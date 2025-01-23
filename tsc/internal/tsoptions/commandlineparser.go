@@ -325,7 +325,7 @@ func convertJsonOptionOfEnumType(
 	opt *CommandLineOption,
 	value string,
 	valueExpression *ast.Expression,
-	sourceFile *TsConfigSourceFile,
+	sourceFile *ast.SourceFile,
 ) (any, []*ast.Diagnostic) {
 	if value == "" {
 		return nil, nil
@@ -339,9 +339,5 @@ func convertJsonOptionOfEnumType(
 	if ok {
 		return validateJsonOptionValue(opt, val, valueExpression, sourceFile)
 	}
-	// todo: clean up use of `TsConfigSourceFile`
-	if sourceFile == nil {
-		return nil, []*ast.Diagnostic{createDiagnosticForInvalidEnumType(opt, nil, nil)}
-	}
-	return nil, []*ast.Diagnostic{createDiagnosticForInvalidEnumType(opt, sourceFile.SourceFile, valueExpression)}
+	return nil, []*ast.Diagnostic{createDiagnosticForInvalidEnumType(opt, sourceFile, valueExpression)}
 }

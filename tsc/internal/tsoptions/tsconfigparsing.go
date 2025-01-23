@@ -117,7 +117,7 @@ type parsedTsconfig struct {
 }
 
 func parseOwnConfigOfJsonSourceFile(
-	sourceFile *TsConfigSourceFile,
+	sourceFile *ast.SourceFile,
 	host ParseConfigHost,
 	basePath string,
 	configFileName string,
@@ -165,7 +165,7 @@ func parseOwnConfigOfJsonSourceFile(
 				propertySetErrors = append(propertySetErrors, err...)
 			} else if option == nil {
 				if keyText == "excludes" {
-					propertySetErrors = append(propertySetErrors, createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile.SourceFile, propertyAssignment.Name(), diagnostics.Unknown_option_excludes_Did_you_mean_exclude))
+					propertySetErrors = append(propertySetErrors, createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, propertyAssignment.Name(), diagnostics.Unknown_option_excludes_Did_you_mean_exclude))
 				}
 				if core.Find(optionsDeclarations, func(option *CommandLineOption) bool { return option.Name == keyText }) != nil {
 					rootCompilerOptions = append(rootCompilerOptions, propertyAssignment.Name())
@@ -176,7 +176,7 @@ func parseOwnConfigOfJsonSourceFile(
 	}
 
 	json, err := convertConfigFileToObject(
-		sourceFile.SourceFile,
+		sourceFile,
 		&jsonConversionNotifier{
 			tsconfigRootOptionsMap,
 			onPropertySet,
@@ -200,6 +200,14 @@ type TsConfigSourceFile struct {
 	configFileSpecs     *configFileSpecs
 	SourceFile          *ast.SourceFile
 }
+
+func tsconfigToSourceFile(tsconfigSourceFile *TsConfigSourceFile) *ast.SourceFile {
+	if tsconfigSourceFile == nil {
+		return nil
+	}
+	return tsconfigSourceFile.SourceFile
+}
+
 type jsonConversionNotifier struct {
 	rootOptions   *CommandLineOption
 	onPropertySet func(keyText string, value any, propertyAssignment *ast.PropertyAssignment, parentOption *CommandLineOption, option *CommandLineOption) (any, []*ast.Diagnostic)
@@ -272,7 +280,7 @@ func validateJsonOptionValue(
 	opt *CommandLineOption,
 	val any,
 	valueExpression *ast.Expression,
-	sourceFile *TsConfigSourceFile,
+	sourceFile *ast.SourceFile,
 ) (any, []*ast.Diagnostic) {
 	if val == nil || val == "" {
 		return nil, nil
@@ -284,7 +292,7 @@ func validateJsonOptionValue(
 		if result == nil {
 			return val, nil
 		}
-		errors = append(errors, createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile.SourceFile, valueExpression, err))
+		errors = append(errors, createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, err))
 	} else {
 		return val, nil
 	}
@@ -297,7 +305,7 @@ func convertJsonOptionOfListType(
 	basePath string,
 	propertyAssignment *ast.PropertyAssignment,
 	valueExpression *ast.Node,
-	sourceFile *TsConfigSourceFile,
+	sourceFile *ast.SourceFile,
 ) ([]any, []*ast.Diagnostic) {
 	var expression *ast.Node
 	var errors []*ast.Diagnostic
@@ -350,7 +358,7 @@ func convertJsonOption(
 	basePath string,
 	propertyAssignment *ast.PropertyAssignment,
 	valueExpression *ast.Expression,
-	sourceFile *TsConfigSourceFile,
+	sourceFile *ast.SourceFile,
 ) (any, []*ast.Diagnostic) {
 	var errors []*ast.Diagnostic
 	if opt.isCommandLineOnly {
@@ -361,7 +369,7 @@ func convertJsonOption(
 		if sourceFile == nil && nodeValue == nil {
 			errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Option_0_can_only_be_specified_on_command_line, opt.Name))
 		} else {
-			errors = append(errors, createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile.SourceFile, nodeValue, diagnostics.Option_0_can_only_be_specified_on_command_line, opt.Name))
+			errors = append(errors, createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, nodeValue, diagnostics.Option_0_can_only_be_specified_on_command_line, opt.Name))
 		}
 		return nil, errors
 	}
@@ -390,7 +398,7 @@ func convertJsonOption(
 			return normalizeNonListOptionValue(opt, basePath, validatedValue), errors
 		}
 	} else {
-		errors = append(errors, createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile.SourceFile, valueExpression, diagnostics.Compiler_option_0_requires_a_value_of_type_1, opt.Name, getCompilerOptionValueTypeString(opt)))
+		errors = append(errors, createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, diagnostics.Compiler_option_0_requires_a_value_of_type_1, opt.Name, getCompilerOptionValueTypeString(opt)))
 		return nil, errors
 	}
 }
@@ -402,7 +410,7 @@ func getExtendsConfigPathOrArray(
 	configFileName string,
 	propertyAssignment *ast.PropertyAssignment,
 	valueExpression *ast.Expression,
-	sourceFile *TsConfigSourceFile,
+	sourceFile *ast.SourceFile,
 ) ([]string, []*ast.Diagnostic) {
 	var extendedConfigPathArray []string
 	newBase := basePath
@@ -446,13 +454,13 @@ func getExtendsConfigPath(
 	host ParseConfigHost,
 	basePath string,
 	valueExpression *ast.Expression,
-	sourceFile *TsConfigSourceFile,
+	sourceFile *ast.SourceFile,
 ) (string, []*ast.Diagnostic) {
 	extendedConfig = tspath.NormalizeSlashes(extendedConfig)
 	var errors []*ast.Diagnostic
 	var errorFile *ast.SourceFile
 	if sourceFile != nil {
-		errorFile = sourceFile.SourceFile
+		errorFile = sourceFile
 	}
 	if tspath.IsRootedDiskPath(extendedConfig) || strings.HasPrefix(extendedConfig, "./") || strings.HasPrefix(extendedConfig, "../") {
 		extendedConfigPath := tspath.GetNormalizedAbsolutePath(extendedConfig, basePath)
@@ -579,7 +587,7 @@ type resolverHost struct {
 
 func (r *resolverHost) Trace(msg string) {}
 
-func ParseJsonSourceFileConfigFileContent(sourceFile *TsConfigSourceFile, host ParseConfigHost, basePath string, existingOptions *core.CompilerOptions, configFileName string, resolutionStack []tspath.Path, extraFileExtensions []fileExtensionInfo, extendedConfigCache map[string]*extendedConfigCacheEntry) ParsedCommandLine {
+func ParseJsonSourceFileConfigFileContent(sourceFile *TsConfigSourceFile, host ParseConfigHost, basePath string, existingOptions *core.CompilerOptions, configFileName string, resolutionStack []tspath.Path, extraFileExtensions []fileExtensionInfo, extendedConfigCache map[string]*extendedConfigCacheEntry) *ParsedCommandLine {
 	// tracing?.push(tracing.Phase.Parse, "parseJsonSourceFileConfigFileContent", { path: sourceFile.fileName });
 	result := parseJsonConfigFileContentWorker(nil /*json*/, sourceFile, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache)
 	// tracing?.pop();
@@ -719,7 +727,7 @@ func convertPropertyValueToJson(sourceFile *ast.SourceFile, valueExpression *ast
 // jsonNode: The contents of the config file to parse
 // host: Instance of ParseConfigHost used to enumerate files in folder.
 // basePath: A root directory to resolve relative path entries in the config file to. e.g. outDir
-func ParseJsonConfigFileContent(json any, host ParseConfigHost, basePath string, existingOptions *core.CompilerOptions, configFileName string, resolutionStack []tspath.Path, extraFileExtensions []fileExtensionInfo, extendedConfigCache map[string]*extendedConfigCacheEntry) ParsedCommandLine {
+func ParseJsonConfigFileContent(json any, host ParseConfigHost, basePath string, existingOptions *core.CompilerOptions, configFileName string, resolutionStack []tspath.Path, extraFileExtensions []fileExtensionInfo, extendedConfigCache map[string]*extendedConfigCacheEntry) *ParsedCommandLine {
 	result := parseJsonConfigFileContentWorker(parseJsonToStringKey(json), nil /*sourceFile*/, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache)
 	return result
 }
@@ -883,7 +891,7 @@ func parseConfig(
 	if json != nil {
 		ownConfig, err = parseOwnConfigOfJson(json, host, basePath, configFileName)
 	} else {
-		ownConfig, err = parseOwnConfigOfJsonSourceFile(sourceFile, host, basePath, configFileName)
+		ownConfig, err = parseOwnConfigOfJsonSourceFile(tsconfigToSourceFile(sourceFile), host, basePath, configFileName)
 	}
 	errors = append(errors, err...)
 	if ownConfig.options != nil && ownConfig.options.Paths != nil {
@@ -1004,7 +1012,7 @@ func parseJsonConfigFileContentWorker(
 	resolutionStack []tspath.Path,
 	extraFileExtensions []fileExtensionInfo,
 	extendedConfigCache map[string]*extendedConfigCacheEntry,
-) ParsedCommandLine {
+) *ParsedCommandLine {
 	// Debug.assert((json === undefined && sourceFile !== undefined) || (json !== undefined && sourceFile === undefined));
 	var errors []*ast.Diagnostic
 	resolutionStackString := []string{}
@@ -1060,7 +1068,7 @@ func parseJsonConfigFileContentWorker(
 					fileName = "tsconfig.json"
 				}
 				diagnosticMessage := diagnostics.The_files_list_in_config_file_0_is_empty
-				nodeValue := forEachTsConfigPropArray(sourceFile, "files", func(property *ast.PropertyAssignment) *ast.Node { return property.Initializer })
+				nodeValue := forEachTsConfigPropArray(sourceFile.SourceFile, "files", func(property *ast.PropertyAssignment) *ast.Node { return property.Initializer })
 				errors = append(errors, ast.NewDiagnostic(sourceFile.SourceFile, core.NewTextRange(scanner.SkipTrivia(sourceFile.SourceFile.Text, nodeValue.Pos()), nodeValue.End()), diagnosticMessage, fileName))
 			} else {
 				errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.The_files_list_in_config_file_0_is_empty, configFileName))
@@ -1099,7 +1107,7 @@ func parseJsonConfigFileContentWorker(
 	// file system.
 	if includeSpecs.sliceValue != nil {
 		var err []*ast.Diagnostic
-		validatedIncludeSpecsBeforeSubstitution, err = validateSpecs(includeSpecs.sliceValue, true /*disallowTrailingRecursion*/, sourceFile, "include")
+		validatedIncludeSpecsBeforeSubstitution, err = validateSpecs(includeSpecs.sliceValue, true /*disallowTrailingRecursion*/, tsconfigToSourceFile(sourceFile), "include")
 		errors = append(errors, err...)
 		validatedIncludeSpecs = getSubstitutedStringArrayWithConfigDirTemplate(
 			validatedIncludeSpecsBeforeSubstitution,
@@ -1111,7 +1119,7 @@ func parseJsonConfigFileContentWorker(
 	}
 	if excludeSpecs.sliceValue != nil {
 		var err []*ast.Diagnostic
-		validatedExcludeSpecsBeforeSubstitution, err = validateSpecs(excludeSpecs.sliceValue, false /*disallowTrailingRecursion*/, sourceFile, "exclude")
+		validatedExcludeSpecsBeforeSubstitution, err = validateSpecs(excludeSpecs.sliceValue, false /*disallowTrailingRecursion*/, tsconfigToSourceFile(sourceFile), "exclude")
 		errors = append(errors, err...)
 		validatedExcludeSpecs = getSubstitutedStringArrayWithConfigDirTemplate(
 			validatedExcludeSpecsBeforeSubstitution,
@@ -1193,7 +1201,7 @@ func parseJsonConfigFileContentWorker(
 		return projectReferences
 	}
 
-	return ParsedCommandLine{
+	return &ParsedCommandLine{
 		ParsedConfig: &core.ParsedOptions{
 			CompilerOptions:   parsedConfig.options,
 			FileNames:         getFileNames(basePathForFileNames),
@@ -1214,10 +1222,10 @@ func shouldReportNoInputFiles(fileNames []string, canJsonReportNoInutFiles bool,
 	return len(fileNames) == 0 && canJsonReportNoInutFiles && len(resolutionStack) == 0
 }
 
-func validateSpecs(specs any, disallowTrailingRecursion bool, jsonSourceFile *TsConfigSourceFile, specKey string) ([]string, []*ast.Diagnostic) {
+func validateSpecs(specs any, disallowTrailingRecursion bool, jsonSourceFile *ast.SourceFile, specKey string) ([]string, []*ast.Diagnostic) {
 	createDiagnostic := func(message *diagnostics.Message, spec string) *ast.Diagnostic {
 		element := getTsConfigPropArrayElementValue(jsonSourceFile, specKey, spec)
-		return createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(jsonSourceFile.SourceFile, element.AsNode(), message, spec)
+		return createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(jsonSourceFile, element.AsNode(), message, spec)
 	}
 	var errors []*ast.Diagnostic
 	var finalSpecs []string
@@ -1282,7 +1290,7 @@ func invalidDotDotAfterRecursiveWildcard(s string) bool {
 //	\/?$        # matches an optional trailing directory separator at the end of the string.
 const invalidTrailingRecursionPattern = `(?:^|\/)\*\*\/?$`
 
-func getTsConfigPropArrayElementValue(tsConfigSourceFile *TsConfigSourceFile, propKey string, elementValue string) *ast.StringLiteral {
+func getTsConfigPropArrayElementValue(tsConfigSourceFile *ast.SourceFile, propKey string, elementValue string) *ast.StringLiteral {
 	return forEachTsConfigPropArray(tsConfigSourceFile, propKey, func(property *ast.PropertyAssignment) *ast.StringLiteral {
 		if ast.IsArrayLiteralExpression(property.Initializer) {
 			value := core.Find(property.Initializer.AsArrayLiteralExpression().Elements.Nodes, func(element *ast.Node) bool {
@@ -1296,7 +1304,7 @@ func getTsConfigPropArrayElementValue(tsConfigSourceFile *TsConfigSourceFile, pr
 	})
 }
 
-func forEachTsConfigPropArray[T any](tsConfigSourceFile *TsConfigSourceFile, propKey string, callback func(property *ast.PropertyAssignment) *T) *T {
+func forEachTsConfigPropArray[T any](tsConfigSourceFile *ast.SourceFile, propKey string, callback func(property *ast.PropertyAssignment) *T) *T {
 	if tsConfigSourceFile != nil {
 		return forEachPropertyAssignment(getTsConfigObjectLiteralExpression(tsConfigSourceFile), propKey, callback)
 	}
@@ -1319,9 +1327,9 @@ func forEachPropertyAssignment[T any](objectLiteral *ast.ObjectLiteralExpression
 	return *new(T)
 }
 
-func getTsConfigObjectLiteralExpression(tsConfigSourceFile *TsConfigSourceFile) *ast.ObjectLiteralExpression {
-	if tsConfigSourceFile != nil && tsConfigSourceFile.SourceFile.Statements != nil && len(tsConfigSourceFile.SourceFile.Statements.Nodes) > 0 {
-		expression := tsConfigSourceFile.SourceFile.Statements.Nodes[0].AsExpressionStatement().Expression
+func getTsConfigObjectLiteralExpression(tsConfigSourceFile *ast.SourceFile) *ast.ObjectLiteralExpression {
+	if tsConfigSourceFile != nil && tsConfigSourceFile.Statements != nil && len(tsConfigSourceFile.Statements.Nodes) > 0 {
+		expression := tsConfigSourceFile.Statements.Nodes[0].AsExpressionStatement().Expression
 		return expression.AsObjectLiteralExpression()
 	}
 	return nil
