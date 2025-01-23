@@ -177,8 +177,9 @@ func main() {
 	var bindTime, checkTime time.Duration
 
 	diagnostics := program.GetOptionsDiagnostics()
+	formatOpts := getFormatOpts(host)
 	if len(diagnostics) != 0 {
-		printDiagnostics(diagnostics, host, compilerOptions)
+		printDiagnostics(diagnostics, formatOpts, compilerOptions)
 		os.Exit(1)
 	}
 
@@ -216,7 +217,7 @@ func main() {
 	runtime.ReadMemStats(&memStats)
 
 	if !opts.devel.quiet && len(diagnostics) != 0 {
-		printDiagnostics(diagnostics, host, compilerOptions)
+		printDiagnostics(diagnostics, formatOpts, compilerOptions)
 	}
 
 	if compilerOptions.ListFiles.IsTrue() {
@@ -290,22 +291,24 @@ func listFiles(p *ts.Program) {
 	}
 }
 
-func printDiagnostics(diagnostics []*ast.Diagnostic, host ts.CompilerHost, compilerOptions *core.CompilerOptions) {
-	comparePathOptions := tspath.ComparePathsOptions{
-		CurrentDirectory:          host.GetCurrentDirectory(),
-		UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
+func getFormatOpts(host ts.CompilerHost) *diagnosticwriter.FormattingOptions {
+	return &diagnosticwriter.FormattingOptions{
+		NewLine: host.NewLine(),
+		ComparePathsOptions: tspath.ComparePathsOptions{
+			CurrentDirectory:          host.GetCurrentDirectory(),
+			UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
+		},
 	}
+}
+
+func printDiagnostics(diagnostics []*ast.Diagnostic, formatOpts *diagnosticwriter.FormattingOptions, compilerOptions *core.CompilerOptions) {
 	if compilerOptions.Pretty.IsTrueOrUnknown() {
-		formatOpts := diagnosticwriter.FormattingOptions{
-			NewLine:             "\n",
-			ComparePathsOptions: comparePathOptions,
-		}
-		diagnosticwriter.FormatDiagnosticsWithColorAndContext(os.Stdout, diagnostics, &formatOpts)
+		diagnosticwriter.FormatDiagnosticsWithColorAndContext(os.Stdout, diagnostics, formatOpts)
 		fmt.Fprintln(os.Stdout)
-		diagnosticwriter.WriteErrorSummaryText(os.Stdout, diagnostics, &formatOpts)
+		diagnosticwriter.WriteErrorSummaryText(os.Stdout, diagnostics, formatOpts)
 	} else {
 		for _, diagnostic := range diagnostics {
-			printDiagnostic(diagnostic, 0, comparePathOptions)
+			printDiagnostic(diagnostic, 0, formatOpts.ComparePathsOptions)
 		}
 	}
 }
