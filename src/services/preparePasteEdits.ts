@@ -33,8 +33,8 @@ export function preparePasteEdits(
         );
         if (!enclosingNode) return;
         if (
-            isImportSpecifier(enclosingNode) || isImportClause(enclosingNode) || isNamespaceImport(enclosingNode) || isImportEqualsDeclaration(enclosingNode)
-            || isBindingElement(enclosingNode) || isImportDeclaration(enclosingNode) || isNamedImports(enclosingNode)
+            isImportSpecifier(enclosingNode) || isImportClause(enclosingNode) || isNamespaceImport(enclosingNode)
+            || isImportEqualsDeclaration(enclosingNode) || isImportDeclaration(enclosingNode) || isNamedImports(enclosingNode)
         ) {
             return;
         }
