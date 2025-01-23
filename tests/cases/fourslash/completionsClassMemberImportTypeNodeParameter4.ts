@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @module: nodenext
+// @module: node18
 
 // @FileName: /other/cls.d.ts
 //// export declare class Cls {
