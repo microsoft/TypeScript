@@ -16,6 +16,12 @@ namespace AlsoIllegalBecauseInstantiated {
     }
 }
 
+namespace IllegalBecauseNestedInstantiated {
+	namespace Nested {
+		export const m = 1;
+	}
+}
+
 enum NotLegalEnum {
     B = 1
 }
