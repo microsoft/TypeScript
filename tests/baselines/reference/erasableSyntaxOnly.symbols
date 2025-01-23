@@ -28,12 +28,12 @@ namespace AlsoIllegalBecauseInstantiated {
 namespace IllegalBecauseNestedInstantiated {
 >IllegalBecauseNestedInstantiated : Symbol(IllegalBecauseNestedInstantiated, Decl(erasableSyntaxOnly.ts, 13, 1))
 
-	namespace Nested {
+    namespace Nested {
 >Nested : Symbol(Nested, Decl(erasableSyntaxOnly.ts, 15, 44))
 
-		export const m = 1;
->m : Symbol(m, Decl(erasableSyntaxOnly.ts, 17, 14))
-	}
+        export const m = 1;
+>m : Symbol(m, Decl(erasableSyntaxOnly.ts, 17, 20))
+    }
 }
 
 enum NotLegalEnum {

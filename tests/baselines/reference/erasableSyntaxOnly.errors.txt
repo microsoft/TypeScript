@@ -2,7 +2,7 @@ erasableSyntaxOnly.ts(3,17): error TS1294: This syntax is not allowed when 'eras
 erasableSyntaxOnly.ts(6,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 erasableSyntaxOnly.ts(10,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 erasableSyntaxOnly.ts(16,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
-erasableSyntaxOnly.ts(17,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+erasableSyntaxOnly.ts(17,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 erasableSyntaxOnly.ts(22,6): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 erasableSyntaxOnly.ts(26,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 erasableSyntaxOnly.ts(28,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -33,11 +33,11 @@ erasableSyntaxOnly.ts(28,12): error TS1294: This syntax is not allowed when 'era
     namespace IllegalBecauseNestedInstantiated {
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
-    	namespace Nested {
-    	          ~~~~~~
+        namespace Nested {
+                  ~~~~~~
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
-    		export const m = 1;
-    	}
+            export const m = 1;
+        }
     }
     
     enum NotLegalEnum {

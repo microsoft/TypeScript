@@ -37,16 +37,16 @@ namespace IllegalBecauseNestedInstantiated {
 >IllegalBecauseNestedInstantiated : typeof IllegalBecauseNestedInstantiated
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	namespace Nested {
+    namespace Nested {
 >Nested : typeof Nested
 >       : ^^^^^^^^^^^^^
 
-		export const m = 1;
+        export const m = 1;
 >m : 1
 >  : ^
 >1 : 1
 >  : ^
-	}
+    }
 }
 
 enum NotLegalEnum {
