@@ -1,7 +1,9 @@
 PrivateIdentifierNameWithEscape1.ts(2,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
 PrivateIdentifierNameWithEscape2.ts(2,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+PrivateIdentifierNameWithEscape3.ts(2,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
 PrivateIdentifierNameWithExtendedEscape1.ts(2,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
 PrivateIdentifierNameWithExtendedEscape2.ts(2,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+PrivateIdentifierNameWithExtendedEscape3.ts(2,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
 
 
 ==== identifierVariableWithEscape1.ts (0 errors) ====
@@ -12,6 +14,10 @@ PrivateIdentifierNameWithExtendedEscape2.ts(2,5): error TS18028: Private identif
     export let x\u0078 = 10;
     xx++;
     
+==== identifierVariableWithEscape3.ts (0 errors) ====
+    export let a\u0062c\u0064e = 10;
+    abcde++;
+    
 ==== identifierVariableWithExtendedEscape1.ts (0 errors) ====
     export let \u{78} = 10;
     x++;
@@ -19,6 +25,10 @@ PrivateIdentifierNameWithExtendedEscape2.ts(2,5): error TS18028: Private identif
 ==== identifierVariableWithExtendedEscape2.ts (0 errors) ====
     export let x\u{78} = 10;
     xx++;
+    
+==== identifierVariableWithExtendedEscape3.ts (0 errors) ====
+    export let a\u{62}c\u{64}e = 10;
+    abcde++;
     
 ==== IdentifierNameWithEscape1.ts (0 errors) ====
     export class IdentifierNameWithEscape1 {
@@ -46,6 +56,19 @@ PrivateIdentifierNameWithExtendedEscape2.ts(2,5): error TS18028: Private identif
         }
     }
     
+==== IdentifierNameWithEscape3.ts (0 errors) ====
+    export class IdentifierNameWithEscape3 {
+        a\u0062c\u0064e: number;
+    
+        constructor() {
+            this.a\u0062c\u0064e = 0;
+        }
+    
+        doThing() {
+            this.abcde = 42;
+        }
+    }
+    
 ==== IdentifierNameWithExtendedEscape1.ts (0 errors) ====
     export class IdentifierNameWithExtendedEscape1 {
         \u{78}: number;
@@ -69,6 +92,19 @@ PrivateIdentifierNameWithExtendedEscape2.ts(2,5): error TS18028: Private identif
     
         doThing() {
             this.xx = 42;
+        }
+    }
+    
+==== IdentifierNameWithExtendedEscape3.ts (0 errors) ====
+    export class IdentifierNameWithExtendedEscape3 {
+        a\u{62}c\u{64}e: number;
+    
+        constructor() {
+            this.a\u{62}c\u{64}e = 0;
+        }
+    
+        doThing() {
+            this.abcde = 42;
         }
     }
     
@@ -102,6 +138,21 @@ PrivateIdentifierNameWithExtendedEscape2.ts(2,5): error TS18028: Private identif
         }
     }
     
+==== PrivateIdentifierNameWithEscape3.ts (1 errors) ====
+    export class PrivateIdentifierWithEscape3 {
+        #a\u0062c\u0064e: number;
+        ~~~~~~~~~~~~~~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+    
+        constructor() {
+            this.#a\u0062c\u0064e = 0;
+        }
+    
+        doThing() {
+            this.#abcde = 42;
+        }
+    }
+    
 ==== PrivateIdentifierNameWithExtendedEscape1.ts (1 errors) ====
     export class PrivateIdentifierWithExtendedEscape1 {
         #\u{78}: number;
@@ -129,6 +180,21 @@ PrivateIdentifierNameWithExtendedEscape2.ts(2,5): error TS18028: Private identif
     
         doThing() {
             this.#xx = 42;
+        }
+    }
+    
+==== PrivateIdentifierNameWithExtendedEscape3.ts (1 errors) ====
+    export class PrivateIdentifierWithExtendedEscape3 {
+        #a\u{62}c\u{64}e: number;
+        ~~~~~~~~~~~~~~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+    
+        constructor() {
+            this.#a\u{62}c\u{64}e = 0;
+        }
+    
+        doThing() {
+            this.#abcde = 42;
         }
     }
     

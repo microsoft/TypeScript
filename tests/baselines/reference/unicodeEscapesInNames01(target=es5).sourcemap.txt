@@ -97,6 +97,55 @@ sourceFile:identifierVariableWithEscape2.ts
 4 >Emitted(5, 14) Source(2, 6) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=identifierVariableWithEscape2.js.map===================================================================
+JsFile: identifierVariableWithEscape3.js
+mapUrl: identifierVariableWithEscape3.js.map
+sourceRoot: 
+sources: identifierVariableWithEscape3.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:identifierVariableWithEscape3.js
+sourceFile:identifierVariableWithEscape3.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.abcde = void 0;
+>>>exports.a\u0062c\u0064e = 10;
+1 >
+2 >^^^^^^^^
+3 >        ^^^^^^^^^^^^^^^
+4 >                       ^^^
+5 >                          ^^
+6 >                            ^
+1 >export let 
+2 >
+3 >        a\u0062c\u0064e
+4 >                        = 
+5 >                          10
+6 >                            ;
+1 >Emitted(4, 1) Source(1, 12) + SourceIndex(0)
+2 >Emitted(4, 9) Source(1, 12) + SourceIndex(0)
+3 >Emitted(4, 24) Source(1, 27) + SourceIndex(0)
+4 >Emitted(4, 27) Source(1, 30) + SourceIndex(0)
+5 >Emitted(4, 29) Source(1, 32) + SourceIndex(0)
+6 >Emitted(4, 30) Source(1, 33) + SourceIndex(0)
+---
+>>>exports.abcde++;
+1 >
+2 >^^^^^^^^^^^^^
+3 >             ^^
+4 >               ^
+5 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >abcde
+3 >             ++
+4 >               ;
+1 >Emitted(5, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(5, 14) Source(2, 6) + SourceIndex(0)
+3 >Emitted(5, 16) Source(2, 8) + SourceIndex(0)
+4 >Emitted(5, 17) Source(2, 9) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=identifierVariableWithEscape3.js.map===================================================================
 JsFile: identifierVariableWithExtendedEscape1.js
 mapUrl: identifierVariableWithExtendedEscape1.js.map
 sourceRoot: 
@@ -195,6 +244,55 @@ sourceFile:identifierVariableWithExtendedEscape2.ts
 4 >Emitted(5, 14) Source(2, 6) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=identifierVariableWithExtendedEscape2.js.map===================================================================
+JsFile: identifierVariableWithExtendedEscape3.js
+mapUrl: identifierVariableWithExtendedEscape3.js.map
+sourceRoot: 
+sources: identifierVariableWithExtendedEscape3.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:identifierVariableWithExtendedEscape3.js
+sourceFile:identifierVariableWithExtendedEscape3.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.abcde = void 0;
+>>>exports.abcde = 10;
+1 >
+2 >^^^^^^^^
+3 >        ^^^^^
+4 >             ^^^
+5 >                ^^
+6 >                  ^
+1 >export let 
+2 >
+3 >        a\u{62}c\u{64}e
+4 >              = 
+5 >                10
+6 >                  ;
+1 >Emitted(4, 1) Source(1, 12) + SourceIndex(0)
+2 >Emitted(4, 9) Source(1, 12) + SourceIndex(0)
+3 >Emitted(4, 14) Source(1, 27) + SourceIndex(0)
+4 >Emitted(4, 17) Source(1, 30) + SourceIndex(0)
+5 >Emitted(4, 19) Source(1, 32) + SourceIndex(0)
+6 >Emitted(4, 20) Source(1, 33) + SourceIndex(0)
+---
+>>>exports.abcde++;
+1 >
+2 >^^^^^^^^^^^^^
+3 >             ^^
+4 >               ^
+5 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >abcde
+3 >             ++
+4 >               ;
+1 >Emitted(5, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(5, 14) Source(2, 6) + SourceIndex(0)
+3 >Emitted(5, 16) Source(2, 8) + SourceIndex(0)
+4 >Emitted(5, 17) Source(2, 9) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=identifierVariableWithExtendedEscape3.js.map===================================================================
 JsFile: IdentifierNameWithEscape1.js
 mapUrl: IdentifierNameWithEscape1.js.map
 sourceRoot: 
@@ -497,6 +595,157 @@ sourceFile:IdentifierNameWithEscape2.ts
 2 >Emitted(13, 63) Source(1, 39) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=IdentifierNameWithEscape2.js.map===================================================================
+JsFile: IdentifierNameWithEscape3.js
+mapUrl: IdentifierNameWithEscape3.js.map
+sourceRoot: 
+sources: IdentifierNameWithEscape3.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:IdentifierNameWithEscape3.js
+sourceFile:IdentifierNameWithEscape3.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.IdentifierNameWithEscape3 = void 0;
+>>>var IdentifierNameWithEscape3 = /** @class */ (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function IdentifierNameWithEscape3() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->export class IdentifierNameWithEscape3 {
+  >    a\u0062c\u0064e: number;
+  >
+  >    
+1->Emitted(5, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        this.a\u0062c\u0064e = 0;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^^^^^^^^^^^^^
+5 >                            ^^^
+6 >                               ^
+7 >                                ^
+1->constructor() {
+  >        
+2 >        this
+3 >            .
+4 >             a\u0062c\u0064e
+5 >                             = 
+6 >                               0
+7 >                                ;
+1->Emitted(6, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(6, 13) Source(5, 13) + SourceIndex(0)
+3 >Emitted(6, 14) Source(5, 14) + SourceIndex(0)
+4 >Emitted(6, 29) Source(5, 29) + SourceIndex(0)
+5 >Emitted(6, 32) Source(5, 32) + SourceIndex(0)
+6 >Emitted(6, 33) Source(5, 33) + SourceIndex(0)
+7 >Emitted(6, 34) Source(5, 34) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(7, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(7, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    IdentifierNameWithEscape3.prototype.doThing = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                               ^^^
+1->
+  >
+  >    
+2 >    doThing
+3 >                                               
+1->Emitted(8, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(8, 48) Source(8, 12) + SourceIndex(0)
+3 >Emitted(8, 51) Source(8, 5) + SourceIndex(0)
+---
+>>>        this.abcde = 42;
+1 >^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^^^
+5 >                  ^^^
+6 >                     ^^
+7 >                       ^
+1 >doThing() {
+  >        
+2 >        this
+3 >            .
+4 >             abcde
+5 >                   = 
+6 >                     42
+7 >                       ;
+1 >Emitted(9, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(9, 13) Source(9, 13) + SourceIndex(0)
+3 >Emitted(9, 14) Source(9, 14) + SourceIndex(0)
+4 >Emitted(9, 19) Source(9, 19) + SourceIndex(0)
+5 >Emitted(9, 22) Source(9, 22) + SourceIndex(0)
+6 >Emitted(9, 24) Source(9, 24) + SourceIndex(0)
+7 >Emitted(9, 25) Source(9, 25) + SourceIndex(0)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(10, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(10, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>    return IdentifierNameWithEscape3;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+2 >    }
+1->Emitted(11, 5) Source(11, 1) + SourceIndex(0)
+2 >Emitted(11, 37) Source(11, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > export class IdentifierNameWithEscape3 {
+  >     a\u0062c\u0064e: number;
+  > 
+  >     constructor() {
+  >         this.a\u0062c\u0064e = 0;
+  >     }
+  > 
+  >     doThing() {
+  >         this.abcde = 42;
+  >     }
+  > }
+1 >Emitted(12, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
+3 >Emitted(12, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(12, 6) Source(11, 2) + SourceIndex(0)
+---
+>>>exports.IdentifierNameWithEscape3 = IdentifierNameWithEscape3;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >IdentifierNameWithEscape3
+1->Emitted(13, 1) Source(1, 14) + SourceIndex(0)
+2 >Emitted(13, 63) Source(1, 39) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=IdentifierNameWithEscape3.js.map===================================================================
 JsFile: IdentifierNameWithExtendedEscape1.js
 mapUrl: IdentifierNameWithExtendedEscape1.js.map
 sourceRoot: 
@@ -799,6 +1048,157 @@ sourceFile:IdentifierNameWithExtendedEscape2.ts
 2 >Emitted(13, 79) Source(1, 47) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=IdentifierNameWithExtendedEscape2.js.map===================================================================
+JsFile: IdentifierNameWithExtendedEscape3.js
+mapUrl: IdentifierNameWithExtendedEscape3.js.map
+sourceRoot: 
+sources: IdentifierNameWithExtendedEscape3.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:IdentifierNameWithExtendedEscape3.js
+sourceFile:IdentifierNameWithExtendedEscape3.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.IdentifierNameWithExtendedEscape3 = void 0;
+>>>var IdentifierNameWithExtendedEscape3 = /** @class */ (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function IdentifierNameWithExtendedEscape3() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^->
+1->export class IdentifierNameWithExtendedEscape3 {
+  >    a\u{62}c\u{64}e: number;
+  >
+  >    
+1->Emitted(5, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        this.abcde = 0;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^^^
+5 >                  ^^^
+6 >                     ^
+7 >                      ^
+1->constructor() {
+  >        
+2 >        this
+3 >            .
+4 >             a\u{62}c\u{64}e
+5 >                   = 
+6 >                     0
+7 >                      ;
+1->Emitted(6, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(6, 13) Source(5, 13) + SourceIndex(0)
+3 >Emitted(6, 14) Source(5, 14) + SourceIndex(0)
+4 >Emitted(6, 19) Source(5, 29) + SourceIndex(0)
+5 >Emitted(6, 22) Source(5, 32) + SourceIndex(0)
+6 >Emitted(6, 23) Source(5, 33) + SourceIndex(0)
+7 >Emitted(6, 24) Source(5, 34) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(7, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(7, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    IdentifierNameWithExtendedEscape3.prototype.doThing = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                       ^^^
+1->
+  >
+  >    
+2 >    doThing
+3 >                                                       
+1->Emitted(8, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(8, 56) Source(8, 12) + SourceIndex(0)
+3 >Emitted(8, 59) Source(8, 5) + SourceIndex(0)
+---
+>>>        this.abcde = 42;
+1 >^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^^^
+5 >                  ^^^
+6 >                     ^^
+7 >                       ^
+1 >doThing() {
+  >        
+2 >        this
+3 >            .
+4 >             abcde
+5 >                   = 
+6 >                     42
+7 >                       ;
+1 >Emitted(9, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(9, 13) Source(9, 13) + SourceIndex(0)
+3 >Emitted(9, 14) Source(9, 14) + SourceIndex(0)
+4 >Emitted(9, 19) Source(9, 19) + SourceIndex(0)
+5 >Emitted(9, 22) Source(9, 22) + SourceIndex(0)
+6 >Emitted(9, 24) Source(9, 24) + SourceIndex(0)
+7 >Emitted(9, 25) Source(9, 25) + SourceIndex(0)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(10, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(10, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>    return IdentifierNameWithExtendedEscape3;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+2 >    }
+1->Emitted(11, 5) Source(11, 1) + SourceIndex(0)
+2 >Emitted(11, 45) Source(11, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > export class IdentifierNameWithExtendedEscape3 {
+  >     a\u{62}c\u{64}e: number;
+  > 
+  >     constructor() {
+  >         this.a\u{62}c\u{64}e = 0;
+  >     }
+  > 
+  >     doThing() {
+  >         this.abcde = 42;
+  >     }
+  > }
+1 >Emitted(12, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
+3 >Emitted(12, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(12, 6) Source(11, 2) + SourceIndex(0)
+---
+>>>exports.IdentifierNameWithExtendedEscape3 = IdentifierNameWithExtendedEscape3;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >IdentifierNameWithExtendedEscape3
+1->Emitted(13, 1) Source(1, 14) + SourceIndex(0)
+2 >Emitted(13, 79) Source(1, 47) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=IdentifierNameWithExtendedEscape3.js.map===================================================================
 JsFile: PrivateIdentifierNameWithEscape1.js
 mapUrl: PrivateIdentifierNameWithEscape1.js.map
 sourceRoot: 
@@ -1141,6 +1541,177 @@ sourceFile:PrivateIdentifierNameWithEscape2.ts
 ---
 >>>_PrivateIdentifierWithEscape2_xx = new WeakMap();
 >>>//# sourceMappingURL=PrivateIdentifierNameWithEscape2.js.map===================================================================
+JsFile: PrivateIdentifierNameWithEscape3.js
+mapUrl: PrivateIdentifierNameWithEscape3.js.map
+sourceRoot: 
+sources: PrivateIdentifierNameWithEscape3.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:PrivateIdentifierNameWithEscape3.js
+sourceFile:PrivateIdentifierNameWithEscape3.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+>>>    if (kind === "m") throw new TypeError("Private method is not writable");
+>>>    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+>>>    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+>>>    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+>>>};
+>>>var _PrivateIdentifierWithEscape3_abcde;
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.PrivateIdentifierWithEscape3 = void 0;
+>>>var PrivateIdentifierWithEscape3 = /** @class */ (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(11, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function PrivateIdentifierWithEscape3() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->export class PrivateIdentifierWithEscape3 {
+  >    #a\u0062c\u0064e: number;
+  >
+  >    
+1->Emitted(12, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        _PrivateIdentifierWithEscape3_abcde.set(this, void 0);
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                              ^^^^^^^^^^^^^^^^^^^^^->
+1->
+2 >        #a\u0062c\u0064e: number;
+1->Emitted(13, 9) Source(2, 5) + SourceIndex(0)
+2 >Emitted(13, 63) Source(2, 30) + SourceIndex(0)
+---
+>>>        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape3_abcde, 0, "f");
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                               ^^^^
+4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                                          ^
+6 >                                                                           ^^^^^^
+7 >                                                                                 ^
+1->
+  >
+  >    constructor() {
+  >        
+2 >        
+3 >                               this
+4 >                                   .#a\u0062c\u0064e = 
+5 >                                                                          0
+6 >                                                                           
+7 >                                                                                 ;
+1->Emitted(14, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(14, 32) Source(5, 9) + SourceIndex(0)
+3 >Emitted(14, 36) Source(5, 13) + SourceIndex(0)
+4 >Emitted(14, 75) Source(5, 33) + SourceIndex(0)
+5 >Emitted(14, 76) Source(5, 34) + SourceIndex(0)
+6 >Emitted(14, 82) Source(5, 34) + SourceIndex(0)
+7 >Emitted(14, 83) Source(5, 35) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(15, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(15, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    PrivateIdentifierWithEscape3.prototype.doThing = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                  ^^^
+4 >                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >    
+2 >    doThing
+3 >                                                  
+1->Emitted(16, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(16, 51) Source(8, 12) + SourceIndex(0)
+3 >Emitted(16, 54) Source(8, 5) + SourceIndex(0)
+---
+>>>        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape3_abcde, 42, "f");
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                               ^^^^
+4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                                          ^^
+6 >                                                                            ^^^^^^
+7 >                                                                                  ^
+1->doThing() {
+  >        
+2 >        
+3 >                               this
+4 >                                   .#abcde = 
+5 >                                                                          42
+6 >                                                                            
+7 >                                                                                  ;
+1->Emitted(17, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(17, 32) Source(9, 9) + SourceIndex(0)
+3 >Emitted(17, 36) Source(9, 13) + SourceIndex(0)
+4 >Emitted(17, 75) Source(9, 23) + SourceIndex(0)
+5 >Emitted(17, 77) Source(9, 25) + SourceIndex(0)
+6 >Emitted(17, 83) Source(9, 25) + SourceIndex(0)
+7 >Emitted(17, 84) Source(9, 26) + SourceIndex(0)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(18, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(18, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>    return PrivateIdentifierWithEscape3;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+2 >    }
+1->Emitted(19, 5) Source(11, 1) + SourceIndex(0)
+2 >Emitted(19, 40) Source(11, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > export class PrivateIdentifierWithEscape3 {
+  >     #a\u0062c\u0064e: number;
+  > 
+  >     constructor() {
+  >         this.#a\u0062c\u0064e = 0;
+  >     }
+  > 
+  >     doThing() {
+  >         this.#abcde = 42;
+  >     }
+  > }
+1 >Emitted(20, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(20, 2) Source(11, 2) + SourceIndex(0)
+3 >Emitted(20, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(20, 6) Source(11, 2) + SourceIndex(0)
+---
+>>>exports.PrivateIdentifierWithEscape3 = PrivateIdentifierWithEscape3;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >PrivateIdentifierWithEscape3
+1->Emitted(21, 1) Source(1, 14) + SourceIndex(0)
+2 >Emitted(21, 69) Source(1, 42) + SourceIndex(0)
+---
+>>>_PrivateIdentifierWithEscape3_abcde = new WeakMap();
+>>>//# sourceMappingURL=PrivateIdentifierNameWithEscape3.js.map===================================================================
 JsFile: PrivateIdentifierNameWithExtendedEscape1.js
 mapUrl: PrivateIdentifierNameWithExtendedEscape1.js.map
 sourceRoot: 
@@ -1482,4 +2053,175 @@ sourceFile:PrivateIdentifierNameWithExtendedEscape2.ts
 2 >Emitted(21, 85) Source(1, 50) + SourceIndex(0)
 ---
 >>>_PrivateIdentifierWithExtendedEscape2_xx = new WeakMap();
->>>//# sourceMappingURL=PrivateIdentifierNameWithExtendedEscape2.js.map
+>>>//# sourceMappingURL=PrivateIdentifierNameWithExtendedEscape2.js.map===================================================================
+JsFile: PrivateIdentifierNameWithExtendedEscape3.js
+mapUrl: PrivateIdentifierNameWithExtendedEscape3.js.map
+sourceRoot: 
+sources: PrivateIdentifierNameWithExtendedEscape3.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:PrivateIdentifierNameWithExtendedEscape3.js
+sourceFile:PrivateIdentifierNameWithExtendedEscape3.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+>>>    if (kind === "m") throw new TypeError("Private method is not writable");
+>>>    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+>>>    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+>>>    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+>>>};
+>>>var _PrivateIdentifierWithExtendedEscape3_abcde;
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.PrivateIdentifierWithExtendedEscape3 = void 0;
+>>>var PrivateIdentifierWithExtendedEscape3 = /** @class */ (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(11, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function PrivateIdentifierWithExtendedEscape3() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->export class PrivateIdentifierWithExtendedEscape3 {
+  >    #a\u{62}c\u{64}e: number;
+  >
+  >    
+1->Emitted(12, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        _PrivateIdentifierWithExtendedEscape3_abcde.set(this, void 0);
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                                      ^^^^^^^^^^^^^^^^^^^^^->
+1->
+2 >        #a\u{62}c\u{64}e: number;
+1->Emitted(13, 9) Source(2, 5) + SourceIndex(0)
+2 >Emitted(13, 71) Source(2, 30) + SourceIndex(0)
+---
+>>>        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape3_abcde, 0, "f");
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                               ^^^^
+4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                                                  ^
+6 >                                                                                   ^^^^^^
+7 >                                                                                         ^
+1->
+  >
+  >    constructor() {
+  >        
+2 >        
+3 >                               this
+4 >                                   .#a\u{62}c\u{64}e = 
+5 >                                                                                  0
+6 >                                                                                   
+7 >                                                                                         ;
+1->Emitted(14, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(14, 32) Source(5, 9) + SourceIndex(0)
+3 >Emitted(14, 36) Source(5, 13) + SourceIndex(0)
+4 >Emitted(14, 83) Source(5, 33) + SourceIndex(0)
+5 >Emitted(14, 84) Source(5, 34) + SourceIndex(0)
+6 >Emitted(14, 90) Source(5, 34) + SourceIndex(0)
+7 >Emitted(14, 91) Source(5, 35) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(15, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(15, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    PrivateIdentifierWithExtendedEscape3.prototype.doThing = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                          ^^^
+4 >                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >    
+2 >    doThing
+3 >                                                          
+1->Emitted(16, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(16, 59) Source(8, 12) + SourceIndex(0)
+3 >Emitted(16, 62) Source(8, 5) + SourceIndex(0)
+---
+>>>        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape3_abcde, 42, "f");
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                               ^^^^
+4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                                                  ^^
+6 >                                                                                    ^^^^^^
+7 >                                                                                          ^
+1->doThing() {
+  >        
+2 >        
+3 >                               this
+4 >                                   .#abcde = 
+5 >                                                                                  42
+6 >                                                                                    
+7 >                                                                                          ;
+1->Emitted(17, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(17, 32) Source(9, 9) + SourceIndex(0)
+3 >Emitted(17, 36) Source(9, 13) + SourceIndex(0)
+4 >Emitted(17, 83) Source(9, 23) + SourceIndex(0)
+5 >Emitted(17, 85) Source(9, 25) + SourceIndex(0)
+6 >Emitted(17, 91) Source(9, 25) + SourceIndex(0)
+7 >Emitted(17, 92) Source(9, 26) + SourceIndex(0)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(18, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(18, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>    return PrivateIdentifierWithExtendedEscape3;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+2 >    }
+1->Emitted(19, 5) Source(11, 1) + SourceIndex(0)
+2 >Emitted(19, 48) Source(11, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > export class PrivateIdentifierWithExtendedEscape3 {
+  >     #a\u{62}c\u{64}e: number;
+  > 
+  >     constructor() {
+  >         this.#a\u{62}c\u{64}e = 0;
+  >     }
+  > 
+  >     doThing() {
+  >         this.#abcde = 42;
+  >     }
+  > }
+1 >Emitted(20, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(20, 2) Source(11, 2) + SourceIndex(0)
+3 >Emitted(20, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(20, 6) Source(11, 2) + SourceIndex(0)
+---
+>>>exports.PrivateIdentifierWithExtendedEscape3 = PrivateIdentifierWithExtendedEscape3;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >PrivateIdentifierWithExtendedEscape3
+1->Emitted(21, 1) Source(1, 14) + SourceIndex(0)
+2 >Emitted(21, 85) Source(1, 50) + SourceIndex(0)
+---
+>>>_PrivateIdentifierWithExtendedEscape3_abcde = new WeakMap();
+>>>//# sourceMappingURL=PrivateIdentifierNameWithExtendedEscape3.js.map
