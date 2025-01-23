@@ -57,13 +57,13 @@ export interface CachedTyping {
 }
 
 /** @internal */
-export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVersions: MapLike<string>) {
+export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVersions: MapLike<string>): boolean {
     const availableVersion = new Version(getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest")!);
     return availableVersion.compareTo(cachedTyping.version) <= 0;
 }
 
 /** @internal */
-export function nonRelativeModuleNameForTypingCache(moduleName: string) {
+export function nonRelativeModuleNameForTypingCache(moduleName: string): string {
     return nodeCoreModules.has(moduleName) ? "node" : moduleName;
 }
 

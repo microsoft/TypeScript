@@ -233,7 +233,7 @@ export namespace SmartIndenter {
         return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, /*isNextChild*/ false, options);
     }
 
-    export function getBaseIndentation(options: EditorSettings) {
+    export function getBaseIndentation(options: EditorSettings): number {
         return options.baseIndentSize || 0;
     }
 
@@ -602,7 +602,10 @@ export namespace SmartIndenter {
      * value of 'character' for '$' is 3
      * value of 'column' for '$' is 6 (assuming that tab size is 4)
      */
-    export function findFirstNonWhitespaceCharacterAndColumn(startPos: number, endPos: number, sourceFile: SourceFileLike, options: EditorSettings) {
+    export function findFirstNonWhitespaceCharacterAndColumn(startPos: number, endPos: number, sourceFile: SourceFileLike, options: EditorSettings): {
+        column: number;
+        character: number;
+    } {
         let character = 0;
         let column = 0;
         for (let pos = startPos; pos < endPos; pos++) {

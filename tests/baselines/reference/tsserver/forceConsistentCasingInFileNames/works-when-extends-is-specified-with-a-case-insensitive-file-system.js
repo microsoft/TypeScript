@@ -61,16 +61,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /Users/username/dev/project/index.ts ProjectRootPath: undefined:: Result: /Users/username/dev/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /Users/username/dev/project/tsconfig.json, currentDirectory: /Users/username/dev/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/username/dev/project/tsconfig.json 2000 undefined Project: /Users/username/dev/project/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/Users/username/dev/project/tsconfig.json",
-        "reason": "Creating possible configured project for /Users/username/dev/project/index.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /Users/username/dev/project/tsconfig.json : {
  "rootNames": [
   "/Users/username/dev/project/index.ts",
@@ -92,6 +82,16 @@ Info seq  [hh:mm:ss:mss] Config: /Users/username/dev/project/tsconfig.json : {
  }
 }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/username/dev/project/tsconfig.all.json 2000 undefined Config: /Users/username/dev/project/tsconfig.json WatchType: Extended config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/Users/username/dev/project/tsconfig.json",
+        "reason": "Creating possible configured project for /Users/username/dev/project/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Users/username/dev/project 1 undefined Config: /Users/username/dev/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Users/username/dev/project 1 undefined Config: /Users/username/dev/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/username/dev/project/types/file2/index.d.ts 500 undefined WatchType: Closed Script info

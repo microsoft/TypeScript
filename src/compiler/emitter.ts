@@ -428,7 +428,7 @@ import * as performance from "./_namespaces/ts.performance.js";
 const brackets = createBracketsMap();
 
 /** @internal */
-export function isBuildInfoFile(file: string) {
+export function isBuildInfoFile(file: string): boolean {
     return fileExtensionIs(file, Extension.TsBuildInfo);
 }
 
@@ -450,7 +450,7 @@ export function forEachEmittedFile<T>(
     forceDtsEmit = false,
     onlyBuildInfo?: boolean,
     includeBuildInfo?: boolean,
-) {
+): T | undefined {
     const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile, forceDtsEmit);
     const options = host.getCompilerOptions();
     if (!onlyBuildInfo) {
@@ -478,7 +478,7 @@ export function forEachEmittedFile<T>(
     }
 }
 
-export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
+export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined {
     const configFile = options.configFilePath;
     if (!canEmitTsBuildInfo(options)) return undefined;
     if (options.tsBuildInfoFile) return options.tsBuildInfoFile;
@@ -499,8 +499,7 @@ export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
     return buildInfoExtensionLess + Extension.TsBuildInfo;
 }
 
-/** @internal */
-export function canEmitTsBuildInfo(options: CompilerOptions) {
+function canEmitTsBuildInfo(options: CompilerOptions) {
     return isIncrementalCompilation(options) || !!options.tscBuild;
 }
 
@@ -561,12 +560,17 @@ function getOutputPathWithoutChangingExt(
 }
 
 /** @internal */
-export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory = () => getCommonSourceDirectoryOfConfig(configFile, ignoreCase)) {
+export function getOutputDeclarationFileName(
+    inputFileName: string,
+    configFile: ParsedCommandLine,
+    ignoreCase: boolean,
+    getCommonSourceDirectory = (): string => getCommonSourceDirectoryOfConfig(configFile, ignoreCase),
+): string {
     return getOutputDeclarationFileNameWorker(inputFileName, configFile.options, ignoreCase, getCommonSourceDirectory);
 }
 
 /** @internal */
-export function getOutputDeclarationFileNameWorker(inputFileName: string, options: CompilerOptions, ignoreCase: boolean, getCommonSourceDirectory: () => string) {
+export function getOutputDeclarationFileNameWorker(inputFileName: string, options: CompilerOptions, ignoreCase: boolean, getCommonSourceDirectory: () => string): string {
     return changeExtension(
         getOutputPathWithoutChangingExt(inputFileName, ignoreCase, options.declarationDir || options.outDir, getCommonSourceDirectory),
         getDeclarationEmitExtensionForPath(inputFileName),
@@ -722,7 +726,7 @@ export function getFirstProjectOutput(configFile: ParsedCommandLine, ignoreCase:
 }
 
 /** @internal */
-export function emitResolverSkipsTypeChecking(emitOnly: boolean | EmitOnly | undefined, forceDtsEmit: boolean | undefined) {
+export function emitResolverSkipsTypeChecking(emitOnly: boolean | EmitOnly | undefined, forceDtsEmit: boolean | undefined): boolean {
     return !!forceDtsEmit && !!emitOnly;
 }
 
@@ -1113,7 +1117,7 @@ export function emitFiles(
 }
 
 /** @internal */
-export function getBuildInfoText(buildInfo: BuildInfo) {
+export function getBuildInfoText(buildInfo: BuildInfo): string {
     return JSON.stringify(buildInfo);
 }
 
@@ -1163,6 +1167,7 @@ export const notImplementedResolver: EmitResolver = {
     getDeclarationStatementsForSourceFile: notImplemented,
     isImportRequiredByAugmentation: notImplemented,
     isDefinitelyReferenceToGlobalSymbolObject: notImplemented,
+    createLateBoundIndexSignatures: notImplemented,
 };
 
 const enum PipelinePhase {
@@ -1174,16 +1179,16 @@ const enum PipelinePhase {
 }
 
 /** @internal */
-export const createPrinterWithDefaults = /* @__PURE__ */ memoize(() => createPrinter({}));
+export const createPrinterWithDefaults: () => Printer = /* @__PURE__ */ memoize(() => createPrinter({}));
 
 /** @internal */
-export const createPrinterWithRemoveComments = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true }));
+export const createPrinterWithRemoveComments: () => Printer = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true }));
 
 /** @internal */
-export const createPrinterWithRemoveCommentsNeverAsciiEscape = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, neverAsciiEscape: true }));
+export const createPrinterWithRemoveCommentsNeverAsciiEscape: () => Printer = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, neverAsciiEscape: true }));
 
 /** @internal */
-export const createPrinterWithRemoveCommentsOmitTrailingSemicolon = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, omitTrailingSemicolon: true }));
+export const createPrinterWithRemoveCommentsOmitTrailingSemicolon: () => Printer = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, omitTrailingSemicolon: true }));
 
 export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
@@ -3221,17 +3226,90 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * Wraps an expression in parens if we would emit a leading comment that would introduce a line separator
      * between the node and its parent.
      */
-    function parenthesizeExpressionForNoAsi(node: Expression) {
-        if (!commentsDisabled && isPartiallyEmittedExpression(node) && willEmitLeadingNewLine(node)) {
-            const parseNode = getParseTreeNode(node);
-            if (parseNode && isParenthesizedExpression(parseNode)) {
-                // If the original node was a parenthesized expression, restore it to preserve comment and source map emit
-                const parens = factory.createParenthesizedExpression(node.expression);
-                setOriginalNode(parens, node);
-                setTextRange(parens, parseNode);
-                return parens;
+    function parenthesizeExpressionForNoAsi(node: Expression): Expression {
+        if (!commentsDisabled) {
+            switch (node.kind) {
+                case SyntaxKind.PartiallyEmittedExpression:
+                    if (willEmitLeadingNewLine(node)) {
+                        const parseNode = getParseTreeNode(node);
+                        if (parseNode && isParenthesizedExpression(parseNode)) {
+                            // If the original node was a parenthesized expression, restore it to preserve comment and source map emit
+                            const parens = factory.createParenthesizedExpression((node as PartiallyEmittedExpression).expression);
+                            setOriginalNode(parens, node);
+                            setTextRange(parens, parseNode);
+                            return parens;
+                        }
+                        return factory.createParenthesizedExpression(node);
+                    }
+                    return factory.updatePartiallyEmittedExpression(
+                        node as PartiallyEmittedExpression,
+                        parenthesizeExpressionForNoAsi((node as PartiallyEmittedExpression).expression),
+                    );
+                case SyntaxKind.PropertyAccessExpression:
+                    return factory.updatePropertyAccessExpression(
+                        node as PropertyAccessExpression,
+                        parenthesizeExpressionForNoAsi((node as PropertyAccessExpression).expression),
+                        (node as PropertyAccessExpression).name,
+                    );
+                case SyntaxKind.ElementAccessExpression:
+                    return factory.updateElementAccessExpression(
+                        node as ElementAccessExpression,
+                        parenthesizeExpressionForNoAsi((node as ElementAccessExpression).expression),
+                        (node as ElementAccessExpression).argumentExpression,
+                    );
+                case SyntaxKind.CallExpression:
+                    return factory.updateCallExpression(
+                        node as CallExpression,
+                        parenthesizeExpressionForNoAsi((node as CallExpression).expression),
+                        (node as CallExpression).typeArguments,
+                        (node as CallExpression).arguments,
+                    );
+                case SyntaxKind.TaggedTemplateExpression:
+                    return factory.updateTaggedTemplateExpression(
+                        node as TaggedTemplateExpression,
+                        parenthesizeExpressionForNoAsi((node as TaggedTemplateExpression).tag),
+                        (node as TaggedTemplateExpression).typeArguments,
+                        (node as TaggedTemplateExpression).template,
+                    );
+                case SyntaxKind.PostfixUnaryExpression:
+                    return factory.updatePostfixUnaryExpression(
+                        node as PostfixUnaryExpression,
+                        parenthesizeExpressionForNoAsi((node as PostfixUnaryExpression).operand),
+                    );
+                case SyntaxKind.BinaryExpression:
+                    return factory.updateBinaryExpression(
+                        node as BinaryExpression,
+                        parenthesizeExpressionForNoAsi((node as BinaryExpression).left),
+                        (node as BinaryExpression).operatorToken,
+                        (node as BinaryExpression).right,
+                    );
+                case SyntaxKind.ConditionalExpression:
+                    return factory.updateConditionalExpression(
+                        node as ConditionalExpression,
+                        parenthesizeExpressionForNoAsi((node as ConditionalExpression).condition),
+                        (node as ConditionalExpression).questionToken,
+                        (node as ConditionalExpression).whenTrue,
+                        (node as ConditionalExpression).colonToken,
+                        (node as ConditionalExpression).whenFalse,
+                    );
+                case SyntaxKind.AsExpression:
+                    return factory.updateAsExpression(
+                        node as AsExpression,
+                        parenthesizeExpressionForNoAsi((node as AsExpression).expression),
+                        (node as AsExpression).type,
+                    );
+                case SyntaxKind.SatisfiesExpression:
+                    return factory.updateSatisfiesExpression(
+                        node as SatisfiesExpression,
+                        parenthesizeExpressionForNoAsi((node as SatisfiesExpression).expression),
+                        (node as SatisfiesExpression).type,
+                    );
+                case SyntaxKind.NonNullExpression:
+                    return factory.updateNonNullExpression(
+                        node as NonNullExpression,
+                        parenthesizeExpressionForNoAsi((node as NonNullExpression).expression),
+                    );
             }
-            return factory.createParenthesizedExpression(node);
         }
         return node;
     }

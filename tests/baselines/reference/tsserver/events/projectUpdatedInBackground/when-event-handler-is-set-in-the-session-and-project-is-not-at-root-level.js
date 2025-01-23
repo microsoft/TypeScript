@@ -44,16 +44,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined:: Result: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json, currentDirectory: /user/username/rootfolder/otherfolder/a/b/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json 2000 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "CustomHandler::projectLoadingStart",
-      "body": {
-        "project": "/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json",
-        "reason": "Creating possible configured project for /user/username/rootfolder/otherfolder/a/b/project/file1.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json : {
  "rootNames": [
   "/user/username/rootfolder/otherfolder/a/b/project/file1.ts",
@@ -64,6 +54,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/rootfolder/otherfolder/a/b/proje
   "configFilePath": "/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "CustomHandler::projectLoadingStart",
+      "body": {
+        "project": "/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/rootfolder/otherfolder/a/b/project/file1.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/project 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/project 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/project/file3.ts 500 undefined WatchType: Closed Script info

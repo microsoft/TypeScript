@@ -79,11 +79,13 @@ import {
     isPropertyAccessExpression,
     isPropertyDeclaration,
     isReturnStatement,
+    isSatisfiesExpression,
     isSourceFile,
     isSourceFileFromLibrary,
     isSourceFileJS,
     isTransientSymbol,
     isTypeLiteralNode,
+    isYieldExpression,
     JsxOpeningLikeElement,
     LanguageVariant,
     lastOrUndefined,
@@ -141,6 +143,7 @@ const errorCodes = [
     Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more.code,
     Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code,
     Diagnostics.Cannot_find_name_0.code,
+    Diagnostics.Type_0_does_not_satisfy_the_expected_type_1.code,
 ];
 
 enum InfoKind {
@@ -182,15 +185,17 @@ registerCodeFix({
     getAllCodeActions: context => {
         const { program, fixId } = context;
         const checker = program.getTypeChecker();
-        const seen = new Map<string, true>();
+        const seen = new Set<string>();
         const typeDeclToMembers = new Map<ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, TypeLikeDeclarationInfo[]>();
 
         return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
             eachDiagnostic(context, errorCodes, diag => {
                 const info = getInfo(diag.file, diag.start, diag.code, checker, context.program);
-                if (!info || !addToSeen(seen, getNodeId(info.parentDeclaration) + "#" + (info.kind === InfoKind.ObjectLiteral ? info.identifier : info.token.text))) {
-                    return;
-                }
+                if (info === undefined) return;
+
+                const nodeId = getNodeId(info.parentDeclaration) + "#" + (info.kind === InfoKind.ObjectLiteral ? info.identifier || getNodeId(info.token) : info.token.text);
+                if (!addToSeen(seen, nodeId)) return;
+
                 if (fixId === fixMissingFunctionDeclaration && (info.kind === InfoKind.Function || info.kind === InfoKind.Signature)) {
                     addFunctionDeclaration(changes, context, info);
                 }
@@ -275,7 +280,7 @@ interface FunctionInfo {
 interface ObjectLiteralInfo {
     readonly kind: InfoKind.ObjectLiteral;
     readonly token: Node;
-    readonly identifier: string;
+    readonly identifier: string | undefined;
     readonly properties: Symbol[];
     readonly parentDeclaration: ObjectLiteralExpression;
     readonly indentation?: number;
@@ -315,26 +320,27 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
         const param = signature.parameters[argIndex].valueDeclaration;
         if (!(param && isParameter(param) && isIdentifier(param.name))) return undefined;
 
-        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getParameterType(signature, argIndex), /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
+        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getParameterType(signature, argIndex).getNonNullableType(), /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;
         return { kind: InfoKind.ObjectLiteral, token: param.name, identifier: param.name.text, properties, parentDeclaration: parent };
     }
 
-    if (token.kind === SyntaxKind.OpenBraceToken && isObjectLiteralExpression(parent)) {
-        const targetType = checker.getContextualType(parent) || checker.getTypeAtLocation(parent);
-        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
-        if (!length(properties)) return undefined;
+    if (token.kind === SyntaxKind.OpenBraceToken || isSatisfiesExpression(parent) || isReturnStatement(parent)) {
+        const expression = (isSatisfiesExpression(parent) || isReturnStatement(parent)) && parent.expression ? parent.expression : parent;
+        if (isObjectLiteralExpression(expression)) {
+            const targetType = isSatisfiesExpression(parent) ? checker.getTypeFromTypeNode(parent.type) :
+                checker.getContextualType(expression) || checker.getTypeAtLocation(expression);
+            const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), targetType.getNonNullableType(), /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
+            if (!length(properties)) return undefined;
 
-        // no identifier needed because the whole parentDeclaration has the error
-        const identifier = "";
-
-        return { kind: InfoKind.ObjectLiteral, token: parent, identifier, properties, parentDeclaration: parent };
+            return { kind: InfoKind.ObjectLiteral, token: parent, identifier: undefined, properties, parentDeclaration: expression, indentation: isReturnStatement(expression.parent) || isYieldExpression(expression.parent) ? 0 : undefined };
+        }
     }
 
     if (!isMemberName(token)) return undefined;
 
     if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectLiteralExpression(parent.initializer)) {
-        const targetType = checker.getContextualType(token) || checker.getTypeAtLocation(token);
+        const targetType = (checker.getContextualType(token) || checker.getTypeAtLocation(token))?.getNonNullableType();
         const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;
 
@@ -681,7 +687,8 @@ function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, 
     }
     if (type.flags & TypeFlags.EnumLike) {
         const enumMember = type.symbol.exports ? firstOrUndefinedIterator(type.symbol.exports.values()) : type.symbol;
-        const name = checker.symbolToExpression(type.symbol.parent ? type.symbol.parent : type.symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, /*flags*/ NodeBuilderFlags.UseFullyQualifiedType);
+        const symbol = type.symbol.parent && type.symbol.parent.flags & SymbolFlags.RegularEnum ? type.symbol.parent : type.symbol;
+        const name = checker.symbolToExpression(symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, /*flags*/ NodeBuilderFlags.UseFullyQualifiedType);
         return enumMember === undefined || name === undefined ? factory.createNumericLiteral(0) : factory.createPropertyAccessExpression(name, checker.symbolToString(enumMember));
     }
     if (type.flags & TypeFlags.NumberLiteral) {

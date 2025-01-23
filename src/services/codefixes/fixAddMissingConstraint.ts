@@ -63,7 +63,7 @@ registerCodeFix({
     fixIds: [fixId],
     getAllCodeActions: context => {
         const { program, preferences, host } = context;
-        const seen = new Map<number, true>();
+        const seen = new Set<number>();
 
         return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
             eachDiagnostic(context, errorCodes, diag => {
