@@ -40,6 +40,9 @@ class MyClassOk {
 namespace NotInstantiated {
     export interface JustAType { }
     export type ATypeInANamespace = {};
+    namespace Nested {
+        export type ATypeInANamespace = {};
+    }
 }
 declare namespace AmbientIsNotInstantiated {
     export const stillOk = 12;
