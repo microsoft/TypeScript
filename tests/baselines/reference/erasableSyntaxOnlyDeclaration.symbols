@@ -24,61 +24,71 @@ enum NotLegalEnum {
 >NotLegalEnum : Symbol(NotLegalEnum, Decl(decl.d.ts, 11, 1))
 
     B = 1
->B : Symbol(NotLegalEnum.B, Decl(decl.d.ts, 13, 19))
+>B : Symbol(NoGoodAlias, Decl(decl.d.ts, 13, 19))
 }
 
+import NoGoodAlias = NotLegalEnum.B;
+>NoGoodAlias : Symbol(NoGoodAlias, Decl(decl.d.ts, 15, 1))
+>NotLegalEnum : Symbol(NotLegalEnum, Decl(decl.d.ts, 11, 1))
+>B : Symbol(NoGoodAlias, Decl(decl.d.ts, 13, 19))
+
 const enum NotLegalConstEnum {
->NotLegalConstEnum : Symbol(NotLegalConstEnum, Decl(decl.d.ts, 15, 1))
+>NotLegalConstEnum : Symbol(NotLegalConstEnum, Decl(decl.d.ts, 17, 36))
 
     C = 2
->C : Symbol(NotLegalConstEnum.C, Decl(decl.d.ts, 17, 30))
+>C : Symbol(NotLegalConstEnum.C, Decl(decl.d.ts, 19, 30))
 }
 
 // No errors after this point
 class MyClassOk {
->MyClassOk : Symbol(MyClassOk, Decl(decl.d.ts, 19, 1))
+>MyClassOk : Symbol(MyClassOk, Decl(decl.d.ts, 21, 1))
 
     // Not a parameter property, ok
     constructor(foo: string);
->foo : Symbol(foo, Decl(decl.d.ts, 24, 16))
+>foo : Symbol(foo, Decl(decl.d.ts, 26, 16))
 }
 namespace NotInstantiated {
->NotInstantiated : Symbol(NotInstantiated, Decl(decl.d.ts, 25, 1))
+>NotInstantiated : Symbol(NotInstantiated, Decl(decl.d.ts, 27, 1))
 
     export interface JustAType { }
->JustAType : Symbol(JustAType, Decl(decl.d.ts, 26, 27))
+>JustAType : Symbol(JustAType, Decl(decl.d.ts, 28, 27))
 
     export type ATypeInANamespace = {};
->ATypeInANamespace : Symbol(ATypeInANamespace, Decl(decl.d.ts, 27, 34))
+>ATypeInANamespace : Symbol(ATypeInANamespace, Decl(decl.d.ts, 29, 34))
 }
 declare namespace AmbientIsNotInstantiated {
->AmbientIsNotInstantiated : Symbol(AmbientIsNotInstantiated, Decl(decl.d.ts, 29, 1))
+>AmbientIsNotInstantiated : Symbol(AmbientIsNotInstantiated, Decl(decl.d.ts, 31, 1))
 
     export const stillOk = 12;
->stillOk : Symbol(stillOk, Decl(decl.d.ts, 31, 16))
+>stillOk : Symbol(stillOk, Decl(decl.d.ts, 33, 16))
 }
 
 declare enum LegalEnum {
->LegalEnum : Symbol(LegalEnum, Decl(decl.d.ts, 32, 1))
+>LegalEnum : Symbol(LegalEnum, Decl(decl.d.ts, 34, 1))
 
     A = 1
->A : Symbol(LegalEnum.A, Decl(decl.d.ts, 34, 24))
+>A : Symbol(LegalEnum.A, Decl(decl.d.ts, 36, 24))
 }
 
 declare namespace AmbientStuff {
->AmbientStuff : Symbol(AmbientStuff, Decl(decl.d.ts, 36, 1))
+>AmbientStuff : Symbol(AmbientStuff, Decl(decl.d.ts, 38, 1))
 
     namespace Nested {
->Nested : Symbol(Nested, Decl(decl.d.ts, 38, 32))
+>Nested : Symbol(Nested, Decl(decl.d.ts, 40, 32))
 
         export const stillOk = 12;
->stillOk : Symbol(stillOk, Decl(decl.d.ts, 40, 20))
+>stillOk : Symbol(stillOk, Decl(decl.d.ts, 42, 20))
     }
     enum EnumInAmbientContext {
->EnumInAmbientContext : Symbol(EnumInAmbientContext, Decl(decl.d.ts, 41, 5))
+>EnumInAmbientContext : Symbol(EnumInAmbientContext, Decl(decl.d.ts, 43, 5))
 
         B = 1
->B : Symbol(EnumInAmbientContext.B, Decl(decl.d.ts, 42, 31))
+>B : Symbol(FineAlias, Decl(decl.d.ts, 44, 31))
     }
+
+    import FineAlias = EnumInAmbientContext.B;
+>FineAlias : Symbol(FineAlias, Decl(decl.d.ts, 46, 5))
+>EnumInAmbientContext : Symbol(EnumInAmbientContext, Decl(decl.d.ts, 43, 5))
+>B : Symbol(FineAlias, Decl(decl.d.ts, 44, 31))
 }
 

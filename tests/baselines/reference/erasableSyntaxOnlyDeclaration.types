@@ -37,6 +37,14 @@ enum NotLegalEnum {
 >  : ^
 }
 
+import NoGoodAlias = NotLegalEnum.B;
+>NoGoodAlias : NotLegalEnum.B
+>            : ^^^^^^^^^^^^^^
+>NotLegalEnum : NotLegalEnum
+>             : ^^^^^^^^^^^^
+>B : NotLegalEnum.B
+>  : ^^^^^^^^^^^^^^
+
 const enum NotLegalConstEnum {
 >NotLegalConstEnum : NotLegalConstEnum
 >                  : ^^^^^^^^^^^^^^^^^
@@ -110,5 +118,13 @@ declare namespace AmbientStuff {
 >1 : 1
 >  : ^
     }
+
+    import FineAlias = EnumInAmbientContext.B;
+>FineAlias : EnumInAmbientContext.B
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+>EnumInAmbientContext : EnumInAmbientContext
+>                     : ^^^^^^^^^^^^^^^^^^^^
+>B : EnumInAmbientContext.B
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 }
 

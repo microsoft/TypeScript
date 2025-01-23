@@ -21,6 +21,8 @@ decl.d.ts(4,1): error TS1046: Top-level declarations in .d.ts files must start w
         B = 1
     }
     
+    import NoGoodAlias = NotLegalEnum.B;
+    
     const enum NotLegalConstEnum {
         C = 2
     }
@@ -49,5 +51,7 @@ decl.d.ts(4,1): error TS1046: Top-level declarations in .d.ts files must start w
         enum EnumInAmbientContext {
             B = 1
         }
+    
+        import FineAlias = EnumInAmbientContext.B;
     }
     
