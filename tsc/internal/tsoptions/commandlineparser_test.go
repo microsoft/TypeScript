@@ -8,7 +8,9 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
 	"github.com/microsoft/typescript-go/internal/repo"
+	"github.com/microsoft/typescript-go/internal/testutil/baseline"
 	"github.com/microsoft/typescript-go/internal/testutil/filefixture"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"gotest.tools/v3/assert"
@@ -137,7 +139,7 @@ func TestParseCommandLineVerifyNull(t *testing.T) {
 }
 
 func createVerifyNullForNonNullIncluded(subScenario string, kind CommandLineOptionKind, nonNullValue string) verifyNull {
-	workerDiagnostics := GetCompilerOptionsDidYouMeanDiagnostics(append(optionsDeclarations, &CommandLineOption{
+	workerDiagnostics := getParseCommandLineWorkerDiagnostics(append(optionsDeclarations, &CommandLineOption{
 		Name:                    "optionName",
 		Kind:                    kind,
 		isTSConfigOnly:          true,
@@ -159,36 +161,34 @@ func (f commandLineSubScenario) assertParseResult(t *testing.T) {
 	t.Run(f.testName, func(t *testing.T) {
 		t.Parallel()
 		originalBaseline := f.baseline.ReadFile(t)
-		existing := parseExistingCompilerBaseline(t, originalBaseline)
+		tsBaseline := parseExistingCompilerBaseline(t, originalBaseline)
 
 		// f.workerDiagnostic is either defined or set to default pointer in `createSubScenario`
 		parsed := parseCommandLineWorker(f.workerDiagnostic, f.commandLine, vfs.FromOS())
 
-		assert.Equal(t, strings.Join(parsed.fileNames, ","), existing.fileNames)
+		newBaselineFileNames := strings.Join(parsed.fileNames, ",")
+		assert.Equal(t, tsBaseline.fileNames, newBaselineFileNames)
 
 		o, _ := json.Marshal(parsed.options)
-		parsedCompilerOptions := core.CompilerOptions{}
-		e := json.Unmarshal(o, &parsedCompilerOptions)
+		newParsedCompilerOptions := core.CompilerOptions{}
+		e := json.Unmarshal(o, &newParsedCompilerOptions)
 		assert.NilError(t, e)
-		assert.DeepEqual(t, parsedCompilerOptions, existing.options)
+		assert.DeepEqual(t, tsBaseline.options, newParsedCompilerOptions)
 
-		// todo: baselines not useful ATM
-		// baseline.Run(
-		// 	t,
-		// 	f.testName + ".js",
-		// 	p.formatNewCommandLineParse(o),
-		// 	baseline.Options{Subfolder: "tsoptions/commandLineParsing"},
-		// )
-		// todo: check parsed watch options
+		var formattedErrors strings.Builder
+		diagnosticwriter.WriteFormatDiagnostics(&formattedErrors, parsed.errors, &diagnosticwriter.FormattingOptions{NewLine: "\n"})
+		newBaselineErrors := formattedErrors.String()
 
-		// currently, Errors aren't checked for identical-ness because undefined/nil/error handling will be different
-		// var formattedErrors strings.Builder
-		// var formatOpts = &compiler.DiagnosticsFormattingOptions{
-		// 	NewLine: "\r\n",
-		// }
-		// compiler.WriteFormatDiagnostics(&formattedErrors, parsed.errors, formatOpts)
-		// assert.Equal(t, formattedErrors.String(), existing.errors)
+		// !!!
+		// useful for debugging--compares the new errors with the old errors. currently will NOT pass because of unimplemented options, not completely identical enum options, etc
+		// assert.Equal(t, tsBaseline.errors, newBaseline)
+
+		baseline.Run(t, f.testName+".js", formatNewBaseline(f.commandLine, o, newBaselineFileNames, newBaselineErrors), baseline.Options{Subfolder: "tsoptions/commandLineParsing"})
 	})
+}
+
+func (f *commandLineSubScenario) getBaselineName() (baseline.Options, string) {
+	return baseline.Options{Subfolder: "tsoptions/commandLineParsing"}, f.testName
 }
 
 func parseExistingCompilerBaseline(t *testing.T, baseline string) *TestCommandLineParser {
@@ -210,19 +210,25 @@ func parseExistingCompilerBaseline(t *testing.T, baseline string) *TestCommandLi
 }
 
 // todo: used in baseline writing
-// func (p *CommandLineParser) formatNewCommandLineParse(opts []byte) string {
-// 	var formatted strings.Builder
-// 	formatted.WriteString("CompilerOptions::\n")
-// 	formatted.Write(opts)
-// 	formatted.WriteString("WatchOptions::\n")
-// 	// todo: watch options not implemented
-// 	formatted.WriteString("FileNames::\n")
-// 	formatted.WriteString(strings.Join(p.fileNames, ","))
-// 	formatted.WriteString("Errors::\n")
-// 	// todo: using these will give circular dependicies
-// 	// compiler.WriteFormatDiagnostics(&formattedOptions, p.errors, formatOpts)
-// 	return formatted.String()
-// }
+func formatNewBaseline(
+	commandLine []string,
+	opts []byte,
+	fileNames string,
+	errors string,
+) string {
+	var formatted strings.Builder
+	formatted.WriteString("Args::\n")
+	formatted.WriteString("[\"" + strings.Join(commandLine, "\", \"") + "\"]")
+	formatted.WriteString("\n\nCompilerOptions::\n")
+	formatted.Write(opts)
+	// todo: watch options not implemented
+	// formatted.WriteString("WatchOptions::\n")
+	formatted.WriteString("\n\nFileNames::\n")
+	formatted.WriteString(fileNames)
+	formatted.WriteString("\n\nErrors::\n")
+	formatted.WriteString(errors)
+	return formatted.String()
+}
 
 // todo: --build not implemented
 // func parseExistingBuildBaseline(baseline string) *TestCommandLineParser {
@@ -243,31 +249,13 @@ func parseExistingCompilerBaseline(t *testing.T, baseline string) *TestCommandLi
 // 	return &parser
 // }
 
-var compilerOptionsDidYouMeanDiagnostics = GetCompilerOptionsDidYouMeanDiagnostics(optionsDeclarations)
-
-func GetCompilerOptionsDidYouMeanDiagnostics(decls []*CommandLineOption) *ParseCommandLineWorkerDiagnostics {
-	return &ParseCommandLineWorkerDiagnostics{
-		didYouMean: DidYouMeanOptionsDiagnostics{
-			alternateMode: &AlternateModeDiagnostics{
-				diagnostic:     diagnostics.Compiler_option_0_may_only_be_used_with_build,
-				optionsNameMap: GetNameMapFromList(optionsForBuild),
-			},
-			OptionDeclarations:          decls,
-			UnknownOptionDiagnostic:     diagnostics.Unknown_compiler_option_0,
-			UnknownDidYouMeanDiagnostic: diagnostics.Unknown_compiler_option_0_Did_you_mean_1,
-		},
-		optionsNameMap:               nil,
-		OptionTypeMismatchDiagnostic: diagnostics.Compiler_option_0_expects_an_argument,
-	}
-}
-
 func createSubScenario(subScenarioName string, commandline []string, d ...*ParseCommandLineWorkerDiagnostics) *commandLineSubScenario {
 	baselineFileName := "tests/baselines/reference/config/commandLineParsing/parseCommandLine/" + subScenarioName + ".js"
 	var workerDiagnostic *ParseCommandLineWorkerDiagnostics
 
 	// d is used for optional workerDiagnostic
 	if d == nil || d[0] == nil {
-		workerDiagnostic = compilerOptionsDidYouMeanDiagnostics
+		workerDiagnostic = CompilerOptionsDidYouMeanDiagnostics
 	} else {
 		workerDiagnostic = d[0]
 	}

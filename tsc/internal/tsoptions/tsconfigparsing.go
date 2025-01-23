@@ -283,9 +283,8 @@ func validateJsonOptionValue(
 		err, result := d(val)
 		if result == nil {
 			return val, nil
-		} else {
-			errors = append(errors, createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile.SourceFile, valueExpression, err, nil))
 		}
+		errors = append(errors, createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile.SourceFile, valueExpression, err))
 	} else {
 		return val, nil
 	}
