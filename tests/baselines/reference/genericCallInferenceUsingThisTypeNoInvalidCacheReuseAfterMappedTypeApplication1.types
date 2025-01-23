@@ -1,0 +1,144 @@
+//// [tests/cases/compiler/genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts] ////
+
+=== genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts ===
+declare const EffectTypeId: unique symbol;
+>EffectTypeId : unique symbol
+>             : ^^^^^^^^^^^^^
+
+interface Variance<out A, out E, out R> {
+  readonly [EffectTypeId]: VarianceStruct<A, E, R>;
+>[EffectTypeId] : VarianceStruct<A, E, R>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>EffectTypeId : unique symbol
+>             : ^^^^^^^^^^^^^
+}
+
+type Covariant<A> = (_: never) => A;
+>Covariant : Covariant<A>
+>          : ^^^^^^^^^^^^
+>_ : never
+>  : ^^^^^
+
+interface VarianceStruct<out A, out E, out R> {
+  readonly _V: string;
+>_V : string
+>   : ^^^^^^
+
+  readonly _A: Covariant<A>;
+>_A : Covariant<A>
+>   : ^^^^^^^^^^^^
+
+  readonly _E: Covariant<E>;
+>_E : Covariant<E>
+>   : ^^^^^^^^^^^^
+
+  readonly _R: Covariant<R>;
+>_R : Covariant<R>
+>   : ^^^^^^^^^^^^
+}
+
+interface Effect<out A, out E = never, out R = never>
+  extends Variance<A, E, R> {}
+
+declare const succeed: <A>(value: A) => Effect<A>;
+>succeed : <A>(value: A) => Effect<A>
+>        : ^ ^^     ^^ ^^^^^         
+>value : A
+>      : ^
+
+type F<X, Y> = Y extends { _type: infer Z }
+>F : F<X, Y>
+>  : ^^^^^^^
+>_type : Z
+>      : ^
+
+  ? X extends Effect<infer A, infer E, infer R>
+    ? Effect<A, E, R | Z>
+    : X
+  : X;
+
+type ProxyMap<Service> = {
+>ProxyMap : ProxyMap<Service>
+>         : ^^^^^^^^^^^^^^^^^
+
+  [K in keyof Service]: (Service & { _type: Service })[K];
+>_type : Service
+>      : ^^^^^^^
+
+};
+
+declare const implement: <T>() => <I extends ReadonlyArray<any>, X>(
+>implement : <T>() => <I extends ReadonlyArray<any>, X>(x: (...i: I) => X) => (...i: I) => F<X, T>
+>          : ^ ^^^^^^^                                                                            
+
+  x: (...i: I) => X,
+>x : (...i: I) => X
+>  : ^^^^ ^^ ^^^^^ 
+>i : I
+>  : ^
+
+) => (...i: I) => F<X, T>;
+>i : I
+>  : ^
+
+class XXX {
+>XXX : XXX
+>    : ^^^
+
+  log = implement<this>()(<N extends number>(n: N) => succeed(n));
+>log : <N extends number>(n: N) => F<Effect<N, never, never>, this>
+>    : ^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>implement<this>()(<N extends number>(n: N) => succeed(n)) : <N extends number>(n: N) => F<Effect<N, never, never>, this>
+>                                                          : ^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>implement<this>() : <I extends ReadonlyArray<any>, X>(x: (...i: I) => X) => (...i: I) => F<X, this>
+>                  : ^ ^^^^^^^^^                  ^^ ^^ ^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>implement : <T>() => <I extends ReadonlyArray<any>, X>(x: (...i: I) => X) => (...i: I) => F<X, T>
+>          : ^ ^^^^^^^                                                                            
+><N extends number>(n: N) => succeed(n) : <N extends number>(n: N) => Effect<N, never, never>
+>                                       : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : N
+>  : ^
+>succeed(n) : Effect<N, never, never>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>succeed : <A>(value: A) => Effect<A>
+>        : ^ ^^     ^^ ^^^^^         
+>n : N
+>  : ^
+}
+
+export declare const inner: XXX;
+>inner : XXX
+>      : ^^^
+
+export declare const outer: ProxyMap<XXX>;
+>outer : ProxyMap<XXX>
+>      : ^^^^^^^^^^^^^
+
+export const a = inner.log(100); // Effect<100, never, never>
+>a : Effect<100, never, never>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>inner.log(100) : Effect<100, never, never>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>inner.log : <N extends number>(n: N) => Effect<N, never, never>
+>          : ^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inner : XXX
+>      : ^^^
+>log : <N extends number>(n: N) => Effect<N, never, never>
+>    : ^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>100 : 100
+>    : ^^^
+
+export const b = outer.log(100); // Effect<100, never, XXX>
+>b : Effect<100, never, XXX>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
+>outer.log(100) : Effect<100, never, XXX>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>outer.log : <N extends number>(n: N) => Effect<N, never, XXX>
+>          : ^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outer : ProxyMap<XXX>
+>      : ^^^^^^^^^^^^^
+>log : <N extends number>(n: N) => Effect<N, never, XXX>
+>    : ^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>100 : 100
+>    : ^^^
+
