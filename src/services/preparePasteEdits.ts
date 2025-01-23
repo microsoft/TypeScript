@@ -2,7 +2,6 @@ import {
     findAncestor,
     forEachChild,
     getTokenAtPosition,
-    isBindingElement,
     isIdentifier,
     isImportClause,
     isImportDeclaration,
