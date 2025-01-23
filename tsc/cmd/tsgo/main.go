@@ -255,7 +255,7 @@ type table struct {
 
 func (t *table) add(name string, value any) {
 	if d, ok := value.(time.Duration); ok {
-		value = roundDuration(d)
+		value = formatDuration(d)
 	}
 	t.rows = append(t.rows, tableRow{name, fmt.Sprint(value)})
 }
@@ -273,16 +273,8 @@ func (t *table) print() {
 	}
 }
 
-func roundDuration(d time.Duration) time.Duration {
-	switch {
-	case d > time.Second:
-		d = d.Round(time.Second / 1000)
-	case d > time.Millisecond:
-		d = d.Round(time.Millisecond / 1000)
-	case d > time.Microsecond:
-		d = d.Round(time.Microsecond / 1000)
-	}
-	return d
+func formatDuration(d time.Duration) string {
+	return fmt.Sprintf("%.3fs", d.Seconds())
 }
 
 func listFiles(p *ts.Program) {
