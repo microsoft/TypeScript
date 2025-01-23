@@ -1,7 +1,7 @@
 /// <reference path='./fourslash.ts' />
 
 // @Filename: /file1.ts
-//// import [|{abc}|] from "./file2";
+//// [|import {abc} from "./file2";|]
 //// [|const a = 1;|]
 //// [|function foo() {
 ////     console.log("testing");}|]
