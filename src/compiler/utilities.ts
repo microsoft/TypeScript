@@ -138,6 +138,7 @@ import {
     FileExtensionInfo,
     fileExtensionIs,
     fileExtensionIsOneOf,
+    FileReference,
     FileWatcher,
     filter,
     find,
@@ -408,6 +409,7 @@ import {
     lastOrUndefined,
     LateVisibilityPaintedStatement,
     length,
+    libMap,
     LiteralImportTypeNode,
     LiteralLikeElementAccessExpression,
     LiteralLikeNode,
@@ -497,6 +499,7 @@ import {
     ResolutionMode,
     ResolvedModuleFull,
     ResolvedModuleWithFailedLookupLocations,
+    ResolvedProjectReference,
     ResolvedTypeReferenceDirective,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     resolvePath,
@@ -549,6 +552,7 @@ import {
     TextRange,
     TextSpan,
     ThisTypePredicate,
+    toFileNameLowerCase,
     Token,
     TokenFlags,
     tokenToString,
@@ -1558,6 +1562,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "fround",
                 "cbrt",
             ],
+            esnext: [
+                "f16round",
+            ],
         })),
         Map: new Map(Object.entries({
             es2015: [
@@ -1727,6 +1734,10 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "getBigInt64",
                 "getBigUint64",
             ],
+            esnext: [
+                "setFloat16",
+                "getFloat16",
+            ],
         })),
         BigInt: new Map(Object.entries({
             es2020: emptyArray,
@@ -1828,6 +1839,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "toSpliced",
                 "with",
             ],
+        })),
+        Float16Array: new Map(Object.entries({
+            esnext: emptyArray,
         })),
         Float32Array: new Map(Object.entries({
             es2022: [
@@ -3014,14 +3028,6 @@ export function forEachPropertyAssignment<T>(objectLiteral: ObjectLiteralExpress
             callback(property) :
             undefined;
     });
-}
-
-/** @internal */
-export function getPropertyArrayElementValue(objectLiteral: ObjectLiteralExpression, propKey: string, elementValue: string): StringLiteral | undefined {
-    return forEachPropertyAssignment(objectLiteral, propKey, property =>
-        isArrayLiteralExpression(property.initializer) ?
-            find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
-            undefined);
 }
 
 /** @internal */
@@ -10471,6 +10477,7 @@ export function isValidBigIntString(s: string, roundTripOnly: boolean): boolean 
 /** @internal */
 export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
     return !!(useSite.flags & NodeFlags.Ambient)
+        || isInJSDoc(useSite)
         || isPartOfTypeQuery(useSite)
         || isIdentifierInNonEmittingHeritageClause(useSite)
         || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
@@ -12112,4 +12119,92 @@ export function isNewScopeNode(node: Node): node is IntroducesNewScopeNode {
     return isFunctionLike(node)
         || isJSDocSignature(node)
         || isMappedTypeNode(node);
+}
+
+/** @internal */
+export function getLibNameFromLibReference(libReference: FileReference): string {
+    return toFileNameLowerCase(libReference.fileName);
+}
+
+/** @internal */
+export function getLibFileNameFromLibReference(libReference: FileReference): string | undefined {
+    const libName = getLibNameFromLibReference(libReference);
+    return libMap.get(libName);
+}
+
+/** @internal */
+export function forEachResolvedProjectReference<T>(
+    resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
+    cb: (resolvedProjectReference: ResolvedProjectReference, parent: ResolvedProjectReference | undefined) => T | undefined,
+): T | undefined {
+    return forEachProjectReference(
+        /*projectReferences*/ undefined,
+        resolvedProjectReferences,
+        (resolvedRef, parent) => resolvedRef && cb(resolvedRef, parent),
+    );
+}
+
+/** @internal */
+export function forEachProjectReference<T>(
+    projectReferences: readonly ProjectReference[] | undefined,
+    resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
+    cbResolvedRef: (resolvedRef: ResolvedProjectReference | undefined, parent: ResolvedProjectReference | undefined, index: number) => T | undefined,
+    cbRef?: (projectReferences: readonly ProjectReference[] | undefined, parent: ResolvedProjectReference | undefined) => T | undefined,
+): T | undefined {
+    let seenResolvedRefs: Set<Path> | undefined;
+    return worker(projectReferences, resolvedProjectReferences, /*parent*/ undefined);
+
+    function worker(
+        projectReferences: readonly ProjectReference[] | undefined,
+        resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
+        parent: ResolvedProjectReference | undefined,
+    ): T | undefined {
+        // Visit project references first
+        if (cbRef) {
+            const result = cbRef(projectReferences, parent);
+            if (result) return result;
+        }
+        let skipChildren: Set<ResolvedProjectReference> | undefined;
+        return forEach(
+            resolvedProjectReferences,
+            (resolvedRef, index) => {
+                if (resolvedRef && seenResolvedRefs?.has(resolvedRef.sourceFile.path)) {
+                    (skipChildren ??= new Set()).add(resolvedRef);
+                    // ignore recursives
+                    return undefined;
+                }
+                const result = cbResolvedRef(resolvedRef, parent, index);
+                if (result || !resolvedRef) return result;
+                (seenResolvedRefs ||= new Set()).add(resolvedRef.sourceFile.path);
+            },
+        ) || forEach(
+            resolvedProjectReferences,
+            resolvedRef =>
+                resolvedRef && !skipChildren?.has(resolvedRef) ?
+                    worker(resolvedRef.commandLine.projectReferences, resolvedRef.references, resolvedRef) :
+                    undefined,
+        );
+    }
+}
+
+/** @internal */
+export function getOptionsSyntaxByArrayElementValue(optionsObject: ObjectLiteralExpression | undefined, name: string, value: string): StringLiteral | undefined {
+    return optionsObject && getPropertyArrayElementValue(optionsObject, name, value);
+}
+
+function getPropertyArrayElementValue(objectLiteral: ObjectLiteralExpression, propKey: string, elementValue: string): StringLiteral | undefined {
+    return forEachPropertyAssignment(objectLiteral, propKey, property =>
+        isArrayLiteralExpression(property.initializer) ?
+            find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
+            undefined);
+}
+
+/** @internal */
+export function getOptionsSyntaxByValue(optionsObject: ObjectLiteralExpression | undefined, name: string, value: string): StringLiteral | undefined {
+    return forEachOptionsSyntaxByName(optionsObject, name, property => isStringLiteral(property.initializer) && property.initializer.text === value ? property.initializer : undefined);
+}
+
+/** @internal */
+export function forEachOptionsSyntaxByName<T>(optionsObject: ObjectLiteralExpression | undefined, name: string, callback: (prop: PropertyAssignment) => T | undefined): T | undefined {
+    return forEachPropertyAssignment(optionsObject, name, callback);
 }

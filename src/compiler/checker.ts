@@ -1824,6 +1824,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getNumberLiteralType,
         getBigIntType: () => bigintType,
         getBigIntLiteralType,
+        getUnknownType: () => unknownType,
         createPromiseType,
         createArrayType,
         getElementTypeOfArrayType,
@@ -6267,7 +6268,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return true;
                 }
                 if (requiresAddingUndefined && annotationType) {
-                    annotationType = getOptionalType(annotationType, !isParameter(node));
+                    annotationType = addOptionality(annotationType, !isParameter(node));
                 }
                 return !!annotationType && typeNodeIsEquivalentToType(node, type, annotationType) && existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, type);
             },
@@ -16683,6 +16684,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case "Number":
                     checkNoTypeArguments(node);
                     return numberType;
+                case "BigInt":
+                    checkNoTypeArguments(node);
+                    return bigintType;
                 case "Boolean":
                     checkNoTypeArguments(node);
                     return booleanType;
@@ -27181,7 +27185,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return target.kind === SyntaxKind.SuperKeyword;
             case SyntaxKind.NonNullExpression:
             case SyntaxKind.ParenthesizedExpression:
-                return isMatchingReference((source as NonNullExpression | ParenthesizedExpression).expression, target);
+            case SyntaxKind.SatisfiesExpression:
+                return isMatchingReference((source as NonNullExpression | ParenthesizedExpression | SatisfiesExpression).expression, target);
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 const sourcePropertyName = getAccessedPropertyName(source as AccessExpression);
@@ -29533,7 +29538,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return narrowTypeByCallExpression(type, expr as CallExpression, assumeTrue);
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.NonNullExpression:
-                    return narrowType(type, (expr as ParenthesizedExpression | NonNullExpression).expression, assumeTrue);
+                case SyntaxKind.SatisfiesExpression:
+                    return narrowType(type, (expr as ParenthesizedExpression | NonNullExpression | SatisfiesExpression).expression, assumeTrue);
                 case SyntaxKind.BinaryExpression:
                     return narrowTypeByBinaryExpression(type, expr as BinaryExpression, assumeTrue);
                 case SyntaxKind.PrefixUnaryExpression:
