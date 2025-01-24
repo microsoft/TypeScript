@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/declarationEmitComputedNameWithQuestionToken.ts] ////
+
+=== declarationEmitComputedNameWithQuestionToken.ts ===
+declare var something: string;
+>something : Symbol(something, Decl(declarationEmitComputedNameWithQuestionToken.ts, 0, 11))
+
+export const dataSomething = `data-${something}` as const;
+>dataSomething : Symbol(dataSomething, Decl(declarationEmitComputedNameWithQuestionToken.ts, 1, 12))
+>something : Symbol(something, Decl(declarationEmitComputedNameWithQuestionToken.ts, 0, 11))
+>const : Symbol(const)
+
+export class WithData {
+>WithData : Symbol(WithData, Decl(declarationEmitComputedNameWithQuestionToken.ts, 1, 58))
+
+    [dataSomething]?() {
+>[dataSomething] : Symbol(WithData[dataSomething], Decl(declarationEmitComputedNameWithQuestionToken.ts, 3, 23))
+>dataSomething : Symbol(dataSomething, Decl(declarationEmitComputedNameWithQuestionToken.ts, 1, 12))
+
+        return "something";
+    }
+}
+
+export const a = (new WithData())["ahahahaahah"]!();
+>a : Symbol(a, Decl(declarationEmitComputedNameWithQuestionToken.ts, 9, 12))
+>WithData : Symbol(WithData, Decl(declarationEmitComputedNameWithQuestionToken.ts, 1, 58))
+
