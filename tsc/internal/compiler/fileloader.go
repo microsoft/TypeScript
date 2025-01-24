@@ -11,7 +11,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/compiler/module"
 	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -217,13 +216,7 @@ func (t *parseTask) start(loader *fileLoader) {
 
 func (p *fileLoader) parseSourceFile(fileName string) *ast.SourceFile {
 	path := tspath.ToPath(fileName, p.host.GetCurrentDirectory(), p.host.FS().UseCaseSensitiveFileNames())
-	text, _ := p.host.FS().ReadFile(fileName)
-	var sourceFile *ast.SourceFile
-	if tspath.FileExtensionIs(fileName, tspath.ExtensionJson) {
-		sourceFile = parser.ParseJSONText(fileName, text)
-	} else {
-		sourceFile = parser.ParseSourceFile(fileName, text, p.compilerOptions.GetEmitScriptTarget())
-	}
+	sourceFile := p.host.GetSourceFile(fileName, p.compilerOptions.GetEmitScriptTarget())
 	sourceFile.SetPath(path)
 	return sourceFile
 }
