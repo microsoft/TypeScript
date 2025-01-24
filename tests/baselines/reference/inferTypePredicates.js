@@ -280,6 +280,16 @@ if (foobarPred(foobar)) {
   foobar.foo;
 }
 
+// https://github.com/microsoft/TypeScript/issues/60778
+const arrTest: Array<number> = [1, 2, null, 3].filter(
+  (x) => (x != null) satisfies boolean,
+);
+
+function isEmptyString(x: unknown) {
+  const rv = x === "";
+  return rv satisfies boolean;
+}
+
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -538,6 +548,12 @@ var foobarPred = function (fb) { return fb.type === "foo"; };
 if (foobarPred(foobar)) {
     foobar.foo;
 }
+// https://github.com/microsoft/TypeScript/issues/60778
+var arrTest = [1, 2, null, 3].filter(function (x) { return (x != null); });
+function isEmptyString(x) {
+    var rv = x === "";
+    return rv;
+}
 
 
 //// [inferTypePredicates.d.ts]
@@ -630,3 +646,5 @@ declare const foobarPred: (fb: typeof foobar) => fb is {
     type: "foo";
     foo: number;
 };
+declare const arrTest: Array<number>;
+declare function isEmptyString(x: unknown): x is "";

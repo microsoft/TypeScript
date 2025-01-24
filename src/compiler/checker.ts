@@ -1931,7 +1931,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         isTypeParameterPossiblyReferenced,
         typeHasCallOrConstructSignatures,
         getSymbolFlags,
+        getTypeArgumentsForResolvedSignature,
     };
+
+    function getTypeArgumentsForResolvedSignature(signature: Signature) {
+        if (signature.mapper === undefined) return undefined;
+        return instantiateTypes((signature.target || signature).typeParameters, signature.mapper);
+    }
 
     function getCandidateSignaturesForStringLiteralCompletions(call: CallLikeExpression, editingArgument: Node) {
         const candidatesSet = new Set<Signature>();
@@ -4715,7 +4721,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (errorNode && resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
                     errorOnImplicitAnyModule(/*isError*/ false, errorNode, currentSourceFile, mode, resolvedModule, moduleReference);
                 }
-                if (errorNode && (moduleResolutionKind === ModuleResolutionKind.Node16 || moduleResolutionKind === ModuleResolutionKind.NodeNext)) {
+                if (errorNode && (moduleKind === ModuleKind.Node16 || moduleKind === ModuleKind.Node18)) {
                     const isSyncImport = (currentSourceFile.impliedNodeFormat === ModuleKind.CommonJS && !findAncestor(location, isImportCall)) || !!findAncestor(location, isImportEqualsDeclaration);
                     const overrideHost = findAncestor(location, l => isImportTypeNode(l) || isExportDeclaration(l) || isImportDeclaration(l) || isJSDocImportTag(l));
                     // An override clause will take effect for type-only imports and import types, and allows importing the types across formats, regardless of
@@ -16684,6 +16690,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case "Number":
                     checkNoTypeArguments(node);
                     return numberType;
+                case "BigInt":
+                    checkNoTypeArguments(node);
+                    return bigintType;
                 case "Boolean":
                     checkNoTypeArguments(node);
                     return booleanType;
@@ -27182,7 +27191,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return target.kind === SyntaxKind.SuperKeyword;
             case SyntaxKind.NonNullExpression:
             case SyntaxKind.ParenthesizedExpression:
-                return isMatchingReference((source as NonNullExpression | ParenthesizedExpression).expression, target);
+            case SyntaxKind.SatisfiesExpression:
+                return isMatchingReference((source as NonNullExpression | ParenthesizedExpression | SatisfiesExpression).expression, target);
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 const sourcePropertyName = getAccessedPropertyName(source as AccessExpression);
@@ -29534,7 +29544,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return narrowTypeByCallExpression(type, expr as CallExpression, assumeTrue);
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.NonNullExpression:
-                    return narrowType(type, (expr as ParenthesizedExpression | NonNullExpression).expression, assumeTrue);
+                case SyntaxKind.SatisfiesExpression:
+                    return narrowType(type, (expr as ParenthesizedExpression | NonNullExpression | SatisfiesExpression).expression, assumeTrue);
                 case SyntaxKind.BinaryExpression:
                     return narrowTypeByBinaryExpression(type, expr as BinaryExpression, assumeTrue);
                 case SyntaxKind.PrefixUnaryExpression:
@@ -33467,6 +33478,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getJsxElementChildrenPropertyName(jsxNamespace: Symbol): __String | undefined {
+        if (compilerOptions.jsx === JsxEmit.ReactJSX || compilerOptions.jsx === JsxEmit.ReactJSXDev) {
+            // In these JsxEmit modes the children property is fixed to 'children'
+            return "children" as __String;
+        }
         return getNameFromJsxElementAttributesContainer(JsxNames.ElementChildrenAttributeNameContainer, jsxNamespace);
     }
 
@@ -41290,6 +41305,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkVariableLikeDeclaration(node);
         const func = getContainingFunction(node)!;
         if (hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
+            if (compilerOptions.erasableSyntaxOnly) {
+                error(node, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
+            }
             if (!(func.kind === SyntaxKind.Constructor && nodeIsPresent(func.body))) {
                 error(node, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
             }
@@ -47504,6 +47522,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkExportsOnMergedDeclarations(node);
         node.members.forEach(checkEnumMember);
 
+        if (compilerOptions.erasableSyntaxOnly && !(node.flags & NodeFlags.Ambient)) {
+            error(node, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
+        }
+
         computeEnumMemberValues(node);
 
         // Spec 2014 - Section 9.3:
@@ -47643,6 +47665,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 && !inAmbientContext
                 && isInstantiatedModule(node, shouldPreserveConstEnums(compilerOptions))
             ) {
+                if (compilerOptions.erasableSyntaxOnly) {
+                    error(node.name, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
+                }
+
                 if (getIsolatedModules(compilerOptions) && !getSourceFileOfNode(node).externalModuleIndicator) {
                     // This could be loosened a little if needed. The only problem we are trying to avoid is unqualified
                     // references to namespace members declared in other files. But use of namespaces is discouraged anyway,
@@ -48077,6 +48103,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 );
             }
 
+            if (moduleKind === ModuleKind.NodeNext && !isImportAttributes) {
+                return grammarErrorOnFirstToken(node, Diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_asserts);
+            }
+
             if (declaration.moduleSpecifier && getEmitSyntaxForModuleSpecifierExpression(declaration.moduleSpecifier) === ModuleKind.CommonJS) {
                 return grammarErrorOnNode(
                     node,
@@ -48155,7 +48185,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         checkGrammarModifiers(node);
-        if (isInternalModuleImportEqualsDeclaration(node) || checkExternalImportOrExportDeclaration(node)) {
+        const isImportEquals = isInternalModuleImportEqualsDeclaration(node);
+        if (compilerOptions.erasableSyntaxOnly && isImportEquals && !(node.flags & NodeFlags.Ambient)) {
+            error(node, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
+        }
+        if (isImportEquals || checkExternalImportOrExportDeclaration(node)) {
             checkImportBinding(node);
             markLinkedReferences(node, ReferenceHint.ExportImportEquals);
             if (node.moduleReference.kind !== SyntaxKind.ExternalModuleReference) {

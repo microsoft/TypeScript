@@ -5439,6 +5439,8 @@ export interface TypeChecker {
     /** @internal */ typeHasCallOrConstructSignatures(type: Type): boolean;
     /** @internal */ getSymbolFlags(symbol: Symbol): SymbolFlags;
     /** @internal */ fillMissingTypeArguments(typeArguments: readonly Type[], typeParameters: readonly TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean): Type[];
+
+    getTypeArgumentsForResolvedSignature(signature: Signature): readonly Type[] | undefined;
 }
 
 /** @internal */
@@ -7503,6 +7505,7 @@ export interface CompilerOptions {
     /** Paths used to compute primary types search locations */
     typeRoots?: string[];
     verbatimModuleSyntax?: boolean;
+    erasableSyntaxOnly?: boolean;
     /** @internal */ version?: boolean;
     /** @internal */ watch?: boolean;
     esModuleInterop?: boolean;

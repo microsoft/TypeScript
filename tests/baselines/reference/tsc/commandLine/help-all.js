@@ -167,6 +167,11 @@ Allow 'import x from y' when a module doesn't have a default export.
 type: boolean
 default: module === "system" or esModuleInterop
 
+[94m--erasableSyntaxOnly[39m
+Do not allow runtime constructs that are not part of ECMAScript.
+type: boolean
+default: false
+
 [94m--esModuleInterop[39m
 Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility.
 type: boolean
