@@ -245,14 +245,6 @@ func (p *Program) findSourceFile(candidate string, reason FileIncludeReason) *as
 	return p.filesByPath[path]
 }
 
-func (p *Program) parseSourceFile(fileName string) *ast.SourceFile {
-	path := tspath.ToPath(fileName, p.currentDirectory, p.host.FS().UseCaseSensitiveFileNames())
-	text, _ := p.host.FS().ReadFile(fileName)
-	sourceFile := parser.ParseSourceFile(fileName, text, p.compilerOptions.GetEmitScriptTarget())
-	sourceFile.SetPath(path)
-	return sourceFile
-}
-
 func getModuleNames(file *ast.SourceFile) []*ast.Node {
 	res := slices.Clone(file.Imports)
 	for _, imp := range file.ModuleAugmentations {
