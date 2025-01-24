@@ -7,4 +7,4 @@ paths-ignore:
 query-filters:
   # Falls over on our dynamic RegExp generation
   - exclude:
-      id: js/incomplete-sanitization
+      id: js/regex-injection
