@@ -2590,6 +2590,7 @@
 // |     [xyz: number]: boolean;
 // | }
 // | any
+// | type AnyFunction = (...args: any) => any
 // | interface Array<T>
 // | var Array: ArrayConstructor
 // | interface ArrayBuffer
@@ -2690,7 +2691,7 @@
 // | type Omit<T, K extends keyof any> = { [P in Exclude<keyof T, K>]: T[P]; }
 // | type OmitThisParameter<T> = unknown extends ThisParameterType<T> ? T : T extends (...args: infer A) => infer R ? (...args: A) => R : T
 // | type ParameterDecorator = (target: Object, propertyKey: string | symbol | undefined, parameterIndex: number) => void
-// | type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never
+// | type Parameters<T extends AnyFunction> = T extends (...args: infer P) => any ? P : never
 // | type Partial<T> = { [P in keyof T]?: T[P]; }
 // | type Pick<T, K extends keyof T> = { [P in K]: T[P]; }
 // | interface Promise<T>
@@ -2716,7 +2717,7 @@
 // | interface RegExpExecArray
 // | interface RegExpMatchArray
 // | type Required<T> = { [P in keyof T]-?: T[P]; }
-// | type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any
+// | type ReturnType<T extends AnyFunction> = T extends (...args: any) => infer R ? R : any
 // | string
 // | interface String
 // | var String: StringConstructor
@@ -2770,6 +2771,7 @@
 // |     [xyz: number]: boolean;
 // | }
 // | any
+// | type AnyFunction = (...args: any) => any
 // | interface Array<T>
 // | var Array: ArrayConstructor
 // | interface ArrayBuffer
@@ -2870,7 +2872,7 @@
 // | type Omit<T, K extends keyof any> = { [P in Exclude<keyof T, K>]: T[P]; }
 // | type OmitThisParameter<T> = unknown extends ThisParameterType<T> ? T : T extends (...args: infer A) => infer R ? (...args: A) => R : T
 // | type ParameterDecorator = (target: Object, propertyKey: string | symbol | undefined, parameterIndex: number) => void
-// | type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never
+// | type Parameters<T extends AnyFunction> = T extends (...args: infer P) => any ? P : never
 // | type Partial<T> = { [P in keyof T]?: T[P]; }
 // | type Pick<T, K extends keyof T> = { [P in K]: T[P]; }
 // | interface Promise<T>
@@ -2896,7 +2898,7 @@
 // | interface RegExpExecArray
 // | interface RegExpMatchArray
 // | type Required<T> = { [P in keyof T]-?: T[P]; }
-// | type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any
+// | type ReturnType<T extends AnyFunction> = T extends (...args: any) => infer R ? R : any
 // | string
 // | interface String
 // | var String: StringConstructor
@@ -74348,6 +74350,88 @@
           ]
         },
         {
+          "name": "AnyFunction",
+          "kind": "type",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "AnyFunction",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "...",
+              "kind": "punctuation"
+            },
+            {
+              "text": "args",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=>",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A wrapper for a function with any amount of arguments and any return value.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -80309,48 +80393,8 @@
               "kind": "space"
             },
             {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "...",
-              "kind": "punctuation"
-            },
-            {
-              "text": "args",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "=>",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
+              "text": "AnyFunction",
+              "kind": "aliasName"
             },
             {
               "text": ">",
@@ -82090,48 +82134,8 @@
               "kind": "space"
             },
             {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "...",
-              "kind": "punctuation"
-            },
-            {
-              "text": "args",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "=>",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
+              "text": "AnyFunction",
+              "kind": "aliasName"
             },
             {
               "text": ">",
@@ -83819,6 +83823,88 @@
           ]
         },
         {
+          "name": "AnyFunction",
+          "kind": "type",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "AnyFunction",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "...",
+              "kind": "punctuation"
+            },
+            {
+              "text": "args",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=>",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A wrapper for a function with any amount of arguments and any return value.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -89780,48 +89866,8 @@
               "kind": "space"
             },
             {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "...",
-              "kind": "punctuation"
-            },
-            {
-              "text": "args",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "=>",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
+              "text": "AnyFunction",
+              "kind": "aliasName"
             },
             {
               "text": ">",
@@ -91561,48 +91607,8 @@
               "kind": "space"
             },
             {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "...",
-              "kind": "punctuation"
-            },
-            {
-              "text": "args",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "=>",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
+              "text": "AnyFunction",
+              "kind": "aliasName"
             },
             {
               "text": ">",

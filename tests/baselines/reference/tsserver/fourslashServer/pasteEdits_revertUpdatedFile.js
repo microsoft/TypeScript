@@ -425,6 +425,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "AnyFunction",
+            "kind": "type",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "Array",
             "kind": "var",
             "kindModifiers": "declare",

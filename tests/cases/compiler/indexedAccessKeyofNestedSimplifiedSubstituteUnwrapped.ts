@@ -1,4 +1,3 @@
-type AnyFunction = (...args: any[]) => any;
 type Params<T> = Parameters<Extract<T, AnyFunction>>;
 
 interface Wrapper<T> {

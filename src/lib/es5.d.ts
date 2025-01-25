@@ -1657,7 +1657,7 @@ type NoInfer<T> = intrinsic;
 /**
  * A wrapper for a function with any amount of arguments and any return value.
  */
-type AnyFunction = (...args: any) => any;
+type AnyFunction = (...args: any[]) => any;
 
 /**
  * Marker for contextual 'this' type
