@@ -1612,7 +1612,7 @@ type NonNullable<T> = T & {};
 /**
  * Obtain the parameters of a function type in a tuple
  */
-type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never;
+type Parameters<T extends AnyFunction> = T extends (...args: infer P) => any ? P : never;
 
 /**
  * Obtain the parameters of a constructor function type in a tuple
@@ -1622,7 +1622,7 @@ type ConstructorParameters<T extends abstract new (...args: any) => any> = T ext
 /**
  * Obtain the return type of a function type
  */
-type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
+type ReturnType<T extends AnyFunction> = T extends (...args: any) => infer R ? R : any;
 
 /**
  * Obtain the return type of a constructor function type
@@ -1653,6 +1653,11 @@ type Uncapitalize<S extends string> = intrinsic;
  * Marker for non-inference type position
  */
 type NoInfer<T> = intrinsic;
+
+/**
+ * A wrapper for a function with any amount of arguments and any return value.
+ */
+type AnyFunction = (...args: any) => any;
 
 /**
  * Marker for contextual 'this' type
