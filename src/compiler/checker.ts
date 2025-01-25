@@ -18430,19 +18430,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case IntrinsicTypeKind.Lowercase:
                 return str.toLowerCase();
             case IntrinsicTypeKind.Capitalize:
-                return toCapitalized(str);
+                return str.charAt(0).toUpperCase() + str.slice(1);
             case IntrinsicTypeKind.Uncapitalize:
-                return toUncapitalized(str);
+                return str.charAt(0).toLowerCase() + str.slice(1);
         }
         return str;
-    }
-
-    function toCapitalized(str: string) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-
-    function toUncapitalized(str: string) {
-        return str.charAt(0).toLowerCase() + str.slice(1);
     }
 
     function applyTemplateStringMapping(symbol: Symbol, texts: readonly string[], types: readonly Type[]): [texts: readonly string[], types: readonly Type[]] {
@@ -18452,15 +18444,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case IntrinsicTypeKind.Lowercase:
                 return [texts.map(t => t.toLowerCase()), types.map(t => getStringMappingType(symbol, t))];
             case IntrinsicTypeKind.Capitalize:
-                return handleCapitalization(symbol, texts, types, toCapitalized);
+                return [texts[0] === "" ? texts : [texts[0].charAt(0).toUpperCase() + texts[0].slice(1), ...texts.slice(1)], texts[0] === "" ? [getStringMappingType(symbol, types[0]), ...types.slice(1)] : types];
             case IntrinsicTypeKind.Uncapitalize:
-                return handleCapitalization(symbol, texts, types, toUncapitalized);
+                return [texts[0] === "" ? texts : [texts[0].charAt(0).toLowerCase() + texts[0].slice(1), ...texts.slice(1)], texts[0] === "" ? [getStringMappingType(symbol, types[0]), ...types.slice(1)] : types];
         }
         return [texts, types];
-    }
-
-    function handleCapitalization(symbol: Symbol, texts: readonly string[], types: readonly Type[], updateFn: (input: string) => string): [texts: readonly string[], types: readonly Type[]] {
-        return [texts[0] === "" ? texts : [updateFn(texts[0]), ...texts.slice(1)], texts[0] === "" ? [getStringMappingType(symbol, types[0]), ...types.slice(1)] : types];
     }
 
     function getStringMappingTypeForGenericType(symbol: Symbol, type: Type): Type {
@@ -34442,7 +34430,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (symbols === globals) {
             const primitives = mapDefined(
                 ["string", "number", "boolean", "object", "bigint", "symbol"],
-                s => symbols.has((toCapitalized(s)) as __String)
+                s => symbols.has((s.charAt(0).toUpperCase() + s.slice(1)) as __String)
                     ? createSymbol(SymbolFlags.TypeAlias, s as __String) as Symbol
                     : undefined,
             );
