@@ -44633,9 +44633,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isSymbolUsedInBody(expr: Expression, body: Statement | Expression | Node, testedNode: Node, testedSymbol: Symbol, startPos: number): boolean {
         return !!forEachChild(body, function check(childNode): boolean | undefined {
-            if (childNode.pos < startPos) return false;
-
-            if (isIdentifier(childNode)) {
+            if (childNode.pos >= startPos && isIdentifier(childNode)) {
                 const childSymbol = getSymbolAtLocation(childNode);
                 if (childSymbol && childSymbol === testedSymbol) {
                     // If the test was a simple identifier, the above check is sufficient
