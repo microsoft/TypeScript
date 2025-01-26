@@ -44639,11 +44639,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             isIdentifier(testedExpression) && isIdentifier(childExpression) ||
                             testedExpression.kind === SyntaxKind.ThisKeyword && childExpression.kind === SyntaxKind.ThisKeyword
                         ) {
-                            const sameSymbol = getSymbolAtLocation(testedExpression) === getSymbolAtLocation(childExpression);
-                            if (sameSymbol) {
-                                return true;
-                            }
-                            return false;
+                            return getSymbolAtLocation(testedExpression) === getSymbolAtLocation(childExpression);
                         }
                         else if (isPropertyAccessExpression(testedExpression) && isPropertyAccessExpression(childExpression)) {
                             if (getSymbolAtLocation(testedExpression.name) !== getSymbolAtLocation(childExpression.name)) {
