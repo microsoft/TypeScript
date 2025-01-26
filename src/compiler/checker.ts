@@ -44536,25 +44536,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkSourceElement(node.elseStatement);
     }
 
-    function checkTestingKnownTruthyCallableOrAwaitableOrEnumMemberType(condExpr: Expression, condType: Type, body?: Statement | Expression) {
+    function checkTestingKnownTruthyCallableOrAwaitableOrEnumMemberType(inputCondExpr: Expression, condType: Type, body?: Statement | Expression) {
         if (!strictNullChecks) return;
 
-        bothHelper(condExpr, body);
+        bothHelper(inputCondExpr);
 
-        function bothHelper(condExpr: Expression, body: Expression | Statement | undefined) {
+        function bothHelper(condExpr: Expression) {
             condExpr = skipParentheses(condExpr);
-            helper(condExpr, body);
+            helper(condExpr);
             while (isBinaryExpression(condExpr) && (condExpr.operatorToken.kind === SyntaxKind.BarBarToken || condExpr.operatorToken.kind === SyntaxKind.QuestionQuestionToken)) {
                 condExpr = skipParentheses(condExpr.left);
-                helper(condExpr, body);
+                helper(condExpr);
             }
         }
 
-        function helper(condExpr: Expression, body: Expression | Statement | undefined) {
-            let location = condExpr;
+        function helper(condExpr: Expression) {
             let inverted = false;
-            if (isPrefixUnaryExpression(location)) {
-                location = skipParentheses(location.operand);
+            let location = condExpr;
+            if (isPrefixUnaryExpression(condExpr) && condExpr.operator === SyntaxKind.ExclamationToken) {
+                if (!isIfStatement(condExpr.parent)) {
+                    return;
+                }
+                location = skipParentheses(condExpr.operand);
                 inverted = true;
             }
             location = isLogicalOrCoalescingBinaryExpression(location) ? skipParentheses(location.right) : location;
@@ -44562,10 +44565,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return;
             }
             if (isLogicalOrCoalescingBinaryExpression(location)) {
-                bothHelper(location, body);
+                bothHelper(location);
                 return;
             }
-            const type = location === condExpr ? condType : checkExpression(location);
+            const type = location === inputCondExpr ? condType : checkExpression(location);
             if (type.flags & TypeFlags.EnumLiteral && isPropertyAccessExpression(location) && (getNodeLinks(location.expression).resolvedSymbol ?? unknownSymbol).flags & SymbolFlags.Enum) {
                 // EnumLiteral type at condition with known value is always truthy or always falsy, likely an error
                 error(location, Diagnostics.This_condition_will_always_return_0, !!(type as LiteralType).value ? "true" : "false");
@@ -44580,8 +44583,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // are too many false positives for values sourced from type
             // definitions without strictNullChecks otherwise.
             const callSignatures = getSignaturesOfType(type, SignatureKind.Call);
+            const isFnCall = callSignatures.length > 0;
             const isPromise = !!getAwaitedTypeOfPromise(type);
-            if (callSignatures.length === 0 && !isPromise) {
+            if (!isFnCall && !isPromise) {
                 return;
             }
 
@@ -44593,9 +44597,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return;
             }
 
-            const isUsedInBody = inverted && isIfStatement(condExpr.parent) ? testedSymbol && isSymbolUsedInConditionBody(location, condExpr.parent.parent, testedNode, testedSymbol, /*checkForAssignment*/ true) : testedSymbol && body && isSymbolUsedInConditionBody(condExpr, body, testedNode, testedSymbol, /*checkForAssignment*/ false);
-            const isUsed = testedSymbol && isBinaryExpression(condExpr.parent) && isSymbolUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
-                || isUsedInBody;
+            let isUsed: boolean;
+            if (inverted) {
+                const ifStatementContainerBody = condExpr.parent.parent;
+                const isUsedLater = !!(testedSymbol && isSymbolUsedInBody(location, ifStatementContainerBody, testedNode, testedSymbol, condExpr.end + 1));
+                isUsed = isUsedLater;
+            }
+            else {
+                const isUsedInBody = !!(testedSymbol && body && isSymbolUsedInBody(location, body, testedNode, testedSymbol, 0));
+                isUsed = isUsedInBody || !!(testedSymbol && isBinaryExpression(condExpr.parent) && isSymbolUsedInBinaryExpressionChain(condExpr.parent, testedSymbol));
+            }
 
             if (!isUsed) {
                 if (isPromise) {
@@ -44613,21 +44624,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function isSymbolUsedInConditionBody(expr: Expression, body: Statement | Expression | Node, testedNode: Node, testedSymbol: Symbol, checkForAssignment: boolean): boolean {
+    function isSymbolUsedInBody(expr: Expression, body: Statement | Expression | Node, testedNode: Node, testedSymbol: Symbol, startPos: number): boolean {
         return !!forEachChild(body, function check(childNode): boolean | undefined {
+            if (childNode.pos < startPos) return false;
+
             if (isIdentifier(childNode)) {
                 const childSymbol = getSymbolAtLocation(childNode);
                 if (childSymbol && childSymbol === testedSymbol) {
-                    if (checkForAssignment) {
-                        if (isIdentifier(expr) && isBinaryExpression(childNode.parent) && childNode.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
-                            return true;
-                        }
-                    }
-                    else {
-                        // If the test was a simple identifier, the above check is sufficient
-                        if (isIdentifier(expr) || isIdentifier(testedNode) && isBinaryExpression(testedNode.parent)) {
-                            return true;
-                        }
+                    // If the test was a simple identifier, the above check is sufficient
+                    if (isIdentifier(expr) || isIdentifier(testedNode) && isBinaryExpression(testedNode.parent)) {
+                        return true;
                     }
 
                     // Otherwise we need to ensure the symbol is called on the same target
@@ -44640,9 +44646,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         ) {
                             const sameSymbol = getSymbolAtLocation(testedExpression) === getSymbolAtLocation(childExpression);
                             if (sameSymbol) {
-                                if (checkForAssignment) {
-                                    return isPropertyAccessExpression(childNode.parent) && isBinaryExpression(childExpression.parent.parent) && childExpression.parent.parent.operatorToken.kind === SyntaxKind.EqualsToken;
-                                }
                                 return true;
                             }
                             return false;

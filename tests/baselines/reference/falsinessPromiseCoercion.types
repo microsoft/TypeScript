@@ -1,0 +1,285 @@
+//// [tests/cases/compiler/falsinessPromiseCoercion.ts] ////
+
+=== falsinessPromiseCoercion.ts ===
+function test1() {
+>test1 : () => void
+>      : ^^^^^^^^^^
+
+    async function canAccess() { return false; }
+>canAccess : () => Promise<boolean>
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+    if (!canAccess()) { // error
+>!canAccess() : false
+>             : ^^^^^
+>canAccess() : Promise<boolean>
+>            : ^^^^^^^^^^^^^^^^
+>canAccess : () => Promise<boolean>
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+    }
+}
+
+async function test2() {
+>test2 : () => Promise<void>
+>      : ^^^^^^^^^^^^^^^^^^^
+
+    async function canAccess() { return false; }
+>canAccess : () => Promise<boolean>
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+    const res = canAccess()
+>res : Promise<boolean>
+>    : ^^^^^^^^^^^^^^^^
+>canAccess() : Promise<boolean>
+>            : ^^^^^^^^^^^^^^^^
+>canAccess : () => Promise<boolean>
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+
+    if (!res) { // ok
+>!res : false
+>     : ^^^^^
+>res : Promise<boolean>
+>    : ^^^^^^^^^^^^^^^^
+
+        return
+    }
+
+   await res
+>await res : boolean
+>          : ^^^^^^^
+>res : Promise<boolean>
+>    : ^^^^^^^^^^^^^^^^
+}
+
+function test3() {
+>test3 : () => void
+>      : ^^^^^^^^^^
+
+    async function canAccess() { return false; }
+>canAccess : () => Promise<boolean>
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+    if (!!!canAccess()) { // ok
+>!!!canAccess() : false
+>               : ^^^^^
+>!!canAccess() : true
+>              : ^^^^
+>!canAccess() : false
+>             : ^^^^^
+>canAccess() : Promise<boolean>
+>            : ^^^^^^^^^^^^^^^^
+>canAccess : () => Promise<boolean>
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+    }
+}
+
+function test4(canAccess: () => Promise<boolean>) {
+>test4 : (canAccess: () => Promise<boolean>) => void
+>      : ^         ^^                      ^^^^^^^^^
+>canAccess : () => Promise<boolean>
+>          : ^^^^^^                
+
+    if (!canAccess()) { // error
+>!canAccess() : false
+>             : ^^^^^
+>canAccess() : Promise<boolean>
+>            : ^^^^^^^^^^^^^^^^
+>canAccess : () => Promise<boolean>
+>          : ^^^^^^                
+    }
+}
+
+function test5(canAccess: () => Promise<boolean> | undefined) {
+>test5 : (canAccess: () => Promise<boolean> | undefined) => void
+>      : ^         ^^                                  ^^^^^^^^^
+>canAccess : () => Promise<boolean> | undefined
+>          : ^^^^^^                            
+
+    if (!canAccess()) { // ok
+>!canAccess() : boolean
+>             : ^^^^^^^
+>canAccess() : Promise<boolean> | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>canAccess : () => Promise<boolean> | undefined
+>          : ^^^^^^                            
+    }
+}
+
+function test6() {
+>test6 : () => void
+>      : ^^^^^^^^^^
+
+    const x = {
+>x : { foo: { bar(): Promise<boolean>; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        foo: {            async bar() { return true; }        }    } : { foo: { bar(): Promise<boolean>; }; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        foo: {
+>foo : { bar(): Promise<boolean>; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{            async bar() { return true; }        } : { bar(): Promise<boolean>; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            async bar() { return true; }
+>bar : () => Promise<boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+        }
+    };
+
+    if (!x.foo.bar()) { // error
+>!x.foo.bar() : false
+>             : ^^^^^
+>x.foo.bar() : Promise<boolean>
+>            : ^^^^^^^^^^^^^^^^
+>x.foo.bar : () => Promise<boolean>
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+>x.foo : { bar(): Promise<boolean>; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { foo: { bar(): Promise<boolean>; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : { bar(): Promise<boolean>; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : () => Promise<boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+    }
+}
+
+async function test7() {
+>test7 : () => Promise<void>
+>      : ^^^^^^^^^^^^^^^^^^^
+
+    const x = {
+>x : { foo: { bar(): Promise<boolean>; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        foo: {            async bar() { return true; }        }    } : { foo: { bar(): Promise<boolean>; }; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        foo: {
+>foo : { bar(): Promise<boolean>; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{            async bar() { return true; }        } : { bar(): Promise<boolean>; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            async bar() { return true; }
+>bar : () => Promise<boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+        }
+    };
+
+    const res = x.foo.bar();
+>res : Promise<boolean>
+>    : ^^^^^^^^^^^^^^^^
+>x.foo.bar() : Promise<boolean>
+>            : ^^^^^^^^^^^^^^^^
+>x.foo.bar : () => Promise<boolean>
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+>x.foo : { bar(): Promise<boolean>; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { foo: { bar(): Promise<boolean>; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : { bar(): Promise<boolean>; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : () => Promise<boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+    if (!res) { // ok
+>!res : false
+>     : ^^^^^
+>res : Promise<boolean>
+>    : ^^^^^^^^^^^^^^^^
+    }
+
+    await res;
+>await res : boolean
+>          : ^^^^^^^
+>res : Promise<boolean>
+>    : ^^^^^^^^^^^^^^^^
+}
+
+class Test8 {
+>Test8 : Test8
+>      : ^^^^^
+
+    async isUser() {
+>isUser : () => Promise<boolean>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+
+        return true;
+>true : true
+>     : ^^^^
+    }
+
+    test() {
+>test : () => void
+>     : ^^^^^^^^^^
+
+        if (!this.isUser()) { // error
+>!this.isUser() : false
+>               : ^^^^^
+>this.isUser() : Promise<boolean>
+>              : ^^^^^^^^^^^^^^^^
+>this.isUser : () => Promise<boolean>
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>isUser : () => Promise<boolean>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+        }
+    }
+}
+
+class Test9 {
+>Test9 : Test9
+>      : ^^^^^
+
+    async isUser() {
+>isUser : () => Promise<boolean>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+
+        return true;
+>true : true
+>     : ^^^^
+    }
+
+    async test() {
+>test : () => Promise<void>
+>     : ^^^^^^^^^^^^^^^^^^^
+
+        const res = this.isUser();
+>res : Promise<boolean>
+>    : ^^^^^^^^^^^^^^^^
+>this.isUser() : Promise<boolean>
+>              : ^^^^^^^^^^^^^^^^
+>this.isUser : () => Promise<boolean>
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>isUser : () => Promise<boolean>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+
+        if (!res) { // ok
+>!res : false
+>     : ^^^^^
+>res : Promise<boolean>
+>    : ^^^^^^^^^^^^^^^^
+        }
+
+        await res;
+>await res : boolean
+>          : ^^^^^^^
+>res : Promise<boolean>
+>    : ^^^^^^^^^^^^^^^^
+    }
+}
+
