@@ -20259,16 +20259,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const firstIdentifier = getFirstIdentifier(entityName);
                     if (!isThisIdentifier(firstIdentifier)) { // Don't attempt to analyze typeof this.xxx
                         const firstIdentifierSymbol = getResolvedSymbol(firstIdentifier);
-                        const tpDeclaration = tp.symbol.declarations![0]; // There is exactly one declaration, otherwise `containsReference` is not called
-                        const tpScope = tpDeclaration.kind === SyntaxKind.TypeParameter ? tpDeclaration.parent : // Type parameter is a regular type parameter, e.g. foo<T>
-                            tp.isThisType ? tpDeclaration : // Type parameter is the this type, and its declaration is the class declaration.
-                            undefined; // Type parameter's declaration was unrecognized, e.g. comes from JSDoc annotation.
+                        const tpScope = getTypeParameterScope();
                         if (firstIdentifierSymbol.declarations && tpScope) {
                             return some(firstIdentifierSymbol.declarations, idDecl => isNodeDescendantOf(idDecl, tpScope)) ||
                                 some((node as TypeQueryNode).typeArguments, containsReference);
                         }
                     }
                     return true;
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    return isNodeDescendantOf(node, getTypeParameterScope());
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                     return !(node as FunctionLikeDeclaration).type && !!(node as FunctionLikeDeclaration).body ||
@@ -20277,6 +20276,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         !!(node as FunctionLikeDeclaration).type && containsReference((node as FunctionLikeDeclaration).type!);
             }
             return !!forEachChild(node, containsReference);
+        }
+
+        function getTypeParameterScope() {
+            const tpDeclaration = tp.symbol.declarations![0]; // There is exactly one declaration, otherwise `containsReference` is not called
+            return tpDeclaration.kind === SyntaxKind.TypeParameter ? tpDeclaration.parent : // Type parameter is a regular type parameter, e.g. foo<T>
+                tp.isThisType ? tpDeclaration : // Type parameter is the this type, and its declaration is the class declaration.
+                undefined; // Type parameter's declaration was unrecognized, e.g. comes from JSDoc annotation.
         }
     }
 
