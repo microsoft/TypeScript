@@ -3,9 +3,10 @@ falsinessCallExpressionCoercion.ts(25,10): error TS2774: This condition will alw
 falsinessCallExpressionCoercion.ts(41,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 falsinessCallExpressionCoercion.ts(66,14): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 falsinessCallExpressionCoercion.ts(91,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+falsinessCallExpressionCoercion.ts(98,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 
 
-==== falsinessCallExpressionCoercion.ts (5 errors) ====
+==== falsinessCallExpressionCoercion.ts (6 errors) ====
     function test1() {
         function canAccess() { return false; }
     
@@ -107,6 +108,17 @@ falsinessCallExpressionCoercion.ts(91,10): error TS2774: This condition will alw
         if (!res) { // error
              ~~~
 !!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    }
+    
+    function test11() {
+        function canAccess() { return false; }
+    
+        if (!canAccess) { // ok
+             ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        } else {
+            canAccess()
         }
     }
     

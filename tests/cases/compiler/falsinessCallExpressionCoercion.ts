@@ -93,3 +93,12 @@ function test10() {
     if (!res) { // error
     }
 }
+
+function test11() {
+    function canAccess() { return false; }
+
+    if (!canAccess) { // ok
+    } else {
+        canAccess()
+    }
+}

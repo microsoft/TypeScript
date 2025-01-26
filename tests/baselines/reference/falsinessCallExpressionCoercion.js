@@ -95,6 +95,15 @@ function test10() {
     }
 }
 
+function test11() {
+    function canAccess() { return false; }
+
+    if (!canAccess) { // ok
+    } else {
+        canAccess()
+    }
+}
+
 
 //// [falsinessCallExpressionCoercion.js]
 function test1() {
@@ -171,5 +180,13 @@ function test10() {
     function canAccess() { return false; }
     var res = canAccess;
     if (!res) { // error
+    }
+}
+function test11() {
+    function canAccess() { return false; }
+    if (!canAccess) { // ok
+    }
+    else {
+        canAccess();
     }
 }

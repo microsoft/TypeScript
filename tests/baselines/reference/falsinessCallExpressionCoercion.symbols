@@ -177,3 +177,18 @@ function test10() {
     }
 }
 
+function test11() {
+>test11 : Symbol(test11, Decl(falsinessCallExpressionCoercion.ts, 92, 1))
+
+    function canAccess() { return false; }
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 94, 19))
+
+    if (!canAccess) { // ok
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 94, 19))
+
+    } else {
+        canAccess()
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 94, 19))
+    }
+}
+

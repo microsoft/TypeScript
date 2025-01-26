@@ -296,3 +296,28 @@ function test10() {
     }
 }
 
+function test11() {
+>test11 : () => void
+>       : ^^^^^^^^^^
+
+    function canAccess() { return false; }
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+    if (!canAccess) { // ok
+>!canAccess : false
+>           : ^^^^^
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+
+    } else {
+        canAccess()
+>canAccess() : boolean
+>            : ^^^^^^^
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+    }
+}
+
