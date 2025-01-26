@@ -44596,17 +44596,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             let isUsed: boolean;
             if (inverted) {
-                let closestBlock: Block | undefined;
-                {
-                    let current: Node = condExpr.parent;
-                    while (current) {
-                        if (isBlock(current)) {
-                            closestBlock = current;
-                            break;
-                        }
-                        current = current.parent;
-                    }
-                }
+                const closestBlock = findAncestor(condExpr.parent, isBlock);
                 const isUsedLater = !!(testedSymbol && closestBlock && isSymbolUsedInBody(location, closestBlock, testedNode, testedSymbol, condExpr.end + 1));
                 isUsed = isUsedLater;
             }
