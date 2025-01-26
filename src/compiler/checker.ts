@@ -44554,9 +44554,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let inverted = false;
             let location = condExpr;
             if (isPrefixUnaryExpression(condExpr) && condExpr.operator === SyntaxKind.ExclamationToken) {
-                if (!isIfStatement(condExpr.parent)) {
-                    return;
-                }
                 location = skipParentheses(condExpr.operand);
                 inverted = true;
             }
@@ -44599,8 +44596,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             let isUsed: boolean;
             if (inverted) {
-                const ifStatementContainerBody = condExpr.parent.parent;
-                const isUsedLater = !!(testedSymbol && isSymbolUsedInBody(location, ifStatementContainerBody, testedNode, testedSymbol, condExpr.end + 1));
+                let closestBlock: Block | undefined;
+                {
+                    let current: Node = condExpr.parent;
+                    while (current) {
+                        if (isBlock(current)) {
+                            closestBlock = current;
+                            break;
+                        }
+                        current = current.parent;
+                    }
+                }
+                const isUsedLater = !!(testedSymbol && closestBlock && isSymbolUsedInBody(location, closestBlock, testedNode, testedSymbol, condExpr.end + 1));
                 isUsed = isUsedLater;
             }
             else {

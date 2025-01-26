@@ -192,3 +192,34 @@ function test11() {
     }
 }
 
+function test12() {
+>test12 : Symbol(test12, Decl(falsinessCallExpressionCoercion.ts, 101, 1))
+
+    function canAccess() { return false; }
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 103, 19))
+
+    if (!canAccess || Math.random()) { // error
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 103, 19))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+function test13() {
+>test13 : Symbol(test13, Decl(falsinessCallExpressionCoercion.ts, 108, 1))
+
+    function canAccess() { return false; }
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 110, 19))
+
+    if (!canAccess || Math.random()) { // ok
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 110, 19))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+    }
+
+    canAccess()
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 110, 19))
+}
+

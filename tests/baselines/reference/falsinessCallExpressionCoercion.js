@@ -104,6 +104,22 @@ function test11() {
     }
 }
 
+function test12() {
+    function canAccess() { return false; }
+
+    if (!canAccess || Math.random()) { // error
+    }
+}
+
+function test13() {
+    function canAccess() { return false; }
+
+    if (!canAccess || Math.random()) { // ok
+    }
+
+    canAccess()
+}
+
 
 //// [falsinessCallExpressionCoercion.js]
 function test1() {
@@ -189,4 +205,15 @@ function test11() {
     else {
         canAccess();
     }
+}
+function test12() {
+    function canAccess() { return false; }
+    if (!canAccess || Math.random()) { // error
+    }
+}
+function test13() {
+    function canAccess() { return false; }
+    if (!canAccess || Math.random()) { // ok
+    }
+    canAccess();
 }

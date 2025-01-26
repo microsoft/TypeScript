@@ -321,3 +321,65 @@ function test11() {
     }
 }
 
+function test12() {
+>test12 : () => void
+>       : ^^^^^^^^^^
+
+    function canAccess() { return false; }
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+    if (!canAccess || Math.random()) { // error
+>!canAccess || Math.random() : number
+>                            : ^^^^^^
+>!canAccess : false
+>           : ^^^^^
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+    }
+}
+
+function test13() {
+>test13 : () => void
+>       : ^^^^^^^^^^
+
+    function canAccess() { return false; }
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+    if (!canAccess || Math.random()) { // ok
+>!canAccess || Math.random() : number
+>                            : ^^^^^^
+>!canAccess : false
+>           : ^^^^^
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+    }
+
+    canAccess()
+>canAccess() : boolean
+>            : ^^^^^^^
+>canAccess : () => boolean
+>          : ^^^^^^^^^^^^^
+}
+

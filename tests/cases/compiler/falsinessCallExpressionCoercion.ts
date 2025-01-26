@@ -102,3 +102,19 @@ function test11() {
         canAccess()
     }
 }
+
+function test12() {
+    function canAccess() { return false; }
+
+    if (!canAccess || Math.random()) { // error
+    }
+}
+
+function test13() {
+    function canAccess() { return false; }
+
+    if (!canAccess || Math.random()) { // ok
+    }
+
+    canAccess()
+}
