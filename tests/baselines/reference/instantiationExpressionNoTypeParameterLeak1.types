@@ -151,3 +151,35 @@ output4(1);
 >1 : 1
 >  : ^
 
+export declare function test5<X>(g: <A>(x: X) => X): typeof g<string>;
+>test5 : <X>(g: <A>(x: X) => X) => typeof g<string>
+>      : ^ ^^ ^^              ^^^^^                
+>g : <A>(x: X) => X
+>  : ^ ^^ ^^ ^^^^^ 
+>x : X
+>  : ^
+>g : <A>(x: X) => X
+>  : ^ ^^ ^^ ^^^^^ 
+
+export const output5 = test5<number>((y: number) => 1);
+>output5 : (x: number) => number
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>test5<number>((y: number) => 1) : (x: number) => number
+>                                : ^ ^^^^^^^^^^^^^^^^^^^
+>test5 : <X>(g: <A>(x: X) => X) => typeof g<string>
+>      : ^ ^^ ^^              ^^^^^                
+>(y: number) => 1 : (y: number) => number
+>                 : ^ ^^      ^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+output5(1);
+>output5(1) : number
+>           : ^^^^^^
+>output5 : (x: number) => number
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+

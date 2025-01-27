@@ -22,3 +22,7 @@ export function test4<X>(g: <A>() => (x: X) => X) {
 }
 export const output4 = test4<number>(() => (y: number) => 1);
 output4(1);
+
+export declare function test5<X>(g: <A>(x: X) => X): typeof g<string>;
+export const output5 = test5<number>((y: number) => 1);
+output5(1);
