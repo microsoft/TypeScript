@@ -884,6 +884,16 @@ func FindAncestorOrQuit(node *Node, callback func(*Node) FindAncestorResult) *No
 	return nil
 }
 
+func IsNodeDescendantOf(node *Node, ancestor *Node) bool {
+	for node != nil {
+		if node == ancestor {
+			return true
+		}
+		node = node.Parent
+	}
+	return false
+}
+
 func ModifierToFlag(token Kind) ModifierFlags {
 	switch token {
 	case KindStaticKeyword:
@@ -1539,15 +1549,17 @@ func IsJsonSourceFile(file *SourceFile) bool {
 	return file.ScriptKind == core.ScriptKindJSON
 }
 
-func GetExternalModuleName(node *Node) *Node {
+func GetExternalModuleName(node *Node) *Expression {
 	switch node.Kind {
 	case KindImportDeclaration:
 		return node.AsImportDeclaration().ModuleSpecifier
 	case KindExportDeclaration:
 		return node.AsExportDeclaration().ModuleSpecifier
+	case KindJSDocImportTag:
+		return node.AsJSDocImportTag().ModuleSpecifier
 	case KindImportEqualsDeclaration:
 		if node.AsImportEqualsDeclaration().ModuleReference.Kind == KindExternalModuleReference {
-			return node.AsImportEqualsDeclaration().ModuleReference.AsExternalModuleReference().Expression_
+			return node.AsImportEqualsDeclaration().ModuleReference.AsExternalModuleReference().Expression
 		}
 		return nil
 	case KindImportType:

@@ -219,6 +219,8 @@ func (n *Node) Expression() *Node {
 		return n.AsExpressionStatement().Expression
 	case KindReturnStatement:
 		return n.AsReturnStatement().Expression
+	case KindExternalModuleReference:
+		return n.AsExternalModuleReference().Expression
 	}
 	panic("Unhandled case in Node.Expression")
 }
@@ -1366,7 +1368,9 @@ type (
 
 type (
 	IdentifierNode                  = Node
+	PrivateIdentifierNode           = Node
 	TokenNode                       = Node
+	StringLiteralNode               = Node
 	TemplateHeadNode                = Node
 	TemplateMiddleNode              = Node
 	TemplateTailNode                = Node
@@ -3165,28 +3169,28 @@ func IsImportSpecifier(node *Node) bool {
 
 type ExternalModuleReference struct {
 	NodeBase
-	Expression_ *Expression // Expression
+	Expression *Expression // Expression
 }
 
 func (f *NodeFactory) NewExternalModuleReference(expression *Expression) *Node {
 	data := &ExternalModuleReference{}
-	data.Expression_ = expression
+	data.Expression = expression
 	return newNode(KindExternalModuleReference, data)
 }
 
 func (f *NodeFactory) UpdateExternalModuleReference(node *ExternalModuleReference, expression *Expression) *Node {
-	if expression != node.Expression_ {
+	if expression != node.Expression {
 		return updateNode(f.NewExternalModuleReference(expression), node.AsNode())
 	}
 	return node.AsNode()
 }
 
 func (node *ExternalModuleReference) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression_)
+	return visit(v, node.Expression)
 }
 
 func (node *ExternalModuleReference) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateExternalModuleReference(node, v.VisitNode(node.Expression_))
+	return v.Factory.UpdateExternalModuleReference(node, v.VisitNode(node.Expression))
 }
 
 func IsExternalModuleReference(node *Node) bool {
@@ -7303,6 +7307,7 @@ type SourceFile struct {
 	UsesUriStyleNodeCoreModules core.Tristate
 	SymbolCount                 int
 	ClassifiableNames           core.Set[string]
+	Identifiers                 map[string]string
 	Imports                     []*LiteralLikeNode // []LiteralLikeNode
 	ModuleAugmentations         []*ModuleName      // []ModuleName
 	PatternAmbientModules       []PatternAmbientModule

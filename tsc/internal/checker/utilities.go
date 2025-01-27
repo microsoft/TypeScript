@@ -1019,7 +1019,7 @@ func getExternalModuleRequireArgument(node *ast.Node) *ast.Node {
 
 func getExternalModuleImportEqualsDeclarationExpression(node *ast.Node) *ast.Node {
 	// Debug.assert(isExternalModuleImportEqualsDeclaration(node))
-	return node.AsImportEqualsDeclaration().ModuleReference.AsExternalModuleReference().Expression_
+	return node.AsImportEqualsDeclaration().ModuleReference.AsExternalModuleReference().Expression
 }
 
 func isRightSideOfQualifiedNameOrPropertyAccess(node *ast.Node) bool {

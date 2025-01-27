@@ -84,11 +84,13 @@ func checkDiagnostics(t *testing.T, file *ast.SourceFile) {
 
 func checkEmit(t *testing.T, file *ast.SourceFile, expected string) {
 	t.Helper()
-	printer := &printer.Printer{
-		Options: printer.PrinterOptions{
+	printer := printer.NewPrinter(
+		printer.PrinterOptions{
 			NewLine: core.NewLineKindLF,
 		},
-	}
+		printer.PrintHandlers{},
+		nil,
+	)
 	actual := printer.EmitSourceFile(file)
 	assert.Equal(t, expected, actual)
 }

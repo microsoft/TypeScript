@@ -582,11 +582,18 @@ func checkDiagnostics(t *testing.T, file *ast.SourceFile) {
 
 func checkEmit(t *testing.T, file *ast.SourceFile, expected string) {
 	t.Helper()
-	printer := &Printer{
-		Options: PrinterOptions{
+	checkEmit2(t, &EmitContext{}, file, expected)
+}
+
+func checkEmit2(t *testing.T, ctx *EmitContext, file *ast.SourceFile, expected string) {
+	t.Helper()
+	printer := NewPrinter(
+		PrinterOptions{
 			NewLine: core.NewLineKindLF,
 		},
-	}
+		PrintHandlers{},
+		ctx,
+	)
 	text := printer.EmitSourceFile(file)
 	actual := strings.TrimSuffix(text, "\n")
 	assert.Equal(t, expected, actual)
@@ -2376,43 +2383,74 @@ func TestParenthesizeConditionalType4(t *testing.T) {
 	t.Parallel()
 
 	var factory ast.NodeFactory
-	file := factory.NewSourceFile("", "", factory.NewNodeList(
-		[]*ast.Node{
-			factory.NewTypeAliasDeclaration(
-				nil,                        /*modifiers*/
-				factory.NewIdentifier("_"), /*name*/
-				nil,                        /*typeParameters*/
-				factory.NewConditionalTypeNode(
-					factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
-					factory.NewFunctionTypeNode(
-						nil, /*typeParameters*/
+	file := factory.NewSourceFile("", "", factory.NewNodeList([]*ast.Node{
+		factory.NewTypeAliasDeclaration(
+			nil,                        /*modifiers*/
+			factory.NewIdentifier("_"), /*name*/
+			nil,                        /*typeParameters*/
+			factory.NewConditionalTypeNode(
+				factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+				factory.NewFunctionTypeNode(
+					nil, /*typeParameters*/
+					factory.NewNodeList(
+						[]*ast.Node{},
+					),
+					// will be parenthesized on emit:
+					factory.NewUnionTypeNode(
 						factory.NewNodeList(
-							[]*ast.Node{},
-						),
-						// will be parenthesized on emit:
-						factory.NewUnionTypeNode(
-							factory.NewNodeList(
-								[]*ast.Node{
-									factory.NewInferTypeNode(
-										factory.NewTypeParameterDeclaration(
-											nil,
-											factory.NewIdentifier("b"),
-											factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
-											nil, /*defaultType*/
-										),
+							[]*ast.Node{
+								factory.NewInferTypeNode(
+									factory.NewTypeParameterDeclaration(
+										nil,
+										factory.NewIdentifier("b"),
+										factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
+										nil, /*defaultType*/
 									),
-									factory.NewTypeReferenceNode(factory.NewIdentifier("d"), nil /*typeArguments*/),
-								},
-							),
+								),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("d"), nil /*typeArguments*/),
+							},
 						),
 					),
-					factory.NewTypeReferenceNode(factory.NewIdentifier("e"), nil /*typeArguments*/),
-					factory.NewTypeReferenceNode(factory.NewIdentifier("f"), nil /*typeArguments*/),
 				),
+				factory.NewTypeReferenceNode(factory.NewIdentifier("e"), nil /*typeArguments*/),
+				factory.NewTypeReferenceNode(factory.NewIdentifier("f"), nil /*typeArguments*/),
 			),
-		},
-	))
+		),
+	}))
 	setParentRecursive(file, nil)
 	markSyntheticRecursive(file)
 	checkEmit(t, file.AsSourceFile(), "type _ = a extends () => (infer b extends c) | d ? e : f;")
+}
+
+func TestNameGeneration(t *testing.T) {
+	t.Parallel()
+	ctx := &EmitContext{}
+	factory := &ctx.Factory
+	file := factory.NewSourceFile("", "", factory.NewNodeList([]*ast.Node{
+		factory.NewVariableStatement(nil, factory.NewVariableDeclarationList(
+			ast.NodeFlagsNone,
+			factory.NewNodeList([]*ast.Node{
+				factory.NewVariableDeclaration(ctx.NewTempVariable(AutoGenerateOptions{}), nil, nil, nil),
+			}),
+		)),
+		factory.NewFunctionDeclaration(
+			nil,
+			nil,
+			factory.NewIdentifier("f"),
+			nil,
+			factory.NewNodeList([]*ast.Node{}),
+			nil,
+			factory.NewBlock(factory.NewNodeList([]*ast.Node{
+				factory.NewVariableStatement(nil, factory.NewVariableDeclarationList(
+					ast.NodeFlagsNone,
+					factory.NewNodeList([]*ast.Node{
+						factory.NewVariableDeclaration(ctx.NewTempVariable(AutoGenerateOptions{}), nil, nil, nil),
+					}),
+				)),
+			}), true),
+		),
+	}))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit2(t, ctx, file.AsSourceFile(), "var _a;\nfunction f() {\n    var _a;\n}")
 }

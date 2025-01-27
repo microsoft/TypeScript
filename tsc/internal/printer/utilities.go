@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/stringutil"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 type getLiteralTextFlags int
@@ -672,4 +673,68 @@ func isImmediatelyInvokedFunctionExpressionOrArrowFunction(node *ast.Expression)
 	}
 	node = ast.SkipPartiallyEmittedExpressions(node.AsCallExpression().Expression)
 	return ast.IsFunctionExpression(node) || ast.IsArrowFunction(node)
+}
+
+func isFileLevelUniqueName(sourceFile *ast.SourceFile, name string, hasGlobalName func(string) bool) bool {
+	if hasGlobalName != nil && hasGlobalName(name) {
+		return false
+	}
+	_, ok := sourceFile.Identifiers[name]
+	return !ok
+}
+
+func hasLeadingHash(text string) bool {
+	return len(text) > 0 && text[0] == '#'
+}
+
+func removeLeadingHash(text string) string {
+	if hasLeadingHash(text) {
+		return text[1:]
+	} else {
+		return text
+	}
+}
+
+func ensureLeadingHash(text string) string {
+	if hasLeadingHash(text) {
+		return text
+	} else {
+		return "#" + text
+	}
+}
+
+func formatGeneratedName(privateName bool, prefix string, base string, suffix string) string {
+	name := removeLeadingHash(prefix) + removeLeadingHash(base) + removeLeadingHash(suffix)
+	if privateName {
+		return ensureLeadingHash(name)
+	}
+	return name
+}
+
+func isASCIIWordCharacter(ch rune) bool {
+	return stringutil.IsASCIILetter(ch) || stringutil.IsDigit(ch) || ch == '_'
+}
+
+func makeIdentifierFromModuleName(moduleName string) string {
+	moduleName = tspath.GetBaseFileName(moduleName)
+	var builder strings.Builder
+	start := 0
+	pos := 0
+	for pos < len(moduleName) {
+		ch := rune(moduleName[pos])
+		if pos == 0 && stringutil.IsDigit(ch) {
+			builder.WriteByte('_')
+		} else if !isASCIIWordCharacter(ch) {
+			if start < pos {
+				builder.WriteString(moduleName[start:pos])
+			}
+			builder.WriteByte('_')
+			start = pos + 1
+		}
+		pos++
+	}
+	if start < pos {
+		builder.WriteString(moduleName[start:pos])
+	}
+	return builder.String()
 }

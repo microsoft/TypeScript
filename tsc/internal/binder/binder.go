@@ -2531,7 +2531,7 @@ func isGeneratorFunctionExpression(node *ast.Node) bool {
 
 func (b *Binder) addToContainerChain(next *ast.Node) {
 	if b.lastContainer != nil {
-		next.LocalsContainerData().NextContainer = next
+		b.lastContainer.LocalsContainerData().NextContainer = next
 	}
 	b.lastContainer = next
 }

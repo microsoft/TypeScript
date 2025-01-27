@@ -61,7 +61,7 @@ func (e *emitter) emitJsFile(sourceFile *ast.SourceFile, jsFilePath string, sour
 	// create a printer to print the nodes
 	printer := printer.NewPrinter(printerOptions, printer.PrintHandlers{
 		// !!!
-	})
+	}, nil /*emitContext*/)
 
 	e.printSourceFile(jsFilePath, sourceMapFilePath, sourceFile, printer)
 

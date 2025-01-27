@@ -27,19 +27,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
-type Printer struct {
-	PrintHandlers
-	Options            PrinterOptions
-	factory            ast.NodeFactory
-	currentSourceFile  *ast.SourceFile
-	nextListElementPos int
-	writer             EmitTextWriter
-	ownWriter          EmitTextWriter
-	writeKind          WriteKind
-	commentsDisabled   bool
-	inExtends          bool // whether we are emitting the `extends` clause of a ConditionalType or InferType
-}
-
 type PrinterOptions struct {
 	// RemoveComments                bool
 	NewLine core.NewLineKind
@@ -119,15 +106,60 @@ type PrintHandlers struct {
 	OnAfterEmitToken     func(nodeOpt *ast.TokenNode)
 }
 
-func NewPrinter(options PrinterOptions, handlers PrintHandlers) *Printer {
-	return &Printer{
+type Printer struct {
+	PrintHandlers
+	Options            PrinterOptions
+	emitContext        *EmitContext
+	currentSourceFile  *ast.SourceFile
+	nextListElementPos int
+	writer             EmitTextWriter
+	ownWriter          EmitTextWriter
+	writeKind          WriteKind
+	commentsDisabled   bool
+	inExtends          bool // whether we are emitting the `extends` clause of a ConditionalType or InferType
+	nameGenerator      nameGenerator
+}
+
+func NewPrinter(options PrinterOptions, handlers PrintHandlers, emitContext *EmitContext) *Printer {
+	printer := &Printer{
 		PrintHandlers: handlers,
 		Options:       options,
+		emitContext:   emitContext,
 	}
+	// wire up name generator
+	if printer.emitContext == nil {
+		printer.emitContext = &EmitContext{}
+	}
+	printer.nameGenerator.Context = printer.emitContext
+	printer.nameGenerator.GetTextOfNode = func(node *ast.Node) string { return printer.getTextOfNode(node, false) }
+	printer.nameGenerator.IsFileLevelUniqueNameInCurrentFile = printer.isFileLevelUniqueNameInCurrentFile
+	return printer
 }
 
 func (p *Printer) getLiteralTextOfNode(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags getLiteralTextFlags) string {
-	// !!! Escape strings from a textSourceNode. We will need this if we opt to downlevel decorators
+	if ast.IsStringLiteral(node) {
+		if textSourceNode, ok := p.emitContext.textSource[node]; ok && textSourceNode != nil {
+			var text string
+			switch textSourceNode.Kind {
+			default:
+				return p.getLiteralTextOfNode(textSourceNode, ast.GetSourceFileOfNode(textSourceNode), flags)
+			case ast.KindNumericLiteral:
+				text = textSourceNode.Text()
+			case ast.KindIdentifier, ast.KindPrivateIdentifier, ast.KindJsxNamespacedName:
+				text = p.getTextOfNode(textSourceNode, false)
+			}
+
+			switch {
+			case flags&getLiteralTextFlagsJsxAttributeEscape != 0:
+				return "\"" + escapeJsxAttributeString(text, quoteCharDoubleQuote) + "\""
+			case flags&getLiteralTextFlagsNeverAsciiEscape != 0: // !!! (getEmitFlags(node) & EmitFlags.NoAsciiEscaping)
+				return "\"" + escapeString(text, quoteCharDoubleQuote) + "\""
+			default:
+				return "\"" + escapeNonAsciiString(text, quoteCharDoubleQuote) + "\""
+			}
+		}
+	}
+
 	// !!! Printer option to control whether to terminate unterminated literals
 	// !!! If necessary, printer option to control whether to preserve numeric seperators
 	return getLiteralText(node, core.Coalesce(sourceFile, p.currentSourceFile), flags)
@@ -135,8 +167,16 @@ func (p *Printer) getLiteralTextOfNode(node *ast.LiteralLikeNode, sourceFile *as
 
 // `node` must be one of Identifier | PrivateIdentifier | LiteralExpression | JsxNamespacedName
 func (p *Printer) getTextOfNode(node *ast.Node, includeTrivia bool) string {
-	// !!! Generated Identifiers
-	// !!! StringLiteral from source
+	if ast.IsMemberName(node) && p.emitContext.autoGenerate[node] != nil {
+		return p.nameGenerator.GenerateName(node)
+	}
+
+	if ast.IsStringLiteral(node) {
+		if textSourceNode := p.emitContext.textSource[node]; textSourceNode != nil {
+			return p.getTextOfNode(textSourceNode, includeTrivia)
+		}
+	}
+
 	switch node.Kind {
 	case ast.KindIdentifier,
 		ast.KindPrivateIdentifier,
@@ -2124,7 +2164,7 @@ func (p *Printer) emitPropertyAccessExpression(node *ast.PropertyAccessExpressio
 	p.emitExpression(node.Expression, core.IfElse(ast.IsOptionalChain(node.AsNode()), ast.OperatorPrecedenceOptionalChain, ast.OperatorPrecedenceMember))
 	token := node.QuestionDotToken
 	if token == nil {
-		token = p.factory.NewToken(ast.KindDotToken)
+		token = p.emitContext.Factory.NewToken(ast.KindDotToken)
 		token.Loc = core.NewTextRange(node.Expression.End(), node.Name().Pos())
 	}
 	linesBeforeDot := p.getLinesBetweenNodes(node.AsNode(), node.Expression, token)
@@ -3610,7 +3650,7 @@ func (p *Printer) emitExternalModuleReference(node *ast.ExternalModuleReference)
 	p.enterNode(node.AsNode())
 	p.writeKeyword("require")
 	p.writePunctuation("(")
-	p.emitExpression(node.Expression_, ast.OperatorPrecedenceDisallowComma)
+	p.emitExpression(node.Expression, ast.OperatorPrecedenceDisallowComma)
 	p.writePunctuation(")")
 	p.exitNode(node.AsNode())
 }
@@ -4175,7 +4215,7 @@ func (p *Printer) emitListItems(
 				}
 
 				shouldEmitInterveningComments = false
-			} else if previousSibling != nil && format&LFSpaceBetweenSiblings != 0 {
+			} else if format&LFSpaceBetweenSiblings != 0 {
 				p.writeSpace()
 			}
 		}
@@ -4491,32 +4531,147 @@ func (p *Printer) emitSourceMapsAfterNode(node *ast.Node) {
 // Name Generation
 //
 
+func (p *Printer) shouldReuseTempVariableScope(node *ast.Node) bool {
+	// !!! return node != nil && getEmitFlags(node)&EmitFlagsReuseTempVariableScope!=0
+	return false
+}
+
 func (p *Printer) pushNameGenerationScope(node *ast.Node) {
-	// !!!
+	p.nameGenerator.PushScope(p.shouldReuseTempVariableScope(node))
 }
 
 func (p *Printer) popNameGenerationScope(node *ast.Node) {
-	// !!!
-}
-
-func (p *Printer) generateNameIfNeeded(node *ast.Node) {
-	// !!!
-}
-
-func (p *Printer) generateNames(node *ast.Node) {
-	// !!!
-}
-
-func (p *Printer) generateMemberNames(node *ast.Node) {
-	// !!!
+	p.nameGenerator.PopScope(p.shouldReuseTempVariableScope(node))
 }
 
 func (p *Printer) generateAllNames(nodes *ast.NodeList) {
-	// !!!
+	if nodes == nil {
+		return
+	}
+	for _, node := range nodes.Nodes {
+		p.generateNames(node)
+	}
+}
+
+func (p *Printer) generateNames(node *ast.Node) {
+	if node == nil {
+		return
+	}
+
+	switch node.Kind {
+	case ast.KindBlock:
+		p.generateAllNames(node.AsBlock().Statements)
+	case ast.KindLabeledStatement:
+		p.generateNames(node.AsLabeledStatement().Statement)
+	case ast.KindWithStatement:
+		p.generateNames(node.AsWithStatement().Statement)
+	case ast.KindDoStatement:
+		p.generateNames(node.AsDoStatement().Statement)
+	case ast.KindWhileStatement:
+		p.generateNames(node.AsWhileStatement().Statement)
+	case ast.KindIfStatement:
+		p.generateNames(node.AsIfStatement().ThenStatement)
+		p.generateNames(node.AsIfStatement().ElseStatement)
+	case ast.KindForStatement:
+		p.generateNames(node.AsForStatement().Initializer)
+		p.generateNames(node.AsForStatement().Statement)
+	case ast.KindForOfStatement, ast.KindForInStatement:
+		p.generateNames(node.AsForInOrOfStatement().Initializer)
+		p.generateNames(node.AsForInOrOfStatement().Statement)
+	case ast.KindSwitchStatement:
+		p.generateNames(node.AsSwitchStatement().CaseBlock)
+	case ast.KindCaseBlock:
+		p.generateAllNames(node.AsCaseBlock().Clauses)
+	case ast.KindCaseClause, ast.KindDefaultClause:
+		p.generateAllNames(node.AsCaseOrDefaultClause().Statements)
+	case ast.KindTryStatement:
+		p.generateNames(node.AsTryStatement().TryBlock)
+		p.generateNames(node.AsTryStatement().CatchClause)
+		p.generateNames(node.AsTryStatement().FinallyBlock)
+	case ast.KindCatchClause:
+		p.generateNames(node.AsCatchClause().VariableDeclaration)
+		p.generateNames(node.AsCatchClause().Block)
+	case ast.KindVariableStatement:
+		p.generateNames(node.AsVariableStatement().DeclarationList)
+	case ast.KindVariableDeclarationList:
+		p.generateAllNames(node.AsVariableDeclarationList().Declarations)
+	case ast.KindVariableDeclaration, ast.KindParameter, ast.KindBindingElement, ast.KindClassDeclaration:
+		p.generateNameIfNeeded(node.Name())
+	case ast.KindFunctionDeclaration:
+		p.generateNameIfNeeded(node.Name())
+		if p.shouldReuseTempVariableScope(node) {
+			p.generateAllNames(node.AsFunctionDeclaration().Parameters)
+			p.generateNames(node.AsFunctionDeclaration().Body)
+		}
+	case ast.KindObjectBindingPattern, ast.KindArrayBindingPattern:
+		p.generateAllNames(node.AsBindingPattern().Elements)
+	case ast.KindImportDeclaration:
+		p.generateNames(node.AsImportDeclaration().ImportClause)
+	case ast.KindImportClause:
+		p.generateNameIfNeeded(node.AsImportClause().Name())
+		p.generateNames(node.AsImportClause().NamedBindings)
+	case ast.KindNamespaceImport, ast.KindNamespaceExport:
+		p.generateNameIfNeeded(node.Name())
+	case ast.KindNamedImports:
+		p.generateAllNames(node.AsNamedImports().Elements)
+	case ast.KindImportSpecifier:
+		n := node.AsImportSpecifier()
+		if n.PropertyName != nil {
+			p.generateNameIfNeeded(n.PropertyName)
+		} else {
+			p.generateNameIfNeeded(n.Name())
+		}
+	}
 }
 
 func (p *Printer) generateAllMemberNames(nodes *ast.NodeList) {
-	// !!!
+	if nodes == nil {
+		return
+	}
+	for _, node := range nodes.Nodes {
+		p.generateMemberNames(node)
+	}
+}
+
+func (p *Printer) generateMemberNames(node *ast.Node) {
+	if node == nil {
+		return
+	}
+	switch node.Kind {
+	case ast.KindPropertyAssignment,
+		ast.KindShorthandPropertyAssignment,
+		ast.KindPropertyDeclaration,
+		ast.KindPropertySignature,
+		ast.KindMethodDeclaration,
+		ast.KindMethodSignature,
+		ast.KindGetAccessor,
+		ast.KindSetAccessor:
+		p.generateNameIfNeeded(node.Name())
+	}
+}
+
+func (p *Printer) generateNameIfNeeded(name *ast.DeclarationName) {
+	if name != nil {
+		if ast.IsMemberName(name) {
+			p.generateName(name)
+		} else if ast.IsBindingPattern(name) {
+			p.generateNames(name)
+		}
+	}
+}
+
+// Generate the text for a generated identifier or private identifier
+func (p *Printer) generateName(name *ast.MemberName) {
+	_ = p.nameGenerator.GenerateName(name)
+}
+
+// Returns a value indicating whether a name is unique globally or within the current file.
+func (p *Printer) isFileLevelUniqueNameInCurrentFile(name string, _ bool) bool {
+	if p.currentSourceFile != nil {
+		return isFileLevelUniqueName(p.currentSourceFile, name, p.HasGlobalName)
+	} else {
+		return true
+	}
 }
 
 //
