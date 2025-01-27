@@ -11,6 +11,9 @@ CHANGES.md lists intentional changes between the Strada (Typescript) and Corsa (
 3. Malformed string ImportSpecifiers (`import x as "OOPS" from "y"`) now contain the string's text instead of an empty identifier.
 4. Empty binding elements no longer have a separate kind for OmittedExpression. Instead they have Kind=BindingElement with a nil Initialiser, Name and DotDotDotToken.
 5. ShorthandPropertyAssignment no longer includes an EqualsToken as a child when it has an ObjectAssignmentInitializer.
+6. The parser always parses a JSDocText node for comments in JSDoc. `string` is no longer part of the type of `comment`.
+7. In cases where Strada did produce a JSDocText node, Corsa no longer (incorrectly) includes all leading and trailing whitespace/asterisks, as well as initial `/**`.
+8. JSDocMemberName is now parsed as QualifiedName. These two nodes previously only differed by type, and now QualifiedName has a much less restrictive type for its left child.
 
 JSDoc types are parsed in normal type annotation position but show a grammar error. Corsa no longer parses the JSDoc types below, giving a parse error instead of a grammar error.
 
@@ -18,3 +21,10 @@ JSDoc types are parsed in normal type annotation position but show a grammar err
 2. No Closure `function(string,string): void` types.
 3. No JSDoc standalone `?` type.
 4. No JSDoc module namepaths: `module:folder/file.C`
+
+Corsa no longer parses the following JSDoc tags with a specific node type. They now parse as generic JSDocTag nodes.
+
+1. `@class`
+2. `@throws`
+3. `@author`
+4. `@enum`

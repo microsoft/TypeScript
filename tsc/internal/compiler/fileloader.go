@@ -8,7 +8,6 @@ import (
 	"sync"
 
 	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/compiler/module"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
@@ -216,7 +215,7 @@ func (t *parseTask) start(loader *fileLoader) {
 
 func (p *fileLoader) parseSourceFile(fileName string) *ast.SourceFile {
 	path := tspath.ToPath(fileName, p.host.GetCurrentDirectory(), p.host.FS().UseCaseSensitiveFileNames())
-	sourceFile := p.host.GetSourceFile(fileName, p.compilerOptions.GetEmitScriptTarget())
+	sourceFile := p.host.GetSourceFile(fileName, p.compilerOptions.GetEmitScriptTarget(), p.programOptions.JSDocParsingMode)
 	sourceFile.SetPath(path)
 	return sourceFile
 }
@@ -272,10 +271,10 @@ func (p *fileLoader) collectDynamicImportOrRequireOrJsDocImportCalls(file *ast.S
 		// } else
 		if ast.IsImportCall(node) && len(node.Arguments()) >= 1 && ast.IsStringLiteralLike(node.Arguments()[0]) {
 			// we have to check the argument list has length of at least 1. We will still have to process these even though we have parsing error.
-			binder.SetParentInChildren(node) // we need parent data on imports before the program is fully bound, so we ensure it's set here
+			ast.SetParentInChildren(node) // we need parent data on imports before the program is fully bound, so we ensure it's set here
 			file.Imports = append(file.Imports, node.Arguments()[0])
 		} else if ast.IsLiteralImportTypeNode(node) {
-			binder.SetParentInChildren(node) // we need parent data on imports before the program is fully bound, so we ensure it's set here
+			ast.SetParentInChildren(node) // we need parent data on imports before the program is fully bound, so we ensure it's set here
 			file.Imports = append(file.Imports, node.AsImportTypeNode().Argument.AsLiteralTypeNode().Literal)
 		}
 		// else if isJavaScriptFile && isJSDocImportTag(node) {
@@ -298,7 +297,7 @@ func (p *fileLoader) collectModuleReferences(file *ast.SourceFile, node *ast.Sta
 		if moduleNameExpr != nil && ast.IsStringLiteral(moduleNameExpr) {
 			moduleName := moduleNameExpr.AsStringLiteral().Text
 			if moduleName != "" && (!inAmbientModule || !tspath.IsExternalModuleNameRelative(moduleName)) {
-				binder.SetParentInChildren(node) // we need parent data on imports before the program is fully bound, so we ensure it's set here
+				ast.SetParentInChildren(node) // we need parent data on imports before the program is fully bound, so we ensure it's set here
 				file.Imports = append(file.Imports, moduleNameExpr)
 				if file.UsesUriStyleNodeCoreModules != core.TSTrue && p.currentNodeModulesDepth == 0 && !file.IsDeclarationFile {
 					if strings.HasPrefix(moduleName, "node:") && !exclusivelyPrefixedNodeCoreModules[moduleName] {
@@ -314,7 +313,7 @@ func (p *fileLoader) collectModuleReferences(file *ast.SourceFile, node *ast.Sta
 		return
 	}
 	if ast.IsModuleDeclaration(node) && ast.IsAmbientModule(node) && (inAmbientModule || ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient) || file.IsDeclarationFile) {
-		binder.SetParentInChildren(node)
+		ast.SetParentInChildren(node)
 		nameText := node.AsModuleDeclaration().Name().Text()
 		// Ambient module declarations can be interpreted as augmentations for some existing external modules.
 		// This will happen in two cases:

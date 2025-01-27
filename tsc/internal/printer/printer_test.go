@@ -605,7 +605,7 @@ func setParentRecursive(node *ast.Node, parent *ast.Node) {
 }
 
 func parseJavaScript(text string, jsx bool) *ast.SourceFile {
-	file := parser.ParseSourceFile(core.IfElse(jsx, "main.tsx", "main.ts"), text, core.ScriptTargetESNext)
+	file := parser.ParseSourceFile(core.IfElse(jsx, "main.tsx", "main.ts"), text, core.ScriptTargetESNext, scanner.JSDocParsingModeParseAll)
 	setParentRecursive(file.AsNode(), nil)
 	return file
 }

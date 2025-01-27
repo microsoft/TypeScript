@@ -49,6 +49,8 @@ type NodeFactory struct {
 	identifierPool core.Pool[Identifier]
 	tokenPool      core.Pool[Token]
 	nodeListPool   core.Pool[NodeList]
+	jsdocPool      core.Pool[JSDoc]
+	jsdocTextPool  core.Pool[JSDocText]
 }
 
 func newNode(kind Kind, data nodeData) *Node {
@@ -393,7 +395,48 @@ func (n *Node) TagName() *Node {
 		return n.AsJsxClosingElement().TagName
 	case KindJsxSelfClosingElement:
 		return n.AsJsxSelfClosingElement().TagName
-		// !!! JSDoc tags
+	case KindJSDocTag:
+		return n.AsJSDocUnknownTag().TagName
+	case KindJSDocAugmentsTag:
+		return n.AsJSDocAugmentsTag().TagName
+	case KindJSDocImplementsTag:
+		return n.AsJSDocImplementsTag().TagName
+	case KindJSDocDeprecatedTag:
+		return n.AsJSDocDeprecatedTag().TagName
+	case KindJSDocPublicTag:
+		return n.AsJSDocPublicTag().TagName
+	case KindJSDocPrivateTag:
+		return n.AsJSDocPrivateTag().TagName
+	case KindJSDocProtectedTag:
+		return n.AsJSDocProtectedTag().TagName
+	case KindJSDocReadonlyTag:
+		return n.AsJSDocReadonlyTag().TagName
+	case KindJSDocOverrideTag:
+		return n.AsJSDocOverrideTag().TagName
+	case KindJSDocCallbackTag:
+		return n.AsJSDocCallbackTag().TagName
+	case KindJSDocOverloadTag:
+		return n.AsJSDocOverloadTag().TagName
+	case KindJSDocParameterTag:
+		return n.AsJSDocParameterTag().TagName
+	case KindJSDocReturnTag:
+		return n.AsJSDocReturnTag().TagName
+	case KindJSDocThisTag:
+		return n.AsJSDocThisTag().TagName
+	case KindJSDocTypeTag:
+		return n.AsJSDocTypeTag().TagName
+	case KindJSDocTemplateTag:
+		return n.AsJSDocTemplateTag().TagName
+	case KindJSDocTypedefTag:
+		return n.AsJSDocTypedefTag().TagName
+	case KindJSDocSeeTag:
+		return n.AsJSDocSeeTag().TagName
+	case KindJSDocPropertyTag:
+		return n.AsJSDocPropertyTag().TagName
+	case KindJSDocSatisfiesTag:
+		return n.AsJSDocSatisfiesTag().TagName
+	case KindJSDocImportTag:
+		return n.AsJSDocImportTag().TagName
 	}
 	panic("Unhandled case in Node.TagName: " + n.Kind.String())
 }
@@ -408,6 +451,56 @@ func (n *Node) PropertyName() *Node {
 		return n.AsBindingElement().PropertyName
 	}
 	panic("Unhandled case in Node.PropertyName: " + n.Kind.String())
+}
+
+func (n *Node) Comments() []*Node {
+	switch n.Kind {
+	case KindJSDoc:
+		return n.AsJSDoc().Comment.Nodes
+	case KindJSDocTag:
+		return n.AsJSDocUnknownTag().Comment.Nodes
+	case KindJSDocAugmentsTag:
+		return n.AsJSDocAugmentsTag().Comment.Nodes
+	case KindJSDocImplementsTag:
+		return n.AsJSDocImplementsTag().Comment.Nodes
+	case KindJSDocDeprecatedTag:
+		return n.AsJSDocDeprecatedTag().Comment.Nodes
+	case KindJSDocPublicTag:
+		return n.AsJSDocPublicTag().Comment.Nodes
+	case KindJSDocPrivateTag:
+		return n.AsJSDocPrivateTag().Comment.Nodes
+	case KindJSDocProtectedTag:
+		return n.AsJSDocProtectedTag().Comment.Nodes
+	case KindJSDocReadonlyTag:
+		return n.AsJSDocReadonlyTag().Comment.Nodes
+	case KindJSDocOverrideTag:
+		return n.AsJSDocOverrideTag().Comment.Nodes
+	case KindJSDocCallbackTag:
+		return n.AsJSDocCallbackTag().Comment.Nodes
+	case KindJSDocOverloadTag:
+		return n.AsJSDocOverloadTag().Comment.Nodes
+	case KindJSDocParameterTag:
+		return n.AsJSDocParameterTag().Comment.Nodes
+	case KindJSDocReturnTag:
+		return n.AsJSDocReturnTag().Comment.Nodes
+	case KindJSDocThisTag:
+		return n.AsJSDocThisTag().Comment.Nodes
+	case KindJSDocTypeTag:
+		return n.AsJSDocTypeTag().Comment.Nodes
+	case KindJSDocTemplateTag:
+		return n.AsJSDocTemplateTag().Comment.Nodes
+	case KindJSDocTypedefTag:
+		return n.AsJSDocTypedefTag().Comment.Nodes
+	case KindJSDocSeeTag:
+		return n.AsJSDocSeeTag().Comment.Nodes
+	case KindJSDocPropertyTag:
+		return n.AsJSDocPropertyTag().Comment.Nodes
+	case KindJSDocSatisfiesTag:
+		return n.AsJSDocSatisfiesTag().Comment.Nodes
+	case KindJSDocImportTag:
+		return n.AsJSDocImportTag().Comment.Nodes
+	}
+	panic("Unhandled case in Node.Comments: " + n.Kind.String())
 }
 
 // Node casts
@@ -1434,13 +1527,6 @@ func (node *Node) JSDoc(file *SourceFile) []*Node {
 		return jsdocs
 	}
 	return nil
-}
-
-func (node *Node) SetJSDoc(file *SourceFile, jsDocs []*Node) {
-	if node.Flags&NodeFlagsHasJSDoc == 0 {
-		node.Flags &= NodeFlagsHasJSDoc
-	}
-	file.jsdocCache[node] = jsDocs
 }
 
 // Token
@@ -6469,7 +6555,7 @@ type JSDoc struct {
 }
 
 func (f *NodeFactory) NewJSDoc(comment *NodeList, tags *NodeList) *Node {
-	data := &JSDoc{}
+	data := f.jsdocPool.New()
 	data.Comment = comment
 	data.Tags = tags
 	return newNode(KindJSDoc, data)
@@ -6507,14 +6593,14 @@ type JSDocText struct {
 }
 
 func (f *NodeFactory) NewJSDocText(text string) *Node {
-	data := &JSDocText{}
+	data := f.jsdocTextPool.New()
 	data.Text = text
 	return newNode(KindJSDocText, data)
 }
 
 type JSDocLink struct {
 	JSDocCommentBase
-	name *Node // optional (should only be EntityName | JSDocMemberName)
+	name *Node // optional (should only be EntityName)
 }
 
 func (f *NodeFactory) NewJSDocLink(name *Node, text string) *Node {
@@ -6534,7 +6620,7 @@ func (node *JSDocLink) Name() *DeclarationName {
 
 type JSDocLinkPlain struct {
 	JSDocCommentBase
-	name *Node // optional (should only be EntityName | JSDocMemberName)
+	name *Node // optional (should only be EntityName)
 }
 
 func (f *NodeFactory) NewJSDocLinkPlain(name *Node, text string) *Node {
@@ -6554,7 +6640,7 @@ func (node *JSDocLinkPlain) Name() *DeclarationName {
 
 type JSDocLinkCode struct {
 	JSDocCommentBase
-	name *Node // optional (should only be EntityName | JSDocMemberName)
+	name *Node // optional (should only be EntityName)
 }
 
 func (f *NodeFactory) NewJSDocLinkCode(name *Node, text string) *Node {
@@ -6707,6 +6793,10 @@ func (node *JSDocTypeTag) ForEachChild(v Visitor) bool {
 	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
 }
 
+func IsJSDocTypeTag(node *Node) bool {
+	return node.Kind == KindJSDocTypeTag
+}
+
 // JSDocUnknownTag
 type JSDocUnknownTag struct {
 	JSDocTagBase
@@ -6717,6 +6807,14 @@ func (f *NodeFactory) NewJSDocUnknownTag(tagName *IdentifierNode, comment *NodeL
 	data.TagName = tagName
 	data.Comment = comment
 	return newNode(KindJSDocTag, data)
+}
+
+func (node *JSDocUnknownTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visitNodeList(v, node.Comment)
+}
+
+func IsJSDocUnknownTag(node *Node) bool {
+	return node.Kind == KindJSDocTag
 }
 
 // JSDocTemplateTag
@@ -6751,7 +6849,7 @@ type JSDocPropertyTag struct {
 	IsNameFirst    bool
 }
 
-func NewJSDocPropertyTag(tagName *IdentifierNode, name *EntityName, isBracketed bool, typeExpression *TypeNode, isNameFirst bool, comment *NodeList) *JSDocPropertyTag {
+func (f *NodeFactory) NewJSDocPropertyTag(tagName *IdentifierNode, name *EntityName, isBracketed bool, typeExpression *TypeNode, isNameFirst bool, comment *NodeList) *Node {
 	data := &JSDocPropertyTag{}
 	data.TagName = tagName
 	data.name = name
@@ -6759,11 +6857,15 @@ func NewJSDocPropertyTag(tagName *IdentifierNode, name *EntityName, isBracketed 
 	data.TypeExpression = typeExpression
 	data.IsNameFirst = isNameFirst
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocPropertyTag, data)
 }
 
 func (node *JSDocPropertyTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visit(v, node.name) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+	if node.IsNameFirst {
+		return visit(v, node.TagName) || visit(v, node.name) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+	} else {
+		return visit(v, node.TagName) || visit(v, node.TypeExpression) || visit(v, node.name) || visitNodeList(v, node.Comment)
+	}
 }
 
 func (node *JSDocPropertyTag) Name() *EntityName { return node.name }
@@ -6776,7 +6878,7 @@ type JSDocParameterTag struct {
 	IsNameFirst    bool
 }
 
-func NewJSDocParameterTag(tagName *IdentifierNode, name *EntityName, isBracketed bool, typeExpression *TypeNode, isNameFirst bool, comment *NodeList) *JSDocParameterTag {
+func (f *NodeFactory) NewJSDocParameterTag(tagName *IdentifierNode, name *EntityName, isBracketed bool, typeExpression *TypeNode, isNameFirst bool, comment *NodeList) *Node {
 	data := &JSDocParameterTag{}
 	data.TagName = tagName
 	data.name = name
@@ -6784,11 +6886,18 @@ func NewJSDocParameterTag(tagName *IdentifierNode, name *EntityName, isBracketed
 	data.TypeExpression = typeExpression
 	data.IsNameFirst = isNameFirst
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocParameterTag, data)
 }
 
 func (node *JSDocParameterTag) ForEachChild(v Visitor) bool {
-	return visit(v, node.TagName) || visit(v, node.name) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+	if visit(v, node.TagName) {
+		return true
+	}
+	if node.IsNameFirst {
+		return visit(v, node.name) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+	} else {
+		return visit(v, node.TypeExpression) || visit(v, node.name) || visitNodeList(v, node.Comment)
+	}
 }
 
 func (node *JSDocParameterTag) Name() *EntityName { return node.name }
@@ -6799,16 +6908,20 @@ type JSDocReturnTag struct {
 	TypeExpression *TypeNode
 }
 
-func NewJSDocReturnTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *JSDocReturnTag {
+func (f *NodeFactory) NewJSDocReturnTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
 	data := &JSDocReturnTag{}
 	data.TagName = tagName
 	data.TypeExpression = typeExpression
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocReturnTag, data)
 }
 
 func (node *JSDocReturnTag) ForEachChild(v Visitor) bool {
 	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+}
+
+func IsJSDocReturnTag(node *Node) bool {
+	return node.Kind == KindJSDocReturnTag
 }
 
 // JSDocPublicTag
@@ -6816,11 +6929,11 @@ type JSDocPublicTag struct {
 	JSDocTagBase
 }
 
-func NewJSDocPublicTag(tagName *IdentifierNode, comment *NodeList) *JSDocPublicTag {
+func (f *NodeFactory) NewJSDocPublicTag(tagName *IdentifierNode, comment *NodeList) *Node {
 	data := &JSDocPublicTag{}
 	data.TagName = tagName
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocPublicTag, data)
 }
 
 func (node *JSDocPublicTag) ForEachChild(v Visitor) bool {
@@ -6832,11 +6945,11 @@ type JSDocPrivateTag struct {
 	JSDocTagBase
 }
 
-func NewJSDocPrivateTag(tagName *IdentifierNode, comment *NodeList) *JSDocPrivateTag {
+func (f *NodeFactory) NewJSDocPrivateTag(tagName *IdentifierNode, comment *NodeList) *Node {
 	data := &JSDocPrivateTag{}
 	data.TagName = tagName
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocPrivateTag, data)
 }
 
 func (node *JSDocPrivateTag) ForEachChild(v Visitor) bool {
@@ -6848,11 +6961,11 @@ type JSDocProtectedTag struct {
 	JSDocTagBase
 }
 
-func NewJSDocProtectedTag(tagName *IdentifierNode, comment *NodeList) *JSDocProtectedTag {
+func (f *NodeFactory) NewJSDocProtectedTag(tagName *IdentifierNode, comment *NodeList) *Node {
 	data := &JSDocProtectedTag{}
 	data.TagName = tagName
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocProtectedTag, data)
 }
 
 func (node *JSDocProtectedTag) ForEachChild(v Visitor) bool {
@@ -6864,11 +6977,11 @@ type JSDocReadonlyTag struct {
 	JSDocTagBase
 }
 
-func NewJSDocReadonlyTag(tagName *IdentifierNode, comment *NodeList) *JSDocReadonlyTag {
+func (f *NodeFactory) NewJSDocReadonlyTag(tagName *IdentifierNode, comment *NodeList) *Node {
 	data := &JSDocReadonlyTag{}
 	data.TagName = tagName
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocReadonlyTag, data)
 }
 
 func (node *JSDocReadonlyTag) ForEachChild(v Visitor) bool {
@@ -6880,11 +6993,11 @@ type JSDocOverrideTag struct {
 	JSDocTagBase
 }
 
-func NewJSDocOverrideTag(tagName *IdentifierNode, comment *NodeList) *JSDocOverrideTag {
+func (f *NodeFactory) NewJSDocOverrideTag(tagName *IdentifierNode, comment *NodeList) *Node {
 	data := &JSDocOverrideTag{}
 	data.TagName = tagName
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocOverrideTag, data)
 }
 
 func (node *JSDocOverrideTag) ForEachChild(v Visitor) bool {
@@ -6896,11 +7009,11 @@ type JSDocDeprecatedTag struct {
 	JSDocTagBase
 }
 
-func NewJSDocDeprecatedTag(tagName *IdentifierNode, comment *NodeList) *JSDocDeprecatedTag {
+func (f *NodeFactory) NewJSDocDeprecatedTag(tagName *IdentifierNode, comment *NodeList) *Node {
 	data := &JSDocDeprecatedTag{}
 	data.TagName = tagName
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocDeprecatedTag, data)
 }
 
 func (node *JSDocDeprecatedTag) ForEachChild(v Visitor) bool {
@@ -6913,12 +7026,12 @@ type JSDocSeeTag struct {
 	NameExpression *TypeNode
 }
 
-func NewJSDocSeeTag(tagName *IdentifierNode, nameExpression *TypeNode, comment *NodeList) *JSDocSeeTag {
+func (f *NodeFactory) NewJSDocSeeTag(tagName *IdentifierNode, nameExpression *TypeNode, comment *NodeList) *Node {
 	data := &JSDocSeeTag{}
 	data.TagName = tagName
 	data.NameExpression = nameExpression
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocSeeTag, data)
 }
 
 func (node *JSDocSeeTag) ForEachChild(v Visitor) bool {
@@ -6931,12 +7044,12 @@ type JSDocImplementsTag struct {
 	ClassName *Expression
 }
 
-func NewJSDocImplementsTag(tagName *IdentifierNode, className *Expression, comment *NodeList) *JSDocImplementsTag {
+func (f *NodeFactory) NewJSDocImplementsTag(tagName *IdentifierNode, className *Expression, comment *NodeList) *Node {
 	data := &JSDocImplementsTag{}
 	data.TagName = tagName
 	data.ClassName = className
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocImplementsTag, data)
 }
 
 func (node *JSDocImplementsTag) ForEachChild(v Visitor) bool {
@@ -6949,12 +7062,12 @@ type JSDocAugmentsTag struct {
 	ClassName *Expression
 }
 
-func NewJSDocAugmentsTag(tagName *IdentifierNode, className *Expression, comment *NodeList) *JSDocAugmentsTag {
+func (f *NodeFactory) NewJSDocAugmentsTag(tagName *IdentifierNode, className *Expression, comment *NodeList) *Node {
 	data := &JSDocAugmentsTag{}
 	data.TagName = tagName
 	data.ClassName = className
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocAugmentsTag, data)
 }
 
 func (node *JSDocAugmentsTag) ForEachChild(v Visitor) bool {
@@ -6967,12 +7080,12 @@ type JSDocSatisfiesTag struct {
 	TypeExpression *TypeNode
 }
 
-func NewJSDocSatisfiesTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *JSDocSatisfiesTag {
+func (f *NodeFactory) NewJSDocSatisfiesTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
 	data := &JSDocSatisfiesTag{}
 	data.TagName = tagName
 	data.TypeExpression = typeExpression
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocSatisfiesTag, data)
 }
 
 func (node *JSDocSatisfiesTag) ForEachChild(v Visitor) bool {
@@ -6985,12 +7098,12 @@ type JSDocThisTag struct {
 	TypeExpression *TypeNode
 }
 
-func NewJSDocThisTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *JSDocThisTag {
+func (f *NodeFactory) NewJSDocThisTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
 	data := &JSDocThisTag{}
 	data.TagName = tagName
 	data.TypeExpression = typeExpression
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocThisTag, data)
 }
 
 func (node *JSDocThisTag) ForEachChild(v Visitor) bool {
@@ -7005,14 +7118,14 @@ type JSDocImportTag struct {
 	Attributes      *Node
 }
 
-func NewJSDocImportTag(tagName *IdentifierNode, importClause *Declaration, moduleSpecifier *Node, attributes *Node, comment *NodeList) *JSDocImportTag {
+func (f *NodeFactory) NewJSDocImportTag(tagName *IdentifierNode, importClause *Declaration, moduleSpecifier *Node, attributes *Node, comment *NodeList) *Node {
 	data := &JSDocImportTag{}
 	data.TagName = tagName
 	data.ImportClause = importClause
 	data.ModuleSpecifier = moduleSpecifier
 	data.Attributes = attributes
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocImportTag, data)
 }
 
 func (node *JSDocImportTag) ForEachChild(v Visitor) bool {
@@ -7026,13 +7139,13 @@ type JSDocCallbackTag struct {
 	TypeExpression *TypeNode
 }
 
-func NewJSDocCallbackTag(tagName *IdentifierNode, typeExpression *TypeNode, fullName *Node, comment *NodeList) *JSDocCallbackTag {
+func (f *NodeFactory) NewJSDocCallbackTag(tagName *IdentifierNode, typeExpression *TypeNode, fullName *Node, comment *NodeList) *Node {
 	data := &JSDocCallbackTag{}
 	data.TagName = tagName
 	data.FullName = fullName
 	data.TypeExpression = typeExpression
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocCallbackTag, data)
 }
 
 func (node *JSDocCallbackTag) ForEachChild(v Visitor) bool {
@@ -7045,12 +7158,12 @@ type JSDocOverloadTag struct {
 	TypeExpression *TypeNode
 }
 
-func NewJSDocOverloadTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *JSDocOverloadTag {
+func (f *NodeFactory) NewJSDocOverloadTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
 	data := &JSDocOverloadTag{}
 	data.TagName = tagName
 	data.TypeExpression = typeExpression
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocOverloadTag, data)
 }
 
 func (node *JSDocOverloadTag) ForEachChild(v Visitor) bool {
@@ -7064,16 +7177,19 @@ type JSDocTypedefTag struct {
 	FullName       *Node
 }
 
-func NewJSDocTypedefTag(tagName *IdentifierNode, typeExpression *Node, fullName *Node, comment *NodeList) *JSDocTypedefTag {
+func (f *NodeFactory) NewJSDocTypedefTag(tagName *IdentifierNode, typeExpression *Node, fullName *Node, comment *NodeList) *Node {
 	data := &JSDocTypedefTag{}
 	data.TagName = tagName
 	data.TypeExpression = typeExpression
 	data.FullName = fullName
 	data.Comment = comment
-	return data
+	return newNode(KindJSDocTypedefTag, data)
 }
 
 func (node *JSDocTypedefTag) ForEachChild(v Visitor) bool {
+	if node.TypeExpression != nil && node.TypeExpression.Kind == KindJSDocTypeLiteral {
+		return visit(v, node.TagName) || visit(v, node.FullName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+	}
 	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visit(v, node.FullName) || visitNodeList(v, node.Comment)
 }
 
@@ -7085,11 +7201,11 @@ type JSDocTypeLiteral struct {
 	IsArrayType       bool
 }
 
-func NewJSDocTypeLiteral(jsDocPropertyTags []*Node, isArrayType bool) *JSDocTypeLiteral {
+func (f *NodeFactory) NewJSDocTypeLiteral(jsDocPropertyTags []*Node, isArrayType bool) *Node {
 	data := &JSDocTypeLiteral{}
 	data.JsDocPropertyTags = jsDocPropertyTags
 	data.IsArrayType = isArrayType
-	return data
+	return newNode(KindJSDocTypeLiteral, data)
 }
 
 func (node *JSDocTypeLiteral) ForEachChild(v Visitor) bool {
@@ -7100,20 +7216,20 @@ func (node *JSDocTypeLiteral) ForEachChild(v Visitor) bool {
 type JSDocSignature struct {
 	TypeNodeBase
 	typeParameters *TypeParameterList
-	Parameters     []*JSDocTag
+	Parameters     *NodeList
 	Type           *JSDocTag
 }
 
-func NewJSDocSignature(typeParameters *TypeParameterList, parameters []*JSDocTag, typeNode *JSDocTag) *JSDocSignature {
+func (f *NodeFactory) NewJSDocSignature(typeParameters *TypeParameterList, parameters *NodeList, typeNode *JSDocTag) *Node {
 	data := &JSDocSignature{}
 	data.typeParameters = typeParameters
 	data.Parameters = parameters
 	data.Type = typeNode
-	return data
+	return newNode(KindJSDocSignature, data)
 }
 
 func (node *JSDocSignature) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.typeParameters) || visitNodes(v, node.Parameters) || visit(v, node.Type)
+	return visitNodeList(v, node.typeParameters) || visitNodeList(v, node.Parameters) || visit(v, node.Type)
 }
 
 func (node *JSDocSignature) TypeParameters() *TypeParameterList { return node.typeParameters }
@@ -7124,10 +7240,10 @@ type JSDocNameReference struct {
 	name *EntityName
 }
 
-func NewJSDocNameReference(name *EntityName) *JSDocNameReference {
+func (f *NodeFactory) NewJSDocNameReference(name *EntityName) *Node {
 	data := &JSDocNameReference{}
 	data.name = name
-	return data
+	return newNode(KindJSDocNameReference, data)
 }
 
 func (node *JSDocNameReference) ForEachChild(v Visitor) bool {
@@ -7167,6 +7283,7 @@ type SourceFile struct {
 	path                        tspath.Path
 	Statements                  *NodeList // NodeList[*Statement]
 	diagnostics                 []*Diagnostic
+	jsdocDiagnostics            []*Diagnostic
 	bindDiagnostics             []*Diagnostic
 	BindSuggestionDiagnostics   []*Diagnostic
 	ImpliedNodeFormat           core.ModuleKind
@@ -7227,6 +7344,18 @@ func (node *SourceFile) SetDiagnostics(diags []*Diagnostic) {
 	node.diagnostics = diags
 }
 
+func (node *SourceFile) JSDocDiagnostics() []*Diagnostic {
+	return node.jsdocDiagnostics
+}
+
+func (node *SourceFile) SetJSDocDiagnostics(diags []*Diagnostic) {
+	node.jsdocDiagnostics = diags
+}
+
+func (node *SourceFile) SetJSDocCache(cache map[*Node][]*Node) {
+	node.jsdocCache = cache
+}
+
 func (node *SourceFile) BindDiagnostics() []*Diagnostic {
 	return node.bindDiagnostics
 }
@@ -7285,7 +7414,7 @@ type CommentRange struct {
 	Kind               Kind
 }
 
-func NewCommentRange(kind Kind, pos int, end int, hasTrailingNewLine bool) CommentRange {
+func (f *NodeFactory) NewCommentRange(kind Kind, pos int, end int, hasTrailingNewLine bool) CommentRange {
 	return CommentRange{
 		TextRange:          core.NewTextRange(pos, end),
 		HasTrailingNewLine: hasTrailingNewLine,

@@ -357,10 +357,7 @@ const (
 	KindJSDocTag
 	KindJSDocAugmentsTag
 	KindJSDocImplementsTag
-	KindJSDocAuthorTag
 	KindJSDocDeprecatedTag
-	KindJSDocImmediateTag
-	KindJSDocClassTag
 	KindJSDocPublicTag
 	KindJSDocPrivateTag
 	KindJSDocProtectedTag
@@ -368,7 +365,6 @@ const (
 	KindJSDocOverrideTag
 	KindJSDocCallbackTag
 	KindJSDocOverloadTag
-	KindJSDocEnumTag
 	KindJSDocParameterTag
 	KindJSDocReturnTag
 	KindJSDocThisTag
@@ -377,7 +373,6 @@ const (
 	KindJSDocTypedefTag
 	KindJSDocSeeTag
 	KindJSDocPropertyTag
-	KindJSDocThrowsTag
 	KindJSDocSatisfiesTag
 	KindJSDocImportTag
 	// Synthesized list

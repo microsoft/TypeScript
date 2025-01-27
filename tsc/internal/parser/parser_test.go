@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/repo"
+	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/testutil/fixtures"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"gotest.tools/v3/assert"
@@ -25,7 +26,7 @@ func BenchmarkParse(b *testing.B) {
 			sourceText := f.ReadFile(b)
 
 			for range b.N {
-				ParseSourceFile(fileName, sourceText, core.ScriptTargetESNext)
+				ParseSourceFile(fileName, sourceText, core.ScriptTargetESNext, scanner.JSDocParsingModeParseAll)
 			}
 		})
 	}
@@ -63,7 +64,7 @@ func TestParseTypeScriptRepo(t *testing.T) {
 					if strings.HasSuffix(f.name, ".json") {
 						sourceFile = ParseJSONText(f.path, string(sourceText))
 					} else {
-						sourceFile = ParseSourceFile(f.path, string(sourceText), core.ScriptTargetESNext)
+						sourceFile = ParseSourceFile(f.path, string(sourceText), core.ScriptTargetESNext, scanner.JSDocParsingModeParseAll)
 					}
 
 					if !test.ignoreErrors {

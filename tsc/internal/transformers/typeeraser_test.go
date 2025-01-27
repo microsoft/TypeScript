@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/printer"
@@ -95,8 +94,8 @@ func checkEmit(t *testing.T, file *ast.SourceFile, expected string) {
 }
 
 func parseTypeScript(text string, jsx bool) *ast.SourceFile {
-	file := parser.ParseSourceFile(core.IfElse(jsx, "main.tsx", "main.ts"), text, core.ScriptTargetESNext)
-	binder.SetParentInChildren(file.AsNode())
+	file := parser.ParseSourceFile(core.IfElse(jsx, "main.tsx", "main.ts"), text, core.ScriptTargetESNext, scanner.JSDocParsingModeParseAll)
+	ast.SetParentInChildren(file.AsNode())
 	return file
 }
 

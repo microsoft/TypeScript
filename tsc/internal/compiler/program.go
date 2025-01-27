@@ -27,6 +27,7 @@ type ProgramOptions struct {
 	SingleThreaded     bool
 	ProjectReference   []core.ProjectReference
 	DefaultLibraryPath string
+	JSDocParsingMode   scanner.JSDocParsingMode
 }
 
 type Program struct {

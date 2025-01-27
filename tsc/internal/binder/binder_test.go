@@ -7,6 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/parser"
+	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/testutil/fixtures"
 )
 
@@ -20,7 +21,7 @@ func BenchmarkBind(b *testing.B) {
 
 			sourceFiles := make([]*ast.SourceFile, b.N)
 			for i := range b.N {
-				sourceFiles[i] = parser.ParseSourceFile(fileName, sourceText, core.ScriptTargetESNext)
+				sourceFiles[i] = parser.ParseSourceFile(fileName, sourceText, core.ScriptTargetESNext, scanner.JSDocParsingModeParseAll)
 			}
 
 			compilerOptions := &core.CompilerOptions{Target: core.ScriptTargetESNext, ModuleKind: core.ModuleKindNodeNext}
