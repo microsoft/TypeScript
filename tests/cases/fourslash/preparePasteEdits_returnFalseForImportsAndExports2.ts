@@ -12,3 +12,9 @@
 
 // @Filename: /file2.ts
 //// export const t = 1;
+
+verify.preparePasteEdits({
+    copiedFromFile: "/file1.ts",
+    copiedTextRange: test.ranges(),
+    providePasteEdits: false,
+})
