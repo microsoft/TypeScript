@@ -183,3 +183,39 @@ output5(1);
 >1 : 1
 >  : ^
 
+export const test6 = <X,>(g: <A>(x: X) => X) => g<X>;
+>test6 : <X>(g: <A>(x: X) => X) => (x: X) => X
+>      : ^ ^^ ^^              ^^^^^^ ^^ ^^^^^ 
+><X,>(g: <A>(x: X) => X) => g<X> : <X>(g: <A>(x: X) => X) => (x: X) => X
+>                                : ^ ^^ ^^              ^^^^^^ ^^ ^^^^^ 
+>g : <A>(x: X) => X
+>  : ^ ^^ ^^ ^^^^^ 
+>x : X
+>  : ^
+>g<X> : (x: X) => X
+>     : ^ ^^ ^^^^^ 
+>g : <A>(x: X) => X
+>  : ^ ^^ ^^ ^^^^^ 
+
+export const output6 = test6<number>((y: number) => 1);
+>output6 : (x: number) => number
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>test6<number>((y: number) => 1) : (x: number) => number
+>                                : ^ ^^^^^^^^^^^^^^^^^^^
+>test6 : <X>(g: <A>(x: X) => X) => (x: X) => X
+>      : ^ ^^ ^^              ^^^^^^ ^^ ^^^^^ 
+>(y: number) => 1 : (y: number) => number
+>                 : ^ ^^      ^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+output6(1);
+>output6(1) : number
+>           : ^^^^^^
+>output6 : (x: number) => number
+>        : ^ ^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+

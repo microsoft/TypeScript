@@ -97,3 +97,22 @@ export const output5 = test5<number>((y: number) => 1);
 output5(1);
 >output5 : Symbol(output5, Decl(instantiationExpressionNoTypeParameterLeak1.ts, 23, 12))
 
+export const test6 = <X,>(g: <A>(x: X) => X) => g<X>;
+>test6 : Symbol(test6, Decl(instantiationExpressionNoTypeParameterLeak1.ts, 26, 12))
+>X : Symbol(X, Decl(instantiationExpressionNoTypeParameterLeak1.ts, 26, 22))
+>g : Symbol(g, Decl(instantiationExpressionNoTypeParameterLeak1.ts, 26, 26))
+>A : Symbol(A, Decl(instantiationExpressionNoTypeParameterLeak1.ts, 26, 30))
+>x : Symbol(x, Decl(instantiationExpressionNoTypeParameterLeak1.ts, 26, 33))
+>X : Symbol(X, Decl(instantiationExpressionNoTypeParameterLeak1.ts, 26, 22))
+>X : Symbol(X, Decl(instantiationExpressionNoTypeParameterLeak1.ts, 26, 22))
+>g : Symbol(g, Decl(instantiationExpressionNoTypeParameterLeak1.ts, 26, 26))
+>X : Symbol(X, Decl(instantiationExpressionNoTypeParameterLeak1.ts, 26, 22))
+
+export const output6 = test6<number>((y: number) => 1);
+>output6 : Symbol(output6, Decl(instantiationExpressionNoTypeParameterLeak1.ts, 27, 12))
+>test6 : Symbol(test6, Decl(instantiationExpressionNoTypeParameterLeak1.ts, 26, 12))
+>y : Symbol(y, Decl(instantiationExpressionNoTypeParameterLeak1.ts, 27, 38))
+
+output6(1);
+>output6 : Symbol(output6, Decl(instantiationExpressionNoTypeParameterLeak1.ts, 27, 12))
+
