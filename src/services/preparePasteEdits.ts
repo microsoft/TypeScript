@@ -2,11 +2,15 @@ import {
     findAncestor,
     forEachChild,
     getTokenAtPosition,
+    isExportAssignment,
+    isExportDeclaration,
+    isExportSpecifier,
     isIdentifier,
     isImportClause,
     isImportDeclaration,
     isImportEqualsDeclaration,
     isImportSpecifier,
+    isNamedExports,
     isNamedImports,
     isNamespaceImport,
     rangeContainsPosition,
@@ -32,8 +36,9 @@ export function preparePasteEdits(
         );
         if (!enclosingNode) return;
         if (
-            isImportSpecifier(enclosingNode) || isImportClause(enclosingNode) || isNamespaceImport(enclosingNode)
-            || isImportEqualsDeclaration(enclosingNode) || isImportDeclaration(enclosingNode) || isNamedImports(enclosingNode)
+            isImportSpecifier(enclosingNode) || isImportClause(enclosingNode) || isNamespaceImport(enclosingNode) || isImportEqualsDeclaration(enclosingNode)
+            || isImportDeclaration(enclosingNode) || isNamedImports(enclosingNode) || isExportSpecifier(enclosingNode) || isNamedExports(enclosingNode)
+            || isExportAssignment(enclosingNode) || isExportDeclaration(enclosingNode)
         ) {
             return;
         }
