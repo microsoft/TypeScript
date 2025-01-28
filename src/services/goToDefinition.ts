@@ -5,6 +5,7 @@ import {
     AssignmentOperatorToken,
     CallLikeExpression,
     canHaveSymbol,
+    CheckFlags,
     concatenate,
     createTextSpan,
     createTextSpanFromBounds,
@@ -74,6 +75,7 @@ import {
     isRightSideOfPropertyAccess,
     isStaticModifier,
     isSwitchStatement,
+    isTransientSymbol,
     isTypeAliasDeclaration,
     isTypeReferenceNode,
     isVariableDeclaration,
@@ -595,7 +597,8 @@ function isExpandoDeclaration(node: Declaration): boolean {
 }
 
 function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node, failedAliasResolution?: boolean, declarationFilter?: (d: Declaration) => boolean): DefinitionInfo[] | undefined {
-    const filteredDeclarations = declarationFilter !== undefined ? filter(symbol.declarations, declarationFilter) : symbol.declarations;
+    const declarations = isTransientSymbol(symbol) && symbol.links.checkFlags & CheckFlags.Mapped && !symbol.declarations?.length ? symbol.links.syntheticOrigin?.declarations : symbol.declarations;
+    const filteredDeclarations = declarationFilter !== undefined ? filter(declarations, declarationFilter) : declarations;
     // If we have a declaration filter, we are looking for specific declaration(s), so we should not return prematurely.
     const signatureDefinition = !declarationFilter && (getConstructSignatureDefinition() || getCallSignatureDefinition());
     if (signatureDefinition) {

@@ -1,0 +1,403 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoMappedType3.ts ===
+// type Getters<Type> =  /** @inheritDoc desc on Getters */  {
+//   [Property in keyof Type as `get${Capitalize<
+//     string & Property
+//   >}`]: () => Type[Property];
+// };
+// 
+// interface Person {
+//   // ✅ When hovering here, the documentation is displayed, as it should.
+//   /**
+//    * Person's name.
+//    * @example "John Doe"
+//    */
+//   name: string;
+// 
+//   // ✅ When hovering here, the documentation is displayed, as it should.
+//   /**
+//    * Person's Age.
+//    * @example 30
+//    */
+//   age: number;
+// 
+//   // ✅ When hovering here, the documentation is displayed, as it should.
+//   /**
+//    * Person's Location.
+//    * @example "Brazil"
+//    */
+//   location: string;
+// }
+// 
+// type LazyPerson = Getters<Person>;
+// 
+// const me: LazyPerson = {
+//   // ❌ When hovering here, the documentation is NOT displayed.
+//   getName: () => "Jake Carter",
+//   ^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) getName: () => string
+// | desc on Getters
+// | Person's name.
+// | ----------------------------------------------------------------------
+//   // ❌ When hovering here, the documentation is NOT displayed.
+//   getAge: () => 35,
+//   ^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) getAge: () => number
+// | desc on Getters
+// | Person's Age.
+// | ----------------------------------------------------------------------
+//   // ❌ When hovering here, the documentation is NOT displayed.
+//   getLocation: () => "United States",
+//   ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) getLocation: () => string
+// | desc on Getters
+// | Person's Location.
+// | ----------------------------------------------------------------------
+// };
+// 
+// // ❌ When hovering here, the documentation is NOT displayed.
+// me.getName();
+//    ^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) getName: () => string
+// | desc on Getters
+// | Person's name.
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoMappedType3.ts",
+      "position": 747,
+      "name": "1"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 747,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "getName",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "desc on Getters",
+          "kind": "text"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "Person's name.",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoMappedType3.ts",
+      "position": 842,
+      "name": "2"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 842,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "getAge",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "desc on Getters",
+          "kind": "text"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "Person's Age.",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoMappedType3.ts",
+      "position": 925,
+      "name": "3"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 925,
+        "length": 11
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "getLocation",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "desc on Getters",
+          "kind": "text"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "Person's Location.",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoMappedType3.ts",
+      "position": 1029,
+      "name": "4"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1029,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "getName",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "desc on Getters",
+          "kind": "text"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "Person's name.",
+          "kind": "text"
+        }
+      ]
+    }
+  }
+]

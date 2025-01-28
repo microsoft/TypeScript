@@ -9,7 +9,7 @@
    {
     "kind": "property",
     "name": "a",
-    "containerName": "",
+    "containerName": "filtered",
     "isLocal": false,
     "isAmbient": false,
     "unverified": false,
