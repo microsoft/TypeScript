@@ -3983,7 +3983,7 @@
         "category": "Error",
         "code": 2879
     },
-    "Import assertions have been replaced by import attributes. Use 'with' instead of 'asserts'.": {
+    "Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.": {
         "category": "Error",
         "code": 2880
     },

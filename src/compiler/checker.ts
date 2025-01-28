@@ -48156,7 +48156,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (moduleKind === ModuleKind.NodeNext && !isImportAttributes) {
-                return grammarErrorOnFirstToken(node, Diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_asserts);
+                return grammarErrorOnFirstToken(node, Diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert);
             }
 
             if (declaration.moduleSpecifier && getEmitSyntaxForModuleSpecifierExpression(declaration.moduleSpecifier) === ModuleKind.CommonJS) {
