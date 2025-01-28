@@ -76,21 +76,32 @@ type Parser struct {
 	jsdocTagCommentsSpace   []string
 }
 
-func NewParser() *Parser {
-	p := &Parser{}
-	p.scanner = scanner.NewScanner()
-	return p
+var parserPool = sync.Pool{
+	New: func() any {
+		return &Parser{}
+	},
+}
+
+func getParser() *Parser {
+	return parserPool.Get().(*Parser)
+}
+
+func putParser(p *Parser) {
+	*p = Parser{scanner: p.scanner}
+	parserPool.Put(p)
 }
 
 func ParseSourceFile(fileName string, sourceText string, languageVersion core.ScriptTarget, jsdocParsingMode scanner.JSDocParsingMode) *ast.SourceFile {
-	var p Parser
+	p := getParser()
+	defer putParser(p)
 	p.initializeState(fileName, sourceText, languageVersion, core.ScriptKindUnknown, jsdocParsingMode)
 	p.nextToken()
 	return p.parseSourceFileWorker()
 }
 
 func ParseJSONText(fileName string, sourceText string) *ast.SourceFile {
-	var p Parser
+	p := getParser()
+	defer putParser(p)
 	p.initializeState(fileName, sourceText, core.ScriptTargetES2015, core.ScriptKindJSON, scanner.JSDocParsingModeParseAll)
 	p.nextToken()
 	pos := p.nodePos()
@@ -163,7 +174,11 @@ func ParseJSONText(fileName string, sourceText string) *ast.SourceFile {
 }
 
 func (p *Parser) initializeState(fileName string, sourceText string, languageVersion core.ScriptTarget, scriptKind core.ScriptKind, jsdocParsingMode scanner.JSDocParsingMode) {
-	p.scanner = scanner.NewScanner()
+	if p.scanner == nil {
+		p.scanner = scanner.NewScanner()
+	} else {
+		p.scanner.Reset()
+	}
 	p.fileName = fileName
 	p.sourceText = sourceText
 	p.languageVersion = languageVersion
@@ -2442,7 +2457,8 @@ func (p *Parser) parseUnionOrIntersectionType(operator ast.Kind, parseConstituen
 		typeNode = parseConstituentType(p)
 	}
 	if p.token == operator || hasLeadingOperator {
-		types := []*ast.TypeNode{typeNode}
+		types := p.nodeSlicePool.NewSlice(2)[:1]
+		types[0] = typeNode
 		for p.parseOptional(operator) {
 			types = append(types, p.parseFunctionOrConstructorTypeToError(isUnionType, parseConstituentType))
 		}

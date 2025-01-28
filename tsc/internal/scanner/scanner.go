@@ -249,8 +249,20 @@ type Scanner struct {
 	ScannerState
 }
 
+func defaultScanner() Scanner {
+	// Using a function rather than a global is intentional; this function is
+	// inlined as pure code (zeroing + moves), whereas a global requires write
+	// barriers since the memory is mutable.
+	return Scanner{languageVersion: core.ScriptTargetLatest, skipTrivia: true}
+}
+
 func NewScanner() *Scanner {
-	return &Scanner{languageVersion: core.ScriptTargetLatest, skipTrivia: true}
+	s := defaultScanner()
+	return &s
+}
+
+func (s *Scanner) Reset() {
+	*s = defaultScanner()
 }
 
 func (s *Scanner) Text() string {

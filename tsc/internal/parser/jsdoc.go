@@ -162,7 +162,7 @@ func (p *Parser) parseJSDocComment(parent *ast.Node, start int, end int) *ast.No
 func (p *Parser) parseJSDocCommentWorker(start int, indent int) *ast.Node {
 	// Initially we can parse out a tag.  We also have seen a starting asterisk.
 	// This is so that /** * @type */ doesn't parse.
-	var tags []*ast.Node
+	tags := p.nodeSlicePool.NewSlice(1)[:0]
 	tagsPos := -1
 	tagsEnd := -1
 	state := jsdocStateSawAsterisk

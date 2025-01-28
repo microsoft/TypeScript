@@ -18,6 +18,14 @@ import (
 )
 
 func BenchmarkParse(b *testing.B) {
+	jsdocModes := []struct {
+		name string
+		mode scanner.JSDocParsingMode
+	}{
+		{"tsc", scanner.JSDocParsingModeParseForTypeErrors},
+		{"server", scanner.JSDocParsingModeParseAll},
+	}
+
 	for _, f := range fixtures.BenchFixtures {
 		b.Run(f.Name(), func(b *testing.B) {
 			f.SkipIfNotExist(b)
@@ -25,8 +33,13 @@ func BenchmarkParse(b *testing.B) {
 			fileName := f.Path()
 			sourceText := f.ReadFile(b)
 
-			for range b.N {
-				ParseSourceFile(fileName, sourceText, core.ScriptTargetESNext, scanner.JSDocParsingModeParseAll)
+			for _, jsdoc := range jsdocModes {
+				b.Run(jsdoc.name, func(b *testing.B) {
+					jsdocMode := jsdoc.mode
+					for range b.N {
+						ParseSourceFile(fileName, sourceText, core.ScriptTargetESNext, jsdocMode)
+					}
+				})
 			}
 		})
 	}

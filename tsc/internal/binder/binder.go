@@ -66,7 +66,7 @@ type Binder struct {
 	symbolPool             core.Pool[ast.Symbol]
 	flowNodePool           core.Pool[ast.FlowNode]
 	flowListPool           core.Pool[ast.FlowList]
-	singleDeclarations     []*ast.Node
+	singleDeclarationsPool core.Pool[*ast.Node]
 }
 
 type ModuleInstanceState int32
@@ -505,13 +505,9 @@ func (b *Binder) combineFlowLists(head *ast.FlowList, tail *ast.FlowList) *ast.F
 }
 
 func (b *Binder) newSingleDeclaration(declaration *ast.Node) []*ast.Node {
-	if len(b.singleDeclarations) == cap(b.singleDeclarations) {
-		b.singleDeclarations = make([]*ast.Node, 0, core.NextPoolSize(len(b.singleDeclarations)))
-	}
-	index := len(b.singleDeclarations)
-	b.singleDeclarations = b.singleDeclarations[:index+1]
-	b.singleDeclarations[index] = declaration
-	return b.singleDeclarations[index : index+1 : index+1]
+	nodes := b.singleDeclarationsPool.NewSlice(1)
+	nodes[0] = declaration
+	return nodes
 }
 
 func setFlowNodeReferenced(flow *ast.FlowNode) {
