@@ -15,7 +15,7 @@ interface ObjectConstructor {
      * Returns an array of key/values of the enumerable own properties of an object
      * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
      */
-    entries<T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][];
+    entries<T, K extends string = string>(o: { [Key in K]: T; } | ArrayLike<T>): [K, T][];
 
     /**
      * Returns an array of key/values of the enumerable own properties of an object
