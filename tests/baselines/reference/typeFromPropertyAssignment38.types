@@ -18,18 +18,18 @@ F["prop"] = 3;
 >  : ^
 
 const f = function () {};
->f : { (): void; prop: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function () {} : { (): void; prop: number; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : () => void
+>  : ^^^^^^^^^^
+>function () {} : () => void
+>               : ^^^^^^^^^^
 
 f["prop"] = 3;
 >f["prop"] = 3 : 3
 >              : ^
->f["prop"] : number
->          : ^^^^^^
->f : { (): void; prop: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f["prop"] : any
+>          : ^^^
+>f : () => void
+>  : ^^^^^^^^^^
 >"prop" : "prop"
 >       : ^^^^^^
 >3 : 3

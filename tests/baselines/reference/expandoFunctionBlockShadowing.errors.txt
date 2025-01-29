@@ -1,0 +1,28 @@
+expandoFunctionBlockShadowing.ts(14,5): error TS2339: Property 'test' does not exist on type '() => void'.
+expandoFunctionBlockShadowing.ts(17,9): error TS2741: Property 'test' is missing in type '() => void' but required in type '{ (): void; test: number; }'.
+
+
+==== expandoFunctionBlockShadowing.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/56538
+    
+    export function X() {}
+    if (Math.random()) {
+      const X: { test?: any } = {};
+      X.test = 1;
+    }
+    
+    export function Y() {}
+    Y.test = "foo";
+    const aliasTopY = Y;
+    if (Math.random()) {
+      const Y = function Y() {}
+      Y.test = 42;
+        ~~~~
+!!! error TS2339: Property 'test' does not exist on type '() => void'.
+    
+      const topYcheck: { (): void; test: string } = aliasTopY;
+      const blockYcheck: { (): void; test: number } = Y;
+            ~~~~~~~~~~~
+!!! error TS2741: Property 'test' is missing in type '() => void' but required in type '{ (): void; test: number; }'.
+!!! related TS2728 expandoFunctionBlockShadowing.ts:17:34: 'test' is declared here.
+    }

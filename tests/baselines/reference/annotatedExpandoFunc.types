@@ -58,40 +58,40 @@ const r1 = f() + f.p
 
 // function expressions are still allowed, by analogy with function declarations
 const e = () => 4
->e : { (): number; q: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->() => 4 : { (): number; q: number; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>e : () => number
+>  : ^^^^^^^^^^^^
+>() => 4 : () => number
+>        : ^^^^^^^^^^^^
 >4 : 4
 >  : ^
 
 e.q = 5
 >e.q = 5 : 5
 >        : ^
->e.q : number
->    : ^^^^^^
->e : { (): number; q: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->q : number
->  : ^^^^^^
+>e.q : any
+>    : ^^^
+>e : () => number
+>  : ^^^^^^^^^^^^
+>q : any
+>  : ^^^
 >5 : 5
 >  : ^
 
 const r2 = e() + e.q
->r2 : number
->   : ^^^^^^
->e() + e.q : number
->          : ^^^^^^
+>r2 : any
+>   : ^^^
+>e() + e.q : any
+>          : ^^^
 >e() : number
 >    : ^^^^^^
->e : { (): number; q: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->e.q : number
->    : ^^^^^^
->e : { (): number; q: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->q : number
->  : ^^^^^^
+>e : () => number
+>  : ^^^^^^^^^^^^
+>e.q : any
+>    : ^^^
+>e : () => number
+>  : ^^^^^^^^^^^^
+>q : any
+>  : ^^^
 
 // function declarations are still allowed
 function g() {

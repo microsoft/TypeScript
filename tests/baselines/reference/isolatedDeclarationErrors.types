@@ -18,38 +18,38 @@ errorOnAssignmentBelowDecl.a = "";
 >   : ^^
 
 const errorOnAssignmentBelow = (): void => {}
->errorOnAssignmentBelow : { (): void; a: string; }
->                       : ^^^^^^    ^^^^^^^^^^^^^^
->(): void => {} : { (): void; a: string; }
->               : ^^^^^^    ^^^^^^^^^^^^^^
+>errorOnAssignmentBelow : () => void
+>                       : ^^^^^^    
+>(): void => {} : () => void
+>               : ^^^^^^    
 
 errorOnAssignmentBelow.a = "";
 >errorOnAssignmentBelow.a = "" : ""
 >                              : ^^
->errorOnAssignmentBelow.a : string
->                         : ^^^^^^
->errorOnAssignmentBelow : { (): void; a: string; }
->                       : ^^^^^^    ^^^^^^^^^^^^^^
->a : string
->  : ^^^^^^
+>errorOnAssignmentBelow.a : any
+>                         : ^^^
+>errorOnAssignmentBelow : () => void
+>                       : ^^^^^^    
+>a : any
+>  : ^^^
 >"" : ""
 >   : ^^
 
 const errorOnMissingReturn = () => {}
->errorOnMissingReturn : { (): void; a: string; }
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^
->() => {} : { (): void; a: string; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>errorOnMissingReturn : () => void
+>                     : ^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
 
 errorOnMissingReturn.a = "";
 >errorOnMissingReturn.a = "" : ""
 >                            : ^^
->errorOnMissingReturn.a : string
->                       : ^^^^^^
->errorOnMissingReturn : { (): void; a: string; }
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^
->a : string
->  : ^^^^^^
+>errorOnMissingReturn.a : any
+>                       : ^^^
+>errorOnMissingReturn : () => void
+>                     : ^^^^^^^^^^
+>a : any
+>  : ^^^
 >"" : ""
 >   : ^^
 

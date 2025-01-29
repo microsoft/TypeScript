@@ -1,8 +1,10 @@
 annotatedExpandoFunc.ts(6,7): error TS2741: Property 'p' is missing in type '() => 1' but required in type 'F'.
 annotatedExpandoFunc.ts(8,3): error TS2339: Property 'extra' does not exist on type 'F'.
+annotatedExpandoFunc.ts(12,3): error TS2339: Property 'q' does not exist on type '() => number'.
+annotatedExpandoFunc.ts(13,20): error TS2339: Property 'q' does not exist on type '() => number'.
 
 
-==== annotatedExpandoFunc.ts (2 errors) ====
+==== annotatedExpandoFunc.ts (4 errors) ====
     interface F {
         (): 1;
         p: 2;
@@ -20,7 +22,11 @@ annotatedExpandoFunc.ts(8,3): error TS2339: Property 'extra' does not exist on t
     // function expressions are still allowed, by analogy with function declarations
     const e = () => 4
     e.q = 5
+      ~
+!!! error TS2339: Property 'q' does not exist on type '() => number'.
     const r2 = e() + e.q
+                       ~
+!!! error TS2339: Property 'q' does not exist on type '() => number'.
     // function declarations are still allowed
     function g() {
         return 6

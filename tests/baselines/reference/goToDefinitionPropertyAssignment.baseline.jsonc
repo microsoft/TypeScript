@@ -25,21 +25,8 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionPropertyAssignment.ts ===
 // export const Component = () => { return "OK"}
-// <|Component.[|displayName|]|> = 'Component'
+// Component.displayName = 'Component'
 // 
 // Component
 // 
 // Component./*GOTO DEF*/displayName
-
-  // === Details ===
-  [
-   {
-    "kind": "property",
-    "name": "displayName",
-    "containerName": "Component",
-    "isLocal": true,
-    "isAmbient": false,
-    "unverified": false,
-    "failedAliasResolution": false
-   }
-  ]

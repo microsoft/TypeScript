@@ -1,0 +1,53 @@
+check.ts(9,8): error TS2339: Property 'first' does not exist on type '() => number'.
+check.ts(10,8): error TS2339: Property 'last' does not exist on type '() => number'.
+check.ts(11,9): error TS2322: Type '() => number' is not assignable to type 'Person'.
+
+
+==== check.ts (3 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/31972
+    interface Person {
+      first: string;
+      last: string;
+    }
+    
+    {
+      const dice = () => Math.floor(Math.random() * 6);
+      dice.first = 'Rando';  
+           ~~~~~
+!!! error TS2339: Property 'first' does not exist on type '() => number'.
+      dice.last = 'Calrissian';
+           ~~~~
+!!! error TS2339: Property 'last' does not exist on type '() => number'.
+      const diceP: Person = dice;  
+            ~~~~~
+!!! error TS2322: Type '() => number' is not assignable to type 'Person'.
+    }
+    
+==== check.js (0 errors) ====
+    // Creates a type { first:string, last: string }
+    /**
+     * @typedef {Object} Human - creates a new type named 'SpecialType'
+     * @property {string} first - a string property of SpecialType
+     * @property {string} last - a number property of SpecialType
+     */
+    
+    /**
+     * @param {Human} param used as a validation tool
+     */
+    function doHumanThings(param) {}
+    
+    const dice1 = () => Math.floor(Math.random() * 6);
+    // dice1.first = 'Rando';
+    dice1.last = 'Calrissian';
+    
+    // doHumanThings(dice)
+    
+    // but inside a block... you can't call  a human
+    {
+      const dice2 = () => Math.floor(Math.random() * 6);
+      dice2.first = 'Rando';
+      dice2.last = 'Calrissian'; 
+      
+      doHumanThings(dice2)
+    }
+    

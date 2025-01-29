@@ -152,29 +152,19 @@ const g = function() {
 }
 if (!!false) {
     g.expando = 1
->g.expando : Symbol(g.expando, Decl(typeFromPropertyAssignment36.ts, 60, 14))
 >g : Symbol(g, Decl(typeFromPropertyAssignment36.ts, 58, 5))
->expando : Symbol(g.expando, Decl(typeFromPropertyAssignment36.ts, 60, 14))
 }
 g.expando // error
->g.expando : Symbol(g.expando, Decl(typeFromPropertyAssignment36.ts, 60, 14))
 >g : Symbol(g, Decl(typeFromPropertyAssignment36.ts, 58, 5))
->expando : Symbol(g.expando, Decl(typeFromPropertyAssignment36.ts, 60, 14))
 
 if (!!false) {
     g.both = 'hi'
->g.both : Symbol(g.both, Decl(typeFromPropertyAssignment36.ts, 65, 14), Decl(typeFromPropertyAssignment36.ts, 68, 6))
 >g : Symbol(g, Decl(typeFromPropertyAssignment36.ts, 58, 5))
->both : Symbol(g.both, Decl(typeFromPropertyAssignment36.ts, 65, 14), Decl(typeFromPropertyAssignment36.ts, 68, 6))
 }
 else {
     g.both = 0
->g.both : Symbol(g.both, Decl(typeFromPropertyAssignment36.ts, 65, 14), Decl(typeFromPropertyAssignment36.ts, 68, 6))
 >g : Symbol(g, Decl(typeFromPropertyAssignment36.ts, 58, 5))
->both : Symbol(g.both, Decl(typeFromPropertyAssignment36.ts, 65, 14), Decl(typeFromPropertyAssignment36.ts, 68, 6))
 }
 g.both
->g.both : Symbol(g.both, Decl(typeFromPropertyAssignment36.ts, 65, 14), Decl(typeFromPropertyAssignment36.ts, 68, 6))
 >g : Symbol(g, Decl(typeFromPropertyAssignment36.ts, 58, 5))
->both : Symbol(g.both, Decl(typeFromPropertyAssignment36.ts, 65, 14), Decl(typeFromPropertyAssignment36.ts, 68, 6))
 

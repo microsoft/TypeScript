@@ -1,9 +1,13 @@
 typeFromPropertyAssignment36.ts(11,7): error TS2565: Property 'q' is used before being assigned.
 typeFromPropertyAssignment36.ts(42,3): error TS2565: Property 'q' is used before being assigned.
-typeFromPropertyAssignment36.ts(64,3): error TS2565: Property 'expando' is used before being assigned.
+typeFromPropertyAssignment36.ts(62,7): error TS2339: Property 'expando' does not exist on type '() => void'.
+typeFromPropertyAssignment36.ts(64,3): error TS2339: Property 'expando' does not exist on type '() => void'.
+typeFromPropertyAssignment36.ts(67,7): error TS2339: Property 'both' does not exist on type '() => void'.
+typeFromPropertyAssignment36.ts(70,7): error TS2339: Property 'both' does not exist on type '() => void'.
+typeFromPropertyAssignment36.ts(72,3): error TS2339: Property 'both' does not exist on type '() => void'.
 
 
-==== typeFromPropertyAssignment36.ts (3 errors) ====
+==== typeFromPropertyAssignment36.ts (7 errors) ====
     function f(b: boolean) {
         function d() {
         }
@@ -70,16 +74,24 @@ typeFromPropertyAssignment36.ts(64,3): error TS2565: Property 'expando' is used 
     }
     if (!!false) {
         g.expando = 1
+          ~~~~~~~
+!!! error TS2339: Property 'expando' does not exist on type '() => void'.
     }
     g.expando // error
       ~~~~~~~
-!!! error TS2565: Property 'expando' is used before being assigned.
+!!! error TS2339: Property 'expando' does not exist on type '() => void'.
     
     if (!!false) {
         g.both = 'hi'
+          ~~~~
+!!! error TS2339: Property 'both' does not exist on type '() => void'.
     }
     else {
         g.both = 0
+          ~~~~
+!!! error TS2339: Property 'both' does not exist on type '() => void'.
     }
     g.both
+      ~~~~
+!!! error TS2339: Property 'both' does not exist on type '() => void'.
     

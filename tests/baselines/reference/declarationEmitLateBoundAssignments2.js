@@ -144,42 +144,27 @@ export declare function decl9(): void;
 export declare namespace decl9 { }
 export declare function decl10(): void;
 export declare namespace decl10 { }
-export declare const arrow: {
-    (): void;
-    B: string;
-};
+export declare const arrow: () => void;
 export declare const arrow2: {
     (): void;
     C: number;
 };
-export declare const arrow3: {
-    (): void;
-    77: number;
-};
+export declare const arrow3: () => void;
 export declare const arrow4: {
     (): void;
     1: number;
 };
-export declare const arrow5: {
-    (): void;
-    "101": number;
-};
+export declare const arrow5: () => void;
 export declare const arrow6: {
     (): void;
     "10": number;
 };
-export declare const arrow7: {
-    (): void;
-    "qwe rty": number;
-};
+export declare const arrow7: () => void;
 export declare const arrow8: {
     (): void;
     "foo bar": number;
 };
-export declare const arrow9: {
-    (): void;
-    "\uD83E\uDD2A": number;
-};
+export declare const arrow9: () => void;
 export declare const arrow10: {
     (): void;
     "\uD83E\uDD37\u200D\u2642\uFE0F": number;

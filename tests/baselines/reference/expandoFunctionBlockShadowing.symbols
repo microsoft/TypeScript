@@ -43,9 +43,7 @@ if (Math.random()) {
 >Y : Symbol(Y, Decl(expandoFunctionBlockShadowing.ts, 12, 11))
 
   Y.test = 42;
->Y.test : Symbol(Y.test, Decl(expandoFunctionBlockShadowing.ts, 12, 27))
 >Y : Symbol(Y, Decl(expandoFunctionBlockShadowing.ts, 12, 7))
->test : Symbol(Y.test, Decl(expandoFunctionBlockShadowing.ts, 12, 27))
 
   const topYcheck: { (): void; test: string } = aliasTopY;
 >topYcheck : Symbol(topYcheck, Decl(expandoFunctionBlockShadowing.ts, 15, 7))

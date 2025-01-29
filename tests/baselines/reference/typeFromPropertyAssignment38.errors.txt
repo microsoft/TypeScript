@@ -1,0 +1,14 @@
+typeFromPropertyAssignment38.ts(5,1): error TS7053: Element implicitly has an 'any' type because expression of type '"prop"' can't be used to index type '() => void'.
+  Property 'prop' does not exist on type '() => void'.
+
+
+==== typeFromPropertyAssignment38.ts (1 errors) ====
+    function F() {}
+    F["prop"] = 3;
+    
+    const f = function () {};
+    f["prop"] = 3;
+    ~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"prop"' can't be used to index type '() => void'.
+!!! error TS7053:   Property 'prop' does not exist on type '() => void'.
+    

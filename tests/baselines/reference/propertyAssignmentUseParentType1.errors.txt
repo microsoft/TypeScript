@@ -1,8 +1,9 @@
 propertyAssignmentUseParentType1.ts(5,14): error TS2741: Property 'num' is missing in type '() => true' but required in type 'N'.
 propertyAssignmentUseParentType1.ts(8,14): error TS2741: Property 'nun' is missing in type '() => true' but required in type '{ (): boolean; nun: 456; }'.
+propertyAssignmentUseParentType1.ts(13,13): error TS2339: Property 'extra' does not exist on type '() => boolean'.
 
 
-==== propertyAssignmentUseParentType1.ts (2 errors) ====
+==== propertyAssignmentUseParentType1.ts (3 errors) ====
     interface N {
         (): boolean
         num: 123;
@@ -22,4 +23,6 @@ propertyAssignmentUseParentType1.ts(8,14): error TS2741: Property 'nun' is missi
     export const ignoreJsdoc = () => true;
     /** @type {string} make sure to ignore jsdoc! */
     ignoreJsdoc.extra = 111
+                ~~~~~
+!!! error TS2339: Property 'extra' does not exist on type '() => boolean'.
     

@@ -37143,12 +37143,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let name: Expression | BindingName | undefined;
         let decl: Node | undefined;
         if (isVariableDeclaration(node.parent) && node.parent.initializer === node) {
-            if (!isInJSFile(node) && !(isVarConstLike(node.parent) && isFunctionLikeDeclaration(node))) {
+            if (!isInJSFile(node)) {
                 return undefined;
-            }
-            // require no type to disable only for annotated function expressions
-            if (node.parent.type) {
-                return undefined
             }
             name = node.parent.name;
             decl = node.parent;

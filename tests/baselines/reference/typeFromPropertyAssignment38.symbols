@@ -13,5 +13,4 @@ const f = function () {};
 
 f["prop"] = 3;
 >f : Symbol(f, Decl(typeFromPropertyAssignment38.ts, 3, 5), Decl(typeFromPropertyAssignment38.ts, 3, 25))
->"prop" : Symbol(f["prop"], Decl(typeFromPropertyAssignment38.ts, 3, 25))
 

@@ -46,21 +46,15 @@ const ExpandoExpr = function (n: number) {
 >toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 }
 ExpandoExpr.prop = { x: 2 }
->ExpandoExpr.prop : Symbol(ExpandoExpr.prop, Decl(typeFromPropertyAssignment29.ts, 11, 1), Decl(typeFromPropertyAssignment29.ts, 12, 27))
 >ExpandoExpr : Symbol(ExpandoExpr, Decl(typeFromPropertyAssignment29.ts, 9, 5), Decl(typeFromPropertyAssignment29.ts, 11, 1), Decl(typeFromPropertyAssignment29.ts, 12, 27), Decl(typeFromPropertyAssignment29.ts, 13, 28))
->prop : Symbol(ExpandoExpr.prop, Decl(typeFromPropertyAssignment29.ts, 11, 1), Decl(typeFromPropertyAssignment29.ts, 12, 27))
 >x : Symbol(x, Decl(typeFromPropertyAssignment29.ts, 12, 20))
 
 ExpandoExpr.prop = { y: "" }
->ExpandoExpr.prop : Symbol(ExpandoExpr.prop, Decl(typeFromPropertyAssignment29.ts, 11, 1), Decl(typeFromPropertyAssignment29.ts, 12, 27))
 >ExpandoExpr : Symbol(ExpandoExpr, Decl(typeFromPropertyAssignment29.ts, 9, 5), Decl(typeFromPropertyAssignment29.ts, 11, 1), Decl(typeFromPropertyAssignment29.ts, 12, 27), Decl(typeFromPropertyAssignment29.ts, 13, 28))
->prop : Symbol(ExpandoExpr.prop, Decl(typeFromPropertyAssignment29.ts, 11, 1), Decl(typeFromPropertyAssignment29.ts, 12, 27))
 >y : Symbol(y, Decl(typeFromPropertyAssignment29.ts, 13, 20))
 
 ExpandoExpr.m = function(n: number) {
->ExpandoExpr.m : Symbol(ExpandoExpr.m, Decl(typeFromPropertyAssignment29.ts, 13, 28))
 >ExpandoExpr : Symbol(ExpandoExpr, Decl(typeFromPropertyAssignment29.ts, 9, 5), Decl(typeFromPropertyAssignment29.ts, 11, 1), Decl(typeFromPropertyAssignment29.ts, 12, 27), Decl(typeFromPropertyAssignment29.ts, 13, 28))
->m : Symbol(ExpandoExpr.m, Decl(typeFromPropertyAssignment29.ts, 13, 28))
 >n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 14, 25))
 
     return n + 1;
@@ -68,14 +62,8 @@ ExpandoExpr.m = function(n: number) {
 }
 var n = (ExpandoExpr.prop.x || 0) + ExpandoExpr.m(12) + ExpandoExpr(101).length
 >n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 7, 3), Decl(typeFromPropertyAssignment29.ts, 17, 3), Decl(typeFromPropertyAssignment29.ts, 45, 3), Decl(typeFromPropertyAssignment29.ts, 63, 3), Decl(typeFromPropertyAssignment29.ts, 73, 3) ... and 1 more)
->ExpandoExpr.prop.x : Symbol(x, Decl(typeFromPropertyAssignment29.ts, 12, 20))
->ExpandoExpr.prop : Symbol(ExpandoExpr.prop, Decl(typeFromPropertyAssignment29.ts, 11, 1), Decl(typeFromPropertyAssignment29.ts, 12, 27))
 >ExpandoExpr : Symbol(ExpandoExpr, Decl(typeFromPropertyAssignment29.ts, 9, 5), Decl(typeFromPropertyAssignment29.ts, 11, 1), Decl(typeFromPropertyAssignment29.ts, 12, 27), Decl(typeFromPropertyAssignment29.ts, 13, 28))
->prop : Symbol(ExpandoExpr.prop, Decl(typeFromPropertyAssignment29.ts, 11, 1), Decl(typeFromPropertyAssignment29.ts, 12, 27))
->x : Symbol(x, Decl(typeFromPropertyAssignment29.ts, 12, 20))
->ExpandoExpr.m : Symbol(ExpandoExpr.m, Decl(typeFromPropertyAssignment29.ts, 13, 28))
 >ExpandoExpr : Symbol(ExpandoExpr, Decl(typeFromPropertyAssignment29.ts, 9, 5), Decl(typeFromPropertyAssignment29.ts, 11, 1), Decl(typeFromPropertyAssignment29.ts, 12, 27), Decl(typeFromPropertyAssignment29.ts, 13, 28))
->m : Symbol(ExpandoExpr.m, Decl(typeFromPropertyAssignment29.ts, 13, 28))
 >ExpandoExpr(101).length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >ExpandoExpr : Symbol(ExpandoExpr, Decl(typeFromPropertyAssignment29.ts, 9, 5), Decl(typeFromPropertyAssignment29.ts, 11, 1), Decl(typeFromPropertyAssignment29.ts, 12, 27), Decl(typeFromPropertyAssignment29.ts, 13, 28))
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
@@ -88,14 +76,10 @@ const ExpandoArrow = (n: number) => n.toString();
 >toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 ExpandoArrow.prop = 2
->ExpandoArrow.prop : Symbol(ExpandoArrow.prop, Decl(typeFromPropertyAssignment29.ts, 19, 49))
 >ExpandoArrow : Symbol(ExpandoArrow, Decl(typeFromPropertyAssignment29.ts, 19, 5), Decl(typeFromPropertyAssignment29.ts, 19, 49), Decl(typeFromPropertyAssignment29.ts, 20, 21))
->prop : Symbol(ExpandoArrow.prop, Decl(typeFromPropertyAssignment29.ts, 19, 49))
 
 ExpandoArrow.m = function(n: number) {
->ExpandoArrow.m : Symbol(ExpandoArrow.m, Decl(typeFromPropertyAssignment29.ts, 20, 21))
 >ExpandoArrow : Symbol(ExpandoArrow, Decl(typeFromPropertyAssignment29.ts, 19, 5), Decl(typeFromPropertyAssignment29.ts, 19, 49), Decl(typeFromPropertyAssignment29.ts, 20, 21))
->m : Symbol(ExpandoArrow.m, Decl(typeFromPropertyAssignment29.ts, 20, 21))
 >n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 21, 26))
 
     return n + 1;
@@ -117,9 +101,7 @@ function ExpandoNested(n: number) {
 
     };
     nested.total = n + 1_000_000;
->nested.total : Symbol(nested.total, Decl(typeFromPropertyAssignment29.ts, 29, 6))
 >nested : Symbol(nested, Decl(typeFromPropertyAssignment29.ts, 27, 9))
->total : Symbol(nested.total, Decl(typeFromPropertyAssignment29.ts, 29, 6))
 >n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 26, 23))
 
     return nested;

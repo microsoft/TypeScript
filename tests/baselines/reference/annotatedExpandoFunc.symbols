@@ -33,16 +33,12 @@ const e = () => 4
 >e : Symbol(e, Decl(annotatedExpandoFunc.ts, 10, 5), Decl(annotatedExpandoFunc.ts, 10, 17))
 
 e.q = 5
->e.q : Symbol(e.q, Decl(annotatedExpandoFunc.ts, 10, 17))
 >e : Symbol(e, Decl(annotatedExpandoFunc.ts, 10, 5), Decl(annotatedExpandoFunc.ts, 10, 17))
->q : Symbol(e.q, Decl(annotatedExpandoFunc.ts, 10, 17))
 
 const r2 = e() + e.q
 >r2 : Symbol(r2, Decl(annotatedExpandoFunc.ts, 12, 5))
 >e : Symbol(e, Decl(annotatedExpandoFunc.ts, 10, 5), Decl(annotatedExpandoFunc.ts, 10, 17))
->e.q : Symbol(e.q, Decl(annotatedExpandoFunc.ts, 10, 17))
 >e : Symbol(e, Decl(annotatedExpandoFunc.ts, 10, 5), Decl(annotatedExpandoFunc.ts, 10, 17))
->q : Symbol(e.q, Decl(annotatedExpandoFunc.ts, 10, 17))
 
 // function declarations are still allowed
 function g() {

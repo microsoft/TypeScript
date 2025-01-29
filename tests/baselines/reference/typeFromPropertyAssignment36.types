@@ -301,10 +301,10 @@ d.r
 
 // test function expressions too
 const g = function() {
->g : { (): void; expando: number; both: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function() {} : { (): void; expando: number; both: string | number; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : () => void
+>  : ^^^^^^^^^^
+>function() {} : () => void
+>              : ^^^^^^^^^^
 }
 if (!!false) {
 >!!false : false
@@ -317,22 +317,22 @@ if (!!false) {
     g.expando = 1
 >g.expando = 1 : 1
 >              : ^
->g.expando : number
->          : ^^^^^^
->g : { (): void; expando: number; both: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->expando : number
->        : ^^^^^^
+>g.expando : any
+>          : ^^^
+>g : () => void
+>  : ^^^^^^^^^^
+>expando : any
+>        : ^^^
 >1 : 1
 >  : ^
 }
 g.expando // error
->g.expando : number
->          : ^^^^^^
->g : { (): void; expando: number; both: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->expando : number
->        : ^^^^^^
+>g.expando : any
+>          : ^^^
+>g : () => void
+>  : ^^^^^^^^^^
+>expando : any
+>        : ^^^
 
 if (!!false) {
 >!!false : false
@@ -345,12 +345,12 @@ if (!!false) {
     g.both = 'hi'
 >g.both = 'hi' : "hi"
 >              : ^^^^
->g.both : string | number
->       : ^^^^^^^^^^^^^^^
->g : { (): void; expando: number; both: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->both : string | number
->     : ^^^^^^^^^^^^^^^
+>g.both : any
+>       : ^^^
+>g : () => void
+>  : ^^^^^^^^^^
+>both : any
+>     : ^^^
 >'hi' : "hi"
 >     : ^^^^
 }
@@ -358,20 +358,20 @@ else {
     g.both = 0
 >g.both = 0 : 0
 >           : ^
->g.both : string | number
->       : ^^^^^^^^^^^^^^^
->g : { (): void; expando: number; both: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->both : string | number
->     : ^^^^^^^^^^^^^^^
+>g.both : any
+>       : ^^^
+>g : () => void
+>  : ^^^^^^^^^^
+>both : any
+>     : ^^^
 >0 : 0
 >  : ^
 }
 g.both
->g.both : string | number
->       : ^^^^^^^^^^^^^^^
->g : { (): void; expando: number; both: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->both : string | number
->     : ^^^^^^^^^^^^^^^
+>g.both : any
+>       : ^^^
+>g : () => void
+>  : ^^^^^^^^^^
+>both : any
+>     : ^^^
 

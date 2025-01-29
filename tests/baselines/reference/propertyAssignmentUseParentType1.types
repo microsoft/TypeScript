@@ -50,10 +50,10 @@ inlined.nun = 456;
 >    : ^^^
 
 export const ignoreJsdoc = () => true;
->ignoreJsdoc : { (): boolean; extra: number; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->() => true : { (): boolean; extra: number; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ignoreJsdoc : () => boolean
+>            : ^^^^^^^^^^^^^
+>() => true : () => boolean
+>           : ^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 
@@ -61,12 +61,12 @@ export const ignoreJsdoc = () => true;
 ignoreJsdoc.extra = 111
 >ignoreJsdoc.extra = 111 : 111
 >                        : ^^^
->ignoreJsdoc.extra : number
->                  : ^^^^^^
->ignoreJsdoc : { (): boolean; extra: number; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->extra : number
->      : ^^^^^^
+>ignoreJsdoc.extra : any
+>                  : ^^^
+>ignoreJsdoc : () => boolean
+>            : ^^^^^^^^^^^^^
+>extra : any
+>      : ^^^
 >111 : 111
 >    : ^^^
 

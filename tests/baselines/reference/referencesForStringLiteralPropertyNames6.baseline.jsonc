@@ -1,128 +1,34 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames6.ts ===
 // const x = function () { return 111111; }
-// x./*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}someProperty|] = 5;
-// x["[|{| isWriteAccess: true, isDefinition: true |}someProperty|]"] = 3;
-
-  // === Definitions ===
-  // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames6.ts ===
-  // const x = function () { return 111111; }
-  // <|x./*FIND ALL REFS*/[|someProperty|]|> = 5;
-  // x["someProperty"] = 3;
-
-  // === Details ===
-  [
-   {
-    "containerKind": "",
-    "containerName": "",
-    "kind": "property",
-    "name": "(property) x.someProperty: number",
-    "displayParts": [
-     {
-      "text": "(",
-      "kind": "punctuation"
-     },
-     {
-      "text": "property",
-      "kind": "text"
-     },
-     {
-      "text": ")",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "x",
-      "kind": "localName"
-     },
-     {
-      "text": ".",
-      "kind": "punctuation"
-     },
-     {
-      "text": "someProperty",
-      "kind": "propertyName"
-     },
-     {
-      "text": ":",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "number",
-      "kind": "keyword"
-     }
-    ]
-   }
-  ]
+// x./*FIND ALL REFS*/someProperty = 5;
+// x["someProperty"] = 3;
 
 
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames6.ts ===
 // const x = function () { return 111111; }
-// x.[|{| isWriteAccess: true, isDefinition: true |}someProperty|] = 5;
-// x["/*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}someProperty|]"] = 3;
+// x.someProperty = 5;
+// x["/*FIND ALL REFS*/[|{| isWriteAccess: true, isInString: true |}someProperty|]"] = 3;
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames6.ts ===
   // const x = function () { return 111111; }
-  // <|x.[|someProperty|]|> = 5;
-  // x["/*FIND ALL REFS*/someProperty"] = 3;
+  // x.someProperty = 5;
+  // x["/*FIND ALL REFS*/[|someProperty|]"] = 3;
 
   // === Details ===
   [
    {
     "containerKind": "",
     "containerName": "",
-    "kind": "property",
-    "name": "(property) x.someProperty: number",
+    "kind": "var",
+    "name": "someProperty",
     "displayParts": [
      {
-      "text": "(",
-      "kind": "punctuation"
-     },
-     {
-      "text": "property",
-      "kind": "text"
-     },
-     {
-      "text": ")",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "x",
-      "kind": "localName"
-     },
-     {
-      "text": ".",
-      "kind": "punctuation"
-     },
-     {
-      "text": "someProperty",
-      "kind": "propertyName"
-     },
-     {
-      "text": ":",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "number",
-      "kind": "keyword"
+      "text": "\"someProperty\"",
+      "kind": "stringLiteral"
      }
     ]
    }

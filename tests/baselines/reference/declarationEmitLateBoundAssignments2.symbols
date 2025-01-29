@@ -93,7 +93,6 @@ export const arrow = () => {}
 
 arrow["B"] = 'bar'
 >arrow : Symbol(arrow, Decl(declarationEmitLateBoundAssignments2.ts, 38, 12), Decl(declarationEmitLateBoundAssignments2.ts, 38, 29))
->"B" : Symbol(arrow["B"], Decl(declarationEmitLateBoundAssignments2.ts, 38, 29))
 
 export const arrow2 = () => {}
 >arrow2 : Symbol(arrow2, Decl(declarationEmitLateBoundAssignments2.ts, 41, 12), Decl(declarationEmitLateBoundAssignments2.ts, 41, 30))
@@ -107,7 +106,6 @@ export const arrow3 = () => {}
 
 arrow3[77] = 0
 >arrow3 : Symbol(arrow3, Decl(declarationEmitLateBoundAssignments2.ts, 44, 12), Decl(declarationEmitLateBoundAssignments2.ts, 44, 30))
->77 : Symbol(arrow3[77], Decl(declarationEmitLateBoundAssignments2.ts, 44, 30))
 
 export const arrow4 = () => {}
 >arrow4 : Symbol(arrow4, Decl(declarationEmitLateBoundAssignments2.ts, 47, 12), Decl(declarationEmitLateBoundAssignments2.ts, 47, 30))
@@ -121,7 +119,6 @@ export const arrow5 = () => {}
 
 arrow5["101"] = 0
 >arrow5 : Symbol(arrow5, Decl(declarationEmitLateBoundAssignments2.ts, 50, 12), Decl(declarationEmitLateBoundAssignments2.ts, 50, 30))
->"101" : Symbol(arrow5["101"], Decl(declarationEmitLateBoundAssignments2.ts, 50, 30))
 
 export const arrow6 = () => {}
 >arrow6 : Symbol(arrow6, Decl(declarationEmitLateBoundAssignments2.ts, 53, 12), Decl(declarationEmitLateBoundAssignments2.ts, 53, 30))
@@ -135,7 +132,6 @@ export const arrow7 = () => {}
 
 arrow7["qwe rty"] = 0
 >arrow7 : Symbol(arrow7, Decl(declarationEmitLateBoundAssignments2.ts, 56, 12), Decl(declarationEmitLateBoundAssignments2.ts, 56, 30))
->"qwe rty" : Symbol(arrow7["qwe rty"], Decl(declarationEmitLateBoundAssignments2.ts, 56, 30))
 
 export const arrow8 = () => {}
 >arrow8 : Symbol(arrow8, Decl(declarationEmitLateBoundAssignments2.ts, 59, 12), Decl(declarationEmitLateBoundAssignments2.ts, 59, 30))
@@ -149,7 +145,6 @@ export const arrow9 = () => {}
 
 arrow9["🤪"] = 0
 >arrow9 : Symbol(arrow9, Decl(declarationEmitLateBoundAssignments2.ts, 62, 12), Decl(declarationEmitLateBoundAssignments2.ts, 62, 30))
->"🤪" : Symbol(arrow9["\uD83E\uDD2A"], Decl(declarationEmitLateBoundAssignments2.ts, 62, 30))
 
 export const arrow10 = () => {}
 >arrow10 : Symbol(arrow10, Decl(declarationEmitLateBoundAssignments2.ts, 65, 12), Decl(declarationEmitLateBoundAssignments2.ts, 65, 31))

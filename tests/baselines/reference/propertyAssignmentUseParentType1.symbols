@@ -31,7 +31,5 @@ export const ignoreJsdoc = () => true;
 
 /** @type {string} make sure to ignore jsdoc! */
 ignoreJsdoc.extra = 111
->ignoreJsdoc.extra : Symbol(ignoreJsdoc.extra, Decl(propertyAssignmentUseParentType1.ts, 10, 38))
 >ignoreJsdoc : Symbol(ignoreJsdoc, Decl(propertyAssignmentUseParentType1.ts, 10, 12), Decl(propertyAssignmentUseParentType1.ts, 10, 38))
->extra : Symbol(ignoreJsdoc.extra, Decl(propertyAssignmentUseParentType1.ts, 10, 38))
 

@@ -21,6 +21,7 @@ if (Math.random()) {
 >X : { test?: any; }
 >  : ^^^^^^^^^   ^^^
 >test : any
+>     : ^^^
 >{} : {}
 >   : ^^
 
@@ -28,6 +29,7 @@ if (Math.random()) {
 >X.test = 1 : 1
 >           : ^
 >X.test : any
+>       : ^^^
 >X : { test?: any; }
 >  : ^^^^^^^^^   ^^^
 >test : any
@@ -69,22 +71,22 @@ if (Math.random()) {
 >       : ^^^^^^      
 
   const Y = function Y() {}
->Y : { (): void; test: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function Y() {} : { (): void; test: number; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Y : { (): void; test: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Y : () => void
+>  : ^^^^^^^^^^
+>function Y() {} : () => void
+>                : ^^^^^^^^^^
+>Y : () => void
+>  : ^^^^^^^^^^
 
   Y.test = 42;
 >Y.test = 42 : 42
 >            : ^^
->Y.test : number
->       : ^^^^^^
->Y : { (): void; test: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->test : number
->     : ^^^^^^
+>Y.test : any
+>       : ^^^
+>Y : () => void
+>  : ^^^^^^^^^^
+>test : any
+>     : ^^^
 >42 : 42
 >   : ^^
 
@@ -101,6 +103,6 @@ if (Math.random()) {
 >            : ^^^^^^    ^^^^^^^^      ^^^
 >test : number
 >     : ^^^^^^
->Y : { (): void; test: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Y : () => void
+>  : ^^^^^^^^^^
 }

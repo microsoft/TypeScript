@@ -14,10 +14,10 @@ interface Person {
 
 {
   const dice = () => Math.floor(Math.random() * 6);
->dice : { (): number; first: string; last: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->() => Math.floor(Math.random() * 6) : { (): number; first: string; last: string; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dice : () => number
+>     : ^^^^^^^^^^^^
+>() => Math.floor(Math.random() * 6) : () => number
+>                                    : ^^^^^^^^^^^^
 >Math.floor(Math.random() * 6) : number
 >                              : ^^^^^^
 >Math.floor : (x: number) => number
@@ -42,32 +42,32 @@ interface Person {
   dice.first = 'Rando';  
 >dice.first = 'Rando' : "Rando"
 >                     : ^^^^^^^
->dice.first : string
->           : ^^^^^^
->dice : { (): number; first: string; last: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->first : string
->      : ^^^^^^
+>dice.first : any
+>           : ^^^
+>dice : () => number
+>     : ^^^^^^^^^^^^
+>first : any
+>      : ^^^
 >'Rando' : "Rando"
 >        : ^^^^^^^
 
   dice.last = 'Calrissian';
 >dice.last = 'Calrissian' : "Calrissian"
 >                         : ^^^^^^^^^^^^
->dice.last : string
->          : ^^^^^^
->dice : { (): number; first: string; last: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->last : string
->     : ^^^^^^
+>dice.last : any
+>          : ^^^
+>dice : () => number
+>     : ^^^^^^^^^^^^
+>last : any
+>     : ^^^
 >'Calrissian' : "Calrissian"
 >             : ^^^^^^^^^^^^
 
   const diceP: Person = dice;  
 >diceP : Person
 >      : ^^^^^^
->dice : { (): number; first: string; last: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dice : () => number
+>     : ^^^^^^^^^^^^
 }
 
 === check.js ===
