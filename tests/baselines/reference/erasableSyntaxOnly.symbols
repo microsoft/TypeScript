@@ -1,0 +1,120 @@
+//// [tests/cases/compiler/erasableSyntaxOnly.ts] ////
+
+=== erasableSyntaxOnly.ts ===
+class MyClassErr {
+>MyClassErr : Symbol(MyClassErr, Decl(erasableSyntaxOnly.ts, 0, 0))
+
+    // No parameter properties
+    constructor(public foo: string) { }
+>foo : Symbol(MyClassErr.foo, Decl(erasableSyntaxOnly.ts, 2, 16))
+}
+
+namespace IllegalBecauseInstantiated {
+>IllegalBecauseInstantiated : Symbol(IllegalBecauseInstantiated, Decl(erasableSyntaxOnly.ts, 3, 1))
+
+    export const m = 1;
+>m : Symbol(m, Decl(erasableSyntaxOnly.ts, 6, 16))
+}
+
+namespace AlsoIllegalBecauseInstantiated {
+>AlsoIllegalBecauseInstantiated : Symbol(AlsoIllegalBecauseInstantiated, Decl(erasableSyntaxOnly.ts, 7, 1))
+
+    class PrivateClass {
+>PrivateClass : Symbol(PrivateClass, Decl(erasableSyntaxOnly.ts, 9, 42))
+
+    }
+}
+
+namespace IllegalBecauseNestedInstantiated {
+>IllegalBecauseNestedInstantiated : Symbol(IllegalBecauseNestedInstantiated, Decl(erasableSyntaxOnly.ts, 13, 1))
+
+    namespace Nested {
+>Nested : Symbol(Nested, Decl(erasableSyntaxOnly.ts, 15, 44))
+
+        export const m = 1;
+>m : Symbol(m, Decl(erasableSyntaxOnly.ts, 17, 20))
+    }
+}
+
+enum NotLegalEnum {
+>NotLegalEnum : Symbol(NotLegalEnum, Decl(erasableSyntaxOnly.ts, 19, 1))
+
+    B = 1
+>B : Symbol(NoGoodAlias, Decl(erasableSyntaxOnly.ts, 21, 19))
+}
+
+import NoGoodAlias = NotLegalEnum.B;
+>NoGoodAlias : Symbol(NoGoodAlias, Decl(erasableSyntaxOnly.ts, 23, 1))
+>NotLegalEnum : Symbol(NotLegalEnum, Decl(erasableSyntaxOnly.ts, 19, 1))
+>B : Symbol(NoGoodAlias, Decl(erasableSyntaxOnly.ts, 21, 19))
+
+const enum NotLegalConstEnum {
+>NotLegalConstEnum : Symbol(NotLegalConstEnum, Decl(erasableSyntaxOnly.ts, 25, 36))
+
+    C = 2
+>C : Symbol(NotLegalConstEnum.C, Decl(erasableSyntaxOnly.ts, 27, 30))
+}
+
+// No errors after this point
+class MyClassOk {
+>MyClassOk : Symbol(MyClassOk, Decl(erasableSyntaxOnly.ts, 29, 1))
+
+    // Not a parameter property, ok
+    constructor(foo: string) { }
+>foo : Symbol(foo, Decl(erasableSyntaxOnly.ts, 34, 16))
+}
+
+// Note for implementors: This should not be an error
+// as this entire namespace block is fully erased
+namespace NotInstantiated {
+>NotInstantiated : Symbol(NotInstantiated, Decl(erasableSyntaxOnly.ts, 35, 1))
+
+    export interface JustAType { }
+>JustAType : Symbol(JustAType, Decl(erasableSyntaxOnly.ts, 39, 27))
+
+    export type ATypeInANamespace = {};
+>ATypeInANamespace : Symbol(ATypeInANamespace, Decl(erasableSyntaxOnly.ts, 40, 34))
+
+    namespace Nested {
+>Nested : Symbol(Nested, Decl(erasableSyntaxOnly.ts, 41, 39))
+
+        export type ATypeInANamespace = {};
+>ATypeInANamespace : Symbol(ATypeInANamespace, Decl(erasableSyntaxOnly.ts, 42, 22))
+    }
+}
+declare namespace AmbientIsNotInstantiated {
+>AmbientIsNotInstantiated : Symbol(AmbientIsNotInstantiated, Decl(erasableSyntaxOnly.ts, 45, 1))
+
+    export const stillOk = 12;
+>stillOk : Symbol(stillOk, Decl(erasableSyntaxOnly.ts, 47, 16))
+}
+
+declare enum LegalEnum {
+>LegalEnum : Symbol(LegalEnum, Decl(erasableSyntaxOnly.ts, 48, 1))
+
+    A = 1
+>A : Symbol(LegalEnum.A, Decl(erasableSyntaxOnly.ts, 50, 24))
+}
+
+declare namespace AmbientStuff {
+>AmbientStuff : Symbol(AmbientStuff, Decl(erasableSyntaxOnly.ts, 52, 1))
+
+    namespace Nested {
+>Nested : Symbol(Nested, Decl(erasableSyntaxOnly.ts, 54, 32))
+
+        export const stillOk = 12;
+>stillOk : Symbol(stillOk, Decl(erasableSyntaxOnly.ts, 56, 20))
+    }
+    enum EnumInAmbientContext {
+>EnumInAmbientContext : Symbol(EnumInAmbientContext, Decl(erasableSyntaxOnly.ts, 57, 5))
+
+        B = 1
+>B : Symbol(FineAlias, Decl(erasableSyntaxOnly.ts, 58, 31))
+    }
+
+    import FineAlias = EnumInAmbientContext.B;
+>FineAlias : Symbol(FineAlias, Decl(erasableSyntaxOnly.ts, 60, 5))
+>EnumInAmbientContext : Symbol(EnumInAmbientContext, Decl(erasableSyntaxOnly.ts, 57, 5))
+>B : Symbol(FineAlias, Decl(erasableSyntaxOnly.ts, 58, 31))
+}
+

@@ -971,7 +971,10 @@
         "category": "Error",
         "code": 1293
     },
-
+    "This syntax is not allowed when 'erasableSyntaxOnly' is enabled.": {
+        "category": "Error",
+        "code": 1294
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -3980,6 +3983,10 @@
         "category": "Error",
         "code": 2879
     },
+    "Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.": {
+        "category": "Error",
+        "code": 2880
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -6467,10 +6474,13 @@
         "category": "Message",
         "code": 6719
     },
-
     "Built-in iterators are instantiated with a 'TReturn' type of 'undefined' instead of 'any'.": {
         "category": "Message",
         "code": 6720
+    },
+    "Do not allow runtime constructs that are not part of ECMAScript.": {
+        "category": "Message",
+        "code": 6721
     },
     "Default catch clause variables as 'unknown' instead of 'any'.": {
         "category": "Message",
@@ -6491,6 +6501,10 @@
     "This operation can be simplified. This shift is identical to `{0} {1} {2}`.": {
         "category": "Error",
         "code": 6807
+    },
+    "Enable lib replacement.": {
+        "category": "Message",
+        "code": 6808
     },
 
     "one of:": {

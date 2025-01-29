@@ -38,11 +38,11 @@ Output::
 
 
 
-//// [/user/username/projects/project/commonFile1.js] Inode:: 110
+//// [/user/username/projects/project/commonFile1.js] Inode:: 111
 var x = 1;
 
 
-//// [/user/username/projects/project/commonFile2.js] Inode:: 111
+//// [/user/username/projects/project/commonFile2.js] Inode:: 112
 var y = 1;
 
 

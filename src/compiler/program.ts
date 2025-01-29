@@ -1511,10 +1511,14 @@ export function createProgram(createProgramOptions: CreateProgramOptions): Progr
  * @returns A 'Program' object.
  */
 export function createProgram(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): Program;
-export function createProgram(rootNamesOrOptions: readonly string[] | CreateProgramOptions, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: readonly Diagnostic[]): Program {
-    const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
-    const { rootNames, options, configFileParsingDiagnostics, projectReferences, typeScriptVersion } = createProgramOptions;
-    let { oldProgram } = createProgramOptions;
+export function createProgram(_rootNamesOrOptions: readonly string[] | CreateProgramOptions, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: readonly Diagnostic[]): Program {
+    let _createProgramOptions = isArray(_rootNamesOrOptions) ? createCreateProgramOptions(_rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : _rootNamesOrOptions; // TODO: GH#18217
+    const { rootNames, options, configFileParsingDiagnostics, projectReferences, typeScriptVersion, host: createProgramOptionsHost } = _createProgramOptions;
+    let { oldProgram } = _createProgramOptions;
+    // Stop referencing these objects to ensure GC collects them.
+    _createProgramOptions = undefined!;
+    _rootNamesOrOptions = undefined!;
+
     for (const option of commandLineOptionOfCustomType) {
         if (hasProperty(options, option.name)) {
             if (typeof options[option.name] === "string") {
@@ -1569,7 +1573,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     tracing?.push(tracing.Phase.Program, "createProgram", { configFilePath: options.configFilePath, rootDir: options.rootDir }, /*separateBeginAndEnd*/ true);
     performance.mark("beforeProgram");
 
-    const host = createProgramOptions.host || createCompilerHost(options);
+    const host = createProgramOptionsHost || createCompilerHost(options);
     const configParsingHost = parseConfigHostFromCompilerHostLike(host);
 
     let skipDefaultLib = options.noLib;
@@ -3932,6 +3936,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function pathForLibFileWorker(libFileName: string): LibResolution {
         const existing = resolvedLibProcessing?.get(libFileName);
         if (existing) return existing;
+
+        if (options.libReplacement === false) {
+            const result: LibResolution = {
+                resolution: {
+                    resolvedModule: undefined,
+                },
+                actual: combinePaths(defaultLibraryPath, libFileName),
+            };
+            (resolvedLibProcessing ??= new Map()).set(libFileName, result);
+            return result;
+        }
 
         if (structureIsReused !== StructureIsReused.Not && oldProgram && !hasInvalidatedLibResolutions(libFileName)) {
             const oldResolution = oldProgram.resolvedLibReferences?.get(libFileName);

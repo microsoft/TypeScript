@@ -157,6 +157,7 @@ import {
     ElementAccessChain,
     ElementAccessExpression,
     ElementFlags,
+    ElementWithComputedPropertyName,
     EmitFlags,
     EmitHint,
     emitModuleKindIsNonNodeESM,
@@ -1931,7 +1932,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         isTypeParameterPossiblyReferenced,
         typeHasCallOrConstructSignatures,
         getSymbolFlags,
+        getTypeArgumentsForResolvedSignature,
     };
+
+    function getTypeArgumentsForResolvedSignature(signature: Signature) {
+        if (signature.mapper === undefined) return undefined;
+        return instantiateTypes((signature.target || signature).typeParameters, signature.mapper);
+    }
 
     function getCandidateSignaturesForStringLiteralCompletions(call: CallLikeExpression, editingArgument: Node) {
         const candidatesSet = new Set<Signature>();
@@ -4715,7 +4722,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (errorNode && resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
                     errorOnImplicitAnyModule(/*isError*/ false, errorNode, currentSourceFile, mode, resolvedModule, moduleReference);
                 }
-                if (errorNode && (moduleResolutionKind === ModuleResolutionKind.Node16 || moduleResolutionKind === ModuleResolutionKind.NodeNext)) {
+                if (errorNode && (moduleKind === ModuleKind.Node16 || moduleKind === ModuleKind.Node18)) {
                     const isSyncImport = (currentSourceFile.impliedNodeFormat === ModuleKind.CommonJS && !findAncestor(location, isImportCall)) || !!findAncestor(location, isImportEqualsDeclaration);
                     const overrideHost = findAncestor(location, l => isImportTypeNode(l) || isExportDeclaration(l) || isImportDeclaration(l) || isJSDocImportTag(l));
                     // An override clause will take effect for type-only imports and import types, and allows importing the types across formats, regardless of
@@ -6929,7 +6936,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 function shouldWriteTypeOfFunctionSymbol() {
                     const isStaticMethodSymbol = !!(symbol.flags & SymbolFlags.Method) && // typeof static method
-                        some(symbol.declarations, declaration => isStatic(declaration));
+                        some(symbol.declarations, declaration => isStatic(declaration) && !isLateBindableIndexSignature(getNameOfDeclaration(declaration)!));
                     const isNonLocalFunctionSymbol = !!(symbol.flags & SymbolFlags.Function) &&
                         (symbol.parent || // is exported function symbol
                             forEach(symbol.declarations, declaration => declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
@@ -7286,6 +7293,37 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return ids;
             }
 
+            function indexInfoToObjectComputedNamesOrSignatureDeclaration(indexInfo: IndexInfo, context: NodeBuilderContext, typeNode: TypeNode | undefined): [IndexSignatureDeclaration] | PropertySignature[] {
+                if (indexInfo.components) {
+                    // Index info is derived from object or class computed property names (plus explicit named members) - we can clone those instead of writing out the result computed index signature
+                    const allComponentComputedNamesSerializable = every(indexInfo.components, e => {
+                        return !!(e.name && isComputedPropertyName(e.name) && isEntityNameExpression(e.name.expression) && context.enclosingDeclaration && isEntityNameVisible(e.name.expression, context.enclosingDeclaration, /*shouldComputeAliasToMakeVisible*/ false)?.accessibility === SymbolAccessibility.Accessible);
+                    });
+                    if (allComponentComputedNamesSerializable) {
+                        // Only use computed name serialization form if all components are visible and take the `a.b.c` form
+                        const newComponents = filter(indexInfo.components, e => {
+                            // skip late bound props that contribute to the index signature - they'll be created by property creation anyway
+                            return !hasLateBindableName(e);
+                        });
+                        return map(newComponents, e => {
+                            // Still need to track visibility even if we've already checked it to paint references as used
+                            trackComputedName(e.name.expression as EntityNameExpression, context.enclosingDeclaration, context);
+                            return setTextRange(
+                                context,
+                                factory.createPropertySignature(
+                                    indexInfo.isReadonly ? [factory.createModifier(SyntaxKind.ReadonlyKeyword)] : undefined,
+                                    e.name,
+                                    (isPropertySignature(e) || isPropertyDeclaration(e) || isMethodSignature(e) || isMethodDeclaration(e) || isGetAccessor(e) || isSetAccessor(e)) && e.questionToken ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
+                                    typeNode || typeToTypeNodeHelper(getTypeOfSymbol(e.symbol), context),
+                                ),
+                                e,
+                            );
+                        });
+                    }
+                }
+                return [indexInfoToIndexSignatureDeclarationHelper(indexInfo, context, typeNode)];
+            }
+
             function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] | undefined {
                 if (checkTruncationLength(context)) {
                     if (context.flags & NodeBuilderFlags.NoTruncation) {
@@ -7302,7 +7340,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     typeElements.push(signatureToSignatureDeclarationHelper(signature, SyntaxKind.ConstructSignature, context) as ConstructSignatureDeclaration);
                 }
                 for (const info of resolvedType.indexInfos) {
-                    typeElements.push(indexInfoToIndexSignatureDeclarationHelper(info, context, resolvedType.objectFlags & ObjectFlags.ReverseMapped ? createElidedInformationPlaceholder(context) : undefined));
+                    typeElements.push(...indexInfoToObjectComputedNamesOrSignatureDeclaration(info, context, resolvedType.objectFlags & ObjectFlags.ReverseMapped ? createElidedInformationPlaceholder(context) : undefined));
                 }
 
                 const properties = resolvedType.properties;
@@ -8043,9 +8081,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!context.tracker.canTrackSymbol) return;
             // get symbol of the first identifier of the entityName
             const firstIdentifier = getFirstIdentifier(accessExpression);
-            const name = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nameNotFoundMessage*/ undefined, /*isUse*/ true);
+            const name = resolveName(enclosingDeclaration, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nameNotFoundMessage*/ undefined, /*isUse*/ true);
             if (name) {
                 context.tracker.trackSymbol(name, enclosingDeclaration, SymbolFlags.Value);
+            }
+            else {
+                // Name does not resolve at target location, track symbol at dest location (should be inaccessible)
+                const fallback = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nameNotFoundMessage*/ undefined, /*isUse*/ true);
+                if (fallback) {
+                    context.tracker.trackSymbol(fallback, enclosingDeclaration, SymbolFlags.Value);
+                }
             }
         }
 
@@ -16034,8 +16079,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return symbolTable.get(InternalSymbolName.Index);
     }
 
-    function createIndexInfo(keyType: Type, type: Type, isReadonly: boolean, declaration?: IndexSignatureDeclaration): IndexInfo {
-        return { keyType, type, isReadonly, declaration };
+    function createIndexInfo(keyType: Type, type: Type, isReadonly: boolean, declaration?: IndexSignatureDeclaration, components?: ElementWithComputedPropertyName[]): IndexInfo {
+        return { keyType, type, isReadonly, declaration, components };
     }
 
     function getIndexInfosOfSymbol(symbol: Symbol): IndexInfo[] {
@@ -16684,6 +16729,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case "Number":
                     checkNoTypeArguments(node);
                     return numberType;
+                case "BigInt":
+                    checkNoTypeArguments(node);
+                    return bigintType;
                 case "Boolean":
                     checkNoTypeArguments(node);
                     return booleanType;
@@ -19649,7 +19697,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getIndexInfoWithReadonly(info: IndexInfo, readonly: boolean) {
-        return info.isReadonly !== readonly ? createIndexInfo(info.keyType, info.type, readonly, info.declaration) : info;
+        return info.isReadonly !== readonly ? createIndexInfo(info.keyType, info.type, readonly, info.declaration, info.components) : info;
     }
 
     function createLiteralType(flags: TypeFlags, value: string | number | PseudoBigInt, symbol?: Symbol, regularType?: LiteralType) {
@@ -20557,7 +20605,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function instantiateIndexInfo(info: IndexInfo, mapper: TypeMapper) {
-        return createIndexInfo(info.keyType, instantiateType(info.type, mapper), info.isReadonly, info.declaration);
+        return createIndexInfo(info.keyType, instantiateType(info.type, mapper), info.isReadonly, info.declaration, info.components);
     }
 
     // Returns true if the given expression contains (at any level of nesting) a function or arrow expression
@@ -25343,7 +25391,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        const result = createAnonymousType(type.symbol, members, emptyArray, emptyArray, sameMap(getIndexInfosOfType(type), info => createIndexInfo(info.keyType, getWidenedType(info.type), info.isReadonly)));
+        const result = createAnonymousType(type.symbol, members, emptyArray, emptyArray, sameMap(getIndexInfosOfType(type), info => createIndexInfo(info.keyType, getWidenedType(info.type), info.isReadonly, info.declaration, info.components)));
         result.objectFlags |= getObjectFlags(type) & (ObjectFlags.JSLiteral | ObjectFlags.NonInferrableType); // Retain js literal flag through widening
         return result;
     }
@@ -27182,7 +27230,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return target.kind === SyntaxKind.SuperKeyword;
             case SyntaxKind.NonNullExpression:
             case SyntaxKind.ParenthesizedExpression:
-                return isMatchingReference((source as NonNullExpression | ParenthesizedExpression).expression, target);
+            case SyntaxKind.SatisfiesExpression:
+                return isMatchingReference((source as NonNullExpression | ParenthesizedExpression | SatisfiesExpression).expression, target);
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 const sourcePropertyName = getAccessedPropertyName(source as AccessExpression);
@@ -29534,7 +29583,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return narrowTypeByCallExpression(type, expr as CallExpression, assumeTrue);
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.NonNullExpression:
-                    return narrowType(type, (expr as ParenthesizedExpression | NonNullExpression).expression, assumeTrue);
+                case SyntaxKind.SatisfiesExpression:
+                    return narrowType(type, (expr as ParenthesizedExpression | NonNullExpression | SatisfiesExpression).expression, assumeTrue);
                 case SyntaxKind.BinaryExpression:
                     return narrowTypeByBinaryExpression(type, expr as BinaryExpression, assumeTrue);
                 case SyntaxKind.PrefixUnaryExpression:
@@ -32799,9 +32849,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isTypeAssignableToKind(checkComputedPropertyName(firstDecl.name), TypeFlags.ESSymbol));
     }
 
+    function isSymbolWithComputedName(symbol: Symbol) {
+        const firstDecl = symbol.declarations?.[0];
+        return firstDecl && isNamedDeclaration(firstDecl) && isComputedPropertyName(firstDecl.name);
+    }
+
     // NOTE: currently does not make pattern literal indexers, eg `${number}px`
     function getObjectLiteralIndexInfo(isReadonly: boolean, offset: number, properties: Symbol[], keyType: Type): IndexInfo {
         const propTypes: Type[] = [];
+        let components: ElementWithComputedPropertyName[] | undefined;
         for (let i = offset; i < properties.length; i++) {
             const prop = properties[i];
             if (
@@ -32810,10 +32866,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 keyType === esSymbolType && isSymbolWithSymbolName(prop)
             ) {
                 propTypes.push(getTypeOfSymbol(properties[i]));
+                if (isSymbolWithComputedName(properties[i])) {
+                    components = append(components, properties[i].declarations?.[0]! as ElementWithComputedPropertyName);
+                }
             }
         }
         const unionType = propTypes.length ? getUnionType(propTypes, UnionReduction.Subtype) : undefinedType;
-        return createIndexInfo(keyType, unionType, isReadonly);
+        return createIndexInfo(keyType, unionType, isReadonly, /*declaration*/ undefined, components);
     }
 
     function getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined {
@@ -33467,6 +33526,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getJsxElementChildrenPropertyName(jsxNamespace: Symbol): __String | undefined {
+        if (compilerOptions.jsx === JsxEmit.ReactJSX || compilerOptions.jsx === JsxEmit.ReactJSXDev) {
+            // In these JsxEmit modes the children property is fixed to 'children'
+            return "children" as __String;
+        }
         return getNameFromJsxElementAttributesContainer(JsxNames.ElementChildrenAttributeNameContainer, jsxNamespace);
     }
 
@@ -41290,6 +41353,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkVariableLikeDeclaration(node);
         const func = getContainingFunction(node)!;
         if (hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
+            if (compilerOptions.erasableSyntaxOnly) {
+                error(node, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
+            }
             if (!(func.kind === SyntaxKind.Constructor && nodeIsPresent(func.body))) {
                 error(node, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
             }
@@ -46221,9 +46287,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const typeDeclaration = symbol.valueDeclaration;
         if (typeDeclaration && isClassLike(typeDeclaration)) {
             for (const member of typeDeclaration.members) {
-                // Only process instance properties with computed names here. Static properties cannot be in conflict with indexers,
-                // and properties with literal names were already checked.
-                if (!isStatic(member) && !hasBindableName(member)) {
+                // Only process instance properties against instance index signatures and static properties against static index signatures
+                if (
+                    (
+                        (!isStaticIndex && !isStatic(member)) ||
+                        (isStaticIndex && isStatic(member))
+                    ) && !hasBindableName(member)
+                ) {
                     const symbol = getSymbolOfDeclaration(member);
                     checkIndexConstraintForProperty(type, symbol, getTypeOfExpression((member as DynamicNamedDeclaration).name.expression), getNonMissingTypeOfSymbol(symbol));
                 }
@@ -47504,6 +47574,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkExportsOnMergedDeclarations(node);
         node.members.forEach(checkEnumMember);
 
+        if (compilerOptions.erasableSyntaxOnly && !(node.flags & NodeFlags.Ambient)) {
+            error(node, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
+        }
+
         computeEnumMemberValues(node);
 
         // Spec 2014 - Section 9.3:
@@ -47643,6 +47717,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 && !inAmbientContext
                 && isInstantiatedModule(node, shouldPreserveConstEnums(compilerOptions))
             ) {
+                if (compilerOptions.erasableSyntaxOnly) {
+                    error(node.name, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
+                }
+
                 if (getIsolatedModules(compilerOptions) && !getSourceFileOfNode(node).externalModuleIndicator) {
                     // This could be loosened a little if needed. The only problem we are trying to avoid is unqualified
                     // references to namespace members declared in other files. But use of namespaces is discouraged anyway,
@@ -48077,6 +48155,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 );
             }
 
+            if (moduleKind === ModuleKind.NodeNext && !isImportAttributes) {
+                return grammarErrorOnFirstToken(node, Diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert);
+            }
+
             if (declaration.moduleSpecifier && getEmitSyntaxForModuleSpecifierExpression(declaration.moduleSpecifier) === ModuleKind.CommonJS) {
                 return grammarErrorOnNode(
                     node,
@@ -48155,7 +48237,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         checkGrammarModifiers(node);
-        if (isInternalModuleImportEqualsDeclaration(node) || checkExternalImportOrExportDeclaration(node)) {
+        const isImportEquals = isInternalModuleImportEqualsDeclaration(node);
+        if (compilerOptions.erasableSyntaxOnly && isImportEquals && !(node.flags & NodeFlags.Ambient)) {
+            error(node, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
+        }
+        if (isImportEquals || checkExternalImportOrExportDeclaration(node)) {
             checkImportBinding(node);
             markLinkedReferences(node, ReferenceHint.ExportImportEquals);
             if (node.moduleReference.kind !== SyntaxKind.ExternalModuleReference) {
@@ -50814,6 +50900,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     for (const info of infoList!) {
                         if (info.declaration) continue;
                         if (info === anyBaseTypeIndexInfo) continue; // inherited, but looks like a late-bound signature because it has no declarations
+                        if (info.components) {
+                            const allComponentComputedNamesSerializable = every(info.components, e => {
+                                return !!(e.name && isComputedPropertyName(e.name) && isEntityNameExpression(e.name.expression) && enclosing && isEntityNameVisible(e.name.expression, enclosing, /*shouldComputeAliasToMakeVisible*/ false)?.accessibility === SymbolAccessibility.Accessible);
+                            });
+                            if (allComponentComputedNamesSerializable) {
+                                const newComponents = filter(info.components, e => {
+                                    // skip late bound props that contribute to the index signature - they'll be preserved via other means
+                                    return !hasLateBindableName(e);
+                                });
+                                result.push(...map(newComponents, e => {
+                                    trackComputedName(e.name.expression as EntityNameExpression);
+                                    const mods = infoList === staticInfos ? [factory.createModifier(SyntaxKind.StaticKeyword)] as Modifier[] : undefined;
+                                    return factory.createPropertyDeclaration(
+                                        append(mods, info.isReadonly ? factory.createModifier(SyntaxKind.ReadonlyKeyword) : undefined),
+                                        e.name,
+                                        (isPropertySignature(e) || isPropertyDeclaration(e) || isMethodSignature(e) || isMethodDeclaration(e) || isGetAccessor(e) || isSetAccessor(e)) && e.questionToken ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
+                                        nodeBuilder.typeToTypeNode(getTypeOfSymbol(e.symbol), enclosing, flags, internalFlags, tracker),
+                                        /*initializer*/ undefined,
+                                    );
+                                }));
+                                continue;
+                            }
+                        }
                         const node = nodeBuilder.indexInfoToIndexSignatureDeclaration(info, enclosing, flags, internalFlags, tracker);
                         if (node && infoList === staticInfos) {
                             (((node as Mutable<typeof node>).modifiers ||= factory.createNodeArray()) as MutableNodeArray<Modifier>).unshift(factory.createModifier(SyntaxKind.StaticKeyword));
@@ -50824,6 +50933,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 return result;
+
+                function trackComputedName(accessExpression: EntityNameOrEntityNameExpression) {
+                    if (!tracker.trackSymbol) return;
+                    // get symbol of the first identifier of the entityName
+                    const firstIdentifier = getFirstIdentifier(accessExpression);
+                    const name = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nameNotFoundMessage*/ undefined, /*isUse*/ true);
+                    if (name) {
+                        tracker.trackSymbol(name, enclosing, SymbolFlags.Value);
+                    }
+                }
             },
         };
 
@@ -52277,7 +52396,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkGrammarForInvalidDynamicName(node: DeclarationName, message: DiagnosticMessage) {
-        if (isNonBindableDynamicName(node)) {
+        // Even non-bindable names are allowed as late-bound implied index signatures so long as the name is a simple `a.b.c` type name expression
+        if (isNonBindableDynamicName(node) && !isEntityNameExpression(isElementAccessExpression(node) ? skipParentheses(node.argumentExpression) : (node as ComputedPropertyName).expression)) {
             return grammarErrorOnNode(node, message);
         }
     }
