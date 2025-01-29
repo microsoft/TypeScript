@@ -8922,6 +8922,8 @@ interface WindowOrWorkerGlobalScope {
 }
 
 interface WorkerEventMap extends AbstractWorkerEventMap, MessageEventTargetEventMap {
+    "message": MessageEvent;
+    "messageerror": MessageEvent;
 }
 
 /**
