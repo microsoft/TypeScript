@@ -567,7 +567,7 @@ namespace Foo {
 
 function f10() {
 >f10 : () => (k: number) => boolean
->    : ^^^^^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^^^^^         ^^^^^^^^^^^^
 
     let i: number | undefined;
 >i : number | undefined
@@ -600,7 +600,7 @@ function f10() {
 
 function makeAdder(n?: number) {
 >makeAdder : (n?: number) => (m: number) => number
->          : ^ ^^^      ^^^^^^ ^^      ^^^^^^^^^^^
+>          : ^ ^^^      ^^^^^^         ^^^^^^^^^^^
 >n : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 

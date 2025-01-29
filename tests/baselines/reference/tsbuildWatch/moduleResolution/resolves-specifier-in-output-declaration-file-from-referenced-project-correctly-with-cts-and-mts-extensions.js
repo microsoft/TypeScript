@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
 {
@@ -49,7 +49,8 @@ export type { TheNum } from './const.cjs';
 }
 
 //// [/user/username/projects/myproject/node_modules/pkg2] symlink(/user/username/projects/myproject/packages/pkg2)
-//// [/a/lib/lib.es2022.full.d.ts]
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -61,9 +62,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -b packages/pkg1 -w --verbose --traceResolution
+/home/src/tslibs/TS/Lib/tsc.js -b packages/pkg1 -w --verbose --traceResolution
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -84,8 +87,11 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/packages/pkg2/const.cjs' has a '.cjs' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/const.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.cts'. ========
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 [[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/tsconfig.tsbuildinfo' does not exist
 
@@ -123,12 +129,17 @@ File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has 
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/packages/pkg2/build/const.cjs]
 "use strict";
@@ -148,12 +159,12 @@ export type { TheNum } from './const.cjs';
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../../a/lib/lib.es2022.full.d.ts","../const.cts","../index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":99}],"root":[2,3],"options":{"composite":true,"module":100,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.es2022.full.d.ts","../const.cts","../index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":99}],"root":[2,3],"options":{"composite":true,"module":100,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../../a/lib/lib.es2022.full.d.ts",
+    "../../../../../../../home/src/tslibs/ts/lib/lib.es2022.full.d.ts",
     "../const.cts",
     "../index.ts"
   ],
@@ -163,14 +174,14 @@ export type { TheNum } from './const.cjs';
     ]
   ],
   "fileInfos": {
-    "../../../../../../../a/lib/lib.es2022.full.d.ts": {
+    "../../../../../../../home/src/tslibs/ts/lib/lib.es2022.full.d.ts": {
       "original": {
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
         "impliedFormat": 1
       },
-      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
       "impliedFormat": "commonjs"
     },
@@ -217,7 +228,7 @@ export type { TheNum } from './const.cjs';
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 985
+  "size": 1082
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]
@@ -238,9 +249,15 @@ export const theNum = 42;
 
 
 PolledWatches::
-/a/lib/package.json: *new*
+/home/package.json: *new*
   {"pollingInterval":2000}
-/a/package.json: *new*
+/home/src/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
   {"pollingInterval":2000}
 /package.json: *new*
   {"pollingInterval":2000}
@@ -284,17 +301,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/const.cts
 /user/username/projects/myproject/packages/pkg2/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/const.cts
 /user/username/projects/myproject/packages/pkg2/index.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.es2022.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2022.full.d.ts (used version)
 /user/username/projects/myproject/packages/pkg2/const.cts (computed .d.ts during emit)
 /user/username/projects/myproject/packages/pkg2/index.ts (computed .d.ts during emit)
 
@@ -311,19 +328,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.es2022.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2022.full.d.ts (used version)
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts (used version)
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts (used version)
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
@@ -393,8 +410,11 @@ File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has 
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1541: [0mType-only import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.
   To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ "type": "module" }`.
@@ -441,7 +461,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
@@ -514,8 +534,11 @@ File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has 
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
@@ -552,7 +575,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
@@ -628,8 +651,11 @@ File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has 
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1541: [0mType-only import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.
   To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ "type": "module" }`.
@@ -676,7 +702,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
@@ -728,18 +754,21 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/packages/pkg2/const.cjs' has a '.cjs' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/const.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.cts'. ========
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../../a/lib/lib.es2022.full.d.ts","../const.cts","../index.cts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":100,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.cts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.es2022.full.d.ts","../const.cts","../index.cts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":100,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.cts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../../a/lib/lib.es2022.full.d.ts",
+    "../../../../../../../home/src/tslibs/ts/lib/lib.es2022.full.d.ts",
     "../const.cts",
     "../index.cts"
   ],
@@ -749,14 +778,14 @@ File '/package.json' does not exist.
     ]
   ],
   "fileInfos": {
-    "../../../../../../../a/lib/lib.es2022.full.d.ts": {
+    "../../../../../../../home/src/tslibs/ts/lib/lib.es2022.full.d.ts": {
       "original": {
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
         "impliedFormat": 1
       },
-      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
       "impliedFormat": "commonjs"
     },
@@ -803,7 +832,7 @@ File '/package.json' does not exist.
   },
   "latestChangedDtsFile": "./index.d.cts",
   "version": "FakeTSVersion",
-  "size": 986
+  "size": 1083
 }
 
 //// [/user/username/projects/myproject/packages/pkg2/build/index.cjs]
@@ -817,9 +846,15 @@ export type { TheNum } from './const.cjs';
 
 
 PolledWatches::
-/a/lib/package.json:
+/home/package.json:
   {"pollingInterval":2000}
-/a/package.json:
+/home/src/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
   {"pollingInterval":2000}
 /package.json:
   {"pollingInterval":2000}
@@ -897,8 +932,11 @@ File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has 
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
@@ -934,7 +972,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/const.cts
 /user/username/projects/myproject/packages/pkg2/index.cts
 
@@ -957,7 +995,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.cts
 /user/username/projects/myproject/packages/pkg1/index.ts

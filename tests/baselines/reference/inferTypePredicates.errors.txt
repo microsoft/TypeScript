@@ -334,3 +334,13 @@ inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1
       foobar.foo;
     }
     
+    // https://github.com/microsoft/TypeScript/issues/60778
+    const arrTest: Array<number> = [1, 2, null, 3].filter(
+      (x) => (x != null) satisfies boolean,
+    );
+    
+    function isEmptyString(x: unknown) {
+      const rv = x === "";
+      return rv satisfies boolean;
+    }
+    

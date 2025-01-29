@@ -5,14 +5,14 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: getApplicableRefactors", () => {
+describe("unittests:: tsserver:: getApplicableRefactors::", () => {
     it("works when taking position", () => {
-        const aTs: File = { path: "/a.ts", content: "" };
-        const host = createServerHost([aTs]);
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: "" };
+        const host = TestServerHost.createServerHost([aTs]);
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
         session.executeCommandSeq<ts.server.protocol.GetApplicableRefactorsRequest>({
@@ -24,7 +24,7 @@ describe("unittests:: tsserver:: getApplicableRefactors", () => {
 
     it("returns the affected range of text for extract symbol refactor", () => {
         const file1: File = {
-            path: "/a.ts",
+            path: "/home/src/projects/project/a.ts",
             content: `class Foo {
     someMethod(m: number) {
         var x = m;
@@ -38,7 +38,7 @@ describe("unittests:: tsserver:: getApplicableRefactors", () => {
     }
 }`,
         };
-        const host = createServerHost([file1]);
+        const host = TestServerHost.createServerHost([file1]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
         session.executeCommandSeq<ts.server.protocol.GetApplicableRefactorsRequest>({
@@ -50,10 +50,10 @@ describe("unittests:: tsserver:: getApplicableRefactors", () => {
 
     it("returns the affected range of text for extract type refactor", () => {
         const file1: File = {
-            path: "/a.ts",
+            path: "/home/src/projects/project/a.ts",
             content: `type A<B, C, D = B> = Partial<C | string | D> & D | C;`,
         };
-        const host = createServerHost([file1]);
+        const host = TestServerHost.createServerHost([file1]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
         session.executeCommandSeq<ts.server.protocol.GetApplicableRefactorsRequest>({
@@ -65,12 +65,12 @@ describe("unittests:: tsserver:: getApplicableRefactors", () => {
 
     it("returns the affected range of text for 'move to file' and 'move to new file' refactors", () => {
         const file1: File = {
-            path: "/a.ts",
+            path: "/home/src/projects/project/a.ts",
             content: `const a = 1;
 const b = 1;
 function foo() { }`,
         };
-        const host = createServerHost([file1]);
+        const host = TestServerHost.createServerHost([file1]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 

@@ -1,4 +1,4 @@
-commentsOnJSXExpressionsArePreserved.tsx(5,17): error TS2304: Cannot find name 'React'.
+commentsOnJSXExpressionsArePreserved.tsx(5,17): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
 
 
 ==== commentsOnJSXExpressionsArePreserved.tsx (1 errors) ====
@@ -8,7 +8,7 @@ commentsOnJSXExpressionsArePreserved.tsx(5,17): error TS2304: Cannot find name '
         render() {
             return <div>
                     ~~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
                 {/* missing */}
                 {null/* preserved */}
                 {

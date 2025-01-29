@@ -1,0 +1,417 @@
+// === goToDefinition ===
+// === /a.ts ===
+// /*GOTO DEF*/<|export class [|A|] {
+// 
+//     private z: string;
+// 
+//     readonly x: string;
+// 
+//     async a() {  }
+// 
+//     override b() {}
+// 
+//     public async c() { }
+// }|>
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "A",
+    "containerName": "\"/a\"",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// <|export class [|{| textSpan: true |}A|]/*GOTO DEF*/ {
+// 
+//     private z: string;
+// 
+//     readonly x: string;
+// 
+//     async a() {  }
+// 
+//     override b() {}
+// 
+//     public async c() { }
+// }|>
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "A",
+    "containerName": "\"/a\"",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// export class A {
+// 
+//     /*GOTO DEF*/<|private [|z|]: string;|>
+// 
+//     readonly x: string;
+// 
+// --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "z",
+    "containerName": "A",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// export class A {
+// 
+//     <|private [|{| textSpan: true |}z|]/*GOTO DEF*/: string;|>
+// 
+//     readonly x: string;
+// 
+// --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "z",
+    "containerName": "A",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// export class A {
+// 
+//     private z: string;
+// 
+//     /*GOTO DEF*/<|readonly [|x|]: string;|>
+// 
+//     async a() {  }
+// 
+// --- (line: 9) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "x",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// export class A {
+// 
+//     private z: string;
+// 
+//     <|readonly [|{| textSpan: true |}x|]/*GOTO DEF*/: string;|>
+// 
+//     async a() {  }
+// 
+// --- (line: 9) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "x",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// --- (line: 3) skipped ---
+// 
+//     readonly x: string;
+// 
+//     /*GOTO DEF*/<|async [|a|]() {  }|>
+// 
+//     override b() {}
+// 
+// --- (line: 11) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "a",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// --- (line: 3) skipped ---
+// 
+//     readonly x: string;
+// 
+//     <|async [|{| textSpan: true |}a|]/*GOTO DEF*/() {  }|>
+// 
+//     override b() {}
+// 
+// --- (line: 11) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "a",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// --- (line: 5) skipped ---
+// 
+//     async a() {  }
+// 
+//     /*GOTO DEF*/<|override [|b|]() {}|>
+// 
+//     public async c() { }
+// }
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "b",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// --- (line: 5) skipped ---
+// 
+//     async a() {  }
+// 
+//     <|override [|{| textSpan: true |}b|]/*GOTO DEF*/() {}|>
+// 
+//     public async c() { }
+// }
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "b",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// --- (line: 7) skipped ---
+// 
+//     override b() {}
+// 
+//     /*GOTO DEF*/<|public async [|c|]() { }|>
+// }
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "c",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// --- (line: 7) skipped ---
+// 
+//     override b() {}
+// 
+//     <|public/*GOTO DEF*/ async [|c|]() { }|>
+// }
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "c",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// --- (line: 7) skipped ---
+// 
+//     override b() {}
+// 
+//     <|public as/*GOTO DEF*/ync [|c|]() { }|>
+// }
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "c",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// --- (line: 7) skipped ---
+// 
+//     override b() {}
+// 
+//     <|public async [|{| textSpan: true |}c|]/*GOTO DEF*/() { }|>
+// }
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "c",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// --- (line: 10) skipped ---
+//     public async c() { }
+// }
+// 
+// <|exp/*GOTO DEF*/ort function [|foo|]() { }|>
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "foo",
+    "containerName": "\"/a\"",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// --- (line: 10) skipped ---
+//     public async c() { }
+// }
+// 
+// <|export function [|{| textSpan: true |}foo|]/*GOTO DEF*/() { }|>
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "foo",
+    "containerName": "\"/a\"",
+    "isLocal": false,
+    "isAmbient": false
+   }
+  ]
