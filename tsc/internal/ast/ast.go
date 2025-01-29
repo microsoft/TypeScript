@@ -148,11 +148,8 @@ func (n *Node) Name() *DeclarationName                    { return n.data.Name()
 func (n *Node) Modifiers() *ModifierList                  { return n.data.Modifiers() }
 func (n *Node) FlowNodeData() *FlowNodeBase               { return n.data.FlowNodeData() }
 func (n *Node) DeclarationData() *DeclarationBase         { return n.data.DeclarationData() }
-func (n *Node) Symbol() *Symbol                           { return n.data.DeclarationData().Symbol }
 func (n *Node) ExportableData() *ExportableBase           { return n.data.ExportableData() }
-func (n *Node) LocalSymbol() *Symbol                      { return n.data.ExportableData().LocalSymbol }
 func (n *Node) LocalsContainerData() *LocalsContainerBase { return n.data.LocalsContainerData() }
-func (n *Node) Locals() SymbolTable                       { return n.data.LocalsContainerData().Locals }
 func (n *Node) FunctionLikeData() *FunctionLikeBase       { return n.data.FunctionLikeData() }
 func (n *Node) Parameters() []*ParameterDeclarationNode {
 	return n.data.FunctionLikeData().Parameters.Nodes
@@ -162,6 +159,34 @@ func (n *Node) BodyData() *BodyBase               { return n.data.BodyData() }
 func (n *Node) LiteralLikeData() *LiteralLikeBase { return n.data.LiteralLikeData() }
 func (n *Node) TemplateLiteralLikeData() *TemplateLiteralLikeBase {
 	return n.data.TemplateLiteralLikeData()
+}
+
+func (n *Node) Symbol() *Symbol {
+	return n.DeclarationData().Symbol
+}
+
+func (n *Node) LocalSymbol() *Symbol {
+	data := n.ExportableData()
+	if data != nil {
+		return data.LocalSymbol
+	}
+	return nil
+}
+
+func (n *Node) Locals() SymbolTable {
+	data := n.LocalsContainerData()
+	if data != nil {
+		return data.Locals
+	}
+	return nil
+}
+
+func (n *Node) Body() *Node {
+	data := n.BodyData()
+	if data != nil {
+		return data.Body
+	}
+	return nil
 }
 
 func (n *Node) Text() string {
@@ -325,6 +350,30 @@ func (n *Node) TypeParameters() []*Node {
 	return nil
 }
 
+func (n *Node) MemberList() *NodeList {
+	switch n.Kind {
+	case KindClassDeclaration:
+		return n.AsClassDeclaration().Members
+	case KindClassExpression:
+		return n.AsClassExpression().Members
+	case KindInterfaceDeclaration:
+		return n.AsInterfaceDeclaration().Members
+	case KindEnumDeclaration:
+		return n.AsEnumDeclaration().Members
+	case KindTypeLiteral:
+		return n.AsTypeLiteralNode().Members
+	}
+	panic("Unhandled case in Node.Members")
+}
+
+func (n *Node) Members() []*Node {
+	list := n.MemberList()
+	if list != nil {
+		return list.Nodes
+	}
+	return nil
+}
+
 func (n *Node) ModifierFlags() ModifierFlags {
 	modifiers := n.Modifiers()
 	if modifiers != nil {
@@ -476,6 +525,14 @@ func (n *Node) PropertyName() *Node {
 		return n.AsBindingElement().PropertyName
 	}
 	panic("Unhandled case in Node.PropertyName: " + n.Kind.String())
+}
+
+func (n *Node) PropertyNameOrName() *Node {
+	name := n.PropertyName()
+	if name == nil {
+		name = n.Name()
+	}
+	return name
 }
 
 func (n *Node) Comments() []*Node {
@@ -5020,31 +5077,33 @@ type ShorthandPropertyAssignment struct {
 	NodeBase
 	NamedMemberBase
 	ObjectLiteralElementBase
+	EqualsToken                 *TokenNode
 	ObjectAssignmentInitializer *Expression // Optional
 }
 
-func (f *NodeFactory) NewShorthandPropertyAssignment(modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, objectAssignmentInitializer *Expression) *Node {
+func (f *NodeFactory) NewShorthandPropertyAssignment(modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, equalsToken *TokenNode, objectAssignmentInitializer *Expression) *Node {
 	data := &ShorthandPropertyAssignment{}
 	data.modifiers = modifiers
 	data.name = name
 	data.PostfixToken = postfixToken
+	data.EqualsToken = equalsToken
 	data.ObjectAssignmentInitializer = objectAssignmentInitializer
 	return newNode(KindShorthandPropertyAssignment, data)
 }
 
-func (f *NodeFactory) UpdateShorthandPropertyAssignment(node *ShorthandPropertyAssignment, modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, objectAssignmentInitializer *Expression) *Node {
+func (f *NodeFactory) UpdateShorthandPropertyAssignment(node *ShorthandPropertyAssignment, modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, equalsToken *TokenNode, objectAssignmentInitializer *Expression) *Node {
 	if modifiers != node.modifiers || name != node.name || postfixToken != node.PostfixToken || objectAssignmentInitializer != node.ObjectAssignmentInitializer {
-		return updateNode(f.NewShorthandPropertyAssignment(modifiers, name, postfixToken, objectAssignmentInitializer), node.AsNode())
+		return updateNode(f.NewShorthandPropertyAssignment(modifiers, name, postfixToken, equalsToken, objectAssignmentInitializer), node.AsNode())
 	}
 	return node.AsNode()
 }
 
 func (node *ShorthandPropertyAssignment) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.PostfixToken) || visit(v, node.ObjectAssignmentInitializer)
+	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.PostfixToken) || visit(v, node.EqualsToken) || visit(v, node.ObjectAssignmentInitializer)
 }
 
 func (node *ShorthandPropertyAssignment) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateShorthandPropertyAssignment(node, v.VisitModifiers(node.modifiers), v.VisitNode(node.name), v.VisitToken(node.PostfixToken), v.VisitNode(node.ObjectAssignmentInitializer))
+	return v.Factory.UpdateShorthandPropertyAssignment(node, v.VisitModifiers(node.modifiers), v.VisitNode(node.name), v.VisitToken(node.PostfixToken), v.VisitToken(node.EqualsToken), v.VisitNode(node.ObjectAssignmentInitializer))
 }
 
 func IsShorthandPropertyAssignment(node *Node) bool {

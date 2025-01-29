@@ -131,7 +131,7 @@ func (b *Binder) declareSymbolEx(symbolTable ast.SymbolTable, parent *ast.Symbol
 	switch {
 	case isComputedName:
 		name = ast.InternalSymbolNameComputed
-	case isDefaultExport && b.parent != nil:
+	case isDefaultExport && parent != nil:
 		name = ast.InternalSymbolNameDefault
 	default:
 		name = b.getDeclarationName(node)
@@ -171,18 +171,19 @@ func (b *Binder) declareSymbolEx(symbolTable ast.SymbolTable, parent *ast.Symbol
 			symbol = b.newSymbol(ast.SymbolFlagsNone, name)
 			symbolTable[name] = symbol
 			if isReplaceableByMethod {
-				symbol.IsReplaceableByMethod = true
+				symbol.Flags |= ast.SymbolFlagsReplaceableByMethod
 			}
-		} else if isReplaceableByMethod && !symbol.IsReplaceableByMethod {
+		} else if isReplaceableByMethod && symbol.Flags&ast.SymbolFlagsReplaceableByMethod == 0 {
 			// A symbol already exists, so don't add this as a declaration.
 			return symbol
 		} else if symbol.Flags&excludes != 0 {
-			if symbol.IsReplaceableByMethod {
+			if symbol.Flags&ast.SymbolFlagsReplaceableByMethod != 0 {
 				// Javascript constructor-declared symbols can be discarded in favor of
 				// prototype symbols like methods.
 				symbol = b.newSymbol(ast.SymbolFlagsNone, name)
 				symbolTable[name] = symbol
-			} else if includes&ast.SymbolFlagsVariable == 0 || symbol.Flags&ast.SymbolFlagsAssignment == 0 {
+			} else if !(includes&ast.SymbolFlagsVariable != 0 && symbol.Flags&ast.SymbolFlagsAssignment != 0 ||
+				includes&ast.SymbolFlagsAssignment != 0 && symbol.Flags&ast.SymbolFlagsVariable != 0) {
 				// Assignment declarations are allowed to merge with variables, no matter what other flags they have.
 				if node.Name() != nil {
 					setParent(node.Name(), node)
@@ -690,7 +691,7 @@ func (b *Binder) bindWorker(node *ast.Node) bool {
 	if node.Kind > ast.KindLastToken {
 		saveParent := b.parent
 		b.parent = node
-		containerFlags := getContainerFlags(node)
+		containerFlags := GetContainerFlags(node)
 		if containerFlags == ContainerFlagsNone {
 			b.bindChildren(node)
 		} else {
@@ -757,8 +758,10 @@ func (b *Binder) bindModuleDeclaration(node *ast.Node) {
 		state := b.declareModuleSymbol(node)
 		if state != ModuleInstanceStateNonInstantiated {
 			symbol := node.AsModuleDeclaration().Symbol
-			// if module was already merged with some function, class or non-const enum, treat it as non-const-enum-only
-			symbol.ConstEnumOnlyModule = symbol.ConstEnumOnlyModule && (symbol.Flags&(ast.SymbolFlagsFunction|ast.SymbolFlagsClass|ast.SymbolFlagsRegularEnum) == 0) && state == ModuleInstanceStateConstEnumOnly
+			if symbol.Flags&(ast.SymbolFlagsFunction|ast.SymbolFlagsClass|ast.SymbolFlagsRegularEnum) != 0 || state != ModuleInstanceStateConstEnumOnly {
+				// if module was already merged with some function, class or non-const enum, treat it as non-const-enum-only
+				symbol.Flags &^= ast.SymbolFlagsConstEnumOnlyModule
+			}
 		}
 	}
 }
@@ -1077,19 +1080,34 @@ func addLateBoundAssignmentDeclarationToSymbol(node *ast.Node, symbol *ast.Symbo
 func (b *Binder) bindFunctionPropertyAssignment(node *ast.Node) {
 	expr := node.AsBinaryExpression()
 	parentName := expr.Left.Expression().Text()
-	parentSymbol := b.lookupName(parentName, b.blockScopeContainer)
-	if parentSymbol == nil {
-		parentSymbol = b.lookupName(parentName, b.container)
+	symbol := b.lookupName(parentName, b.blockScopeContainer)
+	if symbol == nil {
+		symbol = b.lookupName(parentName, b.container)
 	}
-	if parentSymbol != nil && isFunctionSymbol(parentSymbol) {
-		// Fix up parent pointers since we're going to use these nodes before we bind into them
-		setParent(expr.Left, node)
-		setParent(expr.Right, node)
-		if ast.HasDynamicName(node) {
-			b.bindAnonymousDeclaration(node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.InternalSymbolNameComputed)
-			addLateBoundAssignmentDeclarationToSymbol(node, parentSymbol)
-		} else {
-			b.declareSymbol(ast.GetExports(parentSymbol), parentSymbol, node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.SymbolFlagsPropertyExcludes)
+	if symbol != nil && symbol.ValueDeclaration != nil {
+		// For an assignment 'fn.xxx = ...', where 'fn' is a previously declared function or a previously
+		// declared const variable initialized with a function expression or arrow function, we add expando
+		// property declarations to the function's symbol.
+		var funcSymbol *ast.Symbol
+		switch {
+		case ast.IsFunctionDeclaration(symbol.ValueDeclaration):
+			funcSymbol = symbol
+		case ast.IsVariableDeclaration(symbol.ValueDeclaration) && symbol.ValueDeclaration.Parent.Flags&ast.NodeFlagsConst != 0:
+			initializer := symbol.ValueDeclaration.Initializer()
+			if initializer != nil && ast.IsFunctionExpressionOrArrowFunction(initializer) {
+				funcSymbol = initializer.Symbol()
+			}
+		}
+		if funcSymbol != nil {
+			// Fix up parent pointers since we're going to use these nodes before we bind into them
+			setParent(expr.Left, node)
+			setParent(expr.Right, node)
+			if ast.HasDynamicName(node) {
+				b.bindAnonymousDeclaration(node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.InternalSymbolNameComputed)
+				addLateBoundAssignmentDeclarationToSymbol(node, funcSymbol)
+			} else {
+				b.declareSymbol(ast.GetExports(funcSymbol), funcSymbol, node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.SymbolFlagsPropertyExcludes)
+			}
 		}
 	}
 }
@@ -2541,8 +2559,8 @@ func (b *Binder) addDeclarationToSymbol(symbol *ast.Symbol, node *ast.Node, symb
 		symbol.Declarations = core.AppendIfUnique(symbol.Declarations, node)
 	}
 	// On merge of const enum module with class or function, reset const enum only flag (namespaces will already recalculate)
-	if symbol.ConstEnumOnlyModule && symbol.Flags&(ast.SymbolFlagsFunction|ast.SymbolFlagsClass|ast.SymbolFlagsRegularEnum) != 0 {
-		symbol.ConstEnumOnlyModule = false
+	if symbol.Flags&ast.SymbolFlagsConstEnumOnlyModule != 0 && symbol.Flags&(ast.SymbolFlagsFunction|ast.SymbolFlagsClass|ast.SymbolFlagsRegularEnum) != 0 {
+		symbol.Flags &^= ast.SymbolFlagsConstEnumOnlyModule
 	}
 	if symbolFlags&ast.SymbolFlagsValue != 0 {
 		SetValueDeclaration(symbol, node)
@@ -2552,10 +2570,10 @@ func (b *Binder) addDeclarationToSymbol(symbol *ast.Symbol, node *ast.Node, symb
 func SetValueDeclaration(symbol *ast.Symbol, node *ast.Node) {
 	valueDeclaration := symbol.ValueDeclaration
 	if valueDeclaration == nil ||
-		!(node.Flags&ast.NodeFlagsAmbient != 0 && valueDeclaration.Flags&ast.NodeFlagsAmbient == 0) &&
-			(isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
-		(valueDeclaration.Kind != node.Kind && isEffectiveModuleDeclaration(valueDeclaration)) {
-		// other kinds of value declarations take precedence over modules and assignment declarations
+		isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node) ||
+		valueDeclaration.Kind != node.Kind && isEffectiveModuleDeclaration(valueDeclaration) {
+		// Non-assignment declarations take precedence over assignment declarations and
+		// non-namespace declarations take precedence over namespace declarations.
 		symbol.ValueDeclaration = node
 	}
 }
@@ -2569,7 +2587,7 @@ func SetValueDeclaration(symbol *ast.Symbol, node *ast.Node) {
  * @param excludes - The flags which node cannot be declared alongside in a symbol table. Used to report forbidden declarations.
  */
 
-func getContainerFlags(node *ast.Node) ContainerFlags {
+func GetContainerFlags(node *ast.Node) ContainerFlags {
 	switch node.Kind {
 	case ast.KindClassExpression, ast.KindClassDeclaration, ast.KindEnumDeclaration, ast.KindObjectLiteralExpression, ast.KindTypeLiteral,
 		ast.KindJSDocTypeLiteral, ast.KindJsxAttributes:

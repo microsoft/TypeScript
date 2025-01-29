@@ -32,8 +32,10 @@ const (
 	SymbolFlagsExportStar             SymbolFlags = 1 << 23 // Export * declaration
 	SymbolFlagsOptional               SymbolFlags = 1 << 24 // Optional property
 	SymbolFlagsTransient              SymbolFlags = 1 << 25 // Transient symbol (created during type check)
-	SymbolFlagsAssignment             SymbolFlags = 1 << 26 // Assignment treated as declaration (eg `this.prop = 1`)
+	SymbolFlagsAssignment             SymbolFlags = 1 << 26 // Assignment to property on function acting as declaration (eg `func.prop = 1`)
 	SymbolFlagsModuleExports          SymbolFlags = 1 << 27 // Symbol for CommonJS `module` of `module.exports`
+	SymbolFlagsConstEnumOnlyModule    SymbolFlags = 1 << 28 // Module contains only const enums or other modules with only const enums
+	SymbolFlagsReplaceableByMethod    SymbolFlags = 1 << 29
 	SymbolFlagsAll                    SymbolFlags = 0xFFFFFFFF
 
 	SymbolFlagsEnum      = SymbolFlagsRegularEnum | SymbolFlagsConstEnum
@@ -53,7 +55,7 @@ const (
 	SymbolFlagsBlockScopedVariableExcludes = SymbolFlagsValue
 
 	SymbolFlagsParameterExcludes                   = SymbolFlagsValue
-	SymbolFlagsPropertyExcludes                    = SymbolFlagsNone
+	SymbolFlagsPropertyExcludes                    = SymbolFlagsValue & ^SymbolFlagsProperty
 	SymbolFlagsEnumMemberExcludes                  = SymbolFlagsValue | SymbolFlagsType
 	SymbolFlagsFunctionExcludes                    = SymbolFlagsValue & ^(SymbolFlagsFunction | SymbolFlagsValueModule | SymbolFlagsClass)
 	SymbolFlagsClassExcludes                       = (SymbolFlagsValue | SymbolFlagsType) & ^(SymbolFlagsValueModule | SymbolFlagsInterface | SymbolFlagsFunction) // class-interface mergability done in checker.ts

@@ -2149,6 +2149,11 @@ func GetScannerForSourceFile(sourceFile *ast.SourceFile, pos int) *Scanner {
 	return s
 }
 
+func ScanTokenAtPosition(sourceFile *ast.SourceFile, pos int) ast.Kind {
+	s := GetScannerForSourceFile(sourceFile, pos)
+	return s.token
+}
+
 func GetRangeOfTokenAtPosition(sourceFile *ast.SourceFile, pos int) core.TextRange {
 	s := GetScannerForSourceFile(sourceFile, pos)
 	return core.NewTextRange(s.tokenStart, s.pos)

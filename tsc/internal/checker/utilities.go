@@ -259,22 +259,6 @@ func isModuleOrEnumDeclaration(node *ast.Node) bool {
 	return node.Kind == ast.KindModuleDeclaration || node.Kind == ast.KindEnumDeclaration
 }
 
-func getLocalsOfNode(node *ast.Node) ast.SymbolTable {
-	data := node.LocalsContainerData()
-	if data != nil {
-		return data.Locals
-	}
-	return nil
-}
-
-func getBodyOfNode(node *ast.Node) *ast.Node {
-	bodyData := node.BodyData()
-	if bodyData != nil {
-		return bodyData.Body
-	}
-	return nil
-}
-
 func isGlobalSourceFile(node *ast.Node) bool {
 	return node.Kind == ast.KindSourceFile && !ast.IsExternalOrCommonJsModule(node.AsSourceFile())
 }
@@ -345,6 +329,7 @@ type NameResolver struct {
 	argumentsSymbol                  *ast.Symbol
 	requireSymbol                    *ast.Symbol
 	lookup                           func(symbols ast.SymbolTable, name string, meaning ast.SymbolFlags) *ast.Symbol
+	symbolReferenced                 func(symbol *ast.Symbol, meaning ast.SymbolFlags)
 	setRequiresScopeChangeCache      func(node *ast.Node, value core.Tristate)
 	getRequiresScopeChangeCache      func(node *ast.Node) core.Tristate
 	onPropertyWithInvalidInitializer func(location *ast.Node, name string, declaration *ast.Node, result *ast.Symbol) bool
@@ -375,13 +360,13 @@ loop:
 			lastLocation = location
 			location = location.Parent
 		}
-		locals := getLocalsOfNode(location)
+		locals := location.Locals()
 		// Locals of a source file are not in scope (because they get merged into the global symbol table)
 		if locals != nil && !isGlobalSourceFile(location) {
 			result = r.lookup(locals, name, meaning)
 			if result != nil {
 				useResult := true
-				if ast.IsFunctionLike(location) && lastLocation != nil && lastLocation != getBodyOfNode(location) {
+				if ast.IsFunctionLike(location) && lastLocation != nil && lastLocation != location.Body() {
 					// symbol lookup restrictions for function-like declarations
 					// - Type parameters of a function are in scope in the entire function declaration, including the parameter
 					//   list and return type. However, local types are only in scope in the function body.
@@ -500,9 +485,9 @@ loop:
 				break loop
 			}
 			if ast.IsClassExpression(location) && meaning&ast.SymbolFlagsClass != 0 {
-				className := location.AsClassExpression().Name()
-				if className != nil && name == className.AsIdentifier().Text {
-					result = location.AsClassExpression().Symbol
+				className := location.Name()
+				if className != nil && name == className.Text() {
+					result = location.Symbol()
 					break loop
 				}
 			}
@@ -641,7 +626,7 @@ loop:
 	// If `result === lastSelfReferenceLocation.symbol`, that means that we are somewhere inside `lastSelfReferenceLocation` looking up a name, and resolving to `lastLocation` itself.
 	// That means that this is a self-reference of `lastLocation`, and shouldn't count this when considering whether `lastLocation` is used.
 	if isUse && result != nil && (lastSelfReferenceLocation == nil || result != lastSelfReferenceLocation.Symbol()) {
-		// !!! result.isReferenced |= meaning
+		r.symbolReferenced(result, meaning)
 	}
 	if result == nil {
 		if !excludeGlobals {
@@ -663,7 +648,7 @@ loop:
 
 func (r *NameResolver) useOuterVariableScopeInParameter(result *ast.Symbol, location *ast.Node, lastLocation *ast.Node) bool {
 	if ast.IsParameter(lastLocation) {
-		body := getBodyOfNode(location)
+		body := location.Body()
 		if body != nil && result.ValueDeclaration != nil && result.ValueDeclaration.Pos() >= body.Pos() && result.ValueDeclaration.End() <= body.End() {
 			// check for several cases where we introduce temporaries that require moving the name/initializer of the parameter to the body
 			// - static field in a class expression
@@ -832,23 +817,14 @@ func isValidTypeOnlyAliasUseSite(useSite *ast.Node) bool {
 }
 
 func isIdentifierInNonEmittingHeritageClause(node *ast.Node) bool {
-	if node.Kind != ast.KindIdentifier {
+	if !ast.IsIdentifier(node) {
 		return false
 	}
-	heritageClause := ast.FindAncestorOrQuit(node.Parent, func(parent *ast.Node) ast.FindAncestorResult {
-		switch parent.Kind {
-		case ast.KindHeritageClause:
-			return ast.FindAncestorTrue
-		case ast.KindPropertyAccessExpression, ast.KindExpressionWithTypeArguments:
-			return ast.FindAncestorFalse
-		default:
-			return ast.FindAncestorQuit
-		}
-	})
-	if heritageClause != nil {
-		return heritageClause.AsHeritageClause().Token == ast.KindImmediateKeyword || heritageClause.Parent.Kind == ast.KindInterfaceDeclaration
+	parent := node.Parent
+	for ast.IsPropertyAccessExpression(parent) || ast.IsExpressionWithTypeArguments(parent) {
+		parent = parent.Parent
 	}
-	return false
+	return ast.IsHeritageClause(parent) && (parent.AsHeritageClause().Token == ast.KindImplementsKeyword || ast.IsInterfaceDeclaration(parent.Parent))
 }
 
 func isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node *ast.Node) bool {
@@ -1838,15 +1814,28 @@ func parameterIsThisKeyword(parameter *ast.Node) bool {
 	return ast.IsThisParameter(parameter)
 }
 
-func getInterfaceBaseTypeNodes(node *ast.Node) []*ast.Node {
-	heritageClause := getHeritageClause(node.AsInterfaceDeclaration().HeritageClauses, ast.KindExtendsKeyword)
-	if heritageClause != nil {
-		return heritageClause.AsHeritageClause().Types.Nodes
+func getExtendsTypeNode(node *ast.Node) *ast.Node {
+	return core.FirstOrNil(getExtendsTypeNodes(node))
+}
+
+func getExtendsTypeNodes(node *ast.Node) []*ast.Node {
+	return getHeritageTypeNodes(node, ast.KindExtendsKeyword)
+}
+
+func getImplementsTypeNodes(node *ast.Node) []*ast.Node {
+	return getHeritageTypeNodes(node, ast.KindImplementsKeyword)
+}
+
+func getHeritageTypeNodes(node *ast.Node, kind ast.Kind) []*ast.Node {
+	clause := getHeritageClause(node, kind)
+	if clause != nil {
+		return clause.AsHeritageClause().Types.Nodes
 	}
 	return nil
 }
 
-func getHeritageClause(clauses *ast.NodeList, kind ast.Kind) *ast.Node {
+func getHeritageClause(node *ast.Node, kind ast.Kind) *ast.Node {
+	clauses := getHeritageClauses(node)
 	if clauses != nil {
 		for _, clause := range clauses.Nodes {
 			if clause.AsHeritageClause().Token == kind {
@@ -1857,10 +1846,14 @@ func getHeritageClause(clauses *ast.NodeList, kind ast.Kind) *ast.Node {
 	return nil
 }
 
-func getClassExtendsHeritageElement(node *ast.Node) *ast.Node {
-	heritageClause := getHeritageClause(node.ClassLikeData().HeritageClauses, ast.KindExtendsKeyword)
-	if heritageClause != nil && len(heritageClause.AsHeritageClause().Types.Nodes) > 0 {
-		return heritageClause.AsHeritageClause().Types.Nodes[0]
+func getHeritageClauses(node *ast.Node) *ast.NodeList {
+	switch node.Kind {
+	case ast.KindClassDeclaration:
+		return node.AsClassDeclaration().HeritageClauses
+	case ast.KindClassExpression:
+		return node.AsClassExpression().HeritageClauses
+	case ast.KindInterfaceDeclaration:
+		return node.AsInterfaceDeclaration().HeritageClauses
 	}
 	return nil
 }
@@ -2552,4 +2545,14 @@ func isPlainJsFile(file *ast.SourceFile, checkJs core.Tristate) bool {
 	// !!!
 	// return file != nil && (file.ScriptKind == core.ScriptKindJS || file.ScriptKind == core.ScriptKindJSX) && file.CheckJsDirective == nil && checkJs == core.TSUnknown
 	return file != nil && (file.ScriptKind == core.ScriptKindJS || file.ScriptKind == core.ScriptKindJSX) && checkJs == core.TSUnknown
+}
+
+func getEnclosingContainer(node *ast.Node) *ast.Node {
+	return ast.FindAncestor(node.Parent, func(n *ast.Node) bool {
+		return binder.GetContainerFlags(n)&binder.ContainerFlagsIsContainer != 0
+	})
+}
+
+func getDeclarationsOfKind(symbol *ast.Symbol, kind ast.Kind) []*ast.Node {
+	return core.Filter(symbol.Declarations, func(d *ast.Node) bool { return d.Kind == kind })
 }

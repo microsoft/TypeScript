@@ -1200,6 +1200,10 @@ func (c *Checker) hasCovariantVoidArgument(typeArguments []*Type, variances []Va
 	return false
 }
 
+func (c *Checker) isSignatureAssignableTo(source *Signature, target *Signature, ignoreReturnTypes bool) bool {
+	return c.compareSignaturesRelated(source, target, core.IfElse(ignoreReturnTypes, SignatureCheckModeIgnoreReturnTypes, SignatureCheckModeNone), false /*reportErrors*/, nil /*errorReporter*/, c.compareTypesAssignable, nil /*reportUnreliableMarkers*/) != TernaryFalse
+}
+
 func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature, checkMode SignatureCheckMode, reportErrors bool, errorReporter ErrorReporter, compareTypes TypeComparer, reportUnreliableMarkers *TypeMapper) Ternary {
 	if source == target {
 		return TernaryTrue
@@ -1710,12 +1714,13 @@ func (c *Checker) getTypePredicateOfSignature(sig *Signature) *TypePredicate {
 		case sig.composite != nil:
 			sig.resolvedTypePredicate = c.getUnionOrIntersectionTypePredicate(sig.composite.signatures, sig.composite.isUnion)
 		default:
-			var typeNode *ast.TypeNode
 			if sig.declaration != nil {
-				typeNode = sig.declaration.Type()
+				typeNode := sig.declaration.Type()
 				switch {
-				case typeNode != nil && ast.IsTypePredicateNode(typeNode):
-					sig.resolvedTypePredicate = c.createTypePredicateFromTypePredicateNode(typeNode, sig)
+				case typeNode != nil:
+					if ast.IsTypePredicateNode(typeNode) {
+						sig.resolvedTypePredicate = c.createTypePredicateFromTypePredicateNode(typeNode, sig)
+					}
 				case ast.IsFunctionLikeDeclaration(sig.declaration) && (sig.resolvedReturnType == nil || sig.resolvedReturnType.flags&TypeFlagsBoolean != 0) && c.getParameterCount(sig) > 0:
 					sig.resolvedTypePredicate = c.noTypePredicate // avoid infinite loop
 					sig.resolvedTypePredicate = c.getTypePredicateFromBody(sig.declaration)

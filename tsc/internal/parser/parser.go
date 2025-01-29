@@ -5564,11 +5564,12 @@ func (p *Parser) parseObjectLiteralElement() *ast.Node {
 	var node *ast.Node
 	isShorthandPropertyAssignment := tokenIsIdentifier && p.token != ast.KindColonToken
 	if isShorthandPropertyAssignment {
+		equalsToken := p.parseOptionalToken(ast.KindEqualsToken)
 		var initializer *ast.Expression
-		if p.parseOptional(ast.KindEqualsToken) {
+		if equalsToken != nil {
 			initializer = doInContext(p, ast.NodeFlagsDisallowInContext, false, (*Parser).parseAssignmentExpressionOrHigher)
 		}
-		node = p.factory.NewShorthandPropertyAssignment(modifiers, name, postfixToken, initializer)
+		node = p.factory.NewShorthandPropertyAssignment(modifiers, name, postfixToken, equalsToken, initializer)
 	} else {
 		p.parseExpected(ast.KindColonToken)
 		initializer := doInContext(p, ast.NodeFlagsDisallowInContext, false, (*Parser).parseAssignmentExpressionOrHigher)
