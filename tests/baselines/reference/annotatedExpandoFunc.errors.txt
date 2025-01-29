@@ -1,0 +1,30 @@
+annotatedExpandoFunc.ts(6,7): error TS2741: Property 'p' is missing in type '() => 1' but required in type 'F'.
+annotatedExpandoFunc.ts(8,3): error TS2339: Property 'extra' does not exist on type 'F'.
+
+
+==== annotatedExpandoFunc.ts (2 errors) ====
+    interface F {
+        (): 1;
+        p: 2;
+    }
+    // disallowed
+    const f: F = () => 1;
+          ~
+!!! error TS2741: Property 'p' is missing in type '() => 1' but required in type 'F'.
+!!! related TS2728 annotatedExpandoFunc.ts:3:5: 'p' is declared here.
+    f.p = 2;
+    f.extra = 3
+      ~~~~~
+!!! error TS2339: Property 'extra' does not exist on type 'F'.
+    const r1 = f() + f.p
+    // function expressions are still allowed, by analogy with function declarations
+    const e = () => 4
+    e.q = 5
+    const r2 = e() + e.q
+    // function declarations are still allowed
+    function g() {
+        return 6
+    }
+    g.r = 7
+    const r3 = g() + g.r
+    

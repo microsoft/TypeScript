@@ -1,0 +1,64 @@
+//// [tests/cases/conformance/salsa/annotatedExpandoFunc.ts] ////
+
+=== annotatedExpandoFunc.ts ===
+interface F {
+>F : Symbol(F, Decl(annotatedExpandoFunc.ts, 0, 0))
+
+    (): 1;
+    p: 2;
+>p : Symbol(F.p, Decl(annotatedExpandoFunc.ts, 1, 10))
+}
+// disallowed
+const f: F = () => 1;
+>f : Symbol(f, Decl(annotatedExpandoFunc.ts, 5, 5), Decl(annotatedExpandoFunc.ts, 5, 21), Decl(annotatedExpandoFunc.ts, 6, 8))
+>F : Symbol(F, Decl(annotatedExpandoFunc.ts, 0, 0))
+
+f.p = 2;
+>f.p : Symbol(F.p, Decl(annotatedExpandoFunc.ts, 1, 10))
+>f : Symbol(f, Decl(annotatedExpandoFunc.ts, 5, 5), Decl(annotatedExpandoFunc.ts, 5, 21), Decl(annotatedExpandoFunc.ts, 6, 8))
+>p : Symbol(F.p, Decl(annotatedExpandoFunc.ts, 1, 10))
+
+f.extra = 3
+>f : Symbol(f, Decl(annotatedExpandoFunc.ts, 5, 5), Decl(annotatedExpandoFunc.ts, 5, 21), Decl(annotatedExpandoFunc.ts, 6, 8))
+
+const r1 = f() + f.p
+>r1 : Symbol(r1, Decl(annotatedExpandoFunc.ts, 8, 5))
+>f : Symbol(f, Decl(annotatedExpandoFunc.ts, 5, 5), Decl(annotatedExpandoFunc.ts, 5, 21), Decl(annotatedExpandoFunc.ts, 6, 8))
+>f.p : Symbol(F.p, Decl(annotatedExpandoFunc.ts, 1, 10))
+>f : Symbol(f, Decl(annotatedExpandoFunc.ts, 5, 5), Decl(annotatedExpandoFunc.ts, 5, 21), Decl(annotatedExpandoFunc.ts, 6, 8))
+>p : Symbol(F.p, Decl(annotatedExpandoFunc.ts, 1, 10))
+
+// function expressions are still allowed, by analogy with function declarations
+const e = () => 4
+>e : Symbol(e, Decl(annotatedExpandoFunc.ts, 10, 5), Decl(annotatedExpandoFunc.ts, 10, 17))
+
+e.q = 5
+>e.q : Symbol(e.q, Decl(annotatedExpandoFunc.ts, 10, 17))
+>e : Symbol(e, Decl(annotatedExpandoFunc.ts, 10, 5), Decl(annotatedExpandoFunc.ts, 10, 17))
+>q : Symbol(e.q, Decl(annotatedExpandoFunc.ts, 10, 17))
+
+const r2 = e() + e.q
+>r2 : Symbol(r2, Decl(annotatedExpandoFunc.ts, 12, 5))
+>e : Symbol(e, Decl(annotatedExpandoFunc.ts, 10, 5), Decl(annotatedExpandoFunc.ts, 10, 17))
+>e.q : Symbol(e.q, Decl(annotatedExpandoFunc.ts, 10, 17))
+>e : Symbol(e, Decl(annotatedExpandoFunc.ts, 10, 5), Decl(annotatedExpandoFunc.ts, 10, 17))
+>q : Symbol(e.q, Decl(annotatedExpandoFunc.ts, 10, 17))
+
+// function declarations are still allowed
+function g() {
+>g : Symbol(g, Decl(annotatedExpandoFunc.ts, 12, 20), Decl(annotatedExpandoFunc.ts, 16, 1))
+
+    return 6
+}
+g.r = 7
+>g.r : Symbol(g.r, Decl(annotatedExpandoFunc.ts, 16, 1))
+>g : Symbol(g, Decl(annotatedExpandoFunc.ts, 12, 20), Decl(annotatedExpandoFunc.ts, 16, 1))
+>r : Symbol(g.r, Decl(annotatedExpandoFunc.ts, 16, 1))
+
+const r3 = g() + g.r
+>r3 : Symbol(r3, Decl(annotatedExpandoFunc.ts, 18, 5))
+>g : Symbol(g, Decl(annotatedExpandoFunc.ts, 12, 20), Decl(annotatedExpandoFunc.ts, 16, 1))
+>g.r : Symbol(g.r, Decl(annotatedExpandoFunc.ts, 16, 1))
+>g : Symbol(g, Decl(annotatedExpandoFunc.ts, 12, 20), Decl(annotatedExpandoFunc.ts, 16, 1))
+>r : Symbol(g.r, Decl(annotatedExpandoFunc.ts, 16, 1))
+

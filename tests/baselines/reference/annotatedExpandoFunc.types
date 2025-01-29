@@ -1,0 +1,132 @@
+//// [tests/cases/conformance/salsa/annotatedExpandoFunc.ts] ////
+
+=== annotatedExpandoFunc.ts ===
+interface F {
+    (): 1;
+    p: 2;
+>p : 2
+>  : ^
+}
+// disallowed
+const f: F = () => 1;
+>f : F
+>  : ^
+>() => 1 : () => 1
+>        : ^^^^^^^
+>1 : 1
+>  : ^
+
+f.p = 2;
+>f.p = 2 : 2
+>        : ^
+>f.p : 2
+>    : ^
+>f : F
+>  : ^
+>p : 2
+>  : ^
+>2 : 2
+>  : ^
+
+f.extra = 3
+>f.extra = 3 : 3
+>            : ^
+>f.extra : any
+>        : ^^^
+>f : F
+>  : ^
+>extra : any
+>      : ^^^
+>3 : 3
+>  : ^
+
+const r1 = f() + f.p
+>r1 : number
+>   : ^^^^^^
+>f() + f.p : number
+>          : ^^^^^^
+>f() : 1
+>    : ^
+>f : F
+>  : ^
+>f.p : 2
+>    : ^
+>f : F
+>  : ^
+>p : 2
+>  : ^
+
+// function expressions are still allowed, by analogy with function declarations
+const e = () => 4
+>e : { (): number; q: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => 4 : { (): number; q: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>4 : 4
+>  : ^
+
+e.q = 5
+>e.q = 5 : 5
+>        : ^
+>e.q : number
+>    : ^^^^^^
+>e : { (): number; q: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>q : number
+>  : ^^^^^^
+>5 : 5
+>  : ^
+
+const r2 = e() + e.q
+>r2 : number
+>   : ^^^^^^
+>e() + e.q : number
+>          : ^^^^^^
+>e() : number
+>    : ^^^^^^
+>e : { (): number; q: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>e.q : number
+>    : ^^^^^^
+>e : { (): number; q: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>q : number
+>  : ^^^^^^
+
+// function declarations are still allowed
+function g() {
+>g : typeof g
+>  : ^^^^^^^^
+
+    return 6
+>6 : 6
+>  : ^
+}
+g.r = 7
+>g.r = 7 : 7
+>        : ^
+>g.r : number
+>    : ^^^^^^
+>g : typeof g
+>  : ^^^^^^^^
+>r : number
+>  : ^^^^^^
+>7 : 7
+>  : ^
+
+const r3 = g() + g.r
+>r3 : number
+>   : ^^^^^^
+>g() + g.r : number
+>          : ^^^^^^
+>g() : number
+>    : ^^^^^^
+>g : typeof g
+>  : ^^^^^^^^
+>g.r : number
+>    : ^^^^^^
+>g : typeof g
+>  : ^^^^^^^^
+>r : number
+>  : ^^^^^^
+

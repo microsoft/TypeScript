@@ -12188,6 +12188,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let links = getSymbolLinks(symbol);
         const originalLinks = links;
         if (!links.type) {
+            // Disable all this block to turn off expando assignments for all function expressions
             const expando = symbol.valueDeclaration && getSymbolOfExpando(symbol.valueDeclaration, /*allowDeclaration*/ false);
             if (expando) {
                 const merged = mergeJSSymbols(symbol, expando);
@@ -37144,6 +37145,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isVariableDeclaration(node.parent) && node.parent.initializer === node) {
             if (!isInJSFile(node) && !(isVarConstLike(node.parent) && isFunctionLikeDeclaration(node))) {
                 return undefined;
+            }
+            // require no type to disable only for annotated function expressions
+            if (node.parent.type) {
+                return undefined
             }
             name = node.parent.name;
             decl = node.parent;
