@@ -4854,11 +4854,23 @@ interface CSSStyleDeclaration {
     paddingTop: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/page) */
     page: string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/page-break-after) */
+    /**
+     * @deprecated
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/page-break-after)
+     */
     pageBreakAfter: string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/page-break-before) */
+    /**
+     * @deprecated
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/page-break-before)
+     */
     pageBreakBefore: string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/page-break-inside) */
+    /**
+     * @deprecated
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/page-break-inside)
+     */
     pageBreakInside: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/paint-order) */
     paintOrder: string;
@@ -5967,17 +5979,20 @@ interface CanvasRect {
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D)
  */
-interface CanvasRenderingContext2D extends CanvasCompositing, CanvasDrawImage, CanvasDrawPath, CanvasFillStrokeStyles, CanvasFilters, CanvasImageData, CanvasImageSmoothing, CanvasPath, CanvasPathDrawingStyles, CanvasRect, CanvasShadowStyles, CanvasState, CanvasText, CanvasTextDrawingStyles, CanvasTransform, CanvasUserInterface {
+interface CanvasRenderingContext2D extends CanvasCompositing, CanvasDrawImage, CanvasDrawPath, CanvasFillStrokeStyles, CanvasFilters, CanvasImageData, CanvasImageSmoothing, CanvasPath, CanvasPathDrawingStyles, CanvasRect, CanvasSettings, CanvasShadowStyles, CanvasState, CanvasText, CanvasTextDrawingStyles, CanvasTransform, CanvasUserInterface {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/canvas) */
     readonly canvas: HTMLCanvasElement;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/getContextAttributes) */
-    getContextAttributes(): CanvasRenderingContext2DSettings;
 }
 
 declare var CanvasRenderingContext2D: {
     prototype: CanvasRenderingContext2D;
     new(): CanvasRenderingContext2D;
 };
+
+interface CanvasSettings {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/getContextAttributes) */
+    getContextAttributes(): CanvasRenderingContext2DSettings;
+}
 
 interface CanvasShadowStyles {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/shadowBlur) */
@@ -6684,7 +6699,9 @@ interface DOMMatrixReadOnly {
     readonly e: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly f: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/is2D) */
     readonly is2D: boolean;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/isIdentity) */
     readonly isIdentity: boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly m11: number;
@@ -11439,7 +11456,7 @@ interface HTMLImageElement extends HTMLElement {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/decoding) */
     decoding: "async" | "sync" | "auto";
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/fetchPriority) */
-    fetchPriority: string;
+    fetchPriority: "high" | "low" | "auto";
     /**
      * Sets or retrieves the height of the object.
      *
@@ -11958,7 +11975,7 @@ interface HTMLLinkElement extends HTMLElement, LinkStyle {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/disabled) */
     disabled: boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/fetchPriority) */
-    fetchPriority: string;
+    fetchPriority: "high" | "low" | "auto";
     /**
      * Sets or retrieves a destination URL or an anchor point.
      *
@@ -12430,7 +12447,11 @@ interface HTMLModElement extends HTMLElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLModElement/cite)
      */
     cite: string;
-    /** Sets or retrieves the date and time of a modification to the object. */
+    /**
+     * Sets or retrieves the date and time of a modification to the object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLModElement/dateTime)
+     */
     dateTime: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLModElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -13004,7 +13025,7 @@ interface HTMLScriptElement extends HTMLElement {
      */
     event: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLScriptElement/fetchPriority) */
-    fetchPriority: string;
+    fetchPriority: "high" | "low" | "auto";
     /**
      * Sets or retrieves the object that is bound to the event script.
      * @deprecated
@@ -15115,7 +15136,7 @@ interface ImageDecoder {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageDecoder/complete) */
     readonly complete: boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageDecoder/completed) */
-    readonly completed: Promise<undefined>;
+    readonly completed: Promise<void>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageDecoder/tracks) */
     readonly tracks: ImageTrackList;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageDecoder/type) */
@@ -15157,7 +15178,7 @@ interface ImageTrackList {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageTrackList/length) */
     readonly length: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageTrackList/ready) */
-    readonly ready: Promise<undefined>;
+    readonly ready: Promise<void>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageTrackList/selectedIndex) */
     readonly selectedIndex: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageTrackList/selectedTrack) */
@@ -16391,9 +16412,9 @@ interface MessageEventTargetEventMap {
 
 interface MessageEventTarget<T> {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DedicatedWorkerGlobalScope/message_event) */
-    onmessage: ((this: T, ev: MessageEvent) => any) | null;
+    onmessage: ((this: MessageEventTarget<T>, ev: MessageEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DedicatedWorkerGlobalScope/messageerror_event) */
-    onmessageerror: ((this: T, ev: MessageEvent) => any) | null;
+    onmessageerror: ((this: MessageEventTarget<T>, ev: MessageEvent) => any) | null;
     addEventListener<K extends keyof MessageEventTargetEventMap>(type: K, listener: (this: MessageEventTarget<T>, ev: MessageEventTargetEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof MessageEventTargetEventMap>(type: K, listener: (this: MessageEventTarget<T>, ev: MessageEventTargetEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -19612,7 +19633,7 @@ declare var ReadableStreamDefaultReader: {
 
 interface ReadableStreamGenericReader {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader/closed) */
-    readonly closed: Promise<undefined>;
+    readonly closed: Promise<void>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader/cancel) */
     cancel(reason?: any): Promise<void>;
 }
@@ -20186,8 +20207,11 @@ interface SVGAnimationElement extends SVGElement, SVGTests {
     endElement(): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimationElement/endElementAt) */
     endElementAt(offset: number): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimationElement/getCurrentTime) */
     getCurrentTime(): number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimationElement/getSimpleDuration) */
     getSimpleDuration(): number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimationElement/getStartTime) */
     getStartTime(): number;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGAnimationElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -20868,8 +20892,11 @@ declare var SVGFEOffsetElement: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEPointLightElement)
  */
 interface SVGFEPointLightElement extends SVGElement {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEPointLightElement/x) */
     readonly x: SVGAnimatedNumber;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEPointLightElement/y) */
     readonly y: SVGAnimatedNumber;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEPointLightElement/z) */
     readonly z: SVGAnimatedNumber;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEPointLightElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -20920,8 +20947,11 @@ interface SVGFESpotLightElement extends SVGElement {
     readonly pointsAtY: SVGAnimatedNumber;
     readonly pointsAtZ: SVGAnimatedNumber;
     readonly specularExponent: SVGAnimatedNumber;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFESpotLightElement/x) */
     readonly x: SVGAnimatedNumber;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFESpotLightElement/y) */
     readonly y: SVGAnimatedNumber;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFESpotLightElement/z) */
     readonly z: SVGAnimatedNumber;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFESpotLightElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -24149,12 +24179,12 @@ declare var VideoPlaybackQuality: {
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ViewTransition) */
 interface ViewTransition {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ViewTransition/finished) */
-    readonly finished: Promise<undefined>;
+    readonly finished: Promise<void>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ViewTransition/ready) */
-    readonly ready: Promise<undefined>;
+    readonly ready: Promise<void>;
     types: ViewTransitionTypeSet;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ViewTransition/updateCallbackDone) */
-    readonly updateCallbackDone: Promise<undefined>;
+    readonly updateCallbackDone: Promise<void>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ViewTransition/skipTransition) */
     skipTransition(): void;
 }
@@ -26745,7 +26775,7 @@ interface WebTransport {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransport/incomingUnidirectionalStreams) */
     readonly incomingUnidirectionalStreams: ReadableStream;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransport/ready) */
-    readonly ready: Promise<undefined>;
+    readonly ready: Promise<void>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransport/close) */
     close(closeInfo?: WebTransportCloseInfo): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransport/createBidirectionalStream) */
@@ -27259,8 +27289,6 @@ interface WindowSessionStorage {
 }
 
 interface WorkerEventMap extends AbstractWorkerEventMap, MessageEventTargetEventMap {
-    "message": MessageEvent;
-    "messageerror": MessageEvent;
 }
 
 /**
@@ -27361,11 +27389,11 @@ declare var WritableStreamDefaultController: {
  */
 interface WritableStreamDefaultWriter<W = any> {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/closed) */
-    readonly closed: Promise<undefined>;
+    readonly closed: Promise<void>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/desiredSize) */
     readonly desiredSize: number | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/ready) */
-    readonly ready: Promise<undefined>;
+    readonly ready: Promise<void>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/abort) */
     abort(reason?: any): Promise<void>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/close) */
