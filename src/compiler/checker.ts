@@ -20422,6 +20422,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const newMapper = createTypeMapper(root.outerTypeParameters, typeArguments);
                 const checkType = root.checkType;
                 let distributionType = root.isDistributive ? getReducedType(getMappedType(checkType, newMapper)) : undefined;
+                if (distributionType && isNoInferType(distributionType)) {
+                    distributionType = (distributionType as SubstitutionType).baseType;
+                }
                 let narrowingBaseType: Type | undefined;
                 const forNarrowing = distributionType && isNarrowingSubstitutionType(distributionType) && isNarrowableConditionalType(type, mapper);
                 if (forNarrowing) {

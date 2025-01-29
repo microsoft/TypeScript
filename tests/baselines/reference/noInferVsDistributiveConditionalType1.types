@@ -1,0 +1,141 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/noInferVsDistributiveConditionalType1.ts] ////
+
+=== noInferVsDistributiveConditionalType1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61076
+
+type FooEvent = { type: "FOO" };
+>FooEvent : FooEvent
+>         : ^^^^^^^^
+>type : "FOO"
+>     : ^^^^^
+
+type BarEvent = { type: "BAR" };
+>BarEvent : BarEvent
+>         : ^^^^^^^^
+>type : "BAR"
+>     : ^^^^^
+
+type Input = FooEvent | BarEvent;
+>Input : Input
+>      : ^^^^^
+
+type Result = Extract<NoInfer<Input>, FooEvent>;
+>Result : FooEvent
+>       : ^^^^^^^^
+
+type EventObject = {
+>EventObject : EventObject
+>            : ^^^^^^^^^^^
+
+  type: string;
+>type : string
+>     : ^^^^^^
+
+};
+
+type ActionFunction<
+>ActionFunction : ActionFunction<TExpressionEvent, TEvent>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TExpressionEvent extends EventObject,
+  TEvent extends EventObject,
+> = {
+  (args: { event: TExpressionEvent }): void;
+>args : { event: TExpressionEvent; }
+>     : ^^^^^^^^^                ^^^
+>event : TExpressionEvent
+>      : ^^^^^^^^^^^^^^^^
+
+  _out_TEvent?: TEvent;
+>_out_TEvent : TEvent | undefined
+>            : ^^^^^^^^^^^^^^^^^^
+
+};
+
+type TransitionsConfig<TEvent extends EventObject> = {
+>TransitionsConfig : TransitionsConfig<TEvent>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in TEvent["type"]]?: {
+    actions?: ActionFunction<Extract<TEvent, { type: K }>, TEvent>;
+>actions : ActionFunction<Extract<TEvent, { type: K; }>, TEvent> | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : K
+>     : ^
+
+  };
+};
+
+declare function createMachine<TEvent extends EventObject>(config: {
+>createMachine : <TEvent extends EventObject>(config: { types?: { events?: TEvent; }; on?: TransitionsConfig<NoInfer<TEvent>>; }) => void
+>              : ^      ^^^^^^^^^           ^^      ^^                                                                          ^^^^^    
+>config : { types?: { events?: TEvent; }; on?: TransitionsConfig<NoInfer<TEvent>>; }
+>       : ^^^^^^^^^^                    ^^^^^^^                                  ^^^
+
+  types?: {
+>types : { events?: TEvent; } | undefined
+>      : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+
+    events?: TEvent;
+>events : TEvent | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+
+  };
+  on?: TransitionsConfig<NoInfer<TEvent>>;
+>on : TransitionsConfig<NoInfer<TEvent>> | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+}): void;
+
+createMachine({
+>createMachine({  types: {    events: {} as Input,  },  on: {    FOO: {      actions: ({ event }) => {        event; // { type: "FOO"; }      },    },  },}) : void
+>                                                                                                                                                            : ^^^^
+>createMachine : <TEvent extends EventObject>(config: { types?: { events?: TEvent; }; on?: TransitionsConfig<NoInfer<TEvent>>; }) => void
+>              : ^      ^^^^^^^^^           ^^      ^^                                                                          ^^^^^    
+>{  types: {    events: {} as Input,  },  on: {    FOO: {      actions: ({ event }) => {        event; // { type: "FOO"; }      },    },  },} : { types: { events: Input; }; on: { FOO: { actions: ({ event }: { event: FooEvent; }) => void; }; }; }
+>                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  types: {
+>types : { events: Input; }
+>      : ^^^^^^^^^^     ^^^
+>{    events: {} as Input,  } : { events: Input; }
+>                             : ^^^^^^^^^^     ^^^
+
+    events: {} as Input,
+>events : Input
+>       : ^^^^^
+>{} as Input : Input
+>            : ^^^^^
+>{} : {}
+>   : ^^
+
+  },
+  on: {
+>on : { FOO: { actions: ({ event }: { event: FooEvent; }) => void; }; }
+>   : ^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    FOO: {      actions: ({ event }) => {        event; // { type: "FOO"; }      },    },  } : { FOO: { actions: ({ event }: { event: FooEvent; }) => void; }; }
+>                                                                                              : ^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    FOO: {
+>FOO : { actions: ({ event }: { event: FooEvent; }) => void; }
+>    : ^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      actions: ({ event }) => {        event; // { type: "FOO"; }      },    } : { actions: ({ event }: { event: FooEvent; }) => void; }
+>                                                                                : ^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      actions: ({ event }) => {
+>actions : ({ event }: { event: FooEvent; }) => void
+>        : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({ event }) => {        event; // { type: "FOO"; }      } : ({ event }: { event: FooEvent; }) => void
+>                                                          : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>event : FooEvent
+>      : ^^^^^^^^
+
+        event; // { type: "FOO"; }
+>event : FooEvent
+>      : ^^^^^^^^
+
+      },
+    },
+  },
+});
+
