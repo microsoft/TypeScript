@@ -215,7 +215,7 @@ func (t *parseTask) start(loader *fileLoader) {
 
 func (p *fileLoader) parseSourceFile(fileName string) *ast.SourceFile {
 	path := tspath.ToPath(fileName, p.host.GetCurrentDirectory(), p.host.FS().UseCaseSensitiveFileNames())
-	sourceFile := p.host.GetSourceFile(fileName, p.compilerOptions.GetEmitScriptTarget(), p.programOptions.JSDocParsingMode)
+	sourceFile := p.host.GetSourceFile(fileName, p.compilerOptions.GetEmitScriptTarget())
 	sourceFile.SetPath(path)
 	return sourceFile
 }
