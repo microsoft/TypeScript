@@ -19328,7 +19328,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const typeParamMapper = combineTypeMappers((newType as ConditionalType).mapper, newMapper);
                     const typeArguments = map(newRoot.outerTypeParameters, t => getMappedType(t, typeParamMapper));
                     const newRootMapper = createTypeMapper(newRoot.outerTypeParameters, typeArguments);
-                    const newCheckType = newRoot.isDistributive ? getMappedType(newRoot.checkType, newRootMapper) : undefined;
+                    let newCheckType = newRoot.isDistributive ? getMappedType(newRoot.checkType, newRootMapper) : undefined;
+                    if (newCheckType && isNoInferType(newCheckType)) {
+                        newCheckType = (newCheckType as SubstitutionType).baseType;
+                    }
                     if (!newCheckType || newCheckType === newRoot.checkType || !(newCheckType.flags & (TypeFlags.Union | TypeFlags.Never))) {
                         root = newRoot;
                         mapper = newRootMapper;
