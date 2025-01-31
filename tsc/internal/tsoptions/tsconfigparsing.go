@@ -146,10 +146,10 @@ func parseOwnConfigOfJsonSourceFile(
 				if commandLineOptionEnumMapVal != nil {
 					val, ok := commandLineOptionEnumMapVal.Get(strings.ToLower(value.(string)))
 					if ok {
-						propertySetErrors = append(propertySetErrors, parseCompilerOptions(option.Name, val, options)...)
+						propertySetErrors = append(propertySetErrors, ParseCompilerOptions(option.Name, val, options)...)
 					}
 				} else {
-					propertySetErrors = append(propertySetErrors, parseCompilerOptions(option.Name, value, options)...)
+					propertySetErrors = append(propertySetErrors, ParseCompilerOptions(option.Name, value, options)...)
 				}
 			} else if keyText != "" {
 				if parentOption.ElementOptions != nil {
@@ -167,7 +167,7 @@ func parseOwnConfigOfJsonSourceFile(
 				if keyText == "excludes" {
 					propertySetErrors = append(propertySetErrors, createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, propertyAssignment.Name(), diagnostics.Unknown_option_excludes_Did_you_mean_exclude))
 				}
-				if core.Find(optionsDeclarations, func(option *CommandLineOption) bool { return option.Name == keyText }) != nil {
+				if core.Find(OptionsDeclarations, func(option *CommandLineOption) bool { return option.Name == keyText }) != nil {
 					rootCompilerOptions = append(rootCompilerOptions, propertyAssignment.Name())
 				}
 			}
@@ -361,7 +361,7 @@ func convertJsonOption(
 	sourceFile *ast.SourceFile,
 ) (any, []*ast.Diagnostic) {
 	var errors []*ast.Diagnostic
-	if opt.isCommandLineOnly {
+	if opt.IsCommandLineOnly {
 		var nodeValue *ast.Node
 		if propertyAssignment != nil {
 			nodeValue = propertyAssignment.Name()
@@ -500,7 +500,7 @@ func commandLineOptionsToMap(options []*CommandLineOption) map[string]*CommandLi
 	return result
 }
 
-var commandLineCompilerOptionsMap map[string]*CommandLineOption = commandLineOptionsToMap(optionsDeclarations)
+var commandLineCompilerOptionsMap map[string]*CommandLineOption = commandLineOptionsToMap(OptionsDeclarations)
 
 func convertOptionsFromJson(optionsNameMap map[string]*CommandLineOption, jsonOptions any, basePath string, result *core.CompilerOptions) (*core.CompilerOptions, []*ast.Diagnostic) {
 	if jsonOptions == nil {
@@ -514,12 +514,12 @@ func convertOptionsFromJson(optionsNameMap map[string]*CommandLineOption, jsonOp
 			if commandLineOptionEnumMapVal != nil {
 				val, ok := commandLineOptionEnumMapVal.Get(strings.ToLower(value.(string)))
 				if ok {
-					errors = parseCompilerOptions(key, val, result)
+					errors = ParseCompilerOptions(key, val, result)
 				}
 			} else if ok {
 				convertJson, err := convertJsonOption(opt, value, basePath, nil, nil, nil)
 				errors = append(errors, err...)
-				compilerOptionsErr := parseCompilerOptions(key, convertJson, result)
+				compilerOptionsErr := ParseCompilerOptions(key, convertJson, result)
 				errors = append(errors, compilerOptionsErr...)
 			}
 			// else {

@@ -274,26 +274,34 @@ func (p *CommandLineParser) parseOptionValue(
 }
 
 func (p *CommandLineParser) parseListTypeOption(opt *CommandLineOption, value string) []string {
+	elements, errors := ParseListTypeOption(opt, value)
+	p.errors = append(p.errors, errors...)
+	return elements
+}
+
+func ParseListTypeOption(opt *CommandLineOption, value string) ([]string, []*ast.Diagnostic) {
 	value = strings.TrimSpace(value)
+	var errors []*ast.Diagnostic
 	if strings.HasPrefix(value, "-") {
-		return []string{}
+		return []string{}, errors
 	}
 	if opt.Kind == "listOrElement" && !strings.ContainsRune(value, ',') {
 		val, err := validateJsonOptionValue(opt, value, nil, nil)
-		p.errors = append(p.errors, err...)
-		return []string{val.(string)}
+		errors = append(errors, err...)
+		return []string{val.(string)}, errors
 	}
 	if value == "" {
-		return []string{}
+		return []string{}, errors
 	}
 	values := strings.Split(value, ",")
 	switch opt.Elements().Kind {
 	case "string":
-		return core.Filter(core.Map(values, func(v string) string {
+		elements := core.Filter(core.Map(values, func(v string) string {
 			val, err := validateJsonOptionValue(opt.Elements(), v, nil, nil)
-			p.errors = append(p.errors, err...)
+			errors = append(errors, err...)
 			return val.(string)
 		}), isDefined)
+		return elements, errors
 	case "boolean", "object", "number":
 		// do nothing: only string and enum/object types currently allowed as list entries
 		// 				!!! we don't actually have number list options, so I didn't implement number list parsing
@@ -304,7 +312,7 @@ func (p *CommandLineParser) parseListTypeOption(opt *CommandLineOption, value st
 			if _, ok := val.(string); ok {
 				return val.(string)
 			}
-			p.errors = append(p.errors, err...)
+			errors = append(errors, err...)
 			return ""
 		})
 		var mappedValues []string
@@ -313,7 +321,7 @@ func (p *CommandLineParser) parseListTypeOption(opt *CommandLineOption, value st
 				mappedValues = append(mappedValues, v)
 			}
 		}
-		return mappedValues
+		return mappedValues, errors
 	}
 }
 

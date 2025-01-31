@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/settingsSimpleTest.ts] ////
+
+=== /settingsSimpleTest.ts ===
+export {};
+const x: string = undefined;
+>x : Symbol(x, Decl(settingsSimpleTest.ts, 1, 5))
+>undefined : Symbol(undefined)
+

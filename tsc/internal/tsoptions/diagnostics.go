@@ -25,7 +25,7 @@ type ParseCommandLineWorkerDiagnostics struct {
 	OptionTypeMismatchDiagnostic *diagnostics.Message
 }
 
-var CompilerOptionsDidYouMeanDiagnostics = getParseCommandLineWorkerDiagnostics(optionsDeclarations)
+var CompilerOptionsDidYouMeanDiagnostics = getParseCommandLineWorkerDiagnostics(OptionsDeclarations)
 
 func getParseCommandLineWorkerDiagnostics(decls []*CommandLineOption) *ParseCommandLineWorkerDiagnostics {
 	// todo watch, build

@@ -20,18 +20,13 @@ function bar() { return "b"; }`
 	testUnit1 := &testUnit{
 		content: `function foo() { return "a"; }
 // normal comment`,
-		name: "firstFile.ts",
-		fileOptions: map[string]string{
-			"strict": "true",
-			"noemit": "true",
-		},
+		name:             "firstFile.ts",
 		originalFilePath: "simpleTest.ts",
 	}
 	testUnit2 := &testUnit{
 		content: `// some other comment
 function bar() { return "b"; }`,
 		name:             "secondFile.ts",
-		fileOptions:      map[string]string{},
 		originalFilePath: "simpleTest.ts",
 	}
 	testContent := testCaseContent{

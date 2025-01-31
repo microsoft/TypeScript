@@ -25,7 +25,7 @@ type CommandLineOption struct {
 	// used in parsing
 	isFilePath        bool
 	isTSConfigOnly    bool
-	isCommandLineOnly bool
+	IsCommandLineOnly bool
 
 	// used in output
 	description              *diagnostics.Message
@@ -43,14 +43,14 @@ type CommandLineOption struct {
 	allowConfigDirTemplateSubstitution bool
 
 	// used for filter in compilerrunner
-	affectsDeclarationPath     bool
-	affectsProgramStructure    bool
-	affectsSemanticDiagnostics bool
-	affectsBuildInfo           bool
-	affectsBindDiagnostics     bool
-	affectsSourceFile          bool
-	affectsModuleResolution    bool
-	affectsEmit                bool
+	AffectsDeclarationPath     bool
+	AffectsProgramStructure    bool
+	AffectsSemanticDiagnostics bool
+	AffectsBuildInfo           bool
+	AffectsBindDiagnostics     bool
+	AffectsSourceFile          bool
+	AffectsModuleResolution    bool
+	AffectsEmit                bool
 
 	allowJsFlag bool
 	strictFlag  bool
