@@ -137,11 +137,10 @@ export default _default;
 export declare class User {
     name: string;
 }
-declare const TimestampedUser_base: {
+export declare class TimestampedUser extends ({} as {
     new (...args: any[]): {
         timestamp: number;
     };
-} & typeof User;
-export declare class TimestampedUser extends TimestampedUser_base {
+} & typeof User) {
     constructor();
 }

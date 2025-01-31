@@ -128,14 +128,12 @@ export declare function WithTags<T extends Constructor<FooItem>>(Base: T): {
     };
     getTags(): void;
 } & T;
-declare const Test_base: {
+export declare class Test extends ({} as {
     new (...args: any[]): {
         tags(): void;
         foo(): void;
         name?: string;
     };
     getTags(): void;
-} & typeof FooItem;
-export declare class Test extends Test_base {
+} & typeof FooItem) {
 }
-export {};
