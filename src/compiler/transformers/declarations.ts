@@ -1678,13 +1678,13 @@ export function transformDeclarations(context: TransformationContext): Transform
                         return factory.updateHeritageClause(clause, visitNodes(factory.createNodeArray(filter(clause.types, t => isEntityNameExpression(t.expression) || t.expression.kind === SyntaxKind.NullKeyword)), visitDeclarationSubtree, isExpressionWithTypeArguments));
                     }));
                     return cleanup(factory.updateClassDeclaration(
-                            input,
-                            modifiers,
-                            input.name,
-                            typeParameters,
-                            heritageClauses,
-                            members,
-                        ));
+                        input,
+                        modifiers,
+                        input.name,
+                        typeParameters,
+                        heritageClauses,
+                        members,
+                    ));
                 }
                 else {
                     const heritageClauses = transformHeritageClauses(input.heritageClauses);
