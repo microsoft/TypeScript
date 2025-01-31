@@ -16217,8 +16217,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getEffectiveTypeParameterHost(typeParameter: TypeParameter) {
-        const tp = getDeclarationOfKind<TypeParameterDeclaration>(typeParameter.symbol, SyntaxKind.TypeParameter)!;
-        return isJSDocTemplateTag(tp.parent) ? getEffectiveJSDocHost(tp.parent) : tp.parent;
+        const declarations = typeParameter.symbol.declarations;
+        if (!declarations || declarations.length !== 1) {
+            return;
+        }
+        const tpDeclaration = getDeclarationOfKind<TypeParameterDeclaration>(typeParameter.symbol, SyntaxKind.TypeParameter);
+        if (!tpDeclaration) {
+            // Type parameter is the this type, and its declaration is the class declaration.
+            return typeParameter.isThisType ? declarations[0].parent : undefined;
+        }
+        return isJSDocTemplateTag(tpDeclaration.parent) ? getEffectiveJSDocHost(tpDeclaration.parent) : tpDeclaration.parent;
     }
 
     function getParentSymbolOfTypeParameter(typeParameter: TypeParameter): Symbol | undefined {
@@ -20193,7 +20201,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // type parameter, or if the node contains type queries that we can't prove couldn't contain references to the type parameter,
         // we consider the type parameter possibly referenced.
         if (tp.symbol && tp.symbol.declarations && tp.symbol.declarations.length === 1) {
-            const container = tp.symbol.declarations[0].parent;
+            const container = getEffectiveTypeParameterHost(tp);
             for (let n = node; n !== container; n = n.parent) {
                 if (!n || n.kind === SyntaxKind.Block || n.kind === SyntaxKind.ConditionalType && forEachChild((n as ConditionalTypeNode).extendsType, containsReference)) {
                     return true;
@@ -20214,12 +20222,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const firstIdentifier = getFirstIdentifier(entityName);
                     if (!isThisIdentifier(firstIdentifier)) { // Don't attempt to analyze typeof this.xxx
                         const firstIdentifierSymbol = getResolvedSymbol(firstIdentifier);
-                        const tpDeclaration = tp.symbol.declarations![0]; // There is exactly one declaration, otherwise `containsReference` is not called
-                        const tpScope = tpDeclaration.kind === SyntaxKind.TypeParameter ? tpDeclaration.parent : // Type parameter is a regular type parameter, e.g. foo<T>
-                            tp.isThisType ? tpDeclaration : // Type parameter is the this type, and its declaration is the class declaration.
-                            undefined; // Type parameter's declaration was unrecognized, e.g. comes from JSDoc annotation.
-                        if (firstIdentifierSymbol.declarations && tpScope) {
-                            return some(firstIdentifierSymbol.declarations, idDecl => isNodeDescendantOf(idDecl, tpScope)) ||
+                        const tpHost = getEffectiveTypeParameterHost(tp);
+                        if (firstIdentifierSymbol.declarations && tpHost) {
+                            return some(firstIdentifierSymbol.declarations, idDecl => isNodeDescendantOf(idDecl, tpHost)) ||
                                 some((node as TypeQueryNode).typeArguments, containsReference);
                         }
                     }
