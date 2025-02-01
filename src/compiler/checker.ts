@@ -46040,7 +46040,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function isReferenced(node: Node): boolean {
                 if (isTypeReferenceNode(node)) {
-                    return isReferenceToTypeParameter(typeParam, node);
+                    return isReferenceToTypeParameter(typeParam, node) || some(node.typeArguments, isReferenced);
                 }
                 if (isTypeQueryNode(node)) {
                     return isTypeParameterPossiblyReferenced(typeParam, node);
@@ -46049,7 +46049,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
     }
-
 
     /**
      * Determines if the type parameter constraint allows for narrowing of that type parameter.
