@@ -4434,8 +4434,8 @@ namespace Parser {
         parseExpected(SyntaxKind.CloseBraceToken);
         return withJSDoc(
             finishNode(factory.createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type, members), pos),
-            hasJSDoc
-        ) ;
+            hasJSDoc,
+        );
     }
 
     function parseTupleElementType() {

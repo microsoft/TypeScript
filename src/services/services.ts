@@ -15,6 +15,7 @@ import {
     canIncludeBindAndCheckDiagnostics,
     changeCompilerHostLikeToUseCache,
     CharacterCodes,
+    CheckFlags,
     CheckJsDirective,
     Classifications,
     ClassifiedSpan,
@@ -346,7 +347,6 @@ import {
     updateSourceFile,
     UserPreferences,
     VariableDeclaration,
-    CheckFlags,
 } from "./_namespaces/ts.js";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo.js";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar.js";
