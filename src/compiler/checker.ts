@@ -45994,6 +45994,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const typeNode = getEffectiveTypeAnnotationNode(paramDecl);
                     if (!typeNode) continue;
                     if (isTypeParameterReferenced(typeParam, typeNode)) {
+                        // >> TODO: for testing
+                        getValidTypeParameterReference(typeNode, typeParam, []);
                         let candidateReference;
                         if (
                             isTypeReferenceNode(typeNode) &&
@@ -46035,12 +46037,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getTypeFromTypeReference(node) === typeParam;
         }
 
-        function isTypeParameterReferenced(typeParam: TypeParameter, node: TypeNode) {
+        function isTypeParameterReferenced(typeParam: TypeParameter, node: Node) {
             return isReferenced(node);
 
             function isReferenced(node: Node): boolean {
                 if (isTypeReferenceNode(node)) {
-                    return isReferenceToTypeParameter(typeParam, node);
+                    return isReferenceToTypeParameter(typeParam, node) || some(node.typeArguments, isReferenced);
                 }
                 if (isTypeQueryNode(node)) {
                     return isTypeParameterPossiblyReferenced(typeParam, node);
@@ -46048,7 +46050,67 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !!forEachChild(node, isReferenced);
             }
         }
+        function newGetValidParameterReference(paramDecl: ParameterDeclaration, paramType: TypeNode): QualifiedName | undefined {
+            var TODO = undefined;
+            if (isIdentifier(paramDecl.name)) {
+                return TODO; // same as above?
+            }
+            else if (isObjectBindingPattern(paramDecl.name)) {
+                
+            }
+            else { // ArrayBindingPattern, unsupported
+                return undefined;
+            }
+        }
+    
+        // path initially is empty; it's an accumulator
+        // We need two things:
+        // (1) validate all syntactic occurrences of type parameter
+        // (2) collect valid narrowable references (i.e. a path) to a valid occurrence to type parameter
+        // TODO: should this function do both?
+        function getValidTypeParameterReference(typeNode: Node, typeParam: TypeParameter, path: Identifier[]): Identifier[] | boolean {
+            switch (typeNode.kind) {
+                case SyntaxKind.TypeReference:
+                    const type = getTypeFromTypeReference((typeNode as TypeReferenceNode));
+                    if (type === typeParam) { // `T`
+                        return path;
+                    }
+                    const typeArgs = (typeNode as TypeReferenceNode).typeArguments;
+                    // Type arguments that reference `T`
+                    const typeArgsReferenced = typeArgs?.filter(node => isTypeParameterReferenced(typeParam, node))
+                    if (!typeArgsReferenced || typeArgsReferenced.length == 0) return true; // Type reference unrelated to `T`
+                    if (typeArgsReferenced && typeArgsReferenced.length > 1) return false; // e.g. `Foo<T, T, ...>`
+                    const typeArg = typeArgsReferenced[0];
+                    if (!(typeArg.kind & SyntaxKind.TypeReference)) return false; // e.g. `Foo<Wrapper<T>, ...>`
+                    if (!type.symbol || !type.symbol.declarations || type.symbol.declarations.length != 1) return false;
+                    const typeDeclaration = type.symbol.declarations[0];
+                    let aliasDeclaration;
+                    if (isTypeLiteralNode(typeDeclaration)) {
+                        aliasDeclaration = walkUpParenthesizedTypes(typeDeclaration.parent);
+                        if (!isTypeAliasDeclaration(aliasDeclaration)) return false;
+                    } else if (isInterfaceDeclaration(typeDeclaration)) {
+                        aliasDeclaration = typeDeclaration;
+                    } else {
+                        return false; // Unsuported case, e.g. `class Foo<...> ...`, `type Foo<...> = { [P in Foo]: ... }`, etc.
+                    }
+                    const typeArgIndex = typeArgs!.findIndex(arg => arg === typeArg);
+                    const matchingTypeParamDecl = aliasDeclaration.typeParameters?.[typeArgIndex];
+                    if (!matchingTypeParamDecl) return false; // Shouldn't happen, unless there is an error in the program.
+                    const matchingTypeParam = getTypeOfSymbol(getSymbolOfDeclaration(matchingTypeParamDecl)) as TypeParameter; // >> TODO: better way?
+                    return getValidTypeParameterReference(typeDeclaration, matchingTypeParam, path);
+                case SyntaxKind.TypeLiteral:
+                    // TODO: collect all paths/validity from all properties, and validate and return a single path.
+                    // TODO: should support optional property?
+                    // TODO: only support normal properties in referencing `T`, methods etc should not reference `T`
+                case SyntaxKind.InterfaceDeclaration:
+                    // TODO: same as type literal, but also need to worry about `extends` clauses.
+                default:
+                    // If we see a reference to `T` in the type node here, invalidate the whole thing.
+                    return !isTypeParameterReferenced(typeParam, typeNode);
+            }
+        }
     }
+
 
 
     /**
