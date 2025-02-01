@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts] ////
+
+=== controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts ===
+const foo_autoType = <T extends 1 | 2>(bar: T) => {
+>foo_autoType : Symbol(foo_autoType, Decl(controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts, 0, 5))
+>T : Symbol(T, Decl(controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts, 0, 22))
+>bar : Symbol(bar, Decl(controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts, 0, 39))
+>T : Symbol(T, Decl(controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts, 0, 22))
+
+  let test1;
+>test1 : Symbol(test1, Decl(controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts, 1, 5))
+
+  test1 = bar;
+>test1 : Symbol(test1, Decl(controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts, 1, 5))
+>bar : Symbol(bar, Decl(controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts, 0, 39))
+
+  return test1;
+>test1 : Symbol(test1, Decl(controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts, 1, 5))
+
+};
+
+const foo_autoArrayType = <T extends 1 | 2>(bar: T) => {
+>foo_autoArrayType : Symbol(foo_autoArrayType, Decl(controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts, 6, 5))
+>T : Symbol(T, Decl(controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts, 6, 27))
+>bar : Symbol(bar, Decl(controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts, 6, 44))
+>T : Symbol(T, Decl(controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts, 6, 27))
+
+  let test1 = [];
+>test1 : Symbol(test1, Decl(controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts, 7, 5))
+
+  test1.push(bar);
+>test1.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>test1 : Symbol(test1, Decl(controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts, 7, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts, 6, 44))
+
+  return test1;
+>test1 : Symbol(test1, Decl(controlFlowGenericTypesNarrowableReferencesWithAutoTypes1.ts, 7, 5))
+
+};
+

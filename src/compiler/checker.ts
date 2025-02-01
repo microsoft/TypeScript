@@ -1335,6 +1335,7 @@ export const enum CheckMode {
                                                     //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
                                                     //   we need to preserve generic types instead of substituting them for constraints
     TypeOnly = 1 << 6,                              // Called from getTypeOfExpression, diagnostics may be omitted
+    SatisfiesOutput = 1 << 7,                       // Used to get output type of a satisfies expression unaffected by narrowable types for references, used in combination with `ContextFlags.SkipSatisfies`
 }
 
 /** @internal */
@@ -29853,17 +29854,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             !!(type.flags & TypeFlags.Instantiable && !maybeTypeOfKind(getBaseConstraintOrType(type), TypeFlags.Nullable));
     }
 
-    function hasContextualTypeWithNoGenericTypes(node: Node, checkMode: CheckMode | undefined) {
+    function hasContextualTypeWithNoGenericTypes(node: Node, checkMode = CheckMode.Normal) {
         // Computing the contextual type for a child of a JSX element involves resolving the type of the
         // element's tag name, so we exclude that here to avoid circularities.
         // If check mode has `CheckMode.RestBindingElement`, we skip binding pattern contextual types,
         // as we want the type of a rest element to be generic when possible.
         const contextualType = (isIdentifier(node) || isPropertyAccessExpression(node) || isElementAccessExpression(node)) &&
             !((isJsxOpeningElement(node.parent) || isJsxSelfClosingElement(node.parent)) && node.parent.tagName === node) &&
-            (checkMode && checkMode & CheckMode.RestBindingElement ?
-                getContextualType(node, ContextFlags.SkipBindingPatterns)
-                : getContextualType(node, /*contextFlags*/ undefined));
-        return contextualType && !isGenericType(contextualType);
+            getContextualType(node, (checkMode & CheckMode.RestBindingElement ? ContextFlags.SkipBindingPatterns : 0) | (checkMode & CheckMode.SatisfiesOutput ? ContextFlags.SkipSatisfies : 0));
+        return contextualType && !(contextualType.flags & TypeFlags.Any) && !isGenericType(contextualType);
     }
 
     function getNarrowableTypeForReference(type: Type, reference: Node, checkMode?: CheckMode, forReturnTypeNarrowing?: boolean) {
@@ -32244,6 +32243,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.NonNullExpression:
                 return getContextualType(parent as NonNullExpression, contextFlags);
             case SyntaxKind.SatisfiesExpression:
+                if (contextFlags && contextFlags & ContextFlags.SkipSatisfies) {
+                    return getContextualType(parent as SatisfiesExpression, contextFlags);
+                }
                 return getTypeFromTypeNode((parent as SatisfiesExpression).type);
             case SyntaxKind.ExportAssignment:
                 return tryGetTypeFromEffectiveTypeNode(parent as ExportAssignment);
@@ -37643,7 +37645,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return checkSatisfiesExpressionWorker(node.expression, node.type);
     }
 
-    function checkSatisfiesExpressionWorker(expression: Expression, target: TypeNode, checkMode?: CheckMode) {
+    function checkSatisfiesExpressionWorker(expression: Expression, target: TypeNode, checkMode = CheckMode.Normal) {
         const exprType = checkExpression(expression, checkMode);
         const targetType = getTypeFromTypeNode(target);
         if (isErrorType(targetType)) {
@@ -37651,7 +37653,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const errorNode = findAncestor(target.parent, n => n.kind === SyntaxKind.SatisfiesExpression || n.kind === SyntaxKind.JSDocSatisfiesTag);
         checkTypeAssignableToAndOptionallyElaborate(exprType, targetType, errorNode, expression, Diagnostics.Type_0_does_not_satisfy_the_expected_type_1);
-        return exprType;
+        return checkExpression(expression, checkMode | CheckMode.SatisfiesOutput);
     }
 
     function checkMetaProperty(node: MetaProperty): Type {

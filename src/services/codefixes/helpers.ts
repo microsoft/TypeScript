@@ -721,7 +721,8 @@ function getArgumentTypesAndTypeParameters(checker: TypeChecker, importAdder: Im
         }
 
         argumentTypeNodes.push(argumentTypeNode);
-        const argumentTypeParameter = getFirstTypeParameterName(instanceType);
+        const type = instanceType.isIndexType() ? instanceType.type : instanceType;
+        const argumentTypeParameter = getFirstTypeParameterName(type);
 
         // If the instance type is a type parameter with a constraint (other than an anonymous object),
         // remember that constraint for when we create the new type parameter
@@ -732,12 +733,12 @@ function getArgumentTypesAndTypeParameters(checker: TypeChecker, importAdder: Im
         //    function added<T>(value: T) { ... }
         // We instead want to output:
         //    function added<T extends string>(value: T) { ... }
-        const instanceTypeConstraint = instanceType.isTypeParameter() && instanceType.constraint && !isAnonymousObjectConstraintType(instanceType.constraint)
-            ? typeToAutoImportableTypeNode(checker, importAdder, instanceType.constraint, contextNode, scriptTarget, flags, internalFlags, tracker)
+        const typeConstraint = type.isTypeParameter() && type.constraint && !isAnonymousObjectConstraintType(type.constraint)
+            ? typeToAutoImportableTypeNode(checker, importAdder, type.constraint, contextNode, scriptTarget, flags, internalFlags, tracker)
             : undefined;
 
         if (argumentTypeParameter) {
-            argumentTypeParameters.set(argumentTypeParameter, { argumentType: instanceType, constraint: instanceTypeConstraint });
+            argumentTypeParameters.set(argumentTypeParameter, { argumentType: type, constraint: typeConstraint });
         }
     }
 

@@ -155,8 +155,8 @@ function foo<K extends "a" | "b">(x: K) {
 >       : ^^^^^^^
 >isA : (x: any) => x is "a"
 >    : ^ ^^   ^^^^^        
->x : "a" | "b"
->  : ^^^^^^^^^
+>x : K
+>  : ^
 
     x;  // K & "a"
 >x : K & "a"
@@ -167,8 +167,8 @@ function foo<K extends "a" | "b">(x: K) {
 >       : ^^^^^^^
 >isB : (x: any) => x is "b"
 >    : ^ ^^   ^^^^^        
->x : "a" | "b"
->  : ^^^^^^^^^
+>x : K
+>  : ^
 
     x;  // K & "b"
 >x : K & "b"
@@ -179,8 +179,8 @@ function foo<K extends "a" | "b">(x: K) {
 >       : ^^^^^^^
 >isC : (x: any) => x is "c"
 >    : ^ ^^   ^^^^^        
->x : "a" | "b"
->  : ^^^^^^^^^
+>x : K
+>  : ^
 
     x;  // never
 >x : never
@@ -193,14 +193,14 @@ function foo<K extends "a" | "b">(x: K) {
 >       : ^^^^^^^
 >isA : (x: any) => x is "a"
 >    : ^ ^^   ^^^^^        
->x : "a" | "b"
->  : ^^^^^^^^^
+>x : K
+>  : ^
 >isB(x) : boolean
 >       : ^^^^^^^
 >isB : (x: any) => x is "b"
 >    : ^ ^^   ^^^^^        
->x : "b"
->  : ^^^
+>x : K
+>  : ^
 
     x;  // K
 >x : K
@@ -217,14 +217,14 @@ function foo<K extends "a" | "b">(x: K) {
 >       : ^^^^^^^
 >isA : (x: any) => x is "a"
 >    : ^ ^^   ^^^^^        
->x : "a" | "b"
->  : ^^^^^^^^^
+>x : K
+>  : ^
 >isB(x) : boolean
 >       : ^^^^^^^
 >isB : (x: any) => x is "b"
 >    : ^ ^^   ^^^^^        
->x : "b"
->  : ^^^
+>x : K
+>  : ^
 
     return;
   }

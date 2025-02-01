@@ -173,8 +173,8 @@ export function matchFilter<U extends Update, Q extends FilterQuery>(
 >    : ^^^^    ^^     ^^^^^    
 >"Matching" : "Matching"
 >           : ^^^^^^^^^^
->filter : "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost" | Q[]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>filter : Q | Q[]
+>       : ^^^^^^^
 
     return (up: U): up is Filter<U, Q> => !!up;
 >(up: U): up is Filter<U, Q> => !!up : (up: U) => up is Filter<U, Q>
@@ -312,8 +312,8 @@ class EventHub<U extends Update> {
 >       : ^^^^^^
 >"handlers for" : "handlers for"
 >               : ^^^^^^^^^^^^^^
->filter : "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost" | Q[]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>filter : Q | Q[]
+>       : ^^^^^^^
 
         return new EventHub<Filter<U, Q>>();
 >new EventHub<Filter<U, Q>>() : EventHub<PerformQuery<U, Combine<L1Fragment<Q>, Q>>>

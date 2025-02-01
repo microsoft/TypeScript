@@ -15,7 +15,7 @@ verify.codeFix({
   added(keyofTypeof);
 }
 
-function added(keyofTypeof: string | number | symbol) {
+function added<T>(keyofTypeof: keyof T) {
     throw new Error("Function not implemented.");
 }
 `,

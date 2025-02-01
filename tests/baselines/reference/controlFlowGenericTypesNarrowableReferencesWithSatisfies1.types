@@ -1,0 +1,215 @@
+//// [tests/cases/compiler/controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts] ////
+
+=== controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts ===
+// https://github.com/microsoft/TypeScript/issues/52394
+
+const foo52394 = <T extends 1 | 2>(bar: T) => {
+>foo52394 : <T extends 1 | 2>(bar: T) => T
+>         : ^ ^^^^^^^^^     ^^   ^^ ^^^^^^
+><T extends 1 | 2>(bar: T) => {  const a = bar satisfies any;  return a;} : <T extends 1 | 2>(bar: T) => T
+>                                                                         : ^ ^^^^^^^^^     ^^   ^^ ^^^^^^
+>bar : T
+>    : ^
+
+  const a = bar satisfies any;
+>a : T
+>  : ^
+>bar satisfies any : T
+>                  : ^
+>bar : T
+>    : ^
+
+  return a;
+>a : T
+>  : ^
+
+};
+
+type MyType52394 = {
+>MyType52394 : MyType52394
+>            : ^^^^^^^^^^^
+
+  a: string;
+>a : string
+>  : ^^^^^^
+
+  b: "a" | "b" | "c" | "d" | "e";
+>b : "a" | "b" | "c" | "d" | "e"
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+};
+const foo2_52394 = <T extends "a" | "b" | "c">(bar: T) =>
+>foo2_52394 : <T extends "a" | "b" | "c">(bar: T) => { a: T; b: T; }
+>           : ^ ^^^^^^^^^               ^^   ^^ ^^^^^^^^^^^^^^^^^^^^
+><T extends "a" | "b" | "c">(bar: T) =>  ({    a: bar,    b: bar,  }) satisfies MyType52394 : <T extends "a" | "b" | "c">(bar: T) => { a: T; b: T; }
+>                                                                                           : ^ ^^^^^^^^^               ^^   ^^ ^^^^^^^^^^^^^^^^^^^^
+>bar : T
+>    : ^
+
+  ({
+>({    a: bar,    b: bar,  }) satisfies MyType52394 : { a: T; b: T; }
+>                                                   : ^^^^^^^^^^^^^^^
+>({    a: bar,    b: bar,  }) : { a: "a" | "b" | "c"; b: "a" | "b" | "c"; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    a: bar,    b: bar,  } : { a: "a" | "b" | "c"; b: "a" | "b" | "c"; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a: bar,
+>a : "a" | "b" | "c"
+>  : ^^^^^^^^^^^^^^^
+>bar : "a" | "b" | "c"
+>    : ^^^^^^^^^^^^^^^
+
+    b: bar,
+>b : "a" | "b" | "c"
+>  : ^^^^^^^^^^^^^^^
+>bar : "a" | "b" | "c"
+>    : ^^^^^^^^^^^^^^^
+
+  }) satisfies MyType52394;
+
+type BoxState = "open" | "closed";
+>BoxState : BoxState
+>         : ^^^^^^^^
+
+type Box = {
+>Box : Box
+>    : ^^^
+
+  boxState: BoxState;
+>boxState : BoxState
+>         : ^^^^^^^^
+
+  boxedObject: unknown;
+>boxedObject : unknown
+>            : ^^^^^^^
+
+};
+
+function boxFactorySafe<BS extends BoxState>(
+>boxFactorySafe : <BS extends BoxState>(boxState: BS, boxedObject: unknown) => { readonly boxState: BS; readonly boxedObject: unknown; }
+>               : ^  ^^^^^^^^^        ^^        ^^  ^^           ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  boxState: BS,
+>boxState : BS
+>         : ^^
+
+  boxedObject: unknown,
+>boxedObject : unknown
+>            : ^^^^^^^
+
+) {
+  return {
+>{    boxState,    boxedObject,  } as const satisfies Box : { readonly boxState: BS; readonly boxedObject: unknown; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    boxState,    boxedObject,  } as const : { readonly boxState: BoxState; readonly boxedObject: unknown; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    boxState,    boxedObject,  } : { readonly boxState: BoxState; readonly boxedObject: unknown; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    boxState,
+>boxState : BoxState
+>         : ^^^^^^^^
+
+    boxedObject,
+>boxedObject : unknown
+>            : ^^^^^^^
+
+  } as const satisfies Box;
+}
+
+const safeBoxedObject = boxFactorySafe("open", "some value");
+>safeBoxedObject : { readonly boxState: "open"; readonly boxedObject: unknown; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>boxFactorySafe("open", "some value") : { readonly boxState: "open"; readonly boxedObject: unknown; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>boxFactorySafe : <BS extends BoxState>(boxState: BS, boxedObject: unknown) => { readonly boxState: BS; readonly boxedObject: unknown; }
+>               : ^  ^^^^^^^^^        ^^        ^^  ^^           ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"open" : "open"
+>       : ^^^^^^
+>"some value" : "some value"
+>             : ^^^^^^^^^^^^
+
+// https://github.com/microsoft/TypeScript/issues/60698
+
+type Table = "block" | "collection" | "space";
+>Table : Table
+>      : ^^^^^
+
+type RecordPointer<T extends Table> = {
+>RecordPointer : RecordPointer<T>
+>              : ^^^^^^^^^^^^^^^^
+
+  [T_ in T]: {
+    id: string;
+>id : string
+>   : ^^^^^^
+
+    table: T_;
+>table : T_
+>      : ^^
+
+  };
+}[T];
+
+function g<T extends Table>(t: T): RecordPointer<Table> {
+>g : <T extends Table>(t: T) => RecordPointer<Table>
+>  : ^ ^^^^^^^^^     ^^ ^^ ^^^^^                    
+>t : T
+>  : ^
+
+  const x = { table: t, id: "foo" } as const satisfies RecordPointer<Table>;
+>x : { readonly table: T; readonly id: "foo"; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ table: t, id: "foo" } as const satisfies RecordPointer<Table> : { readonly table: T; readonly id: "foo"; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ table: t, id: "foo" } as const : { readonly table: Table; readonly id: "foo"; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ table: t, id: "foo" } : { readonly table: Table; readonly id: "foo"; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>table : Table
+>      : ^^^^^
+>t : Table
+>  : ^^^^^
+>id : "foo"
+>   : ^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+  return x; // error
+>x : { readonly table: T; readonly id: "foo"; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+export function bounceAndTakeIfA<AB extends "A" | "B">(value: AB) {
+>bounceAndTakeIfA : <AB extends "A" | "B">(value: AB) => void
+>                 : ^  ^^^^^^^^^         ^^     ^^  ^^^^^^^^^
+>value : AB
+>      : ^^
+
+  if (value === "A") {
+>value === "A" : boolean
+>              : ^^^^^^^
+>value : AB
+>      : ^^
+>"A" : "A"
+>    : ^^^
+
+    const temp = value satisfies "A"
+>temp : AB
+>     : ^^
+>value satisfies "A" : AB
+>                    : ^^
+>value : "A"
+>      : ^^^
+
+    const takeA: "A" = value satisfies "A";
+>takeA : "A"
+>      : ^^^
+>value satisfies "A" : "A"
+>                    : ^^^
+>value : "A"
+>      : ^^^
+  }
+}
+
