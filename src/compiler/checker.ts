@@ -45940,14 +45940,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     /**
      * Narrowable type parameters are type parameters that:
-     * (1) have a union type constraint;
-     * (2) are used as the type of a single parameter in the function, and nothing else
+     * (1) have a narrowable constraint;
+     * (2) are syntactically used as the type of a single parameter in the function, and nothing else
      */
     function getNarrowableTypeParameters(candidates: TypeParameter[]): [TypeParameter, Symbol, Identifier][] {
         const narrowableParams: [TypeParameter, Symbol, Identifier][] = [];
         for (const typeParam of candidates) {
             const constraint = getConstraintOfTypeParameter(typeParam);
-            if (!constraint || !(constraint.flags & TypeFlags.Union)) continue;
+            if (!constraint || !isNarrowableTypeParameterConstraint(constraint)) continue;
             if (typeParam.symbol && typeParam.symbol.declarations && typeParam.symbol.declarations.length === 1) {
                 const declaration = typeParam.symbol.declarations[0];
                 const container = isJSDocTemplateTag(declaration.parent) ? getJSDocHost(declaration.parent) : declaration.parent;
@@ -46012,6 +46012,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !!forEachChild(node, isReferenced);
             }
         }
+    }
+
+
+    /**
+     * Determines if the type parameter constraint allows for narrowing of that type parameter.
+     * This is true if:
+     * (1) the constraint is a union type;
+     * (2) there's at most one non-primitive type in the union.
+     */
+    function isNarrowableTypeParameterConstraint(constraint: Type): boolean {
+        if (!(constraint.flags & TypeFlags.Union)) return false;
+        let nonPrimitives = 0;
+        for (const type of (constraint as UnionType).types) {
+            if (!(type.flags & TypeFlags.Primitive)) {
+                nonPrimitives += 1;
+            }
+        }
+        return nonPrimitives <= 1;
     }
 
     function isNarrowableReturnType(returnType: IndexedAccessType | ConditionalType): boolean {
