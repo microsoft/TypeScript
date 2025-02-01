@@ -46100,7 +46100,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // (0) The conditional type is distributive;
     // (1) The conditional type has no `infer` type parameters;
     // (2) The conditional type's check type is a narrowable type parameter (i.e. a type parameter with a union constraint);
-    // (3) The extends type `A` is a type or a union of types belonging to the union constraint of the type parameter;
+    // (3) The extends type `A` is a type or a union of types that are supertypes of the union constraint of the type parameter;
     // (4) `TrueBranch<T>` and `FalseBranch<T>` must be valid, recursively.
     //      In particular, the false-most branch of the conditional type must be `never`.
     function isNarrowableConditionalTypeWorker(type: ConditionalType): boolean {
@@ -46129,7 +46129,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             !everyType(type.extendsType, extendsType =>
                 some(
                     (constraintType as UnionType).types,
-                    constraintType => isTypeIdenticalTo(constraintType, extendsType),
+                    constraintType => isTypeAssignableTo(constraintType, extendsType),
                 ))
         ) {
             return false;

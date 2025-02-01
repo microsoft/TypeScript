@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/dependentReturnType10.ts] ////
+
+=== dependentReturnType10.ts ===
+interface Animal {
+    name: string;
+>name : string
+>     : ^^^^^^
+
+    species: string;
+>species : string
+>        : ^^^^^^
+}
+
+interface Dog extends Animal {
+    breed: string;
+>breed : string
+>      : ^^^^^^
+}
+
+type GreetRet<T> =
+>GreetRet : GreetRet<T>
+>         : ^^^^^^^^^^^
+
+    T extends string ? string :
+    T extends { name: string } ? { greeting: string, breed: string } :
+>name : string
+>     : ^^^^^^
+>greeting : string
+>         : ^^^^^^
+>breed : string
+>      : ^^^^^^
+
+    never;
+
+function greet<T extends string | Dog>(animal: T): GreetRet<T> {
+>greet : <T extends string | Dog>(animal: T) => GreetRet<T>
+>      : ^ ^^^^^^^^^            ^^      ^^ ^^^^^           
+>animal : T
+>       : ^
+
+    if (typeof animal === "string") {
+>typeof animal === "string" : boolean
+>                           : ^^^^^^^
+>typeof animal : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>animal : T
+>       : ^
+>"string" : "string"
+>         : ^^^^^^^^
+
+        return `hello, ${animal}`
+>`hello, ${animal}` : string
+>                   : ^^^^^^
+>animal : T & string
+>       : ^^^^^^^^^^
+    }
+    return { greeting: `woof, ${animal.name}`, breed: animal.breed }
+>{ greeting: `woof, ${animal.name}`, breed: animal.breed } : { greeting: string; breed: string; }
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>greeting : string
+>         : ^^^^^^
+>`woof, ${animal.name}` : string
+>                       : ^^^^^^
+>animal.name : string
+>            : ^^^^^^
+>animal : Dog
+>       : ^^^
+>name : string
+>     : ^^^^^^
+>breed : string
+>      : ^^^^^^
+>animal.breed : string
+>             : ^^^^^^
+>animal : Dog
+>       : ^^^
+>breed : string
+>      : ^^^^^^
+}
