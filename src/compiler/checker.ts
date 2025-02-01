@@ -45988,59 +45988,54 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const declaration = typeParam.symbol.declarations[0];
                 const container = isJSDocTemplateTag(declaration.parent) ? getJSDocHost(declaration.parent) : declaration.parent;
                 if (!isFunctionLike(container)) continue;
-                let reference: Identifier | undefined;
+                let paramReference: ParameterDeclaration | undefined;
+                let referencePath: Name[] | undefined;
                 let hasInvalidReference = false;
                 for (const paramDecl of container.parameters) {
                     const typeNode = getEffectiveTypeAnnotationNode(paramDecl);
                     if (!typeNode) continue;
-                    if (isTypeParameterReferenced(typeParam, typeNode)) {
-                        let candidateReference;
-                        if (
-                            isTypeReferenceNode(typeNode) &&
-                            isReferenceToTypeParameter(typeParam, typeNode) &&
-                            (candidateReference = getValidParameterReference(paramDecl, constraint))
-                        ) {
-                            // Type parameter has more than one valid reference.
-                            if (reference) {
-                                hasInvalidReference = true;
-                                break;
-                            }
-                            reference = candidateReference;
-                        }
-                        else { // Type parameter has invalid reference.
+                    const result = getValidTypeParameterReference(typeNode, typeParam, []);
+                    if (!result) { // Invalid reference to type parameter.
+                        hasInvalidReference = true;
+                        break;
+                    }
+                    if (isArray(result)) {
+                        if (referencePath) { // More than one valid reference to type parameter.
                             hasInvalidReference = true;
                             break;
                         }
+                        referencePath = result;
+                        paramReference = paramDecl;
                     }
                 }
-                if (!hasInvalidReference && reference) {
-                    const symbol = getResolvedSymbol(reference);
+                if (!hasInvalidReference && referencePath) { // Valid type parameter reference: type parameter is narrowable
+                    const symbol = getResolvedSymbol(reference); // >> TODO: construct reference; get its symbol
                     if (symbol !== unknownSymbol) narrowableParams.push([typeParam, symbol, reference]);
                 }
             }
         }
 
         return narrowableParams;
-        // For a parameter of declared type `T` to be a valid reference for narrowing, it must satisfy:
-        // - the parameter name is an identifier
-        // - if the parameter is optional, then `T`'s constraint must allow for undefined
-        function getValidParameterReference(paramDecl: ParameterDeclaration, constraint: Type): Identifier | undefined {
-            if (!isIdentifier(paramDecl.name)) return;
-            const isOptional = !!paramDecl.questionToken || isJSDocOptionalParameter(paramDecl);
-            if (isOptional && !containsUndefinedType(constraint)) return;
-            return paramDecl.name;
-        }
+        // // For a parameter of declared type `T` to be a valid reference for narrowing, it must satisfy:
+        // // - the parameter name is an identifier
+        // // - if the parameter is optional, then `T`'s constraint must allow for undefined
+        // function getValidParameterReference(paramDecl: ParameterDeclaration, constraint: Type): Identifier | undefined {
+        //     if (!isIdentifier(paramDecl.name)) return;
+        //     const isOptional = !!paramDecl.questionToken || isJSDocOptionalParameter(paramDecl);
+        //     if (isOptional && !containsUndefinedType(constraint)) return;
+        //     return paramDecl.name;
+        // }
 
         function isReferenceToTypeParameter(typeParam: TypeParameter, node: TypeReferenceNode) {
             return getTypeFromTypeReference(node) === typeParam;
         }
 
-        function isTypeParameterReferenced(typeParam: TypeParameter, node: TypeNode) {
+        function isTypeParameterReferenced(typeParam: TypeParameter, node: Node) {
             return isReferenced(node);
 
             function isReferenced(node: Node): boolean {
                 if (isTypeReferenceNode(node)) {
-                    return isReferenceToTypeParameter(typeParam, node);
+                    return isReferenceToTypeParameter(typeParam, node) || some(node.typeArguments, isReferenced);
                 }
                 if (isTypeQueryNode(node)) {
                     return isTypeParameterPossiblyReferenced(typeParam, node);
@@ -46048,7 +46043,126 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !!forEachChild(node, isReferenced);
             }
         }
+    
+        // Given a type node and a type parameter `T`, this function does two things:
+        // (1) validates all syntactic occurrences of `T`
+        // (2) collects a path to a valid (i.e. narrowable) occurrence to `T`
+        // Returns:
+        // `true` if no references to `T` were found;
+        // `false` if invalid or multiple valid references to `T` were found;
+        // an array of names that corresponds to the valid reference to `T`, if exactly one valid reference was found.
+        // `path` is initially is empty; it's an accumulator for the path through valid property accesses.
+        type Name = Identifier | StringLiteral;
+        function getValidTypeParameterReference(typeNode: Node, typeParam: TypeParameter, path: Name[]): Name[] | boolean {
+            switch (typeNode.kind) {
+                case SyntaxKind.TypeReference:
+                    const type = getTypeFromTypeReference((typeNode as TypeReferenceNode));
+                    if (type === typeParam) { // `T`
+                        return path;
+                    }
+                    const typeArgs = (typeNode as TypeReferenceNode).typeArguments;
+                    // Type arguments that reference `T`
+                    const typeArgsReferenced = typeArgs?.filter(node => isTypeParameterReferenced(typeParam, node))
+                    if (!typeArgsReferenced || typeArgsReferenced.length == 0) return true; // Type reference unrelated to `T`
+                    if (typeArgsReferenced && typeArgsReferenced.length > 1) return false; // e.g. `Foo<T, T, ...>`
+                    const typeArg = typeArgsReferenced[0];
+                    if (!(typeArg.kind & SyntaxKind.TypeReference)) return false; // e.g. `Foo<Wrapper<T>, ...>`
+                    if (!type.symbol || !type.symbol.declarations || type.symbol.declarations.length != 1) return false;
+                    const typeDeclaration = type.symbol.declarations[0];
+                    let aliasDeclaration;
+                    if (isTypeLiteralNode(typeDeclaration)) {
+                        aliasDeclaration = walkUpParenthesizedTypes(typeDeclaration.parent); // `type Foo = { ... }`
+                        if (!isTypeAliasDeclaration(aliasDeclaration)) return false;
+                    } else if (isInterfaceDeclaration(typeDeclaration)) { // `interface Foo { ... }`
+                        aliasDeclaration = typeDeclaration;
+                    } else {
+                        return false; // Unsuported case, e.g. `class Foo<...> ...`, `type Foo<...> = { [P in Foo]: ... }`, etc.
+                    }
+                    const typeArgIndex = typeArgs!.findIndex(arg => arg === typeArg);
+                    const matchingTypeParamDecl = aliasDeclaration.typeParameters?.[typeArgIndex];
+                    if (!matchingTypeParamDecl) return false; // Shouldn't happen, unless there is an error in the input program.
+                    const matchingTypeParam = getTypeOfSymbol(getSymbolOfDeclaration(matchingTypeParamDecl)) as TypeParameter; // >> TODO: better way?
+                    return getValidTypeParameterReference(typeDeclaration, matchingTypeParam, path);
+                case SyntaxKind.InterfaceDeclaration:
+                    const extendsTypes = flatMap((typeNode as InterfaceDeclaration).heritageClauses, clause => clause.types);
+                    const relevantExtendsTypes = extendsTypes.filter(node => isTypeParameterReferenced(typeParam, node));
+                    if (relevantExtendsTypes && relevantExtendsTypes.length > 1) {
+                        return false; // Unsupported: `interface Foo<T> extends Bar<T>, Baz<T> { ... }`
+                    }
+                    const result = getValidTypeParameterReferenceFromTypeElements((typeNode as InterfaceDeclaration).members, typeParam, path);
+                    if (relevantExtendsTypes && relevantExtendsTypes.length === 1) { // `interface Foo<T> extends Bar<T>, Baz<T> { ... }`
+                        if (result !== true) {
+                            return false; // e.g. `interface Foo<T> extends Bar<T> { ... otherRef: T; ...}`
+                        }
+                        return getValidTypeParameterReference(relevantExtendsTypes[0], typeParam, path)
+                    }
+                    return result;
+                case SyntaxKind.TypeLiteral:
+                    return getValidTypeParameterReferenceFromTypeElements((typeNode as TypeLiteralNode).members, typeParam, path);
+                case SyntaxKind.IntersectionType:
+                    let validPath: Name[] | undefined;
+                    for (const type of (typeNode as IntersectionTypeNode).types) {
+                        const result = getValidTypeParameterReference(type, typeParam, path);
+                        if (!result) {
+                            return false;
+                        }
+                        if (isArray(result)) {
+                            if (validPath) {
+                                return false;
+                            }
+                            validPath = result;
+                        }
+                    }
+                    return validPath ?? true;
+                default:
+                    // If we see a reference to `T` in the type node here, invalidate the whole thing.
+                    return !isTypeParameterReferenced(typeParam, typeNode);
+            }
+        }
+
+        function getValidTypeParameterReferenceFromTypeElements(members: NodeArray<TypeElement>, typeParam: TypeParameter, path: Name[]): Name[] | boolean {
+            let validPath: Name[] | undefined;
+            for (const member of members) {
+                if (!isTypeParameterReferenced(typeParam, member)) {
+                    continue;
+                }
+                if (!isPropertySignature(member)) {
+                    return false; // Unsupported reference to `T`, e.g. `[s: string]: T`.
+                }
+                if (!isIdentifier(member.name) && !isStringLiteral(member.name)) { // >> TODO: support number literal? others?
+                    return false; // Unsupported property name, e.g. `[c]: T`
+                }
+                if (member.questionToken) {
+                    // >> TODO: account for property optionality
+                }
+                const result = getValidTypeParameterReference(member.type!, typeParam, [member.name, ...path])
+                if (!result) {
+                    return false;
+                }
+                if (isArray(result)) {
+                    if (validPath) {
+                        return false; // Invalid case: multiple valid references
+                    }
+                    validPath = result;
+                }
+            }
+            return validPath ?? true;
+        }
+
+        // Given a parameter declaration, and a name path to a reference of type parameter `T` in the type of the parameter,
+        // construct a reference to the parameter property that corresponds to the `T` reference in the types.
+        // Examples:
+        // `constructNarrowableReference(`param: { b: T }`, [`b`])` ==> `param.b`
+        // `constructNarrowableReference(`param: { a: { b: T } }`, [`a`, `b`])` ==> `param.ab`
+        // `constructNarrowableReference(`param: { "a b": T }`, ["a b"])` ==> `param["a b"]`
+        // `constructNarrowableReference(`{ b }: { b: T }`, [`b`])` ==> `b`
+        // `constructNarrowableReference(`{ a }: { a: { b: T } }`, [`a`, `b`])` ==> `a.b`
+        function constructNarrowableReference(paramDecl: ParameterDeclaration, path: Name[]): PropertyAccessExpression {
+            // >> TODO: impl
+            // >> TODO: consider if we'll be able to get the symbol at this constructed location...
+        }
     }
+
 
 
     /**
