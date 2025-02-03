@@ -100,7 +100,7 @@ func (v *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 			// TypeScript overloads are elided
 			return nil
 		}
-		return v.Factory.UpdateMethodDeclaration(n, v.VisitModifiers(n.Modifiers()), v.VisitToken(n.AsteriskToken), v.VisitNode(n.Name()), nil, nil, v.VisitNodes(n.Parameters), nil, v.VisitNode(n.Body))
+		return v.Factory.UpdateMethodDeclaration(n, v.VisitModifiers(n.Modifiers()), n.AsteriskToken, v.VisitNode(n.Name()), nil, nil, v.VisitNodes(n.Parameters), nil, v.VisitNode(n.Body))
 
 	case ast.KindGetAccessor:
 		n := node.AsGetAccessorDeclaration()
@@ -144,15 +144,15 @@ func (v *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 			// TypeScript overloads are elided
 			return nil
 		}
-		return v.Factory.UpdateFunctionDeclaration(n, v.VisitModifiers(n.Modifiers()), v.VisitToken(n.AsteriskToken), v.VisitNode(n.Name()), nil, v.VisitNodes(n.Parameters), nil, v.VisitNode(n.Body))
+		return v.Factory.UpdateFunctionDeclaration(n, v.VisitModifiers(n.Modifiers()), n.AsteriskToken, v.VisitNode(n.Name()), nil, v.VisitNodes(n.Parameters), nil, v.VisitNode(n.Body))
 
 	case ast.KindFunctionExpression:
 		n := node.AsFunctionExpression()
-		return v.Factory.UpdateFunctionExpression(n, v.VisitModifiers(n.Modifiers()), v.VisitToken(n.AsteriskToken), v.VisitNode(n.Name()), nil, v.VisitNodes(n.Parameters), nil, v.VisitNode(n.Body))
+		return v.Factory.UpdateFunctionExpression(n, v.VisitModifiers(n.Modifiers()), n.AsteriskToken, v.VisitNode(n.Name()), nil, v.VisitNodes(n.Parameters), nil, v.VisitNode(n.Body))
 
 	case ast.KindArrowFunction:
 		n := node.AsArrowFunction()
-		return v.Factory.UpdateArrowFunction(n, v.VisitModifiers(n.Modifiers()), nil, v.VisitNodes(n.Parameters), nil, v.VisitToken(n.EqualsGreaterThanToken), v.VisitNode(n.Body))
+		return v.Factory.UpdateArrowFunction(n, v.VisitModifiers(n.Modifiers()), nil, v.VisitNodes(n.Parameters), nil, n.EqualsGreaterThanToken, v.VisitNode(n.Body))
 
 	case ast.KindParameter:
 		if ast.IsThisParameter(node) {
@@ -160,11 +160,11 @@ func (v *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 			return nil
 		}
 		n := node.AsParameterDeclaration()
-		return v.Factory.UpdateParameterDeclaration(n, nil, v.VisitToken(n.DotDotDotToken), v.VisitNode(n.Name()), nil, nil, v.VisitNode(n.Initializer))
+		return v.Factory.UpdateParameterDeclaration(n, nil, n.DotDotDotToken, v.VisitNode(n.Name()), nil, nil, v.VisitNode(n.Initializer))
 
 	case ast.KindCallExpression:
 		n := node.AsCallExpression()
-		return v.Factory.UpdateCallExpression(n, v.VisitNode(n.Expression), v.VisitToken(n.QuestionDotToken), nil, v.VisitNodes(n.Arguments))
+		return v.Factory.UpdateCallExpression(n, v.VisitNode(n.Expression), n.QuestionDotToken, nil, v.VisitNodes(n.Arguments))
 
 	case ast.KindNewExpression:
 		n := node.AsNewExpression()
@@ -172,7 +172,7 @@ func (v *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 
 	case ast.KindTaggedTemplateExpression:
 		n := node.AsTaggedTemplateExpression()
-		return v.Factory.UpdateTaggedTemplateExpression(n, v.VisitNode(n.Tag), v.VisitToken(n.QuestionDotToken), nil, v.VisitNode(n.Template))
+		return v.Factory.UpdateTaggedTemplateExpression(n, v.VisitNode(n.Tag), n.QuestionDotToken, nil, v.VisitNode(n.Template))
 
 	case ast.KindNonNullExpression:
 		// !!! Use PartiallyEmittedExpression to preserve comments
