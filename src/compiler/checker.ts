@@ -22030,8 +22030,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (targetFlags & TypeFlags.TypeParameter && target !== markerSuperTypeForCheck && target !== markerSubTypeForCheck) {
                 const constraint = getBaseConstraintOfType(target);
-                const parentConstraint = getBaseConstraintOrType(source);
-
+                
+                // The target is a children of the source 
+                const baseSourceConstraint = getBaseConstraintOrType(source);
+                
                 let needsOriginalSource;
                 if (constraint && (isTypeAssignableTo(generalizedSource, constraint) || (needsOriginalSource = isTypeAssignableTo(source, constraint)))) {
                     reportError(
@@ -22041,12 +22043,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         typeToString(constraint),
                     );
                 }
-                else if (parentConstraint  && (needsOriginalSource = isTypeAssignableTo(target, parentConstraint))) {
+                else if (isTypeAssignableTo(target, getBaseConstraintOrType(generalizedSource))||(needsOriginalSource = isTypeAssignableTo(target, getBaseConstraintOrType(source)))) {
                     reportError(
                         Diagnostics._0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2,
                         needsOriginalSource ? sourceType : generalizedSourceType,
                         targetType,
-                        typeToString(parentConstraint),
+                        typeToString(baseSourceConstraint),
                     );
                 }
                 else {
