@@ -502,7 +502,7 @@ type WideningContext struct {
 
 type Program interface {
 	Options() *core.CompilerOptions
-	Files() []*ast.SourceFile
+	SourceFiles() []*ast.SourceFile
 
 	BindSourceFiles()
 	GetEmitModuleFormatOfFile(sourceFile *ast.SourceFile) core.ModuleKind
@@ -779,7 +779,7 @@ func NewChecker(program Program) *Checker {
 	c.program = program
 	// c.host = program.host
 	c.compilerOptions = program.Options()
-	c.files = program.Files()
+	c.files = program.SourceFiles()
 	c.fileIndexMap = createFileIndexMap(c.files)
 	c.compareSymbols = c.compareSymbolsWorker // Closure optimization
 	c.languageVersion = c.compilerOptions.GetEmitScriptTarget()

@@ -5,6 +5,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 func parseTristate(value any) core.Tristate {
@@ -385,4 +386,28 @@ func MergeCompilerOptions(targetOptions, sourceOptions *core.CompilerOptions) *c
 		}
 	}
 	return targetOptions
+}
+
+func convertToOptionsWithAbsolutePaths(optionsBase map[string]any, optionMap map[string]*CommandLineOption, cwd string) map[string]any {
+	// !!! convert to options with absolute paths was previously done with `CompilerOptions` object, but for ease of implementation, we do it pre-conversion.
+	// !!! Revisit this choice if/when refactoring when conversion is done in tsconfig parsing
+	if optionsBase == nil {
+		return nil
+	}
+	for o, v := range optionsBase {
+		option := optionMap[o]
+		if option == nil || !option.isFilePath {
+			continue
+		}
+		if option.Kind == "list" {
+			if arr, ok := v.([]string); ok {
+				optionsBase[o] = core.Map(arr, func(item string) string {
+					return tspath.GetNormalizedAbsolutePath(item, cwd)
+				})
+			}
+		} else {
+			optionsBase[o] = tspath.GetNormalizedAbsolutePath(v.(string), cwd)
+		}
+	}
+	return optionsBase
 }

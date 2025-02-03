@@ -11,8 +11,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
-type OptionsBase map[string]any // CompilerOptionsValue|TsConfigSourceFile
-
 func (p *CommandLineParser) AlternateMode() *AlternateModeDiagnostics {
 	return p.workerDiagnostics.didYouMean.alternateMode
 }
@@ -50,20 +48,32 @@ func (p *CommandLineParser) GetOptionsNameMap() *NameMap {
 type CommandLineParser struct {
 	workerDiagnostics *ParseCommandLineWorkerDiagnostics
 	fs                vfs.FS
-	options           OptionsBase
-	// todo: watchOptions   OptionsBase
+	options           map[string]any
+	// todo: watchOptions    map[string]any
 	fileNames []string
 	errors    []*ast.Diagnostic
 }
 
 func ParseCommandLine(
 	commandLine []string,
-	fs vfs.FS,
+	host ParseConfigHost,
 ) *ParsedCommandLine {
-	// this function should convert commandLineWorker output to compileroptions
-	// todo: return correct type (waiting on shared tsconfig parsing utilities)
-	// parseCommandLineWorker()
-	return &ParsedCommandLine{}
+	if commandLine == nil {
+		commandLine = []string{}
+	}
+	parser := parseCommandLineWorker(CompilerOptionsDidYouMeanDiagnostics, commandLine, host.FS())
+	optionsWithAbsolutePaths := convertToOptionsWithAbsolutePaths(parser.options, commandLineCompilerOptionsMap, host.GetCurrentDirectory())
+	o, d := convertOptionsFromJson(commandLineCompilerOptionsMap, optionsWithAbsolutePaths, host.GetCurrentDirectory(), &core.CompilerOptions{})
+	return &ParsedCommandLine{
+		ParsedConfig: &core.ParsedOptions{
+			CompilerOptions: o,
+			FileNames:       parser.fileNames,
+		},
+		ConfigFile:    nil,
+		Errors:        append(parser.errors, d...),
+		Raw:           parser.options, // todo: keep optionsBase incase needed later
+		CompileOnSave: nil,
+	}
 }
 
 func parseCommandLineWorker(
@@ -75,7 +85,7 @@ func parseCommandLineWorker(
 		fs:                fs,
 		workerDiagnostics: parseCommandLineWithDiagnostics,
 		fileNames:         []string{},
-		options:           OptionsBase{},
+		options:           map[string]any{},
 		errors:            []*ast.Diagnostic{},
 	}
 	parser.parseStrings(commandLine)

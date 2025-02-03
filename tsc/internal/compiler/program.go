@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/binder"
+	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/checker"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/compiler/module"
@@ -27,25 +28,25 @@ type ProgramOptions struct {
 	SingleThreaded     bool
 	ProjectReference   []core.ProjectReference
 	DefaultLibraryPath string
+	OptionsDiagnostics []*ast.Diagnostic
 }
 
 type Program struct {
-	host             CompilerHost
-	programOptions   ProgramOptions
-	compilerOptions  *core.CompilerOptions
-	configFilePath   string
-	nodeModules      map[string]*ast.SourceFile
-	checkers         []*checker.Checker
-	checkersByFile   map[*ast.SourceFile]*checker.Checker
-	currentDirectory string
+	host               CompilerHost
+	programOptions     ProgramOptions
+	compilerOptions    *core.CompilerOptions
+	configFilePath     string
+	nodeModules        map[string]*ast.SourceFile
+	checkers           []*checker.Checker
+	checkersByFile     map[*ast.SourceFile]*checker.Checker
+	currentDirectory   string
+	optionsDiagnostics []*ast.Diagnostic
 
 	resolver        *module.Resolver
 	resolvedModules map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule]
 
 	comparePathsOptions tspath.ComparePathsOptions
 	defaultLibraryPath  string
-
-	optionsDiagnostics []*ast.Diagnostic
 
 	files       []*ast.SourceFile
 	filesByPath map[tspath.Path]*ast.SourceFile
@@ -72,6 +73,7 @@ func NewProgram(options ProgramOptions) *Program {
 	p := &Program{}
 	p.programOptions = options
 	p.compilerOptions = options.Options
+	p.optionsDiagnostics = options.OptionsDiagnostics
 	if p.compilerOptions == nil {
 		p.compilerOptions = &core.CompilerOptions{}
 	}
@@ -163,17 +165,22 @@ func NewProgram(options ProgramOptions) *Program {
 	return p
 }
 
-func (p *Program) Files() []*ast.SourceFile {
-	return p.files
+func NewProgramFromParsedCommandLine(config *tsoptions.ParsedCommandLine, host CompilerHost) *Program {
+	programOptions := ProgramOptions{
+		RootFiles: config.FileNames(),
+		Options:   config.CompilerOptions(),
+		Host:      host,
+		// todo: ProjectReferences
+		OptionsDiagnostics: config.GetConfigFileParsingDiagnostics(),
+		DefaultLibraryPath: bundled.LibPath(),
+	}
+	return NewProgram(programOptions)
 }
 
-func (p *Program) SourceFiles() []*ast.SourceFile { return p.files }
-func (p *Program) Options() *core.CompilerOptions { return p.compilerOptions }
-func (p *Program) Host() CompilerHost             { return p.host }
-
-func (p *Program) GetOptionsDiagnostics() []*ast.Diagnostic {
-	return p.optionsDiagnostics
-}
+func (p *Program) SourceFiles() []*ast.SourceFile        { return p.files }
+func (p *Program) Options() *core.CompilerOptions        { return p.compilerOptions }
+func (p *Program) Host() CompilerHost                    { return p.host }
+func (p *Program) OptionsDiagnostics() []*ast.Diagnostic { return p.optionsDiagnostics }
 
 func (p *Program) BindSourceFiles() {
 	wg := core.NewWorkGroup(p.programOptions.SingleThreaded)
@@ -274,7 +281,19 @@ func (p *Program) GetGlobalDiagnostics() []*ast.Diagnostic {
 	for _, checker := range p.checkers {
 		globalDiagnostics = append(globalDiagnostics, checker.GetGlobalDiagnostics()...)
 	}
-	return sortAndDeduplicateDiagnostics(globalDiagnostics)
+	return SortAndDeduplicateDiagnostics(globalDiagnostics)
+}
+
+func (p *Program) GetOptionsDiagnostics() []*ast.Diagnostic {
+	return SortAndDeduplicateDiagnostics(append(p.GetGlobalDiagnostics(), p.getOptionsDiagnosticsOfConfigFile()...))
+}
+
+func (p *Program) getOptionsDiagnosticsOfConfigFile() []*ast.Diagnostic {
+	// todo update p.configParsingDiagnostics when updateAndGetProgramDiagnostics is implemented
+	if p.Options() == nil || p.Options().ConfigFilePath == "" {
+		return nil
+	}
+	return p.optionsDiagnostics
 }
 
 func (p *Program) getSyntaticDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.Diagnostic {
@@ -337,7 +356,7 @@ func isCommentOrBlankLine(text string, pos int) bool {
 		pos+1 < len(text) && text[pos] == '/' && text[pos+1] == '/'
 }
 
-func sortAndDeduplicateDiagnostics(diagnostics []*ast.Diagnostic) []*ast.Diagnostic {
+func SortAndDeduplicateDiagnostics(diagnostics []*ast.Diagnostic) []*ast.Diagnostic {
 	result := slices.Clone(diagnostics)
 	slices.SortFunc(result, ast.CompareDiagnostics)
 	return slices.CompactFunc(result, ast.EqualDiagnostics)
@@ -348,7 +367,7 @@ func (p *Program) getDiagnosticsHelper(sourceFile *ast.SourceFile, ensureBound b
 		if ensureBound {
 			binder.BindSourceFile(sourceFile, p.compilerOptions)
 		}
-		return sortAndDeduplicateDiagnostics(getDiagnostics(sourceFile))
+		return SortAndDeduplicateDiagnostics(getDiagnostics(sourceFile))
 	}
 	if ensureBound {
 		p.BindSourceFiles()
@@ -360,7 +379,7 @@ func (p *Program) getDiagnosticsHelper(sourceFile *ast.SourceFile, ensureBound b
 	for _, file := range p.files {
 		result = append(result, getDiagnostics(file)...)
 	}
-	return sortAndDeduplicateDiagnostics(result)
+	return SortAndDeduplicateDiagnostics(result)
 }
 
 func (p *Program) TypeCount() int {

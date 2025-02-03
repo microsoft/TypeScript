@@ -156,6 +156,12 @@ func writeCodeSnippet(writer io.Writer, sourceFile *ast.SourceFile, start int, l
 	}
 }
 
+func FlattenDiagnosticMessage(d *ast.Diagnostic, newLine string) string {
+	var output strings.Builder
+	WriteFlattenedDiagnosticMessage(&output, d, newLine)
+	return output.String()
+}
+
 func WriteFlattenedDiagnosticMessage(writer io.Writer, diagnostic *ast.Diagnostic, newline string) {
 	fmt.Fprint(writer, diagnostic.Message())
 
@@ -232,14 +238,17 @@ func WriteErrorSummaryText(output io.Writer, allDiagnostics []*ast.Diagnostic, f
 		return
 	}
 
-	firstFile := errorSummary.SortedFileList[0]
+	firstFile := &ast.SourceFile{}
+	if len(errorSummary.SortedFileList) > 0 {
+		firstFile = errorSummary.SortedFileList[0]
+	}
 	firstFileName := prettyPathForFileError(firstFile, errorSummary.ErrorsByFiles[firstFile], formatOpts)
 	numErroringFiles := len(errorSummary.ErrorsByFiles)
 
 	var message string
 	if totalErrorCount == 1 {
 		// Special-case a single error.
-		if len(errorSummary.GlobalErrors) > 0 {
+		if len(errorSummary.GlobalErrors) > 0 || firstFileName == "" {
 			message = diagnostics.Found_1_error.Format()
 		} else {
 			message = diagnostics.Found_1_error_in_0.Format(firstFileName)
@@ -333,6 +342,9 @@ func writeTabularErrorsDisplay(output io.Writer, errorSummary *ErrorSummary, for
 }
 
 func prettyPathForFileError(file *ast.SourceFile, fileErrors []*ast.Diagnostic, formatOpts *FormattingOptions) string {
+	if file == nil || len(fileErrors) == 0 {
+		return ""
+	}
 	line, _ := scanner.GetLineAndCharacterOfPosition(file, fileErrors[0].Loc().Pos())
 	fileName := file.FileName()
 	if tspath.PathIsAbsolute(fileName) && tspath.PathIsAbsolute(formatOpts.CurrentDirectory) {

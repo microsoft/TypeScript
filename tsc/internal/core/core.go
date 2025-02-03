@@ -27,6 +27,22 @@ func Filter[T any](slice []T, f func(T) bool) []T {
 	return slice
 }
 
+func FilterIndex[T any](slice []T, f func(T, int, []T) bool) []T {
+	for i, value := range slice {
+		if !f(value, i, slice) {
+			result := slices.Clone(slice[:i])
+			for i++; i < len(slice); i++ {
+				value = slice[i]
+				if f(value, i, slice) {
+					result = append(result, value)
+				}
+			}
+			return result
+		}
+	}
+	return slice
+}
+
 func Map[T, U any](slice []T, f func(T) U) []U {
 	if len(slice) == 0 {
 		return nil

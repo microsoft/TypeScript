@@ -90,7 +90,7 @@ func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inpu
 	var result []string
 
 	outputErrorText := func(diag *ast.Diagnostic) {
-		message := flattenDiagnosticMessage(diag, harnessNewLine)
+		message := diagnosticwriter.FlattenDiagnosticMessage(diag, harnessNewLine)
 
 		var errLines []string
 		for _, line := range strings.Split(removeTestPathPrefixes(message, false), "\n") {
@@ -111,7 +111,7 @@ func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inpu
 			if len(location) > 0 && isDefaultLibraryFile(info.File().FileName()) {
 				location = diagnosticsLocationPattern.ReplaceAllString(location, "$1:--:--")
 			}
-			errLines = append(errLines, fmt.Sprintf("!!! related TS%d%s: %s", info.Code(), location, flattenDiagnosticMessage(info, harnessNewLine)))
+			errLines = append(errLines, fmt.Sprintf("!!! related TS%d%s: %s", info.Code(), location, diagnosticwriter.FlattenDiagnosticMessage(info, harnessNewLine)))
 		}
 
 		for _, e := range errLines {
@@ -240,12 +240,6 @@ func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inpu
 	// Verify we didn't miss any errors in total
 	assert.Check(t, cmp.Equal(totalErrorsReportedInNonLibraryNonTsconfigFiles+numLibraryDiagnostics+numTsconfigDiagnostics, len(diagnostics)), "total number of errors")
 	return result
-}
-
-func flattenDiagnosticMessage(d *ast.Diagnostic, newLine string) string {
-	var output strings.Builder
-	diagnosticwriter.WriteFlattenedDiagnosticMessage(&output, d, newLine)
-	return output.String()
 }
 
 func formatLocation(file *ast.SourceFile, pos int, formatOpts *diagnosticwriter.FormattingOptions, writeWithStyleAndReset diagnosticwriter.FormattedWriter) string {

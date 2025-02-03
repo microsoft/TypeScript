@@ -42,6 +42,10 @@ func (h *compilerHost) FS() vfs.FS {
 	return h.fs
 }
 
+func (h *compilerHost) SetOptions(options *core.CompilerOptions) {
+	h.options = options
+}
+
 func (h *compilerHost) GetCurrentDirectory() string {
 	return h.currentDirectory
 }

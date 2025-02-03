@@ -18,6 +18,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
+	"github.com/microsoft/typescript-go/internal/execute"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
@@ -113,6 +114,10 @@ func parseArgs() *cliOptions {
 }
 
 func main() {
+	if args := os.Args[1:]; len(args) > 0 && args[0] == "tsc" {
+		exitCode := execute.CommandLine(newSystem(), nil, args[1:])
+		os.Exit(int(exitCode))
+	}
 	opts := parseArgs()
 
 	if opts.devel.pprofDir != "" {
@@ -177,9 +182,8 @@ func main() {
 	var bindTime, checkTime time.Duration
 
 	diagnostics := program.GetOptionsDiagnostics()
-	formatOpts := getFormatOpts(host)
 	if len(diagnostics) != 0 {
-		printDiagnostics(diagnostics, formatOpts, compilerOptions)
+		printDiagnostics(diagnostics, host, compilerOptions)
 		os.Exit(1)
 	}
 
@@ -217,7 +221,7 @@ func main() {
 	runtime.ReadMemStats(&memStats)
 
 	if !opts.devel.quiet && len(diagnostics) != 0 {
-		printDiagnostics(diagnostics, formatOpts, compilerOptions)
+		printDiagnostics(diagnostics, host, compilerOptions)
 	}
 
 	if compilerOptions.ListFiles.IsTrue() {
@@ -293,7 +297,8 @@ func getFormatOpts(host ts.CompilerHost) *diagnosticwriter.FormattingOptions {
 	}
 }
 
-func printDiagnostics(diagnostics []*ast.Diagnostic, formatOpts *diagnosticwriter.FormattingOptions, compilerOptions *core.CompilerOptions) {
+func printDiagnostics(diagnostics []*ast.Diagnostic, host ts.CompilerHost, compilerOptions *core.CompilerOptions) {
+	formatOpts := getFormatOpts(host)
 	if compilerOptions.Pretty.IsTrueOrUnknown() {
 		diagnosticwriter.FormatDiagnosticsWithColorAndContext(os.Stdout, diagnostics, formatOpts)
 		fmt.Fprintln(os.Stdout)
