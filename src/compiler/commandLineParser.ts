@@ -56,7 +56,6 @@ import {
     getNormalizedAbsolutePath,
     getOwnKeys,
     getRegexFromPattern,
-    getRegularExpressionForWildcard,
     getRegularExpressionsForWildcards,
     getRelativePathFromFile,
     getSpellingSuggestion,
@@ -2689,16 +2688,17 @@ function filterSameAsDefaultInclude(specs: readonly string[] | undefined) {
 function matchesSpecs(path: string, includeSpecs: readonly string[] | undefined, excludeSpecs: readonly string[] | undefined, host: ConvertToTSConfigHost): (path: string) => boolean {
     if (!includeSpecs) return returnTrue;
     const patterns = getFileMatcherPatterns(path, excludeSpecs, includeSpecs, host.useCaseSensitiveFileNames, host.getCurrentDirectory());
-    const excludeRe = patterns.excludePattern && getRegexFromPattern(patterns.excludePattern, host.useCaseSensitiveFileNames);
-    const includeRe = patterns.includeFilePattern && getRegexFromPattern(patterns.includeFilePattern, host.useCaseSensitiveFileNames);
-    if (includeRe) {
-        if (excludeRe) {
-            return path => !(includeRe.test(path) && !excludeRe.test(path));
+    const excludeRegexes = patterns.excludePatterns && patterns.excludePatterns.map(pattern => getRegexFromPattern(pattern, host.useCaseSensitiveFileNames));
+    const includeRegexes = patterns.includeFilePatterns && patterns.includeFilePatterns.map(pattern => getRegexFromPattern(pattern, host.useCaseSensitiveFileNames));
+    if (includeRegexes) {
+        if (excludeRegexes) {
+            return path => !(includeRegexes.some(regex => regex.test(path)) && !excludeRegexes.some(regex => regex.test(path)));
         }
-        return path => !includeRe.test(path);
+        return path => !includeRegexes.some(regex => regex.test(path));
     }
-    if (excludeRe) {
-        return path => excludeRe.test(path);
+
+    if (excludeRegexes) {
+        return path => excludeRegexes.some(regex => regex.test(path));
     }
     return returnTrue;
 }
@@ -3931,7 +3931,7 @@ export function getFileNamesFromConfigSpecs(
                 // Valid only if *.json specified
                 if (!jsonOnlyIncludeRegexes) {
                     const includes = validatedIncludeSpecs.filter(s => endsWith(s, Extension.Json));
-                    const includeFilePatterns = map(getRegularExpressionsForWildcards(includes, basePath, "files"), pattern => `^${pattern}$`);
+                    const includeFilePatterns = getRegularExpressionsForWildcards(includes, basePath, "files");
                     jsonOnlyIncludeRegexes = includeFilePatterns ? includeFilePatterns.map(pattern => getRegexFromPattern(pattern, host.useCaseSensitiveFileNames)) : emptyArray;
                 }
                 const includeIndex = findIndex(jsonOnlyIncludeRegexes, re => re.test(file));
@@ -4032,11 +4032,11 @@ export function matchesExcludeWorker(
     currentDirectory: string,
     basePath?: string,
 ): boolean {
-    const excludePattern = getRegularExpressionForWildcard(excludeSpecs, combinePaths(normalizePath(currentDirectory), basePath), "exclude");
-    const excludeRegex = excludePattern && getRegexFromPattern(excludePattern, useCaseSensitiveFileNames);
-    if (!excludeRegex) return false;
-    if (excludeRegex.test(pathToCheck)) return true;
-    return !hasExtension(pathToCheck) && excludeRegex.test(ensureTrailingDirectorySeparator(pathToCheck));
+    const excludePatterns = getRegularExpressionsForWildcards(excludeSpecs, combinePaths(normalizePath(currentDirectory), basePath), "exclude");
+    const excludeRegexes = excludePatterns && excludePatterns.map(pattern => getRegexFromPattern(pattern, useCaseSensitiveFileNames));
+    if (!excludeRegexes) return false;
+    if (excludeRegexes.some(regex => regex.test(pathToCheck))) return true;
+    return !hasExtension(pathToCheck) && excludeRegexes.some(regex => regex.test(ensureTrailingDirectorySeparator(pathToCheck)));
 }
 
 function validateSpecs(specs: readonly string[], errors: Diagnostic[], disallowTrailingRecursion: boolean, jsonSourceFile: TsConfigSourceFile | undefined, specKey: string): readonly string[] {
@@ -4081,15 +4081,15 @@ function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExclu
     //
     //  /a/b/*      - Watch /a/b directly to catch any new file
     //  /a/b/a?z    - Watch /a/b directly to catch any new file matching a?z
-    const rawExcludeRegex = getRegularExpressionForWildcard(exclude, basePath, "exclude");
-    const excludeRegex = rawExcludeRegex && new RegExp(rawExcludeRegex, useCaseSensitiveFileNames ? "" : "i");
+    const rawExcludeRegexes = getRegularExpressionsForWildcards(exclude, basePath, "exclude");
+    const excludeRegexes = rawExcludeRegexes && rawExcludeRegexes.map(regex => new RegExp(regex, useCaseSensitiveFileNames ? "" : "i"));
     const wildcardDirectories: MapLike<WatchDirectoryFlags> = {};
     const wildCardKeyToPath = new Map<CanonicalKey, string>();
     if (include !== undefined) {
         const recursiveKeys: CanonicalKey[] = [];
         for (const file of include) {
             const spec = normalizePath(combinePaths(basePath, file));
-            if (excludeRegex && excludeRegex.test(spec)) {
+            if (some(excludeRegexes, excludeRegex => excludeRegex.test(spec))) {
                 continue;
             }
 
