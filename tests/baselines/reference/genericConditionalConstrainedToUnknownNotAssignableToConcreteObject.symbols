@@ -69,8 +69,7 @@ function g2<
 >isA : Symbol(isA, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 25))
 >a2 : Symbol(a2, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 20, 2))
 
-        // a2 is not narrowed
-        a2.x // error, but should be ok
+        a2.x // ok
 >a2.x : Symbol(A.x, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 13))
 >a2 : Symbol(a2, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 20, 2))
 >x : Symbol(A.x, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 13))

@@ -59,12 +59,11 @@ function g2<
 >a2 : ReturnType<T[M]>
 >   : ^^^^^^^^^^^^^^^^
 
-        // a2 is not narrowed
-        a2.x // error, but should be ok
+        a2.x // ok
 >a2.x : number
 >     : ^^^^^^
->a2 : ReturnType<T[M]> & A
->   : ^^^^^^^^^^^^^^^^^^^^
+>a2 : A
+>   : ^
 >x : number
 >  : ^^^^^^
     }

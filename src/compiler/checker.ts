@@ -27665,8 +27665,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return mapType(type, t => hasTypeFacts(t, targetFacts) ? getIntersectionType([t, !(facts & otherIncludesFacts) && hasTypeFacts(t, otherFacts) ? emptyAndOtherUnion : emptyObjectType]) : t);
     }
 
-    function recombineUnknownType(type: Type) {
-        return type === unknownUnionType ? unknownType : type;
+    function recombineUnknownType(type: Type, recombinedType: Type = unknownType) {
+        return type === unknownUnionType ? recombinedType : type;
     }
 
     function getTypeWithDefault(type: Type, defaultExpression: Expression) {
@@ -29844,7 +29844,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isGenericTypeWithUnionConstraint(type: Type): boolean {
         return type.flags & TypeFlags.Intersection ?
             some((type as IntersectionType).types, isGenericTypeWithUnionConstraint) :
-            !!(type.flags & TypeFlags.Instantiable && getBaseConstraintOrType(type).flags & (TypeFlags.Nullable | TypeFlags.Union));
+            !!(type.flags & TypeFlags.Instantiable && getBaseConstraintOrType(type).flags & (TypeFlags.Unknown | TypeFlags.Nullable | TypeFlags.Union));
     }
 
     function isGenericTypeWithoutNullableConstraint(type: Type): boolean {
@@ -29880,7 +29880,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const substituteConstraints = !(checkMode && checkMode & CheckMode.Inferential) &&
             someType(type, isGenericTypeWithUnionConstraint) &&
             (forReturnTypeNarrowing || isConstraintPosition(type, reference) || hasContextualTypeWithNoGenericTypes(reference, checkMode));
-        return substituteConstraints ? mapType(type, getBaseConstraintOrType) : type;
+        return substituteConstraints
+            ? mapType(type, t => {
+                const c = getBaseConstraintOrType(t);
+                return c.flags & TypeFlags.Unknown ? unknownUnionType : c;
+            })
+            : type;
     }
 
     function isExportOrExportExpression(location: Node) {
@@ -30549,6 +30554,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return type;
         }
 
+        const originalType = type;
         type = getNarrowableTypeForReference(type, node, checkMode);
 
         // The declaration container is the innermost function that encloses the declaration of the variable
@@ -30593,8 +30599,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const initialType = isAutomaticTypeInNonNull ? undefinedType :
             assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, declaration as VariableLikeDeclaration) : type) :
             typeIsAutomatic ? undefinedType : getOptionalType(type);
-        const flowType = isAutomaticTypeInNonNull ? getNonNullableType(getFlowTypeOfReference(node, type, initialType, flowContainer)) :
-            getFlowTypeOfReference(node, type, initialType, flowContainer);
+        const flowType = recombineUnknownType(
+            isAutomaticTypeInNonNull
+                ? getNonNullableType(getFlowTypeOfReference(node, type, initialType, flowContainer))
+                : getFlowTypeOfReference(node, type, initialType, flowContainer),
+            originalType,
+        );
         // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
         // from declaration to use, and when the variable's declared type doesn't include undefined but the
         // control flow based type does include undefined.
@@ -34409,6 +34419,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (propType === autoType) {
             return getFlowTypeOfProperty(node, prop);
         }
+        const originalPropType = propType;
         propType = getNarrowableTypeForReference(propType, node, checkMode);
         // If strict null checks and strict property initialization checks are enabled, if we have
         // a this.xxx property access, if the property is an instance property without an initializer,
@@ -34434,7 +34445,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         ) {
             assumeUninitialized = true;
         }
-        const flowType = getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType);
+        const flowType = recombineUnknownType(
+            getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType),
+            originalPropType,
+        );
         if (assumeUninitialized && !containsUndefinedType(propType) && containsUndefinedType(flowType)) {
             error(errorNode, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(prop!)); // TODO: GH#18217
             // Return the declared type to reduce follow-on errors
@@ -45982,8 +45996,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getNarrowableTypeParameters(candidates: TypeParameter[]): [TypeParameter, Symbol, Identifier][] {
         const narrowableParams: [TypeParameter, Symbol, Identifier][] = [];
         for (const typeParam of candidates) {
-            const constraint = getConstraintOfTypeParameter(typeParam);
-            if (!constraint || !(constraint.flags & TypeFlags.Union)) continue;
+            if (!isGenericTypeWithUnionConstraint(typeParam)) continue;
+            const constraint = getConstraintOfTypeParameter(typeParam)!;
             if (typeParam.symbol && typeParam.symbol.declarations && typeParam.symbol.declarations.length === 1) {
                 const declaration = typeParam.symbol.declarations[0];
                 const container = isJSDocTemplateTag(declaration.parent) ? getJSDocHost(declaration.parent) : declaration.parent;
@@ -46101,11 +46115,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // (2)
-        const constraintType = getConstraintOfTypeParameter(type.checkType as TypeParameter);
-        if (!constraintType || !(constraintType.flags & TypeFlags.Union)) {
+        if (!isGenericTypeWithUnionConstraint(type.checkType)) {
             return false;
         }
-
+        let constraintType = getConstraintOfTypeParameter(type.checkType as TypeParameter)!;
+        constraintType = constraintType.flags & TypeFlags.Unknown ? unknownUnionType : constraintType;
+        if (!(constraintType.flags & TypeFlags.Union)) {
+            // the constraint could be a nullable type
+            return false;
+        }
         // (3)
         if (
             !everyType(type.extendsType, extendsType =>

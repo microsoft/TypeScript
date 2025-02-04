@@ -23,8 +23,7 @@ function g2<
     M extends keyof T
 >(a2: ReturnType<T[M]>) {
     if (isA(a2)) {
-        // a2 is not narrowed
-        a2.x // error, but should be ok
+        a2.x // ok
     }
 }
 
@@ -36,7 +35,6 @@ function g(a2, x) {
 // Original CFA report of the above issue
 function g2(a2) {
     if (isA(a2)) {
-        // a2 is not narrowed
-        a2.x; // error, but should be ok
+        a2.x; // ok
     }
 }

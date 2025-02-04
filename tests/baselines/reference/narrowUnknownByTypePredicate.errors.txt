@@ -1,0 +1,59 @@
+narrowUnknownByTypePredicate.ts(41,11): error TS2322: Type 'T' is not assignable to type 'null | undefined'.
+
+
+==== narrowUnknownByTypePredicate.ts (1 errors) ====
+    declare function isNotNullish(value: unknown): value is {};
+    declare function isNullish(value: unknown): value is null | undefined;
+    
+    declare const value1: unknown;
+    if (isNotNullish(value1)) {
+      value1;
+    }
+    
+    declare const value2: unknown;
+    if (!isNotNullish(value2)) {
+      value2;
+    }
+    
+    declare const value3: unknown;
+    if (isNullish(value3)) {
+      value3;
+    }
+    
+    declare const value4: unknown;
+    if (!isNullish(value4)) {
+      value4;
+    }
+    
+    declare class A { foo: string; }
+    declare function isA(value: unknown): value is A;
+    
+    declare const value5: unknown;
+    if (isA(value5)) {
+      value5;
+    }
+    
+    declare const value6: unknown;
+    if (!isA(value6)) {
+      value6;
+    }
+    
+    function fn1<T>(x: T): void {
+      if (x != undefined) {
+        const y: {} = x; // ok
+      } else {
+        const y: null | undefined = x; // ok
+              ~
+!!! error TS2322: Type 'T' is not assignable to type 'null | undefined'.
+!!! related TS2208 narrowUnknownByTypePredicate.ts:37:14: This type parameter might need an `extends null | undefined` constraint.
+      }
+    }
+    
+    function fn2<T extends unknown>(x: T): void {
+      if (x != undefined) {
+        const y: {} = x; // ok
+      } else {
+        const y: null | undefined = x; // ok
+      }
+    }
+    

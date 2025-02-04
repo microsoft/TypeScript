@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/dependentReturnType11.ts] ////
+
+=== dependentReturnType11.ts ===
+// shouldn't crash
+
+type Nullable = null | undefined;
+>Nullable : Symbol(Nullable, Decl(dependentReturnType11.ts, 0, 0))
+
+function test1<T extends null>(
+>test1 : Symbol(test1, Decl(dependentReturnType11.ts, 2, 33))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 4, 15))
+
+  x: T,
+>x : Symbol(x, Decl(dependentReturnType11.ts, 4, 31))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 4, 15))
+
+): T extends Nullable ? Nullable : never {
+>T : Symbol(T, Decl(dependentReturnType11.ts, 4, 15))
+>Nullable : Symbol(Nullable, Decl(dependentReturnType11.ts, 0, 0))
+>Nullable : Symbol(Nullable, Decl(dependentReturnType11.ts, 0, 0))
+
+  if (x == undefined) {
+>x : Symbol(x, Decl(dependentReturnType11.ts, 4, 31))
+>undefined : Symbol(undefined)
+
+    return x;
+>x : Symbol(x, Decl(dependentReturnType11.ts, 4, 31))
+  }
+  return x;
+>x : Symbol(x, Decl(dependentReturnType11.ts, 4, 31))
+}
+
