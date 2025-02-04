@@ -114,9 +114,13 @@ func parseArgs() *cliOptions {
 }
 
 func main() {
-	if args := os.Args[1:]; len(args) > 0 && args[0] == "tsc" {
-		exitCode := execute.CommandLine(newSystem(), nil, args[1:])
-		os.Exit(int(exitCode))
+	if args := os.Args[1:]; len(args) > 0 {
+		switch args[0] {
+		case "tsc":
+			os.Exit(int(execute.CommandLine(newSystem(), nil, args[1:])))
+		case "lsp":
+			os.Exit(runLSP(args[1:]))
+		}
 	}
 	opts := parseArgs()
 

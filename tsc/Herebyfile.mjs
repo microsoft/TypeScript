@@ -1,13 +1,16 @@
 // @ts-check
 
+import chokidar from "chokidar";
 import { $ as _$ } from "execa";
 import { glob } from "glob";
 import { task } from "hereby";
+import assert from "node:assert";
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
 import { parseArgs } from "node:util";
+import pc from "picocolors";
 import which from "which";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
@@ -71,22 +74,30 @@ function isInstalled(tool) {
     return !!which.sync(tool, { nothrow: true });
 }
 
-export const generateLibs = task({
+const libsDir = "./internal/bundled/libs";
+const libsRegexp = /(?:^|[\\/])internal[\\/]bundled[\\/]libs[\\/]/;
+
+async function generateLibs() {
+    await fs.promises.mkdir("./built/local", { recursive: true });
+
+    const libs = await fs.promises.readdir(libsDir);
+
+    await Promise.all(libs.map(async lib => {
+        fs.promises.copyFile(`${libsDir}/${lib}`, `./built/local/${lib}`);
+    }));
+}
+
+export const lib = task({
     name: "lib",
-    run: async () => {
-        await fs.promises.mkdir("./built/local", { recursive: true });
-
-        const libsDir = "./internal/bundled/libs";
-        const libs = await fs.promises.readdir(libsDir);
-
-        await Promise.all(libs.map(async lib => {
-            fs.promises.copyFile(`${libsDir}/${lib}`, `./built/local/${lib}`);
-        }));
-    },
+    run: generateLibs,
 });
 
-function buildExecutableToBuilt(packagePath) {
-    return $`go build ${options.race ? ["-race"] : []} -tags=noembed -o ./built/local/ ${packagePath}`;
+/**
+ * @param {string} packagePath
+ * @param {AbortSignal} [abortSignal]
+ */
+function buildExecutableToBuilt(packagePath, abortSignal) {
+    return $({ cancelSignal: abortSignal })`go build ${options.race ? ["-race"] : []} -tags=noembed -o ./built/local/ ${packagePath}`;
 }
 
 export const tsgoBuild = task({
@@ -98,7 +109,7 @@ export const tsgoBuild = task({
 
 export const tsgo = task({
     name: "tsgo",
-    dependencies: [generateLibs, tsgoBuild],
+    dependencies: [lib, tsgoBuild],
 });
 
 export const local = task({
@@ -109,6 +120,41 @@ export const local = task({
 export const build = task({
     name: "build",
     dependencies: [local],
+});
+
+export const buildWatch = task({
+    name: "build:watch",
+    run: async () => {
+        await watchDebounced("build:watch", async (paths, abortSignal) => {
+            let libsChanged = false;
+            let goChanged = false;
+
+            for (const p of paths) {
+                if (libsRegexp.test(p)) {
+                    libsChanged = true;
+                }
+                else if (p.endsWith(".go")) {
+                    goChanged = true;
+                }
+                if (libsChanged && goChanged) {
+                    break;
+                }
+            }
+
+            if (libsChanged) {
+                console.log("Generating libs...");
+                await generateLibs();
+            }
+
+            if (goChanged) {
+                console.log("Building tsgo...");
+                await buildExecutableToBuilt("./cmd/tsgo", abortSignal);
+            }
+        }, {
+            paths: ["cmd", "internal"],
+            ignored: path => /[\\/]testdata[\\/]/.test(path),
+        });
+    },
 });
 
 export const cleanBuilt = task({
@@ -310,4 +356,177 @@ export const baselineAccept = task({
 function rimraf(p) {
     // The rimraf package uses maxRetries=10 on Windows, but Node's fs.rm does not have that special case.
     return fs.promises.rm(p, { recursive: true, force: true, maxRetries: process.platform === "win32" ? 10 : 0 });
+}
+
+/** @typedef {{
+ * name: string;
+ * paths: string | string[];
+ * ignored?: (path: string) => boolean;
+ * run: (paths: Set<string>, abortSignal: AbortSignal) => void | Promise<unknown>;
+ * }} WatchTask */
+void 0;
+
+/**
+ * @param {string} name
+ * @param {(paths: Set<string>, abortSignal: AbortSignal) => void | Promise<unknown>} run
+ * @param {object} options
+ * @param {string | string[]} options.paths
+ * @param {(path: string) => boolean} [options.ignored]
+ * @param {string} [options.name]
+ */
+async function watchDebounced(name, run, options) {
+    let watching = true;
+    let running = true;
+    let lastChangeTimeMs = Date.now();
+    let changedDeferred = /** @type {Deferred<void>} */ (new Deferred());
+    let abortController = new AbortController();
+
+    const debouncer = new Debouncer(1_000, endRun);
+    const watcher = chokidar.watch(options.paths, {
+        ignored: options.ignored,
+        ignorePermissionErrors: true,
+        alwaysStat: true,
+    });
+    // The paths that have changed since the last run.
+    let paths = new Set();
+
+    process.on("SIGINT", endWatchMode);
+    process.on("beforeExit", endWatchMode);
+    watcher.on("all", onChange);
+
+    while (watching) {
+        const promise = changedDeferred.promise;
+        const token = abortController.signal;
+        if (!token.aborted) {
+            running = true;
+            try {
+                const thePaths = paths;
+                paths = new Set();
+                await run(thePaths, token);
+            }
+            catch {
+                // ignore
+            }
+            running = false;
+        }
+        if (watching) {
+            console.log(pc.yellowBright(`[${name}] run complete, waiting for changes...`));
+            await promise;
+        }
+    }
+
+    console.log("end");
+
+    /**
+     * @param {'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir' | 'all' | 'ready' | 'raw' | 'error'} eventName
+     * @param {string} path
+     * @param {fs.Stats | undefined} stats
+     */
+    function onChange(eventName, path, stats) {
+        switch (eventName) {
+            case "change":
+            case "unlink":
+            case "unlinkDir":
+                break;
+            case "add":
+            case "addDir":
+                // skip files that are detected as 'add' but haven't actually changed since the last time we ran.
+                if (stats && stats.mtimeMs <= lastChangeTimeMs) {
+                    return;
+                }
+                break;
+        }
+        beginRun(path);
+    }
+
+    /**
+     * @param {string} path
+     */
+    function beginRun(path) {
+        if (debouncer.empty) {
+            console.log(pc.yellowBright(`[${name}] changed due to '${path}', restarting...`));
+            if (running) {
+                console.log(pc.yellowBright(`[${name}] aborting in-progress run...`));
+            }
+            abortController.abort();
+            abortController = new AbortController();
+        }
+
+        debouncer.enqueue();
+        paths.add(path);
+    }
+
+    function endRun() {
+        lastChangeTimeMs = Date.now();
+        changedDeferred.resolve();
+        changedDeferred = /** @type {Deferred<void>} */ (new Deferred());
+    }
+
+    function endWatchMode() {
+        if (watching) {
+            watching = false;
+            console.log(pc.yellowBright(`[${name}] exiting watch mode...`));
+            abortController.abort();
+            watcher.close();
+        }
+    }
+}
+
+/**
+ * @template T
+ */
+export class Deferred {
+    constructor() {
+        /** @type {Promise<T>} */
+        this.promise = new Promise((resolve, reject) => {
+            this.resolve = resolve;
+            this.reject = reject;
+        });
+    }
+}
+
+export class Debouncer {
+    /**
+     * @param {number} timeout
+     * @param {() => Promise<any> | void} action
+     */
+    constructor(timeout, action) {
+        this._timeout = timeout;
+        this._action = action;
+    }
+
+    get empty() {
+        return !this._deferred;
+    }
+
+    enqueue() {
+        if (this._timer) {
+            clearTimeout(this._timer);
+            this._timer = undefined;
+        }
+
+        if (!this._deferred) {
+            this._deferred = new Deferred();
+        }
+
+        this._timer = setTimeout(() => this.run(), 100);
+        return this._deferred.promise;
+    }
+
+    run() {
+        if (this._timer) {
+            clearTimeout(this._timer);
+            this._timer = undefined;
+        }
+
+        const deferred = this._deferred;
+        assert(deferred);
+        this._deferred = undefined;
+        try {
+            deferred.resolve(this._action());
+        }
+        catch (e) {
+            deferred.reject(e);
+        }
+    }
 }

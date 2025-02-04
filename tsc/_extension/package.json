@@ -1,0 +1,30 @@
+{
+    "name": "typescript-lsp",
+    "displayName": "TypeScript (LSP)",
+    "publisher": "typescript",
+    "author": "Microsoft Corp.",
+    "description": "Test extension for typescript-go",
+    "private": true,
+    "version": "0.0.0",
+    "type": "commonjs",
+    "engines": {
+        "vscode": "^1.91.0"
+    },
+    "activationEvents": [
+        "onLanguage:javascript",
+        "onLanguage:javascriptreact",
+        "onLanguage:typescript",
+        "onLanguage:typescriptreact"
+    ],
+    "main": "./dist/extension.js",
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc --watch"
+    },
+    "dependencies": {
+        "vscode-languageclient": "^9.0.1"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.96.0"
+    }
+}
