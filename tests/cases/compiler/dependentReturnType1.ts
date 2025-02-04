@@ -307,7 +307,6 @@ function badCapitalize<T extends string | string[]>(
     }
 }
 
-// No narrowing because conditional's extends type is different from type parameter constraint types
 function voidRet<T extends { a: string } | undefined>(
     x: T
 ): T extends {} ? void : T extends undefined ? number : never {
