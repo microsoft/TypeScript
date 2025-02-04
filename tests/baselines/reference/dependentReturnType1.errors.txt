@@ -26,8 +26,6 @@ dependentReturnType1.ts(275,9): error TS2322: Type '1' is not assignable to type
 dependentReturnType1.ts(278,9): error TS2322: Type '2' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
 dependentReturnType1.ts(280,5): error TS2322: Type '0' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
 dependentReturnType1.ts(302,9): error TS2322: Type 'string' is not assignable to type 'string[]'.
-dependentReturnType1.ts(311,9): error TS2322: Type 'undefined' is not assignable to type 'T extends {} ? void : T extends undefined ? number : never'.
-dependentReturnType1.ts(313,5): error TS2322: Type 'number' is not assignable to type 'T extends {} ? void : T extends undefined ? number : never'.
 dependentReturnType1.ts(334,9): error TS2322: Type '1' is not assignable to type '4'.
 dependentReturnType1.ts(367,13): error TS2322: Type 'number' is not assignable to type 'T extends 1 ? number : T extends 2 ? string : never'.
 dependentReturnType1.ts(369,9): error TS2322: Type 'string' is not assignable to type 'T extends 1 ? number : T extends 2 ? string : never'.
@@ -44,7 +42,7 @@ dependentReturnType1.ts(488,9): error TS2322: Type 'R' is not assignable to type
 dependentReturnType1.ts(514,5): error TS2322: Type '1' is not assignable to type 'never'.
 
 
-==== dependentReturnType1.ts (39 errors) ====
+==== dependentReturnType1.ts (37 errors) ====
     interface A {
         1: number;
         2: string;
@@ -407,12 +405,8 @@ dependentReturnType1.ts(514,5): error TS2322: Type '1' is not assignable to type
     ): T extends {} ? void : T extends undefined ? number : never {
         if (x) {
             return;
-            ~~~~~~
-!!! error TS2322: Type 'undefined' is not assignable to type 'T extends {} ? void : T extends undefined ? number : never'.
         }
         return 1;
-        ~~~~~~
-!!! error TS2322: Type 'number' is not assignable to type 'T extends {} ? void : T extends undefined ? number : never'.
     }
     
     // Multiple type parameters at once
