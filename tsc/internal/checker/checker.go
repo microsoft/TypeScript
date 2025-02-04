@@ -25079,7 +25079,7 @@ func (c *Checker) getSymbolAtLocation(node *ast.Node, ignoreErrors bool) *ast.Sy
 	if ast.IsDeclarationNameOrImportPropertyName(node) {
 		// This is a declaration, call getSymbolOfNode
 		parentSymbol := c.getSymbolOfDeclaration(parent)
-		if ast.IsImportOrExportSpecifier(parent) && parent.TagName() == node {
+		if ast.IsImportOrExportSpecifier(parent) && parent.PropertyName() == node {
 			return c.getImmediateAliasedSymbol(parentSymbol)
 		}
 		return parentSymbol
