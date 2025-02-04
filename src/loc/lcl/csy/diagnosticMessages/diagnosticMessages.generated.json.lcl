@@ -8274,11 +8274,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_asserts_2880" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert_2880" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import assertions have been replaced by import attributes. Use 'with' instead of 'asserts'.]]></Val>
+          <Val><![CDATA[Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Kontrolní výrazy importu byly nahrazeny atributy importu. Místo asserts použijte with.]]></Val>
+            <Val><![CDATA[Kontrolní výrazy importu byly nahrazeny atributy importu. Místo assert použijte with.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
