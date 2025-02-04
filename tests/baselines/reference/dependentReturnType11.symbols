@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/dependentReturnType11.ts] ////
+
+=== dependentReturnType11.ts ===
+type Foo<T extends boolean> = {
+>Foo : Symbol(Foo, Decl(dependentReturnType11.ts, 0, 0))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 0, 9))
+
+    name: string,
+>name : Symbol(name, Decl(dependentReturnType11.ts, 0, 31))
+
+    isDog: T,
+>isDog : Symbol(isDog, Decl(dependentReturnType11.ts, 1, 17))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 0, 9))
+}
+
+type Ret<T> =
+>Ret : Symbol(Ret, Decl(dependentReturnType11.ts, 3, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 5, 9))
+
+    T extends true ? "woof" :
+>T : Symbol(T, Decl(dependentReturnType11.ts, 5, 9))
+
+    T extends false? "meow" :
+>T : Symbol(T, Decl(dependentReturnType11.ts, 5, 9))
+
+    never;
+
+function example1<T extends boolean>(param1: T, param2: Foo<T>): Ret<T> {
+>example1 : Symbol(example1, Decl(dependentReturnType11.ts, 8, 10))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 10, 18))
+>param1 : Symbol(param1, Decl(dependentReturnType11.ts, 10, 37))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 10, 18))
+>param2 : Symbol(param2, Decl(dependentReturnType11.ts, 10, 47))
+>Foo : Symbol(Foo, Decl(dependentReturnType11.ts, 0, 0))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 10, 18))
+>Ret : Symbol(Ret, Decl(dependentReturnType11.ts, 3, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 10, 18))
+
+    if (param1) {
+>param1 : Symbol(param1, Decl(dependentReturnType11.ts, 10, 37))
+
+        return "woof";
+    }
+    return "meow"
+}
+

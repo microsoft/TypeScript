@@ -1,0 +1,26 @@
+dependentReturnType11.ts(13,9): error TS2322: Type '"woof"' is not assignable to type 'Ret<T>'.
+dependentReturnType11.ts(15,5): error TS2322: Type '"meow"' is not assignable to type 'Ret<T>'.
+
+
+==== dependentReturnType11.ts (2 errors) ====
+    type Foo<T extends boolean> = {
+        name: string,
+        isDog: T,
+    }
+    
+    type Ret<T> =
+        T extends true ? "woof" :
+        T extends false? "meow" :
+        never;
+    
+    function example1<T extends boolean>(param1: T, param2: Foo<T>): Ret<T> {
+        if (param1) {
+            return "woof";
+            ~~~~~~
+!!! error TS2322: Type '"woof"' is not assignable to type 'Ret<T>'.
+        }
+        return "meow"
+        ~~~~~~
+!!! error TS2322: Type '"meow"' is not assignable to type 'Ret<T>'.
+    }
+    

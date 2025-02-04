@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/dependentReturnType11.ts] ////
+
+=== dependentReturnType11.ts ===
+type Foo<T extends boolean> = {
+>Foo : Foo<T>
+>    : ^^^^^^
+
+    name: string,
+>name : string
+>     : ^^^^^^
+
+    isDog: T,
+>isDog : T
+>      : ^
+}
+
+type Ret<T> =
+>Ret : Ret<T>
+>    : ^^^^^^
+
+    T extends true ? "woof" :
+>true : true
+>     : ^^^^
+
+    T extends false? "meow" :
+>false : false
+>      : ^^^^^
+
+    never;
+
+function example1<T extends boolean>(param1: T, param2: Foo<T>): Ret<T> {
+>example1 : <T extends boolean>(param1: T, param2: Foo<T>) => Ret<T>
+>         : ^ ^^^^^^^^^       ^^      ^^ ^^      ^^      ^^^^^      
+>param1 : T
+>       : ^
+>param2 : Foo<T>
+>       : ^^^^^^
+
+    if (param1) {
+>param1 : T
+>       : ^
+
+        return "woof";
+>"woof" : "woof"
+>       : ^^^^^^
+    }
+    return "meow"
+>"meow" : "meow"
+>       : ^^^^^^
+}
+
