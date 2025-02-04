@@ -23018,7 +23018,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (sourceFlags & TypeFlags.StringMapping) {
                     if ((source as StringMappingType).symbol === (target as StringMappingType).symbol) {
-                        return isRelatedTo((source as IndexType).type, (target as IndexType).type, RecursionFlags.Both, /*reportErrors*/ false);
+                        return isRelatedTo((source as StringMappingType).type, (target as StringMappingType).type, RecursionFlags.Both, /*reportErrors*/ false);
                     }
                 }
                 if (!(sourceFlags & TypeFlags.Object)) {
