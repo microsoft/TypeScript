@@ -24,19 +24,19 @@ type CommandLineOption struct {
 
 	// used in parsing
 	isFilePath        bool
-	isTSConfigOnly    bool
+	IsTSConfigOnly    bool
 	IsCommandLineOnly bool
 
 	// used in output
-	description              *diagnostics.Message
-	defaultValueDescription  any
+	Description              *diagnostics.Message
+	DefaultValueDescription  any
 	showInSimplifiedHelpView bool
 
 	// used in output in serializing and generate tsconfig
-	category *diagnostics.Message
+	Category *diagnostics.Message
 
-	// defined once
-	extraValidation func(value CompilerOptionsValue) (d *diagnostics.Message, args []string)
+	// a flag indicating whether `validateJsonOptionValue` should perform extra checks
+	extraValidation bool
 
 	// true or undefined
 	// used for configDirTemplateSubstitutionOptions
@@ -95,7 +95,7 @@ var commandLineOptionElements = map[string]*CommandLineOption{
 	"lib": {
 		Name:                    "lib",
 		Kind:                    CommandLineOptionTypeEnum, // libMap,
-		defaultValueDescription: core.TSUnknown,
+		DefaultValueDescription: core.TSUnknown,
 	},
 	"rootDirs": {
 		Name:       "rootDirs",
@@ -144,6 +144,19 @@ var commandLineOptionElements = map[string]*CommandLineOption{
 		Name: "extends",
 		Kind: CommandLineOptionTypeString,
 	},
+	// For Watch options
+	"excludeDirectories": {
+		Name:            "excludeDirectory",
+		Kind:            CommandLineOptionTypeString,
+		isFilePath:      true,
+		extraValidation: true,
+	},
+	"excludeFiles": {
+		Name:            "excludeFile",
+		Kind:            CommandLineOptionTypeString,
+		isFilePath:      true,
+		extraValidation: true,
+	},
 }
 
 // CommandLineOption.EnumMap()
@@ -155,6 +168,9 @@ var commandLineOptionEnumMap = map[string]*collections.OrderedMap[string, any]{
 	"moduleDetection":  moduleDetectionOptionMap,
 	"jsx":              jsxOptionMap,
 	"newLine":          newLineOptionMap,
+	"watchFile":        watchFileEnumMap,
+	"watchDirectory":   watchDirectoryEnumMap,
+	"fallbackPolling":  fallbackEnumMap,
 }
 
 // CommandLineOption.DeprecatedKeys()

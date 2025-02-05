@@ -36,7 +36,7 @@ func getCompilerOptionValueTypeString(option *CommandLineOption) string {
 	}
 }
 
-func (parser *CommandLineParser) createUnknownOptionError(
+func (parser *commandLineParser) createUnknownOptionError(
 	unknownOption string,
 	unknownOptionErrorText string,
 	node *ast.Node,

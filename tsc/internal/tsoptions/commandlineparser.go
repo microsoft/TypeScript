@@ -11,47 +11,29 @@ import (
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
-func (p *CommandLineParser) AlternateMode() *AlternateModeDiagnostics {
+func (p *commandLineParser) AlternateMode() *AlternateModeDiagnostics {
 	return p.workerDiagnostics.didYouMean.alternateMode
 }
 
-func (p *CommandLineParser) OptionsDeclarations() []*CommandLineOption {
+func (p *commandLineParser) OptionsDeclarations() []*CommandLineOption {
 	return p.workerDiagnostics.didYouMean.OptionDeclarations
 }
 
-func (p *CommandLineParser) UnknownOptionDiagnostic() *diagnostics.Message {
+func (p *commandLineParser) UnknownOptionDiagnostic() *diagnostics.Message {
 	return p.workerDiagnostics.didYouMean.UnknownOptionDiagnostic
 }
 
-func (p *CommandLineParser) UnknownDidYouMeanDiagnostic() *diagnostics.Message {
+func (p *commandLineParser) UnknownDidYouMeanDiagnostic() *diagnostics.Message {
 	return p.workerDiagnostics.didYouMean.UnknownDidYouMeanDiagnostic
 }
 
-func (p *CommandLineParser) GetOptionsNameMap() *NameMap {
-	p.workerDiagnostics.optionsNameMapOnce.Do(func() {
-		optionsNames := map[string]*CommandLineOption{}
-		shortOptionNames := map[string]string{}
-		for _, option := range p.workerDiagnostics.didYouMean.OptionDeclarations {
-			optionsNames[strings.ToLower(option.Name)] = option
-			if option.shortName != "" {
-				shortOptionNames[option.shortName] = option.Name
-			}
-		}
-		p.workerDiagnostics.optionsNameMap = &NameMap{
-			optionsNames:     optionsNames,
-			shortOptionNames: shortOptionNames,
-		}
-	})
-	return p.workerDiagnostics.optionsNameMap
-}
-
-type CommandLineParser struct {
+type commandLineParser struct {
 	workerDiagnostics *ParseCommandLineWorkerDiagnostics
+	optionsMap        *NameMap
 	fs                vfs.FS
 	options           map[string]any
-	// todo: watchOptions    map[string]any
-	fileNames []string
-	errors    []*ast.Diagnostic
+	fileNames         []string
+	errors            []*ast.Diagnostic
 }
 
 func ParseCommandLine(
@@ -63,14 +45,16 @@ func ParseCommandLine(
 	}
 	parser := parseCommandLineWorker(CompilerOptionsDidYouMeanDiagnostics, commandLine, host.FS())
 	optionsWithAbsolutePaths := convertToOptionsWithAbsolutePaths(parser.options, commandLineCompilerOptionsMap, host.GetCurrentDirectory())
-	o, d := convertOptionsFromJson(commandLineCompilerOptionsMap, optionsWithAbsolutePaths, host.GetCurrentDirectory(), &core.CompilerOptions{})
+	compilerOptions, d1 := convertOptionsFromJson(commandLineCompilerOptionsMap, optionsWithAbsolutePaths, host.GetCurrentDirectory(), &compilerOptionsParser{&core.CompilerOptions{}, true})
+	watchOptions, d2 := convertOptionsFromJson(commandLineCompilerOptionsMap, optionsWithAbsolutePaths, host.GetCurrentDirectory(), &watchOptionsParser{&core.WatchOptions{}, true})
 	return &ParsedCommandLine{
 		ParsedConfig: &core.ParsedOptions{
-			CompilerOptions: o,
+			CompilerOptions: compilerOptions.CompilerOptions,
+			WatchOptions:    watchOptions.WatchOptions,
 			FileNames:       parser.fileNames,
 		},
 		ConfigFile:    nil,
-		Errors:        append(parser.errors, d...),
+		Errors:        append(append(parser.errors, d1...), d2...),
 		Raw:           parser.options, // todo: keep optionsBase incase needed later
 		CompileOnSave: nil,
 	}
@@ -80,19 +64,20 @@ func parseCommandLineWorker(
 	parseCommandLineWithDiagnostics *ParseCommandLineWorkerDiagnostics,
 	commandLine []string,
 	fs vfs.FS,
-) *CommandLineParser {
-	parser := &CommandLineParser{
+) *commandLineParser {
+	parser := &commandLineParser{
 		fs:                fs,
 		workerDiagnostics: parseCommandLineWithDiagnostics,
 		fileNames:         []string{},
 		options:           map[string]any{},
 		errors:            []*ast.Diagnostic{},
 	}
+	parser.optionsMap = GetNameMapFromList(parser.OptionsDeclarations())
 	parser.parseStrings(commandLine)
 	return parser
 }
 
-func (p *CommandLineParser) parseStrings(args []string) {
+func (p *commandLineParser) parseStrings(args []string) {
 	i := 0
 	for i < len(args) {
 		s := args[i]
@@ -105,17 +90,16 @@ func (p *CommandLineParser) parseStrings(args []string) {
 			p.parseResponseFile(s[1:])
 		case '-':
 			inputOptionName := getInputOptionName(s)
-			opt := p.GetOptionsNameMap().GetOptionDeclarationFromName(inputOptionName, true /*allowShort*/)
+			opt := p.optionsMap.GetOptionDeclarationFromName(inputOptionName, true /*allowShort*/)
 			if opt != nil {
-				i = p.parseOptionValue(args, i, opt)
+				i = p.parseOptionValue(args, i, opt, nil)
 			} else {
-				// todo: watch options not yet implemented
-				// watchOpt := getOptionDeclarationFromName(watchOptionsDidYouMeanDiagnostics.getOptionsNameMap, inputOptionName, /*allowShort*/ true);
-				// if (watchOpt != nil) {
-				// 	i := parser.parseOptionValue(args, i, watchOptionsDidYouMeanDiagnostics, watchOpt, watchOptions, errors);
-				// } else {
-				p.errors = append(p.errors, p.createUnknownOptionError(inputOptionName, s, nil, nil))
-				// }
+				watchOpt := WatchNameMap.GetOptionDeclarationFromName(inputOptionName, true /*allowShort*/)
+				if watchOpt != nil {
+					i = p.parseOptionValue(args, i, watchOpt, watchOptionsDidYouMeanDiagnostics.OptionTypeMismatchDiagnostic)
+				} else {
+					p.errors = append(p.errors, p.createUnknownOptionError(inputOptionName, s, nil, nil))
+				}
 			}
 		default:
 			p.fileNames = append(p.fileNames, s)
@@ -128,7 +112,7 @@ func getInputOptionName(input string) string {
 	return strings.ToLower(strings.TrimLeft(strings.TrimLeft(input, "-"), "-"))
 }
 
-func (p *CommandLineParser) parseResponseFile(fileName string) {
+func (p *commandLineParser) parseResponseFile(fileName string) {
 	fileContents, errors := TryReadFile(fileName, func(fileName string) (string, bool) {
 		if p.fs == nil {
 			return "", false
@@ -188,12 +172,13 @@ func TryReadFile(fileName string, readFile func(string) (string, bool), errors [
 	return text, errors
 }
 
-func (p *CommandLineParser) parseOptionValue(
+func (p *commandLineParser) parseOptionValue(
 	args []string,
 	i int,
 	opt *CommandLineOption,
+	diag *diagnostics.Message,
 ) int {
-	if opt.isTSConfigOnly && i <= len(args) {
+	if opt.IsTSConfigOnly && i <= len(args) {
 		optValue := ""
 		if i < len(args) {
 			optValue = args[i]
@@ -221,7 +206,10 @@ func (p *CommandLineParser) parseOptionValue(
 		// Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
 		if i >= len(args) {
 			if opt.Kind != "boolean" {
-				p.errors = append(p.errors, ast.NewCompilerDiagnostic(p.workerDiagnostics.OptionTypeMismatchDiagnostic, opt.Name, getCompilerOptionValueTypeString(opt)))
+				if diag == nil {
+					diag = p.workerDiagnostics.OptionTypeMismatchDiagnostic
+				}
+				p.errors = append(p.errors, ast.NewCompilerDiagnostic(diag, opt.Name, getCompilerOptionValueTypeString(opt)))
 				if opt.Kind == "list" {
 					p.options[opt.Name] = []string{}
 				} else if opt.Kind == "enum" {
@@ -257,13 +245,17 @@ func (p *CommandLineParser) parseOptionValue(
 				}
 			case "string":
 				val, err := validateJsonOptionValue(opt, args[i], nil, nil)
-				p.options[opt.Name] = val
-				p.errors = append(p.errors, err...)
+				if err == nil {
+					p.options[opt.Name] = val
+				} else {
+					p.errors = append(p.errors, err...)
+				}
 				i++
 			case "list":
-				result := p.parseListTypeOption(opt, args[i])
+				result, err := p.parseListTypeOption(opt, args[i])
 				p.options[opt.Name] = result
-				if len(result) != 0 {
+				p.errors = append(p.errors, err...)
+				if len(result) > 0 || len(err) > 0 {
 					i++
 				}
 			case "listOrElement":
@@ -283,10 +275,8 @@ func (p *CommandLineParser) parseOptionValue(
 	return i
 }
 
-func (p *CommandLineParser) parseListTypeOption(opt *CommandLineOption, value string) []string {
-	elements, errors := ParseListTypeOption(opt, value)
-	p.errors = append(p.errors, errors...)
-	return elements
+func (p *commandLineParser) parseListTypeOption(opt *CommandLineOption, value string) ([]string, []*ast.Diagnostic) {
+	return ParseListTypeOption(opt, value)
 }
 
 func ParseListTypeOption(opt *CommandLineOption, value string) ([]string, []*ast.Diagnostic) {
@@ -297,7 +287,9 @@ func ParseListTypeOption(opt *CommandLineOption, value string) ([]string, []*ast
 	}
 	if opt.Kind == "listOrElement" && !strings.ContainsRune(value, ',') {
 		val, err := validateJsonOptionValue(opt, value, nil, nil)
-		errors = append(errors, err...)
+		if err != nil {
+			return []string{}, err
+		}
 		return []string{val.(string)}, errors
 	}
 	if value == "" {
@@ -308,8 +300,11 @@ func ParseListTypeOption(opt *CommandLineOption, value string) ([]string, []*ast
 	case "string":
 		elements := core.Filter(core.Map(values, func(v string) string {
 			val, err := validateJsonOptionValue(opt.Elements(), v, nil, nil)
+			if _, ok := val.(string); ok {
+				return val.(string)
+			}
 			errors = append(errors, err...)
-			return val.(string)
+			return ""
 		}), isDefined)
 		return elements, errors
 	case "boolean", "object", "number":
@@ -317,21 +312,15 @@ func ParseListTypeOption(opt *CommandLineOption, value string) ([]string, []*ast
 		// 				!!! we don't actually have number list options, so I didn't implement number list parsing
 		panic("List of " + opt.Elements().Kind + " is not yet supported.")
 	default:
-		result := core.Map(values, func(v string) string {
+		result := core.Filter(core.Map(values, func(v string) string {
 			val, err := convertJsonOptionOfEnumType(opt.Elements(), strings.TrimFunc(v, stringutil.IsWhiteSpaceLike), nil, nil)
 			if _, ok := val.(string); ok {
 				return val.(string)
 			}
 			errors = append(errors, err...)
 			return ""
-		})
-		var mappedValues []string
-		for _, v := range result {
-			if isDefined(v) {
-				mappedValues = append(mappedValues, v)
-			}
-		}
-		return mappedValues, errors
+		}), isDefined)
+		return result, errors
 	}
 }
 

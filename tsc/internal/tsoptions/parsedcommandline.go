@@ -9,7 +9,6 @@ import (
 
 type ParsedCommandLine struct {
 	ParsedConfig *core.ParsedOptions
-	// WatchOptions WatchOptions
 
 	ConfigFile *ast.SourceFile // TsConfigSourceFile, used in Program and ExecuteCommandLine
 	Errors     []*ast.Diagnostic

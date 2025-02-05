@@ -192,3 +192,26 @@ func GetDefaultLibFileName(options *core.CompilerOptions) string {
 	}
 	return name
 }
+
+var watchFileEnumMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, any]{
+	{Key: "fixedpollinginterval", Value: core.WatchFileKindFixedPollingInterval},
+	{Key: "prioritypollinginterval", Value: core.WatchFileKindPriorityPollingInterval},
+	{Key: "dynamicprioritypolling", Value: core.WatchFileKindDynamicPriorityPolling},
+	{Key: "fixedchunksizepolling", Value: core.WatchFileKindFixedChunkSizePolling},
+	{Key: "usefsevents", Value: core.WatchFileKindUseFsEvents},
+	{Key: "usefseventsonparentdirectory", Value: core.WatchFileKindUseFsEventsOnParentDirectory},
+})
+
+var watchDirectoryEnumMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, any]{
+	{Key: "usefsevents", Value: core.WatchDirectoryKindUseFsEvents},
+	{Key: "fixedpollinginterval", Value: core.WatchDirectoryKindFixedPollingInterval},
+	{Key: "dynamicprioritypolling", Value: core.WatchDirectoryKindDynamicPriorityPolling},
+	{Key: "fixedchunksizepolling", Value: core.WatchDirectoryKindFixedChunkSizePolling},
+})
+
+var fallbackEnumMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, any]{
+	{Key: "fixedinterval", Value: core.PollingKindFixedInterval},
+	{Key: "priorityinterval", Value: core.PollingKindPriorityInterval},
+	{Key: "dynamicpriority", Value: core.PollingKindDynamicPriority},
+	{Key: "fixedchunksize", Value: core.PollingKindFixedChunkSize},
+})

@@ -28,19 +28,40 @@ type ParseCommandLineWorkerDiagnostics struct {
 var CompilerOptionsDidYouMeanDiagnostics = getParseCommandLineWorkerDiagnostics(OptionsDeclarations)
 
 func getParseCommandLineWorkerDiagnostics(decls []*CommandLineOption) *ParseCommandLineWorkerDiagnostics {
-	// todo watch, build
-	// this currently will only return the correct diagnostics for `compiler` mode
+	// this will only return the correct diagnostics for `compiler` mode, and is factored into a function for testing reasons.
 	return &ParseCommandLineWorkerDiagnostics{
 		didYouMean: DidYouMeanOptionsDiagnostics{
 			alternateMode: &AlternateModeDiagnostics{
 				diagnostic:     diagnostics.Compiler_option_0_may_only_be_used_with_build,
-				optionsNameMap: GetNameMapFromList(optionsForBuild),
+				optionsNameMap: BuildNameMap,
 			},
 			OptionDeclarations:          decls,
 			UnknownOptionDiagnostic:     diagnostics.Unknown_compiler_option_0,
 			UnknownDidYouMeanDiagnostic: diagnostics.Unknown_compiler_option_0_Did_you_mean_1,
 		},
-		optionsNameMap:               nil,
 		OptionTypeMismatchDiagnostic: diagnostics.Compiler_option_0_expects_an_argument,
 	}
+}
+
+var watchOptionsDidYouMeanDiagnostics = &ParseCommandLineWorkerDiagnostics{
+	didYouMean: DidYouMeanOptionsDiagnostics{
+		// no alternateMode
+		OptionDeclarations:          optionsForWatch,
+		UnknownOptionDiagnostic:     diagnostics.Unknown_watch_option_0,
+		UnknownDidYouMeanDiagnostic: diagnostics.Unknown_watch_option_0_Did_you_mean_1,
+	},
+	OptionTypeMismatchDiagnostic: diagnostics.Watch_option_0_requires_a_value_of_type_1,
+}
+
+var buildOptionsDidYouMeanDiagnostics = &ParseCommandLineWorkerDiagnostics{
+	didYouMean: DidYouMeanOptionsDiagnostics{
+		alternateMode: &AlternateModeDiagnostics{
+			diagnostic:     diagnostics.Compiler_option_0_may_not_be_used_with_build,
+			optionsNameMap: CompilerNameMap,
+		},
+		OptionDeclarations:          BuildOpts,
+		UnknownOptionDiagnostic:     diagnostics.Unknown_build_option_0,
+		UnknownDidYouMeanDiagnostic: diagnostics.Unknown_build_option_0_Did_you_mean_1,
+	},
+	OptionTypeMismatchDiagnostic: diagnostics.Build_option_0_requires_a_value_of_type_1,
 }
