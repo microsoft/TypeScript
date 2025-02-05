@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/declarationEmitEscapedSymbolNames.ts] ////
+
+=== declarationEmitEscapedSymbolNames.ts ===
+export class T {
+>T : T
+>  : ^
+
+    static readonly "\t" = Symbol()
+>"\t" : unique symbol
+>     : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+}
+
+export let x = { [T['\t']]: 1 }
+>x : { [T["\t"]]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>{ [T['\t']]: 1 } : { [T["\t"]]: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
+>[T['\t']] : number
+>          : ^^^^^^
+>T['\t'] : unique symbol
+>        : ^^^^^^^^^^^^^
+>T : typeof T
+>  : ^^^^^^^^
+>'\t' : "\t"
+>     : ^^^^
+>1 : 1
+>  : ^
+

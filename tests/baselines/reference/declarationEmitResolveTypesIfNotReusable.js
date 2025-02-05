@@ -42,10 +42,10 @@ declare const a: {
     readonly a: "value of a";
     readonly notNecessary: "X";
 };
-export declare const o1: (o: A["a"]["b"]) => void;
-export declare const o2: (o: (typeof a)["a"]) => void;
-export declare const o3: (o: (typeof a)["a"]) => void;
-export declare const o4: (o: keyof A["a"]) => void;
+export declare const o1: (o: A['a']['b']) => void;
+export declare const o2: (o: (typeof a)['a']) => void;
+export declare const o3: (o: (typeof a)['a']) => void;
+export declare const o4: (o: keyof A['a']) => void;
 export {};
 //// [main.d.ts]
 export declare const f: {

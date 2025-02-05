@@ -50,7 +50,7 @@ import { shouldLookupName, reuseDepName, shouldReuseLocalName, shouldBeElided } 
 >               : ^^^^^^^^^^^^^
 
 export declare const goodDeclaration: <T>() => () => { 
->goodDeclaration : <T>() => () => { shouldPrintResult: T extends Other ? "O" : "N"; shouldPrintResult2: T extends typeof shouldBeElided ? Other : "N"; shouldLookupName: typeof import("./other").shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: typeof reuseDepName; }
+>goodDeclaration : <T>() => () => { shouldPrintResult: T extends Other ? "O" : "N"; shouldPrintResult2: T extends typeof shouldBeElided ? Other : "N"; shouldLookupName: typeof import('./other').shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: typeof reuseDepName; }
 >                : ^ ^^^^^^^                                                                                                                                                                                                                                                                               
 
   /** Other Can't be named in index.ts, but the whole conditional type can be resolved  */

@@ -108,7 +108,7 @@ type TCA2 = Cases<'BAR'>;  // 'BAR bar BAR bAR'
 // Assignability
 
 function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
->test : <T extends "foo" | "bar">(name: `get${Capitalize<T>}`) => void
+>test : <T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) => void
 >     : ^ ^^^^^^^^^             ^^    ^^                     ^^^^^^^^^
 >name : `get${Capitalize<T>}`
 >     : ^^^^^^^^^^^^^^^^^^^^^

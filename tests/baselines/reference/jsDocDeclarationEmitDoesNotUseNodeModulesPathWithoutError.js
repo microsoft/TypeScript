@@ -60,4 +60,4 @@ export class NewAjax {
      */
     case6_unexpectedlyResolvesPathToNodeModules: (init?: LionRequestInit) => void;
 }
-export type LionRequestInit = import("@lion/ajax").LionRequestInit;
+export type LionRequestInit = import('@lion/ajax').LionRequestInit;

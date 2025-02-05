@@ -12,6 +12,6 @@
 
 verify.signatureHelp(
     { marker: "1", overloadsCount: 3, parameterName: "z", parameterSpan: "z: string" },
-    { marker: "2", overloadsCount: 3, parameterName: "x", parameterSpan: 'x: "hi"' },
-    { marker: "3", overloadsCount: 3, parameterName: "y", parameterSpan: 'y: "bye"' },
+    { marker: "2", overloadsCount: 3, parameterName: "x", parameterSpan: 'x: \'hi\'' },
+    { marker: "3", overloadsCount: 3, parameterName: "y", parameterSpan: 'y: \'bye\'' },
 );

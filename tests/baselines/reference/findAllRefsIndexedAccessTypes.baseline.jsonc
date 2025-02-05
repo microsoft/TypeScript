@@ -52,7 +52,7 @@
      },
      {
       "text": "0",
-      "kind": "stringLiteral"
+      "kind": "propertyName"
      },
      {
       "text": "]",
@@ -208,7 +208,7 @@
      },
      {
       "text": "0",
-      "kind": "stringLiteral"
+      "kind": "propertyName"
      },
      {
       "text": "]",

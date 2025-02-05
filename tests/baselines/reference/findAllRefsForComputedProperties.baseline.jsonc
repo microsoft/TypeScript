@@ -61,7 +61,7 @@
      },
      {
       "text": "\"prop1\"",
-      "kind": "stringLiteral"
+      "kind": "propertyName"
      },
      {
       "text": "]",
@@ -134,7 +134,7 @@
      },
      {
       "text": "\"prop1\"",
-      "kind": "stringLiteral"
+      "kind": "propertyName"
      },
      {
       "text": "]",
@@ -221,7 +221,7 @@
      },
      {
       "text": "\"prop1\"",
-      "kind": "stringLiteral"
+      "kind": "propertyName"
      },
      {
       "text": "]",
@@ -294,7 +294,7 @@
      },
      {
       "text": "\"prop1\"",
-      "kind": "stringLiteral"
+      "kind": "propertyName"
      },
      {
       "text": "]",
@@ -381,7 +381,7 @@
      },
      {
       "text": "\"prop1\"",
-      "kind": "stringLiteral"
+      "kind": "propertyName"
      },
      {
       "text": "]",
@@ -454,7 +454,7 @@
      },
      {
       "text": "\"prop1\"",
-      "kind": "stringLiteral"
+      "kind": "propertyName"
      },
      {
       "text": "]",

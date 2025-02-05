@@ -115,7 +115,6 @@ import {
     NodeBuilderFlags,
     NodeFlags,
     nodeIsMissing,
-    NoSubstitutionTemplateLiteral,
     ObjectLiteralExpression,
     ParameterDeclaration,
     ParenthesizedExpression,
@@ -193,7 +192,7 @@ export function createSyntacticTypeNodeBuilder(
     function reuseNode<T extends Node>(context: SyntacticTypeNodeBuilderContext, node: T, range?: Node): T;
     function reuseNode<T extends Node>(context: SyntacticTypeNodeBuilderContext, node: T | undefined, range?: Node): T | undefined;
     function reuseNode<T extends Node>(context: SyntacticTypeNodeBuilderContext, node: T | undefined, range: Node | undefined = node) {
-        return node === undefined ? undefined : resolver.markNodeReuse(context, node.flags & NodeFlags.Synthesized ? node : factory.cloneNode(node), range ?? node);
+        return node === undefined ? undefined : resolver.markNodeReuse(context, node, range ?? node);
     }
     function tryReuseExistingTypeNode(context: SyntacticTypeNodeBuilderContext, existing: TypeNode): TypeNode | undefined {
         const { finalizeBoundary, startRecoveryScope, hadError, markError } = resolver.createRecoveryBoundary(context);
@@ -532,10 +531,13 @@ export function createSyntacticTypeNodeBuilder(
                 setEmitFlags(clone, flags | (context.flags & NodeBuilderFlags.MultilineObjectLiterals && isTypeLiteralNode(node) ? 0 : EmitFlags.SingleLine));
                 return clone;
             }
-            if (isStringLiteral(node) && !!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType) && !node.singleQuote) {
-                const clone = factory.cloneNode(node);
-                (clone as Mutable<typeof clone>).singleQuote = true;
-                return clone;
+            if (isStringLiteral(node)) {
+                return setOriginalNode(
+                    context.flags & (NodeBuilderFlags.UseSingleQuotesForStringLiteralType | NodeBuilderFlags.UseDoubleQuotesForStringLiteralType) ?
+                        factory.createStringLiteral(node.text, !!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType)) :
+                        factory.createStringLiteralFromNode(node),
+                    node,
+                );
             }
             if (isConditionalTypeNode(node)) {
                 const checkType = visitNode(node.checkType, visitExistingNodeTreeSymbols, isTypeNode)!;
@@ -942,13 +944,12 @@ export function createSyntacticTypeNodeBuilder(
                 break;
             default:
                 let typeKind: KeywordTypeSyntaxKind | undefined;
-                let primitiveNode = node as PrimitiveLiteral;
+                const primitiveNode = node as PrimitiveLiteral;
                 switch (node.kind) {
                     case SyntaxKind.NumericLiteral:
                         typeKind = SyntaxKind.NumberKeyword;
                         break;
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
-                        primitiveNode = factory.createStringLiteral((node as NoSubstitutionTemplateLiteral).text);
                         typeKind = SyntaxKind.StringKeyword;
                         break;
                     case SyntaxKind.StringLiteral:

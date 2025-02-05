@@ -27,7 +27,7 @@ ns.default.a;
 
 //// [a.d.cts]
 export declare const a: number;
-declare const _default: "string";
+declare const _default: 'string';
 export default _default;
 //// [foo.d.mts]
 import d, { a } from './a.cjs';

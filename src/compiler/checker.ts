@@ -307,6 +307,7 @@ import {
     getExternalModuleRequireArgument,
     getFirstConstructorWithBody,
     getFirstIdentifier,
+    getFullWidth,
     getFunctionFlags,
     getHostSignatureFromJSDoc,
     getIdentifierGeneratedImportReference,
@@ -1709,10 +1710,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind);
         },
         typeToString: (type, enclosingDeclaration, flags) => {
-            return typeToString(type, getParseTreeNode(enclosingDeclaration), flags);
+            return typeToStringWorker(type, getParseTreeNode(enclosingDeclaration), flags);
         },
         symbolToString: (symbol, enclosingDeclaration, meaning, flags) => {
-            return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags);
+            return symbolToStringWorker(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags);
         },
         typePredicateToString: (predicate, enclosingDeclaration, flags) => {
             return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags);
@@ -1721,10 +1722,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind, writer);
         },
         writeType: (type, enclosingDeclaration, flags, writer, verbosityLevel, out) => {
-            return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, writer, verbosityLevel, out);
+            return typeToStringWorker(type, getParseTreeNode(enclosingDeclaration), flags, writer, verbosityLevel, out);
         },
         writeSymbol: (symbol, enclosingDeclaration, meaning, flags, writer) => {
-            return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags, writer);
+            return symbolToStringWorker(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags, writer);
         },
         writeTypePredicate: (predicate, enclosingDeclaration, flags, writer) => {
             return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags, writer);
@@ -5997,8 +5998,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags: SymbolFormatFlags = SymbolFormatFlags.AllowAnyNodeKind, writer?: EmitTextWriter): string {
+        return symbolToStringWorker(symbol, enclosingDeclaration, meaning, flags | SymbolFormatFlags.UseDoubleQuotesForStringLiteralType | SymbolFormatFlags.WriteComputedProps, writer);
+    }
+    function symbolToStringWorker(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags: SymbolFormatFlags = SymbolFormatFlags.AllowAnyNodeKind, writer?: EmitTextWriter): string {
         let nodeFlags = NodeBuilderFlags.IgnoreErrors;
         let internalNodeFlags = InternalNodeBuilderFlags.None;
+        if (flags & SymbolFormatFlags.UseSingleQuotesForStringLiteralType) {
+            nodeFlags |= NodeBuilderFlags.UseSingleQuotesForStringLiteralType;
+        }
+        if (flags & SymbolFormatFlags.UseDoubleQuotesForStringLiteralType) {
+            nodeFlags |= NodeBuilderFlags.UseDoubleQuotesForStringLiteralType;
+        }
         if (flags & SymbolFormatFlags.UseOnlyExternalAliasing) {
             nodeFlags |= NodeBuilderFlags.UseOnlyExternalAliasing;
         }
@@ -6011,7 +6021,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (flags & SymbolFormatFlags.DoNotIncludeSymbolChain) {
             internalNodeFlags |= InternalNodeBuilderFlags.DoNotIncludeSymbolChain;
         }
-        if (flags & SymbolFormatFlags.WriteComputedProps) {
+        if (flags & SymbolFormatFlags.WriteComputedProps || flags & SymbolFormatFlags.AllowAnyNodeKind) {
             internalNodeFlags |= InternalNodeBuilderFlags.WriteComputedProps;
         }
         const builder = flags & SymbolFormatFlags.AllowAnyNodeKind ? nodeBuilder.symbolToNode : nodeBuilder.symbolToEntityName;
@@ -6048,7 +6058,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    /**
+     * Prints a type, forcing the conversion of string delimiters to "
+     * This should usually be used for errors, since in errors printed types are inclosed in '
+     */
     function typeToString(
+        type: Type,
+        enclosingDeclaration?: Node,
+        flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
+        writer: EmitTextWriter = createTextWriter(""),
+        verbosityLevel?: number,
+        out?: WriterContextOut,
+    ): string {
+        return typeToStringWorker(type, enclosingDeclaration, flags | TypeFormatFlags.UseDoubleQuotesForStringLiteralType, writer, verbosityLevel, out);
+    }
+
+    function typeToStringWorker(
         type: Type,
         enclosingDeclaration?: Node,
         flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
@@ -6318,8 +6343,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * It also calls `setOriginalNode` to setup a `.original` pointer, since you basically *always* want these in the node builder.
          */
         function setTextRange<T extends Node>(context: NodeBuilderContext, range: T, location: Node | undefined): T {
-            if (!nodeIsSynthesized(range) || !(range.flags & NodeFlags.Synthesized) || !context.enclosingFile || context.enclosingFile !== getSourceFileOfNode(getOriginalNode(range))) {
-                range = factory.cloneNode(range); // if `range` is synthesized or originates in another file, copy it so it definitely has synthetic positions
+            const nodeSourceFile = getSourceFileOfNode(getOriginalNode(range));
+            if (!nodeIsSynthesized(range) || !(range.flags & NodeFlags.Synthesized) || !context.enclosingFile || context.enclosingFile !== nodeSourceFile) {
+                if (range.kind === SyntaxKind.StringLiteral) {
+                    const node = range as Node as StringLiteral;
+                    return setOriginalNode(
+                        context.flags & (NodeBuilderFlags.UseSingleQuotesForStringLiteralType | NodeBuilderFlags.UseDoubleQuotesForStringLiteralType) ?
+                            factory.createStringLiteral(node.text, !!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType)) :
+                            factory.createStringLiteralFromNode(node),
+                        node,
+                    ) as Node as T;
+                }
+                else {
+                    range = factory.cloneNode(range); // if `range` is synthesized or originates in another file, copy it so it definitely has synthetic positions
+                }
             }
             if (range === location) return range;
             if (!location) {
@@ -6341,18 +6378,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function symbolToNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags) {
-            if (context.internalFlags & InternalNodeBuilderFlags.WriteComputedProps) {
-                if (symbol.valueDeclaration) {
-                    const name = getNameOfDeclaration(symbol.valueDeclaration);
-                    if (name && isComputedPropertyName(name)) return name;
-                }
-                const nameType = getSymbolLinks(symbol).nameType;
-                if (nameType && nameType.flags & (TypeFlags.EnumLiteral | TypeFlags.UniqueESSymbol)) {
-                    context.enclosingDeclaration = nameType.symbol.valueDeclaration;
-                    return factory.createComputedPropertyName(symbolToExpression(nameType.symbol, context, meaning));
-                }
-            }
-            return symbolToExpression(symbol, context, meaning);
+            return symbolToExpression(symbol, context, meaning, !!(context.internalFlags & InternalNodeBuilderFlags.WriteComputedProps));
         }
 
         function withContext<T>(
@@ -8401,7 +8427,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let symbolName: string | undefined;
                 if (index === 0) {
                     context.flags |= NodeBuilderFlags.InInitialEntityName;
-                    symbolName = getNameOfSymbolAsWritten(symbol, context);
+                    symbolName = getNameOfSymbolAsWritten(symbol, context).symbolName;
                     context.approximateLength += (symbolName ? symbolName.length : 0) + 1;
                     context.flags ^= NodeBuilderFlags.InInitialEntityName;
                 }
@@ -8426,7 +8452,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         return LHS;
                     }
-                    symbolName = getNameOfSymbolAsWritten(symbol, context);
+                    symbolName = getNameOfSymbolAsWritten(symbol, context).symbolName;
                 }
                 context.approximateLength += symbolName.length + 1;
 
@@ -8532,7 +8558,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (index === 0) {
                     context.flags |= NodeBuilderFlags.InInitialEntityName;
                 }
-                const symbolName = getNameOfSymbolAsWritten(symbol, context);
+                const { symbolName } = getNameOfSymbolAsWritten(symbol, context);
                 if (index === 0) {
                     context.flags ^= NodeBuilderFlags.InInitialEntityName;
                 }
@@ -8545,28 +8571,37 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        function symbolToExpression(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags) {
+        function symbolToExpression(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, allowComputedProperty?: false): Expression;
+        function symbolToExpression(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, allowComputedProperty: boolean): Expression | ComputedPropertyName;
+        function symbolToExpression(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, allowComputedProperty = false) {
             const chain = lookupSymbolChain(symbol, context, meaning);
 
-            return createExpressionFromSymbolChain(chain, chain.length - 1);
+            return createExpressionFromSymbolChain(chain, chain.length - 1, allowComputedProperty && chain.length === 1);
 
-            function createExpressionFromSymbolChain(chain: Symbol[], index: number): Expression {
+            function createExpressionFromSymbolChain(chain: Symbol[], index: number, allowComputedProperty?: false): Expression;
+            function createExpressionFromSymbolChain(chain: Symbol[], index: number, allowComputedProperty: boolean): Expression | ComputedPropertyName;
+            function createExpressionFromSymbolChain(chain: Symbol[], index: number, allowComputedProperty = false): Expression | ComputedPropertyName {
                 const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
                 const symbol = chain[index];
 
                 if (index === 0) {
                     context.flags |= NodeBuilderFlags.InInitialEntityName;
                 }
-                let symbolName = getNameOfSymbolAsWritten(symbol, context);
+                let { symbolName, symbolNameSource }: { symbolName: string | undefined; symbolNameSource?: Node; } = getNameOfSymbolAsWritten(symbol, context);
                 if (index === 0) {
                     context.flags ^= NodeBuilderFlags.InInitialEntityName;
                 }
-                let firstChar = symbolName.charCodeAt(0);
 
-                if (isSingleOrDoubleQuote(firstChar) && some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
-                    return factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context));
+                const overrideSourceStringDelimiter = !!(context.flags & (NodeBuilderFlags.UseDoubleQuotesForStringLiteralType | NodeBuilderFlags.UseSingleQuotesForStringLiteralType));
+                let useSingleQuote = !(context.flags & NodeBuilderFlags.UseDoubleQuotesForStringLiteralType) &&
+                    (!!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType) || symbolName.charCodeAt(0) === CharacterCodes.singleQuote);
+
+                if (isSingleOrDoubleQuote(symbolName.charCodeAt(0)) && some(symbol.declarations, d => hasNonGlobalAugmentationExternalModuleSymbol(d) || (isSourceFile(d) && isJsonSourceFile(d)))) {
+                    const moduleName = factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context), useSingleQuote);
+                    moduleName.symbol = symbol;
+                    return moduleName;
                 }
-                if (index === 0 || canUsePropertyAccess(symbolName, languageVersion)) {
+                if ((symbolNameSource && isIdentifier(symbolNameSource) && getFullWidth(symbolNameSource) !== 0) || canUsePropertyAccess(symbolName, languageVersion)) {
                     const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
                     if (typeParameterNodes) setIdentifierTypeArguments(identifier, factory.createNodeArray<TypeNode | TypeParameterDeclaration>(typeParameterNodes));
                     identifier.symbol = symbol;
@@ -8574,24 +8609,93 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return index > 0 ? factory.createPropertyAccessExpression(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
                 }
                 else {
-                    if (firstChar === CharacterCodes.openBracket) {
-                        symbolName = symbolName.substring(1, symbolName.length - 1);
-                        firstChar = symbolName.charCodeAt(0);
+                    let hasComputedProperty = false;
+                    if (symbolNameSource && isComputedPropertyName(symbolNameSource)) {
+                        hasComputedProperty = true;
+                        symbolNameSource = symbolNameSource && isComputedPropertyName(symbolNameSource) ? symbolNameSource.expression : undefined;
+                        symbolName = symbolNameSource && isIdentifier(symbolNameSource) ? declarationNameToString(symbolNameSource) : symbolName.substring(1, symbolName.length - 1);
+                        useSingleQuote = !(context.flags & NodeBuilderFlags.UseDoubleQuotesForStringLiteralType) &&
+                            (!!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType) || isSingleOrDoubleQuote(symbolName.charCodeAt(0)));
                     }
                     let expression: Expression | undefined;
-                    if (isSingleOrDoubleQuote(firstChar) && !(symbol.flags & SymbolFlags.EnumMember)) {
-                        expression = factory.createStringLiteral(stripQuotes(symbolName).replace(/\\./g, s => s.substring(1)), firstChar === CharacterCodes.singleQuote);
+
+                    const nameType = getSymbolLinks(symbol).nameType;
+                    const hasEnumOrSymbolName = nameType && nameType.flags & (TypeFlags.EnumLiteral | TypeFlags.UniqueESSymbol);
+                    if (symbolNameSource) {
+                        // If we have a source node for the name it might be string number or entity name that we can reuse
+                        if (isStringLiteral(symbolNameSource)) {
+                            const stringLiteralName = cloneStringLiteral(symbolNameSource, overrideSourceStringDelimiter, useSingleQuote);
+                            stringLiteralName.symbol = symbol;
+                            expression = stringLiteralName;
+                        }
+                        else if (("" + +symbolName) === symbolName && !hasEnumOrSymbolName) {
+                            const numericValue = +symbolName;
+                            const numberLiteralName = factory.createNumericLiteral(Math.abs(numericValue));
+                            numberLiteralName.symbol = symbol;
+                            expression = numericValue >= 0 ? numberLiteralName : factory.createPrefixMinus(numberLiteralName);
+                        }
+                        else if (getFullWidth(symbolNameSource) !== 0) {
+                            expression = clonePropertyOrElementAccessChain(symbolNameSource, overrideSourceStringDelimiter, useSingleQuote, symbol);
+                        }
                     }
-                    else if (("" + +symbolName) === symbolName) {
-                        expression = factory.createNumericLiteral(+symbolName);
+                    // Use am enum or unique symbol name if we can get one
+                    if (hasEnumOrSymbolName && !expression) {
+                        hasComputedProperty = true;
+                        const oldEnclosingDecl = context.enclosingDeclaration;
+                        context.enclosingDeclaration = nameType.symbol.valueDeclaration;
+                        expression = symbolToExpression(nameType.symbol, context, SymbolFlags.Value);
+                        context.enclosingDeclaration = oldEnclosingDecl;
                     }
+
+                    // If we don't have an expression at this point we can be in one of two cases:
+                    // - we have syntax error, we just reuse the source code text to have something to show.
+                    // - we have a numeric literal that is not written in simple format ie one where ("" + +symbolName) !== symbolName
                     if (!expression) {
+                        // The identifier created here may contain a full expression or a number used as a computed property name and thus might not be valid
                         const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
                         if (typeParameterNodes) setIdentifierTypeArguments(identifier, factory.createNodeArray<TypeNode | TypeParameterDeclaration>(typeParameterNodes));
                         identifier.symbol = symbol;
                         expression = identifier;
                     }
-                    return factory.createElementAccessExpression(createExpressionFromSymbolChain(chain, index - 1), expression);
+
+                    return index === 0 && hasComputedProperty && allowComputedProperty ? factory.createComputedPropertyName(expression) :
+                        index === 0 ? expression :
+                        factory.createElementAccessExpression(createExpressionFromSymbolChain(chain, index - 1), expression);
+                }
+            }
+            function cloneStringLiteral(stringLiteral: StringLiteral, overrideSourceStringDelimiter: boolean, useSingleQuote: boolean) {
+                return !overrideSourceStringDelimiter ? factory.createStringLiteralFromNode(stringLiteral) :
+                    factory.createStringLiteral(getTextOfIdentifierOrLiteral(stringLiteral), useSingleQuote);
+            }
+            function clonePropertyOrElementAccessChain(node: Node, overrideDelimiter: boolean, useSingleQuote: boolean, symbol?: Symbol): Expression | undefined {
+                Debug.type<Identifier | PropertyAccessExpression | ElementAccessExpression | NumericLiteral | StringLiteral>(node);
+                switch (node.kind) {
+                    case SyntaxKind.Identifier: {
+                        const identifier = setEmitFlags(factory.createIdentifier(getTextOfNode(node)), EmitFlags.NoAsciiEscaping);
+                        if (symbol) identifier.symbol = symbol;
+                        return identifier;
+                    }
+                    case SyntaxKind.PropertyAccessExpression: {
+                        const target = clonePropertyOrElementAccessChain(node.expression, overrideDelimiter, useSingleQuote);
+                        if (target !== undefined) {
+                            const propertyAccess = factory.createPropertyAccessExpression(target, node.name);
+                            if (symbol) propertyAccess.symbol = symbol;
+                            return propertyAccess;
+                        }
+                        break;
+                    }
+                    case SyntaxKind.ElementAccessExpression: {
+                        const target = clonePropertyOrElementAccessChain(node.expression, overrideDelimiter, useSingleQuote);
+                        if (target !== undefined) {
+                            const argumentExpression = node.argumentExpression.kind === SyntaxKind.StringLiteral ? cloneStringLiteral(node.argumentExpression as StringLiteral, overrideDelimiter, useSingleQuote) : node.argumentExpression;
+                            const elementAccess = factory.createElementAccessExpression(target, argumentExpression);
+                            if (symbol) elementAccess.symbol = symbol;
+                            return elementAccess;
+                        }
+                        break;
+                    }
+                    default:
+                        return undefined;
                 }
             }
         }
@@ -8619,7 +8723,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function getPropertyNameNodeForSymbol(symbol: Symbol, context: NodeBuilderContext) {
             const stringNamed = !!length(symbol.declarations) && every(symbol.declarations, isStringNamed);
-            const singleQuote = !!length(symbol.declarations) && every(symbol.declarations, isSingleQuotedStringNamed);
+            const singleQuote = context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType ? true :
+                context.flags & NodeBuilderFlags.UseDoubleQuotesForStringLiteralType ? false :
+                !!length(symbol.declarations) && every(symbol.declarations, isSingleQuotedStringNamed);
             const isMethod = !!(symbol.flags & SymbolFlags.Method);
             const fromNameType = getPropertyNameNodeForSymbolFromNameType(symbol, context, singleQuote, stringNamed, isMethod);
             if (fromNameType) {
@@ -10547,7 +10653,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (localName === InternalSymbolName.Default || localName === InternalSymbolName.Class || localName === InternalSymbolName.Function) {
                     const restoreFlags = saveRestoreFlags(context);
                     context.flags |= NodeBuilderFlags.InInitialEntityName;
-                    const nameCandidate = getNameOfSymbolAsWritten(symbol, context);
+                    const nameCandidate = getNameOfSymbolAsWritten(symbol, context).symbolName;
                     restoreFlags();
                     localName = nameCandidate.length > 0 && isSingleOrDoubleQuote(nameCandidate.charCodeAt(0)) ? stripQuotes(nameCandidate) : nameCandidate;
                 }
@@ -10657,7 +10763,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return name;
             }
             if (nameType.flags & TypeFlags.UniqueESSymbol) {
-                return `[${getNameOfSymbolAsWritten((nameType as UniqueESSymbolType).symbol, context)}]`;
+                return `[${getNameOfSymbolAsWritten((nameType as UniqueESSymbolType).symbol, context).symbolName}]`;
             }
         }
     }
@@ -10669,7 +10775,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * Unlike `symbolName(symbol)`, this will include quotes if the name is from a string literal.
      * It will also use a representation of a number as written instead of a decimal form, e.g. `0o11` instead of `9`.
      */
-    function getNameOfSymbolAsWritten(symbol: Symbol, context?: NodeBuilderContext): string {
+    function getNameOfSymbolAsWritten(symbol: Symbol, context?: NodeBuilderContext): { symbolName: string; symbolNameSource?: DeclarationName; } {
         if (context?.remappedSymbolReferences?.has(getSymbolId(symbol))) {
             symbol = context.remappedSymbolReferences.get(getSymbolId(symbol))!;
         }
@@ -10682,14 +10788,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // if not in the same binding context (source file, module declaration), it must print as `default`
                 (context.enclosingDeclaration && findAncestor(symbol.declarations[0], isDefaultBindingContext) !== findAncestor(context.enclosingDeclaration, isDefaultBindingContext)))
         ) {
-            return "default";
+            return { symbolName: "default", symbolNameSource: undefined };
         }
         if (symbol.declarations && symbol.declarations.length) {
             let declaration = firstDefined(symbol.declarations, d => getNameOfDeclaration(d) ? d : undefined); // Try using a declaration with a name, first
             const name = declaration && getNameOfDeclaration(declaration);
             if (declaration && name) {
                 if (isCallExpression(declaration) && isBindableObjectDefinePropertyCall(declaration)) {
-                    return symbolName(symbol);
+                    return { symbolName: symbolName(symbol), symbolNameSource: name };
                 }
                 if (isComputedPropertyName(name) && !(getCheckFlags(symbol) & CheckFlags.Late)) {
                     const nameType = getSymbolLinks(symbol).nameType;
@@ -10697,17 +10803,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // Computed property name isn't late bound, but has a well-known name type - use name type to generate a symbol name
                         const result = getNameOfSymbolFromNameType(symbol, context);
                         if (result !== undefined) {
-                            return result;
+                            return { symbolName: result, symbolNameSource: name };
                         }
                     }
                 }
-                return declarationNameToString(name);
+                return { symbolName: declarationNameToString(name), symbolNameSource: name };
             }
             if (!declaration) {
                 declaration = symbol.declarations[0]; // Declaration may be nameless, but we'll try anyway
             }
             if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
-                return declarationNameToString((declaration.parent as VariableDeclaration).name);
+                const name = (declaration.parent as VariableDeclaration).name;
+                return { symbolName: declarationNameToString(name), symbolNameSource: name };
             }
             switch (declaration.kind) {
                 case SyntaxKind.ClassExpression:
@@ -10716,11 +10823,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (context && !context.encounteredError && !(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier)) {
                         context.encounteredError = true;
                     }
-                    return declaration.kind === SyntaxKind.ClassExpression ? "(Anonymous class)" : "(Anonymous function)";
+                    return {
+                        symbolName: declaration.kind === SyntaxKind.ClassExpression ? "(Anonymous class)" : "(Anonymous function)",
+                        symbolNameSource: undefined,
+                    };
             }
         }
         const name = getNameOfSymbolFromNameType(symbol, context);
-        return name !== undefined ? name : symbolName(symbol);
+        return {
+            symbolName: name !== undefined ? name : symbolName(symbol),
+            symbolNameSource: undefined,
+        };
     }
 
     function isDeclarationVisible(node: Node): boolean {
@@ -41695,7 +41808,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // fall through
                     case "prototype":
                         const message = Diagnostics.Static_property_0_conflicts_with_built_in_property_Function_0_of_constructor_function_1;
-                        const className = getNameOfSymbolAsWritten(getSymbolOfDeclaration(node));
+                        const className = getNameOfSymbolAsWritten(getSymbolOfDeclaration(node)).symbolName;
                         error(memberNameNode, message, memberName, className);
                         break;
                 }

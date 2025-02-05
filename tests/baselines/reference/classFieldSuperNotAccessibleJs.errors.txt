@@ -1,7 +1,7 @@
 index.js(20,22): error TS2855: Class field 'roots' defined by the parent class is not accessible in the child class via super.
 index.js(23,22): error TS2855: Class field 'foo' defined by the parent class is not accessible in the child class via super.
 index.js(26,22): error TS2855: Class field 'justProp' defined by the parent class is not accessible in the child class via super.
-index.js(29,22): error TS2855: Class field ''literalElementAccess'' defined by the parent class is not accessible in the child class via super.
+index.js(29,22): error TS2855: Class field '"literalElementAccess"' defined by the parent class is not accessible in the child class via super.
 
 
 ==== index.js (4 errors) ====
@@ -41,7 +41,7 @@ index.js(29,22): error TS2855: Class field ''literalElementAccess'' defined by t
         get literalElementAccessTests() {
             return super.literalElementAccess;
                          ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2855: Class field ''literalElementAccess'' defined by the parent class is not accessible in the child class via super.
+!!! error TS2855: Class field '"literalElementAccess"' defined by the parent class is not accessible in the child class via super.
         }
     }
     

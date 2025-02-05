@@ -2,7 +2,7 @@
 
 === overloadingOnConstantsInImplementation.ts ===
 function foo(a: 'hi', x: string);
->foo : { (a: "hi", x: string): any; (a: "hi", x: string): any; }
+>foo : { (a: 'hi', x: string): any; (a: 'hi', x: string): any; }
 >    : ^^^ ^^    ^^ ^^      ^^^^^^^^^ ^^    ^^ ^^      ^^^^^^^^^
 >a : "hi"
 >  : ^^^^
@@ -10,7 +10,7 @@ function foo(a: 'hi', x: string);
 >  : ^^^^^^
 
 function foo(a: 'hi', x: string);
->foo : { (a: "hi", x: string): any; (a: "hi", x: string): any; }
+>foo : { (a: 'hi', x: string): any; (a: 'hi', x: string): any; }
 >    : ^^^ ^^    ^^ ^^      ^^^^^^^^^ ^^    ^^ ^^      ^^^^^^^^^
 >a : "hi"
 >  : ^^^^
@@ -18,7 +18,7 @@ function foo(a: 'hi', x: string);
 >  : ^^^^^^
 
 function foo(a: 'hi', x: any) {
->foo : { (a: "hi", x: string): any; (a: "hi", x: string): any; }
+>foo : { (a: 'hi', x: string): any; (a: 'hi', x: string): any; }
 >    : ^^^ ^^    ^^ ^^      ^^^^^^^^^ ^^    ^^ ^^      ^^^^^^^^^
 >a : "hi"
 >  : ^^^^

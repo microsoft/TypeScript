@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/declarationEmitEscapedSymbolNames.ts] ////
+
+=== declarationEmitEscapedSymbolNames.ts ===
+export class T {
+>T : Symbol(T, Decl(declarationEmitEscapedSymbolNames.ts, 0, 0))
+
+    static readonly "\t" = Symbol()
+>"\t" : Symbol(T["\t"], Decl(declarationEmitEscapedSymbolNames.ts, 0, 16))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+}
+
+export let x = { [T['\t']]: 1 }
+>x : Symbol(x, Decl(declarationEmitEscapedSymbolNames.ts, 4, 10))
+>[T['\t']] : Symbol([T['\t']], Decl(declarationEmitEscapedSymbolNames.ts, 4, 16))
+>T : Symbol(T, Decl(declarationEmitEscapedSymbolNames.ts, 0, 0))
+>'\t' : Symbol(T["\t"], Decl(declarationEmitEscapedSymbolNames.ts, 0, 16))
+

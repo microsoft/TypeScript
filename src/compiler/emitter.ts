@@ -2099,7 +2099,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     // SyntaxKind.TemplateTail
     function emitLiteral(node: LiteralLikeNode, jsxAttributeEscape: boolean) {
         const text = getLiteralTextOfNode(node, /*sourceFile*/ undefined, printerOptions.neverAsciiEscape, jsxAttributeEscape);
-        if (
+        if ((node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) && (node as StringLiteral).symbol) {
+            writeSymbol(text, (node as StringLiteral).symbol);
+        }
+        else if (
             (printerOptions.sourceMap || printerOptions.inlineSourceMap)
             && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))
         ) {

@@ -32,7 +32,7 @@
      },
      {
       "text": "\"/a\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }

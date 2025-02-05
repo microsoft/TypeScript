@@ -37,17 +37,17 @@ const a = { a: "value of a", notNecessary: u } as const
 
 
 export const o1 = (o: A['a']['b']) => {}
->o1 : (o: A["a"]["b"]) => void
+>o1 : (o: A['a']['b']) => void
 >   : ^ ^^           ^^^^^^^^^
->(o: A['a']['b']) => {} : (o: A["a"]["b"]) => void
+>(o: A['a']['b']) => {} : (o: A['a']['b']) => void
 >                       : ^ ^^           ^^^^^^^^^
 >o : "value of b"
 >  : ^^^^^^^^^^^^
 
 export const o2 = (o: (typeof a)['a']) => {}
->o2 : (o: (typeof a)["a"]) => void
+>o2 : (o: (typeof a)['a']) => void
 >   : ^ ^^^        ^     ^^^^^^^^^
->(o: (typeof a)['a']) => {} : (o: (typeof a)["a"]) => void
+>(o: (typeof a)['a']) => {} : (o: (typeof a)['a']) => void
 >                           : ^ ^^^        ^     ^^^^^^^^^
 >o : "value of a"
 >  : ^^^^^^^^^^^^
@@ -55,9 +55,9 @@ export const o2 = (o: (typeof a)['a']) => {}
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const o3 = (o:  typeof a['a']) => {}
->o3 : (o: (typeof a)["a"]) => void
+>o3 : (o: (typeof a)['a']) => void
 >   : ^ ^^^        ^     ^^^^^^^^^
->(o:  typeof a['a']) => {} : (o: (typeof a)["a"]) => void
+>(o:  typeof a['a']) => {} : (o: (typeof a)['a']) => void
 >                          : ^ ^^^        ^     ^^^^^^^^^
 >o : "value of a"
 >  : ^^^^^^^^^^^^
@@ -65,9 +65,9 @@ export const o3 = (o:  typeof a['a']) => {}
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const o4 = (o: keyof (A['a'])) => {}
->o4 : (o: keyof A["a"]) => void
+>o4 : (o: keyof A['a']) => void
 >   : ^ ^^            ^^^^^^^^^
->(o: keyof (A['a'])) => {} : (o: keyof A["a"]) => void
+>(o: keyof (A['a'])) => {} : (o: keyof A['a']) => void
 >                          : ^ ^^            ^^^^^^^^^
 >o : "b" | "notNecessary"
 >  : ^^^^^^^^^^^^^^^^^^^^

@@ -95,7 +95,7 @@
         },
         {
           "text": "1",
-          "kind": "stringLiteral"
+          "kind": "methodName"
         },
         {
           "text": "]",
@@ -297,7 +297,7 @@
         },
         {
           "text": "\"stringLiteralName\"",
-          "kind": "stringLiteral"
+          "kind": "methodName"
         },
         {
           "text": "]",
@@ -367,7 +367,7 @@
         },
         {
           "text": "1",
-          "kind": "stringLiteral"
+          "kind": "methodName"
         },
         {
           "text": "]",
@@ -437,7 +437,7 @@
         },
         {
           "text": "1",
-          "kind": "stringLiteral"
+          "kind": "methodName"
         },
         {
           "text": "]",
@@ -705,7 +705,7 @@
         },
         {
           "text": "\"stringLiteralName\"",
-          "kind": "stringLiteral"
+          "kind": "methodName"
         },
         {
           "text": "]",

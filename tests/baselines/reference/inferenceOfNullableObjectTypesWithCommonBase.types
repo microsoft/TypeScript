@@ -236,7 +236,7 @@ equal(v as string, v as string & { tag: 'foo' } | undefined);
 >            : ^^^^^^
 >v : never
 >  : ^^^^^
->v as string & { tag: 'foo' } | undefined : (string & { tag: "foo"; }) | undefined
+>v as string & { tag: 'foo' } | undefined : (string & { tag: 'foo'; }) | undefined
 >                                         : ^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^
 >v : never
 >  : ^^^^^
@@ -248,7 +248,7 @@ equal(v as string & { tag: 'foo' } | undefined, v as string);
 >                                                             : ^^^^
 >equal : <T>(a: T, b: T) => void
 >      : ^ ^^ ^^ ^^ ^^ ^^^^^^^^^
->v as string & { tag: 'foo' } | undefined : (string & { tag: "foo"; }) | undefined
+>v as string & { tag: 'foo' } | undefined : (string & { tag: 'foo'; }) | undefined
 >                                         : ^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^
 >v : never
 >  : ^^^^^

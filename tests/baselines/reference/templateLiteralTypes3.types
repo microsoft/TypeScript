@@ -677,7 +677,7 @@ function ff2<T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`) {
 }
 
 function ff3(x: string, y: `foo-${string}` | 'bar') {
->ff3 : (x: string, y: `foo-${string}` | "bar") => void
+>ff3 : (x: string, y: `foo-${string}` | 'bar') => void
 >    : ^ ^^      ^^ ^^                       ^^^^^^^^^
 >x : string
 >  : ^^^^^^

@@ -52,13 +52,13 @@ declare function mapped7<K extends keyof any>(obj: {[P in K]: TakeString}): void
 >    : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
 declare function mapped8<K extends 'foo'>(obj: {[P in K]: TakeString}): void;
->mapped8 : <K extends "foo">(obj: { [P in K]: TakeString; }) => void
+>mapped8 : <K extends 'foo'>(obj: { [P in K]: TakeString; }) => void
 >        : ^ ^^^^^^^^^     ^^   ^^                         ^^^^^    
 >obj : { [P in K]: TakeString; }
 >    : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
 declare function mapped9<K extends 'foo'|'bar'>(obj: {[P in K]: TakeString}): void;
->mapped9 : <K extends "foo" | "bar">(obj: { [P in K]: TakeString; }) => void
+>mapped9 : <K extends 'foo' | 'bar'>(obj: { [P in K]: TakeString; }) => void
 >        : ^ ^^^^^^^^^             ^^   ^^                         ^^^^^    
 >obj : { [P in K]: TakeString; }
 >    : ^^^ ^^^^^^^^^^^^^^^^^^^^^
@@ -178,7 +178,7 @@ mapped7({foo: s => 42});
 mapped8({foo: s => 42});
 >mapped8({foo: s => 42}) : void
 >                        : ^^^^
->mapped8 : <K extends "foo">(obj: { [P in K]: TakeString; }) => void
+>mapped8 : <K extends 'foo'>(obj: { [P in K]: TakeString; }) => void
 >        : ^ ^^^^^^^^^     ^^   ^^                         ^^^^^    
 >{foo: s => 42} : { foo: (s: string) => number; }
 >               : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
@@ -194,7 +194,7 @@ mapped8({foo: s => 42});
 mapped9({foo: s => 42});
 >mapped9({foo: s => 42}) : void
 >                        : ^^^^
->mapped9 : <K extends "foo" | "bar">(obj: { [P in K]: TakeString; }) => void
+>mapped9 : <K extends 'foo' | 'bar'>(obj: { [P in K]: TakeString; }) => void
 >        : ^ ^^^^^^^^^             ^^   ^^                         ^^^^^    
 >{foo: s => 42} : { foo: (s: string) => number; }
 >               : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^

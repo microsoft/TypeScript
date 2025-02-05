@@ -271,13 +271,13 @@ v2;  // 6 | undefined
 // #39105
 
 declare function isEmptyString(value: string): value is '';
->isEmptyString : (value: string) => value is ""
+>isEmptyString : (value: string) => value is ''
 >              : ^     ^^      ^^^^^           
 >value : string
 >      : ^^^^^^
 
 declare function isMaybeEmptyString(value: string | null | undefined): value is '' | null | undefined;
->isMaybeEmptyString : (value: string | null | undefined) => value is "" | null | undefined
+>isMaybeEmptyString : (value: string | null | undefined) => value is '' | null | undefined
 >                   : ^     ^^                         ^^^^^                              
 >value : string | null | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -321,7 +321,7 @@ const TEST_CASES = [
         if (isEmptyString(value)) {
 >isEmptyString(value) : boolean
 >                     : ^^^^^^^
->isEmptyString : (value: string) => value is ""
+>isEmptyString : (value: string) => value is ''
 >              : ^     ^^      ^^^^^           
 >value : string
 >      : ^^^^^^
@@ -338,7 +338,7 @@ const TEST_CASES = [
         if (isMaybeEmptyString(value)) {
 >isMaybeEmptyString(value) : boolean
 >                          : ^^^^^^^
->isMaybeEmptyString : (value: string | null | undefined) => value is "" | null | undefined
+>isMaybeEmptyString : (value: string | null | undefined) => value is '' | null | undefined
 >                   : ^     ^^                         ^^^^^                              
 >value : string
 >      : ^^^^^^
@@ -362,7 +362,7 @@ const TEST_CASES = [
         if (isMaybeEmptyString(value)) {
 >isMaybeEmptyString(value) : boolean
 >                          : ^^^^^^^
->isMaybeEmptyString : (value: string | null | undefined) => value is "" | null | undefined
+>isMaybeEmptyString : (value: string | null | undefined) => value is '' | null | undefined
 >                   : ^     ^^                         ^^^^^                              
 >value : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
@@ -795,7 +795,7 @@ isMyDiscriminatedUnion(working) && working.type === 'A' && working.aProp;
 >    : ^^^
 >working.aProp : number
 >              : ^^^^^^
->working : { type: "A"; aProp: number; }
+>working : { type: 'A'; aProp: number; }
 >        : ^^^^^^^^   ^^^^^^^^^      ^^^
 >aProp : number
 >      : ^^^^^^
@@ -823,7 +823,7 @@ isMyDiscriminatedUnion(broken) && broken.type === 'A' && broken.aProp;
 >    : ^^^
 >broken.aProp : number
 >             : ^^^^^^
->broken : { type: "A"; aProp: number; }
+>broken : { type: 'A'; aProp: number; }
 >       : ^^^^^^^^   ^^^^^^^^^      ^^^
 >aProp : number
 >      : ^^^^^^
@@ -851,7 +851,7 @@ isMyDiscriminatedUnion(workingAgain) && workingAgain.type === 'A' && workingAgai
 >    : ^^^
 >workingAgain.aProp : number
 >                   : ^^^^^^
->workingAgain : { type: "A"; aProp: number; }
+>workingAgain : { type: 'A'; aProp: number; }
 >             : ^^^^^^^^   ^^^^^^^^^      ^^^
 >aProp : number
 >      : ^^^^^^
@@ -879,7 +879,7 @@ type Union =
 >     : ^^^
 
 function example1(value: Union): { type: 'a'; variant: 2 } | null {
->example1 : (value: Union) => { type: "a"; variant: 2; } | null
+>example1 : (value: Union) => { type: 'a'; variant: 2; } | null
 >         : ^     ^^     ^^^^^                                 
 >value : Union
 >      : ^^^^^
@@ -907,7 +907,7 @@ function example1(value: Union): { type: 'a'; variant: 2 } | null {
 >                    : ^^^^^^^
 >value.variant : 1 | 2
 >              : ^^^^^
->value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
+>value : { type: 'a'; variant: 1; } | { type: 'a'; variant: 2; }
 >      : ^^^^^^^^   ^^^^^^^^^^^ ^^^^^^^^^^^^^^   ^^^^^^^^^^^ ^^^
 >variant : 1 | 2
 >        : ^^^^^
@@ -917,12 +917,12 @@ function example1(value: Union): { type: 'a'; variant: 2 } | null {
         return null;
     }
     return value;
->value : { type: "a"; variant: 2; }
+>value : { type: 'a'; variant: 2; }
 >      : ^^^^^^^^   ^^^^^^^^^^^ ^^^
 }
 
 function example2(value: Union): { type: 'a'; variant: 2 } | null {
->example2 : (value: Union) => { type: "a"; variant: 2; } | null
+>example2 : (value: Union) => { type: 'a'; variant: 2; } | null
 >         : ^     ^^     ^^^^^                                 
 >value : Union
 >      : ^^^^^
@@ -952,7 +952,7 @@ function example2(value: Union): { type: 'a'; variant: 2 } | null {
 >                   : ^^^^^^^
 >value.type : "a"
 >           : ^^^
->value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
+>value : { type: 'a'; variant: 1; } | { type: 'a'; variant: 2; }
 >      : ^^^^^^^^   ^^^^^^^^^^^ ^^^^^^^^^^^^^^   ^^^^^^^^^^^ ^^^
 >type : "a"
 >     : ^^^
@@ -962,7 +962,7 @@ function example2(value: Union): { type: 'a'; variant: 2 } | null {
 >                    : ^^^^^^^
 >value.variant : 1 | 2
 >              : ^^^^^
->value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
+>value : { type: 'a'; variant: 1; } | { type: 'a'; variant: 2; }
 >      : ^^^^^^^^   ^^^^^^^^^^^ ^^^^^^^^^^^^^^   ^^^^^^^^^^^ ^^^
 >variant : 1 | 2
 >        : ^^^^^
@@ -972,12 +972,12 @@ function example2(value: Union): { type: 'a'; variant: 2 } | null {
         return null;
     }
     return value;
->value : { type: "a"; variant: 2; }
+>value : { type: 'a'; variant: 2; }
 >      : ^^^^^^^^   ^^^^^^^^^^^ ^^^
 }
 
 function example3(value: Union): { type: 'a'; variant: 2 } | null {
->example3 : (value: Union) => { type: "a"; variant: 2; } | null
+>example3 : (value: Union) => { type: 'a'; variant: 2; } | null
 >         : ^     ^^     ^^^^^                                 
 >value : Union
 >      : ^^^^^
@@ -1005,7 +1005,7 @@ function example3(value: Union): { type: 'a'; variant: 2 } | null {
 >                                  : ^^^^^^^
 >value.type : "a"
 >           : ^^^
->value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
+>value : { type: 'a'; variant: 1; } | { type: 'a'; variant: 2; }
 >      : ^^^^^^^^   ^^^^^^^^^^^ ^^^^^^^^^^^^^^   ^^^^^^^^^^^ ^^^
 >type : "a"
 >     : ^^^
@@ -1013,7 +1013,7 @@ function example3(value: Union): { type: 'a'; variant: 2 } | null {
 >                    : ^^^^^^^
 >value.variant : 1 | 2
 >              : ^^^^^
->value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
+>value : { type: 'a'; variant: 1; } | { type: 'a'; variant: 2; }
 >      : ^^^^^^^^   ^^^^^^^^^^^ ^^^^^^^^^^^^^^   ^^^^^^^^^^^ ^^^
 >variant : 1 | 2
 >        : ^^^^^
@@ -1023,7 +1023,7 @@ function example3(value: Union): { type: 'a'; variant: 2 } | null {
         return null;
     }
     return value;
->value : { type: "a"; variant: 2; }
+>value : { type: 'a'; variant: 2; }
 >      : ^^^^^^^^   ^^^^^^^^^^^ ^^^
 }
 

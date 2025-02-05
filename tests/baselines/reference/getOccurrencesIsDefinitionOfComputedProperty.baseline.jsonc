@@ -43,8 +43,16 @@
       "kind": "space"
      },
      {
-      "text": "[\"foo\"]",
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"foo\"",
       "kind": "propertyName"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
      },
      {
       "text": ":",
@@ -101,8 +109,16 @@
       "kind": "space"
      },
      {
-      "text": "[\"foo\"]",
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"foo\"",
       "kind": "propertyName"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
      },
      {
       "text": ":",
@@ -159,8 +175,16 @@
       "kind": "space"
      },
      {
-      "text": "[\"foo\"]",
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"foo\"",
       "kind": "propertyName"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
      },
      {
       "text": ":",

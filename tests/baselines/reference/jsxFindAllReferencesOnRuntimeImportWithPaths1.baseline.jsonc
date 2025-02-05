@@ -42,7 +42,7 @@
      },
      {
       "text": "\"/tests/cases/fourslash/project/src/dir/jsx-runtime\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }

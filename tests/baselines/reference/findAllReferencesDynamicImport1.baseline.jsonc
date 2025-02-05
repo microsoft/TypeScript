@@ -36,7 +36,7 @@
      },
      {
       "text": "\"/tests/cases/fourslash/foo\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -156,7 +156,7 @@
      },
      {
       "text": "\"/tests/cases/fourslash/foo\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }

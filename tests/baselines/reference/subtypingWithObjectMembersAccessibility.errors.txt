@@ -3,7 +3,7 @@ subtypingWithObjectMembersAccessibility.ts(15,7): error TS2415: Class 'B' incorr
 subtypingWithObjectMembersAccessibility.ts(23,7): error TS2415: Class 'B2' incorrectly extends base class 'A2'.
   Property '1' is private in type 'B2' but not in type 'A2'.
 subtypingWithObjectMembersAccessibility.ts(31,7): error TS2415: Class 'B3' incorrectly extends base class 'A3'.
-  Property ''1'' is private in type 'B3' but not in type 'A3'.
+  Property '"1"' is private in type 'B3' but not in type 'A3'.
 
 
 ==== subtypingWithObjectMembersAccessibility.ts (3 errors) ====
@@ -46,6 +46,6 @@ subtypingWithObjectMembersAccessibility.ts(31,7): error TS2415: Class 'B3' incor
     class B3 extends A3 {
           ~~
 !!! error TS2415: Class 'B3' incorrectly extends base class 'A3'.
-!!! error TS2415:   Property ''1'' is private in type 'B3' but not in type 'A3'.
+!!! error TS2415:   Property '"1"' is private in type 'B3' but not in type 'A3'.
         private '1': Derived; // error
     }
