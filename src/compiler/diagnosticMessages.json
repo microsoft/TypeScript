@@ -5337,6 +5337,11 @@
         "category": "Error",
         "code": 6189
     },
+    "Redundant named import '{0}'.": {
+        "category": "Suggestion",
+        "code": 6190,
+        "reportsUnnecessary": true
+    },
     "Whether to keep outdated console output in watch mode instead of clearing the screen.": {
         "category": "Message",
         "code": 6191
