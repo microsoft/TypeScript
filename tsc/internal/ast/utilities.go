@@ -842,12 +842,17 @@ func GetSourceFileOfNode(node *Node) *SourceFile {
 	return nil
 }
 
-func SetParentInChildren(node *Node) {
-	node.ForEachChild(func(child *Node) bool {
-		child.Parent = node
-		SetParentInChildren(child)
+func SetParentInChildren(parent *Node) {
+	var visit func(*Node) bool
+	visit = func(child *Node) bool {
+		child.Parent = parent
+		saveParent := parent
+		parent = child
+		parent.ForEachChild(visit)
+		parent = saveParent
 		return false
-	})
+	}
+	parent.ForEachChild(visit)
 }
 
 // Walks up the parents of a node to find the ancestor that matches the callback

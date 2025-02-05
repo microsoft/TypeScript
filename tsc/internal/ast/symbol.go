@@ -49,7 +49,7 @@ const (
 
 func SymbolName(symbol *Symbol) string {
 	if symbol.ValueDeclaration != nil && IsPrivateIdentifierClassElementDeclaration(symbol.ValueDeclaration) {
-		return symbol.ValueDeclaration.Name().AsPrivateIdentifier().Text
+		return symbol.ValueDeclaration.Name().Text()
 	}
 	return symbol.Name
 }

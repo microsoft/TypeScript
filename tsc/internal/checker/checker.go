@@ -650,7 +650,7 @@ type Checker struct {
 	numericStringType                         *Type
 	uniqueLiteralType                         *Type
 	uniqueLiteralMapper                       *TypeMapper
-	outofbandVarianceMarkerHandler            func(onlyUnreliable bool)
+	reliabilityFlags                          RelationComparisonResult
 	reportUnreliableMapper                    *TypeMapper
 	reportUnmeasurableMapper                  *TypeMapper
 	restrictiveMapper                         *TypeMapper
@@ -709,10 +709,12 @@ type Checker struct {
 	lastGetCombinedNodeFlagsResult            ast.NodeFlags
 	lastGetCombinedModifierFlagsNode          *ast.Node
 	lastGetCombinedModifierFlagsResult        ast.ModifierFlags
+	inferenceStates                           []InferenceState
 	flowStates                                []FlowState
 	flowLoopCache                             map[FlowLoopKey]*Type
 	flowLoopStack                             []FlowLoopInfo
 	sharedFlows                               []SharedFlow
+	antecedentTypes                           []*Type
 	flowAnalysisDisabled                      bool
 	flowInvocationCount                       int
 	flowTypeCache                             map[*ast.Node]*Type
@@ -772,6 +774,7 @@ type Checker struct {
 	containsMissingType                       func(*Type) bool
 	couldContainTypeVariables                 func(*Type) bool
 	isStringIndexSignatureOnlyType            func(*Type) bool
+	markNodeAssignments                       func(*ast.Node) bool
 }
 
 func NewChecker(program Program) *Checker {
@@ -970,15 +973,15 @@ func createFileIndexMap(files []*ast.SourceFile) map[*ast.SourceFile]int {
 }
 
 func (c *Checker) reportUnreliableWorker(t *Type) *Type {
-	if c.outofbandVarianceMarkerHandler != nil && (t == c.markerSuperType || t == c.markerSubType || t == c.markerOtherType) {
-		c.outofbandVarianceMarkerHandler(true /*onlyUnreliable*/)
+	if t == c.markerSuperType || t == c.markerSubType || t == c.markerOtherType {
+		c.reliabilityFlags |= RelationComparisonResultReportsUnreliable
 	}
 	return t
 }
 
 func (c *Checker) reportUnmeasurableWorker(t *Type) *Type {
-	if c.outofbandVarianceMarkerHandler != nil && (t == c.markerSuperType || t == c.markerSubType || t == c.markerOtherType) {
-		c.outofbandVarianceMarkerHandler(false /*onlyUnreliable*/)
+	if t == c.markerSuperType || t == c.markerSubType || t == c.markerOtherType {
+		c.reliabilityFlags |= RelationComparisonResultReportsUnmeasurable
 	}
 	return t
 }
@@ -1081,6 +1084,7 @@ func (c *Checker) initializeClosures() {
 	}
 	c.couldContainTypeVariables = c.couldContainTypeVariablesWorker
 	c.isStringIndexSignatureOnlyType = c.isStringIndexSignatureOnlyTypeWorker
+	c.markNodeAssignments = c.markNodeAssignmentsWorker
 }
 
 func (c *Checker) initializeIterationResolvers() {
@@ -2170,30 +2174,85 @@ func (c *Checker) checkTypeLiteral(node *ast.Node) {
 	t := c.getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node)
 	c.checkIndexConstraints(t, t.symbol, false /*isStaticIndex*/)
 	c.checkTypeForDuplicateIndexSignatures(node)
-	c.checkObjectTypeForDuplicateDeclarations(node)
+	c.checkObjectTypeForDuplicateDeclarations(node, false /*checkPrivateNames*/)
 }
 
-func (c *Checker) checkObjectTypeForDuplicateDeclarations(node *ast.Node) {
-	var names map[string]*ast.Node
+func (c *Checker) checkObjectTypeForDuplicateDeclarations(node *ast.Node, checkPrivateNames bool) {
+	var instanceNames map[string]int
+	var staticNames map[string]int
+	var privateNames map[string]int
+	nodeInAmbientContext := node.Flags&ast.NodeFlagsAmbient != 0
+	checkProperty := func(symbol *ast.Symbol, isStatic bool) {
+		if len(symbol.Declarations) > 1 {
+			var names map[string]int
+			if isStatic {
+				if instanceNames == nil {
+					instanceNames = make(map[string]int)
+				}
+				names = instanceNames
+			} else {
+				if staticNames == nil {
+					staticNames = make(map[string]int)
+				}
+				names = staticNames
+			}
+			if state := names[symbol.Name]; state != 2 {
+				if state == 1 {
+					c.reportDuplicateMemberErrors(node, symbol.Name, true, isStatic, diagnostics.Duplicate_identifier_0)
+				}
+				names[symbol.Name] = state + 1
+			}
+		}
+	}
 	for _, member := range node.Members() {
-		if ast.IsPropertySignatureDeclaration(member) {
-			if symbol := member.Symbol(); len(symbol.Declarations) > 1 {
-				if name := member.Name(); ast.IsIdentifier(name) || ast.IsStringOrNumericLiteralLike(name) {
-					text := name.Text()
-					if first, ok := names[text]; ok {
-						if first != nil {
-							c.error(ast.GetNameOfDeclaration(first), diagnostics.Duplicate_identifier_0, text)
-							names[text] = nil
-						}
-						c.error(ast.GetNameOfDeclaration(member), diagnostics.Duplicate_identifier_0, text)
-					} else {
-						if names == nil {
-							names = make(map[string]*ast.Node)
-						}
-						names[text] = member
+		if ast.IsConstructorDeclaration(member) {
+			for _, param := range member.Parameters() {
+				if ast.IsParameterPropertyDeclaration(param, member) && !ast.IsBindingPattern(param.Name()) {
+					checkProperty(c.getSymbolOfDeclaration(param), false /*isStatic*/)
+				}
+			}
+		} else {
+			symbol := c.getSymbolOfDeclaration(member)
+			isStatic := ast.HasStaticModifier(member)
+			// In non-ambient contexts, check that static members are not named 'prototype'.
+			if !nodeInAmbientContext && isStatic && symbol != nil && symbol.Name == "prototype" {
+				c.error(member.Name(), diagnostics.Static_property_0_conflicts_with_built_in_property_Function_0_of_constructor_function_1, symbol.Name, node.Name().Text())
+			}
+			// When a property has multiple declarations, check that only one of those declarations is in this object
+			// type declaration (multiple merged object types are permitted to each declare the same property).
+			if ast.IsPropertyDeclaration(member) || ast.IsPropertySignatureDeclaration(member) {
+				checkProperty(symbol, isStatic)
+			}
+			// Check that each private identifier is used only for instance members or only for static members. It is an
+			// error for an instance and a static member to have the same private identifier.
+			if checkPrivateNames && member.Name() != nil && ast.IsPrivateIdentifier(member.Name()) {
+				if flags := privateNames[symbol.Name]; flags != 3 {
+					flags |= core.IfElse(ast.IsStatic(member), 2, 1)
+					if privateNames == nil {
+						privateNames = make(map[string]int)
+					}
+					privateNames[symbol.Name] = flags
+					if flags == 3 {
+						c.reportDuplicateMemberErrors(node, symbol.Name, false, false, diagnostics.Duplicate_identifier_0_Static_and_instance_elements_cannot_share_the_same_private_name)
 					}
 				}
 			}
+		}
+	}
+}
+
+func (c *Checker) reportDuplicateMemberErrors(node *ast.Node, name string, checkStatic bool, isStatic bool, message *diagnostics.Message) {
+	for _, member := range node.Members() {
+		if ast.IsConstructorDeclaration(member) {
+			for _, param := range member.Parameters() {
+				if ast.IsParameterPropertyDeclaration(param, member) && !ast.IsBindingPattern(param.Name()) {
+					if symbol := c.getSymbolOfDeclaration(param); symbol.Name == name {
+						c.error(param.Name(), message, c.symbolToString(symbol))
+					}
+				}
+			}
+		} else if symbol := c.getSymbolOfDeclaration(member); symbol != nil && symbol.Name == name && (!checkStatic || isStatic == ast.IsStatic(member)) {
+			c.error(member.Name(), message, c.symbolToString(symbol))
 		}
 	}
 }
@@ -2939,12 +2998,7 @@ func (c *Checker) checkClassLikeDeclaration(node *ast.Node) {
 	staticType := c.getTypeOfSymbol(symbol)
 	c.checkTypeParameterListsIdentical(symbol)
 	c.checkFunctionOrConstructorSymbol(symbol)
-	c.checkClassForDuplicateDeclarations(node)
-	// Only check for reserved static identifiers on non-ambient context.
-	nodeInAmbientContext := node.Flags&ast.NodeFlagsAmbient != 0
-	if !nodeInAmbientContext {
-		c.checkClassForStaticPropertyNameConflicts(node)
-	}
+	c.checkObjectTypeForDuplicateDeclarations(node, true /*checkPrivateNames*/)
 	baseTypeNode := getExtendsTypeNode(node)
 	if baseTypeNode != nil {
 		c.checkSourceElements(baseTypeNode.TypeArguments())
@@ -3090,21 +3144,43 @@ func (c *Checker) areTypeParametersIdentical(declarations []*ast.Node, targetPar
 	return true
 }
 
-func (c *Checker) checkClassForDuplicateDeclarations(node *ast.Node) {
-	// !!!
-}
-
-func (c *Checker) checkClassForStaticPropertyNameConflicts(node *ast.Node) {
-	// !!!
-}
-
 func (c *Checker) checkBaseTypeAccessibility(t *Type, node *ast.Node) {
-	// !!!
+	signatures := c.getSignaturesOfType(t, SignatureKindConstruct)
+	if len(signatures) != 0 {
+		declaration := signatures[0].declaration
+		if declaration != nil && hasEffectiveModifier(declaration, ast.ModifierFlagsPrivate) {
+			typeClassDeclaration := getClassLikeDeclarationOfSymbol(t.symbol)
+			if !c.isNodeWithinClass(node, typeClassDeclaration) {
+				c.error(node, diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, c.getFullyQualifiedName(t.symbol, nil))
+			}
+		}
+	}
 }
 
 func (c *Checker) issueMemberSpecificError(node *ast.Node, typeWithThis *Type, baseWithThis *Type, broadDiag *diagnostics.Message) {
-	// !!!
-	c.checkTypeAssignableTo(typeWithThis, baseWithThis, core.OrElse(node.Name(), node), broadDiag)
+	// iterate over all implemented properties and issue errors on each one which isn't compatible, rather than the class as a whole, if possible
+	issuedMemberError := false
+	for _, member := range node.Members() {
+		if ast.IsStatic(member) {
+			continue
+		}
+		declaredProp := member.Symbol()
+		if declaredProp != nil && declaredProp.Name != ast.InternalSymbolNameComputed {
+			prop := c.getPropertyOfType(typeWithThis, declaredProp.Name)
+			baseProp := c.getPropertyOfType(baseWithThis, declaredProp.Name)
+			if prop != nil && baseProp != nil {
+				var diags []*ast.Diagnostic
+				if !c.checkTypeAssignableToEx(c.getTypeOfSymbol(prop), c.getTypeOfSymbol(baseProp), core.OrElse(member.Name(), member), nil /*headMessage*/, &diags) {
+					c.diagnostics.Add(ast.NewDiagnosticChain(diags[0], diagnostics.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2, c.symbolToString(declaredProp), c.typeToString(typeWithThis), c.typeToString(baseWithThis)))
+					issuedMemberError = true
+				}
+			}
+		}
+	}
+	if !issuedMemberError {
+		// check again with diagnostics to generate a less-specific error
+		c.checkTypeAssignableTo(typeWithThis, baseWithThis, core.OrElse(node.Name(), node), broadDiag)
+	}
 }
 
 func (c *Checker) getTypeWithoutSignatures(t *Type) *Type {
@@ -3125,19 +3201,397 @@ func (c *Checker) getTypeWithoutSignatures(t *Type) *Type {
 }
 
 func (c *Checker) checkKindsOfPropertyMemberOverrides(t *Type, baseType *Type) {
-	// !!!
+	// TypeScript 1.0 spec (April 2014): 8.2.3
+	// A derived class inherits all members from its base class it doesn't override.
+	// Inheritance means that a derived class implicitly contains all non - overridden members of the base class.
+	// Both public and private property members are inherited, but only public property members can be overridden.
+	// A property member in a derived class is said to override a property member in a base class
+	// when the derived class property member has the same name and kind(instance or static)
+	// as the base class property member.
+	// The type of an overriding property member must be assignable(section 3.8.4)
+	// to the type of the overridden property member, or otherwise a compile - time error occurs.
+	// Base class instance member functions can be overridden by derived class instance member functions,
+	// but not by other kinds of members.
+	// Base class instance member variables and accessors can be overridden by
+	// derived class instance member variables and accessors, but not by other kinds of members.
+	// NOTE: assignability is checked in checkClassDeclaration
+	type MemberInfo struct {
+		missedProperties []string
+		baseTypeName     string
+		typeName         string
+	}
+	var notImplementedInfo map[*ast.Node]MemberInfo
+basePropertyCheck:
+	for _, baseProperty := range c.getPropertiesOfType(baseType) {
+		base := c.getTargetSymbol(baseProperty)
+		if base.Flags&ast.SymbolFlagsPrototype != 0 {
+			continue
+		}
+		baseSymbol := c.getPropertyOfObjectType(t, base.Name)
+		if baseSymbol == nil {
+			continue
+		}
+		derived := c.getTargetSymbol(baseSymbol)
+		baseDeclarationFlags := getDeclarationModifierFlagsFromSymbol(base)
+		// In order to resolve whether the inherited method was overridden in the base class or not,
+		// we compare the Symbols obtained. Since getTargetSymbol returns the symbol on the *uninstantiated*
+		// type declaration, derived and base resolve to the same symbol even in the case of generic classes.
+		if derived == base {
+			// derived class inherits base without override/redeclaration.
+			if baseDeclarationFlags&ast.ModifierFlagsAbstract != 0 {
+				// It is an error to inherit an abstract member without implementing it or being declared abstract.
+				// If there is no declaration for the derived class (as in the case of class expressions),
+				// then the class cannot be declared abstract.
+				derivedClassDecl := getClassLikeDeclarationOfSymbol(t.symbol)
+				if derivedClassDecl == nil || !ast.HasSyntacticModifier(derivedClassDecl, ast.ModifierFlagsAbstract) {
+					// Searches other base types for a declaration that would satisfy the inherited abstract member.
+					// (The class may have more than one base type via declaration merging with an interface with the
+					// same name.)
+					for _, otherBaseType := range c.getBaseTypes(t) {
+						if otherBaseType == baseType {
+							continue
+						}
+						if baseSymbol := c.getPropertyOfObjectType(otherBaseType, base.Name); baseSymbol != nil && base != c.getTargetSymbol(baseSymbol) {
+							// Derived property exists elsewhere.
+							continue basePropertyCheck
+						}
+					}
+					baseTypeName := c.typeToString(baseType)
+					typeName := c.typeToString(t)
+					missedProperties := append(notImplementedInfo[derivedClassDecl].missedProperties, c.symbolToString(baseProperty))
+					if notImplementedInfo == nil {
+						notImplementedInfo = make(map[*ast.Node]MemberInfo)
+					}
+					notImplementedInfo[derivedClassDecl] = MemberInfo{
+						baseTypeName:     baseTypeName,
+						typeName:         typeName,
+						missedProperties: missedProperties,
+					}
+				}
+			}
+		} else {
+			// derived overrides base.
+			derivedDeclarationFlags := getDeclarationModifierFlagsFromSymbol(derived)
+			if baseDeclarationFlags&ast.ModifierFlagsPrivate != 0 || derivedDeclarationFlags&ast.ModifierFlagsPrivate != 0 {
+				// either base or derived property is private - not override, skip it
+				continue
+			}
+			var errorMessage *diagnostics.Message
+			basePropertyFlags := base.Flags & ast.SymbolFlagsPropertyOrAccessor
+			derivedPropertyFlags := derived.Flags & ast.SymbolFlagsPropertyOrAccessor
+			if basePropertyFlags != 0 && derivedPropertyFlags != 0 {
+				// property/accessor is overridden with property/accessor
+				if base.CheckFlags&ast.CheckFlagsMapped != 0 ||
+					derived.ValueDeclaration != nil && ast.IsBinaryExpression(derived.ValueDeclaration) ||
+					c.arePropertiesAbstractOrInterface(base, baseDeclarationFlags) {
+					// when the base property is abstract or from an interface, base/derived flags don't need to match
+					// for intersection properties, this must be true of *any* of the declarations, for others it must be true of *all*
+					// same when the derived property is from an assignment
+					continue
+				}
+				overriddenInstanceProperty := basePropertyFlags != ast.SymbolFlagsProperty && derivedPropertyFlags == ast.SymbolFlagsProperty
+				overriddenInstanceAccessor := basePropertyFlags == ast.SymbolFlagsProperty && derivedPropertyFlags != ast.SymbolFlagsProperty
+				if overriddenInstanceProperty || overriddenInstanceAccessor {
+					errorMessage := core.IfElse(overriddenInstanceProperty,
+						diagnostics.X_0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property,
+						diagnostics.X_0_is_defined_as_a_property_in_class_1_but_is_overridden_here_in_2_as_an_accessor)
+					c.error(core.OrElse(ast.GetNameOfDeclaration(derived.ValueDeclaration), derived.ValueDeclaration), errorMessage, c.symbolToString(base), c.typeToString(baseType), c.typeToString(t))
+				}
+				// !!!
+				// } else if c.useDefineForClassFields {
+				// 	uninitialized := derived.Declarations. /* ? */ find(func(d Declaration) bool {
+				// 		return d.Kind == ast.KindPropertyDeclaration && d.AsPropertyDeclaration().Initializer == nil
+				// 	})
+				// 	if uninitialized != nil && derived.Flags&ast.SymbolFlagsTransient == 0 && baseDeclarationFlags&ast.ModifierFlagsAbstract == 0 && derivedDeclarationFlags&ast.ModifierFlagsAbstract == 0 && !derived.Declarations. /* ? */ some(func(d Declaration) bool {
+				// 		return d.Flags&ast.NodeFlagsAmbient != 0
+				// 	}) {
+				// 		constructor := findConstructorDeclaration(getClassLikeDeclarationOfSymbol(t.symbol))
+				// 		propName := uninitialized.AsPropertyDeclaration().Name
+				// 		if uninitialized.AsPropertyDeclaration().ExclamationToken != nil || constructor == nil || !isIdentifier(propName) || !c.strictNullChecks || !c.isPropertyInitializedInConstructor(propName, t, constructor) {
+				// 			errorMessage := Diagnostics.Property_0_will_overwrite_the_base_property_in_1_If_this_is_intentional_add_an_initializer_Otherwise_add_a_declare_modifier_or_remove_the_redundant_declaration
+				// 			c.error(getNameOfDeclaration(derived.ValueDeclaration) || derived.ValueDeclaration, errorMessage, c.symbolToString(base), c.typeToString(baseType))
+				// 		}
+				// 	}
+				// }
+				// correct case
+				continue
+			} else if isPrototypeProperty(base) {
+				if isPrototypeProperty(derived) || derived.Flags&ast.SymbolFlagsProperty != 0 {
+					// method is overridden with method or property -- correct case
+					continue
+				} else {
+					errorMessage = diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor
+				}
+			} else if base.Flags&ast.SymbolFlagsAccessor != 0 {
+				errorMessage = diagnostics.Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_function
+			} else {
+				errorMessage = diagnostics.Class_0_defines_instance_member_property_1_but_extended_class_2_defines_it_as_instance_member_function
+			}
+			c.error(core.OrElse(ast.GetNameOfDeclaration(derived.ValueDeclaration), derived.ValueDeclaration), errorMessage, c.typeToString(baseType), c.symbolToString(base), c.typeToString(t))
+		}
+	}
+	for errorNode, memberInfo := range notImplementedInfo {
+		switch {
+		case len(memberInfo.missedProperties) == 1:
+			missedProperty := "'" + memberInfo.missedProperties[0] + "'"
+			if ast.IsClassExpression(errorNode) {
+				c.error(errorNode, diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1, missedProperty, memberInfo.baseTypeName)
+			} else {
+				c.error(errorNode, diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2, memberInfo.typeName, missedProperty, memberInfo.baseTypeName)
+			}
+		case len(memberInfo.missedProperties) > 5:
+			missedProperties := strings.Join(core.Map(memberInfo.missedProperties[:4], func(prop string) string { return "'" + prop + "'" }), ", ")
+			remainingMissedProperties := len(memberInfo.missedProperties) - 4
+			if ast.IsClassExpression(errorNode) {
+				c.error(errorNode, diagnostics.Non_abstract_class_expression_is_missing_implementations_for_the_following_members_of_0_Colon_1_and_2_more, memberInfo.baseTypeName, missedProperties, remainingMissedProperties)
+			} else {
+				c.error(errorNode, diagnostics.Non_abstract_class_0_is_missing_implementations_for_the_following_members_of_1_Colon_2_and_3_more, memberInfo.typeName, memberInfo.baseTypeName, missedProperties, remainingMissedProperties)
+			}
+		default:
+			missedProperties := strings.Join(core.Map(memberInfo.missedProperties, func(prop string) string { return "'" + prop + "'" }), ", ")
+			if ast.IsClassExpression(errorNode) {
+				c.error(errorNode, diagnostics.Non_abstract_class_expression_is_missing_implementations_for_the_following_members_of_0_Colon_1, memberInfo.baseTypeName, missedProperties)
+			} else {
+				c.error(errorNode, diagnostics.Non_abstract_class_0_is_missing_implementations_for_the_following_members_of_1_Colon_2, memberInfo.typeName, memberInfo.baseTypeName, missedProperties)
+			}
+		}
+	}
+}
+
+func (c *Checker) arePropertiesAbstractOrInterface(base *ast.Symbol, baseDeclarationFlags ast.ModifierFlags) bool {
+	if base.CheckFlags&ast.CheckFlagsSynthetic != 0 {
+		return core.Some(base.Declarations, func(d *ast.Node) bool { return c.isPropertyAbstractOrInterface(d, baseDeclarationFlags) })
+	}
+	return core.Every(base.Declarations, func(d *ast.Node) bool { return c.isPropertyAbstractOrInterface(d, baseDeclarationFlags) })
+}
+
+func (c *Checker) isPropertyAbstractOrInterface(declaration *ast.Node, baseDeclarationFlags ast.ModifierFlags) bool {
+	return ast.IsInterfaceDeclaration(declaration.Parent) ||
+		baseDeclarationFlags&ast.ModifierFlagsAbstract != 0 && (!ast.IsPropertyDeclaration(declaration) || declaration.Initializer() == nil)
 }
 
 func (c *Checker) checkMembersForOverrideModifier(node *ast.Node, t *Type, typeWithThis *Type, staticType *Type) {
-	// !!!
+	var baseWithThis *Type
+	baseTypeNode := getExtendsTypeNode(node)
+	if baseTypeNode != nil {
+		baseTypes := c.getBaseTypes(t)
+		if len(baseTypes) > 0 {
+			baseWithThis = c.getTypeWithThisArgument(core.FirstOrNil(baseTypes), t.AsInterfaceType().thisType, false)
+		}
+	}
+	baseStaticType := c.getBaseConstructorTypeOfClass(t)
+	for _, member := range node.Members() {
+		if !hasAmbientModifier(member) {
+			if ast.IsConstructorDeclaration(member) {
+				for _, param := range member.Parameters() {
+					if ast.IsParameterPropertyDeclaration(param, member) {
+						c.checkMemberForOverrideModifier(node, staticType, baseStaticType, baseWithThis, t, typeWithThis, param)
+					}
+				}
+			} else {
+				c.checkMemberForOverrideModifier(node, staticType, baseStaticType, baseWithThis, t, typeWithThis, member)
+			}
+		}
+	}
+}
+
+func (c *Checker) checkMemberForOverrideModifier(node *ast.Node, staticType *Type, baseStaticType *Type, baseWithThis *Type, t *Type, typeWithThis *Type, member *ast.Node) {
+	memberHasOverrideModifier := hasOverrideModifier(member)
+	if baseWithThis == nil {
+		if memberHasOverrideModifier {
+			c.error(member, diagnostics.This_member_cannot_have_an_override_modifier_because_its_containing_class_0_does_not_extend_another_class, c.typeToString(t))
+		}
+		return
+	}
+	if !memberHasOverrideModifier && !c.compilerOptions.NoImplicitOverride.IsTrue() {
+		return
+	}
+	// Here we have a base class and also an override modifier or no override modifier in noImplicitOverride mode
+	symbol := c.getSymbolOfDeclaration(member)
+	if symbol == nil {
+		return
+	}
+	memberIsStatic := ast.IsStatic(member)
+	thisType := core.IfElse(memberIsStatic, staticType, typeWithThis)
+	prop := c.getPropertyOfType(thisType, symbol.Name)
+	if prop == nil {
+		return
+	}
+	baseType := core.IfElse(memberIsStatic, baseStaticType, baseWithThis)
+	baseProp := c.getPropertyOfType(baseType, symbol.Name)
+	if baseProp == nil && memberHasOverrideModifier {
+		suggestion := c.getSuggestedSymbolForNonexistentClassMember(ast.SymbolName(symbol), baseType)
+		if suggestion != nil {
+			c.error(member, diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1, c.typeToString(baseWithThis), c.symbolToString(suggestion))
+			return
+		}
+		c.error(member, diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0, c.typeToString(baseWithThis))
+		return
+	}
+	if baseProp != nil && len(baseProp.Declarations) != 0 && !memberHasOverrideModifier && c.compilerOptions.NoImplicitOverride.IsTrue() && node.Flags&ast.NodeFlagsAmbient == 0 {
+		baseHasAbstract := core.Some(baseProp.Declarations, hasAbstractModifier)
+		if !baseHasAbstract {
+			message := core.IfElse(ast.IsParameter(member),
+				diagnostics.This_parameter_property_must_have_an_override_modifier_because_it_overrides_a_member_in_base_class_0,
+				diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0)
+			c.error(member, message, c.typeToString(baseWithThis))
+			return
+		}
+		if hasAbstractModifier(member) && baseHasAbstract {
+			c.error(member, diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_an_abstract_method_that_is_declared_in_the_base_class_0, c.typeToString(baseWithThis))
+		}
+	}
+}
+
+func (c *Checker) getSuggestedSymbolForNonexistentClassMember(name string, baseType *Type) *ast.Symbol {
+	return nil // !!!
 }
 
 func (c *Checker) checkIndexConstraints(t *Type, symbol *ast.Symbol, isStaticIndex bool) {
-	// !!!
+	indexInfos := c.getIndexInfosOfType(t)
+	if len(indexInfos) == 0 {
+		return
+	}
+	for _, prop := range c.getPropertiesOfObjectType(t) {
+		if !(isStaticIndex && prop.Flags&ast.SymbolFlagsPrototype != 0) {
+			c.checkIndexConstraintForProperty(t, prop, c.getLiteralTypeFromProperty(prop, TypeFlagsStringOrNumberLiteralOrUnique, true /*includeNonPublic*/), c.getNonMissingTypeOfSymbol(prop))
+		}
+	}
+	typeDeclaration := symbol.ValueDeclaration
+	if typeDeclaration != nil && ast.IsClassLike(typeDeclaration) {
+		for _, member := range typeDeclaration.Members() {
+			// Only process instance properties with computed names here. Static properties cannot be in conflict with indexers,
+			// and properties with literal names were already checked.
+			if !ast.IsStatic(member) && !c.hasBindableName(member) {
+				symbol := c.getSymbolOfDeclaration(member)
+				c.checkIndexConstraintForProperty(t, symbol, c.getTypeOfExpression(member.Name().Expression()), c.getNonMissingTypeOfSymbol(symbol))
+			}
+		}
+	}
+	if len(indexInfos) > 1 {
+		for _, info := range indexInfos {
+			c.checkIndexConstraintForIndexSignature(t, info)
+		}
+	}
+}
+
+func (c *Checker) checkIndexConstraintForProperty(t *Type, prop *ast.Symbol, propNameType *Type, propType *Type) {
+	declaration := prop.ValueDeclaration
+	name := ast.GetNameOfDeclaration(declaration)
+	if name != nil && ast.IsPrivateIdentifier(name) {
+		return
+	}
+	indexInfos := c.getApplicableIndexInfos(t, propNameType)
+	if len(indexInfos) == 0 {
+		return
+	}
+	var interfaceDeclaration *ast.Node
+	if t.objectFlags&ObjectFlagsInterface != 0 {
+		interfaceDeclaration = getDeclarationOfKind(t.symbol, ast.KindInterfaceDeclaration)
+	}
+	var propDeclaration *ast.Node
+	if declaration != nil && ast.IsBinaryExpression(declaration) || name != nil && ast.IsComputedPropertyName(name) {
+		propDeclaration = declaration
+	}
+	var localPropDeclaration *ast.Node
+	if c.getParentOfSymbol(prop) == t.symbol {
+		localPropDeclaration = declaration
+	}
+	for _, info := range indexInfos {
+		var localIndexDeclaration *ast.Node
+		if info.declaration != nil && c.getParentOfSymbol(c.getSymbolOfDeclaration(info.declaration)) == t.symbol {
+			localIndexDeclaration = info.declaration
+		}
+		// We check only when (a) the property is declared in the containing type, or (b) the applicable index signature is declared
+		// in the containing type, or (c) the containing type is an interface and no base interface contains both the property and
+		// the index signature (i.e. property and index signature are declared in separate inherited interfaces).
+		errorNode := core.OrElse(localPropDeclaration, localIndexDeclaration)
+		if errorNode == nil && interfaceDeclaration != nil && !core.Some(c.getBaseTypes(t), func(base *Type) bool {
+			return c.getPropertyOfObjectType(base, prop.Name) != nil && c.getIndexTypeOfType(base, info.keyType) != nil
+		}) {
+			errorNode = interfaceDeclaration
+		}
+		if errorNode != nil && !c.isTypeAssignableTo(propType, info.valueType) {
+			diagnostic := NewDiagnosticForNode(errorNode, diagnostics.Property_0_of_type_1_is_not_assignable_to_2_index_type_3, c.symbolToString(prop), c.typeToString(propType), c.typeToString(info.keyType), c.typeToString(info.valueType))
+			if propDeclaration != nil && errorNode != propDeclaration {
+				diagnostic.AddRelatedInfo(NewDiagnosticForNode(propDeclaration, diagnostics.X_0_is_declared_here, c.symbolToString(prop)))
+			}
+			c.diagnostics.Add(diagnostic)
+		}
+	}
+}
+
+func (c *Checker) checkIndexConstraintForIndexSignature(t *Type, checkInfo *IndexInfo) {
+	declaration := checkInfo.declaration
+	indexInfos := c.getApplicableIndexInfos(t, checkInfo.keyType)
+	if len(indexInfos) == 0 {
+		return
+	}
+	var interfaceDeclaration *ast.Node
+	if t.objectFlags&ObjectFlagsInterface != 0 {
+		interfaceDeclaration = getDeclarationOfKind(t.symbol, ast.KindInterfaceDeclaration)
+	}
+	var localCheckDeclaration *ast.Node
+	if declaration != nil && c.getParentOfSymbol(c.getSymbolOfDeclaration(declaration)) == t.symbol {
+		localCheckDeclaration = declaration
+	}
+	for _, info := range indexInfos {
+		if info == checkInfo {
+			continue
+		}
+		var localIndexDeclaration *ast.Node
+		if info.declaration != nil && c.getParentOfSymbol(c.getSymbolOfDeclaration(info.declaration)) == t.symbol {
+			localIndexDeclaration = info.declaration
+		}
+		// We check only when (a) the check index signature is declared in the containing type, or (b) the applicable index
+		// signature is declared in the containing type, or (c) the containing type is an interface and no base interface contains
+		// both index signatures (i.e. the index signatures are declared in separate inherited interfaces).
+		errorNode := core.OrElse(localCheckDeclaration, localIndexDeclaration)
+		if errorNode == nil && interfaceDeclaration != nil && !core.Some(c.getBaseTypes(t), func(base *Type) bool {
+			return c.getIndexInfoOfType(base, checkInfo.keyType) != nil && c.getIndexTypeOfType(base, info.keyType) != nil
+		}) {
+			errorNode = interfaceDeclaration
+		}
+		if errorNode != nil && !c.isTypeAssignableTo(checkInfo.valueType, info.valueType) {
+			c.error(errorNode, diagnostics.X_0_index_type_1_is_not_assignable_to_2_index_type_3, c.typeToString(checkInfo.keyType), c.typeToString(checkInfo.valueType), c.typeToString(info.keyType), c.typeToString(info.valueType))
+		}
+	}
 }
 
 func (c *Checker) checkTypeForDuplicateIndexSignatures(node *ast.Node) {
-	// !!!
+	if ast.IsInterfaceDeclaration(node) {
+		// in case of merging interface declaration it is possible that we'll enter this check procedure several times for every declaration
+		// to prevent this run check only for the first declaration of a given kind
+		if symbol := c.getSymbolOfDeclaration(node); len(symbol.Declarations) != 0 && symbol.Declarations[0] != node {
+			return
+		}
+	}
+	// TypeScript 1.0 spec (April 2014)
+	// 3.7.4: An object type can contain at most one string index signature and one numeric index signature.
+	// 8.5: A class declaration can have at most one string index member declaration and one numeric index member declaration
+	indexSymbol := c.getIndexSymbol(c.getSymbolOfDeclaration(node))
+	if indexSymbol == nil || len(indexSymbol.Declarations) <= 1 {
+		return
+	}
+	indexSignatureMap := make(map[*Type][]*ast.Node)
+	for _, declaration := range indexSymbol.Declarations {
+		if ast.IsIndexSignatureDeclaration(declaration) {
+			parameters := declaration.Parameters()
+			if len(parameters) == 1 && parameters[0].Type() != nil {
+				for _, t := range c.getTypeFromTypeNode(parameters[0].Type()).Distributed() {
+					indexSignatureMap[t] = append(indexSignatureMap[t], declaration)
+				}
+			}
+		}
+		// Do nothing for late-bound index signatures: allow these to duplicate one another and explicit indexes
+	}
+	for t, declarations := range indexSignatureMap {
+		if len(declarations) > 1 {
+			for _, declaration := range declarations {
+				c.error(declaration, diagnostics.Duplicate_index_signature_for_type_0, c.typeToString(t))
+			}
+		}
+	}
 }
 
 func (c *Checker) checkPropertyInitialization(node *ast.Node) {
@@ -3220,7 +3674,7 @@ func (c *Checker) checkInterfaceDeclaration(node *ast.Node) {
 			c.checkIndexConstraints(t, symbol /*isStaticIndex*/, false)
 		}
 	}
-	c.checkObjectTypeForDuplicateDeclarations(node)
+	c.checkObjectTypeForDuplicateDeclarations(node, false /*checkPrivateNames*/)
 	for _, heritageElement := range getExtendsTypeNodes(node) {
 		expr := heritageElement.Expression()
 		if !ast.IsEntityNameExpression(expr) || ast.IsOptionalChain(expr) {
@@ -3233,8 +3687,45 @@ func (c *Checker) checkInterfaceDeclaration(node *ast.Node) {
 	c.registerForUnusedIdentifiersCheck(node)
 }
 
+type InheritanceInfo struct {
+	prop           *ast.Symbol
+	containingType *Type
+}
+
 func (c *Checker) checkInheritedPropertiesAreIdentical(t *Type, typeNode *ast.Node) bool {
-	return true // !!!
+	baseTypes := c.getBaseTypes(t)
+	if len(baseTypes) < 2 {
+		return true
+	}
+	seen := make(map[string]InheritanceInfo)
+	for id, p := range c.resolveDeclaredMembers(t).declaredMembers {
+		if c.isNamedMember(p, id) {
+			seen[p.Name] = InheritanceInfo{prop: p, containingType: t}
+		}
+	}
+	identical := true
+	for _, base := range baseTypes {
+		properties := c.getPropertiesOfType(c.getTypeWithThisArgument(base, t.AsInterfaceType().thisType, false))
+		for _, prop := range properties {
+			if existing, ok := seen[prop.Name]; !ok {
+				seen[prop.Name] = InheritanceInfo{prop: prop, containingType: base}
+			} else {
+				isInheritedProperty := existing.containingType != t
+				if isInheritedProperty && !c.isPropertyIdenticalTo(existing.prop, prop) {
+					identical = false
+					typeName1 := c.typeToString(existing.containingType)
+					typeName2 := c.typeToString(base)
+					errorInfo := NewDiagnosticForNode(typeNode, diagnostics.Named_property_0_of_types_1_and_2_are_not_identical, c.symbolToString(prop), typeName1, typeName2)
+					c.diagnostics.Add(ast.NewDiagnosticChain(errorInfo, diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, c.typeToString(t), typeName1, typeName2))
+				}
+			}
+		}
+	}
+	return identical
+}
+
+func (c *Checker) isPropertyIdenticalTo(sourceProp *ast.Symbol, targetProp *ast.Symbol) bool {
+	return c.compareProperties(sourceProp, targetProp, c.compareTypesIdentical) != TernaryFalse
 }
 
 func (c *Checker) checkEnumDeclaration(node *ast.Node) {
@@ -4270,11 +4761,41 @@ func (c *Checker) checkExportsOnMergedDeclarations(node *ast.Node) {
 }
 
 func (c *Checker) checkTypeParameters(typeParameterDeclarations []*ast.Node) {
-	// !!!
-
-	for _, typeParameter := range typeParameterDeclarations {
-		typeParameter.ForEachChild(c.checkSourceElement)
+	seenDefault := false
+	for i, node := range typeParameterDeclarations {
+		c.checkTypeParameter(node)
+		defaultTypeNode := node.AsTypeParameter().DefaultType
+		if defaultTypeNode != nil {
+			seenDefault = true
+			c.checkTypeParametersNotReferenced(defaultTypeNode, typeParameterDeclarations, i)
+		} else if seenDefault {
+			c.error(node, diagnostics.Required_type_parameters_may_not_follow_optional_type_parameters)
+		}
+		for j := range i {
+			if typeParameterDeclarations[j].Symbol() == node.Symbol() {
+				c.error(node.Name(), diagnostics.Duplicate_identifier_0, scanner.DeclarationNameToString(node.Name()))
+			}
+		}
 	}
+}
+
+// Check that type parameter defaults only reference previously declared type parameters */
+func (c *Checker) checkTypeParametersNotReferenced(root *ast.Node, typeParameters []*ast.Node, index int) {
+	var visit func(*ast.Node) bool
+	visit = func(node *ast.Node) bool {
+		if ast.IsTypeReferenceNode(node) {
+			t := c.getTypeFromTypeReference(node)
+			if t.flags&TypeFlagsTypeParameter != 0 {
+				for i := index; i < len(typeParameters); i++ {
+					if t.symbol == c.getSymbolOfDeclaration(typeParameters[i]) {
+						c.error(node, diagnostics.Type_parameter_defaults_can_only_reference_previously_declared_type_parameters)
+					}
+				}
+			}
+		}
+		return node.ForEachChild(visit)
+	}
+	visit(root)
 }
 
 func (c *Checker) registerForUnusedIdentifiersCheck(node *ast.Node) {
@@ -6178,9 +6699,10 @@ func (c *Checker) checkTypeArguments(signature *Signature, typeArgumentNodes []*
 			if reportErrors {
 				errorNode = typeArgumentNodes[i]
 			}
-			var diagnostic *ast.Diagnostic
-			if !c.checkTypeAssignableToEx(typeArgument, c.getTypeWithThisArgument(c.instantiateType(constraint, mapper), typeArgument, false), errorNode, typeArgumentHeadMessage, &diagnostic) {
-				if diagnostic != nil {
+			var diags []*ast.Diagnostic
+			if !c.checkTypeAssignableToEx(typeArgument, c.getTypeWithThisArgument(c.instantiateType(constraint, mapper), typeArgument, false), errorNode, typeArgumentHeadMessage, &diags) {
+				if len(diags) != 0 {
+					diagnostic := diags[0]
 					if headMessage != nil {
 						diagnostic = ast.NewDiagnosticChain(diagnostic, diagnostics.Type_0_does_not_satisfy_the_constraint_1)
 					}
@@ -6193,7 +6715,7 @@ func (c *Checker) checkTypeArguments(signature *Signature, typeArgumentNodes []*
 	return typeArgumentTypes
 }
 
-func (c *Checker) isSignatureApplicable(node *ast.Node, args []*ast.Node, signature *Signature, relation *Relation, checkMode CheckMode, reportErrors bool, inferenceContext *InferenceContext, diagnosticOutput **ast.Diagnostic) bool {
+func (c *Checker) isSignatureApplicable(node *ast.Node, args []*ast.Node, signature *Signature, relation *Relation, checkMode CheckMode, reportErrors bool, inferenceContext *InferenceContext, diagnosticOutput *[]*ast.Diagnostic) bool {
 	if isJsxOpeningLikeElement(node) {
 		// !!!
 		// if !c.checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, checkMode, reportErrors, containingMessageChain, errorOutputContainer) {
@@ -6536,20 +7058,22 @@ func (c *Checker) reportCallResolutionErrors(s *CallState, signatures []*Signatu
 	case len(s.candidatesForArgumentError) != 0:
 		// !!! Port logic that lists all diagnostics up to 3
 		last := s.candidatesForArgumentError[len(s.candidatesForArgumentError)-1]
-		var diagnostic *ast.Diagnostic
-		c.isSignatureApplicable(s.node, s.args, last, c.assignableRelation, CheckModeNormal, true /*reportErrors*/, nil /*inferenceContext*/, &diagnostic)
-		if len(s.candidatesForArgumentError) > 1 {
-			diagnostic = ast.NewDiagnosticChain(diagnostic, diagnostics.The_last_overload_gave_the_following_error)
-			diagnostic = ast.NewDiagnosticChain(diagnostic, diagnostics.No_overload_matches_this_call)
+		var diags []*ast.Diagnostic
+		c.isSignatureApplicable(s.node, s.args, last, c.assignableRelation, CheckModeNormal, true /*reportErrors*/, nil /*inferenceContext*/, &diags)
+		for _, diagnostic := range diags {
+			if len(s.candidatesForArgumentError) > 1 {
+				diagnostic = ast.NewDiagnosticChain(diagnostic, diagnostics.The_last_overload_gave_the_following_error)
+				diagnostic = ast.NewDiagnosticChain(diagnostic, diagnostics.No_overload_matches_this_call)
+			}
+			if headMessage != nil {
+				diagnostic = ast.NewDiagnosticChain(diagnostic, headMessage)
+			}
+			if last.declaration != nil && len(s.candidatesForArgumentError) > 3 {
+				diagnostic.AddRelatedInfo(NewDiagnosticForNode(last.declaration, diagnostics.The_last_overload_is_declared_here))
+			}
+			// !!! addImplementationSuccessElaboration(last, d)
+			c.diagnostics.Add(diagnostic)
 		}
-		if headMessage != nil {
-			diagnostic = ast.NewDiagnosticChain(diagnostic, headMessage)
-		}
-		if last.declaration != nil && len(s.candidatesForArgumentError) > 3 {
-			diagnostic.AddRelatedInfo(NewDiagnosticForNode(last.declaration, diagnostics.The_last_overload_is_declared_here))
-		}
-		// !!! addImplementationSuccessElaboration(last, d)
-		c.diagnostics.Add(diagnostic)
 	case s.candidateForArgumentArityError != nil:
 		c.diagnostics.Add(c.getArgumentArityError(s.node, []*Signature{s.candidateForArgumentArityError}, s.args, headMessage))
 	case s.candidateForTypeArgumentError != nil:
@@ -9411,8 +9935,6 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 	inDestructuringPattern := ast.IsAssignmentTarget(node)
 	// Grammar checking
 	c.checkGrammarObjectLiteralExpression(node.AsObjectLiteralExpression(), inDestructuringPattern)
-
-	// c.checkGrammarObjectLiteralExpression(node, inDestructuringPattern)
 	var allPropertiesTable ast.SymbolTable
 	if c.strictNullChecks {
 		allPropertiesTable = make(ast.SymbolTable)
@@ -9953,7 +10475,100 @@ func (c *Checker) isInPropertyInitializerOrClassStaticBlock(node *ast.Node) bool
 }
 
 func (c *Checker) getNarrowedTypeOfSymbol(symbol *ast.Symbol, location *ast.Node) *Type {
-	return c.getTypeOfSymbol(symbol) // !!!!
+	t := c.getTypeOfSymbol(symbol)
+	declaration := symbol.ValueDeclaration
+	if declaration != nil {
+		// If we have a non-rest binding element with no initializer declared as a const variable or a const-like
+		// parameter (a parameter for which there are no assignments in the function body), and if the parent type
+		// for the destructuring is a union type, one or more of the binding elements may represent discriminant
+		// properties, and we want the effects of conditional checks on such discriminants to affect the types of
+		// other binding elements from the same destructuring. Consider:
+		//
+		//   type Action =
+		//       | { kind: 'A', payload: number }
+		//       | { kind: 'B', payload: string };
+		//
+		//   function f({ kind, payload }: Action) {
+		//       if (kind === 'A') {
+		//           payload.toFixed();
+		//       }
+		//       if (kind === 'B') {
+		//           payload.toUpperCase();
+		//       }
+		//   }
+		//
+		// Above, we want the conditional checks on 'kind' to affect the type of 'payload'. To facilitate this, we use
+		// the binding pattern AST instance for '{ kind, payload }' as a pseudo-reference and narrow this reference
+		// as if it occurred in the specified location. We then recompute the narrowed binding element type by
+		// destructuring from the narrowed parent type.
+		if ast.IsBindingElement(declaration) && declaration.Initializer() == nil && !hasDotDotDotToken(declaration) && len(declaration.Parent.AsBindingPattern().Elements.Nodes) >= 2 {
+			parent := declaration.Parent.Parent
+			rootDeclaration := ast.GetRootDeclaration(parent)
+			if ast.IsVariableDeclaration(rootDeclaration) && c.getCombinedNodeFlagsCached(rootDeclaration)&ast.NodeFlagsConstant != 0 || ast.IsParameter(rootDeclaration) {
+				links := c.nodeLinks.get(parent)
+				if links.flags&NodeCheckFlagsInCheckIdentifier == 0 {
+					links.flags |= NodeCheckFlagsInCheckIdentifier
+					parentType := c.getTypeForBindingElementParent(parent, CheckModeNormal)
+					var parentTypeConstraint *Type
+					if parentType != nil {
+						parentTypeConstraint = c.mapType(parentType, c.getBaseConstraintOrType)
+					}
+					links.flags &^= NodeCheckFlagsInCheckIdentifier
+					if parentTypeConstraint != nil && parentTypeConstraint.flags&TypeFlagsUnion != 0 && !(ast.IsParameter(rootDeclaration) && c.isSomeSymbolAssigned(rootDeclaration)) {
+						pattern := declaration.Parent
+						narrowedType := c.getFlowTypeOfReferenceEx(pattern, parentTypeConstraint, parentTypeConstraint, nil /*flowContainer*/, getFlowNodeOfNode(location))
+						if narrowedType.flags&TypeFlagsNever != 0 {
+							return c.neverType
+						}
+						// Destructurings are validated against the parent type elsewhere. Here we disable tuple bounds
+						// checks because the narrowed type may have lower arity than the full parent type. For example,
+						// for the declaration [x, y]: [1, 2] | [3], we may have narrowed the parent type to just [3].
+						return c.getBindingElementTypeFromParentType(declaration, narrowedType, true /*noTupleBoundsCheck*/)
+					}
+				}
+			}
+		}
+		// If we have a const-like parameter with no type annotation or initializer, and if the parameter is contextually
+		// typed by a signature with a single rest parameter of a union of tuple types, one or more of the parameters may
+		// represent discriminant tuple elements, and we want the effects of conditional checks on such discriminants to
+		// affect the types of other parameters in the same parameter list. Consider:
+		//
+		//   type Action = [kind: 'A', payload: number] | [kind: 'B', payload: string];
+		//
+		//   const f: (...args: Action) => void = (kind, payload) => {
+		//       if (kind === 'A') {
+		//           payload.toFixed();
+		//       }
+		//       if (kind === 'B') {
+		//           payload.toUpperCase();
+		//       }
+		//   }
+		//
+		// Above, we want the conditional checks on 'kind' to affect the type of 'payload'. To facilitate this, we use
+		// the arrow function AST node for '(kind, payload) => ...' as a pseudo-reference and narrow this reference as
+		// if it occurred in the specified location. We then recompute the narrowed parameter type by indexing into the
+		// narrowed tuple type.
+		if ast.IsParameter(declaration) && declaration.Type() == nil && declaration.Initializer() == nil && !hasDotDotDotToken(declaration) {
+			fn := declaration.Parent
+			if len(fn.Parameters()) >= 2 && c.isContextSensitiveFunctionOrObjectLiteralMethod(fn) {
+				contextualSignature := c.getContextualSignature(fn)
+				if contextualSignature != nil && len(contextualSignature.parameters) == 1 && signatureHasRestParameter(contextualSignature) {
+					var mapper *TypeMapper
+					context := c.getInferenceContext(fn)
+					if context != nil {
+						mapper = context.nonFixingMapper
+					}
+					restType := c.getReducedApparentType(c.instantiateType(c.getTypeOfSymbol(contextualSignature.parameters[0]), mapper))
+					if restType.flags&TypeFlagsUnion != 0 && everyType(restType, isTupleType) && !core.Some(fn.Parameters(), c.isSomeSymbolAssigned) {
+						narrowedType := c.getFlowTypeOfReferenceEx(fn, restType, restType, nil /*flowContainer*/, getFlowNodeOfNode(location))
+						index := slices.Index(fn.Parameters(), declaration) - (core.IfElse(getThisParameter(fn) != nil, 1, 0))
+						return c.getIndexedAccessType(narrowedType, c.getNumberLiteralType(jsnum.Number(index)))
+					}
+				}
+			}
+		}
+	}
+	return t
 }
 
 func (c *Checker) isReadonlySymbol(symbol *ast.Symbol) bool {
@@ -13419,8 +14034,7 @@ func (c *Checker) getTypeFromObjectBindingPattern(pattern *ast.Node, includePatt
 	result := c.newAnonymousType(nil, members, nil, nil, indexInfos)
 	result.objectFlags |= objectFlags
 	if includePatternInType {
-		// !!!
-		// result.pattern = pattern
+		c.patternForType[result] = pattern
 		result.objectFlags |= ObjectFlagsContainsObjectOrArrayLiteral
 	}
 	return result
@@ -13466,8 +14080,7 @@ func (c *Checker) getTypeFromArrayBindingPattern(pattern *ast.Node, includePatte
 	result := c.createTupleTypeEx(elementTypes, elementInfos, false)
 	if includePatternInType {
 		result = c.cloneTypeReference(result)
-		// !!!
-		// result.pattern = pattern
+		c.patternForType[result] = pattern
 		result.objectFlags |= ObjectFlagsContainsObjectOrArrayLiteral
 	}
 	return result
@@ -17147,10 +17760,7 @@ func (c *Checker) getEffectiveTypeArguments(node *ast.Node, typeParameters []*Ty
 	return c.fillMissingTypeArguments(core.Map(node.TypeArguments(), c.getTypeFromTypeNode), typeParameters, c.getMinTypeArgumentCount(typeParameters))
 }
 
-/**
- * Gets the minimum number of type arguments needed to satisfy all non-optional type
- * parameters.
- */
+// Gets the minimum number of type arguments needed to satisfy all non-optional type parameters.
 func (c *Checker) getMinTypeArgumentCount(typeParameters []*Type) int {
 	minTypeArgumentCount := 0
 	for i, typeParameter := range typeParameters {
@@ -17247,7 +17857,7 @@ func (c *Checker) getDefaultOrUnknownFromTypeParameter(t *Type) *Type {
 }
 
 func (c *Checker) getNamedMembers(members ast.SymbolTable) []*ast.Symbol {
-	var result []*ast.Symbol
+	result := make([]*ast.Symbol, 0, len(members))
 	for id, symbol := range members {
 		if c.isNamedMember(symbol, id) {
 			result = append(result, symbol)
@@ -18138,7 +18748,51 @@ func (c *Checker) resolveTypeReferenceName(typeReference *ast.Node, meaning ast.
 	if ignoreErrors {
 		return c.unknownSymbol
 	}
-	return c.unknownSymbol // !!! return c.getUnresolvedSymbolForEntityName(name)
+	return c.getUnresolvedSymbolForEntityName(name)
+}
+
+func (c *Checker) getUnresolvedSymbolForEntityName(name *ast.Node) *ast.Symbol {
+	var identifier *ast.Node
+	switch name.Kind {
+	case ast.KindQualifiedName:
+		identifier = name.AsQualifiedName().Right
+	case ast.KindPropertyAccessExpression:
+		identifier = name.Name()
+	default:
+		identifier = name
+	}
+	text := identifier.Text()
+	if text != "" {
+		var parentSymbol *ast.Symbol
+		switch name.Kind {
+		case ast.KindQualifiedName:
+			parentSymbol = c.getUnresolvedSymbolForEntityName(name.AsQualifiedName().Left)
+		case ast.KindPropertyAccessExpression:
+			parentSymbol = c.getUnresolvedSymbolForEntityName(name.Expression())
+		}
+		var path string
+		if parentSymbol != nil {
+			path = getSymbolPath(parentSymbol) + "." + text
+		} else {
+			path = text
+		}
+		result := c.unresolvedSymbols[path]
+		if result == nil {
+			result := c.newSymbolEx(ast.SymbolFlagsTypeAlias, text, ast.CheckFlagsUnresolved)
+			c.unresolvedSymbols[path] = result
+			result.Parent = parentSymbol
+			c.declaredTypeLinks.get(result).declaredType = c.unresolvedType
+		}
+		return result
+	}
+	return c.unknownSymbol
+}
+
+func getSymbolPath(symbol *ast.Symbol) string {
+	if symbol.Parent != nil {
+		return getSymbolPath(symbol.Parent) + "." + symbol.Name
+	}
+	return symbol.Name
 }
 
 func (c *Checker) getTypeReferenceType(node *ast.Node, symbol *ast.Symbol) *Type {
@@ -20602,7 +21256,7 @@ func (c *Checker) getUnionTypeEx(types []*Type, unionReduction UnionReduction, a
 }
 
 func (c *Checker) getUnionTypeWorker(types []*Type, unionReduction UnionReduction, alias *TypeAlias, origin *Type) *Type {
-	typeSet, includes := c.addTypesToUnion(nil, 0, types)
+	typeSet, includes := c.addTypesToUnion(make([]*Type, 0, len(types)), 0, types)
 	if unionReduction != UnionReductionNone {
 		if includes&TypeFlagsAnyOrUnknown != 0 {
 			if includes&TypeFlagsAny != 0 {
@@ -20981,7 +21635,9 @@ func (c *Checker) getIntersectionType(types []*Type) *Type {
 }
 
 func (c *Checker) getIntersectionTypeEx(types []*Type, flags IntersectionFlags, alias *TypeAlias) *Type {
-	var orderedTypes orderedMap[TypeId, *Type]
+	var orderedTypes orderedSet[*Type]
+	orderedTypes.values = make([]*Type, 0, len(types))
+	orderedTypes.valuesByKey = make(map[*Type]struct{}, len(types))
 	includes := c.addTypesToIntersection(&orderedTypes, 0, types)
 	typeSet := orderedTypes.values
 	objectFlags := ObjectFlagsNone
@@ -21174,14 +21830,14 @@ func isNotNullType(t *Type) bool {
 
 // Add the given types to the given type set. Order is preserved, freshness is removed from literal
 // types, duplicates are removed, and nested types of the given kind are flattened into the set.
-func (c *Checker) addTypesToIntersection(typeSet *orderedMap[TypeId, *Type], includes TypeFlags, types []*Type) TypeFlags {
+func (c *Checker) addTypesToIntersection(typeSet *orderedSet[*Type], includes TypeFlags, types []*Type) TypeFlags {
 	for _, t := range types {
 		includes = c.addTypeToIntersection(typeSet, includes, c.getRegularTypeOfLiteralType(t))
 	}
 	return includes
 }
 
-func (c *Checker) addTypeToIntersection(typeSet *orderedMap[TypeId, *Type], includes TypeFlags, t *Type) TypeFlags {
+func (c *Checker) addTypeToIntersection(typeSet *orderedSet[*Type], includes TypeFlags, t *Type) TypeFlags {
 	flags := t.flags
 	if flags&TypeFlagsIntersection != 0 {
 		return c.addTypesToIntersection(typeSet, includes, t.Types())
@@ -21189,7 +21845,7 @@ func (c *Checker) addTypeToIntersection(typeSet *orderedMap[TypeId, *Type], incl
 	if c.isEmptyAnonymousObjectType(t) {
 		if includes&TypeFlagsIncludesEmptyObject == 0 {
 			includes |= TypeFlagsIncludesEmptyObject
-			typeSet.add(t.id, t)
+			typeSet.add(t)
 		}
 	} else {
 		if flags&TypeFlagsAnyOrUnknown != 0 {
@@ -21204,13 +21860,13 @@ func (c *Checker) addTypeToIntersection(typeSet *orderedMap[TypeId, *Type], incl
 				includes |= TypeFlagsIncludesMissingType
 				t = c.undefinedType
 			}
-			if !typeSet.contains(t.id) {
+			if !typeSet.contains(t) {
 				if t.flags&TypeFlagsUnit != 0 && includes&TypeFlagsUnit != 0 {
 					// We have seen two distinct unit types which means we should reduce to an
 					// empty intersection. Adding TypeFlags.NonPrimitive causes that to happen.
 					includes |= TypeFlagsNonPrimitive
 				}
-				typeSet.add(t.id, t)
+				typeSet.add(t)
 			}
 		}
 		includes |= flags & TypeFlagsIncludesMask
@@ -22147,7 +22803,42 @@ func (c *Checker) isSelfTypeAccess(name *ast.Node, parent *ast.Symbol) bool {
 }
 
 func (c *Checker) isAssignmentToReadonlyEntity(expr *ast.Node, symbol *ast.Symbol, assignmentKind AssignmentKind) bool {
-	return false // !!!
+	if assignmentKind == AssignmentKindNone {
+		// no assigment means it doesn't matter whether the entity is readonly
+		return false
+	}
+	if c.isReadonlySymbol(symbol) {
+		// Allow assignments to readonly properties within constructors of the same class declaration.
+		if symbol.Flags&ast.SymbolFlagsProperty != 0 && ast.IsAccessExpression(expr) && expr.Expression().Kind == ast.KindThisKeyword {
+			// Look for if this is the constructor for the class that `symbol` is a property of.
+			ctor := getContainingFunction(expr)
+			if ctor == nil || !ast.IsConstructorDeclaration(ctor) {
+				return true
+			}
+			if symbol.ValueDeclaration != nil {
+				isAssignmentDeclaration := ast.IsBinaryExpression(symbol.ValueDeclaration)
+				isLocalPropertyDeclaration := ctor.Parent == symbol.ValueDeclaration.Parent
+				isLocalParameterProperty := ctor == symbol.ValueDeclaration.Parent
+				isLocalThisPropertyAssignment := isAssignmentDeclaration && symbol.Parent.ValueDeclaration == ctor.Parent
+				isLocalThisPropertyAssignmentConstructorFunction := isAssignmentDeclaration && symbol.Parent.ValueDeclaration == ctor
+				isWriteableSymbol := isLocalPropertyDeclaration || isLocalParameterProperty || isLocalThisPropertyAssignment || isLocalThisPropertyAssignmentConstructorFunction
+				return !isWriteableSymbol
+			}
+		}
+		return true
+	}
+	if ast.IsAccessExpression(expr) {
+		// references through namespace import should be readonly
+		node := ast.SkipParentheses(expr.Expression())
+		if ast.IsIdentifier(node) {
+			symbol := c.getResolvedSymbol(node)
+			if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+				declaration := c.getDeclarationOfAliasSymbol(symbol)
+				return declaration != nil && ast.IsNamespaceImport(declaration)
+			}
+		}
+	}
+	return false
 }
 
 func (c *Checker) isThisPropertyAccessInConstructor(node *ast.Node, prop *ast.Symbol) bool {
@@ -25549,41 +26240,6 @@ func (c *Checker) getApplicableIndexSymbol(t *Type, keyType *Type) *ast.Symbol {
 		}
 	}
 	return nil
-}
-
-func (c *Checker) getUnresolvedSymbolForEntityName(name *ast.Node) *ast.Symbol {
-	var identifier *ast.Node
-	if name.Kind == ast.KindQualifiedName {
-		identifier = name.AsQualifiedName().Right
-	} else if name.Kind == ast.KindPropertyAccessExpression {
-		identifier = name.Name()
-	} else {
-		identifier = name
-	}
-	text := identifier.Text()
-	if text != "" {
-		var parentSymbol *ast.Symbol
-		if name.Kind == ast.KindQualifiedName {
-			parentSymbol = c.getUnresolvedSymbolForEntityName(name.AsQualifiedName().Left)
-		} else if name.Kind == ast.KindPropertyAccessExpression {
-			parentSymbol = c.getUnresolvedSymbolForEntityName(name.Expression())
-		}
-
-		path := text
-		if parentSymbol != nil {
-			path = getSymbolPath(parentSymbol) + "." + text
-		}
-
-		result := c.unresolvedSymbols[path]
-		if result == nil {
-			result = c.newSymbolEx(ast.SymbolFlagsTypeAlias, text, ast.CheckFlagsUnresolved)
-			c.unresolvedSymbols[path] = result
-			result.Parent = parentSymbol
-			c.typeAliasLinks.get(result).declaredType = c.unresolvedType
-		}
-		return result
-	}
-	return c.unknownSymbol
 }
 
 func (c *Checker) getRegularTypeOfExpression(expr *ast.Node) *Type {

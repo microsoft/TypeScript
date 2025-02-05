@@ -32,16 +32,19 @@ func (c *Checker) SymbolToString(s *ast.Symbol) string {
 }
 
 func (c *Checker) symbolToString(s *ast.Symbol) string {
+	if scanner.IsValidIdentifier(s.Name, c.languageVersion) {
+		return s.Name
+	}
 	if s.ValueDeclaration != nil {
 		name := ast.GetNameOfDeclaration(s.ValueDeclaration)
 		if name != nil {
 			return scanner.GetTextOfNode(name)
 		}
 	}
-	if len(s.Name) >= 1 && s.Name[0] != '\xFE' {
-		return s.Name
+	if len(s.Name) == 0 || s.Name[0] != '\xFE' {
+		return "\"" + s.Name + "\"" // !!! Implement escaping
 	}
-	return "###"
+	return "(missing)"
 }
 
 func (c *Checker) typeToString(t *Type) string {

@@ -1199,7 +1199,7 @@ func (c *Checker) narrowTypeBySwitchOnDiscriminantProperty(t *Type, access *ast.
 }
 
 func (c *Checker) getTypeAtFlowBranchLabel(f *FlowState, flow *ast.FlowNode, antecedents *ast.FlowList) FlowType {
-	var antecedentTypes []*Type
+	antecedentStart := len(c.antecedentTypes)
 	subtypeReduction := false
 	seenIncomplete := false
 	var bypassFlow *ast.FlowNode
@@ -1216,9 +1216,12 @@ func (c *Checker) getTypeAtFlowBranchLabel(f *FlowState, flow *ast.FlowNode, ant
 		// are the same), there is no reason to process more antecedents since the only
 		// possible outcome is subtypes that will be removed in the final union type anyway.
 		if flowType.t == f.declaredType && f.declaredType == f.initialType {
+			c.antecedentTypes = c.antecedentTypes[:antecedentStart]
 			return FlowType{t: flowType.t}
 		}
-		antecedentTypes = core.AppendIfUnique(antecedentTypes, flowType.t)
+		if !slices.Contains(c.antecedentTypes[antecedentStart:], flowType.t) {
+			c.antecedentTypes = append(c.antecedentTypes, flowType.t)
+		}
 		// If an antecedent type is not a subset of the declared type, we need to perform
 		// subtype reduction. This happens when a "foreign" type is injected into the control
 		// flow using the instanceof operator or a user defined type predicate.
@@ -1234,11 +1237,12 @@ func (c *Checker) getTypeAtFlowBranchLabel(f *FlowState, flow *ast.FlowNode, ant
 		// If the bypass flow contributes a type we haven't seen yet and the switch statement
 		// isn't exhaustive, process the bypass flow type. Since exhaustiveness checks increase
 		// the risk of circularities, we only want to perform them when they make a difference.
-		if flowType.t.flags&TypeFlagsNever == 0 && !slices.Contains(antecedentTypes, flowType.t) && !c.isExhaustiveSwitchStatement(bypassFlow.Node.AsFlowSwitchClauseData().SwitchStatement) {
+		if flowType.t.flags&TypeFlagsNever == 0 && !slices.Contains(c.antecedentTypes[antecedentStart:], flowType.t) && !c.isExhaustiveSwitchStatement(bypassFlow.Node.AsFlowSwitchClauseData().SwitchStatement) {
 			if flowType.t == f.declaredType && f.declaredType == f.initialType {
+				c.antecedentTypes = c.antecedentTypes[:antecedentStart]
 				return FlowType{t: flowType.t}
 			}
-			antecedentTypes = append(antecedentTypes, flowType.t)
+			c.antecedentTypes = append(c.antecedentTypes, flowType.t)
 			if !c.isTypeSubsetOf(flowType.t, f.initialType) {
 				subtypeReduction = true
 			}
@@ -1247,7 +1251,9 @@ func (c *Checker) getTypeAtFlowBranchLabel(f *FlowState, flow *ast.FlowNode, ant
 			}
 		}
 	}
-	return c.newFlowType(c.getUnionOrEvolvingArrayType(f, antecedentTypes, core.IfElse(subtypeReduction, UnionReductionSubtype, UnionReductionLiteral)), seenIncomplete)
+	result := c.newFlowType(c.getUnionOrEvolvingArrayType(f, c.antecedentTypes[antecedentStart:], core.IfElse(subtypeReduction, UnionReductionSubtype, UnionReductionLiteral)), seenIncomplete)
+	c.antecedentTypes = c.antecedentTypes[:antecedentStart]
+	return result
 }
 
 // At flow control branch or loop junctions, if the type along every antecedent code path
@@ -1293,7 +1299,7 @@ func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowT
 	}
 	// Add the flow loop junction and reference to the in-process stack and analyze
 	// each antecedent code path.
-	var antecedentTypes []*Type
+	antecedentTypes := make([]*Type, 0, 4)
 	subtypeReduction := false
 	var firstAntecedentType FlowType
 	for list := flow.Antecedents; list != nil; list = list.Next {
@@ -2619,7 +2625,7 @@ func (c *Checker) hasParentWithAssignmentsMarked(node *ast.Node) bool {
 // assignments occur in compound statements, record the ending source position of the compound statement
 // as the assignment position (this is more conservative than full control flow analysis, but requires
 // only a single walk over the AST).
-func (c *Checker) markNodeAssignments(node *ast.Node) bool {
+func (c *Checker) markNodeAssignmentsWorker(node *ast.Node) bool {
 	switch node.Kind {
 	case ast.KindIdentifier:
 		assignmentKind := getAssignmentTargetKind(node)

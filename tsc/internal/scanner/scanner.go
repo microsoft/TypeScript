@@ -1880,6 +1880,18 @@ func GetIdentifierToken(str string) ast.Kind {
 	return ast.KindIdentifier
 }
 
+func IsValidIdentifier(s string, languageVersion core.ScriptTarget) bool {
+	if len(s) == 0 {
+		return false
+	}
+	for i, ch := range s {
+		if i == 0 && !isIdentifierStart(ch, languageVersion) || i != 0 && !isIdentifierPart(ch, languageVersion) {
+			return false
+		}
+	}
+	return true
+}
+
 // Section 6.1.4
 func isWordCharacter(ch rune) bool {
 	return stringutil.IsASCIILetter(ch) || stringutil.IsDigit(ch) || ch == '_'
