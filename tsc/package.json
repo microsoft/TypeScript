@@ -27,6 +27,7 @@
         "execa": "^9.5.1",
         "glob": "^10.4.5",
         "hereby": "^1.10.0",
+        "json-schema-to-typescript-lite": "^14.1.0",
         "picocolors": "^1.1.1",
         "typescript": "^5.7.3",
         "which": "^5.0.0"

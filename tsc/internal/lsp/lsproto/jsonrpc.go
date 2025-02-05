@@ -6,14 +6,6 @@ import (
 	"fmt"
 )
 
-type Integer = int32
-
-type Uinteger = uint32
-
-type DocumentURI string // !!!
-
-type URI string // !!!
-
 type JSONRPCVersion struct{}
 
 const jsonRPCVersion = `"2.0"`
@@ -77,7 +69,7 @@ func (r *RequestMessage) UnmarshalJSON(data []byte) error {
 	var params any
 	var err error
 
-	if unmarshalParams, ok := requestMethodUnmarshallers[raw.Method]; ok {
+	if unmarshalParams, ok := unmarshallers[raw.Method]; ok {
 		params, err = unmarshalParams(raw.Params)
 	} else {
 		// Fall back to default; it's probably an unknown message and we will probably not handle it.
@@ -100,7 +92,7 @@ type ResponseMessage struct {
 }
 
 type ResponseError struct {
-	Code    Integer `json:"code"`
-	Message string  `json:"message"`
-	Data    any     `json:"data,omitempty"`
+	Code    int32  `json:"code"`
+	Message string `json:"message"`
+	Data    any    `json:"data,omitempty"`
 }

@@ -93,7 +93,7 @@ func (w *BaseWriter) Write(data []byte) error {
 
 type ErrorCode struct { //nolint:errname
 	Name string
-	Code Integer
+	Code int32
 }
 
 func (e *ErrorCode) Error() string {

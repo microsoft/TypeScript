@@ -140,16 +140,24 @@ func (s *Server) sendResponse(resp *lsproto.ResponseMessage) error {
 	return s.w.Write(data)
 }
 
+func ptrTo[T any](v T) *T {
+	return &v
+}
+
 func (s *Server) handleInitialize(req *lsproto.RequestMessage) error {
 	s.initializeParams = req.Params.(*lsproto.InitializeParams)
 	return s.sendResult(req.ID, &lsproto.InitializeResult{
 		ServerInfo: &lsproto.ServerInfo{
 			Name:    "typescript-go",
-			Version: core.Version,
+			Version: ptrTo(core.Version),
 		},
-		Capabilities: map[string]any{
-			"textDocumentSync": lsproto.TextDocumentSyncKindIncremental,
-			"hoverProvider":    true,
+		Capabilities: lsproto.ServerCapabilities{
+			TextDocumentSync: &lsproto.TextDocumentSyncOptionsOrTextDocumentSyncKind{
+				TextDocumentSyncKind: ptrTo(lsproto.TextDocumentSyncKindIncremental),
+			},
+			HoverProvider: &lsproto.BooleanOrHoverOptions{
+				Boolean: ptrTo(true),
+			},
 		},
 	})
 }
@@ -161,9 +169,11 @@ func (s *Server) handleMessage(req *lsproto.RequestMessage) error {
 		return s.sendError(req.ID, lsproto.ErrInvalidRequest)
 	case *lsproto.HoverParams:
 		return s.sendResult(req.ID, &lsproto.Hover{
-			Contents: lsproto.MarkupContent{
-				Kind:  lsproto.MarkupKindPlaintext,
-				Value: "It works!",
+			Contents: lsproto.MarkupContentOrMarkedStringOrMarkedStrings{
+				MarkupContent: &lsproto.MarkupContent{
+					Kind:  lsproto.MarkupKindPlainText,
+					Value: "It works!",
+				},
 			},
 		})
 	default:
