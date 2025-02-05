@@ -18778,7 +18778,7 @@ func (c *Checker) getUnresolvedSymbolForEntityName(name *ast.Node) *ast.Symbol {
 		}
 		result := c.unresolvedSymbols[path]
 		if result == nil {
-			result := c.newSymbolEx(ast.SymbolFlagsTypeAlias, text, ast.CheckFlagsUnresolved)
+			result = c.newSymbolEx(ast.SymbolFlagsTypeAlias, text, ast.CheckFlagsUnresolved)
 			c.unresolvedSymbols[path] = result
 			result.Parent = parentSymbol
 			c.declaredTypeLinks.get(result).declaredType = c.unresolvedType
