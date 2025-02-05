@@ -108,7 +108,7 @@ func getCompilerVaryByMap() map[string]struct{} {
 		"isolatedModules")
 	varyByMap := make(map[string]struct{})
 	for _, option := range varyByOptions {
-		varyByMap[option] = struct{}{}
+		varyByMap[strings.ToLower(option)] = struct{}{}
 	}
 	return varyByMap
 }
