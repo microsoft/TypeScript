@@ -12091,7 +12091,7 @@ export function forEachDynamicImportOrRequireCall<IncludeTypeSpaceImports extend
     cb: (node: CallExpression | (IncludeTypeSpaceImports extends false ? never : JSDocImportTag | ImportTypeNode), argument: RequireStringLiteralLikeArgument extends true ? StringLiteralLike : Expression) => void,
 ): void {
     const isJavaScriptFile = isInJSFile(file);
-    const r = /import|defer|require/g;
+    const r = /import|require/g;
     while (r.exec(file.text) !== null) { // eslint-disable-line no-restricted-syntax
         const node = getNodeAtPosition(file, r.lastIndex, /*includeJSDoc*/ includeTypeSpaceImports);
         if (isJavaScriptFile && isRequireCall(node, requireStringLiteralLikeArgument)) {
@@ -12123,7 +12123,7 @@ function getNodeAtPosition(sourceFile: SourceFile, position: number, includeJSDo
     };
     while (true) {
         const child = isJavaScriptFile && includeJSDoc && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
-        if (!child) {
+        if (!child || isMetaProperty(child)) {
             return current;
         }
         current = child;

@@ -49961,13 +49961,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (isExpressionNode(node)) {
-            try {
-                return getRegularTypeOfExpression(node as Expression);
-            }
-            catch (e) {
-                console.error("Error while getting the type of", isExpressionNode(node), node.kind, (node as MetaProperty).keywordToken !== SyntaxKind.ImportKeyword, (node as MetaProperty).name?.escapedText);
-                throw e;
-            }
+            return getRegularTypeOfExpression(node as Expression);
         }
 
         if (classType && !classDecl.isImplements) {
