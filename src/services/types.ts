@@ -583,8 +583,6 @@ export interface LanguageService {
      * @param position A zero-based index of the character where you want the quick info
      */
     getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;
-    /** @internal */
-    getQuickInfoAtPosition(fileName: string, position: number, verbosityLevel: number | undefined): QuickInfo | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
 
     getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
 
@@ -1326,7 +1324,6 @@ export interface QuickInfo {
     displayParts?: SymbolDisplayPart[];
     documentation?: SymbolDisplayPart[];
     tags?: JSDocTagInfo[];
-    canIncreaseVerbosityLevel?: boolean;
 }
 
 export type RenameInfo = RenameInfoSuccess | RenameInfoFailure;

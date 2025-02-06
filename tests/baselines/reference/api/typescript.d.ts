@@ -1486,10 +1486,6 @@ declare namespace ts {
                 command: CommandTypes.Quickinfo;
                 arguments: FileLocationRequestArgs;
             }
-            export interface QuickInfoRequestArgs extends FileLocationRequestArgs {
-                /** TODO */
-                verbosityLevel?: number;
-            }
             /**
              * Body of QuickInfoResponse.
              */
@@ -1523,10 +1519,6 @@ declare namespace ts {
                  * JSDoc tags associated with symbol.
                  */
                 tags: JSDocTagInfo[];
-                /**
-                 * TODO
-                 */
-                canIncreaseVerbosityLevel?: boolean;
             }
             /**
              * Quickinfo response message.
@@ -10765,7 +10757,6 @@ declare namespace ts {
         displayParts?: SymbolDisplayPart[];
         documentation?: SymbolDisplayPart[];
         tags?: JSDocTagInfo[];
-        canIncreaseVerbosityLevel?: boolean;
     }
     type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
     interface RenameInfoSuccess {

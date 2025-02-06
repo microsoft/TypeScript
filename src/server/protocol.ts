@@ -2005,11 +2005,6 @@ export interface QuickInfoRequest extends FileLocationRequest {
     arguments: FileLocationRequestArgs;
 }
 
-export interface QuickInfoRequestArgs extends FileLocationRequestArgs {
-    /** TODO */
-    verbosityLevel?: number;
-}
-
 /**
  * Body of QuickInfoResponse.
  */
@@ -2049,11 +2044,6 @@ export interface QuickInfoResponseBody {
      * JSDoc tags associated with symbol.
      */
     tags: JSDocTagInfo[];
-
-    /**
-     * TODO
-     */
-    canIncreaseVerbosityLevel?: boolean;
 }
 
 /**
