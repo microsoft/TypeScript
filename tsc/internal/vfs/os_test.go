@@ -45,8 +45,11 @@ func TestOS(t *testing.T) {
 		// Just check that it works.
 		fs.UseCaseSensitiveFileNames()
 
-		if runtime.GOOS == "windows" {
+		switch runtime.GOOS {
+		case "windows":
 			assert.Assert(t, !fs.UseCaseSensitiveFileNames())
+		case "linux":
+			assert.Assert(t, fs.UseCaseSensitiveFileNames())
 		}
 	})
 }

@@ -45,11 +45,11 @@ var isFileSystemCaseSensitive = func() bool {
 	swapped := swapCase(exe)
 	if _, err := os.Stat(swapped); err != nil {
 		if os.IsNotExist(err) {
-			return false
+			return true
 		}
 		panic(fmt.Sprintf("vfs: failed to stat %q: %v", swapped, err))
 	}
-	return true
+	return false
 }()
 
 // Convert all lowercase chars to uppercase, and vice-versa
