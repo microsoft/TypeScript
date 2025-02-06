@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/tsconfigSimpleTest.ts] ////
 
-=== /foo.ts ===
+=== foo.ts ===
 export {};
 const x: string = undefined;
 >x : Symbol(x, Decl(foo.ts, 1, 5))

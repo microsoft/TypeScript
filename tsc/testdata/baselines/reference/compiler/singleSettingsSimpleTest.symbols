@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/singleSettingsSimpleTest.ts] ////
 
-=== /singleSettingsSimpleTest.ts ===
+=== singleSettingsSimpleTest.ts ===
 export {};
 const x: string = undefined;
 >x : Symbol(x, Decl(singleSettingsSimpleTest.ts, 1, 5))
