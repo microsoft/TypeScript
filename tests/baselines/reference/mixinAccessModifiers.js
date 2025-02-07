@@ -360,27 +360,21 @@ declare function f4(x: Protected & Protected2): void;
 declare function f5(x: Protected & Public): void;
 declare function f6(x: Public & Public2): void;
 declare function Mix<T, U>(c1: T, c2: U): T & U;
-declare const C1_base: typeof Private & typeof Private2;
-declare class C1 extends C1_base {
+declare class C1 extends ({} as typeof Private & typeof Private2) {
 }
-declare const C2_base: typeof Private & typeof Protected;
-declare class C2 extends C2_base {
+declare class C2 extends ({} as typeof Private & typeof Protected) {
 }
-declare const C3_base: typeof Private & typeof Public;
-declare class C3 extends C3_base {
+declare class C3 extends ({} as typeof Private & typeof Public) {
 }
-declare const C4_base: typeof Protected & typeof Protected2;
-declare class C4 extends C4_base {
+declare class C4 extends ({} as typeof Protected & typeof Protected2) {
     f(c4: C4, c5: C5, c6: C6): void;
     static g(): void;
 }
-declare const C5_base: typeof Protected & typeof Public;
-declare class C5 extends C5_base {
+declare class C5 extends ({} as typeof Protected & typeof Public) {
     f(c4: C4, c5: C5, c6: C6): void;
     static g(): void;
 }
-declare const C6_base: typeof Public & typeof Public2;
-declare class C6 extends C6_base {
+declare class C6 extends ({} as typeof Public & typeof Public2) {
     f(c4: C4, c5: C5, c6: C6): void;
     static g(): void;
 }
