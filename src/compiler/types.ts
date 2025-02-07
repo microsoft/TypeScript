@@ -5886,7 +5886,7 @@ export interface EmitResolver {
     getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
     isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
-    createLateBoundIndexSignatures(cls: ClassLikeDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): IndexSignatureDeclaration[] | undefined;
+    createLateBoundIndexSignatures(cls: ClassLikeDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): (IndexSignatureDeclaration | PropertyDeclaration)[] | undefined;
 }
 
 // dprint-ignore
@@ -6249,7 +6249,6 @@ export interface NodeLinks {
     decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
     spreadIndices?: { first: number | undefined, last: number | undefined }; // Indices of first and last spread elements in array literal
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
-    contextualReturnType?: Type;        // If the node is a return statement's expression, then this is the contextual return type.
     fakeScopeForSignatureDeclaration?: "params" | "typeParams"; // If present, this is a fake scope injected into an enclosing declaration chain.
     assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
     potentialThisCollisions?: Node[];
@@ -6517,8 +6516,6 @@ export const enum ObjectFlags {
     IsGenericIndexType = 1 << 23, // Union or intersection contains generic index type
     /** @internal */
     IsGenericType = IsGenericObjectType | IsGenericIndexType,
-    /** @internal */
-    IsNarrowingType = 1 << 24, // Substitution type that comes from type narrowing
 
     // Flags that require TypeFlags.Union
     /** @internal */
@@ -6918,16 +6915,12 @@ export interface StringMappingType extends InstantiableType {
 }
 
 // Type parameter substitution (TypeFlags.Substitution)
-// - Substitution types are created for type parameters or indexed access types that occur in the
+// Substitution types are created for type parameters or indexed access types that occur in the
 // true branch of a conditional type. For example, in 'T extends string ? Foo<T> : Bar<T>', the
 // reference to T in Foo<T> is resolved as a substitution type that substitutes 'string & T' for T.
 // Thus, if Foo has a 'string' constraint on its type parameter, T will satisfy it.
-// - Substitution types are also created for NoInfer<T> types. Those are represented as substitution
+// Substitution type are also created for NoInfer<T> types. Those are represented as substitution
 // types where the constraint is type 'unknown' (which is never generated for the case above).
-// - Substitution types are also created for return type narrowing:
-// if a type parameter `T` is linked to a parameter `x` and `x`'s narrowed type is `S`,
-// we represent that with a substitution type with base `T` and constraint `S`.
-// The resulting substitution type has `ObjectFlags.IsNarrowedType` set.
 export interface SubstitutionType extends InstantiableType {
     objectFlags: ObjectFlags;
     baseType: Type; // Target type
@@ -7020,11 +7013,14 @@ export const enum IndexKind {
     Number,
 }
 
+export type ElementWithComputedPropertyName = (ClassElement | ObjectLiteralElement) & { name: ComputedPropertyName; };
+
 export interface IndexInfo {
     keyType: Type;
     type: Type;
     isReadonly: boolean;
     declaration?: IndexSignatureDeclaration;
+    components?: ElementWithComputedPropertyName[];
 }
 
 /** @internal */

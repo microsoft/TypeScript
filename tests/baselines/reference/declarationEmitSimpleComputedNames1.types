@@ -1,0 +1,192 @@
+//// [tests/cases/compiler/declarationEmitSimpleComputedNames1.ts] ////
+
+=== declarationEmitSimpleComputedNames1.ts ===
+export const fieldName = Math.random() > 0.5 ? "f1" : "f2";
+>fieldName : "f1" | "f2"
+>          : ^^^^^^^^^^^
+>Math.random() > 0.5 ? "f1" : "f2" : "f1" | "f2"
+>                                  : ^^^^^^^^^^^
+>Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>"f1" : "f1"
+>     : ^^^^
+>"f2" : "f2"
+>     : ^^^^
+
+export const conatainer = {
+>conatainer : { [fieldName]: () => string; }
+>           : ^^             ^^^^^^^^^^^^ ^^
+>{    [fieldName]() {        return "result";    }} : { [fieldName]: () => string; }
+>                                                   : ^^             ^^^^^^^^^^^^ ^^
+
+    [fieldName]() {
+>[fieldName] : () => string
+>            : ^^^^^^^^^^^^
+>fieldName : "f1" | "f2"
+>          : ^^^^^^^^^^^
+
+        return "result";
+>"result" : "result"
+>         : ^^^^^^^^
+    }
+};
+
+const classFieldName = Math.random() > 0.5 ? "g1" : "g2";
+>classFieldName : "g1" | "g2"
+>               : ^^^^^^^^^^^
+>Math.random() > 0.5 ? "g1" : "g2" : "g1" | "g2"
+>                                  : ^^^^^^^^^^^
+>Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>"g1" : "g1"
+>     : ^^^^
+>"g2" : "g2"
+>     : ^^^^
+
+const otherField = classFieldName === "g1" ? "g2" : "g1";
+>otherField : "g1" | "g2"
+>           : ^^^^^^^^^^^
+>classFieldName === "g1" ? "g2" : "g1" : "g1" | "g2"
+>                                      : ^^^^^^^^^^^
+>classFieldName === "g1" : boolean
+>                        : ^^^^^^^
+>classFieldName : "g1" | "g2"
+>               : ^^^^^^^^^^^
+>"g1" : "g1"
+>     : ^^^^
+>"g2" : "g2"
+>     : ^^^^
+>"g1" : "g1"
+>     : ^^^^
+
+const staticField = Math.random() > 0.5 ? "s1" : "s2";
+>staticField : "s1" | "s2"
+>            : ^^^^^^^^^^^
+>Math.random() > 0.5 ? "s1" : "s2" : "s1" | "s2"
+>                                  : ^^^^^^^^^^^
+>Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>"s1" : "s1"
+>     : ^^^^
+>"s2" : "s2"
+>     : ^^^^
+
+export class Holder {
+>Holder : Holder
+>       : ^^^^^^
+
+    [classFieldName]() {
+>[classFieldName] : () => string
+>                 : ^^^^^^^^^^^^
+>classFieldName : "g1" | "g2"
+>               : ^^^^^^^^^^^
+
+        return "value";
+>"value" : "value"
+>        : ^^^^^^^
+    }
+    [otherField]() {
+>[otherField] : () => number
+>             : ^^^^^^^^^^^^
+>otherField : "g1" | "g2"
+>           : ^^^^^^^^^^^
+
+        return 42;
+>42 : 42
+>   : ^^
+    }
+    static [staticField]() {
+>[staticField] : () => { static: boolean; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>staticField : "s1" | "s2"
+>            : ^^^^^^^^^^^
+
+        return { static: true };
+>{ static: true } : { static: boolean; }
+>                 : ^^^^^^^^^^^^^^^^^^^^
+>static : boolean
+>       : ^^^^^^^
+>true : true
+>     : ^^^^
+    }
+    static [staticField]() {
+>[staticField] : () => { static: string; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>staticField : "s1" | "s2"
+>            : ^^^^^^^^^^^
+
+        return { static: "sometimes" };
+>{ static: "sometimes" } : { static: string; }
+>                        : ^^^^^^^^^^^^^^^^^^^
+>static : string
+>       : ^^^^^^
+>"sometimes" : "sometimes"
+>            : ^^^^^^^^^^^
+    }
+}
+
+/**
+ * Could be `"prototype"`, so all static string indexers include the instance type
+ */
+export const staticLookup = Holder["some" + "thing"];
+>staticLookup : Holder | (() => { static: boolean; }) | (() => { static: string; })
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Holder["some" + "thing"] : Holder | (() => { static: boolean; }) | (() => { static: string; })
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Holder : typeof Holder
+>       : ^^^^^^^^^^^^^
+>"some" + "thing" : string
+>                 : ^^^^^^
+>"some" : "some"
+>       : ^^^^^^
+>"thing" : "thing"
+>        : ^^^^^^^
+
+export const instanceLookup = (new Holder())["some" + "thing"];
+>instanceLookup : (() => string) | (() => number)
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Holder())["some" + "thing"] : (() => string) | (() => number)
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(new Holder()) : Holder
+>               : ^^^^^^
+>new Holder() : Holder
+>             : ^^^^^^
+>Holder : typeof Holder
+>       : ^^^^^^^^^^^^^
+>"some" + "thing" : string
+>                 : ^^^^^^
+>"some" : "some"
+>       : ^^^^^^
+>"thing" : "thing"
+>        : ^^^^^^^
+
