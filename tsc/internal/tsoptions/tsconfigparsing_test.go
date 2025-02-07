@@ -440,7 +440,29 @@ var parseJsonConfigFileTests = []struct {
 			allFileList:    map[string]string{"/apath/test.ts": "", "/apath/foge.ts": ""},
 		}},
 	},
+	{
+		title:               "parses tsconfig with extends, files and include",
+		noSubmoduleBaseline: true,
+		input: []testConfig{{
+			jsonText: `{
+				"extends": "./tsconfigWithExtends.json",
+				"compilerOptions": {
+				    "outDir": "./dist",
+    				"strict": true,
+    				"noImplicitAny": true,
+				},
+			}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/tsconfigWithExtends.json": tsconfigWithExtends, "/src/index.ts": "", "/src/app.ts": "", "/node_modules/module.ts": "", "/dist/output.js": ""},
+		}},
+	},
 }
+
+var tsconfigWithExtends = `{
+  "files": ["/src/index.ts", "/src/app.ts"],
+  "include": ["/src/**/*"],
+}`
 
 var tsconfigWithoutConfigDir = `{
   "compilerOptions": {

@@ -24,9 +24,9 @@ type extendsResult struct {
 	options *core.CompilerOptions
 	// watchOptions        compiler.WatchOptions
 	watchOptionsCopied  bool
-	include             []string
-	exclude             []string
-	files               []string
+	include             []any
+	exclude             []any
+	files               []any
 	compileOnSave       bool
 	extendedSourceFiles core.Set[string]
 }
@@ -932,9 +932,9 @@ func parseConfig(
 				}
 				if propertyName == "include" || propertyName == "exclude" || propertyName == "files" {
 					if rawMap, ok := extendsRaw.(map[string]any); ok && rawMap[propertyName] != nil {
-						value := core.Map(rawMap[propertyName].([]string), func(path string) string {
-							if startsWithConfigDirTemplate(path) || tspath.IsRootedDiskPath(path) {
-								return path
+						value := core.Map(rawMap[propertyName].([]any), func(path any) any {
+							if startsWithConfigDirTemplate(path) || tspath.IsRootedDiskPath(path.(string)) {
+								return path.(string)
 							} else {
 								if relativeDifference == "" {
 									t := tspath.ComparePathsOptions{
@@ -943,7 +943,7 @@ func parseConfig(
 									}
 									relativeDifference = tspath.ConvertToRelativePath(basePath, t)
 								}
-								return tspath.CombinePaths(relativeDifference, path)
+								return tspath.CombinePaths(relativeDifference, path.(string))
 							}
 						})
 						if propertyName == "include" {
