@@ -6,7 +6,7 @@ subtypingWithNumericIndexer2.ts(24,27): error TS2344: Type 'Base' does not satis
 subtypingWithNumericIndexer2.ts(32,15): error TS2430: Interface 'B3<T>' incorrectly extends interface 'A<T>'.
   'number' index signatures are incompatible.
     Type 'Base' is not assignable to type 'T'.
-      'T' is constrained to be a subtype of'Base'.
+      'T' is constrained to be a subtype of 'Base'.
 subtypingWithNumericIndexer2.ts(36,15): error TS2430: Interface 'B4<T>' incorrectly extends interface 'A<T>'.
   'number' index signatures are incompatible.
     Type 'Derived' is not assignable to type 'T'.
@@ -63,7 +63,7 @@ subtypingWithNumericIndexer2.ts(40,15): error TS2430: Interface 'B5<T>' incorrec
 !!! error TS2430: Interface 'B3<T>' incorrectly extends interface 'A<T>'.
 !!! error TS2430:   'number' index signatures are incompatible.
 !!! error TS2430:     Type 'Base' is not assignable to type 'T'.
-!!! error TS2430:       'T' is constrained to be a subtype of'Base'.
+!!! error TS2430:       'T' is constrained to be a subtype of 'Base'.
             [x: number]: Base; // error
         }
     

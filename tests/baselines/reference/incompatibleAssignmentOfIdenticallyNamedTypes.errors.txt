@@ -1,5 +1,5 @@
 incompatibleAssignmentOfIdenticallyNamedTypes.ts(6,9): error TS2719: Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-  'T' is constrained to be a subtype of'T'.
+  'T' is constrained to be a subtype of 'T'.
 
 
 ==== incompatibleAssignmentOfIdenticallyNamedTypes.ts (1 errors) ====
@@ -11,7 +11,7 @@ incompatibleAssignmentOfIdenticallyNamedTypes.ts(6,9): error TS2719: Type 'T' is
             this.x = a;
             ~~~~~~
 !!! error TS2719: Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:   'T' is constrained to be a subtype of'T'.
+!!! error TS2719:   'T' is constrained to be a subtype of 'T'.
         }
     }
     

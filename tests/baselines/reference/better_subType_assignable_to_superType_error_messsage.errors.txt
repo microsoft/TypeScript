@@ -1,5 +1,5 @@
 better_subType_assignable_to_superType_error_messsage.ts(13,3): error TS2322: Type 'SuperType' is not assignable to type 'SubType2'.
-  'SubType2' is constrained to be a subtype of'SuperType'.
+  'SubType2' is constrained to be a subtype of 'SuperType'.
 
 
 ==== better_subType_assignable_to_superType_error_messsage.ts (1 errors) ====
@@ -18,7 +18,7 @@ better_subType_assignable_to_superType_error_messsage.ts(13,3): error TS2322: Ty
       subType2 = superType;
       ~~~~~~~~
 !!! error TS2322: Type 'SuperType' is not assignable to type 'SubType2'.
-!!! error TS2322:   'SubType2' is constrained to be a subtype of'SuperType'.
+!!! error TS2322:   'SubType2' is constrained to be a subtype of 'SuperType'.
 !!! related TS2208 better_subType_assignable_to_superType_error_messsage.ts:1:41: This type parameter might need an `extends SubType2` constraint.
     }
     

@@ -9,7 +9,7 @@ typeParametersShouldNotBeEqual2.ts(7,5): error TS2322: Type 'V' is not assignabl
 typeParametersShouldNotBeEqual2.ts(8,5): error TS2322: Type 'U' is not assignable to type 'V'.
   'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 typeParametersShouldNotBeEqual2.ts(9,5): error TS2322: Type 'Object' is not assignable to type 'T'.
-  'T' is constrained to be a subtype of'Object'.
+  'T' is constrained to be a subtype of 'Object'.
     The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
 
 
@@ -42,7 +42,7 @@ typeParametersShouldNotBeEqual2.ts(9,5): error TS2322: Type 'Object' is not assi
         x = zz;  // Error
         ~
 !!! error TS2322: Type 'Object' is not assignable to type 'T'.
-!!! error TS2322:   'T' is constrained to be a subtype of'Object'.
+!!! error TS2322:   'T' is constrained to be a subtype of 'Object'.
 !!! error TS2322:     The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
         zz = x;  // Ok
     }

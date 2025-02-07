@@ -3,11 +3,11 @@ indexedAccessRelation.ts(16,23): error TS2345: Argument of type '{ a: T; }' is n
     Type 'T' is not assignable to type 'S["a"] & T'.
       Type 'Foo' is not assignable to type 'S["a"] & T'.
         Type 'Foo' is not assignable to type 'S["a"]'.
-          'S["a"]' is constrained to be a subtype of'Foo'.
+          'S["a"]' is constrained to be a subtype of 'Foo'.
             Type 'T' is not assignable to type 'S["a"]'.
-              'S["a"]' is constrained to be a subtype of'T'.
+              'S["a"]' is constrained to be a subtype of 'T'.
                 Type 'Foo' is not assignable to type 'S["a"]'.
-                  'S["a"]' is constrained to be a subtype of'Foo'.
+                  'S["a"]' is constrained to be a subtype of 'Foo'.
 
 
 ==== indexedAccessRelation.ts (1 errors) ====
@@ -33,11 +33,11 @@ indexedAccessRelation.ts(16,23): error TS2345: Argument of type '{ a: T; }' is n
 !!! error TS2345:     Type 'T' is not assignable to type 'S["a"] & T'.
 !!! error TS2345:       Type 'Foo' is not assignable to type 'S["a"] & T'.
 !!! error TS2345:         Type 'Foo' is not assignable to type 'S["a"]'.
-!!! error TS2345:           'S["a"]' is constrained to be a subtype of'Foo'.
+!!! error TS2345:           'S["a"]' is constrained to be a subtype of 'Foo'.
 !!! error TS2345:             Type 'T' is not assignable to type 'S["a"]'.
-!!! error TS2345:               'S["a"]' is constrained to be a subtype of'T'.
+!!! error TS2345:               'S["a"]' is constrained to be a subtype of 'T'.
 !!! error TS2345:                 Type 'Foo' is not assignable to type 'S["a"]'.
-!!! error TS2345:                   'S["a"]' is constrained to be a subtype of'Foo'.
+!!! error TS2345:                   'S["a"]' is constrained to be a subtype of 'Foo'.
         }
     }
     

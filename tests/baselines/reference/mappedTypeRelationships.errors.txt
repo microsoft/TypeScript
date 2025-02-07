@@ -1,19 +1,19 @@
 mappedTypeRelationships.ts(11,5): error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
   Type 'T' is not assignable to type 'U'.
-    'U' is constrained to be a subtype of'T'.
+    'U' is constrained to be a subtype of 'T'.
 mappedTypeRelationships.ts(16,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
   Type 'T' is not assignable to type 'U'.
-    'U' is constrained to be a subtype of'T'.
+    'U' is constrained to be a subtype of 'T'.
 mappedTypeRelationships.ts(20,5): error TS2536: Type 'keyof U' cannot be used to index type 'T'.
 mappedTypeRelationships.ts(21,12): error TS2536: Type 'keyof U' cannot be used to index type 'T'.
 mappedTypeRelationships.ts(25,5): error TS2536: Type 'K' cannot be used to index type 'T'.
 mappedTypeRelationships.ts(26,12): error TS2536: Type 'K' cannot be used to index type 'T'.
 mappedTypeRelationships.ts(30,5): error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
-  'T[keyof T]' is constrained to be a subtype of'T[keyof T] | undefined'.
+  'T[keyof T]' is constrained to be a subtype of 'T[keyof T] | undefined'.
     Type 'undefined' is not assignable to type 'T[keyof T]'.
       'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
 mappedTypeRelationships.ts(35,5): error TS2322: Type 'T[K] | undefined' is not assignable to type 'T[K]'.
-  'T[K]' is constrained to be a subtype of'T[K] | undefined'.
+  'T[K]' is constrained to be a subtype of 'T[K] | undefined'.
     Type 'undefined' is not assignable to type 'T[K]'.
       'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
 mappedTypeRelationships.ts(40,5): error TS2322: Type 'U[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
@@ -31,21 +31,21 @@ mappedTypeRelationships.ts(51,5): error TS2542: Index signature in type 'Readonl
 mappedTypeRelationships.ts(56,5): error TS2542: Index signature in type 'Readonly<T>' only permits reading.
 mappedTypeRelationships.ts(61,5): error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
   Type 'T' is not assignable to type 'U'.
-    'U' is constrained to be a subtype of'T'.
+    'U' is constrained to be a subtype of 'T'.
 mappedTypeRelationships.ts(61,5): error TS2542: Index signature in type 'Readonly<U>' only permits reading.
 mappedTypeRelationships.ts(66,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
   Type 'T' is not assignable to type 'U'.
-    'U' is constrained to be a subtype of'T'.
+    'U' is constrained to be a subtype of 'T'.
 mappedTypeRelationships.ts(66,5): error TS2542: Index signature in type 'Readonly<U>' only permits reading.
 mappedTypeRelationships.ts(72,5): error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
-  'T' is constrained to be a subtype of'Partial<T>'.
+  'T' is constrained to be a subtype of 'Partial<T>'.
 mappedTypeRelationships.ts(78,5): error TS2322: Type 'Partial<Thing>' is not assignable to type 'Partial<T>'.
 mappedTypeRelationships.ts(88,5): error TS2322: Type 'Readonly<Thing>' is not assignable to type 'Readonly<T>'.
 mappedTypeRelationships.ts(127,5): error TS2322: Type 'Partial<U>' is not assignable to type 'Identity<U>'.
 mappedTypeRelationships.ts(143,5): error TS2322: Type '{ [P in keyof T]: T[P]; }' is not assignable to type '{ [P in keyof T]: U[P]; }'.
   Type 'T[P]' is not assignable to type 'U[P]'.
     Type 'T' is not assignable to type 'U'.
-      'U' is constrained to be a subtype of'T'.
+      'U' is constrained to be a subtype of 'T'.
 mappedTypeRelationships.ts(148,5): error TS2322: Type '{ [P in keyof T]: T[P]; }' is not assignable to type '{ [P in keyof U]: U[P]; }'.
   Type 'keyof U' is not assignable to type 'keyof T'.
     Type 'string | number | symbol' is not assignable to type 'keyof T'.
@@ -74,7 +74,7 @@ mappedTypeRelationships.ts(163,5): error TS2322: Type '{ [P in K]: T[P]; }' is n
 mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in K]: U[P]; }'.
   Type 'T[P]' is not assignable to type 'U[P]'.
     Type 'T' is not assignable to type 'U'.
-      'U' is constrained to be a subtype of'T'.
+      'U' is constrained to be a subtype of 'T'.
 
 
 ==== mappedTypeRelationships.ts (28 errors) ====
@@ -92,7 +92,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is n
         ~~~~
 !!! error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
-!!! error TS2322:     'U' is constrained to be a subtype of'T'.
+!!! error TS2322:     'U' is constrained to be a subtype of 'T'.
 !!! related TS2208 mappedTypeRelationships.ts:9:13: This type parameter might need an `extends U` constraint.
     }
     
@@ -102,7 +102,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is n
         ~~~~
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
-!!! error TS2322:     'U' is constrained to be a subtype of'T'.
+!!! error TS2322:     'U' is constrained to be a subtype of 'T'.
 !!! related TS2208 mappedTypeRelationships.ts:14:13: This type parameter might need an `extends U` constraint.
     }
     
@@ -128,7 +128,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is n
         x[k] = y[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
-!!! error TS2322:   'T[keyof T]' is constrained to be a subtype of'T[keyof T] | undefined'.
+!!! error TS2322:   'T[keyof T]' is constrained to be a subtype of 'T[keyof T] | undefined'.
 !!! error TS2322:     Type 'undefined' is not assignable to type 'T[keyof T]'.
 !!! error TS2322:       'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
         y[k] = x[k];
@@ -138,7 +138,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is n
         x[k] = y[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[K] | undefined' is not assignable to type 'T[K]'.
-!!! error TS2322:   'T[K]' is constrained to be a subtype of'T[K] | undefined'.
+!!! error TS2322:   'T[K]' is constrained to be a subtype of 'T[K] | undefined'.
 !!! error TS2322:     Type 'undefined' is not assignable to type 'T[K]'.
 !!! error TS2322:       'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
         y[k] = x[k];
@@ -189,7 +189,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is n
         ~~~~
 !!! error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
-!!! error TS2322:     'U' is constrained to be a subtype of'T'.
+!!! error TS2322:     'U' is constrained to be a subtype of 'T'.
 !!! related TS2208 mappedTypeRelationships.ts:59:14: This type parameter might need an `extends U` constraint.
         ~~~~
 !!! error TS2542: Index signature in type 'Readonly<U>' only permits reading.
@@ -201,7 +201,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is n
         ~~~~
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
-!!! error TS2322:     'U' is constrained to be a subtype of'T'.
+!!! error TS2322:     'U' is constrained to be a subtype of 'T'.
 !!! related TS2208 mappedTypeRelationships.ts:64:14: This type parameter might need an `extends U` constraint.
         ~~~~
 !!! error TS2542: Index signature in type 'Readonly<U>' only permits reading.
@@ -213,7 +213,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is n
         x = y;  // Error
         ~
 !!! error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
-!!! error TS2322:   'T' is constrained to be a subtype of'Partial<T>'.
+!!! error TS2322:   'T' is constrained to be a subtype of 'Partial<T>'.
         y = x;
     }
     
@@ -295,7 +295,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is n
 !!! error TS2322: Type '{ [P in keyof T]: T[P]; }' is not assignable to type '{ [P in keyof T]: U[P]; }'.
 !!! error TS2322:   Type 'T[P]' is not assignable to type 'U[P]'.
 !!! error TS2322:     Type 'T' is not assignable to type 'U'.
-!!! error TS2322:       'U' is constrained to be a subtype of'T'.
+!!! error TS2322:       'U' is constrained to be a subtype of 'T'.
 !!! related TS2208 mappedTypeRelationships.ts:141:14: This type parameter might need an `extends U` constraint.
     }
     
@@ -355,7 +355,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is n
 !!! error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in K]: U[P]; }'.
 !!! error TS2322:   Type 'T[P]' is not assignable to type 'U[P]'.
 !!! error TS2322:     Type 'T' is not assignable to type 'U'.
-!!! error TS2322:       'U' is constrained to be a subtype of'T'.
+!!! error TS2322:       'U' is constrained to be a subtype of 'T'.
 !!! related TS2208 mappedTypeRelationships.ts:166:14: This type parameter might need an `extends U` constraint.
     }
     

@@ -8448,7 +8448,7 @@
         "category": "Error",
         "code": 18057
     },
-    "'{1}' is constrained to be a subtype of'{0}'.": {
+    "'{1}' is constrained to be a subtype of '{0}'.": {
         "category": "Error",
         "code": 18058
     }

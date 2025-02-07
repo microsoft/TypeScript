@@ -9,7 +9,7 @@ deeplyNestedMappedTypes.ts(69,5): error TS2322: Type '{ level1: { level2: { foo:
     The types of 'level1.level2' are incompatible between these types.
       Property 'bar' is missing in type '{ foo: string; }' but required in type '{ foo: string; bar: string; }'.
 deeplyNestedMappedTypes.ts(73,5): error TS2322: Type '{ level1: { level2: { foo: string; }; }; }[]' is not assignable to type 'T'.
-  'T' is constrained to be a subtype of'{ level1: { level2: { foo: string; }; }; }[]'.
+  'T' is constrained to be a subtype of '{ level1: { level2: { foo: string; }; }; }[]'.
 deeplyNestedMappedTypes.ts(77,5): error TS2322: Type '{ level1: { level2: { foo: string; }; }; }[]' is not assignable to type '{ level1: { level2: { foo: string; bar: string; }; }; }[]'.
   Type '{ level1: { level2: { foo: string; }; }; }' is not assignable to type '{ level1: { level2: { foo: string; bar: string; }; }; }'.
     The types of 'level1.level2' are incompatible between these types.
@@ -106,7 +106,7 @@ deeplyNestedMappedTypes.ts(77,5): error TS2322: Type '{ level1: { level2: { foo:
         return ors;  // Error
         ~~~~~~
 !!! error TS2322: Type '{ level1: { level2: { foo: string; }; }; }[]' is not assignable to type 'T'.
-!!! error TS2322:   'T' is constrained to be a subtype of'{ level1: { level2: { foo: string; }; }; }[]'.
+!!! error TS2322:   'T' is constrained to be a subtype of '{ level1: { level2: { foo: string; }; }; }[]'.
     }
     
     function problematicFunction3(ors: (typeof Input.static)[]): Output[] {
