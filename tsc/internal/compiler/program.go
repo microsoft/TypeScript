@@ -128,8 +128,7 @@ func NewProgram(options ProgramOptions) *Program {
 			return p
 		}
 
-		// !!! this modifies p.compilerOptions
-		tsoptions.MergeCompilerOptions(p.compilerOptions, parseConfigFileContent.CompilerOptions())
+		p.compilerOptions = tsoptions.MergeCompilerOptions(parseConfigFileContent.CompilerOptions(), p.compilerOptions)
 
 		if rootFiles == nil {
 			// !!! merge? override? this?
