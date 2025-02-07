@@ -49220,7 +49220,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return symbol && symbol !== unknownSymbol ? symbol : getUnresolvedSymbolForEntityName(name);
         }
         if (name.parent.kind === SyntaxKind.TypePredicate) {
-            return resolveEntityName(name as Identifier, /*meaning*/ SymbolFlags.FunctionScopedVariable);
+            return resolveEntityName(name as Identifier, /*meaning*/ SymbolFlags.FunctionScopedVariable, /*ignoreErrors*/ true);
         }
         return undefined;
     }
