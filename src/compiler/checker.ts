@@ -22032,7 +22032,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         targetType,
                         typeToString(constraint),
                     );
-                }
+                } // check if target is a descendant of the source
                 else if (isTypeAssignableTo(target, getBaseConstraintOrType(generalizedSource)) || (needsOriginalSource = isTypeAssignableTo(target, getBaseConstraintOrType(source)))) {
                     reportError(
                         Diagnostics._1_is_constrained_to_be_a_subtype_of_0,
