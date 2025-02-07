@@ -965,7 +965,7 @@ func parseConfig(
 					result.compileOnSave = compileOnSave
 				}
 			}
-			MergeCompilerOptions(result.options, extendedConfig.options)
+			mergeCompilerOptions(result.options, extendedConfig.options)
 		}
 	}
 
@@ -999,7 +999,7 @@ func parseConfig(
 				sourceFile.extendedSourceFiles = append(sourceFile.extendedSourceFiles, extendedSourceFile)
 			}
 		}
-		ownConfig.options = MergeCompilerOptions(result.options, ownConfig.options)
+		ownConfig.options = mergeCompilerOptions(result.options, ownConfig.options)
 		// ownConfig.watchOptions = ownConfig.watchOptions && result.watchOptions ?
 		//     assignWatchOptions(result, ownConfig.watchOptions) :
 		//     ownConfig.watchOptions || result.watchOptions;
@@ -1035,7 +1035,7 @@ func parseJsonConfigFileContentWorker(
 	var errors []*ast.Diagnostic
 	resolutionStackString := []string{}
 	parsedConfig, errors := parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStackString, extendedConfigCache)
-	MergeCompilerOptions(parsedConfig.options, existingOptions)
+	mergeCompilerOptions(parsedConfig.options, existingOptions)
 	// const options = handleOptionConfigDirTemplateSubstitution(
 	// 	extend(existingOptions, parsedConfig.options), //function in core.ts
 	// 	configDirTemplateSubstitutionOptions,

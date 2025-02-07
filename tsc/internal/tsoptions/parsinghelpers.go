@@ -414,9 +414,9 @@ func ParseWatchOptions(key string, value any, allOptions *core.WatchOptions) []*
 	return nil
 }
 
-// MergeCompilerOptions merges the source compiler options into the target compiler options.
+// mergeCompilerOptions merges the source compiler options into the target compiler options.
 // Fields in the source options will overwrite the corresponding fields in the target options.
-func MergeCompilerOptions(targetOptions, sourceOptions *core.CompilerOptions) *core.CompilerOptions {
+func mergeCompilerOptions(targetOptions, sourceOptions *core.CompilerOptions) *core.CompilerOptions {
 	if sourceOptions == nil {
 		return targetOptions
 	}
