@@ -1,0 +1,84 @@
+//// [tests/cases/compiler/literalIntersectionPropertyName.ts] ////
+
+=== literalIntersectionPropertyName.ts ===
+declare const typeKey: unique symbol;
+>typeKey : Symbol(typeKey, Decl(literalIntersectionPropertyName.ts, 0, 13))
+
+type TypeID<Type = unknown, ID extends string = string> = ID & { [typeKey]?: Type };
+>TypeID : Symbol(TypeID, Decl(literalIntersectionPropertyName.ts, 0, 37))
+>Type : Symbol(Type, Decl(literalIntersectionPropertyName.ts, 2, 12))
+>ID : Symbol(ID, Decl(literalIntersectionPropertyName.ts, 2, 27))
+>ID : Symbol(ID, Decl(literalIntersectionPropertyName.ts, 2, 27))
+>[typeKey] : Symbol([typeKey], Decl(literalIntersectionPropertyName.ts, 2, 64))
+>typeKey : Symbol(typeKey, Decl(literalIntersectionPropertyName.ts, 0, 13))
+>Type : Symbol(Type, Decl(literalIntersectionPropertyName.ts, 2, 12))
+
+function typeID<Type, ID extends string>(id: ID): TypeID<Type, ID> {
+>typeID : Symbol(typeID, Decl(literalIntersectionPropertyName.ts, 2, 84))
+>Type : Symbol(Type, Decl(literalIntersectionPropertyName.ts, 4, 16))
+>ID : Symbol(ID, Decl(literalIntersectionPropertyName.ts, 4, 21))
+>id : Symbol(id, Decl(literalIntersectionPropertyName.ts, 4, 41))
+>ID : Symbol(ID, Decl(literalIntersectionPropertyName.ts, 4, 21))
+>TypeID : Symbol(TypeID, Decl(literalIntersectionPropertyName.ts, 0, 37))
+>Type : Symbol(Type, Decl(literalIntersectionPropertyName.ts, 4, 16))
+>ID : Symbol(ID, Decl(literalIntersectionPropertyName.ts, 4, 21))
+
+  return id;
+>id : Symbol(id, Decl(literalIntersectionPropertyName.ts, 4, 41))
+}
+
+type KeyOf<TID extends TypeID> = TID extends TypeID<any, infer ID> ? ID : never;
+>KeyOf : Symbol(KeyOf, Decl(literalIntersectionPropertyName.ts, 6, 1))
+>TID : Symbol(TID, Decl(literalIntersectionPropertyName.ts, 8, 11))
+>TypeID : Symbol(TypeID, Decl(literalIntersectionPropertyName.ts, 0, 37))
+>TID : Symbol(TID, Decl(literalIntersectionPropertyName.ts, 8, 11))
+>TypeID : Symbol(TypeID, Decl(literalIntersectionPropertyName.ts, 0, 37))
+>ID : Symbol(ID, Decl(literalIntersectionPropertyName.ts, 8, 62))
+>ID : Symbol(ID, Decl(literalIntersectionPropertyName.ts, 8, 62))
+
+type TypeOf<TID extends TypeID> = TID extends TypeID<infer Type> ? Type : never;
+>TypeOf : Symbol(TypeOf, Decl(literalIntersectionPropertyName.ts, 8, 80))
+>TID : Symbol(TID, Decl(literalIntersectionPropertyName.ts, 10, 12))
+>TypeID : Symbol(TypeID, Decl(literalIntersectionPropertyName.ts, 0, 37))
+>TID : Symbol(TID, Decl(literalIntersectionPropertyName.ts, 10, 12))
+>TypeID : Symbol(TypeID, Decl(literalIntersectionPropertyName.ts, 0, 37))
+>Type : Symbol(Type, Decl(literalIntersectionPropertyName.ts, 10, 58))
+>Type : Symbol(Type, Decl(literalIntersectionPropertyName.ts, 10, 58))
+
+type Provides<P extends TypeID> = { readonly [T in KeyOf<P>]: TypeOf<P> };
+>Provides : Symbol(Provides, Decl(literalIntersectionPropertyName.ts, 10, 80))
+>P : Symbol(P, Decl(literalIntersectionPropertyName.ts, 12, 14))
+>TypeID : Symbol(TypeID, Decl(literalIntersectionPropertyName.ts, 0, 37))
+>T : Symbol(T, Decl(literalIntersectionPropertyName.ts, 12, 46))
+>KeyOf : Symbol(KeyOf, Decl(literalIntersectionPropertyName.ts, 6, 1))
+>P : Symbol(P, Decl(literalIntersectionPropertyName.ts, 12, 14))
+>TypeOf : Symbol(TypeOf, Decl(literalIntersectionPropertyName.ts, 8, 80))
+>P : Symbol(P, Decl(literalIntersectionPropertyName.ts, 12, 14))
+
+// ---cut---
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(literalIntersectionPropertyName.ts, 12, 74), Decl(literalIntersectionPropertyName.ts, 20, 5))
+
+    foo(): void;
+>foo : Symbol(Foo.foo, Decl(literalIntersectionPropertyName.ts, 16, 15))
+}
+
+const Foo = typeID("Foo") satisfies TypeID<Foo>;
+>Foo : Symbol(Foo, Decl(literalIntersectionPropertyName.ts, 12, 74), Decl(literalIntersectionPropertyName.ts, 20, 5))
+>typeID : Symbol(typeID, Decl(literalIntersectionPropertyName.ts, 2, 84))
+>TypeID : Symbol(TypeID, Decl(literalIntersectionPropertyName.ts, 0, 37))
+>Foo : Symbol(Foo, Decl(literalIntersectionPropertyName.ts, 12, 74), Decl(literalIntersectionPropertyName.ts, 20, 5))
+
+//    ^? const Foo: TypeID<Foo, "Foo">
+
+const Bar: Provides<typeof Foo> = {
+>Bar : Symbol(Bar, Decl(literalIntersectionPropertyName.ts, 23, 5))
+>Provides : Symbol(Provides, Decl(literalIntersectionPropertyName.ts, 10, 80))
+>Foo : Symbol(Foo, Decl(literalIntersectionPropertyName.ts, 12, 74), Decl(literalIntersectionPropertyName.ts, 20, 5))
+
+    [Foo]: {}
+>[Foo] : Symbol([Foo], Decl(literalIntersectionPropertyName.ts, 23, 35))
+>Foo : Symbol(Foo, Decl(literalIntersectionPropertyName.ts, 12, 74), Decl(literalIntersectionPropertyName.ts, 20, 5))
+
+};
