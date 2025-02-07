@@ -1,29 +1,31 @@
 //// [tests/cases/compiler/temp/better_subType_assignable_to_superType_error_messsage.ts] ////
 
 === better_subType_assignable_to_superType_error_messsage.ts ===
-function parameterExtendsOtherParameter<SuperType, SubType extends SuperType>(superType: SuperType, subType: SubType) {
+function parameterExtendsOtherParameter<SuperType, SubType extends SuperType, SubType2 extends SubType>(superType: SuperType, subType2: SubType2) {
 >parameterExtendsOtherParameter : Symbol(parameterExtendsOtherParameter, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 0))
 >SuperType : Symbol(SuperType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 40))
 >SubType : Symbol(SubType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 50))
 >SuperType : Symbol(SuperType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 40))
->superType : Symbol(superType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 78))
->SuperType : Symbol(SuperType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 40))
->subType : Symbol(subType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 99))
+>SubType2 : Symbol(SubType2, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 77))
 >SubType : Symbol(SubType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 50))
+>superType : Symbol(superType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 104))
+>SuperType : Symbol(SuperType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 40))
+>subType2 : Symbol(subType2, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 125))
+>SubType2 : Symbol(SubType2, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 77))
 
-    // TS 3.3: Type 'SuperType' is not assignable to type 'SubType'.
-    //
-    // TS 3.5: Type 'SuperType' is not assignable to type 'SubType'. 
-    //         'SuperType' is assignable to the constraint of type 'SubType', but 'SubType' could be instantiated with a different subtype of constraint '{}'.
-    //
-    // TS 3.9: Type 'SuperType' is not assignable to type 'SubType'.
-    //         'SubType' could be instantiated with an arbitrary type which could be unrelated to 'SuperType'.
-    //
-    // TS 4.8: Type 'SuperType' is not assignable to type 'SubType'.
-    //         'SubType' could be instantiated with an arbitrary type which could be unrelated to 'SuperType'.
-    //         input.tsx(1, 41): This type parameter might need an `extends V` constraint.
-    subType = superType;
->subType : Symbol(subType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 99))
->superType : Symbol(superType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 78))
-  }
-  
+  // TS 3.3: Type 'SuperType' is not assignable to type 'SubType'.
+  //
+  // TS 3.5: Type 'SuperType' is not assignable to type 'SubType'. 
+  //         'SuperType' is assignable to the constraint of type 'SubType', but 'SubType' could be instantiated with a different subtype of constraint '{}'.
+  //
+  // TS 3.9: Type 'SuperType' is not assignable to type 'SubType'.
+  //         'SubType' could be instantiated with an arbitrary type which could be unrelated to 'SuperType'.
+  //
+  // TS 4.8: Type 'SuperType' is not assignable to type 'SubType'.
+  //         'SubType' could be instantiated with an arbitrary type which could be unrelated to 'SuperType'.
+  //         input.tsx(1, 41): This type parameter might need an `extends V` constraint.
+  subType2 = superType;
+>subType2 : Symbol(subType2, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 125))
+>superType : Symbol(superType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 104))
+}
+

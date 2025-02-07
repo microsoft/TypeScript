@@ -8448,7 +8448,7 @@
         "category": "Error",
         "code": 18057
     },
-    "'{1}' is constrained to be a subtype of'{0}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.": {
+    "'{1}' is constrained to be a subtype of'{0}'.": {
         "category": "Error",
         "code": 18058
     }
