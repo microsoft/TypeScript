@@ -92,8 +92,14 @@ type ValueSymbolLinks struct {
 	target         *ast.Symbol
 	mapper         *TypeMapper
 	nameType       *Type
-	keyType        *Type // Key type for mapped type member
 	containingType *Type // Mapped type for mapped type property, containing union or intersection type for synthetic property
+}
+
+// Additional links for mapped symbols
+
+type MappedSymbolLinks struct {
+	keyType         *Type       // Key type for mapped type member
+	syntheticOrigin *ast.Symbol // For a property on a mapped or spread type, points back to the original property
 }
 
 // Links for alias symbols

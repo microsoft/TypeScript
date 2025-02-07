@@ -362,6 +362,8 @@ func (n *Node) MemberList() *NodeList {
 		return n.AsEnumDeclaration().Members
 	case KindTypeLiteral:
 		return n.AsTypeLiteralNode().Members
+	case KindMappedType:
+		return n.AsMappedTypeNode().Members
 	}
 	panic("Unhandled case in Node.Members")
 }

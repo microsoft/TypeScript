@@ -2011,30 +2011,32 @@ func SkipTriviaEx(text string, pos int, options *SkipTriviaOptions) int {
 			if options.StopAtComments {
 				break
 			}
-			if text[pos+1] == '/' {
-				pos += 2
-				for pos < len(text) {
-					ch, size := utf8.DecodeRuneInString(text[pos:])
-					if stringutil.IsLineBreak(ch) {
-						break
+			if pos+1 < len(text) {
+				if text[pos+1] == '/' {
+					pos += 2
+					for pos < len(text) {
+						ch, size := utf8.DecodeRuneInString(text[pos:])
+						if stringutil.IsLineBreak(ch) {
+							break
+						}
+						pos += size
 					}
-					pos += size
+					canConsumeStar = false
+					continue
 				}
-				canConsumeStar = false
-				continue
-			}
-			if text[pos+1] == '*' {
-				pos += 2
-				for pos < len(text) {
-					if text[pos] == '*' && text[pos+1] == '/' {
-						pos += 2
-						break
+				if text[pos+1] == '*' {
+					pos += 2
+					for pos < len(text) {
+						if text[pos] == '*' && text[pos+1] == '/' {
+							pos += 2
+							break
+						}
+						_, size := utf8.DecodeRuneInString(text[pos:])
+						pos += size
 					}
-					_, size := utf8.DecodeRuneInString(text[pos:])
-					pos += size
+					canConsumeStar = false
+					continue
 				}
-				canConsumeStar = false
-				continue
 			}
 		case '<', '|', '=', '>':
 			if isConflictMarkerTrivia(text, pos) {

@@ -597,6 +597,7 @@ type Checker struct {
 	switchStatementLinks                      LinkStore[*ast.Node, SwitchStatementLinks]
 	symbolReferenceLinks                      LinkStore[*ast.Symbol, SymbolReferenceLinks]
 	valueSymbolLinks                          LinkStore[*ast.Symbol, ValueSymbolLinks]
+	mappedSymbolLinks                         LinkStore[*ast.Symbol, MappedSymbolLinks]
 	aliasSymbolLinks                          LinkStore[*ast.Symbol, AliasSymbolLinks]
 	moduleSymbolLinks                         LinkStore[*ast.Symbol, ModuleSymbolLinks]
 	lateBoundLinks                            LinkStore[*ast.Symbol, LateBoundLinks]
@@ -752,6 +753,7 @@ type Checker struct {
 	getGlobalPromiseTypeChecked               func() *Type
 	getGlobalPromiseLikeType                  func() *Type
 	getGlobalPromiseConstructorSymbol         func() *ast.Symbol
+	getGlobalPromiseConstructorSymbolOrNil    func() *ast.Symbol
 	getGlobalOmitSymbol                       func() *ast.Symbol
 	getGlobalIteratorType                     func() *Type
 	getGlobalIterableType                     func() *Type
@@ -942,6 +944,7 @@ func NewChecker(program Program) *Checker {
 	c.getGlobalPromiseTypeChecked = c.getGlobalTypeResolver("Promise", 1 /*arity*/, true /*reportErrors*/)
 	c.getGlobalPromiseLikeType = c.getGlobalTypeResolver("PromiseLike", 1 /*arity*/, true /*reportErrors*/)
 	c.getGlobalPromiseConstructorSymbol = c.getGlobalValueSymbolResolver("Promise", true /*reportErrors*/)
+	c.getGlobalPromiseConstructorSymbolOrNil = c.getGlobalValueSymbolResolver("Promise", false /*reportErrors*/)
 	c.getGlobalOmitSymbol = c.getGlobalTypeAliasResolver("Omit", 2 /*arity*/, true /*reportErrors*/)
 	c.getGlobalIteratorType = c.getGlobalTypeResolver("Iterator", 3 /*arity*/, false /*reportErrors*/)
 	c.getGlobalIterableType = c.getGlobalTypeResolver("Iterable", 3 /*arity*/, false /*reportErrors*/)
@@ -5878,9 +5881,8 @@ func (c *Checker) checkCallExpression(node *ast.Node, checkMode CheckMode) *Type
 			c.error(node.Expression(), diagnostics.Assertions_require_the_call_target_to_be_an_identifier_or_qualified_name)
 		} else if c.getEffectsSignature(node) == nil {
 			c.error(node.Expression(), diagnostics.Assertions_require_every_name_in_the_call_target_to_be_declared_with_an_explicit_type_annotation)
-			// !!!
-			// diagnostic := c.error(node.Expression(), diagnostics.Assertions_require_every_name_in_the_call_target_to_be_declared_with_an_explicit_type_annotation)
-			// c.getTypeOfDottedName(node.Expression(), diagnostic)
+			diagnostic := c.error(node.Expression(), diagnostics.Assertions_require_every_name_in_the_call_target_to_be_declared_with_an_explicit_type_annotation)
+			c.getTypeOfDottedName(node.Expression(), diagnostic)
 		}
 	}
 	return returnType
@@ -6774,7 +6776,7 @@ func (c *Checker) isSignatureApplicable(node *ast.Node, args []*ast.Node, signat
 			}
 			effectiveCheckArgumentNode := c.getEffectiveCheckNode(arg)
 			if !c.checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, core.IfElse(reportErrors, effectiveCheckArgumentNode, nil), effectiveCheckArgumentNode, headMessage, diagnosticOutput) {
-				// !!! maybeAddMissingAwaitInfo(arg, checkArgType, paramType)
+				c.maybeAddMissingAwaitInfo(arg, checkArgType, paramType, relation, reportErrors, diagnosticOutput)
 				return false
 			}
 		}
@@ -6795,24 +6797,24 @@ func (c *Checker) isSignatureApplicable(node *ast.Node, args []*ast.Node, signat
 			}
 		}
 		if !c.checkTypeRelatedToEx(spreadType, restType, relation, errorNode, headMessage, diagnosticOutput) {
-			// !!! maybeAddMissingAwaitInfo(errorNode, spreadType, restType)
+			c.maybeAddMissingAwaitInfo(errorNode, spreadType, restType, relation, reportErrors, diagnosticOutput)
 			return false
 		}
 	}
 	return true
-	// !!!
-	// maybeAddMissingAwaitInfo := func(errorNode *ast.Node, source *Type, target *Type) {
-	// 	if errorNode != nil && reportErrors && errorOutputContainer.errors != nil && errorOutputContainer.errors.length != 0 {
-	// 		// Bail if target is Promise-like---something else is wrong
-	// 		if c.getAwaitedTypeOfPromise(target) != nil {
-	// 			return
-	// 		}
-	// 		awaitedTypeOfSource := c.getAwaitedTypeOfPromise(source)
-	// 		if awaitedTypeOfSource != nil && c.isTypeRelatedTo(awaitedTypeOfSource, target, relation) {
-	// 			addRelatedInfo(errorOutputContainer.errors[0], createDiagnosticForNode(errorNode, Diagnostics.Did_you_forget_to_use_await))
-	// 		}
-	// 	}
-	// }
+}
+
+func (c *Checker) maybeAddMissingAwaitInfo(errorNode *ast.Node, source *Type, target *Type, relation *Relation, reportErrors bool, diagnosticOutput *[]*ast.Diagnostic) {
+	if errorNode != nil && reportErrors && diagnosticOutput != nil && len(*diagnosticOutput) != 0 {
+		// Bail if target is Promise-like---something else is wrong
+		if c.getAwaitedTypeOfPromise(target) != nil {
+			return
+		}
+		awaitedTypeOfSource := c.getAwaitedTypeOfPromise(source)
+		if awaitedTypeOfSource != nil && c.isTypeRelatedTo(awaitedTypeOfSource, target, relation) {
+			(*diagnosticOutput)[0].AddRelatedInfo(NewDiagnosticForNode(errorNode, diagnostics.Did_you_forget_to_use_await))
+		}
+	}
 }
 
 // Returns the `this` argument node in calls like `x.f(...)` and `x[f](...)`. `nil` otherwise.
@@ -7050,13 +7052,76 @@ func (c *Checker) inferSignatureInstantiationForOverloadFailure(node *ast.Node, 
 }
 
 func (c *Checker) createUnionOfSignaturesForOverloadFailure(candidates []*Signature) *Signature {
-	return candidates[0] // !!!
+	thisParameters := core.MapNonNil(candidates, func(c *Signature) *ast.Symbol { return c.thisParameter })
+	var thisParameter *ast.Symbol
+	if len(thisParameters) != 0 {
+		thisParameter = c.createCombinedSymbolFromTypes(thisParameters, core.Map(thisParameters, c.getTypeOfParameter))
+	}
+	minArgumentCount, maxNonRestParam := minAndMax(candidates, getNonRestParameterCount)
+	parameters := make([]*ast.Symbol, 0, maxNonRestParam)
+	for i := range maxNonRestParam {
+		symbols := core.MapNonNil(candidates, func(s *Signature) *ast.Symbol {
+			if signatureHasRestParameter(s) {
+				if i < len(s.parameters)-1 {
+					return s.parameters[i]
+				}
+				return core.LastOrNil(s.parameters)
+			}
+			if i < len(s.parameters) {
+				return s.parameters[i]
+			}
+			return nil
+		})
+		parameters = append(parameters, c.createCombinedSymbolFromTypes(symbols, core.MapNonNil(candidates, func(s *Signature) *Type { return c.tryGetTypeAtPosition(s, i) })))
+	}
+	restParameterSymbols := core.MapNonNil(candidates, func(s *Signature) *ast.Symbol {
+		if signatureHasRestParameter(s) {
+			return core.LastOrNil(s.parameters)
+		}
+		return nil
+	})
+	flags := SignatureFlagsIsSignatureCandidateForOverloadFailure
+	if len(restParameterSymbols) != 0 {
+		t := c.createArrayType(c.getUnionTypeEx(core.MapNonNil(candidates, c.tryGetRestTypeOfSignature), UnionReductionSubtype, nil, nil))
+		parameters = append(parameters, c.createCombinedSymbolForOverloadFailure(restParameterSymbols, t))
+		flags |= SignatureFlagsHasRestParameter
+	}
+	if core.Some(candidates, signatureHasLiteralTypes) {
+		flags |= SignatureFlagsHasLiteralTypes
+	}
+	return c.newSignature(flags, candidates[0].declaration, nil, thisParameter, parameters, c.getIntersectionType(core.Map(candidates, c.getReturnTypeOfSignature)), nil, minArgumentCount)
+}
+
+func (c *Checker) createCombinedSymbolFromTypes(sources []*ast.Symbol, types []*Type) *ast.Symbol {
+	return c.createCombinedSymbolForOverloadFailure(sources, c.getUnionTypeEx(types, UnionReductionSubtype, nil, nil))
+}
+
+func (c *Checker) createCombinedSymbolForOverloadFailure(sources []*ast.Symbol, t *Type) *ast.Symbol {
+	// This function is currently only used for erroneous overloads, so it's good enough to just use the first source.
+	return c.createSymbolWithType(core.FirstOrNil(sources), t)
+}
+
+func (c *Checker) getRestTypeOfSignature(signature *Signature) *Type {
+	return core.OrElse(c.tryGetRestTypeOfSignature(signature), c.anyType)
+}
+
+func (c *Checker) tryGetRestTypeOfSignature(signature *Signature) *Type {
+	if !signatureHasRestParameter(signature) {
+		return nil
+	}
+	restType := c.getTypeOfSymbol(signature.parameters[len(signature.parameters)-1])
+	if isTupleType(restType) {
+		restType = c.getRestTypeOfTupleType(restType)
+		if restType == nil {
+			return nil
+		}
+	}
+	return c.getIndexTypeOfType(restType, c.numberType)
 }
 
 func (c *Checker) reportCallResolutionErrors(s *CallState, signatures []*Signature, headMessage *diagnostics.Message) {
 	switch {
 	case len(s.candidatesForArgumentError) != 0:
-		// !!! Port logic that lists all diagnostics up to 3
 		last := s.candidatesForArgumentError[len(s.candidatesForArgumentError)-1]
 		var diags []*ast.Diagnostic
 		c.isSignatureApplicable(s.node, s.args, last, c.assignableRelation, CheckModeNormal, true /*reportErrors*/, nil /*inferenceContext*/, &diags)
@@ -7068,7 +7133,7 @@ func (c *Checker) reportCallResolutionErrors(s *CallState, signatures []*Signatu
 			if headMessage != nil {
 				diagnostic = ast.NewDiagnosticChain(diagnostic, headMessage)
 			}
-			if last.declaration != nil && len(s.candidatesForArgumentError) > 3 {
+			if last.declaration != nil && len(s.candidatesForArgumentError) > 1 {
 				diagnostic.AddRelatedInfo(NewDiagnosticForNode(last.declaration, diagnostics.The_last_overload_is_declared_here))
 			}
 			// !!! addImplementationSuccessElaboration(last, d)
@@ -7191,7 +7256,23 @@ func (c *Checker) getArgumentArityError(node *ast.Node, signatures []*Signature,
 }
 
 func (c *Checker) isPromiseResolveArityError(node *ast.Node) bool {
-	return false // !!!
+	if !ast.IsCallExpression(node) || !ast.IsIdentifier(node.Expression()) {
+		return false
+	}
+	symbol := c.resolveName(node.Expression(), node.Expression().Text(), ast.SymbolFlagsValue, nil /*nameNotFoundMessage*/, false /*isUse*/, false)
+	if symbol == nil {
+		return false
+	}
+	decl := symbol.ValueDeclaration
+	if decl == nil || !ast.IsParameter(decl) || !ast.IsFunctionExpressionOrArrowFunction(decl.Parent) || !ast.IsNewExpression(decl.Parent.Parent) || !ast.IsIdentifier(decl.Parent.Parent.Expression()) {
+		return false
+	}
+	globalPromiseSymbol := c.getGlobalPromiseConstructorSymbolOrNil()
+	if globalPromiseSymbol == nil {
+		return false
+	}
+	constructorSymbol := c.getResolvedSymbol(decl.Parent.Parent.Expression())
+	return constructorSymbol == globalPromiseSymbol
 }
 
 func getErrorNodeForCallNode(node *ast.Node) *ast.Node {
@@ -7205,8 +7286,41 @@ func getErrorNodeForCallNode(node *ast.Node) *ast.Node {
 }
 
 func (c *Checker) getTypeArgumentArityError(node *ast.Node, signatures []*Signature, typeArguments []*ast.Node, headMessage *diagnostics.Message) *ast.Diagnostic {
-	// !!!
-	return NewDiagnosticForNode(node, diagnostics.Expected_0_type_arguments_but_got_1, "???", len(typeArguments))
+	var diagnostic *ast.Diagnostic
+	argCount := len(typeArguments)
+	if len(signatures) == 1 {
+		// No overloads exist
+		sig := signatures[0]
+		minCount := c.getMinTypeArgumentCount(sig.typeParameters)
+		maxCount := len(sig.typeParameters)
+		expected := strconv.Itoa(minCount)
+		if minCount < maxCount {
+			expected = expected + "-" + strconv.Itoa(maxCount)
+		}
+		diagnostic = ast.NewDiagnostic(ast.GetSourceFileOfNode(node), node.TypeArgumentList().Loc, diagnostics.Expected_0_type_arguments_but_got_1, expected, argCount)
+	} else {
+		// Overloads exist
+		belowArgCount := math.MinInt
+		aboveArgCount := math.MaxInt
+		for _, sig := range signatures {
+			minCount := c.getMinTypeArgumentCount(sig.typeParameters)
+			maxCount := len(sig.typeParameters)
+			if minCount > argCount {
+				aboveArgCount = min(aboveArgCount, minCount)
+			} else if maxCount < argCount {
+				belowArgCount = max(belowArgCount, maxCount)
+			}
+		}
+		if belowArgCount != math.MinInt && aboveArgCount != math.MaxInt {
+			diagnostic = ast.NewDiagnostic(ast.GetSourceFileOfNode(node), node.TypeArgumentList().Loc, diagnostics.No_overload_expects_0_type_arguments_but_overloads_do_exist_that_expect_either_1_or_2_type_arguments, argCount, belowArgCount, aboveArgCount)
+		} else {
+			diagnostic = ast.NewDiagnostic(ast.GetSourceFileOfNode(node), node.TypeArgumentList().Loc, diagnostics.Expected_0_type_arguments_but_got_1, core.IfElse(belowArgCount == math.MinInt, aboveArgCount, belowArgCount), argCount)
+		}
+	}
+	if headMessage != nil {
+		diagnostic = ast.NewDiagnosticChain(diagnostic, headMessage)
+	}
+	return diagnostic
 }
 
 func (c *Checker) reportCannotInvokePossiblyNullOrUndefinedError(node *ast.Node, facts TypeFacts) {
@@ -8258,8 +8372,17 @@ func (c *Checker) checkIdentifier(node *ast.Node, checkMode CheckMode) *Type {
 }
 
 func (c *Checker) checkNewTargetMetaProperty(node *ast.Node) *Type {
-	// !!!
-	return nil
+	container := ast.GetNewTargetContainer(node)
+	if container == nil {
+		c.error(node, diagnostics.Meta_property_0_is_only_allowed_in_the_body_of_a_function_declaration_function_expression_or_constructor, "new.target")
+		return c.errorType
+	} else if ast.IsConstructorDeclaration(container) {
+		symbol := c.getSymbolOfDeclaration(container.Parent)
+		return c.getTypeOfSymbol(symbol)
+	} else {
+		symbol := c.getSymbolOfDeclaration(container)
+		return c.getTypeOfSymbol(symbol)
+	}
 }
 
 func (c *Checker) isSameScopedBindingElement(node *ast.Node, declaration *ast.Node) bool {
@@ -10336,8 +10459,7 @@ func (c *Checker) tryMergeUnionOfObjectTypeAndEmptyObject(t *Type, readonly bool
 			}
 			result.Declarations = prop.Declarations
 			links.nameType = c.valueSymbolLinks.get(prop).nameType
-			// !!!
-			// links.syntheticOrigin = prop
+			c.mappedSymbolLinks.get(result).syntheticOrigin = prop
 			members[prop.Name] = result
 		}
 	}
@@ -10367,8 +10489,7 @@ func (c *Checker) getSpreadSymbol(prop *ast.Symbol, readonly bool) *ast.Symbol {
 	}
 	result.Declarations = prop.Declarations
 	links.nameType = c.valueSymbolLinks.get(prop).nameType
-	// !!!
-	// result.links.syntheticOrigin = prop
+	c.mappedSymbolLinks.get(result).syntheticOrigin = prop
 	return result
 }
 
@@ -12052,7 +12173,7 @@ func (c *Checker) resolveEntityName(name *ast.Node, meaning ast.SymbolFlags, ign
 }
 
 func (c *Checker) resolveQualifiedName(name *ast.Node, left *ast.Node, right *ast.Node, meaning ast.SymbolFlags, ignoreErrors bool, dontResolveAlias bool, location *ast.Node) *ast.Symbol {
-	namespace := c.resolveEntityName(left, ast.SymbolFlagsNamespace, ignoreErrors /*dontResolveAlias*/, false, location)
+	namespace := c.resolveEntityName(left, ast.SymbolFlagsNamespace, ignoreErrors, false /*dontResolveAlias*/, location)
 	if namespace == nil || ast.NodeIsMissing(right) {
 		return nil
 	}
@@ -14842,6 +14963,33 @@ func (c *Checker) getTypeOfPropertyOfType(t *Type, name string) *Type {
 }
 
 func (c *Checker) getSignaturesOfType(t *Type, kind SignatureKind) []*Signature {
+	result := c.getSignaturesOfStructuredType(c.getReducedApparentType(t), kind)
+	// !!!
+	// if kind == SignatureKindCall && len(result) == 0 && t.flags&TypeFlagsUnion != 0 {
+	// 	if t.AsUnionType().arrayFallbackSignatures != nil {
+	// 		return t.AsUnionType().arrayFallbackSignatures
+	// 	}
+	// 	// If the union is all different instantiations of a member of the global array type...
+	// 	var memberName string
+	// 	if c.everyType(t, func(t *Type) bool {
+	// 		return t.symbol. /* ? */ Parent != nil && c.isArrayOrTupleSymbol(t.symbol.Parent) && (ifElse(!memberName, ( /* TODO(TS-TO-GO) CommaToken BinaryExpression: memberName = t.symbol.escapedName, true */ TODO), memberName == t.symbol.EscapedName))
+	// 	}) {
+	// 		// Transform the type from `(A[] | B[])["member"]` to `(A | B)[]["member"]` (since we pretend array is covariant anyway)
+	// 		arrayArg := c.mapType(t, func(t *Type) *Type {
+	// 			return c.getMappedType((ifElse(c.isReadonlyArraySymbol(t.symbol.Parent), c.globalReadonlyArrayType, c.globalArrayType)).typeParameters[0], t.AsAnonymousType().mapper)
+	// 		})
+	// 		arrayType := c.createArrayType(arrayArg, c.someType(t, func(t *Type) bool {
+	// 			return c.isReadonlyArraySymbol(t.symbol.Parent)
+	// 		}))
+	// 		t.AsUnionType().arrayFallbackSignatures = c.getSignaturesOfType(c.getTypeOfPropertyOfType(arrayType, memberName), kind)
+	// 		return t.AsUnionType().arrayFallbackSignatures
+	// 	}
+	// 	t.AsUnionType().arrayFallbackSignatures = result
+	// }
+	return result
+}
+
+func (c *Checker) getSignaturesOfStructuredType(t *Type, kind SignatureKind) []*Signature {
 	if t.flags&TypeFlagsStructuredType == 0 {
 		return nil
 	}
@@ -16438,7 +16586,7 @@ func (c *Checker) addOptionalTypeMarker(t *Type) *Type {
 }
 
 func (c *Checker) instantiateSignature(sig *Signature, m *TypeMapper) *Signature {
-	return c.instantiateSignatureEx(sig, m, false /*eraseTypeParameters*/)
+	return c.instantiateSignatureEx(sig, m, m == c.permissiveMapper /*eraseTypeParameters*/)
 }
 
 func (c *Checker) instantiateSignatureEx(sig *Signature, m *TypeMapper, eraseTypeParameters bool) *Signature {
@@ -16744,9 +16892,10 @@ func (c *Checker) resolveMappedTypeMembers(t *Type) {
 			// are distinct types with the same property name. Make the resulting
 			// property symbol's name type be the union of those enum member types.
 			if existingProp := members[propName]; existingProp != nil {
-				links := c.valueSymbolLinks.get(existingProp)
-				links.nameType = c.getUnionType([]*Type{links.nameType, propNameType})
-				links.keyType = c.getUnionType([]*Type{links.keyType, keyType})
+				valueLinks := c.valueSymbolLinks.get(existingProp)
+				valueLinks.nameType = c.getUnionType([]*Type{valueLinks.nameType, propNameType})
+				mappedLinks := c.mappedSymbolLinks.get(existingProp)
+				mappedLinks.keyType = c.getUnionType([]*Type{mappedLinks.keyType, keyType})
 			} else {
 				var modifiersProp *ast.Symbol
 				if isTypeUsableAsPropertyName(keyType) {
@@ -16760,14 +16909,14 @@ func (c *Checker) resolveMappedTypeMembers(t *Type) {
 					lateFlag = modifiersProp.CheckFlags & ast.CheckFlagsLate
 				}
 				prop := c.newSymbol(ast.SymbolFlagsProperty|core.IfElse(isOptional, ast.SymbolFlagsOptional, 0), propName)
-				links := c.valueSymbolLinks.get(prop)
 				prop.CheckFlags = lateFlag | ast.CheckFlagsMapped | core.IfElse(isReadonly, ast.CheckFlagsReadonly, 0) | core.IfElse(stripOptional, ast.CheckFlagsStripOptional, 0)
-				links.containingType = t
-				links.nameType = propNameType
-				links.keyType = keyType
+				valueLinks := c.valueSymbolLinks.get(prop)
+				valueLinks.containingType = t
+				valueLinks.nameType = propNameType
+				mappedLinks := c.mappedSymbolLinks.get(prop)
+				mappedLinks.keyType = keyType
 				if modifiersProp != nil {
-					// !!!
-					// links.syntheticOrigin = modifiersProp
+					mappedLinks.syntheticOrigin = modifiersProp
 					if shouldLinkPropDeclarations {
 						prop.Declarations = modifiersProp.Declarations
 					}
@@ -16817,7 +16966,7 @@ func (c *Checker) getTypeOfMappedSymbol(symbol *ast.Symbol) *Type {
 			return c.errorType
 		}
 		templateType := c.getTemplateTypeFromMappedType(core.OrElse(mappedType.AsMappedType().target, mappedType))
-		mapper := appendTypeMapping(mappedType.AsMappedType().mapper, c.getTypeParameterFromMappedType(mappedType), links.keyType)
+		mapper := appendTypeMapping(mappedType.AsMappedType().mapper, c.getTypeParameterFromMappedType(mappedType), c.mappedSymbolLinks.get(symbol).keyType)
 		propType := c.instantiateType(templateType, mapper)
 		// When creating an optional property in strictNullChecks mode, if 'undefined' isn't assignable to the
 		// type, we include 'undefined' in the type. Similarly, when creating a non-optional property in strictNullChecks
@@ -19583,7 +19732,7 @@ func (c *Checker) computeEnumMemberValue(member *ast.Node, autoValue jsnum.Numbe
 	if ast.IsComputedNonLiteralName(member.Name()) {
 		c.error(member.Name(), diagnostics.Computed_property_names_are_not_allowed_in_enums)
 	} else {
-		text := member.Name().Text()
+		text := ast.GetTextOfPropertyName(member.Name())
 		if isNumericLiteralName(text) && !isInfinityOrNaNString(text) {
 			c.error(member.Name(), diagnostics.An_enum_member_cannot_have_a_numeric_name)
 		}
@@ -20976,6 +21125,10 @@ func getNumberLiteralValue(t *Type) jsnum.Number {
 
 func getBigIntLiteralValue(t *Type) PseudoBigInt {
 	return t.AsLiteralType().value.(PseudoBigInt)
+}
+
+func getBooleanLiteralValue(t *Type) bool {
+	return t.AsLiteralType().value.(bool)
 }
 
 func (c *Checker) getEnumLiteralType(value any, enumSymbol *ast.Symbol, symbol *ast.Symbol) *Type {
@@ -26211,7 +26364,7 @@ func (c *Checker) getApplicableIndexInfos(t *Type, keyType *Type) []*IndexInfo {
 
 func (c *Checker) getApplicableIndexSymbol(t *Type, keyType *Type) *ast.Symbol {
 	infos := c.getApplicableIndexInfos(t, keyType)
-	if len(infos) > 0 && t.AsObjectType().members != nil {
+	if len(infos) > 0 && t.flags&TypeFlagsObject != 0 && t.AsObjectType().members != nil {
 		symbol := getIndexSymbolFromSymbolTable(c.resolveStructuredTypeMembers(t).members)
 		if core.Same(infos, c.getIndexInfosOfType(t)) {
 			return symbol

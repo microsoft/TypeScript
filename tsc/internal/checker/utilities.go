@@ -2491,7 +2491,7 @@ func forEachYieldExpression(body *ast.Node, visitor func(expr *ast.Node)) {
 				if node.Name() != nil && ast.IsComputedPropertyName(node.Name()) {
 					// Note that we will not include methods/accessors of a class because they would require
 					// first descending into the class. This is by design.
-					traverse(node.Expression())
+					traverse(node.Name().Expression())
 				}
 			} else if !ast.IsPartOfTypeNode(node) {
 				// This is the general case, which should include mostly expressions and statements.
@@ -2556,4 +2556,23 @@ func getDeclarationsOfKind(symbol *ast.Symbol, kind ast.Kind) []*ast.Node {
 
 func hasType(node *ast.Node) bool {
 	return node.Type() != nil
+}
+
+func getNonRestParameterCount(sig *Signature) int {
+	return len(sig.parameters) - core.IfElse(signatureHasRestParameter(sig), 1, 0)
+}
+
+func minAndMax[T any](slice []T, getValue func(value T) int) (int, int) {
+	var minValue, maxValue int
+	for i, element := range slice {
+		value := getValue(element)
+		if i == 0 {
+			minValue = value
+			maxValue = value
+		} else {
+			minValue = min(minValue, value)
+			maxValue = max(maxValue, value)
+		}
+	}
+	return minValue, maxValue
 }

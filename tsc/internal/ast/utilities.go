@@ -1783,6 +1783,11 @@ func IsQuestionToken(node *Node) bool {
 	return node != nil && node.Kind == KindQuestionToken
 }
 
+func GetTextOfPropertyName(name *Node) string {
+	text, _ := TryGetTextOfPropertyName(name)
+	return text
+}
+
 func TryGetTextOfPropertyName(name *Node) (string, bool) {
 	switch name.Kind {
 	case KindIdentifier, KindPrivateIdentifier, KindStringLiteral, KindNumericLiteral, KindBigIntLiteral,
@@ -1796,4 +1801,15 @@ func TryGetTextOfPropertyName(name *Node) (string, bool) {
 		return name.AsJsxNamespacedName().Namespace.Text() + ":" + name.Name().Text(), true
 	}
 	return "", false
+}
+
+func GetNewTargetContainer(node *Node) *Node {
+	container := GetThisContainer(node, false /*includeArrowFunctions*/, false /*includeClassComputedPropertyName*/)
+	if container != nil {
+		switch container.Kind {
+		case KindConstructor, KindFunctionDeclaration, KindFunctionExpression:
+			return container
+		}
+	}
+	return nil
 }

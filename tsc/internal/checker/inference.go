@@ -564,7 +564,7 @@ func (c *Checker) inferToTemplateLiteralType(n *InferenceState, source *Type, ta
 									}
 								case left.flags&TypeFlagsBooleanLiteral != 0:
 									return left
-								case right.flags&TypeFlagsBooleanLiteral != 0 && right.AsIntrinsicType().intrinsicName == str:
+								case right.flags&TypeFlagsBooleanLiteral != 0 && core.IfElse(getBooleanLiteralValue(right), "true", "false") == str:
 									return right
 								case left.flags&TypeFlagsUndefined != 0:
 									return left

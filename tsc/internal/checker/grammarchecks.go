@@ -1640,15 +1640,14 @@ func (c *Checker) checkGrammarVariableDeclaration(node *ast.VariableDeclaration)
 }
 
 func (c *Checker) checkGrammarForEsModuleMarkerInBindingName(name *ast.Node) bool {
-	if name.Kind == ast.KindIdentifier {
-		if name.AsIdentifier().Text == "__esModule" {
+	if ast.IsIdentifier(name) {
+		if name.Text() == "__esModule" {
 			return c.grammarErrorOnNodeSkippedOn("noEmit", name, diagnostics.Identifier_expected_esModule_is_reserved_as_an_exported_marker_when_transforming_ECMAScript_modules)
 		}
 	} else {
-		elements := name.AsBindingPattern().Elements.Nodes
-		for _, element := range elements {
-			if !ast.IsOmittedExpression(element) {
-				return c.checkGrammarForEsModuleMarkerInBindingName(element.AsBindingElement().Name())
+		for _, element := range name.AsBindingPattern().Elements.Nodes {
+			if element.Name() != nil {
+				return c.checkGrammarForEsModuleMarkerInBindingName(element.Name())
 			}
 		}
 	}
@@ -1902,7 +1901,7 @@ func (c *Checker) checkGrammarConstructorTypeAnnotation(node *ast.ConstructorDec
 func (c *Checker) checkGrammarProperty(node *ast.Node /*Union[PropertyDeclaration, PropertySignature]*/) bool {
 	propertyName := node.Name()
 	if ast.IsComputedPropertyName(propertyName) && ast.IsBinaryExpression(propertyName.Expression()) && propertyName.Expression().AsBinaryExpression().OperatorToken.Kind == ast.KindInKeyword {
-		return c.grammarErrorOnNode(node.Parent.AsMappedTypeNode().Members.Nodes[0], diagnostics.A_mapped_type_may_not_declare_properties_or_methods)
+		return c.grammarErrorOnNode(node.Parent.Members()[0], diagnostics.A_mapped_type_may_not_declare_properties_or_methods)
 	}
 	if ast.IsClassLike(node.Parent) {
 		if ast.IsStringLiteral(propertyName) && propertyName.Text() == "constructor" {
