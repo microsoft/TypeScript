@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/repo"
@@ -35,8 +36,13 @@ func TestOS(t *testing.T) {
 	t.Run("Realpath", func(t *testing.T) {
 		t.Parallel()
 
+		expected := goModPath
+		if runtime.GOOS == "windows" {
+			// Windows drive letters can be lowercase, but realpath will always return uppercase.
+			expected = strings.ToUpper(expected[:1]) + expected[1:]
+		}
 		realpath := fs.Realpath(goModPath)
-		assert.Equal(t, realpath, goModPath)
+		assert.Equal(t, realpath, expected)
 	})
 
 	t.Run("UseCaseSensitiveFileNames", func(t *testing.T) {
