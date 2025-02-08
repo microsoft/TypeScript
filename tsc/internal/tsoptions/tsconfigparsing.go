@@ -1191,7 +1191,7 @@ func parseJsonConfigFileContentWorker(
 			if excludeSpecs == nil {
 				excludeSpecs = []string{}
 			}
-			errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2, configFileName, core.Must(core.StringifyJson(includeSpecs)), core.Must(core.StringifyJson(excludeSpecs))))
+			errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2, configFileName, core.Must(core.StringifyJson(includeSpecs, "", "")), core.Must(core.StringifyJson(excludeSpecs, "", ""))))
 		}
 		return fileNames
 	}

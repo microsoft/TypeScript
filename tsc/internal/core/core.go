@@ -9,6 +9,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/stringutil"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 func Filter[T any](slice []T, f func(T) bool) []T {
@@ -334,10 +335,11 @@ func Must[T any](v T, err error) T {
 	return v
 }
 
-func StringifyJson(input any) (string, error) {
+func StringifyJson(input any, prefix string, indent string) (string, error) {
 	var buf bytes.Buffer
 	encoder := json.NewEncoder(&buf)
 	encoder.SetEscapeHTML(false)
+	encoder.SetIndent(prefix, indent)
 	if _, ok := input.([]any); ok && len(input.([]any)) == 0 {
 		return "[]", nil
 	}
@@ -345,4 +347,23 @@ func StringifyJson(input any) (string, error) {
 		return "", err
 	}
 	return strings.TrimSpace(buf.String()), nil
+}
+
+func GetScriptKindFromFileName(fileName string) ScriptKind {
+	dotPos := strings.LastIndex(fileName, ".")
+	if dotPos >= 0 {
+		switch strings.ToLower(fileName[dotPos:]) {
+		case tspath.ExtensionJs, tspath.ExtensionCjs, tspath.ExtensionMjs:
+			return ScriptKindJS
+		case tspath.ExtensionJsx:
+			return ScriptKindJSX
+		case tspath.ExtensionTs, tspath.ExtensionCts, tspath.ExtensionMts:
+			return ScriptKindTS
+		case tspath.ExtensionTsx:
+			return ScriptKindTSX
+		case tspath.ExtensionJson:
+			return ScriptKindJSON
+		}
+	}
+	return ScriptKindUnknown
 }

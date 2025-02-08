@@ -493,6 +493,10 @@ func (p *Program) CommonSourceDirectory() string {
 	return p.commonSourceDirectory
 }
 
+func (p *Program) GetCompilerOptions() *core.CompilerOptions {
+	return p.compilerOptions
+}
+
 func computeCommonSourceDirectoryOfFilenames(fileNames []string, currentDirectory string, useCaseSensitiveFileNames bool) string {
 	var commonPathComponents []string
 	for _, sourceFile := range fileNames {
@@ -631,7 +635,15 @@ func (p *Program) Emit(options *EmitOptions) *EmitResult {
 
 func (p *Program) GetSourceFile(filename string) *ast.SourceFile {
 	path := tspath.ToPath(filename, p.host.GetCurrentDirectory(), p.host.FS().UseCaseSensitiveFileNames())
+	return p.GetSourceFileByPath(path)
+}
+
+func (p *Program) GetSourceFileByPath(path tspath.Path) *ast.SourceFile {
 	return p.filesByPath[path]
+}
+
+func (p *Program) GetSourceFiles() []*ast.SourceFile {
+	return p.files
 }
 
 type FileIncludeKind int

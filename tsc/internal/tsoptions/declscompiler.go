@@ -289,7 +289,6 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		Name:                     "module",
 		shortName:                "m",
 		Kind:                     CommandLineOptionTypeEnum, // moduleOptionMap
-		AffectsSourceFile:        true,
 		AffectsModuleResolution:  true,
 		AffectsEmit:              true,
 		AffectsBuildInfo:         true,
@@ -657,7 +656,6 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		//         nodenext: ModuleResolutionKind.NodeNext,
 		//         bundler: ModuleResolutionKind.Bundler,
 		//     })),
-		AffectsSourceFile:       true,
 		AffectsModuleResolution: true,
 		Category:                diagnostics.Modules,
 		Description:             diagnostics.Specify_how_TypeScript_looks_up_a_file_from_a_given_module_specifier,

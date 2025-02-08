@@ -5,9 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"time"
 
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
@@ -16,36 +19,67 @@ type ServerOptions struct {
 	Out io.Writer
 	Err io.Writer
 
+	Cwd                string
+	NewLine            core.NewLineKind
 	FS                 vfs.FS
 	DefaultLibraryPath string
 }
 
 func NewServer(opts *ServerOptions) *Server {
-	stderrJSON := json.NewEncoder(opts.Err)
-	stderrJSON.SetIndent("", "    ")
-	stderrJSON.SetEscapeHTML(false)
-
+	if opts.Cwd == "" {
+		panic("Cwd is required")
+	}
 	return &Server{
 		r:                  lsproto.NewBaseReader(opts.In),
 		w:                  lsproto.NewBaseWriter(opts.Out),
 		stderr:             opts.Err,
-		stderrJSON:         stderrJSON,
+		cwd:                opts.Cwd,
+		newLine:            opts.NewLine,
 		fs:                 opts.FS,
 		defaultLibraryPath: opts.DefaultLibraryPath,
 	}
 }
 
+var _ project.ProjectServiceHost = (*Server)(nil)
+
 type Server struct {
 	r *lsproto.BaseReader
 	w *lsproto.BaseWriter
 
-	stderr     io.Writer
-	stderrJSON *json.Encoder
+	stderr io.Writer
 
+	requestMethod string
+	requestTime   time.Time
+
+	cwd                string
+	newLine            core.NewLineKind
 	fs                 vfs.FS
 	defaultLibraryPath string
 
 	initializeParams *lsproto.InitializeParams
+
+	logger         *project.Logger
+	projectService *project.ProjectService
+}
+
+// FS implements project.ProjectServiceHost.
+func (s *Server) FS() vfs.FS {
+	return s.fs
+}
+
+// GetCurrentDirectory implements project.ProjectServiceHost.
+func (s *Server) GetCurrentDirectory() string {
+	return s.cwd
+}
+
+// NewLine implements project.ProjectServiceHost.
+func (s *Server) NewLine() string {
+	return s.newLine.GetNewLineCharacter()
+}
+
+// Trace implements project.ProjectServiceHost.
+func (s *Server) Trace(msg string) {
+	s.Log(msg)
 }
 
 func (s *Server) Run() error {
@@ -91,14 +125,6 @@ func (s *Server) read() (*lsproto.RequestMessage, error) {
 		return nil, fmt.Errorf("%w: %w", lsproto.ErrInvalidRequest, err)
 	}
 
-	// TODO(jakebailey): temporary debug logging
-	if _, err := s.stderr.Write([]byte("REQUEST ")); err != nil {
-		return nil, err
-	}
-	if err := s.stderrJSON.Encode(req); err != nil {
-		return nil, err
-	}
-
 	return req, err
 }
 
@@ -125,14 +151,9 @@ func (s *Server) sendError(id *lsproto.ID, err error) error {
 }
 
 func (s *Server) sendResponse(resp *lsproto.ResponseMessage) error {
-	// TODO(jakebailey): temporary debug logging
-	if _, err := s.stderr.Write([]byte("RESPONSE ")); err != nil {
-		return err
+	if !s.requestTime.IsZero() {
+		s.logger.PerfTrace(fmt.Sprintf("%s: %s", s.requestMethod, time.Since(s.requestTime)))
 	}
-	if err := s.stderrJSON.Encode(resp); err != nil {
-		return err
-	}
-
 	data, err := json.Marshal(resp)
 	if err != nil {
 		return err
@@ -140,8 +161,39 @@ func (s *Server) sendResponse(resp *lsproto.ResponseMessage) error {
 	return s.w.Write(data)
 }
 
-func ptrTo[T any](v T) *T {
-	return &v
+func (s *Server) handleMessage(req *lsproto.RequestMessage) error {
+	s.requestTime = time.Now()
+	s.requestMethod = string(req.Method)
+
+	params := req.Params
+	switch params.(type) {
+	case *lsproto.InitializeParams:
+		return s.sendError(req.ID, lsproto.ErrInvalidRequest)
+	case *lsproto.InitializedParams:
+		return s.handleInitialized(req)
+	case *lsproto.DidOpenTextDocumentParams:
+		return s.handleDidOpen(req)
+	case *lsproto.DidChangeTextDocumentParams:
+		return s.handleDidChange(req)
+	case *lsproto.HoverParams:
+		return s.handleHover(req)
+	case *lsproto.DefinitionParams:
+		return s.handleDefinition(req)
+	default:
+		switch req.Method {
+		case lsproto.MethodShutdown:
+			s.projectService.Close()
+			return s.sendResult(req.ID, nil)
+		case lsproto.MethodExit:
+			return nil
+		default:
+			s.Log("unknown method", req.Method)
+			if req.ID != nil {
+				return s.sendError(req.ID, lsproto.ErrInvalidRequest)
+			}
+			return nil
+		}
+	}
 }
 
 func (s *Server) handleInitialize(req *lsproto.RequestMessage) error {
@@ -158,29 +210,113 @@ func (s *Server) handleInitialize(req *lsproto.RequestMessage) error {
 			HoverProvider: &lsproto.BooleanOrHoverOptions{
 				Boolean: ptrTo(true),
 			},
+			DefinitionProvider: &lsproto.BooleanOrDefinitionOptions{
+				Boolean: ptrTo(true),
+			},
 		},
 	})
 }
 
-func (s *Server) handleMessage(req *lsproto.RequestMessage) error {
-	params := req.Params
-	switch params.(type) {
-	case *lsproto.InitializeParams:
-		return s.sendError(req.ID, lsproto.ErrInvalidRequest)
-	case *lsproto.HoverParams:
-		return s.sendResult(req.ID, &lsproto.Hover{
-			Contents: lsproto.MarkupContentOrMarkedStringOrMarkedStrings{
-				MarkupContent: &lsproto.MarkupContent{
-					Kind:  lsproto.MarkupKindPlainText,
-					Value: "It works!",
-				},
-			},
-		})
-	default:
-		fmt.Fprintln(s.stderr, "unknown method", req.Method)
-		if req.ID != nil {
+func (s *Server) handleInitialized(req *lsproto.RequestMessage) error {
+	s.logger = project.NewLogger([]io.Writer{s.stderr}, project.LogLevelVerbose)
+	s.projectService = project.NewProjectService(s, project.ProjectServiceOptions{
+		DefaultLibraryPath: s.defaultLibraryPath,
+		Logger:             s.logger,
+	})
+	return s.sendResult(req.ID, nil)
+}
+
+func (s *Server) handleDidOpen(req *lsproto.RequestMessage) error {
+	params := req.Params.(*lsproto.DidOpenTextDocumentParams)
+	s.projectService.OpenClientFile(documentUriToFileName(params.TextDocument.Uri), params.TextDocument.Text, languageKindToScriptKind(params.TextDocument.LanguageId), "")
+	return s.sendResult(req.ID, nil)
+}
+
+func (s *Server) handleDidChange(req *lsproto.RequestMessage) error {
+	params := req.Params.(*lsproto.DidChangeTextDocumentParams)
+	scriptInfo := s.projectService.GetScriptInfo(documentUriToFileName(params.TextDocument.Uri))
+	if scriptInfo == nil {
+		return s.sendError(req.ID, lsproto.ErrRequestFailed)
+	}
+
+	changes := make([]ls.TextChange, len(params.ContentChanges))
+	for i, change := range params.ContentChanges {
+		if partialChange := change.TextDocumentContentChangePartial; partialChange != nil {
+			changes[i] = ls.TextChange{
+				TextRange: core.NewTextRange(
+					lineAndCharacterToPosition(partialChange.Range.Start, scriptInfo.LineMap()),
+					lineAndCharacterToPosition(partialChange.Range.End, scriptInfo.LineMap()),
+				),
+				NewText: partialChange.Text,
+			}
+		} else if wholeChange := change.TextDocumentContentChangeWholeDocument; wholeChange != nil {
+			changes[i] = ls.TextChange{
+				TextRange: core.NewTextRange(0, len(scriptInfo.Text())),
+				NewText:   wholeChange.Text,
+			}
+		} else {
 			return s.sendError(req.ID, lsproto.ErrInvalidRequest)
 		}
-		return nil
 	}
+
+	s.projectService.ApplyChangesInOpenFiles(
+		nil, /*openFiles*/
+		[]project.ChangeFileArguments{{
+			FileName: documentUriToFileName(params.TextDocument.Uri),
+			Changes:  changes,
+		}},
+		nil, /*closedFiles*/
+	)
+
+	return s.sendResult(req.ID, nil)
+}
+
+func (s *Server) handleHover(req *lsproto.RequestMessage) error {
+	params := req.Params.(*lsproto.HoverParams)
+	file, project := s.getFileAndProject(params.TextDocument.Uri)
+	hoverText := project.LanguageService().ProvideHover(
+		file.FileName(),
+		lineAndCharacterToPosition(params.Position, file.LineMap()),
+	)
+	return s.sendResult(req.ID, &lsproto.Hover{
+		Contents: lsproto.MarkupContentOrMarkedStringOrMarkedStrings{
+			MarkupContent: &lsproto.MarkupContent{
+				Kind:  lsproto.MarkupKindPlainText,
+				Value: hoverText,
+			},
+		},
+	})
+}
+
+func (s *Server) handleDefinition(req *lsproto.RequestMessage) error {
+	params := req.Params.(*lsproto.DefinitionParams)
+	file, project := s.getFileAndProject(params.TextDocument.Uri)
+	locations := project.LanguageService().ProvideDefinitions(
+		file.FileName(),
+		lineAndCharacterToPosition(params.Position, file.LineMap()),
+	)
+	lspLocations := make([]lsproto.Location, len(locations))
+	for i, loc := range locations {
+		if info := s.projectService.GetScriptInfo(loc.FileName); info != nil {
+			lspLocations[i] = toLspLocation(loc, info.LineMap())
+		} else {
+			s.logger.Error("failed to get script info for file: " + loc.FileName)
+			return s.sendError(req.ID, lsproto.ErrRequestFailed)
+		}
+	}
+
+	return s.sendResult(req.ID, &lsproto.Definition{Locations: &lspLocations})
+}
+
+func (s *Server) getFileAndProject(uri lsproto.DocumentUri) (*project.ScriptInfo, *project.Project) {
+	fileName := documentUriToFileName(uri)
+	return s.projectService.EnsureDefaultProjectForFile(fileName)
+}
+
+func (s *Server) Log(msg ...any) {
+	fmt.Fprintln(s.stderr, msg...)
+}
+
+func ptrTo[T any](v T) *T {
+	return &v
 }

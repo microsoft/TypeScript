@@ -11,7 +11,12 @@ import {
 let client: LanguageClient;
 
 export function activate(context: vscode.ExtensionContext) {
-    const output = vscode.window.createOutputChannel("typescript-go");
+    context.subscriptions.push(vscode.commands.registerCommand("typescript-go.restart", () => {
+        client.restart();
+    }));
+
+    const output = vscode.window.createOutputChannel("typescript-go", "log");
+    const traceOutput = vscode.window.createOutputChannel("typescript-go (LSP)");
 
     const exe = context.asAbsolutePath(
         path.join("../", "built", "local", `tsgo${process.platform === "win32" ? ".exe" : ""}`),
@@ -38,7 +43,13 @@ export function activate(context: vscode.ExtensionContext) {
             { scheme: "file", language: "typescriptreact" },
             { scheme: "file", language: "javascript" },
             { scheme: "file", language: "javascriptreact" },
+            { scheme: "untitled", language: "typescript" },
+            { scheme: "untitled", language: "typescriptreact" },
+            { scheme: "untitled", language: "javascript" },
+            { scheme: "untitled", language: "javascriptreact" },
         ],
+        outputChannel: output,
+        traceOutputChannel: traceOutput,
     };
 
     client = new LanguageClient(

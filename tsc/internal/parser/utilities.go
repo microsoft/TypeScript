@@ -2,12 +2,10 @@ package parser
 
 import (
 	"slices"
-	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/scanner"
-	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 func ensureScriptKind(fileName string, scriptKind core.ScriptKind) core.ScriptKind {
@@ -18,31 +16,12 @@ func ensureScriptKind(fileName string, scriptKind core.ScriptKind) core.ScriptKi
 	// to get the ScriptKind from the file name. If it cannot be resolved
 	// from the file name then the default 'TS' script kind is returned.
 	if scriptKind == core.ScriptKindUnknown {
-		scriptKind = getScriptKindFromFileName(fileName)
+		scriptKind = core.GetScriptKindFromFileName(fileName)
 	}
 	if scriptKind == core.ScriptKindUnknown {
 		scriptKind = core.ScriptKindTS
 	}
 	return scriptKind
-}
-
-func getScriptKindFromFileName(fileName string) core.ScriptKind {
-	dotPos := strings.LastIndex(fileName, ".")
-	if dotPos >= 0 {
-		switch strings.ToLower(fileName[dotPos:]) {
-		case tspath.ExtensionJs, tspath.ExtensionCjs, tspath.ExtensionMjs:
-			return core.ScriptKindJS
-		case tspath.ExtensionJsx:
-			return core.ScriptKindJSX
-		case tspath.ExtensionTs, tspath.ExtensionCts, tspath.ExtensionMts:
-			return core.ScriptKindTS
-		case tspath.ExtensionTsx:
-			return core.ScriptKindTSX
-		case tspath.ExtensionJson:
-			return core.ScriptKindJSON
-		}
-	}
-	return core.ScriptKindUnknown
 }
 
 func getLanguageVariant(scriptKind core.ScriptKind) core.LanguageVariant {

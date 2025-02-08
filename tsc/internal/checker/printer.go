@@ -47,7 +47,7 @@ func (c *Checker) symbolToString(s *ast.Symbol) string {
 	return "(missing)"
 }
 
-func (c *Checker) typeToString(t *Type) string {
+func (c *Checker) TypeToString(t *Type) string {
 	return c.typeToStringEx(t, nil, TypeFormatFlagsNone)
 }
 

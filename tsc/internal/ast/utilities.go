@@ -1758,6 +1758,10 @@ func isJSDocLinkLike(node *Node) bool {
 	return NodeKindIs(node, KindJSDocLink, KindJSDocLinkCode, KindJSDocLinkPlain)
 }
 
+func IsJSDocTag(node *Node) bool {
+	return node.Kind >= KindFirstJSDocTagNode && node.Kind <= KindLastJSDocTagNode
+}
+
 func isJSXTagName(node *Node) bool {
 	parent := node.Parent
 	switch parent.Kind {
@@ -1801,6 +1805,27 @@ func TryGetTextOfPropertyName(name *Node) (string, bool) {
 		return name.AsJsxNamespacedName().Namespace.Text() + ":" + name.Name().Text(), true
 	}
 	return "", false
+}
+
+func IsJSDocCommentContainingNode(node *Node) bool {
+	return node.Kind == KindJSDoc ||
+		node.Kind == KindJSDocText ||
+		node.Kind == KindJSDocTypeLiteral ||
+		node.Kind == KindJSDocSignature ||
+		isJSDocLinkLike(node) ||
+		IsJSDocTag(node)
+}
+
+func IsJSDocNode(node *Node) bool {
+	return node.Kind >= KindFirstJSDocNode && node.Kind <= KindLastJSDocNode
+}
+
+func IsNonWhitespaceToken(node *Node) bool {
+	return IsTokenKind(node.Kind) && !IsWhitespaceOnlyJsxText(node)
+}
+
+func IsWhitespaceOnlyJsxText(node *Node) bool {
+	return node.Kind == KindJsxText && node.AsJsxText().ContainsOnlyTriviaWhiteSpaces
 }
 
 func GetNewTargetContainer(node *Node) *Node {

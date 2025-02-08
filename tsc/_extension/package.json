@@ -16,6 +16,38 @@
         "onLanguage:typescript",
         "onLanguage:typescriptreact"
     ],
+    "contributes": {
+        "configuration": [
+            {
+                "title": "TypeScript Go",
+                "properties": {
+                    "typescript-go.trace.server": {
+                        "type": "string",
+                        "enum": [
+                            "off",
+                            "messages",
+                            "verbose"
+                        ],
+                        "default": "verbose",
+                        "description": "Trace TypeScript Go server communication."
+                    }
+                }
+            }
+        ],
+        "commands": [
+            {
+                "command": "typescript-go.restart",
+                "title": "TypeScript Go: Restart Language Server"
+            }
+        ],
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "typescript-go.restart"
+                }
+            ]
+        }
+    },
     "main": "./dist/extension.js",
     "scripts": {
         "build": "tsc",

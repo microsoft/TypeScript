@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/lsp"
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
@@ -35,6 +36,7 @@ func runLSP(args []string) int {
 		In:                 os.Stdin,
 		Out:                os.Stdout,
 		Err:                os.Stderr,
+		Cwd:                core.Must(os.Getwd()),
 		FS:                 fs,
 		DefaultLibraryPath: defaultLibraryPath,
 	})
