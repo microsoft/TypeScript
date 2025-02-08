@@ -26,6 +26,19 @@ xx++;
 >xx : number
 >   : ^^^^^^
 
+=== identifierVariableWithEscape3.ts ===
+export let a\u0062c\u0064e = 10;
+>a\u0062c\u0064e : number
+>                : ^^^^^^
+>10 : 10
+>   : ^^
+
+abcde++;
+>abcde++ : number
+>        : ^^^^^^
+>abcde : number
+>      : ^^^^^^
+
 === identifierVariableWithExtendedEscape1.ts ===
 export let \u{78} = 10;
 >\u{78} : number
@@ -51,6 +64,19 @@ xx++;
 >     : ^^^^^^
 >xx : number
 >   : ^^^^^^
+
+=== identifierVariableWithExtendedEscape3.ts ===
+export let a\u{62}c\u{64}e = 10;
+>a\u{62}c\u{64}e : number
+>                : ^^^^^^
+>10 : 10
+>   : ^^
+
+abcde++;
+>abcde++ : number
+>        : ^^^^^^
+>abcde : number
+>      : ^^^^^^
 
 === IdentifierNameWithEscape1.ts ===
 export class IdentifierNameWithEscape1 {
@@ -129,6 +155,47 @@ export class IdentifierNameWithEscape2 {
 >     : ^^^^
 >xx : number
 >   : ^^^^^^
+>42 : 42
+>   : ^^
+    }
+}
+
+=== IdentifierNameWithEscape3.ts ===
+export class IdentifierNameWithEscape3 {
+>IdentifierNameWithEscape3 : IdentifierNameWithEscape3
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a\u0062c\u0064e: number;
+>a\u0062c\u0064e : number
+>                : ^^^^^^
+
+    constructor() {
+        this.a\u0062c\u0064e = 0;
+>this.a\u0062c\u0064e = 0 : 0
+>                         : ^
+>this.a\u0062c\u0064e : number
+>                     : ^^^^^^
+>this : this
+>     : ^^^^
+>a\u0062c\u0064e : number
+>                : ^^^^^^
+>0 : 0
+>  : ^
+    }
+
+    doThing() {
+>doThing : () => void
+>        : ^^^^^^^^^^
+
+        this.abcde = 42;
+>this.abcde = 42 : 42
+>                : ^^
+>this.abcde : number
+>           : ^^^^^^
+>this : this
+>     : ^^^^
+>abcde : number
+>      : ^^^^^^
 >42 : 42
 >   : ^^
     }
@@ -216,6 +283,47 @@ export class IdentifierNameWithExtendedEscape2 {
     }
 }
 
+=== IdentifierNameWithExtendedEscape3.ts ===
+export class IdentifierNameWithExtendedEscape3 {
+>IdentifierNameWithExtendedEscape3 : IdentifierNameWithExtendedEscape3
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a\u{62}c\u{64}e: number;
+>a\u{62}c\u{64}e : number
+>                : ^^^^^^
+
+    constructor() {
+        this.a\u{62}c\u{64}e = 0;
+>this.a\u{62}c\u{64}e = 0 : 0
+>                         : ^
+>this.a\u{62}c\u{64}e : number
+>                     : ^^^^^^
+>this : this
+>     : ^^^^
+>a\u{62}c\u{64}e : number
+>                : ^^^^^^
+>0 : 0
+>  : ^
+    }
+
+    doThing() {
+>doThing : () => void
+>        : ^^^^^^^^^^
+
+        this.abcde = 42;
+>this.abcde = 42 : 42
+>                : ^^
+>this.abcde : number
+>           : ^^^^^^
+>this : this
+>     : ^^^^
+>abcde : number
+>      : ^^^^^^
+>42 : 42
+>   : ^^
+    }
+}
+
 === PrivateIdentifierNameWithEscape1.ts ===
 export class PrivateIdentifierWithEscape1 {
 >PrivateIdentifierWithEscape1 : PrivateIdentifierWithEscape1
@@ -290,6 +398,43 @@ export class PrivateIdentifierWithEscape2 {
     }
 }
 
+=== PrivateIdentifierNameWithEscape3.ts ===
+export class PrivateIdentifierWithEscape3 {
+>PrivateIdentifierWithEscape3 : PrivateIdentifierWithEscape3
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    #a\u0062c\u0064e: number;
+>#a\u0062c\u0064e : number
+>                 : ^^^^^^
+
+    constructor() {
+        this.#a\u0062c\u0064e = 0;
+>this.#a\u0062c\u0064e = 0 : 0
+>                          : ^
+>this.#a\u0062c\u0064e : number
+>                      : ^^^^^^
+>this : this
+>     : ^^^^
+>0 : 0
+>  : ^
+    }
+
+    doThing() {
+>doThing : () => void
+>        : ^^^^^^^^^^
+
+        this.#abcde = 42;
+>this.#abcde = 42 : 42
+>                 : ^^
+>this.#abcde : number
+>            : ^^^^^^
+>this : this
+>     : ^^^^
+>42 : 42
+>   : ^^
+    }
+}
+
 === PrivateIdentifierNameWithExtendedEscape1.ts ===
 export class PrivateIdentifierWithExtendedEscape1 {
 >PrivateIdentifierWithExtendedEscape1 : PrivateIdentifierWithExtendedEscape1
@@ -357,6 +502,43 @@ export class PrivateIdentifierWithExtendedEscape2 {
 >              : ^^
 >this.#xx : number
 >         : ^^^^^^
+>this : this
+>     : ^^^^
+>42 : 42
+>   : ^^
+    }
+}
+
+=== PrivateIdentifierNameWithExtendedEscape3.ts ===
+export class PrivateIdentifierWithExtendedEscape3 {
+>PrivateIdentifierWithExtendedEscape3 : PrivateIdentifierWithExtendedEscape3
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    #a\u{62}c\u{64}e: number;
+>#a\u{62}c\u{64}e : number
+>                 : ^^^^^^
+
+    constructor() {
+        this.#a\u{62}c\u{64}e = 0;
+>this.#a\u{62}c\u{64}e = 0 : 0
+>                          : ^
+>this.#a\u{62}c\u{64}e : number
+>                      : ^^^^^^
+>this : this
+>     : ^^^^
+>0 : 0
+>  : ^
+    }
+
+    doThing() {
+>doThing : () => void
+>        : ^^^^^^^^^^
+
+        this.#abcde = 42;
+>this.#abcde = 42 : 42
+>                 : ^^
+>this.#abcde : number
+>            : ^^^^^^
 >this : this
 >     : ^^^^
 >42 : 42
