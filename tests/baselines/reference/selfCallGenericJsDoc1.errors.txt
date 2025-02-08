@@ -1,0 +1,24 @@
+index.js(13,42): error TS2345: Argument of type 'Children<T>' is not assignable to parameter of type 'any[]'.
+  Type '{ children: Children<T>[] | undefined; }' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+
+
+==== index.js (1 errors) ====
+    /**
+     * @template T
+     * @typedef {T & { children: Children<T>[] | undefined }} Children
+     */
+    
+    /**
+     * @template T
+     * @param {Children<T>[]} groups item and groups
+     */
+    export const spaceLimited = (groups) => {
+    	for (let i = 0; i < groups.length; i++) {
+    		const group = groups[i];
+    		spaceLimited(/** @type {Children<T>} */(group.children)); // should error
+    		                                       ~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'Children<T>' is not assignable to parameter of type 'any[]'.
+!!! error TS2345:   Type '{ children: Children<T>[] | undefined; }' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+    	}
+    };
+    
