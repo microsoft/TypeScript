@@ -1443,3 +1443,28 @@ function funcInferredReturnType(obj: { method(p: typeof s): void }) {
 >    : ^^^^^^^^^ ^^        ^^^    ^^^
 }
 
+// https://github.com/microsoft/TypeScript/issues/61070
+const bar = Symbol('bar') satisfies symbol;
+>bar : unique symbol
+>    : ^^^^^^^^^^^^^
+>Symbol('bar') satisfies symbol : unique symbol
+>                               : ^^^^^^^^^^^^^
+>Symbol('bar') : unique symbol
+>              : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>'bar' : "bar"
+>      : ^^^^^
+
+let bar2 = Symbol('bar2') satisfies symbol;
+>bar2 : symbol
+>     : ^^^^^^
+>Symbol('bar2') satisfies symbol : symbol
+>                                : ^^^^^^
+>Symbol('bar2') : symbol
+>               : ^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>'bar2' : "bar2"
+>       : ^^^^^^
+
