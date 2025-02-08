@@ -1,0 +1,563 @@
+//// [tests/cases/compiler/reverseMappedTuples1.ts] ////
+
+=== reverseMappedTuples1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58726
+
+type Constructor<T> = {
+>Constructor : Symbol(Constructor, Decl(reverseMappedTuples1.ts, 0, 0))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 2, 17))
+
+  new (...args: never[]): T;
+>args : Symbol(args, Decl(reverseMappedTuples1.ts, 3, 7))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 2, 17))
+
+};
+
+interface GenericParams<T> {
+>GenericParams : Symbol(GenericParams, Decl(reverseMappedTuples1.ts, 4, 2))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 6, 24))
+
+  bar: (t: T) => void;
+>bar : Symbol(GenericParams.bar, Decl(reverseMappedTuples1.ts, 6, 28))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 7, 8))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 6, 24))
+}
+
+type Pair<T> = [Constructor<T>, GenericParams<T>];
+>Pair : Symbol(Pair, Decl(reverseMappedTuples1.ts, 8, 1))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 10, 10))
+>Constructor : Symbol(Constructor, Decl(reverseMappedTuples1.ts, 0, 0))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 10, 10))
+>GenericParams : Symbol(GenericParams, Decl(reverseMappedTuples1.ts, 4, 2))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 10, 10))
+
+type List<T> = {
+>List : Symbol(List, Decl(reverseMappedTuples1.ts, 10, 50))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 12, 10))
+
+  [K in keyof T]: Pair<T[K]>;
+>K : Symbol(K, Decl(reverseMappedTuples1.ts, 13, 3))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 12, 10))
+>Pair : Symbol(Pair, Decl(reverseMappedTuples1.ts, 8, 1))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 12, 10))
+>K : Symbol(K, Decl(reverseMappedTuples1.ts, 13, 3))
+
+};
+
+class Foo {
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+
+  test() {}
+>test : Symbol(Foo.test, Decl(reverseMappedTuples1.ts, 16, 11))
+}
+class Bar {
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+
+  other() {}
+>other : Symbol(Bar.other, Decl(reverseMappedTuples1.ts, 19, 11))
+}
+class Baz {
+>Baz : Symbol(Baz, Decl(reverseMappedTuples1.ts, 21, 1))
+
+  third() {}
+>third : Symbol(Baz.third, Decl(reverseMappedTuples1.ts, 22, 11))
+}
+
+declare const withFooPair: [Pair<Foo>];
+>withFooPair : Symbol(withFooPair, Decl(reverseMappedTuples1.ts, 26, 13))
+>Pair : Symbol(Pair, Decl(reverseMappedTuples1.ts, 8, 1))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+
+declare const with2FooPairs: [Pair<Foo>, Pair<Foo>];
+>with2FooPairs : Symbol(with2FooPairs, Decl(reverseMappedTuples1.ts, 27, 13))
+>Pair : Symbol(Pair, Decl(reverseMappedTuples1.ts, 8, 1))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>Pair : Symbol(Pair, Decl(reverseMappedTuples1.ts, 8, 1))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+
+declare function fn1<T extends readonly {}[]>(params: List<[...T]>): T;
+>fn1 : Symbol(fn1, Decl(reverseMappedTuples1.ts, 27, 52))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 29, 21))
+>params : Symbol(params, Decl(reverseMappedTuples1.ts, 29, 46))
+>List : Symbol(List, Decl(reverseMappedTuples1.ts, 10, 50))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 29, 21))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 29, 21))
+
+const res1 = fn1([
+>res1 : Symbol(res1, Decl(reverseMappedTuples1.ts, 31, 5))
+>fn1 : Symbol(fn1, Decl(reverseMappedTuples1.ts, 27, 52))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 32, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 32, 14))
+
+  [Bar, { bar(t) {} }],
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 33, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 33, 14))
+
+]);
+
+const res2 = fn1([
+>res2 : Symbol(res2, Decl(reverseMappedTuples1.ts, 36, 5))
+>fn1 : Symbol(fn1, Decl(reverseMappedTuples1.ts, 27, 52))
+
+  ...withFooPair,
+>withFooPair : Symbol(withFooPair, Decl(reverseMappedTuples1.ts, 26, 13))
+
+  [Bar, { bar(t) {} }], // implicit any
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 38, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 38, 14))
+
+]);
+
+const res3 = fn1([
+>res3 : Symbol(res3, Decl(reverseMappedTuples1.ts, 41, 5))
+>fn1 : Symbol(fn1, Decl(reverseMappedTuples1.ts, 27, 52))
+
+  ...with2FooPairs,
+>with2FooPairs : Symbol(with2FooPairs, Decl(reverseMappedTuples1.ts, 27, 13))
+
+  [Bar, { bar(t) {} }], // implicit any
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 43, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 43, 14))
+
+]);
+
+const res4 = fn1([
+>res4 : Symbol(res4, Decl(reverseMappedTuples1.ts, 46, 5))
+>fn1 : Symbol(fn1, Decl(reverseMappedTuples1.ts, 27, 52))
+
+  [Bar, { bar(t) {} }],
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 47, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 47, 14))
+
+  ...with2FooPairs,
+>with2FooPairs : Symbol(with2FooPairs, Decl(reverseMappedTuples1.ts, 27, 13))
+
+]);
+
+declare function fn2<T extends readonly {}[]>(params: List<[Foo, Foo, ...T]>): T;
+>fn2 : Symbol(fn2, Decl(reverseMappedTuples1.ts, 49, 3))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 51, 21))
+>params : Symbol(params, Decl(reverseMappedTuples1.ts, 51, 46))
+>List : Symbol(List, Decl(reverseMappedTuples1.ts, 10, 50))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 51, 21))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 51, 21))
+
+const res5 = fn2([
+>res5 : Symbol(res5, Decl(reverseMappedTuples1.ts, 53, 5))
+>fn2 : Symbol(fn2, Decl(reverseMappedTuples1.ts, 49, 3))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 54, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 54, 14))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 55, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 55, 14))
+
+  [Bar, { bar(t) {} }],
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 56, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 56, 14))
+
+  [Baz, { bar(t) {} }],
+>Baz : Symbol(Baz, Decl(reverseMappedTuples1.ts, 21, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 57, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 57, 14))
+
+]);
+
+const res6 = fn2([
+>res6 : Symbol(res6, Decl(reverseMappedTuples1.ts, 60, 5))
+>fn2 : Symbol(fn2, Decl(reverseMappedTuples1.ts, 49, 3))
+
+  ...with2FooPairs,
+>with2FooPairs : Symbol(with2FooPairs, Decl(reverseMappedTuples1.ts, 27, 13))
+
+  [Bar, { bar(t) {} }], // implicit any
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 62, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 62, 14))
+
+]);
+
+const res7 = fn2([
+>res7 : Symbol(res7, Decl(reverseMappedTuples1.ts, 65, 5))
+>fn2 : Symbol(fn2, Decl(reverseMappedTuples1.ts, 49, 3))
+
+  ...with2FooPairs,
+>with2FooPairs : Symbol(with2FooPairs, Decl(reverseMappedTuples1.ts, 27, 13))
+
+  [Bar, { bar(t) {} }], // implicit any
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 67, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 67, 14))
+
+  [Baz, { bar(t) {} }], // implicit any
+>Baz : Symbol(Baz, Decl(reverseMappedTuples1.ts, 21, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 68, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 68, 14))
+
+]);
+
+declare function fn3<T extends readonly {}[]>(params: List<[...T, Foo, Foo]>): T;
+>fn3 : Symbol(fn3, Decl(reverseMappedTuples1.ts, 69, 3))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 71, 21))
+>params : Symbol(params, Decl(reverseMappedTuples1.ts, 71, 46))
+>List : Symbol(List, Decl(reverseMappedTuples1.ts, 10, 50))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 71, 21))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 71, 21))
+
+const res8 = fn3([
+>res8 : Symbol(res8, Decl(reverseMappedTuples1.ts, 73, 5))
+>fn3 : Symbol(fn3, Decl(reverseMappedTuples1.ts, 69, 3))
+
+  [Bar, { bar(t) {} }],
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 74, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 74, 14))
+
+  [Baz, { bar(t) {} }],
+>Baz : Symbol(Baz, Decl(reverseMappedTuples1.ts, 21, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 75, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 75, 14))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 76, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 76, 14))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 77, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 77, 14))
+
+]);
+
+const res9 = fn3([
+>res9 : Symbol(res9, Decl(reverseMappedTuples1.ts, 80, 5))
+>fn3 : Symbol(fn3, Decl(reverseMappedTuples1.ts, 69, 3))
+
+  [Bar, { bar(t) {} }],
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 81, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 81, 14))
+
+  [Baz, { bar(t) {} }],
+>Baz : Symbol(Baz, Decl(reverseMappedTuples1.ts, 21, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 82, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 82, 14))
+
+  ...with2FooPairs
+>with2FooPairs : Symbol(with2FooPairs, Decl(reverseMappedTuples1.ts, 27, 13))
+
+]);
+
+const res10 = fn3([
+>res10 : Symbol(res10, Decl(reverseMappedTuples1.ts, 86, 5))
+>fn3 : Symbol(fn3, Decl(reverseMappedTuples1.ts, 69, 3))
+
+  [Bar, { bar(t) {} }],
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 87, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 87, 14))
+
+  [Baz, { bar(t) {} }],
+>Baz : Symbol(Baz, Decl(reverseMappedTuples1.ts, 21, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 88, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 88, 14))
+
+  ...withFooPair,
+>withFooPair : Symbol(withFooPair, Decl(reverseMappedTuples1.ts, 26, 13))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 90, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 90, 14))
+
+]);
+
+const res11 = fn3([
+>res11 : Symbol(res11, Decl(reverseMappedTuples1.ts, 93, 5))
+>fn3 : Symbol(fn3, Decl(reverseMappedTuples1.ts, 69, 3))
+
+  [Bar, { bar(t) {} }],
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 94, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 94, 14))
+
+  [Baz, { bar(t) {} }],
+>Baz : Symbol(Baz, Decl(reverseMappedTuples1.ts, 21, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 95, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 95, 14))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 96, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 96, 14))
+
+  ...withFooPair,
+>withFooPair : Symbol(withFooPair, Decl(reverseMappedTuples1.ts, 26, 13))
+
+]);
+
+declare function fn4<T extends readonly {}[]>(params: List<[Foo, Foo?, ...T]>): T;
+>fn4 : Symbol(fn4, Decl(reverseMappedTuples1.ts, 98, 3))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 100, 21))
+>params : Symbol(params, Decl(reverseMappedTuples1.ts, 100, 46))
+>List : Symbol(List, Decl(reverseMappedTuples1.ts, 10, 50))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 100, 21))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 100, 21))
+
+const res12 = fn4([
+>res12 : Symbol(res12, Decl(reverseMappedTuples1.ts, 102, 5))
+>fn4 : Symbol(fn4, Decl(reverseMappedTuples1.ts, 98, 3))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 103, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 103, 14))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 104, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 104, 14))
+
+  [Bar, { bar(t) {} }],
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 105, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 105, 14))
+
+  [Baz, { bar(t) {} }],
+>Baz : Symbol(Baz, Decl(reverseMappedTuples1.ts, 21, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 106, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 106, 14))
+
+]);
+
+const res13 = fn4([
+>res13 : Symbol(res13, Decl(reverseMappedTuples1.ts, 109, 5))
+>fn4 : Symbol(fn4, Decl(reverseMappedTuples1.ts, 98, 3))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 110, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 110, 14))
+
+  [Bar, { bar(t) {} }], // error
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 111, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 111, 14))
+
+  [Baz, { bar(t) {} }],
+>Baz : Symbol(Baz, Decl(reverseMappedTuples1.ts, 21, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 112, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 112, 14))
+
+]);
+
+declare function fn5<T extends readonly {}[]>(params: List<[...T, Foo?]>): T;
+>fn5 : Symbol(fn5, Decl(reverseMappedTuples1.ts, 113, 3))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 115, 21))
+>params : Symbol(params, Decl(reverseMappedTuples1.ts, 115, 46))
+>List : Symbol(List, Decl(reverseMappedTuples1.ts, 10, 50))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 115, 21))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 115, 21))
+
+const res14 = fn5([
+>res14 : Symbol(res14, Decl(reverseMappedTuples1.ts, 117, 5))
+>fn5 : Symbol(fn5, Decl(reverseMappedTuples1.ts, 113, 3))
+
+  [Bar, { bar(t) {} }],
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 118, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 118, 14))
+
+  [Baz, { bar(t) {} }],
+>Baz : Symbol(Baz, Decl(reverseMappedTuples1.ts, 21, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 119, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 119, 14))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 120, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 120, 14))
+
+]);
+
+const res15 = fn5([
+>res15 : Symbol(res15, Decl(reverseMappedTuples1.ts, 123, 5))
+>fn5 : Symbol(fn5, Decl(reverseMappedTuples1.ts, 113, 3))
+
+  [Bar, { bar(t) {} }],
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 124, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 124, 14))
+
+  [Baz, { bar(t) {} }], // error, inferred [Bar, Baz] would satisfy but the checker prefers picking up trailing optional element for contextual typing etc
+>Baz : Symbol(Baz, Decl(reverseMappedTuples1.ts, 21, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 125, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 125, 14))
+
+]);
+
+declare function fn6<T extends readonly {}[]>(params: List<[Foo, Foo, ...T, Foo, Foo]>): T;
+>fn6 : Symbol(fn6, Decl(reverseMappedTuples1.ts, 126, 3))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 128, 21))
+>params : Symbol(params, Decl(reverseMappedTuples1.ts, 128, 46))
+>List : Symbol(List, Decl(reverseMappedTuples1.ts, 10, 50))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 128, 21))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 128, 21))
+
+const res16 = fn6([
+>res16 : Symbol(res16, Decl(reverseMappedTuples1.ts, 130, 5))
+>fn6 : Symbol(fn6, Decl(reverseMappedTuples1.ts, 126, 3))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 131, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 131, 14))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 132, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 132, 14))
+
+  [Bar, { bar(t) {} }],
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 133, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 133, 14))
+
+  [Baz, { bar(t) {} }],
+>Baz : Symbol(Baz, Decl(reverseMappedTuples1.ts, 21, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 134, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 134, 14))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 135, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 135, 14))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 136, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 136, 14))
+
+]);
+
+declare function fn7<T extends readonly {}[], T2 extends readonly {}[]>(params: List<[Foo, Foo, ...T, ...T2, Foo]>): [T, T2];
+>fn7 : Symbol(fn7, Decl(reverseMappedTuples1.ts, 137, 3))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 139, 21))
+>T2 : Symbol(T2, Decl(reverseMappedTuples1.ts, 139, 45))
+>params : Symbol(params, Decl(reverseMappedTuples1.ts, 139, 72))
+>List : Symbol(List, Decl(reverseMappedTuples1.ts, 10, 50))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 139, 21))
+>T2 : Symbol(T2, Decl(reverseMappedTuples1.ts, 139, 45))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 139, 21))
+>T2 : Symbol(T2, Decl(reverseMappedTuples1.ts, 139, 45))
+
+const res17 = fn7([
+>res17 : Symbol(res17, Decl(reverseMappedTuples1.ts, 141, 5))
+>fn7 : Symbol(fn7, Decl(reverseMappedTuples1.ts, 137, 3))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 142, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 142, 14))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 143, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 143, 14))
+
+  [Bar, { bar(t) {} }], // implicit any
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 144, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 144, 14))
+
+  [Baz, { bar(t) {} }], // implicit any
+>Baz : Symbol(Baz, Decl(reverseMappedTuples1.ts, 21, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 145, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 145, 14))
+
+  [Foo, { bar(t) {} }], // implicit any
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 146, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 146, 14))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 147, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 147, 14))
+
+]);
+
+declare function fn8<T extends readonly {}[]>(params: List<[Foo, Foo, ...T, ...Foo[]]>): T;
+>fn8 : Symbol(fn8, Decl(reverseMappedTuples1.ts, 148, 3))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 150, 21))
+>params : Symbol(params, Decl(reverseMappedTuples1.ts, 150, 46))
+>List : Symbol(List, Decl(reverseMappedTuples1.ts, 10, 50))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 150, 21))
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>T : Symbol(T, Decl(reverseMappedTuples1.ts, 150, 21))
+
+const res18 = fn8([
+>res18 : Symbol(res18, Decl(reverseMappedTuples1.ts, 152, 5))
+>fn8 : Symbol(fn8, Decl(reverseMappedTuples1.ts, 148, 3))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 153, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 153, 14))
+
+  [Foo, { bar(t) {} }],
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 154, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 154, 14))
+
+  [Bar, { bar(t) {} }], // implicit any
+>Bar : Symbol(Bar, Decl(reverseMappedTuples1.ts, 18, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 155, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 155, 14))
+
+  [Baz, { bar(t) {} }], // implicit any
+>Baz : Symbol(Baz, Decl(reverseMappedTuples1.ts, 21, 1))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 156, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 156, 14))
+
+  [Foo, { bar(t) {} }], // implicit any
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 157, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 157, 14))
+
+  [Foo, { bar(t) {} }], // implicit any
+>Foo : Symbol(Foo, Decl(reverseMappedTuples1.ts, 14, 2))
+>bar : Symbol(bar, Decl(reverseMappedTuples1.ts, 158, 9))
+>t : Symbol(t, Decl(reverseMappedTuples1.ts, 158, 14))
+
+]);
+
