@@ -1,9 +1,9 @@
 import { CancelError } from "@esfx/canceltoken";
 import assert from "assert";
-import chalk from "chalk";
 import { spawn } from "child_process";
 import fs from "fs";
 import JSONC from "jsonc-parser";
+import pc from "picocolors";
 import which from "which";
 
 /** @import { CancelToken } from "@esfx/canceltoken" */
@@ -26,7 +26,7 @@ export async function exec(cmd, args, options = {}) {
     return /**@type {Promise<{exitCode?: number}>}*/ (new Promise((resolve, reject) => {
         const { ignoreExitCode, waitForExit = true, ignoreStdout } = options;
 
-        if (!options.hidePrompt) console.log(`> ${chalk.green(cmd)} ${args.join(" ")}`);
+        if (!options.hidePrompt) console.log(`> ${pc.green(cmd)} ${args.join(" ")}`);
         const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? ignoreStdout ? ["inherit", "ignore", "inherit"] : "inherit" : "ignore", detached: !waitForExit });
         if (waitForExit) {
             const onCanceled = () => {

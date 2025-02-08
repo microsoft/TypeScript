@@ -1,8 +1,8 @@
 import { CancelError } from "@esfx/canceltoken";
-import chalk from "chalk";
 import fs from "fs";
 import os from "os";
 import path from "path";
+import pc from "picocolors";
 
 import {
     findUpFile,
@@ -48,12 +48,12 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
 
     if (coverage && testTimeout) {
         testTimeout *= 2;
-        console.log(chalk.yellowBright(`[coverage] doubling test timeout to ${testTimeout}ms...`));
+        console.log(pc.yellowBright(`[coverage] doubling test timeout to ${testTimeout}ms...`));
     }
 
     if (!cmdLineOptions.dirty) {
         if (options.watching) {
-            console.log(chalk.yellowBright(`[watch] cleaning test directories...`));
+            console.log(pc.yellowBright(`[watch] cleaning test directories...`));
         }
         await cleanTestDirs();
         await rimraf(coverageDir);
@@ -81,7 +81,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     }
 
     if (options.watching) {
-        console.log(chalk.yellowBright(`[watch] running tests...`));
+        console.log(pc.yellowBright(`[watch] running tests...`));
     }
 
     if (tests || skipSysTests || runners || light || testTimeout || taskConfigsFolder || keepFailed || shards || shardId) {
@@ -178,7 +178,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
         }
 
         if (options.watching) {
-            console.error(`${chalk.redBright(error.name)}: ${error.message}`);
+            console.error(`${pc.redBright(error.name)}: ${error.message}`);
         }
         else {
             process.exitCode = typeof errorStatus === "number" ? errorStatus : 2;
