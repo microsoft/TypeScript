@@ -1,0 +1,290 @@
+//// [tests/cases/compiler/inferContextualTypePredicates1.ts] ////
+
+=== inferContextualTypePredicates1.ts ===
+type Foo = { type: "foo"; foo: number };
+>Foo : Foo
+>    : ^^^
+>type : "foo"
+>     : ^^^^^
+>foo : number
+>    : ^^^^^^
+
+type Bar = { type: "bar"; bar: string };
+>Bar : Bar
+>    : ^^^
+>type : "bar"
+>     : ^^^^^
+>bar : string
+>    : ^^^^^^
+
+declare function skipIf<A, B extends A>(
+>skipIf : <A, B extends A>(as: A[], predicate: (a: A) => a is B) => Exclude<A, B>[]
+>       : ^ ^^ ^^^^^^^^^ ^^  ^^   ^^         ^^                ^^^^^               
+
+  as: A[],
+>as : A[]
+>   : ^^^
+
+  predicate: (a: A) => a is B,
+>predicate : (a: A) => a is B
+>          : ^ ^^ ^^^^^      
+>a : A
+>  : ^
+
+): Exclude<A, B>[];
+
+declare const items: (Foo | Bar)[];
+>items : (Foo | Bar)[]
+>      : ^^^^^^^^^^^^^
+
+const r1 = skipIf(items, (item) => item.type === "foo"); // ok
+>r1 : Bar[]
+>   : ^^^^^
+>skipIf(items, (item) => item.type === "foo") : Bar[]
+>                                             : ^^^^^
+>skipIf : <A, B extends A>(as: A[], predicate: (a: A) => a is B) => Exclude<A, B>[]
+>       : ^ ^^ ^^^^^^^^^ ^^  ^^   ^^         ^^                ^^^^^               
+>items : (Foo | Bar)[]
+>      : ^^^^^^^^^^^^^
+>(item) => item.type === "foo" : (item: Foo | Bar) => item is Foo
+>                              : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>item : Foo | Bar
+>     : ^^^^^^^^^
+>item.type === "foo" : boolean
+>                    : ^^^^^^^
+>item.type : "foo" | "bar"
+>          : ^^^^^^^^^^^^^
+>item : Foo | Bar
+>     : ^^^^^^^^^
+>type : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+const r2 = skipIf(items, (item) => item.type === "foo" || item.type === "bar"); // ok
+>r2 : never[]
+>   : ^^^^^^^
+>skipIf(items, (item) => item.type === "foo" || item.type === "bar") : never[]
+>                                                                    : ^^^^^^^
+>skipIf : <A, B extends A>(as: A[], predicate: (a: A) => a is B) => Exclude<A, B>[]
+>       : ^ ^^ ^^^^^^^^^ ^^  ^^   ^^         ^^                ^^^^^               
+>items : (Foo | Bar)[]
+>      : ^^^^^^^^^^^^^
+>(item) => item.type === "foo" || item.type === "bar" : (item: Foo | Bar) => item is Foo | Bar
+>                                                     : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>item : Foo | Bar
+>     : ^^^^^^^^^
+>item.type === "foo" || item.type === "bar" : boolean
+>                                           : ^^^^^^^
+>item.type === "foo" : boolean
+>                    : ^^^^^^^
+>item.type : "foo" | "bar"
+>          : ^^^^^^^^^^^^^
+>item : Foo | Bar
+>     : ^^^^^^^^^
+>type : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>item.type === "bar" : boolean
+>                    : ^^^^^^^
+>item.type : "bar"
+>          : ^^^^^
+>item : Bar
+>     : ^^^
+>type : "bar"
+>     : ^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+const r3 = skipIf(items, (item) => false); // ok
+>r3 : (Foo | Bar)[]
+>   : ^^^^^^^^^^^^^
+>skipIf(items, (item) => false) : (Foo | Bar)[]
+>                               : ^^^^^^^^^^^^^
+>skipIf : <A, B extends A>(as: A[], predicate: (a: A) => a is B) => Exclude<A, B>[]
+>       : ^ ^^ ^^^^^^^^^ ^^  ^^   ^^         ^^                ^^^^^               
+>items : (Foo | Bar)[]
+>      : ^^^^^^^^^^^^^
+>(item) => false : (item: Foo | Bar) => item is never
+>                : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>item : Foo | Bar
+>     : ^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+const r4 = skipIf(items, (item) => true); // ok
+>r4 : never[]
+>   : ^^^^^^^
+>skipIf(items, (item) => true) : never[]
+>                              : ^^^^^^^
+>skipIf : <A, B extends A>(as: A[], predicate: (a: A) => a is B) => Exclude<A, B>[]
+>       : ^ ^^ ^^^^^^^^^ ^^  ^^   ^^         ^^                ^^^^^               
+>items : (Foo | Bar)[]
+>      : ^^^^^^^^^^^^^
+>(item) => true : (item: Foo | Bar) => item is Foo | Bar
+>               : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>item : Foo | Bar
+>     : ^^^^^^^^^
+>true : true
+>     : ^^^^
+
+const pred1: (a: string | null, b: string | null) => b is string = (a, b) => typeof b === 'string'; // ok
+>pred1 : (a: string | null, b: string | null) => b is string
+>      : ^ ^^             ^^ ^^             ^^^^^           
+>a : string | null
+>  : ^^^^^^^^^^^^^
+>b : string | null
+>  : ^^^^^^^^^^^^^
+>(a, b) => typeof b === 'string' : (a: string | null, b: string | null) => b is string
+>                                : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string | null
+>  : ^^^^^^^^^^^^^
+>b : string | null
+>  : ^^^^^^^^^^^^^
+>typeof b === 'string' : boolean
+>                      : ^^^^^^^
+>typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : string | null
+>  : ^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+
+const pred2: (a: string | null, b: string | null) => b is string = (a, b) => typeof a === 'string'; // error
+>pred2 : (a: string | null, b: string | null) => b is string
+>      : ^ ^^             ^^ ^^             ^^^^^           
+>a : string | null
+>  : ^^^^^^^^^^^^^
+>b : string | null
+>  : ^^^^^^^^^^^^^
+>(a, b) => typeof a === 'string' : (a: string | null, b: string | null) => boolean
+>                                : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string | null
+>  : ^^^^^^^^^^^^^
+>b : string | null
+>  : ^^^^^^^^^^^^^
+>typeof a === 'string' : boolean
+>                      : ^^^^^^^
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string | null
+>  : ^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+
+export declare function every<T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[];
+>every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T_1, U_1 extends T_1>(array: readonly T_1[] | undefined, callback: (element: T_1, index: number) => element is U_1): array is readonly U_1[] | undefined; <T_1>(array: readonly T_1[] | undefined, callback: (element: T_1, index: number) => boolean): boolean; }
+>      : ^^^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                                           ^^^                     ^^^^^^^^^^^^^^^^^^^^   ^^     ^^                          ^^        ^^                                               ^^^                                   ^^^^^^^^     ^^                          ^^        ^^                                        ^^^       ^^^
+>array : readonly T[]
+>      : ^^^^^^^^^^^^
+>callback : (element: T, index: number) => element is U
+>         : ^       ^^ ^^     ^^      ^^^^^            
+>element : T
+>        : ^
+>index : number
+>      : ^^^^^^
+
+export declare function every<T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined;
+>every : { <T_1, U_1 extends T_1>(array: readonly T_1[], callback: (element: T_1, index: number) => element is U_1): array is readonly U_1[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T_1>(array: readonly T_1[] | undefined, callback: (element: T_1, index: number) => boolean): boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^^   ^^     ^^              ^^        ^^                                               ^^^                       ^^^ ^^ ^^^^^^^^^ ^^     ^^                        ^^        ^^                                           ^^^                                 ^^^^^^^^     ^^                          ^^        ^^                                        ^^^       ^^^
+>array : readonly T[] | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>callback : (element: T, index: number) => element is U
+>         : ^       ^^ ^^     ^^      ^^^^^            
+>element : T
+>        : ^
+>index : number
+>      : ^^^^^^
+
+export declare function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean;
+>every : { <T_1, U extends T_1>(array: readonly T_1[], callback: (element: T_1, index: number) => element is U): array is readonly U[]; <T_1, U extends T_1>(array: readonly T_1[] | undefined, callback: (element: T_1, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
+>      : ^^^^^^^^ ^^^^^^^^^   ^^     ^^              ^^        ^^                                             ^^^                     ^^^^^^^^ ^^^^^^^^^   ^^     ^^                          ^^        ^^                                             ^^^                                 ^^^ ^^     ^^                        ^^        ^^                                      ^^^       ^^^
+>array : readonly T[] | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>callback : (element: T, index: number) => boolean
+>         : ^       ^^ ^^     ^^      ^^^^^       
+>element : T
+>        : ^
+>index : number
+>      : ^^^^^^
+
+type Type = {
+>Type : Type
+>     : ^^^^
+
+  kind: number;
+>kind : number
+>     : ^^^^^^
+
+  flags: number;
+>flags : number
+>      : ^^^^^^
+
+};
+
+function testEvery(typeSet: Type[]) {
+>testEvery : (typeSet: Type[]) => 1 | 2 | -1
+>          : ^       ^^      ^^^^^^^^^^^^^^^
+>typeSet : Type[]
+>        : ^^^^^^
+
+  if (every(typeSet, (t) => t.kind === 1)) {
+>every(typeSet, (t) => t.kind === 1) : boolean
+>                                    : ^^^^^^^
+>every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
+>      : ^^^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                                           ^^^                     ^^^ ^^ ^^^^^^^^^ ^^     ^^                        ^^        ^^                                           ^^^                                 ^^^ ^^     ^^                        ^^        ^^                                      ^^^       ^^^
+>typeSet : Type[]
+>        : ^^^^^^
+>(t) => t.kind === 1 : (t: Type) => boolean
+>                    : ^ ^^^^^^^^^^^^^^^^^^
+>t : Type
+>  : ^^^^
+>t.kind === 1 : boolean
+>             : ^^^^^^^
+>t.kind : number
+>       : ^^^^^^
+>t : Type
+>  : ^^^^
+>kind : number
+>     : ^^^^^^
+>1 : 1
+>  : ^
+
+    return 1;
+>1 : 1
+>  : ^
+  }
+  if (every(typeSet, (t) => t.kind === 2)) {
+>every(typeSet, (t) => t.kind === 2) : boolean
+>                                    : ^^^^^^^
+>every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
+>      : ^^^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                                           ^^^                     ^^^ ^^ ^^^^^^^^^ ^^     ^^                        ^^        ^^                                           ^^^                                 ^^^ ^^     ^^                        ^^        ^^                                      ^^^       ^^^
+>typeSet : Type[]
+>        : ^^^^^^
+>(t) => t.kind === 2 : (t: Type) => boolean
+>                    : ^ ^^^^^^^^^^^^^^^^^^
+>t : Type
+>  : ^^^^
+>t.kind === 2 : boolean
+>             : ^^^^^^^
+>t.kind : number
+>       : ^^^^^^
+>t : Type
+>  : ^^^^
+>kind : number
+>     : ^^^^^^
+>2 : 2
+>  : ^
+
+    return 2;
+>2 : 2
+>  : ^
+  }
+  return -1;
+>-1 : -1
+>   : ^^
+>1 : 1
+>  : ^
+}
+
