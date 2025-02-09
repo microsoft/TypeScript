@@ -441,7 +441,7 @@ var parseJsonConfigFileTests = []struct {
 		}},
 	},
 	{
-		title:               "parses tsconfig with extends, files and include",
+		title:               "parses tsconfig with extends, files, include and other options",
 		noSubmoduleBaseline: true,
 		input: []testConfig{{
 			jsonText: `{
@@ -462,6 +462,12 @@ var parseJsonConfigFileTests = []struct {
 var tsconfigWithExtends = `{
   "files": ["/src/index.ts", "/src/app.ts"],
   "include": ["/src/**/*"],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    },
+    "transpileOnly": true
+  }
 }`
 
 var tsconfigWithoutConfigDir = `{

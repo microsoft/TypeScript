@@ -25,6 +25,12 @@ Fs::
 {
   "files": ["/src/index.ts", "/src/app.ts"],
   "include": ["/src/**/*"],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    },
+    "transpileOnly": true
+  }
 }
 
 

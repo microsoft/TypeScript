@@ -140,7 +140,7 @@ func parseOwnConfigOfJsonSourceFile(
 		if option != nil && option != extendsOptionDeclaration {
 			value, propertySetErrors = convertTsConfigJsonOption(option, value, basePath, propertyAssignment, propertyAssignment.Initializer, sourceFile)
 		}
-		if parentOption.Name != "undefined" && value != nil {
+		if parentOption != nil && parentOption.Name != "undefined" && value != nil {
 			if option != nil && option.Name != "" {
 				commandLineOptionEnumMapVal := option.EnumMap()
 				if commandLineOptionEnumMapVal != nil {
