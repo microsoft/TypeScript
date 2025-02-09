@@ -44222,8 +44222,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // check private/protected variable access
             const parent = node.parent.parent;
             const parentCheckMode = node.dotDotDotToken ? CheckMode.RestBindingElement : CheckMode.Normal;
-            const parentType = getTypeForBindingElementParent(parent, parentCheckMode);
             const name = node.propertyName || node.name;
+
+            let parentType = getTypeForBindingElementParent(parent, parentCheckMode);
+            if (parentType && !parent.initializer) {
+                parentType = checkNonNullType(parentType, parent);
+            }
+
             if (parentType && !isBindingPattern(name)) {
                 const exprType = getLiteralTypeFromPropertyName(name);
                 if (isTypeUsableAsPropertyName(exprType)) {
@@ -44255,18 +44260,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isInAmbientOrTypeNode(node)) {
                 return;
             }
-            const needCheckInitializer = hasOnlyExpressionInitializer(node) && node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement;
+            const needCheckInitializer = node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement;
             const needCheckWidenedType = !some(node.name.elements, not(isOmittedExpression));
             if (needCheckInitializer || needCheckWidenedType) {
                 // Don't validate for-in initializer as it is already an error
                 const widenedType = getWidenedTypeForVariableLikeDeclaration(node);
                 if (needCheckInitializer) {
-                    const initializerType = checkExpressionCached(node.initializer);
                     if (strictNullChecks && needCheckWidenedType) {
-                        checkNonNullNonVoidType(initializerType, node);
+                        checkNonNullNonVoidType(checkExpressionCached(node.initializer), node);
                     }
                     else {
-                        checkTypeAssignableToAndOptionallyElaborate(initializerType, getWidenedTypeForVariableLikeDeclaration(node), node, node.initializer);
+                        checkTypeAssignableToAndOptionallyElaborate(checkNonNullExpression(node.initializer), getWidenedTypeForVariableLikeDeclaration(node), node, node.initializer);
                     }
                 }
                 // check the binding pattern with empty elements

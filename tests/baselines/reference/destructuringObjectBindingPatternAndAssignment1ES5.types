@@ -87,6 +87,7 @@ var {b5: { b52 }  } = { b5: { b52 } };
 >{ b52 } : { b52: any; }
 >        : ^^^^^^^^^^^^^
 >b52 : any
+>    : ^^^
 
 // V is an object assignment pattern and, for each assignment property P in V,
 //      P specifies a numeric property name and S has a numeric index signature
