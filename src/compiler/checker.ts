@@ -13175,9 +13175,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             symbol.declarations.push(member);
         }
         if (symbolFlags & SymbolFlags.Value) {
-            if (!symbol.valueDeclaration || symbol.valueDeclaration.kind !== member.kind) {
-                symbol.valueDeclaration = member;
-            }
+            setValueDeclaration(symbol, member);
         }
     }
 
