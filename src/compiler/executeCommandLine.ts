@@ -1174,6 +1174,11 @@ function reportStatistics(sys: System, program: Program, solutionPerformance: So
         if (memoryUsed >= 0) {
             reportStatisticalValue({ name: "Memory used", value: memoryUsed, type: StatisticType.memory }, /*aggregate*/ true);
         }
+        const caches = program.getRelationCacheSizes();
+        reportCountStatistic("Assignability cache size", caches.assignable);
+        reportCountStatistic("Identity cache size", caches.identity);
+        reportCountStatistic("Subtype cache size", caches.subtype);
+        reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
 
         const isPerformanceEnabled = performance.isEnabled();
         const programTime = isPerformanceEnabled ? performance.getDuration("Program") : 0;
@@ -1181,11 +1186,6 @@ function reportStatistics(sys: System, program: Program, solutionPerformance: So
         const checkTime = isPerformanceEnabled ? performance.getDuration("Check") : 0;
         const emitTime = isPerformanceEnabled ? performance.getDuration("Emit") : 0;
         if (compilerOptions.extendedDiagnostics) {
-            const caches = program.getRelationCacheSizes();
-            reportCountStatistic("Assignability cache size", caches.assignable);
-            reportCountStatistic("Identity cache size", caches.identity);
-            reportCountStatistic("Subtype cache size", caches.subtype);
-            reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
             if (isPerformanceEnabled) {
                 performance.forEachMeasure((name, duration) => {
                     if (!isSolutionMarkOrMeasure(name)) reportTimeStatistic(`${name} time`, duration, /*aggregate*/ true);
