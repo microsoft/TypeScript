@@ -256,7 +256,7 @@ export function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diag
         else {
             if (!forEachEntry(opt.type, v => v === value)) {
                 // Supplied value isn't a valid enum value.
-                diagnostics.push(createCompilerDiagnosticForInvalidCustomType(opt));
+                diagnostics.push(createCompilerDiagnosticForInvalidCustomType(opt, value));
             }
         }
     }
