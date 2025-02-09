@@ -33606,13 +33606,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function isKnownProperty(targetType: Type, name: __String, isComparingJsxAttributes: boolean): boolean {
         if (targetType.flags & TypeFlags.Object) {
-            // For backwards compatibility a symbol-named property is satisfied by a string index signature. This
-            // is incorrect and inconsistent with element access expressions, where it is an error, so eventually
-            // we should remove this exception.
             if (
                 getPropertyOfObjectType(targetType, name) ||
                 getApplicableIndexInfoForName(targetType, name) ||
-                isLateBoundName(name) && getIndexInfoOfType(targetType, stringType) ||
                 isComparingJsxAttributes && isHyphenatedJsxName(name)
             ) {
                 // For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
