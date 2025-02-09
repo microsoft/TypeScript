@@ -31260,7 +31260,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getContextualTypeForStaticPropertyDeclaration(declaration: PropertyDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
         const parentType = isExpression(declaration.parent) && getContextualType(declaration.parent, contextFlags);
-        if (!parentType) return undefined;
+        if (!parentType || getSymbolOfDeclaration(declaration.parent) === parentType.symbol) return undefined;
         return getTypeOfPropertyOfContextualType(parentType, getSymbolOfDeclaration(declaration).escapedName);
     }
 
