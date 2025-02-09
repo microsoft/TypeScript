@@ -5161,6 +5161,7 @@ namespace Parser {
 
     function nextTokenIsIdentifierOnSameLine() {
         nextToken();
+
         return !scanner.hasPrecedingLineBreak() && isIdentifier();
     }
 
@@ -7189,8 +7190,19 @@ namespace Parser {
                 //
                 // could be legal, it would add complexity for very little gain.
                 case SyntaxKind.InterfaceKeyword:
-                case SyntaxKind.TypeKeyword:
                     return nextTokenIsIdentifierOnSameLine();
+                case SyntaxKind.TypeKeyword:
+                    const isIdentifierOnSameLine = nextTokenIsIdentifierOnSameLine();
+                    if (isIdentifierOnSameLine && token() === SyntaxKind.AsKeyword || token() === SyntaxKind.SatisfiesKeyword) {
+                        return lookAhead(() => {
+                            nextToken();
+                            parseTypeParameters();
+
+                            return token() === SyntaxKind.EqualsToken;
+                        });
+                    }
+
+                    return isIdentifierOnSameLine;
                 case SyntaxKind.ModuleKeyword:
                 case SyntaxKind.NamespaceKeyword:
                     return nextTokenIsIdentifierOrStringLiteralOnSameLine();
