@@ -31974,8 +31974,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // If the given contextual type contains instantiable types and if a mapper representing
     // return type inferences is available, instantiate those types using that mapper.
     function instantiateContextualType(contextualType: Type | undefined, node: Node, contextFlags: ContextFlags | undefined): Type | undefined {
-        if (contextualType && maybeTypeOfKind(contextualType, TypeFlags.Instantiable)) {
-            const inferenceContext = getInferenceContext(node);
+        if (!contextualType) {
+            return;
+        }
+        let inferenceContext: InferenceContext | undefined;
+        if (maybeTypeOfKind(contextualType, TypeFlags.Instantiable)) {
+            inferenceContext = getInferenceContext(node);
             // If no inferences have been made, and none of the type parameters for which we are inferring
             // specify default types, nothing is gained from instantiating as type parameters would just be
             // replaced with their constraints similar to the apparent type.
@@ -31986,16 +31990,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (inferenceContext?.returnMapper) {
                 // For other purposes (e.g. determining whether to produce literal types) we only
-                // incorporate inferences made from the return type in a function call. We remove
-                // the 'boolean' type from the contextual type such that contextually typed boolean
-                // literals actually end up widening to 'boolean' (see #48363).
-                const type = instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper);
-                return type.flags & TypeFlags.Union && containsType((type as UnionType).types, regularFalseType) && containsType((type as UnionType).types, regularTrueType) ?
-                    filterType(type, t => t !== regularFalseType && t !== regularTrueType) :
-                    type;
+                // incorporate inferences made from the return type in a function call.
+                contextualType = instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper);
             }
         }
-        return contextualType;
+
+        // We remove the 'boolean' type from the contextual type from return types such that contextually typed boolean
+        // literals actually end up widening to 'boolean' (see #48363).
+        return contextualType.flags & TypeFlags.Union && (inferenceContext ??= getInferenceContext(node))?.returnMapper && containsType((contextualType as UnionType).types, regularFalseType) && containsType((contextualType as UnionType).types, regularTrueType) ?
+            filterType(contextualType, t => t !== regularFalseType && t !== regularTrueType) :
+            contextualType;
     }
 
     // This function is similar to instantiateType, except that (a) it only instantiates types that
