@@ -13746,6 +13746,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (shorter === right) {
                 shorterParamType = instantiateType(shorterParamType, mapper);
             }
+            if (tryGetTypeAtPosition(shorter, i)) {
+                // Remove one any type from union params, if both params exists
+                if (longestParamType.flags & TypeFlags.Any) {
+                    longestParamType = unknownType;
+                }
+                else if (shorterParamType.flags & TypeFlags.Any) {
+                    shorterParamType = unknownType;
+                }
+            }
             const unionParamType = getIntersectionType([longestParamType, shorterParamType]);
             const isRestParam = eitherHasEffectiveRest && !needsExtraRestElement && i === (longestCount - 1);
             const isOptional = i >= getMinArgumentCount(longest) && i >= getMinArgumentCount(shorter);

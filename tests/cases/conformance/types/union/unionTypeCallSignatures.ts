@@ -72,3 +72,23 @@ strOrNum = unionWithRestParameter3(); // error no call signature
 var unionWithRestParameter4: { (...a: string[]): string; } | { (a: string, b: string): number; };
 strOrNum = unionWithRestParameter4("hello"); // error supplied parameters do not match any call signature
 strOrNum = unionWithRestParameter4("hello", "world");
+
+var unionWithAnyParameter1: { (a: string): void; } | { (a: any): void; };
+unionWithAnyParameter1('hello');
+unionWithAnyParameter1({}); // wrong argument type
+
+var unionWithAnyParameter2: { (a: string, b: any): void; } | { (a: any, b: number): void; };
+unionWithAnyParameter2('hello', 10);
+unionWithAnyParameter2(10, 'hello'); // error wrong arguments types
+unionWithAnyParameter2('hello', 'hello'); // error wrong argument type
+unionWithAnyParameter2(10, 10); // error wrong argument type
+
+var unionWithAnyParameter3: { (a: string | number, b: any): void; } | { (...a: string[]): void; };
+unionWithAnyParameter3('hello', 'hello');
+unionWithAnyParameter3('hello', 'hello', 'hello');
+unionWithAnyParameter3(10, 'hello'); // error wrong argument type
+unionWithAnyParameter3('hello', 10); // error wrong argument type
+
+var unionWithAnyParameter4: { (a: string, b: any): void; } | { (a: any): void; };
+unionWithAnyParameter4('hello', {}); 
+unionWithAnyParameter4({}, {}); // error wrong argument type 
