@@ -1367,6 +1367,12 @@ const enum MappedTypeModifiers {
     ExcludeOptional = 1 << 3,
 }
 
+const enum MappedTypeModifierChange {
+    Stripped = -1,
+    Unchanged = 0,
+    Added = 1,
+}
+
 const enum MappedTypeNameTypeKind {
     None,
     Filtering,
@@ -14300,25 +14306,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (declaration.questionToken ? declaration.questionToken.kind === SyntaxKind.MinusToken ? MappedTypeModifiers.ExcludeOptional : MappedTypeModifiers.IncludeOptional : 0);
     }
 
-    // Return -1, 0, or 1, where -1 means optionality is stripped (i.e. -?), 0 means optionality is unchanged, and 1 means
-    // optionality is added (i.e. +?).
-    function getMappedTypeOptionality(type: MappedType): number {
+    function getMappedTypeOptionality(type: MappedType): MappedTypeModifierChange {
         const modifiers = getMappedTypeModifiers(type);
-        return modifiers & MappedTypeModifiers.ExcludeOptional ? -1 : modifiers & MappedTypeModifiers.IncludeOptional ? 1 : 0;
+        return modifiers & MappedTypeModifiers.ExcludeOptional ? MappedTypeModifierChange.Stripped : modifiers & MappedTypeModifiers.IncludeOptional ? MappedTypeModifierChange.Added : MappedTypeModifierChange.Unchanged;
     }
 
-    // Return -1, 0, or 1, for stripped, unchanged, or added optionality respectively. When a homomorphic mapped type doesn't
-    // modify optionality, recursively consult the optionality of the type being mapped over to see if it strips or adds optionality.
-    // For intersections, return -1 or 1 when all constituents strip or add optionality, otherwise return 0.
-    function getCombinedMappedTypeOptionality(type: Type): number {
+    function getMappedTypeReadonlyness(type: MappedType): MappedTypeModifierChange {
+        const modifiers = getMappedTypeModifiers(type);
+        return modifiers & MappedTypeModifiers.ExcludeReadonly ? MappedTypeModifierChange.Stripped : modifiers & MappedTypeModifiers.IncludeReadonly ? MappedTypeModifierChange.Added : MappedTypeModifierChange.Unchanged;
+    }
+
+    // Return -1, 0, or 1, for stripped, unchanged, or added modifier kind respectively. When a homomorphic mapped type doesn't
+    // modify a modifier, recursively consult the modifier change of the type being mapped over to see if it strips or adds it.
+    // For intersections, return -1 or 1 when all constituents strip or add a specific modifier, otherwise return 0.
+    function getCombinedMappedTypeModifierChange(type: Type, getMappedTypeModifierChange: (type: MappedType) => MappedTypeModifierChange): MappedTypeModifierChange {
         if (getObjectFlags(type) & ObjectFlags.Mapped) {
-            return getMappedTypeOptionality(type as MappedType) || getCombinedMappedTypeOptionality(getModifiersTypeFromMappedType(type as MappedType));
+            return getMappedTypeModifierChange(type as MappedType) || getCombinedMappedTypeModifierChange(getModifiersTypeFromMappedType(type as MappedType), getMappedTypeModifierChange);
         }
         if (type.flags & TypeFlags.Intersection) {
-            const optionality = getCombinedMappedTypeOptionality((type as IntersectionType).types[0]);
-            return every((type as IntersectionType).types, (t, i) => i === 0 || getCombinedMappedTypeOptionality(t) === optionality) ? optionality : 0;
+            const modifierChange = getCombinedMappedTypeModifierChange((type as IntersectionType).types[0], getMappedTypeModifierChange);
+            return every((type as IntersectionType).types, (t, i) => i === 0 || getCombinedMappedTypeModifierChange(t, getMappedTypeModifierChange) === modifierChange) ? modifierChange : MappedTypeModifierChange.Unchanged;
         }
-        return 0;
+        return MappedTypeModifierChange.Unchanged;
+    }
+
+    function getCombinedMappedTypeOptionality(type: Type): MappedTypeModifierChange {
+        return getCombinedMappedTypeModifierChange(type, getMappedTypeOptionality);
+    }
+
+    function getCombinedMappedTypeReadonlyness(type: Type): MappedTypeModifierChange {
+        return getCombinedMappedTypeModifierChange(type, getMappedTypeReadonlyness);
     }
 
     function isPartialMappedType(type: Type) {
@@ -18217,6 +18234,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const nameType = getNameTypeFromMappedType(type.target as MappedType || type);
         if (!nameType && !(indexFlags & IndexFlags.NoIndexSignatures)) {
             // no mapping and no filtering required, just quickly bail to returning the constraint in the common case
+            // andarist
             return constraintType;
         }
         const keyTypes: Type[] = [];
@@ -18325,7 +18343,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function shouldDeferIndexType(type: Type, indexFlags = IndexFlags.None) {
         return !!(type.flags & TypeFlags.InstantiableNonPrimitive ||
             isGenericTupleType(type) ||
-            isGenericMappedType(type) && (!hasDistributiveNameType(type) || getMappedTypeNameTypeKind(type) === MappedTypeNameTypeKind.Remapping) ||
+            isGenericMappedType(type) && (getHomomorphicTypeVariable(type.target as MappedType ?? type) && !getNameTypeFromMappedType(type) && getCombinedMappedTypeReadonlyness(type) || (!hasDistributiveNameType(type) || getMappedTypeNameTypeKind(type) === MappedTypeNameTypeKind.Remapping)) ||
             type.flags & TypeFlags.Union && !(indexFlags & IndexFlags.NoReducibleCheck) && isGenericReducibleType(type) ||
             type.flags & TypeFlags.Intersection && maybeTypeOfKind(type, TypeFlags.Instantiable) && some((type as IntersectionType).types, isEmptyAnonymousObjectType));
     }
