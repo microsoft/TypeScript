@@ -1,0 +1,12 @@
+breakTarget7.ts(2,5): error TS18058: Label 'target' used before declaration.
+
+
+==== breakTarget7.ts (1 errors) ====
+    function functionContainingBreak() {
+        break target;
+        ~~~~~~~~~~~~~
+!!! error TS18058: Label 'target' used before declaration.
+!!! related TS18059 breakTarget7.ts:3:5: Label defined here
+        target:;
+    }
+    
