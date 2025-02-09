@@ -7144,6 +7144,10 @@ declare namespace ts {
         ReactJSX = 4,
         ReactJSXDev = 5,
     }
+    enum InitEmit {
+        Default = 0,
+        Clean = 1,
+    }
     /** @deprecated */
     enum ImportsNotUsedAsValues {
         Remove = 0,

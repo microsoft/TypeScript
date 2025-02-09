@@ -67,6 +67,7 @@ import {
     hasExtension,
     hasProperty,
     ImportsNotUsedAsValues,
+    InitEmit,
     isArray,
     isArrayLiteralExpression,
     isComputedNonLiteralName,
@@ -136,6 +137,11 @@ const jsxOptionMap = new Map(Object.entries({
     "react": JsxEmit.React,
     "react-jsx": JsxEmit.ReactJSX,
     "react-jsxdev": JsxEmit.ReactJSXDev,
+}));
+
+const initOptionMap = new Map(Object.entries({
+    default: InitEmit.Default,
+    clean: InitEmit.Clean,
 }));
 
 /** @internal */
@@ -637,11 +643,11 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
     {
         name: "init",
-        type: "boolean",
+        type: initOptionMap,
         showInSimplifiedHelpView: true,
         category: Diagnostics.Command_line_Options,
-        description: Diagnostics.Initializes_a_TypeScript_project_and_creates_a_tsconfig_json_file,
-        defaultValueDescription: false,
+        description: Diagnostics.Initializes_a_TypeScript_project_and_creates_a_tsconfig_json_file_Use_init_clean_to_skip_comments,
+        defaultValueDescription: undefined,
     },
     {
         name: "project",
@@ -2031,7 +2037,7 @@ function parseOptionValue(
     }
     else {
         // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
-        if (!args[i] && opt.type !== "boolean") {
+        if (!args[i] && opt.type !== "boolean" && opt.type !== initOptionMap) {
             errors.push(createCompilerDiagnostic(diagnostics.optionTypeMismatchDiagnostic, opt.name, getCompilerOptionValueTypeString(opt)));
         }
 
@@ -2063,6 +2069,11 @@ function parseOptionValue(
                     break;
                 case "listOrElement":
                     Debug.fail("listOrElement not supported here");
+                    break;
+                case initOptionMap:
+                    const initArg = args[i] ? args[i] : "default";
+                    options[opt.name] = parseCustomTypeOption(opt, initArg, errors);
+                    i++;
                     break;
                 // If not a primitive, the possible types are specified in what is effectively a map of options.
                 default:
@@ -2839,6 +2850,7 @@ function getSerializedCompilerOption(options: CompilerOptions): Map<string, Comp
  */
 export function generateTSConfig(options: CompilerOptions, fileNames: readonly string[], newLine: string): string {
     const compilerOptionsMap = getSerializedCompilerOption(options);
+    const isClean = options.init === InitEmit.Clean;
     return writeConfigurations();
 
     function makePadding(paddingLength: number): string {
@@ -2876,21 +2888,25 @@ export function generateTSConfig(options: CompilerOptions, fileNames: readonly s
         let seenKnownKeys = 0;
         const entries: { value: string; description?: string; }[] = [];
         categorizedOptions.forEach((options, category) => {
-            if (entries.length !== 0) {
+            if (entries.length !== 0 && !isClean) {
                 entries.push({ value: "" });
             }
-            entries.push({ value: `/* ${getLocaleSpecificMessage(category)} */` });
+            // Header comments
+            if (!isClean) {
+                entries.push({ value: `/* ${getLocaleSpecificMessage(category)} */` });
+            }
             for (const option of options) {
                 let optionName;
                 if (compilerOptionsMap.has(option.name)) {
                     optionName = `"${option.name}": ${JSON.stringify(compilerOptionsMap.get(option.name))}${(seenKnownKeys += 1) === compilerOptionsMap.size ? "" : ","}`;
                 }
                 else {
+                    if (isClean) continue;
                     optionName = `// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))},`;
                 }
                 entries.push({
                     value: optionName,
-                    description: `/* ${option.description && getLocaleSpecificMessage(option.description) || option.name} */`,
+                    description: isClean ? `/* ${option.description && getLocaleSpecificMessage(option.description) || option.name} */` : "",
                 });
                 marginLength = Math.max(optionName.length, marginLength);
             }
