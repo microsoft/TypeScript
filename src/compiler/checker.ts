@@ -33633,7 +33633,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isExcessPropertyCheckTarget(type: Type): boolean {
-        return !!(type.flags & TypeFlags.Object && !(getObjectFlags(type) & ObjectFlags.ObjectLiteralPatternWithComputedProperties) ||
+        return !!(type.flags & TypeFlags.Object && !(getObjectFlags(type) & ObjectFlags.ObjectLiteralPatternWithComputedProperties) && !isGenericMappedType(type) ||
             type.flags & TypeFlags.NonPrimitive ||
             type.flags & TypeFlags.Substitution && isExcessPropertyCheckTarget((type as SubstitutionType).baseType) ||
             type.flags & TypeFlags.Union && some((type as UnionType).types, isExcessPropertyCheckTarget) ||
