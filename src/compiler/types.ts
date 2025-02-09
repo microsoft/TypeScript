@@ -16,6 +16,7 @@ import {
     ProgramDiagnostics,
     SymlinkCache,
     ThisContainer,
+    TypeRootsCacheKeyOrSpecifiedTypeRoots,
 } from "./_namespaces/ts.js";
 
 // branded string type used to store absolute, normalized and canonicalized paths
@@ -4732,6 +4733,8 @@ export interface Program extends ScriptReferenceHost {
         callback: (resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
         file?: SourceFile,
     ): void;
+    /** @internal */
+    getTypeRootsCacheKeys(): Map<Path | undefined, TypeRootsCacheKeyOrSpecifiedTypeRoots> | undefined;
 
     /**
      * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
@@ -4915,6 +4918,7 @@ export interface Program extends ScriptReferenceHost {
     getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
     /** @internal */ forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
     /** @internal */ getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined;
+    /** @internal */ getRedirectReferenceForResolution(file: SourceFile): ResolvedProjectReference | undefined;
     /** @internal */ getRedirectReferenceForResolutionFromSourceOfProject(filePath: Path): ResolvedProjectReference | undefined;
     /** @internal */ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     /** @internal */ getCompilerOptionsForFile(file: SourceFile): CompilerOptions;
@@ -7922,6 +7926,8 @@ export interface ModuleResolutionHost {
     getDirectories?(path: string): string[];
     useCaseSensitiveFileNames?: boolean | (() => boolean) | undefined;
     /** @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
+    /** @internal */ getTypeRootsCacheKey?(options: CompilerOptions, redirect: ResolvedProjectReference | undefined): TypeRootsCacheKeyOrSpecifiedTypeRoots;
+    /** @internal */ getEffectiveTypeRoots?(options: CompilerOptions, redirect: ResolvedProjectReference | undefined): readonly string[] | undefined;
 }
 
 /**
@@ -8007,6 +8013,25 @@ export const enum Extension {
     Dcts = ".d.cts",
 }
 
+/** @internal */
+export interface GlobalCacheResolutionResult {
+    primary: ResolvedModuleWithFailedLookupLocations;
+    globalResolution?: ResolvedModuleWithFailedLookupLocations;
+    globalResult?: ResolvedModuleWithFailedLookupLocations;
+}
+
+/** @internal */
+export interface GlobalCacheResolutionResultDisabled extends GlobalCacheResolutionResult {
+    primary: ResolvedModuleWithFailedLookupLocations;
+}
+
+/** @internal */
+export interface GlobalCacheResolutionResultEnabled extends GlobalCacheResolutionResult {
+    primary: ResolvedModuleWithFailedLookupLocations;
+    globalResolution: ResolvedModuleWithFailedLookupLocations;
+    globalResult: ResolvedModuleWithFailedLookupLocations;
+}
+
 export interface ResolvedModuleWithFailedLookupLocations {
     readonly resolvedModule: ResolvedModuleFull | undefined;
     /** @internal */
@@ -8021,7 +8046,19 @@ export interface ResolvedModuleWithFailedLookupLocations {
      * have been resolvable under different module resolution settings.
      */
     alternateResult?: string;
+    /** @internal */
+    globalCacheResolution?: GlobalCacheResolutionResult;
 }
+
+/** @internal */
+export type ResolvedModuleWithFailedLookupLocationsGlobalCachePass = ResolvedModuleWithFailedLookupLocations & {
+    globalCacheResolution: GlobalCacheResolutionResultEnabled;
+};
+
+/** @internal */
+export type ResolvedModuleWithFailedLookupLocationsGlobalCachePassDisabled = ResolvedModuleWithFailedLookupLocations & {
+    globalCacheResolution: GlobalCacheResolutionResultDisabled;
+};
 
 export interface ResolvedTypeReferenceDirective {
     // True if the type declaration file was found in a primary lookup location
@@ -8132,6 +8169,26 @@ export interface CompilerHost extends ModuleResolutionHost {
     /** @internal */ getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
 
     jsDocParsingMode?: JSDocParsingMode;
+}
+
+/** @internal */
+export interface CompilerHostSupportingResolutionCache {
+    onReusedModuleResolutions?(
+        reusedNames: readonly StringLiteralLike[] | undefined,
+        containingSourceFile: SourceFile,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+    ): void;
+    onReusedTypeReferenceDirectiveResolutions?<T extends FileReference | string>(
+        reusedNames: readonly T[] | undefined,
+        containingSourceFile: SourceFile | undefined,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+    ): void;
+    onSourceFileNotCreated?(sourceFileOptions: CreateSourceFileOptions): void;
+}
+/** @internal */
+export interface CompilerHost extends CompilerHostSupportingResolutionCache {
 }
 
 /** true if --out otherwise source file name *
