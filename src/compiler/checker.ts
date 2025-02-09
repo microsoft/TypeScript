@@ -587,6 +587,7 @@ import {
     isImportDeclaration,
     isImportEqualsDeclaration,
     isImportKeyword,
+    isImportMeta,
     isImportOrExportSpecifier,
     isImportSpecifier,
     isImportTypeNode,
@@ -41145,9 +41146,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.JsxAttributes:
                 return checkJsxAttributes(node as JsxAttributes, checkMode);
             case SyntaxKind.JsxOpeningElement:
-                Debug.fail("Shouldn't ever directly check a JsxOpeningElement");
+                return Debug.fail("Shouldn't ever directly check a JsxOpeningElement");
+            case SyntaxKind.ImportKeyword:
+                return isImportCall(node.parent) || isImportMeta(node.parent) ? anyType : errorType; // LHS of ImportCall or ImportMeta or invalid expression TODO: Should this have a better type?
+            case SyntaxKind.JsxNamespacedName:
+                return errorType; // FIXME: Remove when JsxNamespacedName is no longer used as an expression
+            case SyntaxKind.MissingDeclaration:
+                return errorType; // invalid decorated expression
+            default:
+                return Debug.failBadSyntaxKind(node, "Unhandled expression node kind in checkExpressionWorker");
         }
-        return errorType;
     }
 
     // DECLARATION AND STATEMENT TYPE CHECKING
