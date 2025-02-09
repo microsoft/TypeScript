@@ -338,3 +338,26 @@ jobs:
         with:
           name: fix_baselines.patch
           path: fix_baselines.patch
+
+  diagnostics:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4.0.1
+        with:
+          node-version: '*'
+          check-latest: true
+      - run: npm ci
+
+      - name: Generate diagnostics
+        run: |
+          npx hereby generate-diagnostics
+          git add .
+
+      - name: Check for changes
+        run: |
+          if ! git diff --staged --exit-code --quiet; then
+            echo "The following files differed and need to be committed:"
+            git diff --staged --name-only
+          fi
