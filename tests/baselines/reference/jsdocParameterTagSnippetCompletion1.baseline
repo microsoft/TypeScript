@@ -21,6 +21,7 @@
 // | copyright
 // | default
 // | deprecated
+// | experimental
 // | description
 // | emits
 // | enum
@@ -118,6 +119,7 @@
 // | @copyright
 // | @default
 // | @deprecated
+// | @experimental
 // | @description
 // | @emits
 // | @enum
@@ -212,6 +214,7 @@
 // | copyright
 // | default
 // | deprecated
+// | experimental
 // | description
 // | emits
 // | enum
@@ -311,6 +314,7 @@
 // | copyright
 // | default
 // | deprecated
+// | experimental
 // | description
 // | emits
 // | enum
@@ -412,6 +416,7 @@
 // | copyright
 // | default
 // | deprecated
+// | experimental
 // | description
 // | emits
 // | enum
@@ -508,6 +513,7 @@
 // | copyright
 // | default
 // | deprecated
+// | experimental
 // | description
 // | emits
 // | enum
@@ -605,6 +611,7 @@
 // | copyright
 // | default
 // | deprecated
+// | experimental
 // | description
 // | emits
 // | enum
@@ -702,6 +709,7 @@
 // | copyright
 // | default
 // | deprecated
+// | experimental
 // | description
 // | emits
 // | enum
@@ -798,6 +806,7 @@
 // | copyright
 // | default
 // | deprecated
+// | experimental
 // | description
 // | emits
 // | enum
@@ -895,6 +904,7 @@
 // | copyright
 // | default
 // | deprecated
+// | experimental
 // | description
 // | emits
 // | enum
@@ -989,6 +999,7 @@
 // | copyright
 // | default
 // | deprecated
+// | experimental
 // | description
 // | emits
 // | enum
@@ -1084,6 +1095,7 @@
 // | copyright
 // | default
 // | deprecated
+// | experimental
 // | description
 // | emits
 // | enum
@@ -1179,6 +1191,7 @@
 // | copyright
 // | default
 // | deprecated
+// | experimental
 // | description
 // | emits
 // | enum
@@ -1273,6 +1286,7 @@
 // | copyright
 // | default
 // | deprecated
+// | experimental
 // | description
 // | emits
 // | enum
@@ -1369,6 +1383,7 @@
 // | @copyright
 // | @default
 // | @deprecated
+// | @experimental
 // | @description
 // | @emits
 // | @enum
@@ -1463,6 +1478,7 @@
 // | copyright
 // | default
 // | deprecated
+// | experimental
 // | description
 // | emits
 // | enum
@@ -1559,6 +1575,7 @@
 // | copyright
 // | default
 // | deprecated
+// | experimental
 // | description
 // | emits
 // | enum
@@ -1861,6 +1878,19 @@
           "displayParts": [
             {
               "text": "deprecated",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "experimental",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "experimental",
               "kind": "text"
             }
           ],
@@ -3004,6 +3034,19 @@
           "documentation": []
         },
         {
+          "name": "experimental",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "experimental",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "description",
           "kind": "",
           "kindModifiers": "",
@@ -4141,6 +4184,19 @@
           "documentation": []
         },
         {
+          "name": "@experimental",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "@experimental",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "@description",
           "kind": "",
           "kindModifiers": "",
@@ -5259,6 +5315,19 @@
           "displayParts": [
             {
               "text": "deprecated",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "experimental",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "experimental",
               "kind": "text"
             }
           ],
@@ -6389,6 +6458,19 @@
           "documentation": []
         },
         {
+          "name": "experimental",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "experimental",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "description",
           "kind": "",
           "kindModifiers": "",
@@ -7507,6 +7589,19 @@
           "displayParts": [
             {
               "text": "deprecated",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "experimental",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "experimental",
               "kind": "text"
             }
           ],
@@ -8650,6 +8745,19 @@
           "documentation": []
         },
         {
+          "name": "@experimental",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "@experimental",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "@description",
           "kind": "",
           "kindModifiers": "",
@@ -9768,6 +9876,19 @@
           "displayParts": [
             {
               "text": "deprecated",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "experimental",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "experimental",
               "kind": "text"
             }
           ],
@@ -10898,6 +11019,19 @@
           "documentation": []
         },
         {
+          "name": "experimental",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "experimental",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "description",
           "kind": "",
           "kindModifiers": "",
@@ -12016,6 +12150,19 @@
           "displayParts": [
             {
               "text": "deprecated",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "experimental",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "experimental",
               "kind": "text"
             }
           ],
@@ -13146,6 +13293,19 @@
           "documentation": []
         },
         {
+          "name": "experimental",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "experimental",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "description",
           "kind": "",
           "kindModifiers": "",
@@ -14264,6 +14424,19 @@
           "displayParts": [
             {
               "text": "deprecated",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "experimental",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "experimental",
               "kind": "text"
             }
           ],
@@ -15394,6 +15567,19 @@
           "documentation": []
         },
         {
+          "name": "experimental",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "experimental",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "description",
           "kind": "",
           "kindModifiers": "",
@@ -16512,6 +16698,19 @@
           "displayParts": [
             {
               "text": "deprecated",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "experimental",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "experimental",
               "kind": "text"
             }
           ],
@@ -17655,6 +17854,19 @@
           "documentation": []
         },
         {
+          "name": "experimental",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "experimental",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "description",
           "kind": "",
           "kindModifiers": "",
@@ -18779,6 +18991,19 @@
           "documentation": []
         },
         {
+          "name": "experimental",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "experimental",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "description",
           "kind": "",
           "kindModifiers": "",
@@ -19897,6 +20122,19 @@
           "displayParts": [
             {
               "text": "deprecated",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "experimental",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "experimental",
               "kind": "text"
             }
           ],

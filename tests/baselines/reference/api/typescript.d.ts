@@ -440,6 +440,7 @@ declare namespace ts {
                 /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
                 reportsUnnecessary?: {};
                 reportsDeprecated?: {};
+                reportsExperimental?: {};
                 relatedInformation?: DiagnosticRelatedInformation[];
             }
             /**
@@ -1975,6 +1976,7 @@ declare namespace ts {
                 category: string;
                 reportsUnnecessary?: {};
                 reportsDeprecated?: {};
+                reportsExperimental?: {};
                 /**
                  * Any related spans the diagnostic may have, such as other locations relevant to an error, such as declarartion sites
                  */
@@ -4000,33 +4002,34 @@ declare namespace ts {
         JSDocImplementsTag = 329,
         JSDocAuthorTag = 330,
         JSDocDeprecatedTag = 331,
-        JSDocClassTag = 332,
-        JSDocPublicTag = 333,
-        JSDocPrivateTag = 334,
-        JSDocProtectedTag = 335,
-        JSDocReadonlyTag = 336,
-        JSDocOverrideTag = 337,
-        JSDocCallbackTag = 338,
-        JSDocOverloadTag = 339,
-        JSDocEnumTag = 340,
-        JSDocParameterTag = 341,
-        JSDocReturnTag = 342,
-        JSDocThisTag = 343,
-        JSDocTypeTag = 344,
-        JSDocTemplateTag = 345,
-        JSDocTypedefTag = 346,
-        JSDocSeeTag = 347,
-        JSDocPropertyTag = 348,
-        JSDocThrowsTag = 349,
-        JSDocSatisfiesTag = 350,
-        JSDocImportTag = 351,
-        SyntaxList = 352,
-        NotEmittedStatement = 353,
-        NotEmittedTypeElement = 354,
-        PartiallyEmittedExpression = 355,
-        CommaListExpression = 356,
-        SyntheticReferenceExpression = 357,
-        Count = 358,
+        JSDocExperimentalTag = 332,
+        JSDocClassTag = 333,
+        JSDocPublicTag = 334,
+        JSDocPrivateTag = 335,
+        JSDocProtectedTag = 336,
+        JSDocReadonlyTag = 337,
+        JSDocOverrideTag = 338,
+        JSDocCallbackTag = 339,
+        JSDocOverloadTag = 340,
+        JSDocEnumTag = 341,
+        JSDocParameterTag = 342,
+        JSDocReturnTag = 343,
+        JSDocThisTag = 344,
+        JSDocTypeTag = 345,
+        JSDocTemplateTag = 346,
+        JSDocTypedefTag = 347,
+        JSDocSeeTag = 348,
+        JSDocPropertyTag = 349,
+        JSDocThrowsTag = 350,
+        JSDocSatisfiesTag = 351,
+        JSDocImportTag = 352,
+        SyntaxList = 353,
+        NotEmittedStatement = 354,
+        NotEmittedTypeElement = 355,
+        PartiallyEmittedExpression = 356,
+        CommaListExpression = 357,
+        SyntheticReferenceExpression = 358,
+        Count = 359,
         FirstAssignment = 64,
         LastAssignment = 79,
         FirstCompoundAssignment = 65,
@@ -4055,9 +4058,9 @@ declare namespace ts {
         LastStatement = 259,
         FirstNode = 166,
         FirstJSDocNode = 309,
-        LastJSDocNode = 351,
+        LastJSDocNode = 352,
         FirstJSDocTagNode = 327,
-        LastJSDocTagNode = 351,
+        LastJSDocTagNode = 352,
     }
     type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -4266,6 +4269,7 @@ declare namespace ts {
         Out = 16384,
         Decorator = 32768,
         Deprecated = 65536,
+        Experimental = 131072,
         HasComputedJSDocModifiers = 268435456,
         HasComputedFlags = 536870912,
         AccessibilityModifier = 7,
@@ -4273,8 +4277,8 @@ declare namespace ts {
         NonPublicAccessibilityModifier = 6,
         TypeScriptModifier = 28895,
         ExportDefault = 2080,
-        All = 131071,
-        Modifier = 98303,
+        All = 262143,
+        Modifier = 229375,
     }
     enum JsxFlags {
         None = 0,
@@ -5766,6 +5770,9 @@ declare namespace ts {
     interface JSDocDeprecatedTag extends JSDocTag {
         kind: SyntaxKind.JSDocDeprecatedTag;
     }
+    interface JSDocExperimentalTag extends JSDocTag {
+        kind: SyntaxKind.JSDocExperimentalTag;
+    }
     interface JSDocClassTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocClassTag;
     }
@@ -6883,6 +6890,7 @@ declare namespace ts {
         message: string;
         reportsUnnecessary?: {};
         reportsDeprecated?: {};
+        reportsExperimental?: {};
     }
     /**
      * A linked list of formatted diagnostic messages to be used as part of a multiline message.
@@ -6900,6 +6908,7 @@ declare namespace ts {
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
         reportsDeprecated?: {};
+        reportsExperimental?: {};
         source?: string;
         relatedInformation?: DiagnosticRelatedInformation[];
     }
@@ -7815,6 +7824,8 @@ declare namespace ts {
         updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: string | NodeArray<JSDocComment> | undefined): JSDocUnknownTag;
         createJSDocDeprecatedTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
         updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
+        createJSDocExperimentalTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocExperimentalTag;
+        updateJSDocExperimentalTag(node: JSDocExperimentalTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocExperimentalTag;
         createJSDocOverrideTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
         updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
         createJSDocThrowsTag(tagName: Identifier, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag;
@@ -8670,6 +8681,8 @@ declare namespace ts {
     function getJSDocOverrideTagNoCache(node: Node): JSDocOverrideTag | undefined;
     /** Gets the JSDoc deprecated tag for the node if present */
     function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefined;
+    /** Gets the JSDoc experimental tag for the node if present */
+    function getJSDocExperimentalTag(node: Node): JSDocExperimentalTag | undefined;
     /** Gets the JSDoc enum tag for the node if present */
     function getJSDocEnumTag(node: Node): JSDocEnumTag | undefined;
     /** Gets the JSDoc this tag for the node if present */
@@ -9116,6 +9129,7 @@ declare namespace ts {
     function isJSDocOverrideTag(node: Node): node is JSDocOverrideTag;
     function isJSDocOverloadTag(node: Node): node is JSDocOverloadTag;
     function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag;
+    function isJsDOcExperimentalTag(node: Node): node is JSDocExperimentalTag;
     function isJSDocSeeTag(node: Node): node is JSDocSeeTag;
     function isJSDocEnumTag(node: Node): node is JSDocEnumTag;
     function isJSDocParameterTag(node: Node): node is JSDocParameterTag;
@@ -11184,6 +11198,7 @@ declare namespace ts {
         abstractModifier = "abstract",
         optionalModifier = "optional",
         deprecatedModifier = "deprecated",
+        experimentalModifier = "experimental",
         dtsModifier = ".d.ts",
         tsModifier = ".ts",
         tsxModifier = ".tsx",
