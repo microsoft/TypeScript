@@ -38433,6 +38433,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let fallbackReturnType: Type = voidType;
         if (func.body.kind !== SyntaxKind.Block) { // Async or normal arrow function
             returnType = checkExpressionCached(func.body, checkMode && checkMode & ~CheckMode.SkipGenericFunctions);
+            if (isConstContext(func.body)) {
+                returnType = getRegularTypeOfLiteralType(returnType);
+            }
             if (isAsync) {
                 // From within an async function you can return either a non-promise value or a promise. Any
                 // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
@@ -38544,7 +38547,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const nextTypes: Type[] = [];
         const isAsync = (getFunctionFlags(func) & FunctionFlags.Async) !== 0;
         forEachYieldExpression(func.body as Block, yieldExpression => {
-            const yieldExpressionType = yieldExpression.expression ? checkExpression(yieldExpression.expression, checkMode) : undefinedWideningType;
+            let yieldExpressionType = yieldExpression.expression ? checkExpression(yieldExpression.expression, checkMode) : undefinedWideningType;
+            if (yieldExpression.expression && isConstContext(yieldExpression.expression)) {
+                yieldExpressionType = getRegularTypeOfLiteralType(yieldExpressionType);
+            }
             pushIfUnique(yieldTypes, getYieldedTypeOfYieldExpression(yieldExpression, yieldExpressionType, anyType, isAsync));
             let nextType: Type | undefined;
             if (yieldExpression.asteriskToken) {
@@ -38668,7 +38674,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (type.flags & TypeFlags.Never) {
                     hasReturnOfTypeNever = true;
                 }
-                pushIfUnique(aggregatedTypes, type);
+                pushIfUnique(aggregatedTypes, isConstContext(expr) ? getRegularTypeOfLiteralType(type) : type);
             }
             else {
                 hasReturnWithNoExpression = true;
