@@ -1,7 +1,7 @@
-//// [tests/cases/compiler/exportDefaultNamespace.ts] ////
+//// [tests/cases/compiler/exportDefaultModule.ts] ////
 
 === a.ts ===
-export default namespace A {
+export default module A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -17,7 +17,7 @@ import A from "./a"
 >A : typeof A
 >  : ^^^^^^^^
 
-A.Foo
+A.Foo;
 >A.Foo : 1
 >      : ^
 >A : typeof A

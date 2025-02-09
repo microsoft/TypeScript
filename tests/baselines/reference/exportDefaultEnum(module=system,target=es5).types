@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/exportDefaultEnum.ts] ////
+
+=== a.ts ===
+export default enum A {
+>A : A
+>  : ^
+
+    A,
+>A : A.A
+>  : ^^^
+
+    B
+>B : A.B
+>  : ^^^
+}
+
+=== b.ts ===
+import A from "./a"
+>A : typeof A
+>  : ^^^^^^^^
+
+A.A;
+>A.A : A.A
+>    : ^^^
+>A : typeof A
+>  : ^^^^^^^^
+>A : A.A
+>  : ^^^
+
+A.B;
+>A.B : A.B
+>    : ^^^
+>A : typeof A
+>  : ^^^^^^^^
+>B : A.B
+>  : ^^^
+
