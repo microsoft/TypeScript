@@ -27072,7 +27072,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (isElementAccessExpression(node) && isIdentifier(node.argumentExpression)) {
                     const symbol = getResolvedSymbol(node.argumentExpression);
-                    if (isConstantVariable(symbol) || isParameterOrMutableLocalVariable(symbol) && !isSymbolAssigned(symbol)) {
+                    if (isConstantVariable(symbol) || isParameterOrMutableLocalVariable(symbol) && !isSymbolAssigned(symbol) || isBlockScopedForStatementVariable(symbol) && isUsedInForStatementBody(symbol, node.argumentExpression) && !isSymbolAssignedInForStatementBody(symbol)) {
                         const key = getFlowCacheKey((node as AccessExpression).expression, declaredType, initialType, flowContainer);
                         return key && `${key}.@${getSymbolId(symbol)}`;
                     }
@@ -27130,7 +27130,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (isElementAccessExpression(source) && isElementAccessExpression(target) && isIdentifier(source.argumentExpression) && isIdentifier(target.argumentExpression)) {
                     const symbol = getResolvedSymbol(source.argumentExpression);
-                    if (symbol === getResolvedSymbol(target.argumentExpression) && (isConstantVariable(symbol) || isParameterOrMutableLocalVariable(symbol) && !isSymbolAssigned(symbol))) {
+                    if (symbol === getResolvedSymbol(target.argumentExpression) && (isConstantVariable(symbol) || isParameterOrMutableLocalVariable(symbol) && !isSymbolAssigned(symbol) || isBlockScopedForStatementVariable(symbol) && isUsedInForStatementBody(symbol, source.argumentExpression) && !isSymbolAssignedInForStatementBody(symbol))) {
                         return isMatchingReference(source.expression, target.expression);
                     }
                 }
@@ -29555,6 +29555,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isSomeSymbolAssignedWorker(rootDeclaration.name);
     }
 
+    function isSymbolAssignedInForStatementBody(symbol: Symbol) {
+        const forStatement = getRootDeclaration(symbol.valueDeclaration!).parent.parent;
+        Debug.assert(isForStatement(forStatement));
+        return !isPastLastAssignment(symbol, forStatement.statement);
+    }
+
+    function isUsedInForStatementBody(symbol: Symbol, location: Node) {
+        const forStatement = getRootDeclaration(symbol.valueDeclaration!).parent.parent;
+        Debug.assert(isForStatement(forStatement));
+        return location.pos >= forStatement.statement.pos && location.end <= forStatement.statement.end;
+    }
+
     function isSomeSymbolAssignedWorker(node: BindingName): boolean {
         if (node.kind === SyntaxKind.Identifier) {
             return isSymbolAssigned(getSymbolOfDeclaration(node.parent as Declaration));
@@ -29663,6 +29675,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             getCombinedModifierFlags(declaration) & ModifierFlags.Export ||
             declaration.parent.parent.kind === SyntaxKind.VariableStatement && isGlobalSourceFile(declaration.parent.parent.parent)
         );
+    }
+
+    function isBlockScopedForStatementVariable(symbol: Symbol) {
+        if (!(symbol.flags & SymbolFlags.BlockScopedVariable)) {
+            return false;
+        }
+        const declaration = symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration);
+        return !!declaration && isVariableDeclaration(declaration) && declaration.parent.parent.kind === SyntaxKind.ForStatement;
     }
 
     function parameterInitializerContainsUndefined(declaration: ParameterDeclaration): boolean {
