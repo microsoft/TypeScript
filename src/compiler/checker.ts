@@ -44638,6 +44638,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !!(node as StringLiteral | NoSubstitutionTemplateLiteral).text ? PredicateSemantics.Always : PredicateSemantics.Never;
             case SyntaxKind.ConditionalExpression:
                 return getSyntacticTruthySemantics((node as ConditionalExpression).whenTrue) | getSyntacticTruthySemantics((node as ConditionalExpression).whenFalse);
+            case SyntaxKind.BinaryExpression:
+                if ((node as BinaryExpression).operatorToken.kind !== SyntaxKind.CommaToken) {
+                    break;
+                }
+                return getSyntacticTruthySemantics((node as BinaryExpression).right);
             case SyntaxKind.Identifier:
                 if (getResolvedSymbol(node as Identifier) === undefinedSymbol) {
                     return PredicateSemantics.Never;
