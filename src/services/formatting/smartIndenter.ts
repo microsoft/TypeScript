@@ -52,6 +52,7 @@ import {
     SourceFileLike,
     SyntaxKind,
     TextRange,
+    TryStatement,
     TypeAliasDeclaration,
     TypeLiteralNode,
     TypeReferenceNode,
@@ -726,6 +727,12 @@ export namespace SmartIndenter {
             case SyntaxKind.UnionType:
             case SyntaxKind.SatisfiesExpression:
                 if (childKind === SyntaxKind.TypeLiteral || childKind === SyntaxKind.TupleType || childKind === SyntaxKind.MappedType) {
+                    return false;
+                }
+                break;
+            case SyntaxKind.TryStatement:
+                const tryStatement = parent as TryStatement;
+                if (tryStatement.finallyBlock && tryStatement.finallyBlock === child) {
                     return false;
                 }
                 break;
