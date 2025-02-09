@@ -14246,8 +14246,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getConstraintTypeFromMappedType(type: MappedType) {
-        return type.constraintType ||
-            (type.constraintType = getConstraintOfTypeParameter(getTypeParameterFromMappedType(type)) || errorType);
+        if (type.constraintType) {
+            return type.constraintType;
+        }
+        let constraint = getConstraintOfTypeParameter(getTypeParameterFromMappedType(type));
+        // for better or worse constraints of indexed generic homomorphic mapped types without modifiers don't include `| undefined`
+        // but those types can be instantiated with object types with optional properties
+        // it means that it's sometimes possible to pass resulting type as a constraint of another mapped type
+        // at construction time it's OK as constraints are claiming it's OK
+        // but at instantiation type this creates a situation at which `keyof MappedType` might not satisfy `PropertyKey`
+        // so the `undefined` type is eliminated here to prevent such situations and problems arising from them
+        if (constraint && containsUndefinedType(constraint)) {
+            constraint = removeType(constraint, undefinedType);
+        }
+        return (type.constraintType = constraint ?? errorType);
     }
 
     function getNameTypeFromMappedType(type: MappedType) {
