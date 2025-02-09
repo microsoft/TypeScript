@@ -10341,6 +10341,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             function serializeSignatures(kind: SignatureKind, input: Type, baseType: Type | undefined, outputKind: SignatureDeclaration["kind"]) {
                 const signatures = getSignaturesOfType(input, kind);
                 if (kind === SignatureKind.Construct) {
+                    let privateProtected: ModifierFlags = 0;
+                    for (const s of signatures) {
+                        if (s.declaration) {
+                            privateProtected |= getSelectedEffectiveModifierFlags(s.declaration, ModifierFlags.Private | ModifierFlags.Protected);
+                        }
+                    }
+                    if (privateProtected) {
+                        return [setTextRange(
+                            context,
+                            factory.createConstructorDeclaration(
+                                factory.createModifiersFromModifierFlags(privateProtected),
+                                /*parameters*/ [],
+                                /*body*/ undefined,
+                            ),
+                            signatures[0].declaration,
+                        )];
+                    }
                     if (!baseType && every(signatures, s => length(s.parameters) === 0)) {
                         return []; // No base type, every constructor is empty - elide the extraneous `constructor()`
                     }
@@ -10362,23 +10379,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 return []; // Every signature was identical - elide constructor list as it is inherited
                             }
                         }
-                    }
-                    let privateProtected: ModifierFlags = 0;
-                    for (const s of signatures) {
-                        if (s.declaration) {
-                            privateProtected |= getSelectedEffectiveModifierFlags(s.declaration, ModifierFlags.Private | ModifierFlags.Protected);
-                        }
-                    }
-                    if (privateProtected) {
-                        return [setTextRange(
-                            context,
-                            factory.createConstructorDeclaration(
-                                factory.createModifiersFromModifierFlags(privateProtected),
-                                /*parameters*/ [],
-                                /*body*/ undefined,
-                            ),
-                            signatures[0].declaration,
-                        )];
                     }
                 }
 
