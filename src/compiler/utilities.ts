@@ -9900,7 +9900,7 @@ export function getSupportedExtensions(options?: CompilerOptions, extraFileExten
     const flatBuiltins = flatten(builtins);
     const extensions = [
         ...builtins,
-        ...mapDefined(extraFileExtensions, x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJSLike(x.scriptKind) && !flatBuiltins.includes(x.extension as Extension) ? [x.extension] : undefined),
+        ...mapDefined(extraFileExtensions, x => !flatBuiltins.includes(x.extension as Extension) ? [x.extension] : undefined),
     ];
 
     return extensions;
@@ -9916,10 +9916,6 @@ export function getSupportedExtensionsWithJsonIfResolveJsonModule(options: Compi
     if (supportedExtensions === allSupportedExtensions) return allSupportedExtensionsWithJson;
     if (supportedExtensions === supportedTSExtensions) return supportedTSExtensionsWithJson;
     return [...supportedExtensions, [Extension.Json]];
-}
-
-function isJSLike(scriptKind: ScriptKind | undefined): boolean {
-    return scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSX;
 }
 
 /** @internal */
