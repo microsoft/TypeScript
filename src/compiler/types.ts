@@ -420,6 +420,7 @@ export const enum SyntaxKind {
     JSDocImplementsTag,
     JSDocAuthorTag,
     JSDocDeprecatedTag,
+    JSDocIgnoreTag,
     JSDocClassTag,
     JSDocPublicTag,
     JSDocPrivateTag,
@@ -1048,6 +1049,7 @@ export type ForEachChildNodes =
     | JSDocProtectedTag
     | JSDocReadonlyTag
     | JSDocDeprecatedTag
+    | JSDocIgnoreTag
     | JSDocThrowsTag
     | JSDocOverrideTag
     | JSDocSatisfiesTag
@@ -3998,6 +4000,10 @@ export interface JSDocAuthorTag extends JSDocTag {
 
 export interface JSDocDeprecatedTag extends JSDocTag {
     kind: SyntaxKind.JSDocDeprecatedTag;
+}
+
+export interface JSDocIgnoreTag extends JSDocTag {
+    kind: SyntaxKind.JSDocIgnoreTag;
 }
 
 export interface JSDocClassTag extends JSDocTag {
@@ -9135,6 +9141,8 @@ export interface NodeFactory {
     updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: string | NodeArray<JSDocComment> | undefined): JSDocUnknownTag;
     createJSDocDeprecatedTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
     updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
+    createJSDocIgnoreTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocIgnoreTag;
+    updateJSDocIgnoreTag(node: JSDocIgnoreTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocIgnoreTag;
     createJSDocOverrideTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
     updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
     createJSDocThrowsTag(tagName: Identifier, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag;
