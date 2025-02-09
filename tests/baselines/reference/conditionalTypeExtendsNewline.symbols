@@ -1,0 +1,86 @@
+//// [tests/cases/compiler/conditionalTypeExtendsNewline.ts] ////
+
+=== conditionalTypeExtendsNewline.ts ===
+// Repro from #53589
+
+type Example1 = string 
+>Example1 : Symbol(Example1, Decl(conditionalTypeExtendsNewline.ts, 0, 0))
+
+     extends string ? true : false;
+
+type Example2 = `${string
+>Example2 : Symbol(Example2, Decl(conditionalTypeExtendsNewline.ts, 3, 35))
+
+     extends string ? true : false}`;
+
+type Example3 = Array<string
+>Example3 : Symbol(Example3, Decl(conditionalTypeExtendsNewline.ts, 6, 37))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+     extends string ? true : false>;
+
+type Example4<K extends string
+>Example4 : Symbol(Example4, Decl(conditionalTypeExtendsNewline.ts, 9, 36))
+>K : Symbol(K, Decl(conditionalTypeExtendsNewline.ts, 11, 14))
+
+     extends string ? true : false> = string;
+
+type Example5<K = string
+>Example5 : Symbol(Example5, Decl(conditionalTypeExtendsNewline.ts, 12, 45))
+>K : Symbol(K, Decl(conditionalTypeExtendsNewline.ts, 14, 14))
+
+     extends string ? true : false> = string;
+
+function example6(a: string
+>example6 : Symbol(example6, Decl(conditionalTypeExtendsNewline.ts, 15, 45))
+>a : Symbol(a, Decl(conditionalTypeExtendsNewline.ts, 17, 18))
+
+     extends string ? true : false): void {};
+
+type Example7 = {
+>Example7 : Symbol(Example7, Decl(conditionalTypeExtendsNewline.ts, 18, 45))
+
+  foo: string
+>foo : Symbol(foo, Decl(conditionalTypeExtendsNewline.ts, 20, 17))
+
+     extends string ? true : false;
+};
+
+type Example8 = {
+>Example8 : Symbol(Example8, Decl(conditionalTypeExtendsNewline.ts, 23, 2))
+
+     [Key in string as Key 
+>Key : Symbol(Key, Decl(conditionalTypeExtendsNewline.ts, 26, 6))
+>Key : Symbol(Key, Decl(conditionalTypeExtendsNewline.ts, 26, 6))
+
+          extends string ? 'true' : 'false']: string;
+};
+
+class Example9 {
+>Example9 : Symbol(Example9, Decl(conditionalTypeExtendsNewline.ts, 28, 2))
+
+  a?: number
+>a : Symbol(Example9.a, Decl(conditionalTypeExtendsNewline.ts, 30, 16))
+
+  extends = null;
+>extends : Symbol(Example9.extends, Decl(conditionalTypeExtendsNewline.ts, 31, 12))
+}
+
+type Example10Interface = {
+>Example10Interface : Symbol(Example10Interface, Decl(conditionalTypeExtendsNewline.ts, 33, 1))
+
+  extends: number | undefined;
+>extends : Symbol(extends, Decl(conditionalTypeExtendsNewline.ts, 35, 27))
+}
+
+class Example10 implements Example10Interface {
+>Example10 : Symbol(Example10, Decl(conditionalTypeExtendsNewline.ts, 37, 1))
+>Example10Interface : Symbol(Example10Interface, Decl(conditionalTypeExtendsNewline.ts, 33, 1))
+
+  a?: number
+>a : Symbol(Example10.a, Decl(conditionalTypeExtendsNewline.ts, 39, 47))
+
+  extends;
+>extends : Symbol(Example10.extends, Decl(conditionalTypeExtendsNewline.ts, 40, 12))
+}
+
