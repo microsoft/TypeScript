@@ -45722,7 +45722,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             : exprType;
 
         const effectiveExpr = expr && getEffectiveCheckNode(expr); // The effective expression for diagnostics purposes.
-        const errorNode = inReturnStatement && !inConditionalExpression ? node : effectiveExpr;
+        const errorNode = inConditionalExpression ? effectiveExpr :
+            inReturnStatement ? node :
+            isArrowFunction(node.parent) && node.parent.type !== undefined ? node.parent.type :
+            effectiveExpr;
 
         checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, effectiveExpr);
     }
