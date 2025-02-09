@@ -248,6 +248,7 @@ import {
     isStringLiteralOrTemplate,
     isStringTextContainingNode,
     isSyntaxList,
+    isTransientSymbol,
     isTypeKeyword,
     isTypeKeywordTokenOrIdentifier,
     isTypeLiteralNode,
@@ -3281,6 +3282,15 @@ function getContextualType(previousToken: Node, position: number, sourceFile: So
     }
 }
 
+/**
+ * An accessible symbol is a local in the same block or any enclosing blocks, up to and including the global scope (note imports are global). 
+ * An accessible symbol chain is a list of symbols [s_1, s_2, ..., s_n] where import s_i is an alias for symbol s_{i+1} exported from another module.
+ * Note the chain can have just one element as well.
+ * This function follows the given symbol up its parents until it finds a symbol S which has an accessible symbol chain with the first link being 
+ * the accessible symbol from the enclosing declaration and the last link being S. If such a symbol is found, the first link in the accessible chain is returned.
+ * Otherwise, there are two cases. Either its highest parent is a module symbol, in which case that parent's child is an export and it is returned. Or
+ * the highest parent is just a global unexported symbol in which case undefined is returned.
+ */
 function getFirstSymbolInChain(symbol: Symbol, enclosingDeclaration: Node, checker: TypeChecker): Symbol | undefined {
     const chain = checker.getAccessibleSymbolChain(symbol, enclosingDeclaration, /*meaning*/ SymbolFlags.All, /*useOnlyExternalAliasing*/ false);
     if (chain) return first(chain);
@@ -3834,69 +3844,128 @@ function getCompletionData(
     }
 
     function addPropertySymbol(symbol: Symbol, insertAwait: boolean, insertQuestionDot: boolean) {
-        // For a computed property with an accessible name like `Symbol.iterator`,
-        // we'll add a completion for the *name* `Symbol` instead of for the property.
-        // If this is e.g. [Symbol.iterator], add a completion for `Symbol`.
-        const computedPropertyName = firstDefined(symbol.declarations, decl => tryCast(getNameOfDeclaration(decl), isComputedPropertyName));
-        if (computedPropertyName) {
-            const leftMostName = getLeftMostName(computedPropertyName.expression); // The completion is for `Symbol`, not `iterator`.
-            const nameSymbol = leftMostName && typeChecker.getSymbolAtLocation(leftMostName);
-            // If this is nested like for `namespace N { export const sym = Symbol(); }`, we'll add the completion for `N`.
-            const firstAccessibleSymbol = nameSymbol && getFirstSymbolInChain(nameSymbol, contextToken, typeChecker);
-            const firstAccessibleSymbolId = firstAccessibleSymbol && getSymbolId(firstAccessibleSymbol);
-            if (firstAccessibleSymbolId && addToSeen(seenPropertySymbols, firstAccessibleSymbolId)) {
-                const index = symbols.length;
-                symbols.push(firstAccessibleSymbol);
-                const moduleSymbol = firstAccessibleSymbol.parent;
-                if (
-                    !moduleSymbol ||
-                    !isExternalModuleSymbol(moduleSymbol) ||
-                    typeChecker.tryGetMemberInModuleExportsAndProperties(firstAccessibleSymbol.name, moduleSymbol) !== firstAccessibleSymbol
-                ) {
-                    symbolToOriginInfoMap[index] = { kind: getNullableSymbolOriginInfoKind(SymbolOriginInfoKind.SymbolMemberNoExport) };
-                }
-                else {
-                    const fileName = isExternalModuleNameRelative(stripQuotes(moduleSymbol.name)) ? getSourceFileOfModule(moduleSymbol)?.fileName : undefined;
-                    const { moduleSpecifier } = (importSpecifierResolver ||= codefix.createImportSpecifierResolver(sourceFile, program, host, preferences)).getModuleSpecifierForBestExportInfo(
-                        [{
-                            exportKind: ExportKind.Named,
-                            moduleFileName: fileName,
-                            isFromPackageJson: false,
-                            moduleSymbol,
-                            symbol: firstAccessibleSymbol,
-                            targetFlags: skipAlias(firstAccessibleSymbol, typeChecker).flags,
-                        }],
-                        position,
-                        isValidTypeOnlyAliasUseSite(location),
-                    ) || {};
+        // For a computed property `x.y` in an exported namespace `n` that is imported
+        // in another file as `m`, we can access `y` as `m.n.x.y`. To form this access chain, first
+        // we follow `x` up its symbol parents until we find a symbol that is accessible from the completion
+        // location. This gives us a property access chain (`m.n.x`) which we can then combine with the original
+        // computed property expression (`x.y`) by substitution of `m.n.x` for `x` in `x.y` to get `m.n.x.y`.
+        // If this fails, we will fall back to the literal value of `y`.
 
-                    if (moduleSpecifier) {
-                        const origin: SymbolOriginInfoResolvedExport = {
-                            kind: getNullableSymbolOriginInfoKind(SymbolOriginInfoKind.SymbolMemberExport),
-                            moduleSymbol,
-                            isDefaultExport: false,
-                            symbolName: firstAccessibleSymbol.name,
-                            exportName: firstAccessibleSymbol.name,
-                            fileName,
-                            moduleSpecifier,
-                        };
-                        symbolToOriginInfoMap[index] = origin;
-                    }
-                }
+        const computedPropertyName = firstDefined(symbol.declarations, decl => tryCast(getNameOfDeclaration(decl), isComputedPropertyName));
+        if (!computedPropertyName) {
+            addSymbol();
+            return;
+        }
+
+        const computedPropertyNameExpression = computedPropertyName.expression;
+        const name = isEntityName(computedPropertyNameExpression) ? computedPropertyNameExpression :
+            isPropertyAccessExpression(computedPropertyNameExpression) ? computedPropertyNameExpression.name : undefined;
+        const nameSymbol = name && typeChecker.getSymbolAtLocation(name);
+        const nameSymbolId = nameSymbol && getSymbolId(nameSymbol);
+        if (!nameSymbolId) { // Not a property access or entity name
+            addSymbol();
+            return;
+        }
+
+        if (addToSeen(seenPropertySymbols, nameSymbolId)) {
+            const leftMostName = getLeftMostName(computedPropertyNameExpression);
+            const leftMostNameSymbol = leftMostName && typeChecker.getSymbolAtLocation(leftMostName);
+            const firstAccessibleSymbol = leftMostNameSymbol && getFirstSymbolInChain(leftMostNameSymbol, contextToken, typeChecker);
+            if (!firstAccessibleSymbol) { // Symbol is not accessible from completion location
+                addSymbol();
+                return;
             }
-            else if (preferences.includeCompletionsWithInsertText) {
-                if (firstAccessibleSymbolId && seenPropertySymbols.has(firstAccessibleSymbolId)) {
+
+            Debug.assert(isOnlyPropertyAccess(computedPropertyNameExpression));
+
+            const moduleSymbol = firstAccessibleSymbol.parent;
+            if (
+                !moduleSymbol ||
+                !isExternalModuleSymbol(moduleSymbol) ||
+                typeChecker.tryGetMemberInModuleExportsAndProperties(firstAccessibleSymbol.name, moduleSymbol) !== firstAccessibleSymbol
+            ) {
+                // If preferences allow insert text, add completion for [<QualifiedSymbolName>]
+                const node = preferences.includeCompletionsWithInsertText
+                    ? createComputedPropertyAccess(nameSymbol, leftMostNameSymbol, computedPropertyNameExpression)
+                    : undefined;
+
+                if (!node) {
+                    addSymbol();
                     return;
                 }
-                addSymbolOriginInfo(symbol);
-                addSymbolSortInfo(symbol);
-                symbols.push(symbol);
+
+                const index = symbols.length;
+                symbols.push(nameSymbol);
+                const printer = createPrinter({
+                    removeComments: true,
+                    module: compilerOptions.module,
+                    target: compilerOptions.target,
+                    omitTrailingSemicolon: true,
+                });
+                const origin: SymbolOriginInfoComputedPropertyName = {
+                    kind: getNullableSymbolOriginInfoKind(SymbolOriginInfoKind.SymbolMemberNoExport) | SymbolOriginInfoKind.ComputedPropertyName,
+                    symbolName: printer.printNode(EmitHint.Unspecified, node, contextToken.getSourceFile()),
+                };
+                symbolToOriginInfoMap[index] = origin;
+            }
+            else {
+                const index = symbols.length;
+                symbols.push(nameSymbol);
+                const fileName = isExternalModuleNameRelative(stripQuotes(moduleSymbol.name)) ? getSourceFileOfModule(moduleSymbol)?.fileName : undefined;
+                const { moduleSpecifier } = (importSpecifierResolver ||= codefix.createImportSpecifierResolver(sourceFile, program, host, preferences)).getModuleSpecifierForBestExportInfo(
+                    [{
+                        exportKind: ExportKind.Named,
+                        moduleFileName: fileName,
+                        isFromPackageJson: false,
+                        moduleSymbol,
+                        symbol: firstAccessibleSymbol,
+                        targetFlags: skipAlias(firstAccessibleSymbol, typeChecker).flags,
+                    }],
+                    position,
+                    isValidTypeOnlyAliasUseSite(location),
+                ) || {};
+
+                if (moduleSpecifier) {
+                    const origin: SymbolOriginInfoResolvedExport = {
+                        kind: getNullableSymbolOriginInfoKind(SymbolOriginInfoKind.SymbolMemberExport),
+                        moduleSymbol,
+                        isDefaultExport: false,
+                        symbolName: firstAccessibleSymbol.name,
+                        exportName: firstAccessibleSymbol.name,
+                        fileName,
+                        moduleSpecifier,
+                    };
+                    symbolToOriginInfoMap[index] = origin;
+                }
             }
         }
-        else {
+
+        function addSymbol() {
             addSymbolOriginInfo(symbol);
             addSymbolSortInfo(symbol);
             symbols.push(symbol);
+        }
+
+        /**
+         * For a computed property [x.y.z], we get an expression for the left-most node (x) from the completion location. For example, if x is in
+         * a namespace n which is imported into the completion location's scope as m, then the expression would be m.n.x. Then we combine this expression
+         * with the property access expression at the declaration site (x.y.z) by substituting the left-most expression's symbol (m.n.x) for the left-most
+         * identifier in the property access expression (x). This gives us m.n.x.y.z.
+         */
+        function createComputedPropertyAccess(nameSymbol: Symbol, leftMostNameSymbol: Symbol, computedPropertyNameExpression: OnlyPropertyAccess) {
+            let node: Node | undefined;
+            if (!isTransientSymbol(nameSymbol)) {
+                node = typeChecker.symbolToEntityName(nameSymbol, SymbolFlags.All, contextToken, NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope);
+            }
+            else {
+                // Object literals assigned as const
+                const leftMostNodeAccessExpression = typeChecker.symbolToExpression(leftMostNameSymbol, SymbolFlags.All, contextToken, NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope);
+                node = leftMostNodeAccessExpression && createPropertyAccess(leftMostNodeAccessExpression, computedPropertyNameExpression);
+                function createPropertyAccess(leftSide: Expression, rightSide: OnlyPropertyAccess): Expression {
+                    return isIdentifier(rightSide) ? leftSide : factory.createPropertyAccessExpression(createPropertyAccess(leftSide, rightSide.expression), rightSide.name);
+                }
+            }
+            return node;
         }
 
         function addSymbolSortInfo(symbol: Symbol) {
@@ -3924,6 +3993,11 @@ function getCompletionData(
     /** Given 'a.b.c', returns 'a'. */
     function getLeftMostName(e: Expression): Identifier | undefined {
         return isIdentifier(e) ? e : isPropertyAccessExpression(e) ? getLeftMostName(e.expression) : undefined;
+    }
+
+    type OnlyPropertyAccess = Identifier | (PropertyAccessExpression & { expression: OnlyPropertyAccess; });
+    function isOnlyPropertyAccess(e: Expression | Identifier): e is OnlyPropertyAccess {
+        return isIdentifier(e) ? true : isPropertyAccessExpression(e) ? isOnlyPropertyAccess(e.expression) : false;
     }
 
     function tryGetGlobalSymbols(): boolean {
@@ -5429,7 +5503,7 @@ function getCompletionEntryDisplayNameForSymbol(
         case CompletionKind.PropertyAccess:
         case CompletionKind.Global: // For a 'this.' completion it will be in a global context, but may have a non-identifier name.
             // Don't add a completion for a name starting with a space. See https://github.com/Microsoft/TypeScript/pull/20547
-            return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };
+            return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: !originIsComputedPropertyName(origin) };
         case CompletionKind.None:
         case CompletionKind.String:
             return validNameResult;
