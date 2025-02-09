@@ -1,0 +1,59 @@
+/a.js(9,20): error TS2322: Type 'number' is not assignable to type 'string'.
+/a.js(28,5): error TS1360: Type '(a: string, b: string) => void' does not satisfy the expected type '(a: string, ...args: number[]) => void'.
+  Types of parameters 'b' and 'args' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+/a.js(42,21): error TS7006: Parameter 'uuid' implicitly has an 'any' type.
+
+
+==== /a.js (3 errors) ====
+    /** @satisfies {(uuid: string) => void} */
+    export const fn1 = uuid => {};
+    
+    /** @typedef {Parameters<typeof fn1>} Foo */
+    
+    /** @type Foo */
+    export const v1 = ['abc'];
+    /** @type Foo */
+    export const v2 = [123]; // error
+                       ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    
+    /** @satisfies {(a: string, ...args: never) => void} */
+    export const fn2 = (a, b) => {};
+    
+    /** 
+     * @satisfies {(a: string, ...args: never) => void}
+     * @param {string} a
+     */
+    export const fn3 = (a, b) => {};
+    
+    /** 
+     * @satisfies {(a: string, ...args: never) => void}
+     * @param {string} a
+     * @param {number} b
+     */
+    export const fn4 = (a, b) => {};
+    
+    /** 
+     * @satisfies {(a: string, ...args: number[]) => void}
+        ~~~~~~~~~
+!!! error TS1360: Type '(a: string, b: string) => void' does not satisfy the expected type '(a: string, ...args: number[]) => void'.
+!!! error TS1360:   Types of parameters 'b' and 'args' are incompatible.
+!!! error TS1360:     Type 'number' is not assignable to type 'string'.
+     * @param {string} a
+     * @param {string} b
+     */
+    export const fn5 = (a, b) => {};
+    
+    /** 
+     * @satisfies {(a: string, ...args: number[]) => void}
+     * @param {string} a
+     * @param {string | number} b
+     */
+    export const fn6 = (a, b) => {};
+    
+    /** @satisfies {(uuid: string) => void} */
+    export function fn7(uuid) {}
+                        ~~~~
+!!! error TS7006: Parameter 'uuid' implicitly has an 'any' type.
+    
