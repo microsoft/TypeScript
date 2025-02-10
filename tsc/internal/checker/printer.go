@@ -247,7 +247,7 @@ func (p *Printer) printObjectType(t *Type) {
 		p.printParameterizedType(t)
 	case t.objectFlags&ObjectFlagsClassOrInterface != 0:
 		p.printName(t.symbol)
-	case p.c.isGenericMappedType(t):
+	case p.c.isGenericMappedType(t) || t.objectFlags&ObjectFlagsMapped != 0 && t.AsMappedType().containsError:
 		p.printMappedType(t)
 	default:
 		p.printAnonymousType(t)

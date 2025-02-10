@@ -54,7 +54,7 @@ type ExpandingFlags uint8
 
 const (
 	ExpandingFlagsNone   ExpandingFlags = 0
-	ExpandingFlagsSource ExpandingFlags = 1
+	ExpandingFlagsSource ExpandingFlags = 1 << 0
 	ExpandingFlagsTarget ExpandingFlags = 1 << 1
 	ExpandingFlagsBoth                  = ExpandingFlagsSource | ExpandingFlagsTarget
 )
@@ -821,6 +821,7 @@ func (c *Checker) hasMatchingRecursionIdentity(t *Type, identity RecursionId) bo
 				return true
 			}
 		}
+		return false
 	}
 	return getRecursionIdentity(t) == identity
 }
@@ -2517,7 +2518,7 @@ type Relater struct {
 }
 
 func (r *Relater) isRelatedToSimple(source *Type, target *Type) Ternary {
-	return r.isRelatedToEx(source, target, RecursionFlagsNone, false /*reportErrors*/, nil /*headMessage*/, IntersectionStateNone)
+	return r.isRelatedToEx(source, target, RecursionFlagsBoth, false /*reportErrors*/, nil /*headMessage*/, IntersectionStateNone)
 }
 
 func (r *Relater) isRelatedToWorker(source *Type, target *Type, reportErrors bool) Ternary {

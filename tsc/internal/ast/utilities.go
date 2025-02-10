@@ -1838,3 +1838,23 @@ func GetNewTargetContainer(node *Node) *Node {
 	}
 	return nil
 }
+
+func GetEnclosingBlockScopeContainer(node *Node) *Node {
+	return FindAncestor(node.Parent, func(current *Node) bool {
+		return IsBlockScope(current, current.Parent)
+	})
+}
+
+func IsBlockScope(node *Node, parentNode *Node) bool {
+	switch node.Kind {
+	case KindSourceFile, KindCaseBlock, KindCatchClause, KindModuleDeclaration, KindForStatement, KindForInStatement, KindForOfStatement,
+		KindConstructor, KindMethodDeclaration, KindGetAccessor, KindSetAccessor, KindFunctionDeclaration, KindFunctionExpression,
+		KindArrowFunction, KindPropertyDeclaration, KindClassStaticBlockDeclaration:
+		return true
+	case KindBlock:
+		// function block is not considered block-scope container
+		// see comment in binder.ts: bind(...), case for SyntaxKind.Block
+		return !IsFunctionLikeOrClassStaticBlockDeclaration(parentNode)
+	}
+	return false
+}

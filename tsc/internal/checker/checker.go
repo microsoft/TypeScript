@@ -598,6 +598,7 @@ type Checker struct {
 	symbolReferenceLinks                      LinkStore[*ast.Symbol, SymbolReferenceLinks]
 	valueSymbolLinks                          LinkStore[*ast.Symbol, ValueSymbolLinks]
 	mappedSymbolLinks                         LinkStore[*ast.Symbol, MappedSymbolLinks]
+	deferredSymbolLinks                       LinkStore[*ast.Symbol, DeferredSymbolLinks]
 	aliasSymbolLinks                          LinkStore[*ast.Symbol, AliasSymbolLinks]
 	moduleSymbolLinks                         LinkStore[*ast.Symbol, ModuleSymbolLinks]
 	lateBoundLinks                            LinkStore[*ast.Symbol, LateBoundLinks]
@@ -1425,7 +1426,195 @@ func (c *Checker) checkResolvedBlockScopedVariable(result *ast.Symbol, errorLoca
 }
 
 func (c *Checker) isBlockScopedNameDeclaredBeforeUse(declaration *ast.Node, usage *ast.Node) bool {
-	return true // !!!
+	declarationFile := ast.GetSourceFileOfNode(declaration)
+	useFile := ast.GetSourceFileOfNode(usage)
+	declContainer := ast.GetEnclosingBlockScopeContainer(declaration)
+	if declarationFile != useFile {
+		if (c.moduleKind != core.ModuleKindNone && (declarationFile.ExternalModuleIndicator != nil || useFile.ExternalModuleIndicator != nil)) || c.compilerOptions.OutFile == "" || isInTypeQuery(usage) || declaration.Flags&ast.NodeFlagsAmbient != 0 {
+			// nodes are in different files and order cannot be determined
+			return true
+		}
+		// declaration is after usage
+		// can be legal if usage is deferred (i.e. inside function or in initializer of instance property)
+		if c.isUsedInFunctionOrInstanceProperty(usage, declaration, declContainer) {
+			return true
+		}
+		sourceFiles := c.program.SourceFiles()
+		return slices.Index(sourceFiles, declarationFile) <= slices.Index(sourceFiles, useFile)
+	}
+	// deferred usage in a type context is always OK regardless of the usage position:
+	if usage.Flags&ast.NodeFlagsJSDoc != 0 || isInTypeQuery(usage) || c.isInAmbientOrTypeNode(usage) {
+		return true
+	}
+	if declaration.Pos() <= usage.Pos() && !(ast.IsPropertyDeclaration(declaration) && isThisProperty(usage.Parent) && declaration.Initializer() == nil && !isExclamationToken(declaration.AsPropertyDeclaration().PostfixToken)) {
+		// declaration is before usage
+		switch {
+		case declaration.Kind == ast.KindBindingElement:
+			// still might be illegal if declaration and usage are both binding elements (eg var [a = b, b = b] = [1, 2])
+			errorBindingElement := getAncestor(usage, ast.KindBindingElement)
+			if errorBindingElement != nil {
+				return ast.FindAncestor(errorBindingElement, ast.IsBindingElement) != ast.FindAncestor(declaration, ast.IsBindingElement) || declaration.Pos() < errorBindingElement.Pos()
+			}
+			// or it might be illegal if usage happens before parent variable is declared (eg var [a] = a)
+			return c.isBlockScopedNameDeclaredBeforeUse(getAncestor(declaration, ast.KindVariableDeclaration), usage)
+		case declaration.Kind == ast.KindVariableDeclaration:
+			// still might be illegal if usage is in the initializer of the variable declaration (eg var a = a)
+			return !isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration, usage, declContainer)
+		case ast.IsClassLike(declaration):
+			// still might be illegal if the usage is within a computed property name in the class (eg class A { static p = "a"; [A.p]() {} })
+			// or when used within a decorator in the class (e.g. `@dec(A.x) class A { static x = "x" }`),
+			// except when used in a function that is not an IIFE (e.g., `@dec(() => A.x) class A { ... }`)
+			container := usage
+			for container != nil && container != declaration {
+				if ast.IsComputedPropertyName(container) && container.Parent.Parent == declaration ||
+					!c.legacyDecorators && ast.IsDecorator(container) && (container.Parent == declaration ||
+						ast.IsMethodDeclaration(container.Parent) && container.Parent.Parent == declaration ||
+						ast.IsAccessor(container.Parent) && container.Parent.Parent == declaration ||
+						ast.IsPropertyDeclaration(container.Parent) && container.Parent.Parent == declaration ||
+						ast.IsParameter(container.Parent) && container.Parent.Parent.Parent == declaration) {
+					break
+				}
+				container = container.Parent
+			}
+			if container == nil || container == declaration {
+				return true
+			}
+			if !c.legacyDecorators && ast.IsDecorator(container) {
+				n := usage
+				for n != nil && n != container {
+					if ast.IsFunctionLike(n) && ast.GetImmediatelyInvokedFunctionExpression(n) == nil {
+						break
+					}
+					n = n.Parent
+				}
+				return n != nil && n != container
+			}
+			return false
+		case ast.IsPropertyDeclaration(declaration):
+			// still might be illegal if a self-referencing property initializer (eg private x = this.x)
+			return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, false /*stopAtAnyPropertyDeclaration*/)
+		case ast.IsParameterPropertyDeclaration(declaration, declaration.Parent):
+			// foo = this.bar is illegal in emitStandardClassFields when bar is a parameter property
+			return !(c.emitStandardClassFields && ast.GetContainingClass(declaration) == ast.GetContainingClass(usage) && c.isUsedInFunctionOrInstanceProperty(usage, declaration, declContainer))
+		}
+		return true
+	}
+	// declaration is after usage, but it can still be legal if usage is deferred:
+	// 1. inside an export specifier
+	// 2. inside a function
+	// 3. inside an instance property initializer, a reference to a non-instance property
+	//    (except when emitStandardClassFields: true and the reference is to a parameter property)
+	// 4. inside a static property initializer, a reference to a static method in the same class
+	// 5. inside a TS export= declaration (since we will move the export statement during emit to avoid TDZ)
+	if ast.IsExportSpecifier(usage.Parent) || ast.IsExportAssignment(usage.Parent) && usage.Parent.AsExportAssignment().IsExportEquals {
+		// export specifiers do not use the variable, they only make it available for use
+		return true
+	}
+	// When resolving symbols for exports, the `usage` location passed in can be the export site directly
+	if ast.IsExportAssignment(usage) && usage.AsExportAssignment().IsExportEquals {
+		return true
+	}
+	if c.isUsedInFunctionOrInstanceProperty(usage, declaration, declContainer) {
+		if c.emitStandardClassFields && ast.GetContainingClass(declaration) != nil && (ast.IsPropertyDeclaration(declaration) || ast.IsParameterPropertyDeclaration(declaration, declaration.Parent)) {
+			return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, true /*stopAtAnyPropertyDeclaration*/)
+		}
+		return true
+	}
+	return false
+}
+
+func (c *Checker) isUsedInFunctionOrInstanceProperty(usage *ast.Node, declaration *ast.Node, declContainer *ast.Node) bool {
+	for current := usage; current != nil && current != declContainer; current = current.Parent {
+		if ast.IsFunctionLike(current) {
+			return true
+		}
+		if ast.IsClassStaticBlockDeclaration(current) {
+			return declaration.Pos() < usage.Pos()
+		}
+		if current.Parent != nil && ast.IsPropertyDeclaration(current.Parent) && current.Parent.Initializer() == current {
+			if ast.IsStatic(current.Parent) {
+				if ast.IsMethodDeclaration(declaration) {
+					return true
+				}
+				if ast.IsPropertyDeclaration(declaration) && ast.GetContainingClass(usage) == ast.GetContainingClass(declaration) {
+					propName := declaration.Name()
+					if ast.IsIdentifier(propName) || ast.IsPrivateIdentifier(propName) {
+						t := c.getTypeOfSymbol(c.getSymbolOfDeclaration(declaration))
+						staticBlocks := core.Filter(declaration.Parent.Members(), ast.IsClassStaticBlockDeclaration)
+						if c.isPropertyInitializedInStaticBlocks(propName, t, staticBlocks, declaration.Parent.Pos(), current.Pos()) {
+							return true
+						}
+					}
+				}
+			} else {
+				isDeclarationInstanceProperty := ast.IsPropertyDeclaration(declaration) && !ast.IsStatic(declaration)
+				if !isDeclarationInstanceProperty || ast.GetContainingClass(usage) != ast.GetContainingClass(declaration) {
+					return true
+				}
+			}
+		}
+	}
+	return false
+}
+
+func isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration *ast.Node, usage *ast.Node, declContainer *ast.Node) bool {
+	switch declaration.Parent.Parent.Kind {
+	case ast.KindVariableStatement, ast.KindForStatement, ast.KindForOfStatement:
+		// variable statement/for/for-of statement case,
+		// use site should not be inside variable declaration (initializer of declaration or binding element)
+		if isSameScopeDescendentOf(usage, declaration, declContainer) {
+			return true
+		}
+	}
+	// ForIn/ForOf case - use site should not be used in expression part
+	grandparent := declaration.Parent.Parent
+	return ast.IsForInOrOfStatement(grandparent) && isSameScopeDescendentOf(usage, grandparent.Expression(), declContainer)
+}
+
+// Starting from 'initial' node walk up the parent chain until 'stopAt' node is reached.
+// If at any point current node is equal to 'parent' node - return true.
+// If current node is an IIFE, continue walking up.
+// Return false if 'stopAt' node is reached or isFunctionLike(current) === true.
+func isSameScopeDescendentOf(initial *ast.Node, parent *ast.Node, stopAt *ast.Node) bool {
+	if parent == nil {
+		return false
+	}
+	for n := initial; n != nil; n = n.Parent {
+		if n == parent {
+			return true
+		}
+		if n == stopAt || ast.IsFunctionLike(n) && (ast.GetImmediatelyInvokedFunctionExpression(n) == nil || (getFunctionFlags(n)&FunctionFlagsAsyncGenerator != 0)) {
+			return false
+		}
+	}
+	return false
+}
+
+// stopAtAnyPropertyDeclaration is used for detecting ES-standard class field use-before-def errors
+func isPropertyImmediatelyReferencedWithinDeclaration(declaration *ast.Node, usage *ast.Node, stopAtAnyPropertyDeclaration bool) bool {
+	// always legal if usage is after declaration
+	if usage.End() > declaration.End() {
+		return false
+	}
+	// still might be legal if usage is deferred (e.g. x: any = () => this.x)
+	// otherwise illegal if immediately referenced within the declaration (e.g. x: any = this.x)
+	for node := usage; node != nil && node != declaration; node = node.Parent {
+		switch node.Kind {
+		case ast.KindArrowFunction:
+			return false
+		case ast.KindPropertyDeclaration:
+			// even when stopping at any property declaration, they need to come from the same class
+			if stopAtAnyPropertyDeclaration && (ast.IsPropertyDeclaration(declaration) && node.Parent == declaration.Parent || ast.IsParameterPropertyDeclaration(declaration, declaration.Parent) && node.Parent == declaration.Parent.Parent) {
+				return true
+			}
+		case ast.KindBlock:
+			switch node.Parent.Kind {
+			case ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor:
+				return false
+			}
+		}
+	}
+	return true
 }
 
 func (c *Checker) checkAndReportErrorForMissingPrefix(errorLocation *ast.Node, name string) bool {
@@ -12716,15 +12905,45 @@ func (c *Checker) isAliasSymbolDeclaration(node *ast.Node) bool {
 	return false
 }
 
+func (c *Checker) getTypeOfSymbolWithDeferredType(symbol *ast.Symbol) *Type {
+	links := c.valueSymbolLinks.get(symbol)
+	if links.resolvedType == nil {
+		deferred := c.deferredSymbolLinks.get(symbol)
+		if deferred.parent.flags&TypeFlagsUnion != 0 {
+			links.resolvedType = c.getUnionType(deferred.constituents)
+		} else {
+			links.resolvedType = c.getIntersectionType(deferred.constituents)
+		}
+	}
+	return links.resolvedType
+}
+
+func (c *Checker) getWriteTypeOfSymbolWithDeferredType(symbol *ast.Symbol) *Type {
+	links := c.valueSymbolLinks.get(symbol)
+	if links.writeType == nil {
+		deferred := c.deferredSymbolLinks.get(symbol)
+		if len(deferred.writeConstituents) != 0 {
+			if deferred.parent.flags&TypeFlagsUnion != 0 {
+				links.writeType = c.getUnionType(deferred.writeConstituents)
+			} else {
+				links.writeType = c.getIntersectionType(deferred.writeConstituents)
+			}
+		} else {
+			links.writeType = c.getTypeOfSymbolWithDeferredType(symbol)
+		}
+	}
+	return links.writeType
+}
+
 // Distinct write types come only from set accessors, but synthetic union and intersection
 // properties deriving from set accessors will either pre-compute or defer the union or
 // intersection of the writeTypes of their constituents.
 func (c *Checker) getWriteTypeOfSymbol(symbol *ast.Symbol) *Type {
 	if symbol.Flags&ast.SymbolFlagsProperty != 0 {
 		if symbol.CheckFlags&ast.CheckFlagsSyntheticProperty != 0 {
-			// if symbol.CheckFlags&ast.CheckFlagsDeferredType != 0 {
-			// 	return c.getWriteTypeOfSymbolWithDeferredType(symbol) || c.getTypeOfSymbolWithDeferredType(symbol)
-			// }
+			if symbol.CheckFlags&ast.CheckFlagsDeferredType != 0 {
+				return c.getWriteTypeOfSymbolWithDeferredType(symbol)
+			}
 			links := c.valueSymbolLinks.get(symbol)
 			return core.OrElse(links.writeType, links.resolvedType)
 		}
@@ -12745,11 +12964,9 @@ func (c *Checker) GetTypeOfSymbolAtLocation(symbol *ast.Symbol, location *ast.No
 }
 
 func (c *Checker) getTypeOfSymbol(symbol *ast.Symbol) *Type {
-	// !!!
-	// checkFlags := symbol.checkFlags
-	// if checkFlags&CheckFlagsDeferredType != 0 {
-	// 	return c.getTypeOfSymbolWithDeferredType(symbol)
-	// }
+	if symbol.CheckFlags&ast.CheckFlagsDeferredType != 0 {
+		return c.getTypeOfSymbolWithDeferredType(symbol)
+	}
 	if symbol.CheckFlags&ast.CheckFlagsInstantiated != 0 {
 		return c.getTypeOfInstantiatedSymbol(symbol)
 	}
@@ -13648,35 +13865,40 @@ func (b *KeyBuilder) WriteAlias(alias *TypeAlias) {
 	}
 }
 
-// writeTypeReference(A<T, number, U>) writes "111=0-12=1"
-// where A.id=111 and number.id=12
-// Returns true if any referenced type parameter was constrained
-func (b *KeyBuilder) WriteTypeReference(ref *Type, ignoreConstraints bool, depth int) bool {
+func (b *KeyBuilder) WriteGenericTypeReferences(source *Type, target *Type, ignoreConstraints bool) bool {
 	var constrained bool
 	typeParameters := make([]*Type, 0, 8)
-	b.WriteType(ref)
-	for _, t := range ref.AsTypeReference().resolvedTypeArguments {
-		if t.flags&TypeFlagsTypeParameter != 0 {
-			if ignoreConstraints || isUnconstrainedTypeParameter(t) {
-				index := slices.Index(typeParameters, t)
-				if index < 0 {
-					index = len(typeParameters)
-					typeParameters = append(typeParameters, t)
+	var writeTypeReference func(*Type, int)
+	// writeTypeReference(A<T, number, U>) writes "111=0-12=1"
+	// where A.id=111 and number.id=12
+	writeTypeReference = func(ref *Type, depth int) {
+		b.WriteType(ref.Target())
+		for _, t := range ref.AsTypeReference().resolvedTypeArguments {
+			if t.flags&TypeFlagsTypeParameter != 0 {
+				if ignoreConstraints || t.checker.getConstraintOfTypeParameter(t) == nil {
+					index := slices.Index(typeParameters, t)
+					if index < 0 {
+						index = len(typeParameters)
+						typeParameters = append(typeParameters, t)
+					}
+					b.WriteByte('=')
+					b.WriteInt(index)
+					continue
 				}
-				b.WriteByte('=')
-				b.WriteInt(index)
+				constrained = true
+			} else if depth < 4 && isTypeReferenceWithGenericArguments(t) {
+				b.WriteByte('<')
+				writeTypeReference(t, depth+1)
+				b.WriteByte('>')
 				continue
 			}
-			constrained = true
-		} else if depth < 4 && isTypeReferenceWithGenericArguments(t) {
-			b.WriteByte('<')
-			constrained = b.WriteTypeReference(t, ignoreConstraints, depth+1) || constrained
-			b.WriteByte('>')
-			continue
+			b.WriteByte('-')
+			b.WriteType(t)
 		}
-		b.WriteByte('-')
-		b.WriteType(t)
 	}
+	writeTypeReference(source, 0)
+	b.WriteByte(',')
+	writeTypeReference(target, 0)
 	return constrained
 }
 
@@ -13815,9 +14037,7 @@ func getRelationKey(source *Type, target *Type, intersectionState IntersectionSt
 	var b KeyBuilder
 	var constrained bool
 	if isTypeReferenceWithGenericArguments(source) && isTypeReferenceWithGenericArguments(target) {
-		constrained = b.WriteTypeReference(source, ignoreConstraints, 0)
-		b.WriteByte(',')
-		constrained = b.WriteTypeReference(target, ignoreConstraints, 0) || constrained
+		constrained = b.WriteGenericTypeReferences(source, target, ignoreConstraints)
 	} else {
 		b.WriteType(source)
 		b.WriteByte(',')
@@ -13847,7 +14067,7 @@ func getNodeListKey(nodes []*ast.Node) string {
 }
 
 func isTypeReferenceWithGenericArguments(t *Type) bool {
-	return isNonDeferredTypeReference(t) && core.Some(t.AsTypeReference().resolvedTypeArguments, func(t *Type) bool {
+	return isNonDeferredTypeReference(t) && core.Some(t.checker.getTypeArguments(t), func(t *Type) bool {
 		return t.flags&TypeFlagsTypeParameter != 0 || isTypeReferenceWithGenericArguments(t)
 	})
 }
@@ -16966,8 +17186,7 @@ func (c *Checker) getTypeOfMappedSymbol(symbol *ast.Symbol) *Type {
 	if links.resolvedType == nil {
 		mappedType := links.containingType
 		if !c.pushTypeResolution(symbol, TypeSystemPropertyNameType) {
-			// !!!
-			// mappedType.containsError = true
+			mappedType.AsMappedType().containsError = true
 			return c.errorType
 		}
 		templateType := c.getTemplateTypeFromMappedType(core.OrElse(mappedType.AsMappedType().target, mappedType))
@@ -17562,14 +17781,15 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 	links := c.valueSymbolLinks.get(result)
 	links.containingType = containingType
 	links.nameType = nameType
-	// !!! Need new DeferredSymbolLinks or some such
-	// if propTypes.length > 2 {
-	// 	// When `propTypes` has the potential to explode in size when normalized, defer normalization until absolutely needed
-	// 	result.links.checkFlags |= CheckFlagsDeferredType
-	// 	result.links.deferralParent = containingType
-	// 	result.links.deferralConstituents = propTypes
-	// 	result.links.deferralWriteConstituents = writeTypes
-	// } else {
+	if len(propTypes) > 2 {
+		// When `propTypes` has the potential to explode in size when normalized, defer normalization until absolutely needed
+		result.CheckFlags |= ast.CheckFlagsDeferredType
+		deferred := c.deferredSymbolLinks.get(result)
+		deferred.parent = containingType
+		deferred.constituents = propTypes
+		deferred.writeConstituents = writeTypes
+		return result
+	}
 	if isUnion {
 		links.resolvedType = c.getUnionType(propTypes)
 	} else {
@@ -20100,7 +20320,7 @@ func (c *Checker) getConditionalType(root *ConditionalRoot, mapper *TypeMapper, 
 		checkTuples := c.isSimpleTupleType(checkTypeNode) && c.isSimpleTupleType(extendsTypeNode) && len(checkTypeNode.AsTupleTypeNode().Elements.Nodes) == len(extendsTypeNode.AsTupleTypeNode().Elements.Nodes)
 		checkTypeDeferred := c.isDeferredType(checkType, checkTuples)
 		var combinedMapper *TypeMapper
-		if root.inferTypeParameters != nil {
+		if len(root.inferTypeParameters) != 0 {
 			// When we're looking at making an inference for an infer type, when we get its constraint, it'll automagically be
 			// instantiated with the context, so it doesn't need the mapper for the inference context - however the constraint
 			// may refer to another _root_, _uncloned_ `infer` type parameter [1], or to something mapped by `mapper` [2].
@@ -20223,7 +20443,7 @@ func (c *Checker) getConditionalType(root *ConditionalRoot, mapper *TypeMapper, 
 func (c *Checker) getTailRecursionRoot(newType *Type, newMapper *TypeMapper) (*ConditionalRoot, *TypeMapper) {
 	if newType.flags&TypeFlagsConditional != 0 && newMapper != nil {
 		newRoot := newType.AsConditionalType().root
-		if newRoot.outerTypeParameters != nil {
+		if len(newRoot.outerTypeParameters) != 0 {
 			typeParamMapper := c.combineTypeMappers(newType.AsConditionalType().mapper, newMapper)
 			typeArguments := core.Map(newRoot.outerTypeParameters, func(t *Type) *Type { return typeParamMapper.Map(t) })
 			newRootMapper := newTypeMapper(newRoot.outerTypeParameters, typeArguments)

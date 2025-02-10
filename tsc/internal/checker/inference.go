@@ -1222,6 +1222,9 @@ func (c *Checker) inferFromIntraExpressionSites(n *InferenceContext) {
 func (c *Checker) getInferredType(n *InferenceContext, index int) *Type {
 	inference := n.inferences[index]
 	if inference.inferredType == nil {
+		if inference.typeParameter == c.errorType {
+			return inference.typeParameter
+		}
 		var inferredType *Type
 		var fallbackType *Type
 		if n.signature != nil {

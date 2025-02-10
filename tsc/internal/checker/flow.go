@@ -1579,7 +1579,11 @@ func (c *Checker) isMatchingReference(source *ast.Node, target *ast.Node) bool {
 			}
 		}
 	case ast.KindQualifiedName:
-		return ast.IsAccessExpression(target) && source.AsQualifiedName().Right.Text() == target.Name().Text() && c.isMatchingReference(source.AsQualifiedName().Left, target.Expression())
+		if ast.IsAccessExpression(target) {
+			if targetPropertyName, ok := c.getAccessedPropertyName(target); ok {
+				return source.AsQualifiedName().Right.Text() == targetPropertyName && c.isMatchingReference(source.AsQualifiedName().Left, target.Expression())
+			}
+		}
 	case ast.KindBinaryExpression:
 		return ast.IsBinaryExpression(source) && source.AsBinaryExpression().OperatorToken.Kind == ast.KindCommaToken && c.isMatchingReference(source.AsBinaryExpression().Right, target)
 	}
