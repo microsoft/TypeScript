@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts] ////
+
+=== inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts ===
+class S<T> {
+>S : Symbol(S, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 0, 0))
+>T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 0, 8))
+
+  set: Set<T>;
+>set : Symbol(S.set, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 0, 12))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 0, 8))
+
+  constructor(set: Set<T>) {
+>set : Symbol(set, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 3, 14))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 0, 8))
+
+    this.set = set;
+>this.set : Symbol(S.set, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 0, 12))
+>this : Symbol(S, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 0, 0))
+>set : Symbol(S.set, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 0, 12))
+>set : Symbol(set, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 3, 14))
+  }
+
+  array() {
+>array : Symbol(S.array, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 5, 3))
+
+    return new S(new Set([...this.set].map((item) => [item])));
+>S : Symbol(S, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 0, 0))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>[...this.set].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>this.set : Symbol(S.set, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 0, 12))
+>this : Symbol(S, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 0, 0))
+>set : Symbol(S.set, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 0, 12))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 8, 44))
+>item : Symbol(item, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 8, 44))
+  }
+}
+
+function sArray<T>(set: Set<T>) {
+>sArray : Symbol(sArray, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 10, 1))
+>T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 12, 16))
+>set : Symbol(set, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 12, 19))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 12, 16))
+
+  return new S(new Set([...set].map((item) => [item])));
+>S : Symbol(S, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 0, 0))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>[...set].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>set : Symbol(set, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 12, 19))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 13, 37))
+>item : Symbol(item, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult2.ts, 13, 37))
+}
+
