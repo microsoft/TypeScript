@@ -10,6 +10,7 @@ type System interface {
 	Writer() io.Writer
 	EndWrite() // needed for testing
 	FS() vfs.FS
+	DefaultLibraryPath() string
 	GetCurrentDirectory() string
 	NewLine() string // #241 eventually we want to use "\n"
 }

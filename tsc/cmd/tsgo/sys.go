@@ -6,6 +6,7 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/execute"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -13,14 +14,19 @@ import (
 )
 
 type osSys struct {
-	writer  io.Writer
-	fs      vfs.FS
-	newLine string
-	cwd     string
+	writer             io.Writer
+	fs                 vfs.FS
+	defaultLibraryPath string
+	newLine            string
+	cwd                string
 }
 
 func (s *osSys) FS() vfs.FS {
 	return s.fs
+}
+
+func (s *osSys) DefaultLibraryPath() string {
+	return s.defaultLibraryPath
 }
 
 func (s *osSys) GetCurrentDirectory() string {
@@ -48,9 +54,10 @@ func newSystem() *osSys {
 	}
 
 	return &osSys{
-		cwd:     tspath.NormalizePath(cwd),
-		fs:      vfs.FromOS(),
-		writer:  os.Stdout,
-		newLine: core.IfElse(runtime.GOOS == "windows", "\r\n", "\n"),
+		cwd:                tspath.NormalizePath(cwd),
+		fs:                 bundled.WrapFS(vfs.FromOS()),
+		defaultLibraryPath: bundled.LibPath(),
+		writer:             os.Stdout,
+		newLine:            core.IfElse(runtime.GOOS == "windows", "\r\n", "\n"),
 	}
 }

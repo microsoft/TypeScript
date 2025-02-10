@@ -158,7 +158,7 @@ func CompileFiles(
 	fs := vfstest.FromMapFS(testfs, harnessOptions.UseCaseSensitiveFileNames)
 	fs = bundled.WrapFS(fs)
 
-	host := createCompilerHost(fs, &compilerOptions, currentDirectory)
+	host := createCompilerHost(fs, bundled.LibPath(), &compilerOptions, currentDirectory)
 	result := compileFilesWithHost(host, programFileNames, &compilerOptions, &harnessOptions)
 
 	return result
@@ -350,8 +350,8 @@ func getOptionValue(t *testing.T, option *tsoptions.CommandLineOption, value str
 	return nil
 }
 
-func createCompilerHost(fs vfs.FS, options *core.CompilerOptions, currentDirectory string) compiler.CompilerHost {
-	return compiler.NewCompilerHost(options, currentDirectory, fs)
+func createCompilerHost(fs vfs.FS, defaultLibraryPath string, options *core.CompilerOptions, currentDirectory string) compiler.CompilerHost {
+	return compiler.NewCompilerHost(options, currentDirectory, fs, defaultLibraryPath)
 }
 
 func compileFilesWithHost(
@@ -446,10 +446,9 @@ func newCompilationResult(
 // !!! Temporary while we don't have the real `createProgram`
 func createProgram(host compiler.CompilerHost, options *core.CompilerOptions, rootFiles []string) *compiler.Program {
 	programOptions := compiler.ProgramOptions{
-		RootFiles:          rootFiles,
-		Host:               host,
-		Options:            options,
-		DefaultLibraryPath: bundled.LibPath(),
+		RootFiles: rootFiles,
+		Host:      host,
+		Options:   options,
 	}
 	program := compiler.NewProgram(programOptions)
 	return program

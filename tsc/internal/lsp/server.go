@@ -68,6 +68,11 @@ func (s *Server) FS() vfs.FS {
 	return s.fs
 }
 
+// DefaultLibraryPath implements project.ProjectServiceHost.
+func (s *Server) DefaultLibraryPath() string {
+	return s.defaultLibraryPath
+}
+
 // GetCurrentDirectory implements project.ProjectServiceHost.
 func (s *Server) GetCurrentDirectory() string {
 	return s.cwd

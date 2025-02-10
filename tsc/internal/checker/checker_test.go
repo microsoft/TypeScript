@@ -36,11 +36,10 @@ foo.bar;`
 	fs = bundled.WrapFS(fs)
 
 	cd := "/"
-	host := compiler.NewCompilerHost(nil, cd, fs)
+	host := compiler.NewCompilerHost(nil, cd, fs, bundled.LibPath())
 	opts := compiler.ProgramOptions{
-		Host:               host,
-		ConfigFilePath:     "/tsconfig.json",
-		DefaultLibraryPath: bundled.LibPath(),
+		Host:           host,
+		ConfigFilePath: "/tsconfig.json",
 	}
 	p := compiler.NewProgram(opts)
 	p.BindSourceFiles()
@@ -67,11 +66,10 @@ func TestCheckSrcCompiler(t *testing.T) {
 
 	rootPath := tspath.CombinePaths(tspath.NormalizeSlashes(repo.TypeScriptSubmodulePath), "src", "compiler")
 
-	host := compiler.NewCompilerHost(nil, rootPath, fs)
+	host := compiler.NewCompilerHost(nil, rootPath, fs, bundled.LibPath())
 	opts := compiler.ProgramOptions{
-		Host:               host,
-		ConfigFilePath:     tspath.CombinePaths(rootPath, "tsconfig.json"),
-		DefaultLibraryPath: bundled.LibPath(),
+		Host:           host,
+		ConfigFilePath: tspath.CombinePaths(rootPath, "tsconfig.json"),
 	}
 	p := compiler.NewProgram(opts)
 	p.CheckSourceFiles()

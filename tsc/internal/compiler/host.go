@@ -11,6 +11,7 @@ import (
 
 type CompilerHost interface {
 	FS() vfs.FS
+	DefaultLibraryPath() string
 	GetCurrentDirectory() string
 	NewLine() string
 	Trace(msg string)
@@ -25,21 +26,27 @@ type FileInfo struct {
 var _ CompilerHost = (*compilerHost)(nil)
 
 type compilerHost struct {
-	options          *core.CompilerOptions
-	currentDirectory string
-	fs               vfs.FS
+	options            *core.CompilerOptions
+	currentDirectory   string
+	fs                 vfs.FS
+	defaultLibraryPath string
 }
 
-func NewCompilerHost(options *core.CompilerOptions, currentDirectory string, fs vfs.FS) CompilerHost {
+func NewCompilerHost(options *core.CompilerOptions, currentDirectory string, fs vfs.FS, defaultLibraryPath string) CompilerHost {
 	h := &compilerHost{}
 	h.options = options
 	h.currentDirectory = currentDirectory
 	h.fs = fs
+	h.defaultLibraryPath = defaultLibraryPath
 	return h
 }
 
 func (h *compilerHost) FS() vfs.FS {
 	return h.fs
+}
+
+func (h *compilerHost) DefaultLibraryPath() string {
+	return h.defaultLibraryPath
 }
 
 func (h *compilerHost) SetOptions(options *core.CompilerOptions) {

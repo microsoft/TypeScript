@@ -46,7 +46,7 @@ func processAllProgramFiles(
 		compilerOptions:    compilerOptions,
 		resolver:           resolver,
 		tasksByFileName:    make(map[string]*parseTask),
-		defaultLibraryPath: programOptions.DefaultLibraryPath,
+		defaultLibraryPath: host.DefaultLibraryPath(),
 		comparePathsOptions: tspath.ComparePathsOptions{
 			UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
 			CurrentDirectory:          host.GetCurrentDirectory(),

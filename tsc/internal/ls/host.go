@@ -9,6 +9,7 @@ import (
 
 type Host interface {
 	FS() vfs.FS
+	DefaultLibraryPath() string
 	GetCurrentDirectory() string
 	NewLine() string
 	Trace(msg string)

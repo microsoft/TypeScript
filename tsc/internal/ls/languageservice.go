@@ -24,6 +24,11 @@ func (l *LanguageService) FS() vfs.FS {
 	return l.host.FS()
 }
 
+// DefaultLibraryPath implements compiler.CompilerHost.
+func (l *LanguageService) DefaultLibraryPath() string {
+	return l.host.DefaultLibraryPath()
+}
+
 // GetCurrentDirectory implements compiler.CompilerHost.
 func (l *LanguageService) GetCurrentDirectory() string {
 	return l.host.GetCurrentDirectory()

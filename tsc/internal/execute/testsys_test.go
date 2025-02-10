@@ -27,26 +27,32 @@ func newTestSys(fileOrFolderList FileMap, cwd string, args ...string) *testSys {
 	}
 	fs := bundled.WrapFS(vfstest.FromMapFS(mapFS, true /*useCaseSensitiveFileNames*/))
 	return &testSys{
-		fs:           fs,
-		cwd:          cwd,
-		files:        fileList,
-		output:       []string{},
-		currentWrite: &strings.Builder{},
+		fs:                 fs,
+		defaultLibraryPath: bundled.LibPath(),
+		cwd:                cwd,
+		files:              fileList,
+		output:             []string{},
+		currentWrite:       &strings.Builder{},
 	}
 }
 
 type testSys struct {
 	// todo: original has write to output as a string[] because the separations are needed for baselining
-	output         []string
-	currentWrite   *strings.Builder
-	serializedDiff map[string]string
-	fs             vfs.FS
-	cwd            string
-	files          []string
+	output             []string
+	currentWrite       *strings.Builder
+	serializedDiff     map[string]string
+	fs                 vfs.FS
+	defaultLibraryPath string
+	cwd                string
+	files              []string
 }
 
 func (s *testSys) FS() vfs.FS {
 	return s.fs
+}
+
+func (s *testSys) DefaultLibraryPath() string {
+	return s.defaultLibraryPath
 }
 
 func (s *testSys) GetCurrentDirectory() string {

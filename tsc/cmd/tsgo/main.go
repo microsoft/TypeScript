@@ -154,15 +154,14 @@ func main() {
 
 	currentDirectory = tspath.GetDirectoryPath(configFilePath)
 	// !!! is the working directory actually the config path?
-	host := ts.NewCompilerHost(compilerOptions, currentDirectory, fs)
+	host := ts.NewCompilerHost(compilerOptions, currentDirectory, fs, defaultLibraryPath)
 
 	parseStart := time.Now()
 	program := ts.NewProgram(ts.ProgramOptions{
-		ConfigFilePath:     configFilePath,
-		Options:            compilerOptions,
-		SingleThreaded:     opts.devel.singleThreaded,
-		Host:               host,
-		DefaultLibraryPath: defaultLibraryPath,
+		ConfigFilePath: configFilePath,
+		Options:        compilerOptions,
+		SingleThreaded: opts.devel.singleThreaded,
+		Host:           host,
 	})
 	parseTime := time.Since(parseStart)
 

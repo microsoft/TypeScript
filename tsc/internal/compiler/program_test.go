@@ -224,11 +224,10 @@ func TestProgram(t *testing.T) {
 			opts := core.CompilerOptions{Target: testCase.target}
 
 			program := NewProgram(ProgramOptions{
-				RootFiles:          []string{"c:/dev/src/index.ts"},
-				Host:               NewCompilerHost(&opts, "c:/dev/src", fs),
-				Options:            &opts,
-				DefaultLibraryPath: bundled.LibPath(),
-				SingleThreaded:     false,
+				RootFiles:      []string{"c:/dev/src/index.ts"},
+				Host:           NewCompilerHost(&opts, "c:/dev/src", fs, bundled.LibPath()),
+				Options:        &opts,
+				SingleThreaded: false,
 			})
 
 			actualFiles := []string{}
