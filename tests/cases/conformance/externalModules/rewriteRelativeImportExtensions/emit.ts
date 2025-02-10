@@ -21,6 +21,9 @@ import "./foo.ts";
 export * from "./foo.ts";
 //Shim
 import("./foo.ts");
+import("./foo.ts").then(() => {});
+function acceptAny(arg: any) {}
+acceptAny(import("./foo.ts"));
 import("./foo.ts", { with: { attr: "value" } });
 import("" + "./foo.ts");
 // @Filename: js.js
