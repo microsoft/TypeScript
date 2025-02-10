@@ -453,7 +453,7 @@ func (p *Parser) parseTrailingTagComments(pos int, end int, margin int, indentTe
 		margin += end - pos
 	}
 	var initialMargin string
-	if margin < len(initialMargin) {
+	if margin < len(indentText) {
 		initialMargin = indentText[margin:]
 	}
 	return p.parseTagComments(margin, &initialMargin)
