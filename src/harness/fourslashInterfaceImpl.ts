@@ -449,8 +449,8 @@ export class Verify extends VerifyNegatable {
         this.state.baselineGetEmitOutput();
     }
 
-    public baselineQuickInfo(verbosityLevels?: FourSlash.VerbosityLevels): void {
-        this.state.baselineQuickInfo(verbosityLevels);
+    public baselineQuickInfo(): void {
+        this.state.baselineQuickInfo();
     }
 
     public baselineSignatureHelp(): void {
