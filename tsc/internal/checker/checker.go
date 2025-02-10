@@ -12746,6 +12746,14 @@ func isNonLocalAlias(symbol *ast.Symbol, excludes ast.SymbolFlags) bool {
 		symbol.Flags&ast.SymbolFlagsAlias != 0 && symbol.Flags&ast.SymbolFlagsAssignment != 0
 }
 
+func (c *Checker) ResolveAlias(symbol *ast.Symbol) (*ast.Symbol, bool) {
+	if symbol == nil {
+		return nil, false
+	}
+	resolved := c.resolveAlias(symbol)
+	return resolved, resolved != c.unknownSymbol
+}
+
 func (c *Checker) resolveAlias(symbol *ast.Symbol) *ast.Symbol {
 	if symbol.Flags&ast.SymbolFlagsAlias == 0 {
 		panic("Should only get alias here")

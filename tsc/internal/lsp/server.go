@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"strings"
 	"time"
 
 	"github.com/microsoft/typescript-go/internal/core"
@@ -281,8 +282,8 @@ func (s *Server) handleHover(req *lsproto.RequestMessage) error {
 	return s.sendResult(req.ID, &lsproto.Hover{
 		Contents: lsproto.MarkupContentOrMarkedStringOrMarkedStrings{
 			MarkupContent: &lsproto.MarkupContent{
-				Kind:  lsproto.MarkupKindPlainText,
-				Value: hoverText,
+				Kind:  lsproto.MarkupKindMarkdown,
+				Value: codeFence("ts", hoverText),
 			},
 		},
 	})
@@ -319,4 +320,27 @@ func (s *Server) Log(msg ...any) {
 
 func ptrTo[T any](v T) *T {
 	return &v
+}
+
+func codeFence(lang string, code string) string {
+	if code == "" {
+		return ""
+	}
+	ticks := 3
+	for strings.Contains(code, strings.Repeat("`", ticks)) {
+		ticks++
+	}
+	var result strings.Builder
+	result.Grow(len(code) + len(lang) + 2*ticks + 2)
+	for range ticks {
+		result.WriteByte('`')
+	}
+	result.WriteString(lang)
+	result.WriteByte('\n')
+	result.WriteString(code)
+	result.WriteByte('\n')
+	for range ticks {
+		result.WriteByte('`')
+	}
+	return result.String()
 }

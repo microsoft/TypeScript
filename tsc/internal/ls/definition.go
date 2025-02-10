@@ -11,6 +11,12 @@ func (l *LanguageService) ProvideDefinitions(fileName string, position int) []Lo
 
 	checker := program.GetTypeChecker()
 	if symbol := checker.GetSymbolAtLocation(node); symbol != nil {
+		if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+			if resolved, ok := checker.ResolveAlias(symbol); ok {
+				symbol = resolved
+			}
+		}
+
 		locations := make([]Location, 0, len(symbol.Declarations))
 		for _, decl := range symbol.Declarations {
 			locations = append(locations, Location{
