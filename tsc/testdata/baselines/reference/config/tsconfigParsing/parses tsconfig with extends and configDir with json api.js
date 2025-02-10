@@ -11,27 +11,22 @@ Fs::
 //// [/src/index.ts]
 
 
-//// [/tsconfig.json]
+//// [/tsconfig.base.json]
 {
-				"extends": "./tsconfigWithExtends.json",
-				"compilerOptions": {
-				    "outDir": "./dist",
-    				"strict": true,
-    				"noImplicitAny": true,
-				},
-			}
-
-//// [/tsconfigWithExtends.json]
-{
-  "files": ["/src/index.ts", "/src/app.ts"],
-  "include": ["/src/**/*"],
-  "ts-node": {
-    "compilerOptions": {
-      "module": "commonjs"
-    },
-    "transpileOnly": true
+  "compilerOptions": {
+    "outFile": "${configDir}/outFile",
+    "outDir": "${configDir}/outDir",
+    "rootDir": "${configDir}/rootDir",
+    "tsBuildInfoFile": "${configDir}/tsBuildInfoFile",
+    "baseUrl": "${configDir}/baseUrl",
+    "declarationDir": "${configDir}/declarationDir",
   }
 }
+
+//// [/tsconfig.json]
+{
+				"extends": "./tsconfig.base.json"
+			}
 
 
 configFileName:: tsconfig.json
@@ -47,7 +42,7 @@ CompilerOptions::
   "allowUnusedLabels": null,
   "assumeChangesOnlyAffectDirectDependencies": null,
   "alwaysStrict": null,
-  "baseUrl": "",
+  "baseUrl": "/baseUrl",
   "build": null,
   "checkJs": null,
   "customConditions": null,
@@ -57,7 +52,7 @@ CompilerOptions::
   "emitDecoratorMetadata": null,
   "downlevelIteration": null,
   "declaration": null,
-  "declarationDir": "",
+  "declarationDir": "/declarationDir",
   "declarationMap": null,
   "disableSizeLimit": null,
   "disableSourceOfProjectReferenceRedirect": null,
@@ -92,7 +87,7 @@ CompilerOptions::
   "noCheck": null,
   "noErrorTruncation": null,
   "noFallthroughCasesInSwitch": null,
-  "noImplicitAny": true,
+  "noImplicitAny": null,
   "noImplicitThis": null,
   "noImplicitReturns": null,
   "noEmitHelpers": null,
@@ -106,8 +101,8 @@ CompilerOptions::
   "noImplicitOverride": null,
   "noUncheckedSideEffectImports": null,
   "out": "",
-  "outDir": "/dist",
-  "outFile": "",
+  "outDir": "/outDir",
+  "outFile": "/outFile",
   "paths": null,
   "preserveConstEnums": null,
   "preserveSymlinks": null,
@@ -118,10 +113,10 @@ CompilerOptions::
   "removeComments": null,
   "rewriteRelativeImportExtensions": null,
   "reactNamespace": "",
-  "rootDir": "",
+  "rootDir": "/rootDir",
   "rootDirs": null,
   "skipLibCheck": null,
-  "strict": true,
+  "strict": null,
   "strictBindCallApply": null,
   "strictBuiltinIteratorReturn": null,
   "strictFunctionTypes": null,
@@ -134,7 +129,7 @@ CompilerOptions::
   "suppressOutputPathCheck": null,
   "target": 0,
   "traceResolution": null,
-  "tsBuildInfoFile": "",
+  "tsBuildInfoFile": "/tsBuildInfoFile",
   "typeRoots": null,
   "types": null,
   "useDefineForClassFields": null,
@@ -162,6 +157,6 @@ CompilerOptions::
 }
 
 FileNames::
-/src/index.ts,/src/app.ts
+/src/app.ts,/src/index.ts
 Errors::
 
