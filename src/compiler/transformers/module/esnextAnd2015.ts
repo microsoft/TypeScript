@@ -219,7 +219,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             const importStatement = factory.createImportDeclaration(
                 /*modifiers*/ undefined,
                 factory.createImportClause(
-                    /*isTypeOnly*/ false,
+                    /*phaseModifier*/ undefined,
                     /*name*/ undefined,
                     factory.createNamedImports([
                         factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("createRequire"), createRequireName),
@@ -351,7 +351,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         const importDecl = factory.createImportDeclaration(
             /*modifiers*/ undefined,
             factory.createImportClause(
-                /*isTypeOnly*/ false,
+                /*phaseModifier*/ undefined,
                 /*name*/ undefined,
                 factory.createNamespaceImport(
                     synthName,
