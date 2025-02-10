@@ -25,6 +25,7 @@ Fs::
 {
   "files": ["/src/index.ts", "/src/app.ts"],
   "include": ["/src/**/*"],
+  "exclude": [],
   "ts-node": {
     "compilerOptions": {
       "module": "commonjs"
