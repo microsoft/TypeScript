@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/declarationEmitUsingAliasSymbolChain2.ts] ////
+
+=== lib/index.d.ts ===
+import * as DefaultExport from "./internal/default_exports";
+>DefaultExport : Symbol(DefaultExport, Decl(index.d.ts, 0, 6))
+
+export { DefaultExport as default };
+>DefaultExport : Symbol(DefaultExport, Decl(index.d.ts, 0, 6))
+>default : Symbol(default, Decl(index.d.ts, 1, 8))
+
+export * as BaseWindow from "./internal/windows/basewindow";
+>BaseWindow : Symbol(BaseWindow, Decl(index.d.ts, 2, 6))
+
+=== lib/internal/default_exports.d.ts ===
+export { default as BaseWindow } from "./windows/basewindow";
+>default : Symbol(default, Decl(basewindow.d.ts, 2, 48))
+>BaseWindow : Symbol(BaseWindow, Decl(default_exports.d.ts, 0, 8))
+
+=== lib/internal/windows/basewindow.d.ts ===
+interface BaseWindow {}
+>BaseWindow : Symbol(BaseWindow, Decl(basewindow.d.ts, 0, 0), Decl(basewindow.d.ts, 2, 13))
+
+export interface BaseWindowConstructor {}
+>BaseWindowConstructor : Symbol(BaseWindowConstructor, Decl(basewindow.d.ts, 0, 23))
+
+declare const BaseWindow: BaseWindowConstructor;
+>BaseWindow : Symbol(BaseWindow, Decl(basewindow.d.ts, 0, 0), Decl(basewindow.d.ts, 2, 13))
+>BaseWindowConstructor : Symbol(BaseWindowConstructor, Decl(basewindow.d.ts, 0, 23))
+
+export default BaseWindow;
+>BaseWindow : Symbol(BaseWindow, Decl(basewindow.d.ts, 0, 0), Decl(basewindow.d.ts, 2, 13))
+
+
+=== lib-utils/shared-types/widget-config.d.ts ===
+import type UI from "../../lib/index";
+>UI : Symbol(UI, Decl(widget-config.d.ts, 0, 6))
+
+export interface WidgetFactory {
+>WidgetFactory : Symbol(WidgetFactory, Decl(widget-config.d.ts, 0, 38))
+
+    instantiator(parentWindow: UI.BaseWindow): void;
+>instantiator : Symbol(WidgetFactory.instantiator, Decl(widget-config.d.ts, 1, 32))
+>parentWindow : Symbol(parentWindow, Decl(widget-config.d.ts, 2, 17))
+>UI : Symbol(UI, Decl(widget-config.d.ts, 0, 6))
+>BaseWindow : Symbol(UI.BaseWindow, Decl(default_exports.d.ts, 0, 8))
+}
+
+=== app/navigator/widget-factory.ts ===
+import {WidgetFactory} from "../../lib-utils/shared-types/widget-config";
+>WidgetFactory : Symbol(WidgetFactory, Decl(widget-factory.ts, 0, 8))
+
+declare const instantiator: WidgetFactory['instantiator'];
+>instantiator : Symbol(instantiator, Decl(widget-factory.ts, 2, 13))
+>WidgetFactory : Symbol(WidgetFactory, Decl(widget-factory.ts, 0, 8))
+
+export default Object.freeze({
+>Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    instantiator
+>instantiator : Symbol(instantiator, Decl(widget-factory.ts, 4, 30))
+
+});
+
+import type * as __synthetic_export_lib_1 from "../../lib/index";
+>__synthetic_export_lib_1 : Symbol(__synthetic_export_lib_1, Decl(widget-factory.ts, 8, 11))
+
