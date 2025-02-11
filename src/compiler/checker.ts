@@ -1621,6 +1621,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getSymbolsOfParameterPropertyDeclaration(parameter, escapeLeadingUnderscores(parameterName));
         },
         getDeclaredTypeOfSymbol,
+        getBaseConstructorTypeOfClass,
         getPropertiesOfType,
         getPropertyOfType: (type, name) => getPropertyOfType(type, escapeLeadingUnderscores(name)),
         getPrivateIdentifierPropertyOfType: (leftType: Type, name: string, location: Node) => {
