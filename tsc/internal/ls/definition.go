@@ -1,6 +1,10 @@
 package ls
 
-import "github.com/microsoft/typescript-go/internal/ast"
+import (
+	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/scanner"
+)
 
 func (l *LanguageService) ProvideDefinitions(fileName string, position int) []Location {
 	program, file := l.getProgramAndFile(fileName)
@@ -19,9 +23,13 @@ func (l *LanguageService) ProvideDefinitions(fileName string, position int) []Lo
 
 		locations := make([]Location, 0, len(symbol.Declarations))
 		for _, decl := range symbol.Declarations {
+			file := ast.GetSourceFileOfNode(decl)
+			loc := decl.Loc
+			pos := scanner.GetTokenPosOfNode(decl, file, false /*includeJsDoc*/)
+
 			locations = append(locations, Location{
-				FileName: ast.GetSourceFileOfNode(decl).FileName(),
-				Range:    decl.Loc,
+				FileName: file.FileName(),
+				Range:    core.NewTextRange(pos, loc.End()),
 			})
 		}
 		return locations
