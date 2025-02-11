@@ -32,8 +32,6 @@ func (v *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 		ast.KindConstKeyword,
 		ast.KindDeclareKeyword,
 		ast.KindReadonlyKeyword,
-		ast.KindInKeyword,
-		ast.KindOutKeyword,
 		// TypeScript type nodes are elided.
 		ast.KindArrayType,
 		ast.KindTupleType,

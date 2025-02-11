@@ -150,6 +150,27 @@ jobs:
       - run: git add .
       - run: git diff --staged --exit-code --stat
 
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          submodules: true
+      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
+      - uses: ./.github/actions/setup-go
+        with:
+          cache-name: smoke
+
+      - run: npm ci
+
+      - run: npx hereby build --race
+
+      - run: npm ci && npx hereby generate-diagnostics
+        working-directory: ./_submodules/TypeScript
+
+      - run: ./built/local/tsgo -p ./_submodules/TypeScript/src/compiler --singleThreaded
+      - run: ./built/local/tsgo -p ./_submodules/TypeScript/src/compiler
+
   required:
     runs-on: ubuntu-latest
     if: ${{ always() }}
@@ -160,6 +181,7 @@ jobs:
       - format
       - generate
       - tidy
+      - smoke
 
     steps:
       - name: Check required jobs
