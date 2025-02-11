@@ -12,13 +12,13 @@ runs:
   steps:
     - name: Install Go
       id: install-go
-      uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.1.0
+      uses: actions/setup-go@f111f3307d8850f501ac008e886eec1fd1932a34 # v5.3.0
       with:
         go-version: ${{ inputs.go-version }}
         cache: false
 
     - name: Go cache
-      uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
       with:
         # There is more code downloaded and built than is covered by '**/go.sum',
         # so give each job its own cache to try and not end up sharing the wrong
