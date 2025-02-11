@@ -18,6 +18,7 @@ Fs::
 				    "outDir": "./dist",
     				"strict": true,
     				"noImplicitAny": true,
+					"baseUrl": "",
 				},
 			}
 
@@ -48,7 +49,7 @@ CompilerOptions::
   "allowUnusedLabels": null,
   "assumeChangesOnlyAffectDirectDependencies": null,
   "alwaysStrict": null,
-  "baseUrl": "",
+  "baseUrl": "/",
   "build": null,
   "checkJs": null,
   "customConditions": null,

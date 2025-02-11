@@ -450,6 +450,7 @@ var parseJsonConfigFileTests = []struct {
 				    "outDir": "./dist",
     				"strict": true,
     				"noImplicitAny": true,
+					"baseUrl": "",
 				},
 			}`,
 			configFileName: "tsconfig.json",

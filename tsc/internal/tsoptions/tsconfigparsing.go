@@ -286,7 +286,7 @@ func validateJsonOptionValue(
 	valueExpression *ast.Expression,
 	sourceFile *ast.SourceFile,
 ) (any, []*ast.Diagnostic) {
-	if val == nil || val == "" {
+	if val == nil {
 		return nil, nil
 	}
 	errors := []*ast.Diagnostic{}
