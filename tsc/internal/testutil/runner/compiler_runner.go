@@ -247,7 +247,7 @@ func newCompilerTest(
 		// If the last file in a test uses require or a triple slash reference we'll assume all other files will be brought in via references,
 		// otherwise, assume all files are just meant to be in the same compilation session without explicit references to one another.
 
-		if testCaseContentWithConfig.configuration["noImplicitReferences"] != "" ||
+		if testCaseContentWithConfig.configuration["noimplicitreferences"] != "" ||
 			strings.Contains(lastUnit.content, requireStr) ||
 			referencesRegex.MatchString(lastUnit.content) {
 			toBeCompiled = append(toBeCompiled, createHarnessTestFile(lastUnit, currentDirectory))
