@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts] ////
+
+=== mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts ===
+// https://github.com/microsoft/TypeScript/issues/41700
+
+enum EnumA {
+>EnumA : Symbol(EnumA, Decl(mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts, 0, 0))
+
+    A = 'A',
+>A : Symbol(EnumA.A, Decl(mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts, 2, 12))
+
+    B = 'B',
+>B : Symbol(EnumA.B, Decl(mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts, 3, 12))
+}
+
+// A second enum with at least one key also in EnumA
+enum EnumB {
+>EnumB : Symbol(EnumB, Decl(mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts, 5, 1))
+
+    B = 'B',
+>B : Symbol(EnumB.B, Decl(mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts, 8, 12))
+
+    C = 'C',
+>C : Symbol(EnumB.C, Decl(mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts, 9, 12))
+}
+
+type Mapped = {
+>Mapped : Symbol(Mapped, Decl(mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts, 11, 1))
+
+    [k in EnumA|EnumB]: string;
+>k : Symbol(k, Decl(mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts, 14, 5))
+>EnumA : Symbol(EnumA, Decl(mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts, 0, 0))
+>EnumB : Symbol(EnumB, Decl(mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts, 5, 1))
+
+};
+
+// Should work
+const partial: Partial<Mapped> = {
+>partial : Symbol(partial, Decl(mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts, 18, 5))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Mapped : Symbol(Mapped, Decl(mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts, 11, 1))
+
+    [EnumA.B]: 'value',
+>[EnumA.B] : Symbol([EnumA.B], Decl(mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts, 18, 34))
+>EnumA.B : Symbol(EnumA.B, Decl(mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts, 3, 12))
+>EnumA : Symbol(EnumA, Decl(mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts, 0, 0))
+>B : Symbol(EnumA.B, Decl(mappedTypeOverMappedTypeWithOverlappingEnumKeys.ts, 3, 12))
+
+};
+
