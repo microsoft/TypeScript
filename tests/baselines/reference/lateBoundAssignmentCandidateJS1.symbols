@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/lateBoundAssignmentCandidateJS1.ts] ////
+
+=== index.js ===
+// https://github.com/microsoft/TypeScript/issues/60590
+
+export const kBar = Symbol("bar");
+>kBar : Symbol(kBar, Decl(index.js, 2, 12))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+export class foo0 {
+>foo0 : Symbol(foo0, Decl(index.js, 2, 34))
+
+    /**
+     * @protected
+     * @type {null | string}
+     */
+    [kBar] = null;
+>[kBar] : Symbol(foo0[kBar], Decl(index.js, 4, 19))
+>kBar : Symbol(kBar, Decl(index.js, 2, 12))
+
+    get bar() {
+>bar : Symbol(foo0.bar, Decl(index.js, 9, 18), Decl(index.js, 13, 5))
+
+        return this[kBar];
+>this : Symbol(foo0, Decl(index.js, 2, 34))
+>kBar : Symbol(kBar, Decl(index.js, 2, 12))
+    }
+    /**
+     * @type {string}
+     */
+    set bar(value) {
+>bar : Symbol(foo0.bar, Decl(index.js, 9, 18), Decl(index.js, 13, 5))
+>value : Symbol(value, Decl(index.js, 17, 12))
+
+        this[kBar] = value;
+>this : Symbol(foo0, Decl(index.js, 2, 34))
+>kBar : Symbol(kBar, Decl(index.js, 2, 12))
+>value : Symbol(value, Decl(index.js, 17, 12))
+    }
+}
+
