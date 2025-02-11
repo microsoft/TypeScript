@@ -1,0 +1,278 @@
+//// [tests/cases/compiler/declarationEmitInstantationExpressionNested.ts] ////
+
+=== declarationEmitInstantationExpressionNested.ts ===
+function outerFnExpression<K>(n: K) {
+>outerFnExpression : <K>(n: K) => <T>(a: [T, K]) => a is [T, K]
+>                  : ^ ^^ ^^ ^^^^^^ ^^         ^^^^^           
+>n : K
+>  : ^
+
+    return function <T>(a: [T, K]): a is [T, K] {
+>function <T>(a: [T, K]): a is [T, K] {        return null!    } : <T>(a: [T, K]) => a is [T, K]
+>                                                                : ^ ^^ ^^      ^^^^^           
+>a : [T, K]
+>  : ^^^^^^
+
+        return null!
+>null! : never
+>      : ^^^^^
+    }
+}
+
+export let nrFnFromFnExpression = outerFnExpression(1)<number>
+>nrFnFromFnExpression : (a: [number, number]) => a is [number, number]
+>                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerFnExpression(1)<number> : (a: [number, number]) => a is [number, number]
+>                             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerFnExpression(1) : <T>(a: [T, number]) => a is [T, number]
+>                     : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerFnExpression : <K>(n: K) => <T>(a: [T, K]) => a is [T, K]
+>                  : ^ ^^ ^^ ^^^^^^ ^^         ^^^^^           
+>1 : 1
+>  : ^
+
+
+function outerArrowFn<K>(n: K) {
+>outerArrowFn : <K>(n: K) => <T>(a: [T, K]) => a is [T, K]
+>             : ^ ^^ ^^ ^^^^^^ ^^         ^^^^^           
+>n : K
+>  : ^
+
+    return function <T>(a: [T, K]): a is [T, K] {
+>function <T>(a: [T, K]): a is [T, K] {        return null!    } : <T>(a: [T, K]) => a is [T, K]
+>                                                                : ^ ^^ ^^      ^^^^^           
+>a : [T, K]
+>  : ^^^^^^
+
+        return null!
+>null! : never
+>      : ^^^^^
+    }
+}
+
+export let nrFnFromArrowFn = outerArrowFn(1)<number>
+>nrFnFromArrowFn : (a: [number, number]) => a is [number, number]
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerArrowFn(1)<number> : (a: [number, number]) => a is [number, number]
+>                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerArrowFn(1) : <T>(a: [T, number]) => a is [T, number]
+>                : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerArrowFn : <K>(n: K) => <T>(a: [T, K]) => a is [T, K]
+>             : ^ ^^ ^^ ^^^^^^ ^^         ^^^^^           
+>1 : 1
+>  : ^
+
+function outerObjectMethod<K>(n: K) {
+>outerObjectMethod : <K>(n: K) => { inner<T>(a: [T, K]): a is [T, K]; }
+>                  : ^ ^^ ^^ ^^^^^^^^^^^^^ ^^ ^^      ^^^           ^^^
+>n : K
+>  : ^
+
+    return {
+>{        inner<T>(a: [T, K]): a is [T, K] {            return null!        }    } : { inner<T>(a: [T, K]): a is [T, K]; }
+>                                                                                  : ^^^^^^^^ ^^ ^^      ^^^           ^^^
+
+        inner<T>(a: [T, K]): a is [T, K] {
+>inner : <T>(a: [T, K]) => a is [T, K]
+>      : ^ ^^ ^^      ^^^^^           
+>a : [T, K]
+>  : ^^^^^^
+
+            return null!
+>null! : never
+>      : ^^^^^
+        }
+    }
+}
+
+export let nrFnFromObjectMethod = outerObjectMethod(1).inner<number>
+>nrFnFromObjectMethod : (a: [number, number]) => a is [number, number]
+>                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerObjectMethod(1).inner<number> : (a: [number, number]) => a is [number, number]
+>                                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerObjectMethod(1).inner : <T>(a: [T, number]) => a is [T, number]
+>                           : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerObjectMethod(1) : { inner<T>(a: [T, number]): a is [T, number]; }
+>                     : ^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerObjectMethod : <K>(n: K) => { inner<T>(a: [T, K]): a is [T, K]; }
+>                  : ^ ^^ ^^ ^^^^^^^^^^^^^ ^^ ^^      ^^^           ^^^
+>1 : 1
+>  : ^
+>inner : <T>(a: [T, number]) => a is [T, number]
+>      : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+function outerStaticClassMember<K>(n: K) {
+>outerStaticClassMember : <K>(n: K) => typeof (Anonymous class)
+>                       : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : K
+>  : ^
+
+    return class {
+>class {        static inner<T>(a: [T, K]): a is [T, K] {            return null!        }    } : typeof (Anonymous class)
+>                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+        static inner<T>(a: [T, K]): a is [T, K] {
+>inner : <T>(a: [T, K]) => a is [T, K]
+>      : ^ ^^ ^^      ^^^^^           
+>a : [T, K]
+>  : ^^^^^^
+
+            return null!
+>null! : never
+>      : ^^^^^
+        }
+    }
+}
+
+export let nrFnFromStaticClassMember = outerStaticClassMember(1).inner<number>
+>nrFnFromStaticClassMember : (a: [number, number]) => a is [number, number]
+>                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerStaticClassMember(1).inner<number> : (a: [number, number]) => a is [number, number]
+>                                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerStaticClassMember(1).inner : <T>(a: [T, number]) => a is [T, number]
+>                                : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerStaticClassMember(1) : typeof (Anonymous class)
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>outerStaticClassMember : <K>(n: K) => typeof (Anonymous class)
+>                       : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>inner : <T>(a: [T, number]) => a is [T, number]
+>      : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+function outerClassMethod<K>(n: K) {
+>outerClassMethod : <K>(n: K) => typeof (Anonymous class)
+>                 : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : K
+>  : ^
+
+    return class {
+>class {        inner<T>(a: [T, K]): a is [T, K] {            return null!        }    } : typeof (Anonymous class)
+>                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+        inner<T>(a: [T, K]): a is [T, K] {
+>inner : <T>(a: [T, K]) => a is [T, K]
+>      : ^ ^^ ^^      ^^^^^           
+>a : [T, K]
+>  : ^^^^^^
+
+            return null!
+>null! : never
+>      : ^^^^^
+        }
+    }
+}
+
+export let nrFnFromClassMethod = new (outerClassMethod(1))().inner<number>
+>nrFnFromClassMethod : (a: [number, number]) => a is [number, number]
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new (outerClassMethod(1))().inner<number> : (a: [number, number]) => a is [number, number]
+>                                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new (outerClassMethod(1))().inner : <T>(a: [T, number]) => a is [T, number]
+>                                  : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new (outerClassMethod(1))() : outerClassMethod<number>.(Anonymous class)
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(outerClassMethod(1)) : typeof (Anonymous class)
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>outerClassMethod(1) : typeof (Anonymous class)
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>outerClassMethod : <K>(n: K) => typeof (Anonymous class)
+>                 : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>inner : <T>(a: [T, number]) => a is [T, number]
+>      : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+function outerMethodSignature<K>(n: K) : {
+>outerMethodSignature : <K>(n: K) => { inner<T>(a: [T, K]): a is [T, K]; }
+>                     : ^ ^^ ^^ ^^^^^                                     
+>n : K
+>  : ^
+
+    inner<T>(a: [T, K]): a is [T, K]
+>inner : <T>(a: [T, K]) => a is [T, K]
+>      : ^ ^^ ^^      ^^^^^           
+>a : [T, K]
+>  : ^^^^^^
+
+} {
+    return null!
+>null! : never
+>      : ^^^^^
+}
+
+export let nrFnFromMethodSignature = outerMethodSignature(1).inner<number>
+>nrFnFromMethodSignature : (a: [number, number]) => a is [number, number]
+>                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerMethodSignature(1).inner<number> : (a: [number, number]) => a is [number, number]
+>                                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerMethodSignature(1).inner : <T>(a: [T, number]) => a is [T, number]
+>                              : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerMethodSignature(1) : { inner<T>(a: [T, number]): a is [T, number]; }
+>                        : ^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerMethodSignature : <K>(n: K) => { inner<T>(a: [T, K]): a is [T, K]; }
+>                     : ^ ^^ ^^ ^^^^^                                     
+>1 : 1
+>  : ^
+>inner : <T>(a: [T, number]) => a is [T, number]
+>      : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+function outerFnSignature<K>(n: K) : {
+>outerFnSignature : <K>(n: K) => { <T>(a: [T, K]): a is [T, K]; }
+>                 : ^ ^^ ^^ ^^^^^                                
+>n : K
+>  : ^
+
+    <T>(a: [T, K]): a is [T, K]
+>a : [T, K]
+>  : ^^^^^^
+
+} {
+    return null!
+>null! : never
+>      : ^^^^^
+}
+
+export let nrFnFromFnSignature = outerFnSignature(1)<number>
+>nrFnFromFnSignature : (a: [number, number]) => a is [number, number]
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerFnSignature(1)<number> : (a: [number, number]) => a is [number, number]
+>                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerFnSignature(1) : <T>(a: [T, number]) => a is [T, number]
+>                    : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerFnSignature : <K>(n: K) => { <T>(a: [T, K]): a is [T, K]; }
+>                 : ^ ^^ ^^ ^^^^^                                
+>1 : 1
+>  : ^
+
+
+
+function outerFnType<K>(n: K) : <T>(a: [T, K]) => a is [T, K] {
+>outerFnType : <K>(n: K) => <T>(a: [T, K]) => a is [T, K]
+>            : ^ ^^ ^^ ^^^^^                             
+>n : K
+>  : ^
+>a : [T, K]
+>  : ^^^^^^
+
+    return null!
+>null! : never
+>      : ^^^^^
+}
+
+export let nrFnFromFnType = outerFnType(1)<number>
+>nrFnFromFnType : (a: [number, number]) => a is [number, number]
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerFnType(1)<number> : (a: [number, number]) => a is [number, number]
+>                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerFnType(1) : <T>(a: [T, number]) => a is [T, number]
+>               : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>outerFnType : <K>(n: K) => <T>(a: [T, K]) => a is [T, K]
+>            : ^ ^^ ^^ ^^^^^                             
+>1 : 1
+>  : ^
+
