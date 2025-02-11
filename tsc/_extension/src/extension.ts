@@ -50,6 +50,18 @@ export function activate(context: vscode.ExtensionContext) {
         ],
         outputChannel: output,
         traceOutputChannel: traceOutput,
+        diagnosticPullOptions: {
+            onChange: true,
+            onSave: true,
+            onTabs: true,
+            match(documentSelector, resource) {
+                const document = vscode.workspace.textDocuments.find(doc => doc.uri.toString() === resource.toString());
+                if (!document) {
+                    return false;
+                }
+                return vscode.languages.match(documentSelector, document) > 0;
+            },
+        },
     };
 
     client = new LanguageClient(

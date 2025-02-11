@@ -61,6 +61,7 @@ type Server struct {
 
 	logger         *project.Logger
 	projectService *project.ProjectService
+	converters     *converters
 }
 
 // FS implements project.ProjectServiceHost.
@@ -181,6 +182,8 @@ func (s *Server) handleMessage(req *lsproto.RequestMessage) error {
 		return s.handleDidOpen(req)
 	case *lsproto.DidChangeTextDocumentParams:
 		return s.handleDidChange(req)
+	case *lsproto.DocumentDiagnosticParams:
+		return s.handleDocumentDiagnostic(req)
 	case *lsproto.HoverParams:
 		return s.handleHover(req)
 	case *lsproto.DefinitionParams:
@@ -219,6 +222,11 @@ func (s *Server) handleInitialize(req *lsproto.RequestMessage) error {
 			DefinitionProvider: &lsproto.BooleanOrDefinitionOptions{
 				Boolean: ptrTo(true),
 			},
+			DiagnosticProvider: &lsproto.DiagnosticOptionsOrDiagnosticRegistrationOptions{
+				DiagnosticOptions: &lsproto.DiagnosticOptions{
+					InterFileDependencies: true,
+				},
+			},
 		},
 	})
 }
@@ -229,6 +237,7 @@ func (s *Server) handleInitialized(req *lsproto.RequestMessage) error {
 		DefaultLibraryPath: s.defaultLibraryPath,
 		Logger:             s.logger,
 	})
+	s.converters = &converters{projectService: s.projectService}
 	return s.sendResult(req.ID, nil)
 }
 
@@ -248,12 +257,10 @@ func (s *Server) handleDidChange(req *lsproto.RequestMessage) error {
 	changes := make([]ls.TextChange, len(params.ContentChanges))
 	for i, change := range params.ContentChanges {
 		if partialChange := change.TextDocumentContentChangePartial; partialChange != nil {
-			changes[i] = ls.TextChange{
-				TextRange: core.NewTextRange(
-					lineAndCharacterToPosition(partialChange.Range.Start, scriptInfo.LineMap()),
-					lineAndCharacterToPosition(partialChange.Range.End, scriptInfo.LineMap()),
-				),
-				NewText: partialChange.Text,
+			if textChange, err := s.converters.fromLspTextChange(partialChange, scriptInfo.FileName()); err != nil {
+				return s.sendError(req.ID, err)
+			} else {
+				changes[i] = textChange
 			}
 		} else if wholeChange := change.TextDocumentContentChangeWholeDocument; wholeChange != nil {
 			changes[i] = ls.TextChange{
@@ -277,13 +284,37 @@ func (s *Server) handleDidChange(req *lsproto.RequestMessage) error {
 	return s.sendResult(req.ID, nil)
 }
 
+func (s *Server) handleDocumentDiagnostic(req *lsproto.RequestMessage) error {
+	params := req.Params.(*lsproto.DocumentDiagnosticParams)
+	file, project := s.getFileAndProject(params.TextDocument.Uri)
+	diagnostics := project.LanguageService().GetDocumentDiagnostics(file.FileName())
+	lspDiagnostics := make([]lsproto.Diagnostic, len(diagnostics))
+	for i, diag := range diagnostics {
+		if lspDiagnostic, err := s.converters.toLspDiagnostic(diag); err != nil {
+			return s.sendError(req.ID, err)
+		} else {
+			lspDiagnostics[i] = lspDiagnostic
+		}
+	}
+	return s.sendResult(req.ID, &lsproto.DocumentDiagnosticReport{
+		RelatedFullDocumentDiagnosticReport: &lsproto.RelatedFullDocumentDiagnosticReport{
+			FullDocumentDiagnosticReport: lsproto.FullDocumentDiagnosticReport{
+				Kind:  lsproto.StringLiteralFull{},
+				Items: lspDiagnostics,
+			},
+		},
+	})
+}
+
 func (s *Server) handleHover(req *lsproto.RequestMessage) error {
 	params := req.Params.(*lsproto.HoverParams)
 	file, project := s.getFileAndProject(params.TextDocument.Uri)
-	hoverText := project.LanguageService().ProvideHover(
-		file.FileName(),
-		lineAndCharacterToPosition(params.Position, file.LineMap()),
-	)
+	pos, err := s.converters.lineAndCharacterToPosition(params.Position, file.FileName())
+	if err != nil {
+		return s.sendError(req.ID, err)
+	}
+
+	hoverText := project.LanguageService().ProvideHover(file.FileName(), pos)
 	return s.sendResult(req.ID, &lsproto.Hover{
 		Contents: lsproto.MarkupContentOrMarkedStringOrMarkedStrings{
 			MarkupContent: &lsproto.MarkupContent{
@@ -297,17 +328,18 @@ func (s *Server) handleHover(req *lsproto.RequestMessage) error {
 func (s *Server) handleDefinition(req *lsproto.RequestMessage) error {
 	params := req.Params.(*lsproto.DefinitionParams)
 	file, project := s.getFileAndProject(params.TextDocument.Uri)
-	locations := project.LanguageService().ProvideDefinitions(
-		file.FileName(),
-		lineAndCharacterToPosition(params.Position, file.LineMap()),
-	)
+	pos, err := s.converters.lineAndCharacterToPosition(params.Position, file.FileName())
+	if err != nil {
+		return s.sendError(req.ID, err)
+	}
+
+	locations := project.LanguageService().ProvideDefinitions(file.FileName(), pos)
 	lspLocations := make([]lsproto.Location, len(locations))
 	for i, loc := range locations {
-		if info := s.projectService.GetScriptInfo(loc.FileName); info != nil {
-			lspLocations[i] = toLspLocation(loc, info.LineMap())
+		if lspLocation, err := s.converters.toLspLocation(loc); err != nil {
+			return s.sendError(req.ID, err)
 		} else {
-			s.logger.Error("failed to get script info for file: " + loc.FileName)
-			return s.sendError(req.ID, lsproto.ErrRequestFailed)
+			lspLocations[i] = lspLocation
 		}
 	}
 

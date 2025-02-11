@@ -133,20 +133,7 @@ func (p *Project) GetSourceFile(fileName string, languageVersion core.ScriptTarg
 
 // GetProgram implements LanguageServiceHost. Updates the program if needed.
 func (p *Project) GetProgram() *compiler.Program {
-	if !p.dirty && p.program != nil {
-		return p.program
-	}
-
-	rootFileNames := p.GetRootFileNames()
-	compilerOptions := p.GetCompilerOptions()
-
-	p.program = compiler.NewProgram(compiler.ProgramOptions{
-		RootFiles: rootFileNames,
-		Host:      p,
-		Options:   compilerOptions,
-	})
-
-	p.program.BindSourceFiles()
+	p.updateIfDirty()
 	return p.program
 }
 
@@ -218,7 +205,7 @@ func (p *Project) updateGraph() bool {
 	p.initialLoadPending = false
 	p.hasAddedOrRemovedFiles = false
 	p.hasAddedOrRemovedSymlinks = false
-	p.program = p.GetProgram()
+	p.updateProgram()
 	p.dirty = false
 	p.log(fmt.Sprintf("Finishing updateGraph: Project: %s version: %d", p.name, p.version))
 	if hasAddedOrRemovedFiles {
@@ -228,6 +215,19 @@ func (p *Project) updateGraph() bool {
 	}
 
 	return true
+}
+
+func (p *Project) updateProgram() {
+	rootFileNames := p.GetRootFileNames()
+	compilerOptions := p.GetCompilerOptions()
+
+	p.program = compiler.NewProgram(compiler.ProgramOptions{
+		RootFiles: rootFileNames,
+		Host:      p,
+		Options:   compilerOptions,
+	})
+
+	p.program.BindSourceFiles()
 }
 
 func (p *Project) isOrphan() bool {
