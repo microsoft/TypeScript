@@ -91,7 +91,7 @@ func (vfs *wrappedFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
 
 func (vfs *wrappedFS) Realpath(path string) string {
 	if _, path, ok := splitPath(path); ok {
-		return embeddedVFS.Realpath(path)
+		return embeddedVFS.Realpath("/" + path)
 	}
 	return vfs.fs.Realpath(path)
 }

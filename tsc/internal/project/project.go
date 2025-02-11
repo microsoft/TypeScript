@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+	"sync"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
@@ -14,26 +15,27 @@ import (
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
-//go:generate go run golang.org/x/tools/cmd/stringer -type=ProjectKind -output=project_stringer_generated.go
+//go:generate go run golang.org/x/tools/cmd/stringer -type=Kind -output=project_stringer_generated.go
 
 var projectNamer = &namer{}
 
 var _ ls.Host = (*Project)(nil)
 
-type ProjectKind int
+type Kind int
 
 const (
-	ProjectKindInferred ProjectKind = iota
-	ProjectKindConfigured
-	ProjectKindAutoImportProvider
-	ProjectKindAuxiliary
+	KindInferred Kind = iota
+	KindConfigured
+	KindAutoImportProvider
+	KindAuxiliary
 )
 
 type Project struct {
-	projectService *ProjectService
+	projectService *Service
+	mu             sync.Mutex
 
 	name string
-	kind ProjectKind
+	kind Kind
 
 	initialLoadPending        bool
 	dirty                     bool
@@ -56,22 +58,22 @@ type Project struct {
 	program         *compiler.Program
 }
 
-func NewConfiguredProject(configFileName string, configFilePath tspath.Path, projectService *ProjectService) *Project {
-	project := NewProject(configFileName, ProjectKindConfigured, tspath.GetDirectoryPath(configFileName), projectService)
+func NewConfiguredProject(configFileName string, configFilePath tspath.Path, projectService *Service) *Project {
+	project := NewProject(configFileName, KindConfigured, tspath.GetDirectoryPath(configFileName), projectService)
 	project.configFileName = configFileName
 	project.configFilePath = configFilePath
 	project.initialLoadPending = true
 	return project
 }
 
-func NewInferredProject(compilerOptions *core.CompilerOptions, currentDirectory string, projectRootPath tspath.Path, projectService *ProjectService) *Project {
-	project := NewProject(projectNamer.next("/dev/null/inferredProject"), ProjectKindInferred, currentDirectory, projectService)
+func NewInferredProject(compilerOptions *core.CompilerOptions, currentDirectory string, projectRootPath tspath.Path, projectService *Service) *Project {
+	project := NewProject(projectNamer.next("/dev/null/inferredProject"), KindInferred, currentDirectory, projectService)
 	project.rootPath = projectRootPath
 	project.compilerOptions = compilerOptions
 	return project
 }
 
-func NewProject(name string, kind ProjectKind, currentDirectory string, projectService *ProjectService) *Project {
+func NewProject(name string, kind Kind, currentDirectory string, projectService *Service) *Project {
 	projectService.log(fmt.Sprintf("Creating %sProject: %s, currentDirectory: %s", kind.String(), name, currentDirectory))
 	project := &Project{
 		projectService:   projectService,
@@ -144,12 +146,24 @@ func (p *Project) NewLine() string {
 
 // Trace implements LanguageServiceHost.
 func (p *Project) Trace(msg string) {
-	p.projectService.host.Trace(msg)
+	p.log(msg)
 }
 
 // GetDefaultLibraryPath implements ls.Host.
 func (p *Project) GetDefaultLibraryPath() string {
 	return p.projectService.options.DefaultLibraryPath
+}
+
+func (p *Project) Name() string {
+	return p.name
+}
+
+func (p *Project) Kind() Kind {
+	return p.kind
+}
+
+func (p *Project) CurrentProgram() *compiler.Program {
+	return p.program
 }
 
 func (p *Project) LanguageService() *ls.LanguageService {
@@ -175,6 +189,8 @@ func (p *Project) markFileAsDirty(path tspath.Path) {
 }
 
 func (p *Project) markAsDirty() {
+	p.mu.Lock()
+	defer p.mu.Unlock()
 	if !p.dirty {
 		p.dirty = true
 		p.version++
@@ -187,6 +203,8 @@ func (p *Project) updateIfDirty() bool {
 }
 
 func (p *Project) onFileAddedOrRemoved(isSymlink bool) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
 	p.hasAddedOrRemovedFiles = true
 	if isSymlink {
 		p.hasAddedOrRemovedSymlinks = true
@@ -232,9 +250,9 @@ func (p *Project) updateProgram() {
 
 func (p *Project) isOrphan() bool {
 	switch p.kind {
-	case ProjectKindInferred:
+	case KindInferred:
 		return p.rootFileNames.Size() == 0
-	case ProjectKindConfigured:
+	case KindConfigured:
 		return p.deferredClose
 	default:
 		panic("unhandled project kind")
@@ -269,7 +287,7 @@ func (p *Project) removeFile(info *ScriptInfo, fileExists bool, detachFromProjec
 
 func (p *Project) addRoot(info *ScriptInfo) {
 	// !!!
-	// if p.kind == ProjectKindInferred {
+	// if p.kind == KindInferred {
 	// 	p.projectService.startWatchingConfigFilesForInferredProjectRoot(info.path);
 	//  // handle JS toggling
 	// }

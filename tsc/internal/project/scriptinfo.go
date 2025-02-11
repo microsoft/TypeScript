@@ -165,7 +165,7 @@ func (s *ScriptInfo) detachAllProjects() {
 		isRoot := project.isRoot(s)
 		project.removeFile(s, false /*fileExists*/, false /*detachFromProject*/)
 		project.onFileAddedOrRemoved(s.isSymlink())
-		if isRoot && project.kind != ProjectKindInferred {
+		if isRoot && project.kind != KindInferred {
 			project.addMissingRootFile(s.fileName, s.path)
 		}
 	}
@@ -193,7 +193,7 @@ func (s *ScriptInfo) getDefaultProject() *Project {
 		panic("scriptInfo must be attached to a project before calling getDefaultProject")
 	case 1:
 		project := s.containingProjects[0]
-		if project.deferredClose || project.kind == ProjectKindAutoImportProvider || project.kind == ProjectKindAuxiliary {
+		if project.deferredClose || project.kind == KindAutoImportProvider || project.kind == KindAuxiliary {
 			panic("scriptInfo must be attached to a non-background project before calling getDefaultProject")
 		}
 		return project
@@ -210,7 +210,7 @@ func (s *ScriptInfo) getDefaultProject() *Project {
 		var defaultConfiguredProject *Project
 
 		for index, project := range s.containingProjects {
-			if project.kind == ProjectKindConfigured {
+			if project.kind == KindConfigured {
 				if project.deferredClose {
 					continue
 				}
@@ -228,7 +228,7 @@ func (s *ScriptInfo) getDefaultProject() *Project {
 				if firstConfiguredProject == nil {
 					firstConfiguredProject = project
 				}
-			} else if firstInferredProject == nil && project.kind == ProjectKindInferred {
+			} else if firstInferredProject == nil && project.kind == KindInferred {
 				firstInferredProject = project
 			}
 		}

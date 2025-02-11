@@ -15,7 +15,7 @@ import (
 )
 
 type converters struct {
-	projectService *project.ProjectService
+	projectService *project.Service
 }
 
 func (c *converters) toLspRange(fileName string, textRange core.TextRange) (lsproto.Range, error) {
