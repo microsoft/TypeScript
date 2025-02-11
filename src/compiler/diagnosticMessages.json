@@ -1837,6 +1837,14 @@
         "category": "Error",
         "code": 1544
     },
+    "Confusing combination of '!' token and 'instanceof' keyword like 'a !instanceof b' is disallowed, as it might be misinterpreted as '!(a instanceof b)'": {
+        "category": "Error",
+        "code": 1545
+    },
+    "Confusing combination of '!' token and 'in' keyword like 'a !in b' is disallowed, as it might be misinterpreted as '!(a in b)'": {
+        "category": "Error",
+        "code": 1546
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
