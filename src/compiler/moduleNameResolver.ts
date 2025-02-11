@@ -2208,9 +2208,7 @@ function tryFileLookup(fileName: string, onlyRecordFailures: boolean, state: Mod
 
 function loadNodeModuleFromDirectory(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState, considerPackageJson = true) {
     const packageInfo = considerPackageJson ? getPackageJsonInfo(candidate, onlyRecordFailures, state) : undefined;
-    const packageJsonContent = packageInfo && packageInfo.contents.packageJsonContent;
-    const versionPaths = packageInfo && getVersionPathsOfPackageJsonInfo(packageInfo, state);
-    return withPackageId(packageInfo, loadNodeModuleFromDirectoryWorker(extensions, candidate, onlyRecordFailures, state, packageJsonContent, versionPaths), state);
+    return withPackageId(packageInfo, loadNodeModuleFromDirectoryWorker(extensions, candidate, onlyRecordFailures, state, packageInfo), state);
 }
 
 /** @internal */
@@ -2243,8 +2241,7 @@ export function getEntrypointsFromPackageJsonInfo(
         packageJsonInfo.packageDirectory,
         /*onlyRecordFailures*/ false,
         loadPackageJsonMainState,
-        packageJsonInfo.contents.packageJsonContent,
-        getVersionPathsOfPackageJsonInfo(packageJsonInfo, loadPackageJsonMainState),
+        packageJsonInfo,
     );
     entrypoints = append(entrypoints, mainResolution?.path);
 
@@ -2481,15 +2478,16 @@ function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures: boolea
     }
 }
 
-function loadNodeModuleFromDirectoryWorker(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState, jsonContent: PackageJsonPathFields | undefined, versionPaths: VersionPaths | undefined): PathAndExtension | undefined {
+function loadNodeModuleFromDirectoryWorker(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState, packageJson: PackageJsonInfo | undefined): PathAndExtension | undefined {
+    const versionPaths = packageJson && getVersionPathsOfPackageJsonInfo(packageJson, state);
     let packageFile: string | undefined;
-    if (jsonContent) {
+    if (packageJson && arePathsEqual(packageJson?.packageDirectory, candidate, state.host)) {
         if (state.isConfigLookup) {
-            packageFile = readPackageJsonTSConfigField(jsonContent, candidate, state);
+            packageFile = readPackageJsonTSConfigField(packageJson.contents.packageJsonContent, packageJson.packageDirectory, state);
         }
         else {
-            packageFile = extensions & Extensions.Declaration && readPackageJsonTypesFields(jsonContent, candidate, state) ||
-                extensions & (Extensions.ImplementationFiles | Extensions.Declaration) && readPackageJsonMainField(jsonContent, candidate, state) ||
+            packageFile = extensions & Extensions.Declaration && readPackageJsonTypesFields(packageJson.contents.packageJsonContent, packageJson.packageDirectory, state) ||
+                extensions & (Extensions.ImplementationFiles | Extensions.Declaration) && readPackageJsonMainField(packageJson.contents.packageJsonContent, packageJson.packageDirectory, state) ||
                 undefined;
         }
     }
@@ -2510,7 +2508,7 @@ function loadNodeModuleFromDirectoryWorker(extensions: Extensions, candidate: st
         const features = state.features;
         const candidateIsFromPackageJsonField = state.candidateIsFromPackageJsonField;
         state.candidateIsFromPackageJsonField = true;
-        if (jsonContent?.type !== "module") {
+        if (packageJson?.contents.packageJsonContent.type !== "module") {
             state.features &= ~NodeResolutionFeatures.EsmMode;
         }
         const result = nodeLoadModuleByRelativeName(expandedExtensions, candidate, onlyRecordFailures, state, /*considerPackageJson*/ false);
@@ -2624,8 +2622,8 @@ function loadModuleFromExports(scope: PackageJsonInfo, extensions: Extensions, s
             mainExport = (scope.contents.packageJsonContent.exports as MapLike<unknown>)["."];
         }
         if (mainExport) {
-            const loadModuleFromTargetImportOrExport = getLoadModuleFromTargetImportOrExport(extensions, state, cache, redirectedReference, subpath, scope, /*isImports*/ false);
-            return loadModuleFromTargetImportOrExport(mainExport, "", /*pattern*/ false, ".");
+            const loadModuleFromTargetExportOrImport = getLoadModuleFromTargetExportOrImport(extensions, state, cache, redirectedReference, subpath, scope, /*isImports*/ false);
+            return loadModuleFromTargetExportOrImport(mainExport, "", /*pattern*/ false, ".");
         }
     }
     else if (allKeysStartWithDot(scope.contents.packageJsonContent.exports as MapLike<unknown>)) {
@@ -2635,7 +2633,7 @@ function loadModuleFromExports(scope: PackageJsonInfo, extensions: Extensions, s
             }
             return toSearchResult(/*value*/ undefined);
         }
-        const result = loadModuleFromImportsOrExports(extensions, state, cache, redirectedReference, subpath, scope.contents.packageJsonContent.exports, scope, /*isImports*/ false);
+        const result = loadModuleFromExportsOrImports(extensions, state, cache, redirectedReference, subpath, scope.contents.packageJsonContent.exports, scope, /*isImports*/ false);
         if (result) {
             return result;
         }
@@ -2669,7 +2667,7 @@ function loadModuleFromImports(extensions: Extensions, moduleName: string, direc
         return toSearchResult(/*value*/ undefined);
     }
 
-    const result = loadModuleFromImportsOrExports(extensions, state, cache, redirectedReference, moduleName, scope.contents.packageJsonContent.imports, scope, /*isImports*/ true);
+    const result = loadModuleFromExportsOrImports(extensions, state, cache, redirectedReference, moduleName, scope.contents.packageJsonContent.imports, scope, /*isImports*/ true);
     if (result) {
         return result;
     }
@@ -2699,30 +2697,30 @@ export function comparePatternKeys(a: string, b: string): Comparison {
     return Comparison.EqualTo;
 }
 
-function loadModuleFromImportsOrExports(extensions: Extensions, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined, moduleName: string, lookupTable: object, scope: PackageJsonInfo, isImports: boolean): SearchResult<Resolved> | undefined {
-    const loadModuleFromTargetImportOrExport = getLoadModuleFromTargetImportOrExport(extensions, state, cache, redirectedReference, moduleName, scope, isImports);
+function loadModuleFromExportsOrImports(extensions: Extensions, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined, moduleName: string, lookupTable: object, scope: PackageJsonInfo, isImports: boolean): SearchResult<Resolved> | undefined {
+    const loadModuleFromTargetExportOrImport = getLoadModuleFromTargetExportOrImport(extensions, state, cache, redirectedReference, moduleName, scope, isImports);
 
     if (!endsWith(moduleName, directorySeparator) && !moduleName.includes("*") && hasProperty(lookupTable, moduleName)) {
-        const target = (lookupTable as { [idx: string]: unknown; })[moduleName];
-        return loadModuleFromTargetImportOrExport(target, /*subpath*/ "", /*pattern*/ false, moduleName);
+        const target = (lookupTable as MapLike<unknown>)[moduleName];
+        return loadModuleFromTargetExportOrImport(target, /*subpath*/ "", /*pattern*/ false, moduleName);
     }
     const expandingKeys = toSorted(filter(getOwnKeys(lookupTable as MapLike<unknown>), k => hasOneAsterisk(k) || endsWith(k, "/")), comparePatternKeys);
     for (const potentialTarget of expandingKeys) {
         if (state.features & NodeResolutionFeatures.ExportsPatternTrailers && matchesPatternWithTrailer(potentialTarget, moduleName)) {
-            const target = (lookupTable as { [idx: string]: unknown; })[potentialTarget];
+            const target = (lookupTable as MapLike<unknown>)[potentialTarget];
             const starPos = potentialTarget.indexOf("*");
             const subpath = moduleName.substring(potentialTarget.substring(0, starPos).length, moduleName.length - (potentialTarget.length - 1 - starPos));
-            return loadModuleFromTargetImportOrExport(target, subpath, /*pattern*/ true, potentialTarget);
+            return loadModuleFromTargetExportOrImport(target, subpath, /*pattern*/ true, potentialTarget);
         }
         else if (endsWith(potentialTarget, "*") && startsWith(moduleName, potentialTarget.substring(0, potentialTarget.length - 1))) {
-            const target = (lookupTable as { [idx: string]: unknown; })[potentialTarget];
+            const target = (lookupTable as MapLike<unknown>)[potentialTarget];
             const subpath = moduleName.substring(potentialTarget.length - 1);
-            return loadModuleFromTargetImportOrExport(target, subpath, /*pattern*/ true, potentialTarget);
+            return loadModuleFromTargetExportOrImport(target, subpath, /*pattern*/ true, potentialTarget);
         }
         else if (startsWith(moduleName, potentialTarget)) {
-            const target = (lookupTable as { [idx: string]: unknown; })[potentialTarget];
+            const target = (lookupTable as MapLike<unknown>)[potentialTarget];
             const subpath = moduleName.substring(potentialTarget.length);
-            return loadModuleFromTargetImportOrExport(target, subpath, /*pattern*/ false, potentialTarget);
+            return loadModuleFromTargetExportOrImport(target, subpath, /*pattern*/ false, potentialTarget);
         }
     }
 
@@ -2742,9 +2740,9 @@ function hasOneAsterisk(patternKey: string): boolean {
 /**
  * Gets the self-recursive function specialized to retrieving the targeted import/export element for the given resolution configuration
  */
-function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined, moduleName: string, scope: PackageJsonInfo, isImports: boolean) {
-    return loadModuleFromTargetImportOrExport;
-    function loadModuleFromTargetImportOrExport(target: unknown, subpath: string, pattern: boolean, key: string): SearchResult<Resolved> | undefined {
+function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined, moduleName: string, scope: PackageJsonInfo, isImports: boolean) {
+    return loadModuleFromTargetExportOrImport;
+    function loadModuleFromTargetExportOrImport(target: unknown, subpath: string, pattern: boolean, key: string): SearchResult<Resolved> | undefined {
         if (typeof target === "string") {
             if (!pattern && subpath.length > 0 && !endsWith(target, "/")) {
                 if (state.traceEnabled) {
@@ -2758,6 +2756,11 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
                     traceIfEnabled(state, Diagnostics.Using_0_subpath_1_with_target_2, "imports", key, combinedLookup);
                     traceIfEnabled(state, Diagnostics.Resolving_module_0_from_1, combinedLookup, scope.packageDirectory + "/");
                     const result = nodeModuleNameResolverWorker(state.features, combinedLookup, scope.packageDirectory + "/", state.compilerOptions, state.host, cache, extensions, /*isConfigLookup*/ false, redirectedReference, state.conditions);
+                    // Note: we cannot safely reassign `state.failedLookupLocations` during a request;
+                    // `nodeModuleNameResolverWorker` relies on the `state` property remaining reference-equal
+                    // to the one it initializes.
+                    state.failedLookupLocations?.push(...result.failedLookupLocations ?? emptyArray);
+                    state.affectingLocations?.push(...result.affectingLocations ?? emptyArray);
                     return toSearchResult(
                         result.resolvedModule ? {
                             path: result.resolvedModule.resolvedFileName,
@@ -2807,7 +2810,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
                     if (condition === "default" || state.conditions.includes(condition) || isApplicableVersionedTypesKey(state.conditions, condition)) {
                         traceIfEnabled(state, Diagnostics.Matched_0_condition_1, isImports ? "imports" : "exports", condition);
                         const subTarget = (target as MapLike<unknown>)[condition];
-                        const result = loadModuleFromTargetImportOrExport(subTarget, subpath, pattern, key);
+                        const result = loadModuleFromTargetExportOrImport(subTarget, subpath, pattern, key);
                         if (result) {
                             traceIfEnabled(state, Diagnostics.Resolved_under_condition_0, condition);
                             traceIfEnabled(state, Diagnostics.Exiting_conditional_exports);
@@ -2832,7 +2835,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
                     return toSearchResult(/*value*/ undefined);
                 }
                 for (const elem of target) {
-                    const result = loadModuleFromTargetImportOrExport(elem, subpath, pattern, key);
+                    const result = loadModuleFromTargetExportOrImport(elem, subpath, pattern, key);
                     if (result) {
                         return result;
                     }
@@ -2991,7 +2994,7 @@ function loadModuleFromNearestNodeModulesDirectoryTypesScope(moduleName: string,
 }
 
 function loadModuleFromNearestNodeModulesDirectoryWorker(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, typesScopeOnly: boolean, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): SearchResult<Resolved> {
-    const mode = state.features === 0 ? undefined : state.features & NodeResolutionFeatures.EsmMode ? ModuleKind.ESNext : ModuleKind.CommonJS;
+    const mode = state.features === 0 ? undefined : (state.features & NodeResolutionFeatures.EsmMode || state.conditions.includes("import")) ? ModuleKind.ESNext : ModuleKind.CommonJS;
     // Do (up to) two passes through node_modules:
     //   1. For each ancestor node_modules directory, try to find:
     //      i.  TS/DTS files in the implementation package
@@ -3100,8 +3103,7 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
             candidate,
             !nodeModulesDirectoryExists,
             state,
-            packageInfo.contents.packageJsonContent,
-            getVersionPathsOfPackageJsonInfo(packageInfo, state),
+            packageInfo,
         );
         return withPackageId(packageInfo, fromDirectory, state);
     }
@@ -3113,11 +3115,10 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
                 candidate,
                 onlyRecordFailures,
                 state,
-                packageInfo && packageInfo.contents.packageJsonContent,
-                packageInfo && getVersionPathsOfPackageJsonInfo(packageInfo, state),
+                packageInfo,
             );
         if (
-            !pathAndExtension && packageInfo
+            !pathAndExtension && !rest && packageInfo
             // eslint-disable-next-line no-restricted-syntax
             && (packageInfo.contents.packageJsonContent.exports === undefined || packageInfo.contents.packageJsonContent.exports === null)
             && state.features & NodeResolutionFeatures.EsmMode

@@ -1,0 +1,308 @@
+/index.ts(2,49): error TS1453: `resolution-mode` should be either `require` or `import`.
+/index.ts(5,76): error TS1453: `resolution-mode` should be either `require` or `import`.
+/other.ts(3,7): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+/other.ts(3,22): error TS1005: 'with' expected.
+/other.ts(3,39): error TS1005: ';' expected.
+/other.ts(3,50): error TS1128: Declaration or statement expected.
+/other.ts(3,51): error TS1128: Declaration or statement expected.
+/other.ts(3,52): error TS1128: Declaration or statement expected.
+/other.ts(3,53): error TS2304: Cannot find name 'RequireInterface'.
+/other.ts(4,22): error TS2353: Object literal may only specify known properties, and '"resolution-mode"' does not exist in type 'ImportCallOptions'.
+/other.ts(4,52): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
+/other.ts(6,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+/other.ts(6,49): error TS1005: 'with' expected.
+/other.ts(6,66): error TS1005: ';' expected.
+/other.ts(6,77): error TS1128: Declaration or statement expected.
+/other.ts(6,78): error TS1128: Declaration or statement expected.
+/other.ts(6,79): error TS1128: Declaration or statement expected.
+/other.ts(6,80): error TS1434: Unexpected keyword or identifier.
+/other.ts(6,80): error TS2304: Cannot find name 'RequireInterface'.
+/other.ts(6,96): error TS1128: Declaration or statement expected.
+/other.ts(7,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+/other.ts(7,49): error TS1005: 'with' expected.
+/other.ts(7,66): error TS1005: ';' expected.
+/other.ts(7,76): error TS1128: Declaration or statement expected.
+/other.ts(7,77): error TS1128: Declaration or statement expected.
+/other.ts(7,78): error TS1128: Declaration or statement expected.
+/other.ts(7,79): error TS1434: Unexpected keyword or identifier.
+/other.ts(7,79): error TS2304: Cannot find name 'ImportInterface'.
+/other.ts(7,94): error TS1128: Declaration or statement expected.
+/other2.ts(3,30): error TS1463: 'resolution-mode' is the only valid key for type import attributes.
+/other2.ts(4,30): error TS1463: 'resolution-mode' is the only valid key for type import attributes.
+/other2.ts(4,50): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+/other2.ts(6,57): error TS1463: 'resolution-mode' is the only valid key for type import attributes.
+/other2.ts(7,57): error TS1463: 'resolution-mode' is the only valid key for type import attributes.
+/other2.ts(7,77): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+/other3.ts(3,7): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+/other3.ts(3,21): error TS1005: '{' expected.
+/other3.ts(3,23): error TS2538: Type '{ "resolution-mode": "require"; }' cannot be used as an index type.
+/other3.ts(3,55): error TS1005: ';' expected.
+/other3.ts(3,56): error TS1128: Declaration or statement expected.
+/other3.ts(3,57): error TS2304: Cannot find name 'RequireInterface'.
+/other3.ts(4,21): error TS2559: Type '{ "resolution-mode": string; }[]' has no properties in common with type 'ImportCallOptions'.
+/other3.ts(4,56): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
+/other3.ts(6,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+/other3.ts(6,48): error TS1005: '{' expected.
+/other3.ts(6,50): error TS2538: Type '{ "resolution-mode": "require"; }' cannot be used as an index type.
+/other3.ts(6,100): error TS1005: ',' expected.
+/other3.ts(7,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+/other3.ts(7,48): error TS1005: '{' expected.
+/other3.ts(7,50): error TS2538: Type '{ "resolution-mode": "import"; }' cannot be used as an index type.
+/other3.ts(7,98): error TS1005: ',' expected.
+/other4.ts(6,7): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+/other4.ts(6,21): error TS1005: '{' expected.
+/other4.ts(6,21): error TS2448: Block-scoped variable 'Attribute1' used before its declaration.
+/other4.ts(6,31): error TS1128: Declaration or statement expected.
+/other4.ts(6,32): error TS1128: Declaration or statement expected.
+/other4.ts(6,33): error TS2448: Block-scoped variable 'RequireInterface' used before its declaration.
+/other4.ts(7,21): error TS2448: Block-scoped variable 'Attribute2' used before its declaration.
+/other4.ts(7,33): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
+/other4.ts(9,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+/other4.ts(9,48): error TS1005: '{' expected.
+/other4.ts(9,58): error TS1005: ',' expected.
+/other4.ts(9,59): error TS1134: Variable declaration expected.
+/other4.ts(9,76): error TS1005: ',' expected.
+/other4.ts(10,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+/other4.ts(10,48): error TS1005: '{' expected.
+/other4.ts(10,58): error TS1005: ',' expected.
+/other4.ts(10,59): error TS1134: Variable declaration expected.
+/other4.ts(10,75): error TS1005: ',' expected.
+/other5.ts(2,29): error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
+/other5.ts(3,29): error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
+/other5.ts(3,35): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+/other5.ts(5,56): error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
+/other5.ts(6,56): error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
+/other5.ts(6,62): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+
+
+==== /node_modules/pkg/package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "version": "0.0.1",
+        "exports": {
+            "import": "./import.js",
+            "require": "./require.js"
+        }
+    }
+==== /node_modules/pkg/import.d.ts (0 errors) ====
+    export interface ImportInterface {}
+    
+==== /node_modules/pkg/require.d.ts (0 errors) ====
+    export interface RequireInterface {}
+    
+==== /index.ts (2 errors) ====
+    export type LocalInterface =
+        & import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface
+                                                    ~~~~~~~~
+!!! error TS1453: `resolution-mode` should be either `require` or `import`.
+        & import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface;
+    
+    export const a = (null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface);
+                                                                               ~~~~~~~~
+!!! error TS1453: `resolution-mode` should be either `require` or `import`.
+    export const b = (null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface);
+    
+==== /other.ts (27 errors) ====
+    // missing with:
+    export type LocalInterface =
+        & import("pkg", {"resolution-mode": "require"}).RequireInterface
+          ~~~~~~~~~~~~~~~
+!!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+                         ~~~~~~~~~~~~~~~~~
+!!! error TS1005: 'with' expected.
+!!! related TS1007 /other.ts:3:21: The parser expected to find a '}' to match the '{' token here.
+                                          ~
+!!! error TS1005: ';' expected.
+                                                     ~
+!!! error TS1128: Declaration or statement expected.
+                                                      ~
+!!! error TS1128: Declaration or statement expected.
+                                                       ~
+!!! error TS1128: Declaration or statement expected.
+                                                        ~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'RequireInterface'.
+        & import("pkg", {"resolution-mode": "import"}).ImportInterface;
+                         ~~~~~~~~~~~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and '"resolution-mode"' does not exist in type 'ImportCallOptions'.
+                                                       ~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
+    
+    export const a = (null as any as import("pkg", {"resolution-mode": "require"}).RequireInterface);
+                                     ~~~~~~~~~~~~~~~
+!!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+                                                    ~~~~~~~~~~~~~~~~~
+!!! error TS1005: 'with' expected.
+!!! related TS1007 /other.ts:6:48: The parser expected to find a '}' to match the '{' token here.
+                                                                     ~
+!!! error TS1005: ';' expected.
+                                                                                ~
+!!! error TS1128: Declaration or statement expected.
+                                                                                 ~
+!!! error TS1128: Declaration or statement expected.
+                                                                                  ~
+!!! error TS1128: Declaration or statement expected.
+                                                                                   ~~~~~~~~~~~~~~~~
+!!! error TS1434: Unexpected keyword or identifier.
+                                                                                   ~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'RequireInterface'.
+                                                                                                   ~
+!!! error TS1128: Declaration or statement expected.
+    export const b = (null as any as import("pkg", {"resolution-mode": "import"}).ImportInterface);
+                                     ~~~~~~~~~~~~~~~
+!!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+                                                    ~~~~~~~~~~~~~~~~~
+!!! error TS1005: 'with' expected.
+!!! related TS1007 /other.ts:7:48: The parser expected to find a '}' to match the '{' token here.
+                                                                     ~
+!!! error TS1005: ';' expected.
+                                                                               ~
+!!! error TS1128: Declaration or statement expected.
+                                                                                ~
+!!! error TS1128: Declaration or statement expected.
+                                                                                 ~
+!!! error TS1128: Declaration or statement expected.
+                                                                                  ~~~~~~~~~~~~~~~
+!!! error TS1434: Unexpected keyword or identifier.
+                                                                                  ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ImportInterface'.
+                                                                                                 ~
+!!! error TS1128: Declaration or statement expected.
+    
+==== /other2.ts (6 errors) ====
+    // wrong attribute key
+    export type LocalInterface =
+        & import("pkg", { with: {"bad": "require"} }).RequireInterface
+                                 ~~~~~
+!!! error TS1463: 'resolution-mode' is the only valid key for type import attributes.
+        & import("pkg", { with: {"bad": "import"} }).ImportInterface;
+                                 ~~~~~
+!!! error TS1463: 'resolution-mode' is the only valid key for type import attributes.
+                                                     ~~~~~~~~~~~~~~~
+!!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+    
+    export const a = (null as any as import("pkg", { with: {"bad": "require"} }).RequireInterface);
+                                                            ~~~~~
+!!! error TS1463: 'resolution-mode' is the only valid key for type import attributes.
+    export const b = (null as any as import("pkg", { with: {"bad": "import"} }).ImportInterface);
+                                                            ~~~~~
+!!! error TS1463: 'resolution-mode' is the only valid key for type import attributes.
+                                                                                ~~~~~~~~~~~~~~~
+!!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+    
+==== /other3.ts (16 errors) ====
+    // Array instead of object-y thing
+    export type LocalInterface =
+        & import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface
+          ~~~~~~~~~~~~~
+!!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+                        ~
+!!! error TS1005: '{' expected.
+!!! related TS1007 /other3.ts:3:21: The parser expected to find a '}' to match the '{' token here.
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2538: Type '{ "resolution-mode": "require"; }' cannot be used as an index type.
+                                                          ~
+!!! error TS1005: ';' expected.
+                                                           ~
+!!! error TS1128: Declaration or statement expected.
+                                                            ~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'RequireInterface'.
+        & import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface;
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2559: Type '{ "resolution-mode": string; }[]' has no properties in common with type 'ImportCallOptions'.
+                                                           ~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
+    
+    export const a = (null as any as import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface);
+                                     ~~~~~~~~~~~~~
+!!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+                                                   ~
+!!! error TS1005: '{' expected.
+!!! related TS1007 /other3.ts:6:48: The parser expected to find a '}' to match the '{' token here.
+                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2538: Type '{ "resolution-mode": "require"; }' cannot be used as an index type.
+                                                                                                       ~
+!!! error TS1005: ',' expected.
+    export const b = (null as any as import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface);
+                                     ~~~~~~~~~~~~~
+!!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+                                                   ~
+!!! error TS1005: '{' expected.
+!!! related TS1007 /other3.ts:7:48: The parser expected to find a '}' to match the '{' token here.
+                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2538: Type '{ "resolution-mode": "import"; }' cannot be used as an index type.
+                                                                                                     ~
+!!! error TS1005: ',' expected.
+    
+==== /other4.ts (18 errors) ====
+    // Indirected attribute objecty-thing - not allowed
+    type Attribute1 = { with: {"resolution-mode": "require"} };
+    type Attribute2 = { with: {"resolution-mode": "import"} };
+    
+    export type LocalInterface =
+        & import("pkg", Attribute1).RequireInterface
+          ~~~~~~~~~~~~~
+!!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+                        ~~~~~~~~~~
+!!! error TS1005: '{' expected.
+!!! related TS1007 /other4.ts:6:21: The parser expected to find a '}' to match the '{' token here.
+                        ~~~~~~~~~~
+!!! error TS2448: Block-scoped variable 'Attribute1' used before its declaration.
+!!! related TS2728 /other4.ts:9:48: 'Attribute1' is declared here.
+                                  ~
+!!! error TS1128: Declaration or statement expected.
+                                   ~
+!!! error TS1128: Declaration or statement expected.
+                                    ~~~~~~~~~~~~~~~~
+!!! error TS2448: Block-scoped variable 'RequireInterface' used before its declaration.
+!!! related TS2728 /other4.ts:9:60: 'RequireInterface' is declared here.
+        & import("pkg", Attribute2).ImportInterface;
+                        ~~~~~~~~~~
+!!! error TS2448: Block-scoped variable 'Attribute2' used before its declaration.
+!!! related TS2728 /other4.ts:10:48: 'Attribute2' is declared here.
+                                    ~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
+    
+    export const a = (null as any as import("pkg", Attribute1).RequireInterface);
+                                     ~~~~~~~~~~~~~
+!!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+                                                   ~~~~~~~~~~
+!!! error TS1005: '{' expected.
+!!! related TS1007 /other4.ts:9:48: The parser expected to find a '}' to match the '{' token here.
+                                                             ~
+!!! error TS1005: ',' expected.
+                                                              ~
+!!! error TS1134: Variable declaration expected.
+                                                                               ~
+!!! error TS1005: ',' expected.
+    export const b = (null as any as import("pkg", Attribute2).ImportInterface);
+                                     ~~~~~~~~~~~~~
+!!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+                                                   ~~~~~~~~~~
+!!! error TS1005: '{' expected.
+!!! related TS1007 /other4.ts:10:48: The parser expected to find a '}' to match the '{' token here.
+                                                             ~
+!!! error TS1005: ',' expected.
+                                                              ~
+!!! error TS1134: Variable declaration expected.
+                                                                              ~
+!!! error TS1005: ',' expected.
+    
+==== /other5.ts (6 errors) ====
+    export type LocalInterface =
+        & import("pkg", { with: {} }).RequireInterface
+                                ~~
+!!! error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
+        & import("pkg", { with: {} }).ImportInterface;
+                                ~~
+!!! error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
+                                      ~~~~~~~~~~~~~~~
+!!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+    
+    export const a = (null as any as import("pkg", { with: {} }).RequireInterface);
+                                                           ~~
+!!! error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
+    export const b = (null as any as import("pkg", { with: {} }).ImportInterface);
+                                                           ~~
+!!! error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
+                                                                 ~~~~~~~~~~~~~~~
+!!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.

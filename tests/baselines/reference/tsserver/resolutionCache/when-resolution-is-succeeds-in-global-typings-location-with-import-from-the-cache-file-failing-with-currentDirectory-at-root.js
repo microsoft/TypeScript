@@ -23,10 +23,10 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/home/src/Library/Caches/typescript/package.json] Inode:: 108
+//// [/home/src/Library/Caches/typescript/package.json] Inode:: 111
 { "private": true }
 
-//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 110
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 113
 {
   "entries": {}
 }
@@ -140,7 +140,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
-//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 18
+//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 19
 
 
 PolledWatches::
@@ -153,9 +153,9 @@ PolledWatches::
 
 FsWatches::
 /home/src/Library/Caches/typescript/package.json: *new*
-  {"inode":108}
+  {"inode":111}
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts: *new*
-  {"inode":18}
+  {"inode":19}
 
 FsWatchesRecursive::
 /home/src/Library/Caches/typescript/node_modules: *new*

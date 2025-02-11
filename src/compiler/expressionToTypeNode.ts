@@ -706,12 +706,12 @@ export function createSyntacticTypeNodeBuilder(
         }
         if (!result && node.kind === SyntaxKind.PropertyAssignment) {
             const initializer = node.initializer;
-            const type = isJSDocTypeAssertion(initializer) ? getJSDocTypeAssertionType(initializer) :
+            const assertionNode = isJSDocTypeAssertion(initializer) ? getJSDocTypeAssertionType(initializer) :
                 initializer.kind === SyntaxKind.AsExpression || initializer.kind === SyntaxKind.TypeAssertionExpression ? (initializer as AsExpression | TypeAssertion).type :
                 undefined;
 
-            if (type && !isConstTypeReference(type)) {
-                result = serializeExistingTypeNode(type, context);
+            if (assertionNode && !isConstTypeReference(assertionNode) && resolver.canReuseTypeNodeAnnotation(context, node, assertionNode, symbol)) {
+                result = serializeExistingTypeNode(assertionNode, context);
             }
         }
         return result ?? inferTypeOfDeclaration(node, symbol, context, /*reportFallback*/ false);
@@ -969,14 +969,16 @@ export function createSyntacticTypeNodeBuilder(
         return failed;
     }
     function typeFromFunctionLikeExpression(fnNode: FunctionExpression | ArrowFunction, context: SyntacticTypeNodeBuilderContext) {
-        // Disable any inference fallback since we won't actually use the resulting type and we don't want to generate errors
-        const oldNoInferenceFallback = context.noInferenceFallback;
-        context.noInferenceFallback = true;
-        createReturnFromSignature(fnNode, /*symbol*/ undefined, context);
-        reuseTypeParameters(fnNode.typeParameters, context);
-        fnNode.parameters.map(p => ensureParameter(p, context));
-        context.noInferenceFallback = oldNoInferenceFallback;
-        return notImplemented;
+        const returnType = createReturnFromSignature(fnNode, /*symbol*/ undefined, context);
+        const typeParameters = reuseTypeParameters(fnNode.typeParameters, context);
+        const parameters = fnNode.parameters.map(p => ensureParameter(p, context));
+        return syntacticResult(
+            factory.createFunctionTypeNode(
+                typeParameters,
+                parameters,
+                returnType,
+            ),
+        );
     }
     function canGetTypeFromArrayLiteral(arrayLiteral: ArrayLiteralExpression, context: SyntacticTypeNodeBuilderContext, isConstContext: boolean) {
         if (!isConstContext) {

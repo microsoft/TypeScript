@@ -1,0 +1,94 @@
+//// [tests/cases/compiler/erasableSyntaxOnlyDeclaration.ts] ////
+
+=== decl.d.ts ===
+// Diffs from the other test:
+// - Parameter properties are already banned in .d.ts files
+
+namespace IllegalBecauseInstantiated {
+>IllegalBecauseInstantiated : Symbol(IllegalBecauseInstantiated, Decl(decl.d.ts, 0, 0))
+
+    export const m = 1;
+>m : Symbol(m, Decl(decl.d.ts, 4, 16))
+}
+
+namespace AlsoIllegalBecauseInstantiated {
+>AlsoIllegalBecauseInstantiated : Symbol(AlsoIllegalBecauseInstantiated, Decl(decl.d.ts, 5, 1))
+
+    class PrivateClass {
+>PrivateClass : Symbol(PrivateClass, Decl(decl.d.ts, 7, 42))
+
+    }
+}
+
+enum NotLegalEnum {
+>NotLegalEnum : Symbol(NotLegalEnum, Decl(decl.d.ts, 11, 1))
+
+    B = 1
+>B : Symbol(NoGoodAlias, Decl(decl.d.ts, 13, 19))
+}
+
+import NoGoodAlias = NotLegalEnum.B;
+>NoGoodAlias : Symbol(NoGoodAlias, Decl(decl.d.ts, 15, 1))
+>NotLegalEnum : Symbol(NotLegalEnum, Decl(decl.d.ts, 11, 1))
+>B : Symbol(NoGoodAlias, Decl(decl.d.ts, 13, 19))
+
+const enum NotLegalConstEnum {
+>NotLegalConstEnum : Symbol(NotLegalConstEnum, Decl(decl.d.ts, 17, 36))
+
+    C = 2
+>C : Symbol(NotLegalConstEnum.C, Decl(decl.d.ts, 19, 30))
+}
+
+// No errors after this point
+class MyClassOk {
+>MyClassOk : Symbol(MyClassOk, Decl(decl.d.ts, 21, 1))
+
+    // Not a parameter property, ok
+    constructor(foo: string);
+>foo : Symbol(foo, Decl(decl.d.ts, 26, 16))
+}
+namespace NotInstantiated {
+>NotInstantiated : Symbol(NotInstantiated, Decl(decl.d.ts, 27, 1))
+
+    export interface JustAType { }
+>JustAType : Symbol(JustAType, Decl(decl.d.ts, 28, 27))
+
+    export type ATypeInANamespace = {};
+>ATypeInANamespace : Symbol(ATypeInANamespace, Decl(decl.d.ts, 29, 34))
+}
+declare namespace AmbientIsNotInstantiated {
+>AmbientIsNotInstantiated : Symbol(AmbientIsNotInstantiated, Decl(decl.d.ts, 31, 1))
+
+    export const stillOk = 12;
+>stillOk : Symbol(stillOk, Decl(decl.d.ts, 33, 16))
+}
+
+declare enum LegalEnum {
+>LegalEnum : Symbol(LegalEnum, Decl(decl.d.ts, 34, 1))
+
+    A = 1
+>A : Symbol(LegalEnum.A, Decl(decl.d.ts, 36, 24))
+}
+
+declare namespace AmbientStuff {
+>AmbientStuff : Symbol(AmbientStuff, Decl(decl.d.ts, 38, 1))
+
+    namespace Nested {
+>Nested : Symbol(Nested, Decl(decl.d.ts, 40, 32))
+
+        export const stillOk = 12;
+>stillOk : Symbol(stillOk, Decl(decl.d.ts, 42, 20))
+    }
+    enum EnumInAmbientContext {
+>EnumInAmbientContext : Symbol(EnumInAmbientContext, Decl(decl.d.ts, 43, 5))
+
+        B = 1
+>B : Symbol(FineAlias, Decl(decl.d.ts, 44, 31))
+    }
+
+    import FineAlias = EnumInAmbientContext.B;
+>FineAlias : Symbol(FineAlias, Decl(decl.d.ts, 46, 5))
+>EnumInAmbientContext : Symbol(EnumInAmbientContext, Decl(decl.d.ts, 43, 5))
+>B : Symbol(FineAlias, Decl(decl.d.ts, 44, 31))
+}
+

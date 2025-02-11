@@ -1,5 +1,8 @@
 //// [tests/cases/compiler/implicitAnyInCatch.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+
 === implicitAnyInCatch.ts ===
 // this should not be an error
 try { } catch (error) {

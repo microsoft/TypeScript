@@ -21,6 +21,7 @@ import {
     BreakOrContinueStatement,
     CallChain,
     CallExpression,
+    canHaveFlowNode,
     canHaveLocals,
     canHaveSymbol,
     CaseBlock,
@@ -543,6 +544,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var preSwitchCaseFlow: FlowNode | undefined;
     var activeLabelList: ActiveLabel | undefined;
     var hasExplicitReturn: boolean;
+    var inReturnPosition: boolean;
     var hasFlowEffects: boolean;
 
     // state used for emit helpers
@@ -622,6 +624,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         currentExceptionTarget = undefined;
         activeLabelList = undefined;
         hasExplicitReturn = false;
+        inReturnPosition = false;
         hasFlowEffects = false;
         inAssignmentPattern = false;
         emitFlags = NodeFlags.None;
@@ -967,7 +970,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         const saveContainer = container;
         const saveThisParentContainer = thisParentContainer;
         const savedBlockScopeContainer = blockScopeContainer;
+        const savedInReturnPosition = inReturnPosition;
 
+        if (node.kind === SyntaxKind.ArrowFunction && node.body.kind !== SyntaxKind.Block) inReturnPosition = true;
         // Depending on what kind of node this is, we may have to adjust the current container
         // and block-container.   If the current node is a container, then it is automatically
         // considered the current block-container as well.  Also, for containers that we know
@@ -1071,6 +1076,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             bindChildren(node);
         }
 
+        inReturnPosition = savedInReturnPosition;
         container = saveContainer;
         thisParentContainer = saveThisParentContainer;
         blockScopeContainer = savedBlockScopeContainer;
@@ -1099,6 +1105,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // and set it before we descend into nodes that could actually be part of an assignment pattern.
         inAssignmentPattern = false;
         if (checkUnreachable(node)) {
+            if (canHaveFlowNode(node) && node.flowNode) {
+                node.flowNode = undefined;
+            }
             bindEachChild(node);
             bindJSDoc(node);
             inAssignmentPattern = saveInAssignmentPattern;
@@ -1309,9 +1318,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.ExclamationEqualsToken:
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
-                return isNarrowableOperand(expr.left) || isNarrowableOperand(expr.right) ||
-                    isNarrowingTypeofOperands(expr.right, expr.left) || isNarrowingTypeofOperands(expr.left, expr.right) ||
-                    (isBooleanLiteral(expr.right) && isNarrowingExpression(expr.left) || isBooleanLiteral(expr.left) && isNarrowingExpression(expr.right));
+                const left = skipParentheses(expr.left);
+                const right = skipParentheses(expr.right);
+                return isNarrowableOperand(left) || isNarrowableOperand(right) ||
+                    isNarrowingTypeofOperands(right, left) || isNarrowingTypeofOperands(left, right) ||
+                    (isBooleanLiteral(right) && isNarrowingExpression(left) || isBooleanLiteral(left) && isNarrowingExpression(right));
             case SyntaxKind.InstanceOfKeyword:
                 return isNarrowableOperand(expr.left);
             case SyntaxKind.InKeyword:
@@ -1525,13 +1536,16 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function bindForStatement(node: ForStatement): void {
         const preLoopLabel = setContinueTarget(node, createLoopLabel());
         const preBodyLabel = createBranchLabel();
+        const preIncrementorLabel = createBranchLabel();
         const postLoopLabel = createBranchLabel();
         bind(node.initializer);
         addAntecedent(preLoopLabel, currentFlow);
         currentFlow = preLoopLabel;
         bindCondition(node.condition, preBodyLabel, postLoopLabel);
         currentFlow = finishFlowLabel(preBodyLabel);
-        bindIterativeStatement(node.statement, postLoopLabel, preLoopLabel);
+        bindIterativeStatement(node.statement, postLoopLabel, preIncrementorLabel);
+        addAntecedent(preIncrementorLabel, currentFlow);
+        currentFlow = finishFlowLabel(preIncrementorLabel);
         bind(node.incrementor);
         addAntecedent(preLoopLabel, currentFlow);
         currentFlow = finishFlowLabel(postLoopLabel);
@@ -1571,7 +1585,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindReturnOrThrow(node: ReturnStatement | ThrowStatement): void {
+        const savedInReturnPosition = inReturnPosition;
+        inReturnPosition = true;
         bind(node.expression);
+        inReturnPosition = savedInReturnPosition;
         if (node.kind === SyntaxKind.ReturnStatement) {
             hasExplicitReturn = true;
             if (currentReturnTarget) {
@@ -2016,10 +2033,16 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         hasFlowEffects = false;
         bindCondition(node.condition, trueLabel, falseLabel);
         currentFlow = finishFlowLabel(trueLabel);
+        if (inReturnPosition) {
+            node.flowNodeWhenTrue = currentFlow;
+        }
         bind(node.questionToken);
         bind(node.whenTrue);
         addAntecedent(postExpressionLabel, currentFlow);
         currentFlow = finishFlowLabel(falseLabel);
+        if (inReturnPosition) {
+            node.flowNodeWhenFalse = currentFlow;
+        }
         bind(node.colonToken);
         bind(node.whenFalse);
         addAntecedent(postExpressionLabel, currentFlow);

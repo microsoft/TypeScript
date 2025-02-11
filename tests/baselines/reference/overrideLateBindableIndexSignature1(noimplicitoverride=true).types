@@ -1,0 +1,76 @@
+//// [tests/cases/conformance/override/overrideLateBindableIndexSignature1.ts] ////
+
+=== overrideLateBindableIndexSignature1.ts ===
+const sym: symbol = Symbol();
+>sym : symbol
+>    : ^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+class Base1 {
+>Base1 : Base1
+>      : ^^^^^
+
+  [sym]() {}
+>[sym] : () => void
+>      : ^^^^^^^^^^
+>sym : symbol
+>    : ^^^^^^
+}
+
+class Derived1 extends Base1 {
+>Derived1 : Derived1
+>         : ^^^^^^^^
+>Base1 : Base1
+>      : ^^^^^
+
+  override [sym]() {}
+>[sym] : () => void
+>      : ^^^^^^^^^^
+>sym : symbol
+>    : ^^^^^^
+}
+
+class Base2 {
+>Base2 : Base2
+>      : ^^^^^
+
+  [sym]() {}
+>[sym] : () => void
+>      : ^^^^^^^^^^
+>sym : symbol
+>    : ^^^^^^
+}
+
+class Derived2 extends Base2 {
+>Derived2 : Derived2
+>         : ^^^^^^^^
+>Base2 : Base2
+>      : ^^^^^
+
+  [sym]() {}
+>[sym] : () => void
+>      : ^^^^^^^^^^
+>sym : symbol
+>    : ^^^^^^
+}
+
+class Base3 {}
+>Base3 : Base3
+>      : ^^^^^
+
+class Derived3 extends Base3 {
+>Derived3 : Derived3
+>         : ^^^^^^^^
+>Base3 : Base3
+>      : ^^^^^
+
+  override [sym]() {}
+>[sym] : () => void
+>      : ^^^^^^^^^^
+>sym : symbol
+>    : ^^^^^^
+}
+

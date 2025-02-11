@@ -169,6 +169,7 @@ import {
     isExternalModule,
     isExternalModuleImportEqualsDeclaration,
     isExternalModuleReference,
+    isExternalModuleSymbol,
     isFileLevelUniqueName,
     isForInStatement,
     isForOfStatement,
@@ -4027,7 +4028,13 @@ export function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string 
             return tryCast(d.propertyName, isIdentifier)?.text;
         }
         // GH#52694
-        return tryCast(getNameOfDeclaration(d), isIdentifier)?.text;
+        const name = tryCast(getNameOfDeclaration(d), isIdentifier)?.text;
+        if (name) {
+            return name;
+        }
+        if (symbol.parent && !isExternalModuleSymbol(symbol.parent)) {
+            return symbol.parent.getName();
+        }
     });
 }
 
@@ -4053,7 +4060,7 @@ export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: Scri
 
 /** @internal */
 export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget | undefined, forceCapitalize?: boolean): string {
-    const baseName = getBaseFileName(removeSuffix(moduleSpecifier, "/index"));
+    const baseName = getBaseFileName(removeSuffix(removeFileExtension(moduleSpecifier), "/index"));
     let res = "";
     let lastCharWasValid = true;
     const firstCharCode = baseName.charCodeAt(0);

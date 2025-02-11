@@ -1,0 +1,86 @@
+/loosey.cts(1,36): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+/loosey.cts(6,9): error TS2339: Property 'default' does not exist on type '{ version: number; }'.
+/main.mts(5,36): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+/main.mts(6,52): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+/main.mts(9,47): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+/main.mts(10,10): error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'Node16'.
+/main.mts(10,41): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+/main.mts(11,42): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+/main.mts(12,9): error TS2339: Property 'version' does not exist on type '{ default: { version: number; }; }'.
+
+
+==== /node_modules/not.json/package.json (0 errors) ====
+    {
+      "name": "not.json",
+      "version": "1.0.0",
+      "type": "module",
+      "exports": "./index.js"
+    }
+    
+==== /node_modules/not.json/index.d.ts (0 errors) ====
+    export function oops(json: string): any;
+    
+==== /node_modules/actually-json/package.json (0 errors) ====
+    {
+      "name": "actually-json",
+      "version": "1.0.0",
+      "type": "module",
+      "exports": {
+        ".": "./index.json",
+        "./typed": "./typed.d.json.ts"
+      }
+    }
+    
+==== /node_modules/actually-json/index.json (0 errors) ====
+    {}
+    
+==== /node_modules/actually-json/typed.d.json.ts (0 errors) ====
+    declare const _default: {};
+    export default _default;
+    
+==== /config.json (0 errors) ====
+    {
+      "version": 1
+    }
+    
+==== /main.mts (7 errors) ====
+    import { oops } from "not.json"; // Ok
+    import moreOops from "actually-json"; // Error in nodenext
+    import typed from "actually-json/typed"; // Error in nodenext
+    
+    import config from "./config.json" with { type: "json" }; // Ok
+                                       ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+    import { default as config1 } from "./config.json" with { type: "json" }; // Ok
+                                                       ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+    import config2 from "./config.json"; // Error in nodenext, no attribute
+    import type config2Type from "./config.json"; // Ok, type-only
+    import type config2Type2 from "./config.json" with { type: "json" }; // Error, import attributes not allowed on type-only imports
+                                                  ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+    import { version } from "./config.json" with { type: "json" }; // Error, named import
+             ~~~~~~~
+!!! error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'Node16'.
+                                            ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+    import * as config3 from "./config.json" with { type: "json" };
+                                             ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+    config3.version; // Error
+            ~~~~~~~
+!!! error TS2339: Property 'version' does not exist on type '{ default: { version: number; }; }'.
+    config3.default; // Ok
+    
+==== /loosey.cts (2 errors) ====
+    import config from "./config.json" with { type: "json" }; // Error
+                                       ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+    import config2 from "./config.json"; // Ok
+    import { version } from "./config.json"; // Ok
+    import * as config3 from "./config.json";
+    config3.version; // Ok
+    config3.default; // Error
+            ~~~~~~~
+!!! error TS2339: Property 'default' does not exist on type '{ version: number; }'.
+    
