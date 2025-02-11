@@ -16,6 +16,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil/tsbaseline"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
 var (
@@ -142,11 +143,10 @@ type compilerFileBasedTest struct {
 }
 
 func getCompilerFileBasedTest(t *testing.T, filename string) *compilerFileBasedTest {
-	bytes, err := os.ReadFile(filename)
-	if err != nil {
-		panic("Could not read test file: " + err.Error())
+	content, ok := vfs.FromOS().ReadFile(filename)
+	if !ok {
+		panic("Could not read test file: " + filename)
 	}
-	content := string(bytes)
 	settings := extractCompilerSettings(content)
 	configurations := harnessutil.GetFileBasedTestConfigurations(t, settings, compilerVaryBy)
 	return &compilerFileBasedTest{

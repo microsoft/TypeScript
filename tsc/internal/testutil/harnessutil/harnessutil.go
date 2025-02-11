@@ -474,7 +474,7 @@ func listFilesWorker(spec *regexp.Regexp, recursive bool, folder string) ([]stri
 	}
 	var paths []string
 	for _, entry := range entries {
-		path := filepath.Join(folder, entry.Name())
+		path := tspath.NormalizePath(filepath.Join(folder, entry.Name()))
 		if !entry.IsDir() {
 			if spec == nil || spec.MatchString(path) {
 				paths = append(paths, path)

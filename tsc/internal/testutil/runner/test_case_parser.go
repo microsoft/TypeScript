@@ -90,6 +90,7 @@ func makeUnitsFromTest(code string, fileName string) testCaseContent {
 				if currentFileContent.Len() != 0 && scanner.SkipTrivia(currentFileContent.String(), 0) != currentFileContent.Len() {
 					panic("Non-comment test content appears before the first '// @Filename' directive")
 				}
+				currentFileContent.Reset()
 			}
 		} else {
 			// Subfile content line
