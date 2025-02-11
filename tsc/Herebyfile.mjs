@@ -129,16 +129,22 @@ export const buildWatch = task({
             let libsChanged = false;
             let goChanged = false;
 
-            for (const p of paths) {
-                if (libsRegexp.test(p)) {
-                    libsChanged = true;
+            if (paths) {
+                for (const p of paths) {
+                    if (libsRegexp.test(p)) {
+                        libsChanged = true;
+                    }
+                    else if (p.endsWith(".go")) {
+                        goChanged = true;
+                    }
+                    if (libsChanged && goChanged) {
+                        break;
+                    }
                 }
-                else if (p.endsWith(".go")) {
-                    goChanged = true;
-                }
-                if (libsChanged && goChanged) {
-                    break;
-                }
+            }
+            else {
+                libsChanged = true;
+                goChanged = true;
             }
 
             if (libsChanged) {
@@ -368,7 +374,7 @@ void 0;
 
 /**
  * @param {string} name
- * @param {(paths: Set<string>, abortSignal: AbortSignal) => void | Promise<unknown>} run
+ * @param {(paths: Set<string> | undefined, abortSignal: AbortSignal) => void | Promise<unknown>} run
  * @param {object} options
  * @param {string | string[]} options.paths
  * @param {(path: string) => boolean} [options.ignored]
@@ -388,7 +394,8 @@ async function watchDebounced(name, run, options) {
         alwaysStat: true,
     });
     // The paths that have changed since the last run.
-    let paths = new Set();
+    /** @type {Set<string> | undefined} */
+    let paths;
 
     process.on("SIGINT", endWatchMode);
     process.on("beforeExit", endWatchMode);
@@ -453,6 +460,7 @@ async function watchDebounced(name, run, options) {
         }
 
         debouncer.enqueue();
+        paths ??= new Set();
         paths.add(path);
     }
 
