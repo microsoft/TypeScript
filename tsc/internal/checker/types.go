@@ -702,6 +702,8 @@ type IntrinsicType struct {
 	intrinsicName string
 }
 
+func (t *IntrinsicType) IntrinsicName() string { return t.intrinsicName }
+
 // LiteralTypeData
 
 type LiteralType struct {

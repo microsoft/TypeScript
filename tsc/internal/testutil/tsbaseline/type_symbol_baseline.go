@@ -52,10 +52,9 @@ func DoTypeAndSymbolBaseline(
 
 	fullWalker := newTypeWriterWalker(program, hasErrorBaseline)
 
-	// !!! Enable type baselines once it's implemented
-	// t.Run("type", func(t *testing.T) {
-	// 	checkBaselines(t, baselinePath, allFiles, fullWalker, header, opts, false /*isSymbolBaseline*/)
-	// })
+	t.Run("type", func(t *testing.T) {
+		checkBaselines(t, baselinePath, allFiles, fullWalker, header, opts, false /*isSymbolBaseline*/)
+	})
 	t.Run("symbol", func(t *testing.T) {
 		checkBaselines(t, baselinePath, allFiles, fullWalker, header, opts, true /*isSymbolBaseline*/)
 	})
@@ -269,7 +268,59 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 	sourceText := scanner.GetSourceTextOfNodeFromSourceFile(walker.currentSourceFile, node, false /*includeTrivia*/)
 
 	if !isSymbolWalk {
-		// !!! Types baseline
+		// Don't try to get the type of something that's already a type.
+		// Exception for `T` in `type T = something` because that may evaluate to some interesting type.
+		if ast.IsPartOfTypeNode(node) ||
+			ast.IsIdentifier(node) &&
+				(ast.GetMeaningFromDeclaration(node)&ast.SemanticMeaningValue) == 0 &&
+				!(ast.IsTypeAliasDeclaration(node.Parent) && node == node.Parent.Name()) {
+			return nil
+		}
+
+		var t *checker.Type
+		// Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
+		if ast.IsExpressionWithTypeArgumentsInClassExtendsClause(node.Parent) {
+			t = walker.checker.GetTypeAtLocation(node.Parent)
+		}
+		if t == nil || checker.IsTypeAny(t) {
+			t = walker.checker.GetTypeAtLocation(node)
+		}
+		var typeString string
+		// var underline string
+		if !walker.hadErrorBaseline &&
+			checker.IsTypeAny(t) &&
+			!ast.IsBindingElement(node.Parent) &&
+			!ast.IsPropertyAccessOrQualifiedName(node.Parent) &&
+			!ast.IsLabelName(node) &&
+			!(ast.IsModuleDeclaration(node.Parent) && ast.IsGlobalScopeAugmentation(node.Parent)) &&
+			!ast.IsMetaProperty(node.Parent) &&
+			!isImportStatementName(node) &&
+			!isExportStatementName(node) &&
+			!isIntrinsicJsxTag(node) {
+			typeString = t.AsIntrinsicType().IntrinsicName()
+		} else {
+			// !!! TODO: full type printing and underline when we have node builder
+			// const typeFormatFlags = ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType | ts.TypeFormatFlags.GenerateNamesForShadowedTypeParams;
+			// let typeNode = this.checker.typeToTypeNode(type, node.parent, (typeFormatFlags & ts.TypeFormatFlags.NodeBuilderFlagsMask) | ts.NodeBuilderFlags.IgnoreErrors, ts.InternalNodeBuilderFlags.AllowUnresolvedNames)!;
+			// if (ts.isIdentifier(node) && ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node && ts.isIdentifier(typeNode) && ts.idText(typeNode) === ts.idText(node)) {
+			// 	// for a complex type alias `type T = ...`, showing "T : T" isn't very helpful for type tests. When the type produced is the same as
+			// 	// the name of the type alias, recreate the type string without reusing the alias name
+			// 	typeNode = this.checker.typeToTypeNode(type, node.parent, ((typeFormatFlags | ts.TypeFormatFlags.InTypeAlias) & ts.TypeFormatFlags.NodeBuilderFlagsMask) | ts.NodeBuilderFlags.IgnoreErrors)!;
+			// }
+
+			// const { printer, writer, underliner, reset } = createSyntheticNodeUnderliningPrinter();
+			// printer.writeNode(ts.EmitHint.Unspecified, typeNode, this.currentSourceFile, writer);
+			// typeString = writer.getText();
+			// underline = underliner.getText();
+			// reset();
+			typeString = walker.checker.TypeToString(t)
+		}
+		return &typeWriterResult{
+			line:       line,
+			sourceText: sourceText,
+			typ:        typeString,
+			// underline: underline, // !!! TODO: underline
+		}
 	}
 
 	symbol := walker.checker.GetSymbolAtLocation(node)
@@ -307,4 +358,37 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 		sourceText: sourceText,
 		symbol:     symbolString.String(),
 	}
+}
+
+func isImportStatementName(node *ast.Node) bool {
+	if ast.IsImportSpecifier(node.Parent) && (node == node.Parent.Name() || node == node.Parent.PropertyName()) {
+		return true
+	}
+	if ast.IsImportClause(node.Parent) && node == node.Parent.Name() {
+		return true
+	}
+	if ast.IsImportEqualsDeclaration(node.Parent) && node == node.Parent.Name() {
+		return true
+	}
+	return false
+}
+
+func isExportStatementName(node *ast.Node) bool {
+	if ast.IsExportAssignment(node.Parent) && node == node.Parent.Expression() {
+		return true
+	}
+	if ast.IsExportSpecifier(node.Parent) && (node == node.Parent.Name() || node == node.Parent.PropertyName()) {
+		return true
+	}
+	return false
+}
+
+func isIntrinsicJsxTag(node *ast.Node) bool {
+	if !(ast.IsJsxOpeningElement(node.Parent) || ast.IsJsxClosingElement(node.Parent) || ast.IsJsxSelfClosingElement(node.Parent)) {
+		return false
+	}
+	if node.Parent.TagName() != node {
+		return false
+	}
+	return checker.IsIntrinsicJsxName(node.Text())
 }

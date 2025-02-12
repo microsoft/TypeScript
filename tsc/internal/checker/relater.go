@@ -1654,7 +1654,7 @@ func (c *Checker) compareTypePredicateRelatedTo(source *TypePredicate, target *T
 
 // Returns true if `s` is `(...args: A) => R` where `A` is `any`, `any[]`, `never`, or `never[]`, and `R` is `any` or `unknown`.
 func (c *Checker) isTopSignature(s *Signature) bool {
-	if s.typeParameters == nil && (s.thisParameter == nil || isTypeAny(c.getTypeOfParameter(s.thisParameter))) && len(s.parameters) == 1 && signatureHasRestParameter(s) {
+	if s.typeParameters == nil && (s.thisParameter == nil || IsTypeAny(c.getTypeOfParameter(s.thisParameter))) && len(s.parameters) == 1 && signatureHasRestParameter(s) {
 		paramType := c.getTypeOfParameter(s.parameters[0])
 		var restType *Type
 		if c.isArrayType(paramType) {
@@ -1767,7 +1767,7 @@ func (c *Checker) tryGetTypeAtPosition(signature *Signature, pos int) *Type {
 func (c *Checker) getRestOrAnyTypeAtPosition(source *Signature, pos int) *Type {
 	restType := c.getRestTypeAtPosition(source, pos, false)
 	if restType != nil {
-		if elementType := c.getElementTypeOfArrayType(restType); elementType != nil && isTypeAny(elementType) {
+		if elementType := c.getElementTypeOfArrayType(restType); elementType != nil && IsTypeAny(elementType) {
 			return c.anyType
 		}
 	}
@@ -1834,7 +1834,7 @@ func (c *Checker) isValidDeclarationForTupleLabel(d *ast.Node) bool {
 
 func (c *Checker) getNonArrayRestType(signature *Signature) *Type {
 	restType := c.getEffectiveRestType(signature)
-	if restType != nil && !c.isArrayType(restType) && !isTypeAny(restType) {
+	if restType != nil && !c.isArrayType(restType) && !IsTypeAny(restType) {
 		return restType
 	}
 	return nil
@@ -1844,7 +1844,7 @@ func (c *Checker) getEffectiveRestType(signature *Signature) *Type {
 	if signatureHasRestParameter(signature) {
 		restType := c.getTypeOfSymbol(signature.parameters[len(signature.parameters)-1])
 		if !isTupleType(restType) {
-			if isTypeAny(restType) {
+			if IsTypeAny(restType) {
 				return c.anyArrayType
 			}
 			return restType

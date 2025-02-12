@@ -1195,7 +1195,7 @@ func (c *Checker) checkGrammarJsxName(node *ast.JsxTagNameExpression) bool {
 		return c.grammarErrorOnNode(node.Expression(), diagnostics.JSX_property_access_expressions_cannot_include_JSX_namespace_names)
 	}
 
-	if ast.IsJsxNamespacedName(node) && c.compilerOptions.GetJSXTransformEnabled() && !isIntrinsicJsxName(node.AsJsxNamespacedName().Namespace.Text()) {
+	if ast.IsJsxNamespacedName(node) && c.compilerOptions.GetJSXTransformEnabled() && !IsIntrinsicJsxName(node.AsJsxNamespacedName().Namespace.Text()) {
 		return c.grammarErrorOnNode(node, diagnostics.React_components_cannot_include_JSX_namespace_names)
 	}
 

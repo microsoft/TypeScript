@@ -69,15 +69,6 @@ type Binder struct {
 	singleDeclarationsPool core.Pool[*ast.Node]
 }
 
-type ModuleInstanceState int32
-
-const (
-	ModuleInstanceStateUnknown ModuleInstanceState = iota
-	ModuleInstanceStateNonInstantiated
-	ModuleInstanceStateInstantiated
-	ModuleInstanceStateConstEnumOnly
-)
-
 type ActiveLabel struct {
 	next           *ActiveLabel
 	breakTarget    *ast.FlowLabel
@@ -2682,18 +2673,6 @@ func getPostfixTokenFromNode(node *ast.Node) *ast.Node {
 		return node.AsMethodSignatureDeclaration().PostfixToken
 	}
 	panic("Unhandled case in getPostfixTokenFromNode")
-}
-
-func nodeHasName(statement *ast.Node, id *ast.Node) bool {
-	name := statement.Name()
-	if name != nil {
-		return ast.IsIdentifier(name) && name.AsIdentifier().Text == id.AsIdentifier().Text
-	}
-	if ast.IsVariableStatement(statement) {
-		declarations := statement.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes
-		return core.Some(declarations, func(d *ast.Node) bool { return nodeHasName(d, id) })
-	}
-	return false
 }
 
 func isAsyncFunction(node *ast.Node) bool {

@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/allowSyntheticDefaultImports9.ts] ////
+
+=== b.d.ts ===
+export function foo();
+>foo : () => any
+
+export function bar();
+>bar : () => any
+
+=== a.ts ===
+import { default as Foo } from "./b";
+>default : { foo: () => any, bar: () => any }
+>Foo : { foo: () => any, bar: () => any }
+
+Foo.bar();
+>Foo.bar() : any
+>Foo.bar : () => any
+>Foo : { foo: () => any, bar: () => any }
+>bar : () => any
+
+Foo.foo();
+>Foo.foo() : any
+>Foo.foo : () => any
+>Foo : { foo: () => any, bar: () => any }
+>foo : () => any
+

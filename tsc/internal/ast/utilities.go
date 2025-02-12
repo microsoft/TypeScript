@@ -1859,6 +1859,104 @@ func IsBlockScope(node *Node, parentNode *Node) bool {
 	return false
 }
 
+type SemanticMeaning int32
+
+const (
+	SemanticMeaningNone      SemanticMeaning = 0
+	SemanticMeaningValue     SemanticMeaning = 1 << 0
+	SemanticMeaningType      SemanticMeaning = 1 << 1
+	SemanticMeaningNamespace SemanticMeaning = 1 << 2
+	SemanticMeaningAll       SemanticMeaning = SemanticMeaningValue | SemanticMeaningType | SemanticMeaningNamespace
+)
+
+func GetMeaningFromDeclaration(node *Node) SemanticMeaning {
+	switch node.Kind {
+	case KindVariableDeclaration:
+		return SemanticMeaningValue
+	case KindParameter,
+		KindBindingElement,
+		KindPropertyDeclaration,
+		KindPropertySignature,
+		KindPropertyAssignment,
+		KindShorthandPropertyAssignment,
+		KindMethodDeclaration,
+		KindMethodSignature,
+		KindConstructor,
+		KindGetAccessor,
+		KindSetAccessor,
+		KindFunctionDeclaration,
+		KindFunctionExpression,
+		KindArrowFunction,
+		KindCatchClause,
+		KindJsxAttribute:
+		return SemanticMeaningValue
+
+	case KindTypeParameter,
+		KindInterfaceDeclaration,
+		KindTypeAliasDeclaration,
+		KindTypeLiteral:
+		return SemanticMeaningType
+	case KindEnumMember, KindClassDeclaration:
+		return SemanticMeaningValue | SemanticMeaningType
+
+	case KindModuleDeclaration:
+		if IsAmbientModule(node) {
+			return SemanticMeaningNamespace | SemanticMeaningValue
+		} else if GetModuleInstanceState(node) == ModuleInstanceStateInstantiated {
+			return SemanticMeaningNamespace | SemanticMeaningValue
+		} else {
+			return SemanticMeaningNamespace
+		}
+
+	case KindEnumDeclaration,
+		KindNamedImports,
+		KindImportSpecifier,
+		KindImportEqualsDeclaration,
+		KindImportDeclaration,
+		KindExportAssignment,
+		KindExportDeclaration:
+		return SemanticMeaningAll
+
+	// An external module can be a Value
+	case KindSourceFile:
+		return SemanticMeaningNamespace | SemanticMeaningValue
+	}
+
+	return SemanticMeaningAll
+}
+
+func IsPropertyAccessOrQualifiedName(node *Node) bool {
+	return node.Kind == KindPropertyAccessExpression || node.Kind == KindQualifiedName
+}
+
+func IsLabelName(node *Node) bool {
+	return IsLabelOfLabeledStatement(node) || IsJumpStatementTarget(node)
+}
+
+func IsLabelOfLabeledStatement(node *Node) bool {
+	if !IsIdentifier(node) {
+		return false
+	}
+	if !IsLabeledStatement(node.Parent) {
+		return false
+	}
+	return node == node.Parent.Label()
+}
+
+func IsJumpStatementTarget(node *Node) bool {
+	if !IsIdentifier(node) {
+		return false
+	}
+	if !IsBreakOrContinueStatement(node.Parent) {
+		return false
+	}
+	return node == node.Parent.Label()
+}
+
+func IsBreakOrContinueStatement(node *Node) bool {
+	return NodeKindIs(node, KindBreakStatement, KindContinueStatement)
+}
+
 // GetModuleInstanceState is used during binding as well as in transformations and tests, and therefore may be invoked
 // with a node that does not yet have its `Parent` pointer set. In this case, an `ancestors` represents a stack of
 // virtual `Parent` pointers that can be used to walk up the tree. Since `getModuleInstanceStateForAliasTarget` may

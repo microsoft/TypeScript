@@ -501,7 +501,7 @@ func (c *Checker) inferToTemplateLiteralType(n *InferenceState, source *Type, ta
 			// allowed template literal placeholder types, infer from a literal type corresponding to the constraint.
 			if source.flags&TypeFlagsStringLiteral != 0 && target.flags&TypeFlagsTypeVariable != 0 {
 				if inferenceContext := getInferenceInfoForType(n, target); inferenceContext != nil {
-					if constraint := c.getBaseConstraintOfType(inferenceContext.typeParameter); constraint != nil && !isTypeAny(constraint) {
+					if constraint := c.getBaseConstraintOfType(inferenceContext.typeParameter); constraint != nil && !IsTypeAny(constraint) {
 						allTypeFlags := TypeFlagsNone
 						for _, t := range constraint.Distributed() {
 							allTypeFlags |= t.flags
