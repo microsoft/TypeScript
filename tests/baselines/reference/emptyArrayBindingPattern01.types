@@ -1,0 +1,81 @@
+//// [tests/cases/conformance/es6/destructuring/emptyArrayBindingPattern01.ts] ////
+
+=== emptyArrayBindingPattern01.ts ===
+export const cilBlurLinear1: string[][] = [[]];
+>cilBlurLinear1 : string[][]
+>               : ^^^^^^^^^^
+>[[]] : undefined[][]
+>     : ^^^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+const [,] = cilBlurLinear1;
+> : undefined
+> : ^^^^^^^^^
+>cilBlurLinear1 : string[][]
+>               : ^^^^^^^^^^
+
+export const cilBlurLinear2: string[][] = [[]];
+>cilBlurLinear2 : string[][]
+>               : ^^^^^^^^^^
+>[[]] : undefined[][]
+>     : ^^^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+let [,] = cilBlurLinear2;
+> : undefined
+> : ^^^^^^^^^
+>cilBlurLinear2 : string[][]
+>               : ^^^^^^^^^^
+
+export const cilBlurLinear3: string[][] = [[]];
+>cilBlurLinear3 : string[][]
+>               : ^^^^^^^^^^
+>[[]] : undefined[][]
+>     : ^^^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+var [,] = cilBlurLinear3;
+> : undefined
+> : ^^^^^^^^^
+>cilBlurLinear3 : string[][]
+>               : ^^^^^^^^^^
+
+export const cilBlurLinear4: string[][] = [[]];
+>cilBlurLinear4 : string[][]
+>               : ^^^^^^^^^^
+>[[]] : undefined[][]
+>     : ^^^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+const [[]] = cilBlurLinear4;
+>cilBlurLinear4 : string[][]
+>               : ^^^^^^^^^^
+
+export const cilBlurLinear5: string[][] = [[]];
+>cilBlurLinear5 : string[][]
+>               : ^^^^^^^^^^
+>[[]] : undefined[][]
+>     : ^^^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+let [[]] = cilBlurLinear5;
+>cilBlurLinear5 : string[][]
+>               : ^^^^^^^^^^
+
+export const cilBlurLinear6: string[][] = [[]];
+>cilBlurLinear6 : string[][]
+>               : ^^^^^^^^^^
+>[[]] : undefined[][]
+>     : ^^^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+var [[]] = cilBlurLinear6;
+>cilBlurLinear6 : string[][]
+>               : ^^^^^^^^^^
+
