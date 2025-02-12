@@ -225,6 +225,7 @@ import {
     JSDocDeprecatedTag,
     JSDocEnumTag,
     JSDocFunctionType,
+    JSDocIgnoreTag,
     JSDocImplementsTag,
     JSDocImportTag,
     JSDocLink,
@@ -938,6 +939,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         },
         get updateJSDocDeprecatedTag() {
             return getJSDocSimpleTagUpdateFunction<JSDocDeprecatedTag>(SyntaxKind.JSDocDeprecatedTag);
+        },
+        get createJSDocIgnoreTag() {
+            return getJSDocSimpleTagCreateFunction<JSDocIgnoreTag>(SyntaxKind.JSDocIgnoreTag);
+        },
+        get updateJSDocIgnoreTag() {
+            return getJSDocSimpleTagUpdateFunction<JSDocIgnoreTag>(SyntaxKind.JSDocIgnoreTag);
         },
         get createJSDocThrowsTag() {
             return getJSDocTypeLikeTagCreateFunction<JSDocThrowsTag>(SyntaxKind.JSDocThrowsTag);
@@ -5457,6 +5464,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // createJSDocProtectedTag
     // createJSDocReadonlyTag
     // createJSDocDeprecatedTag
+    // createJSDocIgnoreTag
     function createJSDocSimpleTagWorker<T extends JSDocTag>(kind: T["kind"], tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>) {
         const node = createBaseJSDocTag<T>(kind, tagName ?? createIdentifier(getDefaultTagNameForKind(kind)), comment);
         return node;
@@ -5470,6 +5478,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // updateJSDocProtectedTag
     // updateJSDocReadonlyTag
     // updateJSDocDeprecatedTag
+    // updateJSDocIgnoreTag
     function updateJSDocSimpleTagWorker<T extends JSDocTag>(kind: T["kind"], node: T, tagName: Identifier = getDefaultTagName(node), comment: string | NodeArray<JSDocComment> | undefined) {
         return node.tagName !== tagName
                 || node.comment !== comment
