@@ -8,6 +8,7 @@
         "target": "es2020",
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
+        "useDefineForClassFields": true,
 
         "declaration": true,
         "declarationMap": true,
