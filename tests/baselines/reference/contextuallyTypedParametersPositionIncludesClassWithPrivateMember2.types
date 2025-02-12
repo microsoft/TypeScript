@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts] ////
+
+=== contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts ===
+class Foo {
+>Foo : Foo
+
+  private foo = "foo";
+>foo : string
+>"foo" : "foo"
+
+  doStuff(cb: (arg: string) => void) {}
+>doStuff : (cb: (arg: string) => void) => void
+>cb : (arg: string) => void
+>arg : string
+}
+
+interface FooLike {
+  doStuff: (cb: (arg: number) => void) => void;
+>doStuff : (cb: (arg: number) => void) => void
+>cb : (arg: number) => void
+>arg : number
+}
+
+declare function useIt(arg: Foo | FooLike): void;
+>useIt : (arg: Foo | FooLike) => void
+>arg : Foo | FooLike
+
+useIt({
+>useIt({  doStuff: (arg) => {},}) : void
+>useIt : (arg: Foo | FooLike) => void
+>{  doStuff: (arg) => {},} : { doStuff: (arg: (arg: number) => void) => void; }
+
+  doStuff: (arg) => {},
+>doStuff : (arg: (arg: number) => void) => void
+>(arg) => {} : (arg: (arg: number) => void) => void
+>arg : (arg: number) => void
+
+});
+
+declare function useIt2(arg: Foo): void;
+>useIt2 : (arg: Foo) => void
+>arg : Foo
+
+useIt2({
+>useIt2({  doStuff: (arg) => {},}) : void
+>useIt2 : (arg: Foo) => void
+>{  doStuff: (arg) => {},} : { doStuff: (arg: any) => void; }
+
+  doStuff: (arg) => {},
+>doStuff : (arg: any) => void
+>(arg) => {} : (arg: any) => void
+>arg : any
+
+});
+
+declare function useIt3(arg: FooLike): void;
+>useIt3 : (arg: FooLike) => void
+>arg : FooLike
+
+useIt3({
+>useIt3({  doStuff: (arg) => {},}) : void
+>useIt3 : (arg: FooLike) => void
+>{  doStuff: (arg) => {},} : { doStuff: (arg: (arg: number) => void) => void; }
+
+  doStuff: (arg) => {},
+>doStuff : (arg: (arg: number) => void) => void
+>(arg) => {} : (arg: (arg: number) => void) => void
+>arg : (arg: number) => void
+
+});
+
