@@ -20,25 +20,25 @@ import (
 )
 
 type ProgramOptions struct {
-	ConfigFilePath     string
-	RootFiles          []string
-	Host               CompilerHost
-	Options            *core.CompilerOptions
-	SingleThreaded     bool
-	ProjectReference   []core.ProjectReference
-	OptionsDiagnostics []*ast.Diagnostic
+	ConfigFilePath               string
+	RootFiles                    []string
+	Host                         CompilerHost
+	Options                      *core.CompilerOptions
+	SingleThreaded               bool
+	ProjectReference             []core.ProjectReference
+	ConfigFileParsingDiagnostics []*ast.Diagnostic
 }
 
 type Program struct {
-	host               CompilerHost
-	programOptions     ProgramOptions
-	compilerOptions    *core.CompilerOptions
-	configFilePath     string
-	nodeModules        map[string]*ast.SourceFile
-	checkers           []*checker.Checker
-	checkersByFile     map[*ast.SourceFile]*checker.Checker
-	currentDirectory   string
-	optionsDiagnostics []*ast.Diagnostic
+	host                         CompilerHost
+	programOptions               ProgramOptions
+	compilerOptions              *core.CompilerOptions
+	configFilePath               string
+	nodeModules                  map[string]*ast.SourceFile
+	checkers                     []*checker.Checker
+	checkersByFile               map[*ast.SourceFile]*checker.Checker
+	currentDirectory             string
+	configFileParsingDiagnostics []*ast.Diagnostic
 
 	resolver        *module.Resolver
 	resolvedModules map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule]
@@ -70,7 +70,7 @@ func NewProgram(options ProgramOptions) *Program {
 	p := &Program{}
 	p.programOptions = options
 	p.compilerOptions = options.Options
-	p.optionsDiagnostics = options.OptionsDiagnostics
+	p.configFileParsingDiagnostics = slices.Clip(options.ConfigFileParsingDiagnostics)
 	if p.compilerOptions == nil {
 		p.compilerOptions = &core.CompilerOptions{}
 	}
@@ -96,7 +96,7 @@ func NewProgram(options ProgramOptions) *Program {
 		}
 		parsedConfig := parser.ParseJSONText(p.configFilePath, jsonText)
 		if len(parsedConfig.Diagnostics()) > 0 {
-			p.optionsDiagnostics = append(p.optionsDiagnostics, parsedConfig.Diagnostics()...)
+			p.configFileParsingDiagnostics = append(p.configFileParsingDiagnostics, parsedConfig.Diagnostics()...)
 			return p
 		}
 
@@ -118,7 +118,7 @@ func NewProgram(options ProgramOptions) *Program {
 		p.compilerOptions = parseConfigFileContent.CompilerOptions()
 
 		if len(parseConfigFileContent.Errors) > 0 {
-			p.optionsDiagnostics = append(p.optionsDiagnostics, parseConfigFileContent.Errors...)
+			p.configFileParsingDiagnostics = append(p.configFileParsingDiagnostics, parseConfigFileContent.Errors...)
 			return p
 		}
 
@@ -162,15 +162,17 @@ func NewProgramFromParsedCommandLine(config *tsoptions.ParsedCommandLine, host C
 		Options:   config.CompilerOptions(),
 		Host:      host,
 		// todo: ProjectReferences
-		OptionsDiagnostics: config.GetConfigFileParsingDiagnostics(),
+		ConfigFileParsingDiagnostics: config.GetConfigFileParsingDiagnostics(),
 	}
 	return NewProgram(programOptions)
 }
 
-func (p *Program) SourceFiles() []*ast.SourceFile        { return p.files }
-func (p *Program) Options() *core.CompilerOptions        { return p.compilerOptions }
-func (p *Program) Host() CompilerHost                    { return p.host }
-func (p *Program) OptionsDiagnostics() []*ast.Diagnostic { return p.optionsDiagnostics }
+func (p *Program) SourceFiles() []*ast.SourceFile { return p.files }
+func (p *Program) Options() *core.CompilerOptions { return p.compilerOptions }
+func (p *Program) Host() CompilerHost             { return p.host }
+func (p *Program) GetConfigFileParsingDiagnostics() []*ast.Diagnostic {
+	return slices.Clip(p.configFileParsingDiagnostics)
+}
 
 func (p *Program) BindSourceFiles() {
 	wg := core.NewWorkGroup(p.programOptions.SingleThreaded)
@@ -283,7 +285,7 @@ func (p *Program) getOptionsDiagnosticsOfConfigFile() []*ast.Diagnostic {
 	if p.Options() == nil || p.Options().ConfigFilePath == "" {
 		return nil
 	}
-	return p.optionsDiagnostics
+	return p.configFileParsingDiagnostics // TODO: actually call getDiagnosticsHelper on config path
 }
 
 func (p *Program) getSyntaticDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.Diagnostic {

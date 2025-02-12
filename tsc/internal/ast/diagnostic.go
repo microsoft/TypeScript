@@ -122,7 +122,7 @@ func (c *DiagnosticsCollection) GetDiagnosticsForFile(fileName string) []*Diagno
 func (c *DiagnosticsCollection) GetDiagnostics() []*Diagnostic {
 	fileNames := slices.Collect(maps.Keys(c.fileDiagnostics))
 	slices.Sort(fileNames)
-	diagnostics := c.nonFileDiagnostics
+	diagnostics := slices.Clip(c.nonFileDiagnostics)
 	for _, fileName := range fileNames {
 		diagnostics = append(diagnostics, c.fileDiagnostics[fileName]...)
 	}
