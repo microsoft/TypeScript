@@ -36,7 +36,7 @@ func createChildren(node *ast.Node, sourceFile *ast.SourceFile) []*ast.Node {
 	pos := node.Pos()
 
 	processNode := func(child *ast.Node) {
-		addSyntheticNodes(children, pos, child.Pos(), node, scanner)
+		children = addSyntheticNodes(children, pos, child.Pos(), node, scanner)
 		children = append(children, child)
 		pos = child.End()
 	}

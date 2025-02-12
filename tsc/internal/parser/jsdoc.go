@@ -136,7 +136,7 @@ func (p *Parser) parseJSDocComment(parent *ast.Node, start int, end int) *ast.No
 	p.setContextFlags(ast.NodeFlagsJSDoc, true)
 	p.parsingContexts = p.parsingContexts | ParsingContexts(PCJSDocComment)
 
-	comment := p.parseJSDocCommentWorker(start+3, initialIndent)
+	comment := p.parseJSDocCommentWorker(start, end, initialIndent)
 	comment.Parent = parent
 	// move jsdoc diagnostics to jsdocDiagnostics -- for JS files only
 	if p.contextFlags&ast.NodeFlagsJavaScriptFile != 0 {
@@ -159,7 +159,7 @@ func (p *Parser) parseJSDocComment(parent *ast.Node, start int, end int) *ast.No
  * @param offset - the offset in the containing file
  * @param indent - the number of spaces to consider as the margin (applies to non-first lines only)
  */
-func (p *Parser) parseJSDocCommentWorker(start int, indent int) *ast.Node {
+func (p *Parser) parseJSDocCommentWorker(start int, end int, indent int) *ast.Node {
 	// Initially we can parse out a tag.  We also have seen a starting asterisk.
 	// This is so that /** * @type */ doesn't parse.
 	tags := p.nodeSlicePool.NewSlice(1)[:0]
@@ -291,7 +291,7 @@ loop:
 	jsdocComment := p.factory.NewJSDoc(
 		p.newNodeList(core.NewTextRange(start, commentsPos), commentParts),
 		p.newNodeList(core.NewTextRange(tagsPos, tagsEnd), tags))
-	p.finishNodeWithEnd(jsdocComment, start, len(p.sourceText))
+	p.finishNodeWithEnd(jsdocComment, start, end)
 	return jsdocComment
 }
 

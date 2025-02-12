@@ -4,6 +4,7 @@ import (
 	"slices"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
@@ -25,7 +26,7 @@ func getTokenAtPosition(
 
 	for {
 		children := getNodeChildren(current, sourceFile)
-		index, match := slices.BinarySearchFunc(children, position, func(node *ast.Node, _ int) int {
+		index, match := core.BinarySearchUniqueFunc(children, position, func(middle int, node *ast.Node) int {
 			// This last callback is more of a selector than a comparator -
 			// `0` causes the `node` result to be returned
 			// `1` causes recursion on the left of the middle
@@ -53,7 +54,6 @@ func getTokenAtPosition(
 				return -1
 			}
 
-			middle := slices.Index(children, node)
 			start := node.Pos()
 			if !allowPositionInLeadingTrivia {
 				start = scanner.GetTokenPosOfNode(node, sourceFile, true /*includeJSDoc*/)
