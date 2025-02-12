@@ -31,16 +31,16 @@ type ResolvedProjectReference struct {
 type NodeResolutionFeatures int32
 
 const (
-	NodeResolutionFeaturesNone    NodeResolutionFeatures = 0
 	NodeResolutionFeaturesImports NodeResolutionFeatures = 1 << iota
 	NodeResolutionFeaturesSelfName
 	NodeResolutionFeaturesExports
 	NodeResolutionFeaturesExportsPatternTrailers
 
-	NodeResolutionFeaturesAll             = NodeResolutionFeaturesImports | NodeResolutionFeaturesSelfName | NodeResolutionFeaturesExports | NodeResolutionFeaturesExportsPatternTrailers
-	NodeResolutionFeaturesNode16Default   = NodeResolutionFeaturesImports | NodeResolutionFeaturesSelfName | NodeResolutionFeaturesExports | NodeResolutionFeaturesExportsPatternTrailers
-	NodeResolutionFeaturesNodeNextDefault = NodeResolutionFeaturesAll
-	NodeResolutionFeaturesBundlerDefault  = NodeResolutionFeaturesImports | NodeResolutionFeaturesSelfName | NodeResolutionFeaturesExports | NodeResolutionFeaturesExportsPatternTrailers
+	NodeResolutionFeaturesNone            NodeResolutionFeatures = 0
+	NodeResolutionFeaturesAll                                    = NodeResolutionFeaturesImports | NodeResolutionFeaturesSelfName | NodeResolutionFeaturesExports | NodeResolutionFeaturesExportsPatternTrailers
+	NodeResolutionFeaturesNode16Default                          = NodeResolutionFeaturesImports | NodeResolutionFeaturesSelfName | NodeResolutionFeaturesExports | NodeResolutionFeaturesExportsPatternTrailers
+	NodeResolutionFeaturesNodeNextDefault                        = NodeResolutionFeaturesAll
+	NodeResolutionFeaturesBundlerDefault                         = NodeResolutionFeaturesImports | NodeResolutionFeaturesSelfName | NodeResolutionFeaturesExports | NodeResolutionFeaturesExportsPatternTrailers
 )
 
 type PackageId struct {
