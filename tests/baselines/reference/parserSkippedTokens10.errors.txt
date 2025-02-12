@@ -4,10 +4,10 @@ parserSkippedTokens10.ts(2,1): error TS1127: Invalid character.
 
 ==== parserSkippedTokens10.ts (2 errors) ====
     \
-    
+    ~
 !!! error TS1127: Invalid character.
     \
-    
+    ~
 !!! error TS1127: Invalid character.
     /*existing trivia*/ ;
     
