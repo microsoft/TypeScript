@@ -29,7 +29,7 @@ export interface SomeType {
 //# sourceMappingURL=index.d.ts.map
 
 //// [/home/src/workspaces/project/dist/index.d.ts.map]
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../index.ts"],"names":[],"mappings":"AAAA,qBAAa,GAAG;IACZ,MAAM,EAAE,MAAM,CAAC;IACf,UAAU,CAAC,QAAQ,EAAE,QAAQ,GAAG,QAAQ;IACxC,WAAW;;;;;;;CAMd;AAED,MAAM,WAAW,QAAQ;IACrB,MAAM,EAAE,MAAM,CAAC;CAClB"}
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../index.ts"],"names":[],"mappings":"AAAA,qBAAa,GAAG;IACZ,MAAM,EAAE,MAAM,CAAC;IACf,UAAU,CAAC,QAAQ,EAAE,QAAQ,GAAG,QAAQ;IACxC,WAAW;QAEK,CAAC;QAEL,CAAC;;QAAD,CAAC;QAFG,CAAC;;CAIpB;AAED,MAAM,WAAW,QAAQ;IACrB,MAAM,EAAE,MAAM,CAAC;CAClB"}
 
 //// [/home/src/workspaces/project/dist/index.js]
 "use strict";
@@ -411,7 +411,7 @@ Info seq  [hh:mm:ss:mss] response:
           {
             "name": "/home/src/workspaces/project/dist/index.d.ts.map",
             "writeByteOrderMark": false,
-            "text": "{\"version\":3,\"file\":\"index.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../index.ts\"],\"names\":[],\"mappings\":\"AAAA,qBAAa,GAAG;IACZ,MAAM,EAAE,MAAM,CAAC;IACf,UAAU,CAAC,QAAQ,EAAE,QAAQ,GAAG,QAAQ;IACxC,WAAW;;;;;;;CAMd;AAED,MAAM,WAAW,QAAQ;IACrB,MAAM,EAAE,MAAM,CAAC;CAClB\"}"
+            "text": "{\"version\":3,\"file\":\"index.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../index.ts\"],\"names\":[],\"mappings\":\"AAAA,qBAAa,GAAG;IACZ,MAAM,EAAE,MAAM,CAAC;IACf,UAAU,CAAC,QAAQ,EAAE,QAAQ,GAAG,QAAQ;IACxC,WAAW;QAEK,CAAC;QAEL,CAAC;;QAAD,CAAC;QAFG,CAAC;;CAIpB;AAED,MAAM,WAAW,QAAQ;IACrB,MAAM,EAAE,MAAM,CAAC;CAClB\"}"
           },
           {
             "name": "/home/src/workspaces/project/dist/index.d.ts",
