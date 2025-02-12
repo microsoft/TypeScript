@@ -222,7 +222,8 @@ export const enum SyntaxKind {
     GlobalKeyword,
     BigIntKeyword,
     OverrideKeyword,
-    OfKeyword, // LastKeyword and LastToken and LastContextualKeyword
+    OfKeyword,
+    DeferKeyword, // LastKeyword and LastToken and LastContextualKeyword
 
     // Parse tree nodes
 
@@ -462,7 +463,7 @@ export const enum SyntaxKind {
     FirstReservedWord = BreakKeyword,
     LastReservedWord = WithKeyword,
     FirstKeyword = BreakKeyword,
-    LastKeyword = OfKeyword,
+    LastKeyword = DeferKeyword,
     FirstFutureReservedWord = ImplementsKeyword,
     LastFutureReservedWord = YieldKeyword,
     FirstTypeNode = TypePredicate,
@@ -487,7 +488,7 @@ export const enum SyntaxKind {
     FirstJSDocTagNode = JSDocTag,
     LastJSDocTagNode = JSDocImportTag,
     /** @internal */ FirstContextualKeyword = AbstractKeyword,
-    /** @internal */ LastContextualKeyword = OfKeyword,
+    /** @internal */ LastContextualKeyword = DeferKeyword,
 }
 
 export type TriviaSyntaxKind =
@@ -599,6 +600,7 @@ export type KeywordSyntaxKind =
     | SyntaxKind.DebuggerKeyword
     | SyntaxKind.DeclareKeyword
     | SyntaxKind.DefaultKeyword
+    | SyntaxKind.DeferKeyword
     | SyntaxKind.DeleteKeyword
     | SyntaxKind.DoKeyword
     | SyntaxKind.ElseKeyword
@@ -3099,7 +3101,7 @@ export interface SuperCall extends CallExpression {
 }
 
 export interface ImportCall extends CallExpression {
-    readonly expression: ImportExpression;
+    readonly expression: ImportExpression | ImportDeferProperty;
 }
 
 export interface ExpressionWithTypeArguments extends MemberExpression, NodeWithTypeArguments {
@@ -3177,6 +3179,11 @@ export interface MetaProperty extends PrimaryExpression, FlowContainer {
 export interface ImportMetaProperty extends MetaProperty {
     readonly keywordToken: SyntaxKind.ImportKeyword;
     readonly name: Identifier & { readonly escapedText: __String & "meta"; };
+}
+
+export interface ImportDeferProperty extends MetaProperty {
+    readonly keywordToken: SyntaxKind.ImportKeyword;
+    readonly name: Identifier & { readonly escapedText: __String & "defer"; };
 }
 
 /// A JSX expression of the form <TagName attrs>...</TagName>
@@ -3711,10 +3718,14 @@ export type NamedExportBindings =
 export interface ImportClause extends NamedDeclaration {
     readonly kind: SyntaxKind.ImportClause;
     readonly parent: ImportDeclaration | JSDocImportTag;
+    /** @deprecated Use `phaseModifier` instead */
     readonly isTypeOnly: boolean;
+    readonly phaseModifier: undefined | ImportPhaseModifierSyntaxKind;
     readonly name?: Identifier; // Default binding
     readonly namedBindings?: NamedImportBindings;
 }
+
+export type ImportPhaseModifierSyntaxKind = SyntaxKind.TypeKeyword | SyntaxKind.DeferKeyword;
 
 /** @deprecated */
 export type AssertionKey = ImportAttributeName;
@@ -9021,8 +9032,12 @@ export interface NodeFactory {
     updateImportEqualsDeclaration(node: ImportEqualsDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
     createImportDeclaration(modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes?: ImportAttributes): ImportDeclaration;
     updateImportDeclaration(node: ImportDeclaration, modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes: ImportAttributes | undefined): ImportDeclaration;
-    createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
-    updateImportClause(node: ImportClause, isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
+    createImportClause(phaseModifier: ImportPhaseModifierSyntaxKind | undefined, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
+    // eslint-disable-next-line @typescript-eslint/unified-signatures -- Cannot unify due to the @deprecated tag
+    /** @deprecated */ createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
+    updateImportClause(node: ImportClause, phaseModifier: ImportPhaseModifierSyntaxKind | undefined, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
+    // eslint-disable-next-line @typescript-eslint/unified-signatures -- Cannot unify due to the @deprecated tag
+    /** @deprecated */ updateImportClause(node: ImportClause, isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
     /** @deprecated */ createAssertClause(elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
     /** @deprecated */ updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
     /** @deprecated */ createAssertEntry(name: AssertionKey, value: Expression): AssertEntry;
