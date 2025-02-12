@@ -1970,12 +1970,9 @@ func pushAncestor(ancestors []*Node, parent *Node) []*Node {
 }
 
 // If a virtual `Parent` exists on the stack, returns the previous stack entry and the virtual `Parent“.
-// Otherwise, `node` must have an actual `Parent` pointer and we return nil and the parent.
+// Otherwise, we return `nil` and the value of `node.Parent`.
 func popAncestor(ancestors []*Node, node *Node) ([]*Node, *Node) {
 	if len(ancestors) == 0 {
-		if node.Parent == nil {
-			panic("pop without push")
-		}
 		return nil, node.Parent
 	}
 	n := len(ancestors) - 1
