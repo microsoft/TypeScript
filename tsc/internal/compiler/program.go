@@ -175,7 +175,7 @@ func (p *Program) OptionsDiagnostics() []*ast.Diagnostic { return p.optionsDiagn
 func (p *Program) BindSourceFiles() {
 	wg := core.NewWorkGroup(p.programOptions.SingleThreaded)
 	for _, file := range p.files {
-		if !file.IsBound {
+		if !file.IsBound() {
 			wg.Run(func() {
 				binder.BindSourceFile(file, p.compilerOptions)
 			})

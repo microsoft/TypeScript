@@ -7405,7 +7405,6 @@ type SourceFile struct {
 	EndFlowNode                 *FlowNode
 	JsGlobalAugmentations       SymbolTable
 	IsDeclarationFile           bool
-	IsBound                     bool
 	ModuleReferencesProcessed   bool
 	HasNoDefaultLib             bool
 	UsesUriStyleNodeCoreModules core.Tristate
@@ -7423,6 +7422,8 @@ type SourceFile struct {
 	TypeReferenceDirectives     []*FileReference
 	LibReferenceDirectives      []*FileReference
 	Version                     int
+	isBound                     atomic.Bool
+	bindOnce                    sync.Once
 }
 
 func (f *NodeFactory) NewSourceFile(text string, fileName string, statements *NodeList) *Node {
@@ -7512,6 +7513,17 @@ func (node *SourceFile) LineMap() []core.TextPos {
 		}
 	}
 	return lineMap
+}
+
+func (node *SourceFile) IsBound() bool {
+	return node.isBound.Load()
+}
+
+func (node *SourceFile) BindOnce(bind func()) {
+	node.bindOnce.Do(func() {
+		bind()
+		node.isBound.Store(true)
+	})
 }
 
 func IsSourceFile(node *Node) bool {
