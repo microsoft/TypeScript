@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/declarationEmit/exportDefaultNamespaceDeclaration.ts] ////
+
+=== exportDefaultNamespaceDeclaration.ts ===
+export default function someFunc() {
+>someFunc : typeof someFunc
+>         : ^^^^^^^^^^^^^^^
+
+    return 'hello!';
+>'hello!' : "hello!"
+>         : ^^^^^^^^
+}
+
+someFunc.someProp = 'yo';
+>someFunc.someProp = 'yo' : "yo"
+>                         : ^^^^
+>someFunc.someProp : string
+>                  : ^^^^^^
+>someFunc : typeof someFunc
+>         : ^^^^^^^^^^^^^^^
+>someProp : string
+>         : ^^^^^^
+>'yo' : "yo"
+>     : ^^^^
+
