@@ -402,7 +402,7 @@ func (c *Checker) checkTypeRelatedToEx(
 }
 
 func createDiagnosticChainFromErrorChain(chain *ErrorChain, errorNode *ast.Node, relatedInfo []*ast.Diagnostic) *ast.Diagnostic {
-	for chain != nil && chain.message.ElidedInCompatabilityPyramid() {
+	for chain != nil && chain.message.ElidedInCompatibilityPyramid() {
 		chain = chain.next
 	}
 	if chain == nil {

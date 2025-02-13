@@ -2444,15 +2444,15 @@ func (c *Checker) checkObjectTypeForDuplicateDeclarations(node *ast.Node, checkP
 		if len(symbol.Declarations) > 1 {
 			var names map[string]int
 			if isStatic {
-				if instanceNames == nil {
-					instanceNames = make(map[string]int)
-				}
-				names = instanceNames
-			} else {
 				if staticNames == nil {
 					staticNames = make(map[string]int)
 				}
 				names = staticNames
+			} else {
+				if instanceNames == nil {
+					instanceNames = make(map[string]int)
+				}
+				names = instanceNames
 			}
 			if state := names[symbol.Name]; state != 2 {
 				if state == 1 {
@@ -4953,7 +4953,7 @@ func (iterationTypes *IterationTypes) getType(typeKind IterationTypeKind) *Type 
 	case IterationTypeKindNext:
 		return iterationTypes.nextType
 	}
-	panic("Unhandled case in getIterationTypeOfIterable")
+	panic("Unhandled case in getType(IterationTypeKind)")
 }
 
 func (c *Checker) combineIterationTypes(iterationTypes []IterationTypes) IterationTypes {
@@ -7834,7 +7834,7 @@ func (c *Checker) isPromiseResolveArityError(node *ast.Node) bool {
 
 func getErrorNodeForCallNode(node *ast.Node) *ast.Node {
 	if ast.IsCallExpression(node) {
-		node := node.Expression()
+		node = node.Expression()
 		if ast.IsPropertyAccessExpression(node) {
 			node = node.Name()
 		}
@@ -12429,6 +12429,7 @@ func (c *Checker) markSymbolOfAliasDeclarationIfTypeOnly(aliasDeclaration *ast.N
 }
 
 func (c *Checker) markSymbolOfAliasDeclarationIfTypeOnlyWorker(aliasDeclarationLinks *AliasSymbolLinks, target *ast.Symbol, overwriteEmpty bool) bool {
+	// !!! following line checks aliasDeclarationLinks.typeOnlyDeclaration == nil twice; figure out what this was supposed to be
 	if target != nil && (aliasDeclarationLinks.typeOnlyDeclaration == nil || overwriteEmpty && aliasDeclarationLinks.typeOnlyDeclarationResolved && aliasDeclarationLinks.typeOnlyDeclaration == nil) {
 		exportSymbol := target.Exports[ast.InternalSymbolNameExportEquals]
 		if exportSymbol == nil {
@@ -12994,7 +12995,7 @@ func (c *Checker) addDeclarationToLateBoundSymbol(symbol *ast.Symbol, member *as
  */
 func (c *Checker) getMembersOfSymbol(symbol *ast.Symbol) ast.SymbolTable {
 	if symbol.Flags&ast.SymbolFlagsLateBindingContainer != 0 {
-		return c.getResolvedMembersOrExportsOfSymbol(symbol, MembersOrExportsResolutionKindresolvedMembers)
+		return c.getResolvedMembersOrExportsOfSymbol(symbol, MembersOrExportsResolutionKindResolvedMembers)
 	}
 	return symbol.Members
 }
@@ -14315,7 +14316,7 @@ func getUnionKey(types []*Type, origin *Type, alias *TypeAlias) string {
 		b.WriteByte('|')
 		b.WriteTypes(types)
 	default:
-		panic("Unhandled case in getUnionId")
+		panic("Unhandled case in getUnionKey")
 	}
 	b.WriteAlias(alias)
 	return b.String()
@@ -17869,7 +17870,7 @@ func (c *Checker) resolveIntersectionTypeMembers(t *Type) {
 func (c *Checker) appendSignatures(signatures []*Signature, newSignatures []*Signature) []*Signature {
 	for _, sig := range newSignatures {
 		if len(signatures) == 0 || core.Every(signatures, func(s *Signature) bool {
-			return c.compareSignaturesIdentical(s, sig, false /*partialMatch*/, false /*ignoreThisTypes*/, false /*ignoreReturnTypes*/, c.compareTypesIdentical) == 0
+			return c.compareSignaturesIdentical(s, sig, false /*partialMatch*/, false /*ignoreThisTypes*/, false /*ignoreReturnTypes*/, c.compareTypesIdentical) == TernaryFalse
 		}) {
 			signatures = append(signatures, sig)
 		}

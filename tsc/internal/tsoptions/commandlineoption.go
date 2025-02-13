@@ -112,7 +112,7 @@ var commandLineOptionElements = map[string]*CommandLineOption{
 		Kind: CommandLineOptionTypeString,
 	},
 	"moduleSuffixes": {
-		Name: "suffix",
+		Name: "moduleSuffixes",
 		Kind: CommandLineOptionTypeString,
 	},
 	"customConditions": {

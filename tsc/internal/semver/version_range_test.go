@@ -120,7 +120,7 @@ func TestVersionRanges(t *testing.T) {
 	lotsaOnes := strings.Repeat("1", 320)
 	assertRangesGoodBad(t, ">=1.2.3-1"+lotsaOnes, testGoodBad{
 		good: []string{"1.2.3-1" + lotsaOnes, "1.2.3-11" + lotsaOnes + ".1", "1.2.3-1" + lotsaOnes + ".1+build"},
-		bad:  []string{"1.2.3-" + lotsaOnes + ".1+build", "1.2.3-" + lotsaOnes + ".1+build"},
+		bad:  []string{"1.2.3-" + lotsaOnes + ".1+build"},
 	})
 }
 
@@ -856,8 +856,6 @@ func TestTildesOfVersionRanges(t *testing.T) {
 		{"~1.0.0", "1.0.0", true},
 		{"~1.0.0", "1.0.1", true},
 		{"~1", "1.0.0", true},
-		{"~1", "1.2.0", true},
-		{"~1", "1.2.3", true},
 		{"~1", "1.2.0", true},
 		{"~1", "1.2.3", true},
 		{"~1", "0.0.0", false},

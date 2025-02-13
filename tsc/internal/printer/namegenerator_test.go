@@ -188,6 +188,7 @@ func TestUniqueName2(t *testing.T) {
 	text2 := g.GenerateName(name1)
 
 	assert.Equal(t, "foo_1", text1)
+	// Expected to be same because GenerateName goes off object identity
 	assert.Equal(t, "foo_1", text2)
 }
 

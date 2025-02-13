@@ -44,6 +44,7 @@ func isBuiltFile(filePath string) bool {
 }
 
 func isTsConfigFile(path string) bool {
+	// !!! fix to check for just prefixes/suffixes
 	return strings.Contains(path, "tsconfig") && strings.Contains(path, "json")
 }
 

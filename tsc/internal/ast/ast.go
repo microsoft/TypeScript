@@ -356,7 +356,7 @@ func (n *Node) TypeParameterList() *NodeList {
 			return funcLike.TypeParameters
 		}
 	}
-	panic("Unhandled case in Node.TypeParameters")
+	panic("Unhandled case in Node.TypeParameterList")
 }
 
 func (n *Node) TypeParameters() []*Node {
@@ -382,7 +382,7 @@ func (n *Node) MemberList() *NodeList {
 	case KindMappedType:
 		return n.AsMappedTypeNode().Members
 	}
-	panic("Unhandled case in Node.Members")
+	panic("Unhandled case in Node.MemberList")
 }
 
 func (n *Node) Members() []*Node {
@@ -7596,12 +7596,12 @@ type Pragma struct {
 type PragmaKindFlags = uint8
 
 const (
-	PragmaKindFlagsNone PragmaKindFlags = iota
-	PragmaKindTripleSlashXML
+	PragmaKindTripleSlashXML PragmaKindFlags = 1 << iota
 	PragmaKindSingleLine
 	PragmaKindMultiLine
-	PragmaKindAll     = PragmaKindTripleSlashXML | PragmaKindSingleLine | PragmaKindMultiLine
-	PragmaKindDefault = PragmaKindAll
+	PragmaKindFlagsNone PragmaKindFlags = 0
+	PragmaKindAll                       = PragmaKindTripleSlashXML | PragmaKindSingleLine | PragmaKindMultiLine
+	PragmaKindDefault                   = PragmaKindAll
 )
 
 type PragmaArgumentSpecification struct {

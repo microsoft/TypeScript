@@ -109,7 +109,7 @@ func (p *commandLineParser) parseStrings(args []string) {
 
 func getInputOptionName(input string) string {
 	// removes at most two leading '-' from the input string
-	return strings.ToLower(strings.TrimLeft(strings.TrimLeft(input, "-"), "-"))
+	return strings.ToLower(strings.TrimPrefix(strings.TrimPrefix(input, "-"), "-"))
 }
 
 func (p *commandLineParser) parseResponseFile(fileName string) {

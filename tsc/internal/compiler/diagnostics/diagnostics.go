@@ -35,7 +35,7 @@ type Message struct {
 	key                          string
 	text                         string
 	reportsUnnecessary           bool
-	elidedInCompatabilityPyramid bool
+	elidedInCompatibilityPyramid bool
 	reportsDeprecated            bool
 }
 
@@ -44,7 +44,7 @@ func (m *Message) Category() Category                 { return m.category }
 func (m *Message) Key() string                        { return m.key }
 func (m *Message) Message() string                    { return m.text }
 func (m *Message) ReportsUnnecessary() bool           { return m.reportsUnnecessary }
-func (m *Message) ElidedInCompatabilityPyramid() bool { return m.elidedInCompatabilityPyramid }
+func (m *Message) ElidedInCompatibilityPyramid() bool { return m.elidedInCompatibilityPyramid }
 func (m *Message) ReportsDeprecated() bool            { return m.reportsDeprecated }
 
 func (m *Message) Format(args ...any) string {

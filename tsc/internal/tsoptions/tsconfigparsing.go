@@ -796,7 +796,7 @@ func parseOwnConfigOfJson(
 	// watchOptions := convertWatchOptionsFromJsonWorker(json.watchOptions, basePath, errors)
 	// json.compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors)
 	var extendedConfigPath []string
-	if json["extends"] != nil || json["extends"] == "" {
+	if json["extends"] != nil && json["extends"] != "" {
 		extendedConfigPath, err = getExtendsConfigPathOrArray(json["extends"], host, basePath, configFileName, nil, nil, nil)
 		errors = append(errors, err...)
 	}
@@ -1207,8 +1207,8 @@ func canJsonReportNoInputFiles(rawConfig map[string]any) bool {
 	return !filesExists && !referencesExists
 }
 
-func shouldReportNoInputFiles(fileNames []string, canJsonReportNoInutFiles bool, resolutionStack []tspath.Path) bool {
-	return len(fileNames) == 0 && canJsonReportNoInutFiles && len(resolutionStack) == 0
+func shouldReportNoInputFiles(fileNames []string, canJsonReportNoInputFiles bool, resolutionStack []tspath.Path) bool {
+	return len(fileNames) == 0 && canJsonReportNoInputFiles && len(resolutionStack) == 0
 }
 
 func validateSpecs(specs any, disallowTrailingRecursion bool, jsonSourceFile *ast.SourceFile, specKey string) ([]string, []*ast.Diagnostic) {

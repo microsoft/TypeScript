@@ -285,7 +285,7 @@ func getBasePaths(path string, includes []string, useCaseSensitiveFileNames bool
 				absolute = tspath.NormalizePath(tspath.CombinePaths(path, include))
 			}
 			// Append the literal and canonical candidate base paths.
-			includeBasePaths = []string{getIncludeBasePath(absolute)}
+			includeBasePaths = append(includeBasePaths, getIncludeBasePath(absolute))
 		}
 
 		// Sort the offsets array using either the literal or canonical path representations.

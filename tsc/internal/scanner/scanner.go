@@ -1450,7 +1450,7 @@ func (s *Scanner) scanTemplateAndSetTokenValue(shouldEmitInvalidEscapeError bool
 		if ch == '\r' {
 			contents += s.text[start:s.pos]
 			s.pos++
-			if ch == '\n' {
+			if s.char() == '\n' {
 				s.pos++
 			}
 			contents += "\n"
