@@ -61,7 +61,7 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 		if len(source.alias.typeArguments) != 0 || len(target.alias.typeArguments) != 0 {
 			// Source and target are types originating in the same generic type alias declaration.
 			// Simply infer from source type arguments to target type arguments, with defaults applied.
-			params := c.typeAliasLinks.get(source.alias.symbol).typeParameters
+			params := c.typeAliasLinks.Get(source.alias.symbol).typeParameters
 			minParams := c.getMinTypeArgumentCount(params)
 			sourceTypes := c.fillMissingTypeArguments(source.alias.typeArguments, params, minParams)
 			targetTypes := c.fillMissingTypeArguments(target.alias.typeArguments, params, minParams)
@@ -1032,8 +1032,8 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 		checkFlags := ast.CheckFlagsReverseMapped | core.IfElse(readonlyMask && c.isReadonlySymbol(prop), ast.CheckFlagsReadonly, 0)
 		inferredProp := c.newSymbolEx(ast.SymbolFlagsProperty|prop.Flags&optionalMask, prop.Name, checkFlags)
 		inferredProp.Declarations = prop.Declarations
-		c.valueSymbolLinks.get(inferredProp).nameType = c.valueSymbolLinks.get(prop).nameType
-		links := c.ReverseMappedSymbolLinks.get(inferredProp)
+		c.valueSymbolLinks.Get(inferredProp).nameType = c.valueSymbolLinks.Get(prop).nameType
+		links := c.ReverseMappedSymbolLinks.Get(inferredProp)
 		links.propertyType = c.getTypeOfSymbol(prop)
 		constraintTarget := r.constraintType.AsIndexType().target
 		if constraintTarget.flags&TypeFlagsIndexedAccess != 0 && constraintTarget.AsIndexedAccessType().objectType.flags&TypeFlagsTypeParameter != 0 && constraintTarget.AsIndexedAccessType().indexType.flags&TypeFlagsTypeParameter != 0 {
@@ -1054,9 +1054,9 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 }
 
 func (c *Checker) getTypeOfReverseMappedSymbol(symbol *ast.Symbol) *Type {
-	links := c.valueSymbolLinks.get(symbol)
+	links := c.valueSymbolLinks.Get(symbol)
 	if links.resolvedType == nil {
-		reverseLinks := c.ReverseMappedSymbolLinks.get(symbol)
+		reverseLinks := c.ReverseMappedSymbolLinks.Get(symbol)
 		links.resolvedType = core.OrElse(c.inferReverseMappedType(reverseLinks.propertyType, reverseLinks.mappedType, reverseLinks.constraintType), c.unknownType)
 	}
 	return links.resolvedType
@@ -1145,7 +1145,7 @@ func (c *Checker) createEmptyObjectTypeFromStringLiteral(t *Type) *Type {
 		}
 		name := getStringLiteralValue(t)
 		literalProp := c.newSymbol(ast.SymbolFlagsProperty, name)
-		c.valueSymbolLinks.get(literalProp).resolvedType = c.anyType
+		c.valueSymbolLinks.Get(literalProp).resolvedType = c.anyType
 		if t.symbol != nil {
 			literalProp.Declarations = t.symbol.Declarations
 			literalProp.ValueDeclaration = t.symbol.ValueDeclaration

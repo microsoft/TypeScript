@@ -304,8 +304,8 @@ func (c *Checker) isEnumTypeRelatedTo(source *ast.Symbol, target *ast.Symbol, er
 				c.enumRelation[key] = RelationComparisonResultFailed
 				return false
 			}
-			sourceValue := c.getEnumMemberValue(getDeclarationOfKind(sourceProperty, ast.KindEnumMember)).value
-			targetValue := c.getEnumMemberValue(getDeclarationOfKind(targetProperty, ast.KindEnumMember)).value
+			sourceValue := c.getEnumMemberValue(ast.GetDeclarationOfKind(sourceProperty, ast.KindEnumMember)).value
+			targetValue := c.getEnumMemberValue(ast.GetDeclarationOfKind(targetProperty, ast.KindEnumMember)).value
 			if sourceValue != targetValue {
 				// If we have 2 enums with *known* values that differ, they are incompatible.
 				if sourceValue != nil && targetValue != nil {
@@ -384,8 +384,8 @@ func (c *Checker) checkTypeRelatedToEx(
 		c.reportDiagnostic(NewDiagnosticForNode(errorNode, message, c.TypeToString(source), c.TypeToString(target)), diagnosticOutput)
 	} else if r.errorChain != nil {
 		// Check if we should issue an extra diagnostic to produce a quickfix for a slightly incorrect import statement
-		if headMessage != nil && errorNode != nil && result == TernaryFalse && source.symbol != nil && c.exportTypeLinks.has(source.symbol) {
-			links := c.exportTypeLinks.get(source.symbol)
+		if headMessage != nil && errorNode != nil && result == TernaryFalse && source.symbol != nil && c.exportTypeLinks.Has(source.symbol) {
+			links := c.exportTypeLinks.Get(source.symbol)
 			if links.originatingImport != nil && !ast.IsImportCall(links.originatingImport) {
 				helpfulRetry := c.checkTypeRelatedTo(c.getTypeOfSymbol(links.target), target, relation /*errorNode*/, nil)
 				if helpfulRetry {
@@ -1324,7 +1324,7 @@ func (c *Checker) getVariances(t *Type) []VarianceFlags {
 }
 
 func (c *Checker) getAliasVariances(symbol *ast.Symbol) []VarianceFlags {
-	return c.getVariancesWorker(symbol, c.typeAliasLinks.get(symbol).typeParameters)
+	return c.getVariancesWorker(symbol, c.typeAliasLinks.Get(symbol).typeParameters)
 }
 
 // Return an array containing the variance of each type parameter. The variance is effectively
@@ -1333,7 +1333,7 @@ func (c *Checker) getAliasVariances(symbol *ast.Symbol) []VarianceFlags {
 // instantiations of the generic type for type arguments with known relations. The function
 // returns an empty slice when invoked recursively for the given generic type.
 func (c *Checker) getVariancesWorker(symbol *ast.Symbol, typeParameters []*Type) []VarianceFlags {
-	links := c.varianceLinks.get(symbol)
+	links := c.varianceLinks.Get(symbol)
 	if links.variances == nil {
 		oldVarianceComputation := c.inVarianceComputation
 		saveResolutionStart := c.resolutionStart
@@ -1399,7 +1399,7 @@ func (c *Checker) createMarkerType(symbol *ast.Symbol, source *Type, target *Typ
 	}
 	var result *Type
 	if symbol.Flags&ast.SymbolFlagsTypeAlias != 0 {
-		result = c.getTypeAliasInstantiation(symbol, c.instantiateTypes(c.typeAliasLinks.get(symbol).typeParameters, mapper), nil)
+		result = c.getTypeAliasInstantiation(symbol, c.instantiateTypes(c.typeAliasLinks.Get(symbol).typeParameters, mapper), nil)
 	} else {
 		result = c.createTypeReference(t, c.instantiateTypes(t.AsInterfaceType().TypeParameters(), mapper))
 	}
@@ -3308,7 +3308,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		if len(variances) == 0 {
 			return TernaryUnknown
 		}
-		params := r.c.typeAliasLinks.get(source.alias.symbol).typeParameters
+		params := r.c.typeAliasLinks.Get(source.alias.symbol).typeParameters
 		minParams := r.c.getMinTypeArgumentCount(params)
 		sourceTypes := r.c.fillMissingTypeArguments(source.alias.typeArguments, params, minParams)
 		targetTypes := r.c.fillMissingTypeArguments(target.alias.typeArguments, params, minParams)

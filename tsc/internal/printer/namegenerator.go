@@ -16,7 +16,7 @@ const (
 	tempFlags_i        tempFlags = 0x10000000 // Use/preference flag for '_i'
 )
 
-type nameGenerator struct {
+type NameGenerator struct {
 	Context                            *EmitContext
 	IsFileLevelUniqueNameInCurrentFile func(string, bool) bool   // callback for Printer.isFileLevelUniqueNameInCurrentFile
 	GetTextOfNode                      func(*ast.Node) string    // callback for Printer.getTextOfNode
@@ -35,14 +35,14 @@ type nameGenerationScope struct {
 	generatedNames         core.Set[string]
 }
 
-func (g *nameGenerator) PushScope(reuseTempVariableScope bool) {
+func (g *NameGenerator) PushScope(reuseTempVariableScope bool) {
 	g.privateNameGenerationScope = &nameGenerationScope{next: g.privateNameGenerationScope}
 	if !reuseTempVariableScope {
 		g.nameGenerationScope = &nameGenerationScope{next: g.nameGenerationScope}
 	}
 }
 
-func (g *nameGenerator) PopScope(reuseTempVariableScope bool) {
+func (g *NameGenerator) PopScope(reuseTempVariableScope bool) {
 	if g.privateNameGenerationScope != nil {
 		g.privateNameGenerationScope = g.privateNameGenerationScope.next
 	}
@@ -51,11 +51,11 @@ func (g *nameGenerator) PopScope(reuseTempVariableScope bool) {
 	}
 }
 
-func (g *nameGenerator) getScope(privateName bool) **nameGenerationScope {
+func (g *NameGenerator) getScope(privateName bool) **nameGenerationScope {
 	return core.IfElse(privateName, &g.privateNameGenerationScope, &g.nameGenerationScope)
 }
 
-func (g *nameGenerator) getTempFlags(privateName bool) tempFlags {
+func (g *NameGenerator) getTempFlags(privateName bool) tempFlags {
 	scope := g.getScope(privateName)
 	if *scope != nil {
 		return (*scope).tempFlags
@@ -63,7 +63,7 @@ func (g *nameGenerator) getTempFlags(privateName bool) tempFlags {
 	return tempFlagsAuto
 }
 
-func (g *nameGenerator) setTempFlags(privateName bool, flags tempFlags) {
+func (g *NameGenerator) setTempFlags(privateName bool, flags tempFlags) {
 	scope := g.getScope(privateName)
 	if *scope == nil {
 		*scope = &nameGenerationScope{}
@@ -72,7 +72,7 @@ func (g *nameGenerator) setTempFlags(privateName bool, flags tempFlags) {
 }
 
 // Gets the TempFlags to use in the current nameGenerationScope for the given key
-func (g *nameGenerator) getTempFlagsForFormattedName(privateName bool, formattedNameKey string) tempFlags {
+func (g *NameGenerator) getTempFlagsForFormattedName(privateName bool, formattedNameKey string) tempFlags {
 	scope := g.getScope(privateName)
 	if *scope != nil {
 		if flags, ok := (*scope).formattedNameTempFlags[formattedNameKey]; ok {
@@ -83,7 +83,7 @@ func (g *nameGenerator) getTempFlagsForFormattedName(privateName bool, formatted
 }
 
 // Sets the TempFlags to use in the current nameGenerationScope for the given key
-func (g *nameGenerator) setTempFlagsForFormattedName(privateName bool, formattedNameKey string, flags tempFlags) {
+func (g *NameGenerator) setTempFlagsForFormattedName(privateName bool, formattedNameKey string, flags tempFlags) {
 	scope := g.getScope(privateName)
 	if *scope == nil {
 		*scope = &nameGenerationScope{}
@@ -94,7 +94,7 @@ func (g *nameGenerator) setTempFlagsForFormattedName(privateName bool, formatted
 	(*scope).formattedNameTempFlags[formattedNameKey] = flags
 }
 
-func (g *nameGenerator) reserveName(name string, privateName bool, scoped bool, temp bool) {
+func (g *NameGenerator) reserveName(name string, privateName bool, scoped bool, temp bool) {
 	scope := g.getScope(privateName)
 	if *scope == nil {
 		*scope = &nameGenerationScope{}
@@ -107,7 +107,7 @@ func (g *nameGenerator) reserveName(name string, privateName bool, scoped bool, 
 }
 
 // Generate the text for a generated identifier or private identifier
-func (g *nameGenerator) GenerateName(name *ast.MemberName) string {
+func (g *NameGenerator) GenerateName(name *ast.MemberName) string {
 	if g.Context != nil {
 		if autoGenerate, ok := g.Context.autoGenerate[name]; ok {
 			if autoGenerate.Kind() == GeneratedIdentifierFlagsNode {
@@ -131,7 +131,7 @@ func (g *nameGenerator) GenerateName(name *ast.MemberName) string {
 	return g.GetTextOfNode(name)
 }
 
-func (g *nameGenerator) getNodeForGeneratedName(name *ast.MemberName) *ast.Node {
+func (g *NameGenerator) getNodeForGeneratedName(name *ast.MemberName) *ast.Node {
 	node := name
 	if g.Context != nil {
 		if autoGenerate := g.Context.autoGenerate[name]; autoGenerate != nil && autoGenerate.Kind() == GeneratedIdentifierFlagsNode {
@@ -156,7 +156,7 @@ func (g *nameGenerator) getNodeForGeneratedName(name *ast.MemberName) *ast.Node 
 	return node
 }
 
-func (g *nameGenerator) generateNameForNodeCached(node *ast.Node, privateName bool, flags GeneratedIdentifierFlags, prefix string, suffix string) string {
+func (g *NameGenerator) generateNameForNodeCached(node *ast.Node, privateName bool, flags GeneratedIdentifierFlags, prefix string, suffix string) string {
 	nodeId := ast.GetNodeId(node)
 	cache := core.IfElse(privateName, &g.nodeIdToGeneratedPrivateName, &g.nodeIdToGeneratedName)
 	if *cache == nil {
@@ -172,7 +172,7 @@ func (g *nameGenerator) generateNameForNodeCached(node *ast.Node, privateName bo
 	return name
 }
 
-func (g *nameGenerator) generateNameForNode(node *ast.Node, privateName bool, flags GeneratedIdentifierFlags, prefix string, suffix string) string {
+func (g *NameGenerator) generateNameForNode(node *ast.Node, privateName bool, flags GeneratedIdentifierFlags, prefix string, suffix string) string {
 	switch node.Kind {
 	case ast.KindIdentifier, ast.KindPrivateIdentifier:
 		return g.makeUniqueName(
@@ -222,7 +222,7 @@ func (g *nameGenerator) generateNameForNode(node *ast.Node, privateName bool, fl
 	}
 }
 
-func (g *nameGenerator) generateNameForModuleOrEnum(node *ast.Node /* ModuleDeclaration | EnumDeclaration */) string {
+func (g *NameGenerator) generateNameForModuleOrEnum(node *ast.Node /* ModuleDeclaration | EnumDeclaration */) string {
 	name := g.GetTextOfNode(node.Name())
 	// Use module/enum name itself if it is unique, otherwise make a unique variation
 	if isUniqueLocalName(name, node) {
@@ -232,7 +232,7 @@ func (g *nameGenerator) generateNameForModuleOrEnum(node *ast.Node /* ModuleDecl
 	}
 }
 
-func (g *nameGenerator) generateNameForImportOrExportDeclaration(node *ast.Node /* ImportDeclaration | ExportDeclaration */) string {
+func (g *NameGenerator) generateNameForImportOrExportDeclaration(node *ast.Node /* ImportDeclaration | ExportDeclaration */) string {
 	expr := ast.GetExternalModuleName(node)
 	baseName := "module"
 	if ast.IsStringLiteral(expr) {
@@ -241,22 +241,22 @@ func (g *nameGenerator) generateNameForImportOrExportDeclaration(node *ast.Node 
 	return g.makeUniqueName(baseName, nil /*checkFn*/, false /*optimistic*/, false /*scoped*/, false /*privateName*/, "" /*prefix*/, "" /*suffix*/)
 }
 
-func (g *nameGenerator) generateNameForExportDefault() string {
+func (g *NameGenerator) generateNameForExportDefault() string {
 	return g.makeUniqueName("default", nil /*checkFn*/, false /*optimistic*/, false /*scoped*/, false /*privateName*/, "" /*prefix*/, "" /*suffix*/)
 }
 
-func (g *nameGenerator) generateNameForClassExpression() string {
+func (g *NameGenerator) generateNameForClassExpression() string {
 	return g.makeUniqueName("class", nil /*checkFn*/, false /*optimistic*/, false /*scoped*/, false /*privateName*/, "" /*prefix*/, "" /*suffix*/)
 }
 
-func (g *nameGenerator) generateNameForMethodOrAccessor(node *ast.Node /* MethodDeclaration | AccessorDeclaration */, privateName bool, prefix string, suffix string) string {
+func (g *NameGenerator) generateNameForMethodOrAccessor(node *ast.Node /* MethodDeclaration | AccessorDeclaration */, privateName bool, prefix string, suffix string) string {
 	if ast.IsIdentifier(node.Name()) {
 		return g.generateNameForNodeCached(node.Name(), privateName, GeneratedIdentifierFlagsNone, prefix, suffix)
 	}
 	return g.makeTempVariableName(tempFlagsAuto, false /*reservedInNestedScopes*/, privateName, prefix, suffix)
 }
 
-func (g *nameGenerator) makeName(name *ast.Node) string {
+func (g *NameGenerator) makeName(name *ast.Node) string {
 	if g.Context != nil {
 		if autoGenerate, ok := g.Context.autoGenerate[name]; ok {
 			switch autoGenerate.Kind() {
@@ -284,7 +284,7 @@ func (g *nameGenerator) makeName(name *ast.Node) string {
 // Return the next available name in the pattern _a ... _z, _0, _1, ...
 // TempFlags._i may be used to express a preference for that dedicated name.
 // Note that names generated by makeTempVariableName and makeUniqueName will never conflict.
-func (g *nameGenerator) makeTempVariableName(flags tempFlags, reservedInNestedScopes bool, privateName bool, prefix string, suffix string) string {
+func (g *NameGenerator) makeTempVariableName(flags tempFlags, reservedInNestedScopes bool, privateName bool, prefix string, suffix string) string {
 	var tempFlags tempFlags
 	var key string
 	simple := len(prefix) == 0 && len(suffix) == 0
@@ -343,7 +343,7 @@ func (g *nameGenerator) makeTempVariableName(flags tempFlags, reservedInNestedSc
 // where n is a positive integer. Note that names generated by makeTempVariableName and
 // makeUniqueName are guaranteed to never conflict.
 // If `optimistic` is set, the first instance will use 'baseName' verbatim instead of 'baseName_1'
-func (g *nameGenerator) makeUniqueName(baseName string, checkFn func(name string, privateName bool) bool, optimistic bool, scoped bool, privateName bool, prefix string, suffix string) string {
+func (g *NameGenerator) makeUniqueName(baseName string, checkFn func(name string, privateName bool) bool, optimistic bool, scoped bool, privateName bool, prefix string, suffix string) string {
 	baseName = removeLeadingHash(baseName)
 	if optimistic {
 		fullName := formatGeneratedName(privateName, prefix, baseName, suffix)
@@ -369,7 +369,7 @@ func (g *nameGenerator) makeUniqueName(baseName string, checkFn func(name string
 	}
 }
 
-func (g *nameGenerator) checkUniqueName(name string, privateName bool, checkFn func(name string, privateName bool) bool) bool {
+func (g *NameGenerator) checkUniqueName(name string, privateName bool, checkFn func(name string, privateName bool) bool) bool {
 	if checkFn != nil {
 		return checkFn(name, privateName)
 	} else {
@@ -400,12 +400,12 @@ func isUniqueLocalName(name string, container *ast.Node) bool {
 	return true
 }
 
-func (g *nameGenerator) isUniqueName(name string, privateName bool) bool {
+func (g *NameGenerator) isUniqueName(name string, privateName bool) bool {
 	return (g.IsFileLevelUniqueNameInCurrentFile == nil || g.IsFileLevelUniqueNameInCurrentFile(name, privateName)) &&
 		!g.isReservedName(name, privateName)
 }
 
-func (g *nameGenerator) isReservedName(name string, privateName bool) bool {
+func (g *NameGenerator) isReservedName(name string, privateName bool) bool {
 	scope := g.getScope(privateName)
 	if *scope != nil {
 		if (*scope).generatedNames.Has(name) {

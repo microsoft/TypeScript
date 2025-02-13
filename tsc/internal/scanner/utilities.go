@@ -1,6 +1,11 @@
 package scanner
 
-import "github.com/microsoft/typescript-go/internal/ast"
+import (
+	"unicode/utf8"
+
+	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/core"
+)
 
 func tokenIsIdentifierOrKeyword(token ast.Kind) bool {
 	return token >= ast.KindIdentifier
@@ -39,4 +44,19 @@ func DeclarationNameToString(name *ast.Node) string {
 		return "(Missing)"
 	}
 	return GetTextOfNode(name)
+}
+
+func IsIdentifierText(name string, languageVersion core.ScriptTarget) bool {
+	ch, size := utf8.DecodeRuneInString(name)
+	if !isIdentifierStart(ch, languageVersion) {
+		return false
+	}
+	for i := size; i < len(name); {
+		ch, size = utf8.DecodeRuneInString(name[i:])
+		if !isIdentifierPart(ch, languageVersion) {
+			return false
+		}
+		i += size
+	}
+	return true
 }

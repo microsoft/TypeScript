@@ -38,3 +38,11 @@ func (t TextRange) Contains(pos int) bool {
 func (t TextRange) ContainsInclusive(pos int) bool {
 	return pos >= int(t.pos) && pos <= int(t.end)
 }
+
+func (t TextRange) WithPos(pos int) TextRange {
+	return TextRange{pos: TextPos(pos), end: t.end}
+}
+
+func (t TextRange) WithEnd(end int) TextRange {
+	return TextRange{pos: t.pos, end: TextPos(end)}
+}

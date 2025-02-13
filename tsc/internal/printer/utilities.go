@@ -240,9 +240,6 @@ func getLiteralText(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags
 		b.WriteRune(rune(quoteChar))
 
 		// Write text
-		// TODO(rbuckton): This differs from the TS compiler in that a node might have `EmitFlags.NoAsciiEscaping`,
-		// which would essentially set `GetLiteralTextFlagsNeverAsciiEscape`. We've yet to determine whether we will
-		// need something like `EmitFlags.NoAsciiEscaping`, so this function may need to be revisited
 		escapeStringWorker(text, quoteChar, flags, &b)
 
 		// Write trailing quote character
@@ -290,9 +287,6 @@ func getLiteralText(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags
 			// If rawText is set, it is expected to be valid.
 			b.WriteString(rawText)
 		default:
-			// TODO(rbuckton): This differs from the TS compiler in that a node might have `EmitFlags.NoAsciiEscaping`,
-			// which would essentially set `GetLiteralTextFlagsNeverAsciiEscape`. We've yet to determine whether we will
-			// need something like `EmitFlags.NoAsciiEscaping`, so this function may need to be revisited
 			escapeStringWorker(text, quoteCharBacktick, flags, &b)
 		}
 

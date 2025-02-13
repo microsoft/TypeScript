@@ -74,6 +74,7 @@ type NodeFactory struct {
 
 func newNode(kind Kind, data nodeData) *Node {
 	n := data.AsNode()
+	n.Loc = core.UndefinedTextRange()
 	n.Kind = kind
 	n.data = data
 	return n
@@ -104,7 +105,11 @@ func (list *NodeList) Pos() int { return list.Loc.Pos() }
 func (list *NodeList) End() int { return list.Loc.End() }
 
 func (list *NodeList) HasTrailingComma() bool {
-	return len(list.Nodes) > 0 && list.Nodes[len(list.Nodes)-1].End() < list.End()
+	if len(list.Nodes) == 0 || PositionIsSynthesized(list.End()) {
+		return false
+	}
+	last := list.Nodes[len(list.Nodes)-1]
+	return !PositionIsSynthesized(last.End()) && last.End() < list.End()
 }
 
 // ModifierList
@@ -257,6 +262,14 @@ func (n *Node) Expression() *Node {
 		return n.AsAwaitExpression().Expression
 	case KindYieldExpression:
 		return n.AsYieldExpression().Expression
+	case KindIfStatement:
+		return n.AsIfStatement().Expression
+	case KindDoStatement:
+		return n.AsDoStatement().Expression
+	case KindWhileStatement:
+		return n.AsWhileStatement().Expression
+	case KindWithStatement:
+		return n.AsWithStatement().Expression
 	case KindForInStatement, KindForOfStatement:
 		return n.AsForInOrOfStatement().Expression
 	case KindSwitchStatement:
@@ -267,14 +280,12 @@ func (n *Node) Expression() *Node {
 		return n.AsExpressionStatement().Expression
 	case KindReturnStatement:
 		return n.AsReturnStatement().Expression
+	case KindThrowStatement:
+		return n.AsThrowStatement().Expression
 	case KindExternalModuleReference:
 		return n.AsExternalModuleReference().Expression
-	case KindIfStatement:
-		return n.AsIfStatement().Expression
-	case KindWhileStatement:
-		return n.AsWhileStatement().Expression
-	case KindDoStatement:
-		return n.AsDoStatement().Expression
+	case KindExportAssignment:
+		return n.AsExportAssignment().Expression
 	}
 	panic("Unhandled case in Node.Expression")
 }
@@ -1487,7 +1498,9 @@ type (
 	ParameterDeclarationNode        = Node
 	HeritageClauseNode              = Node
 	ExpressionWithTypeArgumentsNode = Node
+	EnumDeclarationNode             = Node
 	EnumMemberNode                  = Node
+	ModuleDeclarationNode           = Node
 	ImportClauseNode                = Node
 	ImportAttributesNode            = Node
 	ImportAttributeNode             = Node
@@ -4244,6 +4257,9 @@ type BinaryExpression struct {
 }
 
 func (f *NodeFactory) NewBinaryExpression(left *Expression, operatorToken *TokenNode, right *Expression) *Node {
+	if operatorToken == nil {
+		panic("operatorToken is required")
+	}
 	data := f.binaryExpressionPool.New()
 	data.Left = left
 	data.OperatorToken = operatorToken

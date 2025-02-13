@@ -1771,7 +1771,7 @@ func (c *Checker) isConstantReference(node *ast.Node) bool {
 	case ast.KindPropertyAccessExpression, ast.KindElementAccessExpression:
 		// The resolvedSymbol property is initialized by checkPropertyAccess or checkElementAccess before we get here.
 		if c.isConstantReference(node.Expression()) {
-			symbol := c.typeNodeLinks.get(node).resolvedSymbol
+			symbol := c.typeNodeLinks.Get(node).resolvedSymbol
 			if symbol != nil {
 				return c.isReadonlySymbol(symbol)
 			}
@@ -1879,7 +1879,7 @@ func isCoercibleUnderDoubleEquals(source *Type, target *Type) bool {
 }
 
 func (c *Checker) isExhaustiveSwitchStatement(node *ast.Node) bool {
-	links := c.switchStatementLinks.get(node)
+	links := c.switchStatementLinks.Get(node)
 	if links.exhaustiveState == ExhaustiveStateUnknown {
 		// Indicate resolution is in process
 		links.exhaustiveState = ExhaustiveStateComputing
@@ -1935,7 +1935,7 @@ func (c *Checker) eachTypeContainedIn(source *Type, types []*Type) bool {
 // Get the type names from all cases in a switch on `typeof`. The default clause and/or duplicate type names are
 // represented as empty strings. Return nil if one or more case clause expressions are not string literals.
 func (c *Checker) getSwitchClauseTypeOfWitnesses(node *ast.Node) []string {
-	links := c.switchStatementLinks.get(node)
+	links := c.switchStatementLinks.Get(node)
 	if !links.witnessesComputed {
 		clauses := node.AsSwitchStatement().CaseBlock.AsCaseBlock().Clauses.Nodes
 		witnesses := make([]string, len(clauses))
@@ -1976,7 +1976,7 @@ func (c *Checker) getNotEqualFactsFromTypeofSwitch(start int, end int, witnesses
 }
 
 func (c *Checker) getSwitchClauseTypes(node *ast.Node) []*Type {
-	links := c.switchStatementLinks.get(node)
+	links := c.switchStatementLinks.Get(node)
 	if !links.switchTypesComputed {
 		clauses := node.AsSwitchStatement().CaseBlock.AsCaseBlock().Clauses.Nodes
 		types := make([]*Type, len(clauses))
@@ -1997,7 +1997,7 @@ func (c *Checker) getTypeOfSwitchClause(clause *ast.Node) *Type {
 }
 
 func (c *Checker) getEffectsSignature(node *ast.Node) *Signature {
-	links := c.signatureLinks.get(node)
+	links := c.signatureLinks.Get(node)
 	signature := links.effectsSignature
 	if signature == nil {
 		// A call expression parented by an expression statement is a potential assertion. Other call
@@ -2111,7 +2111,7 @@ func (c *Checker) getExplicitTypeOfSymbol(symbol *ast.Symbol, diagnostic *ast.Di
 	}
 	if symbol.Flags&(ast.SymbolFlagsVariable|ast.SymbolFlagsProperty) != 0 {
 		if symbol.CheckFlags&ast.CheckFlagsMapped != 0 {
-			origin := c.mappedSymbolLinks.get(symbol).syntheticOrigin
+			origin := c.mappedSymbolLinks.Get(symbol).syntheticOrigin
 			if origin != nil && c.getExplicitTypeOfSymbol(origin, diagnostic) != nil {
 				return c.getTypeOfSymbol(symbol)
 			}
@@ -2199,8 +2199,8 @@ func (c *Checker) getTypeOfInitializer(node *ast.Node) *Type {
 	// Return the cached type if one is available. If the type of the variable was inferred
 	// from its initializer, we'll already have cached the type. Otherwise we compute it now
 	// without caching such that transient types are reflected.
-	if c.typeNodeLinks.has(node) {
-		t := c.typeNodeLinks.get(node).resolvedType
+	if c.typeNodeLinks.Has(node) {
+		t := c.typeNodeLinks.Get(node).resolvedType
 		if t != nil {
 			return t
 		}
@@ -2582,32 +2582,32 @@ func (c *Checker) isPostSuperFlowNode(flow *ast.FlowNode, noCacheCheck bool) boo
 // Check if a parameter, catch variable, or mutable local variable is definitely assigned anywhere
 func (c *Checker) isSymbolAssignedDefinitely(symbol *ast.Symbol) bool {
 	c.ensureAssignmentsMarked(symbol)
-	return c.markedAssignmentSymbolLinks.get(symbol).hasDefiniteAssignment
+	return c.markedAssignmentSymbolLinks.Get(symbol).hasDefiniteAssignment
 }
 
 // Check if a parameter, catch variable, or mutable local variable is assigned anywhere
 func (c *Checker) isSymbolAssigned(symbol *ast.Symbol) bool {
 	c.ensureAssignmentsMarked(symbol)
-	return c.markedAssignmentSymbolLinks.get(symbol).lastAssignmentPos != 0
+	return c.markedAssignmentSymbolLinks.Get(symbol).lastAssignmentPos != 0
 }
 
 // Return true if there are no assignments to the given symbol or if the given location
 // is past the last assignment to the symbol.
 func (c *Checker) isPastLastAssignment(symbol *ast.Symbol, location *ast.Node) bool {
 	c.ensureAssignmentsMarked(symbol)
-	lastAssignmentPos := c.markedAssignmentSymbolLinks.get(symbol).lastAssignmentPos
+	lastAssignmentPos := c.markedAssignmentSymbolLinks.Get(symbol).lastAssignmentPos
 	return lastAssignmentPos == 0 || location != nil && int(lastAssignmentPos) < location.Pos()
 }
 
 func (c *Checker) ensureAssignmentsMarked(symbol *ast.Symbol) {
-	if c.markedAssignmentSymbolLinks.get(symbol).lastAssignmentPos != 0 {
+	if c.markedAssignmentSymbolLinks.Get(symbol).lastAssignmentPos != 0 {
 		return
 	}
 	parent := ast.FindAncestor(symbol.ValueDeclaration, ast.IsFunctionOrSourceFile)
 	if parent == nil {
 		return
 	}
-	links := c.nodeLinks.get(parent)
+	links := c.nodeLinks.Get(parent)
 	if links.flags&NodeCheckFlagsAssignmentsMarked == 0 {
 		links.flags |= NodeCheckFlagsAssignmentsMarked
 		if !c.hasParentWithAssignmentsMarked(parent) {
@@ -2618,7 +2618,7 @@ func (c *Checker) ensureAssignmentsMarked(symbol *ast.Symbol) {
 
 func (c *Checker) hasParentWithAssignmentsMarked(node *ast.Node) bool {
 	return ast.FindAncestor(node.Parent, func(node *ast.Node) bool {
-		return ast.IsFunctionOrSourceFile(node) && c.nodeLinks.get(node).flags&NodeCheckFlagsAssignmentsMarked != 0
+		return ast.IsFunctionOrSourceFile(node) && c.nodeLinks.Get(node).flags&NodeCheckFlagsAssignmentsMarked != 0
 	}) != nil
 }
 
@@ -2635,7 +2635,7 @@ func (c *Checker) markNodeAssignmentsWorker(node *ast.Node) bool {
 		if assignmentKind != AssignmentKindNone {
 			symbol := c.getResolvedSymbol(node)
 			if c.isParameterOrMutableLocalVariable(symbol) {
-				links := c.markedAssignmentSymbolLinks.get(symbol)
+				links := c.markedAssignmentSymbolLinks.Get(symbol)
 				if pos := links.lastAssignmentPos; pos == 0 || pos != math.MaxInt32 {
 					referencingFunction := ast.FindAncestor(node, ast.IsFunctionOrSourceFile)
 					declaringFunction := ast.FindAncestor(symbol.ValueDeclaration, ast.IsFunctionOrSourceFile)
@@ -2660,7 +2660,7 @@ func (c *Checker) markNodeAssignmentsWorker(node *ast.Node) bool {
 		if !node.AsExportSpecifier().IsTypeOnly && !exportDeclaration.IsTypeOnly && exportDeclaration.ModuleSpecifier == nil && !ast.IsStringLiteral(name) {
 			symbol := c.resolveEntityName(name, ast.SymbolFlagsValue, true /*ignoreErrors*/, true /*dontResolveAlias*/, nil)
 			if symbol != nil && c.isParameterOrMutableLocalVariable(symbol) {
-				links := c.markedAssignmentSymbolLinks.get(symbol)
+				links := c.markedAssignmentSymbolLinks.Get(symbol)
 				links.lastAssignmentPos = math.MaxInt32
 			}
 		}

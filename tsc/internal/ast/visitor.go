@@ -7,8 +7,8 @@ import (
 // NodeVisitor
 
 type NodeVisitor struct {
-	Visit   func(node *Node) *Node // The callback used to visit a node
-	Factory NodeFactory            // A NodeFactory used to produce new nodes when passed to VisitEachChild
+	Visit   func(node *Node) *Node // Required. The callback used to visit a node
+	Factory *NodeFactory           // Required. The NodeFactory used to produce new nodes when passed to VisitEachChild
 	Hooks   NodeVisitorHooks       // Hooks to be invoked when visiting a node
 }
 
@@ -155,7 +155,7 @@ func (v *NodeVisitor) VisitEachChild(node *Node) *Node {
 
 	updated := node.VisitEachChild(v)
 	if updated != node && v.Hooks.SetOriginal != nil {
-		v.Hooks.SetOriginal(node, updated)
+		v.Hooks.SetOriginal(updated, node)
 	}
 	return updated
 }

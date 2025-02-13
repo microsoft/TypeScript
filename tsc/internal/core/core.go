@@ -222,6 +222,26 @@ func Concatenate[T any](s1 []T, s2 []T) []T {
 	return slices.Concat(s1, s2)
 }
 
+func Splice[T any](s1 []T, start int, deleteCount int, items ...T) []T {
+	if start < 0 {
+		start = len(s1) + start
+	}
+	if start < 0 {
+		start = 0
+	}
+	if start > len(s1) {
+		start = len(s1)
+	}
+	if deleteCount < 0 {
+		deleteCount = 0
+	}
+	end := min(start+max(deleteCount, 0), len(s1))
+	if start == end && len(items) == 0 {
+		return s1
+	}
+	return slices.Concat(s1[:start], items, s1[end:])
+}
+
 func CountWhere[T any](slice []T, f func(T) bool) int {
 	count := 0
 	for _, value := range slice {

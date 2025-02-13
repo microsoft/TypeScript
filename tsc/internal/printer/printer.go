@@ -117,7 +117,7 @@ type Printer struct {
 	writeKind          WriteKind
 	commentsDisabled   bool
 	inExtends          bool // whether we are emitting the `extends` clause of a ConditionalType or InferType
-	nameGenerator      nameGenerator
+	nameGenerator      NameGenerator
 }
 
 func NewPrinter(options PrinterOptions, handlers PrintHandlers, emitContext *EmitContext) *Printer {
@@ -128,7 +128,7 @@ func NewPrinter(options PrinterOptions, handlers PrintHandlers, emitContext *Emi
 	}
 	// wire up name generator
 	if printer.emitContext == nil {
-		printer.emitContext = &EmitContext{}
+		printer.emitContext = NewEmitContext()
 	}
 	printer.nameGenerator.Context = printer.emitContext
 	printer.nameGenerator.GetTextOfNode = func(node *ast.Node) string { return printer.getTextOfNode(node, false) }
@@ -152,7 +152,7 @@ func (p *Printer) getLiteralTextOfNode(node *ast.LiteralLikeNode, sourceFile *as
 			switch {
 			case flags&getLiteralTextFlagsJsxAttributeEscape != 0:
 				return "\"" + escapeJsxAttributeString(text, quoteCharDoubleQuote) + "\""
-			case flags&getLiteralTextFlagsNeverAsciiEscape != 0: // !!! (getEmitFlags(node) & EmitFlags.NoAsciiEscaping)
+			case flags&getLiteralTextFlagsNeverAsciiEscape != 0 || p.emitContext.EmitFlags(node)&EFNoAsciiEscaping != 0:
 				return "\"" + escapeString(text, quoteCharDoubleQuote) + "\""
 			default:
 				return "\"" + escapeNonAsciiString(text, quoteCharDoubleQuote) + "\""
@@ -162,6 +162,9 @@ func (p *Printer) getLiteralTextOfNode(node *ast.LiteralLikeNode, sourceFile *as
 
 	// !!! Printer option to control whether to terminate unterminated literals
 	// !!! If necessary, printer option to control whether to preserve numeric seperators
+	if p.emitContext.EmitFlags(node)&EFNoAsciiEscaping != 0 {
+		flags |= getLiteralTextFlagsNeverAsciiEscape
+	}
 	return getLiteralText(node, core.Coalesce(sourceFile, p.currentSourceFile), flags)
 }
 
@@ -569,18 +572,19 @@ func (p *Printer) getConstantValue(node *ast.Node) any {
 }
 
 func (p *Printer) shouldEmitIndented(node *ast.Node) bool {
-	// !!! return getEmitFlags(node)&EmitFlagsIndented != 0
-	return false
+	return p.emitContext.EmitFlags(node)&EFIndented != 0
 }
 
 func (p *Printer) shouldElideIndentation(node *ast.Node) bool {
-	// !!! return getEmitFlags(node)&EmitFlagsNoIndentation != 0
-	return false
+	return p.emitContext.EmitFlags(node)&EFNoIndentation != 0
 }
 
 func (p *Printer) shouldEmitOnSingleLine(node *ast.Node) bool {
-	// !!! return getEmitFlags(node)&EmitFlagsSingleLine != 0
-	return false
+	return p.emitContext.EmitFlags(node)&EFSingleLine != 0
+}
+
+func (p *Printer) shouldEmitOnMultipleLines(node *ast.Node) bool {
+	return p.emitContext.EmitFlags(node)&EFMultiLine != 0
 }
 
 func (p *Printer) shouldEmitBlockFunctionBodyOnSingleLine(body *ast.Block) bool {
@@ -627,18 +631,15 @@ func (p *Printer) shouldEmitOnNewLine(node *ast.Node, format ListFormat) bool {
 }
 
 func (p *Printer) shouldEmitLeadingComments(node *ast.Node) bool {
-	// !!! return getEmitFlags(node)&EmitFlagsNoLeadingComments == 0
-	return true
+	return p.emitContext.EmitFlags(node)&EFNoLeadingComments == 0
 }
 
 func (p *Printer) shouldEmitTrailingComments(node *ast.Node) bool {
-	// !!! return getEmitFlags(node)&EmitFlagsNoTrailingComments == 0
-	return true
+	return p.emitContext.EmitFlags(node)&EFNoTrailingComments == 0
 }
 
 func (p *Printer) shouldEmitNestedComments(node *ast.Node) bool {
-	// !!! return getEmitFlags(node)&EmitFlagsNoNestedComments == 0
-	return true
+	return p.emitContext.EmitFlags(node)&EFNoNestedComments == 0
 }
 
 func (p *Printer) hasCommentsAtPosition(pos int) bool {
@@ -2839,14 +2840,12 @@ func (p *Printer) emitBlock(node *ast.Block) {
 	p.enterNode(node.AsNode())
 	p.generateNames(node.AsNode())
 	p.emitTokenWithComment(ast.KindOpenBraceToken, node.Pos(), WriteKindPunctuation, node.AsNode())
-	p.increaseIndent()
 
 	format := core.IfElse(!node.Multiline && p.isEmptyBlock(node.AsNode(), node.Statements) || p.shouldEmitOnSingleLine(node.AsNode()),
 		LFSingleLineBlockStatements,
 		LFMultiLineBlockStatements)
 	p.emitList((*Printer).emitStatement, node.AsNode(), node.Statements, format)
 
-	p.decreaseIndent()
 	p.emitTokenWithCommentEx(ast.KindCloseBraceToken, node.Statements.End(), WriteKindPunctuation, node.AsNode(), format&LFMultiLine != 0 /*indentLeading*/)
 	p.exitNode(node.AsNode())
 }
@@ -3552,7 +3551,7 @@ func (p *Printer) emitEmbeddedStatement(parentNode *ast.Node, node *ast.Statemen
 		p.shouldEmitOnSingleLine(parentNode) ||
 		p.Options.PreserveSourceNewlines && p.getLeadingLineTerminatorCount(parentNode, node, LFNone) == 0 {
 		p.writeSpace()
-		p.emitBlock(node.AsBlock())
+		p.emitStatement(node)
 	} else {
 		p.writeLine()
 		p.increaseIndent()
@@ -4044,6 +4043,10 @@ func (p *Printer) emitSourceFile(node *ast.SourceFile) {
 //
 
 func (p *Printer) emitList(emit func(p *Printer, node *ast.Node), parentNode *ast.Node, children *ast.NodeList, format ListFormat) {
+	if p.shouldEmitOnMultipleLines(parentNode) {
+		format |= LFPreferNewLine
+	}
+
 	p.emitListRange(emit, parentNode, children, format, -1 /*start*/, -1 /*count*/)
 }
 
@@ -4532,8 +4535,7 @@ func (p *Printer) emitSourceMapsAfterNode(node *ast.Node) {
 //
 
 func (p *Printer) shouldReuseTempVariableScope(node *ast.Node) bool {
-	// !!! return node != nil && getEmitFlags(node)&EmitFlagsReuseTempVariableScope!=0
-	return false
+	return node != nil && p.emitContext.EmitFlags(node)&EFReuseTempVariableScope != 0
 }
 
 func (p *Printer) pushNameGenerationScope(node *ast.Node) {

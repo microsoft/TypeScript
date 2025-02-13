@@ -233,6 +233,14 @@ func (options *CompilerOptions) GetEffectiveTypeRoots(currentDirectory string) (
 	return typeRoots, false
 }
 
+func (options *CompilerOptions) GetIsolatedModules() bool {
+	return options.IsolatedModules == TSTrue || options.VerbatimModuleSyntax == TSTrue
+}
+
+func (options *CompilerOptions) GetEmitStandardClassFields() bool {
+	return options.UseDefineForClassFields != TSFalse && options.GetEmitScriptTarget() >= ScriptTargetES2022
+}
+
 func (options *CompilerOptions) GetEmitDeclarations() bool {
 	// !!!
 	return false
