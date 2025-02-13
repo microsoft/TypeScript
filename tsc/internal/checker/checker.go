@@ -2353,8 +2353,75 @@ func (c *Checker) getDeprecatedSuggestionNode(node *ast.Node) *ast.Node {
 }
 
 func (c *Checker) checkTypePredicate(node *ast.Node) {
-	// !!!
-	node.ForEachChild(c.checkSourceElement)
+	parent := c.getTypePredicateParent(node)
+	if parent == nil {
+		// The parent must not be valid.
+		c.error(node, diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods)
+		return
+	}
+	signature := c.getSignatureFromDeclaration(parent)
+	typePredicate := c.getTypePredicateOfSignature(signature)
+	if typePredicate == nil {
+		return
+	}
+	c.checkSourceElement(node.Type())
+	parameterName := node.AsTypePredicateNode().ParameterName
+	if typePredicate.kind != TypePredicateKindThis && typePredicate.kind != TypePredicateKindAssertsThis {
+		if typePredicate.parameterIndex >= 0 {
+			if signatureHasRestParameter(signature) && int(typePredicate.parameterIndex) == len(signature.parameters)-1 {
+				c.error(parameterName, diagnostics.A_type_predicate_cannot_reference_a_rest_parameter)
+			} else {
+				if typePredicate.t != nil {
+					var diags []*ast.Diagnostic
+					if !c.checkTypeAssignableToEx(typePredicate.t, c.getTypeOfSymbol(signature.parameters[typePredicate.parameterIndex]), node.Type(), nil /*headMessage*/, &diags) {
+						c.diagnostics.Add(ast.NewDiagnosticChain(diags[0], diagnostics.A_type_predicate_s_type_must_be_assignable_to_its_parameter_s_type))
+					}
+				}
+			}
+		} else if parameterName != nil {
+			hasReportedError := false
+			for _, param := range parent.Parameters() {
+				name := param.Name()
+				if ast.IsBindingPattern(name) && c.checkIfTypePredicateVariableIsDeclaredInBindingPattern(name, parameterName, typePredicate.parameterName) {
+					hasReportedError = true
+					break
+				}
+			}
+			if !hasReportedError {
+				c.error(parameterName, diagnostics.Cannot_find_parameter_0, typePredicate.parameterName)
+			}
+		}
+	}
+}
+
+func (c *Checker) getTypePredicateParent(node *ast.Node) *ast.SignatureDeclaration {
+	switch node.Parent.Kind {
+	case ast.KindArrowFunction, ast.KindCallSignature, ast.KindFunctionDeclaration, ast.KindFunctionExpression, ast.KindFunctionType,
+		ast.KindMethodDeclaration, ast.KindMethodSignature:
+		if node == node.Parent.Type() {
+			return node.Parent
+		}
+	}
+	return nil
+}
+
+func (c *Checker) checkIfTypePredicateVariableIsDeclaredInBindingPattern(pattern *ast.Node, predicateVariableNode *ast.Node, predicateVariableName string) bool {
+	for _, element := range pattern.AsBindingPattern().Elements.Nodes {
+		name := element.Name()
+		if name == nil {
+			continue
+		}
+		if ast.IsIdentifier(name) && name.Text() == predicateVariableName {
+			c.error(predicateVariableNode, diagnostics.A_type_predicate_cannot_reference_element_0_in_a_binding_pattern, predicateVariableName)
+			return true
+		}
+		if ast.IsArrayBindingPattern(name) || ast.IsObjectBindingPattern(name) {
+			if c.checkIfTypePredicateVariableIsDeclaredInBindingPattern(name, predicateVariableNode, predicateVariableName) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func (c *Checker) checkTypeQuery(node *ast.Node) {
@@ -2408,7 +2475,7 @@ func (c *Checker) checkObjectTypeForDuplicateDeclarations(node *ast.Node, checkP
 			isStatic := ast.HasStaticModifier(member)
 			// In non-ambient contexts, check that static members are not named 'prototype'.
 			if !nodeInAmbientContext && isStatic && symbol != nil && symbol.Name == "prototype" {
-				c.error(member.Name(), diagnostics.Static_property_0_conflicts_with_built_in_property_Function_0_of_constructor_function_1, symbol.Name, node.Name().Text())
+				c.error(member.Name(), diagnostics.Static_property_0_conflicts_with_built_in_property_Function_0_of_constructor_function_1, symbol.Name, c.symbolToString(c.getSymbolOfDeclaration(node)))
 			}
 			// When a property has multiple declarations, check that only one of those declarations is in this object
 			// type declaration (multiple merged object types are permitted to each declare the same property).
@@ -2546,8 +2613,47 @@ func (c *Checker) checkTemplateLiteralType(node *ast.Node) {
 
 func (c *Checker) checkImportType(node *ast.Node) {
 	c.checkSourceElement(node.AsImportTypeNode().Argument)
-	// !!!
+	if attributes := node.AsImportTypeNode().Attributes; attributes != nil {
+		c.getResolutionModeOverride(attributes.AsImportAttributes(), true /*reportErrors*/)
+	}
 	c.checkTypeReferenceOrImport(node)
+}
+
+func (c *Checker) getResolutionModeOverride(node *ast.ImportAttributes, reportErrors bool) core.ResolutionMode {
+	if len(node.Attributes.Nodes) != 1 {
+		if reportErrors {
+			c.grammarErrorOnNode(node.AsNode(), core.IfElse(node.Token == ast.KindWithKeyword,
+				diagnostics.Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require,
+				diagnostics.Type_import_assertions_should_have_exactly_one_key_resolution_mode_with_value_import_or_require))
+		}
+		return core.ResolutionModeNone
+	}
+	elem := node.Attributes.Nodes[0]
+	if !ast.IsStringLiteralLike(elem.Name()) {
+		return core.ResolutionModeNone
+	}
+	if elem.Name().Text() != "resolution-mode" {
+		if reportErrors {
+			c.grammarErrorOnNode(elem.Name(), core.IfElse(node.Token == ast.KindWithKeyword,
+				diagnostics.X_resolution_mode_is_the_only_valid_key_for_type_import_attributes,
+				diagnostics.X_resolution_mode_is_the_only_valid_key_for_type_import_assertions))
+		}
+		return core.ResolutionModeNone
+	}
+	value := elem.AsImportAttribute().Value
+	if !ast.IsStringLiteralLike(value) {
+		return core.ResolutionModeNone
+	}
+	if value.Text() != "import" && value.Text() != "require" {
+		if reportErrors {
+			c.grammarErrorOnNode(value, diagnostics.X_resolution_mode_should_be_either_require_or_import)
+		}
+		return core.ResolutionModeNone
+	}
+	if value.Text() == "import" {
+		return core.ResolutionModeESM
+	}
+	return core.ResolutionModeCommonJS
 }
 
 func (c *Checker) checkNamedTupleMember(node *ast.Node) {
@@ -2972,73 +3078,281 @@ func (c *Checker) checkBlock(node *ast.Node) {
 }
 
 func (c *Checker) checkIfStatement(node *ast.Node) {
-	// Grammar checking
 	c.checkGrammarStatementInAmbientContext(node)
+	t := c.checkTruthinessExpression(node.Expression(), CheckModeNormal)
+	data := node.AsIfStatement()
+	c.checkTestingKnownTruthyCallableOrAwaitableOrEnumMemberType(node.Expression(), t, data.ThenStatement)
+	c.checkSourceElement(data.ThenStatement)
+	if ast.IsEmptyStatement(data.ThenStatement) {
+		c.error(data.ThenStatement, diagnostics.The_body_of_an_if_statement_cannot_be_the_empty_statement)
+	}
+	c.checkSourceElement(data.ElseStatement)
+}
 
-	// !!!
-	node.ForEachChild(c.checkSourceElement)
+func (c *Checker) checkTestingKnownTruthyCallableOrAwaitableOrEnumMemberType(condExpr *ast.Node, condType *Type, body *ast.Node) {
+	if !c.strictNullChecks {
+		return
+	}
+	c.checkTestingKnownTruthyTypes(condExpr, condType, body)
+}
+
+func (c *Checker) checkTestingKnownTruthyTypes(condExpr *ast.Node, condType *Type, body *ast.Node) {
+	condExpr = ast.SkipParentheses(condExpr)
+	c.checkTestingKnownTruthyType(condExpr, condType, body)
+	for ast.IsBinaryExpression(condExpr) && (condExpr.AsBinaryExpression().OperatorToken.Kind == ast.KindBarBarToken || condExpr.AsBinaryExpression().OperatorToken.Kind == ast.KindQuestionQuestionToken) {
+		condExpr = ast.SkipParentheses(condExpr.AsBinaryExpression().Left)
+		c.checkTestingKnownTruthyType(condExpr, condType, body)
+	}
+}
+
+func (c *Checker) checkTestingKnownTruthyType(condExpr *ast.Node, condType *Type, body *ast.Node) {
+	location := condExpr
+	if ast.IsLogicalOrCoalescingBinaryExpression(condExpr) {
+		location = ast.SkipParentheses(condExpr.AsBinaryExpression().Right)
+	}
+	if isModuleExportsAccessExpression(location) {
+		return
+	}
+	if ast.IsLogicalOrCoalescingBinaryExpression(location) {
+		c.checkTestingKnownTruthyTypes(location, condType, body)
+		return
+	}
+	t := condType
+	if location != condExpr {
+		t = c.checkExpression(location)
+	}
+	if t.flags&TypeFlagsEnumLiteral != 0 && ast.IsPropertyAccessExpression(location) && core.OrElse(c.typeNodeLinks.get(location.Expression()).resolvedSymbol, c.unknownSymbol).Flags&ast.SymbolFlagsEnum != 0 {
+		// EnumLiteral type at condition with known value is always truthy or always falsy, likely an error
+		c.error(location, diagnostics.This_condition_will_always_return_0, anyToString(t.AsLiteralType().value))
+		return
+	}
+	isPropertyExpressionCast := ast.IsPropertyAccessExpression(location) && isTypeAssertion(location.Expression())
+	if !c.hasTypeFacts(t, TypeFactsTruthy) || isPropertyExpressionCast {
+		return
+	}
+	// While it technically should be invalid for any known-truthy value
+	// to be tested, we de-scope to functions and Promises unreferenced in
+	// the block as a heuristic to identify the most common bugs. There
+	// are too many false positives for values sourced from type
+	// definitions without strictNullChecks otherwise.
+	callSignatures := c.getSignaturesOfType(t, SignatureKindCall)
+	isPromise := c.getAwaitedTypeOfPromise(t) != nil
+	if len(callSignatures) == 0 && !isPromise {
+		return
+	}
+	var testedNode *ast.Node
+	switch {
+	case ast.IsIdentifier(location):
+		testedNode = location
+	case ast.IsPropertyAccessExpression(location):
+		testedNode = location.Name()
+	}
+	var testedSymbol *ast.Symbol
+	if testedNode != nil {
+		testedSymbol = c.getSymbolAtLocation(testedNode, false)
+	}
+	if testedSymbol == nil && !isPromise {
+		return
+	}
+	isUsed := testedSymbol != nil && ast.IsBinaryExpression(condExpr.Parent) && c.isSymbolUsedInBinaryExpressionChain(condExpr.Parent, testedSymbol) ||
+		testedSymbol != nil && body != nil && c.isSymbolUsedInConditionBody(condExpr, body, testedNode, testedSymbol)
+	if !isUsed {
+		if isPromise {
+			c.errorAndMaybeSuggestAwait(location, true, diagnostics.This_condition_will_always_return_true_since_this_0_is_always_defined, c.getTypeNameForErrorDisplay(t))
+		} else {
+			c.error(location, diagnostics.This_condition_will_always_return_true_since_this_function_is_always_defined_Did_you_mean_to_call_it_instead)
+		}
+	}
+}
+
+func (c *Checker) isSymbolUsedInBinaryExpressionChain(node *ast.Node, testedSymbol *ast.Symbol) bool {
+	var visit func(*ast.Node) bool
+	visit = func(child *ast.Node) bool {
+		if ast.IsIdentifier(child) {
+			symbol := c.getSymbolAtLocation(child, false)
+			if symbol != nil && symbol == testedSymbol {
+				return true
+			}
+		}
+		return child.ForEachChild(visit)
+	}
+	for ast.IsBinaryExpression(node) && node.AsBinaryExpression().OperatorToken.Kind == ast.KindAmpersandAmpersandToken {
+		isUsed := node.AsBinaryExpression().Right.ForEachChild(visit)
+		if isUsed {
+			return true
+		}
+		node = node.Parent
+	}
+	return false
+}
+
+func (c *Checker) isSymbolUsedInConditionBody(expr *ast.Node, body *ast.Node, testedNode *ast.Node, testedSymbol *ast.Symbol) bool {
+	var visit func(*ast.Node) bool
+	visit = func(childNode *ast.Node) bool {
+		if ast.IsIdentifier(childNode) {
+			childSymbol := c.getSymbolAtLocation(childNode, false)
+			if childSymbol != nil && childSymbol == testedSymbol {
+				// If the test was a simple identifier, the above check is sufficient
+				if ast.IsIdentifier(expr) || ast.IsIdentifier(testedNode) && ast.IsBinaryExpression(testedNode.Parent) {
+					return true
+				}
+				// Otherwise we need to ensure the symbol is called on the same target
+				testedExpression := testedNode.Parent
+				childExpression := childNode.Parent
+				for testedExpression != nil && childExpression != nil {
+					if ast.IsIdentifier(testedExpression) && ast.IsIdentifier(childExpression) || testedExpression.Kind == ast.KindThisKeyword && childExpression.Kind == ast.KindThisKeyword {
+						return c.getSymbolAtLocation(testedExpression, false) == c.getSymbolAtLocation(childExpression, false)
+					} else if ast.IsPropertyAccessExpression(testedExpression) && ast.IsPropertyAccessExpression(childExpression) {
+						if c.getSymbolAtLocation(testedExpression.Name(), false) != c.getSymbolAtLocation(childExpression.Name(), false) {
+							return false
+						}
+						childExpression = childExpression.Expression()
+						testedExpression = testedExpression.Expression()
+					} else if ast.IsCallExpression(testedExpression) && ast.IsCallExpression(childExpression) {
+						childExpression = childExpression.Expression()
+						testedExpression = testedExpression.Expression()
+					} else {
+						return false
+					}
+				}
+			}
+		}
+		return childNode.ForEachChild(visit)
+	}
+	return body.ForEachChild(visit)
 }
 
 func (c *Checker) checkDoStatement(node *ast.Node) {
-	// Grammar checking
 	c.checkGrammarStatementInAmbientContext(node)
-
-	// !!!
-	node.ForEachChild(c.checkSourceElement)
+	c.checkSourceElement(node.AsDoStatement().Statement)
+	c.checkTruthinessExpression(node.Expression(), CheckModeNormal)
 }
 
 func (c *Checker) checkWhileStatement(node *ast.Node) {
-	// Grammar checking
 	c.checkGrammarStatementInAmbientContext(node)
-
-	// !!!
-	node.ForEachChild(c.checkSourceElement)
+	c.checkTruthinessExpression(node.Expression(), CheckModeNormal)
+	c.checkSourceElement(node.AsWhileStatement().Statement)
 }
 
 func (c *Checker) checkForStatement(node *ast.Node) {
-	// Grammar checking
 	if !c.checkGrammarStatementInAmbientContext(node) {
 		if init := node.Initializer(); init != nil && init.Kind == ast.KindVariableDeclarationList {
 			c.checkGrammarVariableDeclarationList(init.AsVariableDeclarationList())
 		}
 	}
-
-	// !!!
-	node.ForEachChild(c.checkSourceElement)
+	data := node.AsForStatement()
+	if data.Initializer != nil {
+		if ast.IsVariableDeclarationList(data.Initializer) {
+			c.checkVariableDeclarationList(data.Initializer)
+		} else {
+			c.checkExpression(data.Initializer)
+		}
+	}
+	if data.Condition != nil {
+		c.checkTruthinessExpression(data.Condition, CheckModeNormal)
+	}
+	if data.Incrementor != nil {
+		c.checkExpression(data.Incrementor)
+	}
+	c.checkSourceElement(data.Statement)
+	if node.Locals() != nil {
+		c.registerForUnusedIdentifiersCheck(node)
+	}
 }
 
 func (c *Checker) checkForInStatement(node *ast.Node) {
-	// !!!
-	node.ForEachChild(c.checkSourceElement)
+	data := node.AsForInOrOfStatement()
+	c.checkGrammarForInOrForOfStatement(data)
+	rightType := c.getNonNullableTypeIfNeeded(c.checkExpression(data.Expression))
+	// TypeScript 1.0 spec (April 2014): 5.4
+	// In a 'for-in' statement of the form
+	// for (let VarDecl in Expr) Statement
+	//   VarDecl must be a variable declaration without a type annotation that declares a variable of type Any,
+	//   and Expr must be an expression of type Any, an object type, or a type parameter type.
+	if ast.IsVariableDeclarationList(data.Initializer) {
+		declarations := data.Initializer.AsVariableDeclarationList().Declarations.Nodes
+		if len(declarations) != 0 && ast.IsBindingPattern(declarations[0].Name()) {
+			c.error(declarations[0].Name(), diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_destructuring_pattern)
+		}
+		c.checkVariableDeclarationList(data.Initializer)
+	} else {
+		// In a 'for-in' statement of the form
+		// for (Var in Expr) Statement
+		//   Var must be an expression classified as a reference of type Any or the String primitive type,
+		//   and Expr must be an expression of type Any, an object type, or a type parameter type.
+		varExpr := data.Initializer
+		leftType := c.checkExpression(varExpr)
+		if ast.IsArrayLiteralExpression(varExpr) || ast.IsObjectLiteralExpression(varExpr) {
+			c.error(varExpr, diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_destructuring_pattern)
+		} else if !c.isTypeAssignableTo(c.getIndexTypeOrString(rightType), leftType) {
+			c.error(varExpr, diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_of_type_string_or_any)
+		} else {
+			// run check only former check succeeded to avoid cascading errors
+			c.checkReferenceExpression(varExpr, diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_a_variable_or_a_property_access, diagnostics.The_left_hand_side_of_a_for_in_statement_may_not_be_an_optional_property_access)
+		}
+	}
+	// unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
+	// in this case error about missing name is already reported - do not report extra one
+	if rightType == c.neverType || !c.isTypeAssignableToKind(rightType, TypeFlagsNonPrimitive|TypeFlagsInstantiableNonPrimitive) {
+		c.error(data.Expression, diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter_but_here_has_type_0, c.TypeToString(rightType))
+	}
+	c.checkSourceElement(data.Statement)
+	if node.Locals() != nil {
+		c.registerForUnusedIdentifiersCheck(node)
+	}
+}
+
+func (c *Checker) getIndexTypeOrString(t *Type) *Type {
+	indexType := c.getExtractStringType(c.getIndexType(t))
+	return core.IfElse(indexType.flags&TypeFlagsNever != 0, c.stringType, indexType)
 }
 
 func (c *Checker) checkForOfStatement(node *ast.Node) {
-	forInOfStatement := node.AsForInOrOfStatement()
-	// Grammar checking
-	c.checkGrammarForInOrForOfStatement(forInOfStatement)
-
+	data := node.AsForInOrOfStatement()
+	c.checkGrammarForInOrForOfStatement(data)
 	container := getContainingFunctionOrClassStaticBlock(node)
-	if forInOfStatement.AwaitModifier != nil {
+	if data.AwaitModifier != nil {
 		if container != nil && ast.IsClassStaticBlockDeclaration(container) {
-			c.grammarErrorOnNode(forInOfStatement.AwaitModifier, diagnostics.X_for_await_loops_cannot_be_used_inside_a_class_static_block)
+			c.grammarErrorOnNode(data.AwaitModifier, diagnostics.X_for_await_loops_cannot_be_used_inside_a_class_static_block)
 		}
-		// !!!
+	} // Check the LHS and RHS
+	// If the LHS is a declaration, just check it as a variable declaration, which will in turn check the RHS
+	// via checkRightHandSideOfForOf.
+	// If the LHS is an expression, check the LHS, as a destructuring assignment or as a reference.
+	// Then check that the RHS is assignable to it.
+	if ast.IsVariableDeclarationList(data.Initializer) {
+		c.checkVariableDeclarationList(data.Initializer)
+	} else {
+		varExpr := data.Initializer
+		iteratedType := c.checkRightHandSideOfForOf(node)
+		// There may be a destructuring assignment on the left side
+		if ast.IsArrayLiteralExpression(varExpr) || ast.IsObjectLiteralExpression(varExpr) {
+			// iteratedType may be undefined. In this case, we still want to check the structure of
+			// varExpr, in particular making sure it's a valid LeftHandSideExpression. But we'd like
+			// to short circuit the type relation checking as much as possible, so we pass the unknownType.
+			c.checkDestructuringAssignment(varExpr, core.OrElse(iteratedType, c.errorType), CheckModeNormal, false)
+		} else {
+			leftType := c.checkExpression(varExpr)
+			c.checkReferenceExpression(varExpr, diagnostics.The_left_hand_side_of_a_for_of_statement_must_be_a_variable_or_a_property_access, diagnostics.The_left_hand_side_of_a_for_of_statement_may_not_be_an_optional_property_access)
+			// iteratedType will be undefined if the rightType was missing properties/signatures
+			// required to get its iteratedType (like [Symbol.iterator] or next). This may be
+			// because we accessed properties from anyType, or it may have led to an error inside
+			// getElementTypeOfIterable.
+			if iteratedType != nil {
+				c.checkTypeAssignableToAndOptionallyElaborate(iteratedType, leftType, varExpr, data.Expression, nil, nil)
+			}
+		}
 	}
-
-	// !!!
-	node.ForEachChild(c.checkSourceElement)
+	c.checkSourceElement(data.Statement)
+	if node.Locals() != nil {
+		c.registerForUnusedIdentifiersCheck(node)
+	}
 }
 
 func (c *Checker) checkBreakOrContinueStatement(node *ast.Node) {
-	// Grammar checking
 	if !c.checkGrammarStatementInAmbientContext(node) {
 		c.checkGrammarBreakOrContinueStatement(node)
 	}
-
-	// TODO: Check that target label is valid
-
-	// !!!
-	node.ForEachChild(c.checkSourceElement)
 }
 
 func (c *Checker) checkReturnStatement(node *ast.Node) {
@@ -3091,67 +3405,117 @@ func (c *Checker) checkReturnStatement(node *ast.Node) {
 }
 
 func (c *Checker) checkWithStatement(node *ast.Node) {
-	// Grammar checking for withStatement
 	if !c.checkGrammarStatementInAmbientContext(node) {
 		if node.Flags&ast.NodeFlagsAwaitContext != 0 {
 			c.grammarErrorOnFirstToken(node, diagnostics.X_with_statements_are_not_allowed_in_an_async_function_block)
 		}
 	}
-
-	// !!!
-	node.ForEachChild(c.checkSourceElement)
+	c.checkExpression(node.Expression())
+	sourceFile := ast.GetSourceFileOfNode(node)
+	if !c.hasParseDiagnostics(sourceFile) {
+		start := scanner.GetRangeOfTokenAtPosition(sourceFile, node.Pos()).Pos()
+		end := node.AsWithStatement().Statement.Pos()
+		c.grammarErrorAtPos(sourceFile.AsNode(), start, end-start, diagnostics.The_with_statement_is_not_supported_All_symbols_in_a_with_block_will_have_type_any)
+	}
 }
 
 func (c *Checker) checkSwitchStatement(node *ast.Node) {
 	// Grammar checking
 	c.checkGrammarStatementInAmbientContext(node)
-
-	// !!!
-	node.ForEachChild(c.checkSourceElement)
+	var firstDefaultClause *ast.Node
+	hasDuplicateDefaultClause := false
+	expressionType := c.checkExpression(node.Expression())
+	caseBlock := node.AsSwitchStatement().CaseBlock
+	for _, clause := range caseBlock.AsCaseBlock().Clauses.Nodes {
+		// Grammar check for duplicate default clauses, skip if we already report duplicate default clause
+		if ast.IsDefaultClause(clause) && !hasDuplicateDefaultClause {
+			if firstDefaultClause == nil {
+				firstDefaultClause = clause
+			} else {
+				c.grammarErrorOnNode(clause, diagnostics.A_default_clause_cannot_appear_more_than_once_in_a_switch_statement)
+				hasDuplicateDefaultClause = true
+			}
+		}
+		if ast.IsCaseClause(clause) {
+			caseType := c.checkExpression(clause.Expression())
+			if !c.isTypeEqualityComparableTo(expressionType, caseType) {
+				// expressionType is not comparable to caseType, try the reversed check and report errors if it fails
+				c.checkTypeComparableTo(caseType, expressionType, clause.Expression(), nil /*headMessage*/)
+			}
+		}
+		c.checkSourceElements(clause.AsCaseOrDefaultClause().Statements.Nodes)
+		if c.compilerOptions.NoFallthroughCasesInSwitch.IsTrue() {
+			if flowNode := clause.AsCaseOrDefaultClause().FallthroughFlowNode; flowNode != nil && c.isReachableFlowNode(flowNode) {
+				c.error(clause, diagnostics.Fallthrough_case_in_switch)
+			}
+		}
+	}
+	if caseBlock.Locals() != nil {
+		c.registerForUnusedIdentifiersCheck(caseBlock)
+	}
 }
 
 func (c *Checker) checkLabeledStatement(node *ast.Node) {
 	labeledStatement := node.AsLabeledStatement()
 	labelNode := labeledStatement.Label
-	labelText := labelNode.AsIdentifier().Text
-	// Grammar checking
+	labelText := labelNode.Text()
 	if !c.checkGrammarStatementInAmbientContext(node) {
-		// TODO(danielr): why is this not just a loop?
-		ast.FindAncestorOrQuit(node.Parent, func(current *ast.Node) ast.FindAncestorResult {
-			if ast.IsFunctionLike(current) {
-				return ast.FindAncestorQuit
-			}
-			if current.Kind == ast.KindLabeledStatement && (current.AsLabeledStatement()).Label.AsIdentifier().Text == labelText {
+		for current := node.Parent; current != nil && !ast.IsFunctionLike(current); current = current.Parent {
+			if ast.IsLabeledStatement(current) && current.AsLabeledStatement().Label.Text() == labelText {
 				c.grammarErrorOnNode(labelNode, diagnostics.Duplicate_label_0, labelText)
-				return ast.FindAncestorTrue
+				break
 			}
-			return ast.FindAncestorFalse
-		})
+		}
 	}
-
-	// !!!
-	node.ForEachChild(c.checkSourceElement)
+	c.checkSourceElement(labeledStatement.Statement)
 }
 
 func (c *Checker) checkThrowStatement(node *ast.Node) {
 	throwExpr := node.AsThrowStatement().Expression
-
-	// Grammar checking
 	if !c.checkGrammarStatementInAmbientContext(node) {
-		if ast.IsIdentifier(throwExpr) && len(throwExpr.AsIdentifier().Text) == 0 {
+		if ast.IsIdentifier(throwExpr) && len(throwExpr.Text()) == 0 {
 			c.grammarErrorAtPos(node, throwExpr.Pos(), 0 /*length*/, diagnostics.Line_break_not_permitted_here)
 		}
 	}
-
 	c.checkExpression(throwExpr)
 }
 
 func (c *Checker) checkTryStatement(node *ast.Node) {
-	// Grammar checking
 	c.checkGrammarStatementInAmbientContext(node)
+	data := node.AsTryStatement()
+	c.checkBlock(data.TryBlock)
+	if data.CatchClause != nil {
+		c.checkCatchClause(data.CatchClause)
+	}
+	if data.FinallyBlock != nil {
+		c.checkBlock(data.FinallyBlock)
+	}
+}
 
-	// !!!
-	node.ForEachChild(c.checkSourceElement)
+func (c *Checker) checkCatchClause(node *ast.Node) {
+	declaration := node.AsCatchClause().VariableDeclaration
+	if declaration != nil {
+		c.checkVariableLikeDeclaration(declaration)
+		typeNode := declaration.Type()
+		if typeNode != nil {
+			t := c.getTypeFromTypeNode(typeNode)
+			if t != nil && t.flags&TypeFlagsAnyOrUnknown == 0 {
+				c.grammarErrorOnFirstToken(typeNode, diagnostics.Catch_clause_variable_type_annotation_must_be_any_or_unknown_if_specified)
+			}
+		} else if declaration.Initializer() != nil {
+			c.grammarErrorOnFirstToken(declaration.Initializer(), diagnostics.Catch_clause_variable_cannot_have_an_initializer)
+		} else {
+			blockLocals := node.AsCatchClause().Block.Locals()
+			if blockLocals != nil {
+				for caughtName := range node.Locals() {
+					if blockLocal := blockLocals[caughtName]; blockLocal != nil && blockLocal.ValueDeclaration != nil && blockLocal.Flags&ast.SymbolFlagsBlockScopedVariable != 0 {
+						c.grammarErrorOnNode(blockLocal.ValueDeclaration, diagnostics.Cannot_redeclare_identifier_0_in_catch_clause, caughtName)
+					}
+				}
+			}
+		}
+	}
+	c.checkBlock(node.AsCatchClause().Block)
 }
 
 func (c *Checker) checkBindingElement(node *ast.Node) {
@@ -4578,7 +4942,7 @@ func (c *Checker) getBuiltinIteratorReturnType() *Type {
 }
 
 func (iterationTypes *IterationTypes) hasTypes() bool {
-	return iterationTypes.yieldType != nil && iterationTypes.returnType != nil && iterationTypes.nextType != nil
+	return iterationTypes.yieldType != nil || iterationTypes.returnType != nil || iterationTypes.nextType != nil
 }
 
 func (iterationTypes *IterationTypes) getType(typeKind IterationTypeKind) *Type {
@@ -4810,6 +5174,11 @@ func (c *Checker) getIterationTypesOfMethod(t *Type, resolver *IterationTypesRes
 	return IterationTypes{yieldType, c.getUnionType(returnTypes), nextType}
 }
 
+// Gets the *yield* and *return* types of an `IteratorResult`-like type.
+//
+// If we are unable to determine a *yield* or a *return* type, `noIterationTypes` is
+// returned to indicate to the caller that it should handle the error. Otherwise, an
+// `IterationTypes` record is returned.
 func (c *Checker) getIterationTypesOfIteratorResult(t *Type) IterationTypes {
 	if IsTypeAny(t) {
 		return IterationTypes{c.anyType, c.anyType, c.anyType}
@@ -12666,6 +13035,7 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
 		if symbol == nil || symbol.Exports == nil || slices.Contains(visitedSymbols, symbol) {
 			return nil
 		}
+		visitedSymbols = append(visitedSymbols, symbol)
 		symbols := maps.Clone(symbol.Exports)
 		// All export * declarations are collected in an __export symbol by the binder
 		exportStars := symbol.Exports[ast.InternalSymbolNameExportStar]
@@ -20087,7 +20457,7 @@ func (c *Checker) evaluateEnumMember(expr *ast.Node, symbol *ast.Symbol, locatio
 	}
 	if !c.isBlockScopedNameDeclaredBeforeUse(declaration, location) {
 		c.error(expr, diagnostics.A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums)
-		return evaluatorResult(0.0, false, false, false)
+		return evaluatorResult(jsnum.Number(0), false, false, false)
 	}
 	value := c.getEnumMemberValue(declaration)
 	if location.Parent != declaration.Parent {

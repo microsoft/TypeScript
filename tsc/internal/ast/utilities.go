@@ -205,7 +205,7 @@ func IsLogicalOrCoalescingBinaryOperator(token Kind) bool {
 	return isLogicalBinaryOperator(token) || token == KindQuestionQuestionToken
 }
 
-func isLogicalOrCoalescingBinaryExpression(expr *Node) bool {
+func IsLogicalOrCoalescingBinaryExpression(expr *Node) bool {
 	return IsBinaryExpression(expr) && IsLogicalOrCoalescingBinaryOperator(expr.AsBinaryExpression().OperatorToken.Kind)
 }
 
@@ -224,7 +224,7 @@ func IsLogicalExpression(node *Node) bool {
 		} else if node.Kind == KindPrefixUnaryExpression && node.AsPrefixUnaryExpression().Operator == KindExclamationToken {
 			node = node.AsPrefixUnaryExpression().Operand
 		} else {
-			return isLogicalOrCoalescingBinaryExpression(node)
+			return IsLogicalOrCoalescingBinaryExpression(node)
 		}
 	}
 }
@@ -1234,6 +1234,14 @@ func GetElementOrPropertyAccessArgumentExpressionOrName(node *Node) *Node {
 		return node
 	}
 	panic("Unhandled case in GetElementOrPropertyAccessArgumentExpressionOrName")
+}
+
+func GetElementOrPropertyAccessName(node *Node) string {
+	name := getElementOrPropertyAccessArgumentExpressionOrName(node)
+	if name == nil {
+		return ""
+	}
+	return name.Text()
 }
 
 func IsExpressionWithTypeArgumentsInClassExtendsClause(node *Node) bool {

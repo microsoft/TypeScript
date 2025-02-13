@@ -269,6 +269,12 @@ func (n *Node) Expression() *Node {
 		return n.AsReturnStatement().Expression
 	case KindExternalModuleReference:
 		return n.AsExternalModuleReference().Expression
+	case KindIfStatement:
+		return n.AsIfStatement().Expression
+	case KindWhileStatement:
+		return n.AsWhileStatement().Expression
+	case KindDoStatement:
+		return n.AsDoStatement().Expression
 	}
 	panic("Unhandled case in Node.Expression")
 }
@@ -2226,6 +2232,14 @@ func (node *CaseOrDefaultClause) ForEachChild(v Visitor) bool {
 
 func (node *CaseOrDefaultClause) VisitEachChild(v *NodeVisitor) *Node {
 	return v.Factory.UpdateCaseOrDefaultClause(node, v.visitNode(node.Expression), v.visitNodes(node.Statements))
+}
+
+func IsCaseClause(node *Node) bool {
+	return node.Kind == KindCaseClause
+}
+
+func IsDefaultClause(node *Node) bool {
+	return node.Kind == KindDefaultClause
 }
 
 // ThrowStatement

@@ -557,6 +557,7 @@ func TestParseJsonSourceFileConfigFileContent(t *testing.T) {
 }
 
 func baselineParseConfigWith(t *testing.T, baselineFileName string, noSubmoduleBaseline bool, input []testConfig, getParsed func(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine) {
+	noSubmoduleBaseline = true
 	var baselineContent strings.Builder
 	for i, config := range input {
 		basePath := config.basePath

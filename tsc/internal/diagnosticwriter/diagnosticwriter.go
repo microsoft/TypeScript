@@ -59,10 +59,10 @@ func FormatDiagnosticsWithColorAndContext(output io.Writer, diags []*ast.Diagnos
 		if diagnostic.File() != nil && diagnostic.Code() != diagnostics.File_appears_to_be_binary.Code() {
 			fmt.Fprint(output, formatOpts.NewLine)
 			writeCodeSnippet(output, diagnostic.File(), diagnostic.Pos(), diagnostic.Len(), getCategoryFormat(diagnostic.Category()), "", formatOpts)
+			fmt.Fprint(output, formatOpts.NewLine)
 		}
 
 		if (diagnostic.RelatedInformation() != nil) && (len(diagnostic.RelatedInformation()) > 0) {
-			fmt.Fprint(output, formatOpts.NewLine)
 			for _, relatedInformation := range diagnostic.RelatedInformation() {
 				file := relatedInformation.File()
 				if file != nil {
@@ -75,11 +75,9 @@ func FormatDiagnosticsWithColorAndContext(output io.Writer, diags []*ast.Diagnos
 					writeCodeSnippet(output, file, pos, relatedInformation.Len(), foregroundColorEscapeCyan, "    ", formatOpts)
 				}
 				fmt.Fprint(output, formatOpts.NewLine)
-				// WriteFlattenedDiagnosticMessage(output, relatedInformation, formatOpts.NewLine)
 			}
 		}
 	}
-	fmt.Fprint(output, formatOpts.NewLine)
 }
 
 func writeCodeSnippet(writer io.Writer, sourceFile *ast.SourceFile, start int, length int, squiggleColor string, indent string, formatOpts *FormattingOptions) {
