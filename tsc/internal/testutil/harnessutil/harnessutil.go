@@ -136,26 +136,21 @@ func CompileFiles(
 	// !!! Port vfs usage closer to original
 
 	// Create fake FS for testing
-	// Note: the code below assumes a single root, since an FS in Go always has a single root.
-	testfs := fstest.MapFS{}
+	testfs := map[string]any{}
 	for _, file := range inputFiles {
 		fileName := tspath.GetNormalizedAbsolutePath(file.UnitName, currentDirectory)
-		rootLen := tspath.GetRootLength(fileName)
-		fileName = fileName[rootLen:]
 		testfs[fileName] = &fstest.MapFile{
 			Data: []byte(file.Content),
 		}
 	}
 	for _, file := range otherFiles {
 		fileName := tspath.GetNormalizedAbsolutePath(file.UnitName, currentDirectory)
-		rootLen := tspath.GetRootLength(fileName)
-		fileName = fileName[rootLen:]
 		testfs[fileName] = &fstest.MapFile{
 			Data: []byte(file.Content),
 		}
 	}
 
-	fs := vfstest.FromMapFS(testfs, harnessOptions.UseCaseSensitiveFileNames)
+	fs := vfstest.FromMap(testfs, harnessOptions.UseCaseSensitiveFileNames)
 	fs = bundled.WrapFS(fs)
 
 	host := createCompilerHost(fs, bundled.LibPath(), &compilerOptions, currentDirectory)

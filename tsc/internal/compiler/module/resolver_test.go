@@ -9,7 +9,6 @@ import (
 	"slices"
 	"sync"
 	"testing"
-	"testing/fstest"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler/module"
@@ -143,20 +142,15 @@ type vfsModuleResolutionHost struct {
 func fixRoot(path string) string {
 	rootLength := tspath.GetRootLength(path)
 	if rootLength == 0 {
-		return tspath.CombinePaths(".src", path)
+		return tspath.CombinePaths("/.src", path)
 	}
-	if len(path) == rootLength {
-		return "."
-	}
-	return path[rootLength:]
+	return path
 }
 
 func newVFSModuleResolutionHost(files map[string]string, currentDirectory string) *vfsModuleResolutionHost {
-	fs := fstest.MapFS{}
+	fs := make(map[string]string, len(files))
 	for name, content := range files {
-		fs[fixRoot(name)] = &fstest.MapFile{
-			Data: []byte(content),
-		}
+		fs[fixRoot(name)] = content
 	}
 	if currentDirectory == "" {
 		currentDirectory = "/.src"
@@ -164,7 +158,7 @@ func newVFSModuleResolutionHost(files map[string]string, currentDirectory string
 		currentDirectory = "/.src/" + currentDirectory
 	}
 	return &vfsModuleResolutionHost{
-		fs:               vfstest.FromMapFS(fs, true /*useCaseSensitiveFileNames*/),
+		fs:               vfstest.FromMap(fs, true /*useCaseSensitiveFileNames*/),
 		currentDirectory: currentDirectory,
 	}
 }

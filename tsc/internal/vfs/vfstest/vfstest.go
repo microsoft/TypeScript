@@ -33,12 +33,55 @@ type sys struct {
 	realpath string
 }
 
-// FromTestMapFS creates a new [vfs.FS] from a [fstest.MapFS]. The provided FS will be augmented
-// to properly handle case-insensitive queries.
+// FromMap creates a new [vfs.FS] from a map of paths to file contents.
+// Those file contents may be strings, byte slices, or [fstest.MapFile]s.
 //
-// For paths like `c:/foo/bar`, fsys will be used as though it's rooted at `/` and the path is `/c:/foo/bar`.
-func FromMapFS(m fstest.MapFS, useCaseSensitiveFileNames bool) vfs.FS {
-	return vfs.FromIOFS(convertMapFS(m, useCaseSensitiveFileNames), useCaseSensitiveFileNames)
+// The paths must be normalized absolute paths according to the tspath package,
+// without trailing directory separators.
+// The paths must be all POSIX-style or all Windows-style, but not both.
+func FromMap[File any](m map[string]File, useCaseSensitiveFileNames bool) vfs.FS {
+	posix := false
+	windows := false
+
+	for p := range m {
+		if !tspath.IsRootedDiskPath(p) {
+			panic(fmt.Sprintf("non-rooted path %q", p))
+		}
+
+		if normal := tspath.RemoveTrailingDirectorySeparator(tspath.NormalizePath(p)); normal != p {
+			panic(fmt.Sprintf("non-normalized path %q", p))
+		}
+
+		if strings.HasPrefix(p, "/") {
+			posix = true
+		} else {
+			windows = true
+		}
+	}
+
+	if posix && windows {
+		panic("mixed posix and windows paths")
+	}
+
+	mfs := make(fstest.MapFS, len(m))
+	for p, f := range m {
+		var file *fstest.MapFile
+		switch f := any(f).(type) {
+		case string:
+			file = &fstest.MapFile{Data: []byte(f)}
+		case []byte:
+			file = &fstest.MapFile{Data: f}
+		case *fstest.MapFile:
+			file = f
+		default:
+			panic(fmt.Sprintf("invalid file type %T", f))
+		}
+
+		p, _ = strings.CutPrefix(p, "/")
+		mfs[p] = file
+	}
+
+	return vfs.FromIOFS(convertMapFS(mfs, useCaseSensitiveFileNames), useCaseSensitiveFileNames)
 }
 
 func convertMapFS(input fstest.MapFS, useCaseSensitiveFileNames bool) *mapFS {

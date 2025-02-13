@@ -3,8 +3,9 @@ package execute_test
 import (
 	"fmt"
 	"io"
+	"maps"
+	"slices"
 	"strings"
-	"testing/fstest"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/vfs"
@@ -17,20 +18,12 @@ func newTestSys(fileOrFolderList FileMap, cwd string, args ...string) *testSys {
 	if cwd == "" {
 		cwd = "/home/src/workspaces/project"
 	}
-	mapFS := fstest.MapFS{}
-	fileList := []string{}
-	for name, content := range fileOrFolderList {
-		mapFS[strings.TrimPrefix(name, "/")] = &fstest.MapFile{
-			Data: []byte(content),
-		}
-		fileList = append(fileList, name)
-	}
-	fs := bundled.WrapFS(vfstest.FromMapFS(mapFS, true /*useCaseSensitiveFileNames*/))
+	fs := bundled.WrapFS(vfstest.FromMap(fileOrFolderList, true /*useCaseSensitiveFileNames*/))
 	return &testSys{
 		fs:                 fs,
 		defaultLibraryPath: bundled.LibPath(),
 		cwd:                cwd,
-		files:              fileList,
+		files:              slices.Collect(maps.Keys(fileOrFolderList)),
 		output:             []string{},
 		currentWrite:       &strings.Builder{},
 	}

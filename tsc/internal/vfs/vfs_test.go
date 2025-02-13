@@ -14,19 +14,11 @@ import (
 func TestVFSTestMapFS(t *testing.T) {
 	t.Parallel()
 
-	fs := vfstest.FromMapFS(fstest.MapFS{
-		"foo.ts": &fstest.MapFile{
-			Data: []byte("hello, world"),
-		},
-		"dir1/file1.ts": &fstest.MapFile{
-			Data: []byte("export const foo = 42;"),
-		},
-		"dir1/file2.ts": &fstest.MapFile{
-			Data: []byte("export const foo = 42;"),
-		},
-		"dir2/file1.ts": &fstest.MapFile{
-			Data: []byte("export const foo = 42;"),
-		},
+	fs := vfstest.FromMap(map[string]string{
+		"/foo.ts":        "hello, world",
+		"/dir1/file1.ts": "export const foo = 42;",
+		"/dir1/file2.ts": "export const foo = 42;",
+		"/dir2/file1.ts": "export const foo = 42;",
 	}, false /*useCaseSensitiveFileNames*/)
 
 	t.Run("ReadFile", func(t *testing.T) {
@@ -64,19 +56,11 @@ func TestVFSTestMapFS(t *testing.T) {
 func TestVFSTestMapFSWindows(t *testing.T) {
 	t.Parallel()
 
-	fs := vfstest.FromMapFS(fstest.MapFS{
-		"c:/foo.ts": &fstest.MapFile{
-			Data: []byte("hello, world"),
-		},
-		"c:/dir1/file1.ts": &fstest.MapFile{
-			Data: []byte("export const foo = 42;"),
-		},
-		"c:/dir1/file2.ts": &fstest.MapFile{
-			Data: []byte("export const foo = 42;"),
-		},
-		"c:/dir2/file1.ts": &fstest.MapFile{
-			Data: []byte("export const foo = 42;"),
-		},
+	fs := vfstest.FromMap(map[string]string{
+		"c:/foo.ts":        "hello, world",
+		"c:/dir1/file1.ts": "export const foo = 42;",
+		"c:/dir1/file2.ts": "export const foo = 42;",
+		"c:/dir2/file1.ts": "export const foo = 42;",
 	}, false)
 
 	t.Run("ReadFile", func(t *testing.T) {

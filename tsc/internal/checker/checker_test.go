@@ -2,7 +2,6 @@ package checker_test
 
 import (
 	"testing"
-	"testing/fstest"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/bundled"
@@ -21,17 +20,13 @@ func TestGetSymbolAtLocation(t *testing.T) {
 }
 declare const foo: Foo;
 foo.bar;`
-	fs := vfstest.FromMapFS(fstest.MapFS{
-		"foo.ts": &fstest.MapFile{
-			Data: []byte(content),
-		},
-		"tsconfig.json": &fstest.MapFile{
-			Data: []byte(`
+	fs := vfstest.FromMap(map[string]string{
+		"/foo.ts": content,
+		"/tsconfig.json": `
 				{
 					"compilerOptions": {}
 				}
-			`),
-		},
+			`,
 	}, false /*useCaseSensitiveFileNames*/)
 	fs = bundled.WrapFS(fs)
 
