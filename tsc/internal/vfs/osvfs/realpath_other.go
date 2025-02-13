@@ -1,6 +1,6 @@
 //go:build !windows
 
-package vfs
+package osvfs
 
 import (
 	"path/filepath"

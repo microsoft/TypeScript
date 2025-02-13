@@ -1,4 +1,4 @@
-package vfs
+package osvfs
 
 import (
 	"os"
@@ -39,7 +39,7 @@ func TestSymlinkRealpath(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, string(gotContents), expectedContents)
 
-	fs := FromOS()
+	fs := FS()
 
 	targetRealpath := fs.Realpath(tspath.NormalizePath(targetFile))
 	linkRealpath := fs.Realpath(tspath.NormalizePath(linkFile))

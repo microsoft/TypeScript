@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/iovfs"
 )
 
 const embedded = true
@@ -29,7 +30,7 @@ func libPath() string {
 //go:embed libs
 var embeddedFS embed.FS
 
-var embeddedVFS = vfs.FromIOFS(embeddedFS, true)
+var embeddedVFS = iovfs.From(embeddedFS, true)
 
 type wrappedFS struct {
 	fs vfs.FS

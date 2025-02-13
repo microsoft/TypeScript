@@ -22,7 +22,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/execute"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/tspath"
-	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
 )
 
 func printDiagnostic(d *ast.Diagnostic, level int, comparePathOptions tspath.ComparePathsOptions) {
@@ -138,7 +138,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	fs := bundled.WrapFS(vfs.FromOS())
+	fs := bundled.WrapFS(osvfs.FS())
 	defaultLibraryPath := bundled.LibPath()
 
 	configFilePath := tspath.ResolvePath(currentDirectory, opts.tsc.project)

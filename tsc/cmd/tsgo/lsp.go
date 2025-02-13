@@ -10,7 +10,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/lsp"
-	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
 )
 
 func runLSP(args []string) int {
@@ -29,7 +29,7 @@ func runLSP(args []string) int {
 		return 1
 	}
 
-	fs := bundled.WrapFS(vfs.FromOS())
+	fs := bundled.WrapFS(osvfs.FS())
 	defaultLibraryPath := bundled.LibPath()
 
 	s := lsp.NewServer(&lsp.ServerOptions{

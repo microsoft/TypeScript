@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
 	"gotest.tools/v3/assert"
 )
 
@@ -28,7 +29,7 @@ func TestTestingLibPath(t *testing.T) {
 func TestEmbeddedLibs(t *testing.T) {
 	t.Parallel()
 
-	fs := bundled.WrapFS(vfs.FromOS())
+	fs := bundled.WrapFS(osvfs.FS())
 
 	var files []string
 

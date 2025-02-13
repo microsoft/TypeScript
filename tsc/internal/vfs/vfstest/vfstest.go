@@ -12,6 +12,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/iovfs"
 )
 
 type mapFS struct {
@@ -24,8 +25,8 @@ type mapFS struct {
 }
 
 var (
-	_ vfs.RealpathFS = (*mapFS)(nil)
-	_ vfs.WritableFS = (*mapFS)(nil)
+	_ iovfs.RealpathFS = (*mapFS)(nil)
+	_ iovfs.WritableFS = (*mapFS)(nil)
 )
 
 type sys struct {
@@ -81,7 +82,7 @@ func FromMap[File any](m map[string]File, useCaseSensitiveFileNames bool) vfs.FS
 		mfs[p] = file
 	}
 
-	return vfs.FromIOFS(convertMapFS(mfs, useCaseSensitiveFileNames), useCaseSensitiveFileNames)
+	return iovfs.From(convertMapFS(mfs, useCaseSensitiveFileNames), useCaseSensitiveFileNames)
 }
 
 func convertMapFS(input fstest.MapFS, useCaseSensitiveFileNames bool) *mapFS {

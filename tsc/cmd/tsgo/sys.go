@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/execute"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
 )
 
 type osSys struct {
@@ -55,7 +56,7 @@ func newSystem() *osSys {
 
 	return &osSys{
 		cwd:                tspath.NormalizePath(cwd),
-		fs:                 bundled.WrapFS(vfs.FromOS()),
+		fs:                 bundled.WrapFS(osvfs.FS()),
 		defaultLibraryPath: bundled.LibPath(),
 		writer:             os.Stdout,
 		newLine:            core.IfElse(runtime.GOOS == "windows", "\r\n", "\n"),

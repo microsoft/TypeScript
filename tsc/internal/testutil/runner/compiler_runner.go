@@ -16,7 +16,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil/tsbaseline"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
-	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
 )
 
 var (
@@ -143,7 +143,7 @@ type compilerFileBasedTest struct {
 }
 
 func getCompilerFileBasedTest(t *testing.T, filename string) *compilerFileBasedTest {
-	content, ok := vfs.FromOS().ReadFile(filename)
+	content, ok := osvfs.FS().ReadFile(filename)
 	if !ok {
 		panic("Could not read test file: " + filename)
 	}

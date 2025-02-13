@@ -19,6 +19,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/tsoptions/tsoptionstest"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
 	"gotest.tools/v3/assert"
 )
 
@@ -646,7 +647,7 @@ func TestParseSrcCompiler(t *testing.T) {
 	compilerDir := tspath.NormalizeSlashes(filepath.Join(repo.TypeScriptSubmodulePath, "src", "compiler"))
 	tsconfigPath := tspath.CombinePaths(compilerDir, "tsconfig.json")
 
-	fs := vfs.FromOS()
+	fs := osvfs.FS()
 	host := &tsoptionstest.VfsParseConfigHost{
 		Vfs:              fs,
 		CurrentDirectory: compilerDir,
@@ -810,7 +811,7 @@ func BenchmarkParseSrcCompiler(b *testing.B) {
 	compilerDir := tspath.NormalizeSlashes(filepath.Join(repo.TypeScriptSubmodulePath, "src", "compiler"))
 	tsconfigPath := tspath.CombinePaths(compilerDir, "tsconfig.json")
 
-	fs := vfs.FromOS()
+	fs := osvfs.FS()
 	host := &tsoptionstest.VfsParseConfigHost{
 		Vfs:              fs,
 		CurrentDirectory: compilerDir,

@@ -1,7 +1,8 @@
-package vfs
+package osvfs
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -9,21 +10,23 @@ import (
 	"unicode"
 
 	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/internal"
 )
 
-// FromOS creates a new FS from the OS file system.
-func FromOS() FS {
+// FS creates a new FS from the OS file system.
+func FS() vfs.FS {
 	return osVFS
 }
 
-var osVFS FS = &osFS{
-	common: common{
-		rootFor: os.DirFS,
+var osVFS vfs.FS = &osFS{
+	common: internal.Common{
+		RootFor: os.DirFS,
 	},
 }
 
 type osFS struct {
-	common
+	common internal.Common
 }
 
 // We do this right at startup to minimize the chance that executable gets moved or deleted.
@@ -77,8 +80,28 @@ func (vfs *osFS) ReadFile(path string) (contents string, ok bool) {
 	return vfs.common.ReadFile(path)
 }
 
+func (vfs *osFS) DirectoryExists(path string) bool {
+	return vfs.common.DirectoryExists(path)
+}
+
+func (vfs *osFS) FileExists(path string) bool {
+	return vfs.common.FileExists(path)
+}
+
+func (vfs *osFS) GetDirectories(path string) []string {
+	return vfs.common.GetDirectories(path)
+}
+
+func (vfs *osFS) GetEntries(path string) []fs.DirEntry {
+	return vfs.common.GetEntries(path)
+}
+
+func (vfs *osFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
+	return vfs.common.WalkDir(root, walkFn)
+}
+
 func (vfs *osFS) Realpath(path string) string {
-	_ = rootLength(path) // Assert path is rooted
+	_ = internal.RootLength(path) // Assert path is rooted
 
 	orig := path
 	path = filepath.FromSlash(path)
@@ -118,7 +141,7 @@ func (vfs *osFS) ensureDirectoryExists(directoryPath string) error {
 }
 
 func (vfs *osFS) WriteFile(path string, content string, writeByteOrderMark bool) error {
-	_ = rootLength(path) // Assert path is rooted
+	_ = internal.RootLength(path) // Assert path is rooted
 	if err := vfs.writeFile(path, content, writeByteOrderMark); err == nil {
 		return nil
 	}

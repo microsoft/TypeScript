@@ -1,4 +1,4 @@
-package vfs_test
+package osvfs_test
 
 import (
 	"os"
@@ -9,14 +9,14 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/repo"
 	"github.com/microsoft/typescript-go/internal/tspath"
-	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
 	"gotest.tools/v3/assert"
 )
 
 func TestOS(t *testing.T) {
 	t.Parallel()
 
-	fs := vfs.FromOS()
+	fs := osvfs.FS()
 
 	goMod := filepath.Join(repo.RootPath, "go.mod")
 	goModPath := tspath.NormalizePath(goMod)
