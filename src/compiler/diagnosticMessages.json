@@ -8272,6 +8272,14 @@
         "category": "Message",
         "code": 95197
     },
+    "Simplify redundant import '{0}'": {
+        "category": "Message",
+        "code": 95198
+    },
+    "Simplify all redundant imports": {
+        "category": "Message",
+        "code": 95199
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

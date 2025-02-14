@@ -25,8 +25,15 @@ registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToRemoveUnnecessaryNamedImport(context) {
         const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span));
+        const token = getTokenAtPosition(context.sourceFile, context.span.start);
+        const importSpecifier = tryCast(token.parent, isImportSpecifier);
+
+        if (!importSpecifier) {
+            return;
+        }
+
         if (changes.length > 0) {
-            return [createCodeFixAction(fixId, changes, Diagnostics.Redundant_named_import_0, fixId, Diagnostics.Redundant_named_import_0)];
+            return [createCodeFixAction(fixId, changes, [Diagnostics.Simplify_redundant_import_0,importSpecifier.name.text], fixId, Diagnostics.Simplify_all_redundant_imports)];
         }
     },
     fixIds: [fixId],
@@ -45,4 +52,8 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
     if (importSpecifier.propertyName && importSpecifier.propertyName.text === importSpecifier.name.text) {
         changeTracker.replaceNode(sourceFile, importSpecifier, factory.updateImportSpecifier(importSpecifier, importSpecifier.isTypeOnly, /*propertyName*/ undefined, importSpecifier.name));
     }
+}
+
+function getImportSpecifier(){
+    
 }
