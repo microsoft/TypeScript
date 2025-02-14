@@ -53,7 +53,3 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
         changeTracker.replaceNode(sourceFile, importSpecifier, factory.updateImportSpecifier(importSpecifier, importSpecifier.isTypeOnly, /*propertyName*/ undefined, importSpecifier.name));
     }
 }
-
-function getImportSpecifier(){
-    
-}
