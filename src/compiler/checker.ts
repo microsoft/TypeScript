@@ -32059,7 +32059,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return !hasIndexPropertyOutOfRange(type, elementsLength);
         });
 
-        if (filteredType.flags & TypeFlags.Never) return setCachedType(key, contextualType);
+        if (filteredType.flags & TypeFlags.Never) return setCachedType(key, filteredType);
         if (!(filteredType.flags & TypeFlags.Union)) {
             return setCachedType(
                 key,
@@ -32071,15 +32071,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             key,
             discriminateTypeByDiscriminableItems(
                 filteredType as UnionType,
-                filter(
-                    map(node.elements, (element, index) => {
-                        const name = ("" + index) as __String;
-                        return isPossiblyDiscriminantValue(element) && isDiscriminantProperty(filteredType, name) ?
-                            [() => getContextFreeTypeOfExpression(element), name] as const :
-                            undefined;
-                    }),
-                    discriminator => !!discriminator,
-                ),
+                mapDefined(node.elements, (element, index) => {
+                    const name = ("" + index) as __String;
+                    return isPossiblyDiscriminantValue(element) && isDiscriminantProperty(filteredType, name) ?
+                        [() => getContextFreeTypeOfExpression(element), name] as const :
+                        undefined;
+                }),
                 isTypeAssignableTo,
             ),
         );
