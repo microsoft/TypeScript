@@ -207,6 +207,84 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 		n := node.AsJsxOpeningElement()
 		return tx.factory.UpdateJsxOpeningElement(n, tx.visitor.VisitNode(n.TagName), nil, tx.visitor.VisitNode(n.Attributes))
 
+	case ast.KindImportEqualsDeclaration:
+		n := node.AsImportEqualsDeclaration()
+		if n.IsTypeOnly {
+			// elide type-only imports
+			return nil
+		}
+		return tx.visitor.VisitEachChild(node)
+
+	case ast.KindImportDeclaration:
+		n := node.AsImportDeclaration()
+		if n.ImportClause == nil {
+			// Do not elide a side-effect only import declaration.
+			//  import "foo";
+			return node
+		}
+		importClause := tx.visitor.VisitNode(n.ImportClause)
+		if importClause == nil {
+			return nil
+		}
+		return tx.factory.UpdateImportDeclaration(n, n.Modifiers(), importClause, n.ModuleSpecifier, n.Attributes)
+	case ast.KindImportClause:
+		n := node.AsImportClause()
+		if n.IsTypeOnly {
+			// Always elide type-only imports
+			return nil
+		}
+		name := n.Name()
+		namedBindings := tx.visitor.VisitNode(n.NamedBindings)
+		if name == nil && namedBindings == nil {
+			// all import bindings were elided
+			return nil
+		}
+		return tx.factory.UpdateImportClause(n, false /*isTypeOnly*/, name, namedBindings)
+	case ast.KindNamedImports:
+		n := node.AsNamedImports()
+		elements := tx.visitor.VisitNodes(n.Elements)
+		if !tx.compilerOptions.VerbatimModuleSyntax.IsTrue() && len(elements.Nodes) == 0 {
+			// all import specifiers were elided
+			return nil
+		}
+		return tx.factory.UpdateNamedImports(n, elements)
+	case ast.KindImportSpecifier:
+		n := node.AsImportSpecifier()
+		if n.IsTypeOnly {
+			// elide type-only or unused imports
+			return nil
+		}
+		return node
+	case ast.KindExportDeclaration:
+		n := node.AsExportDeclaration()
+		if n.IsTypeOnly {
+			// elide type-only exports
+			return nil
+		}
+		var exportClause *ast.Node
+		if n.ExportClause != nil {
+			exportClause = tx.visitor.VisitNode(n.ExportClause)
+			if exportClause == nil {
+				// all export bindings were elided
+				return nil
+			}
+		}
+		return tx.factory.UpdateExportDeclaration(n, nil /*modifiers*/, false /*isTypeOnly*/, exportClause, tx.visitor.VisitNode(n.ModuleSpecifier), tx.visitor.VisitNode(n.Attributes))
+	case ast.KindNamedExports:
+		n := node.AsNamedExports()
+		elements := tx.visitor.VisitNodes(n.Elements)
+		if !tx.compilerOptions.VerbatimModuleSyntax.IsTrue() && len(elements.Nodes) == 0 {
+			// all export specifiers were elided
+			return nil
+		}
+		return tx.factory.UpdateNamedExports(n, elements)
+	case ast.KindExportSpecifier:
+		n := node.AsExportSpecifier()
+		if n.IsTypeOnly {
+			// elide unused export
+			return nil
+		}
+		return node
 	default:
 		return tx.visitor.VisitEachChild(node)
 	}

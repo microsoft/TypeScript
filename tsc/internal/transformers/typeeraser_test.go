@@ -16,6 +16,7 @@ func TestTypeEraser(t *testing.T) {
 		input  string
 		output string
 		jsx    bool
+		vms    bool
 	}{
 		{title: "Modifiers", input: "class C { public x; private y }", output: "class C {\n    x;\n    y;\n}"},
 		{title: "InterfaceDeclaration", input: "interface I { }", output: ""},
@@ -62,6 +63,27 @@ func TestTypeEraser(t *testing.T) {
 		{title: "SatisfiesExpression", input: "x satisfies T", output: "x;"},
 		{title: "JsxSelfClosingElement", input: "<x<T> />", output: "<x />;", jsx: true},
 		{title: "JsxOpeningElement", input: "<x<T>></x>", output: "<x></x>;", jsx: true},
+		{title: "ImportEqualsDeclaration#1", input: "import x = require(\"m\");", output: "import x = require(\"m\");"},
+		{title: "ImportEqualsDeclaration#2", input: "import type x = require(\"m\");", output: ""},
+		{title: "ImportEqualsDeclaration#3", input: "import x = y;", output: "import x = y;"},
+		{title: "ImportEqualsDeclaration#4", input: "import type x = y;", output: ""},
+		{title: "ImportDeclaration#1", input: "import \"m\";", output: "import \"m\";"},
+		{title: "ImportDeclaration#2", input: "import * as x from \"m\"; x;", output: "import * as x from \"m\";\nx;"},
+		{title: "ImportDeclaration#3", input: "import x from \"m\"; x;", output: "import x from \"m\";\nx;"},
+		{title: "ImportDeclaration#4", input: "import { x } from \"m\"; x;", output: "import { x } from \"m\";\nx;"},
+		{title: "ImportDeclaration#5", input: "import type * as x from \"m\";", output: ""},
+		{title: "ImportDeclaration#6", input: "import type x from \"m\";", output: ""},
+		{title: "ImportDeclaration#7", input: "import type { x } from \"m\";", output: ""},
+		{title: "ImportDeclaration#8", input: "import { type x } from \"m\";", output: ""},
+		{title: "ImportDeclaration#9", input: "import { type x } from \"m\";", output: "import {} from \"m\";", vms: true},
+		{title: "ExportDeclaration#1", input: "export * from \"m\";", output: "export * from \"m\";"},
+		{title: "ExportDeclaration#2", input: "export * as x from \"m\";", output: "export * as x from \"m\";"},
+		{title: "ExportDeclaration#3", input: "export { x } from \"m\";", output: "export { x } from \"m\";"},
+		{title: "ExportDeclaration#4", input: "export type * from \"m\";", output: ""},
+		{title: "ExportDeclaration#5", input: "export type * as x from \"m\";", output: ""},
+		{title: "ExportDeclaration#6", input: "export type { x } from \"m\";", output: ""},
+		{title: "ExportDeclaration#7", input: "export { type x } from \"m\";", output: ""},
+		{title: "ExportDeclaration#7", input: "export { type x } from \"m\";", output: "export {} from \"m\";", vms: true},
 	}
 
 	for _, rec := range data {
@@ -69,7 +91,11 @@ func TestTypeEraser(t *testing.T) {
 			t.Parallel()
 			file := parsetestutil.ParseTypeScript(rec.input, rec.jsx)
 			parsetestutil.CheckDiagnostics(t, file)
-			emittestutil.CheckEmit(t, nil, NewTypeEraserTransformer(printer.NewEmitContext(), &core.CompilerOptions{}).TransformSourceFile(file), rec.output)
+			compilerOptions := &core.CompilerOptions{}
+			if rec.vms {
+				compilerOptions.VerbatimModuleSyntax = core.TSTrue
+			}
+			emittestutil.CheckEmit(t, nil, NewTypeEraserTransformer(printer.NewEmitContext(), compilerOptions).TransformSourceFile(file), rec.output)
 		})
 	}
 }
