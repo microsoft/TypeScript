@@ -35,15 +35,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-          - macos-latest
-        no-submodules:
-          - false
-        race:
-          - false
         include:
+          - os: ubuntu-latest
+          - os: windows-latest
+          - os: macos-latest
           - os: ubuntu-latest
             no-submodules: true
           - os: ubuntu-latest
@@ -71,7 +66,8 @@ jobs:
 
       - run: go install gotest.tools/gotestsum@latest
         # Installing gotestsum is super slow on Windows.
-        if: ${{ matrix.os != 'windows-latest' }}
+        # Also, avoid using it in race mode so we get the full output.
+        if: ${{ matrix.os != 'windows-latest' && !matrix.race }}
 
       - name: Tests
         id: test
