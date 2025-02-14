@@ -9,13 +9,9 @@ mappedTypeRelationships.ts(21,12): error TS2536: Type 'keyof U' cannot be used t
 mappedTypeRelationships.ts(25,5): error TS2536: Type 'K' cannot be used to index type 'T'.
 mappedTypeRelationships.ts(26,12): error TS2536: Type 'K' cannot be used to index type 'T'.
 mappedTypeRelationships.ts(30,5): error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
-  'T[keyof T]' is constrained to be a subtype of 'T[keyof T] | undefined'.
-    Type 'undefined' is not assignable to type 'T[keyof T]'.
-      'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+  'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'T[keyof T] | undefined'.
 mappedTypeRelationships.ts(35,5): error TS2322: Type 'T[K] | undefined' is not assignable to type 'T[K]'.
-  'T[K]' is constrained to be a subtype of 'T[K] | undefined'.
-    Type 'undefined' is not assignable to type 'T[K]'.
-      'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+  'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'T[K] | undefined'.
 mappedTypeRelationships.ts(40,5): error TS2322: Type 'U[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
   'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'U[keyof T] | undefined'.
 mappedTypeRelationships.ts(41,5): error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T] | undefined'.
@@ -38,7 +34,7 @@ mappedTypeRelationships.ts(66,5): error TS2322: Type 'T[K]' is not assignable to
     'U' is constrained to be a subtype of 'T'.
 mappedTypeRelationships.ts(66,5): error TS2542: Index signature in type 'Readonly<U>' only permits reading.
 mappedTypeRelationships.ts(72,5): error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
-  'T' is constrained to be a subtype of 'Partial<T>'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'Partial<T>'.
 mappedTypeRelationships.ts(78,5): error TS2322: Type 'Partial<Thing>' is not assignable to type 'Partial<T>'.
 mappedTypeRelationships.ts(88,5): error TS2322: Type 'Readonly<Thing>' is not assignable to type 'Readonly<T>'.
 mappedTypeRelationships.ts(127,5): error TS2322: Type 'Partial<U>' is not assignable to type 'Identity<U>'.
@@ -128,9 +124,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is n
         x[k] = y[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
-!!! error TS2322:   'T[keyof T]' is constrained to be a subtype of 'T[keyof T] | undefined'.
-!!! error TS2322:     Type 'undefined' is not assignable to type 'T[keyof T]'.
-!!! error TS2322:       'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+!!! error TS2322:   'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'T[keyof T] | undefined'.
         y[k] = x[k];
     }
     
@@ -138,9 +132,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is n
         x[k] = y[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[K] | undefined' is not assignable to type 'T[K]'.
-!!! error TS2322:   'T[K]' is constrained to be a subtype of 'T[K] | undefined'.
-!!! error TS2322:     Type 'undefined' is not assignable to type 'T[K]'.
-!!! error TS2322:       'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+!!! error TS2322:   'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'T[K] | undefined'.
         y[k] = x[k];
     }
     
@@ -213,7 +205,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is n
         x = y;  // Error
         ~
 !!! error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
-!!! error TS2322:   'T' is constrained to be a subtype of 'Partial<T>'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Partial<T>'.
         y = x;
     }
     

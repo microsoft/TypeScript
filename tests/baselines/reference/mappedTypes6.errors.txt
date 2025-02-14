@@ -1,7 +1,7 @@
 mappedTypes6.ts(23,5): error TS2322: Type 'T' is not assignable to type 'Required<T>'.
 mappedTypes6.ts(24,5): error TS2322: Type 'Partial<T>' is not assignable to type 'Required<T>'.
 mappedTypes6.ts(27,5): error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
-  'T' is constrained to be a subtype of 'Partial<T>'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'Partial<T>'.
 mappedTypes6.ts(37,5): error TS2322: Type 'Required<T>' is not assignable to type 'Denullified<T>'.
   Type 'T[P]' is not assignable to type 'NonNullable<T[P]>'.
     Type 'T[keyof T]' is not assignable to type 'NonNullable<T[P]>'.
@@ -26,7 +26,7 @@ mappedTypes6.ts(39,5): error TS2322: Type 'Partial<T>' is not assignable to type
 mappedTypes6.ts(42,5): error TS2322: Type 'T' is not assignable to type 'Required<T>'.
 mappedTypes6.ts(43,5): error TS2322: Type 'Partial<T>' is not assignable to type 'Required<T>'.
 mappedTypes6.ts(47,5): error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
-  'T' is constrained to be a subtype of 'Partial<T>'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'Partial<T>'.
 mappedTypes6.ts(56,5): error TS2322: Type '{}' is not assignable to type 'Denullified<T>'.
 mappedTypes6.ts(57,5): error TS2322: Type '{}' is not assignable to type 'Required<T>'.
 mappedTypes6.ts(58,5): error TS2322: Type '{}' is not assignable to type 'T'.
@@ -75,7 +75,7 @@ mappedTypes6.ts(120,4): error TS2540: Cannot assign to 'b' because it is a read-
         y = z;  // Error
         ~
 !!! error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
-!!! error TS2322:   'T' is constrained to be a subtype of 'Partial<T>'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Partial<T>'.
         z = x;
         z = y;
         z = z;
@@ -128,7 +128,7 @@ mappedTypes6.ts(120,4): error TS2540: Cannot assign to 'b' because it is a read-
         y = z;  // Error
         ~
 !!! error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
-!!! error TS2322:   'T' is constrained to be a subtype of 'Partial<T>'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Partial<T>'.
         z = w;
         z = x;
         z = y;

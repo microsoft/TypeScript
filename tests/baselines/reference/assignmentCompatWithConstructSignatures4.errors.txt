@@ -19,13 +19,13 @@ assignmentCompatWithConstructSignatures4.ts(53,9): error TS2322: Type 'new (x: (
         'Base' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
 assignmentCompatWithConstructSignatures4.ts(58,9): error TS2322: Type 'new (...x: Base[]) => Base' is not assignable to type 'new <T extends Derived>(...x: T[]) => T'.
   Type 'Base' is not assignable to type 'T'.
-    'T' is constrained to be a subtype of 'Base'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
 assignmentCompatWithConstructSignatures4.ts(62,9): error TS2322: Type 'new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base' is not assignable to type 'new <T extends Derived>(x: T, y: T) => T'.
   Type 'Base' is not assignable to type 'T'.
-    'T' is constrained to be a subtype of 'Base'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
 assignmentCompatWithConstructSignatures4.ts(66,9): error TS2322: Type 'new (x: Base[], y: Derived2[]) => Derived[]' is not assignable to type 'new <T extends Array<Derived2>>(x: Base[], y: Base[]) => T'.
   Type 'Derived[]' is not assignable to type 'T'.
-    'T' is constrained to be a subtype of 'Derived[]'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'Derived[]'.
 assignmentCompatWithConstructSignatures4.ts(69,9): error TS2322: Type 'new <T>(x: { a: T; b: T; }) => T' is not assignable to type 'new (x: { a: string; b: number; }) => number'.
   Types of parameters 'x' and 'x' are incompatible.
     Type '{ a: string; b: number; }' is not assignable to type '{ a: string; b: string; }'.
@@ -165,7 +165,7 @@ assignmentCompatWithConstructSignatures4.ts(96,9): error TS2322: Type 'new <T>(x
             ~~~
 !!! error TS2322: Type 'new (...x: Base[]) => Base' is not assignable to type 'new <T extends Derived>(...x: T[]) => T'.
 !!! error TS2322:   Type 'Base' is not assignable to type 'T'.
-!!! error TS2322:     'T' is constrained to be a subtype of 'Base'.
+!!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
     
             var b11: new <T extends Derived>(x: T, y: T) => T; 
             a11 = b11; // ok
@@ -173,7 +173,7 @@ assignmentCompatWithConstructSignatures4.ts(96,9): error TS2322: Type 'new <T>(x
             ~~~
 !!! error TS2322: Type 'new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base' is not assignable to type 'new <T extends Derived>(x: T, y: T) => T'.
 !!! error TS2322:   Type 'Base' is not assignable to type 'T'.
-!!! error TS2322:     'T' is constrained to be a subtype of 'Base'.
+!!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
     
             var b12: new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; 
             a12 = b12; // ok
@@ -181,7 +181,7 @@ assignmentCompatWithConstructSignatures4.ts(96,9): error TS2322: Type 'new <T>(x
             ~~~
 !!! error TS2322: Type 'new (x: Base[], y: Derived2[]) => Derived[]' is not assignable to type 'new <T extends Array<Derived2>>(x: Base[], y: Base[]) => T'.
 !!! error TS2322:   Type 'Derived[]' is not assignable to type 'T'.
-!!! error TS2322:     'T' is constrained to be a subtype of 'Derived[]'.
+!!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'Derived[]'.
     
             var b15: new <T>(x: { a: T; b: T }) => T; 
             a15 = b15; // ok
