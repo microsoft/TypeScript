@@ -20,9 +20,9 @@ conditionalTypes1.ts(29,5): error TS2322: Type 'T["x"]' is not assignable to typ
           Type 'string | undefined' is not assignable to type '{}'.
             Type 'undefined' is not assignable to type '{}'.
 conditionalTypes1.ts(103,5): error TS2322: Type 'FunctionProperties<T>' is not assignable to type 'T'.
-  'T' is constrained to be a subtype of 'FunctionProperties<T>'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'FunctionProperties<T>'.
 conditionalTypes1.ts(104,5): error TS2322: Type 'NonFunctionProperties<T>' is not assignable to type 'T'.
-  'T' is constrained to be a subtype of 'NonFunctionProperties<T>'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'NonFunctionProperties<T>'.
 conditionalTypes1.ts(106,5): error TS2322: Type 'NonFunctionProperties<T>' is not assignable to type 'FunctionProperties<T>'.
   Type 'FunctionPropertyNames<T>' is not assignable to type 'NonFunctionPropertyNames<T>'.
     Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
@@ -212,11 +212,11 @@ conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to t
         x = y;  // Error
         ~
 !!! error TS2322: Type 'FunctionProperties<T>' is not assignable to type 'T'.
-!!! error TS2322:   'T' is constrained to be a subtype of 'FunctionProperties<T>'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'FunctionProperties<T>'.
         x = z;  // Error
         ~
 !!! error TS2322: Type 'NonFunctionProperties<T>' is not assignable to type 'T'.
-!!! error TS2322:   'T' is constrained to be a subtype of 'NonFunctionProperties<T>'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'NonFunctionProperties<T>'.
         y = x;
         y = z;  // Error
         ~
