@@ -1,14 +1,14 @@
-erasableSyntaxOnly.ts(3,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
-erasableSyntaxOnly.ts(6,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
-erasableSyntaxOnly.ts(10,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
-erasableSyntaxOnly.ts(16,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
-erasableSyntaxOnly.ts(17,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
-erasableSyntaxOnly.ts(22,6): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
-erasableSyntaxOnly.ts(26,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
-erasableSyntaxOnly.ts(28,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(3,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(6,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(10,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(16,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(17,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(22,6): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(26,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(28,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== erasableSyntaxOnly.ts (8 errors) ====
+==== index.ts (8 errors) ====
     class MyClassErr {
         // No parameter properties
         constructor(public foo: string) { }
@@ -89,4 +89,13 @@ erasableSyntaxOnly.ts(28,12): error TS1294: This syntax is not allowed when 'era
     
         import FineAlias = EnumInAmbientContext.B;
     }
+    
+==== commonjs.cts (0 errors) ====
+    import foo = require("./other.cjs");
+    export = foo;
+    
+    
+==== other.d.cts (0 errors) ====
+    declare function foo(): void;
+    export = foo;
     
