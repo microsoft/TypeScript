@@ -1,0 +1,66 @@
+arraySpliceParamDescription.ts(12,34): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(start: number, deleteCount?: number): string[]', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'number'.
+  Overload 2 of 2, '(start: number, deleteCount: number, ...items: string[]): string[]', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'number'.
+arraySpliceParamDescription.ts(32,34): error TS1135: Argument expression expected.
+arraySpliceParamDescription.ts(32,36): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+arraySpliceParamDescription.ts(34,34): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+
+
+==== arraySpliceParamDescription.ts (4 errors) ====
+    // @target es5
+    
+    export function isEmptyArr(l: { length: number }) {
+        return l.length === 0   
+    }
+    
+    var arrA : string[]
+    arrA = ["a", "b", "c", "d", "e", "f", "g"]
+    
+    // deleteCount param: undefined | NaN | 0 | -int; no elements removed
+    var undefSplice1 = arrA.splice(2, undefined) // OK
+    var charSplice1 = arrA.splice(2, "a") // expect error
+                                     ~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(start: number, deleteCount?: number): string[]', gave the following error.
+!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type 'number'.
+!!! error TS2769:   Overload 2 of 2, '(start: number, deleteCount: number, ...items: string[]): string[]', gave the following error.
+!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type 'number'.
+    var naNSplice1 = arrA.splice(2, NaN) // OK
+    var zeroSplice1 = arrA.splice(2, 0)  // OK
+    var negSplice1 = arrA.splice(2, -2) // OK and expect arrA = ["a", "b", "c", "d", "e", "f", "g"]
+    
+    // deleteCount param omitted; All elements after start param are removed
+    var omitSplice1 = arrA.splice(2,) // OK expect arrA = ["a", "b"]
+    
+    // testing the splice arrays are empty
+    isEmptyArr(undefSplice1) // OK and true
+    isEmptyArr(charSplice1) // OK and true
+    isEmptyArr(naNSplice1) // OK and true
+    isEmptyArr(zeroSplice1) // OK and true
+    isEmptyArr(negSplice1) // OK and true
+    isEmptyArr(omitSplice1) // OK and false. length of removed elements is 5
+    
+    var arrB : string[]
+    arrB = ["a", "b", "c", "d", "e", "f", "g"]
+    
+    var undefSplice2 = arrB.splice(2, undefined, "h", "i") // expect error and arrB = ["a", "b", "h", "i", "e", "f", "g"]
+    var omitSplice2 = arrB.splice(2, , "j", "k") // expect error and arrB = ["a", "b", "j", "k", "e", "f", "g"]
+                                     ~
+!!! error TS1135: Argument expression expected.
+                                       ~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    var naNSplice2 = arrB.splice(2, NaN, "l", "m") // OK and arrB = ["a", "b", "l", "m", "e", "f", "g"]
+    var charSplice2 = arrB.splice(2, "a", "n", "o") // expect error and arrB = ["a", "b", "n", "o", "e", "f", "g"]
+                                     ~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    var zeroSplice2 = arrB.splice(2, 0, "p", "q") // OK and arrB = ["a", "b", "p", "q", "e", "f", "g"]
+    var negSplice2 = arrB.splice(2, -2, "r", "s") // OK and arrB = ["a", "b", "r", "s", "e", "f", "g"]
+    
+    isEmptyArr(undefSplice2) // OK and true
+    isEmptyArr(omitSplice2) // OK and true
+    isEmptyArr(naNSplice2) // OK and true
+    isEmptyArr(charSplice2) // OK and true
+    isEmptyArr(zeroSplice2) // OK and true
+    isEmptyArr(negSplice2) // OK and true

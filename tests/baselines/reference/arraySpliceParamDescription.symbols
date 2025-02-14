@@ -1,0 +1,155 @@
+//// [tests/cases/compiler/arraySpliceParamDescription.ts] ////
+
+=== arraySpliceParamDescription.ts ===
+// @target es5
+
+export function isEmptyArr(l: { length: number }) {
+>isEmptyArr : Symbol(isEmptyArr, Decl(arraySpliceParamDescription.ts, 0, 0))
+>l : Symbol(l, Decl(arraySpliceParamDescription.ts, 2, 27))
+>length : Symbol(length, Decl(arraySpliceParamDescription.ts, 2, 31))
+
+    return l.length === 0   
+>l.length : Symbol(length, Decl(arraySpliceParamDescription.ts, 2, 31))
+>l : Symbol(l, Decl(arraySpliceParamDescription.ts, 2, 27))
+>length : Symbol(length, Decl(arraySpliceParamDescription.ts, 2, 31))
+}
+
+var arrA : string[]
+>arrA : Symbol(arrA, Decl(arraySpliceParamDescription.ts, 6, 3))
+
+arrA = ["a", "b", "c", "d", "e", "f", "g"]
+>arrA : Symbol(arrA, Decl(arraySpliceParamDescription.ts, 6, 3))
+
+// deleteCount param: undefined | NaN | 0 | -int; no elements removed
+var undefSplice1 = arrA.splice(2, undefined) // OK
+>undefSplice1 : Symbol(undefSplice1, Decl(arraySpliceParamDescription.ts, 10, 3))
+>arrA.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arrA : Symbol(arrA, Decl(arraySpliceParamDescription.ts, 6, 3))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+var charSplice1 = arrA.splice(2, "a") // expect error
+>charSplice1 : Symbol(charSplice1, Decl(arraySpliceParamDescription.ts, 11, 3))
+>arrA.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arrA : Symbol(arrA, Decl(arraySpliceParamDescription.ts, 6, 3))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var naNSplice1 = arrA.splice(2, NaN) // OK
+>naNSplice1 : Symbol(naNSplice1, Decl(arraySpliceParamDescription.ts, 12, 3))
+>arrA.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arrA : Symbol(arrA, Decl(arraySpliceParamDescription.ts, 6, 3))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+
+var zeroSplice1 = arrA.splice(2, 0)  // OK
+>zeroSplice1 : Symbol(zeroSplice1, Decl(arraySpliceParamDescription.ts, 13, 3))
+>arrA.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arrA : Symbol(arrA, Decl(arraySpliceParamDescription.ts, 6, 3))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var negSplice1 = arrA.splice(2, -2) // OK and expect arrA = ["a", "b", "c", "d", "e", "f", "g"]
+>negSplice1 : Symbol(negSplice1, Decl(arraySpliceParamDescription.ts, 14, 3))
+>arrA.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arrA : Symbol(arrA, Decl(arraySpliceParamDescription.ts, 6, 3))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// deleteCount param omitted; All elements after start param are removed
+var omitSplice1 = arrA.splice(2,) // OK expect arrA = ["a", "b"]
+>omitSplice1 : Symbol(omitSplice1, Decl(arraySpliceParamDescription.ts, 17, 3))
+>arrA.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arrA : Symbol(arrA, Decl(arraySpliceParamDescription.ts, 6, 3))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// testing the splice arrays are empty
+isEmptyArr(undefSplice1) // OK and true
+>isEmptyArr : Symbol(isEmptyArr, Decl(arraySpliceParamDescription.ts, 0, 0))
+>undefSplice1 : Symbol(undefSplice1, Decl(arraySpliceParamDescription.ts, 10, 3))
+
+isEmptyArr(charSplice1) // OK and true
+>isEmptyArr : Symbol(isEmptyArr, Decl(arraySpliceParamDescription.ts, 0, 0))
+>charSplice1 : Symbol(charSplice1, Decl(arraySpliceParamDescription.ts, 11, 3))
+
+isEmptyArr(naNSplice1) // OK and true
+>isEmptyArr : Symbol(isEmptyArr, Decl(arraySpliceParamDescription.ts, 0, 0))
+>naNSplice1 : Symbol(naNSplice1, Decl(arraySpliceParamDescription.ts, 12, 3))
+
+isEmptyArr(zeroSplice1) // OK and true
+>isEmptyArr : Symbol(isEmptyArr, Decl(arraySpliceParamDescription.ts, 0, 0))
+>zeroSplice1 : Symbol(zeroSplice1, Decl(arraySpliceParamDescription.ts, 13, 3))
+
+isEmptyArr(negSplice1) // OK and true
+>isEmptyArr : Symbol(isEmptyArr, Decl(arraySpliceParamDescription.ts, 0, 0))
+>negSplice1 : Symbol(negSplice1, Decl(arraySpliceParamDescription.ts, 14, 3))
+
+isEmptyArr(omitSplice1) // OK and false. length of removed elements is 5
+>isEmptyArr : Symbol(isEmptyArr, Decl(arraySpliceParamDescription.ts, 0, 0))
+>omitSplice1 : Symbol(omitSplice1, Decl(arraySpliceParamDescription.ts, 17, 3))
+
+var arrB : string[]
+>arrB : Symbol(arrB, Decl(arraySpliceParamDescription.ts, 27, 3))
+
+arrB = ["a", "b", "c", "d", "e", "f", "g"]
+>arrB : Symbol(arrB, Decl(arraySpliceParamDescription.ts, 27, 3))
+
+var undefSplice2 = arrB.splice(2, undefined, "h", "i") // expect error and arrB = ["a", "b", "h", "i", "e", "f", "g"]
+>undefSplice2 : Symbol(undefSplice2, Decl(arraySpliceParamDescription.ts, 30, 3))
+>arrB.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arrB : Symbol(arrB, Decl(arraySpliceParamDescription.ts, 27, 3))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+var omitSplice2 = arrB.splice(2, , "j", "k") // expect error and arrB = ["a", "b", "j", "k", "e", "f", "g"]
+>omitSplice2 : Symbol(omitSplice2, Decl(arraySpliceParamDescription.ts, 31, 3))
+>arrB.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arrB : Symbol(arrB, Decl(arraySpliceParamDescription.ts, 27, 3))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var naNSplice2 = arrB.splice(2, NaN, "l", "m") // OK and arrB = ["a", "b", "l", "m", "e", "f", "g"]
+>naNSplice2 : Symbol(naNSplice2, Decl(arraySpliceParamDescription.ts, 32, 3))
+>arrB.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arrB : Symbol(arrB, Decl(arraySpliceParamDescription.ts, 27, 3))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+
+var charSplice2 = arrB.splice(2, "a", "n", "o") // expect error and arrB = ["a", "b", "n", "o", "e", "f", "g"]
+>charSplice2 : Symbol(charSplice2, Decl(arraySpliceParamDescription.ts, 33, 3))
+>arrB.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arrB : Symbol(arrB, Decl(arraySpliceParamDescription.ts, 27, 3))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var zeroSplice2 = arrB.splice(2, 0, "p", "q") // OK and arrB = ["a", "b", "p", "q", "e", "f", "g"]
+>zeroSplice2 : Symbol(zeroSplice2, Decl(arraySpliceParamDescription.ts, 34, 3))
+>arrB.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arrB : Symbol(arrB, Decl(arraySpliceParamDescription.ts, 27, 3))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var negSplice2 = arrB.splice(2, -2, "r", "s") // OK and arrB = ["a", "b", "r", "s", "e", "f", "g"]
+>negSplice2 : Symbol(negSplice2, Decl(arraySpliceParamDescription.ts, 35, 3))
+>arrB.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arrB : Symbol(arrB, Decl(arraySpliceParamDescription.ts, 27, 3))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+isEmptyArr(undefSplice2) // OK and true
+>isEmptyArr : Symbol(isEmptyArr, Decl(arraySpliceParamDescription.ts, 0, 0))
+>undefSplice2 : Symbol(undefSplice2, Decl(arraySpliceParamDescription.ts, 30, 3))
+
+isEmptyArr(omitSplice2) // OK and true
+>isEmptyArr : Symbol(isEmptyArr, Decl(arraySpliceParamDescription.ts, 0, 0))
+>omitSplice2 : Symbol(omitSplice2, Decl(arraySpliceParamDescription.ts, 31, 3))
+
+isEmptyArr(naNSplice2) // OK and true
+>isEmptyArr : Symbol(isEmptyArr, Decl(arraySpliceParamDescription.ts, 0, 0))
+>naNSplice2 : Symbol(naNSplice2, Decl(arraySpliceParamDescription.ts, 32, 3))
+
+isEmptyArr(charSplice2) // OK and true
+>isEmptyArr : Symbol(isEmptyArr, Decl(arraySpliceParamDescription.ts, 0, 0))
+>charSplice2 : Symbol(charSplice2, Decl(arraySpliceParamDescription.ts, 33, 3))
+
+isEmptyArr(zeroSplice2) // OK and true
+>isEmptyArr : Symbol(isEmptyArr, Decl(arraySpliceParamDescription.ts, 0, 0))
+>zeroSplice2 : Symbol(zeroSplice2, Decl(arraySpliceParamDescription.ts, 34, 3))
+
+isEmptyArr(negSplice2) // OK and true
+>isEmptyArr : Symbol(isEmptyArr, Decl(arraySpliceParamDescription.ts, 0, 0))
+>negSplice2 : Symbol(negSplice2, Decl(arraySpliceParamDescription.ts, 35, 3))
+
