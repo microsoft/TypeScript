@@ -33,7 +33,7 @@ function * genPromises (n) {
 >i : Symbol(i, Decl(arrayFromAsync.ts, 7, 12))
     }
 }
-  
+
 const arrLike = {
 >arrLike : Symbol(arrLike, Decl(arrayFromAsync.ts, 12, 5))
 
@@ -184,4 +184,14 @@ const badArray = await Array.fromAsync(badIterable);
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 >fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
 >badIterable : Symbol(badIterable, Decl(arrayFromAsync.ts, 39, 5))
+
+const withIndexResult = await Array.fromAsync(["a", "b"], (str, index) => ({ index, str }));
+>withIndexResult : Symbol(withIndexResult, Decl(arrayFromAsync.ts, 43, 5))
+>Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>str : Symbol(str, Decl(arrayFromAsync.ts, 43, 59))
+>index : Symbol(index, Decl(arrayFromAsync.ts, 43, 63))
+>index : Symbol(index, Decl(arrayFromAsync.ts, 43, 76))
+>str : Symbol(str, Decl(arrayFromAsync.ts, 43, 83))
 

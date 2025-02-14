@@ -117,7 +117,7 @@ export interface ProjectOptions {
     configHasExcludeProperty: boolean;
 }
 
-export function isInferredProjectName(name: string) {
+export function isInferredProjectName(name: string): boolean {
     // POSIX defines /dev/null as a device - there should be no file with this prefix
     return /dev\/null\/inferredProject\d+\*/.test(name);
 }

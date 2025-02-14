@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/jsDocDeclarationEmitDoesNotUseNodeModulesPathWithoutError.ts] ////
+
+=== node_modules/@lion/ajax/dist-types/src/index.d.ts ===
+export type LionRequestInit = import('../types/types.js').LionRequestInit;
+>LionRequestInit : import("node_modules/@lion/ajax/dist-types/types/types").LionRequestInit
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+=== node_modules/@lion/ajax/dist-types/types/types.d.ts ===
+export interface LionRequestInit {
+    body?: null | Object;
+>body : Object | null | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+} 
+=== index.js ===
+/**
+ * @typedef {import('@lion/ajax').LionRequestInit} LionRequestInit
+ */
+
+export class NewAjax {
+>NewAjax : NewAjax
+>        : ^^^^^^^
+
+    /**
+     * @param {LionRequestInit} [init]
+     */
+    case5_unexpectedlyResolvesPathToNodeModules(init) {}
+>case5_unexpectedlyResolvesPathToNodeModules : (init?: LionRequestInit) => void
+>                                            : ^    ^^^               ^^^^^^^^^
+>init : import("node_modules/@lion/ajax/dist-types/types/types").LionRequestInit | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+/**
+ * @type {(init?: LionRequestInit) => void}
+ */
+// @ts-expect-error
+NewAjax.prototype.case6_unexpectedlyResolvesPathToNodeModules;
+>NewAjax.prototype.case6_unexpectedlyResolvesPathToNodeModules : (init?: LionRequestInit) => void
+>                                                              : ^    ^^^               ^^^^^    
+>NewAjax.prototype : NewAjax
+>                  : ^^^^^^^
+>NewAjax : typeof NewAjax
+>        : ^^^^^^^^^^^^^^
+>prototype : NewAjax
+>          : ^^^^^^^
+>case6_unexpectedlyResolvesPathToNodeModules : (init?: LionRequestInit) => void
+>                                            : ^    ^^^               ^^^^^    
+

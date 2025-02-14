@@ -324,8 +324,8 @@ bigIntArray.length = 10;
 >   : ^^
 
 let arrayBufferLike: ArrayBufferView = bigIntArray;
->arrayBufferLike : ArrayBufferView
->                : ^^^^^^^^^^^^^^^
+>arrayBufferLike : ArrayBufferView<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bigIntArray : BigInt64Array
 >            : ^^^^^^^^^^^^^
 
@@ -467,17 +467,17 @@ bigIntArray.length = 10;
 arrayBufferLike = bigIntArray;
 >arrayBufferLike = bigIntArray : BigInt64Array
 >                              : ^^^^^^^^^^^^^
->arrayBufferLike : ArrayBufferView
->                : ^^^^^^^^^^^^^^^
+>arrayBufferLike : ArrayBufferView<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bigIntArray : BigInt64Array
 >            : ^^^^^^^^^^^^^
 
 // Test added DataView methods
 const dataView = new DataView(new ArrayBuffer(80));
->dataView : DataView
->         : ^^^^^^^^
->new DataView(new ArrayBuffer(80)) : DataView
->                                  : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
+>new DataView(new ArrayBuffer(80)) : DataView<ArrayBuffer>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^
 >DataView : DataViewConstructor
 >         : ^^^^^^^^^^^^^^^^^^^
 >new ArrayBuffer(80) : ArrayBuffer
@@ -492,8 +492,8 @@ dataView.setBigInt64(1, -1n);
 >                             : ^^^
 >dataView.setBigInt64 : any
 >                     : ^^^
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >setBigInt64 : any
 >            : ^^^
 >1 : 1
@@ -508,8 +508,8 @@ dataView.setBigInt64(1, -1n, true);
 >                                   : ^^^
 >dataView.setBigInt64 : any
 >                     : ^^^
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >setBigInt64 : any
 >            : ^^^
 >1 : 1
@@ -526,8 +526,8 @@ dataView.setBigInt64(1, -1);
 >                            : ^^^
 >dataView.setBigInt64 : any
 >                     : ^^^
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >setBigInt64 : any
 >            : ^^^
 >1 : 1
@@ -542,8 +542,8 @@ dataView.setBigUint64(2, 123n);
 >                               : ^^^
 >dataView.setBigUint64 : any
 >                      : ^^^
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >setBigUint64 : any
 >             : ^^^
 >2 : 2
@@ -556,8 +556,8 @@ dataView.setBigUint64(2, 123n, true);
 >                                     : ^^^
 >dataView.setBigUint64 : any
 >                      : ^^^
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >setBigUint64 : any
 >             : ^^^
 >2 : 2
@@ -572,8 +572,8 @@ dataView.setBigUint64(2, 123);
 >                              : ^^^
 >dataView.setBigUint64 : any
 >                      : ^^^
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >setBigUint64 : any
 >             : ^^^
 >2 : 2
@@ -590,8 +590,8 @@ bigintVal = dataView.getBigInt64(1);
 >                        : ^^^
 >dataView.getBigInt64 : any
 >                     : ^^^
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >getBigInt64 : any
 >            : ^^^
 >1 : 1
@@ -606,8 +606,8 @@ bigintVal = dataView.getBigInt64(1, true);
 >                              : ^^^
 >dataView.getBigInt64 : any
 >                     : ^^^
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >getBigInt64 : any
 >            : ^^^
 >1 : 1
@@ -624,8 +624,8 @@ bigintVal = dataView.getBigUint64(2);
 >                         : ^^^
 >dataView.getBigUint64 : any
 >                      : ^^^
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >getBigUint64 : any
 >             : ^^^
 >2 : 2
@@ -640,8 +640,8 @@ bigintVal = dataView.getBigUint64(2, true);
 >                               : ^^^
 >dataView.getBigUint64 : any
 >                      : ^^^
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >getBigUint64 : any
 >             : ^^^
 >2 : 2

@@ -1,6 +1,31 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/projects/project/src/main.tsx]
+export default <div/>;
+
+//// [/home/src/projects/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "Node16",
+    "jsx": "react-jsx",
+    "jsxImportSource": "solid-js"
+  }
+}
+
+//// [/home/src/projects/project/node_modules/solid-js/package.json]
+{
+  "name": "solid-js",
+  "type": "module"
+}
+
+//// [/home/src/projects/project/node_modules/solid-js/jsx-runtime.d.ts]
+export namespace JSX {
+    type IntrinsicElements = { div: {}; };
+}
+
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,35 +40,9 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/node_modules/solid-js/jsx-runtime.d.ts]
-export namespace JSX {
-    type IntrinsicElements = { div: {}; };
-}
 
-
-//// [/node_modules/solid-js/package.json]
-{
-  "name": "solid-js",
-  "type": "module"
-}
-
-//// [/src/main.tsx]
-export default <div/>;
-
-//// [/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "module": "Node16",
-    "jsx": "react-jsx",
-    "jsxImportSource": "solid-js"
-  }
-}
-
-
-
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
-/lib/tsc 
 [96msrc/main.tsx[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("solid-js/jsx-runtime")' call instead.
   To convert this file to an ECMAScript module, create a local package.json file with `{ "type": "module" }`.
 
@@ -53,28 +52,29 @@ Output::
 
 Found 1 error in src/main.tsx[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
-//// [/src/main.d.ts]
-declare const _default: any;
-export default _default;
+//// [/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts] *Lib*
 
-
-//// [/src/main.js]
+//// [/home/src/projects/project/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("solid-js/jsx-runtime");
 exports.default = (0, jsx_runtime_1.jsx)("div", {});
 
 
-//// [/tsconfig.tsbuildinfo]
-{"fileNames":["./lib/lib.d.ts","./node_modules/solid-js/jsx-runtime.d.ts","./src/main.tsx"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3511680495-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}\n","impliedFormat":99},{"version":"-359851309-export default <div/>;","signature":"2119670487-declare const _default: any;\nexport default _default;\n","impliedFormat":1}],"root":[1,3],"options":{"composite":true,"jsx":4,"jsxImportSource":"solid-js","module":100},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":15,"length":6,"code":1479,"category":1,"messageText":{"messageText":"The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"solid-js/jsx-runtime\")' call instead.","category":1,"code":1479,"next":[{"info":true}]}}]]],"latestChangedDtsFile":"./src/main.d.ts","version":"FakeTSVersion"}
+//// [/home/src/projects/project/src/main.d.ts]
+declare const _default: any;
+export default _default;
 
-//// [/tsconfig.tsbuildinfo.readable.baseline.txt]
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.es2022.full.d.ts","./node_modules/solid-js/jsx-runtime.d.ts","./src/main.tsx"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3511680495-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}\n","impliedFormat":99},{"version":"-359851309-export default <div/>;","signature":"2119670487-declare const _default: any;\nexport default _default;\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"jsx":4,"jsxImportSource":"solid-js","module":100},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":15,"length":6,"code":1479,"category":1,"messageText":{"messageText":"The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"solid-js/jsx-runtime\")' call instead.","category":1,"code":1479,"next":[{"info":true}]}}]]],"latestChangedDtsFile":"./src/main.d.ts","version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "./lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.es2022.full.d.ts",
     "./node_modules/solid-js/jsx-runtime.d.ts",
     "./src/main.tsx"
   ],
@@ -84,7 +84,7 @@ exports.default = (0, jsx_runtime_1.jsx)("div", {});
     ]
   ],
   "fileInfos": {
-    "./lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.es2022.full.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
@@ -116,10 +116,6 @@ exports.default = (0, jsx_runtime_1.jsx)("div", {});
     }
   },
   "root": [
-    [
-      1,
-      "./lib/lib.d.ts"
-    ],
     [
       3,
       "./src/main.tsx"
@@ -161,6 +157,8 @@ exports.default = (0, jsx_runtime_1.jsx)("div", {});
   ],
   "latestChangedDtsFile": "./src/main.d.ts",
   "version": "FakeTSVersion",
-  "size": 1487
+  "size": 1511
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

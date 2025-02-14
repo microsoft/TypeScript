@@ -20,3 +20,13 @@ class B extends A {
         super();
     }
 }
+
+/**
+ * @extends { A }
+ * @constructor
+ */
+class C extends A {
+    constructor() {
+        super();
+    }
+}

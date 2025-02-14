@@ -1,6 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /a.ts
+// @Filename: /home/src/workspaces/project/a.ts
 //// function foo() {
 ////     console.[|log("Hello");|]
 //// }
@@ -23,12 +23,12 @@
 ////     }
 //// }
 
-// @Filename: /b.ts
+// @Filename: /home/src/workspaces/project/b.ts
 //// export const juice = 1;
 //// export const sauce = 2;
 //// export const tomato = 3;
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 ////{ "files": ["a.ts", "b.ts"] }
 
 verify.pasteEdits({
@@ -43,7 +43,7 @@ verify.pasteEdits({
         pasteLocations: test.ranges(),
     },
     newFileContents: {
-        "/a.ts":
+        "/home/src/workspaces/project/a.ts":
 `import { sauce, tomato } from "./b";
 
 function foo() {

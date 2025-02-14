@@ -1,24 +1,15 @@
 index.js(3,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-index.js(3,22): error TS1471: Module './index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 index.js(5,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-subfolder/index.js(2,17): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("../index.js")' call instead.
-  To convert this file to an ECMAScript module, change its file extension to '.mjs' or create a local package.json file with `{ "type": "module" }`.
 subfolder/index.js(3,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-subfolder/index.js(3,22): error TS1471: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 subfolder/index.js(5,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 
 
-==== subfolder/index.js (4 errors) ====
+==== subfolder/index.js (2 errors) ====
     // cjs format file
     import {h} from "../index.js";
-                    ~~~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("../index.js")' call instead.
-!!! error TS1479:   To convert this file to an ECMAScript module, change its file extension to '.mjs' or create a local package.json file with `{ "type": "module" }`.
     import mod = require("../index.js");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
-                         ~~~~~~~~~~~~~
-!!! error TS1471: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import {f as _f} from "./index.js";
     import mod2 = require("./index.js");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -28,14 +19,12 @@ subfolder/index.js(5,1): error TS8002: 'import ... =' can only be used in TypeSc
         const mod4 = await import ("./index.js");
         h();
     }
-==== index.js (3 errors) ====
+==== index.js (2 errors) ====
     // esm format file
     import {h as _h} from "./index.js";
     import mod = require("./index.js");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
-                         ~~~~~~~~~~~~
-!!! error TS1471: Module './index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import {f} from "./subfolder/index.js";
     import mod2 = require("./subfolder/index.js");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

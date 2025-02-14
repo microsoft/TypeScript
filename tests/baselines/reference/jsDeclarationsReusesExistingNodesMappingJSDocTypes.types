@@ -31,8 +31,8 @@ export const f = null;
 
 /** @type {function(new: object, string, number)} */
 export const g = null;
->g : new (arg1: string, arg2: number) => any
->  : ^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^
+>g : new (arg1: string, arg2: number) => object
+>  : ^^^^^^^^^^^      ^^^^^^^^      ^^^^^      
 
 /** @type {Object.<string, number>} */
 export const h = null;
