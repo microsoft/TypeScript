@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/brandedLiteralRevert1.ts] ////
+
+=== brandedLiteralRevert1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60990
+
+type N0 = number & {
+>N0 : Symbol(N0, Decl(brandedLiteralRevert1.ts, 0, 0))
+
+    test: "TEST"
+>test : Symbol(test, Decl(brandedLiteralRevert1.ts, 2, 20))
+}
+
+type N1 = 3 & {
+>N1 : Symbol(N1, Decl(brandedLiteralRevert1.ts, 4, 1))
+
+    test: "TEST"
+>test : Symbol(test, Decl(brandedLiteralRevert1.ts, 6, 15))
+}
+
+declare let n0: N0
+>n0 : Symbol(n0, Decl(brandedLiteralRevert1.ts, 10, 11))
+>N0 : Symbol(N0, Decl(brandedLiteralRevert1.ts, 0, 0))
+
+declare let n1: N1
+>n1 : Symbol(n1, Decl(brandedLiteralRevert1.ts, 11, 11))
+>N1 : Symbol(N1, Decl(brandedLiteralRevert1.ts, 4, 1))
+
+let m0: `${number}` = `${n0}` // ok
+>m0 : Symbol(m0, Decl(brandedLiteralRevert1.ts, 13, 3))
+>n0 : Symbol(n0, Decl(brandedLiteralRevert1.ts, 10, 11))
+
+let m1: "3" = `${n1}` // ok
+>m1 : Symbol(m1, Decl(brandedLiteralRevert1.ts, 14, 3))
+>n1 : Symbol(n1, Decl(brandedLiteralRevert1.ts, 11, 11))
+

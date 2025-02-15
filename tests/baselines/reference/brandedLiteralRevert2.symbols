@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/brandedLiteralRevert2.ts] ////
+
+=== brandedLiteralRevert2.ts ===
+// https://github.com/microsoft/TypeScript/issues/60990
+
+type Brand1 = number & 1 & {
+>Brand1 : Symbol(Brand1, Decl(brandedLiteralRevert2.ts, 0, 0))
+
+    test: "TEST"
+>test : Symbol(test, Decl(brandedLiteralRevert2.ts, 2, 28))
+}
+
+type Brand2 = "a" & {
+>Brand2 : Symbol(Brand2, Decl(brandedLiteralRevert2.ts, 4, 1))
+
+    test: "TEST1"
+>test : Symbol(test, Decl(brandedLiteralRevert2.ts, 6, 21))
+}
+
+let brandN1: Brand1 = 1 as Brand1
+>brandN1 : Symbol(brandN1, Decl(brandedLiteralRevert2.ts, 10, 3))
+>Brand1 : Symbol(Brand1, Decl(brandedLiteralRevert2.ts, 0, 0))
+>Brand1 : Symbol(Brand1, Decl(brandedLiteralRevert2.ts, 0, 0))
+
+let brandN2: Brand2 = "a" as Brand2
+>brandN2 : Symbol(brandN2, Decl(brandedLiteralRevert2.ts, 11, 3))
+>Brand2 : Symbol(Brand2, Decl(brandedLiteralRevert2.ts, 4, 1))
+>Brand2 : Symbol(Brand2, Decl(brandedLiteralRevert2.ts, 4, 1))
+
+let brandM11: `${number}` = `${brandN1}` // ok
+>brandM11 : Symbol(brandM11, Decl(brandedLiteralRevert2.ts, 13, 3))
+>brandN1 : Symbol(brandN1, Decl(brandedLiteralRevert2.ts, 10, 3))
+
+let brandM12: "1" = `${brandN1}` // ok
+>brandM12 : Symbol(brandM12, Decl(brandedLiteralRevert2.ts, 14, 3))
+>brandN1 : Symbol(brandN1, Decl(brandedLiteralRevert2.ts, 10, 3))
+
+let brandM13: `${1}` = `${brandN1}` // ok
+>brandM13 : Symbol(brandM13, Decl(brandedLiteralRevert2.ts, 15, 3))
+>brandN1 : Symbol(brandN1, Decl(brandedLiteralRevert2.ts, 10, 3))
+
+let brandM21: "a" = `${brandN2}` // ok
+>brandM21 : Symbol(brandM21, Decl(brandedLiteralRevert2.ts, 17, 3))
+>brandN2 : Symbol(brandN2, Decl(brandedLiteralRevert2.ts, 11, 3))
+
+let brandM22: "1a" = `${brandN1}${brandN2}` // ok
+>brandM22 : Symbol(brandM22, Decl(brandedLiteralRevert2.ts, 18, 3))
+>brandN1 : Symbol(brandN1, Decl(brandedLiteralRevert2.ts, 10, 3))
+>brandN2 : Symbol(brandN2, Decl(brandedLiteralRevert2.ts, 11, 3))
+

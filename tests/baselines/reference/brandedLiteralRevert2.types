@@ -1,0 +1,81 @@
+//// [tests/cases/compiler/brandedLiteralRevert2.ts] ////
+
+=== brandedLiteralRevert2.ts ===
+// https://github.com/microsoft/TypeScript/issues/60990
+
+type Brand1 = number & 1 & {
+>Brand1 : Brand1
+>       : ^^^^^^
+
+    test: "TEST"
+>test : "TEST"
+>     : ^^^^^^
+}
+
+type Brand2 = "a" & {
+>Brand2 : Brand2
+>       : ^^^^^^
+
+    test: "TEST1"
+>test : "TEST1"
+>     : ^^^^^^^
+}
+
+let brandN1: Brand1 = 1 as Brand1
+>brandN1 : Brand1
+>        : ^^^^^^
+>1 as Brand1 : Brand1
+>            : ^^^^^^
+>1 : 1
+>  : ^
+
+let brandN2: Brand2 = "a" as Brand2
+>brandN2 : Brand2
+>        : ^^^^^^
+>"a" as Brand2 : Brand2
+>              : ^^^^^^
+>"a" : "a"
+>    : ^^^
+
+let brandM11: `${number}` = `${brandN1}` // ok
+>brandM11 : `${number}`
+>         : ^^^^^^^^^^^
+>`${brandN1}` : `${1}`
+>             : ^^^^^^
+>brandN1 : Brand1
+>        : ^^^^^^
+
+let brandM12: "1" = `${brandN1}` // ok
+>brandM12 : "1"
+>         : ^^^
+>`${brandN1}` : `${1}`
+>             : ^^^^^^
+>brandN1 : Brand1
+>        : ^^^^^^
+
+let brandM13: `${1}` = `${brandN1}` // ok
+>brandM13 : "1"
+>         : ^^^
+>`${brandN1}` : `${1}`
+>             : ^^^^^^
+>brandN1 : Brand1
+>        : ^^^^^^
+
+let brandM21: "a" = `${brandN2}` // ok
+>brandM21 : "a"
+>         : ^^^
+>`${brandN2}` : `${"a"}`
+>             : ^^^^^^^^
+>brandN2 : Brand2
+>        : ^^^^^^
+
+let brandM22: "1a" = `${brandN1}${brandN2}` // ok
+>brandM22 : "1a"
+>         : ^^^^
+>`${brandN1}${brandN2}` : `${1}${"a"}`
+>                       : ^^^^^^^^^^^^
+>brandN1 : Brand1
+>        : ^^^^^^
+>brandN2 : Brand2
+>        : ^^^^^^
+

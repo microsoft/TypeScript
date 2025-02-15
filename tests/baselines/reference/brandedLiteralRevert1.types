@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/brandedLiteralRevert1.ts] ////
+
+=== brandedLiteralRevert1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60990
+
+type N0 = number & {
+>N0 : N0
+>   : ^^
+
+    test: "TEST"
+>test : "TEST"
+>     : ^^^^^^
+}
+
+type N1 = 3 & {
+>N1 : N1
+>   : ^^
+
+    test: "TEST"
+>test : "TEST"
+>     : ^^^^^^
+}
+
+declare let n0: N0
+>n0 : N0
+>   : ^^
+
+declare let n1: N1
+>n1 : N1
+>   : ^^
+
+let m0: `${number}` = `${n0}` // ok
+>m0 : `${number}`
+>   : ^^^^^^^^^^^
+>`${n0}` : `${number}`
+>        : ^^^^^^^^^^^
+>n0 : N0
+>   : ^^
+
+let m1: "3" = `${n1}` // ok
+>m1 : "3"
+>   : ^^^
+>`${n1}` : `${3}`
+>        : ^^^^^^
+>n1 : N1
+>   : ^^
+
