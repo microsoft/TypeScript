@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/instantiateContextualTypes2.ts] ////
+
+=== instantiateContextualTypes2.ts ===
+type ContextStates =
+>ContextStates : Symbol(ContextStates, Decl(instantiateContextualTypes2.ts, 0, 0))
+
+  | {
+      status: "loading";
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 1, 5))
+
+      data: null;
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 2, 24))
+    }
+  | {
+      status: "success";
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 5, 5))
+
+      data: string;
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 6, 24))
+
+    };
+
+declare function createStore<TContext>(config: {
+>createStore : Symbol(createStore, Decl(instantiateContextualTypes2.ts, 8, 6))
+>TContext : Symbol(TContext, Decl(instantiateContextualTypes2.ts, 10, 29))
+>config : Symbol(config, Decl(instantiateContextualTypes2.ts, 10, 39))
+
+  context: TContext;
+>context : Symbol(context, Decl(instantiateContextualTypes2.ts, 10, 48))
+>TContext : Symbol(TContext, Decl(instantiateContextualTypes2.ts, 10, 29))
+
+  on: Record<string, (ctx: TContext) => TContext>;
+>on : Symbol(on, Decl(instantiateContextualTypes2.ts, 11, 20))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ctx : Symbol(ctx, Decl(instantiateContextualTypes2.ts, 12, 22))
+>TContext : Symbol(TContext, Decl(instantiateContextualTypes2.ts, 10, 29))
+>TContext : Symbol(TContext, Decl(instantiateContextualTypes2.ts, 10, 29))
+
+}): void;
+
+const store = createStore({
+>store : Symbol(store, Decl(instantiateContextualTypes2.ts, 15, 5))
+>createStore : Symbol(createStore, Decl(instantiateContextualTypes2.ts, 8, 6))
+
+  context: {
+>context : Symbol(context, Decl(instantiateContextualTypes2.ts, 15, 27))
+
+    status: "loading",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 16, 12))
+
+    data: null,
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 17, 22))
+
+  } as ContextStates,
+>ContextStates : Symbol(ContextStates, Decl(instantiateContextualTypes2.ts, 0, 0))
+
+  on: {
+>on : Symbol(on, Decl(instantiateContextualTypes2.ts, 19, 21))
+
+    fetch: (ctx) => ({
+>fetch : Symbol(fetch, Decl(instantiateContextualTypes2.ts, 20, 7))
+>ctx : Symbol(ctx, Decl(instantiateContextualTypes2.ts, 21, 12))
+
+      status: "success",
+>status : Symbol(status, Decl(instantiateContextualTypes2.ts, 21, 22))
+
+      data: "hello",
+>data : Symbol(data, Decl(instantiateContextualTypes2.ts, 22, 24))
+
+    }),
+  },
+});
+

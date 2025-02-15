@@ -1334,6 +1334,7 @@ export const enum CheckMode {
                                                     //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
                                                     //   we need to preserve generic types instead of substituting them for constraints
     TypeOnly = 1 << 6,                              // Called from getTypeOfExpression, diagnostics may be omitted
+    ContextualSignatureReturn = 1 << 7              // Checking return expressions of functions with contextual signatures
 }
 
 /** @internal */
@@ -31979,7 +31980,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // If no inferences have been made, and none of the type parameters for which we are inferring
             // specify default types, nothing is gained from instantiating as type parameters would just be
             // replaced with their constraints similar to the apparent type.
-            if (inferenceContext && contextFlags! & ContextFlags.Signature && some(inferenceContext.inferences, hasInferenceCandidatesOrDefault)) {
+            if (inferenceContext && contextFlags! & ContextFlags.ContextualSignature && some(inferenceContext.inferences, hasInferenceCandidatesOrDefault)) {
                 // For contextual signatures we incorporate all inferences made so far, e.g. from return
                 // types as well as arguments to the left in a function call.
                 return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
@@ -32446,7 +32447,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (typeTagSignature) {
             return typeTagSignature;
         }
-        const type = getApparentTypeOfContextualType(node, ContextFlags.Signature);
+        const type = getApparentTypeOfContextualType(node, ContextFlags.ContextualSignature);
         if (!type) {
             return undefined;
         }
@@ -38858,7 +38859,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getTypeOfSymbol(getSymbolOfDeclaration(node));
     }
 
-    function contextuallyCheckFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | ArrowFunction | MethodDeclaration, checkMode?: CheckMode) {
+    function contextuallyCheckFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | ArrowFunction | MethodDeclaration, checkMode = CheckMode.Normal) {
         const links = getNodeLinks(node);
         // Check if function expression is contextually typed and assign parameter types if so.
         if (!(links.flags & NodeCheckFlags.ContextChecked)) {
@@ -38899,7 +38900,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 if (contextualSignature && !getReturnTypeFromAnnotation(node) && !signature.resolvedReturnType) {
-                    const returnType = getReturnTypeFromBody(node, checkMode);
+                    const returnType = getReturnTypeFromBody(node, checkMode | CheckMode.ContextualSignatureReturn);
                     if (!signature.resolvedReturnType) {
                         signature.resolvedReturnType = returnType;
                     }
@@ -40701,11 +40702,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (isPropertyAssignment(parent) || isShorthandPropertyAssignment(parent) || isTemplateSpan(parent)) && isConstContext(parent.parent);
     }
 
-    function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode | undefined, forceTuple?: boolean): Type {
+    function checkExpressionForMutableLocation(node: Expression, checkMode = CheckMode.Normal, forceTuple?: boolean): Type {
         const type = checkExpression(node, checkMode, forceTuple);
         return isConstContext(node) || isCommonJsExportedExpression(node) ? getRegularTypeOfLiteralType(type) :
             isTypeAssertion(node) ? type :
-            getWidenedLiteralLikeTypeForContextualType(type, instantiateContextualType(getContextualType(node, /*contextFlags*/ undefined), node, /*contextFlags*/ undefined));
+            getWidenedLiteralLikeTypeForContextualType(type, instantiateContextualType(getContextualType(node, checkMode & CheckMode.ContextualSignatureReturn ? ContextFlags.ContextualSignature : ContextFlags.None), node, /*contextFlags*/ undefined));
     }
 
     function checkPropertyAssignment(node: PropertyAssignment, checkMode?: CheckMode): Type {

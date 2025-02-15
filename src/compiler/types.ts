@@ -5461,10 +5461,10 @@ export const enum IntersectionFlags {
 // dprint-ignore
 /** @internal */
 export const enum ContextFlags {
-    None           = 0,
-    Signature      = 1 << 0, // Obtaining contextual signature
-    NoConstraints  = 1 << 1, // Don't obtain type variable constraints
-    Completions    = 1 << 2, // Ignore inference to current node and parent nodes out to the containing call for completions
+    None                = 0,
+    ContextualSignature = 1 << 0, // Obtaining contextual signature or checking its return type
+    NoConstraints       = 1 << 1, // Don't obtain type variable constraints
+    Completions         = 1 << 2, // Ignore inference to current node and parent nodes out to the containing call for completions
     SkipBindingPatterns = 1 << 3, // Ignore contextual types applied by binding patterns
 }
 

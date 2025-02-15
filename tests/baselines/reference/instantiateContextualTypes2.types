@@ -1,0 +1,108 @@
+//// [tests/cases/compiler/instantiateContextualTypes2.ts] ////
+
+=== instantiateContextualTypes2.ts ===
+type ContextStates =
+>ContextStates : ContextStates
+>              : ^^^^^^^^^^^^^
+
+  | {
+      status: "loading";
+>status : "loading"
+>       : ^^^^^^^^^
+
+      data: null;
+>data : null
+>     : ^^^^
+    }
+  | {
+      status: "success";
+>status : "success"
+>       : ^^^^^^^^^
+
+      data: string;
+>data : string
+>     : ^^^^^^
+
+    };
+
+declare function createStore<TContext>(config: {
+>createStore : <TContext>(config: { context: TContext; on: Record<string, (ctx: TContext) => TContext>; }) => void
+>            : ^        ^^      ^^                                                                       ^^^^^    
+>config : { context: TContext; on: Record<string, (ctx: TContext) => TContext>; }
+>       : ^^^^^^^^^^^        ^^^^^^                                           ^^^
+
+  context: TContext;
+>context : TContext
+>        : ^^^^^^^^
+
+  on: Record<string, (ctx: TContext) => TContext>;
+>on : Record<string, (ctx: TContext) => TContext>
+>   : ^^^^^^^^^^^^^^^^   ^^        ^^^^^        ^
+>ctx : TContext
+>    : ^^^^^^^^
+
+}): void;
+
+const store = createStore({
+>store : void
+>      : ^^^^
+>createStore({  context: {    status: "loading",    data: null,  } as ContextStates,  on: {    fetch: (ctx) => ({      status: "success",      data: "hello",    }),  },}) : void
+>                                                                                                                                                                          : ^^^^
+>createStore : <TContext>(config: { context: TContext; on: Record<string, (ctx: TContext) => TContext>; }) => void
+>            : ^        ^^      ^^                                                                       ^^^^^    
+>{  context: {    status: "loading",    data: null,  } as ContextStates,  on: {    fetch: (ctx) => ({      status: "success",      data: "hello",    }),  },} : { context: ContextStates; on: { fetch: (ctx: ContextStates) => { status: "success"; data: string; }; }; }
+>                                                                                                                                                             : ^^^^^^^^^^^             ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  context: {
+>context : ContextStates
+>        : ^^^^^^^^^^^^^
+>{    status: "loading",    data: null,  } as ContextStates : ContextStates
+>                                                           : ^^^^^^^^^^^^^
+>{    status: "loading",    data: null,  } : { status: "loading"; data: null; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    status: "loading",
+>status : "loading"
+>       : ^^^^^^^^^
+>"loading" : "loading"
+>          : ^^^^^^^^^
+
+    data: null,
+>data : null
+>     : ^^^^
+
+  } as ContextStates,
+  on: {
+>on : { fetch: (ctx: ContextStates) => { status: "success"; data: string; }; }
+>   : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    fetch: (ctx) => ({      status: "success",      data: "hello",    }),  } : { fetch: (ctx: ContextStates) => { status: "success"; data: string; }; }
+>                                                                              : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    fetch: (ctx) => ({
+>fetch : (ctx: ContextStates) => { status: "success"; data: string; }
+>      : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(ctx) => ({      status: "success",      data: "hello",    }) : (ctx: ContextStates) => { status: "success"; data: string; }
+>                                                              : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ctx : ContextStates
+>    : ^^^^^^^^^^^^^
+>({      status: "success",      data: "hello",    }) : { status: "success"; data: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      status: "success",      data: "hello",    } : { status: "success"; data: string; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      status: "success",
+>status : "success"
+>       : ^^^^^^^^^
+>"success" : "success"
+>          : ^^^^^^^^^
+
+      data: "hello",
+>data : string
+>     : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+    }),
+  },
+});
+
