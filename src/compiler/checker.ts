@@ -47165,7 +47165,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         checkCollisionsForDeclarationName(node, node.name);
         checkExportsOnMergedDeclarations(node);
-        node.members.forEach(checkEnumMember);
+        node.members.forEach(checkSourceElement);
 
         if (compilerOptions.erasableSyntaxOnly && !(node.flags & NodeFlags.Ambient)) {
             error(node, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
@@ -48366,6 +48366,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkTypeAliasDeclaration(node as TypeAliasDeclaration);
             case SyntaxKind.EnumDeclaration:
                 return checkEnumDeclaration(node as EnumDeclaration);
+            case SyntaxKind.EnumMember:
+                return checkEnumMember(node as EnumMember);
             case SyntaxKind.ModuleDeclaration:
                 return checkModuleDeclaration(node as ModuleDeclaration);
             case SyntaxKind.ImportDeclaration:
