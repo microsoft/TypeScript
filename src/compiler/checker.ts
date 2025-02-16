@@ -31996,7 +31996,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // If no inferences have been made, and none of the type parameters for which we are inferring
             // specify default types, nothing is gained from instantiating as type parameters would just be
             // replaced with their constraints similar to the apparent type.
-            if (inferenceContext && (contextFlags! & ContextFlags.ContextualSignature || isReturnExpressionLiteralContext(node)) && some(inferenceContext.inferences, hasInferenceCandidatesOrDefault)) {
+            if (inferenceContext && (contextFlags! & ContextFlags.Signature || isReturnExpressionLiteralContext(node)) && some(inferenceContext.inferences, hasInferenceCandidatesOrDefault)) {
                 // For contextual signatures we incorporate all inferences made so far, e.g. from return
                 // types as well as arguments to the left in a function call.
                 return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
@@ -32463,7 +32463,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (typeTagSignature) {
             return typeTagSignature;
         }
-        const type = getApparentTypeOfContextualType(node, ContextFlags.ContextualSignature);
+        const type = getApparentTypeOfContextualType(node, ContextFlags.Signature);
         if (!type) {
             return undefined;
         }
@@ -40718,7 +40718,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (isPropertyAssignment(parent) || isShorthandPropertyAssignment(parent) || isTemplateSpan(parent)) && isConstContext(parent.parent);
     }
 
-    function checkExpressionForMutableLocation(node: Expression, checkMode?: CheckMode, forceTuple?: boolean): Type {
+    function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode | undefined, forceTuple?: boolean): Type {
         const type = checkExpression(node, checkMode, forceTuple);
         return isConstContext(node) || isCommonJsExportedExpression(node) ? getRegularTypeOfLiteralType(type) :
             isTypeAssertion(node) ? type :
