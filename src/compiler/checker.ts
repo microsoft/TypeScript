@@ -31974,6 +31974,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isReturnExpressionLiteralContext(node: Node) {
         const ancestor = findAncestor(node, n => {
             if (isCallOrNewExpression(n)) {
+                // prevent inference candidates of outer inference context to provide contextual type information for the expressions within the inner context
+                // that could turn fresh literal candidates in the inner context into regular types for union-like literals (such as booleans and enums)
+                // and that would create mismatches between inferred types for outer and inner contexts which is especially problematic when invariant type parameters are involved
+                //
+                // the call below should be ok but with the inner one receiving `boolean` as contextual type it would infer `true` for its type parameter
+                // and that would create outer signature applicability error with outer `Box<boolean>` and inner `Box<true>`
+                //
+                // interface Box<T> { v: (arg: T) => T; }
+                // declare function invariantBox<T>(v: T): Box<T>
+                // declare function fn<T>(arg: Box<T>, get: () => Box<T>): void;
+                // fn(invariantBox(true), () => invariantBox(true));
                 return "quit";
             }
             const parent = n.parent;
