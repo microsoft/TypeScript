@@ -25,37 +25,35 @@ type ContextStates =
 
     };
 
-declare function createStore<TContext>(config: {
->createStore : <TContext>(config: { context: TContext; on: Record<string, (ctx: TContext) => TContext>; }) => void
->            : ^        ^^      ^^                                                                       ^^^^^    
->config : { context: TContext; on: Record<string, (ctx: TContext) => TContext>; }
->       : ^^^^^^^^^^^        ^^^^^^                                           ^^^
+declare function createStore<TContext>(
+>createStore : <TContext>(context: TContext, config: { on: Record<string, (ctx: TContext) => TContext>; }) => void
+>            : ^        ^^       ^^        ^^      ^^                                                    ^^^^^    
 
-  context: TContext;
+  context: TContext,
 >context : TContext
 >        : ^^^^^^^^
 
-  on: Record<string, (ctx: TContext) => TContext>;
+  config: {
+>config : { on: Record<string, (ctx: TContext) => TContext>; }
+>       : ^^^^^^                                           ^^^
+
+    on: Record<string, (ctx: TContext) => TContext>;
 >on : Record<string, (ctx: TContext) => TContext>
 >   : ^^^^^^^^^^^^^^^^   ^^        ^^^^^        ^
 >ctx : TContext
 >    : ^^^^^^^^
 
-}): void;
+  },
+): void;
 
-const store = createStore({
->store : void
->      : ^^^^
->createStore({  context: {    status: "loading",    data: null,  } as ContextStates,  on: {    fetch: (ctx) => ({      status: "success",      data: "hello",    }),  },}) : void
->                                                                                                                                                                          : ^^^^
->createStore : <TContext>(config: { context: TContext; on: Record<string, (ctx: TContext) => TContext>; }) => void
->            : ^        ^^      ^^                                                                       ^^^^^    
->{  context: {    status: "loading",    data: null,  } as ContextStates,  on: {    fetch: (ctx) => ({      status: "success",      data: "hello",    }),  },} : { context: ContextStates; on: { fetch: (ctx: ContextStates) => { status: "success"; data: string; }; }; }
->                                                                                                                                                             : ^^^^^^^^^^^             ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-  context: {
->context : ContextStates
->        : ^^^^^^^^^^^^^
+const store1 = createStore(
+>store1 : void
+>       : ^^^^
+>createStore(  {    status: "loading",    data: null,  } as ContextStates,  {    on: {      fetch: (ctx) => ({        status: "success",        data: "hello",      }),    },  },) : void
+>                                                                                                                                                                                  : ^^^^
+>createStore : <TContext>(context: TContext, config: { on: Record<string, (ctx: TContext) => TContext>; }) => void
+>            : ^        ^^       ^^        ^^      ^^                                                    ^^^^^    
+  {
 >{    status: "loading",    data: null,  } as ContextStates : ContextStates
 >                                                           : ^^^^^^^^^^^^^
 >{    status: "loading",    data: null,  } : { status: "loading"; data: null; }
@@ -72,37 +70,530 @@ const store = createStore({
 >     : ^^^^
 
   } as ContextStates,
-  on: {
+  {
+>{    on: {      fetch: (ctx) => ({        status: "success",        data: "hello",      }),    },  } : { on: { fetch: (ctx: ContextStates) => { status: "success"; data: string; }; }; }
+>                                                                                                     : ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    on: {
 >on : { fetch: (ctx: ContextStates) => { status: "success"; data: string; }; }
 >   : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{    fetch: (ctx) => ({      status: "success",      data: "hello",    }),  } : { fetch: (ctx: ContextStates) => { status: "success"; data: string; }; }
->                                                                              : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      fetch: (ctx) => ({        status: "success",        data: "hello",      }),    } : { fetch: (ctx: ContextStates) => { status: "success"; data: string; }; }
+>                                                                                        : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    fetch: (ctx) => ({
+      fetch: (ctx) => ({
 >fetch : (ctx: ContextStates) => { status: "success"; data: string; }
 >      : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(ctx) => ({      status: "success",      data: "hello",    }) : (ctx: ContextStates) => { status: "success"; data: string; }
->                                                              : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(ctx) => ({        status: "success",        data: "hello",      }) : (ctx: ContextStates) => { status: "success"; data: string; }
+>                                                                    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ctx : ContextStates
 >    : ^^^^^^^^^^^^^
->({      status: "success",      data: "hello",    }) : { status: "success"; data: string; }
->                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{      status: "success",      data: "hello",    } : { status: "success"; data: string; }
->                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({        status: "success",        data: "hello",      }) : { status: "success"; data: string; }
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        status: "success",        data: "hello",      } : { status: "success"; data: string; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-      status: "success",
+        status: "success",
 >status : "success"
 >       : ^^^^^^^^^
 >"success" : "success"
 >          : ^^^^^^^^^
 
-      data: "hello",
+        data: "hello",
 >data : string
 >     : ^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
-    }),
+      }),
+    },
   },
-});
+);
+
+const store2 = createStore(
+>store2 : void
+>       : ^^^^
+>createStore(  {    status: "loading",    data: null,  } as ContextStates,  {    on: {      fetch: () => ({        status: "success",        data: "hello",      }),    },  },) : void
+>                                                                                                                                                                               : ^^^^
+>createStore : <TContext>(context: TContext, config: { on: Record<string, (ctx: TContext) => TContext>; }) => void
+>            : ^        ^^       ^^        ^^      ^^                                                    ^^^^^    
+  {
+>{    status: "loading",    data: null,  } as ContextStates : ContextStates
+>                                                           : ^^^^^^^^^^^^^
+>{    status: "loading",    data: null,  } : { status: "loading"; data: null; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    status: "loading",
+>status : "loading"
+>       : ^^^^^^^^^
+>"loading" : "loading"
+>          : ^^^^^^^^^
+
+    data: null,
+>data : null
+>     : ^^^^
+
+  } as ContextStates,
+  {
+>{    on: {      fetch: () => ({        status: "success",        data: "hello",      }),    },  } : { on: { fetch: () => { status: "success"; data: string; }; }; }
+>                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    on: {
+>on : { fetch: () => { status: "success"; data: string; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      fetch: () => ({        status: "success",        data: "hello",      }),    } : { fetch: () => { status: "success"; data: string; }; }
+>                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      fetch: () => ({
+>fetch : () => { status: "success"; data: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => ({        status: "success",        data: "hello",      }) : () => { status: "success"; data: string; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({        status: "success",        data: "hello",      }) : { status: "success"; data: string; }
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        status: "success",        data: "hello",      } : { status: "success"; data: string; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        status: "success",
+>status : "success"
+>       : ^^^^^^^^^
+>"success" : "success"
+>          : ^^^^^^^^^
+
+        data: "hello",
+>data : string
+>     : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+      }),
+    },
+  },
+);
+
+const store3 = createStore(
+>store3 : void
+>       : ^^^^
+>createStore(  {    status: "loading",    data: null,  } as ContextStates,  {    on: {      fetch: (ctx) => {        return {          status: "success",          data: "hello",        };      },    },  },) : void
+>                                                                                                                                                                                                              : ^^^^
+>createStore : <TContext>(context: TContext, config: { on: Record<string, (ctx: TContext) => TContext>; }) => void
+>            : ^        ^^       ^^        ^^      ^^                                                    ^^^^^    
+  {
+>{    status: "loading",    data: null,  } as ContextStates : ContextStates
+>                                                           : ^^^^^^^^^^^^^
+>{    status: "loading",    data: null,  } : { status: "loading"; data: null; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    status: "loading",
+>status : "loading"
+>       : ^^^^^^^^^
+>"loading" : "loading"
+>          : ^^^^^^^^^
+
+    data: null,
+>data : null
+>     : ^^^^
+
+  } as ContextStates,
+  {
+>{    on: {      fetch: (ctx) => {        return {          status: "success",          data: "hello",        };      },    },  } : { on: { fetch: (ctx: ContextStates) => { status: "success"; data: string; }; }; }
+>                                                                                                                                 : ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    on: {
+>on : { fetch: (ctx: ContextStates) => { status: "success"; data: string; }; }
+>   : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      fetch: (ctx) => {        return {          status: "success",          data: "hello",        };      },    } : { fetch: (ctx: ContextStates) => { status: "success"; data: string; }; }
+>                                                                                                                    : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      fetch: (ctx) => {
+>fetch : (ctx: ContextStates) => { status: "success"; data: string; }
+>      : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(ctx) => {        return {          status: "success",          data: "hello",        };      } : (ctx: ContextStates) => { status: "success"; data: string; }
+>                                                                                                : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ctx : ContextStates
+>    : ^^^^^^^^^^^^^
+
+        return {
+>{          status: "success",          data: "hello",        } : { status: "success"; data: string; }
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+          status: "success",
+>status : "success"
+>       : ^^^^^^^^^
+>"success" : "success"
+>          : ^^^^^^^^^
+
+          data: "hello",
+>data : string
+>     : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+        };
+      },
+    },
+  },
+);
+
+const store4 = createStore(
+>store4 : void
+>       : ^^^^
+>createStore(  {    status: "loading",    data: null,  } as ContextStates,  {    on: {      fetch: () => {        return {          status: "success",          data: "hello",        };      },    },  },) : void
+>                                                                                                                                                                                                           : ^^^^
+>createStore : <TContext>(context: TContext, config: { on: Record<string, (ctx: TContext) => TContext>; }) => void
+>            : ^        ^^       ^^        ^^      ^^                                                    ^^^^^    
+  {
+>{    status: "loading",    data: null,  } as ContextStates : ContextStates
+>                                                           : ^^^^^^^^^^^^^
+>{    status: "loading",    data: null,  } : { status: "loading"; data: null; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    status: "loading",
+>status : "loading"
+>       : ^^^^^^^^^
+>"loading" : "loading"
+>          : ^^^^^^^^^
+
+    data: null,
+>data : null
+>     : ^^^^
+
+  } as ContextStates,
+  {
+>{    on: {      fetch: () => {        return {          status: "success",          data: "hello",        };      },    },  } : { on: { fetch: () => { status: "success"; data: string; }; }; }
+>                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    on: {
+>on : { fetch: () => { status: "success"; data: string; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      fetch: () => {        return {          status: "success",          data: "hello",        };      },    } : { fetch: () => { status: "success"; data: string; }; }
+>                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      fetch: () => {
+>fetch : () => { status: "success"; data: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {        return {          status: "success",          data: "hello",        };      } : () => { status: "success"; data: string; }
+>                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        return {
+>{          status: "success",          data: "hello",        } : { status: "success"; data: string; }
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+          status: "success",
+>status : "success"
+>       : ^^^^^^^^^
+>"success" : "success"
+>          : ^^^^^^^^^
+
+          data: "hello",
+>data : string
+>     : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+        };
+      },
+    },
+  },
+);
+
+declare function createStore2<TContext>(
+>createStore2 : <TContext>(context: TContext, config: { on: Record<string, (ctx: TContext) => { context: TContext; }>; }) => void
+>             : ^        ^^       ^^        ^^      ^^                                                                  ^^^^^    
+
+  context: TContext,
+>context : TContext
+>        : ^^^^^^^^
+
+  config: {
+>config : { on: Record<string, (ctx: TContext) => { context: TContext; }>; }
+>       : ^^^^^^                                                         ^^^
+
+    on: Record<string, (ctx: TContext) => { context: TContext }>;
+>on : Record<string, (ctx: TContext) => { context: TContext; }>
+>   : ^^^^^^^^^^^^^^^^   ^^        ^^^^^                      ^
+>ctx : TContext
+>    : ^^^^^^^^
+>context : TContext
+>        : ^^^^^^^^
+
+  },
+): void;
+
+const store5 = createStore2(
+>store5 : void
+>       : ^^^^
+>createStore2(  {    status: "loading",    data: null,  } as ContextStates,  {    on: {      fetch: (ctx) => ({        context: {          status: "success",          data: "hello",        },      }),    },  },) : void
+>                                                                                                                                                                                                                   : ^^^^
+>createStore2 : <TContext>(context: TContext, config: { on: Record<string, (ctx: TContext) => { context: TContext; }>; }) => void
+>             : ^        ^^       ^^        ^^      ^^                                                                  ^^^^^    
+  {
+>{    status: "loading",    data: null,  } as ContextStates : ContextStates
+>                                                           : ^^^^^^^^^^^^^
+>{    status: "loading",    data: null,  } : { status: "loading"; data: null; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    status: "loading",
+>status : "loading"
+>       : ^^^^^^^^^
+>"loading" : "loading"
+>          : ^^^^^^^^^
+
+    data: null,
+>data : null
+>     : ^^^^
+
+  } as ContextStates,
+  {
+>{    on: {      fetch: (ctx) => ({        context: {          status: "success",          data: "hello",        },      }),    },  } : { on: { fetch: (ctx: ContextStates) => { context: { status: "success"; data: string; }; }; }; }
+>                                                                                                                                     : ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    on: {
+>on : { fetch: (ctx: ContextStates) => { context: { status: "success"; data: string; }; }; }
+>   : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      fetch: (ctx) => ({        context: {          status: "success",          data: "hello",        },      }),    } : { fetch: (ctx: ContextStates) => { context: { status: "success"; data: string; }; }; }
+>                                                                                                                        : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      fetch: (ctx) => ({
+>fetch : (ctx: ContextStates) => { context: { status: "success"; data: string; }; }
+>      : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(ctx) => ({        context: {          status: "success",          data: "hello",        },      }) : (ctx: ContextStates) => { context: { status: "success"; data: string; }; }
+>                                                                                                    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ctx : ContextStates
+>    : ^^^^^^^^^^^^^
+>({        context: {          status: "success",          data: "hello",        },      }) : { context: { status: "success"; data: string; }; }
+>                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        context: {          status: "success",          data: "hello",        },      } : { context: { status: "success"; data: string; }; }
+>                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        context: {
+>context : { status: "success"; data: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{          status: "success",          data: "hello",        } : { status: "success"; data: string; }
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+          status: "success",
+>status : "success"
+>       : ^^^^^^^^^
+>"success" : "success"
+>          : ^^^^^^^^^
+
+          data: "hello",
+>data : string
+>     : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+        },
+      }),
+    },
+  },
+);
+
+const store6 = createStore2(
+>store6 : void
+>       : ^^^^
+>createStore2(  {    status: "loading",    data: null,  } as ContextStates,  {    on: {      fetch: () => ({        context: {          status: "success",          data: "hello",        },      }),    },  },) : void
+>                                                                                                                                                                                                                : ^^^^
+>createStore2 : <TContext>(context: TContext, config: { on: Record<string, (ctx: TContext) => { context: TContext; }>; }) => void
+>             : ^        ^^       ^^        ^^      ^^                                                                  ^^^^^    
+  {
+>{    status: "loading",    data: null,  } as ContextStates : ContextStates
+>                                                           : ^^^^^^^^^^^^^
+>{    status: "loading",    data: null,  } : { status: "loading"; data: null; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    status: "loading",
+>status : "loading"
+>       : ^^^^^^^^^
+>"loading" : "loading"
+>          : ^^^^^^^^^
+
+    data: null,
+>data : null
+>     : ^^^^
+
+  } as ContextStates,
+  {
+>{    on: {      fetch: () => ({        context: {          status: "success",          data: "hello",        },      }),    },  } : { on: { fetch: () => { context: { status: "success"; data: string; }; }; }; }
+>                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    on: {
+>on : { fetch: () => { context: { status: "success"; data: string; }; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      fetch: () => ({        context: {          status: "success",          data: "hello",        },      }),    } : { fetch: () => { context: { status: "success"; data: string; }; }; }
+>                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      fetch: () => ({
+>fetch : () => { context: { status: "success"; data: string; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => ({        context: {          status: "success",          data: "hello",        },      }) : () => { context: { status: "success"; data: string; }; }
+>                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({        context: {          status: "success",          data: "hello",        },      }) : { context: { status: "success"; data: string; }; }
+>                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        context: {          status: "success",          data: "hello",        },      } : { context: { status: "success"; data: string; }; }
+>                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        context: {
+>context : { status: "success"; data: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{          status: "success",          data: "hello",        } : { status: "success"; data: string; }
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+          status: "success",
+>status : "success"
+>       : ^^^^^^^^^
+>"success" : "success"
+>          : ^^^^^^^^^
+
+          data: "hello",
+>data : string
+>     : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+        },
+      }),
+    },
+  },
+);
+
+const store7 = createStore2(
+>store7 : void
+>       : ^^^^
+>createStore2(  {    status: "loading",    data: null,  } as ContextStates,  {    on: {      fetch: (ctx) => {        return {          context: {            status: "success",            data: "hello",          },        };      },    },  },) : void
+>                                                                                                                                                                                                                                                   : ^^^^
+>createStore2 : <TContext>(context: TContext, config: { on: Record<string, (ctx: TContext) => { context: TContext; }>; }) => void
+>             : ^        ^^       ^^        ^^      ^^                                                                  ^^^^^    
+  {
+>{    status: "loading",    data: null,  } as ContextStates : ContextStates
+>                                                           : ^^^^^^^^^^^^^
+>{    status: "loading",    data: null,  } : { status: "loading"; data: null; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    status: "loading",
+>status : "loading"
+>       : ^^^^^^^^^
+>"loading" : "loading"
+>          : ^^^^^^^^^
+
+    data: null,
+>data : null
+>     : ^^^^
+
+  } as ContextStates,
+  {
+>{    on: {      fetch: (ctx) => {        return {          context: {            status: "success",            data: "hello",          },        };      },    },  } : { on: { fetch: (ctx: ContextStates) => { context: { status: "success"; data: string; }; }; }; }
+>                                                                                                                                                                     : ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    on: {
+>on : { fetch: (ctx: ContextStates) => { context: { status: "success"; data: string; }; }; }
+>   : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      fetch: (ctx) => {        return {          context: {            status: "success",            data: "hello",          },        };      },    } : { fetch: (ctx: ContextStates) => { context: { status: "success"; data: string; }; }; }
+>                                                                                                                                                        : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      fetch: (ctx) => {
+>fetch : (ctx: ContextStates) => { context: { status: "success"; data: string; }; }
+>      : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(ctx) => {        return {          context: {            status: "success",            data: "hello",          },        };      } : (ctx: ContextStates) => { context: { status: "success"; data: string; }; }
+>                                                                                                                                    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ctx : ContextStates
+>    : ^^^^^^^^^^^^^
+
+        return {
+>{          context: {            status: "success",            data: "hello",          },        } : { context: { status: "success"; data: string; }; }
+>                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+          context: {
+>context : { status: "success"; data: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{            status: "success",            data: "hello",          } : { status: "success"; data: string; }
+>                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            status: "success",
+>status : "success"
+>       : ^^^^^^^^^
+>"success" : "success"
+>          : ^^^^^^^^^
+
+            data: "hello",
+>data : string
+>     : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+          },
+        };
+      },
+    },
+  },
+);
+
+const store8 = createStore2(
+>store8 : void
+>       : ^^^^
+>createStore2(  {    status: "loading",    data: null,  } as ContextStates,  {    on: {      fetch: () => {        return {          context: {            status: "success",            data: "hello",          },        };      },    },  },) : void
+>                                                                                                                                                                                                                                                : ^^^^
+>createStore2 : <TContext>(context: TContext, config: { on: Record<string, (ctx: TContext) => { context: TContext; }>; }) => void
+>             : ^        ^^       ^^        ^^      ^^                                                                  ^^^^^    
+  {
+>{    status: "loading",    data: null,  } as ContextStates : ContextStates
+>                                                           : ^^^^^^^^^^^^^
+>{    status: "loading",    data: null,  } : { status: "loading"; data: null; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    status: "loading",
+>status : "loading"
+>       : ^^^^^^^^^
+>"loading" : "loading"
+>          : ^^^^^^^^^
+
+    data: null,
+>data : null
+>     : ^^^^
+
+  } as ContextStates,
+  {
+>{    on: {      fetch: () => {        return {          context: {            status: "success",            data: "hello",          },        };      },    },  } : { on: { fetch: () => { context: { status: "success"; data: string; }; }; }; }
+>                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    on: {
+>on : { fetch: () => { context: { status: "success"; data: string; }; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      fetch: () => {        return {          context: {            status: "success",            data: "hello",          },        };      },    } : { fetch: () => { context: { status: "success"; data: string; }; }; }
+>                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      fetch: () => {
+>fetch : () => { context: { status: "success"; data: string; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {        return {          context: {            status: "success",            data: "hello",          },        };      } : () => { context: { status: "success"; data: string; }; }
+>                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        return {
+>{          context: {            status: "success",            data: "hello",          },        } : { context: { status: "success"; data: string; }; }
+>                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+          context: {
+>context : { status: "success"; data: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{            status: "success",            data: "hello",          } : { status: "success"; data: string; }
+>                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            status: "success",
+>status : "success"
+>       : ^^^^^^^^^
+>"success" : "success"
+>          : ^^^^^^^^^
+
+            data: "hello",
+>data : string
+>     : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+          },
+        };
+      },
+    },
+  },
+);
 
