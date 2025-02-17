@@ -3987,6 +3987,10 @@
         "category": "Error",
         "code": 2880
     },
+    "'{1}' is constrained to be a subtype of '{0}'.": {
+        "category": "Error",
+        "code": 2881
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -8447,9 +8451,5 @@
     "String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.": {
         "category": "Error",
         "code": 18057
-    },
-    "'{1}' is constrained to be a subtype of '{0}'.": {
-        "category": "Error",
-        "code": 18058
     }
 }
