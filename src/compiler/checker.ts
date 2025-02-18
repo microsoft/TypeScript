@@ -47974,7 +47974,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return;
         }
 
-        if (compilerOptions.erasableSyntaxOnly && !(node.flags & NodeFlags.Ambient)) {
+        if (compilerOptions.erasableSyntaxOnly && node.isExportEquals && !(node.flags & NodeFlags.Ambient)) {
             error(node, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
         }
         const container = node.parent.kind === SyntaxKind.SourceFile ? node.parent : node.parent.parent as ModuleDeclaration;
