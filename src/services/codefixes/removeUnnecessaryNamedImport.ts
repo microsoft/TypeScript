@@ -1,17 +1,17 @@
 import {
-    createCodeFixAction,
     codeFixAll,
+    createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix.js";
 import {
-    factory,
     Diagnostics,
+    factory,
     getTokenAtPosition,
     isImportSpecifier,
-    textChanges,
-    tryCast,
     SourceFile,
+    textChanges,
     TextSpan,
+    tryCast,
 } from "../_namespaces/ts.js";
 
 const fixId = "removeUnnecessaryNamedImport";
@@ -31,7 +31,7 @@ registerCodeFix({
         }
 
         if (changes.length > 0) {
-            return [createCodeFixAction(fixId, changes, [Diagnostics.Simplify_redundant_import_0,importSpecifier.name.text], fixId, Diagnostics.Simplify_all_redundant_imports)];
+            return [createCodeFixAction(fixId, changes, [Diagnostics.Simplify_redundant_import_0, importSpecifier.name.text], fixId, Diagnostics.Simplify_all_redundant_imports)];
         }
     },
     fixIds: [fixId],

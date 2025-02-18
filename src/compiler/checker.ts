@@ -48126,10 +48126,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const importSpecifier = node;
             const namecheck = getTextOfIdentifierOrLiteral(importSpecifier.name);
             const propertyNamecheck = importSpecifier.propertyName ? getTextOfIdentifierOrLiteral(importSpecifier.propertyName) : "";
-            
 
-            if(namecheck === propertyNamecheck){   
-                errorOrSuggestion(/*isError*/ false, importSpecifier, Diagnostics.Redundant_named_import_0, namecheck)         
+            if (namecheck === propertyNamecheck) {
+                errorOrSuggestion(/*isError*/ false, importSpecifier, Diagnostics.Redundant_named_import_0, namecheck);
             }
 
             if (
