@@ -156,7 +156,7 @@ export = foo;
 
 
 === esm.d.mts ===
-const foo = 1234;
+declare const foo = 1234;
 >foo : 1234
 >    : ^^^^
 >1234 : 1234

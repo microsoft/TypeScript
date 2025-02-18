@@ -69,5 +69,5 @@ export = foo;
 
 
 // @filename: esm.d.mts
-const foo = 1234;
+declare const foo = 1234;
 export default foo;

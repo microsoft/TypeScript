@@ -114,9 +114,9 @@ export = foo;
 
 
 === esm.d.mts ===
-const foo = 1234;
->foo : Symbol(foo, Decl(esm.d.mts, 0, 5))
+declare const foo = 1234;
+>foo : Symbol(foo, Decl(esm.d.mts, 0, 13))
 
 export default foo;
->foo : Symbol(foo, Decl(esm.d.mts, 0, 5))
+>foo : Symbol(foo, Decl(esm.d.mts, 0, 13))
 

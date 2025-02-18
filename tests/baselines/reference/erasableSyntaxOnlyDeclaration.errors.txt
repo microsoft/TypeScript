@@ -1,4 +1,3 @@
-esm.d.mts(1,1): error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
 index.d.ts(1,1): error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
 
 
@@ -68,9 +67,7 @@ index.d.ts(1,1): error TS1046: Top-level declarations in .d.ts files must start 
     export = foo;
     
     
-==== esm.d.mts (1 errors) ====
-    const foo = 1234;
-    ~~~~~
-!!! error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
+==== esm.d.mts (0 errors) ====
+    declare const foo = 1234;
     export default foo;
     
