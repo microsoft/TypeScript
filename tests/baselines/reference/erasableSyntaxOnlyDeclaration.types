@@ -154,3 +154,15 @@ export = foo;
 >foo : () => void
 >    : ^^^^^^    
 
+
+=== esm.d.mts ===
+const foo = 1234;
+>foo : 1234
+>    : ^^^^
+>1234 : 1234
+>     : ^^^^
+
+export default foo;
+>foo : 1234
+>    : ^^^^
+

@@ -1,5 +1,6 @@
 commonjs.cts(1,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 commonjs.cts(2,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+esm.mts(2,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 index.ts(3,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 index.ts(6,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 index.ts(10,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -104,4 +105,11 @@ index.ts(28,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOn
 ==== other.d.cts (0 errors) ====
     declare function foo(): void;
     export = foo;
+    
+    
+==== esm.mts (1 errors) ====
+    const foo = 1234;
+    export default foo;
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
