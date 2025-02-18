@@ -1,8 +1,6 @@
 import {
     createCodeFixAction,
     codeFixAll,
-    createCombinedCodeActions,
-    eachDiagnostic,
     registerCodeFix,
 } from "../_namespaces/ts.codefix.js";
 import {
