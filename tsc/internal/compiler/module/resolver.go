@@ -983,7 +983,7 @@ func (r *resolutionState) createResolvedModule(resolved *resolved, isExternalLib
 
 func (r *resolutionState) createResolvedTypeReferenceDirective(resolved *resolved, primary bool) *ResolvedTypeReferenceDirective {
 	var resolvedTypeReferenceDirective ResolvedTypeReferenceDirective
-	if resolved != nil {
+	if resolved.isResolved() {
 		if !tspath.ExtensionIsTs(resolved.extension) {
 			panic("expected a TypeScript file extension")
 		}
