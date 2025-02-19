@@ -64,6 +64,12 @@ type Evolver<T extends Evolvable<any> = any> = {
   [key in keyof Partial<T>]: never;
 };
 
+// https://github.com/microsoft/TypeScript/issues/61203
+type Obj61203 = { [k in keyof any]: number };
+declare const obj61203: Obj61203;
+declare const key61203: keyof Obj61203;
+obj61203[key61203]; // ok
+
 
 //// [mappedTypeWithAny.js]
 "use strict";
@@ -79,6 +85,7 @@ function bar(arrayish, objectish, indirectArrayish) {
 }
 var abc = stringifyArray(void 0);
 var def = stringifyPair(void 0);
+obj61203[key61203]; // ok
 
 
 //// [mappedTypeWithAny.d.ts]
@@ -128,3 +135,8 @@ type Evolvable<E extends Evolver> = {
 type Evolver<T extends Evolvable<any> = any> = {
     [key in keyof Partial<T>]: never;
 };
+type Obj61203 = {
+    [k in keyof any]: number;
+};
+declare const obj61203: Obj61203;
+declare const key61203: keyof Obj61203;

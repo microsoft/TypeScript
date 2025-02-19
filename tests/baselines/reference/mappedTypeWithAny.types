@@ -24,8 +24,8 @@ declare let x2: { [P in string]: Item };
 >   : ^^^^^^^^^^^^^^^^^^^^^^
 
 declare let x3: { [P in keyof any]: Item };
->x3 : { [x: string]: Item; }
->   : ^^^^^^^^^^^^^^^^^^^^^^
+>x3 : { [x: string]: Item; [x: number]: Item; [x: symbol]: Item; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare let x4: ItemMap<any>;
 >x4 : ItemMap<any>
@@ -196,4 +196,25 @@ type Evolver<T extends Evolvable<any> = any> = {
 
   [key in keyof Partial<T>]: never;
 };
+
+// https://github.com/microsoft/TypeScript/issues/61203
+type Obj61203 = { [k in keyof any]: number };
+>Obj61203 : Obj61203
+>         : ^^^^^^^^
+
+declare const obj61203: Obj61203;
+>obj61203 : Obj61203
+>         : ^^^^^^^^
+
+declare const key61203: keyof Obj61203;
+>key61203 : string | number | symbol
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+obj61203[key61203]; // ok
+>obj61203[key61203] : number
+>                   : ^^^^^^
+>obj61203 : Obj61203
+>         : ^^^^^^^^
+>key61203 : string | number | symbol
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
