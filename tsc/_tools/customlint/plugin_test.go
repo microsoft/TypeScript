@@ -98,6 +98,7 @@ func TestPlugin(t *testing.T) {
 		prettyPath := filepath.ToSlash(rel)
 
 		t.Run(prettyPath, func(t *testing.T) {
+			t.Parallel()
 			diagsMap := diagsByPath[p]
 			diags := make([]*diagnostic, 0, len(diagsMap))
 			for diag := range diagsMap {

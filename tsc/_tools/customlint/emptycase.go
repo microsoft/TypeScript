@@ -61,7 +61,7 @@ func checkCases(pass *analysis.Pass, file *ast.File, clause *ast.BlockStmt) {
 
 func checkCaseStatement(pass *analysis.Pass, file *ast.File, stmt ast.Stmt, nextCasePos token.Pos) {
 	var body []ast.Stmt
-	colon := token.NoPos
+	var colon token.Pos
 
 	switch stmt := stmt.(type) {
 	case *ast.CaseClause:

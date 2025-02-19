@@ -3,8 +3,10 @@ description: Setup Go
 
 inputs:
   go-version:
+    description: Go version range to set up.
     default: '>=1.23.0'
   cache-name:
+    description: Name of scoped cache for this set up.
     default: 'cache'
 
 runs:
@@ -23,7 +25,7 @@ runs:
         # There is more code downloaded and built than is covered by '**/go.sum',
         # so give each job its own cache to try and not end up sharing the wrong
         # cache between jobs.
-        key: ts-setup-go-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ github.workflow }}-${{ inputs.cache-name }}-${{ hashFiles('**/go.sum', '**/Herebyfile.mjs') }}
+        key: ts-setup-go-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ github.workflow }}-${{ inputs.cache-name }}-${{ hashFiles('**/go.sum', '**/Herebyfile.mjs', '**/.custom-gcl.yml') }}
         path: |
           ~/go/pkg/mod
           ~/.cache/go-build
