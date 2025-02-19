@@ -121,11 +121,11 @@ func TestPlugin(t *testing.T) {
 				return 0
 			})
 
-			fileContents, err := os.ReadFile(p)
-			assert.NilError(t, err)
+			fileContents, readErr := os.ReadFile(p)
+			assert.NilError(t, readErr)
 
-			goldenPath, err := filepath.Rel(testdataDir, p+".golden")
-			assert.NilError(t, err)
+			goldenPath, relErr := filepath.Rel(testdataDir, p+".golden")
+			assert.NilError(t, relErr)
 
 			expected := toGolden(fileContents, diags)
 

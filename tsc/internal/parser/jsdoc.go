@@ -230,14 +230,14 @@ loop:
 			// only collect whitespace if we're already saving comments or have just crossed the comment indent margin
 			whitespace := p.scanner.TokenText()
 			if margin > -1 && indent+len(whitespace) > margin {
-				start := margin - indent
-				if start < 0 {
-					start += len(whitespace)
+				existingIndent := margin - indent
+				if existingIndent < 0 {
+					existingIndent += len(whitespace)
 				}
-				if start < 0 {
-					start = 0
+				if existingIndent < 0 {
+					existingIndent = 0
 				}
-				comments = append(comments, whitespace[start:])
+				comments = append(comments, whitespace[existingIndent:])
 			}
 			indent += len(whitespace)
 		case ast.KindEndOfFile:

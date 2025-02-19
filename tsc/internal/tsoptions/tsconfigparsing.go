@@ -918,8 +918,8 @@ func parseConfig(
 	}
 
 	applyExtendedConfig := func(result *extendsResult, extendedConfigPath string) {
-		extendedConfig, err := getExtendedConfig(sourceFile, extendedConfigPath, host, resolutionStack, extendedConfigCache, result)
-		errors = append(errors, err...)
+		extendedConfig, extendedErrors := getExtendedConfig(sourceFile, extendedConfigPath, host, resolutionStack, extendedConfigCache, result)
+		errors = append(errors, extendedErrors...)
 		if extendedConfig != nil && extendedConfig.options != nil {
 			extendsRaw := extendedConfig.raw
 			relativeDifference := ""
@@ -1169,9 +1169,9 @@ func parseJsonConfigFileContentWorker(
 
 	getProjectReferences := func(basePath string) []core.ProjectReference {
 		var projectReferences []core.ProjectReference = []core.ProjectReference{}
-		referencesOfRaw := getPropFromRaw("references", func(element any) bool { return reflect.TypeOf(element).Kind() == reflect.Map }, "object")
-		if referencesOfRaw.sliceValue != nil {
-			for _, reference := range referencesOfRaw.sliceValue {
+		newReferencesOfRaw := getPropFromRaw("references", func(element any) bool { return reflect.TypeOf(element).Kind() == reflect.Map }, "object")
+		if newReferencesOfRaw.sliceValue != nil {
+			for _, reference := range newReferencesOfRaw.sliceValue {
 				for _, ref := range parseProjectReference(reference) {
 					if reflect.TypeOf(ref.Path).Kind() != reflect.String {
 						if sourceFile == nil {

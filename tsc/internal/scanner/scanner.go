@@ -557,8 +557,7 @@ func (s *Scanner) Scan() ast.Kind {
 			if s.charAt(1) == '/' {
 				s.pos += 2
 				for {
-					ch := s.char()
-					if ch <= 0x7F {
+					if ch := s.char(); ch <= 0x7F {
 						if ch < 0 || ch == '\r' || ch == '\n' {
 							break
 						}
@@ -593,9 +592,9 @@ func (s *Scanner) Scan() ast.Kind {
 						}
 						s.pos++
 					} else {
-						ch, size := s.charAndSize()
-						if stringutil.IsLineBreak(ch) {
-							break
+						commentCh, size := s.charAndSize()
+						if stringutil.IsLineBreak(commentCh) {
+							s.tokenFlags |= ast.TokenFlagsPrecedingLineBreak
 						}
 						s.pos += size
 					}

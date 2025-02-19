@@ -4468,9 +4468,9 @@ func (c *Checker) checkVariableLikeDeclaration(node *ast.Node) {
 		parent := node.Parent.Parent
 		parentCheckMode := core.IfElse(hasDotDotDotToken(node), CheckModeRestBindingElement, CheckModeNormal)
 		parentType := c.getTypeForBindingElementParent(parent, parentCheckMode)
-		name := node.PropertyNameOrName()
-		if parentType != nil && !ast.IsBindingPattern(name) {
-			exprType := c.getLiteralTypeFromPropertyName(name)
+		propNameName := node.PropertyNameOrName()
+		if parentType != nil && !ast.IsBindingPattern(propNameName) {
+			exprType := c.getLiteralTypeFromPropertyName(propNameName)
 			if isTypeUsableAsPropertyName(exprType) {
 				nameText := getPropertyNameFromType(exprType)
 				property := c.getPropertyOfType(parentType, nameText)
@@ -5461,8 +5461,8 @@ func (c *Checker) checkNonNullTypeWithReporter(t *Type, node *ast.Node, reportEr
 	facts := c.getTypeFacts(t, TypeFactsIsUndefinedOrNull)
 	if facts&TypeFactsIsUndefinedOrNull != 0 {
 		reportError(c, node, facts)
-		t := c.getNonNullableType(t)
-		if t.flags&(TypeFlagsNullable|TypeFlagsNever) != 0 {
+		nonNullable := c.getNonNullableType(t)
+		if nonNullable.flags&(TypeFlagsNullable|TypeFlagsNever) != 0 {
 			return c.errorType
 		}
 	}
@@ -13701,11 +13701,11 @@ func (c *Checker) padTupleType(t *Type, pattern *ast.Node) *Type {
 	for i := c.getTypeReferenceArity(t); i < len(patternElements); i++ {
 		e := patternElements[i]
 		if i < len(patternElements)-1 || !(ast.IsBindingElement(e) && hasDotDotDotToken(e)) {
-			t := c.anyType
+			elementType := c.anyType
 			if !ast.IsOmittedExpression(e) && c.hasDefaultValue(e) {
-				t = c.getTypeFromBindingElement(e, false /*includePatternInType*/, false /*reportErrors*/)
+				elementType = c.getTypeFromBindingElement(e, false /*includePatternInType*/, false /*reportErrors*/)
 			}
-			elementTypes = append(elementTypes, t)
+			elementTypes = append(elementTypes, elementType)
 			elementInfos = append(elementInfos, TupleElementInfo{flags: ElementFlagsOptional})
 			if !ast.IsOmittedExpression(e) && !c.hasDefaultValue(e) {
 				c.reportImplicitAny(e, c.anyType, WideningKindNormal)
@@ -25332,15 +25332,15 @@ func (c *Checker) getContextualTypeForElementExpression(t *Type, index int, leng
 				return c.getTypeArguments(t)[c.getTypeReferenceArity(t)-offset]
 			}
 			// Return a union of the possible contextual element types with no subtype reduction.
-			index := t.TargetTupleType().fixedLength
+			tupleIndex := t.TargetTupleType().fixedLength
 			if firstSpreadIndex >= 0 {
-				index = min(index, firstSpreadIndex)
+				tupleIndex = min(tupleIndex, firstSpreadIndex)
 			}
 			endSkipCount := fixedEndLength
 			if length >= 0 && lastSpreadIndex >= 0 {
 				endSkipCount = min(fixedEndLength, length-lastSpreadIndex)
 			}
-			return c.getElementTypeOfSliceOfTupleType(t, index, endSkipCount, false /*writing*/, true /*noReductions*/)
+			return c.getElementTypeOfSliceOfTupleType(t, tupleIndex, endSkipCount, false /*writing*/, true /*noReductions*/)
 		}
 		// If element index is known and a contextual property with that name exists, return it. Otherwise return the
 		// iterated or element type of the contextual type.

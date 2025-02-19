@@ -47,52 +47,52 @@ func (vfs *wrappedFS) UseCaseSensitiveFileNames() bool {
 }
 
 func (vfs *wrappedFS) FileExists(path string) bool {
-	if _, path, ok := splitPath(path); ok {
-		return embeddedVFS.FileExists("/" + path)
+	if _, rest, ok := splitPath(path); ok {
+		return embeddedVFS.FileExists("/" + rest)
 	}
 	return vfs.fs.FileExists(path)
 }
 
 func (vfs *wrappedFS) ReadFile(path string) (contents string, ok bool) {
-	if _, path, ok := splitPath(path); ok {
-		return embeddedVFS.ReadFile("/" + path)
+	if _, rest, ok := splitPath(path); ok {
+		return embeddedVFS.ReadFile("/" + rest)
 	}
 	return vfs.fs.ReadFile(path)
 }
 
 func (vfs *wrappedFS) DirectoryExists(path string) bool {
-	if _, path, ok := splitPath(path); ok {
-		return embeddedVFS.DirectoryExists("/" + path)
+	if _, rest, ok := splitPath(path); ok {
+		return embeddedVFS.DirectoryExists("/" + rest)
 	}
 	return vfs.fs.DirectoryExists(path)
 }
 
 func (vfs *wrappedFS) GetDirectories(path string) []string {
-	if _, path, ok := splitPath(path); ok {
-		return embeddedVFS.GetDirectories("/" + path)
+	if _, rest, ok := splitPath(path); ok {
+		return embeddedVFS.GetDirectories("/" + rest)
 	}
 	return vfs.fs.GetDirectories(path)
 }
 
 func (vfs *wrappedFS) GetEntries(path string) []fs.DirEntry {
-	if _, path, ok := splitPath(path); ok {
-		return embeddedVFS.GetEntries("/" + path)
+	if _, rest, ok := splitPath(path); ok {
+		return embeddedVFS.GetEntries("/" + rest)
 	}
 	return vfs.fs.GetEntries(path)
 }
 
 func (vfs *wrappedFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	if root, path, ok := splitPath(root); ok {
-		return embeddedVFS.WalkDir("/"+path, func(path string, d fs.DirEntry, err error) error {
-			return walkFn(root+strings.TrimPrefix(path, "/"), d, err)
+	if originalRoot, rest, ok := splitPath(root); ok {
+		return embeddedVFS.WalkDir("/"+rest, func(path string, d fs.DirEntry, err error) error {
+			return walkFn(originalRoot+strings.TrimPrefix(path, "/"), d, err)
 		})
 	}
 	return vfs.fs.WalkDir(root, walkFn)
 }
 
 func (vfs *wrappedFS) Realpath(path string) string {
-	if _, path, ok := splitPath(path); ok {
-		return embeddedVFS.Realpath("/" + path)
+	if _, rest, ok := splitPath(path); ok {
+		return embeddedVFS.Realpath("/" + rest)
 	}
 	return vfs.fs.Realpath(path)
 }

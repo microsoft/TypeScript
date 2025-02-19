@@ -132,7 +132,7 @@ func (s *Server) read() (*lsproto.RequestMessage, error) {
 		return nil, fmt.Errorf("%w: %w", lsproto.ErrInvalidRequest, err)
 	}
 
-	return req, err
+	return req, nil
 }
 
 func (s *Server) sendResult(id *lsproto.ID, result any) error {

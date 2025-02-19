@@ -3193,7 +3193,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 	var originalErrorChain *ErrorChain
 	saveErrorState := r.getErrorState()
 	relateVariances := func(sourceTypeArguments []*Type, targetTypeArguments []*Type, variances []VarianceFlags, intersectionState IntersectionState) (Ternary, bool) {
-		if result := r.typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors, intersectionState); result != TernaryFalse {
+		if result = r.typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors, intersectionState); result != TernaryFalse {
 			return result, true
 		}
 		if core.Some(variances, func(v VarianceFlags) bool { return v&VarianceFlagsAllowsStructuralFallback != 0 }) {
