@@ -342,6 +342,13 @@ func TestNamespaceTransformer(t *testing.T) {
     })(N2 = N.N2 || (N.N2 = {}));
 })(N || (N = {}));`},
 
+		{title: "nested namespace", input: "namespace N.N2 { }", output: `var N;
+(function (N) {
+    let N2;
+    (function (N2) {
+    })(N2 = N.N2 || (N.N2 = {}));
+})(N || (N = {}));`},
+
 		{title: "import=", input: "import X = Y.X;", output: `var X = Y.X;`},
 
 		{title: "export import= at top-level", input: "export import X = Y.X;", output: `export var X = Y.X;`},

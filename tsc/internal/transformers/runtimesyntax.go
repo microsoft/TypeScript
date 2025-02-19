@@ -112,7 +112,7 @@ func (tx *RuntimeSyntaxTransformer) isFirstDeclarationInScope(node *ast.Node) bo
 }
 
 func (tx *RuntimeSyntaxTransformer) isExportOfNamespace(node *ast.Node) bool {
-	return tx.currentNamespace != nil && node.ModifierFlags()&ast.ModifierFlagsExport != 0
+	return tx.currentNamespace != nil && (node.ModifierFlags()&ast.ModifierFlagsExport != 0 || node.Flags&ast.NodeFlagsNestedNamespace != 0)
 }
 
 func (tx *RuntimeSyntaxTransformer) isExportOfExternalModule(node *ast.Node) bool {
@@ -525,6 +525,7 @@ func (tx *RuntimeSyntaxTransformer) visitModuleDeclaration(node *ast.ModuleDecla
 
 func (tx *RuntimeSyntaxTransformer) transformModuleBody(node *ast.ModuleDeclaration, namespaceLocalName *ast.IdentifierNode) *ast.BlockNode {
 	savedCurrentNamespace := tx.currentNamespace
+	savedCurrentScope := tx.currentScope
 	savedCurrentScopeFirstDeclarationsOfName := tx.currentScopeFirstDeclarationsOfName
 
 	tx.currentNamespace = node.AsNode()
@@ -544,20 +545,15 @@ func (tx *RuntimeSyntaxTransformer) transformModuleBody(node *ast.ModuleDeclarat
 			statementsLocation = body.Statements.Loc
 			blockLocation = body.Loc
 		} else { // node.Body.Kind == ast.KindModuleDeclaration
-			result := tx.visitor.VisitNode(node.Body)
-			if result != nil {
-				if result.Kind == ast.KindSyntaxList {
-					statements = result.AsSyntaxList().Children
-				} else {
-					statements = []*ast.Statement{result}
-				}
-			}
+			tx.currentScope = node.AsNode()
+			statements, _ = tx.visitor.VisitSlice([]*ast.Node{node.Body})
 			moduleBlock := getInnermostModuleDeclarationFromDottedModule(node).Body.AsModuleBlock()
 			statementsLocation = moduleBlock.Statements.Loc.WithPos(-1)
 		}
 	}
 
 	tx.currentNamespace = savedCurrentNamespace
+	tx.currentScope = savedCurrentScope
 	tx.currentScopeFirstDeclarationsOfName = savedCurrentScopeFirstDeclarationsOfName
 
 	statements = tx.emitContext.EndAndMergeVarEnvironment(statements)

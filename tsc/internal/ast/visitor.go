@@ -68,7 +68,7 @@ func (v *NodeVisitor) VisitNodes(nodes *NodeList) *NodeList {
 		return nodes
 	}
 
-	if result, changed := v.visitSlice(nodes.Nodes); changed {
+	if result, changed := v.VisitSlice(nodes.Nodes); changed {
 		list := v.Factory.NewNodeList(result)
 		list.Loc = nodes.Loc
 		return list
@@ -90,7 +90,7 @@ func (v *NodeVisitor) VisitModifiers(nodes *ModifierList) *ModifierList {
 		return nodes
 	}
 
-	if result, changed := v.visitSlice(nodes.Nodes); changed {
+	if result, changed := v.VisitSlice(nodes.Nodes); changed {
 		list := v.Factory.NewModifierList(result)
 		list.Loc = nodes.Loc
 		return list
@@ -99,7 +99,14 @@ func (v *NodeVisitor) VisitModifiers(nodes *ModifierList) *ModifierList {
 	return nodes
 }
 
-func (v *NodeVisitor) visitSlice(nodes []*Node) (result []*Node, changed bool) {
+// Visits a slice of Nodes, returning the resulting slice and a value indicating whether the slice was changed.
+//
+//   - If the input slice is nil, the output is nil.
+//   - If v.Visit is nil, then the output is the input.
+//   - If v.Visit returns nil, the visited Node will be absent in the output.
+//   - If v.Visit returns a different Node than the input, a new slice will be generated and returned.
+//   - If v.Visit returns a SyntaxList Node, then the children of that node will be merged into the output and a new slice will be returned.
+func (v *NodeVisitor) VisitSlice(nodes []*Node) (result []*Node, changed bool) {
 	if nodes == nil || v.Visit == nil {
 		return nodes, false
 	}
