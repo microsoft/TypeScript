@@ -1,4 +1,4 @@
-// @module: nodenext
+// @module: node18,nodenext
 // @checkJs: true
 // @outDir: dist
 // @noTypesAndSymbols: true

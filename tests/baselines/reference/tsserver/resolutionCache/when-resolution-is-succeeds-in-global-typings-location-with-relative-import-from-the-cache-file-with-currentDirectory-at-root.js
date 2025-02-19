@@ -27,10 +27,10 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/home/src/Library/Caches/typescript/package.json] Inode:: 111
+//// [/home/src/Library/Caches/typescript/package.json] Inode:: 112
 { "private": true }
 
-//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 113
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 114
 {
   "entries": {}
 }
@@ -149,7 +149,7 @@ PolledWatches::
 
 FsWatches::
 /home/src/Library/Caches/typescript/package.json: *new*
-  {"inode":111}
+  {"inode":112}
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts: *new*
   {"inode":20}
 

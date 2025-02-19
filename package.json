@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "https://www.typescriptlang.org/",
-    "version": "5.8.0",
+    "version": "5.9.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -61,7 +61,7 @@
         "chokidar": "^4.0.3",
         "diff": "^7.0.0",
         "dprint": "^0.48.0",
-        "esbuild": "^0.24.2",
+        "esbuild": "^0.25.0",
         "eslint": "^9.18.0",
         "eslint-formatter-autolinkable-stylish": "^1.4.0",
         "eslint-plugin-regexp": "^2.7.0",

@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @module: nodenext
+// @module: node18
 
 // @Filename: /node_modules/lit/index.d.cts
 //// export declare function customElement(name: string): any;
