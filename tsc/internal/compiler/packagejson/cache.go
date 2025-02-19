@@ -70,33 +70,35 @@ func (p *PackageJson) GetVersionPaths(trace func(string)) VersionPaths {
 type VersionPaths struct {
 	Version   string
 	pathsJSON *collections.OrderedMap[string, JSONValue]
-	paths     map[string][]string
+	paths     *collections.OrderedMap[string, []string]
 }
 
 func (v *VersionPaths) Exists() bool {
 	return v != nil && v.Version != "" && v.pathsJSON != nil
 }
 
-func (v *VersionPaths) GetPaths() map[string][]string {
+func (v *VersionPaths) GetPaths() *collections.OrderedMap[string, []string] {
 	if !v.Exists() {
 		return nil
 	}
 	if v.paths != nil {
 		return v.paths
 	}
-	v.paths = make(map[string][]string, v.pathsJSON.Size())
+	paths := collections.NewOrderedMapWithSizeHint[string, []string](v.pathsJSON.Size())
 	for key, value := range v.pathsJSON.Entries() {
 		if value.Type != JSONValueTypeArray {
 			continue
 		}
-		v.paths[key] = make([]string, len(value.AsArray()))
+		slice := make([]string, len(value.AsArray()))
 		for i, path := range value.AsArray() {
 			if path.Type != JSONValueTypeString {
 				continue
 			}
-			v.paths[key][i] = path.Value.(string)
+			slice[i] = path.Value.(string)
 		}
+		v.paths.Set(key, slice)
 	}
+	v.paths = paths
 	return v.paths
 }
 

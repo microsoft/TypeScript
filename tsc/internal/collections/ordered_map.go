@@ -2,6 +2,7 @@ package collections
 
 import (
 	"bytes"
+	"encoding"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,6 +10,7 @@ import (
 	"maps"
 	"reflect"
 	"slices"
+	"strconv"
 
 	json2 "github.com/go-json-experiment/json"
 	"github.com/go-json-experiment/json/jsontext"
@@ -105,6 +107,10 @@ func (m *OrderedMap[K, V]) Delete(key K) (V, bool) {
 // A slice of the keys can be obtained by calling `slices.Collect`.
 func (m *OrderedMap[K, V]) Keys() iter.Seq[K] {
 	return func(yield func(K) bool) {
+		if m == nil {
+			return
+		}
+
 		// We use a for loop here to ensure we enumerate new items added during iteration.
 		//nolint:intrange
 		for i := 0; i < len(m.keys); i++ {
@@ -119,6 +125,10 @@ func (m *OrderedMap[K, V]) Keys() iter.Seq[K] {
 // A slice of the values can be obtained by calling `slices.Collect`.
 func (m *OrderedMap[K, V]) Values() iter.Seq[V] {
 	return func(yield func(V) bool) {
+		if m == nil {
+			return
+		}
+
 		// We use a for loop here to ensure we enumerate new items added during iteration.
 		//nolint:intrange
 		for i := 0; i < len(m.keys); i++ {
@@ -132,6 +142,10 @@ func (m *OrderedMap[K, V]) Values() iter.Seq[V] {
 // Entries returns an iterator over the key-value pairs in the map.
 func (m *OrderedMap[K, V]) Entries() iter.Seq2[K, V] {
 	return func(yield func(K, V) bool) {
+		if m == nil {
+			return
+		}
+
 		// We use a for loop here to ensure we enumerate new items added during iteration.
 		//nolint:intrange
 		for i := 0; i < len(m.keys); i++ {
@@ -153,11 +167,19 @@ func (m *OrderedMap[K, V]) Clear() {
 
 // Size returns the number of key-value pairs in the map.
 func (m *OrderedMap[K, V]) Size() int {
+	if m == nil {
+		return 0
+	}
+
 	return len(m.keys)
 }
 
 // Clone returns a shallow copy of the map.
 func (m *OrderedMap[K, V]) Clone() *OrderedMap[K, V] {
+	if m == nil {
+		return nil
+	}
+
 	m2 := m.clone()
 	return &m2
 }
@@ -167,6 +189,59 @@ func (m *OrderedMap[K, V]) clone() OrderedMap[K, V] {
 		keys: slices.Clone(m.keys),
 		mp:   maps.Clone(m.mp),
 	}
+}
+
+func (m OrderedMap[K, V]) MarshalJSON() ([]byte, error) {
+	if len(m.mp) == 0 {
+		return []byte("{}"), nil
+	}
+	var buf bytes.Buffer
+	buf.WriteByte('{')
+	enc := json.NewEncoder(&buf)
+	enc.SetEscapeHTML(false)
+
+	for i, k := range m.keys {
+		if i > 0 {
+			buf.WriteByte(',')
+		}
+
+		keyString, err := resolveKeyName(reflect.ValueOf(k))
+		if err != nil {
+			return nil, err
+		}
+
+		if err := enc.Encode(keyString); err != nil {
+			return nil, err
+		}
+
+		buf.WriteByte(':')
+
+		if err := enc.Encode(m.mp[k]); err != nil {
+			return nil, err
+		}
+	}
+	buf.WriteByte('}')
+	return buf.Bytes(), nil
+}
+
+func resolveKeyName(k reflect.Value) (string, error) {
+	if k.Kind() == reflect.String {
+		return k.String(), nil
+	}
+	if tm, ok := k.Interface().(encoding.TextMarshaler); ok {
+		if k.Kind() == reflect.Pointer && k.IsNil() {
+			return "", nil
+		}
+		buf, err := tm.MarshalText()
+		return string(buf), err
+	}
+	switch k.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return strconv.FormatInt(k.Int(), 10), nil
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return strconv.FormatUint(k.Uint(), 10), nil
+	}
+	panic("unexpected map key type")
 }
 
 func (m *OrderedMap[K, V]) UnmarshalJSON(data []byte) error {

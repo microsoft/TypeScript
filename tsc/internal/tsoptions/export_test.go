@@ -2,6 +2,7 @@ package tsoptions
 
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
@@ -21,7 +22,7 @@ func ParseCommandLineTestWorker(
 		fs:                fs,
 		workerDiagnostics: CompilerOptionsDidYouMeanDiagnostics,
 		fileNames:         []string{},
-		options:           map[string]any{},
+		options:           &collections.OrderedMap[string, any]{},
 		errors:            []*ast.Diagnostic{},
 	}
 	if len(decls) != 0 {
@@ -43,6 +44,6 @@ type TestCommandLineParser struct {
 	Fs                vfs.FS
 	WorkerDiagnostics *ParseCommandLineWorkerDiagnostics
 	FileNames         []string
-	Options           map[string]any
+	Options           *collections.OrderedMap[string, any]
 	Errors            []*ast.Diagnostic
 }

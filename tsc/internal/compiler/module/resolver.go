@@ -1023,7 +1023,7 @@ func (r *resolutionState) tryLoadModuleUsingOptionalResolutionSettings() *resolv
 }
 
 func (r *resolutionState) tryLoadModuleUsingPathsIfEligible() *resolved {
-	if len(r.compilerOptions.Paths) > 0 && !tspath.PathIsRelative(r.name) {
+	if r.compilerOptions.Paths.Size() > 0 && !tspath.PathIsRelative(r.name) {
 		if r.resolver.traceEnabled() {
 			r.resolver.host.Trace(diagnostics.X_paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0.Format(r.name))
 		}
@@ -1045,13 +1045,13 @@ func (r *resolutionState) tryLoadModuleUsingPathsIfEligible() *resolved {
 	)
 }
 
-func (r *resolutionState) tryLoadModuleUsingPaths(extensions extensions, moduleName string, containingDirectory string, paths map[string][]string, pathPatterns parsedPatterns, loader resolutionKindSpecificLoader, onlyRecordFailures bool) *resolved {
+func (r *resolutionState) tryLoadModuleUsingPaths(extensions extensions, moduleName string, containingDirectory string, paths *collections.OrderedMap[string, []string], pathPatterns parsedPatterns, loader resolutionKindSpecificLoader, onlyRecordFailures bool) *resolved {
 	if matchedPattern := matchPatternOrExact(pathPatterns, moduleName); matchedPattern.IsValid() {
 		matchedStar := matchedPattern.MatchedText(moduleName)
 		if r.resolver.traceEnabled() {
 			r.resolver.host.Trace(diagnostics.Module_name_0_matched_pattern_1.Format(moduleName, matchedPattern.Text))
 		}
-		for _, subst := range paths[matchedPattern.Text] {
+		for _, subst := range paths.GetOrZero(matchedPattern.Text) {
 			path := strings.Replace(subst, "*", matchedStar, 1)
 			candidate := tspath.NormalizePath(tspath.CombinePaths(containingDirectory, path))
 			if r.resolver.traceEnabled() {
@@ -1688,7 +1688,7 @@ func moveToNextDirectorySeparatorIfAvailable(path string, prevSeparatorIndex int
 }
 
 func getPathsBasePath(options *core.CompilerOptions, currentDirectory string) string {
-	if len(options.Paths) == 0 {
+	if options.Paths.Size() == 0 {
 		return ""
 	}
 	if options.PathsBasePath != "" {
@@ -1702,12 +1702,12 @@ type parsedPatterns struct {
 	patterns           []core.Pattern
 }
 
-func tryParsePatterns(paths map[string][]string) parsedPatterns {
+func tryParsePatterns(paths *collections.OrderedMap[string, []string]) parsedPatterns {
 	// !!! TS has a weakmap cache
 	// We could store a cache on Resolver, but maybe we can wait and profile
 	matchableStringSet := collections.OrderedSet[string]{}
-	patterns := make([]core.Pattern, 0, len(paths))
-	for path := range paths {
+	patterns := make([]core.Pattern, 0, paths.Size())
+	for path := range paths.Keys() {
 		if pattern := core.TryParsePattern(path); pattern.IsValid() {
 			if pattern.StarIndex == -1 {
 				matchableStringSet.Add(path)

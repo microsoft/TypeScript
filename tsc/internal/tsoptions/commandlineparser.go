@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/stringutil"
@@ -31,7 +32,7 @@ type commandLineParser struct {
 	workerDiagnostics *ParseCommandLineWorkerDiagnostics
 	optionsMap        *NameMap
 	fs                vfs.FS
-	options           map[string]any
+	options           *collections.OrderedMap[string, any]
 	fileNames         []string
 	errors            []*ast.Diagnostic
 }
@@ -69,7 +70,7 @@ func parseCommandLineWorker(
 		fs:                fs,
 		workerDiagnostics: parseCommandLineWithDiagnostics,
 		fileNames:         []string{},
-		options:           map[string]any{},
+		options:           &collections.OrderedMap[string, any]{},
 		errors:            []*ast.Diagnostic{},
 	}
 	parser.optionsMap = GetNameMapFromList(parser.OptionsDeclarations())
@@ -184,11 +185,11 @@ func (p *commandLineParser) parseOptionValue(
 			optValue = args[i]
 		}
 		if optValue == "null" {
-			p.options[opt.Name] = nil
+			p.options.Set(opt.Name, nil)
 			i++
 		} else if opt.Kind == "boolean" {
 			if optValue == "false" {
-				p.options[opt.Name] = false
+				p.options.Set(opt.Name, false)
 				i++
 			} else {
 				if optValue == "true" {
@@ -211,12 +212,12 @@ func (p *commandLineParser) parseOptionValue(
 				}
 				p.errors = append(p.errors, ast.NewCompilerDiagnostic(diag, opt.Name, getCompilerOptionValueTypeString(opt)))
 				if opt.Kind == "list" {
-					p.options[opt.Name] = []string{}
+					p.options.Set(opt.Name, []string{})
 				} else if opt.Kind == "enum" {
 					p.errors = append(p.errors, createDiagnosticForInvalidEnumType(opt, nil, nil))
 				}
 			} else {
-				p.options[opt.Name] = true
+				p.options.Set(opt.Name, true)
 			}
 			return i
 		}
@@ -226,7 +227,7 @@ func (p *commandLineParser) parseOptionValue(
 				// todo: Make sure this parseInt matches JS parseInt
 				num, e := strconv.ParseInt(args[i], 10, 0)
 				if e == nil {
-					p.options[opt.Name] = num
+					p.options.Set(opt.Name, num)
 				}
 				i++
 			case "boolean":
@@ -235,9 +236,9 @@ func (p *commandLineParser) parseOptionValue(
 
 				// check next argument as boolean flag value
 				if optValue == "false" {
-					p.options[opt.Name] = false
+					p.options.Set(opt.Name, false)
 				} else {
-					p.options[opt.Name] = true
+					p.options.Set(opt.Name, true)
 				}
 				// try to consume next argument as value for boolean flag; do not consume argument if it is not "true" or "false"
 				if optValue == "false" || optValue == "true" {
@@ -246,14 +247,14 @@ func (p *commandLineParser) parseOptionValue(
 			case "string":
 				val, err := validateJsonOptionValue(opt, args[i], nil, nil)
 				if err == nil {
-					p.options[opt.Name] = val
+					p.options.Set(opt.Name, val)
 				} else {
 					p.errors = append(p.errors, err...)
 				}
 				i++
 			case "list":
 				result, err := p.parseListTypeOption(opt, args[i])
-				p.options[opt.Name] = result
+				p.options.Set(opt.Name, result)
 				p.errors = append(p.errors, err...)
 				if len(result) > 0 || len(err) > 0 {
 					i++
@@ -263,12 +264,12 @@ func (p *commandLineParser) parseOptionValue(
 				panic("listOrElement not supported here")
 			default:
 				val, err := convertJsonOptionOfEnumType(opt, strings.TrimFunc(args[i], stringutil.IsWhiteSpaceLike), nil, nil)
-				p.options[opt.Name] = val
+				p.options.Set(opt.Name, val)
 				p.errors = append(p.errors, err...)
 				i++
 			}
 		} else {
-			p.options[opt.Name] = nil
+			p.options.Set(opt.Name, nil)
 			i++
 		}
 	}
