@@ -18,7 +18,6 @@ linters:
     - errname
     - errorlint
     - fatcontext
-    - gci
     - gocheckcompilerdirectives
     - goprintffuncname
     - gosimple
