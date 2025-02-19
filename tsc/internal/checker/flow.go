@@ -73,7 +73,7 @@ func (c *Checker) getFlowTypeOfReferenceEx(reference *ast.Node, declaredType *Ty
 	f := &c.flowStates[flowStateCount]
 	f.reference = reference
 	f.declaredType = declaredType
-	f.initialType = initialType
+	f.initialType = core.Coalesce(initialType, declaredType)
 	f.flowContainer = flowContainer
 	f.sharedFlowStart = len(c.sharedFlows)
 	f.reduceLabels = f.reduceLabelsBuffer[:0]
