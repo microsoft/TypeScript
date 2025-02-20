@@ -8,11 +8,11 @@
 ////
 
 verify.codeFix({
-    description: "Add return type 'Foo<number, unknown>'",
+    description: "Add return type 'Foo<number>'",
     index: 0,
     newFileContent:
 `
 export interface Foo<S = string, T = unknown, U = number> {}
-export function g(x: Foo<number, unknown, number>): Foo<number, unknown> { return x; }
+export function g(x: Foo<number, unknown, number>): Foo<number> { return x; }
 `,
 });

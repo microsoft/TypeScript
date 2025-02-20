@@ -621,11 +621,7 @@ function endOfRequiredTypeParameters(checker: TypeChecker, type: GenericType): n
     const fullTypeArguments = type.typeArguments;
     const target = type.target;
     for (let cutoff = 0; cutoff < fullTypeArguments.length; cutoff++) {
-        const firstTypeToDrop = fullTypeArguments[cutoff];
-        // Our trick for figuring out if generics have unnecessary defaults by filling in
-        // missing type arguments incorrectly guesses that trailing unknowns are unnneceesary.
-        // Simply bail on trailing unknowns to avoid this case.
-        if ((firstTypeToDrop.getFlags() | TypeFlags.Unknown) === TypeFlags.Unknown) {
+        if (target.localTypeParameters?.[cutoff].constraint === undefined) {
             continue;
         }
         const typeArguments = fullTypeArguments.slice(0, cutoff);
