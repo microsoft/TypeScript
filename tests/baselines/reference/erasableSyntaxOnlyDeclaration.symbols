@@ -112,3 +112,11 @@ declare function foo(): void;
 export = foo;
 >foo : Symbol(foo, Decl(other.d.cts, 0, 0))
 
+
+=== esm.d.mts ===
+declare const foo = 1234;
+>foo : Symbol(foo, Decl(esm.d.mts, 0, 13))
+
+export default foo;
+>foo : Symbol(foo, Decl(esm.d.mts, 0, 13))
+

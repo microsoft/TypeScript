@@ -66,3 +66,8 @@ index.d.ts(1,1): error TS1046: Top-level declarations in .d.ts files must start 
     declare function foo(): void;
     export = foo;
     
+    
+==== esm.d.mts (0 errors) ====
+    declare const foo = 1234;
+    export default foo;
+    

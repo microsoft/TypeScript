@@ -74,3 +74,8 @@ export = foo;
 // @filename: other.d.cts
 declare function foo(): void;
 export = foo;
+
+
+// @filename: esm.mts
+const foo = 1234;
+export default foo;

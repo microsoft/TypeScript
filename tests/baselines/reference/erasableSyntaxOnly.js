@@ -76,6 +76,11 @@ declare function foo(): void;
 export = foo;
 
 
+//// [esm.mts]
+const foo = 1234;
+export default foo;
+
+
 //// [index.js]
 var MyClassErr = /** @class */ (function () {
     // No parameter properties
@@ -119,3 +124,6 @@ var MyClassOk = /** @class */ (function () {
 "use strict";
 var foo = require("./other.cjs");
 module.exports = foo;
+//// [esm.mjs]
+var foo = 1234;
+export default foo;

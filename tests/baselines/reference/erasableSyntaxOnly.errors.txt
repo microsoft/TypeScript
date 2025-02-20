@@ -105,3 +105,8 @@ index.ts(28,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOn
     declare function foo(): void;
     export = foo;
     
+    
+==== esm.mts (0 errors) ====
+    const foo = 1234;
+    export default foo;
+    
