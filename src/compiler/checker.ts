@@ -30456,7 +30456,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const assumeInitialized = isParameter || isAlias ||
             (isOuterVariable && !isNeverInitialized) ||
             isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
-            type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
+            !typeIsAutomatic && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
                     isInTypeQuery(node) || isInAmbientOrTypeNode(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
             node.parent.kind === SyntaxKind.NonNullExpression ||
             declaration.kind === SyntaxKind.VariableDeclaration && (declaration as VariableDeclaration).exclamationToken ||
@@ -30469,19 +30469,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
         // from declaration to use, and when the variable's declared type doesn't include undefined but the
         // control flow based type does include undefined.
-        if (!isEvolvingArrayOperationTarget(node) && (type === autoType || type === autoArrayType)) {
-            if (flowType === autoType || flowType === autoArrayType) {
-                if (noImplicitAny) {
-                    error(getNameOfDeclaration(declaration), Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined, symbolToString(symbol), typeToString(flowType));
-                    error(node, Diagnostics.Variable_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(flowType));
-                }
-                return convertAutoToAny(flowType);
-            }
-        }
-        else if (!assumeInitialized && !containsUndefinedType(type) && containsUndefinedType(flowType)) {
+        if (!typeIsAutomatic && !assumeInitialized && !containsUndefinedType(type) && containsUndefinedType(flowType)) {
             error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
             // Return the declared type to reduce follow-on errors
             return type;
+        }
+        if (flowType === autoType || flowType === autoArrayType && !isEvolvingArrayOperationTarget(node)) {
+            if (noImplicitAny) {
+                error(getNameOfDeclaration(declaration), Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined, symbolToString(symbol), typeToString(flowType));
+                error(node, Diagnostics.Variable_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(flowType));
+            }
+            return convertAutoToAny(flowType);
         }
         return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
     }

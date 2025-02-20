@@ -1,0 +1,204 @@
+//// [tests/cases/compiler/useBeforeAssignedAutoType2.ts] ////
+
+=== useBeforeAssignedAutoType2.ts ===
+declare function is(...arg: string[]): boolean;
+>is : (...arg: string[]) => boolean
+>   : ^^^^   ^^        ^^^^^       
+>arg : string[]
+>    : ^^^^^^^^
+
+declare class AST_Case {
+>AST_Case : AST_Case
+>         : ^^^^^^^^
+
+  constructor(_: { body: any });
+>_ : { body: any; }
+>  : ^^^^^^^^   ^^^
+>body : any
+>     : ^^^
+}
+declare class AST_Default {
+>AST_Default : AST_Default
+>            : ^^^^^^^^^^^
+
+  constructor(_: { body: any });
+>_ : { body: any; }
+>  : ^^^^^^^^   ^^^
+>body : any
+>     : ^^^
+}
+declare class AST_Statement {
+>AST_Statement : AST_Statement
+>              : ^^^^^^^^^^^^^
+
+  children: any[];
+>children : any[]
+>         : ^^^^^
+}
+declare function statement(): AST_Statement;
+>statement : () => AST_Statement
+>          : ^^^^^^             
+
+declare function unexpected(): void;
+>unexpected : () => void
+>           : ^^^^^^    
+
+function switch_body_() {
+>switch_body_ : () => (AST_Case | AST_Default)[]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  var a = [],
+>a : any[]
+>  : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+    branch,
+>branch : any
+>       : ^^^
+
+    cur;
+>cur : any
+>    : ^^^
+
+  while (!is("punc", "}")) {
+>!is("punc", "}") : boolean
+>                 : ^^^^^^^
+>is("punc", "}") : boolean
+>                : ^^^^^^^
+>is : (...arg: string[]) => boolean
+>   : ^^^^   ^^        ^^^^^       
+>"punc" : "punc"
+>       : ^^^^^^
+>"}" : "}"
+>    : ^^^
+
+    if (is("keyword", "case")) {
+>is("keyword", "case") : boolean
+>                      : ^^^^^^^
+>is : (...arg: string[]) => boolean
+>   : ^^^^   ^^        ^^^^^       
+>"keyword" : "keyword"
+>          : ^^^^^^^^^
+>"case" : "case"
+>       : ^^^^^^
+
+      cur = [];
+>cur = [] : never[]
+>         : ^^^^^^^
+>cur : any
+>    : ^^^
+>[] : never[]
+>   : ^^^^^^^
+
+      branch = new AST_Case({
+>branch = new AST_Case({        body: cur,      }) : AST_Case
+>                                                  : ^^^^^^^^
+>branch : any
+>       : ^^^
+>new AST_Case({        body: cur,      }) : AST_Case
+>                                         : ^^^^^^^^
+>AST_Case : typeof AST_Case
+>         : ^^^^^^^^^^^^^^^
+>{        body: cur,      } : { body: any[]; }
+>                           : ^^^^^^^^^^^^^^^^
+
+        body: cur,
+>body : any[]
+>     : ^^^^^
+>cur : any[]
+>    : ^^^^^
+
+      });
+      a.push(branch);
+>a.push(branch) : number
+>               : ^^^^^^
+>a.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
+>a : any[]
+>  : ^^^^^
+>push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
+>branch : AST_Case
+>       : ^^^^^^^^
+
+    } else if (is("keyword", "default")) {
+>is("keyword", "default") : boolean
+>                         : ^^^^^^^
+>is : (...arg: string[]) => boolean
+>   : ^^^^   ^^        ^^^^^       
+>"keyword" : "keyword"
+>          : ^^^^^^^^^
+>"default" : "default"
+>          : ^^^^^^^^^
+
+      cur = [];
+>cur = [] : never[]
+>         : ^^^^^^^
+>cur : any
+>    : ^^^
+>[] : never[]
+>   : ^^^^^^^
+
+      branch = new AST_Default({
+>branch = new AST_Default({        body: cur,      }) : AST_Default
+>                                                     : ^^^^^^^^^^^
+>branch : any
+>       : ^^^
+>new AST_Default({        body: cur,      }) : AST_Default
+>                                            : ^^^^^^^^^^^
+>AST_Default : typeof AST_Default
+>            : ^^^^^^^^^^^^^^^^^^
+>{        body: cur,      } : { body: any[]; }
+>                           : ^^^^^^^^^^^^^^^^
+
+        body: cur,
+>body : any[]
+>     : ^^^^^
+>cur : any[]
+>    : ^^^^^
+
+      });
+      a.push(branch);
+>a.push(branch) : number
+>               : ^^^^^^
+>a.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
+>a : any[]
+>  : ^^^^^
+>push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
+>branch : AST_Default
+>       : ^^^^^^^^^^^
+
+    } else {
+      if (!cur) unexpected();
+>!cur : boolean
+>     : ^^^^^^^
+>cur : any[] | undefined
+>    : ^^^^^^^^^^^^^^^^^
+>unexpected() : void
+>             : ^^^^
+>unexpected : () => void
+>           : ^^^^^^    
+
+      cur.push(statement());
+>cur.push(statement()) : number
+>                      : ^^^^^^
+>cur.push : (...items: any[]) => number
+>         : ^^^^     ^^^^^^^^^^^^      
+>cur : any[] | undefined
+>    : ^^^^^^^^^^^^^^^^^
+>push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
+>statement() : AST_Statement
+>            : ^^^^^^^^^^^^^
+>statement : () => AST_Statement
+>          : ^^^^^^             
+    }
+  }
+  return a;
+>a : (AST_Case | AST_Default)[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
