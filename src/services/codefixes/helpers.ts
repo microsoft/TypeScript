@@ -621,6 +621,9 @@ function endOfRequiredTypeParameters(checker: TypeChecker, type: GenericType): n
     const fullTypeArguments = type.typeArguments;
     const target = type.target;
     for (let cutoff = 0; cutoff < fullTypeArguments.length; cutoff++) {
+        if (target.localTypeParameters?.[cutoff].constraint === undefined) {
+            continue;
+        }
         const typeArguments = fullTypeArguments.slice(0, cutoff);
         const filledIn = checker.fillMissingTypeArguments(typeArguments, target.typeParameters, cutoff, /*isJavaScriptImplicitAny*/ false);
         if (filledIn.every((fill, i) => fill === fullTypeArguments[i])) {
