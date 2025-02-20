@@ -8,7 +8,8 @@ function f() {}
 f[Symbol.iterator] = function() {}
 >f[Symbol.iterator] = function() {} : () => void
 >                                   : ^^^^^^^^^^
->f[Symbol.iterator] : any
+>f[Symbol.iterator] : () => void
+>                   : ^^^^^^^^^^
 >f : typeof f
 >  : ^^^^^^^^
 >Symbol.iterator : unique symbol
