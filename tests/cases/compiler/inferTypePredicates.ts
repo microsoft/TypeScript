@@ -289,3 +289,26 @@ function isEmptyString(x: unknown) {
   const rv = x === "";
   return rv satisfies boolean;
 }
+
+// https://github.com/microsoft/TypeScript/issues/58996
+type Animal = {
+  breath: true,
+};
+
+type Rock = {
+  breath: false,
+};
+
+type Something = Animal | Rock;
+
+function isAnimal(something: Something): something is Animal {
+  return something.breath
+}
+
+function positive(t: Something) {
+  return isAnimal(t)
+}
+
+function negative(t: Something) { 
+  return !isAnimal(t)
+}
