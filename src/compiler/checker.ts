@@ -37870,7 +37870,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : fallbackType;
     }
 
-    function inferFromAnnotatedParameters(signature: Signature, context: Signature, inferenceContext: InferenceContext) {
+    function inferFromAnnotatedParametersAndReturn(signature: Signature, context: Signature, inferenceContext: InferenceContext) {
         const len = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
         for (let i = 0; i < len; i++) {
             const declaration = signature.parameters[i].valueDeclaration as ParameterDeclaration;
@@ -37880,6 +37880,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const target = getTypeAtPosition(context, i);
                 inferTypes(inferenceContext.inferences, source, target);
             }
+        }
+        const typeNode = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
+        if (typeNode) {
+            const source = getTypeFromTypeNode(typeNode);
+            const target = getReturnTypeOfSignature(context);
+            inferTypes(inferenceContext.inferences, source, target);
         }
     }
 
@@ -38878,7 +38884,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const inferenceContext = getInferenceContext(node);
                         let instantiatedContextualSignature: Signature | undefined;
                         if (checkMode && checkMode & CheckMode.Inferential) {
-                            inferFromAnnotatedParameters(signature, contextualSignature, inferenceContext!);
+                            inferFromAnnotatedParametersAndReturn(signature, contextualSignature, inferenceContext!);
                             const restType = getEffectiveRestType(contextualSignature);
                             if (restType && restType.flags & TypeFlags.TypeParameter) {
                                 instantiatedContextualSignature = instantiateSignature(contextualSignature, inferenceContext!.nonFixingMapper);
@@ -38896,7 +38902,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else if (contextualSignature && !node.typeParameters && contextualSignature.parameters.length > node.parameters.length) {
                     const inferenceContext = getInferenceContext(node);
                     if (checkMode && checkMode & CheckMode.Inferential) {
-                        inferFromAnnotatedParameters(signature, contextualSignature, inferenceContext!);
+                        inferFromAnnotatedParametersAndReturn(signature, contextualSignature, inferenceContext!);
                     }
                 }
                 if (contextualSignature && !getReturnTypeFromAnnotation(node) && !signature.resolvedReturnType) {
