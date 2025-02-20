@@ -128,7 +128,8 @@ func makeUnitsFromTest(code string, fileName string) testCaseContent {
 	var tsConfigFileUnitData *testUnit
 	for i, data := range testUnits {
 		if harnessutil.GetConfigNameFromFileName(data.name) != "" {
-			configJson := parser.ParseJSONText(data.name, data.content)
+			path := tspath.ToPath(data.name, parseConfigHost.GetCurrentDirectory(), parseConfigHost.Vfs.UseCaseSensitiveFileNames())
+			configJson := parser.ParseJSONText(data.name, path, data.content)
 			tsConfigSourceFile := &tsoptions.TsConfigSourceFile{
 				SourceFile: configJson,
 			}

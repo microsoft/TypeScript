@@ -9,6 +9,7 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+	"sync"
 	"testing"
 	"testing/fstest"
 
@@ -16,7 +17,9 @@ import (
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/repo"
+	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
@@ -345,8 +348,54 @@ func getOptionValue(t *testing.T, option *tsoptions.CommandLineOption, value str
 	return nil
 }
 
+type cachedCompilerHost struct {
+	compiler.CompilerHost
+	options *core.CompilerOptions
+}
+
+var sourceFileCache sync.Map
+
+func (h *cachedCompilerHost) GetSourceFile(fileName string, path tspath.Path, languageVersion core.ScriptTarget) *ast.SourceFile {
+	text, _ := h.FS().ReadFile(fileName)
+
+	type sourceFileCacheKey struct {
+		core.SourceFileAffectingCompilerOptions
+		fileName        string
+		path            tspath.Path
+		languageVersion core.ScriptTarget
+		text            string
+	}
+
+	key := sourceFileCacheKey{
+		SourceFileAffectingCompilerOptions: h.options.SourceFileAffecting(),
+		fileName:                           fileName,
+		path:                               path,
+		languageVersion:                    languageVersion,
+		text:                               text,
+	}
+
+	if cached, ok := sourceFileCache.Load(key); ok {
+		return cached.(*ast.SourceFile)
+	}
+
+	// !!! dedupe with compiler.compilerHost
+	var sourceFile *ast.SourceFile
+	if tspath.FileExtensionIs(fileName, tspath.ExtensionJson) {
+		sourceFile = parser.ParseJSONText(fileName, path, text)
+	} else {
+		// !!! JSDocParsingMode
+		sourceFile = parser.ParseSourceFile(fileName, path, text, languageVersion, scanner.JSDocParsingModeParseAll)
+	}
+
+	result, _ := sourceFileCache.LoadOrStore(key, sourceFile)
+	return result.(*ast.SourceFile)
+}
+
 func createCompilerHost(fs vfs.FS, defaultLibraryPath string, options *core.CompilerOptions, currentDirectory string) compiler.CompilerHost {
-	return compiler.NewCompilerHost(options, currentDirectory, fs, defaultLibraryPath)
+	return &cachedCompilerHost{
+		CompilerHost: compiler.NewCompilerHost(options, currentDirectory, fs, defaultLibraryPath),
+		options:      options,
+	}
 }
 
 func compileFilesWithHost(

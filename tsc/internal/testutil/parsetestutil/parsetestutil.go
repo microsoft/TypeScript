@@ -9,11 +9,13 @@ import (
 	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 // Simplifies parsing an input string into a SourceFile for testing purposes.
 func ParseTypeScript(text string, jsx bool) *ast.SourceFile {
-	file := parser.ParseSourceFile(core.IfElse(jsx, "main.tsx", "main.ts"), text, core.ScriptTargetESNext, scanner.JSDocParsingModeParseNone)
+	fileName := core.IfElse(jsx, "main.tsx", "main.ts")
+	file := parser.ParseSourceFile(fileName, tspath.Path(fileName), text, core.ScriptTargetESNext, scanner.JSDocParsingModeParseNone)
 	ast.SetParentInChildren(file.AsNode())
 	return file
 }

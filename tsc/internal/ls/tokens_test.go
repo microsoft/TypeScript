@@ -47,7 +47,7 @@ func FuzzTokens(f *testing.F) {
 }
 
 func goGetTokenAtPosition(t *testing.T, fileText string, position int) (kind string, pos int) {
-	file := parser.ParseSourceFile("file.ts", fileText, core.ScriptTargetLatest, scanner.JSDocParsingModeParseAll)
+	file := parser.ParseSourceFile("file.ts", "file.ts", fileText, core.ScriptTargetLatest, scanner.JSDocParsingModeParseAll)
 	token := getTokenAtPosition(file, position, true /*allowPositionInLeadingTrvia*/, false /*includeEndPosition*/, nil)
 	kind = strings.Replace(token.Kind.String(), "Kind", "", 1)
 	switch kind {

@@ -538,8 +538,7 @@ func (s *Service) toPath(fileName string) tspath.Path {
 func (s *Service) loadConfiguredProject(project *Project) {
 	if configFileContent, ok := s.host.FS().ReadFile(project.configFileName); ok {
 		configDir := tspath.GetDirectoryPath(project.configFileName)
-		tsConfigSourceFile := tsoptions.NewTsconfigSourceFileFromFilePath(project.configFileName, configFileContent)
-		tsConfigSourceFile.SourceFile.SetPath(s.toPath(project.configFileName))
+		tsConfigSourceFile := tsoptions.NewTsconfigSourceFileFromFilePath(project.configFileName, s.toPath(project.configFileName), configFileContent)
 		parsedCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
 			tsConfigSourceFile,
 			s.host,

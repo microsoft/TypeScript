@@ -252,6 +252,29 @@ func (options *CompilerOptions) GetAreDeclarationMapsEnabled() bool {
 	return false
 }
 
+// SourceFileAffectingCompilerOptions are the CompilerOptions values that when
+// changed require a new SourceFile be created.
+type SourceFileAffectingCompilerOptions struct {
+	// !!! generate this
+	Target          ScriptTarget
+	Jsx             JsxEmit
+	JsxImportSource string
+	ImportHelpers   Tristate
+	AlwaysStrict    Tristate
+	ModuleDetection ModuleDetectionKind
+}
+
+func (options *CompilerOptions) SourceFileAffecting() SourceFileAffectingCompilerOptions {
+	return SourceFileAffectingCompilerOptions{
+		Target:          options.Target,
+		Jsx:             options.Jsx,
+		JsxImportSource: options.JsxImportSource,
+		ImportHelpers:   options.ImportHelpers,
+		AlwaysStrict:    options.AlwaysStrict,
+		ModuleDetection: options.ModuleDetection,
+	}
+}
+
 type ModuleDetectionKind int32
 
 const (

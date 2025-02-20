@@ -13,6 +13,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/repo"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 var (
@@ -126,7 +127,7 @@ func readLibsMeta() (libNames []string, paths map[string]string) {
 		return nil, nil
 	}
 
-	sourceFile := parser.ParseJSONText(libsFile, string(b))
+	sourceFile := parser.ParseJSONText(libsFile, tspath.Path(libsFile), string(b))
 	diags := sourceFile.Diagnostics()
 
 	if len(diags) > 0 {

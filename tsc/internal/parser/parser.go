@@ -52,6 +52,7 @@ type Parser struct {
 	factory ast.NodeFactory
 
 	fileName         string
+	path             tspath.Path
 	sourceText       string
 	languageVersion  core.ScriptTarget
 	scriptKind       core.ScriptKind
@@ -91,18 +92,18 @@ func putParser(p *Parser) {
 	parserPool.Put(p)
 }
 
-func ParseSourceFile(fileName string, sourceText string, languageVersion core.ScriptTarget, jsdocParsingMode scanner.JSDocParsingMode) *ast.SourceFile {
+func ParseSourceFile(fileName string, path tspath.Path, sourceText string, languageVersion core.ScriptTarget, jsdocParsingMode scanner.JSDocParsingMode) *ast.SourceFile {
 	p := getParser()
 	defer putParser(p)
-	p.initializeState(fileName, sourceText, languageVersion, core.ScriptKindUnknown, jsdocParsingMode)
+	p.initializeState(fileName, path, sourceText, languageVersion, core.ScriptKindUnknown, jsdocParsingMode)
 	p.nextToken()
 	return p.parseSourceFileWorker()
 }
 
-func ParseJSONText(fileName string, sourceText string) *ast.SourceFile {
+func ParseJSONText(fileName string, path tspath.Path, sourceText string) *ast.SourceFile {
 	p := getParser()
 	defer putParser(p)
-	p.initializeState(fileName, sourceText, core.ScriptTargetES2015, core.ScriptKindJSON, scanner.JSDocParsingModeParseAll)
+	p.initializeState(fileName, path, sourceText, core.ScriptTargetES2015, core.ScriptKindJSON, scanner.JSDocParsingModeParseAll)
 	p.nextToken()
 	pos := p.nodePos()
 	var statements *ast.NodeList
@@ -162,7 +163,7 @@ func ParseJSONText(fileName string, sourceText string) *ast.SourceFile {
 		statements = p.newNodeList(core.NewTextRange(pos, p.nodePos()), []*ast.Node{statement})
 		p.parseExpectedToken(ast.KindEndOfFile)
 	}
-	node := p.factory.NewSourceFile(p.sourceText, p.fileName, statements)
+	node := p.factory.NewSourceFile(p.sourceText, p.fileName, p.path, statements)
 	p.finishNode(node, pos)
 	result := node.AsSourceFile()
 	result.ScriptKind = core.ScriptKindJSON
@@ -173,13 +174,14 @@ func ParseJSONText(fileName string, sourceText string) *ast.SourceFile {
 	return result
 }
 
-func (p *Parser) initializeState(fileName string, sourceText string, languageVersion core.ScriptTarget, scriptKind core.ScriptKind, jsdocParsingMode scanner.JSDocParsingMode) {
+func (p *Parser) initializeState(fileName string, path tspath.Path, sourceText string, languageVersion core.ScriptTarget, scriptKind core.ScriptKind, jsdocParsingMode scanner.JSDocParsingMode) {
 	if p.scanner == nil {
 		p.scanner = scanner.NewScanner()
 	} else {
 		p.scanner.Reset()
 	}
 	p.fileName = fileName
+	p.path = path
 	p.sourceText = sourceText
 	p.languageVersion = languageVersion
 	p.scriptKind = ensureScriptKind(fileName, scriptKind)
@@ -290,7 +292,7 @@ func (p *Parser) parseSourceFileWorker() *ast.SourceFile {
 	if eof.Kind != ast.KindEndOfFile {
 		panic("Expected end of file token from scanner.")
 	}
-	node := p.factory.NewSourceFile(p.sourceText, p.fileName, statements)
+	node := p.factory.NewSourceFile(p.sourceText, p.fileName, p.path, statements)
 	p.finishNode(node, pos)
 	result := node.AsSourceFile()
 	p.finishSourceFile(result, isDeclarationFile)
@@ -304,6 +306,7 @@ func (p *Parser) parseSourceFileWorker() *ast.SourceFile {
 	}
 	p.jsdocCache = nil
 	p.possibleAwaitSpans = []int{}
+	collectExternalModuleReferences(result)
 	return result
 }
 
@@ -426,7 +429,7 @@ func (p *Parser) reparseTopLevelAwait(sourceFile *ast.SourceFile) *ast.Node {
 		}
 	}
 
-	return p.factory.NewSourceFile(sourceFile.Text, sourceFile.FileName(), p.newNodeList(sourceFile.Statements.Loc, statements))
+	return p.factory.NewSourceFile(sourceFile.Text, sourceFile.FileName(), sourceFile.Path(), p.newNodeList(sourceFile.Statements.Loc, statements))
 }
 
 func (p *Parser) parseListIndex(kind ParsingContext, parseElement func(p *Parser, index int) *ast.Node) *ast.NodeList {

@@ -236,7 +236,7 @@ func doCall(t *testing.T, resolver *module.Resolver, call functionCall, skipLoca
 		var redirectedReference *module.ResolvedProjectReference
 		if call.args.RedirectedRef != nil {
 			redirectedReference = &module.ResolvedProjectReference{
-				SourceFile: (&ast.NodeFactory{}).NewSourceFile("", call.args.RedirectedRef.SourceFile.FileName, nil).AsSourceFile(),
+				SourceFile: (&ast.NodeFactory{}).NewSourceFile("", call.args.RedirectedRef.SourceFile.FileName, tspath.Path(call.args.RedirectedRef.SourceFile.FileName), nil).AsSourceFile(),
 				CommandLine: core.ParsedOptions{
 					CompilerOptions: call.args.RedirectedRef.CommandLine.CompilerOptions,
 				},
