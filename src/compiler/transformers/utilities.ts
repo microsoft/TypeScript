@@ -7,11 +7,13 @@ import {
     BindingElement,
     Bundle,
     cast,
+    changeExtension,
     ClassDeclaration,
     ClassElement,
     ClassExpression,
     ClassLikeDeclaration,
     ClassStaticBlockDeclaration,
+    CompilerOptions,
     CompoundAssignmentOperator,
     CoreTransformationContext,
     createExternalHelpersImportDeclarationIfNeeded,
@@ -21,6 +23,7 @@ import {
     ExportDeclaration,
     ExportSpecifier,
     Expression,
+    factory,
     filter,
     formatGeneratedName,
     FunctionDeclaration,
@@ -33,6 +36,7 @@ import {
     getNodeForGeneratedName,
     getNodeId,
     getOriginalNode,
+    getOutputExtension,
     hasDecorators,
     hasStaticModifier,
     hasSyntacticModifier,
@@ -47,6 +51,7 @@ import {
     isClassStaticBlockDeclaration,
     isDefaultImport,
     isExpressionStatement,
+    isFunctionDeclaration,
     isGeneratedIdentifier,
     isGeneratedPrivateIdentifier,
     isIdentifier,
@@ -60,6 +65,7 @@ import {
     isPrivateIdentifier,
     isPropertyDeclaration,
     isStatic,
+    isStringLiteral,
     isStringLiteralLike,
     isSuperCall,
     isTryStatement,
@@ -82,6 +88,9 @@ import {
     PrivateIdentifierAutoAccessorPropertyDeclaration,
     PrivateIdentifierMethodDeclaration,
     PropertyDeclaration,
+    setOriginalNode,
+    setTextRange,
+    shouldRewriteModuleSpecifier,
     skipParentheses,
     some,
     SourceFile,
@@ -95,7 +104,7 @@ import {
 } from "../_namespaces/ts.js";
 
 /** @internal */
-export function getOriginalNodeId(node: Node) {
+export function getOriginalNodeId(node: Node): number {
     node = getOriginalNode(node);
     return node ? getNodeId(node) : 0;
 }
@@ -103,7 +112,7 @@ export function getOriginalNodeId(node: Node) {
 /** @internal */
 export interface ExternalModuleInfo {
     externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
-    externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
+    externalHelpersImportDeclaration: ImportDeclaration | ImportEqualsDeclaration | undefined; // import of external helpers
     exportSpecifiers: IdentifierNameMap<ExportSpecifier[]>; // file-local export specifiers by name (no reexports)
     exportedBindings: Identifier[][]; // exported names of local declarations
     exportedNames: ModuleExportName[] | undefined; // all exported names in the module, both local and reexported, excluding the names of locally exported function declarations
@@ -321,7 +330,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     }
 
     function addExportedFunctionDeclaration(node: FunctionDeclaration, name: ModuleExportName | undefined, isDefault: boolean) {
-        exportedFunctions.add(node);
+        exportedFunctions.add(getOriginalNode(node, isFunctionDeclaration));
         if (isDefault) {
             // export default function() { }
             // function x() { } + export { x as default };
@@ -380,19 +389,19 @@ function multiMapSparseArrayAdd<V>(map: V[][], key: number, value: V): V[] {
 export class IdentifierNameMap<V> {
     private readonly _map = new Map<string, V>();
 
-    get size() {
+    get size(): number {
         return this._map.size;
     }
 
-    has(key: Identifier) {
+    has(key: Identifier): boolean {
         return this._map.has(IdentifierNameMap.toKey(key));
     }
 
-    get(key: Identifier) {
+    get(key: Identifier): V | undefined {
         return this._map.get(IdentifierNameMap.toKey(key));
     }
 
-    set(key: Identifier, value: V) {
+    set(key: Identifier, value: V): this {
         this._map.set(IdentifierNameMap.toKey(key), value);
         return this;
     }
@@ -405,7 +414,7 @@ export class IdentifierNameMap<V> {
         this._map.clear();
     }
 
-    values() {
+    values(): MapIterator<V> {
         return this._map.values();
     }
 
@@ -459,7 +468,7 @@ class IdentifierNameMultiMap<V> extends IdentifierNameMap<V[]> {
  *
  * @internal
  */
-export function isSimpleCopiableExpression(expression: Expression) {
+export function isSimpleCopiableExpression(expression: Expression): boolean {
     return isStringLiteralLike(expression) ||
         expression.kind === SyntaxKind.NumericLiteral ||
         isKeyword(expression.kind) ||
@@ -473,7 +482,7 @@ export function isSimpleCopiableExpression(expression: Expression) {
  *
  * @internal
  */
-export function isSimpleInlineableExpression(expression: Expression) {
+export function isSimpleInlineableExpression(expression: Expression): boolean {
     return !isIdentifier(expression) && isSimpleCopiableExpression(expression);
 }
 
@@ -559,7 +568,7 @@ function findSuperStatementIndexPathWorker(statements: NodeArray<Statement>, sta
  *
  * @internal
  */
-export function findSuperStatementIndexPath(statements: NodeArray<Statement>, start: number) {
+export function findSuperStatementIndexPath(statements: NodeArray<Statement>, start: number): number[] {
     const indices: number[] = [];
     findSuperStatementIndexPathWorker(statements, start, indices);
     return indices;
@@ -670,9 +679,9 @@ function getDecoratorsOfParameters(node: FunctionLikeDeclaration | undefined) {
  *
  * @internal
  */
-export function getAllDecoratorsOfClass(node: ClassLikeDeclaration): AllDecorators | undefined {
+export function getAllDecoratorsOfClass(node: ClassLikeDeclaration, useLegacyDecorators: boolean): AllDecorators | undefined {
     const decorators = getDecorators(node);
-    const parameters = getDecoratorsOfParameters(getFirstConstructorWithBody(node));
+    const parameters = useLegacyDecorators ? getDecoratorsOfParameters(getFirstConstructorWithBody(node)) : undefined;
     if (!some(decorators) && !some(parameters)) {
         return undefined;
     }
@@ -696,12 +705,12 @@ export function getAllDecoratorsOfClassElement(member: ClassElement, parent: Cla
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor:
             if (!useLegacyDecorators) {
-                return getAllDecoratorsOfMethod(member as AccessorDeclaration);
+                return getAllDecoratorsOfMethod(member as AccessorDeclaration, /*useLegacyDecorators*/ false);
             }
-            return getAllDecoratorsOfAccessors(member as AccessorDeclaration, parent);
+            return getAllDecoratorsOfAccessors(member as AccessorDeclaration, parent, /*useLegacyDecorators*/ true);
 
         case SyntaxKind.MethodDeclaration:
-            return getAllDecoratorsOfMethod(member as MethodDeclaration);
+            return getAllDecoratorsOfMethod(member as MethodDeclaration, useLegacyDecorators);
 
         case SyntaxKind.PropertyDeclaration:
             return getAllDecoratorsOfProperty(member as PropertyDeclaration);
@@ -717,7 +726,7 @@ export function getAllDecoratorsOfClassElement(member: ClassElement, parent: Cla
  * @param parent The class node that contains the accessor.
  * @param accessor The class accessor member.
  */
-function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: ClassExpression | ClassDeclaration): AllDecorators | undefined {
+function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: ClassExpression | ClassDeclaration, useLegacyDecorators: boolean): AllDecorators | undefined {
     if (!accessor.body) {
         return undefined;
     }
@@ -732,7 +741,7 @@ function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: Clas
     }
 
     const decorators = getDecorators(firstAccessorWithDecorators);
-    const parameters = getDecoratorsOfParameters(setAccessor);
+    const parameters = useLegacyDecorators ? getDecoratorsOfParameters(setAccessor) : undefined;
     if (!some(decorators) && !some(parameters)) {
         return undefined;
     }
@@ -750,13 +759,13 @@ function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: Clas
  *
  * @param method The class method member.
  */
-function getAllDecoratorsOfMethod(method: MethodDeclaration | AccessorDeclaration): AllDecorators | undefined {
+function getAllDecoratorsOfMethod(method: MethodDeclaration | AccessorDeclaration, useLegacyDecorators: boolean): AllDecorators | undefined {
     if (!method.body) {
         return undefined;
     }
 
     const decorators = getDecorators(method);
-    const parameters = getDecoratorsOfParameters(method);
+    const parameters = useLegacyDecorators ? getDecoratorsOfParameters(method) : undefined;
     if (!some(decorators) && !some(parameters)) {
         return undefined;
     }
@@ -820,7 +829,7 @@ export function newPrivateEnvironment<TData, TEntry>(data: TData): PrivateEnviro
 export function getPrivateIdentifier<TData, TEntry>(
     privateEnv: PrivateEnvironment<TData, TEntry> | undefined,
     name: PrivateIdentifier,
-) {
+): TEntry | undefined {
     return isGeneratedPrivateIdentifier(name) ?
         privateEnv?.generatedIdentifiers?.get(getNodeForGeneratedName(name)) :
         privateEnv?.identifiers?.get(name.escapedText);
@@ -831,7 +840,7 @@ export function setPrivateIdentifier<TData, TEntry>(
     privateEnv: PrivateEnvironment<TData, TEntry>,
     name: PrivateIdentifier,
     entry: TEntry,
-) {
+): void {
     if (isGeneratedPrivateIdentifier(name)) {
         privateEnv.generatedIdentifiers ??= new Map();
         privateEnv.generatedIdentifiers.set(getNodeForGeneratedName(name), entry);
@@ -850,7 +859,7 @@ export function accessPrivateIdentifier<
 >(
     env: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry> | undefined,
     name: PrivateIdentifier,
-) {
+): TPrivateEntry | undefined {
     return walkUpLexicalEnvironments(env, env => getPrivateIdentifier(env.privateEnv, name));
 }
 
@@ -859,6 +868,19 @@ function isSimpleParameter(node: ParameterDeclaration) {
 }
 
 /** @internal */
-export function isSimpleParameterList(nodes: NodeArray<ParameterDeclaration>) {
+export function isSimpleParameterList(nodes: NodeArray<ParameterDeclaration>): boolean {
     return every(nodes, isSimpleParameter);
+}
+
+/** @internal */
+export function rewriteModuleSpecifier(node: Expression, compilerOptions: CompilerOptions): Expression;
+/** @internal */
+export function rewriteModuleSpecifier(node: Expression | undefined, compilerOptions: CompilerOptions): Expression | undefined;
+/** @internal */
+export function rewriteModuleSpecifier(node: Expression | undefined, compilerOptions: CompilerOptions): Expression | undefined {
+    if (!node || !isStringLiteral(node) || !shouldRewriteModuleSpecifier(node.text, compilerOptions)) {
+        return node;
+    }
+    const updatedText = changeExtension(node.text, getOutputExtension(node.text, compilerOptions));
+    return updatedText !== node.text ? setOriginalNode(setTextRange(factory.createStringLiteral(updatedText, node.singleQuote), node), node) : node;
 }

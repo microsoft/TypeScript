@@ -1,0 +1,49 @@
+index.js(15,9): error TS7031: Binding element 'json' implicitly has an 'any[]' type.
+
+
+==== index.js (1 errors) ====
+    /**
+     * @param {Object} [config]
+     * @param {Partial<Record<'json' | 'jsonc' | 'json5', string[]>>} [config.additionalFiles]
+     */
+    export function prepareConfig({
+        additionalFiles: {
+            json = []
+        } = {}
+    } = {}) {
+        json // string[]
+    }
+    
+    export function prepareConfigWithoutAnnotation({
+        additionalFiles: {
+            json = []
+            ~~~~
+!!! error TS7031: Binding element 'json' implicitly has an 'any[]' type.
+        } = {}
+    } = {}) {
+        json
+    }
+    
+    /** @type {(param: {
+      additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
+    }) => void} */
+    export const prepareConfigWithContextualSignature = ({
+        additionalFiles: {
+            json = []
+        } = {}
+    } = {})=>  {
+        json // string[]
+    }
+    
+    // Additional repros from https://github.com/microsoft/TypeScript/issues/59936
+    
+    /**
+     * @param {{ a?: { json?: string[] }}} [config]
+     */
+    function f1({ a: { json = [] } = {} } = {}) { return json }
+    
+    /**
+     * @param {[[string[]?]?]} [x]
+     */
+    function f2([[json = []] = []] = []) { return json }
+    

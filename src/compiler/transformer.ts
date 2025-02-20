@@ -65,10 +65,10 @@ import {
     transformESDecorators,
     transformESNext,
     transformGenerators,
+    transformImpliedNodeFormatDependentModule,
     transformJsx,
     transformLegacyDecorators,
     transformModule,
-    transformNodeModule,
     transformSystemModule,
     transformTypeScript,
     VariableDeclaration,
@@ -77,17 +77,24 @@ import * as performance from "./_namespaces/ts.performance.js";
 
 function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
     switch (moduleKind) {
+        case ModuleKind.Preserve:
+            // `transformECMAScriptModule` contains logic for preserving
+            // CJS input syntax in `--module preserve`
+            return transformECMAScriptModule;
         case ModuleKind.ESNext:
         case ModuleKind.ES2022:
         case ModuleKind.ES2020:
         case ModuleKind.ES2015:
-        case ModuleKind.Preserve:
-            return transformECMAScriptModule;
+        case ModuleKind.Node16:
+        case ModuleKind.Node18:
+        case ModuleKind.NodeNext:
+        case ModuleKind.CommonJS:
+            // Wraps `transformModule` and `transformECMAScriptModule` and
+            // selects between them based on the `impliedNodeFormat` of the
+            // source file.
+            return transformImpliedNodeFormatDependentModule;
         case ModuleKind.System:
             return transformSystemModule;
-        case ModuleKind.Node16:
-        case ModuleKind.NodeNext:
-            return transformNodeModule;
         default:
             return transformModule;
     }
@@ -216,12 +223,12 @@ function wrapDeclarationTransformerFactory(transformer: TransformerFactory<Bundl
 }
 
 /** @internal */
-export function noEmitSubstitution(_hint: EmitHint, node: Node) {
+export function noEmitSubstitution(_hint: EmitHint, node: Node): Node {
     return node;
 }
 
 /** @internal */
-export function noEmitNotification(hint: EmitHint, node: Node, callback: (hint: EmitHint, node: Node) => void) {
+export function noEmitNotification(hint: EmitHint, node: Node, callback: (hint: EmitHint, node: Node) => void): void {
     callback(hint, node);
 }
 

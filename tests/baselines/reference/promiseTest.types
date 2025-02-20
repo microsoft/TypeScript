@@ -33,11 +33,11 @@ var p2 = p.then(function (x) {
 >p.then(function (x) {    return p;} ) : Promise<number>
 >                                      : ^^^^^^^^^^^^^^^
 >p.then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <A>(success?: (value: number) => Promise<A>): Promise<A>; <B>(success?: (value: number) => B): Promise<B>; }
->       : ^^^        ^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^        ^^^^^^^^   ^^^^^^^^ ^^^ ^^       ^^^^     ^^^^^^^^^^^^^        ^ ^^^        ^ ^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^^        ^ ^^^
+>       : ^^^        ^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : Promise<number>
 >  : ^^^^^^^^^^^^^^^
 >then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <A>(success?: (value: number) => Promise<A>): Promise<A>; <B>(success?: (value: number) => B): Promise<B>; }
->     : ^^^        ^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^        ^^^^^^^^   ^^^^^^^^ ^^^ ^^       ^^^^     ^^^^^^^^^^^^^        ^ ^^^        ^ ^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^^        ^ ^^^
+>     : ^^^        ^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (x) {    return p;} : (x: number) => Promise<number>
 >                             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number

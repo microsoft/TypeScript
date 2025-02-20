@@ -1,0 +1,150 @@
+//// [tests/cases/compiler/reverseMappedIntersectionInference2.ts] ////
+
+=== reverseMappedIntersectionInference2.ts ===
+type Results<T> = {
+>Results : Results<T>
+>        : ^^^^^^^^^^
+
+  [K in keyof T]: {
+    data: T[K];
+>data : T[K]
+>     : ^^^^
+
+    onSuccess: (data: T[K]) => void;
+>onSuccess : (data: T[K]) => void
+>          : ^    ^^    ^^^^^    
+>data : T[K]
+>     : ^^^^
+
+  };
+};
+
+type Errors<E> = {
+>Errors : Errors<E>
+>       : ^^^^^^^^^
+
+  [K in keyof E]: {
+    error: E[K];
+>error : E[K]
+>      : ^^^^
+
+    onError: (data: E[K]) => void;
+>onError : (data: E[K]) => void
+>        : ^    ^^    ^^^^^    
+>data : E[K]
+>     : ^^^^
+
+  };
+};
+
+declare function withTupleLike<T extends { 0: unknown }, E extends { 0: unknown }>(
+>withTupleLike : <T extends { 0: unknown; }, E extends { 0: unknown; }>(arg: Results<T> & Errors<E>) => [T, E]
+>              : ^ ^^^^^^^^^               ^^ ^^^^^^^^^               ^^   ^^                      ^^^^^      
+>0 : unknown
+>  : ^^^^^^^
+>0 : unknown
+>  : ^^^^^^^
+
+  arg: Results<T> & Errors<E>
+>arg : Results<T> & Errors<E>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+): [T, E];
+
+const res = withTupleLike([
+>res : [[string, boolean], [number, number]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>withTupleLike([  {    data: "foo",    onSuccess: (dataArg) => {      dataArg;    },    error: 404,    onError: (errorArg) => {      errorArg;    },  },  {    data: true,    onSuccess: (dataArg) => {      dataArg;    },    error: 500,    onError: (errorArg) => {      errorArg;    },  },]) : [[string, boolean], [number, number]]
+>                                                                                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>withTupleLike : <T extends { 0: unknown; }, E extends { 0: unknown; }>(arg: Results<T> & Errors<E>) => [T, E]
+>              : ^ ^^^^^^^^^               ^^ ^^^^^^^^^               ^^   ^^                      ^^^^^      
+>[  {    data: "foo",    onSuccess: (dataArg) => {      dataArg;    },    error: 404,    onError: (errorArg) => {      errorArg;    },  },  {    data: true,    onSuccess: (dataArg) => {      dataArg;    },    error: 500,    onError: (errorArg) => {      errorArg;    },  },] : [{ data: string; onSuccess: (dataArg: string) => void; error: number; onError: (errorArg: number) => void; }, { data: true; onSuccess: (dataArg: boolean) => void; error: number; onError: (errorArg: number) => void; }]
+>                                                                                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^
+  {
+>{    data: "foo",    onSuccess: (dataArg) => {      dataArg;    },    error: 404,    onError: (errorArg) => {      errorArg;    },  } : { data: string; onSuccess: (dataArg: string) => void; error: number; onError: (errorArg: number) => void; }
+>                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^
+
+    data: "foo",
+>data : string
+>     : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+    onSuccess: (dataArg) => {
+>onSuccess : (dataArg: string) => void
+>          : ^       ^^^^^^^^^^^^^^^^^
+>(dataArg) => {      dataArg;    } : (dataArg: string) => void
+>                                  : ^       ^^^^^^^^^^^^^^^^^
+>dataArg : string
+>        : ^^^^^^
+
+      dataArg;
+>dataArg : string
+>        : ^^^^^^
+
+    },
+    error: 404,
+>error : number
+>      : ^^^^^^
+>404 : 404
+>    : ^^^
+
+    onError: (errorArg) => {
+>onError : (errorArg: number) => void
+>        : ^        ^^^^^^^^^^^^^^^^^
+>(errorArg) => {      errorArg;    } : (errorArg: number) => void
+>                                    : ^        ^^^^^^^^^^^^^^^^^
+>errorArg : number
+>         : ^^^^^^
+
+      errorArg;
+>errorArg : number
+>         : ^^^^^^
+
+    },
+  },
+  {
+>{    data: true,    onSuccess: (dataArg) => {      dataArg;    },    error: 500,    onError: (errorArg) => {      errorArg;    },  } : { data: true; onSuccess: (dataArg: boolean) => void; error: number; onError: (errorArg: number) => void; }
+>                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^
+
+    data: true,
+>data : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+
+    onSuccess: (dataArg) => {
+>onSuccess : (dataArg: boolean) => void
+>          : ^       ^^^^^^^^^^^^^^^^^^
+>(dataArg) => {      dataArg;    } : (dataArg: boolean) => void
+>                                  : ^       ^^^^^^^^^^^^^^^^^^
+>dataArg : boolean
+>        : ^^^^^^^
+
+      dataArg;
+>dataArg : boolean
+>        : ^^^^^^^
+
+    },
+    error: 500,
+>error : number
+>      : ^^^^^^
+>500 : 500
+>    : ^^^
+
+    onError: (errorArg) => {
+>onError : (errorArg: number) => void
+>        : ^        ^^^^^^^^^^^^^^^^^
+>(errorArg) => {      errorArg;    } : (errorArg: number) => void
+>                                    : ^        ^^^^^^^^^^^^^^^^^
+>errorArg : number
+>         : ^^^^^^
+
+      errorArg;
+>errorArg : number
+>         : ^^^^^^
+
+    },
+  },
+]);
+

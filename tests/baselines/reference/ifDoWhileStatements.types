@@ -360,29 +360,37 @@ do { }while(a)
 
 var b = null;
 >b : any
+>  : ^^^
 
 if (b) { }
 >b : any
+>  : ^^^
 
 while (b) { }
 >b : any
+>  : ^^^
 
 do { }while(b)
 >b : any
+>  : ^^^
 
 var c = undefined;
 >c : any
+>  : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 if (c) { }
 >c : any
+>  : ^^^
 
 while (c) { }
 >c : any
+>  : ^^^
 
 do { }while(c)
 >c : any
+>  : ^^^
 
 var d = 0.0;
 >d : number
