@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/noUncheckedIndexAccessUnionProp1.ts] ////
+
+=== noUncheckedIndexAccessUnionProp1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61225
+
+const nums: { [k: string]: number } = Math.random() < 0.5 ? { a: 1 } : { b: 2 };
+>nums : Symbol(nums, Decl(noUncheckedIndexAccessUnionProp1.ts, 2, 5))
+>k : Symbol(k, Decl(noUncheckedIndexAccessUnionProp1.ts, 2, 15))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(noUncheckedIndexAccessUnionProp1.ts, 2, 61))
+>b : Symbol(b, Decl(noUncheckedIndexAccessUnionProp1.ts, 2, 72))
+
+const str = { a: "hello" };
+>str : Symbol(str, Decl(noUncheckedIndexAccessUnionProp1.ts, 3, 5))
+>a : Symbol(a, Decl(noUncheckedIndexAccessUnionProp1.ts, 3, 13))
+
+const hmm = Math.random() < 0.5 ? nums.a : str.a;
+>hmm : Symbol(hmm, Decl(noUncheckedIndexAccessUnionProp1.ts, 5, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>nums.a : Symbol(__index, Decl(noUncheckedIndexAccessUnionProp1.ts, 2, 13))
+>nums : Symbol(nums, Decl(noUncheckedIndexAccessUnionProp1.ts, 2, 5))
+>a : Symbol(__index, Decl(noUncheckedIndexAccessUnionProp1.ts, 2, 13))
+>str.a : Symbol(a, Decl(noUncheckedIndexAccessUnionProp1.ts, 3, 13))
+>str : Symbol(str, Decl(noUncheckedIndexAccessUnionProp1.ts, 3, 5))
+>a : Symbol(a, Decl(noUncheckedIndexAccessUnionProp1.ts, 3, 13))
+
+const wha = (Math.random() < 0.5 ? nums : str).a;
+>wha : Symbol(wha, Decl(noUncheckedIndexAccessUnionProp1.ts, 6, 5))
+>(Math.random() < 0.5 ? nums : str).a : Symbol(a, Decl(noUncheckedIndexAccessUnionProp1.ts, 3, 13))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>nums : Symbol(nums, Decl(noUncheckedIndexAccessUnionProp1.ts, 2, 5))
+>str : Symbol(str, Decl(noUncheckedIndexAccessUnionProp1.ts, 3, 5))
+>a : Symbol(a, Decl(noUncheckedIndexAccessUnionProp1.ts, 3, 13))
+
