@@ -35,6 +35,7 @@ import {
     getPropertySymbolsFromContextualType,
     getTargetLabel,
     getTextOfPropertyName,
+    getTokenAtPosition,
     getTouchingPropertyName,
     getTouchingToken,
     hasEffectiveModifier,
@@ -450,7 +451,7 @@ function getFirstTypeArgumentDefinitions(typeChecker: TypeChecker, type: Type, n
 /// Goto type
 /** @internal */
 export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
-    const node = getTouchingPropertyName(sourceFile, position);
+    const node = getTokenAtPosition(sourceFile, position);
     if (node === sourceFile) {
         return undefined;
     }
