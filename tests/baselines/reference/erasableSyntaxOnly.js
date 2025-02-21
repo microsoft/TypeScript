@@ -66,6 +66,16 @@ declare namespace AmbientStuff {
     import FineAlias = EnumInAmbientContext.B;
 }
 
+// Not erasable
+(()=><any>{})();
+(()=>< any >{})();
+(()=> < any > {})();
+
+// Erasable
+(()=><any>({}))();
+(()=>(<any>{}))();
+<any>{};
+
 //// [commonjs.cts]
 import foo = require("./other.cjs");
 export = foo;
@@ -120,6 +130,14 @@ var MyClassOk = /** @class */ (function () {
     }
     return MyClassOk;
 }());
+// Not erasable
+(function () { return ({}); })();
+(function () { return ({}); })();
+(function () { return ({}); })();
+// Erasable
+(function () { return ({}); })();
+(function () { return ({}); })();
+({});
 //// [commonjs.cjs]
 "use strict";
 var foo = require("./other.cjs");

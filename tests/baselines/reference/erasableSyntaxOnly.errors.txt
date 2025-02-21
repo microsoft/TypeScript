@@ -92,6 +92,16 @@ index.ts(28,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOn
         import FineAlias = EnumInAmbientContext.B;
     }
     
+    // Not erasable
+    (()=><any>{})();
+    (()=>< any >{})();
+    (()=> < any > {})();
+    
+    // Erasable
+    (()=><any>({}))();
+    (()=>(<any>{}))();
+    <any>{};
+    
 ==== commonjs.cts (2 errors) ====
     import foo = require("./other.cjs");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
