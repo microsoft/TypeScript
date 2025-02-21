@@ -37315,7 +37315,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (
                 compilerOptions.erasableSyntaxOnly
                 && node.expression.kind === SyntaxKind.ObjectLiteralExpression
-                && node.parent.kind === SyntaxKind.ArrowFunction && (node.parent as ArrowFunction).body == node
+                && node.parent.kind === SyntaxKind.ArrowFunction && (node.parent as ArrowFunction).body === node
             ) {
                 const start = node.type.pos - "<".length;
                 const end = skipTrivia(file.text, node.type.end) + ">".length;
