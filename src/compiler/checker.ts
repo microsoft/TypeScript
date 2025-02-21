@@ -34175,11 +34175,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return anyType;
                 }
                 if (leftType.symbol === globalThisSymbol) {
-                    if (globalThisSymbol.exports!.has(right.escapedText) && (globalThisSymbol.exports!.get(right.escapedText)!.flags & SymbolFlags.BlockScoped)) {
-                        error(right, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(right.escapedText), typeToString(leftType));
-                    }
-                    else if (noImplicitAny) {
-                        error(right, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(leftType));
+                    if (noImplicitAny) {
+                        if (globalThisSymbol.exports!.has(right.escapedText) && (globalThisSymbol.exports!.get(right.escapedText)!.flags & SymbolFlags.BlockScoped)) {
+                            error(right, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(right.escapedText), typeToString(leftType));
+                        }
+                        else {
+                            error(right, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(leftType));
+                        }
                     }
                     return anyType;
                 }
