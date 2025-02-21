@@ -1241,8 +1241,11 @@ export const enum TypeFacts {
     Falsy = 1 << 23,              // !x
     IsUndefined = 1 << 24,        // Contains undefined or intersection with undefined
     IsNull = 1 << 25,             // Contains null or intersection with null
+    IsPossiblyUndefined = 1 << 26, // Possibly undefined
+    IsPossiblyNull = 1 << 27,     // Possibly null
     IsUndefinedOrNull = IsUndefined | IsNull,
-    All = (1 << 27) - 1,
+    IsPossiblyUndefinedOrNull = IsPossiblyUndefined | IsPossiblyNull,
+    All = (1 << 29) - 1,
     // The following members encode facts about particular kinds of types for use in the getTypeFacts function.
     // The presence of a particular fact means that the given test is true for some (and possibly all) values
     // of that kind of type.
@@ -1285,11 +1288,12 @@ export const enum TypeFacts {
     FunctionStrictFacts = TypeofEQFunction | TypeofEQHostObject | TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | NEUndefined | NENull | NEUndefinedOrNull | Truthy,
     FunctionFacts = FunctionStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
     VoidFacts = TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | EQUndefined | EQUndefinedOrNull | NENull | Falsy,
-    UndefinedFacts = TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | EQUndefined | EQUndefinedOrNull | NENull | Falsy | IsUndefined,
-    NullFacts = TypeofEQObject | TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | TypeofNEHostObject | EQNull | EQUndefinedOrNull | NEUndefined | Falsy | IsNull,
-    EmptyObjectStrictFacts = All & ~(EQUndefined | EQNull | EQUndefinedOrNull | IsUndefinedOrNull),
-    EmptyObjectFacts = All & ~IsUndefinedOrNull,
-    UnknownFacts = All & ~IsUndefinedOrNull,
+    UndefinedFacts = TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | EQUndefined | EQUndefinedOrNull | NENull | Falsy | IsUndefined | IsPossiblyUndefined,
+    NullFacts = TypeofEQObject | TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | TypeofNEHostObject | EQNull | EQUndefinedOrNull | NEUndefined | Falsy | IsNull | IsPossiblyNull,
+    EmptyObjectStrictFacts = All & ~(EQUndefined | EQNull | EQUndefinedOrNull | IsUndefinedOrNull | IsPossiblyUndefinedOrNull),
+    EmptyObjectFacts = All & ~(IsUndefinedOrNull | IsPossiblyUndefinedOrNull),
+    UnknownStrictFacts = All & ~IsUndefinedOrNull,
+    UnknownFacts = All & ~(IsUndefinedOrNull | IsPossiblyUndefinedOrNull),
     AllTypeofNE = TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | NEUndefined,
     // Masks
     OrFactsMask = TypeofEQFunction | TypeofNEObject,
@@ -27495,7 +27499,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (flags & TypeFlags.Intersection) {
             return getIntersectionTypeFacts(type as IntersectionType, callerOnlyNeeds);
         }
-        return TypeFacts.UnknownFacts;
+        return strictNullChecks && flags & TypeFlags.Unknown ? TypeFacts.UnknownStrictFacts : TypeFacts.UnknownFacts;
     }
 
     function getIntersectionTypeFacts(type: IntersectionType, callerOnlyNeeds: TypeFacts): TypeFacts {
@@ -29701,27 +29705,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isConstraintPosition(type: Type, node: Node) {
         const parent = node.parent;
-        // In an element access obj[x], we consider obj to be in a constraint position, except when obj is of
-        // a generic type without a nullable constraint and x is a generic type. This is because when both obj
-        // and x are of generic types T and K, we want the resulting type to be T[K].
+        // In an element access obj[key], we consider obj to be in a constraint position, except when
+        // obj and key both have generic types. When obj and key are of generic types T and K, we want
+        // the resulting type to be T[K].
         return parent.kind === SyntaxKind.PropertyAccessExpression ||
             parent.kind === SyntaxKind.QualifiedName ||
             parent.kind === SyntaxKind.CallExpression && (parent as CallExpression).expression === node ||
             parent.kind === SyntaxKind.NewExpression && (parent as NewExpression).expression === node ||
             parent.kind === SyntaxKind.ElementAccessExpression && (parent as ElementAccessExpression).expression === node &&
-                !(someType(type, isGenericTypeWithoutNullableConstraint) && isGenericIndexType(getTypeOfExpression((parent as ElementAccessExpression).argumentExpression)));
+                !(isGenericObjectType(type) && isGenericIndexType(getTypeOfExpression((parent as ElementAccessExpression).argumentExpression)));
     }
 
     function isGenericTypeWithUnionConstraint(type: Type): boolean {
         return type.flags & TypeFlags.Intersection ?
             some((type as IntersectionType).types, isGenericTypeWithUnionConstraint) :
             !!(type.flags & TypeFlags.Instantiable && getBaseConstraintOrType(type).flags & (TypeFlags.Nullable | TypeFlags.Union));
-    }
-
-    function isGenericTypeWithoutNullableConstraint(type: Type): boolean {
-        return type.flags & TypeFlags.Intersection ?
-            some((type as IntersectionType).types, isGenericTypeWithoutNullableConstraint) :
-            !!(type.flags & TypeFlags.Instantiable && !maybeTypeOfKind(getBaseConstraintOrType(type), TypeFlags.Nullable));
     }
 
     function hasContextualTypeWithNoGenericTypes(node: Node, checkMode: CheckMode | undefined) {
@@ -33881,7 +33879,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             error(
                 node,
-                facts & TypeFacts.IsUndefined ? facts & TypeFacts.IsNull ?
+                facts & TypeFacts.IsPossiblyUndefined ? facts & TypeFacts.IsPossiblyNull ?
                     Diagnostics._0_is_possibly_null_or_undefined :
                     Diagnostics._0_is_possibly_undefined :
                     Diagnostics._0_is_possibly_null,
@@ -33891,7 +33889,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         else {
             error(
                 node,
-                facts & TypeFacts.IsUndefined ? facts & TypeFacts.IsNull ?
+                facts & TypeFacts.IsPossiblyUndefined ? facts & TypeFacts.IsPossiblyNull ?
                     Diagnostics.Object_is_possibly_null_or_undefined :
                     Diagnostics.Object_is_possibly_undefined :
                     Diagnostics.Object_is_possibly_null,
@@ -33902,7 +33900,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function reportCannotInvokePossiblyNullOrUndefinedError(node: Node, facts: TypeFacts) {
         error(
             node,
-            facts & TypeFacts.IsUndefined ? facts & TypeFacts.IsNull ?
+            facts & TypeFacts.IsPossiblyUndefined ? facts & TypeFacts.IsPossiblyNull ?
                 Diagnostics.Cannot_invoke_an_object_which_is_possibly_null_or_undefined :
                 Diagnostics.Cannot_invoke_an_object_which_is_possibly_undefined :
                 Diagnostics.Cannot_invoke_an_object_which_is_possibly_null,
@@ -33925,8 +33923,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(node, Diagnostics.Object_is_of_type_unknown);
             return errorType;
         }
-        const facts = getTypeFacts(type, TypeFacts.IsUndefinedOrNull);
-        if (facts & TypeFacts.IsUndefinedOrNull) {
+        const facts = getTypeFacts(type, TypeFacts.IsPossiblyUndefinedOrNull);
+        if (facts & TypeFacts.IsPossiblyUndefinedOrNull) {
             reportError(node, facts);
             const t = getNonNullableType(type);
             return t.flags & (TypeFlags.Nullable | TypeFlags.Never) ? errorType : t;
@@ -34772,14 +34770,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkIndexedAccess(node: ElementAccessExpression, checkMode: CheckMode | undefined): Type {
-        return node.flags & NodeFlags.OptionalChain ? checkElementAccessChain(node as ElementAccessChain, checkMode) :
-            checkElementAccessExpression(node, checkNonNullExpression(node.expression), checkMode);
-    }
-
-    function checkElementAccessChain(node: ElementAccessChain, checkMode: CheckMode | undefined) {
+        const isOptional = node.flags & NodeFlags.OptionalChain;
         const exprType = checkExpression(node.expression);
-        const nonOptionalType = getOptionalExpressionType(exprType, node.expression);
-        return propagateOptionalTypeMarker(checkElementAccessExpression(node, checkNonNullType(nonOptionalType, node.expression), checkMode), node, nonOptionalType !== exprType);
+        const nonOptionalType = isOptional ? getOptionalExpressionType(exprType, node.expression) : exprType;
+        const nonNullType = maybeTypeOfKind(nonOptionalType, TypeFlags.Unknown | TypeFlags.Nullable) ? checkNonNullType(nonOptionalType, node.expression) : nonOptionalType;
+        const elementType = checkElementAccessExpression(node, nonNullType, checkMode);
+        return isOptional ? propagateOptionalTypeMarker(elementType, node as ElementAccessChain, nonOptionalType !== exprType) : elementType;
     }
 
     function checkElementAccessExpression(node: ElementAccessExpression, exprType: Type, checkMode: CheckMode | undefined): Type {
