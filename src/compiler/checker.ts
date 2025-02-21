@@ -31792,14 +31792,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // When the length is known and the index is after all spread elements we compute the offset from the element
                 // to the end and the number of ending fixed elements in the contextual tuple type.
                 const offset = length !== undefined && (lastSpreadIndex === undefined || index > lastSpreadIndex) ? length - index : 0;
-                const fixedEndLength = offset > 0 && (t.target.combinedFlags & ElementFlags.Variable) ? getEndElementCount(t.target, ElementFlags.Fixed) : 0;
+                const fixedEndLength = getEndElementCount(t.target, ElementFlags.Fixed);
+                const endSkipCount = offset > 0 && (t.target.combinedFlags & ElementFlags.Variable) ? fixedEndLength : 0;
+                const arity = getTypeReferenceArity(t);
                 // If the offset is within the ending fixed part of the contextual tuple type, return the type of the contextual
                 // tuple element.
-                if (offset > 0 && offset <= fixedEndLength) {
-                    return getTypeArguments(t)[getTypeReferenceArity(t) - offset];
+                if (offset > 0 && offset <= endSkipCount) {
+                    return getTypeArguments(t)[arity - offset];
+                }
+                const middleLength = arity - t.target.fixedLength - fixedEndLength;
+                const singleVariadicIndex = middleLength === 1 && t.target.elementFlags[t.target.fixedLength] & ElementFlags.Variadic ? t.target.fixedLength : -1;
+                if (singleVariadicIndex !== -1 && (firstSpreadIndex === undefined || index < firstSpreadIndex)) {
+                    return getIndexedAccessType(getTypeArguments(t)[singleVariadicIndex], getStringLiteralType("" + (index - singleVariadicIndex)));
                 }
                 // Return a union of the possible contextual element types with no subtype reduction.
-                return getElementTypeOfSliceOfTupleType(t, firstSpreadIndex === undefined ? t.target.fixedLength : Math.min(t.target.fixedLength, firstSpreadIndex), length === undefined || lastSpreadIndex === undefined ? fixedEndLength : Math.min(fixedEndLength, length - lastSpreadIndex), /*writing*/ false, /*noReductions*/ true);
+                return getElementTypeOfSliceOfTupleType(t, firstSpreadIndex === undefined ? t.target.fixedLength : Math.min(t.target.fixedLength, firstSpreadIndex), length === undefined || lastSpreadIndex === undefined ? endSkipCount : Math.min(endSkipCount, length - lastSpreadIndex), /*writing*/ false, /*noReductions*/ true);
             }
             // If element index is known and a contextual property with that name exists, return it. Otherwise return the
             // iterated or element type of the contextual type.
