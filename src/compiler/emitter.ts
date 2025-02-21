@@ -1851,6 +1851,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitJSDocHeritageTag(node as JSDocImplementsTag | JSDocAugmentsTag);
                 case SyntaxKind.JSDocAuthorTag:
                 case SyntaxKind.JSDocDeprecatedTag:
+                case SyntaxKind.JSDocIgnoreTag:
                     return;
                 // SyntaxKind.JSDocClassTag (see JSDocTag, above)
                 case SyntaxKind.JSDocPublicTag:

@@ -320,6 +320,7 @@ import {
     getJSDocDeprecatedTag,
     getJSDocEnumTag,
     getJSDocHost,
+    getJSDocIgnoreTag,
     getJSDocOverloadTags,
     getJSDocParameterTags,
     getJSDocRoot,
@@ -34668,7 +34669,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @param property the accessed property's symbol.
      */
     function isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode | QualifiedName, type: Type, property: Symbol): boolean {
-        return isPropertyAccessible(node, node.kind === SyntaxKind.PropertyAccessExpression && node.expression.kind === SyntaxKind.SuperKeyword, /*isWrite*/ false, type, property);
+        return isPropertyAccessible(node, node.kind === SyntaxKind.PropertyAccessExpression && node.expression.kind === SyntaxKind.SuperKeyword, /*isWrite*/ false, type, property)
+            && (!property.declarations || some(property.declarations, decl => !getJSDocIgnoreTag(decl)));
         // Previously we validated the 'this' type of methods but this adversely affected performance. See #31377 for more context.
     }
 
