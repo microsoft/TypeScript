@@ -14127,7 +14127,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             cb(getLiteralTypeFromProperty(prop, include));
         }
         if (type.flags & TypeFlags.Any) {
-            cb(stringType);
+            forEachType(stringsOnly ? stringType : stringNumberSymbolType, cb);
         }
         else {
             for (const info of getIndexInfosOfType(type)) {
@@ -14166,7 +14166,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function addMemberForKeyType(keyType: Type) {
             const propNameType = nameType ? instantiateType(nameType, appendTypeMapping(type.mapper, typeParameter, keyType)) : keyType;
-            forEachType(propNameType, t => addMemberForKeyTypeWorker(keyType, t));
+            forEachType(keyType.flags & TypeFlags.Any ? stringNumberSymbolType : propNameType, t => addMemberForKeyTypeWorker(keyType, t));
         }
 
         function addMemberForKeyTypeWorker(keyType: Type, propNameType: Type) {
@@ -14201,10 +14201,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     members.set(propName, prop);
                 }
             }
-            else if (isValidIndexKeyType(propNameType) || propNameType.flags & (TypeFlags.Any | TypeFlags.Enum)) {
-                const indexKeyType = propNameType.flags & (TypeFlags.Any | TypeFlags.String) ? stringType :
-                    propNameType.flags & (TypeFlags.Number | TypeFlags.Enum) ? numberType :
-                    propNameType;
+            else if (isValidIndexKeyType(propNameType) || propNameType.flags & TypeFlags.Enum) {
+                const indexKeyType = propNameType.flags & (TypeFlags.Number | TypeFlags.Enum) ? numberType : propNameType;
                 const propType = instantiateType(templateType, appendTypeMapping(type.mapper, typeParameter, keyType));
                 const modifiersIndexInfo = getApplicableIndexInfo(modifiersType, propNameType);
                 const isReadonly = !!(templateModifiers & MappedTypeModifiers.IncludeReadonly ||
