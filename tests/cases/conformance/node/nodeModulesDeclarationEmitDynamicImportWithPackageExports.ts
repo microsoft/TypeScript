@@ -1,4 +1,4 @@
-// @module: nodenext
+// @module: node18,nodenext
 // @declaration: true
 // @filename: index.ts
 // esm format file

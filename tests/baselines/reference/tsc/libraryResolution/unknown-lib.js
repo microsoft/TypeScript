@@ -22,7 +22,8 @@ export const x = "type1";
 {
   "compilerOptions": {
     "composite": true,
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -236,6 +237,7 @@ Program root files: [
 Program options: {
   "composite": true,
   "traceResolution": true,
+  "libReplacement": true,
   "project": "/home/src/workspace/projects/project1",
   "explainFiles": true,
   "configFilePath": "/home/src/workspace/projects/project1/tsconfig.json"

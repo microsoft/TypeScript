@@ -361,7 +361,7 @@ declare namespace FourSlashInterface {
         baselineSyntacticAndSemanticDiagnostics(): void;
         getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
         baselineCompletions(preferences?: UserPreferences): void;
-        baselineQuickInfo(verbosityLevels?: VerbosityLevels): void;
+        baselineQuickInfo(): void;
         baselineSmartSelection(): void;
         baselineSignatureHelp(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
@@ -700,9 +700,6 @@ declare namespace FourSlashInterface {
         readonly organizeImportsAccentCollation?: boolean;
         readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
         readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
-    }
-    interface VerbosityLevels {
-        [markerName: string]: number | number[] | undefined;
     }
     interface InlayHintsOptions extends UserPreferences {
         readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
