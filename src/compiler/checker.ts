@@ -277,7 +277,6 @@ import {
     getDirectoryPath,
     getEffectiveBaseTypeNode,
     getEffectiveConstraintOfTypeParameter,
-    getEffectiveContainerForJSDocTemplateTag,
     getEffectiveImplementsTypeNodes,
     getEffectiveInitializer,
     getEffectiveJSDocHost,
@@ -16194,9 +16193,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return typeParameter.constraint === noConstraintType ? undefined : typeParameter.constraint;
     }
 
+    function getEffectiveTypeParameterHost(typeParameter: TypeParameter) {
+        const declarations = typeParameter.symbol.declarations;
+        if (!declarations || declarations.length !== 1) {
+            return;
+        }
+        const tpDeclaration = getDeclarationOfKind<TypeParameterDeclaration>(typeParameter.symbol, SyntaxKind.TypeParameter);
+        if (!tpDeclaration) {
+            // Type parameter is the this type, and its declaration is the class declaration.
+            return typeParameter.isThisType ? declarations[0].parent : undefined;
+        }
+        return isJSDocTemplateTag(tpDeclaration.parent) ? getEffectiveJSDocHost(tpDeclaration.parent) : tpDeclaration.parent;
+    }
+
     function getParentSymbolOfTypeParameter(typeParameter: TypeParameter): Symbol | undefined {
-        const tp = getDeclarationOfKind<TypeParameterDeclaration>(typeParameter.symbol, SyntaxKind.TypeParameter)!;
-        const host = isJSDocTemplateTag(tp.parent) ? getEffectiveContainerForJSDocTemplateTag(tp.parent) : tp.parent;
+        const host = getEffectiveTypeParameterHost(typeParameter);
         return host && getSymbolOfNode(host);
     }
 
@@ -20153,7 +20164,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // type parameter, or if the node contains type queries that we can't prove couldn't contain references to the type parameter,
         // we consider the type parameter possibly referenced.
         if (tp.symbol && tp.symbol.declarations && tp.symbol.declarations.length === 1) {
-            const container = tp.symbol.declarations[0].parent;
+            const container = getEffectiveTypeParameterHost(tp);
             for (let n = node; n !== container; n = n.parent) {
                 if (!n || n.kind === SyntaxKind.Block || n.kind === SyntaxKind.ConditionalType && forEachChild((n as ConditionalTypeNode).extendsType, containsReference)) {
                     return true;
@@ -20174,12 +20185,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const firstIdentifier = getFirstIdentifier(entityName);
                     if (!isThisIdentifier(firstIdentifier)) { // Don't attempt to analyze typeof this.xxx
                         const firstIdentifierSymbol = getResolvedSymbol(firstIdentifier);
-                        const tpDeclaration = tp.symbol.declarations![0]; // There is exactly one declaration, otherwise `containsReference` is not called
-                        const tpScope = tpDeclaration.kind === SyntaxKind.TypeParameter ? tpDeclaration.parent : // Type parameter is a regular type parameter, e.g. foo<T>
-                            tp.isThisType ? tpDeclaration : // Type parameter is the this type, and its declaration is the class declaration.
-                            undefined; // Type parameter's declaration was unrecognized, e.g. comes from JSDoc annotation.
-                        if (firstIdentifierSymbol.declarations && tpScope) {
-                            return some(firstIdentifierSymbol.declarations, idDecl => isNodeDescendantOf(idDecl, tpScope)) ||
+                        const tpHost = getEffectiveTypeParameterHost(tp);
+                        if (firstIdentifierSymbol.declarations && tpHost) {
+                            return some(firstIdentifierSymbol.declarations, idDecl => isNodeDescendantOf(idDecl, tpHost)) ||
                                 some((node as TypeQueryNode).typeArguments, containsReference);
                         }
                     }
@@ -36058,8 +36066,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (candidate.typeParameters) {
                     // If we are *inside the body of candidate*, we need to create a clone of `candidate` with differing type parameter identities,
                     // so our inference results for this call doesn't pollute expression types referencing the outer type parameter!
-                    const paramLocation = candidate.typeParameters[0].symbol.declarations?.[0]?.parent;
-                    const candidateParameterContext = paramLocation || (candidate.declaration && isConstructorDeclaration(candidate.declaration) ? candidate.declaration.parent : candidate.declaration);
+                    const paramHost = getEffectiveTypeParameterHost(candidate.typeParameters[0]);
+                    const candidateParameterContext = paramHost || (candidate.declaration && isConstructorDeclaration(candidate.declaration) ? candidate.declaration.parent : candidate.declaration);
                     if (candidateParameterContext && findAncestor(node, a => a === candidateParameterContext)) {
                         candidate = getImplementationSignature(candidate);
                     }
