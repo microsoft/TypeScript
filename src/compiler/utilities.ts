@@ -416,7 +416,6 @@ import {
     LogicalOperator,
     LogicalOrCoalescingAssignmentOperator,
     mangleScopedPackageName,
-    map,
     mapDefined,
     MapLike,
     MemberName,
@@ -9553,25 +9552,14 @@ const wildcardMatchers = {
 };
 
 /** @internal */
-export function getRegularExpressionForWildcard(specs: readonly string[] | undefined, basePath: string, usage: "files" | "directories" | "exclude"): string | undefined {
-    const patterns = getRegularExpressionsForWildcards(specs, basePath, usage);
-    if (!patterns || !patterns.length) {
-        return undefined;
-    }
-
-    const pattern = patterns.map(pattern => `(${pattern})`).join("|");
-    // If excluding, match "foo/bar/baz...", but if including, only allow "foo".
-    const terminator = usage === "exclude" ? "($|/)" : "$";
-    return `^(${pattern})${terminator}`;
-}
-
-/** @internal */
 export function getRegularExpressionsForWildcards(specs: readonly string[] | undefined, basePath: string, usage: "files" | "directories" | "exclude"): readonly string[] | undefined {
     if (specs === undefined || specs.length === 0) {
         return undefined;
     }
 
-    return flatMap(specs, spec => spec && getSubPatternFromSpec(spec, basePath, usage, wildcardMatchers[usage]));
+    // If excluding, match "foo/bar/baz...", but if including, only allow "foo".
+    const terminator = usage === "exclude" ? "($|/)" : "$";
+    return flatMap(specs, spec => spec && `^${getSubPatternFromSpec(spec, basePath, usage, wildcardMatchers[usage])}${terminator}`);
 }
 
 /**
@@ -9684,12 +9672,9 @@ export interface FileSystemEntries {
 
 /** @internal */
 export interface FileMatcherPatterns {
-    /** One pattern for each "include" spec. */
     includeFilePatterns: readonly string[] | undefined;
-    /** One pattern matching one of any of the "include" specs. */
-    includeFilePattern: string | undefined;
-    includeDirectoryPattern: string | undefined;
-    excludePattern: string | undefined;
+    includeDirectoryPatterns: readonly string[] | undefined;
+    excludePatterns: readonly string[] | undefined;
     basePaths: readonly string[];
 }
 
@@ -9704,10 +9689,9 @@ export function getFileMatcherPatterns(path: string, excludes: readonly string[]
     const absolutePath = combinePaths(currentDirectory, path);
 
     return {
-        includeFilePatterns: map(getRegularExpressionsForWildcards(includes, absolutePath, "files"), pattern => `^${pattern}$`),
-        includeFilePattern: getRegularExpressionForWildcard(includes, absolutePath, "files"),
-        includeDirectoryPattern: getRegularExpressionForWildcard(includes, absolutePath, "directories"),
-        excludePattern: getRegularExpressionForWildcard(excludes, absolutePath, "exclude"),
+        includeFilePatterns: getRegularExpressionsForWildcards(includes, absolutePath, "files"),
+        includeDirectoryPatterns: getRegularExpressionsForWildcards(includes, absolutePath, "directories"),
+        excludePatterns: getRegularExpressionsForWildcards(excludes, absolutePath, "exclude"),
         basePaths: getBasePaths(path, includes, useCaseSensitiveFileNames),
     };
 }
@@ -9729,8 +9713,8 @@ export function matchFiles(path: string, extensions: readonly string[] | undefin
     const patterns = getFileMatcherPatterns(path, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
 
     const includeFileRegexes = patterns.includeFilePatterns && patterns.includeFilePatterns.map(pattern => getRegexFromPattern(pattern, useCaseSensitiveFileNames));
-    const includeDirectoryRegex = patterns.includeDirectoryPattern && getRegexFromPattern(patterns.includeDirectoryPattern, useCaseSensitiveFileNames);
-    const excludeRegex = patterns.excludePattern && getRegexFromPattern(patterns.excludePattern, useCaseSensitiveFileNames);
+    const includeDirectoryRegexes = patterns.includeDirectoryPatterns && patterns.includeDirectoryPatterns.map(pattern => getRegexFromPattern(pattern, useCaseSensitiveFileNames));
+    const excludeRegexes = patterns.excludePatterns && patterns.excludePatterns.map(pattern => getRegexFromPattern(pattern, useCaseSensitiveFileNames));
 
     // Associate an array of results with each include regex. This keeps results in order of the "include" order.
     // If there are no "includes", then just put everything in results[0].
@@ -9753,7 +9737,7 @@ export function matchFiles(path: string, extensions: readonly string[] | undefin
             const name = combinePaths(path, current);
             const absoluteName = combinePaths(absolutePath, current);
             if (extensions && !fileExtensionIsOneOf(name, extensions)) continue;
-            if (excludeRegex && excludeRegex.test(absoluteName)) continue;
+            if (excludeRegexes && excludeRegexes.some(regex => regex.test(absoluteName))) continue;
             if (!includeFileRegexes) {
                 results[0].push(name);
             }
@@ -9776,8 +9760,8 @@ export function matchFiles(path: string, extensions: readonly string[] | undefin
             const name = combinePaths(path, current);
             const absoluteName = combinePaths(absolutePath, current);
             if (
-                (!includeDirectoryRegex || includeDirectoryRegex.test(absoluteName)) &&
-                (!excludeRegex || !excludeRegex.test(absoluteName))
+                (!includeDirectoryRegexes || includeDirectoryRegexes.some(regex => regex.test(absoluteName))) &&
+                (!excludeRegexes || !excludeRegexes.some(regex => regex.test(absoluteName)))
             ) {
                 visitDirectory(name, absoluteName, depth);
             }
