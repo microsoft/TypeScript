@@ -18,22 +18,27 @@ predicateSemantics.ts(39,21): error TS2871: This expression is always nullish.
 predicateSemantics.ts(40,21): error TS2871: This expression is always nullish.
 predicateSemantics.ts(40,29): error TS2871: This expression is always nullish.
 predicateSemantics.ts(41,21): error TS2871: This expression is always nullish.
-predicateSemantics.ts(42,20): error TS2874: This expression is never nullish.
-predicateSemantics.ts(43,21): error TS2874: This expression is never nullish.
+predicateSemantics.ts(42,20): error TS2881: This expression is never nullish.
+predicateSemantics.ts(43,21): error TS2881: This expression is never nullish.
 predicateSemantics.ts(45,13): error TS2871: This expression is always nullish.
 predicateSemantics.ts(45,21): error TS2871: This expression is always nullish.
 predicateSemantics.ts(45,29): error TS2871: This expression is always nullish.
 predicateSemantics.ts(46,13): error TS2871: This expression is always nullish.
-predicateSemantics.ts(46,21): error TS2874: This expression is never nullish.
+predicateSemantics.ts(46,21): error TS2881: This expression is never nullish.
 predicateSemantics.ts(47,13): error TS2871: This expression is always nullish.
-predicateSemantics.ts(47,22): error TS2874: This expression is never nullish.
+predicateSemantics.ts(47,22): error TS2881: This expression is never nullish.
 predicateSemantics.ts(50,8): error TS2872: This kind of expression is always truthy.
 predicateSemantics.ts(51,11): error TS2872: This kind of expression is always truthy.
 predicateSemantics.ts(52,8): error TS2872: This kind of expression is always truthy.
 predicateSemantics.ts(53,8): error TS2872: This kind of expression is always truthy.
+predicateSemantics.ts(70,14): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+predicateSemantics.ts(71,14): error TS2695: Left side of comma operator is unused and has no side effects.
+predicateSemantics.ts(71,14): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+predicateSemantics.ts(89,1): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+predicateSemantics.ts(90,1): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
 
 
-==== predicateSemantics.ts (33 errors) ====
+==== predicateSemantics.ts (38 errors) ====
     declare let opt: number | undefined;
     
     // OK: One or other operand is possibly nullish
@@ -117,10 +122,10 @@ predicateSemantics.ts(53,8): error TS2872: This kind of expression is always tru
 !!! error TS2871: This expression is always nullish.
     const p16 = opt ?? 1 ?? 2;
                        ~
-!!! error TS2874: This expression is never nullish.
+!!! error TS2881: This expression is never nullish.
     const p17 = opt ?? (opt ? 1 : 2) ?? 3;
                         ~~~~~~~~~~~
-!!! error TS2874: This expression is never nullish.
+!!! error TS2881: This expression is never nullish.
     
     const p21 = null ?? null ?? null ?? null;
                 ~~~~
@@ -133,12 +138,12 @@ predicateSemantics.ts(53,8): error TS2872: This kind of expression is always tru
                 ~~~~
 !!! error TS2871: This expression is always nullish.
                         ~
-!!! error TS2874: This expression is never nullish.
+!!! error TS2881: This expression is never nullish.
     const p23 = null ?? (opt ? 1 : 2) ?? 1;
                 ~~~~
 !!! error TS2871: This expression is always nullish.
                          ~~~~~~~~~~~
-!!! error TS2874: This expression is never nullish.
+!!! error TS2881: This expression is never nullish.
     
     // Outer expression tests
     while ({} as any) { }
@@ -158,4 +163,46 @@ predicateSemantics.ts(53,8): error TS2872: This kind of expression is always tru
     
     // Should be OK
     console.log((cond || undefined) && 1 / cond);
+    
+    function foo(this: Object | undefined) {
+        // Should be OK
+        return this ?? 0;
+    }
+    
+    // https://github.com/microsoft/TypeScript/issues/60401
+    {
+      const maybe = null as true | null;
+      let i = 0;
+      const d = (i++, maybe) ?? true; // ok
+      const e = (i++, i++) ?? true; // error
+                 ~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+      const f = (maybe, i++) ?? true; // error
+                 ~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+                 ~~~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+    }
+    
+    // https://github.com/microsoft/TypeScript/issues/60439
+    class X {
+      constructor() {
+        const p = new.target ?? 32;
+      }
+    }
+    
+    // https://github.com/microsoft/TypeScript/issues/60614
+    declare function tag<T>(
+      strings: TemplateStringsArray,
+      ...values: number[]
+    ): T | null;
+    
+    tag`foo${1}` ?? 32; // ok
+    
+    `foo${1}` ?? 32; // error
+    ~~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+    `foo` ?? 32; // error
+    ~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
     

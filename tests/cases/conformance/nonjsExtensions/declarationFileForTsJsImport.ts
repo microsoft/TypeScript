@@ -1,5 +1,5 @@
 // @allowArbitraryExtensions: true
-// @module: nodenext
+// @module: node18,nodenext
 // @filename: package.json
 {"type": "module"}
 // @filename: main.ts

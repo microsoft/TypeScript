@@ -280,9 +280,9 @@ const simpleAction = (payload: boolean) => ({
 });
 const thunkAction = (param1: number, param2: string) => async (
 >thunkAction : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
->            : ^      ^^      ^^      ^^      ^^^^^^        ^^        ^^       ^^        ^^^^^^^^^^^^^^^^^^^^
+>            : ^      ^^      ^^      ^^      ^^^^^^                  ^^                 ^^^^^^^^^^^^^^^^^^^^
 >(param1: number, param2: string) => async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
->                                                                                                        : ^      ^^      ^^      ^^      ^^^^^^        ^^        ^^       ^^        ^^^^^^^^^^^^^^^^^^^^
+>                                                                                                        : ^      ^^      ^^      ^^      ^^^^^^                  ^^                 ^^^^^^^^^^^^^^^^^^^^
 >param1 : number
 >       : ^^^^^^
 >param2 : string
@@ -332,13 +332,13 @@ class TestComponent extends Component<TestComponentProps> {}
 
 const mapDispatchToProps = { simpleAction, thunkAction };
 >mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>; }
->                   : ^^^^^^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^      ^^      ^^^^^^        ^^        ^^       ^^        ^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^      ^^      ^^^^^^                  ^^                 ^^^^^^^^^^^^^^^^^^^^^^^
 >{ simpleAction, thunkAction } : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>; }
->                              : ^^^^^^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^      ^^      ^^^^^^        ^^        ^^       ^^        ^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^^^^^^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^      ^^      ^^^^^^                  ^^                 ^^^^^^^^^^^^^^^^^^^^^^^
 >simpleAction : (payload: boolean) => { type: string; payload: boolean; }
 >             : ^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >thunkAction : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
->            : ^      ^^      ^^      ^^      ^^^^^^        ^^        ^^       ^^        ^^^^^^^^^^^^^^^^^^^^
+>            : ^      ^^      ^^      ^^      ^^^^^^                  ^^                 ^^^^^^^^^^^^^^^^^^^^
 
 type Q = HandleThunkActionCreator<typeof simpleAction>;
 >Q : (payload: boolean) => { type: string; payload: boolean; }
@@ -359,7 +359,7 @@ const Test1 = connect(
   null,
   mapDispatchToProps
 >mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>; }
->                   : ^^^^^^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^      ^^      ^^^^^^        ^^        ^^       ^^        ^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^      ^^      ^^^^^^                  ^^                 ^^^^^^^^^^^^^^^^^^^^^^^
 
 )(TestComponent);
 >TestComponent : typeof TestComponent

@@ -1,0 +1,55 @@
+contextualPropertyOfGenericFilteringMappedType.ts(38,5): error TS2353: Object literal may only specify known properties, and 'foo' does not exist in type '{ bar: (value: string, prop: "bar") => void; }'.
+contextualPropertyOfGenericFilteringMappedType.ts(38,11): error TS7006: Parameter 'value' implicitly has an 'any' type.
+contextualPropertyOfGenericFilteringMappedType.ts(38,18): error TS7006: Parameter 'key' implicitly has an 'any' type.
+
+
+==== contextualPropertyOfGenericFilteringMappedType.ts (3 errors) ====
+    declare function f1<T extends object>(
+      data: T,
+      handlers: { [P in keyof T as P]: (value: T[P], prop: P) => void },
+    ): void;
+    
+    f1(
+      {
+        foo: 0,
+        bar: "",
+      },
+      {
+        foo: (value, key) => {},
+        bar: (value, key) => {},
+      },
+    );
+    
+    declare function f2<T extends object>(
+      data: T,
+      handlers: { [P in keyof T as T[P] extends string ? P : never]: (value: T[P], prop: P) => void },
+    ): void;
+    
+    f2(
+      {
+        foo: 0,
+        bar: "",
+      },
+      {
+        bar: (value, key) => {},
+      },
+    );
+    
+    f2(
+      {
+        foo: 0,
+        bar: "",
+      },
+      {
+        foo: (value, key) => {
+        ~~~
+!!! error TS2353: Object literal may only specify known properties, and 'foo' does not exist in type '{ bar: (value: string, prop: "bar") => void; }'.
+              ~~~~~
+!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
+                     ~~~
+!!! error TS7006: Parameter 'key' implicitly has an 'any' type.
+          // implicit `any`s
+        },
+      },
+    );
+    

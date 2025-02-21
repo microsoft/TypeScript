@@ -1,15 +1,15 @@
 // === findAllReferences ===
-// === /referencesForGlobals_1.ts ===
+// === /home/src/workspaces/project/referencesForGlobals_1.ts ===
 // <|class [|{| isWriteAccess: true |}globalClass|] {
 //     public f() { }
 // }|>
 
-// === /referencesForGlobals_2.ts ===
+// === /home/src/workspaces/project/referencesForGlobals_2.ts ===
 // ///<reference path="referencesForGlobals_1.ts" />
 // var c = /*FIND ALL REFS*/[|globalClass|]();
 
   // === Definitions ===
-  // === /referencesForGlobals_1.ts ===
+  // === /home/src/workspaces/project/referencesForGlobals_1.ts ===
   // <|class [|globalClass|] {
   //     public f() { }
   // }|>

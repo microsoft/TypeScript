@@ -8,12 +8,11 @@ import {
     TestSessionRequest,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: Semantic operations on Syntax server", () => {
+describe("unittests:: tsserver:: syntacticServer:: Semantic operations on Syntax server", () => {
     function setup() {
         const file1: File = {
             path: `/user/username/projects/myproject/a.ts`,
@@ -39,7 +38,7 @@ import { something } from "something";
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: "{}",
         };
-        const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
+        const host = TestServerHost.createServerHost([file1, file2, file3, something, configFile]);
         const session = new TestSession({ host, serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true });
         return { host, session, file1, file2, file3, something, configFile };
     }
@@ -117,7 +116,7 @@ import { something } from "something";
     it("should not include auto type reference directives", () => {
         const { host, session, file1 } = setup();
         const atTypes: File = {
-            path: `/node_modules/@types/somemodule/index.d.ts`,
+            path: `/user/username/projects/myproject/node_modules/@types/somemodule/index.d.ts`,
             content: "export const something = 10;",
         };
         host.ensureFileOrFolder(atTypes);
@@ -150,7 +149,7 @@ function fooB() { }`,
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: "{}",
         };
-        const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
+        const host = TestServerHost.createServerHost([file1, file2, file3, something, configFile]);
         const session = new TestSession({ host, serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true });
         const service = session.getProjectService();
         openFilesForSession([file1], session);

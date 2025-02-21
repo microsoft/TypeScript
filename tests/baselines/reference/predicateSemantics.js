@@ -60,9 +60,45 @@ declare let cond: any;
 // Should be OK
 console.log((cond || undefined) && 1 / cond);
 
+function foo(this: Object | undefined) {
+    // Should be OK
+    return this ?? 0;
+}
+
+// https://github.com/microsoft/TypeScript/issues/60401
+{
+  const maybe = null as true | null;
+  let i = 0;
+  const d = (i++, maybe) ?? true; // ok
+  const e = (i++, i++) ?? true; // error
+  const f = (maybe, i++) ?? true; // error
+}
+
+// https://github.com/microsoft/TypeScript/issues/60439
+class X {
+  constructor() {
+    const p = new.target ?? 32;
+  }
+}
+
+// https://github.com/microsoft/TypeScript/issues/60614
+declare function tag<T>(
+  strings: TemplateStringsArray,
+  ...values: number[]
+): T | null;
+
+tag`foo${1}` ?? 32; // ok
+
+`foo${1}` ?? 32; // error
+`foo` ?? 32; // error
+
 
 //// [predicateSemantics.js]
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u;
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z;
 // OK: One or other operand is possibly nullish
 var test1 = (_a = (opt ? undefined : 32)) !== null && _a !== void 0 ? _a : "possibly reached";
 // Not OK: Both operands nullish
@@ -114,3 +150,27 @@ while (({})) { }
 while ((({}))) { }
 // Should be OK
 console.log((cond || undefined) && 1 / cond);
+function foo() {
+    // Should be OK
+    return this !== null && this !== void 0 ? this : 0;
+}
+// https://github.com/microsoft/TypeScript/issues/60401
+{
+    var maybe = null;
+    var i = 0;
+    var d = (_v = (i++, maybe)) !== null && _v !== void 0 ? _v : true; // ok
+    var e = (_w = (i++, i++)) !== null && _w !== void 0 ? _w : true; // error
+    var f = (_x = (maybe, i++)) !== null && _x !== void 0 ? _x : true; // error
+}
+// https://github.com/microsoft/TypeScript/issues/60439
+var X = /** @class */ (function () {
+    function X() {
+        var _newTarget = this.constructor;
+        var _a;
+        var p = (_a = _newTarget) !== null && _a !== void 0 ? _a : 32;
+    }
+    return X;
+}());
+(_y = tag(__makeTemplateObject(["foo", ""], ["foo", ""]), 1)) !== null && _y !== void 0 ? _y : 32; // ok
+(_z = "foo".concat(1)) !== null && _z !== void 0 ? _z : 32; // error
+"foo" !== null && "foo" !== void 0 ? "foo" : 32; // error

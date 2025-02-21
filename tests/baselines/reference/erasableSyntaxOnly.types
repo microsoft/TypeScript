@@ -1,0 +1,193 @@
+//// [tests/cases/compiler/erasableSyntaxOnly.ts] ////
+
+=== index.ts ===
+class MyClassErr {
+>MyClassErr : MyClassErr
+>           : ^^^^^^^^^^
+
+    // No parameter properties
+    constructor(public foo: string) { }
+>foo : string
+>    : ^^^^^^
+}
+
+namespace IllegalBecauseInstantiated {
+>IllegalBecauseInstantiated : typeof IllegalBecauseInstantiated
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    export const m = 1;
+>m : 1
+>  : ^
+>1 : 1
+>  : ^
+}
+
+namespace AlsoIllegalBecauseInstantiated {
+>AlsoIllegalBecauseInstantiated : typeof AlsoIllegalBecauseInstantiated
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    class PrivateClass {
+>PrivateClass : PrivateClass
+>             : ^^^^^^^^^^^^
+
+    }
+}
+
+namespace IllegalBecauseNestedInstantiated {
+>IllegalBecauseNestedInstantiated : typeof IllegalBecauseNestedInstantiated
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    namespace Nested {
+>Nested : typeof Nested
+>       : ^^^^^^^^^^^^^
+
+        export const m = 1;
+>m : 1
+>  : ^
+>1 : 1
+>  : ^
+    }
+}
+
+enum NotLegalEnum {
+>NotLegalEnum : NotLegalEnum
+>             : ^^^^^^^^^^^^
+
+    B = 1
+>B : NotLegalEnum.B
+>  : ^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+}
+
+import NoGoodAlias = NotLegalEnum.B;
+>NoGoodAlias : NotLegalEnum.B
+>            : ^^^^^^^^^^^^^^
+>NotLegalEnum : NotLegalEnum
+>             : ^^^^^^^^^^^^
+>B : NotLegalEnum.B
+>  : ^^^^^^^^^^^^^^
+
+const enum NotLegalConstEnum {
+>NotLegalConstEnum : NotLegalConstEnum
+>                  : ^^^^^^^^^^^^^^^^^
+
+    C = 2
+>C : NotLegalConstEnum.C
+>  : ^^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+}
+
+// No errors after this point
+class MyClassOk {
+>MyClassOk : MyClassOk
+>          : ^^^^^^^^^
+
+    // Not a parameter property, ok
+    constructor(foo: string) { }
+>foo : string
+>    : ^^^^^^
+}
+
+// Note for implementors: This should not be an error
+// as this entire namespace block is fully erased
+namespace NotInstantiated {
+    export interface JustAType { }
+    export type ATypeInANamespace = {};
+>ATypeInANamespace : ATypeInANamespace
+>                  : ^^^^^^^^^^^^^^^^^
+
+    namespace Nested {
+        export type ATypeInANamespace = {};
+>ATypeInANamespace : ATypeInANamespace
+>                  : ^^^^^^^^^^^^^^^^^
+    }
+}
+declare namespace AmbientIsNotInstantiated {
+>AmbientIsNotInstantiated : typeof AmbientIsNotInstantiated
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    export const stillOk = 12;
+>stillOk : 12
+>        : ^^
+>12 : 12
+>   : ^^
+}
+
+declare enum LegalEnum {
+>LegalEnum : LegalEnum
+>          : ^^^^^^^^^
+
+    A = 1
+>A : LegalEnum.A
+>  : ^^^^^^^^^^^
+>1 : 1
+>  : ^
+}
+
+declare namespace AmbientStuff {
+>AmbientStuff : typeof AmbientStuff
+>             : ^^^^^^^^^^^^^^^^^^^
+
+    namespace Nested {
+>Nested : typeof Nested
+>       : ^^^^^^^^^^^^^
+
+        export const stillOk = 12;
+>stillOk : 12
+>        : ^^
+>12 : 12
+>   : ^^
+    }
+    enum EnumInAmbientContext {
+>EnumInAmbientContext : EnumInAmbientContext
+>                     : ^^^^^^^^^^^^^^^^^^^^
+
+        B = 1
+>B : EnumInAmbientContext.B
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+    }
+
+    import FineAlias = EnumInAmbientContext.B;
+>FineAlias : EnumInAmbientContext.B
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+>EnumInAmbientContext : EnumInAmbientContext
+>                     : ^^^^^^^^^^^^^^^^^^^^
+>B : EnumInAmbientContext.B
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+}
+
+=== commonjs.cts ===
+import foo = require("./other.cjs");
+>foo : () => void
+>    : ^^^^^^    
+
+export = foo;
+>foo : () => void
+>    : ^^^^^^    
+
+
+=== other.d.cts ===
+declare function foo(): void;
+>foo : () => void
+>    : ^^^^^^    
+
+export = foo;
+>foo : () => void
+>    : ^^^^^^    
+
+
+=== esm.mts ===
+const foo = 1234;
+>foo : 1234
+>    : ^^^^
+>1234 : 1234
+>     : ^^^^
+
+export default foo;
+>foo : 1234
+>    : ^^^^
+

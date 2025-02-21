@@ -1,6 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /src/index.ts
+// @Filename: /home/src/workspaces/project/src/index.ts
 //// const a: "aa" | "bb" = "/**/";
 
 verify.baselineCompletions();

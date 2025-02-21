@@ -10,7 +10,7 @@ import {
     emptyArray,
     ensureTrailingDirectorySeparator,
     findIndex,
-    forEachAncestorDirectory,
+    forEachAncestorDirectoryStoppingAtGlobalCache,
     forEachEntry,
     FutureSourceFile,
     getBaseFileName,
@@ -38,12 +38,14 @@ import {
     ModuleSpecifierResolutionHost,
     moduleSpecifiers,
     moduleSymbolToValidIdentifier,
+    nodeCoreModules,
     nodeModulesPathPart,
     PackageJsonImportFilter,
     Path,
     pathContainsNodeModules,
     Program,
     ScriptTarget,
+    shouldUseUriStyleNodeCoreModules,
     skipAlias,
     SourceFile,
     startsWith,
@@ -72,6 +74,7 @@ export const enum ExportKind {
     Default,
     ExportEquals,
     UMD,
+    Module,
 }
 
 /** @internal */
@@ -362,53 +365,87 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
 }
 
 /** @internal */
-export function isImportableFile(
+export function isImportable(
     program: Program,
-    from: SourceFile,
-    to: SourceFile,
+    fromFile: SourceFile,
+    toFile: SourceFile | undefined,
+    toModule: Symbol,
     preferences: UserPreferences,
     packageJsonFilter: PackageJsonImportFilter | undefined,
     moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost,
     moduleSpecifierCache: ModuleSpecifierCache | undefined,
 ): boolean {
-    if (from === to) return false;
-    const cachedResult = moduleSpecifierCache?.get(from.path, to.path, preferences, {});
+    if (!toFile) {
+        // Ambient module
+        let useNodePrefix;
+        const moduleName = stripQuotes(toModule.name);
+        if (nodeCoreModules.has(moduleName) && (useNodePrefix = shouldUseUriStyleNodeCoreModules(fromFile, program)) !== undefined) {
+            return useNodePrefix === startsWith(moduleName, "node:");
+        }
+        return !packageJsonFilter
+            || packageJsonFilter.allowsImportingAmbientModule(toModule, moduleSpecifierResolutionHost)
+            || fileContainsPackageImport(fromFile, moduleName);
+    }
+
+    Debug.assertIsDefined(toFile);
+    if (fromFile === toFile) return false;
+    const cachedResult = moduleSpecifierCache?.get(fromFile.path, toFile.path, preferences, {});
     if (cachedResult?.isBlockedByPackageJsonDependencies !== undefined) {
-        return !cachedResult.isBlockedByPackageJsonDependencies;
+        return !cachedResult.isBlockedByPackageJsonDependencies || !!cachedResult.packageName && fileContainsPackageImport(fromFile, cachedResult.packageName);
     }
 
     const getCanonicalFileName = hostGetCanonicalFileName(moduleSpecifierResolutionHost);
     const globalTypingsCache = moduleSpecifierResolutionHost.getGlobalTypingsCacheLocation?.();
     const hasImportablePath = !!moduleSpecifiers.forEachFileNameOfModule(
-        from.fileName,
-        to.fileName,
+        fromFile.fileName,
+        toFile.fileName,
         moduleSpecifierResolutionHost,
         /*preferSymlinks*/ false,
         toPath => {
-            const toFile = program.getSourceFile(toPath);
+            const file = program.getSourceFile(toPath);
             // Determine to import using toPath only if toPath is what we were looking at
             // or there doesnt exist the file in the program by the symlink
-            return (toFile === to || !toFile) &&
-                isImportablePath(from.fileName, toPath, getCanonicalFileName, globalTypingsCache);
+            return (file === toFile || !file) &&
+                isImportablePath(
+                    fromFile.fileName,
+                    toPath,
+                    getCanonicalFileName,
+                    globalTypingsCache,
+                    moduleSpecifierResolutionHost,
+                );
         },
     );
 
     if (packageJsonFilter) {
-        const isAutoImportable = hasImportablePath && packageJsonFilter.allowsImportingSourceFile(to, moduleSpecifierResolutionHost);
-        moduleSpecifierCache?.setBlockedByPackageJsonDependencies(from.path, to.path, preferences, {}, !isAutoImportable);
-        return isAutoImportable;
+        const importInfo = hasImportablePath ? packageJsonFilter.getSourceFileInfo(toFile, moduleSpecifierResolutionHost) : undefined;
+        moduleSpecifierCache?.setBlockedByPackageJsonDependencies(fromFile.path, toFile.path, preferences, {}, importInfo?.packageName, !importInfo?.importable);
+        return !!importInfo?.importable || hasImportablePath && !!importInfo?.packageName && fileContainsPackageImport(fromFile, importInfo.packageName);
     }
 
     return hasImportablePath;
+}
+
+function fileContainsPackageImport(sourceFile: SourceFile, packageName: string) {
+    return sourceFile.imports && sourceFile.imports.some(i => i.text === packageName || i.text.startsWith(packageName + "/"));
 }
 
 /**
  * Don't include something from a `node_modules` that isn't actually reachable by a global import.
  * A relative import to node_modules is usually a bad idea.
  */
-function isImportablePath(fromPath: string, toPath: string, getCanonicalFileName: GetCanonicalFileName, globalCachePath?: string): boolean {
+function isImportablePath(
+    fromPath: string,
+    toPath: string,
+    getCanonicalFileName: GetCanonicalFileName,
+    globalCachePath: string | undefined,
+    host: ModuleSpecifierResolutionHost,
+): boolean {
     // If it's in a `node_modules` but is not reachable from here via a global import, don't bother.
-    const toNodeModules = forEachAncestorDirectory(toPath, ancestor => getBaseFileName(ancestor) === "node_modules" ? ancestor : undefined);
+    const toNodeModules = forEachAncestorDirectoryStoppingAtGlobalCache(
+        host,
+        toPath,
+        ancestor => getBaseFileName(ancestor) === "node_modules" ? ancestor : undefined,
+    );
     const toNodeModulesParent = toNodeModules && getDirectoryPath(getCanonicalFileName(toNodeModules));
     return toNodeModulesParent === undefined
         || startsWith(getCanonicalFileName(fromPath), toNodeModulesParent)
@@ -422,7 +459,7 @@ export function forEachExternalModuleToImportFrom(
     preferences: UserPreferences,
     useAutoImportProvider: boolean,
     cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program, isFromPackageJson: boolean) => void,
-) {
+): void {
     const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
     const excludePatterns = preferences.autoImportFileExcludePatterns && getIsExcludedPatterns(preferences, useCaseSensitiveFileNames);
 
@@ -474,20 +511,24 @@ function getIsExcluded(excludePatterns: readonly RegExp[], host: LanguageService
         if (excludePatterns.some(p => p.test(fileName))) return true;
         if (realpathsWithSymlinks?.size && pathContainsNodeModules(fileName)) {
             let dir = getDirectoryPath(fileName);
-            return forEachAncestorDirectory(getDirectoryPath(path), dirPath => {
-                const symlinks = realpathsWithSymlinks.get(ensureTrailingDirectorySeparator(dirPath));
-                if (symlinks) {
-                    return symlinks.some(s => excludePatterns.some(p => p.test(fileName.replace(dir, s))));
-                }
-                dir = getDirectoryPath(dir);
-            }) ?? false;
+            return forEachAncestorDirectoryStoppingAtGlobalCache(
+                host,
+                getDirectoryPath(path),
+                dirPath => {
+                    const symlinks = realpathsWithSymlinks.get(ensureTrailingDirectorySeparator(dirPath));
+                    if (symlinks) {
+                        return symlinks.some(s => excludePatterns.some(p => p.test(fileName.replace(dir, s))));
+                    }
+                    dir = getDirectoryPath(dir);
+                },
+            ) ?? false;
         }
         return false;
     });
 }
 
 /** @internal */
-export function getIsFileExcluded(host: LanguageServiceHost, preferences: UserPreferences) {
+export function getIsFileExcluded(host: LanguageServiceHost, preferences: UserPreferences): (sourceFile: SourceFile) => boolean {
     if (!preferences.autoImportFileExcludePatterns) return () => false;
     return getIsExcluded(getIsExcludedPatterns(preferences, hostUsesCaseSensitiveFileNames(host)), host);
 }
@@ -515,7 +556,7 @@ export function getExportInfoMap(importingFile: SourceFile | FutureSourceFile, h
     try {
         forEachExternalModuleToImportFrom(program, host, preferences, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
             if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
-            const seenExports = new Map<__String, true>();
+            const seenExports = new Set<__String>();
             const checker = program.getTypeChecker();
             const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker);
             // Note: I think we shouldn't actually see resolved module symbols here, but weird merges
@@ -559,9 +600,16 @@ export function getExportInfoMap(importingFile: SourceFile | FutureSourceFile, h
 }
 
 /** @internal */
-export function getDefaultLikeExportInfo(moduleSymbol: Symbol, checker: TypeChecker) {
+export function getDefaultLikeExportInfo(moduleSymbol: Symbol, checker: TypeChecker): {
+    symbol: Symbol;
+    exportKind: ExportKind;
+} | undefined {
     const exportEquals = checker.resolveExternalModuleSymbol(moduleSymbol);
-    if (exportEquals !== moduleSymbol) return { symbol: exportEquals, exportKind: ExportKind.ExportEquals };
+    if (exportEquals !== moduleSymbol) {
+        const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, exportEquals);
+        if (defaultExport) return { symbol: defaultExport, exportKind: ExportKind.Default };
+        return { symbol: exportEquals, exportKind: ExportKind.ExportEquals };
+    }
     const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
     if (defaultExport) return { symbol: defaultExport, exportKind: ExportKind.Default };
 }
@@ -587,7 +635,7 @@ function getNamesForExportedSymbol(defaultExport: Symbol, checker: TypeChecker, 
 export function forEachNameOfDefaultExport<T>(defaultExport: Symbol, checker: TypeChecker, scriptTarget: ScriptTarget | undefined, cb: (name: string, capitalizedName?: string) => T | undefined): T | undefined {
     let chain: Symbol[] | undefined;
     let current: Symbol | undefined = defaultExport;
-    const seen = new Map<Symbol, true>();
+    const seen = new Set<Symbol>();
 
     while (current) {
         // The predecessor to this function also looked for a name on the `localSymbol`

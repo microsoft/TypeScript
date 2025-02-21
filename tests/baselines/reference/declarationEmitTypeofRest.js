@@ -31,7 +31,16 @@ export const v2 = (...a) => {
 
 
 //// [v1.d.ts]
-export declare const v1: (n: "n", a: "a") => {
+export declare const v1: (...a: [n: "n", a: "a"]) => {
     /** r rest param */
-    a: [n: "n", a: "a"];
+    a: typeof a;
 };
+//// [v2.d.ts]
+declare const n: unique symbol;
+export declare const v2: (...a: [n: "n", a: "a"]) => {
+    /** r rest param */
+    a: typeof a;
+    /** module var */
+    n: typeof n;
+};
+export {};

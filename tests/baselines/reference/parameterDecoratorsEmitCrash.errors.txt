@@ -1,0 +1,14 @@
+parameterDecoratorsEmitCrash.ts(6,17): error TS1206: Decorators are not valid here.
+
+
+==== parameterDecoratorsEmitCrash.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/58269
+    declare var dec: any;
+    
+    export class C {
+        @dec x: any;
+        constructor(@dec x: any) {}
+                    ~
+!!! error TS1206: Decorators are not valid here.
+    }
+    
