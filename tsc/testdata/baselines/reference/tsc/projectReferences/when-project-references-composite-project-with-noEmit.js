@@ -131,6 +131,11 @@ CompilerOptions::{
     "tscBuild": null
 }
 Output::
+project/index.ts(1,19): error TS2307: Cannot find module '../utils' or its corresponding type declarations.
+
+
+Found 1 error in project/index.ts[90m:1[0m
+
 //// [/home/src/workspaces/solution/project/index.ts]\nimport { x } from "../utils";
 //// [/home/src/workspaces/solution/project/tsconfig.json]\n{
 		"references": [

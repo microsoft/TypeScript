@@ -316,7 +316,7 @@ loop:
 	}
 	if result == nil {
 		if !excludeGlobals {
-			result = r.lookup(r.Globals, name, meaning)
+			result = r.lookup(r.Globals, name, meaning|ast.SymbolFlagsGlobalLookup)
 		}
 	}
 	if nameNotFoundMessage != nil {

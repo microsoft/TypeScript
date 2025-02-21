@@ -392,15 +392,24 @@ func (p *Program) PrintSourceFileWithTypes() {
 }
 
 func (p *Program) GetEmitModuleFormatOfFile(sourceFile *ast.SourceFile) core.ModuleKind {
-	// !!!
-	// Must reimplement the below.
-	// Also, previous version is a method on `TypeCheckerHost`/`Program`.
+	return p.GetEmitModuleFormatOfFileWorker(sourceFile, p.compilerOptions)
+}
 
-	// mode, hadImpliedFormat := getImpliedNodeFormatForEmitWorker(sourceFile, options)
-	// if !hadImpliedFormat {
-	// 	mode = options.GetEmitModuleKind()
-	// }
-	return p.compilerOptions.GetEmitModuleKind()
+func (p *Program) GetEmitModuleFormatOfFileWorker(sourceFile *ast.SourceFile, options *core.CompilerOptions) core.ModuleKind {
+	result := p.GetImpliedNodeFormatForEmitWorker(sourceFile, options)
+	if result != core.ModuleKindNone {
+		return result
+	}
+	return options.GetEmitModuleKind()
+}
+
+func (p *Program) GetImpliedNodeFormatForEmit(sourceFile *ast.SourceFile) core.ResolutionMode {
+	return p.GetImpliedNodeFormatForEmitWorker(sourceFile, p.compilerOptions)
+}
+
+func (p *Program) GetImpliedNodeFormatForEmitWorker(sourceFile *ast.SourceFile, options *core.CompilerOptions) core.ResolutionMode {
+	// !!!
+	return core.ModuleKindNone
 }
 
 func (p *Program) CommonSourceDirectory() string {

@@ -1593,7 +1593,6 @@ func (node *FunctionLikeBase) LocalsContainerData() *LocalsContainerBase {
 	return &node.LocalsContainerBase
 }
 func (node *FunctionLikeBase) FunctionLikeData() *FunctionLikeBase { return node }
-func (node *FunctionLikeBase) BodyData() *BodyBase                 { return nil }
 
 // BodyBase
 
@@ -2779,8 +2778,6 @@ func (node *FunctionDeclaration) Name() *DeclarationName {
 	return node.name
 }
 
-func (node *FunctionDeclaration) BodyData() *BodyBase { return &node.BodyBase }
-
 func IsFunctionDeclaration(node *Node) bool {
 	return node.Kind == KindFunctionDeclaration
 }
@@ -3127,8 +3124,8 @@ type ModuleDeclaration struct {
 	ExportableBase
 	ModifiersBase
 	LocalsContainerBase
+	BodyBase
 	name *ModuleName // ModuleName
-	Body *ModuleBody // ModuleBody. Optional (may be nil in ambient module declaration)
 }
 
 func (f *NodeFactory) NewModuleDeclaration(modifiers *ModifierList, name *ModuleName, body *ModuleBody, flags NodeFlags) *Node {

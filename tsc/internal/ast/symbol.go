@@ -40,9 +40,9 @@ const (
 	InternalSymbolNameFunction                = InternalSymbolNamePrefix + "function"                // Unnamed function expression
 	InternalSymbolNameComputed                = InternalSymbolNamePrefix + "computed"                // Computed property name declaration with dynamic name
 	InternalSymbolNameResolving               = InternalSymbolNamePrefix + "resolving"               // Indicator symbol used to mark partially resolved type aliases
-	InternalSymbolNameExportEquals            = InternalSymbolNamePrefix + "export="                 // Export assignment symbol
 	InternalSymbolNameInstantiationExpression = InternalSymbolNamePrefix + "instantiationExpression" // Instantiation expressions
 	InternalSymbolNameImportAttributes        = InternalSymbolNamePrefix + "importAttributes"
+	InternalSymbolNameExportEquals            = "export=" // Export assignment symbol
 	InternalSymbolNameDefault                 = "default" // Default export symbol (technically not wholly internal, but included here for usability)
 	InternalSymbolNameThis                    = "this"
 )
