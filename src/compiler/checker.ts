@@ -15124,7 +15124,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * no constituent property has type 'never', but the intersection of the constituent property types is 'never'.
      */
     function getReducedType(type: Type): Type {
-        if (type.flags & TypeFlags.Union && (type as UnionType).objectFlags & ObjectFlags.ContainsIntersections) {
+        if (type.flags & TypeFlags.Union && (type as UnionType).objectFlags) {
             return (type as UnionType).resolvedReducedType || ((type as UnionType).resolvedReducedType = getReducedUnionType(type as UnionType));
         }
         else if (type.flags & TypeFlags.Intersection) {
@@ -15139,14 +15139,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getReducedUnionType(unionType: UnionType) {
         const reducedTypes = sameMap(unionType.types, getReducedType);
-        if (reducedTypes === unionType.types) {
-            return unionType;
+
+        if (reducedTypes !== unionType.types) {
+            const reduced = getUnionType(reducedTypes);
+            if (reduced.flags & TypeFlags.Union) {
+                unionType = reduced as UnionType;
+            }
+            else {
+                return reduced;
+            }
         }
-        const reduced = getUnionType(reducedTypes);
-        if (reduced.flags & TypeFlags.Union) {
-            (reduced as UnionType).resolvedReducedType = reduced;
+
+        let reducedType: Type = unionType;
+
+        if (!(unionType.flags & TypeFlags.EnumLiteral) && every(unionType.types, t => !!(t.flags & TypeFlags.EnumLike))) {
+            const baseType = getBaseTypeOfEnumLikeType(first(unionType.types));
+            if (
+                baseType.flags & TypeFlags.Union &&
+                unionType.types.length === (baseType as UnionType).types.length &&
+                every(unionType.types, t => getBaseTypeOfEnumLikeType(t) === baseType)
+            ) {
+                reducedType = baseType;
+            }
         }
-        return reduced;
+
+        unionType.resolvedReducedType = reducedType;
+        return reducedType;
     }
 
     function isNeverReducedProperty(prop: Symbol) {
