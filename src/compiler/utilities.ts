@@ -9505,7 +9505,7 @@ const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
 
 const commonPackageFolders: readonly string[] = ["node_modules", "bower_components", "jspm_packages"];
 
-const implicitExcludePathRegexPattern = `(?!(${commonPackageFolders.join("|")})(/|$))`;
+const implicitExcludePathRegexPattern = `(?!(?:${commonPackageFolders.join("|")})(?:/|$))`;
 
 /** @internal */
 export interface WildcardMatcher {
@@ -9521,12 +9521,12 @@ const filesMatcher: WildcardMatcher = {
      *  [^./]                   # matches everything up to the first . character (excluding directory separators)
      *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
      */
-    singleAsteriskRegexFragment: "([^./]|(\\.(?!min\\.js$))?)*",
+    singleAsteriskRegexFragment: "(?:[^./]|(?:\\.(?!min\\.js$))?)*",
     /**
      * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
      * files or directories, does not match subdirectories that start with a . character
      */
-    doubleAsteriskRegexFragment: `(/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
+    doubleAsteriskRegexFragment: `(?:/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
     replaceWildcardCharacter: match => replaceWildcardCharacter(match, filesMatcher.singleAsteriskRegexFragment),
 };
 
@@ -9536,13 +9536,13 @@ const directoriesMatcher: WildcardMatcher = {
      * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
      * files or directories, does not match subdirectories that start with a . character
      */
-    doubleAsteriskRegexFragment: `(/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
+    doubleAsteriskRegexFragment: `(?:/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
     replaceWildcardCharacter: match => replaceWildcardCharacter(match, directoriesMatcher.singleAsteriskRegexFragment),
 };
 
 const excludeMatcher: WildcardMatcher = {
     singleAsteriskRegexFragment: "[^/]*",
-    doubleAsteriskRegexFragment: "(/.+?)?",
+    doubleAsteriskRegexFragment: "(?:/.+?)?",
     replaceWildcardCharacter: match => replaceWildcardCharacter(match, excludeMatcher.singleAsteriskRegexFragment),
 };
 
@@ -9559,10 +9559,10 @@ export function getRegularExpressionForWildcard(specs: readonly string[] | undef
         return undefined;
     }
 
-    const pattern = patterns.map(pattern => `(${pattern})`).join("|");
+    const pattern = patterns.map(pattern => `(?:${pattern})`).join("|");
     // If excluding, match "foo/bar/baz...", but if including, only allow "foo".
-    const terminator = usage === "exclude" ? "($|/)" : "$";
-    return `^(${pattern})${terminator}`;
+    const terminator = usage === "exclude" ? "(?:$|/)" : "$";
+    return `^(?:${pattern})${terminator}`;
 }
 
 /** @internal */
@@ -9587,7 +9587,7 @@ export function isImplicitGlob(lastPathComponent: string): boolean {
 /** @internal */
 export function getPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude"): string | undefined {
     const pattern = spec && getSubPatternFromSpec(spec, basePath, usage, wildcardMatchers[usage]);
-    return pattern && `^(${pattern})${usage === "exclude" ? "($|/)" : "$"}`;
+    return pattern && `^(?:${pattern})${usage === "exclude" ? "(?:$|/)" : "$"}`;
 }
 
 /** @internal */
@@ -9620,7 +9620,7 @@ export function getSubPatternFromSpec(
         }
         else {
             if (usage === "directories") {
-                subpattern += "(";
+                subpattern += "(?:";
                 optionalCount++;
             }
 
@@ -9634,7 +9634,7 @@ export function getSubPatternFromSpec(
                 // appear first in a component. Dotted directories and files can be included explicitly
                 // like so: **/.*/.*
                 if (component.charCodeAt(0) === CharacterCodes.asterisk) {
-                    componentPattern += "([^./]" + singleAsteriskRegexFragment + ")?";
+                    componentPattern += "(?:[^./]" + singleAsteriskRegexFragment + ")?";
                     component = component.substr(1);
                 }
                 else if (component.charCodeAt(0) === CharacterCodes.question) {
