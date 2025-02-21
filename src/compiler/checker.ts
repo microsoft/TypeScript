@@ -1331,8 +1331,8 @@ export const enum CheckMode {
     SkipGenericFunctions = 1 << 3,                  // Skip single signature generic functions
     IsForSignatureHelp = 1 << 4,                    // Call resolution for purposes of signature help
     RestBindingElement = 1 << 5,                    // Checking a type that is going to be used to determine the type of a rest binding element
-                                                    //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
-                                                    //   we need to preserve generic types instead of substituting them for constraints
+    //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
+    //   we need to preserve generic types instead of substituting them for constraints
     TypeOnly = 1 << 6,                              // Called from getTypeOfExpression, diagnostics may be omitted
 }
 
@@ -3399,7 +3399,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isEntityNameExpression((node as ExpressionWithTypeArguments).expression)) {
                     return (node as ExpressionWithTypeArguments).expression as EntityNameExpression;
                 }
-                // falls through
+            // falls through
             default:
                 return undefined;
         }
@@ -5527,7 +5527,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (!isExternalOrCommonJsModule(location as SourceFile)) {
                         break;
                     }
-                    // falls through
+                // falls through
                 case SyntaxKind.ModuleDeclaration:
                     const sym = getSymbolOfDeclaration(location as ModuleDeclaration);
                     // `sym` may not have exports if this module declaration is backed by the symbol for a `const` that's being rewritten
@@ -9885,7 +9885,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             );
                             break;
                         }
-                        // else fall through and treat commonjs require just like import=
+                    // else fall through and treat commonjs require just like import=
                     case SyntaxKind.ImportEqualsDeclaration:
                         // This _specifically_ only exists to handle json declarations - where we make aliases, but since
                         // we emit no declarations for the json document, must not refer to it in the declarations
@@ -10683,7 +10683,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // If the binding pattern is empty, this variable declaration is not visible
                         return false;
                     }
-                    // falls through
+                // falls through
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
@@ -10716,8 +10716,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // Private/protected properties/methods are not visible
                         return false;
                     }
-                    // Public properties/methods are visible if its parents are visible, so:
-                    // falls through
+                // Public properties/methods are visible if its parents are visible, so:
+                // falls through
 
                 case SyntaxKind.Constructor:
                 case SyntaxKind.ConstructSignature:
@@ -20700,7 +20700,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!isConstAssertion(node)) {
                     break;
                 }
-                // fallthrough
+            // fallthrough
             case SyntaxKind.JsxExpression:
             case SyntaxKind.ParenthesizedExpression:
                 return elaborateError((node as AsExpression | ParenthesizedExpression | JsxExpression).expression, source, target, relation, headMessage, containingMessageChain, errorOutputContainer);
@@ -21964,6 +21964,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         needsOriginalSource ? sourceType : generalizedSourceType,
                         targetType,
                         typeToString(constraint),
+                    );
+                }
+                else if ((source.flags & TypeFlags.TypeParameter) && (isTypeAssignableTo(target, getBaseConstraintOrType(generalizedSource)) || (needsOriginalSource = isTypeAssignableTo(target, getBaseConstraintOrType(source))))) {
+                    reportError(
+                        Diagnostics._1_is_constrained_to_be_a_subtype_of_0,
+                        needsOriginalSource ? sourceType : generalizedSourceType,
+                        targetType,
                     );
                 }
                 else {
@@ -27013,7 +27020,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isCallExpression(node.parent)) {
                     return Diagnostics.Cannot_find_name_0_Did_you_mean_to_write_this_in_an_async_function;
                 }
-                // falls through
+            // falls through
             default:
                 if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
                     return Diagnostics.No_value_exists_in_scope_for_the_shorthand_property_0_Either_declare_one_or_provide_an_initializer;
@@ -27055,7 +27062,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const symbol = getResolvedSymbol(node as Identifier);
                     return symbol !== unknownSymbol ? `${flowContainer ? getNodeId(flowContainer) : "-1"}|${getTypeId(declaredType)}|${getTypeId(initialType)}|${getSymbolId(symbol)}` : undefined;
                 }
-                // falls through
+            // falls through
             case SyntaxKind.ThisKeyword:
                 return `0|${flowContainer ? getNodeId(flowContainer) : "-1"}|${getTypeId(declaredType)}|${getTypeId(initialType)}`;
             case SyntaxKind.NonNullExpression:
@@ -29444,7 +29451,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                         }
                     }
-                    // falls through
+                // falls through
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
                 case SyntaxKind.PropertyAccessExpression:
@@ -39151,7 +39158,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 hasError = true;
                                 break;
                             }
-                            // fallthrough
+                        // fallthrough
                         case ModuleKind.ES2022:
                         case ModuleKind.ESNext:
                         case ModuleKind.Preserve:
@@ -39159,7 +39166,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             if (languageVersion >= ScriptTarget.ES2017) {
                                 break;
                             }
-                            // fallthrough
+                        // fallthrough
                         default:
                             span ??= getSpanOfTokenAtPosition(sourceFile, node.pos);
                             const message = isAwaitExpression(node) ? Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher :
@@ -41094,7 +41101,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if ((node as CallExpression).expression.kind === SyntaxKind.ImportKeyword) {
                     return checkImportCallExpression(node as ImportCall);
                 }
-                // falls through
+            // falls through
             case SyntaxKind.NewExpression:
                 return checkCallExpression(node as CallExpression, checkMode);
             case SyntaxKind.TaggedTemplateExpression:
@@ -41555,7 +41562,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (useDefineForClassFields) {
                             break;
                         }
-                        // fall through
+                    // fall through
                     case "prototype":
                         const message = Diagnostics.Static_property_0_conflicts_with_built_in_property_Function_0_of_constructor_function_1;
                         const className = getNameOfSymbolAsWritten(getSymbolOfDeclaration(node));
@@ -43161,7 +43168,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     headMessage = Diagnostics.Decorator_function_return_type_0_is_not_assignable_to_type_1;
                     break;
                 }
-                // falls through
+            // falls through
 
             case SyntaxKind.Parameter:
                 headMessage = Diagnostics.Decorator_function_return_type_is_0_but_is_expected_to_be_void_or_any;
@@ -47411,7 +47418,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ImportEqualsDeclaration:
                 // import a = e.x; in module augmentation is ok, but not import a = require('fs)
                 if (isInternalModuleImportEqualsDeclaration(node)) break;
-                // falls through
+            // falls through
             case SyntaxKind.ImportDeclaration:
                 grammarErrorOnFirstToken(node, Diagnostics.Imports_are_not_permitted_in_module_augmentations_Consider_moving_them_to_the_enclosing_external_module);
                 break;
@@ -47425,7 +47432,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     break;
                 }
-                // falls through
+            // falls through
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.FunctionDeclaration:
@@ -48297,7 +48304,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkJSDocPropertyTag(node as JSDocPropertyTag);
             case SyntaxKind.JSDocFunctionType:
                 checkJSDocFunctionType(node as JSDocFunctionType);
-                // falls through
+            // falls through
             case SyntaxKind.JSDocNonNullableType:
             case SyntaxKind.JSDocNullableType:
             case SyntaxKind.JSDocAllType:
@@ -48825,7 +48832,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 switch (location.kind) {
                     case SyntaxKind.SourceFile:
                         if (!isExternalModule(location as SourceFile)) break;
-                        // falls through
+                    // falls through
                     case SyntaxKind.ModuleDeclaration:
                         copyLocallyVisibleExportSymbols(getSymbolOfDeclaration(location as ModuleDeclaration | SourceFile).exports!, meaning & SymbolFlags.ModuleMember);
                         break;
@@ -48990,7 +48997,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isPropertyAccessExpression(entityName.parent) && getLeftmostAccessExpression(entityName.parent) === entityName) {
                     return undefined;
                 }
-                // falls through
+            // falls through
             case AssignmentDeclarationKind.ThisProperty:
             case AssignmentDeclarationKind.ModuleExports:
                 return getSymbolOfDeclaration(entityName.parent.parent as BinaryExpression);
@@ -49289,7 +49296,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!isThisInTypeQuery(node)) {
                     return getSymbolOfNameOrPropertyAccessExpression(node as EntityName | PrivateIdentifier | PropertyAccessExpression);
                 }
-                // falls through
+            // falls through
 
             case SyntaxKind.ThisKeyword:
                 const container = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
@@ -49302,7 +49309,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isInExpressionContext(node)) {
                     return checkExpression(node as Expression).symbol;
                 }
-                // falls through
+            // falls through
 
             case SyntaxKind.ThisType:
                 return getTypeFromThisTypeNode(node as ThisExpression | ThisTypeNode).symbol;
@@ -49336,7 +49343,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isCallExpression(parent) && isBindableObjectDefinePropertyCall(parent) && parent.arguments[1] === node) {
                     return getSymbolOfDeclaration(parent);
                 }
-                // falls through
+            // falls through
 
             case SyntaxKind.NumericLiteral:
                 // index access
@@ -49375,7 +49382,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const symbol = getIntrinsicTagSymbol(node.parent as JsxOpeningLikeElement);
                     return symbol === unknownSymbol ? undefined : symbol;
                 }
-                // falls through
+            // falls through
 
             default:
                 return undefined;
@@ -51803,7 +51810,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     );
                                     break;
                                 }
-                                // fallthrough
+                            // fallthrough
                             case ModuleKind.ES2022:
                             case ModuleKind.ESNext:
                             case ModuleKind.Preserve:
@@ -51811,7 +51818,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 if (languageVersion >= ScriptTarget.ES2017) {
                                     break;
                                 }
-                                // fallthrough
+                            // fallthrough
                             default:
                                 diagnostics.add(
                                     createDiagnosticForNode(forInOrOfStatement.awaitModifier, Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher),
