@@ -22067,7 +22067,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * * Ternary.Maybe if they are related with assumptions of other relationships, or
          * * Ternary.False if they are not related.
          */
-        function isRelatedTo(originalSource: Type, originalTarget: Type, recursionFlags: RecursionFlags = RecursionFlags.Both, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
+        function isRelatedTo(originalSource: Type, originalTarget: Type, recursionFlags: RecursionFlags = RecursionFlags.Both, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None, allowExtraPropertyChecks = true): Ternary {
             if (originalSource === originalTarget) return Ternary.True;
 
             // Before normalization: if `source` is type an object type, and `target` is primitive,
@@ -22129,7 +22129,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ) return Ternary.True;
 
             if (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable) {
-                const isPerformingExcessPropertyChecks = !(intersectionState & IntersectionState.Target) && (isObjectLiteralType(source) && getObjectFlags(source) & ObjectFlags.FreshLiteral);
+                const isPerformingExcessPropertyChecks = allowExtraPropertyChecks && !(intersectionState & IntersectionState.Target) && (isObjectLiteralType(source) && getObjectFlags(source) & ObjectFlags.FreshLiteral);
                 if (isPerformingExcessPropertyChecks) {
                     if (hasExcessProperties(source as FreshObjectLiteralType, target, reportErrors)) {
                         if (reportErrors) {
@@ -22139,7 +22139,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
 
-                const isPerformingCommonPropertyChecks = (relation !== comparableRelation || isUnitType(source)) &&
+                const isPerformingCommonPropertyChecks = allowExtraPropertyChecks && (relation !== comparableRelation || isUnitType(source)) &&
                     !(intersectionState & IntersectionState.Target) &&
                     source.flags & (TypeFlags.Primitive | TypeFlags.Object | TypeFlags.Intersection) && source !== globalObjectType &&
                     target.flags & (TypeFlags.Object | TypeFlags.Intersection) && isWeakType(target) &&
@@ -24050,7 +24050,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return result;
         }
 
-        function membersRelatedToIndexInfo(source: Type, targetInfo: IndexInfo, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
+        function membersRelatedToIndexInfo(source: Type, target: Type, targetInfo: IndexInfo, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
             let result = Ternary.True;
             const keyType = targetInfo.keyType;
             const props = source.flags & TypeFlags.Intersection ? getPropertiesOfUnionOrIntersectionType(source as IntersectionType) : getPropertiesOfObjectType(source);
@@ -24059,12 +24059,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isIgnoredJsxProperty(source, prop)) {
                     continue;
                 }
-                if (isApplicableIndexType(getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique), keyType)) {
+                const propKeyType = getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique);
+                if (isApplicableIndexType(propKeyType, keyType)) {
                     const propType = getNonMissingTypeOfSymbol(prop);
                     const type = exactOptionalPropertyTypes || propType.flags & TypeFlags.Undefined || keyType === numberType || !(prop.flags & SymbolFlags.Optional)
                         ? propType
                         : getTypeWithFacts(propType, TypeFacts.NEUndefined);
-                    const related = isRelatedTo(type, targetInfo.type, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                    const related = isRelatedTo(type, targetInfo.type, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState, targetInfo === getApplicableIndexInfo(target, propKeyType));
                     if (!related) {
                         if (reportErrors) {
                             reportError(Diagnostics.Property_0_is_incompatible_with_index_signature, symbolToString(prop));
@@ -24109,7 +24110,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             for (const targetInfo of indexInfos) {
                 const related = relation !== strictSubtypeRelation && !sourceIsPrimitive && targetHasStringIndex && targetInfo.type.flags & TypeFlags.Any ? Ternary.True :
                     isGenericMappedType(source) && targetHasStringIndex ? isRelatedTo(getTemplateTypeFromMappedType(source), targetInfo.type, RecursionFlags.Both, reportErrors) :
-                    typeRelatedToIndexInfo(source, targetInfo, reportErrors, intersectionState);
+                    typeRelatedToIndexInfo(source, target, targetInfo, reportErrors, intersectionState);
                 if (!related) {
                     return Ternary.False;
                 }
@@ -24118,7 +24119,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return result;
         }
 
-        function typeRelatedToIndexInfo(source: Type, targetInfo: IndexInfo, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
+        function typeRelatedToIndexInfo(source: Type, target: Type, targetInfo: IndexInfo, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
             const sourceInfo = getApplicableIndexInfo(source, targetInfo.keyType);
             if (sourceInfo) {
                 return indexInfoRelatedTo(sourceInfo, targetInfo, reportErrors, intersectionState);
@@ -24127,7 +24128,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // only fresh object literals are considered to have inferred index signatures. This ensures { [x: string]: xxx } <: {} but
             // not vice-versa. Without this rule, those types would be mutual strict subtypes.
             if (!(intersectionState & IntersectionState.Source) && (relation !== strictSubtypeRelation || getObjectFlags(source) & ObjectFlags.FreshLiteral) && isObjectTypeWithInferableIndex(source)) {
-                return membersRelatedToIndexInfo(source, targetInfo, reportErrors, intersectionState);
+                return membersRelatedToIndexInfo(source, target, targetInfo, reportErrors, intersectionState);
             }
             if (reportErrors) {
                 reportError(Diagnostics.Index_signature_for_type_0_is_missing_in_type_1, typeToString(targetInfo.keyType), typeToString(source));
