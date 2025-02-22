@@ -273,3 +273,5 @@ function funcInferredReturnType(obj: { method(p: typeof s): void }) {
 // https://github.com/microsoft/TypeScript/issues/61070
 const bar = Symbol('bar') satisfies symbol;
 let bar2 = Symbol('bar2') satisfies symbol;
+
+const testErrorMessage1 = Symbol() as string;
