@@ -52,7 +52,6 @@ import {
     SourceFileLike,
     SyntaxKind,
     TextRange,
-    TryStatement,
     TypeAliasDeclaration,
     TypeLiteralNode,
     TypeReferenceNode,
