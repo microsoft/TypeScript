@@ -1,0 +1,14 @@
+constEnumNoNumberIndexSignature.ts(7,22): error TS2339: Property '1' does not exist on type 'typeof Foo'.
+
+
+==== constEnumNoNumberIndexSignature.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/55212
+    
+    const enum Foo {
+        a = 1,
+    }
+    
+    export const v = Foo["1"]
+                         ~~~
+!!! error TS2339: Property '1' does not exist on type 'typeof Foo'.
+    
