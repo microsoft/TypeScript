@@ -18303,6 +18303,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 type = prop.escapedName === InternalSymbolName.Default ? getStringLiteralType("default") :
                     name && getLiteralTypeFromPropertyName(name) || (!isKnownSymbol(prop) ? getStringLiteralType(symbolName(prop)) : undefined);
             }
+            // Property name can only have a union type if it refers to multiple structurally identical declarations. (See addMemberForKeyTypeWorker)
+            // In this case, it's safe to take any of the constituents to compute the literal type.
+            if (type && type.flags & TypeFlags.Union) {
+                const unionType = type as UnionType;
+                if (unionType.types.length > 0) {
+                    type = unionType.types[0];
+                }
+            }
             if (type && type.flags & include) {
                 return type;
             }
