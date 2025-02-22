@@ -1657,38 +1657,34 @@ export function transformDeclarations(context: TransformationContext): Transform
 
                 const extendsClause = getEffectiveBaseTypeNode(input);
                 if (extendsClause && !isEntityNameExpression(extendsClause.expression) && extendsClause.expression.kind !== SyntaxKind.NullKeyword) {
-                    // We must add a temporary declaration for the extends clause expression
+                    // For classes which get their base type from an expression other than a name or Null, replace the expression they extend with one of the form:
+                    // declare class A extends ({} as DEFINITION_OF_BASE_HERE) {}
 
-                    const oldId = input.name ? unescapeLeadingUnderscores(input.name.escapedText) : "default";
-                    const newId = factory.createUniqueName(`${oldId}_base`, GeneratedIdentifierFlags.Optimistic);
                     getSymbolAccessibilityDiagnostic = () => ({
                         diagnosticMessage: Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1,
                         errorNode: extendsClause,
                         typeName: input.name,
                     });
-                    const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, resolver.createTypeOfExpression(extendsClause.expression, input, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, symbolTracker), /*initializer*/ undefined);
-                    const statement = factory.createVariableStatement(needsDeclare ? [factory.createModifier(SyntaxKind.DeclareKeyword)] : [], factory.createVariableDeclarationList([varDecl], NodeFlags.Const));
+                    const baseType = resolver.createTypeOfExpression(extendsClause.expression, input, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, symbolTracker);
+                    const extendsExpression = factory.createAsExpression(factory.createObjectLiteralExpression(), baseType!); // TODO: GH#18217
                     const heritageClauses = factory.createNodeArray(map(input.heritageClauses, clause => {
                         if (clause.token === SyntaxKind.ExtendsKeyword) {
                             const oldDiag = getSymbolAccessibilityDiagnostic;
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(clause.types[0]);
-                            const newClause = factory.updateHeritageClause(clause, map(clause.types, t => factory.updateExpressionWithTypeArguments(t, newId, visitNodes(t.typeArguments, visitDeclarationSubtree, isTypeNode))));
+                            const newClause = factory.updateHeritageClause(clause, map(clause.types, t => factory.updateExpressionWithTypeArguments(t, extendsExpression, visitNodes(t.typeArguments, visitDeclarationSubtree, isTypeNode))));
                             getSymbolAccessibilityDiagnostic = oldDiag;
                             return newClause;
                         }
                         return factory.updateHeritageClause(clause, visitNodes(factory.createNodeArray(filter(clause.types, t => isEntityNameExpression(t.expression) || t.expression.kind === SyntaxKind.NullKeyword)), visitDeclarationSubtree, isExpressionWithTypeArguments));
                     }));
-                    return [
-                        statement,
-                        cleanup(factory.updateClassDeclaration(
-                            input,
-                            modifiers,
-                            input.name,
-                            typeParameters,
-                            heritageClauses,
-                            members,
-                        ))!,
-                    ]; // TODO: GH#18217
+                    return cleanup(factory.updateClassDeclaration(
+                        input,
+                        modifiers,
+                        input.name,
+                        typeParameters,
+                        heritageClauses,
+                        members,
+                    ));
                 }
                 else {
                     const heritageClauses = transformHeritageClauses(input.heritageClauses);
