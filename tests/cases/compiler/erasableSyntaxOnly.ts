@@ -1,6 +1,6 @@
 // @erasableSyntaxOnly: true
-// @noEmit: true
 
+// @filename: index.ts
 class MyClassErr {
     // No parameter properties
     constructor(public foo: string) { }
@@ -65,3 +65,17 @@ declare namespace AmbientStuff {
 
     import FineAlias = EnumInAmbientContext.B;
 }
+
+// @filename: commonjs.cts
+import foo = require("./other.cjs");
+export = foo;
+
+
+// @filename: other.d.cts
+declare function foo(): void;
+export = foo;
+
+
+// @filename: esm.mts
+const foo = 1234;
+export default foo;

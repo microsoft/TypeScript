@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/erasableSyntaxOnly.ts] ////
 
-=== erasableSyntaxOnly.ts ===
+=== index.ts ===
 class MyClassErr {
 >MyClassErr : MyClassErr
 >           : ^^^^^^^^^^
@@ -159,4 +159,35 @@ declare namespace AmbientStuff {
 >B : EnumInAmbientContext.B
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 }
+
+=== commonjs.cts ===
+import foo = require("./other.cjs");
+>foo : () => void
+>    : ^^^^^^    
+
+export = foo;
+>foo : () => void
+>    : ^^^^^^    
+
+
+=== other.d.cts ===
+declare function foo(): void;
+>foo : () => void
+>    : ^^^^^^    
+
+export = foo;
+>foo : () => void
+>    : ^^^^^^    
+
+
+=== esm.mts ===
+const foo = 1234;
+>foo : 1234
+>    : ^^^^
+>1234 : 1234
+>     : ^^^^
+
+export default foo;
+>foo : 1234
+>    : ^^^^
 

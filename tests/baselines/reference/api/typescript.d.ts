@@ -1486,10 +1486,6 @@ declare namespace ts {
                 command: CommandTypes.Quickinfo;
                 arguments: FileLocationRequestArgs;
             }
-            export interface QuickInfoRequestArgs extends FileLocationRequestArgs {
-                /** TODO */
-                verbosityLevel?: number;
-            }
             /**
              * Body of QuickInfoResponse.
              */
@@ -1523,10 +1519,6 @@ declare namespace ts {
                  * JSDoc tags associated with symbol.
                  */
                 tags: JSDocTagInfo[];
-                /**
-                 * TODO
-                 */
-                canIncreaseVerbosityLevel?: boolean;
             }
             /**
              * Quickinfo response message.
@@ -3642,7 +3634,7 @@ declare namespace ts {
             readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
         }
     }
-    const versionMajorMinor = "5.8";
+    const versionMajorMinor = "5.9";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -10765,7 +10757,6 @@ declare namespace ts {
         displayParts?: SymbolDisplayPart[];
         documentation?: SymbolDisplayPart[];
         tags?: JSDocTagInfo[];
-        canIncreaseVerbosityLevel?: boolean;
     }
     type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
     interface RenameInfoSuccess {
