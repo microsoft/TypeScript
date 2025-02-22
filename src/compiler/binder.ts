@@ -21,6 +21,7 @@ import {
     BreakOrContinueStatement,
     CallChain,
     CallExpression,
+    canHaveFlowNode,
     canHaveLocals,
     canHaveSymbol,
     CaseBlock,
@@ -1104,6 +1105,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // and set it before we descend into nodes that could actually be part of an assignment pattern.
         inAssignmentPattern = false;
         if (checkUnreachable(node)) {
+            if (canHaveFlowNode(node) && node.flowNode) {
+                node.flowNode = undefined;
+            }
             bindEachChild(node);
             bindJSDoc(node);
             inAssignmentPattern = saveInAssignmentPattern;
@@ -1314,9 +1318,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.ExclamationEqualsToken:
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
-                return isNarrowableOperand(expr.left) || isNarrowableOperand(expr.right) ||
-                    isNarrowingTypeofOperands(expr.right, expr.left) || isNarrowingTypeofOperands(expr.left, expr.right) ||
-                    (isBooleanLiteral(expr.right) && isNarrowingExpression(expr.left) || isBooleanLiteral(expr.left) && isNarrowingExpression(expr.right));
+                const left = skipParentheses(expr.left);
+                const right = skipParentheses(expr.right);
+                return isNarrowableOperand(left) || isNarrowableOperand(right) ||
+                    isNarrowingTypeofOperands(right, left) || isNarrowingTypeofOperands(left, right) ||
+                    (isBooleanLiteral(right) && isNarrowingExpression(left) || isBooleanLiteral(left) && isNarrowingExpression(right));
             case SyntaxKind.InstanceOfKeyword:
                 return isNarrowableOperand(expr.left);
             case SyntaxKind.InKeyword:
@@ -1530,13 +1536,16 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function bindForStatement(node: ForStatement): void {
         const preLoopLabel = setContinueTarget(node, createLoopLabel());
         const preBodyLabel = createBranchLabel();
+        const preIncrementorLabel = createBranchLabel();
         const postLoopLabel = createBranchLabel();
         bind(node.initializer);
         addAntecedent(preLoopLabel, currentFlow);
         currentFlow = preLoopLabel;
         bindCondition(node.condition, preBodyLabel, postLoopLabel);
         currentFlow = finishFlowLabel(preBodyLabel);
-        bindIterativeStatement(node.statement, postLoopLabel, preLoopLabel);
+        bindIterativeStatement(node.statement, postLoopLabel, preIncrementorLabel);
+        addAntecedent(preIncrementorLabel, currentFlow);
+        currentFlow = finishFlowLabel(preIncrementorLabel);
         bind(node.incrementor);
         addAntecedent(preLoopLabel, currentFlow);
         currentFlow = finishFlowLabel(postLoopLabel);

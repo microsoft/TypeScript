@@ -2005,11 +2005,6 @@ export interface QuickInfoRequest extends FileLocationRequest {
     arguments: FileLocationRequestArgs;
 }
 
-export interface QuickInfoRequestArgs extends FileLocationRequestArgs {
-    /** TODO */
-    verbosityLevel?: number;
-}
-
 /**
  * Body of QuickInfoResponse.
  */
@@ -2049,11 +2044,6 @@ export interface QuickInfoResponseBody {
      * JSDoc tags associated with symbol.
      */
     tags: JSDocTagInfo[];
-
-    /**
-     * TODO
-     */
-    canIncreaseVerbosityLevel?: boolean;
 }
 
 /**
@@ -3254,6 +3244,7 @@ export const enum ModuleKind {
     ES2022 = "es2022",
     ESNext = "esnext",
     Node16 = "node16",
+    Node18 = "node18",
     NodeNext = "nodenext",
     Preserve = "preserve",
 }

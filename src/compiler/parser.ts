@@ -9536,6 +9536,7 @@ namespace Parser {
                 const node = factory.createExpressionWithTypeArguments(expression, typeArguments) as ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression; };
                 const res = finishNode(node, pos);
                 if (usedBrace) {
+                    skipWhitespace();
                     parseExpected(SyntaxKind.CloseBraceToken);
                 }
                 return res;
