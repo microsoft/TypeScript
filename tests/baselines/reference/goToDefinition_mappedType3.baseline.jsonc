@@ -1,0 +1,27 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinition_mappedType3.ts ===
+// interface Source {
+//   <|[|alpha|]: number;|>
+//   beta: string;
+// }
+// 
+// --- (line: 6) skipped ---
+
+// --- (line: 22) skipped ---
+// };
+// 
+// // ❌ In VSCode, "Go to Definition" on `alphaSuffix` does not navigate to `alpha` in `Source`
+// obj./*GOTO DEF*/alphaSuffix();
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "alphaSuffix",
+    "containerName": "__type",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

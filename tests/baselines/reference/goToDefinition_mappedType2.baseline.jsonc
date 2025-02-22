@@ -1,0 +1,28 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinition_mappedType2.ts ===
+// interface Foo {
+//     <|[|property|]: string|>
+// }
+// 
+// type JustMapIt<T> = {[P in keyof T]: 0}
+// --- (line: 6) skipped ---
+
+// --- (line: 11) skipped ---
+// 
+// {
+//     let gotoDef!: MapItWithRemap<Foo>
+//     gotoDef./*GOTO DEF*/mapped_property
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "mapped_property",
+    "containerName": "__type",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
