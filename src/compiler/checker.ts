@@ -29114,7 +29114,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!hasDefaultClause) {
                 return caseType;
             }
-            const defaultType = filterType(type, t => !(isUnitLikeType(t) && contains(switchTypes, t.flags & TypeFlags.Undefined ? undefinedType : getRegularTypeOfLiteralType(extractUnitType(t)))));
+            const defaultType = filterType(type, t => !(isUnitLikeType(t) && contains(switchTypes, t.flags & TypeFlags.Undefined ? undefinedType : getRegularTypeOfLiteralType(extractUnitType(t)), (t1, t2) => isUnitType(t1) && areTypesComparable(t1, t2))));
             return caseType.flags & TypeFlags.Never ? defaultType : getUnionType([caseType, defaultType]);
         }
 
