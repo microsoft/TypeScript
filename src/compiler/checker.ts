@@ -21600,6 +21600,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (source === target) {
             return true;
         }
+
         if (relation !== identityRelation) {
             if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) || isSimpleTypeRelatedTo(source, target, relation)) {
                 return true;
@@ -29352,7 +29353,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     matching || type,
                     checkDerived ?
                         t => isTypeDerivedFrom(t, c) ? t : isTypeDerivedFrom(c, t) ? c : neverType :
-                        t => isTypeStrictSubtypeOf(t, c) ? t : isTypeStrictSubtypeOf(c, t) ? c : isTypeSubtypeOf(t, c) ? t : isTypeSubtypeOf(c, t) ? c : neverType,
+                        t => {
+                            // WAS: isTypeStrictSubtypeOf(t, c) ? t : isTypeStrictSubtypeOf(c, t) ? c : isTypeSubtypeOf(t, c) ? t : isTypeSubtypeOf(c, t) ? c : neverType;
+
+                            // Avoid going through relations for comparison between literals of the same types;
+                            // if they're not equal then they're not related and we can skip doing a bunch of work.
+                            if (
+                                t.flags & TypeFlags.Literal
+                                && (t.flags & TypeFlags.Literal) === (c.flags & TypeFlags.Literal)
+                                && !(t.flags & TypeFlags.EnumLiteral && c.flags & TypeFlags.EnumLiteral)
+                            ) {
+                                if (t.flags & TypeFlags.BooleanLiteral) {
+                                    const tIsTrue = t === trueType || t === regularTrueType;
+                                    const cIsTrue = c === trueType || c === regularTrueType;
+                                    return tIsTrue === cIsTrue ? t : neverType;
+                                }
+                                return (t as LiteralType).value === (c as LiteralType).value ? t : neverType;
+                            }
+
+                            if (isTypeStrictSubtypeOf(t, c)) return t;
+                            if (isTypeStrictSubtypeOf(c, t)) return c;
+
+                            // Strict subtyping is equivalent to subtyping for these types (and likely others).
+                            // TODO(jakebailey): what other things can we quickly check here?
+                            if (t.flags & TypeFlags.Unit && c.flags & TypeFlags.Unit) return neverType;
+
+                            if (isTypeSubtypeOf(t, c)) return t;
+                            if (isTypeSubtypeOf(c, t)) return c;
+
+                            return neverType;
+                        },
                 );
                 // If no constituents are directly related, create intersections for any generic constituents that
                 // are related by constraint.
