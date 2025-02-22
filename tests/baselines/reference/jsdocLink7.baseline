@@ -7,7 +7,7 @@
 //                 ^
 // | ----------------------------------------------------------------------
 // | function f(): void
-// | {@link import('./a').A }
+// | {@link import('./a').A}
 // | ----------------------------------------------------------------------
 
 [
@@ -68,8 +68,15 @@
           "kind": "link"
         },
         {
-          "text": "import('./a').A ",
-          "kind": "linkText"
+          "text": "import('./a').A",
+          "kind": "linkName",
+          "target": {
+            "fileName": "/a.ts",
+            "textSpan": {
+              "start": 0,
+              "length": 24
+            }
+          }
         },
         {
           "text": "}",
