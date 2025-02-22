@@ -3983,9 +3983,13 @@
         "category": "Error",
         "code": 2879
     },
-    "Import assertions have been replaced by import attributes. Use 'with' instead of 'asserts'.": {
+    "Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.": {
         "category": "Error",
         "code": 2880
+    },
+    "This expression is never nullish.": {
+        "category": "Error",
+        "code": 2881
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

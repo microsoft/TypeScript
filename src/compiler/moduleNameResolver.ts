@@ -3118,7 +3118,7 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
                 packageInfo,
             );
         if (
-            !pathAndExtension && packageInfo
+            !pathAndExtension && !rest && packageInfo
             // eslint-disable-next-line no-restricted-syntax
             && (packageInfo.contents.packageJsonContent.exports === undefined || packageInfo.contents.packageJsonContent.exports === null)
             && state.features & NodeResolutionFeatures.EsmMode

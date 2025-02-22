@@ -108,7 +108,6 @@ import {
     TypeParameter,
     typeToDisplayParts,
     VariableDeclaration,
-    WriterContextOut,
 } from "./_namespaces/ts.js";
 
 const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
@@ -255,20 +254,9 @@ export interface SymbolDisplayPartsDocumentationAndSymbolKind {
     documentation: SymbolDisplayPart[];
     symbolKind: ScriptElementKind;
     tags: JSDocTagInfo[] | undefined;
-    canIncreaseVerbosityLevel?: boolean;
 }
 
-function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
-    typeChecker: TypeChecker,
-    symbol: Symbol,
-    sourceFile: SourceFile,
-    enclosingDeclaration: Node | undefined,
-    location: Node,
-    type: Type | undefined,
-    semanticMeaning: SemanticMeaning,
-    alias?: Symbol,
-    verbosityLevel?: number,
-): SymbolDisplayPartsDocumentationAndSymbolKind {
+function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node | undefined, location: Node, type: Type | undefined, semanticMeaning: SemanticMeaning, alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
     const displayParts: SymbolDisplayPart[] = [];
     let documentation: SymbolDisplayPart[] = [];
     let tags: JSDocTagInfo[] = [];
@@ -279,7 +267,6 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     let documentationFromAlias: SymbolDisplayPart[] | undefined;
     let tagsFromAlias: JSDocTagInfo[] | undefined;
     let hasMultipleSignatures = false;
-    const typeWriterOut: WriterContextOut | undefined = verbosityLevel !== undefined ? { couldUnfoldMore: false } : undefined;
 
     if (location.kind === SyntaxKind.ThisKeyword && !isThisExpression) {
         return { displayParts: [keywordPart(SyntaxKind.ThisKeyword)], documentation: [], symbolKind: ScriptElementKind.primitiveType, tags: undefined };
@@ -475,17 +462,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         displayParts.push(spacePart());
         displayParts.push(operatorPart(SyntaxKind.EqualsToken));
         displayParts.push(spacePart());
-        addRange(
-            displayParts,
-            typeToDisplayParts(
-                typeChecker,
-                location.parent && isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol),
-                enclosingDeclaration,
-                TypeFormatFlags.InTypeAlias,
-                verbosityLevel,
-                typeWriterOut,
-            ),
-        );
+        addRange(displayParts, typeToDisplayParts(typeChecker, location.parent && isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
     }
     if (symbolFlags & SymbolFlags.Enum) {
         prefixNextMeaning();
@@ -673,30 +650,13 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                     // If the type is type parameter, format it specially
                     if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter && symbolKind !== ScriptElementKind.indexSignatureElement) {
                         const typeParameterParts = mapToDisplayParts(writer => {
-                            const param = typeChecker.typeParameterToDeclaration(
-                                type as TypeParameter,
-                                enclosingDeclaration,
-                                symbolDisplayNodeBuilderFlags,
-                                /*internalFlags*/ undefined,
-                                /*tracker*/ undefined,
-                                verbosityLevel,
-                            )!;
+                            const param = typeChecker.typeParameterToDeclaration(type as TypeParameter, enclosingDeclaration, symbolDisplayNodeBuilderFlags)!;
                             getPrinter().writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
                         });
                         addRange(displayParts, typeParameterParts);
                     }
                     else {
-                        addRange(
-                            displayParts,
-                            typeToDisplayParts(
-                                typeChecker,
-                                type,
-                                enclosingDeclaration,
-                                /*flags*/ undefined,
-                                verbosityLevel,
-                                typeWriterOut,
-                            ),
-                        );
+                        addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
                     }
                     if (isTransientSymbol(symbol) && symbol.links.target && isTransientSymbol(symbol.links.target) && symbol.links.target.links.tupleLabelDeclaration) {
                         const labelDecl = symbol.links.target.links.tupleLabelDeclaration;
@@ -782,13 +742,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         tags = tagsFromAlias;
     }
 
-    return {
-        displayParts,
-        documentation,
-        symbolKind,
-        tags: tags.length === 0 ? undefined : tags,
-        canIncreaseVerbosityLevel: typeWriterOut?.couldUnfoldMore,
-    };
+    return { displayParts, documentation, symbolKind, tags: tags.length === 0 ? undefined : tags };
 
     function getPrinter() {
         return createPrinterWithRemoveComments();
@@ -920,9 +874,8 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(
     location: Node,
     semanticMeaning: SemanticMeaning = getMeaningFromLocation(location),
     alias?: Symbol,
-    verbosityLevel?: number,
 ): SymbolDisplayPartsDocumentationAndSymbolKind {
-    return getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker, symbol, sourceFile, enclosingDeclaration, location, /*type*/ undefined, semanticMeaning, alias, verbosityLevel);
+    return getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker, symbol, sourceFile, enclosingDeclaration, location, /*type*/ undefined, semanticMeaning, alias);
 }
 
 function isLocalVariableOrFunction(symbol: Symbol) {
