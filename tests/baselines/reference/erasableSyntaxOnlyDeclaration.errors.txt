@@ -1,10 +1,12 @@
-decl.d.ts(4,1): error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
+index.d.ts(1,1): error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
 
 
-==== decl.d.ts (1 errors) ====
-    // Diffs from the other test:
-    // - Parameter properties are already banned in .d.ts files
+==== index.d.cts (0 errors) ====
+    declare function foo(): void;
+    export = foo;
     
+    
+==== index.d.ts (1 errors) ====
     namespace IllegalBecauseInstantiated {
     ~~~~~~~~~
 !!! error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
@@ -54,4 +56,18 @@ decl.d.ts(4,1): error TS1046: Top-level declarations in .d.ts files must start w
     
         import FineAlias = EnumInAmbientContext.B;
     }
+    
+==== commonjs.d.cts (0 errors) ====
+    import foo = require("./other.cjs");
+    export = foo;
+    
+    
+==== other.d.cts (0 errors) ====
+    declare function foo(): void;
+    export = foo;
+    
+    
+==== esm.d.mts (0 errors) ====
+    declare const foo = 1234;
+    export default foo;
     

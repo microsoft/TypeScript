@@ -344,3 +344,26 @@ inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1
       return rv satisfies boolean;
     }
     
+    // https://github.com/microsoft/TypeScript/issues/58996
+    type Animal = {
+      breath: true,
+    };
+    
+    type Rock = {
+      breath: false,
+    };
+    
+    type Something = Animal | Rock;
+    
+    function isAnimal(something: Something): something is Animal {
+      return something.breath
+    }
+    
+    function positive(t: Something) {
+      return isAnimal(t)
+    }
+    
+    function negative(t: Something) { 
+      return !isAnimal(t)
+    }
+    
