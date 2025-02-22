@@ -10,15 +10,15 @@ import {
     factory,
     getQuotePreference,
     getTokenAtPosition,
+    hasSyntacticModifier,
     Identifier,
-    isExportModifier,
     isExternalModuleReference,
     isIdentifier,
     isImportDeclaration,
     isImportEqualsDeclaration,
     isNamespaceImport,
     makeImport,
-    some,
+    ModifierFlags,
     SourceFile,
     textChanges,
     UserPreferences,
@@ -54,7 +54,7 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     if (!isIdentifier(name)) return undefined; // bad input
     const { parent } = name;
     if (isImportEqualsDeclaration(parent) && isExternalModuleReference(parent.moduleReference)) {
-        return { importNode: parent, name, moduleSpecifier: parent.moduleReference.expression, exportModifier: some(parent.modifiers, isExportModifier) };
+        return { importNode: parent, name, moduleSpecifier: parent.moduleReference.expression, exportModifier: hasSyntacticModifier(parent, ModifierFlags.Export) };
     }
     else if (isNamespaceImport(parent) && isImportDeclaration(parent.parent.parent)) {
         const importNode = parent.parent.parent;
