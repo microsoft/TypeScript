@@ -1133,6 +1133,7 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    isPrivateIdentifierSymbol,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -9747,7 +9748,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const publicProperties = flatMap<Symbol, ClassElement>(publicSymbolProps, p => serializePropertySymbolForClass(p, /*isStatic*/ false, baseTypes[0]));
                 // Consider static members empty if symbol also has function or module meaning - function namespacey emit will handle statics
                 const staticMembers = flatMap(
-                    filter(getPropertiesOfType(staticType), p => !(p.flags & SymbolFlags.Prototype) && p.escapedName !== "prototype" && !isNamespaceMember(p)),
+                    filter(getPropertiesOfType(staticType), p => !(p.flags & SymbolFlags.Prototype) && p.escapedName !== "prototype" && !isNamespaceMember(p) && !isPrivateIdentifierSymbol(p)),
                     p => serializePropertySymbolForClass(p, /*isStatic*/ true, staticBaseType),
                 );
                 // When we encounter an `X.prototype.y` assignment in a JS file, we bind `X` as a class regardless as to whether
