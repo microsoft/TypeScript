@@ -5396,7 +5396,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createJSDocLink(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLink {
+    function createJSDocLink(name: EntityName | JSDocMemberName | ImportTypeNode | undefined, text: string): JSDocLink {
         const node = createBaseNode<JSDocLink>(SyntaxKind.JSDocLink);
         node.name = name;
         node.text = text;
@@ -5404,14 +5404,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJSDocLink(node: JSDocLink, name: EntityName | JSDocMemberName | undefined, text: string): JSDocLink {
+    function updateJSDocLink(node: JSDocLink, name: EntityName | JSDocMemberName | ImportTypeNode | undefined, text: string): JSDocLink {
         return node.name !== name
             ? update(createJSDocLink(name, text), node)
             : node;
     }
 
     // @api
-    function createJSDocLinkCode(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkCode {
+    function createJSDocLinkCode(name: EntityName | JSDocMemberName | ImportTypeNode | undefined, text: string): JSDocLinkCode {
         const node = createBaseNode<JSDocLinkCode>(SyntaxKind.JSDocLinkCode);
         node.name = name;
         node.text = text;
@@ -5419,14 +5419,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJSDocLinkCode(node: JSDocLinkCode, name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkCode {
+    function updateJSDocLinkCode(node: JSDocLinkCode, name: EntityName | JSDocMemberName | ImportTypeNode | undefined, text: string): JSDocLinkCode {
         return node.name !== name
             ? update(createJSDocLinkCode(name, text), node)
             : node;
     }
 
     // @api
-    function createJSDocLinkPlain(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkPlain {
+    function createJSDocLinkPlain(name: EntityName | JSDocMemberName | ImportTypeNode | undefined, text: string): JSDocLinkPlain {
         const node = createBaseNode<JSDocLinkPlain>(SyntaxKind.JSDocLinkPlain);
         node.name = name;
         node.text = text;
@@ -5434,7 +5434,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJSDocLinkPlain(node: JSDocLinkPlain, name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkPlain {
+    function updateJSDocLinkPlain(node: JSDocLinkPlain, name: EntityName | JSDocMemberName | ImportTypeNode | undefined, text: string): JSDocLinkPlain {
         return node.name !== name
             ? update(createJSDocLinkPlain(name, text), node)
             : node;

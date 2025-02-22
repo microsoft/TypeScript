@@ -9288,8 +9288,10 @@ namespace Parser {
 
             function parseJSDocLinkName() {
                 if (tokenIsIdentifierOrKeyword(token())) {
+                    if (token() === SyntaxKind.ImportKeyword) {
+                        return parseImportType();
+                    }
                     const pos = getNodePos();
-
                     let name: EntityName | JSDocMemberName = parseIdentifierName();
                     while (parseOptional(SyntaxKind.DotToken)) {
                         name = finishNode(factory.createQualifiedName(name, token() === SyntaxKind.PrivateIdentifier ? createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false) : parseIdentifierName()), pos);

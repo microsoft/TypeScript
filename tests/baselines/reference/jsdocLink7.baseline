@@ -1,0 +1,81 @@
+// === QuickInfo ===
+=== /b.ts ===
+// /**
+//  * {@link import('./a').A}
+//  */
+// export function f() { }
+//                 ^
+// | ----------------------------------------------------------------------
+// | function f(): void
+// | {@link import('./a').A }
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/b.ts",
+      "position": 51,
+      "name": ""
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "export",
+      "textSpan": {
+        "start": 51,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "",
+          "kind": "text"
+        },
+        {
+          "text": "{@link ",
+          "kind": "link"
+        },
+        {
+          "text": "import('./a').A ",
+          "kind": "linkText"
+        },
+        {
+          "text": "}",
+          "kind": "link"
+        }
+      ]
+    }
+  }
+]
