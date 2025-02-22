@@ -731,8 +731,7 @@ export namespace SmartIndenter {
                 }
                 break;
             case SyntaxKind.TryStatement:
-                const tryStatement = parent as TryStatement;
-                if (tryStatement.finallyBlock && tryStatement.finallyBlock === child) {
+                if (childKind === SyntaxKind.Block) {
                     return false;
                 }
                 break;
