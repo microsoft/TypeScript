@@ -31893,16 +31893,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 concatenate(
                     map(
                         filter(node.properties, (p): p is PropertyAssignment | ShorthandPropertyAssignment => {
-                            if (!p.symbol) {
-                                return false;
-                            }
-                            if (p.kind === SyntaxKind.PropertyAssignment) {
-                                return isPossiblyDiscriminantValue(p.initializer) && isDiscriminantProperty(contextualType, p.symbol.escapedName);
-                            }
-                            if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                                return isDiscriminantProperty(contextualType, p.symbol.escapedName);
-                            }
-                            return false;
+                            return !!p.symbol
+                                && (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment)
+                                && isDiscriminantProperty(contextualType, p.symbol.escapedName);
                         }),
                         prop => ([() => getContextFreeTypeOfExpression(prop.kind === SyntaxKind.PropertyAssignment ? prop.initializer : prop.name), prop.symbol.escapedName] as const),
                     ),
@@ -31927,7 +31920,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 contextualType,
                 concatenate(
                     map(
-                        filter(node.properties, p => !!p.symbol && p.kind === SyntaxKind.JsxAttribute && isDiscriminantProperty(contextualType, p.symbol.escapedName) && (!p.initializer || isPossiblyDiscriminantValue(p.initializer))),
+                        filter(node.properties, p => !!p.symbol && p.kind === SyntaxKind.JsxAttribute && isDiscriminantProperty(contextualType, p.symbol.escapedName)),
                         prop => ([!(prop as JsxAttribute).initializer ? (() => trueType) : (() => getContextFreeTypeOfExpression((prop as JsxAttribute).initializer!)), prop.symbol.escapedName] as const),
                     ),
                     map(
