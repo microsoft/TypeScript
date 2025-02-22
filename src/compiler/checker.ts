@@ -17723,6 +17723,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         const objectFlags = (includes & TypeFlags.NotPrimitiveUnion ? 0 : ObjectFlags.PrimitiveUnion) |
+            (includes & TypeFlags.NotStringLiteral ? 0 : ObjectFlags.StringLiteralUnion) |
             (includes & TypeFlags.Intersection ? ObjectFlags.ContainsIntersections : 0);
         return getUnionTypeFromSortedList(typeSet, objectFlags, aliasSymbol, aliasTypeArguments, origin);
     }
@@ -21542,7 +21543,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (t & TypeFlags.Any || s & TypeFlags.Never || source === wildcardType) return true;
         if (t & TypeFlags.Unknown && !(relation === strictSubtypeRelation && s & TypeFlags.Any)) return true;
         if (t & TypeFlags.Never) return false;
-        if (s & TypeFlags.StringLike && t & TypeFlags.String) return true;
+        if ((s & TypeFlags.StringLike || s & TypeFlags.Union && getObjectFlags(source) & ObjectFlags.StringLiteralUnion) && t & TypeFlags.String) return true;
         if (
             s & TypeFlags.StringLiteral && s & TypeFlags.EnumLiteral &&
             t & TypeFlags.StringLiteral && !(t & TypeFlags.EnumLiteral) &&
