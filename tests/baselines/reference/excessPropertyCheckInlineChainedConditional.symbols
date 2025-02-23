@@ -1,0 +1,115 @@
+//// [tests/cases/compiler/excessPropertyCheckInlineChainedConditional.ts] ////
+
+=== excessPropertyCheckInlineChainedConditional.ts ===
+declare const someConditions: boolean[];
+>someConditions : Symbol(someConditions, Decl(excessPropertyCheckInlineChainedConditional.ts, 0, 13))
+
+// bar is optional
+type MyObj = { foo: number; bar?: number };
+>MyObj : Symbol(MyObj, Decl(excessPropertyCheckInlineChainedConditional.ts, 0, 40))
+>foo : Symbol(foo, Decl(excessPropertyCheckInlineChainedConditional.ts, 2, 14))
+>bar : Symbol(bar, Decl(excessPropertyCheckInlineChainedConditional.ts, 2, 27))
+
+const yWithExtraProp = { Y: 2 };
+>yWithExtraProp : Symbol(yWithExtraProp, Decl(excessPropertyCheckInlineChainedConditional.ts, 3, 5))
+>Y : Symbol(Y, Decl(excessPropertyCheckInlineChainedConditional.ts, 3, 24))
+
+const zWithExtraProp = { Z: 2, excessPropertyZ: "Z" };
+>zWithExtraProp : Symbol(zWithExtraProp, Decl(excessPropertyCheckInlineChainedConditional.ts, 4, 5))
+>Z : Symbol(Z, Decl(excessPropertyCheckInlineChainedConditional.ts, 4, 24))
+>excessPropertyZ : Symbol(excessPropertyZ, Decl(excessPropertyCheckInlineChainedConditional.ts, 4, 30))
+
+const v1: MyObj = {
+>v1 : Symbol(v1, Decl(excessPropertyCheckInlineChainedConditional.ts, 6, 5))
+>MyObj : Symbol(MyObj, Decl(excessPropertyCheckInlineChainedConditional.ts, 0, 40))
+
+    foo: 1,
+>foo : Symbol(foo, Decl(excessPropertyCheckInlineChainedConditional.ts, 6, 19))
+
+    ...(someConditions[0]
+>someConditions : Symbol(someConditions, Decl(excessPropertyCheckInlineChainedConditional.ts, 0, 13))
+
+        ? someConditions[1]
+>someConditions : Symbol(someConditions, Decl(excessPropertyCheckInlineChainedConditional.ts, 0, 13))
+
+            ? {
+                bar: 2,
+>bar : Symbol(bar, Decl(excessPropertyCheckInlineChainedConditional.ts, 10, 15))
+
+                excessPropertyA: "A",
+>excessPropertyA : Symbol(excessPropertyA, Decl(excessPropertyCheckInlineChainedConditional.ts, 11, 23))
+            }
+            : someConditions[2]
+>someConditions : Symbol(someConditions, Decl(excessPropertyCheckInlineChainedConditional.ts, 0, 13))
+
+                ? someConditions[3]
+>someConditions : Symbol(someConditions, Decl(excessPropertyCheckInlineChainedConditional.ts, 0, 13))
+
+                    ? {
+                        bar: 2,
+>bar : Symbol(bar, Decl(excessPropertyCheckInlineChainedConditional.ts, 16, 23))
+
+                        excessPropertyB: "B",
+>excessPropertyB : Symbol(excessPropertyB, Decl(excessPropertyCheckInlineChainedConditional.ts, 17, 31))
+                    }
+                    : { bar: 2 }
+>bar : Symbol(bar, Decl(excessPropertyCheckInlineChainedConditional.ts, 20, 23))
+
+                : someConditions[4]
+>someConditions : Symbol(someConditions, Decl(excessPropertyCheckInlineChainedConditional.ts, 0, 13))
+
+            ? {
+                foo: 2,
+>foo : Symbol(foo, Decl(excessPropertyCheckInlineChainedConditional.ts, 22, 15))
+
+                excessPropertyC: "C",
+>excessPropertyC : Symbol(excessPropertyC, Decl(excessPropertyCheckInlineChainedConditional.ts, 23, 23))
+            }
+            : {}
+        : { excessPropertyD: "D" }),
+>excessPropertyD : Symbol(excessPropertyD, Decl(excessPropertyCheckInlineChainedConditional.ts, 27, 11))
+
+};
+
+// no errors by design since the objects are not defined inline
+const v2: MyObj = {
+>v2 : Symbol(v2, Decl(excessPropertyCheckInlineChainedConditional.ts, 31, 5))
+>MyObj : Symbol(MyObj, Decl(excessPropertyCheckInlineChainedConditional.ts, 0, 40))
+
+    ...(someConditions[0]
+>someConditions : Symbol(someConditions, Decl(excessPropertyCheckInlineChainedConditional.ts, 0, 13))
+
+        ? someConditions[1]
+>someConditions : Symbol(someConditions, Decl(excessPropertyCheckInlineChainedConditional.ts, 0, 13))
+
+            ? { bar: 2 }
+>bar : Symbol(bar, Decl(excessPropertyCheckInlineChainedConditional.ts, 34, 15))
+
+            : someConditions[2]
+>someConditions : Symbol(someConditions, Decl(excessPropertyCheckInlineChainedConditional.ts, 0, 13))
+
+                ? someConditions[3]
+>someConditions : Symbol(someConditions, Decl(excessPropertyCheckInlineChainedConditional.ts, 0, 13))
+
+                    ? yWithExtraProp
+>yWithExtraProp : Symbol(yWithExtraProp, Decl(excessPropertyCheckInlineChainedConditional.ts, 3, 5))
+
+                    : { bar: 2 }
+>bar : Symbol(bar, Decl(excessPropertyCheckInlineChainedConditional.ts, 38, 23))
+
+                : someConditions[4]
+>someConditions : Symbol(someConditions, Decl(excessPropertyCheckInlineChainedConditional.ts, 0, 13))
+
+            ? { foo: 2 }
+>foo : Symbol(foo, Decl(excessPropertyCheckInlineChainedConditional.ts, 40, 15))
+
+            : {}
+        : zWithExtraProp),
+>zWithExtraProp : Symbol(zWithExtraProp, Decl(excessPropertyCheckInlineChainedConditional.ts, 4, 5))
+
+    foo: 1,
+>foo : Symbol(foo, Decl(excessPropertyCheckInlineChainedConditional.ts, 42, 26))
+
+};
+
+
