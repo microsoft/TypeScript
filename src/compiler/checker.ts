@@ -121,6 +121,7 @@ import {
     createModuleNotFoundChain,
     createMultiMap,
     createNameResolver,
+    createPrefixSuffixTrie,
     createPrinterWithDefaults,
     createPrinterWithRemoveComments,
     createPrinterWithRemoveCommentsNeverAsciiEscape,
@@ -17548,13 +17549,55 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function removeStringLiteralsMatchedByTemplateLiterals(types: Type[]) {
-        const templates = filter(types, isPatternLiteralType) as (TemplateLiteralType | StringMappingType)[];
-        if (templates.length) {
+        let patterns = filter(types, isPatternLiteralType) as (TemplateLiteralType | StringMappingType)[];
+        const templateLiterals = filter(patterns, t => !!(t.flags & TypeFlags.TemplateLiteral)) as TemplateLiteralType[];
+
+        const estimatedCount = templateLiterals.length * countWhere(types, t => !!(t.flags & TypeFlags.StringLiteral));
+        // TODO(jakebailey): set higher limit after testing
+        if (estimatedCount > 0) {
+            // To remove string literals already covered by template literals, we may potentially
+            // check every string literal against every template literal, leading to a combinatoric
+            // explosion. This is made even worse if the strings all share common prefixes or suffixes,
+            // making the "fast path" of a prefix check in inferFromLiteralPartsToTemplateLiteral not actually
+            // very fast as we'll repeatedly scan the strings much farther than just a few characters.
+            //
+            // To reduce the amount of work we need to do, we can build a two-way trie out of the
+            // template literals, only checking those which can be satisfied by a given string.
+
+            const trie = createPrefixSuffixTrie<TemplateLiteralType[]>();
+
+            forEach(templateLiterals, t => {
+                const prefix = t.texts[0];
+                const suffix = t.texts[t.texts.length - 1];
+                trie.set(prefix, suffix, templates => append(templates, t));
+            });
+
+            let i = types.length;
+            outer: while (i > 0) {
+                i--;
+                const t = types[i];
+                if (!(t.flags & TypeFlags.StringLiteral)) continue;
+                const text = (t as StringLiteralType).value;
+
+                for (const templates of trie.iterateAllMatches(text)) {
+                    if (some(templates, template => isTypeMatchedByTemplateLiteralOrStringMapping(t, template))) {
+                        orderedRemoveItemAt(types, i);
+                        continue outer;
+                    }
+                }
+            }
+
+            // Fall through into the general case with just the string mappings.
+            patterns = filter(patterns, t => !!(t.flags & TypeFlags.StringMapping)) as StringMappingType[];
+        }
+
+        if (patterns.length) {
             let i = types.length;
             while (i > 0) {
                 i--;
                 const t = types[i];
-                if (t.flags & TypeFlags.StringLiteral && some(templates, template => isTypeMatchedByTemplateLiteralOrStringMapping(t, template))) {
+                if (!(t.flags & TypeFlags.StringLiteral)) continue;
+                if (some(patterns, template => isTypeMatchedByTemplateLiteralOrStringMapping(t, template))) {
                     orderedRemoveItemAt(types, i);
                 }
             }
