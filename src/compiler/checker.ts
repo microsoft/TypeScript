@@ -16286,6 +16286,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type;
     }
 
+    function getTupleElementTypes(type: Type, seenTypes = new Set<Type>()): readonly Type[] {
+        // Guard against circular references using a Set
+        if (seenTypes.has(type)) {
+            return emptyArray;
+        }
+
+        // Add the current type to the Set to track it
+        seenTypes.add(type);
+
+        if (isTupleType(type)) {
+            const target = type.target;
+            if (target?.resolvedTypeArguments) {
+                return target.resolvedTypeArguments;
+            }
+
+            if (type.objectFlags & ObjectFlags.Tuple) {
+                const tupleTarget = type as unknown as TupleType;
+                if (tupleTarget.elementFlags) {
+                    return getTypeArguments(type) || emptyArray;
+                }
+            }
+        }
+        return emptyArray;
+    }
+
     function getTypeArguments(type: TypeReference): readonly Type[] {
         if (!type.resolvedTypeArguments) {
             if (!pushTypeResolution(type, TypeSystemPropertyName.ResolvedTypeArguments)) {
@@ -18130,13 +18155,52 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return reduceLeft(types, (n, t) => t.flags & TypeFlags.Union ? n * (t as UnionType).types.length : t.flags & TypeFlags.Never ? 0 : n, 1);
     }
 
-    function checkCrossProductUnion(types: readonly Type[]) {
+    function containsDeeplyNestedType(types: readonly Type[], maxDepth: number, currentDepth: number = 0): boolean {
+        if (currentDepth >= maxDepth) return true;
+
+        for (const type of types) {
+            // Check if the type is a union type
+            if (isUnionType(type)) {
+                if (containsDeeplyNestedType(type.types, maxDepth, currentDepth + 1)) {
+                    return true;
+                }
+            }
+
+            // Check if the type is a tuple type
+            if (isTupleType(type)) {
+                const tupleElementTypes = getTupleElementTypes(type);
+                if (containsDeeplyNestedType(tupleElementTypes, maxDepth, currentDepth + 1)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    function checkCrossProductUnion(types: readonly Type[]): boolean {
         const size = getCrossProductUnionSize(types);
+
+        // Check if the cross-product size exceeds the threshold
         if (size >= 100000) {
-            tracing?.instant(tracing.Phase.CheckTypes, "checkCrossProductUnion_DepthLimit", { typeIds: types.map(t => t.id), size });
+            tracing?.instant(tracing.Phase.CheckTypes, "checkCrossProductUnion_DepthLimit", {
+                typeIds: types.map(t => t.id),
+                size,
+            });
             error(currentNode, Diagnostics.Expression_produces_a_union_type_that_is_too_complex_to_represent);
             return false;
         }
+
+        // Check for excessive nesting within types
+        const maxDepth = 3;
+        if (containsDeeplyNestedType(types, maxDepth)) {
+            tracing?.instant(tracing.Phase.CheckTypes, "checkCrossProductUnion_TooNested", {
+                typeIds: types.map(t => t.id),
+            });
+            error(currentNode, Diagnostics.Expression_produces_a_union_type_that_is_too_complex_to_represent);
+            return false;
+        }
+
         return true;
     }
 
@@ -24976,6 +25040,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function isTupleType(type: Type): type is TupleTypeReference {
         return !!(getObjectFlags(type) & ObjectFlags.Reference && (type as TypeReference).target.objectFlags & ObjectFlags.Tuple);
+    }
+
+    /**
+     * Determines if the given type is a union type.
+     *
+     * A union type is a type formed by combining multiple types
+     * using the `|` operator (e.g., `string | number`). This function
+     * checks if the provided type has the `TypeFlags.Union` flag set.
+     *
+     * @param type - The `Type` instance to check.
+     * @returns `true` if the type is a union type, otherwise `false`.
+     */
+    function isUnionType(type: Type): type is UnionType {
+        return (type.flags & TypeFlags.Union) !== 0;
     }
 
     function isGenericTupleType(type: Type): type is TupleTypeReference {
