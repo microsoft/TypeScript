@@ -58,6 +58,7 @@ import {
     getParseTreeNode,
     getProperties,
     getStrictOptionValue,
+    getSyntacticModifierFlags,
     getTextOfNode,
     hasDecorators,
     hasSyntacticModifier,
@@ -85,6 +86,7 @@ import {
     isElementAccessExpression,
     isEntityName,
     isEnumConst,
+    isEnumDeclaration,
     isExportAssignment,
     isExportDeclaration,
     isExportOrDefaultModifier,
@@ -1796,87 +1798,7 @@ export function transformTypeScript(context: TransformationContext): Transformer
      * @param node The enum declaration node.
      */
     function visitEnumDeclaration(node: EnumDeclaration): VisitResult<Statement> {
-        if (!shouldEmitEnumDeclaration(node)) {
-            return factory.createNotEmittedStatement(node);
-        }
-
-        const statements: Statement[] = [];
-
-        // We request to be advised when the printer is about to print this node. This allows
-        // us to set up the correct state for later substitutions.
-        let emitFlags = EmitFlags.AdviseOnEmitNode;
-
-        // If needed, we should emit a variable declaration for the enum. If we emit
-        // a leading variable declaration, we should not emit leading comments for the
-        // enum body.
-        const varAdded = addVarForEnumOrModuleDeclaration(statements, node);
-        if (varAdded) {
-            // We should still emit the comments if we are emitting a system module.
-            if (moduleKind !== ModuleKind.System || currentLexicalScope !== currentSourceFile) {
-                emitFlags |= EmitFlags.NoLeadingComments;
-            }
-        }
-
-        // `parameterName` is the declaration name used inside of the enum.
-        const parameterName = getNamespaceParameterName(node);
-
-        // `containerName` is the expression used inside of the enum for assignments.
-        const containerName = getNamespaceContainerName(node);
-
-        // `exportName` is the expression used within this node's container for any exported references.
-        const exportName = isExportOfNamespace(node)
-            ? factory.getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
-            : factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
-
-        //  x || (x = {})
-        //  exports.x || (exports.x = {})
-        let moduleArg = factory.createLogicalOr(
-            exportName,
-            factory.createAssignment(
-                exportName,
-                factory.createObjectLiteralExpression(),
-            ),
-        );
-
-        if (isExportOfNamespace(node)) {
-            // `localName` is the expression used within this node's containing scope for any local references.
-            const localName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
-
-            //  x = (exports.x || (exports.x = {}))
-            moduleArg = factory.createAssignment(localName, moduleArg);
-        }
-
-        //  (function (x) {
-        //      x[x["y"] = 0] = "y";
-        //      ...
-        //  })(x || (x = {}));
-        const enumStatement = factory.createExpressionStatement(
-            factory.createCallExpression(
-                factory.createFunctionExpression(
-                    /*modifiers*/ undefined,
-                    /*asteriskToken*/ undefined,
-                    /*name*/ undefined,
-                    /*typeParameters*/ undefined,
-                    [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
-                    /*type*/ undefined,
-                    transformEnumBody(node, containerName),
-                ),
-                /*typeArguments*/ undefined,
-                [moduleArg],
-            ),
-        );
-
-        setOriginalNode(enumStatement, node);
-        if (varAdded) {
-            // If a variable was added, synthetic comments are emitted on it, not on the moduleStatement.
-            setSyntheticLeadingComments(enumStatement, undefined);
-            setSyntheticTrailingComments(enumStatement, undefined);
-        }
-        setTextRange(enumStatement, node);
-        addEmitFlags(enumStatement, emitFlags);
-        statements.push(enumStatement);
-
-        return statements;
+        return shouldEmitEnumDeclaration(node) ? createIIFEModule(node) : factory.createNotEmittedStatement(node);
     }
 
     /**
@@ -2008,43 +1930,31 @@ export function transformTypeScript(context: TransformationContext): Transformer
         return node.name.escapedText;
     }
 
-    /**
-     * Adds a leading VariableStatement for a enum or module declaration.
-     */
-    function addVarForEnumOrModuleDeclaration(statements: Statement[], node: ModuleDeclaration | EnumDeclaration) {
-        // Emit a variable statement for the module. We emit top-level enums as a `var`
-        // declaration to avoid static errors in global scripts scripts due to redeclaration.
-        // enums in any other scope are emitted as a `let` declaration.
-        const varDecl = factory.createVariableDeclaration(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true));
-        const varFlags = currentLexicalScope.kind === SyntaxKind.SourceFile ? NodeFlags.None : NodeFlags.Let;
-        const statement = factory.createVariableStatement(
-            visitNodes(node.modifiers, modifierVisitor, isModifier),
-            factory.createVariableDeclarationList([varDecl], varFlags),
+    function addExportVariableForEnumOrModuleDeclaration(statements: Statement[], node: ModuleDeclaration | EnumDeclaration, name: Identifier, modifierFlags: ModifierFlags): boolean {
+        const nodeFlags = currentLexicalScope.kind === SyntaxKind.SourceFile ? NodeFlags.None : NodeFlags.Let;
+        const isDefaultExport = modifierFlags & ModifierFlags.Export && modifierFlags & ModifierFlags.Default;
+        const variableDeclaration = isDefaultExport
+            ? factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createObjectLiteralExpression())
+            : factory.createVariableDeclaration(name);
+        const variableStatement = factory.createVariableStatement(
+            isDefaultExport ? undefined : visitNodes(node.modifiers, modifierVisitor, isModifier),
+            factory.createVariableDeclarationList([variableDeclaration], nodeFlags),
         );
 
-        setOriginalNode(varDecl, node);
-        setSyntheticLeadingComments(varDecl, undefined);
-        setSyntheticTrailingComments(varDecl, undefined);
+        setOriginalNode(variableDeclaration, node);
+        setSyntheticLeadingComments(variableDeclaration, undefined);
+        setSyntheticTrailingComments(variableDeclaration, undefined);
 
-        setOriginalNode(statement, node);
+        setOriginalNode(variableStatement, node);
 
         recordEmittedDeclarationInScope(node);
         if (isFirstEmittedDeclarationInScope(node)) {
-            // Adjust the source map emit to match the old emitter.
-            if (node.kind === SyntaxKind.EnumDeclaration) {
-                setSourceMapRange(statement.declarationList, node);
-            }
-            else {
-                setSourceMapRange(statement, node);
-            }
-
             // Trailing comments for module declaration should be emitted after the function closure
             // instead of the variable statement:
             //
             //     /** Module comment*/
             //     module m1 {
-            //         function foo4Export() {
-            //         }
+            //         function foo4Export() {}
             //     } // trailing comment module
             //
             // Should emit:
@@ -2052,19 +1962,99 @@ export function transformTypeScript(context: TransformationContext): Transformer
             //     /** Module comment*/
             //     var m1;
             //     (function (m1) {
-            //         function foo4Export() {
-            //         }
+            //         function foo4Export() {}
             //     })(m1 || (m1 = {})); // trailing comment module
             //
-            setCommentRange(statement, node);
-            addEmitFlags(statement, EmitFlags.NoTrailingComments);
-            statements.push(statement);
+            setSourceMapRange(isEnumDeclaration(node) ? variableStatement.declarationList : variableStatement, node);
+            setCommentRange(variableStatement, node);
+            addEmitFlags(variableStatement, EmitFlags.NoTrailingComments);
+            statements.push(variableStatement);
+            if (isDefaultExport) {
+                // export module m {
+                //     export const foo = 1;
+                // }
+                // Should emit:
+                //     var m = {};
+                //     export default m;
+                //     (function (m) {
+                //         m.foo = 1;
+                //     })(m);
+                statements.push(factory.createExportAssignment(/*modifiers*/ undefined, /*isExportEquals*/ false, name));
+            }
             return true;
         }
-
         // For an EnumDeclaration or ModuleDeclaration that merges with a preceeding
         // declaration we do not emit a leading variable declaration.
         return false;
+    }
+
+    function getIIFEModuleArgument(node: ModuleDeclaration | EnumDeclaration, name: Identifier, modifierFlags: ModifierFlags) {
+        if (modifierFlags & ModifierFlags.Export && modifierFlags & ModifierFlags.Default) {
+            return name;
+        }
+
+        // `exportName` is the expression used within this node's container for any exported references.
+        const exportName = isExportOfNamespace(node)
+            ? factory.getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
+            : factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+
+        //  x || (x = {})
+        //  exports.x || (exports.x = {})
+        const arg = factory.createLogicalOr(exportName, factory.createAssignment(exportName, factory.createObjectLiteralExpression()));
+
+        return isExportOfNamespace(node)
+            ? factory.createAssignment(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true), arg)
+            : arg;
+    }
+
+    /**
+     * Adds a leading VariableStatement for a enum or module declaration.
+     */
+    function createIIFEModule(node: ModuleDeclaration | EnumDeclaration) {
+        const statements: Statement[] = [];
+        const modifierFlags = getSyntacticModifierFlags(node);
+        const localName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+        const exportVariableAdded = addExportVariableForEnumOrModuleDeclaration(statements, node, localName, modifierFlags);
+        const emitFlags = EmitFlags.AdviseOnEmitNode |
+            (exportVariableAdded && moduleKind !== ModuleKind.System || currentLexicalScope !== currentSourceFile ? EmitFlags.NoLeadingComments : EmitFlags.None);
+
+        // `parameterName` is the declaration name used inside of the enum.
+        const parameterName = getNamespaceParameterName(node);
+
+        // `containerName` is the expression used inside of the enum for assignments.
+        const containerName = getNamespaceContainerName(node);
+
+        //  (function (x) {
+        //      x[x["y"] = 0] = "y";
+        //      ...
+        //  })(x || (x = {}));
+        const moduleStatement = factory.createExpressionStatement(
+            factory.createCallExpression(
+                factory.createFunctionExpression(
+                    /*modifiers*/ undefined,
+                    /*asteriskToken*/ undefined,
+                    /*name*/ undefined,
+                    /*typeParameters*/ undefined,
+                    [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
+                    /*type*/ undefined,
+                    isEnumDeclaration(node) ? transformEnumBody(node, containerName) : transformModuleBody(node, containerName),
+                ),
+                /*typeArguments*/ undefined,
+                [getIIFEModuleArgument(node, localName, modifierFlags)],
+            ),
+        );
+
+        setOriginalNode(moduleStatement, node);
+        if (exportVariableAdded) {
+            // If a variable was added, synthetic comments are emitted on it, not on the moduleStatement.
+            setSyntheticLeadingComments(moduleStatement, undefined);
+            setSyntheticTrailingComments(moduleStatement, undefined);
+        }
+        setTextRange(moduleStatement, node);
+        addEmitFlags(moduleStatement, emitFlags);
+        statements.push(moduleStatement);
+
+        return statements;
     }
 
     /**
@@ -2082,82 +2072,7 @@ export function transformTypeScript(context: TransformationContext): Transformer
         Debug.assertNode(node.name, isIdentifier, "A TypeScript namespace should have an Identifier name.");
         enableSubstitutionForNamespaceExports();
 
-        const statements: Statement[] = [];
-
-        // We request to be advised when the printer is about to print this node. This allows
-        // us to set up the correct state for later substitutions.
-        let emitFlags = EmitFlags.AdviseOnEmitNode;
-
-        // If needed, we should emit a variable declaration for the module. If we emit
-        // a leading variable declaration, we should not emit leading comments for the
-        // module body.
-        const varAdded = addVarForEnumOrModuleDeclaration(statements, node);
-        if (varAdded) {
-            // We should still emit the comments if we are emitting a system module.
-            if (moduleKind !== ModuleKind.System || currentLexicalScope !== currentSourceFile) {
-                emitFlags |= EmitFlags.NoLeadingComments;
-            }
-        }
-
-        // `parameterName` is the declaration name used inside of the namespace.
-        const parameterName = getNamespaceParameterName(node);
-
-        // `containerName` is the expression used inside of the namespace for exports.
-        const containerName = getNamespaceContainerName(node);
-
-        // `exportName` is the expression used within this node's container for any exported references.
-        const exportName = isExportOfNamespace(node)
-            ? factory.getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
-            : factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
-
-        //  x || (x = {})
-        //  exports.x || (exports.x = {})
-        let moduleArg = factory.createLogicalOr(
-            exportName,
-            factory.createAssignment(
-                exportName,
-                factory.createObjectLiteralExpression(),
-            ),
-        );
-
-        if (isExportOfNamespace(node)) {
-            // `localName` is the expression used within this node's containing scope for any local references.
-            const localName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
-
-            //  x = (exports.x || (exports.x = {}))
-            moduleArg = factory.createAssignment(localName, moduleArg);
-        }
-
-        //  (function (x_1) {
-        //      x_1.y = ...;
-        //  })(x || (x = {}));
-        const moduleStatement = factory.createExpressionStatement(
-            factory.createCallExpression(
-                factory.createFunctionExpression(
-                    /*modifiers*/ undefined,
-                    /*asteriskToken*/ undefined,
-                    /*name*/ undefined,
-                    /*typeParameters*/ undefined,
-                    [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
-                    /*type*/ undefined,
-                    transformModuleBody(node, containerName),
-                ),
-                /*typeArguments*/ undefined,
-                [moduleArg],
-            ),
-        );
-
-        setOriginalNode(moduleStatement, node);
-        if (varAdded) {
-            // If a variable was added, synthetic comments are emitted on it, not on the moduleStatement.
-            setSyntheticLeadingComments(moduleStatement, undefined);
-            setSyntheticTrailingComments(moduleStatement, undefined);
-        }
-        setTextRange(moduleStatement, node);
-        addEmitFlags(moduleStatement, emitFlags);
-        statements.push(moduleStatement);
-
-        return statements;
+        return createIIFEModule(node);
     }
 
     /**

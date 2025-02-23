@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/exportDefaultDeclareClass.ts] ////
+
+=== a.ts ===
+export default declare class C {
+>C : C
+>  : ^
+
+    public foo: number;
+>foo : number
+>    : ^^^^^^
+}
+
+=== b.ts ===
+import A from "./a"
+>A : typeof A
+>  : ^^^^^^^^
+
+let a: A;
+>a : A
+>  : ^
+
+a.foo
+>a.foo : number
+>      : ^^^^^^
+>a : A
+>  : ^
+>foo : number
+>    : ^^^^^^
+

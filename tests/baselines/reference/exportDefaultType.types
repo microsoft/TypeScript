@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/exportDefaultType.ts] ////
+
+=== a.ts ===
+export default type A = number;
+>A : number
+>  : ^^^^^^
+
+=== b.ts ===
+import A from "./a"
+>A : any
+>  : ^^^
+
+let a: A;
+>a : number
+>  : ^^^^^^
+
