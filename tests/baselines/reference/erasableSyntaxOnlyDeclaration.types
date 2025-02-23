@@ -1,9 +1,16 @@
 //// [tests/cases/compiler/erasableSyntaxOnlyDeclaration.ts] ////
 
-=== decl.d.ts ===
-// Diffs from the other test:
-// - Parameter properties are already banned in .d.ts files
+=== index.d.cts ===
+declare function foo(): void;
+>foo : () => void
+>    : ^^^^^^    
 
+export = foo;
+>foo : () => void
+>    : ^^^^^^    
+
+
+=== index.d.ts ===
 namespace IllegalBecauseInstantiated {
 >IllegalBecauseInstantiated : typeof IllegalBecauseInstantiated
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -127,4 +134,35 @@ declare namespace AmbientStuff {
 >B : EnumInAmbientContext.B
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 }
+
+=== commonjs.d.cts ===
+import foo = require("./other.cjs");
+>foo : () => void
+>    : ^^^^^^    
+
+export = foo;
+>foo : () => void
+>    : ^^^^^^    
+
+
+=== other.d.cts ===
+declare function foo(): void;
+>foo : () => void
+>    : ^^^^^^    
+
+export = foo;
+>foo : () => void
+>    : ^^^^^^    
+
+
+=== esm.d.mts ===
+declare const foo = 1234;
+>foo : 1234
+>    : ^^^^
+>1234 : 1234
+>     : ^^^^
+
+export default foo;
+>foo : 1234
+>    : ^^^^
 

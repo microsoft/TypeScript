@@ -15504,7 +15504,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 isInJSFile(declaration) &&
                 isValueSignatureDeclaration(declaration) &&
                 !hasJSDocParameterTags(declaration) &&
-                !getJSDocType(declaration);
+                !getJSDocType(declaration) &&
+                !getContextualSignatureForFunctionLikeDeclaration(declaration);
             if (isUntypedSignatureInJSFile) {
                 flags |= SignatureFlags.IsUntypedSignatureInJSFile;
             }
@@ -25934,7 +25935,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return !!(target.flags & TypeFlags.Number && isValidNumberString(value, /*roundTripOnly*/ false) ||
                 target.flags & TypeFlags.BigInt && isValidBigIntString(value, /*roundTripOnly*/ false) ||
                 target.flags & (TypeFlags.BooleanLiteral | TypeFlags.Nullable) && value === (target as IntrinsicType).intrinsicName ||
-                target.flags & TypeFlags.StringMapping && isMemberOfStringMapping(getStringLiteralType(value), target) ||
+                target.flags & TypeFlags.StringMapping && isMemberOfStringMapping(source, target) ||
                 target.flags & TypeFlags.TemplateLiteral && isTypeMatchedByTemplateLiteralType(source, target as TemplateLiteralType));
         }
         if (source.flags & TypeFlags.TemplateLiteral) {
@@ -37869,7 +37870,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : fallbackType;
     }
 
-    function inferFromAnnotatedParameters(signature: Signature, context: Signature, inferenceContext: InferenceContext) {
+    function inferFromAnnotatedParametersAndReturn(signature: Signature, context: Signature, inferenceContext: InferenceContext) {
         const len = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
         for (let i = 0; i < len; i++) {
             const declaration = signature.parameters[i].valueDeclaration as ParameterDeclaration;
@@ -37879,6 +37880,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const target = getTypeAtPosition(context, i);
                 inferTypes(inferenceContext.inferences, source, target);
             }
+        }
+        const typeNode = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
+        if (typeNode) {
+            const source = getTypeFromTypeNode(typeNode);
+            const target = getReturnTypeOfSignature(context);
+            inferTypes(inferenceContext.inferences, source, target);
         }
     }
 
@@ -38753,7 +38760,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // "x is T" means that x is T if and only if it returns true. If it returns false then x is not T.
         // This means that if the function is called with an argument of type trueType, there can't be anything left in the `else` branch. It must reduce to `never`.
         const falseCondition = createFlowNode(FlowFlags.FalseCondition, expr, antecedent);
-        const falseSubtype = getFlowTypeOfReference(param.name, initType, trueType, func, falseCondition);
+        const falseSubtype = getReducedType(getFlowTypeOfReference(param.name, initType, trueType, func, falseCondition));
         return falseSubtype.flags & TypeFlags.Never ? trueType : undefined;
     }
 
@@ -38877,7 +38884,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const inferenceContext = getInferenceContext(node);
                         let instantiatedContextualSignature: Signature | undefined;
                         if (checkMode && checkMode & CheckMode.Inferential) {
-                            inferFromAnnotatedParameters(signature, contextualSignature, inferenceContext!);
+                            inferFromAnnotatedParametersAndReturn(signature, contextualSignature, inferenceContext!);
                             const restType = getEffectiveRestType(contextualSignature);
                             if (restType && restType.flags & TypeFlags.TypeParameter) {
                                 instantiatedContextualSignature = instantiateSignature(contextualSignature, inferenceContext!.nonFixingMapper);
@@ -38895,7 +38902,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else if (contextualSignature && !node.typeParameters && contextualSignature.parameters.length > node.parameters.length) {
                     const inferenceContext = getInferenceContext(node);
                     if (checkMode && checkMode & CheckMode.Inferential) {
-                        inferFromAnnotatedParameters(signature, contextualSignature, inferenceContext!);
+                        inferFromAnnotatedParametersAndReturn(signature, contextualSignature, inferenceContext!);
                     }
                 }
                 if (contextualSignature && !getReturnTypeFromAnnotation(node) && !signature.resolvedReturnType) {
@@ -39840,22 +39847,42 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 grammarErrorOnNode(right, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(right.operatorToken.kind), tokenToString(operatorToken.kind));
             }
 
-            const leftTarget = skipOuterExpressions(left, OuterExpressionKinds.All);
-            const nullishSemantics = getSyntacticNullishnessSemantics(leftTarget);
-            if (nullishSemantics !== PredicateSemantics.Sometimes) {
-                if (node.parent.kind === SyntaxKind.BinaryExpression) {
-                    error(leftTarget, Diagnostics.This_binary_expression_is_never_nullish_Are_you_missing_parentheses);
-                }
-                else {
-                    if (nullishSemantics === PredicateSemantics.Always) {
-                        error(leftTarget, Diagnostics.This_expression_is_always_nullish);
-                    }
-                    else {
-                        error(leftTarget, Diagnostics.Right_operand_of_is_unreachable_because_the_left_operand_is_never_nullish);
-                    }
-                }
+            checkNullishCoalesceOperandLeft(node);
+            checkNullishCoalesceOperandRight(node);
+        }
+    }
+
+    function checkNullishCoalesceOperandLeft(node: BinaryExpression) {
+        const leftTarget = skipOuterExpressions(node.left, OuterExpressionKinds.All);
+
+        const nullishSemantics = getSyntacticNullishnessSemantics(leftTarget);
+        if (nullishSemantics !== PredicateSemantics.Sometimes) {
+            if (nullishSemantics === PredicateSemantics.Always) {
+                error(leftTarget, Diagnostics.This_expression_is_always_nullish);
+            }
+            else {
+                error(leftTarget, Diagnostics.Right_operand_of_is_unreachable_because_the_left_operand_is_never_nullish);
             }
         }
+    }
+
+    function checkNullishCoalesceOperandRight(node: BinaryExpression) {
+        const rightTarget = skipOuterExpressions(node.right, OuterExpressionKinds.All);
+        const nullishSemantics = getSyntacticNullishnessSemantics(rightTarget);
+        if (isNotWithinNullishCoalesceExpression(node)) {
+            return;
+        }
+
+        if (nullishSemantics === PredicateSemantics.Always) {
+            error(rightTarget, Diagnostics.This_expression_is_always_nullish);
+        }
+        else if (nullishSemantics === PredicateSemantics.Never) {
+            error(rightTarget, Diagnostics.This_expression_is_never_nullish);
+        }
+    }
+
+    function isNotWithinNullishCoalesceExpression(node: BinaryExpression) {
+        return !isBinaryExpression(node.parent) || node.parent.operatorToken.kind !== SyntaxKind.QuestionQuestionToken;
     }
 
     function getSyntacticNullishnessSemantics(node: Node): PredicateSemantics {
@@ -47165,7 +47192,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         checkCollisionsForDeclarationName(node, node.name);
         checkExportsOnMergedDeclarations(node);
-        node.members.forEach(checkEnumMember);
+        node.members.forEach(checkSourceElement);
 
         if (compilerOptions.erasableSyntaxOnly && !(node.flags & NodeFlags.Ambient)) {
             error(node, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
@@ -47830,11 +47857,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         checkGrammarModifiers(node);
-        const isImportEquals = isInternalModuleImportEqualsDeclaration(node);
-        if (compilerOptions.erasableSyntaxOnly && isImportEquals && !(node.flags & NodeFlags.Ambient)) {
+        if (compilerOptions.erasableSyntaxOnly && !(node.flags & NodeFlags.Ambient)) {
             error(node, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
         }
-        if (isImportEquals || checkExternalImportOrExportDeclaration(node)) {
+        if (isInternalModuleImportEqualsDeclaration(node) || checkExternalImportOrExportDeclaration(node)) {
             checkImportBinding(node);
             markLinkedReferences(node, ReferenceHint.ExportImportEquals);
             if (node.moduleReference.kind !== SyntaxKind.ExternalModuleReference) {
@@ -47975,6 +48001,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return;
         }
 
+        if (compilerOptions.erasableSyntaxOnly && node.isExportEquals && !(node.flags & NodeFlags.Ambient)) {
+            error(node, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
+        }
         const container = node.parent.kind === SyntaxKind.SourceFile ? node.parent : node.parent.parent as ModuleDeclaration;
         if (container.kind === SyntaxKind.ModuleDeclaration && !isAmbientModule(container)) {
             if (node.isExportEquals) {
@@ -48364,6 +48393,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkTypeAliasDeclaration(node as TypeAliasDeclaration);
             case SyntaxKind.EnumDeclaration:
                 return checkEnumDeclaration(node as EnumDeclaration);
+            case SyntaxKind.EnumMember:
+                return checkEnumMember(node as EnumMember);
             case SyntaxKind.ModuleDeclaration:
                 return checkModuleDeclaration(node as ModuleDeclaration);
             case SyntaxKind.ImportDeclaration:
