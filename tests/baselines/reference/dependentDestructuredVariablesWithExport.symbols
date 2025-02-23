@@ -1,0 +1,49 @@
+//// [tests/cases/conformance/controlFlow/dependentDestructuredVariablesWithExport.ts] ////
+
+=== dependentDestructuredVariablesWithExport.ts ===
+// https://github.com/microsoft/TypeScript/issues/59652
+
+declare function mutuallyEnabledPair(): {
+>mutuallyEnabledPair : Symbol(mutuallyEnabledPair, Decl(dependentDestructuredVariablesWithExport.ts, 0, 0))
+
+    discriminator: true,
+>discriminator : Symbol(discriminator, Decl(dependentDestructuredVariablesWithExport.ts, 2, 41))
+
+    value: string,
+>value : Symbol(value, Decl(dependentDestructuredVariablesWithExport.ts, 3, 24))
+
+  } | {
+    discriminator: false,
+>discriminator : Symbol(discriminator, Decl(dependentDestructuredVariablesWithExport.ts, 5, 7))
+
+    value: null | undefined,
+>value : Symbol(value, Decl(dependentDestructuredVariablesWithExport.ts, 6, 25))
+  }
+
+const { discriminator: discriminator1, value: value1 } = mutuallyEnabledPair()
+>discriminator : Symbol(discriminator, Decl(dependentDestructuredVariablesWithExport.ts, 2, 41), Decl(dependentDestructuredVariablesWithExport.ts, 5, 7))
+>discriminator1 : Symbol(discriminator1, Decl(dependentDestructuredVariablesWithExport.ts, 10, 7))
+>value : Symbol(value, Decl(dependentDestructuredVariablesWithExport.ts, 3, 24), Decl(dependentDestructuredVariablesWithExport.ts, 6, 25))
+>value1 : Symbol(value1, Decl(dependentDestructuredVariablesWithExport.ts, 10, 38))
+>mutuallyEnabledPair : Symbol(mutuallyEnabledPair, Decl(dependentDestructuredVariablesWithExport.ts, 0, 0))
+
+if (discriminator1) {
+>discriminator1 : Symbol(discriminator1, Decl(dependentDestructuredVariablesWithExport.ts, 10, 7))
+
+  value1;
+>value1 : Symbol(value1, Decl(dependentDestructuredVariablesWithExport.ts, 10, 38))
+}
+
+export const { discriminator: discriminator2, value: value2 } = mutuallyEnabledPair()
+>discriminator : Symbol(discriminator, Decl(dependentDestructuredVariablesWithExport.ts, 2, 41), Decl(dependentDestructuredVariablesWithExport.ts, 5, 7))
+>discriminator2 : Symbol(discriminator2, Decl(dependentDestructuredVariablesWithExport.ts, 16, 14))
+>value : Symbol(value, Decl(dependentDestructuredVariablesWithExport.ts, 3, 24), Decl(dependentDestructuredVariablesWithExport.ts, 6, 25))
+>value2 : Symbol(value2, Decl(dependentDestructuredVariablesWithExport.ts, 16, 45))
+>mutuallyEnabledPair : Symbol(mutuallyEnabledPair, Decl(dependentDestructuredVariablesWithExport.ts, 0, 0))
+
+if (discriminator2) {
+>discriminator2 : Symbol(discriminator2, Decl(dependentDestructuredVariablesWithExport.ts, 16, 14))
+
+  value2;
+>value2 : Symbol(value2, Decl(dependentDestructuredVariablesWithExport.ts, 16, 45))
+}
