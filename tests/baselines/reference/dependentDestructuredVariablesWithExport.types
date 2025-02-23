@@ -28,23 +28,49 @@ declare function mutuallyEnabledPair(): {
 >value : null | undefined
 >      : ^^^^^^^^^^^^^^^^
   }
-  
-  
-export const { discriminator, value } = mutuallyEnabledPair()
->discriminator : boolean
->              : ^^^^^^^
->value : string | null | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const { discriminator: discriminator1, value: value1 } = mutuallyEnabledPair()
+>discriminator : any
+>              : ^^^
+>discriminator1 : boolean
+>               : ^^^^^^^
+>value : any
+>      : ^^^
+>value1 : string | null | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >mutuallyEnabledPair() : { discriminator: true; value: string; } | { discriminator: false; value: null | undefined; }
 >                      : ^^^^^^^^^^^^^^^^^    ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                ^^^
 >mutuallyEnabledPair : () => { discriminator: true; value: string; } | { discriminator: false; value: null | undefined; }
 >                    : ^^^^^^                                                                                            
 
-if (discriminator) {
->discriminator : boolean
->              : ^^^^^^^
+if (discriminator1) {
+>discriminator1 : boolean
+>               : ^^^^^^^
 
-  value;
->value : string
->      : ^^^^^^
+  value1;
+>value1 : string
+>       : ^^^^^^
+}
+
+export const { discriminator: discriminator2, value: value2 } = mutuallyEnabledPair()
+>discriminator : any
+>              : ^^^
+>discriminator2 : boolean
+>               : ^^^^^^^
+>value : any
+>      : ^^^
+>value2 : string | null | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>mutuallyEnabledPair() : { discriminator: true; value: string; } | { discriminator: false; value: null | undefined; }
+>                      : ^^^^^^^^^^^^^^^^^    ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                ^^^
+>mutuallyEnabledPair : () => { discriminator: true; value: string; } | { discriminator: false; value: null | undefined; }
+>                    : ^^^^^^                                                                                            
+
+if (discriminator2) {
+>discriminator2 : boolean
+>               : ^^^^^^^
+
+  value2;
+>value2 : string
+>       : ^^^^^^
 }

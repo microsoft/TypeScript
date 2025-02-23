@@ -10,10 +10,15 @@ declare function mutuallyEnabledPair(): {
     discriminator: false,
     value: null | undefined,
   }
-  
-  
-export const { discriminator, value } = mutuallyEnabledPair()
 
-if (discriminator) {
-  value;
+const { discriminator: discriminator1, value: value1 } = mutuallyEnabledPair()
+
+if (discriminator1) {
+  value1;
+}
+
+export const { discriminator: discriminator2, value: value2 } = mutuallyEnabledPair()
+
+if (discriminator2) {
+  value2;
 }
