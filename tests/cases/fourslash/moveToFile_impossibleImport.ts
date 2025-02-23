@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// @module: nodenext
+// @module: node18
 
 // @Filename: /bar.cts
 ////const a = 2;

@@ -161,7 +161,7 @@ export function canProduceDiagnostics(node: Node): node is DeclarationDiagnostic
 }
 
 /** @internal */
-export function createGetSymbolAccessibilityDiagnosticForNodeName(node: DeclarationDiagnosticProducing) {
+export function createGetSymbolAccessibilityDiagnosticForNodeName(node: DeclarationDiagnosticProducing): (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic | undefined {
     if (isSetAccessor(node) || isGetAccessor(node)) {
         return getAccessorNameVisibilityError;
     }
@@ -603,7 +603,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
 }
 
 /** @internal */
-export function createGetIsolatedDeclarationErrors(resolver: EmitResolver) {
+export function createGetIsolatedDeclarationErrors(resolver: EmitResolver): (node: Node) => DiagnosticWithLocation {
     const relatedSuggestionByDeclarationKind = {
         [SyntaxKind.ArrowFunction]: Diagnostics.Add_a_return_type_to_the_function_expression,
         [SyntaxKind.FunctionExpression]: Diagnostics.Add_a_return_type_to_the_function_expression,
@@ -625,8 +625,8 @@ export function createGetIsolatedDeclarationErrors(resolver: EmitResolver) {
         [SyntaxKind.ArrowFunction]: Diagnostics.Function_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
         [SyntaxKind.MethodDeclaration]: Diagnostics.Method_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
         [SyntaxKind.ConstructSignature]: Diagnostics.Method_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
-        [SyntaxKind.GetAccessor]: Diagnostics.At_least_one_accessor_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
-        [SyntaxKind.SetAccessor]: Diagnostics.At_least_one_accessor_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+        [SyntaxKind.GetAccessor]: Diagnostics.At_least_one_accessor_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+        [SyntaxKind.SetAccessor]: Diagnostics.At_least_one_accessor_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
         [SyntaxKind.Parameter]: Diagnostics.Parameter_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
         [SyntaxKind.VariableDeclaration]: Diagnostics.Variable_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
         [SyntaxKind.PropertyDeclaration]: Diagnostics.Property_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
@@ -767,12 +767,12 @@ export function createGetIsolatedDeclarationErrors(resolver: EmitResolver) {
         if (isSetAccessor(node.parent)) {
             return createAccessorTypeError(node.parent);
         }
-        const addUndefined = resolver.requiresAddingImplicitUndefined(node, /*enclosingDeclaration*/ undefined);
+        const addUndefined = resolver.requiresAddingImplicitUndefined(node, node.parent);
         if (!addUndefined && node.initializer) {
             return createExpressionError(node.initializer);
         }
         const message = addUndefined ?
-            Diagnostics.Declaration_emit_for_this_parameter_requires_implicitly_adding_undefined_to_it_s_type_This_is_not_supported_with_isolatedDeclarations :
+            Diagnostics.Declaration_emit_for_this_parameter_requires_implicitly_adding_undefined_to_its_type_This_is_not_supported_with_isolatedDeclarations :
             errorByDeclarationKind[node.kind];
         const diag = createDiagnosticForNode(node, message);
         const targetStr = getTextOfNode(node.name, /*includeTrivia*/ false);

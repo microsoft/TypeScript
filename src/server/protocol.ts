@@ -169,6 +169,7 @@ export const enum CommandTypes {
     GetApplicableRefactors = "getApplicableRefactors",
     GetEditsForRefactor = "getEditsForRefactor",
     GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
+    PreparePasteEdits = "preparePasteEdits",
     GetPasteEdits = "getPasteEdits",
     /** @internal */
     GetEditsForRefactorFull = "getEditsForRefactor-full",
@@ -201,6 +202,8 @@ export const enum CommandTypes {
     ProvideInlayHints = "provideInlayHints",
     WatchChange = "watchChange",
     MapCode = "mapCode",
+    /** @internal */
+    CopilotRelated = "copilotRelated",
 }
 
 /**
@@ -498,6 +501,10 @@ export interface ProjectInfoRequestArgs extends FileRequestArgs {
      * Indicate if the file name list of the project is needed
      */
     needFileNameList: boolean;
+    /**
+     * if true returns details about default configured project calculation
+     */
+    needDefaultConfiguredProjectInfo?: boolean;
 }
 
 /**
@@ -526,6 +533,18 @@ export interface CompilerOptionsDiagnosticsRequestArgs {
 }
 
 /**
+ * Details about the default project for the file if tsconfig file is found
+ */
+export interface DefaultConfiguredProjectInfo {
+    /** List of config files looked and did not match because file was not part of root file names */
+    notMatchedByConfig?: readonly string[];
+    /** List of projects which were loaded but file was not part of the project or is file from referenced project */
+    notInProject?: readonly string[];
+    /** Configured project used as default */
+    defaultProject?: string;
+}
+
+/**
  * Response message body for "projectInfo" request
  */
 export interface ProjectInfo {
@@ -542,6 +561,10 @@ export interface ProjectInfo {
      * Indicates if the project has a active language service instance
      */
     languageServiceDisabled?: boolean;
+    /**
+     * Information about default project
+     */
+    configuredProjectInfo?: DefaultConfiguredProjectInfo;
 }
 
 /**
@@ -649,6 +672,20 @@ export interface GetMoveToRefactoringFileSuggestions extends Response {
         newFileName: string;
         files: string[];
     };
+}
+
+/**
+ * Request to check if `pasteEdits` should be provided for a given location post copying text from that location.
+ */
+export interface PreparePasteEditsRequest extends FileRequest {
+    command: CommandTypes.PreparePasteEdits;
+    arguments: PreparePasteEditsRequestArgs;
+}
+export interface PreparePasteEditsRequestArgs extends FileRequestArgs {
+    copiedTextSpan: TextSpan[];
+}
+export interface PreparePasteEditsResponse extends Response {
+    body: boolean;
 }
 
 /**
@@ -3207,6 +3244,7 @@ export const enum ModuleKind {
     ES2022 = "es2022",
     ESNext = "esnext",
     Node16 = "node16",
+    Node18 = "node18",
     NodeNext = "nodenext",
     Preserve = "preserve",
 }
@@ -3242,6 +3280,7 @@ export const enum ScriptTarget {
     ES2021 = "es2021",
     ES2022 = "es2022",
     ES2023 = "es2023",
+    ES2024 = "es2024",
     ESNext = "esnext",
     JSON = "json",
     Latest = ESNext,
