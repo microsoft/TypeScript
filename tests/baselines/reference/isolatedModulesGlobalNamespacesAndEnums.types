@@ -74,19 +74,19 @@ enum Enum {
 >  : ^^^
 
     E = A, // error
->E : Enum.A
+>E : Enum.E
 >  : ^^^^^^
->A : Enum.A
->  : ^^^^^^
+>A : any
+>  : ^^^
 
     Y = X, // error
->Y : Enum.X
+>Y : Enum.Y
 >  : ^^^^^^
->X : Enum.X
->  : ^^^^^^
+>X : any
+>  : ^^^
 
     Z = Enum.A
->Z : Enum.A
+>Z : Enum.Z
 >  : ^^^^^^
 >Enum.A : Enum.A
 >       : ^^^^^^
@@ -101,8 +101,8 @@ declare enum Enum {
 >     : ^^^^
 
     F = A
->F : Enum.A
+>F : Enum.F
 >  : ^^^^^^
->A : Enum.A
->  : ^^^^^^
+>A : any
+>  : ^^^
 }

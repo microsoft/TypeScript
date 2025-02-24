@@ -5938,7 +5938,7 @@ export const enum SymbolFlags {
     FunctionExcludes = Value & ~(Function | ValueModule | Class),
     ClassExcludes = (Value | Type) & ~(ValueModule | Interface | Function), // class-interface mergability done in checker.ts
     InterfaceExcludes = Type & ~(Interface | Class),
-    RegularEnumExcludes = (Value | Type) & ~(RegularEnum | ValueModule), // regular enums merge only with regular enums and modules
+    RegularEnumExcludes = (Value | Type) & ~ValueModule, // regular enums merge only modules
     ConstEnumExcludes = (Value | Type) & ~ConstEnum, // const enums merge only with const enums
     ValueModuleExcludes = Value & ~(Function | Class | RegularEnum | ValueModule),
     NamespaceModuleExcludes = 0,

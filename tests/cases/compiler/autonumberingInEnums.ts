@@ -3,5 +3,5 @@ enum Foo {
 }
 
 enum Foo {
-    b // should work fine
+    b
 }

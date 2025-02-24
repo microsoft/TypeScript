@@ -13,28 +13,28 @@ export namespace C {
 }
 
 export enum E {
->E : Symbol(E, Decl(es6modulekindWithES5Target12.ts, 5, 1), Decl(es6modulekindWithES5Target12.ts, 9, 1), Decl(es6modulekindWithES5Target12.ts, 13, 1), Decl(es6modulekindWithES5Target12.ts, 17, 1))
+>E : Symbol(E, Decl(es6modulekindWithES5Target12.ts, 5, 1), Decl(es6modulekindWithES5Target12.ts, 13, 1), Decl(es6modulekindWithES5Target12.ts, 17, 1))
 
     w = 1
 >w : Symbol(E.w, Decl(es6modulekindWithES5Target12.ts, 7, 15))
 }
 
 export enum E {
->E : Symbol(E, Decl(es6modulekindWithES5Target12.ts, 5, 1), Decl(es6modulekindWithES5Target12.ts, 9, 1), Decl(es6modulekindWithES5Target12.ts, 13, 1), Decl(es6modulekindWithES5Target12.ts, 17, 1))
+>E : Symbol(E, Decl(es6modulekindWithES5Target12.ts, 9, 1))
 
     x = 2
 >x : Symbol(E.x, Decl(es6modulekindWithES5Target12.ts, 11, 15))
 }
 
 export namespace E {
->E : Symbol(E, Decl(es6modulekindWithES5Target12.ts, 5, 1), Decl(es6modulekindWithES5Target12.ts, 9, 1), Decl(es6modulekindWithES5Target12.ts, 13, 1), Decl(es6modulekindWithES5Target12.ts, 17, 1))
+>E : Symbol(E, Decl(es6modulekindWithES5Target12.ts, 5, 1), Decl(es6modulekindWithES5Target12.ts, 13, 1), Decl(es6modulekindWithES5Target12.ts, 17, 1))
 
     export const y = 1;
 >y : Symbol(y, Decl(es6modulekindWithES5Target12.ts, 16, 16))
 }
 
 export namespace E {
->E : Symbol(E, Decl(es6modulekindWithES5Target12.ts, 5, 1), Decl(es6modulekindWithES5Target12.ts, 9, 1), Decl(es6modulekindWithES5Target12.ts, 13, 1), Decl(es6modulekindWithES5Target12.ts, 17, 1))
+>E : Symbol(E, Decl(es6modulekindWithES5Target12.ts, 5, 1), Decl(es6modulekindWithES5Target12.ts, 13, 1), Decl(es6modulekindWithES5Target12.ts, 17, 1))
 
     export const z = 1;
 >z : Symbol(z, Decl(es6modulekindWithES5Target12.ts, 20, 16))

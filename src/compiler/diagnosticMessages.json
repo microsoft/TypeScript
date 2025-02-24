@@ -2864,7 +2864,7 @@
         "category": "Error",
         "code": 2566
     },
-    "Enum declarations can only merge with namespace or other enum declarations.": {
+    "Enum declarations can only merge with namespace declarations.": {
         "category": "Error",
         "code": 2567
     },

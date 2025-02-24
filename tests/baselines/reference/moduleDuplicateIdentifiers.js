@@ -76,7 +76,7 @@ var Utensils;
     Utensils[Utensils["Spoon"] = 0] = "Spoon";
     Utensils[Utensils["Fork"] = 1] = "Fork";
     Utensils[Utensils["Knife"] = 2] = "Knife";
-})(Utensils || (exports.Utensils = Utensils = {}));
+})(Utensils || (Utensils = {}));
 (function (Utensils) {
     Utensils[Utensils["Spork"] = 3] = "Spork";
-})(Utensils || (exports.Utensils = Utensils = {}));
+})(Utensils || (Utensils = {}));

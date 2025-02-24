@@ -101,12 +101,12 @@ export enum Utensils {
 }
 
 export enum Utensils { // Shouldn't error
->Utensils : Utensils
->         : ^^^^^^^^
+>Utensils : import("moduleDuplicateIdentifiers").Utensils
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	Spork = 3
->Spork : Utensils.Spork
->      : ^^^^^^^^^^^^^^
+>Spork : import("moduleDuplicateIdentifiers").Utensils.Spork
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
 >  : ^
 }

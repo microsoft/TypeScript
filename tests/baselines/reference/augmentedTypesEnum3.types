@@ -44,7 +44,7 @@ enum A {
 >  : ^
 
     c
->c : A.b
+>c : A.c
 >  : ^^^
 }
 module A {

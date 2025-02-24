@@ -1,50 +1,89 @@
-enumMergingErrors.ts(26,22): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
-enumMergingErrors.ts(38,22): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+enumMergingErrors.ts(3,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMergingErrors.ts(4,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMergingErrors.ts(5,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMergingErrors.ts(8,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMergingErrors.ts(9,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMergingErrors.ts(10,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMergingErrors.ts(13,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMergingErrors.ts(14,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMergingErrors.ts(15,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMergingErrors.ts(20,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMergingErrors.ts(23,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMergingErrors.ts(26,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMergingErrors.ts(32,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMergingErrors.ts(35,17): error TS2567: Enum declarations can only merge with namespace declarations.
+enumMergingErrors.ts(38,17): error TS2567: Enum declarations can only merge with namespace declarations.
 
 
-==== enumMergingErrors.ts (2 errors) ====
+==== enumMergingErrors.ts (15 errors) ====
     // Enum with constant, computed, constant members split across 3 declarations with the same root module
     module M {
         export enum E1 { A = 0 }
+                    ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
         export enum E2 { C }
+                    ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
         export enum E3 { A = 0 }
+                    ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
     }
     module M {
         export enum E1 { B = 'foo'.length }
+                    ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
         export enum E2 { B = 'foo'.length }
+                    ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
         export enum E3 { C }
+                    ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
     }
     module M {
         export enum E1 { C }
+                    ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
         export enum E2 { A = 0 }
+                    ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
         export enum E3 { B = 'foo'.length }
+                    ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
     }
     
     // Enum with no initializer in either declaration with constant members with the same root module
     module M1 {
         export enum E1 { A = 0 }
+                    ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
     }
     module M1 {
         export enum E1 { B }
+                    ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
     }
     module M1 {
         export enum E1 { C }
-                         ~
-!!! error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+                    ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
     }
     
     
     // Enum with initializer in only one of three declarations with constant members with the same root module
     module M2 {
         export enum E1 { A }
+                    ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
     }
     module M2 {
         export enum E1 { B = 0 }
+                    ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
     }
     module M2 {
         export enum E1 { C }
-                         ~
-!!! error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+                    ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
     }
     
     

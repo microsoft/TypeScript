@@ -1,7 +1,9 @@
-augmentedTypesEnum3.ts(16,5): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+augmentedTypesEnum3.ts(9,8): error TS2567: Enum declarations can only merge with namespace declarations.
+augmentedTypesEnum3.ts(12,6): error TS2567: Enum declarations can only merge with namespace declarations.
+augmentedTypesEnum3.ts(15,6): error TS2567: Enum declarations can only merge with namespace declarations.
 
 
-==== augmentedTypesEnum3.ts (1 errors) ====
+==== augmentedTypesEnum3.ts (3 errors) ====
     module E {
         var t;
     }
@@ -11,15 +13,19 @@ augmentedTypesEnum3.ts(16,5): error TS2432: In an enum with multiple declaration
     module F { var t; }
     
     module A {
+           ~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
         var o;
     }
     enum A {
+         ~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
         b
     }
     enum A {
+         ~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
         c
-        ~
-!!! error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
     }
     module A {
         var p;

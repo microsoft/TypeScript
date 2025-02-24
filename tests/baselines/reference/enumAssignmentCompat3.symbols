@@ -96,18 +96,18 @@ namespace Merged {
 >Merged : Symbol(Merged, Decl(enumAssignmentCompat3.ts, 37, 1))
 
     export enum E {
->E : Symbol(E, Decl(enumAssignmentCompat3.ts, 38, 18), Decl(enumAssignmentCompat3.ts, 41, 5))
+>E : Symbol(E, Decl(enumAssignmentCompat3.ts, 38, 18))
 
         a, b, 
 >a : Symbol(E.a, Decl(enumAssignmentCompat3.ts, 39, 19))
 >b : Symbol(E.b, Decl(enumAssignmentCompat3.ts, 40, 10))
     }
     export enum E {
->E : Symbol(E, Decl(enumAssignmentCompat3.ts, 38, 18), Decl(enumAssignmentCompat3.ts, 41, 5))
+>E : Symbol(E, Decl(enumAssignmentCompat3.ts, 41, 5))
 
         c = 3, d,
->c : Symbol(E.c, Decl(enumAssignmentCompat3.ts, 42, 19))
->d : Symbol(E.d, Decl(enumAssignmentCompat3.ts, 43, 14))
+>c : Symbol(Merged.E.c, Decl(enumAssignmentCompat3.ts, 42, 19))
+>d : Symbol(Merged.E.d, Decl(enumAssignmentCompat3.ts, 43, 14))
     }
 }
 
@@ -173,7 +173,7 @@ var decl: Decl.E;
 var merged: Merged.E;
 >merged : Symbol(merged, Decl(enumAssignmentCompat3.ts, 64, 3))
 >Merged : Symbol(Merged, Decl(enumAssignmentCompat3.ts, 37, 1))
->E : Symbol(Merged.E, Decl(enumAssignmentCompat3.ts, 38, 18), Decl(enumAssignmentCompat3.ts, 41, 5))
+>E : Symbol(Merged.E, Decl(enumAssignmentCompat3.ts, 38, 18))
 
 var merged2: Merged2.E;
 >merged2 : Symbol(merged2, Decl(enumAssignmentCompat3.ts, 65, 3))

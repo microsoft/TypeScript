@@ -16,7 +16,7 @@ enum Foo {
 >Foo : Foo
 >    : ^^^
 
-    b // should work fine
+    b
 >b : Foo.b
 >  : ^^^^^
 }

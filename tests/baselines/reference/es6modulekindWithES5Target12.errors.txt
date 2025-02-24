@@ -1,0 +1,45 @@
+es6modulekindWithES5Target12.ts(8,13): error TS2567: Enum declarations can only merge with namespace declarations.
+es6modulekindWithES5Target12.ts(12,13): error TS2567: Enum declarations can only merge with namespace declarations.
+
+
+==== es6modulekindWithES5Target12.ts (2 errors) ====
+    export class C {
+    }
+    
+    export namespace C {
+        export const x = 1;
+    }
+    
+    export enum E {
+                ~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
+        w = 1
+    }
+    
+    export enum E {
+                ~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
+        x = 2
+    }
+    
+    export namespace E {
+        export const y = 1;
+    }
+    
+    export namespace E {
+        export const z = 1;
+    }
+    
+    export namespace N {
+    }
+    
+    export namespace N {
+        export const x = 1;
+    }
+    
+    export function F() {
+    }
+    
+    export namespace F {
+        export const x = 1;
+    }

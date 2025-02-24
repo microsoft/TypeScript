@@ -144,16 +144,16 @@ namespace Merged {
 >  : ^^^
     }
     export enum E {
->E : E
->  : ^
+>E : Merged.E
+>  : ^^^^^^^^
 
         c = 3, d,
->c : E.c
->  : ^^^
+>c : Merged.E.c
+>  : ^^^^^^^^^^
 >3 : 3
 >  : ^
->d : E.d
->  : ^^^
+>d : Merged.E.d
+>  : ^^^^^^^^^^
     }
 }
 
@@ -376,12 +376,12 @@ abc = merged; // missing 'd'
 >       : ^^^^^^^^
 
 merged = abc; // bad - value of 'c' differs between these enums
->merged = abc : First.E
->             : ^^^^^^^
+>merged = abc : First.E.a | First.E.b
+>             : ^^^^^^^^^^^^^^^^^^^^^
 >merged : Merged.E
 >       : ^^^^^^^^
->abc : First.E
->    : ^^^^^^^
+>abc : First.E.a | First.E.b
+>    : ^^^^^^^^^^^^^^^^^^^^^
 
 abc = merged2; // ok
 >abc = merged2 : Merged2.E

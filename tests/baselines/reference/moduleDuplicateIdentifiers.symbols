@@ -56,7 +56,7 @@ Pot = 42; // Shouldn't error
 >Pot : Symbol(Pot, Decl(moduleDuplicateIdentifiers.ts, 27, 10))
 
 export enum Utensils {
->Utensils : Symbol(Utensils, Decl(moduleDuplicateIdentifiers.ts, 28, 9), Decl(moduleDuplicateIdentifiers.ts, 34, 1))
+>Utensils : Symbol(Utensils, Decl(moduleDuplicateIdentifiers.ts, 28, 9))
 
 	Spoon,
 >Spoon : Symbol(Utensils.Spoon, Decl(moduleDuplicateIdentifiers.ts, 30, 22))
@@ -69,7 +69,7 @@ export enum Utensils {
 }
 
 export enum Utensils { // Shouldn't error
->Utensils : Symbol(Utensils, Decl(moduleDuplicateIdentifiers.ts, 28, 9), Decl(moduleDuplicateIdentifiers.ts, 34, 1))
+>Utensils : Symbol(Utensils, Decl(moduleDuplicateIdentifiers.ts, 34, 1))
 
 	Spork = 3
 >Spork : Symbol(Utensils.Spork, Decl(moduleDuplicateIdentifiers.ts, 36, 22))

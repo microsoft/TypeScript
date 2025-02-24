@@ -1,11 +1,14 @@
+forwardRefInEnum.ts(1,6): error TS2567: Enum declarations can only merge with namespace declarations.
 forwardRefInEnum.ts(4,9): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
 forwardRefInEnum.ts(5,10): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
-forwardRefInEnum.ts(7,9): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
-forwardRefInEnum.ts(8,10): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
+forwardRefInEnum.ts(7,12): error TS2339: Property 'Z' does not exist on type 'typeof E1'.
+forwardRefInEnum.ts(11,6): error TS2567: Enum declarations can only merge with namespace declarations.
 
 
-==== forwardRefInEnum.ts (4 errors) ====
+==== forwardRefInEnum.ts (5 errors) ====
     enum E1 {
+         ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
         // illegal case
         // forward reference to the element of the same enum
         X = Y, 
@@ -16,14 +19,14 @@ forwardRefInEnum.ts(8,10): error TS2651: A member initializer in a enum declarat
 !!! error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
         // forward reference to the element of the same enum
         Y = E1.Z,
-            ~~~~
-!!! error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
+               ~
+!!! error TS2339: Property 'Z' does not exist on type 'typeof E1'.
         Y1 = E1["Z"]
-             ~~~~~~~
-!!! error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
     }
     
     enum E1 {
+         ~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
         Z = 4    
     }
     

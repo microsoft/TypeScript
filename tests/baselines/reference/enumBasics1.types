@@ -70,10 +70,10 @@ enum E2 { // should error for continued autonumbering
 >   : ^^
 
 	C,
->C : E2.A
+>C : E2.C
 >  : ^^^^
 
 	D,
->D : E2.B
+>D : E2.D
 >  : ^^^^
 }
