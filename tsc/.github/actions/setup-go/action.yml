@@ -20,7 +20,7 @@ runs:
         cache: false
 
     - name: Go cache
-      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+      uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.1
       with:
         # There is more code downloaded and built than is covered by '**/go.sum',
         # so give each job its own cache to try and not end up sharing the wrong
