@@ -41,9 +41,11 @@ func (p *Parser) withJSDoc(node *ast.Node, hasJSDoc bool) {
 	ranges := getJSDocCommentRanges(&p.factory, p.jsdocCommentRangesSpace, node, p.sourceText)
 	p.jsdocCommentRangesSpace = ranges[:0]
 	jsDoc := p.nodeSlicePool.NewSlice(len(ranges))[:0]
+	pos := node.Pos()
 	for _, comment := range ranges {
-		if parsed := p.parseJSDocComment(node, comment.Pos(), comment.End()); parsed != nil {
+		if parsed := p.parseJSDocComment(node, comment.Pos(), comment.End(), pos); parsed != nil {
 			jsDoc = append(jsDoc, parsed)
+			pos = parsed.End()
 		}
 	}
 	if len(jsDoc) != 0 {
@@ -106,7 +108,7 @@ func (p *Parser) parseJSDocNameReference() *ast.Node {
 }
 
 // Pass end=-1 to parse the text to the end
-func (p *Parser) parseJSDocComment(parent *ast.Node, start int, end int) *ast.Node {
+func (p *Parser) parseJSDocComment(parent *ast.Node, start int, end int, fullStart int) *ast.Node {
 	if end == -1 {
 		end = len(p.sourceText)
 	}
@@ -136,7 +138,7 @@ func (p *Parser) parseJSDocComment(parent *ast.Node, start int, end int) *ast.No
 	p.setContextFlags(ast.NodeFlagsJSDoc, true)
 	p.parsingContexts = p.parsingContexts | ParsingContexts(PCJSDocComment)
 
-	comment := p.parseJSDocCommentWorker(start, end, initialIndent)
+	comment := p.parseJSDocCommentWorker(start, end, fullStart, initialIndent)
 	comment.Parent = parent
 	// move jsdoc diagnostics to jsdocDiagnostics -- for JS files only
 	if p.contextFlags&ast.NodeFlagsJavaScriptFile != 0 {
@@ -159,7 +161,7 @@ func (p *Parser) parseJSDocComment(parent *ast.Node, start int, end int) *ast.No
  * @param offset - the offset in the containing file
  * @param indent - the number of spaces to consider as the margin (applies to non-first lines only)
  */
-func (p *Parser) parseJSDocCommentWorker(start int, end int, indent int) *ast.Node {
+func (p *Parser) parseJSDocCommentWorker(start int, end int, fullStart int, indent int) *ast.Node {
 	// Initially we can parse out a tag.  We also have seen a starting asterisk.
 	// This is so that /** * @type */ doesn't parse.
 	tags := p.nodeSlicePool.NewSlice(1)[:0]
@@ -291,7 +293,7 @@ loop:
 	jsdocComment := p.factory.NewJSDoc(
 		p.newNodeList(core.NewTextRange(start, commentsPos), commentParts),
 		p.newNodeList(core.NewTextRange(tagsPos, tagsEnd), tags))
-	p.finishNodeWithEnd(jsdocComment, start, end)
+	p.finishNodeWithEnd(jsdocComment, fullStart, end)
 	return jsdocComment
 }
 

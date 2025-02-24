@@ -46,6 +46,31 @@ func FuzzTokens(f *testing.F) {
 	}
 }
 
+func TestJSDocTokens(t *testing.T) {
+	t.Parallel()
+	fileText := `
+
+	/** @typedef {string} StringType */
+	
+	/**
+		 * This is a JSDoc comment.
+		 * @param {string} name - The name parameter.
+		 * @returns {string} The greeting message.
+		 */
+		function greet(name) {
+			return "Hello, " + name;
+		}`
+
+	position := 0
+	goKind, goPos := goGetTokenAtPosition(t, fileText, position)
+	assert.Assert(t, goPos == 0, fmt.Sprintf("pos: %d", position))
+	assert.Assert(t, goKind == "JSDoc", "goKind is actually %s for pos: %d", goKind, position)
+	position = strings.Index(fileText, "/** @typedef {string} StringType */") + len("/** @typedef {string} StringType */")
+	goKind, goPos = goGetTokenAtPosition(t, fileText, position)
+	assert.Assert(t, goPos == 38, fmt.Sprintf("pos: %d", position))
+	assert.Assert(t, goKind == "JSDoc", "goKind is actually %s for pos: %d", goKind, position)
+}
+
 func goGetTokenAtPosition(t *testing.T, fileText string, position int) (kind string, pos int) {
 	file := parser.ParseSourceFile("file.ts", "file.ts", fileText, core.ScriptTargetLatest, scanner.JSDocParsingModeParseAll)
 	token := getTokenAtPosition(file, position, true /*allowPositionInLeadingTrvia*/, false /*includeEndPosition*/, nil)
