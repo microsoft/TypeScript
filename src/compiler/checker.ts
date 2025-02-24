@@ -31395,6 +31395,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const signature = getContextualSignatureForFunctionLikeDeclaration(functionDecl as FunctionExpression);
         if (signature && !isResolvingReturnTypeOfSignature(signature)) {
             const returnType = getReturnTypeOfSignature(signature);
+
+            if (returnType.flags & TypeFlags.Never) {
+                return returnType;
+            }
+
             const functionFlags = getFunctionFlags(functionDecl);
             if (functionFlags & FunctionFlags.Generator) {
                 return filterType(returnType, t => {
@@ -31402,9 +31407,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 });
             }
             if (functionFlags & FunctionFlags.Async) {
-                return filterType(returnType, t => {
+                const filtered = filterType(returnType, t => {
                     return !!(t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void | TypeFlags.InstantiableNonPrimitive)) || !!getAwaitedTypeOfPromise(t);
                 });
+                return filtered.flags & TypeFlags.Never ? returnType : filtered;
             }
             return returnType;
         }
