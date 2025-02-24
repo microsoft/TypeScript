@@ -6,7 +6,7 @@ enum Foo {
 }
 
 enum Foo {
-    b // should work fine
+    b
 }
 
 //// [autonumberingInEnums.js]
@@ -15,5 +15,5 @@ var Foo;
     Foo[Foo["a"] = 1] = "a";
 })(Foo || (Foo = {}));
 (function (Foo) {
-    Foo[Foo["b"] = 0] = "b"; // should work fine
+    Foo[Foo["b"] = 0] = "b";
 })(Foo || (Foo = {}));
