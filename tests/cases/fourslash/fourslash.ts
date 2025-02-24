@@ -668,6 +668,7 @@ declare namespace FourSlashInterface {
         code: number;
         reportsUnnecessary?: true;
         reportsDeprecated?: true;
+        reportsExperimental?: true;
     }
     interface VerifyDocumentHighlightsOptions {
         filesToSearch: ReadonlyArray<string>;
