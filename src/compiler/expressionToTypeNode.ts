@@ -435,9 +435,11 @@ export function createSyntacticTypeNodeBuilder(
                 if (!resolver.canReuseTypeNode(context, node)) {
                     return resolver.serializeExistingTypeNode(context, node);
                 }
+                const specifier = rewriteModuleSpecifier(node, node.argument.literal);
+                const literal = specifier === node.argument.literal ? reuseNode(context, node.argument.literal) : specifier;
                 return factory.updateImportTypeNode(
                     node,
-                    factory.updateLiteralTypeNode(node.argument, rewriteModuleSpecifier(node, node.argument.literal)),
+                    literal === node.argument.literal ? reuseNode(context, node.argument) : factory.createLiteralTypeNode(literal),
                     visitNode(node.attributes, visitExistingNodeTreeSymbols, isImportAttributes),
                     visitNode(node.qualifier, visitExistingNodeTreeSymbols, isEntityName),
                     visitNodes(node.typeArguments, visitExistingNodeTreeSymbols, isTypeNode),
@@ -612,10 +614,7 @@ export function createSyntacticTypeNodeBuilder(
 
             function rewriteModuleSpecifier(parent: ImportTypeNode, lit: StringLiteral) {
                 const newName = resolver.getModuleSpecifierOverride(context, parent, lit);
-                if (newName) {
-                    return setOriginalNode(factory.createStringLiteral(newName), lit);
-                }
-                return visitNode(lit, visitExistingNodeTreeSymbols, isStringLiteral)!;
+                return newName ? setOriginalNode(factory.createStringLiteral(newName), lit) : lit;
             }
         }
     }
