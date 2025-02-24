@@ -8,9 +8,12 @@ index.ts(17,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOn
 index.ts(22,6): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 index.ts(26,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 index.ts(28,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(67,6): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(68,6): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(69,7): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== index.ts (8 errors) ====
+==== index.ts (11 errors) ====
     class MyClassErr {
         // No parameter properties
         constructor(public foo: string) { }
@@ -91,6 +94,22 @@ index.ts(28,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOn
     
         import FineAlias = EnumInAmbientContext.B;
     }
+    
+    // Not erasable
+    (()=><any>{})();
+         ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    (()=>< any >{})();
+         ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    (()=> < any > {})();
+          ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    // Erasable
+    (()=><any>({}))();
+    (()=>(<any>{}))();
+    <any>{};
     
 ==== commonjs.cts (2 errors) ====
     import foo = require("./other.cjs");

@@ -118,6 +118,16 @@ declare namespace AmbientStuff {
 >B : Symbol(FineAlias, Decl(index.ts, 58, 31))
 }
 
+// Not erasable
+(()=><any>{})();
+(()=>< any >{})();
+(()=> < any > {})();
+
+// Erasable
+(()=><any>({}))();
+(()=>(<any>{}))();
+<any>{};
+
 === commonjs.cts ===
 import foo = require("./other.cjs");
 >foo : Symbol(foo, Decl(commonjs.cts, 0, 0))

@@ -66,6 +66,16 @@ declare namespace AmbientStuff {
     import FineAlias = EnumInAmbientContext.B;
 }
 
+// Not erasable
+(()=><any>{})();
+(()=>< any >{})();
+(()=> < any > {})();
+
+// Erasable
+(()=><any>({}))();
+(()=>(<any>{}))();
+<any>{};
+
 // @filename: commonjs.cts
 import foo = require("./other.cjs");
 export = foo;
