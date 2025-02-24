@@ -31949,6 +31949,59 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
+    function discriminateContextualTypeByArrayElements(node: ArrayLiteralExpression, contextualType: UnionType) {
+        const key = `D${getNodeId(node)},${getTypeId(contextualType)}`;
+        const cachedType = getCachedType(key);
+        if (cachedType) return cachedType;
+
+        const isIndexPropertyLike = (property: Symbol) => /^[-+]?\d+$/.test(property.escapedName as string);
+        const hasIndexPropertyOutOfRange = (type: Type, length: number) =>
+            some(getPropertiesOfType(type), p => {
+                if (p.flags & SymbolFlags.Optional || !isIndexPropertyLike(p)) return false;
+                const index = +p.escapedName;
+                return index < 0 || index >= length;
+            });
+        const hasIndexPropertyInRange = (type: Type, length: number) =>
+            some(getPropertiesOfType(type), p => {
+                if (!isIndexPropertyLike(p)) return false;
+                const index = +p.escapedName;
+                return index >= 0 || index < length;
+            });
+
+        const elementsLength = node.elements.length;
+        const filteredType = filterType(contextualType, type => {
+            if (isTupleType(type)) {
+                return (
+                    elementsLength >= type.target.minLength &&
+                    (!!(type.target.combinedFlags & ElementFlags.Variable) || elementsLength <= type.target.fixedLength)
+                );
+            }
+            return !hasIndexPropertyOutOfRange(type, elementsLength);
+        });
+
+        if (filteredType.flags & TypeFlags.Never) return setCachedType(key, filteredType);
+        if (!(filteredType.flags & TypeFlags.Union)) {
+            return setCachedType(
+                key,
+                isTupleType(filteredType) || hasIndexPropertyInRange(filteredType, elementsLength) ? filteredType : contextualType,
+            );
+        }
+
+        return setCachedType(
+            key,
+            discriminateTypeByDiscriminableItems(
+                filteredType as UnionType,
+                mapDefined(node.elements, (element, index) => {
+                    const name = ("" + index) as __String;
+                    return isPossiblyDiscriminantValue(element) && isDiscriminantProperty(filteredType, name) ?
+                        [() => getContextFreeTypeOfExpression(element), name] as const :
+                        undefined;
+                }),
+                isTypeAssignableTo,
+            ),
+        );
+    }
+
     // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
     // be "pushed" onto a node using the contextualType property.
     function getApparentTypeOfContextualType(node: Expression | MethodDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
@@ -31966,9 +32019,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 t => getObjectFlags(t) & ObjectFlags.Mapped ? t : getApparentType(t),
                 /*noReductions*/ true,
             );
-            return apparentType.flags & TypeFlags.Union && isObjectLiteralExpression(node) ? discriminateContextualTypeByObjectMembers(node, apparentType as UnionType) :
-                apparentType.flags & TypeFlags.Union && isJsxAttributes(node) ? discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType) :
-                apparentType;
+            if (apparentType.flags & TypeFlags.Union) {
+                if (isObjectLiteralExpression(node)) return discriminateContextualTypeByObjectMembers(node, apparentType as UnionType);
+                if (isJsxAttributes(node)) return discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType);
+                if (isArrayLiteralExpression(node)) return discriminateContextualTypeByArrayElements(node, apparentType as UnionType);
+            }
+            return apparentType;
         }
     }
 
