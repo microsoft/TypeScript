@@ -3,34 +3,30 @@
 package bundled
 
 import (
-	"embed"
 	"io/fs"
+	"slices"
 	"strings"
+	"time"
 
 	"github.com/microsoft/typescript-go/internal/vfs"
-	"github.com/microsoft/typescript-go/internal/vfs/iovfs"
 )
 
 const embedded = true
 
 const scheme = "bundled:///"
 
-func splitPath(path string) (root string, rest string, ok bool) {
-	rest, ok = strings.CutPrefix(path, scheme)
-	if !ok {
-		return "", "", false
-	}
-	return scheme, rest, true
+func splitPath(path string) (rest string, ok bool) {
+	return strings.CutPrefix(path, scheme)
 }
 
 func libPath() string {
 	return scheme + "libs"
 }
 
-//go:embed libs
-var embeddedFS embed.FS
-
-var embeddedVFS = iovfs.From(embeddedFS, true)
+// wrappedFS is implemented directly rather than going through [io/fs.FS].
+// Our vfs.FS works with file contents in terms of strings, and that's
+// what go:embed does under the hood, but going through fs.FS will cause
+// copying to []byte and back.
 
 type wrappedFS struct {
 	fs vfs.FS
@@ -47,59 +43,154 @@ func (vfs *wrappedFS) UseCaseSensitiveFileNames() bool {
 }
 
 func (vfs *wrappedFS) FileExists(path string) bool {
-	if _, rest, ok := splitPath(path); ok {
-		return embeddedVFS.FileExists("/" + rest)
+	if rest, ok := splitPath(path); ok {
+		_, ok := embeddedContents[rest]
+		return ok
 	}
 	return vfs.fs.FileExists(path)
 }
 
 func (vfs *wrappedFS) ReadFile(path string) (contents string, ok bool) {
-	if _, rest, ok := splitPath(path); ok {
-		return embeddedVFS.ReadFile("/" + rest)
+	if rest, ok := splitPath(path); ok {
+		contents, ok = embeddedContents[rest]
+		return contents, ok
 	}
 	return vfs.fs.ReadFile(path)
 }
 
 func (vfs *wrappedFS) DirectoryExists(path string) bool {
-	if _, rest, ok := splitPath(path); ok {
-		return embeddedVFS.DirectoryExists("/" + rest)
+	if rest, ok := splitPath(path); ok {
+		return rest == "libs"
 	}
 	return vfs.fs.DirectoryExists(path)
 }
 
 func (vfs *wrappedFS) GetDirectories(path string) []string {
-	if _, rest, ok := splitPath(path); ok {
-		return embeddedVFS.GetDirectories("/" + rest)
+	if rest, ok := splitPath(path); ok {
+		if rest == "" {
+			return []string{"libs"}
+		}
+		return []string{}
 	}
 	return vfs.fs.GetDirectories(path)
 }
 
+var rootEntries = []fs.DirEntry{
+	fs.FileInfoToDirEntry(&fileInfo{name: "libs", mode: fs.ModeDir}),
+}
+
 func (vfs *wrappedFS) GetEntries(path string) []fs.DirEntry {
-	if _, rest, ok := splitPath(path); ok {
-		return embeddedVFS.GetEntries("/" + rest)
+	if rest, ok := splitPath(path); ok {
+		if rest == "" {
+			return slices.Clone(rootEntries)
+		}
+		if rest == "libs" {
+			return slices.Clone(libsEntries)
+		}
+		return []fs.DirEntry{}
 	}
 	return vfs.fs.GetEntries(path)
 }
 
 func (vfs *wrappedFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	if originalRoot, rest, ok := splitPath(root); ok {
-		return embeddedVFS.WalkDir("/"+rest, func(path string, d fs.DirEntry, err error) error {
-			return walkFn(originalRoot+strings.TrimPrefix(path, "/"), d, err)
-		})
+	if rest, ok := splitPath(root); ok {
+		if err := vfs.walkDir(rest, walkFn); err != nil {
+			if err == fs.SkipAll { //nolint:errorlint
+				return nil
+			}
+			return err
+		}
+		return nil
 	}
 	return vfs.fs.WalkDir(root, walkFn)
 }
 
+func (vfs *wrappedFS) walkDir(rest string, walkFn vfs.WalkDirFunc) error {
+	var entries []fs.DirEntry
+	switch rest {
+	case "":
+		entries = rootEntries
+	case "libs":
+		entries = libsEntries
+	default:
+		return nil
+	}
+
+	for _, entry := range entries {
+		name := rest + "/" + entry.Name()
+
+		if err := walkFn(scheme+name, entry, nil); err != nil {
+			if err == fs.SkipAll { //nolint:errorlint
+				return fs.SkipAll
+			}
+			if err == fs.SkipDir { //nolint:errorlint
+				continue
+			}
+			return err
+		}
+		if entry.IsDir() {
+			if err := vfs.walkDir(name, walkFn); err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 func (vfs *wrappedFS) Realpath(path string) string {
-	if _, rest, ok := splitPath(path); ok {
-		return embeddedVFS.Realpath("/" + rest)
+	if _, ok := splitPath(path); ok {
+		return path
 	}
 	return vfs.fs.Realpath(path)
 }
 
 func (vfs *wrappedFS) WriteFile(path string, data string, writeByteOrderMark bool) error {
-	if _, _, ok := splitPath(path); ok {
+	if _, ok := splitPath(path); ok {
 		panic("cannot write to embedded file system")
 	}
 	return vfs.fs.WriteFile(path, data, writeByteOrderMark)
+}
+
+type fileInfo struct {
+	mode fs.FileMode
+	name string
+	size int64
+}
+
+var (
+	_ fs.FileInfo = (*fileInfo)(nil)
+	_ fs.DirEntry = (*fileInfo)(nil)
+)
+
+func (fi *fileInfo) IsDir() bool {
+	return fi.mode.IsDir()
+}
+
+func (fi *fileInfo) ModTime() time.Time {
+	return time.Time{}
+}
+
+func (fi *fileInfo) Mode() fs.FileMode {
+	return fi.mode
+}
+
+func (fi *fileInfo) Name() string {
+	return fi.name
+}
+
+func (fi *fileInfo) Size() int64 {
+	return fi.size
+}
+
+func (fi *fileInfo) Sys() any {
+	return nil
+}
+
+func (fi *fileInfo) Info() (fs.FileInfo, error) {
+	return fi, nil
+}
+
+func (fi *fileInfo) Type() fs.FileMode {
+	return fi.mode.Type()
 }
