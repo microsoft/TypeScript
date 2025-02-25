@@ -1426,6 +1426,13 @@ const enum IntrinsicTypeKind {
     NoInfer,
 }
 
+const enum FlowNodeReachableCacheFlags {
+    None = 0,
+    Read = 1 << 0,
+    Write = 1 << 1,
+    ReadWrite = Read | Write,
+}
+
 const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Object.entries({
     Uppercase: IntrinsicTypeKind.Uppercase,
     Lowercase: IntrinsicTypeKind.Lowercase,
@@ -28104,7 +28111,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isReachableFlowNode(flow: FlowNode) {
-        const result = isReachableFlowNodeWorker(flow, /*noCacheCheck*/ false);
+        const result = isReachableFlowNodeWorker(flow, FlowNodeReachableCacheFlags.ReadWrite);
         lastFlowNode = flow;
         lastFlowNodeReachable = result;
         return result;
@@ -28118,19 +28125,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 );
     }
 
-    function isReachableFlowNodeWorker(flow: FlowNode, noCacheCheck: boolean): boolean {
+    function isReachableFlowNodeWorker(flow: FlowNode, cacheFlags: FlowNodeReachableCacheFlags): boolean {
         while (true) {
             if (flow === lastFlowNode) {
                 return lastFlowNodeReachable;
             }
             const flags = flow.flags;
             if (flags & FlowFlags.Shared) {
-                if (!noCacheCheck) {
+                if (cacheFlags & FlowNodeReachableCacheFlags.Read) {
                     const id = getFlowNodeId(flow);
-                    const reachable = flowNodeReachable[id];
-                    return reachable !== undefined ? reachable : (flowNodeReachable[id] = isReachableFlowNodeWorker(flow, /*noCacheCheck*/ true));
+                    let reachable = flowNodeReachable[id];
+                    if (reachable !== undefined) {
+                        return reachable;
+                    }
+                    reachable = isReachableFlowNodeWorker(flow, cacheFlags & ~FlowNodeReachableCacheFlags.Read);
+                    if (cacheFlags & FlowNodeReachableCacheFlags.Write) {
+                        flowNodeReachable[id] = reachable;
+                    }
+                    return reachable;
                 }
-                noCacheCheck = false;
+                cacheFlags |= FlowNodeReachableCacheFlags.Read;
             }
             if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation)) {
                 flow = (flow as FlowAssignment | FlowCondition | FlowArrayMutation).antecedent;
@@ -28153,7 +28167,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (flags & FlowFlags.BranchLabel) {
                 // A branching point is reachable if any branch is reachable.
-                return some((flow as FlowLabel).antecedent, f => isReachableFlowNodeWorker(f, /*noCacheCheck*/ false));
+                return some((flow as FlowLabel).antecedent, f => isReachableFlowNodeWorker(f, cacheFlags));
             }
             else if (flags & FlowFlags.LoopLabel) {
                 const antecedents = (flow as FlowLabel).antecedent;
@@ -28178,7 +28192,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const target = (flow as FlowReduceLabel).node.target;
                 const saveAntecedents = target.antecedent;
                 target.antecedent = (flow as FlowReduceLabel).node.antecedents;
-                const result = isReachableFlowNodeWorker((flow as FlowReduceLabel).antecedent, /*noCacheCheck*/ false);
+                const result = isReachableFlowNodeWorker((flow as FlowReduceLabel).antecedent, FlowNodeReachableCacheFlags.None);
                 target.antecedent = saveAntecedents;
                 return result;
             }

@@ -1,0 +1,113 @@
+//// [tests/cases/compiler/reachabilityChecks9.ts] ////
+
+=== reachabilityChecks9.ts ===
+// https://github.com/microsoft/TypeScript/issues/61259
+
+const a = (v: 1 | 2) => {
+>a : Symbol(a, Decl(reachabilityChecks9.ts, 2, 5))
+>v : Symbol(v, Decl(reachabilityChecks9.ts, 2, 11))
+
+  try {
+    switch (v) {
+>v : Symbol(v, Decl(reachabilityChecks9.ts, 2, 11))
+
+      case 1:
+        return v;
+>v : Symbol(v, Decl(reachabilityChecks9.ts, 2, 11))
+
+      case 2:
+        return v;
+>v : Symbol(v, Decl(reachabilityChecks9.ts, 2, 11))
+    }
+  } finally {
+    console.log("exit");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+  }
+};
+
+const b = (v: number) => {
+>b : Symbol(b, Decl(reachabilityChecks9.ts, 15, 5))
+>v : Symbol(v, Decl(reachabilityChecks9.ts, 15, 11))
+
+  try {
+    switch (v) {
+>v : Symbol(v, Decl(reachabilityChecks9.ts, 15, 11))
+
+      case 1:
+        return v;
+>v : Symbol(v, Decl(reachabilityChecks9.ts, 15, 11))
+
+      default:
+        return v;
+>v : Symbol(v, Decl(reachabilityChecks9.ts, 15, 11))
+    }
+  } finally {
+    console.log("exit");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+  }
+};
+
+const c = (v: 1 | 2) => {
+>c : Symbol(c, Decl(reachabilityChecks9.ts, 28, 5))
+>v : Symbol(v, Decl(reachabilityChecks9.ts, 28, 11))
+
+  try {
+    switch (v) {
+>v : Symbol(v, Decl(reachabilityChecks9.ts, 28, 11))
+
+      case 1:
+        return v;
+>v : Symbol(v, Decl(reachabilityChecks9.ts, 28, 11))
+
+      case 2:
+        return v;
+>v : Symbol(v, Decl(reachabilityChecks9.ts, 28, 11))
+    }
+  } finally {
+    if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+      console.log("exit");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+    }
+  }
+};
+
+const d = (v: number) => {
+>d : Symbol(d, Decl(reachabilityChecks9.ts, 43, 5))
+>v : Symbol(v, Decl(reachabilityChecks9.ts, 43, 11))
+
+  try {
+    switch (v) {
+>v : Symbol(v, Decl(reachabilityChecks9.ts, 43, 11))
+
+      case 1:
+        return v;
+>v : Symbol(v, Decl(reachabilityChecks9.ts, 43, 11))
+
+      default:
+        return v;
+>v : Symbol(v, Decl(reachabilityChecks9.ts, 43, 11))
+    }
+  } finally {
+    if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+      console.log("exit");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+    }
+  }
+};
+
