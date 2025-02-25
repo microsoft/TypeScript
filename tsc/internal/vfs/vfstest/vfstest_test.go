@@ -223,7 +223,7 @@ func TestStress(t *testing.T) {
 		func() { fs.DirectoryExists("/foo/bar") },
 		func() { fs.FileExists("/foo/bar") },
 		func() { fs.FileExists("/foo/bar/baz.txt") },
-		func() { fs.GetDirectories("/foo/bar") },
+		func() { fs.GetAccessibleEntries("/foo/bar") },
 		func() { fs.Realpath("/foo/bar/baz.txt") },
 		func() {
 			_ = fs.WalkDir("/", func(path string, d vfs.DirEntry, err error) error {

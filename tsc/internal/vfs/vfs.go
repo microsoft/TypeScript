@@ -21,8 +21,9 @@ type FS interface {
 	// DirectoryExists returns true if the path is a directory.
 	DirectoryExists(path string) bool
 
-	// GetDirectories returns the names of the directories in the specified directory.
-	GetDirectories(path string) []string
+	// GetAccessibleEntries returns the files/directories in the specified directory.
+	// If any entry is a symlink, it will be followed.
+	GetAccessibleEntries(path string) Entries
 
 	// GetEntries returns the entries in the specified directory.
 	GetEntries(path string) []fs.DirEntry
@@ -34,6 +35,11 @@ type FS interface {
 	// Realpath returns the "real path" of the specified path,
 	// following symlinks and correcting filename casing.
 	Realpath(path string) string
+}
+
+type Entries struct {
+	Files       []string
+	Directories []string
 }
 
 // DirEntry is [fs.DirEntry].

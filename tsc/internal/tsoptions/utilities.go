@@ -14,34 +14,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
-type FileSystemEntries struct {
-	files       []string
-	directories []string
-}
-
-func getAccessibleFileSystemEntries(path string, host vfs.FS) FileSystemEntries {
-	entries := host.GetEntries(path)
-	var files []string
-	var directories []string
-	for _, dirent := range entries {
-		entry := dirent.Name()
-
-		// This is necessary because on some file system node fails to exclude
-		// "." and "..". See https://github.com/nodejs/node/issues/4002
-		if entry == "." || entry == ".." {
-			continue
-		}
-
-		// !!! symlinks
-		if dirent.IsDir() {
-			directories = append(directories, entry)
-		} else {
-			files = append(files, entry)
-		}
-	}
-	return FileSystemEntries{files: files, directories: directories}
-}
-
 type FileMatcherPatterns struct {
 	// One pattern for each "include" spec.
 	includeFilePatterns []string
@@ -379,7 +351,6 @@ type visitor struct {
 	extensions                []string
 	useCaseSensitiveFileNames bool
 	host                      vfs.FS
-	getFileSystemEntries      func(path string, host vfs.FS) FileSystemEntries
 	visited                   core.Set[string]
 	results                   [][]string
 }
@@ -394,9 +365,9 @@ func (v *visitor) visitDirectory(
 		return
 	}
 	v.visited.Add(canonicalPath)
-	systemEntries := v.getFileSystemEntries(absolutePath, v.host)
-	files := systemEntries.files
-	directories := systemEntries.directories
+	systemEntries := v.host.GetAccessibleEntries(absolutePath)
+	files := systemEntries.Files
+	directories := systemEntries.Directories
 
 	for _, current := range files {
 		name := tspath.CombinePaths(path, current)
@@ -435,7 +406,7 @@ func (v *visitor) visitDirectory(
 }
 
 // path is the directory of the tsconfig.json
-func matchFiles(path string, extensions []string, excludes []string, includes []string, useCaseSensitiveFileNames bool, currentDirectory string, depth *int, host vfs.FS, getFileSystemEntries func(path string, host vfs.FS) FileSystemEntries, realpath func(path string) string) []string {
+func matchFiles(path string, extensions []string, excludes []string, includes []string, useCaseSensitiveFileNames bool, currentDirectory string, depth *int, host vfs.FS) []string {
 	path = tspath.NormalizePath(path)
 	currentDirectory = tspath.NormalizePath(currentDirectory)
 
@@ -468,7 +439,6 @@ func matchFiles(path string, extensions []string, excludes []string, includes []
 	v := visitor{
 		useCaseSensitiveFileNames: useCaseSensitiveFileNames,
 		host:                      host,
-		getFileSystemEntries:      getFileSystemEntries,
 		includeFileRegexes:        includeFileRegexes,
 		excludeRegex:              excludeRegex,
 		includeDirectoryRegex:     includeDirectoryRegex,
@@ -483,5 +453,5 @@ func matchFiles(path string, extensions []string, excludes []string, includes []
 }
 
 func readDirectory(host vfs.FS, currentDir string, path string, extensions []string, excludes []string, includes []string, depth *int) []string {
-	return matchFiles(path, extensions, excludes, includes, host.UseCaseSensitiveFileNames(), currentDir, depth, host, getAccessibleFileSystemEntries, host.Realpath)
+	return matchFiles(path, extensions, excludes, includes, host.UseCaseSensitiveFileNames(), currentDir, depth, host)
 }

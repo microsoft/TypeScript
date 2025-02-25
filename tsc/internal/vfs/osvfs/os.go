@@ -21,7 +21,8 @@ func FS() vfs.FS {
 
 var osVFS vfs.FS = &osFS{
 	common: internal.Common{
-		RootFor: os.DirFS,
+		RootFor:  os.DirFS,
+		Realpath: osFSRealpath,
 	},
 }
 
@@ -88,8 +89,8 @@ func (vfs *osFS) FileExists(path string) bool {
 	return vfs.common.FileExists(path)
 }
 
-func (vfs *osFS) GetDirectories(path string) []string {
-	return vfs.common.GetDirectories(path)
+func (vfs *osFS) GetAccessibleEntries(path string) vfs.Entries {
+	return vfs.common.GetAccessibleEntries(path)
 }
 
 func (vfs *osFS) GetEntries(path string) []fs.DirEntry {
@@ -101,6 +102,10 @@ func (vfs *osFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
 }
 
 func (vfs *osFS) Realpath(path string) string {
+	return osFSRealpath(path)
+}
+
+func osFSRealpath(path string) string {
 	_ = internal.RootLength(path) // Assert path is rooted
 
 	orig := path

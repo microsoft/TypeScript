@@ -1783,7 +1783,7 @@ func GetAutomaticTypeDirectiveNames(options *core.CompilerOptions, host Resoluti
 	typeRoots, _ := options.GetEffectiveTypeRoots(host.GetCurrentDirectory())
 	for _, root := range typeRoots {
 		if host.FS().DirectoryExists(root) {
-			for _, typeDirectivePath := range host.FS().GetDirectories(root) {
+			for _, typeDirectivePath := range host.FS().GetAccessibleEntries(root).Directories {
 				normalized := tspath.NormalizePath(typeDirectivePath)
 				packageJsonPath := tspath.CombinePaths(root, normalized, "package.json")
 				isNotNeededPackage := false

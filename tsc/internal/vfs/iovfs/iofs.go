@@ -118,8 +118,8 @@ func (vfs *ioFS) FileExists(path string) bool {
 	return vfs.common.FileExists(path)
 }
 
-func (vfs *ioFS) GetDirectories(path string) []string {
-	return vfs.common.GetDirectories(path)
+func (vfs *ioFS) GetAccessibleEntries(path string) vfs.Entries {
+	return vfs.common.GetAccessibleEntries(path)
 }
 
 func (vfs *ioFS) GetEntries(path string) []fs.DirEntry {

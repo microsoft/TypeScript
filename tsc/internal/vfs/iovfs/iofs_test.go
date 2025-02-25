@@ -66,13 +66,12 @@ func TestIOFS(t *testing.T) {
 		assert.Assert(t, !fs.DirectoryExists("/bar"))
 	})
 
-	t.Run("GetDirectories", func(t *testing.T) {
+	t.Run("GetAccessibleEntries", func(t *testing.T) {
 		t.Parallel()
 
-		dirs := fs.GetDirectories("/")
-		slices.Sort(dirs)
-
-		assert.DeepEqual(t, dirs, []string{"dir1", "dir2"})
+		entries := fs.GetAccessibleEntries("/")
+		assert.DeepEqual(t, entries.Directories, []string{"dir1", "dir2"})
+		assert.DeepEqual(t, entries.Files, []string{"foo.ts"})
 	})
 
 	t.Run("WalkDir", func(t *testing.T) {

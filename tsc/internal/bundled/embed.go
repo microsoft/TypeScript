@@ -65,14 +65,16 @@ func (vfs *wrappedFS) DirectoryExists(path string) bool {
 	return vfs.fs.DirectoryExists(path)
 }
 
-func (vfs *wrappedFS) GetDirectories(path string) []string {
+func (vfs *wrappedFS) GetAccessibleEntries(path string) (result vfs.Entries) {
 	if rest, ok := splitPath(path); ok {
 		if rest == "" {
-			return []string{"libs"}
+			result.Directories = []string{"libs"}
+		} else if rest == "libs" {
+			result.Files = LibNames
 		}
-		return []string{}
+		return result
 	}
-	return vfs.fs.GetDirectories(path)
+	return vfs.fs.GetAccessibleEntries(path)
 }
 
 var rootEntries = []fs.DirEntry{
