@@ -13,6 +13,9 @@ func parseTristate(value any) core.Tristate {
 	if value == nil {
 		return core.TSUnknown
 	}
+	if v, ok := value.(core.Tristate); ok {
+		return v
+	}
 	if value == true {
 		return core.TSTrue
 	} else {
@@ -128,32 +131,28 @@ func parseJsonToStringKey(json any) *collections.OrderedMap[string, any] {
 
 type optionParser interface {
 	ParseOption(key string, value any) []*ast.Diagnostic
-	CommandLine() bool
 }
 
 type compilerOptionsParser struct {
 	*core.CompilerOptions
-	commandLine bool
 }
 
 func (o *compilerOptionsParser) ParseOption(key string, value any) []*ast.Diagnostic {
 	return ParseCompilerOptions(key, value, o.CompilerOptions)
 }
 
-func (o *compilerOptionsParser) CommandLine() bool { return o.commandLine }
-
 type watchOptionsParser struct {
 	*core.WatchOptions
-	commandLine bool
 }
 
 func (o *watchOptionsParser) ParseOption(key string, value any) []*ast.Diagnostic {
 	return ParseWatchOptions(key, value, o.WatchOptions)
 }
 
-func (o *watchOptionsParser) CommandLine() bool { return o.commandLine }
-
 func ParseCompilerOptions(key string, value any, allOptions *core.CompilerOptions) []*ast.Diagnostic {
+	if value == nil {
+		return nil
+	}
 	if allOptions == nil {
 		return nil
 	}
@@ -400,11 +399,17 @@ func ParseWatchOptions(key string, value any, allOptions *core.WatchOptions) []*
 	}
 	switch key {
 	case "watchFile":
-		allOptions.FileKind = value.(core.WatchFileKind)
+		if value != nil {
+			allOptions.FileKind = value.(core.WatchFileKind)
+		}
 	case "watchDirectory":
-		allOptions.DirectoryKind = value.(core.WatchDirectoryKind)
+		if value != nil {
+			allOptions.DirectoryKind = value.(core.WatchDirectoryKind)
+		}
 	case "fallbackPolling":
-		allOptions.FallbackPolling = value.(core.PollingKind)
+		if value != nil {
+			allOptions.FallbackPolling = value.(core.PollingKind)
+		}
 	case "synchronousWatchDirectory":
 		allOptions.SyncWatchDir = parseTristate(value)
 	case "excludeDirectories":

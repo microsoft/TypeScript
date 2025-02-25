@@ -46,17 +46,17 @@ func ParseCommandLine(
 	}
 	parser := parseCommandLineWorker(CompilerOptionsDidYouMeanDiagnostics, commandLine, host.FS())
 	optionsWithAbsolutePaths := convertToOptionsWithAbsolutePaths(parser.options, commandLineCompilerOptionsMap, host.GetCurrentDirectory())
-	compilerOptions, d1 := convertOptionsFromJson(commandLineCompilerOptionsMap, optionsWithAbsolutePaths, host.GetCurrentDirectory(), &compilerOptionsParser{&core.CompilerOptions{}, true})
-	watchOptions, d2 := convertOptionsFromJson(commandLineCompilerOptionsMap, optionsWithAbsolutePaths, host.GetCurrentDirectory(), &watchOptionsParser{&core.WatchOptions{}, true})
+	compilerOptions := convertMapToOptions(commandLineCompilerOptionsMap, optionsWithAbsolutePaths, host.GetCurrentDirectory(), &compilerOptionsParser{&core.CompilerOptions{}}).CompilerOptions
+	watchOptions := convertMapToOptions(commandLineCompilerOptionsMap, optionsWithAbsolutePaths, host.GetCurrentDirectory(), &watchOptionsParser{&core.WatchOptions{}}).WatchOptions
 	return &ParsedCommandLine{
 		ParsedConfig: &core.ParsedOptions{
-			CompilerOptions: compilerOptions.CompilerOptions,
-			WatchOptions:    watchOptions.WatchOptions,
+			CompilerOptions: compilerOptions,
+			WatchOptions:    watchOptions,
 			FileNames:       parser.fileNames,
 		},
 		ConfigFile:    nil,
-		Errors:        append(append(parser.errors, d1...), d2...),
-		Raw:           parser.options, // todo: keep optionsBase incase needed later
+		Errors:        parser.errors,
+		Raw:           parser.options, // !!! keep optionsBase incase needed later. todo: figure out if this is still needed
 		CompileOnSave: nil,
 	}
 }
@@ -301,8 +301,8 @@ func ParseListTypeOption(opt *CommandLineOption, value string) ([]string, []*ast
 	case "string":
 		elements := core.Filter(core.Map(values, func(v string) string {
 			val, err := validateJsonOptionValue(opt.Elements(), v, nil, nil)
-			if _, ok := val.(string); ok {
-				return val.(string)
+			if s, ok := val.(string); ok && len(err) == 0 && s != "" {
+				return s
 			}
 			errors = append(errors, err...)
 			return ""
@@ -315,8 +315,8 @@ func ParseListTypeOption(opt *CommandLineOption, value string) ([]string, []*ast
 	default:
 		result := core.Filter(core.Map(values, func(v string) string {
 			val, err := convertJsonOptionOfEnumType(opt.Elements(), strings.TrimFunc(v, stringutil.IsWhiteSpaceLike), nil, nil)
-			if _, ok := val.(string); ok {
-				return val.(string)
+			if s, ok := val.(string); ok && len(err) == 0 && s != "" {
+				return s
 			}
 			errors = append(errors, err...)
 			return ""

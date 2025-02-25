@@ -72,6 +72,20 @@ func TestTsc(t *testing.T) {
 	for _, testCase := range testCases {
 		testCase.verify(t)
 	}
+
+	(&tscInput{
+		scenario:        "commandLine",
+		subScenario:     "Parse --lib option with file name",
+		sys:             newTestSys(FileMap{"/home/src/workspaces/project/first.ts": `export const Key = Symbol()`}, ""),
+		commandLineArgs: []string{"--lib", "es6 ", "first.ts"},
+	}).verify(t)
+
+	(&tscInput{
+		scenario:        "commandLine",
+		subScenario:     "Parse enum type options",
+		sys:             newTestSys(nil, ""),
+		commandLineArgs: []string{"--moduleResolution", "nodenext ", "first.ts", "--module", "nodenext", "--target", "esnext", "--moduleDetection", "auto", "--jsx", "react", "--newLine", "crlf"},
+	}).verify(t)
 }
 
 func TestNoEmit(t *testing.T) {
