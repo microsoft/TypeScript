@@ -7820,14 +7820,17 @@ type SourceFile struct {
 
 	Version int
 
+	// Fields set by language service
+
+	tokenCacheMu sync.Mutex
+	tokenCache   map[core.TextRange]*Node
+
 	// !!!
 
 	ImpliedNodeFormat       core.ModuleKind
 	CommonJsModuleIndicator *Node
 	ExternalModuleIndicator *Node
 	JsGlobalAugmentations   SymbolTable
-	tokenCacheMu            sync.Mutex
-	tokenCache              map[*Node][]*Node
 }
 
 func (f *NodeFactory) NewSourceFile(text string, fileName string, path tspath.Path, statements *NodeList) *Node {
@@ -7924,6 +7927,35 @@ func (node *SourceFile) BindOnce(bind func()) {
 		bind()
 		node.isBound.Store(true)
 	})
+}
+
+func (node *SourceFile) GetOrCreateToken(
+	kind Kind,
+	pos int,
+	end int,
+	parent *Node,
+) *TokenNode {
+	node.tokenCacheMu.Lock()
+	defer node.tokenCacheMu.Unlock()
+
+	loc := core.NewTextRange(pos, end)
+	if node.tokenCache == nil {
+		node.tokenCache = make(map[core.TextRange]*Node)
+	} else if token, ok := node.tokenCache[loc]; ok {
+		if token.Kind != kind {
+			panic(fmt.Sprintf("Token cache mismatch: %v != %v", token.Kind, kind))
+		}
+		if token.Parent != parent {
+			panic("Token cache mismatch: parent")
+		}
+		return token
+	}
+
+	token := newNode(kind, &Token{})
+	token.Loc = loc
+	token.Parent = parent
+	node.tokenCache[loc] = token
+	return token
 }
 
 func IsSourceFile(node *Node) bool {

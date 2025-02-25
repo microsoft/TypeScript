@@ -287,12 +287,12 @@ loop:
 		p.finishNodeWithEnd(jsdocText, linkEnd, commentsPos)
 		commentParts = append(commentParts, jsdocText)
 	}
-	if len(commentParts) > 0 && tags != nil && commentsPos == -1 {
+	if len(commentParts) > 0 && len(tags) > 0 && commentsPos == -1 {
 		panic("having parsed tags implies that the end of the comment span should be set")
 	}
 	jsdocComment := p.factory.NewJSDoc(
 		p.newNodeList(core.NewTextRange(start, commentsPos), commentParts),
-		p.newNodeList(core.NewTextRange(tagsPos, tagsEnd), tags))
+		core.IfElse(tagsPos != -1, p.newNodeList(core.NewTextRange(tagsPos, tagsEnd), tags), nil))
 	p.finishNodeWithEnd(jsdocComment, fullStart, end)
 	return jsdocComment
 }

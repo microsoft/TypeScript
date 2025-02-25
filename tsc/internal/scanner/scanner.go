@@ -2188,19 +2188,6 @@ func GetTokenPosOfNode(node *ast.Node, sourceFile *ast.SourceFile, includeJsDoc 
 		return GetTokenPosOfNode(node.JSDoc(sourceFile)[0], sourceFile, false /*includeJsDoc*/)
 	}
 
-	// For a syntax list, it is possible that one of its children has JSDocComment nodes, while
-	// the syntax list itself considers them as normal trivia. Therefore if we simply skip
-	// trivia for the list, we may have skipped the JSDocComment as well. So we should process its
-	// first child to determine the actual position of its first token.
-	if node.Kind == ast.KindSyntaxList {
-		if sourceFile == nil {
-			sourceFile = ast.GetSourceFileOfNode(node)
-		}
-		if first := node.AsSyntaxList().Children[0]; first != nil {
-			return GetTokenPosOfNode(first, sourceFile, includeJsDoc)
-		}
-	}
-
 	return SkipTriviaEx(
 		sourceFile.Text,
 		node.Pos(),

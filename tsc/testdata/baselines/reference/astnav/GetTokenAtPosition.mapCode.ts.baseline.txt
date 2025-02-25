@@ -1,0 +1,79 @@
+〚Positions: [780, 783]〛
+【TS: ExportKeyword [780, 808)】
+《Go: JSDoc [780, 800)》
+38 │    UserPreferences,
+39 │} from "./_namespaces/ts.js";
+40 │import { ChangeTracker } from "./textChanges.js";《【〚
+41 │
+42 │〛/** @internal */》
+43 │export】 function mapCode(
+44 │    sourceFile: SourceFile,
+45 │    contents: string[],
+
+
+〚Positions: [784, 787]〛
+【TS: JSDoc [784, 800)】
+《Go: JSDoc [780, 800)》
+38 │    UserPreferences,
+39 │} from "./_namespaces/ts.js";
+40 │import { ChangeTracker } from "./textChanges.js";《
+41 │
+42 │【〚/** 〛@internal */】》
+43 │export function mapCode(
+44 │    sourceFile: SourceFile,
+
+
+〚Positions: [798, 799]〛
+【TS: JSDoc [784, 800)】
+《Go: JSDoc [780, 800)》
+38 │    UserPreferences,
+39 │} from "./_namespaces/ts.js";
+40 │import { ChangeTracker } from "./textChanges.js";《
+41 │
+42 │【/** @internal 〚*/〛】》
+43 │export function mapCode(
+44 │    sourceFile: SourceFile,
+
+
+〚Positions: [1607, 1610]〛
+【TS: FunctionKeyword [1607, 1743)】
+《Go: JSDoc [1607, 1733)》
+64 │        },
+65 │    );
+66 │}《【〚
+67 │
+68 │〛/**
+69 │ * Tries to parse something into either "top-level" statements, or into blocks
+70 │ * of class-context definitions.
+71 │ */》
+72 │function】 parse(sourceFile: SourceFile, content: string): NodeArray<Node> {
+73 │    // We're going to speculatively parse different kinds of contexts to see
+74 │    // which one makes the most sense, and grab the NodeArray from there. Do
+
+
+〚Positions: [1611, 1730]〛
+【TS: JSDoc [1611, 1733)】
+《Go: JSDocText [1611, 1731)》
+66 │}
+67 │
+68 │《【〚/**
+69 │ * Tries to parse something into either "top-level" statements, or into blocks
+70 │ * of class-context definitions.
+71 │ 〛》*/】
+72 │function parse(sourceFile: SourceFile, content: string): NodeArray<Node> {
+73 │    // We're going to speculatively parse different kinds of contexts to see
+
+
+〚Positions: [1731, 1732]〛
+【TS: JSDoc [1611, 1733)】
+《Go: JSDoc [1607, 1733)》
+64 │        },
+65 │    );
+66 │}《
+67 │
+68 │【/**
+69 │ * Tries to parse something into either "top-level" statements, or into blocks
+70 │ * of class-context definitions.
+71 │ 〚*/〛】》
+72 │function parse(sourceFile: SourceFile, content: string): NodeArray<Node> {
+73 │    // We're going to speculatively parse different kinds of contexts to see

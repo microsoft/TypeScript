@@ -2,13 +2,14 @@ package ls
 
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/astnav"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
 func (l *LanguageService) ProvideDefinitions(fileName string, position int) []Location {
 	program, file := l.getProgramAndFile(fileName)
-	node := getTouchingPropertyName(file, position)
+	node := astnav.GetTouchingPropertyName(file, position)
 	if node.Kind == ast.KindSourceFile {
 		return nil
 	}

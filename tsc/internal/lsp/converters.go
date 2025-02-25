@@ -3,7 +3,6 @@ package lsp
 import (
 	"fmt"
 	"net/url"
-	"sort"
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -205,14 +204,9 @@ func lineAndCharacterToPosition(lineAndCharacter lsproto.Position, lineMap []cor
 }
 
 func positionToLineAndCharacter(position int, lineMap []core.TextPos) lsproto.Position {
-	line := sort.Search(len(lineMap), func(i int) bool {
-		return int(lineMap[i]) > position
-	}) - 1
-	if line < 0 {
-		line = 0
-	}
+	line, character := core.PositionToLineAndCharacter(position, lineMap)
 	return lsproto.Position{
 		Line:      uint32(line),
-		Character: uint32(position - int(lineMap[line])),
+		Character: uint32(character),
 	}
 }

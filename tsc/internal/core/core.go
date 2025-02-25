@@ -6,6 +6,7 @@ import (
 	"iter"
 	"math"
 	"slices"
+	"sort"
 	"strings"
 	"unicode"
 	"unicode/utf8"
@@ -342,6 +343,16 @@ func ComputeLineStarts(text string) []TextPos {
 	return result
 }
 
+func PositionToLineAndCharacter(position int, lineStarts []TextPos) (line int, character int) {
+	line = sort.Search(len(lineStarts), func(i int) bool {
+		return int(lineStarts[i]) > position
+	}) - 1
+	if line < 0 {
+		line = 0
+	}
+	return line, position - int(lineStarts[line])
+}
+
 func Flatten[T any](array [][]T) []T {
 	var result []T
 	for _, subArray := range array {
@@ -478,4 +489,8 @@ func levenshteinWithMax(s1 []rune, s2 []rune, maxValue float64) float64 {
 		return -1
 	}
 	return res
+}
+
+func Identity[T any](t T) T {
+	return t
 }
