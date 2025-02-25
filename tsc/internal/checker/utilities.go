@@ -436,18 +436,6 @@ func isShorthandAmbientModule(node *ast.Node) bool {
 	return node != nil && node.Kind == ast.KindModuleDeclaration && node.AsModuleDeclaration().Body == nil
 }
 
-func getFirstIdentifier(node *ast.Node) *ast.Node {
-	switch node.Kind {
-	case ast.KindIdentifier:
-		return node
-	case ast.KindQualifiedName:
-		return getFirstIdentifier(node.AsQualifiedName().Left)
-	case ast.KindPropertyAccessExpression:
-		return getFirstIdentifier(node.AsPropertyAccessExpression().Expression)
-	}
-	panic("Unhandled case in getFirstIdentifier")
-}
-
 func getAliasDeclarationFromName(node *ast.Node) *ast.Node {
 	switch node.Kind {
 	case ast.KindImportClause, ast.KindImportSpecifier, ast.KindNamespaceImport, ast.KindExportSpecifier, ast.KindExportAssignment,

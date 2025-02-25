@@ -115,6 +115,7 @@ type DeferredSymbolLinks struct {
 type AliasSymbolLinks struct {
 	immediateTarget             *ast.Symbol // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
 	aliasTarget                 *ast.Symbol // Resolved (non-alias) target of an alias
+	referenced                  bool        // True if alias symbol has been referenced as a value that can be emitted
 	typeOnlyDeclarationResolved bool        // True when typeOnlyDeclaration resolution in process
 	typeOnlyDeclaration         *ast.Node   // First resolved alias declaration that makes the symbol only usable in type constructs
 	typeOnlyExportStarName      string      // Set to the name of the symbol re-exported by an 'export type *' declaration, when different from the symbol name

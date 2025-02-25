@@ -36,6 +36,7 @@ type Program struct {
 	configFileName               string
 	nodeModules                  map[string]*ast.SourceFile
 	checkers                     []*checker.Checker
+	checkersOnce                 sync.Once
 	checkersByFile               map[*ast.SourceFile]*checker.Checker
 	currentDirectory             string
 	configFileParsingDiagnostics []*ast.Diagnostic
@@ -201,7 +202,7 @@ func (p *Program) CheckSourceFiles() {
 }
 
 func (p *Program) createCheckers() {
-	if len(p.checkers) == 0 {
+	p.checkersOnce.Do(func() {
 		p.checkers = make([]*checker.Checker, core.IfElse(p.programOptions.SingleThreaded, 1, 4))
 		for i := range p.checkers {
 			p.checkers[i] = checker.NewChecker(p)
@@ -210,7 +211,7 @@ func (p *Program) createCheckers() {
 		for i, file := range p.files {
 			p.checkersByFile[file] = p.checkers[i%len(p.checkers)]
 		}
-	}
+	})
 }
 
 // Return the type checker associated with the program.
@@ -526,6 +527,7 @@ func (p *Program) Emit(options *EmitOptions) *EmitResult {
 
 	var emitters []*emitter
 	sourceFiles := getSourceFilesToEmit(host, options.TargetSourceFile, options.forceDtsEmit)
+
 	for _, sourceFile := range sourceFiles {
 		emitter := &emitter{
 			host:              host,

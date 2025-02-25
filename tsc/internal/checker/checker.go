@@ -7,6 +7,7 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+	"sync"
 	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -348,7 +349,6 @@ const (
 	ReferenceHintProperty
 	ReferenceHintExportAssignment
 	ReferenceHintJsx
-	ReferenceHintAsyncFunction
 	ReferenceHintExportImportEquals
 	ReferenceHintExportSpecifier
 	ReferenceHintDecorator
@@ -543,6 +543,7 @@ type Checker struct {
 	noImplicitThis                            bool
 	useUnknownInCatchVariables                bool
 	exactOptionalPropertyTypes                bool
+	canCollectSymbolAliasAccessabilityData    bool
 	arrayVariances                            []VarianceFlags
 	globals                                   ast.SymbolTable
 	globalSymbols                             []*ast.Symbol
@@ -781,6 +782,8 @@ type Checker struct {
 	couldContainTypeVariables                 func(*Type) bool
 	isStringIndexSignatureOnlyType            func(*Type) bool
 	markNodeAssignments                       func(*ast.Node) bool
+	emitResolver                              *emitResolver
+	emitResolverOnce                          sync.Once
 }
 
 func NewChecker(program Program) *Checker {
@@ -805,6 +808,7 @@ func NewChecker(program Program) *Checker {
 	c.noImplicitThis = c.getStrictOptionValue(c.compilerOptions.NoImplicitThis)
 	c.useUnknownInCatchVariables = c.getStrictOptionValue(c.compilerOptions.UseUnknownInCatchVariables)
 	c.exactOptionalPropertyTypes = c.compilerOptions.ExactOptionalPropertyTypes == core.TSTrue
+	c.canCollectSymbolAliasAccessabilityData = c.compilerOptions.VerbatimModuleSyntax.IsFalseOrUnknown()
 	c.arrayVariances = []VarianceFlags{VarianceFlagsCovariant}
 	c.globals = make(ast.SymbolTable)
 	c.evaluate = createEvaluator(c.evaluateEntity)
@@ -1970,6 +1974,10 @@ func (c *Checker) CheckSourceFile(sourceFile *ast.SourceFile) {
 	if skipTypeChecking(sourceFile, c.compilerOptions) {
 		return
 	}
+	c.checkSourceFile(sourceFile)
+}
+
+func (c *Checker) checkSourceFile(sourceFile *ast.SourceFile) {
 	links := c.sourceFileLinks.Get(sourceFile)
 	if !links.typeChecked {
 		// Grammar checking
@@ -4928,7 +4936,7 @@ func (c *Checker) checkImportEqualsDeclaration(node *ast.Node) {
 				targetFlags := c.getSymbolFlags(target)
 				if targetFlags&ast.SymbolFlagsValue != 0 {
 					// Target is a value symbol, check that it is not hidden by a local declaration with the same name
-					moduleName := getFirstIdentifier(moduleReference)
+					moduleName := ast.GetFirstIdentifier(moduleReference)
 					if c.resolveEntityName(moduleName, ast.SymbolFlagsValue|ast.SymbolFlagsNamespace, false, false, nil).Flags&ast.SymbolFlagsNamespace == 0 {
 						c.error(moduleName, diagnostics.Module_0_is_hidden_by_a_local_declaration_with_the_same_name, scanner.DeclarationNameToString(moduleName))
 					}
@@ -5006,7 +5014,7 @@ func (c *Checker) checkExportSpecifier(node *ast.Node) {
 		if symbol != nil && (symbol == c.undefinedSymbol || symbol == c.globalThisSymbol || symbol.Declarations != nil && ast.IsGlobalSourceFile(getDeclarationContainer(symbol.Declarations[0]))) {
 			c.error(exportedName, diagnostics.Cannot_export_0_Only_local_declarations_can_be_exported_from_a_module, exportedName.Text())
 		} else {
-			c.markLinkedReferences(node, ReferenceHintExportSpecifier, nil, nil)
+			c.markLinkedReferences(node, ReferenceHintExportSpecifier, nil /*propSymbol*/, nil /*parentType*/)
 		}
 	}
 }
@@ -5432,6 +5440,8 @@ func (c *Checker) checkVarDeclaredNamesNotShadowed(node *ast.Node) {
 
 func (c *Checker) checkDecorators(node *ast.Node) {
 	// !!!
+
+	c.markLinkedReferences(node, ReferenceHintDecorator, nil /*propSymbol*/, nil /*parentType*/)
 }
 
 func (c *Checker) checkIteratedTypeOrElementType(use IterationUse, inputType *Type, sentType *Type, errorNode *ast.Node) *Type {
@@ -9659,10 +9669,9 @@ func (c *Checker) checkIdentifier(node *ast.Node, checkMode CheckMode) *Type {
 		}
 		return c.getTypeOfSymbol(symbol)
 	}
-	// !!!
-	// if c.shouldMarkIdentifierAliasReferenced(node) {
-	// 	c.markLinkedReferences(node, ReferenceHintIdentifier)
-	// }
+	if shouldMarkIdentifierAliasReferenced(node) {
+		c.markLinkedReferences(node, ReferenceHintIdentifier, nil /*propSymbol*/, nil /*parentType*/)
+	}
 	localOrExportSymbol := c.getExportSymbolOfValueSymbolIfExported(symbol)
 	declaration := localOrExportSymbol.ValueDeclaration
 	immediateDeclaration := declaration
@@ -13669,7 +13678,7 @@ func (c *Checker) resolveEntityName(name *ast.Node, meaning ast.SymbolFlags, ign
 			if meaning == ast.SymbolFlagsNamespace || ast.NodeIsSynthesized(name) {
 				message = diagnostics.Cannot_find_namespace_0
 			} else {
-				message = c.getCannotFindNameDiagnosticForName(getFirstIdentifier(name))
+				message = c.getCannotFindNameDiagnosticForName(ast.GetFirstIdentifier(name))
 			}
 		}
 		resolveLocation := location
@@ -13746,7 +13755,7 @@ func (c *Checker) resolveQualifiedName(name *ast.Node, left *ast.Node, right *as
 }
 
 func (c *Checker) tryGetQualifiedNameAsValue(node *ast.Node) *ast.Symbol {
-	id := getFirstIdentifier(node)
+	id := ast.GetFirstIdentifier(node)
 	symbol := c.resolveName(id, id.AsIdentifier().Text, ast.SymbolFlagsValue, nil /*nameNotFoundMessage*/, true /*isUse*/, false /*excludeGlobals*/)
 	if symbol == nil {
 		return nil
@@ -19861,7 +19870,7 @@ func (c *Checker) isTypeParameterPossiblyReferenced(tp *Type, node *ast.Node) bo
 			}
 		case ast.KindTypeQuery:
 			entityName := node.AsTypeQueryNode().ExprName
-			firstIdentifier := getFirstIdentifier(entityName)
+			firstIdentifier := ast.GetFirstIdentifier(entityName)
 			if !ast.IsThisIdentifier(firstIdentifier) {
 				firstIdentifierSymbol := c.getResolvedSymbol(firstIdentifier)
 				tpDeclaration := tp.symbol.Declarations[0] // There is exactly one declaration, otherwise `containsReference` is not called
@@ -24530,7 +24539,7 @@ func (c *Checker) errorIfWritingToReadonlyIndex(indexInfo *IndexInfo, objectType
 }
 
 func (c *Checker) isSelfTypeAccess(name *ast.Node, parent *ast.Symbol) bool {
-	return name.Kind == ast.KindThisKeyword || parent != nil && ast.IsEntityNameExpression(name) && parent == c.getResolvedSymbol(getFirstIdentifier(name))
+	return name.Kind == ast.KindThisKeyword || parent != nil && ast.IsEntityNameExpression(name) && parent == c.getResolvedSymbol(ast.GetFirstIdentifier(name))
 }
 
 func (c *Checker) isAssignmentToReadonlyEntity(expr *ast.Node, symbol *ast.Symbol, assignmentKind AssignmentKind) bool {
@@ -25322,6 +25331,381 @@ func (c *Checker) transformTypeOfMembers(t *Type, f func(propertyType *Type) *Ty
 }
 
 func (c *Checker) markLinkedReferences(location *ast.Node, hint ReferenceHint, propSymbol *ast.Symbol, parentType *Type) {
+	if !c.canCollectSymbolAliasAccessabilityData {
+		return
+	}
+	if location.Flags&ast.NodeFlagsAmbient != 0 && !ast.IsPropertySignatureDeclaration(location) && !ast.IsPropertyDeclaration(location) {
+		// References within types and declaration files are never going to contribute to retaining a JS import,
+		// except for properties (which can be decorated).
+		return
+	}
+	switch hint {
+	case ReferenceHintIdentifier:
+		c.markIdentifierAliasReferenced(location)
+	case ReferenceHintProperty:
+		c.markPropertyAliasReferenced(location, propSymbol, parentType)
+	case ReferenceHintExportAssignment:
+		c.markExportAssignmentAliasReferenced(location)
+	case ReferenceHintJsx:
+		c.markJsxAliasReferenced(location)
+	case ReferenceHintExportImportEquals:
+		c.markImportEqualsAliasReferenced(location)
+	case ReferenceHintExportSpecifier:
+		c.markExportSpecifierAliasReferenced(location)
+	case ReferenceHintDecorator:
+		c.markDecoratorAliasReferenced(location)
+	case ReferenceHintUnspecified:
+		// Identifiers in expression contexts are emitted, so we need to follow their referenced aliases and mark them as used
+		// Some non-expression identifiers are also treated as expression identifiers for this purpose, eg, `a` in `b = {a}` or `q` in `import r = q`
+		// This is the exception, rather than the rule - most non-expression identifiers are declaration names.
+		if ast.IsIdentifier(location) &&
+			(ast.IsExpressionNode(location) ||
+				ast.IsShorthandPropertyAssignment(location.Parent) ||
+				(ast.IsImportEqualsDeclaration(location.Parent) &&
+					location.Parent.AsImportEqualsDeclaration().ModuleReference == location)) &&
+			shouldMarkIdentifierAliasReferenced(location) {
+			if ast.IsPropertyAccessOrQualifiedName(location.Parent) {
+				var left *ast.Node
+				if ast.IsPropertyAccessExpression(location.Parent) {
+					left = location.Parent.Expression()
+				} else {
+					left = location.Parent.AsQualifiedName().Left
+				}
+				if left != location {
+					return // Only mark the LHS (the RHS is a property lookup)
+				}
+			}
+			c.markIdentifierAliasReferenced(location)
+			return
+		}
+		if ast.IsPropertyAccessOrQualifiedName(location) {
+			topProp := location
+			for ast.IsPropertyAccessOrQualifiedName(topProp) {
+				if ast.IsPartOfTypeNode(topProp) {
+					return
+				}
+				topProp = topProp.Parent
+			}
+			c.markPropertyAliasReferenced(location, nil /*propSymbol*/, nil /*parentType*/)
+			return
+		}
+		if ast.IsExportAssignment(location) {
+			c.markExportAssignmentAliasReferenced(location)
+			return
+		}
+		if isJsxOpeningLikeElement(location) || ast.IsJsxOpeningFragment(location) {
+			c.markJsxAliasReferenced(location)
+			return
+		}
+		if ast.IsImportEqualsDeclaration(location) {
+			if isInternalModuleImportEqualsDeclaration(location) || c.checkExternalImportOrExportDeclaration(location) {
+				c.markImportEqualsAliasReferenced(location)
+				return
+			}
+			return
+		}
+		if ast.IsExportSpecifier(location) {
+			c.markExportSpecifierAliasReferenced(location)
+			return
+		}
+		if !c.compilerOptions.EmitDecoratorMetadata.IsTrue() {
+			return
+		}
+		if !ast.CanHaveDecorators(location) || !hasDecorators(location) || location.Modifiers() == nil || !nodeCanBeDecorated(c.legacyDecorators, location, location.Parent, location.Parent.Parent) {
+			return
+		}
+
+		c.markDecoratorAliasReferenced(location)
+		return
+	default:
+		panic("Unhandled reference hint")
+	}
+}
+
+func isExportOrExportExpression(location *ast.Node) bool {
+	return ast.FindAncestor(location, func(n *ast.Node) bool {
+		parent := n.Parent
+		if parent != nil {
+			if ast.IsExportAssignment(parent) {
+				return parent.AsExportAssignment().Expression == n && ast.IsEntityNameExpression(n)
+			}
+			if ast.IsExportSpecifier(parent) {
+				return parent.AsExportSpecifier().Name() == n || parent.AsExportSpecifier().PropertyName == n
+			}
+		}
+		return false
+	}) != nil
+}
+
+func shouldMarkIdentifierAliasReferenced(node *ast.IdentifierNode) bool {
+	parent := node.Parent
+	if parent != nil {
+		// A property access expression LHS? checkPropertyAccessExpression will handle that.
+		if ast.IsPropertyAccessExpression(parent) && parent.Expression() == node {
+			return false
+		}
+		// Next two check for an identifier inside a type only export.
+		if ast.IsExportSpecifier(parent) && parent.AsExportSpecifier().IsTypeOnly {
+			return false
+		}
+		if parent.Parent != nil {
+			greatGrandparent := parent.Parent.Parent
+			if greatGrandparent != nil && ast.IsExportDeclaration(greatGrandparent) && greatGrandparent.AsExportDeclaration().IsTypeOnly {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+func isInternalModuleImportEqualsDeclaration(node *ast.Node) bool {
+	return node.Kind == ast.KindImportEqualsDeclaration &&
+		node.AsImportEqualsDeclaration().ModuleReference.Kind != ast.KindExternalModuleReference
+}
+
+func (c *Checker) markIdentifierAliasReferenced(location *ast.IdentifierNode) {
+	symbol := c.getResolvedSymbol(location)
+	if symbol != nil && symbol != c.argumentsSymbol && symbol != c.unknownSymbol && !isThisInTypeQuery(location) {
+		c.markAliasReferenced(symbol, location)
+	}
+}
+
+func (c *Checker) markPropertyAliasReferenced(location *ast.Node /*PropertyAccessExpression | QualifiedName*/, propSymbol *ast.Symbol, parentType *Type) {
+	var left *ast.Node
+	if ast.IsPropertyAccessExpression(location) {
+		left = location.AsPropertyAccessExpression().Expression
+	} else {
+		left = location.AsQualifiedName().Left
+	}
+	if ast.IsThisIdentifier(left) || !ast.IsIdentifier(left) {
+		return
+	}
+	parentSymbol := c.getResolvedSymbol(left)
+	if parentSymbol == nil || parentSymbol == c.unknownSymbol {
+		return
+	}
+	// In `Foo.Bar.Baz`, 'Foo' is not referenced if 'Bar' is a const enum or a module containing only const enums.
+	// `Foo` is also not referenced in `enum FooCopy { Bar = Foo.Bar }`, because the enum member value gets inlined
+	// here even if `Foo` is not a const enum.
+	//
+	// The exceptions are:
+	//   1. if 'isolatedModules' is enabled, because the const enum value will not be inlined, and
+	//   2. if 'preserveConstEnums' is enabled and the expression is itself an export, e.g. `export = Foo.Bar.Baz`.
+	//
+	// The property lookup is deferred as much as possible, in as many situations as possible, to avoid alias marking
+	// pulling on types/symbols it doesn't strictly need to.
+	if c.compilerOptions.GetIsolatedModules() || (c.compilerOptions.ShouldPreserveConstEnums() && isExportOrExportExpression(location)) {
+		c.markAliasReferenced(parentSymbol, location)
+		return
+	}
+	// Hereafter, this relies on type checking - but every check prior to this only used symbol information
+	leftType := parentType
+	if leftType == nil {
+		leftType = c.checkExpressionCached(left)
+	}
+	if IsTypeAny(leftType) || leftType == c.silentNeverType {
+		c.markAliasReferenced(parentSymbol, location)
+		return
+	}
+	prop := propSymbol
+	if prop == nil && parentType == nil {
+		var right *ast.Node
+		if ast.IsPropertyAccessExpression(location) {
+			right = location.AsPropertyAccessExpression().Name()
+		} else {
+			right = location.AsQualifiedName().Right
+		}
+		var lexicallyScopedSymbol *ast.Symbol
+		if ast.IsPrivateIdentifier(right) {
+			lexicallyScopedSymbol = c.lookupSymbolForPrivateIdentifierDeclaration(right.Text(), right)
+		}
+		assignmentKind := getAssignmentTargetKind(location)
+		var apparentType *Type
+		if assignmentKind != AssignmentKindNone || c.isMethodAccessForCall(location) {
+			apparentType = c.getApparentType(c.getWidenedType(leftType))
+		} else {
+			apparentType = c.getApparentType(leftType)
+		}
+		if ast.IsPrivateIdentifier(right) {
+			if lexicallyScopedSymbol != nil {
+				prop = c.getPrivateIdentifierPropertyOfType(apparentType, lexicallyScopedSymbol)
+			}
+		} else {
+			prop = c.getPropertyOfType(apparentType, right.Text())
+		}
+	}
+	if !(prop != nil && (isConstEnumOrConstEnumOnlyModule(prop) || prop.Flags&ast.SymbolFlagsEnumMember != 0 && location.Parent.Kind == ast.KindEnumMember)) {
+		c.markAliasReferenced(parentSymbol, location)
+	}
+}
+
+func (c *Checker) markExportAssignmentAliasReferenced(location *ast.Node /*ExportAssigment*/) {
+	id := location.Expression()
+	if ast.IsIdentifier(id) {
+		sym := c.getExportSymbolOfValueSymbolIfExported(c.resolveEntityName(id, ast.SymbolFlagsAll, true /*ignoreErrors*/, true /*dontResolveAlias*/, location))
+		if sym != nil {
+			c.markAliasReferenced(sym, id)
+		}
+	}
+}
+
+func (c *Checker) markJsxAliasReferenced(node *ast.Node /*JsxOpeningLikeElement | JsxOpeningFragment*/) {
+	// !!!
+}
+
+func (c *Checker) markImportEqualsAliasReferenced(location *ast.Node /*ImportEqualsDeclaration*/) {
+	if ast.HasSyntacticModifier(location, ast.ModifierFlagsExport) {
+		c.markExportAsReferenced(location)
+	}
+}
+
+func (c *Checker) markExportSpecifierAliasReferenced(location *ast.ExportSpecifierNode) {
+	if location.Parent.Parent.AsExportDeclaration().ModuleSpecifier == nil && !location.AsExportSpecifier().IsTypeOnly && !location.Parent.Parent.AsExportDeclaration().IsTypeOnly {
+		exportedName := location.PropertyName()
+		if exportedName == nil {
+			exportedName = location.Name()
+		}
+		if exportedName.Kind == ast.KindStringLiteral {
+			return // Skip for invalid syntax like this: export { "x" }
+		}
+		symbol := c.resolveName(exportedName, exportedName.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias, nil /*nameNotFoundMessage*/, true /*isUse*/, false /*excludeGlobals*/)
+		if symbol != nil && (symbol == c.undefinedSymbol || symbol == c.globalThisSymbol || symbol.Declarations != nil && ast.IsGlobalSourceFile(getDeclarationContainer(symbol.Declarations[0]))) {
+			// Do nothing, non-local symbol
+		} else {
+			target := symbol
+			if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+				target = c.resolveAlias(target)
+			}
+			if target != nil || c.getSymbolFlags(target)&ast.SymbolFlagsValue != 0 {
+				c.markExportAsReferenced(location)            // marks export as used
+				c.markIdentifierAliasReferenced(exportedName) // marks target of export as used
+			}
+		}
+	}
+}
+
+func (c *Checker) markDecoratorAliasReferenced(node *ast.Node /*HasDecorators*/) {
+	// !!!
+}
+
+func (c *Checker) markAliasReferenced(symbol *ast.Symbol, location *ast.Node) {
+	if !c.canCollectSymbolAliasAccessabilityData {
+		return
+	}
+	if isNonLocalAlias(symbol, ast.SymbolFlagsValue /*excludes*/) && !isInTypeQuery(location) {
+		target := c.resolveAlias(symbol)
+		if c.getSymbolFlagsEx(symbol, true /*excludeTypeOnlyMeanings*/, false /*excludeLocalMeanings*/)&(ast.SymbolFlagsValue|ast.SymbolFlagsExportValue) != 0 {
+			// An alias resolving to a const enum cannot be elided if (1) 'isolatedModules' is enabled
+			// (because the const enum value will not be inlined), or if (2) the alias is an export
+			// of a const enum declaration that will be preserved.
+			if c.compilerOptions.GetIsolatedModules() ||
+				c.compilerOptions.ShouldPreserveConstEnums() && isExportOrExportExpression(location) ||
+				!isConstEnumOrConstEnumOnlyModule(c.getExportSymbolOfValueSymbolIfExported(target)) {
+				c.markAliasSymbolAsReferenced(symbol)
+			}
+		}
+	}
+}
+
+// When an alias symbol is referenced, we need to mark the entity it references as referenced and in turn repeat that until
+// we reach a non-alias or an exported entity (which is always considered referenced). We do this by checking the target of
+// the alias as an expression (which recursively takes us back here if the target references another alias).
+func (c *Checker) markAliasSymbolAsReferenced(symbol *ast.Symbol) {
+	links := c.aliasSymbolLinks.Get(symbol)
+	if !links.referenced {
+		links.referenced = true
+		node := c.getDeclarationOfAliasSymbol(symbol)
+		if node == nil {
+			panic("Unexpected nil in markAliasSymbolAsReferenced")
+		}
+		// We defer checking of the reference of an `import =` until the import itself is referenced,
+		// This way a chain of imports can be elided if ultimately the final input is only used in a type
+		// position.
+		if ast.IsImportEqualsDeclaration(node) && node.AsImportEqualsDeclaration().ModuleReference.Kind != ast.KindExternalModuleReference {
+			if c.getSymbolFlags(c.resolveSymbol(symbol))&ast.SymbolFlagsValue != 0 {
+				// import foo = <symbol>
+				left := ast.GetFirstIdentifier(node.AsImportEqualsDeclaration().ModuleReference)
+				c.markIdentifierAliasReferenced(left)
+			}
+		}
+	}
+}
+
+func (c *Checker) markExportAsReferenced(node *ast.Node /*ImportEqualsDeclaration | ExportSpecifier*/) {
+	symbol := c.getSymbolOfDeclaration(node)
+	target := c.resolveAlias(symbol)
+	if target != nil {
+		markAlias := target == c.unknownSymbol ||
+			((c.getSymbolFlagsEx(symbol, true /*excludeTypeOnlyMeanings*/, false /*excludeLocalMeanings*/)&ast.SymbolFlagsValue != 0) && !isConstEnumOrConstEnumOnlyModule(target))
+		if markAlias {
+			c.markAliasSymbolAsReferenced(symbol)
+		}
+	}
+}
+
+func (c *Checker) markEntityNameOrEntityExpressionAsReference(typeName *ast.Node /*EntityNameOrEntityNameExpression | nil*/, forDecoratorMetadata bool) {
+	if typeName == nil {
+		return
+	}
+
+	rootName := ast.GetFirstIdentifier(typeName)
+	meaning := core.IfElse(typeName.Kind == ast.KindIdentifier, ast.SymbolFlagsType, ast.SymbolFlagsNamespace) | ast.SymbolFlagsAlias
+	rootSymbol := c.resolveName(rootName, rootName.Text(), meaning, nil /*nameNotFoundMessage*/, true /*isUse*/, false /*excludeGlobals*/)
+
+	if rootSymbol != nil && rootSymbol.Flags&ast.SymbolFlagsAlias != 0 {
+		if c.canCollectSymbolAliasAccessabilityData &&
+			c.symbolIsValue(rootSymbol) &&
+			!isConstEnumOrConstEnumOnlyModule(c.resolveAlias(rootSymbol)) &&
+			c.getTypeOnlyAliasDeclaration(rootSymbol) == nil {
+			c.markAliasSymbolAsReferenced(rootSymbol)
+		} else if forDecoratorMetadata &&
+			c.compilerOptions.GetIsolatedModules() &&
+			c.compilerOptions.GetEmitModuleKind() >= core.ModuleKindES2015 &&
+			!c.symbolIsValue(rootSymbol) &&
+			!core.Some(rootSymbol.Declarations, isTypeOnlyImportOrExportDeclaration) {
+			diag := c.error(typeName, diagnostics.A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled)
+			var aliasDeclaration *ast.Node
+			for _, decl := range rootSymbol.Declarations {
+				if c.isAliasSymbolDeclaration(decl) {
+					aliasDeclaration = decl
+					break
+				}
+			}
+			if aliasDeclaration != nil {
+				diag.SetRelatedInfo([]*ast.Diagnostic{createDiagnosticForNode(aliasDeclaration, diagnostics.X_0_was_imported_here, rootName.Text())})
+			}
+		}
+	}
+}
+
+func getEntityNameFromTypeNode(node *ast.TypeNode) *ast.Node {
+	switch node.Kind {
+	case ast.KindTypeReference:
+		return node.AsTypeReferenceNode().TypeName
+
+	case ast.KindExpressionWithTypeArguments:
+		if ast.IsEntityNameExpression(node.Expression()) {
+			return node.Expression()
+		}
+		return nil
+
+	// These aren't valid TypeNodes, but we treat them as such because of `isPartOfTypeNode`, which returns `true` for things that aren't `TypeNode`s.
+	case ast.KindIdentifier, ast.KindQualifiedName:
+		return node
+	}
+
+	return nil
+}
+
+// If a TypeNode can be resolved to a value symbol imported from an external module, it is
+// marked as referenced to prevent import elision.
+func (c *Checker) markTypeNodeAsReferenced(node *ast.TypeNode) {
+	if node != nil {
+		c.markEntityNameOrEntityExpressionAsReference(getEntityNameFromTypeNode(node), false /*forDecoratorMetadata*/)
+	}
+}
+
+func (c *Checker) markDecoratorMedataDataTypeNodeAsReferenced(node *ast.TypeNode) {
 	// !!!
 }
 
@@ -27990,4 +28374,19 @@ func (c *Checker) getRegularTypeOfExpression(expr *ast.Node) *Type {
 
 func (c *Checker) GetTypeAtLocation(node *ast.Node) *Type {
 	return c.getTypeOfNode(node)
+}
+
+func (c *Checker) GetEmitResolver(file *ast.SourceFile, skipDiagnostics bool) EmitResolver {
+	c.emitResolverOnce.Do(func() {
+		c.emitResolver = &emitResolver{checker: c}
+	})
+
+	if !skipDiagnostics {
+		// Ensure we have all the type information in place for this file so that all the
+		// emitter questions of this resolver will return the right information.
+		c.emitResolver.checkerMu.Lock()
+		defer c.emitResolver.checkerMu.Unlock()
+		c.checkSourceFile(file)
+	}
+	return c.emitResolver
 }

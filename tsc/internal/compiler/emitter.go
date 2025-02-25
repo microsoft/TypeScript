@@ -2,6 +2,7 @@ package compiler
 
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/checker"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/printer"
@@ -47,11 +48,21 @@ func (e *emitter) emitJsFile(sourceFile *ast.SourceFile, jsFilePath string, sour
 		return
 	}
 
-	// !!! mark linked references
+	// JS files don't use reference calculations as they don't do import ellision, no need to calculate it
+	importElisionEnabled := !options.VerbatimModuleSyntax.IsTrue() && !ast.IsInJSFile(sourceFile.AsNode())
+
+	var emitResolver checker.EmitResolver
+	if importElisionEnabled {
+		emitResolver = e.host.GetEmitResolver(sourceFile, false /*skipDiagnostics*/) // !!! conditionally skip diagnostics
+		emitResolver.MarkLinkedReferencesRecursively(sourceFile)
+	}
 
 	// !!! transform the source files?
 	emitContext := printer.NewEmitContext()
 	sourceFile = transformers.NewTypeEraserTransformer(emitContext, options).TransformSourceFile(sourceFile)
+	if importElisionEnabled {
+		sourceFile = transformers.NewImportElisionTransformer(emitContext, options, emitResolver).TransformSourceFile(sourceFile)
+	}
 	sourceFile = transformers.NewRuntimeSyntaxTransformer(emitContext, options).TransformSourceFile(sourceFile)
 
 	printerOptions := printer.PrinterOptions{
