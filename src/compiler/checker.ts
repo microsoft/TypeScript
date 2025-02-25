@@ -8834,10 +8834,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return setTextRange(context, setEmitFlags(name, EmitFlags.NoAsciiEscaping), node);
                 }
                 const updated = visitEachChildWorker(node, c => attachSymbolToLeftmostIdentifier(c), /*context*/ undefined);
-                if (updated !== node) {
-                    setTextRange(context, updated, node);
-                }
-                return updated;
+                return setTextRange(context, updated, node);
             }
         }
 
