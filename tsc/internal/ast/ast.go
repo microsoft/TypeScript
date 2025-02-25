@@ -543,7 +543,7 @@ func (n *Node) PropertyName() *Node {
 	case KindBindingElement:
 		return n.AsBindingElement().PropertyName
 	}
-	panic("Unhandled case in Node.PropertyName: " + n.Kind.String())
+	return nil
 }
 
 func (n *Node) PropertyNameOrName() *Node {

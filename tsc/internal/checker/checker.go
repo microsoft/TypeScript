@@ -4908,7 +4908,7 @@ func (c *Checker) getTypeFromImportAttributes(node *ast.Node) *Type {
 		members := make(ast.SymbolTable)
 		for _, attr := range node.AsImportAttributes().Attributes.Nodes {
 			member := c.newSymbol(ast.SymbolFlagsProperty, attr.Name().Text())
-			c.valueSymbolLinks.Get(symbol).resolvedType = c.getRegularTypeOfLiteralType(c.checkExpression(attr.AsImportAttribute().Value))
+			c.valueSymbolLinks.Get(member).resolvedType = c.getRegularTypeOfLiteralType(c.checkExpression(attr.AsImportAttribute().Value))
 			members[member.Name] = member
 		}
 		t := c.newAnonymousType(symbol, members, nil, nil, nil)
@@ -6100,7 +6100,7 @@ func (c *Checker) checkAliasSymbol(node *ast.Node) {
 					default:
 						message = diagnostics.X_0_resolves_to_a_type_only_declaration_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled
 					}
-					name := core.IfElse(ast.IsImportSpecifier(node), node.PropertyNameOrName(), node.Name()).Text()
+					name := node.PropertyNameOrName().Text()
 					c.addTypeOnlyDeclarationRelatedInfo(c.error(node, message, name), core.IfElse(isType, nil, typeOnlyAlias), name)
 				}
 				if isType && node.Kind == ast.KindImportEqualsDeclaration && hasEffectiveModifier(node, ast.ModifierFlagsExport) {
@@ -25573,10 +25573,10 @@ func (c *Checker) markExportSpecifierAliasReferenced(location *ast.ExportSpecifi
 			// Do nothing, non-local symbol
 		} else {
 			target := symbol
-			if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+			if target != nil && target.Flags&ast.SymbolFlagsAlias != 0 {
 				target = c.resolveAlias(target)
 			}
-			if target != nil || c.getSymbolFlags(target)&ast.SymbolFlagsValue != 0 {
+			if target == nil || c.getSymbolFlags(target)&ast.SymbolFlagsValue != 0 {
 				c.markExportAsReferenced(location)            // marks export as used
 				c.markIdentifierAliasReferenced(exportedName) // marks target of export as used
 			}
