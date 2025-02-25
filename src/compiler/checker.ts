@@ -21970,7 +21970,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     reportError(
                         Diagnostics._1_is_constrained_to_be_a_subtype_of_0,
                         needsOriginalSource ? sourceType : generalizedSourceType,
-                        targetType
+                        targetType,
                     );
                 }
                 else {
