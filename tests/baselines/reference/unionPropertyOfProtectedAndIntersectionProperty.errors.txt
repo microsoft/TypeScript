@@ -1,7 +1,10 @@
+unionPropertyOfProtectedAndIntersectionProperty.ts(18,11): error TS4129: Private or protected member 'foo' cannot be accessed via indexed access.
+unionPropertyOfProtectedAndIntersectionProperty.ts(19,11): error TS4129: Private or protected member 'foo' cannot be accessed via indexed access.
 unionPropertyOfProtectedAndIntersectionProperty.ts(19,23): error TS2339: Property 'foo' does not exist on type 'Foo | Bar'.
+unionPropertyOfProtectedAndIntersectionProperty.ts(20,11): error TS4129: Private or protected member 'foo' cannot be accessed via indexed access.
 
 
-==== unionPropertyOfProtectedAndIntersectionProperty.ts (1 errors) ====
+==== unionPropertyOfProtectedAndIntersectionProperty.ts (4 errors) ====
     class Foo {
       protected foo = 0;
     }
@@ -20,10 +23,16 @@ unionPropertyOfProtectedAndIntersectionProperty.ts(19,23): error TS2339: Propert
     // that shows the direct result of the change:
     
     type _3 = (Foo & Bar)['foo'];         // Ok
+              ~~~~~~~~~~~~~~~~~~
+!!! error TS4129: Private or protected member 'foo' cannot be accessed via indexed access.
     type _4 = (Foo | Bar)['foo'];         // Error
+              ~~~~~~~~~~~~~~~~~~
+!!! error TS4129: Private or protected member 'foo' cannot be accessed via indexed access.
                           ~~~~~
 !!! error TS2339: Property 'foo' does not exist on type 'Foo | Bar'.
     type _5 = (Foo | (Foo & Bar))['foo']; // Prev error, now ok
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4129: Private or protected member 'foo' cannot be accessed via indexed access.
     
     // V[P] in `Nothing<V[P]>` is the substitution type `V[P] & Foo`. When
     // checking if that's assignable to `Foo` in the constraint of `Nothing`,
