@@ -1,0 +1,37 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment24.ts] ////
+
+=== usage.js ===
+// note that usage is first in the compilation
+Outer.Inner.Message = function() {
+>Outer : Symbol(Outer, Decl(def.js, 0, 3))
+
+};
+
+var y = new Outer.Inner()
+>y : Symbol(y, Decl(usage.js, 4, 3))
+>Outer : Symbol(Outer, Decl(def.js, 0, 3))
+
+y.name
+>y : Symbol(y, Decl(usage.js, 4, 3))
+
+/** @type {Outer.Inner} should be instance type, not static type */
+var x;
+>x : Symbol(x, Decl(usage.js, 7, 3))
+
+x.name
+>x : Symbol(x, Decl(usage.js, 7, 3))
+
+=== def.js ===
+var Outer = {}
+>Outer : Symbol(Outer, Decl(def.js, 0, 3))
+
+Outer.Inner = class {
+>Outer : Symbol(Outer, Decl(def.js, 0, 3))
+
+  name() {
+>name : Symbol(name, Decl(def.js, 1, 21))
+
+    return 'hi'
+  }
+}
+

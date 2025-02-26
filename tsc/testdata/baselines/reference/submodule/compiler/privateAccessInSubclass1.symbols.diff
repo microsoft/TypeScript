@@ -1,0 +1,26 @@
+--- old.privateAccessInSubclass1.symbols
++++ new.privateAccessInSubclass1.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(privateAccessInSubclass1.ts, 0, 0))
+ 
+   private options: any;
+->options : Symbol(Base.options, Decl(privateAccessInSubclass1.ts, 0, 12))
++>options : Symbol(options, Decl(privateAccessInSubclass1.ts, 0, 12))
+ }
+ 
+ class D extends Base {
+@@= skipped -8, +8 lines =@@
+ >Base : Symbol(Base, Decl(privateAccessInSubclass1.ts, 0, 0))
+ 
+   myMethod() {
+->myMethod : Symbol(D.myMethod, Decl(privateAccessInSubclass1.ts, 4, 22))
++>myMethod : Symbol(myMethod, Decl(privateAccessInSubclass1.ts, 4, 22))
+ 
+     this.options;
+->this.options : Symbol(Base.options, Decl(privateAccessInSubclass1.ts, 0, 12))
++>this.options : Symbol(options, Decl(privateAccessInSubclass1.ts, 0, 12))
+ >this : Symbol(D, Decl(privateAccessInSubclass1.ts, 2, 1))
+->options : Symbol(Base.options, Decl(privateAccessInSubclass1.ts, 0, 12))
++>options : Symbol(options, Decl(privateAccessInSubclass1.ts, 0, 12))
+   }
+ }

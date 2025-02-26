@@ -1,0 +1,11 @@
+--- old.allowSyntheticDefaultImportsCanPaintCrossModuleDeclaration.symbols
++++ new.allowSyntheticDefaultImportsCanPaintCrossModuleDeclaration.symbols
+@@= skipped -4, +4 lines =@@
+ >Color : Symbol(Color, Decl(color.ts, 0, 0))
+ 
+     c: string;
+->c : Symbol(Color.c, Decl(color.ts, 0, 17))
++>c : Symbol(c, Decl(color.ts, 0, 17))
+ }
+ export default Color;
+ >Color : Symbol(Color, Decl(color.ts, 0, 0))

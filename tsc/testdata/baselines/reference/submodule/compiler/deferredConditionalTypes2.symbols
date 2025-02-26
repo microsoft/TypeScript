@@ -1,0 +1,117 @@
+//// [tests/cases/compiler/deferredConditionalTypes2.ts] ////
+
+=== deferredConditionalTypes2.ts ===
+// https://github.com/microsoft/TypeScript/issues/56270
+
+type PositiveInfinity = 1e999;
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(deferredConditionalTypes2.ts, 0, 0))
+
+type NegativeInfinity = -1e999;
+>NegativeInfinity : Symbol(NegativeInfinity, Decl(deferredConditionalTypes2.ts, 2, 30))
+
+export type IsEqual<A, B> = (<G>() => G extends A ? 1 : 2) extends <
+>IsEqual : Symbol(IsEqual, Decl(deferredConditionalTypes2.ts, 3, 31))
+>A : Symbol(A, Decl(deferredConditionalTypes2.ts, 5, 20))
+>B : Symbol(B, Decl(deferredConditionalTypes2.ts, 5, 22))
+>G : Symbol(G, Decl(deferredConditionalTypes2.ts, 5, 30))
+>G : Symbol(G, Decl(deferredConditionalTypes2.ts, 5, 30))
+>A : Symbol(A, Decl(deferredConditionalTypes2.ts, 5, 20))
+
+  G,
+>G : Symbol(G, Decl(deferredConditionalTypes2.ts, 5, 68))
+
+>() => G extends B ? 1 : 2
+>G : Symbol(G, Decl(deferredConditionalTypes2.ts, 5, 68))
+>B : Symbol(B, Decl(deferredConditionalTypes2.ts, 5, 22))
+
+  ? true
+  : false;
+
+export type Add<A extends number, B extends number> = [
+>Add : Symbol(Add, Decl(deferredConditionalTypes2.ts, 9, 10))
+>A : Symbol(A, Decl(deferredConditionalTypes2.ts, 11, 16))
+>B : Symbol(B, Decl(deferredConditionalTypes2.ts, 11, 33))
+
+  IsEqual<A, PositiveInfinity>,
+>IsEqual : Symbol(IsEqual, Decl(deferredConditionalTypes2.ts, 3, 31))
+>A : Symbol(A, Decl(deferredConditionalTypes2.ts, 11, 16))
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(deferredConditionalTypes2.ts, 0, 0))
+
+  IsEqual<A, NegativeInfinity>,
+>IsEqual : Symbol(IsEqual, Decl(deferredConditionalTypes2.ts, 3, 31))
+>A : Symbol(A, Decl(deferredConditionalTypes2.ts, 11, 16))
+>NegativeInfinity : Symbol(NegativeInfinity, Decl(deferredConditionalTypes2.ts, 2, 30))
+
+  IsEqual<B, PositiveInfinity>,
+>IsEqual : Symbol(IsEqual, Decl(deferredConditionalTypes2.ts, 3, 31))
+>B : Symbol(B, Decl(deferredConditionalTypes2.ts, 11, 33))
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(deferredConditionalTypes2.ts, 0, 0))
+
+  IsEqual<B, NegativeInfinity>,
+>IsEqual : Symbol(IsEqual, Decl(deferredConditionalTypes2.ts, 3, 31))
+>B : Symbol(B, Decl(deferredConditionalTypes2.ts, 11, 33))
+>NegativeInfinity : Symbol(NegativeInfinity, Decl(deferredConditionalTypes2.ts, 2, 30))
+
+] extends infer R extends [boolean, boolean, boolean, boolean]
+>R : Symbol(R, Decl(deferredConditionalTypes2.ts, 16, 15))
+
+  ? [true, false] extends ([R[0], R[3]])
+>R : Symbol(R, Decl(deferredConditionalTypes2.ts, 16, 15))
+>R : Symbol(R, Decl(deferredConditionalTypes2.ts, 16, 15))
+
+    ? PositiveInfinity
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(deferredConditionalTypes2.ts, 0, 0))
+
+    : "failed"
+  : never;
+
+export type AddWithoutParentheses<A extends number, B extends number> = [
+>AddWithoutParentheses : Symbol(AddWithoutParentheses, Decl(deferredConditionalTypes2.ts, 20, 10))
+>A : Symbol(A, Decl(deferredConditionalTypes2.ts, 22, 34))
+>B : Symbol(B, Decl(deferredConditionalTypes2.ts, 22, 51))
+
+  IsEqual<A, PositiveInfinity>,
+>IsEqual : Symbol(IsEqual, Decl(deferredConditionalTypes2.ts, 3, 31))
+>A : Symbol(A, Decl(deferredConditionalTypes2.ts, 22, 34))
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(deferredConditionalTypes2.ts, 0, 0))
+
+  IsEqual<A, NegativeInfinity>,
+>IsEqual : Symbol(IsEqual, Decl(deferredConditionalTypes2.ts, 3, 31))
+>A : Symbol(A, Decl(deferredConditionalTypes2.ts, 22, 34))
+>NegativeInfinity : Symbol(NegativeInfinity, Decl(deferredConditionalTypes2.ts, 2, 30))
+
+  IsEqual<B, PositiveInfinity>,
+>IsEqual : Symbol(IsEqual, Decl(deferredConditionalTypes2.ts, 3, 31))
+>B : Symbol(B, Decl(deferredConditionalTypes2.ts, 22, 51))
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(deferredConditionalTypes2.ts, 0, 0))
+
+  IsEqual<B, NegativeInfinity>,
+>IsEqual : Symbol(IsEqual, Decl(deferredConditionalTypes2.ts, 3, 31))
+>B : Symbol(B, Decl(deferredConditionalTypes2.ts, 22, 51))
+>NegativeInfinity : Symbol(NegativeInfinity, Decl(deferredConditionalTypes2.ts, 2, 30))
+
+] extends infer R extends [boolean, boolean, boolean, boolean]
+>R : Symbol(R, Decl(deferredConditionalTypes2.ts, 27, 15))
+
+  ? [true, false] extends [R[0], R[3]]
+>R : Symbol(R, Decl(deferredConditionalTypes2.ts, 27, 15))
+>R : Symbol(R, Decl(deferredConditionalTypes2.ts, 27, 15))
+
+    ? PositiveInfinity
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(deferredConditionalTypes2.ts, 0, 0))
+
+    : "failed"
+  : never;
+
+type AddTest0 = Add<PositiveInfinity, PositiveInfinity>;
+>AddTest0 : Symbol(AddTest0, Decl(deferredConditionalTypes2.ts, 31, 10))
+>Add : Symbol(Add, Decl(deferredConditionalTypes2.ts, 9, 10))
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(deferredConditionalTypes2.ts, 0, 0))
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(deferredConditionalTypes2.ts, 0, 0))
+
+type AddTest1 = AddWithoutParentheses<PositiveInfinity, PositiveInfinity>;
+>AddTest1 : Symbol(AddTest1, Decl(deferredConditionalTypes2.ts, 33, 56))
+>AddWithoutParentheses : Symbol(AddWithoutParentheses, Decl(deferredConditionalTypes2.ts, 20, 10))
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(deferredConditionalTypes2.ts, 0, 0))
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(deferredConditionalTypes2.ts, 0, 0))
+

@@ -1,0 +1,12 @@
+//// [tests/cases/conformance/jsdoc/typeTagPrototypeAssignment.ts] ////
+
+=== bug27327.js ===
+function C() {
+>C : Symbol(C, Decl(bug27327.js, 0, 0))
+}
+/** @type {string} */
+C.prototype = 12
+>C.prototype : Symbol(prototype, Decl(bug27327.js, 1, 1))
+>C : Symbol(C, Decl(bug27327.js, 0, 0))
+>prototype : Symbol(prototype, Decl(bug27327.js, 1, 1))
+

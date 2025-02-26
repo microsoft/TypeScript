@@ -1,0 +1,11 @@
+--- old.numericIndexerConstraint1.symbols
++++ new.numericIndexerConstraint1.symbols
+@@= skipped -2, +2 lines =@@
+ === numericIndexerConstraint1.ts ===
+ class Foo { foo() { } }
+ >Foo : Symbol(Foo, Decl(numericIndexerConstraint1.ts, 0, 0))
+->foo : Symbol(Foo.foo, Decl(numericIndexerConstraint1.ts, 0, 11))
++>foo : Symbol(foo, Decl(numericIndexerConstraint1.ts, 0, 11))
+ 
+ var x: { [index: string]: number; };
+ >x : Symbol(x, Decl(numericIndexerConstraint1.ts, 1, 3))

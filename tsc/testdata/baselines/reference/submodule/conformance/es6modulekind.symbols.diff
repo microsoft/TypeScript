@@ -1,0 +1,20 @@
+--- old.es6modulekind.symbols
++++ new.es6modulekind.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === es6modulekind.ts ===
+ export default class A
+->A : Symbol(A, Decl(es6modulekind.ts, 0, 0))
++>A : Symbol(default, Decl(es6modulekind.ts, 0, 0))
+ {
+     constructor ()
+     {
+@@= skipped -8, +8 lines =@@
+     }
+ 
+     public B()
+->B : Symbol(A.B, Decl(es6modulekind.ts, 5, 5))
++>B : Symbol(B, Decl(es6modulekind.ts, 5, 5))
+     {
+         return 42;
+     }

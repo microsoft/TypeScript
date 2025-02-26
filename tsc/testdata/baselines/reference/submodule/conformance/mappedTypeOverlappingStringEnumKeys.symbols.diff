@@ -1,0 +1,76 @@
+--- old.mappedTypeOverlappingStringEnumKeys.symbols
++++ new.mappedTypeOverlappingStringEnumKeys.symbols
+@@= skipped -6, +6 lines =@@
+ >TerrestrialAnimalTypes : Symbol(TerrestrialAnimalTypes, Decl(mappedTypeOverlappingStringEnumKeys.ts, 0, 0))
+ 
+   CAT = "cat",
+->CAT : Symbol(TerrestrialAnimalTypes.CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 2, 29))
++>CAT : Symbol(CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 2, 29))
+ 
+   DOG = "dog"
+->DOG : Symbol(TerrestrialAnimalTypes.DOG, Decl(mappedTypeOverlappingStringEnumKeys.ts, 3, 14))
++>DOG : Symbol(DOG, Decl(mappedTypeOverlappingStringEnumKeys.ts, 3, 14))
+ 
+ };
+ 
+@@= skipped -11, +11 lines =@@
+ >AlienAnimalTypes : Symbol(AlienAnimalTypes, Decl(mappedTypeOverlappingStringEnumKeys.ts, 5, 2))
+ 
+   CAT = "cat",
+->CAT : Symbol(AlienAnimalTypes.CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 7, 23))
++>CAT : Symbol(CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 7, 23))
+ 
+ };
+ 
+@@= skipped -13, +13 lines =@@
+ >TerrestrialCat : Symbol(TerrestrialCat, Decl(mappedTypeOverlappingStringEnumKeys.ts, 11, 61))
+ 
+   type: TerrestrialAnimalTypes.CAT;
+->type : Symbol(TerrestrialCat.type, Decl(mappedTypeOverlappingStringEnumKeys.ts, 13, 26))
++>type : Symbol(type, Decl(mappedTypeOverlappingStringEnumKeys.ts, 13, 26))
+ >TerrestrialAnimalTypes : Symbol(TerrestrialAnimalTypes, Decl(mappedTypeOverlappingStringEnumKeys.ts, 0, 0))
+->CAT : Symbol(TerrestrialAnimalTypes.CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 2, 29))
++>CAT : Symbol(CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 2, 29))
+ 
+   address: string;
+->address : Symbol(TerrestrialCat.address, Decl(mappedTypeOverlappingStringEnumKeys.ts, 14, 35))
++>address : Symbol(address, Decl(mappedTypeOverlappingStringEnumKeys.ts, 14, 35))
+ }
+ 
+ interface AlienCat {
+ >AlienCat : Symbol(AlienCat, Decl(mappedTypeOverlappingStringEnumKeys.ts, 16, 1))
+ 
+   type: AlienAnimalTypes.CAT
+->type : Symbol(AlienCat.type, Decl(mappedTypeOverlappingStringEnumKeys.ts, 18, 20))
++>type : Symbol(type, Decl(mappedTypeOverlappingStringEnumKeys.ts, 18, 20))
+ >AlienAnimalTypes : Symbol(AlienAnimalTypes, Decl(mappedTypeOverlappingStringEnumKeys.ts, 5, 2))
+->CAT : Symbol(AlienAnimalTypes.CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 7, 23))
++>CAT : Symbol(CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 7, 23))
+ 
+   planet: string;
+->planet : Symbol(AlienCat.planet, Decl(mappedTypeOverlappingStringEnumKeys.ts, 19, 28))
++>planet : Symbol(planet, Decl(mappedTypeOverlappingStringEnumKeys.ts, 19, 28))
+ }
+ 
+ type Cats = TerrestrialCat | AlienCat;
+@@= skipped -47, +47 lines =@@
+ 
+     { type: TerrestrialAnimalTypes.CAT, address: "" },
+ >type : Symbol(type, Decl(mappedTypeOverlappingStringEnumKeys.ts, 31, 5))
+->TerrestrialAnimalTypes.CAT : Symbol(TerrestrialAnimalTypes.CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 2, 29))
++>TerrestrialAnimalTypes.CAT : Symbol(CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 2, 29))
+ >TerrestrialAnimalTypes : Symbol(TerrestrialAnimalTypes, Decl(mappedTypeOverlappingStringEnumKeys.ts, 0, 0))
+->CAT : Symbol(TerrestrialAnimalTypes.CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 2, 29))
++>CAT : Symbol(CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 2, 29))
+ >address : Symbol(address, Decl(mappedTypeOverlappingStringEnumKeys.ts, 31, 39))
+ 
+     { type: AlienAnimalTypes.CAT, planet: "" }
+ >type : Symbol(type, Decl(mappedTypeOverlappingStringEnumKeys.ts, 32, 5))
+->AlienAnimalTypes.CAT : Symbol(AlienAnimalTypes.CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 7, 23))
++>AlienAnimalTypes.CAT : Symbol(CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 7, 23))
+ >AlienAnimalTypes : Symbol(AlienAnimalTypes, Decl(mappedTypeOverlappingStringEnumKeys.ts, 5, 2))
+->CAT : Symbol(AlienAnimalTypes.CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 7, 23))
++>CAT : Symbol(CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 7, 23))
+ >planet : Symbol(planet, Decl(mappedTypeOverlappingStringEnumKeys.ts, 32, 33))
+ 
+   ],

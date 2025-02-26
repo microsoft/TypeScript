@@ -1,0 +1,19 @@
+--- old.modularizeLibrary_Dom.iterable.symbols
++++ new.modularizeLibrary_Dom.iterable.symbols
+@@= skipped -2, +2 lines =@@
+ === modularizeLibrary_Dom.iterable.ts ===
+ for (const element of document.getElementsByTagName("a")) {
+ >element : Symbol(element, Decl(modularizeLibrary_Dom.iterable.ts, 0, 10))
+->document.getElementsByTagName : Symbol(Document.getElementsByTagName, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
++>document.getElementsByTagName : Symbol(getElementsByTagName, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+ >document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+->getElementsByTagName : Symbol(Document.getElementsByTagName, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
++>getElementsByTagName : Symbol(getElementsByTagName, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+ 
+     element.href;
+->element.href : Symbol(HTMLHyperlinkElementUtils.href, Decl(lib.dom.d.ts, --, --))
++>element.href : Symbol(href, Decl(lib.dom.d.ts, --, --))
+ >element : Symbol(element, Decl(modularizeLibrary_Dom.iterable.ts, 0, 10))
+->href : Symbol(HTMLHyperlinkElementUtils.href, Decl(lib.dom.d.ts, --, --))
++>href : Symbol(href, Decl(lib.dom.d.ts, --, --))
+ }

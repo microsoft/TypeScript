@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES6.ts] ////
+
+=== computedPropertyNames3_ES6.ts ===
+var id;
+>id : Symbol(id, Decl(computedPropertyNames3_ES6.ts, 0, 3))
+
+class C {
+>C : Symbol(C, Decl(computedPropertyNames3_ES6.ts, 0, 7))
+
+    [0 + 1]() { }
+>[0 + 1] : Symbol([0 + 1], Decl(computedPropertyNames3_ES6.ts, 1, 9))
+
+    static [() => { }]() { }
+>[() => { }] : Symbol([() => { }], Decl(computedPropertyNames3_ES6.ts, 2, 17))
+
+    get [delete id]() { }
+>[delete id] : Symbol([delete id], Decl(computedPropertyNames3_ES6.ts, 3, 28))
+>id : Symbol(id, Decl(computedPropertyNames3_ES6.ts, 0, 3))
+
+    set [[0, 1]](v) { }
+>[[0, 1]] : Symbol([[0, 1]], Decl(computedPropertyNames3_ES6.ts, 4, 25))
+>v : Symbol(v, Decl(computedPropertyNames3_ES6.ts, 5, 17))
+
+    static get [<String>""]() { }
+>[<String>""] : Symbol([<String>""], Decl(computedPropertyNames3_ES6.ts, 5, 23))
+>String : Symbol(String)
+
+    static set [id.toString()](v) { }
+>[id.toString()] : Symbol([id.toString()], Decl(computedPropertyNames3_ES6.ts, 6, 33))
+>id : Symbol(id, Decl(computedPropertyNames3_ES6.ts, 0, 3))
+>v : Symbol(v, Decl(computedPropertyNames3_ES6.ts, 7, 31))
+}

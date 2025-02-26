@@ -1,0 +1,12 @@
+--- old.nodeNextPackageSelfNameWithOutDirDeclDirCompositeNestedDirs.symbols
++++ new.nodeNextPackageSelfNameWithOutDirDeclDirCompositeNestedDirs.symbols
+@@= skipped -16, +16 lines =@@
+ >me : Symbol(me, Decl(thing.ts, 7, 6))
+ 
+ me.thing();
+->me.thing : Symbol(me.thing, Decl(index.ts, 0, 8))
+ >me : Symbol(me, Decl(thing.ts, 7, 6))
+->thing : Symbol(me.thing, Decl(index.ts, 0, 8))
+ 
+ export function srcthing(): void {}
+ >srcthing : Symbol(srcthing, Decl(thing.ts, 9, 11))

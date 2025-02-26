@@ -1,0 +1,33 @@
+--- old.checkJsFiles_noErrorLocation.symbols
++++ new.checkJsFiles_noErrorLocation.symbols
+@@= skipped -8, +8 lines =@@
+ 
+   }
+   foo() {
+->foo : Symbol(A.foo, Decl(a.js, 4, 3))
++>foo : Symbol(foo, Decl(a.js, 4, 3))
+ 
+     return 4;
+   }
+@@= skipped -15, +15 lines =@@
+ >super : Symbol(A, Decl(a.js, 0, 0))
+ 
+     this.foo = () => 3;
+->this.foo : Symbol(B.foo, Decl(a.js, 12, 12))
++>this.foo : Symbol(foo, Decl(a.js, 4, 3))
+ >this : Symbol(B, Decl(a.js, 8, 1))
+->foo : Symbol(B.foo, Decl(a.js, 12, 12))
++>foo : Symbol(foo, Decl(a.js, 4, 3))
+   }
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ >B : Symbol(B, Decl(a.js, 8, 1))
+ 
+ i.foo();
+->i.foo : Symbol(B.foo, Decl(a.js, 12, 12))
++>i.foo : Symbol(foo, Decl(a.js, 4, 3))
+ >i : Symbol(i, Decl(a.js, 17, 5))
+->foo : Symbol(B.foo, Decl(a.js, 12, 12))
++>foo : Symbol(foo, Decl(a.js, 4, 3))
+ 

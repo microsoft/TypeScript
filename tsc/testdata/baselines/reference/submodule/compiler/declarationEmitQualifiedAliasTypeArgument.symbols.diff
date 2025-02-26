@@ -1,0 +1,33 @@
+--- old.declarationEmitQualifiedAliasTypeArgument.symbols
++++ new.declarationEmitQualifiedAliasTypeArgument.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(bbb.d.ts, 0, 23))
+ 
+     data: T;
+->data : Symbol(INode.data, Decl(bbb.d.ts, 0, 27))
++>data : Symbol(data, Decl(bbb.d.ts, 0, 27))
+ >T : Symbol(T, Decl(bbb.d.ts, 0, 23))
+ }
+ 
+@@= skipped -21, +21 lines =@@
+ >E : Symbol(E, Decl(lib.d.ts, --, --))
+ 
+     A = "a",
+->A : Symbol(E.A, Decl(lib.d.ts, --, --))
++>A : Symbol(A, Decl(lib.d.ts, --, --))
+ 
+     B = "b"
+->B : Symbol(E.B, Decl(lib.d.ts, --, --))
++>B : Symbol(B, Decl(lib.d.ts, --, --))
+ }
+ 
+ export type T = G<E>;
+@@= skipped -15, +15 lines =@@
+ >Q : Symbol(Q, Decl(lib.d.ts, --, --))
+ >G : Symbol(G, Decl(lib.d.ts, --, --))
+ >E : Symbol(E, Decl(lib.d.ts, --, --))
+->A : Symbol(E.A, Decl(lib.d.ts, --, --))
++>A : Symbol(A, Decl(lib.d.ts, --, --))
+ 
+ === index.ts ===
+ import { T, Q } from "./lib";

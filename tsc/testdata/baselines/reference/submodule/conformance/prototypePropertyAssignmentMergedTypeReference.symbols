@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/salsa/prototypePropertyAssignmentMergedTypeReference.ts] ////
+
+=== prototypePropertyAssignmentMergedTypeReference.js ===
+var f = function() {
+>f : Symbol(f, Decl(prototypePropertyAssignmentMergedTypeReference.js, 0, 3))
+
+    return 12;
+};
+
+f.prototype.a = "a";
+>f.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(prototypePropertyAssignmentMergedTypeReference.js, 0, 3))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+
+/** @type {new () => f} */
+var x = f;
+>x : Symbol(x, Decl(prototypePropertyAssignmentMergedTypeReference.js, 7, 3))
+>f : Symbol(f, Decl(prototypePropertyAssignmentMergedTypeReference.js, 0, 3))
+
+

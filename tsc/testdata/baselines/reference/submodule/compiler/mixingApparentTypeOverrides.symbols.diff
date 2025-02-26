@@ -1,0 +1,50 @@
+--- old.mixingApparentTypeOverrides.symbols
++++ new.mixingApparentTypeOverrides.symbols
+@@= skipped -17, +17 lines =@@
+ >Base : Symbol(Base, Decl(mixingApparentTypeOverrides.ts, 1, 43))
+ 
+     _tag: string;
+->_tag : Symbol((Anonymous class)._tag, Decl(mixingApparentTypeOverrides.ts, 2, 29))
++>_tag : Symbol(_tag, Decl(mixingApparentTypeOverrides.ts, 2, 29))
+ 
+     constructor(...args: any[]) {
+ >args : Symbol(args, Decl(mixingApparentTypeOverrides.ts, 4, 16))
+@@= skipped -10, +10 lines =@@
+ >args : Symbol(args, Decl(mixingApparentTypeOverrides.ts, 4, 16))
+ 
+       this._tag = "";
+->this._tag : Symbol((Anonymous class)._tag, Decl(mixingApparentTypeOverrides.ts, 2, 29))
++>this._tag : Symbol(_tag, Decl(mixingApparentTypeOverrides.ts, 2, 29))
+ >this : Symbol((Anonymous class), Decl(mixingApparentTypeOverrides.ts, 2, 8))
+->_tag : Symbol((Anonymous class)._tag, Decl(mixingApparentTypeOverrides.ts, 2, 29))
++>_tag : Symbol(_tag, Decl(mixingApparentTypeOverrides.ts, 2, 29))
+     }
+   };
+ }
+@@= skipped -11, +11 lines =@@
+ >A : Symbol(A, Decl(mixingApparentTypeOverrides.ts, 9, 1))
+ 
+   toString () {
+->toString : Symbol(A.toString, Decl(mixingApparentTypeOverrides.ts, 11, 9))
++>toString : Symbol(toString, Decl(mixingApparentTypeOverrides.ts, 11, 9))
+ 
+     return "class A";
+   }
+@@= skipped -12, +12 lines =@@
+ >A : Symbol(A, Decl(mixingApparentTypeOverrides.ts, 9, 1))
+ 
+   toString () { // Should not be an error
+->toString : Symbol(B.toString, Decl(mixingApparentTypeOverrides.ts, 17, 27))
++>toString : Symbol(toString, Decl(mixingApparentTypeOverrides.ts, 17, 27))
+ 
+     return "class B";
+   }
+@@= skipped -11, +11 lines =@@
+ >A : Symbol(A, Decl(mixingApparentTypeOverrides.ts, 9, 1))
+ 
+   toString () { // Should not be an error
+->toString : Symbol(C.toString, Decl(mixingApparentTypeOverrides.ts, 23, 19))
++>toString : Symbol(toString, Decl(mixingApparentTypeOverrides.ts, 23, 19))
+ 
+     return "class C";
+   }

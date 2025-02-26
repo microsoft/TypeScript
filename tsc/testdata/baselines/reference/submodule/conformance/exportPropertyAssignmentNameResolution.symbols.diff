@@ -1,0 +1,16 @@
+--- old.exportPropertyAssignmentNameResolution.symbols
++++ new.exportPropertyAssignmentNameResolution.symbols
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/salsa/exportPropertyAssignmentNameResolution.ts] ////
+ 
+ === bug24492.js ===
+-module.exports.D = class { }
+->module.exports.D : Symbol(D, Decl(bug24492.js, 0, 0))
+->module.exports : Symbol(D, Decl(bug24492.js, 0, 0))
+->module : Symbol(module, Decl(bug24492.js, 0, 0))
+->exports : Symbol(module.exports, Decl(bug24492.js, 0, 0))
+->D : Symbol(D, Decl(bug24492.js, 0, 0))
+ 
++module.exports.D = class { }
+ new D()
+ 

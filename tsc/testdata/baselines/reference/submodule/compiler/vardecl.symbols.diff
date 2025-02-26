@@ -1,0 +1,32 @@
+--- old.vardecl.symbols
++++ new.vardecl.symbols
+@@= skipped -42, +42 lines =@@
+ >y : Symbol(y, Decl(vardecl.ts, 18, 37))
+ 
+ complicatedArrayVar.push({ x: 30, y : 'hello world' });
+->complicatedArrayVar.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>complicatedArrayVar.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >complicatedArrayVar : Symbol(complicatedArrayVar, Decl(vardecl.ts, 18, 3))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(vardecl.ts, 19, 26))
+ >y : Symbol(y, Decl(vardecl.ts, 19, 33))
+ 
+@@= skipped -109, +109 lines =@@
+ >C : Symbol(C, Decl(vardecl.ts, 65, 11))
+ 
+         constructor (public b) {
+->b : Symbol(C.b, Decl(vardecl.ts, 68, 21))
++>b : Symbol(b, Decl(vardecl.ts, 68, 21))
+         }
+     }
+ 
+@@= skipped -8, +8 lines =@@
+ >C2 : Symbol(C2, Decl(vardecl.ts, 70, 5))
+ 
+         constructor (public b) {
+->b : Symbol(C2.b, Decl(vardecl.ts, 73, 21))
++>b : Symbol(b, Decl(vardecl.ts, 73, 21))
+         }
+     }
+     var m;

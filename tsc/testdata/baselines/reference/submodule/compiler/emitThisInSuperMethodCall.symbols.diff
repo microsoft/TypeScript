@@ -1,0 +1,38 @@
+--- old.emitThisInSuperMethodCall.symbols
++++ new.emitThisInSuperMethodCall.symbols
+@@= skipped -4, +4 lines =@@
+ >User : Symbol(User, Decl(emitThisInSuperMethodCall.ts, 0, 0))
+ 
+     sayHello() {
+->sayHello : Symbol(User.sayHello, Decl(emitThisInSuperMethodCall.ts, 0, 12))
++>sayHello : Symbol(sayHello, Decl(emitThisInSuperMethodCall.ts, 0, 12))
+     }
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >User : Symbol(User, Decl(emitThisInSuperMethodCall.ts, 0, 0))
+ 
+     f() {
+->f : Symbol(RegisteredUser.f, Decl(emitThisInSuperMethodCall.ts, 5, 35))
++>f : Symbol(f, Decl(emitThisInSuperMethodCall.ts, 5, 35))
+ 
+         () => {
+             function inner() {
+@@= skipped -11, +11 lines =@@
+         };
+     }
+     g() {
+->g : Symbol(RegisteredUser.g, Decl(emitThisInSuperMethodCall.ts, 12, 5))
++>g : Symbol(g, Decl(emitThisInSuperMethodCall.ts, 12, 5))
+ 
+         function inner() {
+ >inner : Symbol(inner, Decl(emitThisInSuperMethodCall.ts, 13, 9))
+@@= skipped -11, +11 lines =@@
+         }
+     }
+     h() {
+->h : Symbol(RegisteredUser.h, Decl(emitThisInSuperMethodCall.ts, 19, 5))
++>h : Symbol(h, Decl(emitThisInSuperMethodCall.ts, 19, 5))
+ 
+         function inner() {
+ >inner : Symbol(inner, Decl(emitThisInSuperMethodCall.ts, 20, 9))

@@ -1,0 +1,715 @@
+--- old.duplicateLocalVariable1.symbols
++++ new.duplicateLocalVariable1.symbols
+@@= skipped -16, +16 lines =@@
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+     constructor (public name: string, public test: ()=>boolean, public errorMessageRegEx?: string) {
+->name : Symbol(TestCase.name, Decl(duplicateLocalVariable1.ts, 9, 17))
+->test : Symbol(TestCase.test, Decl(duplicateLocalVariable1.ts, 9, 37))
+->errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
++>name : Symbol(name, Decl(duplicateLocalVariable1.ts, 9, 17))
++>test : Symbol(test, Decl(duplicateLocalVariable1.ts, 9, 37))
++>errorMessageRegEx : Symbol(errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+     }
+ }
+ export class TestRunner { 
+ >TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+ 
+     private tests: TestCase[] = [];
+->tests : Symbol(TestRunner.tests, Decl(duplicateLocalVariable1.ts, 12, 25))
++>tests : Symbol(tests, Decl(duplicateLocalVariable1.ts, 12, 25))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+     static arrayCompare(arg1: any[], arg2: any[]): boolean {
+->arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
++>arrayCompare : Symbol(arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+ >arg1 : Symbol(arg1, Decl(duplicateLocalVariable1.ts, 15, 24))
+ >arg2 : Symbol(arg2, Decl(duplicateLocalVariable1.ts, 15, 36))
+ 
+         return (arg1.every(function (val, index) { return val === arg2[index] }));
+->arg1.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>arg1.every : Symbol(every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >arg1 : Symbol(arg1, Decl(duplicateLocalVariable1.ts, 15, 24))
+->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>every : Symbol(every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 16, 37))
+ >index : Symbol(index, Decl(duplicateLocalVariable1.ts, 16, 41))
+ >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 16, 37))
+@@= skipped -29, +29 lines =@@
+     }
+ 
+     public addTest(test: TestCase) {
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >test : Symbol(test, Decl(duplicateLocalVariable1.ts, 19, 19))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         this.tests.push(test);
+->this.tests.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+->this.tests : Symbol(TestRunner.tests, Decl(duplicateLocalVariable1.ts, 12, 25))
++>this.tests.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
++>this.tests : Symbol(tests, Decl(duplicateLocalVariable1.ts, 12, 25))
+ >this : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+->tests : Symbol(TestRunner.tests, Decl(duplicateLocalVariable1.ts, 12, 25))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>tests : Symbol(tests, Decl(duplicateLocalVariable1.ts, 12, 25))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >test : Symbol(test, Decl(duplicateLocalVariable1.ts, 19, 19))
+     }
+     public run() {
+->run : Symbol(TestRunner.run, Decl(duplicateLocalVariable1.ts, 21, 5))
++>run : Symbol(run, Decl(duplicateLocalVariable1.ts, 21, 5))
+ 
+         var success = true;
+ >success : Symbol(success, Decl(duplicateLocalVariable1.ts, 23, 11))
+ 
+         for (var test in this.tests) {
+ >test : Symbol(test, Decl(duplicateLocalVariable1.ts, 24, 16))
+->this.tests : Symbol(TestRunner.tests, Decl(duplicateLocalVariable1.ts, 12, 25))
++>this.tests : Symbol(tests, Decl(duplicateLocalVariable1.ts, 12, 25))
+ >this : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+->tests : Symbol(TestRunner.tests, Decl(duplicateLocalVariable1.ts, 12, 25))
++>tests : Symbol(tests, Decl(duplicateLocalVariable1.ts, 12, 25))
+ 
+             var exception = false;
+ >exception : Symbol(exception, Decl(duplicateLocalVariable1.ts, 25, 15))
+@@= skipped -30, +30 lines =@@
+             var testcase = <TestCase>this.tests[test]
+ >testcase : Symbol(testcase, Decl(duplicateLocalVariable1.ts, 26, 15))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+->this.tests : Symbol(TestRunner.tests, Decl(duplicateLocalVariable1.ts, 12, 25))
++>this.tests : Symbol(tests, Decl(duplicateLocalVariable1.ts, 12, 25))
+ >this : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+->tests : Symbol(TestRunner.tests, Decl(duplicateLocalVariable1.ts, 12, 25))
++>tests : Symbol(tests, Decl(duplicateLocalVariable1.ts, 12, 25))
+ >test : Symbol(test, Decl(duplicateLocalVariable1.ts, 24, 16))
+ 
+             var testResult: boolean = false;
+@@= skipped -11, +11 lines =@@
+             try {
+                 testResult = testcase.test();
+ >testResult : Symbol(testResult, Decl(duplicateLocalVariable1.ts, 27, 15))
+->testcase.test : Symbol(TestCase.test, Decl(duplicateLocalVariable1.ts, 9, 37))
++>testcase.test : Symbol(test, Decl(duplicateLocalVariable1.ts, 9, 37))
+ >testcase : Symbol(testcase, Decl(duplicateLocalVariable1.ts, 26, 15))
+->test : Symbol(TestCase.test, Decl(duplicateLocalVariable1.ts, 9, 37))
++>test : Symbol(test, Decl(duplicateLocalVariable1.ts, 9, 37))
+             }
+             catch (e) {
+ >e : Symbol(e, Decl(duplicateLocalVariable1.ts, 31, 19))
+@@= skipped -14, +14 lines =@@
+ >testResult : Symbol(testResult, Decl(duplicateLocalVariable1.ts, 27, 15))
+ 
+                 if (typeof testcase.errorMessageRegEx === "string") {
+->testcase.errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
++>testcase.errorMessageRegEx : Symbol(errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+ >testcase : Symbol(testcase, Decl(duplicateLocalVariable1.ts, 26, 15))
+->errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
++>errorMessageRegEx : Symbol(errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+ 
+                     if (testcase.errorMessageRegEx === "") { // Any error is fine
+->testcase.errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
++>testcase.errorMessageRegEx : Symbol(errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+ >testcase : Symbol(testcase, Decl(duplicateLocalVariable1.ts, 26, 15))
+->errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
++>errorMessageRegEx : Symbol(errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+ 
+                         testResult = true;
+ >testResult : Symbol(testResult, Decl(duplicateLocalVariable1.ts, 27, 15))
+@@= skipped -18, +18 lines =@@
+                         var regex = new RegExp(testcase.errorMessageRegEx);
+ >regex : Symbol(regex, Decl(duplicateLocalVariable1.ts, 38, 27))
+ >RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->testcase.errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
++>testcase.errorMessageRegEx : Symbol(errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+ >testcase : Symbol(testcase, Decl(duplicateLocalVariable1.ts, 26, 15))
+->errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
++>errorMessageRegEx : Symbol(errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+ 
+                         testResult = regex.test(e.message);
+ >testResult : Symbol(testResult, Decl(duplicateLocalVariable1.ts, 27, 15))
+->regex.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
++>regex.test : Symbol(test, Decl(lib.es5.d.ts, --, --))
+ >regex : Symbol(regex, Decl(duplicateLocalVariable1.ts, 38, 27))
+->test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
++>test : Symbol(test, Decl(lib.es5.d.ts, --, --))
+ >e : Symbol(e, Decl(duplicateLocalVariable1.ts, 31, 19))
+                     }
+                 } 
+@@= skipped -19, +19 lines =@@
+                 }
+             }
+             if ((testcase.errorMessageRegEx !== undefined) && !exception) {
+->testcase.errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
++>testcase.errorMessageRegEx : Symbol(errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+ >testcase : Symbol(testcase, Decl(duplicateLocalVariable1.ts, 26, 15))
+->errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
++>errorMessageRegEx : Symbol(errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
+ >undefined : Symbol(undefined)
+ >exception : Symbol(exception, Decl(duplicateLocalVariable1.ts, 25, 15))
+ 
+@@= skipped -34, +34 lines =@@
+ 
+     // First 3 are for simple harness validation
+     testRunner.addTest(new TestCase("Basic test", function () { return true; }));
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+     testRunner.addTest(new TestCase("Test for any error", function () { throw new Error(); return false; }, ""));
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     testRunner.addTest(new TestCase("Test RegEx error message match", function () { throw new Error("Should also pass"); return false; }, "Should [also]+ pass"));
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     testRunner.addTest(new TestCase("Test array compare true", function () { return TestRunner.arrayCompare([1, 2, 3], [1, 2, 3]); }));
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+->TestRunner.arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
++>TestRunner.arrayCompare : Symbol(arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+ >TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+->arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
++>arrayCompare : Symbol(arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+ 
+     testRunner.addTest(new TestCase("Test array compare false", function () { return !TestRunner.arrayCompare([3, 2, 3], [1, 2, 3]); }));
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+->TestRunner.arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
++>TestRunner.arrayCompare : Symbol(arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+ >TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+->arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
++>arrayCompare : Symbol(arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+ 
+     // File detection tests
+     testRunner.addTest(new TestCase("Check file exists",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -51, +51 lines =@@
+ 
+         }));
+     testRunner.addTest(new TestCase("Check file doesn't exist",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -14, +14 lines =@@
+ 
+     // File pattern matching tests
+     testRunner.addTest(new TestCase("Check text file match",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -17, +17 lines =@@
+ 
+         }));
+     testRunner.addTest(new TestCase("Check makefile match",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -11, +11 lines =@@
+ 
+         }));
+     testRunner.addTest(new TestCase("Check binary file doesn't match",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -16, +16 lines =@@
+ 
+     // Command-line parameter tests
+     testRunner.addTest(new TestCase("Check App defaults",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -34, +34 lines =@@
+ 
+         }));
+     testRunner.addTest(new TestCase("Check App params",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -39, +39 lines =@@
+ 
+     // File BOM detection tests
+     testRunner.addTest(new TestCase("Check encoding detection no BOM",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -17, +17 lines =@@
+ 
+         }));
+     testRunner.addTest(new TestCase("Check encoding detection UTF8 BOM",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -17, +17 lines =@@
+ 
+         }));
+     testRunner.addTest(new TestCase("Check encoding detection UTF16be BOM",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -17, +17 lines =@@
+ 
+         }));
+     testRunner.addTest(new TestCase("Check encoding detection UTF16le BOM",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -17, +17 lines =@@
+ 
+         }));
+     testRunner.addTest(new TestCase("Check encoding on 1 bytes file",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -17, +17 lines =@@
+ 
+         }));
+     testRunner.addTest(new TestCase("Check encoding on 0 bytes file",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -19, +19 lines =@@
+ 
+     // UTF8 encoding tests
+     testRunner.addTest(new TestCase("Check byte reader",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -20, +20 lines =@@
+ >i : Symbol(i, Decl(duplicateLocalVariable1.ts, 156, 20))
+ 
+                 chars.push(fb.readByte());
+->chars.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>chars.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 155, 15))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 154, 15))
+             }
+             return TestRunner.arrayCompare(chars, [0x54, 0xC3, 0xA8, 0xE1, 0xB4, 0xA3, 0xE2, 0x80, 0xA0, 0x0D, 0x0A]);
+->TestRunner.arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
++>TestRunner.arrayCompare : Symbol(arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+ >TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+->arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
++>arrayCompare : Symbol(arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+ >chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 155, 15))
+ 
+         }));
+ 
+ 
+     testRunner.addTest(new TestCase("Check UTF8 decoding",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -35, +35 lines =@@
+ >i : Symbol(i, Decl(duplicateLocalVariable1.ts, 167, 20))
+ 
+                 chars.push(fb.readUtf8CodePoint());
+->chars.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>chars.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 166, 15))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 165, 15))
+             }
+             return TestRunner.arrayCompare(chars, [0x0054, 0x00E8, 0x1D23, 0x2020, 0x000D, 0x000A]);
+->TestRunner.arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
++>TestRunner.arrayCompare : Symbol(arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+ >TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+->arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
++>arrayCompare : Symbol(arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+ >chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 166, 15))
+ 
+         }));
+ 
+     testRunner.addTest(new TestCase("Check UTF8 encoding",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -51, +51 lines =@@
+ >i : Symbol(i, Decl(duplicateLocalVariable1.ts, 178, 20), Decl(duplicateLocalVariable1.ts, 183, 20))
+ 
+                 bytes.push(fb.readByte());
+->bytes.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>bytes.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >bytes : Symbol(bytes, Decl(duplicateLocalVariable1.ts, 182, 15))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 175, 15))
+             }
+             var expected = [0xEF, 0xBB, 0xBF, 0x54, 0xC3, 0xA8, 0xE1, 0xB4, 0xA3, 0xE2, 0x80, 0xA0, 0x0D, 0x0A];
+ >expected : Symbol(expected, Decl(duplicateLocalVariable1.ts, 186, 15))
+ 
+             return TestRunner.arrayCompare(bytes, expected);
+->TestRunner.arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
++>TestRunner.arrayCompare : Symbol(arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+ >TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+->arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
++>arrayCompare : Symbol(arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+ >bytes : Symbol(bytes, Decl(duplicateLocalVariable1.ts, 182, 15))
+ >expected : Symbol(expected, Decl(duplicateLocalVariable1.ts, 186, 15))
+ 
+@@= skipped -19, +19 lines =@@
+ 
+     // Test reading and writing files
+     testRunner.addTest(new TestCase("Check saving a file",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -21, +21 lines =@@
+ >chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 196, 15))
+ 
+             chars.forEach(function (val) { fb.writeUtf16CodePoint(val, false); });
+->chars.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>chars.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 196, 15))
+->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 197, 36))
+ >fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 194, 15))
+ >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 197, 36))
+@@= skipped -29, +29 lines =@@
+ >savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 200, 15))
+ 
+             expectedBytes.forEach(function (val) {
+->expectedBytes.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>expectedBytes.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >expectedBytes : Symbol(expectedBytes, Decl(duplicateLocalVariable1.ts, 204, 15))
+->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 206, 44))
+ 
+                 var byteVal = savedFile.readByte();
+@@= skipped -21, +21 lines =@@
+         }));
+ 
+     testRunner.addTest(new TestCase("Check reading past buffer asserts",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+     function () {
+@@= skipped -18, +18 lines =@@
+         return true;
+     }, "read beyond buffer length"));
+     testRunner.addTest(new TestCase("Check writing past buffer asserts",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+     function () {
+@@= skipped -19, +19 lines =@@
+ 
+     // Non-BMP unicode char tests
+     testRunner.addTest(new TestCase("Read non-BMP utf16 chars",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -27, +27 lines =@@
+ >i : Symbol(i, Decl(duplicateLocalVariable1.ts, 237, 20))
+ 
+                 codePoints.push(savedFile.readUtf16CodePoint(false));
+->codePoints.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>codePoints.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >codePoints : Symbol(codePoints, Decl(duplicateLocalVariable1.ts, 236, 15))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 231, 15))
+             }
+             var expectedCodePoints = [0x10480, 0x10481, 0x10482, 0x54, 0x68, 0x69];
+ >expectedCodePoints : Symbol(expectedCodePoints, Decl(duplicateLocalVariable1.ts, 240, 15))
+ 
+             return TestRunner.arrayCompare(codePoints, expectedCodePoints);
+->TestRunner.arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
++>TestRunner.arrayCompare : Symbol(arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+ >TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+->arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
++>arrayCompare : Symbol(arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+ >codePoints : Symbol(codePoints, Decl(duplicateLocalVariable1.ts, 236, 15))
+ >expectedCodePoints : Symbol(expectedCodePoints, Decl(duplicateLocalVariable1.ts, 240, 15))
+ 
+         }));
+ 
+     testRunner.addTest(new TestCase("Read non-BMP utf8 chars",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -45, +45 lines =@@
+ >i : Symbol(i, Decl(duplicateLocalVariable1.ts, 252, 20))
+ 
+                 codePoints.push(savedFile.readUtf8CodePoint());
+->codePoints.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>codePoints.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >codePoints : Symbol(codePoints, Decl(duplicateLocalVariable1.ts, 251, 15))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 246, 15))
+             }
+             var expectedCodePoints = [0x10480, 0x10481, 0x10482, 0x54, 0x68, 0x69];
+ >expectedCodePoints : Symbol(expectedCodePoints, Decl(duplicateLocalVariable1.ts, 255, 15))
+ 
+             return TestRunner.arrayCompare(codePoints, expectedCodePoints);
+->TestRunner.arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
++>TestRunner.arrayCompare : Symbol(arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+ >TestRunner : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
+->arrayCompare : Symbol(TestRunner.arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
++>arrayCompare : Symbol(arrayCompare, Decl(duplicateLocalVariable1.ts, 13, 35))
+ >codePoints : Symbol(codePoints, Decl(duplicateLocalVariable1.ts, 251, 15))
+ >expectedCodePoints : Symbol(expectedCodePoints, Decl(duplicateLocalVariable1.ts, 255, 15))
+ 
+         }));
+ 
+     testRunner.addTest(new TestCase("Write non-BMP utf8 chars",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -36, +36 lines =@@
+ >chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 263, 15))
+ 
+             chars.forEach(function (val) { fb.writeUtf8CodePoint(val); });
+->chars.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>chars.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 263, 15))
+->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 264, 36))
+ >fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 262, 15))
+ >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 264, 36))
+@@= skipped -26, +26 lines =@@
+ >expectedBytes : Symbol(expectedBytes, Decl(duplicateLocalVariable1.ts, 271, 15))
+ 
+             expectedBytes.forEach(function (val) {
+->expectedBytes.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>expectedBytes.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >expectedBytes : Symbol(expectedBytes, Decl(duplicateLocalVariable1.ts, 271, 15))
+->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 272, 44))
+ 
+                 var byteVal = savedFile.readByte();
+@@= skipped -21, +21 lines =@@
+         }));
+ 
+     testRunner.addTest(new TestCase("Test invalid lead UTF8 byte",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -19, +19 lines =@@
+         }, "Invalid UTF8 byte sequence at index: 4"));
+ 
+     testRunner.addTest(new TestCase("Test invalid tail UTF8 byte",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -19, +19 lines =@@
+         }, "Trailing byte invalid at index: 8"));
+ 
+     testRunner.addTest(new TestCase("Test ANSI fails validation",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -19, +19 lines =@@
+         }, "Trailing byte invalid at index: 6"));
+ 
+     testRunner.addTest(new TestCase("Test UTF-16LE with invalid surrogate trail fails",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -19, +19 lines =@@
+         }, "Trail surrogate has an invalid value"));
+ 
+     testRunner.addTest(new TestCase("Test UTF-16BE with invalid surrogate head fails",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -19, +19 lines =@@
+         }, "Byte sequence starts with a trail surrogate"));
+ 
+     testRunner.addTest(new TestCase("Test UTF-16LE with missing trail surrogate fails",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -20, +20 lines =@@
+ 
+     // Count of CRs & LFs
+     testRunner.addTest(new TestCase("Count character occurrences",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {
+@@= skipped -29, +29 lines =@@
+ 
+     // Control characters in text
+     testRunner.addTest(new TestCase("Test file with control character",
+->testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>testRunner.addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
+->addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
++>addTest : Symbol(addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
+ >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
+ 
+         function () {

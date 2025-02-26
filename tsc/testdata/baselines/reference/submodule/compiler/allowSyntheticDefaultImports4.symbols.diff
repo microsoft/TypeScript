@@ -1,0 +1,11 @@
+--- old.allowSyntheticDefaultImports4.symbols
++++ new.allowSyntheticDefaultImports4.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(b.d.ts, 0, 0))
+ 
+ 	member: string;
+->member : Symbol(Foo.member, Decl(b.d.ts, 0, 19))
++>member : Symbol(member, Decl(b.d.ts, 0, 19))
+ }
+ export = Foo;
+ >Foo : Symbol(Foo, Decl(b.d.ts, 0, 0))

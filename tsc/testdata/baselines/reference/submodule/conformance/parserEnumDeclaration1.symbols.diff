@@ -1,0 +1,13 @@
+--- old.parserEnumDeclaration1.symbols
++++ new.parserEnumDeclaration1.symbols
+@@= skipped -4, +4 lines =@@
+ >E : Symbol(E, Decl(parserEnumDeclaration1.ts, 0, 0))
+ 
+   Foo = 1,
+->Foo : Symbol(E.Foo, Decl(parserEnumDeclaration1.ts, 0, 8))
++>Foo : Symbol(Foo, Decl(parserEnumDeclaration1.ts, 0, 8))
+ 
+   Bar
+->Bar : Symbol(E.Bar, Decl(parserEnumDeclaration1.ts, 1, 10))
++>Bar : Symbol(Bar, Decl(parserEnumDeclaration1.ts, 1, 10))
+ }

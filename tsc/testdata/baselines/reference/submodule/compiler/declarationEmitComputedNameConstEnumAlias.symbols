@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/declarationEmitComputedNameConstEnumAlias.ts] ////
+
+=== EnumExample.ts ===
+enum EnumExample {
+>EnumExample : Symbol(EnumExample, Decl(EnumExample.ts, 0, 0))
+
+    TEST = 'TEST',
+>TEST : Symbol(TEST, Decl(EnumExample.ts, 0, 18))
+}
+
+export default EnumExample;
+>EnumExample : Symbol(EnumExample, Decl(EnumExample.ts, 0, 0))
+
+=== index.ts ===
+import EnumExample from './EnumExample';
+>EnumExample : Symbol(EnumExample, Decl(index.ts, 0, 6))
+
+export default {
+    [EnumExample.TEST]: {},
+>[EnumExample.TEST] : Symbol(TEST, Decl(index.ts, 2, 16))
+>EnumExample.TEST : Symbol(TEST, Decl(EnumExample.ts, 0, 18))
+>EnumExample : Symbol(EnumExample, Decl(index.ts, 0, 6))
+>TEST : Symbol(TEST, Decl(EnumExample.ts, 0, 18))
+
+};

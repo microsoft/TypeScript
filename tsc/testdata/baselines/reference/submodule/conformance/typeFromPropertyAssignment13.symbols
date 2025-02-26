@@ -1,0 +1,42 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment13.ts] ////
+
+=== module.js ===
+var Outer = {}
+>Outer : Symbol(Outer, Decl(module.js, 0, 3))
+
+Outer.Inner = function() {}
+>Outer : Symbol(Outer, Decl(module.js, 0, 3))
+
+Outer.Inner.prototype = {
+>Outer : Symbol(Outer, Decl(module.js, 0, 3))
+
+    m() { },
+>m : Symbol(m, Decl(module.js, 2, 25))
+
+    i: 1
+>i : Symbol(i, Decl(module.js, 3, 12))
+}
+// incremental assignments still work
+Outer.Inner.prototype.j = 2
+>Outer : Symbol(Outer, Decl(module.js, 0, 3))
+
+/** @type {string} */
+Outer.Inner.prototype.k;
+>Outer : Symbol(Outer, Decl(module.js, 0, 3))
+
+var inner = new Outer.Inner()
+>inner : Symbol(inner, Decl(module.js, 10, 3))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3))
+
+inner.m()
+>inner : Symbol(inner, Decl(module.js, 10, 3))
+
+inner.i
+>inner : Symbol(inner, Decl(module.js, 10, 3))
+
+inner.j
+>inner : Symbol(inner, Decl(module.js, 10, 3))
+
+inner.k
+>inner : Symbol(inner, Decl(module.js, 10, 3))
+

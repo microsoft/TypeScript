@@ -1,0 +1,19 @@
+--- old.substitutionTypeNoMergeOfAssignableType.symbols
++++ new.substitutionTypeNoMergeOfAssignableType.symbols
+@@= skipped -4, +4 lines =@@
+ >Entry : Symbol(Entry, Decl(substitutionTypeNoMergeOfAssignableType.ts, 0, 0))
+ 
+     comment?: string;
+->comment : Symbol(Entry.comment, Decl(substitutionTypeNoMergeOfAssignableType.ts, 0, 17))
++>comment : Symbol(comment, Decl(substitutionTypeNoMergeOfAssignableType.ts, 0, 17))
+  }
+  
+  interface Entity {
+ >Entity : Symbol(Entity, Decl(substitutionTypeNoMergeOfAssignableType.ts, 2, 2))
+ 
+      fields: {[key: string]: Entry};
+->fields : Symbol(Entity.fields, Decl(substitutionTypeNoMergeOfAssignableType.ts, 4, 19))
++>fields : Symbol(fields, Decl(substitutionTypeNoMergeOfAssignableType.ts, 4, 19))
+ >key : Symbol(key, Decl(substitutionTypeNoMergeOfAssignableType.ts, 5, 15))
+ >Entry : Symbol(Entry, Decl(substitutionTypeNoMergeOfAssignableType.ts, 0, 0))
+  }

@@ -1,0 +1,111 @@
+--- old.covariantCallbacks.symbols
++++ new.covariantCallbacks.symbols
+@@= skipped -7, +7 lines =@@
+ >T : Symbol(T, Decl(covariantCallbacks.ts, 2, 12))
+ 
+     then(cb: (value: T) => void): void;
+->then : Symbol(P.then, Decl(covariantCallbacks.ts, 2, 16))
++>then : Symbol(then, Decl(covariantCallbacks.ts, 2, 16))
+ >cb : Symbol(cb, Decl(covariantCallbacks.ts, 3, 9))
+ >value : Symbol(value, Decl(covariantCallbacks.ts, 3, 14))
+ >T : Symbol(T, Decl(covariantCallbacks.ts, 2, 12))
+@@= skipped -9, +9 lines =@@
+ 
+ interface A { a: string }
+ >A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+->a : Symbol(A.a, Decl(covariantCallbacks.ts, 6, 13))
++>a : Symbol(a, Decl(covariantCallbacks.ts, 6, 13))
+ 
+ interface B extends A { b: string }
+ >B : Symbol(B, Decl(covariantCallbacks.ts, 6, 25))
+ >A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+->b : Symbol(B.b, Decl(covariantCallbacks.ts, 7, 23))
++>b : Symbol(b, Decl(covariantCallbacks.ts, 7, 23))
+ 
+ function f1(a: P<A>, b: P<B>) {
+ >f1 : Symbol(f1, Decl(covariantCallbacks.ts, 7, 35))
+@@= skipped -28, +28 lines =@@
+ function f2(a: Promise<A>, b: Promise<B>) {
+ >f2 : Symbol(f2, Decl(covariantCallbacks.ts, 12, 1))
+ >a : Symbol(a, Decl(covariantCallbacks.ts, 14, 12))
+->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Promise : Symbol(Promise)
+ >A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+ >b : Symbol(b, Decl(covariantCallbacks.ts, 14, 26))
+->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Promise : Symbol(Promise)
+ >B : Symbol(B, Decl(covariantCallbacks.ts, 6, 25))
+ 
+     a = b;
+@@= skipped -19, +19 lines =@@
+ >AList1 : Symbol(AList1, Decl(covariantCallbacks.ts, 17, 1))
+ 
+     forEach(cb: (item: A) => void): void;
+->forEach : Symbol(AList1.forEach, Decl(covariantCallbacks.ts, 19, 18))
++>forEach : Symbol(forEach, Decl(covariantCallbacks.ts, 19, 18))
+ >cb : Symbol(cb, Decl(covariantCallbacks.ts, 20, 12))
+ >item : Symbol(item, Decl(covariantCallbacks.ts, 20, 17))
+ >A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+@@= skipped -10, +10 lines =@@
+ >BList1 : Symbol(BList1, Decl(covariantCallbacks.ts, 21, 1))
+ 
+     forEach(cb: (item: B) => void): void;
+->forEach : Symbol(BList1.forEach, Decl(covariantCallbacks.ts, 23, 18))
++>forEach : Symbol(forEach, Decl(covariantCallbacks.ts, 23, 18))
+ >cb : Symbol(cb, Decl(covariantCallbacks.ts, 24, 12))
+ >item : Symbol(item, Decl(covariantCallbacks.ts, 24, 17))
+ >B : Symbol(B, Decl(covariantCallbacks.ts, 6, 25))
+@@= skipped -26, +26 lines =@@
+ >AList2 : Symbol(AList2, Decl(covariantCallbacks.ts, 30, 1))
+ 
+     forEach(cb: (item: A) => boolean): void;
+->forEach : Symbol(AList2.forEach, Decl(covariantCallbacks.ts, 32, 18))
++>forEach : Symbol(forEach, Decl(covariantCallbacks.ts, 32, 18))
+ >cb : Symbol(cb, Decl(covariantCallbacks.ts, 33, 12))
+ >item : Symbol(item, Decl(covariantCallbacks.ts, 33, 17))
+ >A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+@@= skipped -10, +10 lines =@@
+ >BList2 : Symbol(BList2, Decl(covariantCallbacks.ts, 34, 1))
+ 
+     forEach(cb: (item: A) => void): void;
+->forEach : Symbol(BList2.forEach, Decl(covariantCallbacks.ts, 36, 18))
++>forEach : Symbol(forEach, Decl(covariantCallbacks.ts, 36, 18))
+ >cb : Symbol(cb, Decl(covariantCallbacks.ts, 37, 12))
+ >item : Symbol(item, Decl(covariantCallbacks.ts, 37, 17))
+ >A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+@@= skipped -26, +26 lines =@@
+ >AList3 : Symbol(AList3, Decl(covariantCallbacks.ts, 43, 1))
+ 
+     forEach(cb: (item: A) => void): void;
+->forEach : Symbol(AList3.forEach, Decl(covariantCallbacks.ts, 45, 18))
++>forEach : Symbol(forEach, Decl(covariantCallbacks.ts, 45, 18))
+ >cb : Symbol(cb, Decl(covariantCallbacks.ts, 46, 12))
+ >item : Symbol(item, Decl(covariantCallbacks.ts, 46, 17))
+ >A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+@@= skipped -10, +10 lines =@@
+ >BList3 : Symbol(BList3, Decl(covariantCallbacks.ts, 47, 1))
+ 
+     forEach(cb: (item: A, context: any) => void): void;
+->forEach : Symbol(BList3.forEach, Decl(covariantCallbacks.ts, 49, 18))
++>forEach : Symbol(forEach, Decl(covariantCallbacks.ts, 49, 18))
+ >cb : Symbol(cb, Decl(covariantCallbacks.ts, 50, 12))
+ >item : Symbol(item, Decl(covariantCallbacks.ts, 50, 17))
+ >A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+@@= skipped -27, +27 lines =@@
+ >AList4 : Symbol(AList4, Decl(covariantCallbacks.ts, 56, 1))
+ 
+     forEach(cb: (item: A) => A): void;
+->forEach : Symbol(AList4.forEach, Decl(covariantCallbacks.ts, 58, 18))
++>forEach : Symbol(forEach, Decl(covariantCallbacks.ts, 58, 18))
+ >cb : Symbol(cb, Decl(covariantCallbacks.ts, 59, 12))
+ >item : Symbol(item, Decl(covariantCallbacks.ts, 59, 17))
+ >A : Symbol(A, Decl(covariantCallbacks.ts, 4, 2))
+@@= skipped -11, +11 lines =@@
+ >BList4 : Symbol(BList4, Decl(covariantCallbacks.ts, 60, 1))
+ 
+     forEach(cb: (item: B) => B): void;
+->forEach : Symbol(BList4.forEach, Decl(covariantCallbacks.ts, 62, 18))
++>forEach : Symbol(forEach, Decl(covariantCallbacks.ts, 62, 18))
+ >cb : Symbol(cb, Decl(covariantCallbacks.ts, 63, 12))
+ >item : Symbol(item, Decl(covariantCallbacks.ts, 63, 17))
+ >B : Symbol(B, Decl(covariantCallbacks.ts, 6, 25))

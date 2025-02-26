@@ -1,0 +1,157 @@
+--- old.narrowingOfDottedNames.symbols
++++ new.narrowingOfDottedNames.symbols
+@@= skipped -6, +6 lines =@@
+ >A : Symbol(A, Decl(narrowingOfDottedNames.ts, 0, 0))
+ 
+     prop!: { a: string; };
+->prop : Symbol(A.prop, Decl(narrowingOfDottedNames.ts, 2, 9))
++>prop : Symbol(prop, Decl(narrowingOfDottedNames.ts, 2, 9))
+ >a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 12))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >B : Symbol(B, Decl(narrowingOfDottedNames.ts, 4, 1))
+ 
+     prop!: { b: string; }
+->prop : Symbol(B.prop, Decl(narrowingOfDottedNames.ts, 6, 9))
++>prop : Symbol(prop, Decl(narrowingOfDottedNames.ts, 6, 9))
+ >b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 12))
+ }
+ 
+@@= skipped -39, +39 lines =@@
+ 
+             x.prop.a;
+ >x.prop.a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 12))
+->x.prop : Symbol(A.prop, Decl(narrowingOfDottedNames.ts, 2, 9))
++>x.prop : Symbol(prop, Decl(narrowingOfDottedNames.ts, 2, 9))
+ >x : Symbol(x, Decl(narrowingOfDottedNames.ts, 18, 12))
+->prop : Symbol(A.prop, Decl(narrowingOfDottedNames.ts, 2, 9))
++>prop : Symbol(prop, Decl(narrowingOfDottedNames.ts, 2, 9))
+ >a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 12))
+         }
+         else if (x instanceof B) {
+@@= skipped -11, +11 lines =@@
+ 
+             x.prop.b;
+ >x.prop.b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 12))
+->x.prop : Symbol(B.prop, Decl(narrowingOfDottedNames.ts, 6, 9))
++>x.prop : Symbol(prop, Decl(narrowingOfDottedNames.ts, 6, 9))
+ >x : Symbol(x, Decl(narrowingOfDottedNames.ts, 18, 12))
+->prop : Symbol(B.prop, Decl(narrowingOfDottedNames.ts, 6, 9))
++>prop : Symbol(prop, Decl(narrowingOfDottedNames.ts, 6, 9))
+ >b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 12))
+         }
+     }
+@@= skipped -21, +21 lines =@@
+ 
+             x.prop.a;
+ >x.prop.a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 12))
+->x.prop : Symbol(A.prop, Decl(narrowingOfDottedNames.ts, 2, 9))
++>x.prop : Symbol(prop, Decl(narrowingOfDottedNames.ts, 2, 9))
+ >x : Symbol(x, Decl(narrowingOfDottedNames.ts, 29, 12))
+->prop : Symbol(A.prop, Decl(narrowingOfDottedNames.ts, 2, 9))
++>prop : Symbol(prop, Decl(narrowingOfDottedNames.ts, 2, 9))
+ >a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 12))
+         }
+         else if (isB(x)) {
+@@= skipped -11, +11 lines =@@
+ 
+             x.prop.b;
+ >x.prop.b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 12))
+->x.prop : Symbol(B.prop, Decl(narrowingOfDottedNames.ts, 6, 9))
++>x.prop : Symbol(prop, Decl(narrowingOfDottedNames.ts, 6, 9))
+ >x : Symbol(x, Decl(narrowingOfDottedNames.ts, 29, 12))
+->prop : Symbol(B.prop, Decl(narrowingOfDottedNames.ts, 6, 9))
++>prop : Symbol(prop, Decl(narrowingOfDottedNames.ts, 6, 9))
+ >b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 12))
+         }
+     }
+@@= skipped -14, +14 lines =@@
+ >Foo1 : Symbol(Foo1, Decl(narrowingOfDottedNames.ts, 38, 1))
+ {
+     x: number;  // Error
+->x : Symbol(Foo1.x, Decl(narrowingOfDottedNames.ts, 43, 1))
++>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 43, 1))
+ 
+     constructor() {
+         if (this instanceof Boolean) {
+@@= skipped -14, +14 lines =@@
+ >Foo2 : Symbol(Foo2, Decl(narrowingOfDottedNames.ts, 49, 1))
+ {
+     x: number;  // Error
+->x : Symbol(Foo2.x, Decl(narrowingOfDottedNames.ts, 52, 1))
++>x : Symbol(x, Decl(narrowingOfDottedNames.ts, 52, 1))
+ 
+     constructor() {
+     }
+@@= skipped -12, +12 lines =@@
+ >AInfo : Symbol(AInfo, Decl(narrowingOfDottedNames.ts, 56, 1))
+ 
+     a_count: number = 1;
+->a_count : Symbol(AInfo.a_count, Decl(narrowingOfDottedNames.ts, 60, 13))
++>a_count : Symbol(a_count, Decl(narrowingOfDottedNames.ts, 60, 13))
+ }
+ 
+ class BInfo {
+ >BInfo : Symbol(BInfo, Decl(narrowingOfDottedNames.ts, 62, 1))
+ 
+     b_count: number = 1;
+->b_count : Symbol(BInfo.b_count, Decl(narrowingOfDottedNames.ts, 64, 13))
++>b_count : Symbol(b_count, Decl(narrowingOfDottedNames.ts, 64, 13))
+ }
+ 
+ class Base {
+ >Base : Symbol(Base, Decl(narrowingOfDottedNames.ts, 66, 1))
+ 
+     id: number = 0;
+->id : Symbol(Base.id, Decl(narrowingOfDottedNames.ts, 68, 12))
++>id : Symbol(id, Decl(narrowingOfDottedNames.ts, 68, 12))
+ }
+ 
+ class A2 extends Base {
+@@= skipped -22, +22 lines =@@
+ >Base : Symbol(Base, Decl(narrowingOfDottedNames.ts, 66, 1))
+ 
+     info!: AInfo;
+->info : Symbol(A2.info, Decl(narrowingOfDottedNames.ts, 72, 23))
++>info : Symbol(info, Decl(narrowingOfDottedNames.ts, 72, 23))
+ >AInfo : Symbol(AInfo, Decl(narrowingOfDottedNames.ts, 56, 1))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >Base : Symbol(Base, Decl(narrowingOfDottedNames.ts, 66, 1))
+ 
+     info!: BInfo;
+->info : Symbol(B2.info, Decl(narrowingOfDottedNames.ts, 76, 23))
++>info : Symbol(info, Decl(narrowingOfDottedNames.ts, 76, 23))
+ >BInfo : Symbol(BInfo, Decl(narrowingOfDottedNames.ts, 62, 1))
+ }
+ 
+@@= skipped -16, +16 lines =@@
+ >A2 : Symbol(A2, Decl(narrowingOfDottedNames.ts, 70, 1))
+ 
+         target.info.a_count = 3;
+->target.info.a_count : Symbol(AInfo.a_count, Decl(narrowingOfDottedNames.ts, 60, 13))
+->target.info : Symbol(A2.info, Decl(narrowingOfDottedNames.ts, 72, 23))
++>target.info.a_count : Symbol(a_count, Decl(narrowingOfDottedNames.ts, 60, 13))
++>target.info : Symbol(info, Decl(narrowingOfDottedNames.ts, 72, 23))
+ >target : Symbol(target, Decl(narrowingOfDottedNames.ts, 80, 3))
+->info : Symbol(A2.info, Decl(narrowingOfDottedNames.ts, 72, 23))
+->a_count : Symbol(AInfo.a_count, Decl(narrowingOfDottedNames.ts, 60, 13))
++>info : Symbol(info, Decl(narrowingOfDottedNames.ts, 72, 23))
++>a_count : Symbol(a_count, Decl(narrowingOfDottedNames.ts, 60, 13))
+     }
+     else if (target instanceof B2) {
+ >target : Symbol(target, Decl(narrowingOfDottedNames.ts, 80, 3))
+@@= skipped -13, +13 lines =@@
+         const j: BInfo = target.info;
+ >j : Symbol(j, Decl(narrowingOfDottedNames.ts, 87, 13))
+ >BInfo : Symbol(BInfo, Decl(narrowingOfDottedNames.ts, 62, 1))
+->target.info : Symbol(B2.info, Decl(narrowingOfDottedNames.ts, 76, 23))
++>target.info : Symbol(info, Decl(narrowingOfDottedNames.ts, 76, 23))
+ >target : Symbol(target, Decl(narrowingOfDottedNames.ts, 80, 3))
+->info : Symbol(B2.info, Decl(narrowingOfDottedNames.ts, 76, 23))
++>info : Symbol(info, Decl(narrowingOfDottedNames.ts, 76, 23))
+     }
+ }
+ 

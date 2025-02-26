@@ -1,0 +1,37 @@
+--- old.typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.symbols
++++ new.typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.symbols
+@@= skipped -7, +7 lines =@@
+ >V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 1, 21))
+ 
+     set(value: V): T;
+->set : Symbol(Settable.set, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 1, 26))
++>set : Symbol(set, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 1, 26))
+ >value : Symbol(value, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 2, 8))
+ >V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 1, 21))
+ >T : Symbol(T, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 1, 19))
+@@= skipped -16, +16 lines =@@
+ >V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 15))
+ 
+     readonly item: V;
+->item : Symbol(Identity.item, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 55))
++>item : Symbol(item, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 55))
+ >V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 15))
+ 
+     constructor(value: V) {
+@@= skipped -8, +8 lines =@@
+ >V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 15))
+ 
+         this.item = value;
+->this.item : Symbol(Identity.item, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 55))
++>this.item : Symbol(item, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 55))
+ >this : Symbol(Identity, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 3, 1))
+->item : Symbol(Identity.item, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 55))
++>item : Symbol(item, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 55))
+ >value : Symbol(value, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 8, 16))
+     }
+     public set(value: V): Identity<V> {
+->set : Symbol(Identity.set, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 10, 5))
++>set : Symbol(set, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 10, 5))
+ >value : Symbol(value, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 11, 15))
+ >V : Symbol(V, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 6, 15))
+ >Identity : Symbol(Identity, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 3, 1))

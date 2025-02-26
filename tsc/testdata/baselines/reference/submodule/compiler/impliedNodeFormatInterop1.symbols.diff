@@ -1,0 +1,21 @@
+--- old.impliedNodeFormatInterop1.symbols
++++ new.impliedNodeFormatInterop1.symbols
+@@= skipped -7, +7 lines =@@
+ >HighlightAPI : Symbol(HighlightAPI, Decl(index.d.ts, 0, 31))
+ 
+     highlight(code: string): string;
+->highlight : Symbol(HighlightAPI.highlight, Decl(index.d.ts, 1, 33))
++>highlight : Symbol(highlight, Decl(index.d.ts, 1, 33))
+ >code : Symbol(code, Decl(index.d.ts, 2, 14))
+   }
+   const hljs: HighlightAPI;
+@@= skipped -23, +23 lines =@@
+ >hljs : Symbol(hljs, Decl(index.ts, 0, 6))
+ 
+ hljs.highlight("code");
+->hljs.highlight : Symbol(HighlightAPI.highlight, Decl(index.d.ts, 1, 33))
++>hljs.highlight : Symbol(highlight, Decl(index.d.ts, 1, 33))
+ >hljs : Symbol(hljs, Decl(index.ts, 0, 6))
+->highlight : Symbol(HighlightAPI.highlight, Decl(index.d.ts, 1, 33))
++>highlight : Symbol(highlight, Decl(index.d.ts, 1, 33))
+ 

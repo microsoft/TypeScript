@@ -1,0 +1,37 @@
+--- old.multipleInferenceContexts.symbols
++++ new.multipleInferenceContexts.symbols
+@@= skipped -18, +18 lines =@@
+ >Data : Symbol(Data, Decl(multipleInferenceContexts.ts, 4, 37))
+ 
+     data: Data;
+->data : Symbol(ComponentOptionsProperties.data, Decl(multipleInferenceContexts.ts, 4, 44))
++>data : Symbol(data, Decl(multipleInferenceContexts.ts, 4, 44))
+ >Data : Symbol(Data, Decl(multipleInferenceContexts.ts, 4, 37))
+ 
+     render(): unknown;
+->render : Symbol(ComponentOptionsProperties.render, Decl(multipleInferenceContexts.ts, 5, 15))
++>render : Symbol(render, Decl(multipleInferenceContexts.ts, 5, 15))
+ }
+ 
+ interface Instance<Data> {
+@@= skipped -12, +12 lines =@@
+ >Data : Symbol(Data, Decl(multipleInferenceContexts.ts, 9, 19))
+ 
+     get<K extends keyof Data>(name: K): unknown;
+->get : Symbol(Instance.get, Decl(multipleInferenceContexts.ts, 9, 26))
++>get : Symbol(get, Decl(multipleInferenceContexts.ts, 9, 26))
+ >K : Symbol(K, Decl(multipleInferenceContexts.ts, 10, 8))
+ >Data : Symbol(Data, Decl(multipleInferenceContexts.ts, 9, 19))
+ >name : Symbol(name, Decl(multipleInferenceContexts.ts, 10, 30))
+@@= skipped -38, +38 lines =@@
+ 
+         return h(this.get("msg"));
+ >h : Symbol(h, Decl(multipleInferenceContexts.ts, 20, 13))
+->this.get : Symbol(Instance.get, Decl(multipleInferenceContexts.ts, 9, 26))
++>this.get : Symbol(get, Decl(multipleInferenceContexts.ts, 9, 26))
+ >this : Symbol(Instance, Decl(multipleInferenceContexts.ts, 7, 1))
+->get : Symbol(Instance.get, Decl(multipleInferenceContexts.ts, 9, 26))
++>get : Symbol(get, Decl(multipleInferenceContexts.ts, 9, 26))
+ 
+     },
+ });

@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/genericInstanceOf.ts] ////
+
+=== genericInstanceOf.ts ===
+interface F {
+>F : Symbol(F, Decl(genericInstanceOf.ts, 0, 0))
+
+    (): number;
+}
+
+class C<T> {
+>C : Symbol(C, Decl(genericInstanceOf.ts, 2, 1))
+>T : Symbol(T, Decl(genericInstanceOf.ts, 4, 8))
+
+    constructor(public a: T, public b: F) {}
+>a : Symbol(a, Decl(genericInstanceOf.ts, 5, 16))
+>T : Symbol(T, Decl(genericInstanceOf.ts, 4, 8))
+>b : Symbol(b, Decl(genericInstanceOf.ts, 5, 28))
+>F : Symbol(F, Decl(genericInstanceOf.ts, 0, 0))
+
+    foo() {
+>foo : Symbol(foo, Decl(genericInstanceOf.ts, 5, 44))
+
+        if (this.a instanceof this.b) {
+>this.a : Symbol(a, Decl(genericInstanceOf.ts, 5, 16))
+>this : Symbol(C, Decl(genericInstanceOf.ts, 2, 1))
+>a : Symbol(a, Decl(genericInstanceOf.ts, 5, 16))
+>this.b : Symbol(b, Decl(genericInstanceOf.ts, 5, 28))
+>this : Symbol(C, Decl(genericInstanceOf.ts, 2, 1))
+>b : Symbol(b, Decl(genericInstanceOf.ts, 5, 28))
+        }
+    }
+}

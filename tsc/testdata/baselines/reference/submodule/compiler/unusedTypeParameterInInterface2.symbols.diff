@@ -1,0 +1,16 @@
+--- old.unusedTypeParameterInInterface2.symbols
++++ new.unusedTypeParameterInInterface2.symbols
+@@= skipped -7, +7 lines =@@
+ >V : Symbol(V, Decl(unusedTypeParameterInInterface2.ts, 0, 19))
+ 
+     f1(a: T): string;
+->f1 : Symbol(int.f1, Decl(unusedTypeParameterInInterface2.ts, 0, 24))
++>f1 : Symbol(f1, Decl(unusedTypeParameterInInterface2.ts, 0, 24))
+ >a : Symbol(a, Decl(unusedTypeParameterInInterface2.ts, 1, 7))
+ >T : Symbol(T, Decl(unusedTypeParameterInInterface2.ts, 0, 14))
+ 
+     c: V;
+->c : Symbol(int.c, Decl(unusedTypeParameterInInterface2.ts, 1, 21))
++>c : Symbol(c, Decl(unusedTypeParameterInInterface2.ts, 1, 21))
+ >V : Symbol(V, Decl(unusedTypeParameterInInterface2.ts, 0, 19))
+ }

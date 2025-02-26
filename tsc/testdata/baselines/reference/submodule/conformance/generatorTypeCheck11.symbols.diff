@@ -1,0 +1,11 @@
+--- old.generatorTypeCheck11.symbols
++++ new.generatorTypeCheck11.symbols
+@@= skipped -2, +2 lines =@@
+ === generatorTypeCheck11.ts ===
+ function* g(): IterableIterator<number, number> {
+ >g : Symbol(g, Decl(generatorTypeCheck11.ts, 0, 0))
+->IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>IterableIterator : Symbol(IterableIterator)
+ 
+     return 0;
+ }

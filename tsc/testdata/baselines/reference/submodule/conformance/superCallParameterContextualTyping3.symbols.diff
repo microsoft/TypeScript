@@ -1,0 +1,54 @@
+--- old.superCallParameterContextualTyping3.symbols
++++ new.superCallParameterContextualTyping3.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(superCallParameterContextualTyping3.ts, 0, 25))
+ 
+     method(parameter: T): void;
+->method : Symbol(ContextualType.method, Decl(superCallParameterContextualTyping3.ts, 0, 29))
++>method : Symbol(method, Decl(superCallParameterContextualTyping3.ts, 0, 29))
+ >parameter : Symbol(parameter, Decl(superCallParameterContextualTyping3.ts, 1, 11))
+ >T : Symbol(T, Decl(superCallParameterContextualTyping3.ts, 0, 25))
+ }
+@@= skipped -16, +16 lines =@@
+     }
+ 
+     foo(param: ContextualType<T>) {
+->foo : Symbol(CBase.foo, Decl(superCallParameterContextualTyping3.ts, 6, 5))
++>foo : Symbol(foo, Decl(superCallParameterContextualTyping3.ts, 6, 5))
+ >param : Symbol(param, Decl(superCallParameterContextualTyping3.ts, 8, 8))
+ >ContextualType : Symbol(ContextualType, Decl(superCallParameterContextualTyping3.ts, 0, 0))
+ >T : Symbol(T, Decl(superCallParameterContextualTyping3.ts, 4, 12))
+@@= skipped -22, +22 lines =@@
+ >p : Symbol(p, Decl(superCallParameterContextualTyping3.ts, 17, 19))
+ 
+                 p.length;
+->p.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>p.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >p : Symbol(p, Decl(superCallParameterContextualTyping3.ts, 17, 19))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+             }
+         });
+ 
+         // Should be okay.
+         // 'p' should have type 'string'.
+         super.foo({
+->super.foo : Symbol(CBase.foo, Decl(superCallParameterContextualTyping3.ts, 6, 5))
++>super.foo : Symbol(foo, Decl(superCallParameterContextualTyping3.ts, 6, 5))
+ >super : Symbol(CBase, Decl(superCallParameterContextualTyping3.ts, 2, 1))
+->foo : Symbol(CBase.foo, Decl(superCallParameterContextualTyping3.ts, 6, 5))
++>foo : Symbol(foo, Decl(superCallParameterContextualTyping3.ts, 6, 5))
+ 
+             method(p) {
+ >method : Symbol(method, Decl(superCallParameterContextualTyping3.ts, 24, 19))
+ >p : Symbol(p, Decl(superCallParameterContextualTyping3.ts, 25, 19))
+ 
+                 p.length;
+->p.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>p.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >p : Symbol(p, Decl(superCallParameterContextualTyping3.ts, 25, 19))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+             }
+         });
+     }

@@ -1,0 +1,11 @@
+--- old.importHelpersVerbatimModuleSyntax.symbols
++++ new.importHelpersVerbatimModuleSyntax.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === /node_modules/tslib/tslib.d.ts ===
+ export declare var __rest: any;
+->__rest : Symbol(__rest, Decl(tslib.d.ts, --, --))
++>__rest : Symbol(__rest, Decl(tslib.d.ts, 0, 18))
+ 
+ === /node_modules/tslib/modules/index.d.ts ===
+ 

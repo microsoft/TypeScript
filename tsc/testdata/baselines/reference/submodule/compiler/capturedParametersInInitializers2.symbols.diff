@@ -1,0 +1,43 @@
+--- old.capturedParametersInInitializers2.symbols
++++ new.capturedParametersInInitializers2.symbols
+@@= skipped -7, +7 lines =@@
+ >y : Symbol(y, Decl(capturedParametersInInitializers2.ts, 0, 13))
+ 
+         static c = x;
+->c : Symbol((Anonymous class).c, Decl(capturedParametersInInitializers2.ts, 1, 15))
++>c : Symbol(c, Decl(capturedParametersInInitializers2.ts, 1, 15))
+ >x : Symbol(x, Decl(capturedParametersInInitializers2.ts, 6, 6))
+ 
+         get [x]() {return x;}
+->[x] : Symbol((Anonymous class)[x], Decl(capturedParametersInInitializers2.ts, 2, 21))
++>[x] : Symbol([x], Decl(capturedParametersInInitializers2.ts, 2, 21))
+ >x : Symbol(x, Decl(capturedParametersInInitializers2.ts, 6, 6))
+ >x : Symbol(x, Decl(capturedParametersInInitializers2.ts, 6, 6))
+ 
+@@= skipped -12, +12 lines =@@
+ >x : Symbol(x, Decl(capturedParametersInInitializers2.ts, 6, 6))
+ 
+         [z]() { return z; }
+->[z] : Symbol((Anonymous class)[z], Decl(capturedParametersInInitializers2.ts, 4, 28))
++>[z] : Symbol([z], Decl(capturedParametersInInitializers2.ts, 4, 28))
+ >z : Symbol(z, Decl(capturedParametersInInitializers2.ts, 7, 10))
+ >z : Symbol(z, Decl(capturedParametersInInitializers2.ts, 7, 10))
+ 
+@@= skipped -13, +13 lines =@@
+ 
+ ) {
+     y.c
+->y.c : Symbol((Anonymous class).c, Decl(capturedParametersInInitializers2.ts, 1, 15))
++>y.c : Symbol(c, Decl(capturedParametersInInitializers2.ts, 1, 15))
+ >y : Symbol(y, Decl(capturedParametersInInitializers2.ts, 0, 13))
+->c : Symbol((Anonymous class).c, Decl(capturedParametersInInitializers2.ts, 1, 15))
++>c : Symbol(c, Decl(capturedParametersInInitializers2.ts, 1, 15))
+ }
+ function foo2(y = class {[x] = x}, x = 1) {
+ >foo2 : Symbol(foo2, Decl(capturedParametersInInitializers2.ts, 11, 1))
+ >y : Symbol(y, Decl(capturedParametersInInitializers2.ts, 12, 14))
+->[x] : Symbol((Anonymous class)[x], Decl(capturedParametersInInitializers2.ts, 12, 25))
++>[x] : Symbol([x], Decl(capturedParametersInInitializers2.ts, 12, 25))
+ >x : Symbol(x, Decl(capturedParametersInInitializers2.ts, 12, 34))
+ >x : Symbol(x, Decl(capturedParametersInInitializers2.ts, 12, 34))
+ >x : Symbol(x, Decl(capturedParametersInInitializers2.ts, 12, 34))

@@ -1,0 +1,11 @@
+--- old.tsxTypeErrors.symbols
++++ new.tsxTypeErrors.symbols
+@@= skipped -30, +30 lines =@@
+ >MyClass : Symbol(MyClass, Decl(tsxTypeErrors.tsx, 11, 31))
+ 
+   props: {
+->props : Symbol(MyClass.props, Decl(tsxTypeErrors.tsx, 14, 15))
++>props : Symbol(props, Decl(tsxTypeErrors.tsx, 14, 15))
+ 
+     pt?: { x: number; y: number; };
+ >pt : Symbol(pt, Decl(tsxTypeErrors.tsx, 15, 10))

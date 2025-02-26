@@ -1,0 +1,28 @@
+--- old.coAndContraVariantInferences.symbols
++++ new.coAndContraVariantInferences.symbols
+@@= skipped -51, +51 lines =@@
+ >TPayload : Symbol(TPayload, Decl(coAndContraVariantInferences.ts, 15, 38))
+ 
+     name: TName,
+->name : Symbol(Action.name, Decl(coAndContraVariantInferences.ts, 15, 49))
++>name : Symbol(name, Decl(coAndContraVariantInferences.ts, 15, 49))
+ >TName : Symbol(TName, Decl(coAndContraVariantInferences.ts, 15, 17))
+ 
+     payload: TPayload
+->payload : Symbol(Action.payload, Decl(coAndContraVariantInferences.ts, 16, 16))
++>payload : Symbol(payload, Decl(coAndContraVariantInferences.ts, 16, 16))
+ >TPayload : Symbol(TPayload, Decl(coAndContraVariantInferences.ts, 15, 38))
+ }
+ 
+@@= skipped -47, +47 lines =@@
+ >action : Symbol(action, Decl(coAndContraVariantInferences.ts, 30, 17))
+ >actionA : Symbol(actionA, Decl(coAndContraVariantInferences.ts, 20, 5))
+ >actionB : Symbol(actionB, Decl(coAndContraVariantInferences.ts, 21, 5))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >action : Symbol(action, Decl(coAndContraVariantInferences.ts, 30, 17))
+ 
+ call(actionA, printFn);

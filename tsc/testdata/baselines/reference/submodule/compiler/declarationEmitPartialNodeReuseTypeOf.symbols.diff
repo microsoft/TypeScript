@@ -1,0 +1,24 @@
+--- old.declarationEmitPartialNodeReuseTypeOf.symbols
++++ new.declarationEmitPartialNodeReuseTypeOf.symbols
+@@= skipped -34, +34 lines =@@
+ >o : Symbol(o, Decl(b.ts, 0, 8))
+ 
+ console.log(nImported);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >nImported : Symbol(nImported, Decl(b.ts, 0, 11))
+ 
+ === c.ts ===
+@@= skipped -11, +11 lines =@@
+ 
+ export const g = a.o
+ >g : Symbol(g, Decl(c.ts, 1, 12))
+->a.o : Symbol(a.o, Decl(a.ts, 3, 12))
++>a.o : Symbol(o, Decl(a.ts, 3, 12))
+ >a : Symbol(a, Decl(c.ts, 0, 6))
+->o : Symbol(a.o, Decl(a.ts, 3, 12))
++>o : Symbol(o, Decl(a.ts, 3, 12))
+ 

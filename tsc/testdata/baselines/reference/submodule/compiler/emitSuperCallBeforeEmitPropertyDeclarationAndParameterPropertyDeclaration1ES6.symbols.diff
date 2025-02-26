@@ -1,0 +1,24 @@
+--- old.emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.symbols
++++ new.emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.ts, 0, 0))
+ 
+     blub = 6;
+->blub : Symbol(A.blub, Decl(emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.ts, 0, 9))
++>blub : Symbol(blub, Decl(emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.ts, 0, 9))
+ }
+ 
+ 
+@@= skipped -9, +9 lines =@@
+ >A : Symbol(A, Decl(emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.ts, 0, 0))
+ 
+     blah = 2;
+->blah : Symbol(B.blah, Decl(emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.ts, 5, 19))
++>blah : Symbol(blah, Decl(emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.ts, 5, 19))
+ 
+     constructor(public x: number) {
+->x : Symbol(B.x, Decl(emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.ts, 7, 16))
++>x : Symbol(x, Decl(emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.ts, 7, 16))
+ 
+         "use strict";
+         'someStringForEgngInject';

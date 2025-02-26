@@ -1,0 +1,110 @@
+--- old.twoGenericInterfacesDifferingByTypeParameterName.symbols
++++ new.twoGenericInterfacesDifferingByTypeParameterName.symbols
+@@= skipped -7, +7 lines =@@
+ >T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 2, 12))
+ 
+     x: T;
+->x : Symbol(A.x, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 2, 16))
++>x : Symbol(x, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 2, 16))
+ >T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 2, 12))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 6, 12))
+ 
+     y: U;
+->y : Symbol(A.y, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 6, 16))
++>y : Symbol(y, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 6, 16))
+ >U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 6, 12))
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ >U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 10, 14))
+ 
+     x: U;
+->x : Symbol(B.x, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 10, 18))
++>x : Symbol(x, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 10, 18))
+ >U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 10, 14))
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ >V : Symbol(V, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 14, 14))
+ 
+     y: V;
+->y : Symbol(B.y, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 14, 18))
++>y : Symbol(y, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 14, 18))
+ >V : Symbol(V, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 14, 14))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 19, 16))
+ 
+         x: T;
+->x : Symbol(A.x, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 19, 20))
++>x : Symbol(x, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 19, 20))
+ >T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 19, 16))
+     }
+ 
+@@= skipped -9, +9 lines =@@
+ >U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 23, 16))
+ 
+         y: U;
+->y : Symbol(A.y, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 23, 20))
++>y : Symbol(y, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 23, 20))
+ >U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 23, 16))
+     }
+ 
+@@= skipped -10, +10 lines =@@
+ >U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 27, 18))
+ 
+         x: U;
+->x : Symbol(B.x, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 27, 23))
++>x : Symbol(x, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 27, 23))
+ >U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 27, 18))
+     }
+ 
+@@= skipped -10, +10 lines =@@
+ >V : Symbol(V, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 31, 18))
+ 
+         y: V;
+->y : Symbol(B.y, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 31, 23))
++>y : Symbol(y, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 31, 23))
+ >V : Symbol(V, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 31, 18))
+     }
+ }
+@@= skipped -14, +14 lines =@@
+ >U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 37, 18))
+ 
+         x: U;
+->x : Symbol(B.x, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 37, 23))
++>x : Symbol(x, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 37, 23))
+ >U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 37, 18))
+     }
+ }
+@@= skipped -14, +14 lines =@@
+ >V : Symbol(V, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 43, 18))
+ 
+         y: V;
+->y : Symbol(B.y, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 43, 23))
++>y : Symbol(y, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 43, 23))
+ >V : Symbol(V, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 43, 18))
+     }
+ }
+@@= skipped -14, +14 lines =@@
+ >U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 49, 25))
+ 
+         x: U;
+->x : Symbol(B.x, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 49, 30))
++>x : Symbol(x, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 49, 30))
+ >U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 49, 25))
+     }
+ }
+@@= skipped -14, +14 lines =@@
+ >V : Symbol(V, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 55, 25))
+ 
+         y: V;
+->y : Symbol(B.y, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 55, 30))
++>y : Symbol(y, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 55, 30))
+ >V : Symbol(V, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 55, 25))
+     }
+ }

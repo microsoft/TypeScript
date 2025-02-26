@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/reexportWrittenCorrectlyInDeclaration.ts] ////
+
+=== ThingA.ts ===
+export class ThingA { } 
+>ThingA : Symbol(ThingA, Decl(ThingA.ts, 0, 0))
+
+=== ThingB.ts ===
+export class ThingB { }
+>ThingB : Symbol(ThingB, Decl(ThingB.ts, 0, 0))
+
+=== Things.ts ===
+export {ThingA} from "./ThingA";
+>ThingA : Symbol(ThingA, Decl(Things.ts, 0, 8))
+
+export {ThingB} from "./ThingB";
+>ThingB : Symbol(ThingB, Decl(Things.ts, 1, 8))
+
+=== Test.ts ===
+import * as things from "./Things";
+>things : Symbol(things, Decl(Test.ts, 0, 6))
+
+export class Test {
+>Test : Symbol(Test, Decl(Test.ts, 0, 35))
+
+    public method = (input: things.ThingA)  => { };
+>method : Symbol(method, Decl(Test.ts, 2, 19))
+>input : Symbol(input, Decl(Test.ts, 3, 21))
+>things : Symbol(things, Decl(Test.ts, 0, 6))
+>ThingA : Symbol(ThingA, Decl(Things.ts, 0, 8))
+}

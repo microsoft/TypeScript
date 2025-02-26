@@ -1,0 +1,40 @@
+--- old.declarationEmitThisPredicates02.symbols
++++ new.declarationEmitThisPredicates02.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(declarationEmitThisPredicates02.ts, 0, 0))
+ 
+     a: string;
+->a : Symbol(Foo.a, Decl(declarationEmitThisPredicates02.ts, 0, 22))
++>a : Symbol(a, Decl(declarationEmitThisPredicates02.ts, 0, 22))
+ 
+     b: number;
+->b : Symbol(Foo.b, Decl(declarationEmitThisPredicates02.ts, 1, 14))
++>b : Symbol(b, Decl(declarationEmitThisPredicates02.ts, 1, 14))
+ 
+     c: boolean;
+->c : Symbol(Foo.c, Decl(declarationEmitThisPredicates02.ts, 2, 14))
++>c : Symbol(c, Decl(declarationEmitThisPredicates02.ts, 2, 14))
+ }
+ 
+ export const obj = {
+@@= skipped -21, +21 lines =@@
+ >Foo : Symbol(Foo, Decl(declarationEmitThisPredicates02.ts, 0, 0))
+ 
+         return dis.a != null && dis.b != null && dis.c != null;
+->dis.a : Symbol(Foo.a, Decl(declarationEmitThisPredicates02.ts, 0, 22))
++>dis.a : Symbol(a, Decl(declarationEmitThisPredicates02.ts, 0, 22))
+ >dis : Symbol(dis, Decl(declarationEmitThisPredicates02.ts, 8, 11))
+->a : Symbol(Foo.a, Decl(declarationEmitThisPredicates02.ts, 0, 22))
+->dis.b : Symbol(Foo.b, Decl(declarationEmitThisPredicates02.ts, 1, 14))
++>a : Symbol(a, Decl(declarationEmitThisPredicates02.ts, 0, 22))
++>dis.b : Symbol(b, Decl(declarationEmitThisPredicates02.ts, 1, 14))
+ >dis : Symbol(dis, Decl(declarationEmitThisPredicates02.ts, 8, 11))
+->b : Symbol(Foo.b, Decl(declarationEmitThisPredicates02.ts, 1, 14))
+->dis.c : Symbol(Foo.c, Decl(declarationEmitThisPredicates02.ts, 2, 14))
++>b : Symbol(b, Decl(declarationEmitThisPredicates02.ts, 1, 14))
++>dis.c : Symbol(c, Decl(declarationEmitThisPredicates02.ts, 2, 14))
+ >dis : Symbol(dis, Decl(declarationEmitThisPredicates02.ts, 8, 11))
+->c : Symbol(Foo.c, Decl(declarationEmitThisPredicates02.ts, 2, 14))
++>c : Symbol(c, Decl(declarationEmitThisPredicates02.ts, 2, 14))
+     }
+ }

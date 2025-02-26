@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/jsFileClassPropertyInitalizationInObjectLiteral.ts] ////
+
+=== foo.js ===
+module.exports = function () {
+  class A { }
+>A : Symbol(A, Decl(foo.js, 0, 30))
+
+  return {
+    c: A.b = 1,
+>c : Symbol(c, Decl(foo.js, 2, 10))
+>A : Symbol(A, Decl(foo.js, 0, 30))
+  }
+};
+

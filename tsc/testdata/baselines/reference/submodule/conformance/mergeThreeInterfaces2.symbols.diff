@@ -1,0 +1,178 @@
+--- old.mergeThreeInterfaces2.symbols
++++ new.mergeThreeInterfaces2.symbols
+@@= skipped -10, +10 lines =@@
+ >A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 3, 11), Decl(mergeThreeInterfaces2.ts, 13, 11), Decl(mergeThreeInterfaces2.ts, 16, 5))
+ 
+         foo: string;
+->foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 4, 24))
++>foo : Symbol(foo, Decl(mergeThreeInterfaces2.ts, 4, 24))
+     }
+ 
+     var a: A;
+@@= skipped -9, +9 lines =@@
+ 
+     var r1 = a.foo;
+ >r1 : Symbol(r1, Decl(mergeThreeInterfaces2.ts, 9, 7))
+->a.foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 4, 24))
++>a.foo : Symbol(foo, Decl(mergeThreeInterfaces2.ts, 4, 24))
+ >a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 8, 7))
+->foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 4, 24))
++>foo : Symbol(foo, Decl(mergeThreeInterfaces2.ts, 4, 24))
+ 
+     var r2 = a.bar;
+ >r2 : Symbol(r2, Decl(mergeThreeInterfaces2.ts, 10, 7))
+->a.bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 14, 24))
++>a.bar : Symbol(bar, Decl(mergeThreeInterfaces2.ts, 14, 24))
+ >a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 8, 7))
+->bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 14, 24))
++>bar : Symbol(bar, Decl(mergeThreeInterfaces2.ts, 14, 24))
+ }
+ 
+ module M2 {
+@@= skipped -18, +18 lines =@@
+ >A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 3, 11), Decl(mergeThreeInterfaces2.ts, 13, 11), Decl(mergeThreeInterfaces2.ts, 16, 5))
+ 
+         bar: number;
+->bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 14, 24))
++>bar : Symbol(bar, Decl(mergeThreeInterfaces2.ts, 14, 24))
+     }
+ 
+     export interface A {
+ >A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 3, 11), Decl(mergeThreeInterfaces2.ts, 13, 11), Decl(mergeThreeInterfaces2.ts, 16, 5))
+ 
+         baz: boolean;
+->baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 18, 24))
++>baz : Symbol(baz, Decl(mergeThreeInterfaces2.ts, 18, 24))
+     }
+ 
+     var a: A;
+@@= skipped -16, +16 lines =@@
+ 
+     var r1 = a.foo;
+ >r1 : Symbol(r1, Decl(mergeThreeInterfaces2.ts, 23, 7))
+->a.foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 4, 24))
++>a.foo : Symbol(foo, Decl(mergeThreeInterfaces2.ts, 4, 24))
+ >a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 22, 7))
+->foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 4, 24))
++>foo : Symbol(foo, Decl(mergeThreeInterfaces2.ts, 4, 24))
+ 
+     var r2 = a.bar;
+ >r2 : Symbol(r2, Decl(mergeThreeInterfaces2.ts, 24, 7))
+->a.bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 14, 24))
++>a.bar : Symbol(bar, Decl(mergeThreeInterfaces2.ts, 14, 24))
+ >a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 22, 7))
+->bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 14, 24))
++>bar : Symbol(bar, Decl(mergeThreeInterfaces2.ts, 14, 24))
+ 
+     var r3 = a.baz; 
+ >r3 : Symbol(r3, Decl(mergeThreeInterfaces2.ts, 25, 7))
+->a.baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 18, 24))
++>a.baz : Symbol(baz, Decl(mergeThreeInterfaces2.ts, 18, 24))
+ >a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 22, 7))
+->baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 18, 24))
++>baz : Symbol(baz, Decl(mergeThreeInterfaces2.ts, 18, 24))
+ }
+ 
+ // same as above but with an additional level of nesting and third module declaration
+@@= skipped -28, +28 lines =@@
+ >A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 30, 22), Decl(mergeThreeInterfaces2.ts, 42, 22), Decl(mergeThreeInterfaces2.ts, 56, 22))
+ 
+             foo: string;
+->foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
++>foo : Symbol(foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
+         }
+ 
+         var a: A;
+@@= skipped -9, +9 lines =@@
+ 
+         var r1 = a.foo;
+ >r1 : Symbol(r1, Decl(mergeThreeInterfaces2.ts, 36, 11))
+->a.foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
++>a.foo : Symbol(foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
+ >a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 35, 11))
+->foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
++>foo : Symbol(foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
+ 
+         var r2 = a.bar;
+ >r2 : Symbol(r2, Decl(mergeThreeInterfaces2.ts, 37, 11))
+->a.bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
++>a.bar : Symbol(bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
+ >a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 35, 11))
+->bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
++>bar : Symbol(bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
+     }
+ }
+ 
+@@= skipped -22, +22 lines =@@
+ >A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 30, 22), Decl(mergeThreeInterfaces2.ts, 42, 22), Decl(mergeThreeInterfaces2.ts, 56, 22))
+ 
+             bar: number;
+->bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
++>bar : Symbol(bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
+         }
+ 
+         var a: A;
+@@= skipped -9, +9 lines =@@
+ 
+         var r1 = a.foo
+ >r1 : Symbol(r1, Decl(mergeThreeInterfaces2.ts, 49, 11))
+->a.foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
++>a.foo : Symbol(foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
+ >a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 47, 11))
+->foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
++>foo : Symbol(foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
+ 
+         var r2 = a.bar;
+ >r2 : Symbol(r2, Decl(mergeThreeInterfaces2.ts, 50, 11))
+->a.bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
++>a.bar : Symbol(bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
+ >a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 47, 11))
+->bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
++>bar : Symbol(bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
+ 
+         var r3 = a.baz;
+ >r3 : Symbol(r3, Decl(mergeThreeInterfaces2.ts, 51, 11))
+->a.baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 57, 28))
++>a.baz : Symbol(baz, Decl(mergeThreeInterfaces2.ts, 57, 28))
+ >a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 47, 11))
+->baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 57, 28))
++>baz : Symbol(baz, Decl(mergeThreeInterfaces2.ts, 57, 28))
+     }
+ }
+ 
+@@= skipped -28, +28 lines =@@
+ >A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 30, 22), Decl(mergeThreeInterfaces2.ts, 42, 22), Decl(mergeThreeInterfaces2.ts, 56, 22))
+ 
+             baz: boolean;
+->baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 57, 28))
++>baz : Symbol(baz, Decl(mergeThreeInterfaces2.ts, 57, 28))
+         }
+ 
+         var a: A;
+@@= skipped -9, +9 lines =@@
+ 
+         var r1 = a.foo
+ >r1 : Symbol(r1, Decl(mergeThreeInterfaces2.ts, 62, 11))
+->a.foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
++>a.foo : Symbol(foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
+ >a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 61, 11))
+->foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
++>foo : Symbol(foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
+ 
+         var r2 = a.bar;
+ >r2 : Symbol(r2, Decl(mergeThreeInterfaces2.ts, 63, 11))
+->a.bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
++>a.bar : Symbol(bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
+ >a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 61, 11))
+->bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
++>bar : Symbol(bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
+ 
+         var r3 = a.baz;
+ >r3 : Symbol(r3, Decl(mergeThreeInterfaces2.ts, 64, 11))
+->a.baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 57, 28))
++>a.baz : Symbol(baz, Decl(mergeThreeInterfaces2.ts, 57, 28))
+ >a : Symbol(a, Decl(mergeThreeInterfaces2.ts, 61, 11))
+->baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 57, 28))
++>baz : Symbol(baz, Decl(mergeThreeInterfaces2.ts, 57, 28))
+     }
+ }

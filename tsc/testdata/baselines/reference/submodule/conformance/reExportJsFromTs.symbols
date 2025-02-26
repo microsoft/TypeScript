@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/salsa/reExportJsFromTs.ts] ////
+
+=== /lib/constants.js ===
+module.exports = {
+  str: 'x',
+>str : Symbol(str, Decl(constants.js, 0, 18))
+
+};
+
+=== /src/constants.ts ===
+import * as tsConstants from "../lib/constants";
+>tsConstants : Symbol(tsConstants, Decl(constants.ts, 0, 6))
+
+export { tsConstants };
+>tsConstants : Symbol(tsConstants, Decl(constants.ts, 1, 8))
+

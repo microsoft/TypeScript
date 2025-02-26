@@ -1,0 +1,10 @@
+--- old.enumWithUnicodeEscape1.symbols
++++ new.enumWithUnicodeEscape1.symbols
+@@= skipped -4, +4 lines =@@
+ >E : Symbol(E, Decl(enumWithUnicodeEscape1.ts, 0, 0))
+ 
+   'gold \u2730'
+->'gold \u2730' : Symbol(E['gold \u2730'], Decl(enumWithUnicodeEscape1.ts, 0, 8))
++>'gold \u2730' : Symbol('gold \u2730', Decl(enumWithUnicodeEscape1.ts, 0, 8))
+ }
+ 

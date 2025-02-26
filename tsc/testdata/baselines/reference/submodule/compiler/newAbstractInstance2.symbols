@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/newAbstractInstance2.ts] ////
+
+=== /a.ts ===
+
+export default abstract class {}
+
+=== /b.ts ===
+import A from "./a";
+>A : Symbol(A, Decl(b.ts, 0, 6))
+
+new A();
+>A : Symbol(A, Decl(b.ts, 0, 6))
+

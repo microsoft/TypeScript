@@ -1,0 +1,14 @@
+--- old.parenthesizedJSDocCastAtReturnStatement.symbols
++++ new.parenthesizedJSDocCastAtReturnStatement.symbols
+@@= skipped -15, +15 lines =@@
+ 
+   return () => {
+     return /** @type {string} */ (cache.get(key))
+->cache.get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
++>cache.get : Symbol(get, Decl(lib.es2015.collection.d.ts, --, --))
+ >cache : Symbol(cache, Decl(index.js, 1, 5))
+->get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
++>get : Symbol(get, Decl(lib.es2015.collection.d.ts, --, --))
+ >key : Symbol(key, Decl(index.js, 7, 25))
+   }
+ }

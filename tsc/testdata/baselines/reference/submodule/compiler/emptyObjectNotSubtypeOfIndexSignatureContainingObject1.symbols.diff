@@ -1,0 +1,31 @@
+--- old.emptyObjectNotSubtypeOfIndexSignatureContainingObject1.symbols
++++ new.emptyObjectNotSubtypeOfIndexSignatureContainingObject1.symbols
+@@= skipped -80, +80 lines =@@
+ >Foo : Symbol(Foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts, 24, 1))
+ 
+   foo: string;
+->foo : Symbol(Foo.foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts, 27, 15))
++>foo : Symbol(foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts, 27, 15))
+ }
+ 
+ interface Bar {
+ >Bar : Symbol(Bar, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts, 29, 1))
+ 
+   bar: string;
+->bar : Symbol(Bar.bar, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts, 31, 15))
++>bar : Symbol(bar, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts, 31, 15))
+ }
+ 
+ export function fooToBar(
+@@= skipped -28, +28 lines =@@
+ >mapValues : Symbol(mapValues, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts, 16, 77))
+ >foos : Symbol(foos, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts, 35, 25))
+ >f : Symbol(f, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts, 38, 52))
+->f.foo : Symbol(Foo.foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts, 27, 15))
++>f.foo : Symbol(foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts, 27, 15))
+ >f : Symbol(f, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts, 38, 52))
+->foo : Symbol(Foo.foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts, 27, 15))
++>foo : Symbol(foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts, 27, 15))
+ 
+   // This line _should_ fail, because `result` is not the right type.
+   return result;

@@ -1,0 +1,29 @@
+--- old.privacyClass.symbols
++++ new.privacyClass.symbols
+@@= skipped -15, +15 lines =@@
+ >m1_c_public : Symbol(m1_c_public, Decl(privacyClass.ts, 5, 5))
+ 
+         private f1() {
+->f1 : Symbol(m1_c_public.f1, Decl(privacyClass.ts, 7, 30))
++>f1 : Symbol(f1, Decl(privacyClass.ts, 7, 30))
+         }
+     }
+ 
+@@= skipped -84, +84 lines =@@
+ >m2_c_public : Symbol(m2_c_public, Decl(privacyClass.ts, 49, 5))
+ 
+         private f1() {
+->f1 : Symbol(m2_c_public.f1, Decl(privacyClass.ts, 51, 30))
++>f1 : Symbol(f1, Decl(privacyClass.ts, 51, 30))
+         }
+     }
+ 
+@@= skipped -80, +80 lines =@@
+ >glo_c_public : Symbol(glo_c_public, Decl(privacyClass.ts, 91, 1))
+ 
+     private f1() {
+->f1 : Symbol(glo_c_public.f1, Decl(privacyClass.ts, 93, 27))
++>f1 : Symbol(f1, Decl(privacyClass.ts, 93, 27))
+     }
+ }
+ 

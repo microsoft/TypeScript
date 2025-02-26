@@ -1,0 +1,150 @@
+--- old.typeFromJSInitializer.symbols
++++ new.typeFromJSInitializer.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     // should get any on this-assignments in constructor
+     this.unknown = null
+->this.unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
+->this : Symbol(A, Decl(a.js, 0, 0))
+->unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
+-
+     this.unknowable = undefined
+->this.unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
+->this : Symbol(A, Decl(a.js, 0, 0))
+->unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
+ >undefined : Symbol(undefined)
+ 
+     this.empty = []
+->this.empty : Symbol(A.empty, Decl(a.js, 3, 31))
+->this : Symbol(A, Decl(a.js, 0, 0))
+->empty : Symbol(A.empty, Decl(a.js, 3, 31))
+ }
+ var a = new A()
+->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
++>a : Symbol(a, Decl(a.js, 6, 3))
+ >A : Symbol(A, Decl(a.js, 0, 0))
+ 
+ a.unknown = 1
+->a.unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
+->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+->unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
++>a : Symbol(a, Decl(a.js, 6, 3))
+ 
+ a.unknown = true
+->a.unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
+->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+->unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
++>a : Symbol(a, Decl(a.js, 6, 3))
+ 
+ a.unknown = {}
+->a.unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
+->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+->unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
++>a : Symbol(a, Decl(a.js, 6, 3))
+ 
+ a.unknown = 'hi'
+->a.unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
+->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+->unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
++>a : Symbol(a, Decl(a.js, 6, 3))
+ 
+ a.unknowable = 1
+->a.unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
+->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+->unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
++>a : Symbol(a, Decl(a.js, 6, 3))
+ 
+ a.unknowable = true
+->a.unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
+->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+->unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
++>a : Symbol(a, Decl(a.js, 6, 3))
+ 
+ a.unknowable = {}
+->a.unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
+->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+->unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
++>a : Symbol(a, Decl(a.js, 6, 3))
+ 
+ a.unknowable = 'hi'
+->a.unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
+->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+->unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
++>a : Symbol(a, Decl(a.js, 6, 3))
+ 
+ a.empty.push(1)
+->a.empty.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+->a.empty : Symbol(A.empty, Decl(a.js, 3, 31))
+->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+->empty : Symbol(A.empty, Decl(a.js, 3, 31))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>a : Symbol(a, Decl(a.js, 6, 3))
+ 
+ a.empty.push(true)
+->a.empty.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+->a.empty : Symbol(A.empty, Decl(a.js, 3, 31))
+->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+->empty : Symbol(A.empty, Decl(a.js, 3, 31))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>a : Symbol(a, Decl(a.js, 6, 3))
+ 
+ a.empty.push({})
+->a.empty.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+->a.empty : Symbol(A.empty, Decl(a.js, 3, 31))
+->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+->empty : Symbol(A.empty, Decl(a.js, 3, 31))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>a : Symbol(a, Decl(a.js, 6, 3))
+ 
+ a.empty.push('hi')
+->a.empty.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+->a.empty : Symbol(A.empty, Decl(a.js, 3, 31))
+->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15), Decl(a.js, 7, 13), Decl(a.js, 8, 16), Decl(a.js, 9, 14) ... and 4 more)
+->empty : Symbol(A.empty, Decl(a.js, 3, 31))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>a : Symbol(a, Decl(a.js, 6, 3))
+ 
+ /** @type {number | undefined} */
+ var n;
+@@= skipped -132, +90 lines =@@
+ 
+     // l should be any[]
+     l.push(1)
+->l.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>l.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >l : Symbol(l, Decl(a.js, 24, 27))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ 
+     l.push('ok')
+->l.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>l.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >l : Symbol(l, Decl(a.js, 24, 27))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ // should get any on variable initialisers
+@@= skipped -35, +35 lines =@@
+ >u : Symbol(u, Decl(a.js, 44, 3))
+ 
+ l.push('ok')
+->l.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>l.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >l : Symbol(l, Decl(a.js, 45, 3))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ 
+ /** @type {(v: unknown) => v is undefined} */
+ const isUndef = v => v === undefined;
+@@= skipped -18, +18 lines =@@
+ // should be undefined[]
+ const g = e.filter(isUndef);
+ >g : Symbol(g, Decl(a.js, 59, 5))
+->e.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>e.filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >e : Symbol(e, Decl(a.js, 56, 5))
+->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >isUndef : Symbol(isUndef, Decl(a.js, 55, 5))
+ 

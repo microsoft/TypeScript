@@ -1,0 +1,96 @@
+--- old.TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.symbols
++++ new.TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.symbols
+@@= skipped -7, +7 lines =@@
+ >Point : Symbol(Point, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 0, 10))
+ 
+         x: number;
+->x : Symbol(Point.x, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 1, 24))
++>x : Symbol(x, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 1, 24))
+ 
+         y: number;
+->y : Symbol(Point.y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 2, 18))
++>y : Symbol(y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 2, 18))
+     }
+ }
+ 
+@@= skipped -14, +14 lines =@@
+ >Point : Symbol(Point, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 7, 10))
+ 
+         fromCarthesian(p: A.Point) {
+->fromCarthesian : Symbol(Point.fromCarthesian, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 8, 17))
++>fromCarthesian : Symbol(fromCarthesian, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 8, 17))
+ >p : Symbol(p, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 9, 23))
+ >A : Symbol(A, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 0, 0), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 5, 1))
+ >Point : Symbol(Point, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 0, 10))
+ 
+             return { x: p.x, y: p.y };
+ >x : Symbol(x, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 10, 20))
+->p.x : Symbol(Point.x, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 1, 24))
++>p.x : Symbol(x, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 1, 24))
+ >p : Symbol(p, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 9, 23))
+->x : Symbol(Point.x, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 1, 24))
++>x : Symbol(x, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 1, 24))
+ >y : Symbol(y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 10, 28))
+->p.y : Symbol(Point.y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 2, 18))
++>p.y : Symbol(y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 2, 18))
+ >p : Symbol(p, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 9, 23))
+->y : Symbol(Point.y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 2, 18))
++>y : Symbol(y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 2, 18))
+         }
+     }
+ }
+@@= skipped -27, +27 lines =@@
+ var p: A.Point;
+ >p : Symbol(p, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 16, 3), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 17, 3))
+ >A : Symbol(A, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 0, 0), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 5, 1))
+->Point : Symbol(A.Point, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 0, 10))
++>Point : Symbol(Point, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 0, 10))
+ 
+ module X.Y.Z {
+ >X : Symbol(X, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 17, 15), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 23, 1))
+->Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 9), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 25, 10))
+->Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 11), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 26, 21))
++>Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 9))
++>Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 11))
+ 
+     export class Line {
+ >Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 14))
+ 
+         length: number;
+->length : Symbol(Line.length, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 20, 23))
++>length : Symbol(length, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 20, 23))
+     }
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >X : Symbol(X, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 17, 15), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 23, 1))
+ 
+     export module Y {
+->Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 9), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 25, 10))
++>Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 25, 10))
+ 
+         export module Z {
+->Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 11), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 26, 21))
++>Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 26, 21))
+ 
+             class Line {
+ >Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 27, 25))
+ 
+                 name: string;
+->name : Symbol(Line.name, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 28, 24))
++>name : Symbol(name, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 28, 24))
+             }
+         }
+     }
+@@= skipped -23, +23 lines =@@
+ var l: X.Y.Z.Line;
+ >l : Symbol(l, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 36, 3), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 37, 3))
+ >X : Symbol(X, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 17, 15), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 23, 1))
+->Y : Symbol(X.Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 9), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 25, 10))
+->Z : Symbol(X.Y.Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 11), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 26, 21))
+->Line : Symbol(X.Y.Z.Line, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 14))
++>Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 25, 10))
++>Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 26, 21))
++>Line : Symbol(Line)
+ 
+ 

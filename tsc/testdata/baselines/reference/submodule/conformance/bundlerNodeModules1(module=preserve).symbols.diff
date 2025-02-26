@@ -1,0 +1,20 @@
+--- old.bundlerNodeModules1(module=preserve).symbols
++++ new.bundlerNodeModules1(module=preserve).symbols
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/moduleResolution/bundler/bundlerNodeModules1.ts] ////
+ 
++=== /node_modules/dual/index.js ===
++export const esm = 0;
++>esm : Symbol(esm, Decl(index.js, 0, 12))
++
+ === /node_modules/dual/index.d.ts ===
+ export const esm: number;
+ >esm : Symbol(esm, Decl(index.d.ts, 0, 12))
+ 
++=== /node_modules/dual/index.cjs ===
++
++exports.cjs = 0;
++
+ === /node_modules/dual/index.d.cts ===
+ export const cjs: number;
+ >cjs : Symbol(cjs, Decl(index.d.cts, 0, 12))

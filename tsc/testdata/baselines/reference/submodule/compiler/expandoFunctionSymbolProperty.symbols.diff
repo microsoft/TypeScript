@@ -1,0 +1,11 @@
+--- old.expandoFunctionSymbolProperty.symbols
++++ new.expandoFunctionSymbolProperty.symbols
+@@= skipped -11, +11 lines =@@
+ 
+   (): void;
+   readonly [symb]: boolean;
+->[symb] : Symbol(TestSymb[symb], Decl(expandoFunctionSymbolProperty.ts, 5, 11))
++>[symb] : Symbol([symb], Decl(expandoFunctionSymbolProperty.ts, 5, 11))
+ >symb : Symbol(symb, Decl(expandoFunctionSymbolProperty.ts, 2, 5))
+ }
+ 

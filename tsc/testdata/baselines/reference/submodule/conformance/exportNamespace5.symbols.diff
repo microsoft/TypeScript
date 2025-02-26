@@ -1,0 +1,11 @@
+--- old.exportNamespace5.symbols
++++ new.exportNamespace5.symbols
+@@= skipped -17, +17 lines =@@
+ === /c.ts ===
+ import { A, B as C, X } from "./b";
+ >A : Symbol(A, Decl(c.ts, 0, 8))
+->B : Symbol(C, Decl(a.ts, 0, 17))
++>B : Symbol(B, Decl(a.ts, 0, 17))
+ >C : Symbol(C, Decl(c.ts, 0, 11))
+ >X : Symbol(X, Decl(c.ts, 0, 19))
+ 

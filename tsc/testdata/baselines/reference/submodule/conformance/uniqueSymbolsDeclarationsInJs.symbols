@@ -1,0 +1,50 @@
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJs.ts] ////
+
+=== uniqueSymbolsDeclarationsInJs.js ===
+// classes
+class C {
+>C : Symbol(C, Decl(uniqueSymbolsDeclarationsInJs.js, 0, 0))
+
+    /**
+     * @readonly
+     */
+    static readonlyStaticCall = Symbol();
+>readonlyStaticCall : Symbol(readonlyStaticCall, Decl(uniqueSymbolsDeclarationsInJs.js, 1, 9))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+    /**
+     * @type {unique symbol}
+     * @readonly
+     */
+    static readonlyStaticType;
+>readonlyStaticType : Symbol(readonlyStaticType, Decl(uniqueSymbolsDeclarationsInJs.js, 5, 41))
+
+    /**
+     * @type {unique symbol}
+     * @readonly
+     */
+    static readonlyStaticTypeAndCall = Symbol();
+>readonlyStaticTypeAndCall : Symbol(readonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarationsInJs.js, 10, 30))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+    static readwriteStaticCall = Symbol();
+>readwriteStaticCall : Symbol(readwriteStaticCall, Decl(uniqueSymbolsDeclarationsInJs.js, 15, 48))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+    /**
+     * @readonly
+     */
+    readonlyCall = Symbol();
+>readonlyCall : Symbol(readonlyCall, Decl(uniqueSymbolsDeclarationsInJs.js, 16, 42))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+    readwriteCall = Symbol();
+>readwriteCall : Symbol(readwriteCall, Decl(uniqueSymbolsDeclarationsInJs.js, 21, 28))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+}
+
+/** @type {unique symbol} */
+const a = Symbol();
+>a : Symbol(a, Decl(uniqueSymbolsDeclarationsInJs.js, 26, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+

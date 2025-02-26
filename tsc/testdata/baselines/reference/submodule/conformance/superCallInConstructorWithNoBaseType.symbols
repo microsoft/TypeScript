@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/superCallInConstructorWithNoBaseType.ts] ////
+
+=== superCallInConstructorWithNoBaseType.ts ===
+class C {
+>C : Symbol(C, Decl(superCallInConstructorWithNoBaseType.ts, 0, 0))
+
+    constructor() {
+        super(); // error
+    }
+}
+
+class D<T> {
+>D : Symbol(D, Decl(superCallInConstructorWithNoBaseType.ts, 4, 1))
+>T : Symbol(T, Decl(superCallInConstructorWithNoBaseType.ts, 6, 8))
+
+    public constructor(public x: T) {
+>x : Symbol(x, Decl(superCallInConstructorWithNoBaseType.ts, 7, 23))
+>T : Symbol(T, Decl(superCallInConstructorWithNoBaseType.ts, 6, 8))
+
+        super(); // error
+    }
+}

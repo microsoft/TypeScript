@@ -1,0 +1,17 @@
+--- old.unionTypesAssignability.symbols
++++ new.unionTypesAssignability.symbols
+@@= skipped -9, +9 lines =@@
+ class D extends C { foo1() { } }
+ >D : Symbol(D, Decl(unionTypesAssignability.ts, 1, 11))
+ >C : Symbol(C, Decl(unionTypesAssignability.ts, 0, 39))
+->foo1 : Symbol(D.foo1, Decl(unionTypesAssignability.ts, 2, 19))
++>foo1 : Symbol(foo1, Decl(unionTypesAssignability.ts, 2, 19))
+ 
+ class E extends C { foo2() { } }
+ >E : Symbol(E, Decl(unionTypesAssignability.ts, 2, 32))
+ >C : Symbol(C, Decl(unionTypesAssignability.ts, 0, 39))
+->foo2 : Symbol(E.foo2, Decl(unionTypesAssignability.ts, 3, 19))
++>foo2 : Symbol(foo2, Decl(unionTypesAssignability.ts, 3, 19))
+ 
+ var unionDE: D | E;
+ >unionDE : Symbol(unionDE, Decl(unionTypesAssignability.ts, 4, 3))

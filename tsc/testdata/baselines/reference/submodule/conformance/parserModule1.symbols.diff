@@ -1,0 +1,23 @@
+--- old.parserModule1.symbols
++++ new.parserModule1.symbols
+@@= skipped -10, +10 lines =@@
+ >IDiagnosticWriter : Symbol(IDiagnosticWriter, Decl(parserModule1.ts, 1, 33))
+ 
+             Alert(output: string): void;
+->Alert : Symbol(IDiagnosticWriter.Alert, Decl(parserModule1.ts, 2, 44))
++>Alert : Symbol(Alert, Decl(parserModule1.ts, 2, 44))
+ >output : Symbol(output, Decl(parserModule1.ts, 3, 18))
+         }
+ 
+@@= skipped -19, +19 lines =@@
+ >diagnosticWriter : Symbol(diagnosticWriter, Decl(parserModule1.ts, 6, 18))
+ 
+                 diagnosticWriter.Alert(output);
+->diagnosticWriter.Alert : Symbol(IDiagnosticWriter.Alert, Decl(parserModule1.ts, 2, 44))
++>diagnosticWriter.Alert : Symbol(Alert, Decl(parserModule1.ts, 2, 44))
+ >diagnosticWriter : Symbol(diagnosticWriter, Decl(parserModule1.ts, 6, 18))
+->Alert : Symbol(IDiagnosticWriter.Alert, Decl(parserModule1.ts, 2, 44))
++>Alert : Symbol(Alert, Decl(parserModule1.ts, 2, 44))
+ >output : Symbol(output, Decl(parserModule1.ts, 10, 30))
+             }
+         }

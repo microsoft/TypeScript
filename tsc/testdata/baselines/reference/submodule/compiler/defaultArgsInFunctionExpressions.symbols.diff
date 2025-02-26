@@ -1,0 +1,12 @@
+--- old.defaultArgsInFunctionExpressions.symbols
++++ new.defaultArgsInFunctionExpressions.symbols
+@@= skipped -84, +84 lines =@@
+ >t : Symbol(t, Decl(defaultArgsInFunctionExpressions.ts, 28, 10))
+ 
+ f7().x;
+->f7().x : Symbol(U.x, Decl(defaultArgsInFunctionExpressions.ts, 24, 14))
++>f7().x : Symbol(x, Decl(defaultArgsInFunctionExpressions.ts, 24, 14))
+ >f7 : Symbol(f7, Decl(defaultArgsInFunctionExpressions.ts, 28, 3))
+->x : Symbol(U.x, Decl(defaultArgsInFunctionExpressions.ts, 24, 14))
++>x : Symbol(x, Decl(defaultArgsInFunctionExpressions.ts, 24, 14))
+ 

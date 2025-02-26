@@ -1,0 +1,19 @@
+--- old.topLevelFileModule.symbols
++++ new.topLevelFileModule.symbols
+@@= skipped -8, +8 lines =@@
+ 
+ var z = foo.x + fum.y;
+ >z : Symbol(z, Decl(foo_1.ts, 2, 3))
+->foo.x : Symbol(foo.x, Decl(foo_0.ts, 0, 10))
++>foo.x : Symbol(x, Decl(foo_0.ts, 0, 10))
+ >foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
+->x : Symbol(foo.x, Decl(foo_0.ts, 0, 10))
+->fum.y : Symbol(fum.y, Decl(fum.d.ts, 0, 18))
++>x : Symbol(x, Decl(foo_0.ts, 0, 10))
++>fum.y : Symbol(y, Decl(fum.d.ts, 0, 18))
+ >fum : Symbol(fum, Decl(foo_1.ts, 0, 35))
+->y : Symbol(fum.y, Decl(fum.d.ts, 0, 18))
++>y : Symbol(y, Decl(fum.d.ts, 0, 18))
+ 
+ === vs/foo_0.ts ===
+ export var x: number;

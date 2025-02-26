@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/thisInFunctionCallJs.ts] ////
+
+=== /a.js ===
+class Test {
+>Test : Symbol(Test, Decl(a.js, 0, 0))
+
+    constructor() {
+        /** @type {number[]} */
+        this.data = [1, 2, 3];
+>this : Symbol(Test, Decl(a.js, 0, 0))
+    }
+
+    finderRaw() {
+>finderRaw : Symbol(finderRaw, Decl(a.js, 4, 5))
+
+        this.data.find(function (d) {
+>this : Symbol(Test, Decl(a.js, 0, 0))
+>d : Symbol(d, Decl(a.js, 7, 33))
+
+            return d === this.data.length
+>d : Symbol(d, Decl(a.js, 7, 33))
+
+        })
+    }
+
+    forEacherRaw() {
+>forEacherRaw : Symbol(forEacherRaw, Decl(a.js, 10, 5))
+
+        this.data.forEach(function (d) {
+>this : Symbol(Test, Decl(a.js, 0, 0))
+>d : Symbol(d, Decl(a.js, 13, 36))
+
+            console.log(d === this.data.length)
+>d : Symbol(d, Decl(a.js, 13, 36))
+
+        })
+    }
+
+    forEacher() {
+>forEacher : Symbol(forEacher, Decl(a.js, 16, 5))
+
+        this.data.forEach(
+>this : Symbol(Test, Decl(a.js, 0, 0))
+
+        /** @this {Test} */
+        function (d) {
+>d : Symbol(d, Decl(a.js, 21, 18))
+
+            console.log(d === this.data.length)
+>d : Symbol(d, Decl(a.js, 21, 18))
+
+        }, this)
+>this : Symbol(Test, Decl(a.js, 0, 0))
+    }
+
+    finder() {
+>finder : Symbol(finder, Decl(a.js, 24, 5))
+
+        this.data.find(
+>this : Symbol(Test, Decl(a.js, 0, 0))
+
+        /** @this {Test} */
+        function (d) {
+>d : Symbol(d, Decl(a.js, 29, 18))
+
+            return d === this.data.length
+>d : Symbol(d, Decl(a.js, 29, 18))
+
+        }, this)
+>this : Symbol(Test, Decl(a.js, 0, 0))
+    }
+}
+

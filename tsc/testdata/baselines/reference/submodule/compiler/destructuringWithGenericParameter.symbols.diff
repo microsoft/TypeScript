@@ -1,0 +1,35 @@
+--- old.destructuringWithGenericParameter.symbols
++++ new.destructuringWithGenericParameter.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(destructuringWithGenericParameter.ts, 0, 19))
+ 
+     payload: T;
+->payload : Symbol(GenericClass.payload, Decl(destructuringWithGenericParameter.ts, 0, 23))
++>payload : Symbol(payload, Decl(destructuringWithGenericParameter.ts, 0, 23))
+ >T : Symbol(T, Decl(destructuringWithGenericParameter.ts, 0, 19))
+ }
+ 
+@@= skipped -21, +21 lines =@@
+ 
+     callback(object.payload);
+ >callback : Symbol(callback, Decl(destructuringWithGenericParameter.ts, 6, 52))
+->object.payload : Symbol(GenericClass.payload, Decl(destructuringWithGenericParameter.ts, 0, 23))
++>object.payload : Symbol(payload, Decl(destructuringWithGenericParameter.ts, 0, 23))
+ >object : Symbol(object, Decl(destructuringWithGenericParameter.ts, 6, 28))
+->payload : Symbol(GenericClass.payload, Decl(destructuringWithGenericParameter.ts, 0, 23))
++>payload : Symbol(payload, Decl(destructuringWithGenericParameter.ts, 0, 23))
+ }
+ 
+ genericFunction(genericObject, ({greeting}) => {
+@@= skipped -12, +12 lines =@@
+ 
+     var s = greeting.toLocaleLowerCase();  // Greeting should be of type string
+ >s : Symbol(s, Decl(destructuringWithGenericParameter.ts, 11, 7))
+->greeting.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
++>greeting.toLocaleLowerCase : Symbol(toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+ >greeting : Symbol(greeting, Decl(destructuringWithGenericParameter.ts, 10, 33))
+->toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
++>toLocaleLowerCase : Symbol(toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+ 
+ });
+ 

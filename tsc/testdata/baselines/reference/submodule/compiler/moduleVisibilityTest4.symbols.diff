@@ -1,0 +1,39 @@
+--- old.moduleVisibilityTest4.symbols
++++ new.moduleVisibilityTest4.symbols
+@@= skipped -17, +17 lines =@@
+ let a1: M.num;
+ >a1 : Symbol(a1, Decl(moduleVisibilityTest4.ts, 8, 3))
+ >M : Symbol(M, Decl(moduleVisibilityTest4.ts, 0, 0))
+->num : Symbol(M.num)
++>num : Symbol(num)
+ 
+ let b1: M.nums;
+ >b1 : Symbol(b1, Decl(moduleVisibilityTest4.ts, 9, 3))
+ >M : Symbol(M, Decl(moduleVisibilityTest4.ts, 0, 0))
+->nums : Symbol(M.nums, Decl(moduleVisibilityTest4.ts, 0, 10))
++>nums : Symbol(nums, Decl(moduleVisibilityTest4.ts, 0, 10))
+ 
+ let c1: M.bar;
+ >c1 : Symbol(c1, Decl(moduleVisibilityTest4.ts, 10, 3))
+ >M : Symbol(M, Decl(moduleVisibilityTest4.ts, 0, 0))
+->bar : Symbol(M.bar)
++>bar : Symbol(bar)
+ 
+ let a2: N.num;
+ >a2 : Symbol(a2, Decl(moduleVisibilityTest4.ts, 12, 3))
+ >N : Symbol(N, Decl(moduleVisibilityTest4.ts, 2, 1))
+->num : Symbol(N.num)
++>num : Symbol(num)
+ 
+ let b2: N.nums;
+ >b2 : Symbol(b2, Decl(moduleVisibilityTest4.ts, 13, 3))
+ >N : Symbol(N, Decl(moduleVisibilityTest4.ts, 2, 1))
+->nums : Symbol(N.nums, Decl(moduleVisibilityTest4.ts, 4, 13))
++>nums : Symbol(nums, Decl(moduleVisibilityTest4.ts, 4, 13))
+ 
+ let c2: N.bar;
+ >c2 : Symbol(c2, Decl(moduleVisibilityTest4.ts, 14, 3))
+ >N : Symbol(N, Decl(moduleVisibilityTest4.ts, 2, 1))
+->bar : Symbol(N.bar)
++>bar : Symbol(bar)
+ 

@@ -1,0 +1,51 @@
+--- old.noUnusedLocals_selfReference.symbols
++++ new.noUnusedLocals_selfReference.symbols
+@@= skipped -19, +19 lines =@@
+ >C : Symbol(C, Decl(noUnusedLocals_selfReference.ts, 7, 1))
+ 
+     m() { C; }
+->m : Symbol(C.m, Decl(noUnusedLocals_selfReference.ts, 8, 9))
++>m : Symbol(m, Decl(noUnusedLocals_selfReference.ts, 8, 9))
+ >C : Symbol(C, Decl(noUnusedLocals_selfReference.ts, 7, 1))
+ }
+ enum E { A = 0, B = E.A }
+ >E : Symbol(E, Decl(noUnusedLocals_selfReference.ts, 10, 1))
+->A : Symbol(E.A, Decl(noUnusedLocals_selfReference.ts, 11, 8))
+->B : Symbol(E.B, Decl(noUnusedLocals_selfReference.ts, 11, 15))
+->E.A : Symbol(E.A, Decl(noUnusedLocals_selfReference.ts, 11, 8))
++>A : Symbol(A, Decl(noUnusedLocals_selfReference.ts, 11, 8))
++>B : Symbol(B, Decl(noUnusedLocals_selfReference.ts, 11, 15))
++>E.A : Symbol(A, Decl(noUnusedLocals_selfReference.ts, 11, 8))
+ >E : Symbol(E, Decl(noUnusedLocals_selfReference.ts, 10, 1))
+->A : Symbol(E.A, Decl(noUnusedLocals_selfReference.ts, 11, 8))
++>A : Symbol(A, Decl(noUnusedLocals_selfReference.ts, 11, 8))
+ 
+ interface I { x: I };
+ >I : Symbol(I, Decl(noUnusedLocals_selfReference.ts, 11, 25))
+->x : Symbol(I.x, Decl(noUnusedLocals_selfReference.ts, 12, 13))
++>x : Symbol(x, Decl(noUnusedLocals_selfReference.ts, 12, 13))
+ >I : Symbol(I, Decl(noUnusedLocals_selfReference.ts, 11, 25))
+ 
+ type T = { x: T };
+@@= skipped -36, +36 lines =@@
+ 
+ class P { private m() { this.m; } }
+ >P : Symbol(P, Decl(noUnusedLocals_selfReference.ts, 19, 30))
+->m : Symbol(P.m, Decl(noUnusedLocals_selfReference.ts, 21, 9))
+->this.m : Symbol(P.m, Decl(noUnusedLocals_selfReference.ts, 21, 9))
++>m : Symbol(m, Decl(noUnusedLocals_selfReference.ts, 21, 9))
++>this.m : Symbol(m, Decl(noUnusedLocals_selfReference.ts, 21, 9))
+ >this : Symbol(P, Decl(noUnusedLocals_selfReference.ts, 19, 30))
+->m : Symbol(P.m, Decl(noUnusedLocals_selfReference.ts, 21, 9))
++>m : Symbol(m, Decl(noUnusedLocals_selfReference.ts, 21, 9))
+ 
+ P;
+ >P : Symbol(P, Decl(noUnusedLocals_selfReference.ts, 19, 30))
+@@= skipped -15, +15 lines =@@
+ 
+ class D { m() { g; } }
+ >D : Symbol(D, Decl(noUnusedLocals_selfReference.ts, 25, 19))
+->m : Symbol(D.m, Decl(noUnusedLocals_selfReference.ts, 26, 9))
++>m : Symbol(m, Decl(noUnusedLocals_selfReference.ts, 26, 9))
+ >g : Symbol(g, Decl(noUnusedLocals_selfReference.ts, 22, 2))
+ 

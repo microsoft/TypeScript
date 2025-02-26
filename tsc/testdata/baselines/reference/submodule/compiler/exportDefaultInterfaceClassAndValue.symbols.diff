@@ -1,0 +1,13 @@
+--- old.exportDefaultInterfaceClassAndValue.symbols
++++ new.exportDefaultInterfaceClassAndValue.symbols
+@@= skipped -7, +7 lines =@@
+ >foo : Symbol(foo, Decl(exportDefaultInterfaceClassAndValue.ts, 0, 5))
+ 
+ export default class Foo {}
+->Foo : Symbol(foo, Decl(exportDefaultInterfaceClassAndValue.ts, 0, 13), Decl(exportDefaultInterfaceClassAndValue.ts, 1, 18), Decl(exportDefaultInterfaceClassAndValue.ts, 2, 27))
++>Foo : Symbol(default, Decl(exportDefaultInterfaceClassAndValue.ts, 0, 13), Decl(exportDefaultInterfaceClassAndValue.ts, 1, 18), Decl(exportDefaultInterfaceClassAndValue.ts, 2, 27))
+ 
+ export default interface Foo {}
+->Foo : Symbol(foo, Decl(exportDefaultInterfaceClassAndValue.ts, 0, 13), Decl(exportDefaultInterfaceClassAndValue.ts, 1, 18), Decl(exportDefaultInterfaceClassAndValue.ts, 2, 27))
++>Foo : Symbol(default, Decl(exportDefaultInterfaceClassAndValue.ts, 0, 13), Decl(exportDefaultInterfaceClassAndValue.ts, 1, 18), Decl(exportDefaultInterfaceClassAndValue.ts, 2, 27))
+ 

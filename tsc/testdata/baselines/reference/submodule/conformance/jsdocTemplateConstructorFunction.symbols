@@ -1,0 +1,47 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateConstructorFunction.ts] ////
+
+=== templateTagOnConstructorFunctions.js ===
+/**
+ * @template U
+ * @typedef {(u: U) => U} Id
+ */
+/**
+ * @param {T} t
+ * @template T
+ */
+function Zet(t) {
+>Zet : Symbol(Zet, Decl(templateTagOnConstructorFunctions.js, 0, 0))
+>t : Symbol(t, Decl(templateTagOnConstructorFunctions.js, 8, 13))
+
+    /** @type {T} */
+    this.u
+    this.t = t
+>t : Symbol(t, Decl(templateTagOnConstructorFunctions.js, 8, 13))
+}
+/**
+ * @param {T} v
+ * @param {Id<T>} id
+ */
+Zet.prototype.add = function(v, id) {
+>Zet.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Zet : Symbol(Zet, Decl(templateTagOnConstructorFunctions.js, 0, 0))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(templateTagOnConstructorFunctions.js, 17, 29))
+>id : Symbol(id, Decl(templateTagOnConstructorFunctions.js, 17, 31))
+
+    this.u = v || this.t
+>v : Symbol(v, Decl(templateTagOnConstructorFunctions.js, 17, 29))
+
+    return id(this.u)
+>id : Symbol(id, Decl(templateTagOnConstructorFunctions.js, 17, 31))
+}
+var z = new Zet(1)
+>z : Symbol(z, Decl(templateTagOnConstructorFunctions.js, 21, 3))
+>Zet : Symbol(Zet, Decl(templateTagOnConstructorFunctions.js, 0, 0))
+
+z.t = 2
+>z : Symbol(z, Decl(templateTagOnConstructorFunctions.js, 21, 3))
+
+z.u = false
+>z : Symbol(z, Decl(templateTagOnConstructorFunctions.js, 21, 3))
+

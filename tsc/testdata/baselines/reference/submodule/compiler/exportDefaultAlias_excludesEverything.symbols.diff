@@ -1,0 +1,11 @@
+--- old.exportDefaultAlias_excludesEverything.symbols
++++ new.exportDefaultAlias_excludesEverything.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === exportDefaultAlias_excludesEverything.ts ===
+ export default interface A {}
+->A : Symbol(A, Decl(exportDefaultAlias_excludesEverything.ts, 0, 0))
++>A : Symbol(default, Decl(exportDefaultAlias_excludesEverything.ts, 0, 0))
+ 
+ interface B {}
+ >B : Symbol(B, Decl(exportDefaultAlias_excludesEverything.ts, 0, 29))

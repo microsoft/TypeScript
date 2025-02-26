@@ -1,0 +1,29 @@
+--- old.subtypingWithConstructSignatures3.symbols
++++ new.subtypingWithConstructSignatures3.symbols
+@@= skipped -8, +8 lines =@@
+ 
+     class Base { foo: string; }
+ >Base : Symbol(Base, Decl(subtypingWithConstructSignatures3.ts, 3, 15))
+->foo : Symbol(Base.foo, Decl(subtypingWithConstructSignatures3.ts, 4, 16))
++>foo : Symbol(foo, Decl(subtypingWithConstructSignatures3.ts, 4, 16))
+ 
+     class Derived extends Base { bar: string; }
+ >Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures3.ts, 4, 31))
+ >Base : Symbol(Base, Decl(subtypingWithConstructSignatures3.ts, 3, 15))
+->bar : Symbol(Derived.bar, Decl(subtypingWithConstructSignatures3.ts, 5, 32))
++>bar : Symbol(bar, Decl(subtypingWithConstructSignatures3.ts, 5, 32))
+ 
+     class Derived2 extends Derived { baz: string; }
+ >Derived2 : Symbol(Derived2, Decl(subtypingWithConstructSignatures3.ts, 5, 47))
+ >Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures3.ts, 4, 31))
+->baz : Symbol(Derived2.baz, Decl(subtypingWithConstructSignatures3.ts, 6, 36))
++>baz : Symbol(baz, Decl(subtypingWithConstructSignatures3.ts, 6, 36))
+ 
+     class OtherDerived extends Base { bing: string; }
+ >OtherDerived : Symbol(OtherDerived, Decl(subtypingWithConstructSignatures3.ts, 6, 51))
+ >Base : Symbol(Base, Decl(subtypingWithConstructSignatures3.ts, 3, 15))
+->bing : Symbol(OtherDerived.bing, Decl(subtypingWithConstructSignatures3.ts, 7, 37))
++>bing : Symbol(bing, Decl(subtypingWithConstructSignatures3.ts, 7, 37))
+ 
+     declare function foo2(a2: new (x: number) => string[]): typeof a2;
+ >foo2 : Symbol(foo2, Decl(subtypingWithConstructSignatures3.ts, 7, 53), Decl(subtypingWithConstructSignatures3.ts, 9, 70))

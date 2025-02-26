@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/topFunctionTypeNotCallable.ts] ////
+
+=== topFunctionTypeNotCallable.ts ===
+// repro from #48840
+
+declare let foo: (...args: never) => void;
+>foo : Symbol(foo, Decl(topFunctionTypeNotCallable.ts, 2, 11))
+>args : Symbol(args, Decl(topFunctionTypeNotCallable.ts, 2, 18))
+
+foo(); // error
+>foo : Symbol(foo, Decl(topFunctionTypeNotCallable.ts, 2, 11))
+

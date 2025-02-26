@@ -1,0 +1,11 @@
+--- old.parseJsxElementInUnaryExpressionNoCrash1.symbols
++++ new.parseJsxElementInUnaryExpressionNoCrash1.symbols
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/parseJsxElementInUnaryExpressionNoCrash1.ts] ////
+ 
+ === a.js ===
+-
+ ~< <
+ 
++> : Symbol(unknown)
++

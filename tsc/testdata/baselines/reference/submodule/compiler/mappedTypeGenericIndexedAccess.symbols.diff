@@ -1,0 +1,85 @@
+--- old.mappedTypeGenericIndexedAccess.symbols
++++ new.mappedTypeGenericIndexedAccess.symbols
+@@= skipped -22, +22 lines =@@
+ >Test : Symbol(Test, Decl(mappedTypeGenericIndexedAccess.ts, 6, 1))
+ 
+     entries: { [T in keyof Types]?: Types[T][] };
+->entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
++>entries : Symbol(entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+ >T : Symbol(T, Decl(mappedTypeGenericIndexedAccess.ts, 9, 16))
+ >Types : Symbol(Types, Decl(mappedTypeGenericIndexedAccess.ts, 0, 0))
+ >Types : Symbol(Types, Decl(mappedTypeGenericIndexedAccess.ts, 0, 0))
+@@= skipped -8, +8 lines =@@
+ 
+     constructor() {
+         this.entries = {};
+->this.entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
++>this.entries : Symbol(entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+ >this : Symbol(Test, Decl(mappedTypeGenericIndexedAccess.ts, 6, 1))
+->entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
++>entries : Symbol(entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+     }
+ 
+     addEntry<T extends keyof Types>(name: T, entry: Types[T]) {
+->addEntry : Symbol(Test.addEntry, Decl(mappedTypeGenericIndexedAccess.ts, 13, 5))
++>addEntry : Symbol(addEntry, Decl(mappedTypeGenericIndexedAccess.ts, 13, 5))
+ >T : Symbol(T, Decl(mappedTypeGenericIndexedAccess.ts, 15, 13))
+ >Types : Symbol(Types, Decl(mappedTypeGenericIndexedAccess.ts, 0, 0))
+ >name : Symbol(name, Decl(mappedTypeGenericIndexedAccess.ts, 15, 36))
+@@= skipped -16, +16 lines =@@
+ >T : Symbol(T, Decl(mappedTypeGenericIndexedAccess.ts, 15, 13))
+ 
+         if (!this.entries[name]) {
+->this.entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
++>this.entries : Symbol(entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+ >this : Symbol(Test, Decl(mappedTypeGenericIndexedAccess.ts, 6, 1))
+->entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
++>entries : Symbol(entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+ >name : Symbol(name, Decl(mappedTypeGenericIndexedAccess.ts, 15, 36))
+ 
+             this.entries[name] = [];
+->this.entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
++>this.entries : Symbol(entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+ >this : Symbol(Test, Decl(mappedTypeGenericIndexedAccess.ts, 6, 1))
+->entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
++>entries : Symbol(entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+ >name : Symbol(name, Decl(mappedTypeGenericIndexedAccess.ts, 15, 36))
+         }
+         this.entries[name]?.push(entry);
+->this.entries[name]?.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+->this.entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
++>this.entries[name]?.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
++>this.entries : Symbol(entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+ >this : Symbol(Test, Decl(mappedTypeGenericIndexedAccess.ts, 6, 1))
+->entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
++>entries : Symbol(entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
+ >name : Symbol(name, Decl(mappedTypeGenericIndexedAccess.ts, 15, 36))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >entry : Symbol(entry, Decl(mappedTypeGenericIndexedAccess.ts, 15, 44))
+     }
+ }
+@@= skipped -68, +68 lines =@@
+ >[0] : Symbol([0], Decl(mappedTypeGenericIndexedAccess.ts, 36, 36))
+ >0 : Symbol([0], Decl(mappedTypeGenericIndexedAccess.ts, 36, 36))
+ >p : Symbol(p, Decl(mappedTypeGenericIndexedAccess.ts, 37, 10))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >p.foo : Symbol(foo, Decl(mappedTypeGenericIndexedAccess.ts, 26, 10))
+ >p : Symbol(p, Decl(mappedTypeGenericIndexedAccess.ts, 37, 10))
+ >foo : Symbol(foo, Decl(mappedTypeGenericIndexedAccess.ts, 26, 10))
+@@= skipped -11, +11 lines =@@
+ >[1] : Symbol([1], Decl(mappedTypeGenericIndexedAccess.ts, 37, 35))
+ >1 : Symbol([1], Decl(mappedTypeGenericIndexedAccess.ts, 37, 35))
+ >p : Symbol(p, Decl(mappedTypeGenericIndexedAccess.ts, 38, 10))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >p.a : Symbol(a, Decl(mappedTypeGenericIndexedAccess.ts, 27, 10))
+ >p : Symbol(p, Decl(mappedTypeGenericIndexedAccess.ts, 38, 10))
+ >a : Symbol(a, Decl(mappedTypeGenericIndexedAccess.ts, 27, 10))

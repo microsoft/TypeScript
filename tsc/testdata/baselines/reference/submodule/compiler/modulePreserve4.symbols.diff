@@ -1,0 +1,147 @@
+--- old.modulePreserve4.symbols
++++ new.modulePreserve4.symbols
+@@= skipped -29, +29 lines =@@
+ export default 0;
+ 
+ === /g.js ===
++
+ exports.default = 0;
+->exports.default : Symbol(default, Decl(g.js, 0, 0))
+->exports : Symbol(default, Decl(g.js, 0, 0))
+->default : Symbol(default, Decl(g.js, 0, 0))
+ 
+ === /main1.ts ===
+ import { x, y } from "./a"; // No y
+@@= skipped -18, +16 lines =@@
+ 
+ const a3 = await import("./a"); // { x: 0 }
+ >a3 : Symbol(a3, Decl(main1.ts, 3, 5))
+->"./a" : Symbol(a1, Decl(a.js, 0, 0))
+ 
+ a3.x;
+ >a3.x : Symbol(x, Decl(a.js, 0, 12))
+@@= skipped -14, +13 lines =@@
+ >b2 : Symbol(b2, Decl(main1.ts, 6, 21))
+ 
+ b2.default;
+->b2.default : Symbol(b1, Decl(b.ts, 0, 0))
++>b2.default : Symbol(default, Decl(b.ts, 0, 0))
+ >b2 : Symbol(b2, Decl(main1.ts, 6, 21))
+->default : Symbol(b1, Decl(b.ts, 0, 0))
++>default : Symbol(default, Decl(b.ts, 0, 0))
+ 
+ const b3 = await import("./b"); // { default: 0 }
+ >b3 : Symbol(b3, Decl(main1.ts, 9, 5))
+->"./b" : Symbol(b2, Decl(b.ts, 0, 0))
+ 
+ b3.default;
+->b3.default : Symbol(b1, Decl(b.ts, 0, 0))
++>b3.default : Symbol(default, Decl(b.ts, 0, 0))
+ >b3 : Symbol(b3, Decl(main1.ts, 9, 5))
+->default : Symbol(b1, Decl(b.ts, 0, 0))
++>default : Symbol(default, Decl(b.ts, 0, 0))
+ 
+ import c1 from "./c"; // { default: [Function: default] }
+ >c1 : Symbol(c1, Decl(main1.ts, 12, 6))
+@@= skipped -38, +37 lines =@@
+ 
+ const d3 = await import("./d"); // { default: [Function: default] }
+ >d3 : Symbol(d3, Decl(main1.ts, 19, 5))
+->"./d" : Symbol("/d", Decl(d.ts, 0, 0))
+ 
+ d3.default();
+ >d3.default : Symbol(default)
+@@= skipped -20, +19 lines =@@
+ >f2 : Symbol(f2, Decl(main1.ts, 24, 25))
+ 
+ f2.default;
+->f2.default : Symbol(f1, Decl(f.cts, 0, 0))
++>f2.default : Symbol(default, Decl(f.cts, 0, 0))
+ >f2 : Symbol(f2, Decl(main1.ts, 24, 25))
+->default : Symbol(f1, Decl(f.cts, 0, 0))
++>default : Symbol(default, Decl(f.cts, 0, 0))
+ 
+ import g1 from "./g"; // { default: 0 }
+ >g1 : Symbol(g1, Decl(main1.ts, 28, 6))
+ 
+ g1.default;
+->g1.default : Symbol(g1.default, Decl(g.js, 0, 0))
+ >g1 : Symbol(g1, Decl(main1.ts, 28, 6))
+->default : Symbol(g1.default, Decl(g.js, 0, 0))
+ 
+ import g2 = require("./g"); // { default: 0 }
+ >g2 : Symbol(g2, Decl(main1.ts, 29, 11))
+ 
+ g2.default;
+->g2.default : Symbol(g1.default, Decl(g.js, 0, 0))
+ >g2 : Symbol(g2, Decl(main1.ts, 29, 11))
+->default : Symbol(g1.default, Decl(g.js, 0, 0))
+ 
+ === /main2.mts ===
+ import { x, y } from "./a"; // No y
+@@= skipped -85, +81 lines =@@
+ 
+ const a2 = require("./a"); // { x: 0 }
+ >a2 : Symbol(a2, Decl(main3.cjs, 2, 5))
+->require : Symbol(require)
+->"./a" : Symbol(a1, Decl(a.js, 0, 0))
+ 
+ import b1 from "./b"; // 0
+ >b1 : Symbol(b1, Decl(main3.cjs, 4, 6))
+ 
+ const b2 = require("./b"); // { default: 0 }
+ >b2 : Symbol(b2, Decl(main3.cjs, 5, 5))
+->require : Symbol(require)
+->"./b" : Symbol(b2, Decl(b.ts, 0, 0))
+ 
+ import c1 from "./c"; // { default: [Function: default] }
+ >c1 : Symbol(c1, Decl(main3.cjs, 7, 6))
+ 
+ const c2 = require("./c"); // { default: [Function: default] }
+ >c2 : Symbol(c2, Decl(main3.cjs, 8, 5))
+->require : Symbol(require)
+->"./c" : Symbol("/c", Decl(c.ts, 0, 0))
+ 
+ import d1 from "./d"; // [Function: default]
+ >d1 : Symbol(d1, Decl(main3.cjs, 9, 6))
+ 
+ const d2 = require("./d"); // [Function: default]
+ >d2 : Symbol(d2, Decl(main3.cjs, 10, 5))
+->require : Symbol(require)
+->"./d" : Symbol("/d", Decl(d.ts, 0, 0))
+ 
+ import e1 from "./e.mjs"; // 0
+ >e1 : Symbol(e1, Decl(main3.cjs, 11, 6))
+ 
+ const e2 = require("./e.mjs"); // 0
+ >e2 : Symbol(e2, Decl(main3.cjs, 12, 5))
+->require : Symbol(require)
+->"./e.mjs" : Symbol("/e", Decl(e.mts, 0, 0))
+ 
+ import f1 from "./f.cjs"; // 0
+ >f1 : Symbol(f1, Decl(main3.cjs, 13, 6))
+ 
+ const f2 = require("./f.cjs"); // { default: 0 }
+ >f2 : Symbol(f2, Decl(main3.cjs, 14, 5))
+->require : Symbol(require)
+->"./f.cjs" : Symbol(f2, Decl(f.cts, 0, 0))
+ 
+ import g1 from "./g"; // { default: 0 }
+ >g1 : Symbol(g1, Decl(main3.cjs, 16, 6))
+ 
+ const g2 = require("./g"); // { default: 0 }
+ >g2 : Symbol(g2, Decl(main3.cjs, 17, 5))
+->require : Symbol(require)
+->"./g" : Symbol(g1, Decl(g.js, 0, 0))
+ 
+ === /main4.cjs ===
++
+ exports.x = require("./g");
+->exports.x : Symbol(x, Decl(main4.cjs, 0, 0))
+->exports : Symbol(x, Decl(main4.cjs, 0, 0))
+->x : Symbol(x, Decl(main4.cjs, 0, 0))
+->require : Symbol(require)
+->"./g" : Symbol("/g", Decl(g.js, 0, 0))
+ 
+ === /dummy.ts ===
+ 

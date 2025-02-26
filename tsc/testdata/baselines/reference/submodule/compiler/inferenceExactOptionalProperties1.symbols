@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/inferenceExactOptionalProperties1.ts] ////
+
+=== inferenceExactOptionalProperties1.ts ===
+type Test1 = { prop?: never } extends { prop?: infer T } ? T : false; // never
+>Test1 : Symbol(Test1, Decl(inferenceExactOptionalProperties1.ts, 0, 0))
+>prop : Symbol(prop, Decl(inferenceExactOptionalProperties1.ts, 0, 14))
+>prop : Symbol(prop, Decl(inferenceExactOptionalProperties1.ts, 0, 39))
+>T : Symbol(T, Decl(inferenceExactOptionalProperties1.ts, 0, 52))
+>T : Symbol(T, Decl(inferenceExactOptionalProperties1.ts, 0, 52))
+

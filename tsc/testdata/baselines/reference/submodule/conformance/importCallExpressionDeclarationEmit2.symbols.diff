@@ -1,0 +1,8 @@
+--- old.importCallExpressionDeclarationEmit2.symbols
++++ new.importCallExpressionDeclarationEmit2.symbols
+@@= skipped -6, +6 lines =@@
+ === 1.ts ===
+ var p1 = import("./0");
+ >p1 : Symbol(p1, Decl(1.ts, 0, 3))
+->"./0" : Symbol("0", Decl(0.ts, 0, 0))
+ 

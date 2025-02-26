@@ -1,0 +1,23 @@
+--- old.nodeColonModuleResolution2.symbols
++++ new.nodeColonModuleResolution2.symbols
+@@= skipped -4, +4 lines =@@
+ >ph : Symbol(ph, Decl(main.ts, 0, 6))
+ 
+ console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE)
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : Symbol(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE, Decl(index.d.ts, 9, 9))
+->ph.constants : Symbol(ph.constants, Decl(index.d.ts, 0, 0))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : Symbol(NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE, Decl(index.d.ts, 9, 9))
++>ph.constants : Symbol(constants, Decl(index.d.ts, 0, 0))
+ >ph : Symbol(ph, Decl(main.ts, 0, 6))
+->constants : Symbol(ph.constants, Decl(index.d.ts, 0, 0))
+->NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : Symbol(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE, Decl(index.d.ts, 9, 9))
++>constants : Symbol(constants, Decl(index.d.ts, 0, 0))
++>NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : Symbol(NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE, Decl(index.d.ts, 9, 9))
+ 
+ === /a/b/node_modules/fake/thing/index.d.ts ===
+ export namespace constants {

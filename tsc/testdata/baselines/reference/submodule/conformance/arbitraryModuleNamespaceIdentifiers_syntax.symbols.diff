@@ -1,0 +1,75 @@
+--- old.arbitraryModuleNamespaceIdentifiers_syntax.symbols
++++ new.arbitraryModuleNamespaceIdentifiers_syntax.symbols
+@@= skipped -22, +22 lines =@@
+ 
+ === values-bad-import.ts ===
+ import { foo as "invalid 2" } from "./values-valid";
+->foo : Symbol((Missing), Decl(values-valid.ts, 0, 12))
+-> : Symbol((Missing), Decl(values-bad-import.ts, 0, 8))
++>foo : Symbol(foo, Decl(values-valid.ts, 0, 12))
++>"invalid 2" : Symbol("", Decl(values-bad-import.ts, 0, 8))
+ 
+ === values-bad-export.ts ===
+ export { "invalid 3" as baz };
+@@= skipped -9, +9 lines =@@
+ 
+ === values-no-as.ts ===
+ import { "invalid 1" } from "./values-valid";
+-> : Symbol((Missing), Decl(values-no-as.ts, 0, 8))
++>"invalid 1" : Symbol("", Decl(values-no-as.ts, 0, 8))
+ 
+ === values-type-as.ts ===
+ import { type as "invalid 4" } from "./values-valid";
+-> : Symbol((Missing), Decl(values-type-as.ts, 0, 8))
++>"invalid 4" : Symbol("", Decl(values-type-as.ts, 0, 8))
+ 
+ 
+ === type-decls-valid.ts ===
+@@= skipped -30, +30 lines =@@
+ 
+ === type-decls-bad-import.ts ===
+ import type { foo as "invalid 2" } from "./type-decls-valid";
+->foo : Symbol((Missing), Decl(type-decls-valid.ts, 0, 0))
+-> : Symbol((Missing), Decl(type-decls-bad-import.ts, 0, 13))
++>foo : Symbol(foo, Decl(type-decls-valid.ts, 0, 0))
++>"invalid 2" : Symbol("", Decl(type-decls-bad-import.ts, 0, 13))
+ 
+ === type-decls-bad-export.ts ===
+ export type { "invalid 3" as baz };
+@@= skipped -9, +9 lines =@@
+ 
+ === type-decls-no-as.ts ===
+ import type { "invalid 1" } from "./type-decls-valid";
+-> : Symbol((Missing), Decl(type-decls-no-as.ts, 0, 13))
++>"invalid 1" : Symbol("", Decl(type-decls-no-as.ts, 0, 13))
+ 
+ === type-decls-type-as.ts ===
+ import type { type as "invalid 4" } from "./type-decls-valid";
+-> : Symbol((Missing), Decl(type-decls-type-as.ts, 0, 13))
++>"invalid 4" : Symbol("", Decl(type-decls-type-as.ts, 0, 13))
+ 
+ === type-clause-valid.ts ===
+ export type foo = 123;
+@@= skipped -26, +26 lines =@@
+ 
+ === type-clause-bad-import.ts ===
+ import { type foo as "invalid 2" } from "./type-clause-valid";
+->foo : Symbol((Missing), Decl(type-clause-valid.ts, 0, 0))
+-> : Symbol((Missing), Decl(type-clause-bad-import.ts, 0, 8))
++>foo : Symbol(foo, Decl(type-clause-valid.ts, 0, 0))
++>"invalid 2" : Symbol("", Decl(type-clause-bad-import.ts, 0, 8))
+ 
+ === type-clause-bad-export.ts ===
+ export { type "invalid 3" as baz };
+@@= skipped -9, +9 lines =@@
+ 
+ === type-clause-no-as.ts ===
+ import { type "invalid 1" } from "./type-clause-valid";
+-> : Symbol((Missing), Decl(type-clause-no-as.ts, 0, 8))
++>"invalid 1" : Symbol("", Decl(type-clause-no-as.ts, 0, 8))
+ 
+ === type-clause-type-as-as.ts ===
+ import { type as as "invalid 4" } from "./type-clause-valid";
+-> : Symbol((Missing), Decl(type-clause-type-as-as.ts, 0, 8))
++>"invalid 4" : Symbol("", Decl(type-clause-type-as-as.ts, 0, 8))
+ 

@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/jsdoc/typedefCrossModule5.ts] ////
+
+=== mod1.js ===
+/** @typedef {number} Foo */
+class Bar {}
+>Bar : Symbol(Bar, Decl(mod1.js, 0, 0))
+
+=== mod2.js ===
+class Foo { } // should error
+>Foo : Symbol(Foo, Decl(mod2.js, 0, 0))
+
+const Bar = 3;
+>Bar : Symbol(Bar, Decl(mod2.js, 1, 5))
+

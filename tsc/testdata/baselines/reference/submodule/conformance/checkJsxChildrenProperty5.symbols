@@ -1,0 +1,80 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty5.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+interface Prop {
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+
+    a: number,
+>a : Symbol(a, Decl(file.tsx, 2, 16))
+
+    b: string,
+>b : Symbol(b, Decl(file.tsx, 3, 14))
+
+    children: Button;
+>children : Symbol(children, Decl(file.tsx, 4, 14))
+>Button : Symbol(Button, Decl(file.tsx, 6, 1))
+}
+
+class Button extends React.Component<any, any> {
+>Button : Symbol(Button, Decl(file.tsx, 6, 1))
+>React.Component : Symbol(unknown)
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(unknown)
+
+    render() {
+>render : Symbol(render, Decl(file.tsx, 8, 48))
+
+        return (<div>My Button</div>)
+    }
+}
+
+function Comp(p: Prop) {
+>Comp : Symbol(Comp, Decl(file.tsx, 12, 1))
+>p : Symbol(p, Decl(file.tsx, 14, 14))
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+
+    return <div>{p.b}</div>;
+>p.b : Symbol(b, Decl(file.tsx, 3, 14))
+>p : Symbol(p, Decl(file.tsx, 14, 14))
+>b : Symbol(b, Decl(file.tsx, 3, 14))
+}
+
+// Error: no children specified
+let k = <Comp a={10} b="hi" />;
+>k : Symbol(k, Decl(file.tsx, 19, 3))
+>Comp : Symbol(Comp, Decl(file.tsx, 12, 1))
+>a : Symbol(a, Decl(file.tsx, 19, 13))
+>b : Symbol(b, Decl(file.tsx, 19, 20))
+
+// Error: JSX.element is not the same as JSX.ElementClass
+let k1 =
+>k1 : Symbol(k1, Decl(file.tsx, 22, 3))
+
+    <Comp a={10} b="hi">
+>Comp : Symbol(Comp, Decl(file.tsx, 12, 1))
+>a : Symbol(a, Decl(file.tsx, 23, 9))
+>b : Symbol(b, Decl(file.tsx, 23, 16))
+
+        <Button />
+>Button : Symbol(Button, Decl(file.tsx, 6, 1))
+
+    </Comp>;
+>Comp : Symbol(Comp, Decl(file.tsx, 12, 1))
+
+let k2 =
+>k2 : Symbol(k2, Decl(file.tsx, 26, 3))
+
+    <Comp a={10} b="hi">
+>Comp : Symbol(Comp, Decl(file.tsx, 12, 1))
+>a : Symbol(a, Decl(file.tsx, 27, 9))
+>b : Symbol(b, Decl(file.tsx, 27, 16))
+
+        {Button}
+>Button : Symbol(Button, Decl(file.tsx, 6, 1))
+
+    </Comp>;
+>Comp : Symbol(Comp, Decl(file.tsx, 12, 1))
+

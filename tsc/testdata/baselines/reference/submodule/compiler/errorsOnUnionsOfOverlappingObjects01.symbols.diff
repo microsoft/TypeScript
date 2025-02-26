@@ -1,0 +1,57 @@
+--- old.errorsOnUnionsOfOverlappingObjects01.symbols
++++ new.errorsOnUnionsOfOverlappingObjects01.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 0, 0))
+ 
+     a: string;
+->a : Symbol(Foo.a, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 0, 15))
++>a : Symbol(a, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 0, 15))
+ 
+     b: number;
+->b : Symbol(Foo.b, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 1, 14))
++>b : Symbol(b, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 1, 14))
+ 
+ };
+ 
+@@= skipped -11, +11 lines =@@
+ >Bar : Symbol(Bar, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 3, 2))
+ 
+     b: string;
+->b : Symbol(Bar.b, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 5, 15))
++>b : Symbol(b, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 5, 15))
+ }
+ 
+ interface Other {
+ >Other : Symbol(Other, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 7, 1))
+ 
+     totallyUnrelatedProperty: number;
+->totallyUnrelatedProperty : Symbol(Other.totallyUnrelatedProperty, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 9, 17))
++>totallyUnrelatedProperty : Symbol(totallyUnrelatedProperty, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 9, 17))
+ }
+ 
+ export let x = { a: '', b: '' };
+@@= skipped -63, +63 lines =@@
+ 
+ interface CatDog { cat: any, dog: any }
+ >CatDog : Symbol(CatDog, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 28, 19))
+->cat : Symbol(CatDog.cat, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 30, 18))
+->dog : Symbol(CatDog.dog, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 30, 28))
++>cat : Symbol(cat, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 30, 18))
++>dog : Symbol(dog, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 30, 28))
+ 
+ interface ManBearPig { man: any, bear: any, pig: any }
+ >ManBearPig : Symbol(ManBearPig, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 30, 39))
+->man : Symbol(ManBearPig.man, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 31, 22))
+->bear : Symbol(ManBearPig.bear, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 31, 32))
+->pig : Symbol(ManBearPig.pig, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 31, 43))
++>man : Symbol(man, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 31, 22))
++>bear : Symbol(bear, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 31, 32))
++>pig : Symbol(pig, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 31, 43))
+ 
+ interface Platypus { platypus: any }
+ >Platypus : Symbol(Platypus, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 31, 54))
+->platypus : Symbol(Platypus.platypus, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 32, 20))
++>platypus : Symbol(platypus, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 32, 20))
+ 
+ type ExoticAnimal =
+ >ExoticAnimal : Symbol(ExoticAnimal, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 32, 36))

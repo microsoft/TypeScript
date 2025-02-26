@@ -1,0 +1,14 @@
+--- old.narrowExceptionVariableInCatchClause.symbols
++++ new.narrowExceptionVariableInCatchClause.symbols
+@@= skipped -34, +34 lines =@@
+ >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+             err.message;
+->err.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
++>err.message : Symbol(message, Decl(lib.es5.d.ts, --, --))
+ >err : Symbol(err, Decl(narrowExceptionVariableInCatchClause.ts, 6, 11))
+->message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
++>message : Symbol(message, Decl(lib.es5.d.ts, --, --))
+ 
+             err.massage; // ERROR: Property 'massage' does not exist on type 'Error'
+ >err : Symbol(err, Decl(narrowExceptionVariableInCatchClause.ts, 6, 11))

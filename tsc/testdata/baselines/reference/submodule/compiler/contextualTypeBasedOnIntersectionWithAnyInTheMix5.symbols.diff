@@ -1,0 +1,67 @@
+--- old.contextualTypeBasedOnIntersectionWithAnyInTheMix5.symbols
++++ new.contextualTypeBasedOnIntersectionWithAnyInTheMix5.symbols
+@@= skipped -37, +37 lines =@@
+ >ComputedOptions : Symbol(ComputedOptions, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 0, 45))
+ 
+   data?: D;
+->data : Symbol(ComponentOptionsBase.data, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 9, 62))
++>data : Symbol(data, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 9, 62))
+ >D : Symbol(D, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 9, 31))
+ 
+   computed?: C;
+->computed : Symbol(ComponentOptionsBase.computed, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 10, 11))
++>computed : Symbol(computed, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 10, 11))
+ >C : Symbol(C, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 9, 33))
+ }
+ 
+@@= skipped -42, +42 lines =@@
+ >App : Symbol(App, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 20, 73))
+ 
+   mixin(mixin: ComponentOptions): this;
+->mixin : Symbol(App.mixin, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 22, 15))
++>mixin : Symbol(mixin, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 22, 15))
+ >mixin : Symbol(mixin, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 23, 8))
+ >ComponentOptions : Symbol(ComponentOptions, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 15, 28))
+ }
+@@= skipped -15, +15 lines =@@
+ >T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 28, 14))
+ 
+   _v: T;
+->_v : Symbol(Ref._v, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 28, 18))
++>_v : Symbol(_v, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 28, 18))
+ >T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 28, 14))
+ }
+ 
+@@= skipped -16, +16 lines =@@
+ >ThemeInstance : Symbol(ThemeInstance, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 32, 63))
+ 
+   readonly name: Readonly<Ref<string>>;
+->name : Symbol(ThemeInstance.name, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 34, 25))
++>name : Symbol(name, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 34, 25))
+ >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+ >Ref : Symbol(Ref, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 26, 43))
+ }
+@@= skipped -28, +28 lines =@@
+ >App : Symbol(App, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 20, 73))
+ 
+ app.mixin({
+->app.mixin : Symbol(App.mixin, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 22, 15))
++>app.mixin : Symbol(mixin, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 22, 15))
+ >app : Symbol(app, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 45, 13))
+->mixin : Symbol(App.mixin, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 22, 15))
++>mixin : Symbol(mixin, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 22, 15))
+ 
+   computed: {
+ >computed : Symbol(computed, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 46, 11))
+@@= skipped -16, +16 lines =@@
+ 
+         theme: inject.call(this, ThemeSymbol),
+ >theme : Symbol(theme, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 50, 23))
+->inject.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
++>inject.call : Symbol(call, Decl(lib.es5.d.ts, --, --))
+ >inject : Symbol(inject, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 38, 55))
+->call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
++>call : Symbol(call, Decl(lib.es5.d.ts, --, --))
+ >ThemeSymbol : Symbol(ThemeSymbol, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 38, 13))
+ 
+       });

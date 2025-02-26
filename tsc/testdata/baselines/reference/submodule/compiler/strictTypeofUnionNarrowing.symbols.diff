@@ -1,0 +1,49 @@
+--- old.strictTypeofUnionNarrowing.symbols
++++ new.strictTypeofUnionNarrowing.symbols
+@@= skipped -7, +7 lines =@@
+ 
+     return typeof anything === "string" ? anything.toUpperCase() : "";
+ >anything : Symbol(anything, Decl(strictTypeofUnionNarrowing.ts, 0, 20))
+->anything.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>anything.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >anything : Symbol(anything, Decl(strictTypeofUnionNarrowing.ts, 0, 20))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function stringify2(anything: {} | undefined): string {
+@@= skipped -11, +11 lines =@@
+ 
+     return typeof anything === "string" ? anything.toUpperCase() : "";
+ >anything : Symbol(anything, Decl(strictTypeofUnionNarrowing.ts, 4, 20))
+->anything.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>anything.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >anything : Symbol(anything, Decl(strictTypeofUnionNarrowing.ts, 4, 20))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function stringify3(anything: unknown | undefined): string { // should simplify to just `unknown` which should narrow fine
+@@= skipped -11, +11 lines =@@
+ 
+     return typeof anything === "string" ? anything.toUpperCase() : "";
+ >anything : Symbol(anything, Decl(strictTypeofUnionNarrowing.ts, 8, 20))
+->anything.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>anything.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >anything : Symbol(anything, Decl(strictTypeofUnionNarrowing.ts, 8, 20))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function stringify4(anything: { toString?(): string } | undefined): string {
+@@= skipped -12, +12 lines =@@
+ 
+     return typeof anything === "string" ? anything.toUpperCase() : "";
+ >anything : Symbol(anything, Decl(strictTypeofUnionNarrowing.ts, 12, 20))
+->anything.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>anything.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >anything : Symbol(anything, Decl(strictTypeofUnionNarrowing.ts, 12, 20))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ }
+ 

@@ -1,0 +1,11 @@
+--- old.internalAliasClass.symbols
++++ new.internalAliasClass.symbols
+@@= skipped -14, +14 lines =@@
+     import b = a.c;
+ >b : Symbol(b, Decl(internalAliasClass.ts, 5, 10))
+ >a : Symbol(a, Decl(internalAliasClass.ts, 0, 0))
+->c : Symbol(b, Decl(internalAliasClass.ts, 0, 10))
++>c : Symbol(c, Decl(internalAliasClass.ts, 0, 10))
+ 
+     export var x: b = new b();
+ >x : Symbol(x, Decl(internalAliasClass.ts, 7, 14))

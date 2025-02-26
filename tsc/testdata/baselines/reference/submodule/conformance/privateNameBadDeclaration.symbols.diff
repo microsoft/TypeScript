@@ -1,0 +1,26 @@
+--- old.privateNameBadDeclaration.symbols
++++ new.privateNameBadDeclaration.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(privateNameBadDeclaration.ts, 0, 0))
+ 
+ A.prototype = {
+->A.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
++>A.prototype : Symbol(prototype, Decl(privateNameBadDeclaration.ts, 0, 16))
+ >A : Symbol(A, Decl(privateNameBadDeclaration.ts, 0, 0))
+->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
++>prototype : Symbol(prototype, Decl(privateNameBadDeclaration.ts, 0, 16))
+ 
+   #x: 1,         // Error
+ >#x : Symbol(#x, Decl(privateNameBadDeclaration.ts, 1, 15))
+@@= skipped -17, +17 lines =@@
+ >B : Symbol(B, Decl(privateNameBadDeclaration.ts, 5, 1))
+ 
+ B.prototype = {
+->B.prototype : Symbol(B.prototype)
++>B.prototype : Symbol(prototype)
+ >B : Symbol(B, Decl(privateNameBadDeclaration.ts, 5, 1))
+->prototype : Symbol(B.prototype)
++>prototype : Symbol(prototype)
+ 
+   #y: 2,         // Error
+ >#y : Symbol(#y, Decl(privateNameBadDeclaration.ts, 7, 15))

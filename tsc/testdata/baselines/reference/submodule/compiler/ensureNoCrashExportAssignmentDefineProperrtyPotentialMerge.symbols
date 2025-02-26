@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/ensureNoCrashExportAssignmentDefineProperrtyPotentialMerge.ts] ////
+
+=== index.js ===
+const _item = require("./namespacer");
+>_item : Symbol(_item, Decl(index.js, 0, 5))
+
+module.exports = 12;
+Object.defineProperty(module, "exports", { value: "oh no" });
+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(index.js, 2, 42))
+

@@ -1,0 +1,23 @@
+--- old.typesWithSpecializedConstructSignatures.symbols
++++ new.typesWithSpecializedConstructSignatures.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ class Base { foo: string }
+ >Base : Symbol(Base, Decl(typesWithSpecializedConstructSignatures.ts, 0, 0))
+->foo : Symbol(Base.foo, Decl(typesWithSpecializedConstructSignatures.ts, 2, 12))
++>foo : Symbol(foo, Decl(typesWithSpecializedConstructSignatures.ts, 2, 12))
+ 
+ class Derived1 extends Base { bar: string }
+ >Derived1 : Symbol(Derived1, Decl(typesWithSpecializedConstructSignatures.ts, 2, 26))
+ >Base : Symbol(Base, Decl(typesWithSpecializedConstructSignatures.ts, 0, 0))
+->bar : Symbol(Derived1.bar, Decl(typesWithSpecializedConstructSignatures.ts, 3, 29))
++>bar : Symbol(bar, Decl(typesWithSpecializedConstructSignatures.ts, 3, 29))
+ 
+ class Derived2 extends Base { baz: string }
+ >Derived2 : Symbol(Derived2, Decl(typesWithSpecializedConstructSignatures.ts, 3, 43))
+ >Base : Symbol(Base, Decl(typesWithSpecializedConstructSignatures.ts, 0, 0))
+->baz : Symbol(Derived2.baz, Decl(typesWithSpecializedConstructSignatures.ts, 4, 29))
++>baz : Symbol(baz, Decl(typesWithSpecializedConstructSignatures.ts, 4, 29))
+ 
+ class C {
+ >C : Symbol(C, Decl(typesWithSpecializedConstructSignatures.ts, 4, 43))

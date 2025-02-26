@@ -1,0 +1,11 @@
+--- old.bases.symbols
++++ new.bases.symbols
+@@= skipped -4, +4 lines =@@
+ >I : Symbol(I, Decl(bases.ts, 0, 0))
+ 
+     x;
+->x : Symbol(I.x, Decl(bases.ts, 0, 13))
++>x : Symbol(x, Decl(bases.ts, 0, 13))
+ }
+ 
+ class B {

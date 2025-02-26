@@ -1,0 +1,11 @@
+--- old.declarationEmitWithInvalidPackageJsonTypings.symbols
++++ new.declarationEmitWithInvalidPackageJsonTypings.symbols
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(index.ts, 0, 34))
+ 
+     current: T;
+->current : Symbol(MutableRefObject.current, Decl(index.ts, 0, 38))
++>current : Symbol(current, Decl(index.ts, 0, 38))
+ >T : Symbol(T, Decl(index.ts, 0, 34))
+ }
+ export function useRef<T>(current: T): MutableRefObject<T> {

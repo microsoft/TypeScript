@@ -1,0 +1,396 @@
+--- old.typeGuardFunctionOfFormThis.symbols
++++ new.typeGuardFunctionOfFormThis.symbols
+@@= skipped -4, +4 lines =@@
+ >RoyalGuard : Symbol(RoyalGuard, Decl(typeGuardFunctionOfFormThis.ts, 0, 0))
+ 
+     isLeader(): this is LeadGuard {
+->isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
++>isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
+ >LeadGuard : Symbol(LeadGuard, Decl(typeGuardFunctionOfFormThis.ts, 7, 1))
+ 
+         return this instanceof LeadGuard;
+@@= skipped -8, +8 lines =@@
+ >LeadGuard : Symbol(LeadGuard, Decl(typeGuardFunctionOfFormThis.ts, 7, 1))
+     }
+     isFollower(): this is FollowerGuard {
+->isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
+ >FollowerGuard : Symbol(FollowerGuard, Decl(typeGuardFunctionOfFormThis.ts, 11, 1))
+ 
+         return this instanceof FollowerGuard;
+@@= skipped -14, +14 lines =@@
+ >RoyalGuard : Symbol(RoyalGuard, Decl(typeGuardFunctionOfFormThis.ts, 0, 0))
+ 
+     lead(): void {};
+->lead : Symbol(LeadGuard.lead, Decl(typeGuardFunctionOfFormThis.ts, 9, 36))
++>lead : Symbol(lead, Decl(typeGuardFunctionOfFormThis.ts, 9, 36))
+ }
+ 
+ class FollowerGuard extends RoyalGuard {
+@@= skipped -8, +8 lines =@@
+ >RoyalGuard : Symbol(RoyalGuard, Decl(typeGuardFunctionOfFormThis.ts, 0, 0))
+ 
+     follow(): void {};
+->follow : Symbol(FollowerGuard.follow, Decl(typeGuardFunctionOfFormThis.ts, 13, 40))
++>follow : Symbol(follow, Decl(typeGuardFunctionOfFormThis.ts, 13, 40))
+ }
+ 
+ let a: RoyalGuard = new FollowerGuard();
+@@= skipped -9, +9 lines =@@
+ >FollowerGuard : Symbol(FollowerGuard, Decl(typeGuardFunctionOfFormThis.ts, 11, 1))
+ 
+ if (a.isLeader()) {
+->a.isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
++>a.isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
+ >a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
+->isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
++>isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
+ 
+     a.lead();
+->a.lead : Symbol(LeadGuard.lead, Decl(typeGuardFunctionOfFormThis.ts, 9, 36))
++>a.lead : Symbol(lead, Decl(typeGuardFunctionOfFormThis.ts, 9, 36))
+ >a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
+->lead : Symbol(LeadGuard.lead, Decl(typeGuardFunctionOfFormThis.ts, 9, 36))
++>lead : Symbol(lead, Decl(typeGuardFunctionOfFormThis.ts, 9, 36))
+ }
+ else if (a.isFollower()) {
+->a.isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
++>a.isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
+ >a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
+->isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
+ 
+     a.follow();
+->a.follow : Symbol(FollowerGuard.follow, Decl(typeGuardFunctionOfFormThis.ts, 13, 40))
++>a.follow : Symbol(follow, Decl(typeGuardFunctionOfFormThis.ts, 13, 40))
+ >a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
+->follow : Symbol(FollowerGuard.follow, Decl(typeGuardFunctionOfFormThis.ts, 13, 40))
++>follow : Symbol(follow, Decl(typeGuardFunctionOfFormThis.ts, 13, 40))
+ }
+ 
+ interface GuardInterface extends RoyalGuard {}
+@@= skipped -29, +29 lines =@@
+ >GuardInterface : Symbol(GuardInterface, Decl(typeGuardFunctionOfFormThis.ts, 23, 1))
+ 
+ if (b.isLeader()) {
+->b.isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
++>b.isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
+ >b : Symbol(b, Decl(typeGuardFunctionOfFormThis.ts, 27, 3))
+->isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
++>isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
+ 
+     b.lead();
+->b.lead : Symbol(LeadGuard.lead, Decl(typeGuardFunctionOfFormThis.ts, 9, 36))
++>b.lead : Symbol(lead, Decl(typeGuardFunctionOfFormThis.ts, 9, 36))
+ >b : Symbol(b, Decl(typeGuardFunctionOfFormThis.ts, 27, 3))
+->lead : Symbol(LeadGuard.lead, Decl(typeGuardFunctionOfFormThis.ts, 9, 36))
++>lead : Symbol(lead, Decl(typeGuardFunctionOfFormThis.ts, 9, 36))
+ }
+ else if (b.isFollower()) {
+->b.isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
++>b.isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
+ >b : Symbol(b, Decl(typeGuardFunctionOfFormThis.ts, 27, 3))
+->isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
+ 
+     b.follow();
+->b.follow : Symbol(FollowerGuard.follow, Decl(typeGuardFunctionOfFormThis.ts, 13, 40))
++>b.follow : Symbol(follow, Decl(typeGuardFunctionOfFormThis.ts, 13, 40))
+ >b : Symbol(b, Decl(typeGuardFunctionOfFormThis.ts, 27, 3))
+->follow : Symbol(FollowerGuard.follow, Decl(typeGuardFunctionOfFormThis.ts, 13, 40))
++>follow : Symbol(follow, Decl(typeGuardFunctionOfFormThis.ts, 13, 40))
+ }
+ 
+ // if (((a.isLeader)())) {
+@@= skipped -39, +39 lines =@@
+ >a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 49, 15))
+ 
+ if (holder2.a.isLeader()) {
+->holder2.a.isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
++>holder2.a.isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
+ >holder2.a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 49, 15))
+ >holder2 : Symbol(holder2, Decl(typeGuardFunctionOfFormThis.ts, 49, 3))
+ >a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 49, 15))
+->isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
++>isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
+ 
+     holder2.a;
+ >holder2.a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 49, 15))
+@@= skipped -22, +22 lines =@@
+ >ArrowGuard : Symbol(ArrowGuard, Decl(typeGuardFunctionOfFormThis.ts, 56, 1))
+ 
+     isElite = (): this is ArrowElite => {
+->isElite : Symbol(ArrowGuard.isElite, Decl(typeGuardFunctionOfFormThis.ts, 58, 18))
++>isElite : Symbol(isElite, Decl(typeGuardFunctionOfFormThis.ts, 58, 18))
+ >ArrowElite : Symbol(ArrowElite, Decl(typeGuardFunctionOfFormThis.ts, 65, 1))
+ 
+         return this instanceof ArrowElite;
+@@= skipped -8, +8 lines =@@
+ >ArrowElite : Symbol(ArrowElite, Decl(typeGuardFunctionOfFormThis.ts, 65, 1))
+     }
+     isMedic = (): this is ArrowMedic => {
+->isMedic : Symbol(ArrowGuard.isMedic, Decl(typeGuardFunctionOfFormThis.ts, 61, 5))
++>isMedic : Symbol(isMedic, Decl(typeGuardFunctionOfFormThis.ts, 61, 5))
+ >ArrowMedic : Symbol(ArrowMedic, Decl(typeGuardFunctionOfFormThis.ts, 69, 1))
+ 
+         return this instanceof ArrowMedic;
+@@= skipped -14, +14 lines =@@
+ >ArrowGuard : Symbol(ArrowGuard, Decl(typeGuardFunctionOfFormThis.ts, 56, 1))
+ 
+     defend(): void {}
+->defend : Symbol(ArrowElite.defend, Decl(typeGuardFunctionOfFormThis.ts, 67, 37))
++>defend : Symbol(defend, Decl(typeGuardFunctionOfFormThis.ts, 67, 37))
+ }
+ 
+ class ArrowMedic extends ArrowGuard {
+@@= skipped -8, +8 lines =@@
+ >ArrowGuard : Symbol(ArrowGuard, Decl(typeGuardFunctionOfFormThis.ts, 56, 1))
+ 
+     heal(): void {}
+->heal : Symbol(ArrowMedic.heal, Decl(typeGuardFunctionOfFormThis.ts, 71, 37))
++>heal : Symbol(heal, Decl(typeGuardFunctionOfFormThis.ts, 71, 37))
+ }
+ 
+ let guard = new ArrowGuard();
+@@= skipped -8, +8 lines =@@
+ >ArrowGuard : Symbol(ArrowGuard, Decl(typeGuardFunctionOfFormThis.ts, 56, 1))
+ 
+ if (guard.isElite()) {
+->guard.isElite : Symbol(ArrowGuard.isElite, Decl(typeGuardFunctionOfFormThis.ts, 58, 18))
++>guard.isElite : Symbol(isElite, Decl(typeGuardFunctionOfFormThis.ts, 58, 18))
+ >guard : Symbol(guard, Decl(typeGuardFunctionOfFormThis.ts, 75, 3))
+->isElite : Symbol(ArrowGuard.isElite, Decl(typeGuardFunctionOfFormThis.ts, 58, 18))
++>isElite : Symbol(isElite, Decl(typeGuardFunctionOfFormThis.ts, 58, 18))
+ 
+     guard.defend();
+->guard.defend : Symbol(ArrowElite.defend, Decl(typeGuardFunctionOfFormThis.ts, 67, 37))
++>guard.defend : Symbol(defend, Decl(typeGuardFunctionOfFormThis.ts, 67, 37))
+ >guard : Symbol(guard, Decl(typeGuardFunctionOfFormThis.ts, 75, 3))
+->defend : Symbol(ArrowElite.defend, Decl(typeGuardFunctionOfFormThis.ts, 67, 37))
++>defend : Symbol(defend, Decl(typeGuardFunctionOfFormThis.ts, 67, 37))
+ }
+ else if (guard.isMedic()) {
+->guard.isMedic : Symbol(ArrowGuard.isMedic, Decl(typeGuardFunctionOfFormThis.ts, 61, 5))
++>guard.isMedic : Symbol(isMedic, Decl(typeGuardFunctionOfFormThis.ts, 61, 5))
+ >guard : Symbol(guard, Decl(typeGuardFunctionOfFormThis.ts, 75, 3))
+->isMedic : Symbol(ArrowGuard.isMedic, Decl(typeGuardFunctionOfFormThis.ts, 61, 5))
++>isMedic : Symbol(isMedic, Decl(typeGuardFunctionOfFormThis.ts, 61, 5))
+ 
+     guard.heal();
+->guard.heal : Symbol(ArrowMedic.heal, Decl(typeGuardFunctionOfFormThis.ts, 71, 37))
++>guard.heal : Symbol(heal, Decl(typeGuardFunctionOfFormThis.ts, 71, 37))
+ >guard : Symbol(guard, Decl(typeGuardFunctionOfFormThis.ts, 75, 3))
+->heal : Symbol(ArrowMedic.heal, Decl(typeGuardFunctionOfFormThis.ts, 71, 37))
++>heal : Symbol(heal, Decl(typeGuardFunctionOfFormThis.ts, 71, 37))
+ }
+ 
+ interface Supplies {
+ >Supplies : Symbol(Supplies, Decl(typeGuardFunctionOfFormThis.ts, 81, 1))
+ 
+     spoiled: boolean;
+->spoiled : Symbol(Supplies.spoiled, Decl(typeGuardFunctionOfFormThis.ts, 83, 20))
++>spoiled : Symbol(spoiled, Decl(typeGuardFunctionOfFormThis.ts, 83, 20))
+ }
+ 
+ interface Sundries {
+ >Sundries : Symbol(Sundries, Decl(typeGuardFunctionOfFormThis.ts, 85, 1))
+ 
+     broken: boolean;
+->broken : Symbol(Sundries.broken, Decl(typeGuardFunctionOfFormThis.ts, 87, 20))
++>broken : Symbol(broken, Decl(typeGuardFunctionOfFormThis.ts, 87, 20))
+ }
+ 
+ interface Crate<T> {
+@@= skipped -39, +39 lines =@@
+ >T : Symbol(T, Decl(typeGuardFunctionOfFormThis.ts, 91, 16))
+ 
+     contents: T;
+->contents : Symbol(Crate.contents, Decl(typeGuardFunctionOfFormThis.ts, 91, 20))
++>contents : Symbol(contents, Decl(typeGuardFunctionOfFormThis.ts, 91, 20))
+ >T : Symbol(T, Decl(typeGuardFunctionOfFormThis.ts, 91, 16))
+ 
+     volume: number;
+->volume : Symbol(Crate.volume, Decl(typeGuardFunctionOfFormThis.ts, 92, 16))
++>volume : Symbol(volume, Decl(typeGuardFunctionOfFormThis.ts, 92, 16))
+ 
+     isSupplies(): this is Crate<Supplies>;
+->isSupplies : Symbol(Crate.isSupplies, Decl(typeGuardFunctionOfFormThis.ts, 93, 19))
++>isSupplies : Symbol(isSupplies, Decl(typeGuardFunctionOfFormThis.ts, 93, 19))
+ >Crate : Symbol(Crate, Decl(typeGuardFunctionOfFormThis.ts, 89, 1))
+ >Supplies : Symbol(Supplies, Decl(typeGuardFunctionOfFormThis.ts, 81, 1))
+ 
+     isSundries(): this is Crate<Sundries>;
+->isSundries : Symbol(Crate.isSundries, Decl(typeGuardFunctionOfFormThis.ts, 94, 42))
++>isSundries : Symbol(isSundries, Decl(typeGuardFunctionOfFormThis.ts, 94, 42))
+ >Crate : Symbol(Crate, Decl(typeGuardFunctionOfFormThis.ts, 89, 1))
+ >Sundries : Symbol(Sundries, Decl(typeGuardFunctionOfFormThis.ts, 85, 1))
+ }
+@@= skipped -22, +22 lines =@@
+ >Crate : Symbol(Crate, Decl(typeGuardFunctionOfFormThis.ts, 89, 1))
+ 
+ if (crate.isSundries()) {
+->crate.isSundries : Symbol(Crate.isSundries, Decl(typeGuardFunctionOfFormThis.ts, 94, 42))
++>crate.isSundries : Symbol(isSundries, Decl(typeGuardFunctionOfFormThis.ts, 94, 42))
+ >crate : Symbol(crate, Decl(typeGuardFunctionOfFormThis.ts, 98, 3))
+->isSundries : Symbol(Crate.isSundries, Decl(typeGuardFunctionOfFormThis.ts, 94, 42))
++>isSundries : Symbol(isSundries, Decl(typeGuardFunctionOfFormThis.ts, 94, 42))
+ 
+     crate.contents.broken = true;
+->crate.contents.broken : Symbol(Sundries.broken, Decl(typeGuardFunctionOfFormThis.ts, 87, 20))
+->crate.contents : Symbol(Crate.contents, Decl(typeGuardFunctionOfFormThis.ts, 91, 20))
++>crate.contents.broken : Symbol(broken, Decl(typeGuardFunctionOfFormThis.ts, 87, 20))
++>crate.contents : Symbol(contents, Decl(typeGuardFunctionOfFormThis.ts, 91, 20))
+ >crate : Symbol(crate, Decl(typeGuardFunctionOfFormThis.ts, 98, 3))
+->contents : Symbol(Crate.contents, Decl(typeGuardFunctionOfFormThis.ts, 91, 20))
+->broken : Symbol(Sundries.broken, Decl(typeGuardFunctionOfFormThis.ts, 87, 20))
++>contents : Symbol(contents, Decl(typeGuardFunctionOfFormThis.ts, 91, 20))
++>broken : Symbol(broken, Decl(typeGuardFunctionOfFormThis.ts, 87, 20))
+ }
+ else if (crate.isSupplies()) {
+->crate.isSupplies : Symbol(Crate.isSupplies, Decl(typeGuardFunctionOfFormThis.ts, 93, 19))
++>crate.isSupplies : Symbol(isSupplies, Decl(typeGuardFunctionOfFormThis.ts, 93, 19))
+ >crate : Symbol(crate, Decl(typeGuardFunctionOfFormThis.ts, 98, 3))
+->isSupplies : Symbol(Crate.isSupplies, Decl(typeGuardFunctionOfFormThis.ts, 93, 19))
++>isSupplies : Symbol(isSupplies, Decl(typeGuardFunctionOfFormThis.ts, 93, 19))
+ 
+     crate.contents.spoiled = true;
+->crate.contents.spoiled : Symbol(Supplies.spoiled, Decl(typeGuardFunctionOfFormThis.ts, 83, 20))
+->crate.contents : Symbol(Crate.contents, Decl(typeGuardFunctionOfFormThis.ts, 91, 20))
++>crate.contents.spoiled : Symbol(spoiled, Decl(typeGuardFunctionOfFormThis.ts, 83, 20))
++>crate.contents : Symbol(contents, Decl(typeGuardFunctionOfFormThis.ts, 91, 20))
+ >crate : Symbol(crate, Decl(typeGuardFunctionOfFormThis.ts, 98, 3))
+->contents : Symbol(Crate.contents, Decl(typeGuardFunctionOfFormThis.ts, 91, 20))
+->spoiled : Symbol(Supplies.spoiled, Decl(typeGuardFunctionOfFormThis.ts, 83, 20))
++>contents : Symbol(contents, Decl(typeGuardFunctionOfFormThis.ts, 91, 20))
++>spoiled : Symbol(spoiled, Decl(typeGuardFunctionOfFormThis.ts, 83, 20))
+ }
+ 
+ // Matching guards should be assignable
+ 
+ a.isFollower = b.isFollower;
+->a.isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
++>a.isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
+ >a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
+->isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
+->b.isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
++>b.isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
+ >b : Symbol(b, Decl(typeGuardFunctionOfFormThis.ts, 27, 3))
+->isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
+ 
+ a.isLeader = b.isLeader;
+->a.isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
++>a.isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
+ >a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
+->isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
+->b.isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
++>isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
++>b.isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
+ >b : Symbol(b, Decl(typeGuardFunctionOfFormThis.ts, 27, 3))
+->isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
++>isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
+ 
+ class MimicGuard {
+ >MimicGuard : Symbol(MimicGuard, Decl(typeGuardFunctionOfFormThis.ts, 110, 24))
+ 
+     isLeader(): this is MimicLeader { return this instanceof MimicLeader; };
+->isLeader : Symbol(MimicGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 112, 18))
++>isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 112, 18))
+ >MimicLeader : Symbol(MimicLeader, Decl(typeGuardFunctionOfFormThis.ts, 115, 1))
+ >this : Symbol(MimicGuard, Decl(typeGuardFunctionOfFormThis.ts, 110, 24))
+ >MimicLeader : Symbol(MimicLeader, Decl(typeGuardFunctionOfFormThis.ts, 115, 1))
+ 
+     isFollower(): this is MimicFollower { return this instanceof MimicFollower; };
+->isFollower : Symbol(MimicGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 113, 76))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 113, 76))
+ >MimicFollower : Symbol(MimicFollower, Decl(typeGuardFunctionOfFormThis.ts, 119, 1))
+ >this : Symbol(MimicGuard, Decl(typeGuardFunctionOfFormThis.ts, 110, 24))
+ >MimicFollower : Symbol(MimicFollower, Decl(typeGuardFunctionOfFormThis.ts, 119, 1))
+@@= skipped -63, +63 lines =@@
+ >MimicGuard : Symbol(MimicGuard, Decl(typeGuardFunctionOfFormThis.ts, 110, 24))
+ 
+     lead(): void {}
+->lead : Symbol(MimicLeader.lead, Decl(typeGuardFunctionOfFormThis.ts, 117, 38))
++>lead : Symbol(lead, Decl(typeGuardFunctionOfFormThis.ts, 117, 38))
+ }
+ 
+ class MimicFollower extends MimicGuard {
+@@= skipped -8, +8 lines =@@
+ >MimicGuard : Symbol(MimicGuard, Decl(typeGuardFunctionOfFormThis.ts, 110, 24))
+ 
+     follow(): void {}
+->follow : Symbol(MimicFollower.follow, Decl(typeGuardFunctionOfFormThis.ts, 121, 40))
++>follow : Symbol(follow, Decl(typeGuardFunctionOfFormThis.ts, 121, 40))
+ }
+ 
+ let mimic = new MimicGuard();
+@@= skipped -8, +8 lines =@@
+ >MimicGuard : Symbol(MimicGuard, Decl(typeGuardFunctionOfFormThis.ts, 110, 24))
+ 
+ a.isLeader = mimic.isLeader;
+->a.isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
++>a.isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
+ >a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
+->isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
+->mimic.isLeader : Symbol(MimicGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 112, 18))
++>isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
++>mimic.isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 112, 18))
+ >mimic : Symbol(mimic, Decl(typeGuardFunctionOfFormThis.ts, 125, 3))
+->isLeader : Symbol(MimicGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 112, 18))
++>isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 112, 18))
+ 
+ a.isFollower = mimic.isFollower;
+->a.isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
++>a.isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
+ >a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
+->isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
+->mimic.isFollower : Symbol(MimicGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 113, 76))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
++>mimic.isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 113, 76))
+ >mimic : Symbol(mimic, Decl(typeGuardFunctionOfFormThis.ts, 125, 3))
+->isFollower : Symbol(MimicGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 113, 76))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 113, 76))
+ 
+ if (mimic.isFollower()) {
+->mimic.isFollower : Symbol(MimicGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 113, 76))
++>mimic.isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 113, 76))
+ >mimic : Symbol(mimic, Decl(typeGuardFunctionOfFormThis.ts, 125, 3))
+->isFollower : Symbol(MimicGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 113, 76))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 113, 76))
+ 
+     mimic.follow();
+->mimic.follow : Symbol(MimicFollower.follow, Decl(typeGuardFunctionOfFormThis.ts, 121, 40))
++>mimic.follow : Symbol(follow, Decl(typeGuardFunctionOfFormThis.ts, 121, 40))
+ >mimic : Symbol(mimic, Decl(typeGuardFunctionOfFormThis.ts, 125, 3))
+->follow : Symbol(MimicFollower.follow, Decl(typeGuardFunctionOfFormThis.ts, 121, 40))
++>follow : Symbol(follow, Decl(typeGuardFunctionOfFormThis.ts, 121, 40))
+ 
+     mimic.isFollower = a.isFollower;
+->mimic.isFollower : Symbol(MimicGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 113, 76))
++>mimic.isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 113, 76))
+ >mimic : Symbol(mimic, Decl(typeGuardFunctionOfFormThis.ts, 125, 3))
+->isFollower : Symbol(MimicGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 113, 76))
+->a.isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 113, 76))
++>a.isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
+ >a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
+->isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
+ }
+ 
+ 
+@@= skipped -39, +39 lines =@@
+ >MimicGuardInterface : Symbol(MimicGuardInterface, Decl(typeGuardFunctionOfFormThis.ts, 133, 1))
+ 
+     isLeader(): this is LeadGuard;
+->isLeader : Symbol(MimicGuardInterface.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 136, 31))
++>isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 136, 31))
+ >LeadGuard : Symbol(LeadGuard, Decl(typeGuardFunctionOfFormThis.ts, 7, 1))
+ 
+     isFollower(): this is FollowerGuard;
+->isFollower : Symbol(MimicGuardInterface.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 137, 34))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 137, 34))
+ >FollowerGuard : Symbol(FollowerGuard, Decl(typeGuardFunctionOfFormThis.ts, 11, 1))
+ }
+ 

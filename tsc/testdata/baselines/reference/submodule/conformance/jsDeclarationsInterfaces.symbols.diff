@@ -1,0 +1,106 @@
+--- old.jsDeclarationsInterfaces.symbols
++++ new.jsDeclarationsInterfaces.symbols
+@@= skipped -10, +10 lines =@@
+ >B : Symbol(B, Decl(index.js, 3, 21))
+ 
+     cat: string;
+->cat : Symbol(B.cat, Decl(index.js, 5, 20))
++>cat : Symbol(cat, Decl(index.js, 5, 20))
+ }
+ 
+ export interface C<T, U> {
+@@= skipped -9, +9 lines =@@
+ >U : Symbol(U, Decl(index.js, 9, 21))
+ 
+     field: T & U;
+->field : Symbol(C.field, Decl(index.js, 9, 26))
++>field : Symbol(field, Decl(index.js, 9, 26))
+ >T : Symbol(T, Decl(index.js, 9, 19))
+ >U : Symbol(U, Decl(index.js, 9, 21))
+ 
+     optionalField?: T;
+->optionalField : Symbol(C.optionalField, Decl(index.js, 10, 17))
++>optionalField : Symbol(optionalField, Decl(index.js, 10, 17))
+ >T : Symbol(T, Decl(index.js, 9, 19))
+ 
+     readonly readonlyField: T & U;
+->readonlyField : Symbol(C.readonlyField, Decl(index.js, 11, 22))
++>readonlyField : Symbol(readonlyField, Decl(index.js, 11, 22))
+ >T : Symbol(T, Decl(index.js, 9, 19))
+ >U : Symbol(U, Decl(index.js, 9, 21))
+ 
+     readonly readonlyOptionalField?: U;
+->readonlyOptionalField : Symbol(C.readonlyOptionalField, Decl(index.js, 12, 34))
++>readonlyOptionalField : Symbol(readonlyOptionalField, Decl(index.js, 12, 34))
+ >U : Symbol(U, Decl(index.js, 9, 21))
+ 
+     (): number;
+@@= skipped -44, +44 lines =@@
+ >Q : Symbol(Q, Decl(index.js, 20, 9))
+ 
+     method<Q = number>(): number;
+->method : Symbol(C.method, Decl(index.js, 20, 25), Decl(index.js, 22, 33), Decl(index.js, 23, 36), Decl(index.js, 24, 31))
++>method : Symbol(method, Decl(index.js, 20, 25), Decl(index.js, 22, 33), Decl(index.js, 23, 36), Decl(index.js, 24, 31))
+ >Q : Symbol(Q, Decl(index.js, 22, 11))
+ 
+     method<Q>(a: T & Q): Q & number;
+->method : Symbol(C.method, Decl(index.js, 20, 25), Decl(index.js, 22, 33), Decl(index.js, 23, 36), Decl(index.js, 24, 31))
++>method : Symbol(method, Decl(index.js, 20, 25), Decl(index.js, 22, 33), Decl(index.js, 23, 36), Decl(index.js, 24, 31))
+ >Q : Symbol(Q, Decl(index.js, 23, 11))
+ >a : Symbol(a, Decl(index.js, 23, 14))
+ >T : Symbol(T, Decl(index.js, 9, 19))
+@@= skipped -12, +12 lines =@@
+ >Q : Symbol(Q, Decl(index.js, 23, 11))
+ 
+     method(a?: number): number;
+->method : Symbol(C.method, Decl(index.js, 20, 25), Decl(index.js, 22, 33), Decl(index.js, 23, 36), Decl(index.js, 24, 31))
++>method : Symbol(method, Decl(index.js, 20, 25), Decl(index.js, 22, 33), Decl(index.js, 23, 36), Decl(index.js, 24, 31))
+ >a : Symbol(a, Decl(index.js, 24, 11))
+ 
+     method(...args: any[]): number;
+->method : Symbol(C.method, Decl(index.js, 20, 25), Decl(index.js, 22, 33), Decl(index.js, 23, 36), Decl(index.js, 24, 31))
++>method : Symbol(method, Decl(index.js, 20, 25), Decl(index.js, 22, 33), Decl(index.js, 23, 36), Decl(index.js, 24, 31))
+ >args : Symbol(args, Decl(index.js, 25, 11))
+ 
+     optMethod?(): number;
+->optMethod : Symbol(C.optMethod, Decl(index.js, 25, 35))
++>optMethod : Symbol(optMethod, Decl(index.js, 25, 35))
+ }
+ 
+ interface G {}
+@@= skipped -44, +44 lines =@@
+ >J : Symbol(J, Decl(index.js, 41, 19))
+ 
+     x: string;
+->x : Symbol(K.x, Decl(index.js, 44, 32))
++>x : Symbol(x, Decl(index.js, 44, 32))
+ }
+ 
+ export interface L extends K {
+@@= skipped -8, +8 lines =@@
+ >K : Symbol(K, Decl(index.js, 42, 21))
+ 
+     y: string;
+->y : Symbol(L.y, Decl(index.js, 48, 30))
++>y : Symbol(y, Decl(index.js, 48, 30))
+ }
+ 
+ export interface M<T> {
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(index.js, 52, 19))
+ 
+     field: T;
+->field : Symbol(M.field, Decl(index.js, 52, 23))
++>field : Symbol(field, Decl(index.js, 52, 23))
+ >T : Symbol(T, Decl(index.js, 52, 19))
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ >U : Symbol(U, Decl(index.js, 56, 19))
+ 
+     other: U;
+->other : Symbol(N.other, Decl(index.js, 56, 36))
++>other : Symbol(other, Decl(index.js, 56, 36))
+ >U : Symbol(U, Decl(index.js, 56, 19))
+ }
+ 

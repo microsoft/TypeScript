@@ -1,0 +1,11 @@
+--- old.unusedTypeParametersWithUnderscore.symbols
++++ new.unusedTypeParametersWithUnderscore.symbols
+@@= skipped -21, +21 lines =@@
+ >U : Symbol(U, Decl(unusedTypeParametersWithUnderscore.ts, 6, 11))
+ 
+     public m<_V, W>() { }
+->m : Symbol(C.m, Decl(unusedTypeParametersWithUnderscore.ts, 6, 16))
++>m : Symbol(m, Decl(unusedTypeParametersWithUnderscore.ts, 6, 16))
+ >_V : Symbol(_V, Decl(unusedTypeParametersWithUnderscore.ts, 7, 13))
+ >W : Symbol(W, Decl(unusedTypeParametersWithUnderscore.ts, 7, 16))
+ 

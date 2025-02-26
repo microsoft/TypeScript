@@ -1,0 +1,29 @@
+--- old.assignmentCompatWithConstructSignatures4.symbols
++++ new.assignmentCompatWithConstructSignatures4.symbols
+@@= skipped -7, +7 lines =@@
+ 
+     class Base { foo: string; }
+ >Base : Symbol(Base, Decl(assignmentCompatWithConstructSignatures4.ts, 2, 15))
+->foo : Symbol(Base.foo, Decl(assignmentCompatWithConstructSignatures4.ts, 3, 16))
++>foo : Symbol(foo, Decl(assignmentCompatWithConstructSignatures4.ts, 3, 16))
+ 
+     class Derived extends Base { bar: string; }
+ >Derived : Symbol(Derived, Decl(assignmentCompatWithConstructSignatures4.ts, 3, 31))
+ >Base : Symbol(Base, Decl(assignmentCompatWithConstructSignatures4.ts, 2, 15))
+->bar : Symbol(Derived.bar, Decl(assignmentCompatWithConstructSignatures4.ts, 4, 32))
++>bar : Symbol(bar, Decl(assignmentCompatWithConstructSignatures4.ts, 4, 32))
+ 
+     class Derived2 extends Derived { baz: string; }
+ >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithConstructSignatures4.ts, 4, 47))
+ >Derived : Symbol(Derived, Decl(assignmentCompatWithConstructSignatures4.ts, 3, 31))
+->baz : Symbol(Derived2.baz, Decl(assignmentCompatWithConstructSignatures4.ts, 5, 36))
++>baz : Symbol(baz, Decl(assignmentCompatWithConstructSignatures4.ts, 5, 36))
+ 
+     class OtherDerived extends Base { bing: string; }
+ >OtherDerived : Symbol(OtherDerived, Decl(assignmentCompatWithConstructSignatures4.ts, 5, 51))
+ >Base : Symbol(Base, Decl(assignmentCompatWithConstructSignatures4.ts, 2, 15))
+->bing : Symbol(OtherDerived.bing, Decl(assignmentCompatWithConstructSignatures4.ts, 6, 37))
++>bing : Symbol(bing, Decl(assignmentCompatWithConstructSignatures4.ts, 6, 37))
+ 
+     module WithNonGenericSignaturesInBaseType {
+ >WithNonGenericSignaturesInBaseType : Symbol(WithNonGenericSignaturesInBaseType, Decl(assignmentCompatWithConstructSignatures4.ts, 6, 53))

@@ -1,0 +1,27 @@
+--- old.genericIndexedAccessVarianceComparisonResultCorrect.symbols
++++ new.genericIndexedAccessVarianceComparisonResultCorrect.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 0, 0))
+ 
+     x: string = 'A';
+->x : Symbol(A.x, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 0, 9))
++>x : Symbol(x, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 0, 9))
+ 
+     y: number = 0;
+->y : Symbol(A.y, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 1, 20))
++>y : Symbol(y, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 1, 20))
+ }
+ 
+ class B {
+ >B : Symbol(B, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 3, 1))
+ 
+     x: string = 'B';
+->x : Symbol(B.x, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 5, 9))
++>x : Symbol(x, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 5, 9))
+ 
+     z: boolean = true;
+->z : Symbol(B.z, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 6, 20))
++>z : Symbol(z, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 6, 20))
+ }
+ 
+ type T<X extends { x: any }> = Pick<X, 'x'>;

@@ -1,0 +1,16 @@
+--- old.typeInfer1.symbols
++++ new.typeInfer1.symbols
+@@= skipped -4, +4 lines =@@
+ >ITextWriter2 : Symbol(ITextWriter2, Decl(typeInfer1.ts, 0, 0))
+ 
+     Write(s:string):void;
+->Write : Symbol(ITextWriter2.Write, Decl(typeInfer1.ts, 0, 24))
++>Write : Symbol(Write, Decl(typeInfer1.ts, 0, 24))
+ >s : Symbol(s, Decl(typeInfer1.ts, 1, 10))
+ 
+     WriteLine(s:string):void;
+->WriteLine : Symbol(ITextWriter2.WriteLine, Decl(typeInfer1.ts, 1, 25))
++>WriteLine : Symbol(WriteLine, Decl(typeInfer1.ts, 1, 25))
+ >s : Symbol(s, Decl(typeInfer1.ts, 2, 14))
+ }
+ 

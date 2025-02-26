@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/requireEmitSemicolon.ts] ////
+
+=== requireEmitSemicolon_1.ts ===
+///<reference path='requireEmitSemicolon_0.ts'/>
+import P = require("requireEmitSemicolon_0"); // bug was we were not emitting a ; here and causing runtime failures in node
+>P : Symbol(P, Decl(requireEmitSemicolon_1.ts, 0, 0))
+
+export module Database {
+>Database : Symbol(Database, Decl(requireEmitSemicolon_1.ts, 1, 45))
+
+	export class DB {
+>DB : Symbol(DB, Decl(requireEmitSemicolon_1.ts, 3, 24))
+
+	    public findPerson(id: number): P.Models.Person {
+>findPerson : Symbol(findPerson, Decl(requireEmitSemicolon_1.ts, 4, 18))
+>id : Symbol(id, Decl(requireEmitSemicolon_1.ts, 5, 23))
+>P : Symbol(P, Decl(requireEmitSemicolon_1.ts, 0, 0))
+>Models : Symbol(Models)
+>Person : Symbol(Person)
+
+	        return new P.Models.Person("Rock");
+>P : Symbol(P, Decl(requireEmitSemicolon_1.ts, 0, 0))
+	    }
+	}
+} 
+=== requireEmitSemicolon_0.ts ===
+export module Models {
+>Models : Symbol(Models, Decl(requireEmitSemicolon_0.ts, 0, 0))
+
+	export class Person {
+>Person : Symbol(Person, Decl(requireEmitSemicolon_0.ts, 0, 22))
+
+        constructor(name: string) { }
+>name : Symbol(name, Decl(requireEmitSemicolon_0.ts, 2, 20))
+	}
+}
+

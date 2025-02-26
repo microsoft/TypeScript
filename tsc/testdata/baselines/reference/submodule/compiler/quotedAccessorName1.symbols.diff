@@ -1,0 +1,9 @@
+--- old.quotedAccessorName1.symbols
++++ new.quotedAccessorName1.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(quotedAccessorName1.ts, 0, 0))
+ 
+     get "foo"() { return 0; }
+->"foo" : Symbol(C["foo"], Decl(quotedAccessorName1.ts, 0, 9))
++>"foo" : Symbol(foo, Decl(quotedAccessorName1.ts, 0, 9))
+ }

@@ -1,0 +1,22 @@
+--- old.interMixingModulesInterfaces2.symbols
++++ new.interMixingModulesInterfaces2.symbols
+@@= skipped -7, +7 lines =@@
+ >B : Symbol(B, Decl(interMixingModulesInterfaces2.ts, 0, 10))
+ 
+         name: string;
+->name : Symbol(A.B.name, Decl(interMixingModulesInterfaces2.ts, 2, 24))
++>name : Symbol(name, Decl(interMixingModulesInterfaces2.ts, 2, 24))
+ 
+         value: number;
+->value : Symbol(A.B.value, Decl(interMixingModulesInterfaces2.ts, 3, 21))
++>value : Symbol(value, Decl(interMixingModulesInterfaces2.ts, 3, 21))
+     }
+ 
+     module B {
+@@= skipped -21, +21 lines =@@
+ var x: A.B = null;
+ >x : Symbol(x, Decl(interMixingModulesInterfaces2.ts, 14, 3))
+ >A : Symbol(A, Decl(interMixingModulesInterfaces2.ts, 0, 0))
+->B : Symbol(A.B, Decl(interMixingModulesInterfaces2.ts, 0, 10))
++>B : Symbol(B, Decl(interMixingModulesInterfaces2.ts, 0, 10))
+ 

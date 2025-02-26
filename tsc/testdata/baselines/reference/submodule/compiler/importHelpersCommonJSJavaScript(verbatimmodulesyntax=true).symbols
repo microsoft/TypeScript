@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/importHelpersCommonJSJavaScript.ts] ////
+
+=== /node_modules/tslib/tslib.d.ts ===
+export declare var __extends: any;
+>__extends : Symbol(__extends, Decl(tslib.d.ts, 0, 18))
+
+=== /node_modules/tslib/modules/index.d.ts ===
+
+export {};
+
+=== /index.js ===
+class Foo {}
+>Foo : Symbol(Foo, Decl(index.js, 0, 0))
+
+class Bar extends Foo {}
+>Bar : Symbol(Bar, Decl(index.js, 0, 12))
+>Foo : Symbol(Foo, Decl(index.js, 0, 0))
+
+module.exports = Bar;
+>Bar : Symbol(Bar, Decl(index.js, 0, 12))
+

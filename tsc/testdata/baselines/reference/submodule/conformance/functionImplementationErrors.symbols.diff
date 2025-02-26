@@ -1,0 +1,28 @@
+--- old.functionImplementationErrors.symbols
++++ new.functionImplementationErrors.symbols
+@@= skipped -73, +73 lines =@@
+ 
+ class Base { private x; }
+ >Base : Symbol(Base, Decl(functionImplementationErrors.ts, 42, 2))
+->x : Symbol(Base.x, Decl(functionImplementationErrors.ts, 44, 12))
++>x : Symbol(x, Decl(functionImplementationErrors.ts, 44, 12))
+ 
+ class AnotherClass { private y; }
+ >AnotherClass : Symbol(AnotherClass, Decl(functionImplementationErrors.ts, 44, 25))
+->y : Symbol(AnotherClass.y, Decl(functionImplementationErrors.ts, 45, 20))
++>y : Symbol(y, Decl(functionImplementationErrors.ts, 45, 20))
+ 
+ class Derived1 extends Base { private m; }
+ >Derived1 : Symbol(Derived1, Decl(functionImplementationErrors.ts, 45, 33))
+ >Base : Symbol(Base, Decl(functionImplementationErrors.ts, 42, 2))
+->m : Symbol(Derived1.m, Decl(functionImplementationErrors.ts, 46, 29))
++>m : Symbol(m, Decl(functionImplementationErrors.ts, 46, 29))
+ 
+ class Derived2 extends Base { private n; }
+ >Derived2 : Symbol(Derived2, Decl(functionImplementationErrors.ts, 46, 42))
+ >Base : Symbol(Base, Decl(functionImplementationErrors.ts, 42, 2))
+->n : Symbol(Derived2.n, Decl(functionImplementationErrors.ts, 47, 29))
++>n : Symbol(n, Decl(functionImplementationErrors.ts, 47, 29))
+ 
+ function f8() {
+ >f8 : Symbol(f8, Decl(functionImplementationErrors.ts, 47, 42))

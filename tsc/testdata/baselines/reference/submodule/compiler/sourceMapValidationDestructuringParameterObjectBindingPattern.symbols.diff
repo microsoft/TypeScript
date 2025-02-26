@@ -1,0 +1,36 @@
+--- old.sourceMapValidationDestructuringParameterObjectBindingPattern.symbols
++++ new.sourceMapValidationDestructuringParameterObjectBindingPattern.symbols
+@@= skipped -4, +4 lines =@@
+ >Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 0, 0))
+ 
+     name: string;
+->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 0, 17))
++>name : Symbol(name, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 0, 17))
+ 
+     skill: string;
+->skill : Symbol(Robot.skill, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 1, 17))
++>skill : Symbol(skill, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 1, 17))
+ }
+ declare var console: {
+ >console : Symbol(console, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 4, 11))
+@@= skipped -23, +23 lines =@@
+ 
+ function foo1({ name: nameA }: Robot) {
+ >foo1 : Symbol(foo1, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 8, 55))
+->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 0, 17))
++>name : Symbol(name, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 0, 17))
+ >nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 10, 15))
+ >Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 0, 0))
+ 
+@@= skipped -12, +12 lines =@@
+ }
+ function foo2({ name: nameB, skill: skillB }: Robot) {
+ >foo2 : Symbol(foo2, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 12, 1))
+->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 0, 17))
++>name : Symbol(name, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 0, 17))
+ >nameB : Symbol(nameB, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 13, 15))
+->skill : Symbol(Robot.skill, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 1, 17))
++>skill : Symbol(skill, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 1, 17))
+ >skillB : Symbol(skillB, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 13, 28))
+ >Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 0, 0))
+ 

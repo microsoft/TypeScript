@@ -1,0 +1,19 @@
+--- old.decoratorOnClassMethod1.es6.symbols
++++ new.decoratorOnClassMethod1.es6.symbols
+@@= skipped -6, +6 lines =@@
+ >target : Symbol(target, Decl(decoratorOnClassMethod1.es6.ts, 0, 24))
+ >propertyKey : Symbol(propertyKey, Decl(decoratorOnClassMethod1.es6.ts, 0, 36))
+ >descriptor : Symbol(descriptor, Decl(decoratorOnClassMethod1.es6.ts, 0, 57))
+->TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
++>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor)
+ >T : Symbol(T, Decl(decoratorOnClassMethod1.es6.ts, 0, 21))
+->TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
++>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor)
+ >T : Symbol(T, Decl(decoratorOnClassMethod1.es6.ts, 0, 21))
+ 
+ export default class {
+     @dec method() {}
+ >dec : Symbol(dec, Decl(decoratorOnClassMethod1.es6.ts, 0, 0))
+->method : Symbol(default.method, Decl(decoratorOnClassMethod1.es6.ts, 2, 22))
++>method : Symbol(method, Decl(decoratorOnClassMethod1.es6.ts, 2, 22))
+ }

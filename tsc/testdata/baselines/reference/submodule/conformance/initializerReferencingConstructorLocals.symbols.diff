@@ -1,0 +1,46 @@
+--- old.initializerReferencingConstructorLocals.symbols
++++ new.initializerReferencingConstructorLocals.symbols
+@@= skipped -6, +6 lines =@@
+ >C : Symbol(C, Decl(initializerReferencingConstructorLocals.ts, 0, 0))
+ 
+     a = z; // error
+->a : Symbol(C.a, Decl(initializerReferencingConstructorLocals.ts, 2, 9))
++>a : Symbol(a, Decl(initializerReferencingConstructorLocals.ts, 2, 9))
+ 
+     b: typeof z; // error
+->b : Symbol(C.b, Decl(initializerReferencingConstructorLocals.ts, 3, 10))
++>b : Symbol(b, Decl(initializerReferencingConstructorLocals.ts, 3, 10))
+ 
+     c = this.z; // error
+->c : Symbol(C.c, Decl(initializerReferencingConstructorLocals.ts, 4, 16))
++>c : Symbol(c, Decl(initializerReferencingConstructorLocals.ts, 4, 16))
+ >this : Symbol(C, Decl(initializerReferencingConstructorLocals.ts, 0, 0))
+ 
+     d: typeof this.z; // error
+->d : Symbol(C.d, Decl(initializerReferencingConstructorLocals.ts, 5, 15))
++>d : Symbol(d, Decl(initializerReferencingConstructorLocals.ts, 5, 15))
+ >this : Symbol(C, Decl(initializerReferencingConstructorLocals.ts, 0, 0))
+ 
+     constructor(x) {
+@@= skipped -25, +25 lines =@@
+ >T : Symbol(T, Decl(initializerReferencingConstructorLocals.ts, 12, 8))
+ 
+     a = z; // error
+->a : Symbol(D.a, Decl(initializerReferencingConstructorLocals.ts, 12, 12))
++>a : Symbol(a, Decl(initializerReferencingConstructorLocals.ts, 12, 12))
+ 
+     b: typeof z; // error
+->b : Symbol(D.b, Decl(initializerReferencingConstructorLocals.ts, 13, 10))
++>b : Symbol(b, Decl(initializerReferencingConstructorLocals.ts, 13, 10))
+ 
+     c = this.z; // error
+->c : Symbol(D.c, Decl(initializerReferencingConstructorLocals.ts, 14, 16))
++>c : Symbol(c, Decl(initializerReferencingConstructorLocals.ts, 14, 16))
+ >this : Symbol(D, Decl(initializerReferencingConstructorLocals.ts, 10, 1))
+ 
+     d: typeof this.z; // error
+->d : Symbol(D.d, Decl(initializerReferencingConstructorLocals.ts, 15, 15))
++>d : Symbol(d, Decl(initializerReferencingConstructorLocals.ts, 15, 15))
+ >this : Symbol(D, Decl(initializerReferencingConstructorLocals.ts, 10, 1))
+ 
+     constructor(x: T) {

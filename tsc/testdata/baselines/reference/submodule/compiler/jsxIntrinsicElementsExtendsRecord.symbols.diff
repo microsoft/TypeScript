@@ -1,0 +1,8 @@
+--- old.jsxIntrinsicElementsExtendsRecord.symbols
++++ new.jsxIntrinsicElementsExtendsRecord.symbols
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ <a />;
+->a : Symbol(JSX.IntrinsicElements, Decl(index.tsx, 0, 23))
+ 

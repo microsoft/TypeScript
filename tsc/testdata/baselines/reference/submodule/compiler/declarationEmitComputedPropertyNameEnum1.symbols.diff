@@ -1,0 +1,27 @@
+--- old.declarationEmitComputedPropertyNameEnum1.symbols
++++ new.declarationEmitComputedPropertyNameEnum1.symbols
+@@= skipped -4, +4 lines =@@
+ >Enum : Symbol(Enum, Decl(type.ts, 0, 0))
+ 
+   A = "a",
+->A : Symbol(Enum.A, Decl(type.ts, 0, 18))
++>A : Symbol(A, Decl(type.ts, 0, 18))
+ 
+   B = "b"
+->B : Symbol(Enum.B, Decl(type.ts, 1, 10))
++>B : Symbol(B, Decl(type.ts, 1, 10))
+ }
+ 
+ export type Type = { x?: { [Enum.A]: 0 } };
+ >Type : Symbol(Type, Decl(type.ts, 3, 1))
+ >x : Symbol(x, Decl(type.ts, 5, 20))
+->[Enum.A] : Symbol([Enum.A], Decl(type.ts, 5, 26))
+->Enum.A : Symbol(Enum.A, Decl(type.ts, 0, 18))
++>[Enum.A] : Symbol(a, Decl(type.ts, 5, 26))
++>Enum.A : Symbol(A, Decl(type.ts, 0, 18))
+ >Enum : Symbol(Enum, Decl(type.ts, 0, 0))
+->A : Symbol(Enum.A, Decl(type.ts, 0, 18))
++>A : Symbol(A, Decl(type.ts, 0, 18))
+ 
+ === index.ts ===
+ import { type Type } from "./type";

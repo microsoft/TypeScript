@@ -1,0 +1,41 @@
+--- old.fixingTypeParametersRepeatedly3.symbols
++++ new.fixingTypeParametersRepeatedly3.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(fixingTypeParametersRepeatedly3.ts, 0, 0))
+ 
+     baseProp;
+->baseProp : Symbol(Base.baseProp, Decl(fixingTypeParametersRepeatedly3.ts, 0, 16))
++>baseProp : Symbol(baseProp, Decl(fixingTypeParametersRepeatedly3.ts, 0, 16))
+ }
+ interface Derived extends Base {
+ >Derived : Symbol(Derived, Decl(fixingTypeParametersRepeatedly3.ts, 2, 1))
+ >Base : Symbol(Base, Decl(fixingTypeParametersRepeatedly3.ts, 0, 0))
+ 
+     toBase?(): Base;
+->toBase : Symbol(Derived.toBase, Decl(fixingTypeParametersRepeatedly3.ts, 3, 32))
++>toBase : Symbol(toBase, Decl(fixingTypeParametersRepeatedly3.ts, 3, 32))
+ >Base : Symbol(Base, Decl(fixingTypeParametersRepeatedly3.ts, 0, 0))
+ }
+ 
+@@= skipped -31, +31 lines =@@
+ >foo : Symbol(foo, Decl(fixingTypeParametersRepeatedly3.ts, 7, 21))
+ >derived : Symbol(derived, Decl(fixingTypeParametersRepeatedly3.ts, 7, 3))
+ >d : Symbol(d, Decl(fixingTypeParametersRepeatedly3.ts, 10, 25))
+->d.toBase : Symbol(Derived.toBase, Decl(fixingTypeParametersRepeatedly3.ts, 3, 32))
++>d.toBase : Symbol(toBase, Decl(fixingTypeParametersRepeatedly3.ts, 3, 32))
+ >d : Symbol(d, Decl(fixingTypeParametersRepeatedly3.ts, 10, 25))
+->toBase : Symbol(Derived.toBase, Decl(fixingTypeParametersRepeatedly3.ts, 3, 32))
++>toBase : Symbol(toBase, Decl(fixingTypeParametersRepeatedly3.ts, 3, 32))
+ 
+ // bar should type check just like foo.
+ // result2 should have the same type as result
+@@= skipped -33, +33 lines =@@
+ >bar : Symbol(bar, Decl(fixingTypeParametersRepeatedly3.ts, 10, 43), Decl(fixingTypeParametersRepeatedly3.ts, 14, 52))
+ >derived : Symbol(derived, Decl(fixingTypeParametersRepeatedly3.ts, 7, 3))
+ >d : Symbol(d, Decl(fixingTypeParametersRepeatedly3.ts, 16, 26))
+->d.toBase : Symbol(Derived.toBase, Decl(fixingTypeParametersRepeatedly3.ts, 3, 32))
++>d.toBase : Symbol(toBase, Decl(fixingTypeParametersRepeatedly3.ts, 3, 32))
+ >d : Symbol(d, Decl(fixingTypeParametersRepeatedly3.ts, 16, 26))
+->toBase : Symbol(Derived.toBase, Decl(fixingTypeParametersRepeatedly3.ts, 3, 32))
++>toBase : Symbol(toBase, Decl(fixingTypeParametersRepeatedly3.ts, 3, 32))
+ 

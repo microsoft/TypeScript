@@ -1,0 +1,33 @@
+--- old.thisInInvalidContexts.symbols
++++ new.thisInInvalidContexts.symbols
+@@= skipped -12, +12 lines =@@
+ >BaseErrClass : Symbol(BaseErrClass, Decl(thisInInvalidContexts.ts, 0, 0))
+ 
+     t;
+->t : Symbol(ClassWithNoInitializer.t, Decl(thisInInvalidContexts.ts, 4, 51))
++>t : Symbol(t, Decl(thisInInvalidContexts.ts, 4, 51))
+ 
+     //'this' in optional super call
+     constructor() {
+@@= skipped -15, +15 lines =@@
+ >BaseErrClass : Symbol(BaseErrClass, Decl(thisInInvalidContexts.ts, 0, 0))
+ 
+     t = 4;
+->t : Symbol(ClassWithInitializer.t, Decl(thisInInvalidContexts.ts, 12, 49))
++>t : Symbol(t, Decl(thisInInvalidContexts.ts, 12, 49))
+ 
+     //'this' in required super call
+     constructor() {
+@@= skipped -43, +43 lines =@@
+ >SomeEnum : Symbol(SomeEnum, Decl(thisInInvalidContexts.ts, 34, 1))
+ 
+     A = this, // Should not be allowed
+->A : Symbol(SomeEnum.A, Decl(thisInInvalidContexts.ts, 37, 15))
++>A : Symbol(A, Decl(thisInInvalidContexts.ts, 37, 15))
+ 
+     B = this.spaaaace // Also should not be allowed
+->B : Symbol(SomeEnum.B, Decl(thisInInvalidContexts.ts, 38, 13))
++>B : Symbol(B, Decl(thisInInvalidContexts.ts, 38, 13))
+ }
+ 
+ 

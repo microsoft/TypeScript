@@ -1,0 +1,19 @@
+--- old.noImplicitAnyDestructuringInPrivateMethod.symbols
++++ new.noImplicitAnyDestructuringInPrivateMethod.symbols
+@@= skipped -11, +11 lines =@@
+ >Bar : Symbol(Bar, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 2, 2))
+ 
+     private bar({ a, }: Arg): number {
+->bar : Symbol(Bar.bar, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 3, 18))
++>bar : Symbol(bar, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 3, 18))
+ >a : Symbol(a, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 4, 17))
+ >Arg : Symbol(Arg, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 0, 0))
+ 
+@@= skipped -12, +12 lines =@@
+ >Bar2 : Symbol(Bar2, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 7, 1))
+ 
+     private bar({ a, });
+->bar : Symbol(Bar2.bar, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 8, 27))
++>bar : Symbol(bar, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 8, 27))
+ >a : Symbol(a, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 9, 17))
+ }

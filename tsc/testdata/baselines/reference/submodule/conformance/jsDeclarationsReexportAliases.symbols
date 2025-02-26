@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReexportAliases.ts] ////
+
+=== cls.js ===
+export default class Foo {}
+>Foo : Symbol(default, Decl(cls.js, 0, 0))
+
+=== usage.js ===
+import {default as Fooa} from "./cls";
+>default : Symbol(default, Decl(cls.js, 0, 0))
+>Fooa : Symbol(Fooa, Decl(usage.js, 0, 8))
+
+export const x = new Fooa();
+>x : Symbol(x, Decl(usage.js, 2, 12))
+>Fooa : Symbol(Fooa, Decl(usage.js, 0, 8))
+
+export {default as Foob} from "./cls";
+>default : Symbol(default, Decl(cls.js, 0, 0))
+>Foob : Symbol(Foob, Decl(usage.js, 4, 8))
+

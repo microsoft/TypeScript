@@ -1,0 +1,10 @@
+--- old.defaultKeywordWithoutExport2.symbols
++++ new.defaultKeywordWithoutExport2.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === defaultKeywordWithoutExport2.ts ===
+ default function () {
+-> : Symbol((Missing), Decl(defaultKeywordWithoutExport2.ts, 0, 7))
++> : Symbol(, Decl(defaultKeywordWithoutExport2.ts, 0, 7))
+ 
+ }

@@ -1,0 +1,55 @@
+--- old.aliasUsageInIndexerOfClass.symbols
++++ new.aliasUsageInIndexerOfClass.symbols
+@@= skipped -10, +10 lines =@@
+ >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInIndexerOfClass_main.ts, 1, 65))
+ 
+     VisualizationModel: typeof Backbone.Model;
+->VisualizationModel : Symbol(IHasVisualizationModel.VisualizationModel, Decl(aliasUsageInIndexerOfClass_main.ts, 2, 34))
+->Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
++>VisualizationModel : Symbol(VisualizationModel, Decl(aliasUsageInIndexerOfClass_main.ts, 2, 34))
++>Backbone.Model : Symbol(Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
+ >Backbone : Symbol(Backbone, Decl(aliasUsageInIndexerOfClass_main.ts, 0, 0))
+->Model : Symbol(Backbone.Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
++>Model : Symbol(Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
+ }
+ class N {
+ >N : Symbol(N, Decl(aliasUsageInIndexerOfClass_main.ts, 4, 1))
+@@= skipped -13, +13 lines =@@
+ >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInIndexerOfClass_main.ts, 1, 65))
+ 
+     x = moduleA;
+->x : Symbol(N.x, Decl(aliasUsageInIndexerOfClass_main.ts, 6, 41))
++>x : Symbol(x, Decl(aliasUsageInIndexerOfClass_main.ts, 6, 41))
+ >moduleA : Symbol(moduleA, Decl(aliasUsageInIndexerOfClass_main.ts, 0, 67))
+ }
+ class N2 {
+@@= skipped -11, +11 lines =@@
+ >moduleA : Symbol(moduleA, Decl(aliasUsageInIndexerOfClass_main.ts, 0, 67))
+ 
+     x: IHasVisualizationModel;
+->x : Symbol(N2.x, Decl(aliasUsageInIndexerOfClass_main.ts, 10, 33))
++>x : Symbol(x, Decl(aliasUsageInIndexerOfClass_main.ts, 10, 33))
+ >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInIndexerOfClass_main.ts, 1, 65))
+ }
+ === aliasUsageInIndexerOfClass_backbone.ts ===
+@@= skipped -8, +8 lines =@@
+ >Model : Symbol(Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
+ 
+     public someData: string;
+->someData : Symbol(Model.someData, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 20))
++>someData : Symbol(someData, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 20))
+ }
+ 
+ === aliasUsageInIndexerOfClass_moduleA.ts ===
+@@= skipped -9, +9 lines =@@
+ 
+ export class VisualizationModel extends Backbone.Model {
+ >VisualizationModel : Symbol(VisualizationModel, Decl(aliasUsageInIndexerOfClass_moduleA.ts, 0, 67))
+->Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
++>Backbone.Model : Symbol(Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
+ >Backbone : Symbol(Backbone, Decl(aliasUsageInIndexerOfClass_moduleA.ts, 0, 0))
+->Model : Symbol(Backbone.Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
++>Model : Symbol(Model, Decl(aliasUsageInIndexerOfClass_backbone.ts, 0, 0))
+ 
+     // interesting stuff here
+ }

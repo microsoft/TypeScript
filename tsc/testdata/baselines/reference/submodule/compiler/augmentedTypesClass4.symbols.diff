@@ -1,0 +1,14 @@
+--- old.augmentedTypesClass4.symbols
++++ new.augmentedTypesClass4.symbols
+@@= skipped -3, +3 lines =@@
+ //// class then class
+ class c3 { public foo() { } } // error
+ >c3 : Symbol(c3, Decl(augmentedTypesClass4.ts, 0, 0))
+->foo : Symbol(c3.foo, Decl(augmentedTypesClass4.ts, 1, 10))
++>foo : Symbol(foo, Decl(augmentedTypesClass4.ts, 1, 10))
+ 
+ class c3 { public bar() { } } // error
+ >c3 : Symbol(c3, Decl(augmentedTypesClass4.ts, 1, 29))
+->bar : Symbol(c3.bar, Decl(augmentedTypesClass4.ts, 2, 10))
++>bar : Symbol(bar, Decl(augmentedTypesClass4.ts, 2, 10))
+ 

@@ -1,0 +1,91 @@
+--- old.strictFunctionTypesErrors.symbols
++++ new.strictFunctionTypesErrors.symbols
+@@= skipped -293, +293 lines =@@
+ 
+ interface Animal { animal: void }
+ >Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+->animal : Symbol(Animal.animal, Decl(strictFunctionTypesErrors.ts, 89, 18))
++>animal : Symbol(animal, Decl(strictFunctionTypesErrors.ts, 89, 18))
+ 
+ interface Dog extends Animal { dog: void }
+ >Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+ >Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+->dog : Symbol(Dog.dog, Decl(strictFunctionTypesErrors.ts, 90, 30))
++>dog : Symbol(dog, Decl(strictFunctionTypesErrors.ts, 90, 30))
+ 
+ interface Cat extends Animal { cat: void }
+ >Cat : Symbol(Cat, Decl(strictFunctionTypesErrors.ts, 90, 42))
+ >Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+->cat : Symbol(Cat.cat, Decl(strictFunctionTypesErrors.ts, 91, 30))
++>cat : Symbol(cat, Decl(strictFunctionTypesErrors.ts, 91, 30))
+ 
+ interface Comparer1<T> {
+ >Comparer1 : Symbol(Comparer1, Decl(strictFunctionTypesErrors.ts, 91, 42))
+ >T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 93, 20))
+ 
+     compare(a: T, b: T): number;
+->compare : Symbol(Comparer1.compare, Decl(strictFunctionTypesErrors.ts, 93, 24))
++>compare : Symbol(compare, Decl(strictFunctionTypesErrors.ts, 93, 24))
+ >a : Symbol(a, Decl(strictFunctionTypesErrors.ts, 94, 12))
+ >T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 93, 20))
+ >b : Symbol(b, Decl(strictFunctionTypesErrors.ts, 94, 17))
+@@= skipped -47, +47 lines =@@
+ >T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 103, 20))
+ 
+     compare: (a: T, b: T) => number;
+->compare : Symbol(Comparer2.compare, Decl(strictFunctionTypesErrors.ts, 103, 24))
++>compare : Symbol(compare, Decl(strictFunctionTypesErrors.ts, 103, 24))
+ >a : Symbol(a, Decl(strictFunctionTypesErrors.ts, 104, 14))
+ >T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 103, 20))
+ >b : Symbol(b, Decl(strictFunctionTypesErrors.ts, 104, 19))
+@@= skipped -32, +32 lines =@@
+ >T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 115, 16))
+ 
+     item: T;
+->item : Symbol(Crate.item, Decl(strictFunctionTypesErrors.ts, 115, 20))
++>item : Symbol(item, Decl(strictFunctionTypesErrors.ts, 115, 20))
+ >T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 115, 16))
+ 
+     onSetItem: (item: T) => void;
+->onSetItem : Symbol(Crate.onSetItem, Decl(strictFunctionTypesErrors.ts, 116, 12))
++>onSetItem : Symbol(onSetItem, Decl(strictFunctionTypesErrors.ts, 116, 12))
+ >item : Symbol(item, Decl(strictFunctionTypesErrors.ts, 117, 16))
+ >T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 115, 16))
+ }
+@@= skipped -63, +63 lines =@@
+ >Foo : Symbol(Foo, Decl(strictFunctionTypesErrors.ts, 138, 14))
+ 
+         static f1(x: Animal): Animal { throw "wat"; }
+->f1 : Symbol(Foo.f1, Decl(strictFunctionTypesErrors.ts, 139, 15))
++>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 139, 15))
+ >x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 140, 18))
+ >Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+ >Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+ 
+         static f2(x: Dog): Animal { throw "wat"; };
+->f2 : Symbol(Foo.f2, Decl(strictFunctionTypesErrors.ts, 140, 53))
++>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 140, 53))
+ >x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 141, 18))
+ >Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+ >Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+@@= skipped -14, +14 lines =@@
+     declare let f1: (cb: typeof Foo.f1) => void;
+ >f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 143, 15))
+ >cb : Symbol(cb, Decl(strictFunctionTypesErrors.ts, 143, 21))
+->Foo.f1 : Symbol(Foo.f1, Decl(strictFunctionTypesErrors.ts, 139, 15))
++>Foo.f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 139, 15))
+ >Foo : Symbol(Foo, Decl(strictFunctionTypesErrors.ts, 138, 14))
+->f1 : Symbol(Foo.f1, Decl(strictFunctionTypesErrors.ts, 139, 15))
++>f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 139, 15))
+ 
+     declare let f2: (cb: typeof Foo.f2) => void;
+ >f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 144, 15))
+ >cb : Symbol(cb, Decl(strictFunctionTypesErrors.ts, 144, 21))
+->Foo.f2 : Symbol(Foo.f2, Decl(strictFunctionTypesErrors.ts, 140, 53))
++>Foo.f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 140, 53))
+ >Foo : Symbol(Foo, Decl(strictFunctionTypesErrors.ts, 138, 14))
+->f2 : Symbol(Foo.f2, Decl(strictFunctionTypesErrors.ts, 140, 53))
++>f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 140, 53))
+ 
+     f1 = f2;
+ >f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 143, 15))

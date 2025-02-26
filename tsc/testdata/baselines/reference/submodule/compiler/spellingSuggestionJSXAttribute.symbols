@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/spellingSuggestionJSXAttribute.tsx] ////
+
+=== spellingSuggestionJSXAttribute.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : Symbol(React, Decl(spellingSuggestionJSXAttribute.tsx, 1, 6))
+
+function MyComp2(props: { className?: string, htmlFor?: string }) {
+>MyComp2 : Symbol(MyComp2, Decl(spellingSuggestionJSXAttribute.tsx, 1, 31))
+>props : Symbol(props, Decl(spellingSuggestionJSXAttribute.tsx, 3, 17))
+>className : Symbol(className, Decl(spellingSuggestionJSXAttribute.tsx, 3, 25))
+>htmlFor : Symbol(htmlFor, Decl(spellingSuggestionJSXAttribute.tsx, 3, 45))
+
+    return null!;
+}
+class MyComp extends React.Component<{ className?: string, htmlFor?: string }> { }
+>MyComp : Symbol(MyComp, Decl(spellingSuggestionJSXAttribute.tsx, 5, 1))
+>React.Component : Symbol(unknown)
+>React : Symbol(React, Decl(spellingSuggestionJSXAttribute.tsx, 1, 6))
+>Component : Symbol(unknown)
+>className : Symbol(className, Decl(spellingSuggestionJSXAttribute.tsx, 6, 38))
+>htmlFor : Symbol(htmlFor, Decl(spellingSuggestionJSXAttribute.tsx, 6, 58))
+
+<a class="" />;
+>class : Symbol(class, Decl(spellingSuggestionJSXAttribute.tsx, 7, 2))
+
+<a for="" />; // should have no fix
+>for : Symbol(for, Decl(spellingSuggestionJSXAttribute.tsx, 8, 2))
+
+<label for="" />;
+>for : Symbol(for, Decl(spellingSuggestionJSXAttribute.tsx, 9, 6))
+
+<label for="" class="" />;
+>for : Symbol(for, Decl(spellingSuggestionJSXAttribute.tsx, 10, 6))
+>class : Symbol(class, Decl(spellingSuggestionJSXAttribute.tsx, 10, 13))
+
+<MyComp class="" />;
+>MyComp : Symbol(MyComp, Decl(spellingSuggestionJSXAttribute.tsx, 5, 1))
+>class : Symbol(class, Decl(spellingSuggestionJSXAttribute.tsx, 11, 7))
+
+<MyComp2 class="" />;
+>MyComp2 : Symbol(MyComp2, Decl(spellingSuggestionJSXAttribute.tsx, 1, 31))
+>class : Symbol(class, Decl(spellingSuggestionJSXAttribute.tsx, 12, 8))
+
+<MyComp for="" />;
+>MyComp : Symbol(MyComp, Decl(spellingSuggestionJSXAttribute.tsx, 5, 1))
+>for : Symbol(for, Decl(spellingSuggestionJSXAttribute.tsx, 13, 7))
+
+<MyComp2 for="" />;
+>MyComp2 : Symbol(MyComp2, Decl(spellingSuggestionJSXAttribute.tsx, 1, 31))
+>for : Symbol(for, Decl(spellingSuggestionJSXAttribute.tsx, 14, 8))
+

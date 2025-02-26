@@ -1,0 +1,15 @@
+--- old.doNotElaborateAssignabilityToTypeParameters.symbols
++++ new.doNotElaborateAssignabilityToTypeParameters.symbols
+@@= skipped -21, +21 lines =@@
+ >Yadda : Symbol(Yadda, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 3, 1))
+ 
+   stuff: string,
+->stuff : Symbol(Yadda.stuff, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 5, 17))
++>stuff : Symbol(stuff, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 5, 17))
+ 
+   things: string,
+->things : Symbol(Yadda.things, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 6, 16))
++>things : Symbol(things, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 6, 16))
+ }
+ 
+ declare function getXOrYadda<T>(x: T): T | Yadda;

@@ -1,0 +1,39 @@
+--- old.genericBaseClassLiteralProperty2.symbols
++++ new.genericBaseClassLiteralProperty2.symbols
+@@= skipped -9, +9 lines =@@
+ >CollectionItem2 : Symbol(CollectionItem2, Decl(genericBaseClassLiteralProperty2.ts, 0, 0))
+ 
+     _itemsByKey: { [key: string]: TItem; };
+->_itemsByKey : Symbol(BaseCollection2._itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
++>_itemsByKey : Symbol(_itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
+ >key : Symbol(key, Decl(genericBaseClassLiteralProperty2.ts, 3, 20))
+ >TItem : Symbol(TItem, Decl(genericBaseClassLiteralProperty2.ts, 2, 22))
+ 
+     constructor() {
+         this._itemsByKey = {};
+->this._itemsByKey : Symbol(BaseCollection2._itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
++>this._itemsByKey : Symbol(_itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
+ >this : Symbol(BaseCollection2, Decl(genericBaseClassLiteralProperty2.ts, 0, 25))
+->_itemsByKey : Symbol(BaseCollection2._itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
++>_itemsByKey : Symbol(_itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
+     }
+ }
+ 
+@@= skipped -18, +18 lines =@@
+ >CollectionItem2 : Symbol(CollectionItem2, Decl(genericBaseClassLiteralProperty2.ts, 0, 0))
+ 
+     fillItems(item: CollectionItem2) {
+->fillItems : Symbol(DataView2.fillItems, Decl(genericBaseClassLiteralProperty2.ts, 9, 58))
++>fillItems : Symbol(fillItems, Decl(genericBaseClassLiteralProperty2.ts, 9, 58))
+ >item : Symbol(item, Decl(genericBaseClassLiteralProperty2.ts, 10, 14))
+ >CollectionItem2 : Symbol(CollectionItem2, Decl(genericBaseClassLiteralProperty2.ts, 0, 0))
+ 
+         this._itemsByKey['dummy'] = item;
+->this._itemsByKey : Symbol(BaseCollection2._itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
++>this._itemsByKey : Symbol(_itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
+ >this : Symbol(DataView2, Decl(genericBaseClassLiteralProperty2.ts, 7, 1))
+->_itemsByKey : Symbol(BaseCollection2._itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
++>_itemsByKey : Symbol(_itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
+ >item : Symbol(item, Decl(genericBaseClassLiteralProperty2.ts, 10, 14))
+     }
+ }

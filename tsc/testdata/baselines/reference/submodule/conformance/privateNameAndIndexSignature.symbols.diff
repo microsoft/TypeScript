@@ -1,0 +1,20 @@
+--- old.privateNameAndIndexSignature.symbols
++++ new.privateNameAndIndexSignature.symbols
+@@= skipped -7, +7 lines =@@
+ >k : Symbol(k, Decl(privateNameAndIndexSignature.ts, 1, 5))
+ 
+     #foo = 3;
+->#foo : Symbol(A.#foo, Decl(privateNameAndIndexSignature.ts, 1, 21))
++>#foo : Symbol(#foo, Decl(privateNameAndIndexSignature.ts, 1, 21))
+ 
+     ["#bar"] = this["#bar"]   // Error (private identifiers should not prevent circularity checking for computeds)
+->["#bar"] : Symbol(A["#bar"], Decl(privateNameAndIndexSignature.ts, 2, 13))
+->"#bar" : Symbol(A["#bar"], Decl(privateNameAndIndexSignature.ts, 2, 13))
++>["#bar"] : Symbol(["#bar"], Decl(privateNameAndIndexSignature.ts, 2, 13))
++>"#bar" : Symbol(["#bar"], Decl(privateNameAndIndexSignature.ts, 2, 13))
+ >this : Symbol(A, Decl(privateNameAndIndexSignature.ts, 0, 0))
+->"#bar" : Symbol(A["#bar"], Decl(privateNameAndIndexSignature.ts, 2, 13))
++>"#bar" : Symbol(["#bar"], Decl(privateNameAndIndexSignature.ts, 2, 13))
+ 
+     constructor(message: string) {
+ >message : Symbol(message, Decl(privateNameAndIndexSignature.ts, 4, 16))

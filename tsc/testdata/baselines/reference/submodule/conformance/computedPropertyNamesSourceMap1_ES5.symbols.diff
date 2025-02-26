@@ -1,0 +1,21 @@
+--- old.computedPropertyNamesSourceMap1_ES5.symbols
++++ new.computedPropertyNamesSourceMap1_ES5.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(computedPropertyNamesSourceMap1_ES5.ts, 0, 0))
+ 
+     ["hello"]() {
+->["hello"] : Symbol(C["hello"], Decl(computedPropertyNamesSourceMap1_ES5.ts, 0, 9))
+->"hello" : Symbol(C["hello"], Decl(computedPropertyNamesSourceMap1_ES5.ts, 0, 9))
++>["hello"] : Symbol(hello, Decl(computedPropertyNamesSourceMap1_ES5.ts, 0, 9))
++>"hello" : Symbol(hello, Decl(computedPropertyNamesSourceMap1_ES5.ts, 0, 9))
+ 
+         debugger;
+     }
+     get ["goodbye"]() {
+->["goodbye"] : Symbol(C["goodbye"], Decl(computedPropertyNamesSourceMap1_ES5.ts, 3, 5))
+->"goodbye" : Symbol(C["goodbye"], Decl(computedPropertyNamesSourceMap1_ES5.ts, 3, 5))
++>["goodbye"] : Symbol(goodbye, Decl(computedPropertyNamesSourceMap1_ES5.ts, 3, 5))
++>"goodbye" : Symbol(goodbye, Decl(computedPropertyNamesSourceMap1_ES5.ts, 3, 5))
+ 
+ 		return 0;
+     }

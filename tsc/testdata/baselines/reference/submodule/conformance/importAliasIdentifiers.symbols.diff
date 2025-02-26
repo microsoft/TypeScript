@@ -1,0 +1,89 @@
+--- old.importAliasIdentifiers.symbols
++++ new.importAliasIdentifiers.symbols
+@@= skipped -7, +7 lines =@@
+ >Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 0, 16))
+ 
+         constructor(public x: number, public y: number) { }
+->x : Symbol(Point.x, Decl(importAliasIdentifiers.ts, 2, 20))
+->y : Symbol(Point.y, Decl(importAliasIdentifiers.ts, 2, 37))
++>x : Symbol(x, Decl(importAliasIdentifiers.ts, 2, 20))
++>y : Symbol(y, Decl(importAliasIdentifiers.ts, 2, 37))
+     }
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ var p: alias.Point;
+ >p : Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3) ... and 4 more)
+ >alias : Symbol(alias, Decl(importAliasIdentifiers.ts, 4, 1))
+->Point : Symbol(alias.Point, Decl(importAliasIdentifiers.ts, 0, 16))
++>Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 0, 16))
+ 
+ var p: moduleA.Point;
+ >p : Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3) ... and 4 more)
+ >moduleA : Symbol(moduleA, Decl(importAliasIdentifiers.ts, 0, 0))
+->Point : Symbol(alias.Point, Decl(importAliasIdentifiers.ts, 0, 16))
++>Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 0, 16))
+ 
+ var p: { x: number; y: number; };
+ >p : Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3) ... and 4 more)
+@@= skipped -16, +16 lines =@@
+ >clodule : Symbol(clodule, Decl(importAliasIdentifiers.ts, 10, 33), Decl(importAliasIdentifiers.ts, 14, 1))
+ 
+     name: string;
+->name : Symbol(clodule.name, Decl(importAliasIdentifiers.ts, 12, 15))
++>name : Symbol(name, Decl(importAliasIdentifiers.ts, 12, 15))
+ }
+ 
+ module clodule {
+@@= skipped -10, +10 lines =@@
+ >Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 16, 16))
+ 
+         x: number; y: number;
+->x : Symbol(Point.x, Decl(importAliasIdentifiers.ts, 17, 28))
+->y : Symbol(Point.y, Decl(importAliasIdentifiers.ts, 18, 18))
++>x : Symbol(x, Decl(importAliasIdentifiers.ts, 17, 28))
++>y : Symbol(y, Decl(importAliasIdentifiers.ts, 18, 18))
+     }
+     var Point: Point = { x: 0, y: 0 };
+ >Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 16, 16), Decl(importAliasIdentifiers.ts, 20, 7))
+@@= skipped -17, +17 lines =@@
+ var p: clolias.Point;
+ >p : Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3) ... and 4 more)
+ >clolias : Symbol(clolias, Decl(importAliasIdentifiers.ts, 21, 1))
+->Point : Symbol(clolias.Point, Decl(importAliasIdentifiers.ts, 16, 16))
++>Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 16, 16))
+ 
+ var p: clodule.Point;
+ >p : Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3) ... and 4 more)
+ >clodule : Symbol(clodule, Decl(importAliasIdentifiers.ts, 10, 33), Decl(importAliasIdentifiers.ts, 14, 1))
+->Point : Symbol(clolias.Point, Decl(importAliasIdentifiers.ts, 16, 16))
++>Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 16, 16))
+ 
+ var p: { x: number; y: number; };
+ >p : Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3) ... and 4 more)
+@@= skipped -28, +28 lines =@@
+ >Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 34, 16))
+ 
+         x: number; y: number;
+->x : Symbol(Point.x, Decl(importAliasIdentifiers.ts, 35, 28))
+->y : Symbol(Point.y, Decl(importAliasIdentifiers.ts, 36, 18))
++>x : Symbol(x, Decl(importAliasIdentifiers.ts, 35, 28))
++>y : Symbol(y, Decl(importAliasIdentifiers.ts, 36, 18))
+     }
+     var Point: Point = { x: 0, y: 0 };
+ >Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 34, 16), Decl(importAliasIdentifiers.ts, 38, 7))
+@@= skipped -17, +17 lines =@@
+ var p: funlias.Point;
+ >p : Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3) ... and 4 more)
+ >funlias : Symbol(funlias, Decl(importAliasIdentifiers.ts, 39, 1))
+->Point : Symbol(funlias.Point, Decl(importAliasIdentifiers.ts, 34, 16))
++>Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 34, 16))
+ 
+ var p: fundule.Point;
+ >p : Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3) ... and 4 more)
+ >fundule : Symbol(fundule, Decl(importAliasIdentifiers.ts, 27, 33), Decl(importAliasIdentifiers.ts, 32, 1))
+->Point : Symbol(funlias.Point, Decl(importAliasIdentifiers.ts, 34, 16))
++>Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 34, 16))
+ 
+ var p: { x: number; y: number; };
+ >p : Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3) ... and 4 more)

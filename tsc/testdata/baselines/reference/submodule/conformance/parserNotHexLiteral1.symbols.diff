@@ -1,0 +1,26 @@
+--- old.parserNotHexLiteral1.symbols
++++ new.parserNotHexLiteral1.symbols
+@@= skipped -6, +6 lines =@@
+ >x0 : Symbol(x0, Decl(parserNotHexLiteral1.ts, 0, 19))
+ 
+ console.info (x.x0);
+->console.info : Symbol(Console.info, Decl(lib.dom.d.ts, --, --))
++>console.info : Symbol(info, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->info : Symbol(Console.info, Decl(lib.dom.d.ts, --, --))
++>info : Symbol(info, Decl(lib.dom.d.ts, --, --))
+ >x.x0 : Symbol(x0, Decl(parserNotHexLiteral1.ts, 0, 19))
+ >x : Symbol(x, Decl(parserNotHexLiteral1.ts, 0, 3))
+ >x0 : Symbol(x0, Decl(parserNotHexLiteral1.ts, 0, 19))
+@@= skipped -10, +10 lines =@@
+ // tsc dies on this next line with "bug.ts (5,16): Expected ')'"
+ //   tsc seems to be parsing the e0 as a hex constant.
+ console.info (x.e0);
+->console.info : Symbol(Console.info, Decl(lib.dom.d.ts, --, --))
++>console.info : Symbol(info, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->info : Symbol(Console.info, Decl(lib.dom.d.ts, --, --))
++>info : Symbol(info, Decl(lib.dom.d.ts, --, --))
+ >x.e0 : Symbol(e0, Decl(parserNotHexLiteral1.ts, 0, 9))
+ >x : Symbol(x, Decl(parserNotHexLiteral1.ts, 0, 3))
+ >e0 : Symbol(e0, Decl(parserNotHexLiteral1.ts, 0, 9))

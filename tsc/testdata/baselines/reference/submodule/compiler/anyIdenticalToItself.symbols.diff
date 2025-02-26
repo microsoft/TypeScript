@@ -1,0 +1,20 @@
+--- old.anyIdenticalToItself.symbols
++++ new.anyIdenticalToItself.symbols
+@@= skipped -17, +17 lines =@@
+ >C : Symbol(C, Decl(anyIdenticalToItself.ts, 2, 35))
+ 
+     get X(): any {
+->X : Symbol(C.X, Decl(anyIdenticalToItself.ts, 4, 9), Decl(anyIdenticalToItself.ts, 8, 5))
++>X : Symbol(X, Decl(anyIdenticalToItself.ts, 4, 9), Decl(anyIdenticalToItself.ts, 8, 5))
+ 
+         var y: any;
+ >y : Symbol(y, Decl(anyIdenticalToItself.ts, 6, 11))
+@@= skipped -9, +9 lines =@@
+ >y : Symbol(y, Decl(anyIdenticalToItself.ts, 6, 11))
+     }
+     set X(v: any) {
+->X : Symbol(C.X, Decl(anyIdenticalToItself.ts, 4, 9), Decl(anyIdenticalToItself.ts, 8, 5))
++>X : Symbol(X, Decl(anyIdenticalToItself.ts, 4, 9), Decl(anyIdenticalToItself.ts, 8, 5))
+ >v : Symbol(v, Decl(anyIdenticalToItself.ts, 9, 10))
+     }
+ }

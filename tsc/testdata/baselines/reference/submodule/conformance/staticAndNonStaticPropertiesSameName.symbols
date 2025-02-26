@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/staticAndNonStaticPropertiesSameName.ts] ////
+
+=== staticAndNonStaticPropertiesSameName.ts ===
+class C {
+>C : Symbol(C, Decl(staticAndNonStaticPropertiesSameName.ts, 0, 0))
+
+    x: number;
+>x : Symbol(x, Decl(staticAndNonStaticPropertiesSameName.ts, 0, 9))
+
+    static x: number;
+>x : Symbol(x, Decl(staticAndNonStaticPropertiesSameName.ts, 1, 14))
+
+    f() { }
+>f : Symbol(f, Decl(staticAndNonStaticPropertiesSameName.ts, 2, 21))
+
+    static f() { }
+>f : Symbol(f, Decl(staticAndNonStaticPropertiesSameName.ts, 4, 11))
+}

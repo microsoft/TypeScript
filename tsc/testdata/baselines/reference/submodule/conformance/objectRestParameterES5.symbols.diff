@@ -1,0 +1,20 @@
+--- old.objectRestParameterES5.symbols
++++ new.objectRestParameterES5.symbols
+@@= skipped -47, +47 lines =@@
+ >C : Symbol(C, Decl(objectRestParameterES5.ts, 5, 107))
+ 
+     m({ a, ...clone }: { a: number, b: string}): void {
+->m : Symbol(C.m, Decl(objectRestParameterES5.ts, 7, 9))
++>m : Symbol(m, Decl(objectRestParameterES5.ts, 7, 9))
+ >a : Symbol(a, Decl(objectRestParameterES5.ts, 8, 7))
+ >clone : Symbol(clone, Decl(objectRestParameterES5.ts, 8, 10))
+ >a : Symbol(a, Decl(objectRestParameterES5.ts, 8, 24))
+@@= skipped -9, +9 lines =@@
+         // actually, never mind, don't clone
+     }
+     set p({ a, ...clone }: { a: number, b: string}) {
+->p : Symbol(C.p, Decl(objectRestParameterES5.ts, 10, 5))
++>p : Symbol(p, Decl(objectRestParameterES5.ts, 10, 5))
+ >a : Symbol(a, Decl(objectRestParameterES5.ts, 11, 11))
+ >clone : Symbol(clone, Decl(objectRestParameterES5.ts, 11, 14))
+ >a : Symbol(a, Decl(objectRestParameterES5.ts, 11, 28))

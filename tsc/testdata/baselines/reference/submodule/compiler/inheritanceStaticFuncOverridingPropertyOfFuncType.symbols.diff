@@ -1,0 +1,20 @@
+--- old.inheritanceStaticFuncOverridingPropertyOfFuncType.symbols
++++ new.inheritanceStaticFuncOverridingPropertyOfFuncType.symbols
+@@= skipped -4, +4 lines =@@
+ >a : Symbol(a, Decl(inheritanceStaticFuncOverridingPropertyOfFuncType.ts, 0, 0))
+ 
+     static x: () => string;
+->x : Symbol(a.x, Decl(inheritanceStaticFuncOverridingPropertyOfFuncType.ts, 0, 9))
++>x : Symbol(x, Decl(inheritanceStaticFuncOverridingPropertyOfFuncType.ts, 0, 9))
+ }
+ 
+ class b extends a {
+@@= skipped -8, +8 lines =@@
+ >a : Symbol(a, Decl(inheritanceStaticFuncOverridingPropertyOfFuncType.ts, 0, 0))
+ 
+     static x() {
+->x : Symbol(b.x, Decl(inheritanceStaticFuncOverridingPropertyOfFuncType.ts, 4, 19))
++>x : Symbol(x, Decl(inheritanceStaticFuncOverridingPropertyOfFuncType.ts, 4, 19))
+ 
+         return "20";
+     }

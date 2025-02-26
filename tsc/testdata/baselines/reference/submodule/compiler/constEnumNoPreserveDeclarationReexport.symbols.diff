@@ -1,0 +1,39 @@
+--- old.constEnumNoPreserveDeclarationReexport.symbols
++++ new.constEnumNoPreserveDeclarationReexport.symbols
+@@= skipped -4, +4 lines =@@
+ >MyConstEnum : Symbol(MyConstEnum, Decl(ConstEnum.d.ts, 0, 0))
+ 
+     Foo,
+->Foo : Symbol(MyConstEnum.Foo, Decl(ConstEnum.d.ts, 0, 31))
++>Foo : Symbol(Foo, Decl(ConstEnum.d.ts, 0, 31))
+ 
+     Bar
+->Bar : Symbol(MyConstEnum.Bar, Decl(ConstEnum.d.ts, 1, 8))
++>Bar : Symbol(Bar, Decl(ConstEnum.d.ts, 1, 8))
+ }
+ === ImportExport.d.ts ===
+ import { MyConstEnum } from './ConstEnum';
+@@= skipped -28, +28 lines =@@
+ >StillEnum : Symbol(StillEnum, Decl(usages.ts, 2, 6))
+ 
+ MyConstEnum.Foo;
+->MyConstEnum.Foo : Symbol(MyConstEnum.Foo, Decl(ConstEnum.d.ts, 0, 31))
++>MyConstEnum.Foo : Symbol(Foo, Decl(ConstEnum.d.ts, 0, 31))
+ >MyConstEnum : Symbol(MyConstEnum, Decl(usages.ts, 0, 8))
+->Foo : Symbol(MyConstEnum.Foo, Decl(ConstEnum.d.ts, 0, 31))
++>Foo : Symbol(Foo, Decl(ConstEnum.d.ts, 0, 31))
+ 
+ AlsoEnum.Foo;
+->AlsoEnum.Foo : Symbol(MyConstEnum.Foo, Decl(ConstEnum.d.ts, 0, 31))
++>AlsoEnum.Foo : Symbol(Foo, Decl(ConstEnum.d.ts, 0, 31))
+ >AlsoEnum : Symbol(AlsoEnum, Decl(usages.ts, 1, 6))
+->Foo : Symbol(MyConstEnum.Foo, Decl(ConstEnum.d.ts, 0, 31))
++>Foo : Symbol(Foo, Decl(ConstEnum.d.ts, 0, 31))
+ 
+ StillEnum.Foo;
+->StillEnum.Foo : Symbol(MyConstEnum.Foo, Decl(ConstEnum.d.ts, 0, 31))
++>StillEnum.Foo : Symbol(Foo, Decl(ConstEnum.d.ts, 0, 31))
+ >StillEnum : Symbol(StillEnum, Decl(usages.ts, 2, 6))
+->Foo : Symbol(MyConstEnum.Foo, Decl(ConstEnum.d.ts, 0, 31))
++>Foo : Symbol(Foo, Decl(ConstEnum.d.ts, 0, 31))
+ 

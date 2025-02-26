@@ -1,0 +1,20 @@
+--- old.stringLiteralPropertyNameWithLineContinuation1.symbols
++++ new.stringLiteralPropertyNameWithLineContinuation1.symbols
+@@= skipped -2, +2 lines =@@
+ === stringLiteralPropertyNameWithLineContinuation1.ts ===
+ var x = {'text\
+ >x : Symbol(x, Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 3))
+->'text\' : Symbol('text\
+-', Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 9))
++>'text\' : Symbol(text, Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 9))
+ 
+ ':'hello'}
+ x.text = "bar"
+->x.text : Symbol('text\
+-', Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 9))
++>x.text : Symbol(text, Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 9))
+ >x : Symbol(x, Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 3))
+->text : Symbol('text\
+-', Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 9))
++>text : Symbol(text, Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 9))
+ 

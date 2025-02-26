@@ -1,0 +1,11 @@
+--- old.taggedTemplateWithoutDeclaredHelper.symbols
++++ new.taggedTemplateWithoutDeclaredHelper.symbols
+@@= skipped -14, +14 lines =@@
+ >result : Symbol(result, Decl(foo.ts, 4, 12))
+ >id : Symbol(id, Decl(foo.ts, 0, 0))
+ 
+-=== ./node_modules/tslib/index.d.ts ===
++=== node_modules/tslib/index.d.ts ===
+ 
+ export { };
+ 

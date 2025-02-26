@@ -1,0 +1,26 @@
+--- old.intersectionAndUnionTypes.symbols
++++ new.intersectionAndUnionTypes.symbols
+@@= skipped -2, +2 lines =@@
+ === intersectionAndUnionTypes.ts ===
+ interface A { a: string }
+ >A : Symbol(A, Decl(intersectionAndUnionTypes.ts, 0, 0))
+->a : Symbol(A.a, Decl(intersectionAndUnionTypes.ts, 0, 13))
++>a : Symbol(a, Decl(intersectionAndUnionTypes.ts, 0, 13))
+ 
+ interface B { b: string }
+ >B : Symbol(B, Decl(intersectionAndUnionTypes.ts, 0, 25))
+->b : Symbol(B.b, Decl(intersectionAndUnionTypes.ts, 1, 13))
++>b : Symbol(b, Decl(intersectionAndUnionTypes.ts, 1, 13))
+ 
+ interface C { c: string }
+ >C : Symbol(C, Decl(intersectionAndUnionTypes.ts, 1, 25))
+->c : Symbol(C.c, Decl(intersectionAndUnionTypes.ts, 2, 13))
++>c : Symbol(c, Decl(intersectionAndUnionTypes.ts, 2, 13))
+ 
+ interface D { d: string }
+ >D : Symbol(D, Decl(intersectionAndUnionTypes.ts, 2, 25))
+->d : Symbol(D.d, Decl(intersectionAndUnionTypes.ts, 3, 13))
++>d : Symbol(d, Decl(intersectionAndUnionTypes.ts, 3, 13))
+ 
+ var a: A;
+ >a : Symbol(a, Decl(intersectionAndUnionTypes.ts, 5, 3))

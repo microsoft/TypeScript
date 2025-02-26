@@ -1,0 +1,60 @@
+--- old.errorOnFunctionReturnType.symbols
++++ new.errorOnFunctionReturnType.symbols
+@@= skipped -10, +10 lines =@@
+ >testPromise1 : Symbol(testPromise1, Decl(foo.js, 0, 0))
+ 
+     console.log("Nope");
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ }
+ 
+ /** @type {FunctionReturningPromise} */
+@@= skipped -16, +16 lines =@@
+ >testPromise3 : Symbol(testPromise3, Decl(foo.js, 15, 3))
+ 
+     console.log("test")
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ }
+ 
+ /** @type {FunctionReturningPromise} */
+@@= skipped -10, +10 lines =@@
+ >testPromise4 : Symbol(testPromise4, Decl(foo.js, 20, 3))
+ 
+     console.log("test")
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ }
+ 
+ /**
+@@= skipped -27, +27 lines =@@
+ >testNever3 : Symbol(testNever3, Decl(foo.js, 39, 3))
+ 
+     console.log("test")
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ }
+ 
+ /** @type {FunctionReturningNever} */
+@@= skipped -10, +10 lines =@@
+ >testNever4 : Symbol(testNever4, Decl(foo.js, 44, 3))
+ 
+     console.log("test")
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ }

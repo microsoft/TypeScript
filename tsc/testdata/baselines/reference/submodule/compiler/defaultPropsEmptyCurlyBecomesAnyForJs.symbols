@@ -1,0 +1,72 @@
+//// [tests/cases/compiler/defaultPropsEmptyCurlyBecomesAnyForJs.ts] ////
+
+=== library.d.ts ===
+export class Foo<T = {}, U = {}> {
+>Foo : Symbol(Foo, Decl(library.d.ts, 0, 0))
+>T : Symbol(T, Decl(library.d.ts, 0, 17))
+>U : Symbol(U, Decl(library.d.ts, 0, 24))
+
+    props: T;
+>props : Symbol(props, Decl(library.d.ts, 0, 34))
+>T : Symbol(T, Decl(library.d.ts, 0, 17))
+
+    state: U;
+>state : Symbol(state, Decl(library.d.ts, 1, 13))
+>U : Symbol(U, Decl(library.d.ts, 0, 24))
+
+    constructor(props: T, state: U);
+>props : Symbol(props, Decl(library.d.ts, 3, 16))
+>T : Symbol(T, Decl(library.d.ts, 0, 17))
+>state : Symbol(state, Decl(library.d.ts, 3, 25))
+>U : Symbol(U, Decl(library.d.ts, 0, 24))
+}
+
+=== component.js ===
+import { Foo } from "./library";
+>Foo : Symbol(Foo, Decl(component.js, 0, 8))
+
+export class MyFoo extends Foo {
+>MyFoo : Symbol(MyFoo, Decl(component.js, 0, 32))
+>Foo : Symbol(Foo, Decl(component.js, 0, 8))
+
+    member;
+>member : Symbol(member, Decl(component.js, 1, 32))
+}
+
+=== typed_component.ts ===
+import { MyFoo } from "./component";
+>MyFoo : Symbol(MyFoo, Decl(typed_component.ts, 0, 8))
+
+export class TypedFoo extends MyFoo {
+>TypedFoo : Symbol(TypedFoo, Decl(typed_component.ts, 0, 36))
+>MyFoo : Symbol(MyFoo, Decl(typed_component.ts, 0, 8))
+
+    constructor() {
+        super({x: "string", y: 42}, { value: undefined });
+>super : Symbol(MyFoo, Decl(component.js, 0, 32))
+>x : Symbol(x, Decl(typed_component.ts, 3, 15))
+>y : Symbol(y, Decl(typed_component.ts, 3, 27))
+>value : Symbol(value, Decl(typed_component.ts, 3, 37))
+>undefined : Symbol(undefined)
+
+        this.props.x;
+>this.props : Symbol(props, Decl(library.d.ts, 0, 34))
+>this : Symbol(TypedFoo, Decl(typed_component.ts, 0, 36))
+>props : Symbol(props, Decl(library.d.ts, 0, 34))
+
+        this.props.y;
+>this.props : Symbol(props, Decl(library.d.ts, 0, 34))
+>this : Symbol(TypedFoo, Decl(typed_component.ts, 0, 36))
+>props : Symbol(props, Decl(library.d.ts, 0, 34))
+
+        this.state.value;
+>this.state : Symbol(state, Decl(library.d.ts, 1, 13))
+>this : Symbol(TypedFoo, Decl(typed_component.ts, 0, 36))
+>state : Symbol(state, Decl(library.d.ts, 1, 13))
+
+        this.member;
+>this.member : Symbol(member, Decl(component.js, 1, 32))
+>this : Symbol(TypedFoo, Decl(typed_component.ts, 0, 36))
+>member : Symbol(member, Decl(component.js, 1, 32))
+    }
+}

@@ -1,0 +1,54 @@
+--- old.mutuallyRecursiveInference.symbols
++++ new.mutuallyRecursiveInference.symbols
+@@= skipped -5, +5 lines =@@
+ >A : Symbol(A, Decl(mutuallyRecursiveInference.ts, 0, 8))
+ 
+     a: A;
+->a : Symbol(T.a, Decl(mutuallyRecursiveInference.ts, 0, 12))
++>a : Symbol(a, Decl(mutuallyRecursiveInference.ts, 0, 12))
+ >A : Symbol(A, Decl(mutuallyRecursiveInference.ts, 0, 8))
+ 
+     b: any
+->b : Symbol(T.b, Decl(mutuallyRecursiveInference.ts, 1, 9))
++>b : Symbol(b, Decl(mutuallyRecursiveInference.ts, 1, 9))
+ }
+ class L<RT extends { a: 'a' | 'b', b: any }> extends T<RT[RT['a']]> {
+ >L : Symbol(L, Decl(mutuallyRecursiveInference.ts, 3, 1))
+@@= skipped -16, +16 lines =@@
+ >RT : Symbol(RT, Decl(mutuallyRecursiveInference.ts, 4, 8))
+ 
+     m() { this.a }
+->m : Symbol(L.m, Decl(mutuallyRecursiveInference.ts, 4, 69))
+->this.a : Symbol(T.a, Decl(mutuallyRecursiveInference.ts, 0, 12))
++>m : Symbol(m, Decl(mutuallyRecursiveInference.ts, 4, 69))
++>this.a : Symbol(a, Decl(mutuallyRecursiveInference.ts, 0, 12))
+ >this : Symbol(L, Decl(mutuallyRecursiveInference.ts, 3, 1))
+->a : Symbol(T.a, Decl(mutuallyRecursiveInference.ts, 0, 12))
++>a : Symbol(a, Decl(mutuallyRecursiveInference.ts, 0, 12))
+ }
+ class X extends L<X> {
+ >X : Symbol(X, Decl(mutuallyRecursiveInference.ts, 6, 1))
+@@= skipped -11, +11 lines =@@
+ >X : Symbol(X, Decl(mutuallyRecursiveInference.ts, 6, 1))
+ 
+     a: 'a' | 'b'
+->a : Symbol(X.a, Decl(mutuallyRecursiveInference.ts, 7, 22))
++>a : Symbol(a, Decl(mutuallyRecursiveInference.ts, 7, 22))
+ 
+     b: number
+->b : Symbol(X.b, Decl(mutuallyRecursiveInference.ts, 8, 16))
++>b : Symbol(b, Decl(mutuallyRecursiveInference.ts, 8, 16))
+ 
+     m2() {
+->m2 : Symbol(X.m2, Decl(mutuallyRecursiveInference.ts, 9, 13))
++>m2 : Symbol(m2, Decl(mutuallyRecursiveInference.ts, 9, 13))
+ 
+         this.a
+->this.a : Symbol(X.a, Decl(mutuallyRecursiveInference.ts, 7, 22))
++>this.a : Symbol(a, Decl(mutuallyRecursiveInference.ts, 7, 22))
+ >this : Symbol(X, Decl(mutuallyRecursiveInference.ts, 6, 1))
+->a : Symbol(X.a, Decl(mutuallyRecursiveInference.ts, 7, 22))
++>a : Symbol(a, Decl(mutuallyRecursiveInference.ts, 7, 22))
+     }
+ }
+ 

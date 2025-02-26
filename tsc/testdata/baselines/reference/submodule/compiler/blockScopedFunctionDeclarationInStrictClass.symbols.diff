@@ -1,0 +1,11 @@
+--- old.blockScopedFunctionDeclarationInStrictClass.symbols
++++ new.blockScopedFunctionDeclarationInStrictClass.symbols
+@@= skipped -4, +4 lines =@@
+ >c : Symbol(c, Decl(blockScopedFunctionDeclarationInStrictClass.ts, 0, 0))
+ 
+     method() {
+->method : Symbol(c.method, Decl(blockScopedFunctionDeclarationInStrictClass.ts, 0, 9))
++>method : Symbol(method, Decl(blockScopedFunctionDeclarationInStrictClass.ts, 0, 9))
+ 
+         if (true) {
+             function foo() { }

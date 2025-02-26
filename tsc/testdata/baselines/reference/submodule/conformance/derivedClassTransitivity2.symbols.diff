@@ -1,0 +1,47 @@
+--- old.derivedClassTransitivity2.symbols
++++ new.derivedClassTransitivity2.symbols
+@@= skipped -6, +6 lines =@@
+ >C : Symbol(C, Decl(derivedClassTransitivity2.ts, 0, 0))
+ 
+     foo(x: number, y: number) { }
+->foo : Symbol(C.foo, Decl(derivedClassTransitivity2.ts, 2, 9))
++>foo : Symbol(foo, Decl(derivedClassTransitivity2.ts, 2, 9))
+ >x : Symbol(x, Decl(derivedClassTransitivity2.ts, 3, 8))
+ >y : Symbol(y, Decl(derivedClassTransitivity2.ts, 3, 18))
+ }
+@@= skipped -10, +10 lines =@@
+ >C : Symbol(C, Decl(derivedClassTransitivity2.ts, 0, 0))
+ 
+     foo(x: number) { } // ok to drop parameters
+->foo : Symbol(D.foo, Decl(derivedClassTransitivity2.ts, 6, 19))
++>foo : Symbol(foo, Decl(derivedClassTransitivity2.ts, 6, 19))
+ >x : Symbol(x, Decl(derivedClassTransitivity2.ts, 7, 8))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >D : Symbol(D, Decl(derivedClassTransitivity2.ts, 4, 1))
+ 
+     foo(x: number, y?: string) { } // ok to add optional parameters
+->foo : Symbol(E.foo, Decl(derivedClassTransitivity2.ts, 10, 19))
++>foo : Symbol(foo, Decl(derivedClassTransitivity2.ts, 10, 19))
+ >x : Symbol(x, Decl(derivedClassTransitivity2.ts, 11, 8))
+ >y : Symbol(y, Decl(derivedClassTransitivity2.ts, 11, 18))
+ }
+@@= skipped -23, +23 lines =@@
+ 
+ var r = c.foo(1, 1);
+ >r : Symbol(r, Decl(derivedClassTransitivity2.ts, 18, 3))
+->c.foo : Symbol(C.foo, Decl(derivedClassTransitivity2.ts, 2, 9))
++>c.foo : Symbol(foo, Decl(derivedClassTransitivity2.ts, 2, 9))
+ >c : Symbol(c, Decl(derivedClassTransitivity2.ts, 14, 3))
+->foo : Symbol(C.foo, Decl(derivedClassTransitivity2.ts, 2, 9))
++>foo : Symbol(foo, Decl(derivedClassTransitivity2.ts, 2, 9))
+ 
+ var r2 = e.foo(1, '');
+ >r2 : Symbol(r2, Decl(derivedClassTransitivity2.ts, 19, 3))
+->e.foo : Symbol(E.foo, Decl(derivedClassTransitivity2.ts, 10, 19))
++>e.foo : Symbol(foo, Decl(derivedClassTransitivity2.ts, 10, 19))
+ >e : Symbol(e, Decl(derivedClassTransitivity2.ts, 16, 3))
+->foo : Symbol(E.foo, Decl(derivedClassTransitivity2.ts, 10, 19))
++>foo : Symbol(foo, Decl(derivedClassTransitivity2.ts, 10, 19))
+ 

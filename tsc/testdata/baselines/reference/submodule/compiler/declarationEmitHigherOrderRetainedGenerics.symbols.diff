@@ -1,0 +1,170 @@
+--- old.declarationEmitHigherOrderRetainedGenerics.symbols
++++ new.declarationEmitHigherOrderRetainedGenerics.symbols
+@@= skipped -4, +4 lines =@@
+ >TypeLambda : Symbol(TypeLambda, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 0))
+ 
+     readonly In: unknown
+->In : Symbol(TypeLambda.In, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 29))
++>In : Symbol(In, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 29))
+ 
+     readonly Out2: unknown
+->Out2 : Symbol(TypeLambda.Out2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 1, 24))
++>Out2 : Symbol(Out2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 1, 24))
+ 
+     readonly Out1: unknown
+->Out1 : Symbol(TypeLambda.Out1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 2, 26))
++>Out1 : Symbol(Out1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 2, 26))
+ 
+     readonly Target: unknown
+->Target : Symbol(TypeLambda.Target, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 3, 26))
++>Target : Symbol(Target, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 3, 26))
+ }
+ export namespace Types {
+ >Types : Symbol(Types, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 5, 1))
+@@= skipped -43, +43 lines =@@
+ >TypeLambda : Symbol(TypeLambda, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 0))
+ 
+     readonly [URI]?: F
+->[URI] : Symbol(TypeClass[URI], Decl(declarationEmitHigherOrderRetainedGenerics.ts, 13, 50))
++>[URI] : Symbol([URI], Decl(declarationEmitHigherOrderRetainedGenerics.ts, 13, 50))
+ >URI : Symbol(URI, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 12, 20))
+ >F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 13, 27))
+ }
+@@= skipped -13, +13 lines =@@
+ >F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 17, 27))
+ 
+     readonly imap: {
+->imap : Symbol(Invariant.imap, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 17, 71))
++>imap : Symbol(imap, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 17, 71))
+ 
+         <A, B>(
+ >A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 19, 9))
+@@= skipped -82, +82 lines =@@
+ >F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 27))
+ 
+     readonly map: {
+->map : Symbol(Covariant.map, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 71))
++>map : Symbol(map, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 71))
+ 
+         <A, B>(f: (a: A) => B): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+ >A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 9))
+@@= skipped -94, +94 lines =@@
+         readonly In: Types.Contravariant<In>
+ >In : Symbol(In, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 48, 21))
+ >Types : Symbol(Types, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 5, 1))
+->Contravariant : Symbol(Types.Contravariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 8, 46))
++>Contravariant : Symbol(Contravariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 8, 46))
+ >In : Symbol(In, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 38))
+ 
+         readonly Out2: Types.Covariant<Out2>
+ >Out2 : Symbol(Out2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 49, 44))
+ >Types : Symbol(Types, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 5, 1))
+->Covariant : Symbol(Types.Covariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 7, 42))
++>Covariant : Symbol(Covariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 7, 42))
+ >Out2 : Symbol(Out2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 42))
+ 
+         readonly Out1: Types.Covariant<Out1>
+ >Out1 : Symbol(Out1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 50, 44))
+ >Types : Symbol(Types, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 5, 1))
+->Covariant : Symbol(Types.Covariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 7, 42))
++>Covariant : Symbol(Covariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 7, 42))
+ >Out1 : Symbol(Out1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 48))
+ 
+         readonly Target: Types.Invariant<Target>
+ >Target : Symbol(Target, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 51, 44))
+ >Types : Symbol(Types, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 5, 1))
+->Invariant : Symbol(Types.Invariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 6, 24))
++>Invariant : Symbol(Invariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 6, 24))
+ >Target : Symbol(Target, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 54))
+     }
+ 
+@@= skipped -30, +30 lines =@@
+ >F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 29))
+ 
+     readonly product: <R1, O1, E1, A, R2, O2, E2, B>(
+->product : Symbol(SemiProduct.product, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 73))
++>product : Symbol(product, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 73))
+ >R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 23))
+ >O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 26))
+ >E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 30))
+@@= skipped -41, +41 lines =@@
+ >B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 49))
+ 
+     readonly productMany: <R, O, E, A>(
+->productMany : Symbol(SemiProduct.productMany, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 59, 51))
++>productMany : Symbol(productMany, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 59, 51))
+ >R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 27))
+ >O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 29))
+ >E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 32))
+@@= skipped -17, +17 lines =@@
+ 
+         collection: Iterable<Kind<F, R, O, E, A>>
+ >collection : Symbol(collection, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 62, 34))
+->Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
++>Iterable : Symbol(Iterable)
+ >Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+ >F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 29))
+ >R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 27))
+@@= skipped -15, +15 lines =@@
+ >O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 29))
+ >E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 32))
+ >A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 35))
+->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Array : Symbol(Array)
+ >A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 35))
+ }
+ export interface SemiApplicative<F extends TypeLambda> extends SemiProduct<F>, Covariant<F> { }
+@@= skipped -30, +30 lines =@@
+     <DataLast extends (...args: Array<any>) => any, DataFirst extends (...args: Array<any>) => any>(
+ >DataLast : Symbol(DataLast, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 5))
+ >args : Symbol(args, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 23))
+->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Array : Symbol(Array)
+ >DataFirst : Symbol(DataFirst, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 51))
+ >args : Symbol(args, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 71))
+->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Array : Symbol(Array)
+ 
+         arity: Parameters<DataFirst>["length"],
+ >arity : Symbol(arity, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 100))
+->Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
++>Parameters : Symbol(Parameters)
+ >DataFirst : Symbol(DataFirst, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 51))
+ 
+         body: DataFirst
+@@= skipped -21, +21 lines =@@
+     <DataLast extends (...args: Array<any>) => any, DataFirst extends (...args: Array<any>) => any>(
+ >DataLast : Symbol(DataLast, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 5))
+ >args : Symbol(args, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 23))
+->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Array : Symbol(Array)
+ >DataFirst : Symbol(DataFirst, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 51))
+ >args : Symbol(args, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 71))
+->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Array : Symbol(Array)
+ 
+         isDataFirst: (args: IArguments) => boolean,
+ >isDataFirst : Symbol(isDataFirst, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 100))
+ >args : Symbol(args, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 77, 22))
+->IArguments : Symbol(IArguments, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
++>IArguments : Symbol(IArguments)
+ 
+         body: DataFirst
+ >body : Symbol(body, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 77, 51))
+@@= skipped -174, +174 lines =@@
+ >E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 16))
+ >E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 31))
+ >C : Symbol(C, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 38))
+->F.map : Symbol(Covariant.map, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 71))
++>F.map : Symbol(map, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 71))
+ >F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
+->map : Symbol(Covariant.map, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 71))
+->F.product : Symbol(SemiProduct.product, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 73))
++>map : Symbol(map, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 71))
++>F.product : Symbol(product, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 73))
+ >F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
+->product : Symbol(SemiProduct.product, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 73))
++>product : Symbol(product, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 73))
+ >self : Symbol(self, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 42))
+ >that : Symbol(that, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 96, 41))
+ >a : Symbol(a, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 99, 83))

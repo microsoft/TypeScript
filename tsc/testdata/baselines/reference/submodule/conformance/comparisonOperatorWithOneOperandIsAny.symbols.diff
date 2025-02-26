@@ -1,0 +1,15 @@
+--- old.comparisonOperatorWithOneOperandIsAny.symbols
++++ new.comparisonOperatorWithOneOperandIsAny.symbols
+@@= skipped -5, +5 lines =@@
+ 
+ enum E { a, b, c }
+ >E : Symbol(E, Decl(comparisonOperatorWithOneOperandIsAny.ts, 0, 11))
+->a : Symbol(E.a, Decl(comparisonOperatorWithOneOperandIsAny.ts, 2, 8))
+->b : Symbol(E.b, Decl(comparisonOperatorWithOneOperandIsAny.ts, 2, 11))
+->c : Symbol(E.c, Decl(comparisonOperatorWithOneOperandIsAny.ts, 2, 14))
++>a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsAny.ts, 2, 8))
++>b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsAny.ts, 2, 11))
++>c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsAny.ts, 2, 14))
+ 
+ function foo<T>(t: T) {
+ >foo : Symbol(foo, Decl(comparisonOperatorWithOneOperandIsAny.ts, 2, 18))

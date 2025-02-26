@@ -1,0 +1,20 @@
+--- old.asiInES6Classes.symbols
++++ new.asiInES6Classes.symbols
+@@= skipped -6, +6 lines =@@
+  
+ 
+     defaults = {
+->defaults : Symbol(Foo.defaults, Decl(asiInES6Classes.ts, 0, 11))
++>defaults : Symbol(defaults, Decl(asiInES6Classes.ts, 0, 11))
+ 
+         done: false
+ >done : Symbol(done, Decl(asiInES6Classes.ts, 4, 16))
+@@= skipped -10, +10 lines =@@
+  
+ 
+     bar() {
+->bar : Symbol(Foo.bar, Decl(asiInES6Classes.ts, 8, 5))
++>bar : Symbol(bar, Decl(asiInES6Classes.ts, 8, 5))
+ 
+         return 3;
+ 

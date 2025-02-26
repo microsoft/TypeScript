@@ -1,0 +1,11 @@
+--- old.aliasWithInterfaceExportAssignmentUsedInVarInitializer.symbols
++++ new.aliasWithInterfaceExportAssignmentUsedInVarInitializer.symbols
+@@= skipped -11, +11 lines =@@
+ >c : Symbol(c, Decl(aliasWithInterfaceExportAssignmentUsedInVarInitializer_0.ts, 0, 0))
+ 
+     q3: number;
+->q3 : Symbol(c.q3, Decl(aliasWithInterfaceExportAssignmentUsedInVarInitializer_0.ts, 0, 13))
++>q3 : Symbol(q3, Decl(aliasWithInterfaceExportAssignmentUsedInVarInitializer_0.ts, 0, 13))
+ }
+ export = c;
+ >c : Symbol(c, Decl(aliasWithInterfaceExportAssignmentUsedInVarInitializer_0.ts, 0, 0))

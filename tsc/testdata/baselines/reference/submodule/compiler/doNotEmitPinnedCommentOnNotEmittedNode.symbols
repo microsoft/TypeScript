@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/doNotEmitPinnedCommentOnNotEmittedNode.ts] ////
+
+=== doNotEmitPinnedCommentOnNotEmittedNode.ts ===
+class C {
+>C : Symbol(C, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 0, 0))
+
+    /*! remove pinned comment anywhere else */
+    public foo(x: string, y: any)
+>foo : Symbol(foo, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 0, 9), Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 2, 33))
+>x : Symbol(x, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 2, 15))
+>y : Symbol(y, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 2, 25))
+
+    public foo(x: string, y: number) { }
+>foo : Symbol(foo, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 0, 9), Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 2, 33))
+>x : Symbol(x, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 3, 15))
+>y : Symbol(y, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 3, 25))
+}
+
+var x = 10;
+>x : Symbol(x, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 6, 3))
+
+/*! remove pinned comment anywhere else */
+declare var OData: any;
+>OData : Symbol(OData, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 9, 11))
+

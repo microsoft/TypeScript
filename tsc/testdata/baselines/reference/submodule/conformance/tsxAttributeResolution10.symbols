@@ -1,0 +1,51 @@
+//// [tests/cases/conformance/jsx/tsxAttributeResolution10.tsx] ////
+
+=== react.d.ts ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(react.d.ts, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(react.d.ts, 0, 20))
+
+	interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react.d.ts, 1, 22))
+	}
+	interface ElementAttributesProperty {
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(react.d.ts, 3, 2))
+
+		props;
+>props : Symbol(props, Decl(react.d.ts, 4, 38))
+	}
+}
+
+=== file.tsx ===
+export class MyComponent {  
+>MyComponent : Symbol(MyComponent, Decl(file.tsx, 0, 0))
+
+  render() {
+>render : Symbol(render, Decl(file.tsx, 0, 26))
+  }
+
+  props: {
+>props : Symbol(props, Decl(file.tsx, 2, 3))
+
+  	[s: string]: boolean;
+>s : Symbol(s, Decl(file.tsx, 5, 4))
+  }
+}
+
+// Should be an error
+<MyComponent bar='world' />;
+>MyComponent : Symbol(MyComponent, Decl(file.tsx, 0, 0))
+>bar : Symbol(bar, Decl(file.tsx, 10, 12))
+
+// Should be OK
+<MyComponent bar={true} />;
+>MyComponent : Symbol(MyComponent, Decl(file.tsx, 0, 0))
+>bar : Symbol(bar, Decl(file.tsx, 13, 12))
+
+// Should be ok
+<MyComponent data-bar='hello' />;
+>MyComponent : Symbol(MyComponent, Decl(file.tsx, 0, 0))
+>data-bar : Symbol(data-bar, Decl(file.tsx, 16, 12))
+

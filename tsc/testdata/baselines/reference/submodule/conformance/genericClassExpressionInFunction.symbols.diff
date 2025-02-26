@@ -1,0 +1,74 @@
+--- old.genericClassExpressionInFunction.symbols
++++ new.genericClassExpressionInFunction.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(genericClassExpressionInFunction.ts, 0, 8))
+ 
+     genericVar: T
+->genericVar : Symbol(A.genericVar, Decl(genericClassExpressionInFunction.ts, 0, 12))
++>genericVar : Symbol(genericVar, Decl(genericClassExpressionInFunction.ts, 0, 12))
+ >T : Symbol(T, Decl(genericClassExpressionInFunction.ts, 0, 8))
+ }
+ function B1<U>() {
+@@= skipped -17, +17 lines =@@
+ >V : Symbol(V, Decl(genericClassExpressionInFunction.ts, 7, 9))
+ 
+     anon = class extends A<V> { }
+->anon : Symbol(B2.anon, Decl(genericClassExpressionInFunction.ts, 7, 13))
++>anon : Symbol(anon, Decl(genericClassExpressionInFunction.ts, 7, 13))
+ >A : Symbol(A, Decl(genericClassExpressionInFunction.ts, 0, 0))
+ >V : Symbol(V, Decl(genericClassExpressionInFunction.ts, 7, 9))
+ }
+@@= skipped -20, +20 lines =@@
+ >B1 : Symbol(B1, Decl(genericClassExpressionInFunction.ts, 2, 1))
+ 
+     namae: string;
+->namae : Symbol(K.namae, Decl(genericClassExpressionInFunction.ts, 14, 30))
++>namae : Symbol(namae, Decl(genericClassExpressionInFunction.ts, 14, 30))
+ }
+ class C extends (new B2<number>().anon) {
+ >C : Symbol(C, Decl(genericClassExpressionInFunction.ts, 16, 1))
+->new B2<number>().anon : Symbol(B2.anon, Decl(genericClassExpressionInFunction.ts, 7, 13))
++>new B2<number>().anon : Symbol(anon, Decl(genericClassExpressionInFunction.ts, 7, 13))
+ >B2 : Symbol(B2, Decl(genericClassExpressionInFunction.ts, 6, 1))
+->anon : Symbol(B2.anon, Decl(genericClassExpressionInFunction.ts, 7, 13))
++>anon : Symbol(anon, Decl(genericClassExpressionInFunction.ts, 7, 13))
+ 
+     name: string;
+->name : Symbol(C.name, Decl(genericClassExpressionInFunction.ts, 17, 41))
++>name : Symbol(name, Decl(genericClassExpressionInFunction.ts, 17, 41))
+ }
+ let b3Number = B3<number>();
+ >b3Number : Symbol(b3Number, Decl(genericClassExpressionInFunction.ts, 20, 3))
+@@= skipped -20, +20 lines =@@
+ >b3Number : Symbol(b3Number, Decl(genericClassExpressionInFunction.ts, 20, 3))
+ 
+     nom: string;
+->nom : Symbol(S.nom, Decl(genericClassExpressionInFunction.ts, 21, 34))
++>nom : Symbol(nom, Decl(genericClassExpressionInFunction.ts, 21, 34))
+ }
+ var c = new C();
+ >c : Symbol(c, Decl(genericClassExpressionInFunction.ts, 24, 3))
+@@= skipped -15, +15 lines =@@
+ >S : Symbol(S, Decl(genericClassExpressionInFunction.ts, 20, 28))
+ 
+ c.genericVar = 12;
+->c.genericVar : Symbol(A.genericVar, Decl(genericClassExpressionInFunction.ts, 0, 12))
++>c.genericVar : Symbol(genericVar, Decl(genericClassExpressionInFunction.ts, 0, 12))
+ >c : Symbol(c, Decl(genericClassExpressionInFunction.ts, 24, 3))
+->genericVar : Symbol(A.genericVar, Decl(genericClassExpressionInFunction.ts, 0, 12))
++>genericVar : Symbol(genericVar, Decl(genericClassExpressionInFunction.ts, 0, 12))
+ 
+ k.genericVar = 12;
+->k.genericVar : Symbol(A.genericVar, Decl(genericClassExpressionInFunction.ts, 0, 12))
++>k.genericVar : Symbol(genericVar, Decl(genericClassExpressionInFunction.ts, 0, 12))
+ >k : Symbol(k, Decl(genericClassExpressionInFunction.ts, 25, 3))
+->genericVar : Symbol(A.genericVar, Decl(genericClassExpressionInFunction.ts, 0, 12))
++>genericVar : Symbol(genericVar, Decl(genericClassExpressionInFunction.ts, 0, 12))
+ 
+ s.genericVar = 12;
+->s.genericVar : Symbol(A.genericVar, Decl(genericClassExpressionInFunction.ts, 0, 12))
++>s.genericVar : Symbol(genericVar, Decl(genericClassExpressionInFunction.ts, 0, 12))
+ >s : Symbol(s, Decl(genericClassExpressionInFunction.ts, 26, 3))
+->genericVar : Symbol(A.genericVar, Decl(genericClassExpressionInFunction.ts, 0, 12))
++>genericVar : Symbol(genericVar, Decl(genericClassExpressionInFunction.ts, 0, 12))
+ 

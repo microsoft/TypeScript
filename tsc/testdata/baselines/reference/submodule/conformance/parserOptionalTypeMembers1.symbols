@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserOptionalTypeMembers1.ts] ////
+
+=== parserOptionalTypeMembers1.ts ===
+interface PropertyDescriptor2 {
+>PropertyDescriptor2 : Symbol(PropertyDescriptor2, Decl(parserOptionalTypeMembers1.ts, 0, 0))
+
+    configurable?: boolean;
+>configurable : Symbol(configurable, Decl(parserOptionalTypeMembers1.ts, 0, 31))
+
+    enumerable?: boolean;
+>enumerable : Symbol(enumerable, Decl(parserOptionalTypeMembers1.ts, 1, 27))
+
+    value?: any;
+>value : Symbol(value, Decl(parserOptionalTypeMembers1.ts, 2, 25))
+
+    writable?: boolean;
+>writable : Symbol(writable, Decl(parserOptionalTypeMembers1.ts, 3, 16))
+
+    get?(): any;
+>get : Symbol(get, Decl(parserOptionalTypeMembers1.ts, 4, 23))
+
+    set?(v: any): void;
+>set : Symbol(set, Decl(parserOptionalTypeMembers1.ts, 5, 16))
+>v : Symbol(v, Decl(parserOptionalTypeMembers1.ts, 6, 9))
+}

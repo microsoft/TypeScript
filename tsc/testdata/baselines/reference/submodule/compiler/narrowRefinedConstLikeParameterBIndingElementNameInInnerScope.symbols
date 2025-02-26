@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/narrowRefinedConstLikeParameterBIndingElementNameInInnerScope.ts] ////
+
+=== narrowRefinedConstLikeParameterBIndingElementNameInInnerScope.ts ===
+function ff({ a, b }: { a: string | undefined, b: () => void }) {
+>ff : Symbol(ff, Decl(narrowRefinedConstLikeParameterBIndingElementNameInInnerScope.ts, 0, 0))
+>a : Symbol(a, Decl(narrowRefinedConstLikeParameterBIndingElementNameInInnerScope.ts, 0, 13))
+>b : Symbol(b, Decl(narrowRefinedConstLikeParameterBIndingElementNameInInnerScope.ts, 0, 16))
+>a : Symbol(a, Decl(narrowRefinedConstLikeParameterBIndingElementNameInInnerScope.ts, 0, 23))
+>b : Symbol(b, Decl(narrowRefinedConstLikeParameterBIndingElementNameInInnerScope.ts, 0, 46))
+
+  if (a !== undefined) {
+>a : Symbol(a, Decl(narrowRefinedConstLikeParameterBIndingElementNameInInnerScope.ts, 0, 13))
+>undefined : Symbol(undefined)
+
+    b = () => {
+>b : Symbol(b, Decl(narrowRefinedConstLikeParameterBIndingElementNameInInnerScope.ts, 0, 16))
+
+      const x: string = a;
+>x : Symbol(x, Decl(narrowRefinedConstLikeParameterBIndingElementNameInInnerScope.ts, 3, 11))
+>a : Symbol(a, Decl(narrowRefinedConstLikeParameterBIndingElementNameInInnerScope.ts, 0, 13))
+    }
+  }
+}
+

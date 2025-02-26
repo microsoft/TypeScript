@@ -1,0 +1,20 @@
+--- old.assignmentCompatWithObjectMembers5.symbols
++++ new.assignmentCompatWithObjectMembers5.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(assignmentCompatWithObjectMembers5.ts, 0, 0))
+ 
+     foo: string;
+->foo : Symbol(C.foo, Decl(assignmentCompatWithObjectMembers5.ts, 0, 9))
++>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers5.ts, 0, 9))
+ }
+ 
+ var c: C;
+@@= skipped -11, +11 lines =@@
+ >I : Symbol(I, Decl(assignmentCompatWithObjectMembers5.ts, 4, 9))
+ 
+     fooo: string;
+->fooo : Symbol(I.fooo, Decl(assignmentCompatWithObjectMembers5.ts, 6, 13))
++>fooo : Symbol(fooo, Decl(assignmentCompatWithObjectMembers5.ts, 6, 13))
+ }
+ 
+ var i: I;

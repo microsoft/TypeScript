@@ -1,0 +1,10 @@
+--- old.typedefOnSemicolonClassElement.symbols
++++ new.typedefOnSemicolonClassElement.symbols
+@@= skipped -7, +7 lines =@@
+   ;
+   /** @type {A} */
+   a = 'ok'
+->a : Symbol(Preferences.a, Decl(typedefOnSemicolonClassElement.js, 2, 3))
++>a : Symbol(a, Decl(typedefOnSemicolonClassElement.js, 2, 3))
+ }
+ 

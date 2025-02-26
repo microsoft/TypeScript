@@ -1,0 +1,11 @@
+--- old.nodeModulesTripleSlashReferenceModeDeclarationEmit1(module=nodenext).symbols
++++ new.nodeModulesTripleSlashReferenceModeDeclarationEmit1(module=nodenext).symbols
+@@= skipped -8, +8 lines =@@
+ === /node_modules/pkg/require.d.ts ===
+ export {};
+ declare global {
+->global : Symbol(global, Decl(require.d.ts, 0, 10))
++>global : Symbol((Missing), Decl(require.d.ts, 0, 10))
+ 
+     interface RequireInterface {}
+ >RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 1, 16))

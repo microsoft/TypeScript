@@ -1,0 +1,41 @@
+//// [tests/cases/conformance/salsa/assignmentToVoidZero2.ts] ////
+
+=== assignmentToVoidZero2.js ===
+exports.j = 1;
+exports.k = void 0;
+var o = {}
+>o : Symbol(o, Decl(assignmentToVoidZero2.js, 2, 3))
+
+o.x = 1
+>o : Symbol(o, Decl(assignmentToVoidZero2.js, 2, 3))
+
+o.y = void 0
+>o : Symbol(o, Decl(assignmentToVoidZero2.js, 2, 3))
+
+o.x + o.y
+>o : Symbol(o, Decl(assignmentToVoidZero2.js, 2, 3))
+>o : Symbol(o, Decl(assignmentToVoidZero2.js, 2, 3))
+
+function C() {
+>C : Symbol(C, Decl(assignmentToVoidZero2.js, 5, 9))
+
+    this.p = 1
+    this.q = void 0
+}
+var c = new C()
+>c : Symbol(c, Decl(assignmentToVoidZero2.js, 11, 3))
+>C : Symbol(C, Decl(assignmentToVoidZero2.js, 5, 9))
+
+c.p + c.q
+>c : Symbol(c, Decl(assignmentToVoidZero2.js, 11, 3))
+>c : Symbol(c, Decl(assignmentToVoidZero2.js, 11, 3))
+
+=== importer.js ===
+import { j, k } from './assignmentToVoidZero2'
+>j : Symbol(j, Decl(importer.js, 0, 8))
+>k : Symbol(k, Decl(importer.js, 0, 11))
+
+j + k
+>j : Symbol(j, Decl(importer.js, 0, 8))
+>k : Symbol(k, Decl(importer.js, 0, 11))
+

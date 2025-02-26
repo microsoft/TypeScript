@@ -1,0 +1,20 @@
+--- old.destructuringParameterDeclaration6.symbols
++++ new.destructuringParameterDeclaration6.symbols
+@@= skipped -9, +9 lines =@@
+ function a({while}) { }
+ >a : Symbol(a, Decl(destructuringParameterDeclaration6.ts, 3, 12))
+ >while : Symbol(while)
+-> : Symbol((Missing), Decl(destructuringParameterDeclaration6.ts, 6, 12))
++> : Symbol(, Decl(destructuringParameterDeclaration6.ts, 6, 12))
+ 
+ function a1({public}) { }
+ >a1 : Symbol(a1, Decl(destructuringParameterDeclaration6.ts, 6, 23))
+@@= skipped -11, +11 lines =@@
+ 
+ function a5(...while) { }
+ >a5 : Symbol(a5, Decl(destructuringParameterDeclaration6.ts, 8, 36))
+-> : Symbol((Missing), Decl(destructuringParameterDeclaration6.ts, 9, 12))
++> : Symbol(, Decl(destructuringParameterDeclaration6.ts, 9, 12))
+ 
+ function a6(...public) { }
+ >a6 : Symbol(a6, Decl(destructuringParameterDeclaration6.ts, 9, 25))

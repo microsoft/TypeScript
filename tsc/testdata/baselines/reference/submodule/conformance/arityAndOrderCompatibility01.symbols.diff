@@ -1,0 +1,19 @@
+--- old.arityAndOrderCompatibility01.symbols
++++ new.arityAndOrderCompatibility01.symbols
+@@= skipped -5, +5 lines =@@
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     0: string;
+->0 : Symbol(StrNum[0], Decl(arityAndOrderCompatibility01.ts, 0, 47))
++>0 : Symbol(0, Decl(arityAndOrderCompatibility01.ts, 0, 47))
+ 
+     1: number;
+->1 : Symbol(StrNum[1], Decl(arityAndOrderCompatibility01.ts, 1, 14))
++>1 : Symbol(1, Decl(arityAndOrderCompatibility01.ts, 1, 14))
+ 
+     length: 2;
+->length : Symbol(StrNum.length, Decl(arityAndOrderCompatibility01.ts, 2, 14))
++>length : Symbol(length, Decl(arityAndOrderCompatibility01.ts, 2, 14))
+ }
+ 
+ var x: [string, number];

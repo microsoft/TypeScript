@@ -1,0 +1,29 @@
+--- old.mixinAbstractClasses.2.symbols
++++ new.mixinAbstractClasses.2.symbols
+@@= skipped -4, +4 lines =@@
+ >Mixin : Symbol(Mixin, Decl(mixinAbstractClasses.2.ts, 2, 1), Decl(mixinAbstractClasses.2.ts, 0, 0))
+ 
+     mixinMethod(): void;
+->mixinMethod : Symbol(Mixin.mixinMethod, Decl(mixinAbstractClasses.2.ts, 0, 17))
++>mixinMethod : Symbol(mixinMethod, Decl(mixinAbstractClasses.2.ts, 0, 17))
+ }
+ 
+ function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass): TBaseClass & (abstract new (...args: any) => Mixin) {
+@@= skipped -20, +20 lines =@@
+ >Mixin : Symbol(Mixin, Decl(mixinAbstractClasses.2.ts, 2, 1), Decl(mixinAbstractClasses.2.ts, 0, 0))
+ 
+         mixinMethod() {
+->mixinMethod : Symbol(MixinClass.mixinMethod, Decl(mixinAbstractClasses.2.ts, 6, 57))
++>mixinMethod : Symbol(mixinMethod, Decl(mixinAbstractClasses.2.ts, 6, 57))
+         }
+     }
+     return MixinClass;
+@@= skipped -11, +11 lines =@@
+ >AbstractBase : Symbol(AbstractBase, Decl(mixinAbstractClasses.2.ts, 11, 1))
+ 
+     abstract abstractBaseMethod(): void;
+->abstractBaseMethod : Symbol(AbstractBase.abstractBaseMethod, Decl(mixinAbstractClasses.2.ts, 13, 29))
++>abstractBaseMethod : Symbol(abstractBaseMethod, Decl(mixinAbstractClasses.2.ts, 13, 29))
+ }
+ 
+ const MixedBase = Mixin(AbstractBase);

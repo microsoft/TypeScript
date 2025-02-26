@@ -1,0 +1,62 @@
+--- old.mergedDeclarations1.symbols
++++ new.mergedDeclarations1.symbols
+@@= skipped -4, +4 lines =@@
+ >Point : Symbol(Point, Decl(mergedDeclarations1.ts, 0, 0))
+ 
+     x: number;
+->x : Symbol(Point.x, Decl(mergedDeclarations1.ts, 0, 17))
++>x : Symbol(x, Decl(mergedDeclarations1.ts, 0, 17))
+ 
+     y: number;
+->y : Symbol(Point.y, Decl(mergedDeclarations1.ts, 1, 14))
++>y : Symbol(y, Decl(mergedDeclarations1.ts, 1, 14))
+ }
+ function point(x: number, y: number): Point {
+ >point : Symbol(point, Decl(mergedDeclarations1.ts, 3, 1), Decl(mergedDeclarations1.ts, 6, 1))
+@@= skipped -32, +32 lines =@@
+ >Point : Symbol(Point, Decl(mergedDeclarations1.ts, 0, 0))
+ 
+         return p1.x == p2.x && p1.y == p2.y;
+->p1.x : Symbol(Point.x, Decl(mergedDeclarations1.ts, 0, 17))
++>p1.x : Symbol(x, Decl(mergedDeclarations1.ts, 0, 17))
+ >p1 : Symbol(p1, Decl(mergedDeclarations1.ts, 9, 27))
+->x : Symbol(Point.x, Decl(mergedDeclarations1.ts, 0, 17))
+->p2.x : Symbol(Point.x, Decl(mergedDeclarations1.ts, 0, 17))
++>x : Symbol(x, Decl(mergedDeclarations1.ts, 0, 17))
++>p2.x : Symbol(x, Decl(mergedDeclarations1.ts, 0, 17))
+ >p2 : Symbol(p2, Decl(mergedDeclarations1.ts, 9, 37))
+->x : Symbol(Point.x, Decl(mergedDeclarations1.ts, 0, 17))
+->p1.y : Symbol(Point.y, Decl(mergedDeclarations1.ts, 1, 14))
++>x : Symbol(x, Decl(mergedDeclarations1.ts, 0, 17))
++>p1.y : Symbol(y, Decl(mergedDeclarations1.ts, 1, 14))
+ >p1 : Symbol(p1, Decl(mergedDeclarations1.ts, 9, 27))
+->y : Symbol(Point.y, Decl(mergedDeclarations1.ts, 1, 14))
+->p2.y : Symbol(Point.y, Decl(mergedDeclarations1.ts, 1, 14))
++>y : Symbol(y, Decl(mergedDeclarations1.ts, 1, 14))
++>p2.y : Symbol(y, Decl(mergedDeclarations1.ts, 1, 14))
+ >p2 : Symbol(p2, Decl(mergedDeclarations1.ts, 9, 37))
+->y : Symbol(Point.y, Decl(mergedDeclarations1.ts, 1, 14))
++>y : Symbol(y, Decl(mergedDeclarations1.ts, 1, 14))
+     }
+ }
+ var p1 = point(0, 0);
+@@= skipped -20, +20 lines =@@
+ 
+ var p2 = point.origin;
+ >p2 : Symbol(p2, Decl(mergedDeclarations1.ts, 14, 3))
+->point.origin : Symbol(point.origin, Decl(mergedDeclarations1.ts, 8, 14))
++>point.origin : Symbol(origin, Decl(mergedDeclarations1.ts, 8, 14))
+ >point : Symbol(point, Decl(mergedDeclarations1.ts, 3, 1), Decl(mergedDeclarations1.ts, 6, 1))
+->origin : Symbol(point.origin, Decl(mergedDeclarations1.ts, 8, 14))
++>origin : Symbol(origin, Decl(mergedDeclarations1.ts, 8, 14))
+ 
+ var b = point.equals(p1, p2);
+ >b : Symbol(b, Decl(mergedDeclarations1.ts, 15, 3))
+->point.equals : Symbol(point.equals, Decl(mergedDeclarations1.ts, 8, 36))
++>point.equals : Symbol(equals, Decl(mergedDeclarations1.ts, 8, 36))
+ >point : Symbol(point, Decl(mergedDeclarations1.ts, 3, 1), Decl(mergedDeclarations1.ts, 6, 1))
+->equals : Symbol(point.equals, Decl(mergedDeclarations1.ts, 8, 36))
++>equals : Symbol(equals, Decl(mergedDeclarations1.ts, 8, 36))
+ >p1 : Symbol(p1, Decl(mergedDeclarations1.ts, 13, 3))
+ >p2 : Symbol(p2, Decl(mergedDeclarations1.ts, 14, 3))
+ 

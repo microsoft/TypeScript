@@ -1,0 +1,14 @@
+--- old.moduleSameValueDuplicateExportedBindings2.symbols
++++ new.moduleSameValueDuplicateExportedBindings2.symbols
+@@= skipped -13, +13 lines =@@
+ >Animals : Symbol(Animals, Decl(c.ts, 0, 0))
+ 
+ 	Cat,
+->Cat : Symbol(Animals.Cat, Decl(c.ts, 0, 21))
++>Cat : Symbol(Cat, Decl(c.ts, 0, 21))
+ 
+ 	Dog
+->Dog : Symbol(Animals.Dog, Decl(c.ts, 1, 5))
++>Dog : Symbol(Dog, Decl(c.ts, 1, 5))
+ 
+ };

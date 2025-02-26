@@ -1,0 +1,76 @@
+--- old.importTypeAmbient.symbols
++++ new.importTypeAmbient.symbols
+@@= skipped -7, +7 lines =@@
+ >Point : Symbol(Point, Decl(importTypeAmbient.ts, 0, 22))
+ 
+         x: number;
+->x : Symbol(Point.x, Decl(importTypeAmbient.ts, 1, 21))
++>x : Symbol(x, Decl(importTypeAmbient.ts, 1, 21))
+ 
+         y: number;
+->y : Symbol(Point.y, Decl(importTypeAmbient.ts, 2, 18))
++>y : Symbol(y, Decl(importTypeAmbient.ts, 2, 18))
+     }
+     export = Point;
+ >Point : Symbol(Point, Decl(importTypeAmbient.ts, 0, 22))
+@@= skipped -23, +23 lines =@@
+ >I : Symbol(I, Decl(importTypeAmbient.ts, 10, 19))
+ 
+             a: string;
+->a : Symbol(I.a, Decl(importTypeAmbient.ts, 11, 21))
++>a : Symbol(a, Decl(importTypeAmbient.ts, 11, 21))
+ 
+             b: number;
+->b : Symbol(I.b, Decl(importTypeAmbient.ts, 12, 22))
++>b : Symbol(b, Decl(importTypeAmbient.ts, 12, 22))
+         }
+     }
+ 
+@@= skipped -14, +14 lines =@@
+ >J : Symbol(J, Decl(importTypeAmbient.ts, 17, 19))
+ 
+             a: number;
+->a : Symbol(J.a, Decl(importTypeAmbient.ts, 18, 21))
++>a : Symbol(a, Decl(importTypeAmbient.ts, 18, 21))
+ 
+             b: string;
+->b : Symbol(J.b, Decl(importTypeAmbient.ts, 19, 22))
++>b : Symbol(b, Decl(importTypeAmbient.ts, 19, 22))
+         }
+     }
+ 
+@@= skipped -11, +11 lines =@@
+ >Bar : Symbol(Bar, Decl(importTypeAmbient.ts, 9, 23), Decl(importTypeAmbient.ts, 22, 5))
+ 
+         item: Bar.I;
+->item : Symbol(Bar.item, Decl(importTypeAmbient.ts, 24, 15))
++>item : Symbol(item, Decl(importTypeAmbient.ts, 24, 15))
+ >Bar : Symbol(Bar, Decl(importTypeAmbient.ts, 9, 23), Decl(importTypeAmbient.ts, 22, 5))
+->I : Symbol(Bar.I, Decl(importTypeAmbient.ts, 10, 19))
++>I : Symbol(I, Decl(importTypeAmbient.ts, 10, 19))
+ 
+         constructor(input: Baz.J);
+ >input : Symbol(input, Decl(importTypeAmbient.ts, 26, 20))
+ >Baz : Symbol(Baz, Decl(importTypeAmbient.ts, 15, 5))
+->J : Symbol(Baz.J, Decl(importTypeAmbient.ts, 17, 19))
++>J : Symbol(J, Decl(importTypeAmbient.ts, 17, 19))
+     }
+ }
+ 
+ let y: import("foo2").Bar.I = { a: "", b: 0 };
+ >y : Symbol(y, Decl(importTypeAmbient.ts, 30, 3))
+ >Bar : Symbol(Bar, Decl(importTypeAmbient.ts, 9, 23), Decl(importTypeAmbient.ts, 22, 5))
+->I : Symbol(Bar.I, Decl(importTypeAmbient.ts, 10, 19))
++>I : Symbol(I, Decl(importTypeAmbient.ts, 10, 19))
+ >a : Symbol(a, Decl(importTypeAmbient.ts, 30, 31))
+ >b : Symbol(b, Decl(importTypeAmbient.ts, 30, 38))
+ 
+@@= skipped -22, +22 lines =@@
+ >Bar2 : Symbol(Bar2, Decl(importTypeAmbient.ts, 30, 46))
+ 
+     item: {a: string, b: number, c: object};
+->item : Symbol(Bar2.item, Decl(importTypeAmbient.ts, 32, 12))
++>item : Symbol(item, Decl(importTypeAmbient.ts, 32, 12))
+ >a : Symbol(a, Decl(importTypeAmbient.ts, 33, 11))
+ >b : Symbol(b, Decl(importTypeAmbient.ts, 33, 21))
+ >c : Symbol(c, Decl(importTypeAmbient.ts, 33, 32))

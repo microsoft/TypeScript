@@ -1,0 +1,20 @@
+--- old.validUndefinedAssignments.symbols
++++ new.validUndefinedAssignments.symbols
+@@= skipped -31, +31 lines =@@
+ 
+ class C { foo: string }
+ >C : Symbol(C, Decl(validUndefinedAssignments.ts, 8, 6))
+->foo : Symbol(C.foo, Decl(validUndefinedAssignments.ts, 10, 9))
++>foo : Symbol(foo, Decl(validUndefinedAssignments.ts, 10, 9))
+ 
+ var f: C;
+ >f : Symbol(f, Decl(validUndefinedAssignments.ts, 11, 3))
+@@= skipped -12, +12 lines =@@
+ 
+ interface I { foo: string }
+ >I : Symbol(I, Decl(validUndefinedAssignments.ts, 12, 6))
+->foo : Symbol(I.foo, Decl(validUndefinedAssignments.ts, 14, 13))
++>foo : Symbol(foo, Decl(validUndefinedAssignments.ts, 14, 13))
+ 
+ var g: I;
+ >g : Symbol(g, Decl(validUndefinedAssignments.ts, 15, 3))

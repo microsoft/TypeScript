@@ -1,0 +1,88 @@
+--- old.constEnumPropertyAccess1.symbols
++++ new.constEnumPropertyAccess1.symbols
+@@= skipped -8, +8 lines =@@
+ >G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
+ 
+     A = 1,
+->A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
++>A : Symbol(A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+ 
+     B = 2,
+->B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
++>B : Symbol(B, Decl(constEnumPropertyAccess1.ts, 5, 10))
+ 
+     C = A + B,
+->C : Symbol(G.C, Decl(constEnumPropertyAccess1.ts, 6, 10))
+->A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+->B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
++>C : Symbol(C, Decl(constEnumPropertyAccess1.ts, 6, 10))
++>A : Symbol(A, Decl(constEnumPropertyAccess1.ts, 4, 14))
++>B : Symbol(B, Decl(constEnumPropertyAccess1.ts, 5, 10))
+ 
+     D = A * 2
+->D : Symbol(G.D, Decl(constEnumPropertyAccess1.ts, 7, 14))
+->A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
++>D : Symbol(D, Decl(constEnumPropertyAccess1.ts, 7, 14))
++>A : Symbol(A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+ }
+ 
+ var o: {
+@@= skipped -29, +29 lines =@@
+ 
+ var a = G.A;
+ >a : Symbol(a, Decl(constEnumPropertyAccess1.ts, 17, 3))
+->G.A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
++>G.A : Symbol(A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+ >G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
+->A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
++>A : Symbol(A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+ 
+ var a1 = G["A"];
+ >a1 : Symbol(a1, Decl(constEnumPropertyAccess1.ts, 18, 3))
+ >G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
+->"A" : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
++>"A" : Symbol(A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+ 
+ var g = o[G.A];
+ >g : Symbol(g, Decl(constEnumPropertyAccess1.ts, 19, 3))
+ >o : Symbol(o, Decl(constEnumPropertyAccess1.ts, 11, 3))
+->G.A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
++>G.A : Symbol(A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+ >G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
+->A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
++>A : Symbol(A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+ 
+ class C {
+ >C : Symbol(C, Decl(constEnumPropertyAccess1.ts, 19, 15))
+ 
+     [G.A]() { }
+->[G.A] : Symbol(C[G.A], Decl(constEnumPropertyAccess1.ts, 21, 9))
+->G.A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
++>[G.A] : Symbol([G.A], Decl(constEnumPropertyAccess1.ts, 21, 9))
++>G.A : Symbol(A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+ >G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
+->A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
++>A : Symbol(A, Decl(constEnumPropertyAccess1.ts, 4, 14))
+ 
+     get [G.B]() {
+->[G.B] : Symbol(C[G.B], Decl(constEnumPropertyAccess1.ts, 22, 15), Decl(constEnumPropertyAccess1.ts, 25, 5))
+->G.B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
++>[G.B] : Symbol([G.B], Decl(constEnumPropertyAccess1.ts, 22, 15), Decl(constEnumPropertyAccess1.ts, 25, 5))
++>G.B : Symbol(B, Decl(constEnumPropertyAccess1.ts, 5, 10))
+ >G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
+->B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
++>B : Symbol(B, Decl(constEnumPropertyAccess1.ts, 5, 10))
+ 
+         return true;
+     }
+     set [G.B](x: number) { }
+->[G.B] : Symbol(C[G.B], Decl(constEnumPropertyAccess1.ts, 22, 15), Decl(constEnumPropertyAccess1.ts, 25, 5))
+->G.B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
++>[G.B] : Symbol([G.B], Decl(constEnumPropertyAccess1.ts, 22, 15), Decl(constEnumPropertyAccess1.ts, 25, 5))
++>G.B : Symbol(B, Decl(constEnumPropertyAccess1.ts, 5, 10))
+ >G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
+->B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
++>B : Symbol(B, Decl(constEnumPropertyAccess1.ts, 5, 10))
+ >x : Symbol(x, Decl(constEnumPropertyAccess1.ts, 26, 14))
+ }
+ 

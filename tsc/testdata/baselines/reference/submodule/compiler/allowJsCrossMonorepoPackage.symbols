@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/allowJsCrossMonorepoPackage.ts] ////
+
+=== /packages/main/index.ts ===
+import { x } from "shared";
+>x : Symbol(x, Decl(index.ts, 0, 8))
+

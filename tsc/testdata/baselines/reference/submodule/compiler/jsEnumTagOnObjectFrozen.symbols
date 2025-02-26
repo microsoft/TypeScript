@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/jsEnumTagOnObjectFrozen.ts] ////
+
+=== usage.js ===
+const { Thing, useThing, cbThing } = require("./index");
+>Thing : Symbol(Thing, Decl(usage.js, 0, 7))
+>useThing : Symbol(useThing, Decl(usage.js, 0, 14))
+>cbThing : Symbol(cbThing, Decl(usage.js, 0, 24))
+
+useThing(Thing.a);
+>useThing : Symbol(useThing, Decl(usage.js, 0, 14))
+>Thing : Symbol(Thing, Decl(usage.js, 0, 7))
+
+/**
+ * @typedef {Object} LogEntry
+ * @property {string} type
+ * @property {number} time
+ */
+
+cbThing(type => {
+>cbThing : Symbol(cbThing, Decl(usage.js, 0, 24))
+>type : Symbol(type, Decl(usage.js, 10, 8))
+
+    /** @type {LogEntry} */
+    const logEntry = {
+>logEntry : Symbol(logEntry, Decl(usage.js, 12, 9))
+
+        time: Date.now(),
+>time : Symbol(time, Decl(usage.js, 12, 22))
+>Date.now : Symbol(now, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>now : Symbol(now, Decl(lib.es5.d.ts, --, --))
+
+        type,
+>type : Symbol(type, Decl(usage.js, 13, 25))
+
+    };
+});
+

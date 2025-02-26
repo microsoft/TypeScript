@@ -1,0 +1,12 @@
+--- old.javascriptImportDefaultBadExport.symbols
++++ new.javascriptImportDefaultBadExport.symbols
+@@= skipped -4, +4 lines =@@
+ >alias : Symbol(alias, Decl(a.js, 0, 5))
+ 
+ module.exports = alias;
+->module.exports : Symbol(module.exports, Decl(a.js, 0, 0))
+->module : Symbol(export=, Decl(a.js, 0, 17))
+->exports : Symbol(export=, Decl(a.js, 0, 17))
+ >alias : Symbol(alias, Decl(a.js, 0, 5))
+ 
+ === /b.js ===

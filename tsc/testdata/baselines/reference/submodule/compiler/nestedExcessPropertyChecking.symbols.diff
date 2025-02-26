@@ -1,0 +1,40 @@
+--- old.nestedExcessPropertyChecking.symbols
++++ new.nestedExcessPropertyChecking.symbols
+@@= skipped -41, +41 lines =@@
+ 
+ enum E { A = "A" }
+ >E : Symbol(E, Decl(nestedExcessPropertyChecking.ts, 12, 30))
+->A : Symbol(E.A, Decl(nestedExcessPropertyChecking.ts, 14, 8))
++>A : Symbol(A, Decl(nestedExcessPropertyChecking.ts, 14, 8))
+ 
+ let x: { nope?: any } = E.A;  // Error
+ >x : Symbol(x, Decl(nestedExcessPropertyChecking.ts, 16, 3))
+ >nope : Symbol(nope, Decl(nestedExcessPropertyChecking.ts, 16, 8))
+->E.A : Symbol(E.A, Decl(nestedExcessPropertyChecking.ts, 14, 8))
++>E.A : Symbol(A, Decl(nestedExcessPropertyChecking.ts, 14, 8))
+ >E : Symbol(E, Decl(nestedExcessPropertyChecking.ts, 12, 30))
+->A : Symbol(E.A, Decl(nestedExcessPropertyChecking.ts, 14, 8))
++>A : Symbol(A, Decl(nestedExcessPropertyChecking.ts, 14, 8))
+ 
+ let y: { nope?: any } = "A";  // Error
+ >y : Symbol(y, Decl(nestedExcessPropertyChecking.ts, 17, 3))
+@@= skipped -46, +46 lines =@@
+ 
+ interface Unrelated { _?: any }
+ >Unrelated : Symbol(Unrelated, Decl(nestedExcessPropertyChecking.ts, 29, 42))
+->_ : Symbol(Unrelated._, Decl(nestedExcessPropertyChecking.ts, 32, 21))
++>_ : Symbol(_, Decl(nestedExcessPropertyChecking.ts, 32, 21))
+ 
+ interface VariablesA { overrides?: OverridesInput; }
+ >VariablesA : Symbol(VariablesA, Decl(nestedExcessPropertyChecking.ts, 32, 31))
+->overrides : Symbol(VariablesA.overrides, Decl(nestedExcessPropertyChecking.ts, 34, 22))
++>overrides : Symbol(overrides, Decl(nestedExcessPropertyChecking.ts, 34, 22))
+ >OverridesInput : Symbol(OverridesInput, Decl(nestedExcessPropertyChecking.ts, 17, 28))
+ 
+ interface VariablesB { overrides?: OverridesInput; }
+ >VariablesB : Symbol(VariablesB, Decl(nestedExcessPropertyChecking.ts, 34, 52))
+->overrides : Symbol(VariablesB.overrides, Decl(nestedExcessPropertyChecking.ts, 35, 22))
++>overrides : Symbol(overrides, Decl(nestedExcessPropertyChecking.ts, 35, 22))
+ >OverridesInput : Symbol(OverridesInput, Decl(nestedExcessPropertyChecking.ts, 17, 28))
+ 
+ const foo2: Unrelated & { variables: VariablesA & VariablesB } = {

@@ -1,0 +1,29 @@
+--- old.restParameterAssignmentCompatibility.symbols
++++ new.restParameterAssignmentCompatibility.symbols
+@@= skipped -4, +4 lines =@@
+ >T : Symbol(T, Decl(restParameterAssignmentCompatibility.ts, 0, 0))
+ 
+     m(...p3) {
+->m : Symbol(T.m, Decl(restParameterAssignmentCompatibility.ts, 0, 9))
++>m : Symbol(m, Decl(restParameterAssignmentCompatibility.ts, 0, 9))
+ >p3 : Symbol(p3, Decl(restParameterAssignmentCompatibility.ts, 1, 6))
+ 
+     }
+@@= skipped -10, +10 lines =@@
+ >S : Symbol(S, Decl(restParameterAssignmentCompatibility.ts, 4, 1))
+ 
+     m(p1, p2) {
+->m : Symbol(S.m, Decl(restParameterAssignmentCompatibility.ts, 6, 9))
++>m : Symbol(m, Decl(restParameterAssignmentCompatibility.ts, 6, 9))
+ >p1 : Symbol(p1, Decl(restParameterAssignmentCompatibility.ts, 7, 6))
+ >p2 : Symbol(p2, Decl(restParameterAssignmentCompatibility.ts, 7, 9))
+ 
+@@= skipped -25, +25 lines =@@
+ >T1 : Symbol(T1, Decl(restParameterAssignmentCompatibility.ts, 16, 6))
+ 
+     m(p1?, p2?) {
+->m : Symbol(T1.m, Decl(restParameterAssignmentCompatibility.ts, 18, 10))
++>m : Symbol(m, Decl(restParameterAssignmentCompatibility.ts, 18, 10))
+ >p1 : Symbol(p1, Decl(restParameterAssignmentCompatibility.ts, 19, 6))
+ >p2 : Symbol(p2, Decl(restParameterAssignmentCompatibility.ts, 19, 10))
+ 

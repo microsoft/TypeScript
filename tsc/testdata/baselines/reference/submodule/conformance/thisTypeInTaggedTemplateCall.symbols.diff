@@ -1,0 +1,28 @@
+--- old.thisTypeInTaggedTemplateCall.symbols
++++ new.thisTypeInTaggedTemplateCall.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(thisTypeInTaggedTemplateCall.ts, 0, 0))
+ 
+     static m<T>(this: new () => T, strings: TemplateStringsArray | string) {
+->m : Symbol(Foo.m, Decl(thisTypeInTaggedTemplateCall.ts, 0, 11))
++>m : Symbol(m, Decl(thisTypeInTaggedTemplateCall.ts, 0, 11))
+ >T : Symbol(T, Decl(thisTypeInTaggedTemplateCall.ts, 1, 13))
+ >this : Symbol(this, Decl(thisTypeInTaggedTemplateCall.ts, 1, 16))
+ >T : Symbol(T, Decl(thisTypeInTaggedTemplateCall.ts, 1, 13))
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ Foo.m`test`;
+->Foo.m : Symbol(Foo.m, Decl(thisTypeInTaggedTemplateCall.ts, 0, 11))
++>Foo.m : Symbol(m, Decl(thisTypeInTaggedTemplateCall.ts, 0, 11))
+ >Foo : Symbol(Foo, Decl(thisTypeInTaggedTemplateCall.ts, 0, 0))
+->m : Symbol(Foo.m, Decl(thisTypeInTaggedTemplateCall.ts, 0, 11))
++>m : Symbol(m, Decl(thisTypeInTaggedTemplateCall.ts, 0, 11))
+ 
+ (Foo.m)`test`;
+->Foo.m : Symbol(Foo.m, Decl(thisTypeInTaggedTemplateCall.ts, 0, 11))
++>Foo.m : Symbol(m, Decl(thisTypeInTaggedTemplateCall.ts, 0, 11))
+ >Foo : Symbol(Foo, Decl(thisTypeInTaggedTemplateCall.ts, 0, 0))
+->m : Symbol(Foo.m, Decl(thisTypeInTaggedTemplateCall.ts, 0, 11))
++>m : Symbol(m, Decl(thisTypeInTaggedTemplateCall.ts, 0, 11))
+ 

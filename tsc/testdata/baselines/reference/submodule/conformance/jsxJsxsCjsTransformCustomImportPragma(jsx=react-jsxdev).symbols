@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformCustomImportPragma.tsx] ////
+
+=== react.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxImportSource react */
+import "./preact";
+const a = <>
+>a : Symbol(a, Decl(react.tsx, 3, 5))
+
+  <p></p>
+  text
+  <div className="foo"></div>
+>className : Symbol(className, Decl(react.tsx, 6, 6))
+
+</>
+
+export {};
+=== preact.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxImportSource preact */
+const a = <>
+>a : Symbol(a, Decl(preact.tsx, 2, 5))
+
+  <p></p>
+  text
+  <div className="foo"></div>
+>className : Symbol(className, Decl(preact.tsx, 5, 6))
+
+</>
+
+export {};

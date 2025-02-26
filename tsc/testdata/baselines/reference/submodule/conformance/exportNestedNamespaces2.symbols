@@ -1,0 +1,34 @@
+//// [tests/cases/conformance/salsa/exportNestedNamespaces2.ts] ////
+
+=== mod.js ===
+
+// Based on a pattern from adonis
+exports.formatters = {}
+=== first.js ===
+exports = require('./mod')
+exports.formatters.j = function (v) {
+>v : Symbol(v, Decl(first.js, 1, 33))
+
+    return v
+>v : Symbol(v, Decl(first.js, 1, 33))
+}
+=== second.js ===
+exports = require('./mod')
+exports.formatters.o = function (v) {
+>v : Symbol(v, Decl(second.js, 1, 33))
+
+    return v
+>v : Symbol(v, Decl(second.js, 1, 33))
+}
+
+=== use.js ===
+import * as debug from './mod'
+>debug : Symbol(debug, Decl(use.js, 0, 6))
+
+debug.formatters.j
+>debug : Symbol(debug, Decl(use.js, 0, 6))
+
+var one = debug.formatters.o(1)
+>one : Symbol(one, Decl(use.js, 3, 3))
+>debug : Symbol(debug, Decl(use.js, 0, 6))
+

@@ -1,0 +1,71 @@
+--- old.capturedLetConstInLoop9_ES6.symbols
++++ new.capturedLetConstInLoop9_ES6.symbols
+@@= skipped -54, +54 lines =@@
+ >A : Symbol(A, Decl(capturedLetConstInLoop9_ES6.ts, 24, 5))
+ 
+         m() {
+->m : Symbol(A.m, Decl(capturedLetConstInLoop9_ES6.ts, 26, 13))
++>m : Symbol(m, Decl(capturedLetConstInLoop9_ES6.ts, 26, 13))
+ 
+             return x + 1;
+ >x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 1, 7))
+@@= skipped -73, +73 lines =@@
+ >z1 : Symbol(z1, Decl(capturedLetConstInLoop9_ES6.ts, 67, 21))
+ >x1 : Symbol(x1, Decl(capturedLetConstInLoop9_ES6.ts, 67, 33))
+ >y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 67, 38))
+->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+ >arguments : Symbol(arguments)
+->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+ 
+             if (b === 1) {
+ >b : Symbol(b, Decl(capturedLetConstInLoop9_ES6.ts, 66, 16))
+@@= skipped -95, +93 lines =@@
+ >C : Symbol(C, Decl(capturedLetConstInLoop9_ES6.ts, 119, 1))
+ 
+     constructor(private N: number) { }
+->N : Symbol(C.N, Decl(capturedLetConstInLoop9_ES6.ts, 122, 16))
++>N : Symbol(N, Decl(capturedLetConstInLoop9_ES6.ts, 122, 16))
+ 
+     foo() {
+->foo : Symbol(C.foo, Decl(capturedLetConstInLoop9_ES6.ts, 122, 38))
++>foo : Symbol(foo, Decl(capturedLetConstInLoop9_ES6.ts, 122, 38))
+ 
+         for (let i = 0; i < 100; i++) {
+ >i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 124, 16))
+@@= skipped -12, +12 lines =@@
+ 
+             let f = () => this.N * i;
+ >f : Symbol(f, Decl(capturedLetConstInLoop9_ES6.ts, 125, 15))
+->this.N : Symbol(C.N, Decl(capturedLetConstInLoop9_ES6.ts, 122, 16))
++>this.N : Symbol(N, Decl(capturedLetConstInLoop9_ES6.ts, 122, 16))
+ >this : Symbol(C, Decl(capturedLetConstInLoop9_ES6.ts, 119, 1))
+->N : Symbol(C.N, Decl(capturedLetConstInLoop9_ES6.ts, 122, 16))
++>N : Symbol(N, Decl(capturedLetConstInLoop9_ES6.ts, 122, 16))
+ >i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 124, 16))
+         }
+     }
+@@= skipped -13, +13 lines =@@
+ 
+     let x = arguments.length;
+ >x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 131, 7))
+->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+ >arguments : Symbol(arguments)
+->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+ 
+     for (let y of []) {
+ >y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 132, 12))
+ 
+         let z = arguments.length;
+ >z : Symbol(z, Decl(capturedLetConstInLoop9_ES6.ts, 133, 11))
+->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+ >arguments : Symbol(arguments)
+->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+ 
+         (function() { return y + z + arguments.length; });
+ >y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 132, 12))
+ >z : Symbol(z, Decl(capturedLetConstInLoop9_ES6.ts, 133, 11))
+->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+ >arguments : Symbol(arguments)
+->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+     }
+ }

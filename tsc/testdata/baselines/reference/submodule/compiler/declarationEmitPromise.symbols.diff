@@ -1,0 +1,71 @@
+--- old.declarationEmitPromise.symbols
++++ new.declarationEmitPromise.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(declarationEmitPromise.ts, 0, 22))
+ 
+     static all: Array<bluebird<any>>;
+->all : Symbol(bluebird.all, Decl(declarationEmitPromise.ts, 0, 26))
+->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>all : Symbol(all, Decl(declarationEmitPromise.ts, 0, 26))
++>Array : Symbol(Array)
+ >bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
+ }
+ 
+@@= skipped -32, +32 lines =@@
+ 
+     let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => !!el));
+ >result : Symbol(result, Decl(declarationEmitPromise.ts, 6, 7))
+->bluebird.all : Symbol(bluebird.all, Decl(declarationEmitPromise.ts, 0, 26))
++>bluebird.all : Symbol(all, Decl(declarationEmitPromise.ts, 0, 26))
+ >bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
+->all : Symbol(bluebird.all, Decl(declarationEmitPromise.ts, 0, 26))
+->[a, b, c, d, e].filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>all : Symbol(all, Decl(declarationEmitPromise.ts, 0, 26))
+ >a : Symbol(a, Decl(declarationEmitPromise.ts, 4, 52))
+ >b : Symbol(b, Decl(declarationEmitPromise.ts, 5, 19))
+ >c : Symbol(c, Decl(declarationEmitPromise.ts, 5, 36))
+ >d : Symbol(d, Decl(declarationEmitPromise.ts, 5, 53))
+ >e : Symbol(e, Decl(declarationEmitPromise.ts, 5, 70))
+->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >el : Symbol(el, Decl(declarationEmitPromise.ts, 6, 68))
+ >el : Symbol(el, Decl(declarationEmitPromise.ts, 6, 68))
+ 
+@@= skipped -31, +29 lines =@@
+ >T : Symbol(T, Decl(declarationEmitPromise.ts, 7, 16))
+ 
+         f.apply(this, result);
+->f.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+ >f : Symbol(f, Decl(declarationEmitPromise.ts, 7, 19))
+->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+ >result : Symbol(result, Decl(declarationEmitPromise.ts, 6, 7))
+ 
+     let rfunc: typeof func & {} = func as any; // <- This is the only difference
+@@= skipped -41, +39 lines =@@
+ 
+     let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => !!el));
+ >result : Symbol(result, Decl(declarationEmitPromise.ts, 15, 7))
+->bluebird.all : Symbol(bluebird.all, Decl(declarationEmitPromise.ts, 0, 26))
++>bluebird.all : Symbol(all, Decl(declarationEmitPromise.ts, 0, 26))
+ >bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
+->all : Symbol(bluebird.all, Decl(declarationEmitPromise.ts, 0, 26))
+->[a, b, c, d, e].filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>all : Symbol(all, Decl(declarationEmitPromise.ts, 0, 26))
+ >a : Symbol(a, Decl(declarationEmitPromise.ts, 13, 53))
+ >b : Symbol(b, Decl(declarationEmitPromise.ts, 14, 19))
+ >c : Symbol(c, Decl(declarationEmitPromise.ts, 14, 36))
+ >d : Symbol(d, Decl(declarationEmitPromise.ts, 14, 53))
+ >e : Symbol(e, Decl(declarationEmitPromise.ts, 14, 70))
+->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >el : Symbol(el, Decl(declarationEmitPromise.ts, 15, 68))
+ >el : Symbol(el, Decl(declarationEmitPromise.ts, 15, 68))
+ 
+@@= skipped -31, +29 lines =@@
+ >T : Symbol(T, Decl(declarationEmitPromise.ts, 16, 16))
+ 
+         f.apply(this, result);
+->f.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+ >f : Symbol(f, Decl(declarationEmitPromise.ts, 16, 19))
+->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+ >result : Symbol(result, Decl(declarationEmitPromise.ts, 15, 7))
+ 
+     let rfunc: typeof func = func as any; // <- This is the only difference

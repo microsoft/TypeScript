@@ -1,0 +1,26 @@
+--- old.controlFlowWithIncompleteTypes.symbols
++++ new.controlFlowWithIncompleteTypes.symbols
+@@= skipped -19, +19 lines =@@
+ 
+             x = x.slice();
+ >x : Symbol(x, Decl(controlFlowWithIncompleteTypes.ts, 5, 7))
+->x.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>x.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowWithIncompleteTypes.ts, 5, 7))
+->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+         }
+         else {
+             x = "abc";
+@@= skipped -29, +29 lines =@@
+         else {
+             x = x.slice();
+ >x : Symbol(x, Decl(controlFlowWithIncompleteTypes.ts, 17, 7))
+->x.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>x.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowWithIncompleteTypes.ts, 17, 7))
+->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+         }
+     }
+ }

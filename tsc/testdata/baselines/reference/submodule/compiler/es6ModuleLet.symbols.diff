@@ -1,0 +1,14 @@
+--- old.es6ModuleLet.symbols
++++ new.es6ModuleLet.symbols
+@@= skipped -59, +59 lines =@@
+ 
+     let n = m1.k;
+ >n : Symbol(n, Decl(es6ModuleLet.ts, 13, 7))
+->m1.k : Symbol(m1.k, Decl(es6ModuleLet.ts, 5, 14))
++>m1.k : Symbol(k, Decl(es6ModuleLet.ts, 5, 14))
+ >m1 : Symbol(m1, Decl(es6ModuleLet.ts, 3, 25))
+->k : Symbol(m1.k, Decl(es6ModuleLet.ts, 5, 14))
++>k : Symbol(k, Decl(es6ModuleLet.ts, 5, 14))
+ 
+     let o: string = n, p = k;
+ >o : Symbol(o, Decl(es6ModuleLet.ts, 14, 7))

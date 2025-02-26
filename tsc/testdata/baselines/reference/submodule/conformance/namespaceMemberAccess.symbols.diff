@@ -1,0 +1,11 @@
+--- old.namespaceMemberAccess.symbols
++++ new.namespaceMemberAccess.symbols
+@@= skipped -2, +2 lines =@@
+ === /a.ts ===
+ class A { a!: string }
+ >A : Symbol(A, Decl(a.ts, 0, 0))
+->a : Symbol(A.a, Decl(a.ts, 0, 9))
++>a : Symbol(a, Decl(a.ts, 0, 9))
+ 
+ export type { A };
+ >A : Symbol(A, Decl(a.ts, 1, 13))

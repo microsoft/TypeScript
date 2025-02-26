@@ -1,0 +1,47 @@
+--- old.classVarianceCircularity.symbols
++++ new.classVarianceCircularity.symbols
+@@= skipped -11, +11 lines =@@
+ 
+     // Uncomment to create error
+     console.log(b.Value);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->b.Value : Symbol(Bar.Value, Decl(classVarianceCircularity.ts, 11, 43))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>b.Value : Symbol(Value, Decl(classVarianceCircularity.ts, 11, 43))
+ >b : Symbol(b, Decl(classVarianceCircularity.ts, 3, 9))
+->Value : Symbol(Bar.Value, Decl(classVarianceCircularity.ts, 11, 43))
++>Value : Symbol(Value, Decl(classVarianceCircularity.ts, 11, 43))
+ }
+ 
+ class Bar<T> {
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(classVarianceCircularity.ts, 8, 10))
+ 
+     num!: number;
+->num : Symbol(Bar.num, Decl(classVarianceCircularity.ts, 8, 14))
++>num : Symbol(num, Decl(classVarianceCircularity.ts, 8, 14))
+ 
+     // Or swap these two lines
+     Field: number = (this as Bar<any>).num;
+->Field : Symbol(Bar.Field, Decl(classVarianceCircularity.ts, 9, 17))
+->(this as Bar<any>).num : Symbol(Bar.num, Decl(classVarianceCircularity.ts, 8, 14))
++>Field : Symbol(Field, Decl(classVarianceCircularity.ts, 9, 17))
++>(this as Bar<any>).num : Symbol(num, Decl(classVarianceCircularity.ts, 8, 14))
+ >this : Symbol(Bar, Decl(classVarianceCircularity.ts, 6, 1))
+ >Bar : Symbol(Bar, Decl(classVarianceCircularity.ts, 6, 1))
+->num : Symbol(Bar.num, Decl(classVarianceCircularity.ts, 8, 14))
++>num : Symbol(num, Decl(classVarianceCircularity.ts, 8, 14))
+ 
+     Value = (this as Bar<any>).num;
+->Value : Symbol(Bar.Value, Decl(classVarianceCircularity.ts, 11, 43))
+->(this as Bar<any>).num : Symbol(Bar.num, Decl(classVarianceCircularity.ts, 8, 14))
++>Value : Symbol(Value, Decl(classVarianceCircularity.ts, 11, 43))
++>(this as Bar<any>).num : Symbol(num, Decl(classVarianceCircularity.ts, 8, 14))
+ >this : Symbol(Bar, Decl(classVarianceCircularity.ts, 6, 1))
+ >Bar : Symbol(Bar, Decl(classVarianceCircularity.ts, 6, 1))
+->num : Symbol(Bar.num, Decl(classVarianceCircularity.ts, 8, 14))
++>num : Symbol(num, Decl(classVarianceCircularity.ts, 8, 14))
+ }

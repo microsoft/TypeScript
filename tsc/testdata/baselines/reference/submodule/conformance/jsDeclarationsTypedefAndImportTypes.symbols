@@ -1,0 +1,51 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefAndImportTypes.ts] ////
+
+=== conn.js ===
+/**
+ * @typedef {string | number} Whatever
+ */
+
+class Conn {
+>Conn : Symbol(Conn, Decl(conn.js, 0, 0))
+
+    constructor() {}
+    item = 3;
+>item : Symbol(item, Decl(conn.js, 5, 20))
+
+    method() {}
+>method : Symbol(method, Decl(conn.js, 6, 13))
+}
+
+module.exports = Conn;
+>Conn : Symbol(Conn, Decl(conn.js, 0, 0))
+
+=== usage.js ===
+/**
+ * @typedef {import("./conn")} Conn
+ */
+
+class Wrap {
+>Wrap : Symbol(Wrap, Decl(usage.js, 0, 0))
+
+    /**
+     * @param {Conn} c
+     */
+    constructor(c) {
+>c : Symbol(c, Decl(usage.js, 8, 16))
+
+        this.connItem = c.item;
+>this : Symbol(Wrap, Decl(usage.js, 0, 0))
+>c : Symbol(c, Decl(usage.js, 8, 16))
+
+        /** @type {import("./conn").Whatever} */
+        this.another = "";
+>this : Symbol(Wrap, Decl(usage.js, 0, 0))
+    }
+}
+
+module.exports = {
+    Wrap
+>Wrap : Symbol(Wrap, Decl(usage.js, 15, 18))
+
+};
+

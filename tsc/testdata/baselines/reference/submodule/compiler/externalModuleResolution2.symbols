@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/externalModuleResolution2.ts] ////
+
+=== consumer.ts ===
+import x = require('./foo');
+>x : Symbol(x, Decl(consumer.ts, 0, 0))
+
+x.X // .ts should be picked
+>x.X : Symbol(X, Decl(foo.ts, 1, 14))
+>x : Symbol(x, Decl(consumer.ts, 0, 0))
+>X : Symbol(X, Decl(foo.ts, 1, 14))
+
+=== foo.ts ===
+module M2 {
+>M2 : Symbol(M2, Decl(foo.ts, 0, 0))
+
+    export var X = 1;
+>X : Symbol(X, Decl(foo.ts, 1, 14))
+}
+export = M2
+>M2 : Symbol(M2, Decl(foo.ts, 0, 0))
+

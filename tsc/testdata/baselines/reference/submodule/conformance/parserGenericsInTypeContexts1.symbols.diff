@@ -1,0 +1,20 @@
+--- old.parserGenericsInTypeContexts1.symbols
++++ new.parserGenericsInTypeContexts1.symbols
+@@= skipped -19, +19 lines =@@
+ var v3: E.F<T>;
+ >v3 : Symbol(v3, Decl(parserGenericsInTypeContexts1.ts, 5, 3), Decl(parserGenericsInTypeContexts1.ts, 6, 3))
+ >E : Symbol(E)
+->F : Symbol(E.F)
++>F : Symbol(F)
+ >T : Symbol(T)
+ 
+ var v3: G.H.I<T>;
+ >v3 : Symbol(v3, Decl(parserGenericsInTypeContexts1.ts, 5, 3), Decl(parserGenericsInTypeContexts1.ts, 6, 3))
+ >G : Symbol(G)
+->H : Symbol(G.H)
+->I : Symbol(G.H.I)
++>H : Symbol(H)
++>I : Symbol(I)
+ >T : Symbol(T)
+ 
+ var v6: K<T>[];

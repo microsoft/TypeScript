@@ -1,0 +1,66 @@
+--- old.excessPropertyChecksWithNestedIntersections.symbols
++++ new.excessPropertyChecksWithNestedIntersections.symbols
+@@= skipped -6, +6 lines =@@
+ >A : Symbol(A, Decl(excessPropertyChecksWithNestedIntersections.ts, 0, 0))
+ 
+     x: string
+->x : Symbol(A.x, Decl(excessPropertyChecksWithNestedIntersections.ts, 2, 13))
++>x : Symbol(x, Decl(excessPropertyChecksWithNestedIntersections.ts, 2, 13))
+ }
+ 
+ interface B {
+ >B : Symbol(B, Decl(excessPropertyChecksWithNestedIntersections.ts, 4, 1))
+ 
+     a: A;
+->a : Symbol(B.a, Decl(excessPropertyChecksWithNestedIntersections.ts, 6, 13))
++>a : Symbol(a, Decl(excessPropertyChecksWithNestedIntersections.ts, 6, 13))
+ >A : Symbol(A, Decl(excessPropertyChecksWithNestedIntersections.ts, 0, 0))
+ }
+ 
+@@= skipped -15, +15 lines =@@
+ >C : Symbol(C, Decl(excessPropertyChecksWithNestedIntersections.ts, 8, 1))
+ 
+     c: number;
+->c : Symbol(C.c, Decl(excessPropertyChecksWithNestedIntersections.ts, 10, 13))
++>c : Symbol(c, Decl(excessPropertyChecksWithNestedIntersections.ts, 10, 13))
+ }
+ 
+ type D = B & C;
+@@= skipped -121, +121 lines =@@
+ >TypeC : Symbol(TypeC, Decl(excessPropertyChecksWithNestedIntersections.ts, 48, 95))
+ 
+     foo: string;
+->foo : Symbol(TypeC.foo, Decl(excessPropertyChecksWithNestedIntersections.ts, 50, 17))
++>foo : Symbol(foo, Decl(excessPropertyChecksWithNestedIntersections.ts, 50, 17))
+ 
+     bar: string;
+->bar : Symbol(TypeC.bar, Decl(excessPropertyChecksWithNestedIntersections.ts, 51, 16))
++>bar : Symbol(bar, Decl(excessPropertyChecksWithNestedIntersections.ts, 51, 16))
+ }
+ 
+ interface TypeB {
+ >TypeB : Symbol(TypeB, Decl(excessPropertyChecksWithNestedIntersections.ts, 53, 1))
+ 
+     foo: string,
+->foo : Symbol(TypeB.foo, Decl(excessPropertyChecksWithNestedIntersections.ts, 55, 17))
++>foo : Symbol(foo, Decl(excessPropertyChecksWithNestedIntersections.ts, 55, 17))
+ 
+     bar: TypeC
+->bar : Symbol(TypeB.bar, Decl(excessPropertyChecksWithNestedIntersections.ts, 56, 16))
++>bar : Symbol(bar, Decl(excessPropertyChecksWithNestedIntersections.ts, 56, 16))
+ >TypeC : Symbol(TypeC, Decl(excessPropertyChecksWithNestedIntersections.ts, 48, 95))
+ }
+ 
+@@= skipped -21, +21 lines =@@
+ >TypeA : Symbol(TypeA, Decl(excessPropertyChecksWithNestedIntersections.ts, 58, 1))
+ 
+     foo: string,
+->foo : Symbol(TypeA.foo, Decl(excessPropertyChecksWithNestedIntersections.ts, 60, 17))
++>foo : Symbol(foo, Decl(excessPropertyChecksWithNestedIntersections.ts, 60, 17))
+ 
+     bar: TypeB,
+->bar : Symbol(TypeA.bar, Decl(excessPropertyChecksWithNestedIntersections.ts, 61, 16))
++>bar : Symbol(bar, Decl(excessPropertyChecksWithNestedIntersections.ts, 61, 16))
+ >TypeB : Symbol(TypeB, Decl(excessPropertyChecksWithNestedIntersections.ts, 53, 1))
+ }
+ 

@@ -1,0 +1,49 @@
+--- old.filterNamespace_import.symbols
++++ new.filterNamespace_import.symbols
+@@= skipped -19, +19 lines =@@
+ >NestedClass : Symbol(NestedClass, Decl(ns.ts, 4, 27))
+ 
+       a!: string;
+->a : Symbol(NestedClass.a, Decl(ns.ts, 5, 30))
++>a : Symbol(a, Decl(ns.ts, 5, 30))
+     }
+   }
+ }
+@@= skipped -13, +13 lines =@@
+ >ns : Symbol(ns, Decl(a.ts, 0, 6))
+ 
+ ns.Class; // Error
+->ns.Class : Symbol(ns.Class, Decl(ns.ts, 1, 28))
++>ns.Class : Symbol(Class, Decl(ns.ts, 1, 28))
+ >ns : Symbol(ns, Decl(a.ts, 0, 6))
+->Class : Symbol(ns.Class, Decl(ns.ts, 1, 28))
++>Class : Symbol(Class, Decl(ns.ts, 1, 28))
+ 
+ ns.Value; // Error
+->ns.Value : Symbol(ns.Value, Decl(ns.ts, 3, 14))
++>ns.Value : Symbol(Value, Decl(ns.ts, 3, 14))
+ >ns : Symbol(ns, Decl(a.ts, 0, 6))
+->Value : Symbol(ns.Value, Decl(ns.ts, 3, 14))
++>Value : Symbol(Value, Decl(ns.ts, 3, 14))
+ 
+ let c: ns.Class;
+ >c : Symbol(c, Decl(a.ts, 3, 3))
+ >ns : Symbol(ns, Decl(a.ts, 0, 6))
+->Class : Symbol(ns.Class, Decl(ns.ts, 1, 28))
++>Class : Symbol(Class, Decl(ns.ts, 1, 28))
+ 
+ let t: ns.Type = "";
+ >t : Symbol(t, Decl(a.ts, 4, 3))
+ >ns : Symbol(ns, Decl(a.ts, 0, 6))
+->Type : Symbol(ns.Type, Decl(ns.ts, 0, 14))
++>Type : Symbol(Type, Decl(ns.ts, 0, 14))
+ 
+ let n: ns.nested.NestedClass = { a: '' };
+ >n : Symbol(n, Decl(a.ts, 5, 3))
+ >ns : Symbol(ns, Decl(a.ts, 0, 6))
+->nested : Symbol(ns.nested, Decl(ns.ts, 3, 26))
+->NestedClass : Symbol(ns.nested.NestedClass, Decl(ns.ts, 4, 27))
++>nested : Symbol(nested, Decl(ns.ts, 3, 26))
++>NestedClass : Symbol(NestedClass, Decl(ns.ts, 4, 27))
+ >a : Symbol(a, Decl(a.ts, 5, 32))
+ 

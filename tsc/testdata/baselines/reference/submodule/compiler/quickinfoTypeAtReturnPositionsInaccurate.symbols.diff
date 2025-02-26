@@ -1,0 +1,179 @@
+--- old.quickinfoTypeAtReturnPositionsInaccurate.symbols
++++ new.quickinfoTypeAtReturnPositionsInaccurate.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 15))
+ 
+     private value!: T;
+->value : Symbol(NumClass.value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 34))
++>value : Symbol(value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 34))
+ >T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 15))
+ 
+     public get(): T {
+->get : Symbol(NumClass.get, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 1, 22))
++>get : Symbol(get, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 1, 22))
+ >T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 15))
+ 
+         return this.value;
+->this.value : Symbol(NumClass.value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 34))
++>this.value : Symbol(value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 34))
+ >this : Symbol(NumClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 0))
+->value : Symbol(NumClass.value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 34))
++>value : Symbol(value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 34))
+     }
+     public numExclusive() { }
+->numExclusive : Symbol(NumClass.numExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 4, 5))
++>numExclusive : Symbol(numExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 4, 5))
+ }
+ 
+ class StrClass<T extends string> {
+@@= skipped -21, +21 lines =@@
+ >T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 8, 15))
+ 
+     private value!: T;
+->value : Symbol(StrClass.value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 8, 34))
++>value : Symbol(value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 8, 34))
+ >T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 8, 15))
+ 
+     public get(): T {
+->get : Symbol(StrClass.get, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 9, 22))
++>get : Symbol(get, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 9, 22))
+ >T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 8, 15))
+ 
+         return this.value;
+->this.value : Symbol(StrClass.value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 8, 34))
++>this.value : Symbol(value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 8, 34))
+ >this : Symbol(StrClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 6, 1))
+->value : Symbol(StrClass.value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 8, 34))
++>value : Symbol(value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 8, 34))
+     }
+     public strExclusive() { }
+->strExclusive : Symbol(StrClass.strExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 12, 5))
++>strExclusive : Symbol(strExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 12, 5))
+ }
+ 
+ const isNumClass = <Item extends NumClass<number> | StrClass<string>> (
+@@= skipped -49, +49 lines =@@
+ >StrClass : Symbol(StrClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 6, 1))
+ 
+     private entries = { } as Entries;
+->entries : Symbol(SimpleStore.entries, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 26, 93))
++>entries : Symbol(entries, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 26, 93))
+ >Entries : Symbol(Entries, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 26, 18))
+ 
+     public get<EntryId extends keyof Entries>(entryId: EntryId): Entries[EntryId] {
+->get : Symbol(SimpleStore.get, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 27, 37))
++>get : Symbol(get, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 27, 37))
+ >EntryId : Symbol(EntryId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 29, 15))
+ >Entries : Symbol(Entries, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 26, 18))
+ >entryId : Symbol(entryId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 29, 46))
+@@= skipped -14, +14 lines =@@
+ 
+         let entry = this.entries[entryId];
+ >entry : Symbol(entry, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 30, 11))
+->this.entries : Symbol(SimpleStore.entries, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 26, 93))
++>this.entries : Symbol(entries, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 26, 93))
+ >this : Symbol(SimpleStore, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 20, 5))
+->entries : Symbol(SimpleStore.entries, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 26, 93))
++>entries : Symbol(entries, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 26, 93))
+ >entryId : Symbol(entryId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 29, 46))
+ 
+         entry.numExclusive(); // error - expected.
+@@= skipped -13, +13 lines =@@
+ >entry : Symbol(entry, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 30, 11))
+ 
+             entry.numExclusive(); // works
+->entry.numExclusive : Symbol(NumClass.numExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 4, 5))
++>entry.numExclusive : Symbol(numExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 4, 5))
+ >entry : Symbol(entry, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 30, 11))
+->numExclusive : Symbol(NumClass.numExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 4, 5))
++>numExclusive : Symbol(numExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 4, 5))
+ 
+             return entry;
+ >entry : Symbol(entry, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 30, 11))
+@@= skipped -36, +36 lines =@@
+ >Slice : Symbol(Slice, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 41, 1))
+ 
+     private slices = { } as Slices;
+->slices : Symbol(ComplexStore.slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 63))
++>slices : Symbol(slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 63))
+ >Slices : Symbol(Slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 19))
+ 
+     public get<SliceId extends keyof Slices, SliceKey extends keyof Slices[SliceId]>(
+->get : Symbol(ComplexStore.get, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 55, 35))
++>get : Symbol(get, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 55, 35))
+ >SliceId : Symbol(SliceId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 57, 15))
+ >Slices : Symbol(Slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 19))
+ >SliceKey : Symbol(SliceKey, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 57, 44))
+@@= skipped -24, +24 lines =@@
+ 
+         let item = this.slices[sliceId][sliceKey];
+ >item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 60, 11))
+->this.slices : Symbol(ComplexStore.slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 63))
++>this.slices : Symbol(slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 63))
+ >this : Symbol(ComplexStore, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 45, 1))
+->slices : Symbol(ComplexStore.slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 63))
++>slices : Symbol(slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 63))
+ >sliceId : Symbol(sliceId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 57, 85))
+ >sliceKey : Symbol(sliceKey, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 58, 25))
+ 
+@@= skipped -11, +11 lines =@@
+ >item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 60, 11))
+ 
+             item.numExclusive(); // works only since version 4.2
+->item.numExclusive : Symbol(NumClass.numExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 4, 5))
++>item.numExclusive : Symbol(numExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 4, 5))
+ >item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 60, 11))
+->numExclusive : Symbol(NumClass.numExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 4, 5))
++>numExclusive : Symbol(numExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 4, 5))
+         }
+ 
+         item.get();
+@@= skipped -18, +18 lines =@@
+     }
+ 
+     public get2<SliceId extends keyof Slices, SliceKey extends keyof Slices[SliceId]>(
+->get2 : Symbol(ComplexStore.get2, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 72, 5))
++>get2 : Symbol(get2, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 72, 5))
+ >SliceId : Symbol(SliceId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 74, 16))
+ >Slices : Symbol(Slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 19))
+ >SliceKey : Symbol(SliceKey, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 74, 45))
+@@= skipped -20, +20 lines =@@
+ 
+         let item = this.slices[sliceId][sliceKey];
+ >item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 77, 11))
+->this.slices : Symbol(ComplexStore.slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 63))
++>this.slices : Symbol(slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 63))
+ >this : Symbol(ComplexStore, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 45, 1))
+->slices : Symbol(ComplexStore.slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 63))
++>slices : Symbol(slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 63))
+ >sliceId : Symbol(sliceId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 74, 86))
+ >sliceKey : Symbol(sliceKey, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 75, 25))
+ 
+@@= skipped -31, +31 lines =@@
+ >BuilderProgram : Symbol(BuilderProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 89, 1))
+ 
+     getProgram(): Program;
+->getProgram : Symbol(BuilderProgram.getProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 92, 26))
++>getProgram : Symbol(getProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 92, 26))
+ >Program : Symbol(Program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 94, 1))
+ }
+ interface Program {
+ >Program : Symbol(Program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 94, 1))
+ 
+     state: any;
+->state : Symbol(Program.state, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 95, 19))
++>state : Symbol(state, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 95, 19))
+ }
+ declare function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T;
+ >isBuilderProgram : Symbol(isBuilderProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 97, 1))
+@@= skipped -32, +32 lines =@@
+ >Program : Symbol(Program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 94, 1))
+ >isBuilderProgram : Symbol(isBuilderProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 97, 1))
+ >program : Symbol(program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 99, 52))
+->program.getProgram : Symbol(BuilderProgram.getProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 92, 26))
++>program.getProgram : Symbol(getProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 92, 26))
+ >program : Symbol(program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 99, 52))
+->getProgram : Symbol(BuilderProgram.getProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 92, 26))
++>getProgram : Symbol(getProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 92, 26))
+ >program : Symbol(program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 99, 52))
+ }

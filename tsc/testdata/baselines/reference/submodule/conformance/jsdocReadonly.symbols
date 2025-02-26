@@ -1,0 +1,46 @@
+//// [tests/cases/conformance/jsdoc/jsdocReadonly.ts] ////
+
+=== jsdocReadonly.js ===
+class LOL {
+>LOL : Symbol(LOL, Decl(jsdocReadonly.js, 0, 0))
+
+    /**
+     * @readonly
+     * @private
+     * @type {number}
+     * Order rules do not apply to JSDoc
+     */
+    x = 1
+>x : Symbol(x, Decl(jsdocReadonly.js, 0, 11))
+
+    /** @readonly */
+    y = 2
+>y : Symbol(y, Decl(jsdocReadonly.js, 7, 9))
+
+    /** @readonly Definitely not here */
+    static z = 3
+>z : Symbol(z, Decl(jsdocReadonly.js, 9, 9))
+
+    /** @readonly This is OK too */
+    constructor() {
+        /** ok */
+        this.y = 2
+>this.y : Symbol(y, Decl(jsdocReadonly.js, 7, 9))
+>this : Symbol(LOL, Decl(jsdocReadonly.js, 0, 0))
+>y : Symbol(y, Decl(jsdocReadonly.js, 7, 9))
+
+        /** @readonly ok */
+        this.ka = 2
+>this : Symbol(LOL, Decl(jsdocReadonly.js, 0, 0))
+    }
+}
+
+var l = new LOL()
+>l : Symbol(l, Decl(jsdocReadonly.js, 21, 3))
+>LOL : Symbol(LOL, Decl(jsdocReadonly.js, 0, 0))
+
+l.y = 12
+>l.y : Symbol(y, Decl(jsdocReadonly.js, 7, 9))
+>l : Symbol(l, Decl(jsdocReadonly.js, 21, 3))
+>y : Symbol(y, Decl(jsdocReadonly.js, 7, 9))
+

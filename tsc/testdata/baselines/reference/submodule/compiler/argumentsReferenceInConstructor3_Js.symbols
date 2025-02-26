@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/argumentsReferenceInConstructor3_Js.ts] ////
+
+=== /a.js ===
+class A {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+	get arguments() {
+>arguments : Symbol(arguments, Decl(a.js, 0, 9))
+
+		return { bar: {} };
+>bar : Symbol(bar, Decl(a.js, 2, 10))
+	}
+}
+
+class B extends A {
+>B : Symbol(B, Decl(a.js, 4, 1))
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+	/**
+	 * Constructor
+	 *
+	 * @param {object} [foo={}]
+	 */
+	constructor(foo = {}) {
+>foo : Symbol(foo, Decl(a.js, 12, 13))
+
+		super();
+>super : Symbol(A, Decl(a.js, 0, 0))
+
+		/**
+		 * @type object
+		 */
+		this.foo = foo;
+>this : Symbol(B, Decl(a.js, 4, 1))
+>foo : Symbol(foo, Decl(a.js, 12, 13))
+
+		/**
+		 * @type object
+		 */
+		this.bar = super.arguments.foo;
+>this : Symbol(B, Decl(a.js, 4, 1))
+>super.arguments : Symbol(arguments, Decl(a.js, 0, 9))
+>super : Symbol(A, Decl(a.js, 0, 0))
+>arguments : Symbol(arguments, Decl(a.js, 0, 9))
+	}
+}
+

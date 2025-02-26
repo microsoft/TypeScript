@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/jsEnumCrossFileExport.ts] ////
+
+=== enumDef.js ===
+var Host = {};
+>Host : Symbol(Host, Decl(enumDef.js, 0, 3))
+
+Host.UserMetrics = {};
+>Host : Symbol(Host, Decl(enumDef.js, 0, 3))
+
+/** @enum {number} */
+Host.UserMetrics.Action = {
+>Host : Symbol(Host, Decl(enumDef.js, 0, 3))
+
+    WindowDocked: 1,
+>WindowDocked : Symbol(WindowDocked, Decl(enumDef.js, 3, 27))
+
+    WindowUndocked: 2,
+>WindowUndocked : Symbol(WindowUndocked, Decl(enumDef.js, 4, 20))
+
+    ScriptsBreakpointSet: 3,
+>ScriptsBreakpointSet : Symbol(ScriptsBreakpointSet, Decl(enumDef.js, 5, 22))
+
+    TimelineStarted: 4,
+>TimelineStarted : Symbol(TimelineStarted, Decl(enumDef.js, 6, 28))
+
+};
+/**
+ * @typedef {string} Host.UserMetrics.Bargh
+ */
+/**
+ * @typedef {string}
+ */
+Host.UserMetrics.Blah = {
+>Host : Symbol(Host, Decl(enumDef.js, 0, 3))
+
+    x: 12
+>x : Symbol(x, Decl(enumDef.js, 15, 25))
+}
+=== index.js ===
+var Other = {};
+>Other : Symbol(Other, Decl(index.js, 0, 3))
+
+Other.Cls = class {
+>Other : Symbol(Other, Decl(index.js, 0, 3))
+
+    /**
+     * @param {!Host.UserMetrics.Action} p
+     */
+    method(p) {}
+>method : Symbol(method, Decl(index.js, 1, 19))
+>p : Symbol(p, Decl(index.js, 5, 11))
+
+    usage() {
+>usage : Symbol(usage, Decl(index.js, 5, 16))
+
+        this.method(Host.UserMetrics.Action.WindowDocked);
+>this.method : Symbol(method, Decl(index.js, 1, 19))
+>this : Symbol(Cls, Decl(index.js, 1, 11))
+>method : Symbol(method, Decl(index.js, 1, 19))
+>Host : Symbol(Host, Decl(enumDef.js, 0, 3))
+    }
+}
+
+/**
+ * @type {Host.UserMetrics.Bargh}
+ */
+var x = "ok";
+>x : Symbol(x, Decl(index.js, 14, 3))
+
+/**
+ * @type {Host.UserMetrics.Blah}
+ */
+var y = "ok";
+>y : Symbol(y, Decl(index.js, 19, 3))
+

@@ -1,0 +1,41 @@
+--- old.privateNameMethodAssignment.symbols
++++ new.privateNameMethodAssignment.symbols
+@@= skipped -4, +4 lines =@@
+ >A3 : Symbol(A3, Decl(privateNameMethodAssignment.ts, 0, 0))
+ 
+     #method() { };
+->#method : Symbol(A3.#method, Decl(privateNameMethodAssignment.ts, 0, 10))
++>#method : Symbol(#method, Decl(privateNameMethodAssignment.ts, 0, 10))
+ 
+     constructor(a: A3, b: any) {
+ >a : Symbol(a, Decl(privateNameMethodAssignment.ts, 2, 16))
+@@= skipped -8, +8 lines =@@
+ >b : Symbol(b, Decl(privateNameMethodAssignment.ts, 2, 22))
+ 
+         this.#method = () => {} // Error, not writable 
+->this.#method : Symbol(A3.#method, Decl(privateNameMethodAssignment.ts, 0, 10))
++>this.#method : Symbol(#method, Decl(privateNameMethodAssignment.ts, 0, 10))
+ >this : Symbol(A3, Decl(privateNameMethodAssignment.ts, 0, 0))
+ 
+         a.#method = () => { }; // Error, not writable 
+->a.#method : Symbol(A3.#method, Decl(privateNameMethodAssignment.ts, 0, 10))
++>a.#method : Symbol(#method, Decl(privateNameMethodAssignment.ts, 0, 10))
+ >a : Symbol(a, Decl(privateNameMethodAssignment.ts, 2, 16))
+ 
+         b.#method =  () => { } //Error, not writable 
+@@= skipped -12, +12 lines =@@
+ 
+         ({ x: this.#method } = { x: () => {}}); //Error, not writable 
+ >x : Symbol(x, Decl(privateNameMethodAssignment.ts, 6, 10))
+->this.#method : Symbol(A3.#method, Decl(privateNameMethodAssignment.ts, 0, 10))
++>this.#method : Symbol(#method, Decl(privateNameMethodAssignment.ts, 0, 10))
+ >this : Symbol(A3, Decl(privateNameMethodAssignment.ts, 0, 0))
+ >x : Symbol(x, Decl(privateNameMethodAssignment.ts, 6, 32))
+ 
+         let x = this.#method;
+ >x : Symbol(x, Decl(privateNameMethodAssignment.ts, 7, 11))
+->this.#method : Symbol(A3.#method, Decl(privateNameMethodAssignment.ts, 0, 10))
++>this.#method : Symbol(#method, Decl(privateNameMethodAssignment.ts, 0, 10))
+ >this : Symbol(A3, Decl(privateNameMethodAssignment.ts, 0, 0))
+ 
+         b.#method++ //Error, not writable 

@@ -1,0 +1,16 @@
+--- old.genericFunduleInModule.symbols
++++ new.genericFunduleInModule.symbols
+@@= skipped -21, +21 lines =@@
+ var b: A.B;
+ >b : Symbol(b, Decl(genericFunduleInModule.ts, 7, 3))
+ >A : Symbol(A, Decl(genericFunduleInModule.ts, 0, 0))
+->B : Symbol(A.B)
++>B : Symbol(B)
+ 
+ A.B(1);
+->A.B : Symbol(A.B, Decl(genericFunduleInModule.ts, 0, 10), Decl(genericFunduleInModule.ts, 1, 44))
++>A.B : Symbol(B, Decl(genericFunduleInModule.ts, 0, 10), Decl(genericFunduleInModule.ts, 1, 44))
+ >A : Symbol(A, Decl(genericFunduleInModule.ts, 0, 0))
+->B : Symbol(A.B, Decl(genericFunduleInModule.ts, 0, 10), Decl(genericFunduleInModule.ts, 1, 44))
++>B : Symbol(B, Decl(genericFunduleInModule.ts, 0, 10), Decl(genericFunduleInModule.ts, 1, 44))
+ 

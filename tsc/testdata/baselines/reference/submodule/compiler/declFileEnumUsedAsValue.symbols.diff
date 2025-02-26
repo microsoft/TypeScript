@@ -1,0 +1,19 @@
+--- old.declFileEnumUsedAsValue.symbols
++++ new.declFileEnumUsedAsValue.symbols
+@@= skipped -4, +4 lines =@@
+ >e : Symbol(e, Decl(declFileEnumUsedAsValue.ts, 0, 0))
+ 
+     a,
+->a : Symbol(e.a, Decl(declFileEnumUsedAsValue.ts, 0, 8))
++>a : Symbol(a, Decl(declFileEnumUsedAsValue.ts, 0, 8))
+ 
+     b,
+->b : Symbol(e.b, Decl(declFileEnumUsedAsValue.ts, 1, 6))
++>b : Symbol(b, Decl(declFileEnumUsedAsValue.ts, 1, 6))
+ 
+     c
+->c : Symbol(e.c, Decl(declFileEnumUsedAsValue.ts, 2, 6))
++>c : Symbol(c, Decl(declFileEnumUsedAsValue.ts, 2, 6))
+ }
+ var x = e;
+ >x : Symbol(x, Decl(declFileEnumUsedAsValue.ts, 5, 3))

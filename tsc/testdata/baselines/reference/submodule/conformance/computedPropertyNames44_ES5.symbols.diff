@@ -1,0 +1,40 @@
+--- old.computedPropertyNames44_ES5.symbols
++++ new.computedPropertyNames44_ES5.symbols
+@@= skipped -2, +2 lines =@@
+ === computedPropertyNames44_ES5.ts ===
+ class Foo { x }
+ >Foo : Symbol(Foo, Decl(computedPropertyNames44_ES5.ts, 0, 0))
+->x : Symbol(Foo.x, Decl(computedPropertyNames44_ES5.ts, 0, 11))
++>x : Symbol(x, Decl(computedPropertyNames44_ES5.ts, 0, 11))
+ 
+ class Foo2 { x; y }
+ >Foo2 : Symbol(Foo2, Decl(computedPropertyNames44_ES5.ts, 0, 15))
+->x : Symbol(Foo2.x, Decl(computedPropertyNames44_ES5.ts, 1, 12))
+->y : Symbol(Foo2.y, Decl(computedPropertyNames44_ES5.ts, 1, 15))
++>x : Symbol(x, Decl(computedPropertyNames44_ES5.ts, 1, 12))
++>y : Symbol(y, Decl(computedPropertyNames44_ES5.ts, 1, 15))
+ 
+ class C {
+ >C : Symbol(C, Decl(computedPropertyNames44_ES5.ts, 1, 19))
+@@= skipped -15, +15 lines =@@
+ >Foo2 : Symbol(Foo2, Decl(computedPropertyNames44_ES5.ts, 0, 15))
+ 
+     get ["get1"]() { return new Foo }
+->["get1"] : Symbol(C["get1"], Decl(computedPropertyNames44_ES5.ts, 4, 22))
+->"get1" : Symbol(C["get1"], Decl(computedPropertyNames44_ES5.ts, 4, 22))
++>["get1"] : Symbol(get1, Decl(computedPropertyNames44_ES5.ts, 4, 22))
++>"get1" : Symbol(get1, Decl(computedPropertyNames44_ES5.ts, 4, 22))
+ >Foo : Symbol(Foo, Decl(computedPropertyNames44_ES5.ts, 0, 0))
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ >C : Symbol(C, Decl(computedPropertyNames44_ES5.ts, 1, 19))
+ 
+     set ["set1"](p: Foo) { }
+->["set1"] : Symbol(D["set1"], Decl(computedPropertyNames44_ES5.ts, 8, 19))
+->"set1" : Symbol(D["set1"], Decl(computedPropertyNames44_ES5.ts, 8, 19))
++>["set1"] : Symbol(set1, Decl(computedPropertyNames44_ES5.ts, 8, 19))
++>"set1" : Symbol(set1, Decl(computedPropertyNames44_ES5.ts, 8, 19))
+ >p : Symbol(p, Decl(computedPropertyNames44_ES5.ts, 9, 17))
+ >Foo : Symbol(Foo, Decl(computedPropertyNames44_ES5.ts, 0, 0))
+ }

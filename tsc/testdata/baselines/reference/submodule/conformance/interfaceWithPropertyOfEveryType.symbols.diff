@@ -1,0 +1,103 @@
+--- old.interfaceWithPropertyOfEveryType.symbols
++++ new.interfaceWithPropertyOfEveryType.symbols
+@@= skipped -2, +2 lines =@@
+ === interfaceWithPropertyOfEveryType.ts ===
+ class C { foo: string; }
+ >C : Symbol(C, Decl(interfaceWithPropertyOfEveryType.ts, 0, 0))
+->foo : Symbol(C.foo, Decl(interfaceWithPropertyOfEveryType.ts, 0, 9))
++>foo : Symbol(foo, Decl(interfaceWithPropertyOfEveryType.ts, 0, 9))
+ 
+ function f1() { }
+ >f1 : Symbol(f1, Decl(interfaceWithPropertyOfEveryType.ts, 0, 24))
+@@= skipped -13, +13 lines =@@
+ }
+ enum E { A }
+ >E : Symbol(E, Decl(interfaceWithPropertyOfEveryType.ts, 4, 1))
+->A : Symbol(E.A, Decl(interfaceWithPropertyOfEveryType.ts, 5, 8))
++>A : Symbol(A, Decl(interfaceWithPropertyOfEveryType.ts, 5, 8))
+ 
+ interface Foo {
+ >Foo : Symbol(Foo, Decl(interfaceWithPropertyOfEveryType.ts, 5, 12))
+ 
+     a: number;
+->a : Symbol(Foo.a, Decl(interfaceWithPropertyOfEveryType.ts, 7, 15))
++>a : Symbol(a, Decl(interfaceWithPropertyOfEveryType.ts, 7, 15))
+ 
+     b: string;
+->b : Symbol(Foo.b, Decl(interfaceWithPropertyOfEveryType.ts, 8, 14))
++>b : Symbol(b, Decl(interfaceWithPropertyOfEveryType.ts, 8, 14))
+ 
+     c: boolean;
+->c : Symbol(Foo.c, Decl(interfaceWithPropertyOfEveryType.ts, 9, 14))
++>c : Symbol(c, Decl(interfaceWithPropertyOfEveryType.ts, 9, 14))
+ 
+     d: any;
+->d : Symbol(Foo.d, Decl(interfaceWithPropertyOfEveryType.ts, 10, 15))
++>d : Symbol(d, Decl(interfaceWithPropertyOfEveryType.ts, 10, 15))
+ 
+     e: void;
+->e : Symbol(Foo.e, Decl(interfaceWithPropertyOfEveryType.ts, 11, 11))
++>e : Symbol(e, Decl(interfaceWithPropertyOfEveryType.ts, 11, 11))
+ 
+     f: number[];
+->f : Symbol(Foo.f, Decl(interfaceWithPropertyOfEveryType.ts, 12, 12))
++>f : Symbol(f, Decl(interfaceWithPropertyOfEveryType.ts, 12, 12))
+ 
+     g: Object;
+->g : Symbol(Foo.g, Decl(interfaceWithPropertyOfEveryType.ts, 13, 16))
++>g : Symbol(g, Decl(interfaceWithPropertyOfEveryType.ts, 13, 16))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     h: (x: number) => number;
+->h : Symbol(Foo.h, Decl(interfaceWithPropertyOfEveryType.ts, 14, 14))
++>h : Symbol(h, Decl(interfaceWithPropertyOfEveryType.ts, 14, 14))
+ >x : Symbol(x, Decl(interfaceWithPropertyOfEveryType.ts, 15, 8))
+ 
+     i: <T>(x: T) => T;
+->i : Symbol(Foo.i, Decl(interfaceWithPropertyOfEveryType.ts, 15, 29))
++>i : Symbol(i, Decl(interfaceWithPropertyOfEveryType.ts, 15, 29))
+ >T : Symbol(T, Decl(interfaceWithPropertyOfEveryType.ts, 16, 8))
+ >x : Symbol(x, Decl(interfaceWithPropertyOfEveryType.ts, 16, 11))
+ >T : Symbol(T, Decl(interfaceWithPropertyOfEveryType.ts, 16, 8))
+ >T : Symbol(T, Decl(interfaceWithPropertyOfEveryType.ts, 16, 8))
+ 
+     j: Foo;
+->j : Symbol(Foo.j, Decl(interfaceWithPropertyOfEveryType.ts, 16, 22))
++>j : Symbol(j, Decl(interfaceWithPropertyOfEveryType.ts, 16, 22))
+ >Foo : Symbol(Foo, Decl(interfaceWithPropertyOfEveryType.ts, 5, 12))
+ 
+     k: C;
+->k : Symbol(Foo.k, Decl(interfaceWithPropertyOfEveryType.ts, 17, 11))
++>k : Symbol(k, Decl(interfaceWithPropertyOfEveryType.ts, 17, 11))
+ >C : Symbol(C, Decl(interfaceWithPropertyOfEveryType.ts, 0, 0))
+ 
+     l: typeof f1;
+->l : Symbol(Foo.l, Decl(interfaceWithPropertyOfEveryType.ts, 18, 9))
++>l : Symbol(l, Decl(interfaceWithPropertyOfEveryType.ts, 18, 9))
+ >f1 : Symbol(f1, Decl(interfaceWithPropertyOfEveryType.ts, 0, 24))
+ 
+     m: typeof M;
+->m : Symbol(Foo.m, Decl(interfaceWithPropertyOfEveryType.ts, 19, 17))
++>m : Symbol(m, Decl(interfaceWithPropertyOfEveryType.ts, 19, 17))
+ >M : Symbol(M, Decl(interfaceWithPropertyOfEveryType.ts, 1, 17))
+ 
+     n: {};
+->n : Symbol(Foo.n, Decl(interfaceWithPropertyOfEveryType.ts, 20, 16))
++>n : Symbol(n, Decl(interfaceWithPropertyOfEveryType.ts, 20, 16))
+ 
+     o: E;
+->o : Symbol(Foo.o, Decl(interfaceWithPropertyOfEveryType.ts, 21, 10))
++>o : Symbol(o, Decl(interfaceWithPropertyOfEveryType.ts, 21, 10))
+ >E : Symbol(E, Decl(interfaceWithPropertyOfEveryType.ts, 4, 1))
+ }
+ 
+@@= skipped -119, +119 lines =@@
+ 
+     o: E.A
+ >o : Symbol(o, Decl(interfaceWithPropertyOfEveryType.ts, 39, 10))
+->E.A : Symbol(E.A, Decl(interfaceWithPropertyOfEveryType.ts, 5, 8))
++>E.A : Symbol(A, Decl(interfaceWithPropertyOfEveryType.ts, 5, 8))
+ >E : Symbol(E, Decl(interfaceWithPropertyOfEveryType.ts, 4, 1))
+->A : Symbol(E.A, Decl(interfaceWithPropertyOfEveryType.ts, 5, 8))
++>A : Symbol(A, Decl(interfaceWithPropertyOfEveryType.ts, 5, 8))
+ }

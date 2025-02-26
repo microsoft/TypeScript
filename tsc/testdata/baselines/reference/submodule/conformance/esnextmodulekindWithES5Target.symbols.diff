@@ -1,0 +1,36 @@
+--- old.esnextmodulekindWithES5Target.symbols
++++ new.esnextmodulekindWithES5Target.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(esnextmodulekindWithES5Target.ts, 0, 0))
+ 
+     static s = 0;
+->s : Symbol(C.s, Decl(esnextmodulekindWithES5Target.ts, 0, 16))
++>s : Symbol(s, Decl(esnextmodulekindWithES5Target.ts, 0, 16))
+ 
+     p = 1;
+->p : Symbol(C.p, Decl(esnextmodulekindWithES5Target.ts, 1, 17))
++>p : Symbol(p, Decl(esnextmodulekindWithES5Target.ts, 1, 17))
+ 
+     method() { }
+->method : Symbol(C.method, Decl(esnextmodulekindWithES5Target.ts, 2, 10))
++>method : Symbol(method, Decl(esnextmodulekindWithES5Target.ts, 2, 10))
+ }
+ export { C as C2 };
+ >C : Symbol(C, Decl(esnextmodulekindWithES5Target.ts, 0, 0))
+@@= skipped -23, +23 lines =@@
+ >D : Symbol(D, Decl(esnextmodulekindWithES5Target.ts, 7, 42))
+ 
+     static s = 0;
+->s : Symbol(D.s, Decl(esnextmodulekindWithES5Target.ts, 9, 16))
++>s : Symbol(s, Decl(esnextmodulekindWithES5Target.ts, 9, 16))
+ 
+     p = 1;
+->p : Symbol(D.p, Decl(esnextmodulekindWithES5Target.ts, 10, 17))
++>p : Symbol(p, Decl(esnextmodulekindWithES5Target.ts, 10, 17))
+ 
+     method() { }
+->method : Symbol(D.method, Decl(esnextmodulekindWithES5Target.ts, 11, 10))
++>method : Symbol(method, Decl(esnextmodulekindWithES5Target.ts, 11, 10))
+ }
+ export { D as D2 };
+ >D : Symbol(D, Decl(esnextmodulekindWithES5Target.ts, 7, 42))

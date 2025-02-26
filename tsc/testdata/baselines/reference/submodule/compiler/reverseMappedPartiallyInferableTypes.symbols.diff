@@ -1,0 +1,47 @@
+--- old.reverseMappedPartiallyInferableTypes.symbols
++++ new.reverseMappedPartiallyInferableTypes.symbols
+@@= skipped -87, +87 lines =@@
+ >MyType : Symbol(MyType, Decl(reverseMappedPartiallyInferableTypes.ts, 25, 90))
+ 
+     valid: boolean;
+->valid : Symbol(MyType.valid, Decl(reverseMappedPartiallyInferableTypes.ts, 27, 18))
++>valid : Symbol(valid, Decl(reverseMappedPartiallyInferableTypes.ts, 27, 18))
+ }
+ 
+ const r = extend({
+@@= skipped -24, +24 lines =@@
+ >x : Symbol(x, Decl(reverseMappedPartiallyInferableTypes.ts, 35, 22))
+ 
+                 return x.valid;
+->x.valid : Symbol(MyType.valid, Decl(reverseMappedPartiallyInferableTypes.ts, 27, 18))
++>x.valid : Symbol(valid, Decl(reverseMappedPartiallyInferableTypes.ts, 27, 18))
+ >x : Symbol(x, Decl(reverseMappedPartiallyInferableTypes.ts, 35, 22))
+->valid : Symbol(MyType.valid, Decl(reverseMappedPartiallyInferableTypes.ts, 27, 18))
++>valid : Symbol(valid, Decl(reverseMappedPartiallyInferableTypes.ts, 27, 18))
+             }
+         },
+         explicit: {
+@@= skipped -20, +20 lines =@@
+ >MyType : Symbol(MyType, Decl(reverseMappedPartiallyInferableTypes.ts, 25, 90))
+ 
+                 return x.valid;
+->x.valid : Symbol(MyType.valid, Decl(reverseMappedPartiallyInferableTypes.ts, 27, 18))
++>x.valid : Symbol(valid, Decl(reverseMappedPartiallyInferableTypes.ts, 27, 18))
+ >x : Symbol(x, Decl(reverseMappedPartiallyInferableTypes.ts, 41, 24))
+->valid : Symbol(MyType.valid, Decl(reverseMappedPartiallyInferableTypes.ts, 27, 18))
++>valid : Symbol(valid, Decl(reverseMappedPartiallyInferableTypes.ts, 27, 18))
+             }
+         }
+     }
+@@= skipped -101, +101 lines =@@
+ >k : Symbol(k, Decl(reverseMappedPartiallyInferableTypes.ts, 79, 17))
+ 
+             return k.length > 0;
+->k.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>k.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >k : Symbol(k, Decl(reverseMappedPartiallyInferableTypes.ts, 79, 17))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+         }
+     }
+ });

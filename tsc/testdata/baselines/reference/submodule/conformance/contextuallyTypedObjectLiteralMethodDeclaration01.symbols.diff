@@ -1,0 +1,105 @@
+--- old.contextuallyTypedObjectLiteralMethodDeclaration01.symbols
++++ new.contextuallyTypedObjectLiteralMethodDeclaration01.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 0))
+ 
+     numProp: number;
+->numProp : Symbol(A.numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 13))
++>numProp : Symbol(numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 13))
+ }
+ 
+ interface B  {
+ >B : Symbol(B, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 2, 1))
+ 
+     strProp: string;
+->strProp : Symbol(B.strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 4, 14))
++>strProp : Symbol(strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 4, 14))
+ }
+ 
+ interface Foo {
+ >Foo : Symbol(Foo, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 6, 1))
+ 
+     method1(arg: A): void;
+->method1 : Symbol(Foo.method1, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 8, 15))
++>method1 : Symbol(method1, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 8, 15))
+ >arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 9, 12))
+ >A : Symbol(A, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 0))
+ 
+     method2(arg: B): void;
+->method2 : Symbol(Foo.method2, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 9, 26))
++>method2 : Symbol(method2, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 9, 26))
+ >arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 10, 12))
+ >B : Symbol(B, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 2, 1))
+ }
+@@= skipped -34, +34 lines =@@
+ >arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 15, 16))
+ 
+             arg.numProp = 10;
+->arg.numProp : Symbol(A.numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 13))
++>arg.numProp : Symbol(numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 13))
+ >arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 15, 16))
+->numProp : Symbol(A.numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 13))
++>numProp : Symbol(numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 13))
+ 
+         },
+         method2(arg) {
+@@= skipped -10, +10 lines =@@
+ >arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 18, 16))
+ 
+             arg.strProp = "hello";
+->arg.strProp : Symbol(B.strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 4, 14))
++>arg.strProp : Symbol(strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 4, 14))
+ >arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 18, 16))
+->strProp : Symbol(B.strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 4, 14))
++>strProp : Symbol(strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 4, 14))
+         }
+     }
+ }
+@@= skipped -17, +17 lines =@@
+ >arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 26, 18))
+ 
+             arg.numProp = 10;
+->arg.numProp : Symbol(A.numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 13))
++>arg.numProp : Symbol(numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 13))
+ >arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 26, 18))
+->numProp : Symbol(A.numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 13))
++>numProp : Symbol(numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 13))
+ 
+         },
+         method2: (arg) => {
+@@= skipped -10, +10 lines =@@
+ >arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 29, 18))
+ 
+             arg.strProp = "hello";
+->arg.strProp : Symbol(B.strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 4, 14))
++>arg.strProp : Symbol(strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 4, 14))
+ >arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 29, 18))
+->strProp : Symbol(B.strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 4, 14))
++>strProp : Symbol(strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 4, 14))
+         }
+     }
+ }
+@@= skipped -17, +17 lines =@@
+ >arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 37, 27))
+ 
+             arg.numProp = 10;
+->arg.numProp : Symbol(A.numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 13))
++>arg.numProp : Symbol(numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 13))
+ >arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 37, 27))
+->numProp : Symbol(A.numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 13))
++>numProp : Symbol(numProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 0, 13))
+ 
+         },
+         method2: function (arg) {
+@@= skipped -10, +10 lines =@@
+ >arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 40, 27))
+ 
+             arg.strProp = "hello";
+->arg.strProp : Symbol(B.strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 4, 14))
++>arg.strProp : Symbol(strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 4, 14))
+ >arg : Symbol(arg, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 40, 27))
+->strProp : Symbol(B.strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 4, 14))
++>strProp : Symbol(strProp, Decl(contextuallyTypedObjectLiteralMethodDeclaration01.ts, 4, 14))
+         }
+     }
+ }

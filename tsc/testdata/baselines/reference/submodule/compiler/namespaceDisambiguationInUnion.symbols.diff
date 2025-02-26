@@ -1,0 +1,25 @@
+--- old.namespaceDisambiguationInUnion.symbols
++++ new.namespaceDisambiguationInUnion.symbols
+@@= skipped -23, +23 lines =@@
+ const val1: Foo.Yep | Bar.Yep = x;
+ >val1 : Symbol(val1, Decl(namespaceDisambiguationInUnion.ts, 9, 5))
+ >Foo : Symbol(Foo, Decl(namespaceDisambiguationInUnion.ts, 0, 0))
+->Yep : Symbol(Foo.Yep, Decl(namespaceDisambiguationInUnion.ts, 0, 15))
++>Yep : Symbol(Yep, Decl(namespaceDisambiguationInUnion.ts, 0, 15))
+ >Bar : Symbol(Bar, Decl(namespaceDisambiguationInUnion.ts, 2, 1))
+->Yep : Symbol(Bar.Yep, Decl(namespaceDisambiguationInUnion.ts, 4, 15))
++>Yep : Symbol(Yep, Decl(namespaceDisambiguationInUnion.ts, 4, 15))
+ >x : Symbol(x, Decl(namespaceDisambiguationInUnion.ts, 8, 5))
+ 
+ const y = [{ type: "a" }, { type: "b" }];
+@@= skipped -13, +13 lines =@@
+ const val2: [Foo.Yep, Bar.Yep] = y;
+ >val2 : Symbol(val2, Decl(namespaceDisambiguationInUnion.ts, 12, 5))
+ >Foo : Symbol(Foo, Decl(namespaceDisambiguationInUnion.ts, 0, 0))
+->Yep : Symbol(Foo.Yep, Decl(namespaceDisambiguationInUnion.ts, 0, 15))
++>Yep : Symbol(Yep, Decl(namespaceDisambiguationInUnion.ts, 0, 15))
+ >Bar : Symbol(Bar, Decl(namespaceDisambiguationInUnion.ts, 2, 1))
+->Yep : Symbol(Bar.Yep, Decl(namespaceDisambiguationInUnion.ts, 4, 15))
++>Yep : Symbol(Yep, Decl(namespaceDisambiguationInUnion.ts, 4, 15))
+ >y : Symbol(y, Decl(namespaceDisambiguationInUnion.ts, 11, 5))
+ 

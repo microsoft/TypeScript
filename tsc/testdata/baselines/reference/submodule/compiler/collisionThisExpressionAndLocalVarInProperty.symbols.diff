@@ -1,0 +1,20 @@
+--- old.collisionThisExpressionAndLocalVarInProperty.symbols
++++ new.collisionThisExpressionAndLocalVarInProperty.symbols
+@@= skipped -4, +4 lines =@@
+ >class1 : Symbol(class1, Decl(collisionThisExpressionAndLocalVarInProperty.ts, 0, 0))
+ 
+     public prop1 = {
+->prop1 : Symbol(class1.prop1, Decl(collisionThisExpressionAndLocalVarInProperty.ts, 0, 14))
++>prop1 : Symbol(prop1, Decl(collisionThisExpressionAndLocalVarInProperty.ts, 0, 14))
+ 
+         doStuff: (callback) => () => {
+ >doStuff : Symbol(doStuff, Decl(collisionThisExpressionAndLocalVarInProperty.ts, 1, 20))
+@@= skipped -24, +24 lines =@@
+ >_this : Symbol(_this, Decl(collisionThisExpressionAndLocalVarInProperty.ts, 11, 11))
+     }
+     public prop1 = {
+->prop1 : Symbol(class2.prop1, Decl(collisionThisExpressionAndLocalVarInProperty.ts, 12, 5))
++>prop1 : Symbol(prop1, Decl(collisionThisExpressionAndLocalVarInProperty.ts, 12, 5))
+ 
+         doStuff: (callback) => () => {
+ >doStuff : Symbol(doStuff, Decl(collisionThisExpressionAndLocalVarInProperty.ts, 13, 20))

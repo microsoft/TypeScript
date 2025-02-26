@@ -1,0 +1,14 @@
+--- old.typeSatisfaction_propertyValueConformance2(nouncheckedindexedaccess=false).symbols
++++ new.typeSatisfaction_propertyValueConformance2(nouncheckedindexedaccess=false).symbols
+@@= skipped -33, +33 lines =@@
+ >x : Symbol(x, Decl(typeSatisfaction_propertyValueConformance2.ts, 3, 5))
+ 
+ console.log(x.z);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x : Symbol(x, Decl(typeSatisfaction_propertyValueConformance2.ts, 3, 5))
+ 
+ // Should be OK under --noUncheckedIndexedAccess

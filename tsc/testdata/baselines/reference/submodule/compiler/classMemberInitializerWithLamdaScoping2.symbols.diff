@@ -1,0 +1,15 @@
+--- old.classMemberInitializerWithLamdaScoping2.symbols
++++ new.classMemberInitializerWithLamdaScoping2.symbols
+@@= skipped -16, +16 lines =@@
+ >Test1 : Symbol(Test1, Decl(classMemberInitializerWithLamdaScoping2_1.ts, 2, 2))
+ 
+     constructor(private field1: string) {
+->field1 : Symbol(Test1.field1, Decl(classMemberInitializerWithLamdaScoping2_1.ts, 4, 16))
++>field1 : Symbol(field1, Decl(classMemberInitializerWithLamdaScoping2_1.ts, 4, 16))
+     }
+     messageHandler = () => {
+->messageHandler : Symbol(Test1.messageHandler, Decl(classMemberInitializerWithLamdaScoping2_1.ts, 5, 5))
++>messageHandler : Symbol(messageHandler, Decl(classMemberInitializerWithLamdaScoping2_1.ts, 5, 5))
+ 
+         console.log(field1); // But this should be error as the field1 will resolve to var field1 
+ >console.log : Symbol(log, Decl(classMemberInitializerWithLamdaScoping2_1.ts, 0, 22))

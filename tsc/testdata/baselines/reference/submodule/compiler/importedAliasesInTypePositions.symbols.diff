@@ -1,0 +1,44 @@
+--- old.importedAliasesInTypePositions.symbols
++++ new.importedAliasesInTypePositions.symbols
+@@= skipped -6, +6 lines =@@
+ import ReferredTo = RT_ALIAS.elaborate.nested.mod.name.ReferredTo;
+ >ReferredTo : Symbol(ReferredTo, Decl(file2.ts, 0, 35))
+ >RT_ALIAS : Symbol(RT_ALIAS, Decl(file2.ts, 0, 0))
+->elaborate : Symbol(RT_ALIAS.elaborate, Decl(file1.ts, 0, 0))
+->nested : Symbol(RT_ALIAS.elaborate.nested, Decl(file1.ts, 0, 24))
+->mod : Symbol(RT_ALIAS.elaborate.nested.mod, Decl(file1.ts, 0, 31))
+->name : Symbol(RT_ALIAS.elaborate.nested.mod.name, Decl(file1.ts, 0, 35))
+->ReferredTo : Symbol(ReferredTo, Decl(file1.ts, 0, 41))
++>elaborate : Symbol(unknown)
++>nested : Symbol(unknown)
++>mod : Symbol(unknown)
++>name : Symbol(unknown)
++>ReferredTo : Symbol(unknown)
+ 
+ export module ImportingModule {
+ >ImportingModule : Symbol(ImportingModule, Decl(file2.ts, 1, 66))
+@@= skipped -13, +13 lines =@@
+ >UsesReferredType : Symbol(UsesReferredType, Decl(file2.ts, 3, 31))
+ 
+         constructor(private referred: ReferredTo) { }
+->referred : Symbol(UsesReferredType.referred, Decl(file2.ts, 5, 20))
++>referred : Symbol(referred, Decl(file2.ts, 5, 20))
+ >ReferredTo : Symbol(ReferredTo, Decl(file2.ts, 0, 35))
+     }
+ }
+-=== file1.ts ===
+-export module elaborate.nested.mod.name {
+->elaborate : Symbol(elaborate, Decl(file1.ts, 0, 0))
+->nested : Symbol(nested, Decl(file1.ts, 0, 24))
+->mod : Symbol(mod, Decl(file1.ts, 0, 31))
+->name : Symbol(name, Decl(file1.ts, 0, 35))
+-
+-    export class ReferredTo {
+->ReferredTo : Symbol(ReferredTo, Decl(file1.ts, 0, 41))
+-
+-        doSomething(): void {
+->doSomething : Symbol(ReferredTo.doSomething, Decl(file1.ts, 1, 29))
+-        }
+-    }
+-}
+-

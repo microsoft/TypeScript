@@ -1,0 +1,47 @@
+--- old.awaitedTypeNoLib.symbols
++++ new.awaitedTypeNoLib.symbols
+@@= skipped -11, +11 lines =@@
+ 
+   : T extends PromiseLike<unknown>
+ >T : Symbol(T, Decl(awaitedTypeNoLib.ts, 0, 16))
+->PromiseLike : Symbol(PromiseLike)
++>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+ 
+   ? never
+   : T;
+@@= skipped -18, +18 lines =@@
+ >T : Symbol(T, Decl(awaitedTypeNoLib.ts, 8, 15))
+ 
+   then(a: Receiver<T>) {}
+->then : Symbol(Thenable.then, Decl(awaitedTypeNoLib.ts, 8, 19))
++>then : Symbol(then, Decl(awaitedTypeNoLib.ts, 8, 19))
+ >a : Symbol(a, Decl(awaitedTypeNoLib.ts, 9, 7))
+ >Receiver : Symbol(Receiver, Decl(awaitedTypeNoLib.ts, 4, 6))
+ >T : Symbol(T, Decl(awaitedTypeNoLib.ts, 8, 15))
+ 
+   private handleResolve<TResult>(
+->handleResolve : Symbol(Thenable.handleResolve, Decl(awaitedTypeNoLib.ts, 9, 25))
++>handleResolve : Symbol(handleResolve, Decl(awaitedTypeNoLib.ts, 9, 25))
+ >TResult : Symbol(TResult, Decl(awaitedTypeNoLib.ts, 11, 24))
+ 
+     result: NotPromise<TResult> | Thenable<NotPromise<TResult>>,
+@@= skipped -29, +29 lines =@@
+ 
+       //  #58547 This previously was a Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
+       this.resolvePromise(result, resolve);
+->this.resolvePromise : Symbol(Thenable.resolvePromise, Decl(awaitedTypeNoLib.ts, 19, 3))
++>this.resolvePromise : Symbol(resolvePromise, Decl(awaitedTypeNoLib.ts, 19, 3))
+ >this : Symbol(Thenable, Decl(awaitedTypeNoLib.ts, 6, 50))
+->resolvePromise : Symbol(Thenable.resolvePromise, Decl(awaitedTypeNoLib.ts, 19, 3))
++>resolvePromise : Symbol(resolvePromise, Decl(awaitedTypeNoLib.ts, 19, 3))
+ >result : Symbol(result, Decl(awaitedTypeNoLib.ts, 11, 33))
+ >resolve : Symbol(resolve, Decl(awaitedTypeNoLib.ts, 12, 64))
+     }
+   }
+ 
+   private resolvePromise<TResult>(
+->resolvePromise : Symbol(Thenable.resolvePromise, Decl(awaitedTypeNoLib.ts, 19, 3))
++>resolvePromise : Symbol(resolvePromise, Decl(awaitedTypeNoLib.ts, 19, 3))
+ >TResult : Symbol(TResult, Decl(awaitedTypeNoLib.ts, 21, 25))
+ 
+     result: Thenable<TResult>,

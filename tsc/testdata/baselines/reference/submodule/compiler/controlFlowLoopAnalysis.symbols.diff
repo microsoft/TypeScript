@@ -1,0 +1,26 @@
+--- old.controlFlowLoopAnalysis.symbols
++++ new.controlFlowLoopAnalysis.symbols
+@@= skipped -94, +94 lines =@@
+     for (let index = 0, length = values.length; index < length; index++) {
+ >index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))
+ >length : Symbol(length, Decl(controlFlowLoopAnalysis.ts, 38, 23))
+->values.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>values.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >values : Symbol(values, Decl(controlFlowLoopAnalysis.ts, 32, 28))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))
+ >length : Symbol(length, Decl(controlFlowLoopAnalysis.ts, 38, 23))
+ >index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))
+@@= skipped -18, +18 lines =@@
+ >index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))
+ 
+             result.push(mapping(value, index));
+->result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>result.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >result : Symbol(result, Decl(controlFlowLoopAnalysis.ts, 37, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >mapping : Symbol(mapping, Decl(controlFlowLoopAnalysis.ts, 34, 50))
+ >value : Symbol(value, Decl(controlFlowLoopAnalysis.ts, 39, 11))
+ >index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))

@@ -1,0 +1,154 @@
+//// [tests/cases/conformance/salsa/moduleExportAlias.ts] ////
+
+=== a.ts ===
+import b = require("./b.js");
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func1;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func2;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func3;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func4;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func5;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func6;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func7;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func8;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func9;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func10;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func11;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func12;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func13;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func14;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func15;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func16;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func17;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func18;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func19;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+b.func20;
+>b : Symbol(b, Decl(a.ts, 0, 0))
+
+
+=== b.js ===
+var exportsAlias = exports;
+>exportsAlias : Symbol(exportsAlias, Decl(b.js, 0, 3))
+
+exportsAlias.func1 = function () { };
+>exportsAlias : Symbol(exportsAlias, Decl(b.js, 0, 3))
+
+exports.func2 = function () { };
+
+var moduleExportsAlias = module.exports;
+>moduleExportsAlias : Symbol(moduleExportsAlias, Decl(b.js, 4, 3))
+
+moduleExportsAlias.func3 = function () { };
+>moduleExportsAlias : Symbol(moduleExportsAlias, Decl(b.js, 4, 3))
+
+module.exports.func4 = function () { };
+
+var multipleDeclarationAlias1 = exports = module.exports;
+>multipleDeclarationAlias1 : Symbol(multipleDeclarationAlias1, Decl(b.js, 8, 3))
+
+multipleDeclarationAlias1.func5 = function () { };
+>multipleDeclarationAlias1 : Symbol(multipleDeclarationAlias1, Decl(b.js, 8, 3))
+
+var multipleDeclarationAlias2 = module.exports = exports;
+>multipleDeclarationAlias2 : Symbol(multipleDeclarationAlias2, Decl(b.js, 11, 3))
+
+multipleDeclarationAlias2.func6 = function () { };
+>multipleDeclarationAlias2 : Symbol(multipleDeclarationAlias2, Decl(b.js, 11, 3))
+
+var someOtherVariable;
+>someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
+
+var multipleDeclarationAlias3 = someOtherVariable = exports;
+>multipleDeclarationAlias3 : Symbol(multipleDeclarationAlias3, Decl(b.js, 15, 3))
+>someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
+
+multipleDeclarationAlias3.func7 = function () { };
+>multipleDeclarationAlias3 : Symbol(multipleDeclarationAlias3, Decl(b.js, 15, 3))
+
+var multipleDeclarationAlias4 = someOtherVariable = module.exports;
+>multipleDeclarationAlias4 : Symbol(multipleDeclarationAlias4, Decl(b.js, 18, 3))
+>someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
+
+multipleDeclarationAlias4.func8 = function () { };
+>multipleDeclarationAlias4 : Symbol(multipleDeclarationAlias4, Decl(b.js, 18, 3))
+
+var multipleDeclarationAlias5 = module.exports = exports = {};
+>multipleDeclarationAlias5 : Symbol(multipleDeclarationAlias5, Decl(b.js, 21, 3))
+
+multipleDeclarationAlias5.func9 = function () { };
+>multipleDeclarationAlias5 : Symbol(multipleDeclarationAlias5, Decl(b.js, 21, 3))
+
+var multipleDeclarationAlias6 = exports = module.exports = {};
+>multipleDeclarationAlias6 : Symbol(multipleDeclarationAlias6, Decl(b.js, 24, 3))
+
+multipleDeclarationAlias6.func10 = function () { };
+>multipleDeclarationAlias6 : Symbol(multipleDeclarationAlias6, Decl(b.js, 24, 3))
+
+exports = module.exports = someOtherVariable = {};
+>someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
+
+exports.func11 = function () { };
+module.exports.func12 = function () { };
+
+exports = module.exports = someOtherVariable = {};
+>someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
+
+exports.func11 = function () { };
+module.exports.func12 = function () { };
+
+exports = module.exports = {};
+exports.func13 = function () { };
+module.exports.func14 = function () { };
+
+exports = module.exports = {};
+exports.func15 = function () { };
+module.exports.func16 = function () { };
+
+module.exports = exports = {};
+exports.func17 = function () { };
+module.exports.func18 = function () { };
+
+module.exports = {};
+exports.func19 = function () { };
+module.exports.func20 = function () { };
+
+

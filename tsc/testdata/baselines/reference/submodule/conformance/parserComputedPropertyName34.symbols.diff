@@ -1,0 +1,13 @@
+--- old.parserComputedPropertyName34.symbols
++++ new.parserComputedPropertyName34.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     // no ASI, comma expected
+     [e] = id++,
+->[e] : Symbol(E[e], Decl(parserComputedPropertyName34.ts, 0, 8))
++>[e] : Symbol([e], Decl(parserComputedPropertyName34.ts, 0, 8))
+ 
+     [e2] = 1
+->[e2] : Symbol(E[e2], Decl(parserComputedPropertyName34.ts, 2, 15))
++>[e2] : Symbol([e2], Decl(parserComputedPropertyName34.ts, 2, 15))
+ }

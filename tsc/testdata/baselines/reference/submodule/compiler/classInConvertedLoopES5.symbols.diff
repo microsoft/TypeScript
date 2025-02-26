@@ -1,0 +1,16 @@
+--- old.classInConvertedLoopES5.symbols
++++ new.classInConvertedLoopES5.symbols
+@@= skipped -11, +11 lines =@@
+ >RowClass : Symbol(RowClass, Decl(classInConvertedLoopES5.ts, 1, 46))
+ 
+     row = row;
+->row : Symbol(RowClass.row, Decl(classInConvertedLoopES5.ts, 2, 18))
++>row : Symbol(row, Decl(classInConvertedLoopES5.ts, 2, 18))
+ >row : Symbol(row, Decl(classInConvertedLoopES5.ts, 1, 10))
+ 
+     static factory = () => new RowClass();
+->factory : Symbol(RowClass.factory, Decl(classInConvertedLoopES5.ts, 3, 14))
++>factory : Symbol(factory, Decl(classInConvertedLoopES5.ts, 3, 14))
+ >RowClass : Symbol(RowClass, Decl(classInConvertedLoopES5.ts, 1, 46))
+   }
+ 

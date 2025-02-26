@@ -1,0 +1,342 @@
+--- old.genericDefaults.symbols
++++ new.genericDefaults.symbols
+@@= skipped -2, +2 lines =@@
+ === genericDefaults.ts ===
+ interface A { a: number; }
+ >A : Symbol(A, Decl(genericDefaults.ts, 0, 0))
+->a : Symbol(A.a, Decl(genericDefaults.ts, 0, 13))
++>a : Symbol(a, Decl(genericDefaults.ts, 0, 13))
+ 
+ interface B { b: number; }
+ >B : Symbol(B, Decl(genericDefaults.ts, 0, 26))
+->b : Symbol(B.b, Decl(genericDefaults.ts, 1, 13))
++>b : Symbol(b, Decl(genericDefaults.ts, 1, 13))
+ 
+ interface C { c: number; }
+ >C : Symbol(C, Decl(genericDefaults.ts, 1, 26))
+->c : Symbol(C.c, Decl(genericDefaults.ts, 2, 13))
++>c : Symbol(c, Decl(genericDefaults.ts, 2, 13))
+ 
+ interface D { d: number; }
+ >D : Symbol(D, Decl(genericDefaults.ts, 2, 26))
+->d : Symbol(D.d, Decl(genericDefaults.ts, 3, 13))
++>d : Symbol(d, Decl(genericDefaults.ts, 3, 13))
+ 
+ interface AB { a: number; b: number; }
+ >AB : Symbol(AB, Decl(genericDefaults.ts, 3, 26))
+->a : Symbol(AB.a, Decl(genericDefaults.ts, 4, 14))
+->b : Symbol(AB.b, Decl(genericDefaults.ts, 4, 25))
++>a : Symbol(a, Decl(genericDefaults.ts, 4, 14))
++>b : Symbol(b, Decl(genericDefaults.ts, 4, 25))
+ 
+ interface BC { b: number; c: number; }
+ >BC : Symbol(BC, Decl(genericDefaults.ts, 4, 38))
+->b : Symbol(BC.b, Decl(genericDefaults.ts, 5, 14))
+->c : Symbol(BC.c, Decl(genericDefaults.ts, 5, 25))
++>b : Symbol(b, Decl(genericDefaults.ts, 5, 14))
++>c : Symbol(c, Decl(genericDefaults.ts, 5, 25))
+ 
+ declare const a: A;
+ >a : Symbol(a, Decl(genericDefaults.ts, 7, 13))
+@@= skipped -1806, +1806 lines =@@
+ interface i00<T = number> { a: T; }
+ >i00 : Symbol(i00, Decl(genericDefaults.ts, 393, 22))
+ >T : Symbol(T, Decl(genericDefaults.ts, 395, 14))
+->a : Symbol(i00.a, Decl(genericDefaults.ts, 395, 27))
++>a : Symbol(a, Decl(genericDefaults.ts, 395, 27))
+ >T : Symbol(T, Decl(genericDefaults.ts, 395, 14))
+ 
+ const i00c00 = (<i00>x).a;
+ >i00c00 : Symbol(i00c00, Decl(genericDefaults.ts, 396, 5))
+->(<i00>x).a : Symbol(i00.a, Decl(genericDefaults.ts, 395, 27))
++>(<i00>x).a : Symbol(a, Decl(genericDefaults.ts, 395, 27))
+ >i00 : Symbol(i00, Decl(genericDefaults.ts, 393, 22))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i00.a, Decl(genericDefaults.ts, 395, 27))
++>a : Symbol(a, Decl(genericDefaults.ts, 395, 27))
+ 
+ const i00c01 = (<i00<number>>x).a;
+ >i00c01 : Symbol(i00c01, Decl(genericDefaults.ts, 397, 5))
+->(<i00<number>>x).a : Symbol(i00.a, Decl(genericDefaults.ts, 395, 27))
++>(<i00<number>>x).a : Symbol(a, Decl(genericDefaults.ts, 395, 27))
+ >i00 : Symbol(i00, Decl(genericDefaults.ts, 393, 22))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i00.a, Decl(genericDefaults.ts, 395, 27))
++>a : Symbol(a, Decl(genericDefaults.ts, 395, 27))
+ 
+ interface i01<T, U = T> { a: [T, U]; }
+ >i01 : Symbol(i01, Decl(genericDefaults.ts, 397, 34))
+ >T : Symbol(T, Decl(genericDefaults.ts, 399, 14))
+ >U : Symbol(U, Decl(genericDefaults.ts, 399, 16))
+ >T : Symbol(T, Decl(genericDefaults.ts, 399, 14))
+->a : Symbol(i01.a, Decl(genericDefaults.ts, 399, 25))
++>a : Symbol(a, Decl(genericDefaults.ts, 399, 25))
+ >T : Symbol(T, Decl(genericDefaults.ts, 399, 14))
+ >U : Symbol(U, Decl(genericDefaults.ts, 399, 16))
+ 
+ const i01c00 = (<i01<number>>x).a;
+ >i01c00 : Symbol(i01c00, Decl(genericDefaults.ts, 400, 5))
+->(<i01<number>>x).a : Symbol(i01.a, Decl(genericDefaults.ts, 399, 25))
++>(<i01<number>>x).a : Symbol(a, Decl(genericDefaults.ts, 399, 25))
+ >i01 : Symbol(i01, Decl(genericDefaults.ts, 397, 34))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i01.a, Decl(genericDefaults.ts, 399, 25))
++>a : Symbol(a, Decl(genericDefaults.ts, 399, 25))
+ 
+ const i01c01 = (<i01<number, string>>x).a;
+ >i01c01 : Symbol(i01c01, Decl(genericDefaults.ts, 401, 5))
+->(<i01<number, string>>x).a : Symbol(i01.a, Decl(genericDefaults.ts, 399, 25))
++>(<i01<number, string>>x).a : Symbol(a, Decl(genericDefaults.ts, 399, 25))
+ >i01 : Symbol(i01, Decl(genericDefaults.ts, 397, 34))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i01.a, Decl(genericDefaults.ts, 399, 25))
++>a : Symbol(a, Decl(genericDefaults.ts, 399, 25))
+ 
+ interface i02<T extends number, U = T> { a: [T, U]; }
+ >i02 : Symbol(i02, Decl(genericDefaults.ts, 401, 42))
+ >T : Symbol(T, Decl(genericDefaults.ts, 403, 14))
+ >U : Symbol(U, Decl(genericDefaults.ts, 403, 31))
+ >T : Symbol(T, Decl(genericDefaults.ts, 403, 14))
+->a : Symbol(i02.a, Decl(genericDefaults.ts, 403, 40))
++>a : Symbol(a, Decl(genericDefaults.ts, 403, 40))
+ >T : Symbol(T, Decl(genericDefaults.ts, 403, 14))
+ >U : Symbol(U, Decl(genericDefaults.ts, 403, 31))
+ 
+ const i02c00 = (<i02<number>>x).a;
+ >i02c00 : Symbol(i02c00, Decl(genericDefaults.ts, 404, 5))
+->(<i02<number>>x).a : Symbol(i02.a, Decl(genericDefaults.ts, 403, 40))
++>(<i02<number>>x).a : Symbol(a, Decl(genericDefaults.ts, 403, 40))
+ >i02 : Symbol(i02, Decl(genericDefaults.ts, 401, 42))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i02.a, Decl(genericDefaults.ts, 403, 40))
++>a : Symbol(a, Decl(genericDefaults.ts, 403, 40))
+ 
+ const i02c01 = (<i02<1>>x).a;
+ >i02c01 : Symbol(i02c01, Decl(genericDefaults.ts, 405, 5))
+->(<i02<1>>x).a : Symbol(i02.a, Decl(genericDefaults.ts, 403, 40))
++>(<i02<1>>x).a : Symbol(a, Decl(genericDefaults.ts, 403, 40))
+ >i02 : Symbol(i02, Decl(genericDefaults.ts, 401, 42))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i02.a, Decl(genericDefaults.ts, 403, 40))
++>a : Symbol(a, Decl(genericDefaults.ts, 403, 40))
+ 
+ const i02c02 = (<i02<number, number>>x).a;
+ >i02c02 : Symbol(i02c02, Decl(genericDefaults.ts, 406, 5))
+->(<i02<number, number>>x).a : Symbol(i02.a, Decl(genericDefaults.ts, 403, 40))
++>(<i02<number, number>>x).a : Symbol(a, Decl(genericDefaults.ts, 403, 40))
+ >i02 : Symbol(i02, Decl(genericDefaults.ts, 401, 42))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i02.a, Decl(genericDefaults.ts, 403, 40))
++>a : Symbol(a, Decl(genericDefaults.ts, 403, 40))
+ 
+ const i02c03 = (<i02<1, number>>x).a;
+ >i02c03 : Symbol(i02c03, Decl(genericDefaults.ts, 407, 5))
+->(<i02<1, number>>x).a : Symbol(i02.a, Decl(genericDefaults.ts, 403, 40))
++>(<i02<1, number>>x).a : Symbol(a, Decl(genericDefaults.ts, 403, 40))
+ >i02 : Symbol(i02, Decl(genericDefaults.ts, 401, 42))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i02.a, Decl(genericDefaults.ts, 403, 40))
++>a : Symbol(a, Decl(genericDefaults.ts, 403, 40))
+ 
+ const i02c04 = (<i02<number, 1>>x).a;
+ >i02c04 : Symbol(i02c04, Decl(genericDefaults.ts, 408, 5))
+->(<i02<number, 1>>x).a : Symbol(i02.a, Decl(genericDefaults.ts, 403, 40))
++>(<i02<number, 1>>x).a : Symbol(a, Decl(genericDefaults.ts, 403, 40))
+ >i02 : Symbol(i02, Decl(genericDefaults.ts, 401, 42))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i02.a, Decl(genericDefaults.ts, 403, 40))
++>a : Symbol(a, Decl(genericDefaults.ts, 403, 40))
+ 
+ interface i03<T extends number, U extends T = T> { a: [T, U]; }
+ >i03 : Symbol(i03, Decl(genericDefaults.ts, 408, 37))
+@@= skipped -90, +90 lines =@@
+ >U : Symbol(U, Decl(genericDefaults.ts, 410, 31))
+ >T : Symbol(T, Decl(genericDefaults.ts, 410, 14))
+ >T : Symbol(T, Decl(genericDefaults.ts, 410, 14))
+->a : Symbol(i03.a, Decl(genericDefaults.ts, 410, 50))
++>a : Symbol(a, Decl(genericDefaults.ts, 410, 50))
+ >T : Symbol(T, Decl(genericDefaults.ts, 410, 14))
+ >U : Symbol(U, Decl(genericDefaults.ts, 410, 31))
+ 
+ const i03c00 = (<i03<number>>x).a;
+ >i03c00 : Symbol(i03c00, Decl(genericDefaults.ts, 411, 5))
+->(<i03<number>>x).a : Symbol(i03.a, Decl(genericDefaults.ts, 410, 50))
++>(<i03<number>>x).a : Symbol(a, Decl(genericDefaults.ts, 410, 50))
+ >i03 : Symbol(i03, Decl(genericDefaults.ts, 408, 37))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i03.a, Decl(genericDefaults.ts, 410, 50))
++>a : Symbol(a, Decl(genericDefaults.ts, 410, 50))
+ 
+ const i03c01 = (<i03<1>>x).a;
+ >i03c01 : Symbol(i03c01, Decl(genericDefaults.ts, 412, 5))
+->(<i03<1>>x).a : Symbol(i03.a, Decl(genericDefaults.ts, 410, 50))
++>(<i03<1>>x).a : Symbol(a, Decl(genericDefaults.ts, 410, 50))
+ >i03 : Symbol(i03, Decl(genericDefaults.ts, 408, 37))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i03.a, Decl(genericDefaults.ts, 410, 50))
++>a : Symbol(a, Decl(genericDefaults.ts, 410, 50))
+ 
+ const i03c02 = (<i03<number, number>>x).a;
+ >i03c02 : Symbol(i03c02, Decl(genericDefaults.ts, 413, 5))
+->(<i03<number, number>>x).a : Symbol(i03.a, Decl(genericDefaults.ts, 410, 50))
++>(<i03<number, number>>x).a : Symbol(a, Decl(genericDefaults.ts, 410, 50))
+ >i03 : Symbol(i03, Decl(genericDefaults.ts, 408, 37))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i03.a, Decl(genericDefaults.ts, 410, 50))
++>a : Symbol(a, Decl(genericDefaults.ts, 410, 50))
+ 
+ const i03c03 = (<i03<1, 1>>x).a;
+ >i03c03 : Symbol(i03c03, Decl(genericDefaults.ts, 414, 5))
+->(<i03<1, 1>>x).a : Symbol(i03.a, Decl(genericDefaults.ts, 410, 50))
++>(<i03<1, 1>>x).a : Symbol(a, Decl(genericDefaults.ts, 410, 50))
+ >i03 : Symbol(i03, Decl(genericDefaults.ts, 408, 37))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i03.a, Decl(genericDefaults.ts, 410, 50))
++>a : Symbol(a, Decl(genericDefaults.ts, 410, 50))
+ 
+ const i03c04 = (<i03<number, 1>>x).a;
+ >i03c04 : Symbol(i03c04, Decl(genericDefaults.ts, 415, 5))
+->(<i03<number, 1>>x).a : Symbol(i03.a, Decl(genericDefaults.ts, 410, 50))
++>(<i03<number, 1>>x).a : Symbol(a, Decl(genericDefaults.ts, 410, 50))
+ >i03 : Symbol(i03, Decl(genericDefaults.ts, 408, 37))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i03.a, Decl(genericDefaults.ts, 410, 50))
++>a : Symbol(a, Decl(genericDefaults.ts, 410, 50))
+ 
+ interface i04 {}
+ >i04 : Symbol(i04, Decl(genericDefaults.ts, 415, 37), Decl(genericDefaults.ts, 417, 16), Decl(genericDefaults.ts, 418, 19), Decl(genericDefaults.ts, 419, 28))
+@@= skipped -59, +59 lines =@@
+ >i05 : Symbol(i05, Decl(genericDefaults.ts, 420, 40))
+ >T : Symbol(T, Decl(genericDefaults.ts, 422, 14))
+ >T : Symbol(T, Decl(genericDefaults.ts, 422, 14))
+->a : Symbol(i05.a, Decl(genericDefaults.ts, 422, 22))
++>a : Symbol(a, Decl(genericDefaults.ts, 422, 22))
+ >T : Symbol(T, Decl(genericDefaults.ts, 422, 14))
+ 
+ const i05c00 = (<i05>x).a;
+ >i05c00 : Symbol(i05c00, Decl(genericDefaults.ts, 423, 5))
+->(<i05>x).a : Symbol(i05.a, Decl(genericDefaults.ts, 422, 22))
++>(<i05>x).a : Symbol(a, Decl(genericDefaults.ts, 422, 22))
+ >i05 : Symbol(i05, Decl(genericDefaults.ts, 420, 40))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i05.a, Decl(genericDefaults.ts, 422, 22))
++>a : Symbol(a, Decl(genericDefaults.ts, 422, 22))
+ 
+ const i05c01 = (<i05<number>>x).a;
+ >i05c01 : Symbol(i05c01, Decl(genericDefaults.ts, 424, 5))
+->(<i05<number>>x).a : Symbol(i05.a, Decl(genericDefaults.ts, 422, 22))
++>(<i05<number>>x).a : Symbol(a, Decl(genericDefaults.ts, 422, 22))
+ >i05 : Symbol(i05, Decl(genericDefaults.ts, 420, 40))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i05.a, Decl(genericDefaults.ts, 422, 22))
++>a : Symbol(a, Decl(genericDefaults.ts, 422, 22))
+ 
+ interface i06<T = U, U = T> { a: [T, U]; }
+ >i06 : Symbol(i06, Decl(genericDefaults.ts, 424, 34))
+@@= skipped -23, +23 lines =@@
+ >U : Symbol(U, Decl(genericDefaults.ts, 426, 20))
+ >U : Symbol(U, Decl(genericDefaults.ts, 426, 20))
+ >T : Symbol(T, Decl(genericDefaults.ts, 426, 14))
+->a : Symbol(i06.a, Decl(genericDefaults.ts, 426, 29))
++>a : Symbol(a, Decl(genericDefaults.ts, 426, 29))
+ >T : Symbol(T, Decl(genericDefaults.ts, 426, 14))
+ >U : Symbol(U, Decl(genericDefaults.ts, 426, 20))
+ 
+ const i06c00 = (<i06>x).a;
+ >i06c00 : Symbol(i06c00, Decl(genericDefaults.ts, 427, 5))
+->(<i06>x).a : Symbol(i06.a, Decl(genericDefaults.ts, 426, 29))
++>(<i06>x).a : Symbol(a, Decl(genericDefaults.ts, 426, 29))
+ >i06 : Symbol(i06, Decl(genericDefaults.ts, 424, 34))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i06.a, Decl(genericDefaults.ts, 426, 29))
++>a : Symbol(a, Decl(genericDefaults.ts, 426, 29))
+ 
+ const i06c01 = (<i06<number>>x).a;
+ >i06c01 : Symbol(i06c01, Decl(genericDefaults.ts, 428, 5))
+->(<i06<number>>x).a : Symbol(i06.a, Decl(genericDefaults.ts, 426, 29))
++>(<i06<number>>x).a : Symbol(a, Decl(genericDefaults.ts, 426, 29))
+ >i06 : Symbol(i06, Decl(genericDefaults.ts, 424, 34))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i06.a, Decl(genericDefaults.ts, 426, 29))
++>a : Symbol(a, Decl(genericDefaults.ts, 426, 29))
+ 
+ const i06c02 = (<i06<number, string>>x).a;
+ >i06c02 : Symbol(i06c02, Decl(genericDefaults.ts, 429, 5))
+->(<i06<number, string>>x).a : Symbol(i06.a, Decl(genericDefaults.ts, 426, 29))
++>(<i06<number, string>>x).a : Symbol(a, Decl(genericDefaults.ts, 426, 29))
+ >i06 : Symbol(i06, Decl(genericDefaults.ts, 424, 34))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i06.a, Decl(genericDefaults.ts, 426, 29))
++>a : Symbol(a, Decl(genericDefaults.ts, 426, 29))
+ 
+ interface i07 { a: A; }
+ >i07 : Symbol(i07, Decl(genericDefaults.ts, 429, 42), Decl(genericDefaults.ts, 431, 23))
+->a : Symbol(i07.a, Decl(genericDefaults.ts, 431, 15))
++>a : Symbol(a, Decl(genericDefaults.ts, 431, 15))
+ >A : Symbol(A, Decl(genericDefaults.ts, 0, 0))
+ 
+ interface i07<A = number> { b: A; }
+ >i07 : Symbol(i07, Decl(genericDefaults.ts, 429, 42), Decl(genericDefaults.ts, 431, 23))
+ >A : Symbol(A, Decl(genericDefaults.ts, 432, 14))
+->b : Symbol(i07.b, Decl(genericDefaults.ts, 432, 27))
++>b : Symbol(b, Decl(genericDefaults.ts, 432, 27))
+ >A : Symbol(A, Decl(genericDefaults.ts, 432, 14))
+ 
+ const i07c00 = (<i07>x).a;
+ >i07c00 : Symbol(i07c00, Decl(genericDefaults.ts, 433, 5))
+->(<i07>x).a : Symbol(i07.a, Decl(genericDefaults.ts, 431, 15))
++>(<i07>x).a : Symbol(a, Decl(genericDefaults.ts, 431, 15))
+ >i07 : Symbol(i07, Decl(genericDefaults.ts, 429, 42), Decl(genericDefaults.ts, 431, 23))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i07.a, Decl(genericDefaults.ts, 431, 15))
++>a : Symbol(a, Decl(genericDefaults.ts, 431, 15))
+ 
+ const i07c01 = (<i07>x).b;
+ >i07c01 : Symbol(i07c01, Decl(genericDefaults.ts, 434, 5))
+->(<i07>x).b : Symbol(i07.b, Decl(genericDefaults.ts, 432, 27))
++>(<i07>x).b : Symbol(b, Decl(genericDefaults.ts, 432, 27))
+ >i07 : Symbol(i07, Decl(genericDefaults.ts, 429, 42), Decl(genericDefaults.ts, 431, 23))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->b : Symbol(i07.b, Decl(genericDefaults.ts, 432, 27))
++>b : Symbol(b, Decl(genericDefaults.ts, 432, 27))
+ 
+ const i07c02 = (<i07<B>>x).a;
+ >i07c02 : Symbol(i07c02, Decl(genericDefaults.ts, 435, 5))
+->(<i07<B>>x).a : Symbol(i07.a, Decl(genericDefaults.ts, 431, 15))
++>(<i07<B>>x).a : Symbol(a, Decl(genericDefaults.ts, 431, 15))
+ >i07 : Symbol(i07, Decl(genericDefaults.ts, 429, 42), Decl(genericDefaults.ts, 431, 23))
+ >B : Symbol(B, Decl(genericDefaults.ts, 0, 26))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->a : Symbol(i07.a, Decl(genericDefaults.ts, 431, 15))
++>a : Symbol(a, Decl(genericDefaults.ts, 431, 15))
+ 
+ const i07c03 = (<i07<B>>x).b;
+ >i07c03 : Symbol(i07c03, Decl(genericDefaults.ts, 436, 5))
+->(<i07<B>>x).b : Symbol(i07.b, Decl(genericDefaults.ts, 432, 27))
++>(<i07<B>>x).b : Symbol(b, Decl(genericDefaults.ts, 432, 27))
+ >i07 : Symbol(i07, Decl(genericDefaults.ts, 429, 42), Decl(genericDefaults.ts, 431, 23))
+ >B : Symbol(B, Decl(genericDefaults.ts, 0, 26))
+ >x : Symbol(x, Decl(genericDefaults.ts, 13, 13))
+->b : Symbol(i07.b, Decl(genericDefaults.ts, 432, 27))
++>b : Symbol(b, Decl(genericDefaults.ts, 432, 27))
+ 
+ interface Base01<T> { a: T; }
+ >Base01 : Symbol(Base01, Decl(genericDefaults.ts, 436, 29), Decl(genericDefaults.ts, 441, 13))
+ >T : Symbol(T, Decl(genericDefaults.ts, 438, 17))
+->a : Symbol(Base01.a, Decl(genericDefaults.ts, 438, 21))
++>a : Symbol(a, Decl(genericDefaults.ts, 438, 21))
+ >T : Symbol(T, Decl(genericDefaults.ts, 438, 17))
+ 
+ interface Base01Constructor { new <T = number>(a?: T): Base01<T>; }
+@@= skipped -172, +172 lines =@@
+ 
+ const Derived03c01 = Derived03c00.a;
+ >Derived03c01 : Symbol(Derived03c01, Decl(genericDefaults.ts, 465, 5))
+->Derived03c00.a : Symbol(A.a, Decl(genericDefaults.ts, 0, 13))
++>Derived03c00.a : Symbol(a, Decl(genericDefaults.ts, 0, 13))
+ >Derived03c00 : Symbol(Derived03c00, Decl(genericDefaults.ts, 464, 5))
+->a : Symbol(A.a, Decl(genericDefaults.ts, 0, 13))
++>a : Symbol(a, Decl(genericDefaults.ts, 0, 13))
+ 
+ type DerivedProps = keyof Derived03;
+ >DerivedProps : Symbol(DerivedProps, Decl(genericDefaults.ts, 465, 36))

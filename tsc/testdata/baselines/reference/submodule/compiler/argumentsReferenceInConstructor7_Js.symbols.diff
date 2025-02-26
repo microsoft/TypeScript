@@ -1,0 +1,17 @@
+--- old.argumentsReferenceInConstructor7_Js.symbols
++++ new.argumentsReferenceInConstructor7_Js.symbols
+@@= skipped -8, +8 lines =@@
+ 		 * @type Function
+ 		 */
+ 		this.callee = arguments.callee;
+->this.callee : Symbol(A.callee, Decl(a.js, 1, 16))
+ >this : Symbol(A, Decl(a.js, 0, 0))
+->callee : Symbol(A.callee, Decl(a.js, 1, 16))
+->arguments.callee : Symbol(IArguments.callee, Decl(lib.es5.d.ts, --, --))
++>arguments.callee : Symbol(callee, Decl(lib.es5.d.ts, --, --))
+ >arguments : Symbol(arguments)
+->callee : Symbol(IArguments.callee, Decl(lib.es5.d.ts, --, --))
++>callee : Symbol(callee, Decl(lib.es5.d.ts, --, --))
+ 	}
+ }
+ 

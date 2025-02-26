@@ -1,0 +1,23 @@
+--- old.typeArgumentInferenceWithClassExpression1.symbols
++++ new.typeArgumentInferenceWithClassExpression1.symbols
+@@= skipped -4, +4 lines =@@
+ >foo : Symbol(foo, Decl(typeArgumentInferenceWithClassExpression1.ts, 0, 0))
+ >T : Symbol(T, Decl(typeArgumentInferenceWithClassExpression1.ts, 0, 13))
+ >x : Symbol(x, Decl(typeArgumentInferenceWithClassExpression1.ts, 0, 16))
+->prop : Symbol((Anonymous class).prop, Decl(typeArgumentInferenceWithClassExpression1.ts, 0, 27))
++>prop : Symbol(prop, Decl(typeArgumentInferenceWithClassExpression1.ts, 0, 27))
+ >T : Symbol(T, Decl(typeArgumentInferenceWithClassExpression1.ts, 0, 13))
+ >T : Symbol(T, Decl(typeArgumentInferenceWithClassExpression1.ts, 0, 13))
+ 
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ foo(class { static prop = "hello" }).length;
+->foo(class { static prop = "hello" }).length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>foo(class { static prop = "hello" }).length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >foo : Symbol(foo, Decl(typeArgumentInferenceWithClassExpression1.ts, 0, 0))
+->prop : Symbol((Anonymous class).prop, Decl(typeArgumentInferenceWithClassExpression1.ts, 4, 11))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>prop : Symbol(prop, Decl(typeArgumentInferenceWithClassExpression1.ts, 4, 11))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 

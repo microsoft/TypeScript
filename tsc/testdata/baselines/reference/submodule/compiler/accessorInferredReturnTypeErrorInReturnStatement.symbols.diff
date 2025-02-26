@@ -1,0 +1,11 @@
+--- old.accessorInferredReturnTypeErrorInReturnStatement.symbols
++++ new.accessorInferredReturnTypeErrorInReturnStatement.symbols
+@@= skipped -8, +8 lines =@@
+ 
+     var _this = this;
+ >_this : Symbol(_this, Decl(accessorInferredReturnTypeErrorInReturnStatement.ts, 2, 7))
+->this : Symbol(basePrototype, Decl(accessorInferredReturnTypeErrorInReturnStatement.ts, 0, 26))
++>this : Symbol((Anonymous type), Decl(accessorInferredReturnTypeErrorInReturnStatement.ts, 0, 26))
+ 
+     return _this.collection.schema.primaryPath;
+ >_this : Symbol(_this, Decl(accessorInferredReturnTypeErrorInReturnStatement.ts, 2, 7))

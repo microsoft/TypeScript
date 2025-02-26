@@ -1,0 +1,34 @@
+--- old.esDecorators-classDeclaration-exportModifier.symbols
++++ new.esDecorators-classDeclaration-exportModifier.symbols
+@@= skipped -14, +14 lines =@@
+ // ok
+ @dec export default class C2 {}
+ >dec : Symbol(dec, Decl(global.js, 1, 3))
+->C2 : Symbol(C2, Decl(file2.js, 0, 0))
++>C2 : Symbol(default, Decl(file2.js, 0, 0))
+ 
+ === file3.js ===
+ // error
+ export @dec default class C3 {}
+ >dec : Symbol(dec, Decl(global.js, 1, 3))
+->C3 : Symbol(C3, Decl(file3.js, 0, 0))
++>C3 : Symbol(default, Decl(file3.js, 0, 0))
+ 
+ === file4.js ===
+ // ok
+@@= skipped -18, +18 lines =@@
+ // ok
+ export default @dec class C5 {}
+ >dec : Symbol(dec, Decl(global.js, 1, 3))
+->C5 : Symbol(C5, Decl(file5.js, 0, 0))
++>C5 : Symbol(default, Decl(file5.js, 0, 0))
+ 
+ === file6.js ===
+ // error
+@@= skipped -14, +14 lines =@@
+ @dec export default @dec class C7 {}
+ >dec : Symbol(dec, Decl(global.js, 1, 3))
+ >dec : Symbol(dec, Decl(global.js, 1, 3))
+->C7 : Symbol(C7, Decl(file7.js, 0, 0))
++>C7 : Symbol(default, Decl(file7.js, 0, 0))
+ 

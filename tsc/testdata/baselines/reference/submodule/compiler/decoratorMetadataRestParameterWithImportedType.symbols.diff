@@ -1,0 +1,59 @@
+--- old.decoratorMetadataRestParameterWithImportedType.symbols
++++ new.decoratorMetadataRestParameterWithImportedType.symbols
+@@= skipped -4, +4 lines =@@
+ >SomeClass : Symbol(SomeClass, Decl(aux.ts, 0, 0))
+ 
+     field: string;
+->field : Symbol(SomeClass.field, Decl(aux.ts, 0, 24))
++>field : Symbol(field, Decl(aux.ts, 0, 24))
+ }
+ 
+ === aux1.ts ===
+@@= skipped -8, +8 lines =@@
+ >SomeClass1 : Symbol(SomeClass1, Decl(aux1.ts, 0, 0))
+ 
+     field: string;
+->field : Symbol(SomeClass1.field, Decl(aux1.ts, 0, 25))
++>field : Symbol(field, Decl(aux1.ts, 0, 25))
+ }
+ 
+ === aux2.ts ===
+@@= skipped -8, +8 lines =@@
+ >SomeClass2 : Symbol(SomeClass2, Decl(aux2.ts, 0, 0))
+ 
+     field: string;
+->field : Symbol(SomeClass2.field, Decl(aux2.ts, 0, 25))
++>field : Symbol(field, Decl(aux2.ts, 0, 25))
+ }
+ === main.ts ===
+ import { SomeClass } from './aux';
+@@= skipped -32, +32 lines =@@
+ >ClassA : Symbol(ClassA, Decl(main.ts, 9, 1))
+ 
+     array: SomeClass[];
+->array : Symbol(ClassA.array, Decl(main.ts, 12, 21))
++>array : Symbol(array, Decl(main.ts, 12, 21))
+ >SomeClass : Symbol(SomeClass, Decl(main.ts, 0, 8))
+ 
+     constructor(...init: SomeClass[]) {
+@@= skipped -8, +8 lines =@@
+ >SomeClass : Symbol(SomeClass, Decl(main.ts, 0, 8))
+ 
+         this.array = init;
+->this.array : Symbol(ClassA.array, Decl(main.ts, 12, 21))
++>this.array : Symbol(array, Decl(main.ts, 12, 21))
+ >this : Symbol(ClassA, Decl(main.ts, 9, 1))
+->array : Symbol(ClassA.array, Decl(main.ts, 12, 21))
++>array : Symbol(array, Decl(main.ts, 12, 21))
+ >init : Symbol(init, Decl(main.ts, 15, 16))
+     }
+ 
+@@= skipped -10, +10 lines =@@
+ >annotation1 : Symbol(annotation1, Decl(main.ts, 5, 1))
+ 
+     foo(... args: SomeClass1[]) {
+->foo : Symbol(ClassA.foo, Decl(main.ts, 17, 5))
++>foo : Symbol(foo, Decl(main.ts, 17, 5))
+ >args : Symbol(args, Decl(main.ts, 20, 8))
+ >SomeClass1 : Symbol(SomeClass1, Decl(main.ts, 1, 8))
+     }

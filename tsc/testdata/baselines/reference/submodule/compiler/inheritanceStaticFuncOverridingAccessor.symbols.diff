@@ -1,0 +1,26 @@
+--- old.inheritanceStaticFuncOverridingAccessor.symbols
++++ new.inheritanceStaticFuncOverridingAccessor.symbols
+@@= skipped -4, +4 lines =@@
+ >a : Symbol(a, Decl(inheritanceStaticFuncOverridingAccessor.ts, 0, 0))
+ 
+     static get x() {
+->x : Symbol(a.x, Decl(inheritanceStaticFuncOverridingAccessor.ts, 0, 9), Decl(inheritanceStaticFuncOverridingAccessor.ts, 3, 5))
++>x : Symbol(x, Decl(inheritanceStaticFuncOverridingAccessor.ts, 0, 9), Decl(inheritanceStaticFuncOverridingAccessor.ts, 3, 5))
+ 
+         return "20";
+     }
+     static set x(aValue: string) {
+->x : Symbol(a.x, Decl(inheritanceStaticFuncOverridingAccessor.ts, 0, 9), Decl(inheritanceStaticFuncOverridingAccessor.ts, 3, 5))
++>x : Symbol(x, Decl(inheritanceStaticFuncOverridingAccessor.ts, 0, 9), Decl(inheritanceStaticFuncOverridingAccessor.ts, 3, 5))
+ >aValue : Symbol(aValue, Decl(inheritanceStaticFuncOverridingAccessor.ts, 4, 17))
+ 
+     }
+@@= skipped -16, +16 lines =@@
+ >a : Symbol(a, Decl(inheritanceStaticFuncOverridingAccessor.ts, 0, 0))
+ 
+     static x() {
+->x : Symbol(b.x, Decl(inheritanceStaticFuncOverridingAccessor.ts, 9, 19))
++>x : Symbol(x, Decl(inheritanceStaticFuncOverridingAccessor.ts, 9, 19))
+ 
+         return "20";
+     }

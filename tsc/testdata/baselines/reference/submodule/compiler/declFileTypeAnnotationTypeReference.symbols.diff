@@ -1,0 +1,52 @@
+--- old.declFileTypeAnnotationTypeReference.symbols
++++ new.declFileTypeAnnotationTypeReference.symbols
+@@= skipped -38, +38 lines =@@
+ function foo3(): m.c {
+ >foo3 : Symbol(foo3, Decl(declFileTypeAnnotationTypeReference.ts, 17, 1))
+ >m : Symbol(m, Decl(declFileTypeAnnotationTypeReference.ts, 1, 1))
+->c : Symbol(m.c, Decl(declFileTypeAnnotationTypeReference.ts, 2, 10))
++>c : Symbol(c, Decl(declFileTypeAnnotationTypeReference.ts, 2, 10))
+ 
+     return new m.c();
+->m.c : Symbol(m.c, Decl(declFileTypeAnnotationTypeReference.ts, 2, 10))
++>m.c : Symbol(c, Decl(declFileTypeAnnotationTypeReference.ts, 2, 10))
+ >m : Symbol(m, Decl(declFileTypeAnnotationTypeReference.ts, 1, 1))
+->c : Symbol(m.c, Decl(declFileTypeAnnotationTypeReference.ts, 2, 10))
++>c : Symbol(c, Decl(declFileTypeAnnotationTypeReference.ts, 2, 10))
+ }
+ function foo4() {
+ >foo4 : Symbol(foo4, Decl(declFileTypeAnnotationTypeReference.ts, 22, 1))
+ 
+     return new m.c();
+->m.c : Symbol(m.c, Decl(declFileTypeAnnotationTypeReference.ts, 2, 10))
++>m.c : Symbol(c, Decl(declFileTypeAnnotationTypeReference.ts, 2, 10))
+ >m : Symbol(m, Decl(declFileTypeAnnotationTypeReference.ts, 1, 1))
+->c : Symbol(m.c, Decl(declFileTypeAnnotationTypeReference.ts, 2, 10))
++>c : Symbol(c, Decl(declFileTypeAnnotationTypeReference.ts, 2, 10))
+ }
+ 
+ // Just the name with type arguments
+@@= skipped -35, +35 lines =@@
+ function foo7(): m.g<number> {
+ >foo7 : Symbol(foo7, Decl(declFileTypeAnnotationTypeReference.ts, 33, 1))
+ >m : Symbol(m, Decl(declFileTypeAnnotationTypeReference.ts, 1, 1))
+->g : Symbol(m.g, Decl(declFileTypeAnnotationTypeReference.ts, 4, 5))
++>g : Symbol(g, Decl(declFileTypeAnnotationTypeReference.ts, 4, 5))
+ 
+     return new m.g<number>();
+->m.g : Symbol(m.g, Decl(declFileTypeAnnotationTypeReference.ts, 4, 5))
++>m.g : Symbol(g, Decl(declFileTypeAnnotationTypeReference.ts, 4, 5))
+ >m : Symbol(m, Decl(declFileTypeAnnotationTypeReference.ts, 1, 1))
+->g : Symbol(m.g, Decl(declFileTypeAnnotationTypeReference.ts, 4, 5))
++>g : Symbol(g, Decl(declFileTypeAnnotationTypeReference.ts, 4, 5))
+ }
+ function foo8() {
+ >foo8 : Symbol(foo8, Decl(declFileTypeAnnotationTypeReference.ts, 38, 1))
+ 
+     return new m.g<number>();
+->m.g : Symbol(m.g, Decl(declFileTypeAnnotationTypeReference.ts, 4, 5))
++>m.g : Symbol(g, Decl(declFileTypeAnnotationTypeReference.ts, 4, 5))
+ >m : Symbol(m, Decl(declFileTypeAnnotationTypeReference.ts, 1, 1))
+->g : Symbol(m.g, Decl(declFileTypeAnnotationTypeReference.ts, 4, 5))
++>g : Symbol(g, Decl(declFileTypeAnnotationTypeReference.ts, 4, 5))
+ }

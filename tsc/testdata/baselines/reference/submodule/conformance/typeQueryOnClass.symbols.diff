@@ -1,0 +1,110 @@
+--- old.typeQueryOnClass.symbols
++++ new.typeQueryOnClass.symbols
+@@= skipped -11, +11 lines =@@
+ >x : Symbol(x, Decl(typeQueryOnClass.ts, 2, 16))
+ 
+     constructor(public x) { }
+->x : Symbol(C.x, Decl(typeQueryOnClass.ts, 3, 16))
++>x : Symbol(x, Decl(typeQueryOnClass.ts, 3, 16))
+ 
+     static foo(x: number);
+->foo : Symbol(C.foo, Decl(typeQueryOnClass.ts, 3, 29), Decl(typeQueryOnClass.ts, 5, 26), Decl(typeQueryOnClass.ts, 6, 22))
++>foo : Symbol(foo, Decl(typeQueryOnClass.ts, 3, 29), Decl(typeQueryOnClass.ts, 5, 26), Decl(typeQueryOnClass.ts, 6, 22))
+ >x : Symbol(x, Decl(typeQueryOnClass.ts, 5, 15))
+ 
+     static foo(x: {});
+->foo : Symbol(C.foo, Decl(typeQueryOnClass.ts, 3, 29), Decl(typeQueryOnClass.ts, 5, 26), Decl(typeQueryOnClass.ts, 6, 22))
++>foo : Symbol(foo, Decl(typeQueryOnClass.ts, 3, 29), Decl(typeQueryOnClass.ts, 5, 26), Decl(typeQueryOnClass.ts, 6, 22))
+ >x : Symbol(x, Decl(typeQueryOnClass.ts, 6, 15))
+ 
+     static foo(x) { }
+->foo : Symbol(C.foo, Decl(typeQueryOnClass.ts, 3, 29), Decl(typeQueryOnClass.ts, 5, 26), Decl(typeQueryOnClass.ts, 6, 22))
++>foo : Symbol(foo, Decl(typeQueryOnClass.ts, 3, 29), Decl(typeQueryOnClass.ts, 5, 26), Decl(typeQueryOnClass.ts, 6, 22))
+ >x : Symbol(x, Decl(typeQueryOnClass.ts, 7, 15))
+ 
+     static bar(x) { }
+->bar : Symbol(C.bar, Decl(typeQueryOnClass.ts, 7, 21))
++>bar : Symbol(bar, Decl(typeQueryOnClass.ts, 7, 21))
+ >x : Symbol(x, Decl(typeQueryOnClass.ts, 9, 15))
+ 
+     static sa = 1;
+->sa : Symbol(C.sa, Decl(typeQueryOnClass.ts, 9, 21))
++>sa : Symbol(sa, Decl(typeQueryOnClass.ts, 9, 21))
+ 
+     static sb = () => 1;
+->sb : Symbol(C.sb, Decl(typeQueryOnClass.ts, 11, 18))
++>sb : Symbol(sb, Decl(typeQueryOnClass.ts, 11, 18))
+ 
+     static get sc() {
+->sc : Symbol(C.sc, Decl(typeQueryOnClass.ts, 12, 24), Decl(typeQueryOnClass.ts, 16, 5))
++>sc : Symbol(sc, Decl(typeQueryOnClass.ts, 12, 24), Decl(typeQueryOnClass.ts, 16, 5))
+ 
+         return 1;
+     }
+     static set sc(x) {
+->sc : Symbol(C.sc, Decl(typeQueryOnClass.ts, 12, 24), Decl(typeQueryOnClass.ts, 16, 5))
++>sc : Symbol(sc, Decl(typeQueryOnClass.ts, 12, 24), Decl(typeQueryOnClass.ts, 16, 5))
+ >x : Symbol(x, Decl(typeQueryOnClass.ts, 17, 18))
+     }
+ 
+     static get sd() {
+->sd : Symbol(C.sd, Decl(typeQueryOnClass.ts, 18, 5))
++>sd : Symbol(sd, Decl(typeQueryOnClass.ts, 18, 5))
+ 
+         return 1;
+     }
+ 
+     baz(x): string { return ''; }
+->baz : Symbol(C.baz, Decl(typeQueryOnClass.ts, 22, 5))
++>baz : Symbol(baz, Decl(typeQueryOnClass.ts, 22, 5))
+ >x : Symbol(x, Decl(typeQueryOnClass.ts, 24, 8))
+ 
+     ia = 1;
+->ia : Symbol(C.ia, Decl(typeQueryOnClass.ts, 24, 33))
++>ia : Symbol(ia, Decl(typeQueryOnClass.ts, 24, 33))
+ 
+     ib = () => this.ia;
+->ib : Symbol(C.ib, Decl(typeQueryOnClass.ts, 26, 11))
+->this.ia : Symbol(C.ia, Decl(typeQueryOnClass.ts, 24, 33))
++>ib : Symbol(ib, Decl(typeQueryOnClass.ts, 26, 11))
++>this.ia : Symbol(ia, Decl(typeQueryOnClass.ts, 24, 33))
+ >this : Symbol(C, Decl(typeQueryOnClass.ts, 0, 0))
+->ia : Symbol(C.ia, Decl(typeQueryOnClass.ts, 24, 33))
++>ia : Symbol(ia, Decl(typeQueryOnClass.ts, 24, 33))
+ 
+     get ic() {
+->ic : Symbol(C.ic, Decl(typeQueryOnClass.ts, 27, 23), Decl(typeQueryOnClass.ts, 31, 5))
++>ic : Symbol(ic, Decl(typeQueryOnClass.ts, 27, 23), Decl(typeQueryOnClass.ts, 31, 5))
+ 
+         return 1;
+     }
+     set ic(x) {
+->ic : Symbol(C.ic, Decl(typeQueryOnClass.ts, 27, 23), Decl(typeQueryOnClass.ts, 31, 5))
++>ic : Symbol(ic, Decl(typeQueryOnClass.ts, 27, 23), Decl(typeQueryOnClass.ts, 31, 5))
+ >x : Symbol(x, Decl(typeQueryOnClass.ts, 32, 11))
+     }
+ 
+     get id() {
+->id : Symbol(C.id, Decl(typeQueryOnClass.ts, 33, 5))
++>id : Symbol(id, Decl(typeQueryOnClass.ts, 33, 5))
+ 
+         return 1;
+     }
+@@= skipped -89, +89 lines =@@
+ >T : Symbol(T, Decl(typeQueryOnClass.ts, 47, 8))
+ 
+     constructor(public y?) { }
+->y : Symbol(D.y, Decl(typeQueryOnClass.ts, 48, 16))
++>y : Symbol(y, Decl(typeQueryOnClass.ts, 48, 16))
+ 
+     x: T;
+->x : Symbol(D.x, Decl(typeQueryOnClass.ts, 48, 30))
++>x : Symbol(x, Decl(typeQueryOnClass.ts, 48, 30))
+ >T : Symbol(T, Decl(typeQueryOnClass.ts, 47, 8))
+ 
+     foo() { }
+->foo : Symbol(D.foo, Decl(typeQueryOnClass.ts, 49, 9))
++>foo : Symbol(foo, Decl(typeQueryOnClass.ts, 49, 9))
+ }
+ 
+ var d: D<string>;

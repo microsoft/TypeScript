@@ -1,0 +1,35 @@
+--- old.noUncheckedIndexedAccessCompoundAssignments.symbols
++++ new.noUncheckedIndexedAccessCompoundAssignments.symbols
+@@= skipped -3, +3 lines =@@
+ // Each line should have one error
+ // for a total of 12 errors
+ stringMap.foo++;
+->stringMap.foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
++>stringMap.foo : Symbol((Missing), Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+ >stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))
+->foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
++>foo : Symbol((Missing), Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+ 
+ --stringMap.foo;
+->stringMap.foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
++>stringMap.foo : Symbol((Missing), Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+ >stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))
+->foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
++>foo : Symbol((Missing), Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+ 
+ stringMap.foo += 1;
+->stringMap.foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
++>stringMap.foo : Symbol((Missing), Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+ >stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))
+->foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
++>foo : Symbol((Missing), Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+ 
+ stringMap.foo *= 1;
+->stringMap.foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
++>stringMap.foo : Symbol((Missing), Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+ >stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))
+->foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
++>foo : Symbol((Missing), Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+ 
+ ++stringMap['foo'];
+ >stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))

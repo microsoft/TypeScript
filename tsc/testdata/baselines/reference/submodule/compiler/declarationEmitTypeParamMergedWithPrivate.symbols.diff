@@ -1,0 +1,11 @@
+--- old.declarationEmitTypeParamMergedWithPrivate.symbols
++++ new.declarationEmitTypeParamMergedWithPrivate.symbols
+@@= skipped -12, +12 lines =@@
+     }
+ 
+     public test(): T {
+->test : Symbol(Test.test, Decl(declarationEmitTypeParamMergedWithPrivate.ts, 3, 5))
++>test : Symbol(test, Decl(declarationEmitTypeParamMergedWithPrivate.ts, 3, 5))
+ >T : Symbol(T, Decl(declarationEmitTypeParamMergedWithPrivate.ts, 0, 18), Decl(declarationEmitTypeParamMergedWithPrivate.ts, 0, 22))
+ 
+         return null as any;

@@ -1,0 +1,18 @@
+--- old.systemModuleNonTopLevelModuleMembers.symbols
++++ new.systemModuleNonTopLevelModuleMembers.symbols
+@@= skipped -12, +12 lines =@@
+ 
+ export enum TopLevelEnum {E}
+ >TopLevelEnum : Symbol(TopLevelEnum, Decl(systemModuleNonTopLevelModuleMembers.ts, 2, 43))
+->E : Symbol(TopLevelEnum.E, Decl(systemModuleNonTopLevelModuleMembers.ts, 3, 26))
++>E : Symbol(E, Decl(systemModuleNonTopLevelModuleMembers.ts, 3, 26))
+ 
+ export module TopLevelModule2 {
+ >TopLevelModule2 : Symbol(TopLevelModule2, Decl(systemModuleNonTopLevelModuleMembers.ts, 3, 28))
+@@= skipped -17, +17 lines =@@
+ 
+     export enum NonTopLevelEnum {E}
+ >NonTopLevelEnum : Symbol(NonTopLevelEnum, Decl(systemModuleNonTopLevelModuleMembers.ts, 8, 50))
+->E : Symbol(NonTopLevelEnum.E, Decl(systemModuleNonTopLevelModuleMembers.ts, 9, 33))
++>E : Symbol(E, Decl(systemModuleNonTopLevelModuleMembers.ts, 9, 33))
+ }

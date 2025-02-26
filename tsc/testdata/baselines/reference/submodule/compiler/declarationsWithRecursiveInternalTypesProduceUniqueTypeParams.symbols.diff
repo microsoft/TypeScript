@@ -1,0 +1,43 @@
+--- old.declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.symbols
++++ new.declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.symbols
+@@= skipped -38, +38 lines =@@
+ >set : Symbol(set, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 8, 13))
+ >newU : Symbol(newU, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 8, 21))
+ >U : Symbol(U, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 20))
+->Object.is : Symbol(ObjectConstructor.is, Decl(lib.es2015.core.d.ts, --, --))
++>Object.is : Symbol(is, Decl(lib.es2015.core.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->is : Symbol(ObjectConstructor.is, Decl(lib.es2015.core.d.ts, --, --))
++>is : Symbol(is, Decl(lib.es2015.core.d.ts, --, --))
+ >u : Symbol(u, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 23))
+ >newU : Symbol(newU, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 8, 21))
+ >t : Symbol(t, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 6, 35))
+@@= skipped -10, +10 lines =@@
+ >newU : Symbol(newU, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 8, 21))
+ 
+         return Object.assign(
+->Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+             <K extends Key<U>>(key: K) =>
+ >K : Symbol(K, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 10, 13))
+@@= skipped -29, +29 lines =@@
+ 
+                     return update(Object.assign(Array.isArray(u) ? [] : {}, u, { [key]: v }));
+ >update : Symbol(update, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 28))
+->Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>Array.isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ >u : Symbol(u, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 23))
+ >u : Symbol(u, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 23))
+ >[key] : Symbol([key], Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 12, 80))

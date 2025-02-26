@@ -1,0 +1,37 @@
+--- old.typeAliasDeclarationEmit3.symbols
++++ new.typeAliasDeclarationEmit3.symbols
+@@= skipped -12, +12 lines =@@
+ >foo : Symbol(foo, Decl(typeAliasDeclarationEmit3.ts, 1, 31))
+ 
+         console.log('f1');
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ }
+ 
+ function f2(): void {
+@@= skipped -13, +13 lines =@@
+ >foo : Symbol(foo, Decl(typeAliasDeclarationEmit3.ts, 7, 16))
+ 
+         console.log('f2');
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ }
+ 
+ function f3(): void {
+@@= skipped -13, +13 lines =@@
+ >foo : Symbol(foo, Decl(typeAliasDeclarationEmit3.ts, 13, 13))
+ 
+         console.log('f3');
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ }
+ 

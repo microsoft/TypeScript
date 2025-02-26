@@ -1,0 +1,11 @@
+--- old.declarationEmitAnyComputedPropertyInClass.symbols
++++ new.declarationEmitAnyComputedPropertyInClass.symbols
+@@= skipped -11, +11 lines =@@
+ >C : Symbol(C, Decl(main.ts, 0, 28))
+ 
+     [Test.someKey]() {};
+->[Test.someKey] : Symbol(C[Test.someKey], Decl(main.ts, 2, 16))
++>[Test.someKey] : Symbol([Test.someKey], Decl(main.ts, 2, 16))
+ >Test : Symbol(Test, Decl(main.ts, 0, 6))
+ }
+ 

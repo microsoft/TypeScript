@@ -1,0 +1,31 @@
+--- old.neverType.symbols
++++ new.neverType.symbols
+@@= skipped -98, +98 lines =@@
+ >C : Symbol(C, Decl(neverType.ts, 47, 1))
+ 
+     void1() {
+->void1 : Symbol(C.void1, Decl(neverType.ts, 49, 9))
++>void1 : Symbol(void1, Decl(neverType.ts, 49, 9))
+ 
+         throw new Error();
+ >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+     }
+     void2() {
+->void2 : Symbol(C.void2, Decl(neverType.ts, 52, 5))
++>void2 : Symbol(void2, Decl(neverType.ts, 52, 5))
+ 
+         while (true) {}
+     }
+     never1(): never {
+->never1 : Symbol(C.never1, Decl(neverType.ts, 55, 5))
++>never1 : Symbol(never1, Decl(neverType.ts, 55, 5))
+ 
+         throw new Error();
+ >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+     }
+     never2(): never {
+->never2 : Symbol(C.never2, Decl(neverType.ts, 58, 5))
++>never2 : Symbol(never2, Decl(neverType.ts, 58, 5))
+ 
+         while (true) {}
+     }

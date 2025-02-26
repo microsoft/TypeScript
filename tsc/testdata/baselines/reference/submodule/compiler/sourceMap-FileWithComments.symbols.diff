@@ -1,0 +1,75 @@
+--- old.sourceMap-FileWithComments.symbols
++++ new.sourceMap-FileWithComments.symbols
+@@= skipped -5, +5 lines =@@
+ >IPoint : Symbol(IPoint, Decl(sourceMap-FileWithComments.ts, 0, 0))
+ 
+     getDist(): number;
+->getDist : Symbol(IPoint.getDist, Decl(sourceMap-FileWithComments.ts, 1, 18))
++>getDist : Symbol(getDist, Decl(sourceMap-FileWithComments.ts, 1, 18))
+ }
+ 
+ // Module
+@@= skipped -14, +14 lines =@@
+ 
+         // Constructor
+         constructor(public x: number, public y: number) { }
+->x : Symbol(Point.x, Decl(sourceMap-FileWithComments.ts, 11, 20))
+->y : Symbol(Point.y, Decl(sourceMap-FileWithComments.ts, 11, 37))
++>x : Symbol(x, Decl(sourceMap-FileWithComments.ts, 11, 20))
++>y : Symbol(y, Decl(sourceMap-FileWithComments.ts, 11, 37))
+ 
+         // Instance member
+         getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+->getDist : Symbol(Point.getDist, Decl(sourceMap-FileWithComments.ts, 11, 59))
+->Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
++>getDist : Symbol(getDist, Decl(sourceMap-FileWithComments.ts, 11, 59))
++>Math.sqrt : Symbol(sqrt, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+->this.x : Symbol(Point.x, Decl(sourceMap-FileWithComments.ts, 11, 20))
++>sqrt : Symbol(sqrt, Decl(lib.es5.d.ts, --, --))
++>this.x : Symbol(x, Decl(sourceMap-FileWithComments.ts, 11, 20))
+ >this : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 6, 15))
+->x : Symbol(Point.x, Decl(sourceMap-FileWithComments.ts, 11, 20))
+->this.x : Symbol(Point.x, Decl(sourceMap-FileWithComments.ts, 11, 20))
++>x : Symbol(x, Decl(sourceMap-FileWithComments.ts, 11, 20))
++>this.x : Symbol(x, Decl(sourceMap-FileWithComments.ts, 11, 20))
+ >this : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 6, 15))
+->x : Symbol(Point.x, Decl(sourceMap-FileWithComments.ts, 11, 20))
+->this.y : Symbol(Point.y, Decl(sourceMap-FileWithComments.ts, 11, 37))
++>x : Symbol(x, Decl(sourceMap-FileWithComments.ts, 11, 20))
++>this.y : Symbol(y, Decl(sourceMap-FileWithComments.ts, 11, 37))
+ >this : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 6, 15))
+->y : Symbol(Point.y, Decl(sourceMap-FileWithComments.ts, 11, 37))
+->this.y : Symbol(Point.y, Decl(sourceMap-FileWithComments.ts, 11, 37))
++>y : Symbol(y, Decl(sourceMap-FileWithComments.ts, 11, 37))
++>this.y : Symbol(y, Decl(sourceMap-FileWithComments.ts, 11, 37))
+ >this : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 6, 15))
+->y : Symbol(Point.y, Decl(sourceMap-FileWithComments.ts, 11, 37))
++>y : Symbol(y, Decl(sourceMap-FileWithComments.ts, 11, 37))
+ 
+         // Static member
+         static origin = new Point(0, 0);
+->origin : Symbol(Point.origin, Decl(sourceMap-FileWithComments.ts, 14, 74))
++>origin : Symbol(origin, Decl(sourceMap-FileWithComments.ts, 14, 74))
+ >Point : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 6, 15))
+     }
+ 
+@@= skipped -47, +47 lines =@@
+ var p: IPoint = new Shapes.Point(3, 4);
+ >p : Symbol(p, Decl(sourceMap-FileWithComments.ts, 33, 3))
+ >IPoint : Symbol(IPoint, Decl(sourceMap-FileWithComments.ts, 0, 0))
+->Shapes.Point : Symbol(Shapes.Point, Decl(sourceMap-FileWithComments.ts, 6, 15))
++>Shapes.Point : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 6, 15))
+ >Shapes : Symbol(Shapes, Decl(sourceMap-FileWithComments.ts, 3, 1))
+->Point : Symbol(Shapes.Point, Decl(sourceMap-FileWithComments.ts, 6, 15))
++>Point : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 6, 15))
+ 
+ var dist = p.getDist();
+ >dist : Symbol(dist, Decl(sourceMap-FileWithComments.ts, 34, 3))
+->p.getDist : Symbol(IPoint.getDist, Decl(sourceMap-FileWithComments.ts, 1, 18))
++>p.getDist : Symbol(getDist, Decl(sourceMap-FileWithComments.ts, 1, 18))
+ >p : Symbol(p, Decl(sourceMap-FileWithComments.ts, 33, 3))
+->getDist : Symbol(IPoint.getDist, Decl(sourceMap-FileWithComments.ts, 1, 18))
++>getDist : Symbol(getDist, Decl(sourceMap-FileWithComments.ts, 1, 18))
+ 

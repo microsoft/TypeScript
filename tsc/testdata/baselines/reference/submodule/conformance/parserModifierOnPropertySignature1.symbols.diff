@@ -1,0 +1,10 @@
+--- old.parserModifierOnPropertySignature1.symbols
++++ new.parserModifierOnPropertySignature1.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(parserModifierOnPropertySignature1.ts, 0, 0))
+ 
+     public biz;
+->biz : Symbol(Foo.biz, Decl(parserModifierOnPropertySignature1.ts, 0, 14))
++>biz : Symbol(biz, Decl(parserModifierOnPropertySignature1.ts, 0, 14))
+ }
+ 

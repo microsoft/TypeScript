@@ -1,0 +1,102 @@
+--- old.typeofOperatorWithNumberType.symbols
++++ new.typeofOperatorWithNumberType.symbols
+@@= skipped -14, +14 lines =@@
+ >A : Symbol(A, Decl(typeofOperatorWithNumberType.ts, 4, 36))
+ 
+     public a: number;
+->a : Symbol(A.a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
++>a : Symbol(a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
+ 
+     static foo() { return 1; }
+->foo : Symbol(A.foo, Decl(typeofOperatorWithNumberType.ts, 7, 21))
++>foo : Symbol(foo, Decl(typeofOperatorWithNumberType.ts, 7, 21))
+ }
+ module M {
+ >M : Symbol(M, Decl(typeofOperatorWithNumberType.ts, 9, 1))
+@@= skipped -44, +44 lines =@@
+ // number type expressions
+ var ResultIsString6 = typeof objA.a;
+ >ResultIsString6 : Symbol(ResultIsString6, Decl(typeofOperatorWithNumberType.ts, 26, 3))
+->objA.a : Symbol(A.a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
++>objA.a : Symbol(a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
+ >objA : Symbol(objA, Decl(typeofOperatorWithNumberType.ts, 14, 3))
+->a : Symbol(A.a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
++>a : Symbol(a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
+ 
+ var ResultIsString7 = typeof M.n;
+ >ResultIsString7 : Symbol(ResultIsString7, Decl(typeofOperatorWithNumberType.ts, 27, 3))
+->M.n : Symbol(M.n, Decl(typeofOperatorWithNumberType.ts, 11, 14))
++>M.n : Symbol(n, Decl(typeofOperatorWithNumberType.ts, 11, 14))
+ >M : Symbol(M, Decl(typeofOperatorWithNumberType.ts, 9, 1))
+->n : Symbol(M.n, Decl(typeofOperatorWithNumberType.ts, 11, 14))
++>n : Symbol(n, Decl(typeofOperatorWithNumberType.ts, 11, 14))
+ 
+ var ResultIsString8 = typeof NUMBER1[0];
+ >ResultIsString8 : Symbol(ResultIsString8, Decl(typeofOperatorWithNumberType.ts, 28, 3))
+@@= skipped -20, +20 lines =@@
+ 
+ var ResultIsString10 = typeof A.foo();
+ >ResultIsString10 : Symbol(ResultIsString10, Decl(typeofOperatorWithNumberType.ts, 30, 3))
+->A.foo : Symbol(A.foo, Decl(typeofOperatorWithNumberType.ts, 7, 21))
++>A.foo : Symbol(foo, Decl(typeofOperatorWithNumberType.ts, 7, 21))
+ >A : Symbol(A, Decl(typeofOperatorWithNumberType.ts, 4, 36))
+->foo : Symbol(A.foo, Decl(typeofOperatorWithNumberType.ts, 7, 21))
++>foo : Symbol(foo, Decl(typeofOperatorWithNumberType.ts, 7, 21))
+ 
+ var ResultIsString11 = typeof (NUMBER + NUMBER);
+ >ResultIsString11 : Symbol(ResultIsString11, Decl(typeofOperatorWithNumberType.ts, 31, 3))
+@@= skipped -31, +31 lines =@@
+ >foo : Symbol(foo, Decl(typeofOperatorWithNumberType.ts, 2, 31))
+ 
+ typeof objA.a;
+->objA.a : Symbol(A.a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
++>objA.a : Symbol(a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
+ >objA : Symbol(objA, Decl(typeofOperatorWithNumberType.ts, 14, 3))
+->a : Symbol(A.a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
++>a : Symbol(a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
+ 
+ typeof M.n;
+->M.n : Symbol(M.n, Decl(typeofOperatorWithNumberType.ts, 11, 14))
++>M.n : Symbol(n, Decl(typeofOperatorWithNumberType.ts, 11, 14))
+ >M : Symbol(M, Decl(typeofOperatorWithNumberType.ts, 9, 1))
+->n : Symbol(M.n, Decl(typeofOperatorWithNumberType.ts, 11, 14))
++>n : Symbol(n, Decl(typeofOperatorWithNumberType.ts, 11, 14))
+ 
+ typeof objA.a, M.n;
+->objA.a : Symbol(A.a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
++>objA.a : Symbol(a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
+ >objA : Symbol(objA, Decl(typeofOperatorWithNumberType.ts, 14, 3))
+->a : Symbol(A.a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
+->M.n : Symbol(M.n, Decl(typeofOperatorWithNumberType.ts, 11, 14))
++>a : Symbol(a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
++>M.n : Symbol(n, Decl(typeofOperatorWithNumberType.ts, 11, 14))
+ >M : Symbol(M, Decl(typeofOperatorWithNumberType.ts, 9, 1))
+->n : Symbol(M.n, Decl(typeofOperatorWithNumberType.ts, 11, 14))
++>n : Symbol(n, Decl(typeofOperatorWithNumberType.ts, 11, 14))
+ 
+ // use typeof in type query
+ var z: number;
+@@= skipped -44, +44 lines =@@
+ >a : Symbol(a, Decl(typeofOperatorWithNumberType.ts, 52, 9))
+ 
+ z: typeof objA.a;
+->objA.a : Symbol(A.a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
++>objA.a : Symbol(a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
+ >objA : Symbol(objA, Decl(typeofOperatorWithNumberType.ts, 14, 3))
+->a : Symbol(A.a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
++>a : Symbol(a, Decl(typeofOperatorWithNumberType.ts, 6, 9))
+ 
+ z: typeof A.foo;
+->A.foo : Symbol(A.foo, Decl(typeofOperatorWithNumberType.ts, 7, 21))
++>A.foo : Symbol(foo, Decl(typeofOperatorWithNumberType.ts, 7, 21))
+ >A : Symbol(A, Decl(typeofOperatorWithNumberType.ts, 4, 36))
+->foo : Symbol(A.foo, Decl(typeofOperatorWithNumberType.ts, 7, 21))
++>foo : Symbol(foo, Decl(typeofOperatorWithNumberType.ts, 7, 21))
+ 
+ z: typeof M.n;
+->M.n : Symbol(M.n, Decl(typeofOperatorWithNumberType.ts, 11, 14))
++>M.n : Symbol(n, Decl(typeofOperatorWithNumberType.ts, 11, 14))
+ >M : Symbol(M, Decl(typeofOperatorWithNumberType.ts, 9, 1))
+->n : Symbol(M.n, Decl(typeofOperatorWithNumberType.ts, 11, 14))
++>n : Symbol(n, Decl(typeofOperatorWithNumberType.ts, 11, 14))
+ 

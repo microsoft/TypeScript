@@ -1,0 +1,11 @@
+--- old.internalAliasVarInsideTopLevelModuleWithoutExport.symbols
++++ new.internalAliasVarInsideTopLevelModuleWithoutExport.symbols
+@@= skipped -10, +10 lines =@@
+ import b = a.x;
+ >b : Symbol(b, Decl(internalAliasVarInsideTopLevelModuleWithoutExport.ts, 2, 1))
+ >a : Symbol(a, Decl(internalAliasVarInsideTopLevelModuleWithoutExport.ts, 0, 0))
+->x : Symbol(b, Decl(internalAliasVarInsideTopLevelModuleWithoutExport.ts, 1, 14))
++>x : Symbol(x, Decl(internalAliasVarInsideTopLevelModuleWithoutExport.ts, 1, 14))
+ 
+ export var bVal = b;
+ >bVal : Symbol(bVal, Decl(internalAliasVarInsideTopLevelModuleWithoutExport.ts, 5, 10))

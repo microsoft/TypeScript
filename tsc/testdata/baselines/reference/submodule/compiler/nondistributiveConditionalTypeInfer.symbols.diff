@@ -1,0 +1,22 @@
+--- old.nondistributiveConditionalTypeInfer.symbols
++++ new.nondistributiveConditionalTypeInfer.symbols
+@@= skipped -32, +32 lines =@@
+ >A : Symbol(A, Decl(nondistributiveConditionalTypeInfer.ts, 4, 20))
+ 
+   _R: (_: R) => void;
+->_R : Symbol(Sync._R, Decl(nondistributiveConditionalTypeInfer.ts, 4, 25))
++>_R : Symbol(_R, Decl(nondistributiveConditionalTypeInfer.ts, 4, 25))
+ >_ : Symbol(_, Decl(nondistributiveConditionalTypeInfer.ts, 5, 7))
+ >R : Symbol(R, Decl(nondistributiveConditionalTypeInfer.ts, 4, 15))
+ 
+   _E: () => E;
+->_E : Symbol(Sync._E, Decl(nondistributiveConditionalTypeInfer.ts, 5, 21))
++>_E : Symbol(_E, Decl(nondistributiveConditionalTypeInfer.ts, 5, 21))
+ >E : Symbol(E, Decl(nondistributiveConditionalTypeInfer.ts, 4, 17))
+ 
+   _A: () => A;
+->_A : Symbol(Sync._A, Decl(nondistributiveConditionalTypeInfer.ts, 6, 14))
++>_A : Symbol(_A, Decl(nondistributiveConditionalTypeInfer.ts, 6, 14))
+ >A : Symbol(A, Decl(nondistributiveConditionalTypeInfer.ts, 4, 20))
+ }
+ 

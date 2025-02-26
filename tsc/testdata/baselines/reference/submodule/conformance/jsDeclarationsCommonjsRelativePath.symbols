@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsCommonjsRelativePath.ts] ////
+
+=== reexport.js ===
+'use strict';
+const Thing = require('./thing').Thing
+>Thing : Symbol(Thing, Decl(reexport.js, 1, 5))
+
+module.exports = { Thing }
+>Thing : Symbol(Thing, Decl(reexport.js, 2, 18))
+

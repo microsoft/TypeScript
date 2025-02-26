@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/jsPropertyAssignedAfterMethodDeclaration.ts] ////
+
+=== /a.js ===
+const o = {
+>o : Symbol(o, Decl(a.js, 0, 5))
+
+    a() {
+>a : Symbol(a, Decl(a.js, 0, 11))
+
+        // Should not be treated as a declaration. Should be an error.
+        this.a = 0;
+>this.a : Symbol(a, Decl(a.js, 0, 11))
+>this : Symbol((Anonymous type), Decl(a.js, 0, 9))
+>a : Symbol(a, Decl(a.js, 0, 11))
+    }
+};
+

@@ -1,0 +1,18 @@
+--- old.pathMappingBasedModuleResolution6_classic.symbols
++++ new.pathMappingBasedModuleResolution6_classic.symbols
+@@= skipped -9, +9 lines =@@
+ 
+ use(x.toExponential());
+ >use : Symbol(use, Decl(file1.ts, 0, 34))
+->x.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(file1.ts, 0, 8))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+ 
+ === c:/root/src/file2.d.ts ===
+ export let x: number;
+ >x : Symbol(x, Decl(file2.d.ts, 0, 10))
+ 
+-=== c:/root/generated/src/project/file3.ts ===
+-export {x} from "../file2";
+->x : Symbol(x, Decl(file3.ts, 0, 8))
+-

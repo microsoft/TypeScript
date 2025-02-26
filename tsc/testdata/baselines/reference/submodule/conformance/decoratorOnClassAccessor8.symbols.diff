@@ -1,0 +1,74 @@
+--- old.decoratorOnClassAccessor8.symbols
++++ new.decoratorOnClassAccessor8.symbols
+@@= skipped -16, +16 lines =@@
+ 
+     @dec get x() { return 0; }
+ >dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+->x : Symbol(A.x, Decl(decoratorOnClassAccessor8.ts, 2, 9), Decl(decoratorOnClassAccessor8.ts, 3, 30))
++>x : Symbol(x, Decl(decoratorOnClassAccessor8.ts, 2, 9), Decl(decoratorOnClassAccessor8.ts, 3, 30))
+ 
+     set x(value: number) { }
+->x : Symbol(A.x, Decl(decoratorOnClassAccessor8.ts, 2, 9), Decl(decoratorOnClassAccessor8.ts, 3, 30))
++>x : Symbol(x, Decl(decoratorOnClassAccessor8.ts, 2, 9), Decl(decoratorOnClassAccessor8.ts, 3, 30))
+ >value : Symbol(value, Decl(decoratorOnClassAccessor8.ts, 4, 10))
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ >B : Symbol(B, Decl(decoratorOnClassAccessor8.ts, 5, 1))
+ 
+     get x() { return 0; }
+->x : Symbol(B.x, Decl(decoratorOnClassAccessor8.ts, 7, 9), Decl(decoratorOnClassAccessor8.ts, 8, 25))
++>x : Symbol(x, Decl(decoratorOnClassAccessor8.ts, 7, 9), Decl(decoratorOnClassAccessor8.ts, 8, 25))
+ 
+     @dec set x(value: number) { }
+ >dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+->x : Symbol(B.x, Decl(decoratorOnClassAccessor8.ts, 7, 9), Decl(decoratorOnClassAccessor8.ts, 8, 25))
++>x : Symbol(x, Decl(decoratorOnClassAccessor8.ts, 7, 9), Decl(decoratorOnClassAccessor8.ts, 8, 25))
+ >value : Symbol(value, Decl(decoratorOnClassAccessor8.ts, 9, 15))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ 
+     @dec set x(value: number) { }
+ >dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+->x : Symbol(C.x, Decl(decoratorOnClassAccessor8.ts, 12, 9), Decl(decoratorOnClassAccessor8.ts, 13, 33))
++>x : Symbol(x, Decl(decoratorOnClassAccessor8.ts, 12, 9), Decl(decoratorOnClassAccessor8.ts, 13, 33))
+ >value : Symbol(value, Decl(decoratorOnClassAccessor8.ts, 13, 15))
+ 
+     get x() { return 0; }
+->x : Symbol(C.x, Decl(decoratorOnClassAccessor8.ts, 12, 9), Decl(decoratorOnClassAccessor8.ts, 13, 33))
++>x : Symbol(x, Decl(decoratorOnClassAccessor8.ts, 12, 9), Decl(decoratorOnClassAccessor8.ts, 13, 33))
+ }
+ 
+ class D {
+ >D : Symbol(D, Decl(decoratorOnClassAccessor8.ts, 15, 1))
+ 
+     set x(value: number) { }
+->x : Symbol(D.x, Decl(decoratorOnClassAccessor8.ts, 17, 9), Decl(decoratorOnClassAccessor8.ts, 18, 28))
++>x : Symbol(x, Decl(decoratorOnClassAccessor8.ts, 17, 9), Decl(decoratorOnClassAccessor8.ts, 18, 28))
+ >value : Symbol(value, Decl(decoratorOnClassAccessor8.ts, 18, 10))
+ 
+     @dec get x() { return 0; }
+ >dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+->x : Symbol(D.x, Decl(decoratorOnClassAccessor8.ts, 17, 9), Decl(decoratorOnClassAccessor8.ts, 18, 28))
++>x : Symbol(x, Decl(decoratorOnClassAccessor8.ts, 17, 9), Decl(decoratorOnClassAccessor8.ts, 18, 28))
+ }
+ 
+ class E {
+@@= skipped -24, +24 lines =@@
+ 
+     @dec get x() { return 0; }
+ >dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+->x : Symbol(E.x, Decl(decoratorOnClassAccessor8.ts, 22, 9))
++>x : Symbol(x, Decl(decoratorOnClassAccessor8.ts, 22, 9))
+ }
+ 
+ class F {
+@@= skipped -8, +8 lines =@@
+ 
+     @dec set x(value: number) { }
+ >dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+->x : Symbol(F.x, Decl(decoratorOnClassAccessor8.ts, 26, 9))
++>x : Symbol(x, Decl(decoratorOnClassAccessor8.ts, 26, 9))
+ >value : Symbol(value, Decl(decoratorOnClassAccessor8.ts, 27, 15))
+ }

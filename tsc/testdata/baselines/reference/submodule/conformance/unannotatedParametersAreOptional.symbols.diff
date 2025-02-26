@@ -1,0 +1,44 @@
+--- old.unannotatedParametersAreOptional.symbols
++++ new.unannotatedParametersAreOptional.symbols
+@@= skipped -11, +11 lines =@@
+ >C : Symbol(C, Decl(test.js, 1, 4))
+ 
+   static m(x) {}
+->m : Symbol(C.m, Decl(test.js, 3, 9))
++>m : Symbol(m, Decl(test.js, 3, 9))
+ >x : Symbol(x, Decl(test.js, 4, 11))
+ 
+   p = x => {}
+->p : Symbol(C.p, Decl(test.js, 4, 16))
++>p : Symbol(p, Decl(test.js, 4, 16))
+ >x : Symbol(x, Decl(test.js, 5, 5))
+ 
+   m(x) {}
+->m : Symbol(C.m, Decl(test.js, 5, 13))
++>m : Symbol(m, Decl(test.js, 5, 13))
+ >x : Symbol(x, Decl(test.js, 6, 4))
+ }
+ 
+ C.m();       // Always been ok
+->C.m : Symbol(C.m, Decl(test.js, 3, 9))
++>C.m : Symbol(m, Decl(test.js, 3, 9))
+ >C : Symbol(C, Decl(test.js, 1, 4))
+->m : Symbol(C.m, Decl(test.js, 3, 9))
++>m : Symbol(m, Decl(test.js, 3, 9))
+ 
+ new C().m(); // Regression #39261
+->new C().m : Symbol(C.m, Decl(test.js, 5, 13))
++>new C().m : Symbol(m, Decl(test.js, 5, 13))
+ >C : Symbol(C, Decl(test.js, 1, 4))
+->m : Symbol(C.m, Decl(test.js, 5, 13))
++>m : Symbol(m, Decl(test.js, 5, 13))
+ 
+ new C().p(); // Regression #39261
+->new C().p : Symbol(C.p, Decl(test.js, 4, 16))
++>new C().p : Symbol(p, Decl(test.js, 4, 16))
+ >C : Symbol(C, Decl(test.js, 1, 4))
+->p : Symbol(C.p, Decl(test.js, 4, 16))
++>p : Symbol(p, Decl(test.js, 4, 16))
+ 
+ const obj = {
+ >obj : Symbol(obj, Decl(test.js, 13, 5))

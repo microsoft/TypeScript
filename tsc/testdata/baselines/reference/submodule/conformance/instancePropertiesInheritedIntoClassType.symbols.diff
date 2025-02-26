@@ -1,0 +1,167 @@
+--- old.instancePropertiesInheritedIntoClassType.symbols
++++ new.instancePropertiesInheritedIntoClassType.symbols
+@@= skipped -7, +7 lines =@@
+ >C : Symbol(C, Decl(instancePropertiesInheritedIntoClassType.ts, 0, 19))
+ 
+         x: string;
+->x : Symbol(C.x, Decl(instancePropertiesInheritedIntoClassType.ts, 1, 13))
++>x : Symbol(x, Decl(instancePropertiesInheritedIntoClassType.ts, 1, 13))
+ 
+         get y() {
+->y : Symbol(C.y, Decl(instancePropertiesInheritedIntoClassType.ts, 2, 18), Decl(instancePropertiesInheritedIntoClassType.ts, 5, 9))
++>y : Symbol(y, Decl(instancePropertiesInheritedIntoClassType.ts, 2, 18), Decl(instancePropertiesInheritedIntoClassType.ts, 5, 9))
+ 
+             return 1;
+         }
+         set y(v) { }
+->y : Symbol(C.y, Decl(instancePropertiesInheritedIntoClassType.ts, 2, 18), Decl(instancePropertiesInheritedIntoClassType.ts, 5, 9))
++>y : Symbol(y, Decl(instancePropertiesInheritedIntoClassType.ts, 2, 18), Decl(instancePropertiesInheritedIntoClassType.ts, 5, 9))
+ >v : Symbol(v, Decl(instancePropertiesInheritedIntoClassType.ts, 6, 14))
+ 
+         fn() { return this; }
+->fn : Symbol(C.fn, Decl(instancePropertiesInheritedIntoClassType.ts, 6, 20))
++>fn : Symbol(fn, Decl(instancePropertiesInheritedIntoClassType.ts, 6, 20))
+ >this : Symbol(C, Decl(instancePropertiesInheritedIntoClassType.ts, 0, 19))
+ 
+         constructor(public a: number, private b: number) { }
+->a : Symbol(C.a, Decl(instancePropertiesInheritedIntoClassType.ts, 8, 20))
+->b : Symbol(C.b, Decl(instancePropertiesInheritedIntoClassType.ts, 8, 37))
++>a : Symbol(a, Decl(instancePropertiesInheritedIntoClassType.ts, 8, 20))
++>b : Symbol(b, Decl(instancePropertiesInheritedIntoClassType.ts, 8, 37))
+     }
+ 
+     class D extends C { e: string; }
+ >D : Symbol(D, Decl(instancePropertiesInheritedIntoClassType.ts, 9, 5))
+ >C : Symbol(C, Decl(instancePropertiesInheritedIntoClassType.ts, 0, 19))
+->e : Symbol(D.e, Decl(instancePropertiesInheritedIntoClassType.ts, 11, 23))
++>e : Symbol(e, Decl(instancePropertiesInheritedIntoClassType.ts, 11, 23))
+ 
+     var d = new D(1, 2);
+ >d : Symbol(d, Decl(instancePropertiesInheritedIntoClassType.ts, 13, 7))
+@@= skipped -31, +31 lines =@@
+ 
+     var r = d.fn();
+ >r : Symbol(r, Decl(instancePropertiesInheritedIntoClassType.ts, 14, 7))
+->d.fn : Symbol(C.fn, Decl(instancePropertiesInheritedIntoClassType.ts, 6, 20))
++>d.fn : Symbol(fn, Decl(instancePropertiesInheritedIntoClassType.ts, 6, 20))
+ >d : Symbol(d, Decl(instancePropertiesInheritedIntoClassType.ts, 13, 7))
+->fn : Symbol(C.fn, Decl(instancePropertiesInheritedIntoClassType.ts, 6, 20))
++>fn : Symbol(fn, Decl(instancePropertiesInheritedIntoClassType.ts, 6, 20))
+ 
+     var r2 = r.x;
+ >r2 : Symbol(r2, Decl(instancePropertiesInheritedIntoClassType.ts, 15, 7))
+->r.x : Symbol(C.x, Decl(instancePropertiesInheritedIntoClassType.ts, 1, 13))
++>r.x : Symbol(x, Decl(instancePropertiesInheritedIntoClassType.ts, 1, 13))
+ >r : Symbol(r, Decl(instancePropertiesInheritedIntoClassType.ts, 14, 7))
+->x : Symbol(C.x, Decl(instancePropertiesInheritedIntoClassType.ts, 1, 13))
++>x : Symbol(x, Decl(instancePropertiesInheritedIntoClassType.ts, 1, 13))
+ 
+     var r3 = r.y;
+ >r3 : Symbol(r3, Decl(instancePropertiesInheritedIntoClassType.ts, 16, 7))
+->r.y : Symbol(C.y, Decl(instancePropertiesInheritedIntoClassType.ts, 2, 18), Decl(instancePropertiesInheritedIntoClassType.ts, 5, 9))
++>r.y : Symbol(y, Decl(instancePropertiesInheritedIntoClassType.ts, 2, 18), Decl(instancePropertiesInheritedIntoClassType.ts, 5, 9))
+ >r : Symbol(r, Decl(instancePropertiesInheritedIntoClassType.ts, 14, 7))
+->y : Symbol(C.y, Decl(instancePropertiesInheritedIntoClassType.ts, 2, 18), Decl(instancePropertiesInheritedIntoClassType.ts, 5, 9))
++>y : Symbol(y, Decl(instancePropertiesInheritedIntoClassType.ts, 2, 18), Decl(instancePropertiesInheritedIntoClassType.ts, 5, 9))
+ 
+     r.y = 4;
+->r.y : Symbol(C.y, Decl(instancePropertiesInheritedIntoClassType.ts, 2, 18), Decl(instancePropertiesInheritedIntoClassType.ts, 5, 9))
++>r.y : Symbol(y, Decl(instancePropertiesInheritedIntoClassType.ts, 2, 18), Decl(instancePropertiesInheritedIntoClassType.ts, 5, 9))
+ >r : Symbol(r, Decl(instancePropertiesInheritedIntoClassType.ts, 14, 7))
+->y : Symbol(C.y, Decl(instancePropertiesInheritedIntoClassType.ts, 2, 18), Decl(instancePropertiesInheritedIntoClassType.ts, 5, 9))
++>y : Symbol(y, Decl(instancePropertiesInheritedIntoClassType.ts, 2, 18), Decl(instancePropertiesInheritedIntoClassType.ts, 5, 9))
+ 
+     var r6 = d.y(); // error
+ >r6 : Symbol(r6, Decl(instancePropertiesInheritedIntoClassType.ts, 18, 7))
+->d.y : Symbol(C.y, Decl(instancePropertiesInheritedIntoClassType.ts, 2, 18), Decl(instancePropertiesInheritedIntoClassType.ts, 5, 9))
++>d.y : Symbol(y, Decl(instancePropertiesInheritedIntoClassType.ts, 2, 18), Decl(instancePropertiesInheritedIntoClassType.ts, 5, 9))
+ >d : Symbol(d, Decl(instancePropertiesInheritedIntoClassType.ts, 13, 7))
+->y : Symbol(C.y, Decl(instancePropertiesInheritedIntoClassType.ts, 2, 18), Decl(instancePropertiesInheritedIntoClassType.ts, 5, 9))
++>y : Symbol(y, Decl(instancePropertiesInheritedIntoClassType.ts, 2, 18), Decl(instancePropertiesInheritedIntoClassType.ts, 5, 9))
+ 
+ }
+ 
+@@= skipped -38, +38 lines =@@
+ >U : Symbol(U, Decl(instancePropertiesInheritedIntoClassType.ts, 23, 14))
+ 
+         x: T;
+->x : Symbol(C.x, Decl(instancePropertiesInheritedIntoClassType.ts, 23, 19))
++>x : Symbol(x, Decl(instancePropertiesInheritedIntoClassType.ts, 23, 19))
+ >T : Symbol(T, Decl(instancePropertiesInheritedIntoClassType.ts, 23, 12))
+ 
+         get y() {
+->y : Symbol(C.y, Decl(instancePropertiesInheritedIntoClassType.ts, 24, 13), Decl(instancePropertiesInheritedIntoClassType.ts, 27, 9))
++>y : Symbol(y, Decl(instancePropertiesInheritedIntoClassType.ts, 24, 13), Decl(instancePropertiesInheritedIntoClassType.ts, 27, 9))
+ 
+             return null;
+         }
+         set y(v: U) { }
+->y : Symbol(C.y, Decl(instancePropertiesInheritedIntoClassType.ts, 24, 13), Decl(instancePropertiesInheritedIntoClassType.ts, 27, 9))
++>y : Symbol(y, Decl(instancePropertiesInheritedIntoClassType.ts, 24, 13), Decl(instancePropertiesInheritedIntoClassType.ts, 27, 9))
+ >v : Symbol(v, Decl(instancePropertiesInheritedIntoClassType.ts, 28, 14))
+ >U : Symbol(U, Decl(instancePropertiesInheritedIntoClassType.ts, 23, 14))
+ 
+         fn() { return this; }
+->fn : Symbol(C.fn, Decl(instancePropertiesInheritedIntoClassType.ts, 28, 23))
++>fn : Symbol(fn, Decl(instancePropertiesInheritedIntoClassType.ts, 28, 23))
+ >this : Symbol(C, Decl(instancePropertiesInheritedIntoClassType.ts, 22, 16))
+ 
+         constructor(public a: T, private b: U) { }
+->a : Symbol(C.a, Decl(instancePropertiesInheritedIntoClassType.ts, 30, 20))
++>a : Symbol(a, Decl(instancePropertiesInheritedIntoClassType.ts, 30, 20))
+ >T : Symbol(T, Decl(instancePropertiesInheritedIntoClassType.ts, 23, 12))
+->b : Symbol(C.b, Decl(instancePropertiesInheritedIntoClassType.ts, 30, 32))
++>b : Symbol(b, Decl(instancePropertiesInheritedIntoClassType.ts, 30, 32))
+ >U : Symbol(U, Decl(instancePropertiesInheritedIntoClassType.ts, 23, 14))
+     }
+ 
+@@= skipped -31, +31 lines =@@
+ >C : Symbol(C, Decl(instancePropertiesInheritedIntoClassType.ts, 22, 16))
+ >T : Symbol(T, Decl(instancePropertiesInheritedIntoClassType.ts, 33, 12))
+ >U : Symbol(U, Decl(instancePropertiesInheritedIntoClassType.ts, 33, 14))
+->e : Symbol(D.e, Decl(instancePropertiesInheritedIntoClassType.ts, 33, 35))
++>e : Symbol(e, Decl(instancePropertiesInheritedIntoClassType.ts, 33, 35))
+ >T : Symbol(T, Decl(instancePropertiesInheritedIntoClassType.ts, 33, 12))
+ 
+     var d = new D(1, '');
+@@= skipped -9, +9 lines =@@
+ 
+     var r = d.fn();
+ >r : Symbol(r, Decl(instancePropertiesInheritedIntoClassType.ts, 36, 7))
+->d.fn : Symbol(C.fn, Decl(instancePropertiesInheritedIntoClassType.ts, 28, 23))
++>d.fn : Symbol(fn, Decl(instancePropertiesInheritedIntoClassType.ts, 28, 23))
+ >d : Symbol(d, Decl(instancePropertiesInheritedIntoClassType.ts, 35, 7))
+->fn : Symbol(C.fn, Decl(instancePropertiesInheritedIntoClassType.ts, 28, 23))
++>fn : Symbol(fn, Decl(instancePropertiesInheritedIntoClassType.ts, 28, 23))
+ 
+     var r2 = r.x;
+ >r2 : Symbol(r2, Decl(instancePropertiesInheritedIntoClassType.ts, 37, 7))
+->r.x : Symbol(C.x, Decl(instancePropertiesInheritedIntoClassType.ts, 23, 19))
++>r.x : Symbol(x, Decl(instancePropertiesInheritedIntoClassType.ts, 23, 19))
+ >r : Symbol(r, Decl(instancePropertiesInheritedIntoClassType.ts, 36, 7))
+->x : Symbol(C.x, Decl(instancePropertiesInheritedIntoClassType.ts, 23, 19))
++>x : Symbol(x, Decl(instancePropertiesInheritedIntoClassType.ts, 23, 19))
+ 
+     var r3 = r.y;
+ >r3 : Symbol(r3, Decl(instancePropertiesInheritedIntoClassType.ts, 38, 7))
+->r.y : Symbol(C.y, Decl(instancePropertiesInheritedIntoClassType.ts, 24, 13), Decl(instancePropertiesInheritedIntoClassType.ts, 27, 9))
++>r.y : Symbol(y, Decl(instancePropertiesInheritedIntoClassType.ts, 24, 13), Decl(instancePropertiesInheritedIntoClassType.ts, 27, 9))
+ >r : Symbol(r, Decl(instancePropertiesInheritedIntoClassType.ts, 36, 7))
+->y : Symbol(C.y, Decl(instancePropertiesInheritedIntoClassType.ts, 24, 13), Decl(instancePropertiesInheritedIntoClassType.ts, 27, 9))
++>y : Symbol(y, Decl(instancePropertiesInheritedIntoClassType.ts, 24, 13), Decl(instancePropertiesInheritedIntoClassType.ts, 27, 9))
+ 
+     r.y = '';
+->r.y : Symbol(C.y, Decl(instancePropertiesInheritedIntoClassType.ts, 24, 13), Decl(instancePropertiesInheritedIntoClassType.ts, 27, 9))
++>r.y : Symbol(y, Decl(instancePropertiesInheritedIntoClassType.ts, 24, 13), Decl(instancePropertiesInheritedIntoClassType.ts, 27, 9))
+ >r : Symbol(r, Decl(instancePropertiesInheritedIntoClassType.ts, 36, 7))
+->y : Symbol(C.y, Decl(instancePropertiesInheritedIntoClassType.ts, 24, 13), Decl(instancePropertiesInheritedIntoClassType.ts, 27, 9))
++>y : Symbol(y, Decl(instancePropertiesInheritedIntoClassType.ts, 24, 13), Decl(instancePropertiesInheritedIntoClassType.ts, 27, 9))
+ 
+     var r6 = d.y(); // error
+ >r6 : Symbol(r6, Decl(instancePropertiesInheritedIntoClassType.ts, 40, 7))
+->d.y : Symbol(C.y, Decl(instancePropertiesInheritedIntoClassType.ts, 24, 13), Decl(instancePropertiesInheritedIntoClassType.ts, 27, 9))
++>d.y : Symbol(y, Decl(instancePropertiesInheritedIntoClassType.ts, 24, 13), Decl(instancePropertiesInheritedIntoClassType.ts, 27, 9))
+ >d : Symbol(d, Decl(instancePropertiesInheritedIntoClassType.ts, 35, 7))
+->y : Symbol(C.y, Decl(instancePropertiesInheritedIntoClassType.ts, 24, 13), Decl(instancePropertiesInheritedIntoClassType.ts, 27, 9))
++>y : Symbol(y, Decl(instancePropertiesInheritedIntoClassType.ts, 24, 13), Decl(instancePropertiesInheritedIntoClassType.ts, 27, 9))
+ }

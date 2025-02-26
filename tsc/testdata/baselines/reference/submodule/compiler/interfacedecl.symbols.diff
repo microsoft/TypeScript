@@ -1,0 +1,45 @@
+--- old.interfacedecl.symbols
++++ new.interfacedecl.symbols
+@@= skipped -20, +20 lines =@@
+ >s : Symbol(s, Decl(interfacedecl.ts, 8, 5))
+ 
+     p1;
+->p1 : Symbol(a0.p1, Decl(interfacedecl.ts, 8, 21))
++>p1 : Symbol(p1, Decl(interfacedecl.ts, 8, 21))
+ 
+     p2: string;
+->p2 : Symbol(a0.p2, Decl(interfacedecl.ts, 10, 7))
++>p2 : Symbol(p2, Decl(interfacedecl.ts, 10, 7))
+ 
+     p3?;
+->p3 : Symbol(a0.p3, Decl(interfacedecl.ts, 11, 15))
++>p3 : Symbol(p3, Decl(interfacedecl.ts, 11, 15))
+ 
+     p4?: number;
+->p4 : Symbol(a0.p4, Decl(interfacedecl.ts, 12, 8))
++>p4 : Symbol(p4, Decl(interfacedecl.ts, 12, 8))
+ 
+     p5: (s: number) =>string;
+->p5 : Symbol(a0.p5, Decl(interfacedecl.ts, 13, 16))
++>p5 : Symbol(p5, Decl(interfacedecl.ts, 13, 16))
+ >s : Symbol(s, Decl(interfacedecl.ts, 14, 9))
+ 
+     f1();
+->f1 : Symbol(a0.f1, Decl(interfacedecl.ts, 14, 29))
++>f1 : Symbol(f1, Decl(interfacedecl.ts, 14, 29))
+ 
+     f2? ();
+->f2 : Symbol(a0.f2, Decl(interfacedecl.ts, 16, 9))
++>f2 : Symbol(f2, Decl(interfacedecl.ts, 16, 9))
+ 
+     f3(a: string): number;
+->f3 : Symbol(a0.f3, Decl(interfacedecl.ts, 17, 11))
++>f3 : Symbol(f3, Decl(interfacedecl.ts, 17, 11))
+ >a : Symbol(a, Decl(interfacedecl.ts, 18, 7))
+ 
+     f4? (s: number): string;
+->f4 : Symbol(a0.f4, Decl(interfacedecl.ts, 18, 26))
++>f4 : Symbol(f4, Decl(interfacedecl.ts, 18, 26))
+ >s : Symbol(s, Decl(interfacedecl.ts, 19, 9))
+ }
+ 

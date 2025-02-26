@@ -1,0 +1,9 @@
+--- old.parser509668.symbols
++++ new.parser509668.symbols
+@@= skipped -5, +5 lines =@@
+ 
+   // Doesn't work, but should
+   constructor (public ...args: string[]) { }
+->args : Symbol(Foo3.args, Decl(parser509668.ts, 2, 15))
++>args : Symbol(args, Decl(parser509668.ts, 2, 15))
+ }

@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment3.ts] ////
+
+=== a.js ===
+var Outer = function O() {
+>Outer : Symbol(Outer, Decl(a.js, 0, 3))
+>O : Symbol(O, Decl(a.js, 0, 11))
+
+    this.y = 2
+}
+Outer.Inner = class I {
+>Outer : Symbol(Outer, Decl(a.js, 0, 3))
+>I : Symbol(I, Decl(a.js, 3, 13))
+
+    constructor() {
+        this.x = 1
+>this : Symbol(I, Decl(a.js, 3, 13))
+    }
+}
+/** @type {Outer} */
+var ja
+>ja : Symbol(ja, Decl(a.js, 9, 3))
+
+ja.y
+>ja : Symbol(ja, Decl(a.js, 9, 3))
+
+/** @type {Outer.Inner} */
+var da
+>da : Symbol(da, Decl(a.js, 12, 3))
+
+da.x
+>da : Symbol(da, Decl(a.js, 12, 3))
+

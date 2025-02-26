@@ -1,0 +1,145 @@
+--- old.unionReductionWithStringMappingAndIdenticalBaseTypeExistsNoCrash.symbols
++++ new.unionReductionWithStringMappingAndIdenticalBaseTypeExistsNoCrash.symbols
+@@= skipped -47, +47 lines =@@
+ 
+   > {
+     type: T;
+->type : Symbol(ReactElement.type, Decl(index.d.ts, 18, 5))
++>type : Symbol(type, Decl(index.d.ts, 18, 5))
+ >T : Symbol(T, Decl(index.d.ts, 14, 12))
+ 
+     props: P;
+->props : Symbol(ReactElement.props, Decl(index.d.ts, 19, 12))
++>props : Symbol(props, Decl(index.d.ts, 19, 12))
+ >P : Symbol(P, Decl(index.d.ts, 13, 25))
+ 
+     key: string | null;
+->key : Symbol(ReactElement.key, Decl(index.d.ts, 20, 13))
++>key : Symbol(key, Decl(index.d.ts, 20, 13))
+   }
+ 
+   type ComponentProps<T extends JSXElementConstructor<any>> =
+@@= skipped -32, +32 lines =@@
+ >ReactNode : Symbol(ReactNode, Decl(index.d.ts, 3, 25))
+ 
+     readonly $$typeof: symbol;
+->$$typeof : Symbol(ExoticComponent.$$typeof, Decl(index.d.ts, 28, 26))
++>$$typeof : Symbol($$typeof, Decl(index.d.ts, 28, 26))
+   }
+ 
+   type LazyExoticComponent<T extends JSXElementConstructor<any>> =
+@@= skipped -70, +70 lines =@@
+ >P : Symbol(P, Decl(index.d.ts, 51, 30))
+ 
+ declare global {
+->global : Symbol(global, Decl(index.d.ts, 53, 6))
++>global : Symbol((Missing), Decl(index.d.ts, 53, 6))
+ 
+   namespace JSX {
+ >JSX : Symbol(JSX, Decl(index.d.ts, 55, 16))
+ 
+     interface Element extends React.ReactElement<any, any> {}
+ >Element : Symbol(Element, Decl(index.d.ts, 56, 17))
+->React.ReactElement : Symbol(React.ReactElement, Decl(index.d.ts, 12, 58))
++>React.ReactElement : Symbol(ReactElement, Decl(index.d.ts, 12, 58))
+ >React : Symbol(React, Decl(index.d.ts, 1, 26))
+->ReactElement : Symbol(React.ReactElement, Decl(index.d.ts, 12, 58))
++>ReactElement : Symbol(ReactElement, Decl(index.d.ts, 12, 58))
+ 
+     interface ElementChildrenAttribute {
+ >ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(index.d.ts, 57, 61))
+ 
+       children: {};
+->children : Symbol(ElementChildrenAttribute.children, Decl(index.d.ts, 58, 40))
++>children : Symbol(children, Decl(index.d.ts, 58, 40))
+     }
+     type LibraryManagedAttributes<C, P> = C extends React.LazyExoticComponent<
+ >LibraryManagedAttributes : Symbol(LibraryManagedAttributes, Decl(index.d.ts, 60, 5))
+@@= skipped -23, +23 lines =@@
+ >P : Symbol(P, Decl(index.d.ts, 61, 36))
+ >C : Symbol(C, Decl(index.d.ts, 61, 34))
+ >React : Symbol(React, Decl(index.d.ts, 1, 26))
+->LazyExoticComponent : Symbol(React.LazyExoticComponent, Decl(index.d.ts, 30, 3))
++>LazyExoticComponent : Symbol(LazyExoticComponent, Decl(index.d.ts, 30, 3))
+ 
+       infer T
+ >T : Symbol(T, Decl(index.d.ts, 62, 11))
+@@= skipped -20, +20 lines =@@
+ >IntrinsicElements : Symbol(IntrinsicElements, Decl(index.d.ts, 65, 37))
+ 
+       div: {};
+->div : Symbol(IntrinsicElements.div, Decl(index.d.ts, 66, 33))
++>div : Symbol(div, Decl(index.d.ts, 66, 33))
+ 
+       span: {};
+->span : Symbol(IntrinsicElements.span, Decl(index.d.ts, 67, 14))
++>span : Symbol(span, Decl(index.d.ts, 67, 14))
+     }
+   }
+ }
+ 
+ interface GlobalJSXElement extends JSX.Element {}
+ >GlobalJSXElement : Symbol(GlobalJSXElement, Decl(index.d.ts, 71, 1))
+->JSX.Element : Symbol(JSX.Element, Decl(index.d.ts, 56, 17))
++>JSX.Element : Symbol(Element, Decl(index.d.ts, 56, 17))
+ >JSX : Symbol(JSX, Decl(index.d.ts, 55, 16))
+->Element : Symbol(JSX.Element, Decl(index.d.ts, 56, 17))
++>Element : Symbol(Element, Decl(index.d.ts, 56, 17))
+ 
+ interface GlobalJSXElementChildrenAttribute
+ >GlobalJSXElementChildrenAttribute : Symbol(GlobalJSXElementChildrenAttribute, Decl(index.d.ts, 73, 49))
+ 
+   extends JSX.ElementChildrenAttribute {}
+->JSX.ElementChildrenAttribute : Symbol(JSX.ElementChildrenAttribute, Decl(index.d.ts, 57, 61))
++>JSX.ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(index.d.ts, 57, 61))
+ >JSX : Symbol(JSX, Decl(index.d.ts, 55, 16))
+->ElementChildrenAttribute : Symbol(JSX.ElementChildrenAttribute, Decl(index.d.ts, 57, 61))
++>ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(index.d.ts, 57, 61))
+ 
+ type GlobalJSXLibraryManagedAttributes<C, P> = JSX.LibraryManagedAttributes<
+ >GlobalJSXLibraryManagedAttributes : Symbol(GlobalJSXLibraryManagedAttributes, Decl(index.d.ts, 75, 41))
+ >C : Symbol(C, Decl(index.d.ts, 76, 39))
+ >P : Symbol(P, Decl(index.d.ts, 76, 41))
+ >JSX : Symbol(JSX, Decl(index.d.ts, 55, 16))
+->LibraryManagedAttributes : Symbol(JSX.LibraryManagedAttributes, Decl(index.d.ts, 60, 5))
++>LibraryManagedAttributes : Symbol(LibraryManagedAttributes, Decl(index.d.ts, 60, 5))
+ 
+   C,
+ >C : Symbol(C, Decl(index.d.ts, 76, 39))
+@@= skipped -38, +38 lines =@@
+ >;
+ interface GlobalJSXIntrinsicElements extends JSX.IntrinsicElements {}
+ >GlobalJSXIntrinsicElements : Symbol(GlobalJSXIntrinsicElements, Decl(index.d.ts, 79, 2))
+->JSX.IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(index.d.ts, 65, 37))
++>JSX.IntrinsicElements : Symbol(IntrinsicElements, Decl(index.d.ts, 65, 37))
+ >JSX : Symbol(JSX, Decl(index.d.ts, 55, 16))
+->IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(index.d.ts, 65, 37))
++>IntrinsicElements : Symbol(IntrinsicElements, Decl(index.d.ts, 65, 37))
+ 
+ === src/index.tsx ===
+ import React from 'react'
+@@= skipped -20, +20 lines =@@
+ >displayEnum : Symbol(displayEnum, Decl(index.tsx, 4, 5))
+ >value : Symbol(value, Decl(index.tsx, 4, 21))
+ >upperFirst : Symbol(upperFirst, Decl(index.tsx, 0, 25))
+->value.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>value.toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+ >value : Symbol(value, Decl(index.tsx, 4, 21))
+->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+ 
+ function Comp() {
+ >Comp : Symbol(Comp, Decl(index.tsx, 4, 70))
+ 
+   return <div>
+->div : Symbol(JSX.IntrinsicElements.div, Decl(index.d.ts, 66, 33))
+-
+     <span>Scope:</span> {displayEnum("VALUE")}
+->span : Symbol(JSX.IntrinsicElements.span, Decl(index.d.ts, 67, 14))
+->span : Symbol(JSX.IntrinsicElements.span, Decl(index.d.ts, 67, 14))
+ >displayEnum : Symbol(displayEnum, Decl(index.tsx, 4, 5))
+ 
+   </div>
+->div : Symbol(JSX.IntrinsicElements.div, Decl(index.d.ts, 66, 33))
+ }
+ 

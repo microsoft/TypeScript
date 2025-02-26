@@ -1,0 +1,44 @@
+--- old.callSignaturesWithAccessibilityModifiersOnParameters.symbols
++++ new.callSignaturesWithAccessibilityModifiersOnParameters.symbols
+@@= skipped -64, +64 lines =@@
+ >C : Symbol(C, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 12, 46))
+ 
+     foo(public x, private y) { }
+->foo : Symbol(C.foo, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 14, 9))
++>foo : Symbol(foo, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 14, 9))
+ >x : Symbol(x, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 15, 8))
+ >y : Symbol(y, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 15, 17))
+ 
+     foo2(public x: number, private y: string) { }
+->foo2 : Symbol(C.foo2, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 15, 32))
++>foo2 : Symbol(foo2, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 15, 32))
+ >x : Symbol(x, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 16, 9))
+ >y : Symbol(y, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 16, 26))
+ 
+     foo3<T>(public x: T, private y: T) { }
+->foo3 : Symbol(C.foo3, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 16, 49))
++>foo3 : Symbol(foo3, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 16, 49))
+ >T : Symbol(T, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 17, 9))
+ >x : Symbol(x, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 17, 12))
+ >T : Symbol(T, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 17, 9))
+@@= skipped -30, +30 lines =@@
+ >y : Symbol(y, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 22, 23))
+ 
+     foo(private x, public y);
+->foo : Symbol(I.foo, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 22, 42), Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 23, 29))
++>foo : Symbol(foo, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 22, 42), Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 23, 29))
+ >x : Symbol(x, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 23, 8))
+ >y : Symbol(y, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 23, 18))
+ 
+     foo(public x: number, y: string);
+->foo : Symbol(I.foo, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 22, 42), Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 23, 29))
++>foo : Symbol(foo, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 22, 42), Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 23, 29))
+ >x : Symbol(x, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 24, 8))
+ >y : Symbol(y, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 24, 25))
+ 
+     foo3<T>(x: T, private y: T);
+->foo3 : Symbol(I.foo3, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 24, 37))
++>foo3 : Symbol(foo3, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 24, 37))
+ >T : Symbol(T, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 25, 9))
+ >x : Symbol(x, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 25, 12))
+ >T : Symbol(T, Decl(callSignaturesWithAccessibilityModifiersOnParameters.ts, 25, 9))

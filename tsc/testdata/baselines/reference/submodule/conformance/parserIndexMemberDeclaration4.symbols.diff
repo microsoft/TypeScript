@@ -1,0 +1,9 @@
+--- old.parserIndexMemberDeclaration4.symbols
++++ new.parserIndexMemberDeclaration4.symbols
+@@= skipped -5, +5 lines =@@
+ 
+    [a: string]: number; public v: number
+ >a : Symbol(a, Decl(parserIndexMemberDeclaration4.ts, 1, 4))
+->v : Symbol(C.v, Decl(parserIndexMemberDeclaration4.ts, 1, 23))
++>v : Symbol(v, Decl(parserIndexMemberDeclaration4.ts, 1, 23))
+ }

@@ -1,0 +1,20 @@
+--- old.typePredicatesInUnion.symbols
++++ new.typePredicatesInUnion.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(typePredicatesInUnion.ts, 0, 0))
+ 
+     pred(x: {}): x is boolean;
+->pred : Symbol(A.pred, Decl(typePredicatesInUnion.ts, 0, 13))
++>pred : Symbol(pred, Decl(typePredicatesInUnion.ts, 0, 13))
+ >x : Symbol(x, Decl(typePredicatesInUnion.ts, 1, 9))
+ >x : Symbol(x, Decl(typePredicatesInUnion.ts, 1, 9))
+ }
+@@= skipped -8, +8 lines =@@
+ >B : Symbol(B, Decl(typePredicatesInUnion.ts, 2, 1))
+ 
+     pred(x: {}): x is string;
+->pred : Symbol(B.pred, Decl(typePredicatesInUnion.ts, 3, 13))
++>pred : Symbol(pred, Decl(typePredicatesInUnion.ts, 3, 13))
+ >x : Symbol(x, Decl(typePredicatesInUnion.ts, 4, 9))
+ >x : Symbol(x, Decl(typePredicatesInUnion.ts, 4, 9))
+ }

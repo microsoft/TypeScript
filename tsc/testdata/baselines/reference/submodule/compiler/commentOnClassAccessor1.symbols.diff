@@ -1,0 +1,9 @@
+--- old.commentOnClassAccessor1.symbols
++++ new.commentOnClassAccessor1.symbols
+@@= skipped -7, +7 lines =@@
+    * @type {number}
+    */
+   get bar(): number { return 1;}
+->bar : Symbol(C.bar, Decl(commentOnClassAccessor1.ts, 0, 9))
++>bar : Symbol(bar, Decl(commentOnClassAccessor1.ts, 0, 9))
+ }

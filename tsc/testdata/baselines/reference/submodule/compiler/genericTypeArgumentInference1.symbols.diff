@@ -1,0 +1,79 @@
+--- old.genericTypeArgumentInference1.symbols
++++ new.genericTypeArgumentInference1.symbols
+@@= skipped -19, +19 lines =@@
+ >Static : Symbol(Static, Decl(genericTypeArgumentInference1.ts, 3, 5))
+ 
+         all<T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): T;
+->all : Symbol(Static.all, Decl(genericTypeArgumentInference1.ts, 4, 29))
++>all : Symbol(all, Decl(genericTypeArgumentInference1.ts, 4, 29))
+ >T : Symbol(T, Decl(genericTypeArgumentInference1.ts, 5, 12))
+ >list : Symbol(list, Decl(genericTypeArgumentInference1.ts, 5, 15))
+ >T : Symbol(T, Decl(genericTypeArgumentInference1.ts, 5, 12))
+@@= skipped -11, +11 lines =@@
+ >T : Symbol(T, Decl(genericTypeArgumentInference1.ts, 5, 12))
+ 
+         identity<T>(value: T): T;
+->identity : Symbol(Static.identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
++>identity : Symbol(identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
+ >T : Symbol(T, Decl(genericTypeArgumentInference1.ts, 6, 17))
+ >value : Symbol(value, Decl(genericTypeArgumentInference1.ts, 6, 20))
+ >T : Symbol(T, Decl(genericTypeArgumentInference1.ts, 6, 17))
+@@= skipped -10, +10 lines =@@
+ declare var _: Underscore.Static;
+ >_ : Symbol(_, Decl(genericTypeArgumentInference1.ts, 9, 11))
+ >Underscore : Symbol(Underscore, Decl(genericTypeArgumentInference1.ts, 0, 0))
+->Static : Symbol(Underscore.Static, Decl(genericTypeArgumentInference1.ts, 3, 5))
++>Static : Symbol(Static, Decl(genericTypeArgumentInference1.ts, 3, 5))
+ 
+ var r = _.all([true, 1, null, 'yes'], _.identity);
+ >r : Symbol(r, Decl(genericTypeArgumentInference1.ts, 11, 3))
+->_.all : Symbol(Underscore.Static.all, Decl(genericTypeArgumentInference1.ts, 4, 29))
++>_.all : Symbol(all, Decl(genericTypeArgumentInference1.ts, 4, 29))
+ >_ : Symbol(_, Decl(genericTypeArgumentInference1.ts, 9, 11))
+->all : Symbol(Underscore.Static.all, Decl(genericTypeArgumentInference1.ts, 4, 29))
+->_.identity : Symbol(Underscore.Static.identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
++>all : Symbol(all, Decl(genericTypeArgumentInference1.ts, 4, 29))
++>_.identity : Symbol(identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
+ >_ : Symbol(_, Decl(genericTypeArgumentInference1.ts, 9, 11))
+->identity : Symbol(Underscore.Static.identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
++>identity : Symbol(identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
+ 
+ var r2 = _.all([true], _.identity);
+ >r2 : Symbol(r2, Decl(genericTypeArgumentInference1.ts, 12, 3))
+->_.all : Symbol(Underscore.Static.all, Decl(genericTypeArgumentInference1.ts, 4, 29))
++>_.all : Symbol(all, Decl(genericTypeArgumentInference1.ts, 4, 29))
+ >_ : Symbol(_, Decl(genericTypeArgumentInference1.ts, 9, 11))
+->all : Symbol(Underscore.Static.all, Decl(genericTypeArgumentInference1.ts, 4, 29))
+->_.identity : Symbol(Underscore.Static.identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
++>all : Symbol(all, Decl(genericTypeArgumentInference1.ts, 4, 29))
++>_.identity : Symbol(identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
+ >_ : Symbol(_, Decl(genericTypeArgumentInference1.ts, 9, 11))
+->identity : Symbol(Underscore.Static.identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
++>identity : Symbol(identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
+ 
+ var r3 = _.all([], _.identity);
+ >r3 : Symbol(r3, Decl(genericTypeArgumentInference1.ts, 13, 3))
+->_.all : Symbol(Underscore.Static.all, Decl(genericTypeArgumentInference1.ts, 4, 29))
++>_.all : Symbol(all, Decl(genericTypeArgumentInference1.ts, 4, 29))
+ >_ : Symbol(_, Decl(genericTypeArgumentInference1.ts, 9, 11))
+->all : Symbol(Underscore.Static.all, Decl(genericTypeArgumentInference1.ts, 4, 29))
+->_.identity : Symbol(Underscore.Static.identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
++>all : Symbol(all, Decl(genericTypeArgumentInference1.ts, 4, 29))
++>_.identity : Symbol(identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
+ >_ : Symbol(_, Decl(genericTypeArgumentInference1.ts, 9, 11))
+->identity : Symbol(Underscore.Static.identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
++>identity : Symbol(identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
+ 
+ var r4 = _.all([<any>true], _.identity);
+ >r4 : Symbol(r4, Decl(genericTypeArgumentInference1.ts, 14, 3))
+->_.all : Symbol(Underscore.Static.all, Decl(genericTypeArgumentInference1.ts, 4, 29))
++>_.all : Symbol(all, Decl(genericTypeArgumentInference1.ts, 4, 29))
+ >_ : Symbol(_, Decl(genericTypeArgumentInference1.ts, 9, 11))
+->all : Symbol(Underscore.Static.all, Decl(genericTypeArgumentInference1.ts, 4, 29))
+->_.identity : Symbol(Underscore.Static.identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
++>all : Symbol(all, Decl(genericTypeArgumentInference1.ts, 4, 29))
++>_.identity : Symbol(identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
+ >_ : Symbol(_, Decl(genericTypeArgumentInference1.ts, 9, 11))
+->identity : Symbol(Underscore.Static.identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
++>identity : Symbol(identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
+ 

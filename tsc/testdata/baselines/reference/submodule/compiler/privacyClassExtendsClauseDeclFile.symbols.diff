@@ -1,0 +1,78 @@
+--- old.privacyClassExtendsClauseDeclFile.symbols
++++ new.privacyClassExtendsClauseDeclFile.symbols
+@@= skipped -7, +7 lines =@@
+ >publicClassInPublicModule : Symbol(publicClassInPublicModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 0, 28))
+ 
+         private f1() {
+->f1 : Symbol(publicClassInPublicModule.f1, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 1, 44))
++>f1 : Symbol(f1, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 1, 44))
+         }
+     }
+ 
+@@= skipped -27, +27 lines =@@
+ 
+     class privateClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
+ >privateClassExtendingFromPrivateModuleClass : Symbol(privateClassExtendingFromPrivateModuleClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 16, 5))
+->privateModule.publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
++>privateModule.publicClassInPrivateModule : Symbol(publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+ >privateModule : Symbol(privateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 22, 1))
+->publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
++>publicClassInPrivateModule : Symbol(publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+     }
+     export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule { // Should error
+ >publicClassExtendingFromPrivateModuleClass : Symbol(publicClassExtendingFromPrivateModuleClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 19, 5))
+->privateModule.publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
++>privateModule.publicClassInPrivateModule : Symbol(publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+ >privateModule : Symbol(privateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 22, 1))
+->publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
++>publicClassInPrivateModule : Symbol(publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+     }
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >publicClassInPrivateModule : Symbol(publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+ 
+         private f1() {
+->f1 : Symbol(publicClassInPrivateModule.f1, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 25, 45))
++>f1 : Symbol(f1, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 25, 45))
+         }
+     }
+ 
+@@= skipped -43, +43 lines =@@
+ >publicClass : Symbol(publicClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 46, 1))
+ 
+     private f1() {
+->f1 : Symbol(publicClass.f1, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 48, 26))
++>f1 : Symbol(f1, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 48, 26))
+     }
+ }
+ 
+@@= skipped -27, +27 lines =@@
+ 
+ class privateClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
+ >privateClassExtendingFromPrivateModuleClass : Symbol(privateClassExtendingFromPrivateModuleClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 63, 1))
+->privateModule.publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
++>privateModule.publicClassInPrivateModule : Symbol(publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+ >privateModule : Symbol(privateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 22, 1))
+->publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
++>publicClassInPrivateModule : Symbol(publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+ }
+ export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule { // Should error
+ >publicClassExtendingFromPrivateModuleClass : Symbol(publicClassExtendingFromPrivateModuleClass, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 66, 1))
+->privateModule.publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
++>privateModule.publicClassInPrivateModule : Symbol(publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+ >privateModule : Symbol(privateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 22, 1))
+->publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
++>publicClassInPrivateModule : Symbol(publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
+ }
+ 
+ === privacyClassExtendsClauseDeclFile_GlobalFile.ts ===
+@@= skipped -19, +19 lines =@@
+ >publicClassInPublicModule : Symbol(publicClassInPublicModule, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 0, 29))
+ 
+         private f1() {
+->f1 : Symbol(publicClassInPublicModule.f1, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 1, 44))
++>f1 : Symbol(f1, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 1, 44))
+         }
+     }
+ 

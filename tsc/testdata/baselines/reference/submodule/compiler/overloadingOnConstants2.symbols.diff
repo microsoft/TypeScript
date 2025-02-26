@@ -1,0 +1,20 @@
+--- old.overloadingOnConstants2.symbols
++++ new.overloadingOnConstants2.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(overloadingOnConstants2.ts, 0, 0))
+ 
+    private x = 1;
+->x : Symbol(C.x, Decl(overloadingOnConstants2.ts, 0, 9))
++>x : Symbol(x, Decl(overloadingOnConstants2.ts, 0, 9))
+ }
+ class D extends C {}
+ >D : Symbol(D, Decl(overloadingOnConstants2.ts, 2, 1))
+@@= skipped -10, +10 lines =@@
+ >E : Symbol(E, Decl(overloadingOnConstants2.ts, 3, 20))
+ 
+    private y = 1;
+->y : Symbol(E.y, Decl(overloadingOnConstants2.ts, 4, 9))
++>y : Symbol(y, Decl(overloadingOnConstants2.ts, 4, 9))
+ }
+ function foo(x: "hi", items: string[]): D;
+ >foo : Symbol(foo, Decl(overloadingOnConstants2.ts, 6, 1), Decl(overloadingOnConstants2.ts, 7, 42), Decl(overloadingOnConstants2.ts, 8, 43))

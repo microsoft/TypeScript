@@ -1,0 +1,47 @@
+--- old.nominalSubtypeCheckOfTypeParameter.symbols
++++ new.nominalSubtypeCheckOfTypeParameter.symbols
+@@= skipped -6, +6 lines =@@
+ >S : Symbol(S, Decl(nominalSubtypeCheckOfTypeParameter.ts, 0, 24))
+ 
+     first: T
+->first : Symbol(BinaryTuple.first, Decl(nominalSubtypeCheckOfTypeParameter.ts, 0, 29))
++>first : Symbol(first, Decl(nominalSubtypeCheckOfTypeParameter.ts, 0, 29))
+ >T : Symbol(T, Decl(nominalSubtypeCheckOfTypeParameter.ts, 0, 22))
+ 
+     second: S
+->second : Symbol(BinaryTuple.second, Decl(nominalSubtypeCheckOfTypeParameter.ts, 1, 12))
++>second : Symbol(second, Decl(nominalSubtypeCheckOfTypeParameter.ts, 1, 12))
+ >S : Symbol(S, Decl(nominalSubtypeCheckOfTypeParameter.ts, 0, 24))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(nominalSubtypeCheckOfTypeParameter.ts, 5, 19))
+ 
+     hasNext(): boolean
+->hasNext : Symbol(Sequence.hasNext, Decl(nominalSubtypeCheckOfTypeParameter.ts, 5, 23))
++>hasNext : Symbol(hasNext, Decl(nominalSubtypeCheckOfTypeParameter.ts, 5, 23))
+ 
+     pop(): T
+->pop : Symbol(Sequence.pop, Decl(nominalSubtypeCheckOfTypeParameter.ts, 6, 22))
++>pop : Symbol(pop, Decl(nominalSubtypeCheckOfTypeParameter.ts, 6, 22))
+ >T : Symbol(T, Decl(nominalSubtypeCheckOfTypeParameter.ts, 5, 19))
+ 
+     zip<S>(seq: Sequence<S>): Sequence<BinaryTuple<T, S>>
+->zip : Symbol(Sequence.zip, Decl(nominalSubtypeCheckOfTypeParameter.ts, 7, 12))
++>zip : Symbol(zip, Decl(nominalSubtypeCheckOfTypeParameter.ts, 7, 12))
+ >S : Symbol(S, Decl(nominalSubtypeCheckOfTypeParameter.ts, 8, 8))
+ >seq : Symbol(seq, Decl(nominalSubtypeCheckOfTypeParameter.ts, 8, 11))
+ >Sequence : Symbol(Sequence, Decl(nominalSubtypeCheckOfTypeParameter.ts, 3, 1))
+@@= skipped -27, +27 lines =@@
+ >T : Symbol(T, Decl(nominalSubtypeCheckOfTypeParameter.ts, 13, 15))
+ 
+     getLength(): number
+->getLength : Symbol(List.getLength, Decl(nominalSubtypeCheckOfTypeParameter.ts, 13, 39))
++>getLength : Symbol(getLength, Decl(nominalSubtypeCheckOfTypeParameter.ts, 13, 39))
+ 
+     zip<S>(seq: Sequence<S>): List<BinaryTuple<T, S>>
+->zip : Symbol(List.zip, Decl(nominalSubtypeCheckOfTypeParameter.ts, 14, 23))
++>zip : Symbol(zip, Decl(nominalSubtypeCheckOfTypeParameter.ts, 14, 23))
+ >S : Symbol(S, Decl(nominalSubtypeCheckOfTypeParameter.ts, 15, 8))
+ >seq : Symbol(seq, Decl(nominalSubtypeCheckOfTypeParameter.ts, 15, 11))
+ >Sequence : Symbol(Sequence, Decl(nominalSubtypeCheckOfTypeParameter.ts, 3, 1))

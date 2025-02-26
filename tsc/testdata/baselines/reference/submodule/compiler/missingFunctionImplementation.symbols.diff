@@ -1,0 +1,104 @@
+--- old.missingFunctionImplementation.symbols
++++ new.missingFunctionImplementation.symbols
+@@= skipped -4, +4 lines =@@
+ >C1 : Symbol(C1, Decl(missingFunctionImplementation.ts, 0, 0))
+ 
+   m(): void;
+->m : Symbol(C1.m, Decl(missingFunctionImplementation.ts, 0, 17))
++>m : Symbol(m, Decl(missingFunctionImplementation.ts, 0, 17))
+ }
+ 
+ // merged with a namespace
+@@= skipped -8, +8 lines =@@
+ >C2 : Symbol(C2, Decl(missingFunctionImplementation.ts, 2, 1), Decl(missingFunctionImplementation.ts, 7, 1))
+ 
+   m(): void;
+->m : Symbol(C2.m, Decl(missingFunctionImplementation.ts, 5, 17))
++>m : Symbol(m, Decl(missingFunctionImplementation.ts, 5, 17))
+ }
+ export namespace C2 { }
+ >C2 : Symbol(C2, Decl(missingFunctionImplementation.ts, 2, 1), Decl(missingFunctionImplementation.ts, 7, 1))
+@@= skipped -11, +11 lines =@@
+ >C3 : Symbol(C3, Decl(missingFunctionImplementation.ts, 8, 23), Decl(missingFunctionImplementation.ts, 15, 1))
+ 
+   m(a, b);
+->m : Symbol(C3.m, Decl(missingFunctionImplementation.ts, 12, 10), Decl(missingFunctionImplementation.ts, 13, 10))
++>m : Symbol(m, Decl(missingFunctionImplementation.ts, 12, 10), Decl(missingFunctionImplementation.ts, 13, 10))
+ >a : Symbol(a, Decl(missingFunctionImplementation.ts, 13, 4))
+ >b : Symbol(b, Decl(missingFunctionImplementation.ts, 13, 6))
+ 
+   m(a);
+->m : Symbol(C3.m, Decl(missingFunctionImplementation.ts, 12, 10), Decl(missingFunctionImplementation.ts, 13, 10))
++>m : Symbol(m, Decl(missingFunctionImplementation.ts, 12, 10), Decl(missingFunctionImplementation.ts, 13, 10))
+ >a : Symbol(a, Decl(missingFunctionImplementation.ts, 14, 4))
+ }
+ namespace C3 { }
+@@= skipped -16, +16 lines =@@
+ >C4 : Symbol(C4, Decl(missingFunctionImplementation.ts, 16, 16))
+ 
+   static m(a): void;
+->m : Symbol(C4.m, Decl(missingFunctionImplementation.ts, 19, 10))
++>m : Symbol(m, Decl(missingFunctionImplementation.ts, 19, 10))
+ >a : Symbol(a, Decl(missingFunctionImplementation.ts, 20, 11))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >C5 : Symbol(C5, Decl(missingFunctionImplementation.ts, 21, 1))
+ 
+   static m(a): void;
+->m : Symbol(C5.m, Decl(missingFunctionImplementation.ts, 24, 10), Decl(missingFunctionImplementation.ts, 25, 20))
++>m : Symbol(m, Decl(missingFunctionImplementation.ts, 24, 10), Decl(missingFunctionImplementation.ts, 25, 20))
+ >a : Symbol(a, Decl(missingFunctionImplementation.ts, 25, 11))
+ 
+   static m(): void;
+->m : Symbol(C5.m, Decl(missingFunctionImplementation.ts, 24, 10), Decl(missingFunctionImplementation.ts, 25, 20))
++>m : Symbol(m, Decl(missingFunctionImplementation.ts, 24, 10), Decl(missingFunctionImplementation.ts, 25, 20))
+ }
+ 
+ // merged with namespace, static methods
+@@= skipped -12, +12 lines =@@
+ >C6 : Symbol(C6, Decl(missingFunctionImplementation.ts, 27, 1), Decl(missingFunctionImplementation.ts, 32, 1))
+ 
+   static m(): void;
+->m : Symbol(C6.m, Decl(missingFunctionImplementation.ts, 30, 10))
++>m : Symbol(m, Decl(missingFunctionImplementation.ts, 30, 10))
+ }
+ namespace C6 {
+ >C6 : Symbol(C6, Decl(missingFunctionImplementation.ts, 27, 1), Decl(missingFunctionImplementation.ts, 32, 1))
+@@= skipped -11, +11 lines =@@
+ >C7 : Symbol(C7, Decl(missingFunctionImplementation.ts, 34, 1), Decl(missingFunctionImplementation.ts, 40, 1))
+ 
+   static m(a): void;
+->m : Symbol(C7.m, Decl(missingFunctionImplementation.ts, 37, 10), Decl(missingFunctionImplementation.ts, 38, 20))
++>m : Symbol(m, Decl(missingFunctionImplementation.ts, 37, 10), Decl(missingFunctionImplementation.ts, 38, 20))
+ >a : Symbol(a, Decl(missingFunctionImplementation.ts, 38, 11))
+ 
+   static m(): void;
+->m : Symbol(C7.m, Decl(missingFunctionImplementation.ts, 37, 10), Decl(missingFunctionImplementation.ts, 38, 20))
++>m : Symbol(m, Decl(missingFunctionImplementation.ts, 37, 10), Decl(missingFunctionImplementation.ts, 38, 20))
+ }
+ namespace C7 {
+ >C7 : Symbol(C7, Decl(missingFunctionImplementation.ts, 34, 1), Decl(missingFunctionImplementation.ts, 40, 1))
+@@= skipped -15, +15 lines =@@
+ >C8 : Symbol(C8, Decl(missingFunctionImplementation.ts, 42, 1), Decl(missingFunctionImplementation.ts, 48, 1))
+ 
+   static m(a): void;
+->m : Symbol(C8.m, Decl(missingFunctionImplementation.ts, 45, 10), Decl(missingFunctionImplementation.ts, 46, 20))
++>m : Symbol(m, Decl(missingFunctionImplementation.ts, 45, 10), Decl(missingFunctionImplementation.ts, 46, 20))
+ >a : Symbol(a, Decl(missingFunctionImplementation.ts, 46, 11))
+ 
+   static m(a, b): void;
+->m : Symbol(C8.m, Decl(missingFunctionImplementation.ts, 45, 10), Decl(missingFunctionImplementation.ts, 46, 20))
++>m : Symbol(m, Decl(missingFunctionImplementation.ts, 45, 10), Decl(missingFunctionImplementation.ts, 46, 20))
+ >a : Symbol(a, Decl(missingFunctionImplementation.ts, 47, 11))
+ >b : Symbol(b, Decl(missingFunctionImplementation.ts, 47, 13))
+ }
+@@= skipped -22, +22 lines =@@
+ >C9 : Symbol(C9, Decl(missingFunctionImplementation.ts, 51, 1), Decl(missingFunctionImplementation.ts, 56, 1))
+ 
+   static m(a): void { }
+->m : Symbol(C9.m, Decl(missingFunctionImplementation.ts, 54, 10))
++>m : Symbol(m, Decl(missingFunctionImplementation.ts, 54, 10))
+ >a : Symbol(a, Decl(missingFunctionImplementation.ts, 55, 11))
+ }
+ namespace C9 {

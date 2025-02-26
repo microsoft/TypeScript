@@ -1,0 +1,34 @@
+--- old.superPropertyAccessInComputedPropertiesOfNestedType_ES6.symbols
++++ new.superPropertyAccessInComputedPropertiesOfNestedType_ES6.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 0, 0))
+ 
+     foo() { return 1; }
+->foo : Symbol(A.foo, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 0, 9))
++>foo : Symbol(foo, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 0, 9))
+ }
+ 
+ class B extends A {
+@@= skipped -8, +8 lines =@@
+ >A : Symbol(A, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 0, 0))
+ 
+     foo() { return 2; }
+->foo : Symbol(B.foo, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 4, 19))
++>foo : Symbol(foo, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 4, 19))
+ 
+     bar() {
+->bar : Symbol(B.bar, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 5, 23))
++>bar : Symbol(bar, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 5, 23))
+ 
+         return class {
+             [super.foo()]() {
+->[super.foo()] : Symbol((Anonymous class)[super.foo()], Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 7, 22))
+->super.foo : Symbol(A.foo, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 0, 9))
++>[super.foo()] : Symbol([super.foo()], Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 7, 22))
++>super.foo : Symbol(foo, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 0, 9))
+ >super : Symbol(A, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 0, 0))
+->foo : Symbol(A.foo, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 0, 9))
++>foo : Symbol(foo, Decl(superPropertyAccessInComputedPropertiesOfNestedType_ES6.ts, 0, 9))
+ 
+                 return 100;
+             }

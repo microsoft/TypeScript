@@ -1,0 +1,97 @@
+--- old.wrappedRecursiveGenericType.symbols
++++ new.wrappedRecursiveGenericType.symbols
+@@= skipped -3, +3 lines =@@
+ interface X<T> { e: T; }
+ >X : Symbol(X, Decl(wrappedRecursiveGenericType.ts, 0, 0))
+ >T : Symbol(T, Decl(wrappedRecursiveGenericType.ts, 0, 12))
+->e : Symbol(X.e, Decl(wrappedRecursiveGenericType.ts, 0, 16))
++>e : Symbol(e, Decl(wrappedRecursiveGenericType.ts, 0, 16))
+ >T : Symbol(T, Decl(wrappedRecursiveGenericType.ts, 0, 12))
+ 
+ interface A<T> {
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(wrappedRecursiveGenericType.ts, 1, 12))
+ 
+     a: B<T>;
+->a : Symbol(A.a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
++>a : Symbol(a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
+ >B : Symbol(B, Decl(wrappedRecursiveGenericType.ts, 4, 1))
+ >T : Symbol(T, Decl(wrappedRecursiveGenericType.ts, 1, 12))
+ 
+     val: T;
+->val : Symbol(A.val, Decl(wrappedRecursiveGenericType.ts, 2, 12))
++>val : Symbol(val, Decl(wrappedRecursiveGenericType.ts, 2, 12))
+ >T : Symbol(T, Decl(wrappedRecursiveGenericType.ts, 1, 12))
+ }
+ interface B<T> {
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(wrappedRecursiveGenericType.ts, 5, 12))
+ 
+     b: A<X<T>>;
+->b : Symbol(B.b, Decl(wrappedRecursiveGenericType.ts, 5, 16))
++>b : Symbol(b, Decl(wrappedRecursiveGenericType.ts, 5, 16))
+ >A : Symbol(A, Decl(wrappedRecursiveGenericType.ts, 0, 24))
+ >X : Symbol(X, Decl(wrappedRecursiveGenericType.ts, 0, 0))
+ >T : Symbol(T, Decl(wrappedRecursiveGenericType.ts, 5, 12))
+ 
+     val: T;
+->val : Symbol(B.val, Decl(wrappedRecursiveGenericType.ts, 6, 15))
++>val : Symbol(val, Decl(wrappedRecursiveGenericType.ts, 6, 15))
+ >T : Symbol(T, Decl(wrappedRecursiveGenericType.ts, 5, 12))
+ }
+ var x: A<number>;
+@@= skipped -14, +14 lines =@@
+ >A : Symbol(A, Decl(wrappedRecursiveGenericType.ts, 0, 24))
+ 
+ x.val = 5;         // val -> number
+->x.val : Symbol(A.val, Decl(wrappedRecursiveGenericType.ts, 2, 12))
++>x.val : Symbol(val, Decl(wrappedRecursiveGenericType.ts, 2, 12))
+ >x : Symbol(x, Decl(wrappedRecursiveGenericType.ts, 9, 3))
+->val : Symbol(A.val, Decl(wrappedRecursiveGenericType.ts, 2, 12))
++>val : Symbol(val, Decl(wrappedRecursiveGenericType.ts, 2, 12))
+ 
+ x.a.val = 5;       // val -> number
+->x.a.val : Symbol(B.val, Decl(wrappedRecursiveGenericType.ts, 6, 15))
+->x.a : Symbol(A.a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
++>x.a.val : Symbol(val, Decl(wrappedRecursiveGenericType.ts, 6, 15))
++>x.a : Symbol(a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
+ >x : Symbol(x, Decl(wrappedRecursiveGenericType.ts, 9, 3))
+->a : Symbol(A.a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
+->val : Symbol(B.val, Decl(wrappedRecursiveGenericType.ts, 6, 15))
++>a : Symbol(a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
++>val : Symbol(val, Decl(wrappedRecursiveGenericType.ts, 6, 15))
+ 
+ x.a.b.val = 5;     // val -> X<number> (This should be an error)
+->x.a.b.val : Symbol(A.val, Decl(wrappedRecursiveGenericType.ts, 2, 12))
+->x.a.b : Symbol(B.b, Decl(wrappedRecursiveGenericType.ts, 5, 16))
+->x.a : Symbol(A.a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
++>x.a.b.val : Symbol(val, Decl(wrappedRecursiveGenericType.ts, 2, 12))
++>x.a.b : Symbol(b, Decl(wrappedRecursiveGenericType.ts, 5, 16))
++>x.a : Symbol(a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
+ >x : Symbol(x, Decl(wrappedRecursiveGenericType.ts, 9, 3))
+->a : Symbol(A.a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
+->b : Symbol(B.b, Decl(wrappedRecursiveGenericType.ts, 5, 16))
+->val : Symbol(A.val, Decl(wrappedRecursiveGenericType.ts, 2, 12))
++>a : Symbol(a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
++>b : Symbol(b, Decl(wrappedRecursiveGenericType.ts, 5, 16))
++>val : Symbol(val, Decl(wrappedRecursiveGenericType.ts, 2, 12))
+ 
+ x.a.b.a.val = 5;   // val -> X<number> (This should be an error)
+->x.a.b.a.val : Symbol(B.val, Decl(wrappedRecursiveGenericType.ts, 6, 15))
+->x.a.b.a : Symbol(A.a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
+->x.a.b : Symbol(B.b, Decl(wrappedRecursiveGenericType.ts, 5, 16))
+->x.a : Symbol(A.a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
++>x.a.b.a.val : Symbol(val, Decl(wrappedRecursiveGenericType.ts, 6, 15))
++>x.a.b.a : Symbol(a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
++>x.a.b : Symbol(b, Decl(wrappedRecursiveGenericType.ts, 5, 16))
++>x.a : Symbol(a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
+ >x : Symbol(x, Decl(wrappedRecursiveGenericType.ts, 9, 3))
+->a : Symbol(A.a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
+->b : Symbol(B.b, Decl(wrappedRecursiveGenericType.ts, 5, 16))
+->a : Symbol(A.a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
+->val : Symbol(B.val, Decl(wrappedRecursiveGenericType.ts, 6, 15))
++>a : Symbol(a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
++>b : Symbol(b, Decl(wrappedRecursiveGenericType.ts, 5, 16))
++>a : Symbol(a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
++>val : Symbol(val, Decl(wrappedRecursiveGenericType.ts, 6, 15))
+ 

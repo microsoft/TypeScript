@@ -1,0 +1,40 @@
+--- old.staticIndexSignature6.symbols
++++ new.staticIndexSignature6.symbols
+@@= skipped -13, +13 lines =@@
+ >s : Symbol(s, Decl(staticIndexSignature6.ts, 3, 16))
+ 
+         foo(v: T) { return v }
+->foo : Symbol((Anonymous class).foo, Decl(staticIndexSignature6.ts, 3, 30))
++>foo : Symbol(foo, Decl(staticIndexSignature6.ts, 3, 30))
+ >v : Symbol(v, Decl(staticIndexSignature6.ts, 5, 12))
+ >T : Symbol(T, Decl(staticIndexSignature6.ts, 1, 17))
+ >v : Symbol(v, Decl(staticIndexSignature6.ts, 5, 12))
+@@= skipped -12, +12 lines =@@
+ >foo : Symbol(foo, Decl(staticIndexSignature6.ts, 0, 0))
+ 
+ C.a;
+->C.a : Symbol((Anonymous class).__index, Decl(staticIndexSignature6.ts, 1, 21))
++>C.a : Symbol((Missing), Decl(staticIndexSignature6.ts, 1, 21))
+ >C : Symbol(C, Decl(staticIndexSignature6.ts, 9, 5))
+->a : Symbol((Anonymous class).__index, Decl(staticIndexSignature6.ts, 1, 21))
++>a : Symbol((Missing), Decl(staticIndexSignature6.ts, 1, 21))
+ 
+ C.a = 1;
+->C.a : Symbol((Anonymous class).__index, Decl(staticIndexSignature6.ts, 1, 21))
++>C.a : Symbol((Missing), Decl(staticIndexSignature6.ts, 1, 21))
+ >C : Symbol(C, Decl(staticIndexSignature6.ts, 9, 5))
+->a : Symbol((Anonymous class).__index, Decl(staticIndexSignature6.ts, 1, 21))
++>a : Symbol((Missing), Decl(staticIndexSignature6.ts, 1, 21))
+ 
+ C[2];
+ >C : Symbol(C, Decl(staticIndexSignature6.ts, 9, 5))
+@@= skipped -20, +20 lines =@@
+ >C : Symbol(C, Decl(staticIndexSignature6.ts, 9, 5))
+ 
+ c.foo(1);
+->c.foo : Symbol((Anonymous class).foo, Decl(staticIndexSignature6.ts, 3, 30))
++>c.foo : Symbol(foo, Decl(staticIndexSignature6.ts, 3, 30))
+ >c : Symbol(c, Decl(staticIndexSignature6.ts, 15, 5))
+->foo : Symbol((Anonymous class).foo, Decl(staticIndexSignature6.ts, 3, 30))
++>foo : Symbol(foo, Decl(staticIndexSignature6.ts, 3, 30))
+ 

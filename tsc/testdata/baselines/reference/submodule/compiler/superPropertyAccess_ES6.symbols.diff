@@ -1,0 +1,90 @@
+--- old.superPropertyAccess_ES6.symbols
++++ new.superPropertyAccess_ES6.symbols
+@@= skipped -4, +4 lines =@@
+ >MyBase : Symbol(MyBase, Decl(superPropertyAccess_ES6.ts, 0, 0))
+ 
+   getValue(): number { return 1; }
+->getValue : Symbol(MyBase.getValue, Decl(superPropertyAccess_ES6.ts, 0, 14))
++>getValue : Symbol(getValue, Decl(superPropertyAccess_ES6.ts, 0, 14))
+ 
+   get value(): number { return 1; }
+->value : Symbol(MyBase.value, Decl(superPropertyAccess_ES6.ts, 1, 34))
++>value : Symbol(value, Decl(superPropertyAccess_ES6.ts, 1, 34))
+ }
+ 
+ class MyDerived extends MyBase {
+@@= skipped -16, +16 lines =@@
+ 
+     const f1 = super.getValue();
+ >f1 : Symbol(f1, Decl(superPropertyAccess_ES6.ts, 9, 9))
+->super.getValue : Symbol(MyBase.getValue, Decl(superPropertyAccess_ES6.ts, 0, 14))
++>super.getValue : Symbol(getValue, Decl(superPropertyAccess_ES6.ts, 0, 14))
+ >super : Symbol(MyBase, Decl(superPropertyAccess_ES6.ts, 0, 0))
+->getValue : Symbol(MyBase.getValue, Decl(superPropertyAccess_ES6.ts, 0, 14))
++>getValue : Symbol(getValue, Decl(superPropertyAccess_ES6.ts, 0, 14))
+ 
+     const f2 = super.value;
+ >f2 : Symbol(f2, Decl(superPropertyAccess_ES6.ts, 10, 9))
+->super.value : Symbol(MyBase.value, Decl(superPropertyAccess_ES6.ts, 1, 34))
++>super.value : Symbol(value, Decl(superPropertyAccess_ES6.ts, 1, 34))
+ >super : Symbol(MyBase, Decl(superPropertyAccess_ES6.ts, 0, 0))
+->value : Symbol(MyBase.value, Decl(superPropertyAccess_ES6.ts, 1, 34))
++>value : Symbol(value, Decl(superPropertyAccess_ES6.ts, 1, 34))
+   }
+ }
+ 
+@@= skipped -18, +18 lines =@@
+ 
+ var f3 = d.value;
+ >f3 : Symbol(f3, Decl(superPropertyAccess_ES6.ts, 15, 3))
+->d.value : Symbol(MyBase.value, Decl(superPropertyAccess_ES6.ts, 1, 34))
++>d.value : Symbol(value, Decl(superPropertyAccess_ES6.ts, 1, 34))
+ >d : Symbol(d, Decl(superPropertyAccess_ES6.ts, 14, 3))
+->value : Symbol(MyBase.value, Decl(superPropertyAccess_ES6.ts, 1, 34))
++>value : Symbol(value, Decl(superPropertyAccess_ES6.ts, 1, 34))
+ 
+ class A {
+ >A : Symbol(A, Decl(superPropertyAccess_ES6.ts, 15, 17))
+ 
+     private _property: string;
+->_property : Symbol(A._property, Decl(superPropertyAccess_ES6.ts, 17, 9))
++>_property : Symbol(_property, Decl(superPropertyAccess_ES6.ts, 17, 9))
+ 
+     get property() { return this._property; }
+->property : Symbol(A.property, Decl(superPropertyAccess_ES6.ts, 18, 30), Decl(superPropertyAccess_ES6.ts, 19, 45))
+->this._property : Symbol(A._property, Decl(superPropertyAccess_ES6.ts, 17, 9))
++>property : Symbol(property, Decl(superPropertyAccess_ES6.ts, 18, 30), Decl(superPropertyAccess_ES6.ts, 19, 45))
++>this._property : Symbol(_property, Decl(superPropertyAccess_ES6.ts, 17, 9))
+ >this : Symbol(A, Decl(superPropertyAccess_ES6.ts, 15, 17))
+->_property : Symbol(A._property, Decl(superPropertyAccess_ES6.ts, 17, 9))
++>_property : Symbol(_property, Decl(superPropertyAccess_ES6.ts, 17, 9))
+ 
+     set property(value: string) { this._property = value }
+->property : Symbol(A.property, Decl(superPropertyAccess_ES6.ts, 18, 30), Decl(superPropertyAccess_ES6.ts, 19, 45))
++>property : Symbol(property, Decl(superPropertyAccess_ES6.ts, 18, 30), Decl(superPropertyAccess_ES6.ts, 19, 45))
+ >value : Symbol(value, Decl(superPropertyAccess_ES6.ts, 20, 17))
+->this._property : Symbol(A._property, Decl(superPropertyAccess_ES6.ts, 17, 9))
++>this._property : Symbol(_property, Decl(superPropertyAccess_ES6.ts, 17, 9))
+ >this : Symbol(A, Decl(superPropertyAccess_ES6.ts, 15, 17))
+->_property : Symbol(A._property, Decl(superPropertyAccess_ES6.ts, 17, 9))
++>_property : Symbol(_property, Decl(superPropertyAccess_ES6.ts, 17, 9))
+ >value : Symbol(value, Decl(superPropertyAccess_ES6.ts, 20, 17))
+ }
+ 
+@@= skipped -30, +30 lines =@@
+ >A : Symbol(A, Decl(superPropertyAccess_ES6.ts, 15, 17))
+ 
+     set property(value: string) {
+->property : Symbol(B.property, Decl(superPropertyAccess_ES6.ts, 23, 19))
++>property : Symbol(property, Decl(superPropertyAccess_ES6.ts, 23, 19))
+ >value : Symbol(value, Decl(superPropertyAccess_ES6.ts, 24, 17))
+ 
+         super.property = value + " addition";
+->super.property : Symbol(A.property, Decl(superPropertyAccess_ES6.ts, 18, 30), Decl(superPropertyAccess_ES6.ts, 19, 45))
++>super.property : Symbol(property, Decl(superPropertyAccess_ES6.ts, 18, 30), Decl(superPropertyAccess_ES6.ts, 19, 45))
+ >super : Symbol(A, Decl(superPropertyAccess_ES6.ts, 15, 17))
+->property : Symbol(A.property, Decl(superPropertyAccess_ES6.ts, 18, 30), Decl(superPropertyAccess_ES6.ts, 19, 45))
++>property : Symbol(property, Decl(superPropertyAccess_ES6.ts, 18, 30), Decl(superPropertyAccess_ES6.ts, 19, 45))
+ >value : Symbol(value, Decl(superPropertyAccess_ES6.ts, 24, 17))
+     }
+ }

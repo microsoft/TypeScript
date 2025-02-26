@@ -1,0 +1,10 @@
+--- old.uniqueSymbolJs.symbols
++++ new.uniqueSymbolJs.symbols
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/uniqueSymbolJs.ts] ////
+ 
+-=== ./a.js ===
++=== a.js ===
+ /** @type {unique symbol} */
+ const foo = Symbol();
+ >foo : Symbol(foo, Decl(a.js, 1, 5))

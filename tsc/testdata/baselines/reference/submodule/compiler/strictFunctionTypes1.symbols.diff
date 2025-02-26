@@ -1,0 +1,17 @@
+--- old.strictFunctionTypes1.symbols
++++ new.strictFunctionTypes1.symbols
+@@= skipped -130, +130 lines =@@
+ 
+ interface A { a: string }
+ >A : Symbol(A, Decl(strictFunctionTypes1.ts, 25, 16))
+->a : Symbol(A.a, Decl(strictFunctionTypes1.ts, 29, 13))
++>a : Symbol(a, Decl(strictFunctionTypes1.ts, 29, 13))
+ 
+ interface B extends A { b: string }
+ >B : Symbol(B, Decl(strictFunctionTypes1.ts, 29, 25))
+ >A : Symbol(A, Decl(strictFunctionTypes1.ts, 25, 16))
+->b : Symbol(B.b, Decl(strictFunctionTypes1.ts, 30, 23))
++>b : Symbol(b, Decl(strictFunctionTypes1.ts, 30, 23))
+ 
+ declare function acceptUnion(x: A | number): void;
+ >acceptUnion : Symbol(acceptUnion, Decl(strictFunctionTypes1.ts, 30, 35))

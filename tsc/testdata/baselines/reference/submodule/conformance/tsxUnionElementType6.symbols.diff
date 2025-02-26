@@ -1,0 +1,28 @@
+--- old.tsxUnionElementType6.symbols
++++ new.tsxUnionElementType6.symbols
+@@= skipped -7, +7 lines =@@
+ >EmptySFC1 : Symbol(EmptySFC1, Decl(file.tsx, 0, 32))
+ 
+     return <div>Hi</div>
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+ }
+ 
+ function EmptySFC2() {
+ >EmptySFC2 : Symbol(EmptySFC2, Decl(file.tsx, 4, 1))
+ 
+     return <div>Hello</div>
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+ }
+ 
+ function SFC2(prop: { x: boolean }) {
+@@= skipped -18, +14 lines =@@
+ >x : Symbol(x, Decl(file.tsx, 10, 21))
+ 
+     return <h1>World</h1>;
+->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+ }
+ 
+ var EmptySFCComp = EmptySFC1 || EmptySFC2;

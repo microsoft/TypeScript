@@ -1,0 +1,249 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsGetterSetter.ts] ////
+
+=== index.js ===
+export class A {
+>A : Symbol(A, Decl(index.js, 0, 0))
+
+    get x() {
+>x : Symbol(x, Decl(index.js, 0, 16))
+
+        return 12;
+    }
+}
+
+export class B {
+>B : Symbol(B, Decl(index.js, 4, 1))
+
+    /**
+     * @param {number} _arg
+     */
+    set x(_arg) {
+>x : Symbol(x, Decl(index.js, 6, 16))
+>_arg : Symbol(_arg, Decl(index.js, 10, 10))
+    }
+}
+
+export class C {
+>C : Symbol(C, Decl(index.js, 12, 1))
+
+    get x() {
+>x : Symbol(x, Decl(index.js, 14, 16), Decl(index.js, 17, 5))
+
+        return 12;
+    }
+    set x(_arg) {
+>x : Symbol(x, Decl(index.js, 14, 16), Decl(index.js, 17, 5))
+>_arg : Symbol(_arg, Decl(index.js, 18, 10))
+    }
+}
+
+export class D {}
+>D : Symbol(D, Decl(index.js, 20, 1))
+
+Object.defineProperty(D.prototype, "x", {
+>D.prototype : Symbol(prototype)
+>D : Symbol(D, Decl(index.js, 20, 1))
+>prototype : Symbol(prototype)
+
+    get() {
+>get : Symbol(get, Decl(index.js, 23, 41))
+
+        return 12;
+    }
+});
+
+export class E {}
+>E : Symbol(E, Decl(index.js, 27, 3))
+
+Object.defineProperty(E.prototype, "x", {
+>E.prototype : Symbol(prototype)
+>E : Symbol(E, Decl(index.js, 27, 3))
+>prototype : Symbol(prototype)
+
+    /**
+     * @param {number} _arg
+     */
+    set(_arg) {}
+>set : Symbol(set, Decl(index.js, 30, 41))
+>_arg : Symbol(_arg, Decl(index.js, 34, 8))
+
+});
+
+export class F {}
+>F : Symbol(F, Decl(index.js, 35, 3))
+
+Object.defineProperty(F.prototype, "x", {
+>F.prototype : Symbol(prototype)
+>F : Symbol(F, Decl(index.js, 35, 3))
+>prototype : Symbol(prototype)
+
+    get() {
+>get : Symbol(get, Decl(index.js, 38, 41))
+
+        return 12;
+    },
+    /**
+     * @param {number} _arg
+     */
+    set(_arg) {}
+>set : Symbol(set, Decl(index.js, 41, 6))
+>_arg : Symbol(_arg, Decl(index.js, 45, 8))
+
+});
+
+export class G {}
+>G : Symbol(G, Decl(index.js, 46, 3))
+
+Object.defineProperty(G.prototype, "x", {
+>G.prototype : Symbol(prototype)
+>G : Symbol(G, Decl(index.js, 46, 3))
+>prototype : Symbol(prototype)
+
+    /**
+     * @param {number[]} args
+     */
+    set(...args) {}
+>set : Symbol(set, Decl(index.js, 49, 41))
+>args : Symbol(args, Decl(index.js, 53, 8))
+
+});
+
+export class H {}
+>H : Symbol(H, Decl(index.js, 54, 3))
+
+Object.defineProperty(H.prototype, "x", {
+>H.prototype : Symbol(prototype)
+>H : Symbol(H, Decl(index.js, 54, 3))
+>prototype : Symbol(prototype)
+
+    set() {}
+>set : Symbol(set, Decl(index.js, 57, 41))
+
+});
+
+
+export class I {}
+>I : Symbol(I, Decl(index.js, 59, 3))
+
+Object.defineProperty(I.prototype, "x", {
+>I.prototype : Symbol(prototype)
+>I : Symbol(I, Decl(index.js, 59, 3))
+>prototype : Symbol(prototype)
+
+    /**
+     * @param {number} v
+     */
+    set: (v) => {}
+>set : Symbol(set, Decl(index.js, 63, 41))
+>v : Symbol(v, Decl(index.js, 67, 10))
+
+});
+
+/**
+ * @param {number} v
+ */
+const jSetter = (v) => {}
+>jSetter : Symbol(jSetter, Decl(index.js, 73, 5))
+>v : Symbol(v, Decl(index.js, 73, 17))
+
+export class J {}
+>J : Symbol(J, Decl(index.js, 73, 25))
+
+Object.defineProperty(J.prototype, "x", {
+>J.prototype : Symbol(prototype)
+>J : Symbol(J, Decl(index.js, 73, 25))
+>prototype : Symbol(prototype)
+
+    set: jSetter
+>set : Symbol(set, Decl(index.js, 75, 41))
+>jSetter : Symbol(jSetter, Decl(index.js, 73, 5))
+
+});
+
+/**
+ * @param {number} v
+ */
+const kSetter1 = (v) => {}
+>kSetter1 : Symbol(kSetter1, Decl(index.js, 82, 5))
+>v : Symbol(v, Decl(index.js, 82, 18))
+
+/**
+ * @param {number} v
+ */
+const kSetter2 = (v) => {}
+>kSetter2 : Symbol(kSetter2, Decl(index.js, 86, 5))
+>v : Symbol(v, Decl(index.js, 86, 18))
+
+export class K {}
+>K : Symbol(K, Decl(index.js, 86, 26))
+
+Object.defineProperty(K.prototype, "x", {
+>K.prototype : Symbol(prototype)
+>K : Symbol(K, Decl(index.js, 86, 26))
+>prototype : Symbol(prototype)
+
+    set: Math.random() ? kSetter1 : kSetter2
+>set : Symbol(set, Decl(index.js, 88, 41))
+>kSetter1 : Symbol(kSetter1, Decl(index.js, 82, 5))
+>kSetter2 : Symbol(kSetter2, Decl(index.js, 86, 5))
+
+});
+
+/**
+ * @param {number} v
+ */
+const lSetter1 = (v) => {}
+>lSetter1 : Symbol(lSetter1, Decl(index.js, 95, 5))
+>v : Symbol(v, Decl(index.js, 95, 18))
+
+/**
+ * @param {string} v
+ */
+const lSetter2 = (v) => {}
+>lSetter2 : Symbol(lSetter2, Decl(index.js, 99, 5))
+>v : Symbol(v, Decl(index.js, 99, 18))
+
+export class L {}
+>L : Symbol(L, Decl(index.js, 99, 26))
+
+Object.defineProperty(L.prototype, "x", {
+>L.prototype : Symbol(prototype)
+>L : Symbol(L, Decl(index.js, 99, 26))
+>prototype : Symbol(prototype)
+
+    set: Math.random() ? lSetter1 : lSetter2
+>set : Symbol(set, Decl(index.js, 101, 41))
+>lSetter1 : Symbol(lSetter1, Decl(index.js, 95, 5))
+>lSetter2 : Symbol(lSetter2, Decl(index.js, 99, 5))
+
+});
+
+/**
+ * @param {number | boolean} v
+ */
+const mSetter1 = (v) => {}
+>mSetter1 : Symbol(mSetter1, Decl(index.js, 108, 5))
+>v : Symbol(v, Decl(index.js, 108, 18))
+
+/**
+ * @param {string | boolean} v
+ */
+const mSetter2 = (v) => {}
+>mSetter2 : Symbol(mSetter2, Decl(index.js, 112, 5))
+>v : Symbol(v, Decl(index.js, 112, 18))
+
+export class M {}
+>M : Symbol(M, Decl(index.js, 112, 26))
+
+Object.defineProperty(M.prototype, "x", {
+>M.prototype : Symbol(prototype)
+>M : Symbol(M, Decl(index.js, 112, 26))
+>prototype : Symbol(prototype)
+
+    set: Math.random() ? mSetter1 : mSetter2
+>set : Symbol(set, Decl(index.js, 114, 41))
+>mSetter1 : Symbol(mSetter1, Decl(index.js, 108, 5))
+>mSetter2 : Symbol(mSetter2, Decl(index.js, 112, 5))
+
+});
+

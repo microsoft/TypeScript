@@ -1,0 +1,11 @@
+--- old.instanceMemberWithComputedPropertyName2.symbols
++++ new.instanceMemberWithComputedPropertyName2.symbols
+@@= skipped -9, +9 lines =@@
+ >C : Symbol(C, Decl(instanceMemberWithComputedPropertyName2.ts, 2, 12))
+ 
+     [x]: string;
+->[x] : Symbol(C[x], Decl(instanceMemberWithComputedPropertyName2.ts, 3, 9))
++>[x] : Symbol([x], Decl(instanceMemberWithComputedPropertyName2.ts, 3, 9))
+ >x : Symbol(x, Decl(instanceMemberWithComputedPropertyName2.ts, 2, 5))
+ }
+ 

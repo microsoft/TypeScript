@@ -1,0 +1,72 @@
+--- old.commentsAfterSpread.symbols
++++ new.commentsAfterSpread.symbols
+@@= skipped -67, +67 lines =@@
+ >args : Symbol(args, Decl(commentsAfterSpread.ts, 30, 12))
+ 
+   return args.length;
+->args.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>args.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >args : Symbol(args, Decl(commentsAfterSpread.ts, 30, 12))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function f (
+@@= skipped -16, +16 lines =@@
+ 
+ ) {
+   return rest.length;
+->rest.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>rest.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >rest : Symbol(rest, Decl(commentsAfterSpread.ts, 36, 8))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function g (
+@@= skipped -25, +25 lines =@@
+ 
+   ]
+   return rest.length;
+->rest.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>rest.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >rest : Symbol(rest, Decl(commentsAfterSpread.ts, 43, 8))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ const h = (.../* comment h */args) => args.length;
+ >h : Symbol(h, Decl(commentsAfterSpread.ts, 53, 5))
+ >args : Symbol(args, Decl(commentsAfterSpread.ts, 53, 11))
+->args.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>args.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >args : Symbol(args, Decl(commentsAfterSpread.ts, 53, 11))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ const i = (
+ >i : Symbol(i, Decl(commentsAfterSpread.ts, 55, 5))
+@@= skipped -20, +20 lines =@@
+ >rest : Symbol(rest, Decl(commentsAfterSpread.ts, 56, 8))
+ 
+ ) => rest.length;
+->rest.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>rest.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >rest : Symbol(rest, Decl(commentsAfterSpread.ts, 56, 8))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ const j = (
+ >j : Symbol(j, Decl(commentsAfterSpread.ts, 59, 5))
+@@= skipped -15, +15 lines =@@
+ >rest : Symbol(rest, Decl(commentsAfterSpread.ts, 60, 8))
+ 
+ ) => rest.length;
+->rest.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>rest.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >rest : Symbol(rest, Decl(commentsAfterSpread.ts, 60, 8))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ function k ({
+ >k : Symbol(k, Decl(commentsAfterSpread.ts, 63, 17))

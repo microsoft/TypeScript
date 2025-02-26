@@ -1,0 +1,15 @@
+--- old.classIndexer2.symbols
++++ new.classIndexer2.symbols
+@@= skipped -7, +7 lines =@@
+ >s : Symbol(s, Decl(classIndexer2.ts, 1, 5))
+ 
+     x: number;
+->x : Symbol(C123.x, Decl(classIndexer2.ts, 1, 24))
++>x : Symbol(x, Decl(classIndexer2.ts, 1, 24))
+ 
+     y: string;
+->y : Symbol(C123.y, Decl(classIndexer2.ts, 2, 14))
++>y : Symbol(y, Decl(classIndexer2.ts, 2, 14))
+ 
+     constructor() {
+     }

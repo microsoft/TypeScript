@@ -1,0 +1,11 @@
+--- old.anyAsGenericFunctionCall.symbols
++++ new.anyAsGenericFunctionCall.symbols
+@@= skipped -16, +16 lines =@@
+ 
+ class C { foo: string; }
+ >C : Symbol(C, Decl(anyAsGenericFunctionCall.ts, 5, 27))
+->foo : Symbol(C.foo, Decl(anyAsGenericFunctionCall.ts, 7, 9))
++>foo : Symbol(foo, Decl(anyAsGenericFunctionCall.ts, 7, 9))
+ 
+ var c = x<C>(x);
+ >c : Symbol(c, Decl(anyAsGenericFunctionCall.ts, 8, 3))

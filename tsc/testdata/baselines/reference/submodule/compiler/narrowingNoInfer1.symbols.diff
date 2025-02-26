@@ -1,0 +1,14 @@
+--- old.narrowingNoInfer1.symbols
++++ new.narrowingNoInfer1.symbols
+@@= skipped -34, +34 lines =@@
+ >B : Symbol(B, Decl(narrowingNoInfer1.ts, 9, 15))
+ 
+   return items.map(f);
+->items.map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
++>items.map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >items : Symbol(items, Decl(narrowingNoInfer1.ts, 9, 19))
+->map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >f : Symbol(f, Decl(narrowingNoInfer1.ts, 9, 39))
+ }
+ 

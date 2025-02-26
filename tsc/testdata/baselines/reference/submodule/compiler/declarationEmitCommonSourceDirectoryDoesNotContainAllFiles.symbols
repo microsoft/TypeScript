@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/declarationEmitCommonSourceDirectoryDoesNotContainAllFiles.ts] ////
+
+=== /a/index.ts ===
+
+export * from "./src/"
+=== /a/src/index.ts ===
+import { B } from "b";
+>B : Symbol(B, Decl(index.ts, 0, 8))
+
+export default function () {
+	return new B();
+>B : Symbol(B, Decl(index.ts, 0, 8))
+}

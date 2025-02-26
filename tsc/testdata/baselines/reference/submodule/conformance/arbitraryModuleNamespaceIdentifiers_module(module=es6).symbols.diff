@@ -1,0 +1,82 @@
+--- old.arbitraryModuleNamespaceIdentifiers_module(module=es6).symbols
++++ new.arbitraryModuleNamespaceIdentifiers_module(module=es6).symbols
+@@= skipped -8, +8 lines =@@
+ 
+ export { someValue as "<X>" };
+ >someValue : Symbol(someValue, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 0, 5))
+->"<X>" : Symbol(valueZ["<X>"], Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 3, 8))
++>"<X>" : Symbol("<X>", Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 3, 8))
+ 
+ import { "<X>" as valueX } from "./arbitraryModuleNamespaceIdentifiers_module";
+ >valueX : Symbol(valueX, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 4, 8))
+@@= skipped -9, +9 lines =@@
+ >valueX : Symbol(valueX, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 4, 8))
+ 
+ export { "<X>" as "<Y>" } from "./arbitraryModuleNamespaceIdentifiers_module";
+->"<Y>" : Symbol(valueZ["<Y>"], Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 7, 8))
++>"<Y>" : Symbol("<Y>", Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 7, 8))
+ 
+ import { "<Y>" as valueY } from "./arbitraryModuleNamespaceIdentifiers_module";
+ >valueY : Symbol(valueY, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 8, 8))
+@@= skipped -9, +9 lines =@@
+ >valueY : Symbol(valueY, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 8, 8))
+ 
+ export * as "<Z>" from "./arbitraryModuleNamespaceIdentifiers_module";
+->"<Z>" : Symbol(valueZ["<Z>"], Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 11, 6))
++>"<Z>" : Symbol("<Z>", Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 11, 6))
+ 
+ import { "<Z>" as valueZ } from "./arbitraryModuleNamespaceIdentifiers_module";
+ >valueZ : Symbol(valueZ, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 12, 8))
+ 
+ if (valueZ["<X>"] !== "someValue") throw "should be someValue";
+ >valueZ : Symbol(valueZ, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 12, 8))
+->"<X>" : Symbol(valueZ["<X>"], Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 3, 8))
++>"<X>" : Symbol("<X>", Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 3, 8))
+ 
+ if (valueZ["<Y>"] !== "someValue") throw "should be someValue";
+ >valueZ : Symbol(valueZ, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 12, 8))
+->"<Y>" : Symbol(valueZ["<Y>"], Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 7, 8))
++>"<Y>" : Symbol("<Y>", Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 7, 8))
+ 
+ if (valueZ["<Z>"] !== valueZ) throw "should be export namespace";
+ >valueZ : Symbol(valueZ, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 12, 8))
+->"<Z>" : Symbol(valueZ["<Z>"], Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 11, 6))
++>"<Z>" : Symbol("<Z>", Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 11, 6))
+ >valueZ : Symbol(valueZ, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 12, 8))
+ 
+ export { type someType as "<A>" };
+ >someType : Symbol(someType, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 0, 30))
+->"<A>" : Symbol(valueZ["<A>"], Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 17, 8))
++>"<A>" : Symbol("<A>", Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 17, 8))
+ 
+ import { type "<A>" as typeA } from "./arbitraryModuleNamespaceIdentifiers_module";
+ >typeA : Symbol(typeA, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 18, 8))
+@@= skipped -30, +30 lines =@@
+ >typeA : Symbol(typeA, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 18, 8))
+ 
+ export { type "<A>" as "<B>" } from "./arbitraryModuleNamespaceIdentifiers_module";
+->"<B>" : Symbol(valueZ["<B>"], Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 21, 8))
++>"<B>" : Symbol("<B>", Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 21, 8))
+ 
+ import { type "<B>" as typeB } from "./arbitraryModuleNamespaceIdentifiers_module";
+ >typeB : Symbol(typeB, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 22, 8))
+@@= skipped -10, +10 lines =@@
+ >typeB : Symbol(typeB, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 22, 8))
+ 
+ export type * as "<C>" from "./arbitraryModuleNamespaceIdentifiers_module";
+->"<C>" : Symbol(valueZ["<C>"], Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 25, 11))
++>"<C>" : Symbol("<C>", Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 25, 11))
+ 
+ import { type "<C>" as typeC } from "./arbitraryModuleNamespaceIdentifiers_module";
+ >typeC : Symbol(typeC, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 26, 8))
+ 
+ export type otherType = "otherType";
+->otherType : Symbol(valueZ.otherType, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 26, 83))
++>otherType : Symbol(otherType, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 26, 83))
+ 
+ const importStarTestA: typeC.otherType = "expect error about otherType";
+ >importStarTestA : Symbol(importStarTestA, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 28, 5))
+ >typeC : Symbol(typeC, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 26, 8))
+->otherType : Symbol(valueZ.otherType, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 26, 83))
++>otherType : Symbol(otherType, Decl(arbitraryModuleNamespaceIdentifiers_module.ts, 26, 83))
+ 

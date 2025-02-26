@@ -1,0 +1,20 @@
+--- old.typeInferenceWithExcessPropertiesJsx.symbols
++++ new.typeInferenceWithExcessPropertiesJsx.symbols
+@@= skipped -53, +53 lines =@@
+ >Entry : Symbol(Entry, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 17, 19))
+ 
+ ): JSX.Element;
+->JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+->Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
++>JSX : Symbol(JSX)
++>Element : Symbol(Element)
+ 
+ <T getTranslationEntry={(allTranslations) => allTranslations.a} args="a" />
+ >T : Symbol(T, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 15, 8))
+ >getTranslationEntry : Symbol(getTranslationEntry, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 21, 2))
+ >allTranslations : Symbol(allTranslations, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 21, 25))
+->allTranslations.a : Symbol(a, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 7, 21))
+ >allTranslations : Symbol(allTranslations, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 21, 25))
+->a : Symbol(a, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 7, 21))
+ >args : Symbol(args, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 21, 63))
+ 

@@ -1,0 +1,69 @@
+--- old.importHelpersSystem.symbols
++++ new.importHelpersSystem.symbols
+@@= skipped -14, +14 lines =@@
+ 
+ === tslib.d.ts ===
+ export declare function __extends(d: Function, b: Function): void;
+->__extends : Symbol(__extends, Decl(tslib.d.ts, --, --))
+->d : Symbol(d, Decl(tslib.d.ts, --, --))
++>__extends : Symbol(__extends, Decl(tslib.d.ts, 0, 0))
++>d : Symbol(d, Decl(tslib.d.ts, 0, 34))
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->b : Symbol(b, Decl(tslib.d.ts, --, --))
++>b : Symbol(b, Decl(tslib.d.ts, 0, 46))
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+ export declare function __assign(t: any, ...sources: any[]): any;
+->__assign : Symbol(__assign, Decl(tslib.d.ts, --, --))
+->t : Symbol(t, Decl(tslib.d.ts, --, --))
+->sources : Symbol(sources, Decl(tslib.d.ts, --, --))
++>__assign : Symbol(__assign, Decl(tslib.d.ts, 0, 66))
++>t : Symbol(t, Decl(tslib.d.ts, 1, 33))
++>sources : Symbol(sources, Decl(tslib.d.ts, 1, 40))
+ 
+ export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;
+->__decorate : Symbol(__decorate, Decl(tslib.d.ts, --, --))
+->decorators : Symbol(decorators, Decl(tslib.d.ts, --, --))
++>__decorate : Symbol(__decorate, Decl(tslib.d.ts, 1, 65))
++>decorators : Symbol(decorators, Decl(tslib.d.ts, 2, 35))
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->target : Symbol(target, Decl(tslib.d.ts, --, --))
+->key : Symbol(key, Decl(tslib.d.ts, --, --))
+->desc : Symbol(desc, Decl(tslib.d.ts, --, --))
++>target : Symbol(target, Decl(tslib.d.ts, 2, 58))
++>key : Symbol(key, Decl(tslib.d.ts, 2, 71))
++>desc : Symbol(desc, Decl(tslib.d.ts, 2, 94))
+ 
+ export declare function __param(paramIndex: number, decorator: Function): Function;
+->__param : Symbol(__param, Decl(tslib.d.ts, --, --))
+->paramIndex : Symbol(paramIndex, Decl(tslib.d.ts, --, --))
+->decorator : Symbol(decorator, Decl(tslib.d.ts, --, --))
++>__param : Symbol(__param, Decl(tslib.d.ts, 2, 112))
++>paramIndex : Symbol(paramIndex, Decl(tslib.d.ts, 3, 32))
++>decorator : Symbol(decorator, Decl(tslib.d.ts, 3, 51))
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+ export declare function __metadata(metadataKey: any, metadataValue: any): Function;
+->__metadata : Symbol(__metadata, Decl(tslib.d.ts, --, --))
+->metadataKey : Symbol(metadataKey, Decl(tslib.d.ts, --, --))
+->metadataValue : Symbol(metadataValue, Decl(tslib.d.ts, --, --))
++>__metadata : Symbol(__metadata, Decl(tslib.d.ts, 3, 83))
++>metadataKey : Symbol(metadataKey, Decl(tslib.d.ts, 4, 35))
++>metadataValue : Symbol(metadataValue, Decl(tslib.d.ts, 4, 52))
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
+->__awaiter : Symbol(__awaiter, Decl(tslib.d.ts, --, --))
+->thisArg : Symbol(thisArg, Decl(tslib.d.ts, --, --))
+->_arguments : Symbol(_arguments, Decl(tslib.d.ts, --, --))
+->P : Symbol(P, Decl(tslib.d.ts, --, --))
++>__awaiter : Symbol(__awaiter, Decl(tslib.d.ts, 4, 83))
++>thisArg : Symbol(thisArg, Decl(tslib.d.ts, 5, 34))
++>_arguments : Symbol(_arguments, Decl(tslib.d.ts, 5, 47))
++>P : Symbol(P, Decl(tslib.d.ts, 5, 64))
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->generator : Symbol(generator, Decl(tslib.d.ts, --, --))
++>generator : Symbol(generator, Decl(tslib.d.ts, 5, 77))
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 

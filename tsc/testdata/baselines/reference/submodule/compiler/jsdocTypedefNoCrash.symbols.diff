@@ -1,0 +1,9 @@
+--- old.jsdocTypedefNoCrash.symbols
++++ new.jsdocTypedefNoCrash.symbols
+@@= skipped -5, +5 lines =@@
+  * }}
+  */
+ export const foo = 5;
+->foo : Symbol(foo, Decl(export.js, 4, 12), Decl(export.js, 1, 3))
++>foo : Symbol(foo, Decl(export.js, 4, 12))
+ 

@@ -1,0 +1,23 @@
+--- old.assignmentCompatWithNumericIndexer.symbols
++++ new.assignmentCompatWithNumericIndexer.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ interface Base { foo: string; }
+ >Base : Symbol(Base, Decl(assignmentCompatWithNumericIndexer.ts, 0, 0))
+->foo : Symbol(Base.foo, Decl(assignmentCompatWithNumericIndexer.ts, 2, 16))
++>foo : Symbol(foo, Decl(assignmentCompatWithNumericIndexer.ts, 2, 16))
+ 
+ interface Derived extends Base { bar: string; }
+ >Derived : Symbol(Derived, Decl(assignmentCompatWithNumericIndexer.ts, 2, 31))
+ >Base : Symbol(Base, Decl(assignmentCompatWithNumericIndexer.ts, 0, 0))
+->bar : Symbol(Derived.bar, Decl(assignmentCompatWithNumericIndexer.ts, 3, 32))
++>bar : Symbol(bar, Decl(assignmentCompatWithNumericIndexer.ts, 3, 32))
+ 
+ interface Derived2 extends Derived { baz: string; }
+ >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithNumericIndexer.ts, 3, 47))
+ >Derived : Symbol(Derived, Decl(assignmentCompatWithNumericIndexer.ts, 2, 31))
+->baz : Symbol(Derived2.baz, Decl(assignmentCompatWithNumericIndexer.ts, 4, 36))
++>baz : Symbol(baz, Decl(assignmentCompatWithNumericIndexer.ts, 4, 36))
+ 
+ class A {
+ >A : Symbol(A, Decl(assignmentCompatWithNumericIndexer.ts, 4, 51))

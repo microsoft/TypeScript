@@ -1,0 +1,18 @@
+--- old.privateNameStaticFieldNoInitializer(target=esnext).symbols
++++ new.privateNameStaticFieldNoInitializer(target=esnext).symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(privateNameStaticFieldNoInitializer.ts, 0, 5))
+ 
+     static #x;
+->#x : Symbol(C.#x, Decl(privateNameStaticFieldNoInitializer.ts, 0, 17))
++>#x : Symbol(#x, Decl(privateNameStaticFieldNoInitializer.ts, 0, 17))
+ }
+ 
+ class C2 {
+ >C2 : Symbol(C2, Decl(privateNameStaticFieldNoInitializer.ts, 2, 1))
+ 
+     static #x;
+->#x : Symbol(C2.#x, Decl(privateNameStaticFieldNoInitializer.ts, 4, 10))
++>#x : Symbol(#x, Decl(privateNameStaticFieldNoInitializer.ts, 4, 10))
+ }
+ 

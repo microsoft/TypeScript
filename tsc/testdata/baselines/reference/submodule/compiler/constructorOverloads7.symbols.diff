@@ -1,0 +1,30 @@
+--- old.constructorOverloads7.symbols
++++ new.constructorOverloads7.symbols
+@@= skipped -4, +4 lines =@@
+ >Point : Symbol(Point, Decl(constructorOverloads7.ts, 9, 1), Decl(constructorOverloads7.ts, 0, 0))
+ {
+     x: number;
+->x : Symbol(Point.x, Decl(constructorOverloads7.ts, 1, 1))
++>x : Symbol(x, Decl(constructorOverloads7.ts, 1, 1))
+ 
+     y: number;
+->y : Symbol(Point.y, Decl(constructorOverloads7.ts, 2, 14))
++>y : Symbol(y, Decl(constructorOverloads7.ts, 2, 14))
+ 
+     constructor(x: number, y: number);
+ >x : Symbol(x, Decl(constructorOverloads7.ts, 4, 16))
+ >y : Symbol(y, Decl(constructorOverloads7.ts, 4, 26))
+ 
+      add(dx: number, dy: number): Point;
+->add : Symbol(Point.add, Decl(constructorOverloads7.ts, 4, 38))
++>add : Symbol(add, Decl(constructorOverloads7.ts, 4, 38))
+ >dx : Symbol(dx, Decl(constructorOverloads7.ts, 6, 9))
+ >dy : Symbol(dy, Decl(constructorOverloads7.ts, 6, 20))
+ >Point : Symbol(Point, Decl(constructorOverloads7.ts, 9, 1), Decl(constructorOverloads7.ts, 0, 0))
+ 
+      origin: Point;
+->origin : Symbol(Point.origin, Decl(constructorOverloads7.ts, 6, 40))
++>origin : Symbol(origin, Decl(constructorOverloads7.ts, 6, 40))
+ >Point : Symbol(Point, Decl(constructorOverloads7.ts, 9, 1), Decl(constructorOverloads7.ts, 0, 0))
+ 
+ }

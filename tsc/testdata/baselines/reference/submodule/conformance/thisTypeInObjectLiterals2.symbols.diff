@@ -1,0 +1,263 @@
+--- old.thisTypeInObjectLiterals2.symbols
++++ new.thisTypeInObjectLiterals2.symbols
+@@= skipped -14, +14 lines =@@
+ 
+         return this.a;
+ >this.a : Symbol(a, Decl(thisTypeInObjectLiterals2.ts, 3, 12))
+->this : Symbol(obj1, Decl(thisTypeInObjectLiterals2.ts, 3, 10))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 3, 10))
+ >a : Symbol(a, Decl(thisTypeInObjectLiterals2.ts, 3, 12))
+ 
+     },
+@@= skipped -15, +15 lines =@@
+ 
+             this.g();
+ >this.g : Symbol(g, Decl(thisTypeInObjectLiterals2.ts, 9, 8))
+->this : Symbol(__object, Decl(thisTypeInObjectLiterals2.ts, 9, 6))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 9, 6))
+ >g : Symbol(g, Decl(thisTypeInObjectLiterals2.ts, 9, 8))
+         }
+     },
+@@= skipped -9, +9 lines =@@
+ 
+         return this.a;
+ >this.a : Symbol(a, Decl(thisTypeInObjectLiterals2.ts, 3, 12))
+->this : Symbol(obj1, Decl(thisTypeInObjectLiterals2.ts, 3, 10))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 3, 10))
+ >a : Symbol(a, Decl(thisTypeInObjectLiterals2.ts, 3, 12))
+ 
+     },
+@@= skipped -9, +9 lines =@@
+ 
+         return this.b;
+ >this.b : Symbol(b, Decl(thisTypeInObjectLiterals2.ts, 7, 6))
+->this : Symbol(obj1, Decl(thisTypeInObjectLiterals2.ts, 3, 10))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 3, 10))
+ >b : Symbol(b, Decl(thisTypeInObjectLiterals2.ts, 7, 6))
+ 
+     },
+@@= skipped -10, +10 lines =@@
+ 
+         this.b = value;
+ >this.b : Symbol(b, Decl(thisTypeInObjectLiterals2.ts, 7, 6))
+->this : Symbol(obj1, Decl(thisTypeInObjectLiterals2.ts, 3, 10))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 3, 10))
+ >b : Symbol(b, Decl(thisTypeInObjectLiterals2.ts, 7, 6))
+ >value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 20, 10))
+     }
+@@= skipped -46, +46 lines =@@
+ 
+         this.x += dx;
+ >this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+ >dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 38, 11))
+ 
+         this.y += dy;
+ >this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+ >dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 38, 14))
+ 
+         if (this.z && dz) {
+ >this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+ >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 38, 18))
+ 
+             this.z += dz;
+ >this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+ >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 38, 18))
+         }
+@@= skipped -43, +43 lines =@@
+ 
+         this.x += dx;
+ >this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+ >dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 50, 11))
+ 
+         this.y += dy;
+ >this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+ >dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 50, 14))
+ 
+         if (this.z && dz) {
+ >this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+ >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 50, 18))
+ 
+             this.z += dz;
+ >this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+ >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 50, 18))
+         }
+@@= skipped -43, +43 lines =@@
+ 
+         this.x += dx;
+ >this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+ >dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 62, 11))
+ 
+         this.y += dy;
+ >this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+ >dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 62, 14))
+ 
+         if (this.z && dz) {
+ >this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+ >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 62, 18))
+ 
+             this.z += dz;
+ >this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+ >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 62, 18))
+         }
+@@= skipped -43, +43 lines =@@
+ 
+         this.x += dx;
+ >this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+ >dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 74, 11))
+ 
+         this.y += dy;
+ >this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+ >dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 74, 14))
+ 
+         if (this.z && dz) {
+ >this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+ >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 74, 18))
+ 
+             this.z += dz;
+ >this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+ >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 74, 18))
+         }
+@@= skipped -47, +47 lines =@@
+ 
+         this.x += dx;
+ >this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+ >dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 88, 11))
+ 
+         this.y += dy;
+ >this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+ >dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 88, 14))
+ 
+         if (this.z && dz) {
+ >this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+ >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 88, 18))
+ 
+             this.z += dz;
+ >this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+ >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 88, 18))
+         }
+@@= skipped -47, +47 lines =@@
+ 
+         this.x += dx;
+ >this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+ >dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 102, 11))
+ 
+         this.y += dy;
+ >this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+ >dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 102, 14))
+ 
+         if (this.z && dz) {
+ >this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+ >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 102, 18))
+ 
+             this.z += dz;
+ >this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+ >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 102, 18))
+         }
+@@= skipped -236, +236 lines =@@
+ 
+         return this.x;
+ >this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+ 
+     },
+@@= skipped -10, +10 lines =@@
+ 
+         this.x = value;
+ >this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+ >value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 174, 8))
+     }
+@@= skipped -33, +33 lines =@@
+ 
+             return this.x;
+ >this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+ 
+         },
+@@= skipped -10, +10 lines =@@
+ 
+             this.x = value;
+ >this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+ >x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+ >value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 188, 12))
+         }

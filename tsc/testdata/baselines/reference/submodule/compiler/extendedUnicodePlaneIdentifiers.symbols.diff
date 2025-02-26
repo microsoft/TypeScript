@@ -1,0 +1,88 @@
+--- old.extendedUnicodePlaneIdentifiers.symbols
++++ new.extendedUnicodePlaneIdentifiers.symbols
+@@= skipped -7, +7 lines =@@
+ >𝑀 : Symbol(𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 1, 5))
+ 
+ console.log(𝑀 + 𝑚); // 9
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >𝑀 : Symbol(𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 1, 5))
+ >𝑚 : Symbol(𝑚, Decl(extendedUnicodePlaneIdentifiers.ts, 0, 5))
+ 
+ class K {
+->K : Symbol(K, Decl(extendedUnicodePlaneIdentifiers.ts, 2, 21))
++>K : Symbol(K, Decl(extendedUnicodePlaneIdentifiers.ts, 2, 19))
+ 
+     #𝑚 = 4;
+->#𝑚 : Symbol(K[#𝑚], Decl(extendedUnicodePlaneIdentifiers.ts, 4, 9))
++>#𝑚 : Symbol(#𝑚, Decl(extendedUnicodePlaneIdentifiers.ts, 4, 9))
+ 
+     #𝑀 = 5;
+->#𝑀 : Symbol(K[#𝑀], Decl(extendedUnicodePlaneIdentifiers.ts, 5, 12))
++>#𝑀 : Symbol(#𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 5, 11))
+ }
+ 
+ // lower 8 bits look like 'a'
+@@= skipped -21, +21 lines =@@
+ >ၡ : Symbol(ၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 10, 5))
+ 
+ console.log(ၡ ** ၡ);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >ၡ : Symbol(ၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 10, 5))
+ >ၡ : Symbol(ၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 10, 5))
+ 
+@@= skipped -11, +11 lines =@@
+ >ဒ : Symbol(ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 14, 5))
+ 
+ console.log(ဒ ** ဒ);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >ဒ : Symbol(ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 14, 5))
+ >ဒ : Symbol(ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 14, 5))
+ 
+@@= skipped -11, +11 lines =@@
+ >ဒၡ𝑀 : Symbol(ဒၡ𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 18, 5))
+ 
+ console.log(ဒၡ𝑀 ** ဒၡ𝑀);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >ဒၡ𝑀 : Symbol(ဒၡ𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 18, 5))
+ >ဒၡ𝑀 : Symbol(ဒၡ𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 18, 5))
+ 
+@@= skipped -10, +10 lines =@@
+ >ၡ𝑀ဒ : Symbol(ၡ𝑀ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 21, 5))
+ 
+ console.log(ၡ𝑀ဒ ** ၡ𝑀ဒ);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >ၡ𝑀ဒ : Symbol(ၡ𝑀ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 21, 5))
+ >ၡ𝑀ဒ : Symbol(ၡ𝑀ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 21, 5))
+ 
+@@= skipped -10, +10 lines =@@
+ >𝑀ဒၡ : Symbol(𝑀ဒၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 24, 5))
+ 
+ console.log(𝑀ဒၡ ** 𝑀ဒၡ);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >𝑀ဒၡ : Symbol(𝑀ဒၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 24, 5))
+ >𝑀ဒၡ : Symbol(𝑀ဒၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 24, 5))
+ 

@@ -1,0 +1,11 @@
+--- old.optionalParameterInDestructuringWithInitializer.symbols
++++ new.optionalParameterInDestructuringWithInitializer.symbols
+@@= skipped -157, +157 lines =@@
+ >Foo : Symbol(Foo, Decl(optionalParameterInDestructuringWithInitializer.ts, 37, 1))
+ 
+   readonly bar?: number;
+->bar : Symbol(Foo.bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 39, 15))
++>bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 39, 15))
+ }
+ 
+ function performFoo({ bar }: Foo = {}) {

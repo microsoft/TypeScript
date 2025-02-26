@@ -1,0 +1,50 @@
+--- old.controlFlowIIFE.symbols
++++ new.controlFlowIIFE.symbols
+@@= skipped -17, +17 lines =@@
+ >n : Symbol(n, Decl(controlFlowIIFE.ts, 5, 11))
+ 
+             return x.length;
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowIIFE.ts, 3, 7))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+         }();
+     }
+@@= skipped -22, +22 lines =@@
+ >n : Symbol(n, Decl(controlFlowIIFE.ts, 14, 11))
+ 
+             return x.length;
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowIIFE.ts, 12, 7))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+         })();
+     }
+@@= skipped -24, +24 lines =@@
+         let n = (z => x.length + y + z)(y = 1);
+ >n : Symbol(n, Decl(controlFlowIIFE.ts, 24, 11))
+ >z : Symbol(z, Decl(controlFlowIIFE.ts, 24, 17))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowIIFE.ts, 21, 7))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >y : Symbol(y, Decl(controlFlowIIFE.ts, 22, 7))
+ >z : Symbol(z, Decl(controlFlowIIFE.ts, 24, 17))
+ >y : Symbol(y, Decl(controlFlowIIFE.ts, 22, 7))
+@@= skipped -41, +41 lines =@@
+ }
+ (() => {
+     test.slice(1); // No error
+->test.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>test.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >test : Symbol(test, Decl(controlFlowIIFE.ts, 39, 3))
+->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ 
+ })();
+ 

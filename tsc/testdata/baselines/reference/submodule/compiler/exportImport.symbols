@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/exportImport.ts] ////
+
+=== consumer.ts ===
+import e = require('./exporter');
+>e : Symbol(e, Decl(consumer.ts, 0, 0))
+
+export function w(): e.w { // Should be OK
+>w : Symbol(w, Decl(consumer.ts, 0, 33))
+>e : Symbol(e, Decl(consumer.ts, 0, 0))
+>w : Symbol(w, Decl(exporter.ts, 0, 0))
+
+    return new e.w();
+>e.w : Symbol(w, Decl(exporter.ts, 0, 0))
+>e : Symbol(e, Decl(consumer.ts, 0, 0))
+>w : Symbol(w, Decl(exporter.ts, 0, 0))
+}
+=== w1.ts ===
+export = Widget1
+>Widget1 : Symbol(Widget1, Decl(w1.ts, 0, 16))
+
+class Widget1 { name = 'one'; }
+>Widget1 : Symbol(Widget1, Decl(w1.ts, 0, 16))
+>name : Symbol(name, Decl(w1.ts, 1, 15))
+
+=== exporter.ts ===
+export import w = require('./w1');
+>w : Symbol(w, Decl(exporter.ts, 0, 0))
+

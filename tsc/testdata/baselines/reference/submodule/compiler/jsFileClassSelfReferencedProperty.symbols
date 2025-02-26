@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/jsFileClassSelfReferencedProperty.ts] ////
+
+=== foo.js ===
+export class StackOverflowTest {
+>StackOverflowTest : Symbol(StackOverflowTest, Decl(foo.js, 0, 0))
+
+  constructor () {
+    this.testStackOverflow = this.testStackOverflow.bind(this)
+>this : Symbol(StackOverflowTest, Decl(foo.js, 0, 0))
+>this : Symbol(StackOverflowTest, Decl(foo.js, 0, 0))
+>this : Symbol(StackOverflowTest, Decl(foo.js, 0, 0))
+  }
+}
+

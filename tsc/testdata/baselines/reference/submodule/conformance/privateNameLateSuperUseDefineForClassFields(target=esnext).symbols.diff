@@ -1,0 +1,11 @@
+--- old.privateNameLateSuperUseDefineForClassFields(target=esnext).symbols
++++ new.privateNameLateSuperUseDefineForClassFields(target=esnext).symbols
+@@= skipped -8, +8 lines =@@
+ >B : Symbol(B, Decl(privateNameLateSuperUseDefineForClassFields.ts, 0, 0))
+ 
+     #x;
+->#x : Symbol(A.#x, Decl(privateNameLateSuperUseDefineForClassFields.ts, 1, 19))
++>#x : Symbol(#x, Decl(privateNameLateSuperUseDefineForClassFields.ts, 1, 19))
+ 
+     constructor() {
+         void 0;

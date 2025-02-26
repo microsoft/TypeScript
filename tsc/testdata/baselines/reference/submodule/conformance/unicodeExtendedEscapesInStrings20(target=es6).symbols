@@ -1,0 +1,6 @@
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings20.ts] ////
+
+=== unicodeExtendedEscapesInStrings20.ts ===
+var x = "\u{";
+>x : Symbol(x, Decl(unicodeExtendedEscapesInStrings20.ts, 0, 3))
+

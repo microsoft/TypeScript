@@ -1,0 +1,43 @@
+--- old.coAndContraVariantInferences4.symbols
++++ new.coAndContraVariantInferences4.symbols
+@@= skipped -4, +4 lines =@@
+ >SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences4.ts, 0, 0))
+ 
+     Modifier,
+->Modifier : Symbol(SyntaxKind.Modifier, Decl(coAndContraVariantInferences4.ts, 0, 23))
++>Modifier : Symbol(Modifier, Decl(coAndContraVariantInferences4.ts, 0, 23))
+ 
+     Decorator,
+->Decorator : Symbol(SyntaxKind.Decorator, Decl(coAndContraVariantInferences4.ts, 1, 13))
++>Decorator : Symbol(Decorator, Decl(coAndContraVariantInferences4.ts, 1, 13))
+ }
+ 
+ interface Node {
+ >Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences4.ts, 3, 1))
+ 
+     kind: SyntaxKind;
+->kind : Symbol(Node.kind, Decl(coAndContraVariantInferences4.ts, 5, 16))
++>kind : Symbol(kind, Decl(coAndContraVariantInferences4.ts, 5, 16))
+ >SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences4.ts, 0, 0))
+ }
+ 
+ interface Modifier extends Node { kind: SyntaxKind.Modifier; }
+ >Modifier : Symbol(Modifier, Decl(coAndContraVariantInferences4.ts, 7, 1))
+ >Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences4.ts, 3, 1))
+->kind : Symbol(Modifier.kind, Decl(coAndContraVariantInferences4.ts, 9, 33))
++>kind : Symbol(kind, Decl(coAndContraVariantInferences4.ts, 9, 33))
+ >SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences4.ts, 0, 0))
+->Modifier : Symbol(SyntaxKind.Modifier, Decl(coAndContraVariantInferences4.ts, 0, 23))
++>Modifier : Symbol(Modifier, Decl(coAndContraVariantInferences4.ts, 0, 23))
+ 
+ interface Decorator extends Node { kind: SyntaxKind.Decorator; }
+ >Decorator : Symbol(Decorator, Decl(coAndContraVariantInferences4.ts, 9, 62))
+ >Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences4.ts, 3, 1))
+->kind : Symbol(Decorator.kind, Decl(coAndContraVariantInferences4.ts, 10, 34))
++>kind : Symbol(kind, Decl(coAndContraVariantInferences4.ts, 10, 34))
+ >SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences4.ts, 0, 0))
+->Decorator : Symbol(SyntaxKind.Decorator, Decl(coAndContraVariantInferences4.ts, 1, 13))
++>Decorator : Symbol(Decorator, Decl(coAndContraVariantInferences4.ts, 1, 13))
+ 
+ declare function isModifier(node: Node): node is Modifier;
+ >isModifier : Symbol(isModifier, Decl(coAndContraVariantInferences4.ts, 10, 64))

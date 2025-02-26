@@ -1,0 +1,15 @@
+--- old.thisTag1.symbols
++++ new.thisTag1.symbols
+@@= skipped -9, +9 lines =@@
+ >s : Symbol(s, Decl(a.js, 4, 11))
+ 
+     return this.n + s.length
+->this.n : Symbol(n, Decl(a.js, 0, 12))
+->this : Symbol(this)
+->n : Symbol(n, Decl(a.js, 0, 12))
+->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(a.js, 4, 11))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ const o = {

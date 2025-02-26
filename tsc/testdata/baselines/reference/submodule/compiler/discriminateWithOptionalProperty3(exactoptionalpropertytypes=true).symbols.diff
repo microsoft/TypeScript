@@ -1,0 +1,38 @@
+--- old.discriminateWithOptionalProperty3(exactoptionalpropertytypes=true).symbols
++++ new.discriminateWithOptionalProperty3(exactoptionalpropertytypes=true).symbols
+@@= skipped -12, +12 lines =@@
+ >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+ 
+   originalError: Error;
+->originalError : Symbol(GraphQLError.originalError, Decl(discriminateWithOptionalProperty3.ts, 4, 42))
++>originalError : Symbol(originalError, Decl(discriminateWithOptionalProperty3.ts, 4, 42))
+ >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >ExecutionArgs : Symbol(ExecutionArgs, Decl(discriminateWithOptionalProperty3.ts, 6, 1))
+ 
+   variableValues?: Maybe<{ readonly [variable: string]: unknown }>;
+->variableValues : Symbol(ExecutionArgs.variableValues, Decl(discriminateWithOptionalProperty3.ts, 8, 25))
++>variableValues : Symbol(variableValues, Decl(discriminateWithOptionalProperty3.ts, 8, 25))
+ >Maybe : Symbol(Maybe, Decl(discriminateWithOptionalProperty3.ts, 0, 0))
+ >variable : Symbol(variable, Decl(discriminateWithOptionalProperty3.ts, 9, 37))
+ }
+@@= skipped -9, +9 lines =@@
+ >ExecutionContext : Symbol(ExecutionContext, Decl(discriminateWithOptionalProperty3.ts, 10, 1))
+ 
+   variableValues: { [variable: string]: unknown };
+->variableValues : Symbol(ExecutionContext.variableValues, Decl(discriminateWithOptionalProperty3.ts, 12, 28))
++>variableValues : Symbol(variableValues, Decl(discriminateWithOptionalProperty3.ts, 12, 28))
+ >variable : Symbol(variable, Decl(discriminateWithOptionalProperty3.ts, 13, 21))
+ }
+ 
+@@= skipped -41, +41 lines =@@
+ >ExecutionContext : Symbol(ExecutionContext, Decl(discriminateWithOptionalProperty3.ts, 10, 1))
+ 
+   const { variableValues: rawVariableValues } = args;
+->variableValues : Symbol(ExecutionArgs.variableValues, Decl(discriminateWithOptionalProperty3.ts, 8, 25))
++>variableValues : Symbol(variableValues, Decl(discriminateWithOptionalProperty3.ts, 8, 25))
+ >rawVariableValues : Symbol(rawVariableValues, Decl(discriminateWithOptionalProperty3.ts, 27, 9))
+ >args : Symbol(args, Decl(discriminateWithOptionalProperty3.ts, 24, 38))
+ 

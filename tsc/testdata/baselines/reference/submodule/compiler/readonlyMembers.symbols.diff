@@ -1,0 +1,167 @@
+--- old.readonlyMembers.symbols
++++ new.readonlyMembers.symbols
+@@= skipped -4, +4 lines =@@
+ >X : Symbol(X, Decl(readonlyMembers.ts, 0, 0))
+ 
+     readonly a: number;
+->a : Symbol(X.a, Decl(readonlyMembers.ts, 0, 13))
++>a : Symbol(a, Decl(readonlyMembers.ts, 0, 13))
+ 
+     readonly b?: number;
+->b : Symbol(X.b, Decl(readonlyMembers.ts, 1, 23))
++>b : Symbol(b, Decl(readonlyMembers.ts, 1, 23))
+ }
+ var x: X = { a: 0 };
+ >x : Symbol(x, Decl(readonlyMembers.ts, 4, 3))
+@@= skipped -11, +11 lines =@@
+ >a : Symbol(a, Decl(readonlyMembers.ts, 4, 12))
+ 
+ x.a = 1;  // Error
+->x.a : Symbol(X.a, Decl(readonlyMembers.ts, 0, 13))
++>x.a : Symbol(a, Decl(readonlyMembers.ts, 0, 13))
+ >x : Symbol(x, Decl(readonlyMembers.ts, 4, 3))
+->a : Symbol(X.a, Decl(readonlyMembers.ts, 0, 13))
++>a : Symbol(a, Decl(readonlyMembers.ts, 0, 13))
+ 
+ x.b = 1;  // Error
+->x.b : Symbol(X.b, Decl(readonlyMembers.ts, 1, 23))
++>x.b : Symbol(b, Decl(readonlyMembers.ts, 1, 23))
+ >x : Symbol(x, Decl(readonlyMembers.ts, 4, 3))
+->b : Symbol(X.b, Decl(readonlyMembers.ts, 1, 23))
++>b : Symbol(b, Decl(readonlyMembers.ts, 1, 23))
+ 
+ class C {
+ >C : Symbol(C, Decl(readonlyMembers.ts, 6, 8))
+ 
+     readonly a: number;
+->a : Symbol(C.a, Decl(readonlyMembers.ts, 8, 9))
++>a : Symbol(a, Decl(readonlyMembers.ts, 8, 9))
+ 
+     readonly b = 1;
+->b : Symbol(C.b, Decl(readonlyMembers.ts, 9, 23))
++>b : Symbol(b, Decl(readonlyMembers.ts, 9, 23))
+ 
+     get c() { return 1 }
+->c : Symbol(C.c, Decl(readonlyMembers.ts, 10, 19))
++>c : Symbol(c, Decl(readonlyMembers.ts, 10, 19))
+ 
+     constructor() {
+         this.a = 1;  // Ok
+->this.a : Symbol(C.a, Decl(readonlyMembers.ts, 8, 9))
++>this.a : Symbol(a, Decl(readonlyMembers.ts, 8, 9))
+ >this : Symbol(C, Decl(readonlyMembers.ts, 6, 8))
+->a : Symbol(C.a, Decl(readonlyMembers.ts, 8, 9))
++>a : Symbol(a, Decl(readonlyMembers.ts, 8, 9))
+ 
+         this.b = 1;  // Ok
+->this.b : Symbol(C.b, Decl(readonlyMembers.ts, 9, 23))
++>this.b : Symbol(b, Decl(readonlyMembers.ts, 9, 23))
+ >this : Symbol(C, Decl(readonlyMembers.ts, 6, 8))
+->b : Symbol(C.b, Decl(readonlyMembers.ts, 9, 23))
++>b : Symbol(b, Decl(readonlyMembers.ts, 9, 23))
+ 
+         this.c = 1;  // Error
+->this.c : Symbol(C.c, Decl(readonlyMembers.ts, 10, 19))
++>this.c : Symbol(c, Decl(readonlyMembers.ts, 10, 19))
+ >this : Symbol(C, Decl(readonlyMembers.ts, 6, 8))
+->c : Symbol(C.c, Decl(readonlyMembers.ts, 10, 19))
++>c : Symbol(c, Decl(readonlyMembers.ts, 10, 19))
+ 
+         const f = () => {
+ >f : Symbol(f, Decl(readonlyMembers.ts, 16, 13))
+ 
+             this.a = 1;  // Error
+->this.a : Symbol(C.a, Decl(readonlyMembers.ts, 8, 9))
++>this.a : Symbol(a, Decl(readonlyMembers.ts, 8, 9))
+ >this : Symbol(C, Decl(readonlyMembers.ts, 6, 8))
+->a : Symbol(C.a, Decl(readonlyMembers.ts, 8, 9))
++>a : Symbol(a, Decl(readonlyMembers.ts, 8, 9))
+ 
+             this.b = 1;  // Error
+->this.b : Symbol(C.b, Decl(readonlyMembers.ts, 9, 23))
++>this.b : Symbol(b, Decl(readonlyMembers.ts, 9, 23))
+ >this : Symbol(C, Decl(readonlyMembers.ts, 6, 8))
+->b : Symbol(C.b, Decl(readonlyMembers.ts, 9, 23))
++>b : Symbol(b, Decl(readonlyMembers.ts, 9, 23))
+ 
+             this.c = 1;  // Error
+->this.c : Symbol(C.c, Decl(readonlyMembers.ts, 10, 19))
++>this.c : Symbol(c, Decl(readonlyMembers.ts, 10, 19))
+ >this : Symbol(C, Decl(readonlyMembers.ts, 6, 8))
+->c : Symbol(C.c, Decl(readonlyMembers.ts, 10, 19))
++>c : Symbol(c, Decl(readonlyMembers.ts, 10, 19))
+         }
+     }
+     foo() {
+->foo : Symbol(C.foo, Decl(readonlyMembers.ts, 21, 5))
++>foo : Symbol(foo, Decl(readonlyMembers.ts, 21, 5))
+ 
+         this.a = 1;  // Error
+->this.a : Symbol(C.a, Decl(readonlyMembers.ts, 8, 9))
++>this.a : Symbol(a, Decl(readonlyMembers.ts, 8, 9))
+ >this : Symbol(C, Decl(readonlyMembers.ts, 6, 8))
+->a : Symbol(C.a, Decl(readonlyMembers.ts, 8, 9))
++>a : Symbol(a, Decl(readonlyMembers.ts, 8, 9))
+ 
+         this.b = 1;  // Error
+->this.b : Symbol(C.b, Decl(readonlyMembers.ts, 9, 23))
++>this.b : Symbol(b, Decl(readonlyMembers.ts, 9, 23))
+ >this : Symbol(C, Decl(readonlyMembers.ts, 6, 8))
+->b : Symbol(C.b, Decl(readonlyMembers.ts, 9, 23))
++>b : Symbol(b, Decl(readonlyMembers.ts, 9, 23))
+ 
+         this.c = 1;  // Error
+->this.c : Symbol(C.c, Decl(readonlyMembers.ts, 10, 19))
++>this.c : Symbol(c, Decl(readonlyMembers.ts, 10, 19))
+ >this : Symbol(C, Decl(readonlyMembers.ts, 6, 8))
+->c : Symbol(C.c, Decl(readonlyMembers.ts, 10, 19))
++>c : Symbol(c, Decl(readonlyMembers.ts, 10, 19))
+     }
+ }
+ 
+@@= skipped -137, +137 lines =@@
+ >E : Symbol(E, Decl(readonlyMembers.ts, 42, 8))
+ 
+     A, B, C
+->A : Symbol(E.A, Decl(readonlyMembers.ts, 44, 8))
+->B : Symbol(E.B, Decl(readonlyMembers.ts, 45, 6))
+->C : Symbol(E.C, Decl(readonlyMembers.ts, 45, 9))
++>A : Symbol(A, Decl(readonlyMembers.ts, 44, 8))
++>B : Symbol(B, Decl(readonlyMembers.ts, 45, 6))
++>C : Symbol(C, Decl(readonlyMembers.ts, 45, 9))
+ }
+ E.A = 1;  // Error
+->E.A : Symbol(E.A, Decl(readonlyMembers.ts, 44, 8))
++>E.A : Symbol(A, Decl(readonlyMembers.ts, 44, 8))
+ >E : Symbol(E, Decl(readonlyMembers.ts, 42, 8))
+->A : Symbol(E.A, Decl(readonlyMembers.ts, 44, 8))
++>A : Symbol(A, Decl(readonlyMembers.ts, 44, 8))
+ 
+ namespace N {
+ >N : Symbol(N, Decl(readonlyMembers.ts, 47, 8))
+@@= skipped -22, +22 lines =@@
+ >c : Symbol(c, Decl(readonlyMembers.ts, 52, 14))
+ }
+ N.a = 1;  // Error
+->N.a : Symbol(N.a, Decl(readonlyMembers.ts, 50, 16))
++>N.a : Symbol(a, Decl(readonlyMembers.ts, 50, 16))
+ >N : Symbol(N, Decl(readonlyMembers.ts, 47, 8))
+->a : Symbol(N.a, Decl(readonlyMembers.ts, 50, 16))
++>a : Symbol(a, Decl(readonlyMembers.ts, 50, 16))
+ 
+ N.b = 1;
+->N.b : Symbol(N.b, Decl(readonlyMembers.ts, 51, 14))
++>N.b : Symbol(b, Decl(readonlyMembers.ts, 51, 14))
+ >N : Symbol(N, Decl(readonlyMembers.ts, 47, 8))
+->b : Symbol(N.b, Decl(readonlyMembers.ts, 51, 14))
++>b : Symbol(b, Decl(readonlyMembers.ts, 51, 14))
+ 
+ N.c = 1;
+->N.c : Symbol(N.c, Decl(readonlyMembers.ts, 52, 14))
++>N.c : Symbol(c, Decl(readonlyMembers.ts, 52, 14))
+ >N : Symbol(N, Decl(readonlyMembers.ts, 47, 8))
+->c : Symbol(N.c, Decl(readonlyMembers.ts, 52, 14))
++>c : Symbol(c, Decl(readonlyMembers.ts, 52, 14))
+ 
+ let xx: { readonly [x: string]: string };
+ >xx : Symbol(xx, Decl(readonlyMembers.ts, 58, 3))

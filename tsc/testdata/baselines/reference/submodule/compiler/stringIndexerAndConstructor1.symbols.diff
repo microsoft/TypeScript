@@ -1,0 +1,9 @@
+--- old.stringIndexerAndConstructor1.symbols
++++ new.stringIndexerAndConstructor1.symbols
+@@= skipped -7, +7 lines =@@
+ >s : Symbol(s, Decl(stringIndexerAndConstructor1.ts, 1, 5))
+ 
+     "": string;
+->"" : Symbol(I[""], Decl(stringIndexerAndConstructor1.ts, 1, 24))
++>"" : Symbol("", Decl(stringIndexerAndConstructor1.ts, 1, 24))
+ }

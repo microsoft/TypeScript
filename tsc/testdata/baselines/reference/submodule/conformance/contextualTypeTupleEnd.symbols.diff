@@ -1,0 +1,14 @@
+--- old.contextualTypeTupleEnd.symbols
++++ new.contextualTypeTupleEnd.symbols
+@@= skipped -117, +117 lines =@@
+ >x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 27, 106))
+ 
+     console.log(selectors);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >selectors : Symbol(selectors, Decl(contextualTypeTupleEnd.ts, 27, 70))
+ }
+ 

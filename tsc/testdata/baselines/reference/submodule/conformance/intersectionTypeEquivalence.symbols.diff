@@ -1,0 +1,21 @@
+--- old.intersectionTypeEquivalence.symbols
++++ new.intersectionTypeEquivalence.symbols
+@@= skipped -2, +2 lines =@@
+ === intersectionTypeEquivalence.ts ===
+ interface A { a: string }
+ >A : Symbol(A, Decl(intersectionTypeEquivalence.ts, 0, 0))
+->a : Symbol(A.a, Decl(intersectionTypeEquivalence.ts, 0, 13))
++>a : Symbol(a, Decl(intersectionTypeEquivalence.ts, 0, 13))
+ 
+ interface B { b: string }
+ >B : Symbol(B, Decl(intersectionTypeEquivalence.ts, 0, 25))
+->b : Symbol(B.b, Decl(intersectionTypeEquivalence.ts, 1, 13))
++>b : Symbol(b, Decl(intersectionTypeEquivalence.ts, 1, 13))
+ 
+ interface C { c: string }
+ >C : Symbol(C, Decl(intersectionTypeEquivalence.ts, 1, 25))
+->c : Symbol(C.c, Decl(intersectionTypeEquivalence.ts, 2, 13))
++>c : Symbol(c, Decl(intersectionTypeEquivalence.ts, 2, 13))
+ 
+ // A & B is equivalent to B & A.
+ var y: A & B;

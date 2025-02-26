@@ -1,0 +1,45 @@
+--- old.accessorsInAmbientContext.symbols
++++ new.accessorsInAmbientContext.symbols
+@@= skipped -7, +7 lines =@@
+ >C : Symbol(C, Decl(accessorsInAmbientContext.ts, 0, 18))
+ 
+         get X() { return 1; }
+->X : Symbol(C.X, Decl(accessorsInAmbientContext.ts, 1, 13), Decl(accessorsInAmbientContext.ts, 2, 29))
++>X : Symbol(X, Decl(accessorsInAmbientContext.ts, 1, 13), Decl(accessorsInAmbientContext.ts, 2, 29))
+ 
+         set X(v) { }
+->X : Symbol(C.X, Decl(accessorsInAmbientContext.ts, 1, 13), Decl(accessorsInAmbientContext.ts, 2, 29))
++>X : Symbol(X, Decl(accessorsInAmbientContext.ts, 1, 13), Decl(accessorsInAmbientContext.ts, 2, 29))
+ >v : Symbol(v, Decl(accessorsInAmbientContext.ts, 3, 14))
+ 
+         static get Y() { return 1; }
+->Y : Symbol(C.Y, Decl(accessorsInAmbientContext.ts, 3, 20), Decl(accessorsInAmbientContext.ts, 5, 36))
++>Y : Symbol(Y, Decl(accessorsInAmbientContext.ts, 3, 20), Decl(accessorsInAmbientContext.ts, 5, 36))
+ 
+         static set Y(v) { }
+->Y : Symbol(C.Y, Decl(accessorsInAmbientContext.ts, 3, 20), Decl(accessorsInAmbientContext.ts, 5, 36))
++>Y : Symbol(Y, Decl(accessorsInAmbientContext.ts, 3, 20), Decl(accessorsInAmbientContext.ts, 5, 36))
+ >v : Symbol(v, Decl(accessorsInAmbientContext.ts, 6, 21))
+     }
+ }
+@@= skipped -19, +19 lines =@@
+ >C : Symbol(C, Decl(accessorsInAmbientContext.ts, 8, 1))
+ 
+     get X() { return 1; }
+->X : Symbol(C.X, Decl(accessorsInAmbientContext.ts, 10, 17), Decl(accessorsInAmbientContext.ts, 11, 25))
++>X : Symbol(X, Decl(accessorsInAmbientContext.ts, 10, 17), Decl(accessorsInAmbientContext.ts, 11, 25))
+ 
+     set X(v) { }
+->X : Symbol(C.X, Decl(accessorsInAmbientContext.ts, 10, 17), Decl(accessorsInAmbientContext.ts, 11, 25))
++>X : Symbol(X, Decl(accessorsInAmbientContext.ts, 10, 17), Decl(accessorsInAmbientContext.ts, 11, 25))
+ >v : Symbol(v, Decl(accessorsInAmbientContext.ts, 12, 10))
+ 
+     static get Y() { return 1; }
+->Y : Symbol(C.Y, Decl(accessorsInAmbientContext.ts, 12, 16), Decl(accessorsInAmbientContext.ts, 14, 32))
++>Y : Symbol(Y, Decl(accessorsInAmbientContext.ts, 12, 16), Decl(accessorsInAmbientContext.ts, 14, 32))
+ 
+     static set Y(v) { }
+->Y : Symbol(C.Y, Decl(accessorsInAmbientContext.ts, 12, 16), Decl(accessorsInAmbientContext.ts, 14, 32))
++>Y : Symbol(Y, Decl(accessorsInAmbientContext.ts, 12, 16), Decl(accessorsInAmbientContext.ts, 14, 32))
+ >v : Symbol(v, Decl(accessorsInAmbientContext.ts, 15, 17))
+ }

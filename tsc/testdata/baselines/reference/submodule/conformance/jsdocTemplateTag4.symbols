@@ -1,0 +1,87 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTag4.ts] ////
+
+=== a.js ===
+/**
+ * Should work for function declarations
+ * @constructor
+ * @template {string} K
+ * @template V
+ */
+function Multimap() {
+>Multimap : Symbol(Multimap, Decl(a.js, 0, 0))
+
+    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
+    this._map = {};
+};
+
+/**
+ * @param {K} key the key ok
+ * @returns {V} the value ok
+ */
+Multimap.prototype.get = function (key) {
+>Multimap.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Multimap : Symbol(Multimap, Decl(a.js, 0, 0))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(a.js, 15, 35))
+
+    return this._map[key + ''];
+>key : Symbol(key, Decl(a.js, 15, 35))
+}
+
+/**
+ * Should work for initialisers too
+ * @constructor
+ * @template {string} K
+ * @template V
+ */
+var Multimap2 = function() {
+>Multimap2 : Symbol(Multimap2, Decl(a.js, 25, 3))
+
+    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
+    this._map = {};
+};
+
+/**
+ * @param {K} key the key ok
+ * @returns {V} the value ok
+ */
+Multimap2.prototype.get = function (key) {
+>Multimap2.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Multimap2 : Symbol(Multimap2, Decl(a.js, 25, 3))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(a.js, 34, 36))
+
+    return this._map[key + ''];
+>key : Symbol(key, Decl(a.js, 34, 36))
+}
+
+var Ns = {};
+>Ns : Symbol(Ns, Decl(a.js, 38, 3))
+
+/**
+ * Should work for expando-namespaced initialisers too
+ * @constructor
+ * @template {string} K
+ * @template V
+ */
+Ns.Multimap3 = function() {
+>Ns : Symbol(Ns, Decl(a.js, 38, 3))
+
+    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
+    this._map = {};
+>this : Symbol((Anonymous type), Decl(a.js, 38, 8))
+
+};
+
+/**
+ * @param {K} key the key ok
+ * @returns {V} the value ok
+ */
+Ns.Multimap3.prototype.get = function (key) {
+>Ns : Symbol(Ns, Decl(a.js, 38, 3))
+>key : Symbol(key, Decl(a.js, 54, 39))
+
+    return this._map[key + ''];
+>key : Symbol(key, Decl(a.js, 54, 39))
+}
+

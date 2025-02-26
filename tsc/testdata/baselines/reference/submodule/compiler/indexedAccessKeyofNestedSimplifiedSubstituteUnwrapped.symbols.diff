@@ -1,0 +1,46 @@
+--- old.indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.symbols
++++ new.indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.symbols
+@@= skipped -17, +17 lines =@@
+ >T : Symbol(T, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 3, 18))
+ 
+ 	call<K extends keyof T>(event: K, ...args: Params<T[K]>): void;
+->call : Symbol(Wrapper.call, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 3, 22))
++>call : Symbol(call, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 3, 22))
+ >K : Symbol(K, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 4, 6))
+ >T : Symbol(T, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 3, 18))
+ >event : Symbol(event, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 4, 25))
+@@= skipped -15, +15 lines =@@
+ >AWrapped : Symbol(AWrapped, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 5, 1))
+ 
+ 	foo(): void;
+->foo : Symbol(AWrapped.foo, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 7, 20))
++>foo : Symbol(foo, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 7, 20))
+ }
+ 
+ class A {
+ >A : Symbol(A, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 9, 1))
+ 
+ 	foo: Wrapper<AWrapped>;
+->foo : Symbol(A.foo, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 11, 9))
++>foo : Symbol(foo, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 11, 9))
+ >Wrapper : Symbol(Wrapper, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 1, 53))
+ >AWrapped : Symbol(AWrapped, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 5, 1))
+ }
+@@= skipped -17, +17 lines =@@
+ >AWrapped : Symbol(AWrapped, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 5, 1))
+ 
+ 	bar(): void;
+->bar : Symbol(BWrapped.bar, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 15, 37))
++>bar : Symbol(bar, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 15, 37))
+ }
+ 
+ class B extends A {
+@@= skipped -8, +8 lines =@@
+ >A : Symbol(A, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 9, 1))
+ 
+ 	foo: Wrapper<BWrapped>;
+->foo : Symbol(B.foo, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 19, 19))
++>foo : Symbol(foo, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 19, 19))
+ >Wrapper : Symbol(Wrapper, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 1, 53))
+ >BWrapped : Symbol(BWrapped, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 13, 1))
+ }

@@ -1,0 +1,42 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameMethodClassExpression.ts] ////
+
+=== privateNameMethodClassExpression.ts ===
+const C = class {
+>C : Symbol(C, Decl(privateNameMethodClassExpression.ts, 0, 5))
+
+    #field = this.#method();
+>#field : Symbol(#field, Decl(privateNameMethodClassExpression.ts, 0, 17))
+>this.#method : Symbol(#method, Decl(privateNameMethodClassExpression.ts, 1, 28))
+>this : Symbol(C, Decl(privateNameMethodClassExpression.ts, 0, 9))
+
+    #method() { return 42; }
+>#method : Symbol(#method, Decl(privateNameMethodClassExpression.ts, 1, 28))
+
+    static getInstance() { return new C(); }
+>getInstance : Symbol(getInstance, Decl(privateNameMethodClassExpression.ts, 2, 28))
+>C : Symbol(C, Decl(privateNameMethodClassExpression.ts, 0, 5))
+
+    getField() { return this.#field };
+>getField : Symbol(getField, Decl(privateNameMethodClassExpression.ts, 3, 44))
+>this.#field : Symbol(#field, Decl(privateNameMethodClassExpression.ts, 0, 17))
+>this : Symbol(C, Decl(privateNameMethodClassExpression.ts, 0, 9))
+}
+
+console.log(C.getInstance().getField());
+>C.getInstance().getField : Symbol(getField, Decl(privateNameMethodClassExpression.ts, 3, 44))
+>C.getInstance : Symbol(getInstance, Decl(privateNameMethodClassExpression.ts, 2, 28))
+>C : Symbol(C, Decl(privateNameMethodClassExpression.ts, 0, 5))
+>getInstance : Symbol(getInstance, Decl(privateNameMethodClassExpression.ts, 2, 28))
+>getField : Symbol(getField, Decl(privateNameMethodClassExpression.ts, 3, 44))
+
+C.getInstance().#method; // Error
+>C.getInstance : Symbol(getInstance, Decl(privateNameMethodClassExpression.ts, 2, 28))
+>C : Symbol(C, Decl(privateNameMethodClassExpression.ts, 0, 5))
+>getInstance : Symbol(getInstance, Decl(privateNameMethodClassExpression.ts, 2, 28))
+
+C.getInstance().#field; // Error
+>C.getInstance : Symbol(getInstance, Decl(privateNameMethodClassExpression.ts, 2, 28))
+>C : Symbol(C, Decl(privateNameMethodClassExpression.ts, 0, 5))
+>getInstance : Symbol(getInstance, Decl(privateNameMethodClassExpression.ts, 2, 28))
+
+

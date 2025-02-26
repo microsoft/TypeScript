@@ -1,0 +1,66 @@
+//// [tests/cases/conformance/salsa/typeFromPrototypeAssignment.ts] ////
+
+=== a.js ===
+// all references to _map, set, get, addon should be ok
+
+/** @constructor */
+var Multimap = function() {
+>Multimap : Symbol(Multimap, Decl(a.js, 3, 3))
+
+    this._map = {};
+    this._map
+    this.set
+    this.get
+    this.addon
+};
+
+Multimap.prototype = {
+>Multimap.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Multimap : Symbol(Multimap, Decl(a.js, 3, 3))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+
+    set: function() {
+>set : Symbol(set, Decl(a.js, 11, 22))
+
+        this._map
+        this.set
+        this.get
+        this.addon
+    },
+    get() {
+>get : Symbol(get, Decl(a.js, 17, 6))
+
+        this._map
+        this.set
+        this.get
+        this.addon
+    }
+}
+
+Multimap.prototype.addon = function () {
+>Multimap.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Multimap : Symbol(Multimap, Decl(a.js, 3, 3))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+
+    this._map
+    this.set
+    this.get
+    this.addon
+}
+
+var mm = new Multimap();
+>mm : Symbol(mm, Decl(a.js, 33, 3))
+>Multimap : Symbol(Multimap, Decl(a.js, 3, 3))
+
+mm._map
+>mm : Symbol(mm, Decl(a.js, 33, 3))
+
+mm.set
+>mm : Symbol(mm, Decl(a.js, 33, 3))
+
+mm.get
+>mm : Symbol(mm, Decl(a.js, 33, 3))
+
+mm.addon
+>mm : Symbol(mm, Decl(a.js, 33, 3))
+

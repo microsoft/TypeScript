@@ -1,0 +1,55 @@
+--- old.intraExpressionInferencesJsx.symbols
++++ new.intraExpressionInferencesJsx.symbols
+@@= skipped -205, +205 lines =@@
+ >T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 85, 16))
+ 
+   a: (x: string) => T;
+->a : Symbol(Props.a, Decl(intraExpressionInferencesJsx.tsx, 85, 20))
++>a : Symbol(a, Decl(intraExpressionInferencesJsx.tsx, 85, 20))
+ >x : Symbol(x, Decl(intraExpressionInferencesJsx.tsx, 86, 6))
+ >T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 85, 16))
+ 
+   b: (arg: T) => void;
+->b : Symbol(Props.b, Decl(intraExpressionInferencesJsx.tsx, 86, 22))
++>b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 86, 22))
+ >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 87, 6))
+ >T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 85, 16))
+ }
+@@= skipped -18, +18 lines =@@
+ >T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 90, 13))
+ 
+   return <div />;
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+ }
+ 
+ <Foo
+@@= skipped -12, +11 lines =@@
+   b={(arg) => { arg.toString(); }}
+ >b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 95, 14))
+ >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 96, 6))
+->arg.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 96, 6))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ 
+ />;
+ 
+@@= skipped -16, +14 lines =@@
+   b={(arg) => { arg.toString(); }}
+ >b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 100, 15))
+ >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 101, 6))
+->arg.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 101, 6))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ 
+ />;
+ 
+@@= skipped -16, +14 lines =@@
+   b: (arg) => { arg.toString(); },
+ >b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 105, 15))
+ >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 106, 6))
+->arg.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ >arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 106, 6))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ 
+ }} />;
+ 

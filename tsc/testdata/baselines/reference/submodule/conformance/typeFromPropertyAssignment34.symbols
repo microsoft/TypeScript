@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment34.ts] ////
+
+=== file1.js ===
+var N = {};
+>N : Symbol(N, Decl(file1.js, 0, 3))
+
+N.commands = {};
+>N : Symbol(N, Decl(file1.js, 0, 3))
+
+=== file2.js ===
+N.commands.a = 111;
+>N : Symbol(N, Decl(file1.js, 0, 3))
+
+N.commands.b = function () { };
+>N : Symbol(N, Decl(file1.js, 0, 3))
+

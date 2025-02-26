@@ -1,0 +1,11 @@
+--- old.unionTypeWithIndexedLiteralType.symbols
++++ new.unionTypeWithIndexedLiteralType.symbols
+@@= skipped -2, +2 lines =@@
+ === unionTypeWithIndexedLiteralType.ts ===
+ interface I { x: number; }
+ >I : Symbol(I, Decl(unionTypeWithIndexedLiteralType.ts, 0, 0))
+->x : Symbol(I.x, Decl(unionTypeWithIndexedLiteralType.ts, 0, 13))
++>x : Symbol(x, Decl(unionTypeWithIndexedLiteralType.ts, 0, 13))
+ 
+ interface Idx { [index: string]: U; }
+ >Idx : Symbol(Idx, Decl(unionTypeWithIndexedLiteralType.ts, 0, 26))

@@ -1,0 +1,38 @@
+--- old.genericSpecializations2.symbols
++++ new.genericSpecializations2.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(genericSpecializations2.ts, 0, 11))
+ 
+     foo<T>(x: T): T { // no error on implementors because IFoo's T is different from foo's T
+->foo : Symbol(IFoo.foo, Decl(genericSpecializations2.ts, 0, 15))
++>foo : Symbol(foo, Decl(genericSpecializations2.ts, 0, 15))
+ >T : Symbol(T, Decl(genericSpecializations2.ts, 1, 8))
+ >x : Symbol(x, Decl(genericSpecializations2.ts, 1, 11))
+ >T : Symbol(T, Decl(genericSpecializations2.ts, 1, 8))
+@@= skipped -15, +15 lines =@@
+ >IFoo : Symbol(IFoo, Decl(genericSpecializations2.ts, 0, 0))
+ 
+     foo<string>(x: string): string { return null; }
+->foo : Symbol(IntFooBad.foo, Decl(genericSpecializations2.ts, 6, 41))
++>foo : Symbol(foo, Decl(genericSpecializations2.ts, 6, 41))
+ >string : Symbol(string, Decl(genericSpecializations2.ts, 7, 8))
+ >x : Symbol(x, Decl(genericSpecializations2.ts, 7, 16))
+ }
+@@= skipped -10, +10 lines =@@
+ >IFoo : Symbol(IFoo, Decl(genericSpecializations2.ts, 0, 0))
+ 
+     foo<string>(x: string): string { return null; }
+->foo : Symbol(StringFoo2.foo, Decl(genericSpecializations2.ts, 10, 42))
++>foo : Symbol(foo, Decl(genericSpecializations2.ts, 10, 42))
+ >string : Symbol(string, Decl(genericSpecializations2.ts, 11, 8))
+ >x : Symbol(x, Decl(genericSpecializations2.ts, 11, 16))
+ }
+@@= skipped -10, +10 lines =@@
+ >IFoo : Symbol(IFoo, Decl(genericSpecializations2.ts, 0, 0))
+ 
+     foo<T>(x: T): T { return null; }
+->foo : Symbol(StringFoo3.foo, Decl(genericSpecializations2.ts, 14, 42))
++>foo : Symbol(foo, Decl(genericSpecializations2.ts, 14, 42))
+ >T : Symbol(T, Decl(genericSpecializations2.ts, 15, 8))
+ >x : Symbol(x, Decl(genericSpecializations2.ts, 15, 11))
+ >T : Symbol(T, Decl(genericSpecializations2.ts, 15, 8))

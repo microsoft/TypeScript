@@ -1,0 +1,11 @@
+--- old.mappedTypePartialNonHomomorphicBaseConstraint.symbols
++++ new.mappedTypePartialNonHomomorphicBaseConstraint.symbols
+@@= skipped -11, +11 lines =@@
+ >D : Symbol(D, Decl(mappedTypePartialNonHomomorphicBaseConstraint.ts, 2, 12))
+ 
+   getErrors(): Errors<D> {
+->getErrors : Symbol(Model.getErrors, Decl(mappedTypePartialNonHomomorphicBaseConstraint.ts, 2, 16))
++>getErrors : Symbol(getErrors, Decl(mappedTypePartialNonHomomorphicBaseConstraint.ts, 2, 16))
+ >Errors : Symbol(Errors, Decl(mappedTypePartialNonHomomorphicBaseConstraint.ts, 0, 0))
+ >D : Symbol(D, Decl(mappedTypePartialNonHomomorphicBaseConstraint.ts, 2, 12))
+ 

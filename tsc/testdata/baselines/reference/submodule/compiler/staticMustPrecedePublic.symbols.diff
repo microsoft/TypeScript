@@ -1,0 +1,14 @@
+--- old.staticMustPrecedePublic.symbols
++++ new.staticMustPrecedePublic.symbols
+@@= skipped -4, +4 lines =@@
+ >Outer : Symbol(Outer, Decl(staticMustPrecedePublic.ts, 0, 0))
+ 
+     static public intI: number;
+->intI : Symbol(Outer.intI, Decl(staticMustPrecedePublic.ts, 0, 13))
++>intI : Symbol(intI, Decl(staticMustPrecedePublic.ts, 0, 13))
+ 
+     static private stringF: string;
+->stringF : Symbol(Outer.stringF, Decl(staticMustPrecedePublic.ts, 1, 31))
++>stringF : Symbol(stringF, Decl(staticMustPrecedePublic.ts, 1, 31))
+ }
+ 

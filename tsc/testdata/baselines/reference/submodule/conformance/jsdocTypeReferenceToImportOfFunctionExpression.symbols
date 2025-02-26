@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToImportOfFunctionExpression.ts] ////
+
+=== MC.js ===
+const MW = require("./MW");
+>MW : Symbol(MW, Decl(MC.js, 0, 5))
+
+/** @typedef {number} Meyerhauser */
+
+/** @class */
+module.exports = function MC() {
+>MC : Symbol(MC, Decl(MC.js, 5, 16))
+
+    /** @type {any} */
+    var x = {}
+>x : Symbol(x, Decl(MC.js, 7, 7))
+
+    return new MW(x);
+>MW : Symbol(MW, Decl(MC.js, 0, 5))
+>x : Symbol(x, Decl(MC.js, 7, 7))
+
+};
+

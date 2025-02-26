@@ -1,0 +1,18 @@
+--- old.decoratorOnClassMethod11.symbols
++++ new.decoratorOnClassMethod11.symbols
+@@= skipped -7, +7 lines =@@
+ >C : Symbol(C, Decl(decoratorOnClassMethod11.ts, 0, 10))
+ 
+         decorator(target: Object, key: string): void { }
+->decorator : Symbol(C.decorator, Decl(decoratorOnClassMethod11.ts, 1, 13))
++>decorator : Symbol(decorator, Decl(decoratorOnClassMethod11.ts, 1, 13))
+ >target : Symbol(target, Decl(decoratorOnClassMethod11.ts, 2, 18))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >key : Symbol(key, Decl(decoratorOnClassMethod11.ts, 2, 33))
+ 
+         @(this.decorator)
+         method() { }
+->method : Symbol(C.method, Decl(decoratorOnClassMethod11.ts, 2, 56))
++>method : Symbol(method, Decl(decoratorOnClassMethod11.ts, 2, 56))
+     }
+ }

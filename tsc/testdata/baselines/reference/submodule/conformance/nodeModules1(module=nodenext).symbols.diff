@@ -1,0 +1,27 @@
+--- old.nodeModules1(module=nodenext).symbols
++++ new.nodeModules1(module=nodenext).symbols
+@@= skipped -317, +317 lines =@@
+ >x : Symbol(x, Decl(index.mts, 86, 5))
+ 
+ export {x};
+->x : Symbol(m2.x, Decl(index.mts, 87, 8))
++>x : Symbol(x, Decl(index.mts, 87, 8))
+ 
+ === index.cts ===
+ // ESM-format imports below should issue errors
+@@= skipped -249, +249 lines =@@
+ >x : Symbol(x, Decl(index.cts, 86, 5))
+ 
+ export {x};
+->x : Symbol(m3.x, Decl(index.cts, 87, 8))
++>x : Symbol(x, Decl(index.cts, 87, 8))
+ 
+ === index.ts ===
+ import * as m1 from "./index.js";
+@@= skipped -248, +248 lines =@@
+ >x : Symbol(x, Decl(index.ts, 85, 5))
+ 
+ export {x};
+->x : Symbol(m1.x, Decl(index.ts, 86, 8))
++>x : Symbol(x, Decl(index.ts, 86, 8))
+ 

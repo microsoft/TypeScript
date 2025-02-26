@@ -1,0 +1,18 @@
+--- old.decoratorMetadataTypeOnlyExport.symbols
++++ new.decoratorMetadataTypeOnlyExport.symbols
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/decoratorMetadataTypeOnlyExport.ts] ////
+ 
+-=== ./a.ts ===
++=== a.ts ===
+ class Foo {}
+ >Foo : Symbol(Foo, Decl(a.ts, 0, 0))
+ 
+ export type { Foo };
+ >Foo : Symbol(Foo, Decl(a.ts, 1, 13))
+ 
+-=== ./b.ts ===
++=== b.ts ===
+ import { Foo } from "./a";
+ >Foo : Symbol(Foo, Decl(b.ts, 0, 8))
+ 

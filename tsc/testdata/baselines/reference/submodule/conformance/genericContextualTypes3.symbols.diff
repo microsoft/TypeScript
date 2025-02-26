@@ -1,0 +1,11 @@
+--- old.genericContextualTypes3.symbols
++++ new.genericContextualTypes3.symbols
+@@= skipped -49, +49 lines =@@
+ >TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 14, 23))
+ 
+   type: "xstate.assign";
+->type : Symbol(AssignAction.type, Decl(genericContextualTypes3.ts, 14, 34))
++>type : Symbol(type, Decl(genericContextualTypes3.ts, 14, 34))
+ 
+   (arg: TContext, meta: Meta<TContext>): void;
+ >arg : Symbol(arg, Decl(genericContextualTypes3.ts, 16, 3))

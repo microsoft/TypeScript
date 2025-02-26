@@ -1,0 +1,19 @@
+--- old.lateBoundClassMemberAssignmentJS3.symbols
++++ new.lateBoundClassMemberAssignmentJS3.symbols
+@@= skipped -2, +2 lines =@@
+ === lateBoundClassMemberAssignmentJS.js ===
+ const _sym = Symbol("_sym");
+ >_sym : Symbol(_sym, Decl(lateBoundClassMemberAssignmentJS.js, 0, 5))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ 
+ export class MyClass {
+ >MyClass : Symbol(MyClass, Decl(lateBoundClassMemberAssignmentJS.js, 0, 28))
+@@= skipped -16, +15 lines =@@
+     }
+ 
+     method() {
+->method : Symbol(MyClass.method, Decl(lateBoundClassMemberAssignmentJS.js, 5, 5))
++>method : Symbol(method, Decl(lateBoundClassMemberAssignmentJS.js, 5, 5))
+ 
+         var self = this
+ >self : Symbol(self, Decl(lateBoundClassMemberAssignmentJS.js, 8, 11))

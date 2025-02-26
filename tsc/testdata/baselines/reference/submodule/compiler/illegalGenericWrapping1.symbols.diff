@@ -1,0 +1,36 @@
+--- old.illegalGenericWrapping1.symbols
++++ new.illegalGenericWrapping1.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(illegalGenericWrapping1.ts, 0, 19))
+ 
+     each(iterator: (value: T) => void ): void;
+->each : Symbol(Sequence.each, Decl(illegalGenericWrapping1.ts, 0, 23))
++>each : Symbol(each, Decl(illegalGenericWrapping1.ts, 0, 23))
+ >iterator : Symbol(iterator, Decl(illegalGenericWrapping1.ts, 1, 9))
+ >value : Symbol(value, Decl(illegalGenericWrapping1.ts, 1, 20))
+ >T : Symbol(T, Decl(illegalGenericWrapping1.ts, 0, 19))
+ 
+     map<U>(iterator: (value: T) => U): Sequence<U>;
+->map : Symbol(Sequence.map, Decl(illegalGenericWrapping1.ts, 1, 46))
++>map : Symbol(map, Decl(illegalGenericWrapping1.ts, 1, 46))
+ >U : Symbol(U, Decl(illegalGenericWrapping1.ts, 2, 8))
+ >iterator : Symbol(iterator, Decl(illegalGenericWrapping1.ts, 2, 11))
+ >value : Symbol(value, Decl(illegalGenericWrapping1.ts, 2, 22))
+@@= skipped -16, +16 lines =@@
+ >U : Symbol(U, Decl(illegalGenericWrapping1.ts, 2, 8))
+ 
+     filter(iterator: (value: T) => boolean): Sequence<T>;
+->filter : Symbol(Sequence.filter, Decl(illegalGenericWrapping1.ts, 2, 51))
++>filter : Symbol(filter, Decl(illegalGenericWrapping1.ts, 2, 51))
+ >iterator : Symbol(iterator, Decl(illegalGenericWrapping1.ts, 3, 11))
+ >value : Symbol(value, Decl(illegalGenericWrapping1.ts, 3, 22))
+ >T : Symbol(T, Decl(illegalGenericWrapping1.ts, 0, 19))
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(illegalGenericWrapping1.ts, 0, 19))
+ 
+     groupBy<K>(keySelector: (value: T) => K): Sequence<{ key: K; items: Sequence<T>; }>;
+->groupBy : Symbol(Sequence.groupBy, Decl(illegalGenericWrapping1.ts, 3, 57))
++>groupBy : Symbol(groupBy, Decl(illegalGenericWrapping1.ts, 3, 57))
+ >K : Symbol(K, Decl(illegalGenericWrapping1.ts, 4, 12))
+ >keySelector : Symbol(keySelector, Decl(illegalGenericWrapping1.ts, 4, 15))
+ >value : Symbol(value, Decl(illegalGenericWrapping1.ts, 4, 29))

@@ -1,0 +1,16 @@
+--- old.functionTypeArgumentArrayAssignment.symbols
++++ new.functionTypeArgumentArrayAssignment.symbols
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(functionTypeArgumentArrayAssignment.ts, 1, 20))
+ 
+         foo: T;
+->foo : Symbol(Array.foo, Decl(functionTypeArgumentArrayAssignment.ts, 1, 24))
++>foo : Symbol(foo, Decl(functionTypeArgumentArrayAssignment.ts, 1, 24))
+ >T : Symbol(T, Decl(functionTypeArgumentArrayAssignment.ts, 1, 20))
+ 
+         length: number;
+->length : Symbol(Array.length, Decl(functionTypeArgumentArrayAssignment.ts, 2, 15))
++>length : Symbol(length, Decl(functionTypeArgumentArrayAssignment.ts, 2, 15))
+     }
+ 
+     function map<U>() {

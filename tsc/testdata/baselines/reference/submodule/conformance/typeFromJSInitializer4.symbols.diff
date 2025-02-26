@@ -1,0 +1,20 @@
+--- old.typeFromJSInitializer4.symbols
++++ new.typeFromJSInitializer4.symbols
+@@= skipped -45, +45 lines =@@
+ 
+     // l should be any[]
+     l.push(1)
+->l.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>l.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >l : Symbol(l, Decl(a.js, 4, 27))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ 
+     l.push('ok')
+->l.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>l.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >l : Symbol(l, Decl(a.js, 4, 27))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ }
+ 

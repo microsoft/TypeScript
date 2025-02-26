@@ -1,0 +1,12 @@
+--- old.functionOverloadAmbiguity1.symbols
++++ new.functionOverloadAmbiguity1.symbols
+@@= skipped -36, +36 lines =@@
+ callb2((a) => { a.length; } ); // ok, chose first overload
+ >callb2 : Symbol(callb2, Decl(functionOverloadAmbiguity1.ts, 3, 29), Decl(functionOverloadAmbiguity1.ts, 5, 43), Decl(functionOverloadAmbiguity1.ts, 6, 43))
+ >a : Symbol(a, Decl(functionOverloadAmbiguity1.ts, 8, 8))
+->a.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>a.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(functionOverloadAmbiguity1.ts, 8, 8))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 

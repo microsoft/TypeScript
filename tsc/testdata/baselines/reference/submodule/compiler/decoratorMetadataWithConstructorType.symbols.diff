@@ -1,0 +1,11 @@
+--- old.decoratorMetadataWithConstructorType.symbols
++++ new.decoratorMetadataWithConstructorType.symbols
+@@= skipped -32, +32 lines =@@
+ >decorator : Symbol(decorator, Decl(decoratorMetadataWithConstructorType.ts, 6, 1))
+ 
+     x: A = new A();
+->x : Symbol(B.x, Decl(decoratorMetadataWithConstructorType.ts, 11, 16))
++>x : Symbol(x, Decl(decoratorMetadataWithConstructorType.ts, 11, 16))
+ >A : Symbol(A, Decl(decoratorMetadataWithConstructorType.ts, 2, 2))
+ >A : Symbol(A, Decl(decoratorMetadataWithConstructorType.ts, 2, 2))
+ }

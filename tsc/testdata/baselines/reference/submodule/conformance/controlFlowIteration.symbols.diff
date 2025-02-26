@@ -1,0 +1,24 @@
+--- old.controlFlowIteration.symbols
++++ new.controlFlowIteration.symbols
+@@= skipped -21, +21 lines =@@
+ >x : Symbol(x, Decl(controlFlowIteration.ts, 3, 7))
+ 
+                 x.length;
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowIteration.ts, 3, 7))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+             }
+             if (x) {
+ >x : Symbol(x, Decl(controlFlowIteration.ts, 3, 7))
+ 
+                 x.length;
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowIteration.ts, 3, 7))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+             }
+         }
+     }

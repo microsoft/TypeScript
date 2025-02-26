@@ -1,0 +1,39 @@
+--- old.discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.symbols
++++ new.discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.symbols
+@@= skipped -37, +37 lines =@@
+ >X : Symbol(X, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 11, 38))
+ 
+     foo: string;
+->foo : Symbol(X.foo, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 15, 13))
++>foo : Symbol(foo, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 15, 13))
+ }
+ 
+ interface Y {
+ >Y : Symbol(Y, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 17, 1))
+ 
+     baz: number;
+->baz : Symbol(Y.baz, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 19, 13))
++>baz : Symbol(baz, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 19, 13))
+ }
+ 
+ interface A2 {
+ >A2 : Symbol(A2, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 21, 1))
+ 
+     result: unknown;
+->result : Symbol(A2.result, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 23, 14))
++>result : Symbol(result, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 23, 14))
+ 
+     error: undefined;
+->error : Symbol(A2.error, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 24, 20))
++>error : Symbol(error, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 24, 20))
+ }
+ 
+ interface B2 {
+ >B2 : Symbol(B2, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 26, 1))
+ 
+     error: X | Y;
+->error : Symbol(B2.error, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 28, 14))
++>error : Symbol(error, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 28, 14))
+ >X : Symbol(X, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 11, 38))
+ >Y : Symbol(Y, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 17, 1))
+ }

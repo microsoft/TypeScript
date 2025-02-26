@@ -1,0 +1,29 @@
+--- old.assignmentCompatability27.symbols
++++ new.assignmentCompatability27.symbols
+@@= skipped -7, +7 lines =@@
+ >interfaceWithPublicAndOptional : Symbol(interfaceWithPublicAndOptional, Decl(assignmentCompatability27.ts, 0, 18))
+ >T : Symbol(T, Decl(assignmentCompatability27.ts, 1, 52))
+ >U : Symbol(U, Decl(assignmentCompatability27.ts, 1, 54))
+->one : Symbol(interfaceWithPublicAndOptional.one, Decl(assignmentCompatability27.ts, 1, 58))
++>one : Symbol(one, Decl(assignmentCompatability27.ts, 1, 58))
+ >T : Symbol(T, Decl(assignmentCompatability27.ts, 1, 52))
+->two : Symbol(interfaceWithPublicAndOptional.two, Decl(assignmentCompatability27.ts, 1, 66))
++>two : Symbol(two, Decl(assignmentCompatability27.ts, 1, 66))
+ >U : Symbol(U, Decl(assignmentCompatability27.ts, 1, 54))
+ >obj4 : Symbol(obj4, Decl(assignmentCompatability27.ts, 1, 83))
+ >interfaceWithPublicAndOptional : Symbol(interfaceWithPublicAndOptional, Decl(assignmentCompatability27.ts, 0, 18))
+@@= skipped -24, +24 lines =@@
+ >aa : Symbol(aa, Decl(assignmentCompatability27.ts, 5, 14))
+ }
+ __test2__.__val__aa = __test1__.__val__obj4
+->__test2__.__val__aa : Symbol(__test2__.__val__aa, Decl(assignmentCompatability27.ts, 6, 14))
++>__test2__.__val__aa : Symbol(__val__aa, Decl(assignmentCompatability27.ts, 6, 14))
+ >__test2__ : Symbol(__test2__, Decl(assignmentCompatability27.ts, 3, 1))
+->__val__aa : Symbol(__test2__.__val__aa, Decl(assignmentCompatability27.ts, 6, 14))
+->__test1__.__val__obj4 : Symbol(__test1__.__val__obj4, Decl(assignmentCompatability27.ts, 2, 14))
++>__val__aa : Symbol(__val__aa, Decl(assignmentCompatability27.ts, 6, 14))
++>__test1__.__val__obj4 : Symbol(__val__obj4, Decl(assignmentCompatability27.ts, 2, 14))
+ >__test1__ : Symbol(__test1__, Decl(assignmentCompatability27.ts, 0, 0))
+->__val__obj4 : Symbol(__test1__.__val__obj4, Decl(assignmentCompatability27.ts, 2, 14))
++>__val__obj4 : Symbol(__val__obj4, Decl(assignmentCompatability27.ts, 2, 14))
+ 

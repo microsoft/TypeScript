@@ -1,0 +1,11 @@
+--- old.strictModeUseContextualKeyword.symbols
++++ new.strictModeUseContextualKeyword.symbols
+@@= skipped -12, +12 lines =@@
+ >C : Symbol(C, Decl(strictModeUseContextualKeyword.ts, 2, 28))
+ 
+     public as() { }
+->as : Symbol(C.as, Decl(strictModeUseContextualKeyword.ts, 3, 9))
++>as : Symbol(as, Decl(strictModeUseContextualKeyword.ts, 3, 9))
+ }
+ function F() {
+ >F : Symbol(F, Decl(strictModeUseContextualKeyword.ts, 5, 1))

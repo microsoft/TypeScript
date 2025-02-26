@@ -1,0 +1,14 @@
+--- old.controlFlowDestructuringParameters.symbols
++++ new.controlFlowDestructuringParameters.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ [{ x: 1 }].map(
+->[{ x: 1 }].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>[{ x: 1 }].map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowDestructuringParameters.ts, 3, 2))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ 
+   ({ x }) => x
+ >x : Symbol(x, Decl(controlFlowDestructuringParameters.ts, 4, 4))

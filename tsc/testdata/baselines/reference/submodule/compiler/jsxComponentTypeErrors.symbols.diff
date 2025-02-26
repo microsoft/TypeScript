@@ -1,0 +1,73 @@
+--- old.jsxComponentTypeErrors.symbols
++++ new.jsxComponentTypeErrors.symbols
+@@= skipped -7, +7 lines =@@
+ >Element : Symbol(Element, Decl(jsxComponentTypeErrors.tsx, 0, 15))
+ 
+     type: 'element';
+->type : Symbol(Element.type, Decl(jsxComponentTypeErrors.tsx, 1, 28))
++>type : Symbol(type, Decl(jsxComponentTypeErrors.tsx, 1, 28))
+   }
+   export interface ElementClass {
+ >ElementClass : Symbol(ElementClass, Decl(jsxComponentTypeErrors.tsx, 3, 3))
+ 
+     type: 'element-class';
+->type : Symbol(ElementClass.type, Decl(jsxComponentTypeErrors.tsx, 4, 33))
++>type : Symbol(type, Decl(jsxComponentTypeErrors.tsx, 4, 33))
+   }
+ }
+ 
+ function FunctionComponent<T extends string>({type}: {type?: T}) {
+->FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1), Decl(jsxComponentTypeErrors.tsx, 13, 1))
++>FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1))
+ >T : Symbol(T, Decl(jsxComponentTypeErrors.tsx, 9, 27))
+ >type : Symbol(type, Decl(jsxComponentTypeErrors.tsx, 9, 46))
+ >type : Symbol(type, Decl(jsxComponentTypeErrors.tsx, 9, 54))
+@@= skipped -23, +23 lines =@@
+   }
+ }
+ FunctionComponent.useThis = function() {
+->FunctionComponent.useThis : Symbol(FunctionComponent.useThis, Decl(jsxComponentTypeErrors.tsx, 13, 1))
+->FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1), Decl(jsxComponentTypeErrors.tsx, 13, 1))
+->useThis : Symbol(FunctionComponent.useThis, Decl(jsxComponentTypeErrors.tsx, 13, 1))
++>FunctionComponent.useThis : Symbol(useThis, Decl(jsxComponentTypeErrors.tsx, 13, 1))
++>FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1))
++>useThis : Symbol(useThis, Decl(jsxComponentTypeErrors.tsx, 13, 1))
+ 
+   return <this type="foo" />;
+->this : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1), Decl(jsxComponentTypeErrors.tsx, 13, 1))
++>this : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1))
+ >type : Symbol(type, Decl(jsxComponentTypeErrors.tsx, 15, 14))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >ClassComponent : Symbol(ClassComponent, Decl(jsxComponentTypeErrors.tsx, 16, 1))
+ 
+   type = 'string';
+->type : Symbol(ClassComponent.type, Decl(jsxComponentTypeErrors.tsx, 18, 22))
++>type : Symbol(type, Decl(jsxComponentTypeErrors.tsx, 18, 22))
+ }
+ 
+ const MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
+ >MixedComponent : Symbol(MixedComponent, Decl(jsxComponentTypeErrors.tsx, 22, 5))
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+->FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1), Decl(jsxComponentTypeErrors.tsx, 13, 1))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
++>FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1))
+ >ClassComponent : Symbol(ClassComponent, Decl(jsxComponentTypeErrors.tsx, 16, 1))
+ 
+ const elem1 = <FunctionComponent type="abc" />;
+ >elem1 : Symbol(elem1, Decl(jsxComponentTypeErrors.tsx, 24, 5))
+->FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1), Decl(jsxComponentTypeErrors.tsx, 13, 1))
++>FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1))
+ >type : Symbol(type, Decl(jsxComponentTypeErrors.tsx, 24, 32))
+ 
+ const elem2 = <FunctionComponent<"abc"> />;
+ >elem2 : Symbol(elem2, Decl(jsxComponentTypeErrors.tsx, 25, 5))
+->FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1), Decl(jsxComponentTypeErrors.tsx, 13, 1))
++>FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1))
+ 
+ const elem3 = <ClassComponent />;
+ >elem3 : Symbol(elem3, Decl(jsxComponentTypeErrors.tsx, 26, 5))

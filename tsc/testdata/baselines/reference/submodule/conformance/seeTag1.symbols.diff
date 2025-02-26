@@ -1,0 +1,20 @@
+--- old.seeTag1.symbols
++++ new.seeTag1.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(seeTag1.ts, 0, 0))
+ 
+     foo: string
+->foo : Symbol(Foo.foo, Decl(seeTag1.ts, 0, 15))
++>foo : Symbol(foo, Decl(seeTag1.ts, 0, 15))
+ }
+ 
+ namespace NS {
+@@= skipped -10, +10 lines =@@
+ >Bar : Symbol(Bar, Decl(seeTag1.ts, 4, 14))
+ 
+         baz: Foo
+->baz : Symbol(Bar.baz, Decl(seeTag1.ts, 5, 26))
++>baz : Symbol(baz, Decl(seeTag1.ts, 5, 26))
+ >Foo : Symbol(Foo, Decl(seeTag1.ts, 0, 0))
+     }
+ }

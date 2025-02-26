@@ -1,0 +1,41 @@
+--- old.typePredicateWithThisParameter.symbols
++++ new.typePredicateWithThisParameter.symbols
+@@= skipped -6, +6 lines =@@
+ >Foo : Symbol(Foo, Decl(typePredicateWithThisParameter.ts, 0, 0))
+ 
+     foo: string;
+->foo : Symbol(Foo.foo, Decl(typePredicateWithThisParameter.ts, 2, 15))
++>foo : Symbol(foo, Decl(typePredicateWithThisParameter.ts, 2, 15))
+ }
+ interface Bar {
+ >Bar : Symbol(Bar, Decl(typePredicateWithThisParameter.ts, 4, 1))
+ 
+     bar: string;
+->bar : Symbol(Bar.bar, Decl(typePredicateWithThisParameter.ts, 5, 15))
++>bar : Symbol(bar, Decl(typePredicateWithThisParameter.ts, 5, 15))
+ }
+ 
+ function isFoo1(object: {}): object is Foo {
+@@= skipped -40, +40 lines =@@
+ >test : Symbol(test, Decl(typePredicateWithThisParameter.ts, 17, 11))
+ 
+     test.foo = 'hi';
+->test.foo : Symbol(Foo.foo, Decl(typePredicateWithThisParameter.ts, 2, 15))
++>test.foo : Symbol(foo, Decl(typePredicateWithThisParameter.ts, 2, 15))
+ >test : Symbol(test, Decl(typePredicateWithThisParameter.ts, 17, 11))
+->foo : Symbol(Foo.foo, Decl(typePredicateWithThisParameter.ts, 2, 15))
++>foo : Symbol(foo, Decl(typePredicateWithThisParameter.ts, 2, 15))
+ }
+ 
+ if (isFoo2(test)) {
+@@= skipped -10, +10 lines =@@
+ >test : Symbol(test, Decl(typePredicateWithThisParameter.ts, 17, 11))
+ 
+     test.foo = 'hi';
+->test.foo : Symbol(Foo.foo, Decl(typePredicateWithThisParameter.ts, 2, 15))
++>test.foo : Symbol(foo, Decl(typePredicateWithThisParameter.ts, 2, 15))
+ >test : Symbol(test, Decl(typePredicateWithThisParameter.ts, 17, 11))
+->foo : Symbol(Foo.foo, Decl(typePredicateWithThisParameter.ts, 2, 15))
++>foo : Symbol(foo, Decl(typePredicateWithThisParameter.ts, 2, 15))
+ }
+ 

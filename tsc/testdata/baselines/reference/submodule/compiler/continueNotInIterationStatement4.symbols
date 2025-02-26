@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/continueNotInIterationStatement4.ts] ////
+
+=== continueNotInIterationStatement4.ts ===
+TWO:
+while (true){
+  var x = () => {
+>x : Symbol(x, Decl(continueNotInIterationStatement4.ts, 2, 5))
+
+    continue TWO;
+  }
+}
+

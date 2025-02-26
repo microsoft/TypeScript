@@ -1,0 +1,21 @@
+--- old.constructorOverloads3.symbols
++++ new.constructorOverloads3.symbols
+@@= skipped -32, +32 lines =@@
+ >y : Symbol(y, Decl(constructorOverloads3.ts, 11, 23))
+ 
+     bar1() { /*WScript.Echo("Yo");*/}
+->bar1 : Symbol(Foo.bar1, Decl(constructorOverloads3.ts, 11, 36))
++>bar1 : Symbol(bar1, Decl(constructorOverloads3.ts, 11, 36))
+ }
+ 
+ var f1 = new Foo("hey");
+@@= skipped -24, +24 lines =@@
+ >f3 : Symbol(f3, Decl(constructorOverloads3.ts, 17, 3))
+ 
+ f1.bar1();
+->f1.bar1 : Symbol(Foo.bar1, Decl(constructorOverloads3.ts, 11, 36))
++>f1.bar1 : Symbol(bar1, Decl(constructorOverloads3.ts, 11, 36))
+ >f1 : Symbol(f1, Decl(constructorOverloads3.ts, 15, 3))
+->bar1 : Symbol(Foo.bar1, Decl(constructorOverloads3.ts, 11, 36))
++>bar1 : Symbol(bar1, Decl(constructorOverloads3.ts, 11, 36))
+ 

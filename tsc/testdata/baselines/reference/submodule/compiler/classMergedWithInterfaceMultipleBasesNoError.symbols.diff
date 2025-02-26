@@ -1,0 +1,18 @@
+--- old.classMergedWithInterfaceMultipleBasesNoError.symbols
++++ new.classMergedWithInterfaceMultipleBasesNoError.symbols
+@@= skipped -21, +21 lines =@@
+ >Foo : Symbol(Foo, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 2, 15), Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 3, 34))
+ 
+     readonly observer = this.handleIntersection;
+->observer : Symbol(default.observer, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 6, 34))
+->this.handleIntersection : Symbol(default.handleIntersection, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 7, 48))
++>observer : Symbol(observer, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 6, 34))
++>this.handleIntersection : Symbol(handleIntersection, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 7, 48))
+ >this : Symbol(default, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 4, 13))
+->handleIntersection : Symbol(default.handleIntersection, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 7, 48))
++>handleIntersection : Symbol(handleIntersection, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 7, 48))
+ 
+     readonly handleIntersection = () => { }
+->handleIntersection : Symbol(default.handleIntersection, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 7, 48))
++>handleIntersection : Symbol(handleIntersection, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 7, 48))
+ }

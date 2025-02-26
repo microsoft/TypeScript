@@ -1,0 +1,12 @@
+//// [tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnumDeclaration1.ts] ////
+
+=== parserEnumDeclaration1.ts ===
+enum E {
+>E : Symbol(E, Decl(parserEnumDeclaration1.ts, 0, 0))
+
+  Foo = 1,
+>Foo : Symbol(Foo, Decl(parserEnumDeclaration1.ts, 0, 8))
+
+  Bar
+>Bar : Symbol(Bar, Decl(parserEnumDeclaration1.ts, 1, 10))
+}

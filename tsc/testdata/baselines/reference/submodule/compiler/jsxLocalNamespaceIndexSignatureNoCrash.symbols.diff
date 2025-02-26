@@ -1,0 +1,25 @@
+--- old.jsxLocalNamespaceIndexSignatureNoCrash.symbols
++++ new.jsxLocalNamespaceIndexSignatureNoCrash.symbols
+@@= skipped -4, +4 lines =@@
+ >X : Symbol(X, Decl(index.tsx, 0, 0), Decl(index.tsx, 4, 1))
+ 
+     static jsx() {
+->jsx : Symbol(X.jsx, Decl(index.tsx, 0, 16))
++>jsx : Symbol(jsx, Decl(index.tsx, 0, 16))
+ 
+         return document.createElement('p');
+->document.createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
++>document.createElement : Symbol(createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+ >document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+->createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
++>createElement : Symbol(createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+     }
+ }
+ 
+@@= skipped -29, +29 lines =@@
+ >A : Symbol(A, Decl(index.tsx, 12, 1))
+ 
+     return (<p>Hello</p>);
+->p : Symbol(X.JSX.IntrinsicElements.__index, Decl(index.tsx, 8, 41))
+->p : Symbol(X.JSX.IntrinsicElements.__index, Decl(index.tsx, 8, 41))
+ }

@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyValueConformance3.ts] ////
+
+=== typeSatisfaction_propertyValueConformance3.ts ===
+export type Color = { r: number, g: number, b: number };
+>Color : Symbol(Color, Decl(typeSatisfaction_propertyValueConformance3.ts, 0, 0))
+>r : Symbol(r, Decl(typeSatisfaction_propertyValueConformance3.ts, 0, 21))
+>g : Symbol(g, Decl(typeSatisfaction_propertyValueConformance3.ts, 0, 32))
+>b : Symbol(b, Decl(typeSatisfaction_propertyValueConformance3.ts, 0, 43))
+
+// All of these should be Colors, but I only use some of them here.
+export const Palette = {
+>Palette : Symbol(Palette, Decl(typeSatisfaction_propertyValueConformance3.ts, 3, 12))
+
+    white: { r: 255, g: 255, b: 255 },
+>white : Symbol(white, Decl(typeSatisfaction_propertyValueConformance3.ts, 3, 24))
+>r : Symbol(r, Decl(typeSatisfaction_propertyValueConformance3.ts, 4, 12))
+>g : Symbol(g, Decl(typeSatisfaction_propertyValueConformance3.ts, 4, 20))
+>b : Symbol(b, Decl(typeSatisfaction_propertyValueConformance3.ts, 4, 28))
+
+    black: { r: 0, g: 0, d: 0 }, // <- oops! 'd' in place of 'b'
+>black : Symbol(black, Decl(typeSatisfaction_propertyValueConformance3.ts, 4, 38))
+>r : Symbol(r, Decl(typeSatisfaction_propertyValueConformance3.ts, 5, 12))
+>g : Symbol(g, Decl(typeSatisfaction_propertyValueConformance3.ts, 5, 18))
+>d : Symbol(d, Decl(typeSatisfaction_propertyValueConformance3.ts, 5, 24))
+
+    blue: { r: 0, g: 0, b: 255 },
+>blue : Symbol(blue, Decl(typeSatisfaction_propertyValueConformance3.ts, 5, 32))
+>r : Symbol(r, Decl(typeSatisfaction_propertyValueConformance3.ts, 6, 11))
+>g : Symbol(g, Decl(typeSatisfaction_propertyValueConformance3.ts, 6, 17))
+>b : Symbol(b, Decl(typeSatisfaction_propertyValueConformance3.ts, 6, 23))
+
+} satisfies Record<string, Color>;
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Color : Symbol(Color, Decl(typeSatisfaction_propertyValueConformance3.ts, 0, 0))
+

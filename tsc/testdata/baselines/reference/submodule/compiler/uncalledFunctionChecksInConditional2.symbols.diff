@@ -1,0 +1,190 @@
+--- old.uncalledFunctionChecksInConditional2.symbols
++++ new.uncalledFunctionChecksInConditional2.symbols
+@@= skipped -13, +13 lines =@@
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+ 
+     perf.measure &&
+->perf.measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
++>perf.measure : Symbol(measure, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+->measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
++>measure : Symbol(measure, Decl(lib.dom.d.ts, --, --))
+ 
+     perf.clearMarks &&
+->perf.clearMarks : Symbol(Performance.clearMarks, Decl(lib.dom.d.ts, --, --))
++>perf.clearMarks : Symbol(clearMarks, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+->clearMarks : Symbol(Performance.clearMarks, Decl(lib.dom.d.ts, --, --))
++>clearMarks : Symbol(clearMarks, Decl(lib.dom.d.ts, --, --))
+ 
+     perf.clearMeasures
+->perf.clearMeasures : Symbol(Performance.clearMeasures, Decl(lib.dom.d.ts, --, --))
++>perf.clearMeasures : Symbol(clearMeasures, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+->clearMeasures : Symbol(Performance.clearMeasures, Decl(lib.dom.d.ts, --, --))
++>clearMeasures : Symbol(clearMeasures, Decl(lib.dom.d.ts, --, --))
+ 
+   ) {
+     perf.measure("");
+->perf.measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
++>perf.measure : Symbol(measure, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+->measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
++>measure : Symbol(measure, Decl(lib.dom.d.ts, --, --))
+ 
+     perf.clearMarks("")
+->perf.clearMarks : Symbol(Performance.clearMarks, Decl(lib.dom.d.ts, --, --))
++>perf.clearMarks : Symbol(clearMarks, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+->clearMarks : Symbol(Performance.clearMarks, Decl(lib.dom.d.ts, --, --))
++>clearMarks : Symbol(clearMarks, Decl(lib.dom.d.ts, --, --))
+ 
+     perf.clearMeasures("")
+->perf.clearMeasures : Symbol(Performance.clearMeasures, Decl(lib.dom.d.ts, --, --))
++>perf.clearMeasures : Symbol(clearMeasures, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+->clearMeasures : Symbol(Performance.clearMeasures, Decl(lib.dom.d.ts, --, --))
++>clearMeasures : Symbol(clearMeasures, Decl(lib.dom.d.ts, --, --))
+   }
+ 
+   // With ||
+@@= skipped -37, +37 lines =@@
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+ 
+     perf.mark &&
+->perf.mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
++>perf.mark : Symbol(mark, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+->mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
++>mark : Symbol(mark, Decl(lib.dom.d.ts, --, --))
+ 
+     perf.measure || !!true
+->perf.measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
++>perf.measure : Symbol(measure, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+->measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
++>measure : Symbol(measure, Decl(lib.dom.d.ts, --, --))
+ 
+   ) {
+     perf.mark("");
+->perf.mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
++>perf.mark : Symbol(mark, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+->mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
++>mark : Symbol(mark, Decl(lib.dom.d.ts, --, --))
+   }
+ 
+   // With ??
+@@= skipped -23, +23 lines =@@
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+ 
+       perf.mark &&
+->perf.mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
++>perf.mark : Symbol(mark, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+->mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
++>mark : Symbol(mark, Decl(lib.dom.d.ts, --, --))
+ 
+       perf.measure
+->perf.measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
++>perf.measure : Symbol(measure, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+->measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
++>measure : Symbol(measure, Decl(lib.dom.d.ts, --, --))
+ 
+     ) ?? !!true
+   ) {
+     perf.mark("");
+->perf.mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
++>perf.mark : Symbol(mark, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+->mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
++>mark : Symbol(mark, Decl(lib.dom.d.ts, --, --))
+   }
+ };
+ 
+@@= skipped -41, +41 lines =@@
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
+ 
+     perf.mark &&
+->perf.mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
++>perf.mark : Symbol(mark, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
+->mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
++>mark : Symbol(mark, Decl(lib.dom.d.ts, --, --))
+ 
+     perf.measure &&
+->perf.measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
++>perf.measure : Symbol(measure, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
+->measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
++>measure : Symbol(measure, Decl(lib.dom.d.ts, --, --))
+ 
+     perf.clearMarks &&
+->perf.clearMarks : Symbol(Performance.clearMarks, Decl(lib.dom.d.ts, --, --))
++>perf.clearMarks : Symbol(clearMarks, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
+->clearMarks : Symbol(Performance.clearMarks, Decl(lib.dom.d.ts, --, --))
++>clearMarks : Symbol(clearMarks, Decl(lib.dom.d.ts, --, --))
+ 
+     perf.clearMeasures
+->perf.clearMeasures : Symbol(Performance.clearMeasures, Decl(lib.dom.d.ts, --, --))
++>perf.clearMeasures : Symbol(clearMeasures, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
+->clearMeasures : Symbol(Performance.clearMeasures, Decl(lib.dom.d.ts, --, --))
++>clearMeasures : Symbol(clearMeasures, Decl(lib.dom.d.ts, --, --))
+ 
+   ) {
+     mark = (tag) => perf.mark(tag)
+ >mark : Symbol(mark, Decl(uncalledFunctionChecksInConditional2.ts, 39, 5))
+ >tag : Symbol(tag, Decl(uncalledFunctionChecksInConditional2.ts, 50, 12))
+->perf.mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
++>perf.mark : Symbol(mark, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
+->mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
++>mark : Symbol(mark, Decl(lib.dom.d.ts, --, --))
+ >tag : Symbol(tag, Decl(uncalledFunctionChecksInConditional2.ts, 50, 12))
+ 
+     measure = (name, startTag, endTag) => {
+@@= skipped -35, +35 lines =@@
+ >endTag : Symbol(endTag, Decl(uncalledFunctionChecksInConditional2.ts, 51, 30))
+ 
+       perf.measure(name, startTag, endTag)
+->perf.measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
++>perf.measure : Symbol(measure, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
+->measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
++>measure : Symbol(measure, Decl(lib.dom.d.ts, --, --))
+ >name : Symbol(name, Decl(uncalledFunctionChecksInConditional2.ts, 51, 15))
+ >startTag : Symbol(startTag, Decl(uncalledFunctionChecksInConditional2.ts, 51, 20))
+ >endTag : Symbol(endTag, Decl(uncalledFunctionChecksInConditional2.ts, 51, 30))
+ 
+       perf.clearMarks(startTag)
+->perf.clearMarks : Symbol(Performance.clearMarks, Decl(lib.dom.d.ts, --, --))
++>perf.clearMarks : Symbol(clearMarks, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
+->clearMarks : Symbol(Performance.clearMarks, Decl(lib.dom.d.ts, --, --))
++>clearMarks : Symbol(clearMarks, Decl(lib.dom.d.ts, --, --))
+ >startTag : Symbol(startTag, Decl(uncalledFunctionChecksInConditional2.ts, 51, 20))
+ 
+       perf.clearMarks(endTag)
+->perf.clearMarks : Symbol(Performance.clearMarks, Decl(lib.dom.d.ts, --, --))
++>perf.clearMarks : Symbol(clearMarks, Decl(lib.dom.d.ts, --, --))
+ >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
+->clearMarks : Symbol(Performance.clearMarks, Decl(lib.dom.d.ts, --, --))
++>clearMarks : Symbol(clearMarks, Decl(lib.dom.d.ts, --, --))
+ >endTag : Symbol(endTag, Decl(uncalledFunctionChecksInConditional2.ts, 51, 30))
+ 
+       // perf.clearMeasures(name)
+@@= skipped -53, +53 lines =@@
+     _isMobile = isMobileMatch && isMobileMatch.matches;
+ >_isMobile : Symbol(_isMobile, Decl(uncalledFunctionChecksInConditional2.ts, 60, 3))
+ >isMobileMatch : Symbol(isMobileMatch, Decl(uncalledFunctionChecksInConditional2.ts, 63, 9))
+->isMobileMatch.matches : Symbol(MediaQueryList.matches, Decl(lib.dom.d.ts, --, --))
++>isMobileMatch.matches : Symbol(matches, Decl(lib.dom.d.ts, --, --))
+ >isMobileMatch : Symbol(isMobileMatch, Decl(uncalledFunctionChecksInConditional2.ts, 63, 9))
+->matches : Symbol(MediaQueryList.matches, Decl(lib.dom.d.ts, --, --))
++>matches : Symbol(matches, Decl(lib.dom.d.ts, --, --))
+   }
+   return _isMobile;
+ >_isMobile : Symbol(_isMobile, Decl(uncalledFunctionChecksInConditional2.ts, 60, 3))

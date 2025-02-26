@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit11.ts] ////
+
+=== symbolDeclarationEmit11.ts ===
+class C {
+>C : Symbol(C, Decl(symbolDeclarationEmit11.ts, 0, 0))
+
+    static [Symbol.iterator] = 0;
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(symbolDeclarationEmit11.ts, 0, 9))
+
+    static [Symbol.isConcatSpreadable]() { }
+>[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(symbolDeclarationEmit11.ts, 1, 33))
+
+    static get [Symbol.toPrimitive]() { return ""; }
+>[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(symbolDeclarationEmit11.ts, 2, 44))
+
+    static set [Symbol.toPrimitive](x) { }
+>[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(symbolDeclarationEmit11.ts, 3, 52))
+>x : Symbol(x, Decl(symbolDeclarationEmit11.ts, 4, 36))
+}

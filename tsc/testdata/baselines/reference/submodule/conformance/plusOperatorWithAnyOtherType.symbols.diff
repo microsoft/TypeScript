@@ -1,0 +1,64 @@
+--- old.plusOperatorWithAnyOtherType.symbols
++++ new.plusOperatorWithAnyOtherType.symbols
+@@= skipped -34, +34 lines =@@
+ >A : Symbol(A, Decl(plusOperatorWithAnyOtherType.ts, 11, 1))
+ 
+     public a: any;
+->a : Symbol(A.a, Decl(plusOperatorWithAnyOtherType.ts, 12, 9))
++>a : Symbol(a, Decl(plusOperatorWithAnyOtherType.ts, 12, 9))
+ 
+     static foo() {
+->foo : Symbol(A.foo, Decl(plusOperatorWithAnyOtherType.ts, 13, 18))
++>foo : Symbol(foo, Decl(plusOperatorWithAnyOtherType.ts, 13, 18))
+ 
+         var a;
+ >a : Symbol(a, Decl(plusOperatorWithAnyOtherType.ts, 15, 11))
+@@= skipped -74, +74 lines =@@
+ 
+ var ResultIsNumber12 = +objA.a;
+ >ResultIsNumber12 : Symbol(ResultIsNumber12, Decl(plusOperatorWithAnyOtherType.ts, 40, 3))
+->objA.a : Symbol(A.a, Decl(plusOperatorWithAnyOtherType.ts, 12, 9))
++>objA.a : Symbol(a, Decl(plusOperatorWithAnyOtherType.ts, 12, 9))
+ >objA : Symbol(objA, Decl(plusOperatorWithAnyOtherType.ts, 22, 3))
+->a : Symbol(A.a, Decl(plusOperatorWithAnyOtherType.ts, 12, 9))
++>a : Symbol(a, Decl(plusOperatorWithAnyOtherType.ts, 12, 9))
+ 
+ var ResultIsNumber13 = +M.n;
+ >ResultIsNumber13 : Symbol(ResultIsNumber13, Decl(plusOperatorWithAnyOtherType.ts, 41, 3))
+->M.n : Symbol(M.n, Decl(plusOperatorWithAnyOtherType.ts, 20, 14))
++>M.n : Symbol(n, Decl(plusOperatorWithAnyOtherType.ts, 20, 14))
+ >M : Symbol(M, Decl(plusOperatorWithAnyOtherType.ts, 18, 1))
+->n : Symbol(M.n, Decl(plusOperatorWithAnyOtherType.ts, 20, 14))
++>n : Symbol(n, Decl(plusOperatorWithAnyOtherType.ts, 20, 14))
+ 
+ var ResultIsNumber14 = +foo();
+ >ResultIsNumber14 : Symbol(ResultIsNumber14, Decl(plusOperatorWithAnyOtherType.ts, 42, 3))
+@@= skipped -16, +16 lines =@@
+ 
+ var ResultIsNumber15 = +A.foo();
+ >ResultIsNumber15 : Symbol(ResultIsNumber15, Decl(plusOperatorWithAnyOtherType.ts, 43, 3))
+->A.foo : Symbol(A.foo, Decl(plusOperatorWithAnyOtherType.ts, 13, 18))
++>A.foo : Symbol(foo, Decl(plusOperatorWithAnyOtherType.ts, 13, 18))
+ >A : Symbol(A, Decl(plusOperatorWithAnyOtherType.ts, 11, 1))
+->foo : Symbol(A.foo, Decl(plusOperatorWithAnyOtherType.ts, 13, 18))
++>foo : Symbol(foo, Decl(plusOperatorWithAnyOtherType.ts, 13, 18))
+ 
+ var ResultIsNumber16 = +(ANY + ANY1);
+ >ResultIsNumber16 : Symbol(ResultIsNumber16, Decl(plusOperatorWithAnyOtherType.ts, 44, 3))
+@@= skipped -36, +36 lines =@@
+ >ANY1 : Symbol(ANY1, Decl(plusOperatorWithAnyOtherType.ts, 3, 3))
+ 
+ +objA.a;
+->objA.a : Symbol(A.a, Decl(plusOperatorWithAnyOtherType.ts, 12, 9))
++>objA.a : Symbol(a, Decl(plusOperatorWithAnyOtherType.ts, 12, 9))
+ >objA : Symbol(objA, Decl(plusOperatorWithAnyOtherType.ts, 22, 3))
+->a : Symbol(A.a, Decl(plusOperatorWithAnyOtherType.ts, 12, 9))
++>a : Symbol(a, Decl(plusOperatorWithAnyOtherType.ts, 12, 9))
+ 
+ +M.n;
+->M.n : Symbol(M.n, Decl(plusOperatorWithAnyOtherType.ts, 20, 14))
++>M.n : Symbol(n, Decl(plusOperatorWithAnyOtherType.ts, 20, 14))
+ >M : Symbol(M, Decl(plusOperatorWithAnyOtherType.ts, 18, 1))
+->n : Symbol(M.n, Decl(plusOperatorWithAnyOtherType.ts, 20, 14))
++>n : Symbol(n, Decl(plusOperatorWithAnyOtherType.ts, 20, 14))
+ 

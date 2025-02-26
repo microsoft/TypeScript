@@ -1,0 +1,30 @@
+--- old.recursiveTypesUsedAsFunctionParameters.symbols
++++ new.recursiveTypesUsedAsFunctionParameters.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 11))
+ 
+     data: T;
+->data : Symbol(List.data, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 15))
++>data : Symbol(data, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 15))
+ >T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 11))
+ 
+     next: List<List<T>>;
+->next : Symbol(List.next, Decl(recursiveTypesUsedAsFunctionParameters.ts, 1, 12))
++>next : Symbol(next, Decl(recursiveTypesUsedAsFunctionParameters.ts, 1, 12))
+ >List : Symbol(List, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 0))
+ >List : Symbol(List, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 0))
+ >T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 11))
+@@= skipped -15, +15 lines =@@
+ >T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 5, 13))
+ 
+     data: T;
+->data : Symbol(MyList.data, Decl(recursiveTypesUsedAsFunctionParameters.ts, 5, 17))
++>data : Symbol(data, Decl(recursiveTypesUsedAsFunctionParameters.ts, 5, 17))
+ >T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 5, 13))
+ 
+     next: MyList<MyList<T>>;
+->next : Symbol(MyList.next, Decl(recursiveTypesUsedAsFunctionParameters.ts, 6, 12))
++>next : Symbol(next, Decl(recursiveTypesUsedAsFunctionParameters.ts, 6, 12))
+ >MyList : Symbol(MyList, Decl(recursiveTypesUsedAsFunctionParameters.ts, 3, 1))
+ >MyList : Symbol(MyList, Decl(recursiveTypesUsedAsFunctionParameters.ts, 3, 1))
+ >T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 5, 13))

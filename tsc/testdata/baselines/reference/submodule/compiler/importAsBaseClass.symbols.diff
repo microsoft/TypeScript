@@ -1,0 +1,10 @@
+--- old.importAsBaseClass.symbols
++++ new.importAsBaseClass.symbols
+@@= skipped -12, +12 lines =@@
+ >Greeter : Symbol(Greeter, Decl(importAsBaseClass_0.ts, 0, 0))
+ 
+    greet() { return 'greet' }
+->greet : Symbol(Greeter.greet, Decl(importAsBaseClass_0.ts, 0, 22))
++>greet : Symbol(greet, Decl(importAsBaseClass_0.ts, 0, 22))
+ }
+ 

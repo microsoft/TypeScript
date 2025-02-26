@@ -1,0 +1,8 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserTryStatement1.d.ts] ////
+
+=== parserTryStatement1.d.ts ===
+try {
+}
+catch (e) {
+>e : Symbol(e, Decl(parserTryStatement1.d.ts, 2, 7))
+}

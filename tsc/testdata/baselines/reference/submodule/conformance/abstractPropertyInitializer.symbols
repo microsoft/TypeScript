@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/abstractPropertyInitializer.ts] ////
+
+=== abstractPropertyInitializer.ts ===
+abstract class C {
+>C : Symbol(C, Decl(abstractPropertyInitializer.ts, 0, 0))
+
+    abstract prop = 1
+>prop : Symbol(prop, Decl(abstractPropertyInitializer.ts, 0, 18))
+}
+

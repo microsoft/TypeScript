@@ -1,0 +1,38 @@
+--- old.contextualSignatureInstantiation3.symbols
++++ new.contextualSignatureInstantiation3.symbols
+@@= skipped -13, +13 lines =@@
+ >U : Symbol(U, Decl(contextualSignatureInstantiation3.ts, 0, 15))
+ 
+     return items.map(f);
+->items.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>items.map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >items : Symbol(items, Decl(contextualSignatureInstantiation3.ts, 0, 19))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >f : Symbol(f, Decl(contextualSignatureInstantiation3.ts, 0, 30))
+ }
+ 
+@@= skipped -35, +35 lines =@@
+ 
+ var v1 = xs.map(identity);      // Error if not number[]
+ >v1 : Symbol(v1, Decl(contextualSignatureInstantiation3.ts, 15, 3), Decl(contextualSignatureInstantiation3.ts, 16, 3), Decl(contextualSignatureInstantiation3.ts, 17, 3))
+->xs.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>xs.map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >xs : Symbol(xs, Decl(contextualSignatureInstantiation3.ts, 12, 3))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >identity : Symbol(identity, Decl(contextualSignatureInstantiation3.ts, 2, 1))
+ 
+ var v1 = map(xs, identity);     // Error if not number[]
+@@= skipped -16, +16 lines =@@
+ 
+ var v2 = xs.map(singleton);     // Error if not number[][]
+ >v2 : Symbol(v2, Decl(contextualSignatureInstantiation3.ts, 19, 3), Decl(contextualSignatureInstantiation3.ts, 20, 3), Decl(contextualSignatureInstantiation3.ts, 21, 3))
+->xs.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>xs.map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >xs : Symbol(xs, Decl(contextualSignatureInstantiation3.ts, 12, 3))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >singleton : Symbol(singleton, Decl(contextualSignatureInstantiation3.ts, 6, 1))
+ 
+ var v2 = map(xs, singleton);    // Error if not number[][]

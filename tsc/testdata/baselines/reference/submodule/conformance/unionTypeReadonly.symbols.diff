@@ -1,0 +1,50 @@
+--- old.unionTypeReadonly.symbols
++++ new.unionTypeReadonly.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(unionTypeReadonly.ts, 0, 0))
+ 
+     readonly value: number;
+->value : Symbol(Base.value, Decl(unionTypeReadonly.ts, 0, 16))
++>value : Symbol(value, Decl(unionTypeReadonly.ts, 0, 16))
+ }
+ interface Identical {
+ >Identical : Symbol(Identical, Decl(unionTypeReadonly.ts, 2, 1))
+ 
+     readonly value: number;
+->value : Symbol(Identical.value, Decl(unionTypeReadonly.ts, 3, 21))
++>value : Symbol(value, Decl(unionTypeReadonly.ts, 3, 21))
+ }
+ interface Mutable {
+ >Mutable : Symbol(Mutable, Decl(unionTypeReadonly.ts, 5, 1))
+ 
+     value: number;
+->value : Symbol(Mutable.value, Decl(unionTypeReadonly.ts, 6, 19))
++>value : Symbol(value, Decl(unionTypeReadonly.ts, 6, 19))
+ }
+ interface DifferentType {
+ >DifferentType : Symbol(DifferentType, Decl(unionTypeReadonly.ts, 8, 1))
+ 
+     readonly value: string;
+->value : Symbol(DifferentType.value, Decl(unionTypeReadonly.ts, 9, 25))
++>value : Symbol(value, Decl(unionTypeReadonly.ts, 9, 25))
+ }
+ interface DifferentName {
+ >DifferentName : Symbol(DifferentName, Decl(unionTypeReadonly.ts, 11, 1))
+ 
+     readonly other: number;
+->other : Symbol(DifferentName.other, Decl(unionTypeReadonly.ts, 12, 25))
++>other : Symbol(other, Decl(unionTypeReadonly.ts, 12, 25))
+ }
+ let base: Base;
+ >base : Symbol(base, Decl(unionTypeReadonly.ts, 15, 3))
+ >Base : Symbol(Base, Decl(unionTypeReadonly.ts, 0, 0))
+ 
+ base.value = 12 // error, lhs can't be a readonly property
+->base.value : Symbol(Base.value, Decl(unionTypeReadonly.ts, 0, 16))
++>base.value : Symbol(value, Decl(unionTypeReadonly.ts, 0, 16))
+ >base : Symbol(base, Decl(unionTypeReadonly.ts, 15, 3))
+->value : Symbol(Base.value, Decl(unionTypeReadonly.ts, 0, 16))
++>value : Symbol(value, Decl(unionTypeReadonly.ts, 0, 16))
+ 
+ let identical: Base | Identical;
+ >identical : Symbol(identical, Decl(unionTypeReadonly.ts, 17, 3))

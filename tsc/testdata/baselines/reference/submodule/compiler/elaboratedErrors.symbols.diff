@@ -1,0 +1,31 @@
+--- old.elaboratedErrors.symbols
++++ new.elaboratedErrors.symbols
+@@= skipped -4, +4 lines =@@
+ >FileSystem : Symbol(FileSystem, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(elaboratedErrors.ts, 0, 0))
+ 
+   read: number;
+->read : Symbol(FileSystem.read, Decl(elaboratedErrors.ts, 0, 22))
++>read : Symbol(read, Decl(elaboratedErrors.ts, 0, 22))
+ }
+ 
+ function fn(s: WorkerFS): void;
+@@= skipped -25, +25 lines =@@
+ >FileSystem : Symbol(FileSystem, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(elaboratedErrors.ts, 0, 0))
+ 
+   read: string;
+->read : Symbol(WorkerFS.read, Decl(elaboratedErrors.ts, 9, 38))
++>read : Symbol(read, Decl(elaboratedErrors.ts, 9, 38))
+ }
+ 
+ interface Alpha { x: string; }
+ >Alpha : Symbol(Alpha, Decl(elaboratedErrors.ts, 11, 1))
+->x : Symbol(Alpha.x, Decl(elaboratedErrors.ts, 13, 17))
++>x : Symbol(x, Decl(elaboratedErrors.ts, 13, 17))
+ 
+ interface Beta { y: number; }
+ >Beta : Symbol(Beta, Decl(elaboratedErrors.ts, 13, 30))
+->y : Symbol(Beta.y, Decl(elaboratedErrors.ts, 14, 16))
++>y : Symbol(y, Decl(elaboratedErrors.ts, 14, 16))
+ 
+ var x: Alpha;
+ >x : Symbol(x, Decl(elaboratedErrors.ts, 15, 3))

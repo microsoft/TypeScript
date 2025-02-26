@@ -1,0 +1,14 @@
+--- old.objectLitGetterSetter.symbols
++++ new.objectLitGetterSetter.symbols
+@@= skipped -4, +4 lines =@@
+ >obj : Symbol(obj, Decl(objectLitGetterSetter.ts, 0, 15))
+ 
+             Object.defineProperty(obj, "accProperty", <PropertyDescriptor>({
+->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
++>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
++>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+ >obj : Symbol(obj, Decl(objectLitGetterSetter.ts, 0, 15))
+ >PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+ 

@@ -1,0 +1,20 @@
+--- old.computedPropertyNames26_ES5.symbols
++++ new.computedPropertyNames26_ES5.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(computedPropertyNames26_ES5.ts, 0, 0))
+ 
+     bar() {
+->bar : Symbol(Base.bar, Decl(computedPropertyNames26_ES5.ts, 0, 12))
++>bar : Symbol(bar, Decl(computedPropertyNames26_ES5.ts, 0, 12))
+ 
+         return 0;
+     }
+@@= skipped -10, +10 lines =@@
+ >Base : Symbol(Base, Decl(computedPropertyNames26_ES5.ts, 0, 0))
+ 
+     [
+->[        { [super.bar()]: 1 }[0]    ] : Symbol(C[
++>[        { [super.bar()]: 1 }[0]    ] : Symbol([
+         { [super.bar()]: 1 }[0]
+     ], Decl(computedPropertyNames26_ES5.ts, 5, 22))
+ 

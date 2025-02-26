@@ -1,0 +1,30 @@
+--- old.systemModule15.symbols
++++ new.systemModule15.symbols
+@@= skipped -9, +9 lines =@@
+ 
+ use(moduleB.value);
+ >use : Symbol(use, Decl(file1.ts, 0, 34))
+->moduleB.value : Symbol(moduleB.value, Decl(file2.ts, 7, 12))
++>moduleB.value : Symbol(value, Decl(file2.ts, 7, 12))
+ >moduleB : Symbol(moduleB, Decl(file1.ts, 0, 6))
+->value : Symbol(moduleB.value, Decl(file2.ts, 7, 12))
++>value : Symbol(value, Decl(file2.ts, 7, 12))
+ 
+ use(moduleB.moduleC);
+ >use : Symbol(use, Decl(file1.ts, 0, 34))
+->moduleB.moduleC : Symbol(moduleB.moduleC, Decl(file2.ts, 6, 16))
++>moduleB.moduleC : Symbol(moduleC, Decl(file2.ts, 6, 16))
+ >moduleB : Symbol(moduleB, Decl(file1.ts, 0, 6))
+->moduleC : Symbol(moduleB.moduleC, Decl(file2.ts, 6, 16))
++>moduleC : Symbol(moduleC, Decl(file2.ts, 6, 16))
+ 
+ use(moduleB.moduleCStar);
+ >use : Symbol(use, Decl(file1.ts, 0, 34))
+->moduleB.moduleCStar : Symbol(moduleB.moduleCStar, Decl(file2.ts, 5, 8))
++>moduleB.moduleCStar : Symbol(moduleCStar, Decl(file2.ts, 5, 8))
+ >moduleB : Symbol(moduleB, Decl(file1.ts, 0, 6))
+->moduleCStar : Symbol(moduleB.moduleCStar, Decl(file2.ts, 5, 8))
++>moduleCStar : Symbol(moduleCStar, Decl(file2.ts, 5, 8))
+ 
+ === file2.ts ===
+ import * as moduleCStar from "./file3"

@@ -1,0 +1,48 @@
+--- old.thisInTypeQuery.symbols
++++ new.thisInTypeQuery.symbols
+@@= skipped -19, +19 lines =@@
+ >MyClass : Symbol(MyClass, Decl(thisInTypeQuery.ts, 6, 1))
+ 
+     private map = {
+->map : Symbol(MyClass.map, Decl(thisInTypeQuery.ts, 8, 15))
++>map : Symbol(map, Decl(thisInTypeQuery.ts, 8, 15))
+ 
+         my_key: 'example_value'
+ >my_key : Symbol(my_key, Decl(thisInTypeQuery.ts, 9, 19))
+@@= skipped -8, +8 lines =@@
+     };
+ 
+     runTypeFails() {
+->runTypeFails : Symbol(MyClass.runTypeFails, Decl(thisInTypeQuery.ts, 11, 6))
++>runTypeFails : Symbol(runTypeFails, Decl(thisInTypeQuery.ts, 11, 6))
+ 
+         const params = null as any as { a: { key: string } } | null;
+ >params : Symbol(params, Decl(thisInTypeQuery.ts, 14, 13))
+@@= skipped -13, +13 lines =@@
+ 
+         type Key = keyof typeof this.map;
+ >Key : Symbol(Key, Decl(thisInTypeQuery.ts, 15, 23))
+->this.map : Symbol(MyClass.map, Decl(thisInTypeQuery.ts, 8, 15))
++>this.map : Symbol(map, Decl(thisInTypeQuery.ts, 8, 15))
+ >this : Symbol(MyClass, Decl(thisInTypeQuery.ts, 6, 1))
+->map : Symbol(MyClass.map, Decl(thisInTypeQuery.ts, 8, 15))
++>map : Symbol(map, Decl(thisInTypeQuery.ts, 8, 15))
+ 
+         this.map[params.a.key as Key];
+->this.map : Symbol(MyClass.map, Decl(thisInTypeQuery.ts, 8, 15))
++>this.map : Symbol(map, Decl(thisInTypeQuery.ts, 8, 15))
+ >this : Symbol(MyClass, Decl(thisInTypeQuery.ts, 6, 1))
+->map : Symbol(MyClass.map, Decl(thisInTypeQuery.ts, 8, 15))
++>map : Symbol(map, Decl(thisInTypeQuery.ts, 8, 15))
+ >params.a.key : Symbol(key, Decl(thisInTypeQuery.ts, 14, 44))
+ >params.a : Symbol(a, Decl(thisInTypeQuery.ts, 14, 39))
+ >params : Symbol(params, Decl(thisInTypeQuery.ts, 14, 13))
+@@= skipped -21, +21 lines =@@
+ >C : Symbol(C, Decl(thisInTypeQuery.ts, 19, 1))
+ 
+   foo() {
+->foo : Symbol(C.foo, Decl(thisInTypeQuery.ts, 21, 9))
++>foo : Symbol(foo, Decl(thisInTypeQuery.ts, 21, 9))
+ 
+     const x = !!true;
+ >x : Symbol(x, Decl(thisInTypeQuery.ts, 23, 9))

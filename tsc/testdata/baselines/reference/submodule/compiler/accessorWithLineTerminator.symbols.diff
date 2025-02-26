@@ -1,0 +1,15 @@
+--- old.accessorWithLineTerminator.symbols
++++ new.accessorWithLineTerminator.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     get
+     x() { return 1 }
+->x : Symbol(C.x, Decl(accessorWithLineTerminator.ts, 0, 9), Decl(accessorWithLineTerminator.ts, 2, 20))
++>x : Symbol(x, Decl(accessorWithLineTerminator.ts, 0, 9), Decl(accessorWithLineTerminator.ts, 2, 20))
+ 
+     set
+     x(v) {  }
+->x : Symbol(C.x, Decl(accessorWithLineTerminator.ts, 0, 9), Decl(accessorWithLineTerminator.ts, 2, 20))
++>x : Symbol(x, Decl(accessorWithLineTerminator.ts, 0, 9), Decl(accessorWithLineTerminator.ts, 2, 20))
+ >v : Symbol(v, Decl(accessorWithLineTerminator.ts, 5, 6))
+ }

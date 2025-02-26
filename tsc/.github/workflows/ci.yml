@@ -40,13 +40,19 @@ jobs:
           - os: windows-latest
           - os: macos-latest
           - os: ubuntu-latest
+            name: 'no submodules'
             no-submodules: true
-          - os: ubuntu-latest
+          - os: ['self-hosted', '1ES.Pool=TypeScript-1ES-GitHub-XL', '1ES.ImageOverride=mariner-2.0']
+            name: 'race mode'
             race: true
           - os: ubuntu-latest
+            name: 'noembed'
             noembed: true
+          - os: ubuntu-latest
+            name: 'concurrent test programs'
+            concurrent-test-program: true
 
-    name: test (${{ matrix.os }}${{ (matrix.no-submodules && ' without submodules') || '' }}${{ (matrix.race && ' in race mode') || '' }}${{ (matrix.noembed && ' with noembed') || '' }})
+    name: test (${{ matrix.name || matrix.os }})
 
     runs-on: ${{ matrix.os }}
 
@@ -58,6 +64,8 @@ jobs:
         with:
           submodules: ${{ !matrix.no-submodules }}
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
+        with:
+          node-version: 'lts/*'
       - uses: ./.github/actions/setup-go
         with:
           cache-name: test
@@ -71,10 +79,11 @@ jobs:
 
       - name: Tests
         id: test
-        run: npx hereby test:all ${RACE_FLAG:+"$RACE_FLAG"} ${NOEMBED_FLAG:+"$NOEMBED_FLAG"}
+        run: npx hereby test:all ${RACE_FLAG:+"$RACE_FLAG"} ${NOEMBED_FLAG:+"$NOEMBED_FLAG"} ${CONCURRENTTESTPROGRAM_FLAG:+"$CONCURRENTTESTPROGRAM_FLAG"}
         env:
           RACE_FLAG: ${{ (matrix.race && '--race') || '' }}
           NOEMBED_FLAG: ${{ (matrix.noembed && '--noembed') || '' }}
+          CONCURRENTTESTPROGRAM_FLAG: ${{ (matrix.concurrent-test-program && '--concurrentTestPrograms') || '' }}
 
       - run: git add .
       - run: git diff --staged --exit-code --stat
@@ -85,6 +94,11 @@ jobs:
           npx hereby baseline-accept
           git add testdata/baselines/reference
           git diff --staged --exit-code
+      - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        if: ${{ failure() && steps.test.conclusion == 'failure' }}
+        with:
+          name: ${{ matrix.os }}-${{ (matrix.race && 'race') || 'norace' }}-new-baselines-artifact
+          path: testdata/baselines/local
 
   lint:
     runs-on: ubuntu-latest

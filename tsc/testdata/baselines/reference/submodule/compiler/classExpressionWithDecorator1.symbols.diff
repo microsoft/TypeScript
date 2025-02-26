@@ -1,0 +1,9 @@
+--- old.classExpressionWithDecorator1.symbols
++++ new.classExpressionWithDecorator1.symbols
+@@= skipped -3, +3 lines =@@
+ var v = @decorate class C { static p = 1 };
+ >v : Symbol(v, Decl(classExpressionWithDecorator1.ts, 0, 3))
+ >C : Symbol(C, Decl(classExpressionWithDecorator1.ts, 0, 7))
+->p : Symbol(C.p, Decl(classExpressionWithDecorator1.ts, 0, 27))
++>p : Symbol(p, Decl(classExpressionWithDecorator1.ts, 0, 27))
+ 

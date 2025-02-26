@@ -1,0 +1,96 @@
+--- old.constEnumErrors.symbols
++++ new.constEnumErrors.symbols
+@@= skipped -4, +4 lines =@@
+ >E : Symbol(E, Decl(constEnumErrors.ts, 0, 0))
+ 
+     A
+->A : Symbol(E.A, Decl(constEnumErrors.ts, 0, 14))
++>A : Symbol(A, Decl(constEnumErrors.ts, 0, 14))
+ }
+ 
+ module E {
+@@= skipped -16, +16 lines =@@
+     // illegal case
+     // forward reference to the element of the same enum
+     X = Y,
+->X : Symbol(E1.X, Decl(constEnumErrors.ts, 8, 15))
+->Y : Symbol(E1.Y, Decl(constEnumErrors.ts, 11, 10))
++>X : Symbol(X, Decl(constEnumErrors.ts, 8, 15))
++>Y : Symbol(Y, Decl(constEnumErrors.ts, 11, 10))
+ 
+     // forward reference to the element of the same enum
+     Y = E1.Z,
+->Y : Symbol(E1.Y, Decl(constEnumErrors.ts, 11, 10))
++>Y : Symbol(Y, Decl(constEnumErrors.ts, 11, 10))
+ >E1 : Symbol(E1, Decl(constEnumErrors.ts, 6, 1))
+ 
+     Y1 = E1["Z"]
+->Y1 : Symbol(E1.Y1, Decl(constEnumErrors.ts, 13, 13))
++>Y1 : Symbol(Y1, Decl(constEnumErrors.ts, 13, 13))
+ >E1 : Symbol(E1, Decl(constEnumErrors.ts, 6, 1))
+ }
+ 
+@@= skipped -17, +17 lines =@@
+ >E2 : Symbol(E2, Decl(constEnumErrors.ts, 15, 1))
+ 
+     A
+->A : Symbol(E2.A, Decl(constEnumErrors.ts, 17, 15))
++>A : Symbol(A, Decl(constEnumErrors.ts, 17, 15))
+ }
+ 
+ var y0 = E2[1]
+@@= skipped -41, +41 lines =@@
+ >NaNOrInfinity : Symbol(NaNOrInfinity, Decl(constEnumErrors.ts, 32, 8))
+ 
+     A = 9007199254740992,
+->A : Symbol(NaNOrInfinity.A, Decl(constEnumErrors.ts, 34, 26))
++>A : Symbol(A, Decl(constEnumErrors.ts, 34, 26))
+ 
+     B = A * A,
+->B : Symbol(NaNOrInfinity.B, Decl(constEnumErrors.ts, 35, 25))
+->A : Symbol(NaNOrInfinity.A, Decl(constEnumErrors.ts, 34, 26))
+->A : Symbol(NaNOrInfinity.A, Decl(constEnumErrors.ts, 34, 26))
++>B : Symbol(B, Decl(constEnumErrors.ts, 35, 25))
++>A : Symbol(A, Decl(constEnumErrors.ts, 34, 26))
++>A : Symbol(A, Decl(constEnumErrors.ts, 34, 26))
+ 
+     C = B * B,
+->C : Symbol(NaNOrInfinity.C, Decl(constEnumErrors.ts, 36, 14))
+->B : Symbol(NaNOrInfinity.B, Decl(constEnumErrors.ts, 35, 25))
+->B : Symbol(NaNOrInfinity.B, Decl(constEnumErrors.ts, 35, 25))
++>C : Symbol(C, Decl(constEnumErrors.ts, 36, 14))
++>B : Symbol(B, Decl(constEnumErrors.ts, 35, 25))
++>B : Symbol(B, Decl(constEnumErrors.ts, 35, 25))
+ 
+     D = C * C,
+->D : Symbol(NaNOrInfinity.D, Decl(constEnumErrors.ts, 37, 14))
+->C : Symbol(NaNOrInfinity.C, Decl(constEnumErrors.ts, 36, 14))
+->C : Symbol(NaNOrInfinity.C, Decl(constEnumErrors.ts, 36, 14))
++>D : Symbol(D, Decl(constEnumErrors.ts, 37, 14))
++>C : Symbol(C, Decl(constEnumErrors.ts, 36, 14))
++>C : Symbol(C, Decl(constEnumErrors.ts, 36, 14))
+ 
+     E = D * D,
+->E : Symbol(NaNOrInfinity.E, Decl(constEnumErrors.ts, 38, 14))
+->D : Symbol(NaNOrInfinity.D, Decl(constEnumErrors.ts, 37, 14))
+->D : Symbol(NaNOrInfinity.D, Decl(constEnumErrors.ts, 37, 14))
++>E : Symbol(E, Decl(constEnumErrors.ts, 38, 14))
++>D : Symbol(D, Decl(constEnumErrors.ts, 37, 14))
++>D : Symbol(D, Decl(constEnumErrors.ts, 37, 14))
+ 
+     F = E * E, // overflow
+->F : Symbol(NaNOrInfinity.F, Decl(constEnumErrors.ts, 39, 14))
+->E : Symbol(NaNOrInfinity.E, Decl(constEnumErrors.ts, 38, 14))
+->E : Symbol(NaNOrInfinity.E, Decl(constEnumErrors.ts, 38, 14))
++>F : Symbol(F, Decl(constEnumErrors.ts, 39, 14))
++>E : Symbol(E, Decl(constEnumErrors.ts, 38, 14))
++>E : Symbol(E, Decl(constEnumErrors.ts, 38, 14))
+ 
+     G = 1 / 0, // overflow
+->G : Symbol(NaNOrInfinity.G, Decl(constEnumErrors.ts, 40, 14))
++>G : Symbol(G, Decl(constEnumErrors.ts, 40, 14))
+ 
+     H = 0 / 0  // NaN
+->H : Symbol(NaNOrInfinity.H, Decl(constEnumErrors.ts, 41, 14))
++>H : Symbol(H, Decl(constEnumErrors.ts, 41, 14))
+ }

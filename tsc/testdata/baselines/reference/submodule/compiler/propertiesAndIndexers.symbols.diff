@@ -1,0 +1,105 @@
+--- old.propertiesAndIndexers.symbols
++++ new.propertiesAndIndexers.symbols
+@@= skipped -7, +7 lines =@@
+ >Y : Symbol(Y, Decl(propertiesAndIndexers.ts, 0, 15))
+ 
+     n: number;
+->n : Symbol(Y.n, Decl(propertiesAndIndexers.ts, 1, 13))
++>n : Symbol(n, Decl(propertiesAndIndexers.ts, 1, 13))
+ }
+ interface Z {
+ >Z : Symbol(Z, Decl(propertiesAndIndexers.ts, 3, 1))
+ 
+     s: string;
+->s : Symbol(Z.s, Decl(propertiesAndIndexers.ts, 4, 13))
++>s : Symbol(s, Decl(propertiesAndIndexers.ts, 4, 13))
+ }
+ 
+ interface A {
+ >A : Symbol(A, Decl(propertiesAndIndexers.ts, 6, 1))
+ 
+     a: Y;
+->a : Symbol(A.a, Decl(propertiesAndIndexers.ts, 8, 13))
++>a : Symbol(a, Decl(propertiesAndIndexers.ts, 8, 13))
+ >Y : Symbol(Y, Decl(propertiesAndIndexers.ts, 0, 15))
+ 
+     b: X;
+->b : Symbol(A.b, Decl(propertiesAndIndexers.ts, 9, 9))
++>b : Symbol(b, Decl(propertiesAndIndexers.ts, 9, 9))
+ >X : Symbol(X, Decl(propertiesAndIndexers.ts, 0, 0))
+ 
+     1: Z;
+->1 : Symbol(A[1], Decl(propertiesAndIndexers.ts, 10, 9))
++>1 : Symbol(1, Decl(propertiesAndIndexers.ts, 10, 9))
+ >Z : Symbol(Z, Decl(propertiesAndIndexers.ts, 3, 1))
+ }
+ 
+@@= skipped -33, +33 lines =@@
+ >n : Symbol(n, Decl(propertiesAndIndexers.ts, 15, 5))
+ 
+     c: boolean;
+->c : Symbol(B.c, Decl(propertiesAndIndexers.ts, 15, 24))
++>c : Symbol(c, Decl(propertiesAndIndexers.ts, 15, 24))
+ 
+     3: boolean;
+->3 : Symbol(B[3], Decl(propertiesAndIndexers.ts, 16, 15))
++>3 : Symbol(3, Decl(propertiesAndIndexers.ts, 16, 15))
+ 
+     6(): string;
+->6 : Symbol(B[6], Decl(propertiesAndIndexers.ts, 17, 15))
++>6 : Symbol(6, Decl(propertiesAndIndexers.ts, 17, 15))
+ }
+ 
+ interface B {
+ >B : Symbol(B, Decl(propertiesAndIndexers.ts, 12, 1), Decl(propertiesAndIndexers.ts, 19, 1))
+ 
+     4: boolean;
+->4 : Symbol(B[4], Decl(propertiesAndIndexers.ts, 21, 13))
++>4 : Symbol(4, Decl(propertiesAndIndexers.ts, 21, 13))
+ 
+     5: string;
+->5 : Symbol(B[5], Decl(propertiesAndIndexers.ts, 22, 15))
++>5 : Symbol(5, Decl(propertiesAndIndexers.ts, 22, 15))
+ }
+ 
+ interface C extends A {
+@@= skipped -27, +27 lines =@@
+ >s : Symbol(s, Decl(propertiesAndIndexers.ts, 27, 5))
+ 
+     c: boolean;
+->c : Symbol(C.c, Decl(propertiesAndIndexers.ts, 27, 24))
++>c : Symbol(c, Decl(propertiesAndIndexers.ts, 27, 24))
+ 
+     3: boolean;
+->3 : Symbol(C[3], Decl(propertiesAndIndexers.ts, 28, 15))
++>3 : Symbol(3, Decl(propertiesAndIndexers.ts, 28, 15))
+ }
+ 
+ interface D extends B, C {
+@@= skipped -12, +12 lines =@@
+ >C : Symbol(C, Decl(propertiesAndIndexers.ts, 24, 1))
+ 
+     2: Z;
+->2 : Symbol(D[2], Decl(propertiesAndIndexers.ts, 32, 26))
++>2 : Symbol(2, Decl(propertiesAndIndexers.ts, 32, 26))
+ >Z : Symbol(Z, Decl(propertiesAndIndexers.ts, 3, 1))
+ 
+     Infinity: number;
+->Infinity : Symbol(D.Infinity, Decl(propertiesAndIndexers.ts, 33, 9))
++>Infinity : Symbol(Infinity, Decl(propertiesAndIndexers.ts, 33, 9))
+ 
+     zoo: string;
+->zoo : Symbol(D.zoo, Decl(propertiesAndIndexers.ts, 34, 21))
++>zoo : Symbol(zoo, Decl(propertiesAndIndexers.ts, 34, 21))
+ }
+ 
+ class P {
+@@= skipped -22, +22 lines =@@
+ >P : Symbol(P, Decl(propertiesAndIndexers.ts, 36, 1))
+ 
+     t: number;
+->t : Symbol(Q.t, Decl(propertiesAndIndexers.ts, 42, 19))
++>t : Symbol(t, Decl(propertiesAndIndexers.ts, 42, 19))
+ }
+ 
+ var c: {

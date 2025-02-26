@@ -1,0 +1,14 @@
+--- old.funcdecl.symbols
++++ new.funcdecl.symbols
+@@= skipped -124, +124 lines =@@
+ }
+ 
+ m2.foo(() =>  {
+->m2.foo : Symbol(m2.foo, Decl(funcdecl.ts, 50, 11))
++>m2.foo : Symbol(foo, Decl(funcdecl.ts, 50, 11))
+ >m2 : Symbol(m2, Decl(funcdecl.ts, 48, 29))
+->foo : Symbol(m2.foo, Decl(funcdecl.ts, 50, 11))
++>foo : Symbol(foo, Decl(funcdecl.ts, 50, 11))
+ 
+     var b = 30;
+ >b : Symbol(b, Decl(funcdecl.ts, 58, 7))

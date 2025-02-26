@@ -1,0 +1,11 @@
+--- old.substitutionTypeForIndexedAccessType2.symbols
++++ new.substitutionTypeForIndexedAccessType2.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(substitutionTypeForIndexedAccessType2.ts, 0, 0))
+ 
+   foo: string|undefined
+->foo : Symbol(Foo.foo, Decl(substitutionTypeForIndexedAccessType2.ts, 0, 15))
++>foo : Symbol(foo, Decl(substitutionTypeForIndexedAccessType2.ts, 0, 15))
+ }
+ 
+ type Str<T extends string> = T

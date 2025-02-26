@@ -1,0 +1,11 @@
+--- old.recursiveExcessPropertyChecks.symbols
++++ new.recursiveExcessPropertyChecks.symbols
+@@= skipped -6, +6 lines =@@
+ >ITreeItem : Symbol(ITreeItem, Decl(recursiveExcessPropertyChecks.ts, 0, 0))
+ 
+   Parent?: this;
+->Parent : Symbol(ITreeItem.Parent, Decl(recursiveExcessPropertyChecks.ts, 2, 21))
++>Parent : Symbol(Parent, Decl(recursiveExcessPropertyChecks.ts, 2, 21))
+ }
+ 
+ type NodeWithId = ITreeItem & { Id?: number };

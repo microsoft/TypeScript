@@ -1,0 +1,27 @@
+--- old.thisPropertyOverridesAccessors.symbols
++++ new.thisPropertyOverridesAccessors.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(foo.ts, 0, 0))
+ 
+     get p() { return 1 }
+->p : Symbol(Foo.p, Decl(foo.ts, 0, 11), Decl(foo.ts, 1, 24))
++>p : Symbol(p, Decl(foo.ts, 0, 11), Decl(foo.ts, 1, 24))
+ 
+     set p(value) { }
+->p : Symbol(Foo.p, Decl(foo.ts, 0, 11), Decl(foo.ts, 1, 24))
++>p : Symbol(p, Decl(foo.ts, 0, 11), Decl(foo.ts, 1, 24))
+ >value : Symbol(value, Decl(foo.ts, 2, 10))
+ }
+ 
+@@= skipped -17, +17 lines =@@
+ >super : Symbol(Foo, Decl(foo.ts, 0, 0))
+ 
+         this.p = 2
+->this.p : Symbol(Bar.p, Decl(bar.js, 2, 15))
++>this.p : Symbol(p, Decl(foo.ts, 0, 11), Decl(foo.ts, 1, 24))
+ >this : Symbol(Bar, Decl(bar.js, 0, 0))
+->p : Symbol(Bar.p, Decl(bar.js, 2, 15))
++>p : Symbol(p, Decl(foo.ts, 0, 11), Decl(foo.ts, 1, 24))
+     }
+ }
+ 

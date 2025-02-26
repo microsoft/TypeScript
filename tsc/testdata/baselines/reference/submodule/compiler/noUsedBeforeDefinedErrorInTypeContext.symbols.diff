@@ -1,0 +1,11 @@
+--- old.noUsedBeforeDefinedErrorInTypeContext.symbols
++++ new.noUsedBeforeDefinedErrorInTypeContext.symbols
+@@= skipped -7, +7 lines =@@
+ >T : Symbol(T, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 2, 17))
+ 
+     owner: T;
+->owner : Symbol(IThing.owner, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 2, 21))
++>owner : Symbol(owner, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 2, 21))
+ >T : Symbol(T, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 2, 17))
+ }
+ 

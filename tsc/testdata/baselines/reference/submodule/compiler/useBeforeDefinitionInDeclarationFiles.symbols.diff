@@ -1,0 +1,25 @@
+--- old.useBeforeDefinitionInDeclarationFiles.symbols
++++ new.useBeforeDefinitionInDeclarationFiles.symbols
+@@= skipped -4, +4 lines =@@
+ >ClassWithSymbols : Symbol(ClassWithSymbols, Decl(declaration.d.ts, 0, 0))
+ 
+   public readonly [Namespace.locallyExportedCustomSymbol]: string;
+->[Namespace.locallyExportedCustomSymbol] : Symbol(ClassWithSymbols[Namespace.locallyExportedCustomSymbol], Decl(declaration.d.ts, 0, 39))
+->Namespace.locallyExportedCustomSymbol : Symbol(Namespace.locallyExportedCustomSymbol, Decl(declaration.d.ts, 5, 14))
++>[Namespace.locallyExportedCustomSymbol] : Symbol([Namespace.locallyExportedCustomSymbol], Decl(declaration.d.ts, 0, 39))
++>Namespace.locallyExportedCustomSymbol : Symbol(locallyExportedCustomSymbol, Decl(declaration.d.ts, 5, 14))
+ >Namespace : Symbol(Namespace, Decl(declaration.d.ts, 3, 1))
+->locallyExportedCustomSymbol : Symbol(Namespace.locallyExportedCustomSymbol, Decl(declaration.d.ts, 5, 14))
++>locallyExportedCustomSymbol : Symbol(locallyExportedCustomSymbol, Decl(declaration.d.ts, 5, 14))
+ 
+   public [Namespace.fullyExportedCustomSymbol](): void;
+->[Namespace.fullyExportedCustomSymbol] : Symbol(ClassWithSymbols[Namespace.fullyExportedCustomSymbol], Decl(declaration.d.ts, 1, 66))
+->Namespace.fullyExportedCustomSymbol : Symbol(Namespace.fullyExportedCustomSymbol, Decl(declaration.d.ts, 6, 14))
++>[Namespace.fullyExportedCustomSymbol] : Symbol([Namespace.fullyExportedCustomSymbol], Decl(declaration.d.ts, 1, 66))
++>Namespace.fullyExportedCustomSymbol : Symbol(fullyExportedCustomSymbol, Decl(declaration.d.ts, 6, 14))
+ >Namespace : Symbol(Namespace, Decl(declaration.d.ts, 3, 1))
+->fullyExportedCustomSymbol : Symbol(Namespace.fullyExportedCustomSymbol, Decl(declaration.d.ts, 6, 14))
++>fullyExportedCustomSymbol : Symbol(fullyExportedCustomSymbol, Decl(declaration.d.ts, 6, 14))
+ }
+ export namespace Namespace {
+ >Namespace : Symbol(Namespace, Decl(declaration.d.ts, 3, 1))

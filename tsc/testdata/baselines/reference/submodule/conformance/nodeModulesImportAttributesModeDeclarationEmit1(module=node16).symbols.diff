@@ -1,0 +1,13 @@
+--- old.nodeModulesImportAttributesModeDeclarationEmit1(module=node16).symbols
++++ new.nodeModulesImportAttributesModeDeclarationEmit1(module=node16).symbols
+@@= skipped -29, +29 lines =@@
+ export type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
+ >ImportInterface : Symbol(ImportInterface, Decl(index.ts, 10, 13))
+ 
+-=== /node_modules/pkg/import.d.ts ===
+-export interface ImportInterface {}
+->ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
+-
+ === /node_modules/pkg/require.d.ts ===
+ export interface RequireInterface {}
+ >RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))

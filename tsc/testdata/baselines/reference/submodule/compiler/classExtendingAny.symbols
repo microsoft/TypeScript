@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/classExtendingAny.ts] ////
+
+=== a.ts ===
+declare var Err: any
+>Err : Symbol(Err, Decl(a.ts, 0, 11))
+
+class A extends Err {
+>A : Symbol(A, Decl(a.ts, 0, 20))
+>Err : Symbol(Err, Decl(a.ts, 0, 11))
+
+    payload: string
+>payload : Symbol(payload, Decl(a.ts, 1, 21))
+
+    constructor() {
+        super(1,2,3,3,4,56)
+        super.unknown
+        super['unknown']
+    }
+    process() {
+>process : Symbol(process, Decl(a.ts, 7, 5))
+
+        return this.payload + "!";
+>this.payload : Symbol(payload, Decl(a.ts, 1, 21))
+>this : Symbol(A, Decl(a.ts, 0, 20))
+>payload : Symbol(payload, Decl(a.ts, 1, 21))
+    }
+}
+
+var o = {
+>o : Symbol(o, Decl(a.ts, 13, 3))
+
+    m() {
+>m : Symbol(m, Decl(a.ts, 13, 9))
+
+        super.unknown
+    }
+}
+=== b.js ===
+class B extends Err {
+>B : Symbol(B, Decl(b.js, 0, 0))
+>Err : Symbol(Err, Decl(a.ts, 0, 11))
+
+    constructor() {
+        super()
+        this.wat = 12
+>this : Symbol(B, Decl(b.js, 0, 0))
+    }
+    f() {
+>f : Symbol(f, Decl(b.js, 4, 5))
+
+        this.wat
+>this : Symbol(B, Decl(b.js, 0, 0))
+
+        this.wit
+>this : Symbol(B, Decl(b.js, 0, 0))
+
+        this['wot']
+>this : Symbol(B, Decl(b.js, 0, 0))
+
+        super.alsoBad
+    }
+}
+

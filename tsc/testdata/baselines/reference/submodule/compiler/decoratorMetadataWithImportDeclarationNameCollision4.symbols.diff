@@ -1,0 +1,44 @@
+--- old.decoratorMetadataWithImportDeclarationNameCollision4.symbols
++++ new.decoratorMetadataWithImportDeclarationNameCollision4.symbols
+@@= skipped -4, +4 lines =@@
+ >db : Symbol(db, Decl(db.ts, 0, 0))
+ 
+     public doSomething() {
+->doSomething : Symbol(db.doSomething, Decl(db.ts, 0, 17))
++>doSomething : Symbol(doSomething, Decl(db.ts, 0, 17))
+     }
+ }
+ 
+@@= skipped -22, +22 lines =@@
+ >MyClass : Symbol(MyClass, Decl(service.ts, 3, 1))
+ 
+     db: db.db;
+->db : Symbol(MyClass.db, Decl(service.ts, 5, 15))
++>db : Symbol(db, Decl(service.ts, 5, 15))
+ >db : Symbol(db, Decl(service.ts, 0, 6))
+->db : Symbol(db.db)
++>db : Symbol(db)
+ 
+     constructor(db: db.db) {
+ >db : Symbol(db, Decl(service.ts, 8, 16))
+ >db : Symbol(db, Decl(service.ts, 0, 6))
+->db : Symbol(db.db)
++>db : Symbol(db)
+ 
+         this.db = db;
+->this.db : Symbol(MyClass.db, Decl(service.ts, 5, 15))
++>this.db : Symbol(db, Decl(service.ts, 5, 15))
+ >this : Symbol(MyClass, Decl(service.ts, 3, 1))
+->db : Symbol(MyClass.db, Decl(service.ts, 5, 15))
++>db : Symbol(db, Decl(service.ts, 5, 15))
+ >db : Symbol(db, Decl(service.ts, 8, 16))
+ 
+         this.db.doSomething();
+->this.db : Symbol(MyClass.db, Decl(service.ts, 5, 15))
++>this.db : Symbol(db, Decl(service.ts, 5, 15))
+ >this : Symbol(MyClass, Decl(service.ts, 3, 1))
+->db : Symbol(MyClass.db, Decl(service.ts, 5, 15))
++>db : Symbol(db, Decl(service.ts, 5, 15))
+     }
+ }
+ export {MyClass};

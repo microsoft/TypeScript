@@ -1,0 +1,14 @@
+--- old.genericInstantiationEquivalentToObjectLiteral.symbols
++++ new.genericInstantiationEquivalentToObjectLiteral.symbols
+@@= skipped -4, +4 lines =@@
+ >Pair : Symbol(Pair, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 0))
+ >T1 : Symbol(T1, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 15))
+ >T2 : Symbol(T2, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 18))
+->first : Symbol(Pair.first, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 24))
++>first : Symbol(first, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 24))
+ >T1 : Symbol(T1, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 15))
+->second : Symbol(Pair.second, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 35))
++>second : Symbol(second, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 35))
+ >T2 : Symbol(T2, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 18))
+ 
+ var x: Pair<string, number>

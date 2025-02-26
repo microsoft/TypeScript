@@ -1,0 +1,137 @@
+--- old.contextualTypeWithUnionTypeMembers.symbols
++++ new.contextualTypeWithUnionTypeMembers.symbols
+@@= skipped -7, +7 lines =@@
+ >T : Symbol(T, Decl(contextualTypeWithUnionTypeMembers.ts, 2, 13))
+ 
+     commonMethodType(a: string): string;
+->commonMethodType : Symbol(I1.commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 2, 17))
++>commonMethodType : Symbol(commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 2, 17))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 3, 21))
+ 
+     commonPropertyType: string;
+->commonPropertyType : Symbol(I1.commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 3, 40))
++>commonPropertyType : Symbol(commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 3, 40))
+ 
+     commonMethodWithTypeParameter(a: T): T;
+->commonMethodWithTypeParameter : Symbol(I1.commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 4, 31))
++>commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 4, 31))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 5, 34))
+ >T : Symbol(T, Decl(contextualTypeWithUnionTypeMembers.ts, 2, 13))
+ >T : Symbol(T, Decl(contextualTypeWithUnionTypeMembers.ts, 2, 13))
+ 
+     methodOnlyInI1(a: string): string;
+->methodOnlyInI1 : Symbol(I1.methodOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 5, 43))
++>methodOnlyInI1 : Symbol(methodOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 5, 43))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 7, 19))
+ 
+     propertyOnlyInI1: string;
+->propertyOnlyInI1 : Symbol(I1.propertyOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 7, 38))
++>propertyOnlyInI1 : Symbol(propertyOnlyInI1, Decl(contextualTypeWithUnionTypeMembers.ts, 7, 38))
+ }
+ interface I2<T> {
+ >I2 : Symbol(I2, Decl(contextualTypeWithUnionTypeMembers.ts, 9, 1))
+ >T : Symbol(T, Decl(contextualTypeWithUnionTypeMembers.ts, 10, 13))
+ 
+     commonMethodType(a: string): string;
+->commonMethodType : Symbol(I2.commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 10, 17))
++>commonMethodType : Symbol(commonMethodType, Decl(contextualTypeWithUnionTypeMembers.ts, 10, 17))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 11, 21))
+ 
+     commonPropertyType: string;
+->commonPropertyType : Symbol(I2.commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 11, 40))
++>commonPropertyType : Symbol(commonPropertyType, Decl(contextualTypeWithUnionTypeMembers.ts, 11, 40))
+ 
+     commonMethodWithTypeParameter(a: T): T;
+->commonMethodWithTypeParameter : Symbol(I2.commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 12, 31))
++>commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(contextualTypeWithUnionTypeMembers.ts, 12, 31))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 13, 34))
+ >T : Symbol(T, Decl(contextualTypeWithUnionTypeMembers.ts, 10, 13))
+ >T : Symbol(T, Decl(contextualTypeWithUnionTypeMembers.ts, 10, 13))
+ 
+     methodOnlyInI2(a: string): string;
+->methodOnlyInI2 : Symbol(I2.methodOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 13, 43))
++>methodOnlyInI2 : Symbol(methodOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 13, 43))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 15, 19))
+ 
+     propertyOnlyInI2: string;
+->propertyOnlyInI2 : Symbol(I2.propertyOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 15, 38))
++>propertyOnlyInI2 : Symbol(propertyOnlyInI2, Decl(contextualTypeWithUnionTypeMembers.ts, 15, 38))
+ }
+ 
+ // Let S be the set of types in U that has a property P.
+@@= skipped -244, +244 lines =@@
+ >I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeMembers.ts, 74, 7))
+ 
+     commonMethodDifferentReturnType(a: string, b: number): string;
+->commonMethodDifferentReturnType : Symbol(I11.commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeMembers.ts, 76, 15))
++>commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeMembers.ts, 76, 15))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 77, 36))
+ >b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 77, 46))
+ 
+     commonPropertyDifferentType: string;
+->commonPropertyDifferentType : Symbol(I11.commonPropertyDifferentType, Decl(contextualTypeWithUnionTypeMembers.ts, 77, 66))
++>commonPropertyDifferentType : Symbol(commonPropertyDifferentType, Decl(contextualTypeWithUnionTypeMembers.ts, 77, 66))
+ }
+ interface I21 {
+ >I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeMembers.ts, 79, 1))
+ 
+     commonMethodDifferentReturnType(a: string, b: number): number;
+->commonMethodDifferentReturnType : Symbol(I21.commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeMembers.ts, 80, 15))
++>commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(contextualTypeWithUnionTypeMembers.ts, 80, 15))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 81, 36))
+ >b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 81, 46))
+ 
+     commonPropertyDifferentType: number;
+->commonPropertyDifferentType : Symbol(I21.commonPropertyDifferentType, Decl(contextualTypeWithUnionTypeMembers.ts, 81, 66))
++>commonPropertyDifferentType : Symbol(commonPropertyDifferentType, Decl(contextualTypeWithUnionTypeMembers.ts, 81, 66))
+ }
+ var i11: I11;
+ >i11 : Symbol(i11, Decl(contextualTypeWithUnionTypeMembers.ts, 84, 3))
+@@= skipped -51, +51 lines =@@
+ 
+         var z = a.charAt(b);
+ >z : Symbol(z, Decl(contextualTypeWithUnionTypeMembers.ts, 91, 11))
+->a.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
++>a.charAt : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 90, 38))
+->charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
++>charAt : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
+ >b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 90, 40))
+ 
+         return z;  
+@@= skipped -26, +26 lines =@@
+ 
+         var z = a.charCodeAt(b);
+ >z : Symbol(z, Decl(contextualTypeWithUnionTypeMembers.ts, 99, 11))
+->a.charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
++>a.charCodeAt : Symbol(charCodeAt, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 98, 38))
+->charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
++>charCodeAt : Symbol(charCodeAt, Decl(lib.es5.d.ts, --, --))
+ >b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 98, 40))
+ 
+         return z;
+@@= skipped -31, +31 lines =@@
+ 
+             var z = a.charAt(b);
+ >z : Symbol(z, Decl(contextualTypeWithUnionTypeMembers.ts, 107, 15))
+->a.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
++>a.charAt : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 106, 42))
+->charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
++>charAt : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
+ >b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 106, 44))
+ 
+             return z;
+@@= skipped -21, +21 lines =@@
+ 
+             var z = a.charCodeAt(b);
+ >z : Symbol(z, Decl(contextualTypeWithUnionTypeMembers.ts, 114, 15))
+->a.charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
++>a.charCodeAt : Symbol(charCodeAt, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 113, 42))
+->charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
++>charCodeAt : Symbol(charCodeAt, Decl(lib.es5.d.ts, --, --))
+ >b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 113, 44))
+ 
+             return z;

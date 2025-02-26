@@ -1,0 +1,29 @@
+--- old.tsxSpreadAttributesResolution17.symbols
++++ new.tsxSpreadAttributesResolution17.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ declare global {
+->global : Symbol(global, Decl(file.tsx, 0, 0))
++>global : Symbol((Missing), Decl(file.tsx, 0, 0))
+ 
+     namespace JSX {
+ >JSX : Symbol(JSX, Decl(file.tsx, 0, 16))
+@@= skipped -10, +10 lines =@@
+ 
+         interface ElementAttributesProperty { props: {} }
+ >ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(file.tsx, 2, 28))
+->props : Symbol(ElementAttributesProperty.props, Decl(file.tsx, 3, 45))
++>props : Symbol(props, Decl(file.tsx, 3, 45))
+     }
+ }
+ declare var React: any;
+@@= skipped -11, +11 lines =@@
+ >React : Symbol(React, Decl(file.tsx, 6, 11))
+ 
+     render() {
+->render : Symbol(Empty.render, Decl(file.tsx, 8, 52))
++>render : Symbol(render, Decl(file.tsx, 8, 52))
+ 
+         return <div>Hello</div>;
+     }

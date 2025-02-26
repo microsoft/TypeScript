@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/declarationEmitAmdModuleDefault.ts] ////
+
+=== declarationEmitAmdModuleDefault.ts ===
+export default class DefaultClass { }
+>DefaultClass : Symbol(default, Decl(declarationEmitAmdModuleDefault.ts, 0, 0))
+

@@ -1,0 +1,38 @@
+--- old.collisionThisExpressionAndLocalVarInAccessors.symbols
++++ new.collisionThisExpressionAndLocalVarInAccessors.symbols
+@@= skipped -4, +4 lines =@@
+ >class1 : Symbol(class1, Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 0, 0))
+ 
+     get a(): number {
+->a : Symbol(class1.a, Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 0, 14), Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 10, 5))
++>a : Symbol(a, Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 0, 14), Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 10, 5))
+ 
+         var x2 = {
+ >x2 : Symbol(x2, Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 2, 11))
+@@= skipped -21, +21 lines =@@
+         return 10;
+     }
+     set a(val: number) {
+->a : Symbol(class1.a, Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 0, 14), Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 10, 5))
++>a : Symbol(a, Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 0, 14), Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 10, 5))
+ >val : Symbol(val, Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 11, 10))
+ 
+         var x2 = {
+@@= skipped -26, +26 lines =@@
+ >class2 : Symbol(class2, Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 20, 1))
+ 
+     get a(): number {
+->a : Symbol(class2.a, Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 22, 14), Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 32, 5))
++>a : Symbol(a, Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 22, 14), Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 32, 5))
+ 
+         var _this = 2;
+ >_this : Symbol(_this, Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 24, 11))
+@@= skipped -21, +21 lines =@@
+         return 10;
+     }
+     set a(val: number) {
+->a : Symbol(class2.a, Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 22, 14), Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 32, 5))
++>a : Symbol(a, Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 22, 14), Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 32, 5))
+ >val : Symbol(val, Decl(collisionThisExpressionAndLocalVarInAccessors.ts, 33, 10))
+ 
+         var _this = 2;

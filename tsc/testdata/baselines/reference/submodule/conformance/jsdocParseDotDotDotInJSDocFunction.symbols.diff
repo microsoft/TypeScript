@@ -1,0 +1,12 @@
+--- old.jsdocParseDotDotDotInJSDocFunction.symbols
++++ new.jsdocParseDotDotDotInJSDocFunction.symbols
+@@= skipped -16, +16 lines =@@
+  */
+ var stringFromCharCode = String.fromCharCode;
+ >stringFromCharCode : Symbol(stringFromCharCode, Decl(a.js, 10, 3))
+->String.fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
++>String.fromCharCode : Symbol(fromCharCode, Decl(lib.es5.d.ts, --, --))
+ >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
++>fromCharCode : Symbol(fromCharCode, Decl(lib.es5.d.ts, --, --))
+ 

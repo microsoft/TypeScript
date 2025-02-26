@@ -1,0 +1,14 @@
+--- old.spreadNonObject1.symbols
++++ new.spreadNonObject1.symbols
+@@= skipped -10, +10 lines =@@
+ 
+   c: (["4"] as S[]).map(function (s) {
+ >c : Symbol(c, Decl(spreadNonObject1.ts, 3, 11))
+->(["4"] as S[]).map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>(["4"] as S[]).map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >S : Symbol(S, Decl(spreadNonObject1.ts, 0, 0))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(spreadNonObject1.ts, 4, 34))
+ 
+     const a = { ...s, y: 6 };

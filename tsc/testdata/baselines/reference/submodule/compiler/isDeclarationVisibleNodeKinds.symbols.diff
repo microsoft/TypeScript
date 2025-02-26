@@ -1,0 +1,20 @@
+--- old.isDeclarationVisibleNodeKinds.symbols
++++ new.isDeclarationVisibleNodeKinds.symbols
+@@= skipped -146, +146 lines =@@
+ >T : Symbol(T, Decl(isDeclarationVisibleNodeKinds.ts, 58, 15))
+ 
+         get createValidator9(): <T>(data: T) => T {
+->createValidator9 : Symbol(T.createValidator9, Decl(isDeclarationVisibleNodeKinds.ts, 59, 20))
++>createValidator9 : Symbol(createValidator9, Decl(isDeclarationVisibleNodeKinds.ts, 59, 20))
+ >T : Symbol(T, Decl(isDeclarationVisibleNodeKinds.ts, 60, 33))
+ >data : Symbol(data, Decl(isDeclarationVisibleNodeKinds.ts, 60, 36))
+ >T : Symbol(T, Decl(isDeclarationVisibleNodeKinds.ts, 60, 33))
+@@= skipped -11, +11 lines =@@
+         }
+         
+         set createValidator10(v: <T>(data: T) => T) {
+->createValidator10 : Symbol(T.createValidator10, Decl(isDeclarationVisibleNodeKinds.ts, 62, 9))
++>createValidator10 : Symbol(createValidator10, Decl(isDeclarationVisibleNodeKinds.ts, 62, 9))
+ >v : Symbol(v, Decl(isDeclarationVisibleNodeKinds.ts, 64, 30))
+ >T : Symbol(T, Decl(isDeclarationVisibleNodeKinds.ts, 64, 34))
+ >data : Symbol(data, Decl(isDeclarationVisibleNodeKinds.ts, 64, 37))

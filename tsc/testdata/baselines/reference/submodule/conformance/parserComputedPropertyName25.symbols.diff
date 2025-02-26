@@ -1,0 +1,11 @@
+--- old.parserComputedPropertyName25.symbols
++++ new.parserComputedPropertyName25.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     // No ASI
+     [e] = 0
+->[e] : Symbol(C[e], Decl(parserComputedPropertyName25.ts, 0, 9))
++>[e] : Symbol([e], Decl(parserComputedPropertyName25.ts, 0, 9))
+ 
+     [e2] = 1
+ }

@@ -1,0 +1,78 @@
+--- old.implicitAnyCastedValue.symbols
++++ new.implicitAnyCastedValue.symbols
+@@= skipped -16, +16 lines =@@
+ >C : Symbol(C, Decl(implicitAnyCastedValue.ts, 6, 1))
+ 
+     bar = null;  // this should be an error
+->bar : Symbol(C.bar, Decl(implicitAnyCastedValue.ts, 8, 9))
++>bar : Symbol(bar, Decl(implicitAnyCastedValue.ts, 8, 9))
+ 
+     foo = undefined;  // this should be an error
+->foo : Symbol(C.foo, Decl(implicitAnyCastedValue.ts, 9, 15))
++>foo : Symbol(foo, Decl(implicitAnyCastedValue.ts, 9, 15))
+ >undefined : Symbol(undefined)
+ 
+     public get tempVar() {
+->tempVar : Symbol(C.tempVar, Decl(implicitAnyCastedValue.ts, 10, 20))
++>tempVar : Symbol(tempVar, Decl(implicitAnyCastedValue.ts, 10, 20))
+ 
+         return <any>0;  // this should not be an error
+     }
+ 
+     public returnBarWithCase() {    // this should not be an error
+->returnBarWithCase : Symbol(C.returnBarWithCase, Decl(implicitAnyCastedValue.ts, 13, 5))
++>returnBarWithCase : Symbol(returnBarWithCase, Decl(implicitAnyCastedValue.ts, 13, 5))
+ 
+         return <any>this.bar;
+->this.bar : Symbol(C.bar, Decl(implicitAnyCastedValue.ts, 8, 9))
++>this.bar : Symbol(bar, Decl(implicitAnyCastedValue.ts, 8, 9))
+ >this : Symbol(C, Decl(implicitAnyCastedValue.ts, 6, 1))
+->bar : Symbol(C.bar, Decl(implicitAnyCastedValue.ts, 8, 9))
++>bar : Symbol(bar, Decl(implicitAnyCastedValue.ts, 8, 9))
+     }
+ 
+     public returnFooWithCase() {
+->returnFooWithCase : Symbol(C.returnFooWithCase, Decl(implicitAnyCastedValue.ts, 17, 5))
++>returnFooWithCase : Symbol(returnFooWithCase, Decl(implicitAnyCastedValue.ts, 17, 5))
+ 
+         return <any>this.foo;  // this should not be an error
+->this.foo : Symbol(C.foo, Decl(implicitAnyCastedValue.ts, 9, 15))
++>this.foo : Symbol(foo, Decl(implicitAnyCastedValue.ts, 9, 15))
+ >this : Symbol(C, Decl(implicitAnyCastedValue.ts, 6, 1))
+->foo : Symbol(C.foo, Decl(implicitAnyCastedValue.ts, 9, 15))
++>foo : Symbol(foo, Decl(implicitAnyCastedValue.ts, 9, 15))
+     }
+ }
+ 
+@@= skipped -35, +35 lines =@@
+ >C1 : Symbol(C1, Decl(implicitAnyCastedValue.ts, 22, 1))
+ 
+     getValue = null;  // this should be an error
+->getValue : Symbol(C1.getValue, Decl(implicitAnyCastedValue.ts, 24, 10))
++>getValue : Symbol(getValue, Decl(implicitAnyCastedValue.ts, 24, 10))
+ 
+     public get castedGet() {
+->castedGet : Symbol(C1.castedGet, Decl(implicitAnyCastedValue.ts, 25, 20))
++>castedGet : Symbol(castedGet, Decl(implicitAnyCastedValue.ts, 25, 20))
+ 
+         return <any>this.getValue;  // this should not be an error
+->this.getValue : Symbol(C1.getValue, Decl(implicitAnyCastedValue.ts, 24, 10))
++>this.getValue : Symbol(getValue, Decl(implicitAnyCastedValue.ts, 24, 10))
+ >this : Symbol(C1, Decl(implicitAnyCastedValue.ts, 22, 1))
+->getValue : Symbol(C1.getValue, Decl(implicitAnyCastedValue.ts, 24, 10))
++>getValue : Symbol(getValue, Decl(implicitAnyCastedValue.ts, 24, 10))
+     }
+ 
+     public get notCastedGet() {
+->notCastedGet : Symbol(C1.notCastedGet, Decl(implicitAnyCastedValue.ts, 29, 5))
++>notCastedGet : Symbol(notCastedGet, Decl(implicitAnyCastedValue.ts, 29, 5))
+ 
+         return this.getValue;  // this should not be an error
+->this.getValue : Symbol(C1.getValue, Decl(implicitAnyCastedValue.ts, 24, 10))
++>this.getValue : Symbol(getValue, Decl(implicitAnyCastedValue.ts, 24, 10))
+ >this : Symbol(C1, Decl(implicitAnyCastedValue.ts, 22, 1))
+->getValue : Symbol(C1.getValue, Decl(implicitAnyCastedValue.ts, 24, 10))
++>getValue : Symbol(getValue, Decl(implicitAnyCastedValue.ts, 24, 10))
+     }
+ }
+ 

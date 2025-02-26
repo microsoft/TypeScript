@@ -1,0 +1,21 @@
+--- old.assertionFunctionWildcardImport2.symbols
++++ new.assertionFunctionWildcardImport2.symbols
+@@= skipped -34, +34 lines =@@
+ >obj : Symbol(obj, Decl(test.ts, 2, 14))
+ 
+     asserts.isNonNullable(obj);
+->asserts.isNonNullable : Symbol(asserts.isNonNullable, Decl(asserts.ts, 6, 8))
++>asserts.isNonNullable : Symbol(isNonNullable, Decl(asserts.ts, 6, 8))
+ >asserts : Symbol(asserts, Decl(test.ts, 0, 6))
+->isNonNullable : Symbol(asserts.isNonNullable, Decl(asserts.ts, 6, 8))
++>isNonNullable : Symbol(isNonNullable, Decl(asserts.ts, 6, 8))
+ >obj : Symbol(obj, Decl(test.ts, 2, 14))
+ 
+     obj.trim();
+->obj.trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
++>obj.trim : Symbol(trim, Decl(lib.es5.d.ts, --, --))
+ >obj : Symbol(obj, Decl(test.ts, 2, 14))
+->trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
++>trim : Symbol(trim, Decl(lib.es5.d.ts, --, --))
+ }
+ 

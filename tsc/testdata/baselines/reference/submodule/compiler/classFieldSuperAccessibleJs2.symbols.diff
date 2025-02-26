@@ -1,0 +1,97 @@
+--- old.classFieldSuperAccessibleJs2.symbols
++++ new.classFieldSuperAccessibleJs2.symbols
+@@= skipped -5, +5 lines =@@
+ 
+   constructor() {
+     this.foo = () => {
+->this.foo : Symbol(C.foo, Decl(index.js, 5, 3))
++>this.foo : Symbol(foo, Decl(index.js, 5, 3))
+ >this : Symbol(C, Decl(index.js, 0, 0))
+->foo : Symbol(C.foo, Decl(index.js, 1, 17))
++>foo : Symbol(foo, Decl(index.js, 5, 3))
+ 
+       console.log("called arrow");
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ 
+     };
+   }
+   foo() {
+->foo : Symbol(C.foo, Decl(index.js, 5, 3))
++>foo : Symbol(foo, Decl(index.js, 5, 3))
+ 
+     console.log("called method");
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+   }
+ }
+ 
+@@= skipped -26, +26 lines =@@
+ >C : Symbol(C, Decl(index.js, 0, 0))
+ 
+   foo() {
+->foo : Symbol(D.foo, Decl(index.js, 11, 19))
++>foo : Symbol(foo, Decl(index.js, 11, 19))
+ 
+     console.log("SUPER:");
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ 
+     super.foo();
+->super.foo : Symbol(C.foo, Decl(index.js, 5, 3))
++>super.foo : Symbol(foo, Decl(index.js, 5, 3))
+ >super : Symbol(C, Decl(index.js, 0, 0))
+->foo : Symbol(C.foo, Decl(index.js, 5, 3))
++>foo : Symbol(foo, Decl(index.js, 5, 3))
+ 
+     console.log("THIS:");
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ 
+     this.foo();
+->this.foo : Symbol(D.foo, Decl(index.js, 11, 19))
++>this.foo : Symbol(foo, Decl(index.js, 11, 19))
+ >this : Symbol(D, Decl(index.js, 9, 1))
+->foo : Symbol(D.foo, Decl(index.js, 11, 19))
++>foo : Symbol(foo, Decl(index.js, 11, 19))
+   }
+ }
+ 
+@@= skipped -29, +29 lines =@@
+ >D : Symbol(D, Decl(index.js, 9, 1))
+ 
+ obj.foo();
+->obj.foo : Symbol(D.foo, Decl(index.js, 11, 19))
++>obj.foo : Symbol(foo, Decl(index.js, 11, 19))
+ >obj : Symbol(obj, Decl(index.js, 20, 5))
+->foo : Symbol(D.foo, Decl(index.js, 11, 19))
++>foo : Symbol(foo, Decl(index.js, 11, 19))
+ 
+ D.prototype.foo.call(obj);
+->D.prototype.foo.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+->D.prototype.foo : Symbol(D.foo, Decl(index.js, 11, 19))
+->D.prototype : Symbol(D.prototype)
++>D.prototype.foo.call : Symbol(call, Decl(lib.es5.d.ts, --, --))
++>D.prototype.foo : Symbol(foo, Decl(index.js, 11, 19))
++>D.prototype : Symbol(prototype)
+ >D : Symbol(D, Decl(index.js, 9, 1))
+->prototype : Symbol(D.prototype)
+->foo : Symbol(D.foo, Decl(index.js, 11, 19))
+->call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
++>prototype : Symbol(prototype)
++>foo : Symbol(foo, Decl(index.js, 11, 19))
++>call : Symbol(call, Decl(lib.es5.d.ts, --, --))
+ >obj : Symbol(obj, Decl(index.js, 20, 5))
+ 

@@ -1,0 +1,20 @@
+--- old.ES5For-ofTypeCheck10.symbols
++++ new.ES5For-ofTypeCheck10.symbols
+@@= skipped -5, +5 lines =@@
+ >MyStringIterator : Symbol(MyStringIterator, Decl(ES5For-ofTypeCheck10.ts, 0, 0))
+ 
+     next() {
+->next : Symbol(MyStringIterator.next, Decl(ES5For-ofTypeCheck10.ts, 1, 24))
++>next : Symbol(next, Decl(ES5For-ofTypeCheck10.ts, 1, 24))
+ 
+         return {
+             done: true,
+@@= skipped -12, +12 lines =@@
+         };
+     }
+     [Symbol.iterator]() {
+->[Symbol.iterator] : Symbol(MyStringIterator[Symbol.iterator], Decl(ES5For-ofTypeCheck10.ts, 7, 5))
++>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(ES5For-ofTypeCheck10.ts, 7, 5))
+ 
+         return this;
+ >this : Symbol(MyStringIterator, Decl(ES5For-ofTypeCheck10.ts, 0, 0))

@@ -1,0 +1,31 @@
+--- old.mappedTypeProperties.symbols
++++ new.mappedTypeProperties.symbols
+@@= skipped -71, +71 lines =@@
+ >I : Symbol(I, Decl(mappedTypeProperties.ts, 27, 1))
+ 
+     [P in PlaceType]: any
+->[P in PlaceType] : Symbol(I[P in PlaceType], Decl(mappedTypeProperties.ts, 29, 13))
++>[P in PlaceType] : Symbol([P in PlaceType], Decl(mappedTypeProperties.ts, 29, 13))
+ }
+ class C {
+ >C : Symbol(C, Decl(mappedTypeProperties.ts, 31, 1))
+ 
+     [P in PlaceType]: any
+->[P in PlaceType] : Symbol(C[P in PlaceType], Decl(mappedTypeProperties.ts, 32, 9))
++>[P in PlaceType] : Symbol([P in PlaceType], Decl(mappedTypeProperties.ts, 32, 9))
+ }
+ const D = class {
+ >D : Symbol(D, Decl(mappedTypeProperties.ts, 35, 5))
+ 
+     [P in PlaceType]: any
+->[P in PlaceType] : Symbol(D[P in PlaceType], Decl(mappedTypeProperties.ts, 35, 17))
++>[P in PlaceType] : Symbol([P in PlaceType], Decl(mappedTypeProperties.ts, 35, 17))
+ }
+ const E = class {
+ >E : Symbol(E, Decl(mappedTypeProperties.ts, 38, 5))
+ 
+     [P in 'a' | 'b']: any
+->[P in 'a' | 'b'] : Symbol(E[P in 'a' | 'b'], Decl(mappedTypeProperties.ts, 38, 17))
++>[P in 'a' | 'b'] : Symbol([P in 'a' | 'b'], Decl(mappedTypeProperties.ts, 38, 17))
+ }
+ 

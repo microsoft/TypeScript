@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/restParamUsingMappedTypeOverUnionConstraint.ts] ////
+
+=== restParamUsingMappedTypeOverUnionConstraint.ts ===
+// repro 29919#issuecomment-470948453
+
+type HomomorphicMappedType<T> = { [P in keyof T]: T[P] extends string ? boolean : null }
+>HomomorphicMappedType : Symbol(HomomorphicMappedType, Decl(restParamUsingMappedTypeOverUnionConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(restParamUsingMappedTypeOverUnionConstraint.ts, 2, 27))
+>P : Symbol(P, Decl(restParamUsingMappedTypeOverUnionConstraint.ts, 2, 35))
+>T : Symbol(T, Decl(restParamUsingMappedTypeOverUnionConstraint.ts, 2, 27))
+>T : Symbol(T, Decl(restParamUsingMappedTypeOverUnionConstraint.ts, 2, 27))
+>P : Symbol(P, Decl(restParamUsingMappedTypeOverUnionConstraint.ts, 2, 35))
+
+declare function test<T extends [number] | [string]>(
+>test : Symbol(test, Decl(restParamUsingMappedTypeOverUnionConstraint.ts, 2, 88))
+>T : Symbol(T, Decl(restParamUsingMappedTypeOverUnionConstraint.ts, 4, 22))
+
+  args: T,
+>args : Symbol(args, Decl(restParamUsingMappedTypeOverUnionConstraint.ts, 4, 53))
+>T : Symbol(T, Decl(restParamUsingMappedTypeOverUnionConstraint.ts, 4, 22))
+
+  fn: (...args: HomomorphicMappedType<T>) => void
+>fn : Symbol(fn, Decl(restParamUsingMappedTypeOverUnionConstraint.ts, 5, 10))
+>args : Symbol(args, Decl(restParamUsingMappedTypeOverUnionConstraint.ts, 6, 7))
+>HomomorphicMappedType : Symbol(HomomorphicMappedType, Decl(restParamUsingMappedTypeOverUnionConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(restParamUsingMappedTypeOverUnionConstraint.ts, 4, 22))
+
+): void
+

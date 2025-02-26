@@ -1,0 +1,42 @@
+--- old.tsxPreserveEmit1.symbols
++++ new.tsxPreserveEmit1.symbols
+@@= skipped -10, +10 lines =@@
+ import Route = ReactRouter.Route;
+ >Route : Symbol(Route, Decl(test.tsx, 2, 45))
+ >ReactRouter : Symbol(ReactRouter, Decl(test.tsx, 1, 32))
+->Route : Symbol(ReactRouter.Route, Decl(react.d.ts, 6, 4))
++>Route : Symbol(unknown)
+ 
+ var routes1 = <Route />;
+ >routes1 : Symbol(routes1, Decl(test.tsx, 6, 3))
+@@= skipped -22, +22 lines =@@
+ >X : Symbol(X, Decl(test.tsx, 9, 11))
+ }
+ 
+-=== react.d.ts ===
+-declare module 'react' {
+->'react' : Symbol("react", Decl(react.d.ts, 0, 0))
+-
+-	var x: any;
+->x : Symbol(x, Decl(react.d.ts, 1, 4))
+-
+-	export = x;
+->x : Symbol(x, Decl(react.d.ts, 1, 4))
+-}
+-
+-declare module ReactRouter {
+->ReactRouter : Symbol(ReactRouter, Decl(react.d.ts, 3, 1))
+-
+-	var Route: any;
+->Route : Symbol(Route, Decl(react.d.ts, 6, 4))
+-
+-	interface Thing { }
+->Thing : Symbol(Thing, Decl(react.d.ts, 6, 16))
+-}
+-declare module 'react-router' {
+->'react-router' : Symbol("react-router", Decl(react.d.ts, 8, 1))
+-
+-	export = ReactRouter;
+->ReactRouter : Symbol(ReactRouter, Decl(react.d.ts, 3, 1))
+-}
+-

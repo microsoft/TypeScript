@@ -1,0 +1,26 @@
+--- old.errorCause(target=esnext).symbols
++++ new.errorCause(target=esnext).symbols
+@@= skipped -10, +10 lines =@@
+ >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+ 
+ err.cause;
+->err.cause : Symbol(Error.cause, Decl(lib.es2022.error.d.ts, --, --))
++>err.cause : Symbol(cause, Decl(lib.es2022.error.d.ts, --, --))
+ >err : Symbol(err, Decl(errorCause.ts, 2, 3))
+->cause : Symbol(Error.cause, Decl(lib.es2022.error.d.ts, --, --))
++>cause : Symbol(cause, Decl(lib.es2022.error.d.ts, --, --))
+ 
+ let anotherErr = new Error("foo", { cause: a });
+ >anotherErr : Symbol(anotherErr, Decl(errorCause.ts, 4, 3))
+@@= skipped -11, +11 lines =@@
+ >a : Symbol(a, Decl(errorCause.ts, 0, 13))
+ 
+ anotherErr.cause;
+->anotherErr.cause : Symbol(Error.cause, Decl(lib.es2022.error.d.ts, --, --))
++>anotherErr.cause : Symbol(cause, Decl(lib.es2022.error.d.ts, --, --))
+ >anotherErr : Symbol(anotherErr, Decl(errorCause.ts, 4, 3))
+->cause : Symbol(Error.cause, Decl(lib.es2022.error.d.ts, --, --))
++>cause : Symbol(cause, Decl(lib.es2022.error.d.ts, --, --))
+ 
+ new EvalError("foo", { cause: new Error("bar") });
+ >EvalError : Symbol(EvalError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

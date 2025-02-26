@@ -1,0 +1,9 @@
+--- old.es6ExportDefaultFunctionDeclaration.symbols
++++ new.es6ExportDefaultFunctionDeclaration.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === es6ExportDefaultFunctionDeclaration.ts ===
+ export default function f() { }
+->f : Symbol(f, Decl(es6ExportDefaultFunctionDeclaration.ts, 0, 0))
++>f : Symbol(default, Decl(es6ExportDefaultFunctionDeclaration.ts, 0, 0))
+ 

@@ -1,0 +1,61 @@
+--- old.constLocalsInFunctionExpressions.symbols
++++ new.constLocalsInFunctionExpressions.symbols
+@@= skipped -15, +15 lines =@@
+ 
+         const f = () => x.length;
+ >f : Symbol(f, Decl(constLocalsInFunctionExpressions.ts, 5, 13))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(constLocalsInFunctionExpressions.ts, 3, 9))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 
+@@= skipped -20, +20 lines =@@
+     }
+     const f = () => x.length;
+ >f : Symbol(f, Decl(constLocalsInFunctionExpressions.ts, 14, 9))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(constLocalsInFunctionExpressions.ts, 10, 9))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function f3() {
+@@= skipped -17, +17 lines =@@
+ 
+         const f = function() { return x.length; };
+ >f : Symbol(f, Decl(constLocalsInFunctionExpressions.ts, 20, 13))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(constLocalsInFunctionExpressions.ts, 18, 9))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 
+@@= skipped -20, +20 lines =@@
+     }
+     const f = function() { return x.length; };
+ >f : Symbol(f, Decl(constLocalsInFunctionExpressions.ts, 29, 9))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(constLocalsInFunctionExpressions.ts, 25, 9))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function f5() {
+@@= skipped -17, +17 lines =@@
+ 
+         const f = () => () => x.length;
+ >f : Symbol(f, Decl(constLocalsInFunctionExpressions.ts, 35, 13))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(constLocalsInFunctionExpressions.ts, 33, 9))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+     }
+ }

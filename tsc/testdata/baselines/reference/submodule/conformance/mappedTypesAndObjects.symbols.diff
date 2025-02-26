@@ -1,0 +1,64 @@
+--- old.mappedTypesAndObjects.symbols
++++ new.mappedTypesAndObjects.symbols
+@@= skipped -62, +62 lines =@@
+ >Base : Symbol(Base, Decl(mappedTypesAndObjects.ts, 14, 1))
+ 
+     foo: { [key: string]: any };
+->foo : Symbol(Base.foo, Decl(mappedTypesAndObjects.ts, 18, 16))
++>foo : Symbol(foo, Decl(mappedTypesAndObjects.ts, 18, 16))
+ >key : Symbol(key, Decl(mappedTypesAndObjects.ts, 19, 12))
+ 
+     bar: any;
+->bar : Symbol(Base.bar, Decl(mappedTypesAndObjects.ts, 19, 32))
++>bar : Symbol(bar, Decl(mappedTypesAndObjects.ts, 19, 32))
+ 
+     baz: any;
+->baz : Symbol(Base.baz, Decl(mappedTypesAndObjects.ts, 20, 13))
++>baz : Symbol(baz, Decl(mappedTypesAndObjects.ts, 20, 13))
+ }
+ 
+ interface E1<T> extends Base {
+@@= skipped -16, +16 lines =@@
+ >Base : Symbol(Base, Decl(mappedTypesAndObjects.ts, 14, 1))
+ 
+     foo: T;
+->foo : Symbol(E1.foo, Decl(mappedTypesAndObjects.ts, 24, 30))
++>foo : Symbol(foo, Decl(mappedTypesAndObjects.ts, 24, 30))
+ >T : Symbol(T, Decl(mappedTypesAndObjects.ts, 24, 13))
+ }
+ 
+ interface Something { name: string, value: string };
+ >Something : Symbol(Something, Decl(mappedTypesAndObjects.ts, 26, 1))
+->name : Symbol(Something.name, Decl(mappedTypesAndObjects.ts, 28, 21))
+->value : Symbol(Something.value, Decl(mappedTypesAndObjects.ts, 28, 35))
++>name : Symbol(name, Decl(mappedTypesAndObjects.ts, 28, 21))
++>value : Symbol(value, Decl(mappedTypesAndObjects.ts, 28, 35))
+ 
+ interface E2 extends Base {
+ >E2 : Symbol(E2, Decl(mappedTypesAndObjects.ts, 28, 52))
+ >Base : Symbol(Base, Decl(mappedTypesAndObjects.ts, 14, 1))
+ 
+     foo: Partial<Something>;  // or other mapped type
+->foo : Symbol(E2.foo, Decl(mappedTypesAndObjects.ts, 29, 27))
++>foo : Symbol(foo, Decl(mappedTypesAndObjects.ts, 29, 27))
+ >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+ >Something : Symbol(Something, Decl(mappedTypesAndObjects.ts, 26, 1))
+ }
+@@= skipped -25, +25 lines =@@
+ >Base : Symbol(Base, Decl(mappedTypesAndObjects.ts, 14, 1))
+ 
+     foo: Partial<T>; // or other mapped type
+->foo : Symbol(E3.foo, Decl(mappedTypesAndObjects.ts, 33, 30))
++>foo : Symbol(foo, Decl(mappedTypesAndObjects.ts, 33, 30))
+ >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+ >T : Symbol(T, Decl(mappedTypesAndObjects.ts, 33, 13))
+ }
+@@= skipped -12, +12 lines =@@
+ >T : Symbol(T, Decl(mappedTypesAndObjects.ts, 39, 11))
+ 
+     private values: {[P in keyof T]?: T[P]} = {}
+->values : Symbol(Form.values, Decl(mappedTypesAndObjects.ts, 39, 15))
++>values : Symbol(values, Decl(mappedTypesAndObjects.ts, 39, 15))
+ >P : Symbol(P, Decl(mappedTypesAndObjects.ts, 40, 22))
+ >T : Symbol(T, Decl(mappedTypesAndObjects.ts, 39, 11))
+ >T : Symbol(T, Decl(mappedTypesAndObjects.ts, 39, 11))

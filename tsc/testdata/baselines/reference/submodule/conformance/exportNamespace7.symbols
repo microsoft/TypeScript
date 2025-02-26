@@ -1,0 +1,63 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace7.ts] ////
+
+=== /a.ts ===
+export class A {}
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+export class B {}
+>B : Symbol(B, Decl(a.ts, 0, 17))
+
+export class C {}
+>C : Symbol(C, Decl(a.ts, 1, 17))
+
+=== /b.ts ===
+export type * from "./a";
+export class C {}
+>C : Symbol(C, Decl(b.ts, 0, 25))
+
+=== /c.ts ===
+import { A, B, C } from "./b";
+>A : Symbol(A, Decl(c.ts, 0, 8))
+>B : Symbol(B, Decl(c.ts, 0, 11))
+>C : Symbol(C, Decl(c.ts, 0, 14))
+
+let _: A = new A();  // Error
+>_ : Symbol(_, Decl(c.ts, 1, 3))
+>A : Symbol(A, Decl(c.ts, 0, 8))
+>A : Symbol(A, Decl(c.ts, 0, 8))
+
+let __: B = new B(); // Error
+>__ : Symbol(__, Decl(c.ts, 2, 3))
+>B : Symbol(B, Decl(c.ts, 0, 11))
+>B : Symbol(B, Decl(c.ts, 0, 11))
+
+let ___: C = new C(); // Ok
+>___ : Symbol(___, Decl(c.ts, 3, 3))
+>C : Symbol(C, Decl(c.ts, 0, 14))
+>C : Symbol(C, Decl(c.ts, 0, 14))
+
+=== /d.ts ===
+
+export type * from "./b";
+
+=== /e.ts ===
+import { A, B, C } from "./d";
+>A : Symbol(A, Decl(e.ts, 0, 8))
+>B : Symbol(B, Decl(e.ts, 0, 11))
+>C : Symbol(C, Decl(e.ts, 0, 14))
+
+let _: A = new A();   // Error
+>_ : Symbol(_, Decl(e.ts, 1, 3))
+>A : Symbol(A, Decl(e.ts, 0, 8))
+>A : Symbol(A, Decl(e.ts, 0, 8))
+
+let __: B = new B();  // Error
+>__ : Symbol(__, Decl(e.ts, 2, 3))
+>B : Symbol(B, Decl(e.ts, 0, 11))
+>B : Symbol(B, Decl(e.ts, 0, 11))
+
+let ___: C = new C(); // Error
+>___ : Symbol(___, Decl(e.ts, 3, 3))
+>C : Symbol(C, Decl(e.ts, 0, 14))
+>C : Symbol(C, Decl(e.ts, 0, 14))
+

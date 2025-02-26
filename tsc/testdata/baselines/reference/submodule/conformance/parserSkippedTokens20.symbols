@@ -1,0 +1,8 @@
+//// [tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens20.ts] ////
+
+=== parserSkippedTokens20.ts ===
+var v: X<T \
+>v : Symbol(v, Decl(parserSkippedTokens20.ts, 0, 3))
+>X : Symbol(X)
+>T : Symbol(T)
+

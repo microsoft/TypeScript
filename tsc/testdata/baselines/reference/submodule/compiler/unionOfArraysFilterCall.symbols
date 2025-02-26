@@ -1,0 +1,82 @@
+//// [tests/cases/compiler/unionOfArraysFilterCall.ts] ////
+
+=== unionOfArraysFilterCall.ts ===
+interface Fizz {
+>Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
+
+    id: number;
+>id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 0, 16))
+
+    fizz: string;
+>fizz : Symbol(fizz, Decl(unionOfArraysFilterCall.ts, 1, 15))
+}
+
+interface Buzz {
+>Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
+
+    id: number;
+>id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 5, 16))
+
+    buzz: string;
+>buzz : Symbol(buzz, Decl(unionOfArraysFilterCall.ts, 6, 15))
+}
+
+([] as Fizz[] | Buzz[]).filter(item => item.id < 5);
+>Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
+>Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
+>item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 10, 31))
+>item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 10, 31))
+
+([] as Fizz[] | readonly Buzz[]).filter(item => item.id < 5); 
+>Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
+>Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
+>item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 11, 40))
+>item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 11, 40))
+
+([] as Fizz[] | Buzz[]).find(item => item);
+>Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
+>Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
+>item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 13, 29))
+>item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 13, 29))
+
+declare function isFizz(x: unknown): x is Fizz;
+>isFizz : Symbol(isFizz, Decl(unionOfArraysFilterCall.ts, 13, 43))
+>x : Symbol(x, Decl(unionOfArraysFilterCall.ts, 14, 24))
+>x : Symbol(x, Decl(unionOfArraysFilterCall.ts, 14, 24))
+>Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
+
+([] as Fizz[] | Buzz[]).find(isFizz);
+>Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
+>Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
+>isFizz : Symbol(isFizz, Decl(unionOfArraysFilterCall.ts, 13, 43))
+
+declare function isBuzz(x: unknown): x is Buzz;
+>isBuzz : Symbol(isBuzz, Decl(unionOfArraysFilterCall.ts, 15, 37))
+>x : Symbol(x, Decl(unionOfArraysFilterCall.ts, 16, 24))
+>x : Symbol(x, Decl(unionOfArraysFilterCall.ts, 16, 24))
+>Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
+
+([] as Fizz[] | Buzz[]).find(isBuzz);
+>Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
+>Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
+>isBuzz : Symbol(isBuzz, Decl(unionOfArraysFilterCall.ts, 15, 37))
+
+([] as Fizz[] | Buzz[]).every(item => item.id < 5);
+>Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
+>Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
+>item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 19, 30))
+>item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 19, 30))
+
+([] as Fizz[] | Buzz[]).reduce(item => item);
+>Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
+>Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
+>item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 21, 31))
+>item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 21, 31))
+
+
+([] as [Fizz] | readonly [Buzz?]).filter(item => item?.id < 5);
+>Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
+>Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
+>item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 24, 41))
+>item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 24, 41))
+

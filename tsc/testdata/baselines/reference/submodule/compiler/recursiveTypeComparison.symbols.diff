@@ -1,0 +1,30 @@
+--- old.recursiveTypeComparison.symbols
++++ new.recursiveTypeComparison.symbols
+@@= skipped -8, +8 lines =@@
+ 
+     // This member can't be of type T, Property<T>, or Observable<anything but T>
+     needThisOne: Observable<T>;
+->needThisOne : Symbol(Observable.needThisOne, Decl(recursiveTypeComparison.ts, 2, 25))
++>needThisOne : Symbol(needThisOne, Decl(recursiveTypeComparison.ts, 2, 25))
+ >Observable : Symbol(Observable, Decl(recursiveTypeComparison.ts, 0, 0))
+ >T : Symbol(T, Decl(recursiveTypeComparison.ts, 2, 21))
+ 
+     // Add more to make it slower
+     expo1: Property<T[]>; //  0.31 seconds in check
+->expo1 : Symbol(Observable.expo1, Decl(recursiveTypeComparison.ts, 4, 31))
++>expo1 : Symbol(expo1, Decl(recursiveTypeComparison.ts, 4, 31))
+ >Property : Symbol(Property, Decl(recursiveTypeComparison.ts, 9, 1))
+ >T : Symbol(T, Decl(recursiveTypeComparison.ts, 2, 21))
+ 
+     expo2: Property<T[]>; //  3.11 seconds
+->expo2 : Symbol(Observable.expo2, Decl(recursiveTypeComparison.ts, 6, 25))
++>expo2 : Symbol(expo2, Decl(recursiveTypeComparison.ts, 6, 25))
+ >Property : Symbol(Property, Decl(recursiveTypeComparison.ts, 9, 1))
+ >T : Symbol(T, Decl(recursiveTypeComparison.ts, 2, 21))
+ 
+     expo3: Property<T[]>; // 82.28 seconds
+->expo3 : Symbol(Observable.expo3, Decl(recursiveTypeComparison.ts, 7, 25))
++>expo3 : Symbol(expo3, Decl(recursiveTypeComparison.ts, 7, 25))
+ >Property : Symbol(Property, Decl(recursiveTypeComparison.ts, 9, 1))
+ >T : Symbol(T, Decl(recursiveTypeComparison.ts, 2, 21))
+ }

@@ -1,0 +1,20 @@
+--- old.recursiveClassBaseType.symbols
++++ new.recursiveClassBaseType.symbols
+@@= skipped -29, +29 lines =@@
+ >Base1 : Symbol(Base1, Decl(recursiveClassBaseType.ts, 6, 49))
+ 
+     abstract root(): Derived1;
+->root : Symbol(Base1.root, Decl(recursiveClassBaseType.ts, 10, 22))
++>root : Symbol(root, Decl(recursiveClassBaseType.ts, 10, 22))
+ >Derived1 : Symbol(Derived1, Decl(recursiveClassBaseType.ts, 12, 1))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >Base1 : Symbol(Base1, Decl(recursiveClassBaseType.ts, 6, 49))
+ 
+     root() {
+->root : Symbol((Anonymous class).root, Decl(recursiveClassBaseType.ts, 14, 44))
++>root : Symbol(root, Decl(recursiveClassBaseType.ts, 14, 44))
+ 
+         return undefined as any;
+ >undefined : Symbol(undefined)

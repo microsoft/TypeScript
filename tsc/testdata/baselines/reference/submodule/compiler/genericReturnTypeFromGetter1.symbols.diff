@@ -1,0 +1,20 @@
+--- old.genericReturnTypeFromGetter1.symbols
++++ new.genericReturnTypeFromGetter1.symbols
+@@= skipped -15, +15 lines =@@
+ >T : Symbol(T, Decl(genericReturnTypeFromGetter1.ts, 3, 19))
+ 
+     _entityType: A;
+->_entityType : Symbol(DbSet._entityType, Decl(genericReturnTypeFromGetter1.ts, 3, 23))
++>_entityType : Symbol(_entityType, Decl(genericReturnTypeFromGetter1.ts, 3, 23))
+ >A : Symbol(A, Decl(genericReturnTypeFromGetter1.ts, 0, 0))
+ 
+   get entityType() { return this._entityType; }  // used to ICE without return type annotation
+->entityType : Symbol(DbSet.entityType, Decl(genericReturnTypeFromGetter1.ts, 4, 19))
+->this._entityType : Symbol(DbSet._entityType, Decl(genericReturnTypeFromGetter1.ts, 3, 23))
++>entityType : Symbol(entityType, Decl(genericReturnTypeFromGetter1.ts, 4, 19))
++>this._entityType : Symbol(_entityType, Decl(genericReturnTypeFromGetter1.ts, 3, 23))
+ >this : Symbol(DbSet, Decl(genericReturnTypeFromGetter1.ts, 2, 1))
+->_entityType : Symbol(DbSet._entityType, Decl(genericReturnTypeFromGetter1.ts, 3, 23))
++>_entityType : Symbol(_entityType, Decl(genericReturnTypeFromGetter1.ts, 3, 23))
+ }
+ 

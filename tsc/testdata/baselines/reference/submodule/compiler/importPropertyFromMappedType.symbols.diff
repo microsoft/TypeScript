@@ -1,0 +1,11 @@
+--- old.importPropertyFromMappedType.symbols
++++ new.importPropertyFromMappedType.symbols
+@@= skipped -6, +6 lines =@@
+ declare const createHttpError: createHttpError.NamedConstructors;
+ >createHttpError : Symbol(createHttpError, Decl(errors.d.ts, 1, 13), Decl(errors.d.ts, 1, 65))
+ >createHttpError : Symbol(createHttpError, Decl(errors.d.ts, 1, 13), Decl(errors.d.ts, 1, 65))
+->NamedConstructors : Symbol(createHttpError.NamedConstructors, Decl(errors.d.ts, 2, 35))
++>NamedConstructors : Symbol(NamedConstructors, Decl(errors.d.ts, 2, 35))
+ 
+ declare namespace createHttpError {
+ >createHttpError : Symbol(createHttpError, Decl(errors.d.ts, 1, 13), Decl(errors.d.ts, 1, 65))

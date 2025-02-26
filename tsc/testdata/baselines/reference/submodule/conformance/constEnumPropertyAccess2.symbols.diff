@@ -1,0 +1,51 @@
+--- old.constEnumPropertyAccess2.symbols
++++ new.constEnumPropertyAccess2.symbols
+@@= skipped -8, +8 lines =@@
+ >G : Symbol(G, Decl(constEnumPropertyAccess2.ts, 0, 0))
+ 
+     A = 1,
+->A : Symbol(G.A, Decl(constEnumPropertyAccess2.ts, 4, 14))
++>A : Symbol(A, Decl(constEnumPropertyAccess2.ts, 4, 14))
+ 
+     B = 2,
+->B : Symbol(G.B, Decl(constEnumPropertyAccess2.ts, 5, 10))
++>B : Symbol(B, Decl(constEnumPropertyAccess2.ts, 5, 10))
+ 
+     C = A + B,
+->C : Symbol(G.C, Decl(constEnumPropertyAccess2.ts, 6, 10))
+->A : Symbol(G.A, Decl(constEnumPropertyAccess2.ts, 4, 14))
+->B : Symbol(G.B, Decl(constEnumPropertyAccess2.ts, 5, 10))
++>C : Symbol(C, Decl(constEnumPropertyAccess2.ts, 6, 10))
++>A : Symbol(A, Decl(constEnumPropertyAccess2.ts, 4, 14))
++>B : Symbol(B, Decl(constEnumPropertyAccess2.ts, 5, 10))
+ 
+     D = A * 2
+->D : Symbol(G.D, Decl(constEnumPropertyAccess2.ts, 7, 14))
+->A : Symbol(G.A, Decl(constEnumPropertyAccess2.ts, 4, 14))
++>D : Symbol(D, Decl(constEnumPropertyAccess2.ts, 7, 14))
++>A : Symbol(A, Decl(constEnumPropertyAccess2.ts, 4, 14))
+ }
+ 
+ // Error from referring constant enum in any other context than a property access
+@@= skipped -23, +23 lines =@@
+ var z1 = G[G.A];
+ >z1 : Symbol(z1, Decl(constEnumPropertyAccess2.ts, 13, 3))
+ >G : Symbol(G, Decl(constEnumPropertyAccess2.ts, 0, 0))
+->G.A : Symbol(G.A, Decl(constEnumPropertyAccess2.ts, 4, 14))
++>G.A : Symbol(A, Decl(constEnumPropertyAccess2.ts, 4, 14))
+ >G : Symbol(G, Decl(constEnumPropertyAccess2.ts, 0, 0))
+->A : Symbol(G.A, Decl(constEnumPropertyAccess2.ts, 4, 14))
++>A : Symbol(A, Decl(constEnumPropertyAccess2.ts, 4, 14))
+ 
+ var g: G;
+ >g : Symbol(g, Decl(constEnumPropertyAccess2.ts, 14, 3))
+@@= skipped -17, +17 lines =@@
+ >G : Symbol(G, Decl(constEnumPropertyAccess2.ts, 0, 0))
+ 
+ G.B = 3;
+->G.B : Symbol(G.B, Decl(constEnumPropertyAccess2.ts, 5, 10))
++>G.B : Symbol(B, Decl(constEnumPropertyAccess2.ts, 5, 10))
+ >G : Symbol(G, Decl(constEnumPropertyAccess2.ts, 0, 0))
+->B : Symbol(G.B, Decl(constEnumPropertyAccess2.ts, 5, 10))
++>B : Symbol(B, Decl(constEnumPropertyAccess2.ts, 5, 10))
+ 

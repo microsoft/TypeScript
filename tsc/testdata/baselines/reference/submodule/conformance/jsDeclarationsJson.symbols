@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsJson.ts] ////
+
+=== index.js ===
+const j = require("./obj.json");
+>j : Symbol(j, Decl(index.js, 0, 5))
+
+module.exports = j;
+>j : Symbol(j, Decl(index.js, 0, 5))
+

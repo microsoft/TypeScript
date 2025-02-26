@@ -1,0 +1,20 @@
+--- old.stringLiteralsWithEqualityChecks04.symbols
++++ new.stringLiteralsWithEqualityChecks04.symbols
+@@= skipped -4, +4 lines =@@
+ >Runnable : Symbol(Runnable, Decl(stringLiteralsWithEqualityChecks04.ts, 0, 0))
+ 
+     isRunning: boolean;
+->isRunning : Symbol(Runnable.isRunning, Decl(stringLiteralsWithEqualityChecks04.ts, 0, 20))
++>isRunning : Symbol(isRunning, Decl(stringLiteralsWithEqualityChecks04.ts, 0, 20))
+ }
+ 
+ interface Refrigerator extends Runnable {
+@@= skipped -8, +8 lines =@@
+ >Runnable : Symbol(Runnable, Decl(stringLiteralsWithEqualityChecks04.ts, 0, 0))
+ 
+     makesFoodGoBrrr: boolean;
+->makesFoodGoBrrr : Symbol(Refrigerator.makesFoodGoBrrr, Decl(stringLiteralsWithEqualityChecks04.ts, 4, 41))
++>makesFoodGoBrrr : Symbol(makesFoodGoBrrr, Decl(stringLiteralsWithEqualityChecks04.ts, 4, 41))
+ }
+ 
+ let x: string;

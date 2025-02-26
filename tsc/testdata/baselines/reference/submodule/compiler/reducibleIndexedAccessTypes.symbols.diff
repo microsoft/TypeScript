@@ -1,0 +1,93 @@
+--- old.reducibleIndexedAccessTypes.symbols
++++ new.reducibleIndexedAccessTypes.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ enum Type { A, B, C }
+ >Type : Symbol(Type, Decl(reducibleIndexedAccessTypes.ts, 0, 0))
+->A : Symbol(Type.A, Decl(reducibleIndexedAccessTypes.ts, 2, 11))
+->B : Symbol(Type.B, Decl(reducibleIndexedAccessTypes.ts, 2, 14))
+->C : Symbol(Type.C, Decl(reducibleIndexedAccessTypes.ts, 2, 17))
++>A : Symbol(A, Decl(reducibleIndexedAccessTypes.ts, 2, 11))
++>B : Symbol(B, Decl(reducibleIndexedAccessTypes.ts, 2, 14))
++>C : Symbol(C, Decl(reducibleIndexedAccessTypes.ts, 2, 17))
+ 
+ interface PayloadStructure {
+ >PayloadStructure : Symbol(PayloadStructure, Decl(reducibleIndexedAccessTypes.ts, 2, 21))
+ 
+     dataType: Type;
+->dataType : Symbol(PayloadStructure.dataType, Decl(reducibleIndexedAccessTypes.ts, 4, 28))
++>dataType : Symbol(dataType, Decl(reducibleIndexedAccessTypes.ts, 4, 28))
+ >Type : Symbol(Type, Decl(reducibleIndexedAccessTypes.ts, 0, 0))
+ 
+     data: unknown;
+->data : Symbol(PayloadStructure.data, Decl(reducibleIndexedAccessTypes.ts, 5, 19))
++>data : Symbol(data, Decl(reducibleIndexedAccessTypes.ts, 5, 19))
+ }
+ 
+ interface PayloadA extends PayloadStructure {
+@@= skipped -20, +20 lines =@@
+ >PayloadStructure : Symbol(PayloadStructure, Decl(reducibleIndexedAccessTypes.ts, 2, 21))
+ 
+     dataType: Type.A;
+->dataType : Symbol(PayloadA.dataType, Decl(reducibleIndexedAccessTypes.ts, 9, 45))
++>dataType : Symbol(dataType, Decl(reducibleIndexedAccessTypes.ts, 9, 45))
+ >Type : Symbol(Type, Decl(reducibleIndexedAccessTypes.ts, 0, 0))
+->A : Symbol(Type.A, Decl(reducibleIndexedAccessTypes.ts, 2, 11))
++>A : Symbol(A, Decl(reducibleIndexedAccessTypes.ts, 2, 11))
+ 
+     data: string;
+->data : Symbol(PayloadA.data, Decl(reducibleIndexedAccessTypes.ts, 10, 21))
++>data : Symbol(data, Decl(reducibleIndexedAccessTypes.ts, 10, 21))
+ }
+ 
+ interface PayloadB extends PayloadStructure {
+@@= skipped -13, +13 lines =@@
+ >PayloadStructure : Symbol(PayloadStructure, Decl(reducibleIndexedAccessTypes.ts, 2, 21))
+ 
+     dataType: Type.B;
+->dataType : Symbol(PayloadB.dataType, Decl(reducibleIndexedAccessTypes.ts, 14, 45))
++>dataType : Symbol(dataType, Decl(reducibleIndexedAccessTypes.ts, 14, 45))
+ >Type : Symbol(Type, Decl(reducibleIndexedAccessTypes.ts, 0, 0))
+->B : Symbol(Type.B, Decl(reducibleIndexedAccessTypes.ts, 2, 14))
++>B : Symbol(B, Decl(reducibleIndexedAccessTypes.ts, 2, 14))
+ 
+     data: number;
+->data : Symbol(PayloadB.data, Decl(reducibleIndexedAccessTypes.ts, 15, 21))
++>data : Symbol(data, Decl(reducibleIndexedAccessTypes.ts, 15, 21))
+ }
+ 
+ interface PayloadC extends PayloadStructure {
+@@= skipped -13, +13 lines =@@
+ >PayloadStructure : Symbol(PayloadStructure, Decl(reducibleIndexedAccessTypes.ts, 2, 21))
+ 
+     dataType: Type.C;
+->dataType : Symbol(PayloadC.dataType, Decl(reducibleIndexedAccessTypes.ts, 19, 45))
++>dataType : Symbol(dataType, Decl(reducibleIndexedAccessTypes.ts, 19, 45))
+ >Type : Symbol(Type, Decl(reducibleIndexedAccessTypes.ts, 0, 0))
+->C : Symbol(Type.C, Decl(reducibleIndexedAccessTypes.ts, 2, 17))
++>C : Symbol(C, Decl(reducibleIndexedAccessTypes.ts, 2, 17))
+ 
+     data: {
+->data : Symbol(PayloadC.data, Decl(reducibleIndexedAccessTypes.ts, 20, 21))
++>data : Symbol(data, Decl(reducibleIndexedAccessTypes.ts, 20, 21))
+ 
+         x: number;
+ >x : Symbol(x, Decl(reducibleIndexedAccessTypes.ts, 21, 11))
+@@= skipped -40, +40 lines =@@
+ 
+     [Type.A]: data => { console.log(data) }
+ >[Type.A] : Symbol([Type.A], Decl(reducibleIndexedAccessTypes.ts, 33, 35))
+->Type.A : Symbol(Type.A, Decl(reducibleIndexedAccessTypes.ts, 2, 11))
++>Type.A : Symbol(A, Decl(reducibleIndexedAccessTypes.ts, 2, 11))
+ >Type : Symbol(Type, Decl(reducibleIndexedAccessTypes.ts, 0, 0))
+->A : Symbol(Type.A, Decl(reducibleIndexedAccessTypes.ts, 2, 11))
++>A : Symbol(A, Decl(reducibleIndexedAccessTypes.ts, 2, 11))
+ >data : Symbol(data, Decl(reducibleIndexedAccessTypes.ts, 34, 13))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >data : Symbol(data, Decl(reducibleIndexedAccessTypes.ts, 34, 13))
+ }
+ 

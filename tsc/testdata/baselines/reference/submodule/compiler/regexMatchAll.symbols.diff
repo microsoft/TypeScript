@@ -1,0 +1,14 @@
+--- old.regexMatchAll.symbols
++++ new.regexMatchAll.symbols
+@@= skipped -2, +2 lines =@@
+ === regexMatchAll.ts ===
+ const matches = /\w/g[Symbol.matchAll]("matchAll");
+ >matches : Symbol(matches, Decl(regexMatchAll.ts, 0, 5))
+->Symbol.matchAll : Symbol(SymbolConstructor.matchAll, Decl(lib.es2020.symbol.wellknown.d.ts, --, --))
++>Symbol.matchAll : Symbol(matchAll, Decl(lib.es2020.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+->matchAll : Symbol(SymbolConstructor.matchAll, Decl(lib.es2020.symbol.wellknown.d.ts, --, --))
++>matchAll : Symbol(matchAll, Decl(lib.es2020.symbol.wellknown.d.ts, --, --))
+ 
+ const array = [...matches];
+ >array : Symbol(array, Decl(regexMatchAll.ts, 1, 5))

@@ -1,0 +1,20 @@
+--- old.exportedEnumTypeAndValue.symbols
++++ new.exportedEnumTypeAndValue.symbols
+@@= skipped -2, +2 lines =@@
+ === def.js ===
+ /** @enum {number} */
+ const MyEnum = {
+->MyEnum : Symbol(MyEnum, Decl(def.js, 1, 5), Decl(def.js, 0, 4))
++>MyEnum : Symbol(MyEnum, Decl(def.js, 1, 5))
+ 
+   a: 1,
+ >a : Symbol(a, Decl(def.js, 1, 16))
+@@= skipped -10, +10 lines =@@
+ 
+ };
+ export default MyEnum;
+->MyEnum : Symbol(MyEnum, Decl(def.js, 1, 5), Decl(def.js, 0, 4))
++>MyEnum : Symbol(MyEnum, Decl(def.js, 1, 5))
+ 
+ === use.js ===
+ import MyEnum from "./def";

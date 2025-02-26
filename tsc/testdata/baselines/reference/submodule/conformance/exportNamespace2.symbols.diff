@@ -1,0 +1,12 @@
+--- old.exportNamespace2.symbols
++++ new.exportNamespace2.symbols
+@@= skipped -19, +19 lines =@@
+ >a : Symbol(a, Decl(d.ts, 0, 8))
+ 
+ new a.A(); // Error
+->a.A : Symbol(a.A, Decl(a.ts, 0, 0))
++>a.A : Symbol(A, Decl(a.ts, 0, 0))
+ >a : Symbol(a, Decl(d.ts, 0, 8))
+->A : Symbol(a.A, Decl(a.ts, 0, 0))
++>A : Symbol(A, Decl(a.ts, 0, 0))
+ 

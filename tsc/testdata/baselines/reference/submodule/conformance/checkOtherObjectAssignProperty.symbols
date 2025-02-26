@@ -1,0 +1,43 @@
+//// [tests/cases/conformance/jsdoc/checkOtherObjectAssignProperty.ts] ////
+
+=== importer.js ===
+const mod = require("./mod1");
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+
+mod.thing;
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+
+mod.other;
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+
+mod.prop;
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+
+mod.bad1;
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+
+mod.bad2;
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+
+mod.bad3;
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+
+
+mod.thing = 0;
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+
+mod.other = 0;
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+
+mod.prop = 0;
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+
+mod.bad1 = 0;
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+
+mod.bad2 = 0;
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+
+mod.bad3 = 0;
+>mod : Symbol(mod, Decl(importer.js, 0, 5))
+

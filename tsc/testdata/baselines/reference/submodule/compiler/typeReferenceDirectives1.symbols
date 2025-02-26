@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/typeReferenceDirectives1.ts] ////
+
+=== /app.ts ===
+/// <reference types="lib" preserve="true" />
+interface A {
+>A : Symbol(A, Decl(app.ts, 0, 0))
+
+    x: $
+>x : Symbol(x, Decl(app.ts, 1, 13))
+>$ : Symbol($)
+}

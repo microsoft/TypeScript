@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/exportDefaultInterfaceClassAndFunctionOverloads.ts] ////
+
+=== exportDefaultInterfaceClassAndFunctionOverloads.ts ===
+export default function foo(value: number): number
+>foo : Symbol(default, Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 0, 0), Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 0, 50), Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 1, 50), Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 6, 18))
+>value : Symbol(value, Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 0, 28))
+
+export default function foo(value: string): string
+>foo : Symbol(default, Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 0, 0), Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 0, 50), Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 1, 50), Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 6, 18))
+>value : Symbol(value, Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 1, 28))
+
+export default function foo(value: string | number): string | number {
+>foo : Symbol(default, Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 0, 0), Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 0, 50), Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 1, 50), Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 6, 18))
+>value : Symbol(value, Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 2, 28))
+
+    return 1
+}
+declare class Foo {}
+>Foo : Symbol(Foo, Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 4, 1))
+
+export default Foo
+>Foo : Symbol(Foo, Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 4, 1))
+
+export default interface Bar {}
+>Bar : Symbol(default, Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 0, 0), Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 0, 50), Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 1, 50), Decl(exportDefaultInterfaceClassAndFunctionOverloads.ts, 6, 18))
+

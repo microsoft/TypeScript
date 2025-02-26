@@ -1,0 +1,11 @@
+--- old.sourceMapValidationWithComments.symbols
++++ new.sourceMapValidationWithComments.symbols
+@@= skipped -4, +4 lines =@@
+ >DebugClass : Symbol(DebugClass, Decl(sourceMapValidationWithComments.ts, 0, 0))
+ 
+     public static debugFunc() {
+->debugFunc : Symbol(DebugClass.debugFunc, Decl(sourceMapValidationWithComments.ts, 0, 18))
++>debugFunc : Symbol(debugFunc, Decl(sourceMapValidationWithComments.ts, 0, 18))
+ 
+         // Start Debugger Test Code
+         var i = 0;

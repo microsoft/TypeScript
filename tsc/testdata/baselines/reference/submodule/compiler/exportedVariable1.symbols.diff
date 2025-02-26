@@ -1,0 +1,14 @@
+--- old.exportedVariable1.symbols
++++ new.exportedVariable1.symbols
+@@= skipped -6, +6 lines =@@
+ 
+ var upper = foo.name.toUpperCase();
+ >upper : Symbol(upper, Decl(exportedVariable1.ts, 1, 3))
+->foo.name.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>foo.name.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >foo.name : Symbol(name, Decl(exportedVariable1.ts, 0, 18))
+ >foo : Symbol(foo, Decl(exportedVariable1.ts, 0, 10))
+ >name : Symbol(name, Decl(exportedVariable1.ts, 0, 18))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ 

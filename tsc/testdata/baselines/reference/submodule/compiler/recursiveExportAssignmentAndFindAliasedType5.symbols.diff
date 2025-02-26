@@ -1,0 +1,27 @@
+--- old.recursiveExportAssignmentAndFindAliasedType5.symbols
++++ new.recursiveExportAssignmentAndFindAliasedType5.symbols
+@@= skipped -10, +10 lines =@@
+ >b : Symbol(b, Decl(recursiveExportAssignmentAndFindAliasedType5_moduleA.ts, 2, 10))
+ >ClassB : Symbol(ClassB, Decl(recursiveExportAssignmentAndFindAliasedType5_moduleA.ts, 0, 81))
+ 
+-=== recursiveExportAssignmentAndFindAliasedType5_moduleC.ts ===
+-import self = require("recursiveExportAssignmentAndFindAliasedType5_moduleD");
+->self : Symbol(self, Decl(recursiveExportAssignmentAndFindAliasedType5_moduleC.ts, 0, 0))
+-
+-export = self;
+->self : Symbol(self, Decl(recursiveExportAssignmentAndFindAliasedType5_moduleC.ts, 0, 0))
+-
+-=== recursiveExportAssignmentAndFindAliasedType5_moduleD.ts ===
+-import self = require("recursiveExportAssignmentAndFindAliasedType5_moduleC");
+->self : Symbol(self, Decl(recursiveExportAssignmentAndFindAliasedType5_moduleD.ts, 0, 0))
+-
+-export = self;
+->self : Symbol(self, Decl(recursiveExportAssignmentAndFindAliasedType5_moduleD.ts, 0, 0))
+-
+-=== recursiveExportAssignmentAndFindAliasedType5_moduleB.ts ===
+-class ClassB { }
+->ClassB : Symbol(ClassB, Decl(recursiveExportAssignmentAndFindAliasedType5_moduleB.ts, 0, 0))
+-
+-export = ClassB;
+->ClassB : Symbol(ClassB, Decl(recursiveExportAssignmentAndFindAliasedType5_moduleB.ts, 0, 0))
+-

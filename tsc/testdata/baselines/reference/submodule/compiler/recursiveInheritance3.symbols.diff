@@ -1,0 +1,25 @@
+--- old.recursiveInheritance3.symbols
++++ new.recursiveInheritance3.symbols
+@@= skipped -5, +5 lines =@@
+ >I : Symbol(I, Decl(recursiveInheritance3.ts, 3, 1))
+ 
+     public foo(x: any) { return x; }
+->foo : Symbol(C.foo, Decl(recursiveInheritance3.ts, 0, 22))
++>foo : Symbol(foo, Decl(recursiveInheritance3.ts, 0, 22))
+ >x : Symbol(x, Decl(recursiveInheritance3.ts, 1, 15))
+ >x : Symbol(x, Decl(recursiveInheritance3.ts, 1, 15))
+ 
+     private x = 1;
+->x : Symbol(C.x, Decl(recursiveInheritance3.ts, 1, 36))
++>x : Symbol(x, Decl(recursiveInheritance3.ts, 1, 36))
+ }
+ 
+ interface I extends C {
+@@= skipped -13, +13 lines =@@
+ >C : Symbol(C, Decl(recursiveInheritance3.ts, 0, 0))
+ 
+     other(x: any): any;
+->other : Symbol(I.other, Decl(recursiveInheritance3.ts, 5, 23))
++>other : Symbol(other, Decl(recursiveInheritance3.ts, 5, 23))
+ >x : Symbol(x, Decl(recursiveInheritance3.ts, 6, 10))
+ }

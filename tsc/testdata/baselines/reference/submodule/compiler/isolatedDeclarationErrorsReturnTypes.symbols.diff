@@ -1,0 +1,445 @@
+--- old.isolatedDeclarationErrorsReturnTypes.symbols
++++ new.isolatedDeclarationErrorsReturnTypes.symbols
+@@= skipped -75, +75 lines =@@
+ 
+     // Should Error
+     fnExpression = function foo() { return 0; }
+->fnExpression : Symbol(ExportedClass.fnExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 31, 28))
++>fnExpression : Symbol(fnExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 31, 28))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 33, 18))
+ 
+     fnArrow = () => "S";    
+->fnArrow : Symbol(ExportedClass.fnArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 33, 47))
++>fnArrow : Symbol(fnArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 33, 47))
+ 
+     protected fnExpressionProtected = function foo() { return 0; }
+->fnExpressionProtected : Symbol(ExportedClass.fnExpressionProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 34, 24))
++>fnExpressionProtected : Symbol(fnExpressionProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 34, 24))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 35, 37))
+ 
+     protected fnArrowProtected = () => "S";
+->fnArrowProtected : Symbol(ExportedClass.fnArrowProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 35, 66))
++>fnArrowProtected : Symbol(fnArrowProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 35, 66))
+ 
+     static fnStaticExpression = function foo() { return 0; }
+->fnStaticExpression : Symbol(ExportedClass.fnStaticExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 36, 43))
++>fnStaticExpression : Symbol(fnStaticExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 36, 43))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 38, 31))
+ 
+     static fnStaticArrow = () => "S";
+->fnStaticArrow : Symbol(ExportedClass.fnStaticArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 38, 60))
++>fnStaticArrow : Symbol(fnStaticArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 38, 60))
+ 
+     protected static fnStaticExpressionProtected = function foo() { return 0; }    
+->fnStaticExpressionProtected : Symbol(ExportedClass.fnStaticExpressionProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 39, 37))
++>fnStaticExpressionProtected : Symbol(fnStaticExpressionProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 39, 37))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 40, 50))
+ 
+     protected static fnStaticArrowProtected = () => "S";
+->fnStaticArrowProtected : Symbol(ExportedClass.fnStaticArrowProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 40, 79))
++>fnStaticArrowProtected : Symbol(fnStaticArrowProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 40, 79))
+ 
+     // Have annotation, so ok 
+     fnExpressionOk = function foo(): number { return 0; }
+->fnExpressionOk : Symbol(ExportedClass.fnExpressionOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 41, 56))
++>fnExpressionOk : Symbol(fnExpressionOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 41, 56))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 44, 20))
+ 
+     fnArrowOK = (): string => "S";
+->fnArrowOK : Symbol(ExportedClass.fnArrowOK, Decl(isolatedDeclarationErrorsReturnTypes.ts, 44, 57))
++>fnArrowOK : Symbol(fnArrowOK, Decl(isolatedDeclarationErrorsReturnTypes.ts, 44, 57))
+ 
+     protected fnExpressionProtectedOk = function foo(): number { return 0; }
+->fnExpressionProtectedOk : Symbol(ExportedClass.fnExpressionProtectedOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 45, 34))
++>fnExpressionProtectedOk : Symbol(fnExpressionProtectedOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 45, 34))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 46, 39))
+ 
+     protected fnArrowProtectedOK = (): string => "S";
+->fnArrowProtectedOK : Symbol(ExportedClass.fnArrowProtectedOK, Decl(isolatedDeclarationErrorsReturnTypes.ts, 46, 76))
++>fnArrowProtectedOK : Symbol(fnArrowProtectedOK, Decl(isolatedDeclarationErrorsReturnTypes.ts, 46, 76))
+ 
+     static fnStaticExpressionOk = function foo(): number { return 0; }
+->fnStaticExpressionOk : Symbol(ExportedClass.fnStaticExpressionOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 47, 53))
++>fnStaticExpressionOk : Symbol(fnStaticExpressionOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 47, 53))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 49, 33))
+ 
+     static fnStaticArrowOk = (): string => "S";
+->fnStaticArrowOk : Symbol(ExportedClass.fnStaticArrowOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 49, 70))
++>fnStaticArrowOk : Symbol(fnStaticArrowOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 49, 70))
+ 
+     protected static fnStaticExpressionProtectedOk = function foo(): number { return 0; }    
+->fnStaticExpressionProtectedOk : Symbol(ExportedClass.fnStaticExpressionProtectedOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 50, 47))
++>fnStaticExpressionProtectedOk : Symbol(fnStaticExpressionProtectedOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 50, 47))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 51, 52))
+ 
+     protected static fnStaticArrowProtectedOk = (): string => "S";
+->fnStaticArrowProtectedOk : Symbol(ExportedClass.fnStaticArrowProtectedOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 51, 89))
++>fnStaticArrowProtectedOk : Symbol(fnStaticArrowProtectedOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 51, 89))
+     
+ 
+     // No Error not in declarations
+     private fnExpressionPrivate = function foo() { return 0; }
+->fnExpressionPrivate : Symbol(ExportedClass.fnExpressionPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 52, 66))
++>fnExpressionPrivate : Symbol(fnExpressionPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 52, 66))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 56, 33))
+ 
+     private fnArrowPrivate = () => "S";
+->fnArrowPrivate : Symbol(ExportedClass.fnArrowPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 56, 62))
++>fnArrowPrivate : Symbol(fnArrowPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 56, 62))
+ 
+     #fnArrow = () => "S";
+->#fnArrow : Symbol(ExportedClass.#fnArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 57, 39))
++>#fnArrow : Symbol(#fnArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 57, 39))
+ 
+     #fnExpression = function foo() { return 0;}
+->#fnExpression : Symbol(ExportedClass.#fnExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 58, 25))
++>#fnExpression : Symbol(#fnExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 58, 25))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 59, 19))
+ 
+     private static fnStaticExpressionPrivate = function foo() { return 0; }
+->fnStaticExpressionPrivate : Symbol(ExportedClass.fnStaticExpressionPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 59, 47))
++>fnStaticExpressionPrivate : Symbol(fnStaticExpressionPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 59, 47))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 60, 46))
+ 
+     private static fnStaticArrowPrivate = () => "S";
+->fnStaticArrowPrivate : Symbol(ExportedClass.fnStaticArrowPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 60, 75))
++>fnStaticArrowPrivate : Symbol(fnStaticArrowPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 60, 75))
+ }
+ 
+ // Should error
+@@= skipped -85, +85 lines =@@
+ >IndirectlyExportedClass : Symbol(IndirectlyExportedClass, Decl(isolatedDeclarationErrorsReturnTypes.ts, 62, 1))
+ 
+     fnExpression = function foo() { return 0; }
+->fnExpression : Symbol(IndirectlyExportedClass.fnExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 65, 31))
++>fnExpression : Symbol(fnExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 65, 31))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 66, 18))
+ 
+     fnArrow = () => "S";
+->fnArrow : Symbol(IndirectlyExportedClass.fnArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 66, 47))
++>fnArrow : Symbol(fnArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 66, 47))
+ 
+     static fnStaticExpression = function foo() { return 0; }
+->fnStaticExpression : Symbol(IndirectlyExportedClass.fnStaticExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 67, 24))
++>fnStaticExpression : Symbol(fnStaticExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 67, 24))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 69, 31))
+ 
+     static fnStaticArrow = () => "S";
+->fnStaticArrow : Symbol(IndirectlyExportedClass.fnStaticArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 69, 60))
++>fnStaticArrow : Symbol(fnStaticArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 69, 60))
+     
+     protected static fnStaticExpressionProtected = function foo() { return 0; }    
+->fnStaticExpressionProtected : Symbol(IndirectlyExportedClass.fnStaticExpressionProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 70, 37))
++>fnStaticExpressionProtected : Symbol(fnStaticExpressionProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 70, 37))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 72, 50))
+ 
+     protected static fnStaticArrowProtected = () => "S";
+->fnStaticArrowProtected : Symbol(IndirectlyExportedClass.fnStaticArrowProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 72, 79))
++>fnStaticArrowProtected : Symbol(fnStaticArrowProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 72, 79))
+ 
+     private fnExpressionPrivate = function foo() { return 0; }
+->fnExpressionPrivate : Symbol(IndirectlyExportedClass.fnExpressionPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 73, 56))
++>fnExpressionPrivate : Symbol(fnExpressionPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 73, 56))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 75, 33))
+ 
+     private fnArrowPrivate = () => "S";
+->fnArrowPrivate : Symbol(IndirectlyExportedClass.fnArrowPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 75, 62))
++>fnArrowPrivate : Symbol(fnArrowPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 75, 62))
+ 
+     #fnArrow = () => "S";
+->#fnArrow : Symbol(IndirectlyExportedClass.#fnArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 76, 39))
++>#fnArrow : Symbol(#fnArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 76, 39))
+ 
+     #fnExpression = function foo() { return 0;}
+->#fnExpression : Symbol(IndirectlyExportedClass.#fnExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 77, 25))
++>#fnExpression : Symbol(#fnExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 77, 25))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 78, 19))
+ 
+     private static fnStaticExpressionPrivate = function foo() { return 0; }
+->fnStaticExpressionPrivate : Symbol(IndirectlyExportedClass.fnStaticExpressionPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 78, 47))
++>fnStaticExpressionPrivate : Symbol(fnStaticExpressionPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 78, 47))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 79, 46))
+ 
+     private static fnStaticArrowPrivate = () => "S";
+->fnStaticArrowPrivate : Symbol(IndirectlyExportedClass.fnStaticArrowPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 79, 75))
++>fnStaticArrowPrivate : Symbol(fnStaticArrowPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 79, 75))
+ }
+ export const instance: IndirectlyExportedClass = new IndirectlyExportedClass();
+ >instance : Symbol(instance, Decl(isolatedDeclarationErrorsReturnTypes.ts, 82, 12))
+@@= skipped -51, +51 lines =@@
+ >InternalClass : Symbol(InternalClass, Decl(isolatedDeclarationErrorsReturnTypes.ts, 82, 79))
+ 
+     fnExpression = function foo() { return 0; }
+->fnExpression : Symbol(InternalClass.fnExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 85, 21))
++>fnExpression : Symbol(fnExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 85, 21))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 86, 18))
+ 
+     fnArrow = () => "S";
+->fnArrow : Symbol(InternalClass.fnArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 86, 47))
++>fnArrow : Symbol(fnArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 86, 47))
+ 
+     static fnStaticExpression = function foo() { return 0; }
+->fnStaticExpression : Symbol(InternalClass.fnStaticExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 87, 24))
++>fnStaticExpression : Symbol(fnStaticExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 87, 24))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 89, 31))
+ 
+     static fnStaticArrow = () => "S";
+->fnStaticArrow : Symbol(InternalClass.fnStaticArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 89, 60))
++>fnStaticArrow : Symbol(fnStaticArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 89, 60))
+     
+     protected static fnStaticExpressionProtected = function foo() { return 0; }    
+->fnStaticExpressionProtected : Symbol(InternalClass.fnStaticExpressionProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 90, 37))
++>fnStaticExpressionProtected : Symbol(fnStaticExpressionProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 90, 37))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 92, 50))
+ 
+     protected static fnStaticArrowProtected = () => "S";
+->fnStaticArrowProtected : Symbol(InternalClass.fnStaticArrowProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 92, 79))
++>fnStaticArrowProtected : Symbol(fnStaticArrowProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 92, 79))
+ 
+     private fnExpressionPrivate = function foo() { return 0; }
+->fnExpressionPrivate : Symbol(InternalClass.fnExpressionPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 93, 56))
++>fnExpressionPrivate : Symbol(fnExpressionPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 93, 56))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 95, 33))
+ 
+     private fnArrowPrivate = () => "S";
+->fnArrowPrivate : Symbol(InternalClass.fnArrowPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 95, 62))
++>fnArrowPrivate : Symbol(fnArrowPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 95, 62))
+ 
+     #fnArrow = () => "S";
+->#fnArrow : Symbol(InternalClass.#fnArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 96, 39))
++>#fnArrow : Symbol(#fnArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 96, 39))
+ 
+     #fnExpression = function foo() { return 0;}
+->#fnExpression : Symbol(InternalClass.#fnExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 97, 25))
++>#fnExpression : Symbol(#fnExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 97, 25))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 98, 19))
+ 
+     private static fnStaticExpressionPrivate = function foo() { return 0; }
+->fnStaticExpressionPrivate : Symbol(InternalClass.fnStaticExpressionPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 98, 47))
++>fnStaticExpressionPrivate : Symbol(fnStaticExpressionPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 98, 47))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 99, 46))
+ 
+     private static fnStaticArrowPrivate = () => "S";
+->fnStaticArrowPrivate : Symbol(InternalClass.fnStaticArrowPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 99, 75))
++>fnStaticArrowPrivate : Symbol(fnStaticArrowPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 99, 75))
+ }
+ const internalInstance: InternalClass = new InternalClass();
+ >internalInstance : Symbol(internalInstance, Decl(isolatedDeclarationErrorsReturnTypes.ts, 102, 5))
+@@= skipped -167, +167 lines =@@
+ 
+     // Should Error
+     fnExpression = function foo(cb = function(){ }) { return 0; }
+->fnExpression : Symbol(FnParamsExportedClass.fnExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 148, 36))
++>fnExpression : Symbol(fnExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 148, 36))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 150, 18))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 150, 32))
+ 
+     fnArrow = (cb = function(){ }) => "S";
+->fnArrow : Symbol(FnParamsExportedClass.fnArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 150, 65))
++>fnArrow : Symbol(fnArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 150, 65))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 151, 15))
+ 
+     protected fnExpressionProtected = function foo(cb = function(){ }) { return 0; }
+->fnExpressionProtected : Symbol(FnParamsExportedClass.fnExpressionProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 151, 42))
++>fnExpressionProtected : Symbol(fnExpressionProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 151, 42))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 152, 37))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 152, 51))
+ 
+     protected fnArrowProtected = (cb = function(){ }) => "S";
+->fnArrowProtected : Symbol(FnParamsExportedClass.fnArrowProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 152, 84))
++>fnArrowProtected : Symbol(fnArrowProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 152, 84))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 153, 34))
+ 
+     static fnStaticExpression = function foo(cb = function(){ }) { return 0; }
+->fnStaticExpression : Symbol(FnParamsExportedClass.fnStaticExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 153, 61))
++>fnStaticExpression : Symbol(fnStaticExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 153, 61))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 155, 31))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 155, 45))
+ 
+     static fnStaticArrow = (cb = function(){ }) => "S";
+->fnStaticArrow : Symbol(FnParamsExportedClass.fnStaticArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 155, 78))
++>fnStaticArrow : Symbol(fnStaticArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 155, 78))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 156, 28))
+ 
+     protected static fnStaticExpressionProtected = function foo(cb = function(){ }) { return 0; }    
+->fnStaticExpressionProtected : Symbol(FnParamsExportedClass.fnStaticExpressionProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 156, 55))
++>fnStaticExpressionProtected : Symbol(fnStaticExpressionProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 156, 55))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 157, 50))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 157, 64))
+ 
+     protected static fnStaticArrowProtected = (cb = function(){ }) => "S";
+->fnStaticArrowProtected : Symbol(FnParamsExportedClass.fnStaticArrowProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 157, 97))
++>fnStaticArrowProtected : Symbol(fnStaticArrowProtected, Decl(isolatedDeclarationErrorsReturnTypes.ts, 157, 97))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 158, 47))
+ 
+     // Have annotation on owner
+     fnExpressionMethodHasReturn = function foo(cb = function(){ }): number { return 0; }
+->fnExpressionMethodHasReturn : Symbol(FnParamsExportedClass.fnExpressionMethodHasReturn, Decl(isolatedDeclarationErrorsReturnTypes.ts, 158, 74))
++>fnExpressionMethodHasReturn : Symbol(fnExpressionMethodHasReturn, Decl(isolatedDeclarationErrorsReturnTypes.ts, 158, 74))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 161, 33))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 161, 47))
+ 
+     fnArrowMethodHasReturn = (cb = function(){ }): string => "S";
+->fnArrowMethodHasReturn : Symbol(FnParamsExportedClass.fnArrowMethodHasReturn, Decl(isolatedDeclarationErrorsReturnTypes.ts, 161, 88))
++>fnArrowMethodHasReturn : Symbol(fnArrowMethodHasReturn, Decl(isolatedDeclarationErrorsReturnTypes.ts, 161, 88))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 162, 30))
+ 
+     protected fnExpressionProtectedMethodHasReturn = function foo(cb = function(){ }): number { return 0; }
+->fnExpressionProtectedMethodHasReturn : Symbol(FnParamsExportedClass.fnExpressionProtectedMethodHasReturn, Decl(isolatedDeclarationErrorsReturnTypes.ts, 162, 65))
++>fnExpressionProtectedMethodHasReturn : Symbol(fnExpressionProtectedMethodHasReturn, Decl(isolatedDeclarationErrorsReturnTypes.ts, 162, 65))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 163, 52))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 163, 66))
+ 
+     protected fnArrowProtectedMethodHasReturn = (cb = function(){ }): string => "S";
+->fnArrowProtectedMethodHasReturn : Symbol(FnParamsExportedClass.fnArrowProtectedMethodHasReturn, Decl(isolatedDeclarationErrorsReturnTypes.ts, 163, 107))
++>fnArrowProtectedMethodHasReturn : Symbol(fnArrowProtectedMethodHasReturn, Decl(isolatedDeclarationErrorsReturnTypes.ts, 163, 107))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 164, 49))
+ 
+     static fnStaticExpressionMethodHasReturn = function foo(cb = function(){ }): number { return 0; }
+->fnStaticExpressionMethodHasReturn : Symbol(FnParamsExportedClass.fnStaticExpressionMethodHasReturn, Decl(isolatedDeclarationErrorsReturnTypes.ts, 164, 84))
++>fnStaticExpressionMethodHasReturn : Symbol(fnStaticExpressionMethodHasReturn, Decl(isolatedDeclarationErrorsReturnTypes.ts, 164, 84))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 166, 46))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 166, 60))
+ 
+     static fnStaticArrowMethodHasReturn = (cb = function(){ }): string => "S";
+->fnStaticArrowMethodHasReturn : Symbol(FnParamsExportedClass.fnStaticArrowMethodHasReturn, Decl(isolatedDeclarationErrorsReturnTypes.ts, 166, 101))
++>fnStaticArrowMethodHasReturn : Symbol(fnStaticArrowMethodHasReturn, Decl(isolatedDeclarationErrorsReturnTypes.ts, 166, 101))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 167, 43))
+ 
+     protected static fnStaticExpressionProtectedMethodHasReturn = function foo(cb = function(){ }): number { return 0; }    
+->fnStaticExpressionProtectedMethodHasReturn : Symbol(FnParamsExportedClass.fnStaticExpressionProtectedMethodHasReturn, Decl(isolatedDeclarationErrorsReturnTypes.ts, 167, 78))
++>fnStaticExpressionProtectedMethodHasReturn : Symbol(fnStaticExpressionProtectedMethodHasReturn, Decl(isolatedDeclarationErrorsReturnTypes.ts, 167, 78))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 168, 65))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 168, 79))
+ 
+     protected static fnStaticArrowProtectedMethodHasReturn = (cb = function(){ }): string => "S";
+->fnStaticArrowProtectedMethodHasReturn : Symbol(FnParamsExportedClass.fnStaticArrowProtectedMethodHasReturn, Decl(isolatedDeclarationErrorsReturnTypes.ts, 168, 120))
++>fnStaticArrowProtectedMethodHasReturn : Symbol(fnStaticArrowProtectedMethodHasReturn, Decl(isolatedDeclarationErrorsReturnTypes.ts, 168, 120))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 169, 62))
+ 
+     // Have annotation only on parameter
+     fnExpressionOnlyOnParam = function foo(cb = function(): void { }) { return 0; }
+->fnExpressionOnlyOnParam : Symbol(FnParamsExportedClass.fnExpressionOnlyOnParam, Decl(isolatedDeclarationErrorsReturnTypes.ts, 169, 97))
++>fnExpressionOnlyOnParam : Symbol(fnExpressionOnlyOnParam, Decl(isolatedDeclarationErrorsReturnTypes.ts, 169, 97))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 172, 29))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 172, 43))
+ 
+     fnArrowOnlyOnParam = (cb = function(): void { }) => "S";
+->fnArrowOnlyOnParam : Symbol(FnParamsExportedClass.fnArrowOnlyOnParam, Decl(isolatedDeclarationErrorsReturnTypes.ts, 172, 83))
++>fnArrowOnlyOnParam : Symbol(fnArrowOnlyOnParam, Decl(isolatedDeclarationErrorsReturnTypes.ts, 172, 83))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 173, 26))
+ 
+     protected fnExpressionProtectedOnlyOnParam = function foo(cb = function(): void { }) { return 0; }
+->fnExpressionProtectedOnlyOnParam : Symbol(FnParamsExportedClass.fnExpressionProtectedOnlyOnParam, Decl(isolatedDeclarationErrorsReturnTypes.ts, 173, 60))
++>fnExpressionProtectedOnlyOnParam : Symbol(fnExpressionProtectedOnlyOnParam, Decl(isolatedDeclarationErrorsReturnTypes.ts, 173, 60))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 174, 48))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 174, 62))
+ 
+     protected fnArrowProtectedOnlyOnParam = (cb = function(): void { }) => "S";
+->fnArrowProtectedOnlyOnParam : Symbol(FnParamsExportedClass.fnArrowProtectedOnlyOnParam, Decl(isolatedDeclarationErrorsReturnTypes.ts, 174, 102))
++>fnArrowProtectedOnlyOnParam : Symbol(fnArrowProtectedOnlyOnParam, Decl(isolatedDeclarationErrorsReturnTypes.ts, 174, 102))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 175, 45))
+ 
+     static fnStaticExpressionOnlyOnParam = function foo(cb = function(): void{ }) { return 0; }
+->fnStaticExpressionOnlyOnParam : Symbol(FnParamsExportedClass.fnStaticExpressionOnlyOnParam, Decl(isolatedDeclarationErrorsReturnTypes.ts, 175, 79))
++>fnStaticExpressionOnlyOnParam : Symbol(fnStaticExpressionOnlyOnParam, Decl(isolatedDeclarationErrorsReturnTypes.ts, 175, 79))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 177, 42))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 177, 56))
+ 
+     static fnStaticArrowOnlyOnParam = (cb = function(): void{ }) => "S";
+->fnStaticArrowOnlyOnParam : Symbol(FnParamsExportedClass.fnStaticArrowOnlyOnParam, Decl(isolatedDeclarationErrorsReturnTypes.ts, 177, 95))
++>fnStaticArrowOnlyOnParam : Symbol(fnStaticArrowOnlyOnParam, Decl(isolatedDeclarationErrorsReturnTypes.ts, 177, 95))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 178, 39))
+ 
+     protected static fnStaticExpressionProtectedOnlyOnParam = function foo(cb = function(): void{ }) { return 0; }    
+->fnStaticExpressionProtectedOnlyOnParam : Symbol(FnParamsExportedClass.fnStaticExpressionProtectedOnlyOnParam, Decl(isolatedDeclarationErrorsReturnTypes.ts, 178, 72))
++>fnStaticExpressionProtectedOnlyOnParam : Symbol(fnStaticExpressionProtectedOnlyOnParam, Decl(isolatedDeclarationErrorsReturnTypes.ts, 178, 72))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 179, 61))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 179, 75))
+ 
+     protected static fnStaticArrowProtectedOnlyOnParam = (cb = function(): void{ }) => "S";
+->fnStaticArrowProtectedOnlyOnParam : Symbol(FnParamsExportedClass.fnStaticArrowProtectedOnlyOnParam, Decl(isolatedDeclarationErrorsReturnTypes.ts, 179, 114))
++>fnStaticArrowProtectedOnlyOnParam : Symbol(fnStaticArrowProtectedOnlyOnParam, Decl(isolatedDeclarationErrorsReturnTypes.ts, 179, 114))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 180, 58))
+ 
+     // Have annotation, so ok 
+     fnExpressionOk = function foo(cb = function(): void { }): number { return 0; }
+->fnExpressionOk : Symbol(FnParamsExportedClass.fnExpressionOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 180, 91))
++>fnExpressionOk : Symbol(fnExpressionOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 180, 91))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 183, 20))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 183, 34))
+ 
+     fnArrowOK = (cb = function(): void { }): string => "S";
+->fnArrowOK : Symbol(FnParamsExportedClass.fnArrowOK, Decl(isolatedDeclarationErrorsReturnTypes.ts, 183, 82))
++>fnArrowOK : Symbol(fnArrowOK, Decl(isolatedDeclarationErrorsReturnTypes.ts, 183, 82))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 184, 17))
+ 
+     protected fnExpressionProtectedOk = function foo(cb = function(): void { }): number { return 0; }
+->fnExpressionProtectedOk : Symbol(FnParamsExportedClass.fnExpressionProtectedOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 184, 59))
++>fnExpressionProtectedOk : Symbol(fnExpressionProtectedOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 184, 59))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 185, 39))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 185, 53))
+ 
+     protected fnArrowProtectedOK = (cb = function(): void { }): string => "S";
+->fnArrowProtectedOK : Symbol(FnParamsExportedClass.fnArrowProtectedOK, Decl(isolatedDeclarationErrorsReturnTypes.ts, 185, 101))
++>fnArrowProtectedOK : Symbol(fnArrowProtectedOK, Decl(isolatedDeclarationErrorsReturnTypes.ts, 185, 101))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 186, 36))
+ 
+     static fnStaticExpressionOk = function foo(cb = function(): void{ }): number { return 0; }
+->fnStaticExpressionOk : Symbol(FnParamsExportedClass.fnStaticExpressionOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 186, 78))
++>fnStaticExpressionOk : Symbol(fnStaticExpressionOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 186, 78))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 188, 33))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 188, 47))
+ 
+     static fnStaticArrowOk = (cb = function(): void{ }): string => "S";
+->fnStaticArrowOk : Symbol(FnParamsExportedClass.fnStaticArrowOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 188, 94))
++>fnStaticArrowOk : Symbol(fnStaticArrowOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 188, 94))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 189, 30))
+ 
+     protected static fnStaticExpressionProtectedOk = function foo(cb = function(): void{ }): number { return 0; }    
+->fnStaticExpressionProtectedOk : Symbol(FnParamsExportedClass.fnStaticExpressionProtectedOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 189, 71))
++>fnStaticExpressionProtectedOk : Symbol(fnStaticExpressionProtectedOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 189, 71))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 190, 52))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 190, 66))
+ 
+     protected static fnStaticArrowProtectedOk = (cb = function(): void{ }): string => "S";
+->fnStaticArrowProtectedOk : Symbol(FnParamsExportedClass.fnStaticArrowProtectedOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 190, 113))
++>fnStaticArrowProtectedOk : Symbol(fnStaticArrowProtectedOk, Decl(isolatedDeclarationErrorsReturnTypes.ts, 190, 113))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 191, 49))
+     
+ 
+     // No Error, not in declarations
+     private fnExpressionPrivate = function foo(cb = function(){ }) { return 0; }
+->fnExpressionPrivate : Symbol(FnParamsExportedClass.fnExpressionPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 191, 90))
++>fnExpressionPrivate : Symbol(fnExpressionPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 191, 90))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 195, 33))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 195, 47))
+ 
+     private fnArrowPrivate = (cb = function(){ }) => "S";
+->fnArrowPrivate : Symbol(FnParamsExportedClass.fnArrowPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 195, 80))
++>fnArrowPrivate : Symbol(fnArrowPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 195, 80))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 196, 30))
+ 
+     #fnArrow = (cb = function(){ }) => "S";
+->#fnArrow : Symbol(FnParamsExportedClass.#fnArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 196, 57))
++>#fnArrow : Symbol(#fnArrow, Decl(isolatedDeclarationErrorsReturnTypes.ts, 196, 57))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 197, 16))
+ 
+     #fnExpression = function foo(cb = function(){ }) { return 0;}
+->#fnExpression : Symbol(FnParamsExportedClass.#fnExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 197, 43))
++>#fnExpression : Symbol(#fnExpression, Decl(isolatedDeclarationErrorsReturnTypes.ts, 197, 43))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 198, 19))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 198, 33))
+ 
+     private static fnStaticExpressionPrivate = function foo(cb = function(){ }) { return 0; }
+->fnStaticExpressionPrivate : Symbol(FnParamsExportedClass.fnStaticExpressionPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 198, 65))
++>fnStaticExpressionPrivate : Symbol(fnStaticExpressionPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 198, 65))
+ >foo : Symbol(foo, Decl(isolatedDeclarationErrorsReturnTypes.ts, 199, 46))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 199, 60))
+ 
+     private static fnStaticArrowPrivate = (cb = function(){ }) => "S";
+->fnStaticArrowPrivate : Symbol(FnParamsExportedClass.fnStaticArrowPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 199, 93))
++>fnStaticArrowPrivate : Symbol(fnStaticArrowPrivate, Decl(isolatedDeclarationErrorsReturnTypes.ts, 199, 93))
+ >cb : Symbol(cb, Decl(isolatedDeclarationErrorsReturnTypes.ts, 200, 43))
+ }
+ 

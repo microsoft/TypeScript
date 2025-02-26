@@ -1,0 +1,37 @@
+--- old.invalidVoidValues.symbols
++++ new.invalidVoidValues.symbols
+@@= skipped -14, +14 lines =@@
+ 
+ enum E { A }
+ >E : Symbol(E, Decl(invalidVoidValues.ts, 3, 9))
+->A : Symbol(E.A, Decl(invalidVoidValues.ts, 5, 8))
++>A : Symbol(A, Decl(invalidVoidValues.ts, 5, 8))
+ 
+ x = E;
+ >x : Symbol(x, Decl(invalidVoidValues.ts, 0, 3))
+@@= skipped -8, +8 lines =@@
+ 
+ x = E.A;
+ >x : Symbol(x, Decl(invalidVoidValues.ts, 0, 3))
+->E.A : Symbol(E.A, Decl(invalidVoidValues.ts, 5, 8))
++>E.A : Symbol(A, Decl(invalidVoidValues.ts, 5, 8))
+ >E : Symbol(E, Decl(invalidVoidValues.ts, 3, 9))
+->A : Symbol(E.A, Decl(invalidVoidValues.ts, 5, 8))
++>A : Symbol(A, Decl(invalidVoidValues.ts, 5, 8))
+ 
+ class C { foo: string }
+ >C : Symbol(C, Decl(invalidVoidValues.ts, 7, 8))
+->foo : Symbol(C.foo, Decl(invalidVoidValues.ts, 9, 9))
++>foo : Symbol(foo, Decl(invalidVoidValues.ts, 9, 9))
+ 
+ var a: C;
+ >a : Symbol(a, Decl(invalidVoidValues.ts, 10, 3))
+@@= skipped -18, +18 lines =@@
+ 
+ interface I { foo: string }
+ >I : Symbol(I, Decl(invalidVoidValues.ts, 11, 6))
+->foo : Symbol(I.foo, Decl(invalidVoidValues.ts, 13, 13))
++>foo : Symbol(foo, Decl(invalidVoidValues.ts, 13, 13))
+ 
+ var b: I;
+ >b : Symbol(b, Decl(invalidVoidValues.ts, 14, 3))

@@ -1,0 +1,9 @@
+--- old.metadataOfStringLiteral.symbols
++++ new.metadataOfStringLiteral.symbols
+@@= skipped -13, +13 lines =@@
+ >PropDeco : Symbol(PropDeco, Decl(metadataOfStringLiteral.ts, 0, 0))
+ 
+     public foo: "foo" | "bar";
+->foo : Symbol(Foo.foo, Decl(metadataOfStringLiteral.ts, 2, 11))
++>foo : Symbol(foo, Decl(metadataOfStringLiteral.ts, 2, 11))
+ }

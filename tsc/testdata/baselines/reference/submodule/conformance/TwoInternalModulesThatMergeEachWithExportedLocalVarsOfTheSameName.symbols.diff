@@ -1,0 +1,45 @@
+--- old.TwoInternalModulesThatMergeEachWithExportedLocalVarsOfTheSameName.symbols
++++ new.TwoInternalModulesThatMergeEachWithExportedLocalVarsOfTheSameName.symbols
+@@= skipped -7, +7 lines =@@
+ >Point : Symbol(Point, Decl(part1.ts, 0, 17))
+ 
+         x: number;
+->x : Symbol(Point.x, Decl(part1.ts, 1, 28))
++>x : Symbol(x, Decl(part1.ts, 1, 28))
+ 
+         y: number;
+->y : Symbol(Point.y, Decl(part1.ts, 2, 18))
++>y : Symbol(y, Decl(part1.ts, 2, 18))
+     }
+ 
+     export module Utils {
+@@= skipped -18, +18 lines =@@
+ 
+             return { x: p.y, y: p.x };
+ >x : Symbol(x, Decl(part1.ts, 8, 20))
+->p.y : Symbol(Point.y, Decl(part1.ts, 2, 18))
++>p.y : Symbol(y, Decl(part1.ts, 2, 18))
+ >p : Symbol(p, Decl(part1.ts, 7, 48))
+->y : Symbol(Point.y, Decl(part1.ts, 2, 18))
++>y : Symbol(y, Decl(part1.ts, 2, 18))
+ >y : Symbol(y, Decl(part1.ts, 8, 28))
+->p.x : Symbol(Point.x, Decl(part1.ts, 1, 28))
++>p.x : Symbol(x, Decl(part1.ts, 1, 28))
+ >p : Symbol(p, Decl(part1.ts, 7, 48))
+->x : Symbol(Point.x, Decl(part1.ts, 1, 28))
++>x : Symbol(x, Decl(part1.ts, 1, 28))
+         }
+     }
+ 
+@@= skipped -35, +35 lines =@@
+ >Plane : Symbol(Plane, Decl(part2.ts, 4, 25))
+ 
+             constructor(public tl: Point, public br: Point) { }
+->tl : Symbol(Plane.tl, Decl(part2.ts, 6, 24))
++>tl : Symbol(tl, Decl(part2.ts, 6, 24))
+ >Point : Symbol(Point)
+->br : Symbol(Plane.br, Decl(part2.ts, 6, 41))
++>br : Symbol(br, Decl(part2.ts, 6, 41))
+ >Point : Symbol(Point)
+         }
+     }

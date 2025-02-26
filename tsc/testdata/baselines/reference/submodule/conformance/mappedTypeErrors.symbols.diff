@@ -1,0 +1,144 @@
+--- old.mappedTypeErrors.symbols
++++ new.mappedTypeErrors.symbols
+@@= skipped -4, +4 lines =@@
+ >Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
+ 
+     name: string;
+->name : Symbol(Shape.name, Decl(mappedTypeErrors.ts, 0, 17))
++>name : Symbol(name, Decl(mappedTypeErrors.ts, 0, 17))
+ 
+     width: number;
+->width : Symbol(Shape.width, Decl(mappedTypeErrors.ts, 1, 17))
++>width : Symbol(width, Decl(mappedTypeErrors.ts, 1, 17))
+ 
+     height: number;
+->height : Symbol(Shape.height, Decl(mappedTypeErrors.ts, 2, 18))
++>height : Symbol(height, Decl(mappedTypeErrors.ts, 2, 18))
+ 
+     visible: boolean;
+->visible : Symbol(Shape.visible, Decl(mappedTypeErrors.ts, 3, 19))
++>visible : Symbol(visible, Decl(mappedTypeErrors.ts, 3, 19))
+ }
+ 
+ interface Named {
+ >Named : Symbol(Named, Decl(mappedTypeErrors.ts, 5, 1))
+ 
+     name: string;
+->name : Symbol(Named.name, Decl(mappedTypeErrors.ts, 7, 17))
++>name : Symbol(name, Decl(mappedTypeErrors.ts, 7, 17))
+ }
+ 
+ interface Point {
+ >Point : Symbol(Point, Decl(mappedTypeErrors.ts, 9, 1))
+ 
+     x: number;
+->x : Symbol(Point.x, Decl(mappedTypeErrors.ts, 11, 17))
++>x : Symbol(x, Decl(mappedTypeErrors.ts, 11, 17))
+ 
+     y: number;
+->y : Symbol(Point.y, Decl(mappedTypeErrors.ts, 12, 14))
++>y : Symbol(y, Decl(mappedTypeErrors.ts, 12, 14))
+ }
+ 
+ // Constraint checking
+@@= skipped -309, +309 lines =@@
+ >Foo : Symbol(Foo, Decl(mappedTypeErrors.ts, 83, 1))
+ 
+     a: string;
+->a : Symbol(Foo.a, Decl(mappedTypeErrors.ts, 87, 15))
++>a : Symbol(a, Decl(mappedTypeErrors.ts, 87, 15))
+ 
+     b?: number;
+->b : Symbol(Foo.b, Decl(mappedTypeErrors.ts, 88, 14))
++>b : Symbol(b, Decl(mappedTypeErrors.ts, 88, 14))
+ }
+ 
+ function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>) {
+@@= skipped -78, +78 lines =@@
+ >T : Symbol(T, Decl(mappedTypeErrors.ts, 107, 8))
+ 
+     state: T;
+->state : Symbol(C.state, Decl(mappedTypeErrors.ts, 107, 12))
++>state : Symbol(state, Decl(mappedTypeErrors.ts, 107, 12))
+ >T : Symbol(T, Decl(mappedTypeErrors.ts, 107, 8))
+ 
+     setState<K extends keyof T>(props: Pick<T, K>) {
+->setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
++>setState : Symbol(setState, Decl(mappedTypeErrors.ts, 108, 13))
+ >K : Symbol(K, Decl(mappedTypeErrors.ts, 109, 13))
+ >T : Symbol(T, Decl(mappedTypeErrors.ts, 107, 8))
+ >props : Symbol(props, Decl(mappedTypeErrors.ts, 109, 32))
+@@= skipped -17, +17 lines =@@
+ >props : Symbol(props, Decl(mappedTypeErrors.ts, 109, 32))
+ 
+             this.state[k] = props[k];
+->this.state : Symbol(C.state, Decl(mappedTypeErrors.ts, 107, 12))
++>this.state : Symbol(state, Decl(mappedTypeErrors.ts, 107, 12))
+ >this : Symbol(C, Decl(mappedTypeErrors.ts, 105, 27))
+->state : Symbol(C.state, Decl(mappedTypeErrors.ts, 107, 12))
++>state : Symbol(state, Decl(mappedTypeErrors.ts, 107, 12))
+ >k : Symbol(k, Decl(mappedTypeErrors.ts, 110, 16))
+ >props : Symbol(props, Decl(mappedTypeErrors.ts, 109, 32))
+ >k : Symbol(k, Decl(mappedTypeErrors.ts, 110, 16))
+@@= skipped -16, +16 lines =@@
+ >Foo : Symbol(Foo, Decl(mappedTypeErrors.ts, 83, 1))
+ 
+ c.setState({ a: "test", b: 43 });
+->c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
++>c.setState : Symbol(setState, Decl(mappedTypeErrors.ts, 108, 13))
+ >c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
+->setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
++>setState : Symbol(setState, Decl(mappedTypeErrors.ts, 108, 13))
+ >a : Symbol(a, Decl(mappedTypeErrors.ts, 117, 12))
+ >b : Symbol(b, Decl(mappedTypeErrors.ts, 117, 23))
+ 
+ c.setState({ a: "hi" });
+->c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
++>c.setState : Symbol(setState, Decl(mappedTypeErrors.ts, 108, 13))
+ >c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
+->setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
++>setState : Symbol(setState, Decl(mappedTypeErrors.ts, 108, 13))
+ >a : Symbol(a, Decl(mappedTypeErrors.ts, 118, 12))
+ 
+ c.setState({ b: undefined });
+->c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
++>c.setState : Symbol(setState, Decl(mappedTypeErrors.ts, 108, 13))
+ >c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
+->setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
++>setState : Symbol(setState, Decl(mappedTypeErrors.ts, 108, 13))
+ >b : Symbol(b, Decl(mappedTypeErrors.ts, 119, 12))
+ >undefined : Symbol(undefined)
+ 
+ c.setState({ });
+->c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
++>c.setState : Symbol(setState, Decl(mappedTypeErrors.ts, 108, 13))
+ >c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
+->setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
++>setState : Symbol(setState, Decl(mappedTypeErrors.ts, 108, 13))
+ 
+ c.setState(foo);
+->c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
++>c.setState : Symbol(setState, Decl(mappedTypeErrors.ts, 108, 13))
+ >c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
+->setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
++>setState : Symbol(setState, Decl(mappedTypeErrors.ts, 108, 13))
+ >foo : Symbol(foo, Decl(mappedTypeErrors.ts, 98, 3))
+ 
+ c.setState({ a: undefined });  // Error
+->c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
++>c.setState : Symbol(setState, Decl(mappedTypeErrors.ts, 108, 13))
+ >c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
+->setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
++>setState : Symbol(setState, Decl(mappedTypeErrors.ts, 108, 13))
+ >a : Symbol(a, Decl(mappedTypeErrors.ts, 122, 12))
+ >undefined : Symbol(undefined)
+ 
+ c.setState({ c: true });  // Error
+->c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
++>c.setState : Symbol(setState, Decl(mappedTypeErrors.ts, 108, 13))
+ >c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
+->setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
++>setState : Symbol(setState, Decl(mappedTypeErrors.ts, 108, 13))
+ >c : Symbol(c, Decl(mappedTypeErrors.ts, 123, 12))
+ 
+ type T2 = { a?: number, [key: string]: any };

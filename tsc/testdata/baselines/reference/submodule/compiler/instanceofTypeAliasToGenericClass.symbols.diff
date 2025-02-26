@@ -1,0 +1,11 @@
+--- old.instanceofTypeAliasToGenericClass.symbols
++++ new.instanceofTypeAliasToGenericClass.symbols
+@@= skipped -5, +5 lines =@@
+ >S : Symbol(S, Decl(instanceofTypeAliasToGenericClass.ts, 0, 25))
+ 
+     _field: S;
+->_field : Symbol(TableClass._field, Decl(instanceofTypeAliasToGenericClass.ts, 0, 35))
++>_field : Symbol(_field, Decl(instanceofTypeAliasToGenericClass.ts, 0, 35))
+ >S : Symbol(S, Decl(instanceofTypeAliasToGenericClass.ts, 0, 25))
+ }
+ 

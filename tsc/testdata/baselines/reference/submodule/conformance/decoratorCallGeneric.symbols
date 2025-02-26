@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/decorators/decoratorCallGeneric.ts] ////
+
+=== decoratorCallGeneric.ts ===
+interface I<T> {
+>I : Symbol(I, Decl(decoratorCallGeneric.ts, 0, 0))
+>T : Symbol(T, Decl(decoratorCallGeneric.ts, 0, 12))
+
+    prototype: T,
+>prototype : Symbol(prototype, Decl(decoratorCallGeneric.ts, 0, 16))
+>T : Symbol(T, Decl(decoratorCallGeneric.ts, 0, 12))
+
+    m: () => T
+>m : Symbol(m, Decl(decoratorCallGeneric.ts, 1, 17))
+>T : Symbol(T, Decl(decoratorCallGeneric.ts, 0, 12))
+}
+function dec<T>(c: I<T>) { }
+>dec : Symbol(dec, Decl(decoratorCallGeneric.ts, 3, 1))
+>T : Symbol(T, Decl(decoratorCallGeneric.ts, 4, 13))
+>c : Symbol(c, Decl(decoratorCallGeneric.ts, 4, 16))
+>I : Symbol(I, Decl(decoratorCallGeneric.ts, 0, 0))
+>T : Symbol(T, Decl(decoratorCallGeneric.ts, 4, 13))
+
+@dec
+>dec : Symbol(dec, Decl(decoratorCallGeneric.ts, 3, 1))
+
+class C {
+>C : Symbol(C, Decl(decoratorCallGeneric.ts, 4, 28))
+
+    _brand: any;
+>_brand : Symbol(_brand, Decl(decoratorCallGeneric.ts, 7, 9))
+
+    static m() {}
+>m : Symbol(m, Decl(decoratorCallGeneric.ts, 8, 16))
+}
+

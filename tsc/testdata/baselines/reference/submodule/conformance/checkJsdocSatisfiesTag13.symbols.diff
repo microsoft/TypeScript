@@ -1,0 +1,12 @@
+--- old.checkJsdocSatisfiesTag13.symbols
++++ new.checkJsdocSatisfiesTag13.symbols
+@@= skipped -5, +5 lines =@@
+ >t1 : Symbol(t1, Decl(a.js, 1, 5))
+ >f : Symbol(f, Decl(a.js, 1, 12))
+ >s : Symbol(s, Decl(a.js, 1, 15))
+->s.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(a.js, 1, 15))
+->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+ 
+ /** @satisfies {{ f: (x: string) => string }} */
+ const t2 = { g: "oops" }; // should error

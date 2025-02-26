@@ -1,0 +1,22 @@
+--- old.stringIndexerAndConstructor.symbols
++++ new.stringIndexerAndConstructor.symbols
+@@= skipped -8, +8 lines =@@
+ 
+     constructor() { }
+     static v() { }
+->v : Symbol(C.v, Decl(stringIndexerAndConstructor.ts, 2, 21))
++>v : Symbol(v, Decl(stringIndexerAndConstructor.ts, 2, 21))
+ }
+ 
+ interface I {
+@@= skipped -12, +12 lines =@@
+     (): boolean;
+     new (): boolean;
+     "": string;
+->"" : Symbol(I[""], Decl(stringIndexerAndConstructor.ts, 9, 20))
++>"" : Symbol("", Decl(stringIndexerAndConstructor.ts, 9, 20))
+ 
+     d: string;
+->d : Symbol(I.d, Decl(stringIndexerAndConstructor.ts, 10, 15))
++>d : Symbol(d, Decl(stringIndexerAndConstructor.ts, 10, 15))
+ }

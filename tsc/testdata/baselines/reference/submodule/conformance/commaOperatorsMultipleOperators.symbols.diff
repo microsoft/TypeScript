@@ -1,0 +1,25 @@
+--- old.commaOperatorsMultipleOperators.symbols
++++ new.commaOperatorsMultipleOperators.symbols
+@@= skipped -77, +77 lines =@@
+ null, true, 1;
+ ++NUMBER, STRING.charAt(0), new Object();
+ >NUMBER : Symbol(NUMBER, Decl(commaOperatorsMultipleOperators.ts, 2, 3))
+->STRING.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
++>STRING.charAt : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
+ >STRING : Symbol(STRING, Decl(commaOperatorsMultipleOperators.ts, 3, 3))
+->charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
++>charAt : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+ var resultIsNumber2 = (null, true, 1);
+@@= skipped -11, +11 lines =@@
+ var resultIsObject2 = (++NUMBER, STRING.charAt(0), new Object());
+ >resultIsObject2 : Symbol(resultIsObject2, Decl(commaOperatorsMultipleOperators.ts, 25, 3))
+ >NUMBER : Symbol(NUMBER, Decl(commaOperatorsMultipleOperators.ts, 2, 3))
+->STRING.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
++>STRING.charAt : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
+ >STRING : Symbol(STRING, Decl(commaOperatorsMultipleOperators.ts, 3, 3))
+->charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
++>charAt : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 

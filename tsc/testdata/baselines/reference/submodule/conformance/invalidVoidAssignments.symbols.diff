@@ -1,0 +1,41 @@
+--- old.invalidVoidAssignments.symbols
++++ new.invalidVoidAssignments.symbols
+@@= skipped -22, +22 lines =@@
+ 
+ class C { foo: string; }
+ >C : Symbol(C, Decl(invalidVoidAssignments.ts, 5, 28))
+->foo : Symbol(C.foo, Decl(invalidVoidAssignments.ts, 7, 9))
++>foo : Symbol(foo, Decl(invalidVoidAssignments.ts, 7, 9))
+ 
+ var e: C = x;
+ >e : Symbol(e, Decl(invalidVoidAssignments.ts, 8, 3))
+@@= skipped -9, +9 lines =@@
+ 
+ interface I { bar: string; }
+ >I : Symbol(I, Decl(invalidVoidAssignments.ts, 8, 13))
+->bar : Symbol(I.bar, Decl(invalidVoidAssignments.ts, 10, 13))
++>bar : Symbol(bar, Decl(invalidVoidAssignments.ts, 10, 13))
+ 
+ var f: I = x;
+ >f : Symbol(f, Decl(invalidVoidAssignments.ts, 11, 3))
+@@= skipped -39, +39 lines =@@
+ 
+ enum E { A }
+ >E : Symbol(E, Decl(invalidVoidAssignments.ts, 22, 6))
+->A : Symbol(E.A, Decl(invalidVoidAssignments.ts, 24, 8))
++>A : Symbol(A, Decl(invalidVoidAssignments.ts, 24, 8))
+ 
+ x = E;
+ >x : Symbol(x, Decl(invalidVoidAssignments.ts, 0, 3))
+@@= skipped -8, +8 lines =@@
+ 
+ x = E.A;
+ >x : Symbol(x, Decl(invalidVoidAssignments.ts, 0, 3))
+->E.A : Symbol(E.A, Decl(invalidVoidAssignments.ts, 24, 8))
++>E.A : Symbol(A, Decl(invalidVoidAssignments.ts, 24, 8))
+ >E : Symbol(E, Decl(invalidVoidAssignments.ts, 22, 6))
+->A : Symbol(E.A, Decl(invalidVoidAssignments.ts, 24, 8))
++>A : Symbol(A, Decl(invalidVoidAssignments.ts, 24, 8))
+ 
+ x = { f() { } }
+ >x : Symbol(x, Decl(invalidVoidAssignments.ts, 0, 3))

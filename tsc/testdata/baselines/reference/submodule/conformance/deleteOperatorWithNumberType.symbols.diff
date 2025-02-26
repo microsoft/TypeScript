@@ -1,0 +1,76 @@
+--- old.deleteOperatorWithNumberType.symbols
++++ new.deleteOperatorWithNumberType.symbols
+@@= skipped -14, +14 lines =@@
+ >A : Symbol(A, Decl(deleteOperatorWithNumberType.ts, 4, 36))
+ 
+     public a: number;
+->a : Symbol(A.a, Decl(deleteOperatorWithNumberType.ts, 6, 9))
++>a : Symbol(a, Decl(deleteOperatorWithNumberType.ts, 6, 9))
+ 
+     static foo() { return 1; }
+->foo : Symbol(A.foo, Decl(deleteOperatorWithNumberType.ts, 7, 21))
++>foo : Symbol(foo, Decl(deleteOperatorWithNumberType.ts, 7, 21))
+ }
+ module M {
+ >M : Symbol(M, Decl(deleteOperatorWithNumberType.ts, 9, 1))
+@@= skipped -44, +44 lines =@@
+ // number type expressions
+ var ResultIsBoolean6 = delete objA.a;
+ >ResultIsBoolean6 : Symbol(ResultIsBoolean6, Decl(deleteOperatorWithNumberType.ts, 26, 3))
+->objA.a : Symbol(A.a, Decl(deleteOperatorWithNumberType.ts, 6, 9))
++>objA.a : Symbol(a, Decl(deleteOperatorWithNumberType.ts, 6, 9))
+ >objA : Symbol(objA, Decl(deleteOperatorWithNumberType.ts, 14, 3))
+->a : Symbol(A.a, Decl(deleteOperatorWithNumberType.ts, 6, 9))
++>a : Symbol(a, Decl(deleteOperatorWithNumberType.ts, 6, 9))
+ 
+ var ResultIsBoolean7 = delete M.n;
+ >ResultIsBoolean7 : Symbol(ResultIsBoolean7, Decl(deleteOperatorWithNumberType.ts, 27, 3))
+->M.n : Symbol(M.n, Decl(deleteOperatorWithNumberType.ts, 11, 14))
++>M.n : Symbol(n, Decl(deleteOperatorWithNumberType.ts, 11, 14))
+ >M : Symbol(M, Decl(deleteOperatorWithNumberType.ts, 9, 1))
+->n : Symbol(M.n, Decl(deleteOperatorWithNumberType.ts, 11, 14))
++>n : Symbol(n, Decl(deleteOperatorWithNumberType.ts, 11, 14))
+ 
+ var ResultIsBoolean8 = delete NUMBER1[0];
+ >ResultIsBoolean8 : Symbol(ResultIsBoolean8, Decl(deleteOperatorWithNumberType.ts, 28, 3))
+@@= skipped -20, +20 lines =@@
+ 
+ var ResultIsBoolean10 = delete A.foo();
+ >ResultIsBoolean10 : Symbol(ResultIsBoolean10, Decl(deleteOperatorWithNumberType.ts, 30, 3))
+->A.foo : Symbol(A.foo, Decl(deleteOperatorWithNumberType.ts, 7, 21))
++>A.foo : Symbol(foo, Decl(deleteOperatorWithNumberType.ts, 7, 21))
+ >A : Symbol(A, Decl(deleteOperatorWithNumberType.ts, 4, 36))
+->foo : Symbol(A.foo, Decl(deleteOperatorWithNumberType.ts, 7, 21))
++>foo : Symbol(foo, Decl(deleteOperatorWithNumberType.ts, 7, 21))
+ 
+ var ResultIsBoolean11 = delete (NUMBER + NUMBER);
+ >ResultIsBoolean11 : Symbol(ResultIsBoolean11, Decl(deleteOperatorWithNumberType.ts, 31, 3))
+@@= skipped -31, +31 lines =@@
+ >foo : Symbol(foo, Decl(deleteOperatorWithNumberType.ts, 2, 31))
+ 
+ delete objA.a;
+->objA.a : Symbol(A.a, Decl(deleteOperatorWithNumberType.ts, 6, 9))
++>objA.a : Symbol(a, Decl(deleteOperatorWithNumberType.ts, 6, 9))
+ >objA : Symbol(objA, Decl(deleteOperatorWithNumberType.ts, 14, 3))
+->a : Symbol(A.a, Decl(deleteOperatorWithNumberType.ts, 6, 9))
++>a : Symbol(a, Decl(deleteOperatorWithNumberType.ts, 6, 9))
+ 
+ delete M.n;
+->M.n : Symbol(M.n, Decl(deleteOperatorWithNumberType.ts, 11, 14))
++>M.n : Symbol(n, Decl(deleteOperatorWithNumberType.ts, 11, 14))
+ >M : Symbol(M, Decl(deleteOperatorWithNumberType.ts, 9, 1))
+->n : Symbol(M.n, Decl(deleteOperatorWithNumberType.ts, 11, 14))
++>n : Symbol(n, Decl(deleteOperatorWithNumberType.ts, 11, 14))
+ 
+ delete objA.a, M.n;
+->objA.a : Symbol(A.a, Decl(deleteOperatorWithNumberType.ts, 6, 9))
++>objA.a : Symbol(a, Decl(deleteOperatorWithNumberType.ts, 6, 9))
+ >objA : Symbol(objA, Decl(deleteOperatorWithNumberType.ts, 14, 3))
+->a : Symbol(A.a, Decl(deleteOperatorWithNumberType.ts, 6, 9))
+->M.n : Symbol(M.n, Decl(deleteOperatorWithNumberType.ts, 11, 14))
++>a : Symbol(a, Decl(deleteOperatorWithNumberType.ts, 6, 9))
++>M.n : Symbol(n, Decl(deleteOperatorWithNumberType.ts, 11, 14))
+ >M : Symbol(M, Decl(deleteOperatorWithNumberType.ts, 9, 1))
+->n : Symbol(M.n, Decl(deleteOperatorWithNumberType.ts, 11, 14))
++>n : Symbol(n, Decl(deleteOperatorWithNumberType.ts, 11, 14))
+ 

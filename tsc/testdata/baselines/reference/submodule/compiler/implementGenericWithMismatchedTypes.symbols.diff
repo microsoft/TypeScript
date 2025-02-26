@@ -1,0 +1,38 @@
+--- old.implementGenericWithMismatchedTypes.symbols
++++ new.implementGenericWithMismatchedTypes.symbols
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(implementGenericWithMismatchedTypes.ts, 3, 15))
+ 
+     foo(x: T): T;
+->foo : Symbol(IFoo.foo, Decl(implementGenericWithMismatchedTypes.ts, 3, 19))
++>foo : Symbol(foo, Decl(implementGenericWithMismatchedTypes.ts, 3, 19))
+ >x : Symbol(x, Decl(implementGenericWithMismatchedTypes.ts, 4, 8))
+ >T : Symbol(T, Decl(implementGenericWithMismatchedTypes.ts, 3, 15))
+ >T : Symbol(T, Decl(implementGenericWithMismatchedTypes.ts, 3, 15))
+@@= skipped -12, +12 lines =@@
+ >T : Symbol(T, Decl(implementGenericWithMismatchedTypes.ts, 6, 8))
+ 
+     foo(x: string): number {
+->foo : Symbol(C.foo, Decl(implementGenericWithMismatchedTypes.ts, 6, 31))
++>foo : Symbol(foo, Decl(implementGenericWithMismatchedTypes.ts, 6, 31))
+ >x : Symbol(x, Decl(implementGenericWithMismatchedTypes.ts, 7, 8))
+ 
+         return null;
+@@= skipped -12, +12 lines =@@
+ >T : Symbol(T, Decl(implementGenericWithMismatchedTypes.ts, 12, 16))
+ 
+     foo(x: T): T;
+->foo : Symbol(IFoo2.foo, Decl(implementGenericWithMismatchedTypes.ts, 12, 20))
++>foo : Symbol(foo, Decl(implementGenericWithMismatchedTypes.ts, 12, 20))
+ >x : Symbol(x, Decl(implementGenericWithMismatchedTypes.ts, 13, 8))
+ >T : Symbol(T, Decl(implementGenericWithMismatchedTypes.ts, 12, 16))
+ >T : Symbol(T, Decl(implementGenericWithMismatchedTypes.ts, 12, 16))
+@@= skipped -12, +12 lines =@@
+ >T : Symbol(T, Decl(implementGenericWithMismatchedTypes.ts, 15, 9))
+ 
+     foo<Tstring>(x: Tstring): number {
+->foo : Symbol(C2.foo, Decl(implementGenericWithMismatchedTypes.ts, 15, 33))
++>foo : Symbol(foo, Decl(implementGenericWithMismatchedTypes.ts, 15, 33))
+ >Tstring : Symbol(Tstring, Decl(implementGenericWithMismatchedTypes.ts, 16, 8))
+ >x : Symbol(x, Decl(implementGenericWithMismatchedTypes.ts, 16, 17))
+ >Tstring : Symbol(Tstring, Decl(implementGenericWithMismatchedTypes.ts, 16, 8))

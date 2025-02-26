@@ -1,0 +1,29 @@
+--- old.nullAssignableToEveryType.symbols
++++ new.nullAssignableToEveryType.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(nullAssignableToEveryType.ts, 0, 0))
+ 
+     foo: string;
+->foo : Symbol(C.foo, Decl(nullAssignableToEveryType.ts, 0, 9))
++>foo : Symbol(foo, Decl(nullAssignableToEveryType.ts, 0, 9))
+ }
+ var ac: C;
+ >ac : Symbol(ac, Decl(nullAssignableToEveryType.ts, 3, 3))
+@@= skipped -10, +10 lines =@@
+ >I : Symbol(I, Decl(nullAssignableToEveryType.ts, 3, 10))
+ 
+     foo: string;
+->foo : Symbol(I.foo, Decl(nullAssignableToEveryType.ts, 4, 13))
++>foo : Symbol(foo, Decl(nullAssignableToEveryType.ts, 4, 13))
+ }
+ var ai: I;
+ >ai : Symbol(ai, Decl(nullAssignableToEveryType.ts, 7, 3))
+@@= skipped -8, +8 lines =@@
+ 
+ enum E { A }
+ >E : Symbol(E, Decl(nullAssignableToEveryType.ts, 7, 10))
+->A : Symbol(E.A, Decl(nullAssignableToEveryType.ts, 9, 8))
++>A : Symbol(A, Decl(nullAssignableToEveryType.ts, 9, 8))
+ 
+ var ae: E;
+ >ae : Symbol(ae, Decl(nullAssignableToEveryType.ts, 10, 3))

@@ -1,0 +1,29 @@
+--- old.constructorFunctionTypeIsAssignableToBaseType2.symbols
++++ new.constructorFunctionTypeIsAssignableToBaseType2.symbols
+@@= skipped -6, +6 lines =@@
+ >Base : Symbol(Base, Decl(constructorFunctionTypeIsAssignableToBaseType2.ts, 0, 0))
+ 
+     static foo: {
+->foo : Symbol(Base.foo, Decl(constructorFunctionTypeIsAssignableToBaseType2.ts, 2, 12))
++>foo : Symbol(foo, Decl(constructorFunctionTypeIsAssignableToBaseType2.ts, 2, 12))
+ 
+         bar: Object;
+ >bar : Symbol(bar, Decl(constructorFunctionTypeIsAssignableToBaseType2.ts, 3, 17))
+@@= skipped -18, +18 lines =@@
+ 
+     // ok
+     static foo: {
+->foo : Symbol(Derived.foo, Decl(constructorFunctionTypeIsAssignableToBaseType2.ts, 10, 28))
++>foo : Symbol(foo, Decl(constructorFunctionTypeIsAssignableToBaseType2.ts, 10, 28))
+ 
+         bar: number;
+ >bar : Symbol(bar, Decl(constructorFunctionTypeIsAssignableToBaseType2.ts, 12, 17))
+@@= skipped -20, +20 lines =@@
+ >Base : Symbol(Base, Decl(constructorFunctionTypeIsAssignableToBaseType2.ts, 0, 0))
+ 
+     static foo: {
+->foo : Symbol(Derived2.foo, Decl(constructorFunctionTypeIsAssignableToBaseType2.ts, 21, 29))
++>foo : Symbol(foo, Decl(constructorFunctionTypeIsAssignableToBaseType2.ts, 21, 29))
+ 
+         bar: number;
+ >bar : Symbol(bar, Decl(constructorFunctionTypeIsAssignableToBaseType2.ts, 22, 17))

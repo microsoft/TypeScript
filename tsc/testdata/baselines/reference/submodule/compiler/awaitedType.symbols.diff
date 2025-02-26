@@ -1,0 +1,95 @@
+--- old.awaitedType.symbols
++++ new.awaitedType.symbols
+@@= skipped -94, +94 lines =@@
+ 
+ interface BadPromise { then(cb: (value: BadPromise) => void): void; }
+ >BadPromise : Symbol(BadPromise, Decl(awaitedType.ts, 18, 50))
+->then : Symbol(BadPromise.then, Decl(awaitedType.ts, 20, 22))
++>then : Symbol(then, Decl(awaitedType.ts, 20, 22))
+ >cb : Symbol(cb, Decl(awaitedType.ts, 20, 28))
+ >value : Symbol(value, Decl(awaitedType.ts, 20, 33))
+ >BadPromise : Symbol(BadPromise, Decl(awaitedType.ts, 18, 50))
+@@= skipped -12, +12 lines =@@
+ 
+ interface BadPromise1 { then(cb: (value: BadPromise2) => void): void; }
+ >BadPromise1 : Symbol(BadPromise1, Decl(awaitedType.ts, 21, 31))
+->then : Symbol(BadPromise1.then, Decl(awaitedType.ts, 23, 23))
++>then : Symbol(then, Decl(awaitedType.ts, 23, 23))
+ >cb : Symbol(cb, Decl(awaitedType.ts, 23, 29))
+ >value : Symbol(value, Decl(awaitedType.ts, 23, 34))
+ >BadPromise2 : Symbol(BadPromise2, Decl(awaitedType.ts, 23, 71))
+ 
+ interface BadPromise2 { then(cb: (value: BadPromise1) => void): void; }
+ >BadPromise2 : Symbol(BadPromise2, Decl(awaitedType.ts, 23, 71))
+->then : Symbol(BadPromise2.then, Decl(awaitedType.ts, 24, 23))
++>then : Symbol(then, Decl(awaitedType.ts, 24, 23))
+ >cb : Symbol(cb, Decl(awaitedType.ts, 24, 29))
+ >value : Symbol(value, Decl(awaitedType.ts, 24, 34))
+ >BadPromise1 : Symbol(BadPromise1, Decl(awaitedType.ts, 21, 31))
+@@= skipped -61, +61 lines =@@
+ >bbb : Symbol(bbb, Decl(awaitedType.ts, 36, 7))
+ 
+     ] = await Promise.all([
+->Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>Promise.all : Symbol(all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+->all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>all : Symbol(all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ 
+         MaybePromise(1),
+ >MaybePromise : Symbol(MaybePromise, Decl(awaitedType.ts, 31, 54), Decl(awaitedType.ts, 28, 69))
+@@= skipped -435, +435 lines =@@
+ {
+   const promises = [Promise.resolve(0)] as const
+ >promises : Symbol(promises, Decl(awaitedType.ts, 231, 7))
+->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >const : Symbol(const)
+ 
+   Promise.all(promises).then((results) => {
+->Promise.all(promises).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+->Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>Promise.all(promises).then : Symbol(then, Decl(lib.es5.d.ts, --, --))
++>Promise.all : Symbol(all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+->all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>all : Symbol(all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >promises : Symbol(promises, Decl(awaitedType.ts, 231, 7))
+->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
++>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+ >results : Symbol(results, Decl(awaitedType.ts, 233, 30))
+ 
+     const first = results[0]
+ >first : Symbol(first, Decl(awaitedType.ts, 234, 9))
+ >results : Symbol(results, Decl(awaitedType.ts, 233, 30))
+->0 : Symbol(0)
++>0 : Symbol("0")
+ 
+     const second = results[1] // error
+ >second : Symbol(second, Decl(awaitedType.ts, 235, 9))
+@@= skipped -33, +33 lines =@@
+ 
+     const promiseNumber = Promise.resolve(1);
+ >promiseNumber : Symbol(promiseNumber, Decl(awaitedType.ts, 243, 9))
+->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ 
+     const promiseVoid = async () => {}
+ >promiseVoid : Symbol(promiseVoid, Decl(awaitedType.ts, 244, 9))
+ 
+     const res = await Promise.all([
+ >res : Symbol(res, Decl(awaitedType.ts, 246, 9))
+->Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>Promise.all : Symbol(all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+->all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>all : Symbol(all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ 
+         promiseNumber,
+ >promiseNumber : Symbol(promiseNumber, Decl(awaitedType.ts, 243, 9))

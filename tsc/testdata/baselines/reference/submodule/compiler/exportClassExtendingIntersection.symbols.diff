@@ -1,0 +1,38 @@
+--- old.exportClassExtendingIntersection.symbols
++++ new.exportClassExtendingIntersection.symbols
+@@= skipped -11, +11 lines =@@
+ >T : Symbol(T, Decl(BaseClass.ts, 2, 25))
+ 
+     baseProperty: string;
+->baseProperty : Symbol(MyBaseClass.baseProperty, Decl(BaseClass.ts, 2, 29))
++>baseProperty : Symbol(baseProperty, Decl(BaseClass.ts, 2, 29))
+ 
+     constructor(value: T) {}
+ >value : Symbol(value, Decl(BaseClass.ts, 4, 16))
+@@= skipped -15, +15 lines =@@
+ >MyMixin : Symbol(MyMixin, Decl(MixinClass.ts, 4, 1), Decl(MixinClass.ts, 0, 55))
+ 
+     mixinProperty: string;
+->mixinProperty : Symbol(MyMixin.mixinProperty, Decl(MixinClass.ts, 2, 26))
++>mixinProperty : Symbol(mixinProperty, Decl(MixinClass.ts, 2, 26))
+ }
+ 
+ export function MyMixin<T extends Constructor<MyBaseClass<any>>>(base: T): T & Constructor<MyMixin> {
+@@= skipped -18, +18 lines =@@
+ >base : Symbol(base, Decl(MixinClass.ts, 6, 65))
+ 
+         mixinProperty: string;
+->mixinProperty : Symbol((Anonymous class).mixinProperty, Decl(MixinClass.ts, 7, 31))
++>mixinProperty : Symbol(mixinProperty, Decl(MixinClass.ts, 7, 31))
+     }
+ }
+ === FinalClass.ts ===
+@@= skipped -16, +16 lines =@@
+ >MyBaseClass : Symbol(MyBaseClass, Decl(FinalClass.ts, 0, 8))
+ 
+     extendedClassProperty: number;
+->extendedClassProperty : Symbol(MyExtendedClass.extendedClassProperty, Decl(FinalClass.ts, 3, 67))
++>extendedClassProperty : Symbol(extendedClassProperty, Decl(FinalClass.ts, 3, 67))
+ }
+ === Main.ts ===
+ import { MyExtendedClass } from './FinalClass';

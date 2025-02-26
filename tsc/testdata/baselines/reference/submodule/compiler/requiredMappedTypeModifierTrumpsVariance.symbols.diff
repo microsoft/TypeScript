@@ -1,0 +1,28 @@
+--- old.requiredMappedTypeModifierTrumpsVariance.symbols
++++ new.requiredMappedTypeModifierTrumpsVariance.symbols
+@@= skipped -43, +43 lines =@@
+ >T : Symbol(T, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 14))
+ 
+     a: Required<T>;
+->a : Symbol(Foo.a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 18))
++>a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 18))
+ >Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+ >T : Symbol(T, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 14))
+ }
+@@= skipped -39, +39 lines =@@
+ >aa : Symbol(aa, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 13, 5))
+ 
+ aa.a.b; // Property 'b' does not exist on type 'Required<{ a?: 1; x: 1; }>'.
+->aa.a : Symbol(Foo.a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 18))
++>aa.a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 18))
+ >aa : Symbol(aa, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 13, 5))
+->a : Symbol(Foo.a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 18))
++>a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 18))
+ 
+ bb.a.a; // Property 'a' does not exist on type 'Required<{ b?: 1; x: 1; }>'.
+->bb.a : Symbol(Foo.a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 18))
++>bb.a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 18))
+ >bb : Symbol(bb, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 14, 5))
+->a : Symbol(Foo.a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 18))
++>a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 18))
+ 

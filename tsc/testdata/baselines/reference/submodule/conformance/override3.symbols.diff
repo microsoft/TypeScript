@@ -1,0 +1,66 @@
+--- old.override3.symbols
++++ new.override3.symbols
+@@= skipped -4, +4 lines =@@
+ >B : Symbol(B, Decl(override3.ts, 0, 0))
+ 
+     foo(): void
+->foo : Symbol(B.foo, Decl(override3.ts, 0, 17))
++>foo : Symbol(foo, Decl(override3.ts, 0, 17))
+ 
+     bar(): void
+->bar : Symbol(B.bar, Decl(override3.ts, 1, 15))
++>bar : Symbol(bar, Decl(override3.ts, 1, 15))
+ }
+ 
+ declare class D extends B {
+@@= skipped -11, +11 lines =@@
+ >B : Symbol(B, Decl(override3.ts, 0, 0))
+ 
+     foo (): void;
+->foo : Symbol(D.foo, Decl(override3.ts, 5, 27))
++>foo : Symbol(foo, Decl(override3.ts, 5, 27))
+ 
+     override bar (): void;
+->bar : Symbol(D.bar, Decl(override3.ts, 6, 17))
++>bar : Symbol(bar, Decl(override3.ts, 6, 17))
+ }
+ 
+ class DB extends B {
+@@= skipped -11, +11 lines =@@
+ >B : Symbol(B, Decl(override3.ts, 0, 0))
+ 
+     override foo(): void {}
+->foo : Symbol(DB.foo, Decl(override3.ts, 10, 20))
++>foo : Symbol(foo, Decl(override3.ts, 10, 20))
+ 
+     override bar(): void {}
+->bar : Symbol(DB.bar, Decl(override3.ts, 11, 27))
++>bar : Symbol(bar, Decl(override3.ts, 11, 27))
+ }
+ 
+ class DD extends D {
+@@= skipped -11, +11 lines =@@
+ >D : Symbol(D, Decl(override3.ts, 3, 1))
+ 
+     override foo(): void {}
+->foo : Symbol(DD.foo, Decl(override3.ts, 15, 20))
++>foo : Symbol(foo, Decl(override3.ts, 15, 20))
+ 
+     override bar(): void {}
+->bar : Symbol(DD.bar, Decl(override3.ts, 16, 27))
++>bar : Symbol(bar, Decl(override3.ts, 16, 27))
+ }
+ 
+ class EB extends D {
+@@= skipped -11, +11 lines =@@
+ >D : Symbol(D, Decl(override3.ts, 3, 1))
+ 
+     foo(): void {}
+->foo : Symbol(EB.foo, Decl(override3.ts, 20, 20))
++>foo : Symbol(foo, Decl(override3.ts, 20, 20))
+ 
+     override bar(): void {}
+->bar : Symbol(EB.bar, Decl(override3.ts, 21, 18))
++>bar : Symbol(bar, Decl(override3.ts, 21, 18))
+ }
+ 

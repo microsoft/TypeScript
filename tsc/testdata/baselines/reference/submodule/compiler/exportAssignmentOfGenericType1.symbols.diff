@@ -1,0 +1,20 @@
+--- old.exportAssignmentOfGenericType1.symbols
++++ new.exportAssignmentOfGenericType1.symbols
+@@= skipped -14, +14 lines =@@
+ 
+ var r: string = m.foo;
+ >r : Symbol(r, Decl(exportAssignmentOfGenericType1_1.ts, 5, 3))
+->m.foo : Symbol(q.foo, Decl(exportAssignmentOfGenericType1_0.ts, 1, 12))
+ >m : Symbol(m, Decl(exportAssignmentOfGenericType1_1.ts, 4, 3))
+->foo : Symbol(q.foo, Decl(exportAssignmentOfGenericType1_0.ts, 1, 12))
+ 
+ === exportAssignmentOfGenericType1_0.ts ===
+ export = T;
+@@= skipped -11, +9 lines =@@
+ class T<X> { foo: X; }
+ >T : Symbol(T, Decl(exportAssignmentOfGenericType1_0.ts, 0, 11))
+ >X : Symbol(X, Decl(exportAssignmentOfGenericType1_0.ts, 1, 8))
+->foo : Symbol(T.foo, Decl(exportAssignmentOfGenericType1_0.ts, 1, 12))
++>foo : Symbol(foo, Decl(exportAssignmentOfGenericType1_0.ts, 1, 12))
+ >X : Symbol(X, Decl(exportAssignmentOfGenericType1_0.ts, 1, 8))
+ 

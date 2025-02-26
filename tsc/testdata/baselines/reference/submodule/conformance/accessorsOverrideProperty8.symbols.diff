@@ -1,0 +1,28 @@
+--- old.accessorsOverrideProperty8.symbols
++++ new.accessorsOverrideProperty8.symbols
+@@= skipped -70, +70 lines =@@
+ >Base : Symbol(Base, Decl(accessorsOverrideProperty8.ts, 13, 5))
+ 
+     get x() {
+->x : Symbol(MyClass.x, Decl(accessorsOverrideProperty8.ts, 19, 28))
++>x : Symbol(x, Decl(accessorsOverrideProperty8.ts, 19, 28))
+ 
+         return false;
+     }
+     get y() {
+->y : Symbol(MyClass.y, Decl(accessorsOverrideProperty8.ts, 22, 5))
++>y : Symbol(y, Decl(accessorsOverrideProperty8.ts, 22, 5))
+ 
+         return 'hi'
+     }
+@@= skipped -17, +17 lines =@@
+ 
+ const value = mine.x;
+ >value : Symbol(value, Decl(accessorsOverrideProperty8.ts, 29, 5))
+->mine.x : Symbol(MyClass.x, Decl(accessorsOverrideProperty8.ts, 19, 28))
++>mine.x : Symbol(x, Decl(accessorsOverrideProperty8.ts, 19, 28))
+ >mine : Symbol(mine, Decl(accessorsOverrideProperty8.ts, 28, 5))
+->x : Symbol(MyClass.x, Decl(accessorsOverrideProperty8.ts, 19, 28))
++>x : Symbol(x, Decl(accessorsOverrideProperty8.ts, 19, 28))
+ 
+ 

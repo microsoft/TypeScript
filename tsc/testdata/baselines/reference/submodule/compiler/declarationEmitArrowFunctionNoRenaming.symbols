@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/declarationEmitArrowFunctionNoRenaming.ts] ////
+
+=== declarationEmitArrowFunctionNoRenaming.ts ===
+export type Brand<
+>Brand : Symbol(Brand, Decl(declarationEmitArrowFunctionNoRenaming.ts, 0, 0))
+
+  Base,
+>Base : Symbol(Base, Decl(declarationEmitArrowFunctionNoRenaming.ts, 0, 18))
+
+  Branding,
+>Branding : Symbol(Branding, Decl(declarationEmitArrowFunctionNoRenaming.ts, 1, 7))
+
+  ReservedName extends string = "__type__"
+>ReservedName : Symbol(ReservedName, Decl(declarationEmitArrowFunctionNoRenaming.ts, 2, 11))
+
+> = Base & { [K in ReservedName]: Branding } & { __witness__: Base };
+>Base : Symbol(Base, Decl(declarationEmitArrowFunctionNoRenaming.ts, 0, 18))
+>K : Symbol(K, Decl(declarationEmitArrowFunctionNoRenaming.ts, 4, 14))
+>ReservedName : Symbol(ReservedName, Decl(declarationEmitArrowFunctionNoRenaming.ts, 2, 11))
+>Branding : Symbol(Branding, Decl(declarationEmitArrowFunctionNoRenaming.ts, 1, 7))
+>__witness__ : Symbol(__witness__, Decl(declarationEmitArrowFunctionNoRenaming.ts, 4, 48))
+>Base : Symbol(Base, Decl(declarationEmitArrowFunctionNoRenaming.ts, 0, 18))
+
+export type BoundedInteger<
+>BoundedInteger : Symbol(BoundedInteger, Decl(declarationEmitArrowFunctionNoRenaming.ts, 4, 69))
+
+  LowerBound extends number,
+>LowerBound : Symbol(LowerBound, Decl(declarationEmitArrowFunctionNoRenaming.ts, 6, 27))
+
+  UpperBound extends number
+>UpperBound : Symbol(UpperBound, Decl(declarationEmitArrowFunctionNoRenaming.ts, 7, 28))
+
+> = Brand<number, "BoundedInteger">;
+>Brand : Symbol(Brand, Decl(declarationEmitArrowFunctionNoRenaming.ts, 0, 0))
+
+export const toBoundedInteger =
+>toBoundedInteger : Symbol(toBoundedInteger, Decl(declarationEmitArrowFunctionNoRenaming.ts, 11, 12))
+
+  <LowerBound extends number, UpperBound extends number>(bounds: {
+>LowerBound : Symbol(LowerBound, Decl(declarationEmitArrowFunctionNoRenaming.ts, 12, 3))
+>UpperBound : Symbol(UpperBound, Decl(declarationEmitArrowFunctionNoRenaming.ts, 12, 29))
+>bounds : Symbol(bounds, Decl(declarationEmitArrowFunctionNoRenaming.ts, 12, 57))
+
+    lowerBound: LowerBound;
+>lowerBound : Symbol(lowerBound, Decl(declarationEmitArrowFunctionNoRenaming.ts, 12, 66))
+>LowerBound : Symbol(LowerBound, Decl(declarationEmitArrowFunctionNoRenaming.ts, 12, 3))
+
+    upperBound: UpperBound;
+>upperBound : Symbol(upperBound, Decl(declarationEmitArrowFunctionNoRenaming.ts, 13, 27))
+>UpperBound : Symbol(UpperBound, Decl(declarationEmitArrowFunctionNoRenaming.ts, 12, 29))
+
+  }) =>
+  (
+    n: number
+>n : Symbol(n, Decl(declarationEmitArrowFunctionNoRenaming.ts, 16, 3))
+
+  ): BoundedInteger<LowerBound, UpperBound> =>
+>BoundedInteger : Symbol(BoundedInteger, Decl(declarationEmitArrowFunctionNoRenaming.ts, 4, 69))
+>LowerBound : Symbol(LowerBound, Decl(declarationEmitArrowFunctionNoRenaming.ts, 12, 3))
+>UpperBound : Symbol(UpperBound, Decl(declarationEmitArrowFunctionNoRenaming.ts, 12, 29))
+
+  // Implementation doesn't matter here
+    ({} as any)
+

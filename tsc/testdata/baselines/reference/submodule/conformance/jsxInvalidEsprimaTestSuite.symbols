@@ -1,0 +1,118 @@
+//// [tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx] ////
+
+=== 1.tsx ===
+declare var React: any;
+>React : Symbol(React, Decl(1.tsx, 0, 11))
+
+</>;
+=== 2.tsx ===
+
+<a: />;
+=== 3.tsx ===
+
+<:a />;
+=== 4.tsx ===
+<a b=d />;
+>b : Symbol(b, Decl(4.tsx, 0, 2))
+>d : Symbol(d, Decl(4.tsx, 0, 5))
+
+=== 5.tsx ===
+
+<a>;
+=== 6.tsx ===
+
+<a></b>;
+=== 7.tsx ===
+<a foo="bar;
+>foo : Symbol(foo, Decl(7.tsx, 0, 2))
+
+=== 8.tsx ===
+
+<a:b></b>;
+=== 9.tsx ===
+<a:b.c></a:b.c>;
+>c : Symbol(c, Decl(9.tsx, 0, 5))
+
+=== 10.tsx ===
+<a.b:c></a.b:c>;
+>c : Symbol(c, Decl(10.tsx, 0, 5))
+
+=== 11.tsx ===
+
+<a.b.c></a>;
+=== 12.tsx ===
+
+<.a></.a>;
+=== 13.tsx ===
+
+<a.></a.>;
+=== 14.tsx ===
+
+<a[foo]></a[foo]>;
+=== 15.tsx ===
+
+<a['foo']></a['foo']>;
+=== 16.tsx ===
+
+<a><a />;
+=== 17.tsx ===
+<a b={}>;
+>b : Symbol(b, Decl(17.tsx, 0, 2))
+
+=== 18.tsx ===
+var x = /* Leading trivia */ <div>one</div><div>two</div>;;
+>x : Symbol(x, Decl(18.tsx, 0, 3), Decl(19.tsx, 0, 3))
+
+=== 19.tsx ===
+var x = <div>one</div> /* intervening comment */ <div>two</div>;;
+>x : Symbol(x, Decl(18.tsx, 0, 3), Decl(19.tsx, 0, 3))
+
+=== 20.tsx ===
+
+<a>{"str";}</a>;
+=== 21.tsx ===
+<span className="a", id="b" />;
+>className : Symbol(className, Decl(21.tsx, 0, 5))
+>id : Symbol(id, Decl(21.tsx, 0, 20))
+
+=== 22.tsx ===
+<div className"app">;
+>className : Symbol(className, Decl(22.tsx, 0, 4))
+
+=== 23.tsx ===
+
+<div {props} />;
+
+=== 24.tsx ===
+
+<div>stuff</div {...props}>;
+
+=== 25.tsx ===
+
+<div {...props}>stuff</div {...props}>;
+
+
+=== 26.tsx ===
+
+<a>></a>;
+
+=== 27.tsx ===
+
+<a> ></a>;
+
+=== 28.tsx ===
+<a b=}>;
+>b : Symbol(b, Decl(28.tsx, 0, 2))
+
+=== 29.tsx ===
+<a b=<}>;
+>b : Symbol(b, Decl(29.tsx, 0, 2))
+
+=== 30.tsx ===
+
+<a>}</a>;
+
+=== 31.tsx ===
+<a .../*hai*/asdf/>;
+>asdf : Symbol(asdf, Decl(31.tsx, 0, 6))
+

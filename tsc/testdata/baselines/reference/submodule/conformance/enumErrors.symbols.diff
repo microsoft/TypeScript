@@ -1,0 +1,153 @@
+--- old.enumErrors.symbols
++++ new.enumErrors.symbols
+@@= skipped -18, +18 lines =@@
+ >E5 : Symbol(E5, Decl(enumErrors.ts, 4, 16))
+ 
+     C = new Number(30)
+->C : Symbol(E5.C, Decl(enumErrors.ts, 7, 9))
++>C : Symbol(C, Decl(enumErrors.ts, 7, 9))
+ >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >E9 : Symbol(E9, Decl(enumErrors.ts, 9, 1))
+ 
+     A,
+->A : Symbol(E9.A, Decl(enumErrors.ts, 11, 9))
++>A : Symbol(A, Decl(enumErrors.ts, 11, 9))
+ 
+     B = A
+->B : Symbol(E9.B, Decl(enumErrors.ts, 12, 6))
+->A : Symbol(E9.A, Decl(enumErrors.ts, 11, 9))
++>B : Symbol(B, Decl(enumErrors.ts, 12, 6))
++>A : Symbol(A, Decl(enumErrors.ts, 11, 9))
+ }
+ 
+ //Enum with computed member intializer of different enum type
+@@= skipped -13, +13 lines =@@
+ >E10 : Symbol(E10, Decl(enumErrors.ts, 14, 1))
+ 
+     A = E9.A,
+->A : Symbol(E10.A, Decl(enumErrors.ts, 18, 10))
+->E9.A : Symbol(E9.A, Decl(enumErrors.ts, 11, 9))
++>A : Symbol(A, Decl(enumErrors.ts, 18, 10))
++>E9.A : Symbol(A, Decl(enumErrors.ts, 11, 9))
+ >E9 : Symbol(E9, Decl(enumErrors.ts, 9, 1))
+->A : Symbol(E9.A, Decl(enumErrors.ts, 11, 9))
++>A : Symbol(A, Decl(enumErrors.ts, 11, 9))
+ 
+     B = E9.B
+->B : Symbol(E10.B, Decl(enumErrors.ts, 19, 13))
+->E9.B : Symbol(E9.B, Decl(enumErrors.ts, 12, 6))
++>B : Symbol(B, Decl(enumErrors.ts, 19, 13))
++>E9.B : Symbol(B, Decl(enumErrors.ts, 12, 6))
+ >E9 : Symbol(E9, Decl(enumErrors.ts, 9, 1))
+->B : Symbol(E9.B, Decl(enumErrors.ts, 12, 6))
++>B : Symbol(B, Decl(enumErrors.ts, 12, 6))
+ }
+ 
+ // Enum with computed member intializer of other types
+@@= skipped -17, +17 lines =@@
+ >E11 : Symbol(E11, Decl(enumErrors.ts, 21, 1))
+ 
+     A = true,
+->A : Symbol(E11.A, Decl(enumErrors.ts, 24, 10))
++>A : Symbol(A, Decl(enumErrors.ts, 24, 10))
+ 
+     B = new Date(),
+->B : Symbol(E11.B, Decl(enumErrors.ts, 25, 13))
++>B : Symbol(B, Decl(enumErrors.ts, 25, 13))
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ 
+     C = window,
+->C : Symbol(E11.C, Decl(enumErrors.ts, 26, 19))
++>C : Symbol(C, Decl(enumErrors.ts, 26, 19))
+ >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+ 
+     D = {},
+->D : Symbol(E11.D, Decl(enumErrors.ts, 27, 15))
++>D : Symbol(D, Decl(enumErrors.ts, 27, 15))
+ 
+     E = (() => 'foo')(),
+->E : Symbol(E11.E, Decl(enumErrors.ts, 28, 11))
++>E : Symbol(E, Decl(enumErrors.ts, 28, 11))
+ }
+ 
+ // Enum with string valued member and computed member initializers
+@@= skipped -22, +22 lines =@@
+ >E12 : Symbol(E12, Decl(enumErrors.ts, 30, 1))
+ 
+     A = '',
+->A : Symbol(E12.A, Decl(enumErrors.ts, 33, 10))
++>A : Symbol(A, Decl(enumErrors.ts, 33, 10))
+ 
+     B = new Date(),
+->B : Symbol(E12.B, Decl(enumErrors.ts, 34, 11))
++>B : Symbol(B, Decl(enumErrors.ts, 34, 11))
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ 
+     C = window,
+->C : Symbol(E12.C, Decl(enumErrors.ts, 35, 19))
++>C : Symbol(C, Decl(enumErrors.ts, 35, 19))
+ >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+ 
+     D = {},
+->D : Symbol(E12.D, Decl(enumErrors.ts, 36, 15))
++>D : Symbol(D, Decl(enumErrors.ts, 36, 15))
+ 
+     E = 1 + 1,
+->E : Symbol(E12.E, Decl(enumErrors.ts, 37, 11))
++>E : Symbol(E, Decl(enumErrors.ts, 37, 11))
+ 
+     F = (() => 'foo')(),
+->F : Symbol(E12.F, Decl(enumErrors.ts, 38, 14))
++>F : Symbol(F, Decl(enumErrors.ts, 38, 14))
+ }
+ 
+ // Enum with incorrect syntax
+@@= skipped -25, +25 lines =@@
+ >E13 : Symbol(E13, Decl(enumErrors.ts, 40, 1))
+ 
+     postComma,
+->postComma : Symbol(E13.postComma, Decl(enumErrors.ts, 43, 10))
++>postComma : Symbol(postComma, Decl(enumErrors.ts, 43, 10))
+ 
+     postValueComma = 1,
+->postValueComma : Symbol(E13.postValueComma, Decl(enumErrors.ts, 44, 14))
++>postValueComma : Symbol(postValueComma, Decl(enumErrors.ts, 44, 14))
+ 
+     postSemicolon;
+->postSemicolon : Symbol(E13.postSemicolon, Decl(enumErrors.ts, 45, 23))
++>postSemicolon : Symbol(postSemicolon, Decl(enumErrors.ts, 45, 23))
+ 
+     postColonValueComma: 2,
+->postColonValueComma : Symbol(E13.postColonValueComma, Decl(enumErrors.ts, 47, 18))
+->2 : Symbol(E13[2], Decl(enumErrors.ts, 48, 24))
++>postColonValueComma : Symbol(postColonValueComma, Decl(enumErrors.ts, 47, 18))
++>2 : Symbol(2, Decl(enumErrors.ts, 48, 24))
+ 
+     postColonValueSemicolon: 3;
+->postColonValueSemicolon : Symbol(E13.postColonValueSemicolon, Decl(enumErrors.ts, 48, 27))
+->3 : Symbol(E13[3], Decl(enumErrors.ts, 49, 28))
++>postColonValueSemicolon : Symbol(postColonValueSemicolon, Decl(enumErrors.ts, 48, 27))
++>3 : Symbol(3, Decl(enumErrors.ts, 49, 28))
+ 
+ };
+ 
+ enum E14 { a, b: any "hello" += 1, c, d}
+ >E14 : Symbol(E14, Decl(enumErrors.ts, 50, 2))
+->a : Symbol(E14.a, Decl(enumErrors.ts, 52, 10))
+->b : Symbol(E14.b, Decl(enumErrors.ts, 52, 13))
+->any : Symbol(E14.any, Decl(enumErrors.ts, 52, 16))
+->"hello" : Symbol(E14["hello"], Decl(enumErrors.ts, 52, 20))
+->1 : Symbol(E14[1], Decl(enumErrors.ts, 52, 31))
+->c : Symbol(E14.c, Decl(enumErrors.ts, 52, 34))
+->d : Symbol(E14.d, Decl(enumErrors.ts, 52, 37))
++>a : Symbol(a, Decl(enumErrors.ts, 52, 10))
++>b : Symbol(b, Decl(enumErrors.ts, 52, 13))
++>any : Symbol(any, Decl(enumErrors.ts, 52, 16))
++>"hello" : Symbol(hello, Decl(enumErrors.ts, 52, 20))
++>1 : Symbol(1, Decl(enumErrors.ts, 52, 31))
++>c : Symbol(c, Decl(enumErrors.ts, 52, 34))
++>d : Symbol(d, Decl(enumErrors.ts, 52, 37))
+ 

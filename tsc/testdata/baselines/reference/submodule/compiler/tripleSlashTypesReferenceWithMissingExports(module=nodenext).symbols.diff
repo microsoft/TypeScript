@@ -1,0 +1,11 @@
+--- old.tripleSlashTypesReferenceWithMissingExports(module=nodenext).symbols
++++ new.tripleSlashTypesReferenceWithMissingExports(module=nodenext).symbols
+@@= skipped -2, +2 lines =@@
+ === node_modules/pkg/index.d.ts ===
+ interface GlobalThing { a: number }
+ >GlobalThing : Symbol(GlobalThing, Decl(index.d.ts, 0, 0))
+->a : Symbol(GlobalThing.a, Decl(index.d.ts, 0, 23))
++>a : Symbol(a, Decl(index.d.ts, 0, 23))
+ 
+ === usage.ts ===
+ /// <reference types="pkg" />

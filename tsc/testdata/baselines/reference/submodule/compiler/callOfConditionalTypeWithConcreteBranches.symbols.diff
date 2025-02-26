@@ -1,0 +1,23 @@
+--- old.callOfConditionalTypeWithConcreteBranches.symbols
++++ new.callOfConditionalTypeWithConcreteBranches.symbols
+@@= skipped -22, +22 lines =@@
+ fn<string | number>(m => m.toFixed());
+ >fn : Symbol(fn, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 59))
+ >m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 7, 20))
+->m.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>m.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 7, 20))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+ fn<number>(m => m.toFixed());
+ >fn : Symbol(fn, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 59))
+ >m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 8, 11))
+->m.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>m.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 8, 11))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+ // Ensure the following real-world example that relies on substitution still works
+ type ExtractParameters<T> = "parameters" extends keyof T

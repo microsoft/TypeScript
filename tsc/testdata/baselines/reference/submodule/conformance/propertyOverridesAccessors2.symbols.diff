@@ -1,0 +1,45 @@
+--- old.propertyOverridesAccessors2.symbols
++++ new.propertyOverridesAccessors2.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(propertyOverridesAccessors2.ts, 0, 0))
+ 
+   get x() { return 2; }
+->x : Symbol(Base.x, Decl(propertyOverridesAccessors2.ts, 0, 12), Decl(propertyOverridesAccessors2.ts, 1, 23))
++>x : Symbol(x, Decl(propertyOverridesAccessors2.ts, 0, 12), Decl(propertyOverridesAccessors2.ts, 1, 23))
+ 
+   set x(value) { console.log(`x was set to ${value}`); }
+->x : Symbol(Base.x, Decl(propertyOverridesAccessors2.ts, 0, 12), Decl(propertyOverridesAccessors2.ts, 1, 23))
++>x : Symbol(x, Decl(propertyOverridesAccessors2.ts, 0, 12), Decl(propertyOverridesAccessors2.ts, 1, 23))
+ >value : Symbol(value, Decl(propertyOverridesAccessors2.ts, 2, 8))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >value : Symbol(value, Decl(propertyOverridesAccessors2.ts, 2, 8))
+ }
+ 
+@@= skipped -16, +16 lines =@@
+ >Base : Symbol(Base, Decl(propertyOverridesAccessors2.ts, 0, 0))
+ 
+   x = 1;
+->x : Symbol(Derived.x, Decl(propertyOverridesAccessors2.ts, 5, 28))
++>x : Symbol(x, Decl(propertyOverridesAccessors2.ts, 5, 28))
+ }
+ 
+ const obj = new Derived(); // prints 'x was set to 1'
+@@= skipped -8, +8 lines =@@
+ >Derived : Symbol(Derived, Decl(propertyOverridesAccessors2.ts, 3, 1))
+ 
+ console.log(obj.x); // 2
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->obj.x : Symbol(Derived.x, Decl(propertyOverridesAccessors2.ts, 5, 28))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>obj.x : Symbol(x, Decl(propertyOverridesAccessors2.ts, 5, 28))
+ >obj : Symbol(obj, Decl(propertyOverridesAccessors2.ts, 9, 5))
+->x : Symbol(Derived.x, Decl(propertyOverridesAccessors2.ts, 5, 28))
++>x : Symbol(x, Decl(propertyOverridesAccessors2.ts, 5, 28))
+ 

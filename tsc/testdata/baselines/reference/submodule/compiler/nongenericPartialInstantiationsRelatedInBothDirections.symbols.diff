@@ -1,0 +1,19 @@
+--- old.nongenericPartialInstantiationsRelatedInBothDirections.symbols
++++ new.nongenericPartialInstantiationsRelatedInBothDirections.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 0, 0))
+ 
+     a: number;
+->a : Symbol(Foo.a, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 0, 15))
++>a : Symbol(a, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 0, 15))
+ 
+     b: number;
+->b : Symbol(Foo.b, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 1, 14))
++>b : Symbol(b, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 1, 14))
+ 
+     bar: string;
+->bar : Symbol(Foo.bar, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 2, 14))
++>bar : Symbol(bar, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 2, 14))
+ }
+ interface ObjectContaining<T> {
+ >ObjectContaining : Symbol(ObjectContaining, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 4, 1))

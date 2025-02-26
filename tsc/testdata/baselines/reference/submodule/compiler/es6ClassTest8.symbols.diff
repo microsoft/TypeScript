@@ -1,0 +1,172 @@
+--- old.es6ClassTest8.symbols
++++ new.es6ClassTest8.symbols
+@@= skipped -29, +29 lines =@@
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+ 
+     static norm(v:Vector):Vector {return null;}
+->norm : Symbol(Vector.norm, Decl(es6ClassTest8.ts, 12, 14))
++>norm : Symbol(norm, Decl(es6ClassTest8.ts, 12, 14))
+ >v : Symbol(v, Decl(es6ClassTest8.ts, 13, 16))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+ 
+     static minus(v1:Vector, v2:Vector):Vector {return null;}
+->minus : Symbol(Vector.minus, Decl(es6ClassTest8.ts, 13, 47))
++>minus : Symbol(minus, Decl(es6ClassTest8.ts, 13, 47))
+ >v1 : Symbol(v1, Decl(es6ClassTest8.ts, 14, 17))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+ >v2 : Symbol(v2, Decl(es6ClassTest8.ts, 14, 27))
+@@= skipped -14, +14 lines =@@
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+ 
+     static times(v1:Vector, v2:Vector):Vector {return null;}
+->times : Symbol(Vector.times, Decl(es6ClassTest8.ts, 14, 60))
++>times : Symbol(times, Decl(es6ClassTest8.ts, 14, 60))
+ >v1 : Symbol(v1, Decl(es6ClassTest8.ts, 15, 17))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+ >v2 : Symbol(v2, Decl(es6ClassTest8.ts, 15, 27))
+@@= skipped -8, +8 lines =@@
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+ 
+     static cross(v1:Vector, v2:Vector):Vector {return null;}
+->cross : Symbol(Vector.cross, Decl(es6ClassTest8.ts, 15, 60))
++>cross : Symbol(cross, Decl(es6ClassTest8.ts, 15, 60))
+ >v1 : Symbol(v1, Decl(es6ClassTest8.ts, 16, 17))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+ >v2 : Symbol(v2, Decl(es6ClassTest8.ts, 16, 27))
+@@= skipped -8, +8 lines =@@
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+ 
+     constructor(public x: number,
+->x : Symbol(Vector.x, Decl(es6ClassTest8.ts, 18, 16))
++>x : Symbol(x, Decl(es6ClassTest8.ts, 18, 16))
+ 
+                 public y: number,
+->y : Symbol(Vector.y, Decl(es6ClassTest8.ts, 18, 33))
++>y : Symbol(y, Decl(es6ClassTest8.ts, 18, 33))
+ 
+                 public z: number) { 
+->z : Symbol(Vector.z, Decl(es6ClassTest8.ts, 19, 33))
++>z : Symbol(z, Decl(es6ClassTest8.ts, 19, 33))
+     }
+ 
+     static dot(v1:Vector, v2:Vector):Vector {return null;}    
+->dot : Symbol(Vector.dot, Decl(es6ClassTest8.ts, 21, 5))
++>dot : Symbol(dot, Decl(es6ClassTest8.ts, 21, 5))
+ >v1 : Symbol(v1, Decl(es6ClassTest8.ts, 23, 15))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+ >v2 : Symbol(v2, Decl(es6ClassTest8.ts, 23, 25))
+@@= skipped -23, +23 lines =@@
+ >Camera : Symbol(Camera, Decl(es6ClassTest8.ts, 25, 1))
+ 
+     public forward: Vector;
+->forward : Symbol(Camera.forward, Decl(es6ClassTest8.ts, 27, 14))
++>forward : Symbol(forward, Decl(es6ClassTest8.ts, 27, 14))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+ 
+     public right: Vector;
+->right : Symbol(Camera.right, Decl(es6ClassTest8.ts, 28, 27))
++>right : Symbol(right, Decl(es6ClassTest8.ts, 28, 27))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+ 
+     public up: Vector;
+->up : Symbol(Camera.up, Decl(es6ClassTest8.ts, 29, 25))
++>up : Symbol(up, Decl(es6ClassTest8.ts, 29, 25))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+ 
+     constructor(public pos: Vector, lookAt: Vector) { 
+->pos : Symbol(Camera.pos, Decl(es6ClassTest8.ts, 31, 16))
++>pos : Symbol(pos, Decl(es6ClassTest8.ts, 31, 16))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+ >lookAt : Symbol(lookAt, Decl(es6ClassTest8.ts, 31, 35))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+@@= skipped -22, +22 lines =@@
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+ 
+         this.forward = Vector.norm(Vector.minus(lookAt,this.pos));
+->this.forward : Symbol(Camera.forward, Decl(es6ClassTest8.ts, 27, 14))
++>this.forward : Symbol(forward, Decl(es6ClassTest8.ts, 27, 14))
+ >this : Symbol(Camera, Decl(es6ClassTest8.ts, 25, 1))
+->forward : Symbol(Camera.forward, Decl(es6ClassTest8.ts, 27, 14))
+->Vector.norm : Symbol(Vector.norm, Decl(es6ClassTest8.ts, 12, 14))
++>forward : Symbol(forward, Decl(es6ClassTest8.ts, 27, 14))
++>Vector.norm : Symbol(norm, Decl(es6ClassTest8.ts, 12, 14))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+->norm : Symbol(Vector.norm, Decl(es6ClassTest8.ts, 12, 14))
+->Vector.minus : Symbol(Vector.minus, Decl(es6ClassTest8.ts, 13, 47))
++>norm : Symbol(norm, Decl(es6ClassTest8.ts, 12, 14))
++>Vector.minus : Symbol(minus, Decl(es6ClassTest8.ts, 13, 47))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+->minus : Symbol(Vector.minus, Decl(es6ClassTest8.ts, 13, 47))
++>minus : Symbol(minus, Decl(es6ClassTest8.ts, 13, 47))
+ >lookAt : Symbol(lookAt, Decl(es6ClassTest8.ts, 31, 35))
+->this.pos : Symbol(Camera.pos, Decl(es6ClassTest8.ts, 31, 16))
++>this.pos : Symbol(pos, Decl(es6ClassTest8.ts, 31, 16))
+ >this : Symbol(Camera, Decl(es6ClassTest8.ts, 25, 1))
+->pos : Symbol(Camera.pos, Decl(es6ClassTest8.ts, 31, 16))
++>pos : Symbol(pos, Decl(es6ClassTest8.ts, 31, 16))
+ 
+         this.right = Vector.times(down, Vector.norm(Vector.cross(this.forward, down)));
+->this.right : Symbol(Camera.right, Decl(es6ClassTest8.ts, 28, 27))
++>this.right : Symbol(right, Decl(es6ClassTest8.ts, 28, 27))
+ >this : Symbol(Camera, Decl(es6ClassTest8.ts, 25, 1))
+->right : Symbol(Camera.right, Decl(es6ClassTest8.ts, 28, 27))
+->Vector.times : Symbol(Vector.times, Decl(es6ClassTest8.ts, 14, 60))
++>right : Symbol(right, Decl(es6ClassTest8.ts, 28, 27))
++>Vector.times : Symbol(times, Decl(es6ClassTest8.ts, 14, 60))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+->times : Symbol(Vector.times, Decl(es6ClassTest8.ts, 14, 60))
++>times : Symbol(times, Decl(es6ClassTest8.ts, 14, 60))
+ >down : Symbol(down, Decl(es6ClassTest8.ts, 32, 11))
+->Vector.norm : Symbol(Vector.norm, Decl(es6ClassTest8.ts, 12, 14))
++>Vector.norm : Symbol(norm, Decl(es6ClassTest8.ts, 12, 14))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+->norm : Symbol(Vector.norm, Decl(es6ClassTest8.ts, 12, 14))
+->Vector.cross : Symbol(Vector.cross, Decl(es6ClassTest8.ts, 15, 60))
++>norm : Symbol(norm, Decl(es6ClassTest8.ts, 12, 14))
++>Vector.cross : Symbol(cross, Decl(es6ClassTest8.ts, 15, 60))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+->cross : Symbol(Vector.cross, Decl(es6ClassTest8.ts, 15, 60))
+->this.forward : Symbol(Camera.forward, Decl(es6ClassTest8.ts, 27, 14))
++>cross : Symbol(cross, Decl(es6ClassTest8.ts, 15, 60))
++>this.forward : Symbol(forward, Decl(es6ClassTest8.ts, 27, 14))
+ >this : Symbol(Camera, Decl(es6ClassTest8.ts, 25, 1))
+->forward : Symbol(Camera.forward, Decl(es6ClassTest8.ts, 27, 14))
++>forward : Symbol(forward, Decl(es6ClassTest8.ts, 27, 14))
+ >down : Symbol(down, Decl(es6ClassTest8.ts, 32, 11))
+ 
+         this.up = Vector.times(down, Vector.norm(Vector.cross(this.forward, this.right)));    
+->this.up : Symbol(Camera.up, Decl(es6ClassTest8.ts, 29, 25))
++>this.up : Symbol(up, Decl(es6ClassTest8.ts, 29, 25))
+ >this : Symbol(Camera, Decl(es6ClassTest8.ts, 25, 1))
+->up : Symbol(Camera.up, Decl(es6ClassTest8.ts, 29, 25))
+->Vector.times : Symbol(Vector.times, Decl(es6ClassTest8.ts, 14, 60))
++>up : Symbol(up, Decl(es6ClassTest8.ts, 29, 25))
++>Vector.times : Symbol(times, Decl(es6ClassTest8.ts, 14, 60))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+->times : Symbol(Vector.times, Decl(es6ClassTest8.ts, 14, 60))
++>times : Symbol(times, Decl(es6ClassTest8.ts, 14, 60))
+ >down : Symbol(down, Decl(es6ClassTest8.ts, 32, 11))
+->Vector.norm : Symbol(Vector.norm, Decl(es6ClassTest8.ts, 12, 14))
++>Vector.norm : Symbol(norm, Decl(es6ClassTest8.ts, 12, 14))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+->norm : Symbol(Vector.norm, Decl(es6ClassTest8.ts, 12, 14))
+->Vector.cross : Symbol(Vector.cross, Decl(es6ClassTest8.ts, 15, 60))
++>norm : Symbol(norm, Decl(es6ClassTest8.ts, 12, 14))
++>Vector.cross : Symbol(cross, Decl(es6ClassTest8.ts, 15, 60))
+ >Vector : Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+->cross : Symbol(Vector.cross, Decl(es6ClassTest8.ts, 15, 60))
+->this.forward : Symbol(Camera.forward, Decl(es6ClassTest8.ts, 27, 14))
++>cross : Symbol(cross, Decl(es6ClassTest8.ts, 15, 60))
++>this.forward : Symbol(forward, Decl(es6ClassTest8.ts, 27, 14))
+ >this : Symbol(Camera, Decl(es6ClassTest8.ts, 25, 1))
+->forward : Symbol(Camera.forward, Decl(es6ClassTest8.ts, 27, 14))
+->this.right : Symbol(Camera.right, Decl(es6ClassTest8.ts, 28, 27))
++>forward : Symbol(forward, Decl(es6ClassTest8.ts, 27, 14))
++>this.right : Symbol(right, Decl(es6ClassTest8.ts, 28, 27))
+ >this : Symbol(Camera, Decl(es6ClassTest8.ts, 25, 1))
+->right : Symbol(Camera.right, Decl(es6ClassTest8.ts, 28, 27))
++>right : Symbol(right, Decl(es6ClassTest8.ts, 28, 27))
+     }
+ }
+ 

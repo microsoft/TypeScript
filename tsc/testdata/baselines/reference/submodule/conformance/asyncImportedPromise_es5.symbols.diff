@@ -1,0 +1,11 @@
+--- old.asyncImportedPromise_es5.symbols
++++ new.asyncImportedPromise_es5.symbols
+@@= skipped -14, +14 lines =@@
+ >Test : Symbol(Test, Decl(test.ts, 0, 30))
+ 
+     async example<T>(): Task<T> { return; }
+->example : Symbol(Test.example, Decl(test.ts, 1, 12))
++>example : Symbol(example, Decl(test.ts, 1, 12))
+ >T : Symbol(T, Decl(test.ts, 2, 18))
+ >Task : Symbol(Task, Decl(test.ts, 0, 8))
+ >T : Symbol(T, Decl(test.ts, 2, 18))

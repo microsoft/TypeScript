@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/classIndexer4.ts] ////
+
+=== classIndexer4.ts ===
+class C123 {
+>C123 : Symbol(C123, Decl(classIndexer4.ts, 0, 0))
+
+    [s: string]: number;
+>s : Symbol(s, Decl(classIndexer4.ts, 1, 5))
+
+    constructor() {
+    }
+}
+
+interface D123 extends C123 {
+>D123 : Symbol(D123, Decl(classIndexer4.ts, 4, 1))
+>C123 : Symbol(C123, Decl(classIndexer4.ts, 0, 0))
+
+    x: number;
+>x : Symbol(x, Decl(classIndexer4.ts, 6, 29))
+
+    y: string;
+>y : Symbol(y, Decl(classIndexer4.ts, 7, 14))
+}

@@ -1,0 +1,313 @@
+--- old.typeGuardOfFromPropNameInUnionType.symbols
++++ new.typeGuardOfFromPropNameInUnionType.symbols
+@@= skipped -2, +2 lines =@@
+ === typeGuardOfFromPropNameInUnionType.ts ===
+ class A { a: string; }
+ >A : Symbol(A, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 0))
+->a : Symbol(A.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
++>a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
+ 
+ class B { b: number; }
+ >B : Symbol(B, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 22))
+->b : Symbol(B.b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
++>b : Symbol(b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
+ 
+ class C { b: Object; }
+ >C : Symbol(C, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 22))
+->b : Symbol(C.b, Decl(typeGuardOfFromPropNameInUnionType.ts, 2, 9))
++>b : Symbol(b, Decl(typeGuardOfFromPropNameInUnionType.ts, 2, 9))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+ class D { a: Date; }
+ >D : Symbol(D, Decl(typeGuardOfFromPropNameInUnionType.ts, 2, 22))
+->a : Symbol(D.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 3, 9))
++>a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 3, 9))
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ 
+ function namedClasses(x: A | B) {
+@@= skipped -26, +26 lines =@@
+ >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 5, 22))
+ 
+         x.a = "1";
+->x.a : Symbol(A.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
++>x.a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
+ >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 5, 22))
+->a : Symbol(A.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
++>a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
+ 
+     } else {
+         x.b = 1;
+->x.b : Symbol(B.b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
++>x.b : Symbol(b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
+ >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 5, 22))
+->b : Symbol(B.b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
++>b : Symbol(b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
+     }
+ }
+ 
+@@= skipped -66, +66 lines =@@
+ 
+ class AWithOptionalProp { a?: string; }
+ >AWithOptionalProp : Symbol(AWithOptionalProp, Decl(typeGuardOfFromPropNameInUnionType.ts, 27, 1))
+->a : Symbol(AWithOptionalProp.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 29, 25))
++>a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 29, 25))
+ 
+ class BWithOptionalProp { b?: string; }
+ >BWithOptionalProp : Symbol(BWithOptionalProp, Decl(typeGuardOfFromPropNameInUnionType.ts, 29, 39))
+->b : Symbol(BWithOptionalProp.b, Decl(typeGuardOfFromPropNameInUnionType.ts, 30, 25))
++>b : Symbol(b, Decl(typeGuardOfFromPropNameInUnionType.ts, 30, 25))
+ 
+ function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithOptionalProp) {
+ >positiveTestClassesWithOptionalProperties : Symbol(positiveTestClassesWithOptionalProperties, Decl(typeGuardOfFromPropNameInUnionType.ts, 30, 39))
+@@= skipped -16, +16 lines =@@
+ >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 32, 51))
+ 
+         x.a = "1";
+->x.a : Symbol(AWithOptionalProp.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 29, 25))
++>x.a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 29, 25))
+ >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 32, 51))
+->a : Symbol(AWithOptionalProp.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 29, 25))
++>a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 29, 25))
+ 
+     } else {
+         const y: string = x instanceof AWithOptionalProp
+@@= skipped -11, +11 lines =@@
+ >AWithOptionalProp : Symbol(AWithOptionalProp, Decl(typeGuardOfFromPropNameInUnionType.ts, 27, 1))
+ 
+             ? x.a
+->x.a : Symbol(AWithOptionalProp.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 29, 25))
++>x.a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 29, 25))
+ >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 32, 51))
+->a : Symbol(AWithOptionalProp.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 29, 25))
++>a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 29, 25))
+ 
+             : x.b
+->x.b : Symbol(BWithOptionalProp.b, Decl(typeGuardOfFromPropNameInUnionType.ts, 30, 25))
++>x.b : Symbol(b, Decl(typeGuardOfFromPropNameInUnionType.ts, 30, 25))
+ >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 32, 51))
+->b : Symbol(BWithOptionalProp.b, Decl(typeGuardOfFromPropNameInUnionType.ts, 30, 25))
++>b : Symbol(b, Decl(typeGuardOfFromPropNameInUnionType.ts, 30, 25))
+     }
+ }
+ 
+@@= skipped -22, +22 lines =@@
+ 
+         let y: string = x.a;
+ >y : Symbol(y, Decl(typeGuardOfFromPropNameInUnionType.ts, 44, 11))
+->x.a : Symbol(A.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
++>x.a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
+ >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 42, 35))
+->a : Symbol(A.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
++>a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
+ 
+     } else {
+         let z: number = x.b;
+ >z : Symbol(z, Decl(typeGuardOfFromPropNameInUnionType.ts, 46, 11))
+->x.b : Symbol(B.b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
++>x.b : Symbol(b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
+ >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 42, 35))
+->b : Symbol(B.b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
++>b : Symbol(b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
+     }
+ }
+ 
+ class ClassWithUnionProp { prop: A | B; }
+ >ClassWithUnionProp : Symbol(ClassWithUnionProp, Decl(typeGuardOfFromPropNameInUnionType.ts, 48, 1))
+->prop : Symbol(ClassWithUnionProp.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
++>prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
+ >A : Symbol(A, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 0))
+ >B : Symbol(B, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 22))
+ 
+@@= skipped -25, +25 lines =@@
+ >ClassWithUnionProp : Symbol(ClassWithUnionProp, Decl(typeGuardOfFromPropNameInUnionType.ts, 48, 1))
+ 
+     if ("a" in x.prop) {
+->x.prop : Symbol(ClassWithUnionProp.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
++>x.prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
+ >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 52, 20))
+->prop : Symbol(ClassWithUnionProp.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
++>prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
+ 
+         let y: string = x.prop.a;
+ >y : Symbol(y, Decl(typeGuardOfFromPropNameInUnionType.ts, 54, 11))
+->x.prop.a : Symbol(A.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
+->x.prop : Symbol(ClassWithUnionProp.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
++>x.prop.a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
++>x.prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
+ >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 52, 20))
+->prop : Symbol(ClassWithUnionProp.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
+->a : Symbol(A.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
++>prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
++>a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
+ 
+     } else {
+         let z: number = x.prop.b;
+ >z : Symbol(z, Decl(typeGuardOfFromPropNameInUnionType.ts, 56, 11))
+->x.prop.b : Symbol(B.b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
+->x.prop : Symbol(ClassWithUnionProp.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
++>x.prop.b : Symbol(b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
++>x.prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
+ >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 52, 20))
+->prop : Symbol(ClassWithUnionProp.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
+->b : Symbol(B.b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
++>prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
++>b : Symbol(b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
+     }
+ }
+ 
+ class NestedClassWithProp { outer: ClassWithUnionProp; }
+ >NestedClassWithProp : Symbol(NestedClassWithProp, Decl(typeGuardOfFromPropNameInUnionType.ts, 58, 1))
+->outer : Symbol(NestedClassWithProp.outer, Decl(typeGuardOfFromPropNameInUnionType.ts, 60, 27))
++>outer : Symbol(outer, Decl(typeGuardOfFromPropNameInUnionType.ts, 60, 27))
+ >ClassWithUnionProp : Symbol(ClassWithUnionProp, Decl(typeGuardOfFromPropNameInUnionType.ts, 48, 1))
+ 
+ function innestedProperty(x: NestedClassWithProp) {
+@@= skipped -34, +34 lines =@@
+ >NestedClassWithProp : Symbol(NestedClassWithProp, Decl(typeGuardOfFromPropNameInUnionType.ts, 58, 1))
+ 
+     if ("a" in x.outer.prop) {
+->x.outer.prop : Symbol(ClassWithUnionProp.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
+->x.outer : Symbol(NestedClassWithProp.outer, Decl(typeGuardOfFromPropNameInUnionType.ts, 60, 27))
++>x.outer.prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
++>x.outer : Symbol(outer, Decl(typeGuardOfFromPropNameInUnionType.ts, 60, 27))
+ >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 62, 26))
+->outer : Symbol(NestedClassWithProp.outer, Decl(typeGuardOfFromPropNameInUnionType.ts, 60, 27))
+->prop : Symbol(ClassWithUnionProp.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
++>outer : Symbol(outer, Decl(typeGuardOfFromPropNameInUnionType.ts, 60, 27))
++>prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
+ 
+         let y: string = x.outer.prop.a;
+ >y : Symbol(y, Decl(typeGuardOfFromPropNameInUnionType.ts, 64, 11))
+->x.outer.prop.a : Symbol(A.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
+->x.outer.prop : Symbol(ClassWithUnionProp.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
+->x.outer : Symbol(NestedClassWithProp.outer, Decl(typeGuardOfFromPropNameInUnionType.ts, 60, 27))
++>x.outer.prop.a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
++>x.outer.prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
++>x.outer : Symbol(outer, Decl(typeGuardOfFromPropNameInUnionType.ts, 60, 27))
+ >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 62, 26))
+->outer : Symbol(NestedClassWithProp.outer, Decl(typeGuardOfFromPropNameInUnionType.ts, 60, 27))
+->prop : Symbol(ClassWithUnionProp.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
+->a : Symbol(A.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
++>outer : Symbol(outer, Decl(typeGuardOfFromPropNameInUnionType.ts, 60, 27))
++>prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
++>a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
+ 
+     } else {
+         let z: number = x.outer.prop.b;
+ >z : Symbol(z, Decl(typeGuardOfFromPropNameInUnionType.ts, 66, 11))
+->x.outer.prop.b : Symbol(B.b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
+->x.outer.prop : Symbol(ClassWithUnionProp.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
+->x.outer : Symbol(NestedClassWithProp.outer, Decl(typeGuardOfFromPropNameInUnionType.ts, 60, 27))
++>x.outer.prop.b : Symbol(b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
++>x.outer.prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
++>x.outer : Symbol(outer, Decl(typeGuardOfFromPropNameInUnionType.ts, 60, 27))
+ >x : Symbol(x, Decl(typeGuardOfFromPropNameInUnionType.ts, 62, 26))
+->outer : Symbol(NestedClassWithProp.outer, Decl(typeGuardOfFromPropNameInUnionType.ts, 60, 27))
+->prop : Symbol(ClassWithUnionProp.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
+->b : Symbol(B.b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
++>outer : Symbol(outer, Decl(typeGuardOfFromPropNameInUnionType.ts, 60, 27))
++>prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 50, 26))
++>b : Symbol(b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
+     }
+ }
+ 
+@@= skipped -33, +33 lines =@@
+ >InMemberOfClass : Symbol(InMemberOfClass, Decl(typeGuardOfFromPropNameInUnionType.ts, 68, 1))
+ 
+     protected prop: A | B;
+->prop : Symbol(InMemberOfClass.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 70, 23))
++>prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 70, 23))
+ >A : Symbol(A, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 0))
+ >B : Symbol(B, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 22))
+ 
+     inThis() {
+->inThis : Symbol(InMemberOfClass.inThis, Decl(typeGuardOfFromPropNameInUnionType.ts, 71, 26))
++>inThis : Symbol(inThis, Decl(typeGuardOfFromPropNameInUnionType.ts, 71, 26))
+ 
+         if ("a" in this.prop) {
+->this.prop : Symbol(InMemberOfClass.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 70, 23))
++>this.prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 70, 23))
+ >this : Symbol(InMemberOfClass, Decl(typeGuardOfFromPropNameInUnionType.ts, 68, 1))
+->prop : Symbol(InMemberOfClass.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 70, 23))
++>prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 70, 23))
+ 
+             let y: string = this.prop.a;
+ >y : Symbol(y, Decl(typeGuardOfFromPropNameInUnionType.ts, 74, 15))
+->this.prop.a : Symbol(A.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
+->this.prop : Symbol(InMemberOfClass.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 70, 23))
++>this.prop.a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
++>this.prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 70, 23))
+ >this : Symbol(InMemberOfClass, Decl(typeGuardOfFromPropNameInUnionType.ts, 68, 1))
+->prop : Symbol(InMemberOfClass.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 70, 23))
+->a : Symbol(A.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
++>prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 70, 23))
++>a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
+ 
+         } else {
+             let z: number = this.prop.b;
+ >z : Symbol(z, Decl(typeGuardOfFromPropNameInUnionType.ts, 76, 15))
+->this.prop.b : Symbol(B.b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
+->this.prop : Symbol(InMemberOfClass.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 70, 23))
++>this.prop.b : Symbol(b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
++>this.prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 70, 23))
+ >this : Symbol(InMemberOfClass, Decl(typeGuardOfFromPropNameInUnionType.ts, 68, 1))
+->prop : Symbol(InMemberOfClass.prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 70, 23))
+->b : Symbol(B.b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
++>prop : Symbol(prop, Decl(typeGuardOfFromPropNameInUnionType.ts, 70, 23))
++>b : Symbol(b, Decl(typeGuardOfFromPropNameInUnionType.ts, 1, 9))
+         }
+     }
+ }
+@@= skipped -37, +37 lines =@@
+ >SelfAssert : Symbol(SelfAssert, Decl(typeGuardOfFromPropNameInUnionType.ts, 79, 1))
+ 
+     a: string;
+->a : Symbol(SelfAssert.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 82, 18))
++>a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 82, 18))
+ 
+     inThis() {
+->inThis : Symbol(SelfAssert.inThis, Decl(typeGuardOfFromPropNameInUnionType.ts, 83, 14))
++>inThis : Symbol(inThis, Decl(typeGuardOfFromPropNameInUnionType.ts, 83, 14))
+ 
+         if ("a" in this) {
+ >this : Symbol(SelfAssert, Decl(typeGuardOfFromPropNameInUnionType.ts, 79, 1))
+ 
+             let y: string = this.a;
+ >y : Symbol(y, Decl(typeGuardOfFromPropNameInUnionType.ts, 86, 15))
+->this.a : Symbol(SelfAssert.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 82, 18))
++>this.a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 82, 18))
+ >this : Symbol(SelfAssert, Decl(typeGuardOfFromPropNameInUnionType.ts, 79, 1))
+->a : Symbol(SelfAssert.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 82, 18))
++>a : Symbol(a, Decl(typeGuardOfFromPropNameInUnionType.ts, 82, 18))
+ 
+         } else {
+         }
+@@= skipped -35, +35 lines =@@
+ >i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
+ 
+         return i.a;
+->i.a : Symbol(Indexed.__index, Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
++>i.a : Symbol((Missing), Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
+ >i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
+->a : Symbol(Indexed.__index, Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
++>a : Symbol((Missing), Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
+     }
+     else if ("b" in i) {
+ >i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
+ 
+         return i.b;
+->i.b : Symbol(Indexed.__index, Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
++>i.b : Symbol((Missing), Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
+ >i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
+->b : Symbol(Indexed.__index, Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
++>b : Symbol((Missing), Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
+     }
+     return "c" in i && i.c;
+ >i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
+->i.c : Symbol(Indexed.__index, Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
++>i.c : Symbol((Missing), Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
+ >i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
+->c : Symbol(Indexed.__index, Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
++>c : Symbol((Missing), Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
+ }
+ 

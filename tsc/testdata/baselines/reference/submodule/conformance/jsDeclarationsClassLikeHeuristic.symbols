@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassLikeHeuristic.ts] ////
+
+=== index.js ===
+// https://github.com/microsoft/TypeScript/issues/35801
+let A;
+>A : Symbol(A, Decl(index.js, 1, 3))
+
+A = {};
+>A : Symbol(A, Decl(index.js, 1, 3))
+
+A.prototype.b = {};
+>A : Symbol(A, Decl(index.js, 1, 3))
+

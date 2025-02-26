@@ -1,0 +1,42 @@
+--- old.constraints0.symbols
++++ new.constraints0.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(constraints0.ts, 0, 0))
+ 
+ 	a: number;
+->a : Symbol(A.a, Decl(constraints0.ts, 0, 13))
++>a : Symbol(a, Decl(constraints0.ts, 0, 13))
+ }
+ 
+ interface B {
+ >B : Symbol(B, Decl(constraints0.ts, 2, 1))
+ 
+ 	b: string;
+->b : Symbol(B.b, Decl(constraints0.ts, 4, 13))
++>b : Symbol(b, Decl(constraints0.ts, 4, 13))
+ }
+ 
+ interface C<T extends A> {
+@@= skipped -16, +16 lines =@@
+ >A : Symbol(A, Decl(constraints0.ts, 0, 0))
+ 
+     x: T;
+->x : Symbol(C.x, Decl(constraints0.ts, 8, 26))
++>x : Symbol(x, Decl(constraints0.ts, 8, 26))
+ >T : Symbol(T, Decl(constraints0.ts, 8, 12))
+ }
+ 
+@@= skipped -16, +16 lines =@@
+ 
+ var y = v1.x.a; // 'a' should be of type 'number'
+ >y : Symbol(y, Decl(constraints0.ts, 15, 3))
+->v1.x.a : Symbol(A.a, Decl(constraints0.ts, 0, 13))
+->v1.x : Symbol(C.x, Decl(constraints0.ts, 8, 26))
++>v1.x.a : Symbol(a, Decl(constraints0.ts, 0, 13))
++>v1.x : Symbol(x, Decl(constraints0.ts, 8, 26))
+ >v1 : Symbol(v1, Decl(constraints0.ts, 12, 3))
+->x : Symbol(C.x, Decl(constraints0.ts, 8, 26))
+->a : Symbol(A.a, Decl(constraints0.ts, 0, 13))
++>x : Symbol(x, Decl(constraints0.ts, 8, 26))
++>a : Symbol(a, Decl(constraints0.ts, 0, 13))
+ 

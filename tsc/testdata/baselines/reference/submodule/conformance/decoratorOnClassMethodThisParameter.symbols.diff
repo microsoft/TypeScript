@@ -1,0 +1,20 @@
+--- old.decoratorOnClassMethodThisParameter.symbols
++++ new.decoratorOnClassMethodThisParameter.symbols
+@@= skipped -11, +11 lines =@@
+ >C : Symbol(C, Decl(decoratorOnClassMethodThisParameter.ts, 0, 97))
+ 
+     method(@dec this: C) {}
+->method : Symbol(C.method, Decl(decoratorOnClassMethodThisParameter.ts, 2, 9))
++>method : Symbol(method, Decl(decoratorOnClassMethodThisParameter.ts, 2, 9))
+ >dec : Symbol(dec, Decl(decoratorOnClassMethodThisParameter.ts, 0, 0))
+ >this : Symbol(this, Decl(decoratorOnClassMethodThisParameter.ts, 3, 11))
+ >C : Symbol(C, Decl(decoratorOnClassMethodThisParameter.ts, 0, 97))
+@@= skipped -10, +10 lines =@@
+ >C2 : Symbol(C2, Decl(decoratorOnClassMethodThisParameter.ts, 4, 1))
+ 
+     method(@dec allowed: C2, @dec this: C2) {}
+->method : Symbol(C2.method, Decl(decoratorOnClassMethodThisParameter.ts, 6, 10))
++>method : Symbol(method, Decl(decoratorOnClassMethodThisParameter.ts, 6, 10))
+ >dec : Symbol(dec, Decl(decoratorOnClassMethodThisParameter.ts, 0, 0))
+ >allowed : Symbol(allowed, Decl(decoratorOnClassMethodThisParameter.ts, 7, 11))
+ >C2 : Symbol(C2, Decl(decoratorOnClassMethodThisParameter.ts, 4, 1))

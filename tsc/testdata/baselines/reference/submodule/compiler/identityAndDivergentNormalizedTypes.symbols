@@ -1,0 +1,98 @@
+//// [tests/cases/compiler/identityAndDivergentNormalizedTypes.ts] ////
+
+=== identityAndDivergentNormalizedTypes.ts ===
+// Repros from #53998
+
+type ApiPost =
+>ApiPost : Symbol(ApiPost, Decl(identityAndDivergentNormalizedTypes.ts, 0, 0))
+
+    | {
+        path: "/login";
+>path : Symbol(path, Decl(identityAndDivergentNormalizedTypes.ts, 3, 7))
+
+        body: {};
+>body : Symbol(body, Decl(identityAndDivergentNormalizedTypes.ts, 4, 23))
+    }
+    | {
+        path: "/user";
+>path : Symbol(path, Decl(identityAndDivergentNormalizedTypes.ts, 7, 7))
+
+        body: { name: string; };
+>body : Symbol(body, Decl(identityAndDivergentNormalizedTypes.ts, 8, 22))
+>name : Symbol(name, Decl(identityAndDivergentNormalizedTypes.ts, 9, 15))
+    }
+
+type PostPath = ApiPost["path"];
+>PostPath : Symbol(PostPath, Decl(identityAndDivergentNormalizedTypes.ts, 10, 5))
+>ApiPost : Symbol(ApiPost, Decl(identityAndDivergentNormalizedTypes.ts, 0, 0))
+
+type PostBody<PATH extends PostPath> = Extract<ApiPost, { path: PATH }>["body"];
+>PostBody : Symbol(PostBody, Decl(identityAndDivergentNormalizedTypes.ts, 12, 32))
+>PATH : Symbol(PATH, Decl(identityAndDivergentNormalizedTypes.ts, 14, 14))
+>PostPath : Symbol(PostPath, Decl(identityAndDivergentNormalizedTypes.ts, 10, 5))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>ApiPost : Symbol(ApiPost, Decl(identityAndDivergentNormalizedTypes.ts, 0, 0))
+>path : Symbol(path, Decl(identityAndDivergentNormalizedTypes.ts, 14, 57))
+>PATH : Symbol(PATH, Decl(identityAndDivergentNormalizedTypes.ts, 14, 14))
+
+const post = <PATH extends PostPath>(
+>post : Symbol(post, Decl(identityAndDivergentNormalizedTypes.ts, 16, 5))
+>PATH : Symbol(PATH, Decl(identityAndDivergentNormalizedTypes.ts, 16, 14))
+>PostPath : Symbol(PostPath, Decl(identityAndDivergentNormalizedTypes.ts, 10, 5))
+
+    path: PATH,
+>path : Symbol(path, Decl(identityAndDivergentNormalizedTypes.ts, 16, 37))
+>PATH : Symbol(PATH, Decl(identityAndDivergentNormalizedTypes.ts, 16, 14))
+
+    {body, ...options}: Omit<RequestInit, 'body'> & {body: PostBody<PATH>}
+>body : Symbol(body, Decl(identityAndDivergentNormalizedTypes.ts, 18, 5))
+>options : Symbol(options, Decl(identityAndDivergentNormalizedTypes.ts, 18, 10))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>RequestInit : Symbol(RequestInit, Decl(lib.dom.d.ts, --, --))
+>body : Symbol(body, Decl(identityAndDivergentNormalizedTypes.ts, 18, 53))
+>PostBody : Symbol(PostBody, Decl(identityAndDivergentNormalizedTypes.ts, 12, 32))
+>PATH : Symbol(PATH, Decl(identityAndDivergentNormalizedTypes.ts, 16, 14))
+
+) => {
+}
+
+const tmp = <PATH extends PostPath>(
+>tmp : Symbol(tmp, Decl(identityAndDivergentNormalizedTypes.ts, 22, 5))
+>PATH : Symbol(PATH, Decl(identityAndDivergentNormalizedTypes.ts, 22, 13))
+>PostPath : Symbol(PostPath, Decl(identityAndDivergentNormalizedTypes.ts, 10, 5))
+
+  path: PATH,
+>path : Symbol(path, Decl(identityAndDivergentNormalizedTypes.ts, 22, 36))
+>PATH : Symbol(PATH, Decl(identityAndDivergentNormalizedTypes.ts, 22, 13))
+
+  body: PostBody<PATH>
+>body : Symbol(body, Decl(identityAndDivergentNormalizedTypes.ts, 23, 13))
+>PostBody : Symbol(PostBody, Decl(identityAndDivergentNormalizedTypes.ts, 12, 32))
+>PATH : Symbol(PATH, Decl(identityAndDivergentNormalizedTypes.ts, 22, 13))
+
+) => {
+  post<PATH>(path, { body })
+>post : Symbol(post, Decl(identityAndDivergentNormalizedTypes.ts, 16, 5))
+>PATH : Symbol(PATH, Decl(identityAndDivergentNormalizedTypes.ts, 22, 13))
+>path : Symbol(path, Decl(identityAndDivergentNormalizedTypes.ts, 22, 36))
+>body : Symbol(body, Decl(identityAndDivergentNormalizedTypes.ts, 26, 20))
+}
+
+function fx1<P extends PostPath>(x: { body: PostBody<P> }, y: { body: PostBody<P> }) {
+>fx1 : Symbol(fx1, Decl(identityAndDivergentNormalizedTypes.ts, 27, 1))
+>P : Symbol(P, Decl(identityAndDivergentNormalizedTypes.ts, 29, 13))
+>PostPath : Symbol(PostPath, Decl(identityAndDivergentNormalizedTypes.ts, 10, 5))
+>x : Symbol(x, Decl(identityAndDivergentNormalizedTypes.ts, 29, 33))
+>body : Symbol(body, Decl(identityAndDivergentNormalizedTypes.ts, 29, 37))
+>PostBody : Symbol(PostBody, Decl(identityAndDivergentNormalizedTypes.ts, 12, 32))
+>P : Symbol(P, Decl(identityAndDivergentNormalizedTypes.ts, 29, 13))
+>y : Symbol(y, Decl(identityAndDivergentNormalizedTypes.ts, 29, 58))
+>body : Symbol(body, Decl(identityAndDivergentNormalizedTypes.ts, 29, 63))
+>PostBody : Symbol(PostBody, Decl(identityAndDivergentNormalizedTypes.ts, 12, 32))
+>P : Symbol(P, Decl(identityAndDivergentNormalizedTypes.ts, 29, 13))
+
+    x = y;
+>x : Symbol(x, Decl(identityAndDivergentNormalizedTypes.ts, 29, 33))
+>y : Symbol(y, Decl(identityAndDivergentNormalizedTypes.ts, 29, 58))
+}
+

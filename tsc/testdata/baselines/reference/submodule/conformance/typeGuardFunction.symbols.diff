@@ -1,0 +1,85 @@
+--- old.typeGuardFunction.symbols
++++ new.typeGuardFunction.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(typeGuardFunction.ts, 0, 0))
+ 
+     propA: number;
+->propA : Symbol(A.propA, Decl(typeGuardFunction.ts, 0, 9))
++>propA : Symbol(propA, Decl(typeGuardFunction.ts, 0, 9))
+ }
+ 
+ class B {
+ >B : Symbol(B, Decl(typeGuardFunction.ts, 2, 1))
+ 
+     propB: number;
+->propB : Symbol(B.propB, Decl(typeGuardFunction.ts, 4, 9))
++>propB : Symbol(propB, Decl(typeGuardFunction.ts, 4, 9))
+ }
+ 
+ class C extends A {
+@@= skipped -15, +15 lines =@@
+ >A : Symbol(A, Decl(typeGuardFunction.ts, 0, 0))
+ 
+     propC: number;
+->propC : Symbol(C.propC, Decl(typeGuardFunction.ts, 8, 19))
++>propC : Symbol(propC, Decl(typeGuardFunction.ts, 8, 19))
+ }
+ 
+ declare function isA(p1: any): p1 is A;
+@@= skipped -39, +39 lines =@@
+ >a : Symbol(a, Decl(typeGuardFunction.ts, 18, 3))
+ 
+     a.propC;
+->a.propC : Symbol(C.propC, Decl(typeGuardFunction.ts, 8, 19))
++>a.propC : Symbol(propC, Decl(typeGuardFunction.ts, 8, 19))
+ >a : Symbol(a, Decl(typeGuardFunction.ts, 18, 3))
+->propC : Symbol(C.propC, Decl(typeGuardFunction.ts, 8, 19))
++>propC : Symbol(propC, Decl(typeGuardFunction.ts, 8, 19))
+ }
+ 
+ // Sub type
+@@= skipped -15, +15 lines =@@
+ >subType : Symbol(subType, Decl(typeGuardFunction.ts, 27, 3))
+ 
+     subType.propC;
+->subType.propC : Symbol(C.propC, Decl(typeGuardFunction.ts, 8, 19))
++>subType.propC : Symbol(propC, Decl(typeGuardFunction.ts, 8, 19))
+ >subType : Symbol(subType, Decl(typeGuardFunction.ts, 27, 3))
+->propC : Symbol(C.propC, Decl(typeGuardFunction.ts, 8, 19))
++>propC : Symbol(propC, Decl(typeGuardFunction.ts, 8, 19))
+ }
+ 
+ // Union type
+@@= skipped -16, +16 lines =@@
+ >union : Symbol(union, Decl(typeGuardFunction.ts, 33, 3))
+ 
+     union.propA;
+->union.propA : Symbol(A.propA, Decl(typeGuardFunction.ts, 0, 9))
++>union.propA : Symbol(propA, Decl(typeGuardFunction.ts, 0, 9))
+ >union : Symbol(union, Decl(typeGuardFunction.ts, 33, 3))
+->propA : Symbol(A.propA, Decl(typeGuardFunction.ts, 0, 9))
++>propA : Symbol(propA, Decl(typeGuardFunction.ts, 0, 9))
+ }
+ 
+ // Call signature
+@@= skipped -30, +30 lines =@@
+ >a : Symbol(a, Decl(typeGuardFunction.ts, 18, 3))
+ 
+     a.propC;
+->a.propC : Symbol(C.propC, Decl(typeGuardFunction.ts, 8, 19))
++>a.propC : Symbol(propC, Decl(typeGuardFunction.ts, 8, 19))
+ >a : Symbol(a, Decl(typeGuardFunction.ts, 18, 3))
+->propC : Symbol(C.propC, Decl(typeGuardFunction.ts, 8, 19))
++>propC : Symbol(propC, Decl(typeGuardFunction.ts, 8, 19))
+ }
+ 
+ // Methods
+@@= skipped -20, +20 lines =@@
+ >D : Symbol(D, Decl(typeGuardFunction.ts, 53, 1))
+ 
+     method1(p1: A): p1 is C {
+->method1 : Symbol(D.method1, Decl(typeGuardFunction.ts, 54, 9))
++>method1 : Symbol(method1, Decl(typeGuardFunction.ts, 54, 9))
+ >p1 : Symbol(p1, Decl(typeGuardFunction.ts, 55, 12))
+ >A : Symbol(A, Decl(typeGuardFunction.ts, 0, 0))
+ >p1 : Symbol(p1, Decl(typeGuardFunction.ts, 55, 12))

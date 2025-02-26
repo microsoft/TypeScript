@@ -1,0 +1,11 @@
+--- old.interfaceInReopenedModule.symbols
++++ new.interfaceInReopenedModule.symbols
+@@= skipped -15, +15 lines =@@
+ >n : Symbol(n, Decl(interfaceInReopenedModule.ts, 5, 18))
+ 
+         private n: f;
+->n : Symbol(n.n, Decl(interfaceInReopenedModule.ts, 6, 20))
++>n : Symbol(n, Decl(interfaceInReopenedModule.ts, 6, 20))
+ >f : Symbol(f, Decl(interfaceInReopenedModule.ts, 4, 10))
+     }
+ }

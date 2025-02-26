@@ -1,0 +1,301 @@
+--- old.es2020IntlAPIs.symbols
++++ new.es2020IntlAPIs.symbols
+@@= skipped -13, +13 lines =@@
+ >locale : Symbol(locale, Decl(es2020IntlAPIs.ts, 4, 13))
+ 
+   console.log(
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ 
+     `${new Intl.DateTimeFormat(locale).format(date)} ${new Intl.NumberFormat(locale).format(count)}`
+->new Intl.DateTimeFormat(locale).format : Symbol(Intl.DateTimeFormat.format, Decl(lib.es5.d.ts, --, --))
+->Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
++>new Intl.DateTimeFormat(locale).format : Symbol(format, Decl(lib.es5.d.ts, --, --))
++>Intl.DateTimeFormat : Symbol(DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
++>DateTimeFormat : Symbol(DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+ >locale : Symbol(locale, Decl(es2020IntlAPIs.ts, 4, 13))
+->format : Symbol(Intl.DateTimeFormat.format, Decl(lib.es5.d.ts, --, --))
++>format : Symbol(format, Decl(lib.es5.d.ts, --, --))
+ >date : Symbol(date, Decl(es2020IntlAPIs.ts, 2, 5))
+->new Intl.NumberFormat(locale).format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+->Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
++>new Intl.NumberFormat(locale).format : Symbol(format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
++>Intl.NumberFormat : Symbol(NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
++>NumberFormat : Symbol(NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+ >locale : Symbol(locale, Decl(es2020IntlAPIs.ts, 4, 13))
+->format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
++>format : Symbol(format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+ >count : Symbol(count, Decl(es2020IntlAPIs.ts, 1, 5))
+ 
+   );
+@@= skipped -36, +36 lines =@@
+ // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat
+ const rtf1 = new Intl.RelativeTimeFormat('en', { style: 'narrow' });
+ >rtf1 : Symbol(rtf1, Decl(es2020IntlAPIs.ts, 17, 5))
+->Intl.RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Intl.RelativeTimeFormat : Symbol(RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>RelativeTimeFormat : Symbol(RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >style : Symbol(style, Decl(es2020IntlAPIs.ts, 17, 48))
+ 
+ console.log(rtf1.format(3, 'quarter'));
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->rtf1.format : Symbol(Intl.RelativeTimeFormat.format, Decl(lib.es2020.intl.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>rtf1.format : Symbol(format, Decl(lib.es2020.intl.d.ts, --, --))
+ >rtf1 : Symbol(rtf1, Decl(es2020IntlAPIs.ts, 17, 5))
+->format : Symbol(Intl.RelativeTimeFormat.format, Decl(lib.es2020.intl.d.ts, --, --))
++>format : Symbol(format, Decl(lib.es2020.intl.d.ts, --, --))
+ 
+ //expected output: "in 3 qtrs."
+ 
+ console.log(rtf1.format(-1, 'day'));
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->rtf1.format : Symbol(Intl.RelativeTimeFormat.format, Decl(lib.es2020.intl.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>rtf1.format : Symbol(format, Decl(lib.es2020.intl.d.ts, --, --))
+ >rtf1 : Symbol(rtf1, Decl(es2020IntlAPIs.ts, 17, 5))
+->format : Symbol(Intl.RelativeTimeFormat.format, Decl(lib.es2020.intl.d.ts, --, --))
++>format : Symbol(format, Decl(lib.es2020.intl.d.ts, --, --))
+ 
+ //expected output: "1 day ago"
+ 
+ const rtf2 = new Intl.RelativeTimeFormat('es', { numeric: 'auto' });
+ >rtf2 : Symbol(rtf2, Decl(es2020IntlAPIs.ts, 25, 5))
+->Intl.RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Intl.RelativeTimeFormat : Symbol(RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>RelativeTimeFormat : Symbol(RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >numeric : Symbol(numeric, Decl(es2020IntlAPIs.ts, 25, 48))
+ 
+ console.log(rtf2.format(2, 'day'));
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->rtf2.format : Symbol(Intl.RelativeTimeFormat.format, Decl(lib.es2020.intl.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>rtf2.format : Symbol(format, Decl(lib.es2020.intl.d.ts, --, --))
+ >rtf2 : Symbol(rtf2, Decl(es2020IntlAPIs.ts, 25, 5))
+->format : Symbol(Intl.RelativeTimeFormat.format, Decl(lib.es2020.intl.d.ts, --, --))
++>format : Symbol(format, Decl(lib.es2020.intl.d.ts, --, --))
+ 
+ //expected output: "pasado mañana"
+ 
+ // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames
+ const regionNamesInEnglish = new Intl.DisplayNames(['en'], { type: 'region' });
+ >regionNamesInEnglish : Symbol(regionNamesInEnglish, Decl(es2020IntlAPIs.ts, 31, 5))
+->Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Intl.DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >type : Symbol(type, Decl(es2020IntlAPIs.ts, 31, 60))
+ 
+ const regionNamesInTraditionalChinese = new Intl.DisplayNames(['zh-Hant'], { type: 'region' });
+ >regionNamesInTraditionalChinese : Symbol(regionNamesInTraditionalChinese, Decl(es2020IntlAPIs.ts, 32, 5))
+->Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Intl.DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >type : Symbol(type, Decl(es2020IntlAPIs.ts, 32, 76))
+ 
+ console.log(regionNamesInEnglish.of('US'));
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->regionNamesInEnglish.of : Symbol(Intl.DisplayNames.of, Decl(lib.es2020.intl.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>regionNamesInEnglish.of : Symbol(of, Decl(lib.es2020.intl.d.ts, --, --))
+ >regionNamesInEnglish : Symbol(regionNamesInEnglish, Decl(es2020IntlAPIs.ts, 31, 5))
+->of : Symbol(Intl.DisplayNames.of, Decl(lib.es2020.intl.d.ts, --, --))
++>of : Symbol(of, Decl(lib.es2020.intl.d.ts, --, --))
+ 
+ // expected output: "United States"
+ 
+ console.log(regionNamesInTraditionalChinese.of('US'));
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->regionNamesInTraditionalChinese.of : Symbol(Intl.DisplayNames.of, Decl(lib.es2020.intl.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>regionNamesInTraditionalChinese.of : Symbol(of, Decl(lib.es2020.intl.d.ts, --, --))
+ >regionNamesInTraditionalChinese : Symbol(regionNamesInTraditionalChinese, Decl(es2020IntlAPIs.ts, 32, 5))
+->of : Symbol(Intl.DisplayNames.of, Decl(lib.es2020.intl.d.ts, --, --))
++>of : Symbol(of, Decl(lib.es2020.intl.d.ts, --, --))
+ 
+ // expected output: "美國"
+ 
+@@= skipped -86, +86 lines =@@
+ >const : Symbol(const)
+ 
+ console.log(Intl.DisplayNames.supportedLocalesOf(locales1, options1).join(', '));
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->Intl.DisplayNames.supportedLocalesOf(locales1, options1).join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>Intl.DisplayNames.supportedLocalesOf(locales1, options1).join : Symbol(join, Decl(lib.es5.d.ts, --, --))
+ >Intl.DisplayNames.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+->Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Intl.DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+ >locales1 : Symbol(locales1, Decl(es2020IntlAPIs.ts, 40, 5))
+ >options1 : Symbol(options1, Decl(es2020IntlAPIs.ts, 41, 5))
+->join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
++>join : Symbol(join, Decl(lib.es5.d.ts, --, --))
+ 
+ new Intl.Locale(); // should error
+->Intl.Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Intl.Locale : Symbol(Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Locale : Symbol(Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ 
+ new Intl.Locale(new Intl.Locale('en-US'));
+->Intl.Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Intl.Locale : Symbol(Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+->Intl.Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Locale : Symbol(Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Intl.Locale : Symbol(Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Locale : Symbol(Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ 
+ new Intl.DisplayNames(); // TypeError: invalid_argument
+->Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Intl.DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ 
+ new Intl.DisplayNames('en'); // TypeError: invalid_argument
+->Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Intl.DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ 
+ new Intl.DisplayNames('en', {}); // TypeError: invalid_argument
+->Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Intl.DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ 
+ console.log((new Intl.DisplayNames(undefined, {type: 'language'})).of('en-GB')); // "British English"
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->(new Intl.DisplayNames(undefined, {type: 'language'})).of : Symbol(Intl.DisplayNames.of, Decl(lib.es2020.intl.d.ts, --, --))
+->Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>(new Intl.DisplayNames(undefined, {type: 'language'})).of : Symbol(of, Decl(lib.es2020.intl.d.ts, --, --))
++>Intl.DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >undefined : Symbol(undefined)
+ >type : Symbol(type, Decl(es2020IntlAPIs.ts, 50, 47))
+->of : Symbol(Intl.DisplayNames.of, Decl(lib.es2020.intl.d.ts, --, --))
++>of : Symbol(of, Decl(lib.es2020.intl.d.ts, --, --))
+ 
+ const localesArg = ["es-ES", new Intl.Locale("en-US")];
+ >localesArg : Symbol(localesArg, Decl(es2020IntlAPIs.ts, 52, 5))
+->Intl.Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Intl.Locale : Symbol(Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Locale : Symbol(Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ 
+ console.log((new Intl.DisplayNames(localesArg, {type: 'language'})).resolvedOptions().locale); // "es-ES"
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->(new Intl.DisplayNames(localesArg, {type: 'language'})).resolvedOptions().locale : Symbol(Intl.ResolvedDisplayNamesOptions.locale, Decl(lib.es2020.intl.d.ts, --, --))
+->(new Intl.DisplayNames(localesArg, {type: 'language'})).resolvedOptions : Symbol(Intl.DisplayNames.resolvedOptions, Decl(lib.es2020.intl.d.ts, --, --))
+->Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>(new Intl.DisplayNames(localesArg, {type: 'language'})).resolvedOptions().locale : Symbol(locale, Decl(lib.es2020.intl.d.ts, --, --))
++>(new Intl.DisplayNames(localesArg, {type: 'language'})).resolvedOptions : Symbol(resolvedOptions, Decl(lib.es2020.intl.d.ts, --, --))
++>Intl.DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >localesArg : Symbol(localesArg, Decl(es2020IntlAPIs.ts, 52, 5))
+ >type : Symbol(type, Decl(es2020IntlAPIs.ts, 53, 48))
+->resolvedOptions : Symbol(Intl.DisplayNames.resolvedOptions, Decl(lib.es2020.intl.d.ts, --, --))
+->locale : Symbol(Intl.ResolvedDisplayNamesOptions.locale, Decl(lib.es2020.intl.d.ts, --, --))
++>resolvedOptions : Symbol(resolvedOptions, Decl(lib.es2020.intl.d.ts, --, --))
++>locale : Symbol(locale, Decl(lib.es2020.intl.d.ts, --, --))
+ 
+ console.log(Intl.DisplayNames.supportedLocalesOf(localesArg)); // ["es-ES", "en-US"]
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >Intl.DisplayNames.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+->Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Intl.DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+ >localesArg : Symbol(localesArg, Decl(es2020IntlAPIs.ts, 52, 5))
+ 
+ console.log(Intl.DisplayNames.supportedLocalesOf()); // []
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >Intl.DisplayNames.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+->Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Intl.DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+ 
+ console.log(Intl.DisplayNames.supportedLocalesOf(localesArg, {})); // ["es-ES", "en-US"]
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >Intl.DisplayNames.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+->Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>Intl.DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+->DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
++>DisplayNames : Symbol(DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+ >supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+ >localesArg : Symbol(localesArg, Decl(es2020IntlAPIs.ts, 52, 5))
+ 

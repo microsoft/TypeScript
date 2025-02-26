@@ -1,0 +1,285 @@
+--- old.unusedLocalsInMethod4.symbols
++++ new.unusedLocalsInMethod4.symbols
+@@= skipped -46, +46 lines =@@
+ >foo : Symbol(foo, Decl(unusedLocalsInMethod4.ts, 11, 21))
+ 
+         console.log(x1);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x1 : Symbol(x1, Decl(unusedLocalsInMethod4.ts, 1, 7))
+ 
+         console.log(x2);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x2 : Symbol(x2, Decl(unusedLocalsInMethod4.ts, 2, 7))
+ 
+         console.log(x3);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x3 : Symbol(x3, Decl(unusedLocalsInMethod4.ts, 3, 7))
+ 
+         console.log(x4);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x4 : Symbol(x4, Decl(unusedLocalsInMethod4.ts, 4, 7))
+ 
+         console.log(x5);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x5 : Symbol(x5, Decl(unusedLocalsInMethod4.ts, 5, 7))
+ 
+         console.log(x6);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x6 : Symbol(x6, Decl(unusedLocalsInMethod4.ts, 6, 7))
+ 
+         console.log(x7);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x7 : Symbol(x7, Decl(unusedLocalsInMethod4.ts, 7, 7))
+ 
+         console.log(x8);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x8 : Symbol(x8, Decl(unusedLocalsInMethod4.ts, 8, 7))
+ 
+         console.log(x9);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x9 : Symbol(x9, Decl(unusedLocalsInMethod4.ts, 9, 7))
+ 
+         console.log(x10);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x10 : Symbol(x10, Decl(unusedLocalsInMethod4.ts, 10, 7))
+ 
+         console.log(x11);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x11 : Symbol(x11, Decl(unusedLocalsInMethod4.ts, 11, 7))
+     }
+     function bar() {
+@@= skipped -110, +110 lines =@@
+ >NonNull : Symbol(NonNull, Decl(unusedLocalsInMethod4.ts, 32, 14))
+ 
+     console.log(x1);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x1 : Symbol(x1, Decl(unusedLocalsInMethod4.ts, 33, 7))
+ 
+     console.log(x2);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x2 : Symbol(x2, Decl(unusedLocalsInMethod4.ts, 34, 7))
+ 
+     console.log(x3);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x3 : Symbol(x3, Decl(unusedLocalsInMethod4.ts, 35, 7))
+ 
+     console.log(x4);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x4 : Symbol(x4, Decl(unusedLocalsInMethod4.ts, 36, 7))
+ 
+     console.log(x5);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x5 : Symbol(x5, Decl(unusedLocalsInMethod4.ts, 37, 7))
+ 
+     console.log(x6);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x6 : Symbol(x6, Decl(unusedLocalsInMethod4.ts, 38, 7))
+ 
+     console.log(x7);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x7 : Symbol(x7, Decl(unusedLocalsInMethod4.ts, 39, 7))
+ 
+     console.log(x8);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x8 : Symbol(x8, Decl(unusedLocalsInMethod4.ts, 40, 7))
+ 
+     console.log(x9);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x9 : Symbol(x9, Decl(unusedLocalsInMethod4.ts, 41, 7))
+ }
+ 
+@@= skipped -64, +64 lines =@@
+ >foo : Symbol(foo, Decl(unusedLocalsInMethod4.ts, 55, 20))
+ 
+         x.toString();
+->x.toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(unusedLocalsInMethod4.ts, 55, 7))
+->toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+     }
+     foo();
+ >foo : Symbol(foo, Decl(unusedLocalsInMethod4.ts, 55, 20))
+@@= skipped -19, +19 lines =@@
+ >foo : Symbol(foo, Decl(unusedLocalsInMethod4.ts, 64, 12))
+ 
+             return x.toString();
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(unusedLocalsInMethod4.ts, 63, 7))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+         }
+     };
+ }
+@@= skipped -14, +14 lines =@@
+ >f5 : Symbol(f5, Decl(unusedLocalsInMethod4.ts, 71, 22))
+ 
+     x.toString();
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(unusedLocalsInMethod4.ts, 71, 11))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ }
+ export default {};
+ 
+@@= skipped -16, +16 lines =@@
+ >key : Symbol(key, Decl(unusedLocalsInMethod4.ts, 78, 7))
+ 
+         console.log(key);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >key : Symbol(key, Decl(unusedLocalsInMethod4.ts, 78, 7))
+     }
+ }
+@@= skipped -17, +17 lines =@@
+ >key : Symbol(key, Decl(unusedLocalsInMethod4.ts, 85, 7))
+ 
+         console.log(key);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >key : Symbol(key, Decl(unusedLocalsInMethod4.ts, 85, 7))
+     }
+ }
+@@= skipped -57, +57 lines =@@
+ >i : Symbol(i, Decl(unusedLocalsInMethod4.ts, 110, 7))
+ 
+         console.log(i); // NaN
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >i : Symbol(i, Decl(unusedLocalsInMethod4.ts, 110, 7))
+     }
+     inside();
+@@= skipped -26, +26 lines =@@
+ >f : Symbol(f, Decl(unusedLocalsInMethod4.ts, 122, 28))
+ 
+         file.toString();
+->file.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
++>file.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >file : Symbol(file, Decl(unusedLocalsInMethod4.ts, 120, 7))
+->toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >ClassPropertySubstitutionFlags : Symbol(ClassPropertySubstitutionFlags, Decl(unusedLocalsInMethod4.ts, 129, 33))
+ 
+         ClassAliases = 1 << 0,
+->ClassAliases : Symbol(ClassPropertySubstitutionFlags.ClassAliases, Decl(unusedLocalsInMethod4.ts, 130, 41))
++>ClassAliases : Symbol(ClassAliases, Decl(unusedLocalsInMethod4.ts, 130, 41))
+ 
+         ClassStaticThisOrSuperReference = 1 << 1,
+->ClassStaticThisOrSuperReference : Symbol(ClassPropertySubstitutionFlags.ClassStaticThisOrSuperReference, Decl(unusedLocalsInMethod4.ts, 131, 30))
++>ClassStaticThisOrSuperReference : Symbol(ClassStaticThisOrSuperReference, Decl(unusedLocalsInMethod4.ts, 131, 30))
+     }
+ 
+     let enabledSubstitutions: ClassPropertySubstitutionFlags;   // should error
+@@= skipped -15, +15 lines =@@
+ 
+         enabledSubstitutions |= ClassPropertySubstitutionFlags.ClassAliases;
+ >enabledSubstitutions : Symbol(enabledSubstitutions, Decl(unusedLocalsInMethod4.ts, 135, 7))
+->ClassPropertySubstitutionFlags.ClassAliases : Symbol(ClassPropertySubstitutionFlags.ClassAliases, Decl(unusedLocalsInMethod4.ts, 130, 41))
++>ClassPropertySubstitutionFlags.ClassAliases : Symbol(ClassAliases, Decl(unusedLocalsInMethod4.ts, 130, 41))
+ >ClassPropertySubstitutionFlags : Symbol(ClassPropertySubstitutionFlags, Decl(unusedLocalsInMethod4.ts, 129, 33))
+->ClassAliases : Symbol(ClassPropertySubstitutionFlags.ClassAliases, Decl(unusedLocalsInMethod4.ts, 130, 41))
++>ClassAliases : Symbol(ClassAliases, Decl(unusedLocalsInMethod4.ts, 130, 41))
+ 
+         enabledSubstitutions.toString();
+->enabledSubstitutions.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>enabledSubstitutions.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >enabledSubstitutions : Symbol(enabledSubstitutions, Decl(unusedLocalsInMethod4.ts, 135, 7))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+     }
+ }

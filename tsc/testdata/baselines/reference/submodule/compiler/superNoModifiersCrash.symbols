@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/superNoModifiersCrash.ts] ////
+
+=== File.js ===
+class Parent {
+>Parent : Symbol(Parent, Decl(File.js, 0, 0))
+
+    initialize() {
+>initialize : Symbol(initialize, Decl(File.js, 0, 14))
+
+        super.initialize(...arguments)
+>arguments : Symbol(arguments)
+
+        return this.asdf = ''
+>this : Symbol(Parent, Decl(File.js, 0, 0))
+    }
+  }
+
+class Child extends Parent {
+>Child : Symbol(Child, Decl(File.js, 5, 3))
+>Parent : Symbol(Parent, Decl(File.js, 0, 0))
+
+    initialize() {
+>initialize : Symbol(initialize, Decl(File.js, 7, 28))
+    }
+}

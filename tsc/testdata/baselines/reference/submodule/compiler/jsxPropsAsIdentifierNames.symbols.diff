@@ -1,0 +1,11 @@
+--- old.jsxPropsAsIdentifierNames.symbols
++++ new.jsxPropsAsIdentifierNames.symbols
+@@= skipped -10, +10 lines =@@
+ >IntrinsicElements : Symbol(IntrinsicElements, Decl(index.tsx, 1, 25))
+ 
+         div: {
+->div : Symbol(IntrinsicElements.div, Decl(index.tsx, 2, 33))
++>div : Symbol(div, Decl(index.tsx, 2, 33))
+ 
+             static?: boolean;
+ >static : Symbol(static, Decl(index.tsx, 3, 14))

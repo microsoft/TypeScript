@@ -1,0 +1,15 @@
+--- old.comparisonOperatorWithOneOperandIsNull.symbols
++++ new.comparisonOperatorWithOneOperandIsNull.symbols
+@@= skipped -2, +2 lines =@@
+ === comparisonOperatorWithOneOperandIsNull.ts ===
+ enum E { a, b, c }
+ >E : Symbol(E, Decl(comparisonOperatorWithOneOperandIsNull.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithOneOperandIsNull.ts, 0, 8))
+->b : Symbol(E.b, Decl(comparisonOperatorWithOneOperandIsNull.ts, 0, 11))
+->c : Symbol(E.c, Decl(comparisonOperatorWithOneOperandIsNull.ts, 0, 14))
++>a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsNull.ts, 0, 8))
++>b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsNull.ts, 0, 11))
++>c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsNull.ts, 0, 14))
+ 
+ function foo<T>(t: T) {
+ >foo : Symbol(foo, Decl(comparisonOperatorWithOneOperandIsNull.ts, 0, 18))

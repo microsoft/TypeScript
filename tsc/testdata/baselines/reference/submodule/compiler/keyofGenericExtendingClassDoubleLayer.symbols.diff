@@ -1,0 +1,24 @@
+--- old.keyofGenericExtendingClassDoubleLayer.symbols
++++ new.keyofGenericExtendingClassDoubleLayer.symbols
+@@= skipped -5, +5 lines =@@
+ >Attributes : Symbol(Attributes, Decl(keyofGenericExtendingClassDoubleLayer.ts, 0, 12))
+ 
+     public createdAt: Date;
+->createdAt : Symbol(Model.createdAt, Decl(keyofGenericExtendingClassDoubleLayer.ts, 0, 31))
++>createdAt : Symbol(createdAt, Decl(keyofGenericExtendingClassDoubleLayer.ts, 0, 31))
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ }
+ 
+@@= skipped -24, +24 lines =@@
+ >PersonModel : Symbol(PersonModel, Decl(keyofGenericExtendingClassDoubleLayer.ts, 6, 55))
+ 
+     public age: number;
+->age : Symbol(PersonModel.age, Decl(keyofGenericExtendingClassDoubleLayer.ts, 8, 50))
++>age : Symbol(age, Decl(keyofGenericExtendingClassDoubleLayer.ts, 8, 50))
+ 
+     toJson() {
+->toJson : Symbol(PersonModel.toJson, Decl(keyofGenericExtendingClassDoubleLayer.ts, 9, 23))
++>toJson : Symbol(toJson, Decl(keyofGenericExtendingClassDoubleLayer.ts, 9, 23))
+ 
+         let x: keyof this = 'createdAt';
+ >x : Symbol(x, Decl(keyofGenericExtendingClassDoubleLayer.ts, 12, 11))

@@ -1,0 +1,58 @@
+--- old.callSignatureWithOptionalParameterAndInitializer.symbols
++++ new.callSignatureWithOptionalParameterAndInitializer.symbols
+@@= skipped -38, +38 lines =@@
+ >C : Symbol(C, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 11, 9))
+ 
+     foo(x?: number = 1) { }
+->foo : Symbol(C.foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 13, 9))
++>foo : Symbol(foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 13, 9))
+ >x : Symbol(x, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 14, 8))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >C : Symbol(C, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 11, 9))
+ 
+ c.foo();
+->c.foo : Symbol(C.foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 13, 9))
++>c.foo : Symbol(foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 13, 9))
+ >c : Symbol(c, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 17, 3))
+->foo : Symbol(C.foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 13, 9))
++>foo : Symbol(foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 13, 9))
+ 
+ c.foo(1);
+->c.foo : Symbol(C.foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 13, 9))
++>c.foo : Symbol(foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 13, 9))
+ >c : Symbol(c, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 17, 3))
+->foo : Symbol(C.foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 13, 9))
++>foo : Symbol(foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 13, 9))
+ 
+ interface I {
+ >I : Symbol(I, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 19, 9))
+@@= skipped -16, +16 lines =@@
+ >x : Symbol(x, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 22, 5))
+ 
+     foo(x: number, y?: number = 1);
+->foo : Symbol(I.foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 22, 13))
++>foo : Symbol(foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 22, 13))
+ >x : Symbol(x, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 23, 8))
+ >y : Symbol(y, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 23, 18))
+ }
+@@= skipped -16, +16 lines =@@
+ >i : Symbol(i, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 26, 3))
+ 
+ i.foo(1);
+->i.foo : Symbol(I.foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 22, 13))
++>i.foo : Symbol(foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 22, 13))
+ >i : Symbol(i, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 26, 3))
+->foo : Symbol(I.foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 22, 13))
++>foo : Symbol(foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 22, 13))
+ 
+ i.foo(1, 2);
+->i.foo : Symbol(I.foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 22, 13))
++>i.foo : Symbol(foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 22, 13))
+ >i : Symbol(i, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 26, 3))
+->foo : Symbol(I.foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 22, 13))
++>foo : Symbol(foo, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 22, 13))
+ 
+ var a: {
+ >a : Symbol(a, Decl(callSignatureWithOptionalParameterAndInitializer.ts, 32, 3))

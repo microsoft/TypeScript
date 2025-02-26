@@ -1,0 +1,25 @@
+--- old.ES5For-of37.symbols
++++ new.ES5For-of37.symbols
+@@= skipped -18, +18 lines =@@
+             }
+         }
+         console.log(i);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >i : Symbol(i, Decl(ES5For-of37.ts, 2, 10))
+ 
+     } catch (err) {
+ >err : Symbol(err, Decl(ES5For-of37.ts, 11, 13))
+ 
+         console.log('E %s %s', i, err);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >i : Symbol(i, Decl(ES5For-of37.ts, 2, 10))
+ >err : Symbol(err, Decl(ES5For-of37.ts, 11, 13))
+     }

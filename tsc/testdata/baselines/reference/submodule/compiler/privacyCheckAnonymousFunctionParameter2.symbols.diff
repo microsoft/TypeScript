@@ -1,0 +1,11 @@
+--- old.privacyCheckAnonymousFunctionParameter2.symbols
++++ new.privacyCheckAnonymousFunctionParameter2.symbols
+@@= skipped -6, +6 lines =@@
+ interface Iterator<T> { x: T }
+ >Iterator : Symbol(Iterator, Decl(privacyCheckAnonymousFunctionParameter2.ts, 0, 17))
+ >T : Symbol(T, Decl(privacyCheckAnonymousFunctionParameter2.ts, 1, 19))
+->x : Symbol(Iterator.x, Decl(privacyCheckAnonymousFunctionParameter2.ts, 1, 23))
++>x : Symbol(x, Decl(privacyCheckAnonymousFunctionParameter2.ts, 1, 23))
+ >T : Symbol(T, Decl(privacyCheckAnonymousFunctionParameter2.ts, 1, 19))
+ 
+ module Q {

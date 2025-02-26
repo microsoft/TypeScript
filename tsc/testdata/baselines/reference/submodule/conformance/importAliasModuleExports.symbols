@@ -1,0 +1,41 @@
+//// [tests/cases/conformance/salsa/importAliasModuleExports.ts] ////
+
+=== mod1.js ===
+class Alias {
+>Alias : Symbol(Alias, Decl(mod1.js, 0, 0))
+
+    bar() { return 1 }
+>bar : Symbol(bar, Decl(mod1.js, 0, 13))
+}
+module.exports = Alias;
+>Alias : Symbol(Alias, Decl(mod1.js, 0, 0))
+
+=== main.js ===
+import A from './mod1'
+>A : Symbol(A, Decl(main.js, 0, 6))
+
+A.prototype.foo = 0
+>A : Symbol(A, Decl(main.js, 0, 6))
+
+A.prototype.func = function() { this._func = 0; }
+>A : Symbol(A, Decl(main.js, 0, 6))
+
+Object.defineProperty(A.prototype, "def", { value: 0 });
+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(main.js, 0, 6))
+>value : Symbol(value, Decl(main.js, 3, 43))
+
+new A().bar
+>A : Symbol(A, Decl(main.js, 0, 6))
+
+new A().foo
+>A : Symbol(A, Decl(main.js, 0, 6))
+
+new A().func()
+>A : Symbol(A, Decl(main.js, 0, 6))
+
+new A().def
+>A : Symbol(A, Decl(main.js, 0, 6))
+

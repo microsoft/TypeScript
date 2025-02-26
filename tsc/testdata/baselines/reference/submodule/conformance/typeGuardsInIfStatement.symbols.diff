@@ -1,0 +1,74 @@
+--- old.typeGuardsInIfStatement.symbols
++++ new.typeGuardsInIfStatement.symbols
+@@= skipped -12, +12 lines =@@
+ >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 4, 13))
+ 
+         return x.length; // string
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 4, 13))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+     }
+     else {
+         return x++; // number
+@@= skipped -163, +163 lines =@@
+         // usage of x or assignment to separate variable shouldn't cause narrowing of type to stop
+         y = x.length; 
+ >y : Symbol(y, Decl(typeGuardsInIfStatement.ts, 84, 7))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 83, 14))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+         return x === "hello"; // string
+ >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 83, 14))
+@@= skipped -68, +68 lines =@@
+             // change value of x
+             x = 10 && x.toString() // number | boolean | string
+ >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 107, 15))
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 107, 15))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+             )
+             : (
+@@= skipped -10, +10 lines =@@
+             y = x && x.toString() // number | boolean | string
+ >y : Symbol(y, Decl(typeGuardsInIfStatement.ts, 114, 11))
+ >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 107, 15))
+->x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 107, 15))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+             );
+     }
+@@= skipped -17, +17 lines =@@
+ >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 127, 15))
+ 
+         return x.toString(); // string | number | boolean - x changed in else branch
+->x.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 127, 15))
+->toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+     }
+     else {
+         x = 10;
+@@= skipped -16, +16 lines =@@
+ >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 127, 15))
+ 
+             ? x.toString() // number
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 127, 15))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+             : x.toString(); // boolean | string
+ >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 127, 15))

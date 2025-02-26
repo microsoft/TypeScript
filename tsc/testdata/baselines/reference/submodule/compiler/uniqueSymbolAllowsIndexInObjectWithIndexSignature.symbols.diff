@@ -1,0 +1,11 @@
+--- old.uniqueSymbolAllowsIndexInObjectWithIndexSignature.symbols
++++ new.uniqueSymbolAllowsIndexInObjectWithIndexSignature.symbols
+@@= skipped -9, +9 lines =@@
+ >I : Symbol(I, Decl(uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts, 1, 45))
+ 
+   [SYM]: 'sym';
+->[SYM] : Symbol(I[SYM], Decl(uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts, 3, 20))
++>[SYM] : Symbol([SYM], Decl(uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts, 3, 20))
+ >SYM : Symbol(SYM, Decl(uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts, 1, 12))
+ 
+   [x: string]: 'str';

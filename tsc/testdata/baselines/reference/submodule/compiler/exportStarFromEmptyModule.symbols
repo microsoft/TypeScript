@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/exportStarFromEmptyModule.ts] ////
+
+=== exportStarFromEmptyModule_module1.ts ===
+export class A {
+>A : Symbol(A, Decl(exportStarFromEmptyModule_module1.ts, 0, 0))
+
+    static r;
+>r : Symbol(r, Decl(exportStarFromEmptyModule_module1.ts, 0, 16))
+}
+
+=== exportStarFromEmptyModule_module2.ts ===
+
+// empty
+
+=== exportStarFromEmptyModule_module3.ts ===
+export * from "./exportStarFromEmptyModule_module2";
+export * from "./exportStarFromEmptyModule_module1";
+
+export class A {
+>A : Symbol(A, Decl(exportStarFromEmptyModule_module3.ts, 1, 52))
+
+    static q;
+>q : Symbol(q, Decl(exportStarFromEmptyModule_module3.ts, 3, 16))
+}
+
+=== exportStarFromEmptyModule_module4.ts ===
+import * as X from "./exportStarFromEmptyModule_module3";
+>X : Symbol(X, Decl(exportStarFromEmptyModule_module4.ts, 0, 6))
+
+var s: X.A;
+>s : Symbol(s, Decl(exportStarFromEmptyModule_module4.ts, 1, 3))
+>X : Symbol(X, Decl(exportStarFromEmptyModule_module4.ts, 0, 6))
+>A : Symbol(A, Decl(exportStarFromEmptyModule_module3.ts, 1, 52))
+
+X.A.q;
+>X.A.q : Symbol(q, Decl(exportStarFromEmptyModule_module3.ts, 3, 16))
+>X.A : Symbol(A, Decl(exportStarFromEmptyModule_module3.ts, 1, 52))
+>X : Symbol(X, Decl(exportStarFromEmptyModule_module4.ts, 0, 6))
+>A : Symbol(A, Decl(exportStarFromEmptyModule_module3.ts, 1, 52))
+>q : Symbol(q, Decl(exportStarFromEmptyModule_module3.ts, 3, 16))
+
+X.A.r; // Error
+>X.A : Symbol(A, Decl(exportStarFromEmptyModule_module3.ts, 1, 52))
+>X : Symbol(X, Decl(exportStarFromEmptyModule_module4.ts, 0, 6))
+>A : Symbol(A, Decl(exportStarFromEmptyModule_module3.ts, 1, 52))
+

@@ -1,0 +1,11 @@
+--- old.duplicateVariablesByScope.symbols
++++ new.duplicateVariablesByScope.symbols
+@@= skipped -41, +41 lines =@@
+ >C : Symbol(C, Decl(duplicateVariablesByScope.ts, 19, 1))
+ 
+     foo() {
+->foo : Symbol(C.foo, Decl(duplicateVariablesByScope.ts, 21, 9))
++>foo : Symbol(foo, Decl(duplicateVariablesByScope.ts, 21, 9))
+ 
+         try {
+             var x = 1;

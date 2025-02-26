@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/jsdoc/typeTagCircularReferenceOnConstructorFunction.ts] ////
+
+=== bug27346.js ===
+/**
+ * @type {MyClass}
+ */
+function MyClass() { }
+>MyClass : Symbol(MyClass, Decl(bug27346.js, 0, 0))
+
+MyClass.prototype = {};
+>MyClass.prototype : Symbol(prototype, Decl(bug27346.js, 3, 22))
+>MyClass : Symbol(MyClass, Decl(bug27346.js, 0, 0))
+>prototype : Symbol(prototype, Decl(bug27346.js, 3, 22))
+

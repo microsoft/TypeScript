@@ -1,0 +1,116 @@
+--- old.derivedClassWithAny.symbols
++++ new.derivedClassWithAny.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(derivedClassWithAny.ts, 0, 0))
+ 
+     x: number;
+->x : Symbol(C.x, Decl(derivedClassWithAny.ts, 0, 9))
++>x : Symbol(x, Decl(derivedClassWithAny.ts, 0, 9))
+ 
+     get X(): number { return 1; }
+->X : Symbol(C.X, Decl(derivedClassWithAny.ts, 1, 14))
++>X : Symbol(X, Decl(derivedClassWithAny.ts, 1, 14))
+ 
+     foo(): number {
+->foo : Symbol(C.foo, Decl(derivedClassWithAny.ts, 2, 33))
++>foo : Symbol(foo, Decl(derivedClassWithAny.ts, 2, 33))
+ 
+         return 1;
+     }
+ 
+     static y: number;
+->y : Symbol(C.y, Decl(derivedClassWithAny.ts, 5, 5))
++>y : Symbol(y, Decl(derivedClassWithAny.ts, 5, 5))
+ 
+     static get Y(): number {
+->Y : Symbol(C.Y, Decl(derivedClassWithAny.ts, 7, 21))
++>Y : Symbol(Y, Decl(derivedClassWithAny.ts, 7, 21))
+ 
+         return 1;
+     }
+     static bar(): number {
+->bar : Symbol(C.bar, Decl(derivedClassWithAny.ts, 10, 5))
++>bar : Symbol(bar, Decl(derivedClassWithAny.ts, 10, 5))
+ 
+         return 1;
+     }
+@@= skipped -31, +31 lines =@@
+ >C : Symbol(C, Decl(derivedClassWithAny.ts, 0, 0))
+ 
+     x: any;
+->x : Symbol(D.x, Decl(derivedClassWithAny.ts, 16, 19))
++>x : Symbol(x, Decl(derivedClassWithAny.ts, 16, 19))
+ 
+     get X(): any {
+->X : Symbol(D.X, Decl(derivedClassWithAny.ts, 17, 11))
++>X : Symbol(X, Decl(derivedClassWithAny.ts, 17, 11))
+ 
+         return null;
+     }
+     foo(): any {
+->foo : Symbol(D.foo, Decl(derivedClassWithAny.ts, 20, 5))
++>foo : Symbol(foo, Decl(derivedClassWithAny.ts, 20, 5))
+ 
+         return 1;
+     }
+ 
+     static y: any;
+->y : Symbol(D.y, Decl(derivedClassWithAny.ts, 23, 5))
++>y : Symbol(y, Decl(derivedClassWithAny.ts, 23, 5))
+ 
+     static get Y(): any {
+->Y : Symbol(D.Y, Decl(derivedClassWithAny.ts, 25, 18))
++>Y : Symbol(Y, Decl(derivedClassWithAny.ts, 25, 18))
+ 
+         return null;
+     }
+     static bar(): any {
+->bar : Symbol(D.bar, Decl(derivedClassWithAny.ts, 28, 5))
++>bar : Symbol(bar, Decl(derivedClassWithAny.ts, 28, 5))
+ 
+         return null;
+     }
+@@= skipped -34, +34 lines =@@
+ >D : Symbol(D, Decl(derivedClassWithAny.ts, 14, 1))
+ 
+     x: string;
+->x : Symbol(E.x, Decl(derivedClassWithAny.ts, 35, 19))
++>x : Symbol(x, Decl(derivedClassWithAny.ts, 35, 19))
+ 
+     get X(): string{ return ''; }
+->X : Symbol(E.X, Decl(derivedClassWithAny.ts, 36, 14))
++>X : Symbol(X, Decl(derivedClassWithAny.ts, 36, 14))
+ 
+     foo(): string {
+->foo : Symbol(E.foo, Decl(derivedClassWithAny.ts, 37, 33))
++>foo : Symbol(foo, Decl(derivedClassWithAny.ts, 37, 33))
+ 
+         return '';
+     }
+ 
+     static y: string;
+->y : Symbol(E.y, Decl(derivedClassWithAny.ts, 40, 5))
++>y : Symbol(y, Decl(derivedClassWithAny.ts, 40, 5))
+ 
+     static get Y(): string {
+->Y : Symbol(E.Y, Decl(derivedClassWithAny.ts, 42, 21))
++>Y : Symbol(Y, Decl(derivedClassWithAny.ts, 42, 21))
+ 
+         return '';
+     }
+     static bar(): string {
+->bar : Symbol(E.bar, Decl(derivedClassWithAny.ts, 45, 5))
++>bar : Symbol(bar, Decl(derivedClassWithAny.ts, 45, 5))
+ 
+         return '';
+     }
+@@= skipped -48, +48 lines =@@
+ 
+ var r = c.foo(); // e.foo would return string
+ >r : Symbol(r, Decl(derivedClassWithAny.ts, 57, 3))
+->c.foo : Symbol(C.foo, Decl(derivedClassWithAny.ts, 2, 33))
++>c.foo : Symbol(foo, Decl(derivedClassWithAny.ts, 2, 33))
+ >c : Symbol(c, Decl(derivedClassWithAny.ts, 51, 3))
+->foo : Symbol(C.foo, Decl(derivedClassWithAny.ts, 2, 33))
++>foo : Symbol(foo, Decl(derivedClassWithAny.ts, 2, 33))
+ 

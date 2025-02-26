@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/pushTypeGetTypeOfAlias.ts] ////
+
+=== bar.js ===
+
+module.exports = function () {};
+exports.blah = exports.someProp;

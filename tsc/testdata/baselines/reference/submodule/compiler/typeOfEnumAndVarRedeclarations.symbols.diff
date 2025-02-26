@@ -1,0 +1,18 @@
+--- old.typeOfEnumAndVarRedeclarations.symbols
++++ new.typeOfEnumAndVarRedeclarations.symbols
+@@= skipped -4, +4 lines =@@
+ >E : Symbol(E, Decl(typeOfEnumAndVarRedeclarations.ts, 0, 0), Decl(typeOfEnumAndVarRedeclarations.ts, 2, 1))
+ 
+     a
+->a : Symbol(E.a, Decl(typeOfEnumAndVarRedeclarations.ts, 0, 8))
++>a : Symbol(a, Decl(typeOfEnumAndVarRedeclarations.ts, 0, 8))
+ }
+ enum E {
+ >E : Symbol(E, Decl(typeOfEnumAndVarRedeclarations.ts, 0, 0), Decl(typeOfEnumAndVarRedeclarations.ts, 2, 1))
+ 
+     b = 1
+->b : Symbol(E.b, Decl(typeOfEnumAndVarRedeclarations.ts, 3, 8))
++>b : Symbol(b, Decl(typeOfEnumAndVarRedeclarations.ts, 3, 8))
+ }
+ var x = E;
+ >x : Symbol(x, Decl(typeOfEnumAndVarRedeclarations.ts, 6, 3), Decl(typeOfEnumAndVarRedeclarations.ts, 7, 3))

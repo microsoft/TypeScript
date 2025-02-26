@@ -1,0 +1,90 @@
+//// [tests/cases/compiler/contextualOuterTypeParameters.ts] ////
+
+=== contextualOuterTypeParameters.ts ===
+// https://github.com/microsoft/TypeScript/issues/59450
+
+declare function f(fun: <T>(t: T) => void): void
+>f : Symbol(f, Decl(contextualOuterTypeParameters.ts, 0, 0))
+>fun : Symbol(fun, Decl(contextualOuterTypeParameters.ts, 2, 19))
+>T : Symbol(T, Decl(contextualOuterTypeParameters.ts, 2, 25))
+>t : Symbol(t, Decl(contextualOuterTypeParameters.ts, 2, 28))
+>T : Symbol(T, Decl(contextualOuterTypeParameters.ts, 2, 25))
+
+f(t => {
+>f : Symbol(f, Decl(contextualOuterTypeParameters.ts, 0, 0))
+>t : Symbol(t, Decl(contextualOuterTypeParameters.ts, 4, 2))
+
+    type isArray = (typeof t)[] extends string[] ? true : false;
+>isArray : Symbol(isArray, Decl(contextualOuterTypeParameters.ts, 4, 8))
+>t : Symbol(t, Decl(contextualOuterTypeParameters.ts, 4, 2))
+
+    type IsObject = { x: typeof t } extends { x: string } ? true : false;
+>IsObject : Symbol(IsObject, Decl(contextualOuterTypeParameters.ts, 5, 64))
+>x : Symbol(x, Decl(contextualOuterTypeParameters.ts, 6, 21))
+>t : Symbol(t, Decl(contextualOuterTypeParameters.ts, 4, 2))
+>x : Symbol(x, Decl(contextualOuterTypeParameters.ts, 6, 45))
+
+});
+
+const fn1: <T>(x: T) => void = t => {
+>fn1 : Symbol(fn1, Decl(contextualOuterTypeParameters.ts, 9, 5))
+>T : Symbol(T, Decl(contextualOuterTypeParameters.ts, 9, 12))
+>x : Symbol(x, Decl(contextualOuterTypeParameters.ts, 9, 15))
+>T : Symbol(T, Decl(contextualOuterTypeParameters.ts, 9, 12))
+>t : Symbol(t, Decl(contextualOuterTypeParameters.ts, 9, 30))
+
+    type isArray = (typeof t)[] extends string[] ? true : false;
+>isArray : Symbol(isArray, Decl(contextualOuterTypeParameters.ts, 9, 37))
+>t : Symbol(t, Decl(contextualOuterTypeParameters.ts, 9, 30))
+
+    type IsObject = { x: typeof t } extends { x: string } ? true : false;
+>IsObject : Symbol(IsObject, Decl(contextualOuterTypeParameters.ts, 10, 64))
+>x : Symbol(x, Decl(contextualOuterTypeParameters.ts, 11, 21))
+>t : Symbol(t, Decl(contextualOuterTypeParameters.ts, 9, 30))
+>x : Symbol(x, Decl(contextualOuterTypeParameters.ts, 11, 45))
+
+};
+
+const fn2: <T>(x: T) => void = function test(t) {
+>fn2 : Symbol(fn2, Decl(contextualOuterTypeParameters.ts, 14, 5))
+>T : Symbol(T, Decl(contextualOuterTypeParameters.ts, 14, 12))
+>x : Symbol(x, Decl(contextualOuterTypeParameters.ts, 14, 15))
+>T : Symbol(T, Decl(contextualOuterTypeParameters.ts, 14, 12))
+>test : Symbol(test, Decl(contextualOuterTypeParameters.ts, 14, 30))
+>t : Symbol(t, Decl(contextualOuterTypeParameters.ts, 14, 45))
+
+    type isArray = (typeof t)[] extends string[] ? true : false;
+>isArray : Symbol(isArray, Decl(contextualOuterTypeParameters.ts, 14, 49))
+>t : Symbol(t, Decl(contextualOuterTypeParameters.ts, 14, 45))
+
+    type IsObject = { x: typeof t } extends { x: string } ? true : false;
+>IsObject : Symbol(IsObject, Decl(contextualOuterTypeParameters.ts, 15, 64))
+>x : Symbol(x, Decl(contextualOuterTypeParameters.ts, 16, 21))
+>t : Symbol(t, Decl(contextualOuterTypeParameters.ts, 14, 45))
+>x : Symbol(x, Decl(contextualOuterTypeParameters.ts, 16, 45))
+
+};
+
+const obj: { f: <T>(x: T) => void } = {
+>obj : Symbol(obj, Decl(contextualOuterTypeParameters.ts, 19, 5))
+>f : Symbol(f, Decl(contextualOuterTypeParameters.ts, 19, 12))
+>T : Symbol(T, Decl(contextualOuterTypeParameters.ts, 19, 17))
+>x : Symbol(x, Decl(contextualOuterTypeParameters.ts, 19, 20))
+>T : Symbol(T, Decl(contextualOuterTypeParameters.ts, 19, 17))
+
+    f(t) {
+>f : Symbol(f, Decl(contextualOuterTypeParameters.ts, 19, 39))
+>t : Symbol(t, Decl(contextualOuterTypeParameters.ts, 20, 6))
+
+        type isArray = (typeof t)[] extends string[] ? true : false;
+>isArray : Symbol(isArray, Decl(contextualOuterTypeParameters.ts, 20, 10))
+>t : Symbol(t, Decl(contextualOuterTypeParameters.ts, 20, 6))
+
+        type IsObject = { x: typeof t } extends { x: string } ? true : false;
+>IsObject : Symbol(IsObject, Decl(contextualOuterTypeParameters.ts, 21, 68))
+>x : Symbol(x, Decl(contextualOuterTypeParameters.ts, 22, 25))
+>t : Symbol(t, Decl(contextualOuterTypeParameters.ts, 20, 6))
+>x : Symbol(x, Decl(contextualOuterTypeParameters.ts, 22, 49))
+    }
+};
+

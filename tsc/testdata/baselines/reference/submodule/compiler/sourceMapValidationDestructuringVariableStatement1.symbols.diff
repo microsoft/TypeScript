@@ -1,0 +1,75 @@
+--- old.sourceMapValidationDestructuringVariableStatement1.symbols
++++ new.sourceMapValidationDestructuringVariableStatement1.symbols
+@@= skipped -4, +4 lines =@@
+ >Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 0, 0))
+ 
+     name: string;
+->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 0, 17))
++>name : Symbol(name, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 0, 17))
+ 
+     skill: string;
+->skill : Symbol(Robot.skill, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 1, 17))
++>skill : Symbol(skill, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 1, 17))
+ }
+ declare var console: {
+ >console : Symbol(console, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 4, 11))
+@@= skipped -29, +29 lines =@@
+ 
+ var a: string, { name: nameA } = robotA;
+ >a : Symbol(a, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 10, 3), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 14, 29), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 18, 3))
+->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 0, 17))
++>name : Symbol(name, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 0, 17))
+ >nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 10, 16), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 14, 5), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 18, 16))
+ >robotA : Symbol(robotA, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 8, 3))
+ 
+ var b: string, { name: nameB, skill: skillB } = robotB;
+ >b : Symbol(b, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 11, 3), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 15, 44), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 19, 3))
+->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 0, 17))
++>name : Symbol(name, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 0, 17))
+ >nameB : Symbol(nameB, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 11, 16), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 15, 5), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 19, 16))
+->skill : Symbol(Robot.skill, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 1, 17))
++>skill : Symbol(skill, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 1, 17))
+ >skillB : Symbol(skillB, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 11, 29), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 15, 18), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 19, 29))
+ >robotB : Symbol(robotB, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 9, 3))
+ 
+@@= skipped -22, +22 lines =@@
+ >skill : Symbol(skill, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 12, 64))
+ 
+ var { name: nameA } = robotA, a = hello;
+->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 0, 17))
++>name : Symbol(name, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 0, 17))
+ >nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 10, 16), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 14, 5), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 18, 16))
+ >robotA : Symbol(robotA, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 8, 3))
+ >a : Symbol(a, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 10, 3), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 14, 29), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 18, 3))
+ >hello : Symbol(hello, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 7, 3))
+ 
+ var { name: nameB, skill: skillB } = robotB, b = " hello";
+->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 0, 17))
++>name : Symbol(name, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 0, 17))
+ >nameB : Symbol(nameB, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 11, 16), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 15, 5), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 19, 16))
+->skill : Symbol(Robot.skill, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 1, 17))
++>skill : Symbol(skill, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 1, 17))
+ >skillB : Symbol(skillB, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 11, 29), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 15, 18), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 19, 29))
+ >robotB : Symbol(robotB, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 9, 3))
+ >b : Symbol(b, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 11, 3), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 15, 44), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 19, 3))
+@@= skipped -27, +27 lines =@@
+ var a = hello, { name: nameA } = robotA, a1= "hello";
+ >a : Symbol(a, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 10, 3), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 14, 29), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 18, 3))
+ >hello : Symbol(hello, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 7, 3))
+->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 0, 17))
++>name : Symbol(name, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 0, 17))
+ >nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 10, 16), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 14, 5), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 18, 16))
+ >robotA : Symbol(robotA, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 8, 3))
+ >a1 : Symbol(a1, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 18, 40))
+@@= skipped -8, +8 lines =@@
+ var b = hello, { name: nameB, skill: skillB } = robotB, b1 = "hello";
+ >b : Symbol(b, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 11, 3), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 15, 44), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 19, 3))
+ >hello : Symbol(hello, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 7, 3))
+->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 0, 17))
++>name : Symbol(name, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 0, 17))
+ >nameB : Symbol(nameB, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 11, 16), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 15, 5), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 19, 16))
+->skill : Symbol(Robot.skill, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 1, 17))
++>skill : Symbol(skill, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 1, 17))
+ >skillB : Symbol(skillB, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 11, 29), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 15, 18), Decl(sourceMapValidationDestructuringVariableStatement1.ts, 19, 29))
+ >robotB : Symbol(robotB, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 9, 3))
+ >b1 : Symbol(b1, Decl(sourceMapValidationDestructuringVariableStatement1.ts, 19, 55))

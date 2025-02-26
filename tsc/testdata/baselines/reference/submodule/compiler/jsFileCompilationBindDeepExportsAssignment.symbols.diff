@@ -1,0 +1,10 @@
+--- old.jsFileCompilationBindDeepExportsAssignment.symbols
++++ new.jsFileCompilationBindDeepExportsAssignment.symbols
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/jsFileCompilationBindDeepExportsAssignment.ts] ////
+ 
+ === a.js ===
++
+ exports.a.b.c = 0;
+->exports : Symbol("a", Decl(a.js, 0, 0))
+ 

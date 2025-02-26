@@ -1,0 +1,14 @@
+--- old.requireOfJsonFileWithoutEsModuleInterop.symbols
++++ new.requireOfJsonFileWithoutEsModuleInterop.symbols
+@@= skipped -3, +3 lines =@@
+ import * as test from "./test.json"
+ >test : Symbol(test, Decl(file1.ts, 0, 6))
+ 
+-=== test.json ===
+-{
+-    "a": true,
+->"a" : Symbol("a", Decl(test.json, 0, 1))
+-
+-    "b": "hello"
+->"b" : Symbol("b", Decl(test.json, 1, 14))
+-}

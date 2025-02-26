@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/strictOptionalProperties4.ts] ////
+
+=== a.js ===
+/**
+ * @typedef Foo
+ * @property {number} [foo]
+ */
+
+const x = /** @type {Foo} */ ({});
+>x : Symbol(x, Decl(a.js, 5, 5))
+
+x.foo; // number | undefined
+>x : Symbol(x, Decl(a.js, 5, 5))
+
+const y = /** @type {Required<Foo>} */ ({});
+>y : Symbol(y, Decl(a.js, 8, 5))
+
+y.foo; // number
+>y : Symbol(y, Decl(a.js, 8, 5))
+

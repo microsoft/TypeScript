@@ -1,0 +1,11 @@
+--- old.exportAssignedTypeAsTypeAnnotation.symbols
++++ new.exportAssignedTypeAsTypeAnnotation.symbols
+@@= skipped -16, +16 lines =@@
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ 
+     foo: string;
+->foo : Symbol(x.foo, Decl(exportAssignedTypeAsTypeAnnotation_0.ts, 1, 13))
++>foo : Symbol(foo, Decl(exportAssignedTypeAsTypeAnnotation_0.ts, 1, 13))
+ }
+ export = x;
+ >x : Symbol(x, Decl(exportAssignedTypeAsTypeAnnotation_0.ts, 0, 0))

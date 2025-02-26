@@ -1,0 +1,32 @@
+--- old.jsDocDeclarationEmitDoesNotUseNodeModulesPathWithoutError.symbols
++++ new.jsDocDeclarationEmitDoesNotUseNodeModulesPathWithoutError.symbols
+@@= skipped -9, +9 lines =@@
+ >LionRequestInit : Symbol(LionRequestInit, Decl(types.d.ts, 0, 0))
+ 
+     body?: null | Object;
+->body : Symbol(LionRequestInit.body, Decl(types.d.ts, 0, 34))
++>body : Symbol(body, Decl(types.d.ts, 0, 34))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ } 
+ === index.js ===
+@@= skipped -15, +15 lines =@@
+      * @param {LionRequestInit} [init]
+      */
+     case5_unexpectedlyResolvesPathToNodeModules(init) {}
+->case5_unexpectedlyResolvesPathToNodeModules : Symbol(NewAjax.case5_unexpectedlyResolvesPathToNodeModules, Decl(index.js, 4, 22))
++>case5_unexpectedlyResolvesPathToNodeModules : Symbol(case5_unexpectedlyResolvesPathToNodeModules, Decl(index.js, 4, 22))
+ >init : Symbol(init, Decl(index.js, 8, 48))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+  */
+ // @ts-expect-error
+ NewAjax.prototype.case6_unexpectedlyResolvesPathToNodeModules;
+->NewAjax.prototype.case6_unexpectedlyResolvesPathToNodeModules : Symbol(NewAjax.case6_unexpectedlyResolvesPathToNodeModules, Decl(index.js, 9, 1))
+->NewAjax.prototype : Symbol(NewAjax.prototype)
++>NewAjax.prototype : Symbol(prototype)
+ >NewAjax : Symbol(NewAjax, Decl(index.js, 0, 0))
+->prototype : Symbol(NewAjax.prototype)
+->case6_unexpectedlyResolvesPathToNodeModules : Symbol(NewAjax.case6_unexpectedlyResolvesPathToNodeModules, Decl(index.js, 9, 1))
++>prototype : Symbol(prototype)
+ 

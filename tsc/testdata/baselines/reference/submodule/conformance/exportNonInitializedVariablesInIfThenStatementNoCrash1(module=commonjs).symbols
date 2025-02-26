@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/externalModules/exportNonInitializedVariablesInIfThenStatementNoCrash1.ts] ////
+
+=== exportNonInitializedVariablesInIfThenStatementNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59373
+
+if (true)
+export const cssExports: CssExports;
+>cssExports : Symbol(cssExports, Decl(exportNonInitializedVariablesInIfThenStatementNoCrash1.ts, 3, 12))
+>CssExports : Symbol(CssExports)
+
+export default cssExports;
+>cssExports : Symbol(cssExports, Decl(exportNonInitializedVariablesInIfThenStatementNoCrash1.ts, 3, 12))
+

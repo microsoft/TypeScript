@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/jsdoc/typedefCrossModule2.ts] ////
+
+=== use.js ===
+var mod = require('./mod1.js');
+>mod : Symbol(mod, Decl(use.js, 0, 3))
+
+/** @type {import("./mod1.js").Baz} */
+var b;
+>b : Symbol(b, Decl(use.js, 2, 3))
+
+/** @type {mod.Baz} */
+var bb;
+>bb : Symbol(bb, Decl(use.js, 4, 3))
+
+var bbb = new mod.Baz();
+>bbb : Symbol(bbb, Decl(use.js, 5, 3))
+>mod : Symbol(mod, Decl(use.js, 0, 3))
+

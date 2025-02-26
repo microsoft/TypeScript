@@ -1,0 +1,27 @@
+--- old.genericCallWithObjectTypeArgsAndConstraints3.symbols
++++ new.genericCallWithObjectTypeArgsAndConstraints3.symbols
+@@= skipped -6, +6 lines =@@
+ >Base : Symbol(Base, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 0, 0))
+ 
+     x: string;
+->x : Symbol(Base.x, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 2, 12))
++>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 2, 12))
+ }
+ class Derived extends Base {
+ >Derived : Symbol(Derived, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 4, 1))
+ >Base : Symbol(Base, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 0, 0))
+ 
+     y: string;
+->y : Symbol(Derived.y, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 5, 28))
++>y : Symbol(y, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 5, 28))
+ }
+ class Derived2 extends Base {
+ >Derived2 : Symbol(Derived2, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 7, 1))
+ >Base : Symbol(Base, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 0, 0))
+ 
+     z: string;
+->z : Symbol(Derived2.z, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 8, 29))
++>z : Symbol(z, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 8, 29))
+ }
+ 
+ function f<T extends Base>(a: { x: T; y: T }) {

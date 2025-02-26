@@ -1,0 +1,14 @@
+--- old.compositeWithNodeModulesSourceFile.symbols
++++ new.compositeWithNodeModulesSourceFile.symbols
+@@= skipped -4, +4 lines =@@
+ >myModule : Symbol(myModule, Decl(test.ts, 0, 0))
+ 
+ new myModule.c();
+->myModule.c : Symbol(myModule.c, Decl(index.ts, 0, 0))
++>myModule.c : Symbol(c, Decl(index.ts, 0, 0))
+ >myModule : Symbol(myModule, Decl(test.ts, 0, 0))
+->c : Symbol(myModule.c, Decl(index.ts, 0, 0))
++>c : Symbol(c, Decl(index.ts, 0, 0))
+ 
+ 
+ === /foo/node_modules/myModule/index.ts ===

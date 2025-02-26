@@ -190,7 +190,7 @@ func (p *Program) BindSourceFiles() {
 
 func (p *Program) CheckSourceFiles() {
 	p.createCheckers()
-	wg := core.NewWorkGroup(false)
+	wg := core.NewWorkGroup(p.programOptions.SingleThreaded)
 	for index, checker := range p.checkers {
 		wg.Queue(func() {
 			for i := index; i < len(p.files); i += len(p.checkers) {
@@ -227,7 +227,7 @@ func (p *Program) GetTypeChecker() *checker.Checker {
 // method returns the checker that was tasked with checking the file. Note that it isn't possible to mix
 // types obtained from different checkers, so only non-type data (such as diagnostics or string
 // representations of types) should be obtained from checkers returned by this method.
-func (p *Program) getTypeCheckerForFile(file *ast.SourceFile) *checker.Checker {
+func (p *Program) GetTypeCheckerForFile(file *ast.SourceFile) *checker.Checker {
 	p.createCheckers()
 	return p.checkersByFile[file]
 }
@@ -299,7 +299,7 @@ func (p *Program) getBindDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.D
 }
 
 func (p *Program) getSemanticDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	diags := core.Concatenate(sourceFile.BindDiagnostics(), p.getTypeCheckerForFile(sourceFile).GetDiagnostics(sourceFile))
+	diags := core.Concatenate(sourceFile.BindDiagnostics(), p.GetTypeCheckerForFile(sourceFile).GetDiagnostics(sourceFile))
 	if len(sourceFile.CommentDirectives) == 0 {
 		return diags
 	}

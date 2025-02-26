@@ -1,0 +1,13 @@
+--- old.validMultipleVariableDeclarations.symbols
++++ new.validMultipleVariableDeclarations.symbols
+@@= skipped -29, +29 lines =@@
+ 
+ interface Point { x: number; y: number; }
+ >Point : Symbol(Point, Decl(validMultipleVariableDeclarations.ts, 13, 1))
+->x : Symbol(Point.x, Decl(validMultipleVariableDeclarations.ts, 15, 17))
+->y : Symbol(Point.y, Decl(validMultipleVariableDeclarations.ts, 15, 28))
++>x : Symbol(x, Decl(validMultipleVariableDeclarations.ts, 15, 17))
++>y : Symbol(y, Decl(validMultipleVariableDeclarations.ts, 15, 28))
+ 
+ var p: Point;
+ >p : Symbol(p, Decl(validMultipleVariableDeclarations.ts, 17, 3), Decl(validMultipleVariableDeclarations.ts, 18, 3), Decl(validMultipleVariableDeclarations.ts, 19, 3), Decl(validMultipleVariableDeclarations.ts, 20, 3), Decl(validMultipleVariableDeclarations.ts, 21, 3) ... and 2 more)

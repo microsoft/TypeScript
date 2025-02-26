@@ -1,0 +1,13 @@
+--- old.genericFunctions2.symbols
++++ new.genericFunctions2.symbols
+@@= skipped -20, +20 lines =@@
+ >map : Symbol(map, Decl(genericFunctions2.ts, 0, 0))
+ >myItems : Symbol(myItems, Decl(genericFunctions2.ts, 2, 3))
+ >x : Symbol(x, Decl(genericFunctions2.ts, 3, 26))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(genericFunctions2.ts, 3, 26))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ 

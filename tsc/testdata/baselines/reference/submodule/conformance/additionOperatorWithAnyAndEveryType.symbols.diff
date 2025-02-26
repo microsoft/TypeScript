@@ -1,0 +1,36 @@
+--- old.additionOperatorWithAnyAndEveryType.symbols
++++ new.additionOperatorWithAnyAndEveryType.symbols
+@@= skipped -7, +7 lines =@@
+ >C : Symbol(C, Decl(additionOperatorWithAnyAndEveryType.ts, 0, 18))
+ 
+     public a: string;
+->a : Symbol(C.a, Decl(additionOperatorWithAnyAndEveryType.ts, 1, 9))
++>a : Symbol(a, Decl(additionOperatorWithAnyAndEveryType.ts, 1, 9))
+ 
+     static foo() { }
+->foo : Symbol(C.foo, Decl(additionOperatorWithAnyAndEveryType.ts, 2, 21))
++>foo : Symbol(foo, Decl(additionOperatorWithAnyAndEveryType.ts, 2, 21))
+ }
+ enum E { a, b, c }
+ >E : Symbol(E, Decl(additionOperatorWithAnyAndEveryType.ts, 4, 1))
+->a : Symbol(E.a, Decl(additionOperatorWithAnyAndEveryType.ts, 5, 8))
+->b : Symbol(E.b, Decl(additionOperatorWithAnyAndEveryType.ts, 5, 11))
+->c : Symbol(E.c, Decl(additionOperatorWithAnyAndEveryType.ts, 5, 14))
++>a : Symbol(a, Decl(additionOperatorWithAnyAndEveryType.ts, 5, 8))
++>b : Symbol(b, Decl(additionOperatorWithAnyAndEveryType.ts, 5, 11))
++>c : Symbol(c, Decl(additionOperatorWithAnyAndEveryType.ts, 5, 14))
+ 
+ module M { export var a }
+ >M : Symbol(M, Decl(additionOperatorWithAnyAndEveryType.ts, 5, 18))
+@@= skipped -107, +107 lines =@@
+ var r15 = a + E.a;
+ >r15 : Symbol(r15, Decl(additionOperatorWithAnyAndEveryType.ts, 33, 3))
+ >a : Symbol(a, Decl(additionOperatorWithAnyAndEveryType.ts, 8, 3))
+->E.a : Symbol(E.a, Decl(additionOperatorWithAnyAndEveryType.ts, 5, 8))
++>E.a : Symbol(a, Decl(additionOperatorWithAnyAndEveryType.ts, 5, 8))
+ >E : Symbol(E, Decl(additionOperatorWithAnyAndEveryType.ts, 4, 1))
+->a : Symbol(E.a, Decl(additionOperatorWithAnyAndEveryType.ts, 5, 8))
++>a : Symbol(a, Decl(additionOperatorWithAnyAndEveryType.ts, 5, 8))
+ 
+ var r16 = a + M;
+ >r16 : Symbol(r16, Decl(additionOperatorWithAnyAndEveryType.ts, 34, 3))

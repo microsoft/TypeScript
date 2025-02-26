@@ -1,0 +1,29 @@
+--- old.mismatchedGenericArguments1.symbols
++++ new.mismatchedGenericArguments1.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(mismatchedGenericArguments1.ts, 0, 15))
+ 
+    foo<T>(x: T): T;
+->foo : Symbol(IFoo.foo, Decl(mismatchedGenericArguments1.ts, 0, 19))
++>foo : Symbol(foo, Decl(mismatchedGenericArguments1.ts, 0, 19))
+ >T : Symbol(T, Decl(mismatchedGenericArguments1.ts, 1, 7))
+ >x : Symbol(x, Decl(mismatchedGenericArguments1.ts, 1, 10))
+ >T : Symbol(T, Decl(mismatchedGenericArguments1.ts, 1, 7))
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(mismatchedGenericArguments1.ts, 3, 8))
+ 
+    foo(x: string): number {
+->foo : Symbol(C.foo, Decl(mismatchedGenericArguments1.ts, 3, 31))
++>foo : Symbol(foo, Decl(mismatchedGenericArguments1.ts, 3, 31))
+ >x : Symbol(x, Decl(mismatchedGenericArguments1.ts, 4, 7))
+ 
+      return null;
+@@= skipped -14, +14 lines =@@
+ >T : Symbol(T, Decl(mismatchedGenericArguments1.ts, 9, 9))
+ 
+    foo<U>(x: string): number {
+->foo : Symbol(C2.foo, Decl(mismatchedGenericArguments1.ts, 9, 32))
++>foo : Symbol(foo, Decl(mismatchedGenericArguments1.ts, 9, 32))
+ >U : Symbol(U, Decl(mismatchedGenericArguments1.ts, 10, 7))
+ >x : Symbol(x, Decl(mismatchedGenericArguments1.ts, 10, 10))
+ 

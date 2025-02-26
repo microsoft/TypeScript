@@ -1,0 +1,28 @@
+--- old.override19.symbols
++++ new.override19.symbols
+@@= skipped -29, +29 lines =@@
+ >A : Symbol(A, Decl(override19.ts, 4, 16))
+ 
+     doSomething() {}
+->doSomething : Symbol(A.doSomething, Decl(override19.ts, 6, 9))
++>doSomething : Symbol(doSomething, Decl(override19.ts, 6, 9))
+ }
+ 
+ class B extends CreateMixin(Context, A) {
+@@= skipped -10, +10 lines =@@
+ >A : Symbol(A, Decl(override19.ts, 4, 16))
+ 
+    override foo() {} // Remove override
+->foo : Symbol(B.foo, Decl(override19.ts, 10, 41))
++>foo : Symbol(foo, Decl(override19.ts, 10, 41))
+ }
+ 
+ class C extends CreateMixin(Context, A) {
+@@= skipped -10, +10 lines =@@
+ >A : Symbol(A, Decl(override19.ts, 4, 16))
+ 
+     override doSomethang() {} // Suggestion 'doSomething'
+->doSomethang : Symbol(C.doSomethang, Decl(override19.ts, 14, 41))
++>doSomethang : Symbol(doSomethang, Decl(override19.ts, 14, 41))
+ }
+ 

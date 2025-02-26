@@ -1,0 +1,62 @@
+--- old.circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.symbols
++++ new.circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.symbols
+@@= skipped -15, +15 lines =@@
+ >context : Symbol(context, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 2, 25))
+ 
+     readonly props: Readonly<P> & Readonly<{ children?: {} }>;
+->props : Symbol(Component.props, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 2, 41))
++>props : Symbol(props, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 2, 41))
+ >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+ >P : Symbol(P, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 0, 24))
+ >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+@@= skipped -18, +18 lines =@@
+ >P : Symbol(P, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 5, 25))
+ 
+     propTypes?: WeakValidationMap<P>;
+->propTypes : Symbol(ComponentClass.propTypes, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 6, 48))
++>propTypes : Symbol(propTypes, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 6, 48))
+ >WeakValidationMap : Symbol(WeakValidationMap, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 22, 1))
+ >P : Symbol(P, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 5, 25))
+ 
+     defaultProps?: Partial<P>;
+->defaultProps : Symbol(ComponentClass.defaultProps, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 7, 37))
++>defaultProps : Symbol(defaultProps, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 7, 37))
+ >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+ >P : Symbol(P, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 5, 25))
+ 
+     displayName?: string;
+->displayName : Symbol(ComponentClass.displayName, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 8, 30))
++>displayName : Symbol(displayName, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 8, 30))
+ }
+ interface FunctionComponent<P = {}> {
+ >FunctionComponent : Symbol(FunctionComponent, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 10, 1))
+@@= skipped -23, +23 lines =@@
+ >context : Symbol(context, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 12, 34))
+ 
+     propTypes?: WeakValidationMap<P>;
+->propTypes : Symbol(FunctionComponent.propTypes, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 12, 61))
++>propTypes : Symbol(propTypes, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 12, 61))
+ >WeakValidationMap : Symbol(WeakValidationMap, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 22, 1))
+ >P : Symbol(P, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 11, 28))
+ 
+     defaultProps?: Partial<P>;
+->defaultProps : Symbol(FunctionComponent.defaultProps, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 13, 37))
++>defaultProps : Symbol(defaultProps, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 13, 37))
+ >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+ >P : Symbol(P, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 11, 28))
+ 
+     displayName?: string;
+->displayName : Symbol(FunctionComponent.displayName, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 14, 30))
++>displayName : Symbol(displayName, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 14, 30))
+ }
+ 
+ export declare const nominalTypeHack: unique symbol;
+@@= skipped -29, +29 lines =@@
+ >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     [nominalTypeHack]?: T;
+->[nominalTypeHack] : Symbol(Validator[nominalTypeHack], Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 20, 115))
++>[nominalTypeHack] : Symbol([nominalTypeHack], Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 20, 115))
+ >nominalTypeHack : Symbol(nominalTypeHack, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 18, 20))
+ >T : Symbol(T, Decl(circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts, 19, 27))
+ }

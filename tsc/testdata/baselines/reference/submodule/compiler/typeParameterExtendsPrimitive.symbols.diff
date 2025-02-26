@@ -1,0 +1,11 @@
+--- old.typeParameterExtendsPrimitive.symbols
++++ new.typeParameterExtendsPrimitive.symbols
+@@= skipped -24, +24 lines =@@
+ // #15501
+ interface I { x: number }
+ >I : Symbol(I, Decl(typeParameterExtendsPrimitive.ts, 7, 1))
+->x : Symbol(I.x, Decl(typeParameterExtendsPrimitive.ts, 10, 13))
++>x : Symbol(x, Decl(typeParameterExtendsPrimitive.ts, 10, 13))
+ 
+ type IdMap<T> = { [P in keyof T]: T[P] };
+ >IdMap : Symbol(IdMap, Decl(typeParameterExtendsPrimitive.ts, 10, 25))

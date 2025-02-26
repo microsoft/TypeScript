@@ -1,0 +1,14 @@
+--- old.externalModuleResolution2.symbols
++++ new.externalModuleResolution2.symbols
+@@= skipped -4, +4 lines =@@
+ >x : Symbol(x, Decl(consumer.ts, 0, 0))
+ 
+ x.X // .ts should be picked
+->x.X : Symbol(x.X, Decl(foo.ts, 1, 14))
++>x.X : Symbol(X, Decl(foo.ts, 1, 14))
+ >x : Symbol(x, Decl(consumer.ts, 0, 0))
+->X : Symbol(x.X, Decl(foo.ts, 1, 14))
++>X : Symbol(X, Decl(foo.ts, 1, 14))
+ 
+ === foo.ts ===
+ module M2 {

@@ -1,0 +1,28 @@
+--- old.genericCallWithObjectTypeArgs.symbols
++++ new.genericCallWithObjectTypeArgs.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(genericCallWithObjectTypeArgs.ts, 0, 0))
+ 
+     private x: string;
+->x : Symbol(C.x, Decl(genericCallWithObjectTypeArgs.ts, 0, 9))
++>x : Symbol(x, Decl(genericCallWithObjectTypeArgs.ts, 0, 9))
+ }
+ 
+ class D {
+ >D : Symbol(D, Decl(genericCallWithObjectTypeArgs.ts, 2, 1))
+ 
+     private x: string;
+->x : Symbol(D.x, Decl(genericCallWithObjectTypeArgs.ts, 4, 9))
++>x : Symbol(x, Decl(genericCallWithObjectTypeArgs.ts, 4, 9))
+ }
+ 
+ class X<T> {
+@@= skipped -15, +15 lines =@@
+ >T : Symbol(T, Decl(genericCallWithObjectTypeArgs.ts, 8, 8))
+ 
+     x: T;
+->x : Symbol(X.x, Decl(genericCallWithObjectTypeArgs.ts, 8, 12))
++>x : Symbol(x, Decl(genericCallWithObjectTypeArgs.ts, 8, 12))
+ >T : Symbol(T, Decl(genericCallWithObjectTypeArgs.ts, 8, 8))
+ }
+ 

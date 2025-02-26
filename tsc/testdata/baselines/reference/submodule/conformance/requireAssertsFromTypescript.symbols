@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/salsa/requireAssertsFromTypescript.ts] ////
+
+=== 38379.js ===
+const { art } = require('./ex')
+>art : Symbol(art, Decl(38379.js, 0, 7))
+
+const artoo = require('./ex2')
+>artoo : Symbol(artoo, Decl(38379.js, 1, 5))
+
+let x = 1
+>x : Symbol(x, Decl(38379.js, 2, 3))
+
+art(x)
+>art : Symbol(art, Decl(38379.js, 0, 7))
+>x : Symbol(x, Decl(38379.js, 2, 3))
+
+let y = 1
+>y : Symbol(y, Decl(38379.js, 4, 3))
+
+artoo(y)
+>artoo : Symbol(artoo, Decl(38379.js, 1, 5))
+>y : Symbol(y, Decl(38379.js, 4, 3))
+

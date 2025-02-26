@@ -1,0 +1,11 @@
+--- old.ambient.symbols
++++ new.ambient.symbols
+@@= skipped -2, +2 lines =@@
+ === /a.ts ===
+ export class A { a!: string }
+ >A : Symbol(A, Decl(a.ts, 0, 0))
+->a : Symbol(A.a, Decl(a.ts, 0, 16))
++>a : Symbol(a, Decl(a.ts, 0, 16))
+ 
+ === /b.ts ===
+ import type { A } from './a';

@@ -1,0 +1,21 @@
+--- old.importElisionConstEnumMerge1.symbols
++++ new.importElisionConstEnumMerge1.symbols
+@@= skipped -4, +4 lines =@@
+ >Enum : Symbol(Enum, Decl(enum.ts, 0, 0))
+ 
+   One = 1,
+->One : Symbol(Enum.One, Decl(enum.ts, 0, 24))
++>One : Symbol(One, Decl(enum.ts, 0, 24))
+ }
+ 
+ === merge.ts ===
+@@= skipped -21, +21 lines =@@
+ >Enum : Symbol(Enum, Decl(index.ts, 0, 8))
+ 
+ Enum.One;
+->Enum.One : Symbol(Enum.One, Decl(enum.ts, 0, 24))
++>Enum.One : Symbol(One, Decl(enum.ts, 0, 24))
+ >Enum : Symbol(Enum, Decl(index.ts, 0, 8))
+->One : Symbol(Enum.One, Decl(enum.ts, 0, 24))
++>One : Symbol(One, Decl(enum.ts, 0, 24))
+ 

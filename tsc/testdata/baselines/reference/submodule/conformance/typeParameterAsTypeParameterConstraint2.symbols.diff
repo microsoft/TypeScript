@@ -1,0 +1,11 @@
+--- old.typeParameterAsTypeParameterConstraint2.symbols
++++ new.typeParameterAsTypeParameterConstraint2.symbols
+@@= skipped -26, +26 lines =@@
+ >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     x: number;
+->x : Symbol(NumberVariant.x, Decl(typeParameterAsTypeParameterConstraint2.ts, 8, 40))
++>x : Symbol(x, Decl(typeParameterAsTypeParameterConstraint2.ts, 8, 40))
+ }
+ var n: NumberVariant;
+ >n : Symbol(n, Decl(typeParameterAsTypeParameterConstraint2.ts, 11, 3))

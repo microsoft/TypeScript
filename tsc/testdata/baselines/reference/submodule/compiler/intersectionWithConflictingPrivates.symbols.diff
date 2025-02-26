@@ -1,0 +1,94 @@
+--- old.intersectionWithConflictingPrivates.symbols
++++ new.intersectionWithConflictingPrivates.symbols
+@@= skipped -2, +2 lines =@@
+ === intersectionWithConflictingPrivates.ts ===
+ class A { private x: unknown; y?: string; }
+ >A : Symbol(A, Decl(intersectionWithConflictingPrivates.ts, 0, 0))
+->x : Symbol(A.x, Decl(intersectionWithConflictingPrivates.ts, 0, 9))
+->y : Symbol(A.y, Decl(intersectionWithConflictingPrivates.ts, 0, 29))
++>x : Symbol(x, Decl(intersectionWithConflictingPrivates.ts, 0, 9))
++>y : Symbol(y, Decl(intersectionWithConflictingPrivates.ts, 0, 29))
+ 
+ class B { private x: unknown; y?: string; }
+ >B : Symbol(B, Decl(intersectionWithConflictingPrivates.ts, 0, 43))
+->x : Symbol(B.x, Decl(intersectionWithConflictingPrivates.ts, 1, 9))
+->y : Symbol(B.y, Decl(intersectionWithConflictingPrivates.ts, 1, 29))
++>x : Symbol(x, Decl(intersectionWithConflictingPrivates.ts, 1, 9))
++>y : Symbol(y, Decl(intersectionWithConflictingPrivates.ts, 1, 29))
+ 
+ declare let ab: A & B;
+ >ab : Symbol(ab, Decl(intersectionWithConflictingPrivates.ts, 3, 11))
+@@= skipped -60, +60 lines =@@
+ >ViewRefFileNode : Symbol(ViewRefFileNode, Decl(intersectionWithConflictingPrivates.ts, 20, 47))
+ 
+   private _id: any;
+->_id : Symbol(CommitFileNode._id, Decl(intersectionWithConflictingPrivates.ts, 23, 46))
++>_id : Symbol(_id, Decl(intersectionWithConflictingPrivates.ts, 23, 46))
+ }
+ 
+ class ResultsFileNode extends ViewRefFileNode {
+@@= skipped -8, +8 lines =@@
+ >ViewRefFileNode : Symbol(ViewRefFileNode, Decl(intersectionWithConflictingPrivates.ts, 20, 47))
+ 
+   private _id: any;
+->_id : Symbol(ResultsFileNode._id, Decl(intersectionWithConflictingPrivates.ts, 27, 47))
++>_id : Symbol(_id, Decl(intersectionWithConflictingPrivates.ts, 27, 47))
+ }
+ 
+ class StashFileNode extends CommitFileNode { 
+@@= skipped -8, +8 lines =@@
+ >CommitFileNode : Symbol(CommitFileNode, Decl(intersectionWithConflictingPrivates.ts, 21, 54))
+ 
+   private _id2: any;
+->_id2 : Symbol(StashFileNode._id2, Decl(intersectionWithConflictingPrivates.ts, 31, 44))
++>_id2 : Symbol(_id2, Decl(intersectionWithConflictingPrivates.ts, 31, 44))
+ }
+ 
+ class StatusFileNode extends ViewNode {
+@@= skipped -8, +8 lines =@@
+ >ViewNode : Symbol(ViewNode, Decl(intersectionWithConflictingPrivates.ts, 15, 1))
+ 
+   private _id: any;
+->_id : Symbol(StatusFileNode._id, Decl(intersectionWithConflictingPrivates.ts, 35, 39))
++>_id : Symbol(_id, Decl(intersectionWithConflictingPrivates.ts, 35, 39))
+ }
+ 
+ class Foo {
+ >Foo : Symbol(Foo, Decl(intersectionWithConflictingPrivates.ts, 37, 1))
+ 
+   private async foo(node: CommitFileNode | ResultsFileNode | StashFileNode) {
+->foo : Symbol(Foo.foo, Decl(intersectionWithConflictingPrivates.ts, 39, 11))
++>foo : Symbol(foo, Decl(intersectionWithConflictingPrivates.ts, 39, 11))
+ >node : Symbol(node, Decl(intersectionWithConflictingPrivates.ts, 40, 20))
+ >CommitFileNode : Symbol(CommitFileNode, Decl(intersectionWithConflictingPrivates.ts, 21, 54))
+ >ResultsFileNode : Symbol(ResultsFileNode, Decl(intersectionWithConflictingPrivates.ts, 25, 1))
+@@= skipped -31, +31 lines =@@
+ 		}
+ 
+ 		await this.bar(node);
+->this.bar : Symbol(Foo.bar, Decl(intersectionWithConflictingPrivates.ts, 50, 2))
++>this.bar : Symbol(bar, Decl(intersectionWithConflictingPrivates.ts, 50, 2))
+ >this : Symbol(Foo, Decl(intersectionWithConflictingPrivates.ts, 37, 1))
+->bar : Symbol(Foo.bar, Decl(intersectionWithConflictingPrivates.ts, 50, 2))
++>bar : Symbol(bar, Decl(intersectionWithConflictingPrivates.ts, 50, 2))
+ >node : Symbol(node, Decl(intersectionWithConflictingPrivates.ts, 40, 20))
+ 	}
+ 
+   private async bar(node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {}) {
+->bar : Symbol(Foo.bar, Decl(intersectionWithConflictingPrivates.ts, 50, 2))
++>bar : Symbol(bar, Decl(intersectionWithConflictingPrivates.ts, 50, 2))
+ >node : Symbol(node, Decl(intersectionWithConflictingPrivates.ts, 52, 20))
+ >CommitFileNode : Symbol(CommitFileNode, Decl(intersectionWithConflictingPrivates.ts, 21, 54))
+ >ResultsFileNode : Symbol(ResultsFileNode, Decl(intersectionWithConflictingPrivates.ts, 25, 1))
+@@= skipped -16, +16 lines =@@
+ >options : Symbol(options, Decl(intersectionWithConflictingPrivates.ts, 52, 92))
+ 
+     return Promise.resolve(undefined);
+->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >undefined : Symbol(undefined)
+   }
+ }

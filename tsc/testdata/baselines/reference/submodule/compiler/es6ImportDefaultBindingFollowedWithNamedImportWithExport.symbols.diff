@@ -1,0 +1,26 @@
+--- old.es6ImportDefaultBindingFollowedWithNamedImportWithExport.symbols
++++ new.es6ImportDefaultBindingFollowedWithNamedImportWithExport.symbols
+@@= skipped -27, +27 lines =@@
+ 
+ export import defaultBinding3, { a as b } from "server";
+ >defaultBinding3 : Symbol(defaultBinding3, Decl(client.ts, 3, 13))
+->a : Symbol(a, Decl(server.ts, 0, 10))
+ >b : Symbol(b, Decl(client.ts, 3, 32))
+ 
+ export var x1: number = b;
+@@= skipped -10, +9 lines =@@
+ export import defaultBinding4, { x, a as y } from "server";
+ >defaultBinding4 : Symbol(defaultBinding4, Decl(client.ts, 5, 13))
+ >x : Symbol(x, Decl(client.ts, 5, 32))
+->a : Symbol(a, Decl(server.ts, 0, 10))
+ >y : Symbol(y, Decl(client.ts, 5, 35))
+ 
+ export var x1: number = x;
+@@= skipped -13, +12 lines =@@
+ 
+ export import defaultBinding5, { x as z,  } from "server";
+ >defaultBinding5 : Symbol(defaultBinding5, Decl(client.ts, 8, 13))
+->x : Symbol(x, Decl(server.ts, 1, 10))
+ >z : Symbol(z, Decl(client.ts, 8, 32))
+ 
+ export var x1: number = z;

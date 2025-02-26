@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/distributiveConditionalTypeNeverIntersection1.ts] ////
+
+=== distributiveConditionalTypeNeverIntersection1.ts ===
+// https://github.com/microsoft/TypeScript/issues/57343
+
+type IsNumber<T> = T extends number ? true : false;
+>IsNumber : Symbol(IsNumber, Decl(distributiveConditionalTypeNeverIntersection1.ts, 0, 0))
+>T : Symbol(T, Decl(distributiveConditionalTypeNeverIntersection1.ts, 2, 14))
+>T : Symbol(T, Decl(distributiveConditionalTypeNeverIntersection1.ts, 2, 14))
+
+type Conflicted = { x: true } & { x: false };
+>Conflicted : Symbol(Conflicted, Decl(distributiveConditionalTypeNeverIntersection1.ts, 2, 51))
+>x : Symbol(x, Decl(distributiveConditionalTypeNeverIntersection1.ts, 4, 19))
+>x : Symbol(x, Decl(distributiveConditionalTypeNeverIntersection1.ts, 4, 33))
+
+type Ex1 = IsNumber<Conflicted>; // never
+>Ex1 : Symbol(Ex1, Decl(distributiveConditionalTypeNeverIntersection1.ts, 4, 45))
+>IsNumber : Symbol(IsNumber, Decl(distributiveConditionalTypeNeverIntersection1.ts, 0, 0))
+>Conflicted : Symbol(Conflicted, Decl(distributiveConditionalTypeNeverIntersection1.ts, 2, 51))
+
+type Ex2 = IsNumber<"OEEE" | Conflicted>; // false
+>Ex2 : Symbol(Ex2, Decl(distributiveConditionalTypeNeverIntersection1.ts, 6, 32))
+>IsNumber : Symbol(IsNumber, Decl(distributiveConditionalTypeNeverIntersection1.ts, 0, 0))
+>Conflicted : Symbol(Conflicted, Decl(distributiveConditionalTypeNeverIntersection1.ts, 2, 51))
+
+type Ex3 = IsNumber<1 | Conflicted>; // true
+>Ex3 : Symbol(Ex3, Decl(distributiveConditionalTypeNeverIntersection1.ts, 7, 41))
+>IsNumber : Symbol(IsNumber, Decl(distributiveConditionalTypeNeverIntersection1.ts, 0, 0))
+>Conflicted : Symbol(Conflicted, Decl(distributiveConditionalTypeNeverIntersection1.ts, 2, 51))
+

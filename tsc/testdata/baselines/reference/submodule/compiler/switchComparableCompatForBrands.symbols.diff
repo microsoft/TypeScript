@@ -1,0 +1,11 @@
+--- old.switchComparableCompatForBrands.symbols
++++ new.switchComparableCompatForBrands.symbols
+@@= skipped -4, +4 lines =@@
+ >MyBrand : Symbol(MyBrand, Decl(switchComparableCompatForBrands.ts, 0, 0))
+ {
+     private _a: number;
+->_a : Symbol(MyBrand._a, Decl(switchComparableCompatForBrands.ts, 1, 1))
++>_a : Symbol(_a, Decl(switchComparableCompatForBrands.ts, 1, 1))
+ }
+ 
+ function test(strInput: string & MyBrand) {

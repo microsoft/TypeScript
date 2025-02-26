@@ -1,0 +1,29 @@
+--- old.instanceofOperatorWithInvalidStaticToString.symbols
++++ new.instanceofOperatorWithInvalidStaticToString.symbols
+@@= skipped -4, +4 lines =@@
+ >StaticToString : Symbol(StaticToString, Decl(instanceofOperatorWithInvalidStaticToString.ts, 0, 0))
+ 
+     static toString(): void;
+->toString : Symbol(StaticToString.toString, Decl(instanceofOperatorWithInvalidStaticToString.ts, 0, 30))
++>toString : Symbol(toString, Decl(instanceofOperatorWithInvalidStaticToString.ts, 0, 30))
+ }
+ 
+ function foo(staticToString: StaticToString) {
+@@= skipped -17, +17 lines =@@
+ >StaticToNumber : Symbol(StaticToNumber, Decl(instanceofOperatorWithInvalidStaticToString.ts, 6, 1))
+ 
+     static toNumber(): void;
+->toNumber : Symbol(StaticToNumber.toNumber, Decl(instanceofOperatorWithInvalidStaticToString.ts, 8, 30))
++>toNumber : Symbol(toNumber, Decl(instanceofOperatorWithInvalidStaticToString.ts, 8, 30))
+ }
+ function bar(staticToNumber: StaticToNumber) {
+ >bar : Symbol(bar, Decl(instanceofOperatorWithInvalidStaticToString.ts, 10, 1))
+@@= skipped -16, +16 lines =@@
+ >NormalToString : Symbol(NormalToString, Decl(instanceofOperatorWithInvalidStaticToString.ts, 13, 1))
+ 
+     toString(): void;
+->toString : Symbol(NormalToString.toString, Decl(instanceofOperatorWithInvalidStaticToString.ts, 15, 30))
++>toString : Symbol(toString, Decl(instanceofOperatorWithInvalidStaticToString.ts, 15, 30))
+ }
+ function baz(normal: NormalToString) {
+ >baz : Symbol(baz, Decl(instanceofOperatorWithInvalidStaticToString.ts, 17, 1))

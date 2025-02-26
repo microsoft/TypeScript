@@ -1,0 +1,18 @@
+--- old.accessorsOverrideProperty7.symbols
++++ new.accessorsOverrideProperty7.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(accessorsOverrideProperty7.ts, 0, 0))
+ 
+     abstract p = 'yep'
+->p : Symbol(A.p, Decl(accessorsOverrideProperty7.ts, 0, 18))
++>p : Symbol(p, Decl(accessorsOverrideProperty7.ts, 0, 18))
+ }
+ class B extends A {
+ >B : Symbol(B, Decl(accessorsOverrideProperty7.ts, 2, 1))
+ >A : Symbol(A, Decl(accessorsOverrideProperty7.ts, 0, 0))
+ 
+     get p() { return 'oh no' } // error
+->p : Symbol(B.p, Decl(accessorsOverrideProperty7.ts, 3, 19))
++>p : Symbol(p, Decl(accessorsOverrideProperty7.ts, 3, 19))
+ }
+ 

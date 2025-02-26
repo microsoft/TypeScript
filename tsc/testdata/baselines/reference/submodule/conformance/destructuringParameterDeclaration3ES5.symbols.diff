@@ -1,0 +1,87 @@
+--- old.destructuringParameterDeclaration3ES5.symbols
++++ new.destructuringParameterDeclaration3ES5.symbols
+@@= skipped -8, +8 lines =@@
+ 
+ type arrayString = Array<String>
+ >arrayString : Symbol(arrayString, Decl(destructuringParameterDeclaration3ES5.ts, 0, 0))
+->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
++>Array : Symbol(Array)
++>String : Symbol(String)
+ 
+ type someArray = Array<String> | number[];
+ >someArray : Symbol(someArray, Decl(destructuringParameterDeclaration3ES5.ts, 6, 32))
+->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
++>Array : Symbol(Array)
++>String : Symbol(String)
+ 
+ type stringOrNumArray = Array<String|Number>;
+ >stringOrNumArray : Symbol(stringOrNumArray, Decl(destructuringParameterDeclaration3ES5.ts, 7, 42))
+->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Array : Symbol(Array)
++>String : Symbol(String)
++>Number : Symbol(Number)
+ 
+ function a1(...x: (number|string)[]) { }
+ >a1 : Symbol(a1, Decl(destructuringParameterDeclaration3ES5.ts, 8, 45))
+@@= skipped -25, +25 lines =@@
+ function a3(...a: Array<String>) { }
+ >a3 : Symbol(a3, Decl(destructuringParameterDeclaration3ES5.ts, 11, 21))
+ >a : Symbol(a, Decl(destructuringParameterDeclaration3ES5.ts, 12, 12))
+->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
++>Array : Symbol(Array)
++>String : Symbol(String)
+ 
+ function a4(...a: arrayString) { }
+ >a4 : Symbol(a4, Decl(destructuringParameterDeclaration3ES5.ts, 12, 36))
+@@= skipped -78, +78 lines =@@
+ 
+ enum E { a, b }
+ >E : Symbol(E, Decl(destructuringParameterDeclaration3ES5.ts, 35, 22))
+->a : Symbol(E.a, Decl(destructuringParameterDeclaration3ES5.ts, 37, 8))
+->b : Symbol(E.b, Decl(destructuringParameterDeclaration3ES5.ts, 37, 11))
++>a : Symbol(a, Decl(destructuringParameterDeclaration3ES5.ts, 37, 8))
++>b : Symbol(b, Decl(destructuringParameterDeclaration3ES5.ts, 37, 11))
+ 
+ const enum E1 { a, b }
+ >E1 : Symbol(E1, Decl(destructuringParameterDeclaration3ES5.ts, 37, 15))
+->a : Symbol(E1.a, Decl(destructuringParameterDeclaration3ES5.ts, 38, 15))
+->b : Symbol(E1.b, Decl(destructuringParameterDeclaration3ES5.ts, 38, 18))
++>a : Symbol(a, Decl(destructuringParameterDeclaration3ES5.ts, 38, 15))
++>b : Symbol(b, Decl(destructuringParameterDeclaration3ES5.ts, 38, 18))
+ 
+ function foo1<T extends Number>(...a: T[]) { }
+ >foo1 : Symbol(foo1, Decl(destructuringParameterDeclaration3ES5.ts, 38, 22))
+ >T : Symbol(T, Decl(destructuringParameterDeclaration3ES5.ts, 39, 14))
+->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Number : Symbol(Number)
+ >a : Symbol(a, Decl(destructuringParameterDeclaration3ES5.ts, 39, 32))
+ >T : Symbol(T, Decl(destructuringParameterDeclaration3ES5.ts, 39, 14))
+ 
+ foo1(1, 2, 3, E.a);
+ >foo1 : Symbol(foo1, Decl(destructuringParameterDeclaration3ES5.ts, 38, 22))
+->E.a : Symbol(E.a, Decl(destructuringParameterDeclaration3ES5.ts, 37, 8))
++>E.a : Symbol(a, Decl(destructuringParameterDeclaration3ES5.ts, 37, 8))
+ >E : Symbol(E, Decl(destructuringParameterDeclaration3ES5.ts, 35, 22))
+->a : Symbol(E.a, Decl(destructuringParameterDeclaration3ES5.ts, 37, 8))
++>a : Symbol(a, Decl(destructuringParameterDeclaration3ES5.ts, 37, 8))
+ 
+ foo1(1, 2, 3, E1.a, E.b);
+ >foo1 : Symbol(foo1, Decl(destructuringParameterDeclaration3ES5.ts, 38, 22))
+->E1.a : Symbol(E1.a, Decl(destructuringParameterDeclaration3ES5.ts, 38, 15))
++>E1.a : Symbol(a, Decl(destructuringParameterDeclaration3ES5.ts, 38, 15))
+ >E1 : Symbol(E1, Decl(destructuringParameterDeclaration3ES5.ts, 37, 15))
+->a : Symbol(E1.a, Decl(destructuringParameterDeclaration3ES5.ts, 38, 15))
+->E.b : Symbol(E.b, Decl(destructuringParameterDeclaration3ES5.ts, 37, 11))
++>a : Symbol(a, Decl(destructuringParameterDeclaration3ES5.ts, 38, 15))
++>E.b : Symbol(b, Decl(destructuringParameterDeclaration3ES5.ts, 37, 11))
+ >E : Symbol(E, Decl(destructuringParameterDeclaration3ES5.ts, 35, 22))
+->b : Symbol(E.b, Decl(destructuringParameterDeclaration3ES5.ts, 37, 11))
++>b : Symbol(b, Decl(destructuringParameterDeclaration3ES5.ts, 37, 11))
+ 
+ 
+ 

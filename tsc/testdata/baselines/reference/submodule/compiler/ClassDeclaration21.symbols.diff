@@ -1,0 +1,13 @@
+--- old.ClassDeclaration21.symbols
++++ new.ClassDeclaration21.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(ClassDeclaration21.ts, 0, 0))
+ 
+     0();
+->0 : Symbol(C[0], Decl(ClassDeclaration21.ts, 0, 9))
++>0 : Symbol(0, Decl(ClassDeclaration21.ts, 0, 9))
+ 
+     1() { }
+->1 : Symbol(C[1], Decl(ClassDeclaration21.ts, 1, 8))
++>1 : Symbol(1, Decl(ClassDeclaration21.ts, 1, 8))
+ }

@@ -1,0 +1,11 @@
+--- old.es5ModuleWithoutModuleGenTarget.symbols
++++ new.es5ModuleWithoutModuleGenTarget.symbols
+@@= skipped -8, +8 lines =@@
+     }
+ 
+     public B()
+->B : Symbol(A.B, Decl(es5ModuleWithoutModuleGenTarget.ts, 4, 5))
++>B : Symbol(B, Decl(es5ModuleWithoutModuleGenTarget.ts, 4, 5))
+     {
+         return 42;
+     }

@@ -1,0 +1,82 @@
+--- old.invalidMultipleVariableDeclarations.symbols
++++ new.invalidMultipleVariableDeclarations.symbols
+@@= skipped -4, +4 lines =@@
+ >I : Symbol(I, Decl(invalidMultipleVariableDeclarations.ts, 0, 0))
+ 
+     id: number;
+->id : Symbol(I.id, Decl(invalidMultipleVariableDeclarations.ts, 0, 13))
++>id : Symbol(id, Decl(invalidMultipleVariableDeclarations.ts, 0, 13))
+ }
+ 
+ class C implements I {
+@@= skipped -8, +8 lines =@@
+ >I : Symbol(I, Decl(invalidMultipleVariableDeclarations.ts, 0, 0))
+ 
+     id: number;
+->id : Symbol(C.id, Decl(invalidMultipleVariableDeclarations.ts, 4, 22))
++>id : Symbol(id, Decl(invalidMultipleVariableDeclarations.ts, 4, 22))
+ 
+     valid: boolean;
+->valid : Symbol(C.valid, Decl(invalidMultipleVariableDeclarations.ts, 5, 15))
++>valid : Symbol(valid, Decl(invalidMultipleVariableDeclarations.ts, 5, 15))
+ }
+ 
+ class C2 extends C {
+@@= skipped -11, +11 lines =@@
+ >C : Symbol(C, Decl(invalidMultipleVariableDeclarations.ts, 2, 1))
+ 
+     name: string;
+->name : Symbol(C2.name, Decl(invalidMultipleVariableDeclarations.ts, 9, 20))
++>name : Symbol(name, Decl(invalidMultipleVariableDeclarations.ts, 9, 20))
+ }
+ 
+ class D<T>{
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(invalidMultipleVariableDeclarations.ts, 13, 8))
+ 
+     source: T;
+->source : Symbol(D.source, Decl(invalidMultipleVariableDeclarations.ts, 13, 11))
++>source : Symbol(source, Decl(invalidMultipleVariableDeclarations.ts, 13, 11))
+ >T : Symbol(T, Decl(invalidMultipleVariableDeclarations.ts, 13, 8))
+ 
+     recurse: D<T>;
+->recurse : Symbol(D.recurse, Decl(invalidMultipleVariableDeclarations.ts, 14, 14))
++>recurse : Symbol(recurse, Decl(invalidMultipleVariableDeclarations.ts, 14, 14))
+ >D : Symbol(D, Decl(invalidMultipleVariableDeclarations.ts, 11, 1))
+ >T : Symbol(T, Decl(invalidMultipleVariableDeclarations.ts, 13, 8))
+ 
+     wrapped: D<D<T>>
+->wrapped : Symbol(D.wrapped, Decl(invalidMultipleVariableDeclarations.ts, 15, 18))
++>wrapped : Symbol(wrapped, Decl(invalidMultipleVariableDeclarations.ts, 15, 18))
+ >D : Symbol(D, Decl(invalidMultipleVariableDeclarations.ts, 11, 1))
+ >D : Symbol(D, Decl(invalidMultipleVariableDeclarations.ts, 11, 1))
+ >T : Symbol(T, Decl(invalidMultipleVariableDeclarations.ts, 13, 8))
+@@= skipped -26, +26 lines =@@
+ >A : Symbol(A, Decl(invalidMultipleVariableDeclarations.ts, 21, 10))
+ 
+         name: string;
+->name : Symbol(A.name, Decl(invalidMultipleVariableDeclarations.ts, 22, 20))
++>name : Symbol(name, Decl(invalidMultipleVariableDeclarations.ts, 22, 20))
+     }
+ 
+     export function F2(x: number): string { return x.toString(); }
+ >F2 : Symbol(F2, Decl(invalidMultipleVariableDeclarations.ts, 24, 5))
+ >x : Symbol(x, Decl(invalidMultipleVariableDeclarations.ts, 26, 23))
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(invalidMultipleVariableDeclarations.ts, 26, 23))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ // all of these are errors
+@@= skipped -80, +80 lines =@@
+ 
+ var m = M.A;
+ >m : Symbol(m, Decl(invalidMultipleVariableDeclarations.ts, 51, 3), Decl(invalidMultipleVariableDeclarations.ts, 52, 3))
+->M.A : Symbol(M.A, Decl(invalidMultipleVariableDeclarations.ts, 21, 10))
++>M.A : Symbol(A, Decl(invalidMultipleVariableDeclarations.ts, 21, 10))
+ >M : Symbol(M, Decl(invalidMultipleVariableDeclarations.ts, 19, 44))
+->A : Symbol(M.A, Decl(invalidMultipleVariableDeclarations.ts, 21, 10))
++>A : Symbol(A, Decl(invalidMultipleVariableDeclarations.ts, 21, 10))
+ 

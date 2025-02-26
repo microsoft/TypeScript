@@ -1,0 +1,11 @@
+--- old.selfReferencingTypeReferenceInference.symbols
++++ new.selfReferencingTypeReferenceInference.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(selfReferencingTypeReferenceInference.ts, 0, 14))
+ 
+     __: T
+->__ : Symbol(Box.__, Decl(selfReferencingTypeReferenceInference.ts, 0, 18))
++>__ : Symbol(__, Decl(selfReferencingTypeReferenceInference.ts, 0, 18))
+ >T : Symbol(T, Decl(selfReferencingTypeReferenceInference.ts, 0, 14))
+ }
+ 

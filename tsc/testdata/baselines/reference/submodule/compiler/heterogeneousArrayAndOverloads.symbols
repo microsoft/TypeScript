@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/heterogeneousArrayAndOverloads.ts] ////
+
+=== heterogeneousArrayAndOverloads.ts ===
+class arrTest {
+>arrTest : Symbol(arrTest, Decl(heterogeneousArrayAndOverloads.ts, 0, 0))
+
+    test(arg1: number[]);
+>test : Symbol(test, Decl(heterogeneousArrayAndOverloads.ts, 0, 15), Decl(heterogeneousArrayAndOverloads.ts, 1, 25), Decl(heterogeneousArrayAndOverloads.ts, 2, 25))
+>arg1 : Symbol(arg1, Decl(heterogeneousArrayAndOverloads.ts, 1, 9))
+
+    test(arg1: string[]);
+>test : Symbol(test, Decl(heterogeneousArrayAndOverloads.ts, 0, 15), Decl(heterogeneousArrayAndOverloads.ts, 1, 25), Decl(heterogeneousArrayAndOverloads.ts, 2, 25))
+>arg1 : Symbol(arg1, Decl(heterogeneousArrayAndOverloads.ts, 2, 9))
+
+    test(arg1: any[]) { }
+>test : Symbol(test, Decl(heterogeneousArrayAndOverloads.ts, 0, 15), Decl(heterogeneousArrayAndOverloads.ts, 1, 25), Decl(heterogeneousArrayAndOverloads.ts, 2, 25))
+>arg1 : Symbol(arg1, Decl(heterogeneousArrayAndOverloads.ts, 3, 9))
+
+    callTest() {
+>callTest : Symbol(callTest, Decl(heterogeneousArrayAndOverloads.ts, 3, 25))
+
+        this.test([1, 2, 3, 5]);
+>this.test : Symbol(test, Decl(heterogeneousArrayAndOverloads.ts, 0, 15), Decl(heterogeneousArrayAndOverloads.ts, 1, 25), Decl(heterogeneousArrayAndOverloads.ts, 2, 25))
+>this : Symbol(arrTest, Decl(heterogeneousArrayAndOverloads.ts, 0, 0))
+>test : Symbol(test, Decl(heterogeneousArrayAndOverloads.ts, 0, 15), Decl(heterogeneousArrayAndOverloads.ts, 1, 25), Decl(heterogeneousArrayAndOverloads.ts, 2, 25))
+
+        this.test(["hi"]);
+>this.test : Symbol(test, Decl(heterogeneousArrayAndOverloads.ts, 0, 15), Decl(heterogeneousArrayAndOverloads.ts, 1, 25), Decl(heterogeneousArrayAndOverloads.ts, 2, 25))
+>this : Symbol(arrTest, Decl(heterogeneousArrayAndOverloads.ts, 0, 0))
+>test : Symbol(test, Decl(heterogeneousArrayAndOverloads.ts, 0, 15), Decl(heterogeneousArrayAndOverloads.ts, 1, 25), Decl(heterogeneousArrayAndOverloads.ts, 2, 25))
+
+        this.test([]);
+>this.test : Symbol(test, Decl(heterogeneousArrayAndOverloads.ts, 0, 15), Decl(heterogeneousArrayAndOverloads.ts, 1, 25), Decl(heterogeneousArrayAndOverloads.ts, 2, 25))
+>this : Symbol(arrTest, Decl(heterogeneousArrayAndOverloads.ts, 0, 0))
+>test : Symbol(test, Decl(heterogeneousArrayAndOverloads.ts, 0, 15), Decl(heterogeneousArrayAndOverloads.ts, 1, 25), Decl(heterogeneousArrayAndOverloads.ts, 2, 25))
+
+        this.test([1, 2, "hi", 5]); // Error
+>this.test : Symbol(test, Decl(heterogeneousArrayAndOverloads.ts, 0, 15), Decl(heterogeneousArrayAndOverloads.ts, 1, 25), Decl(heterogeneousArrayAndOverloads.ts, 2, 25))
+>this : Symbol(arrTest, Decl(heterogeneousArrayAndOverloads.ts, 0, 0))
+>test : Symbol(test, Decl(heterogeneousArrayAndOverloads.ts, 0, 15), Decl(heterogeneousArrayAndOverloads.ts, 1, 25), Decl(heterogeneousArrayAndOverloads.ts, 2, 25))
+    }
+}

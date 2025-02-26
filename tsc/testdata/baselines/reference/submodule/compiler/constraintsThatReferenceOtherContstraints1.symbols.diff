@@ -1,0 +1,11 @@
+--- old.constraintsThatReferenceOtherContstraints1.symbols
++++ new.constraintsThatReferenceOtherContstraints1.symbols
+@@= skipped -17, +17 lines =@@
+ >T : Symbol(T, Decl(constraintsThatReferenceOtherContstraints1.ts, 3, 10))
+ 
+     data: Foo<Object, Object>; // Error 1 Type 'Object' does not satisfy the constraint 'T' for type parameter 'U extends T'.
+->data : Symbol(Bar.data, Decl(constraintsThatReferenceOtherContstraints1.ts, 3, 42))
++>data : Symbol(data, Decl(constraintsThatReferenceOtherContstraints1.ts, 3, 42))
+ >Foo : Symbol(Foo, Decl(constraintsThatReferenceOtherContstraints1.ts, 0, 20))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(constraintsThatReferenceOtherContstraints1.ts, 0, 0))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(constraintsThatReferenceOtherContstraints1.ts, 0, 0))

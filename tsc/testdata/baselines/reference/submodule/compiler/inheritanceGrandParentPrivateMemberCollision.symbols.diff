@@ -1,0 +1,19 @@
+--- old.inheritanceGrandParentPrivateMemberCollision.symbols
++++ new.inheritanceGrandParentPrivateMemberCollision.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(inheritanceGrandParentPrivateMemberCollision.ts, 0, 0))
+ 
+     private myMethod() { }
+->myMethod : Symbol(A.myMethod, Decl(inheritanceGrandParentPrivateMemberCollision.ts, 0, 9))
++>myMethod : Symbol(myMethod, Decl(inheritanceGrandParentPrivateMemberCollision.ts, 0, 9))
+ }
+ 
+ class B extends A { }
+@@= skipped -12, +12 lines =@@
+ >B : Symbol(B, Decl(inheritanceGrandParentPrivateMemberCollision.ts, 2, 1))
+ 
+     private myMethod() { }
+->myMethod : Symbol(C.myMethod, Decl(inheritanceGrandParentPrivateMemberCollision.ts, 6, 19))
++>myMethod : Symbol(myMethod, Decl(inheritanceGrandParentPrivateMemberCollision.ts, 6, 19))
+ }
+ 

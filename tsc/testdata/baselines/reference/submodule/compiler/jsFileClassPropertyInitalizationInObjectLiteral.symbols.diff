@@ -1,0 +1,13 @@
+--- old.jsFileClassPropertyInitalizationInObjectLiteral.symbols
++++ new.jsFileClassPropertyInitalizationInObjectLiteral.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === foo.js ===
+ module.exports = function () {
+->module.exports : Symbol(module.exports, Decl(foo.js, 0, 0))
+->module : Symbol(export=, Decl(foo.js, 0, 0))
+->exports : Symbol(export=, Decl(foo.js, 0, 0))
+-
+   class A { }
+ >A : Symbol(A, Decl(foo.js, 0, 30))
+ 

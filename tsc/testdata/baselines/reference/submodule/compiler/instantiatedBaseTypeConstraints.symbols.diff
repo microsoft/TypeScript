@@ -1,0 +1,20 @@
+--- old.instantiatedBaseTypeConstraints.symbols
++++ new.instantiatedBaseTypeConstraints.symbols
+@@= skipped -9, +9 lines =@@
+ >C : Symbol(C, Decl(instantiatedBaseTypeConstraints.ts, 0, 34))
+ 
+   foo(bar: C): void;
+->foo : Symbol(Foo.foo, Decl(instantiatedBaseTypeConstraints.ts, 0, 39))
++>foo : Symbol(foo, Decl(instantiatedBaseTypeConstraints.ts, 0, 39))
+ >bar : Symbol(bar, Decl(instantiatedBaseTypeConstraints.ts, 1, 6))
+ >C : Symbol(C, Decl(instantiatedBaseTypeConstraints.ts, 0, 34))
+ }
+@@= skipped -11, +11 lines =@@
+ >Bar : Symbol(Bar, Decl(instantiatedBaseTypeConstraints.ts, 2, 1))
+ 
+   foo(bar: string): void {
+->foo : Symbol(Bar.foo, Decl(instantiatedBaseTypeConstraints.ts, 4, 39))
++>foo : Symbol(foo, Decl(instantiatedBaseTypeConstraints.ts, 4, 39))
+ >bar : Symbol(bar, Decl(instantiatedBaseTypeConstraints.ts, 5, 6))
+   }
+ }

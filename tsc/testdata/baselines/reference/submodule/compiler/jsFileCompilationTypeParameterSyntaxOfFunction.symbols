@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/jsFileCompilationTypeParameterSyntaxOfFunction.ts] ////
+
+=== a.js ===
+function F<T>() { }
+>F : Symbol(F, Decl(a.js, 0, 0))
+>T : Symbol(T, Decl(a.js, 0, 11))
+

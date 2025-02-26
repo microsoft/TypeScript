@@ -1,0 +1,10 @@
+--- old.moduleAugmentationGlobal7.symbols
++++ new.moduleAugmentationGlobal7.symbols
+@@= skipped -9, +9 lines =@@
+         interface Array<T> { x }
+ >Array : Symbol(Array, Decl(moduleAugmentationGlobal7.ts, 1, 20))
+ >T : Symbol(T, Decl(moduleAugmentationGlobal7.ts, 2, 24))
+->x : Symbol(Array.x, Decl(moduleAugmentationGlobal7.ts, 2, 28))
++>x : Symbol(x, Decl(moduleAugmentationGlobal7.ts, 2, 28))
+     }
+ }

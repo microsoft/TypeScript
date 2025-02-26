@@ -1,0 +1,20 @@
+--- old.signatureInstantiationWithRecursiveConstraints.symbols
++++ new.signatureInstantiationWithRecursiveConstraints.symbols
+@@= skipped -6, +6 lines =@@
+ >Foo : Symbol(Foo, Decl(signatureInstantiationWithRecursiveConstraints.ts, 0, 0))
+ 
+   myFunc<T extends Foo>(arg: T) {}
+->myFunc : Symbol(Foo.myFunc, Decl(signatureInstantiationWithRecursiveConstraints.ts, 2, 11))
++>myFunc : Symbol(myFunc, Decl(signatureInstantiationWithRecursiveConstraints.ts, 2, 11))
+ >T : Symbol(T, Decl(signatureInstantiationWithRecursiveConstraints.ts, 3, 9))
+ >Foo : Symbol(Foo, Decl(signatureInstantiationWithRecursiveConstraints.ts, 0, 0))
+ >arg : Symbol(arg, Decl(signatureInstantiationWithRecursiveConstraints.ts, 3, 24))
+@@= skipped -11, +11 lines =@@
+ >Bar : Symbol(Bar, Decl(signatureInstantiationWithRecursiveConstraints.ts, 4, 1))
+ 
+   myFunc<T extends Bar>(arg: T) {}
+->myFunc : Symbol(Bar.myFunc, Decl(signatureInstantiationWithRecursiveConstraints.ts, 6, 11))
++>myFunc : Symbol(myFunc, Decl(signatureInstantiationWithRecursiveConstraints.ts, 6, 11))
+ >T : Symbol(T, Decl(signatureInstantiationWithRecursiveConstraints.ts, 7, 9))
+ >Bar : Symbol(Bar, Decl(signatureInstantiationWithRecursiveConstraints.ts, 4, 1))
+ >arg : Symbol(arg, Decl(signatureInstantiationWithRecursiveConstraints.ts, 7, 24))

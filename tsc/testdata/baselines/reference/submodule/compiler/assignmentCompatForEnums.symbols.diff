@@ -1,0 +1,13 @@
+--- old.assignmentCompatForEnums.symbols
++++ new.assignmentCompatForEnums.symbols
+@@= skipped -2, +2 lines =@@
+ === assignmentCompatForEnums.ts ===
+ enum TokenType { One, Two };
+ >TokenType : Symbol(TokenType, Decl(assignmentCompatForEnums.ts, 0, 0))
+->One : Symbol(TokenType.One, Decl(assignmentCompatForEnums.ts, 0, 16))
+->Two : Symbol(TokenType.Two, Decl(assignmentCompatForEnums.ts, 0, 21))
++>One : Symbol(One, Decl(assignmentCompatForEnums.ts, 0, 16))
++>Two : Symbol(Two, Decl(assignmentCompatForEnums.ts, 0, 21))
+ 
+ var list = {};
+ >list : Symbol(list, Decl(assignmentCompatForEnums.ts, 2, 3))

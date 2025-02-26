@@ -1,0 +1,20 @@
+--- old.decoratorOnClass6.es6.symbols
++++ new.decoratorOnClass6.es6.symbols
+@@= skipped -14, +14 lines =@@
+ >C : Symbol(C, Decl(decoratorOnClass6.es6.ts, 0, 38))
+ 
+     static x() { return C.y; }
+->x : Symbol(C.x, Decl(decoratorOnClass6.es6.ts, 3, 16))
+->C.y : Symbol(C.y, Decl(decoratorOnClass6.es6.ts, 4, 30))
++>x : Symbol(x, Decl(decoratorOnClass6.es6.ts, 3, 16))
++>C.y : Symbol(y, Decl(decoratorOnClass6.es6.ts, 4, 30))
+ >C : Symbol(C, Decl(decoratorOnClass6.es6.ts, 0, 38))
+->y : Symbol(C.y, Decl(decoratorOnClass6.es6.ts, 4, 30))
++>y : Symbol(y, Decl(decoratorOnClass6.es6.ts, 4, 30))
+ 
+     static y = 1;
+->y : Symbol(C.y, Decl(decoratorOnClass6.es6.ts, 4, 30))
++>y : Symbol(y, Decl(decoratorOnClass6.es6.ts, 4, 30))
+ }
+ 
+ let c = new C();

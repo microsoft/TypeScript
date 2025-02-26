@@ -1,0 +1,29 @@
+--- old.scopeCheckClassProperty.symbols
++++ new.scopeCheckClassProperty.symbols
+@@= skipped -5, +5 lines =@@
+ 
+   constructor() {
+     new A().p; // ok
+->new A().p : Symbol(A.p, Decl(scopeCheckClassProperty.ts, 6, 9))
++>new A().p : Symbol(p, Decl(scopeCheckClassProperty.ts, 6, 9))
+ >A : Symbol(A, Decl(scopeCheckClassProperty.ts, 5, 1))
+->p : Symbol(A.p, Decl(scopeCheckClassProperty.ts, 6, 9))
++>p : Symbol(p, Decl(scopeCheckClassProperty.ts, 6, 9))
+   }
+   public x = new A().p; // should also be ok
+->x : Symbol(C.x, Decl(scopeCheckClassProperty.ts, 3, 3))
+->new A().p : Symbol(A.p, Decl(scopeCheckClassProperty.ts, 6, 9))
++>x : Symbol(x, Decl(scopeCheckClassProperty.ts, 3, 3))
++>new A().p : Symbol(p, Decl(scopeCheckClassProperty.ts, 6, 9))
+ >A : Symbol(A, Decl(scopeCheckClassProperty.ts, 5, 1))
+->p : Symbol(A.p, Decl(scopeCheckClassProperty.ts, 6, 9))
++>p : Symbol(p, Decl(scopeCheckClassProperty.ts, 6, 9))
+ }
+ class A {
+ >A : Symbol(A, Decl(scopeCheckClassProperty.ts, 5, 1))
+ 
+   public p = '';
+->p : Symbol(A.p, Decl(scopeCheckClassProperty.ts, 6, 9))
++>p : Symbol(p, Decl(scopeCheckClassProperty.ts, 6, 9))
+ }
+ 

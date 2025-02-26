@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace_js.ts] ////
+
+=== a.js ===
+export class A {}
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+=== b.js ===
+
+export type * from './a';
+
+=== c.js ===
+import { A } from './b';
+>A : Symbol(A, Decl(c.js, 0, 8))
+
+A;
+>A : Symbol(A, Decl(c.js, 0, 8))
+

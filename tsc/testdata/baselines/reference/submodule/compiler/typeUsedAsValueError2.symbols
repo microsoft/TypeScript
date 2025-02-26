@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/typeUsedAsValueError2.ts] ////
+
+=== world.ts ===
+import HelloInterface = require("helloInterface");
+>HelloInterface : Symbol(HelloInterface, Decl(world.ts, 0, 0))
+
+import HelloNamespace = require("helloNamespace");
+>HelloNamespace : Symbol(HelloNamespace, Decl(world.ts, 0, 50))
+
+HelloInterface.world;
+>HelloInterface : Symbol(HelloInterface, Decl(world.ts, 0, 0))
+
+HelloNamespace.world;
+>HelloNamespace : Symbol(HelloNamespace, Decl(world.ts, 0, 50))
+

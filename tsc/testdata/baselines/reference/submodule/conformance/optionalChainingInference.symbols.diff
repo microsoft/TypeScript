@@ -1,0 +1,70 @@
+--- old.optionalChainingInference.symbols
++++ new.optionalChainingInference.symbols
+@@= skipped -26, +26 lines =@@
+ const b1 = { value: su?.length };
+ >b1 : Symbol(b1, Decl(optionalChainingInference.ts, 7, 5))
+ >value : Symbol(value, Decl(optionalChainingInference.ts, 7, 12))
+->su?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>su?.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >su : Symbol(su, Decl(optionalChainingInference.ts, 2, 13))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ const v1: number = unbox(b1);
+ >v1 : Symbol(v1, Decl(optionalChainingInference.ts, 8, 5))
+@@= skipped -12, +12 lines =@@
+ const b2 = { value: su?.length as number | undefined };
+ >b2 : Symbol(b2, Decl(optionalChainingInference.ts, 10, 5))
+ >value : Symbol(value, Decl(optionalChainingInference.ts, 10, 12))
+->su?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>su?.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >su : Symbol(su, Decl(optionalChainingInference.ts, 2, 13))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ const v2: number = unbox(b2);
+ >v2 : Symbol(v2, Decl(optionalChainingInference.ts, 11, 5))
+@@= skipped -13, +13 lines =@@
+ >b3 : Symbol(b3, Decl(optionalChainingInference.ts, 13, 5))
+ >value : Symbol(value, Decl(optionalChainingInference.ts, 13, 11))
+ >value : Symbol(value, Decl(optionalChainingInference.ts, 13, 43))
+->su?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>su?.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >su : Symbol(su, Decl(optionalChainingInference.ts, 2, 13))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ const v3: number = unbox(b3);
+ >v3 : Symbol(v3, Decl(optionalChainingInference.ts, 14, 5))
+@@= skipped -23, +23 lines =@@
+ >b5 : Symbol(b5, Decl(optionalChainingInference.ts, 19, 5))
+ >value : Symbol(value, Decl(optionalChainingInference.ts, 19, 12))
+ >su : Symbol(su, Decl(optionalChainingInference.ts, 2, 13))
+->"length" : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>"length" : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ const v5: number = unbox(b5);
+ >v5 : Symbol(v5, Decl(optionalChainingInference.ts, 20, 5))
+@@= skipped -10, +10 lines =@@
+ const b6 = { value: osu?.prop.length };
+ >b6 : Symbol(b6, Decl(optionalChainingInference.ts, 22, 5))
+ >value : Symbol(value, Decl(optionalChainingInference.ts, 22, 12))
+->osu?.prop.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>osu?.prop.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >osu?.prop : Symbol(prop, Decl(optionalChainingInference.ts, 4, 20))
+ >osu : Symbol(osu, Decl(optionalChainingInference.ts, 4, 13))
+ >prop : Symbol(prop, Decl(optionalChainingInference.ts, 4, 20))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ const v6: number = unbox(b6);
+ >v6 : Symbol(v6, Decl(optionalChainingInference.ts, 23, 5))
+@@= skipped -17, +17 lines =@@
+ >osu?.prop : Symbol(prop, Decl(optionalChainingInference.ts, 4, 20))
+ >osu : Symbol(osu, Decl(optionalChainingInference.ts, 4, 13))
+ >prop : Symbol(prop, Decl(optionalChainingInference.ts, 4, 20))
+->"length" : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>"length" : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ const v7: number = unbox(b7);
+ >v7 : Symbol(v7, Decl(optionalChainingInference.ts, 26, 5))

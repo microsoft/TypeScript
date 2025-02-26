@@ -1,0 +1,11 @@
+--- old.asyncFunctionDeclaration16_es5.symbols
++++ new.asyncFunctionDeclaration16_es5.symbols
+@@= skipped -2, +2 lines =@@
+ === /types.d.ts ===
+ declare class Thenable { then(): void; }
+ >Thenable : Symbol(Thenable, Decl(types.d.ts, 0, 0))
+->then : Symbol(Thenable.then, Decl(types.d.ts, 0, 24))
++>then : Symbol(then, Decl(types.d.ts, 0, 24))
+ 
+ === /a.js ===
+ /**

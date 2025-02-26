@@ -1,0 +1,50 @@
+--- old.parenthesizedContexualTyping1.symbols
++++ new.parenthesizedContexualTyping1.symbols
+@@= skipped -102, +102 lines =@@
+ var i = fun((Math.random() < 0.5 ? x => x : x => undefined), 10);
+ >i : Symbol(i, Decl(parenthesizedContexualTyping1.ts, 17, 3))
+ >fun : Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 0, 41), Decl(parenthesizedContexualTyping1.ts, 1, 57))
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(parenthesizedContexualTyping1.ts, 17, 34))
+ >x : Symbol(x, Decl(parenthesizedContexualTyping1.ts, 17, 34))
+ >x : Symbol(x, Decl(parenthesizedContexualTyping1.ts, 17, 43))
+@@= skipped -11, +11 lines =@@
+ var j = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10);
+ >j : Symbol(j, Decl(parenthesizedContexualTyping1.ts, 18, 3))
+ >fun : Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 0, 41), Decl(parenthesizedContexualTyping1.ts, 1, 57))
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(parenthesizedContexualTyping1.ts, 18, 36))
+ >x : Symbol(x, Decl(parenthesizedContexualTyping1.ts, 18, 36))
+ >x : Symbol(x, Decl(parenthesizedContexualTyping1.ts, 18, 47))
+@@= skipped -11, +11 lines =@@
+ var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
+ >k : Symbol(k, Decl(parenthesizedContexualTyping1.ts, 19, 3))
+ >fun : Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 0, 41), Decl(parenthesizedContexualTyping1.ts, 1, 57))
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(parenthesizedContexualTyping1.ts, 19, 36))
+ >x : Symbol(x, Decl(parenthesizedContexualTyping1.ts, 19, 36))
+ >x : Symbol(x, Decl(parenthesizedContexualTyping1.ts, 19, 47))
+@@= skipped -13, +13 lines =@@
+ var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)), 10);
+ >l : Symbol(l, Decl(parenthesizedContexualTyping1.ts, 20, 3))
+ >fun : Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 0, 41), Decl(parenthesizedContexualTyping1.ts, 1, 57))
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(parenthesizedContexualTyping1.ts, 20, 38))
+ >x : Symbol(x, Decl(parenthesizedContexualTyping1.ts, 20, 38))
+ >x : Symbol(x, Decl(parenthesizedContexualTyping1.ts, 20, 51))

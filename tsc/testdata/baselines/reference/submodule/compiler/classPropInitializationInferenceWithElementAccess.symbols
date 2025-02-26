@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/classPropInitializationInferenceWithElementAccess.ts] ////
+
+=== classPropInitializationInferenceWithElementAccess.ts ===
+// repro #49339
+export class Cls {
+>Cls : Symbol(Cls, Decl(classPropInitializationInferenceWithElementAccess.ts, 0, 0))
+
+    x;
+>x : Symbol(x, Decl(classPropInitializationInferenceWithElementAccess.ts, 1, 18))
+
+    y;
+>y : Symbol(y, Decl(classPropInitializationInferenceWithElementAccess.ts, 2, 6))
+
+    z;
+>z : Symbol(z, Decl(classPropInitializationInferenceWithElementAccess.ts, 3, 6))
+    
+    0;
+>0 : Symbol(0, Decl(classPropInitializationInferenceWithElementAccess.ts, 4, 6))
+
+    constructor(seed: number) {
+>seed : Symbol(seed, Decl(classPropInitializationInferenceWithElementAccess.ts, 8, 16))
+
+        this['x'] = [seed];
+>this : Symbol(Cls, Decl(classPropInitializationInferenceWithElementAccess.ts, 0, 0))
+>'x' : Symbol(x, Decl(classPropInitializationInferenceWithElementAccess.ts, 1, 18))
+>seed : Symbol(seed, Decl(classPropInitializationInferenceWithElementAccess.ts, 8, 16))
+
+        this['y'] = { seed };
+>this : Symbol(Cls, Decl(classPropInitializationInferenceWithElementAccess.ts, 0, 0))
+>'y' : Symbol(y, Decl(classPropInitializationInferenceWithElementAccess.ts, 2, 6))
+>seed : Symbol(seed, Decl(classPropInitializationInferenceWithElementAccess.ts, 10, 21))
+
+        this['z'] = `${seed}`;
+>this : Symbol(Cls, Decl(classPropInitializationInferenceWithElementAccess.ts, 0, 0))
+>'z' : Symbol(z, Decl(classPropInitializationInferenceWithElementAccess.ts, 3, 6))
+>seed : Symbol(seed, Decl(classPropInitializationInferenceWithElementAccess.ts, 8, 16))
+
+        this[0] = [seed];
+>this : Symbol(Cls, Decl(classPropInitializationInferenceWithElementAccess.ts, 0, 0))
+>0 : Symbol(0, Decl(classPropInitializationInferenceWithElementAccess.ts, 4, 6))
+>seed : Symbol(seed, Decl(classPropInitializationInferenceWithElementAccess.ts, 8, 16))
+    }
+}

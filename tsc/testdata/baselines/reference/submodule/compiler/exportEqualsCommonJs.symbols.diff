@@ -1,0 +1,11 @@
+--- old.exportEqualsCommonJs.symbols
++++ new.exportEqualsCommonJs.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === exportEqualsCommonJs.ts ===
+ export = { ["hi"]: "there" };
+->["hi"] : Symbol(["hi"], Decl(exportEqualsCommonJs.ts, 0, 10))
+->"hi" : Symbol(["hi"], Decl(exportEqualsCommonJs.ts, 0, 10))
++>["hi"] : Symbol(hi, Decl(exportEqualsCommonJs.ts, 0, 10))
++>"hi" : Symbol(hi, Decl(exportEqualsCommonJs.ts, 0, 10))
+ 

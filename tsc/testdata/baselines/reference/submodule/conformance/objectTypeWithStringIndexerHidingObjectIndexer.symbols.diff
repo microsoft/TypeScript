@@ -1,0 +1,20 @@
+--- old.objectTypeWithStringIndexerHidingObjectIndexer.symbols
++++ new.objectTypeWithStringIndexerHidingObjectIndexer.symbols
+@@= skipped -21, +21 lines =@@
+ >C : Symbol(C, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 7, 14))
+ 
+     foo: string;
+->foo : Symbol(C.foo, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 9, 9))
++>foo : Symbol(foo, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 9, 9))
+ 
+     [x: string]: string;
+ >x : Symbol(x, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 11, 5))
+@@= skipped -17, +17 lines =@@
+ >I : Symbol(I, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 14, 23))
+ 
+     bar: string;
+->bar : Symbol(I.bar, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 16, 13))
++>bar : Symbol(bar, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 16, 13))
+ 
+     [x: string]: string;
+ >x : Symbol(x, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 18, 5))

@@ -1,0 +1,28 @@
+--- old.genericInheritedDefaultConstructors.symbols
++++ new.genericInheritedDefaultConstructors.symbols
+@@= skipped -10, +10 lines =@@
+ >T : Symbol(T, Decl(genericInheritedDefaultConstructors.ts, 1, 22))
+ 
+     prototype: T;
+->prototype : Symbol(Constructor.prototype, Decl(genericInheritedDefaultConstructors.ts, 2, 27))
++>prototype : Symbol(prototype, Decl(genericInheritedDefaultConstructors.ts, 2, 27))
+ >T : Symbol(T, Decl(genericInheritedDefaultConstructors.ts, 1, 22))
+ }
+ 
+ class A<U> { a: U; }
+ >A : Symbol(A, Decl(genericInheritedDefaultConstructors.ts, 4, 1))
+ >U : Symbol(U, Decl(genericInheritedDefaultConstructors.ts, 6, 8))
+->a : Symbol(A.a, Decl(genericInheritedDefaultConstructors.ts, 6, 12))
++>a : Symbol(a, Decl(genericInheritedDefaultConstructors.ts, 6, 12))
+ >U : Symbol(U, Decl(genericInheritedDefaultConstructors.ts, 6, 8))
+ 
+ class B<V> extends A<V> { b: V; }
+@@= skipped -15, +15 lines =@@
+ >V : Symbol(V, Decl(genericInheritedDefaultConstructors.ts, 7, 8))
+ >A : Symbol(A, Decl(genericInheritedDefaultConstructors.ts, 4, 1))
+ >V : Symbol(V, Decl(genericInheritedDefaultConstructors.ts, 7, 8))
+->b : Symbol(B.b, Decl(genericInheritedDefaultConstructors.ts, 7, 25))
++>b : Symbol(b, Decl(genericInheritedDefaultConstructors.ts, 7, 25))
+ >V : Symbol(V, Decl(genericInheritedDefaultConstructors.ts, 7, 8))
+ 
+ var c:Constructor<B<boolean>> = B; // shouldn't error here

@@ -1,0 +1,106 @@
+--- old.callSignaturesWithOptionalParameters2.symbols
++++ new.callSignaturesWithOptionalParameters2.symbols
+@@= skipped -40, +40 lines =@@
+ >C : Symbol(C, Decl(callSignaturesWithOptionalParameters2.ts, 13, 11))
+ 
+     foo(x?: number);
+->foo : Symbol(C.foo, Decl(callSignaturesWithOptionalParameters2.ts, 15, 9), Decl(callSignaturesWithOptionalParameters2.ts, 16, 20))
++>foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters2.ts, 15, 9), Decl(callSignaturesWithOptionalParameters2.ts, 16, 20))
+ >x : Symbol(x, Decl(callSignaturesWithOptionalParameters2.ts, 16, 8))
+ 
+     foo(x?: number) { }
+->foo : Symbol(C.foo, Decl(callSignaturesWithOptionalParameters2.ts, 15, 9), Decl(callSignaturesWithOptionalParameters2.ts, 16, 20))
++>foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters2.ts, 15, 9), Decl(callSignaturesWithOptionalParameters2.ts, 16, 20))
+ >x : Symbol(x, Decl(callSignaturesWithOptionalParameters2.ts, 17, 8))
+ 
+     foo2(x: number);
+->foo2 : Symbol(C.foo2, Decl(callSignaturesWithOptionalParameters2.ts, 17, 23), Decl(callSignaturesWithOptionalParameters2.ts, 19, 20), Decl(callSignaturesWithOptionalParameters2.ts, 20, 32))
++>foo2 : Symbol(foo2, Decl(callSignaturesWithOptionalParameters2.ts, 17, 23), Decl(callSignaturesWithOptionalParameters2.ts, 19, 20), Decl(callSignaturesWithOptionalParameters2.ts, 20, 32))
+ >x : Symbol(x, Decl(callSignaturesWithOptionalParameters2.ts, 19, 9))
+ 
+     foo2(x: number, y?: number);
+->foo2 : Symbol(C.foo2, Decl(callSignaturesWithOptionalParameters2.ts, 17, 23), Decl(callSignaturesWithOptionalParameters2.ts, 19, 20), Decl(callSignaturesWithOptionalParameters2.ts, 20, 32))
++>foo2 : Symbol(foo2, Decl(callSignaturesWithOptionalParameters2.ts, 17, 23), Decl(callSignaturesWithOptionalParameters2.ts, 19, 20), Decl(callSignaturesWithOptionalParameters2.ts, 20, 32))
+ >x : Symbol(x, Decl(callSignaturesWithOptionalParameters2.ts, 20, 9))
+ >y : Symbol(y, Decl(callSignaturesWithOptionalParameters2.ts, 20, 19))
+ 
+     foo2(x: number, y?: number) { }
+->foo2 : Symbol(C.foo2, Decl(callSignaturesWithOptionalParameters2.ts, 17, 23), Decl(callSignaturesWithOptionalParameters2.ts, 19, 20), Decl(callSignaturesWithOptionalParameters2.ts, 20, 32))
++>foo2 : Symbol(foo2, Decl(callSignaturesWithOptionalParameters2.ts, 17, 23), Decl(callSignaturesWithOptionalParameters2.ts, 19, 20), Decl(callSignaturesWithOptionalParameters2.ts, 20, 32))
+ >x : Symbol(x, Decl(callSignaturesWithOptionalParameters2.ts, 21, 9))
+ >y : Symbol(y, Decl(callSignaturesWithOptionalParameters2.ts, 21, 19))
+ }
+@@= skipped -27, +27 lines =@@
+ >C : Symbol(C, Decl(callSignaturesWithOptionalParameters2.ts, 13, 11))
+ 
+ c.foo();
+->c.foo : Symbol(C.foo, Decl(callSignaturesWithOptionalParameters2.ts, 15, 9), Decl(callSignaturesWithOptionalParameters2.ts, 16, 20))
++>c.foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters2.ts, 15, 9), Decl(callSignaturesWithOptionalParameters2.ts, 16, 20))
+ >c : Symbol(c, Decl(callSignaturesWithOptionalParameters2.ts, 24, 3))
+->foo : Symbol(C.foo, Decl(callSignaturesWithOptionalParameters2.ts, 15, 9), Decl(callSignaturesWithOptionalParameters2.ts, 16, 20))
++>foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters2.ts, 15, 9), Decl(callSignaturesWithOptionalParameters2.ts, 16, 20))
+ 
+ c.foo(1);
+->c.foo : Symbol(C.foo, Decl(callSignaturesWithOptionalParameters2.ts, 15, 9), Decl(callSignaturesWithOptionalParameters2.ts, 16, 20))
++>c.foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters2.ts, 15, 9), Decl(callSignaturesWithOptionalParameters2.ts, 16, 20))
+ >c : Symbol(c, Decl(callSignaturesWithOptionalParameters2.ts, 24, 3))
+->foo : Symbol(C.foo, Decl(callSignaturesWithOptionalParameters2.ts, 15, 9), Decl(callSignaturesWithOptionalParameters2.ts, 16, 20))
++>foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters2.ts, 15, 9), Decl(callSignaturesWithOptionalParameters2.ts, 16, 20))
+ 
+ c.foo2(1);
+->c.foo2 : Symbol(C.foo2, Decl(callSignaturesWithOptionalParameters2.ts, 17, 23), Decl(callSignaturesWithOptionalParameters2.ts, 19, 20), Decl(callSignaturesWithOptionalParameters2.ts, 20, 32))
++>c.foo2 : Symbol(foo2, Decl(callSignaturesWithOptionalParameters2.ts, 17, 23), Decl(callSignaturesWithOptionalParameters2.ts, 19, 20), Decl(callSignaturesWithOptionalParameters2.ts, 20, 32))
+ >c : Symbol(c, Decl(callSignaturesWithOptionalParameters2.ts, 24, 3))
+->foo2 : Symbol(C.foo2, Decl(callSignaturesWithOptionalParameters2.ts, 17, 23), Decl(callSignaturesWithOptionalParameters2.ts, 19, 20), Decl(callSignaturesWithOptionalParameters2.ts, 20, 32))
++>foo2 : Symbol(foo2, Decl(callSignaturesWithOptionalParameters2.ts, 17, 23), Decl(callSignaturesWithOptionalParameters2.ts, 19, 20), Decl(callSignaturesWithOptionalParameters2.ts, 20, 32))
+ 
+ c.foo2(1, 2);
+->c.foo2 : Symbol(C.foo2, Decl(callSignaturesWithOptionalParameters2.ts, 17, 23), Decl(callSignaturesWithOptionalParameters2.ts, 19, 20), Decl(callSignaturesWithOptionalParameters2.ts, 20, 32))
++>c.foo2 : Symbol(foo2, Decl(callSignaturesWithOptionalParameters2.ts, 17, 23), Decl(callSignaturesWithOptionalParameters2.ts, 19, 20), Decl(callSignaturesWithOptionalParameters2.ts, 20, 32))
+ >c : Symbol(c, Decl(callSignaturesWithOptionalParameters2.ts, 24, 3))
+->foo2 : Symbol(C.foo2, Decl(callSignaturesWithOptionalParameters2.ts, 17, 23), Decl(callSignaturesWithOptionalParameters2.ts, 19, 20), Decl(callSignaturesWithOptionalParameters2.ts, 20, 32))
++>foo2 : Symbol(foo2, Decl(callSignaturesWithOptionalParameters2.ts, 17, 23), Decl(callSignaturesWithOptionalParameters2.ts, 19, 20), Decl(callSignaturesWithOptionalParameters2.ts, 20, 32))
+ 
+ interface I {
+ >I : Symbol(I, Decl(callSignaturesWithOptionalParameters2.ts, 29, 13))
+@@= skipped -30, +30 lines =@@
+ >y : Symbol(y, Decl(callSignaturesWithOptionalParameters2.ts, 33, 16))
+ 
+     foo(x: number, y?: number);
+->foo : Symbol(I.foo, Decl(callSignaturesWithOptionalParameters2.ts, 33, 29), Decl(callSignaturesWithOptionalParameters2.ts, 34, 31))
++>foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters2.ts, 33, 29), Decl(callSignaturesWithOptionalParameters2.ts, 34, 31))
+ >x : Symbol(x, Decl(callSignaturesWithOptionalParameters2.ts, 34, 8))
+ >y : Symbol(y, Decl(callSignaturesWithOptionalParameters2.ts, 34, 18))
+ 
+     foo(x: number, y?: number, z?: number);
+->foo : Symbol(I.foo, Decl(callSignaturesWithOptionalParameters2.ts, 33, 29), Decl(callSignaturesWithOptionalParameters2.ts, 34, 31))
++>foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters2.ts, 33, 29), Decl(callSignaturesWithOptionalParameters2.ts, 34, 31))
+ >x : Symbol(x, Decl(callSignaturesWithOptionalParameters2.ts, 35, 8))
+ >y : Symbol(y, Decl(callSignaturesWithOptionalParameters2.ts, 35, 18))
+ >z : Symbol(z, Decl(callSignaturesWithOptionalParameters2.ts, 35, 30))
+@@= skipped -25, +25 lines =@@
+ >i : Symbol(i, Decl(callSignaturesWithOptionalParameters2.ts, 38, 3))
+ 
+ i.foo(1);
+->i.foo : Symbol(I.foo, Decl(callSignaturesWithOptionalParameters2.ts, 33, 29), Decl(callSignaturesWithOptionalParameters2.ts, 34, 31))
++>i.foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters2.ts, 33, 29), Decl(callSignaturesWithOptionalParameters2.ts, 34, 31))
+ >i : Symbol(i, Decl(callSignaturesWithOptionalParameters2.ts, 38, 3))
+->foo : Symbol(I.foo, Decl(callSignaturesWithOptionalParameters2.ts, 33, 29), Decl(callSignaturesWithOptionalParameters2.ts, 34, 31))
++>foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters2.ts, 33, 29), Decl(callSignaturesWithOptionalParameters2.ts, 34, 31))
+ 
+ i.foo(1, 2);
+->i.foo : Symbol(I.foo, Decl(callSignaturesWithOptionalParameters2.ts, 33, 29), Decl(callSignaturesWithOptionalParameters2.ts, 34, 31))
++>i.foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters2.ts, 33, 29), Decl(callSignaturesWithOptionalParameters2.ts, 34, 31))
+ >i : Symbol(i, Decl(callSignaturesWithOptionalParameters2.ts, 38, 3))
+->foo : Symbol(I.foo, Decl(callSignaturesWithOptionalParameters2.ts, 33, 29), Decl(callSignaturesWithOptionalParameters2.ts, 34, 31))
++>foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters2.ts, 33, 29), Decl(callSignaturesWithOptionalParameters2.ts, 34, 31))
+ 
+ i.foo(1, 2, 3);
+->i.foo : Symbol(I.foo, Decl(callSignaturesWithOptionalParameters2.ts, 33, 29), Decl(callSignaturesWithOptionalParameters2.ts, 34, 31))
++>i.foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters2.ts, 33, 29), Decl(callSignaturesWithOptionalParameters2.ts, 34, 31))
+ >i : Symbol(i, Decl(callSignaturesWithOptionalParameters2.ts, 38, 3))
+->foo : Symbol(I.foo, Decl(callSignaturesWithOptionalParameters2.ts, 33, 29), Decl(callSignaturesWithOptionalParameters2.ts, 34, 31))
++>foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters2.ts, 33, 29), Decl(callSignaturesWithOptionalParameters2.ts, 34, 31))
+ 
+ var a: {
+ >a : Symbol(a, Decl(callSignaturesWithOptionalParameters2.ts, 46, 3))

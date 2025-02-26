@@ -1,0 +1,43 @@
+--- old.chainedAssignment1.symbols
++++ new.chainedAssignment1.symbols
+@@= skipped -4, +4 lines =@@
+ >X : Symbol(X, Decl(chainedAssignment1.ts, 0, 0))
+ 
+     constructor(public z) { }
+->z : Symbol(X.z, Decl(chainedAssignment1.ts, 1, 16))
++>z : Symbol(z, Decl(chainedAssignment1.ts, 1, 16))
+ 
+     a: number;
+->a : Symbol(X.a, Decl(chainedAssignment1.ts, 1, 29))
++>a : Symbol(a, Decl(chainedAssignment1.ts, 1, 29))
+ }
+ 
+ class Y {
+ >Y : Symbol(Y, Decl(chainedAssignment1.ts, 3, 1))
+ 
+     constructor(public z) {
+->z : Symbol(Y.z, Decl(chainedAssignment1.ts, 6, 16))
++>z : Symbol(z, Decl(chainedAssignment1.ts, 6, 16))
+     }
+     a: number;
+->a : Symbol(Y.a, Decl(chainedAssignment1.ts, 7, 5))
++>a : Symbol(a, Decl(chainedAssignment1.ts, 7, 5))
+ 
+     b: string;
+->b : Symbol(Y.b, Decl(chainedAssignment1.ts, 8, 14))
++>b : Symbol(b, Decl(chainedAssignment1.ts, 8, 14))
+ }
+ 
+ class Z {
+ >Z : Symbol(Z, Decl(chainedAssignment1.ts, 10, 1))
+ 
+     z: any;
+->z : Symbol(Z.z, Decl(chainedAssignment1.ts, 12, 9))
++>z : Symbol(z, Decl(chainedAssignment1.ts, 12, 9))
+ 
+     c: string;
+->c : Symbol(Z.c, Decl(chainedAssignment1.ts, 13, 11))
++>c : Symbol(c, Decl(chainedAssignment1.ts, 13, 11))
+ }
+ 
+ var c1 = new X(3);

@@ -1,0 +1,24 @@
+--- old.objectTypeWithCallSignatureAppearsToBeFunctionType.symbols
++++ new.objectTypeWithCallSignatureAppearsToBeFunctionType.symbols
+@@= skipped -21, +21 lines =@@
+ >r2b : Symbol(r2b, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 9, 3))
+ >x : Symbol(x, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 9, 10))
+ >y : Symbol(y, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 9, 17))
+->i.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
++>i.apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
+ >i : Symbol(i, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 7, 3))
+->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
++>apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
+ 
+ var b: {
+ >b : Symbol(b, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 11, 3))
+@@= skipped -18, +18 lines =@@
+ >rb4 : Symbol(rb4, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 16, 3))
+ >x : Symbol(x, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 16, 10))
+ >y : Symbol(y, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 16, 17))
+->b.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
++>b.apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
+ >b : Symbol(b, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 11, 3))
+->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
++>apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
+ 

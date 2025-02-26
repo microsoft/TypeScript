@@ -1,0 +1,26 @@
+--- old.inheritanceMemberAccessorOverridingMethod.symbols
++++ new.inheritanceMemberAccessorOverridingMethod.symbols
+@@= skipped -4, +4 lines =@@
+ >a : Symbol(a, Decl(inheritanceMemberAccessorOverridingMethod.ts, 0, 0))
+ 
+     x() {
+->x : Symbol(a.x, Decl(inheritanceMemberAccessorOverridingMethod.ts, 0, 9))
++>x : Symbol(x, Decl(inheritanceMemberAccessorOverridingMethod.ts, 0, 9))
+ 
+         return "20";
+     }
+@@= skipped -11, +11 lines =@@
+ >a : Symbol(a, Decl(inheritanceMemberAccessorOverridingMethod.ts, 0, 0))
+ 
+     get x() {
+->x : Symbol(b.x, Decl(inheritanceMemberAccessorOverridingMethod.ts, 6, 19), Decl(inheritanceMemberAccessorOverridingMethod.ts, 9, 5))
++>x : Symbol(x, Decl(inheritanceMemberAccessorOverridingMethod.ts, 6, 19), Decl(inheritanceMemberAccessorOverridingMethod.ts, 9, 5))
+ 
+         return () => "20";
+     }
+     set x(aValue) {
+->x : Symbol(b.x, Decl(inheritanceMemberAccessorOverridingMethod.ts, 6, 19), Decl(inheritanceMemberAccessorOverridingMethod.ts, 9, 5))
++>x : Symbol(x, Decl(inheritanceMemberAccessorOverridingMethod.ts, 6, 19), Decl(inheritanceMemberAccessorOverridingMethod.ts, 9, 5))
+ >aValue : Symbol(aValue, Decl(inheritanceMemberAccessorOverridingMethod.ts, 10, 10))
+         
+     }

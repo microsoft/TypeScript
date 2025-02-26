@@ -1,0 +1,14 @@
+--- old.awaitCallExpressionInSyncFunction.symbols
++++ new.awaitCallExpressionInSyncFunction.symbols
+@@= skipped -5, +5 lines =@@
+ 
+    const foo = await(Promise.resolve(1));
+ >foo : Symbol(foo, Decl(awaitCallExpressionInSyncFunction.ts, 1, 8))
+->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ 
+    return foo;
+ >foo : Symbol(foo, Decl(awaitCallExpressionInSyncFunction.ts, 1, 8))

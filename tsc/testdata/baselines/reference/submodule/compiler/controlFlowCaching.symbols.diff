@@ -1,0 +1,56 @@
+--- old.controlFlowCaching.symbols
++++ new.controlFlowCaching.symbols
+@@= skipped -112, +112 lines =@@
+ 
+         cosr = Math.abs(Math.cos(rotation * Math.PI / 180)),
+ >cosr : Symbol(cosr, Decl(controlFlowCaching.ts, 20, 79))
+->Math.abs : Symbol(Math.abs, Decl(lib.es5.d.ts, --, --))
++>Math.abs : Symbol(abs, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->abs : Symbol(Math.abs, Decl(lib.es5.d.ts, --, --))
+->Math.cos : Symbol(Math.cos, Decl(lib.es5.d.ts, --, --))
++>abs : Symbol(abs, Decl(lib.es5.d.ts, --, --))
++>Math.cos : Symbol(cos, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->cos : Symbol(Math.cos, Decl(lib.es5.d.ts, --, --))
++>cos : Symbol(cos, Decl(lib.es5.d.ts, --, --))
+ >rotation : Symbol(rotation, Decl(controlFlowCaching.ts, 6, 47))
+->Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
++>Math.PI : Symbol(PI, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
++>PI : Symbol(PI, Decl(lib.es5.d.ts, --, --))
+ 
+         sinr = Math.abs(Math.sin(rotation * Math.PI / 180)),
+ >sinr : Symbol(sinr, Decl(controlFlowCaching.ts, 21, 60))
+->Math.abs : Symbol(Math.abs, Decl(lib.es5.d.ts, --, --))
++>Math.abs : Symbol(abs, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->abs : Symbol(Math.abs, Decl(lib.es5.d.ts, --, --))
+->Math.sin : Symbol(Math.sin, Decl(lib.es5.d.ts, --, --))
++>abs : Symbol(abs, Decl(lib.es5.d.ts, --, --))
++>Math.sin : Symbol(sin, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->sin : Symbol(Math.sin, Decl(lib.es5.d.ts, --, --))
++>sin : Symbol(sin, Decl(lib.es5.d.ts, --, --))
+ >rotation : Symbol(rotation, Decl(controlFlowCaching.ts, 6, 47))
+->Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
++>Math.PI : Symbol(PI, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
++>PI : Symbol(PI, Decl(lib.es5.d.ts, --, --))
+ 
+         tsize = taTitleFont ? g.normalizedLength(g.splitFontString(taTitleFont).size) : 0;
+ >tsize : Symbol(tsize, Decl(controlFlowCaching.ts, 22, 60))
+@@= skipped -52, +52 lines =@@
+ >cachedLabelW : Symbol(cachedLabelW, Decl(controlFlowCaching.ts, 27, 7))
+ >sinr : Symbol(sinr, Decl(controlFlowCaching.ts, 21, 60))
+ >labelGap : Symbol(labelGap, Decl(controlFlowCaching.ts, 7, 125))
+->Math.max : Symbol(Math.max, Decl(lib.es5.d.ts, --, --))
++>Math.max : Symbol(max, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->max : Symbol(Math.max, Decl(lib.es5.d.ts, --, --))
++>max : Symbol(max, Decl(lib.es5.d.ts, --, --))
+ >taMajorTick : Symbol(taMajorTick, Decl(controlFlowCaching.ts, 14, 96))
+ >taMajorTick : Symbol(taMajorTick, Decl(controlFlowCaching.ts, 14, 96))
+ 

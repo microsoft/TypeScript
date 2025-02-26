@@ -1,0 +1,29 @@
+--- old.invalidBooleanAssignments.symbols
++++ new.invalidBooleanAssignments.symbols
+@@= skipped -22, +22 lines =@@
+ 
+ enum E { A }
+ >E : Symbol(E, Decl(invalidBooleanAssignments.ts, 5, 28))
+->A : Symbol(E.A, Decl(invalidBooleanAssignments.ts, 7, 8))
++>A : Symbol(A, Decl(invalidBooleanAssignments.ts, 7, 8))
+ 
+ var e: E = x;
+ >e : Symbol(e, Decl(invalidBooleanAssignments.ts, 8, 3))
+@@= skipped -9, +9 lines =@@
+ 
+ class C { foo: string }
+ >C : Symbol(C, Decl(invalidBooleanAssignments.ts, 8, 13))
+->foo : Symbol(C.foo, Decl(invalidBooleanAssignments.ts, 10, 9))
++>foo : Symbol(foo, Decl(invalidBooleanAssignments.ts, 10, 9))
+ 
+ var f: C = x;
+ >f : Symbol(f, Decl(invalidBooleanAssignments.ts, 11, 3))
+@@= skipped -9, +9 lines =@@
+ 
+ interface I { bar: string }
+ >I : Symbol(I, Decl(invalidBooleanAssignments.ts, 11, 13))
+->bar : Symbol(I.bar, Decl(invalidBooleanAssignments.ts, 13, 13))
++>bar : Symbol(bar, Decl(invalidBooleanAssignments.ts, 13, 13))
+ 
+ var g: I = x;
+ >g : Symbol(g, Decl(invalidBooleanAssignments.ts, 14, 3))

@@ -1,0 +1,11 @@
+--- old.jsxCallElaborationCheckNoCrash1.symbols
++++ new.jsxCallElaborationCheckNoCrash1.symbols
+@@= skipped -19, +19 lines =@@
+ 
+ ): React.SFC => {
+ >React : Symbol(React, Decl(jsxCallElaborationCheckNoCrash1.tsx, 2, 6))
+->SFC : Symbol(React.SFC, Decl(react16.d.ts, 400, 9))
++>SFC : Symbol(SFC)
+ 
+    const Component = () => <TagElement />;
+ >Component : Symbol(Component, Decl(jsxCallElaborationCheckNoCrash1.tsx, 9, 8))

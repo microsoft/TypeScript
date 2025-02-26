@@ -1,0 +1,54 @@
+--- old.genericArgumentCallSigAssignmentCompat.symbols
++++ new.genericArgumentCallSigAssignmentCompat.symbols
+@@= skipped -20, +20 lines =@@
+ >Static : Symbol(Static, Decl(genericArgumentCallSigAssignmentCompat.ts, 3, 5))
+ 
+         all<T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean;
+->all : Symbol(Static.all, Decl(genericArgumentCallSigAssignmentCompat.ts, 5, 29))
++>all : Symbol(all, Decl(genericArgumentCallSigAssignmentCompat.ts, 5, 29))
+ >T : Symbol(T, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 12))
+ >list : Symbol(list, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 15))
+ >T : Symbol(T, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 12))
+@@= skipped -10, +10 lines =@@
+ >context : Symbol(context, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 58))
+ 
+         identity<T>(value: T): T;
+->identity : Symbol(Static.identity, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 83))
++>identity : Symbol(identity, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 83))
+ >T : Symbol(T, Decl(genericArgumentCallSigAssignmentCompat.ts, 7, 17))
+ >value : Symbol(value, Decl(genericArgumentCallSigAssignmentCompat.ts, 7, 20))
+ >T : Symbol(T, Decl(genericArgumentCallSigAssignmentCompat.ts, 7, 17))
+@@= skipped -11, +11 lines =@@
+ declare var _: Underscore.Static;
+ >_ : Symbol(_, Decl(genericArgumentCallSigAssignmentCompat.ts, 11, 11))
+ >Underscore : Symbol(Underscore, Decl(genericArgumentCallSigAssignmentCompat.ts, 0, 0))
+->Static : Symbol(Underscore.Static, Decl(genericArgumentCallSigAssignmentCompat.ts, 3, 5))
++>Static : Symbol(Static, Decl(genericArgumentCallSigAssignmentCompat.ts, 3, 5))
+  
+ // No error, Call signatures of types '<T>(value: T) => T' and 'Underscore.Iterator<{}, boolean>' are compatible when instantiated with any.
+ // Ideally, we would not have a generic signature here, because it should be instantiated with {} during inferential typing
+ _.all([true, 1, null, 'yes'], _.identity);
+->_.all : Symbol(Underscore.Static.all, Decl(genericArgumentCallSigAssignmentCompat.ts, 5, 29))
++>_.all : Symbol(all, Decl(genericArgumentCallSigAssignmentCompat.ts, 5, 29))
+ >_ : Symbol(_, Decl(genericArgumentCallSigAssignmentCompat.ts, 11, 11))
+->all : Symbol(Underscore.Static.all, Decl(genericArgumentCallSigAssignmentCompat.ts, 5, 29))
+->_.identity : Symbol(Underscore.Static.identity, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 83))
++>all : Symbol(all, Decl(genericArgumentCallSigAssignmentCompat.ts, 5, 29))
++>_.identity : Symbol(identity, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 83))
+ >_ : Symbol(_, Decl(genericArgumentCallSigAssignmentCompat.ts, 11, 11))
+->identity : Symbol(Underscore.Static.identity, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 83))
++>identity : Symbol(identity, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 83))
+  
+ // Ok, because fixing makes us infer boolean for T
+ _.all([true], _.identity);
+->_.all : Symbol(Underscore.Static.all, Decl(genericArgumentCallSigAssignmentCompat.ts, 5, 29))
++>_.all : Symbol(all, Decl(genericArgumentCallSigAssignmentCompat.ts, 5, 29))
+ >_ : Symbol(_, Decl(genericArgumentCallSigAssignmentCompat.ts, 11, 11))
+->all : Symbol(Underscore.Static.all, Decl(genericArgumentCallSigAssignmentCompat.ts, 5, 29))
+->_.identity : Symbol(Underscore.Static.identity, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 83))
++>all : Symbol(all, Decl(genericArgumentCallSigAssignmentCompat.ts, 5, 29))
++>_.identity : Symbol(identity, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 83))
+ >_ : Symbol(_, Decl(genericArgumentCallSigAssignmentCompat.ts, 11, 11))
+->identity : Symbol(Underscore.Static.identity, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 83))
++>identity : Symbol(identity, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 83))
+ 

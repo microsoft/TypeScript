@@ -1,0 +1,21 @@
+--- old.classExpression4.symbols
++++ new.classExpression4.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(classExpression4.ts, 0, 3))
+ 
+     foo() {
+->foo : Symbol(C.foo, Decl(classExpression4.ts, 0, 15))
++>foo : Symbol(foo, Decl(classExpression4.ts, 0, 15))
+ 
+         return new C();
+ >C : Symbol(C, Decl(classExpression4.ts, 0, 3))
+@@= skipped -8, +8 lines =@@
+ };
+ let x = (new C).foo();
+ >x : Symbol(x, Decl(classExpression4.ts, 5, 3))
+->(new C).foo : Symbol(C.foo, Decl(classExpression4.ts, 0, 15))
++>(new C).foo : Symbol(foo, Decl(classExpression4.ts, 0, 15))
+ >C : Symbol(C, Decl(classExpression4.ts, 0, 3))
+->foo : Symbol(C.foo, Decl(classExpression4.ts, 0, 15))
++>foo : Symbol(foo, Decl(classExpression4.ts, 0, 15))
+ 

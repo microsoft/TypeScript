@@ -1,0 +1,17 @@
+--- old.esDecorators-classDeclaration-commonjs.symbols
++++ new.esDecorators-classDeclaration-commonjs.symbols
+@@= skipped -10, +10 lines =@@
+ >Example : Symbol(Example, Decl(esDecorators-classDeclaration-commonjs.ts, 0, 22))
+ 
+     static foo() {}
+->foo : Symbol(Example.foo, Decl(esDecorators-classDeclaration-commonjs.ts, 3, 22))
++>foo : Symbol(foo, Decl(esDecorators-classDeclaration-commonjs.ts, 3, 22))
+ }
+ 
+ Example.foo();
+->Example.foo : Symbol(Example.foo, Decl(esDecorators-classDeclaration-commonjs.ts, 3, 22))
++>Example.foo : Symbol(foo, Decl(esDecorators-classDeclaration-commonjs.ts, 3, 22))
+ >Example : Symbol(Example, Decl(esDecorators-classDeclaration-commonjs.ts, 0, 22))
+->foo : Symbol(Example.foo, Decl(esDecorators-classDeclaration-commonjs.ts, 3, 22))
++>foo : Symbol(foo, Decl(esDecorators-classDeclaration-commonjs.ts, 3, 22))
+ 

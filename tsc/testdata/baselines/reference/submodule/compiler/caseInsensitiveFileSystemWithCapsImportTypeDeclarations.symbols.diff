@@ -1,0 +1,11 @@
+--- old.caseInsensitiveFileSystemWithCapsImportTypeDeclarations.symbols
++++ new.caseInsensitiveFileSystemWithCapsImportTypeDeclarations.symbols
+@@= skipped -7, +7 lines =@@
+ >Broken : Symbol(Broken, Decl(index.ts, 0, 33))
+ 
+     method () {
+->method : Symbol(Broken.method, Decl(index.ts, 2, 21))
++>method : Symbol(method, Decl(index.ts, 2, 21))
+ 
+         return { } as TypeB;
+ >TypeB : Symbol(TypeB, Decl(index.ts, 0, 8))

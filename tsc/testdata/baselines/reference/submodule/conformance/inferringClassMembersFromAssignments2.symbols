@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/salsa/inferringClassMembersFromAssignments2.ts] ////
+
+=== a.js ===
+OOOrder.prototype.m = function () {
+>OOOrder.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>OOOrder : Symbol(OOOrder, Decl(a.js, 2, 1))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+
+    this.p = 1
+}
+function OOOrder() {
+>OOOrder : Symbol(OOOrder, Decl(a.js, 2, 1))
+
+    this.x = 1
+}
+

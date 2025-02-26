@@ -1,0 +1,23 @@
+--- old.esModuleInteropDefaultMemberMustBeSyntacticallyDefaultExport.symbols
++++ new.esModuleInteropDefaultMemberMustBeSyntacticallyDefaultExport.symbols
+@@= skipped -4, +4 lines =@@
+ >Point : Symbol(Point, Decl(point.d.ts, 0, 0))
+ 
+     x: number;
+->x : Symbol(Point.x, Decl(point.d.ts, 0, 21))
++>x : Symbol(x, Decl(point.d.ts, 0, 21))
+ 
+     y: number;
+->y : Symbol(Point.y, Decl(point.d.ts, 1, 14))
++>y : Symbol(y, Decl(point.d.ts, 1, 14))
+ 
+     constructor(x: number, y: number);
+ >x : Symbol(x, Decl(point.d.ts, 4, 16))
+ >y : Symbol(y, Decl(point.d.ts, 4, 26))
+ 
+     static default: "foo";
+->default : Symbol(Point.default, Decl(point.d.ts, 4, 38))
++>default : Symbol(default, Decl(point.d.ts, 4, 38))
+ }
+ 
+ export = Point;

@@ -1,0 +1,156 @@
+--- old.noUncheckedIndexedAccess.symbols
++++ new.noUncheckedIndexedAccess.symbols
+@@= skipped -11, +11 lines =@@
+ 
+ enum NumericEnum1 { A, B, C }
+ >NumericEnum1 : Symbol(NumericEnum1, Decl(noUncheckedIndexedAccess.ts, 2, 52))
+->A : Symbol(NumericEnum1.A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
+->B : Symbol(NumericEnum1.B, Decl(noUncheckedIndexedAccess.ts, 4, 22))
+->C : Symbol(NumericEnum1.C, Decl(noUncheckedIndexedAccess.ts, 4, 25))
++>A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
++>B : Symbol(B, Decl(noUncheckedIndexedAccess.ts, 4, 22))
++>C : Symbol(C, Decl(noUncheckedIndexedAccess.ts, 4, 25))
+ 
+ enum NumericEnum2 { A = 0, B = 1 , C = 2 }
+ >NumericEnum2 : Symbol(NumericEnum2, Decl(noUncheckedIndexedAccess.ts, 4, 29))
+->A : Symbol(NumericEnum2.A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
+->B : Symbol(NumericEnum2.B, Decl(noUncheckedIndexedAccess.ts, 5, 26))
+->C : Symbol(NumericEnum2.C, Decl(noUncheckedIndexedAccess.ts, 5, 34))
++>A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
++>B : Symbol(B, Decl(noUncheckedIndexedAccess.ts, 5, 26))
++>C : Symbol(C, Decl(noUncheckedIndexedAccess.ts, 5, 34))
+ 
+ enum StringEnum1 { A = "Alpha", B = "Beta" }
+ >StringEnum1 : Symbol(StringEnum1, Decl(noUncheckedIndexedAccess.ts, 5, 42))
+->A : Symbol(StringEnum1.A, Decl(noUncheckedIndexedAccess.ts, 6, 18))
+->B : Symbol(StringEnum1.B, Decl(noUncheckedIndexedAccess.ts, 6, 31))
++>A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 6, 18))
++>B : Symbol(B, Decl(noUncheckedIndexedAccess.ts, 6, 31))
+ 
+ declare const strMap: { [s: string]: boolean };
+ >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+@@= skipped -26, +26 lines =@@
+ 
+ const e2: boolean = strMap.bar;
+ >e2 : Symbol(e2, Decl(noUncheckedIndexedAccess.ts, 12, 5))
+->strMap.bar : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
++>strMap.bar : Symbol((Missing), Decl(noUncheckedIndexedAccess.ts, 8, 23))
+ >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+->bar : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
++>bar : Symbol((Missing), Decl(noUncheckedIndexedAccess.ts, 8, 23))
+ 
+ const e3: boolean = strMap[0];
+ >e3 : Symbol(e3, Decl(noUncheckedIndexedAccess.ts, 13, 5))
+@@= skipped -27, +27 lines =@@
+ const e8: boolean = strMap[NumericEnum1.A];
+ >e8 : Symbol(e8, Decl(noUncheckedIndexedAccess.ts, 18, 5))
+ >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+->NumericEnum1.A : Symbol(NumericEnum1.A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
++>NumericEnum1.A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
+ >NumericEnum1 : Symbol(NumericEnum1, Decl(noUncheckedIndexedAccess.ts, 2, 52))
+->A : Symbol(NumericEnum1.A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
++>A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
+ 
+ const e9: boolean = strMap[NumericEnum2.A];
+ >e9 : Symbol(e9, Decl(noUncheckedIndexedAccess.ts, 19, 5))
+ >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+->NumericEnum2.A : Symbol(NumericEnum2.A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
++>NumericEnum2.A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
+ >NumericEnum2 : Symbol(NumericEnum2, Decl(noUncheckedIndexedAccess.ts, 4, 29))
+->A : Symbol(NumericEnum2.A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
++>A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
+ 
+ const e10: boolean = strMap[StringEnum1.A];
+ >e10 : Symbol(e10, Decl(noUncheckedIndexedAccess.ts, 20, 5))
+ >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+->StringEnum1.A : Symbol(StringEnum1.A, Decl(noUncheckedIndexedAccess.ts, 6, 18))
++>StringEnum1.A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 6, 18))
+ >StringEnum1 : Symbol(StringEnum1, Decl(noUncheckedIndexedAccess.ts, 5, 42))
+->A : Symbol(StringEnum1.A, Decl(noUncheckedIndexedAccess.ts, 6, 18))
++>A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 6, 18))
+ 
+ const e11: boolean = strMap[StringEnum1.A as StringEnum1];
+ >e11 : Symbol(e11, Decl(noUncheckedIndexedAccess.ts, 21, 5))
+ >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+->StringEnum1.A : Symbol(StringEnum1.A, Decl(noUncheckedIndexedAccess.ts, 6, 18))
++>StringEnum1.A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 6, 18))
+ >StringEnum1 : Symbol(StringEnum1, Decl(noUncheckedIndexedAccess.ts, 5, 42))
+->A : Symbol(StringEnum1.A, Decl(noUncheckedIndexedAccess.ts, 6, 18))
++>A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 6, 18))
+ >StringEnum1 : Symbol(StringEnum1, Decl(noUncheckedIndexedAccess.ts, 5, 42))
+ 
+ const e12: boolean = strMap[NumericEnum1.A as NumericEnum1];
+ >e12 : Symbol(e12, Decl(noUncheckedIndexedAccess.ts, 22, 5))
+ >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+->NumericEnum1.A : Symbol(NumericEnum1.A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
++>NumericEnum1.A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
+ >NumericEnum1 : Symbol(NumericEnum1, Decl(noUncheckedIndexedAccess.ts, 2, 52))
+->A : Symbol(NumericEnum1.A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
++>A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
+ >NumericEnum1 : Symbol(NumericEnum1, Decl(noUncheckedIndexedAccess.ts, 2, 52))
+ 
+ const e13: boolean = strMap[NumericEnum2.A as NumericEnum2];
+ >e13 : Symbol(e13, Decl(noUncheckedIndexedAccess.ts, 23, 5))
+ >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+->NumericEnum2.A : Symbol(NumericEnum2.A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
++>NumericEnum2.A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
+ >NumericEnum2 : Symbol(NumericEnum2, Decl(noUncheckedIndexedAccess.ts, 4, 29))
+->A : Symbol(NumericEnum2.A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
++>A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
+ >NumericEnum2 : Symbol(NumericEnum2, Decl(noUncheckedIndexedAccess.ts, 4, 29))
+ 
+ const e14: boolean = strMap[null as any];
+@@= skipped -53, +53 lines =@@
+ 
+ const ok2: boolean | undefined = strMap.bar;
+ >ok2 : Symbol(ok2, Decl(noUncheckedIndexedAccess.ts, 28, 5))
+->strMap.bar : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
++>strMap.bar : Symbol((Missing), Decl(noUncheckedIndexedAccess.ts, 8, 23))
+ >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+->bar : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
++>bar : Symbol((Missing), Decl(noUncheckedIndexedAccess.ts, 8, 23))
+ 
+ type T_OK1 = CheckBooleanOnly<(typeof strMap)[string]>;
+ >T_OK1 : Symbol(T_OK1, Decl(noUncheckedIndexedAccess.ts, 28, 44))
+@@= skipped -35, +35 lines =@@
+ >undefined : Symbol(undefined)
+ 
+ strMap.qua = undefined;
+->strMap.qua : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
++>strMap.qua : Symbol((Missing), Decl(noUncheckedIndexedAccess.ts, 8, 23))
+ >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+->qua : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
++>qua : Symbol((Missing), Decl(noUncheckedIndexedAccess.ts, 8, 23))
+ >undefined : Symbol(undefined)
+ 
+ strMap[0] = undefined;
+@@= skipped -34, +34 lines =@@
+ const num_ok4: boolean = numMap[NumericEnum1.A];
+ >num_ok4 : Symbol(num_ok4, Decl(noUncheckedIndexedAccess.ts, 48, 5))
+ >numMap : Symbol(numMap, Decl(noUncheckedIndexedAccess.ts, 43, 13))
+->NumericEnum1.A : Symbol(NumericEnum1.A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
++>NumericEnum1.A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
+ >NumericEnum1 : Symbol(NumericEnum1, Decl(noUncheckedIndexedAccess.ts, 2, 52))
+->A : Symbol(NumericEnum1.A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
++>A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
+ 
+ const num_ok5: boolean = numMap[NumericEnum2.A];
+ >num_ok5 : Symbol(num_ok5, Decl(noUncheckedIndexedAccess.ts, 49, 5))
+ >numMap : Symbol(numMap, Decl(noUncheckedIndexedAccess.ts, 43, 13))
+->NumericEnum2.A : Symbol(NumericEnum2.A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
++>NumericEnum2.A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
+ >NumericEnum2 : Symbol(NumericEnum2, Decl(noUncheckedIndexedAccess.ts, 4, 29))
+->A : Symbol(NumericEnum2.A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
++>A : Symbol(A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
+ 
+ // Generics
+ function generic1<T extends { [s: string]: boolean }>(arg: T): boolean {
+@@= skipped -115, +115 lines =@@
+ const variadicOk1: string = nonEmptyStringArray[0];  // Should OK
+ >variadicOk1 : Symbol(variadicOk1, Decl(noUncheckedIndexedAccess.ts, 88, 5))
+ >nonEmptyStringArray : Symbol(nonEmptyStringArray, Decl(noUncheckedIndexedAccess.ts, 87, 13))
+->0 : Symbol(0)
++>0 : Symbol("0")
+ 
+ const variadicError1: string = nonEmptyStringArray[1]; // Should error
+ >variadicError1 : Symbol(variadicError1, Decl(noUncheckedIndexedAccess.ts, 89, 5))

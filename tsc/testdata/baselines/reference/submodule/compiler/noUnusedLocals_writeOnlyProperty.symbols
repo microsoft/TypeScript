@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/noUnusedLocals_writeOnlyProperty.ts] ////
+
+=== noUnusedLocals_writeOnlyProperty.ts ===
+class C {
+>C : Symbol(C, Decl(noUnusedLocals_writeOnlyProperty.ts, 0, 0))
+
+    private x;
+>x : Symbol(x, Decl(noUnusedLocals_writeOnlyProperty.ts, 0, 9))
+
+    m() {
+>m : Symbol(m, Decl(noUnusedLocals_writeOnlyProperty.ts, 1, 14))
+
+        this.x = 0;
+>this.x : Symbol(x, Decl(noUnusedLocals_writeOnlyProperty.ts, 0, 9))
+>this : Symbol(C, Decl(noUnusedLocals_writeOnlyProperty.ts, 0, 0))
+>x : Symbol(x, Decl(noUnusedLocals_writeOnlyProperty.ts, 0, 9))
+    }
+}
+

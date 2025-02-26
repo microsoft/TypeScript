@@ -1,8 +1,0 @@
-//// [tests/cases/compiler/settingsSimpleTest.ts] ////
-
-=== /settingsSimpleTest.ts ===
-export {};
-const x: string = undefined;
->x : string
->undefined : undefined
-

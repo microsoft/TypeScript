@@ -1,0 +1,88 @@
+--- old.overrideBaseIntersectionMethod.symbols
++++ new.overrideBaseIntersectionMethod.symbols
+@@= skipped -18, +18 lines =@@
+ >Base : Symbol(Base, Decl(overrideBaseIntersectionMethod.ts, 4, 52))
+ 
+   getLocation(): [number, number] {
+->getLocation : Symbol((Anonymous class).getLocation, Decl(overrideBaseIntersectionMethod.ts, 4, 84))
++>getLocation : Symbol(getLocation, Decl(overrideBaseIntersectionMethod.ts, 4, 84))
+ 
+     const [x,y] = super.getLocation();
+ >x : Symbol(x, Decl(overrideBaseIntersectionMethod.ts, 6, 11))
+ >y : Symbol(y, Decl(overrideBaseIntersectionMethod.ts, 6, 13))
+->super.getLocation : Symbol(Point.getLocation, Decl(overrideBaseIntersectionMethod.ts, 12, 53))
++>super.getLocation : Symbol(getLocation, Decl(overrideBaseIntersectionMethod.ts, 12, 53))
+ >super : Symbol(Point, Decl(overrideBaseIntersectionMethod.ts, 9, 1))
+->getLocation : Symbol(Point.getLocation, Decl(overrideBaseIntersectionMethod.ts, 12, 53))
++>getLocation : Symbol(getLocation, Decl(overrideBaseIntersectionMethod.ts, 12, 53))
+ 
+     return [this.x | x, this.y | y];
+->this.x : Symbol(Point.x, Decl(overrideBaseIntersectionMethod.ts, 12, 14))
++>this.x : Symbol(x, Decl(overrideBaseIntersectionMethod.ts, 12, 14))
+ >this : Symbol((Anonymous class), Decl(overrideBaseIntersectionMethod.ts, 4, 63))
+->x : Symbol(Point.x, Decl(overrideBaseIntersectionMethod.ts, 12, 14))
++>x : Symbol(x, Decl(overrideBaseIntersectionMethod.ts, 12, 14))
+ >x : Symbol(x, Decl(overrideBaseIntersectionMethod.ts, 6, 11))
+->this.y : Symbol(Point.y, Decl(overrideBaseIntersectionMethod.ts, 12, 31))
++>this.y : Symbol(y, Decl(overrideBaseIntersectionMethod.ts, 12, 31))
+ >this : Symbol((Anonymous class), Decl(overrideBaseIntersectionMethod.ts, 4, 63))
+->y : Symbol(Point.y, Decl(overrideBaseIntersectionMethod.ts, 12, 31))
++>y : Symbol(y, Decl(overrideBaseIntersectionMethod.ts, 12, 31))
+ >y : Symbol(y, Decl(overrideBaseIntersectionMethod.ts, 6, 13))
+   }
+ }
+@@= skipped -25, +25 lines =@@
+ >Point : Symbol(Point, Decl(overrideBaseIntersectionMethod.ts, 9, 1))
+ 
+   constructor(public x: number, public y: number) { }
+->x : Symbol(Point.x, Decl(overrideBaseIntersectionMethod.ts, 12, 14))
+->y : Symbol(Point.y, Decl(overrideBaseIntersectionMethod.ts, 12, 31))
++>x : Symbol(x, Decl(overrideBaseIntersectionMethod.ts, 12, 14))
++>y : Symbol(y, Decl(overrideBaseIntersectionMethod.ts, 12, 31))
+ 
+   getLocation(): [number, number] {
+->getLocation : Symbol(Point.getLocation, Decl(overrideBaseIntersectionMethod.ts, 12, 53))
++>getLocation : Symbol(getLocation, Decl(overrideBaseIntersectionMethod.ts, 12, 53))
+ 
+     return [0,0];
+   }
+@@= skipped -16, +16 lines =@@
+ >Point : Symbol(Point, Decl(overrideBaseIntersectionMethod.ts, 9, 1))
+ 
+   calculate() {
+->calculate : Symbol(Foo.calculate, Decl(overrideBaseIntersectionMethod.ts, 18, 39))
++>calculate : Symbol(calculate, Decl(overrideBaseIntersectionMethod.ts, 18, 39))
+ 
+     return this.x + this.y;
+->this.x : Symbol(Point.x, Decl(overrideBaseIntersectionMethod.ts, 12, 14))
++>this.x : Symbol(x, Decl(overrideBaseIntersectionMethod.ts, 12, 14))
+ >this : Symbol(Foo, Decl(overrideBaseIntersectionMethod.ts, 16, 1))
+->x : Symbol(Point.x, Decl(overrideBaseIntersectionMethod.ts, 12, 14))
+->this.y : Symbol(Point.y, Decl(overrideBaseIntersectionMethod.ts, 12, 31))
++>x : Symbol(x, Decl(overrideBaseIntersectionMethod.ts, 12, 14))
++>this.y : Symbol(y, Decl(overrideBaseIntersectionMethod.ts, 12, 31))
+ >this : Symbol(Foo, Decl(overrideBaseIntersectionMethod.ts, 16, 1))
+->y : Symbol(Point.y, Decl(overrideBaseIntersectionMethod.ts, 12, 31))
++>y : Symbol(y, Decl(overrideBaseIntersectionMethod.ts, 12, 31))
+   }
+   getLocation() {
+->getLocation : Symbol(Foo.getLocation, Decl(overrideBaseIntersectionMethod.ts, 21, 3))
++>getLocation : Symbol(getLocation, Decl(overrideBaseIntersectionMethod.ts, 21, 3))
+ 
+     return super.getLocation()
+ >super.getLocation : Symbol(getLocation, Decl(overrideBaseIntersectionMethod.ts, 4, 84), Decl(overrideBaseIntersectionMethod.ts, 12, 53))
+ >getLocation : Symbol(getLocation, Decl(overrideBaseIntersectionMethod.ts, 4, 84), Decl(overrideBaseIntersectionMethod.ts, 12, 53))
+   }
+   whereAmI() {
+->whereAmI : Symbol(Foo.whereAmI, Decl(overrideBaseIntersectionMethod.ts, 24, 3))
++>whereAmI : Symbol(whereAmI, Decl(overrideBaseIntersectionMethod.ts, 24, 3))
+ 
+     return this.getLocation();
+->this.getLocation : Symbol(Foo.getLocation, Decl(overrideBaseIntersectionMethod.ts, 21, 3))
++>this.getLocation : Symbol(getLocation, Decl(overrideBaseIntersectionMethod.ts, 21, 3))
+ >this : Symbol(Foo, Decl(overrideBaseIntersectionMethod.ts, 16, 1))
+->getLocation : Symbol(Foo.getLocation, Decl(overrideBaseIntersectionMethod.ts, 21, 3))
++>getLocation : Symbol(getLocation, Decl(overrideBaseIntersectionMethod.ts, 21, 3))
+   }
+ }
+ 

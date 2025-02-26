@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum1.ts] ////
+
+=== parserEnum1.ts ===
+    export enum SignatureFlags {
+>SignatureFlags : Symbol(SignatureFlags, Decl(parserEnum1.ts, 0, 0))
+
+        None = 0,
+>None : Symbol(None, Decl(parserEnum1.ts, 0, 32))
+
+        IsIndexer = 1,
+>IsIndexer : Symbol(IsIndexer, Decl(parserEnum1.ts, 1, 17))
+
+        IsStringIndexer = 1 << 1,
+>IsStringIndexer : Symbol(IsStringIndexer, Decl(parserEnum1.ts, 2, 22))
+
+        IsNumberIndexer = 1 << 2,
+>IsNumberIndexer : Symbol(IsNumberIndexer, Decl(parserEnum1.ts, 3, 33))
+    }

@@ -1,0 +1,47 @@
+--- old.interfaceExtendsClassWithPrivate1.symbols
++++ new.interfaceExtendsClassWithPrivate1.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(interfaceExtendsClassWithPrivate1.ts, 0, 0))
+ 
+     public foo(x: any) { return x; }
+->foo : Symbol(C.foo, Decl(interfaceExtendsClassWithPrivate1.ts, 0, 9))
++>foo : Symbol(foo, Decl(interfaceExtendsClassWithPrivate1.ts, 0, 9))
+ >x : Symbol(x, Decl(interfaceExtendsClassWithPrivate1.ts, 1, 15))
+ >x : Symbol(x, Decl(interfaceExtendsClassWithPrivate1.ts, 1, 15))
+ 
+     private x = 1;
+->x : Symbol(C.x, Decl(interfaceExtendsClassWithPrivate1.ts, 1, 36))
++>x : Symbol(x, Decl(interfaceExtendsClassWithPrivate1.ts, 1, 36))
+ }
+ 
+ interface I extends C {
+@@= skipped -13, +13 lines =@@
+ >C : Symbol(C, Decl(interfaceExtendsClassWithPrivate1.ts, 0, 0))
+ 
+     other(x: any): any;
+->other : Symbol(I.other, Decl(interfaceExtendsClassWithPrivate1.ts, 5, 23))
++>other : Symbol(other, Decl(interfaceExtendsClassWithPrivate1.ts, 5, 23))
+ >x : Symbol(x, Decl(interfaceExtendsClassWithPrivate1.ts, 6, 10))
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ >I : Symbol(I, Decl(interfaceExtendsClassWithPrivate1.ts, 3, 1))
+ 
+     public foo(x: any) { return x; }
+->foo : Symbol(D.foo, Decl(interfaceExtendsClassWithPrivate1.ts, 9, 32))
++>foo : Symbol(foo, Decl(interfaceExtendsClassWithPrivate1.ts, 9, 32))
+ >x : Symbol(x, Decl(interfaceExtendsClassWithPrivate1.ts, 10, 15))
+ >x : Symbol(x, Decl(interfaceExtendsClassWithPrivate1.ts, 10, 15))
+ 
+     other(x: any) { return x; }
+->other : Symbol(D.other, Decl(interfaceExtendsClassWithPrivate1.ts, 10, 36))
++>other : Symbol(other, Decl(interfaceExtendsClassWithPrivate1.ts, 10, 36))
+ >x : Symbol(x, Decl(interfaceExtendsClassWithPrivate1.ts, 11, 10))
+ >x : Symbol(x, Decl(interfaceExtendsClassWithPrivate1.ts, 11, 10))
+ 
+     bar() { }
+->bar : Symbol(D.bar, Decl(interfaceExtendsClassWithPrivate1.ts, 11, 31))
++>bar : Symbol(bar, Decl(interfaceExtendsClassWithPrivate1.ts, 11, 31))
+ } 
+ 
+ var c: C;

@@ -1,0 +1,9 @@
+--- old.importCallExpressionNestedAMD.symbols
++++ new.importCallExpressionNestedAMD.symbols
+@@= skipped -9, +9 lines =@@
+ 
+     return await import((await import("./foo")).default);
+ >(await import("./foo")).default : Symbol(default, Decl(foo.ts, 0, 0))
+->"./foo" : Symbol("foo", Decl(foo.ts, 0, 0))
+ >default : Symbol(default, Decl(foo.ts, 0, 0))
+ }

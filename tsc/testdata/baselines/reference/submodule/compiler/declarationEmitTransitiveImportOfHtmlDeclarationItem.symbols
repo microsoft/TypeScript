@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/declarationEmitTransitiveImportOfHtmlDeclarationItem.ts] ////
+
+=== foo.d.html.ts ===
+export declare class CustomHtmlRepresentationThing {}
+>CustomHtmlRepresentationThing : Symbol(CustomHtmlRepresentationThing, Decl(foo.d.html.ts, 0, 0))
+
+=== reexporter.ts ===
+import { CustomHtmlRepresentationThing } from "./foo.html";
+>CustomHtmlRepresentationThing : Symbol(CustomHtmlRepresentationThing, Decl(reexporter.ts, 0, 8))
+
+export function func() {
+>func : Symbol(func, Decl(reexporter.ts, 0, 59))
+
+    return new CustomHtmlRepresentationThing();
+>CustomHtmlRepresentationThing : Symbol(CustomHtmlRepresentationThing, Decl(reexporter.ts, 0, 8))
+}
+
+=== index.ts ===
+import { func } from "./reexporter";
+>func : Symbol(func, Decl(index.ts, 0, 8))
+
+export const c = func();
+>c : Symbol(c, Decl(index.ts, 1, 12))
+>func : Symbol(func, Decl(index.ts, 0, 8))
+

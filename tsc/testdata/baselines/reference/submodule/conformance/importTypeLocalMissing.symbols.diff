@@ -1,0 +1,68 @@
+--- old.importTypeLocalMissing.symbols
++++ new.importTypeLocalMissing.symbols
+@@= skipped -4, +4 lines =@@
+ >Point : Symbol(Point, Decl(foo.ts, 0, 0))
+ 
+     x: number;
+->x : Symbol(Point.x, Decl(foo.ts, 0, 17))
++>x : Symbol(x, Decl(foo.ts, 0, 17))
+ 
+     y: number;
+->y : Symbol(Point.y, Decl(foo.ts, 1, 14))
++>y : Symbol(y, Decl(foo.ts, 1, 14))
+ }
+ export = Point;
+ >Point : Symbol(Point, Decl(foo.ts, 0, 0))
+@@= skipped -16, +16 lines =@@
+ >I : Symbol(I, Decl(foo2.ts, 0, 15))
+ 
+         a: string;
+->a : Symbol(I.a, Decl(foo2.ts, 1, 24))
++>a : Symbol(a, Decl(foo2.ts, 1, 24))
+ 
+         b: number;
+->b : Symbol(I.b, Decl(foo2.ts, 2, 18))
++>b : Symbol(b, Decl(foo2.ts, 2, 18))
+     }
+ }
+ 
+@@= skipped -14, +14 lines =@@
+ >J : Symbol(J, Decl(foo2.ts, 7, 22))
+ 
+         a: number;
+->a : Symbol(J.a, Decl(foo2.ts, 8, 24))
++>a : Symbol(a, Decl(foo2.ts, 8, 24))
+ 
+         b: string;
+->b : Symbol(J.b, Decl(foo2.ts, 9, 18))
++>b : Symbol(b, Decl(foo2.ts, 9, 18))
+     }
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ >Bar : Symbol(Bar, Decl(foo2.ts, 0, 0), Decl(foo2.ts, 12, 1))
+ 
+     item: Bar.I;
+->item : Symbol(Bar.item, Decl(foo2.ts, 14, 11))
++>item : Symbol(item, Decl(foo2.ts, 14, 11))
+ >Bar : Symbol(Bar, Decl(foo2.ts, 0, 0), Decl(foo2.ts, 12, 1))
+->I : Symbol(Bar.I, Decl(foo2.ts, 0, 15))
++>I : Symbol(I, Decl(foo2.ts, 0, 15))
+ 
+     constructor(input: Baz.J) {}
+ >input : Symbol(input, Decl(foo2.ts, 16, 16))
+ >Baz : Symbol(Baz, Decl(foo2.ts, 5, 1))
+->J : Symbol(Baz.J, Decl(foo2.ts, 7, 22))
++>J : Symbol(J, Decl(foo2.ts, 7, 22))
+ }
+ export { Bar }
+ >Bar : Symbol(Bar, Decl(foo2.ts, 18, 8))
+@@= skipped -33, +33 lines =@@
+ >Bar2 : Symbol(Bar2, Decl(usage.ts, 2, 55))
+ 
+     item: {a: string, b: number, c: object};
+->item : Symbol(Bar2.item, Decl(usage.ts, 4, 19))
++>item : Symbol(item, Decl(usage.ts, 4, 19))
+ >a : Symbol(a, Decl(usage.ts, 5, 11))
+ >b : Symbol(b, Decl(usage.ts, 5, 21))
+ >c : Symbol(c, Decl(usage.ts, 5, 32))

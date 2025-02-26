@@ -1,0 +1,11 @@
+--- old.unionTypeWithIndexAndTuple.symbols
++++ new.unionTypeWithIndexAndTuple.symbols
+@@= skipped -7, +7 lines =@@
+ >index : Symbol(index, Decl(unionTypeWithIndexAndTuple.ts, 1, 5))
+ 
+     someOtherProperty: number;
+->someOtherProperty : Symbol(I.someOtherProperty, Decl(unionTypeWithIndexAndTuple.ts, 1, 25))
++>someOtherProperty : Symbol(someOtherProperty, Decl(unionTypeWithIndexAndTuple.ts, 1, 25))
+ }
+ function f(args: ["a"] | I) { }
+ >f : Symbol(f, Decl(unionTypeWithIndexAndTuple.ts, 3, 1))

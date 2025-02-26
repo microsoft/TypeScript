@@ -1,0 +1,137 @@
+--- old.callWithSpreadES6.symbols
++++ new.callWithSpreadES6.symbols
+@@= skipped -4, +4 lines =@@
+ >X : Symbol(X, Decl(callWithSpreadES6.ts, 0, 0))
+ 
+     foo(x: number, y: number, ...z: string[]);
+->foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
+ >x : Symbol(x, Decl(callWithSpreadES6.ts, 1, 8))
+ >y : Symbol(y, Decl(callWithSpreadES6.ts, 1, 18))
+ >z : Symbol(z, Decl(callWithSpreadES6.ts, 1, 29))
+@@= skipped -39, +39 lines =@@
+ >a : Symbol(a, Decl(callWithSpreadES6.ts, 7, 3))
+ 
+ obj.foo(1, 2, "abc");
+->obj.foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>obj.foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
+ >obj : Symbol(obj, Decl(callWithSpreadES6.ts, 9, 3))
+->foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
+ 
+ obj.foo(1, 2, ...a);
+->obj.foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>obj.foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
+ >obj : Symbol(obj, Decl(callWithSpreadES6.ts, 9, 3))
+->foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
+ >a : Symbol(a, Decl(callWithSpreadES6.ts, 7, 3))
+ 
+ obj.foo(1, 2, ...a, "abc");
+->obj.foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>obj.foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
+ >obj : Symbol(obj, Decl(callWithSpreadES6.ts, 9, 3))
+->foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
+ >a : Symbol(a, Decl(callWithSpreadES6.ts, 7, 3))
+ 
+ (obj.foo)(1, 2, "abc");
+->obj.foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>obj.foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
+ >obj : Symbol(obj, Decl(callWithSpreadES6.ts, 9, 3))
+->foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
+ 
+ (obj.foo)(1, 2, ...a);
+->obj.foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>obj.foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
+ >obj : Symbol(obj, Decl(callWithSpreadES6.ts, 9, 3))
+->foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
+ >a : Symbol(a, Decl(callWithSpreadES6.ts, 7, 3))
+ 
+ (obj.foo)(1, 2, ...a, "abc");
+->obj.foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>obj.foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
+ >obj : Symbol(obj, Decl(callWithSpreadES6.ts, 9, 3))
+->foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
+ >a : Symbol(a, Decl(callWithSpreadES6.ts, 7, 3))
+ 
+ xa[1].foo(1, 2, "abc");
+->xa[1].foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
+ >xa : Symbol(xa, Decl(callWithSpreadES6.ts, 10, 3))
+->foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
+ 
+ xa[1].foo(1, 2, ...a);
+->xa[1].foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
+ >xa : Symbol(xa, Decl(callWithSpreadES6.ts, 10, 3))
+->foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
+ >a : Symbol(a, Decl(callWithSpreadES6.ts, 7, 3))
+ 
+ xa[1].foo(1, 2, ...a, "abc");
+->xa[1].foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
+ >xa : Symbol(xa, Decl(callWithSpreadES6.ts, 10, 3))
+->foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
+ >a : Symbol(a, Decl(callWithSpreadES6.ts, 7, 3))
+ 
+ (<Function>xa[1].foo)(...[1, 2, "abc"]);
+->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->xa[1].foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>Function : Symbol(Function)
+ >xa : Symbol(xa, Decl(callWithSpreadES6.ts, 10, 3))
+->foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
+ 
+ class C {
+ >C : Symbol(C, Decl(callWithSpreadES6.ts, 28, 40))
+@@= skipped -65, +57 lines =@@
+ >z : Symbol(z, Decl(callWithSpreadES6.ts, 31, 37))
+ 
+         this.foo(x, y);
+->this.foo : Symbol(C.foo, Decl(callWithSpreadES6.ts, 34, 5))
++>this.foo : Symbol(foo, Decl(callWithSpreadES6.ts, 34, 5))
+ >this : Symbol(C, Decl(callWithSpreadES6.ts, 28, 40))
+->foo : Symbol(C.foo, Decl(callWithSpreadES6.ts, 34, 5))
++>foo : Symbol(foo, Decl(callWithSpreadES6.ts, 34, 5))
+ >x : Symbol(x, Decl(callWithSpreadES6.ts, 31, 16))
+ >y : Symbol(y, Decl(callWithSpreadES6.ts, 31, 26))
+ 
+         this.foo(x, y, ...z);
+->this.foo : Symbol(C.foo, Decl(callWithSpreadES6.ts, 34, 5))
++>this.foo : Symbol(foo, Decl(callWithSpreadES6.ts, 34, 5))
+ >this : Symbol(C, Decl(callWithSpreadES6.ts, 28, 40))
+->foo : Symbol(C.foo, Decl(callWithSpreadES6.ts, 34, 5))
++>foo : Symbol(foo, Decl(callWithSpreadES6.ts, 34, 5))
+ >x : Symbol(x, Decl(callWithSpreadES6.ts, 31, 16))
+ >y : Symbol(y, Decl(callWithSpreadES6.ts, 31, 26))
+ >z : Symbol(z, Decl(callWithSpreadES6.ts, 31, 37))
+     }
+     foo(x: number, y: number, ...z: string[]) {
+->foo : Symbol(C.foo, Decl(callWithSpreadES6.ts, 34, 5))
++>foo : Symbol(foo, Decl(callWithSpreadES6.ts, 34, 5))
+ >x : Symbol(x, Decl(callWithSpreadES6.ts, 35, 8))
+ >y : Symbol(y, Decl(callWithSpreadES6.ts, 35, 18))
+ >z : Symbol(z, Decl(callWithSpreadES6.ts, 35, 29))
+@@= skipped -35, +35 lines =@@
+ >a : Symbol(a, Decl(callWithSpreadES6.ts, 7, 3))
+     }
+     foo() {
+->foo : Symbol(D.foo, Decl(callWithSpreadES6.ts, 43, 5))
++>foo : Symbol(foo, Decl(callWithSpreadES6.ts, 43, 5))
+ 
+         super.foo(1, 2);
+->super.foo : Symbol(C.foo, Decl(callWithSpreadES6.ts, 34, 5))
++>super.foo : Symbol(foo, Decl(callWithSpreadES6.ts, 34, 5))
+ >super : Symbol(C, Decl(callWithSpreadES6.ts, 28, 40))
+->foo : Symbol(C.foo, Decl(callWithSpreadES6.ts, 34, 5))
++>foo : Symbol(foo, Decl(callWithSpreadES6.ts, 34, 5))
+ 
+         super.foo(1, 2, ...a);
+->super.foo : Symbol(C.foo, Decl(callWithSpreadES6.ts, 34, 5))
++>super.foo : Symbol(foo, Decl(callWithSpreadES6.ts, 34, 5))
+ >super : Symbol(C, Decl(callWithSpreadES6.ts, 28, 40))
+->foo : Symbol(C.foo, Decl(callWithSpreadES6.ts, 34, 5))
++>foo : Symbol(foo, Decl(callWithSpreadES6.ts, 34, 5))
+ >a : Symbol(a, Decl(callWithSpreadES6.ts, 7, 3))
+     }
+ }

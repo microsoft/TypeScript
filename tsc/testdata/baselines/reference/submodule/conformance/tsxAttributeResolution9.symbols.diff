@@ -1,0 +1,34 @@
+--- old.tsxAttributeResolution9.symbols
++++ new.tsxAttributeResolution9.symbols
+@@= skipped -13, +13 lines =@@
+ >ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(react.d.ts, 3, 2))
+ 
+ 		props;
+->props : Symbol(ElementAttributesProperty.props, Decl(react.d.ts, 4, 38))
++>props : Symbol(props, Decl(react.d.ts, 4, 38))
+ 	}
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >Props : Symbol(Props, Decl(react.d.ts, 7, 1))
+ 
+   foo: string;
+->foo : Symbol(Props.foo, Decl(react.d.ts, 9, 17))
++>foo : Symbol(foo, Decl(react.d.ts, 9, 17))
+ }
+ 
+ === file.tsx ===
+@@= skipped -8, +8 lines =@@
+ >MyComponent : Symbol(MyComponent, Decl(file.tsx, 0, 0))
+ 
+   render() {
+->render : Symbol(MyComponent.render, Decl(file.tsx, 0, 26))
++>render : Symbol(render, Decl(file.tsx, 0, 26))
+   }
+ 
+   props: { foo: string; }
+->props : Symbol(MyComponent.props, Decl(file.tsx, 2, 3))
++>props : Symbol(props, Decl(file.tsx, 2, 3))
+ >foo : Symbol(foo, Decl(file.tsx, 4, 10))
+ }
+ 

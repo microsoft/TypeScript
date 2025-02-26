@@ -1,0 +1,16 @@
+--- old.bigintArbirtraryIdentifier.symbols
++++ new.bigintArbirtraryIdentifier.symbols
+@@= skipped -21, +21 lines =@@
+ 
+ === badImport2.ts ===
+ import { foo as 0n } from "./foo";
+-> : Symbol((Missing), Decl(badImport2.ts, 0, 8))
++> : Symbol("", Decl(badImport2.ts, 0, 8))
+ 
+ === badExport.ts ===
+ export { foo as 0n };
+-> : Symbol((Missing), Decl(badExport.ts, 0, 8))
++> : Symbol("", Decl(badExport.ts, 0, 8))
+ 
+ === badExport2.ts ===
+ export { 0n as foo };

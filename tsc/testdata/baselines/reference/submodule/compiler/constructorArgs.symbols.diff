@@ -1,0 +1,29 @@
+--- old.constructorArgs.symbols
++++ new.constructorArgs.symbols
+@@= skipped -4, +4 lines =@@
+ >Options : Symbol(Options, Decl(constructorArgs.ts, 0, 0))
+ 
+  value: number;
+->value : Symbol(Options.value, Decl(constructorArgs.ts, 0, 19))
++>value : Symbol(value, Decl(constructorArgs.ts, 0, 19))
+ }
+ 
+ class Super {
+@@= skipped -16, +16 lines =@@
+ >Super : Symbol(Super, Decl(constructorArgs.ts, 2, 1))
+ 
+  constructor(public options:Options) {
+->options : Symbol(Sub.options, Decl(constructorArgs.ts, 10, 13))
++>options : Symbol(options, Decl(constructorArgs.ts, 10, 13))
+ >Options : Symbol(Options, Decl(constructorArgs.ts, 0, 0))
+ 
+   super(options.value);
+ >super : Symbol(Super, Decl(constructorArgs.ts, 2, 1))
+->options.value : Symbol(Options.value, Decl(constructorArgs.ts, 0, 19))
++>options.value : Symbol(value, Decl(constructorArgs.ts, 0, 19))
+ >options : Symbol(options, Decl(constructorArgs.ts, 10, 13))
+->value : Symbol(Options.value, Decl(constructorArgs.ts, 0, 19))
++>value : Symbol(value, Decl(constructorArgs.ts, 0, 19))
+  } 
+ }
+ 

@@ -1,0 +1,38 @@
+--- old.typeGuardNarrowsIndexedAccessOfKnownProperty8.symbols
++++ new.typeGuardNarrowsIndexedAccessOfKnownProperty8.symbols
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty8.ts] ////
+ 
+-=== ./a.ts ===
++=== a.ts ===
+ export const key = "a";
+ >key : Symbol(key, Decl(a.ts, 0, 12))
+ 
+-=== ./b.ts ===
++=== b.ts ===
+ import * as a from "./a";
+ >a : Symbol(a, Decl(b.ts, 0, 6))
+ 
+@@= skipped -11, +11 lines =@@
+ >C : Symbol(C, Decl(b.ts, 0, 25))
+ 
+     [a.key]: string;
+->[a.key] : Symbol(C[a.key], Decl(b.ts, 1, 16))
+->a.key : Symbol(a.key, Decl(a.ts, 0, 12))
++>[a.key] : Symbol(a, Decl(b.ts, 1, 16))
++>a.key : Symbol(key, Decl(a.ts, 0, 12))
+ >a : Symbol(a, Decl(b.ts, 0, 6))
+->key : Symbol(a.key, Decl(a.ts, 0, 12))
++>key : Symbol(key, Decl(a.ts, 0, 12))
+ 
+     constructor() {
+         this[a.key] = "foo";
+ >this : Symbol(C, Decl(b.ts, 0, 25))
+->a.key : Symbol(a.key, Decl(a.ts, 0, 12))
++>a.key : Symbol(key, Decl(a.ts, 0, 12))
+ >a : Symbol(a, Decl(b.ts, 0, 6))
+->key : Symbol(a.key, Decl(a.ts, 0, 12))
++>key : Symbol(key, Decl(a.ts, 0, 12))
+     }
+ }
+ 

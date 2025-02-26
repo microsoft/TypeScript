@@ -1,0 +1,9 @@
+--- old.parserComputedPropertyName39.symbols
++++ new.parserComputedPropertyName39.symbols
+@@= skipped -5, +5 lines =@@
+ >C : Symbol(C, Decl(parserComputedPropertyName39.ts, 0, 13))
+ 
+     [public]() { }
+->[public] : Symbol(C[public], Decl(parserComputedPropertyName39.ts, 1, 9))
++>[public] : Symbol([public], Decl(parserComputedPropertyName39.ts, 1, 9))
+ }

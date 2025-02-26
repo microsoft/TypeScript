@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/salsa/prototypePropertyAssignmentMergeAcrossFiles.ts] ////
+
+=== prototypePropertyAssignmentMergeAcrossFiles.js ===
+function C() {
+>C : Symbol(C, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 0))
+
+    this.a = 1
+}
+
+=== other.js ===
+C.prototype.foo = function() { return this.a }
+>C.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 0))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+

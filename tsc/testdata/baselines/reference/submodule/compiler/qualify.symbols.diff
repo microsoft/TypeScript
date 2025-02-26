@@ -1,0 +1,106 @@
+--- old.qualify.symbols
++++ new.qualify.symbols
+@@= skipped -39, +39 lines =@@
+ >I : Symbol(I, Decl(qualify.ts, 15, 10))
+ 
+         p;
+->p : Symbol(I.p, Decl(qualify.ts, 16, 24))
++>p : Symbol(p, Decl(qualify.ts, 16, 24))
+     }
+     export module U {
+ >U : Symbol(U, Decl(qualify.ts, 18, 5))
+@@= skipped -13, +13 lines =@@
+ >I2 : Symbol(I2, Decl(qualify.ts, 20, 18))
+ 
+             q;
+->q : Symbol(I2.q, Decl(qualify.ts, 21, 29))
++>q : Symbol(q, Decl(qualify.ts, 21, 29))
+         }
+     }
+ }
+@@= skipped -14, +14 lines =@@
+         var z:T.U.I2=3;
+ >z : Symbol(z, Decl(qualify.ts, 29, 11))
+ >T : Symbol(T, Decl(qualify.ts, 12, 1))
+->U : Symbol(T.U, Decl(qualify.ts, 18, 5))
+->I2 : Symbol(T.U.I2, Decl(qualify.ts, 20, 18))
++>U : Symbol(U, Decl(qualify.ts, 18, 5))
++>I2 : Symbol(I2, Decl(qualify.ts, 20, 18))
+     }
+ }
+ 
+@@= skipped -15, +15 lines =@@
+ >I3 : Symbol(I3, Decl(qualify.ts, 34, 22))
+ 
+             zeep;
+->zeep : Symbol(I3.zeep, Decl(qualify.ts, 35, 29))
++>zeep : Symbol(zeep, Decl(qualify.ts, 35, 29))
+         }
+     }
+     export module K2 {
+@@= skipped -10, +10 lines =@@
+ >I4 : Symbol(I4, Decl(qualify.ts, 39, 22))
+ 
+             z;
+->z : Symbol(I4.z, Decl(qualify.ts, 40, 29))
++>z : Symbol(z, Decl(qualify.ts, 40, 29))
+         }
+         var v1:I4;
+ >v1 : Symbol(v1, Decl(qualify.ts, 43, 11))
+@@= skipped -9, +9 lines =@@
+         var v2:K1.I3=v1;
+ >v2 : Symbol(v2, Decl(qualify.ts, 44, 11))
+ >K1 : Symbol(K1, Decl(qualify.ts, 33, 16))
+->I3 : Symbol(K1.I3, Decl(qualify.ts, 34, 22))
++>I3 : Symbol(I3, Decl(qualify.ts, 34, 22))
+ >v1 : Symbol(v1, Decl(qualify.ts, 43, 11))
+ 
+         var v3:K1.I3[]=v1;
+ >v3 : Symbol(v3, Decl(qualify.ts, 45, 11))
+ >K1 : Symbol(K1, Decl(qualify.ts, 33, 16))
+->I3 : Symbol(K1.I3, Decl(qualify.ts, 34, 22))
++>I3 : Symbol(I3, Decl(qualify.ts, 34, 22))
+ >v1 : Symbol(v1, Decl(qualify.ts, 43, 11))
+ 
+         var v4:()=>K1.I3=v1;
+ >v4 : Symbol(v4, Decl(qualify.ts, 46, 11))
+ >K1 : Symbol(K1, Decl(qualify.ts, 33, 16))
+->I3 : Symbol(K1.I3, Decl(qualify.ts, 34, 22))
++>I3 : Symbol(I3, Decl(qualify.ts, 34, 22))
+ >v1 : Symbol(v1, Decl(qualify.ts, 43, 11))
+ 
+         var v5:(k:K1.I3)=>void=v1;
+ >v5 : Symbol(v5, Decl(qualify.ts, 47, 11))
+ >k : Symbol(k, Decl(qualify.ts, 47, 16))
+ >K1 : Symbol(K1, Decl(qualify.ts, 33, 16))
+->I3 : Symbol(K1.I3, Decl(qualify.ts, 34, 22))
++>I3 : Symbol(I3, Decl(qualify.ts, 34, 22))
+ >v1 : Symbol(v1, Decl(qualify.ts, 43, 11))
+ 
+         var v6:{k:K1.I3;}=v1;
+ >v6 : Symbol(v6, Decl(qualify.ts, 48, 11))
+ >k : Symbol(k, Decl(qualify.ts, 48, 16))
+ >K1 : Symbol(K1, Decl(qualify.ts, 33, 16))
+->I3 : Symbol(K1.I3, Decl(qualify.ts, 34, 22))
++>I3 : Symbol(I3, Decl(qualify.ts, 34, 22))
+ >v1 : Symbol(v1, Decl(qualify.ts, 43, 11))
+     }
+ }
+@@= skipped -35, +35 lines =@@
+ >I : Symbol(I, Decl(qualify.ts, 50, 1))
+ 
+     k;
+->k : Symbol(I.k, Decl(qualify.ts, 52, 13))
++>k : Symbol(k, Decl(qualify.ts, 52, 13))
+ }
+ 
+ var y:I;
+@@= skipped -10, +10 lines =@@
+ var x:T.I=y;
+ >x : Symbol(x, Decl(qualify.ts, 57, 3))
+ >T : Symbol(T, Decl(qualify.ts, 12, 1))
+->I : Symbol(T.I, Decl(qualify.ts, 15, 10))
++>I : Symbol(I, Decl(qualify.ts, 15, 10))
+ >y : Symbol(y, Decl(qualify.ts, 56, 3))
+ 
+ 

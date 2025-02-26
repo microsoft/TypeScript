@@ -1,0 +1,27 @@
+--- old.extendedInterfacesWithDuplicateTypeParameters.symbols
++++ new.extendedInterfacesWithDuplicateTypeParameters.symbols
+@@= skipped -6, +6 lines =@@
+ >A : Symbol(A, Decl(extendedInterfacesWithDuplicateTypeParameters.ts, 0, 38), Decl(extendedInterfacesWithDuplicateTypeParameters.ts, 0, 40))
+ 
+ 	bar(): void;
+->bar : Symbol(InterfaceWithMultipleTypars.bar, Decl(extendedInterfacesWithDuplicateTypeParameters.ts, 0, 45))
++>bar : Symbol(bar, Decl(extendedInterfacesWithDuplicateTypeParameters.ts, 0, 45))
+ }
+ 
+ interface InterfaceWithSomeTypars<B> { // should not error
+@@= skipped -8, +8 lines =@@
+ >B : Symbol(B, Decl(extendedInterfacesWithDuplicateTypeParameters.ts, 4, 34))
+ 
+ 	bar(): void;
+->bar : Symbol(InterfaceWithSomeTypars.bar, Decl(extendedInterfacesWithDuplicateTypeParameters.ts, 4, 38))
++>bar : Symbol(bar, Decl(extendedInterfacesWithDuplicateTypeParameters.ts, 4, 38))
+ }
+ 
+ interface InterfaceWithSomeTypars<C, C> { // should error
+@@= skipped -9, +9 lines =@@
+ >C : Symbol(C, Decl(extendedInterfacesWithDuplicateTypeParameters.ts, 8, 34), Decl(extendedInterfacesWithDuplicateTypeParameters.ts, 8, 36))
+ 
+ 	bar2(): void;
+->bar2 : Symbol(InterfaceWithSomeTypars.bar2, Decl(extendedInterfacesWithDuplicateTypeParameters.ts, 8, 41))
++>bar2 : Symbol(bar2, Decl(extendedInterfacesWithDuplicateTypeParameters.ts, 8, 41))
+ }

@@ -1,0 +1,11 @@
+--- old.nonPrimitiveInGeneric.symbols
++++ new.nonPrimitiveInGeneric.symbols
+@@= skipped -104, +104 lines =@@
+ >Blah : Symbol(Blah, Decl(nonPrimitiveInGeneric.ts, 35, 25))
+ 
+     foo: number;
+->foo : Symbol(Blah.foo, Decl(nonPrimitiveInGeneric.ts, 38, 16))
++>foo : Symbol(foo, Decl(nonPrimitiveInGeneric.ts, 38, 16))
+ }
+ 
+ var u: Proxy<Blah>; // ok

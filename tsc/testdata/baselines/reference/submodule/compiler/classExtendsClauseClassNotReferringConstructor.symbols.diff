@@ -1,0 +1,19 @@
+--- old.classExtendsClauseClassNotReferringConstructor.symbols
++++ new.classExtendsClauseClassNotReferringConstructor.symbols
+@@= skipped -2, +2 lines =@@
+ === classExtendsClauseClassNotReferringConstructor.ts ===
+ class A { a: number; }
+ >A : Symbol(A, Decl(classExtendsClauseClassNotReferringConstructor.ts, 0, 0))
+->a : Symbol(A.a, Decl(classExtendsClauseClassNotReferringConstructor.ts, 0, 9))
++>a : Symbol(a, Decl(classExtendsClauseClassNotReferringConstructor.ts, 0, 9))
+ 
+ module Foo {
+ >Foo : Symbol(Foo, Decl(classExtendsClauseClassNotReferringConstructor.ts, 0, 22))
+@@= skipped -11, +11 lines =@@
+     class B extends A { b: string; }
+ >B : Symbol(B, Decl(classExtendsClauseClassNotReferringConstructor.ts, 2, 14))
+ >A : Symbol(A, Decl(classExtendsClauseClassNotReferringConstructor.ts, 2, 7))
+->b : Symbol(B.b, Decl(classExtendsClauseClassNotReferringConstructor.ts, 3, 23))
++>b : Symbol(b, Decl(classExtendsClauseClassNotReferringConstructor.ts, 3, 23))
+ }
+ 

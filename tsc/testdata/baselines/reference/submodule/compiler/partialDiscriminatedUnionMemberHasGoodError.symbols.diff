@@ -1,0 +1,48 @@
+--- old.partialDiscriminatedUnionMemberHasGoodError.symbols
++++ new.partialDiscriminatedUnionMemberHasGoodError.symbols
+@@= skipped -4, +4 lines =@@
+ >TypeA : Symbol(TypeA, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 0, 0))
+ 
+     type: "A";
+->type : Symbol(TypeA.type, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 0, 17))
++>type : Symbol(type, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 0, 17))
+ 
+     param: string;
+->param : Symbol(TypeA.param, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 1, 14))
++>param : Symbol(param, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 1, 14))
+ }
+ 
+ interface TypeB {
+ >TypeB : Symbol(TypeB, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 3, 1))
+ 
+     type: "B";
+->type : Symbol(TypeB.type, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 5, 17))
++>type : Symbol(type, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 5, 17))
+ 
+     param: string;
+->param : Symbol(TypeB.param, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 6, 14))
++>param : Symbol(param, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 6, 14))
+ }
+ 
+ type ValidType = TypeA | TypeB;
+@@= skipped -25, +25 lines =@@
+ >Wrapper : Symbol(Wrapper, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 10, 31))
+ 
+     types: ValidType[];
+->types : Symbol(Wrapper.types, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 12, 19))
++>types : Symbol(types, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 12, 19))
+ >ValidType : Symbol(ValidType, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 8, 1))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >Wrapper : Symbol(Wrapper, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 10, 31))
+ 
+ foo.push({
+->foo.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>foo.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >foo : Symbol(foo, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 16, 5))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ 
+     types: [{
+ >types : Symbol(types, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 18, 10))

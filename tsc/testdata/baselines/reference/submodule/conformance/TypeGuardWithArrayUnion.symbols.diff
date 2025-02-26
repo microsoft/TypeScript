@@ -1,0 +1,23 @@
+--- old.TypeGuardWithArrayUnion.symbols
++++ new.TypeGuardWithArrayUnion.symbols
+@@= skipped -4, +4 lines =@@
+ >Message : Symbol(Message, Decl(TypeGuardWithArrayUnion.ts, 0, 0))
+ 
+     value: string;
+->value : Symbol(Message.value, Decl(TypeGuardWithArrayUnion.ts, 0, 15))
++>value : Symbol(value, Decl(TypeGuardWithArrayUnion.ts, 0, 15))
+ }
+ 
+ function saySize(message: Message | Message[]) {
+@@= skipped -14, +14 lines =@@
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+         return message.length;  // Should have type Message[] here
+->message.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>message.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >message : Symbol(message, Decl(TypeGuardWithArrayUnion.ts, 4, 17))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 

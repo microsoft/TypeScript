@@ -1,0 +1,10 @@
+--- old.classExpressionInClassStaticDeclarations.symbols
++++ new.classExpressionInClassStaticDeclarations.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(classExpressionInClassStaticDeclarations.ts, 0, 0))
+ 
+     static D = class extends C {};
+->D : Symbol(C.D, Decl(classExpressionInClassStaticDeclarations.ts, 0, 9))
++>D : Symbol(D, Decl(classExpressionInClassStaticDeclarations.ts, 0, 9))
+ >C : Symbol(C, Decl(classExpressionInClassStaticDeclarations.ts, 0, 0))
+ }

@@ -1,0 +1,64 @@
+--- old.contextualTypingOfOptionalMembers.symbols
++++ new.contextualTypingOfOptionalMembers.symbols
+@@= skipped -17, +17 lines =@@
+ >Actions : Symbol(Actions, Decl(index.tsx, 4, 24))
+ 
+     state?: State;
+->state : Symbol(Options.state, Decl(index.tsx, 4, 35))
++>state : Symbol(state, Decl(index.tsx, 4, 35))
+ >State : Symbol(State, Decl(index.tsx, 4, 18))
+ 
+     view?: (state: State, actions: Actions) => any;
+->view : Symbol(Options.view, Decl(index.tsx, 5, 18))
++>view : Symbol(view, Decl(index.tsx, 5, 18))
+ >state : Symbol(state, Decl(index.tsx, 6, 12))
+ >State : Symbol(State, Decl(index.tsx, 4, 18))
+ >actions : Symbol(actions, Decl(index.tsx, 6, 25))
+ >Actions : Symbol(Actions, Decl(index.tsx, 4, 24))
+ 
+     actions: string | Actions;
+->actions : Symbol(Options.actions, Decl(index.tsx, 6, 51))
++>actions : Symbol(actions, Decl(index.tsx, 6, 51))
+ >Actions : Symbol(Actions, Decl(index.tsx, 4, 24))
+ }
+ 
+@@= skipped -54, +54 lines =@@
+ >Bar : Symbol(Bar, Decl(index.tsx, 18, 3))
+ 
+     bar: (a: number) => void;
+->bar : Symbol(Bar.bar, Decl(index.tsx, 21, 15))
++>bar : Symbol(bar, Decl(index.tsx, 21, 15))
+ >a : Symbol(a, Decl(index.tsx, 22, 10))
+ }
+ 
+@@= skipped -28, +28 lines =@@
+ >Actions : Symbol(Actions, Decl(index.tsx, 32, 25))
+ 
+     state?: State;
+->state : Symbol(Options2.state, Decl(index.tsx, 32, 36))
++>state : Symbol(state, Decl(index.tsx, 32, 36))
+ >State : Symbol(State, Decl(index.tsx, 32, 19))
+ 
+     view?: (state: State, actions: Actions) => any;
+->view : Symbol(Options2.view, Decl(index.tsx, 33, 18))
++>view : Symbol(view, Decl(index.tsx, 33, 18))
+ >state : Symbol(state, Decl(index.tsx, 34, 12))
+ >State : Symbol(State, Decl(index.tsx, 32, 19))
+ >actions : Symbol(actions, Decl(index.tsx, 34, 25))
+ >Actions : Symbol(Actions, Decl(index.tsx, 32, 25))
+ 
+     actions?: Actions;
+->actions : Symbol(Options2.actions, Decl(index.tsx, 34, 51))
++>actions : Symbol(actions, Decl(index.tsx, 34, 51))
+ >Actions : Symbol(Actions, Decl(index.tsx, 32, 25))
+ }
+ 
+@@= skipped -125, +125 lines =@@
+ >state : Symbol(state, Decl(index.tsx, 70, 114))
+ >State : Symbol(State, Decl(index.tsx, 70, 22))
+ >JSX : Symbol(JSX, Decl(index.tsx, 59, 3))
+->Element : Symbol(JSX.Element, Decl(index.tsx, 61, 15))
++>Element : Symbol(Element, Decl(index.tsx, 61, 15))
+ 
+ const a = <App4 state={100} foo={s => s} />; // TODO: should be number => number, but JSX resolution is missing an inferential pass
+ >a : Symbol(a, Decl(index.tsx, 72, 5))

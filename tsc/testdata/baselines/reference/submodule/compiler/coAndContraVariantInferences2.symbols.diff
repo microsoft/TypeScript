@@ -1,0 +1,176 @@
+--- old.coAndContraVariantInferences2.symbols
++++ new.coAndContraVariantInferences2.symbols
+@@= skipped -2, +2 lines =@@
+ === coAndContraVariantInferences2.ts ===
+ interface A { a: string }
+ >A : Symbol(A, Decl(coAndContraVariantInferences2.ts, 0, 0))
+->a : Symbol(A.a, Decl(coAndContraVariantInferences2.ts, 0, 13))
++>a : Symbol(a, Decl(coAndContraVariantInferences2.ts, 0, 13))
+ 
+ interface B extends A { b: string }
+ >B : Symbol(B, Decl(coAndContraVariantInferences2.ts, 0, 25))
+ >A : Symbol(A, Decl(coAndContraVariantInferences2.ts, 0, 0))
+->b : Symbol(B.b, Decl(coAndContraVariantInferences2.ts, 1, 23))
++>b : Symbol(b, Decl(coAndContraVariantInferences2.ts, 1, 23))
+ 
+ interface C extends A { c: string }
+ >C : Symbol(C, Decl(coAndContraVariantInferences2.ts, 1, 35))
+ >A : Symbol(A, Decl(coAndContraVariantInferences2.ts, 0, 0))
+->c : Symbol(C.c, Decl(coAndContraVariantInferences2.ts, 2, 23))
++>c : Symbol(c, Decl(coAndContraVariantInferences2.ts, 2, 23))
+ 
+ declare function cast<T, U extends T>(x: T, test: (x: T) => x is U): U;
+ >cast : Symbol(cast, Decl(coAndContraVariantInferences2.ts, 2, 35))
+@@= skipped -144, +144 lines =@@
+ >SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences2.ts, 33, 1))
+ 
+     Block,
+->Block : Symbol(SyntaxKind.Block, Decl(coAndContraVariantInferences2.ts, 37, 17))
++>Block : Symbol(Block, Decl(coAndContraVariantInferences2.ts, 37, 17))
+ 
+     Identifier,
+->Identifier : Symbol(SyntaxKind.Identifier, Decl(coAndContraVariantInferences2.ts, 38, 10))
++>Identifier : Symbol(Identifier, Decl(coAndContraVariantInferences2.ts, 38, 10))
+ 
+     CaseClause,
+->CaseClause : Symbol(SyntaxKind.CaseClause, Decl(coAndContraVariantInferences2.ts, 39, 15))
++>CaseClause : Symbol(CaseClause, Decl(coAndContraVariantInferences2.ts, 39, 15))
+ 
+     FunctionExpression,
+->FunctionExpression : Symbol(SyntaxKind.FunctionExpression, Decl(coAndContraVariantInferences2.ts, 40, 15))
++>FunctionExpression : Symbol(FunctionExpression, Decl(coAndContraVariantInferences2.ts, 40, 15))
+ 
+     FunctionDeclaration,
+->FunctionDeclaration : Symbol(SyntaxKind.FunctionDeclaration, Decl(coAndContraVariantInferences2.ts, 41, 23))
++>FunctionDeclaration : Symbol(FunctionDeclaration, Decl(coAndContraVariantInferences2.ts, 41, 23))
+ }
+ 
+ interface Node { kind: SyntaxKind; }
+ >Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+->kind : Symbol(Node.kind, Decl(coAndContraVariantInferences2.ts, 45, 16))
++>kind : Symbol(kind, Decl(coAndContraVariantInferences2.ts, 45, 16))
+ >SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences2.ts, 33, 1))
+ 
+ interface Expression extends Node { _expressionBrand: any; }
+ >Expression : Symbol(Expression, Decl(coAndContraVariantInferences2.ts, 45, 36))
+ >Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+->_expressionBrand : Symbol(Expression._expressionBrand, Decl(coAndContraVariantInferences2.ts, 46, 35))
++>_expressionBrand : Symbol(_expressionBrand, Decl(coAndContraVariantInferences2.ts, 46, 35))
+ 
+ interface Declaration extends Node { _declarationBrand: any; }
+ >Declaration : Symbol(Declaration, Decl(coAndContraVariantInferences2.ts, 46, 60))
+ >Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+->_declarationBrand : Symbol(Declaration._declarationBrand, Decl(coAndContraVariantInferences2.ts, 47, 36))
++>_declarationBrand : Symbol(_declarationBrand, Decl(coAndContraVariantInferences2.ts, 47, 36))
+ 
+ interface Block extends Node { kind: SyntaxKind.Block; }
+ >Block : Symbol(Block, Decl(coAndContraVariantInferences2.ts, 47, 62))
+ >Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+->kind : Symbol(Block.kind, Decl(coAndContraVariantInferences2.ts, 48, 30))
++>kind : Symbol(kind, Decl(coAndContraVariantInferences2.ts, 48, 30))
+ >SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences2.ts, 33, 1))
+->Block : Symbol(SyntaxKind.Block, Decl(coAndContraVariantInferences2.ts, 37, 17))
++>Block : Symbol(Block, Decl(coAndContraVariantInferences2.ts, 37, 17))
+ 
+ interface Identifier extends Expression, Declaration { kind: SyntaxKind.Identifier; }
+ >Identifier : Symbol(Identifier, Decl(coAndContraVariantInferences2.ts, 48, 56))
+ >Expression : Symbol(Expression, Decl(coAndContraVariantInferences2.ts, 45, 36))
+ >Declaration : Symbol(Declaration, Decl(coAndContraVariantInferences2.ts, 46, 60))
+->kind : Symbol(Identifier.kind, Decl(coAndContraVariantInferences2.ts, 49, 54))
++>kind : Symbol(kind, Decl(coAndContraVariantInferences2.ts, 49, 54))
+ >SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences2.ts, 33, 1))
+->Identifier : Symbol(SyntaxKind.Identifier, Decl(coAndContraVariantInferences2.ts, 38, 10))
++>Identifier : Symbol(Identifier, Decl(coAndContraVariantInferences2.ts, 38, 10))
+ 
+ interface CaseClause extends Node { kind: SyntaxKind.CaseClause; }
+ >CaseClause : Symbol(CaseClause, Decl(coAndContraVariantInferences2.ts, 49, 85))
+ >Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+->kind : Symbol(CaseClause.kind, Decl(coAndContraVariantInferences2.ts, 50, 35))
++>kind : Symbol(kind, Decl(coAndContraVariantInferences2.ts, 50, 35))
+ >SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences2.ts, 33, 1))
+->CaseClause : Symbol(SyntaxKind.CaseClause, Decl(coAndContraVariantInferences2.ts, 39, 15))
++>CaseClause : Symbol(CaseClause, Decl(coAndContraVariantInferences2.ts, 39, 15))
+ 
+ interface FunctionDeclaration extends Declaration { kind: SyntaxKind.FunctionDeclaration; }
+ >FunctionDeclaration : Symbol(FunctionDeclaration, Decl(coAndContraVariantInferences2.ts, 50, 66))
+ >Declaration : Symbol(Declaration, Decl(coAndContraVariantInferences2.ts, 46, 60))
+->kind : Symbol(FunctionDeclaration.kind, Decl(coAndContraVariantInferences2.ts, 51, 51))
++>kind : Symbol(kind, Decl(coAndContraVariantInferences2.ts, 51, 51))
+ >SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences2.ts, 33, 1))
+->FunctionDeclaration : Symbol(SyntaxKind.FunctionDeclaration, Decl(coAndContraVariantInferences2.ts, 41, 23))
++>FunctionDeclaration : Symbol(FunctionDeclaration, Decl(coAndContraVariantInferences2.ts, 41, 23))
+ 
+ type HasLocals = Block | FunctionDeclaration;
+ >HasLocals : Symbol(HasLocals, Decl(coAndContraVariantInferences2.ts, 51, 91))
+@@= skipped -150, +150 lines =@@
+ >SyntaxKind1 : Symbol(SyntaxKind1, Decl(coAndContraVariantInferences2.ts, 70, 1))
+ 
+     ClassExpression,
+->ClassExpression : Symbol(SyntaxKind1.ClassExpression, Decl(coAndContraVariantInferences2.ts, 74, 24))
++>ClassExpression : Symbol(ClassExpression, Decl(coAndContraVariantInferences2.ts, 74, 24))
+ 
+     ClassStatement,
+->ClassStatement : Symbol(SyntaxKind1.ClassStatement, Decl(coAndContraVariantInferences2.ts, 75, 20))
++>ClassStatement : Symbol(ClassStatement, Decl(coAndContraVariantInferences2.ts, 75, 20))
+ }
+ 
+ interface Node1 {
+ >Node1 : Symbol(Node1, Decl(coAndContraVariantInferences2.ts, 77, 1))
+ 
+     kind: SyntaxKind1;
+->kind : Symbol(Node1.kind, Decl(coAndContraVariantInferences2.ts, 79, 17))
++>kind : Symbol(kind, Decl(coAndContraVariantInferences2.ts, 79, 17))
+ >SyntaxKind1 : Symbol(SyntaxKind1, Decl(coAndContraVariantInferences2.ts, 70, 1))
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >Node1 : Symbol(Node1, Decl(coAndContraVariantInferences2.ts, 77, 1))
+ 
+     _statementBrand: any;
+->_statementBrand : Symbol(Statement1._statementBrand, Decl(coAndContraVariantInferences2.ts, 83, 36))
++>_statementBrand : Symbol(_statementBrand, Decl(coAndContraVariantInferences2.ts, 83, 36))
+ }
+ 
+ interface ClassExpression1 extends Node1 {
+@@= skipped -8, +8 lines =@@
+ >Node1 : Symbol(Node1, Decl(coAndContraVariantInferences2.ts, 77, 1))
+ 
+     kind: SyntaxKind1.ClassExpression;
+->kind : Symbol(ClassExpression1.kind, Decl(coAndContraVariantInferences2.ts, 87, 42))
++>kind : Symbol(kind, Decl(coAndContraVariantInferences2.ts, 87, 42))
+ >SyntaxKind1 : Symbol(SyntaxKind1, Decl(coAndContraVariantInferences2.ts, 70, 1))
+->ClassExpression : Symbol(SyntaxKind1.ClassExpression, Decl(coAndContraVariantInferences2.ts, 74, 24))
++>ClassExpression : Symbol(ClassExpression, Decl(coAndContraVariantInferences2.ts, 74, 24))
+ }
+ 
+ interface ClassStatement1 extends Statement1 {
+@@= skipped -10, +10 lines =@@
+ >Statement1 : Symbol(Statement1, Decl(coAndContraVariantInferences2.ts, 81, 1))
+ 
+     kind: SyntaxKind1.ClassStatement;
+->kind : Symbol(ClassStatement1.kind, Decl(coAndContraVariantInferences2.ts, 91, 46))
++>kind : Symbol(kind, Decl(coAndContraVariantInferences2.ts, 91, 46))
+ >SyntaxKind1 : Symbol(SyntaxKind1, Decl(coAndContraVariantInferences2.ts, 70, 1))
+->ClassStatement : Symbol(SyntaxKind1.ClassStatement, Decl(coAndContraVariantInferences2.ts, 75, 20))
++>ClassStatement : Symbol(ClassStatement, Decl(coAndContraVariantInferences2.ts, 75, 20))
+ }
+ 
+ type ClassLike1 = ClassExpression1 | ClassStatement1;
+@@= skipped -34, +34 lines =@@
+ >Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+ 
+     typeInfo: string;
+->typeInfo : Symbol(TypeNode.typeInfo, Decl(coAndContraVariantInferences2.ts, 105, 33))
++>typeInfo : Symbol(typeInfo, Decl(coAndContraVariantInferences2.ts, 105, 33))
+ }
+ 
+ interface NodeArray<T extends Node> extends Array<T> {
+@@= skipped -11, +11 lines =@@
+ >T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 109, 20))
+ 
+     someProp: string;
+->someProp : Symbol(NodeArray.someProp, Decl(coAndContraVariantInferences2.ts, 109, 54))
++>someProp : Symbol(someProp, Decl(coAndContraVariantInferences2.ts, 109, 54))
+ }
+ 
+ declare function isNodeArray<T extends Node>(array: readonly T[]): array is NodeArray<T>;

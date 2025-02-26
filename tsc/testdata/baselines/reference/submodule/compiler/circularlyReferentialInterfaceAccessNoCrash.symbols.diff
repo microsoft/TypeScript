@@ -1,0 +1,16 @@
+--- old.circularlyReferentialInterfaceAccessNoCrash.symbols
++++ new.circularlyReferentialInterfaceAccessNoCrash.symbols
+@@= skipped -11, +11 lines =@@
+ >K : Symbol(K, Decl(circularlyReferentialInterfaceAccessNoCrash.ts, 2, 15))
+ 
+   p1: T;
+->p1 : Symbol(Mx.p1, Decl(circularlyReferentialInterfaceAccessNoCrash.ts, 2, 20))
++>p1 : Symbol(p1, Decl(circularlyReferentialInterfaceAccessNoCrash.ts, 2, 20))
+ >T : Symbol(T, Decl(circularlyReferentialInterfaceAccessNoCrash.ts, 2, 13))
+ 
+   p2: K;
+->p2 : Symbol(Mx.p2, Decl(circularlyReferentialInterfaceAccessNoCrash.ts, 3, 8))
++>p2 : Symbol(p2, Decl(circularlyReferentialInterfaceAccessNoCrash.ts, 3, 8))
+ >K : Symbol(K, Decl(circularlyReferentialInterfaceAccessNoCrash.ts, 2, 15))
+ }
+ 

@@ -1,0 +1,27 @@
+--- old.controlFlowWithTemplateLiterals.symbols
++++ new.controlFlowWithTemplateLiterals.symbols
+@@= skipped -7, +7 lines =@@
+ >envVar : Symbol(envVar, Decl(controlFlowWithTemplateLiterals.ts, 0, 13))
+ 
+   envVar.slice(0)
+->envVar.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>envVar.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >envVar : Symbol(envVar, Decl(controlFlowWithTemplateLiterals.ts, 0, 13))
+->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ declare const obj: {test: string} | {}
+@@= skipped -13, +13 lines =@@
+ >obj : Symbol(obj, Decl(controlFlowWithTemplateLiterals.ts, 5, 13))
+ 
+   obj.test.slice(0)
+->obj.test.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>obj.test.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >obj.test : Symbol(test, Decl(controlFlowWithTemplateLiterals.ts, 5, 20))
+ >obj : Symbol(obj, Decl(controlFlowWithTemplateLiterals.ts, 5, 13))
+ >test : Symbol(test, Decl(controlFlowWithTemplateLiterals.ts, 5, 20))
+->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ }
+ 

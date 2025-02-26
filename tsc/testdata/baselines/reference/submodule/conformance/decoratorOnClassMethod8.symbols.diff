@@ -1,0 +1,9 @@
+--- old.decoratorOnClassMethod8.symbols
++++ new.decoratorOnClassMethod8.symbols
+@@= skipped -12, +12 lines =@@
+ 
+     @dec method() {}
+ >dec : Symbol(dec, Decl(decoratorOnClassMethod8.ts, 0, 0))
+->method : Symbol(C.method, Decl(decoratorOnClassMethod8.ts, 2, 9))
++>method : Symbol(method, Decl(decoratorOnClassMethod8.ts, 2, 9))
+ }

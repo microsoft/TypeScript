@@ -1,0 +1,14 @@
+--- old.destructuringObjectBindingPatternAndAssignment8(target=esnext).symbols
++++ new.destructuringObjectBindingPatternAndAssignment8(target=esnext).symbols
+@@= skipped -31, +31 lines =@@
+ 
+ })();
+ console.log(aVal, bVal);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >aVal : Symbol(aVal, Decl(destructuringObjectBindingPatternAndAssignment8.ts, 4, 7))
+ >bVal : Symbol(bVal, Decl(destructuringObjectBindingPatternAndAssignment8.ts, 4, 20))
+ 

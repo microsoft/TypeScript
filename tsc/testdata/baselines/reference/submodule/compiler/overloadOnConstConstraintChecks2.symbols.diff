@@ -1,0 +1,11 @@
+--- old.overloadOnConstConstraintChecks2.symbols
++++ new.overloadOnConstConstraintChecks2.symbols
+@@= skipped -12, +12 lines =@@
+ >A : Symbol(A, Decl(overloadOnConstConstraintChecks2.ts, 0, 0))
+ 
+     public foo() { }
+->foo : Symbol(C.foo, Decl(overloadOnConstConstraintChecks2.ts, 2, 19))
++>foo : Symbol(foo, Decl(overloadOnConstConstraintChecks2.ts, 2, 19))
+ }
+ function foo(name: 'hi'): B;
+ >foo : Symbol(foo, Decl(overloadOnConstConstraintChecks2.ts, 4, 1), Decl(overloadOnConstConstraintChecks2.ts, 5, 28), Decl(overloadOnConstConstraintChecks2.ts, 6, 29), Decl(overloadOnConstConstraintChecks2.ts, 7, 30))

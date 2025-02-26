@@ -1,0 +1,17 @@
+--- old.commentOnClassAccessor2.symbols
++++ new.commentOnClassAccessor2.symbols
+@@= skipped -7, +7 lines =@@
+    * Getter.
+    */
+   get bar(): number { return 1;}
+->bar : Symbol(C.bar, Decl(commentOnClassAccessor2.ts, 0, 9), Decl(commentOnClassAccessor2.ts, 4, 32))
++>bar : Symbol(bar, Decl(commentOnClassAccessor2.ts, 0, 9), Decl(commentOnClassAccessor2.ts, 4, 32))
+ 
+   /**
+    * Setter.
+    */
+   set bar(v) { }
+->bar : Symbol(C.bar, Decl(commentOnClassAccessor2.ts, 0, 9), Decl(commentOnClassAccessor2.ts, 4, 32))
++>bar : Symbol(bar, Decl(commentOnClassAccessor2.ts, 0, 9), Decl(commentOnClassAccessor2.ts, 4, 32))
+ >v : Symbol(v, Decl(commentOnClassAccessor2.ts, 9, 10))
+ }

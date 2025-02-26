@@ -1,0 +1,124 @@
+//// [tests/cases/compiler/deleteExpressionMustBeOptional.ts] ////
+
+=== deleteExpressionMustBeOptional.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(deleteExpressionMustBeOptional.ts, 0, 0))
+
+    a: number
+>a : Symbol(a, Decl(deleteExpressionMustBeOptional.ts, 0, 15))
+
+    b: number | undefined
+>b : Symbol(b, Decl(deleteExpressionMustBeOptional.ts, 1, 13))
+
+    c: number | null
+>c : Symbol(c, Decl(deleteExpressionMustBeOptional.ts, 2, 25))
+
+    d?: number
+>d : Symbol(d, Decl(deleteExpressionMustBeOptional.ts, 3, 20))
+
+    e: number | undefined | null
+>e : Symbol(e, Decl(deleteExpressionMustBeOptional.ts, 4, 14))
+
+    f?: number | undefined | null
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional.ts, 5, 32))
+
+    g: unknown
+>g : Symbol(g, Decl(deleteExpressionMustBeOptional.ts, 6, 33))
+
+    h: any
+>h : Symbol(h, Decl(deleteExpressionMustBeOptional.ts, 7, 14))
+
+    i: never
+>i : Symbol(i, Decl(deleteExpressionMustBeOptional.ts, 8, 10))
+}
+
+interface AA {
+>AA : Symbol(AA, Decl(deleteExpressionMustBeOptional.ts, 10, 1))
+
+    [s: string]: number
+>s : Symbol(s, Decl(deleteExpressionMustBeOptional.ts, 13, 5))
+}
+
+type BB = {
+>BB : Symbol(BB, Decl(deleteExpressionMustBeOptional.ts, 14, 1))
+
+    [P in keyof any]: number
+>P : Symbol(P, Decl(deleteExpressionMustBeOptional.ts, 17, 5))
+}
+
+declare const f: Foo
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional.ts, 20, 13))
+>Foo : Symbol(Foo, Decl(deleteExpressionMustBeOptional.ts, 0, 0))
+
+declare const a: AA
+>a : Symbol(a, Decl(deleteExpressionMustBeOptional.ts, 21, 13))
+>AA : Symbol(AA, Decl(deleteExpressionMustBeOptional.ts, 10, 1))
+
+declare const b: BB
+>b : Symbol(b, Decl(deleteExpressionMustBeOptional.ts, 22, 13))
+>BB : Symbol(BB, Decl(deleteExpressionMustBeOptional.ts, 14, 1))
+
+delete f.a
+>f.a : Symbol(a, Decl(deleteExpressionMustBeOptional.ts, 0, 15))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional.ts, 20, 13))
+>a : Symbol(a, Decl(deleteExpressionMustBeOptional.ts, 0, 15))
+
+delete f.b
+>f.b : Symbol(b, Decl(deleteExpressionMustBeOptional.ts, 1, 13))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional.ts, 20, 13))
+>b : Symbol(b, Decl(deleteExpressionMustBeOptional.ts, 1, 13))
+
+delete f.c
+>f.c : Symbol(c, Decl(deleteExpressionMustBeOptional.ts, 2, 25))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional.ts, 20, 13))
+>c : Symbol(c, Decl(deleteExpressionMustBeOptional.ts, 2, 25))
+
+delete f.d
+>f.d : Symbol(d, Decl(deleteExpressionMustBeOptional.ts, 3, 20))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional.ts, 20, 13))
+>d : Symbol(d, Decl(deleteExpressionMustBeOptional.ts, 3, 20))
+
+delete f.e
+>f.e : Symbol(e, Decl(deleteExpressionMustBeOptional.ts, 4, 14))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional.ts, 20, 13))
+>e : Symbol(e, Decl(deleteExpressionMustBeOptional.ts, 4, 14))
+
+delete f.f
+>f.f : Symbol(f, Decl(deleteExpressionMustBeOptional.ts, 5, 32))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional.ts, 20, 13))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional.ts, 5, 32))
+
+delete f.g
+>f.g : Symbol(g, Decl(deleteExpressionMustBeOptional.ts, 6, 33))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional.ts, 20, 13))
+>g : Symbol(g, Decl(deleteExpressionMustBeOptional.ts, 6, 33))
+
+delete f.h
+>f.h : Symbol(h, Decl(deleteExpressionMustBeOptional.ts, 7, 14))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional.ts, 20, 13))
+>h : Symbol(h, Decl(deleteExpressionMustBeOptional.ts, 7, 14))
+
+delete f.i
+>f.i : Symbol(i, Decl(deleteExpressionMustBeOptional.ts, 8, 10))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional.ts, 20, 13))
+>i : Symbol(i, Decl(deleteExpressionMustBeOptional.ts, 8, 10))
+
+delete f.j
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional.ts, 20, 13))
+
+delete a.a
+>a.a : Symbol((Missing), Decl(deleteExpressionMustBeOptional.ts, 12, 14))
+>a : Symbol(a, Decl(deleteExpressionMustBeOptional.ts, 21, 13))
+>a : Symbol((Missing), Decl(deleteExpressionMustBeOptional.ts, 12, 14))
+
+delete a.b
+>a.b : Symbol((Missing), Decl(deleteExpressionMustBeOptional.ts, 12, 14))
+>a : Symbol(a, Decl(deleteExpressionMustBeOptional.ts, 21, 13))
+>b : Symbol((Missing), Decl(deleteExpressionMustBeOptional.ts, 12, 14))
+
+delete b.a
+>b : Symbol(b, Decl(deleteExpressionMustBeOptional.ts, 22, 13))
+
+delete b.b
+>b : Symbol(b, Decl(deleteExpressionMustBeOptional.ts, 22, 13))
+

@@ -1,0 +1,49 @@
+--- old.compoundAdditionAssignmentWithInvalidOperands.symbols
++++ new.compoundAdditionAssignmentWithInvalidOperands.symbols
+@@= skipped -2, +2 lines =@@
+ === compoundAdditionAssignmentWithInvalidOperands.ts ===
+ enum E { a, b }
+ >E : Symbol(E, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 8))
+->b : Symbol(E.b, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 11))
++>a : Symbol(a, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 8))
++>b : Symbol(b, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 11))
+ 
+ var a: void;
+ >a : Symbol(a, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 2, 3))
+@@= skipped -21, +21 lines =@@
+ 
+ x1 += E.a;
+ >x1 : Symbol(x1, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 4, 3))
+->E.a : Symbol(E.a, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 8))
++>E.a : Symbol(a, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 8))
+ >E : Symbol(E, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 8))
++>a : Symbol(a, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 8))
+ 
+ x1 += {};
+ >x1 : Symbol(x1, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 4, 3))
+@@= skipped -29, +29 lines =@@
+ 
+ x2 += E.a;
+ >x2 : Symbol(x2, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 13, 3))
+->E.a : Symbol(E.a, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 8))
++>E.a : Symbol(a, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 8))
+ >E : Symbol(E, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 8))
++>a : Symbol(a, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 8))
+ 
+ x2 += {};
+ >x2 : Symbol(x2, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 13, 3))
+@@= skipped -29, +29 lines =@@
+ 
+ x3 += E.a;
+ >x3 : Symbol(x3, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 22, 3))
+->E.a : Symbol(E.a, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 8))
++>E.a : Symbol(a, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 8))
+ >E : Symbol(E, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 8))
++>a : Symbol(a, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 0, 8))
+ 
+ x3 += {};
+ >x3 : Symbol(x3, Decl(compoundAdditionAssignmentWithInvalidOperands.ts, 22, 3))

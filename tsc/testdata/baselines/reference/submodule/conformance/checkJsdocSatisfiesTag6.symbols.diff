@@ -1,0 +1,21 @@
+--- old.checkJsdocSatisfiesTag6.symbols
++++ new.checkJsdocSatisfiesTag6.symbols
+@@= skipped -13, +13 lines =@@
+ 
+ // Should OK
+ console.log(a.x.toFixed());
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->a.x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>a.x.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >a.x : Symbol(x, Decl(a.js, 7, 49))
+ >a : Symbol(a, Decl(a.js, 7, 5))
+ >x : Symbol(x, Decl(a.js, 7, 49))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+ // Should error
+ let p = a.y;

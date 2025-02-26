@@ -1,0 +1,48 @@
+--- old.extendAndImplementTheSameBaseType.symbols
++++ new.extendAndImplementTheSameBaseType.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(extendAndImplementTheSameBaseType.ts, 0, 0))
+ 
+     foo: number
+->foo : Symbol(C.foo, Decl(extendAndImplementTheSameBaseType.ts, 0, 9))
++>foo : Symbol(foo, Decl(extendAndImplementTheSameBaseType.ts, 0, 9))
+ 
+     bar() {}
+->bar : Symbol(C.bar, Decl(extendAndImplementTheSameBaseType.ts, 1, 15))
++>bar : Symbol(bar, Decl(extendAndImplementTheSameBaseType.ts, 1, 15))
+ }
+ class D extends C implements C {
+ >D : Symbol(D, Decl(extendAndImplementTheSameBaseType.ts, 3, 1))
+@@= skipped -11, +11 lines =@@
+ >C : Symbol(C, Decl(extendAndImplementTheSameBaseType.ts, 0, 0))
+ 
+     baz() { }
+->baz : Symbol(D.baz, Decl(extendAndImplementTheSameBaseType.ts, 4, 32))
++>baz : Symbol(baz, Decl(extendAndImplementTheSameBaseType.ts, 4, 32))
+ }
+ 
+ var c: C;
+@@= skipped -13, +13 lines =@@
+ >D : Symbol(D, Decl(extendAndImplementTheSameBaseType.ts, 3, 1))
+ 
+ d.bar();
+->d.bar : Symbol(C.bar, Decl(extendAndImplementTheSameBaseType.ts, 1, 15))
++>d.bar : Symbol(bar, Decl(extendAndImplementTheSameBaseType.ts, 1, 15))
+ >d : Symbol(d, Decl(extendAndImplementTheSameBaseType.ts, 9, 3))
+->bar : Symbol(C.bar, Decl(extendAndImplementTheSameBaseType.ts, 1, 15))
++>bar : Symbol(bar, Decl(extendAndImplementTheSameBaseType.ts, 1, 15))
+ 
+ d.baz();
+->d.baz : Symbol(D.baz, Decl(extendAndImplementTheSameBaseType.ts, 4, 32))
++>d.baz : Symbol(baz, Decl(extendAndImplementTheSameBaseType.ts, 4, 32))
+ >d : Symbol(d, Decl(extendAndImplementTheSameBaseType.ts, 9, 3))
+->baz : Symbol(D.baz, Decl(extendAndImplementTheSameBaseType.ts, 4, 32))
++>baz : Symbol(baz, Decl(extendAndImplementTheSameBaseType.ts, 4, 32))
+ 
+ d.foo;
+->d.foo : Symbol(C.foo, Decl(extendAndImplementTheSameBaseType.ts, 0, 9))
++>d.foo : Symbol(foo, Decl(extendAndImplementTheSameBaseType.ts, 0, 9))
+ >d : Symbol(d, Decl(extendAndImplementTheSameBaseType.ts, 9, 3))
+->foo : Symbol(C.foo, Decl(extendAndImplementTheSameBaseType.ts, 0, 9))
++>foo : Symbol(foo, Decl(extendAndImplementTheSameBaseType.ts, 0, 9))
+ 

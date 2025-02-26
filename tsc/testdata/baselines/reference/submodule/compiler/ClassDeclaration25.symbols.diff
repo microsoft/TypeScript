@@ -1,0 +1,29 @@
+--- old.ClassDeclaration25.symbols
++++ new.ClassDeclaration25.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(ClassDeclaration25.ts, 0, 16))
+ 
+     data(): T;
+->data : Symbol(IList.data, Decl(ClassDeclaration25.ts, 0, 20))
++>data : Symbol(data, Decl(ClassDeclaration25.ts, 0, 20))
+ >T : Symbol(T, Decl(ClassDeclaration25.ts, 0, 16))
+ 
+     next(): string;
+->next : Symbol(IList.next, Decl(ClassDeclaration25.ts, 1, 14))
++>next : Symbol(next, Decl(ClassDeclaration25.ts, 1, 14))
+ }
+ class List<U> implements IList<U> {
+ >List : Symbol(List, Decl(ClassDeclaration25.ts, 3, 1))
+@@= skipped -13, +13 lines =@@
+ >U : Symbol(U, Decl(ClassDeclaration25.ts, 4, 11))
+ 
+     data(): U;
+->data : Symbol(List.data, Decl(ClassDeclaration25.ts, 4, 35))
++>data : Symbol(data, Decl(ClassDeclaration25.ts, 4, 35))
+ >U : Symbol(U, Decl(ClassDeclaration25.ts, 4, 11))
+ 
+     next(): string;
+->next : Symbol(List.next, Decl(ClassDeclaration25.ts, 5, 14))
++>next : Symbol(next, Decl(ClassDeclaration25.ts, 5, 14))
+ }
+ 

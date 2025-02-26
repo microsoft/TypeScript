@@ -1,0 +1,71 @@
+--- old.indexedAccessTypeConstraints.symbols
++++ new.indexedAccessTypeConstraints.symbols
+@@= skipped -7, +7 lines =@@
+ >T : Symbol(T, Decl(indexedAccessTypeConstraints.ts, 2, 16))
+ 
+     content: T;
+->content : Symbol(IData.content, Decl(indexedAccessTypeConstraints.ts, 2, 20))
++>content : Symbol(content, Decl(indexedAccessTypeConstraints.ts, 2, 20))
+ >T : Symbol(T, Decl(indexedAccessTypeConstraints.ts, 2, 16))
+ }
+ 
+@@= skipped -24, +24 lines =@@
+ >M : Symbol(M, Decl(indexedAccessTypeConstraints.ts, 10, 13))
+ 
+     constructor(private data: Data<M>) {}
+->data : Symbol(Parent.data, Decl(indexedAccessTypeConstraints.ts, 11, 16))
++>data : Symbol(data, Decl(indexedAccessTypeConstraints.ts, 11, 16))
+ >Data : Symbol(Data, Decl(indexedAccessTypeConstraints.ts, 4, 1))
+ >M : Symbol(M, Decl(indexedAccessTypeConstraints.ts, 10, 13))
+ 
+     getData(): Data<M> {
+->getData : Symbol(Parent.getData, Decl(indexedAccessTypeConstraints.ts, 11, 41))
++>getData : Symbol(getData, Decl(indexedAccessTypeConstraints.ts, 11, 41))
+ >Data : Symbol(Data, Decl(indexedAccessTypeConstraints.ts, 4, 1))
+ >M : Symbol(M, Decl(indexedAccessTypeConstraints.ts, 10, 13))
+ 
+         return this.data;
+->this.data : Symbol(Parent.data, Decl(indexedAccessTypeConstraints.ts, 11, 16))
++>this.data : Symbol(data, Decl(indexedAccessTypeConstraints.ts, 11, 16))
+ >this : Symbol(Parent, Decl(indexedAccessTypeConstraints.ts, 8, 2))
+->data : Symbol(Parent.data, Decl(indexedAccessTypeConstraints.ts, 11, 16))
++>data : Symbol(data, Decl(indexedAccessTypeConstraints.ts, 11, 16))
+     }
+ }
+ 
+@@= skipped -24, +24 lines =@@
+ >C : Symbol(C, Decl(indexedAccessTypeConstraints.ts, 17, 17))
+ 
+     getContent(): C {
+->getContent : Symbol(Foo.getContent, Decl(indexedAccessTypeConstraints.ts, 17, 46))
++>getContent : Symbol(getContent, Decl(indexedAccessTypeConstraints.ts, 17, 46))
+ >C : Symbol(C, Decl(indexedAccessTypeConstraints.ts, 17, 17))
+ 
+         return this.getData().get('content');
+ >this.getData().get : Symbol(get, Decl(indexedAccessTypeConstraints.ts, 6, 16))
+->this.getData : Symbol(Parent.getData, Decl(indexedAccessTypeConstraints.ts, 11, 41))
++>this.getData : Symbol(getData, Decl(indexedAccessTypeConstraints.ts, 11, 41))
+ >this : Symbol(Foo, Decl(indexedAccessTypeConstraints.ts, 15, 1))
+->getData : Symbol(Parent.getData, Decl(indexedAccessTypeConstraints.ts, 11, 41))
++>getData : Symbol(getData, Decl(indexedAccessTypeConstraints.ts, 11, 41))
+ >get : Symbol(get, Decl(indexedAccessTypeConstraints.ts, 6, 16))
+     }
+ }
+@@= skipped -22, +22 lines =@@
+ >T : Symbol(T, Decl(indexedAccessTypeConstraints.ts, 23, 19))
+ 
+     getContent(): C {
+->getContent : Symbol(Bar.getContent, Decl(indexedAccessTypeConstraints.ts, 23, 59))
++>getContent : Symbol(getContent, Decl(indexedAccessTypeConstraints.ts, 23, 59))
+ >C : Symbol(C, Decl(indexedAccessTypeConstraints.ts, 23, 17))
+ 
+         return this.getData().get('content');
+ >this.getData().get : Symbol(get, Decl(indexedAccessTypeConstraints.ts, 6, 16))
+->this.getData : Symbol(Parent.getData, Decl(indexedAccessTypeConstraints.ts, 11, 41))
++>this.getData : Symbol(getData, Decl(indexedAccessTypeConstraints.ts, 11, 41))
+ >this : Symbol(Bar, Decl(indexedAccessTypeConstraints.ts, 21, 1))
+->getData : Symbol(Parent.getData, Decl(indexedAccessTypeConstraints.ts, 11, 41))
++>getData : Symbol(getData, Decl(indexedAccessTypeConstraints.ts, 11, 41))
+ >get : Symbol(get, Decl(indexedAccessTypeConstraints.ts, 6, 16))
+     }
+ }

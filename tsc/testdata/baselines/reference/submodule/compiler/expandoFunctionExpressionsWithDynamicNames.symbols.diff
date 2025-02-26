@@ -1,0 +1,23 @@
+--- old.expandoFunctionExpressionsWithDynamicNames.symbols
++++ new.expandoFunctionExpressionsWithDynamicNames.symbols
+@@= skipped -6, +6 lines =@@
+ >s : Symbol(s, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 2, 5))
+ 
+ export const expr = () => {}
+->expr : Symbol(expr, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 4, 12), Decl(expandoFunctionExpressionsWithDynamicNames.ts, 4, 28))
++>expr : Symbol(expr, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 4, 12))
+ 
+ expr[s] = 0
+->expr : Symbol(expr, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 4, 12), Decl(expandoFunctionExpressionsWithDynamicNames.ts, 4, 28))
++>expr : Symbol(expr, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 4, 12))
+ >s : Symbol(s, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 2, 5))
+ 
+ export const expr2 = function () {}
+->expr2 : Symbol(expr2, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 7, 12), Decl(expandoFunctionExpressionsWithDynamicNames.ts, 7, 35))
++>expr2 : Symbol(expr2, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 7, 12))
+ 
+ expr2[s] = 0
+->expr2 : Symbol(expr2, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 7, 12), Decl(expandoFunctionExpressionsWithDynamicNames.ts, 7, 35))
++>expr2 : Symbol(expr2, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 7, 12))
+ >s : Symbol(s, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 2, 5))
+ 

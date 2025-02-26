@@ -1,0 +1,100 @@
+--- old.generatorYieldContextualType.symbols
++++ new.generatorYieldContextualType.symbols
+@@= skipped -49, +49 lines =@@
+ >Directive : Symbol(Directive, Decl(generatorYieldContextualType.ts, 10, 3), Decl(generatorYieldContextualType.ts, 18, 1))
+ 
+   Back,
+->Back : Symbol(Directive.Back, Decl(generatorYieldContextualType.ts, 13, 16))
++>Back : Symbol(Back, Decl(generatorYieldContextualType.ts, 13, 16))
+ 
+   Cancel,
+->Cancel : Symbol(Directive.Cancel, Decl(generatorYieldContextualType.ts, 14, 7))
++>Cancel : Symbol(Cancel, Decl(generatorYieldContextualType.ts, 14, 7))
+ 
+   LoadMore,
+->LoadMore : Symbol(Directive.LoadMore, Decl(generatorYieldContextualType.ts, 15, 9))
++>LoadMore : Symbol(LoadMore, Decl(generatorYieldContextualType.ts, 15, 9))
+ 
+   Noop,
+->Noop : Symbol(Directive.Noop, Decl(generatorYieldContextualType.ts, 16, 11))
++>Noop : Symbol(Noop, Decl(generatorYieldContextualType.ts, 16, 11))
+ }
+ 
+ namespace Directive {
+@@= skipped -35, +35 lines =@@
+ >QuickPickItem : Symbol(QuickPickItem, Decl(generatorYieldContextualType.ts, 24, 1))
+ 
+   label: string;
+->label : Symbol(QuickPickItem.label, Decl(generatorYieldContextualType.ts, 26, 25))
++>label : Symbol(label, Decl(generatorYieldContextualType.ts, 26, 25))
+ 
+   description?: string;
+->description : Symbol(QuickPickItem.description, Decl(generatorYieldContextualType.ts, 27, 16))
++>description : Symbol(description, Decl(generatorYieldContextualType.ts, 27, 16))
+ 
+   detail?: string;
+->detail : Symbol(QuickPickItem.detail, Decl(generatorYieldContextualType.ts, 28, 23))
++>detail : Symbol(detail, Decl(generatorYieldContextualType.ts, 28, 23))
+ 
+   picked?: boolean;
+->picked : Symbol(QuickPickItem.picked, Decl(generatorYieldContextualType.ts, 29, 18))
++>picked : Symbol(picked, Decl(generatorYieldContextualType.ts, 29, 18))
+ 
+   alwaysShow?: boolean;
+->alwaysShow : Symbol(QuickPickItem.alwaysShow, Decl(generatorYieldContextualType.ts, 30, 19))
++>alwaysShow : Symbol(alwaysShow, Decl(generatorYieldContextualType.ts, 30, 19))
+ }
+ 
+ interface QuickInputStep {
+ >QuickInputStep : Symbol(QuickInputStep, Decl(generatorYieldContextualType.ts, 32, 1))
+ 
+   placeholder?: string;
+->placeholder : Symbol(QuickInputStep.placeholder, Decl(generatorYieldContextualType.ts, 34, 26))
++>placeholder : Symbol(placeholder, Decl(generatorYieldContextualType.ts, 34, 26))
+ 
+   prompt?: string;
+->prompt : Symbol(QuickInputStep.prompt, Decl(generatorYieldContextualType.ts, 35, 23))
++>prompt : Symbol(prompt, Decl(generatorYieldContextualType.ts, 35, 23))
+ 
+   title?: string;
+->title : Symbol(QuickInputStep.title, Decl(generatorYieldContextualType.ts, 36, 18))
++>title : Symbol(title, Decl(generatorYieldContextualType.ts, 36, 18))
+ }
+ 
+ interface QuickPickStep<T extends QuickPickItem = QuickPickItem> {
+@@= skipped -35, +35 lines =@@
+ >QuickPickItem : Symbol(QuickPickItem, Decl(generatorYieldContextualType.ts, 24, 1))
+ 
+   placeholder?: string;
+->placeholder : Symbol(QuickPickStep.placeholder, Decl(generatorYieldContextualType.ts, 40, 66))
++>placeholder : Symbol(placeholder, Decl(generatorYieldContextualType.ts, 40, 66))
+ 
+   title?: string;
+->title : Symbol(QuickPickStep.title, Decl(generatorYieldContextualType.ts, 41, 23))
++>title : Symbol(title, Decl(generatorYieldContextualType.ts, 41, 23))
+ }
+ 
+ type StepGenerator =
+@@= skipped -60, +60 lines =@@
+ type StepResult<T> = typeof StepResult.Break | T;
+ >StepResult : Symbol(StepResult, Decl(generatorYieldContextualType.ts, 61, 10), Decl(generatorYieldContextualType.ts, 64, 1))
+ >T : Symbol(T, Decl(generatorYieldContextualType.ts, 65, 16))
+->StepResult.Break : Symbol(StepResult.Break, Decl(generatorYieldContextualType.ts, 63, 14))
++>StepResult.Break : Symbol(Break, Decl(generatorYieldContextualType.ts, 63, 14))
+ >StepResult : Symbol(StepResult, Decl(generatorYieldContextualType.ts, 61, 10), Decl(generatorYieldContextualType.ts, 64, 1))
+->Break : Symbol(StepResult.Break, Decl(generatorYieldContextualType.ts, 63, 14))
++>Break : Symbol(Break, Decl(generatorYieldContextualType.ts, 63, 14))
+ >T : Symbol(T, Decl(generatorYieldContextualType.ts, 65, 16))
+ 
+ type StepResultGenerator<T> =
+@@= skipped -178, +178 lines =@@
+ >selection : Symbol(selection, Decl(generatorYieldContextualType.ts, 111, 7))
+ 
+     : StepResult.Break;
+->StepResult.Break : Symbol(StepResult.Break, Decl(generatorYieldContextualType.ts, 63, 14))
++>StepResult.Break : Symbol(Break, Decl(generatorYieldContextualType.ts, 63, 14))
+ >StepResult : Symbol(StepResult, Decl(generatorYieldContextualType.ts, 61, 10), Decl(generatorYieldContextualType.ts, 64, 1))
+->Break : Symbol(StepResult.Break, Decl(generatorYieldContextualType.ts, 63, 14))
++>Break : Symbol(Break, Decl(generatorYieldContextualType.ts, 63, 14))
+ }
+ 

@@ -1,0 +1,18 @@
+--- old.superCallFromClassThatDerivesFromGenericType1.symbols
++++ new.superCallFromClassThatDerivesFromGenericType1.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 0, 16))
+ 
+     m<U>(): B<U>;
+->m : Symbol(B.m, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 0, 20))
++>m : Symbol(m, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 0, 20))
+ >U : Symbol(U, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 1, 6))
+ >B : Symbol(B, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 0, 0))
+ >U : Symbol(U, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 1, 6))
+ 
+     static g(): B<any>;
+->g : Symbol(B.g, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 1, 17))
++>g : Symbol(g, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 1, 17))
+ >B : Symbol(B, Decl(superCallFromClassThatDerivesFromGenericType1.ts, 0, 0))
+ }
+ 

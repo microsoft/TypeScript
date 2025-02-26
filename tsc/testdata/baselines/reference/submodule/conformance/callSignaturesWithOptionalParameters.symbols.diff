@@ -1,0 +1,58 @@
+--- old.callSignaturesWithOptionalParameters.symbols
++++ new.callSignaturesWithOptionalParameters.symbols
+@@= skipped -38, +38 lines =@@
+ >C : Symbol(C, Decl(callSignaturesWithOptionalParameters.ts, 11, 9))
+ 
+     foo(x?: number) { }
+->foo : Symbol(C.foo, Decl(callSignaturesWithOptionalParameters.ts, 13, 9))
++>foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 13, 9))
+ >x : Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 14, 8))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >C : Symbol(C, Decl(callSignaturesWithOptionalParameters.ts, 11, 9))
+ 
+ c.foo();
+->c.foo : Symbol(C.foo, Decl(callSignaturesWithOptionalParameters.ts, 13, 9))
++>c.foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 13, 9))
+ >c : Symbol(c, Decl(callSignaturesWithOptionalParameters.ts, 17, 3))
+->foo : Symbol(C.foo, Decl(callSignaturesWithOptionalParameters.ts, 13, 9))
++>foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 13, 9))
+ 
+ c.foo(1);
+->c.foo : Symbol(C.foo, Decl(callSignaturesWithOptionalParameters.ts, 13, 9))
++>c.foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 13, 9))
+ >c : Symbol(c, Decl(callSignaturesWithOptionalParameters.ts, 17, 3))
+->foo : Symbol(C.foo, Decl(callSignaturesWithOptionalParameters.ts, 13, 9))
++>foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 13, 9))
+ 
+ interface I {
+ >I : Symbol(I, Decl(callSignaturesWithOptionalParameters.ts, 19, 9))
+@@= skipped -16, +16 lines =@@
+ >x : Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 22, 5))
+ 
+     foo(x: number, y?: number);
+->foo : Symbol(I.foo, Decl(callSignaturesWithOptionalParameters.ts, 22, 17))
++>foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 22, 17))
+ >x : Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 23, 8))
+ >y : Symbol(y, Decl(callSignaturesWithOptionalParameters.ts, 23, 18))
+ }
+@@= skipped -16, +16 lines =@@
+ >i : Symbol(i, Decl(callSignaturesWithOptionalParameters.ts, 26, 3))
+ 
+ i.foo(1);
+->i.foo : Symbol(I.foo, Decl(callSignaturesWithOptionalParameters.ts, 22, 17))
++>i.foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 22, 17))
+ >i : Symbol(i, Decl(callSignaturesWithOptionalParameters.ts, 26, 3))
+->foo : Symbol(I.foo, Decl(callSignaturesWithOptionalParameters.ts, 22, 17))
++>foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 22, 17))
+ 
+ i.foo(1, 2);
+->i.foo : Symbol(I.foo, Decl(callSignaturesWithOptionalParameters.ts, 22, 17))
++>i.foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 22, 17))
+ >i : Symbol(i, Decl(callSignaturesWithOptionalParameters.ts, 26, 3))
+->foo : Symbol(I.foo, Decl(callSignaturesWithOptionalParameters.ts, 22, 17))
++>foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 22, 17))
+ 
+ var a: {
+ >a : Symbol(a, Decl(callSignaturesWithOptionalParameters.ts, 32, 3))

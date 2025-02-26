@@ -1,0 +1,47 @@
+--- old.controlFlowInstanceOfGuardPrimitives.symbols
++++ new.controlFlowInstanceOfGuardPrimitives.symbols
+@@= skipped -10, +10 lines =@@
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+         console.log("Aha!! It's a Date in " + thing.getFullYear());
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->thing.getFullYear : Symbol(Date.getFullYear, Decl(lib.es5.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>thing.getFullYear : Symbol(getFullYear, Decl(lib.es5.d.ts, --, --))
+ >thing : Symbol(thing, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 21))
+->getFullYear : Symbol(Date.getFullYear, Decl(lib.es5.d.ts, --, --))
++>getFullYear : Symbol(getFullYear, Decl(lib.es5.d.ts, --, --))
+ 
+     } else if (typeof thing === 'string') {
+ >thing : Symbol(thing, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 21))
+ 
+         console.log("Aha!! It's a string of length " + thing.length);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->thing.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>thing.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >thing : Symbol(thing, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 21))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+     } else {
+         console.log("Aha!! It's the number " + thing.toPrecision(3));
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->thing.toPrecision : Symbol(Number.toPrecision, Decl(lib.es5.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>thing.toPrecision : Symbol(toPrecision, Decl(lib.es5.d.ts, --, --))
+ >thing : Symbol(thing, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 21))
+->toPrecision : Symbol(Number.toPrecision, Decl(lib.es5.d.ts, --, --))
++>toPrecision : Symbol(toPrecision, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 

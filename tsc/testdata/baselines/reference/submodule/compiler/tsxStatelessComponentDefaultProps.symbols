@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/tsxStatelessComponentDefaultProps.tsx] ////
+
+=== tsxStatelessComponentDefaultProps.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from 'react';
+>React : Symbol(React, Decl(tsxStatelessComponentDefaultProps.tsx, 2, 6))
+
+interface Props {
+>Props : Symbol(Props, Decl(tsxStatelessComponentDefaultProps.tsx, 2, 26))
+
+    text: string;
+>text : Symbol(text, Decl(tsxStatelessComponentDefaultProps.tsx, 3, 17))
+}
+
+function BackButton(_props: Props) {
+>BackButton : Symbol(BackButton, Decl(tsxStatelessComponentDefaultProps.tsx, 5, 1))
+>_props : Symbol(_props, Decl(tsxStatelessComponentDefaultProps.tsx, 7, 20))
+>Props : Symbol(Props, Decl(tsxStatelessComponentDefaultProps.tsx, 2, 26))
+
+    return <div />
+}
+BackButton.defaultProps = {
+>BackButton.defaultProps : Symbol(defaultProps, Decl(tsxStatelessComponentDefaultProps.tsx, 9, 1))
+>BackButton : Symbol(BackButton, Decl(tsxStatelessComponentDefaultProps.tsx, 5, 1))
+>defaultProps : Symbol(defaultProps, Decl(tsxStatelessComponentDefaultProps.tsx, 9, 1))
+
+    text: 'Go Back',
+>text : Symbol(text, Decl(tsxStatelessComponentDefaultProps.tsx, 10, 27))
+
+};
+let a = <BackButton />
+>a : Symbol(a, Decl(tsxStatelessComponentDefaultProps.tsx, 13, 3))
+>BackButton : Symbol(BackButton, Decl(tsxStatelessComponentDefaultProps.tsx, 5, 1))
+

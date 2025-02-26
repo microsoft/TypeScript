@@ -1,0 +1,11 @@
+--- old.unqualifiedCallToClassStatic1.symbols
++++ new.unqualifiedCallToClassStatic1.symbols
+@@= skipped -4, +4 lines =@@
+ >Vector : Symbol(Vector, Decl(unqualifiedCallToClassStatic1.ts, 0, 0))
+ 
+  static foo = () => {
+->foo : Symbol(Vector.foo, Decl(unqualifiedCallToClassStatic1.ts, 0, 14))
++>foo : Symbol(foo, Decl(unqualifiedCallToClassStatic1.ts, 0, 14))
+ 
+   // 'foo' cannot be called in an unqualified manner.
+   foo();

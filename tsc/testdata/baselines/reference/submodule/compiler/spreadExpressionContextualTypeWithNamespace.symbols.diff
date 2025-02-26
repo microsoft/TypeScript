@@ -1,0 +1,98 @@
+--- old.spreadExpressionContextualTypeWithNamespace.symbols
++++ new.spreadExpressionContextualTypeWithNamespace.symbols
+@@= skipped -25, +25 lines =@@
+ >stuff : Symbol(stuff, Decl(spreadExpressionContextualTypeWithNamespace_1.ts, 0, 6))
+ 
+ stuff.func;
+->stuff.func : Symbol(stuff.func, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 8))
++>stuff.func : Symbol(func, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 8))
+ >stuff : Symbol(stuff, Decl(spreadExpressionContextualTypeWithNamespace_1.ts, 0, 6))
+->func : Symbol(stuff.func, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 8))
++>func : Symbol(func, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 8))
+ 
+ stuff.klass;
+->stuff.klass : Symbol(stuff.klass, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 14))
++>stuff.klass : Symbol(klass, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 14))
+ >stuff : Symbol(stuff, Decl(spreadExpressionContextualTypeWithNamespace_1.ts, 0, 6))
+->klass : Symbol(stuff.klass, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 14))
++>klass : Symbol(klass, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 14))
+ 
+ stuff.obj;
+->stuff.obj : Symbol(stuff.obj, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 21))
++>stuff.obj : Symbol(obj, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 21))
+ >stuff : Symbol(stuff, Decl(spreadExpressionContextualTypeWithNamespace_1.ts, 0, 6))
+->obj : Symbol(stuff.obj, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 21))
++>obj : Symbol(obj, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 21))
+ 
+ stuff.exportedDirectly;
+->stuff.exportedDirectly : Symbol(stuff.exportedDirectly, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 28))
++>stuff.exportedDirectly : Symbol(exportedDirectly, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 28))
+ >stuff : Symbol(stuff, Decl(spreadExpressionContextualTypeWithNamespace_1.ts, 0, 6))
+->exportedDirectly : Symbol(stuff.exportedDirectly, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 28))
++>exportedDirectly : Symbol(exportedDirectly, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 28))
+ 
+ function getStuff<T>() {
+ >getStuff : Symbol(getStuff, Decl(spreadExpressionContextualTypeWithNamespace_1.ts, 5, 23))
+@@= skipped -28, +28 lines =@@
+ >stuff : Symbol(stuff, Decl(spreadExpressionContextualTypeWithNamespace_1.ts, 0, 6))
+ 
+   thing.func;
+->thing.func : Symbol(stuff.func, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 8))
++>thing.func : Symbol(func, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 8))
+ >thing : Symbol(thing, Decl(spreadExpressionContextualTypeWithNamespace_1.ts, 8, 7))
+->func : Symbol(stuff.func, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 8))
++>func : Symbol(func, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 8))
+ 
+   thing.klass;
+->thing.klass : Symbol(stuff.klass, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 14))
++>thing.klass : Symbol(klass, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 14))
+ >thing : Symbol(thing, Decl(spreadExpressionContextualTypeWithNamespace_1.ts, 8, 7))
+->klass : Symbol(stuff.klass, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 14))
++>klass : Symbol(klass, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 14))
+ 
+   thing.obj;
+->thing.obj : Symbol(stuff.obj, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 21))
++>thing.obj : Symbol(obj, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 21))
+ >thing : Symbol(thing, Decl(spreadExpressionContextualTypeWithNamespace_1.ts, 8, 7))
+->obj : Symbol(stuff.obj, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 21))
++>obj : Symbol(obj, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 21))
+ 
+   thing.exportedDirectly;
+->thing.exportedDirectly : Symbol(stuff.exportedDirectly, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 28))
++>thing.exportedDirectly : Symbol(exportedDirectly, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 28))
+ >thing : Symbol(thing, Decl(spreadExpressionContextualTypeWithNamespace_1.ts, 8, 7))
+->exportedDirectly : Symbol(stuff.exportedDirectly, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 28))
++>exportedDirectly : Symbol(exportedDirectly, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 28))
+ 
+   return thing;
+ >thing : Symbol(thing, Decl(spreadExpressionContextualTypeWithNamespace_1.ts, 8, 7))
+ }
+ 
+ getStuff().func;
+->getStuff().func : Symbol(stuff.func, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 8))
++>getStuff().func : Symbol(func, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 8))
+ >getStuff : Symbol(getStuff, Decl(spreadExpressionContextualTypeWithNamespace_1.ts, 5, 23))
+->func : Symbol(stuff.func, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 8))
++>func : Symbol(func, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 8))
+ 
+ getStuff().klass;
+->getStuff().klass : Symbol(stuff.klass, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 14))
++>getStuff().klass : Symbol(klass, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 14))
+ >getStuff : Symbol(getStuff, Decl(spreadExpressionContextualTypeWithNamespace_1.ts, 5, 23))
+->klass : Symbol(stuff.klass, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 14))
++>klass : Symbol(klass, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 14))
+ 
+ getStuff().obj;
+->getStuff().obj : Symbol(stuff.obj, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 21))
++>getStuff().obj : Symbol(obj, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 21))
+ >getStuff : Symbol(getStuff, Decl(spreadExpressionContextualTypeWithNamespace_1.ts, 5, 23))
+->obj : Symbol(stuff.obj, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 21))
++>obj : Symbol(obj, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 21))
+ 
+ getStuff().exportedDirectly;
+->getStuff().exportedDirectly : Symbol(stuff.exportedDirectly, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 28))
++>getStuff().exportedDirectly : Symbol(exportedDirectly, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 28))
+ >getStuff : Symbol(getStuff, Decl(spreadExpressionContextualTypeWithNamespace_1.ts, 5, 23))
+->exportedDirectly : Symbol(stuff.exportedDirectly, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 28))
++>exportedDirectly : Symbol(exportedDirectly, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 28))
+ 

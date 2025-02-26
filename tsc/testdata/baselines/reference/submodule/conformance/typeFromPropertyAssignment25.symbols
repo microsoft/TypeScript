@@ -1,0 +1,42 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment25.ts] ////
+
+=== bug24703.js ===
+var Common = {};
+>Common : Symbol(Common, Decl(bug24703.js, 0, 3))
+
+Common.I = class {
+>Common : Symbol(Common, Decl(bug24703.js, 0, 3))
+
+    constructor() {
+        this.i = 1
+>this : Symbol(I, Decl(bug24703.js, 1, 10))
+    }
+}
+Common.O = class extends Common.I {
+>Common : Symbol(Common, Decl(bug24703.js, 0, 3))
+>Common : Symbol(Common, Decl(bug24703.js, 0, 3))
+
+    constructor() {
+        super()
+        this.o = 2
+>this : Symbol(O, Decl(bug24703.js, 6, 10))
+    }
+}
+var o = new Common.O()
+>o : Symbol(o, Decl(bug24703.js, 12, 3))
+>Common : Symbol(Common, Decl(bug24703.js, 0, 3))
+
+var i = new Common.I()
+>i : Symbol(i, Decl(bug24703.js, 13, 3))
+>Common : Symbol(Common, Decl(bug24703.js, 0, 3))
+
+o.i
+>o : Symbol(o, Decl(bug24703.js, 12, 3))
+
+o.o
+>o : Symbol(o, Decl(bug24703.js, 12, 3))
+
+i.i
+>i : Symbol(i, Decl(bug24703.js, 13, 3))
+
+

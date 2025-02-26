@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/moduleExportNonStructured.ts] ////
+
+=== index.mts ===
+import * as exportAny from "./exportAny.cjs";
+>exportAny : Symbol(exportAny, Decl(index.mts, 0, 6))
+
+import * as exportUnknown from "./exportUnknown.cjs";
+>exportUnknown : Symbol(exportUnknown, Decl(index.mts, 1, 6))
+
+import * as exportSymbol from "./exportSymbol.cjs";
+>exportSymbol : Symbol(exportSymbol, Decl(index.mts, 2, 6))
+
+import type * as exportAnyType from "./exportAny.cjs";
+>exportAnyType : Symbol(exportAnyType, Decl(index.mts, 4, 11))
+
+import type * as exportUnknownType from "./exportUnknown.cjs";
+>exportUnknownType : Symbol(exportUnknownType, Decl(index.mts, 5, 11))
+
+import type * as exportSymbolType from "./exportSymbol.cjs";
+>exportSymbolType : Symbol(exportSymbolType, Decl(index.mts, 6, 11))
+
+=== exportAny.d.cts ===
+declare const __: any;
+>__ : Symbol(__, Decl(exportAny.d.cts, 0, 13))
+
+export = __;
+>__ : Symbol(__, Decl(exportAny.d.cts, 0, 13))
+
+
+=== exportUnknown.d.cts ===
+declare const __: unknown;
+>__ : Symbol(__, Decl(exportUnknown.d.cts, 0, 13))
+
+export = __;
+>__ : Symbol(__, Decl(exportUnknown.d.cts, 0, 13))
+
+
+=== exportSymbol.d.cts ===
+declare const __: symbol;
+>__ : Symbol(__, Decl(exportSymbol.d.cts, 0, 13))
+
+export = __;
+>__ : Symbol(__, Decl(exportSymbol.d.cts, 0, 13))
+

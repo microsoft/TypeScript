@@ -1,0 +1,16 @@
+--- old.declarationEmitExpressionInExtends2.symbols
++++ new.declarationEmitExpressionInExtends2.symbols
+@@= skipped -6, +6 lines =@@
+ >U : Symbol(U, Decl(declarationEmitExpressionInExtends2.ts, 0, 10))
+ 
+     x: T;
+->x : Symbol(C.x, Decl(declarationEmitExpressionInExtends2.ts, 0, 15))
++>x : Symbol(x, Decl(declarationEmitExpressionInExtends2.ts, 0, 15))
+ >T : Symbol(T, Decl(declarationEmitExpressionInExtends2.ts, 0, 8))
+ 
+     y: U;
+->y : Symbol(C.y, Decl(declarationEmitExpressionInExtends2.ts, 1, 9))
++>y : Symbol(y, Decl(declarationEmitExpressionInExtends2.ts, 1, 9))
+ >U : Symbol(U, Decl(declarationEmitExpressionInExtends2.ts, 0, 10))
+ }
+ 

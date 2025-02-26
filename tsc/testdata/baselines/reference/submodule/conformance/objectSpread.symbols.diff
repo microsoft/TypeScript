@@ -1,0 +1,13 @@
+--- old.objectSpread.symbols
++++ new.objectSpread.symbols
+@@= skipped -257, +257 lines =@@
+ // methods are not enumerable
+ class C { p = 1; m() { } }
+ >C : Symbol(C, Decl(objectSpread.ts, 69, 32))
+->p : Symbol(C.p, Decl(objectSpread.ts, 72, 9))
+->m : Symbol(C.m, Decl(objectSpread.ts, 72, 16))
++>p : Symbol(p, Decl(objectSpread.ts, 72, 9))
++>m : Symbol(m, Decl(objectSpread.ts, 72, 16))
+ 
+ let c: C = new C()
+ >c : Symbol(c, Decl(objectSpread.ts, 73, 3))

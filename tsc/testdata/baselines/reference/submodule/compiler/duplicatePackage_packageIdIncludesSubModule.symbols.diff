@@ -1,0 +1,15 @@
+--- old.duplicatePackage_packageIdIncludesSubModule.symbols
++++ new.duplicatePackage_packageIdIncludesSubModule.symbols
+@@= skipped -8, +8 lines =@@
+ 
+ === /node_modules/foo/Foo.d.ts ===
+ export default class Foo {
+->Foo : Symbol(Foo, Decl(Foo.d.ts, 0, 0))
++>Foo : Symbol(default, Decl(Foo.d.ts, 0, 0))
+ 
+     protected source: boolean;
+->source : Symbol(Foo.source, Decl(Foo.d.ts, 0, 26))
++>source : Symbol(source, Decl(Foo.d.ts, 0, 26))
+ }
+ 
+ === /node_modules/foo/Bar.d.ts ===

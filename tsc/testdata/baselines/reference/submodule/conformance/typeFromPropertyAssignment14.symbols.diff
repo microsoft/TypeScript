@@ -1,0 +1,58 @@
+--- old.typeFromPropertyAssignment14.symbols
++++ new.typeFromPropertyAssignment14.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === def.js ===
+ var Outer = {};
+->Outer : Symbol(Outer, Decl(def.js, 0, 3), Decl(work.js, 0, 0), Decl(work.js, 0, 28))
++>Outer : Symbol(Outer, Decl(def.js, 0, 3))
+ 
+ === work.js ===
+ Outer.Inner = function () {}
+->Outer.Inner : Symbol(Outer.Inner, Decl(work.js, 0, 0), Decl(work.js, 1, 6))
+->Outer : Symbol(Outer, Decl(def.js, 0, 3), Decl(work.js, 0, 0), Decl(work.js, 0, 28))
+->Inner : Symbol(Outer.Inner, Decl(work.js, 0, 0), Decl(work.js, 1, 6))
++>Outer : Symbol(Outer, Decl(def.js, 0, 3))
+ 
+ Outer.Inner.prototype = {
+->Outer.Inner.prototype : Symbol(Outer.Inner.prototype, Decl(work.js, 0, 28))
+->Outer.Inner : Symbol(Outer.Inner, Decl(work.js, 0, 0), Decl(work.js, 1, 6))
+->Outer : Symbol(Outer, Decl(def.js, 0, 3), Decl(work.js, 0, 0), Decl(work.js, 0, 28))
+->Inner : Symbol(Outer.Inner, Decl(work.js, 0, 0), Decl(work.js, 1, 6))
+->prototype : Symbol(Outer.Inner.prototype, Decl(work.js, 0, 28))
++>Outer : Symbol(Outer, Decl(def.js, 0, 3))
+ 
+     x: 1,
+ >x : Symbol(x, Decl(work.js, 1, 25))
+@@= skipped -28, +22 lines =@@
+ >inner : Symbol(inner, Decl(use.js, 1, 3))
+ 
+ inner.x
+->inner.x : Symbol(x, Decl(work.js, 1, 25))
+ >inner : Symbol(inner, Decl(use.js, 1, 3))
+->x : Symbol(x, Decl(work.js, 1, 25))
+ 
+ inner.m()
+->inner.m : Symbol(m, Decl(work.js, 2, 9))
+ >inner : Symbol(inner, Decl(use.js, 1, 3))
+->m : Symbol(m, Decl(work.js, 2, 9))
+ 
+ var inno = new Outer.Inner()
+ >inno : Symbol(inno, Decl(use.js, 4, 3))
+->Outer.Inner : Symbol(Outer.Inner, Decl(work.js, 0, 0), Decl(work.js, 1, 6))
+->Outer : Symbol(Outer, Decl(def.js, 0, 3), Decl(work.js, 0, 0), Decl(work.js, 0, 28))
+->Inner : Symbol(Outer.Inner, Decl(work.js, 0, 0), Decl(work.js, 1, 6))
++>Outer : Symbol(Outer, Decl(def.js, 0, 3))
+ 
+ inno.x
+->inno.x : Symbol(x, Decl(work.js, 1, 25))
+ >inno : Symbol(inno, Decl(use.js, 4, 3))
+->x : Symbol(x, Decl(work.js, 1, 25))
+ 
+ inno.m()
+->inno.m : Symbol(m, Decl(work.js, 2, 9))
+ >inno : Symbol(inno, Decl(use.js, 4, 3))
+->m : Symbol(m, Decl(work.js, 2, 9))
+ 
+ 
+ 

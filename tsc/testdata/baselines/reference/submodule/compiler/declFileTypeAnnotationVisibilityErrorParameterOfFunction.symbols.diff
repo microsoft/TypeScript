@@ -1,0 +1,37 @@
+--- old.declFileTypeAnnotationVisibilityErrorParameterOfFunction.symbols
++++ new.declFileTypeAnnotationVisibilityErrorParameterOfFunction.symbols
+@@= skipped -68, +68 lines =@@
+ >foo111 : Symbol(foo111, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 31, 5))
+ >param : Symbol(param, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 33, 20))
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 26, 5))
+->public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 28, 15))
++>public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 28, 15))
+     }
+     function foo112(param = new m2.public2()) {
+ >foo112 : Symbol(foo112, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 34, 5))
+ >param : Symbol(param, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 35, 20))
+->m2.public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 28, 15))
++>m2.public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 28, 15))
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 26, 5))
+->public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 28, 15))
++>public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 28, 15))
+     }
+ 
+     export function foo113(param: m2.public2) {
+ >foo113 : Symbol(foo113, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 36, 5))
+ >param : Symbol(param, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 38, 27))
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 26, 5))
+->public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 28, 15))
++>public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 28, 15))
+     }
+     export function foo114(param = new m2.public2()) {
+ >foo114 : Symbol(foo114, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 39, 5))
+ >param : Symbol(param, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 40, 27))
+->m2.public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 28, 15))
++>m2.public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 28, 15))
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 26, 5))
+->public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 28, 15))
++>public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts, 28, 15))
+     }
+ }
+ 

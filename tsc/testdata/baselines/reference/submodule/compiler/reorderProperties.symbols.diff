@@ -1,0 +1,38 @@
+--- old.reorderProperties.symbols
++++ new.reorderProperties.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(reorderProperties.ts, 0, 12))
+ 
+     x: T
+->x : Symbol(A.x, Decl(reorderProperties.ts, 0, 16))
++>x : Symbol(x, Decl(reorderProperties.ts, 0, 16))
+ >T : Symbol(T, Decl(reorderProperties.ts, 0, 12))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(reorderProperties.ts, 4, 12))
+ 
+     x: T
+->x : Symbol(B.x, Decl(reorderProperties.ts, 4, 16))
++>x : Symbol(x, Decl(reorderProperties.ts, 4, 16))
+ >T : Symbol(T, Decl(reorderProperties.ts, 4, 12))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >S : Symbol(S, Decl(reorderProperties.ts, 8, 12))
+ 
+     y: S
+->y : Symbol(C.y, Decl(reorderProperties.ts, 8, 32))
++>y : Symbol(y, Decl(reorderProperties.ts, 8, 32))
+ >S : Symbol(S, Decl(reorderProperties.ts, 8, 12))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >S : Symbol(S, Decl(reorderProperties.ts, 12, 12))
+ 
+     y: S
+->y : Symbol(D.y, Decl(reorderProperties.ts, 12, 32))
++>y : Symbol(y, Decl(reorderProperties.ts, 12, 32))
+ >S : Symbol(S, Decl(reorderProperties.ts, 12, 12))
+ }
+ 

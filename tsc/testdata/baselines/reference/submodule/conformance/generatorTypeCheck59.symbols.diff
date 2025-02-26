@@ -1,0 +1,11 @@
+--- old.generatorTypeCheck59.symbols
++++ new.generatorTypeCheck59.symbols
+@@= skipped -8, +8 lines =@@
+ 
+         @(yield "")
+         m() { }
+->m : Symbol(C.m, Decl(generatorTypeCheck59.ts, 1, 13))
++>m : Symbol(m, Decl(generatorTypeCheck59.ts, 1, 13))
+ 
+     };
+ }

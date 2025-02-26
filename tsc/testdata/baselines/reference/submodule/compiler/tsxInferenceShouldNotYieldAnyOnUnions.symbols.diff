@@ -1,0 +1,29 @@
+--- old.tsxInferenceShouldNotYieldAnyOnUnions.symbols
++++ new.tsxInferenceShouldNotYieldAnyOnUnions.symbols
+@@= skipped -19, +19 lines =@@
+ >T : Symbol(T, Decl(index.tsx, 6, 20))
+ 
+     data: T;
+->data : Symbol(PropsBase.data, Decl(index.tsx, 6, 24))
++>data : Symbol(data, Decl(index.tsx, 6, 24))
+ >T : Symbol(T, Decl(index.tsx, 6, 20))
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ >T : Symbol(T, Decl(index.tsx, 10, 27))
+ 
+     convert: (t: T) => string;
+->convert : Symbol(PropsWithConvert.convert, Decl(index.tsx, 10, 52))
++>convert : Symbol(convert, Decl(index.tsx, 10, 52))
+ >t : Symbol(t, Decl(index.tsx, 11, 14))
+ >T : Symbol(T, Decl(index.tsx, 10, 27))
+ }
+@@= skipped -12, +12 lines =@@
+ >Props : Symbol(Props, Decl(index.tsx, 2, 1))
+ >T : Symbol(T, Decl(index.tsx, 14, 29))
+ >JSX : Symbol(JSX, Decl(index.tsx, 0, 0))
+->Element : Symbol(JSX.Element, Decl(index.tsx, 0, 15))
++>Element : Symbol(Element, Decl(index.tsx, 0, 15))
+ 
+     return <div />;
+ }

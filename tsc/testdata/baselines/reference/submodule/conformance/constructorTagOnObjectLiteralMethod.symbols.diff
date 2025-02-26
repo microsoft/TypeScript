@@ -1,0 +1,11 @@
+--- old.constructorTagOnObjectLiteralMethod.symbols
++++ new.constructorTagOnObjectLiteralMethod.symbols
+@@= skipped -6, +6 lines =@@
+   /** @constructor */
+   Foo() { this.bar = "bar" }
+ >Foo : Symbol(Foo, Decl(example.js, 0, 13))
+->this : Symbol(obj, Decl(example.js, 0, 11))
+->bar : Symbol(bar, Decl(example.js, 2, 9))
+ 
+ };
+ (new obj.Foo()).bar

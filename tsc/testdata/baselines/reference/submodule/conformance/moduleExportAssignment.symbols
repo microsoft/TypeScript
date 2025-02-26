@@ -1,0 +1,12 @@
+//// [tests/cases/conformance/salsa/moduleExportAssignment.ts] ////
+
+=== use.js ===
+var npmlog = require('./npmlog')
+>npmlog : Symbol(npmlog, Decl(use.js, 0, 3))
+
+npmlog.x
+>npmlog : Symbol(npmlog, Decl(use.js, 0, 3))
+
+npmlog.on
+>npmlog : Symbol(npmlog, Decl(use.js, 0, 3))
+

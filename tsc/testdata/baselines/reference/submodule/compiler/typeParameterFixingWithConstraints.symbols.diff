@@ -1,0 +1,23 @@
+--- old.typeParameterFixingWithConstraints.symbols
++++ new.typeParameterFixingWithConstraints.symbols
+@@= skipped -11, +11 lines =@@
+ >IFoo : Symbol(IFoo, Decl(typeParameterFixingWithConstraints.ts, 2, 1))
+ 
+     foo<TBar extends IBar>(bar: TBar, bar1: (bar: TBar) => TBar, bar2: (bar: TBar) => TBar): TBar;
+->foo : Symbol(IFoo.foo, Decl(typeParameterFixingWithConstraints.ts, 4, 16))
++>foo : Symbol(foo, Decl(typeParameterFixingWithConstraints.ts, 4, 16))
+ >TBar : Symbol(TBar, Decl(typeParameterFixingWithConstraints.ts, 5, 8))
+ >IBar : Symbol(IBar, Decl(typeParameterFixingWithConstraints.ts, 0, 0))
+ >bar : Symbol(bar, Decl(typeParameterFixingWithConstraints.ts, 5, 27))
+@@= skipped -21, +21 lines =@@
+ >IFoo : Symbol(IFoo, Decl(typeParameterFixingWithConstraints.ts, 2, 1))
+ 
+ foo.foo({ bar: null }, bar => null, bar => null);
+->foo.foo : Symbol(IFoo.foo, Decl(typeParameterFixingWithConstraints.ts, 4, 16))
++>foo.foo : Symbol(foo, Decl(typeParameterFixingWithConstraints.ts, 4, 16))
+ >foo : Symbol(foo, Decl(typeParameterFixingWithConstraints.ts, 8, 3))
+->foo : Symbol(IFoo.foo, Decl(typeParameterFixingWithConstraints.ts, 4, 16))
++>foo : Symbol(foo, Decl(typeParameterFixingWithConstraints.ts, 4, 16))
+ >bar : Symbol(bar, Decl(typeParameterFixingWithConstraints.ts, 9, 9))
+ >bar : Symbol(bar, Decl(typeParameterFixingWithConstraints.ts, 9, 22))
+ >bar : Symbol(bar, Decl(typeParameterFixingWithConstraints.ts, 9, 35))

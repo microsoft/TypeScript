@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/emitThisInSuperMethodCall.ts] ////
+
+=== emitThisInSuperMethodCall.ts ===
+class User {
+>User : Symbol(User, Decl(emitThisInSuperMethodCall.ts, 0, 0))
+
+    sayHello() {
+>sayHello : Symbol(sayHello, Decl(emitThisInSuperMethodCall.ts, 0, 12))
+    }
+}
+
+class RegisteredUser extends User {
+>RegisteredUser : Symbol(RegisteredUser, Decl(emitThisInSuperMethodCall.ts, 3, 1))
+>User : Symbol(User, Decl(emitThisInSuperMethodCall.ts, 0, 0))
+
+    f() {
+>f : Symbol(f, Decl(emitThisInSuperMethodCall.ts, 5, 35))
+
+        () => {
+            function inner() {
+>inner : Symbol(inner, Decl(emitThisInSuperMethodCall.ts, 7, 15))
+
+                super.sayHello();
+            }
+        };
+    }
+    g() {
+>g : Symbol(g, Decl(emitThisInSuperMethodCall.ts, 12, 5))
+
+        function inner() {
+>inner : Symbol(inner, Decl(emitThisInSuperMethodCall.ts, 13, 9))
+
+            () => {
+                super.sayHello();
+            }
+        }
+    }
+    h() {
+>h : Symbol(h, Decl(emitThisInSuperMethodCall.ts, 19, 5))
+
+        function inner() {
+>inner : Symbol(inner, Decl(emitThisInSuperMethodCall.ts, 20, 9))
+
+            super.sayHello();
+        }
+    }
+}
+

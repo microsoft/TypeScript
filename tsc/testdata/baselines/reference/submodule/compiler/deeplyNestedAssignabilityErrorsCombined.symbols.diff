@@ -1,0 +1,19 @@
+--- old.deeplyNestedAssignabilityErrorsCombined.symbols
++++ new.deeplyNestedAssignabilityErrorsCombined.symbols
+@@= skipped -28, +28 lines =@@
+ >Ctor1 : Symbol(Ctor1, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 2, 6))
+ 
+     g = "ok"
+->g : Symbol(Ctor1.g, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 4, 13))
++>g : Symbol(g, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 4, 13))
+ }
+ 
+ class Ctor2 {
+ >Ctor2 : Symbol(Ctor2, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 6, 1))
+ 
+     g = 12;
+->g : Symbol(Ctor2.g, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 8, 13))
++>g : Symbol(g, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 8, 13))
+ }
+ 
+ let x2 = { a: { b: { c: { d: { e: { f: Ctor1 } } } } } };

@@ -1,0 +1,31 @@
+--- old.augmentExportEquals6_1.symbols
++++ new.augmentExportEquals6_1.symbols
+@@= skipped -24, +24 lines =@@
+ 
+ // OK - './file1' is a namespace
+ declare module "file1" {
+->"file1" : Symbol(x, Decl(file1.d.ts, 0, 24), Decl(file1.d.ts, 1, 16), Decl(file2.ts, 1, 28))
++>"file1" : Symbol(foo, Decl(file1.d.ts, 0, 24), Decl(file1.d.ts, 1, 16), Decl(file2.ts, 1, 28))
+ 
+     interface A { a: number }
+ >A : Symbol(A, Decl(file1.d.ts, 2, 19), Decl(file2.ts, 4, 24))
+->a : Symbol(A.a, Decl(file2.ts, 5, 17))
++>a : Symbol(a, Decl(file2.ts, 5, 17))
+ }
+ 
+ === file3.ts ===
+@@= skipped -15, +15 lines =@@
+ let a: x.A;
+ >a : Symbol(a, Decl(file3.ts, 2, 3))
+ >x : Symbol(x, Decl(file3.ts, 0, 6))
+->A : Symbol(x.A, Decl(file1.d.ts, 2, 19), Decl(file2.ts, 4, 24))
++>A : Symbol(A, Decl(file1.d.ts, 2, 19), Decl(file2.ts, 4, 24))
+ 
+ let b = a.a;
+ >b : Symbol(b, Decl(file3.ts, 3, 3))
+->a.a : Symbol(x.A.a, Decl(file2.ts, 5, 17))
++>a.a : Symbol(a, Decl(file2.ts, 5, 17))
+ >a : Symbol(a, Decl(file3.ts, 2, 3))
+->a : Symbol(x.A.a, Decl(file2.ts, 5, 17))
++>a : Symbol(a, Decl(file2.ts, 5, 17))
+ 

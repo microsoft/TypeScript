@@ -1,0 +1,54 @@
+--- old.constEnumNoEmitReexport.symbols
++++ new.constEnumNoEmitReexport.symbols
+@@= skipped -4, +4 lines =@@
+ >MyConstEnum : Symbol(MyConstEnum, Decl(ConstEnum.ts, 0, 0))
+ 
+     Foo,
+->Foo : Symbol(MyConstEnum.Foo, Decl(ConstEnum.ts, 0, 31))
++>Foo : Symbol(Foo, Decl(ConstEnum.ts, 0, 31))
+ 
+     Bar
+->Bar : Symbol(MyConstEnum.Bar, Decl(ConstEnum.ts, 1, 8))
++>Bar : Symbol(Bar, Decl(ConstEnum.ts, 1, 8))
+ 
+ };
+ === ImportExport.ts ===
+@@= skipped -37, +37 lines =@@
+ >MyConstEnum2 : Symbol(MyConstEnum2, Decl(Usage1.ts, 1, 6))
+ 
+ MyConstEnum1.Foo;
+->MyConstEnum1.Foo : Symbol(MyConstEnum1.Foo, Decl(ConstEnum.ts, 0, 31))
++>MyConstEnum1.Foo : Symbol(Foo, Decl(ConstEnum.ts, 0, 31))
+ >MyConstEnum1 : Symbol(MyConstEnum1, Decl(Usage1.ts, 0, 6))
+->Foo : Symbol(MyConstEnum1.Foo, Decl(ConstEnum.ts, 0, 31))
++>Foo : Symbol(Foo, Decl(ConstEnum.ts, 0, 31))
+ 
+ MyConstEnum2.Foo;
+->MyConstEnum2.Foo : Symbol(MyConstEnum1.Foo, Decl(ConstEnum.ts, 0, 31))
++>MyConstEnum2.Foo : Symbol(Foo, Decl(ConstEnum.ts, 0, 31))
+ >MyConstEnum2 : Symbol(MyConstEnum2, Decl(Usage1.ts, 1, 6))
+->Foo : Symbol(MyConstEnum1.Foo, Decl(ConstEnum.ts, 0, 31))
++>Foo : Symbol(Foo, Decl(ConstEnum.ts, 0, 31))
+ 
+ === Usage2.ts ===
+ import { MyConstEnum } from './ImportExport';
+ >MyConstEnum : Symbol(MyConstEnum, Decl(Usage2.ts, 0, 8))
+ 
+ MyConstEnum.Foo;
+->MyConstEnum.Foo : Symbol(MyConstEnum.Foo, Decl(ConstEnum.ts, 0, 31))
++>MyConstEnum.Foo : Symbol(Foo, Decl(ConstEnum.ts, 0, 31))
+ >MyConstEnum : Symbol(MyConstEnum, Decl(Usage2.ts, 0, 8))
+->Foo : Symbol(MyConstEnum.Foo, Decl(ConstEnum.ts, 0, 31))
++>Foo : Symbol(Foo, Decl(ConstEnum.ts, 0, 31))
+ 
+ === Usage3.ts ===
+ import { MyConstEnum } from './ReExport';
+ >MyConstEnum : Symbol(MyConstEnum, Decl(Usage3.ts, 0, 8))
+ 
+ MyConstEnum.Foo;
+->MyConstEnum.Foo : Symbol(MyConstEnum.Foo, Decl(ConstEnum.ts, 0, 31))
++>MyConstEnum.Foo : Symbol(Foo, Decl(ConstEnum.ts, 0, 31))
+ >MyConstEnum : Symbol(MyConstEnum, Decl(Usage3.ts, 0, 8))
+->Foo : Symbol(MyConstEnum.Foo, Decl(ConstEnum.ts, 0, 31))
++>Foo : Symbol(Foo, Decl(ConstEnum.ts, 0, 31))
+ 

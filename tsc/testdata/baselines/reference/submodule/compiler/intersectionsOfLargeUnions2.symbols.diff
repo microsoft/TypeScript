@@ -1,0 +1,39 @@
+--- old.intersectionsOfLargeUnions2.symbols
++++ new.intersectionsOfLargeUnions2.symbols
+@@= skipped -3, +3 lines =@@
+ // Repro from #24233
+ 
+ declare global {
+->global : Symbol(global, Decl(intersectionsOfLargeUnions2.ts, 0, 0))
++>global : Symbol((Missing), Decl(intersectionsOfLargeUnions2.ts, 0, 0))
+ 
+     interface ElementTagNameMap {
+ >ElementTagNameMap : Symbol(ElementTagNameMap, Decl(intersectionsOfLargeUnions2.ts, 2, 16))
+@@= skipped -29, +29 lines =@@
+     let nodeType = node === null ? null : node.nodeType;
+ >nodeType : Symbol(nodeType, Decl(intersectionsOfLargeUnions2.ts, 13, 7))
+ >node : Symbol(node, Decl(intersectionsOfLargeUnions2.ts, 12, 32))
+->node.nodeType : Symbol(Node.nodeType, Decl(lib.dom.d.ts, --, --))
++>node.nodeType : Symbol(nodeType, Decl(lib.dom.d.ts, --, --))
+ >node : Symbol(node, Decl(intersectionsOfLargeUnions2.ts, 12, 32))
+->nodeType : Symbol(Node.nodeType, Decl(lib.dom.d.ts, --, --))
++>nodeType : Symbol(nodeType, Decl(lib.dom.d.ts, --, --))
+ 
+     return nodeType === 1;
+ >nodeType : Symbol(nodeType, Decl(intersectionsOfLargeUnions2.ts, 13, 7))
+@@= skipped -32, +32 lines =@@
+ 
+         const nodeTagName = node.tagName.toLowerCase();
+ >nodeTagName : Symbol(nodeTagName, Decl(intersectionsOfLargeUnions2.ts, 21, 13))
+->node.tagName.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+->node.tagName : Symbol(Element.tagName, Decl(lib.dom.d.ts, --, --))
++>node.tagName.toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
++>node.tagName : Symbol(tagName, Decl(lib.dom.d.ts, --, --))
+ >node : Symbol(node, Decl(intersectionsOfLargeUnions2.ts, 19, 36))
+->tagName : Symbol(Element.tagName, Decl(lib.dom.d.ts, --, --))
+->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>tagName : Symbol(tagName, Decl(lib.dom.d.ts, --, --))
++>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+ 
+          return nodeTagName === tagName;
+ >nodeTagName : Symbol(nodeTagName, Decl(intersectionsOfLargeUnions2.ts, 21, 13))

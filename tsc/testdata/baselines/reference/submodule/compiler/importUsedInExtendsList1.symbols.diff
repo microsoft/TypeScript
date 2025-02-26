@@ -1,0 +1,30 @@
+--- old.importUsedInExtendsList1.symbols
++++ new.importUsedInExtendsList1.symbols
+@@= skipped -6, +6 lines =@@
+ 
+ class Sub extends foo.Super { }
+ >Sub : Symbol(Sub, Decl(importUsedInExtendsList1_1.ts, 1, 59))
+->foo.Super : Symbol(foo.Super, Decl(importUsedInExtendsList1_require.ts, 0, 0))
++>foo.Super : Symbol(Super, Decl(importUsedInExtendsList1_require.ts, 0, 0))
+ >foo : Symbol(foo, Decl(importUsedInExtendsList1_1.ts, 0, 0))
+->Super : Symbol(foo.Super, Decl(importUsedInExtendsList1_require.ts, 0, 0))
++>Super : Symbol(Super, Decl(importUsedInExtendsList1_require.ts, 0, 0))
+ 
+ var s: Sub;
+ >s : Symbol(s, Decl(importUsedInExtendsList1_1.ts, 3, 3))
+@@= skipped -10, +10 lines =@@
+ 
+ var r: string = s.foo;
+ >r : Symbol(r, Decl(importUsedInExtendsList1_1.ts, 4, 3))
+->s.foo : Symbol(foo.Super.foo, Decl(importUsedInExtendsList1_require.ts, 0, 20))
++>s.foo : Symbol(foo, Decl(importUsedInExtendsList1_require.ts, 0, 20))
+ >s : Symbol(s, Decl(importUsedInExtendsList1_1.ts, 3, 3))
+->foo : Symbol(foo.Super.foo, Decl(importUsedInExtendsList1_require.ts, 0, 20))
++>foo : Symbol(foo, Decl(importUsedInExtendsList1_require.ts, 0, 20))
+ 
+ === importUsedInExtendsList1_require.ts ===
+ export class Super { foo: string; }
+ >Super : Symbol(Super, Decl(importUsedInExtendsList1_require.ts, 0, 0))
+->foo : Symbol(Super.foo, Decl(importUsedInExtendsList1_require.ts, 0, 20))
++>foo : Symbol(foo, Decl(importUsedInExtendsList1_require.ts, 0, 20))
+ 

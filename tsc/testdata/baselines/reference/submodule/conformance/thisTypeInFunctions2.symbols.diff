@@ -1,0 +1,96 @@
+--- old.thisTypeInFunctions2.symbols
++++ new.thisTypeInFunctions2.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     // this is a workaround for React
+     init?: (this: this) => void;
+->init : Symbol(IndexedWithThis.init, Decl(thisTypeInFunctions2.ts, 0, 27))
++>init : Symbol(init, Decl(thisTypeInFunctions2.ts, 0, 27))
+ >this : Symbol(this, Decl(thisTypeInFunctions2.ts, 2, 12))
+ 
+     willDestroy?: (this: any) => void;
+->willDestroy : Symbol(IndexedWithThis.willDestroy, Decl(thisTypeInFunctions2.ts, 2, 32))
++>willDestroy : Symbol(willDestroy, Decl(thisTypeInFunctions2.ts, 2, 32))
+ >this : Symbol(this, Decl(thisTypeInFunctions2.ts, 3, 19))
+ 
+     [propName: string]: number | string | boolean | symbol | undefined | null | {} | ((this: any, ...args:any[]) => any);
+@@= skipped -17, +17 lines =@@
+ 
+     // this is what React would like to write (and what they write today)
+     init?: () => void;
+->init : Symbol(IndexedWithoutThis.init, Decl(thisTypeInFunctions2.ts, 6, 30))
++>init : Symbol(init, Decl(thisTypeInFunctions2.ts, 6, 30))
+ 
+     willDestroy?: () => void;
+->willDestroy : Symbol(IndexedWithoutThis.willDestroy, Decl(thisTypeInFunctions2.ts, 8, 22))
++>willDestroy : Symbol(willDestroy, Decl(thisTypeInFunctions2.ts, 8, 22))
+ 
+     [propName: string]: any;
+ >propName : Symbol(propName, Decl(thisTypeInFunctions2.ts, 10, 5))
+@@= skipped -12, +12 lines =@@
+ >SimpleInterface : Symbol(SimpleInterface, Decl(thisTypeInFunctions2.ts, 11, 1))
+ 
+     foo(n: string);
+->foo : Symbol(SimpleInterface.foo, Decl(thisTypeInFunctions2.ts, 12, 27))
++>foo : Symbol(foo, Decl(thisTypeInFunctions2.ts, 12, 27))
+ >n : Symbol(n, Decl(thisTypeInFunctions2.ts, 13, 8))
+ 
+     bar(): number;
+->bar : Symbol(SimpleInterface.bar, Decl(thisTypeInFunctions2.ts, 13, 19))
++>bar : Symbol(bar, Decl(thisTypeInFunctions2.ts, 13, 19))
+ }
+ declare function extend1(args: IndexedWithThis): void;
+ >extend1 : Symbol(extend1, Decl(thisTypeInFunctions2.ts, 15, 1))
+@@= skipped -32, +32 lines =@@
+ 
+         // this.mine
+         this.willDestroy
+->this.willDestroy : Symbol(IndexedWithThis.willDestroy, Decl(thisTypeInFunctions2.ts, 2, 32))
++>this.willDestroy : Symbol(willDestroy, Decl(thisTypeInFunctions2.ts, 2, 32))
+ >this : Symbol(this, Decl(thisTypeInFunctions2.ts, 2, 12))
+->willDestroy : Symbol(IndexedWithThis.willDestroy, Decl(thisTypeInFunctions2.ts, 2, 32))
++>willDestroy : Symbol(willDestroy, Decl(thisTypeInFunctions2.ts, 2, 32))
+ 
+     },
+     mine: 12,
+@@= skipped -28, +28 lines =@@
+ >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
+ 
+         this.mine
+->this.mine : Symbol(IndexedWithoutThis.__index, Decl(thisTypeInFunctions2.ts, 9, 29))
++>this.mine : Symbol((Missing), Decl(thisTypeInFunctions2.ts, 9, 29))
+ >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
+->mine : Symbol(IndexedWithoutThis.__index, Decl(thisTypeInFunctions2.ts, 9, 29))
++>mine : Symbol((Missing), Decl(thisTypeInFunctions2.ts, 9, 29))
+ 
+     },
+     mine: 13,
+@@= skipped -15, +15 lines =@@
+ >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
+ 
+         this.mine
+->this.mine : Symbol(IndexedWithoutThis.__index, Decl(thisTypeInFunctions2.ts, 9, 29))
++>this.mine : Symbol((Missing), Decl(thisTypeInFunctions2.ts, 9, 29))
+ >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
+->mine : Symbol(IndexedWithoutThis.__index, Decl(thisTypeInFunctions2.ts, 9, 29))
++>mine : Symbol((Missing), Decl(thisTypeInFunctions2.ts, 9, 29))
+     }
+ });
+ 
+@@= skipped -14, +14 lines =@@
+ >n : Symbol(n, Decl(thisTypeInFunctions2.ts, 45, 8))
+ 
+         return n.length + this.bar();
+->n.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>n.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >n : Symbol(n, Decl(thisTypeInFunctions2.ts, 45, 8))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+->this.bar : Symbol(SimpleInterface.bar, Decl(thisTypeInFunctions2.ts, 13, 19))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
++>this.bar : Symbol(bar, Decl(thisTypeInFunctions2.ts, 13, 19))
+ >this : Symbol(SimpleInterface, Decl(thisTypeInFunctions2.ts, 11, 1))
+->bar : Symbol(SimpleInterface.bar, Decl(thisTypeInFunctions2.ts, 13, 19))
++>bar : Symbol(bar, Decl(thisTypeInFunctions2.ts, 13, 19))
+ 
+     },
+     bar() {

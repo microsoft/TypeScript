@@ -1,0 +1,42 @@
+--- old.constEnumNamespaceReferenceCausesNoImport(isolatedmodules=false).symbols
++++ new.constEnumNamespaceReferenceCausesNoImport(isolatedmodules=false).symbols
+@@= skipped -4, +4 lines =@@
+ >ConstFooEnum : Symbol(ConstFooEnum, Decl(foo.ts, 0, 0))
+ 
+     Some,
+->Some : Symbol(ConstFooEnum.Some, Decl(foo.ts, 0, 32))
++>Some : Symbol(Some, Decl(foo.ts, 0, 32))
+ 
+     Values,
+->Values : Symbol(ConstFooEnum.Values, Decl(foo.ts, 1, 9))
++>Values : Symbol(Values, Decl(foo.ts, 1, 9))
+ 
+     Here
+->Here : Symbol(ConstFooEnum.Here, Decl(foo.ts, 2, 11))
++>Here : Symbol(Here, Decl(foo.ts, 2, 11))
+ 
+ };
+ export function fooFunc(): void { /* removed */ }
+@@= skipped -20, +20 lines =@@
+ >check : Symbol(check, Decl(index.ts, 0, 29))
+ >x : Symbol(x, Decl(index.ts, 2, 15))
+ >Foo : Symbol(Foo, Decl(index.ts, 0, 6))
+->ConstFooEnum : Symbol(Foo.ConstFooEnum, Decl(foo.ts, 0, 0))
++>ConstFooEnum : Symbol(ConstFooEnum, Decl(foo.ts, 0, 0))
+ 
+   switch (x) {
+ >x : Symbol(x, Decl(index.ts, 2, 15))
+ 
+     case Foo.ConstFooEnum.Some:
+->Foo.ConstFooEnum.Some : Symbol(Foo.ConstFooEnum.Some, Decl(foo.ts, 0, 32))
+->Foo.ConstFooEnum : Symbol(Foo.ConstFooEnum, Decl(foo.ts, 0, 0))
++>Foo.ConstFooEnum.Some : Symbol(Some, Decl(foo.ts, 0, 32))
++>Foo.ConstFooEnum : Symbol(ConstFooEnum, Decl(foo.ts, 0, 0))
+ >Foo : Symbol(Foo, Decl(index.ts, 0, 6))
+->ConstFooEnum : Symbol(Foo.ConstFooEnum, Decl(foo.ts, 0, 0))
+->Some : Symbol(Foo.ConstFooEnum.Some, Decl(foo.ts, 0, 32))
++>ConstFooEnum : Symbol(ConstFooEnum, Decl(foo.ts, 0, 0))
++>Some : Symbol(Some, Decl(foo.ts, 0, 32))
+ 
+       break;
+   }

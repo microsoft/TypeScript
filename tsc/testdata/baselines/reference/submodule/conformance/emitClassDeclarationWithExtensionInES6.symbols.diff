@@ -1,0 +1,61 @@
+--- old.emitClassDeclarationWithExtensionInES6.symbols
++++ new.emitClassDeclarationWithExtensionInES6.symbols
+@@= skipped -4, +4 lines =@@
+ >B : Symbol(B, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 0))
+ 
+     baz(a: string, y = 10) { }
+->baz : Symbol(B.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 9))
++>baz : Symbol(baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 9))
+ >a : Symbol(a, Decl(emitClassDeclarationWithExtensionInES6.ts, 1, 8))
+ >y : Symbol(y, Decl(emitClassDeclarationWithExtensionInES6.ts, 1, 18))
+ }
+@@= skipped -9, +9 lines =@@
+ >B : Symbol(B, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 0))
+ 
+     foo() { }
+->foo : Symbol(C.foo, Decl(emitClassDeclarationWithExtensionInES6.ts, 3, 19))
++>foo : Symbol(foo, Decl(emitClassDeclarationWithExtensionInES6.ts, 3, 19))
+ 
+     baz(a: string, y:number) {
+->baz : Symbol(C.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 4, 13))
++>baz : Symbol(baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 4, 13))
+ >a : Symbol(a, Decl(emitClassDeclarationWithExtensionInES6.ts, 5, 8))
+ >y : Symbol(y, Decl(emitClassDeclarationWithExtensionInES6.ts, 5, 18))
+ 
+         super.baz(a, y);
+->super.baz : Symbol(B.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 9))
++>super.baz : Symbol(baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 9))
+ >super : Symbol(B, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 0))
+->baz : Symbol(B.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 9))
++>baz : Symbol(baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 9))
+ >a : Symbol(a, Decl(emitClassDeclarationWithExtensionInES6.ts, 5, 8))
+ >y : Symbol(y, Decl(emitClassDeclarationWithExtensionInES6.ts, 5, 18))
+     }
+@@= skipped -25, +25 lines =@@
+     }
+ 
+     foo() {
+->foo : Symbol(D.foo, Decl(emitClassDeclarationWithExtensionInES6.ts, 12, 5))
++>foo : Symbol(foo, Decl(emitClassDeclarationWithExtensionInES6.ts, 12, 5))
+ 
+         super.foo();
+->super.foo : Symbol(C.foo, Decl(emitClassDeclarationWithExtensionInES6.ts, 3, 19))
++>super.foo : Symbol(foo, Decl(emitClassDeclarationWithExtensionInES6.ts, 3, 19))
+ >super : Symbol(C, Decl(emitClassDeclarationWithExtensionInES6.ts, 2, 1))
+->foo : Symbol(C.foo, Decl(emitClassDeclarationWithExtensionInES6.ts, 3, 19))
++>foo : Symbol(foo, Decl(emitClassDeclarationWithExtensionInES6.ts, 3, 19))
+     }
+ 
+     baz() {
+->baz : Symbol(D.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 16, 5))
++>baz : Symbol(baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 16, 5))
+ 
+         super.baz("hello", 10);
+->super.baz : Symbol(C.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 4, 13))
++>super.baz : Symbol(baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 4, 13))
+ >super : Symbol(C, Decl(emitClassDeclarationWithExtensionInES6.ts, 2, 1))
+->baz : Symbol(C.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 4, 13))
++>baz : Symbol(baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 4, 13))
+     }
+ }
+ 

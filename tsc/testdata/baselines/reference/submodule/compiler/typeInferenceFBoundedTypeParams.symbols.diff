@@ -1,0 +1,14 @@
+--- old.typeInferenceFBoundedTypeParams.symbols
++++ new.typeInferenceFBoundedTypeParams.symbols
+@@= skipped -44, +44 lines =@@
+ >a : Symbol(a, Decl(typeInferenceFBoundedTypeParams.ts, 9, 16))
+ 
+     values.push(value);
+->values.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>values.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >values : Symbol(values, Decl(typeInferenceFBoundedTypeParams.ts, 9, 32))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >value : Symbol(value, Decl(typeInferenceFBoundedTypeParams.ts, 9, 44))
+ 
+     return values;

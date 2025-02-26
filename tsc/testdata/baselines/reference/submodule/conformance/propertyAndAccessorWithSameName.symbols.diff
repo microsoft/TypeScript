@@ -1,0 +1,46 @@
+--- old.propertyAndAccessorWithSameName.symbols
++++ new.propertyAndAccessorWithSameName.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(propertyAndAccessorWithSameName.ts, 0, 0))
+ 
+     x: number;
+->x : Symbol(C.x, Decl(propertyAndAccessorWithSameName.ts, 0, 9))
++>x : Symbol(x, Decl(propertyAndAccessorWithSameName.ts, 0, 9))
+ 
+     get x() { // error
+->x : Symbol(C.x, Decl(propertyAndAccessorWithSameName.ts, 1, 14))
++>x : Symbol(x, Decl(propertyAndAccessorWithSameName.ts, 1, 14))
+ 
+         return 1;
+     }
+@@= skipped -13, +13 lines =@@
+ >D : Symbol(D, Decl(propertyAndAccessorWithSameName.ts, 5, 1))
+ 
+     x: number;
+->x : Symbol(D.x, Decl(propertyAndAccessorWithSameName.ts, 7, 9))
++>x : Symbol(x, Decl(propertyAndAccessorWithSameName.ts, 7, 9))
+ 
+     set x(v) { } // error
+->x : Symbol(D.x, Decl(propertyAndAccessorWithSameName.ts, 8, 14))
++>x : Symbol(x, Decl(propertyAndAccessorWithSameName.ts, 8, 14))
+ >v : Symbol(v, Decl(propertyAndAccessorWithSameName.ts, 9, 10))
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ >E : Symbol(E, Decl(propertyAndAccessorWithSameName.ts, 10, 1))
+ 
+     private x: number;
+->x : Symbol(E.x, Decl(propertyAndAccessorWithSameName.ts, 12, 9))
++>x : Symbol(x, Decl(propertyAndAccessorWithSameName.ts, 12, 9))
+ 
+     get x() { // error
+->x : Symbol(E.x, Decl(propertyAndAccessorWithSameName.ts, 13, 22))
++>x : Symbol(x, Decl(propertyAndAccessorWithSameName.ts, 13, 22))
+ 
+         return 1;
+     }
+     set x(v) { }
+->x : Symbol(E.x, Decl(propertyAndAccessorWithSameName.ts, 16, 5))
++>x : Symbol(x, Decl(propertyAndAccessorWithSameName.ts, 16, 5))
+ >v : Symbol(v, Decl(propertyAndAccessorWithSameName.ts, 17, 10))
+ }

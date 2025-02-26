@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/ambient/ambientEnumDeclaration2.ts] ////
+
+=== ambientEnumDeclaration2.ts ===
+// In ambient enum declarations that specify no const modifier, enum member declarations
+// that omit a value are considered computed members (as opposed to having auto- incremented values assigned).
+
+declare enum E {
+>E : Symbol(E, Decl(ambientEnumDeclaration2.ts, 0, 0))
+
+    a, // E.a
+>a : Symbol(a, Decl(ambientEnumDeclaration2.ts, 3, 16))
+
+    b, // E.b
+>b : Symbol(b, Decl(ambientEnumDeclaration2.ts, 4, 6))
+}
+
+declare const enum E1 {
+>E1 : Symbol(E1, Decl(ambientEnumDeclaration2.ts, 6, 1))
+
+    a, // E.a = 0
+>a : Symbol(a, Decl(ambientEnumDeclaration2.ts, 8, 23))
+
+    b, // E.b = 1
+>b : Symbol(b, Decl(ambientEnumDeclaration2.ts, 9, 6))
+}

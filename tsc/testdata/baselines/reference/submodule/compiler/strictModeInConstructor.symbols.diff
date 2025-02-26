@@ -1,0 +1,68 @@
+--- old.strictModeInConstructor.symbols
++++ new.strictModeInConstructor.symbols
+@@= skipped -11, +11 lines =@@
+ >A : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+ 
+     public s: number = 9;
+->s : Symbol(B.s, Decl(strictModeInConstructor.ts, 5, 19))
++>s : Symbol(s, Decl(strictModeInConstructor.ts, 5, 19))
+ 
+     constructor () {
+         "use strict";   // No error
+@@= skipped -14, +14 lines =@@
+ >A : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+ 
+     public s: number = 9;
+->s : Symbol(C.s, Decl(strictModeInConstructor.ts, 14, 19))
++>s : Symbol(s, Decl(strictModeInConstructor.ts, 14, 19))
+ 
+     constructor () {
+         super();            // No error
+@@= skipped -15, +15 lines =@@
+ >A : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+ 
+     public s: number = 9;
+->s : Symbol(D.s, Decl(strictModeInConstructor.ts, 23, 19))
++>s : Symbol(s, Decl(strictModeInConstructor.ts, 23, 19))
+ 
+     constructor () {
+         var x = 1; // No error
+@@= skipped -8, +8 lines =@@
+ 
+         var y = this.s; // Error
+ >y : Symbol(y, Decl(strictModeInConstructor.ts, 28, 11))
+->this.s : Symbol(D.s, Decl(strictModeInConstructor.ts, 23, 19))
++>this.s : Symbol(s, Decl(strictModeInConstructor.ts, 23, 19))
+ >this : Symbol(D, Decl(strictModeInConstructor.ts, 21, 1))
+->s : Symbol(D.s, Decl(strictModeInConstructor.ts, 23, 19))
++>s : Symbol(s, Decl(strictModeInConstructor.ts, 23, 19))
+ 
+         super();
+ >super : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+@@= skipped -16, +16 lines =@@
+ >A : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+ 
+     public static s: number = 9;
+->s : Symbol(Bs.s, Decl(strictModeInConstructor.ts, 34, 20))
++>s : Symbol(s, Decl(strictModeInConstructor.ts, 34, 20))
+ 
+     constructor () {
+         "use strict";   // No error
+@@= skipped -14, +14 lines =@@
+ >A : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+ 
+     public static s: number = 9;
+->s : Symbol(Cs.s, Decl(strictModeInConstructor.ts, 43, 20))
++>s : Symbol(s, Decl(strictModeInConstructor.ts, 43, 20))
+ 
+     constructor () {
+         super();            // No error
+@@= skipped -15, +15 lines =@@
+ >A : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+ 
+     public static s: number = 9;
+->s : Symbol(Ds.s, Decl(strictModeInConstructor.ts, 52, 20))
++>s : Symbol(s, Decl(strictModeInConstructor.ts, 52, 20))
+ 
+     constructor () {
+         var x = 1; // no Error

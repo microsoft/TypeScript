@@ -1,0 +1,96 @@
+--- old.assignmentCompatWithObjectMembers4.symbols
++++ new.assignmentCompatWithObjectMembers4.symbols
+@@= skipped -7, +7 lines =@@
+ 
+     class Base { foo: string; }
+ >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 2, 20))
+->foo : Symbol(Base.foo, Decl(assignmentCompatWithObjectMembers4.ts, 3, 16))
++>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers4.ts, 3, 16))
+ 
+     class Derived extends Base { bar: string; }
+ >Derived : Symbol(Derived, Decl(assignmentCompatWithObjectMembers4.ts, 3, 31))
+ >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 2, 20))
+->bar : Symbol(Derived.bar, Decl(assignmentCompatWithObjectMembers4.ts, 4, 32))
++>bar : Symbol(bar, Decl(assignmentCompatWithObjectMembers4.ts, 4, 32))
+ 
+     class Derived2 extends Base { baz: string; }
+ >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithObjectMembers4.ts, 4, 47))
+ >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 2, 20))
+->baz : Symbol(Derived2.baz, Decl(assignmentCompatWithObjectMembers4.ts, 5, 33))
++>baz : Symbol(baz, Decl(assignmentCompatWithObjectMembers4.ts, 5, 33))
+ 
+     class S { foo: Derived; }
+ >S : Symbol(S, Decl(assignmentCompatWithObjectMembers4.ts, 5, 48))
+->foo : Symbol(S.foo, Decl(assignmentCompatWithObjectMembers4.ts, 7, 13))
++>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers4.ts, 7, 13))
+ >Derived : Symbol(Derived, Decl(assignmentCompatWithObjectMembers4.ts, 3, 31))
+ 
+     class T { foo: Derived2; }
+ >T : Symbol(T, Decl(assignmentCompatWithObjectMembers4.ts, 7, 29))
+->foo : Symbol(T.foo, Decl(assignmentCompatWithObjectMembers4.ts, 8, 13))
++>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers4.ts, 8, 13))
+ >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithObjectMembers4.ts, 4, 47))
+ 
+     var s: S;
+@@= skipped -32, +32 lines =@@
+ 
+     interface S2 { foo: Derived; }
+ >S2 : Symbol(S2, Decl(assignmentCompatWithObjectMembers4.ts, 10, 13))
+->foo : Symbol(S2.foo, Decl(assignmentCompatWithObjectMembers4.ts, 12, 18))
++>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers4.ts, 12, 18))
+ >Derived : Symbol(Derived, Decl(assignmentCompatWithObjectMembers4.ts, 3, 31))
+ 
+     interface T2 { foo: Derived2; }
+ >T2 : Symbol(T2, Decl(assignmentCompatWithObjectMembers4.ts, 12, 34))
+->foo : Symbol(T2.foo, Decl(assignmentCompatWithObjectMembers4.ts, 13, 18))
++>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers4.ts, 13, 18))
+ >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithObjectMembers4.ts, 4, 47))
+ 
+     var s2: S2;
+@@= skipped -118, +118 lines =@@
+ 
+     class Base { foo: string; }
+ >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 17))
+->foo : Symbol(Base.foo, Decl(assignmentCompatWithObjectMembers4.ts, 48, 16))
++>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers4.ts, 48, 16))
+ 
+     class Derived extends Base { bar: string; }
+ >Derived : Symbol(Derived, Decl(assignmentCompatWithObjectMembers4.ts, 48, 31))
+ >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 17))
+->bar : Symbol(Derived.bar, Decl(assignmentCompatWithObjectMembers4.ts, 49, 32))
++>bar : Symbol(bar, Decl(assignmentCompatWithObjectMembers4.ts, 49, 32))
+ 
+     class Derived2 extends Base { baz: string; }
+ >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithObjectMembers4.ts, 49, 47))
+ >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 17))
+->baz : Symbol(Derived2.baz, Decl(assignmentCompatWithObjectMembers4.ts, 50, 33))
++>baz : Symbol(baz, Decl(assignmentCompatWithObjectMembers4.ts, 50, 33))
+ 
+     class S { foo: Base; }
+ >S : Symbol(S, Decl(assignmentCompatWithObjectMembers4.ts, 50, 48))
+->foo : Symbol(S.foo, Decl(assignmentCompatWithObjectMembers4.ts, 52, 13))
++>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers4.ts, 52, 13))
+ >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 17))
+ 
+     class T { foo: Derived2; }
+ >T : Symbol(T, Decl(assignmentCompatWithObjectMembers4.ts, 52, 26))
+->foo : Symbol(T.foo, Decl(assignmentCompatWithObjectMembers4.ts, 53, 13))
++>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers4.ts, 53, 13))
+ >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithObjectMembers4.ts, 49, 47))
+ 
+     var s: S;
+@@= skipped -32, +32 lines =@@
+ 
+     interface S2 { foo: Base; }
+ >S2 : Symbol(S2, Decl(assignmentCompatWithObjectMembers4.ts, 55, 13))
+->foo : Symbol(S2.foo, Decl(assignmentCompatWithObjectMembers4.ts, 57, 18))
++>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers4.ts, 57, 18))
+ >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembers4.ts, 47, 17))
+ 
+     interface T2 { foo: Derived2; }
+ >T2 : Symbol(T2, Decl(assignmentCompatWithObjectMembers4.ts, 57, 31))
+->foo : Symbol(T2.foo, Decl(assignmentCompatWithObjectMembers4.ts, 58, 18))
++>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers4.ts, 58, 18))
+ >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithObjectMembers4.ts, 49, 47))
+ 
+     var s2: S2;

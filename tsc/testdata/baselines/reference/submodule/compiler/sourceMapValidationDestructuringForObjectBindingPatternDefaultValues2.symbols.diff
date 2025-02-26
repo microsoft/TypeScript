@@ -1,0 +1,27 @@
+--- old.sourceMapValidationDestructuringForObjectBindingPatternDefaultValues2.symbols
++++ new.sourceMapValidationDestructuringForObjectBindingPatternDefaultValues2.symbols
+@@= skipped -11, +11 lines =@@
+ >Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringForObjectBindingPatternDefaultValues2.ts, 2, 1))
+ 
+     name: string;
+->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringForObjectBindingPatternDefaultValues2.ts, 3, 17))
++>name : Symbol(name, Decl(sourceMapValidationDestructuringForObjectBindingPatternDefaultValues2.ts, 3, 17))
+ 
+     skill: string;
+->skill : Symbol(Robot.skill, Decl(sourceMapValidationDestructuringForObjectBindingPatternDefaultValues2.ts, 4, 17))
++>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForObjectBindingPatternDefaultValues2.ts, 4, 17))
+ }
+ 
+ interface MultiRobot {
+ >MultiRobot : Symbol(MultiRobot, Decl(sourceMapValidationDestructuringForObjectBindingPatternDefaultValues2.ts, 6, 1))
+ 
+     name: string;
+->name : Symbol(MultiRobot.name, Decl(sourceMapValidationDestructuringForObjectBindingPatternDefaultValues2.ts, 8, 22))
++>name : Symbol(name, Decl(sourceMapValidationDestructuringForObjectBindingPatternDefaultValues2.ts, 8, 22))
+ 
+     skills: {
+->skills : Symbol(MultiRobot.skills, Decl(sourceMapValidationDestructuringForObjectBindingPatternDefaultValues2.ts, 9, 17))
++>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForObjectBindingPatternDefaultValues2.ts, 9, 17))
+ 
+         primary?: string;
+ >primary : Symbol(primary, Decl(sourceMapValidationDestructuringForObjectBindingPatternDefaultValues2.ts, 10, 13))

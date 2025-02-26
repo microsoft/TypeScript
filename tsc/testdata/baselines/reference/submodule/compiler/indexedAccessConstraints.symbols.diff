@@ -1,0 +1,14 @@
+--- old.indexedAccessConstraints.symbols
++++ new.indexedAccessConstraints.symbols
+@@= skipped -35, +35 lines =@@
+         return 0;
+     }
+     return fn.length;
+->fn.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
++>fn.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >fn : Symbol(fn, Decl(indexedAccessConstraints.ts, 7, 9))
+->length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ // Repro from #54837

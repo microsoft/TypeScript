@@ -1,0 +1,28 @@
+--- old.module_augmentUninstantiatedModule2.symbols
++++ new.module_augmentUninstantiatedModule2.symbols
+@@= skipped -3, +3 lines =@@
+ declare var ng: ng.IAngularStatic;
+ >ng : Symbol(ng, Decl(module_augmentUninstantiatedModule2.ts, 0, 11), Decl(module_augmentUninstantiatedModule2.ts, 0, 34))
+ >ng : Symbol(ng, Decl(module_augmentUninstantiatedModule2.ts, 0, 11), Decl(module_augmentUninstantiatedModule2.ts, 0, 34))
+->IAngularStatic : Symbol(ng.IAngularStatic, Decl(module_augmentUninstantiatedModule2.ts, 5, 4))
++>IAngularStatic : Symbol(IAngularStatic, Decl(module_augmentUninstantiatedModule2.ts, 5, 4))
+ 
+ declare module ng {
+ >ng : Symbol(ng, Decl(module_augmentUninstantiatedModule2.ts, 0, 11), Decl(module_augmentUninstantiatedModule2.ts, 0, 34))
+@@= skipped -9, +9 lines =@@
+ >IModule : Symbol(IModule, Decl(module_augmentUninstantiatedModule2.ts, 2, 19))
+ 
+       name: string;
+->name : Symbol(IModule.name, Decl(module_augmentUninstantiatedModule2.ts, 3, 29))
++>name : Symbol(name, Decl(module_augmentUninstantiatedModule2.ts, 3, 29))
+    }
+ 
+    export interface IAngularStatic {
+ >IAngularStatic : Symbol(IAngularStatic, Decl(module_augmentUninstantiatedModule2.ts, 5, 4))
+ 
+        module: (s: string) => IModule;
+->module : Symbol(IAngularStatic.module, Decl(module_augmentUninstantiatedModule2.ts, 7, 36))
++>module : Symbol(module, Decl(module_augmentUninstantiatedModule2.ts, 7, 36))
+ >s : Symbol(s, Decl(module_augmentUninstantiatedModule2.ts, 8, 16))
+ >IModule : Symbol(IModule, Decl(module_augmentUninstantiatedModule2.ts, 2, 19))
+    }

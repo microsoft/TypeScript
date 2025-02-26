@@ -1,0 +1,67 @@
+--- old.exportDefaultProperty.symbols
++++ new.exportDefaultProperty.symbols
+@@= skipped -7, +7 lines =@@
+ import X = fooBar.X;
+ >X : Symbol(X, Decl(index.ts, 1, 28))
+ >fooBar : Symbol(fooBar, Decl(index.ts, 1, 6))
+->X : Symbol(fooBar.X, Decl(declarations.d.ts, 0, 27), Decl(declarations.d.ts, 2, 16))
++>X : Symbol(X, Decl(declarations.d.ts, 0, 27), Decl(declarations.d.ts, 2, 16))
+ 
+ import X2 from "foobarx";
+ >X2 : Symbol(X2, Decl(index.ts, 3, 6))
+@@= skipped -22, +22 lines =@@
+ >b : Symbol(b, Decl(index.ts, 8, 5))
+ >B : Symbol(B, Decl(index.ts, 7, 6))
+ >B : Symbol(B, Decl(index.ts, 7, 6))
+->B.b : Symbol(B.b, Decl(a.ts, 2, 37))
++>B.b : Symbol(b, Decl(a.ts, 2, 37))
+ >B : Symbol(B, Decl(index.ts, 7, 6))
+->b : Symbol(B.b, Decl(a.ts, 2, 37))
++>b : Symbol(b, Decl(a.ts, 2, 37))
+ 
+ import fooLength from "./b";
+ >fooLength : Symbol(fooLength, Decl(index.ts, 10, 6))
+@@= skipped -26, +26 lines =@@
+ >"foobar" : Symbol("foobar", Decl(declarations.d.ts, 3, 1))
+ 
+     export default foo.bar;
+->foo.bar : Symbol(foo.bar, Decl(declarations.d.ts, 0, 22))
++>foo.bar : Symbol(bar, Decl(declarations.d.ts, 0, 22))
+ >foo : Symbol(foo, Decl(declarations.d.ts, 0, 0))
+->bar : Symbol(foo.bar, Decl(declarations.d.ts, 0, 22))
++>bar : Symbol(bar, Decl(declarations.d.ts, 0, 22))
+ }
+ 
+ declare module "foobarx" {
+ >"foobarx" : Symbol("foobarx", Decl(declarations.d.ts, 7, 1))
+ 
+     export default foo.bar.X;
+->foo.bar.X : Symbol(foo.bar.X, Decl(declarations.d.ts, 0, 27), Decl(declarations.d.ts, 2, 16))
+->foo.bar : Symbol(foo.bar, Decl(declarations.d.ts, 0, 22))
++>foo.bar.X : Symbol(X, Decl(declarations.d.ts, 0, 27), Decl(declarations.d.ts, 2, 16))
++>foo.bar : Symbol(bar, Decl(declarations.d.ts, 0, 22))
+ >foo : Symbol(foo, Decl(declarations.d.ts, 0, 0))
+->bar : Symbol(foo.bar, Decl(declarations.d.ts, 0, 22))
+->X : Symbol(foo.bar.X, Decl(declarations.d.ts, 0, 27), Decl(declarations.d.ts, 2, 16))
++>bar : Symbol(bar, Decl(declarations.d.ts, 0, 22))
++>X : Symbol(X, Decl(declarations.d.ts, 0, 27), Decl(declarations.d.ts, 2, 16))
+ }
+ 
+ === a.ts ===
+@@= skipped -29, +29 lines =@@
+ >b : Symbol(b, Decl(a.ts, 2, 37))
+ }
+ export default A.B;
+->A.B : Symbol(A.B, Decl(a.ts, 0, 13), Decl(a.ts, 1, 48))
++>A.B : Symbol(B, Decl(a.ts, 0, 13), Decl(a.ts, 1, 48))
+ >A : Symbol(A, Decl(a.ts, 0, 0))
+->B : Symbol(A.B, Decl(a.ts, 0, 13), Decl(a.ts, 1, 48))
++>B : Symbol(B, Decl(a.ts, 0, 13), Decl(a.ts, 1, 48))
+ 
+ === b.ts ===
+ export default "foo".length;
+->"foo".length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>"foo".length : Symbol(length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 

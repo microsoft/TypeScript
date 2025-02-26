@@ -1,0 +1,50 @@
+--- old.enumAssignability.symbols
++++ new.enumAssignability.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ enum E { A }
+ >E : Symbol(E, Decl(enumAssignability.ts, 0, 0))
+->A : Symbol(E.A, Decl(enumAssignability.ts, 2, 8))
++>A : Symbol(A, Decl(enumAssignability.ts, 2, 8))
+ 
+ enum F { B }
+ >F : Symbol(F, Decl(enumAssignability.ts, 2, 12))
+->B : Symbol(F.B, Decl(enumAssignability.ts, 3, 8))
++>B : Symbol(B, Decl(enumAssignability.ts, 3, 8))
+ 
+ var e = E.A;
+ >e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+->E.A : Symbol(E.A, Decl(enumAssignability.ts, 2, 8))
++>E.A : Symbol(A, Decl(enumAssignability.ts, 2, 8))
+ >E : Symbol(E, Decl(enumAssignability.ts, 0, 0))
+->A : Symbol(E.A, Decl(enumAssignability.ts, 2, 8))
++>A : Symbol(A, Decl(enumAssignability.ts, 2, 8))
+ 
+ var f = F.B;
+ >f : Symbol(f, Decl(enumAssignability.ts, 6, 3))
+->F.B : Symbol(F.B, Decl(enumAssignability.ts, 3, 8))
++>F.B : Symbol(B, Decl(enumAssignability.ts, 3, 8))
+ >F : Symbol(F, Decl(enumAssignability.ts, 2, 12))
+->B : Symbol(F.B, Decl(enumAssignability.ts, 3, 8))
++>B : Symbol(B, Decl(enumAssignability.ts, 3, 8))
+ 
+ e = f; 
+ >e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+@@= skipped -51, +51 lines =@@
+ >C : Symbol(C, Decl(enumAssignability.ts, 16, 19))
+ 
+         foo: string;
+->foo : Symbol(C.foo, Decl(enumAssignability.ts, 18, 13))
++>foo : Symbol(foo, Decl(enumAssignability.ts, 18, 13))
+     }
+     var ac: C;
+ >ac : Symbol(ac, Decl(enumAssignability.ts, 21, 7))
+@@= skipped -10, +10 lines =@@
+ >I : Symbol(I, Decl(enumAssignability.ts, 21, 14))
+ 
+         foo: string;
+->foo : Symbol(I.foo, Decl(enumAssignability.ts, 22, 17))
++>foo : Symbol(foo, Decl(enumAssignability.ts, 22, 17))
+     }
+     var ai: I;
+ >ai : Symbol(ai, Decl(enumAssignability.ts, 25, 7))

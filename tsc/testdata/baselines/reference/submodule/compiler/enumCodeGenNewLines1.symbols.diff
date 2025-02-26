@@ -1,0 +1,18 @@
+--- old.enumCodeGenNewLines1.symbols
++++ new.enumCodeGenNewLines1.symbols
+@@= skipped -4, +4 lines =@@
+ >foo : Symbol(foo, Decl(enumCodeGenNewLines1.ts, 0, 0))
+ 
+   b = 1,
+->b : Symbol(foo.b, Decl(enumCodeGenNewLines1.ts, 0, 10))
++>b : Symbol(b, Decl(enumCodeGenNewLines1.ts, 0, 10))
+ 
+   c = 2,
+->c : Symbol(foo.c, Decl(enumCodeGenNewLines1.ts, 1, 8))
++>c : Symbol(c, Decl(enumCodeGenNewLines1.ts, 1, 8))
+ 
+   d = 3
+->d : Symbol(foo.d, Decl(enumCodeGenNewLines1.ts, 2, 8))
++>d : Symbol(d, Decl(enumCodeGenNewLines1.ts, 2, 8))
+ }
+ 

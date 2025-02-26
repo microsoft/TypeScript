@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/importNonExportedMember2.ts] ////
+
+=== a.ts ===
+export {}
+interface Foo {}
+>Foo : Symbol(Foo, Decl(a.ts, 0, 9))
+
+=== b.ts ===
+import { Foo } from './a';
+>Foo : Symbol(Foo, Decl(b.ts, 0, 8))
+

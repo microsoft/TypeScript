@@ -1,0 +1,23 @@
+--- old.callOverloads4.symbols
++++ new.callOverloads4.symbols
+@@= skipped -13, +13 lines =@@
+ >Foo : Symbol(Foo, Decl(callOverloads4.ts, 0, 0), Decl(callOverloads4.ts, 0, 19), Decl(callOverloads4.ts, 1, 27))
+ 
+     bar1() { /*WScript.Echo("bar1");*/ }
+->bar1 : Symbol(Foo.bar1, Decl(callOverloads4.ts, 2, 11))
++>bar1 : Symbol(bar1, Decl(callOverloads4.ts, 2, 11))
+ 
+     constructor(s: string);
+ >s : Symbol(s, Decl(callOverloads4.ts, 4, 16))
+@@= skipped -18, +18 lines =@@
+ 
+ 
+ f1.bar1();
+->f1.bar1 : Symbol(Foo.bar1, Decl(callOverloads4.ts, 2, 11))
++>f1.bar1 : Symbol(bar1, Decl(callOverloads4.ts, 2, 11))
+ >f1 : Symbol(f1, Decl(callOverloads4.ts, 10, 3))
+->bar1 : Symbol(Foo.bar1, Decl(callOverloads4.ts, 2, 11))
++>bar1 : Symbol(bar1, Decl(callOverloads4.ts, 2, 11))
+ 
+ Foo();
+ >Foo : Symbol(Foo, Decl(callOverloads4.ts, 0, 0), Decl(callOverloads4.ts, 0, 19), Decl(callOverloads4.ts, 1, 27))

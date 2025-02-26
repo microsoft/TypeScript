@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/es6/moduleExportsSystem/outFilerootDirModuleNamesSystem.ts] ////
+
+=== src/a.ts ===
+import foo from "./b";
+>foo : Symbol(foo, Decl(a.ts, 0, 6))
+
+export default class Foo {}
+>Foo : Symbol(default, Decl(a.ts, 0, 22))
+
+foo();
+>foo : Symbol(foo, Decl(a.ts, 0, 6))
+
+=== src/b.ts ===
+import Foo from "./a";
+>Foo : Symbol(Foo, Decl(b.ts, 0, 6))
+
+export default function foo() { new Foo(); }
+>foo : Symbol(default, Decl(b.ts, 0, 22))
+>Foo : Symbol(Foo, Decl(b.ts, 0, 6))
+
+// https://github.com/microsoft/TypeScript/issues/37429
+import("./a");
+

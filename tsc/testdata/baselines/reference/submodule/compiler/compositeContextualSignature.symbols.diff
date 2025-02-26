@@ -1,0 +1,14 @@
+--- old.compositeContextualSignature.symbols
++++ new.compositeContextualSignature.symbols
+@@= skipped -22, +22 lines =@@
+         1,
+         () => {
+             console.log('Hello')
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ 
+         },
+     ],

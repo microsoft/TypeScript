@@ -1,0 +1,426 @@
+--- old.arrayToLocaleStringES2020.symbols
++++ new.arrayToLocaleStringES2020.symbols
+@@= skipped -8, +8 lines =@@
+ 
+ str = arr.toLocaleString(); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>arr.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >arr : Symbol(arr, Decl(arrayToLocaleStringES2020.ts, 1, 5))
+->toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = arr.toLocaleString('en-US'); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>arr.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >arr : Symbol(arr, Decl(arrayToLocaleStringES2020.ts, 1, 5))
+->toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>arr.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >arr : Symbol(arr, Decl(arrayToLocaleStringES2020.ts, 1, 5))
+->toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >style : Symbol(style, Decl(arrayToLocaleStringES2020.ts, 4, 35))
+ >currency : Symbol(currency, Decl(arrayToLocaleStringES2020.ts, 4, 54))
+ 
+@@= skipped -26, +26 lines =@@
+ 
+ str = dates.toLocaleString(); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->dates.toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>dates.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >dates : Symbol(dates, Decl(arrayToLocaleStringES2020.ts, 6, 5))
+->toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = dates.toLocaleString('fr'); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->dates.toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>dates.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >dates : Symbol(dates, Decl(arrayToLocaleStringES2020.ts, 6, 5))
+->toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = dates.toLocaleString('fr', { timeZone: 'UTC' }); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->dates.toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>dates.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >dates : Symbol(dates, Decl(arrayToLocaleStringES2020.ts, 6, 5))
+->toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >timeZone : Symbol(timeZone, Decl(arrayToLocaleStringES2020.ts, 9, 34))
+ 
+ const mixed = [1, new Date(), 59782, new Date()];
+@@= skipped -24, +24 lines =@@
+ 
+ str = mixed.toLocaleString(); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->mixed.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>mixed.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >mixed : Symbol(mixed, Decl(arrayToLocaleStringES2020.ts, 11, 5))
+->toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->mixed.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>mixed.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >mixed : Symbol(mixed, Decl(arrayToLocaleStringES2020.ts, 11, 5))
+->toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >style : Symbol(style, Decl(arrayToLocaleStringES2020.ts, 13, 34))
+ >currency : Symbol(currency, Decl(arrayToLocaleStringES2020.ts, 13, 53))
+ 
+ str = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: 'EUR', style: 'currency', timeZone: 'UTC' }); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->(mixed as ReadonlyArray<number | Date>).toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>(mixed as ReadonlyArray<number | Date>).toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >mixed : Symbol(mixed, Decl(arrayToLocaleStringES2020.ts, 11, 5))
+ >ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
+->toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >currency : Symbol(currency, Decl(arrayToLocaleStringES2020.ts, 14, 68))
+ >style : Symbol(style, Decl(arrayToLocaleStringES2020.ts, 14, 85))
+ >timeZone : Symbol(timeZone, Decl(arrayToLocaleStringES2020.ts, 14, 104))
+@@= skipped -31, +31 lines =@@
+ 
+ str = bigInts.toLocaleString(); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->bigInts.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>bigInts.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >bigInts : Symbol(bigInts, Decl(arrayToLocaleStringES2020.ts, 16, 5))
+->toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = bigInts.toLocaleString('en-US'); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->bigInts.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>bigInts.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >bigInts : Symbol(bigInts, Decl(arrayToLocaleStringES2020.ts, 16, 5))
+->toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = bigInts.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->bigInts.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>bigInts.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >bigInts : Symbol(bigInts, Decl(arrayToLocaleStringES2020.ts, 16, 5))
+->toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >style : Symbol(style, Decl(arrayToLocaleStringES2020.ts, 19, 39))
+ >currency : Symbol(currency, Decl(arrayToLocaleStringES2020.ts, 19, 58))
+ 
+@@= skipped -24, +24 lines =@@
+ 
+ str = int8Array.toLocaleString(); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->int8Array.toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>int8Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >int8Array : Symbol(int8Array, Decl(arrayToLocaleStringES2020.ts, 21, 5))
+->toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = int8Array.toLocaleString('en-US'); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->int8Array.toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>int8Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >int8Array : Symbol(int8Array, Decl(arrayToLocaleStringES2020.ts, 21, 5))
+->toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->int8Array.toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>int8Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >int8Array : Symbol(int8Array, Decl(arrayToLocaleStringES2020.ts, 21, 5))
+->toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >style : Symbol(style, Decl(arrayToLocaleStringES2020.ts, 24, 41))
+ >currency : Symbol(currency, Decl(arrayToLocaleStringES2020.ts, 24, 60))
+ 
+@@= skipped -24, +24 lines =@@
+ 
+ str = uint8Array.toLocaleString(); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->uint8Array.toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>uint8Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >uint8Array : Symbol(uint8Array, Decl(arrayToLocaleStringES2020.ts, 26, 5))
+->toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = uint8Array.toLocaleString('en-US'); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->uint8Array.toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>uint8Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >uint8Array : Symbol(uint8Array, Decl(arrayToLocaleStringES2020.ts, 26, 5))
+->toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->uint8Array.toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>uint8Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >uint8Array : Symbol(uint8Array, Decl(arrayToLocaleStringES2020.ts, 26, 5))
+->toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >style : Symbol(style, Decl(arrayToLocaleStringES2020.ts, 29, 42))
+ >currency : Symbol(currency, Decl(arrayToLocaleStringES2020.ts, 29, 61))
+ 
+@@= skipped -24, +24 lines =@@
+ 
+ str = uint8ClampedArray.toLocaleString(); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->uint8ClampedArray.toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>uint8ClampedArray.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >uint8ClampedArray : Symbol(uint8ClampedArray, Decl(arrayToLocaleStringES2020.ts, 31, 5))
+->toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = uint8ClampedArray.toLocaleString('en-US'); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->uint8ClampedArray.toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>uint8ClampedArray.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >uint8ClampedArray : Symbol(uint8ClampedArray, Decl(arrayToLocaleStringES2020.ts, 31, 5))
+->toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->uint8ClampedArray.toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>uint8ClampedArray.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >uint8ClampedArray : Symbol(uint8ClampedArray, Decl(arrayToLocaleStringES2020.ts, 31, 5))
+->toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >style : Symbol(style, Decl(arrayToLocaleStringES2020.ts, 34, 49))
+ >currency : Symbol(currency, Decl(arrayToLocaleStringES2020.ts, 34, 68))
+ 
+@@= skipped -24, +24 lines =@@
+ 
+ str = int16Array.toLocaleString(); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->int16Array.toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>int16Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >int16Array : Symbol(int16Array, Decl(arrayToLocaleStringES2020.ts, 36, 5))
+->toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = int16Array.toLocaleString('en-US'); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->int16Array.toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>int16Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >int16Array : Symbol(int16Array, Decl(arrayToLocaleStringES2020.ts, 36, 5))
+->toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->int16Array.toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>int16Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >int16Array : Symbol(int16Array, Decl(arrayToLocaleStringES2020.ts, 36, 5))
+->toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >style : Symbol(style, Decl(arrayToLocaleStringES2020.ts, 39, 42))
+ >currency : Symbol(currency, Decl(arrayToLocaleStringES2020.ts, 39, 61))
+ 
+@@= skipped -24, +24 lines =@@
+ 
+ str = uint16Array.toLocaleString(); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->uint16Array.toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>uint16Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >uint16Array : Symbol(uint16Array, Decl(arrayToLocaleStringES2020.ts, 41, 5))
+->toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = uint16Array.toLocaleString('en-US'); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->uint16Array.toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>uint16Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >uint16Array : Symbol(uint16Array, Decl(arrayToLocaleStringES2020.ts, 41, 5))
+->toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->uint16Array.toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>uint16Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >uint16Array : Symbol(uint16Array, Decl(arrayToLocaleStringES2020.ts, 41, 5))
+->toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >style : Symbol(style, Decl(arrayToLocaleStringES2020.ts, 44, 43))
+ >currency : Symbol(currency, Decl(arrayToLocaleStringES2020.ts, 44, 62))
+ 
+@@= skipped -24, +24 lines =@@
+ 
+ str = int32Array.toLocaleString(); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->int32Array.toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>int32Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >int32Array : Symbol(int32Array, Decl(arrayToLocaleStringES2020.ts, 46, 5))
+->toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = int32Array.toLocaleString('en-US'); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->int32Array.toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>int32Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >int32Array : Symbol(int32Array, Decl(arrayToLocaleStringES2020.ts, 46, 5))
+->toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->int32Array.toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>int32Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >int32Array : Symbol(int32Array, Decl(arrayToLocaleStringES2020.ts, 46, 5))
+->toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >style : Symbol(style, Decl(arrayToLocaleStringES2020.ts, 49, 42))
+ >currency : Symbol(currency, Decl(arrayToLocaleStringES2020.ts, 49, 61))
+ 
+@@= skipped -24, +24 lines =@@
+ 
+ str = uint32Array.toLocaleString(); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->uint32Array.toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>uint32Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >uint32Array : Symbol(uint32Array, Decl(arrayToLocaleStringES2020.ts, 51, 5))
+->toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = uint32Array.toLocaleString('en-US'); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->uint32Array.toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>uint32Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >uint32Array : Symbol(uint32Array, Decl(arrayToLocaleStringES2020.ts, 51, 5))
+->toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->uint32Array.toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>uint32Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >uint32Array : Symbol(uint32Array, Decl(arrayToLocaleStringES2020.ts, 51, 5))
+->toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >style : Symbol(style, Decl(arrayToLocaleStringES2020.ts, 54, 43))
+ >currency : Symbol(currency, Decl(arrayToLocaleStringES2020.ts, 54, 62))
+ 
+@@= skipped -24, +24 lines =@@
+ 
+ str = float32Array.toLocaleString(); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->float32Array.toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>float32Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >float32Array : Symbol(float32Array, Decl(arrayToLocaleStringES2020.ts, 56, 5))
+->toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = float32Array.toLocaleString('en-US'); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->float32Array.toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>float32Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >float32Array : Symbol(float32Array, Decl(arrayToLocaleStringES2020.ts, 56, 5))
+->toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->float32Array.toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>float32Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >float32Array : Symbol(float32Array, Decl(arrayToLocaleStringES2020.ts, 56, 5))
+->toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >style : Symbol(style, Decl(arrayToLocaleStringES2020.ts, 59, 44))
+ >currency : Symbol(currency, Decl(arrayToLocaleStringES2020.ts, 59, 63))
+ 
+@@= skipped -24, +24 lines =@@
+ 
+ str = float64Array.toLocaleString(); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->float64Array.toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>float64Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >float64Array : Symbol(float64Array, Decl(arrayToLocaleStringES2020.ts, 61, 5))
+->toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = float64Array.toLocaleString('en-US'); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->float64Array.toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>float64Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >float64Array : Symbol(float64Array, Decl(arrayToLocaleStringES2020.ts, 61, 5))
+->toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ 
+ str = float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->float64Array.toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>float64Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >float64Array : Symbol(float64Array, Decl(arrayToLocaleStringES2020.ts, 61, 5))
+->toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >style : Symbol(style, Decl(arrayToLocaleStringES2020.ts, 64, 44))
+ >currency : Symbol(currency, Decl(arrayToLocaleStringES2020.ts, 64, 63))
+ 
+@@= skipped -24, +24 lines =@@
+ 
+ str = bigInt64Array.toLocaleString(); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->bigInt64Array.toLocaleString : Symbol(BigInt64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
++>bigInt64Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+ >bigInt64Array : Symbol(bigInt64Array, Decl(arrayToLocaleStringES2020.ts, 66, 5))
+->toLocaleString : Symbol(BigInt64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+ 
+ str = bigInt64Array.toLocaleString('en-US'); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->bigInt64Array.toLocaleString : Symbol(BigInt64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
++>bigInt64Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+ >bigInt64Array : Symbol(bigInt64Array, Decl(arrayToLocaleStringES2020.ts, 66, 5))
+->toLocaleString : Symbol(BigInt64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+ 
+ str = bigInt64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->bigInt64Array.toLocaleString : Symbol(BigInt64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
++>bigInt64Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+ >bigInt64Array : Symbol(bigInt64Array, Decl(arrayToLocaleStringES2020.ts, 66, 5))
+->toLocaleString : Symbol(BigInt64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+ >style : Symbol(style, Decl(arrayToLocaleStringES2020.ts, 69, 45))
+ >currency : Symbol(currency, Decl(arrayToLocaleStringES2020.ts, 69, 64))
+ 
+@@= skipped -24, +24 lines =@@
+ 
+ str = bigIntUint64Array.toLocaleString(); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->bigIntUint64Array.toLocaleString : Symbol(BigUint64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
++>bigIntUint64Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+ >bigIntUint64Array : Symbol(bigIntUint64Array, Decl(arrayToLocaleStringES2020.ts, 71, 5))
+->toLocaleString : Symbol(BigUint64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+ 
+ str = bigIntUint64Array.toLocaleString('en-US'); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->bigIntUint64Array.toLocaleString : Symbol(BigUint64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
++>bigIntUint64Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+ >bigIntUint64Array : Symbol(bigIntUint64Array, Decl(arrayToLocaleStringES2020.ts, 71, 5))
+->toLocaleString : Symbol(BigUint64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+ 
+ str = bigIntUint64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+ >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+->bigIntUint64Array.toLocaleString : Symbol(BigUint64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
++>bigIntUint64Array.toLocaleString : Symbol(toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+ >bigIntUint64Array : Symbol(bigIntUint64Array, Decl(arrayToLocaleStringES2020.ts, 71, 5))
+->toLocaleString : Symbol(BigUint64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+ >style : Symbol(style, Decl(arrayToLocaleStringES2020.ts, 74, 49))
+ >currency : Symbol(currency, Decl(arrayToLocaleStringES2020.ts, 74, 68))
+ 

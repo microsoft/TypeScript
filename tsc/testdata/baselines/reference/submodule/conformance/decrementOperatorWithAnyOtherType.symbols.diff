@@ -1,0 +1,87 @@
+--- old.decrementOperatorWithAnyOtherType.symbols
++++ new.decrementOperatorWithAnyOtherType.symbols
+@@= skipped -20, +20 lines =@@
+ >A : Symbol(A, Decl(decrementOperatorWithAnyOtherType.ts, 5, 23))
+ 
+     public a: any;
+->a : Symbol(A.a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
++>a : Symbol(a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
+ }
+ module M {
+ >M : Symbol(M, Decl(decrementOperatorWithAnyOtherType.ts, 8, 1))
+@@= skipped -48, +48 lines =@@
+ 
+ var ResultIsNumber8 = --objA.a;
+ >ResultIsNumber8 : Symbol(ResultIsNumber8, Decl(decrementOperatorWithAnyOtherType.ts, 25, 3))
+->objA.a : Symbol(A.a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
++>objA.a : Symbol(a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
+ >objA : Symbol(objA, Decl(decrementOperatorWithAnyOtherType.ts, 12, 3))
+->a : Symbol(A.a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
++>a : Symbol(a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
+ 
+ var ResultIsNumber = --M.n;
+ >ResultIsNumber : Symbol(ResultIsNumber, Decl(decrementOperatorWithAnyOtherType.ts, 26, 3))
+->M.n : Symbol(M.n, Decl(decrementOperatorWithAnyOtherType.ts, 10, 14))
++>M.n : Symbol(n, Decl(decrementOperatorWithAnyOtherType.ts, 10, 14))
+ >M : Symbol(M, Decl(decrementOperatorWithAnyOtherType.ts, 8, 1))
+->n : Symbol(M.n, Decl(decrementOperatorWithAnyOtherType.ts, 10, 14))
++>n : Symbol(n, Decl(decrementOperatorWithAnyOtherType.ts, 10, 14))
+ 
+ var ResultIsNumber9 = ANY2[0]--;
+ >ResultIsNumber9 : Symbol(ResultIsNumber9, Decl(decrementOperatorWithAnyOtherType.ts, 28, 3))
+@@= skipped -28, +28 lines =@@
+ 
+ var ResultIsNumber12 = objA.a--;
+ >ResultIsNumber12 : Symbol(ResultIsNumber12, Decl(decrementOperatorWithAnyOtherType.ts, 31, 3))
+->objA.a : Symbol(A.a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
++>objA.a : Symbol(a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
+ >objA : Symbol(objA, Decl(decrementOperatorWithAnyOtherType.ts, 12, 3))
+->a : Symbol(A.a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
++>a : Symbol(a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
+ 
+ var ResultIsNumber13 = M.n--;
+ >ResultIsNumber13 : Symbol(ResultIsNumber13, Decl(decrementOperatorWithAnyOtherType.ts, 32, 3))
+->M.n : Symbol(M.n, Decl(decrementOperatorWithAnyOtherType.ts, 10, 14))
++>M.n : Symbol(n, Decl(decrementOperatorWithAnyOtherType.ts, 10, 14))
+ >M : Symbol(M, Decl(decrementOperatorWithAnyOtherType.ts, 8, 1))
+->n : Symbol(M.n, Decl(decrementOperatorWithAnyOtherType.ts, 10, 14))
++>n : Symbol(n, Decl(decrementOperatorWithAnyOtherType.ts, 10, 14))
+ 
+ // miss assignment opertors
+ --ANY;
+@@= skipped -25, +25 lines =@@
+ >ANY1 : Symbol(ANY1, Decl(decrementOperatorWithAnyOtherType.ts, 3, 3))
+ 
+ --objA.a;
+->objA.a : Symbol(A.a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
++>objA.a : Symbol(a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
+ >objA : Symbol(objA, Decl(decrementOperatorWithAnyOtherType.ts, 12, 3))
+->a : Symbol(A.a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
++>a : Symbol(a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
+ 
+ --M.n;
+->M.n : Symbol(M.n, Decl(decrementOperatorWithAnyOtherType.ts, 10, 14))
++>M.n : Symbol(n, Decl(decrementOperatorWithAnyOtherType.ts, 10, 14))
+ >M : Symbol(M, Decl(decrementOperatorWithAnyOtherType.ts, 8, 1))
+->n : Symbol(M.n, Decl(decrementOperatorWithAnyOtherType.ts, 10, 14))
++>n : Symbol(n, Decl(decrementOperatorWithAnyOtherType.ts, 10, 14))
+ 
+ ANY--;
+ >ANY : Symbol(ANY, Decl(decrementOperatorWithAnyOtherType.ts, 2, 3))
+@@= skipped -23, +23 lines =@@
+ >ANY1 : Symbol(ANY1, Decl(decrementOperatorWithAnyOtherType.ts, 3, 3))
+ 
+ objA.a--;
+->objA.a : Symbol(A.a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
++>objA.a : Symbol(a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
+ >objA : Symbol(objA, Decl(decrementOperatorWithAnyOtherType.ts, 12, 3))
+->a : Symbol(A.a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
++>a : Symbol(a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
+ 
+ M.n--;
+->M.n : Symbol(M.n, Decl(decrementOperatorWithAnyOtherType.ts, 10, 14))
++>M.n : Symbol(n, Decl(decrementOperatorWithAnyOtherType.ts, 10, 14))
+ >M : Symbol(M, Decl(decrementOperatorWithAnyOtherType.ts, 8, 1))
+->n : Symbol(M.n, Decl(decrementOperatorWithAnyOtherType.ts, 10, 14))
++>n : Symbol(n, Decl(decrementOperatorWithAnyOtherType.ts, 10, 14))
+ 

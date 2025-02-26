@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameImplicitDeclaration.ts] ////
+
+=== privateNameImplicitDeclaration.js ===
+class C {
+>C : Symbol(C, Decl(privateNameImplicitDeclaration.js, 0, 0))
+
+    constructor() {
+        /** @type {string} */
+        this.#x;
+>this : Symbol(C, Decl(privateNameImplicitDeclaration.js, 0, 0))
+    }
+}
+
+

@@ -1,0 +1,38 @@
+--- old.commentsClass.symbols
++++ new.commentsClass.symbols
+@@= skipped -49, +49 lines =@@
+ >c5 : Symbol(c5, Decl(commentsClass.ts, 19, 14))
+ 
+     static s1: number;
+->s1 : Symbol(c5.s1, Decl(commentsClass.ts, 21, 10))
++>s1 : Symbol(s1, Decl(commentsClass.ts, 21, 10))
+ }
+ var i5 = new c5();
+ >i5 : Symbol(i5, Decl(commentsClass.ts, 24, 3))
+@@= skipped -16, +16 lines =@@
+ 
+     /// s1 comment
+     static s1: number; /// s1 comment2
+->s1 : Symbol(c6.s1, Decl(commentsClass.ts, 28, 10))
++>s1 : Symbol(s1, Decl(commentsClass.ts, 28, 10))
+ 
+     /// constructor comment
+     constructor() { /// constructor comment2
+@@= skipped -20, +20 lines =@@
+ 
+     // s1 comment
+     static s1: number;
+->s1 : Symbol(c7.s1, Decl(commentsClass.ts, 39, 10))
++>s1 : Symbol(s1, Decl(commentsClass.ts, 39, 10))
+ 
+     // constructor comment
+     constructor() {
+@@= skipped -21, +21 lines =@@
+ 
+     /** s1 comment */
+     static s1: number; /** s1 comment2 */
+->s1 : Symbol(c8.s1, Decl(commentsClass.ts, 51, 10))
++>s1 : Symbol(s1, Decl(commentsClass.ts, 51, 10))
+ 
+     /** constructor comment 
+     */

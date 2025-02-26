@@ -1,0 +1,22 @@
+--- old.recursiveConditionalTypes.symbols
++++ new.recursiveConditionalTypes.symbols
+@@= skipped -225, +225 lines =@@
+ interface Box<T> { value: T };
+ >Box : Symbol(Box, Decl(recursiveConditionalTypes.ts, 55, 21))
+ >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 59, 14))
+->value : Symbol(Box.value, Decl(recursiveConditionalTypes.ts, 59, 18))
++>value : Symbol(value, Decl(recursiveConditionalTypes.ts, 59, 18))
+ >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 59, 14))
+ 
+ type RecBox<T> = T | Box<RecBox<T>>;
+@@= skipped -399, +399 lines =@@
+ >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 167, 14))
+ 
+     return value.length;  // Error
+->value.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>value.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >value : Symbol(value, Decl(recursiveConditionalTypes.ts, 167, 35))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ 

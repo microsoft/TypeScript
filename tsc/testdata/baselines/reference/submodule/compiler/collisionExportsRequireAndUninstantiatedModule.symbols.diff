@@ -1,0 +1,20 @@
+--- old.collisionExportsRequireAndUninstantiatedModule.symbols
++++ new.collisionExportsRequireAndUninstantiatedModule.symbols
+@@= skipped -10, +10 lines =@@
+ export function foo(): require.I {
+ >foo : Symbol(foo, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 3, 1))
+ >require : Symbol(require, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 0, 0))
+->I : Symbol(require.I, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 0, 23))
++>I : Symbol(I, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 0, 23))
+ 
+     return null;
+ }
+@@= skipped -14, +14 lines =@@
+ export function foo2(): exports.I {
+ >foo2 : Symbol(foo2, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 10, 1))
+ >exports : Symbol(exports, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 6, 1))
+->I : Symbol(exports.I, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 7, 23))
++>I : Symbol(I, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 7, 23))
+ 
+     return null;
+ }

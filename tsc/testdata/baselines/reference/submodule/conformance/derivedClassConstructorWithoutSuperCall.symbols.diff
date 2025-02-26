@@ -1,0 +1,20 @@
+--- old.derivedClassConstructorWithoutSuperCall.symbols
++++ new.derivedClassConstructorWithoutSuperCall.symbols
+@@= skipped -6, +6 lines =@@
+ >Base : Symbol(Base, Decl(derivedClassConstructorWithoutSuperCall.ts, 0, 0))
+ 
+     x: string;
+->x : Symbol(Base.x, Decl(derivedClassConstructorWithoutSuperCall.ts, 2, 12))
++>x : Symbol(x, Decl(derivedClassConstructorWithoutSuperCall.ts, 2, 12))
+ }
+ 
+ class Derived extends Base {
+@@= skipped -16, +16 lines =@@
+ >T : Symbol(T, Decl(derivedClassConstructorWithoutSuperCall.ts, 11, 12))
+ 
+     x: T;
+->x : Symbol(Base2.x, Decl(derivedClassConstructorWithoutSuperCall.ts, 11, 16))
++>x : Symbol(x, Decl(derivedClassConstructorWithoutSuperCall.ts, 11, 16))
+ >T : Symbol(T, Decl(derivedClassConstructorWithoutSuperCall.ts, 11, 12))
+ }
+ 

@@ -1,0 +1,41 @@
+--- old.objectTypesWithOptionalProperties2.symbols
++++ new.objectTypesWithOptionalProperties2.symbols
+@@= skipped -14, +14 lines =@@
+ >I : Symbol(I, Decl(objectTypesWithOptionalProperties2.ts, 4, 1))
+ 
+     x()?: number; // error
+->x : Symbol(I.x, Decl(objectTypesWithOptionalProperties2.ts, 6, 13))
+->number : Symbol(I.number, Decl(objectTypesWithOptionalProperties2.ts, 7, 9))
++>x : Symbol(x, Decl(objectTypesWithOptionalProperties2.ts, 6, 13))
++>number : Symbol(number, Decl(objectTypesWithOptionalProperties2.ts, 7, 9))
+ }
+ 
+ class C {
+ >C : Symbol(C, Decl(objectTypesWithOptionalProperties2.ts, 8, 1))
+ 
+     x()?: number; // error
+->x : Symbol(C.x, Decl(objectTypesWithOptionalProperties2.ts, 10, 9))
+->number : Symbol(C.number, Decl(objectTypesWithOptionalProperties2.ts, 11, 9))
++>x : Symbol(x, Decl(objectTypesWithOptionalProperties2.ts, 10, 9))
++>number : Symbol(number, Decl(objectTypesWithOptionalProperties2.ts, 11, 9))
+ }
+ 
+ interface I2<T> {
+@@= skipped -17, +17 lines =@@
+ >T : Symbol(T, Decl(objectTypesWithOptionalProperties2.ts, 14, 13), Decl(objectTypesWithOptionalProperties2.ts, 15, 9))
+ 
+     x()?: T; // error
+->x : Symbol(I2.x, Decl(objectTypesWithOptionalProperties2.ts, 14, 17))
++>x : Symbol(x, Decl(objectTypesWithOptionalProperties2.ts, 14, 17))
+ >T : Symbol(T, Decl(objectTypesWithOptionalProperties2.ts, 14, 13), Decl(objectTypesWithOptionalProperties2.ts, 15, 9))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(objectTypesWithOptionalProperties2.ts, 18, 9), Decl(objectTypesWithOptionalProperties2.ts, 19, 9))
+ 
+     x()?: T; // error
+->x : Symbol(C2.x, Decl(objectTypesWithOptionalProperties2.ts, 18, 13))
++>x : Symbol(x, Decl(objectTypesWithOptionalProperties2.ts, 18, 13))
+ >T : Symbol(T, Decl(objectTypesWithOptionalProperties2.ts, 18, 9), Decl(objectTypesWithOptionalProperties2.ts, 19, 9))
+ }
+ 

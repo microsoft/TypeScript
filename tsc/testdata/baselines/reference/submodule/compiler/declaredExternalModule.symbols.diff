@@ -1,0 +1,27 @@
+--- old.declaredExternalModule.symbols
++++ new.declaredExternalModule.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === declaredExternalModule.ts ===
+ declare module 'connect' {
+->'connect' : Symbol("connect", Decl(declaredExternalModule.ts, 0, 0))
++>'connect' : Symbol('connect', Decl(declaredExternalModule.ts, 0, 0))
+ 
+     interface connectModule {
+ >connectModule : Symbol(connectModule, Decl(declaredExternalModule.ts, 0, 26))
+@@= skipped -16, +16 lines =@@
+ >connectExport : Symbol(connectExport, Decl(declaredExternalModule.ts, 6, 5))
+ 
+         use: (mod: connectModule) => connectExport;
+->use : Symbol(connectExport.use, Decl(declaredExternalModule.ts, 8, 29))
++>use : Symbol(use, Decl(declaredExternalModule.ts, 8, 29))
+ >mod : Symbol(mod, Decl(declaredExternalModule.ts, 10, 14))
+ >connectModule : Symbol(connectModule, Decl(declaredExternalModule.ts, 0, 26))
+ >connectExport : Symbol(connectExport, Decl(declaredExternalModule.ts, 6, 5))
+ 
+         listen: (port: number) => void;
+->listen : Symbol(connectExport.listen, Decl(declaredExternalModule.ts, 10, 51))
++>listen : Symbol(listen, Decl(declaredExternalModule.ts, 10, 51))
+ >port : Symbol(port, Decl(declaredExternalModule.ts, 12, 17))
+ 
+     }

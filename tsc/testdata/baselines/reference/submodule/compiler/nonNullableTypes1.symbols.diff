@@ -1,0 +1,23 @@
+--- old.nonNullableTypes1.symbols
++++ new.nonNullableTypes1.symbols
+@@= skipped -75, +75 lines =@@
+ >A : Symbol(A, Decl(nonNullableTypes1.ts, 26, 1))
+ 
+     x = "hello";
+->x : Symbol(A.x, Decl(nonNullableTypes1.ts, 28, 9))
++>x : Symbol(x, Decl(nonNullableTypes1.ts, 28, 9))
+ 
+     foo() {
+->foo : Symbol(A.foo, Decl(nonNullableTypes1.ts, 29, 16))
++>foo : Symbol(foo, Decl(nonNullableTypes1.ts, 29, 16))
+ 
+         let zz = this?.x;  // string
+ >zz : Symbol(zz, Decl(nonNullableTypes1.ts, 31, 11))
+->this?.x : Symbol(A.x, Decl(nonNullableTypes1.ts, 28, 9))
++>this?.x : Symbol(x, Decl(nonNullableTypes1.ts, 28, 9))
+ >this : Symbol(A, Decl(nonNullableTypes1.ts, 26, 1))
+->x : Symbol(A.x, Decl(nonNullableTypes1.ts, 28, 9))
++>x : Symbol(x, Decl(nonNullableTypes1.ts, 28, 9))
+     }
+ }
+ 

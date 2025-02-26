@@ -1,0 +1,22 @@
+--- old.circularConstructorWithReturn.symbols
++++ new.circularConstructorWithReturn.symbols
+@@= skipped -17, +17 lines =@@
+ >PrismaClient : Symbol(PrismaClient, Decl(circularConstructorWithReturn.ts, 4, 48))
+ 
+     self: Client;
+->self : Symbol(PrismaClient.self, Decl(circularConstructorWithReturn.ts, 5, 22))
++>self : Symbol(self, Decl(circularConstructorWithReturn.ts, 5, 22))
+ >Client : Symbol(Client, Decl(circularConstructorWithReturn.ts, 0, 0))
+ 
+     constructor(options?: any) {
+ >options : Symbol(options, Decl(circularConstructorWithReturn.ts, 7, 16))
+ 
+       return (this.self = applyModelsAndClientExtensions(this));
+->this.self : Symbol(PrismaClient.self, Decl(circularConstructorWithReturn.ts, 5, 22))
++>this.self : Symbol(self, Decl(circularConstructorWithReturn.ts, 5, 22))
+ >this : Symbol(PrismaClient, Decl(circularConstructorWithReturn.ts, 4, 48))
+->self : Symbol(PrismaClient.self, Decl(circularConstructorWithReturn.ts, 5, 22))
++>self : Symbol(self, Decl(circularConstructorWithReturn.ts, 5, 22))
+ >applyModelsAndClientExtensions : Symbol(applyModelsAndClientExtensions, Decl(circularConstructorWithReturn.ts, 13, 1))
+ >this : Symbol(PrismaClient, Decl(circularConstructorWithReturn.ts, 4, 48))
+     }

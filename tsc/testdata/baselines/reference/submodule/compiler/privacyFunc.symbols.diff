@@ -1,0 +1,253 @@
+--- old.privacyFunc.symbols
++++ new.privacyFunc.symbols
+@@= skipped -7, +7 lines =@@
+ >C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+ 
+         private f1() {
+->f1 : Symbol(C1_public.f1, Decl(privacyFunc.ts, 1, 28))
++>f1 : Symbol(f1, Decl(privacyFunc.ts, 1, 28))
+         }
+     }
+ 
+@@= skipped -24, +24 lines =@@
+         }
+ 
+         private f1_private(m1_c3_f1_arg: C1_public) {
+->f1_private : Symbol(C3_public.f1_private, Decl(privacyFunc.ts, 13, 9))
++>f1_private : Symbol(f1_private, Decl(privacyFunc.ts, 13, 9))
+ >m1_c3_f1_arg : Symbol(m1_c3_f1_arg, Decl(privacyFunc.ts, 15, 27))
+ >C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+         }
+ 
+         public f2_public(m1_c3_f2_arg: C1_public) {
+->f2_public : Symbol(C3_public.f2_public, Decl(privacyFunc.ts, 16, 9))
++>f2_public : Symbol(f2_public, Decl(privacyFunc.ts, 16, 9))
+ >m1_c3_f2_arg : Symbol(m1_c3_f2_arg, Decl(privacyFunc.ts, 18, 25))
+ >C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+         }
+ 
+         private f3_private(m1_c3_f3_arg: C2_private) {
+->f3_private : Symbol(C3_public.f3_private, Decl(privacyFunc.ts, 19, 9))
++>f3_private : Symbol(f3_private, Decl(privacyFunc.ts, 19, 9))
+ >m1_c3_f3_arg : Symbol(m1_c3_f3_arg, Decl(privacyFunc.ts, 21, 27))
+ >C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+         }
+ 
+         public f4_public(m1_c3_f4_arg: C2_private) { // error
+->f4_public : Symbol(C3_public.f4_public, Decl(privacyFunc.ts, 22, 9))
++>f4_public : Symbol(f4_public, Decl(privacyFunc.ts, 22, 9))
+ >m1_c3_f4_arg : Symbol(m1_c3_f4_arg, Decl(privacyFunc.ts, 24, 25))
+ >C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+         }
+ 
+         private f5_private() {
+->f5_private : Symbol(C3_public.f5_private, Decl(privacyFunc.ts, 25, 9))
++>f5_private : Symbol(f5_private, Decl(privacyFunc.ts, 25, 9))
+ 
+             return new C1_public();
+ >C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+         }
+ 
+         public f6_public() {
+->f6_public : Symbol(C3_public.f6_public, Decl(privacyFunc.ts, 29, 9))
++>f6_public : Symbol(f6_public, Decl(privacyFunc.ts, 29, 9))
+ 
+             return new C1_public();
+ >C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+         }
+ 
+         private f7_private() {
+->f7_private : Symbol(C3_public.f7_private, Decl(privacyFunc.ts, 33, 9))
++>f7_private : Symbol(f7_private, Decl(privacyFunc.ts, 33, 9))
+ 
+             return new C2_private();
+ >C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+         }
+ 
+         public f8_public() {
+->f8_public : Symbol(C3_public.f8_public, Decl(privacyFunc.ts, 37, 9))
++>f8_public : Symbol(f8_public, Decl(privacyFunc.ts, 37, 9))
+ 
+             return new C2_private();  // error
+ >C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+         }
+ 
+         private f9_private(): C1_public {
+->f9_private : Symbol(C3_public.f9_private, Decl(privacyFunc.ts, 41, 9))
++>f9_private : Symbol(f9_private, Decl(privacyFunc.ts, 41, 9))
+ >C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+ 
+             return new C1_public();
+@@= skipped -60, +60 lines =@@
+         }
+ 
+         public f10_public(): C1_public {
+->f10_public : Symbol(C3_public.f10_public, Decl(privacyFunc.ts, 45, 9))
++>f10_public : Symbol(f10_public, Decl(privacyFunc.ts, 45, 9))
+ >C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+ 
+             return new C1_public();
+@@= skipped -8, +8 lines =@@
+         }
+ 
+         private f11_private(): C2_private {
+->f11_private : Symbol(C3_public.f11_private, Decl(privacyFunc.ts, 49, 9))
++>f11_private : Symbol(f11_private, Decl(privacyFunc.ts, 49, 9))
+ >C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+ 
+             return new C2_private();
+@@= skipped -8, +8 lines =@@
+         }
+ 
+         public f12_public(): C2_private { // error
+->f12_public : Symbol(C3_public.f12_public, Decl(privacyFunc.ts, 53, 9))
++>f12_public : Symbol(f12_public, Decl(privacyFunc.ts, 53, 9))
+ >C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+ 
+             return new C2_private(); //error
+@@= skipped -23, +23 lines =@@
+ >m1_c4_c1_2 : Symbol(m1_c4_c1_2, Decl(privacyFunc.ts, 63, 21))
+         }
+         private f1_private(m1_c4_f1_arg: C1_public) {
+->f1_private : Symbol(C4_private.f1_private, Decl(privacyFunc.ts, 64, 9))
++>f1_private : Symbol(f1_private, Decl(privacyFunc.ts, 64, 9))
+ >m1_c4_f1_arg : Symbol(m1_c4_f1_arg, Decl(privacyFunc.ts, 65, 27))
+ >C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+         }
+ 
+         public f2_public(m1_c4_f2_arg: C1_public) {
+->f2_public : Symbol(C4_private.f2_public, Decl(privacyFunc.ts, 66, 9))
++>f2_public : Symbol(f2_public, Decl(privacyFunc.ts, 66, 9))
+ >m1_c4_f2_arg : Symbol(m1_c4_f2_arg, Decl(privacyFunc.ts, 68, 25))
+ >C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+         }
+ 
+         private f3_private(m1_c4_f3_arg: C2_private) {
+->f3_private : Symbol(C4_private.f3_private, Decl(privacyFunc.ts, 69, 9))
++>f3_private : Symbol(f3_private, Decl(privacyFunc.ts, 69, 9))
+ >m1_c4_f3_arg : Symbol(m1_c4_f3_arg, Decl(privacyFunc.ts, 71, 27))
+ >C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+         }
+ 
+         public f4_public(m1_c4_f4_arg: C2_private) {
+->f4_public : Symbol(C4_private.f4_public, Decl(privacyFunc.ts, 72, 9))
++>f4_public : Symbol(f4_public, Decl(privacyFunc.ts, 72, 9))
+ >m1_c4_f4_arg : Symbol(m1_c4_f4_arg, Decl(privacyFunc.ts, 74, 25))
+ >C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+         }
+ 
+ 
+         private f5_private() {
+->f5_private : Symbol(C4_private.f5_private, Decl(privacyFunc.ts, 75, 9))
++>f5_private : Symbol(f5_private, Decl(privacyFunc.ts, 75, 9))
+ 
+             return new C1_public();
+ >C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+         }
+ 
+         public f6_public() {
+->f6_public : Symbol(C4_private.f6_public, Decl(privacyFunc.ts, 80, 9))
++>f6_public : Symbol(f6_public, Decl(privacyFunc.ts, 80, 9))
+ 
+             return new C1_public();
+ >C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+         }
+ 
+         private f7_private() {
+->f7_private : Symbol(C4_private.f7_private, Decl(privacyFunc.ts, 84, 9))
++>f7_private : Symbol(f7_private, Decl(privacyFunc.ts, 84, 9))
+ 
+             return new C2_private();
+ >C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+         }
+ 
+         public f8_public() {
+->f8_public : Symbol(C4_private.f8_public, Decl(privacyFunc.ts, 88, 9))
++>f8_public : Symbol(f8_public, Decl(privacyFunc.ts, 88, 9))
+ 
+             return new C2_private();
+ >C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+@@= skipped -54, +54 lines =@@
+ 
+ 
+         private f9_private(): C1_public {
+->f9_private : Symbol(C4_private.f9_private, Decl(privacyFunc.ts, 92, 9))
++>f9_private : Symbol(f9_private, Decl(privacyFunc.ts, 92, 9))
+ >C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+ 
+             return new C1_public();
+@@= skipped -8, +8 lines =@@
+         }
+ 
+         public f10_public(): C1_public {
+->f10_public : Symbol(C4_private.f10_public, Decl(privacyFunc.ts, 97, 9))
++>f10_public : Symbol(f10_public, Decl(privacyFunc.ts, 97, 9))
+ >C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+ 
+             return new C1_public();
+@@= skipped -8, +8 lines =@@
+         }
+ 
+         private f11_private(): C2_private {
+->f11_private : Symbol(C4_private.f11_private, Decl(privacyFunc.ts, 101, 9))
++>f11_private : Symbol(f11_private, Decl(privacyFunc.ts, 101, 9))
+ >C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+ 
+             return new C2_private();
+@@= skipped -8, +8 lines =@@
+         }
+ 
+         public f12_public(): C2_private {
+->f12_public : Symbol(C4_private.f12_public, Decl(privacyFunc.ts, 105, 9))
++>f12_public : Symbol(f12_public, Decl(privacyFunc.ts, 105, 9))
+ >C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+ 
+             return new C2_private();
+@@= skipped -145, +145 lines =@@
+ >c7_c1_2 : Symbol(c7_c1_2, Decl(privacyFunc.ts, 183, 17))
+     }
+     private f1_private(c7_f1_arg: C6_public) {
+->f1_private : Symbol(C7_public.f1_private, Decl(privacyFunc.ts, 184, 5))
++>f1_private : Symbol(f1_private, Decl(privacyFunc.ts, 184, 5))
+ >c7_f1_arg : Symbol(c7_f1_arg, Decl(privacyFunc.ts, 185, 23))
+ >C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+     }
+ 
+     public f2_public(c7_f2_arg: C6_public) {
+->f2_public : Symbol(C7_public.f2_public, Decl(privacyFunc.ts, 186, 5))
++>f2_public : Symbol(f2_public, Decl(privacyFunc.ts, 186, 5))
+ >c7_f2_arg : Symbol(c7_f2_arg, Decl(privacyFunc.ts, 188, 21))
+ >C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+     }
+ 
+     private f5_private() {
+->f5_private : Symbol(C7_public.f5_private, Decl(privacyFunc.ts, 189, 5))
++>f5_private : Symbol(f5_private, Decl(privacyFunc.ts, 189, 5))
+ 
+         return new C6_public();
+ >C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+     }
+ 
+     public f6_public() {
+->f6_public : Symbol(C7_public.f6_public, Decl(privacyFunc.ts, 193, 5))
++>f6_public : Symbol(f6_public, Decl(privacyFunc.ts, 193, 5))
+ 
+         return new C6_public();
+ >C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+     }
+ 
+     private f9_private(): C6_public {
+->f9_private : Symbol(C7_public.f9_private, Decl(privacyFunc.ts, 197, 5))
++>f9_private : Symbol(f9_private, Decl(privacyFunc.ts, 197, 5))
+ >C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+ 
+         return new C6_public();
+@@= skipped -34, +34 lines =@@
+     }
+ 
+     public f10_public(): C6_public {
+->f10_public : Symbol(C7_public.f10_public, Decl(privacyFunc.ts, 201, 5))
++>f10_public : Symbol(f10_public, Decl(privacyFunc.ts, 201, 5))
+ >C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+ 
+         return new C6_public();

@@ -1,0 +1,13 @@
+--- old.duplicateStringNamedProperty1.symbols
++++ new.duplicateStringNamedProperty1.symbols
+@@= skipped -4, +4 lines =@@
+ >Album : Symbol(Album, Decl(duplicateStringNamedProperty1.ts, 0, 0))
+ 
+     "artist": string;
+->"artist" : Symbol(Album["artist"], Decl(duplicateStringNamedProperty1.ts, 0, 24), Decl(duplicateStringNamedProperty1.ts, 1, 21))
++>"artist" : Symbol(artist, Decl(duplicateStringNamedProperty1.ts, 0, 24), Decl(duplicateStringNamedProperty1.ts, 1, 21))
+ 
+     artist: string;
+->artist : Symbol(Album["artist"], Decl(duplicateStringNamedProperty1.ts, 0, 24), Decl(duplicateStringNamedProperty1.ts, 1, 21))
++>artist : Symbol(artist, Decl(duplicateStringNamedProperty1.ts, 0, 24), Decl(duplicateStringNamedProperty1.ts, 1, 21))
+ }

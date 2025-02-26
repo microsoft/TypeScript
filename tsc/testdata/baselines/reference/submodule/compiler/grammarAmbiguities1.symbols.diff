@@ -1,0 +1,16 @@
+--- old.grammarAmbiguities1.symbols
++++ new.grammarAmbiguities1.symbols
+@@= skipped -2, +2 lines =@@
+ === grammarAmbiguities1.ts ===
+ class A { foo() { } }
+ >A : Symbol(A, Decl(grammarAmbiguities1.ts, 0, 0))
+->foo : Symbol(A.foo, Decl(grammarAmbiguities1.ts, 0, 9))
++>foo : Symbol(foo, Decl(grammarAmbiguities1.ts, 0, 9))
+ 
+ class B { bar() { }}
+ >B : Symbol(B, Decl(grammarAmbiguities1.ts, 0, 21))
+->bar : Symbol(B.bar, Decl(grammarAmbiguities1.ts, 1, 9))
++>bar : Symbol(bar, Decl(grammarAmbiguities1.ts, 1, 9))
+ 
+ function f(x) { return x; }
+ >f : Symbol(f, Decl(grammarAmbiguities1.ts, 1, 20))

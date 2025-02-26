@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/wellKnownSymbolExpando.ts] ////
+
+=== wellKnownSymbolExpando.ts ===
+function f() {}
+>f : Symbol(f, Decl(wellKnownSymbolExpando.ts, 0, 0))
+
+f[Symbol.iterator] = function() {}
+>f : Symbol(f, Decl(wellKnownSymbolExpando.ts, 0, 0))
+>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+

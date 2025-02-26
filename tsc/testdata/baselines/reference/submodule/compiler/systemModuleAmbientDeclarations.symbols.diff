@@ -1,0 +1,20 @@
+--- old.systemModuleAmbientDeclarations.symbols
++++ new.systemModuleAmbientDeclarations.symbols
+@@= skipped -11, +11 lines =@@
+ 
+ declare enum E {X = 1};
+ >E : Symbol(E, Decl(file1.ts, 2, 18))
+->X : Symbol(E.X, Decl(file1.ts, 3, 16))
++>X : Symbol(X, Decl(file1.ts, 3, 16))
+ 
+ export var promise = Promise;
+ >promise : Symbol(promise, Decl(file1.ts, 5, 10))
+@@= skipped -33, +33 lines =@@
+ === file5.ts ===
+ export declare enum E {X = 1}
+ >E : Symbol(E, Decl(file5.ts, 0, 0))
+->X : Symbol(E.X, Decl(file5.ts, 0, 23))
++>X : Symbol(X, Decl(file5.ts, 0, 23))
+ 
+ === file6.ts ===
+ export declare module M { var v: number; }

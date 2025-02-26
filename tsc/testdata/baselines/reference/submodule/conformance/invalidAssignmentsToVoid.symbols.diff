@@ -1,0 +1,20 @@
+--- old.invalidAssignmentsToVoid.symbols
++++ new.invalidAssignmentsToVoid.symbols
+@@= skipped -17, +17 lines =@@
+ 
+ class C { foo: string; }
+ >C : Symbol(C, Decl(invalidAssignmentsToVoid.ts, 4, 6))
+->foo : Symbol(C.foo, Decl(invalidAssignmentsToVoid.ts, 6, 9))
++>foo : Symbol(foo, Decl(invalidAssignmentsToVoid.ts, 6, 9))
+ 
+ var c: C;
+ >c : Symbol(c, Decl(invalidAssignmentsToVoid.ts, 7, 3))
+@@= skipped -16, +16 lines =@@
+ 
+ interface I { foo: string; }
+ >I : Symbol(I, Decl(invalidAssignmentsToVoid.ts, 9, 6))
+->foo : Symbol(I.foo, Decl(invalidAssignmentsToVoid.ts, 11, 13))
++>foo : Symbol(foo, Decl(invalidAssignmentsToVoid.ts, 11, 13))
+ 
+ var i: I;
+ >i : Symbol(i, Decl(invalidAssignmentsToVoid.ts, 12, 3))

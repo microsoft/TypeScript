@@ -1,0 +1,23 @@
+--- old.exportAssignmentGenericType.symbols
++++ new.exportAssignmentGenericType.symbols
+@@= skipped -9, +9 lines =@@
+ 
+ var y:number = x.test;
+ >y : Symbol(y, Decl(foo_1.ts, 2, 3))
+->x.test : Symbol(foo.test, Decl(foo_0.ts, 0, 13))
++>x.test : Symbol(test, Decl(foo_0.ts, 0, 13))
+ >x : Symbol(x, Decl(foo_1.ts, 1, 3))
+->test : Symbol(foo.test, Decl(foo_0.ts, 0, 13))
++>test : Symbol(test, Decl(foo_0.ts, 0, 13))
+ 
+ === foo_0.ts ===
+ class Foo<T>{
+@@= skipped -10, +10 lines =@@
+ >T : Symbol(T, Decl(foo_0.ts, 0, 10))
+ 
+ 	test: T;
+->test : Symbol(Foo.test, Decl(foo_0.ts, 0, 13))
++>test : Symbol(test, Decl(foo_0.ts, 0, 13))
+ >T : Symbol(T, Decl(foo_0.ts, 0, 10))
+ }
+ export = Foo;

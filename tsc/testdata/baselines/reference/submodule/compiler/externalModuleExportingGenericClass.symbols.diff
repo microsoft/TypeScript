@@ -1,0 +1,31 @@
+--- old.externalModuleExportingGenericClass.symbols
++++ new.externalModuleExportingGenericClass.symbols
+@@= skipped -9, +9 lines =@@
+ 
+ var v2: any = (new a()).foo;
+ >v2 : Symbol(v2, Decl(externalModuleExportingGenericClass_file1.ts, 2, 3))
+->(new a()).foo : Symbol(a.foo, Decl(externalModuleExportingGenericClass_file0.ts, 0, 12))
++>(new a()).foo : Symbol(foo, Decl(externalModuleExportingGenericClass_file0.ts, 0, 12))
+ >a : Symbol(a, Decl(externalModuleExportingGenericClass_file1.ts, 0, 0))
+->foo : Symbol(a.foo, Decl(externalModuleExportingGenericClass_file0.ts, 0, 12))
++>foo : Symbol(foo, Decl(externalModuleExportingGenericClass_file0.ts, 0, 12))
+ 
+ var v3: number = (new a<number>()).foo;
+ >v3 : Symbol(v3, Decl(externalModuleExportingGenericClass_file1.ts, 3, 3))
+->(new a<number>()).foo : Symbol(a.foo, Decl(externalModuleExportingGenericClass_file0.ts, 0, 12))
++>(new a<number>()).foo : Symbol(foo, Decl(externalModuleExportingGenericClass_file0.ts, 0, 12))
+ >a : Symbol(a, Decl(externalModuleExportingGenericClass_file1.ts, 0, 0))
+->foo : Symbol(a.foo, Decl(externalModuleExportingGenericClass_file0.ts, 0, 12))
++>foo : Symbol(foo, Decl(externalModuleExportingGenericClass_file0.ts, 0, 12))
+ 
+ === externalModuleExportingGenericClass_file0.ts ===
+ class C<T> {
+@@= skipped -16, +16 lines =@@
+ >T : Symbol(T, Decl(externalModuleExportingGenericClass_file0.ts, 0, 8))
+ 
+     foo: T;
+->foo : Symbol(C.foo, Decl(externalModuleExportingGenericClass_file0.ts, 0, 12))
++>foo : Symbol(foo, Decl(externalModuleExportingGenericClass_file0.ts, 0, 12))
+ >T : Symbol(T, Decl(externalModuleExportingGenericClass_file0.ts, 0, 8))
+ }
+ export = C;

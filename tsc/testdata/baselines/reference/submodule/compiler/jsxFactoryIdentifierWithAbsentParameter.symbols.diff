@@ -1,0 +1,11 @@
+--- old.jsxFactoryIdentifierWithAbsentParameter.symbols
++++ new.jsxFactoryIdentifierWithAbsentParameter.symbols
+@@= skipped -15, +15 lines =@@
+ >AppComponent : Symbol(AppComponent, Decl(test.tsx, 4, 1))
+ 
+     render() {
+->render : Symbol(AppComponent.render, Decl(test.tsx, 6, 27))
++>render : Symbol(render, Decl(test.tsx, 6, 27))
+ 
+         return <div />;
+     }

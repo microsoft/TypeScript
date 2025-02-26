@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/exportDefaultAbstractClass.ts] ////
+
+=== a.ts ===
+export default abstract class A { a: number; }
+>A : Symbol(default, Decl(a.ts, 0, 0))
+>a : Symbol(a, Decl(a.ts, 0, 33))
+
+class B extends A {}
+>B : Symbol(B, Decl(a.ts, 0, 46))
+>A : Symbol(default, Decl(a.ts, 0, 0))
+
+new B().a.toExponential();
+>new B().a.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+>new B().a : Symbol(a, Decl(a.ts, 0, 33))
+>B : Symbol(B, Decl(a.ts, 0, 46))
+>a : Symbol(a, Decl(a.ts, 0, 33))
+>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+
+=== b.ts ===
+import A from './a';
+>A : Symbol(A, Decl(b.ts, 0, 6))
+
+class C extends A {}
+>C : Symbol(C, Decl(b.ts, 0, 20))
+>A : Symbol(A, Decl(b.ts, 0, 6))
+
+new C().a.toExponential();
+>new C().a.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+>new C().a : Symbol(a, Decl(a.ts, 0, 33))
+>C : Symbol(C, Decl(b.ts, 0, 20))
+>a : Symbol(a, Decl(a.ts, 0, 33))
+>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+

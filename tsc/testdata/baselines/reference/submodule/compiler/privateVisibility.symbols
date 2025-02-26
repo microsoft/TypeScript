@@ -1,0 +1,76 @@
+//// [tests/cases/compiler/privateVisibility.ts] ////
+
+=== privateVisibility.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(privateVisibility.ts, 0, 0))
+
+	public pubMeth() {this.privMeth();}
+>pubMeth : Symbol(pubMeth, Decl(privateVisibility.ts, 0, 11))
+>this.privMeth : Symbol(privMeth, Decl(privateVisibility.ts, 1, 36))
+>this : Symbol(Foo, Decl(privateVisibility.ts, 0, 0))
+>privMeth : Symbol(privMeth, Decl(privateVisibility.ts, 1, 36))
+
+	private privMeth() {}
+>privMeth : Symbol(privMeth, Decl(privateVisibility.ts, 1, 36))
+
+	public pubProp = 0;
+>pubProp : Symbol(pubProp, Decl(privateVisibility.ts, 2, 22))
+
+	private privProp = 0;
+>privProp : Symbol(privProp, Decl(privateVisibility.ts, 3, 20))
+}
+
+var f = new Foo();
+>f : Symbol(f, Decl(privateVisibility.ts, 7, 3))
+>Foo : Symbol(Foo, Decl(privateVisibility.ts, 0, 0))
+
+f.privMeth(); // should not work
+>f.privMeth : Symbol(privMeth, Decl(privateVisibility.ts, 1, 36))
+>f : Symbol(f, Decl(privateVisibility.ts, 7, 3))
+>privMeth : Symbol(privMeth, Decl(privateVisibility.ts, 1, 36))
+
+f.privProp; // should not work
+>f.privProp : Symbol(privProp, Decl(privateVisibility.ts, 3, 20))
+>f : Symbol(f, Decl(privateVisibility.ts, 7, 3))
+>privProp : Symbol(privProp, Decl(privateVisibility.ts, 3, 20))
+
+f.pubMeth(); // should work
+>f.pubMeth : Symbol(pubMeth, Decl(privateVisibility.ts, 0, 11))
+>f : Symbol(f, Decl(privateVisibility.ts, 7, 3))
+>pubMeth : Symbol(pubMeth, Decl(privateVisibility.ts, 0, 11))
+
+f.pubProp; // should work
+>f.pubProp : Symbol(pubProp, Decl(privateVisibility.ts, 2, 22))
+>f : Symbol(f, Decl(privateVisibility.ts, 7, 3))
+>pubProp : Symbol(pubProp, Decl(privateVisibility.ts, 2, 22))
+
+module M {
+>M : Symbol(M, Decl(privateVisibility.ts, 12, 10))
+
+    export class C { public pub = 0; private priv = 1; }
+>C : Symbol(C, Decl(privateVisibility.ts, 14, 10))
+>pub : Symbol(pub, Decl(privateVisibility.ts, 15, 20))
+>priv : Symbol(priv, Decl(privateVisibility.ts, 15, 36))
+
+    export var V = 0;
+>V : Symbol(V, Decl(privateVisibility.ts, 16, 14))
+}
+
+
+var c = new M.C();
+>c : Symbol(c, Decl(privateVisibility.ts, 20, 3))
+>M.C : Symbol(C, Decl(privateVisibility.ts, 14, 10))
+>M : Symbol(M, Decl(privateVisibility.ts, 12, 10))
+>C : Symbol(C, Decl(privateVisibility.ts, 14, 10))
+
+c.pub; // should work
+>c.pub : Symbol(pub, Decl(privateVisibility.ts, 15, 20))
+>c : Symbol(c, Decl(privateVisibility.ts, 20, 3))
+>pub : Symbol(pub, Decl(privateVisibility.ts, 15, 20))
+
+c.priv; // should not work
+>c.priv : Symbol(priv, Decl(privateVisibility.ts, 15, 36))
+>c : Symbol(c, Decl(privateVisibility.ts, 20, 3))
+>priv : Symbol(priv, Decl(privateVisibility.ts, 15, 36))
+
+

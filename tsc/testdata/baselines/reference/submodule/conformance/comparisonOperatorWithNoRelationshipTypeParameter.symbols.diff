@@ -1,0 +1,15 @@
+--- old.comparisonOperatorWithNoRelationshipTypeParameter.symbols
++++ new.comparisonOperatorWithNoRelationshipTypeParameter.symbols
+@@= skipped -2, +2 lines =@@
+ === comparisonOperatorWithNoRelationshipTypeParameter.ts ===
+ enum E { a, b, c }
+ >E : Symbol(E, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 0, 8))
+->b : Symbol(E.b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 0, 11))
+->c : Symbol(E.c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 0, 14))
++>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 0, 8))
++>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 0, 11))
++>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 0, 14))
+ 
+ var a: boolean;
+ >a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))

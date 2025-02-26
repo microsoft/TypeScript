@@ -1,0 +1,11 @@
+--- old.noCrashOnMixin.symbols
++++ new.noCrashOnMixin.symbols
+@@= skipped -41, +41 lines =@@
+ >Empty : Symbol(Empty, Decl(noCrashOnMixin.ts, 13, 1))
+ 
+     public trigger() {
+->trigger : Symbol(CrashTrigger.trigger, Decl(noCrashOnMixin.ts, 18, 41))
++>trigger : Symbol(trigger, Decl(noCrashOnMixin.ts, 18, 41))
+ 
+         new Concrete();
+ >Concrete : Symbol(Concrete, Decl(noCrashOnMixin.ts, 3, 1))

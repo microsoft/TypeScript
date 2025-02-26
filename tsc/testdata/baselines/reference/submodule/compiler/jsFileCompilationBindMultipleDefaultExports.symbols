@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/jsFileCompilationBindMultipleDefaultExports.ts] ////
+
+=== a.js ===
+export default class a {
+>a : Symbol(default, Decl(a.js, 0, 0))
+}
+export default var a = 10;
+>a : Symbol(a, Decl(a.js, 0, 0), Decl(a.js, 2, 18))
+

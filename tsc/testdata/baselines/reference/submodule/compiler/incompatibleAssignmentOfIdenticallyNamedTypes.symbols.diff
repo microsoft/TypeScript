@@ -1,0 +1,23 @@
+--- old.incompatibleAssignmentOfIdenticallyNamedTypes.symbols
++++ new.incompatibleAssignmentOfIdenticallyNamedTypes.symbols
+@@= skipped -12, +12 lines =@@
+ >T : Symbol(T, Decl(incompatibleAssignmentOfIdenticallyNamedTypes.ts, 2, 10))
+ 
+     x: T;
+->x : Symbol(Foo.x, Decl(incompatibleAssignmentOfIdenticallyNamedTypes.ts, 2, 14))
++>x : Symbol(x, Decl(incompatibleAssignmentOfIdenticallyNamedTypes.ts, 2, 14))
+ >T : Symbol(T, Decl(incompatibleAssignmentOfIdenticallyNamedTypes.ts, 2, 10))
+ 
+     fn() {
+->fn : Symbol(Foo.fn, Decl(incompatibleAssignmentOfIdenticallyNamedTypes.ts, 3, 9))
++>fn : Symbol(fn, Decl(incompatibleAssignmentOfIdenticallyNamedTypes.ts, 3, 9))
+ 
+         this.x = a;
+->this.x : Symbol(Foo.x, Decl(incompatibleAssignmentOfIdenticallyNamedTypes.ts, 2, 14))
++>this.x : Symbol(x, Decl(incompatibleAssignmentOfIdenticallyNamedTypes.ts, 2, 14))
+ >this : Symbol(Foo, Decl(incompatibleAssignmentOfIdenticallyNamedTypes.ts, 1, 19))
+->x : Symbol(Foo.x, Decl(incompatibleAssignmentOfIdenticallyNamedTypes.ts, 2, 14))
++>x : Symbol(x, Decl(incompatibleAssignmentOfIdenticallyNamedTypes.ts, 2, 14))
+ >a : Symbol(a, Decl(incompatibleAssignmentOfIdenticallyNamedTypes.ts, 1, 13))
+     }
+ }

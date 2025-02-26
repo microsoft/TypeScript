@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/extendedUnicodeEscapeSequenceIdentifiers.ts] ////
+
+=== extendedUnicodeEscapeSequenceIdentifiers.ts ===
+const \u{0061} = 12;
+>\u{0061} : Symbol(a, Decl(extendedUnicodeEscapeSequenceIdentifiers.ts, 0, 5))
+
+const a\u{0061} = 12;
+>a\u{0061} : Symbol(aa, Decl(extendedUnicodeEscapeSequenceIdentifiers.ts, 1, 5))
+
+console.log(a + aa);
+>a : Symbol(a, Decl(extendedUnicodeEscapeSequenceIdentifiers.ts, 0, 5))
+>aa : Symbol(aa, Decl(extendedUnicodeEscapeSequenceIdentifiers.ts, 1, 5))
+

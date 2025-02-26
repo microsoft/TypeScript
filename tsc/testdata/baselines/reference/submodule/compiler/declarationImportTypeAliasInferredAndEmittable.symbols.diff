@@ -1,0 +1,40 @@
+--- old.declarationImportTypeAliasInferredAndEmittable.symbols
++++ new.declarationImportTypeAliasInferredAndEmittable.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     constructor() { }
+     item = 3;
+->item : Symbol(Conn.item, Decl(foo.ts, 1, 21))
++>item : Symbol(item, Decl(foo.ts, 1, 21))
+ 
+     method() { }
+->method : Symbol(Conn.method, Decl(foo.ts, 2, 13))
++>method : Symbol(method, Decl(foo.ts, 2, 13))
+ }
+ 
+ export = Conn;
+@@= skipped -21, +21 lines =@@
+ >Wrap : Symbol(Wrap, Decl(usage.ts, 1, 20))
+ 
+     connItem: number;
+->connItem : Symbol(Wrap.connItem, Decl(usage.ts, 3, 19))
++>connItem : Symbol(connItem, Decl(usage.ts, 3, 19))
+ 
+     constructor(c = x) {
+ >c : Symbol(c, Decl(usage.ts, 5, 16))
+ >x : Symbol(x, Decl(usage.ts, 1, 11))
+ 
+         this.connItem = c.item;
+->this.connItem : Symbol(Wrap.connItem, Decl(usage.ts, 3, 19))
++>this.connItem : Symbol(connItem, Decl(usage.ts, 3, 19))
+ >this : Symbol(Wrap, Decl(usage.ts, 1, 20))
+->connItem : Symbol(Wrap.connItem, Decl(usage.ts, 3, 19))
+->c.item : Symbol(Conn.item, Decl(foo.ts, 1, 21))
++>connItem : Symbol(connItem, Decl(usage.ts, 3, 19))
++>c.item : Symbol(item, Decl(foo.ts, 1, 21))
+ >c : Symbol(c, Decl(usage.ts, 5, 16))
+->item : Symbol(Conn.item, Decl(foo.ts, 1, 21))
++>item : Symbol(item, Decl(foo.ts, 1, 21))
+     }
+ }
+ 

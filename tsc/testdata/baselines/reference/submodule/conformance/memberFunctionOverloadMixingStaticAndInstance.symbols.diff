@@ -1,0 +1,56 @@
+--- old.memberFunctionOverloadMixingStaticAndInstance.symbols
++++ new.memberFunctionOverloadMixingStaticAndInstance.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 0, 0))
+ 
+     foo();
+->foo : Symbol(C.foo, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 0, 9))
++>foo : Symbol(foo, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 0, 9))
+ 
+     static foo(); // error
+->foo : Symbol(C.foo, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 1, 10))
++>foo : Symbol(foo, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 1, 10))
+ }
+ 
+ class D {
+ >D : Symbol(D, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 3, 1))
+ 
+     static foo();
+->foo : Symbol(D.foo, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 5, 9))
++>foo : Symbol(foo, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 5, 9))
+ 
+     foo(); // error    
+->foo : Symbol(D.foo, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 6, 17))
++>foo : Symbol(foo, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 6, 17))
+ }
+ 
+ class E<T> {
+@@= skipped -21, +21 lines =@@
+ >T : Symbol(T, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 10, 8))
+ 
+     foo(x: T);
+->foo : Symbol(E.foo, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 10, 12))
++>foo : Symbol(foo, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 10, 12))
+ >x : Symbol(x, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 11, 8))
+ >T : Symbol(T, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 10, 8))
+ 
+     static foo(x: number); // error
+->foo : Symbol(E.foo, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 11, 14))
++>foo : Symbol(foo, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 11, 14))
+ >x : Symbol(x, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 12, 15))
+ }
+ 
+@@= skipped -14, +14 lines =@@
+ >T : Symbol(T, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 15, 8))
+ 
+     static foo(x: number);
+->foo : Symbol(F.foo, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 15, 12))
++>foo : Symbol(foo, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 15, 12))
+ >x : Symbol(x, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 16, 15))
+ 
+     foo(x: T); // error    
+->foo : Symbol(F.foo, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 16, 26))
++>foo : Symbol(foo, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 16, 26))
+ >x : Symbol(x, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 17, 8))
+ >T : Symbol(T, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 15, 8))
+ }

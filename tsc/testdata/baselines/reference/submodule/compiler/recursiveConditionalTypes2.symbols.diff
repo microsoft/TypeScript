@@ -1,0 +1,45 @@
+--- old.recursiveConditionalTypes2.symbols
++++ new.recursiveConditionalTypes2.symbols
+@@= skipped -24, +24 lines =@@
+ >ClassSpec : Symbol(ClassSpec, Decl(recursiveConditionalTypes2.ts, 6, 10))
+ 
+   public?: object;
+->public : Symbol(ClassSpec.public, Decl(recursiveConditionalTypes2.ts, 8, 21))
++>public : Symbol(public, Decl(recursiveConditionalTypes2.ts, 8, 21))
+ 
+   private?: object;
+->private : Symbol(ClassSpec.private, Decl(recursiveConditionalTypes2.ts, 9, 18))
++>private : Symbol(private, Decl(recursiveConditionalTypes2.ts, 9, 18))
+ 
+   publicExtends?: Record<string, ClassSpec>;
+->publicExtends : Symbol(ClassSpec.publicExtends, Decl(recursiveConditionalTypes2.ts, 10, 19))
++>publicExtends : Symbol(publicExtends, Decl(recursiveConditionalTypes2.ts, 10, 19))
+ >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+ >ClassSpec : Symbol(ClassSpec, Decl(recursiveConditionalTypes2.ts, 6, 10))
+ 
+   privateExtends?: Record<string, ClassSpec>;
+->privateExtends : Symbol(ClassSpec.privateExtends, Decl(recursiveConditionalTypes2.ts, 11, 44))
++>privateExtends : Symbol(privateExtends, Decl(recursiveConditionalTypes2.ts, 11, 44))
+ >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+ >ClassSpec : Symbol(ClassSpec, Decl(recursiveConditionalTypes2.ts, 6, 10))
+ }
+@@= skipped -163, +163 lines =@@
+ >T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 54, 17))
+ 
+   find<S extends T>(predicate: (value: T) => boolean): void;
+->find : Symbol(_Array.find, Decl(recursiveConditionalTypes2.ts, 54, 21))
++>find : Symbol(find, Decl(recursiveConditionalTypes2.ts, 54, 21))
+ >S : Symbol(S, Decl(recursiveConditionalTypes2.ts, 55, 7))
+ >T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 54, 17))
+ >predicate : Symbol(predicate, Decl(recursiveConditionalTypes2.ts, 55, 20))
+@@= skipped -14, +14 lines =@@
+ >DefaultsDeep : Symbol(DefaultsDeep, Decl(recursiveConditionalTypes2.ts, 44, 2))
+ 
+ z.find((_) => true);
+->z.find : Symbol(_Array.find, Decl(recursiveConditionalTypes2.ts, 54, 21))
++>z.find : Symbol(find, Decl(recursiveConditionalTypes2.ts, 54, 21))
+ >z : Symbol(z, Decl(recursiveConditionalTypes2.ts, 58, 5))
+->find : Symbol(_Array.find, Decl(recursiveConditionalTypes2.ts, 54, 21))
++>find : Symbol(find, Decl(recursiveConditionalTypes2.ts, 54, 21))
+ >_ : Symbol(_, Decl(recursiveConditionalTypes2.ts, 60, 8))
+ 

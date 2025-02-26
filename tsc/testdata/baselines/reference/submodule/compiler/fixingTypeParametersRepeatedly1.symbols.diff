@@ -1,0 +1,24 @@
+--- old.fixingTypeParametersRepeatedly1.symbols
++++ new.fixingTypeParametersRepeatedly1.symbols
+@@= skipped -19, +19 lines =@@
+ >f : Symbol(f, Decl(fixingTypeParametersRepeatedly1.ts, 0, 0))
+ >x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 1, 5))
+ >x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 1, 16))
+->x.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>x.toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 1, 16))
+->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+ 
+ // First overload of g should type check just like f
+ declare function g<T>(x: T, y: (p: T) => T, z: (p: T) => T): T;
+@@= skipped -27, +27 lines =@@
+ >g : Symbol(g, Decl(fixingTypeParametersRepeatedly1.ts, 1, 39), Decl(fixingTypeParametersRepeatedly1.ts, 4, 63))
+ >x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 6, 5))
+ >x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 6, 16))
+->x.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>x.toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 6, 16))
+->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+ 

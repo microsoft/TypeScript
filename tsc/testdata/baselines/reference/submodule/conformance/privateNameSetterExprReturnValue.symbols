@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameSetterExprReturnValue.ts] ////
+
+=== privateNameSetterExprReturnValue.ts ===
+class C {
+>C : Symbol(C, Decl(privateNameSetterExprReturnValue.ts, 0, 0))
+
+    set #foo(a: number) {}
+>#foo : Symbol(#foo, Decl(privateNameSetterExprReturnValue.ts, 0, 9))
+>a : Symbol(a, Decl(privateNameSetterExprReturnValue.ts, 1, 13))
+
+    bar() {
+>bar : Symbol(bar, Decl(privateNameSetterExprReturnValue.ts, 1, 26))
+
+        let x = (this.#foo = 42 * 2);
+>x : Symbol(x, Decl(privateNameSetterExprReturnValue.ts, 3, 11))
+>this.#foo : Symbol(#foo, Decl(privateNameSetterExprReturnValue.ts, 0, 9))
+>this : Symbol(C, Decl(privateNameSetterExprReturnValue.ts, 0, 0))
+
+        console.log(x); // 84
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(privateNameSetterExprReturnValue.ts, 3, 11))
+    }
+}
+
+new C().bar();
+>new C().bar : Symbol(bar, Decl(privateNameSetterExprReturnValue.ts, 1, 26))
+>C : Symbol(C, Decl(privateNameSetterExprReturnValue.ts, 0, 0))
+>bar : Symbol(bar, Decl(privateNameSetterExprReturnValue.ts, 1, 26))
+

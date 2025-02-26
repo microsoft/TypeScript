@@ -1,0 +1,15 @@
+--- old.thisInInnerFunctions.symbols
++++ new.thisInInnerFunctions.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(thisInInnerFunctions.ts, 0, 0))
+ 
+     x = "hello";
+->x : Symbol(Foo.x, Decl(thisInInnerFunctions.ts, 0, 11))
++>x : Symbol(x, Decl(thisInInnerFunctions.ts, 0, 11))
+ 
+     bar() {
+->bar : Symbol(Foo.bar, Decl(thisInInnerFunctions.ts, 1, 16))
++>bar : Symbol(bar, Decl(thisInInnerFunctions.ts, 1, 16))
+ 
+         function inner() {
+ >inner : Symbol(inner, Decl(thisInInnerFunctions.ts, 2, 11))

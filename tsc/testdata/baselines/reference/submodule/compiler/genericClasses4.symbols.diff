@@ -1,0 +1,81 @@
+--- old.genericClasses4.symbols
++++ new.genericClasses4.symbols
+@@= skipped -6, +6 lines =@@
+ >A : Symbol(A, Decl(genericClasses4.ts, 1, 13))
+ {
+     constructor(public x: A, public y: A) { }
+->x : Symbol(Vec2_T.x, Decl(genericClasses4.ts, 3, 16))
++>x : Symbol(x, Decl(genericClasses4.ts, 3, 16))
+ >A : Symbol(A, Decl(genericClasses4.ts, 1, 13))
+->y : Symbol(Vec2_T.y, Decl(genericClasses4.ts, 3, 28))
++>y : Symbol(y, Decl(genericClasses4.ts, 3, 28))
+ >A : Symbol(A, Decl(genericClasses4.ts, 1, 13))
+ 
+     fmap<B>(f: (a: A) => B): Vec2_T<B> {
+->fmap : Symbol(Vec2_T.fmap, Decl(genericClasses4.ts, 3, 45))
++>fmap : Symbol(fmap, Decl(genericClasses4.ts, 3, 45))
+ >B : Symbol(B, Decl(genericClasses4.ts, 4, 9))
+ >f : Symbol(f, Decl(genericClasses4.ts, 4, 12))
+ >a : Symbol(a, Decl(genericClasses4.ts, 4, 16))
+@@= skipped -19, +19 lines =@@
+ >x : Symbol(x, Decl(genericClasses4.ts, 5, 11))
+ >B : Symbol(B, Decl(genericClasses4.ts, 4, 9))
+ >f : Symbol(f, Decl(genericClasses4.ts, 4, 12))
+->this.x : Symbol(Vec2_T.x, Decl(genericClasses4.ts, 3, 16))
++>this.x : Symbol(x, Decl(genericClasses4.ts, 3, 16))
+ >this : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
+->x : Symbol(Vec2_T.x, Decl(genericClasses4.ts, 3, 16))
++>x : Symbol(x, Decl(genericClasses4.ts, 3, 16))
+ 
+         var y:B = f(this.y);
+ >y : Symbol(y, Decl(genericClasses4.ts, 6, 11))
+ >B : Symbol(B, Decl(genericClasses4.ts, 4, 9))
+ >f : Symbol(f, Decl(genericClasses4.ts, 4, 12))
+->this.y : Symbol(Vec2_T.y, Decl(genericClasses4.ts, 3, 28))
++>this.y : Symbol(y, Decl(genericClasses4.ts, 3, 28))
+ >this : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
+->y : Symbol(Vec2_T.y, Decl(genericClasses4.ts, 3, 28))
++>y : Symbol(y, Decl(genericClasses4.ts, 3, 28))
+ 
+         var retval: Vec2_T<B> = new Vec2_T(x, y);
+ >retval : Symbol(retval, Decl(genericClasses4.ts, 7, 11))
+@@= skipped -24, +24 lines =@@
+ >retval : Symbol(retval, Decl(genericClasses4.ts, 7, 11))
+     }
+     apply<B>(f: Vec2_T<(a: A) => B>): Vec2_T<B> {
+->apply : Symbol(Vec2_T.apply, Decl(genericClasses4.ts, 9, 5))
++>apply : Symbol(apply, Decl(genericClasses4.ts, 9, 5))
+ >B : Symbol(B, Decl(genericClasses4.ts, 10, 10))
+ >f : Symbol(f, Decl(genericClasses4.ts, 10, 13))
+ >Vec2_T : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
+@@= skipped -13, +13 lines =@@
+         var x:B = f.x(this.x);
+ >x : Symbol(x, Decl(genericClasses4.ts, 11, 11))
+ >B : Symbol(B, Decl(genericClasses4.ts, 10, 10))
+->f.x : Symbol(Vec2_T.x, Decl(genericClasses4.ts, 3, 16))
++>f.x : Symbol(x, Decl(genericClasses4.ts, 3, 16))
+ >f : Symbol(f, Decl(genericClasses4.ts, 10, 13))
+->x : Symbol(Vec2_T.x, Decl(genericClasses4.ts, 3, 16))
+->this.x : Symbol(Vec2_T.x, Decl(genericClasses4.ts, 3, 16))
++>x : Symbol(x, Decl(genericClasses4.ts, 3, 16))
++>this.x : Symbol(x, Decl(genericClasses4.ts, 3, 16))
+ >this : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
+->x : Symbol(Vec2_T.x, Decl(genericClasses4.ts, 3, 16))
++>x : Symbol(x, Decl(genericClasses4.ts, 3, 16))
+ 
+         var y:B = f.y(this.y);
+ >y : Symbol(y, Decl(genericClasses4.ts, 12, 11))
+ >B : Symbol(B, Decl(genericClasses4.ts, 10, 10))
+->f.y : Symbol(Vec2_T.y, Decl(genericClasses4.ts, 3, 28))
++>f.y : Symbol(y, Decl(genericClasses4.ts, 3, 28))
+ >f : Symbol(f, Decl(genericClasses4.ts, 10, 13))
+->y : Symbol(Vec2_T.y, Decl(genericClasses4.ts, 3, 28))
+->this.y : Symbol(Vec2_T.y, Decl(genericClasses4.ts, 3, 28))
++>y : Symbol(y, Decl(genericClasses4.ts, 3, 28))
++>this.y : Symbol(y, Decl(genericClasses4.ts, 3, 28))
+ >this : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
+->y : Symbol(Vec2_T.y, Decl(genericClasses4.ts, 3, 28))
++>y : Symbol(y, Decl(genericClasses4.ts, 3, 28))
+ 
+         var retval: Vec2_T<B> = new Vec2_T(x, y);
+ >retval : Symbol(retval, Decl(genericClasses4.ts, 13, 11))

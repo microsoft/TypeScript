@@ -1,0 +1,14 @@
+--- old.classIndexer5.symbols
++++ new.classIndexer5.symbols
+@@= skipped -7, +7 lines =@@
+ >key : Symbol(key, Decl(classIndexer5.ts, 1, 5))
+ 
+     #a: boolean;
+->#a : Symbol(Foo.#a, Decl(classIndexer5.ts, 1, 26))
++>#a : Symbol(#a, Decl(classIndexer5.ts, 1, 26))
+ 
+     #b = false;
+->#b : Symbol(Foo.#b, Decl(classIndexer5.ts, 3, 16))
++>#b : Symbol(#b, Decl(classIndexer5.ts, 3, 16))
+ }
+ 

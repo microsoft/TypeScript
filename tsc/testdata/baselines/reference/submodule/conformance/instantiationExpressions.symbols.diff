@@ -1,0 +1,23 @@
+--- old.instantiationExpressions.symbols
++++ new.instantiationExpressions.symbols
+@@= skipped -98, +98 lines =@@
+ >T : Symbol(T, Decl(instantiationExpressions.ts, 26, 16))
+ 
+     static f<U>(x: U): U[];
+->f : Symbol(C.f, Decl(instantiationExpressions.ts, 27, 22))
++>f : Symbol(f, Decl(instantiationExpressions.ts, 27, 22))
+ >U : Symbol(U, Decl(instantiationExpressions.ts, 28, 13))
+ >x : Symbol(x, Decl(instantiationExpressions.ts, 28, 16))
+ >U : Symbol(U, Decl(instantiationExpressions.ts, 28, 13))
+@@= skipped -16, +16 lines =@@
+ 
+     let f1 = C.f<string>;  // (x: string) => string[]
+ >f1 : Symbol(f1, Decl(instantiationExpressions.ts, 33, 7))
+->C.f : Symbol(C.f, Decl(instantiationExpressions.ts, 27, 22))
++>C.f : Symbol(f, Decl(instantiationExpressions.ts, 27, 22))
+ >C : Symbol(C, Decl(instantiationExpressions.ts, 24, 40))
+->f : Symbol(C.f, Decl(instantiationExpressions.ts, 27, 22))
++>f : Symbol(f, Decl(instantiationExpressions.ts, 27, 22))
+ }
+ 
+ function f10(f: { <T>(a: T): T, <U>(a: U, b: number): U[] }) {

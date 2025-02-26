@@ -1,0 +1,292 @@
+--- old.inlineJsxFactoryDeclarationsLocalTypes.symbols
++++ new.inlineJsxFactoryDeclarationsLocalTypes.symbols
+@@= skipped -16, +16 lines =@@
+ >Element : Symbol(Element, Decl(renderer.d.ts, 4, 9))
+ 
+             __domBrand: void;
+->__domBrand : Symbol(Element.__domBrand, Decl(renderer.d.ts, 5, 27))
++>__domBrand : Symbol(__domBrand, Decl(renderer.d.ts, 5, 27))
+ 
+             props: {
+->props : Symbol(Element.props, Decl(renderer.d.ts, 6, 29))
++>props : Symbol(props, Decl(renderer.d.ts, 6, 29))
+ 
+                 children?: Element[];
+ >children : Symbol(children, Decl(renderer.d.ts, 7, 20))
+@@= skipped -16, +16 lines =@@
+ >Element : Symbol(Element, Decl(renderer.d.ts, 4, 9))
+ 
+             render(): Element;
+->render : Symbol(ElementClass.render, Decl(renderer.d.ts, 11, 48))
++>render : Symbol(render, Decl(renderer.d.ts, 11, 48))
+ >Element : Symbol(Element, Decl(renderer.d.ts, 4, 9))
+         }
+         interface ElementAttributesProperty { props: any; }
+ >ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(renderer.d.ts, 13, 9))
+->props : Symbol(ElementAttributesProperty.props, Decl(renderer.d.ts, 14, 45))
++>props : Symbol(props, Decl(renderer.d.ts, 14, 45))
+ 
+         interface ElementChildrenAttribute { children: any; }
+ >ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(renderer.d.ts, 14, 59))
+->children : Symbol(ElementChildrenAttribute.children, Decl(renderer.d.ts, 15, 44))
++>children : Symbol(children, Decl(renderer.d.ts, 15, 44))
+     }
+ }
+ export function dom(): dom.JSX.Element;
+ >dom : Symbol(dom, Decl(renderer.d.ts, 17, 1), Decl(renderer.d.ts, 0, 0))
+ >dom : Symbol(dom, Decl(renderer.d.ts, 17, 1), Decl(renderer.d.ts, 0, 0))
+->JSX : Symbol(dom.JSX, Decl(renderer.d.ts, 0, 22))
+->Element : Symbol(dom.JSX.Element, Decl(renderer.d.ts, 4, 9))
++>JSX : Symbol(JSX, Decl(renderer.d.ts, 0, 22))
++>Element : Symbol(Element, Decl(renderer.d.ts, 4, 9))
+ 
+ === renderer2.d.ts ===
+ export namespace predom {
+@@= skipped -35, +35 lines =@@
+ >Element : Symbol(Element, Decl(renderer2.d.ts, 4, 9))
+ 
+             __predomBrand: void;
+->__predomBrand : Symbol(Element.__predomBrand, Decl(renderer2.d.ts, 5, 27))
++>__predomBrand : Symbol(__predomBrand, Decl(renderer2.d.ts, 5, 27))
+ 
+             props: {
+->props : Symbol(Element.props, Decl(renderer2.d.ts, 6, 32))
++>props : Symbol(props, Decl(renderer2.d.ts, 6, 32))
+ 
+                 children?: Element[];
+ >children : Symbol(children, Decl(renderer2.d.ts, 7, 20))
+@@= skipped -16, +16 lines =@@
+ >Element : Symbol(Element, Decl(renderer2.d.ts, 4, 9))
+ 
+             render(): Element;
+->render : Symbol(ElementClass.render, Decl(renderer2.d.ts, 11, 48))
++>render : Symbol(render, Decl(renderer2.d.ts, 11, 48))
+ >Element : Symbol(Element, Decl(renderer2.d.ts, 4, 9))
+         }
+         interface ElementAttributesProperty { props: any; }
+ >ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(renderer2.d.ts, 13, 9))
+->props : Symbol(ElementAttributesProperty.props, Decl(renderer2.d.ts, 14, 45))
++>props : Symbol(props, Decl(renderer2.d.ts, 14, 45))
+ 
+         interface ElementChildrenAttribute { children: any; }
+ >ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(renderer2.d.ts, 14, 59))
+->children : Symbol(ElementChildrenAttribute.children, Decl(renderer2.d.ts, 15, 44))
++>children : Symbol(children, Decl(renderer2.d.ts, 15, 44))
+     }
+ }
+ export function predom(): predom.JSX.Element;
+ >predom : Symbol(predom, Decl(renderer2.d.ts, 17, 1), Decl(renderer2.d.ts, 0, 0))
+ >predom : Symbol(predom, Decl(renderer2.d.ts, 17, 1), Decl(renderer2.d.ts, 0, 0))
+->JSX : Symbol(predom.JSX, Decl(renderer2.d.ts, 0, 25))
+->Element : Symbol(predom.JSX.Element, Decl(renderer2.d.ts, 4, 9))
++>JSX : Symbol(JSX, Decl(renderer2.d.ts, 0, 25))
++>Element : Symbol(Element, Decl(renderer2.d.ts, 4, 9))
+ 
+ === component.tsx ===
+ /** @jsx predom */
+@@= skipped -30, +30 lines =@@
+ >y : Symbol(y, Decl(component.tsx, 3, 40))
+ >children : Symbol(children, Decl(component.tsx, 3, 51))
+ >predom : Symbol(predom, Decl(component.tsx, 1, 8))
+->JSX : Symbol(predom.JSX, Decl(renderer2.d.ts, 0, 25))
+->Element : Symbol(predom.JSX.Element, Decl(renderer2.d.ts, 4, 9))
+->p : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
++>JSX : Symbol(JSX, Decl(renderer2.d.ts, 0, 25))
++>Element : Symbol(Element, Decl(renderer2.d.ts, 4, 9))
+ >props.x : Symbol(x, Decl(component.tsx, 3, 30))
+ >props : Symbol(props, Decl(component.tsx, 3, 22))
+ >x : Symbol(x, Decl(component.tsx, 3, 30))
+@@= skipped -15, +14 lines =@@
+ >props.y : Symbol(y, Decl(component.tsx, 3, 40))
+ >props : Symbol(props, Decl(component.tsx, 3, 22))
+ >y : Symbol(y, Decl(component.tsx, 3, 40))
+->p : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
+ 
+ export class MyClass implements predom.JSX.Element {
+ >MyClass : Symbol(MyClass, Decl(component.tsx, 3, 164))
+->predom.JSX.Element : Symbol(predom.JSX.Element, Decl(renderer2.d.ts, 4, 9))
+->predom.JSX : Symbol(predom.JSX, Decl(renderer2.d.ts, 0, 25))
++>predom.JSX.Element : Symbol(Element, Decl(renderer2.d.ts, 4, 9))
++>predom.JSX : Symbol(JSX, Decl(renderer2.d.ts, 0, 25))
+ >predom : Symbol(predom, Decl(component.tsx, 1, 8))
+->JSX : Symbol(predom.JSX, Decl(renderer2.d.ts, 0, 25))
+->Element : Symbol(predom.JSX.Element, Decl(renderer2.d.ts, 4, 9))
++>JSX : Symbol(JSX, Decl(renderer2.d.ts, 0, 25))
++>Element : Symbol(Element, Decl(renderer2.d.ts, 4, 9))
+ 
+     __predomBrand!: void;
+->__predomBrand : Symbol(MyClass.__predomBrand, Decl(component.tsx, 5, 52))
++>__predomBrand : Symbol(__predomBrand, Decl(component.tsx, 5, 52))
+ 
+     constructor(public props: {x: number, y: number, children?: predom.JSX.Element[]}) {}
+->props : Symbol(MyClass.props, Decl(component.tsx, 7, 16))
++>props : Symbol(props, Decl(component.tsx, 7, 16))
+ >x : Symbol(x, Decl(component.tsx, 7, 31))
+ >y : Symbol(y, Decl(component.tsx, 7, 41))
+ >children : Symbol(children, Decl(component.tsx, 7, 52))
+ >predom : Symbol(predom, Decl(component.tsx, 1, 8))
+->JSX : Symbol(predom.JSX, Decl(renderer2.d.ts, 0, 25))
+->Element : Symbol(predom.JSX.Element, Decl(renderer2.d.ts, 4, 9))
++>JSX : Symbol(JSX, Decl(renderer2.d.ts, 0, 25))
++>Element : Symbol(Element, Decl(renderer2.d.ts, 4, 9))
+ 
+     render() {
+->render : Symbol(MyClass.render, Decl(component.tsx, 7, 89))
++>render : Symbol(render, Decl(component.tsx, 7, 89))
+ 
+         return <p>
+->p : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
+-
+             {this.props.x} + {this.props.y} = {this.props.x + this.props.y}
+ >this.props.x : Symbol(x, Decl(component.tsx, 7, 31))
+->this.props : Symbol(MyClass.props, Decl(component.tsx, 7, 16))
++>this.props : Symbol(props, Decl(component.tsx, 7, 16))
+ >this : Symbol(MyClass, Decl(component.tsx, 3, 164))
+->props : Symbol(MyClass.props, Decl(component.tsx, 7, 16))
++>props : Symbol(props, Decl(component.tsx, 7, 16))
+ >x : Symbol(x, Decl(component.tsx, 7, 31))
+ >this.props.y : Symbol(y, Decl(component.tsx, 7, 41))
+->this.props : Symbol(MyClass.props, Decl(component.tsx, 7, 16))
++>this.props : Symbol(props, Decl(component.tsx, 7, 16))
+ >this : Symbol(MyClass, Decl(component.tsx, 3, 164))
+->props : Symbol(MyClass.props, Decl(component.tsx, 7, 16))
++>props : Symbol(props, Decl(component.tsx, 7, 16))
+ >y : Symbol(y, Decl(component.tsx, 7, 41))
+ >this.props.x : Symbol(x, Decl(component.tsx, 7, 31))
+->this.props : Symbol(MyClass.props, Decl(component.tsx, 7, 16))
++>this.props : Symbol(props, Decl(component.tsx, 7, 16))
+ >this : Symbol(MyClass, Decl(component.tsx, 3, 164))
+->props : Symbol(MyClass.props, Decl(component.tsx, 7, 16))
++>props : Symbol(props, Decl(component.tsx, 7, 16))
+ >x : Symbol(x, Decl(component.tsx, 7, 31))
+ >this.props.y : Symbol(y, Decl(component.tsx, 7, 41))
+->this.props : Symbol(MyClass.props, Decl(component.tsx, 7, 16))
++>this.props : Symbol(props, Decl(component.tsx, 7, 16))
+ >this : Symbol(MyClass, Decl(component.tsx, 3, 164))
+->props : Symbol(MyClass.props, Decl(component.tsx, 7, 16))
++>props : Symbol(props, Decl(component.tsx, 7, 16))
+ >y : Symbol(y, Decl(component.tsx, 7, 41))
+ 
+             {...this.props.children}
+ >this.props.children : Symbol(children, Decl(component.tsx, 7, 52))
+->this.props : Symbol(MyClass.props, Decl(component.tsx, 7, 16))
++>this.props : Symbol(props, Decl(component.tsx, 7, 16))
+ >this : Symbol(MyClass, Decl(component.tsx, 3, 164))
+->props : Symbol(MyClass.props, Decl(component.tsx, 7, 16))
++>props : Symbol(props, Decl(component.tsx, 7, 16))
+ >children : Symbol(children, Decl(component.tsx, 7, 52))
+ 
+         </p>;
+->p : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
+     }
+ }
+ export const tree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC>
+@@= skipped -75, +71 lines =@@
+ >MySFC : Symbol(MySFC, Decl(component.tsx, 3, 12))
+ 
+ export default <h></h>
+->h : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
+->h : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
+ 
+ === index.tsx ===
+ /** @jsx dom */
+@@= skipped -20, +18 lines =@@
+ 
+ elem = <h></h>; // Expect assignability error here
+ >elem : Symbol(elem, Decl(index.tsx, 3, 3))
+->h : Symbol(dom.JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+->h : Symbol(dom.JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+ 
+ const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p>;
+ >DOMSFC : Symbol(DOMSFC, Decl(index.tsx, 6, 5))
+@@= skipped -10, +8 lines =@@
+ >y : Symbol(y, Decl(index.tsx, 6, 34))
+ >children : Symbol(children, Decl(index.tsx, 6, 45))
+ >dom : Symbol(dom, Decl(index.tsx, 1, 8))
+->JSX : Symbol(dom.JSX, Decl(renderer.d.ts, 0, 22))
+->Element : Symbol(dom.JSX.Element, Decl(renderer.d.ts, 4, 9))
+->p : Symbol(dom.JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
++>JSX : Symbol(JSX, Decl(renderer.d.ts, 0, 22))
++>Element : Symbol(Element, Decl(renderer.d.ts, 4, 9))
+ >props.x : Symbol(x, Decl(index.tsx, 6, 24))
+ >props : Symbol(props, Decl(index.tsx, 6, 16))
+ >x : Symbol(x, Decl(index.tsx, 6, 24))
+@@= skipped -18, +17 lines =@@
+ >props.children : Symbol(children, Decl(index.tsx, 6, 45))
+ >props : Symbol(props, Decl(index.tsx, 6, 16))
+ >children : Symbol(children, Decl(index.tsx, 6, 45))
+->p : Symbol(dom.JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+ 
+ class DOMClass implements dom.JSX.Element {
+ >DOMClass : Symbol(DOMClass, Decl(index.tsx, 6, 147))
+->dom.JSX.Element : Symbol(dom.JSX.Element, Decl(renderer.d.ts, 4, 9))
+->dom.JSX : Symbol(dom.JSX, Decl(renderer.d.ts, 0, 22))
++>dom.JSX.Element : Symbol(Element, Decl(renderer.d.ts, 4, 9))
++>dom.JSX : Symbol(JSX, Decl(renderer.d.ts, 0, 22))
+ >dom : Symbol(dom, Decl(index.tsx, 1, 8))
+->JSX : Symbol(dom.JSX, Decl(renderer.d.ts, 0, 22))
+->Element : Symbol(dom.JSX.Element, Decl(renderer.d.ts, 4, 9))
++>JSX : Symbol(JSX, Decl(renderer.d.ts, 0, 22))
++>Element : Symbol(Element, Decl(renderer.d.ts, 4, 9))
+ 
+     __domBrand!: void;
+->__domBrand : Symbol(DOMClass.__domBrand, Decl(index.tsx, 8, 43))
++>__domBrand : Symbol(__domBrand, Decl(index.tsx, 8, 43))
+ 
+     constructor(public props: {x: number, y: number, children?: dom.JSX.Element[]}) {}
+->props : Symbol(DOMClass.props, Decl(index.tsx, 10, 16))
++>props : Symbol(props, Decl(index.tsx, 10, 16))
+ >x : Symbol(x, Decl(index.tsx, 10, 31))
+ >y : Symbol(y, Decl(index.tsx, 10, 41))
+ >children : Symbol(children, Decl(index.tsx, 10, 52))
+ >dom : Symbol(dom, Decl(index.tsx, 1, 8))
+->JSX : Symbol(dom.JSX, Decl(renderer.d.ts, 0, 22))
+->Element : Symbol(dom.JSX.Element, Decl(renderer.d.ts, 4, 9))
++>JSX : Symbol(JSX, Decl(renderer.d.ts, 0, 22))
++>Element : Symbol(Element, Decl(renderer.d.ts, 4, 9))
+ 
+     render() {
+->render : Symbol(DOMClass.render, Decl(index.tsx, 10, 86))
++>render : Symbol(render, Decl(index.tsx, 10, 86))
+ 
+         return <p>{this.props.x} + {this.props.y} = {this.props.x + this.props.y}{...this.props.children}</p>;
+->p : Symbol(dom.JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+ >this.props.x : Symbol(x, Decl(index.tsx, 10, 31))
+->this.props : Symbol(DOMClass.props, Decl(index.tsx, 10, 16))
++>this.props : Symbol(props, Decl(index.tsx, 10, 16))
+ >this : Symbol(DOMClass, Decl(index.tsx, 6, 147))
+->props : Symbol(DOMClass.props, Decl(index.tsx, 10, 16))
++>props : Symbol(props, Decl(index.tsx, 10, 16))
+ >x : Symbol(x, Decl(index.tsx, 10, 31))
+ >this.props.y : Symbol(y, Decl(index.tsx, 10, 41))
+->this.props : Symbol(DOMClass.props, Decl(index.tsx, 10, 16))
++>this.props : Symbol(props, Decl(index.tsx, 10, 16))
+ >this : Symbol(DOMClass, Decl(index.tsx, 6, 147))
+->props : Symbol(DOMClass.props, Decl(index.tsx, 10, 16))
++>props : Symbol(props, Decl(index.tsx, 10, 16))
+ >y : Symbol(y, Decl(index.tsx, 10, 41))
+ >this.props.x : Symbol(x, Decl(index.tsx, 10, 31))
+->this.props : Symbol(DOMClass.props, Decl(index.tsx, 10, 16))
++>this.props : Symbol(props, Decl(index.tsx, 10, 16))
+ >this : Symbol(DOMClass, Decl(index.tsx, 6, 147))
+->props : Symbol(DOMClass.props, Decl(index.tsx, 10, 16))
++>props : Symbol(props, Decl(index.tsx, 10, 16))
+ >x : Symbol(x, Decl(index.tsx, 10, 31))
+ >this.props.y : Symbol(y, Decl(index.tsx, 10, 41))
+->this.props : Symbol(DOMClass.props, Decl(index.tsx, 10, 16))
++>this.props : Symbol(props, Decl(index.tsx, 10, 16))
+ >this : Symbol(DOMClass, Decl(index.tsx, 6, 147))
+->props : Symbol(DOMClass.props, Decl(index.tsx, 10, 16))
++>props : Symbol(props, Decl(index.tsx, 10, 16))
+ >y : Symbol(y, Decl(index.tsx, 10, 41))
+ >this.props.children : Symbol(children, Decl(index.tsx, 10, 52))
+->this.props : Symbol(DOMClass.props, Decl(index.tsx, 10, 16))
++>this.props : Symbol(props, Decl(index.tsx, 10, 16))
+ >this : Symbol(DOMClass, Decl(index.tsx, 6, 147))
+->props : Symbol(DOMClass.props, Decl(index.tsx, 10, 16))
++>props : Symbol(props, Decl(index.tsx, 10, 16))
+ >children : Symbol(children, Decl(index.tsx, 10, 52))
+->p : Symbol(dom.JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+     }
+ }
+ 

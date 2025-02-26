@@ -1,0 +1,11 @@
+--- old.arrayAssignmentTest4.symbols
++++ new.arrayAssignmentTest4.symbols
+@@= skipped -4, +4 lines =@@
+ >C3 : Symbol(C3, Decl(arrayAssignmentTest4.ts, 0, 0))
+ 
+     CM3M1() { return 3;}
+->CM3M1 : Symbol(C3.CM3M1, Decl(arrayAssignmentTest4.ts, 0, 10))
++>CM3M1 : Symbol(CM3M1, Decl(arrayAssignmentTest4.ts, 0, 10))
+ }
+ 
+ 

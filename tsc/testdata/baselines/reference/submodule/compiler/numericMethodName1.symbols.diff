@@ -1,0 +1,10 @@
+--- old.numericMethodName1.symbols
++++ new.numericMethodName1.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(numericMethodName1.ts, 0, 0))
+ 
+   1 = 2;
+->1 : Symbol(C[1], Decl(numericMethodName1.ts, 0, 9))
++>1 : Symbol(1, Decl(numericMethodName1.ts, 0, 9))
+ }
+ 

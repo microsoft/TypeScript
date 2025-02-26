@@ -1,0 +1,32 @@
+--- old.typeSatisfaction.symbols
++++ new.typeSatisfaction.symbols
+@@= skipped -4, +4 lines =@@
+ >I1 : Symbol(I1, Decl(typeSatisfaction.ts, 0, 0))
+ 
+     a: number;
+->a : Symbol(I1.a, Decl(typeSatisfaction.ts, 0, 14))
++>a : Symbol(a, Decl(typeSatisfaction.ts, 0, 14))
+ }
+ 
+ type T1 = {
+@@= skipped -38, +38 lines =@@
+ const t5 = (m => m.substring(0)) satisfies T2; // Ok
+ >t5 : Symbol(t5, Decl(typeSatisfaction.ts, 15, 5))
+ >m : Symbol(m, Decl(typeSatisfaction.ts, 15, 12))
+->m.substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
++>m.substring : Symbol(substring, Decl(lib.es5.d.ts, --, --))
+ >m : Symbol(m, Decl(typeSatisfaction.ts, 15, 12))
+->substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
++>substring : Symbol(substring, Decl(lib.es5.d.ts, --, --))
+ >T2 : Symbol(T2, Decl(typeSatisfaction.ts, 6, 1))
+ 
+ const t6 = [1, 2] satisfies [number, number];
+@@= skipped -12, +12 lines =@@
+ >A : Symbol(A, Decl(typeSatisfaction.ts, 17, 45))
+ 
+     a: string
+->a : Symbol(A.a, Decl(typeSatisfaction.ts, 19, 13))
++>a : Symbol(a, Decl(typeSatisfaction.ts, 19, 13))
+ }
+ let t7 = { a: 'test' } satisfies A;
+ >t7 : Symbol(t7, Decl(typeSatisfaction.ts, 22, 3))

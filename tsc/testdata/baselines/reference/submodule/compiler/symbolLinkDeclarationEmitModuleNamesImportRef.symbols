@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/symbolLinkDeclarationEmitModuleNamesImportRef.ts] ////
+
+=== Folder/monorepo/core/index.ts ===
+import { styles } from "package-a";
+>styles : Symbol(styles, Decl(index.ts, 0, 8))
+
+export function getStyles() {
+>getStyles : Symbol(getStyles, Decl(index.ts, 0, 35))
+
+	return styles;
+>styles : Symbol(styles, Decl(index.ts, 0, 8))
+}
+

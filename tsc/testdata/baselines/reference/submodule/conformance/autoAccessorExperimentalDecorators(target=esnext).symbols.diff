@@ -1,0 +1,33 @@
+--- old.autoAccessorExperimentalDecorators(target=esnext).symbols
++++ new.autoAccessorExperimentalDecorators(target=esnext).symbols
+@@= skipped -15, +15 lines =@@
+ >dec : Symbol(dec, Decl(autoAccessorExperimentalDecorators.ts, 0, 11))
+ 
+     accessor a: any;
+->a : Symbol(C1.a, Decl(autoAccessorExperimentalDecorators.ts, 2, 10))
++>a : Symbol(a, Decl(autoAccessorExperimentalDecorators.ts, 2, 10))
+ 
+     @dec
+ >dec : Symbol(dec, Decl(autoAccessorExperimentalDecorators.ts, 0, 11))
+ 
+     static accessor b: any;
+->b : Symbol(C1.b, Decl(autoAccessorExperimentalDecorators.ts, 4, 20))
++>b : Symbol(b, Decl(autoAccessorExperimentalDecorators.ts, 4, 20))
+ }
+ 
+ class C2 {
+@@= skipped -16, +16 lines =@@
+ >dec : Symbol(dec, Decl(autoAccessorExperimentalDecorators.ts, 0, 11))
+ 
+     accessor #a: any;
+->#a : Symbol(C2.#a, Decl(autoAccessorExperimentalDecorators.ts, 10, 10))
++>#a : Symbol(#a, Decl(autoAccessorExperimentalDecorators.ts, 10, 10))
+ 
+     @dec
+ >dec : Symbol(dec, Decl(autoAccessorExperimentalDecorators.ts, 0, 11))
+ 
+     static accessor #b: any;
+->#b : Symbol(C2.#b, Decl(autoAccessorExperimentalDecorators.ts, 12, 21))
++>#b : Symbol(#b, Decl(autoAccessorExperimentalDecorators.ts, 12, 21))
+ }
+ 

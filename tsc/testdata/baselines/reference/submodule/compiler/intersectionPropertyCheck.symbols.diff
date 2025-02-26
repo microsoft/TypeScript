@@ -1,0 +1,11 @@
+--- old.intersectionPropertyCheck.symbols
++++ new.intersectionPropertyCheck.symbols
+@@= skipped -42, +42 lines =@@
+ >Test : Symbol(Test, Decl(intersectionPropertyCheck.ts, 7, 1))
+ 
+   readonly hi?: string[]
+->hi : Symbol(Test.hi, Decl(intersectionPropertyCheck.ts, 11, 16))
++>hi : Symbol(hi, Decl(intersectionPropertyCheck.ts, 11, 16))
+ }
+ 
+ function test<T extends object>(value: T): Test {

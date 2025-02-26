@@ -1,0 +1,35 @@
+--- old.classConstructorAccessibility3.symbols
++++ new.classConstructorAccessibility3.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(classConstructorAccessibility3.ts, 0, 0))
+ 
+      constructor(public x: number) { }
+->x : Symbol(Foo.x, Decl(classConstructorAccessibility3.ts, 1, 17))
++>x : Symbol(x, Decl(classConstructorAccessibility3.ts, 1, 17))
+ }
+ 
+ class Bar {
+ >Bar : Symbol(Bar, Decl(classConstructorAccessibility3.ts, 2, 1))
+ 
+     public constructor(public x: number) { }
+->x : Symbol(Bar.x, Decl(classConstructorAccessibility3.ts, 5, 23))
++>x : Symbol(x, Decl(classConstructorAccessibility3.ts, 5, 23))
+ }
+ 
+ class Baz {
+ >Baz : Symbol(Baz, Decl(classConstructorAccessibility3.ts, 6, 1))
+ 
+     protected constructor(public x: number) { }
+->x : Symbol(Baz.x, Decl(classConstructorAccessibility3.ts, 9, 26))
++>x : Symbol(x, Decl(classConstructorAccessibility3.ts, 9, 26))
+ }
+ 
+ class Qux {
+ >Qux : Symbol(Qux, Decl(classConstructorAccessibility3.ts, 10, 1))
+ 
+      private constructor(public x: number) { }
+->x : Symbol(Qux.x, Decl(classConstructorAccessibility3.ts, 13, 25))
++>x : Symbol(x, Decl(classConstructorAccessibility3.ts, 13, 25))
+ }
+ 
+ // b is public

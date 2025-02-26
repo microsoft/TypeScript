@@ -1,0 +1,11 @@
+--- old.staticMethodsReferencingClassTypeParameters.symbols
++++ new.staticMethodsReferencingClassTypeParameters.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(staticMethodsReferencingClassTypeParameters.ts, 0, 8))
+ 
+     static s(p: T) { return p; }
+->s : Symbol(C.s, Decl(staticMethodsReferencingClassTypeParameters.ts, 0, 12))
++>s : Symbol(s, Decl(staticMethodsReferencingClassTypeParameters.ts, 0, 12))
+ >p : Symbol(p, Decl(staticMethodsReferencingClassTypeParameters.ts, 1, 13))
+ >T : Symbol(T)
+ >p : Symbol(p, Decl(staticMethodsReferencingClassTypeParameters.ts, 1, 13))

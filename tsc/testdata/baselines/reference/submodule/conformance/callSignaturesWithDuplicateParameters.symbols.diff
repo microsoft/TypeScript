@@ -1,0 +1,44 @@
+--- old.callSignaturesWithDuplicateParameters.symbols
++++ new.callSignaturesWithDuplicateParameters.symbols
+@@= skipped -64, +64 lines =@@
+ >C : Symbol(C, Decl(callSignaturesWithDuplicateParameters.ts, 12, 31))
+ 
+     foo(x, x) { }
+->foo : Symbol(C.foo, Decl(callSignaturesWithDuplicateParameters.ts, 14, 9))
++>foo : Symbol(foo, Decl(callSignaturesWithDuplicateParameters.ts, 14, 9))
+ >x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 15, 8))
+ >x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 15, 10))
+ 
+     foo2(x: number, x: string) { }
+->foo2 : Symbol(C.foo2, Decl(callSignaturesWithDuplicateParameters.ts, 15, 17))
++>foo2 : Symbol(foo2, Decl(callSignaturesWithDuplicateParameters.ts, 15, 17))
+ >x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 16, 9))
+ >x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 16, 19))
+ 
+     foo3<T>(x: T, x: T) { }
+->foo3 : Symbol(C.foo3, Decl(callSignaturesWithDuplicateParameters.ts, 16, 34))
++>foo3 : Symbol(foo3, Decl(callSignaturesWithDuplicateParameters.ts, 16, 34))
+ >T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 17, 9))
+ >x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 17, 12))
+ >T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 17, 9))
+@@= skipped -30, +30 lines =@@
+ >x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 22, 15))
+ 
+     foo(x, x);
+->foo : Symbol(I.foo, Decl(callSignaturesWithDuplicateParameters.ts, 22, 27), Decl(callSignaturesWithDuplicateParameters.ts, 23, 14))
++>foo : Symbol(foo, Decl(callSignaturesWithDuplicateParameters.ts, 22, 27), Decl(callSignaturesWithDuplicateParameters.ts, 23, 14))
+ >x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 23, 8))
+ >x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 23, 10))
+ 
+     foo(x: number, x: string);
+->foo : Symbol(I.foo, Decl(callSignaturesWithDuplicateParameters.ts, 22, 27), Decl(callSignaturesWithDuplicateParameters.ts, 23, 14))
++>foo : Symbol(foo, Decl(callSignaturesWithDuplicateParameters.ts, 22, 27), Decl(callSignaturesWithDuplicateParameters.ts, 23, 14))
+ >x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 24, 8))
+ >x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 24, 18))
+ 
+     foo3<T>(x: T, x: T);
+->foo3 : Symbol(I.foo3, Decl(callSignaturesWithDuplicateParameters.ts, 24, 30))
++>foo3 : Symbol(foo3, Decl(callSignaturesWithDuplicateParameters.ts, 24, 30))
+ >T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 25, 9))
+ >x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 25, 12))
+ >T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 25, 9))

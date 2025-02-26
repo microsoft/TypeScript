@@ -1,0 +1,10 @@
+--- old.ambientEnumElementInitializer6.symbols
++++ new.ambientEnumElementInitializer6.symbols
+@@= skipped -7, +7 lines =@@
+ >E : Symbol(E, Decl(ambientEnumElementInitializer6.ts, 0, 18))
+ 
+         e = 3
+->e : Symbol(E.e, Decl(ambientEnumElementInitializer6.ts, 1, 12))
++>e : Symbol(e, Decl(ambientEnumElementInitializer6.ts, 1, 12))
+     }
+ }

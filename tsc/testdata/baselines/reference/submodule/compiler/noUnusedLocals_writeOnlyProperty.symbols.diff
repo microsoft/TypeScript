@@ -1,0 +1,22 @@
+--- old.noUnusedLocals_writeOnlyProperty.symbols
++++ new.noUnusedLocals_writeOnlyProperty.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(noUnusedLocals_writeOnlyProperty.ts, 0, 0))
+ 
+     private x;
+->x : Symbol(C.x, Decl(noUnusedLocals_writeOnlyProperty.ts, 0, 9))
++>x : Symbol(x, Decl(noUnusedLocals_writeOnlyProperty.ts, 0, 9))
+ 
+     m() {
+->m : Symbol(C.m, Decl(noUnusedLocals_writeOnlyProperty.ts, 1, 14))
++>m : Symbol(m, Decl(noUnusedLocals_writeOnlyProperty.ts, 1, 14))
+ 
+         this.x = 0;
+->this.x : Symbol(C.x, Decl(noUnusedLocals_writeOnlyProperty.ts, 0, 9))
++>this.x : Symbol(x, Decl(noUnusedLocals_writeOnlyProperty.ts, 0, 9))
+ >this : Symbol(C, Decl(noUnusedLocals_writeOnlyProperty.ts, 0, 0))
+->x : Symbol(C.x, Decl(noUnusedLocals_writeOnlyProperty.ts, 0, 9))
++>x : Symbol(x, Decl(noUnusedLocals_writeOnlyProperty.ts, 0, 9))
+     }
+ }
+ 

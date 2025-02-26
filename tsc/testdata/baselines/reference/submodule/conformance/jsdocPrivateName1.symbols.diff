@@ -1,0 +1,10 @@
+--- old.jsdocPrivateName1.symbols
++++ new.jsdocPrivateName1.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     /** @type {boolean} some number value */
+     #foo = 3 // Error because not assignable to boolean
+->#foo : Symbol(A.#foo, Decl(jsdocPrivateName1.js, 0, 9))
++>#foo : Symbol(#foo, Decl(jsdocPrivateName1.js, 0, 9))
+ }
+ 

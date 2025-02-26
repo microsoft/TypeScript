@@ -1,0 +1,13 @@
+--- old.classStaticBlock28.symbols
++++ new.classStaticBlock28.symbols
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ console.log(foo)
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >foo : Symbol(foo, Decl(classStaticBlock28.ts, 0, 3))
+ 

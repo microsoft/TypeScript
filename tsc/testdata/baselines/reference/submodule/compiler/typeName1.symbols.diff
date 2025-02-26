@@ -1,0 +1,22 @@
+--- old.typeName1.symbols
++++ new.typeName1.symbols
+@@= skipped -4, +4 lines =@@
+ >I : Symbol(I, Decl(typeName1.ts, 0, 0))
+ 
+     k;
+->k : Symbol(I.k, Decl(typeName1.ts, 0, 13))
++>k : Symbol(k, Decl(typeName1.ts, 0, 13))
+ }
+ class C {
+ >C : Symbol(C, Decl(typeName1.ts, 2, 1))
+ 
+     public eek:string;
+->eek : Symbol(C.eek, Decl(typeName1.ts, 3, 9))
++>eek : Symbol(eek, Decl(typeName1.ts, 3, 9))
+ 
+     static zeek:number;
+->zeek : Symbol(C.zeek, Decl(typeName1.ts, 4, 22))
++>zeek : Symbol(zeek, Decl(typeName1.ts, 4, 22))
+ }
+ 
+ var x1:{ f(s:string):number;f(n:number):string; }=3;

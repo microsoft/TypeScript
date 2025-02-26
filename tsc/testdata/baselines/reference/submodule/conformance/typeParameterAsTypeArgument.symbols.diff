@@ -1,0 +1,20 @@
+--- old.typeParameterAsTypeArgument.symbols
++++ new.typeParameterAsTypeArgument.symbols
+@@= skipped -30, +30 lines =@@
+ >U : Symbol(U, Decl(typeParameterAsTypeArgument.ts, 7, 10))
+ 
+     x: T;
+->x : Symbol(C.x, Decl(typeParameterAsTypeArgument.ts, 7, 15))
++>x : Symbol(x, Decl(typeParameterAsTypeArgument.ts, 7, 15))
+ >T : Symbol(T, Decl(typeParameterAsTypeArgument.ts, 7, 8))
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ >U : Symbol(U, Decl(typeParameterAsTypeArgument.ts, 11, 14))
+ 
+     x: C<U, T>;
+->x : Symbol(I.x, Decl(typeParameterAsTypeArgument.ts, 11, 19))
++>x : Symbol(x, Decl(typeParameterAsTypeArgument.ts, 11, 19))
+ >C : Symbol(C, Decl(typeParameterAsTypeArgument.ts, 5, 1))
+ >U : Symbol(U, Decl(typeParameterAsTypeArgument.ts, 11, 14))
+ >T : Symbol(T, Decl(typeParameterAsTypeArgument.ts, 11, 12))

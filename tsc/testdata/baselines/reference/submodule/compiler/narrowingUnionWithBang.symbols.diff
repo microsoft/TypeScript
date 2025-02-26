@@ -1,0 +1,74 @@
+--- old.narrowingUnionWithBang.symbols
++++ new.narrowingUnionWithBang.symbols
+@@= skipped -60, +60 lines =@@
+ >name : Symbol(name, Decl(narrowingUnionWithBang.ts, 2, 5), Decl(narrowingUnionWithBang.ts, 3, 5), Decl(narrowingUnionWithBang.ts, 4, 5), Decl(narrowingUnionWithBang.ts, 5, 5), Decl(narrowingUnionWithBang.ts, 6, 5) ... and 5 more)
+ 
+     console.log(working.thing!.message)
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >working.thing!.message : Symbol(message, Decl(narrowingUnionWithBang.ts, 2, 21), Decl(narrowingUnionWithBang.ts, 3, 21), Decl(narrowingUnionWithBang.ts, 4, 21), Decl(narrowingUnionWithBang.ts, 5, 21), Decl(narrowingUnionWithBang.ts, 6, 21) ... and 4 more)
+ >working.thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 0, 20))
+ >working : Symbol(working, Decl(narrowingUnionWithBang.ts, 13, 5))
+@@= skipped -11, +11 lines =@@
+ 
+ } else {
+     console.log(working.thing!.id);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >working.thing!.id : Symbol(id, Decl(narrowingUnionWithBang.ts, 11, 22))
+ >working.thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 0, 20))
+ >working : Symbol(working, Decl(narrowingUnionWithBang.ts, 13, 5))
+@@= skipped -66, +66 lines =@@
+ >name : Symbol(name, Decl(narrowingUnionWithBang.ts, 22, 5), Decl(narrowingUnionWithBang.ts, 23, 5), Decl(narrowingUnionWithBang.ts, 24, 5), Decl(narrowingUnionWithBang.ts, 25, 5), Decl(narrowingUnionWithBang.ts, 26, 5) ... and 4 more)
+ 
+     console.log(borked.thing!.message);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >borked.thing!.message : Symbol(message, Decl(narrowingUnionWithBang.ts, 22, 21), Decl(narrowingUnionWithBang.ts, 23, 21), Decl(narrowingUnionWithBang.ts, 24, 21), Decl(narrowingUnionWithBang.ts, 25, 21), Decl(narrowingUnionWithBang.ts, 26, 21) ... and 3 more)
+ >borked.thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 20, 19))
+ >borked : Symbol(borked, Decl(narrowingUnionWithBang.ts, 32, 5))
+@@= skipped -11, +11 lines =@@
+ 
+ } else {
+     console.log(borked.thing!.id);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >borked.thing!.id : Symbol(id, Decl(narrowingUnionWithBang.ts, 30, 22))
+ >borked.thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 20, 19))
+ >borked : Symbol(borked, Decl(narrowingUnionWithBang.ts, 32, 5))
+@@= skipped -66, +66 lines =@@
+ >name : Symbol(name, Decl(narrowingUnionWithBang.ts, 41, 5), Decl(narrowingUnionWithBang.ts, 42, 5), Decl(narrowingUnionWithBang.ts, 43, 5), Decl(narrowingUnionWithBang.ts, 44, 5), Decl(narrowingUnionWithBang.ts, 45, 5) ... and 4 more)
+ 
+     console.log(fixed.thing!.message);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >fixed.thing!.message : Symbol(message, Decl(narrowingUnionWithBang.ts, 41, 21), Decl(narrowingUnionWithBang.ts, 42, 21), Decl(narrowingUnionWithBang.ts, 43, 21), Decl(narrowingUnionWithBang.ts, 44, 21), Decl(narrowingUnionWithBang.ts, 45, 21) ... and 3 more)
+ >fixed.thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 39, 25))
+ >fixed : Symbol(fixed, Decl(narrowingUnionWithBang.ts, 51, 5))
+@@= skipped -11, +11 lines =@@
+ 
+ } else {
+     console.log(fixed.thing.id);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >fixed.thing.id : Symbol(id, Decl(narrowingUnionWithBang.ts, 49, 22))
+ >fixed.thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 39, 25))
+ >fixed : Symbol(fixed, Decl(narrowingUnionWithBang.ts, 51, 5))

@@ -1,0 +1,235 @@
+--- old.typedArraysSubarray.symbols
++++ new.typedArraysSubarray.symbols
+@@= skipped -8, +8 lines =@@
+ >Int8Array : Symbol(Int8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray();
+->arr.subarray : Symbol(Int8Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 1, 7))
+->subarray : Symbol(Int8Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0);
+->arr.subarray : Symbol(Int8Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 1, 7))
+->subarray : Symbol(Int8Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0, 10);
+->arr.subarray : Symbol(Int8Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 1, 7))
+->subarray : Symbol(Int8Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function uint8ArraySubarray() {
+@@= skipped -23, +23 lines =@@
+ >Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray();
+->arr.subarray : Symbol(Uint8Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 8, 7))
+->subarray : Symbol(Uint8Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0);
+->arr.subarray : Symbol(Uint8Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 8, 7))
+->subarray : Symbol(Uint8Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0, 10);
+->arr.subarray : Symbol(Uint8Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 8, 7))
+->subarray : Symbol(Uint8Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function uint8ClampedArraySubarray() {
+@@= skipped -23, +23 lines =@@
+ >Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray();
+->arr.subarray : Symbol(Uint8ClampedArray.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 15, 7))
+->subarray : Symbol(Uint8ClampedArray.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0);
+->arr.subarray : Symbol(Uint8ClampedArray.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 15, 7))
+->subarray : Symbol(Uint8ClampedArray.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0, 10);
+->arr.subarray : Symbol(Uint8ClampedArray.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 15, 7))
+->subarray : Symbol(Uint8ClampedArray.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function int16ArraySubarray() {
+@@= skipped -23, +23 lines =@@
+ >Int16Array : Symbol(Int16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray();
+->arr.subarray : Symbol(Int16Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 22, 7))
+->subarray : Symbol(Int16Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0);
+->arr.subarray : Symbol(Int16Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 22, 7))
+->subarray : Symbol(Int16Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0, 10);
+->arr.subarray : Symbol(Int16Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 22, 7))
+->subarray : Symbol(Int16Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function uint16ArraySubarray() {
+@@= skipped -23, +23 lines =@@
+ >Uint16Array : Symbol(Uint16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray();
+->arr.subarray : Symbol(Uint16Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 29, 7))
+->subarray : Symbol(Uint16Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0);
+->arr.subarray : Symbol(Uint16Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 29, 7))
+->subarray : Symbol(Uint16Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0, 10);
+->arr.subarray : Symbol(Uint16Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 29, 7))
+->subarray : Symbol(Uint16Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function int32ArraySubarray() {
+@@= skipped -23, +23 lines =@@
+ >Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray();
+->arr.subarray : Symbol(Int32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 36, 7))
+->subarray : Symbol(Int32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0);
+->arr.subarray : Symbol(Int32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 36, 7))
+->subarray : Symbol(Int32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0, 10);
+->arr.subarray : Symbol(Int32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 36, 7))
+->subarray : Symbol(Int32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function uint32ArraySubarray() {
+@@= skipped -23, +23 lines =@@
+ >Uint32Array : Symbol(Uint32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray();
+->arr.subarray : Symbol(Uint32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 43, 7))
+->subarray : Symbol(Uint32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0);
+->arr.subarray : Symbol(Uint32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 43, 7))
+->subarray : Symbol(Uint32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0, 10);
+->arr.subarray : Symbol(Uint32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 43, 7))
+->subarray : Symbol(Uint32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function float32ArraySubarray() {
+@@= skipped -23, +23 lines =@@
+ >Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray();
+->arr.subarray : Symbol(Float32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 50, 7))
+->subarray : Symbol(Float32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0);
+->arr.subarray : Symbol(Float32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 50, 7))
+->subarray : Symbol(Float32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0, 10);
+->arr.subarray : Symbol(Float32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 50, 7))
+->subarray : Symbol(Float32Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function float64ArraySubarray() {
+@@= skipped -23, +23 lines =@@
+ >Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray();
+->arr.subarray : Symbol(Float64Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 57, 7))
+->subarray : Symbol(Float64Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0);
+->arr.subarray : Symbol(Float64Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 57, 7))
+->subarray : Symbol(Float64Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ 
+     arr.subarray(0, 10);
+->arr.subarray : Symbol(Float64Array.subarray, Decl(lib.es5.d.ts, --, --))
++>arr.subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(typedArraysSubarray.ts, 57, 7))
+->subarray : Symbol(Float64Array.subarray, Decl(lib.es5.d.ts, --, --))
++>subarray : Symbol(subarray, Decl(lib.es5.d.ts, --, --))
+ }
+ 

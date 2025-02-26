@@ -1,0 +1,33 @@
+--- old.enumIndexer.symbols
++++ new.enumIndexer.symbols
+@@= skipped -4, +4 lines =@@
+ >MyEnumType : Symbol(MyEnumType, Decl(enumIndexer.ts, 0, 0))
+ 
+     foo, bar
+->foo : Symbol(MyEnumType.foo, Decl(enumIndexer.ts, 0, 17))
+->bar : Symbol(MyEnumType.bar, Decl(enumIndexer.ts, 1, 8))
++>foo : Symbol(foo, Decl(enumIndexer.ts, 0, 17))
++>bar : Symbol(bar, Decl(enumIndexer.ts, 1, 8))
+ }
+ var _arr = [{ key: 'foo' }, { key: 'bar' }]
+ >_arr : Symbol(_arr, Decl(enumIndexer.ts, 3, 3))
+@@= skipped -10, +10 lines =@@
+ 
+ var enumValue = MyEnumType.foo;
+ >enumValue : Symbol(enumValue, Decl(enumIndexer.ts, 4, 3))
+->MyEnumType.foo : Symbol(MyEnumType.foo, Decl(enumIndexer.ts, 0, 17))
++>MyEnumType.foo : Symbol(foo, Decl(enumIndexer.ts, 0, 17))
+ >MyEnumType : Symbol(MyEnumType, Decl(enumIndexer.ts, 0, 0))
+->foo : Symbol(MyEnumType.foo, Decl(enumIndexer.ts, 0, 17))
++>foo : Symbol(foo, Decl(enumIndexer.ts, 0, 17))
+ 
+ var x = _arr.map(o => MyEnumType[o.key] === enumValue); // these are not same type
+ >x : Symbol(x, Decl(enumIndexer.ts, 5, 3))
+->_arr.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>_arr.map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >_arr : Symbol(_arr, Decl(enumIndexer.ts, 3, 3))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >o : Symbol(o, Decl(enumIndexer.ts, 5, 17))
+ >MyEnumType : Symbol(MyEnumType, Decl(enumIndexer.ts, 0, 0))
+ >o.key : Symbol(key, Decl(enumIndexer.ts, 3, 13))

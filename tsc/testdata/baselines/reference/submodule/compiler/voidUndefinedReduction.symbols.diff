@@ -1,0 +1,18 @@
+--- old.voidUndefinedReduction.symbols
++++ new.voidUndefinedReduction.symbols
+@@= skipped -24, +24 lines =@@
+ >foo : Symbol(foo, Decl(voidUndefinedReduction.ts, 6, 13))
+ 
+   console.log(foo.toUpperCase()); 
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->foo.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>foo.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >foo : Symbol(foo, Decl(voidUndefinedReduction.ts, 6, 13))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ }
+ 

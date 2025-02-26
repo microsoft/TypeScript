@@ -1,0 +1,13 @@
+--- old.ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.symbols
++++ new.ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.symbols
+@@= skipped -7, +7 lines =@@
+ >Point : Symbol(Point, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 0, 10))
+ 
+         constructor(public x: number, public y: number) { }
+->x : Symbol(Point.x, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 3, 20))
+->y : Symbol(Point.y, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 3, 37))
++>x : Symbol(x, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 3, 20))
++>y : Symbol(y, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 3, 37))
+     }
+ 
+     export var UnitSquare : {

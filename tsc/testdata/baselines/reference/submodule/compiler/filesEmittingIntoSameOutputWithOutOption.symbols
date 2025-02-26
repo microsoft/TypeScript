@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/filesEmittingIntoSameOutputWithOutOption.ts] ////
+
+=== a.ts ===
+export class c {
+>c : Symbol(c, Decl(a.ts, 0, 0))
+}
+
+=== b.ts ===
+function foo() {
+>foo : Symbol(foo, Decl(b.ts, 0, 0))
+}
+

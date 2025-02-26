@@ -1,0 +1,21 @@
+--- old.arrayFlatMap.symbols
++++ new.arrayFlatMap.symbols
+@@= skipped -8, +8 lines =@@
+ >ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+ 
+ array.flatMap((): ReadonlyArray<number> => []); // ok
+->array.flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
++>array.flatMap : Symbol(flatMap, Decl(lib.es2019.array.d.ts, --, --))
+ >array : Symbol(array, Decl(arrayFlatMap.ts, 0, 5))
+->flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
++>flatMap : Symbol(flatMap, Decl(lib.es2019.array.d.ts, --, --))
+ >ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+ 
+ readonlyArray.flatMap((): ReadonlyArray<number> => []); // ok
+->readonlyArray.flatMap : Symbol(ReadonlyArray.flatMap, Decl(lib.es2019.array.d.ts, --, --))
++>readonlyArray.flatMap : Symbol(flatMap, Decl(lib.es2019.array.d.ts, --, --))
+ >readonlyArray : Symbol(readonlyArray, Decl(arrayFlatMap.ts, 1, 5))
+->flatMap : Symbol(ReadonlyArray.flatMap, Decl(lib.es2019.array.d.ts, --, --))
++>flatMap : Symbol(flatMap, Decl(lib.es2019.array.d.ts, --, --))
+ >ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+ 

@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType3.ts] ////
+
+=== symbolType3.ts ===
+var s = Symbol();
+>s : Symbol(s, Decl(symbolType3.ts, 0, 3))
+
+delete Symbol.iterator;
+void Symbol.toPrimitive;
+typeof Symbol.toStringTag;
+++s;
+>s : Symbol(s, Decl(symbolType3.ts, 0, 3))
+
+--s;
+>s : Symbol(s, Decl(symbolType3.ts, 0, 3))
+
++ Symbol();
+- Symbol();
+~ Symbol();
+! Symbol();
+
++(Symbol() || 0);

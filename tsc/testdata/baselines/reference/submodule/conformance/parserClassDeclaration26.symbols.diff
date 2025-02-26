@@ -1,0 +1,13 @@
+--- old.parserClassDeclaration26.symbols
++++ new.parserClassDeclaration26.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(parserClassDeclaration26.ts, 0, 0))
+ 
+    var
+->var : Symbol(C.var, Decl(parserClassDeclaration26.ts, 0, 9))
++>var : Symbol(var, Decl(parserClassDeclaration26.ts, 0, 9))
+ 
+    public
+->public : Symbol(C.public, Decl(parserClassDeclaration26.ts, 1, 6))
++>public : Symbol(public, Decl(parserClassDeclaration26.ts, 1, 6))
+ }

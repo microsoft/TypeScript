@@ -1,0 +1,38 @@
+--- old.implicitAnyAmbients.symbols
++++ new.implicitAnyAmbients.symbols
+@@= skipped -25, +25 lines =@@
+ >I : Symbol(I, Decl(implicitAnyAmbients.ts, 6, 29))
+ 
+         foo(); // error
+->foo : Symbol(I.foo, Decl(implicitAnyAmbients.ts, 8, 17))
++>foo : Symbol(foo, Decl(implicitAnyAmbients.ts, 8, 17))
+ 
+         foo2(x: any); // error
+->foo2 : Symbol(I.foo2, Decl(implicitAnyAmbients.ts, 9, 14))
++>foo2 : Symbol(foo2, Decl(implicitAnyAmbients.ts, 9, 14))
+ >x : Symbol(x, Decl(implicitAnyAmbients.ts, 10, 13))
+ 
+         foo3(x: any): any;
+->foo3 : Symbol(I.foo3, Decl(implicitAnyAmbients.ts, 10, 21))
++>foo3 : Symbol(foo3, Decl(implicitAnyAmbients.ts, 10, 21))
+ >x : Symbol(x, Decl(implicitAnyAmbients.ts, 11, 13))
+     }
+ 
+@@= skipped -15, +15 lines =@@
+ >C : Symbol(C, Decl(implicitAnyAmbients.ts, 12, 5))
+ 
+         foo(); // error
+->foo : Symbol(C.foo, Decl(implicitAnyAmbients.ts, 14, 13))
++>foo : Symbol(foo, Decl(implicitAnyAmbients.ts, 14, 13))
+ 
+         foo2(x: any); // error
+->foo2 : Symbol(C.foo2, Decl(implicitAnyAmbients.ts, 15, 14))
++>foo2 : Symbol(foo2, Decl(implicitAnyAmbients.ts, 15, 14))
+ >x : Symbol(x, Decl(implicitAnyAmbients.ts, 16, 13))
+ 
+         foo3(x: any): any;
+->foo3 : Symbol(C.foo3, Decl(implicitAnyAmbients.ts, 16, 21))
++>foo3 : Symbol(foo3, Decl(implicitAnyAmbients.ts, 16, 21))
+ >x : Symbol(x, Decl(implicitAnyAmbients.ts, 17, 13))
+     }
+ 

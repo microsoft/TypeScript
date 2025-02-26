@@ -1,0 +1,14 @@
+--- old.typePredicatesOptionalChaining1.symbols
++++ new.typePredicatesOptionalChaining1.symbols
+@@= skipped -40, +40 lines =@@
+ >str : Symbol(str, Decl(typePredicatesOptionalChaining1.ts, 13, 15))
+ 
+   return str.length > 0 ? "Dear " + str : "Dear nobody";
+->str.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>str.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >str : Symbol(str, Decl(typePredicatesOptionalChaining1.ts, 13, 15))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >str : Symbol(str, Decl(typePredicatesOptionalChaining1.ts, 13, 15))
+ }
+ 

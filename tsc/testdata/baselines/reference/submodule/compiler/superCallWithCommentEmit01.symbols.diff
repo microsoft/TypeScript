@@ -1,0 +1,11 @@
+--- old.superCallWithCommentEmit01.symbols
++++ new.superCallWithCommentEmit01.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(superCallWithCommentEmit01.ts, 0, 0))
+ 
+     constructor(public text: string) { }
+->text : Symbol(A.text, Decl(superCallWithCommentEmit01.ts, 1, 16))
++>text : Symbol(text, Decl(superCallWithCommentEmit01.ts, 1, 16))
+ }
+ 
+ class B extends A {

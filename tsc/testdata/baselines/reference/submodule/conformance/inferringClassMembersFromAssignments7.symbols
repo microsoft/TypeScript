@@ -1,0 +1,48 @@
+//// [tests/cases/conformance/salsa/inferringClassMembersFromAssignments7.ts] ////
+
+=== inferringClassMembersFromAssignments7.js ===
+class C {
+>C : Symbol(C, Decl(inferringClassMembersFromAssignments7.js, 0, 0))
+
+    constructor() {
+        var self = this
+>self : Symbol(self, Decl(inferringClassMembersFromAssignments7.js, 2, 11))
+>this : Symbol(C, Decl(inferringClassMembersFromAssignments7.js, 0, 0))
+
+        self.x = 1
+>self : Symbol(self, Decl(inferringClassMembersFromAssignments7.js, 2, 11))
+
+        self.m = function() {
+>self : Symbol(self, Decl(inferringClassMembersFromAssignments7.js, 2, 11))
+
+            console.log(self.x)
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>self : Symbol(self, Decl(inferringClassMembersFromAssignments7.js, 2, 11))
+        }
+    }
+    mreal() {
+>mreal : Symbol(mreal, Decl(inferringClassMembersFromAssignments7.js, 7, 5))
+
+        var self = this
+>self : Symbol(self, Decl(inferringClassMembersFromAssignments7.js, 9, 11))
+>this : Symbol(C, Decl(inferringClassMembersFromAssignments7.js, 0, 0))
+
+        self.y = 2
+>self : Symbol(self, Decl(inferringClassMembersFromAssignments7.js, 9, 11))
+    }
+}
+const c = new C()
+>c : Symbol(c, Decl(inferringClassMembersFromAssignments7.js, 13, 5))
+>C : Symbol(C, Decl(inferringClassMembersFromAssignments7.js, 0, 0))
+
+c.x
+>c : Symbol(c, Decl(inferringClassMembersFromAssignments7.js, 13, 5))
+
+c.y
+>c : Symbol(c, Decl(inferringClassMembersFromAssignments7.js, 13, 5))
+
+c.m()
+>c : Symbol(c, Decl(inferringClassMembersFromAssignments7.js, 13, 5))
+

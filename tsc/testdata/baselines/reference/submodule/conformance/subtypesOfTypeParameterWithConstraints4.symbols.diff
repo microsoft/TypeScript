@@ -1,0 +1,100 @@
+--- old.subtypesOfTypeParameterWithConstraints4.symbols
++++ new.subtypesOfTypeParameterWithConstraints4.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ class Foo { foo: number; }
+ >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 0, 0))
+->foo : Symbol(Foo.foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 2, 11))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 2, 11))
+ 
+ function f<T extends Foo, U extends Foo, V>(t: T, u: U, v: V) {
+ >f : Symbol(f, Decl(subtypesOfTypeParameterWithConstraints4.ts, 2, 26))
+@@= skipped -89, +89 lines =@@
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints4.ts, 30, 9))
+ 
+     foo: T;
+->foo : Symbol(B1.foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 30, 13))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 30, 13))
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints4.ts, 30, 9))
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 0, 0))
+ 
+     foo: T; // ok
+->foo : Symbol(D1.foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 35, 21))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 35, 21))
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints4.ts, 34, 9))
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 0, 0))
+ 
+     foo: U; // ok
+->foo : Symbol(D2.foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 40, 21))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 40, 21))
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints4.ts, 39, 23))
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >Foo : Symbol(Foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 0, 0))
+ 
+     foo: V; // error
+->foo : Symbol(D3.foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 45, 21))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 45, 21))
+ >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints4.ts, 44, 38))
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints4.ts, 49, 9))
+ 
+     foo: T; // ok
+->foo : Symbol(D4.foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 50, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 50, 19))
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints4.ts, 49, 9))
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints4.ts, 54, 9))
+ 
+     foo: U; // error
+->foo : Symbol(D5.foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 55, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 55, 19))
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints4.ts, 54, 23))
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints4.ts, 59, 9))
+ 
+     foo: V; // error
+->foo : Symbol(D6.foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 60, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 60, 19))
+ >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints4.ts, 59, 38))
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints4.ts, 64, 23))
+ 
+     foo: T; // error
+->foo : Symbol(D7.foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 65, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 65, 19))
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints4.ts, 64, 9))
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints4.ts, 69, 23))
+ 
+     foo: U; // ok
+->foo : Symbol(D8.foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 70, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 70, 19))
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints4.ts, 69, 23))
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints4.ts, 74, 23))
+ 
+     foo: V; // error
+->foo : Symbol(D9.foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 75, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints4.ts, 75, 19))
+ >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints4.ts, 74, 38))
+ }

@@ -1,0 +1,11 @@
+--- old.importUsedAsTypeWithErrors.symbols
++++ new.importUsedAsTypeWithErrors.symbols
+@@= skipped -4, +4 lines =@@
+ >T : Symbol(T, Decl(test.ts, 0, 0))
+ 
+     value: string
+->value : Symbol(T.value, Decl(test.ts, 0, 20))
++>value : Symbol(value, Decl(test.ts, 0, 20))
+ }
+ 
+ === main.ts ===

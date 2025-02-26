@@ -1,0 +1,38 @@
+--- old.moduleAugmentationDisallowedExtensions.symbols
++++ new.moduleAugmentationDisallowedExtensions.symbols
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ declare module "./observable" {
+->"./observable" : Symbol("observable", Decl(observable.ts, 0, 0), Decl(x.ts, 2, 1))
++>"./observable" : Symbol(""observable.ts"", Decl(observable.ts, 0, 0), Decl(x.ts, 2, 1))
+ 
+     var x: number;
+ >x : Symbol(x, Decl(x.ts, 5, 7))
+@@= skipped -30, +30 lines =@@
+ 
+     interface A { x }
+ >A : Symbol(A, Decl(x.ts, 8, 118))
+->x : Symbol(A.x, Decl(x.ts, 9, 17))
++>x : Symbol(x, Decl(x.ts, 9, 17))
+ 
+     namespace N {
+ >N : Symbol(N, Decl(x.ts, 9, 21))
+@@= skipped -29, +29 lines =@@
+ }
+ 
+ declare module "./test" {
+->"./test" : Symbol("test", Decl(test.ts, 0, 0), Decl(x.ts, 20, 1))
++>"./test" : Symbol(""test.ts"", Decl(test.ts, 0, 0), Decl(x.ts, 20, 1))
+ 
+     export = N1;
+ >N1 : Symbol(N1, Decl(x.ts, 0, 0))
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(observable.ts, 0, 32))
+ 
+     filter(pred: (e:T) => boolean): Observable<T>;
+->filter : Symbol(Observable.filter, Decl(observable.ts, 0, 36))
++>filter : Symbol(filter, Decl(observable.ts, 0, 36))
+ >pred : Symbol(pred, Decl(observable.ts, 1, 11))
+ >e : Symbol(e, Decl(observable.ts, 1, 18))
+ >T : Symbol(T, Decl(observable.ts, 0, 32))

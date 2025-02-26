@@ -1,0 +1,30 @@
+--- old.implementsIncorrectlyNoAssertion.symbols
++++ new.implementsIncorrectlyNoAssertion.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(implementsIncorrectlyNoAssertion.ts, 0, 0))
+ 
+     x: string;
+->x : Symbol(Foo.x, Decl(implementsIncorrectlyNoAssertion.ts, 0, 19))
++>x : Symbol(x, Decl(implementsIncorrectlyNoAssertion.ts, 0, 19))
+ }
+ declare class Bar {
+ >Bar : Symbol(Bar, Decl(implementsIncorrectlyNoAssertion.ts, 2, 1))
+ 
+     y: string;
+->y : Symbol(Bar.y, Decl(implementsIncorrectlyNoAssertion.ts, 3, 19))
++>y : Symbol(y, Decl(implementsIncorrectlyNoAssertion.ts, 3, 19))
+ }
+ type Wrapper = Foo & Bar;
+ >Wrapper : Symbol(Wrapper, Decl(implementsIncorrectlyNoAssertion.ts, 5, 1))
+@@= skipped -18, +18 lines =@@
+ >Wrapper : Symbol(Wrapper, Decl(implementsIncorrectlyNoAssertion.ts, 5, 1))
+ 
+     x: number;
+->x : Symbol(Baz.x, Decl(implementsIncorrectlyNoAssertion.ts, 7, 30))
++>x : Symbol(x, Decl(implementsIncorrectlyNoAssertion.ts, 7, 30))
+ 
+     y: string;
+->y : Symbol(Baz.y, Decl(implementsIncorrectlyNoAssertion.ts, 8, 14))
++>y : Symbol(y, Decl(implementsIncorrectlyNoAssertion.ts, 8, 14))
+ }
+ 

@@ -1,0 +1,11 @@
+--- old.optionalSetterParam.symbols
++++ new.optionalSetterParam.symbols
+@@= skipped -4, +4 lines =@@
+ >foo : Symbol(foo, Decl(optionalSetterParam.ts, 0, 0))
+ 
+     public set bar(param?:any) { }
+->bar : Symbol(foo.bar, Decl(optionalSetterParam.ts, 0, 11))
++>bar : Symbol(bar, Decl(optionalSetterParam.ts, 0, 11))
+ >param : Symbol(param, Decl(optionalSetterParam.ts, 2, 19))
+ }
+ 

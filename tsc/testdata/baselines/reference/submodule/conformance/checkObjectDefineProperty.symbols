@@ -1,0 +1,46 @@
+//// [tests/cases/conformance/jsdoc/checkObjectDefineProperty.ts] ////
+
+=== validate.ts ===
+// Validate in TS as simple validations would usually be interpreted as more special assignments
+import x = require("./");
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+
+x.name;
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+
+x.middleInit;
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+
+x.lastName;
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+
+x.zip;
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+
+x.houseNumber;
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+
+x.zipStr;
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+
+x.name = "Another";
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+
+x.zip = 98123;
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+
+x.zipStr = "OK";
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+
+x.lastName = "should fail";
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+
+x.houseNumber = 12; // should also fail
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+
+x.zipStr = 12; // should fail
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+
+x.middleInit = "R"; // should also fail
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+

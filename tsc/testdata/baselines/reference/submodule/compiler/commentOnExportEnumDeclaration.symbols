@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/commentOnExportEnumDeclaration.ts] ////
+
+=== commentOnExportEnumDeclaration.ts ===
+/**
+ * comment
+ */
+export enum Color {
+>Color : Symbol(Color, Decl(commentOnExportEnumDeclaration.ts, 0, 0))
+
+    r, g, b
+>r : Symbol(r, Decl(commentOnExportEnumDeclaration.ts, 3, 19))
+>g : Symbol(g, Decl(commentOnExportEnumDeclaration.ts, 4, 6))
+>b : Symbol(b, Decl(commentOnExportEnumDeclaration.ts, 4, 9))
+}

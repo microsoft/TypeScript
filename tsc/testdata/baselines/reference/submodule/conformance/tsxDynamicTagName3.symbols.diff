@@ -1,0 +1,11 @@
+--- old.tsxDynamicTagName3.symbols
++++ new.tsxDynamicTagName3.symbols
+@@= skipped -10, +10 lines =@@
+ >IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxDynamicTagName3.tsx, 1, 22))
+ 
+ 		div: any
+->div : Symbol(IntrinsicElements.div, Decl(tsxDynamicTagName3.tsx, 2, 30))
++>div : Symbol(div, Decl(tsxDynamicTagName3.tsx, 2, 30))
+ 	}
+ }
+ 

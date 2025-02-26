@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/typedArrays-es6.ts] ////
+
+=== typedArrays-es6.ts ===
+const float32Array = new Float32Array(1);
+>float32Array : Symbol(float32Array, Decl(typedArrays-es6.ts, 0, 5))
+
+[...float32Array];
+>float32Array : Symbol(float32Array, Decl(typedArrays-es6.ts, 0, 5))
+
+const float64Array = new Float64Array(1);
+>float64Array : Symbol(float64Array, Decl(typedArrays-es6.ts, 3, 5))
+
+[...float64Array];
+>float64Array : Symbol(float64Array, Decl(typedArrays-es6.ts, 3, 5))
+
+const int16Array = new Int16Array(1);
+>int16Array : Symbol(int16Array, Decl(typedArrays-es6.ts, 6, 5))
+
+[...int16Array];
+>int16Array : Symbol(int16Array, Decl(typedArrays-es6.ts, 6, 5))
+
+const int32Array = new Int32Array(1);
+>int32Array : Symbol(int32Array, Decl(typedArrays-es6.ts, 9, 5))
+
+[...int32Array];
+>int32Array : Symbol(int32Array, Decl(typedArrays-es6.ts, 9, 5))
+
+const int8Array = new Int8Array(1);
+>int8Array : Symbol(int8Array, Decl(typedArrays-es6.ts, 12, 5))
+
+[...int8Array];
+>int8Array : Symbol(int8Array, Decl(typedArrays-es6.ts, 12, 5))
+
+const nodeList = new NodeList();
+>nodeList : Symbol(nodeList, Decl(typedArrays-es6.ts, 15, 5))
+
+[...nodeList];
+>nodeList : Symbol(nodeList, Decl(typedArrays-es6.ts, 15, 5))
+
+const uint16Array = new Uint16Array(1);
+>uint16Array : Symbol(uint16Array, Decl(typedArrays-es6.ts, 18, 5))
+
+[...uint16Array];
+>uint16Array : Symbol(uint16Array, Decl(typedArrays-es6.ts, 18, 5))
+
+const uint32Array = new Uint32Array(1);
+>uint32Array : Symbol(uint32Array, Decl(typedArrays-es6.ts, 21, 5))
+
+[...uint32Array];
+>uint32Array : Symbol(uint32Array, Decl(typedArrays-es6.ts, 21, 5))
+
+const uint8Array = new Uint8Array(1);
+>uint8Array : Symbol(uint8Array, Decl(typedArrays-es6.ts, 24, 5))
+
+[...uint8Array];
+>uint8Array : Symbol(uint8Array, Decl(typedArrays-es6.ts, 24, 5))
+
+const uint8ClampedArray = new Uint8ClampedArray(1);
+>uint8ClampedArray : Symbol(uint8ClampedArray, Decl(typedArrays-es6.ts, 27, 5))
+
+[...uint8ClampedArray];
+>uint8ClampedArray : Symbol(uint8ClampedArray, Decl(typedArrays-es6.ts, 27, 5))
+

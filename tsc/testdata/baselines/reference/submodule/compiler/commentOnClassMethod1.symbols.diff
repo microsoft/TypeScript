@@ -1,0 +1,10 @@
+--- old.commentOnClassMethod1.symbols
++++ new.commentOnClassMethod1.symbols
+@@= skipped -7, +7 lines =@@
+      * Render a control
+      */
+     createControl(): any {
+->createControl : Symbol(WebControls.createControl, Decl(commentOnClassMethod1.ts, 0, 19))
++>createControl : Symbol(createControl, Decl(commentOnClassMethod1.ts, 0, 19))
+     }
+ }

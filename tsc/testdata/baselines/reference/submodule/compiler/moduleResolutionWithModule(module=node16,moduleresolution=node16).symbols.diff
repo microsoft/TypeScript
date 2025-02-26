@@ -1,0 +1,12 @@
+--- old.moduleResolutionWithModule(module=node16,moduleresolution=node16).symbols
++++ new.moduleResolutionWithModule(module=node16,moduleresolution=node16).symbols
+@@= skipped -8, +8 lines =@@
+ >p : Symbol(p, Decl(index.ts, 0, 6))
+ 
+ p.thing();
+->p.thing : Symbol(p.thing, Decl(entrypoint.d.ts, 0, 0))
++>p.thing : Symbol(thing, Decl(entrypoint.d.ts, 0, 0))
+ >p : Symbol(p, Decl(index.ts, 0, 6))
+->thing : Symbol(p.thing, Decl(entrypoint.d.ts, 0, 0))
++>thing : Symbol(thing, Decl(entrypoint.d.ts, 0, 0))
+ 

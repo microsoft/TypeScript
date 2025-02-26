@@ -1,0 +1,11 @@
+--- old.indexer2A.symbols
++++ new.indexer2A.symbols
+@@= skipped -8, +8 lines =@@
+ 
+     // Decided to enforce a semicolon after declarations
+     hasOwnProperty(objectId: number): boolean
+->hasOwnProperty : Symbol(IDirectChildrenMap.hasOwnProperty, Decl(indexer2A.ts, 1, 26))
++>hasOwnProperty : Symbol(hasOwnProperty, Decl(indexer2A.ts, 1, 26))
+ >objectId : Symbol(objectId, Decl(indexer2A.ts, 3, 19))
+ 
+     [objectId: number]: IHeapObjectProperty[]

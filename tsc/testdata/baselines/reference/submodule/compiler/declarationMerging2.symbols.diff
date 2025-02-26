@@ -1,0 +1,33 @@
+--- old.declarationMerging2.symbols
++++ new.declarationMerging2.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(a.ts, 0, 0), Decl(b.ts, 1, 22))
+ 
+     protected _f: number;
+->_f : Symbol(A._f, Decl(a.ts, 0, 16))
++>_f : Symbol(_f, Decl(a.ts, 0, 16))
+ 
+     getF() { return this._f; }
+->getF : Symbol(A.getF, Decl(a.ts, 1, 25))
+->this._f : Symbol(A._f, Decl(a.ts, 0, 16))
++>getF : Symbol(getF, Decl(a.ts, 1, 25))
++>this._f : Symbol(_f, Decl(a.ts, 0, 16))
+ >this : Symbol(A, Decl(a.ts, 0, 0), Decl(b.ts, 1, 22))
+->_f : Symbol(A._f, Decl(a.ts, 0, 16))
++>_f : Symbol(_f, Decl(a.ts, 0, 16))
+ }
+ 
+ === b.ts ===
+ export {}
+ declare module "./a" {
+->"./a" : Symbol("a", Decl(a.ts, 0, 0), Decl(b.ts, 0, 9))
++>"./a" : Symbol(""a.ts"", Decl(a.ts, 0, 0), Decl(b.ts, 0, 9))
+ 
+     interface A {
+ >A : Symbol(A, Decl(a.ts, 0, 0), Decl(b.ts, 1, 22))
+ 
+         run();
+->run : Symbol(A.run, Decl(b.ts, 2, 17))
++>run : Symbol(run, Decl(b.ts, 2, 17))
+     }
+ }

@@ -1,0 +1,61 @@
+--- old.abstractClassUnionInstantiation.symbols
++++ new.abstractClassUnionInstantiation.symbols
+@@= skipped -8, +8 lines =@@
+ 
+ abstract class AbstractA { a: string; }
+ >AbstractA : Symbol(AbstractA, Decl(abstractClassUnionInstantiation.ts, 1, 18))
+->a : Symbol(AbstractA.a, Decl(abstractClassUnionInstantiation.ts, 2, 26))
++>a : Symbol(a, Decl(abstractClassUnionInstantiation.ts, 2, 26))
+ 
+ abstract class AbstractB { b: string; }
+ >AbstractB : Symbol(AbstractB, Decl(abstractClassUnionInstantiation.ts, 2, 39))
+->b : Symbol(AbstractB.b, Decl(abstractClassUnionInstantiation.ts, 3, 26))
++>b : Symbol(b, Decl(abstractClassUnionInstantiation.ts, 3, 26))
+ 
+ type Abstracts = typeof AbstractA | typeof AbstractB;
+ >Abstracts : Symbol(Abstracts, Decl(abstractClassUnionInstantiation.ts, 3, 39))
+@@= skipped -43, +43 lines =@@
+ >cls3 : Symbol(cls3, Decl(abstractClassUnionInstantiation.ts, 11, 13))
+ 
+ [ConcreteA, AbstractA, AbstractB].map(cls => new cls()); // should error
+->[ConcreteA, AbstractA, AbstractB].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>[ConcreteA, AbstractA, AbstractB].map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >ConcreteA : Symbol(ConcreteA, Decl(abstractClassUnionInstantiation.ts, 0, 0))
+ >AbstractA : Symbol(AbstractA, Decl(abstractClassUnionInstantiation.ts, 1, 18))
+ >AbstractB : Symbol(AbstractB, Decl(abstractClassUnionInstantiation.ts, 2, 39))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >cls : Symbol(cls, Decl(abstractClassUnionInstantiation.ts, 17, 38))
+ >cls : Symbol(cls, Decl(abstractClassUnionInstantiation.ts, 17, 38))
+ 
+ [AbstractA, AbstractB, ConcreteA].map(cls => new cls()); // should error
+->[AbstractA, AbstractB, ConcreteA].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>[AbstractA, AbstractB, ConcreteA].map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >AbstractA : Symbol(AbstractA, Decl(abstractClassUnionInstantiation.ts, 1, 18))
+ >AbstractB : Symbol(AbstractB, Decl(abstractClassUnionInstantiation.ts, 2, 39))
+ >ConcreteA : Symbol(ConcreteA, Decl(abstractClassUnionInstantiation.ts, 0, 0))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >cls : Symbol(cls, Decl(abstractClassUnionInstantiation.ts, 18, 38))
+ >cls : Symbol(cls, Decl(abstractClassUnionInstantiation.ts, 18, 38))
+ 
+ [ConcreteA, ConcreteB].map(cls => new cls()); // should work
+->[ConcreteA, ConcreteB].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>[ConcreteA, ConcreteB].map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >ConcreteA : Symbol(ConcreteA, Decl(abstractClassUnionInstantiation.ts, 0, 0))
+ >ConcreteB : Symbol(ConcreteB, Decl(abstractClassUnionInstantiation.ts, 0, 18))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >cls : Symbol(cls, Decl(abstractClassUnionInstantiation.ts, 19, 27))
+ >cls : Symbol(cls, Decl(abstractClassUnionInstantiation.ts, 19, 27))
+ 
+ [AbstractA, AbstractB].map(cls => new cls()); // should error
+->[AbstractA, AbstractB].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>[AbstractA, AbstractB].map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >AbstractA : Symbol(AbstractA, Decl(abstractClassUnionInstantiation.ts, 1, 18))
+ >AbstractB : Symbol(AbstractB, Decl(abstractClassUnionInstantiation.ts, 2, 39))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >cls : Symbol(cls, Decl(abstractClassUnionInstantiation.ts, 20, 27))
+ >cls : Symbol(cls, Decl(abstractClassUnionInstantiation.ts, 20, 27))
+ 

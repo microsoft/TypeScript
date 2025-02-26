@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedClassExpression.ts] ////
+
+=== index.js ===
+module.exports = class Thing {
+>Thing : Symbol(Thing, Decl(index.js, 0, 16))
+
+    /**
+     * @param {number} p
+     */
+    constructor(p) {
+>p : Symbol(p, Decl(index.js, 4, 16))
+
+        this.t = 12 + p;
+>this : Symbol(Thing, Decl(index.js, 0, 16))
+>p : Symbol(p, Decl(index.js, 4, 16))
+    }
+}

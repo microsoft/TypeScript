@@ -1,0 +1,47 @@
+--- old.varianceAnnotationValidation.symbols
++++ new.varianceAnnotationValidation.symbols
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(varianceAnnotationValidation.ts, 4, 21))
+ 
+ 	createAnimal: () => T;
+->createAnimal : Symbol(Controller.createAnimal, Decl(varianceAnnotationValidation.ts, 4, 29))
++>createAnimal : Symbol(createAnimal, Decl(varianceAnnotationValidation.ts, 4, 29))
+ >T : Symbol(T, Decl(varianceAnnotationValidation.ts, 4, 21))
+ 
+ 	run: (animal: T) => void;
+->run : Symbol(Controller.run, Decl(varianceAnnotationValidation.ts, 5, 23))
++>run : Symbol(run, Decl(varianceAnnotationValidation.ts, 5, 23))
+ >animal : Symbol(animal, Decl(varianceAnnotationValidation.ts, 6, 7))
+ >T : Symbol(T, Decl(varianceAnnotationValidation.ts, 4, 21))
+ }
+@@= skipped -13, +13 lines =@@
+ >Animal : Symbol(Animal, Decl(varianceAnnotationValidation.ts, 7, 1))
+ 
+ 	run(): void;
+->run : Symbol(Animal.run, Decl(varianceAnnotationValidation.ts, 9, 18))
++>run : Symbol(run, Decl(varianceAnnotationValidation.ts, 9, 18))
+ 
+ };
+ 
+@@= skipped -9, +9 lines =@@
+ >Animal : Symbol(Animal, Decl(varianceAnnotationValidation.ts, 7, 1))
+ 
+ 	run() {};
+->run : Symbol(Dog.run, Decl(varianceAnnotationValidation.ts, 13, 29))
++>run : Symbol(run, Decl(varianceAnnotationValidation.ts, 13, 29))
+ 
+ 	bark() {};
+->bark : Symbol(Dog.bark, Decl(varianceAnnotationValidation.ts, 14, 10))
++>bark : Symbol(bark, Decl(varianceAnnotationValidation.ts, 14, 10))
+ }
+ 
+ interface AnimalContainer<T> {
+@@= skipped -11, +11 lines =@@
+ >T : Symbol(T, Decl(varianceAnnotationValidation.ts, 18, 26))
+ 
+ 	controller: Controller<T>;
+->controller : Symbol(AnimalContainer.controller, Decl(varianceAnnotationValidation.ts, 18, 30))
++>controller : Symbol(controller, Decl(varianceAnnotationValidation.ts, 18, 30))
+ >Controller : Symbol(Controller, Decl(varianceAnnotationValidation.ts, 0, 0))
+ >T : Symbol(T, Decl(varianceAnnotationValidation.ts, 18, 26))
+ }

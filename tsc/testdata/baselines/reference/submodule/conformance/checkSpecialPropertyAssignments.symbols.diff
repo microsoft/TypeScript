@@ -1,0 +1,21 @@
+--- old.checkSpecialPropertyAssignments.symbols
++++ new.checkSpecialPropertyAssignments.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === bug24252.js ===
+ var A = {};
+->A : Symbol(A, Decl(bug24252.js, 0, 3), Decl(bug24252.js, 0, 11))
++>A : Symbol(A, Decl(bug24252.js, 0, 3))
+ 
+ A.B = class {
+->A.B : Symbol(A.B, Decl(bug24252.js, 0, 11))
+->A : Symbol(A, Decl(bug24252.js, 0, 3), Decl(bug24252.js, 0, 11))
+->B : Symbol(A.B, Decl(bug24252.js, 0, 11))
++>A : Symbol(A, Decl(bug24252.js, 0, 3))
+ 
+     m() {
+->m : Symbol(B.m, Decl(bug24252.js, 1, 13))
++>m : Symbol(m, Decl(bug24252.js, 1, 13))
+ 
+         /** @type {string[]} */
+         var x = [];

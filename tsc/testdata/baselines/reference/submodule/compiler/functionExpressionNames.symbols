@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/functionExpressionNames.ts] ////
+
+=== b.js ===
+exports.E = function() {
+    this.e = 'exported'
+}
+var e = new exports.E();
+>e : Symbol(e, Decl(b.js, 3, 3))
+
+var o = {
+>o : Symbol(o, Decl(b.js, 5, 3))
+
+    C: function () {
+>C : Symbol(C, Decl(b.js, 5, 9))
+
+        this.c = 'nested object'
+    }
+}
+var og = new o.C();
+>og : Symbol(og, Decl(b.js, 10, 3))
+>o.C : Symbol(C, Decl(b.js, 5, 9))
+>o : Symbol(o, Decl(b.js, 5, 3))
+>C : Symbol(C, Decl(b.js, 5, 9))
+
+var V = function () {
+>V : Symbol(V, Decl(b.js, 12, 3))
+
+    this.v = 'simple'
+}
+var v = new V();
+>v : Symbol(v, Decl(b.js, 15, 3))
+>V : Symbol(V, Decl(b.js, 12, 3))
+
+var A;
+>A : Symbol(A, Decl(b.js, 17, 3))
+
+A = function () {
+>A : Symbol(A, Decl(b.js, 17, 3))
+
+    this.a = 'assignment'
+}
+var a = new A();
+>a : Symbol(a, Decl(b.js, 21, 3))
+>A : Symbol(A, Decl(b.js, 17, 3))
+
+const {
+    B = function() {
+>B : Symbol(B, Decl(b.js, 23, 7))
+
+        this.b = 'binding pattern'
+    }
+} = { B: undefined };
+>B : Symbol(B, Decl(b.js, 27, 5))
+>undefined : Symbol(undefined)
+
+var b = new B();
+>b : Symbol(b, Decl(b.js, 28, 3))
+>B : Symbol(B, Decl(b.js, 23, 7))
+

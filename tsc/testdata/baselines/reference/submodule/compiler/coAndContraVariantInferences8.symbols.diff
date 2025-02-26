@@ -1,0 +1,22 @@
+--- old.coAndContraVariantInferences8.symbols
++++ new.coAndContraVariantInferences8.symbols
+@@= skipped -13, +13 lines =@@
+ >y : Symbol(y, Decl(coAndContraVariantInferences8.ts, 5, 13))
+ 
+ fn.call(null, x);
+->fn.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
++>fn.call : Symbol(call, Decl(lib.es5.d.ts, --, --))
+ >fn : Symbol(fn, Decl(coAndContraVariantInferences8.ts, 2, 13))
+->call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
++>call : Symbol(call, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(coAndContraVariantInferences8.ts, 4, 13))
+ 
+ fn.call(null, y);
+->fn.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
++>fn.call : Symbol(call, Decl(lib.es5.d.ts, --, --))
+ >fn : Symbol(fn, Decl(coAndContraVariantInferences8.ts, 2, 13))
+->call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
++>call : Symbol(call, Decl(lib.es5.d.ts, --, --))
+ >y : Symbol(y, Decl(coAndContraVariantInferences8.ts, 5, 13))
+ 
+ export {};

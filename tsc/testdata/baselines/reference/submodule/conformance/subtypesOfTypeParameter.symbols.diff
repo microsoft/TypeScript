@@ -1,0 +1,77 @@
+--- old.subtypesOfTypeParameter.symbols
++++ new.subtypesOfTypeParameter.symbols
+@@= skipped -7, +7 lines =@@
+ >T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 2, 9))
+ 
+     foo: T;
+->foo : Symbol(C3.foo, Decl(subtypesOfTypeParameter.ts, 2, 13))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameter.ts, 2, 13))
+ >T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 2, 9))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 6, 9))
+ 
+     foo: U; // error
+->foo : Symbol(D1.foo, Decl(subtypesOfTypeParameter.ts, 6, 30))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameter.ts, 6, 30))
+ >U : Symbol(U, Decl(subtypesOfTypeParameter.ts, 6, 11))
+ }
+ 
+@@= skipped -26, +26 lines =@@
+ 
+ interface I1 { foo: number; }
+ >I1 : Symbol(I1, Decl(subtypesOfTypeParameter.ts, 13, 1))
+->foo : Symbol(I1.foo, Decl(subtypesOfTypeParameter.ts, 15, 14))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameter.ts, 15, 14))
+ 
+ class C1 { foo: number; }
+ >C1 : Symbol(C1, Decl(subtypesOfTypeParameter.ts, 15, 29))
+->foo : Symbol(C1.foo, Decl(subtypesOfTypeParameter.ts, 16, 10))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameter.ts, 16, 10))
+ 
+ class C2<T> { foo: T; }
+ >C2 : Symbol(C2, Decl(subtypesOfTypeParameter.ts, 16, 25))
+ >T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 17, 9))
+->foo : Symbol(C2.foo, Decl(subtypesOfTypeParameter.ts, 17, 13))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameter.ts, 17, 13))
+ >T : Symbol(T, Decl(subtypesOfTypeParameter.ts, 17, 9))
+ 
+ enum E { A }
+ >E : Symbol(E, Decl(subtypesOfTypeParameter.ts, 17, 23))
+->A : Symbol(E.A, Decl(subtypesOfTypeParameter.ts, 18, 8))
++>A : Symbol(A, Decl(subtypesOfTypeParameter.ts, 18, 8))
+ 
+ function f() { }
+ >f : Symbol(f, Decl(subtypesOfTypeParameter.ts, 18, 12), Decl(subtypesOfTypeParameter.ts, 19, 16))
+@@= skipped -27, +27 lines =@@
+ }
+ class c { baz: string }
+ >c : Symbol(c, Decl(subtypesOfTypeParameter.ts, 22, 1), Decl(subtypesOfTypeParameter.ts, 23, 23))
+->baz : Symbol(c.baz, Decl(subtypesOfTypeParameter.ts, 23, 9))
++>baz : Symbol(baz, Decl(subtypesOfTypeParameter.ts, 23, 9))
+ 
+ module c {
+ >c : Symbol(c, Decl(subtypesOfTypeParameter.ts, 22, 1), Decl(subtypesOfTypeParameter.ts, 23, 23))
+@@= skipped -173, +173 lines =@@
+ 
+     var r14 = true ? E.A : x;
+ >r14 : Symbol(r14, Decl(subtypesOfTypeParameter.ts, 78, 7), Decl(subtypesOfTypeParameter.ts, 79, 7))
+->E.A : Symbol(E.A, Decl(subtypesOfTypeParameter.ts, 18, 8))
++>E.A : Symbol(A, Decl(subtypesOfTypeParameter.ts, 18, 8))
+ >E : Symbol(E, Decl(subtypesOfTypeParameter.ts, 17, 23))
+->A : Symbol(E.A, Decl(subtypesOfTypeParameter.ts, 18, 8))
++>A : Symbol(A, Decl(subtypesOfTypeParameter.ts, 18, 8))
+ >x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+ 
+     var r14 = true ? x : E.A;
+ >r14 : Symbol(r14, Decl(subtypesOfTypeParameter.ts, 78, 7), Decl(subtypesOfTypeParameter.ts, 79, 7))
+ >x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
+->E.A : Symbol(E.A, Decl(subtypesOfTypeParameter.ts, 18, 8))
++>E.A : Symbol(A, Decl(subtypesOfTypeParameter.ts, 18, 8))
+ >E : Symbol(E, Decl(subtypesOfTypeParameter.ts, 17, 23))
+->A : Symbol(E.A, Decl(subtypesOfTypeParameter.ts, 18, 8))
++>A : Symbol(A, Decl(subtypesOfTypeParameter.ts, 18, 8))
+ 
+     var af: typeof f;
+ >af : Symbol(af, Decl(subtypesOfTypeParameter.ts, 81, 7))

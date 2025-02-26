@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/inheritanceStaticPropertyOverridingProperty.ts] ////
+
+=== inheritanceStaticPropertyOverridingProperty.ts ===
+class a {
+>a : Symbol(a, Decl(inheritanceStaticPropertyOverridingProperty.ts, 0, 0))
+
+    static x: () => string;
+>x : Symbol(x, Decl(inheritanceStaticPropertyOverridingProperty.ts, 0, 9))
+}
+
+class b extends a {
+>b : Symbol(b, Decl(inheritanceStaticPropertyOverridingProperty.ts, 2, 1))
+>a : Symbol(a, Decl(inheritanceStaticPropertyOverridingProperty.ts, 0, 0))
+
+    static x: () => string;
+>x : Symbol(x, Decl(inheritanceStaticPropertyOverridingProperty.ts, 4, 19))
+}

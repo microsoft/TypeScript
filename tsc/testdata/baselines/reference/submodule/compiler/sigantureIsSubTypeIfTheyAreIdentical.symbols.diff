@@ -1,0 +1,20 @@
+--- old.sigantureIsSubTypeIfTheyAreIdentical.symbols
++++ new.sigantureIsSubTypeIfTheyAreIdentical.symbols
+@@= skipped -4, +4 lines =@@
+ >ICache : Symbol(ICache, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 0, 0))
+ 
+     get<T>(key: string): T;
+->get : Symbol(ICache.get, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 0, 18))
++>get : Symbol(get, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 0, 18))
+ >T : Symbol(T, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 1, 8))
+ >key : Symbol(key, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 1, 11))
+ >T : Symbol(T, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 1, 8))
+@@= skipped -10, +10 lines =@@
+ >ICache : Symbol(ICache, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 0, 0))
+ 
+     get<T>(key: string): T {
+->get : Symbol(CacheService.get, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 3, 38))
++>get : Symbol(get, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 3, 38))
+ >T : Symbol(T, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 4, 8))
+ >key : Symbol(key, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 4, 11))
+ >T : Symbol(T, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 4, 8))

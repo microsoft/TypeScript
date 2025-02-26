@@ -1,0 +1,11 @@
+--- old.objectLiteralWithNumericPropertyName.symbols
++++ new.objectLiteralWithNumericPropertyName.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(objectLiteralWithNumericPropertyName.ts, 0, 0))
+ 
+     0: string;
+->0 : Symbol(A[0], Decl(objectLiteralWithNumericPropertyName.ts, 0, 13))
++>0 : Symbol(0, Decl(objectLiteralWithNumericPropertyName.ts, 0, 13))
+ }
+ var x: A = {
+ >x : Symbol(x, Decl(objectLiteralWithNumericPropertyName.ts, 3, 3))

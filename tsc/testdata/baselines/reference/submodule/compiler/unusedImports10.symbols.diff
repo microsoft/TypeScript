@@ -1,0 +1,18 @@
+--- old.unusedImports10.symbols
++++ new.unusedImports10.symbols
+@@= skipped -7, +7 lines =@@
+ >Calculator : Symbol(Calculator, Decl(unusedImports10.ts, 0, 10))
+ 
+         public handelChar() {
+->handelChar : Symbol(Calculator.handelChar, Decl(unusedImports10.ts, 1, 29))
++>handelChar : Symbol(handelChar, Decl(unusedImports10.ts, 1, 29))
+         }
+     }
+ }
+@@= skipped -10, +10 lines =@@
+ 
+     import a = A;
+ >a : Symbol(a, Decl(unusedImports10.ts, 7, 10))
+->A : Symbol(a, Decl(unusedImports10.ts, 0, 0))
++>A : Symbol(A, Decl(unusedImports10.ts, 0, 0))
+ }

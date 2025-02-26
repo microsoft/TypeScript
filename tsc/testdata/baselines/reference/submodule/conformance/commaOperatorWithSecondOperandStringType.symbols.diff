@@ -1,0 +1,26 @@
+--- old.commaOperatorWithSecondOperandStringType.symbols
++++ new.commaOperatorWithSecondOperandStringType.symbols
+@@= skipped -81, +81 lines =@@
+ >undefined : Symbol(undefined)
+ 
+ ["a", "b"], NUMBER.toString();
+->NUMBER.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>NUMBER.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >NUMBER : Symbol(NUMBER, Decl(commaOperatorWithSecondOperandStringType.ts, 2, 3))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+ OBJECT = new Object, STRING + "string";
+ >OBJECT : Symbol(OBJECT, Decl(commaOperatorWithSecondOperandStringType.ts, 4, 3))
+@@= skipped -29, +29 lines =@@
+ 
+ var resultIsString10 = (["a", "b"], NUMBER.toString());
+ >resultIsString10 : Symbol(resultIsString10, Decl(commaOperatorWithSecondOperandStringType.ts, 34, 3))
+->NUMBER.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>NUMBER.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >NUMBER : Symbol(NUMBER, Decl(commaOperatorWithSecondOperandStringType.ts, 2, 3))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+ var resultIsString11 = (new Object, STRING + "string");
+ >resultIsString11 : Symbol(resultIsString11, Decl(commaOperatorWithSecondOperandStringType.ts, 35, 3))

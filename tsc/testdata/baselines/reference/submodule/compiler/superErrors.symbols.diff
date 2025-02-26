@@ -1,0 +1,50 @@
+--- old.superErrors.symbols
++++ new.superErrors.symbols
+@@= skipped -18, +18 lines =@@
+ >User : Symbol(User, Decl(superErrors.ts, 5, 1))
+ 
+     name: string = "Bob";
+->name : Symbol(User.name, Decl(superErrors.ts, 7, 12))
++>name : Symbol(name, Decl(superErrors.ts, 7, 12))
+ 
+     sayHello(): void {
+->sayHello : Symbol(User.sayHello, Decl(superErrors.ts, 8, 25))
++>sayHello : Symbol(sayHello, Decl(superErrors.ts, 8, 25))
+ 
+         //console.log("Hello, " + this.name);
+     }
+@@= skipped -14, +14 lines =@@
+ >User : Symbol(User, Decl(superErrors.ts, 5, 1))
+ 
+     name: string = "Frank";
+->name : Symbol(RegisteredUser.name, Decl(superErrors.ts, 14, 35))
++>name : Symbol(name, Decl(superErrors.ts, 14, 35))
+ 
+     constructor() {
+         super();
+@@= skipped -25, +25 lines =@@
+         (function() { return () => super; })();
+     }
+     sayHello(): void {
+->sayHello : Symbol(RegisteredUser.sayHello, Decl(superErrors.ts, 31, 5))
++>sayHello : Symbol(sayHello, Decl(superErrors.ts, 31, 5))
+ 
+         // super call in a method
+         super.sayHello();
+->super.sayHello : Symbol(User.sayHello, Decl(superErrors.ts, 8, 25))
++>super.sayHello : Symbol(sayHello, Decl(superErrors.ts, 8, 25))
+ >super : Symbol(User, Decl(superErrors.ts, 5, 1))
+->sayHello : Symbol(User.sayHello, Decl(superErrors.ts, 8, 25))
++>sayHello : Symbol(sayHello, Decl(superErrors.ts, 8, 25))
+ 
+         // super call in a lambda in an inner function in a method
+         function inner() {
+@@= skipped -20, +20 lines =@@
+         (function() { return () => super; })();
+     }
+     static staticFunction(): void {
+->staticFunction : Symbol(RegisteredUser.staticFunction, Decl(superErrors.ts, 43, 5))
++>staticFunction : Symbol(staticFunction, Decl(superErrors.ts, 43, 5))
+ 
+         // super in static functions
+         var s = super;

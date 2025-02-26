@@ -1,0 +1,35 @@
+--- old.resolutionModeTypeOnlyImport1(moduleresolution=bundler).symbols
++++ new.resolutionModeTypeOnlyImport1(moduleresolution=bundler).symbols
+@@= skipped -9, +9 lines =@@
+ 
+ === /app.ts ===
+ import type { x as Default } from "foo";
+->x : Symbol(Default, Decl(index.d.mts, 0, 20))
++>x : Symbol(x, Decl(index.d.cts, 0, 20))
+ >Default : Symbol(Default, Decl(app.ts, 0, 13))
+ 
+ import type { x as Import } from "foo" assert { "resolution-mode": "import" };
+->x : Symbol(Default, Decl(index.d.mts, 0, 20))
++>x : Symbol(x, Decl(index.d.cts, 0, 20))
+ >Import : Symbol(Import, Decl(app.ts, 1, 13))
+ 
+ import type { x as Require } from "foo" assert { "resolution-mode": "require" };
+->x : Symbol(Require, Decl(index.d.cts, 0, 20))
++>x : Symbol(x, Decl(index.d.cts, 0, 20))
+ >Require : Symbol(Require, Decl(app.ts, 2, 13))
+ 
+ type _Default = typeof Default;
+@@= skipped -25, +25 lines =@@
+ 
+ // resolution-mode does not enforce file extension in `bundler`, just sets conditions
+ import type { x as ImportRelative } from "./other" assert { "resolution-mode": "import" };
+->x : Symbol(ImportRelative, Decl(other.ts, 0, 12))
++>x : Symbol(x, Decl(other.ts, 0, 12))
+ >ImportRelative : Symbol(ImportRelative, Decl(app.ts, 8, 13))
+ 
+ import type { x as RequireRelative } from "./other" assert { "resolution-mode": "require" };
+->x : Symbol(ImportRelative, Decl(other.ts, 0, 12))
++>x : Symbol(x, Decl(other.ts, 0, 12))
+ >RequireRelative : Symbol(RequireRelative, Decl(app.ts, 9, 13))
+ 
+ type _ImportRelative = typeof ImportRelative;

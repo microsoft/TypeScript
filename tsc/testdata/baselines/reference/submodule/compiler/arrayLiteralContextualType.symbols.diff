@@ -1,0 +1,35 @@
+--- old.arrayLiteralContextualType.symbols
++++ new.arrayLiteralContextualType.symbols
+@@= skipped -4, +4 lines =@@
+ >IAnimal : Symbol(IAnimal, Decl(arrayLiteralContextualType.ts, 0, 0))
+ 
+     name: string;
+->name : Symbol(IAnimal.name, Decl(arrayLiteralContextualType.ts, 0, 19))
++>name : Symbol(name, Decl(arrayLiteralContextualType.ts, 0, 19))
+ }
+ 
+ class Giraffe {
+ >Giraffe : Symbol(Giraffe, Decl(arrayLiteralContextualType.ts, 2, 1))
+ 
+     name = "Giraffe";
+->name : Symbol(Giraffe.name, Decl(arrayLiteralContextualType.ts, 4, 15))
++>name : Symbol(name, Decl(arrayLiteralContextualType.ts, 4, 15))
+ 
+     neckLength = "3m";
+->neckLength : Symbol(Giraffe.neckLength, Decl(arrayLiteralContextualType.ts, 5, 21))
++>neckLength : Symbol(neckLength, Decl(arrayLiteralContextualType.ts, 5, 21))
+ }
+ 
+ class Elephant {
+ >Elephant : Symbol(Elephant, Decl(arrayLiteralContextualType.ts, 7, 1))
+ 
+     name = "Elephant";
+->name : Symbol(Elephant.name, Decl(arrayLiteralContextualType.ts, 9, 16))
++>name : Symbol(name, Decl(arrayLiteralContextualType.ts, 9, 16))
+ 
+     trunkDiameter = "20cm";
+->trunkDiameter : Symbol(Elephant.trunkDiameter, Decl(arrayLiteralContextualType.ts, 10, 22))
++>trunkDiameter : Symbol(trunkDiameter, Decl(arrayLiteralContextualType.ts, 10, 22))
+ }
+ 
+ function foo(animals: IAnimal[]) { }

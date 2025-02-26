@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/jsx/tsxReactEmitWhitespace2.tsx] ////
+
+=== file.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(file.tsx, 0, 20))
+
+	interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
+
+		[s: string]: any;
+>s : Symbol(s, Decl(file.tsx, 3, 3))
+	}
+}
+declare var React: any;
+>React : Symbol(React, Decl(file.tsx, 6, 11))
+
+// Emit ' word' in the last string
+<div>word <code>code</code> word</div>;
+// Same here
+<div><code>code</code> word</div>;
+// And here
+<div><code /> word</div>;
+
+

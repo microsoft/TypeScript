@@ -1,0 +1,123 @@
+//// [tests/cases/compiler/inferFromNestedSameShapeTuple.ts] ////
+
+=== inferFromNestedSameShapeTuple.ts ===
+// repro #48524
+
+type Magic<X> = X extends [[infer Y, ...infer _], ...infer __] ? Y : never;
+>Magic : Symbol(Magic, Decl(inferFromNestedSameShapeTuple.ts, 0, 0))
+>X : Symbol(X, Decl(inferFromNestedSameShapeTuple.ts, 2, 11))
+>X : Symbol(X, Decl(inferFromNestedSameShapeTuple.ts, 2, 11))
+>Y : Symbol(Y, Decl(inferFromNestedSameShapeTuple.ts, 2, 33))
+>_ : Symbol(_, Decl(inferFromNestedSameShapeTuple.ts, 2, 45))
+>__ : Symbol(__, Decl(inferFromNestedSameShapeTuple.ts, 2, 58))
+>Y : Symbol(Y, Decl(inferFromNestedSameShapeTuple.ts, 2, 33))
+
+type R = Magic<[[number]]>
+>R : Symbol(R, Decl(inferFromNestedSameShapeTuple.ts, 2, 75))
+>Magic : Symbol(Magic, Decl(inferFromNestedSameShapeTuple.ts, 0, 0))
+
+// repro #52722
+
+type Recursive<Id> = {
+>Recursive : Symbol(Recursive, Decl(inferFromNestedSameShapeTuple.ts, 4, 26))
+>Id : Symbol(Id, Decl(inferFromNestedSameShapeTuple.ts, 8, 15))
+
+    id: Id
+>id : Symbol(id, Decl(inferFromNestedSameShapeTuple.ts, 8, 22))
+>Id : Symbol(Id, Decl(inferFromNestedSameShapeTuple.ts, 8, 15))
+
+    children: readonly Recursive<Id>[]
+>children : Symbol(children, Decl(inferFromNestedSameShapeTuple.ts, 9, 10))
+>Recursive : Symbol(Recursive, Decl(inferFromNestedSameShapeTuple.ts, 4, 26))
+>Id : Symbol(Id, Decl(inferFromNestedSameShapeTuple.ts, 8, 15))
+}
+
+declare function getIds<Id>(items: readonly Recursive<Id>[]): Id[];
+>getIds : Symbol(getIds, Decl(inferFromNestedSameShapeTuple.ts, 11, 1))
+>Id : Symbol(Id, Decl(inferFromNestedSameShapeTuple.ts, 13, 24))
+>items : Symbol(items, Decl(inferFromNestedSameShapeTuple.ts, 13, 28))
+>Recursive : Symbol(Recursive, Decl(inferFromNestedSameShapeTuple.ts, 4, 26))
+>Id : Symbol(Id, Decl(inferFromNestedSameShapeTuple.ts, 13, 24))
+>Id : Symbol(Id, Decl(inferFromNestedSameShapeTuple.ts, 13, 24))
+
+const items = [{
+>items : Symbol(items, Decl(inferFromNestedSameShapeTuple.ts, 15, 5))
+
+    id: 'a',
+>id : Symbol(id, Decl(inferFromNestedSameShapeTuple.ts, 15, 16))
+
+    children: [{
+>children : Symbol(children, Decl(inferFromNestedSameShapeTuple.ts, 16, 12))
+
+        id: 'b',
+>id : Symbol(id, Decl(inferFromNestedSameShapeTuple.ts, 17, 16))
+
+        children: []
+>children : Symbol(children, Decl(inferFromNestedSameShapeTuple.ts, 18, 16))
+
+    }]
+}] as const satisfies readonly Recursive<string>[]
+>const : Symbol(const)
+>Recursive : Symbol(Recursive, Decl(inferFromNestedSameShapeTuple.ts, 4, 26))
+
+const foo = getIds(items)
+>foo : Symbol(foo, Decl(inferFromNestedSameShapeTuple.ts, 23, 5))
+>getIds : Symbol(getIds, Decl(inferFromNestedSameShapeTuple.ts, 11, 1))
+>items : Symbol(items, Decl(inferFromNestedSameShapeTuple.ts, 15, 5))
+
+// variant with a fresh argument
+const foo2 = getIds([{
+>foo2 : Symbol(foo2, Decl(inferFromNestedSameShapeTuple.ts, 26, 5))
+>getIds : Symbol(getIds, Decl(inferFromNestedSameShapeTuple.ts, 11, 1))
+
+    id: 'a',
+>id : Symbol(id, Decl(inferFromNestedSameShapeTuple.ts, 26, 22))
+
+    children: [{
+>children : Symbol(children, Decl(inferFromNestedSameShapeTuple.ts, 27, 12))
+
+        id: 'b',
+>id : Symbol(id, Decl(inferFromNestedSameShapeTuple.ts, 28, 16))
+
+        children: []
+>children : Symbol(children, Decl(inferFromNestedSameShapeTuple.ts, 29, 16))
+
+    }]
+}] as const)
+>const : Symbol(const)
+
+// Repro from comment in #49226
+
+type T1<T> = [number, T1<{ x: T }>];
+>T1 : Symbol(T1, Decl(inferFromNestedSameShapeTuple.ts, 32, 12))
+>T : Symbol(T, Decl(inferFromNestedSameShapeTuple.ts, 36, 8))
+>T1 : Symbol(T1, Decl(inferFromNestedSameShapeTuple.ts, 32, 12))
+>x : Symbol(x, Decl(inferFromNestedSameShapeTuple.ts, 36, 26))
+>T : Symbol(T, Decl(inferFromNestedSameShapeTuple.ts, 36, 8))
+
+type T2<T> = [42, T2<{ x: T }>];
+>T2 : Symbol(T2, Decl(inferFromNestedSameShapeTuple.ts, 36, 36))
+>T : Symbol(T, Decl(inferFromNestedSameShapeTuple.ts, 37, 8))
+>T2 : Symbol(T2, Decl(inferFromNestedSameShapeTuple.ts, 36, 36))
+>x : Symbol(x, Decl(inferFromNestedSameShapeTuple.ts, 37, 22))
+>T : Symbol(T, Decl(inferFromNestedSameShapeTuple.ts, 37, 8))
+
+function qq<U>(x: T1<U>, y: T2<U>) {
+>qq : Symbol(qq, Decl(inferFromNestedSameShapeTuple.ts, 37, 32))
+>U : Symbol(U, Decl(inferFromNestedSameShapeTuple.ts, 39, 12))
+>x : Symbol(x, Decl(inferFromNestedSameShapeTuple.ts, 39, 15))
+>T1 : Symbol(T1, Decl(inferFromNestedSameShapeTuple.ts, 32, 12))
+>U : Symbol(U, Decl(inferFromNestedSameShapeTuple.ts, 39, 12))
+>y : Symbol(y, Decl(inferFromNestedSameShapeTuple.ts, 39, 24))
+>T2 : Symbol(T2, Decl(inferFromNestedSameShapeTuple.ts, 36, 36))
+>U : Symbol(U, Decl(inferFromNestedSameShapeTuple.ts, 39, 12))
+
+    x = y;
+>x : Symbol(x, Decl(inferFromNestedSameShapeTuple.ts, 39, 15))
+>y : Symbol(y, Decl(inferFromNestedSameShapeTuple.ts, 39, 24))
+
+    y = x;  // Error
+>y : Symbol(y, Decl(inferFromNestedSameShapeTuple.ts, 39, 24))
+>x : Symbol(x, Decl(inferFromNestedSameShapeTuple.ts, 39, 15))
+}
+

@@ -1,0 +1,95 @@
+--- old.defineProperty(target=es5).symbols
++++ new.defineProperty(target=es5).symbols
+@@= skipped -7, +7 lines =@@
+ >A : Symbol(A, Decl(defineProperty.ts, 0, 16))
+ 
+     a = this.y
+->a : Symbol(A.a, Decl(defineProperty.ts, 1, 9))
+->this.y : Symbol(A.y, Decl(defineProperty.ts, 8, 16))
++>a : Symbol(a, Decl(defineProperty.ts, 1, 9))
++>this.y : Symbol(y, Decl(defineProperty.ts, 8, 16))
+ >this : Symbol(A, Decl(defineProperty.ts, 0, 16))
+->y : Symbol(A.y, Decl(defineProperty.ts, 8, 16))
++>y : Symbol(y, Decl(defineProperty.ts, 8, 16))
+ 
+     b
+->b : Symbol(A.b, Decl(defineProperty.ts, 2, 14))
++>b : Symbol(b, Decl(defineProperty.ts, 2, 14))
+ 
+     public c;
+->c : Symbol(A.c, Decl(defineProperty.ts, 3, 5))
++>c : Symbol(c, Decl(defineProperty.ts, 3, 5))
+ 
+     ["computed"] = 13
+->["computed"] : Symbol(A["computed"], Decl(defineProperty.ts, 4, 13))
+->"computed" : Symbol(A["computed"], Decl(defineProperty.ts, 4, 13))
++>["computed"] : Symbol(computed, Decl(defineProperty.ts, 4, 13))
++>"computed" : Symbol(computed, Decl(defineProperty.ts, 4, 13))
+ 
+     ;[x] = 14
+->[x] : Symbol(A[x], Decl(defineProperty.ts, 6, 5))
++>[x] : Symbol(p, Decl(defineProperty.ts, 6, 5))
+ >x : Symbol(x, Decl(defineProperty.ts, 0, 3))
+ 
+     m() { }
+->m : Symbol(A.m, Decl(defineProperty.ts, 6, 13))
++>m : Symbol(m, Decl(defineProperty.ts, 6, 13))
+ 
+     constructor(public readonly y: number) { }
+->y : Symbol(A.y, Decl(defineProperty.ts, 8, 16))
++>y : Symbol(y, Decl(defineProperty.ts, 8, 16))
+ 
+     z = this.y
+->z : Symbol(A.z, Decl(defineProperty.ts, 8, 46))
+->this.y : Symbol(A.y, Decl(defineProperty.ts, 8, 16))
++>z : Symbol(z, Decl(defineProperty.ts, 8, 46))
++>this.y : Symbol(y, Decl(defineProperty.ts, 8, 16))
+ >this : Symbol(A, Decl(defineProperty.ts, 0, 16))
+->y : Symbol(A.y, Decl(defineProperty.ts, 8, 16))
++>y : Symbol(y, Decl(defineProperty.ts, 8, 16))
+ 
+     declare notEmitted;
+->notEmitted : Symbol(A.notEmitted, Decl(defineProperty.ts, 9, 14))
++>notEmitted : Symbol(notEmitted, Decl(defineProperty.ts, 9, 14))
+ }
+ class B {
+ >B : Symbol(B, Decl(defineProperty.ts, 11, 1))
+ 
+     public a;
+->a : Symbol(B.a, Decl(defineProperty.ts, 12, 9))
++>a : Symbol(a, Decl(defineProperty.ts, 12, 9))
+ }
+ class C extends B {
+ >C : Symbol(C, Decl(defineProperty.ts, 14, 1))
+ >B : Symbol(B, Decl(defineProperty.ts, 11, 1))
+ 
+     declare public a;
+->a : Symbol(C.a, Decl(defineProperty.ts, 15, 19))
++>a : Symbol(a, Decl(defineProperty.ts, 15, 19))
+ 
+     z = this.ka
+->z : Symbol(C.z, Decl(defineProperty.ts, 16, 21))
+->this.ka : Symbol(C.ka, Decl(defineProperty.ts, 18, 16))
++>z : Symbol(z, Decl(defineProperty.ts, 16, 21))
++>this.ka : Symbol(ka, Decl(defineProperty.ts, 18, 16))
+ >this : Symbol(C, Decl(defineProperty.ts, 14, 1))
+->ka : Symbol(C.ka, Decl(defineProperty.ts, 18, 16))
++>ka : Symbol(ka, Decl(defineProperty.ts, 18, 16))
+ 
+     constructor(public ka: number) {
+->ka : Symbol(C.ka, Decl(defineProperty.ts, 18, 16))
++>ka : Symbol(ka, Decl(defineProperty.ts, 18, 16))
+ 
+         super()
+ >super : Symbol(B, Decl(defineProperty.ts, 11, 1))
+     }
+     ki = this.ka
+->ki : Symbol(C.ki, Decl(defineProperty.ts, 20, 5))
+->this.ka : Symbol(C.ka, Decl(defineProperty.ts, 18, 16))
++>ki : Symbol(ki, Decl(defineProperty.ts, 20, 5))
++>this.ka : Symbol(ka, Decl(defineProperty.ts, 18, 16))
+ >this : Symbol(C, Decl(defineProperty.ts, 14, 1))
+->ka : Symbol(C.ka, Decl(defineProperty.ts, 18, 16))
++>ka : Symbol(ka, Decl(defineProperty.ts, 18, 16))
+ }
+ 

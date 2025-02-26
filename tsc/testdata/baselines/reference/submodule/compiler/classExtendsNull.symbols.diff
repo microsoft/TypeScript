@@ -1,0 +1,25 @@
+--- old.classExtendsNull.symbols
++++ new.classExtendsNull.symbols
+@@= skipped -6, +6 lines =@@
+     constructor() {
+         super();
+         return Object.create(null);
+->Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ 
+     constructor() {
+         return Object.create(null);
+->Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+     }
+ }

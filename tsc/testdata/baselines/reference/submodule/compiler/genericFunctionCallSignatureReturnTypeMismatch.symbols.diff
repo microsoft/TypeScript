@@ -1,0 +1,20 @@
+--- old.genericFunctionCallSignatureReturnTypeMismatch.symbols
++++ new.genericFunctionCallSignatureReturnTypeMismatch.symbols
+@@= skipped -22, +22 lines =@@
+ 
+ var s = f("str").toUpperCase();
+ >s : Symbol(s, Decl(genericFunctionCallSignatureReturnTypeMismatch.ts, 7, 3))
+->f("str").toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>f("str").toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >f : Symbol(f, Decl(genericFunctionCallSignatureReturnTypeMismatch.ts, 2, 3))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ 
+ console.log(s);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >s : Symbol(s, Decl(genericFunctionCallSignatureReturnTypeMismatch.ts, 7, 3))
+ 

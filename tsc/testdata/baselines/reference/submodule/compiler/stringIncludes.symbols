@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/stringIncludes.ts] ////
+
+=== stringIncludes.ts ===
+var includes: boolean;
+>includes : Symbol(includes, Decl(stringIncludes.ts, 0, 3))
+
+includes = "abcde".includes("cd");
+>includes : Symbol(includes, Decl(stringIncludes.ts, 0, 3))
+
+includes = "abcde".includes("cd", 2);
+>includes : Symbol(includes, Decl(stringIncludes.ts, 0, 3))
+

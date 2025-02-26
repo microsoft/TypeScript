@@ -1,0 +1,36 @@
+--- old.typePredicateFreshLiteralWidening.symbols
++++ new.typePredicateFreshLiteralWidening.symbols
+@@= skipped -74, +74 lines =@@
+ 
+ const filteredValues2 = values2.filter(isNotNull);
+ >filteredValues2 : Symbol(filteredValues2, Decl(typePredicateFreshLiteralWidening.ts, 22, 5))
+->values2.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>values2.filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >values2 : Symbol(values2, Decl(typePredicateFreshLiteralWidening.ts, 21, 5))
+->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >isNotNull : Symbol(isNotNull, Decl(typePredicateFreshLiteralWidening.ts, 13, 5))
+ 
+ const values1 = [item1, item2, item3].map(item => item.value);
+ >values1 : Symbol(values1, Decl(typePredicateFreshLiteralWidening.ts, 24, 5))
+->[item1, item2, item3].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>[item1, item2, item3].map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >item1 : Symbol(item1, Decl(typePredicateFreshLiteralWidening.ts, 17, 5))
+ >item2 : Symbol(item2, Decl(typePredicateFreshLiteralWidening.ts, 18, 5))
+ >item3 : Symbol(item3, Decl(typePredicateFreshLiteralWidening.ts, 19, 5))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >item : Symbol(item, Decl(typePredicateFreshLiteralWidening.ts, 24, 42))
+ >item.value : Symbol(value, Decl(typePredicateFreshLiteralWidening.ts, 17, 33), Decl(typePredicateFreshLiteralWidening.ts, 18, 33), Decl(typePredicateFreshLiteralWidening.ts, 19, 33))
+ >item : Symbol(item, Decl(typePredicateFreshLiteralWidening.ts, 24, 42))
+@@= skipped -19, +19 lines =@@
+ 
+ const filteredValues1 = values1.filter(isNotNull);
+ >filteredValues1 : Symbol(filteredValues1, Decl(typePredicateFreshLiteralWidening.ts, 25, 5))
+->values1.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>values1.filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >values1 : Symbol(values1, Decl(typePredicateFreshLiteralWidening.ts, 24, 5))
+->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >isNotNull : Symbol(isNotNull, Decl(typePredicateFreshLiteralWidening.ts, 13, 5))
+ 

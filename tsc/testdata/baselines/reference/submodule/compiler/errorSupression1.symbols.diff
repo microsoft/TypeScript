@@ -1,0 +1,11 @@
+--- old.errorSupression1.symbols
++++ new.errorSupression1.symbols
+@@= skipped -2, +2 lines =@@
+ === errorSupression1.ts ===
+ class Foo { static bar() { return "x"; } }
+ >Foo : Symbol(Foo, Decl(errorSupression1.ts, 0, 0))
+->bar : Symbol(Foo.bar, Decl(errorSupression1.ts, 0, 11))
++>bar : Symbol(bar, Decl(errorSupression1.ts, 0, 11))
+ 
+ var baz = Foo.b;
+ >baz : Symbol(baz, Decl(errorSupression1.ts, 2, 3))

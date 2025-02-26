@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty39.ts] ////
+
+=== symbolProperty39.ts ===
+class C {
+>C : Symbol(C, Decl(symbolProperty39.ts, 0, 0))
+
+    [Symbol.iterator](x: string): string;
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(symbolProperty39.ts, 0, 9))
+>x : Symbol(x, Decl(symbolProperty39.ts, 1, 22))
+
+    [Symbol.iterator](x: number): number;
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(symbolProperty39.ts, 1, 41))
+>x : Symbol(x, Decl(symbolProperty39.ts, 2, 22))
+
+    [Symbol.iterator](x: any) {
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(symbolProperty39.ts, 2, 41))
+>x : Symbol(x, Decl(symbolProperty39.ts, 3, 22))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+    [Symbol.iterator](x: any) {
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(symbolProperty39.ts, 5, 5))
+>x : Symbol(x, Decl(symbolProperty39.ts, 6, 22))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+}

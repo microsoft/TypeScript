@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/exportEqualsAmd.ts] ////
+
+=== exportEqualsAmd.ts ===
+export = { ["hi"]: "there" };
+>["hi"] : Symbol(hi, Decl(exportEqualsAmd.ts, 0, 10))
+>"hi" : Symbol(hi, Decl(exportEqualsAmd.ts, 0, 10))
+

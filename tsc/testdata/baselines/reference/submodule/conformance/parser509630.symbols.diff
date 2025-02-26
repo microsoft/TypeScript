@@ -1,0 +1,11 @@
+--- old.parser509630.symbols
++++ new.parser509630.symbols
+@@= skipped -4, +4 lines =@@
+ >Type : Symbol(Type, Decl(parser509630.ts, 0, 0))
+ 
+     public examples = [ // typing here
+->examples : Symbol(Type.examples, Decl(parser509630.ts, 0, 12))
++>examples : Symbol(examples, Decl(parser509630.ts, 0, 12))
+ }
+ class Any extends Type {
+ >Any : Symbol(Any, Decl(parser509630.ts, 2, 1))

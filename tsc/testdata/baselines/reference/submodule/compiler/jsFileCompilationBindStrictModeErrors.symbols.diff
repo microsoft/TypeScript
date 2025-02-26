@@ -1,0 +1,16 @@
+--- old.jsFileCompilationBindStrictModeErrors.symbols
++++ new.jsFileCompilationBindStrictModeErrors.symbols
+@@= skipped -40, +40 lines =@@
+ >c : Symbol(c, Decl(b.js, 0, 0))
+ 
+     a(eval) { //error
+->a : Symbol(c.a, Decl(b.js, 1, 9))
++>a : Symbol(a, Decl(b.js, 1, 9))
+ >eval : Symbol(eval, Decl(b.js, 2, 6))
+     }
+     method() {
+->method : Symbol(c.method, Decl(b.js, 3, 5))
++>method : Symbol(method, Decl(b.js, 3, 5))
+ 
+         var let = 10; // error
+ >let : Symbol(let, Decl(b.js, 5, 11))

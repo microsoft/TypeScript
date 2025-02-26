@@ -1,0 +1,13 @@
+--- old.computedPropertiesInDestructuring1_ES6.symbols
++++ new.computedPropertiesInDestructuring1_ES6.symbols
+@@= skipped -86, +86 lines =@@
+ >bar : Symbol(bar, Decl(computedPropertiesInDestructuring1_ES6.ts, 24, 17))
+ 
+ ({["bar"]: bar2} = {bar: "bar"});
+->["bar"] : Symbol(["bar"], Decl(computedPropertiesInDestructuring1_ES6.ts, 26, 2))
+->"bar" : Symbol(["bar"], Decl(computedPropertiesInDestructuring1_ES6.ts, 26, 2))
++>["bar"] : Symbol(bar, Decl(computedPropertiesInDestructuring1_ES6.ts, 26, 2))
++>"bar" : Symbol(bar, Decl(computedPropertiesInDestructuring1_ES6.ts, 26, 2))
+ >bar2 : Symbol(bar2, Decl(computedPropertiesInDestructuring1_ES6.ts, 4, 5))
+ >bar : Symbol(bar, Decl(computedPropertiesInDestructuring1_ES6.ts, 26, 20))
+ 

@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty57.ts] ////
+
+=== symbolProperty57.ts ===
+var obj = {
+>obj : Symbol(obj, Decl(symbolProperty57.ts, 0, 3))
+
+    [Symbol.iterator]: 0
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(symbolProperty57.ts, 0, 11))
+
+};
+
+// Should give type 'any'.
+obj[Symbol["nonsense"]];
+>obj : Symbol(obj, Decl(symbolProperty57.ts, 0, 3))
+

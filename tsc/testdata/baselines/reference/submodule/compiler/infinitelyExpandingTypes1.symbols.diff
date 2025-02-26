@@ -1,0 +1,42 @@
+--- old.infinitelyExpandingTypes1.symbols
++++ new.infinitelyExpandingTypes1.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(infinitelyExpandingTypes1.ts, 0, 15))
+ 
+     data: T;
+->data : Symbol(List.data, Decl(infinitelyExpandingTypes1.ts, 0, 19))
++>data : Symbol(data, Decl(infinitelyExpandingTypes1.ts, 0, 19))
+ >T : Symbol(T, Decl(infinitelyExpandingTypes1.ts, 0, 15))
+ 
+     next: List<T>;
+->next : Symbol(List.next, Decl(infinitelyExpandingTypes1.ts, 1, 12))
++>next : Symbol(next, Decl(infinitelyExpandingTypes1.ts, 1, 12))
+ >List : Symbol(List, Decl(infinitelyExpandingTypes1.ts, 0, 0))
+ >T : Symbol(T, Decl(infinitelyExpandingTypes1.ts, 0, 15))
+ 
+     owner: List<List<T>>;
+->owner : Symbol(List.owner, Decl(infinitelyExpandingTypes1.ts, 2, 18))
++>owner : Symbol(owner, Decl(infinitelyExpandingTypes1.ts, 2, 18))
+ >List : Symbol(List, Decl(infinitelyExpandingTypes1.ts, 0, 0))
+ >List : Symbol(List, Decl(infinitelyExpandingTypes1.ts, 0, 0))
+ >T : Symbol(T, Decl(infinitelyExpandingTypes1.ts, 0, 15))
+@@= skipped -21, +21 lines =@@
+ >T : Symbol(T, Decl(infinitelyExpandingTypes1.ts, 7, 17))
+ 
+     data: T;
+->data : Symbol(MyList.data, Decl(infinitelyExpandingTypes1.ts, 7, 21))
++>data : Symbol(data, Decl(infinitelyExpandingTypes1.ts, 7, 21))
+ >T : Symbol(T, Decl(infinitelyExpandingTypes1.ts, 7, 17))
+ 
+     next: MyList<T>;
+->next : Symbol(MyList.next, Decl(infinitelyExpandingTypes1.ts, 8, 12))
++>next : Symbol(next, Decl(infinitelyExpandingTypes1.ts, 8, 12))
+ >MyList : Symbol(MyList, Decl(infinitelyExpandingTypes1.ts, 4, 1))
+ >T : Symbol(T, Decl(infinitelyExpandingTypes1.ts, 7, 17))
+ 
+     owner: MyList<MyList<T>>;
+->owner : Symbol(MyList.owner, Decl(infinitelyExpandingTypes1.ts, 9, 20))
++>owner : Symbol(owner, Decl(infinitelyExpandingTypes1.ts, 9, 20))
+ >MyList : Symbol(MyList, Decl(infinitelyExpandingTypes1.ts, 4, 1))
+ >MyList : Symbol(MyList, Decl(infinitelyExpandingTypes1.ts, 4, 1))
+ >T : Symbol(T, Decl(infinitelyExpandingTypes1.ts, 7, 17))

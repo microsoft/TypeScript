@@ -1,0 +1,12 @@
+--- old.memberAccessOnConstructorType.symbols
++++ new.memberAccessOnConstructorType.symbols
+@@= skipped -4, +4 lines =@@
+ >f : Symbol(f, Decl(memberAccessOnConstructorType.ts, 0, 3))
+ 
+ f.arguments == 0;
+->f.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
++>f.arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
+ >f : Symbol(f, Decl(memberAccessOnConstructorType.ts, 0, 3))
+->arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
++>arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
+ 

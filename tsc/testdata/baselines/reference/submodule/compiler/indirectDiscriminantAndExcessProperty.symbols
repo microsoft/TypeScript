@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/indirectDiscriminantAndExcessProperty.ts] ////
+
+=== indirectDiscriminantAndExcessProperty.ts ===
+export type Blah =
+>Blah : Symbol(Blah, Decl(indirectDiscriminantAndExcessProperty.ts, 0, 0))
+
+    | { type: "foo", abc: string }
+>type : Symbol(type, Decl(indirectDiscriminantAndExcessProperty.ts, 1, 7))
+>abc : Symbol(abc, Decl(indirectDiscriminantAndExcessProperty.ts, 1, 20))
+
+    | { type: "bar", xyz: number, extra: any };
+>type : Symbol(type, Decl(indirectDiscriminantAndExcessProperty.ts, 2, 7))
+>xyz : Symbol(xyz, Decl(indirectDiscriminantAndExcessProperty.ts, 2, 20))
+>extra : Symbol(extra, Decl(indirectDiscriminantAndExcessProperty.ts, 2, 33))
+
+declare function thing(blah: Blah): void;
+>thing : Symbol(thing, Decl(indirectDiscriminantAndExcessProperty.ts, 2, 47))
+>blah : Symbol(blah, Decl(indirectDiscriminantAndExcessProperty.ts, 4, 23))
+>Blah : Symbol(Blah, Decl(indirectDiscriminantAndExcessProperty.ts, 0, 0))
+
+let foo1 = "foo";
+>foo1 : Symbol(foo1, Decl(indirectDiscriminantAndExcessProperty.ts, 6, 3))
+
+thing({
+>thing : Symbol(thing, Decl(indirectDiscriminantAndExcessProperty.ts, 2, 47))
+
+    type: foo1,
+>type : Symbol(type, Decl(indirectDiscriminantAndExcessProperty.ts, 7, 7))
+>foo1 : Symbol(foo1, Decl(indirectDiscriminantAndExcessProperty.ts, 6, 3))
+
+    abc: "hello!"
+>abc : Symbol(abc, Decl(indirectDiscriminantAndExcessProperty.ts, 8, 15))
+
+});
+
+let foo2 = "foo";
+>foo2 : Symbol(foo2, Decl(indirectDiscriminantAndExcessProperty.ts, 12, 3))
+
+thing({
+>thing : Symbol(thing, Decl(indirectDiscriminantAndExcessProperty.ts, 2, 47))
+
+    type: foo2,
+>type : Symbol(type, Decl(indirectDiscriminantAndExcessProperty.ts, 13, 7))
+>foo2 : Symbol(foo2, Decl(indirectDiscriminantAndExcessProperty.ts, 12, 3))
+
+    abc: "hello!",
+>abc : Symbol(abc, Decl(indirectDiscriminantAndExcessProperty.ts, 14, 15))
+
+    extra: 123,
+>extra : Symbol(extra, Decl(indirectDiscriminantAndExcessProperty.ts, 15, 18))
+
+});
+
+let bar = "bar";
+>bar : Symbol(bar, Decl(indirectDiscriminantAndExcessProperty.ts, 19, 3))
+
+thing({
+>thing : Symbol(thing, Decl(indirectDiscriminantAndExcessProperty.ts, 2, 47))
+
+    type: bar,
+>type : Symbol(type, Decl(indirectDiscriminantAndExcessProperty.ts, 20, 7))
+>bar : Symbol(bar, Decl(indirectDiscriminantAndExcessProperty.ts, 19, 3))
+
+    xyz: 123,
+>xyz : Symbol(xyz, Decl(indirectDiscriminantAndExcessProperty.ts, 21, 14))
+
+    extra: 123,
+>extra : Symbol(extra, Decl(indirectDiscriminantAndExcessProperty.ts, 22, 13))
+
+});
+

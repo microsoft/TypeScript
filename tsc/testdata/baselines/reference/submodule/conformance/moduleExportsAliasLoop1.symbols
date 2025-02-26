@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/salsa/moduleExportsAliasLoop1.ts] ////
+
+=== x.js ===
+exports.fn1();
+exports.fn2 = Math.min;
+>Math.min : Symbol(min, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>min : Symbol(min, Decl(lib.es5.d.ts, --, --))
+

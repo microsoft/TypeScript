@@ -1,0 +1,19 @@
+--- old.strictSubtypeAndNarrowing.symbols
++++ new.strictSubtypeAndNarrowing.symbols
+@@= skipped -563, +563 lines =@@
+ >Free : Symbol(Free, Decl(strictSubtypeAndNarrowing.ts, 209, 1))
+ 
+     premium: false;
+->premium : Symbol(Free.premium, Decl(strictSubtypeAndNarrowing.ts, 213, 16))
++>premium : Symbol(premium, Decl(strictSubtypeAndNarrowing.ts, 213, 16))
+ }
+ 
+ interface Premium {
+ >Premium : Symbol(Premium, Decl(strictSubtypeAndNarrowing.ts, 215, 1))
+ 
+     premium: true;
+->premium : Symbol(Premium.premium, Decl(strictSubtypeAndNarrowing.ts, 217, 19))
++>premium : Symbol(premium, Decl(strictSubtypeAndNarrowing.ts, 217, 19))
+ }
+ 
+ type Union = { premium: false } | { premium: true };

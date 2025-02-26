@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/declarationEmitInferredTypeAlias1.ts] ////
+
+=== 0.ts ===
+{
+    type Data = string | boolean;
+>Data : Symbol(Data, Decl(0.ts, 0, 1))
+
+    let obj: Data = true;
+>obj : Symbol(obj, Decl(0.ts, 2, 7))
+>Data : Symbol(Data, Decl(0.ts, 0, 1))
+}
+export { }
+
+=== 1.ts ===
+let v = "str" || true;
+>v : Symbol(v, Decl(1.ts, 0, 3))
+
+export { v }
+>v : Symbol(v, Decl(1.ts, 1, 8))
+

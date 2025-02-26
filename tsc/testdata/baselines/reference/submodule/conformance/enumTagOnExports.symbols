@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/jsdoc/enumTagOnExports.ts] ////
+
+=== enumTagOnExports.js ===
+
+/** @enum {number} */
+exports.a = {};
+
+/** @enum {string} */
+module.exports.b = {};
+

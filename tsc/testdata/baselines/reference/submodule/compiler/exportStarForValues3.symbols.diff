@@ -1,0 +1,35 @@
+--- old.exportStarForValues3.symbols
++++ new.exportStarForValues3.symbols
+@@= skipped -2, +2 lines =@@
+ === file1.ts ===
+ export interface Foo { x }
+ >Foo : Symbol(Foo, Decl(file1.ts, 0, 0))
+->x : Symbol(Foo.x, Decl(file1.ts, 0, 22))
++>x : Symbol(x, Decl(file1.ts, 0, 22))
+ 
+ === file2.ts ===
+ export interface A { x }
+ >A : Symbol(A, Decl(file2.ts, 0, 0))
+->x : Symbol(A.x, Decl(file2.ts, 0, 20))
++>x : Symbol(x, Decl(file2.ts, 0, 20))
+ 
+ export * from "file1"
+ var x = 1;
+@@= skipped -14, +14 lines =@@
+ === file3.ts ===
+ export interface B { x }
+ >B : Symbol(B, Decl(file3.ts, 0, 0))
+->x : Symbol(B.x, Decl(file3.ts, 0, 20))
++>x : Symbol(x, Decl(file3.ts, 0, 20))
+ 
+ export * from "file1"
+ var x = 1;
+@@= skipped -9, +9 lines =@@
+ === file4.ts ===
+ export interface C { x }
+ >C : Symbol(C, Decl(file4.ts, 0, 0))
+->x : Symbol(C.x, Decl(file4.ts, 0, 20))
++>x : Symbol(x, Decl(file4.ts, 0, 20))
+ 
+ export * from "file2"
+ export * from "file3"

@@ -1,0 +1,9 @@
+--- old.exportDefaultClassWithStaticPropertyAssignmentsInES6.symbols
++++ new.exportDefaultClassWithStaticPropertyAssignmentsInES6.symbols
+@@= skipped -2, +2 lines =@@
+ === exportDefaultClassWithStaticPropertyAssignmentsInES6.ts ===
+ export default class {
+     static z: string = "Foo";
+->z : Symbol(default.z, Decl(exportDefaultClassWithStaticPropertyAssignmentsInES6.ts, 0, 22))
++>z : Symbol(z, Decl(exportDefaultClassWithStaticPropertyAssignmentsInES6.ts, 0, 22))
+ }

@@ -1,0 +1,10 @@
+--- old.moduleNoneErrors.symbols
++++ new.moduleNoneErrors.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(a.ts, 0, 0))
+ 
+     foo: string;
+->foo : Symbol(Foo.foo, Decl(a.ts, 0, 18))
++>foo : Symbol(foo, Decl(a.ts, 0, 18))
+ }
+ 

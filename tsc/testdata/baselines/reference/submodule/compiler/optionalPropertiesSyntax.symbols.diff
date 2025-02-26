@@ -1,0 +1,67 @@
+--- old.optionalPropertiesSyntax.symbols
++++ new.optionalPropertiesSyntax.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     //functions signatures can be optional
+     fn(): void;
+->fn : Symbol(fnSigs.fn, Decl(optionalPropertiesSyntax.ts, 0, 18), Decl(optionalPropertiesSyntax.ts, 2, 15))
++>fn : Symbol(fn, Decl(optionalPropertiesSyntax.ts, 0, 18), Decl(optionalPropertiesSyntax.ts, 2, 15))
+ 
+     fn?(): void; //err
+->fn : Symbol(fnSigs.fn, Decl(optionalPropertiesSyntax.ts, 0, 18), Decl(optionalPropertiesSyntax.ts, 2, 15))
++>fn : Symbol(fn, Decl(optionalPropertiesSyntax.ts, 0, 18), Decl(optionalPropertiesSyntax.ts, 2, 15))
+ 
+     fn2?(): void;
+->fn2 : Symbol(fnSigs.fn2, Decl(optionalPropertiesSyntax.ts, 3, 16))
++>fn2 : Symbol(fn2, Decl(optionalPropertiesSyntax.ts, 3, 16))
+ }
+ 
+ interface callSig {
+@@= skipped -15, +15 lines =@@
+     //Call signatures can't be optional
+     (): any;
+     ()?: any; //err
+->any : Symbol(callSig.any, Decl(optionalPropertiesSyntax.ts, 10, 8))
++>any : Symbol(any, Decl(optionalPropertiesSyntax.ts, 10, 8))
+ 
+     ?(): any; //err
+ }
+@@= skipped -11, +11 lines =@@
+     //Construct signatures can't be optional
+     new (): any;
+     new ()?: any; //err
+->any : Symbol(constructSig.any, Decl(optionalPropertiesSyntax.ts, 17, 12))
++>any : Symbol(any, Decl(optionalPropertiesSyntax.ts, 17, 12))
+ 
+     new ?(): any; //err
+->new : Symbol(constructSig.new, Decl(optionalPropertiesSyntax.ts, 17, 17))
++>new : Symbol(new, Decl(optionalPropertiesSyntax.ts, 17, 17))
+ }
+ 
+ interface propertySig {
+@@= skipped -11, +11 lines =@@
+ 
+     //Property signatures can be optional
+     prop: any;
+->prop : Symbol(propertySig.prop, Decl(optionalPropertiesSyntax.ts, 21, 23), Decl(optionalPropertiesSyntax.ts, 23, 14))
++>prop : Symbol(prop, Decl(optionalPropertiesSyntax.ts, 21, 23), Decl(optionalPropertiesSyntax.ts, 23, 14))
+ 
+     prop?: any;
+->prop : Symbol(propertySig.prop, Decl(optionalPropertiesSyntax.ts, 21, 23), Decl(optionalPropertiesSyntax.ts, 23, 14))
++>prop : Symbol(prop, Decl(optionalPropertiesSyntax.ts, 21, 23), Decl(optionalPropertiesSyntax.ts, 23, 14))
+ 
+     prop2?: any;
+->prop2 : Symbol(propertySig.prop2, Decl(optionalPropertiesSyntax.ts, 24, 15))
++>prop2 : Symbol(prop2, Decl(optionalPropertiesSyntax.ts, 24, 15))
+ }
+ 
+ interface indexSig {
+@@= skipped -18, +18 lines =@@
+ 
+     [idx: number]?: any; //err
+ >idx : Symbol(idx, Decl(optionalPropertiesSyntax.ts, 31, 5))
+->any : Symbol(indexSig.any, Decl(optionalPropertiesSyntax.ts, 31, 19))
++>any : Symbol(any, Decl(optionalPropertiesSyntax.ts, 31, 19))
+ 
+     ? [idx: number]: any; //err
+ >idx : Symbol(idx, Decl(optionalPropertiesSyntax.ts, 32, 7))

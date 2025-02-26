@@ -1,0 +1,156 @@
+--- old.templateLiteralTypes4.symbols
++++ new.templateLiteralTypes4.symbols
+@@= skipped -128, +128 lines =@@
+ // infer from literal enums
+ const enum StringLiteralEnum { Zero = "0", True = "true", False = "false", Undefined = "undefined", Null = "null" }
+ >StringLiteralEnum : Symbol(StringLiteralEnum, Decl(templateLiteralTypes4.ts, 32, 77))
+->Zero : Symbol(StringLiteralEnum.Zero, Decl(templateLiteralTypes4.ts, 35, 30))
+->True : Symbol(StringLiteralEnum.True, Decl(templateLiteralTypes4.ts, 35, 42))
+->False : Symbol(StringLiteralEnum.False, Decl(templateLiteralTypes4.ts, 35, 57))
+->Undefined : Symbol(StringLiteralEnum.Undefined, Decl(templateLiteralTypes4.ts, 35, 74))
+->Null : Symbol(StringLiteralEnum.Null, Decl(templateLiteralTypes4.ts, 35, 99))
++>Zero : Symbol(Zero, Decl(templateLiteralTypes4.ts, 35, 30))
++>True : Symbol(True, Decl(templateLiteralTypes4.ts, 35, 42))
++>False : Symbol(False, Decl(templateLiteralTypes4.ts, 35, 57))
++>Undefined : Symbol(Undefined, Decl(templateLiteralTypes4.ts, 35, 74))
++>Null : Symbol(Null, Decl(templateLiteralTypes4.ts, 35, 99))
+ 
+ type TStringLiteralEnum0 = "0" extends `${infer T extends StringLiteralEnum}` ? T : never; // StringLiteralEnum.Zero
+ >TStringLiteralEnum0 : Symbol(TStringLiteralEnum0, Decl(templateLiteralTypes4.ts, 35, 115))
+@@= skipped -14, +14 lines =@@
+ 
+ const enum NumberLiteralEnum { Zero, One }
+ >NumberLiteralEnum : Symbol(NumberLiteralEnum, Decl(templateLiteralTypes4.ts, 36, 90))
+->Zero : Symbol(NumberLiteralEnum.Zero, Decl(templateLiteralTypes4.ts, 38, 30))
+->One : Symbol(NumberLiteralEnum.One, Decl(templateLiteralTypes4.ts, 38, 36))
++>Zero : Symbol(Zero, Decl(templateLiteralTypes4.ts, 38, 30))
++>One : Symbol(One, Decl(templateLiteralTypes4.ts, 38, 36))
+ 
+ type TNumberLiteralEnum0 = "0" extends `${infer T extends NumberLiteralEnum}` ? T : never; // NumberLiteralEnum.Zero
+ >TNumberLiteralEnum0 : Symbol(TNumberLiteralEnum0, Decl(templateLiteralTypes4.ts, 38, 42))
+@@= skipped -12, +12 lines =@@
+ // infer from non-literal enums
+ const enum NonLiteralEnum { Zero = NumberLiteralEnum.Zero, One = NumberLiteralEnum.One }
+ >NonLiteralEnum : Symbol(NonLiteralEnum, Decl(templateLiteralTypes4.ts, 39, 90))
+->Zero : Symbol(NonLiteralEnum.Zero, Decl(templateLiteralTypes4.ts, 42, 27))
+->NumberLiteralEnum.Zero : Symbol(NumberLiteralEnum.Zero, Decl(templateLiteralTypes4.ts, 38, 30))
++>Zero : Symbol(Zero, Decl(templateLiteralTypes4.ts, 42, 27))
++>NumberLiteralEnum.Zero : Symbol(Zero, Decl(templateLiteralTypes4.ts, 38, 30))
+ >NumberLiteralEnum : Symbol(NumberLiteralEnum, Decl(templateLiteralTypes4.ts, 36, 90))
+->Zero : Symbol(NumberLiteralEnum.Zero, Decl(templateLiteralTypes4.ts, 38, 30))
+->One : Symbol(NonLiteralEnum.One, Decl(templateLiteralTypes4.ts, 42, 58))
+->NumberLiteralEnum.One : Symbol(NumberLiteralEnum.One, Decl(templateLiteralTypes4.ts, 38, 36))
++>Zero : Symbol(Zero, Decl(templateLiteralTypes4.ts, 38, 30))
++>One : Symbol(One, Decl(templateLiteralTypes4.ts, 42, 58))
++>NumberLiteralEnum.One : Symbol(One, Decl(templateLiteralTypes4.ts, 38, 36))
+ >NumberLiteralEnum : Symbol(NumberLiteralEnum, Decl(templateLiteralTypes4.ts, 36, 90))
+->One : Symbol(NumberLiteralEnum.One, Decl(templateLiteralTypes4.ts, 38, 36))
++>One : Symbol(One, Decl(templateLiteralTypes4.ts, 38, 36))
+ 
+ type TNonLiteralEnum0 = "0" extends `${infer T extends NonLiteralEnum}` ? T : never; // 0
+ >TNonLiteralEnum0 : Symbol(TNonLiteralEnum0, Decl(templateLiteralTypes4.ts, 42, 88))
+@@= skipped -434, +434 lines =@@
+ >PExclude3 : Symbol(PExclude3, Decl(templateLiteralTypes4.ts, 210, 73))
+ >T : Symbol(T, Decl(templateLiteralTypes4.ts, 211, 37))
+ >NumberLiteralEnum : Symbol(NumberLiteralEnum, Decl(templateLiteralTypes4.ts, 36, 90))
+->One : Symbol(NumberLiteralEnum.One, Decl(templateLiteralTypes4.ts, 38, 36))
++>One : Symbol(One, Decl(templateLiteralTypes4.ts, 38, 36))
+ >T : Symbol(T, Decl(templateLiteralTypes4.ts, 211, 37))
+ 
+ type PExclude4 = "100000000000000000000000" extends `${infer T extends number | bigint}` ? T : never; // 100000000000000000000000n
+@@= skipped -84, +84 lines =@@
+ >FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 237, 55))
+ 
+     readonly name: string;
+->name : Symbol(FieldDefinition.name, Decl(templateLiteralTypes4.ts, 239, 27))
++>name : Symbol(name, Decl(templateLiteralTypes4.ts, 239, 27))
+ 
+     readonly type: "i8" | "i16" | "i32" | "i64" | "u8" | "u16" | "u32" | "u64" | "f32" | "f64";
+->type : Symbol(FieldDefinition.type, Decl(templateLiteralTypes4.ts, 240, 26))
++>type : Symbol(type, Decl(templateLiteralTypes4.ts, 240, 26))
+ }
+ 
+ type FieldType<T extends FieldDefinition["type"]> =
+@@= skipped -62, +62 lines =@@
+ 
+     // get/set a field by name
+     get<K extends TDef[number]["name"]>(key: K): FieldType<Extract<TDef[number], { readonly name: K }>["type"]>;
+->get : Symbol(TypedObjectMembers.get, Decl(templateLiteralTypes4.ts, 260, 71))
++>get : Symbol(get, Decl(templateLiteralTypes4.ts, 260, 71))
+ >K : Symbol(K, Decl(templateLiteralTypes4.ts, 262, 8))
+ >TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 260, 29))
+ >key : Symbol(key, Decl(templateLiteralTypes4.ts, 262, 40))
+@@= skipped -12, +12 lines =@@
+ >K : Symbol(K, Decl(templateLiteralTypes4.ts, 262, 8))
+ 
+     set<K extends TDef[number]["name"]>(key: K, value: FieldType<Extract<TDef[number], { readonly name: K }>["type"]>): void;
+->set : Symbol(TypedObjectMembers.set, Decl(templateLiteralTypes4.ts, 262, 112))
++>set : Symbol(set, Decl(templateLiteralTypes4.ts, 262, 112))
+ >K : Symbol(K, Decl(templateLiteralTypes4.ts, 263, 8))
+ >TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 260, 29))
+ >key : Symbol(key, Decl(templateLiteralTypes4.ts, 263, 40))
+@@= skipped -14, +14 lines =@@
+ 
+     // get/set a field by index
+     getIndex<I extends IndicesOf<TDef>>(index: I): FieldType<Extract<TDef[I], FieldDefinition>["type"]>;
+->getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 263, 125))
++>getIndex : Symbol(getIndex, Decl(templateLiteralTypes4.ts, 263, 125))
+ >I : Symbol(I, Decl(templateLiteralTypes4.ts, 266, 13))
+ >IndicesOf : Symbol(IndicesOf, Decl(templateLiteralTypes4.ts, 236, 84))
+ >TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 260, 29))
+@@= skipped -13, +13 lines =@@
+ >FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 237, 55))
+ 
+     setIndex<I extends IndicesOf<TDef>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>): void;
+->setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 266, 104))
++>setIndex : Symbol(setIndex, Decl(templateLiteralTypes4.ts, 266, 104))
+ >I : Symbol(I, Decl(templateLiteralTypes4.ts, 267, 13))
+ >IndicesOf : Symbol(IndicesOf, Decl(templateLiteralTypes4.ts, 236, 84))
+ >TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 260, 29))
+@@= skipped -51, +51 lines =@@
+ >Point : Symbol(Point, Decl(templateLiteralTypes4.ts, 273, 38))
+ 
+ p.getIndex(0); // ok, 0 is a valid index
+->p.getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 263, 125))
++>p.getIndex : Symbol(getIndex, Decl(templateLiteralTypes4.ts, 263, 125))
+ >p : Symbol(p, Decl(templateLiteralTypes4.ts, 281, 13))
+->getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 263, 125))
++>getIndex : Symbol(getIndex, Decl(templateLiteralTypes4.ts, 263, 125))
+ 
+ p.getIndex(1); // ok, 1 is a valid index
+->p.getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 263, 125))
++>p.getIndex : Symbol(getIndex, Decl(templateLiteralTypes4.ts, 263, 125))
+ >p : Symbol(p, Decl(templateLiteralTypes4.ts, 281, 13))
+->getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 263, 125))
++>getIndex : Symbol(getIndex, Decl(templateLiteralTypes4.ts, 263, 125))
+ 
+ p.getIndex(2); // error, 2 is not a valid index
+->p.getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 263, 125))
++>p.getIndex : Symbol(getIndex, Decl(templateLiteralTypes4.ts, 263, 125))
+ >p : Symbol(p, Decl(templateLiteralTypes4.ts, 281, 13))
+->getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 263, 125))
++>getIndex : Symbol(getIndex, Decl(templateLiteralTypes4.ts, 263, 125))
+ 
+ p.setIndex(0, 0); // ok, 0 is a valid index
+->p.setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 266, 104))
++>p.setIndex : Symbol(setIndex, Decl(templateLiteralTypes4.ts, 266, 104))
+ >p : Symbol(p, Decl(templateLiteralTypes4.ts, 281, 13))
+->setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 266, 104))
++>setIndex : Symbol(setIndex, Decl(templateLiteralTypes4.ts, 266, 104))
+ 
+ p.setIndex(1, 0); // ok, 1 is a valid index
+->p.setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 266, 104))
++>p.setIndex : Symbol(setIndex, Decl(templateLiteralTypes4.ts, 266, 104))
+ >p : Symbol(p, Decl(templateLiteralTypes4.ts, 281, 13))
+->setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 266, 104))
++>setIndex : Symbol(setIndex, Decl(templateLiteralTypes4.ts, 266, 104))
+ 
+ p.setIndex(2, 3); // error, 2 is not a valid index
+->p.setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 266, 104))
++>p.setIndex : Symbol(setIndex, Decl(templateLiteralTypes4.ts, 266, 104))
+ >p : Symbol(p, Decl(templateLiteralTypes4.ts, 281, 13))
+->setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 266, 104))
++>setIndex : Symbol(setIndex, Decl(templateLiteralTypes4.ts, 266, 104))
+ 
+ // function inference
+ declare function f1<T extends string | number>(s: `**${T}**`): T;

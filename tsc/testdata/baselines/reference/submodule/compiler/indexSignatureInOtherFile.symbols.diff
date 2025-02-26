@@ -1,0 +1,37 @@
+--- old.indexSignatureInOtherFile.symbols
++++ new.indexSignatureInOtherFile.symbols
+@@= skipped -14, +14 lines =@@
+ >T : Symbol(T, Decl(other.ts, 0, 17), Decl(other.ts, 12, 17), Decl(other.ts, 17, 17))
+ 
+   length: number;
+->length : Symbol(Array1.length, Decl(other.ts, 0, 21))
++>length : Symbol(length, Decl(other.ts, 0, 21))
+ 
+   [n: number]: T;
+ >n : Symbol(n, Decl(other.ts, 2, 3))
+@@= skipped -25, +25 lines =@@
+ >T : Symbol(T, Decl(other.ts, 0, 17), Decl(other.ts, 12, 17), Decl(other.ts, 17, 17))
+ 
+   [Symbol.iterator](): IterableIterator<T>;
+->[Symbol.iterator] : Symbol(Array1[Symbol.iterator], Decl(other.ts, 12, 21))
+->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+->IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(other.ts, 12, 21))
++>IterableIterator : Symbol(IterableIterator)
+ >T : Symbol(T, Decl(other.ts, 0, 17), Decl(other.ts, 12, 17), Decl(other.ts, 17, 17))
+ }
+ 
+@@= skipped -18, +15 lines =@@
+    * when they will be absent when used in a 'with' statement.
+    */
+   [Symbol.unscopables](): {
+->[Symbol.unscopables] : Symbol(Array1[Symbol.unscopables], Decl(other.ts, 17, 21))
+->Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>[Symbol.unscopables] : Symbol([Symbol.unscopables], Decl(other.ts, 17, 21))
+ 
+       copyWithin: boolean;
+ >copyWithin : Symbol(copyWithin, Decl(other.ts, 22, 27))

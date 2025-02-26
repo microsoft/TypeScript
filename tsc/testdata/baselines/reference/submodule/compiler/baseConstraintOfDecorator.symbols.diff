@@ -1,0 +1,11 @@
+--- old.baseConstraintOfDecorator.symbols
++++ new.baseConstraintOfDecorator.symbols
+@@= skipped -30, +30 lines =@@
+ 
+ class MyClass { private x; }
+ >MyClass : Symbol(MyClass, Decl(baseConstraintOfDecorator.ts, 7, 1))
+->x : Symbol(MyClass.x, Decl(baseConstraintOfDecorator.ts, 9, 15))
++>x : Symbol(x, Decl(baseConstraintOfDecorator.ts, 9, 15))
+ 
+ export function classExtender2<TFunction extends new (...args: string[]) => MyClass>(superClass: TFunction, _instanceModifier: (instance: any, args: any[]) => void): TFunction {
+ >classExtender2 : Symbol(classExtender2, Decl(baseConstraintOfDecorator.ts, 9, 28))

@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/moduleSameValueDuplicateExportedBindings2.ts] ////
+
+=== a.ts ===
+
+export * from "./b";
+export * from "./c";
+
+=== b.ts ===
+export {Animals} from "./c";
+>Animals : Symbol(Animals, Decl(b.ts, 0, 8))
+
+=== c.ts ===
+export enum Animals {
+>Animals : Symbol(Animals, Decl(c.ts, 0, 0))
+
+	Cat,
+>Cat : Symbol(Cat, Decl(c.ts, 0, 21))
+
+	Dog
+>Dog : Symbol(Dog, Decl(c.ts, 1, 5))
+
+};

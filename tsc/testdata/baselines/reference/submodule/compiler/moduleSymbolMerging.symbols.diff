@@ -1,0 +1,11 @@
+--- old.moduleSymbolMerging.symbols
++++ new.moduleSymbolMerging.symbols
+@@= skipped -10, +10 lines =@@
+ 	export function f(): A.I { return null; }
+ >f : Symbol(f, Decl(B.ts, 2, 10))
+ >A : Symbol(A, Decl(A.ts, 0, 0), Decl(B.ts, 0, 0))
+->I : Symbol(A.I, Decl(A.ts, 0, 10))
++>I : Symbol(I, Decl(A.ts, 0, 10))
+ }
+ 
+ 

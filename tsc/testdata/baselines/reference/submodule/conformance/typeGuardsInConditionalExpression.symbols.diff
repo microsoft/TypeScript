@@ -1,0 +1,54 @@
+--- old.typeGuardsInConditionalExpression.symbols
++++ new.typeGuardsInConditionalExpression.symbols
+@@= skipped -15, +15 lines =@@
+ >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 7, 13))
+ 
+         ? x.length // string
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 7, 13))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+         : x++; // number
+ >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 7, 13))
+@@= skipped -137, +137 lines =@@
+ 
+         ? ((y = x.length) && x === "hello") // boolean
+ >y : Symbol(y, Decl(typeGuardsInConditionalExpression.ts, 55, 7))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 54, 14))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 54, 14))
+ 
+         : x === 10; // boolean
+@@= skipped -30, +30 lines =@@
+ >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 61, 15))
+ 
+         && x.toString()); // x is number
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 61, 15))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ }
+ function foo11(x: number | string | boolean) {
+ >foo11 : Symbol(foo11, Decl(typeGuardsInConditionalExpression.ts, 69, 1))
+@@= skipped -44, +44 lines =@@
+ 
+         ? ((x = 10) && x.toString().length) // number
+ >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 80, 15))
+->x.toString().length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString().length : Symbol(length, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 80, 15))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+         : ((b = x) // x is number | boolean
+ >b : Symbol(b, Decl(typeGuardsInConditionalExpression.ts, 82, 7))

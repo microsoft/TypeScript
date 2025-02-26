@@ -1,0 +1,28 @@
+--- old.autoAccessor7(target=es2015,usedefineforclassfields=true).symbols
++++ new.autoAccessor7(target=es2015,usedefineforclassfields=true).symbols
+@@= skipped -4, +4 lines =@@
+ >C1 : Symbol(C1, Decl(autoAccessor7.ts, 0, 0))
+ 
+     abstract accessor a: any;
+->a : Symbol(C1.a, Decl(autoAccessor7.ts, 0, 19))
++>a : Symbol(a, Decl(autoAccessor7.ts, 0, 19))
+ }
+ 
+ class C2 extends C1 {
+@@= skipped -8, +8 lines =@@
+ >C1 : Symbol(C1, Decl(autoAccessor7.ts, 0, 0))
+ 
+     accessor a = 1;
+->a : Symbol(C2.a, Decl(autoAccessor7.ts, 4, 21))
++>a : Symbol(a, Decl(autoAccessor7.ts, 4, 21))
+ }
+ 
+ class C3 extends C1 {
+@@= skipped -8, +8 lines =@@
+ >C1 : Symbol(C1, Decl(autoAccessor7.ts, 0, 0))
+ 
+     get a() { return 1; }
+->a : Symbol(C3.a, Decl(autoAccessor7.ts, 8, 21))
++>a : Symbol(a, Decl(autoAccessor7.ts, 8, 21))
+ }
+ 

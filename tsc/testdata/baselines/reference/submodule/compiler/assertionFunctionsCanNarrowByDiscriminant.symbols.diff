@@ -1,0 +1,49 @@
+--- old.assertionFunctionsCanNarrowByDiscriminant.symbols
++++ new.assertionFunctionsCanNarrowByDiscriminant.symbols
+@@= skipped -4, +4 lines =@@
+ >Cat : Symbol(Cat, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 0, 0))
+ 
+     type: 'cat';
+->type : Symbol(Cat.type, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 0, 15))
++>type : Symbol(type, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 0, 15))
+ 
+     canMeow: true;
+->canMeow : Symbol(Cat.canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 1, 16))
++>canMeow : Symbol(canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 1, 16))
+ }
+ 
+ interface Dog {
+ >Dog : Symbol(Dog, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 3, 1))
+ 
+     type: 'dog';
+->type : Symbol(Dog.type, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 5, 15))
++>type : Symbol(type, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 5, 15))
+ 
+     canBark: true;
+->canBark : Symbol(Dog.canBark, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 6, 16))
++>canBark : Symbol(canBark, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 6, 16))
+ }
+ 
+ type Animal = Cat | Dog;
+@@= skipped -44, +44 lines =@@
+ >const : Symbol(const)
+ 
+ animal.canMeow; // since is cat, should not be an error
+->animal.canMeow : Symbol(Cat.canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 1, 16))
++>animal.canMeow : Symbol(canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 1, 16))
+ >animal : Symbol(animal, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 14, 5))
+->canMeow : Symbol(Cat.canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 1, 16))
++>canMeow : Symbol(canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 1, 16))
+ 
+ const animalOrUndef = { type: 'cat', canMeow: true } as Animal | undefined;
+ >animalOrUndef : Symbol(animalOrUndef, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 19, 5))
+@@= skipped -18, +18 lines =@@
+ >const : Symbol(const)
+ 
+ animalOrUndef.canMeow; // since is cat, should not be an error
+->animalOrUndef.canMeow : Symbol(Cat.canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 1, 16))
++>animalOrUndef.canMeow : Symbol(canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 1, 16))
+ >animalOrUndef : Symbol(animalOrUndef, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 19, 5))
+->canMeow : Symbol(Cat.canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 1, 16))
++>canMeow : Symbol(canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 1, 16))
+ 

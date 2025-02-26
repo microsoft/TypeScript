@@ -1,0 +1,14 @@
+--- old.declarationEmitComputedPropertyNameSymbol2.symbols
++++ new.declarationEmitComputedPropertyNameSymbol2.symbols
+@@= skipped -11, +11 lines =@@
+ >Type : Symbol(Type, Decl(type.ts, 2, 1))
+ >x : Symbol(x, Decl(type.ts, 3, 20))
+ >[Foo.sym] : Symbol([Foo.sym], Decl(type.ts, 3, 26))
+->Foo.sym : Symbol(Foo.sym, Decl(type.ts, 1, 14))
++>Foo.sym : Symbol(sym, Decl(type.ts, 1, 14))
+ >Foo : Symbol(Foo, Decl(type.ts, 0, 0))
+->sym : Symbol(Foo.sym, Decl(type.ts, 1, 14))
++>sym : Symbol(sym, Decl(type.ts, 1, 14))
+ 
+ === index.ts ===
+ import { type Type } from "./type";

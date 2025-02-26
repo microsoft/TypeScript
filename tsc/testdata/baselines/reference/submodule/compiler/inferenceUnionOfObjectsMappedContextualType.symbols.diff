@@ -1,0 +1,13 @@
+--- old.inferenceUnionOfObjectsMappedContextualType.symbols
++++ new.inferenceUnionOfObjectsMappedContextualType.symbols
+@@= skipped -50, +50 lines =@@
+ >formatter : Symbol(formatter, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 12, 23))
+ >value : Symbol(value, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 13, 16))
+ >value : Symbol(value, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 13, 16))
+->value.toString : Symbol(Date.toString, Decl(lib.es5.d.ts, --, --))
++>value.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >value : Symbol(value, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 13, 16))
+->toString : Symbol(Date.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ }
+ 

@@ -1,0 +1,81 @@
+--- old.typeofANonExportedType.symbols
++++ new.typeofANonExportedType.symbols
+@@= skipped -19, +19 lines =@@
+ >C : Symbol(C, Decl(typeofANonExportedType.ts, 3, 24))
+ 
+     foo: string;
+->foo : Symbol(C.foo, Decl(typeofANonExportedType.ts, 4, 9))
++>foo : Symbol(foo, Decl(typeofANonExportedType.ts, 4, 9))
+ }
+ export var c: C;
+ >c : Symbol(c, Decl(typeofANonExportedType.ts, 7, 10))
+@@= skipped -26, +26 lines =@@
+ >I : Symbol(I, Decl(typeofANonExportedType.ts, 12, 26))
+ 
+     foo: string;
+->foo : Symbol(I.foo, Decl(typeofANonExportedType.ts, 14, 13))
++>foo : Symbol(foo, Decl(typeofANonExportedType.ts, 14, 13))
+ }
+ export var i: I;
+ >i : Symbol(i, Decl(typeofANonExportedType.ts, 17, 10))
+@@= skipped -28, +28 lines =@@
+ >C : Symbol(C, Decl(typeofANonExportedType.ts, 23, 24))
+ 
+         foo: string;
+->foo : Symbol(C.foo, Decl(typeofANonExportedType.ts, 24, 20))
++>foo : Symbol(foo, Decl(typeofANonExportedType.ts, 24, 20))
+     }
+ }
+ export var r6: typeof M;
+@@= skipped -9, +9 lines =@@
+ 
+ export var r7: typeof M.foo;
+ >r7 : Symbol(r7, Decl(typeofANonExportedType.ts, 29, 10))
+->M.foo : Symbol(Z.foo, Decl(typeofANonExportedType.ts, 23, 14))
++>M.foo : Symbol(foo, Decl(typeofANonExportedType.ts, 23, 14))
+ >M : Symbol(M, Decl(typeofANonExportedType.ts, 20, 25))
+->foo : Symbol(Z.foo, Decl(typeofANonExportedType.ts, 23, 14))
++>foo : Symbol(foo, Decl(typeofANonExportedType.ts, 23, 14))
+ 
+ import Z = M;
+ >Z : Symbol(Z, Decl(typeofANonExportedType.ts, 29, 28))
+@@= skipped -14, +14 lines =@@
+ 
+ export var r9: typeof Z.foo;
+ >r9 : Symbol(r9, Decl(typeofANonExportedType.ts, 33, 10))
+->Z.foo : Symbol(Z.foo, Decl(typeofANonExportedType.ts, 23, 14))
++>Z.foo : Symbol(foo, Decl(typeofANonExportedType.ts, 23, 14))
+ >Z : Symbol(Z, Decl(typeofANonExportedType.ts, 29, 28))
+->foo : Symbol(Z.foo, Decl(typeofANonExportedType.ts, 23, 14))
++>foo : Symbol(foo, Decl(typeofANonExportedType.ts, 23, 14))
+ 
+ enum E {
+ >E : Symbol(E, Decl(typeofANonExportedType.ts, 33, 28))
+ 
+     A
+->A : Symbol(E.A, Decl(typeofANonExportedType.ts, 35, 8))
++>A : Symbol(A, Decl(typeofANonExportedType.ts, 35, 8))
+ }
+ export var r10: typeof E;
+ >r10 : Symbol(r10, Decl(typeofANonExportedType.ts, 38, 10))
+@@= skipped -16, +16 lines =@@
+ 
+ export var r11: typeof E.A;
+ >r11 : Symbol(r11, Decl(typeofANonExportedType.ts, 39, 10))
+->E.A : Symbol(E.A, Decl(typeofANonExportedType.ts, 35, 8))
++>E.A : Symbol(A, Decl(typeofANonExportedType.ts, 35, 8))
+ >E : Symbol(E, Decl(typeofANonExportedType.ts, 33, 28))
+->A : Symbol(E.A, Decl(typeofANonExportedType.ts, 35, 8))
++>A : Symbol(A, Decl(typeofANonExportedType.ts, 35, 8))
+ 
+ export var r12: typeof r12;
+ >r12 : Symbol(r12, Decl(typeofANonExportedType.ts, 41, 10))
+@@= skipped -21, +21 lines =@@
+ >C : Symbol(C, Decl(typeofANonExportedType.ts, 45, 21))
+ 
+         foo: string;
+->foo : Symbol(C.foo, Decl(typeofANonExportedType.ts, 46, 20))
++>foo : Symbol(foo, Decl(typeofANonExportedType.ts, 46, 20))
+     }
+ }
+ export var r13: typeof foo;

@@ -1,0 +1,110 @@
+//// [tests/cases/compiler/deeplyDependentLargeArrayMutation.ts] ////
+
+=== foo.js ===
+// repro from #26031
+function build() {
+>build : Symbol(build, Decl(foo.js, 0, 0))
+
+    var arr = [];
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value'; 
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value'; 
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value'; 
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value'; 
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value'; 
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value'; 
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+}

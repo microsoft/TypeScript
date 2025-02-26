@@ -1,0 +1,52 @@
+--- old.recursiveMappedTypes.symbols
++++ new.recursiveMappedTypes.symbols
+@@= skipped -107, +107 lines =@@
+ >User : Symbol(User, Decl(recursiveMappedTypes.ts, 37, 56))
+ 
+     avatar: string;
+->avatar : Symbol(User.avatar, Decl(recursiveMappedTypes.ts, 39, 16))
++>avatar : Symbol(avatar, Decl(recursiveMappedTypes.ts, 39, 16))
+ }
+ 
+ interface Guest {
+ >Guest : Symbol(Guest, Decl(recursiveMappedTypes.ts, 41, 1))
+ 
+     displayName: string;
+->displayName : Symbol(Guest.displayName, Decl(recursiveMappedTypes.ts, 43, 17))
++>displayName : Symbol(displayName, Decl(recursiveMappedTypes.ts, 43, 17))
+ }
+ 
+ interface Product {
+ >Product : Symbol(Product, Decl(recursiveMappedTypes.ts, 45, 1))
+ 
+     users: (User | Guest)[];
+->users : Symbol(Product.users, Decl(recursiveMappedTypes.ts, 47, 19))
++>users : Symbol(users, Decl(recursiveMappedTypes.ts, 47, 19))
+ >User : Symbol(User, Decl(recursiveMappedTypes.ts, 37, 56))
+ >Guest : Symbol(Guest, Decl(recursiveMappedTypes.ts, 41, 1))
+ }
+@@= skipped -84, +84 lines =@@
+ >ListWidget : Symbol(ListWidget, Decl(recursiveMappedTypes.ts, 65, 51))
+ 
+     "type": "list",
+->"type" : Symbol(ListWidget["type"], Decl(recursiveMappedTypes.ts, 67, 29))
++>"type" : Symbol(type, Decl(recursiveMappedTypes.ts, 67, 29))
+ 
+     "minimum_count": number,
+->"minimum_count" : Symbol(ListWidget["minimum_count"], Decl(recursiveMappedTypes.ts, 68, 19))
++>"minimum_count" : Symbol(minimum_count, Decl(recursiveMappedTypes.ts, 68, 19))
+ 
+     "maximum_count": number,
+->"maximum_count" : Symbol(ListWidget["maximum_count"], Decl(recursiveMappedTypes.ts, 69, 28))
++>"maximum_count" : Symbol(maximum_count, Decl(recursiveMappedTypes.ts, 69, 28))
+ 
+     "collapsable"?: boolean, //default to false, means all expanded
+->"collapsable" : Symbol(ListWidget["collapsable"], Decl(recursiveMappedTypes.ts, 70, 28))
++>"collapsable" : Symbol(collapsable, Decl(recursiveMappedTypes.ts, 70, 28))
+ 
+     "each": Child<ListWidget>;
+->"each" : Symbol(ListWidget["each"], Decl(recursiveMappedTypes.ts, 71, 28))
++>"each" : Symbol(each, Decl(recursiveMappedTypes.ts, 71, 28))
+ >Child : Symbol(Child, Decl(recursiveMappedTypes.ts, 64, 90))
+ >ListWidget : Symbol(ListWidget, Decl(recursiveMappedTypes.ts, 65, 51))
+ }

@@ -1,0 +1,11 @@
+--- old.readonlyAssignmentInSubclassOfClassExpression.symbols
++++ new.readonlyAssignmentInSubclassOfClassExpression.symbols
+@@= skipped -7, +7 lines =@@
+ 
+     constructor() {
+         super()
+->super : Symbol(__type, Decl(readonlyAssignmentInSubclassOfClassExpression.ts, 0, 28))
++>super : Symbol((Anonymous type), Decl(readonlyAssignmentInSubclassOfClassExpression.ts, 0, 28))
+ 
+         this.attrib = 2
+ >this.attrib : Symbol(attrib, Decl(readonlyAssignmentInSubclassOfClassExpression.ts, 0, 49))

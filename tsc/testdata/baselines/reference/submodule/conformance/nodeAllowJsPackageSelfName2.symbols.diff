@@ -1,0 +1,10 @@
+--- old.nodeAllowJsPackageSelfName2.symbols
++++ new.nodeAllowJsPackageSelfName2.symbols
+@@= skipped -7, +7 lines =@@
+ import { foo } from "js-self-name-import/foo.js";
+ >foo : Symbol(foo, Decl(foo.js, 0, 8))
+ 
++=== /types/src/foo.d.ts ===
++export const foo: 1;
++>foo : Symbol(foo, Decl(foo.d.ts, 0, 12))
++

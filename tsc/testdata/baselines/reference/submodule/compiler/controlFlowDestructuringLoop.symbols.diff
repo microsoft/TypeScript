@@ -1,0 +1,40 @@
+--- old.controlFlowDestructuringLoop.symbols
++++ new.controlFlowDestructuringLoop.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ interface NumVal { val: number; }
+ >NumVal : Symbol(NumVal, Decl(controlFlowDestructuringLoop.ts, 0, 0))
+->val : Symbol(NumVal.val, Decl(controlFlowDestructuringLoop.ts, 2, 18))
++>val : Symbol(val, Decl(controlFlowDestructuringLoop.ts, 2, 18))
+ 
+ interface StrVal { val: string; }
+ >StrVal : Symbol(StrVal, Decl(controlFlowDestructuringLoop.ts, 2, 33))
+->val : Symbol(StrVal.val, Decl(controlFlowDestructuringLoop.ts, 3, 18))
++>val : Symbol(val, Decl(controlFlowDestructuringLoop.ts, 3, 18))
+ 
+ type Val = NumVal | StrVal;
+ >Val : Symbol(Val, Decl(controlFlowDestructuringLoop.ts, 3, 33))
+@@= skipped -42, +42 lines =@@
+ >thing : Symbol(thing, Decl(controlFlowDestructuringLoop.ts, 11, 14))
+ 
+             val.toFixed(2);
+->val.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>val.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >val : Symbol(val, Decl(controlFlowDestructuringLoop.ts, 13, 19))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+         }
+         else {
+             const { val } = thing;
+@@= skipped -10, +10 lines =@@
+ >thing : Symbol(thing, Decl(controlFlowDestructuringLoop.ts, 11, 14))
+ 
+             val.length;
+->val.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>val.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >val : Symbol(val, Decl(controlFlowDestructuringLoop.ts, 17, 19))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+         }
+     }
+ }

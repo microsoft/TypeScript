@@ -1,0 +1,10 @@
+--- old.parser509546_2.symbols
++++ new.parser509546_2.symbols
+@@= skipped -6, +6 lines =@@
+ >Logger : Symbol(Logger, Decl(parser509546_2.ts, 0, 13))
+ 
+      public
+->public : Symbol(Logger.public, Decl(parser509546_2.ts, 2, 21))
++>public : Symbol(public, Decl(parser509546_2.ts, 2, 21))
+ }
+ 

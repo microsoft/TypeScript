@@ -1,0 +1,43 @@
+--- old.localImportNameVsGlobalName.symbols
++++ new.localImportNameVsGlobalName.symbols
+@@= skipped -5, +5 lines =@@
+ 
+   export enum Key { UP, DOWN, LEFT, RIGHT }
+ >Key : Symbol(Key, Decl(localImportNameVsGlobalName.ts, 0, 17))
+->UP : Symbol(Key.UP, Decl(localImportNameVsGlobalName.ts, 1, 19))
+->DOWN : Symbol(Key.DOWN, Decl(localImportNameVsGlobalName.ts, 1, 23))
+->LEFT : Symbol(Key.LEFT, Decl(localImportNameVsGlobalName.ts, 1, 29))
+->RIGHT : Symbol(Key.RIGHT, Decl(localImportNameVsGlobalName.ts, 1, 35))
++>UP : Symbol(UP, Decl(localImportNameVsGlobalName.ts, 1, 19))
++>DOWN : Symbol(DOWN, Decl(localImportNameVsGlobalName.ts, 1, 23))
++>LEFT : Symbol(LEFT, Decl(localImportNameVsGlobalName.ts, 1, 29))
++>RIGHT : Symbol(RIGHT, Decl(localImportNameVsGlobalName.ts, 1, 35))
+ }
+ 
+ module App {
+@@= skipped -21, +21 lines =@@
+ 
+   foo(Key.UP);
+ >foo : Symbol(foo, Decl(localImportNameVsGlobalName.ts, 5, 28))
+->Key.UP : Symbol(Key.UP, Decl(localImportNameVsGlobalName.ts, 1, 19))
++>Key.UP : Symbol(UP, Decl(localImportNameVsGlobalName.ts, 1, 19))
+ >Key : Symbol(Key, Decl(localImportNameVsGlobalName.ts, 4, 12))
+->UP : Symbol(Key.UP, Decl(localImportNameVsGlobalName.ts, 1, 19))
++>UP : Symbol(UP, Decl(localImportNameVsGlobalName.ts, 1, 19))
+ 
+   foo(Key.DOWN);
+ >foo : Symbol(foo, Decl(localImportNameVsGlobalName.ts, 5, 28))
+->Key.DOWN : Symbol(Key.DOWN, Decl(localImportNameVsGlobalName.ts, 1, 23))
++>Key.DOWN : Symbol(DOWN, Decl(localImportNameVsGlobalName.ts, 1, 23))
+ >Key : Symbol(Key, Decl(localImportNameVsGlobalName.ts, 4, 12))
+->DOWN : Symbol(Key.DOWN, Decl(localImportNameVsGlobalName.ts, 1, 23))
++>DOWN : Symbol(DOWN, Decl(localImportNameVsGlobalName.ts, 1, 23))
+ 
+   foo(Key.LEFT);
+ >foo : Symbol(foo, Decl(localImportNameVsGlobalName.ts, 5, 28))
+->Key.LEFT : Symbol(Key.LEFT, Decl(localImportNameVsGlobalName.ts, 1, 29))
++>Key.LEFT : Symbol(LEFT, Decl(localImportNameVsGlobalName.ts, 1, 29))
+ >Key : Symbol(Key, Decl(localImportNameVsGlobalName.ts, 4, 12))
+->LEFT : Symbol(Key.LEFT, Decl(localImportNameVsGlobalName.ts, 1, 29))
++>LEFT : Symbol(LEFT, Decl(localImportNameVsGlobalName.ts, 1, 29))
+ }

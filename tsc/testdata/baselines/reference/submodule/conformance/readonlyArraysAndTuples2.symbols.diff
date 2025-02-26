@@ -1,0 +1,17 @@
+--- old.readonlyArraysAndTuples2.symbols
++++ new.readonlyArraysAndTuples2.symbols
+@@= skipped -37, +37 lines =@@
+ >someDec : Symbol(someDec, Decl(readonlyArraysAndTuples2.ts, 10, 13))
+ 
+   j: readonly string[] = [];
+->j : Symbol(A.j, Decl(readonlyArraysAndTuples2.ts, 12, 9))
++>j : Symbol(j, Decl(readonlyArraysAndTuples2.ts, 12, 9))
+ 
+   @someDec
+ >someDec : Symbol(someDec, Decl(readonlyArraysAndTuples2.ts, 10, 13))
+ 
+   k: readonly [string, number] = ['foo', 42];
+->k : Symbol(A.k, Decl(readonlyArraysAndTuples2.ts, 14, 28))
++>k : Symbol(k, Decl(readonlyArraysAndTuples2.ts, 14, 28))
+ }
+ 

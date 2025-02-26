@@ -1,0 +1,12 @@
+--- old.inferentialTypingWithFunctionType2.symbols
++++ new.inferentialTypingWithFunctionType2.symbols
+@@= skipped -12, +12 lines =@@
+ }
+ var x = [1, 2, 3].map(identity)[0];
+ >x : Symbol(x, Decl(inferentialTypingWithFunctionType2.ts, 3, 3))
+->[1, 2, 3].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>[1, 2, 3].map : Symbol(map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >identity : Symbol(identity, Decl(inferentialTypingWithFunctionType2.ts, 0, 0))
+ 

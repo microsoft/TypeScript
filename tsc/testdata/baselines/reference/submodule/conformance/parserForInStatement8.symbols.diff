@@ -1,0 +1,23 @@
+--- old.parserForInStatement8.symbols
++++ new.parserForInStatement8.symbols
+@@= skipped -5, +5 lines =@@
+ for (let [x = 'a' in {}] in { '': 0 }) console.log(x)
+ >x : Symbol(x, Decl(parserForInStatement8.ts, 2, 10))
+ >'' : Symbol('', Decl(parserForInStatement8.ts, 2, 29))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x : Symbol(x, Decl(parserForInStatement8.ts, 2, 10))
+ 
+ for (let {x = 'a' in {}} in { '': 0 }) console.log(x)
+ >x : Symbol(x, Decl(parserForInStatement8.ts, 3, 10))
+ >'' : Symbol('', Decl(parserForInStatement8.ts, 3, 29))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x : Symbol(x, Decl(parserForInStatement8.ts, 3, 10))
+ 

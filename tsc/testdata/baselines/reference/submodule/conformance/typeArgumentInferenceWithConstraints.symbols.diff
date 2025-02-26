@@ -1,0 +1,50 @@
+--- old.typeArgumentInferenceWithConstraints.symbols
++++ new.typeArgumentInferenceWithConstraints.symbols
+@@= skipped -72, +72 lines =@@
+ someGenerics2a<string>((n) => n.substr(0));
+ >someGenerics2a : Symbol(someGenerics2a, Decl(typeArgumentInferenceWithConstraints.ts, 17, 36))
+ >n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 23, 24))
+->n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
++>n.substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
+ >n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 23, 24))
+->substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
++>substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
+ 
+ function someGenerics2b<T extends string, U extends number>(n: (x: T, y: U) => void) { }
+ >someGenerics2b : Symbol(someGenerics2b, Decl(typeArgumentInferenceWithConstraints.ts, 23, 43))
+@@= skipped -30, +30 lines =@@
+ >someGenerics2b : Symbol(someGenerics2b, Decl(typeArgumentInferenceWithConstraints.ts, 23, 43))
+ >n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 28, 32))
+ >t : Symbol(t, Decl(typeArgumentInferenceWithConstraints.ts, 28, 34))
+->n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
++>n.substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
+ >n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 28, 32))
+->substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
++>substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
+ >t : Symbol(t, Decl(typeArgumentInferenceWithConstraints.ts, 28, 34))
+ >t : Symbol(t, Decl(typeArgumentInferenceWithConstraints.ts, 28, 34))
+ 
+@@= skipped -228, +228 lines =@@
+ >A91 : Symbol(A91, Decl(typeArgumentInferenceWithConstraints.ts, 75, 37))
+ 
+     x: number;
+->x : Symbol(A91.x, Decl(typeArgumentInferenceWithConstraints.ts, 78, 15))
++>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 78, 15))
+ 
+     y?: string;
+->y : Symbol(A91.y, Decl(typeArgumentInferenceWithConstraints.ts, 79, 14))
++>y : Symbol(y, Decl(typeArgumentInferenceWithConstraints.ts, 79, 14))
+ }
+ interface A92 {
+ >A92 : Symbol(A92, Decl(typeArgumentInferenceWithConstraints.ts, 81, 1))
+ 
+     x: number;
+->x : Symbol(A92.x, Decl(typeArgumentInferenceWithConstraints.ts, 82, 15))
++>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 82, 15))
+ 
+     z?: Window;
+->z : Symbol(A92.z, Decl(typeArgumentInferenceWithConstraints.ts, 83, 14))
++>z : Symbol(z, Decl(typeArgumentInferenceWithConstraints.ts, 83, 14))
+ >Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+ }
+ var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });

@@ -1,0 +1,38 @@
+--- old.contextualTypeFunctionObjectPropertyIntersection.symbols
++++ new.contextualTypeFunctionObjectPropertyIntersection.symbols
+@@= skipped -15, +15 lines =@@
+ >type : Symbol(type, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 4, 40))
+ 
+   schema: {
+->schema : Symbol(MachineConfig.schema, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 4, 58))
++>schema : Symbol(schema, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 4, 58))
+ 
+     events: TEvent;
+ >events : Symbol(events, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 5, 11))
+@@= skipped -8, +8 lines =@@
+ 
+   };
+   on?: {
+->on : Symbol(MachineConfig.on, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 7, 4))
++>on : Symbol(on, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 7, 4))
+ 
+     [K in TEvent["type"]]?: Action<TEvent extends { type: K } ? TEvent : never>;
+ >K : Symbol(K, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 9, 5))
+@@= skipped -94, +94 lines =@@
+ >type : Symbol(type, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 41, 41))
+ 
+   schema: {
+->schema : Symbol(MachineConfig2.schema, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 41, 59))
++>schema : Symbol(schema, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 41, 59))
+ 
+     events: TEvent;
+ >events : Symbol(events, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 42, 11))
+@@= skipped -8, +8 lines =@@
+ 
+   };
+   on?: {
+->on : Symbol(MachineConfig2.on, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 44, 4))
++>on : Symbol(on, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 44, 4))
+ 
+     [K in TEvent["type"] as K extends Uppercase<string> ? K : never]?: Action<TEvent extends { type: K } ? TEvent : never>;
+ >K : Symbol(K, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 46, 5))

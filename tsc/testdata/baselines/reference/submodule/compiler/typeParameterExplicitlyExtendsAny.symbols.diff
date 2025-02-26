@@ -1,0 +1,35 @@
+--- old.typeParameterExplicitlyExtendsAny.symbols
++++ new.typeParameterExplicitlyExtendsAny.symbols
+@@= skipped -12, +12 lines =@@
+ >t : Symbol(t, Decl(typeParameterExplicitlyExtendsAny.ts, 1, 7))
+ 
+     t.toString; // ok
+->t.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>t.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >t : Symbol(t, Decl(typeParameterExplicitlyExtendsAny.ts, 1, 7))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function fee2<T extends any>() {
+@@= skipped -17, +17 lines =@@
+ >t : Symbol(t, Decl(typeParameterExplicitlyExtendsAny.ts, 7, 7))
+ 
+     t.toString; // ok
+->t.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>t.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >t : Symbol(t, Decl(typeParameterExplicitlyExtendsAny.ts, 7, 7))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function f<T extends any>(x: T) {
+@@= skipped -44, +44 lines =@@
+ >MyClass : Symbol(MyClass, Decl(typeParameterExplicitlyExtendsAny.ts, 24, 1))
+ 
+     public static displayTree1<T extends Tree<any>>(tree: T) {
+->displayTree1 : Symbol(MyClass.displayTree1, Decl(typeParameterExplicitlyExtendsAny.ts, 26, 15))
++>displayTree1 : Symbol(displayTree1, Decl(typeParameterExplicitlyExtendsAny.ts, 26, 15))
+ >T : Symbol(T, Decl(typeParameterExplicitlyExtendsAny.ts, 27, 31))
+ >Tree : Symbol(Tree, Decl(typeParameterExplicitlyExtendsAny.ts, 18, 1))
+ >tree : Symbol(tree, Decl(typeParameterExplicitlyExtendsAny.ts, 27, 52))

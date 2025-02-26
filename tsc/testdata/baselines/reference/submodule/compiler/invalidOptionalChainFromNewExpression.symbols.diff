@@ -1,0 +1,24 @@
+--- old.invalidOptionalChainFromNewExpression.symbols
++++ new.invalidOptionalChainFromNewExpression.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(invalidOptionalChainFromNewExpression.ts, 0, 0))
+ 
+     b() {}
+->b : Symbol(A.b, Decl(invalidOptionalChainFromNewExpression.ts, 0, 9))
++>b : Symbol(b, Decl(invalidOptionalChainFromNewExpression.ts, 0, 9))
+ }
+ 
+ new A?.b()   // error
+->new A?.b : Symbol(A.b, Decl(invalidOptionalChainFromNewExpression.ts, 0, 9))
++>new A?.b : Symbol(b, Decl(invalidOptionalChainFromNewExpression.ts, 0, 9))
+ >A : Symbol(A, Decl(invalidOptionalChainFromNewExpression.ts, 0, 0))
+->b : Symbol(A.b, Decl(invalidOptionalChainFromNewExpression.ts, 0, 9))
++>b : Symbol(b, Decl(invalidOptionalChainFromNewExpression.ts, 0, 9))
+ 
+ new A()?.b() // ok
+->new A()?.b : Symbol(A.b, Decl(invalidOptionalChainFromNewExpression.ts, 0, 9))
++>new A()?.b : Symbol(b, Decl(invalidOptionalChainFromNewExpression.ts, 0, 9))
+ >A : Symbol(A, Decl(invalidOptionalChainFromNewExpression.ts, 0, 0))
+->b : Symbol(A.b, Decl(invalidOptionalChainFromNewExpression.ts, 0, 9))
++>b : Symbol(b, Decl(invalidOptionalChainFromNewExpression.ts, 0, 9))
+ 

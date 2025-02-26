@@ -1,0 +1,40 @@
+--- old.isolatedDeclarationErrorsAugmentation.symbols
++++ new.isolatedDeclarationErrorsAugmentation.symbols
+@@= skipped -4, +4 lines =@@
+ >ParentThing : Symbol(ParentThing, Decl(child1.ts, 0, 8))
+ 
+ declare module './parent' {
+->'./parent' : Symbol("parent", Decl(parent.ts, 0, 0), Decl(child1.ts, 0, 39))
++>'./parent' : Symbol(""parent.ts"", Decl(parent.ts, 0, 0), Decl(child1.ts, 0, 39))
+ 
+     interface ParentThing {
+ >ParentThing : Symbol(ParentThing, Decl(parent.ts, 0, 34), Decl(child1.ts, 2, 27))
+ 
+         add: (a: number, b: number) => number;
+->add : Symbol(ParentThing.add, Decl(child1.ts, 3, 27))
++>add : Symbol(add, Decl(child1.ts, 3, 27))
+ >a : Symbol(a, Decl(child1.ts, 4, 14))
+ >b : Symbol(b, Decl(child1.ts, 4, 24))
+     }
+@@= skipped -18, +18 lines =@@
+ >ParentThing : Symbol(ParentThing, Decl(child1.ts, 0, 8))
+ 
+     prototype.add = (a: number, b: number) => a + b;
+->prototype.add : Symbol(ParentThing.add, Decl(child1.ts, 3, 27))
++>prototype.add : Symbol(add, Decl(child1.ts, 3, 27))
+ >prototype : Symbol(prototype, Decl(child1.ts, 8, 23))
+->add : Symbol(ParentThing.add, Decl(child1.ts, 3, 27))
++>add : Symbol(add, Decl(child1.ts, 3, 27))
+ >a : Symbol(a, Decl(child1.ts, 9, 21))
+ >b : Symbol(b, Decl(child1.ts, 9, 31))
+ >a : Symbol(a, Decl(child1.ts, 9, 21))
+@@= skipped -19, +19 lines =@@
+ 
+ child1(ParentThing.prototype);
+ >child1 : Symbol(child1, Decl(parent.ts, 0, 8))
+->ParentThing.prototype : Symbol(ParentThing.prototype)
++>ParentThing.prototype : Symbol(prototype)
+ >ParentThing : Symbol(ParentThing, Decl(parent.ts, 0, 34), Decl(child1.ts, 2, 27))
+->prototype : Symbol(ParentThing.prototype)
++>prototype : Symbol(prototype)
+ 

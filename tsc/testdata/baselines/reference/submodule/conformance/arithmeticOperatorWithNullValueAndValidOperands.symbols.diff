@@ -1,0 +1,253 @@
+--- old.arithmeticOperatorWithNullValueAndValidOperands.symbols
++++ new.arithmeticOperatorWithNullValueAndValidOperands.symbols
+@@= skipped -7, +7 lines =@@
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+ 
+     a,
+->a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ 
+     b
+->b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ }
+ 
+ var a: any;
+@@= skipped -26, +26 lines =@@
+ 
+ var ra4 = null * E.a;
+ >ra4 : Symbol(ra4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 15, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ 
+ var ra5 = a * null;
+ >ra5 : Symbol(ra5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 16, 3))
+@@= skipped -17, +17 lines =@@
+ 
+ var ra8 = E.b * null;
+ >ra8 : Symbol(ra8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 19, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ 
+ // operator /
+ var rb1 = null / a;
+@@= skipped -18, +18 lines =@@
+ 
+ var rb4 = null / E.a;
+ >rb4 : Symbol(rb4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 25, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ 
+ var rb5 = a / null;
+ >rb5 : Symbol(rb5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 26, 3))
+@@= skipped -17, +17 lines =@@
+ 
+ var rb8 = E.b / null;
+ >rb8 : Symbol(rb8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 29, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ 
+ // operator %
+ var rc1 = null % a;
+@@= skipped -18, +18 lines =@@
+ 
+ var rc4 = null % E.a;
+ >rc4 : Symbol(rc4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 35, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ 
+ var rc5 = a % null;
+ >rc5 : Symbol(rc5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 36, 3))
+@@= skipped -17, +17 lines =@@
+ 
+ var rc8 = E.b % null;
+ >rc8 : Symbol(rc8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 39, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ 
+ // operator -
+ var rd1 = null - a;
+@@= skipped -18, +18 lines =@@
+ 
+ var rd4 = null - E.a;
+ >rd4 : Symbol(rd4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 45, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ 
+ var rd5 = a - null;
+ >rd5 : Symbol(rd5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 46, 3))
+@@= skipped -17, +17 lines =@@
+ 
+ var rd8 = E.b - null;
+ >rd8 : Symbol(rd8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 49, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ 
+ // operator <<
+ var re1 = null << a;
+@@= skipped -18, +18 lines =@@
+ 
+ var re4 = null << E.a;
+ >re4 : Symbol(re4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 55, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ 
+ var re5 = a << null;
+ >re5 : Symbol(re5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 56, 3))
+@@= skipped -17, +17 lines =@@
+ 
+ var re8 = E.b << null;
+ >re8 : Symbol(re8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 59, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ 
+ // operator >>
+ var rf1 = null >> a;
+@@= skipped -18, +18 lines =@@
+ 
+ var rf4 = null >> E.a;
+ >rf4 : Symbol(rf4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 65, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ 
+ var rf5 = a >> null;
+ >rf5 : Symbol(rf5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 66, 3))
+@@= skipped -17, +17 lines =@@
+ 
+ var rf8 = E.b >> null;
+ >rf8 : Symbol(rf8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 69, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ 
+ // operator >>>
+ var rg1 = null >>> a;
+@@= skipped -18, +18 lines =@@
+ 
+ var rg4 = null >>> E.a;
+ >rg4 : Symbol(rg4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 75, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ 
+ var rg5 = a >>> null;
+ >rg5 : Symbol(rg5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 76, 3))
+@@= skipped -17, +17 lines =@@
+ 
+ var rg8 = E.b >>> null;
+ >rg8 : Symbol(rg8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 79, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ 
+ // operator &
+ var rh1 = null & a;
+@@= skipped -18, +18 lines =@@
+ 
+ var rh4 = null & E.a;
+ >rh4 : Symbol(rh4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 85, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ 
+ var rh5 = a & null;
+ >rh5 : Symbol(rh5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 86, 3))
+@@= skipped -17, +17 lines =@@
+ 
+ var rh8 = E.b & null;
+ >rh8 : Symbol(rh8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 89, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ 
+ // operator ^
+ var ri1 = null ^ a;
+@@= skipped -18, +18 lines =@@
+ 
+ var ri4 = null ^ E.a;
+ >ri4 : Symbol(ri4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 95, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ 
+ var ri5 = a ^ null;
+ >ri5 : Symbol(ri5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 96, 3))
+@@= skipped -17, +17 lines =@@
+ 
+ var ri8 = E.b ^ null;
+ >ri8 : Symbol(ri8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 99, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ 
+ // operator |
+ var rj1 = null | a;
+@@= skipped -18, +18 lines =@@
+ 
+ var rj4 = null | E.a;
+ >rj4 : Symbol(rj4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 105, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+ 
+ var rj5 = a | null;
+ >rj5 : Symbol(rj5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 106, 3))
+@@= skipped -17, +17 lines =@@
+ 
+ var rj8 = E.b | null;
+ >rj8 : Symbol(rj8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 109, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ >E : Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
++>b : Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+ 

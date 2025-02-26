@@ -1,0 +1,13 @@
+--- old.noImplicitAnyInBareInterface.symbols
++++ new.noImplicitAnyInBareInterface.symbols
+@@= skipped -6, +6 lines =@@
+     // Should return error for implicit any on `new` and `foo`.
+     new ();
+     few() : any;
+->few : Symbol(Entry.few, Decl(noImplicitAnyInBareInterface.ts, 2, 11))
++>few : Symbol(few, Decl(noImplicitAnyInBareInterface.ts, 2, 11))
+ 
+     foo();
+->foo : Symbol(Entry.foo, Decl(noImplicitAnyInBareInterface.ts, 3, 16))
++>foo : Symbol(foo, Decl(noImplicitAnyInBareInterface.ts, 3, 16))
+ }

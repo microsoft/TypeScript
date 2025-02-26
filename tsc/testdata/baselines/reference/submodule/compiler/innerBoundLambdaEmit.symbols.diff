@@ -1,0 +1,13 @@
+--- old.innerBoundLambdaEmit.symbols
++++ new.innerBoundLambdaEmit.symbols
+@@= skipped -14, +14 lines =@@
+ >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(innerBoundLambdaEmit.ts, 5, 16))
+ 
+     toFoo(): M.Foo
+->toFoo : Symbol(Array.toFoo, Decl(innerBoundLambdaEmit.ts, 5, 20))
++>toFoo : Symbol(toFoo, Decl(innerBoundLambdaEmit.ts, 5, 20))
+ >M : Symbol(M, Decl(innerBoundLambdaEmit.ts, 0, 0))
+->Foo : Symbol(M.Foo, Decl(innerBoundLambdaEmit.ts, 0, 10))
++>Foo : Symbol(Foo, Decl(innerBoundLambdaEmit.ts, 0, 10))
+ }
+ 

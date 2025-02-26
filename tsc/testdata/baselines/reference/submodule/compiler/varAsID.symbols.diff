@@ -1,0 +1,28 @@
+--- old.varAsID.symbols
++++ new.varAsID.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(varAsID.ts, 0, 0))
+ 
+     var; // ok
+->var : Symbol(Foo.var, Decl(varAsID.ts, 0, 11))
++>var : Symbol(var, Decl(varAsID.ts, 0, 11))
+ 
+     x=1;
+->x : Symbol(Foo.x, Decl(varAsID.ts, 1, 8))
++>x : Symbol(x, Decl(varAsID.ts, 1, 8))
+ }
+ 
+ var f = new Foo();
+@@= skipped -15, +15 lines =@@
+ >Foo2 : Symbol(Foo2, Decl(varAsID.ts, 5, 18))
+ 
+     var // not an error, because of ASI.
+->var : Symbol(Foo2.var, Decl(varAsID.ts, 8, 12))
++>var : Symbol(var, Decl(varAsID.ts, 8, 12))
+ 
+     x=1;
+->x : Symbol(Foo2.x, Decl(varAsID.ts, 9, 7))
++>x : Symbol(x, Decl(varAsID.ts, 9, 7))
+ }
+ 
+ var f2 = new Foo2();

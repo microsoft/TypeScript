@@ -1,0 +1,10 @@
+--- old.classBodyWithStatements.symbols
++++ new.classBodyWithStatements.symbols
+@@= skipped -24, +24 lines =@@
+ >C3 : Symbol(C3, Decl(classBodyWithStatements.ts, 9, 10))
+ 
+     x: number = y + 1; // ok, need a var in the statement production
+->x : Symbol(C3.x, Decl(classBodyWithStatements.ts, 10, 10))
++>x : Symbol(x, Decl(classBodyWithStatements.ts, 10, 10))
+ >y : Symbol(y, Decl(classBodyWithStatements.ts, 9, 3))
+ }

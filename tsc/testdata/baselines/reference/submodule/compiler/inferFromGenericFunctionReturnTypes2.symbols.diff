@@ -1,0 +1,331 @@
+--- old.inferFromGenericFunctionReturnTypes2.symbols
++++ new.inferFromGenericFunctionReturnTypes2.symbols
+@@= skipped -58, +58 lines =@@
+ >f1 : Symbol(f1, Decl(inferFromGenericFunctionReturnTypes2.ts, 10, 3))
+ >Mapper : Symbol(Mapper, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 0))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 10, 32))
+->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 10, 32))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ let f2: Mapper<string, number> = wrap(s => s.length);
+ >f2 : Symbol(f2, Decl(inferFromGenericFunctionReturnTypes2.ts, 11, 3))
+ >Mapper : Symbol(Mapper, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 0))
+ >wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 32))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 11, 38))
+->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 11, 38))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ let f3: Mapper<string, number[]> = arrayize(wrap(s => s.length));
+ >f3 : Symbol(f3, Decl(inferFromGenericFunctionReturnTypes2.ts, 12, 3))
+@@= skipped -19, +19 lines =@@
+ >arrayize : Symbol(arrayize, Decl(inferFromGenericFunctionReturnTypes2.ts, 2, 60))
+ >wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 32))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 12, 49))
+->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 12, 49))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ let f4: Mapper<string, boolean> = combine(wrap(s => s.length), wrap(n => n >= 10));
+ >f4 : Symbol(f4, Decl(inferFromGenericFunctionReturnTypes2.ts, 13, 3))
+@@= skipped -10, +10 lines =@@
+ >combine : Symbol(combine, Decl(inferFromGenericFunctionReturnTypes2.ts, 4, 66))
+ >wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 32))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 13, 47))
+->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 13, 47))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 32))
+ >n : Symbol(n, Decl(inferFromGenericFunctionReturnTypes2.ts, 13, 68))
+ >n : Symbol(n, Decl(inferFromGenericFunctionReturnTypes2.ts, 13, 68))
+@@= skipped -11, +11 lines =@@
+ >foo : Symbol(foo, Decl(inferFromGenericFunctionReturnTypes2.ts, 6, 79))
+ >wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 32))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 15, 9))
+->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 15, 9))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ let a1 = ["a", "b"].map(s => s.length);
+ >a1 : Symbol(a1, Decl(inferFromGenericFunctionReturnTypes2.ts, 17, 3))
+->["a", "b"].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>["a", "b"].map : Symbol(map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 17, 24))
+->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 17, 24))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ let a2 = ["a", "b"].map(wrap(s => s.length));
+ >a2 : Symbol(a2, Decl(inferFromGenericFunctionReturnTypes2.ts, 18, 3))
+->["a", "b"].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>["a", "b"].map : Symbol(map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 32))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 18, 29))
+->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 18, 29))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ let a3 = ["a", "b"].map(wrap(arrayize(s => s.length)));
+ >a3 : Symbol(a3, Decl(inferFromGenericFunctionReturnTypes2.ts, 19, 3))
+->["a", "b"].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>["a", "b"].map : Symbol(map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 32))
+ >arrayize : Symbol(arrayize, Decl(inferFromGenericFunctionReturnTypes2.ts, 2, 60))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 19, 38))
+->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 19, 38))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ let a4 = ["a", "b"].map(combine(wrap(s => s.length), wrap(n => n > 10)));
+ >a4 : Symbol(a4, Decl(inferFromGenericFunctionReturnTypes2.ts, 20, 3))
+->["a", "b"].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>["a", "b"].map : Symbol(map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >combine : Symbol(combine, Decl(inferFromGenericFunctionReturnTypes2.ts, 4, 66))
+ >wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 32))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 20, 37))
+->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 20, 37))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 32))
+ >n : Symbol(n, Decl(inferFromGenericFunctionReturnTypes2.ts, 20, 58))
+ >n : Symbol(n, Decl(inferFromGenericFunctionReturnTypes2.ts, 20, 58))
+ 
+ let a5 = ["a", "b"].map(combine(identity, wrap(s => s.length)));
+ >a5 : Symbol(a5, Decl(inferFromGenericFunctionReturnTypes2.ts, 21, 3))
+->["a", "b"].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>["a", "b"].map : Symbol(map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >combine : Symbol(combine, Decl(inferFromGenericFunctionReturnTypes2.ts, 4, 66))
+ >identity : Symbol(identity, Decl(inferFromGenericFunctionReturnTypes2.ts, 82, 1))
+ >wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 32))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 21, 47))
+->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 21, 47))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ let a6 = ["a", "b"].map(combine(wrap(s => s.length), identity));
+ >a6 : Symbol(a6, Decl(inferFromGenericFunctionReturnTypes2.ts, 22, 3))
+->["a", "b"].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>["a", "b"].map : Symbol(map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >combine : Symbol(combine, Decl(inferFromGenericFunctionReturnTypes2.ts, 4, 66))
+ >wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 32))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 22, 37))
+->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 22, 37))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >identity : Symbol(identity, Decl(inferFromGenericFunctionReturnTypes2.ts, 82, 1))
+ 
+ // This is a contrived class. We could do the same thing with Observables, etc.
+@@= skipped -78, +78 lines =@@
+ >A : Symbol(A, Decl(inferFromGenericFunctionReturnTypes2.ts, 25, 12))
+ 
+   _store: A[];
+->_store : Symbol(SetOf._store, Decl(inferFromGenericFunctionReturnTypes2.ts, 25, 16))
++>_store : Symbol(_store, Decl(inferFromGenericFunctionReturnTypes2.ts, 25, 16))
+ >A : Symbol(A, Decl(inferFromGenericFunctionReturnTypes2.ts, 25, 12))
+ 
+   add(a: A) {
+->add : Symbol(SetOf.add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
++>add : Symbol(add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
+ >a : Symbol(a, Decl(inferFromGenericFunctionReturnTypes2.ts, 28, 6))
+ >A : Symbol(A, Decl(inferFromGenericFunctionReturnTypes2.ts, 25, 12))
+ 
+     this._store.push(a);
+->this._store.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+->this._store : Symbol(SetOf._store, Decl(inferFromGenericFunctionReturnTypes2.ts, 25, 16))
++>this._store.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
++>this._store : Symbol(_store, Decl(inferFromGenericFunctionReturnTypes2.ts, 25, 16))
+ >this : Symbol(SetOf, Decl(inferFromGenericFunctionReturnTypes2.ts, 22, 64))
+->_store : Symbol(SetOf._store, Decl(inferFromGenericFunctionReturnTypes2.ts, 25, 16))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>_store : Symbol(_store, Decl(inferFromGenericFunctionReturnTypes2.ts, 25, 16))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(inferFromGenericFunctionReturnTypes2.ts, 28, 6))
+   }
+ 
+   transform<B>(transformer: (a: SetOf<A>) => SetOf<B>): SetOf<B> {
+->transform : Symbol(SetOf.transform, Decl(inferFromGenericFunctionReturnTypes2.ts, 30, 3))
++>transform : Symbol(transform, Decl(inferFromGenericFunctionReturnTypes2.ts, 30, 3))
+ >B : Symbol(B, Decl(inferFromGenericFunctionReturnTypes2.ts, 32, 12))
+ >transformer : Symbol(transformer, Decl(inferFromGenericFunctionReturnTypes2.ts, 32, 15))
+ >a : Symbol(a, Decl(inferFromGenericFunctionReturnTypes2.ts, 32, 29))
+@@= skipped -35, +35 lines =@@
+   }
+ 
+   forEach(fn: (a: A, index: number) => void) {
+->forEach : Symbol(SetOf.forEach, Decl(inferFromGenericFunctionReturnTypes2.ts, 34, 3))
++>forEach : Symbol(forEach, Decl(inferFromGenericFunctionReturnTypes2.ts, 34, 3))
+ >fn : Symbol(fn, Decl(inferFromGenericFunctionReturnTypes2.ts, 36, 10))
+ >a : Symbol(a, Decl(inferFromGenericFunctionReturnTypes2.ts, 36, 15))
+ >A : Symbol(A, Decl(inferFromGenericFunctionReturnTypes2.ts, 25, 12))
+ >index : Symbol(index, Decl(inferFromGenericFunctionReturnTypes2.ts, 36, 20))
+ 
+       this._store.forEach((a, i) => fn(a, i));
+->this._store.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+->this._store : Symbol(SetOf._store, Decl(inferFromGenericFunctionReturnTypes2.ts, 25, 16))
++>this._store.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
++>this._store : Symbol(_store, Decl(inferFromGenericFunctionReturnTypes2.ts, 25, 16))
+ >this : Symbol(SetOf, Decl(inferFromGenericFunctionReturnTypes2.ts, 22, 64))
+->_store : Symbol(SetOf._store, Decl(inferFromGenericFunctionReturnTypes2.ts, 25, 16))
+->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>_store : Symbol(_store, Decl(inferFromGenericFunctionReturnTypes2.ts, 25, 16))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(inferFromGenericFunctionReturnTypes2.ts, 37, 27))
+ >i : Symbol(i, Decl(inferFromGenericFunctionReturnTypes2.ts, 37, 29))
+ >fn : Symbol(fn, Decl(inferFromGenericFunctionReturnTypes2.ts, 36, 10))
+@@= skipped -82, +82 lines =@@
+   return (x: T) => fns.reduce((prev, fn) => fn(prev), x);
+ >x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes2.ts, 49, 10))
+ >T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes2.ts, 48, 17))
+->fns.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>fns.reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >fns : Symbol(fns, Decl(inferFromGenericFunctionReturnTypes2.ts, 48, 20))
+->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >prev : Symbol(prev, Decl(inferFromGenericFunctionReturnTypes2.ts, 49, 31))
+ >fn : Symbol(fn, Decl(inferFromGenericFunctionReturnTypes2.ts, 49, 36))
+ >fn : Symbol(fn, Decl(inferFromGenericFunctionReturnTypes2.ts, 49, 36))
+@@= skipped -36, +36 lines =@@
+ >SetOf : Symbol(SetOf, Decl(inferFromGenericFunctionReturnTypes2.ts, 22, 64))
+ 
+     a.forEach(x => b.add(fn(x)));
+->a.forEach : Symbol(SetOf.forEach, Decl(inferFromGenericFunctionReturnTypes2.ts, 34, 3))
++>a.forEach : Symbol(forEach, Decl(inferFromGenericFunctionReturnTypes2.ts, 34, 3))
+ >a : Symbol(a, Decl(inferFromGenericFunctionReturnTypes2.ts, 53, 10))
+->forEach : Symbol(SetOf.forEach, Decl(inferFromGenericFunctionReturnTypes2.ts, 34, 3))
++>forEach : Symbol(forEach, Decl(inferFromGenericFunctionReturnTypes2.ts, 34, 3))
+ >x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes2.ts, 55, 14))
+->b.add : Symbol(SetOf.add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
++>b.add : Symbol(add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
+ >b : Symbol(b, Decl(inferFromGenericFunctionReturnTypes2.ts, 54, 9))
+->add : Symbol(SetOf.add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
++>add : Symbol(add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
+ >fn : Symbol(fn, Decl(inferFromGenericFunctionReturnTypes2.ts, 52, 19))
+ >x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes2.ts, 55, 14))
+ 
+@@= skipped -38, +38 lines =@@
+ >A : Symbol(A, Decl(inferFromGenericFunctionReturnTypes2.ts, 60, 16))
+ 
+     a.forEach(x => {
+->a.forEach : Symbol(SetOf.forEach, Decl(inferFromGenericFunctionReturnTypes2.ts, 34, 3))
++>a.forEach : Symbol(forEach, Decl(inferFromGenericFunctionReturnTypes2.ts, 34, 3))
+ >a : Symbol(a, Decl(inferFromGenericFunctionReturnTypes2.ts, 61, 10))
+->forEach : Symbol(SetOf.forEach, Decl(inferFromGenericFunctionReturnTypes2.ts, 34, 3))
++>forEach : Symbol(forEach, Decl(inferFromGenericFunctionReturnTypes2.ts, 34, 3))
+ >x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes2.ts, 63, 14))
+ 
+       if (predicate(x)) result.add(x);
+ >predicate : Symbol(predicate, Decl(inferFromGenericFunctionReturnTypes2.ts, 60, 19))
+ >x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes2.ts, 63, 14))
+->result.add : Symbol(SetOf.add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
++>result.add : Symbol(add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
+ >result : Symbol(result, Decl(inferFromGenericFunctionReturnTypes2.ts, 62, 9))
+->add : Symbol(SetOf.add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
++>add : Symbol(add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
+ >x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes2.ts, 63, 14))
+ 
+     });
+@@= skipped -24, +24 lines =@@
+ >SetOf : Symbol(SetOf, Decl(inferFromGenericFunctionReturnTypes2.ts, 22, 64))
+ 
+ testSet.add(1);
+->testSet.add : Symbol(SetOf.add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
++>testSet.add : Symbol(add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
+ >testSet : Symbol(testSet, Decl(inferFromGenericFunctionReturnTypes2.ts, 70, 5))
+->add : Symbol(SetOf.add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
++>add : Symbol(add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
+ 
+ testSet.add(2);
+->testSet.add : Symbol(SetOf.add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
++>testSet.add : Symbol(add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
+ >testSet : Symbol(testSet, Decl(inferFromGenericFunctionReturnTypes2.ts, 70, 5))
+->add : Symbol(SetOf.add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
++>add : Symbol(add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
+ 
+ testSet.add(3);
+->testSet.add : Symbol(SetOf.add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
++>testSet.add : Symbol(add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
+ >testSet : Symbol(testSet, Decl(inferFromGenericFunctionReturnTypes2.ts, 70, 5))
+->add : Symbol(SetOf.add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
++>add : Symbol(add, Decl(inferFromGenericFunctionReturnTypes2.ts, 26, 14))
+ 
+ const t1 = testSet.transform(
+ >t1 : Symbol(t1, Decl(inferFromGenericFunctionReturnTypes2.ts, 75, 5))
+->testSet.transform : Symbol(SetOf.transform, Decl(inferFromGenericFunctionReturnTypes2.ts, 30, 3))
++>testSet.transform : Symbol(transform, Decl(inferFromGenericFunctionReturnTypes2.ts, 30, 3))
+ >testSet : Symbol(testSet, Decl(inferFromGenericFunctionReturnTypes2.ts, 70, 5))
+->transform : Symbol(SetOf.transform, Decl(inferFromGenericFunctionReturnTypes2.ts, 30, 3))
++>transform : Symbol(transform, Decl(inferFromGenericFunctionReturnTypes2.ts, 30, 3))
+ 
+   compose(
+ >compose : Symbol(compose, Decl(inferFromGenericFunctionReturnTypes2.ts, 39, 1), Decl(inferFromGenericFunctionReturnTypes2.ts, 46, 28))
+@@= skipped -42, +42 lines =@@
+     map(x => x.toUpperCase())
+ >map : Symbol(map, Decl(inferFromGenericFunctionReturnTypes2.ts, 50, 1))
+ >x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes2.ts, 80, 8))
+->x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>x.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes2.ts, 80, 8))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ 
+   )
+ )
+@@= skipped -16, +16 lines =@@
+ 
+ const t2 = testSet.transform(
+ >t2 : Symbol(t2, Decl(inferFromGenericFunctionReturnTypes2.ts, 86, 5))
+->testSet.transform : Symbol(SetOf.transform, Decl(inferFromGenericFunctionReturnTypes2.ts, 30, 3))
++>testSet.transform : Symbol(transform, Decl(inferFromGenericFunctionReturnTypes2.ts, 30, 3))
+ >testSet : Symbol(testSet, Decl(inferFromGenericFunctionReturnTypes2.ts, 70, 5))
+->transform : Symbol(SetOf.transform, Decl(inferFromGenericFunctionReturnTypes2.ts, 30, 3))
++>transform : Symbol(transform, Decl(inferFromGenericFunctionReturnTypes2.ts, 30, 3))
+ 
+   compose(
+ >compose : Symbol(compose, Decl(inferFromGenericFunctionReturnTypes2.ts, 39, 1), Decl(inferFromGenericFunctionReturnTypes2.ts, 46, 28))
+@@= skipped -23, +23 lines =@@
+     map(x => x.toUpperCase())
+ >map : Symbol(map, Decl(inferFromGenericFunctionReturnTypes2.ts, 50, 1))
+ >x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes2.ts, 91, 8))
+->x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>x.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes2.ts, 91, 8))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ 
+   )
+ )

@@ -1,0 +1,13 @@
+--- old.computedPropertiesInDestructuring1.symbols
++++ new.computedPropertiesInDestructuring1.symbols
+@@= skipped -81, +81 lines =@@
+ >bar : Symbol(bar, Decl(computedPropertiesInDestructuring1.ts, 23, 17))
+ 
+ ({["bar"]: bar2} = {bar: "bar"});
+->["bar"] : Symbol(["bar"], Decl(computedPropertiesInDestructuring1.ts, 25, 2))
+->"bar" : Symbol(["bar"], Decl(computedPropertiesInDestructuring1.ts, 25, 2))
++>["bar"] : Symbol(bar, Decl(computedPropertiesInDestructuring1.ts, 25, 2))
++>"bar" : Symbol(bar, Decl(computedPropertiesInDestructuring1.ts, 25, 2))
+ >bar2 : Symbol(bar2, Decl(computedPropertiesInDestructuring1.ts, 4, 5))
+ >bar : Symbol(bar, Decl(computedPropertiesInDestructuring1.ts, 25, 20))
+ 

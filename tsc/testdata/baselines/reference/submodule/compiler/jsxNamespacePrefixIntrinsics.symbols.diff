@@ -1,0 +1,23 @@
+--- old.jsxNamespacePrefixIntrinsics.symbols
++++ new.jsxNamespacePrefixIntrinsics.symbols
+@@= skipped -7, +7 lines =@@
+ >IntrinsicElements : Symbol(IntrinsicElements, Decl(jsxNamespacePrefixIntrinsics.tsx, 0, 23))
+ 
+     "ns:element": {
+->"ns:element" : Symbol(IntrinsicElements["ns:element"], Decl(jsxNamespacePrefixIntrinsics.tsx, 1, 31))
++>"ns:element" : Symbol("ns:element", Decl(jsxNamespacePrefixIntrinsics.tsx, 1, 31))
+ 
+       "ns:attribute": string;
+ >"ns:attribute" : Symbol("ns:attribute", Decl(jsxNamespacePrefixIntrinsics.tsx, 2, 19))
+ 
+     },
+     "ns:NamespacedUpcaseAlsoIntrinsic": any,
+->"ns:NamespacedUpcaseAlsoIntrinsic" : Symbol(IntrinsicElements["ns:NamespacedUpcaseAlsoIntrinsic"], Decl(jsxNamespacePrefixIntrinsics.tsx, 4, 6))
++>"ns:NamespacedUpcaseAlsoIntrinsic" : Symbol("ns:NamespacedUpcaseAlsoIntrinsic", Decl(jsxNamespacePrefixIntrinsics.tsx, 4, 6))
+ 
+     "NS:NamespacedUpcaseAlsoIntrinsic": any
+->"NS:NamespacedUpcaseAlsoIntrinsic" : Symbol(IntrinsicElements["NS:NamespacedUpcaseAlsoIntrinsic"], Decl(jsxNamespacePrefixIntrinsics.tsx, 5, 44))
++>"NS:NamespacedUpcaseAlsoIntrinsic" : Symbol("NS:NamespacedUpcaseAlsoIntrinsic", Decl(jsxNamespacePrefixIntrinsics.tsx, 5, 44))
+   }
+ }
+ 

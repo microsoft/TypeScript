@@ -1,0 +1,15 @@
+--- old.objectTypeWithStringAndNumberIndexSignatureToAny.symbols
++++ new.objectTypeWithStringAndNumberIndexSignatureToAny.symbols
+@@= skipped -50, +50 lines =@@
+ >Obj : Symbol(Obj, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 28, 1))
+ 
+     hello: string;
+->hello : Symbol(Obj.hello, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 30, 15))
++>hello : Symbol(hello, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 30, 15))
+ 
+     world: number;
+->world : Symbol(Obj.world, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 31, 18))
++>world : Symbol(world, Decl(objectTypeWithStringAndNumberIndexSignatureToAny.ts, 31, 18))
+ }
+ 
+ function f1(sToAny: StringTo<any>, nToAny: NumberTo<any>, bothToAny: StringAndNumberTo<any>, someObj: Obj) {

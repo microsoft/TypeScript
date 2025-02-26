@@ -1,0 +1,22 @@
+--- old.ambientExternalModuleWithRelativeExternalImportDeclaration.symbols
++++ new.ambientExternalModuleWithRelativeExternalImportDeclaration.symbols
+@@= skipped -10, +10 lines =@@
+ >SubModule : Symbol(SubModule, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 1, 39))
+ 
+         public static StaticVar: number;
+->StaticVar : Symbol(SubModule.StaticVar, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 2, 21))
++>StaticVar : Symbol(StaticVar, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 2, 21))
+ 
+         public InstanceVar: number;
+->InstanceVar : Symbol(SubModule.InstanceVar, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 3, 40))
++>InstanceVar : Symbol(InstanceVar, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 3, 40))
+ 
+         public x: m2.c;
+->x : Symbol(SubModule.x, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 4, 35))
++>x : Symbol(x, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 4, 35))
+ >m2 : Symbol(m2, Decl(ambientExternalModuleWithRelativeExternalImportDeclaration.ts, 0, 30))
+->c : Symbol(m2.c)
++>c : Symbol(c)
+ 
+         constructor();
+     }

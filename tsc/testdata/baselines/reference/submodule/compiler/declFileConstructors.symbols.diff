@@ -1,0 +1,97 @@
+--- old.declFileConstructors.symbols
++++ new.declFileConstructors.symbols
+@@= skipped -33, +33 lines =@@
+ 
+         return a + rests.join("");
+ >a : Symbol(a, Decl(declFileConstructors_0.ts, 15, 16))
+->rests.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
++>rests.join : Symbol(join, Decl(lib.es5.d.ts, --, --))
+ >rests : Symbol(rests, Decl(declFileConstructors_0.ts, 15, 26))
+->join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
++>join : Symbol(join, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 
+@@= skipped -24, +24 lines =@@
+ >ConstructorWithPublicParameterProperty : Symbol(ConstructorWithPublicParameterProperty, Decl(declFileConstructors_0.ts, 25, 1))
+ 
+     constructor(public x: string) {
+->x : Symbol(ConstructorWithPublicParameterProperty.x, Decl(declFileConstructors_0.ts, 28, 16))
++>x : Symbol(x, Decl(declFileConstructors_0.ts, 28, 16))
+     }
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >ConstructorWithPrivateParameterProperty : Symbol(ConstructorWithPrivateParameterProperty, Decl(declFileConstructors_0.ts, 30, 1))
+ 
+     constructor(private x: string) {
+->x : Symbol(ConstructorWithPrivateParameterProperty.x, Decl(declFileConstructors_0.ts, 33, 16))
++>x : Symbol(x, Decl(declFileConstructors_0.ts, 33, 16))
+     }
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >ConstructorWithOptionalParameterProperty : Symbol(ConstructorWithOptionalParameterProperty, Decl(declFileConstructors_0.ts, 35, 1))
+ 
+     constructor(public x?: string) {
+->x : Symbol(ConstructorWithOptionalParameterProperty.x, Decl(declFileConstructors_0.ts, 38, 16))
++>x : Symbol(x, Decl(declFileConstructors_0.ts, 38, 16))
+     }
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >ConstructorWithParameterInitializer : Symbol(ConstructorWithParameterInitializer, Decl(declFileConstructors_0.ts, 40, 1))
+ 
+     constructor(public x = "hello") {
+->x : Symbol(ConstructorWithParameterInitializer.x, Decl(declFileConstructors_0.ts, 43, 16))
++>x : Symbol(x, Decl(declFileConstructors_0.ts, 43, 16))
+     }
+ }
+ 
+@@= skipped -38, +38 lines =@@
+ 
+         return a + rests.join("");
+ >a : Symbol(a, Decl(declFileConstructors_1.ts, 15, 16))
+->rests.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
++>rests.join : Symbol(join, Decl(lib.es5.d.ts, --, --))
+ >rests : Symbol(rests, Decl(declFileConstructors_1.ts, 15, 26))
+->join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
++>join : Symbol(join, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 
+@@= skipped -24, +24 lines =@@
+ >GlobalConstructorWithPublicParameterProperty : Symbol(GlobalConstructorWithPublicParameterProperty, Decl(declFileConstructors_1.ts, 25, 1))
+ 
+     constructor(public x: string) {
+->x : Symbol(GlobalConstructorWithPublicParameterProperty.x, Decl(declFileConstructors_1.ts, 28, 16))
++>x : Symbol(x, Decl(declFileConstructors_1.ts, 28, 16))
+     }
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >GlobalConstructorWithPrivateParameterProperty : Symbol(GlobalConstructorWithPrivateParameterProperty, Decl(declFileConstructors_1.ts, 30, 1))
+ 
+     constructor(private x: string) {
+->x : Symbol(GlobalConstructorWithPrivateParameterProperty.x, Decl(declFileConstructors_1.ts, 33, 16))
++>x : Symbol(x, Decl(declFileConstructors_1.ts, 33, 16))
+     }
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >GlobalConstructorWithOptionalParameterProperty : Symbol(GlobalConstructorWithOptionalParameterProperty, Decl(declFileConstructors_1.ts, 35, 1))
+ 
+     constructor(public x?: string) {
+->x : Symbol(GlobalConstructorWithOptionalParameterProperty.x, Decl(declFileConstructors_1.ts, 38, 16))
++>x : Symbol(x, Decl(declFileConstructors_1.ts, 38, 16))
+     }
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >GlobalConstructorWithParameterInitializer : Symbol(GlobalConstructorWithParameterInitializer, Decl(declFileConstructors_1.ts, 40, 1))
+ 
+     constructor(public x = "hello") {
+->x : Symbol(GlobalConstructorWithParameterInitializer.x, Decl(declFileConstructors_1.ts, 43, 16))
++>x : Symbol(x, Decl(declFileConstructors_1.ts, 43, 16))
+     }
+ }

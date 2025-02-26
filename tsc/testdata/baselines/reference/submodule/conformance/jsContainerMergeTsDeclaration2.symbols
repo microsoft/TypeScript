@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/salsa/jsContainerMergeTsDeclaration2.ts] ////
+
+=== a.d.ts ===
+declare namespace C {
+>C : Symbol(C, Decl(a.d.ts, 0, 0))
+
+    function bar(): void
+>bar : Symbol(bar, Decl(a.d.ts, 0, 21))
+}
+=== b.js ===
+C.prototype = {};
+>C : Symbol(C, Decl(a.d.ts, 0, 0))
+
+C.bar = 2;
+>C.bar : Symbol(bar, Decl(a.d.ts, 0, 21))
+>C : Symbol(C, Decl(a.d.ts, 0, 0))
+>bar : Symbol(bar, Decl(a.d.ts, 0, 21))
+

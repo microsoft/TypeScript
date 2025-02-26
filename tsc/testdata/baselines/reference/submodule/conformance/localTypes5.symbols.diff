@@ -1,0 +1,23 @@
+--- old.localTypes5.symbols
++++ new.localTypes5.symbols
+@@= skipped -8, +8 lines =@@
+ >X : Symbol(X, Decl(localTypes5.ts, 0, 19))
+ 
+         m<B, C>() {
+->m : Symbol(X.m, Decl(localTypes5.ts, 1, 13))
++>m : Symbol(m, Decl(localTypes5.ts, 1, 13))
+ >B : Symbol(B, Decl(localTypes5.ts, 2, 10))
+ >C : Symbol(C, Decl(localTypes5.ts, 2, 12))
+ 
+@@= skipped -23, +23 lines =@@
+ >X : Symbol(X, Decl(localTypes5.ts, 0, 19))
+ 
+     return x.m<number, boolean>();
+->x.m : Symbol(X.m, Decl(localTypes5.ts, 1, 13))
++>x.m : Symbol(m, Decl(localTypes5.ts, 1, 13))
+ >x : Symbol(x, Decl(localTypes5.ts, 10, 7))
+->m : Symbol(X.m, Decl(localTypes5.ts, 1, 13))
++>m : Symbol(m, Decl(localTypes5.ts, 1, 13))
+ }
+ var x = foo<void>();
+ >x : Symbol(x, Decl(localTypes5.ts, 13, 3))

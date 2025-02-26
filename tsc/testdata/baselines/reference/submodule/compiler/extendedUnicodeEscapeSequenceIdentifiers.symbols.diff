@@ -1,0 +1,22 @@
+--- old.extendedUnicodeEscapeSequenceIdentifiers.symbols
++++ new.extendedUnicodeEscapeSequenceIdentifiers.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === extendedUnicodeEscapeSequenceIdentifiers.ts ===
+ const \u{0061} = 12;
+->\u{0061} : Symbol(\u{0061}, Decl(extendedUnicodeEscapeSequenceIdentifiers.ts, 0, 5))
++>\u{0061} : Symbol(a, Decl(extendedUnicodeEscapeSequenceIdentifiers.ts, 0, 5))
+ 
+ const a\u{0061} = 12;
+->a\u{0061} : Symbol(a\u{0061}, Decl(extendedUnicodeEscapeSequenceIdentifiers.ts, 1, 5))
++>a\u{0061} : Symbol(aa, Decl(extendedUnicodeEscapeSequenceIdentifiers.ts, 1, 5))
+ 
+ console.log(a + aa);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->a : Symbol(\u{0061}, Decl(extendedUnicodeEscapeSequenceIdentifiers.ts, 0, 5))
+->aa : Symbol(a\u{0061}, Decl(extendedUnicodeEscapeSequenceIdentifiers.ts, 1, 5))
++>a : Symbol(a, Decl(extendedUnicodeEscapeSequenceIdentifiers.ts, 0, 5))
++>aa : Symbol(aa, Decl(extendedUnicodeEscapeSequenceIdentifiers.ts, 1, 5))
+ 

@@ -1,0 +1,11 @@
+--- old.genericTupleWithSimplifiableElements.symbols
++++ new.genericTupleWithSimplifiableElements.symbols
+@@= skipped -25, +25 lines =@@
+ >SS : Symbol(SS, Decl(genericTupleWithSimplifiableElements.ts, 8, 8))
+ 
+     f() {
+->f : Symbol(I.f, Decl(genericTupleWithSimplifiableElements.ts, 8, 27))
++>f : Symbol(f, Decl(genericTupleWithSimplifiableElements.ts, 8, 27))
+ 
+         let w: [...args: { [S in SS]: [a: number]; }[SS]] = [1];
+ >w : Symbol(w, Decl(genericTupleWithSimplifiableElements.ts, 10, 11))

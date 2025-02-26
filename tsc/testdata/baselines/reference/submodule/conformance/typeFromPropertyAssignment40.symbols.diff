@@ -1,0 +1,22 @@
+--- old.typeFromPropertyAssignment40.symbols
++++ new.typeFromPropertyAssignment40.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     var self = this
+ >self : Symbol(self, Decl(typeFromPropertyAssignment40.js, 1, 7))
+->this : Symbol(Outer, Decl(typeFromPropertyAssignment40.js, 0, 0))
+ 
+     self.y = 2
+->self.y : Symbol(Outer.y, Decl(typeFromPropertyAssignment40.js, 1, 19))
+ >self : Symbol(self, Decl(typeFromPropertyAssignment40.js, 1, 7))
+->y : Symbol(Outer.y, Decl(typeFromPropertyAssignment40.js, 1, 19))
+ }
+ /** @type {Outer} */
+ var ok
+ >ok : Symbol(ok, Decl(typeFromPropertyAssignment40.js, 5, 3))
+ 
+ ok.y
+->ok.y : Symbol(Outer.y, Decl(typeFromPropertyAssignment40.js, 1, 19))
+ >ok : Symbol(ok, Decl(typeFromPropertyAssignment40.js, 5, 3))
+->y : Symbol(Outer.y, Decl(typeFromPropertyAssignment40.js, 1, 19))
+ 

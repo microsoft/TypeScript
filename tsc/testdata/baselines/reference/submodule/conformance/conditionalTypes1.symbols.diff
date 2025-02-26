@@ -1,0 +1,89 @@
+--- old.conditionalTypes1.symbols
++++ new.conditionalTypes1.symbols
+@@= skipped -289, +289 lines =@@
+ >Item : Symbol(Item, Decl(conditionalTypes1.ts, 75, 1))
+ 
+     id: number;
+->id : Symbol(Item.id, Decl(conditionalTypes1.ts, 77, 16))
++>id : Symbol(id, Decl(conditionalTypes1.ts, 77, 16))
+ 
+     name: string;
+->name : Symbol(Item.name, Decl(conditionalTypes1.ts, 78, 15))
++>name : Symbol(name, Decl(conditionalTypes1.ts, 78, 15))
+ 
+     subitems: string[];
+->subitems : Symbol(Item.subitems, Decl(conditionalTypes1.ts, 79, 17))
++>subitems : Symbol(subitems, Decl(conditionalTypes1.ts, 79, 17))
+ }
+ 
+ type KOItem = KnockedOutObj<Item>;
+@@= skipped -18, +18 lines =@@
+ >Part : Symbol(Part, Decl(conditionalTypes1.ts, 83, 34))
+ 
+     id: number;
+->id : Symbol(Part.id, Decl(conditionalTypes1.ts, 85, 16))
++>id : Symbol(id, Decl(conditionalTypes1.ts, 85, 16))
+ 
+     name: string;
+->name : Symbol(Part.name, Decl(conditionalTypes1.ts, 86, 15))
++>name : Symbol(name, Decl(conditionalTypes1.ts, 86, 15))
+ 
+     subparts: Part[];
+->subparts : Symbol(Part.subparts, Decl(conditionalTypes1.ts, 87, 17))
++>subparts : Symbol(subparts, Decl(conditionalTypes1.ts, 87, 17))
+ >Part : Symbol(Part, Decl(conditionalTypes1.ts, 83, 34))
+ 
+     updatePart(newName: string): void;
+->updatePart : Symbol(Part.updatePart, Decl(conditionalTypes1.ts, 88, 21))
++>updatePart : Symbol(updatePart, Decl(conditionalTypes1.ts, 88, 21))
+ >newName : Symbol(newName, Decl(conditionalTypes1.ts, 89, 15))
+ }
+ 
+@@= skipped -912, +912 lines =@@
+ >A : Symbol(A, Decl(conditionalTypes1.ts, 307, 45))
+ 
+     a: 'a';
+->a : Symbol(A.a, Decl(conditionalTypes1.ts, 308, 13))
++>a : Symbol(a, Decl(conditionalTypes1.ts, 308, 13))
+ }
+ interface B1 extends A {
+ >B1 : Symbol(B1, Decl(conditionalTypes1.ts, 310, 1))
+ >A : Symbol(A, Decl(conditionalTypes1.ts, 307, 45))
+ 
+     b: 'b';
+->b : Symbol(B1.b, Decl(conditionalTypes1.ts, 311, 24))
++>b : Symbol(b, Decl(conditionalTypes1.ts, 311, 24))
+ 
+     c: OldDiff<keyof this, keyof A>;
+->c : Symbol(B1.c, Decl(conditionalTypes1.ts, 312, 11))
++>c : Symbol(c, Decl(conditionalTypes1.ts, 312, 11))
+ >OldDiff : Symbol(OldDiff, Decl(conditionalTypes1.ts, 298, 1))
+ >A : Symbol(A, Decl(conditionalTypes1.ts, 307, 45))
+ }
+@@= skipped -19, +19 lines =@@
+ >A : Symbol(A, Decl(conditionalTypes1.ts, 307, 45))
+ 
+     b: 'b';
+->b : Symbol(B2.b, Decl(conditionalTypes1.ts, 315, 24))
++>b : Symbol(b, Decl(conditionalTypes1.ts, 315, 24))
+ 
+     c: NewDiff<keyof this, keyof A>;
+->c : Symbol(B2.c, Decl(conditionalTypes1.ts, 316, 11))
++>c : Symbol(c, Decl(conditionalTypes1.ts, 316, 11))
+ >NewDiff : Symbol(NewDiff, Decl(conditionalTypes1.ts, 306, 5))
+ >A : Symbol(A, Decl(conditionalTypes1.ts, 307, 45))
+ }
+@@= skipped -47, +47 lines =@@
+ 
+ interface Foo2 { foo: string; }
+ >Foo2 : Symbol(Foo2, Decl(conditionalTypes1.ts, 328, 51))
+->foo : Symbol(Foo2.foo, Decl(conditionalTypes1.ts, 332, 16))
++>foo : Symbol(foo, Decl(conditionalTypes1.ts, 332, 16))
+ 
+ interface Bar2 { bar: string; }
+ >Bar2 : Symbol(Bar2, Decl(conditionalTypes1.ts, 332, 31))
+->bar : Symbol(Bar2.bar, Decl(conditionalTypes1.ts, 333, 16))
++>bar : Symbol(bar, Decl(conditionalTypes1.ts, 333, 16))
+ 
+ type FooBar = Foo2 | Bar2;
+ >FooBar : Symbol(FooBar, Decl(conditionalTypes1.ts, 333, 31))

@@ -1,0 +1,10 @@
+--- old.allowSyntheticDefaultImports3.symbols
++++ new.allowSyntheticDefaultImports3.symbols
+@@= skipped -12, +12 lines =@@
+ >Foo : Symbol(Foo, Decl(b.ts, 0, 0))
+ 
+ 	member: string;
+->member : Symbol(Foo.member, Decl(b.ts, 0, 18))
++>member : Symbol(member, Decl(b.ts, 0, 18))
+ }
+ 

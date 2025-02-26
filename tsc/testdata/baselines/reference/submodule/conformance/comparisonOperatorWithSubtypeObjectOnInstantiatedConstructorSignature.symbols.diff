@@ -1,0 +1,20 @@
+--- old.comparisonOperatorWithSubtypeObjectOnInstantiatedConstructorSignature.symbols
++++ new.comparisonOperatorWithSubtypeObjectOnInstantiatedConstructorSignature.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnInstantiatedConstructorSignature.ts, 0, 0))
+ 
+     public a: string;
+->a : Symbol(Base.a, Decl(comparisonOperatorWithSubtypeObjectOnInstantiatedConstructorSignature.ts, 0, 12))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnInstantiatedConstructorSignature.ts, 0, 12))
+ }
+ 
+ class Derived extends Base {
+@@= skipped -8, +8 lines =@@
+ >Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnInstantiatedConstructorSignature.ts, 0, 0))
+ 
+     public b: string;
+->b : Symbol(Derived.b, Decl(comparisonOperatorWithSubtypeObjectOnInstantiatedConstructorSignature.ts, 4, 28))
++>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnInstantiatedConstructorSignature.ts, 4, 28))
+ }
+ 
+ var a1: { new <T>(x: T): T };

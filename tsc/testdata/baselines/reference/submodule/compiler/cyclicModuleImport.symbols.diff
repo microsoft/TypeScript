@@ -1,0 +1,28 @@
+--- old.cyclicModuleImport.symbols
++++ new.cyclicModuleImport.symbols
+@@= skipped -10, +10 lines =@@
+ >SubModule : Symbol(SubModule, Decl(cyclicModuleImport.ts, 1, 46))
+ 
+         public static StaticVar: number;
+->StaticVar : Symbol(SubModule.StaticVar, Decl(cyclicModuleImport.ts, 2, 21))
++>StaticVar : Symbol(StaticVar, Decl(cyclicModuleImport.ts, 2, 21))
+ 
+         public InstanceVar: number;
+->InstanceVar : Symbol(SubModule.InstanceVar, Decl(cyclicModuleImport.ts, 3, 40))
++>InstanceVar : Symbol(InstanceVar, Decl(cyclicModuleImport.ts, 3, 40))
+ 
+         public main: MainModule;
+->main : Symbol(SubModule.main, Decl(cyclicModuleImport.ts, 4, 35))
++>main : Symbol(main, Decl(cyclicModuleImport.ts, 4, 35))
+ >MainModule : Symbol(MainModule, Decl(cyclicModuleImport.ts, 0, 28))
+ 
+         constructor();
+@@= skipped -24, +24 lines =@@
+ >MainModule : Symbol(MainModule, Decl(cyclicModuleImport.ts, 11, 44))
+ 
+         public SubModule: SubModule;
+->SubModule : Symbol(MainModule.SubModule, Decl(cyclicModuleImport.ts, 12, 22))
++>SubModule : Symbol(SubModule, Decl(cyclicModuleImport.ts, 12, 22))
+ >SubModule : Symbol(SubModule, Decl(cyclicModuleImport.ts, 10, 29))
+ 
+         constructor();

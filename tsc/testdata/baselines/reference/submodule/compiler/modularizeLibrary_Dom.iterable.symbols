@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/modularizeLibrary_Dom.iterable.ts] ////
+
+=== modularizeLibrary_Dom.iterable.ts ===
+for (const element of document.getElementsByTagName("a")) {
+>element : Symbol(element, Decl(modularizeLibrary_Dom.iterable.ts, 0, 10))
+>document.getElementsByTagName : Symbol(getElementsByTagName, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>getElementsByTagName : Symbol(getElementsByTagName, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    element.href;
+>element.href : Symbol(href, Decl(lib.dom.d.ts, --, --))
+>element : Symbol(element, Decl(modularizeLibrary_Dom.iterable.ts, 0, 10))
+>href : Symbol(href, Decl(lib.dom.d.ts, --, --))
+}

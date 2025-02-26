@@ -1,0 +1,21 @@
+--- old.extendGenericArray.symbols
++++ new.extendGenericArray.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(extendGenericArray.ts, 0, 16))
+ 
+     foo(): T;
+->foo : Symbol(Array.foo, Decl(extendGenericArray.ts, 0, 20))
++>foo : Symbol(foo, Decl(extendGenericArray.ts, 0, 20))
+ >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(extendGenericArray.ts, 0, 16))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ 
+ var x: number = arr.foo();
+ >x : Symbol(x, Decl(extendGenericArray.ts, 5, 3))
+->arr.foo : Symbol(Array.foo, Decl(extendGenericArray.ts, 0, 20))
++>arr.foo : Symbol(foo, Decl(extendGenericArray.ts, 0, 20))
+ >arr : Symbol(arr, Decl(extendGenericArray.ts, 4, 3))
+->foo : Symbol(Array.foo, Decl(extendGenericArray.ts, 0, 20))
++>foo : Symbol(foo, Decl(extendGenericArray.ts, 0, 20))
+ 

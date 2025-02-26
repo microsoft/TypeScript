@@ -1,0 +1,70 @@
+--- old.genericSpecializations3.symbols
++++ new.genericSpecializations3.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(genericSpecializations3.ts, 0, 15))
+ 
+     foo(x: T): T;
+->foo : Symbol(IFoo.foo, Decl(genericSpecializations3.ts, 0, 19))
++>foo : Symbol(foo, Decl(genericSpecializations3.ts, 0, 19))
+ >x : Symbol(x, Decl(genericSpecializations3.ts, 1, 8))
+ >T : Symbol(T, Decl(genericSpecializations3.ts, 0, 15))
+ >T : Symbol(T, Decl(genericSpecializations3.ts, 0, 15))
+@@= skipped -11, +11 lines =@@
+ >IFoo : Symbol(IFoo, Decl(genericSpecializations3.ts, 0, 0))
+ 
+ iFoo.foo(1);
+->iFoo.foo : Symbol(IFoo.foo, Decl(genericSpecializations3.ts, 0, 19))
++>iFoo.foo : Symbol(foo, Decl(genericSpecializations3.ts, 0, 19))
+ >iFoo : Symbol(iFoo, Decl(genericSpecializations3.ts, 4, 3))
+->foo : Symbol(IFoo.foo, Decl(genericSpecializations3.ts, 0, 19))
++>foo : Symbol(foo, Decl(genericSpecializations3.ts, 0, 19))
+ 
+ class IntFooBad implements IFoo<number> { // error
+ >IntFooBad : Symbol(IntFooBad, Decl(genericSpecializations3.ts, 5, 12))
+ >IFoo : Symbol(IFoo, Decl(genericSpecializations3.ts, 0, 0))
+ 
+     foo(x: string): string { return null; }
+->foo : Symbol(IntFooBad.foo, Decl(genericSpecializations3.ts, 7, 41))
++>foo : Symbol(foo, Decl(genericSpecializations3.ts, 7, 41))
+ >x : Symbol(x, Decl(genericSpecializations3.ts, 8, 8))
+ }
+ 
+@@= skipped -22, +22 lines =@@
+ >IFoo : Symbol(IFoo, Decl(genericSpecializations3.ts, 0, 0))
+ 
+     foo(x: number): number { return null; }
+->foo : Symbol(IntFoo.foo, Decl(genericSpecializations3.ts, 13, 38))
++>foo : Symbol(foo, Decl(genericSpecializations3.ts, 13, 38))
+ >x : Symbol(x, Decl(genericSpecializations3.ts, 14, 8))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >IFoo : Symbol(IFoo, Decl(genericSpecializations3.ts, 0, 0))
+ 
+     foo(x: string): string { return null; }
+->foo : Symbol(StringFoo2.foo, Decl(genericSpecializations3.ts, 19, 42))
++>foo : Symbol(foo, Decl(genericSpecializations3.ts, 19, 42))
+ >x : Symbol(x, Decl(genericSpecializations3.ts, 20, 8))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >StringFoo2 : Symbol(StringFoo2, Decl(genericSpecializations3.ts, 17, 19))
+ 
+ stringFoo2.foo("hm");
+->stringFoo2.foo : Symbol(StringFoo2.foo, Decl(genericSpecializations3.ts, 19, 42))
++>stringFoo2.foo : Symbol(foo, Decl(genericSpecializations3.ts, 19, 42))
+ >stringFoo2 : Symbol(stringFoo2, Decl(genericSpecializations3.ts, 23, 3))
+->foo : Symbol(StringFoo2.foo, Decl(genericSpecializations3.ts, 19, 42))
++>foo : Symbol(foo, Decl(genericSpecializations3.ts, 19, 42))
+ 
+ 
+ intFoo = stringFoo2; // error
+@@= skipped -19, +19 lines =@@
+ >IFoo : Symbol(IFoo, Decl(genericSpecializations3.ts, 0, 0))
+ 
+     foo<T>(x: T): T { return null; }
+->foo : Symbol(StringFoo3.foo, Decl(genericSpecializations3.ts, 31, 42))
++>foo : Symbol(foo, Decl(genericSpecializations3.ts, 31, 42))
+ >T : Symbol(T, Decl(genericSpecializations3.ts, 32, 8))
+ >x : Symbol(x, Decl(genericSpecializations3.ts, 32, 11))
+ >T : Symbol(T, Decl(genericSpecializations3.ts, 32, 8))

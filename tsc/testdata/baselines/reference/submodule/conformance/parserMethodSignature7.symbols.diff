@@ -1,0 +1,10 @@
+--- old.parserMethodSignature7.symbols
++++ new.parserMethodSignature7.symbols
+@@= skipped -4, +4 lines =@@
+ >I : Symbol(I, Decl(parserMethodSignature7.ts, 0, 0))
+ 
+   "G"<T>();
+->"G" : Symbol(I["G"], Decl(parserMethodSignature7.ts, 0, 13))
++>"G" : Symbol(G, Decl(parserMethodSignature7.ts, 0, 13))
+ >T : Symbol(T, Decl(parserMethodSignature7.ts, 1, 6))
+ }

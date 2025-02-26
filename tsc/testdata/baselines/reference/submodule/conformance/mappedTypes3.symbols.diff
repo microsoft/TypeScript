@@ -1,0 +1,99 @@
+--- old.mappedTypes3.symbols
++++ new.mappedTypes3.symbols
+@@= skipped -5, +5 lines =@@
+ >P : Symbol(P, Decl(mappedTypes3.ts, 0, 10))
+ 
+     value: P;
+->value : Symbol(Box.value, Decl(mappedTypes3.ts, 0, 14))
++>value : Symbol(value, Decl(mappedTypes3.ts, 0, 14))
+ >P : Symbol(P, Decl(mappedTypes3.ts, 0, 10))
+ }
+ 
+@@= skipped -36, +36 lines =@@
+ >Bacon : Symbol(Bacon, Decl(mappedTypes3.ts, 9, 50))
+ 
+     isPerfect: boolean;
+->isPerfect : Symbol(Bacon.isPerfect, Decl(mappedTypes3.ts, 11, 17))
++>isPerfect : Symbol(isPerfect, Decl(mappedTypes3.ts, 11, 17))
+ 
+     weight: number;
+->weight : Symbol(Bacon.weight, Decl(mappedTypes3.ts, 12, 23))
++>weight : Symbol(weight, Decl(mappedTypes3.ts, 12, 23))
+ }
+ 
+ interface BoxifiedBacon {
+ >BoxifiedBacon : Symbol(BoxifiedBacon, Decl(mappedTypes3.ts, 14, 1))
+ 
+     isPerfect: Box<boolean>;
+->isPerfect : Symbol(BoxifiedBacon.isPerfect, Decl(mappedTypes3.ts, 16, 25))
++>isPerfect : Symbol(isPerfect, Decl(mappedTypes3.ts, 16, 25))
+ >Box : Symbol(Box, Decl(mappedTypes3.ts, 0, 0))
+ 
+     weight: Box<number>;
+->weight : Symbol(BoxifiedBacon.weight, Decl(mappedTypes3.ts, 17, 28))
++>weight : Symbol(weight, Decl(mappedTypes3.ts, 17, 28))
+ >Box : Symbol(Box, Decl(mappedTypes3.ts, 0, 0))
+ }
+ 
+@@= skipped -30, +30 lines =@@
+ 
+     let isPerfect = bb.isPerfect.value;
+ >isPerfect : Symbol(isPerfect, Decl(mappedTypes3.ts, 23, 7))
+->bb.isPerfect.value : Symbol(Box.value, Decl(mappedTypes3.ts, 0, 14))
++>bb.isPerfect.value : Symbol(value, Decl(mappedTypes3.ts, 0, 14))
+ >bb.isPerfect : Symbol(isPerfect, Decl(mappedTypes3.ts, 11, 17))
+ >bb : Symbol(bb, Decl(mappedTypes3.ts, 22, 7))
+ >isPerfect : Symbol(isPerfect, Decl(mappedTypes3.ts, 11, 17))
+->value : Symbol(Box.value, Decl(mappedTypes3.ts, 0, 14))
++>value : Symbol(value, Decl(mappedTypes3.ts, 0, 14))
+ 
+     let weight = bb.weight.value;
+ >weight : Symbol(weight, Decl(mappedTypes3.ts, 24, 7))
+->bb.weight.value : Symbol(Box.value, Decl(mappedTypes3.ts, 0, 14))
++>bb.weight.value : Symbol(value, Decl(mappedTypes3.ts, 0, 14))
+ >bb.weight : Symbol(weight, Decl(mappedTypes3.ts, 12, 23))
+ >bb : Symbol(bb, Decl(mappedTypes3.ts, 22, 7))
+ >weight : Symbol(weight, Decl(mappedTypes3.ts, 12, 23))
+->value : Symbol(Box.value, Decl(mappedTypes3.ts, 0, 14))
++>value : Symbol(value, Decl(mappedTypes3.ts, 0, 14))
+ }
+ 
+ function f2(bb: Boxified<Bacon>) {
+@@= skipped -28, +28 lines =@@
+ 
+     let bool = b.isPerfect;
+ >bool : Symbol(bool, Decl(mappedTypes3.ts, 29, 7))
+->b.isPerfect : Symbol(Bacon.isPerfect, Decl(mappedTypes3.ts, 11, 17))
++>b.isPerfect : Symbol(isPerfect, Decl(mappedTypes3.ts, 11, 17))
+ >b : Symbol(b, Decl(mappedTypes3.ts, 28, 7))
+->isPerfect : Symbol(Bacon.isPerfect, Decl(mappedTypes3.ts, 11, 17))
++>isPerfect : Symbol(isPerfect, Decl(mappedTypes3.ts, 11, 17))
+ 
+     let weight = b.weight;
+ >weight : Symbol(weight, Decl(mappedTypes3.ts, 30, 7))
+->b.weight : Symbol(Bacon.weight, Decl(mappedTypes3.ts, 12, 23))
++>b.weight : Symbol(weight, Decl(mappedTypes3.ts, 12, 23))
+ >b : Symbol(b, Decl(mappedTypes3.ts, 28, 7))
+->weight : Symbol(Bacon.weight, Decl(mappedTypes3.ts, 12, 23))
++>weight : Symbol(weight, Decl(mappedTypes3.ts, 12, 23))
+ }
+ 
+ function f3(bb: BoxifiedBacon) {
+@@= skipped -24, +24 lines =@@
+ 
+     let bool = b.isPerfect;
+ >bool : Symbol(bool, Decl(mappedTypes3.ts, 35, 7))
+->b.isPerfect : Symbol(Bacon.isPerfect, Decl(mappedTypes3.ts, 11, 17))
++>b.isPerfect : Symbol(isPerfect, Decl(mappedTypes3.ts, 11, 17))
+ >b : Symbol(b, Decl(mappedTypes3.ts, 34, 7))
+->isPerfect : Symbol(Bacon.isPerfect, Decl(mappedTypes3.ts, 11, 17))
++>isPerfect : Symbol(isPerfect, Decl(mappedTypes3.ts, 11, 17))
+ 
+     let weight = bb.weight;
+ >weight : Symbol(weight, Decl(mappedTypes3.ts, 36, 7))
+->bb.weight : Symbol(BoxifiedBacon.weight, Decl(mappedTypes3.ts, 17, 28))
++>bb.weight : Symbol(weight, Decl(mappedTypes3.ts, 17, 28))
+ >bb : Symbol(bb, Decl(mappedTypes3.ts, 33, 12))
+->weight : Symbol(BoxifiedBacon.weight, Decl(mappedTypes3.ts, 17, 28))
++>weight : Symbol(weight, Decl(mappedTypes3.ts, 17, 28))
+ }

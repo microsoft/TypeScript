@@ -1,0 +1,17 @@
+--- old.sourceMapValidationImport.symbols
++++ new.sourceMapValidationImport.symbols
+@@= skipped -10, +10 lines =@@
+ import a = m.c;
+ >a : Symbol(a, Decl(sourceMapValidationImport.ts, 3, 1))
+ >m : Symbol(m, Decl(sourceMapValidationImport.ts, 0, 0))
+->c : Symbol(a, Decl(sourceMapValidationImport.ts, 0, 17))
++>c : Symbol(c, Decl(sourceMapValidationImport.ts, 0, 17))
+ 
+ export import b = m.c;
+ >b : Symbol(b, Decl(sourceMapValidationImport.ts, 4, 15))
+ >m : Symbol(m, Decl(sourceMapValidationImport.ts, 0, 0))
+->c : Symbol(a, Decl(sourceMapValidationImport.ts, 0, 17))
++>c : Symbol(c, Decl(sourceMapValidationImport.ts, 0, 17))
+ 
+ var x = new a();
+ >x : Symbol(x, Decl(sourceMapValidationImport.ts, 6, 3))

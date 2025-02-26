@@ -1,0 +1,13 @@
+--- old.taggedTemplateStringsWithOverloadResolution3.symbols
++++ new.taggedTemplateStringsWithOverloadResolution3.symbols
+@@= skipped -225, +225 lines =@@
+ fn5 `${ (n) => n.substr(0) }`;
+ >fn5 : Symbol(fn5, Decl(taggedTemplateStringsWithOverloadResolution3.ts, 62, 25), Decl(taggedTemplateStringsWithOverloadResolution3.ts, 65, 73), Decl(taggedTemplateStringsWithOverloadResolution3.ts, 66, 73))
+ >n : Symbol(n, Decl(taggedTemplateStringsWithOverloadResolution3.ts, 69, 9))
+->n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
++>n.substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
+ >n : Symbol(n, Decl(taggedTemplateStringsWithOverloadResolution3.ts, 69, 9))
+->substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
++>substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
+ 
+ 

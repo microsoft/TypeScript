@@ -1,0 +1,20 @@
+--- old.addMoreOverloadsToBaseSignature.symbols
++++ new.addMoreOverloadsToBaseSignature.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(addMoreOverloadsToBaseSignature.ts, 0, 0))
+ 
+     f(): string;
+->f : Symbol(Foo.f, Decl(addMoreOverloadsToBaseSignature.ts, 0, 15))
++>f : Symbol(f, Decl(addMoreOverloadsToBaseSignature.ts, 0, 15))
+ }
+ 
+ interface Bar extends Foo {
+@@= skipped -8, +8 lines =@@
+ >Foo : Symbol(Foo, Decl(addMoreOverloadsToBaseSignature.ts, 0, 0))
+ 
+     f(key: string): string;
+->f : Symbol(Bar.f, Decl(addMoreOverloadsToBaseSignature.ts, 4, 27))
++>f : Symbol(f, Decl(addMoreOverloadsToBaseSignature.ts, 4, 27))
+ >key : Symbol(key, Decl(addMoreOverloadsToBaseSignature.ts, 5, 6))
+ }
+ 

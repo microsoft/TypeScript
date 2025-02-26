@@ -1,0 +1,40 @@
+--- old.interfaceImplementation3.symbols
++++ new.interfaceImplementation3.symbols
+@@= skipped -4, +4 lines =@@
+ >I1 : Symbol(I1, Decl(interfaceImplementation3.ts, 0, 0))
+ 
+     iObj:{ };
+->iObj : Symbol(I1.iObj, Decl(interfaceImplementation3.ts, 0, 14))
++>iObj : Symbol(iObj, Decl(interfaceImplementation3.ts, 0, 14))
+ 
+     iNum:number;
+->iNum : Symbol(I1.iNum, Decl(interfaceImplementation3.ts, 1, 13))
++>iNum : Symbol(iNum, Decl(interfaceImplementation3.ts, 1, 13))
+ 
+     iAny:any;
+->iAny : Symbol(I1.iAny, Decl(interfaceImplementation3.ts, 2, 16))
++>iAny : Symbol(iAny, Decl(interfaceImplementation3.ts, 2, 16))
+ 
+     iFn():void;
+->iFn : Symbol(I1.iFn, Decl(interfaceImplementation3.ts, 3, 13))
++>iFn : Symbol(iFn, Decl(interfaceImplementation3.ts, 3, 13))
+ }
+ 
+ class C4 implements I1 {
+@@= skipped -17, +17 lines =@@
+ >I1 : Symbol(I1, Decl(interfaceImplementation3.ts, 0, 0))
+ 
+     public iObj:{ };
+->iObj : Symbol(C4.iObj, Decl(interfaceImplementation3.ts, 7, 24))
++>iObj : Symbol(iObj, Decl(interfaceImplementation3.ts, 7, 24))
+ 
+     public iNum:number;
+->iNum : Symbol(C4.iNum, Decl(interfaceImplementation3.ts, 8, 20))
++>iNum : Symbol(iNum, Decl(interfaceImplementation3.ts, 8, 20))
+ 
+     public iFn() { }
+->iFn : Symbol(C4.iFn, Decl(interfaceImplementation3.ts, 9, 23))
++>iFn : Symbol(iFn, Decl(interfaceImplementation3.ts, 9, 23))
+ }
+ 
+ 

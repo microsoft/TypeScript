@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES2015Target.ts] ////
+
+=== esnextmodulekindWithES2015Target.ts ===
+export default class A
+>A : Symbol(default, Decl(esnextmodulekindWithES2015Target.ts, 0, 0))
+{
+    constructor ()
+    {
+
+    }
+
+    public B()
+>B : Symbol(B, Decl(esnextmodulekindWithES2015Target.ts, 5, 5))
+    {
+        return 42;
+    }
+}

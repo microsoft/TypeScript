@@ -1,0 +1,55 @@
+--- old.contextualExpressionTypecheckingDoesntBlowStack.symbols
++++ new.contextualExpressionTypecheckingDoesntBlowStack.symbols
+@@= skipped -5, +5 lines =@@
+ >IValidationError : Symbol(IValidationError, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 0, 0))
+ 
+     message: string;
+->message : Symbol(IValidationError.message, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 1, 35))
++>message : Symbol(message, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 1, 35))
+ }
+ 
+ export default class Operation {
+->Operation : Symbol(Operation, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 3, 1))
++>Operation : Symbol(default, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 3, 1))
+ 
+     validateParameters(parameterValues: any) : IValidationError[] | null {
+->validateParameters : Symbol(Operation.validateParameters, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 5, 32))
++>validateParameters : Symbol(validateParameters, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 5, 32))
+ >parameterValues : Symbol(parameterValues, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 6, 23))
+ >IValidationError : Symbol(IValidationError, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 0, 0))
+ 
+@@= skipped -17, +17 lines =@@
+ 
+         for(const parameterLocation of Object.keys(parameterValues)) {
+ >parameterLocation : Symbol(parameterLocation, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 8, 17))
+->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>Object.keys : Symbol(keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>keys : Symbol(keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >parameterValues : Symbol(parameterValues, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 6, 23))
+ 
+             const parameter: any = (this as any).getParameter();;
+ >parameter : Symbol(parameter, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 9, 17))
+->this : Symbol(Operation, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 3, 1))
++>this : Symbol(default, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 3, 1))
+ 
+             const values = (this as any).getValues();
+ >values : Symbol(values, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 10, 17))
+->this : Symbol(Operation, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 3, 1))
++>this : Symbol(default, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 3, 1))
+ 
+             const innerResult = parameter.validate(values[parameter.oaParameter.name]);
+ >innerResult : Symbol(innerResult, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 12, 17))
+@@= skipped -26, +26 lines =@@
+                 // Commenting out this line will fix the problem.
+                 result = (result || []).concat(innerResult);
+ >result : Symbol(result, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 7, 11))
+->(result || []).concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>(result || []).concat : Symbol(concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >result : Symbol(result, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 7, 11))
+->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>concat : Symbol(concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >innerResult : Symbol(innerResult, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 12, 17))
+             }
+         }

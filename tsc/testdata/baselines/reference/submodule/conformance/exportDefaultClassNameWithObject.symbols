@@ -1,0 +1,6 @@
+//// [tests/cases/conformance/externalModules/exportDefaultClassNameWithObject.ts] ////
+
+=== exportDefaultClassNameWithObject.ts ===
+export default class Object {}
+>Object : Symbol(default, Decl(exportDefaultClassNameWithObject.ts, 0, 0))
+

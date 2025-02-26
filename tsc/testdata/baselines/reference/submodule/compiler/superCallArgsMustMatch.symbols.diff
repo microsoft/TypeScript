@@ -1,0 +1,28 @@
+--- old.superCallArgsMustMatch.symbols
++++ new.superCallArgsMustMatch.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(superCallArgsMustMatch.ts, 0, 9))
+ 
+     public foo: T;
+->foo : Symbol(T5.foo, Decl(superCallArgsMustMatch.ts, 0, 12))
++>foo : Symbol(foo, Decl(superCallArgsMustMatch.ts, 0, 12))
+ >T : Symbol(T, Decl(superCallArgsMustMatch.ts, 0, 9))
+ 
+     constructor(public bar: T) { }
+->bar : Symbol(T5.bar, Decl(superCallArgsMustMatch.ts, 4, 16))
++>bar : Symbol(bar, Decl(superCallArgsMustMatch.ts, 4, 16))
+ >T : Symbol(T, Decl(superCallArgsMustMatch.ts, 0, 9))
+ 
+ }
+@@= skipped -24, +24 lines =@@
+ 
+         var x: number = this.foo;
+ >x : Symbol(x, Decl(superCallArgsMustMatch.ts, 18, 11))
+->this.foo : Symbol(T5.foo, Decl(superCallArgsMustMatch.ts, 0, 12))
++>this.foo : Symbol(foo, Decl(superCallArgsMustMatch.ts, 0, 12))
+ >this : Symbol(T6, Decl(superCallArgsMustMatch.ts, 6, 1))
+->foo : Symbol(T5.foo, Decl(superCallArgsMustMatch.ts, 0, 12))
++>foo : Symbol(foo, Decl(superCallArgsMustMatch.ts, 0, 12))
+ 
+     }
+ 

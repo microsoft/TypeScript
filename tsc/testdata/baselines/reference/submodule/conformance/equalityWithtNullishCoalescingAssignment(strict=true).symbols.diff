@@ -1,0 +1,26 @@
+--- old.equalityWithtNullishCoalescingAssignment(strict=true).symbols
++++ new.equalityWithtNullishCoalescingAssignment(strict=true).symbols
+@@= skipped -11, +11 lines =@@
+ >a : Symbol(a, Decl(equalityWithtNullishCoalescingAssignment.ts, 0, 12))
+ 
+         console.log(a);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >a : Symbol(a, Decl(equalityWithtNullishCoalescingAssignment.ts, 0, 12))
+     }
+ }
+@@= skipped -22, +22 lines =@@
+ >x : Symbol(x, Decl(equalityWithtNullishCoalescingAssignment.ts, 10, 7))
+ 
+         console.log(x);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x : Symbol(x, Decl(equalityWithtNullishCoalescingAssignment.ts, 10, 7))
+     }
+ }

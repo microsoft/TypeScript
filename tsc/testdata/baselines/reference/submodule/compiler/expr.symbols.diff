@@ -1,0 +1,15 @@
+--- old.expr.symbols
++++ new.expr.symbols
+@@= skipped -8, +8 lines =@@
+ >E : Symbol(E, Decl(expr.ts, 1, 1))
+ 
+     Red, Green, Blue
+->Red : Symbol(E.Red, Decl(expr.ts, 3, 8))
+->Green : Symbol(E.Green, Decl(expr.ts, 4, 8))
+->Blue : Symbol(E.Blue, Decl(expr.ts, 4, 15))
++>Red : Symbol(Red, Decl(expr.ts, 3, 8))
++>Green : Symbol(Green, Decl(expr.ts, 4, 8))
++>Blue : Symbol(Blue, Decl(expr.ts, 4, 15))
+ }
+ 
+ function f() {

@@ -1,0 +1,11 @@
+--- old.es6ModuleWithModuleGenTargetAmd.symbols
++++ new.es6ModuleWithModuleGenTargetAmd.symbols
+@@= skipped -8, +8 lines =@@
+     }
+ 
+     public B()
+->B : Symbol(A.B, Decl(es6ModuleWithModuleGenTargetAmd.ts, 4, 5))
++>B : Symbol(B, Decl(es6ModuleWithModuleGenTargetAmd.ts, 4, 5))
+     {
+         return 42;
+     }

@@ -1,0 +1,11 @@
+--- old.typeGuardOfFormTypeOfEqualEqualHasNoEffect.symbols
++++ new.typeGuardOfFormTypeOfEqualEqualHasNoEffect.symbols
+@@= skipped -2, +2 lines =@@
+ === typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts ===
+ class C { private p: string };
+ >C : Symbol(C, Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts, 0, 0))
+->p : Symbol(C.p, Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts, 0, 9))
++>p : Symbol(p, Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts, 0, 9))
+ 
+ var strOrNum: string | number;
+ >strOrNum : Symbol(strOrNum, Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts, 2, 3))

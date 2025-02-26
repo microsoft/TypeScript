@@ -1,0 +1,11 @@
+--- old.importDeclTypes.symbols
++++ new.importDeclTypes.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(index.d.ts, 0, 0))
+ 
+     bar: string;
+->bar : Symbol(Foo.bar, Decl(index.d.ts, 0, 22))
++>bar : Symbol(bar, Decl(index.d.ts, 0, 22))
+ }
+ 
+ // This should error

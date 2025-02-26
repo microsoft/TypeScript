@@ -1,0 +1,21 @@
+--- old.unaryPlus.symbols
++++ new.unaryPlus.symbols
+@@= skipped -9, +9 lines =@@
+ 
+ enum E { some, thing };
+ >E : Symbol(E, Decl(unaryPlus.ts, 2, 19))
+->some : Symbol(E.some, Decl(unaryPlus.ts, 3, 8))
+->thing : Symbol(E.thing, Decl(unaryPlus.ts, 3, 14))
++>some : Symbol(some, Decl(unaryPlus.ts, 3, 8))
++>thing : Symbol(thing, Decl(unaryPlus.ts, 3, 14))
+ 
+ var c = +E.some;
+ >c : Symbol(c, Decl(unaryPlus.ts, 4, 3))
+->E.some : Symbol(E.some, Decl(unaryPlus.ts, 3, 8))
++>E.some : Symbol(some, Decl(unaryPlus.ts, 3, 8))
+ >E : Symbol(E, Decl(unaryPlus.ts, 2, 19))
+->some : Symbol(E.some, Decl(unaryPlus.ts, 3, 8))
++>some : Symbol(some, Decl(unaryPlus.ts, 3, 8))
+ 
+ // also allowed, used to be errors
+ var x = +"3"; //should be valid

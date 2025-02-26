@@ -1,0 +1,44 @@
+--- old.moduleAugmentationInAmbientModule5.symbols
++++ new.moduleAugmentationInAmbientModule5.symbols
+@@= skipped -8, +8 lines =@@
+ 
+ let y = x.getA().x;
+ >y : Symbol(y, Decl(f.ts, 4, 3))
+->x.getA().x : Symbol(A.x, Decl(array.d.ts, 1, 13))
+->x.getA : Symbol(Array.getA, Decl(array.d.ts, 7, 28))
++>x.getA().x : Symbol(x, Decl(array.d.ts, 1, 13))
++>x.getA : Symbol(getA, Decl(array.d.ts, 7, 28))
+ >x : Symbol(x, Decl(f.ts, 3, 3))
+->getA : Symbol(Array.getA, Decl(array.d.ts, 7, 28))
+->x : Symbol(A.x, Decl(array.d.ts, 1, 13))
++>getA : Symbol(getA, Decl(array.d.ts, 7, 28))
++>x : Symbol(x, Decl(array.d.ts, 1, 13))
+ 
+ === array.d.ts ===
+ declare module "A" {
+@@= skipped -12, +12 lines =@@
+ 
+     class A { x: number; }
+ >A : Symbol(A, Decl(array.d.ts, 0, 20))
+->x : Symbol(A.x, Decl(array.d.ts, 1, 13))
++>x : Symbol(x, Decl(array.d.ts, 1, 13))
+ }
+ 
+ declare module "array" {
+@@= skipped -10, +10 lines =@@
+ >A : Symbol(A, Decl(array.d.ts, 5, 12))
+ 
+     global {
+->global : Symbol(global, Decl(array.d.ts, 5, 24))
++>global : Symbol((Missing), Decl(array.d.ts, 5, 24))
+ 
+         interface Array<T> {
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(array.d.ts, 6, 12))
+ >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(array.d.ts, 7, 24))
+ 
+             getA(): A;
+->getA : Symbol(Array.getA, Decl(array.d.ts, 7, 28))
++>getA : Symbol(getA, Decl(array.d.ts, 7, 28))
+ >A : Symbol(A, Decl(array.d.ts, 5, 12))
+         }
+     }

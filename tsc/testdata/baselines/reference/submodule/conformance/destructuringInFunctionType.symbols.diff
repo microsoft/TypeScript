@@ -1,0 +1,21 @@
+--- old.destructuringInFunctionType.symbols
++++ new.destructuringInFunctionType.symbols
+@@= skipped -2, +2 lines =@@
+ === destructuringInFunctionType.ts ===
+ interface a { a }
+ >a : Symbol(a, Decl(destructuringInFunctionType.ts, 0, 0))
+->a : Symbol(a.a, Decl(destructuringInFunctionType.ts, 0, 13))
++>a : Symbol(a, Decl(destructuringInFunctionType.ts, 0, 13))
+ 
+ interface b { b }
+ >b : Symbol(b, Decl(destructuringInFunctionType.ts, 0, 17))
+->b : Symbol(b.b, Decl(destructuringInFunctionType.ts, 1, 13))
++>b : Symbol(b, Decl(destructuringInFunctionType.ts, 1, 13))
+ 
+ interface c { c }
+ >c : Symbol(c, Decl(destructuringInFunctionType.ts, 1, 17))
+->c : Symbol(c.c, Decl(destructuringInFunctionType.ts, 2, 13))
++>c : Symbol(c, Decl(destructuringInFunctionType.ts, 2, 13))
+ 
+ type T1 = ([a, b, c]);
+ >T1 : Symbol(T1, Decl(destructuringInFunctionType.ts, 2, 17))

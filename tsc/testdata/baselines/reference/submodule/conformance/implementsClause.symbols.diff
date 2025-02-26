@@ -1,0 +1,24 @@
+--- old.implementsClause.symbols
++++ new.implementsClause.symbols
+@@= skipped -19, +19 lines =@@
+ 
+ class C implements types.Component {}
+ >C : Symbol(C, Decl(index.ts, 1, 40))
+->types.Component : Symbol(types.Component, Decl(types.ts, 0, 0))
++>types.Component : Symbol(Component, Decl(types.ts, 0, 0))
+ >types : Symbol(types, Decl(index.ts, 0, 11))
+->Component : Symbol(types.Component, Decl(types.ts, 0, 0))
++>Component : Symbol(Component, Decl(types.ts, 0, 0))
+ 
+ class D implements nestedNamespace.types.Component {}
+ >D : Symbol(D, Decl(index.ts, 3, 37))
+->nestedNamespace.types.Component : Symbol(types.Component, Decl(types.ts, 0, 0))
+->nestedNamespace.types : Symbol(nestedNamespace.types, Decl(ns.ts, 1, 8))
++>nestedNamespace.types.Component : Symbol(Component, Decl(types.ts, 0, 0))
++>nestedNamespace.types : Symbol(types, Decl(ns.ts, 1, 8))
+ >nestedNamespace : Symbol(nestedNamespace, Decl(index.ts, 1, 6))
+->types : Symbol(nestedNamespace.types, Decl(ns.ts, 1, 8))
+->Component : Symbol(types.Component, Decl(types.ts, 0, 0))
++>types : Symbol(types, Decl(ns.ts, 1, 8))
++>Component : Symbol(Component, Decl(types.ts, 0, 0))
+ 

@@ -1,0 +1,64 @@
+--- old.voidOperatorWithAnyOtherType.symbols
++++ new.voidOperatorWithAnyOtherType.symbols
+@@= skipped -32, +32 lines =@@
+ >A : Symbol(A, Decl(voidOperatorWithAnyOtherType.ts, 11, 1))
+ 
+     public a: any;
+->a : Symbol(A.a, Decl(voidOperatorWithAnyOtherType.ts, 12, 9))
++>a : Symbol(a, Decl(voidOperatorWithAnyOtherType.ts, 12, 9))
+ 
+     static foo() {
+->foo : Symbol(A.foo, Decl(voidOperatorWithAnyOtherType.ts, 13, 18))
++>foo : Symbol(foo, Decl(voidOperatorWithAnyOtherType.ts, 13, 18))
+ 
+         var a;
+ >a : Symbol(a, Decl(voidOperatorWithAnyOtherType.ts, 15, 11))
+@@= skipped -74, +74 lines =@@
+ 
+ var ResultIsAny12 = void objA.a;
+ >ResultIsAny12 : Symbol(ResultIsAny12, Decl(voidOperatorWithAnyOtherType.ts, 40, 3))
+->objA.a : Symbol(A.a, Decl(voidOperatorWithAnyOtherType.ts, 12, 9))
++>objA.a : Symbol(a, Decl(voidOperatorWithAnyOtherType.ts, 12, 9))
+ >objA : Symbol(objA, Decl(voidOperatorWithAnyOtherType.ts, 22, 3))
+->a : Symbol(A.a, Decl(voidOperatorWithAnyOtherType.ts, 12, 9))
++>a : Symbol(a, Decl(voidOperatorWithAnyOtherType.ts, 12, 9))
+ 
+ var ResultIsAny13 = void M.n;
+ >ResultIsAny13 : Symbol(ResultIsAny13, Decl(voidOperatorWithAnyOtherType.ts, 41, 3))
+->M.n : Symbol(M.n, Decl(voidOperatorWithAnyOtherType.ts, 20, 14))
++>M.n : Symbol(n, Decl(voidOperatorWithAnyOtherType.ts, 20, 14))
+ >M : Symbol(M, Decl(voidOperatorWithAnyOtherType.ts, 18, 1))
+->n : Symbol(M.n, Decl(voidOperatorWithAnyOtherType.ts, 20, 14))
++>n : Symbol(n, Decl(voidOperatorWithAnyOtherType.ts, 20, 14))
+ 
+ var ResultIsAny14 = void foo();
+ >ResultIsAny14 : Symbol(ResultIsAny14, Decl(voidOperatorWithAnyOtherType.ts, 42, 3))
+@@= skipped -16, +16 lines =@@
+ 
+ var ResultIsAny15 = void A.foo();
+ >ResultIsAny15 : Symbol(ResultIsAny15, Decl(voidOperatorWithAnyOtherType.ts, 43, 3))
+->A.foo : Symbol(A.foo, Decl(voidOperatorWithAnyOtherType.ts, 13, 18))
++>A.foo : Symbol(foo, Decl(voidOperatorWithAnyOtherType.ts, 13, 18))
+ >A : Symbol(A, Decl(voidOperatorWithAnyOtherType.ts, 11, 1))
+->foo : Symbol(A.foo, Decl(voidOperatorWithAnyOtherType.ts, 13, 18))
++>foo : Symbol(foo, Decl(voidOperatorWithAnyOtherType.ts, 13, 18))
+ 
+ var ResultIsAny16 = void (ANY + ANY1);
+ >ResultIsAny16 : Symbol(ResultIsAny16, Decl(voidOperatorWithAnyOtherType.ts, 44, 3))
+@@= skipped -46, +46 lines =@@
+ >ANY1 : Symbol(ANY1, Decl(voidOperatorWithAnyOtherType.ts, 3, 3))
+ 
+ void objA.a;
+->objA.a : Symbol(A.a, Decl(voidOperatorWithAnyOtherType.ts, 12, 9))
++>objA.a : Symbol(a, Decl(voidOperatorWithAnyOtherType.ts, 12, 9))
+ >objA : Symbol(objA, Decl(voidOperatorWithAnyOtherType.ts, 22, 3))
+->a : Symbol(A.a, Decl(voidOperatorWithAnyOtherType.ts, 12, 9))
++>a : Symbol(a, Decl(voidOperatorWithAnyOtherType.ts, 12, 9))
+ 
+ void M.n;
+->M.n : Symbol(M.n, Decl(voidOperatorWithAnyOtherType.ts, 20, 14))
++>M.n : Symbol(n, Decl(voidOperatorWithAnyOtherType.ts, 20, 14))
+ >M : Symbol(M, Decl(voidOperatorWithAnyOtherType.ts, 18, 1))
+->n : Symbol(M.n, Decl(voidOperatorWithAnyOtherType.ts, 20, 14))
++>n : Symbol(n, Decl(voidOperatorWithAnyOtherType.ts, 20, 14))
+ 

@@ -1,0 +1,56 @@
+--- old.objectRest.symbols
++++ new.objectRest.symbols
+@@= skipped -114, +114 lines =@@
+ >Removable : Symbol(Removable, Decl(objectRest.ts, 18, 35))
+ 
+     private x: number;
+->x : Symbol(Removable.x, Decl(objectRest.ts, 20, 17))
++>x : Symbol(x, Decl(objectRest.ts, 20, 17))
+ 
+     protected y: number;
+->y : Symbol(Removable.y, Decl(objectRest.ts, 21, 22))
++>y : Symbol(y, Decl(objectRest.ts, 21, 22))
+ 
+     set z(value: number) { }
+->z : Symbol(Removable.z, Decl(objectRest.ts, 22, 24))
++>z : Symbol(z, Decl(objectRest.ts, 22, 24))
+ >value : Symbol(value, Decl(objectRest.ts, 23, 10))
+ 
+     get both(): number { return 12 }
+->both : Symbol(Removable.both, Decl(objectRest.ts, 23, 28), Decl(objectRest.ts, 24, 36))
++>both : Symbol(both, Decl(objectRest.ts, 23, 28), Decl(objectRest.ts, 24, 36))
+ 
+     set both(value: number) { }
+->both : Symbol(Removable.both, Decl(objectRest.ts, 23, 28), Decl(objectRest.ts, 24, 36))
++>both : Symbol(both, Decl(objectRest.ts, 23, 28), Decl(objectRest.ts, 24, 36))
+ >value : Symbol(value, Decl(objectRest.ts, 25, 13))
+ 
+     m() { }
+->m : Symbol(Removable.m, Decl(objectRest.ts, 25, 31))
++>m : Symbol(m, Decl(objectRest.ts, 25, 31))
+ 
+     removed: string;
+->removed : Symbol(Removable.removed, Decl(objectRest.ts, 26, 11))
++>removed : Symbol(removed, Decl(objectRest.ts, 26, 11))
+ 
+     remainder: string;
+->remainder : Symbol(Removable.remainder, Decl(objectRest.ts, 27, 20))
++>remainder : Symbol(remainder, Decl(objectRest.ts, 27, 20))
+ }
+ interface I {
+ >I : Symbol(I, Decl(objectRest.ts, 29, 1))
+ 
+     m(): void;
+->m : Symbol(I.m, Decl(objectRest.ts, 30, 13))
++>m : Symbol(m, Decl(objectRest.ts, 30, 13))
+ 
+     removed: string;
+->removed : Symbol(I.removed, Decl(objectRest.ts, 31, 14))
++>removed : Symbol(removed, Decl(objectRest.ts, 31, 14))
+ 
+     remainder: string;
+->remainder : Symbol(I.remainder, Decl(objectRest.ts, 32, 20))
++>remainder : Symbol(remainder, Decl(objectRest.ts, 32, 20))
+ }
+ var removable = new Removable();
+ >removable : Symbol(removable, Decl(objectRest.ts, 35, 3))

@@ -1,0 +1,44 @@
+--- old.dottedSymbolResolution1.symbols
++++ new.dottedSymbolResolution1.symbols
+@@= skipped -4, +4 lines =@@
+ >JQuery : Symbol(JQuery, Decl(dottedSymbolResolution1.ts, 0, 0))
+ 
+     find(selector: string): JQuery;
+->find : Symbol(JQuery.find, Decl(dottedSymbolResolution1.ts, 0, 18))
++>find : Symbol(find, Decl(dottedSymbolResolution1.ts, 0, 18))
+ >selector : Symbol(selector, Decl(dottedSymbolResolution1.ts, 1, 9))
+ >JQuery : Symbol(JQuery, Decl(dottedSymbolResolution1.ts, 0, 0))
+ }
+@@= skipped -20, +20 lines =@@
+ 
+ class Base { foo() { } }
+ >Base : Symbol(Base, Decl(dottedSymbolResolution1.ts, 8, 1))
+->foo : Symbol(Base.foo, Decl(dottedSymbolResolution1.ts, 10, 12))
++>foo : Symbol(foo, Decl(dottedSymbolResolution1.ts, 10, 12))
+ 
+ function each(collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any;
+ >each : Symbol(each, Decl(dottedSymbolResolution1.ts, 10, 24), Decl(dottedSymbolResolution1.ts, 12, 98), Decl(dottedSymbolResolution1.ts, 13, 102))
+@@= skipped -39, +39 lines =@@
+ 
+     each(x.find(" "), function () {
+ >each : Symbol(each, Decl(dottedSymbolResolution1.ts, 10, 24), Decl(dottedSymbolResolution1.ts, 12, 98), Decl(dottedSymbolResolution1.ts, 13, 102))
+->x.find : Symbol(JQuery.find, Decl(dottedSymbolResolution1.ts, 0, 18))
++>x.find : Symbol(find, Decl(dottedSymbolResolution1.ts, 0, 18))
+ >x : Symbol(x, Decl(dottedSymbolResolution1.ts, 19, 7))
+->find : Symbol(JQuery.find, Decl(dottedSymbolResolution1.ts, 0, 18))
++>find : Symbol(find, Decl(dottedSymbolResolution1.ts, 0, 18))
+ 
+         var $this: JQuery = $(''),
+ >$this : Symbol($this, Decl(dottedSymbolResolution1.ts, 21, 11))
+@@= skipped -11, +11 lines =@@
+ 
+             thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here
+ >thisBar : Symbol(thisBar, Decl(dottedSymbolResolution1.ts, 21, 34))
+->$this.find : Symbol(JQuery.find, Decl(dottedSymbolResolution1.ts, 0, 18))
++>$this.find : Symbol(find, Decl(dottedSymbolResolution1.ts, 0, 18))
+ >$this : Symbol($this, Decl(dottedSymbolResolution1.ts, 21, 11))
+->find : Symbol(JQuery.find, Decl(dottedSymbolResolution1.ts, 0, 18))
++>find : Symbol(find, Decl(dottedSymbolResolution1.ts, 0, 18))
+ 
+     } );
+ }

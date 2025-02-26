@@ -1,0 +1,18 @@
+--- old.exportSpecifierAndExportedMemberDeclaration.symbols
++++ new.exportSpecifierAndExportedMemberDeclaration.symbols
+@@= skipped -19, +19 lines =@@
+     function Z(): X.I;
+ >Z : Symbol(Z, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 5, 22))
+ >X : Symbol(X, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 0, 21), Decl(exportSpecifierAndExportedMemberDeclaration.ts, 5, 12))
+->I : Symbol(X.I, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 1, 21))
++>I : Symbol(I)
+ }
+ 
+ declare module "m2" {
+@@= skipped -9, +9 lines =@@
+     function Z2(): X.I;
+ >Z2 : Symbol(Z2, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 9, 21))
+ >X : Symbol(X, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 0, 21), Decl(exportSpecifierAndExportedMemberDeclaration.ts, 5, 12))
+->I : Symbol(X.I, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 1, 21))
++>I : Symbol(I)
+ }

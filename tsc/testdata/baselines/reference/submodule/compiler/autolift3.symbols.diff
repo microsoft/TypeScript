@@ -1,0 +1,14 @@
+--- old.autolift3.symbols
++++ new.autolift3.symbols
+@@= skipped -28, +28 lines =@@
+ >path : Symbol(path, Decl(autolift3.ts, 13, 39))
+ 
+                         return fso.toString();
+->fso.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>fso.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >fso : Symbol(fso, Decl(autolift3.ts, 10, 19))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+                     }
+                 }
+             })();

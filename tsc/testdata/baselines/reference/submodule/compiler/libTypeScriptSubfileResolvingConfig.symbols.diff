@@ -1,0 +1,24 @@
+--- old.libTypeScriptSubfileResolvingConfig.symbols
++++ new.libTypeScriptSubfileResolvingConfig.symbols
+@@= skipped -3, +3 lines =@@
+ /// <reference lib="dom.iterable" />
+ const a: DOMIterable = { abc: "Hello" }
+ >a : Symbol(a, Decl(index.ts, 1, 5))
+->DOMIterable : Symbol(DOMIterable, Decl(iterable.d.ts, 0, 0))
++>DOMIterable : Symbol(DOMIterable)
+ >abc : Symbol(abc, Decl(index.ts, 1, 24))
+ 
+ // This should fail because libdom has been replaced
+ // by the module above ^
+ window.localStorage
+-=== /somepath/node_modules/@typescript/lib-dom/index.d.ts ===
++>window.localStorage : Symbol(localStorage, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
++>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
++>localStorage : Symbol(localStorage, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+ 
+-// NOOP
+-=== /somepath/node_modules/@typescript/lib-dom/iterable.d.ts ===
+-interface DOMIterable { abc: string }
+->DOMIterable : Symbol(DOMIterable, Decl(iterable.d.ts, 0, 0))
+->abc : Symbol(DOMIterable.abc, Decl(iterable.d.ts, 0, 23))
+-

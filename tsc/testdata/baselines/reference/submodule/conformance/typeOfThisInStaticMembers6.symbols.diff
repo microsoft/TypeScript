@@ -1,0 +1,19 @@
+--- old.typeOfThisInStaticMembers6.symbols
++++ new.typeOfThisInStaticMembers6.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(typeOfThisInStaticMembers6.ts, 0, 0))
+ 
+     static f = 1
+->f : Symbol(C.f, Decl(typeOfThisInStaticMembers6.ts, 0, 9))
++>f : Symbol(f, Decl(typeOfThisInStaticMembers6.ts, 0, 9))
+ }
+ 
+ class D extends C {
+@@= skipped -8, +8 lines =@@
+ >C : Symbol(C, Decl(typeOfThisInStaticMembers6.ts, 0, 0))
+ 
+     static c = super();
+->c : Symbol(D.c, Decl(typeOfThisInStaticMembers6.ts, 4, 19))
++>c : Symbol(c, Decl(typeOfThisInStaticMembers6.ts, 4, 19))
+ }
+ 

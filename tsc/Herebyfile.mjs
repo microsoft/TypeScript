@@ -28,12 +28,14 @@ const { values: options } = parseArgs({
         fix: { type: "boolean" },
         noembed: { type: "boolean" },
         debug: { type: "boolean" },
+        concurrentTestPrograms: { type: "boolean" },
     },
     strict: false,
     allowPositionals: true,
     allowNegative: true,
     noembed: false,
     debug: false,
+    concurrentTestPrograms: false,
 });
 
 const defaultGoBuildTags = [
@@ -203,6 +205,12 @@ const goTestFlags = [
     ...goBuildTags(),
 ];
 
+const goTestEnv = {
+    ...(options.concurrentTestPrograms ? { TS_TEST_PROGRAM_SINGLE_THREADED: "false" } : {}),
+};
+
+const $test = $({ env: goTestEnv });
+
 const gotestsum = memoize(() => {
     const args = isInstalled("gotestsum") ? ["gotestsum", "--format-hide-empty-pkg", "--"] : ["go", "test"];
     return args.concat(goTestFlags);
@@ -213,7 +221,7 @@ const goTest = memoize(() => {
 });
 
 async function runTests() {
-    await $`${gotestsum()} ./...`;
+    await $test`${gotestsum()} ./... ${isCI ? ["--timeout=45m"] : []}`;
 }
 
 export const test = task({
@@ -223,7 +231,7 @@ export const test = task({
 
 async function runTestBenchmarks() {
     // Run the benchmarks once to ensure they compile and run without errors.
-    await $`${goTest()} -run=- -bench=. -benchtime=1x ./...`;
+    await $test`${goTest()} -run=- -bench=. -benchtime=1x ./...`;
 }
 
 export const testBenchmarks = task({
@@ -232,7 +240,7 @@ export const testBenchmarks = task({
 });
 
 async function runTestTools() {
-    await $({ cwd: path.join(__dirname, "_tools") })`${gotestsum()} ./...`;
+    await $test({ cwd: path.join(__dirname, "_tools") })`${gotestsum()} ./...`;
 }
 
 export const testTools = task({

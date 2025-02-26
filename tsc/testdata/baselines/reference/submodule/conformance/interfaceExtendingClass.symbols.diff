@@ -1,0 +1,47 @@
+--- old.interfaceExtendingClass.symbols
++++ new.interfaceExtendingClass.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(interfaceExtendingClass.ts, 0, 0))
+ 
+     x: string;
+->x : Symbol(Foo.x, Decl(interfaceExtendingClass.ts, 0, 11))
++>x : Symbol(x, Decl(interfaceExtendingClass.ts, 0, 11))
+ 
+     y() { }
+->y : Symbol(Foo.y, Decl(interfaceExtendingClass.ts, 1, 14))
++>y : Symbol(y, Decl(interfaceExtendingClass.ts, 1, 14))
+ 
+     get Z() {
+->Z : Symbol(Foo.Z, Decl(interfaceExtendingClass.ts, 2, 11))
++>Z : Symbol(Z, Decl(interfaceExtendingClass.ts, 2, 11))
+ 
+         return 1;
+     }
+@@= skipped -26, +26 lines =@@
+ 
+ var r1 = i.x;
+ >r1 : Symbol(r1, Decl(interfaceExtendingClass.ts, 13, 3))
+->i.x : Symbol(Foo.x, Decl(interfaceExtendingClass.ts, 0, 11))
++>i.x : Symbol(x, Decl(interfaceExtendingClass.ts, 0, 11))
+ >i : Symbol(i, Decl(interfaceExtendingClass.ts, 12, 3))
+->x : Symbol(Foo.x, Decl(interfaceExtendingClass.ts, 0, 11))
++>x : Symbol(x, Decl(interfaceExtendingClass.ts, 0, 11))
+ 
+ var r2 = i.y();
+ >r2 : Symbol(r2, Decl(interfaceExtendingClass.ts, 14, 3))
+->i.y : Symbol(Foo.y, Decl(interfaceExtendingClass.ts, 1, 14))
++>i.y : Symbol(y, Decl(interfaceExtendingClass.ts, 1, 14))
+ >i : Symbol(i, Decl(interfaceExtendingClass.ts, 12, 3))
+->y : Symbol(Foo.y, Decl(interfaceExtendingClass.ts, 1, 14))
++>y : Symbol(y, Decl(interfaceExtendingClass.ts, 1, 14))
+ 
+ var r3 = i.Z;
+ >r3 : Symbol(r3, Decl(interfaceExtendingClass.ts, 15, 3))
+->i.Z : Symbol(Foo.Z, Decl(interfaceExtendingClass.ts, 2, 11))
++>i.Z : Symbol(Z, Decl(interfaceExtendingClass.ts, 2, 11))
+ >i : Symbol(i, Decl(interfaceExtendingClass.ts, 12, 3))
+->Z : Symbol(Foo.Z, Decl(interfaceExtendingClass.ts, 2, 11))
++>Z : Symbol(Z, Decl(interfaceExtendingClass.ts, 2, 11))
+ 
+ var f: Foo = i;
+ >f : Symbol(f, Decl(interfaceExtendingClass.ts, 17, 3))

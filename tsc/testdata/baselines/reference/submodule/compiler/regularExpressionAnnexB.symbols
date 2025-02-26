@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/regularExpressionAnnexB.ts] ////
+
+=== regularExpressionAnnexB.ts ===
+const regexes: RegExp[] = [
+>regexes : Symbol(regexes, Decl(regularExpressionAnnexB.ts, 0, 5))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.regexp.d.ts, --, --) ... and 3 more)
+
+  /\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/,
+  /[\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s]/,
+  /\P[\P\w-_]/,
+
+  // Compare to
+  /\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/u,
+  /[\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s]/u,
+  /\P[\P\w-_]/u,
+];
+
+const regexesWithBraces: RegExp[] = [
+>regexesWithBraces : Symbol(regexesWithBraces, Decl(regularExpressionAnnexB.ts, 11, 5))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.regexp.d.ts, --, --) ... and 3 more)
+
+  /{??/,
+  /{,??/,
+  /{,1??/,
+  /{1??/,
+  /{1,??/,
+  /{1,2??/,
+  /{2,1??/,
+  /{}??/,
+  /{,}??/,
+  /{,1}??/,
+  /{1}??/,
+  /{1,}??/,
+  /{1,2}??/,
+  /{2,1}??/,
+
+  // Compare to
+  /{??/u,
+  /{,??/u,
+  /{,1??/u,
+  /{1??/u,
+  /{1,??/u,
+  /{1,2??/u,
+  /{2,1??/u,
+  /{}??/u,
+  /{,}??/u,
+  /{,1}??/u,
+  /{1}??/u,
+  /{1,}??/u,
+  /{1,2}??/u,
+  /{2,1}??/u,
+];
+

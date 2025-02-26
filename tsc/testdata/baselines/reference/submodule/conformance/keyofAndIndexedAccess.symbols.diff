@@ -1,0 +1,632 @@
+--- old.keyofAndIndexedAccess.symbols
++++ new.keyofAndIndexedAccess.symbols
+@@= skipped -4, +4 lines =@@
+ >Shape : Symbol(Shape, Decl(keyofAndIndexedAccess.ts, 0, 0))
+ 
+     name: string;
+->name : Symbol(Shape.name, Decl(keyofAndIndexedAccess.ts, 0, 13))
++>name : Symbol(name, Decl(keyofAndIndexedAccess.ts, 0, 13))
+ 
+     width: number;
+->width : Symbol(Shape.width, Decl(keyofAndIndexedAccess.ts, 1, 17))
++>width : Symbol(width, Decl(keyofAndIndexedAccess.ts, 1, 17))
+ 
+     height: number;
+->height : Symbol(Shape.height, Decl(keyofAndIndexedAccess.ts, 2, 18))
++>height : Symbol(height, Decl(keyofAndIndexedAccess.ts, 2, 18))
+ 
+     visible: boolean;
+->visible : Symbol(Shape.visible, Decl(keyofAndIndexedAccess.ts, 3, 19))
++>visible : Symbol(visible, Decl(keyofAndIndexedAccess.ts, 3, 19))
+ }
+ 
+ class TaggedShape extends Shape {
+@@= skipped -17, +17 lines =@@
+ >Shape : Symbol(Shape, Decl(keyofAndIndexedAccess.ts, 0, 0))
+ 
+     tag: string;
+->tag : Symbol(TaggedShape.tag, Decl(keyofAndIndexedAccess.ts, 7, 33))
++>tag : Symbol(tag, Decl(keyofAndIndexedAccess.ts, 7, 33))
+ }
+ 
+ class Item {
+ >Item : Symbol(Item, Decl(keyofAndIndexedAccess.ts, 9, 1))
+ 
+     name: string;
+->name : Symbol(Item.name, Decl(keyofAndIndexedAccess.ts, 11, 12))
++>name : Symbol(name, Decl(keyofAndIndexedAccess.ts, 11, 12))
+ 
+     price: number;
+->price : Symbol(Item.price, Decl(keyofAndIndexedAccess.ts, 12, 17))
++>price : Symbol(price, Decl(keyofAndIndexedAccess.ts, 12, 17))
+ }
+ 
+ class Options {
+ >Options : Symbol(Options, Decl(keyofAndIndexedAccess.ts, 14, 1))
+ 
+     visible: "yes" | "no";
+->visible : Symbol(Options.visible, Decl(keyofAndIndexedAccess.ts, 16, 15))
++>visible : Symbol(visible, Decl(keyofAndIndexedAccess.ts, 16, 15))
+ }
+ 
+ type Dictionary<T> = { [x: string]: T };
+@@= skipped -34, +34 lines =@@
+ 
+ const enum E { A, B, C }
+ >E : Symbol(E, Decl(keyofAndIndexedAccess.ts, 21, 48))
+->A : Symbol(E.A, Decl(keyofAndIndexedAccess.ts, 23, 14))
+->B : Symbol(E.B, Decl(keyofAndIndexedAccess.ts, 23, 17))
+->C : Symbol(E.C, Decl(keyofAndIndexedAccess.ts, 23, 20))
++>A : Symbol(A, Decl(keyofAndIndexedAccess.ts, 23, 14))
++>B : Symbol(B, Decl(keyofAndIndexedAccess.ts, 23, 17))
++>C : Symbol(C, Decl(keyofAndIndexedAccess.ts, 23, 20))
+ 
+ type K00 = keyof any;  // string
+ >K00 : Symbol(K00, Decl(keyofAndIndexedAccess.ts, 23, 24))
+@@= skipped -129, +129 lines =@@
+ type Q33 = [string, number][E.A];  // string
+ >Q33 : Symbol(Q33, Decl(keyofAndIndexedAccess.ts, 63, 36))
+ >E : Symbol(E, Decl(keyofAndIndexedAccess.ts, 21, 48))
+->A : Symbol(E.A, Decl(keyofAndIndexedAccess.ts, 23, 14))
++>A : Symbol(A, Decl(keyofAndIndexedAccess.ts, 23, 14))
+ 
+ type Q34 = [string, number][E.B];  // number
+ >Q34 : Symbol(Q34, Decl(keyofAndIndexedAccess.ts, 64, 33))
+ >E : Symbol(E, Decl(keyofAndIndexedAccess.ts, 21, 48))
+->B : Symbol(E.B, Decl(keyofAndIndexedAccess.ts, 23, 17))
++>B : Symbol(B, Decl(keyofAndIndexedAccess.ts, 23, 17))
+ 
+ type Q35 = [string, number]["0"];  // string
+ >Q35 : Symbol(Q35, Decl(keyofAndIndexedAccess.ts, 65, 33))
+@@= skipped -38, +38 lines =@@
+ >Dictionary : Symbol(Dictionary, Decl(keyofAndIndexedAccess.ts, 18, 1))
+ >Shape : Symbol(Shape, Decl(keyofAndIndexedAccess.ts, 0, 0))
+ >E : Symbol(E, Decl(keyofAndIndexedAccess.ts, 21, 48))
+->B : Symbol(E.B, Decl(keyofAndIndexedAccess.ts, 23, 17))
++>B : Symbol(B, Decl(keyofAndIndexedAccess.ts, 23, 17))
+ 
+ declare let cond: boolean;
+ >cond : Symbol(cond, Decl(keyofAndIndexedAccess.ts, 76, 11))
+@@= skipped -140, +140 lines =@@
+ >PropType : Symbol(PropType, Decl(keyofAndIndexedAccess.ts, 112, 16))
+ 
+     props: PropType;
+->props : Symbol(Component.props, Decl(keyofAndIndexedAccess.ts, 112, 27))
++>props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 112, 27))
+ >PropType : Symbol(PropType, Decl(keyofAndIndexedAccess.ts, 112, 16))
+ 
+     getProperty<K extends keyof PropType>(key: K) {
+->getProperty : Symbol(Component.getProperty, Decl(keyofAndIndexedAccess.ts, 113, 20))
++>getProperty : Symbol(getProperty, Decl(keyofAndIndexedAccess.ts, 113, 20))
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 114, 16))
+ >PropType : Symbol(PropType, Decl(keyofAndIndexedAccess.ts, 112, 16))
+ >key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 114, 42))
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 114, 16))
+ 
+         return this.props[key];
+->this.props : Symbol(Component.props, Decl(keyofAndIndexedAccess.ts, 112, 27))
++>this.props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 112, 27))
+ >this : Symbol(Component, Decl(keyofAndIndexedAccess.ts, 110, 1))
+->props : Symbol(Component.props, Decl(keyofAndIndexedAccess.ts, 112, 27))
++>props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 112, 27))
+ >key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 114, 42))
+     }
+     setProperty<K extends keyof PropType>(key: K, value: PropType[K]) {
+->setProperty : Symbol(Component.setProperty, Decl(keyofAndIndexedAccess.ts, 116, 5))
++>setProperty : Symbol(setProperty, Decl(keyofAndIndexedAccess.ts, 116, 5))
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 117, 16))
+ >PropType : Symbol(PropType, Decl(keyofAndIndexedAccess.ts, 112, 16))
+ >key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 117, 42))
+@@= skipped -27, +27 lines =@@
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 117, 16))
+ 
+         this.props[key] = value;
+->this.props : Symbol(Component.props, Decl(keyofAndIndexedAccess.ts, 112, 27))
++>this.props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 112, 27))
+ >this : Symbol(Component, Decl(keyofAndIndexedAccess.ts, 110, 1))
+->props : Symbol(Component.props, Decl(keyofAndIndexedAccess.ts, 112, 27))
++>props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 112, 27))
+ >key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 117, 42))
+ >value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 117, 49))
+     }
+@@= skipped -16, +16 lines =@@
+ 
+     let name = component.getProperty("name");  // string
+ >name : Symbol(name, Decl(keyofAndIndexedAccess.ts, 123, 7))
+->component.getProperty : Symbol(Component.getProperty, Decl(keyofAndIndexedAccess.ts, 113, 20))
++>component.getProperty : Symbol(getProperty, Decl(keyofAndIndexedAccess.ts, 113, 20))
+ >component : Symbol(component, Decl(keyofAndIndexedAccess.ts, 122, 13))
+->getProperty : Symbol(Component.getProperty, Decl(keyofAndIndexedAccess.ts, 113, 20))
++>getProperty : Symbol(getProperty, Decl(keyofAndIndexedAccess.ts, 113, 20))
+ 
+     let widthOrHeight = component.getProperty(cond ? "width" : "height");  // number
+ >widthOrHeight : Symbol(widthOrHeight, Decl(keyofAndIndexedAccess.ts, 124, 7))
+->component.getProperty : Symbol(Component.getProperty, Decl(keyofAndIndexedAccess.ts, 113, 20))
++>component.getProperty : Symbol(getProperty, Decl(keyofAndIndexedAccess.ts, 113, 20))
+ >component : Symbol(component, Decl(keyofAndIndexedAccess.ts, 122, 13))
+->getProperty : Symbol(Component.getProperty, Decl(keyofAndIndexedAccess.ts, 113, 20))
++>getProperty : Symbol(getProperty, Decl(keyofAndIndexedAccess.ts, 113, 20))
+ >cond : Symbol(cond, Decl(keyofAndIndexedAccess.ts, 76, 11))
+ 
+     let nameOrVisible = component.getProperty(cond ? "name" : "visible");  // string | boolean
+ >nameOrVisible : Symbol(nameOrVisible, Decl(keyofAndIndexedAccess.ts, 125, 7))
+->component.getProperty : Symbol(Component.getProperty, Decl(keyofAndIndexedAccess.ts, 113, 20))
++>component.getProperty : Symbol(getProperty, Decl(keyofAndIndexedAccess.ts, 113, 20))
+ >component : Symbol(component, Decl(keyofAndIndexedAccess.ts, 122, 13))
+->getProperty : Symbol(Component.getProperty, Decl(keyofAndIndexedAccess.ts, 113, 20))
++>getProperty : Symbol(getProperty, Decl(keyofAndIndexedAccess.ts, 113, 20))
+ >cond : Symbol(cond, Decl(keyofAndIndexedAccess.ts, 76, 11))
+ 
+     component.setProperty("name", "rectangle");
+->component.setProperty : Symbol(Component.setProperty, Decl(keyofAndIndexedAccess.ts, 116, 5))
++>component.setProperty : Symbol(setProperty, Decl(keyofAndIndexedAccess.ts, 116, 5))
+ >component : Symbol(component, Decl(keyofAndIndexedAccess.ts, 122, 13))
+->setProperty : Symbol(Component.setProperty, Decl(keyofAndIndexedAccess.ts, 116, 5))
++>setProperty : Symbol(setProperty, Decl(keyofAndIndexedAccess.ts, 116, 5))
+ 
+     component.setProperty(cond ? "width" : "height", 10)
+->component.setProperty : Symbol(Component.setProperty, Decl(keyofAndIndexedAccess.ts, 116, 5))
++>component.setProperty : Symbol(setProperty, Decl(keyofAndIndexedAccess.ts, 116, 5))
+ >component : Symbol(component, Decl(keyofAndIndexedAccess.ts, 122, 13))
+->setProperty : Symbol(Component.setProperty, Decl(keyofAndIndexedAccess.ts, 116, 5))
++>setProperty : Symbol(setProperty, Decl(keyofAndIndexedAccess.ts, 116, 5))
+ >cond : Symbol(cond, Decl(keyofAndIndexedAccess.ts, 76, 11))
+ 
+     component.setProperty(cond ? "name" : "visible", true);  // Technically not safe
+->component.setProperty : Symbol(Component.setProperty, Decl(keyofAndIndexedAccess.ts, 116, 5))
++>component.setProperty : Symbol(setProperty, Decl(keyofAndIndexedAccess.ts, 116, 5))
+ >component : Symbol(component, Decl(keyofAndIndexedAccess.ts, 122, 13))
+->setProperty : Symbol(Component.setProperty, Decl(keyofAndIndexedAccess.ts, 116, 5))
++>setProperty : Symbol(setProperty, Decl(keyofAndIndexedAccess.ts, 116, 5))
+ >cond : Symbol(cond, Decl(keyofAndIndexedAccess.ts, 76, 11))
+ }
+ 
+@@= skipped -47, +47 lines =@@
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 131, 17))
+ 
+     return array.map(x => x[key]);
+->array.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>array.map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >array : Symbol(array, Decl(keyofAndIndexedAccess.ts, 131, 37))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 132, 21))
+ >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 132, 21))
+ >key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 131, 48))
+@@= skipped -115, +115 lines =@@
+ >C : Symbol(C, Decl(keyofAndIndexedAccess.ts, 160, 1))
+ 
+     public x: string;
+->x : Symbol(C.x, Decl(keyofAndIndexedAccess.ts, 162, 9))
++>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 162, 9))
+ 
+     protected y: string;
+->y : Symbol(C.y, Decl(keyofAndIndexedAccess.ts, 163, 21))
++>y : Symbol(y, Decl(keyofAndIndexedAccess.ts, 163, 21))
+ 
+     private z: string;
+->z : Symbol(C.z, Decl(keyofAndIndexedAccess.ts, 164, 24))
++>z : Symbol(z, Decl(keyofAndIndexedAccess.ts, 164, 24))
+ }
+ 
+ // Indexed access expressions have always permitted access to private and protected members.
+@@= skipped -32, +32 lines =@@
+ >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 174, 7))
+ >X : Symbol(X, Decl(keyofAndIndexedAccess.ts, 170, 20))
+ >c : Symbol(c, Decl(keyofAndIndexedAccess.ts, 170, 13))
+->"x" : Symbol(C.x, Decl(keyofAndIndexedAccess.ts, 162, 9))
++>"x" : Symbol(x, Decl(keyofAndIndexedAccess.ts, 162, 9))
+ 
+     let y: Y = c["y"];
+ >y : Symbol(y, Decl(keyofAndIndexedAccess.ts, 175, 7))
+ >Y : Symbol(Y, Decl(keyofAndIndexedAccess.ts, 171, 20))
+ >c : Symbol(c, Decl(keyofAndIndexedAccess.ts, 170, 13))
+->"y" : Symbol(C.y, Decl(keyofAndIndexedAccess.ts, 163, 21))
++>"y" : Symbol(y, Decl(keyofAndIndexedAccess.ts, 163, 21))
+ 
+     let z: Z = c["z"];
+ >z : Symbol(z, Decl(keyofAndIndexedAccess.ts, 176, 7))
+ >Z : Symbol(Z, Decl(keyofAndIndexedAccess.ts, 172, 20))
+ >c : Symbol(c, Decl(keyofAndIndexedAccess.ts, 170, 13))
+->"z" : Symbol(C.z, Decl(keyofAndIndexedAccess.ts, 164, 24))
++>"z" : Symbol(z, Decl(keyofAndIndexedAccess.ts, 164, 24))
+ }
+ 
+ function f50<T>(k: keyof T, s: string) {
+@@= skipped -470, +470 lines =@@
+ >C1 : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 274, 1))
+ 
+     x: number;
+->x : Symbol(C1.x, Decl(keyofAndIndexedAccess.ts, 276, 10))
++>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 276, 10))
+ 
+     get<K extends keyof this>(key: K) {
+->get : Symbol(C1.get, Decl(keyofAndIndexedAccess.ts, 277, 14))
++>get : Symbol(get, Decl(keyofAndIndexedAccess.ts, 277, 14))
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 278, 8))
+ >key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 278, 30))
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 278, 8))
+@@= skipped -13, +13 lines =@@
+ >key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 278, 30))
+     }
+     set<K extends keyof this>(key: K, value: this[K]) {
+->set : Symbol(C1.set, Decl(keyofAndIndexedAccess.ts, 280, 5))
++>set : Symbol(set, Decl(keyofAndIndexedAccess.ts, 280, 5))
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 281, 8))
+ >key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 281, 30))
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 281, 8))
+@@= skipped -13, +13 lines =@@
+ >value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 281, 37))
+     }
+     foo() {
+->foo : Symbol(C1.foo, Decl(keyofAndIndexedAccess.ts, 283, 5))
++>foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 283, 5))
+ 
+         let x1 = this.x;  // number
+ >x1 : Symbol(x1, Decl(keyofAndIndexedAccess.ts, 285, 11))
+->this.x : Symbol(C1.x, Decl(keyofAndIndexedAccess.ts, 276, 10))
++>this.x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 276, 10))
+ >this : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 274, 1))
+->x : Symbol(C1.x, Decl(keyofAndIndexedAccess.ts, 276, 10))
++>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 276, 10))
+ 
+         let x2 = this["x"];  // number
+ >x2 : Symbol(x2, Decl(keyofAndIndexedAccess.ts, 286, 11))
+ >this : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 274, 1))
+->"x" : Symbol(C1.x, Decl(keyofAndIndexedAccess.ts, 276, 10))
++>"x" : Symbol(x, Decl(keyofAndIndexedAccess.ts, 276, 10))
+ 
+         let x3 = this.get("x");  // this["x"]
+ >x3 : Symbol(x3, Decl(keyofAndIndexedAccess.ts, 287, 11))
+->this.get : Symbol(C1.get, Decl(keyofAndIndexedAccess.ts, 277, 14))
++>this.get : Symbol(get, Decl(keyofAndIndexedAccess.ts, 277, 14))
+ >this : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 274, 1))
+->get : Symbol(C1.get, Decl(keyofAndIndexedAccess.ts, 277, 14))
++>get : Symbol(get, Decl(keyofAndIndexedAccess.ts, 277, 14))
+ 
+         let x4 = getProperty(this, "x"); // this["x"]
+ >x4 : Symbol(x4, Decl(keyofAndIndexedAccess.ts, 288, 11))
+@@= skipped -25, +25 lines =@@
+ >this : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 274, 1))
+ 
+         this.x = 42;
+->this.x : Symbol(C1.x, Decl(keyofAndIndexedAccess.ts, 276, 10))
++>this.x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 276, 10))
+ >this : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 274, 1))
+->x : Symbol(C1.x, Decl(keyofAndIndexedAccess.ts, 276, 10))
++>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 276, 10))
+ 
+         this["x"] = 42;
+ >this : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 274, 1))
+->"x" : Symbol(C1.x, Decl(keyofAndIndexedAccess.ts, 276, 10))
++>"x" : Symbol(x, Decl(keyofAndIndexedAccess.ts, 276, 10))
+ 
+         this.set("x", 42);
+->this.set : Symbol(C1.set, Decl(keyofAndIndexedAccess.ts, 280, 5))
++>this.set : Symbol(set, Decl(keyofAndIndexedAccess.ts, 280, 5))
+ >this : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 274, 1))
+->set : Symbol(C1.set, Decl(keyofAndIndexedAccess.ts, 280, 5))
++>set : Symbol(set, Decl(keyofAndIndexedAccess.ts, 280, 5))
+ 
+         setProperty(this, "x", 42);
+ >setProperty : Symbol(setProperty, Decl(keyofAndIndexedAccess.ts, 80, 1))
+@@= skipped -71, +71 lines =@@
+ >x2 : Symbol(x2, Decl(keyofAndIndexedAccess.ts, 301, 64))
+ 
+     x1.length;
+->x1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x1.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x1 : Symbol(x1, Decl(keyofAndIndexedAccess.ts, 301, 47))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+     x2.length;
+->x2.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x2.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x2 : Symbol(x2, Decl(keyofAndIndexedAccess.ts, 301, 64))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+     x3.length;
+->x3.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x3.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x3 : Symbol(x3, Decl(keyofAndIndexedAccess.ts, 301, 81))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
+@@= skipped -81, +81 lines =@@
+ >Base : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 325, 1))
+ 
+     get<K extends keyof this>(prop: K) {
+->get : Symbol(Base.get, Decl(keyofAndIndexedAccess.ts, 329, 12))
++>get : Symbol(get, Decl(keyofAndIndexedAccess.ts, 329, 12))
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 330, 8))
+ >prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 330, 30))
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 330, 8))
+@@= skipped -10, +10 lines =@@
+ >prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 330, 30))
+     }
+     set<K extends keyof this>(prop: K, value: this[K]) {
+->set : Symbol(Base.set, Decl(keyofAndIndexedAccess.ts, 332, 5))
++>set : Symbol(set, Decl(keyofAndIndexedAccess.ts, 332, 5))
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 333, 8))
+ >prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 333, 30))
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 333, 8))
+@@= skipped -19, +19 lines =@@
+ >Base : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 325, 1))
+ 
+     parts: number;
+->parts : Symbol(Person.parts, Decl(keyofAndIndexedAccess.ts, 338, 27))
++>parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 338, 27))
+ 
+     constructor(parts: number) {
+ >parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 340, 16))
+@@= skipped -9, +9 lines =@@
+ >super : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 325, 1))
+ 
+         this.set("parts", parts);
+->this.set : Symbol(Base.set, Decl(keyofAndIndexedAccess.ts, 332, 5))
++>this.set : Symbol(set, Decl(keyofAndIndexedAccess.ts, 332, 5))
+ >this : Symbol(Person, Decl(keyofAndIndexedAccess.ts, 336, 1))
+->set : Symbol(Base.set, Decl(keyofAndIndexedAccess.ts, 332, 5))
++>set : Symbol(set, Decl(keyofAndIndexedAccess.ts, 332, 5))
+ >parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 340, 16))
+     }
+     getParts() {
+->getParts : Symbol(Person.getParts, Decl(keyofAndIndexedAccess.ts, 343, 5))
++>getParts : Symbol(getParts, Decl(keyofAndIndexedAccess.ts, 343, 5))
+ 
+         return this.get("parts")
+->this.get : Symbol(Base.get, Decl(keyofAndIndexedAccess.ts, 329, 12))
++>this.get : Symbol(get, Decl(keyofAndIndexedAccess.ts, 329, 12))
+ >this : Symbol(Person, Decl(keyofAndIndexedAccess.ts, 336, 1))
+->get : Symbol(Base.get, Decl(keyofAndIndexedAccess.ts, 329, 12))
++>get : Symbol(get, Decl(keyofAndIndexedAccess.ts, 329, 12))
+     }
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >OtherPerson : Symbol(OtherPerson, Decl(keyofAndIndexedAccess.ts, 347, 1))
+ 
+     parts: number;
+->parts : Symbol(OtherPerson.parts, Decl(keyofAndIndexedAccess.ts, 349, 19))
++>parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 349, 19))
+ 
+     constructor(parts: number) {
+ >parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 351, 16))
+@@= skipped -11, +11 lines =@@
+ >parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 351, 16))
+     }
+     getParts() {
+->getParts : Symbol(OtherPerson.getParts, Decl(keyofAndIndexedAccess.ts, 353, 5))
++>getParts : Symbol(getParts, Decl(keyofAndIndexedAccess.ts, 353, 5))
+ 
+         return getProperty(this, "parts")
+ >getProperty : Symbol(getProperty, Decl(keyofAndIndexedAccess.ts, 76, 26))
+@@= skipped -209, +209 lines =@@
+ >Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 403, 24))
+ 
+     data?: Data
+->data : Symbol(Options1.data, Decl(keyofAndIndexedAccess.ts, 403, 36))
++>data : Symbol(data, Decl(keyofAndIndexedAccess.ts, 403, 36))
+ >Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 403, 19))
+ 
+     computed?: Computed;
+->computed : Symbol(Options1.computed, Decl(keyofAndIndexedAccess.ts, 404, 15))
++>computed : Symbol(computed, Decl(keyofAndIndexedAccess.ts, 404, 15))
+ >Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 403, 24))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 408, 30))
+ 
+     get<K extends keyof (Data & Computed)>(key: K): (Data & Computed)[K];
+->get : Symbol(Component1.get, Decl(keyofAndIndexedAccess.ts, 409, 51))
++>get : Symbol(get, Decl(keyofAndIndexedAccess.ts, 409, 51))
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 410, 8))
+ >Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 408, 25))
+ >Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 408, 30))
+@@= skipped -24, +24 lines =@@
+ });
+ 
+ c1.get("hello");
+->c1.get : Symbol(Component1.get, Decl(keyofAndIndexedAccess.ts, 409, 51))
++>c1.get : Symbol(get, Decl(keyofAndIndexedAccess.ts, 409, 51))
+ >c1 : Symbol(c1, Decl(keyofAndIndexedAccess.ts, 413, 3))
+->get : Symbol(Component1.get, Decl(keyofAndIndexedAccess.ts, 409, 51))
++>get : Symbol(get, Decl(keyofAndIndexedAccess.ts, 409, 51))
+ 
+ // Repro from #12625
+ 
+@@= skipped -12, +12 lines =@@
+ >Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 423, 24))
+ 
+     data?: Data
+->data : Symbol(Options2.data, Decl(keyofAndIndexedAccess.ts, 423, 36))
++>data : Symbol(data, Decl(keyofAndIndexedAccess.ts, 423, 36))
+ >Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 423, 19))
+ 
+     computed?: Computed;
+->computed : Symbol(Options2.computed, Decl(keyofAndIndexedAccess.ts, 424, 15))
++>computed : Symbol(computed, Decl(keyofAndIndexedAccess.ts, 424, 15))
+ >Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 423, 24))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 428, 30))
+ 
+     get<K extends keyof Data | keyof Computed>(key: K): (Data & Computed)[K];
+->get : Symbol(Component2.get, Decl(keyofAndIndexedAccess.ts, 429, 51))
++>get : Symbol(get, Decl(keyofAndIndexedAccess.ts, 429, 51))
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 430, 8))
+ >Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 428, 25))
+ >Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 428, 30))
+@@= skipped -17, +17 lines =@@
+ >R : Symbol(R, Decl(keyofAndIndexedAccess.ts, 431, 1))
+ 
+     p: number;
+->p : Symbol(R.p, Decl(keyofAndIndexedAccess.ts, 435, 13))
++>p : Symbol(p, Decl(keyofAndIndexedAccess.ts, 435, 13))
+ }
+ 
+ function f<K extends keyof R>(p: K) {
+@@= skipped -79, +79 lines =@@
+ >S : Symbol(S, Decl(keyofAndIndexedAccess.ts, 467, 23))
+ 
+     MyThingy[key].push("a");
+->MyThingy[key].push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>MyThingy[key].push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >MyThingy : Symbol(MyThingy, Decl(keyofAndIndexedAccess.ts, 465, 3))
+ >key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 467, 43))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ // Repro from #13102
+@@= skipped -137, +137 lines =@@
+ >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 514, 8))
+ 
+ 	props: T & { foo: string };
+->props : Symbol(A.props, Decl(keyofAndIndexedAccess.ts, 514, 12))
++>props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 514, 12))
+ >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 514, 8))
+ >foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 515, 13))
+ }
+@@= skipped -11, +11 lines =@@
+ >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 518, 19))
+ 
+ 	f(p: this["props"]) {
+->f : Symbol(B.f, Decl(keyofAndIndexedAccess.ts, 518, 33))
++>f : Symbol(f, Decl(keyofAndIndexedAccess.ts, 518, 33))
+ >p : Symbol(p, Decl(keyofAndIndexedAccess.ts, 519, 3))
+ 
+ 		p.x;
+@@= skipped -17, +17 lines =@@
+ >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 526, 11))
+ 
+     private childFormFactories: {[K in keyof T]: (v: T[K]) => Form<T[K]>}
+->childFormFactories : Symbol(Form.childFormFactories, Decl(keyofAndIndexedAccess.ts, 526, 15))
++>childFormFactories : Symbol(childFormFactories, Decl(keyofAndIndexedAccess.ts, 526, 15))
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 527, 34))
+ >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 526, 11))
+ >v : Symbol(v, Decl(keyofAndIndexedAccess.ts, 527, 50))
+@@= skipped -11, +11 lines =@@
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 527, 34))
+ 
+     public set<K extends keyof T>(prop: K, value: T[K]) {
+->set : Symbol(Form.set, Decl(keyofAndIndexedAccess.ts, 527, 73))
++>set : Symbol(set, Decl(keyofAndIndexedAccess.ts, 527, 73))
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 529, 15))
+ >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 526, 11))
+ >prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 529, 34))
+@@= skipped -10, +10 lines =@@
+ >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 529, 15))
+ 
+         this.childFormFactories[prop](value)
+->this.childFormFactories : Symbol(Form.childFormFactories, Decl(keyofAndIndexedAccess.ts, 526, 15))
++>this.childFormFactories : Symbol(childFormFactories, Decl(keyofAndIndexedAccess.ts, 526, 15))
+ >this : Symbol(Form, Decl(keyofAndIndexedAccess.ts, 522, 1))
+->childFormFactories : Symbol(Form.childFormFactories, Decl(keyofAndIndexedAccess.ts, 526, 15))
++>childFormFactories : Symbol(childFormFactories, Decl(keyofAndIndexedAccess.ts, 526, 15))
+ >prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 529, 34))
+ >value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 529, 42))
+     }
+@@= skipped -15, +15 lines =@@
+ >P : Symbol(P, Decl(keyofAndIndexedAccess.ts, 536, 18))
+ 
+     public props: Readonly<P>;
+->props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 536, 22))
++>props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 536, 22))
+ >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+ >P : Symbol(P, Decl(keyofAndIndexedAccess.ts, 536, 18))
+ 
+@@= skipped -9, +9 lines =@@
+ >P : Symbol(P, Decl(keyofAndIndexedAccess.ts, 536, 18))
+ 
+         this.props = Object.freeze(props);
+->this.props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 536, 22))
++>this.props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 536, 22))
+ >this : Symbol(SampleClass, Decl(keyofAndIndexedAccess.ts, 532, 1))
+->props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 536, 22))
+->Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 536, 22))
++>Object.freeze : Symbol(freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>freeze : Symbol(freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 538, 16))
+     }
+ }
+@@= skipped -14, +14 lines =@@
+ >Foo : Symbol(Foo, Decl(keyofAndIndexedAccess.ts, 541, 1))
+ 
+     foo: string;
+->foo : Symbol(Foo.foo, Decl(keyofAndIndexedAccess.ts, 543, 15))
++>foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 543, 15))
+ }
+ 
+ declare function merge<T, U>(obj1: T, obj2: U): T & U;
+@@= skipped -38, +38 lines =@@
+     }
+ 
+     public brokenMethod() {
+->brokenMethod : Symbol(AnotherSampleClass.brokenMethod, Decl(keyofAndIndexedAccess.ts, 553, 5))
++>brokenMethod : Symbol(brokenMethod, Decl(keyofAndIndexedAccess.ts, 553, 5))
+ 
+         this.props.foo.concat;
+->this.props.foo.concat : Symbol(String.concat, Decl(lib.es5.d.ts, --, --))
++>this.props.foo.concat : Symbol(concat, Decl(lib.es5.d.ts, --, --))
+ >this.props.foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 543, 15))
+->this.props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 536, 22))
++>this.props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 536, 22))
+ >this : Symbol(AnotherSampleClass, Decl(keyofAndIndexedAccess.ts, 547, 54))
+->props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 536, 22))
++>props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 536, 22))
+ >foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 543, 15))
+->concat : Symbol(String.concat, Decl(lib.es5.d.ts, --, --))
++>concat : Symbol(concat, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ new AnotherSampleClass({});
+@@= skipped -122, +122 lines =@@
+ >Flag : Symbol(Flag, Decl(keyofAndIndexedAccess.ts, 585, 56))
+ 
+     FLAG_1 = "flag_1",
+->FLAG_1 : Symbol(Flag.FLAG_1, Decl(keyofAndIndexedAccess.ts, 586, 11))
++>FLAG_1 : Symbol(FLAG_1, Decl(keyofAndIndexedAccess.ts, 586, 11))
+ 
+     FLAG_2 = "flag_2"
+->FLAG_2 : Symbol(Flag.FLAG_2, Decl(keyofAndIndexedAccess.ts, 587, 22))
++>FLAG_2 : Symbol(FLAG_2, Decl(keyofAndIndexedAccess.ts, 587, 22))
+ }
+ 
+ type SimpleDBRecord<Flag extends string> = { staticField: number } & DBBoolTable<Flag>
+@@= skipped -55, +55 lines =@@
+ >I : Symbol(I, Decl(keyofAndIndexedAccess.ts, 599, 1))
+ 
+     foo: string;
+->foo : Symbol(I.foo, Decl(keyofAndIndexedAccess.ts, 603, 13))
++>foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 603, 13))
+ }
+ 
+ declare function take<T>(p: T): void;
+@@= skipped -38, +38 lines =@@
+ >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 616, 16))
+ 
+     foo(x: T[keyof T]) {
+->foo : Symbol(Unbounded.foo, Decl(keyofAndIndexedAccess.ts, 616, 20))
++>foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 616, 20))
+ >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 617, 8))
+ >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 616, 16))
+ >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 616, 16))
+@@= skipped -17, +17 lines =@@
+ >I7 : Symbol(I7, Decl(keyofAndIndexedAccess.ts, 620, 1))
+ 
+     x: any;
+->x : Symbol(I7.x, Decl(keyofAndIndexedAccess.ts, 624, 14))
++>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 624, 14))
+ }
+ type Foo7<T extends number> = T;
+ >Foo7 : Symbol(Foo7, Decl(keyofAndIndexedAccess.ts, 626, 1))

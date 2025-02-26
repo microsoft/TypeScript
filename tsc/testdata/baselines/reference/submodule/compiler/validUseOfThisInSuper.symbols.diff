@@ -1,0 +1,11 @@
+--- old.validUseOfThisInSuper.symbols
++++ new.validUseOfThisInSuper.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(validUseOfThisInSuper.ts, 0, 0))
+ 
+     constructor(public b: Base) {
+->b : Symbol(Base.b, Decl(validUseOfThisInSuper.ts, 1, 16))
++>b : Symbol(b, Decl(validUseOfThisInSuper.ts, 1, 16))
+ >Base : Symbol(Base, Decl(validUseOfThisInSuper.ts, 0, 0))
+     }
+ }

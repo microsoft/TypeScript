@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of37.ts] ////
+
+=== for-of37.ts ===
+var map = new Map([["", true]]);
+>map : Symbol(map, Decl(for-of37.ts, 0, 3))
+
+for (var v of map) {
+>v : Symbol(v, Decl(for-of37.ts, 1, 8))
+>map : Symbol(map, Decl(for-of37.ts, 0, 3))
+
+    v;
+>v : Symbol(v, Decl(for-of37.ts, 1, 8))
+}

@@ -1,0 +1,63 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty13.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+interface ButtonProp {
+>ButtonProp : Symbol(ButtonProp, Decl(file.tsx, 0, 32))
+
+    a: number,
+>a : Symbol(a, Decl(file.tsx, 2, 22))
+
+    b: string,
+>b : Symbol(b, Decl(file.tsx, 3, 14))
+
+    children: Button;
+>children : Symbol(children, Decl(file.tsx, 4, 14))
+>Button : Symbol(Button, Decl(file.tsx, 6, 1))
+}
+
+class Button extends React.Component<ButtonProp, any> {
+>Button : Symbol(Button, Decl(file.tsx, 6, 1))
+>React.Component : Symbol(unknown)
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(unknown)
+>ButtonProp : Symbol(ButtonProp, Decl(file.tsx, 0, 32))
+
+    render() {
+>render : Symbol(render, Decl(file.tsx, 8, 55))
+
+        // Error children are specified twice
+        return (<InnerButton {...this.props} children="hi">
+>InnerButton : Symbol(InnerButton, Decl(file.tsx, 19, 1))
+>this : Symbol(Button, Decl(file.tsx, 6, 1))
+>children : Symbol(children, Decl(file.tsx, 11, 44))
+
+            <div>Hello World</div>
+            </InnerButton>);
+>InnerButton : Symbol(InnerButton, Decl(file.tsx, 19, 1))
+    }
+}
+
+interface InnerButtonProp {
+>InnerButtonProp : Symbol(InnerButtonProp, Decl(file.tsx, 15, 1))
+
+	a: number
+>a : Symbol(a, Decl(file.tsx, 17, 27))
+}
+
+class InnerButton extends React.Component<InnerButtonProp, any> {
+>InnerButton : Symbol(InnerButton, Decl(file.tsx, 19, 1))
+>React.Component : Symbol(unknown)
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(unknown)
+>InnerButtonProp : Symbol(InnerButtonProp, Decl(file.tsx, 15, 1))
+
+	render() {
+>render : Symbol(render, Decl(file.tsx, 21, 65))
+
+		return (<button>Hello</button>);
+	}
+}
+

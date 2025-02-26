@@ -1,0 +1,42 @@
+--- old.booleanLiteralsContextuallyTypedFromUnion.symbols
++++ new.booleanLiteralsContextuallyTypedFromUnion.symbols
+@@= skipped -2, +2 lines =@@
+ === booleanLiteralsContextuallyTypedFromUnion.tsx ===
+ interface A { isIt: true; text: string; }
+ >A : Symbol(A, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 0, 0))
+->isIt : Symbol(A.isIt, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 0, 13))
+->text : Symbol(A.text, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 0, 25))
++>isIt : Symbol(isIt, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 0, 13))
++>text : Symbol(text, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 0, 25))
+ 
+ interface B { isIt: false; value: number; }
+ >B : Symbol(B, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 0, 41))
+->isIt : Symbol(B.isIt, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 1, 13))
+->value : Symbol(B.value, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 1, 26))
++>isIt : Symbol(isIt, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 1, 13))
++>value : Symbol(value, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 1, 26))
+ 
+ type C = A | B;
+ >C : Symbol(C, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 1, 43))
+@@= skipped -15, +15 lines =@@
+ 
+ const isIt = Math.random() > 0.5;
+ >isIt : Symbol(isIt, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 3, 5))
+->Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
++>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ 
+ const c: C = isIt ? { isIt, text: 'hey' } : { isIt, value: 123 };
+ >c : Symbol(c, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 4, 5))
+@@= skipped -44, +44 lines =@@
+ >Funk : Symbol(Funk, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 16, 3))
+ >_props : Symbol(_props, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 16, 12))
+ >ComponentProps : Symbol(ComponentProps, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 5, 78))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+ 
+ let Fail1 = () => <Funk mandatoryFn={() => { }} optionalBool={true} />
+ >Fail1 : Symbol(Fail1, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 18, 3))

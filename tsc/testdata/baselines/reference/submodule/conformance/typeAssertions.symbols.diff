@@ -1,0 +1,26 @@
+--- old.typeAssertions.symbols
++++ new.typeAssertions.symbols
+@@= skipped -32, +32 lines =@@
+ >SomeBase : Symbol(SomeBase, Decl(typeAssertions.ts, 11, 20))
+ 
+     private p;
+->p : Symbol(SomeBase.p, Decl(typeAssertions.ts, 13, 16))
++>p : Symbol(p, Decl(typeAssertions.ts, 13, 16))
+ }
+ class SomeDerived extends SomeBase {
+ >SomeDerived : Symbol(SomeDerived, Decl(typeAssertions.ts, 15, 1))
+ >SomeBase : Symbol(SomeBase, Decl(typeAssertions.ts, 11, 20))
+ 
+     private x;
+->x : Symbol(SomeDerived.x, Decl(typeAssertions.ts, 16, 36))
++>x : Symbol(x, Decl(typeAssertions.ts, 16, 36))
+ }
+ class SomeOther {
+ >SomeOther : Symbol(SomeOther, Decl(typeAssertions.ts, 18, 1))
+ 
+     private q;
+->q : Symbol(SomeOther.q, Decl(typeAssertions.ts, 19, 17))
++>q : Symbol(q, Decl(typeAssertions.ts, 19, 17))
+ }
+ 
+ // Type assertion should check for assignability in either direction

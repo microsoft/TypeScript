@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_asConstArrays.ts] ////
+
+=== typeSatisfaction_asConstArrays.ts ===
+// with readonly array
+const arr1 = [1, 2, 3] as const satisfies readonly unknown[]
+>arr1 : Symbol(arr1, Decl(typeSatisfaction_asConstArrays.ts, 1, 5))
+>const : Symbol(const)
+
+// with mutable array
+const arr2 = [1, 2, 3] as const satisfies unknown[]
+>arr2 : Symbol(arr2, Decl(typeSatisfaction_asConstArrays.ts, 4, 5))
+>const : Symbol(const)
+

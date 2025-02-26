@@ -1,0 +1,72 @@
+--- old.jsdocFunctionType.symbols
++++ new.jsdocFunctionType.symbols
+@@= skipped -16, +16 lines =@@
+ >x : Symbol(x, Decl(functions.js, 8, 3))
+ >id1 : Symbol(id1, Decl(functions.js, 0, 0))
+ >n : Symbol(n, Decl(functions.js, 8, 22))
+->this.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+->this : Symbol(this, Decl(functions.js, 1, 20))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+ >n : Symbol(n, Decl(functions.js, 8, 22))
+ 
+ /**
+@@= skipped -25, +22 lines =@@
+ >n : Symbol(n, Decl(functions.js, 20, 16))
+ 
+         this.length = n;
+->this.length : Symbol(C.length, Decl(functions.js, 20, 20))
+ >this : Symbol(C, Decl(functions.js, 16, 1))
+->length : Symbol(C.length, Decl(functions.js, 20, 20))
+ >n : Symbol(n, Decl(functions.js, 20, 16))
+     }
+ }
+@@= skipped -17, +15 lines =@@
+ >y : Symbol(y, Decl(functions.js, 25, 3))
+ 
+ z.length;
+->z.length : Symbol(length, Decl(functions.js, 12, 27))
+ >z : Symbol(z, Decl(functions.js, 26, 3))
+->length : Symbol(length, Decl(functions.js, 12, 27))
+ 
+ /** @type {function ("a" | "b", 1 | 2): 3 | 4} */
+ var f = function (ab, onetwo) { return ab === "a" ? 3 : 4;  }
+@@= skipped -21, +19 lines =@@
+ >n : Symbol(n, Decl(functions.js, 37, 11))
+ 
+   this.length = n;
+->this.length : Symbol(D.length, Decl(functions.js, 37, 15))
+->this : Symbol(D, Decl(functions.js, 30, 61))
+->length : Symbol(D.length, Decl(functions.js, 37, 15))
+ >n : Symbol(n, Decl(functions.js, 37, 11))
+ }
+ 
+@@= skipped -16, +13 lines =@@
+ >y2 : Symbol(y2, Decl(functions.js, 41, 3))
+ 
+ z2.length;
+->z2.length : Symbol(length, Decl(functions.js, 12, 27))
+ >z2 : Symbol(z2, Decl(functions.js, 42, 3))
+->length : Symbol(length, Decl(functions.js, 12, 27))
+ 
+ 
+ /** 
+@@= skipped -20, +18 lines =@@
+ >D : Symbol(D, Decl(functions.js, 30, 61))
+ 
+ z3.length;
+->z3.length : Symbol(D.length, Decl(functions.js, 37, 15))
+ >z3 : Symbol(z3, Decl(functions.js, 51, 3))
+->length : Symbol(D.length, Decl(functions.js, 37, 15))
+ 
+ 
+ /** 
+@@= skipped -14, +12 lines =@@
+ >n : Symbol(n, Decl(functions.js, 59, 17))
+ 
+   this.not_length_on_purpose = n;
+->this.not_length_on_purpose : Symbol(E.not_length_on_purpose, Decl(functions.js, 59, 21))
+->this : Symbol(E, Decl(functions.js, 59, 7))
+->not_length_on_purpose : Symbol(E.not_length_on_purpose, Decl(functions.js, 59, 21))
+ >n : Symbol(n, Decl(functions.js, 59, 17))
+ 
+ };

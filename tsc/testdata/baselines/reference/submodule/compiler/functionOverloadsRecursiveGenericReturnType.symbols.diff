@@ -1,0 +1,20 @@
+--- old.functionOverloadsRecursiveGenericReturnType.symbols
++++ new.functionOverloadsRecursiveGenericReturnType.symbols
+@@= skipped -5, +5 lines =@@
+ >V : Symbol(V, Decl(functionOverloadsRecursiveGenericReturnType.ts, 0, 8))
+ 
+     private id: V;
+->id : Symbol(B.id, Decl(functionOverloadsRecursiveGenericReturnType.ts, 0, 11))
++>id : Symbol(id, Decl(functionOverloadsRecursiveGenericReturnType.ts, 0, 11))
+ >V : Symbol(V, Decl(functionOverloadsRecursiveGenericReturnType.ts, 0, 8))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >U : Symbol(U, Decl(functionOverloadsRecursiveGenericReturnType.ts, 4, 8))
+ 
+     GetEnumerator: () => B<U>;
+->GetEnumerator : Symbol(A.GetEnumerator, Decl(functionOverloadsRecursiveGenericReturnType.ts, 4, 11))
++>GetEnumerator : Symbol(GetEnumerator, Decl(functionOverloadsRecursiveGenericReturnType.ts, 4, 11))
+ >B : Symbol(B, Decl(functionOverloadsRecursiveGenericReturnType.ts, 0, 0))
+ >U : Symbol(U, Decl(functionOverloadsRecursiveGenericReturnType.ts, 4, 8))
+ }

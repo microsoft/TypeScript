@@ -1,0 +1,27 @@
+--- old.internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.symbols
++++ new.internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.ts, 0, 0), Decl(internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.ts, 2, 1))
+ 
+     aProp: string;
+->aProp : Symbol(A.aProp, Decl(internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.ts, 0, 9))
++>aProp : Symbol(aProp, Decl(internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.ts, 0, 9))
+ }
+ module A {
+ >A : Symbol(A, Decl(internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.ts, 0, 0), Decl(internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.ts, 2, 1))
+ 
+     export interface X { s: string }
+ >X : Symbol(X, Decl(internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.ts, 3, 10))
+->s : Symbol(X.s, Decl(internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.ts, 4, 24))
++>s : Symbol(s, Decl(internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.ts, 4, 24))
+ 
+     export var a = 10;
+ >a : Symbol(a, Decl(internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.ts, 5, 14))
+@@= skipped -21, +21 lines =@@
+ 
+     import Y = A;
+ >Y : Symbol(Y, Decl(internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.ts, 9, 14))
+->A : Symbol(Y, Decl(internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.ts, 0, 0), Decl(internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.ts, 2, 1))
++>A : Symbol(A, Decl(internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.ts, 0, 0), Decl(internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.ts, 2, 1))
+ }
+ 

@@ -1,0 +1,20 @@
+--- old.functionConstraintSatisfaction3.symbols
++++ new.functionConstraintSatisfaction3.symbols
+@@= skipped -24, +24 lines =@@
+ >C : Symbol(C, Decl(functionConstraintSatisfaction3.ts, 7, 9))
+ 
+     foo: string;
+->foo : Symbol(C.foo, Decl(functionConstraintSatisfaction3.ts, 9, 9))
++>foo : Symbol(foo, Decl(functionConstraintSatisfaction3.ts, 9, 9))
+ }
+ 
+ var a: { (): string };
+@@= skipped -65, +65 lines =@@
+ >T : Symbol(T, Decl(functionConstraintSatisfaction3.ts, 29, 9))
+ 
+     foo: T;
+->foo : Symbol(C2.foo, Decl(functionConstraintSatisfaction3.ts, 29, 13))
++>foo : Symbol(foo, Decl(functionConstraintSatisfaction3.ts, 29, 13))
+ >T : Symbol(T, Decl(functionConstraintSatisfaction3.ts, 29, 9))
+ }
+ 

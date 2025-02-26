@@ -1,0 +1,19 @@
+--- old.tsxEmit3.symbols
++++ new.tsxEmit3.symbols
+@@= skipped -56, +56 lines =@@
+ 
+ 	// Emit M.S.Bar
+ 	S.Bar, <S.Bar />;
+->S.Bar : Symbol(S.Bar, Decl(file.tsx, 7, 18))
++>S.Bar : Symbol(Bar, Decl(file.tsx, 7, 18))
+ >S : Symbol(S, Decl(file.tsx, 6, 39), Decl(file.tsx, 17, 14))
+->Bar : Symbol(S.Bar, Decl(file.tsx, 7, 18))
+->S.Bar : Symbol(S.Bar, Decl(file.tsx, 7, 18))
++>Bar : Symbol(Bar, Decl(file.tsx, 7, 18))
++>S.Bar : Symbol(Bar, Decl(file.tsx, 7, 18))
+ >S : Symbol(S, Decl(file.tsx, 6, 39), Decl(file.tsx, 17, 14))
+->Bar : Symbol(S.Bar, Decl(file.tsx, 7, 18))
++>Bar : Symbol(Bar, Decl(file.tsx, 7, 18))
+ }
+ 
+ module M {

@@ -1,0 +1,8 @@
+--- old.tslibInJs.symbols
++++ new.tslibInJs.symbols
+@@= skipped -3, +3 lines =@@
+ "use strict";
+ const { foo } = require("bar");
+ >foo : Symbol(foo, Decl(main.js, 1, 7))
+->require : Symbol(require)
+ 

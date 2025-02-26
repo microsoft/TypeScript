@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/salsa/moduleExportDuplicateAlias.ts] ////
+
+=== test.js ===
+const { apply } = require('./moduleExportAliasDuplicateAlias')
+>apply : Symbol(apply, Decl(test.js, 0, 7))
+
+apply()
+>apply : Symbol(apply, Decl(test.js, 0, 7))
+

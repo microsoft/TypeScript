@@ -1,0 +1,48 @@
+--- old.arraySigChecking.symbols
++++ new.arraySigChecking.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     interface iBar { t: any; }
+ >iBar : Symbol(iBar, Decl(arraySigChecking.ts, 0, 18))
+->t : Symbol(iBar.t, Decl(arraySigChecking.ts, 1, 20))
++>t : Symbol(t, Decl(arraySigChecking.ts, 1, 20))
+ 
+     interface iFoo extends iBar {
+ >iFoo : Symbol(iFoo, Decl(arraySigChecking.ts, 1, 30))
+ >iBar : Symbol(iBar, Decl(arraySigChecking.ts, 0, 18))
+ 
+         s: any;
+->s : Symbol(iFoo.s, Decl(arraySigChecking.ts, 2, 33))
++>s : Symbol(s, Decl(arraySigChecking.ts, 2, 33))
+     }
+ 
+     class cFoo {
+ >cFoo : Symbol(cFoo, Decl(arraySigChecking.ts, 4, 5))
+ 
+         t: any;
+->t : Symbol(cFoo.t, Decl(arraySigChecking.ts, 6, 16))
++>t : Symbol(t, Decl(arraySigChecking.ts, 6, 16))
+     }
+ 
+     var foo: { [index: any]; }; // expect an error here
+@@= skipped -26, +26 lines =@@
+ >myInt : Symbol(myInt, Decl(arraySigChecking.ts, 11, 1))
+ 
+     voidFn(): void;
+->voidFn : Symbol(myInt.voidFn, Decl(arraySigChecking.ts, 13, 17))
++>voidFn : Symbol(voidFn, Decl(arraySigChecking.ts, 13, 17))
+ }
+ var myVar: myInt;
+ >myVar : Symbol(myVar, Decl(arraySigChecking.ts, 16, 3))
+@@= skipped -8, +8 lines =@@
+ 
+ var strArray: string[] = [myVar.voidFn()];
+ >strArray : Symbol(strArray, Decl(arraySigChecking.ts, 17, 3))
+->myVar.voidFn : Symbol(myInt.voidFn, Decl(arraySigChecking.ts, 13, 17))
++>myVar.voidFn : Symbol(voidFn, Decl(arraySigChecking.ts, 13, 17))
+ >myVar : Symbol(myVar, Decl(arraySigChecking.ts, 16, 3))
+->voidFn : Symbol(myInt.voidFn, Decl(arraySigChecking.ts, 13, 17))
++>voidFn : Symbol(voidFn, Decl(arraySigChecking.ts, 13, 17))
+ 
+ 
+ var myArray: number[][][];

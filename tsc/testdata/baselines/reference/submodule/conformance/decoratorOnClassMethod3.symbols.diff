@@ -1,0 +1,12 @@
+--- old.decoratorOnClassMethod3.symbols
++++ new.decoratorOnClassMethod3.symbols
+@@= skipped -15, +15 lines =@@
+ >C : Symbol(C, Decl(decoratorOnClassMethod3.ts, 0, 126))
+ 
+     public @dec method() {}
+->public : Symbol(C.public, Decl(decoratorOnClassMethod3.ts, 2, 9))
++>public : Symbol(public, Decl(decoratorOnClassMethod3.ts, 2, 9))
+ >dec : Symbol(dec, Decl(decoratorOnClassMethod3.ts, 0, 0))
+->method : Symbol(C.method, Decl(decoratorOnClassMethod3.ts, 3, 10))
++>method : Symbol(method, Decl(decoratorOnClassMethod3.ts, 3, 10))
+ }

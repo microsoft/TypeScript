@@ -1,0 +1,614 @@
+--- old.uniqueSymbolsDeclarations.symbols
++++ new.uniqueSymbolsDeclarations.symbols
+@@= skipped -152, +152 lines =@@
+ >C : Symbol(C, Decl(uniqueSymbolsDeclarations.ts, 53, 61))
+ 
+     static readonly readonlyStaticCall = Symbol();
+->readonlyStaticCall : Symbol(C.readonlyStaticCall, Decl(uniqueSymbolsDeclarations.ts, 56, 9))
++>readonlyStaticCall : Symbol(readonlyStaticCall, Decl(uniqueSymbolsDeclarations.ts, 56, 9))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+ 
+     static readonly readonlyStaticType: unique symbol;
+->readonlyStaticType : Symbol(C.readonlyStaticType, Decl(uniqueSymbolsDeclarations.ts, 57, 50))
++>readonlyStaticType : Symbol(readonlyStaticType, Decl(uniqueSymbolsDeclarations.ts, 57, 50))
+ 
+     static readonly readonlyStaticTypeAndCall: unique symbol = Symbol();
+->readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarations.ts, 58, 54))
++>readonlyStaticTypeAndCall : Symbol(readonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarations.ts, 58, 54))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+ 
+     static readwriteStaticCall = Symbol();
+->readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbolsDeclarations.ts, 59, 72))
++>readwriteStaticCall : Symbol(readwriteStaticCall, Decl(uniqueSymbolsDeclarations.ts, 59, 72))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+ 
+     readonly readonlyCall = Symbol();
+->readonlyCall : Symbol(C.readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
++>readonlyCall : Symbol(readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+ 
+     readwriteCall = Symbol();
+->readwriteCall : Symbol(C.readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
++>readwriteCall : Symbol(readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+ }
+ declare const c: C;
+@@= skipped -28, +28 lines =@@
+ 
+ const constInitToCReadonlyStaticCall = C.readonlyStaticCall;
+ >constInitToCReadonlyStaticCall : Symbol(constInitToCReadonlyStaticCall, Decl(uniqueSymbolsDeclarations.ts, 67, 5))
+->C.readonlyStaticCall : Symbol(C.readonlyStaticCall, Decl(uniqueSymbolsDeclarations.ts, 56, 9))
++>C.readonlyStaticCall : Symbol(readonlyStaticCall, Decl(uniqueSymbolsDeclarations.ts, 56, 9))
+ >C : Symbol(C, Decl(uniqueSymbolsDeclarations.ts, 53, 61))
+->readonlyStaticCall : Symbol(C.readonlyStaticCall, Decl(uniqueSymbolsDeclarations.ts, 56, 9))
++>readonlyStaticCall : Symbol(readonlyStaticCall, Decl(uniqueSymbolsDeclarations.ts, 56, 9))
+ 
+ const constInitToCReadonlyStaticType = C.readonlyStaticType;
+ >constInitToCReadonlyStaticType : Symbol(constInitToCReadonlyStaticType, Decl(uniqueSymbolsDeclarations.ts, 68, 5))
+->C.readonlyStaticType : Symbol(C.readonlyStaticType, Decl(uniqueSymbolsDeclarations.ts, 57, 50))
++>C.readonlyStaticType : Symbol(readonlyStaticType, Decl(uniqueSymbolsDeclarations.ts, 57, 50))
+ >C : Symbol(C, Decl(uniqueSymbolsDeclarations.ts, 53, 61))
+->readonlyStaticType : Symbol(C.readonlyStaticType, Decl(uniqueSymbolsDeclarations.ts, 57, 50))
++>readonlyStaticType : Symbol(readonlyStaticType, Decl(uniqueSymbolsDeclarations.ts, 57, 50))
+ 
+ const constInitToCReadonlyStaticTypeAndCall = C.readonlyStaticTypeAndCall;
+ >constInitToCReadonlyStaticTypeAndCall : Symbol(constInitToCReadonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarations.ts, 69, 5))
+->C.readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarations.ts, 58, 54))
++>C.readonlyStaticTypeAndCall : Symbol(readonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarations.ts, 58, 54))
+ >C : Symbol(C, Decl(uniqueSymbolsDeclarations.ts, 53, 61))
+->readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarations.ts, 58, 54))
++>readonlyStaticTypeAndCall : Symbol(readonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarations.ts, 58, 54))
+ 
+ const constInitToCReadwriteStaticCall = C.readwriteStaticCall;
+ >constInitToCReadwriteStaticCall : Symbol(constInitToCReadwriteStaticCall, Decl(uniqueSymbolsDeclarations.ts, 70, 5))
+->C.readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbolsDeclarations.ts, 59, 72))
++>C.readwriteStaticCall : Symbol(readwriteStaticCall, Decl(uniqueSymbolsDeclarations.ts, 59, 72))
+ >C : Symbol(C, Decl(uniqueSymbolsDeclarations.ts, 53, 61))
+->readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbolsDeclarations.ts, 59, 72))
++>readwriteStaticCall : Symbol(readwriteStaticCall, Decl(uniqueSymbolsDeclarations.ts, 59, 72))
+ 
+ const constInitToCReadonlyStaticCallWithTypeQuery: typeof C.readonlyStaticCall = C.readonlyStaticCall;
+ >constInitToCReadonlyStaticCallWithTypeQuery : Symbol(constInitToCReadonlyStaticCallWithTypeQuery, Decl(uniqueSymbolsDeclarations.ts, 72, 5))
+->C.readonlyStaticCall : Symbol(C.readonlyStaticCall, Decl(uniqueSymbolsDeclarations.ts, 56, 9))
++>C.readonlyStaticCall : Symbol(readonlyStaticCall, Decl(uniqueSymbolsDeclarations.ts, 56, 9))
+ >C : Symbol(C, Decl(uniqueSymbolsDeclarations.ts, 53, 61))
+->readonlyStaticCall : Symbol(C.readonlyStaticCall, Decl(uniqueSymbolsDeclarations.ts, 56, 9))
+->C.readonlyStaticCall : Symbol(C.readonlyStaticCall, Decl(uniqueSymbolsDeclarations.ts, 56, 9))
++>readonlyStaticCall : Symbol(readonlyStaticCall, Decl(uniqueSymbolsDeclarations.ts, 56, 9))
++>C.readonlyStaticCall : Symbol(readonlyStaticCall, Decl(uniqueSymbolsDeclarations.ts, 56, 9))
+ >C : Symbol(C, Decl(uniqueSymbolsDeclarations.ts, 53, 61))
+->readonlyStaticCall : Symbol(C.readonlyStaticCall, Decl(uniqueSymbolsDeclarations.ts, 56, 9))
++>readonlyStaticCall : Symbol(readonlyStaticCall, Decl(uniqueSymbolsDeclarations.ts, 56, 9))
+ 
+ const constInitToCReadonlyStaticTypeWithTypeQuery: typeof C.readonlyStaticType = C.readonlyStaticType;
+ >constInitToCReadonlyStaticTypeWithTypeQuery : Symbol(constInitToCReadonlyStaticTypeWithTypeQuery, Decl(uniqueSymbolsDeclarations.ts, 73, 5))
+->C.readonlyStaticType : Symbol(C.readonlyStaticType, Decl(uniqueSymbolsDeclarations.ts, 57, 50))
++>C.readonlyStaticType : Symbol(readonlyStaticType, Decl(uniqueSymbolsDeclarations.ts, 57, 50))
+ >C : Symbol(C, Decl(uniqueSymbolsDeclarations.ts, 53, 61))
+->readonlyStaticType : Symbol(C.readonlyStaticType, Decl(uniqueSymbolsDeclarations.ts, 57, 50))
+->C.readonlyStaticType : Symbol(C.readonlyStaticType, Decl(uniqueSymbolsDeclarations.ts, 57, 50))
++>readonlyStaticType : Symbol(readonlyStaticType, Decl(uniqueSymbolsDeclarations.ts, 57, 50))
++>C.readonlyStaticType : Symbol(readonlyStaticType, Decl(uniqueSymbolsDeclarations.ts, 57, 50))
+ >C : Symbol(C, Decl(uniqueSymbolsDeclarations.ts, 53, 61))
+->readonlyStaticType : Symbol(C.readonlyStaticType, Decl(uniqueSymbolsDeclarations.ts, 57, 50))
++>readonlyStaticType : Symbol(readonlyStaticType, Decl(uniqueSymbolsDeclarations.ts, 57, 50))
+ 
+ const constInitToCReadonlyStaticTypeAndCallWithTypeQuery: typeof C.readonlyStaticTypeAndCall = C.readonlyStaticTypeAndCall;
+ >constInitToCReadonlyStaticTypeAndCallWithTypeQuery : Symbol(constInitToCReadonlyStaticTypeAndCallWithTypeQuery, Decl(uniqueSymbolsDeclarations.ts, 74, 5))
+->C.readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarations.ts, 58, 54))
++>C.readonlyStaticTypeAndCall : Symbol(readonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarations.ts, 58, 54))
+ >C : Symbol(C, Decl(uniqueSymbolsDeclarations.ts, 53, 61))
+->readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarations.ts, 58, 54))
+->C.readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarations.ts, 58, 54))
++>readonlyStaticTypeAndCall : Symbol(readonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarations.ts, 58, 54))
++>C.readonlyStaticTypeAndCall : Symbol(readonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarations.ts, 58, 54))
+ >C : Symbol(C, Decl(uniqueSymbolsDeclarations.ts, 53, 61))
+->readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarations.ts, 58, 54))
++>readonlyStaticTypeAndCall : Symbol(readonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarations.ts, 58, 54))
+ 
+ const constInitToCReadwriteStaticCallWithTypeQuery: typeof C.readwriteStaticCall = C.readwriteStaticCall;
+ >constInitToCReadwriteStaticCallWithTypeQuery : Symbol(constInitToCReadwriteStaticCallWithTypeQuery, Decl(uniqueSymbolsDeclarations.ts, 75, 5))
+->C.readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbolsDeclarations.ts, 59, 72))
++>C.readwriteStaticCall : Symbol(readwriteStaticCall, Decl(uniqueSymbolsDeclarations.ts, 59, 72))
+ >C : Symbol(C, Decl(uniqueSymbolsDeclarations.ts, 53, 61))
+->readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbolsDeclarations.ts, 59, 72))
+->C.readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbolsDeclarations.ts, 59, 72))
++>readwriteStaticCall : Symbol(readwriteStaticCall, Decl(uniqueSymbolsDeclarations.ts, 59, 72))
++>C.readwriteStaticCall : Symbol(readwriteStaticCall, Decl(uniqueSymbolsDeclarations.ts, 59, 72))
+ >C : Symbol(C, Decl(uniqueSymbolsDeclarations.ts, 53, 61))
+->readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbolsDeclarations.ts, 59, 72))
++>readwriteStaticCall : Symbol(readwriteStaticCall, Decl(uniqueSymbolsDeclarations.ts, 59, 72))
+ 
+ const constInitToCReadonlyCall = c.readonlyCall;
+ >constInitToCReadonlyCall : Symbol(constInitToCReadonlyCall, Decl(uniqueSymbolsDeclarations.ts, 77, 5))
+->c.readonlyCall : Symbol(C.readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
++>c.readonlyCall : Symbol(readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
+ >c : Symbol(c, Decl(uniqueSymbolsDeclarations.ts, 65, 13))
+->readonlyCall : Symbol(C.readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
++>readonlyCall : Symbol(readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
+ 
+ const constInitToCReadwriteCall = c.readwriteCall;
+ >constInitToCReadwriteCall : Symbol(constInitToCReadwriteCall, Decl(uniqueSymbolsDeclarations.ts, 78, 5))
+->c.readwriteCall : Symbol(C.readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
++>c.readwriteCall : Symbol(readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
+ >c : Symbol(c, Decl(uniqueSymbolsDeclarations.ts, 65, 13))
+->readwriteCall : Symbol(C.readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
++>readwriteCall : Symbol(readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
+ 
+ const constInitToCReadonlyCallWithTypeQuery: typeof c.readonlyCall = c.readonlyCall;
+ >constInitToCReadonlyCallWithTypeQuery : Symbol(constInitToCReadonlyCallWithTypeQuery, Decl(uniqueSymbolsDeclarations.ts, 79, 5))
+->c.readonlyCall : Symbol(C.readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
++>c.readonlyCall : Symbol(readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
+ >c : Symbol(c, Decl(uniqueSymbolsDeclarations.ts, 65, 13))
+->readonlyCall : Symbol(C.readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
+->c.readonlyCall : Symbol(C.readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
++>readonlyCall : Symbol(readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
++>c.readonlyCall : Symbol(readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
+ >c : Symbol(c, Decl(uniqueSymbolsDeclarations.ts, 65, 13))
+->readonlyCall : Symbol(C.readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
++>readonlyCall : Symbol(readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
+ 
+ const constInitToCReadwriteCallWithTypeQuery: typeof c.readwriteCall = c.readwriteCall;
+ >constInitToCReadwriteCallWithTypeQuery : Symbol(constInitToCReadwriteCallWithTypeQuery, Decl(uniqueSymbolsDeclarations.ts, 80, 5))
+->c.readwriteCall : Symbol(C.readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
++>c.readwriteCall : Symbol(readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
+ >c : Symbol(c, Decl(uniqueSymbolsDeclarations.ts, 65, 13))
+->readwriteCall : Symbol(C.readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
+->c.readwriteCall : Symbol(C.readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
++>readwriteCall : Symbol(readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
++>c.readwriteCall : Symbol(readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
+ >c : Symbol(c, Decl(uniqueSymbolsDeclarations.ts, 65, 13))
+->readwriteCall : Symbol(C.readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
++>readwriteCall : Symbol(readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
+ 
+ const constInitToCReadonlyCallWithIndexedAccess: C["readonlyCall"] = c.readonlyCall;
+ >constInitToCReadonlyCallWithIndexedAccess : Symbol(constInitToCReadonlyCallWithIndexedAccess, Decl(uniqueSymbolsDeclarations.ts, 81, 5))
+ >C : Symbol(C, Decl(uniqueSymbolsDeclarations.ts, 53, 61))
+->c.readonlyCall : Symbol(C.readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
++>c.readonlyCall : Symbol(readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
+ >c : Symbol(c, Decl(uniqueSymbolsDeclarations.ts, 65, 13))
+->readonlyCall : Symbol(C.readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
++>readonlyCall : Symbol(readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
+ 
+ const constInitToCReadwriteCallWithIndexedAccess: C["readwriteCall"] = c.readwriteCall;
+ >constInitToCReadwriteCallWithIndexedAccess : Symbol(constInitToCReadwriteCallWithIndexedAccess, Decl(uniqueSymbolsDeclarations.ts, 82, 5))
+ >C : Symbol(C, Decl(uniqueSymbolsDeclarations.ts, 53, 61))
+->c.readwriteCall : Symbol(C.readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
++>c.readwriteCall : Symbol(readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
+ >c : Symbol(c, Decl(uniqueSymbolsDeclarations.ts, 65, 13))
+->readwriteCall : Symbol(C.readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
++>readwriteCall : Symbol(readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
+ 
+ // interfaces
+ interface I {
+ >I : Symbol(I, Decl(uniqueSymbolsDeclarations.ts, 82, 87))
+ 
+     readonly readonlyType: unique symbol;
+->readonlyType : Symbol(I.readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
++>readonlyType : Symbol(readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
+ }
+ declare const i: I;
+ >i : Symbol(i, Decl(uniqueSymbolsDeclarations.ts, 88, 13))
+@@= skipped -115, +115 lines =@@
+ 
+ const constInitToIReadonlyType = i.readonlyType;
+ >constInitToIReadonlyType : Symbol(constInitToIReadonlyType, Decl(uniqueSymbolsDeclarations.ts, 90, 5))
+->i.readonlyType : Symbol(I.readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
++>i.readonlyType : Symbol(readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
+ >i : Symbol(i, Decl(uniqueSymbolsDeclarations.ts, 88, 13))
+->readonlyType : Symbol(I.readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
++>readonlyType : Symbol(readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
+ 
+ const constInitToIReadonlyTypeWithTypeQuery: typeof i.readonlyType = i.readonlyType;
+ >constInitToIReadonlyTypeWithTypeQuery : Symbol(constInitToIReadonlyTypeWithTypeQuery, Decl(uniqueSymbolsDeclarations.ts, 91, 5))
+->i.readonlyType : Symbol(I.readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
++>i.readonlyType : Symbol(readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
+ >i : Symbol(i, Decl(uniqueSymbolsDeclarations.ts, 88, 13))
+->readonlyType : Symbol(I.readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
+->i.readonlyType : Symbol(I.readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
++>readonlyType : Symbol(readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
++>i.readonlyType : Symbol(readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
+ >i : Symbol(i, Decl(uniqueSymbolsDeclarations.ts, 88, 13))
+->readonlyType : Symbol(I.readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
++>readonlyType : Symbol(readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
+ 
+ const constInitToIReadonlyTypeWithIndexedAccess: I["readonlyType"] = i.readonlyType;
+ >constInitToIReadonlyTypeWithIndexedAccess : Symbol(constInitToIReadonlyTypeWithIndexedAccess, Decl(uniqueSymbolsDeclarations.ts, 92, 5))
+ >I : Symbol(I, Decl(uniqueSymbolsDeclarations.ts, 82, 87))
+->i.readonlyType : Symbol(I.readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
++>i.readonlyType : Symbol(readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
+ >i : Symbol(i, Decl(uniqueSymbolsDeclarations.ts, 88, 13))
+->readonlyType : Symbol(I.readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
++>readonlyType : Symbol(readonlyType, Decl(uniqueSymbolsDeclarations.ts, 85, 13))
+ 
+ // type literals
+ type L = {
+@@= skipped -93, +93 lines =@@
+ // type argument inference
+ const promiseForConstCall = Promise.resolve(constCall);
+ >promiseForConstCall : Symbol(promiseForConstCall, Decl(uniqueSymbolsDeclarations.ts, 111, 5))
+->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >constCall : Symbol(constCall, Decl(uniqueSymbolsDeclarations.ts, 1, 5))
+ 
+ const arrayOfConstCall = [constCall];
+@@= skipped -22, +22 lines =@@
+ >[s] : Symbol([s], Decl(uniqueSymbolsDeclarations.ts, 117, 18))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ >[N.s] : Symbol([N.s], Decl(uniqueSymbolsDeclarations.ts, 117, 28))
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+ declare function f<T>(x: T): T;
+ >f : Symbol(f, Decl(uniqueSymbolsDeclarations.ts, 117, 42))
+@@= skipped -19, +19 lines =@@
+ declare function g(x: typeof N.s): void;
+ >g : Symbol(g, Decl(uniqueSymbolsDeclarations.ts, 118, 31), Decl(uniqueSymbolsDeclarations.ts, 119, 38))
+ >x : Symbol(x, Decl(uniqueSymbolsDeclarations.ts, 120, 19))
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+ // widening positions
+ 
+@@= skipped -13, +13 lines =@@
+ 
+ f(N.s);
+ >f : Symbol(f, Decl(uniqueSymbolsDeclarations.ts, 117, 42))
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+ f(N["s"]);
+ >f : Symbol(f, Decl(uniqueSymbolsDeclarations.ts, 117, 42))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->"s" : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>"s" : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+ // array literal elements
+ [s];
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ 
+ [N.s];
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+ [N["s"]];
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->"s" : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>"s" : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+ // property assignments/methods
+ const o2 = {
+@@= skipped -32, +32 lines =@@
+ 
+     b: N.s,
+ >b : Symbol(b, Decl(uniqueSymbolsDeclarations.ts, 136, 9))
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+     c: N["s"],
+ >c : Symbol(c, Decl(uniqueSymbolsDeclarations.ts, 137, 11))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->"s" : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>"s" : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+     method1() { return s; },
+ >method1 : Symbol(method1, Decl(uniqueSymbolsDeclarations.ts, 138, 14))
+@@= skipped -38, +38 lines =@@
+ >C0 : Symbol(C0, Decl(uniqueSymbolsDeclarations.ts, 145, 2))
+ 
+     static readonly a = s;
+->a : Symbol(C0.a, Decl(uniqueSymbolsDeclarations.ts, 148, 10))
++>a : Symbol(a, Decl(uniqueSymbolsDeclarations.ts, 148, 10))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ 
+     static readonly b = N.s;
+->b : Symbol(C0.b, Decl(uniqueSymbolsDeclarations.ts, 149, 26))
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>b : Symbol(b, Decl(uniqueSymbolsDeclarations.ts, 149, 26))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+     static readonly c = N["s"];
+->c : Symbol(C0.c, Decl(uniqueSymbolsDeclarations.ts, 150, 28))
++>c : Symbol(c, Decl(uniqueSymbolsDeclarations.ts, 150, 28))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->"s" : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>"s" : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+     static d = s;
+->d : Symbol(C0.d, Decl(uniqueSymbolsDeclarations.ts, 151, 31))
++>d : Symbol(d, Decl(uniqueSymbolsDeclarations.ts, 151, 31))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ 
+     static e = N.s;
+->e : Symbol(C0.e, Decl(uniqueSymbolsDeclarations.ts, 153, 17))
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>e : Symbol(e, Decl(uniqueSymbolsDeclarations.ts, 153, 17))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+     static f = N["s"];
+->f : Symbol(C0.f, Decl(uniqueSymbolsDeclarations.ts, 154, 19))
++>f : Symbol(f, Decl(uniqueSymbolsDeclarations.ts, 154, 19))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->"s" : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>"s" : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+     readonly a = s;
+->a : Symbol(C0.a, Decl(uniqueSymbolsDeclarations.ts, 155, 22))
++>a : Symbol(a, Decl(uniqueSymbolsDeclarations.ts, 155, 22))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ 
+     readonly b = N.s;
+->b : Symbol(C0.b, Decl(uniqueSymbolsDeclarations.ts, 157, 19))
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>b : Symbol(b, Decl(uniqueSymbolsDeclarations.ts, 157, 19))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+     readonly c = N["s"];
+->c : Symbol(C0.c, Decl(uniqueSymbolsDeclarations.ts, 158, 21))
++>c : Symbol(c, Decl(uniqueSymbolsDeclarations.ts, 158, 21))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->"s" : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>"s" : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+     d = s;
+->d : Symbol(C0.d, Decl(uniqueSymbolsDeclarations.ts, 159, 24))
++>d : Symbol(d, Decl(uniqueSymbolsDeclarations.ts, 159, 24))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ 
+     e = N.s;
+->e : Symbol(C0.e, Decl(uniqueSymbolsDeclarations.ts, 161, 10))
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>e : Symbol(e, Decl(uniqueSymbolsDeclarations.ts, 161, 10))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+     f = N["s"];
+->f : Symbol(C0.f, Decl(uniqueSymbolsDeclarations.ts, 162, 12))
++>f : Symbol(f, Decl(uniqueSymbolsDeclarations.ts, 162, 12))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->"s" : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>"s" : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+     method1() { return s; }
+->method1 : Symbol(C0.method1, Decl(uniqueSymbolsDeclarations.ts, 163, 15))
++>method1 : Symbol(method1, Decl(uniqueSymbolsDeclarations.ts, 163, 15))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ 
+     async method2() { return s; }
+->method2 : Symbol(C0.method2, Decl(uniqueSymbolsDeclarations.ts, 165, 27))
++>method2 : Symbol(method2, Decl(uniqueSymbolsDeclarations.ts, 165, 27))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ 
+     async * method3() { yield s; }
+->method3 : Symbol(C0.method3, Decl(uniqueSymbolsDeclarations.ts, 166, 33))
++>method3 : Symbol(method3, Decl(uniqueSymbolsDeclarations.ts, 166, 33))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ 
+     * method4() { yield s; }
+->method4 : Symbol(C0.method4, Decl(uniqueSymbolsDeclarations.ts, 167, 34))
++>method4 : Symbol(method4, Decl(uniqueSymbolsDeclarations.ts, 167, 34))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ 
+     method5(p = s) { return p; }
+->method5 : Symbol(C0.method5, Decl(uniqueSymbolsDeclarations.ts, 168, 28))
++>method5 : Symbol(method5, Decl(uniqueSymbolsDeclarations.ts, 168, 28))
+ >p : Symbol(p, Decl(uniqueSymbolsDeclarations.ts, 169, 12))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ >p : Symbol(p, Decl(uniqueSymbolsDeclarations.ts, 169, 12))
+@@= skipped -91, +91 lines =@@
+ 
+ o[N.s];
+ >o : Symbol(o, Decl(uniqueSymbolsDeclarations.ts, 117, 13))
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+ o[N["s"]];
+ >o : Symbol(o, Decl(uniqueSymbolsDeclarations.ts, 117, 13))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->"s" : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>"s" : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+ // arguments (no-inference)
+ f<typeof s>(s);
+@@= skipped -17, +17 lines =@@
+ 
+ f<typeof N.s>(N.s);
+ >f : Symbol(f, Decl(uniqueSymbolsDeclarations.ts, 117, 42))
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+ f<typeof N.s>(N["s"]);
+ >f : Symbol(f, Decl(uniqueSymbolsDeclarations.ts, 117, 42))
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->"s" : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>"s" : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+ g(s);
+ >g : Symbol(g, Decl(uniqueSymbolsDeclarations.ts, 118, 31), Decl(uniqueSymbolsDeclarations.ts, 119, 38))
+@@= skipped -21, +21 lines =@@
+ 
+ g(N.s);
+ >g : Symbol(g, Decl(uniqueSymbolsDeclarations.ts, 118, 31), Decl(uniqueSymbolsDeclarations.ts, 119, 38))
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+ g(N["s"]);
+ >g : Symbol(g, Decl(uniqueSymbolsDeclarations.ts, 118, 31), Decl(uniqueSymbolsDeclarations.ts, 119, 38))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->"s" : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>"s" : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+ // falsy expressions
+ s || "";
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ 
+ N.s || "";
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+ N["s"] || "";
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->"s" : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>"s" : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+ // conditionals
+ Math.random() * 2 ? s : "a";
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ 
+ Math.random() * 2 ? N.s : "a";
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+ Math.random() * 2 ? N["s"] : "a";
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->"s" : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>"s" : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+ // computed property names
+ ({
+@@= skipped -52, +52 lines =@@
+ 
+     [N.s]: "b",
+ >[N.s] : Symbol([N.s], Decl(uniqueSymbolsDeclarations.ts, 199, 13))
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+ });
+ 
+@@= skipped -10, +10 lines =@@
+ >C1 : Symbol(C1, Decl(uniqueSymbolsDeclarations.ts, 201, 3))
+ 
+     static [s]: "a";
+->[s] : Symbol(C1[s], Decl(uniqueSymbolsDeclarations.ts, 203, 10))
++>[s] : Symbol([s], Decl(uniqueSymbolsDeclarations.ts, 203, 10))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ 
+     static [N.s]: "b";
+->[N.s] : Symbol(C1[N.s], Decl(uniqueSymbolsDeclarations.ts, 204, 20))
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>[N.s] : Symbol([N.s], Decl(uniqueSymbolsDeclarations.ts, 204, 20))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ 
+     [s]: "a";
+->[s] : Symbol(C1[s], Decl(uniqueSymbolsDeclarations.ts, 205, 22))
++>[s] : Symbol([s], Decl(uniqueSymbolsDeclarations.ts, 205, 22))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ 
+     [N.s]: "b";
+->[N.s] : Symbol(C1[N.s], Decl(uniqueSymbolsDeclarations.ts, 207, 13))
+->N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>[N.s] : Symbol([N.s], Decl(uniqueSymbolsDeclarations.ts, 207, 13))
++>N.s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
+->s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
++>s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
+ }
+ 
+ // contextual types
+@@= skipped -26, +26 lines =@@
+ >Context : Symbol(Context, Decl(uniqueSymbolsDeclarations.ts, 209, 1))
+ 
+     method1(): typeof s;
+->method1 : Symbol(Context.method1, Decl(uniqueSymbolsDeclarations.ts, 213, 19))
++>method1 : Symbol(method1, Decl(uniqueSymbolsDeclarations.ts, 213, 19))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ 
+     method2(): Promise<typeof s>;
+->method2 : Symbol(Context.method2, Decl(uniqueSymbolsDeclarations.ts, 214, 24))
++>method2 : Symbol(method2, Decl(uniqueSymbolsDeclarations.ts, 214, 24))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ 
+     method3(): AsyncIterableIterator<typeof s>;
+->method3 : Symbol(Context.method3, Decl(uniqueSymbolsDeclarations.ts, 215, 33))
++>method3 : Symbol(method3, Decl(uniqueSymbolsDeclarations.ts, 215, 33))
+ >AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ 
+     method4(): IterableIterator<typeof s>;
+->method4 : Symbol(Context.method4, Decl(uniqueSymbolsDeclarations.ts, 216, 47))
++>method4 : Symbol(method4, Decl(uniqueSymbolsDeclarations.ts, 216, 47))
+ >IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ 
+     method5(p?: typeof s): typeof s;
+->method5 : Symbol(Context.method5, Decl(uniqueSymbolsDeclarations.ts, 217, 42))
++>method5 : Symbol(method5, Decl(uniqueSymbolsDeclarations.ts, 217, 42))
+ >p : Symbol(p, Decl(uniqueSymbolsDeclarations.ts, 218, 12))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))

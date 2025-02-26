@@ -1,0 +1,9 @@
+--- old.FunctionPropertyAssignments2_es6.symbols
++++ new.FunctionPropertyAssignments2_es6.symbols
+@@= skipped -2, +2 lines =@@
+ === FunctionPropertyAssignments2_es6.ts ===
+ var v = { *() { } }
+ >v : Symbol(v, Decl(FunctionPropertyAssignments2_es6.ts, 0, 3))
+-> : Symbol((Missing), Decl(FunctionPropertyAssignments2_es6.ts, 0, 9))
++> : Symbol(, Decl(FunctionPropertyAssignments2_es6.ts, 0, 9))
+ 

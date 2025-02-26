@@ -1,0 +1,17 @@
+--- old.declarationEmitWithDefaultAsComputedName2.symbols
++++ new.declarationEmitWithDefaultAsComputedName2.symbols
+@@= skipped -38, +38 lines =@@
+ >obj : Symbol(obj, Decl(main.ts, 1, 12))
+ 
+     [other2.default.name]: 1
+->[other2.default.name] : Symbol([other2.default.name], Decl(main.ts, 1, 20))
++>[other2.default.name] : Symbol(foo, Decl(main.ts, 1, 20))
+ >other2.default.name : Symbol(name, Decl(other.ts, 0, 25))
+->other2.default : Symbol(other2.default, Decl(other.ts, 5, 22))
++>other2.default : Symbol(default, Decl(other.ts, 5, 22))
+ >other2 : Symbol(other2, Decl(main.ts, 0, 6))
+->default : Symbol(other2.default, Decl(other.ts, 5, 22))
++>default : Symbol(default, Decl(other.ts, 5, 22))
+ >name : Symbol(name, Decl(other.ts, 0, 25))
+ 
+ };

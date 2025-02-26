@@ -1,0 +1,47 @@
+--- old.derivedClassTransitivity4.symbols
++++ new.derivedClassTransitivity4.symbols
+@@= skipped -6, +6 lines =@@
+ >C : Symbol(C, Decl(derivedClassTransitivity4.ts, 0, 0))
+ 
+     protected foo(x: number) { }
+->foo : Symbol(C.foo, Decl(derivedClassTransitivity4.ts, 2, 9))
++>foo : Symbol(foo, Decl(derivedClassTransitivity4.ts, 2, 9))
+ >x : Symbol(x, Decl(derivedClassTransitivity4.ts, 3, 18))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >C : Symbol(C, Decl(derivedClassTransitivity4.ts, 0, 0))
+ 
+     protected foo() { } // ok to drop parameters
+->foo : Symbol(D.foo, Decl(derivedClassTransitivity4.ts, 6, 19))
++>foo : Symbol(foo, Decl(derivedClassTransitivity4.ts, 6, 19))
+ }
+ 
+ class E extends D {
+@@= skipped -8, +8 lines =@@
+ >D : Symbol(D, Decl(derivedClassTransitivity4.ts, 4, 1))
+ 
+     public foo(x?: string) { } // ok to add optional parameters
+->foo : Symbol(E.foo, Decl(derivedClassTransitivity4.ts, 10, 19))
++>foo : Symbol(foo, Decl(derivedClassTransitivity4.ts, 10, 19))
+ >x : Symbol(x, Decl(derivedClassTransitivity4.ts, 11, 15))
+ }
+ 
+@@= skipped -22, +22 lines =@@
+ 
+ var r = c.foo(1);
+ >r : Symbol(r, Decl(derivedClassTransitivity4.ts, 18, 3))
+->c.foo : Symbol(C.foo, Decl(derivedClassTransitivity4.ts, 2, 9))
++>c.foo : Symbol(foo, Decl(derivedClassTransitivity4.ts, 2, 9))
+ >c : Symbol(c, Decl(derivedClassTransitivity4.ts, 14, 3))
+->foo : Symbol(C.foo, Decl(derivedClassTransitivity4.ts, 2, 9))
++>foo : Symbol(foo, Decl(derivedClassTransitivity4.ts, 2, 9))
+ 
+ var r2 = e.foo('');
+ >r2 : Symbol(r2, Decl(derivedClassTransitivity4.ts, 19, 3))
+->e.foo : Symbol(E.foo, Decl(derivedClassTransitivity4.ts, 10, 19))
++>e.foo : Symbol(foo, Decl(derivedClassTransitivity4.ts, 10, 19))
+ >e : Symbol(e, Decl(derivedClassTransitivity4.ts, 16, 3))
+->foo : Symbol(E.foo, Decl(derivedClassTransitivity4.ts, 10, 19))
++>foo : Symbol(foo, Decl(derivedClassTransitivity4.ts, 10, 19))
+ 

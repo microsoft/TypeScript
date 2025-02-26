@@ -1,0 +1,13 @@
+--- old.sourceMapValidationClassWithDefaultConstructorAndExtendsClause.symbols
++++ new.sourceMapValidationClassWithDefaultConstructorAndExtendsClause.symbols
+@@= skipped -9, +9 lines =@@
+ >AbstractGreeter : Symbol(AbstractGreeter, Decl(sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts, 0, 0))
+ 
+     public a = 10;
+->a : Symbol(Greeter.a, Decl(sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts, 3, 39))
++>a : Symbol(a, Decl(sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts, 3, 39))
+ 
+     public nameA = "Ten";
+->nameA : Symbol(Greeter.nameA, Decl(sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts, 4, 18))
++>nameA : Symbol(nameA, Decl(sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts, 4, 18))
+ }

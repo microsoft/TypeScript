@@ -1,0 +1,11 @@
+--- old.collisionSuperAndNameResolution.symbols
++++ new.collisionSuperAndNameResolution.symbols
+@@= skipped -18, +18 lines =@@
+ >base : Symbol(base, Decl(collisionSuperAndNameResolution.ts, 3, 16))
+ 
+     x() {
+->x : Symbol(Foo.x, Decl(collisionSuperAndNameResolution.ts, 6, 24))
++>x : Symbol(x, Decl(collisionSuperAndNameResolution.ts, 6, 24))
+ 
+         console.log(_super); // Error as this doesnt not resolve to user defined _super
+ >console.log : Symbol(log, Decl(collisionSuperAndNameResolution.ts, 0, 14))

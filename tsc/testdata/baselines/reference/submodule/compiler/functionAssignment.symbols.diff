@@ -1,0 +1,41 @@
+--- old.functionAssignment.symbols
++++ new.functionAssignment.symbols
+@@= skipped -12, +12 lines =@@
+ >foo : Symbol(foo, Decl(functionAssignment.ts, 1, 19))
+ 
+     get(handler: (bar: number)=>void): void;
+->get : Symbol(foo.get, Decl(functionAssignment.ts, 3, 15))
++>get : Symbol(get, Decl(functionAssignment.ts, 3, 15))
+ >handler : Symbol(handler, Decl(functionAssignment.ts, 4, 8))
+ >bar : Symbol(bar, Decl(functionAssignment.ts, 4, 18))
+ }
+@@= skipped -9, +9 lines =@@
+ >baz : Symbol(baz, Decl(functionAssignment.ts, 5, 1))
+ 
+     get(callback: Function): number;
+->get : Symbol(baz.get, Decl(functionAssignment.ts, 7, 15))
++>get : Symbol(get, Decl(functionAssignment.ts, 7, 15))
+ >callback : Symbol(callback, Decl(functionAssignment.ts, 8, 8))
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ }
+@@= skipped -14, +14 lines =@@
+ >foo : Symbol(foo, Decl(functionAssignment.ts, 1, 19))
+ 
+ test.get(function (param) {
+->test.get : Symbol(foo.get, Decl(functionAssignment.ts, 3, 15))
++>test.get : Symbol(get, Decl(functionAssignment.ts, 3, 15))
+ >test : Symbol(test, Decl(functionAssignment.ts, 12, 3))
+->get : Symbol(foo.get, Decl(functionAssignment.ts, 3, 15))
++>get : Symbol(get, Decl(functionAssignment.ts, 3, 15))
+ >param : Symbol(param, Decl(functionAssignment.ts, 14, 19))
+ 
+     var x = barbaz.get(function () { });
+ >x : Symbol(x, Decl(functionAssignment.ts, 15, 7))
+->barbaz.get : Symbol(baz.get, Decl(functionAssignment.ts, 7, 15))
++>barbaz.get : Symbol(get, Decl(functionAssignment.ts, 7, 15))
+ >barbaz : Symbol(barbaz, Decl(functionAssignment.ts, 11, 3))
+->get : Symbol(baz.get, Decl(functionAssignment.ts, 7, 15))
++>get : Symbol(get, Decl(functionAssignment.ts, 7, 15))
+ 
+ });
+ 

@@ -1,0 +1,23 @@
+--- old.contextualSignatureInstatiationCovariance.symbols
++++ new.contextualSignatureInstatiationCovariance.symbols
+@@= skipped -2, +2 lines =@@
+ === contextualSignatureInstatiationCovariance.ts ===
+ interface Animal { x }
+ >Animal : Symbol(Animal, Decl(contextualSignatureInstatiationCovariance.ts, 0, 0))
+->x : Symbol(Animal.x, Decl(contextualSignatureInstatiationCovariance.ts, 0, 18))
++>x : Symbol(x, Decl(contextualSignatureInstatiationCovariance.ts, 0, 18))
+ 
+ interface TallThing { x2 }
+ >TallThing : Symbol(TallThing, Decl(contextualSignatureInstatiationCovariance.ts, 0, 22))
+->x2 : Symbol(TallThing.x2, Decl(contextualSignatureInstatiationCovariance.ts, 1, 21))
++>x2 : Symbol(x2, Decl(contextualSignatureInstatiationCovariance.ts, 1, 21))
+ 
+ interface Giraffe extends Animal, TallThing { y }
+ >Giraffe : Symbol(Giraffe, Decl(contextualSignatureInstatiationCovariance.ts, 1, 26))
+ >Animal : Symbol(Animal, Decl(contextualSignatureInstatiationCovariance.ts, 0, 0))
+ >TallThing : Symbol(TallThing, Decl(contextualSignatureInstatiationCovariance.ts, 0, 22))
+->y : Symbol(Giraffe.y, Decl(contextualSignatureInstatiationCovariance.ts, 2, 45))
++>y : Symbol(y, Decl(contextualSignatureInstatiationCovariance.ts, 2, 45))
+ 
+ var f2: <T extends Giraffe>(x: T, y: T) => void;
+ >f2 : Symbol(f2, Decl(contextualSignatureInstatiationCovariance.ts, 4, 3))

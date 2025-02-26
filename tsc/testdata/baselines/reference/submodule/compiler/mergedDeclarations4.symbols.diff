@@ -1,0 +1,43 @@
+--- old.mergedDeclarations4.symbols
++++ new.mergedDeclarations4.symbols
+@@= skipped -16, +16 lines =@@
+ 
+     var r = f.hello;
+ >r : Symbol(r, Decl(mergedDeclarations4.ts, 4, 7))
+->f.hello : Symbol(f.hello, Decl(mergedDeclarations4.ts, 9, 18))
++>f.hello : Symbol(hello, Decl(mergedDeclarations4.ts, 9, 18))
+ >f : Symbol(f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
+->hello : Symbol(f.hello, Decl(mergedDeclarations4.ts, 9, 18))
++>hello : Symbol(hello, Decl(mergedDeclarations4.ts, 9, 18))
+ }
+  
+ module M {
+@@= skipped -24, +24 lines =@@
+ 
+     var r = f.hello;
+ >r : Symbol(r, Decl(mergedDeclarations4.ts, 13, 7))
+->f.hello : Symbol(f.hello, Decl(mergedDeclarations4.ts, 9, 18))
++>f.hello : Symbol(hello, Decl(mergedDeclarations4.ts, 9, 18))
+ >f : Symbol(f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
+->hello : Symbol(f.hello, Decl(mergedDeclarations4.ts, 9, 18))
++>hello : Symbol(hello, Decl(mergedDeclarations4.ts, 9, 18))
+ }
+  
+ M.f();
+->M.f : Symbol(M.f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
++>M.f : Symbol(f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
+ >M : Symbol(M, Decl(mergedDeclarations4.ts, 0, 0), Decl(mergedDeclarations4.ts, 5, 1))
+->f : Symbol(M.f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
++>f : Symbol(f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
+ 
+ M.f.hello;
+->M.f.hello : Symbol(M.f.hello, Decl(mergedDeclarations4.ts, 9, 18))
+->M.f : Symbol(M.f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
++>M.f.hello : Symbol(hello, Decl(mergedDeclarations4.ts, 9, 18))
++>M.f : Symbol(f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
+ >M : Symbol(M, Decl(mergedDeclarations4.ts, 0, 0), Decl(mergedDeclarations4.ts, 5, 1))
+->f : Symbol(M.f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
+->hello : Symbol(M.f.hello, Decl(mergedDeclarations4.ts, 9, 18))
++>f : Symbol(f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
++>hello : Symbol(hello, Decl(mergedDeclarations4.ts, 9, 18))
+ 

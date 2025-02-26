@@ -1,0 +1,47 @@
+--- old.exportsAndImports4.symbols
++++ new.exportsAndImports4.symbols
+@@= skipped -4, +4 lines =@@
+ >a : Symbol(a, Decl(t3.ts, 0, 0))
+ 
+ a.default;
+->a.default : Symbol(a.default, Decl(t1.ts, 0, 0))
++>a.default : Symbol(default, Decl(t1.ts, 0, 0))
+ >a : Symbol(a, Decl(t3.ts, 0, 0))
+->default : Symbol(a.default, Decl(t1.ts, 0, 0))
++>default : Symbol(default, Decl(t1.ts, 0, 0))
+ 
+ import b from "./t1";
+ >b : Symbol(b, Decl(t3.ts, 2, 6))
+@@= skipped -14, +14 lines =@@
+ >c : Symbol(c, Decl(t3.ts, 4, 6))
+ 
+ c.default;
+->c.default : Symbol(a.default, Decl(t1.ts, 0, 0))
++>c.default : Symbol(default, Decl(t1.ts, 0, 0))
+ >c : Symbol(c, Decl(t3.ts, 4, 6))
+->default : Symbol(a.default, Decl(t1.ts, 0, 0))
++>default : Symbol(default, Decl(t1.ts, 0, 0))
+ 
+ import { default as d } from "./t1";
+->default : Symbol(a.default, Decl(t1.ts, 0, 0))
++>default : Symbol(default, Decl(t1.ts, 0, 0))
+ >d : Symbol(d, Decl(t3.ts, 6, 8))
+ 
+ d;
+@@= skipped -19, +19 lines =@@
+ >e1 : Symbol(e1, Decl(t3.ts, 8, 6))
+ 
+ e2.default;
+->e2.default : Symbol(a.default, Decl(t1.ts, 0, 0))
++>e2.default : Symbol(default, Decl(t1.ts, 0, 0))
+ >e2 : Symbol(e2, Decl(t3.ts, 8, 10))
+->default : Symbol(a.default, Decl(t1.ts, 0, 0))
++>default : Symbol(default, Decl(t1.ts, 0, 0))
+ 
+ import f1, { default as f2 } from "./t1";
+ >f1 : Symbol(f1, Decl(t3.ts, 11, 6))
+->default : Symbol(a.default, Decl(t1.ts, 0, 0))
++>default : Symbol(default, Decl(t1.ts, 0, 0))
+ >f2 : Symbol(f2, Decl(t3.ts, 11, 12))
+ 
+ f1;

@@ -1,0 +1,11 @@
+--- old.decoratorMetadataNoLibIsolatedModulesTypes.symbols
++++ new.decoratorMetadataNoLibIsolatedModulesTypes.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     @Decorate
+     member: Map<string, number>;
+->member : Symbol(B.member, Decl(decoratorMetadataNoLibIsolatedModulesTypes.ts, 0, 16))
++>member : Symbol(member, Decl(decoratorMetadataNoLibIsolatedModulesTypes.ts, 0, 16))
+ >Map : Symbol(Map)
+ }
+ 

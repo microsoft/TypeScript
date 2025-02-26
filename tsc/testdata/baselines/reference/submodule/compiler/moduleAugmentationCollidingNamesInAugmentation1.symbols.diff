@@ -1,0 +1,53 @@
+--- old.moduleAugmentationCollidingNamesInAugmentation1.symbols
++++ new.moduleAugmentationCollidingNamesInAugmentation1.symbols
+@@= skipped -4, +4 lines =@@
+ >Observable : Symbol(Observable, Decl(map1.ts, 0, 8))
+ 
+ (<any>Observable.prototype).map = function() { }
+->Observable.prototype : Symbol(Observable.prototype)
++>Observable.prototype : Symbol(prototype)
+ >Observable : Symbol(Observable, Decl(map1.ts, 0, 8))
+->prototype : Symbol(Observable.prototype)
++>prototype : Symbol(prototype)
+ 
+ declare module "./observable" {
+->"./observable" : Symbol("observable", Decl(observable.ts, 0, 0), Decl(map1.ts, 2, 48), Decl(map2.ts, 2, 48))
++>"./observable" : Symbol(""observable.ts"", Decl(observable.ts, 0, 0), Decl(map1.ts, 2, 48), Decl(map2.ts, 2, 48))
+ 
+     interface I {x0}
+ >I : Symbol(I, Decl(map1.ts, 4, 31), Decl(map2.ts, 4, 31))
+->x0 : Symbol(I.x0, Decl(map1.ts, 5, 17))
++>x0 : Symbol(x0, Decl(map1.ts, 5, 17))
+ }
+ 
+ === map2.ts ===
+@@= skipped -17, +17 lines =@@
+ >Observable : Symbol(Observable, Decl(map2.ts, 0, 8))
+ 
+ (<any>Observable.prototype).map = function() { }
+->Observable.prototype : Symbol(Observable.prototype)
++>Observable.prototype : Symbol(prototype)
+ >Observable : Symbol(Observable, Decl(map2.ts, 0, 8))
+->prototype : Symbol(Observable.prototype)
++>prototype : Symbol(prototype)
+ 
+ declare module "./observable" {
+->"./observable" : Symbol("observable", Decl(observable.ts, 0, 0), Decl(map1.ts, 2, 48), Decl(map2.ts, 2, 48))
++>"./observable" : Symbol(""observable.ts"", Decl(observable.ts, 0, 0), Decl(map1.ts, 2, 48), Decl(map2.ts, 2, 48))
+ 
+     interface I {x1}
+ >I : Symbol(I, Decl(map1.ts, 4, 31), Decl(map2.ts, 4, 31))
+->x1 : Symbol(I.x1, Decl(map2.ts, 5, 17))
++>x1 : Symbol(x1, Decl(map2.ts, 5, 17))
+ }
+ 
+ 
+@@= skipped -19, +19 lines =@@
+ >T : Symbol(T, Decl(observable.ts, 0, 32))
+ 
+     filter(pred: (e:T) => boolean): Observable<T>;
+->filter : Symbol(Observable.filter, Decl(observable.ts, 0, 36))
++>filter : Symbol(filter, Decl(observable.ts, 0, 36))
+ >pred : Symbol(pred, Decl(observable.ts, 1, 11))
+ >e : Symbol(e, Decl(observable.ts, 1, 18))
+ >T : Symbol(T, Decl(observable.ts, 0, 32))

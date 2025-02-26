@@ -1,0 +1,92 @@
+--- old.interfaceWithMultipleBaseTypes.symbols
++++ new.interfaceWithMultipleBaseTypes.symbols
+@@= skipped -6, +6 lines =@@
+ >Base1 : Symbol(Base1, Decl(interfaceWithMultipleBaseTypes.ts, 0, 0))
+ 
+     x: {
+->x : Symbol(Base1.x, Decl(interfaceWithMultipleBaseTypes.ts, 2, 17))
++>x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 2, 17))
+ 
+         a: string;
+ >a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 3, 8))
+@@= skipped -11, +11 lines =@@
+ >Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 6, 1))
+ 
+     x: {
+->x : Symbol(Base2.x, Decl(interfaceWithMultipleBaseTypes.ts, 8, 17))
++>x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 8, 17))
+ 
+         b: string;
+ >b : Symbol(b, Decl(interfaceWithMultipleBaseTypes.ts, 9, 8))
+@@= skipped -13, +13 lines =@@
+ >Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 6, 1))
+ 
+     x: {
+->x : Symbol(Derived.x, Decl(interfaceWithMultipleBaseTypes.ts, 14, 40))
++>x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 14, 40))
+ 
+         a: string; b: string;
+ >a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 15, 8))
+@@= skipped -14, +14 lines =@@
+ >Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 6, 1))
+ 
+     x: {
+->x : Symbol(Derived2.x, Decl(interfaceWithMultipleBaseTypes.ts, 20, 41))
++>x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 20, 41))
+ 
+         a: string; b: number;
+ >a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 21, 8))
+@@= skipped -16, +16 lines =@@
+ >T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 27, 20))
+ 
+         x: {
+->x : Symbol(Base1.x, Decl(interfaceWithMultipleBaseTypes.ts, 27, 24))
++>x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 27, 24))
+ 
+             a: T;
+ >a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 28, 12))
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 33, 20))
+ 
+         x: {
+->x : Symbol(Base2.x, Decl(interfaceWithMultipleBaseTypes.ts, 33, 24))
++>x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 33, 24))
+ 
+             b: T;
+ >b : Symbol(b, Decl(interfaceWithMultipleBaseTypes.ts, 34, 12))
+@@= skipped -15, +15 lines =@@
+ >Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 31, 5))
+ 
+         x: {
+->x : Symbol(Derived.x, Decl(interfaceWithMultipleBaseTypes.ts, 39, 63))
++>x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 39, 63))
+ 
+             a: string; b: number;
+ >a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 40, 12))
+@@= skipped -18, +18 lines =@@
+ >U : Symbol(U, Decl(interfaceWithMultipleBaseTypes.ts, 45, 25))
+ 
+         x: {
+->x : Symbol(Derived2.x, Decl(interfaceWithMultipleBaseTypes.ts, 45, 57))
++>x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 45, 57))
+ 
+             a: T; b: U;
+ >a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 46, 12))
+@@= skipped -23, +23 lines =@@
+ >Base2 : Symbol(Base2, Decl(interfaceWithMultipleBaseTypes.ts, 31, 5))
+ 
+         x: {
+->x : Symbol(Derived4.x, Decl(interfaceWithMultipleBaseTypes.ts, 53, 64))
++>x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 53, 64))
+ 
+             a: T; b: T;
+ >a : Symbol(a, Decl(interfaceWithMultipleBaseTypes.ts, 54, 12))
+@@= skipped -19, +19 lines =@@
+ >T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 59, 23))
+ 
+         x: T;
+->x : Symbol(Derived5.x, Decl(interfaceWithMultipleBaseTypes.ts, 59, 54))
++>x : Symbol(x, Decl(interfaceWithMultipleBaseTypes.ts, 59, 54))
+ >T : Symbol(T, Decl(interfaceWithMultipleBaseTypes.ts, 59, 23))
+     }
+ }

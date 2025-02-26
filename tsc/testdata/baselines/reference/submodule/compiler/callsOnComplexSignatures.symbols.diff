@@ -1,0 +1,117 @@
+--- old.callsOnComplexSignatures.symbols
++++ new.callsOnComplexSignatures.symbols
+@@= skipped -18, +18 lines =@@
+ >Temp1 : Symbol(Temp1, Decl(callsOnComplexSignatures.tsx, 6, 37))
+ 
+         getValue(name: stringType1): number;
+->getValue : Symbol(Temp1.getValue, Decl(callsOnComplexSignatures.tsx, 8, 21))
++>getValue : Symbol(getValue, Decl(callsOnComplexSignatures.tsx, 8, 21))
+ >name : Symbol(name, Decl(callsOnComplexSignatures.tsx, 9, 17))
+ >stringType1 : Symbol(stringType1, Decl(callsOnComplexSignatures.tsx, 4, 18))
+     }
+@@= skipped -9, +9 lines =@@
+ >Temp2 : Symbol(Temp2, Decl(callsOnComplexSignatures.tsx, 10, 5))
+ 
+         getValue(name: stringType2): string;
+->getValue : Symbol(Temp2.getValue, Decl(callsOnComplexSignatures.tsx, 12, 21))
++>getValue : Symbol(getValue, Decl(callsOnComplexSignatures.tsx, 12, 21))
+ >name : Symbol(name, Decl(callsOnComplexSignatures.tsx, 13, 17))
+ >stringType2 : Symbol(stringType2, Decl(callsOnComplexSignatures.tsx, 5, 37))
+     }
+@@= skipped -26, +26 lines =@@
+ >Messages : Symbol(Messages, Decl(callsOnComplexSignatures.tsx, 21, 18))
+ 
+         readonly foo: (options: { [key: string]: any, b: number }) => string;
+->foo : Symbol(Messages.foo, Decl(callsOnComplexSignatures.tsx, 22, 24))
++>foo : Symbol(foo, Decl(callsOnComplexSignatures.tsx, 22, 24))
+ >options : Symbol(options, Decl(callsOnComplexSignatures.tsx, 23, 23))
+ >key : Symbol(key, Decl(callsOnComplexSignatures.tsx, 23, 35))
+ >b : Symbol(b, Decl(callsOnComplexSignatures.tsx, 23, 53))
+ 
+         readonly bar: (options: { [key: string]: any, a: string }) => string;
+->bar : Symbol(Messages.bar, Decl(callsOnComplexSignatures.tsx, 23, 77))
++>bar : Symbol(bar, Decl(callsOnComplexSignatures.tsx, 23, 77))
+ >options : Symbol(options, Decl(callsOnComplexSignatures.tsx, 24, 23))
+ >key : Symbol(key, Decl(callsOnComplexSignatures.tsx, 24, 35))
+ >a : Symbol(a, Decl(callsOnComplexSignatures.tsx, 24, 53))
+@@= skipped -42, +42 lines =@@
+ >items : Symbol(items, Decl(callsOnComplexSignatures.tsx, 36, 15))
+ 
+     items.forEach(item => console.log(item));
+->items.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>items.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >items : Symbol(items, Decl(callsOnComplexSignatures.tsx, 36, 15))
+->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >item : Symbol(item, Decl(callsOnComplexSignatures.tsx, 37, 18))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >item : Symbol(item, Decl(callsOnComplexSignatures.tsx, 37, 18))
+ }
+ 
+@@= skipped -165, +165 lines =@@
+ >render : Symbol(render, Decl(callsOnComplexSignatures.tsx, 73, 18))
+ >url : Symbol(url, Decl(callsOnComplexSignatures.tsx, 75, 20))
+ >React : Symbol(React, Decl(callsOnComplexSignatures.tsx, 1, 6))
+->ReactNode : Symbol(React.ReactNode, Decl(react16.d.ts, 216, 49))
++>ReactNode : Symbol(ReactNode)
+ 
+         const Tag = url ? 'a' : 'button';
+ >Tag : Symbol(Tag, Decl(callsOnComplexSignatures.tsx, 76, 13))
+@@= skipped -17, +17 lines =@@
+ >props : Symbol(props, Decl(callsOnComplexSignatures.tsx, 81, 17))
+ >component : Symbol(component, Decl(callsOnComplexSignatures.tsx, 81, 25))
+ >React : Symbol(React, Decl(callsOnComplexSignatures.tsx, 1, 6))
+->ReactType : Symbol(React.ReactType, Decl(react16.d.ts, 112, 21))
++>ReactType : Symbol(ReactType)
+ 
+         const Comp: React.ReactType = props.component;
+ >Comp : Symbol(Comp, Decl(callsOnComplexSignatures.tsx, 82, 13))
+ >React : Symbol(React, Decl(callsOnComplexSignatures.tsx, 1, 6))
+->ReactType : Symbol(React.ReactType, Decl(react16.d.ts, 112, 21))
++>ReactType : Symbol(ReactType)
+ >props.component : Symbol(component, Decl(callsOnComplexSignatures.tsx, 81, 25))
+ >props : Symbol(props, Decl(callsOnComplexSignatures.tsx, 81, 17))
+ >component : Symbol(component, Decl(callsOnComplexSignatures.tsx, 81, 25))
+@@= skipped -22, +22 lines =@@
+ >P1 : Symbol(P1, Decl(callsOnComplexSignatures.tsx, 87, 24))
+ 
+             p?: boolean;
+->p : Symbol(P1.p, Decl(callsOnComplexSignatures.tsx, 88, 22))
++>p : Symbol(p, Decl(callsOnComplexSignatures.tsx, 88, 22))
+ 
+             c?: string;
+->c : Symbol(P1.c, Decl(callsOnComplexSignatures.tsx, 89, 24))
++>c : Symbol(c, Decl(callsOnComplexSignatures.tsx, 89, 24))
+         }
+         interface P2 {
+ >P2 : Symbol(P2, Decl(callsOnComplexSignatures.tsx, 91, 9))
+ 
+             p?: boolean;
+->p : Symbol(P2.p, Decl(callsOnComplexSignatures.tsx, 92, 22))
++>p : Symbol(p, Decl(callsOnComplexSignatures.tsx, 92, 22))
+ 
+             c?: any;
+->c : Symbol(P2.c, Decl(callsOnComplexSignatures.tsx, 93, 24))
++>c : Symbol(c, Decl(callsOnComplexSignatures.tsx, 93, 24))
+ 
+             d?: any;
+->d : Symbol(P2.d, Decl(callsOnComplexSignatures.tsx, 94, 20))
++>d : Symbol(d, Decl(callsOnComplexSignatures.tsx, 94, 20))
+         }
+ 
+         var C: React.ComponentType<P1> | React.ComponentType<P2> = null as any;
+ >C : Symbol(C, Decl(callsOnComplexSignatures.tsx, 98, 11))
+ >React : Symbol(React, Decl(callsOnComplexSignatures.tsx, 1, 6))
+->ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
++>ComponentType : Symbol(ComponentType)
+ >P1 : Symbol(P1, Decl(callsOnComplexSignatures.tsx, 87, 24))
+ >React : Symbol(React, Decl(callsOnComplexSignatures.tsx, 1, 6))
+->ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
++>ComponentType : Symbol(ComponentType)
+ >P2 : Symbol(P2, Decl(callsOnComplexSignatures.tsx, 91, 9))
+ 
+         const a = <C p={true} />;

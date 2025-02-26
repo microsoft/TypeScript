@@ -1,0 +1,19 @@
+--- old.specialIntersectionsInMappedTypes.symbols
++++ new.specialIntersectionsInMappedTypes.symbols
+@@= skipped -29, +29 lines =@@
+ };
+ 
+ a.left.length;
+->a.left.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>a.left.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >a.left : Symbol(left)
+ >a : Symbol(a, Decl(specialIntersectionsInMappedTypes.ts, 5, 5))
+ >left : Symbol(left)
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ a.other.length;  // Error expected here
+->a.other.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(specialIntersectionsInMappedTypes.ts, 5, 5))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+ 

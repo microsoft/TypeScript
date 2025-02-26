@@ -1,0 +1,71 @@
+--- old.interfaceExtendingClassWithPrivates2.symbols
++++ new.interfaceExtendingClassWithPrivates2.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(interfaceExtendingClassWithPrivates2.ts, 0, 0))
+ 
+     private x: string;
+->x : Symbol(Foo.x, Decl(interfaceExtendingClassWithPrivates2.ts, 0, 11))
++>x : Symbol(x, Decl(interfaceExtendingClassWithPrivates2.ts, 0, 11))
+ }
+ 
+ class Bar {
+ >Bar : Symbol(Bar, Decl(interfaceExtendingClassWithPrivates2.ts, 2, 1))
+ 
+     private x: string;
+->x : Symbol(Bar.x, Decl(interfaceExtendingClassWithPrivates2.ts, 4, 11))
++>x : Symbol(x, Decl(interfaceExtendingClassWithPrivates2.ts, 4, 11))
+ }
+ 
+ interface I3 extends Foo, Bar { // error
+@@= skipped -22, +22 lines =@@
+ >Bar : Symbol(Bar, Decl(interfaceExtendingClassWithPrivates2.ts, 2, 1))
+ 
+     x: string;
+->x : Symbol(I4.x, Decl(interfaceExtendingClassWithPrivates2.ts, 11, 31))
++>x : Symbol(x, Decl(interfaceExtendingClassWithPrivates2.ts, 11, 31))
+ }
+ 
+ class Baz {
+ >Baz : Symbol(Baz, Decl(interfaceExtendingClassWithPrivates2.ts, 13, 1))
+ 
+     private y: string;
+->y : Symbol(Baz.y, Decl(interfaceExtendingClassWithPrivates2.ts, 15, 11))
++>y : Symbol(y, Decl(interfaceExtendingClassWithPrivates2.ts, 15, 11))
+ }
+ 
+ interface I5 extends Foo, Baz {
+@@= skipped -16, +16 lines =@@
+ >Baz : Symbol(Baz, Decl(interfaceExtendingClassWithPrivates2.ts, 13, 1))
+ 
+     z: string;
+->z : Symbol(I5.z, Decl(interfaceExtendingClassWithPrivates2.ts, 19, 31))
++>z : Symbol(z, Decl(interfaceExtendingClassWithPrivates2.ts, 19, 31))
+ }
+ 
+ var i: I5;
+@@= skipped -9, +9 lines =@@
+ 
+ var r: string = i.z;
+ >r : Symbol(r, Decl(interfaceExtendingClassWithPrivates2.ts, 24, 3))
+->i.z : Symbol(I5.z, Decl(interfaceExtendingClassWithPrivates2.ts, 19, 31))
++>i.z : Symbol(z, Decl(interfaceExtendingClassWithPrivates2.ts, 19, 31))
+ >i : Symbol(i, Decl(interfaceExtendingClassWithPrivates2.ts, 23, 3))
+->z : Symbol(I5.z, Decl(interfaceExtendingClassWithPrivates2.ts, 19, 31))
++>z : Symbol(z, Decl(interfaceExtendingClassWithPrivates2.ts, 19, 31))
+ 
+ var r2 = i.x; // error
+ >r2 : Symbol(r2, Decl(interfaceExtendingClassWithPrivates2.ts, 25, 3))
+->i.x : Symbol(Foo.x, Decl(interfaceExtendingClassWithPrivates2.ts, 0, 11))
++>i.x : Symbol(x, Decl(interfaceExtendingClassWithPrivates2.ts, 0, 11))
+ >i : Symbol(i, Decl(interfaceExtendingClassWithPrivates2.ts, 23, 3))
+->x : Symbol(Foo.x, Decl(interfaceExtendingClassWithPrivates2.ts, 0, 11))
++>x : Symbol(x, Decl(interfaceExtendingClassWithPrivates2.ts, 0, 11))
+ 
+ var r3 = i.y; // error
+ >r3 : Symbol(r3, Decl(interfaceExtendingClassWithPrivates2.ts, 26, 3))
+->i.y : Symbol(Baz.y, Decl(interfaceExtendingClassWithPrivates2.ts, 15, 11))
++>i.y : Symbol(y, Decl(interfaceExtendingClassWithPrivates2.ts, 15, 11))
+ >i : Symbol(i, Decl(interfaceExtendingClassWithPrivates2.ts, 23, 3))
+->y : Symbol(Baz.y, Decl(interfaceExtendingClassWithPrivates2.ts, 15, 11))
++>y : Symbol(y, Decl(interfaceExtendingClassWithPrivates2.ts, 15, 11))
+ 

@@ -1,0 +1,17 @@
+--- old.indexerConstraints2.symbols
++++ new.indexerConstraints2.symbols
+@@= skipped -2, +2 lines =@@
+ === indexerConstraints2.ts ===
+ class A { a: number; }
+ >A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+->a : Symbol(A.a, Decl(indexerConstraints2.ts, 0, 9))
++>a : Symbol(a, Decl(indexerConstraints2.ts, 0, 9))
+ 
+ class B extends A { b: number; }
+ >B : Symbol(B, Decl(indexerConstraints2.ts, 0, 22))
+ >A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
+->b : Symbol(B.b, Decl(indexerConstraints2.ts, 1, 19))
++>b : Symbol(b, Decl(indexerConstraints2.ts, 1, 19))
+ 
+ // Inheritance
+ class F {

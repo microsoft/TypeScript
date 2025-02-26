@@ -1,0 +1,20 @@
+--- old.checkJsTypeDefNoUnusedLocalMarked.symbols
++++ new.checkJsTypeDefNoUnusedLocalMarked.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(file.ts, 0, 0))
+ 
+     x: number;
+->x : Symbol(Foo.x, Decl(file.ts, 0, 11))
++>x : Symbol(x, Decl(file.ts, 0, 11))
+ }
+ 
+ declare global {
+@@= skipped -19, +19 lines =@@
+ /** @typedef {(foo: Foo) => string} FooFun */
+ 
+ module.exports = /** @type {FooFun} */(void 0);
+->module.exports : Symbol(module.exports, Decl(something.js, 0, 0))
+->module : Symbol(export=, Decl(something.js, 0, 0))
+->exports : Symbol(export=, Decl(something.js, 0, 0))
++>module : Symbol(module, Decl(file.ts, 5, 7))
+ 

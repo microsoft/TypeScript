@@ -1,0 +1,10 @@
+--- old.jsFileCompilationPublicMethodSyntaxOfClass.symbols
++++ new.jsFileCompilationPublicMethodSyntaxOfClass.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(a.js, 0, 0))
+ 
+     public foo() {
+->foo : Symbol(C.foo, Decl(a.js, 0, 9))
++>foo : Symbol(foo, Decl(a.js, 0, 9))
+     }
+ }

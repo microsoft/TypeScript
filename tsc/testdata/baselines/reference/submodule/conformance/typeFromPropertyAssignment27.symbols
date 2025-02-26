@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment27.ts] ////
+
+=== a.js ===
+// mixed prototype-assignment+function declaration
+function C() { this.p = 1; }
+>C : Symbol(C, Decl(a.js, 0, 0))
+
+C.prototype = { q: 2 };
+>C.prototype : Symbol(prototype, Decl(a.js, 1, 28))
+>C : Symbol(C, Decl(a.js, 0, 0))
+>prototype : Symbol(prototype, Decl(a.js, 1, 28))
+>q : Symbol(q, Decl(a.js, 2, 15))
+
+const c = new C()
+>c : Symbol(c, Decl(a.js, 4, 5))
+>C : Symbol(C, Decl(a.js, 0, 0))
+
+c.p
+>c : Symbol(c, Decl(a.js, 4, 5))
+
+c.q
+>c : Symbol(c, Decl(a.js, 4, 5))
+

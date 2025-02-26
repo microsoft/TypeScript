@@ -1,0 +1,35 @@
+--- old.defaultDeclarationEmitNamedCorrectly.symbols
++++ new.defaultDeclarationEmitNamedCorrectly.symbols
+@@= skipped -6, +6 lines =@@
+ >T : Symbol(T, Decl(defaultDeclarationEmitNamedCorrectly.ts, 0, 26))
+ 
+     p: P;
+->p : Symbol(Things.p, Decl(defaultDeclarationEmitNamedCorrectly.ts, 0, 31))
++>p : Symbol(p, Decl(defaultDeclarationEmitNamedCorrectly.ts, 0, 31))
+ >P : Symbol(P, Decl(defaultDeclarationEmitNamedCorrectly.ts, 0, 24))
+ 
+     t: T;
+->t : Symbol(Things.t, Decl(defaultDeclarationEmitNamedCorrectly.ts, 1, 9))
++>t : Symbol(t, Decl(defaultDeclarationEmitNamedCorrectly.ts, 1, 9))
+ >T : Symbol(T, Decl(defaultDeclarationEmitNamedCorrectly.ts, 0, 26))
+ }
+ export function make<P, CTor>(x: { new (): CTor & {props: P} }): Things<P, CTor> {
+@@= skipped -27, +27 lines =@@
+ }
+ 
+ export default class MyComponent {
+->MyComponent : Symbol(MyComponent, Decl(defaultDeclarationEmitNamedCorrectly.ts, 9, 1))
++>MyComponent : Symbol(default, Decl(defaultDeclarationEmitNamedCorrectly.ts, 9, 1))
+ 
+     props: Props;
+->props : Symbol(MyComponent.props, Decl(defaultDeclarationEmitNamedCorrectly.ts, 11, 34))
++>props : Symbol(props, Decl(defaultDeclarationEmitNamedCorrectly.ts, 11, 34))
+ >Props : Symbol(Props, Decl(defaultDeclarationEmitNamedCorrectly.ts, 6, 1))
+ 
+     static create = make(MyComponent);
+->create : Symbol(MyComponent.create, Decl(defaultDeclarationEmitNamedCorrectly.ts, 12, 17))
++>create : Symbol(create, Decl(defaultDeclarationEmitNamedCorrectly.ts, 12, 17))
+ >make : Symbol(make, Decl(defaultDeclarationEmitNamedCorrectly.ts, 3, 1))
+->MyComponent : Symbol(MyComponent, Decl(defaultDeclarationEmitNamedCorrectly.ts, 9, 1))
++>MyComponent : Symbol(default, Decl(defaultDeclarationEmitNamedCorrectly.ts, 9, 1))
+ }

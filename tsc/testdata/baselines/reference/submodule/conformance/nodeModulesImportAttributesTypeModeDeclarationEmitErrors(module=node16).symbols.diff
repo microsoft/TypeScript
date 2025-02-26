@@ -1,0 +1,42 @@
+--- old.nodeModulesImportAttributesTypeModeDeclarationEmitErrors(module=node16).symbols
++++ new.nodeModulesImportAttributesTypeModeDeclarationEmitErrors(module=node16).symbols
+@@= skipped -15, +15 lines =@@
+ >RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
+ 
+     & import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface;
+->ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
+ 
+ export const a = (null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface);
+ >a : Symbol(a, Decl(index.ts, 4, 12))
+@@= skipped -8, +7 lines =@@
+ 
+ export const b = (null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface);
+ >b : Symbol(b, Decl(index.ts, 5, 12))
+->ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
+ 
+ === /other.ts ===
+ // missing with:
+@@= skipped -9, +8 lines =@@
+ 
+     & import("pkg", {"resolution-mode": "require"}).RequireInterface
+     & import("pkg", {"resolution-mode": "import"}).ImportInterface;
+->"pkg" : Symbol("/node_modules/pkg/import", Decl(import.d.ts, 0, 0))
+ >"resolution-mode" : Symbol("resolution-mode", Decl(other.ts, 3, 21))
+ 
+ export const a = (null as any as import("pkg", {"resolution-mode": "require"}).RequireInterface);
+@@= skipped -35, +34 lines =@@
+ >"resolution-mode" : Symbol("resolution-mode", Decl(other3.ts, 2, 23))
+ 
+     & import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface;
+->"pkg" : Symbol("/node_modules/pkg/import", Decl(import.d.ts, 0, 0))
+ >"resolution-mode" : Symbol("resolution-mode", Decl(other3.ts, 3, 23))
+ 
+ export const a = (null as any as import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface);
+@@= skipped -31, +30 lines =@@
+ >RequireInterface : Symbol(RequireInterface, Decl(other4.ts, 8, 59))
+ 
+     & import("pkg", Attribute2).ImportInterface;
+->"pkg" : Symbol("/node_modules/pkg/import", Decl(import.d.ts, 0, 0))
+ >Attribute2 : Symbol(Attribute2, Decl(other4.ts, 9, 46))
+ 
+ export const a = (null as any as import("pkg", Attribute1).RequireInterface);

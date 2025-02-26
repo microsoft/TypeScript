@@ -1,0 +1,25 @@
+--- old.contextuallyTypingOrOperator2.symbols
++++ new.contextuallyTypingOrOperator2.symbols
+@@= skipped -6, +6 lines =@@
+ >_ : Symbol(_, Decl(contextuallyTypingOrOperator2.ts, 0, 13))
+ >a : Symbol(a, Decl(contextuallyTypingOrOperator2.ts, 0, 39))
+ >s : Symbol(s, Decl(contextuallyTypingOrOperator2.ts, 0, 42))
+->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(contextuallyTypingOrOperator2.ts, 0, 42))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(contextuallyTypingOrOperator2.ts, 0, 63))
+ >s : Symbol(s, Decl(contextuallyTypingOrOperator2.ts, 0, 66))
+ 
+ var v2 = (s: string) => s.length || function (s) { s.aaa };
+ >v2 : Symbol(v2, Decl(contextuallyTypingOrOperator2.ts, 2, 3))
+ >s : Symbol(s, Decl(contextuallyTypingOrOperator2.ts, 2, 10))
+->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(contextuallyTypingOrOperator2.ts, 2, 10))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(contextuallyTypingOrOperator2.ts, 2, 46))
+ >s : Symbol(s, Decl(contextuallyTypingOrOperator2.ts, 2, 46))
+ 

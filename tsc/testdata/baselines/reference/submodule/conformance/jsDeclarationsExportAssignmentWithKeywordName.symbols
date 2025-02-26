@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignmentWithKeywordName.ts] ////
+
+=== index.js ===
+var x = 12;
+>x : Symbol(x, Decl(index.js, 0, 3))
+
+module.exports = {
+    extends: 'base',
+>extends : Symbol(extends, Decl(index.js, 1, 18))
+
+    more: {
+>more : Symbol(more, Decl(index.js, 2, 20))
+
+        others: ['strs']
+>others : Symbol(others, Decl(index.js, 3, 11))
+
+    },
+    x
+>x : Symbol(x, Decl(index.js, 5, 6))
+
+};

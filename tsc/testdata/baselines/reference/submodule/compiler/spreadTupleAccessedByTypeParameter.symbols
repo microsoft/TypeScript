@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/spreadTupleAccessedByTypeParameter.ts] ////
+
+=== spreadTupleAccessedByTypeParameter.ts ===
+export function test<N extends number>(singletons: ["a"][], i: N) {
+>test : Symbol(test, Decl(spreadTupleAccessedByTypeParameter.ts, 0, 0))
+>N : Symbol(N, Decl(spreadTupleAccessedByTypeParameter.ts, 0, 21))
+>singletons : Symbol(singletons, Decl(spreadTupleAccessedByTypeParameter.ts, 0, 39))
+>i : Symbol(i, Decl(spreadTupleAccessedByTypeParameter.ts, 0, 59))
+>N : Symbol(N, Decl(spreadTupleAccessedByTypeParameter.ts, 0, 21))
+
+  const singleton = singletons[i];
+>singleton : Symbol(singleton, Decl(spreadTupleAccessedByTypeParameter.ts, 1, 7))
+>singletons : Symbol(singletons, Decl(spreadTupleAccessedByTypeParameter.ts, 0, 39))
+>i : Symbol(i, Decl(spreadTupleAccessedByTypeParameter.ts, 0, 59))
+
+  const [, ...rest] = singleton;
+>rest : Symbol(rest, Decl(spreadTupleAccessedByTypeParameter.ts, 2, 10))
+>singleton : Symbol(singleton, Decl(spreadTupleAccessedByTypeParameter.ts, 1, 7))
+
+  return rest;
+>rest : Symbol(rest, Decl(spreadTupleAccessedByTypeParameter.ts, 2, 10))
+}
+

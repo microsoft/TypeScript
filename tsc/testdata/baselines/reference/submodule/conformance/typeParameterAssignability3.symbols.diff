@@ -1,0 +1,53 @@
+--- old.typeParameterAssignability3.symbols
++++ new.typeParameterAssignability3.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ class Foo { foo: string; }
+ >Foo : Symbol(Foo, Decl(typeParameterAssignability3.ts, 0, 0))
+->foo : Symbol(Foo.foo, Decl(typeParameterAssignability3.ts, 2, 11))
++>foo : Symbol(foo, Decl(typeParameterAssignability3.ts, 2, 11))
+ 
+ function foo<T extends Foo, U extends Foo>(t: T, u: U) {
+ >foo : Symbol(foo, Decl(typeParameterAssignability3.ts, 2, 26))
+@@= skipped -54, +54 lines =@@
+ >Foo : Symbol(Foo, Decl(typeParameterAssignability3.ts, 0, 0))
+ 
+     t: T;
+->t : Symbol(C.t, Decl(typeParameterAssignability3.ts, 17, 39))
++>t : Symbol(t, Decl(typeParameterAssignability3.ts, 17, 39))
+ >T : Symbol(T, Decl(typeParameterAssignability3.ts, 17, 8))
+ 
+     u: U;
+->u : Symbol(C.u, Decl(typeParameterAssignability3.ts, 18, 9))
++>u : Symbol(u, Decl(typeParameterAssignability3.ts, 18, 9))
+ >U : Symbol(U, Decl(typeParameterAssignability3.ts, 17, 22))
+ 
+     r = () => {
+->r : Symbol(C.r, Decl(typeParameterAssignability3.ts, 19, 9))
++>r : Symbol(r, Decl(typeParameterAssignability3.ts, 19, 9))
+ 
+         this.t = this.u; // error
+->this.t : Symbol(C.t, Decl(typeParameterAssignability3.ts, 17, 39))
++>this.t : Symbol(t, Decl(typeParameterAssignability3.ts, 17, 39))
+ >this : Symbol(C, Decl(typeParameterAssignability3.ts, 15, 1))
+->t : Symbol(C.t, Decl(typeParameterAssignability3.ts, 17, 39))
+->this.u : Symbol(C.u, Decl(typeParameterAssignability3.ts, 18, 9))
++>t : Symbol(t, Decl(typeParameterAssignability3.ts, 17, 39))
++>this.u : Symbol(u, Decl(typeParameterAssignability3.ts, 18, 9))
+ >this : Symbol(C, Decl(typeParameterAssignability3.ts, 15, 1))
+->u : Symbol(C.u, Decl(typeParameterAssignability3.ts, 18, 9))
++>u : Symbol(u, Decl(typeParameterAssignability3.ts, 18, 9))
+ 
+         this.u = this.t; // error
+->this.u : Symbol(C.u, Decl(typeParameterAssignability3.ts, 18, 9))
++>this.u : Symbol(u, Decl(typeParameterAssignability3.ts, 18, 9))
+ >this : Symbol(C, Decl(typeParameterAssignability3.ts, 15, 1))
+->u : Symbol(C.u, Decl(typeParameterAssignability3.ts, 18, 9))
+->this.t : Symbol(C.t, Decl(typeParameterAssignability3.ts, 17, 39))
++>u : Symbol(u, Decl(typeParameterAssignability3.ts, 18, 9))
++>this.t : Symbol(t, Decl(typeParameterAssignability3.ts, 17, 39))
+ >this : Symbol(C, Decl(typeParameterAssignability3.ts, 15, 1))
+->t : Symbol(C.t, Decl(typeParameterAssignability3.ts, 17, 39))
++>t : Symbol(t, Decl(typeParameterAssignability3.ts, 17, 39))
+     }
+ }

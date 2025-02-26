@@ -1,0 +1,313 @@
+//// [tests/cases/compiler/library_DatePrototypeProperties.ts] ////
+
+=== library_DatePrototypeProperties.ts ===
+// Properties of the Date prototype object as per ES5 spec
+// http://www.ecma-international.org/ecma-262/5.1/#sec-15.9.5
+Date.prototype.constructor;
+>Date.prototype.constructor : Symbol(constructor, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>constructor : Symbol(constructor, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.toString();
+>Date.prototype.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.toDateString();
+>Date.prototype.toDateString : Symbol(toDateString, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>toDateString : Symbol(toDateString, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.toTimeString();
+>Date.prototype.toTimeString : Symbol(toTimeString, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>toTimeString : Symbol(toTimeString, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.toLocaleString();
+>Date.prototype.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.toLocaleDateString();
+>Date.prototype.toLocaleDateString : Symbol(toLocaleDateString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>toLocaleDateString : Symbol(toLocaleDateString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.toLocaleTimeString();
+>Date.prototype.toLocaleTimeString : Symbol(toLocaleTimeString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>toLocaleTimeString : Symbol(toLocaleTimeString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.valueOf();
+>Date.prototype.valueOf : Symbol(valueOf, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>valueOf : Symbol(valueOf, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getTime();
+>Date.prototype.getTime : Symbol(getTime, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getTime : Symbol(getTime, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getFullYear();
+>Date.prototype.getFullYear : Symbol(getFullYear, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getFullYear : Symbol(getFullYear, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getUTCFullYear();
+>Date.prototype.getUTCFullYear : Symbol(getUTCFullYear, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getUTCFullYear : Symbol(getUTCFullYear, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getMonth();
+>Date.prototype.getMonth : Symbol(getMonth, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getMonth : Symbol(getMonth, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getUTCMonth();
+>Date.prototype.getUTCMonth : Symbol(getUTCMonth, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getUTCMonth : Symbol(getUTCMonth, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getDate();
+>Date.prototype.getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getUTCDate();
+>Date.prototype.getUTCDate : Symbol(getUTCDate, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getUTCDate : Symbol(getUTCDate, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getDay();
+>Date.prototype.getDay : Symbol(getDay, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getDay : Symbol(getDay, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getUTCDay();
+>Date.prototype.getUTCDay : Symbol(getUTCDay, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getUTCDay : Symbol(getUTCDay, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getHours();
+>Date.prototype.getHours : Symbol(getHours, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getHours : Symbol(getHours, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getUTCHours();
+>Date.prototype.getUTCHours : Symbol(getUTCHours, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getUTCHours : Symbol(getUTCHours, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getMinutes();
+>Date.prototype.getMinutes : Symbol(getMinutes, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getMinutes : Symbol(getMinutes, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getUTCMinutes();
+>Date.prototype.getUTCMinutes : Symbol(getUTCMinutes, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getUTCMinutes : Symbol(getUTCMinutes, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getSeconds();
+>Date.prototype.getSeconds : Symbol(getSeconds, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getSeconds : Symbol(getSeconds, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getUTCSeconds();
+>Date.prototype.getUTCSeconds : Symbol(getUTCSeconds, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getUTCSeconds : Symbol(getUTCSeconds, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getMilliseconds();
+>Date.prototype.getMilliseconds : Symbol(getMilliseconds, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getMilliseconds : Symbol(getMilliseconds, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getUTCMilliseconds();
+>Date.prototype.getUTCMilliseconds : Symbol(getUTCMilliseconds, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getUTCMilliseconds : Symbol(getUTCMilliseconds, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.getTimezoneOffset();
+>Date.prototype.getTimezoneOffset : Symbol(getTimezoneOffset, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>getTimezoneOffset : Symbol(getTimezoneOffset, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.setTime(0);
+>Date.prototype.setTime : Symbol(setTime, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>setTime : Symbol(setTime, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.setMilliseconds(0);
+>Date.prototype.setMilliseconds : Symbol(setMilliseconds, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>setMilliseconds : Symbol(setMilliseconds, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.setUTCMilliseconds(0);
+>Date.prototype.setUTCMilliseconds : Symbol(setUTCMilliseconds, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>setUTCMilliseconds : Symbol(setUTCMilliseconds, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.setSeconds(0);
+>Date.prototype.setSeconds : Symbol(setSeconds, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>setSeconds : Symbol(setSeconds, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.setUTCSeconds(0);
+>Date.prototype.setUTCSeconds : Symbol(setUTCSeconds, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>setUTCSeconds : Symbol(setUTCSeconds, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.setMinutes(0);
+>Date.prototype.setMinutes : Symbol(setMinutes, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>setMinutes : Symbol(setMinutes, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.setUTCMinutes(0);
+>Date.prototype.setUTCMinutes : Symbol(setUTCMinutes, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>setUTCMinutes : Symbol(setUTCMinutes, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.setHours(0);
+>Date.prototype.setHours : Symbol(setHours, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>setHours : Symbol(setHours, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.setUTCHours(0);
+>Date.prototype.setUTCHours : Symbol(setUTCHours, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>setUTCHours : Symbol(setUTCHours, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.setDate(0);
+>Date.prototype.setDate : Symbol(setDate, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>setDate : Symbol(setDate, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.setUTCDate(0);
+>Date.prototype.setUTCDate : Symbol(setUTCDate, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>setUTCDate : Symbol(setUTCDate, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.setMonth(0);
+>Date.prototype.setMonth : Symbol(setMonth, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>setMonth : Symbol(setMonth, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.setUTCMonth(0);
+>Date.prototype.setUTCMonth : Symbol(setUTCMonth, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>setUTCMonth : Symbol(setUTCMonth, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.setFullYear(0);
+>Date.prototype.setFullYear : Symbol(setFullYear, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>setFullYear : Symbol(setFullYear, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.setUTCFullYear(0);
+>Date.prototype.setUTCFullYear : Symbol(setUTCFullYear, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>setUTCFullYear : Symbol(setUTCFullYear, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.toUTCString();
+>Date.prototype.toUTCString : Symbol(toUTCString, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>toUTCString : Symbol(toUTCString, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.toISOString();
+>Date.prototype.toISOString : Symbol(toISOString, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>toISOString : Symbol(toISOString, Decl(lib.es5.d.ts, --, --))
+
+Date.prototype.toJSON(null);
+>Date.prototype.toJSON : Symbol(toJSON, Decl(lib.es5.d.ts, --, --))
+>Date.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>toJSON : Symbol(toJSON, Decl(lib.es5.d.ts, --, --))
+

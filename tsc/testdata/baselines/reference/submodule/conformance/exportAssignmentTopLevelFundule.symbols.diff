@@ -1,0 +1,14 @@
+--- old.exportAssignmentTopLevelFundule.symbols
++++ new.exportAssignmentTopLevelFundule.symbols
+@@= skipped -4, +4 lines =@@
+ >foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
+ 
+ if(foo.answer === 42){
+->foo.answer : Symbol(foo.answer, Decl(foo_0.ts, 4, 11))
++>foo.answer : Symbol(answer, Decl(foo_0.ts, 4, 11))
+ >foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
+->answer : Symbol(foo.answer, Decl(foo_0.ts, 4, 11))
++>answer : Symbol(answer, Decl(foo_0.ts, 4, 11))
+ 
+ 	var x = foo();
+ >x : Symbol(x, Decl(foo_1.ts, 2, 4))

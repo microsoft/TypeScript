@@ -1,0 +1,20 @@
+--- old.genericDerivedTypeWithSpecializedBase.symbols
++++ new.genericDerivedTypeWithSpecializedBase.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(genericDerivedTypeWithSpecializedBase.ts, 0, 8))
+ 
+     x: T;
+->x : Symbol(A.x, Decl(genericDerivedTypeWithSpecializedBase.ts, 0, 12))
++>x : Symbol(x, Decl(genericDerivedTypeWithSpecializedBase.ts, 0, 12))
+ >T : Symbol(T, Decl(genericDerivedTypeWithSpecializedBase.ts, 0, 8))
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ >A : Symbol(A, Decl(genericDerivedTypeWithSpecializedBase.ts, 0, 0))
+ 
+     y: U;
+->y : Symbol(B.y, Decl(genericDerivedTypeWithSpecializedBase.ts, 4, 30))
++>y : Symbol(y, Decl(genericDerivedTypeWithSpecializedBase.ts, 4, 30))
+ >U : Symbol(U, Decl(genericDerivedTypeWithSpecializedBase.ts, 4, 8))
+ }
+ 

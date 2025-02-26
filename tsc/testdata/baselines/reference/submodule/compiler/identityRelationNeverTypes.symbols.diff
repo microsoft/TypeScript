@@ -1,0 +1,37 @@
+--- old.identityRelationNeverTypes.symbols
++++ new.identityRelationNeverTypes.symbols
+@@= skipped -18, +18 lines =@@
+ >TContext : Symbol(TContext, Decl(identityRelationNeverTypes.ts, 4, 20))
+ 
+     _context: TContext;
+->_context : Symbol(State._context, Decl(identityRelationNeverTypes.ts, 4, 31))
++>_context : Symbol(_context, Decl(identityRelationNeverTypes.ts, 4, 31))
+ >TContext : Symbol(TContext, Decl(identityRelationNeverTypes.ts, 4, 20))
+ 
+     _value: string;
+->_value : Symbol(State._value, Decl(identityRelationNeverTypes.ts, 5, 23))
++>_value : Symbol(_value, Decl(identityRelationNeverTypes.ts, 5, 23))
+ 
+     matches<TSV extends string>(stateValue: TSV): this is State<TContext> & { value: TSV };
+->matches : Symbol(State.matches, Decl(identityRelationNeverTypes.ts, 6, 19))
++>matches : Symbol(matches, Decl(identityRelationNeverTypes.ts, 6, 19))
+ >TSV : Symbol(TSV, Decl(identityRelationNeverTypes.ts, 7, 12))
+ >stateValue : Symbol(stateValue, Decl(identityRelationNeverTypes.ts, 7, 32))
+ >TSV : Symbol(TSV, Decl(identityRelationNeverTypes.ts, 7, 12))
+@@= skipped -24, +24 lines =@@
+ >foo : Symbol(foo, Decl(identityRelationNeverTypes.ts, 10, 26))
+ 
+     if (state.matches('a') && state.matches('a.b')) {
+->state.matches : Symbol(State.matches, Decl(identityRelationNeverTypes.ts, 6, 19))
++>state.matches : Symbol(matches, Decl(identityRelationNeverTypes.ts, 6, 19))
+ >state : Symbol(state, Decl(identityRelationNeverTypes.ts, 10, 12))
+->matches : Symbol(State.matches, Decl(identityRelationNeverTypes.ts, 6, 19))
+->state.matches : Symbol(State.matches, Decl(identityRelationNeverTypes.ts, 6, 19))
++>matches : Symbol(matches, Decl(identityRelationNeverTypes.ts, 6, 19))
++>state.matches : Symbol(matches, Decl(identityRelationNeverTypes.ts, 6, 19))
+ >state : Symbol(state, Decl(identityRelationNeverTypes.ts, 10, 12))
+->matches : Symbol(State.matches, Decl(identityRelationNeverTypes.ts, 6, 19))
++>matches : Symbol(matches, Decl(identityRelationNeverTypes.ts, 6, 19))
+ 
+         state;  // never
+ >state : Symbol(state, Decl(identityRelationNeverTypes.ts, 10, 12))

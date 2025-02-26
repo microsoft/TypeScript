@@ -1,0 +1,64 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty1.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+interface Prop {
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+
+    a: number,
+>a : Symbol(a, Decl(file.tsx, 2, 16))
+
+    b: string,
+>b : Symbol(b, Decl(file.tsx, 3, 14))
+
+    children: string | JSX.Element
+>children : Symbol(children, Decl(file.tsx, 4, 14))
+>JSX : Symbol(JSX)
+>Element : Symbol(Element)
+}
+
+function Comp(p: Prop) {
+>Comp : Symbol(Comp, Decl(file.tsx, 6, 1))
+>p : Symbol(p, Decl(file.tsx, 8, 14))
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+
+    return <div>{p.b}</div>;
+>p.b : Symbol(b, Decl(file.tsx, 3, 14))
+>p : Symbol(p, Decl(file.tsx, 8, 14))
+>b : Symbol(b, Decl(file.tsx, 3, 14))
+}
+
+// OK
+let k = <Comp a={10} b="hi" children ="lol" />;
+>k : Symbol(k, Decl(file.tsx, 13, 3))
+>Comp : Symbol(Comp, Decl(file.tsx, 6, 1))
+>a : Symbol(a, Decl(file.tsx, 13, 13))
+>b : Symbol(b, Decl(file.tsx, 13, 20))
+>children : Symbol(children, Decl(file.tsx, 13, 27))
+
+let k1 =
+>k1 : Symbol(k1, Decl(file.tsx, 14, 3))
+
+    <Comp a={10} b="hi">
+>Comp : Symbol(Comp, Decl(file.tsx, 6, 1))
+>a : Symbol(a, Decl(file.tsx, 15, 9))
+>b : Symbol(b, Decl(file.tsx, 15, 16))
+
+        hi hi hi!
+    </Comp>;
+>Comp : Symbol(Comp, Decl(file.tsx, 6, 1))
+
+let k2 =
+>k2 : Symbol(k2, Decl(file.tsx, 18, 3))
+
+    <Comp a={10} b="hi">
+>Comp : Symbol(Comp, Decl(file.tsx, 6, 1))
+>a : Symbol(a, Decl(file.tsx, 19, 9))
+>b : Symbol(b, Decl(file.tsx, 19, 16))
+
+        <div>hi hi hi!</div>
+    </Comp>;
+>Comp : Symbol(Comp, Decl(file.tsx, 6, 1))
+

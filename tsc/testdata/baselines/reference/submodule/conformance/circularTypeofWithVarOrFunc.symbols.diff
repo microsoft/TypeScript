@@ -1,0 +1,32 @@
+--- old.circularTypeofWithVarOrFunc.symbols
++++ new.circularTypeofWithVarOrFunc.symbols
+@@= skipped -34, +34 lines =@@
+ >Input : Symbol(Input, Decl(circularTypeofWithVarOrFunc.ts, 8, 43))
+ 
+   a: number;
+->a : Symbol(Input.a, Decl(circularTypeofWithVarOrFunc.ts, 12, 17))
++>a : Symbol(a, Decl(circularTypeofWithVarOrFunc.ts, 12, 17))
+ 
+   b: number;
+->b : Symbol(Input.b, Decl(circularTypeofWithVarOrFunc.ts, 13, 12))
++>b : Symbol(b, Decl(circularTypeofWithVarOrFunc.ts, 13, 12))
+ }
+ 
+ type R = ReturnType<typeof mul>;
+@@= skipped -18, +18 lines =@@
+ >R : Symbol(R, Decl(circularTypeofWithVarOrFunc.ts, 15, 1))
+ 
+   return input.a * input.b;
+->input.a : Symbol(Input.a, Decl(circularTypeofWithVarOrFunc.ts, 12, 17))
++>input.a : Symbol(a, Decl(circularTypeofWithVarOrFunc.ts, 12, 17))
+ >input : Symbol(input, Decl(circularTypeofWithVarOrFunc.ts, 18, 13))
+->a : Symbol(Input.a, Decl(circularTypeofWithVarOrFunc.ts, 12, 17))
+->input.b : Symbol(Input.b, Decl(circularTypeofWithVarOrFunc.ts, 13, 12))
++>a : Symbol(a, Decl(circularTypeofWithVarOrFunc.ts, 12, 17))
++>input.b : Symbol(b, Decl(circularTypeofWithVarOrFunc.ts, 13, 12))
+ >input : Symbol(input, Decl(circularTypeofWithVarOrFunc.ts, 18, 13))
+->b : Symbol(Input.b, Decl(circularTypeofWithVarOrFunc.ts, 13, 12))
++>b : Symbol(b, Decl(circularTypeofWithVarOrFunc.ts, 13, 12))
+ }
+ 
+ // Repro from #26104

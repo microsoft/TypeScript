@@ -1,0 +1,24 @@
+--- old.enumWithComputedMember.symbols
++++ new.enumWithComputedMember.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(enumWithComputedMember.ts, 0, 0))
+ 
+     X = "".length, 
+->X : Symbol(A.X, Decl(enumWithComputedMember.ts, 0, 8))
+->"".length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>X : Symbol(X, Decl(enumWithComputedMember.ts, 0, 8))
++>"".length : Symbol(length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+     Y = X,
+->Y : Symbol(A.Y, Decl(enumWithComputedMember.ts, 1, 18))
+->X : Symbol(A.X, Decl(enumWithComputedMember.ts, 0, 8))
++>Y : Symbol(Y, Decl(enumWithComputedMember.ts, 1, 18))
++>X : Symbol(X, Decl(enumWithComputedMember.ts, 0, 8))
+ 
+     Z
+->Z : Symbol(A.Z, Decl(enumWithComputedMember.ts, 2, 10))
++>Z : Symbol(Z, Decl(enumWithComputedMember.ts, 2, 10))
+ }
+ 

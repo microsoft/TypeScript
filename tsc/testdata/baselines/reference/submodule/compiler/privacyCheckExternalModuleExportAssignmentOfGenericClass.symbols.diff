@@ -1,0 +1,20 @@
+--- old.privacyCheckExternalModuleExportAssignmentOfGenericClass.symbols
++++ new.privacyCheckExternalModuleExportAssignmentOfGenericClass.symbols
+@@= skipped -10, +10 lines =@@
+ >Bar : Symbol(Bar, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts, 1, 13))
+ 
+     foo: Foo<number>;
+->foo : Symbol(Bar.foo, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts, 2, 15))
++>foo : Symbol(foo, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts, 2, 15))
+ >Foo : Symbol(Foo, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts, 0, 0))
+ }
+ === privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts ===
+@@= skipped -12, +12 lines =@@
+ >A : Symbol(A, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts, 1, 10))
+ 
+     constructor(public a: A) { }
+->a : Symbol(Foo.a, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts, 2, 16))
++>a : Symbol(a, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts, 2, 16))
+ >A : Symbol(A, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts, 1, 10))
+ }
+ 

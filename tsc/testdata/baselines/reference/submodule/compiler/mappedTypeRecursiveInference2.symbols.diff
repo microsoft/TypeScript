@@ -1,0 +1,33 @@
+--- old.mappedTypeRecursiveInference2.symbols
++++ new.mappedTypeRecursiveInference2.symbols
+@@= skipped -49, +49 lines =@@
+ >shallow : Symbol(shallow, Decl(mappedTypeRecursiveInference2.ts, 14, 5))
+ >type : Symbol(type, Decl(mappedTypeRecursiveInference2.ts, 10, 7))
+ >x : Symbol(x, Decl(mappedTypeRecursiveInference2.ts, 14, 36))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(mappedTypeRecursiveInference2.ts, 14, 36))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ const objectLiteral = type({ a: ["ark", "|>", (x) => x.length] })
+ >objectLiteral : Symbol(objectLiteral, Decl(mappedTypeRecursiveInference2.ts, 15, 5))
+ >type : Symbol(type, Decl(mappedTypeRecursiveInference2.ts, 10, 7))
+ >a : Symbol(a, Decl(mappedTypeRecursiveInference2.ts, 15, 28))
+ >x : Symbol(x, Decl(mappedTypeRecursiveInference2.ts, 15, 47))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(mappedTypeRecursiveInference2.ts, 15, 47))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ const nestedTuple = type([["ark", "|>", (x) => x.length]])
+ >nestedTuple : Symbol(nestedTuple, Decl(mappedTypeRecursiveInference2.ts, 16, 5))
+ >type : Symbol(type, Decl(mappedTypeRecursiveInference2.ts, 10, 7))
+ >x : Symbol(x, Decl(mappedTypeRecursiveInference2.ts, 16, 41))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(mappedTypeRecursiveInference2.ts, 16, 41))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 

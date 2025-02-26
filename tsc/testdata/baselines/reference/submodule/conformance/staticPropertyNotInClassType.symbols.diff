@@ -1,0 +1,86 @@
+--- old.staticPropertyNotInClassType.symbols
++++ new.staticPropertyNotInClassType.symbols
+@@= skipped -7, +7 lines =@@
+ >C : Symbol(C, Decl(staticPropertyNotInClassType.ts, 0, 19), Decl(staticPropertyNotInClassType.ts, 7, 5))
+ 
+         fn() { return this; }
+->fn : Symbol(C.fn, Decl(staticPropertyNotInClassType.ts, 1, 13))
++>fn : Symbol(fn, Decl(staticPropertyNotInClassType.ts, 1, 13))
+ >this : Symbol(C, Decl(staticPropertyNotInClassType.ts, 0, 19), Decl(staticPropertyNotInClassType.ts, 7, 5))
+ 
+         static get x() { return 1; }
+->x : Symbol(C.x, Decl(staticPropertyNotInClassType.ts, 2, 29), Decl(staticPropertyNotInClassType.ts, 3, 36))
++>x : Symbol(x, Decl(staticPropertyNotInClassType.ts, 2, 29), Decl(staticPropertyNotInClassType.ts, 3, 36))
+ 
+         static set x(v) { }
+->x : Symbol(C.x, Decl(staticPropertyNotInClassType.ts, 2, 29), Decl(staticPropertyNotInClassType.ts, 3, 36))
++>x : Symbol(x, Decl(staticPropertyNotInClassType.ts, 2, 29), Decl(staticPropertyNotInClassType.ts, 3, 36))
+ >v : Symbol(v, Decl(staticPropertyNotInClassType.ts, 4, 21))
+ 
+         constructor(public a: number, private b: number) { }
+->a : Symbol(C.a, Decl(staticPropertyNotInClassType.ts, 5, 20))
+->b : Symbol(C.b, Decl(staticPropertyNotInClassType.ts, 5, 37))
++>a : Symbol(a, Decl(staticPropertyNotInClassType.ts, 5, 20))
++>b : Symbol(b, Decl(staticPropertyNotInClassType.ts, 5, 37))
+ 
+         static foo: string; // not reflected in class type
+->foo : Symbol(C.foo, Decl(staticPropertyNotInClassType.ts, 5, 60))
++>foo : Symbol(foo, Decl(staticPropertyNotInClassType.ts, 5, 60))
+     }
+ 
+     module C {
+@@= skipped -31, +31 lines =@@
+ 
+     var r = c.fn();
+ >r : Symbol(r, Decl(staticPropertyNotInClassType.ts, 14, 7))
+->c.fn : Symbol(C.fn, Decl(staticPropertyNotInClassType.ts, 1, 13))
++>c.fn : Symbol(fn, Decl(staticPropertyNotInClassType.ts, 1, 13))
+ >c : Symbol(c, Decl(staticPropertyNotInClassType.ts, 13, 7))
+->fn : Symbol(C.fn, Decl(staticPropertyNotInClassType.ts, 1, 13))
++>fn : Symbol(fn, Decl(staticPropertyNotInClassType.ts, 1, 13))
+ 
+     var r4 = c.foo; // error
+ >r4 : Symbol(r4, Decl(staticPropertyNotInClassType.ts, 15, 7))
+@@= skipped -26, +26 lines =@@
+ >U : Symbol(U, Decl(staticPropertyNotInClassType.ts, 21, 14))
+ 
+         fn() { return this; }
+->fn : Symbol(C.fn, Decl(staticPropertyNotInClassType.ts, 21, 19))
++>fn : Symbol(fn, Decl(staticPropertyNotInClassType.ts, 21, 19))
+ >this : Symbol(C, Decl(staticPropertyNotInClassType.ts, 20, 16), Decl(staticPropertyNotInClassType.ts, 27, 5))
+ 
+         static get x() { return 1; }
+->x : Symbol(C.x, Decl(staticPropertyNotInClassType.ts, 22, 29), Decl(staticPropertyNotInClassType.ts, 23, 36))
++>x : Symbol(x, Decl(staticPropertyNotInClassType.ts, 22, 29), Decl(staticPropertyNotInClassType.ts, 23, 36))
+ 
+         static set x(v) { }
+->x : Symbol(C.x, Decl(staticPropertyNotInClassType.ts, 22, 29), Decl(staticPropertyNotInClassType.ts, 23, 36))
++>x : Symbol(x, Decl(staticPropertyNotInClassType.ts, 22, 29), Decl(staticPropertyNotInClassType.ts, 23, 36))
+ >v : Symbol(v, Decl(staticPropertyNotInClassType.ts, 24, 21))
+ 
+         constructor(public a: T, private b: U) { }
+->a : Symbol(C.a, Decl(staticPropertyNotInClassType.ts, 25, 20))
++>a : Symbol(a, Decl(staticPropertyNotInClassType.ts, 25, 20))
+ >T : Symbol(T, Decl(staticPropertyNotInClassType.ts, 21, 12))
+->b : Symbol(C.b, Decl(staticPropertyNotInClassType.ts, 25, 32))
++>b : Symbol(b, Decl(staticPropertyNotInClassType.ts, 25, 32))
+ >U : Symbol(U, Decl(staticPropertyNotInClassType.ts, 21, 14))
+ 
+         static foo: T; // not reflected in class type
+->foo : Symbol(C.foo, Decl(staticPropertyNotInClassType.ts, 25, 50))
++>foo : Symbol(foo, Decl(staticPropertyNotInClassType.ts, 25, 50))
+ >T : Symbol(T)
+     }
+ 
+@@= skipped -34, +34 lines =@@
+ 
+     var r = c.fn();
+ >r : Symbol(r, Decl(staticPropertyNotInClassType.ts, 34, 7))
+->c.fn : Symbol(C.fn, Decl(staticPropertyNotInClassType.ts, 21, 19))
++>c.fn : Symbol(fn, Decl(staticPropertyNotInClassType.ts, 21, 19))
+ >c : Symbol(c, Decl(staticPropertyNotInClassType.ts, 33, 7))
+->fn : Symbol(C.fn, Decl(staticPropertyNotInClassType.ts, 21, 19))
++>fn : Symbol(fn, Decl(staticPropertyNotInClassType.ts, 21, 19))
+ 
+     var r4 = c.foo; // error
+ >r4 : Symbol(r4, Decl(staticPropertyNotInClassType.ts, 35, 7))

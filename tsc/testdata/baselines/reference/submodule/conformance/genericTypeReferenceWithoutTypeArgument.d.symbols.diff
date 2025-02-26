@@ -1,0 +1,38 @@
+--- old.genericTypeReferenceWithoutTypeArgument.d.symbols
++++ new.genericTypeReferenceWithoutTypeArgument.d.symbols
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 3, 16))
+ 
+     foo: T;
+->foo : Symbol(C.foo, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 3, 20))
++>foo : Symbol(foo, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 3, 20))
+ >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 3, 16))
+ }
+ 
+@@= skipped -41, +41 lines =@@
+     export class E<T> { foo: T }
+ >E : Symbol(E, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 17, 18))
+ >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 18, 19))
+->foo : Symbol(E.foo, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 18, 23))
++>foo : Symbol(foo, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 18, 23))
+ >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 18, 19))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >D3 : Symbol(D3, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 21, 32))
+ >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 22, 17))
+ >M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 15, 28))
+->E : Symbol(M.E, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 17, 18))
++>E : Symbol(E, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 17, 18))
+ 
+ declare function h<T extends C>(x: T);
+ >h : Symbol(h, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 22, 35))
+@@= skipped -13, +13 lines =@@
+ >i : Symbol(i, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 24, 38))
+ >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 25, 19))
+ >M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 15, 28))
+->E : Symbol(M.E, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 17, 18))
++>E : Symbol(E, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 17, 18))
+ >x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 25, 34))
+ >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument.d.ts, 25, 19))
+ 

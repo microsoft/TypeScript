@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty18.ts] ////
+
+=== symbolProperty18.ts ===
+var i = {
+>i : Symbol(i, Decl(symbolProperty18.ts, 0, 3))
+
+    [Symbol.iterator]: 0,
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(symbolProperty18.ts, 0, 9))
+
+    [Symbol.toStringTag]() { return "" },
+>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(symbolProperty18.ts, 1, 25))
+
+    set [Symbol.toPrimitive](p: boolean) { }
+>[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(symbolProperty18.ts, 2, 41))
+>p : Symbol(p, Decl(symbolProperty18.ts, 3, 29))
+}
+
+var it = i[Symbol.iterator];
+>it : Symbol(it, Decl(symbolProperty18.ts, 6, 3))
+>i : Symbol(i, Decl(symbolProperty18.ts, 0, 3))
+
+var str = i[Symbol.toStringTag]();
+>str : Symbol(str, Decl(symbolProperty18.ts, 7, 3))
+>i : Symbol(i, Decl(symbolProperty18.ts, 0, 3))
+
+i[Symbol.toPrimitive] = false;
+>i : Symbol(i, Decl(symbolProperty18.ts, 0, 3))
+

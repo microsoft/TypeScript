@@ -1,0 +1,11 @@
+--- old.privateFieldAssignabilityFromUnknown.symbols
++++ new.privateFieldAssignabilityFromUnknown.symbols
+@@= skipped -4, +4 lines =@@
+ >Class : Symbol(Class, Decl(privateFieldAssignabilityFromUnknown.ts, 0, 0))
+ 
+   #field: any
+->#field : Symbol(Class.#field, Decl(privateFieldAssignabilityFromUnknown.ts, 0, 20))
++>#field : Symbol(#field, Decl(privateFieldAssignabilityFromUnknown.ts, 0, 20))
+ }
+ 
+ const task: Class = {} as unknown;

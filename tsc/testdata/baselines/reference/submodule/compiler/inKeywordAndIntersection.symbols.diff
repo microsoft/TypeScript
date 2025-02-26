@@ -1,0 +1,44 @@
+--- old.inKeywordAndIntersection.symbols
++++ new.inKeywordAndIntersection.symbols
+@@= skipped -2, +2 lines =@@
+ === inKeywordAndIntersection.ts ===
+ class A { a = 0 }
+ >A : Symbol(A, Decl(inKeywordAndIntersection.ts, 0, 0))
+->a : Symbol(A.a, Decl(inKeywordAndIntersection.ts, 0, 9))
++>a : Symbol(a, Decl(inKeywordAndIntersection.ts, 0, 9))
+ 
+ class B { b = 0 }
+ >B : Symbol(B, Decl(inKeywordAndIntersection.ts, 0, 17))
+->b : Symbol(B.b, Decl(inKeywordAndIntersection.ts, 1, 9))
++>b : Symbol(b, Decl(inKeywordAndIntersection.ts, 1, 9))
+ 
+ function f10(obj: A & { x: string } | B) {
+ >f10 : Symbol(f10, Decl(inKeywordAndIntersection.ts, 1, 17))
+@@= skipped -32, +32 lines =@@
+ >InstanceOne : Symbol(InstanceOne, Decl(inKeywordAndIntersection.ts, 10, 1))
+ 
+     one(): void
+->one : Symbol(InstanceOne.one, Decl(inKeywordAndIntersection.ts, 14, 23))
++>one : Symbol(one, Decl(inKeywordAndIntersection.ts, 14, 23))
+ }
+ 
+ interface InstanceTwo {
+ >InstanceTwo : Symbol(InstanceTwo, Decl(inKeywordAndIntersection.ts, 16, 1))
+ 
+     two(): void
+->two : Symbol(InstanceTwo.two, Decl(inKeywordAndIntersection.ts, 18, 23))
++>two : Symbol(two, Decl(inKeywordAndIntersection.ts, 18, 23))
+ }
+ 
+ const instance = {} as InstanceOne | InstanceTwo
+@@= skipped -25, +25 lines =@@
+ >ClassOne : Symbol(ClassOne, Decl(inKeywordAndIntersection.ts, 24, 5))
+ 
+     instance.one();
+->instance.one : Symbol(InstanceOne.one, Decl(inKeywordAndIntersection.ts, 14, 23))
++>instance.one : Symbol(one, Decl(inKeywordAndIntersection.ts, 14, 23))
+ >instance : Symbol(instance, Decl(inKeywordAndIntersection.ts, 22, 5))
+->one : Symbol(InstanceOne.one, Decl(inKeywordAndIntersection.ts, 14, 23))
++>one : Symbol(one, Decl(inKeywordAndIntersection.ts, 14, 23))
+ }
+ 

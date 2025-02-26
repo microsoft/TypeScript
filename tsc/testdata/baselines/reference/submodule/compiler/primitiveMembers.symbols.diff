@@ -1,0 +1,51 @@
+--- old.primitiveMembers.symbols
++++ new.primitiveMembers.symbols
+@@= skipped -7, +7 lines =@@
+ >r : Symbol(r, Decl(primitiveMembers.ts, 1, 3))
+ 
+ r.source;
+->r.source : Symbol(RegExp.source, Decl(lib.es5.d.ts, --, --))
++>r.source : Symbol(source, Decl(lib.es5.d.ts, --, --))
+ >r : Symbol(r, Decl(primitiveMembers.ts, 1, 3))
+->source : Symbol(RegExp.source, Decl(lib.es5.d.ts, --, --))
++>source : Symbol(source, Decl(lib.es5.d.ts, --, --))
+ 
+ x.toBAZ();
+ >x : Symbol(x, Decl(primitiveMembers.ts, 0, 3))
+ 
+ x.toString();
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(primitiveMembers.ts, 0, 3))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+ var n = 0;
+ >n : Symbol(n, Decl(primitiveMembers.ts, 7, 3))
+@@= skipped -35, +35 lines =@@
+ >f : Symbol(f, Decl(primitiveMembers.ts, 14, 3))
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(primitiveMembers.ts, 14, 19))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(primitiveMembers.ts, 14, 19))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ var r2: RegExp = /./g;
+ >r2 : Symbol(r2, Decl(primitiveMembers.ts, 15, 3))
+@@= skipped -26, +26 lines =@@
+ 
+ class baz { public bar(): void { }; }
+ >baz : Symbol(baz, Decl(primitiveMembers.ts, 20, 17))
+->bar : Symbol(baz.bar, Decl(primitiveMembers.ts, 23, 11))
++>bar : Symbol(bar, Decl(primitiveMembers.ts, 23, 11))
+ 
+ class foo extends baz { public bar(){ return undefined}; }
+ >foo : Symbol(foo, Decl(primitiveMembers.ts, 23, 37))
+ >baz : Symbol(baz, Decl(primitiveMembers.ts, 20, 17))
+->bar : Symbol(foo.bar, Decl(primitiveMembers.ts, 24, 23))
++>bar : Symbol(bar, Decl(primitiveMembers.ts, 24, 23))
+ >undefined : Symbol(undefined)
+ 
+ 

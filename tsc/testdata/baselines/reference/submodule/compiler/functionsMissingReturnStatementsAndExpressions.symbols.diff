@@ -1,0 +1,41 @@
+--- old.functionsMissingReturnStatementsAndExpressions.symbols
++++ new.functionsMissingReturnStatementsAndExpressions.symbols
+@@= skipped -195, +195 lines =@@
+ >C : Symbol(C, Decl(functionsMissingReturnStatementsAndExpressions.ts, 126, 1))
+ 
+     public get m1() {
+->m1 : Symbol(C.m1, Decl(functionsMissingReturnStatementsAndExpressions.ts, 128, 9))
++>m1 : Symbol(m1, Decl(functionsMissingReturnStatementsAndExpressions.ts, 128, 9))
+ 
+         // Errors; get accessors must return a value.
+     }
+ 
+     public get m2() {
+->m2 : Symbol(C.m2, Decl(functionsMissingReturnStatementsAndExpressions.ts, 131, 5))
++>m2 : Symbol(m2, Decl(functionsMissingReturnStatementsAndExpressions.ts, 131, 5))
+ 
+         // Permissible; returns undefined.
+         return;
+     }
+ 
+     public get m3() {
+->m3 : Symbol(C.m3, Decl(functionsMissingReturnStatementsAndExpressions.ts, 136, 5))
++>m3 : Symbol(m3, Decl(functionsMissingReturnStatementsAndExpressions.ts, 136, 5))
+ 
+         return "Okay, because this is a return expression.";
+     }
+ 
+     public get m4() {
+->m4 : Symbol(C.m4, Decl(functionsMissingReturnStatementsAndExpressions.ts, 140, 5))
++>m4 : Symbol(m4, Decl(functionsMissingReturnStatementsAndExpressions.ts, 140, 5))
+ 
+         // Fine since this consists of a single throw statement.
+         throw null;
+     }
+ 
+     public get m5() {
+->m5 : Symbol(C.m5, Decl(functionsMissingReturnStatementsAndExpressions.ts, 145, 5))
++>m5 : Symbol(m5, Decl(functionsMissingReturnStatementsAndExpressions.ts, 145, 5))
+ 
+         // Not fine, since we can *only* consist of a single throw statement
+         // if no return statements are present but we are a get accessor.

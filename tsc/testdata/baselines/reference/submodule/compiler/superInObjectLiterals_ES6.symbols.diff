@@ -1,0 +1,32 @@
+--- old.superInObjectLiterals_ES6.symbols
++++ new.superInObjectLiterals_ES6.symbols
+@@= skipped -49, +49 lines =@@
+ >A : Symbol(A, Decl(superInObjectLiterals_ES6.ts, 24, 2))
+ 
+     method() { }
+->method : Symbol(A.method, Decl(superInObjectLiterals_ES6.ts, 26, 9))
++>method : Symbol(method, Decl(superInObjectLiterals_ES6.ts, 26, 9))
+ }
+ 
+ class B extends A {
+@@= skipped -8, +8 lines =@@
+ >A : Symbol(A, Decl(superInObjectLiterals_ES6.ts, 24, 2))
+ 
+     f() {
+->f : Symbol(B.f, Decl(superInObjectLiterals_ES6.ts, 30, 19))
++>f : Symbol(f, Decl(superInObjectLiterals_ES6.ts, 30, 19))
+ 
+         var obj = {
+ >obj : Symbol(obj, Decl(superInObjectLiterals_ES6.ts, 32, 11))
+@@= skipped -44, +44 lines =@@
+ >p3 : Symbol(p3, Decl(superInObjectLiterals_ES6.ts, 52, 14))
+ 
+                 super.method();
+->super.method : Symbol(A.method, Decl(superInObjectLiterals_ES6.ts, 26, 9))
++>super.method : Symbol(method, Decl(superInObjectLiterals_ES6.ts, 26, 9))
+ >super : Symbol(A, Decl(superInObjectLiterals_ES6.ts, 24, 2))
+->method : Symbol(A.method, Decl(superInObjectLiterals_ES6.ts, 26, 9))
++>method : Symbol(method, Decl(superInObjectLiterals_ES6.ts, 26, 9))
+             }
+         };
+     }

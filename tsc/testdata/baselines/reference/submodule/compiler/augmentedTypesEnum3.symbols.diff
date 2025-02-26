@@ -1,0 +1,18 @@
+--- old.augmentedTypesEnum3.symbols
++++ new.augmentedTypesEnum3.symbols
+@@= skipped -26, +26 lines =@@
+ >A : Symbol(A, Decl(augmentedTypesEnum3.ts, 6, 19), Decl(augmentedTypesEnum3.ts, 10, 1), Decl(augmentedTypesEnum3.ts, 13, 1), Decl(augmentedTypesEnum3.ts, 16, 1))
+ 
+     b
+->b : Symbol(A.b, Decl(augmentedTypesEnum3.ts, 11, 8))
++>b : Symbol(b, Decl(augmentedTypesEnum3.ts, 11, 8))
+ }
+ enum A {
+ >A : Symbol(A, Decl(augmentedTypesEnum3.ts, 6, 19), Decl(augmentedTypesEnum3.ts, 10, 1), Decl(augmentedTypesEnum3.ts, 13, 1), Decl(augmentedTypesEnum3.ts, 16, 1))
+ 
+     c
+->c : Symbol(A.c, Decl(augmentedTypesEnum3.ts, 14, 8))
++>c : Symbol(c, Decl(augmentedTypesEnum3.ts, 14, 8))
+ }
+ module A {
+ >A : Symbol(A, Decl(augmentedTypesEnum3.ts, 6, 19), Decl(augmentedTypesEnum3.ts, 10, 1), Decl(augmentedTypesEnum3.ts, 13, 1), Decl(augmentedTypesEnum3.ts, 16, 1))

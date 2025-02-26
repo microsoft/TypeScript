@@ -1,0 +1,99 @@
+--- old.objectLiteralErrors.symbols
++++ new.objectLiteralErrors.symbols
+@@= skipped -33, +33 lines =@@
+ 
+ var e7 = { 'a': 0, a: 0 };
+ >e7 : Symbol(e7, Decl(objectLiteralErrors.ts, 7, 3))
+->'a' : Symbol('a', Decl(objectLiteralErrors.ts, 7, 10), Decl(objectLiteralErrors.ts, 7, 18))
+->a : Symbol('a', Decl(objectLiteralErrors.ts, 7, 10), Decl(objectLiteralErrors.ts, 7, 18))
++>'a' : Symbol(a, Decl(objectLiteralErrors.ts, 7, 10), Decl(objectLiteralErrors.ts, 7, 18))
++>a : Symbol(a, Decl(objectLiteralErrors.ts, 7, 10), Decl(objectLiteralErrors.ts, 7, 18))
+ 
+ var e8 = { 'a': 0, "a": 0 };
+ >e8 : Symbol(e8, Decl(objectLiteralErrors.ts, 8, 3))
+->'a' : Symbol('a', Decl(objectLiteralErrors.ts, 8, 10), Decl(objectLiteralErrors.ts, 8, 18))
+->"a" : Symbol('a', Decl(objectLiteralErrors.ts, 8, 10), Decl(objectLiteralErrors.ts, 8, 18))
++>'a' : Symbol(a, Decl(objectLiteralErrors.ts, 8, 10), Decl(objectLiteralErrors.ts, 8, 18))
++>"a" : Symbol(a, Decl(objectLiteralErrors.ts, 8, 10), Decl(objectLiteralErrors.ts, 8, 18))
+ 
+ var e9 = { 'a': 0, 'a': 0 };
+ >e9 : Symbol(e9, Decl(objectLiteralErrors.ts, 9, 3))
+->'a' : Symbol('a', Decl(objectLiteralErrors.ts, 9, 10), Decl(objectLiteralErrors.ts, 9, 18))
+->'a' : Symbol('a', Decl(objectLiteralErrors.ts, 9, 10), Decl(objectLiteralErrors.ts, 9, 18))
++>'a' : Symbol(a, Decl(objectLiteralErrors.ts, 9, 10), Decl(objectLiteralErrors.ts, 9, 18))
++>'a' : Symbol(a, Decl(objectLiteralErrors.ts, 9, 10), Decl(objectLiteralErrors.ts, 9, 18))
+ 
+ var e10 = { "a": 0, 'a': 0 };
+ >e10 : Symbol(e10, Decl(objectLiteralErrors.ts, 10, 3))
+->"a" : Symbol("a", Decl(objectLiteralErrors.ts, 10, 11), Decl(objectLiteralErrors.ts, 10, 19))
+->'a' : Symbol("a", Decl(objectLiteralErrors.ts, 10, 11), Decl(objectLiteralErrors.ts, 10, 19))
++>"a" : Symbol(a, Decl(objectLiteralErrors.ts, 10, 11), Decl(objectLiteralErrors.ts, 10, 19))
++>'a' : Symbol(a, Decl(objectLiteralErrors.ts, 10, 11), Decl(objectLiteralErrors.ts, 10, 19))
+ 
+ var e11 = { 1.0: 0, '1': 0 };
+ >e11 : Symbol(e11, Decl(objectLiteralErrors.ts, 11, 3))
+@@= skipped -35, +35 lines =@@
+ 
+ var e14 = { 0: 0, 0x0: 0 };
+ >e14 : Symbol(e14, Decl(objectLiteralErrors.ts, 14, 3), Decl(objectLiteralErrors.ts, 15, 3))
+->0 : Symbol(0, Decl(objectLiteralErrors.ts, 14, 11), Decl(objectLiteralErrors.ts, 14, 17))
+->0x0 : Symbol(0, Decl(objectLiteralErrors.ts, 14, 11), Decl(objectLiteralErrors.ts, 14, 17))
++>0 : Symbol(0, Decl(objectLiteralErrors.ts, 14, 11))
++>0x0 : Symbol(0x0, Decl(objectLiteralErrors.ts, 14, 17))
+ 
+ var e14 = { 0: 0, 0o0: 0 };
+ >e14 : Symbol(e14, Decl(objectLiteralErrors.ts, 14, 3), Decl(objectLiteralErrors.ts, 15, 3))
+->0 : Symbol(0, Decl(objectLiteralErrors.ts, 15, 11), Decl(objectLiteralErrors.ts, 15, 17))
+->0o0 : Symbol(0, Decl(objectLiteralErrors.ts, 15, 11), Decl(objectLiteralErrors.ts, 15, 17))
++>0 : Symbol(0, Decl(objectLiteralErrors.ts, 15, 11))
++>0o0 : Symbol(0o0, Decl(objectLiteralErrors.ts, 15, 17))
+ 
+ var e15 = { "100": 0, 1e2: 0 };
+ >e15 : Symbol(e15, Decl(objectLiteralErrors.ts, 16, 3))
+@@= skipped -15, +15 lines =@@
+ 
+ var e16 = { 0x20: 0, 3.2e1: 0 };
+ >e16 : Symbol(e16, Decl(objectLiteralErrors.ts, 17, 3))
+->0x20 : Symbol(0x20, Decl(objectLiteralErrors.ts, 17, 11), Decl(objectLiteralErrors.ts, 17, 20))
+->3.2e1 : Symbol(0x20, Decl(objectLiteralErrors.ts, 17, 11), Decl(objectLiteralErrors.ts, 17, 20))
++>0x20 : Symbol(0x20, Decl(objectLiteralErrors.ts, 17, 11))
++>3.2e1 : Symbol(3.2e1, Decl(objectLiteralErrors.ts, 17, 20))
+ 
+ var e17 = { a: 0, b: 1, a: 0 };
+ >e17 : Symbol(e17, Decl(objectLiteralErrors.ts, 18, 3))
+@@= skipped -38, +38 lines =@@
+ var f6 = { a: 0, get 'a'() { return 0; } };
+ >f6 : Symbol(f6, Decl(objectLiteralErrors.ts, 26, 3))
+ >a : Symbol(a, Decl(objectLiteralErrors.ts, 26, 10))
+->'a' : Symbol('a', Decl(objectLiteralErrors.ts, 26, 16))
++>'a' : Symbol(a, Decl(objectLiteralErrors.ts, 26, 16))
+ 
+ var f7 = { 'a': 0, get a() { return 0; } };
+ >f7 : Symbol(f7, Decl(objectLiteralErrors.ts, 27, 3))
+->'a' : Symbol('a', Decl(objectLiteralErrors.ts, 27, 10))
++>'a' : Symbol(a, Decl(objectLiteralErrors.ts, 27, 10))
+ >a : Symbol(a, Decl(objectLiteralErrors.ts, 27, 18))
+ 
+ var f8 = { 'a': 0, get "a"() { return 0; } };
+ >f8 : Symbol(f8, Decl(objectLiteralErrors.ts, 28, 3))
+->'a' : Symbol('a', Decl(objectLiteralErrors.ts, 28, 10))
+->"a" : Symbol("a", Decl(objectLiteralErrors.ts, 28, 18))
++>'a' : Symbol(a, Decl(objectLiteralErrors.ts, 28, 10))
++>"a" : Symbol(a, Decl(objectLiteralErrors.ts, 28, 18))
+ 
+ var f9 = { 'a': 0, get 'a'() { return 0; } };
+ >f9 : Symbol(f9, Decl(objectLiteralErrors.ts, 29, 3))
+->'a' : Symbol('a', Decl(objectLiteralErrors.ts, 29, 10))
+->'a' : Symbol('a', Decl(objectLiteralErrors.ts, 29, 18))
++>'a' : Symbol(a, Decl(objectLiteralErrors.ts, 29, 10))
++>'a' : Symbol(a, Decl(objectLiteralErrors.ts, 29, 18))
+ 
+ var f10 = { "a": 0, get 'a'() { return 0; } };
+ >f10 : Symbol(f10, Decl(objectLiteralErrors.ts, 30, 3))
+->"a" : Symbol("a", Decl(objectLiteralErrors.ts, 30, 11))
+->'a' : Symbol('a', Decl(objectLiteralErrors.ts, 30, 19))
++>"a" : Symbol(a, Decl(objectLiteralErrors.ts, 30, 11))
++>'a' : Symbol(a, Decl(objectLiteralErrors.ts, 30, 19))
+ 
+ var f11 = { 1.0: 0, get '1'() { return 0; } };
+ >f11 : Symbol(f11, Decl(objectLiteralErrors.ts, 31, 3))

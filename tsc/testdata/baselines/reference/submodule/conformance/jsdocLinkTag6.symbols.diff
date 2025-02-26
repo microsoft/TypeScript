@@ -1,0 +1,19 @@
+--- old.jsdocLinkTag6.symbols
++++ new.jsdocLinkTag6.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(a.ts, 0, 0))
+ 
+     foo() {}
+->foo : Symbol(A.foo, Decl(a.ts, 0, 9))
++>foo : Symbol(foo, Decl(a.ts, 0, 9))
+ }
+ class B extends A {
+ >B : Symbol(B, Decl(a.ts, 2, 1))
+@@= skipped -10, +10 lines =@@
+      * @override {@link A.foo}
+      */
+     foo() {}
+->foo : Symbol(B.foo, Decl(a.ts, 3, 19))
++>foo : Symbol(foo, Decl(a.ts, 3, 19))
+ }
+ 

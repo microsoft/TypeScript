@@ -1,0 +1,50 @@
+--- old.genericRestParameters2.symbols
++++ new.genericRestParameters2.symbols
+@@= skipped -79, +79 lines =@@
+ f10(t1[0], t1[1], t1[2], t1[3]);
+ >f10 : Symbol(f10, Decl(genericRestParameters2.ts, 11, 11))
+ >t1 : Symbol(t1, Decl(genericRestParameters2.ts, 0, 13))
+->0 : Symbol(0)
++>0 : Symbol("0")
+ >t1 : Symbol(t1, Decl(genericRestParameters2.ts, 0, 13))
+->1 : Symbol(1)
++>1 : Symbol("1")
+ >t1 : Symbol(t1, Decl(genericRestParameters2.ts, 0, 13))
+ >t1 : Symbol(t1, Decl(genericRestParameters2.ts, 0, 13))
+ 
+@@= skipped -39, +39 lines =@@
+ f11(t1[0], t1[1], t1[2], t1[3]);
+ >f11 : Symbol(f11, Decl(genericRestParameters2.ts, 12, 11))
+ >t1 : Symbol(t1, Decl(genericRestParameters2.ts, 0, 13))
+->0 : Symbol(0)
++>0 : Symbol("0")
+ >t1 : Symbol(t1, Decl(genericRestParameters2.ts, 0, 13))
+->1 : Symbol(1)
++>1 : Symbol("1")
+ >t1 : Symbol(t1, Decl(genericRestParameters2.ts, 0, 13))
+ >t1 : Symbol(t1, Decl(genericRestParameters2.ts, 0, 13))
+ 
+@@= skipped -39, +39 lines =@@
+ f12(t1[0], t1[1], t1[2], t1[3]);
+ >f12 : Symbol(f12, Decl(genericRestParameters2.ts, 13, 11))
+ >t1 : Symbol(t1, Decl(genericRestParameters2.ts, 0, 13))
+->0 : Symbol(0)
++>0 : Symbol("0")
+ >t1 : Symbol(t1, Decl(genericRestParameters2.ts, 0, 13))
+->1 : Symbol(1)
++>1 : Symbol("1")
+ >t1 : Symbol(t1, Decl(genericRestParameters2.ts, 0, 13))
+ >t1 : Symbol(t1, Decl(genericRestParameters2.ts, 0, 13))
+ 
+@@= skipped -39, +39 lines =@@
+ f13(t1[0], t1[1], t1[2], t1[3]);
+ >f13 : Symbol(f13, Decl(genericRestParameters2.ts, 14, 11))
+ >t1 : Symbol(t1, Decl(genericRestParameters2.ts, 0, 13))
+->0 : Symbol(0)
++>0 : Symbol("0")
+ >t1 : Symbol(t1, Decl(genericRestParameters2.ts, 0, 13))
+->1 : Symbol(1)
++>1 : Symbol("1")
+ >t1 : Symbol(t1, Decl(genericRestParameters2.ts, 0, 13))
+ >t1 : Symbol(t1, Decl(genericRestParameters2.ts, 0, 13))
+ 

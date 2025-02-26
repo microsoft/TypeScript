@@ -1,0 +1,29 @@
+--- old.declarationEmitAliasFromIndirectFile.symbols
++++ new.declarationEmitAliasFromIndirectFile.symbols
+@@= skipped -35, +35 lines =@@
+ import { Locale, CustomLocale, key as LocaleKey } from "./locale";
+ >Locale : Symbol(Locale, Decl(instance.d.ts, 0, 8))
+ >CustomLocale : Symbol(CustomLocale, Decl(instance.d.ts, 0, 16))
+->key : Symbol(LocaleKey, Decl(locale.d.ts, 11, 2))
++>key : Symbol(key, Decl(locale.d.ts, 11, 2))
+ >LocaleKey : Symbol(LocaleKey, Decl(instance.d.ts, 0, 30))
+ 
+ export interface FlatpickrFn {
+ >FlatpickrFn : Symbol(FlatpickrFn, Decl(instance.d.ts, 0, 66))
+ 
+     l10ns: {[k in LocaleKey]?: CustomLocale } & { default: Locale };
+->l10ns : Symbol(FlatpickrFn.l10ns, Decl(instance.d.ts, 1, 30))
++>l10ns : Symbol(l10ns, Decl(instance.d.ts, 1, 30))
+ >k : Symbol(k, Decl(instance.d.ts, 2, 13))
+ >LocaleKey : Symbol(LocaleKey, Decl(instance.d.ts, 0, 30))
+ >CustomLocale : Symbol(CustomLocale, Decl(instance.d.ts, 0, 16))
+@@= skipped -25, +25 lines =@@
+ >FlatpickrFn : Symbol(FlatpickrFn, Decl(app.ts, 0, 8))
+ 
+ export default fp.l10ns;
+->fp.l10ns : Symbol(FlatpickrFn.l10ns, Decl(instance.d.ts, 1, 30))
++>fp.l10ns : Symbol(l10ns, Decl(instance.d.ts, 1, 30))
+ >fp : Symbol(fp, Decl(app.ts, 1, 5))
+->l10ns : Symbol(FlatpickrFn.l10ns, Decl(instance.d.ts, 1, 30))
++>l10ns : Symbol(l10ns, Decl(instance.d.ts, 1, 30))
+ 

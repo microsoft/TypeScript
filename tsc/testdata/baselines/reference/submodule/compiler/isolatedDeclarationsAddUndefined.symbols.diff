@@ -1,0 +1,37 @@
+--- old.isolatedDeclarationsAddUndefined.symbols
++++ new.isolatedDeclarationsAddUndefined.symbols
+@@= skipped -7, +7 lines =@@
+ >Bar : Symbol(Bar, Decl(file1.ts, 0, 11))
+ 
+     c? = [2 as N] as const;
+->c : Symbol(Bar.c, Decl(file1.ts, 1, 18))
++>c : Symbol(c, Decl(file1.ts, 1, 18))
+ >N : Symbol(N, Decl(file1.ts, 0, 0))
+ >const : Symbol(const)
+ 
+     c3? = 1 as N;
+->c3 : Symbol(Bar.c3, Decl(file1.ts, 2, 27))
++>c3 : Symbol(c3, Decl(file1.ts, 2, 27))
+ >N : Symbol(N, Decl(file1.ts, 0, 0))
+ 
+     readonly r = 1;
+->r : Symbol(Bar.r, Decl(file1.ts, 3, 17))
++>r : Symbol(r, Decl(file1.ts, 3, 17))
+ 
+     f = 2;
+->f : Symbol(Bar.f, Decl(file1.ts, 4, 19))
++>f : Symbol(f, Decl(file1.ts, 4, 19))
+ }
+ 
+ === file2.ts ===
+@@= skipped -36, +36 lines =@@
+ >Bar2 : Symbol(Bar2, Decl(file2.ts, 3, 71))
+ 
+     readonly r = 1;
+->r : Symbol(Bar2.r, Decl(file2.ts, 4, 19))
++>r : Symbol(r, Decl(file2.ts, 4, 19))
+ 
+     f = 2;
+->f : Symbol(Bar2.f, Decl(file2.ts, 5, 19))
++>f : Symbol(f, Decl(file2.ts, 5, 19))
+ }

@@ -1,0 +1,100 @@
+--- old.typeGuardOfFormIsType.symbols
++++ new.typeGuardOfFormIsType.symbols
+@@= skipped -4, +4 lines =@@
+ >C1 : Symbol(C1, Decl(typeGuardOfFormIsType.ts, 0, 0))
+ 
+     p1: string;
+->p1 : Symbol(C1.p1, Decl(typeGuardOfFormIsType.ts, 0, 10))
++>p1 : Symbol(p1, Decl(typeGuardOfFormIsType.ts, 0, 10))
+ }
+ class C2 {
+ >C2 : Symbol(C2, Decl(typeGuardOfFormIsType.ts, 2, 1))
+ 
+     p2: number;
+->p2 : Symbol(C2.p2, Decl(typeGuardOfFormIsType.ts, 3, 10))
++>p2 : Symbol(p2, Decl(typeGuardOfFormIsType.ts, 3, 10))
+ }
+ class D1 extends C1 {
+ >D1 : Symbol(D1, Decl(typeGuardOfFormIsType.ts, 5, 1))
+ >C1 : Symbol(C1, Decl(typeGuardOfFormIsType.ts, 0, 0))
+ 
+     p3: number;
+->p3 : Symbol(D1.p3, Decl(typeGuardOfFormIsType.ts, 6, 21))
++>p3 : Symbol(p3, Decl(typeGuardOfFormIsType.ts, 6, 21))
+ }
+ var str: string;
+ >str : Symbol(str, Decl(typeGuardOfFormIsType.ts, 9, 3))
+@@= skipped -60, +60 lines =@@
+ >str : Symbol(str, Decl(typeGuardOfFormIsType.ts, 9, 3))
+ >isC1 : Symbol(isC1, Decl(typeGuardOfFormIsType.ts, 11, 30))
+ >c1Orc2 : Symbol(c1Orc2, Decl(typeGuardOfFormIsType.ts, 25, 3))
+->c1Orc2.p1 : Symbol(C1.p1, Decl(typeGuardOfFormIsType.ts, 0, 10))
++>c1Orc2.p1 : Symbol(p1, Decl(typeGuardOfFormIsType.ts, 0, 10))
+ >c1Orc2 : Symbol(c1Orc2, Decl(typeGuardOfFormIsType.ts, 25, 3))
+->p1 : Symbol(C1.p1, Decl(typeGuardOfFormIsType.ts, 0, 10))
++>p1 : Symbol(p1, Decl(typeGuardOfFormIsType.ts, 0, 10))
+ 
+ num = isC2(c1Orc2) && c1Orc2.p2; // C2
+ >num : Symbol(num, Decl(typeGuardOfFormIsType.ts, 10, 3))
+ >isC2 : Symbol(isC2, Decl(typeGuardOfFormIsType.ts, 15, 1))
+ >c1Orc2 : Symbol(c1Orc2, Decl(typeGuardOfFormIsType.ts, 25, 3))
+->c1Orc2.p2 : Symbol(C2.p2, Decl(typeGuardOfFormIsType.ts, 3, 10))
++>c1Orc2.p2 : Symbol(p2, Decl(typeGuardOfFormIsType.ts, 3, 10))
+ >c1Orc2 : Symbol(c1Orc2, Decl(typeGuardOfFormIsType.ts, 25, 3))
+->p2 : Symbol(C2.p2, Decl(typeGuardOfFormIsType.ts, 3, 10))
++>p2 : Symbol(p2, Decl(typeGuardOfFormIsType.ts, 3, 10))
+ 
+ str = isD1(c1Orc2) && c1Orc2.p1; // D1
+ >str : Symbol(str, Decl(typeGuardOfFormIsType.ts, 9, 3))
+ >isD1 : Symbol(isD1, Decl(typeGuardOfFormIsType.ts, 19, 1))
+ >c1Orc2 : Symbol(c1Orc2, Decl(typeGuardOfFormIsType.ts, 25, 3))
+->c1Orc2.p1 : Symbol(C1.p1, Decl(typeGuardOfFormIsType.ts, 0, 10))
++>c1Orc2.p1 : Symbol(p1, Decl(typeGuardOfFormIsType.ts, 0, 10))
+ >c1Orc2 : Symbol(c1Orc2, Decl(typeGuardOfFormIsType.ts, 25, 3))
+->p1 : Symbol(C1.p1, Decl(typeGuardOfFormIsType.ts, 0, 10))
++>p1 : Symbol(p1, Decl(typeGuardOfFormIsType.ts, 0, 10))
+ 
+ num = isD1(c1Orc2) && c1Orc2.p3; // D1
+ >num : Symbol(num, Decl(typeGuardOfFormIsType.ts, 10, 3))
+ >isD1 : Symbol(isD1, Decl(typeGuardOfFormIsType.ts, 19, 1))
+ >c1Orc2 : Symbol(c1Orc2, Decl(typeGuardOfFormIsType.ts, 25, 3))
+->c1Orc2.p3 : Symbol(D1.p3, Decl(typeGuardOfFormIsType.ts, 6, 21))
++>c1Orc2.p3 : Symbol(p3, Decl(typeGuardOfFormIsType.ts, 6, 21))
+ >c1Orc2 : Symbol(c1Orc2, Decl(typeGuardOfFormIsType.ts, 25, 3))
+->p3 : Symbol(D1.p3, Decl(typeGuardOfFormIsType.ts, 6, 21))
++>p3 : Symbol(p3, Decl(typeGuardOfFormIsType.ts, 6, 21))
+ 
+ var c2Ord1: C2 | D1;
+ >c2Ord1 : Symbol(c2Ord1, Decl(typeGuardOfFormIsType.ts, 31, 3))
+@@= skipped -37, +37 lines =@@
+ >num : Symbol(num, Decl(typeGuardOfFormIsType.ts, 10, 3))
+ >isC2 : Symbol(isC2, Decl(typeGuardOfFormIsType.ts, 15, 1))
+ >c2Ord1 : Symbol(c2Ord1, Decl(typeGuardOfFormIsType.ts, 31, 3))
+->c2Ord1.p2 : Symbol(C2.p2, Decl(typeGuardOfFormIsType.ts, 3, 10))
++>c2Ord1.p2 : Symbol(p2, Decl(typeGuardOfFormIsType.ts, 3, 10))
+ >c2Ord1 : Symbol(c2Ord1, Decl(typeGuardOfFormIsType.ts, 31, 3))
+->p2 : Symbol(C2.p2, Decl(typeGuardOfFormIsType.ts, 3, 10))
++>p2 : Symbol(p2, Decl(typeGuardOfFormIsType.ts, 3, 10))
+ 
+ num = isD1(c2Ord1) && c2Ord1.p3; // D1
+ >num : Symbol(num, Decl(typeGuardOfFormIsType.ts, 10, 3))
+ >isD1 : Symbol(isD1, Decl(typeGuardOfFormIsType.ts, 19, 1))
+ >c2Ord1 : Symbol(c2Ord1, Decl(typeGuardOfFormIsType.ts, 31, 3))
+->c2Ord1.p3 : Symbol(D1.p3, Decl(typeGuardOfFormIsType.ts, 6, 21))
++>c2Ord1.p3 : Symbol(p3, Decl(typeGuardOfFormIsType.ts, 6, 21))
+ >c2Ord1 : Symbol(c2Ord1, Decl(typeGuardOfFormIsType.ts, 31, 3))
+->p3 : Symbol(D1.p3, Decl(typeGuardOfFormIsType.ts, 6, 21))
++>p3 : Symbol(p3, Decl(typeGuardOfFormIsType.ts, 6, 21))
+ 
+ str = isD1(c2Ord1) && c2Ord1.p1; // D1
+ >str : Symbol(str, Decl(typeGuardOfFormIsType.ts, 9, 3))
+ >isD1 : Symbol(isD1, Decl(typeGuardOfFormIsType.ts, 19, 1))
+ >c2Ord1 : Symbol(c2Ord1, Decl(typeGuardOfFormIsType.ts, 31, 3))
+->c2Ord1.p1 : Symbol(C1.p1, Decl(typeGuardOfFormIsType.ts, 0, 10))
++>c2Ord1.p1 : Symbol(p1, Decl(typeGuardOfFormIsType.ts, 0, 10))
+ >c2Ord1 : Symbol(c2Ord1, Decl(typeGuardOfFormIsType.ts, 31, 3))
+->p1 : Symbol(C1.p1, Decl(typeGuardOfFormIsType.ts, 0, 10))
++>p1 : Symbol(p1, Decl(typeGuardOfFormIsType.ts, 0, 10))
+ 
+ var r2: C2 | D1 = isC1(c2Ord1) && c2Ord1; // C2 | D1
+ >r2 : Symbol(r2, Decl(typeGuardOfFormIsType.ts, 35, 3))

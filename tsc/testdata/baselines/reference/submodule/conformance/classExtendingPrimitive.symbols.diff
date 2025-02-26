@@ -1,0 +1,11 @@
+--- old.classExtendingPrimitive.symbols
++++ new.classExtendingPrimitive.symbols
+@@= skipped -32, +32 lines =@@
+ 
+ enum E { A }
+ >E : Symbol(E, Decl(classExtendingPrimitive.ts, 10, 30))
+->A : Symbol(E.A, Decl(classExtendingPrimitive.ts, 12, 8))
++>A : Symbol(A, Decl(classExtendingPrimitive.ts, 12, 8))
+ 
+ class C8 extends E { }
+ >C8 : Symbol(C8, Decl(classExtendingPrimitive.ts, 12, 12))

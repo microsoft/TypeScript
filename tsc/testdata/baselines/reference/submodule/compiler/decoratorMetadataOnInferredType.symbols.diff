@@ -1,0 +1,11 @@
+--- old.decoratorMetadataOnInferredType.symbols
++++ new.decoratorMetadataOnInferredType.symbols
+@@= skipped -32, +32 lines =@@
+ >decorator : Symbol(decorator, Decl(decoratorMetadataOnInferredType.ts, 6, 1))
+ 
+     x = new A();
+->x : Symbol(B.x, Decl(decoratorMetadataOnInferredType.ts, 11, 16))
++>x : Symbol(x, Decl(decoratorMetadataOnInferredType.ts, 11, 16))
+ >A : Symbol(A, Decl(decoratorMetadataOnInferredType.ts, 2, 2))
+ }
+ 

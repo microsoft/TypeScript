@@ -1,0 +1,149 @@
+//// [tests/cases/conformance/salsa/typeFromParamTagForFunction.ts] ////
+
+=== node.d.ts ===
+declare function require(id: string): any;
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+>id : Symbol(id, Decl(node.d.ts, 0, 25))
+
+declare var module: any, exports: any;
+>module : Symbol(module, Decl(node.d.ts, 1, 11))
+>exports : Symbol(exports, Decl(node.d.ts, 1, 24))
+
+=== a-ext.js ===
+exports.A = function () {
+>exports : Symbol(exports, Decl(node.d.ts, 1, 24))
+
+    this.x = 1;
+};
+
+=== a.js ===
+const { A } = require("./a-ext");
+>A : Symbol(A, Decl(a.js, 0, 7))
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+
+/** @param {A} p */
+function a(p) { p.x; }
+>a : Symbol(a, Decl(a.js, 0, 33))
+>p : Symbol(p, Decl(a.js, 3, 11))
+>p : Symbol(p, Decl(a.js, 3, 11))
+
+=== b-ext.js ===
+exports.B = class {
+>exports : Symbol(exports, Decl(node.d.ts, 1, 24))
+
+    constructor() {
+        this.x = 1;
+>this : Symbol(B, Decl(b-ext.js, 0, 11))
+    }
+};
+
+=== b.js ===
+const { B } = require("./b-ext");
+>B : Symbol(B, Decl(b.js, 0, 7))
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+
+/** @param {B} p */
+function b(p) { p.x; }
+>b : Symbol(b, Decl(b.js, 0, 33))
+>p : Symbol(p, Decl(b.js, 3, 11))
+>p : Symbol(p, Decl(b.js, 3, 11))
+
+=== c-ext.js ===
+export function C() {
+>C : Symbol(C, Decl(c-ext.js, 0, 0))
+
+    this.x = 1;
+}
+
+=== c.js ===
+const { C } = require("./c-ext");
+>C : Symbol(C, Decl(c.js, 0, 7))
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+
+/** @param {C} p */
+function c(p) { p.x; }
+>c : Symbol(c, Decl(c.js, 0, 33))
+>p : Symbol(p, Decl(c.js, 3, 11))
+>p : Symbol(p, Decl(c.js, 3, 11))
+
+=== d-ext.js ===
+export var D = function() {
+>D : Symbol(D, Decl(d-ext.js, 0, 10))
+
+    this.x = 1;
+};
+
+=== d.js ===
+const { D } = require("./d-ext");
+>D : Symbol(D, Decl(d.js, 0, 7))
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+
+/** @param {D} p */
+function d(p) { p.x; }
+>d : Symbol(d, Decl(d.js, 0, 33))
+>p : Symbol(p, Decl(d.js, 3, 11))
+>p : Symbol(p, Decl(d.js, 3, 11))
+
+=== e-ext.js ===
+export class E {
+>E : Symbol(E, Decl(e-ext.js, 0, 0))
+
+    constructor() {
+        this.x = 1;
+>this : Symbol(E, Decl(e-ext.js, 0, 0))
+    }
+}
+
+=== e.js ===
+const { E } = require("./e-ext");
+>E : Symbol(E, Decl(e.js, 0, 7))
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+
+/** @param {E} p */
+function e(p) { p.x; }
+>e : Symbol(e, Decl(e.js, 0, 33))
+>p : Symbol(p, Decl(e.js, 3, 11))
+>p : Symbol(p, Decl(e.js, 3, 11))
+
+=== f.js ===
+var F = function () {
+>F : Symbol(F, Decl(f.js, 0, 3))
+
+    this.x = 1;
+};
+
+/** @param {F} p */
+function f(p) { p.x; }
+>f : Symbol(f, Decl(f.js, 2, 2))
+>p : Symbol(p, Decl(f.js, 5, 11))
+>p : Symbol(p, Decl(f.js, 5, 11))
+
+=== g.js ===
+function G() {
+>G : Symbol(G, Decl(g.js, 0, 0))
+
+    this.x = 1;
+}
+
+/** @param {G} p */
+function g(p) { p.x; }
+>g : Symbol(g, Decl(g.js, 2, 1))
+>p : Symbol(p, Decl(g.js, 5, 11))
+>p : Symbol(p, Decl(g.js, 5, 11))
+
+=== h.js ===
+class H {
+>H : Symbol(H, Decl(h.js, 0, 0))
+
+    constructor() {
+        this.x = 1;
+>this : Symbol(H, Decl(h.js, 0, 0))
+    }
+}
+
+/** @param {H} p */
+function h(p) { p.x; }
+>h : Symbol(h, Decl(h.js, 4, 1))
+>p : Symbol(p, Decl(h.js, 7, 11))
+>p : Symbol(p, Decl(h.js, 7, 11))
+

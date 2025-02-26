@@ -1,0 +1,21 @@
+--- old.parserExportAsFunctionIdentifier.symbols
++++ new.parserExportAsFunctionIdentifier.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(parserExportAsFunctionIdentifier.ts, 0, 0))
+ 
+        export(): string;
+->export : Symbol(Foo.export, Decl(parserExportAsFunctionIdentifier.ts, 0, 15))
++>export : Symbol(export, Decl(parserExportAsFunctionIdentifier.ts, 0, 15))
+ }
+ 
+ var f: Foo;
+@@= skipped -9, +9 lines =@@
+ 
+ var x = f.export();
+ >x : Symbol(x, Decl(parserExportAsFunctionIdentifier.ts, 5, 3))
+->f.export : Symbol(Foo.export, Decl(parserExportAsFunctionIdentifier.ts, 0, 15))
++>f.export : Symbol(export, Decl(parserExportAsFunctionIdentifier.ts, 0, 15))
+ >f : Symbol(f, Decl(parserExportAsFunctionIdentifier.ts, 4, 3))
+->export : Symbol(Foo.export, Decl(parserExportAsFunctionIdentifier.ts, 0, 15))
++>export : Symbol(export, Decl(parserExportAsFunctionIdentifier.ts, 0, 15))
+ 

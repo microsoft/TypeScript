@@ -1,0 +1,11 @@
+--- old.tsxExternalModuleEmit2.symbols
++++ new.tsxExternalModuleEmit2.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === modules.d.ts ===
+ declare module 'mod' {
+->'mod' : Symbol("mod", Decl(modules.d.ts, 0, 0))
++>'mod' : Symbol('mod', Decl(modules.d.ts, 0, 0))
+ 
+   var y: any;
+ >y : Symbol(y, Decl(modules.d.ts, 1, 5))

@@ -1,0 +1,15 @@
+--- old.doubleUnderscoreMappedTypes.symbols
++++ new.doubleUnderscoreMappedTypes.symbols
+@@= skipped -4, +4 lines =@@
+ >Properties : Symbol(Properties, Decl(doubleUnderscoreMappedTypes.ts, 0, 0))
+ 
+     property1: string;
+->property1 : Symbol(Properties.property1, Decl(doubleUnderscoreMappedTypes.ts, 0, 22))
++>property1 : Symbol(property1, Decl(doubleUnderscoreMappedTypes.ts, 0, 22))
+ 
+     __property2: string;
+->__property2 : Symbol(Properties.__property2, Decl(doubleUnderscoreMappedTypes.ts, 1, 22))
++>__property2 : Symbol(__property2, Decl(doubleUnderscoreMappedTypes.ts, 1, 22))
+ }
+ 
+ // As expected, I can make an object satisfying this interface

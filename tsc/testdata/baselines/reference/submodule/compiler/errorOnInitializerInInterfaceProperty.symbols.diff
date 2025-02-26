@@ -1,0 +1,10 @@
+--- old.errorOnInitializerInInterfaceProperty.symbols
++++ new.errorOnInitializerInInterfaceProperty.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(errorOnInitializerInInterfaceProperty.ts, 0, 0))
+ 
+     bar: number = 5;
+->bar : Symbol(Foo.bar, Decl(errorOnInitializerInInterfaceProperty.ts, 0, 15))
++>bar : Symbol(bar, Decl(errorOnInitializerInInterfaceProperty.ts, 0, 15))
+ }
+ 

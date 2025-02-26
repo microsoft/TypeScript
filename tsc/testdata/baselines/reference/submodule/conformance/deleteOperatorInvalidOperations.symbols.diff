@@ -1,0 +1,11 @@
+--- old.deleteOperatorInvalidOperations.symbols
++++ new.deleteOperatorInvalidOperations.symbols
+@@= skipped -18, +18 lines =@@
+ >testADelx : Symbol(testADelx, Decl(deleteOperatorInvalidOperations.ts, 7, 23))
+ 
+     constructor(public s: () => {}) {
+->s : Symbol(testADelx.s, Decl(deleteOperatorInvalidOperations.ts, 11, 16))
++>s : Symbol(s, Decl(deleteOperatorInvalidOperations.ts, 11, 16))
+ 
+         delete s;      //expect error
+ >s : Symbol(s, Decl(deleteOperatorInvalidOperations.ts, 11, 16))

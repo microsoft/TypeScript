@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts] ////
+
+=== parser0_004152.ts ===
+export class Game {
+>Game : Symbol(Game, Decl(parser0_004152.ts, 0, 0))
+
+    private position = new DisplayPosition([), 3, 3, 3, 3, 3, 0, 3, 3, 3, 3, 3, 3, 0], NoMove, 0);
+>position : Symbol(position, Decl(parser0_004152.ts, 0, 19))
+>3 : Symbol(3, Decl(parser0_004152.ts, 1, 46), Decl(parser0_004152.ts, 1, 49), Decl(parser0_004152.ts, 1, 52), Decl(parser0_004152.ts, 1, 55), Decl(parser0_004152.ts, 1, 58) ... and 6 more)
+>3 : Symbol(3, Decl(parser0_004152.ts, 1, 46), Decl(parser0_004152.ts, 1, 49), Decl(parser0_004152.ts, 1, 52), Decl(parser0_004152.ts, 1, 55), Decl(parser0_004152.ts, 1, 58) ... and 6 more)
+>3 : Symbol(3, Decl(parser0_004152.ts, 1, 46), Decl(parser0_004152.ts, 1, 49), Decl(parser0_004152.ts, 1, 52), Decl(parser0_004152.ts, 1, 55), Decl(parser0_004152.ts, 1, 58) ... and 6 more)
+>3 : Symbol(3, Decl(parser0_004152.ts, 1, 46), Decl(parser0_004152.ts, 1, 49), Decl(parser0_004152.ts, 1, 52), Decl(parser0_004152.ts, 1, 55), Decl(parser0_004152.ts, 1, 58) ... and 6 more)
+>3 : Symbol(3, Decl(parser0_004152.ts, 1, 46), Decl(parser0_004152.ts, 1, 49), Decl(parser0_004152.ts, 1, 52), Decl(parser0_004152.ts, 1, 55), Decl(parser0_004152.ts, 1, 58) ... and 6 more)
+>0 : Symbol(0, Decl(parser0_004152.ts, 1, 61), Decl(parser0_004152.ts, 1, 82), Decl(parser0_004152.ts, 1, 94))
+>3 : Symbol(3, Decl(parser0_004152.ts, 1, 46), Decl(parser0_004152.ts, 1, 49), Decl(parser0_004152.ts, 1, 52), Decl(parser0_004152.ts, 1, 55), Decl(parser0_004152.ts, 1, 58) ... and 6 more)
+>3 : Symbol(3, Decl(parser0_004152.ts, 1, 46), Decl(parser0_004152.ts, 1, 49), Decl(parser0_004152.ts, 1, 52), Decl(parser0_004152.ts, 1, 55), Decl(parser0_004152.ts, 1, 58) ... and 6 more)
+>3 : Symbol(3, Decl(parser0_004152.ts, 1, 46), Decl(parser0_004152.ts, 1, 49), Decl(parser0_004152.ts, 1, 52), Decl(parser0_004152.ts, 1, 55), Decl(parser0_004152.ts, 1, 58) ... and 6 more)
+>3 : Symbol(3, Decl(parser0_004152.ts, 1, 46), Decl(parser0_004152.ts, 1, 49), Decl(parser0_004152.ts, 1, 52), Decl(parser0_004152.ts, 1, 55), Decl(parser0_004152.ts, 1, 58) ... and 6 more)
+>3 : Symbol(3, Decl(parser0_004152.ts, 1, 46), Decl(parser0_004152.ts, 1, 49), Decl(parser0_004152.ts, 1, 52), Decl(parser0_004152.ts, 1, 55), Decl(parser0_004152.ts, 1, 58) ... and 6 more)
+>3 : Symbol(3, Decl(parser0_004152.ts, 1, 46), Decl(parser0_004152.ts, 1, 49), Decl(parser0_004152.ts, 1, 52), Decl(parser0_004152.ts, 1, 55), Decl(parser0_004152.ts, 1, 58) ... and 6 more)
+>0 : Symbol(0, Decl(parser0_004152.ts, 1, 61), Decl(parser0_004152.ts, 1, 82), Decl(parser0_004152.ts, 1, 94))
+>NoMove : Symbol(NoMove, Decl(parser0_004152.ts, 1, 86))
+>0 : Symbol(0, Decl(parser0_004152.ts, 1, 61), Decl(parser0_004152.ts, 1, 82), Decl(parser0_004152.ts, 1, 94))
+
+    private prevConfig: SeedCoords[][];
+>prevConfig : Symbol(prevConfig, Decl(parser0_004152.ts, 1, 98))
+>SeedCoords : Symbol(SeedCoords)
+}

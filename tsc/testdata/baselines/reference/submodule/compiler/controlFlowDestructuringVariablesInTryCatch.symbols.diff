@@ -1,0 +1,14 @@
+--- old.controlFlowDestructuringVariablesInTryCatch.symbols
++++ new.controlFlowDestructuringVariablesInTryCatch.symbols
+@@= skipped -31, +31 lines =@@
+ 
+ } catch {
+     console.error("error");
+->console.error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
++>console.error : Symbol(error, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
++>error : Symbol(error, Decl(lib.dom.d.ts, --, --))
+ }
+ 
+ a;

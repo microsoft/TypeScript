@@ -1,0 +1,55 @@
+--- old.declFileTypeAnnotationVisibilityErrorTypeLiteral.symbols
++++ new.declFileTypeAnnotationVisibilityErrorTypeLiteral.symbols
+@@= skipped -24, +24 lines =@@
+         y: m2.public1;
+ >y : Symbol(y, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 9, 20))
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 2, 5))
+->public1 : Symbol(m2.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
++>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
+ 
+         (): m2.public1[];
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 2, 5))
+->public1 : Symbol(m2.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
++>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
+ 
+         method(): private1;
+ >method : Symbol(method, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 11, 25))
+@@= skipped -17, +17 lines =@@
+         [s: string]: m2.public1;
+ >s : Symbol(s, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 14, 9))
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 2, 5))
+->public1 : Symbol(m2.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
++>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
+ 
+     };
+     export var x2 = {
+@@= skipped -12, +12 lines =@@
+ 
+         y: new m2.public1(),
+ >y : Symbol(y, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 17, 26))
+->m2.public1 : Symbol(m2.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
++>m2.public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 2, 5))
+->public1 : Symbol(m2.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
++>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
+ 
+         method() {
+ >method : Symbol(method, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 18, 28))
+@@= skipped -21, +21 lines =@@
+ >a : Symbol(a, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 26, 19))
+ >private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 0, 10))
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 2, 5))
+->public1 : Symbol(m2.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
++>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
+ 
+     export var y2 = y;
+ >y2 : Symbol(y2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 27, 14))
+@@= skipped -12, +12 lines =@@
+ >a : Symbol(a, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 30, 23))
+ >private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 0, 10))
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 2, 5))
+->public1 : Symbol(m2.public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
++>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 3, 15))
+ 
+     export var z2 = z;
+ >z2 : Symbol(z2, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 31, 14))

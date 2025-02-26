@@ -1,0 +1,20 @@
+--- old.templateInsideCallback.symbols
++++ new.templateInsideCallback.symbols
+@@= skipped -62, +62 lines =@@
+   for (let i = 0; i < array.length; i += 1) {
+ >i : Symbol(i, Decl(templateInsideCallback.js, 49, 10))
+ >i : Symbol(i, Decl(templateInsideCallback.js, 49, 10))
+->array.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >array : Symbol(array, Decl(templateInsideCallback.js, 46, 17))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >i : Symbol(i, Decl(templateInsideCallback.js, 49, 10))
+ 
+     result.push(.../** @type {unknown[]} */(iterable(array[i])));
+->result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>result.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >result : Symbol(result, Decl(templateInsideCallback.js, 48, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >iterable : Symbol(iterable, Decl(templateInsideCallback.js, 46, 23))
+ >array : Symbol(array, Decl(templateInsideCallback.js, 46, 17))
+ >i : Symbol(i, Decl(templateInsideCallback.js, 49, 10))

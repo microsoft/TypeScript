@@ -1,0 +1,48 @@
+--- old.genericsWithoutTypeParameters1.symbols
++++ new.genericsWithoutTypeParameters1.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(genericsWithoutTypeParameters1.ts, 0, 8))
+ 
+     foo(): T { return null }
+->foo : Symbol(C.foo, Decl(genericsWithoutTypeParameters1.ts, 0, 12))
++>foo : Symbol(foo, Decl(genericsWithoutTypeParameters1.ts, 0, 12))
+ >T : Symbol(T, Decl(genericsWithoutTypeParameters1.ts, 0, 8))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(genericsWithoutTypeParameters1.ts, 4, 12))
+ 
+     bar(): T;
+->bar : Symbol(I.bar, Decl(genericsWithoutTypeParameters1.ts, 4, 16))
++>bar : Symbol(bar, Decl(genericsWithoutTypeParameters1.ts, 4, 16))
+ >T : Symbol(T, Decl(genericsWithoutTypeParameters1.ts, 4, 12))
+ }
+ 
+@@= skipped -57, +57 lines =@@
+ >T : Symbol(T, Decl(genericsWithoutTypeParameters1.ts, 19, 8))
+ 
+     x: C;
+->x : Symbol(D.x, Decl(genericsWithoutTypeParameters1.ts, 19, 12))
++>x : Symbol(x, Decl(genericsWithoutTypeParameters1.ts, 19, 12))
+ >C : Symbol(C, Decl(genericsWithoutTypeParameters1.ts, 0, 0))
+ 
+     y: D;
+->y : Symbol(D.y, Decl(genericsWithoutTypeParameters1.ts, 20, 9))
++>y : Symbol(y, Decl(genericsWithoutTypeParameters1.ts, 20, 9))
+ >D : Symbol(D, Decl(genericsWithoutTypeParameters1.ts, 17, 49))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(genericsWithoutTypeParameters1.ts, 24, 12))
+ 
+     x: I;
+->x : Symbol(J.x, Decl(genericsWithoutTypeParameters1.ts, 24, 16))
++>x : Symbol(x, Decl(genericsWithoutTypeParameters1.ts, 24, 16))
+ >I : Symbol(I, Decl(genericsWithoutTypeParameters1.ts, 2, 1))
+ 
+     y: J;
+->y : Symbol(J.y, Decl(genericsWithoutTypeParameters1.ts, 25, 9))
++>y : Symbol(y, Decl(genericsWithoutTypeParameters1.ts, 25, 9))
+ >J : Symbol(J, Decl(genericsWithoutTypeParameters1.ts, 22, 1))
+ }
+ 

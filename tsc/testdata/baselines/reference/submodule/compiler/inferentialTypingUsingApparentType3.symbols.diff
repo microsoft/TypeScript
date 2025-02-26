@@ -1,0 +1,49 @@
+--- old.inferentialTypingUsingApparentType3.symbols
++++ new.inferentialTypingUsingApparentType3.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(inferentialTypingUsingApparentType3.ts, 0, 16))
+ 
+     clean(input: T): T
+->clean : Symbol(Field.clean, Decl(inferentialTypingUsingApparentType3.ts, 0, 20))
++>clean : Symbol(clean, Decl(inferentialTypingUsingApparentType3.ts, 0, 20))
+ >input : Symbol(input, Decl(inferentialTypingUsingApparentType3.ts, 1, 10))
+ >T : Symbol(T, Decl(inferentialTypingUsingApparentType3.ts, 0, 16))
+ >T : Symbol(T, Decl(inferentialTypingUsingApparentType3.ts, 0, 16))
+@@= skipped -11, +11 lines =@@
+ >Field : Symbol(Field, Decl(inferentialTypingUsingApparentType3.ts, 0, 0))
+ 
+     clean(input: string) {
+->clean : Symbol(CharField.clean, Decl(inferentialTypingUsingApparentType3.ts, 4, 42))
++>clean : Symbol(clean, Decl(inferentialTypingUsingApparentType3.ts, 4, 42))
+ >input : Symbol(input, Decl(inferentialTypingUsingApparentType3.ts, 5, 10))
+ 
+         return "Yup";
+@@= skipped -12, +12 lines =@@
+ >Field : Symbol(Field, Decl(inferentialTypingUsingApparentType3.ts, 0, 0))
+ 
+     clean(input: number) {
+->clean : Symbol(NumberField.clean, Decl(inferentialTypingUsingApparentType3.ts, 10, 44))
++>clean : Symbol(clean, Decl(inferentialTypingUsingApparentType3.ts, 10, 44))
+ >input : Symbol(input, Decl(inferentialTypingUsingApparentType3.ts, 11, 10))
+ 
+         return 123;
+@@= skipped -15, +15 lines =@@
+ >Field : Symbol(Field, Decl(inferentialTypingUsingApparentType3.ts, 0, 0))
+ 
+     constructor(public fields: T) { }
+->fields : Symbol(ObjectField.fields, Decl(inferentialTypingUsingApparentType3.ts, 17, 16))
++>fields : Symbol(fields, Decl(inferentialTypingUsingApparentType3.ts, 17, 16))
+ >T : Symbol(T, Decl(inferentialTypingUsingApparentType3.ts, 16, 20))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ 
+ person.fields.id;
+ >person.fields.id : Symbol(id, Decl(inferentialTypingUsingApparentType3.ts, 20, 30))
+->person.fields : Symbol(ObjectField.fields, Decl(inferentialTypingUsingApparentType3.ts, 17, 16))
++>person.fields : Symbol(fields, Decl(inferentialTypingUsingApparentType3.ts, 17, 16))
+ >person : Symbol(person, Decl(inferentialTypingUsingApparentType3.ts, 20, 3))
+->fields : Symbol(ObjectField.fields, Decl(inferentialTypingUsingApparentType3.ts, 17, 16))
++>fields : Symbol(fields, Decl(inferentialTypingUsingApparentType3.ts, 17, 16))
+ >id : Symbol(id, Decl(inferentialTypingUsingApparentType3.ts, 20, 30))
+ 

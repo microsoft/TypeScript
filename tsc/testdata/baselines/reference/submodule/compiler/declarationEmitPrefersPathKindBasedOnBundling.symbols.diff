@@ -1,0 +1,11 @@
+--- old.declarationEmitPrefersPathKindBasedOnBundling.symbols
++++ new.declarationEmitPrefersPathKindBasedOnBundling.symbols
+@@= skipped -5, +5 lines =@@
+ 
+ 	(): string;
+ 	value: number;
+->value : Symbol(Scalar.value, Decl(scalar.ts, 1, 12))
++>value : Symbol(value, Decl(scalar.ts, 1, 12))
+ }
+ 
+ export function scalar(value: string): Scalar {

@@ -1,0 +1,31 @@
+--- old.override_js3.symbols
++++ new.override_js3.symbols
+@@= skipped -4, +4 lines =@@
+ >B : Symbol(B, Decl(a.js, 0, 0))
+ 
+     foo (v) {}
+->foo : Symbol(B.foo, Decl(a.js, 0, 9))
++>foo : Symbol(foo, Decl(a.js, 0, 9))
+ >v : Symbol(v, Decl(a.js, 1, 9))
+ 
+     fooo (v) {}
+->fooo : Symbol(B.fooo, Decl(a.js, 1, 14))
++>fooo : Symbol(fooo, Decl(a.js, 1, 14))
+ >v : Symbol(v, Decl(a.js, 2, 10))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >B : Symbol(B, Decl(a.js, 0, 0))
+ 
+     override foo (v) {}
+->foo : Symbol(D.foo, Decl(a.js, 5, 19))
++>foo : Symbol(foo, Decl(a.js, 5, 19))
+ >v : Symbol(v, Decl(a.js, 6, 18))
+ 
+     /** @override */
+     fooo (v) {}
+->fooo : Symbol(D.fooo, Decl(a.js, 6, 23))
++>fooo : Symbol(fooo, Decl(a.js, 6, 23))
+ >v : Symbol(v, Decl(a.js, 8, 10))
+ }
+ 

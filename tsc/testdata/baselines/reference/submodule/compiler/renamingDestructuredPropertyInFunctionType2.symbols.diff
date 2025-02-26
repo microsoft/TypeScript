@@ -1,0 +1,16 @@
+--- old.renamingDestructuredPropertyInFunctionType2.symbols
++++ new.renamingDestructuredPropertyInFunctionType2.symbols
+@@= skipped -128, +128 lines =@@
+ >I : Symbol(I, Decl(a.d.ts, 19, 30))
+ 
+   method1(arg: number): any; 
+->method1 : Symbol(I.method1, Decl(a.d.ts, 21, 13))
++>method1 : Symbol(method1, Decl(a.d.ts, 21, 13))
+ >arg : Symbol(arg, Decl(a.d.ts, 22, 10))
+ 
+   method2({ a: string }): any; 
+->method2 : Symbol(I.method2, Decl(a.d.ts, 22, 28))
++>method2 : Symbol(method2, Decl(a.d.ts, 22, 28))
+ >a : Symbol(a)
+ >string : Symbol(string, Decl(a.d.ts, 23, 11))
+ 

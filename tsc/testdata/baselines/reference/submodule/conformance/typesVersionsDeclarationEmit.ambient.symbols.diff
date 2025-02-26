@@ -1,0 +1,16 @@
+--- old.typesVersionsDeclarationEmit.ambient.symbols
++++ new.typesVersionsDeclarationEmit.ambient.symbols
+@@= skipped -14, +14 lines =@@
+ >vb : Symbol(vb, Decl(main.ts, 4, 12))
+ >fb : Symbol(fb, Decl(main.ts, 1, 8))
+ 
+-=== node_modules/ext/ts3.1/index.d.ts ===
++=== node_modules/ext/index.d.ts ===
+ declare module "ext" {
+ >"ext" : Symbol("ext", Decl(index.d.ts, 0, 0))
+ 
+@@= skipped -21, +21 lines =@@
+ >fb : Symbol(fb, Decl(index.d.ts, 5, 25))
+ >B : Symbol(B, Decl(index.d.ts, 4, 28))
+ }
+-

@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/requireOfJsonFileInJsFile.ts] ////
+
+=== /user.js ===
+const json0 = require("./json.json");
+>json0 : Symbol(json0, Decl(user.js, 0, 5))
+
+json0.b; // Error (good)
+>json0 : Symbol(json0, Decl(user.js, 0, 5))
+
+/** @type {{ b: number }} */
+const json1 = require("./json.json"); // No error (bad)
+>json1 : Symbol(json1, Decl(user.js, 4, 5))
+
+json1.b; // No error (OK since that's the type annotation)
+>json1 : Symbol(json1, Decl(user.js, 4, 5))
+
+const js0 = require("./js.js");
+>js0 : Symbol(js0, Decl(user.js, 7, 5))
+
+json0.b; // Error (good)
+>json0 : Symbol(json0, Decl(user.js, 0, 5))
+
+/** @type {{ b: number }} */
+const js1 = require("./js.js"); // Error (good)
+>js1 : Symbol(js1, Decl(user.js, 11, 5))
+
+js1.b;
+>js1 : Symbol(js1, Decl(user.js, 11, 5))
+

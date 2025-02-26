@@ -1,0 +1,11 @@
+--- old.badArraySyntax.symbols
++++ new.badArraySyntax.symbols
+@@= skipped -4, +4 lines =@@
+ >Z : Symbol(Z, Decl(badArraySyntax.ts, 0, 0))
+ 
+  public x = "";
+->x : Symbol(Z.x, Decl(badArraySyntax.ts, 0, 9))
++>x : Symbol(x, Decl(badArraySyntax.ts, 0, 9))
+ }
+ 
+ var a1: Z[] = [];

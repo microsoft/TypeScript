@@ -1,0 +1,9 @@
+--- old.typeFromPropertyAssignment21.symbols
++++ new.typeFromPropertyAssignment21.symbols
+@@= skipped -7, +7 lines =@@
+ >prototype : Symbol(prototype, Decl(lib.dom.d.ts, --, --))
+ 
+     this.textContent = 'nope, not going to happen'
+->this : Symbol(Event, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+ }
+ 

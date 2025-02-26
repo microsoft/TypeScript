@@ -1,0 +1,16 @@
+--- old.objectTypeWithRecursiveWrappedProperty2.symbols
++++ new.objectTypeWithRecursiveWrappedProperty2.symbols
+@@= skipped -7, +7 lines =@@
+ >T : Symbol(T, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 2, 11))
+ 
+     data: T;
+->data : Symbol(List.data, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 2, 15))
++>data : Symbol(data, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 2, 15))
+ >T : Symbol(T, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 2, 11))
+ 
+     next: List<List<T>>;
+->next : Symbol(List.next, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 3, 12))
++>next : Symbol(next, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 3, 12))
+ >List : Symbol(List, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 0, 0))
+ >List : Symbol(List, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 0, 0))
+ >T : Symbol(T, Decl(objectTypeWithRecursiveWrappedProperty2.ts, 2, 11))

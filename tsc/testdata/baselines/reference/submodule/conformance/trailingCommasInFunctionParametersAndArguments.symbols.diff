@@ -1,0 +1,11 @@
+--- old.trailingCommasInFunctionParametersAndArguments.symbols
++++ new.trailingCommasInFunctionParametersAndArguments.symbols
+@@= skipped -44, +44 lines =@@
+ 
+     // See trailingCommasInGetter.ts
+     set x(value,) { }
+->x : Symbol(X.x, Decl(trailingCommasInFunctionParametersAndArguments.ts, 20, 23))
++>x : Symbol(x, Decl(trailingCommasInFunctionParametersAndArguments.ts, 20, 23))
+ >value : Symbol(value, Decl(trailingCommasInFunctionParametersAndArguments.ts, 22, 10))
+ }
+ interface Y {

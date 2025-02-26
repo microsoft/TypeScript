@@ -1,0 +1,94 @@
+--- old.sourceMapValidationDecorators.symbols
++++ new.sourceMapValidationDecorators.symbols
+@@= skipped -60, +60 lines =@@
+ >ParameterDecorator2 : Symbol(ParameterDecorator2, Decl(sourceMapValidationDecorators.ts, 4, 101))
+ 
+       public greeting: string, 
+->greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
++>greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
+       
+       @ParameterDecorator1 
+ >ParameterDecorator1 : Symbol(ParameterDecorator1, Decl(sourceMapValidationDecorators.ts, 3, 128))
+@@= skipped -19, +19 lines =@@
+ >PropertyDecorator2 : Symbol(PropertyDecorator2, Decl(sourceMapValidationDecorators.ts, 2, 113))
+ 
+     greet() {
+->greet : Symbol(Greeter.greet, Decl(sourceMapValidationDecorators.ts, 18, 5))
++>greet : Symbol(greet, Decl(sourceMapValidationDecorators.ts, 18, 5))
+ 
+         return "<h1>" + this.greeting + "</h1>";
+->this.greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
++>this.greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
+ >this : Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 116))
+->greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
++>greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
+     }
+ 
+     @PropertyDecorator1
+@@= skipped -15, +15 lines =@@
+ >PropertyDecorator2 : Symbol(PropertyDecorator2, Decl(sourceMapValidationDecorators.ts, 2, 113))
+ 
+     private x: string;
+->x : Symbol(Greeter.x, Decl(sourceMapValidationDecorators.ts, 24, 5))
++>x : Symbol(x, Decl(sourceMapValidationDecorators.ts, 24, 5))
+ 
+     @PropertyDecorator1
+ >PropertyDecorator1 : Symbol(PropertyDecorator1, Decl(sourceMapValidationDecorators.ts, 1, 72))
+@@= skipped -9, +9 lines =@@
+ >PropertyDecorator2 : Symbol(PropertyDecorator2, Decl(sourceMapValidationDecorators.ts, 2, 113))
+ 
+     private static x1: number = 10;
+->x1 : Symbol(Greeter.x1, Decl(sourceMapValidationDecorators.ts, 28, 22))
++>x1 : Symbol(x1, Decl(sourceMapValidationDecorators.ts, 28, 22))
+     
+     private fn(
+->fn : Symbol(Greeter.fn, Decl(sourceMapValidationDecorators.ts, 32, 35))
++>fn : Symbol(fn, Decl(sourceMapValidationDecorators.ts, 32, 35))
+ 
+       @ParameterDecorator1 
+ >ParameterDecorator1 : Symbol(ParameterDecorator1, Decl(sourceMapValidationDecorators.ts, 3, 128))
+@@= skipped -15, +15 lines =@@
+ >x : Symbol(x, Decl(sourceMapValidationDecorators.ts, 34, 15))
+ 
+         return this.greeting;
+->this.greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
++>this.greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
+ >this : Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 116))
+->greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
++>greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
+     }
+ 
+     @PropertyDecorator1
+@@= skipped -12, +12 lines =@@
+ >PropertyDecorator2 : Symbol(PropertyDecorator2, Decl(sourceMapValidationDecorators.ts, 2, 113))
+ 
+     get greetings() {
+->greetings : Symbol(Greeter.greetings, Decl(sourceMapValidationDecorators.ts, 39, 5), Decl(sourceMapValidationDecorators.ts, 45, 5))
++>greetings : Symbol(greetings, Decl(sourceMapValidationDecorators.ts, 39, 5), Decl(sourceMapValidationDecorators.ts, 45, 5))
+ 
+         return this.greeting;
+->this.greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
++>this.greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
+ >this : Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 116))
+->greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
++>greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
+     }
+ 
+     set greetings(
+->greetings : Symbol(Greeter.greetings, Decl(sourceMapValidationDecorators.ts, 39, 5), Decl(sourceMapValidationDecorators.ts, 45, 5))
++>greetings : Symbol(greetings, Decl(sourceMapValidationDecorators.ts, 39, 5), Decl(sourceMapValidationDecorators.ts, 45, 5))
+ 
+       @ParameterDecorator1 
+ >ParameterDecorator1 : Symbol(ParameterDecorator1, Decl(sourceMapValidationDecorators.ts, 3, 128))
+@@= skipped -21, +21 lines =@@
+ >greetings : Symbol(greetings, Decl(sourceMapValidationDecorators.ts, 47, 18))
+ 
+         this.greeting = greetings;
+->this.greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
++>this.greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
+ >this : Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 116))
+->greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
++>greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
+ >greetings : Symbol(greetings, Decl(sourceMapValidationDecorators.ts, 47, 18))
+     }    
+ }

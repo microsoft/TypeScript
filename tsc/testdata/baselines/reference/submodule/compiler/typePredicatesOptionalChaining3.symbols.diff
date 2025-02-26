@@ -1,0 +1,73 @@
+--- old.typePredicatesOptionalChaining3.symbols
++++ new.typePredicatesOptionalChaining3.symbols
+@@= skipped -4, +4 lines =@@
+ >Animal : Symbol(Animal, Decl(typePredicatesOptionalChaining3.ts, 0, 0))
+ 
+   breed?: Breed;
+->breed : Symbol(Animal.breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
++>breed : Symbol(breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
+ >Breed : Symbol(Breed, Decl(typePredicatesOptionalChaining3.ts, 2, 1))
+ }
+ interface Breed {
+ >Breed : Symbol(Breed, Decl(typePredicatesOptionalChaining3.ts, 2, 1))
+ 
+   size?: string;
+->size : Symbol(Breed.size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
++>size : Symbol(size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
+ }
+ 
+ declare function isNil(value: unknown): value is undefined | null;
+@@= skipped -21, +21 lines =@@
+ >Animal : Symbol(Animal, Decl(typePredicatesOptionalChaining3.ts, 0, 0))
+ 
+   if (animal?.breed?.size != null) {
+->animal?.breed?.size : Symbol(Breed.size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
+->animal?.breed : Symbol(Animal.breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
++>animal?.breed?.size : Symbol(size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
++>animal?.breed : Symbol(breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
+ >animal : Symbol(animal, Decl(typePredicatesOptionalChaining3.ts, 9, 37))
+->breed : Symbol(Animal.breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
+->size : Symbol(Breed.size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
++>breed : Symbol(breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
++>size : Symbol(size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
+ 
+     return animal.breed.size;
+->animal.breed.size : Symbol(Breed.size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
+->animal.breed : Symbol(Animal.breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
++>animal.breed.size : Symbol(size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
++>animal.breed : Symbol(breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
+ >animal : Symbol(animal, Decl(typePredicatesOptionalChaining3.ts, 9, 37))
+->breed : Symbol(Animal.breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
+->size : Symbol(Breed.size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
++>breed : Symbol(breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
++>size : Symbol(size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
+ 
+   } else {
+     return undefined;
+@@= skipped -26, +26 lines =@@
+ 
+   if (!isNil(animal?.breed?.size)) {
+ >isNil : Symbol(isNil, Decl(typePredicatesOptionalChaining3.ts, 5, 1))
+->animal?.breed?.size : Symbol(Breed.size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
+->animal?.breed : Symbol(Animal.breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
++>animal?.breed?.size : Symbol(size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
++>animal?.breed : Symbol(breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
+ >animal : Symbol(animal, Decl(typePredicatesOptionalChaining3.ts, 17, 34))
+->breed : Symbol(Animal.breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
+->size : Symbol(Breed.size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
++>breed : Symbol(breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
++>size : Symbol(size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
+ 
+     return animal.breed.size;
+->animal.breed.size : Symbol(Breed.size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
+->animal.breed : Symbol(Animal.breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
++>animal.breed.size : Symbol(size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
++>animal.breed : Symbol(breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
+ >animal : Symbol(animal, Decl(typePredicatesOptionalChaining3.ts, 17, 34))
+->breed : Symbol(Animal.breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
+->size : Symbol(Breed.size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
++>breed : Symbol(breed, Decl(typePredicatesOptionalChaining3.ts, 0, 18))
++>size : Symbol(size, Decl(typePredicatesOptionalChaining3.ts, 3, 17))
+ 
+   } else {
+     return undefined;

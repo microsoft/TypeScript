@@ -1,0 +1,18 @@
+--- old.optionalArgsWithDefaultValues.symbols
++++ new.optionalArgsWithDefaultValues.symbols
+@@= skipped -10, +10 lines =@@
+ >CCC : Symbol(CCC, Decl(optionalArgsWithDefaultValues.ts, 0, 50))
+ 
+     public foo(x: number, y?:boolean=false, z?=0) {}
+->foo : Symbol(CCC.foo, Decl(optionalArgsWithDefaultValues.ts, 2, 11))
++>foo : Symbol(foo, Decl(optionalArgsWithDefaultValues.ts, 2, 11))
+ >x : Symbol(x, Decl(optionalArgsWithDefaultValues.ts, 3, 15))
+ >y : Symbol(y, Decl(optionalArgsWithDefaultValues.ts, 3, 25))
+ >z : Symbol(z, Decl(optionalArgsWithDefaultValues.ts, 3, 43))
+ 
+     static foo2(x: number, y?:boolean=false, z?=0) {}
+->foo2 : Symbol(CCC.foo2, Decl(optionalArgsWithDefaultValues.ts, 3, 52))
++>foo2 : Symbol(foo2, Decl(optionalArgsWithDefaultValues.ts, 3, 52))
+ >x : Symbol(x, Decl(optionalArgsWithDefaultValues.ts, 4, 16))
+ >y : Symbol(y, Decl(optionalArgsWithDefaultValues.ts, 4, 26))
+ >z : Symbol(z, Decl(optionalArgsWithDefaultValues.ts, 4, 44))

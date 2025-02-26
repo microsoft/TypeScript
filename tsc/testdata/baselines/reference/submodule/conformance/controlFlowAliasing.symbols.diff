@@ -1,0 +1,154 @@
+--- old.controlFlowAliasing.symbols
++++ new.controlFlowAliasing.symbols
+@@= skipped -168, +168 lines =@@
+     const isString = typeof obj[0] === 'string';
+ >isString : Symbol(isString, Decl(controlFlowAliasing.ts, 63, 9))
+ >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 62, 13))
+->0 : Symbol(0)
++>0 : Symbol("0")
+ 
+     if (isString) {
+ >isString : Symbol(isString, Decl(controlFlowAliasing.ts, 63, 9))
+@@= skipped -8, +8 lines =@@
+         let s: string = obj[0];
+ >s : Symbol(s, Decl(controlFlowAliasing.ts, 65, 11))
+ >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 62, 13))
+->0 : Symbol(0)
++>0 : Symbol("0")
+     }
+ }
+ 
+@@= skipped -11, +11 lines =@@
+     const isString = typeof obj[0] === 'string';
+ >isString : Symbol(isString, Decl(controlFlowAliasing.ts, 70, 9))
+ >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 69, 13))
+->0 : Symbol(0)
++>0 : Symbol("0")
+ 
+     obj = [42];
+ >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 69, 13))
+@@= skipped -11, +11 lines =@@
+         let s: string = obj[0];  // Not narrowed because of is assigned in function body
+ >s : Symbol(s, Decl(controlFlowAliasing.ts, 73, 11))
+ >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 69, 13))
+->0 : Symbol(0)
++>0 : Symbol("0")
+     }
+ }
+ 
+@@= skipped -415, +415 lines =@@
+ >C10 : Symbol(C10, Decl(controlFlowAliasing.ts, 209, 1))
+ 
+     constructor(readonly x: string | number) {
+->x : Symbol(C10.x, Decl(controlFlowAliasing.ts, 213, 16))
++>x : Symbol(x, Decl(controlFlowAliasing.ts, 213, 16))
+ 
+         const thisX_isString = typeof this.x === 'string';
+ >thisX_isString : Symbol(thisX_isString, Decl(controlFlowAliasing.ts, 214, 13))
+->this.x : Symbol(C10.x, Decl(controlFlowAliasing.ts, 213, 16))
++>this.x : Symbol(x, Decl(controlFlowAliasing.ts, 213, 16))
+ >this : Symbol(C10, Decl(controlFlowAliasing.ts, 209, 1))
+->x : Symbol(C10.x, Decl(controlFlowAliasing.ts, 213, 16))
++>x : Symbol(x, Decl(controlFlowAliasing.ts, 213, 16))
+ 
+         const xIsString = typeof x === 'string';
+ >xIsString : Symbol(xIsString, Decl(controlFlowAliasing.ts, 215, 13))
+@@= skipped -21, +21 lines =@@
+ 
+             s = this.x;
+ >s : Symbol(s, Decl(controlFlowAliasing.ts, 217, 15))
+->this.x : Symbol(C10.x, Decl(controlFlowAliasing.ts, 213, 16))
++>this.x : Symbol(x, Decl(controlFlowAliasing.ts, 213, 16))
+ >this : Symbol(C10, Decl(controlFlowAliasing.ts, 209, 1))
+->x : Symbol(C10.x, Decl(controlFlowAliasing.ts, 213, 16))
++>x : Symbol(x, Decl(controlFlowAliasing.ts, 213, 16))
+ 
+             s = x;
+ >s : Symbol(s, Decl(controlFlowAliasing.ts, 217, 15))
+@@= skipped -15, +15 lines =@@
+ >C11 : Symbol(C11, Decl(controlFlowAliasing.ts, 222, 1))
+ 
+     constructor(readonly x: string | number) {
+->x : Symbol(C11.x, Decl(controlFlowAliasing.ts, 225, 16))
++>x : Symbol(x, Decl(controlFlowAliasing.ts, 225, 16))
+ 
+         const thisX_isString = typeof this.x === 'string';
+ >thisX_isString : Symbol(thisX_isString, Decl(controlFlowAliasing.ts, 226, 13))
+->this.x : Symbol(C11.x, Decl(controlFlowAliasing.ts, 225, 16))
++>this.x : Symbol(x, Decl(controlFlowAliasing.ts, 225, 16))
+ >this : Symbol(C11, Decl(controlFlowAliasing.ts, 222, 1))
+->x : Symbol(C11.x, Decl(controlFlowAliasing.ts, 225, 16))
++>x : Symbol(x, Decl(controlFlowAliasing.ts, 225, 16))
+ 
+         const xIsString = typeof x === 'string';
+ >xIsString : Symbol(xIsString, Decl(controlFlowAliasing.ts, 227, 13))
+@@= skipped -22, +22 lines =@@
+ 
+             s = this.x;
+ >s : Symbol(s, Decl(controlFlowAliasing.ts, 230, 15))
+->this.x : Symbol(C11.x, Decl(controlFlowAliasing.ts, 225, 16))
++>this.x : Symbol(x, Decl(controlFlowAliasing.ts, 225, 16))
+ >this : Symbol(C11, Decl(controlFlowAliasing.ts, 222, 1))
+->x : Symbol(C11.x, Decl(controlFlowAliasing.ts, 225, 16))
++>x : Symbol(x, Decl(controlFlowAliasing.ts, 225, 16))
+ 
+             s = x;
+ >s : Symbol(s, Decl(controlFlowAliasing.ts, 230, 15))
+@@= skipped -10, +10 lines =@@
+         }
+         else {
+             this.x = 10;
+->this.x : Symbol(C11.x, Decl(controlFlowAliasing.ts, 225, 16))
++>this.x : Symbol(x, Decl(controlFlowAliasing.ts, 225, 16))
+ >this : Symbol(C11, Decl(controlFlowAliasing.ts, 222, 1))
+->x : Symbol(C11.x, Decl(controlFlowAliasing.ts, 225, 16))
++>x : Symbol(x, Decl(controlFlowAliasing.ts, 225, 16))
+ 
+             x = 10;
+ >x : Symbol(x, Decl(controlFlowAliasing.ts, 225, 16))
+@@= skipped -120, +120 lines =@@
+ >Utils : Symbol(Utils, Decl(controlFlowAliasing.ts, 281, 19))
+ 
+   static isDefined<T>(value: T): value is NonNullable<T> {
+->isDefined : Symbol(Utils.isDefined, Decl(controlFlowAliasing.ts, 284, 13))
++>isDefined : Symbol(isDefined, Decl(controlFlowAliasing.ts, 284, 13))
+ >T : Symbol(T, Decl(controlFlowAliasing.ts, 285, 19))
+ >value : Symbol(value, Decl(controlFlowAliasing.ts, 285, 22))
+ >T : Symbol(T, Decl(controlFlowAliasing.ts, 285, 19))
+@@= skipped -17, +17 lines =@@
+ >A53267 : Symbol(A53267, Decl(controlFlowAliasing.ts, 288, 1))
+ 
+   public readonly testNumber: number | undefined;
+->testNumber : Symbol(A53267.testNumber, Decl(controlFlowAliasing.ts, 290, 14))
++>testNumber : Symbol(testNumber, Decl(controlFlowAliasing.ts, 290, 14))
+ 
+   foo() {
+->foo : Symbol(A53267.foo, Decl(controlFlowAliasing.ts, 291, 49))
++>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 291, 49))
+ 
+     const isNumber = Utils.isDefined(this.testNumber);
+ >isNumber : Symbol(isNumber, Decl(controlFlowAliasing.ts, 294, 9))
+->Utils.isDefined : Symbol(Utils.isDefined, Decl(controlFlowAliasing.ts, 284, 13))
++>Utils.isDefined : Symbol(isDefined, Decl(controlFlowAliasing.ts, 284, 13))
+ >Utils : Symbol(Utils, Decl(controlFlowAliasing.ts, 281, 19))
+->isDefined : Symbol(Utils.isDefined, Decl(controlFlowAliasing.ts, 284, 13))
+->this.testNumber : Symbol(A53267.testNumber, Decl(controlFlowAliasing.ts, 290, 14))
++>isDefined : Symbol(isDefined, Decl(controlFlowAliasing.ts, 284, 13))
++>this.testNumber : Symbol(testNumber, Decl(controlFlowAliasing.ts, 290, 14))
+ >this : Symbol(A53267, Decl(controlFlowAliasing.ts, 288, 1))
+->testNumber : Symbol(A53267.testNumber, Decl(controlFlowAliasing.ts, 290, 14))
++>testNumber : Symbol(testNumber, Decl(controlFlowAliasing.ts, 290, 14))
+ 
+     if (isNumber) {
+ >isNumber : Symbol(isNumber, Decl(controlFlowAliasing.ts, 294, 9))
+ 
+       const x: number = this.testNumber;
+ >x : Symbol(x, Decl(controlFlowAliasing.ts, 297, 11))
+->this.testNumber : Symbol(A53267.testNumber, Decl(controlFlowAliasing.ts, 290, 14))
++>this.testNumber : Symbol(testNumber, Decl(controlFlowAliasing.ts, 290, 14))
+ >this : Symbol(A53267, Decl(controlFlowAliasing.ts, 288, 1))
+->testNumber : Symbol(A53267.testNumber, Decl(controlFlowAliasing.ts, 290, 14))
++>testNumber : Symbol(testNumber, Decl(controlFlowAliasing.ts, 290, 14))
+     }
+   }
+ }

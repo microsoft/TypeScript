@@ -1,0 +1,11 @@
+--- old.circularlySimplifyingConditionalTypesNoCrash.symbols
++++ new.circularlySimplifyingConditionalTypesNoCrash.symbols
+@@= skipped -43, +43 lines =@@
+ >P : Symbol(P, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 9, 25))
+ 
+     defaultProps?: Partial<P>; // Inference target is also mapped _and_ optional
+->defaultProps : Symbol(ComponentClass.defaultProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 9, 29))
++>defaultProps : Symbol(defaultProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 9, 29))
+ >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+ >P : Symbol(P, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 9, 25))
+ }

@@ -1,0 +1,25 @@
+--- old.nestedSelf.symbols
++++ new.nestedSelf.symbols
+@@= skipped -7, +7 lines =@@
+ >C : Symbol(C, Decl(nestedSelf.ts, 0, 10))
+ 
+    public n = 42;
+->n : Symbol(C.n, Decl(nestedSelf.ts, 1, 17))
++>n : Symbol(n, Decl(nestedSelf.ts, 1, 17))
+ 
+    public foo() { [1,2,3].map((x) => { return this.n * x; })}
+->foo : Symbol(C.foo, Decl(nestedSelf.ts, 2, 17))
+->[1,2,3].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>foo : Symbol(foo, Decl(nestedSelf.ts, 2, 17))
++>[1,2,3].map : Symbol(map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(nestedSelf.ts, 3, 31))
+->this.n : Symbol(C.n, Decl(nestedSelf.ts, 1, 17))
++>this.n : Symbol(n, Decl(nestedSelf.ts, 1, 17))
+ >this : Symbol(C, Decl(nestedSelf.ts, 0, 10))
+->n : Symbol(C.n, Decl(nestedSelf.ts, 1, 17))
++>n : Symbol(n, Decl(nestedSelf.ts, 1, 17))
+ >x : Symbol(x, Decl(nestedSelf.ts, 3, 31))
+  }
+ }

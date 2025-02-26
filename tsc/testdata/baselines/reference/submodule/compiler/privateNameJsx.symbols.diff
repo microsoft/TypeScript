@@ -1,0 +1,15 @@
+--- old.privateNameJsx.symbols
++++ new.privateNameJsx.symbols
+@@= skipped -4, +4 lines =@@
+ >Test : Symbol(Test, Decl(privateNameJsx.tsx, 0, 0))
+ 
+     #prop = () => <div />;
+->#prop : Symbol(Test.#prop, Decl(privateNameJsx.tsx, 0, 12))
++>#prop : Symbol(#prop, Decl(privateNameJsx.tsx, 0, 12))
+ 
+     render() {
+->render : Symbol(Test.render, Decl(privateNameJsx.tsx, 1, 26))
++>render : Symbol(render, Decl(privateNameJsx.tsx, 1, 26))
+ 
+         return <this.#prop />;
+ >this : Symbol(Test, Decl(privateNameJsx.tsx, 0, 0))

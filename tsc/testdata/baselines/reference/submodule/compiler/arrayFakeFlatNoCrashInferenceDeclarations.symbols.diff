@@ -1,0 +1,16 @@
+--- old.arrayFakeFlatNoCrashInferenceDeclarations.symbols
++++ new.arrayFakeFlatNoCrashInferenceDeclarations.symbols
+@@= skipped -7, +7 lines =@@
+ >obj : Symbol(obj, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 48))
+ 
+     "done": Arr,
+->"done" : Symbol("done", Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 54))
++>"done" : Symbol(done, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 54))
+ >Arr : Symbol(Arr, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 18))
+ 
+     "recur": Arr extends ReadonlyArray<infer InnerArr>
+->"recur" : Symbol("recur", Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 1, 16))
++>"recur" : Symbol(recur, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 1, 16))
+ >Arr : Symbol(Arr, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 18))
+ >ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+ >InnerArr : Symbol(InnerArr, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 2, 44))

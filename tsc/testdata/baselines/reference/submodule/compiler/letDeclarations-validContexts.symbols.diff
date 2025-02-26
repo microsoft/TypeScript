@@ -1,0 +1,28 @@
+--- old.letDeclarations-validContexts.symbols
++++ new.letDeclarations-validContexts.symbols
+@@= skipped -150, +150 lines =@@
+     }
+ 
+     method() {
+->method : Symbol(C.method, Decl(letDeclarations-validContexts.ts, 96, 5))
++>method : Symbol(method, Decl(letDeclarations-validContexts.ts, 96, 5))
+ 
+         let l25 = 0;
+ >l25 : Symbol(l25, Decl(letDeclarations-validContexts.ts, 99, 11))
+     }
+ 
+     get v() {
+->v : Symbol(C.v, Decl(letDeclarations-validContexts.ts, 100, 5), Decl(letDeclarations-validContexts.ts, 105, 5))
++>v : Symbol(v, Decl(letDeclarations-validContexts.ts, 100, 5), Decl(letDeclarations-validContexts.ts, 105, 5))
+ 
+         let l26 = 0;
+ >l26 : Symbol(l26, Decl(letDeclarations-validContexts.ts, 103, 11))
+@@= skipped -17, +17 lines =@@
+     }
+ 
+     set v(value) {
+->v : Symbol(C.v, Decl(letDeclarations-validContexts.ts, 100, 5), Decl(letDeclarations-validContexts.ts, 105, 5))
++>v : Symbol(v, Decl(letDeclarations-validContexts.ts, 100, 5), Decl(letDeclarations-validContexts.ts, 105, 5))
+ >value : Symbol(value, Decl(letDeclarations-validContexts.ts, 107, 10))
+ 
+         let l27 = value;

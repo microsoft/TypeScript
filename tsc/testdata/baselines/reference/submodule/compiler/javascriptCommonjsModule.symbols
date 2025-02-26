@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/javascriptCommonjsModule.ts] ////
+
+=== index.js ===
+class Foo {}
+>Foo : Symbol(Foo, Decl(index.js, 0, 0))
+
+class Bar extends Foo {}
+>Bar : Symbol(Bar, Decl(index.js, 0, 12))
+>Foo : Symbol(Foo, Decl(index.js, 0, 0))
+
+module.exports = Bar;
+>Bar : Symbol(Bar, Decl(index.js, 0, 12))
+

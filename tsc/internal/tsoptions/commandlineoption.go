@@ -157,6 +157,11 @@ var commandLineOptionElements = map[string]*CommandLineOption{
 		isFilePath:      true,
 		extraValidation: true,
 	},
+	// Test infra options
+	"libFiles": {
+		Name: "libFiles",
+		Kind: CommandLineOptionTypeString,
+	},
 }
 
 // CommandLineOption.EnumMap()

@@ -1,0 +1,20 @@
+--- old.classConstructorAccessibility5.symbols
++++ new.classConstructorAccessibility5.symbols
+@@= skipped -10, +10 lines =@@
+ >Base : Symbol(Base, Decl(classConstructorAccessibility5.ts, 0, 0))
+ 
+     static make() { new Base() } // ok
+->make : Symbol(Derived.make, Decl(classConstructorAccessibility5.ts, 3, 28))
++>make : Symbol(make, Decl(classConstructorAccessibility5.ts, 3, 28))
+ >Base : Symbol(Base, Decl(classConstructorAccessibility5.ts, 0, 0))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >Unrelated : Symbol(Unrelated, Decl(classConstructorAccessibility5.ts, 5, 1))
+ 
+     static fake() { new Base() } // error
+->fake : Symbol(Unrelated.fake, Decl(classConstructorAccessibility5.ts, 7, 17))
++>fake : Symbol(fake, Decl(classConstructorAccessibility5.ts, 7, 17))
+ >Base : Symbol(Base, Decl(classConstructorAccessibility5.ts, 0, 0))
+ }
+ 

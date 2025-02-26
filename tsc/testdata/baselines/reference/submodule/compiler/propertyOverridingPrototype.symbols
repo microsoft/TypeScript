@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/propertyOverridingPrototype.ts] ////
+
+=== propertyOverridingPrototype.ts ===
+class Base {
+>Base : Symbol(Base, Decl(propertyOverridingPrototype.ts, 0, 0))
+
+    foo() {
+>foo : Symbol(foo, Decl(propertyOverridingPrototype.ts, 0, 12))
+    }
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(propertyOverridingPrototype.ts, 3, 1))
+>Base : Symbol(Base, Decl(propertyOverridingPrototype.ts, 0, 0))
+
+    foo: () => { };
+>foo : Symbol(foo, Decl(propertyOverridingPrototype.ts, 5, 28))
+}
+
+

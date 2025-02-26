@@ -1,0 +1,9 @@
+--- old.parserMemberVariableDeclaration4.symbols
++++ new.parserMemberVariableDeclaration4.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(parserMemberVariableDeclaration4.ts, 0, 0))
+ 
+   export Foo;
+->Foo : Symbol(C.Foo, Decl(parserMemberVariableDeclaration4.ts, 0, 9))
++>Foo : Symbol(Foo, Decl(parserMemberVariableDeclaration4.ts, 0, 9))
+ }

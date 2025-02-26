@@ -1,0 +1,112 @@
+--- old.mixingStaticAndInstanceOverloads.symbols
++++ new.mixingStaticAndInstanceOverloads.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     // ERROR
+     foo1(n: number);
+->foo1 : Symbol(C1.foo1, Decl(mixingStaticAndInstanceOverloads.ts, 0, 10), Decl(mixingStaticAndInstanceOverloads.ts, 2, 20))
++>foo1 : Symbol(foo1, Decl(mixingStaticAndInstanceOverloads.ts, 0, 10), Decl(mixingStaticAndInstanceOverloads.ts, 2, 20))
+ >n : Symbol(n, Decl(mixingStaticAndInstanceOverloads.ts, 2, 9))
+ 
+     foo1(s: string);
+->foo1 : Symbol(C1.foo1, Decl(mixingStaticAndInstanceOverloads.ts, 0, 10), Decl(mixingStaticAndInstanceOverloads.ts, 2, 20))
++>foo1 : Symbol(foo1, Decl(mixingStaticAndInstanceOverloads.ts, 0, 10), Decl(mixingStaticAndInstanceOverloads.ts, 2, 20))
+ >s : Symbol(s, Decl(mixingStaticAndInstanceOverloads.ts, 3, 9))
+ 
+     static foo1(a) { }
+->foo1 : Symbol(C1.foo1, Decl(mixingStaticAndInstanceOverloads.ts, 3, 20))
++>foo1 : Symbol(foo1, Decl(mixingStaticAndInstanceOverloads.ts, 3, 20))
+ >a : Symbol(a, Decl(mixingStaticAndInstanceOverloads.ts, 4, 16))
+ }
+ class C2 {
+@@= skipped -16, +16 lines =@@
+ 
+     // ERROR
+     static foo2(n: number);
+->foo2 : Symbol(C2.foo2, Decl(mixingStaticAndInstanceOverloads.ts, 6, 10), Decl(mixingStaticAndInstanceOverloads.ts, 8, 27))
++>foo2 : Symbol(foo2, Decl(mixingStaticAndInstanceOverloads.ts, 6, 10), Decl(mixingStaticAndInstanceOverloads.ts, 8, 27))
+ >n : Symbol(n, Decl(mixingStaticAndInstanceOverloads.ts, 8, 16))
+ 
+     static foo2(s: string);
+->foo2 : Symbol(C2.foo2, Decl(mixingStaticAndInstanceOverloads.ts, 6, 10), Decl(mixingStaticAndInstanceOverloads.ts, 8, 27))
++>foo2 : Symbol(foo2, Decl(mixingStaticAndInstanceOverloads.ts, 6, 10), Decl(mixingStaticAndInstanceOverloads.ts, 8, 27))
+ >s : Symbol(s, Decl(mixingStaticAndInstanceOverloads.ts, 9, 16))
+ 
+     foo2(a) { }
+->foo2 : Symbol(C2.foo2, Decl(mixingStaticAndInstanceOverloads.ts, 9, 27))
++>foo2 : Symbol(foo2, Decl(mixingStaticAndInstanceOverloads.ts, 9, 27))
+ >a : Symbol(a, Decl(mixingStaticAndInstanceOverloads.ts, 10, 9))
+ }
+ class C3 {
+@@= skipped -16, +16 lines =@@
+ 
+     // ERROR
+     foo3(n: number);
+->foo3 : Symbol(C3.foo3, Decl(mixingStaticAndInstanceOverloads.ts, 12, 10), Decl(mixingStaticAndInstanceOverloads.ts, 15, 27))
++>foo3 : Symbol(foo3, Decl(mixingStaticAndInstanceOverloads.ts, 12, 10), Decl(mixingStaticAndInstanceOverloads.ts, 15, 27))
+ >n : Symbol(n, Decl(mixingStaticAndInstanceOverloads.ts, 14, 9))
+ 
+     static foo3(s: string);
+->foo3 : Symbol(C3.foo3, Decl(mixingStaticAndInstanceOverloads.ts, 14, 20))
++>foo3 : Symbol(foo3, Decl(mixingStaticAndInstanceOverloads.ts, 14, 20))
+ >s : Symbol(s, Decl(mixingStaticAndInstanceOverloads.ts, 15, 16))
+ 
+     foo3(a) { }
+->foo3 : Symbol(C3.foo3, Decl(mixingStaticAndInstanceOverloads.ts, 12, 10), Decl(mixingStaticAndInstanceOverloads.ts, 15, 27))
++>foo3 : Symbol(foo3, Decl(mixingStaticAndInstanceOverloads.ts, 12, 10), Decl(mixingStaticAndInstanceOverloads.ts, 15, 27))
+ >a : Symbol(a, Decl(mixingStaticAndInstanceOverloads.ts, 16, 9))
+ }
+ class C4 {
+@@= skipped -16, +16 lines =@@
+ 
+     // ERROR
+     static foo4(n: number);
+->foo4 : Symbol(C4.foo4, Decl(mixingStaticAndInstanceOverloads.ts, 18, 10), Decl(mixingStaticAndInstanceOverloads.ts, 21, 20))
++>foo4 : Symbol(foo4, Decl(mixingStaticAndInstanceOverloads.ts, 18, 10), Decl(mixingStaticAndInstanceOverloads.ts, 21, 20))
+ >n : Symbol(n, Decl(mixingStaticAndInstanceOverloads.ts, 20, 16))
+ 
+     foo4(s: string);
+->foo4 : Symbol(C4.foo4, Decl(mixingStaticAndInstanceOverloads.ts, 20, 27))
++>foo4 : Symbol(foo4, Decl(mixingStaticAndInstanceOverloads.ts, 20, 27))
+ >s : Symbol(s, Decl(mixingStaticAndInstanceOverloads.ts, 21, 9))
+ 
+     static foo4(a) { }
+->foo4 : Symbol(C4.foo4, Decl(mixingStaticAndInstanceOverloads.ts, 18, 10), Decl(mixingStaticAndInstanceOverloads.ts, 21, 20))
++>foo4 : Symbol(foo4, Decl(mixingStaticAndInstanceOverloads.ts, 18, 10), Decl(mixingStaticAndInstanceOverloads.ts, 21, 20))
+ >a : Symbol(a, Decl(mixingStaticAndInstanceOverloads.ts, 22, 16))
+ }
+ class C5 {
+@@= skipped -16, +16 lines =@@
+ 
+     // OK
+     foo5(n: number);
+->foo5 : Symbol(C5.foo5, Decl(mixingStaticAndInstanceOverloads.ts, 24, 10), Decl(mixingStaticAndInstanceOverloads.ts, 26, 20), Decl(mixingStaticAndInstanceOverloads.ts, 27, 20))
++>foo5 : Symbol(foo5, Decl(mixingStaticAndInstanceOverloads.ts, 24, 10), Decl(mixingStaticAndInstanceOverloads.ts, 26, 20), Decl(mixingStaticAndInstanceOverloads.ts, 27, 20))
+ >n : Symbol(n, Decl(mixingStaticAndInstanceOverloads.ts, 26, 9))
+ 
+     foo5(s: string);
+->foo5 : Symbol(C5.foo5, Decl(mixingStaticAndInstanceOverloads.ts, 24, 10), Decl(mixingStaticAndInstanceOverloads.ts, 26, 20), Decl(mixingStaticAndInstanceOverloads.ts, 27, 20))
++>foo5 : Symbol(foo5, Decl(mixingStaticAndInstanceOverloads.ts, 24, 10), Decl(mixingStaticAndInstanceOverloads.ts, 26, 20), Decl(mixingStaticAndInstanceOverloads.ts, 27, 20))
+ >s : Symbol(s, Decl(mixingStaticAndInstanceOverloads.ts, 27, 9))
+ 
+     foo5(a) { }
+->foo5 : Symbol(C5.foo5, Decl(mixingStaticAndInstanceOverloads.ts, 24, 10), Decl(mixingStaticAndInstanceOverloads.ts, 26, 20), Decl(mixingStaticAndInstanceOverloads.ts, 27, 20))
++>foo5 : Symbol(foo5, Decl(mixingStaticAndInstanceOverloads.ts, 24, 10), Decl(mixingStaticAndInstanceOverloads.ts, 26, 20), Decl(mixingStaticAndInstanceOverloads.ts, 27, 20))
+ >a : Symbol(a, Decl(mixingStaticAndInstanceOverloads.ts, 28, 9))
+ 
+     // OK
+     static foo5(n: number);
+->foo5 : Symbol(C5.foo5, Decl(mixingStaticAndInstanceOverloads.ts, 28, 15), Decl(mixingStaticAndInstanceOverloads.ts, 31, 27), Decl(mixingStaticAndInstanceOverloads.ts, 32, 27))
++>foo5 : Symbol(foo5, Decl(mixingStaticAndInstanceOverloads.ts, 28, 15), Decl(mixingStaticAndInstanceOverloads.ts, 31, 27), Decl(mixingStaticAndInstanceOverloads.ts, 32, 27))
+ >n : Symbol(n, Decl(mixingStaticAndInstanceOverloads.ts, 31, 16))
+ 
+     static foo5(s: string);
+->foo5 : Symbol(C5.foo5, Decl(mixingStaticAndInstanceOverloads.ts, 28, 15), Decl(mixingStaticAndInstanceOverloads.ts, 31, 27), Decl(mixingStaticAndInstanceOverloads.ts, 32, 27))
++>foo5 : Symbol(foo5, Decl(mixingStaticAndInstanceOverloads.ts, 28, 15), Decl(mixingStaticAndInstanceOverloads.ts, 31, 27), Decl(mixingStaticAndInstanceOverloads.ts, 32, 27))
+ >s : Symbol(s, Decl(mixingStaticAndInstanceOverloads.ts, 32, 16))
+ 
+     static foo5(a) { }
+->foo5 : Symbol(C5.foo5, Decl(mixingStaticAndInstanceOverloads.ts, 28, 15), Decl(mixingStaticAndInstanceOverloads.ts, 31, 27), Decl(mixingStaticAndInstanceOverloads.ts, 32, 27))
++>foo5 : Symbol(foo5, Decl(mixingStaticAndInstanceOverloads.ts, 28, 15), Decl(mixingStaticAndInstanceOverloads.ts, 31, 27), Decl(mixingStaticAndInstanceOverloads.ts, 32, 27))
+ >a : Symbol(a, Decl(mixingStaticAndInstanceOverloads.ts, 33, 16))
+ }

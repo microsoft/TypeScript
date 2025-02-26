@@ -1,0 +1,24 @@
+--- old.nonObjectUnionNestedExcessPropertyCheck.symbols
++++ new.nonObjectUnionNestedExcessPropertyCheck.symbols
+@@= skipped -4, +4 lines =@@
+ >IProps : Symbol(IProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 0, 0))
+ 
+     iconProp?: string;
+->iconProp : Symbol(IProps.iconProp, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 0, 18))
++>iconProp : Symbol(iconProp, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 0, 18))
+ 
+     nestedProp?: {
+->nestedProp : Symbol(IProps.nestedProp, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 1, 22))
++>nestedProp : Symbol(nestedProp, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 1, 22))
+ 
+         testBool?: boolean;
+ >testBool : Symbol(testBool, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 2, 18))
+@@= skipped -14, +14 lines =@@
+ >INestedProps : Symbol(INestedProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 5, 1))
+ 
+     nestedProps?: IProps;
+->nestedProps : Symbol(INestedProps.nestedProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 7, 24))
++>nestedProps : Symbol(nestedProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 7, 24))
+ >IProps : Symbol(IProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 0, 0))
+ }
+ 

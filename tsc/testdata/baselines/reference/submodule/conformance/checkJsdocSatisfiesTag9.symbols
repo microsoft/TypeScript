@@ -1,0 +1,34 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag9.ts] ////
+
+=== /a.js ===
+/**
+ * @typedef {Object} Color
+ * @property {number} r
+ * @property {number} g
+ * @property {number} b
+ */
+
+// All of these should be Colors, but I only use some of them here.
+export const Palette = /** @satisfies {Record<string, Color>} */ ({
+>Palette : Symbol(Palette, Decl(a.js, 8, 12))
+
+    white: { r: 255, g: 255, b: 255 },
+>white : Symbol(white, Decl(a.js, 8, 67))
+>r : Symbol(r, Decl(a.js, 9, 12))
+>g : Symbol(g, Decl(a.js, 9, 20))
+>b : Symbol(b, Decl(a.js, 9, 28))
+
+    black: { r: 0, g: 0, d: 0 }, // <- oops! 'd' in place of 'b'
+>black : Symbol(black, Decl(a.js, 9, 38))
+>r : Symbol(r, Decl(a.js, 10, 12))
+>g : Symbol(g, Decl(a.js, 10, 18))
+>d : Symbol(d, Decl(a.js, 10, 24))
+
+    blue: { r: 0, g: 0, b: 255 },
+>blue : Symbol(blue, Decl(a.js, 10, 32))
+>r : Symbol(r, Decl(a.js, 11, 11))
+>g : Symbol(g, Decl(a.js, 11, 17))
+>b : Symbol(b, Decl(a.js, 11, 23))
+
+});
+

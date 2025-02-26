@@ -1,0 +1,106 @@
+--- old.derivedClassWithoutExplicitConstructor3.symbols
++++ new.derivedClassWithoutExplicitConstructor3.symbols
+@@= skipped -6, +6 lines =@@
+ >Base : Symbol(Base, Decl(derivedClassWithoutExplicitConstructor3.ts, 0, 0))
+ 
+     a = 1;
+->a : Symbol(Base.a, Decl(derivedClassWithoutExplicitConstructor3.ts, 2, 12))
++>a : Symbol(a, Decl(derivedClassWithoutExplicitConstructor3.ts, 2, 12))
+ 
+     constructor(x: number) { this.a = x; }
+ >x : Symbol(x, Decl(derivedClassWithoutExplicitConstructor3.ts, 4, 16))
+->this.a : Symbol(Base.a, Decl(derivedClassWithoutExplicitConstructor3.ts, 2, 12))
++>this.a : Symbol(a, Decl(derivedClassWithoutExplicitConstructor3.ts, 2, 12))
+ >this : Symbol(Base, Decl(derivedClassWithoutExplicitConstructor3.ts, 0, 0))
+->a : Symbol(Base.a, Decl(derivedClassWithoutExplicitConstructor3.ts, 2, 12))
++>a : Symbol(a, Decl(derivedClassWithoutExplicitConstructor3.ts, 2, 12))
+ >x : Symbol(x, Decl(derivedClassWithoutExplicitConstructor3.ts, 4, 16))
+ }
+ 
+@@= skipped -15, +15 lines =@@
+ >Base : Symbol(Base, Decl(derivedClassWithoutExplicitConstructor3.ts, 0, 0))
+ 
+     b = '';
+->b : Symbol(Derived.b, Decl(derivedClassWithoutExplicitConstructor3.ts, 7, 28))
++>b : Symbol(b, Decl(derivedClassWithoutExplicitConstructor3.ts, 7, 28))
+ 
+     constructor(y: string, z: string) {
+ >y : Symbol(y, Decl(derivedClassWithoutExplicitConstructor3.ts, 9, 16))
+@@= skipped -10, +10 lines =@@
+ >super : Symbol(Base, Decl(derivedClassWithoutExplicitConstructor3.ts, 0, 0))
+ 
+         this.b = y;
+->this.b : Symbol(Derived.b, Decl(derivedClassWithoutExplicitConstructor3.ts, 7, 28))
++>this.b : Symbol(b, Decl(derivedClassWithoutExplicitConstructor3.ts, 7, 28))
+ >this : Symbol(Derived, Decl(derivedClassWithoutExplicitConstructor3.ts, 5, 1))
+->b : Symbol(Derived.b, Decl(derivedClassWithoutExplicitConstructor3.ts, 7, 28))
++>b : Symbol(b, Decl(derivedClassWithoutExplicitConstructor3.ts, 7, 28))
+ >y : Symbol(y, Decl(derivedClassWithoutExplicitConstructor3.ts, 9, 16))
+     }
+ }
+@@= skipped -12, +12 lines =@@
+ >Derived : Symbol(Derived, Decl(derivedClassWithoutExplicitConstructor3.ts, 5, 1))
+ 
+     x = 1
+->x : Symbol(Derived2.x, Decl(derivedClassWithoutExplicitConstructor3.ts, 15, 32))
++>x : Symbol(x, Decl(derivedClassWithoutExplicitConstructor3.ts, 15, 32))
+ 
+     y = 'hello';
+->y : Symbol(Derived2.y, Decl(derivedClassWithoutExplicitConstructor3.ts, 16, 9))
++>y : Symbol(y, Decl(derivedClassWithoutExplicitConstructor3.ts, 16, 9))
+ }
+ 
+ var r = new Derived(); // error
+@@= skipped -23, +23 lines =@@
+ >T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor3.ts, 24, 12))
+ 
+     a: T;
+->a : Symbol(Base2.a, Decl(derivedClassWithoutExplicitConstructor3.ts, 24, 16))
++>a : Symbol(a, Decl(derivedClassWithoutExplicitConstructor3.ts, 24, 16))
+ >T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor3.ts, 24, 12))
+ 
+     constructor(x: T) { this.a = x; }
+ >x : Symbol(x, Decl(derivedClassWithoutExplicitConstructor3.ts, 26, 16))
+ >T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor3.ts, 24, 12))
+->this.a : Symbol(Base2.a, Decl(derivedClassWithoutExplicitConstructor3.ts, 24, 16))
++>this.a : Symbol(a, Decl(derivedClassWithoutExplicitConstructor3.ts, 24, 16))
+ >this : Symbol(Base2, Decl(derivedClassWithoutExplicitConstructor3.ts, 22, 29))
+->a : Symbol(Base2.a, Decl(derivedClassWithoutExplicitConstructor3.ts, 24, 16))
++>a : Symbol(a, Decl(derivedClassWithoutExplicitConstructor3.ts, 24, 16))
+ >x : Symbol(x, Decl(derivedClassWithoutExplicitConstructor3.ts, 26, 16))
+ }
+ 
+@@= skipped -18, +18 lines =@@
+ >Base : Symbol(Base, Decl(derivedClassWithoutExplicitConstructor3.ts, 0, 0))
+ 
+     b: T = null;
+->b : Symbol(D.b, Decl(derivedClassWithoutExplicitConstructor3.ts, 29, 25))
++>b : Symbol(b, Decl(derivedClassWithoutExplicitConstructor3.ts, 29, 25))
+ >T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor3.ts, 29, 8))
+ 
+     constructor(y: T, z: T) {
+@@= skipped -13, +13 lines =@@
+ >super : Symbol(Base, Decl(derivedClassWithoutExplicitConstructor3.ts, 0, 0))
+ 
+         this.b = y;
+->this.b : Symbol(D.b, Decl(derivedClassWithoutExplicitConstructor3.ts, 29, 25))
++>this.b : Symbol(b, Decl(derivedClassWithoutExplicitConstructor3.ts, 29, 25))
+ >this : Symbol(D, Decl(derivedClassWithoutExplicitConstructor3.ts, 27, 1))
+->b : Symbol(D.b, Decl(derivedClassWithoutExplicitConstructor3.ts, 29, 25))
++>b : Symbol(b, Decl(derivedClassWithoutExplicitConstructor3.ts, 29, 25))
+ >y : Symbol(y, Decl(derivedClassWithoutExplicitConstructor3.ts, 31, 16))
+     }
+ }
+@@= skipped -16, +16 lines =@@
+ >T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor3.ts, 38, 9))
+ 
+     x = 2
+->x : Symbol(D2.x, Decl(derivedClassWithoutExplicitConstructor3.ts, 38, 39))
++>x : Symbol(x, Decl(derivedClassWithoutExplicitConstructor3.ts, 38, 39))
+ 
+     y: T = null;
+->y : Symbol(D2.y, Decl(derivedClassWithoutExplicitConstructor3.ts, 39, 9))
++>y : Symbol(y, Decl(derivedClassWithoutExplicitConstructor3.ts, 39, 9))
+ >T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor3.ts, 38, 9))
+ }
+ 

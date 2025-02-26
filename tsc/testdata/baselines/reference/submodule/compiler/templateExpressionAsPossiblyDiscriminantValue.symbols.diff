@@ -1,0 +1,14 @@
+--- old.templateExpressionAsPossiblyDiscriminantValue.symbols
++++ new.templateExpressionAsPossiblyDiscriminantValue.symbols
+@@= skipped -44, +44 lines =@@
+   onClick: (ev) => console.log('@@@@', ev),
+ >onClick : Symbol(onClick, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 17, 30))
+ >ev : Symbol(ev, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 18, 12))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >ev : Symbol(ev, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 18, 12))
+ }
+ 

@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameSetterNoGetter.ts] ////
+
+=== privateNameSetterNoGetter.ts ===
+const C = class {
+>C : Symbol(C, Decl(privateNameSetterNoGetter.ts, 0, 5))
+
+    set #x(x) {}
+>#x : Symbol(#x, Decl(privateNameSetterNoGetter.ts, 0, 17))
+>x : Symbol(x, Decl(privateNameSetterNoGetter.ts, 1, 11))
+
+    m() {
+>m : Symbol(m, Decl(privateNameSetterNoGetter.ts, 1, 16))
+
+        this.#x += 2; // Error
+>this.#x : Symbol(#x, Decl(privateNameSetterNoGetter.ts, 0, 17))
+>this : Symbol(C, Decl(privateNameSetterNoGetter.ts, 0, 9))
+    }
+}
+
+console.log(new C().m());
+>new C().m : Symbol(m, Decl(privateNameSetterNoGetter.ts, 1, 16))
+>C : Symbol(C, Decl(privateNameSetterNoGetter.ts, 0, 5))
+>m : Symbol(m, Decl(privateNameSetterNoGetter.ts, 1, 16))
+

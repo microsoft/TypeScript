@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/memberAccessOnConstructorType.ts] ////
+
+=== memberAccessOnConstructorType.ts ===
+var f: new () => void;
+>f : Symbol(f, Decl(memberAccessOnConstructorType.ts, 0, 3))
+
+f.arguments == 0;
+>f.arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(memberAccessOnConstructorType.ts, 0, 3))
+>arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
+

@@ -1,0 +1,42 @@
+--- old.arrayAssignmentTest1.symbols
++++ new.arrayAssignmentTest1.symbols
+@@= skipped -4, +4 lines =@@
+ >I1 : Symbol(I1, Decl(arrayAssignmentTest1.ts, 0, 0))
+ 
+ 	IM1():void[];
+->IM1 : Symbol(I1.IM1, Decl(arrayAssignmentTest1.ts, 0, 14))
++>IM1 : Symbol(IM1, Decl(arrayAssignmentTest1.ts, 0, 14))
+ }
+ 
+ class C1 implements I1 { 
+@@= skipped -8, +8 lines =@@
+ >I1 : Symbol(I1, Decl(arrayAssignmentTest1.ts, 0, 0))
+ 
+ 	IM1():void[] {return null;}
+->IM1 : Symbol(C1.IM1, Decl(arrayAssignmentTest1.ts, 4, 24))
++>IM1 : Symbol(IM1, Decl(arrayAssignmentTest1.ts, 4, 24))
+ 
+ 	C1M1():C1[] {return null;}
+->C1M1 : Symbol(C1.C1M1, Decl(arrayAssignmentTest1.ts, 5, 28))
++>C1M1 : Symbol(C1M1, Decl(arrayAssignmentTest1.ts, 5, 28))
+ >C1 : Symbol(C1, Decl(arrayAssignmentTest1.ts, 2, 1))
+  }
+ class C2 extends C1 {
+@@= skipped -11, +11 lines =@@
+ >C1 : Symbol(C1, Decl(arrayAssignmentTest1.ts, 2, 1))
+ 
+     C2M1():C2[] { return null;}
+->C2M1 : Symbol(C2.C2M1, Decl(arrayAssignmentTest1.ts, 8, 21))
++>C2M1 : Symbol(C2M1, Decl(arrayAssignmentTest1.ts, 8, 21))
+ >C2 : Symbol(C2, Decl(arrayAssignmentTest1.ts, 7, 2))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >C3 : Symbol(C3, Decl(arrayAssignmentTest1.ts, 10, 1))
+ 
+     CM3M1() { return 3;}
+->CM3M1 : Symbol(C3.CM3M1, Decl(arrayAssignmentTest1.ts, 12, 10))
++>CM3M1 : Symbol(CM3M1, Decl(arrayAssignmentTest1.ts, 12, 10))
+ }
+ 
+ 

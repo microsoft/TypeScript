@@ -1,0 +1,23 @@
+--- old.import_unneeded-require-when-referenecing-aliased-type-throug-array.symbols
++++ new.import_unneeded-require-when-referenecing-aliased-type-throug-array.symbols
+@@= skipped -10, +10 lines =@@
+ 
+ var p = testData[0].name;
+ >p : Symbol(p, Decl(a.ts, 3, 3))
+->testData[0].name : Symbol(ITest.name, Decl(b.ts, 1, 20))
++>testData[0].name : Symbol(name, Decl(b.ts, 1, 20))
+ >testData : Symbol(testData, Decl(a.ts, 2, 3))
+->name : Symbol(ITest.name, Decl(b.ts, 1, 20))
++>name : Symbol(name, Decl(b.ts, 1, 20))
+  
+ === b.ts ===
+ declare module "ITest" {
+@@= skipped -12, +12 lines =@@
+ >Name : Symbol(Name, Decl(b.ts, 0, 24))
+ 
+         name: string;
+->name : Symbol(Name.name, Decl(b.ts, 1, 20))
++>name : Symbol(name, Decl(b.ts, 1, 20))
+     }
+     export = Name;
+ >Name : Symbol(Name, Decl(b.ts, 0, 24))

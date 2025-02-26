@@ -1,0 +1,12 @@
+--- old.inferentialTypingUsingApparentType1.symbols
++++ new.inferentialTypingUsingApparentType1.symbols
+@@= skipped -15, +15 lines =@@
+ foo(x => x.length);
+ >foo : Symbol(foo, Decl(inferentialTypingUsingApparentType1.ts, 0, 0))
+ >x : Symbol(x, Decl(inferentialTypingUsingApparentType1.ts, 4, 4))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(inferentialTypingUsingApparentType1.ts, 4, 4))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 

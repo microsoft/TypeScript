@@ -1,0 +1,85 @@
+--- old.jsxNamespaceGlobalReexport.symbols
++++ new.jsxNamespaceGlobalReexport.symbols
+@@= skipped -59, +59 lines =@@
+ >IntrinsicAttributes : Symbol(IntrinsicAttributes, Decl(index.d.ts, 14, 16))
+ 
+         key?: any;
+->key : Symbol(IntrinsicAttributes.key, Decl(index.d.ts, 16, 35))
++>key : Symbol(key, Decl(index.d.ts, 16, 35))
+     }
+ 
+     interface Element extends VNode<any> { }
+@@= skipped -15, +15 lines =@@
+ >ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(index.d.ts, 22, 58))
+ 
+         props: any;
+->props : Symbol(ElementAttributesProperty.props, Decl(index.d.ts, 24, 41))
++>props : Symbol(props, Decl(index.d.ts, 24, 41))
+     }
+ 
+     interface ElementChildrenAttribute {
+ >ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(index.d.ts, 26, 5))
+ 
+         children: any;
+->children : Symbol(ElementChildrenAttribute.children, Decl(index.d.ts, 28, 40))
++>children : Symbol(children, Decl(index.d.ts, 28, 40))
+     }
+ 
+     interface IntrinsicElements {
+ >IntrinsicElements : Symbol(IntrinsicElements, Decl(index.d.ts, 30, 5))
+ 
+         div: HTMLAttributes;
+->div : Symbol(IntrinsicElements.div, Decl(index.d.ts, 32, 33))
++>div : Symbol(div, Decl(index.d.ts, 32, 33))
+ >HTMLAttributes : Symbol(HTMLAttributes, Decl(index.d.ts, 7, 30))
+     }
+ }
+@@= skipped -76, +76 lines =@@
+     props: JSXInternal.HTMLAttributes &
+ >props : Symbol(props, Decl(index.d.ts, 11, 17))
+ >JSXInternal : Symbol(JSXInternal, Decl(index.d.ts, 8, 8))
+->HTMLAttributes : Symbol(JSXInternal.HTMLAttributes, Decl(index.d.ts, 7, 30))
++>HTMLAttributes : Symbol(HTMLAttributes, Decl(index.d.ts, 7, 30))
+ 
+         JSXInternal.SVGAttributes &
+ >JSXInternal : Symbol(JSXInternal, Decl(index.d.ts, 8, 8))
+->SVGAttributes : Symbol(JSXInternal.SVGAttributes, Decl(index.d.ts, 8, 40))
++>SVGAttributes : Symbol(SVGAttributes, Decl(index.d.ts, 8, 40))
+ 
+         Record<string, any> & { children?: ComponentChild },
+ >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+@@= skipped -48, +48 lines =@@
+     props: JSXInternal.HTMLAttributes &
+ >props : Symbol(props, Decl(index.d.ts, 24, 17))
+ >JSXInternal : Symbol(JSXInternal, Decl(index.d.ts, 8, 8))
+->HTMLAttributes : Symbol(JSXInternal.HTMLAttributes, Decl(index.d.ts, 7, 30))
++>HTMLAttributes : Symbol(HTMLAttributes, Decl(index.d.ts, 7, 30))
+ 
+         JSXInternal.SVGAttributes &
+ >JSXInternal : Symbol(JSXInternal, Decl(index.d.ts, 8, 8))
+->SVGAttributes : Symbol(JSXInternal.SVGAttributes, Decl(index.d.ts, 8, 40))
++>SVGAttributes : Symbol(SVGAttributes, Decl(index.d.ts, 8, 40))
+ 
+         Record<string, any> & { children?: ComponentChild[] },
+ >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+@@= skipped -48, +48 lines =@@
+     props: JSXInternal.HTMLAttributes &
+ >props : Symbol(props, Decl(index.d.ts, 37, 17))
+ >JSXInternal : Symbol(JSXInternal, Decl(index.d.ts, 8, 8))
+->HTMLAttributes : Symbol(JSXInternal.HTMLAttributes, Decl(index.d.ts, 7, 30))
++>HTMLAttributes : Symbol(HTMLAttributes, Decl(index.d.ts, 7, 30))
+ 
+         JSXInternal.SVGAttributes &
+ >JSXInternal : Symbol(JSXInternal, Decl(index.d.ts, 8, 8))
+->SVGAttributes : Symbol(JSXInternal.SVGAttributes, Decl(index.d.ts, 8, 40))
++>SVGAttributes : Symbol(SVGAttributes, Decl(index.d.ts, 8, 40))
+ 
+         Record<string, any> & { children?: ComponentChildren },
+ >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+@@= skipped -55, +55 lines =@@
+ === /index.tsx ===
+ export const Comp = () => <div></div>;
+ >Comp : Symbol(Comp, Decl(index.tsx, 0, 12))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(index.d.ts, 32, 33))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(index.d.ts, 32, 33))
+ 

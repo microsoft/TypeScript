@@ -1,0 +1,30 @@
+--- old.typeMatch1.symbols
++++ new.typeMatch1.symbols
+@@= skipped -2, +2 lines =@@
+ === typeMatch1.ts ===
+ interface I { z; }
+ >I : Symbol(I, Decl(typeMatch1.ts, 0, 0))
+->z : Symbol(I.z, Decl(typeMatch1.ts, 0, 13))
++>z : Symbol(z, Decl(typeMatch1.ts, 0, 13))
+ 
+ interface I2 { z; }
+ >I2 : Symbol(I2, Decl(typeMatch1.ts, 0, 18))
+->z : Symbol(I2.z, Decl(typeMatch1.ts, 1, 14))
++>z : Symbol(z, Decl(typeMatch1.ts, 1, 14))
+ 
+ var x1: { z: number; f(n: number): string; f(s: string): number; }
+ >x1 : Symbol(x1, Decl(typeMatch1.ts, 3, 3))
+@@= skipped -47, +47 lines =@@
+ 
+ class C { private x; }
+ >C : Symbol(C, Decl(typeMatch1.ts, 9, 12))
+->x : Symbol(C.x, Decl(typeMatch1.ts, 11, 9))
++>x : Symbol(x, Decl(typeMatch1.ts, 11, 9))
+ 
+ class D { private x; }
+ >D : Symbol(D, Decl(typeMatch1.ts, 11, 22))
+->x : Symbol(D.x, Decl(typeMatch1.ts, 12, 9))
++>x : Symbol(x, Decl(typeMatch1.ts, 12, 9))
+ 
+ var x6=new C();
+ >x6 : Symbol(x6, Decl(typeMatch1.ts, 14, 3))

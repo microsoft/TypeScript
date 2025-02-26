@@ -1,0 +1,11 @@
+--- old.declFileImportChainInExportAssignment.symbols
++++ new.declFileImportChainInExportAssignment.symbols
+@@= skipped -14, +14 lines =@@
+ import a = m.c;
+ >a : Symbol(a, Decl(declFileImportChainInExportAssignment.ts, 5, 1))
+ >m : Symbol(m, Decl(declFileImportChainInExportAssignment.ts, 0, 0))
+->c : Symbol(a, Decl(declFileImportChainInExportAssignment.ts, 0, 10))
++>c : Symbol(c, Decl(declFileImportChainInExportAssignment.ts, 0, 10))
+ 
+ import b = a;
+ >b : Symbol(b, Decl(declFileImportChainInExportAssignment.ts, 6, 15))

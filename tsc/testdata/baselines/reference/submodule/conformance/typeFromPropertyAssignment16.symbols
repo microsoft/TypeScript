@@ -1,0 +1,39 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment16.ts] ////
+
+=== a.js ===
+var Outer = {};
+>Outer : Symbol(Outer, Decl(a.js, 0, 3))
+
+Outer.Inner = function () {}
+>Outer : Symbol(Outer, Decl(a.js, 0, 3))
+
+Outer.Inner.prototype = {
+>Outer : Symbol(Outer, Decl(a.js, 0, 3))
+
+    x: 1,
+>x : Symbol(x, Decl(a.js, 3, 25))
+
+    m() { }
+>m : Symbol(m, Decl(a.js, 4, 9))
+}
+
+/** @type {Outer.Inner} */
+var inner
+>inner : Symbol(inner, Decl(a.js, 9, 3))
+
+inner.x
+>inner : Symbol(inner, Decl(a.js, 9, 3))
+
+inner.m()
+>inner : Symbol(inner, Decl(a.js, 9, 3))
+
+var inno = new Outer.Inner()
+>inno : Symbol(inno, Decl(a.js, 12, 3))
+>Outer : Symbol(Outer, Decl(a.js, 0, 3))
+
+inno.x
+>inno : Symbol(inno, Decl(a.js, 12, 3))
+
+inno.m()
+>inno : Symbol(inno, Decl(a.js, 12, 3))
+

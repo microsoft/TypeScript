@@ -1,0 +1,11 @@
+--- old.jsDeclarationsClassLeadingOptional.symbols
++++ new.jsDeclarationsClassLeadingOptional.symbols
+@@= skipped -4, +4 lines =@@
+ >Z : Symbol(Z, Decl(bar.js, 0, 0))
+ 
+     f(x = 1, y) {
+->f : Symbol(Z.f, Decl(bar.js, 0, 16))
++>f : Symbol(f, Decl(bar.js, 0, 16))
+ >x : Symbol(x, Decl(bar.js, 1, 6))
+ >y : Symbol(y, Decl(bar.js, 1, 12))
+ 

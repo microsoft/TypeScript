@@ -1,0 +1,11 @@
+--- old.destructuringArrayBindingPatternAndAssignment2.symbols
++++ new.destructuringArrayBindingPatternAndAssignment2.symbols
+@@= skipped -25, +25 lines =@@
+ >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     2: number;
+->2 : Symbol(J[2], Decl(destructuringArrayBindingPatternAndAssignment2.ts, 9, 35))
++>2 : Symbol(2, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 9, 35))
+ }
+ 
+ function bar(): J {

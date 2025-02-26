@@ -1,0 +1,20 @@
+--- old.decoratorReferenceOnOtherProperty.symbols
++++ new.decoratorReferenceOnOtherProperty.symbols
+@@= skipped -15, +15 lines =@@
+ >Bar : Symbol(Bar, Decl(index.ts, 2, 31))
+ 
+   yoha(@foo yoha, bar: Yoha) {}
+->yoha : Symbol(Bar.yoha, Decl(index.ts, 4, 11))
++>yoha : Symbol(yoha, Decl(index.ts, 4, 11))
+ >foo : Symbol(foo, Decl(index.ts, 0, 28))
+ >yoha : Symbol(yoha, Decl(index.ts, 5, 7))
+ >bar : Symbol(bar, Decl(index.ts, 5, 17))
+@@= skipped -21, +21 lines =@@
+ >Bar : Symbol(Bar, Decl(index2.ts, 2, 31))
+ 
+   yoha(@foo yoha, ...bar: Yoha[]) {}
+->yoha : Symbol(Bar.yoha, Decl(index2.ts, 4, 11))
++>yoha : Symbol(yoha, Decl(index2.ts, 4, 11))
+ >foo : Symbol(foo, Decl(index2.ts, 0, 28))
+ >yoha : Symbol(yoha, Decl(index2.ts, 5, 7))
+ >bar : Symbol(bar, Decl(index2.ts, 5, 17))

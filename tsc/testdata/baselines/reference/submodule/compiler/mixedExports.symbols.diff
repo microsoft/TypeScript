@@ -1,0 +1,17 @@
+--- old.mixedExports.symbols
++++ new.mixedExports.symbols
+@@= skipped -28, +28 lines =@@
+ 
+      interface X {x}
+ >X : Symbol(X, Decl(mixedExports.ts, 11, 10), Decl(mixedExports.ts, 12, 20), Decl(mixedExports.ts, 13, 23))
+->x : Symbol(X.x, Decl(mixedExports.ts, 12, 18))
++>x : Symbol(x, Decl(mixedExports.ts, 12, 18))
+ 
+      export module X {}
+ >X : Symbol(X, Decl(mixedExports.ts, 12, 20))
+ 
+      interface X {y}
+ >X : Symbol(X, Decl(mixedExports.ts, 11, 10), Decl(mixedExports.ts, 12, 20), Decl(mixedExports.ts, 13, 23))
+->y : Symbol(X.y, Decl(mixedExports.ts, 14, 18))
++>y : Symbol(y, Decl(mixedExports.ts, 14, 18))
+ }

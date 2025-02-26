@@ -1,0 +1,11 @@
+--- old.asyncArrowFunctionCapturesThis_es2017.symbols
++++ new.asyncArrowFunctionCapturesThis_es2017.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(asyncArrowFunctionCapturesThis_es2017.ts, 0, 0))
+ 
+    method() {
+->method : Symbol(C.method, Decl(asyncArrowFunctionCapturesThis_es2017.ts, 0, 9))
++>method : Symbol(method, Decl(asyncArrowFunctionCapturesThis_es2017.ts, 0, 9))
+ 
+       var fn = async () => await this;      
+ >fn : Symbol(fn, Decl(asyncArrowFunctionCapturesThis_es2017.ts, 2, 9))

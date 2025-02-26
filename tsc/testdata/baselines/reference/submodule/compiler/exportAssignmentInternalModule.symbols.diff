@@ -1,0 +1,21 @@
+--- old.exportAssignmentInternalModule.symbols
++++ new.exportAssignmentInternalModule.symbols
+@@= skipped -5, +5 lines =@@
+ 
+ var n: number = modM.x;
+ >n : Symbol(n, Decl(exportAssignmentInternalModule_B.ts, 2, 3))
+->modM.x : Symbol(modM.x, Decl(exportAssignmentInternalModule_A.ts, 1, 11))
+ >modM : Symbol(modM, Decl(exportAssignmentInternalModule_B.ts, 0, 0))
+->x : Symbol(modM.x, Decl(exportAssignmentInternalModule_A.ts, 1, 11))
+ 
+-=== exportAssignmentInternalModule_A.ts ===
+-module M {
+->M : Symbol(M, Decl(exportAssignmentInternalModule_A.ts, 0, 0))
+-
+-	export var x;
+->x : Symbol(x, Decl(exportAssignmentInternalModule_A.ts, 1, 11))
+-}
+-
+-export = M;
+->M : Symbol(M, Decl(exportAssignmentInternalModule_A.ts, 0, 0))
+-

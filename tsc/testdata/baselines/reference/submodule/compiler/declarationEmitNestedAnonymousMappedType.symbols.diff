@@ -1,0 +1,14 @@
+--- old.declarationEmitNestedAnonymousMappedType.symbols
++++ new.declarationEmitNestedAnonymousMappedType.symbols
+@@= skipped -30, +30 lines =@@
+ >Property : Symbol(Property, Decl(declarationEmitNestedAnonymousMappedType.ts, 6, 20))
+ 
+     return Object.create(null) as Part2;
+->Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Part2 : Symbol(Part2, Decl(declarationEmitNestedAnonymousMappedType.ts, 5, 6))
+ }
+ 

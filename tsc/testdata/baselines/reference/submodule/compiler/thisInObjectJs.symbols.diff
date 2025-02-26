@@ -1,0 +1,35 @@
+--- old.thisInObjectJs.symbols
++++ new.thisInObjectJs.symbols
+@@= skipped -14, +14 lines =@@
+ >fun : Symbol(fun, Decl(index.js, 3, 9))
+ 
+     this.x = 1
+->this.x : Symbol(x, Decl(index.js, 1, 11))
+->this : Symbol(obj, Decl(index.js, 1, 9))
+->x : Symbol(fun.x, Decl(index.js, 4, 19))
+-
+     this/*1*/
+->this : Symbol(obj, Decl(index.js, 1, 9))
+-
+   },
+   f2: function() {
+ >f2 : Symbol(f2, Decl(index.js, 7, 4))
+ 
+     this.x
+->this.x : Symbol(x, Decl(index.js, 1, 11))
+->this : Symbol(obj, Decl(index.js, 1, 9))
+->x : Symbol(x, Decl(index.js, 1, 11))
+-
+     this/*2*/
+->this : Symbol(obj, Decl(index.js, 1, 9))
+-
+   },
+   f3: (function() {
+ >f3 : Symbol(f3, Decl(index.js, 11, 4))
+ 
+     this.x = 1
+->x : Symbol((Anonymous function).x, Decl(index.js, 12, 19))
+-
+     this/*3*/
+   }),
+ }

@@ -1,0 +1,8 @@
+--- old.requireOfJsonFileWithNoContent.symbols
++++ new.requireOfJsonFileWithNoContent.symbols
+@@= skipped -23, +23 lines =@@
+ >b : Symbol(b, Decl(file1.ts, 4, 7))
+ }
+ 
+-=== b.json ===
+-

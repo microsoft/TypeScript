@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsFunctionDeclarations.ts] ////
+
+=== isolatedDeclarationErrorsFunctionDeclarations.ts ===
+export function noReturn() {}
+>noReturn : Symbol(noReturn, Decl(isolatedDeclarationErrorsFunctionDeclarations.ts, 0, 0))
+
+export function noParamAnnotation(p): void {}
+>noParamAnnotation : Symbol(noParamAnnotation, Decl(isolatedDeclarationErrorsFunctionDeclarations.ts, 0, 29))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsFunctionDeclarations.ts, 2, 34))
+
+export function noParamAnnotationDefault(p = 1): void {}
+>noParamAnnotationDefault : Symbol(noParamAnnotationDefault, Decl(isolatedDeclarationErrorsFunctionDeclarations.ts, 2, 45))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsFunctionDeclarations.ts, 4, 41))
+
+export function noParamAnnotationBadDefault(p = 1 + 1, p2 = { a: 1 + 1 }, p3 = [1 + 1] as const): void {}
+>noParamAnnotationBadDefault : Symbol(noParamAnnotationBadDefault, Decl(isolatedDeclarationErrorsFunctionDeclarations.ts, 4, 56))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsFunctionDeclarations.ts, 6, 44))
+>p2 : Symbol(p2, Decl(isolatedDeclarationErrorsFunctionDeclarations.ts, 6, 54))
+>a : Symbol(a, Decl(isolatedDeclarationErrorsFunctionDeclarations.ts, 6, 61))
+>p3 : Symbol(p3, Decl(isolatedDeclarationErrorsFunctionDeclarations.ts, 6, 73))
+>const : Symbol(const)
+
+export function noParamAnnotationBadDefault2(p = { a: 1 + 1 }): void {}
+>noParamAnnotationBadDefault2 : Symbol(noParamAnnotationBadDefault2, Decl(isolatedDeclarationErrorsFunctionDeclarations.ts, 6, 105))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsFunctionDeclarations.ts, 8, 45))
+>a : Symbol(a, Decl(isolatedDeclarationErrorsFunctionDeclarations.ts, 8, 50))
+

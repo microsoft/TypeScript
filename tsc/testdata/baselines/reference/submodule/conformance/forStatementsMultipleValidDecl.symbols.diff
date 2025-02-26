@@ -1,0 +1,13 @@
+--- old.forStatementsMultipleValidDecl.symbols
++++ new.forStatementsMultipleValidDecl.symbols
+@@= skipped -21, +21 lines =@@
+ }
+ interface Point { x: number; y: number; }
+ >Point : Symbol(Point, Decl(forStatementsMultipleValidDecl.ts, 9, 1))
+->x : Symbol(Point.x, Decl(forStatementsMultipleValidDecl.ts, 10, 17))
+->y : Symbol(Point.y, Decl(forStatementsMultipleValidDecl.ts, 10, 28))
++>x : Symbol(x, Decl(forStatementsMultipleValidDecl.ts, 10, 17))
++>y : Symbol(y, Decl(forStatementsMultipleValidDecl.ts, 10, 28))
+ 
+ for (var p: Point; ;) { }
+ >p : Symbol(p, Decl(forStatementsMultipleValidDecl.ts, 12, 8), Decl(forStatementsMultipleValidDecl.ts, 13, 8), Decl(forStatementsMultipleValidDecl.ts, 14, 8), Decl(forStatementsMultipleValidDecl.ts, 15, 8), Decl(forStatementsMultipleValidDecl.ts, 16, 8) ... and 2 more)

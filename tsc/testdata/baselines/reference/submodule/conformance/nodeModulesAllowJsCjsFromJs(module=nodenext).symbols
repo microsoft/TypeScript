@@ -1,0 +1,12 @@
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsCjsFromJs.ts] ////
+
+=== foo.cjs ===
+
+exports.foo = "foo"
+=== bar.ts ===
+import foo from "./foo.cjs"
+>foo : Symbol(foo, Decl(bar.ts, 0, 6))
+
+foo.foo;
+>foo : Symbol(foo, Decl(bar.ts, 0, 6))
+

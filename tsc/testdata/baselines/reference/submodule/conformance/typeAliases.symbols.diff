@@ -1,0 +1,67 @@
+--- old.typeAliases.symbols
++++ new.typeAliases.symbols
+@@= skipped -54, +54 lines =@@
+ 
+ interface I6 { x : string }
+ >I6 : Symbol(I6, Decl(typeAliases.ts, 20, 11))
+->x : Symbol(I6.x, Decl(typeAliases.ts, 22, 14))
++>x : Symbol(x, Decl(typeAliases.ts, 22, 14))
+ 
+ type T6 = I6;
+ >T6 : Symbol(T6, Decl(typeAliases.ts, 22, 27))
+@@= skipped -16, +16 lines =@@
+ 
+ class C7 { x: boolean }
+ >C7 : Symbol(C7, Decl(typeAliases.ts, 25, 11))
+->x : Symbol(C7.x, Decl(typeAliases.ts, 27, 10))
++>x : Symbol(x, Decl(typeAliases.ts, 27, 10))
+ 
+ type T7 = C7;
+ >T7 : Symbol(T7, Decl(typeAliases.ts, 27, 23))
+@@= skipped -58, +58 lines =@@
+ 
+ interface I13 { x: string };
+ >I13 : Symbol(I13, Decl(typeAliases.ts, 46, 13))
+->x : Symbol(I13.x, Decl(typeAliases.ts, 48, 15))
++>x : Symbol(x, Decl(typeAliases.ts, 48, 15))
+ 
+ type T13 = I13;
+ >T13 : Symbol(T13, Decl(typeAliases.ts, 48, 28))
+@@= skipped -61, +61 lines =@@
+ 
+ enum E { x = 10 }
+ >E : Symbol(E, Decl(typeAliases.ts, 65, 20))
+->x : Symbol(E.x, Decl(typeAliases.ts, 67, 8))
++>x : Symbol(x, Decl(typeAliases.ts, 67, 8))
+ 
+ declare function f15(a: string): boolean;
+ >f15 : Symbol(f15, Decl(typeAliases.ts, 67, 17), Decl(typeAliases.ts, 69, 41))
+@@= skipped -12, +12 lines =@@
+ >Meters : Symbol(Meters, Decl(typeAliases.ts, 63, 39))
+ 
+ f15(E.x).toLowerCase();
+->f15(E.x).toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>f15(E.x).toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+ >f15 : Symbol(f15, Decl(typeAliases.ts, 67, 17), Decl(typeAliases.ts, 69, 41))
+->E.x : Symbol(E.x, Decl(typeAliases.ts, 67, 8))
++>E.x : Symbol(x, Decl(typeAliases.ts, 67, 8))
+ >E : Symbol(E, Decl(typeAliases.ts, 65, 20))
+->x : Symbol(E.x, Decl(typeAliases.ts, 67, 8))
+->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>x : Symbol(x, Decl(typeAliases.ts, 67, 8))
++>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+ 
+ type StringAndBoolean = [string, boolean]
+ >StringAndBoolean : Symbol(StringAndBoolean, Decl(typeAliases.ts, 71, 23))
+@@= skipped -27, +27 lines =@@
+ >StringAndBoolean : Symbol(StringAndBoolean, Decl(typeAliases.ts, 71, 23))
+ 
+ y[0].toLowerCase();
+->y[0].toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>y[0].toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+ >y : Symbol(y, Decl(typeAliases.ts, 78, 3))
+->0 : Symbol(0)
+->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>0 : Symbol("0")
++>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+ 

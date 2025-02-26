@@ -1,0 +1,16 @@
+--- old.privateNamesNoDelete.symbols
++++ new.privateNamesNoDelete.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(privateNamesNoDelete.ts, 0, 0))
+ 
+     #v = 1;
+->#v : Symbol(A.#v, Decl(privateNamesNoDelete.ts, 0, 9))
++>#v : Symbol(#v, Decl(privateNamesNoDelete.ts, 0, 9))
+ 
+     constructor() {
+         delete this.#v; // Error: The operand of a delete operator cannot be a private name.
+->this.#v : Symbol(A.#v, Decl(privateNamesNoDelete.ts, 0, 9))
++>this.#v : Symbol(#v, Decl(privateNamesNoDelete.ts, 0, 9))
+ >this : Symbol(A, Decl(privateNamesNoDelete.ts, 0, 0))
+     }
+ }

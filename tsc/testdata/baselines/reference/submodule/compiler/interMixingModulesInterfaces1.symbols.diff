@@ -1,0 +1,31 @@
+--- old.interMixingModulesInterfaces1.symbols
++++ new.interMixingModulesInterfaces1.symbols
+@@= skipped -7, +7 lines =@@
+ >B : Symbol(B, Decl(interMixingModulesInterfaces1.ts, 0, 10), Decl(interMixingModulesInterfaces1.ts, 5, 5))
+ 
+         name: string;
+->name : Symbol(B.name, Decl(interMixingModulesInterfaces1.ts, 2, 24))
++>name : Symbol(name, Decl(interMixingModulesInterfaces1.ts, 2, 24))
+ 
+         value: number;
+->value : Symbol(B.value, Decl(interMixingModulesInterfaces1.ts, 3, 21))
++>value : Symbol(value, Decl(interMixingModulesInterfaces1.ts, 3, 21))
+     }
+ 
+     export module B {
+@@= skipped -21, +21 lines =@@
+ var x: A.B = A.B.createB();
+ >x : Symbol(x, Decl(interMixingModulesInterfaces1.ts, 14, 3))
+ >A : Symbol(A, Decl(interMixingModulesInterfaces1.ts, 0, 0))
+->B : Symbol(A.B, Decl(interMixingModulesInterfaces1.ts, 0, 10), Decl(interMixingModulesInterfaces1.ts, 5, 5))
+->A.B.createB : Symbol(A.B.createB, Decl(interMixingModulesInterfaces1.ts, 7, 21))
+->A.B : Symbol(A.B, Decl(interMixingModulesInterfaces1.ts, 0, 10), Decl(interMixingModulesInterfaces1.ts, 5, 5))
++>B : Symbol(B, Decl(interMixingModulesInterfaces1.ts, 0, 10), Decl(interMixingModulesInterfaces1.ts, 5, 5))
++>A.B.createB : Symbol(createB, Decl(interMixingModulesInterfaces1.ts, 7, 21))
++>A.B : Symbol(B, Decl(interMixingModulesInterfaces1.ts, 0, 10), Decl(interMixingModulesInterfaces1.ts, 5, 5))
+ >A : Symbol(A, Decl(interMixingModulesInterfaces1.ts, 0, 0))
+->B : Symbol(A.B, Decl(interMixingModulesInterfaces1.ts, 0, 10), Decl(interMixingModulesInterfaces1.ts, 5, 5))
+->createB : Symbol(A.B.createB, Decl(interMixingModulesInterfaces1.ts, 7, 21))
++>B : Symbol(B, Decl(interMixingModulesInterfaces1.ts, 0, 10), Decl(interMixingModulesInterfaces1.ts, 5, 5))
++>createB : Symbol(createB, Decl(interMixingModulesInterfaces1.ts, 7, 21))
+ 

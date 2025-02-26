@@ -1,0 +1,10 @@
+--- old.importDeclarationUsedAsTypeQuery.symbols
++++ new.importDeclarationUsedAsTypeQuery.symbols
+@@= skipped -13, +13 lines =@@
+ >B : Symbol(B, Decl(importDeclarationUsedAsTypeQuery_require.ts, 0, 0))
+ 
+     id: number;
+->id : Symbol(B.id, Decl(importDeclarationUsedAsTypeQuery_require.ts, 0, 16))
++>id : Symbol(id, Decl(importDeclarationUsedAsTypeQuery_require.ts, 0, 16))
+ }
+ 

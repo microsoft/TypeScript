@@ -1,0 +1,26 @@
+--- old.contextualReturnTypeOfIIFE3.symbols
++++ new.contextualReturnTypeOfIIFE3.symbols
+@@= skipped -19, +19 lines =@@
+ 
+ app.foo.bar = (function () {
+ >app.foo.bar : Symbol(bar, Decl(contextualReturnTypeOfIIFE3.ts, 1, 12))
+->app.foo : Symbol(app.foo, Decl(contextualReturnTypeOfIIFE3.ts, 1, 5))
++>app.foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE3.ts, 1, 5))
+ >app : Symbol(app, Decl(contextualReturnTypeOfIIFE3.ts, 0, 0))
+->foo : Symbol(app.foo, Decl(contextualReturnTypeOfIIFE3.ts, 1, 5))
++>foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE3.ts, 1, 5))
+ >bar : Symbol(bar, Decl(contextualReturnTypeOfIIFE3.ts, 1, 12))
+ 
+   return { someFun(arg) {} };
+@@= skipped -14, +14 lines =@@
+ app.foo.bar.someFun(1);
+ >app.foo.bar.someFun : Symbol(someFun, Decl(contextualReturnTypeOfIIFE3.ts, 2, 10))
+ >app.foo.bar : Symbol(bar, Decl(contextualReturnTypeOfIIFE3.ts, 1, 12))
+->app.foo : Symbol(app.foo, Decl(contextualReturnTypeOfIIFE3.ts, 1, 5))
++>app.foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE3.ts, 1, 5))
+ >app : Symbol(app, Decl(contextualReturnTypeOfIIFE3.ts, 0, 0))
+->foo : Symbol(app.foo, Decl(contextualReturnTypeOfIIFE3.ts, 1, 5))
++>foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE3.ts, 1, 5))
+ >bar : Symbol(bar, Decl(contextualReturnTypeOfIIFE3.ts, 1, 12))
+ >someFun : Symbol(someFun, Decl(contextualReturnTypeOfIIFE3.ts, 2, 10))
+ 

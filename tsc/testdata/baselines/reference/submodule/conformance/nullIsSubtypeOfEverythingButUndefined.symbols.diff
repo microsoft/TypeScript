@@ -1,0 +1,67 @@
+--- old.nullIsSubtypeOfEverythingButUndefined.symbols
++++ new.nullIsSubtypeOfEverythingButUndefined.symbols
+@@= skipped -82, +82 lines =@@
+ 
+ interface I1 { foo: number; }
+ >I1 : Symbol(I1, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 31, 50))
+->foo : Symbol(I1.foo, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 33, 14))
++>foo : Symbol(foo, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 33, 14))
+ 
+ var i1: I1;
+ >i1 : Symbol(i1, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 34, 3))
+@@= skipped -16, +16 lines =@@
+ 
+ class C1 { foo: number; }
+ >C1 : Symbol(C1, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 36, 26))
+->foo : Symbol(C1.foo, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 38, 10))
++>foo : Symbol(foo, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 38, 10))
+ 
+ var c1: C1;
+ >c1 : Symbol(c1, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 39, 3))
+@@= skipped -17, +17 lines =@@
+ class C2<T> { foo: T; }
+ >C2 : Symbol(C2, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 41, 27))
+ >T : Symbol(T, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 43, 9))
+->foo : Symbol(C2.foo, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 43, 13))
++>foo : Symbol(foo, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 43, 13))
+ >T : Symbol(T, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 43, 9))
+ 
+ var c2: C2<number>;
+@@= skipped -17, +17 lines =@@
+ 
+ enum E { A }
+ >E : Symbol(E, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 46, 27))
+->A : Symbol(E.A, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 48, 8))
++>A : Symbol(A, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 48, 8))
+ 
+ var r13 = true ? E : null;
+ >r13 : Symbol(r13, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 49, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 50, 3))
+@@= skipped -12, +12 lines =@@
+ 
+ var r14 = true ? E.A : null;
+ >r14 : Symbol(r14, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 52, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 53, 3))
+->E.A : Symbol(E.A, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 48, 8))
++>E.A : Symbol(A, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 48, 8))
+ >E : Symbol(E, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 46, 27))
+->A : Symbol(E.A, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 48, 8))
++>A : Symbol(A, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 48, 8))
+ 
+ var r14 = true ? null : E.A;
+ >r14 : Symbol(r14, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 52, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 53, 3))
+->E.A : Symbol(E.A, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 48, 8))
++>E.A : Symbol(A, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 48, 8))
+ >E : Symbol(E, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 46, 27))
+->A : Symbol(E.A, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 48, 8))
++>A : Symbol(A, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 48, 8))
+ 
+ function f() { }
+ >f : Symbol(f, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 53, 28), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 55, 16))
+@@= skipped -33, +33 lines =@@
+ 
+ class c { baz: string }
+ >c : Symbol(c, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 61, 27), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 63, 23))
+->baz : Symbol(c.baz, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 63, 9))
++>baz : Symbol(baz, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 63, 9))
+ 
+ module c {
+ >c : Symbol(c, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 61, 27), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 63, 23))

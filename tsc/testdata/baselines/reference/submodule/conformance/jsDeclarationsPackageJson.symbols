@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsPackageJson.ts] ////
+
+=== index.js ===
+const j = require("./package.json");
+>j : Symbol(j, Decl(index.js, 0, 5))
+
+module.exports = j;
+>j : Symbol(j, Decl(index.js, 0, 5))
+

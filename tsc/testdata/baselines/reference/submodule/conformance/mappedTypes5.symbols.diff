@@ -1,0 +1,46 @@
+--- old.mappedTypes5.symbols
++++ new.mappedTypes5.symbols
+@@= skipped -180, +180 lines =@@
+ >previous : Symbol(previous, Decl(mappedTypes5.ts, 36, 7))
+ >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+ >T : Symbol(T, Decl(mappedTypes5.ts, 35, 14))
+->Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     let current: Partial<T> = Object.create(null);
+ >current : Symbol(current, Decl(mappedTypes5.ts, 37, 7))
+ >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+ >T : Symbol(T, Decl(mappedTypes5.ts, 35, 14))
+->Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     let args1: Args1<T> = { previous, current };
+ >args1 : Symbol(args1, Decl(mappedTypes5.ts, 38, 7))
+@@= skipped -73, +73 lines =@@
+ >previous : Symbol(previous, Decl(mappedTypes5.ts, 55, 7))
+ >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+ >State2 : Symbol(State2, Decl(mappedTypes5.ts, 40, 1))
+->Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     let current: Partial<State2> = Object.create(null);
+ >current : Symbol(current, Decl(mappedTypes5.ts, 56, 7))
+ >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+ >State2 : Symbol(State2, Decl(mappedTypes5.ts, 40, 1))
+->Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     let args1: Args3 = { previous, current };
+ >args1 : Symbol(args1, Decl(mappedTypes5.ts, 57, 7))

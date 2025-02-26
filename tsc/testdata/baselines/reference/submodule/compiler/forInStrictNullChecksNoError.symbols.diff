@@ -1,0 +1,14 @@
+--- old.forInStrictNullChecksNoError.symbols
++++ new.forInStrictNullChecksNoError.symbols
+@@= skipped -10, +10 lines =@@
+ >x : Symbol(x, Decl(forInStrictNullChecksNoError.ts, 0, 11))
+ 
+         console.log(x[key]);  // 2
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x : Symbol(x, Decl(forInStrictNullChecksNoError.ts, 0, 11))
+ >key : Symbol(key, Decl(forInStrictNullChecksNoError.ts, 1, 14))
+     }

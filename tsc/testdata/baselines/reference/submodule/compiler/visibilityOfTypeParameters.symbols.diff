@@ -1,0 +1,11 @@
+--- old.visibilityOfTypeParameters.symbols
++++ new.visibilityOfTypeParameters.symbols
+@@= skipped -4, +4 lines =@@
+ >MyClass : Symbol(MyClass, Decl(visibilityOfTypeParameters.ts, 0, 0))
+ 
+     protected myMethod<T>(val: T): T {
+->myMethod : Symbol(MyClass.myMethod, Decl(visibilityOfTypeParameters.ts, 0, 22))
++>myMethod : Symbol(myMethod, Decl(visibilityOfTypeParameters.ts, 0, 22))
+ >T : Symbol(T, Decl(visibilityOfTypeParameters.ts, 1, 23))
+ >val : Symbol(val, Decl(visibilityOfTypeParameters.ts, 1, 26))
+ >T : Symbol(T, Decl(visibilityOfTypeParameters.ts, 1, 23))

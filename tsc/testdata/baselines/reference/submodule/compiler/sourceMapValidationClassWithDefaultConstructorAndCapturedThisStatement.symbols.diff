@@ -1,0 +1,18 @@
+--- old.sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.symbols
++++ new.sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.symbols
+@@= skipped -4, +4 lines =@@
+ >Greeter : Symbol(Greeter, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 0, 0))
+ 
+     public a = 10;
+->a : Symbol(Greeter.a, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 0, 15))
++>a : Symbol(a, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 0, 15))
+ 
+     public returnA = () => this.a;
+->returnA : Symbol(Greeter.returnA, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 1, 18))
+->this.a : Symbol(Greeter.a, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 0, 15))
++>returnA : Symbol(returnA, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 1, 18))
++>this.a : Symbol(a, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 0, 15))
+ >this : Symbol(Greeter, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 0, 0))
+->a : Symbol(Greeter.a, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 0, 15))
++>a : Symbol(a, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 0, 15))
+ }

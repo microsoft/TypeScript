@@ -1,0 +1,14 @@
+--- old.nonPrimitiveAccessProperty.symbols
++++ new.nonPrimitiveAccessProperty.symbols
+@@= skipped -4, +4 lines =@@
+ >a : Symbol(a, Decl(nonPrimitiveAccessProperty.ts, 0, 3))
+ 
+ a.toString();
+->a.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>a.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(nonPrimitiveAccessProperty.ts, 0, 3))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+ a.nonExist(); // error
+ >a : Symbol(a, Decl(nonPrimitiveAccessProperty.ts, 0, 3))

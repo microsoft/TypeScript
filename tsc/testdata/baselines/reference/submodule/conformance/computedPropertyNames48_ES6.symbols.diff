@@ -1,0 +1,23 @@
+--- old.computedPropertyNames48_ES6.symbols
++++ new.computedPropertyNames48_ES6.symbols
+@@= skipped -10, +10 lines =@@
+ 
+ enum E { x }
+ >E : Symbol(E, Decl(computedPropertyNames48_ES6.ts, 0, 61))
+->x : Symbol(E.x, Decl(computedPropertyNames48_ES6.ts, 2, 8))
++>x : Symbol(x, Decl(computedPropertyNames48_ES6.ts, 2, 8))
+ 
+ var a: any;
+ >a : Symbol(a, Decl(computedPropertyNames48_ES6.ts, 4, 3))
+@@= skipped -19, +19 lines =@@
+ 
+     [E.x]: ""
+ >[E.x] : Symbol([E.x], Decl(computedPropertyNames48_ES6.ts, 10, 16))
+->E.x : Symbol(E.x, Decl(computedPropertyNames48_ES6.ts, 2, 8))
++>E.x : Symbol(x, Decl(computedPropertyNames48_ES6.ts, 2, 8))
+ >E : Symbol(E, Decl(computedPropertyNames48_ES6.ts, 0, 61))
+->x : Symbol(E.x, Decl(computedPropertyNames48_ES6.ts, 2, 8))
++>x : Symbol(x, Decl(computedPropertyNames48_ES6.ts, 2, 8))
+ 
+ }); // Should return string
+ 

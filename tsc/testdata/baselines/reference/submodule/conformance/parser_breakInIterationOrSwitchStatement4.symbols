@@ -1,0 +1,8 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakInIterationOrSwitchStatement4.ts] ////
+
+=== parser_breakInIterationOrSwitchStatement4.ts ===
+for (var i in something) {
+>i : Symbol(i, Decl(parser_breakInIterationOrSwitchStatement4.ts, 0, 8))
+
+  break;
+}

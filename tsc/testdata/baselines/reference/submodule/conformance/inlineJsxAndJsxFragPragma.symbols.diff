@@ -1,0 +1,47 @@
+--- old.inlineJsxAndJsxFragPragma.symbols
++++ new.inlineJsxAndJsxFragPragma.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === renderer.d.ts ===
+ declare global {
+->global : Symbol(global, Decl(renderer.d.ts, 0, 0))
++>global : Symbol((Missing), Decl(renderer.d.ts, 0, 0))
+ 
+     namespace JSX {
+ >JSX : Symbol(JSX, Decl(renderer.d.ts, 0, 16))
+@@= skipped -32, +32 lines =@@
+ >Fragment : Symbol(Fragment, Decl(preacty.tsx, 4, 10))
+ 
+ <><div></div></>
+->div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+->div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+ 
+ === snabbdomy.tsx ===
+ /* @jsx jsx */
+@@= skipped -10, +8 lines =@@
+ >jsx : Symbol(jsx, Decl(snabbdomy.tsx, 2, 8))
+ 
+ <><span></span></>
+->span : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+->span : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+ 
+ === preacty-only-fragment.tsx ===
+ /**
+@@= skipped -49, +47 lines =@@
+ >Fragment : Symbol(Fragment, Decl(preacty-no-fragment.tsx, 4, 10))
+ 
+ <div></div>
+->div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+->div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+ 
+ === snabbdomy-no-fragment.tsx ===
+ /* @jsx jsx */
+@@= skipped -10, +8 lines =@@
+ >jsx : Symbol(jsx, Decl(snabbdomy-no-fragment.tsx, 2, 8))
+ 
+ <div></div>
+->div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+->div : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+ 
+ === preacty-only-component.tsx ===
+ /**

@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/staticAndMemberFunctions.ts] ////
+
+=== staticAndMemberFunctions.ts ===
+class T {
+>T : Symbol(T, Decl(staticAndMemberFunctions.ts, 0, 0))
+
+    static x() { }
+>x : Symbol(x, Decl(staticAndMemberFunctions.ts, 0, 9))
+
+    public y() { }
+>y : Symbol(y, Decl(staticAndMemberFunctions.ts, 1, 18))
+}

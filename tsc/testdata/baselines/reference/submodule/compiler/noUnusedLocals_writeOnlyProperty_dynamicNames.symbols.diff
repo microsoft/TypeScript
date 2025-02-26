@@ -1,0 +1,21 @@
+--- old.noUnusedLocals_writeOnlyProperty_dynamicNames.symbols
++++ new.noUnusedLocals_writeOnlyProperty_dynamicNames.symbols
+@@= skipped -12, +12 lines =@@
+ >C : Symbol(C, Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 1, 22))
+ 
+     private [x]: number;
+->[x] : Symbol(C[x], Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 2, 9))
++>[x] : Symbol([x], Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 2, 9))
+ >x : Symbol(x, Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 0, 5))
+ 
+     private [y]: number;
+->[y] : Symbol(C[y], Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 3, 24))
++>[y] : Symbol([y], Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 3, 24))
+ >y : Symbol(y, Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 1, 5))
+ 
+     m() {
+->m : Symbol(C.m, Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 4, 24))
++>m : Symbol(m, Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 4, 24))
+ 
+         this[x] = 0; // write-only
+ >this : Symbol(C, Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 1, 22))

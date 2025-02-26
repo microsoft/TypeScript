@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/commentOnStaticMember1.ts] ////
+
+=== commentOnStaticMember1.ts ===
+class Greeter {
+>Greeter : Symbol(Greeter, Decl(commentOnStaticMember1.ts, 0, 0))
+
+    //Hello World
+    static foo(){
+>foo : Symbol(foo, Decl(commentOnStaticMember1.ts, 0, 15))
+    }
+}

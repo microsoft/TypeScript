@@ -1,0 +1,11 @@
+--- old.icomparable.symbols
++++ new.icomparable.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(icomparable.ts, 0, 26))
+ 
+        compareTo(other: T);
+->compareTo : Symbol(IComparable.compareTo, Decl(icomparable.ts, 0, 30))
++>compareTo : Symbol(compareTo, Decl(icomparable.ts, 0, 30))
+ >other : Symbol(other, Decl(icomparable.ts, 1, 17))
+ >T : Symbol(T, Decl(icomparable.ts, 0, 26))
+     }

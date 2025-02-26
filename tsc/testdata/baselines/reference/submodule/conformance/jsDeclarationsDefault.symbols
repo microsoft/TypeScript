@@ -1,0 +1,68 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsDefault.ts] ////
+
+=== index1.js ===
+
+export default 12;
+
+=== index2.js ===
+export default function foo() {
+>foo : Symbol(default, Decl(index2.js, 0, 0))
+
+    return foo;
+>foo : Symbol(default, Decl(index2.js, 0, 0))
+}
+export const x = foo;
+>x : Symbol(x, Decl(index2.js, 3, 12))
+>foo : Symbol(default, Decl(index2.js, 0, 0))
+
+export { foo as bar };
+>foo : Symbol(default, Decl(index2.js, 0, 0))
+>bar : Symbol(bar, Decl(index2.js, 4, 8))
+
+=== index3.js ===
+export default class Foo {
+>Foo : Symbol(default, Decl(index3.js, 0, 0))
+
+    a = /** @type {Foo} */(null);
+>a : Symbol(a, Decl(index3.js, 0, 26))
+
+};
+export const X = Foo;
+>X : Symbol(X, Decl(index3.js, 3, 12))
+>Foo : Symbol(default, Decl(index3.js, 0, 0))
+
+export { Foo as Bar };
+>Foo : Symbol(default, Decl(index3.js, 0, 0))
+>Bar : Symbol(Bar, Decl(index3.js, 4, 8))
+
+=== index4.js ===
+import Fab from "./index3";
+>Fab : Symbol(Fab, Decl(index4.js, 0, 6))
+
+class Bar extends Fab {
+>Bar : Symbol(Bar, Decl(index4.js, 0, 27))
+>Fab : Symbol(Fab, Decl(index4.js, 0, 6))
+
+    x = /** @type {Bar} */(null);
+>x : Symbol(x, Decl(index4.js, 1, 23))
+}
+export default Bar;
+>Bar : Symbol(Bar, Decl(index4.js, 0, 27))
+
+=== index5.js ===
+
+// merge type alias and const (OK)
+export default 12;
+/**
+ * @typedef {string | number} default
+ */
+
+=== index6.js ===
+// merge type alias and function (OK)
+export default function func() {};
+>func : Symbol(default, Decl(index6.js, 0, 0))
+
+/**
+ * @typedef {string | number} default
+ */
+

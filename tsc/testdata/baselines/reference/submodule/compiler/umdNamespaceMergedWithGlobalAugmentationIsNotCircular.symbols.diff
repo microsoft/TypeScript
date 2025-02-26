@@ -1,0 +1,27 @@
+--- old.umdNamespaceMergedWithGlobalAugmentationIsNotCircular.symbols
++++ new.umdNamespaceMergedWithGlobalAugmentationIsNotCircular.symbols
+@@= skipped -26, +26 lines =@@
+ === some_module.ts ===
+ export { };
+ React.createRef;
+->React.createRef : Symbol(React.createRef, Decl(module.d.ts, 3, 25))
++>React.createRef : Symbol(createRef, Decl(module.d.ts, 3, 25))
+ >React : Symbol(React, Decl(global.d.ts, 1, 9))
+->createRef : Symbol(React.createRef, Decl(module.d.ts, 3, 25))
++>createRef : Symbol(createRef, Decl(module.d.ts, 3, 25))
+ 
+ === emits.ts ===
+ console.log("hello");
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ 
+ React.createRef;
+->React.createRef : Symbol(React.createRef, Decl(module.d.ts, 3, 25))
++>React.createRef : Symbol(createRef, Decl(module.d.ts, 3, 25))
+ >React : Symbol(React, Decl(global.d.ts, 1, 9))
+->createRef : Symbol(React.createRef, Decl(module.d.ts, 3, 25))
++>createRef : Symbol(createRef, Decl(module.d.ts, 3, 25))
+ 

@@ -1,0 +1,38 @@
+--- old.conditionalOperatorConditoinIsStringType.symbols
++++ new.conditionalOperatorConditoinIsStringType.symbols
+@@= skipped -105, +105 lines =@@
+ >exprAny2 : Symbol(exprAny2, Decl(conditionalOperatorConditoinIsStringType.ts, 9, 3))
+ 
+ condString.toUpperCase ? exprBoolean1 : exprBoolean2;
+->condString.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>condString.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >condString : Symbol(condString, Decl(conditionalOperatorConditoinIsStringType.ts, 1, 3))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsStringType.ts, 4, 3))
+ >exprBoolean2 : Symbol(exprBoolean2, Decl(conditionalOperatorConditoinIsStringType.ts, 10, 3))
+ 
+@@= skipped -101, +101 lines =@@
+ 
+ var resultIsBoolean3 = condString.toUpperCase ? exprBoolean1 : exprBoolean2;
+ >resultIsBoolean3 : Symbol(resultIsBoolean3, Decl(conditionalOperatorConditoinIsStringType.ts, 58, 3))
+->condString.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>condString.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >condString : Symbol(condString, Decl(conditionalOperatorConditoinIsStringType.ts, 1, 3))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsStringType.ts, 4, 3))
+ >exprBoolean2 : Symbol(exprBoolean2, Decl(conditionalOperatorConditoinIsStringType.ts, 10, 3))
+ 
+@@= skipped -32, +32 lines =@@
+ 
+ var resultIsStringOrBoolean4 = condString.toUpperCase ? exprString1 : exprBoolean1; // union
+ >resultIsStringOrBoolean4 : Symbol(resultIsStringOrBoolean4, Decl(conditionalOperatorConditoinIsStringType.ts, 63, 3))
+->condString.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>condString.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >condString : Symbol(condString, Decl(conditionalOperatorConditoinIsStringType.ts, 1, 3))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditoinIsStringType.ts, 6, 3))
+ >exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsStringType.ts, 4, 3))
+ 

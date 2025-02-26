@@ -1,0 +1,37 @@
+--- old.AmbientModuleAndAmbientWithSameNameAndCommonRoot.symbols
++++ new.AmbientModuleAndAmbientWithSameNameAndCommonRoot.symbols
+@@= skipped -30, +30 lines =@@
+ >y : Symbol(y, Decl(class.d.ts, 2, 30))
+ 
+         x: number;
+->x : Symbol(Point.x, Decl(class.d.ts, 2, 42))
++>x : Symbol(x, Decl(class.d.ts, 2, 42))
+ 
+         y: number;
+->y : Symbol(Point.y, Decl(class.d.ts, 3, 18))
++>y : Symbol(y, Decl(class.d.ts, 3, 18))
+     }
+ }
+ 
+@@= skipped -15, +15 lines =@@
+ 
+ var p = A.Point.Origin;
+ >p : Symbol(p, Decl(test.ts, 0, 3), Decl(test.ts, 1, 3), Decl(test.ts, 2, 3))
+->A.Point.Origin : Symbol(A.Point.Origin, Decl(module.d.ts, 2, 18))
+->A.Point : Symbol(A.Point, Decl(module.d.ts, 0, 18), Decl(class.d.ts, 0, 18))
++>A.Point.Origin : Symbol(Origin, Decl(module.d.ts, 2, 18))
++>A.Point : Symbol(Point, Decl(module.d.ts, 0, 18), Decl(class.d.ts, 0, 18))
+ >A : Symbol(A, Decl(module.d.ts, 0, 0), Decl(class.d.ts, 0, 0))
+->Point : Symbol(A.Point, Decl(module.d.ts, 0, 18), Decl(class.d.ts, 0, 18))
+->Origin : Symbol(A.Point.Origin, Decl(module.d.ts, 2, 18))
++>Point : Symbol(Point, Decl(module.d.ts, 0, 18), Decl(class.d.ts, 0, 18))
++>Origin : Symbol(Origin, Decl(module.d.ts, 2, 18))
+ 
+ var p = new A.Point(0, 0); // unexpected error here, bug 840000
+ >p : Symbol(p, Decl(test.ts, 0, 3), Decl(test.ts, 1, 3), Decl(test.ts, 2, 3))
+->A.Point : Symbol(A.Point, Decl(module.d.ts, 0, 18), Decl(class.d.ts, 0, 18))
++>A.Point : Symbol(Point, Decl(module.d.ts, 0, 18), Decl(class.d.ts, 0, 18))
+ >A : Symbol(A, Decl(module.d.ts, 0, 0), Decl(class.d.ts, 0, 0))
+->Point : Symbol(A.Point, Decl(module.d.ts, 0, 18), Decl(class.d.ts, 0, 18))
++>Point : Symbol(Point, Decl(module.d.ts, 0, 18), Decl(class.d.ts, 0, 18))
+  

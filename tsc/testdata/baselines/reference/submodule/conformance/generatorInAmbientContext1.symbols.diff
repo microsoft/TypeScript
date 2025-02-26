@@ -1,0 +1,9 @@
+--- old.generatorInAmbientContext1.symbols
++++ new.generatorInAmbientContext1.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(generatorInAmbientContext1.ts, 0, 0))
+ 
+     *generator(): any;
+->generator : Symbol(C.generator, Decl(generatorInAmbientContext1.ts, 0, 17))
++>generator : Symbol(generator, Decl(generatorInAmbientContext1.ts, 0, 17))
+ }

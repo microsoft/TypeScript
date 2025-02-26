@@ -1,0 +1,152 @@
+--- old.thisTypeInAccessors.symbols
++++ new.thisTypeInAccessors.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(thisTypeInAccessors.ts, 0, 0))
+ 
+     n: number;
+->n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ 
+     x: number;
+->x : Symbol(Foo.x, Decl(thisTypeInAccessors.ts, 1, 14))
++>x : Symbol(x, Decl(thisTypeInAccessors.ts, 1, 14))
+ }
+ 
+ const explicit = {
+@@= skipped -16, +16 lines =@@
+ >x : Symbol(x, Decl(thisTypeInAccessors.ts, 6, 10), Decl(thisTypeInAccessors.ts, 7, 48))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 7, 10))
+ >Foo : Symbol(Foo, Decl(thisTypeInAccessors.ts, 0, 0))
+->this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>this.n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 7, 10))
+->n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ 
+     set x(this: Foo, n: number) { this.n = n; }
+ >x : Symbol(x, Decl(thisTypeInAccessors.ts, 6, 10), Decl(thisTypeInAccessors.ts, 7, 48))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 8, 10))
+ >Foo : Symbol(Foo, Decl(thisTypeInAccessors.ts, 0, 0))
+ >n : Symbol(n, Decl(thisTypeInAccessors.ts, 8, 20))
+->this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>this.n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 8, 10))
+->n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ >n : Symbol(n, Decl(thisTypeInAccessors.ts, 8, 20))
+ }
+ const copiedFromGetter = {
+@@= skipped -24, +24 lines =@@
+ >x : Symbol(x, Decl(thisTypeInAccessors.ts, 11, 10), Decl(thisTypeInAccessors.ts, 12, 48))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 12, 10))
+ >Foo : Symbol(Foo, Decl(thisTypeInAccessors.ts, 0, 0))
+->this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>this.n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 12, 10))
+->n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ 
+     set x(n) { this.n = n; }
+ >x : Symbol(x, Decl(thisTypeInAccessors.ts, 11, 10), Decl(thisTypeInAccessors.ts, 12, 48))
+ >n : Symbol(n, Decl(thisTypeInAccessors.ts, 13, 10))
+->this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>this.n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 12, 10))
+->n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ >n : Symbol(n, Decl(thisTypeInAccessors.ts, 13, 10))
+ }
+ const copiedFromSetter = {
+@@= skipped -20, +20 lines =@@
+ 
+     get x() { return this.n },
+ >x : Symbol(x, Decl(thisTypeInAccessors.ts, 16, 10), Decl(thisTypeInAccessors.ts, 17, 30))
+->this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>this.n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 18, 10))
+->n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ 
+     set x(this: Foo, n: number) { this.n = n; }
+ >x : Symbol(x, Decl(thisTypeInAccessors.ts, 16, 10), Decl(thisTypeInAccessors.ts, 17, 30))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 18, 10))
+ >Foo : Symbol(Foo, Decl(thisTypeInAccessors.ts, 0, 0))
+ >n : Symbol(n, Decl(thisTypeInAccessors.ts, 18, 20))
+->this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>this.n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 18, 10))
+->n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ >n : Symbol(n, Decl(thisTypeInAccessors.ts, 18, 20))
+ }
+ const copiedFromGetterUnannotated = {
+@@= skipped -24, +24 lines =@@
+ >x : Symbol(x, Decl(thisTypeInAccessors.ts, 21, 10), Decl(thisTypeInAccessors.ts, 22, 39))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 22, 10))
+ >Foo : Symbol(Foo, Decl(thisTypeInAccessors.ts, 0, 0))
+->this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>this.n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 22, 10))
+->n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ 
+     set x(this, n) { this.n = n; }
+ >x : Symbol(x, Decl(thisTypeInAccessors.ts, 21, 10), Decl(thisTypeInAccessors.ts, 22, 39))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 23, 10))
+ >n : Symbol(n, Decl(thisTypeInAccessors.ts, 23, 15))
+->this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>this.n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 23, 10))
+->n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ >n : Symbol(n, Decl(thisTypeInAccessors.ts, 23, 15))
+ }
+ 
+@@= skipped -18, +18 lines =@@
+ >Explicit : Symbol(Explicit, Decl(thisTypeInAccessors.ts, 24, 1))
+ 
+     n = 17;
+->n : Symbol(Explicit.n, Decl(thisTypeInAccessors.ts, 26, 16))
++>n : Symbol(n, Decl(thisTypeInAccessors.ts, 26, 16))
+ 
+     get x(this: Foo): number { return this.n; }
+->x : Symbol(Explicit.x, Decl(thisTypeInAccessors.ts, 27, 11), Decl(thisTypeInAccessors.ts, 28, 47))
++>x : Symbol(x, Decl(thisTypeInAccessors.ts, 27, 11), Decl(thisTypeInAccessors.ts, 28, 47))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 28, 10))
+ >Foo : Symbol(Foo, Decl(thisTypeInAccessors.ts, 0, 0))
+->this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>this.n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 28, 10))
+->n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ 
+     set x(this: Foo, n: number) { this.n = n; }
+->x : Symbol(Explicit.x, Decl(thisTypeInAccessors.ts, 27, 11), Decl(thisTypeInAccessors.ts, 28, 47))
++>x : Symbol(x, Decl(thisTypeInAccessors.ts, 27, 11), Decl(thisTypeInAccessors.ts, 28, 47))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 29, 10))
+ >Foo : Symbol(Foo, Decl(thisTypeInAccessors.ts, 0, 0))
+ >n : Symbol(n, Decl(thisTypeInAccessors.ts, 29, 20))
+->this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>this.n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ >this : Symbol(this, Decl(thisTypeInAccessors.ts, 29, 10))
+->n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
++>n : Symbol(n, Decl(thisTypeInAccessors.ts, 0, 15))
+ >n : Symbol(n, Decl(thisTypeInAccessors.ts, 29, 20))
+ }
+ class Contextual {
+ >Contextual : Symbol(Contextual, Decl(thisTypeInAccessors.ts, 30, 1))
+ 
+     n = 21;
+->n : Symbol(Contextual.n, Decl(thisTypeInAccessors.ts, 31, 18))
++>n : Symbol(n, Decl(thisTypeInAccessors.ts, 31, 18))
+ 
+     get x() { return this.n } // inside a class, so already correct
+->x : Symbol(Contextual.x, Decl(thisTypeInAccessors.ts, 32, 11))
+->this.n : Symbol(Contextual.n, Decl(thisTypeInAccessors.ts, 31, 18))
++>x : Symbol(x, Decl(thisTypeInAccessors.ts, 32, 11))
++>this.n : Symbol(n, Decl(thisTypeInAccessors.ts, 31, 18))
+ >this : Symbol(Contextual, Decl(thisTypeInAccessors.ts, 30, 1))
+->n : Symbol(Contextual.n, Decl(thisTypeInAccessors.ts, 31, 18))
++>n : Symbol(n, Decl(thisTypeInAccessors.ts, 31, 18))
+ }
+ 

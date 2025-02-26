@@ -1,0 +1,11 @@
+--- old.asyncSetter_es5.symbols
++++ new.asyncSetter_es5.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(asyncSetter_es5.ts, 0, 0))
+ 
+   async set foo(value) {
+->foo : Symbol(C.foo, Decl(asyncSetter_es5.ts, 0, 9))
++>foo : Symbol(foo, Decl(asyncSetter_es5.ts, 0, 9))
+ >value : Symbol(value, Decl(asyncSetter_es5.ts, 1, 16))
+   }
+ }

@@ -1,0 +1,40 @@
+--- old.autoAccessor8.symbols
++++ new.autoAccessor8.symbols
+@@= skipped -4, +4 lines =@@
+ >C1 : Symbol(C1, Decl(autoAccessor8.ts, 0, 0))
+ 
+     accessor a: any;
+->a : Symbol(C1.a, Decl(autoAccessor8.ts, 0, 10))
++>a : Symbol(a, Decl(autoAccessor8.ts, 0, 10))
+ 
+     static accessor b: any;
+->b : Symbol(C1.b, Decl(autoAccessor8.ts, 1, 20))
++>b : Symbol(b, Decl(autoAccessor8.ts, 1, 20))
+ }
+ 
+ declare class C2 {
+ >C2 : Symbol(C2, Decl(autoAccessor8.ts, 3, 1))
+ 
+     accessor a: any;
+->a : Symbol(C2.a, Decl(autoAccessor8.ts, 5, 18))
++>a : Symbol(a, Decl(autoAccessor8.ts, 5, 18))
+ 
+     static accessor b: any;
+->b : Symbol(C2.b, Decl(autoAccessor8.ts, 6, 20))
++>b : Symbol(b, Decl(autoAccessor8.ts, 6, 20))
+ }
+ 
+ function f() {
+@@= skipped -23, +23 lines =@@
+ >C3 : Symbol(C3, Decl(autoAccessor8.ts, 10, 14))
+ 
+         accessor a: any;
+->a : Symbol(C3.a, Decl(autoAccessor8.ts, 11, 14))
++>a : Symbol(a, Decl(autoAccessor8.ts, 11, 14))
+ 
+         static accessor b: any;
+->b : Symbol(C3.b, Decl(autoAccessor8.ts, 12, 24))
++>b : Symbol(b, Decl(autoAccessor8.ts, 12, 24))
+     }
+     return C3;
+ >C3 : Symbol(C3, Decl(autoAccessor8.ts, 10, 14))

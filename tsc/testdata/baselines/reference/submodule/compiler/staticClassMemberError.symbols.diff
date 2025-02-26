@@ -1,0 +1,22 @@
+--- old.staticClassMemberError.symbols
++++ new.staticClassMemberError.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(staticClassMemberError.ts, 0, 0))
+ 
+ 	static s;
+->s : Symbol(C.s, Decl(staticClassMemberError.ts, 0, 9))
++>s : Symbol(s, Decl(staticClassMemberError.ts, 0, 9))
+ 
+ 	public a() {
+->a : Symbol(C.a, Decl(staticClassMemberError.ts, 1, 10))
++>a : Symbol(a, Decl(staticClassMemberError.ts, 1, 10))
+ 
+ 		s = 1;
+ 	}
+@@= skipped -17, +17 lines =@@
+ >Foo : Symbol(Foo, Decl(staticClassMemberError.ts, 5, 1), Decl(staticClassMemberError.ts, 8, 15))
+ 
+  static bar;
+->bar : Symbol(Foo.bar, Decl(staticClassMemberError.ts, 9, 11))
++>bar : Symbol(bar, Decl(staticClassMemberError.ts, 9, 11))
+ }

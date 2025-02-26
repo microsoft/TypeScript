@@ -1,0 +1,19 @@
+--- old.extendGlobalThis.symbols
++++ new.extendGlobalThis.symbols
+@@= skipped -20, +20 lines =@@
+ >globalThis : Symbol(globalThis, Decl(extension.d.ts, 0, 16))
+ 
+ console.log(globalThis.test.split("-"));
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->globalThis.test.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>globalThis.test.split : Symbol(split, Decl(lib.es5.d.ts, --, --))
+ >globalThis.test : Symbol(test, Decl(extension.d.ts, 2, 11))
+ >globalThis : Symbol(globalThis, Decl(extension.d.ts, 0, 16))
+ >test : Symbol(test, Decl(extension.d.ts, 2, 11))
+->split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
++>split : Symbol(split, Decl(lib.es5.d.ts, --, --))
+ 

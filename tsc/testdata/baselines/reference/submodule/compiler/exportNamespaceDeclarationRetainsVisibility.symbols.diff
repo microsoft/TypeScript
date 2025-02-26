@@ -1,0 +1,19 @@
+--- old.exportNamespaceDeclarationRetainsVisibility.symbols
++++ new.exportNamespaceDeclarationRetainsVisibility.symbols
+@@= skipped -7, +7 lines =@@
+ >A : Symbol(A, Decl(exportNamespaceDeclarationRetainsVisibility.ts, 0, 13))
+ 
+         kind: 'a';
+->kind : Symbol(A.kind, Decl(exportNamespaceDeclarationRetainsVisibility.ts, 1, 17))
++>kind : Symbol(kind, Decl(exportNamespaceDeclarationRetainsVisibility.ts, 1, 17))
+     }
+ 
+     interface B {
+ >B : Symbol(B, Decl(exportNamespaceDeclarationRetainsVisibility.ts, 3, 5))
+ 
+         kind: 'b';
+->kind : Symbol(B.kind, Decl(exportNamespaceDeclarationRetainsVisibility.ts, 5, 17))
++>kind : Symbol(kind, Decl(exportNamespaceDeclarationRetainsVisibility.ts, 5, 17))
+     }
+ 
+     export type C = A | B;

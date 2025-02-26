@@ -1,0 +1,17 @@
+--- old.asOperatorAmbiguity.symbols
++++ new.asOperatorAmbiguity.symbols
+@@= skipped -3, +3 lines =@@
+ interface A<T> { x: T; }
+ >A : Symbol(A, Decl(asOperatorAmbiguity.ts, 0, 0))
+ >T : Symbol(T, Decl(asOperatorAmbiguity.ts, 0, 12))
+->x : Symbol(A.x, Decl(asOperatorAmbiguity.ts, 0, 16))
++>x : Symbol(x, Decl(asOperatorAmbiguity.ts, 0, 16))
+ >T : Symbol(T, Decl(asOperatorAmbiguity.ts, 0, 12))
+ 
+ interface B { m: string; }
+ >B : Symbol(B, Decl(asOperatorAmbiguity.ts, 0, 24))
+->m : Symbol(B.m, Decl(asOperatorAmbiguity.ts, 1, 13))
++>m : Symbol(m, Decl(asOperatorAmbiguity.ts, 1, 13))
+ 
+ // Make sure this is a type assertion to an array type, and not nested comparison operators.
+ var x: any;

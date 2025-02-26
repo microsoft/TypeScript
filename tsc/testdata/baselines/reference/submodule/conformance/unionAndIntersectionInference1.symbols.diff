@@ -1,0 +1,109 @@
+--- old.unionAndIntersectionInference1.symbols
++++ new.unionAndIntersectionInference1.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ interface Y { 'i am a very certain type': Y }
+ >Y : Symbol(Y, Decl(unionAndIntersectionInference1.ts, 0, 0))
+->'i am a very certain type' : Symbol(Y['i am a very certain type'], Decl(unionAndIntersectionInference1.ts, 2, 13))
++>'i am a very certain type' : Symbol('i am a very certain type', Decl(unionAndIntersectionInference1.ts, 2, 13))
+ >Y : Symbol(Y, Decl(unionAndIntersectionInference1.ts, 0, 0))
+ 
+ var y: Y = <Y>undefined;
+@@= skipped -46, +46 lines =@@
+ 
+ var value = Math.random() > 0.5 ? 'hey!' : <Y>undefined;
+ >value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 12, 3))
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+ >Y : Symbol(Y, Decl(unionAndIntersectionInference1.ts, 0, 0))
+ >undefined : Symbol(undefined)
+ 
+@@= skipped -98, +95 lines =@@
+ >Maybe : Symbol(Maybe, Decl(unionAndIntersectionInference1.ts, 40, 1))
+ 
+ get(foo).toUpperCase(); // Ok
+->get(foo).toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >get : Symbol(get, Decl(unionAndIntersectionInference1.ts, 44, 25))
+ >foo : Symbol(foo, Decl(unionAndIntersectionInference1.ts, 50, 3))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+ 
+ // Repro from #5456
+ 
+@@= skipped -11, +9 lines =@@
+ >Man : Symbol(Man, Decl(unionAndIntersectionInference1.ts, 51, 23))
+ 
+     walks: boolean;
+->walks : Symbol(Man.walks, Decl(unionAndIntersectionInference1.ts, 55, 15))
++>walks : Symbol(walks, Decl(unionAndIntersectionInference1.ts, 55, 15))
+ }
+ 
+ interface Bear {
+ >Bear : Symbol(Bear, Decl(unionAndIntersectionInference1.ts, 57, 1))
+ 
+     roars: boolean;
+->roars : Symbol(Bear.roars, Decl(unionAndIntersectionInference1.ts, 59, 16))
++>roars : Symbol(roars, Decl(unionAndIntersectionInference1.ts, 59, 16))
+ }
+ 
+ interface Pig {
+ >Pig : Symbol(Pig, Decl(unionAndIntersectionInference1.ts, 61, 1))
+ 
+     oinks: boolean;
+->oinks : Symbol(Pig.oinks, Decl(unionAndIntersectionInference1.ts, 63, 15))
++>oinks : Symbol(oinks, Decl(unionAndIntersectionInference1.ts, 63, 15))
+ }
+ 
+ declare function pigify<T>(y: T & Bear): T & Pig;
+@@= skipped -32, +32 lines =@@
+ >Bear : Symbol(Bear, Decl(unionAndIntersectionInference1.ts, 57, 1))
+ 
+ pigify(mbp).oinks; // OK, mbp is treated as Pig
+->pigify(mbp).oinks : Symbol(Pig.oinks, Decl(unionAndIntersectionInference1.ts, 63, 15))
++>pigify(mbp).oinks : Symbol(oinks, Decl(unionAndIntersectionInference1.ts, 63, 15))
+ >pigify : Symbol(pigify, Decl(unionAndIntersectionInference1.ts, 65, 1))
+ >mbp : Symbol(mbp, Decl(unionAndIntersectionInference1.ts, 68, 11))
+->oinks : Symbol(Pig.oinks, Decl(unionAndIntersectionInference1.ts, 63, 15))
++>oinks : Symbol(oinks, Decl(unionAndIntersectionInference1.ts, 63, 15))
+ 
+ pigify(mbp).walks; // Ok, mbp is treated as Man
+->pigify(mbp).walks : Symbol(Man.walks, Decl(unionAndIntersectionInference1.ts, 55, 15))
++>pigify(mbp).walks : Symbol(walks, Decl(unionAndIntersectionInference1.ts, 55, 15))
+ >pigify : Symbol(pigify, Decl(unionAndIntersectionInference1.ts, 65, 1))
+ >mbp : Symbol(mbp, Decl(unionAndIntersectionInference1.ts, 68, 11))
+->walks : Symbol(Man.walks, Decl(unionAndIntersectionInference1.ts, 55, 15))
++>walks : Symbol(walks, Decl(unionAndIntersectionInference1.ts, 55, 15))
+ 
+ // Repros from #29815
+ 
+@@= skipped -17, +17 lines =@@
+ >ITest : Symbol(ITest, Decl(unionAndIntersectionInference1.ts, 71, 18))
+ 
+   name: 'test'
+->name : Symbol(ITest.name, Decl(unionAndIntersectionInference1.ts, 75, 17))
++>name : Symbol(name, Decl(unionAndIntersectionInference1.ts, 75, 17))
+ }
+ 
+ const createTestAsync = (): Promise<ITest> => Promise.resolve().then(() => ({ name: 'test' }))
+ >createTestAsync : Symbol(createTestAsync, Decl(unionAndIntersectionInference1.ts, 79, 5))
+->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Promise : Symbol(Promise)
+ >ITest : Symbol(ITest, Decl(unionAndIntersectionInference1.ts, 71, 18))
+->Promise.resolve().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+ >name : Symbol(name, Decl(unionAndIntersectionInference1.ts, 79, 77))
+ 
+ const createTest = (): ITest => {
+@@= skipped -65, +60 lines =@@
+ >T : Symbol(T, Decl(unionAndIntersectionInference1.ts, 94, 16))
+ >b : Symbol(b, Decl(unionAndIntersectionInference1.ts, 94, 27))
+ >U : Symbol(U, Decl(unionAndIntersectionInference1.ts, 94, 18))
+->Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 94, 22))
+ >b : Symbol(b, Decl(unionAndIntersectionInference1.ts, 94, 27))
+ 

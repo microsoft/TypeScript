@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/importedAliasesInTypePositions.ts] ////
+
+=== file2.ts ===
+import RT_ALIAS = require("file1");
+>RT_ALIAS : Symbol(RT_ALIAS, Decl(file2.ts, 0, 0))
+
+import ReferredTo = RT_ALIAS.elaborate.nested.mod.name.ReferredTo;
+>ReferredTo : Symbol(ReferredTo, Decl(file2.ts, 0, 35))
+>RT_ALIAS : Symbol(RT_ALIAS, Decl(file2.ts, 0, 0))
+>elaborate : Symbol(unknown)
+>nested : Symbol(unknown)
+>mod : Symbol(unknown)
+>name : Symbol(unknown)
+>ReferredTo : Symbol(unknown)
+
+export module ImportingModule {
+>ImportingModule : Symbol(ImportingModule, Decl(file2.ts, 1, 66))
+
+    class UsesReferredType {
+>UsesReferredType : Symbol(UsesReferredType, Decl(file2.ts, 3, 31))
+
+        constructor(private referred: ReferredTo) { }
+>referred : Symbol(referred, Decl(file2.ts, 5, 20))
+>ReferredTo : Symbol(ReferredTo, Decl(file2.ts, 0, 35))
+    }
+}

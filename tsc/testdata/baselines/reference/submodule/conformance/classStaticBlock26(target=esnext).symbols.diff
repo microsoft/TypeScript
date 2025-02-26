@@ -1,0 +1,11 @@
+--- old.classStaticBlock26(target=esnext).symbols
++++ new.classStaticBlock26(target=esnext).symbols
+@@= skipped -18, +18 lines =@@
+ >D : Symbol(D, Decl(classStaticBlock26.ts, 10, 12))
+ 
+             [await] = 1; // illegal (computed property names are evaluated outside of a class body
+->[await] : Symbol(D[await], Decl(classStaticBlock26.ts, 11, 17))
++>[await] : Symbol([await], Decl(classStaticBlock26.ts, 11, 17))
+ 
+         };
+     }

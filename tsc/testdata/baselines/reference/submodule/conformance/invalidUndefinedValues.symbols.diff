@@ -1,0 +1,39 @@
+--- old.invalidUndefinedValues.symbols
++++ new.invalidUndefinedValues.symbols
+@@= skipped -25, +25 lines =@@
+ 
+ class C { foo: string }
+ >C : Symbol(C, Decl(invalidUndefinedValues.ts, 7, 9))
+->foo : Symbol(C.foo, Decl(invalidUndefinedValues.ts, 9, 9))
++>foo : Symbol(foo, Decl(invalidUndefinedValues.ts, 9, 9))
+ 
+ var b: C;
+ >b : Symbol(b, Decl(invalidUndefinedValues.ts, 10, 3))
+@@= skipped -16, +16 lines =@@
+ 
+ interface I { foo: string }
+ >I : Symbol(I, Decl(invalidUndefinedValues.ts, 12, 6))
+->foo : Symbol(I.foo, Decl(invalidUndefinedValues.ts, 14, 13))
++>foo : Symbol(foo, Decl(invalidUndefinedValues.ts, 14, 13))
+ 
+ var c: I;
+ >c : Symbol(c, Decl(invalidUndefinedValues.ts, 15, 3))
+@@= skipped -38, +38 lines =@@
+ 
+ enum E { A }
+ >E : Symbol(E, Decl(invalidUndefinedValues.ts, 26, 6))
+->A : Symbol(E.A, Decl(invalidUndefinedValues.ts, 28, 8))
++>A : Symbol(A, Decl(invalidUndefinedValues.ts, 28, 8))
+ 
+ x = E;
+ >x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+@@= skipped -8, +8 lines =@@
+ 
+ x = E.A;
+ >x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+->E.A : Symbol(E.A, Decl(invalidUndefinedValues.ts, 28, 8))
++>E.A : Symbol(A, Decl(invalidUndefinedValues.ts, 28, 8))
+ >E : Symbol(E, Decl(invalidUndefinedValues.ts, 26, 6))
+->A : Symbol(E.A, Decl(invalidUndefinedValues.ts, 28, 8))
++>A : Symbol(A, Decl(invalidUndefinedValues.ts, 28, 8))
+ 

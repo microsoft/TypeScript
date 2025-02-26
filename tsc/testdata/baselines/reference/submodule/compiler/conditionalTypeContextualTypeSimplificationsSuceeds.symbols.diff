@@ -1,0 +1,11 @@
+--- old.conditionalTypeContextualTypeSimplificationsSuceeds.symbols
++++ new.conditionalTypeContextualTypeSimplificationsSuceeds.symbols
+@@= skipped -5, +5 lines =@@
+ >Props : Symbol(Props, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 0, 0))
+ 
+     when: (value: string) => boolean;
+->when : Symbol(Props.when, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 1, 17))
++>when : Symbol(when, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 1, 17))
+ >value : Symbol(value, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 2, 11))
+ }
+ 

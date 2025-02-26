@@ -1,0 +1,57 @@
+--- old.exportNonVisibleType.symbols
++++ new.exportNonVisibleType.symbols
+@@= skipped -4, +4 lines =@@
+ >I1 : Symbol(I1, Decl(foo1.ts, 0, 0))
+ 
+ 	a: string;
+->a : Symbol(I1.a, Decl(foo1.ts, 0, 14))
++>a : Symbol(a, Decl(foo1.ts, 0, 14))
+ 
+ 	b: number;
+->b : Symbol(I1.b, Decl(foo1.ts, 1, 11))
++>b : Symbol(b, Decl(foo1.ts, 1, 11))
+ }
+ 
+ var x: I1 = {a: "test", b: 42};
+@@= skipped -21, +21 lines =@@
+ >I1 : Symbol(I1, Decl(foo2.ts, 0, 0))
+ 
+ 	a: string;
+->a : Symbol(I1.a, Decl(foo2.ts, 0, 14))
++>a : Symbol(a, Decl(foo2.ts, 0, 14))
+ 
+ 	b: number;
+->b : Symbol(I1.b, Decl(foo2.ts, 1, 11))
++>b : Symbol(b, Decl(foo2.ts, 1, 11))
+ }
+ 
+ class C1 {
+ >C1 : Symbol(C1, Decl(foo2.ts, 3, 1))
+ 
+ 	m1: I1;
+->m1 : Symbol(C1.m1, Decl(foo2.ts, 5, 10))
++>m1 : Symbol(m1, Decl(foo2.ts, 5, 10))
+ >I1 : Symbol(I1, Decl(foo2.ts, 0, 0))
+ }
+ 
+@@= skipped -22, +22 lines =@@
+ >I1 : Symbol(I1, Decl(foo3.ts, 0, 0))
+ 
+ 	a: string;
+->a : Symbol(I1.a, Decl(foo3.ts, 0, 14))
++>a : Symbol(a, Decl(foo3.ts, 0, 14))
+ 
+ 	b: number;
+->b : Symbol(I1.b, Decl(foo3.ts, 1, 11))
++>b : Symbol(b, Decl(foo3.ts, 1, 11))
+ }
+ 
+ class C1 {
+ >C1 : Symbol(C1, Decl(foo3.ts, 3, 1))
+ 
+ 	private m1: I1;
+->m1 : Symbol(C1.m1, Decl(foo3.ts, 5, 10))
++>m1 : Symbol(m1, Decl(foo3.ts, 5, 10))
+ >I1 : Symbol(I1, Decl(foo3.ts, 0, 0))
+ }
+ 

@@ -1,0 +1,68 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeAliases.ts] ////
+
+=== index.js ===
+
+export {}; // flag file as module
+/**
+ * @typedef {string | number | symbol} PropName 
+ */
+
+/**
+ * Callback
+ *
+ * @callback NumberToStringCb
+ * @param {number} a
+ * @returns {string}
+ */
+
+/**
+ * @template T
+ * @typedef {T & {name: string}} MixinName 
+ */
+
+/**
+ * Identity function
+ *
+ * @template T
+ * @callback Identity
+ * @param {T} x
+ * @returns {T}
+ */
+
+=== mixed.js ===
+/**
+ * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
+ */
+/**
+ * @param {number} x
+ * @returns {SomeType}
+ */
+function doTheThing(x) {
+>doTheThing : Symbol(doTheThing, Decl(mixed.js, 0, 0))
+>x : Symbol(x, Decl(mixed.js, 7, 20))
+
+    return {x: ""+x};
+>x : Symbol(x, Decl(mixed.js, 8, 12))
+>x : Symbol(x, Decl(mixed.js, 7, 20))
+}
+class ExportedThing {
+>ExportedThing : Symbol(ExportedThing, Decl(mixed.js, 9, 1))
+
+    z = "ok"
+>z : Symbol(z, Decl(mixed.js, 10, 21))
+}
+module.exports = {
+    doTheThing,
+>doTheThing : Symbol(doTheThing, Decl(mixed.js, 13, 18))
+
+    ExportedThing,
+>ExportedThing : Symbol(ExportedThing, Decl(mixed.js, 14, 15))
+
+};
+class LocalThing {
+>LocalThing : Symbol(LocalThing, Decl(mixed.js, 16, 2))
+
+    y = "ok"
+>y : Symbol(y, Decl(mixed.js, 17, 18))
+}
+

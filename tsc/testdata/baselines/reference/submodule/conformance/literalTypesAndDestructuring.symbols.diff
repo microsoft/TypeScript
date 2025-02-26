@@ -1,0 +1,11 @@
+--- old.literalTypesAndDestructuring.symbols
++++ new.literalTypesAndDestructuring.symbols
+@@= skipped -56, +56 lines =@@
+ >Foo : Symbol(Foo, Decl(literalTypesAndDestructuring.ts, 10, 27))
+ 
+   bar: 'yo' | 'ha' | undefined;
+->bar : Symbol(Foo.bar, Decl(literalTypesAndDestructuring.ts, 14, 15))
++>bar : Symbol(bar, Decl(literalTypesAndDestructuring.ts, 14, 15))
+ }
+ 
+ let { bar = 'yo' } = {} as Foo;

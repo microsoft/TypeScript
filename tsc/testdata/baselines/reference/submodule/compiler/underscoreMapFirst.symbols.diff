@@ -1,0 +1,83 @@
+--- old.underscoreMapFirst.symbols
++++ new.underscoreMapFirst.symbols
+@@= skipped -18, +18 lines =@@
+ >T : Symbol(T, Decl(underscoreMapFirst.ts, 2, 19))
+ 
+         length: number;
+->length : Symbol(List.length, Decl(underscoreMapFirst.ts, 3, 27))
++>length : Symbol(length, Decl(underscoreMapFirst.ts, 3, 27))
+     }
+ 
+     interface ListIterator<T, TResult> {
+@@= skipped -72, +72 lines =@@
+ >View : Symbol(View, Decl(underscoreMapFirst.ts, 24, 1))
+ 
+     model: any;
+->model : Symbol(View.model, Decl(underscoreMapFirst.ts, 26, 20))
++>model : Symbol(model, Decl(underscoreMapFirst.ts, 26, 20))
+ }
+ 
+ interface IData {
+ >IData : Symbol(IData, Decl(underscoreMapFirst.ts, 28, 1))
+ 
+     series: ISeries[];
+->series : Symbol(IData.series, Decl(underscoreMapFirst.ts, 30, 17))
++>series : Symbol(series, Decl(underscoreMapFirst.ts, 30, 17))
+ >ISeries : Symbol(ISeries, Decl(underscoreMapFirst.ts, 32, 1))
+ }
+ 
+@@= skipped -15, +15 lines =@@
+ >ISeries : Symbol(ISeries, Decl(underscoreMapFirst.ts, 32, 1))
+ 
+     items: any[];
+->items : Symbol(ISeries.items, Decl(underscoreMapFirst.ts, 34, 19))
++>items : Symbol(items, Decl(underscoreMapFirst.ts, 34, 19))
+ 
+     key: string;
+->key : Symbol(ISeries.key, Decl(underscoreMapFirst.ts, 35, 17))
++>key : Symbol(key, Decl(underscoreMapFirst.ts, 35, 17))
+ }
+ 
+ class MyView extends View {
+@@= skipped -11, +11 lines =@@
+ >View : Symbol(View, Decl(underscoreMapFirst.ts, 24, 1))
+ 
+     public getDataSeries(): ISeries[] {
+->getDataSeries : Symbol(MyView.getDataSeries, Decl(underscoreMapFirst.ts, 39, 27))
++>getDataSeries : Symbol(getDataSeries, Decl(underscoreMapFirst.ts, 39, 27))
+ >ISeries : Symbol(ISeries, Decl(underscoreMapFirst.ts, 32, 1))
+ 
+         var data: IData[] = this.model.get("data");
+ >data : Symbol(data, Decl(underscoreMapFirst.ts, 41, 11))
+ >IData : Symbol(IData, Decl(underscoreMapFirst.ts, 28, 1))
+->this.model : Symbol(View.model, Decl(underscoreMapFirst.ts, 26, 20))
++>this.model : Symbol(model, Decl(underscoreMapFirst.ts, 26, 20))
+ >this : Symbol(MyView, Decl(underscoreMapFirst.ts, 37, 1))
+->model : Symbol(View.model, Decl(underscoreMapFirst.ts, 26, 20))
++>model : Symbol(model, Decl(underscoreMapFirst.ts, 26, 20))
+ 
+         var allSeries: ISeries[][] = _.pluck(data, "series");
+ >allSeries : Symbol(allSeries, Decl(underscoreMapFirst.ts, 42, 11))
+ >ISeries : Symbol(ISeries, Decl(underscoreMapFirst.ts, 32, 1))
+->_.pluck : Symbol(_.pluck, Decl(underscoreMapFirst.ts, 13, 5))
++>_.pluck : Symbol(pluck, Decl(underscoreMapFirst.ts, 13, 5))
+ >_ : Symbol(_, Decl(underscoreMapFirst.ts, 0, 0))
+->pluck : Symbol(_.pluck, Decl(underscoreMapFirst.ts, 13, 5))
++>pluck : Symbol(pluck, Decl(underscoreMapFirst.ts, 13, 5))
+ >data : Symbol(data, Decl(underscoreMapFirst.ts, 41, 11))
+ 
+         return _.map(allSeries, _.first);
+->_.map : Symbol(_.map, Decl(underscoreMapFirst.ts, 16, 37))
++>_.map : Symbol(map, Decl(underscoreMapFirst.ts, 16, 37))
+ >_ : Symbol(_, Decl(underscoreMapFirst.ts, 0, 0))
+->map : Symbol(_.map, Decl(underscoreMapFirst.ts, 16, 37))
++>map : Symbol(map, Decl(underscoreMapFirst.ts, 16, 37))
+ >allSeries : Symbol(allSeries, Decl(underscoreMapFirst.ts, 42, 11))
+->_.first : Symbol(_.first, Decl(underscoreMapFirst.ts, 21, 34))
++>_.first : Symbol(first, Decl(underscoreMapFirst.ts, 21, 34))
+ >_ : Symbol(_, Decl(underscoreMapFirst.ts, 0, 0))
+->first : Symbol(_.first, Decl(underscoreMapFirst.ts, 21, 34))
++>first : Symbol(first, Decl(underscoreMapFirst.ts, 21, 34))
+     }
+ }
+ 

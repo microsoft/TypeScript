@@ -1,0 +1,14 @@
+--- old.parsingClassRecoversWhenHittingUnexpectedSemicolon.symbols
++++ new.parsingClassRecoversWhenHittingUnexpectedSemicolon.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(parsingClassRecoversWhenHittingUnexpectedSemicolon.ts, 0, 0))
+ 
+     public f() { };
+->f : Symbol(C.f, Decl(parsingClassRecoversWhenHittingUnexpectedSemicolon.ts, 0, 9))
++>f : Symbol(f, Decl(parsingClassRecoversWhenHittingUnexpectedSemicolon.ts, 0, 9))
+ 
+     private m;
+->m : Symbol(C.m, Decl(parsingClassRecoversWhenHittingUnexpectedSemicolon.ts, 1, 19))
++>m : Symbol(m, Decl(parsingClassRecoversWhenHittingUnexpectedSemicolon.ts, 1, 19))
+ }
+ 

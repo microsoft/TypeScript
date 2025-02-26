@@ -1,0 +1,46 @@
+--- old.functionExpressionContextualTyping1.symbols
++++ new.functionExpressionContextualTyping1.symbols
+@@= skipped -5, +5 lines =@@
+ 
+ enum E { red, blue }
+ >E : Symbol(E, Decl(functionExpressionContextualTyping1.ts, 0, 0))
+->red : Symbol(E.red, Decl(functionExpressionContextualTyping1.ts, 3, 8))
+->blue : Symbol(E.blue, Decl(functionExpressionContextualTyping1.ts, 3, 13))
++>red : Symbol(red, Decl(functionExpressionContextualTyping1.ts, 3, 8))
++>blue : Symbol(blue, Decl(functionExpressionContextualTyping1.ts, 3, 13))
+ 
+ // A contextual signature S is extracted from a function type T as follows:
+ //      If T is a function type with exactly one call signature, and if that call signature is non- generic, S is that signature.
+@@= skipped -14, +14 lines =@@
+ >str : Symbol(str, Decl(functionExpressionContextualTyping1.ts, 8, 48))
+ 
+     num.toExponential();
+->num.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>num.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >num : Symbol(num, Decl(functionExpressionContextualTyping1.ts, 8, 44))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ 
+     return 0;
+ }
+@@= skipped -12, +12 lines =@@
+ >T : Symbol(T, Decl(functionExpressionContextualTyping1.ts, 13, 12))
+ 
+     foo() { }
+->foo : Symbol(Class.foo, Decl(functionExpressionContextualTyping1.ts, 13, 16))
++>foo : Symbol(foo, Decl(functionExpressionContextualTyping1.ts, 13, 16))
+ }
+ 
+ var a1: (c: Class<Number>) => number = (a1) => {
+@@= skipped -11, +11 lines =@@
+ >a1 : Symbol(a1, Decl(functionExpressionContextualTyping1.ts, 17, 40))
+ 
+     a1.foo();
+->a1.foo : Symbol(Class.foo, Decl(functionExpressionContextualTyping1.ts, 13, 16))
++>a1.foo : Symbol(foo, Decl(functionExpressionContextualTyping1.ts, 13, 16))
+ >a1 : Symbol(a1, Decl(functionExpressionContextualTyping1.ts, 17, 40))
+->foo : Symbol(Class.foo, Decl(functionExpressionContextualTyping1.ts, 13, 16))
++>foo : Symbol(foo, Decl(functionExpressionContextualTyping1.ts, 13, 16))
+ 
+     return 1;
+ }

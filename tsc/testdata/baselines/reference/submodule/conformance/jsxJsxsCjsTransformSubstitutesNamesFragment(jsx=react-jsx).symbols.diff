@@ -1,0 +1,17 @@
+--- old.jsxJsxsCjsTransformSubstitutesNamesFragment(jsx=react-jsx).symbols
++++ new.jsxJsxsCjsTransformSubstitutesNamesFragment(jsx=react-jsx).symbols
+@@= skipped -5, +5 lines =@@
+ >a : Symbol(a, Decl(jsxJsxsCjsTransformSubstitutesNamesFragment.tsx, 1, 5))
+ 
+   <p></p>
+->p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
+->p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
+-
+   text
+   <div></div>
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+-
+ </>
+ 
+ export {};

@@ -1,0 +1,29 @@
+--- old.declarationEmitRetainsJsdocyComments.symbols
++++ new.declarationEmitRetainsJsdocyComments.symbols
+@@= skipped -35, +35 lines =@@
+      * @param s  
+      */
+     bar(s: number) {
+->bar : Symbol(Foo.bar, Decl(declarationEmitRetainsJsdocyComments.ts, 19, 18))
++>bar : Symbol(bar, Decl(declarationEmitRetainsJsdocyComments.ts, 19, 18))
+ >s : Symbol(s, Decl(declarationEmitRetainsJsdocyComments.ts, 24, 8))
+     }
+ }
+@@= skipped -15, +15 lines =@@
+ } = null as any;
+ 
+ declare global {
+->global : Symbol(global, Decl(declarationEmitRetainsJsdocyComments.ts, 33, 16))
++>global : Symbol((Missing), Decl(declarationEmitRetainsJsdocyComments.ts, 33, 16))
+ 
+     interface ExtFunc {
+ >ExtFunc : Symbol(ExtFunc, Decl(declarationEmitRetainsJsdocyComments.ts, 35, 16))
+@@= skipped -9, +9 lines =@@
+         * comment6
+         */
+         someMethod(collection: any[]): boolean;
+->someMethod : Symbol(ExtFunc.someMethod, Decl(declarationEmitRetainsJsdocyComments.ts, 36, 23))
++>someMethod : Symbol(someMethod, Decl(declarationEmitRetainsJsdocyComments.ts, 36, 23))
+ >collection : Symbol(collection, Decl(declarationEmitRetainsJsdocyComments.ts, 40, 19))
+     }
+ }

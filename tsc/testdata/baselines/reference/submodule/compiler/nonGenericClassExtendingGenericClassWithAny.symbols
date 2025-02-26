@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/nonGenericClassExtendingGenericClassWithAny.ts] ////
+
+=== nonGenericClassExtendingGenericClassWithAny.ts ===
+class Foo<T> {
+>Foo : Symbol(Foo, Decl(nonGenericClassExtendingGenericClassWithAny.ts, 0, 0))
+>T : Symbol(T, Decl(nonGenericClassExtendingGenericClassWithAny.ts, 0, 10))
+
+    t: T;
+>t : Symbol(t, Decl(nonGenericClassExtendingGenericClassWithAny.ts, 0, 14))
+>T : Symbol(T, Decl(nonGenericClassExtendingGenericClassWithAny.ts, 0, 10))
+}
+
+class Bar extends Foo<any> { } // Valid
+>Bar : Symbol(Bar, Decl(nonGenericClassExtendingGenericClassWithAny.ts, 2, 1))
+>Foo : Symbol(Foo, Decl(nonGenericClassExtendingGenericClassWithAny.ts, 0, 0))
+

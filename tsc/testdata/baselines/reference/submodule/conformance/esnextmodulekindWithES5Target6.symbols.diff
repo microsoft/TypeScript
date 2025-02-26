@@ -1,0 +1,11 @@
+--- old.esnextmodulekindWithES5Target6.symbols
++++ new.esnextmodulekindWithES5Target6.symbols
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ export default function f3(d = 0) {
+->f3 : Symbol(f3, Decl(esnextmodulekindWithES5Target6.ts, 4, 1))
++>f3 : Symbol(default, Decl(esnextmodulekindWithES5Target6.ts, 4, 1))
+ >d : Symbol(d, Decl(esnextmodulekindWithES5Target6.ts, 6, 27))
+ }
+ 

@@ -1,0 +1,305 @@
+//// [tests/cases/compiler/declarationEmitRecursiveConditionalAliasPreserved.ts] ////
+
+=== input.d.ts ===
+type _BuildPowersOf2LengthArrays<
+>_BuildPowersOf2LengthArrays : Symbol(_BuildPowersOf2LengthArrays, Decl(input.d.ts, 0, 0))
+
+    Length extends number,
+>Length : Symbol(Length, Decl(input.d.ts, 0, 33))
+
+    AccumulatedArray extends never[][],
+>AccumulatedArray : Symbol(AccumulatedArray, Decl(input.d.ts, 1, 26))
+
+> = AccumulatedArray[0][Length] extends never
+>AccumulatedArray : Symbol(AccumulatedArray, Decl(input.d.ts, 1, 26))
+>Length : Symbol(Length, Decl(input.d.ts, 0, 33))
+
+    ? AccumulatedArray
+>AccumulatedArray : Symbol(AccumulatedArray, Decl(input.d.ts, 1, 26))
+
+    : _BuildPowersOf2LengthArrays<
+>_BuildPowersOf2LengthArrays : Symbol(_BuildPowersOf2LengthArrays, Decl(input.d.ts, 0, 0))
+
+        Length,
+>Length : Symbol(Length, Decl(input.d.ts, 0, 33))
+
+        [[...AccumulatedArray[0], ...AccumulatedArray[0]], ...AccumulatedArray]
+>AccumulatedArray : Symbol(AccumulatedArray, Decl(input.d.ts, 1, 26))
+>AccumulatedArray : Symbol(AccumulatedArray, Decl(input.d.ts, 1, 26))
+>AccumulatedArray : Symbol(AccumulatedArray, Decl(input.d.ts, 1, 26))
+
+    >;
+
+type _ConcatLargestUntilDone<
+>_ConcatLargestUntilDone : Symbol(_ConcatLargestUntilDone, Decl(input.d.ts, 8, 6))
+
+    Length extends number,
+>Length : Symbol(Length, Decl(input.d.ts, 10, 29))
+
+    AccumulatedArray extends never[][],
+>AccumulatedArray : Symbol(AccumulatedArray, Decl(input.d.ts, 11, 26))
+
+    NextArray extends never[],
+>NextArray : Symbol(NextArray, Decl(input.d.ts, 12, 39))
+
+> = NextArray['length'] extends Length
+>NextArray : Symbol(NextArray, Decl(input.d.ts, 12, 39))
+>Length : Symbol(Length, Decl(input.d.ts, 10, 29))
+
+    ? NextArray
+>NextArray : Symbol(NextArray, Decl(input.d.ts, 12, 39))
+
+    : [...AccumulatedArray[0], ...NextArray][Length] extends never
+>AccumulatedArray : Symbol(AccumulatedArray, Decl(input.d.ts, 11, 26))
+>NextArray : Symbol(NextArray, Decl(input.d.ts, 12, 39))
+>Length : Symbol(Length, Decl(input.d.ts, 10, 29))
+
+    ? _ConcatLargestUntilDone<
+>_ConcatLargestUntilDone : Symbol(_ConcatLargestUntilDone, Decl(input.d.ts, 8, 6))
+
+        Length,
+>Length : Symbol(Length, Decl(input.d.ts, 10, 29))
+
+        AccumulatedArray extends [AccumulatedArray[0], ...infer U]
+>AccumulatedArray : Symbol(AccumulatedArray, Decl(input.d.ts, 11, 26))
+>AccumulatedArray : Symbol(AccumulatedArray, Decl(input.d.ts, 11, 26))
+>U : Symbol(U, Decl(input.d.ts, 19, 63))
+
+        ? U extends never[][]
+>U : Symbol(U, Decl(input.d.ts, 19, 63))
+
+        ? U
+>U : Symbol(U, Decl(input.d.ts, 19, 63))
+
+        : never
+        : never,
+        NextArray
+>NextArray : Symbol(NextArray, Decl(input.d.ts, 12, 39))
+
+    >
+    : _ConcatLargestUntilDone<
+>_ConcatLargestUntilDone : Symbol(_ConcatLargestUntilDone, Decl(input.d.ts, 8, 6))
+
+        Length,
+>Length : Symbol(Length, Decl(input.d.ts, 10, 29))
+
+        AccumulatedArray extends [AccumulatedArray[0], ...infer U]
+>AccumulatedArray : Symbol(AccumulatedArray, Decl(input.d.ts, 11, 26))
+>AccumulatedArray : Symbol(AccumulatedArray, Decl(input.d.ts, 11, 26))
+>U : Symbol(U, Decl(input.d.ts, 28, 63))
+
+        ? U extends never[][]
+>U : Symbol(U, Decl(input.d.ts, 28, 63))
+
+        ? U
+>U : Symbol(U, Decl(input.d.ts, 28, 63))
+
+        : never
+        : never,
+        [...AccumulatedArray[0], ...NextArray]
+>AccumulatedArray : Symbol(AccumulatedArray, Decl(input.d.ts, 11, 26))
+>NextArray : Symbol(NextArray, Decl(input.d.ts, 12, 39))
+
+    >
+
+type _Replace<R extends unknown[], T> = { [K in keyof R]: T };
+>_Replace : Symbol(_Replace, Decl(input.d.ts, 34, 5))
+>R : Symbol(R, Decl(input.d.ts, 36, 14))
+>T : Symbol(T, Decl(input.d.ts, 36, 34))
+>K : Symbol(K, Decl(input.d.ts, 36, 43))
+>R : Symbol(R, Decl(input.d.ts, 36, 14))
+>T : Symbol(T, Decl(input.d.ts, 36, 34))
+
+export type TupleOf<Type, Length extends number> = number extends Length
+>TupleOf : Symbol(TupleOf, Decl(input.d.ts, 36, 62))
+>Type : Symbol(Type, Decl(input.d.ts, 38, 20))
+>Length : Symbol(Length, Decl(input.d.ts, 38, 25))
+>Length : Symbol(Length, Decl(input.d.ts, 38, 25))
+
+    ? Type[]
+>Type : Symbol(Type, Decl(input.d.ts, 38, 20))
+
+    : {
+        // in case Length is a union
+        [LengthKey in Length]: _BuildPowersOf2LengthArrays<
+>LengthKey : Symbol(LengthKey, Decl(input.d.ts, 42, 9))
+>Length : Symbol(Length, Decl(input.d.ts, 38, 25))
+>_BuildPowersOf2LengthArrays : Symbol(_BuildPowersOf2LengthArrays, Decl(input.d.ts, 0, 0))
+
+            LengthKey,
+>LengthKey : Symbol(LengthKey, Decl(input.d.ts, 42, 9))
+
+            [[never]]
+        > extends infer TwoDimensionalArray
+>TwoDimensionalArray : Symbol(TwoDimensionalArray, Decl(input.d.ts, 45, 23))
+
+        ? TwoDimensionalArray extends never[][]
+>TwoDimensionalArray : Symbol(TwoDimensionalArray, Decl(input.d.ts, 45, 23))
+
+        ? _Replace<_ConcatLargestUntilDone<LengthKey, TwoDimensionalArray, []>, Type>
+>_Replace : Symbol(_Replace, Decl(input.d.ts, 34, 5))
+>_ConcatLargestUntilDone : Symbol(_ConcatLargestUntilDone, Decl(input.d.ts, 8, 6))
+>LengthKey : Symbol(LengthKey, Decl(input.d.ts, 42, 9))
+>TwoDimensionalArray : Symbol(TwoDimensionalArray, Decl(input.d.ts, 45, 23))
+>Type : Symbol(Type, Decl(input.d.ts, 38, 20))
+
+        : never
+        : never
+    }[Length];
+>Length : Symbol(Length, Decl(input.d.ts, 38, 25))
+
+export type Subtract<N1 extends number, N2 extends number> = TupleOf<never, N1> extends [
+>Subtract : Symbol(Subtract, Decl(input.d.ts, 50, 14))
+>N1 : Symbol(N1, Decl(input.d.ts, 52, 21))
+>N2 : Symbol(N2, Decl(input.d.ts, 52, 39))
+>TupleOf : Symbol(TupleOf, Decl(input.d.ts, 36, 62))
+>N1 : Symbol(N1, Decl(input.d.ts, 52, 21))
+
+    ...TupleOf<never, N2>,
+>TupleOf : Symbol(TupleOf, Decl(input.d.ts, 36, 62))
+>N2 : Symbol(N2, Decl(input.d.ts, 52, 39))
+
+    ...infer R,
+>R : Symbol(R, Decl(input.d.ts, 54, 12))
+
+]
+    ? R['length']
+>R : Symbol(R, Decl(input.d.ts, 54, 12))
+
+    : never;
+
+export type Decrement<T extends number> = Subtract<T, 1>;
+>Decrement : Symbol(Decrement, Decl(input.d.ts, 57, 12))
+>T : Symbol(T, Decl(input.d.ts, 59, 22))
+>Subtract : Symbol(Subtract, Decl(input.d.ts, 50, 14))
+>T : Symbol(T, Decl(input.d.ts, 59, 22))
+
+export type Add<N1 extends number, N2 extends number> = [
+>Add : Symbol(Add, Decl(input.d.ts, 59, 57))
+>N1 : Symbol(N1, Decl(input.d.ts, 61, 16))
+>N2 : Symbol(N2, Decl(input.d.ts, 61, 34))
+
+    ...TupleOf<never, N1>,
+>TupleOf : Symbol(TupleOf, Decl(input.d.ts, 36, 62))
+>N1 : Symbol(N1, Decl(input.d.ts, 61, 16))
+
+    ...TupleOf<never, N2>,
+>TupleOf : Symbol(TupleOf, Decl(input.d.ts, 36, 62))
+>N2 : Symbol(N2, Decl(input.d.ts, 61, 34))
+
+]['length'] &
+    // intersection to suppress compiler narrowing bug
+    number;
+
+type _MultiAdd<
+>_MultiAdd : Symbol(_MultiAdd, Decl(input.d.ts, 66, 11))
+
+    Num extends number,
+>Num : Symbol(Num, Decl(input.d.ts, 68, 15))
+
+    Accumulator extends number,
+>Accumulator : Symbol(Accumulator, Decl(input.d.ts, 69, 23))
+
+    IterationsLeft extends number,
+>IterationsLeft : Symbol(IterationsLeft, Decl(input.d.ts, 70, 31))
+
+> = IterationsLeft extends 0
+>IterationsLeft : Symbol(IterationsLeft, Decl(input.d.ts, 70, 31))
+
+    ? Accumulator
+>Accumulator : Symbol(Accumulator, Decl(input.d.ts, 69, 23))
+
+    : _MultiAdd<Num, Add<Num, Accumulator>, Decrement<IterationsLeft>>
+>_MultiAdd : Symbol(_MultiAdd, Decl(input.d.ts, 66, 11))
+>Num : Symbol(Num, Decl(input.d.ts, 68, 15))
+>Add : Symbol(Add, Decl(input.d.ts, 59, 57))
+>Num : Symbol(Num, Decl(input.d.ts, 68, 15))
+>Accumulator : Symbol(Accumulator, Decl(input.d.ts, 69, 23))
+>Decrement : Symbol(Decrement, Decl(input.d.ts, 57, 12))
+>IterationsLeft : Symbol(IterationsLeft, Decl(input.d.ts, 70, 31))
+
+export type Multiply<N1 extends number, N2 extends number> = number extends N1 | N2
+>Multiply : Symbol(Multiply, Decl(input.d.ts, 74, 70))
+>N1 : Symbol(N1, Decl(input.d.ts, 76, 21))
+>N2 : Symbol(N2, Decl(input.d.ts, 76, 39))
+>N1 : Symbol(N1, Decl(input.d.ts, 76, 21))
+>N2 : Symbol(N2, Decl(input.d.ts, 76, 39))
+
+    ? number
+    : {
+        [K2 in N2]: { [K1 in N1]: _MultiAdd<K1, 0, N2> }[N1]
+>K2 : Symbol(K2, Decl(input.d.ts, 79, 9))
+>N2 : Symbol(N2, Decl(input.d.ts, 76, 39))
+>K1 : Symbol(K1, Decl(input.d.ts, 79, 23))
+>N1 : Symbol(N1, Decl(input.d.ts, 76, 21))
+>_MultiAdd : Symbol(_MultiAdd, Decl(input.d.ts, 66, 11))
+>K1 : Symbol(K1, Decl(input.d.ts, 79, 23))
+>N2 : Symbol(N2, Decl(input.d.ts, 76, 39))
+>N1 : Symbol(N1, Decl(input.d.ts, 76, 21))
+
+    }[N2]
+>N2 : Symbol(N2, Decl(input.d.ts, 76, 39))
+
+type PowerTailRec<
+>PowerTailRec : Symbol(PowerTailRec, Decl(input.d.ts, 80, 9))
+
+    Num extends number,
+>Num : Symbol(Num, Decl(input.d.ts, 82, 18))
+
+    PowerOf extends number,
+>PowerOf : Symbol(PowerOf, Decl(input.d.ts, 83, 23))
+
+    Result extends number,
+>Result : Symbol(Result, Decl(input.d.ts, 84, 27))
+
+> = number extends PowerOf
+>PowerOf : Symbol(PowerOf, Decl(input.d.ts, 83, 23))
+
+    ? number
+    : PowerOf extends 0
+>PowerOf : Symbol(PowerOf, Decl(input.d.ts, 83, 23))
+
+    ? Result
+>Result : Symbol(Result, Decl(input.d.ts, 84, 27))
+
+    : PowerTailRec<Num, Decrement<PowerOf>, Multiply<Result, Num>>;
+>PowerTailRec : Symbol(PowerTailRec, Decl(input.d.ts, 80, 9))
+>Num : Symbol(Num, Decl(input.d.ts, 82, 18))
+>Decrement : Symbol(Decrement, Decl(input.d.ts, 57, 12))
+>PowerOf : Symbol(PowerOf, Decl(input.d.ts, 83, 23))
+>Multiply : Symbol(Multiply, Decl(input.d.ts, 74, 70))
+>Result : Symbol(Result, Decl(input.d.ts, 84, 27))
+>Num : Symbol(Num, Decl(input.d.ts, 82, 18))
+
+export type Power<Num extends number, PowerOf extends number> = PowerTailRec<Num, PowerOf, 1>;
+>Power : Symbol(Power, Decl(input.d.ts, 90, 67))
+>Num : Symbol(Num, Decl(input.d.ts, 92, 18))
+>PowerOf : Symbol(PowerOf, Decl(input.d.ts, 92, 37))
+>PowerTailRec : Symbol(PowerTailRec, Decl(input.d.ts, 80, 9))
+>Num : Symbol(Num, Decl(input.d.ts, 92, 18))
+>PowerOf : Symbol(PowerOf, Decl(input.d.ts, 92, 37))
+
+=== a.tsx ===
+import { Power } from "./input";
+>Power : Symbol(Power, Decl(a.tsx, 0, 8))
+
+export const power = <Num extends number, PowerOf extends number>(
+>power : Symbol(power, Decl(a.tsx, 2, 12))
+>Num : Symbol(Num, Decl(a.tsx, 2, 22))
+>PowerOf : Symbol(PowerOf, Decl(a.tsx, 2, 41))
+
+    num: Num,
+>num : Symbol(num, Decl(a.tsx, 2, 66))
+>Num : Symbol(Num, Decl(a.tsx, 2, 22))
+
+    powerOf: PowerOf
+>powerOf : Symbol(powerOf, Decl(a.tsx, 3, 13))
+>PowerOf : Symbol(PowerOf, Decl(a.tsx, 2, 41))
+
+): Power<Num, PowerOf> => (num ** powerOf) as never;
+>Power : Symbol(Power, Decl(a.tsx, 0, 8))
+>Num : Symbol(Num, Decl(a.tsx, 2, 22))
+>PowerOf : Symbol(PowerOf, Decl(a.tsx, 2, 41))
+>num : Symbol(num, Decl(a.tsx, 2, 66))
+>powerOf : Symbol(powerOf, Decl(a.tsx, 3, 13))
+

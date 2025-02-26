@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/jsdoc/extendsTag4.ts] ////
+
+=== foo.js ===
+/**
+ * @constructor
+ */
+class A {
+>A : Symbol(A, Decl(foo.js, 0, 0))
+
+    constructor() {}
+}
+
+/**
+ * @extends {A}
+ */
+

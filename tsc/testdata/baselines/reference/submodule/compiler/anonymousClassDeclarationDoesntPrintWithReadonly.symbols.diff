@@ -1,0 +1,11 @@
+--- old.anonymousClassDeclarationDoesntPrintWithReadonly.symbols
++++ new.anonymousClassDeclarationDoesntPrintWithReadonly.symbols
+@@= skipped -4, +4 lines =@@
+ >X : Symbol(X, Decl(anonymousClassDeclarationDoesntPrintWithReadonly.ts, 0, 0))
+ 
+     constructor(readonly a: number) { }
+->a : Symbol(X.a, Decl(anonymousClassDeclarationDoesntPrintWithReadonly.ts, 1, 16))
++>a : Symbol(a, Decl(anonymousClassDeclarationDoesntPrintWithReadonly.ts, 1, 16))
+ }
+ 
+ export function y() {

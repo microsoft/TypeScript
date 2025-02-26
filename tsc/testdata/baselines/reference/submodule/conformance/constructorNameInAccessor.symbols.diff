@@ -1,0 +1,15 @@
+--- old.constructorNameInAccessor.symbols
++++ new.constructorNameInAccessor.symbols
+@@= skipped -4, +4 lines =@@
+ >C1 : Symbol(C1, Decl(constructorNameInAccessor.ts, 0, 0))
+ 
+     get constructor() { return }
+->constructor : Symbol(C1.constructor, Decl(constructorNameInAccessor.ts, 0, 10), Decl(constructorNameInAccessor.ts, 1, 32))
++>constructor : Symbol(constructor, Decl(constructorNameInAccessor.ts, 0, 10), Decl(constructorNameInAccessor.ts, 1, 32))
+ 
+     set constructor(value) {}
+->constructor : Symbol(C1.constructor, Decl(constructorNameInAccessor.ts, 0, 10), Decl(constructorNameInAccessor.ts, 1, 32))
++>constructor : Symbol(constructor, Decl(constructorNameInAccessor.ts, 0, 10), Decl(constructorNameInAccessor.ts, 1, 32))
+ >value : Symbol(value, Decl(constructorNameInAccessor.ts, 2, 20))
+ }
+ 

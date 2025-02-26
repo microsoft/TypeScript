@@ -1,0 +1,32 @@
+--- old.noImplicitAnyMissingGetAccessor.symbols
++++ new.noImplicitAnyMissingGetAccessor.symbols
+@@= skipped -4, +4 lines =@@
+ >Parent : Symbol(Parent, Decl(noImplicitAnyMissingGetAccessor.ts, 0, 0))
+ {
+     public abstract set message(str);
+->message : Symbol(Parent.message, Decl(noImplicitAnyMissingGetAccessor.ts, 1, 1))
++>message : Symbol(message, Decl(noImplicitAnyMissingGetAccessor.ts, 1, 1))
+ >str : Symbol(str, Decl(noImplicitAnyMissingGetAccessor.ts, 2, 32))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >Parent : Symbol(Parent, Decl(noImplicitAnyMissingGetAccessor.ts, 0, 0))
+ 
+     _x: any;
+->_x : Symbol(Child._x, Decl(noImplicitAnyMissingGetAccessor.ts, 5, 28))
++>_x : Symbol(_x, Decl(noImplicitAnyMissingGetAccessor.ts, 5, 28))
+ 
+     public set message(str) {
+->message : Symbol(Child.message, Decl(noImplicitAnyMissingGetAccessor.ts, 6, 12))
++>message : Symbol(message, Decl(noImplicitAnyMissingGetAccessor.ts, 6, 12))
+ >str : Symbol(str, Decl(noImplicitAnyMissingGetAccessor.ts, 7, 23))
+ 
+         this._x = str;
+->this._x : Symbol(Child._x, Decl(noImplicitAnyMissingGetAccessor.ts, 5, 28))
++>this._x : Symbol(_x, Decl(noImplicitAnyMissingGetAccessor.ts, 5, 28))
+ >this : Symbol(Child, Decl(noImplicitAnyMissingGetAccessor.ts, 3, 1))
+->_x : Symbol(Child._x, Decl(noImplicitAnyMissingGetAccessor.ts, 5, 28))
++>_x : Symbol(_x, Decl(noImplicitAnyMissingGetAccessor.ts, 5, 28))
+ >str : Symbol(str, Decl(noImplicitAnyMissingGetAccessor.ts, 7, 23))
+     }
+ }

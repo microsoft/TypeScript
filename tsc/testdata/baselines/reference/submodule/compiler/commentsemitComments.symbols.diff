@@ -1,0 +1,93 @@
+--- old.commentsemitComments.symbols
++++ new.commentsemitComments.symbols
+@@= skipped -30, +30 lines =@@
+ 
+     /** property comment */
+     public b = 10;
+->b : Symbol(c.b, Decl(commentsemitComments.ts, 16, 5))
++>b : Symbol(b, Decl(commentsemitComments.ts, 16, 5))
+ 
+     /** function comment */
+     public myFoo() {
+->myFoo : Symbol(c.myFoo, Decl(commentsemitComments.ts, 19, 18))
++>myFoo : Symbol(myFoo, Decl(commentsemitComments.ts, 19, 18))
+ 
+         return this.b;
+->this.b : Symbol(c.b, Decl(commentsemitComments.ts, 16, 5))
++>this.b : Symbol(b, Decl(commentsemitComments.ts, 16, 5))
+ >this : Symbol(c, Decl(commentsemitComments.ts, 10, 9))
+->b : Symbol(c.b, Decl(commentsemitComments.ts, 16, 5))
++>b : Symbol(b, Decl(commentsemitComments.ts, 16, 5))
+     }
+ 
+     /** getter comment*/
+     public get prop1() {
+->prop1 : Symbol(c.prop1, Decl(commentsemitComments.ts, 24, 5), Decl(commentsemitComments.ts, 29, 5))
++>prop1 : Symbol(prop1, Decl(commentsemitComments.ts, 24, 5), Decl(commentsemitComments.ts, 29, 5))
+ 
+         return this.b;
+->this.b : Symbol(c.b, Decl(commentsemitComments.ts, 16, 5))
++>this.b : Symbol(b, Decl(commentsemitComments.ts, 16, 5))
+ >this : Symbol(c, Decl(commentsemitComments.ts, 10, 9))
+->b : Symbol(c.b, Decl(commentsemitComments.ts, 16, 5))
++>b : Symbol(b, Decl(commentsemitComments.ts, 16, 5))
+     }
+ 
+     /** setter comment*/
+     public set prop1(val: number) {
+->prop1 : Symbol(c.prop1, Decl(commentsemitComments.ts, 24, 5), Decl(commentsemitComments.ts, 29, 5))
++>prop1 : Symbol(prop1, Decl(commentsemitComments.ts, 24, 5), Decl(commentsemitComments.ts, 29, 5))
+ >val : Symbol(val, Decl(commentsemitComments.ts, 32, 21))
+ 
+         this.b = val;
+->this.b : Symbol(c.b, Decl(commentsemitComments.ts, 16, 5))
++>this.b : Symbol(b, Decl(commentsemitComments.ts, 16, 5))
+ >this : Symbol(c, Decl(commentsemitComments.ts, 10, 9))
+->b : Symbol(c.b, Decl(commentsemitComments.ts, 16, 5))
++>b : Symbol(b, Decl(commentsemitComments.ts, 16, 5))
+ >val : Symbol(val, Decl(commentsemitComments.ts, 32, 21))
+     }
+ 
+     /** overload signature1*/
+     public foo1(a: number): string;
+->foo1 : Symbol(c.foo1, Decl(commentsemitComments.ts, 34, 5), Decl(commentsemitComments.ts, 37, 35), Decl(commentsemitComments.ts, 39, 35))
++>foo1 : Symbol(foo1, Decl(commentsemitComments.ts, 34, 5), Decl(commentsemitComments.ts, 37, 35), Decl(commentsemitComments.ts, 39, 35))
+ >a : Symbol(a, Decl(commentsemitComments.ts, 37, 16))
+ 
+     /** Overload signature 2*/
+     public foo1(b: string): string;
+->foo1 : Symbol(c.foo1, Decl(commentsemitComments.ts, 34, 5), Decl(commentsemitComments.ts, 37, 35), Decl(commentsemitComments.ts, 39, 35))
++>foo1 : Symbol(foo1, Decl(commentsemitComments.ts, 34, 5), Decl(commentsemitComments.ts, 37, 35), Decl(commentsemitComments.ts, 39, 35))
+ >b : Symbol(b, Decl(commentsemitComments.ts, 39, 16))
+ 
+     /** overload implementation signature*/
+     public foo1(aOrb) {
+->foo1 : Symbol(c.foo1, Decl(commentsemitComments.ts, 34, 5), Decl(commentsemitComments.ts, 37, 35), Decl(commentsemitComments.ts, 39, 35))
++>foo1 : Symbol(foo1, Decl(commentsemitComments.ts, 34, 5), Decl(commentsemitComments.ts, 37, 35), Decl(commentsemitComments.ts, 39, 35))
+ >aOrb : Symbol(aOrb, Decl(commentsemitComments.ts, 41, 16))
+ 
+         return aOrb.toString();
+@@= skipped -77, +77 lines =@@
+ 
+     /** function property;*/
+     myFoo(/*param prop*/a: number): string;
+->myFoo : Symbol(i1.myFoo, Decl(commentsemitComments.ts, 58, 24))
++>myFoo : Symbol(myFoo, Decl(commentsemitComments.ts, 58, 24))
+ >a : Symbol(a, Decl(commentsemitComments.ts, 61, 10))
+ 
+     /** prop*/
+     prop: string;
+->prop : Symbol(i1.prop, Decl(commentsemitComments.ts, 61, 43))
++>prop : Symbol(prop, Decl(commentsemitComments.ts, 61, 43))
+ }
+ 
+ /**interface instance comments*/
+@@= skipped -22, +22 lines =@@
+ >b : Symbol(b, Decl(commentsemitComments.ts, 71, 11))
+ 
+         constructor(public x: number) {
+->x : Symbol(b.x, Decl(commentsemitComments.ts, 74, 20))
++>x : Symbol(x, Decl(commentsemitComments.ts, 74, 20))
+ 
+         }
+     }

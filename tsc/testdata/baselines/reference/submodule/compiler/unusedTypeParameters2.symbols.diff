@@ -1,0 +1,22 @@
+--- old.unusedTypeParameters2.symbols
++++ new.unusedTypeParameters2.symbols
+@@= skipped -6, +6 lines =@@
+ >typeparameter2 : Symbol(typeparameter2, Decl(unusedTypeParameters2.ts, 0, 29))
+ 
+     private x: typeparameter2;
+->x : Symbol(greeter.x, Decl(unusedTypeParameters2.ts, 0, 47))
++>x : Symbol(x, Decl(unusedTypeParameters2.ts, 0, 47))
+ >typeparameter2 : Symbol(typeparameter2, Decl(unusedTypeParameters2.ts, 0, 29))
+ 
+     public function1() {
+->function1 : Symbol(greeter.function1, Decl(unusedTypeParameters2.ts, 1, 30))
++>function1 : Symbol(function1, Decl(unusedTypeParameters2.ts, 1, 30))
+ 
+         this.x;
+->this.x : Symbol(greeter.x, Decl(unusedTypeParameters2.ts, 0, 47))
++>this.x : Symbol(x, Decl(unusedTypeParameters2.ts, 0, 47))
+ >this : Symbol(greeter, Decl(unusedTypeParameters2.ts, 0, 0))
+->x : Symbol(greeter.x, Decl(unusedTypeParameters2.ts, 0, 47))
++>x : Symbol(x, Decl(unusedTypeParameters2.ts, 0, 47))
+     }
+ }

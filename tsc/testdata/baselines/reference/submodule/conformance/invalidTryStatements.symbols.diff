@@ -1,0 +1,9 @@
+--- old.invalidTryStatements.symbols
++++ new.invalidTryStatements.symbols
+@@= skipped -26, +26 lines =@@
+ >x : Symbol(x, Decl(invalidTryStatements.ts, 16, 11))
+ 
+     try { } catch () { } // error missing catch binding
+-> : Symbol((Missing), Decl(invalidTryStatements.ts, 18, 19))
++> : Symbol(, Decl(invalidTryStatements.ts, 18, 19))
+ }

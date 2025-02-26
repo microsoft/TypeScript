@@ -1,0 +1,43 @@
+--- old.emptyObjectNotSubtypeOfIndexSignatureContainingObject2.symbols
++++ new.emptyObjectNotSubtypeOfIndexSignatureContainingObject2.symbols
+@@= skipped -80, +80 lines =@@
+ >Foo : Symbol(Foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 24, 1))
+ 
+   foo: string;
+->foo : Symbol(Foo.foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 27, 15))
++>foo : Symbol(foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 27, 15))
+ }
+ 
+ interface Bar {
+ >Bar : Symbol(Bar, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 29, 1))
+ 
+   bar: string;
+->bar : Symbol(Bar.bar, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 31, 15))
++>bar : Symbol(bar, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 31, 15))
+ }
+ 
+ export function fooToBar(
+@@= skipped -27, +27 lines =@@
+ >mapValues : Symbol(mapValues, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 16, 77))
+ >foos : Symbol(foos, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 35, 25))
+ >f : Symbol(f, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 38, 29))
+->f.foo : Symbol(Foo.foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 27, 15))
++>f.foo : Symbol(foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 27, 15))
+ >f : Symbol(f, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 38, 29))
+->foo : Symbol(Foo.foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 27, 15))
++>foo : Symbol(foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 27, 15))
+ 
+   const result = foos == null ? {} : mapValues(foos, f => f.foo);
+ >result : Symbol(result, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 39, 7))
+@@= skipped -10, +10 lines =@@
+ >mapValues : Symbol(mapValues, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 16, 77))
+ >foos : Symbol(foos, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 35, 25))
+ >f : Symbol(f, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 39, 52))
+->f.foo : Symbol(Foo.foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 27, 15))
++>f.foo : Symbol(foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 27, 15))
+ >f : Symbol(f, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 39, 52))
+->foo : Symbol(Foo.foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 27, 15))
++>foo : Symbol(foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 27, 15))
+ 
+   // This line _should_ fail, because `result` is not the right type.
+   return result;

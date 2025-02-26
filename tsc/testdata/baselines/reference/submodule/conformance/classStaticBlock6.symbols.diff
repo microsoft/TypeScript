@@ -1,0 +1,11 @@
+--- old.classStaticBlock6.symbols
++++ new.classStaticBlock6.symbols
+@@= skipped -4, +4 lines =@@
+ >B : Symbol(B, Decl(classStaticBlock6.ts, 0, 0))
+ 
+     static a = 1;
+->a : Symbol(B.a, Decl(classStaticBlock6.ts, 0, 9))
++>a : Symbol(a, Decl(classStaticBlock6.ts, 0, 9))
+ }
+ 
+ class C extends B {

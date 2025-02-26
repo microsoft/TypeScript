@@ -1,0 +1,11 @@
+--- old.classExtendsEveryObjectType.symbols
++++ new.classExtendsEveryObjectType.symbols
+@@= skipped -4, +4 lines =@@
+ >I : Symbol(I, Decl(classExtendsEveryObjectType.ts, 0, 0))
+ 
+     foo: string;
+->foo : Symbol(I.foo, Decl(classExtendsEveryObjectType.ts, 0, 13))
++>foo : Symbol(foo, Decl(classExtendsEveryObjectType.ts, 0, 13))
+ }
+ class C extends I { } // error
+ >C : Symbol(C, Decl(classExtendsEveryObjectType.ts, 2, 1))

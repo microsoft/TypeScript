@@ -1,0 +1,61 @@
+--- old.compoundExponentiationAssignmentLHSCannotBeAssigned.symbols
++++ new.compoundExponentiationAssignmentLHSCannotBeAssigned.symbols
+@@= skipped -2, +2 lines =@@
+ === compoundExponentiationAssignmentLHSCannotBeAssigned.ts ===
+ enum E { a, b }
+ >E : Symbol(E, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 0))
+->a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+->b : Symbol(E.b, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 11))
++>a : Symbol(a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
++>b : Symbol(b, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 11))
+ 
+ var a: any;
+ >a : Symbol(a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 2, 3))
+@@= skipped -31, +31 lines =@@
+ 
+ x1 **= E.a;
+ >x1 : Symbol(x1, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 5, 3))
+->E.a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
++>E.a : Symbol(a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+ >E : Symbol(E, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 0))
+->a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
++>a : Symbol(a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+ 
+ x1 **= {};
+ >x1 : Symbol(x1, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 5, 3))
+@@= skipped -36, +36 lines =@@
+ 
+ x2 **= E.a;
+ >x2 : Symbol(x2, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 16, 3))
+->E.a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
++>E.a : Symbol(a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+ >E : Symbol(E, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 0))
+->a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
++>a : Symbol(a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+ 
+ x2 **= {};
+ >x2 : Symbol(x2, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 16, 3))
+@@= skipped -36, +36 lines =@@
+ 
+ x3 **= E.a;
+ >x3 : Symbol(x3, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 27, 3))
+->E.a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
++>E.a : Symbol(a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+ >E : Symbol(E, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 0))
+->a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
++>a : Symbol(a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+ 
+ x3 **= {};
+ >x3 : Symbol(x3, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 27, 3))
+@@= skipped -36, +36 lines =@@
+ 
+ x4 **= E.a;
+ >x4 : Symbol(x4, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 38, 3))
+->E.a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
++>E.a : Symbol(a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+ >E : Symbol(E, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 0))
+->a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
++>a : Symbol(a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+ 
+ x4 **= {};
+ >x4 : Symbol(x4, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 38, 3))

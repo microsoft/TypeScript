@@ -1,0 +1,81 @@
+--- old.declarationEmitDefaultExportWithStaticAssignment.symbols
++++ new.declarationEmitDefaultExportWithStaticAssignment.symbols
+@@= skipped -8, +8 lines =@@
+ >Foo : Symbol(Foo, Decl(index1.ts, 0, 8))
+ 
+ export default function Example() {}
+->Example : Symbol(Example, Decl(index1.ts, 0, 26), Decl(index1.ts, 1, 36))
++>Example : Symbol(default, Decl(index1.ts, 0, 26))
+ 
+ Example.Foo = Foo
+->Example.Foo : Symbol(Example.Foo, Decl(index1.ts, 1, 36))
+->Example : Symbol(Example, Decl(index1.ts, 0, 26), Decl(index1.ts, 1, 36))
+->Foo : Symbol(Example.Foo, Decl(index1.ts, 1, 36))
++>Example.Foo : Symbol(Foo, Decl(index1.ts, 1, 36))
++>Example : Symbol(default, Decl(index1.ts, 0, 26))
++>Foo : Symbol(Foo, Decl(index1.ts, 1, 36))
+ >Foo : Symbol(Foo, Decl(index1.ts, 0, 8))
+ 
+ === index2.ts ===
+@@= skipped -16, +16 lines =@@
+ >Foo : Symbol(Foo, Decl(index2.ts, 1, 8))
+ 
+ export default function Example() {}
+->Example : Symbol(Example, Decl(index2.ts, 1, 13), Decl(index2.ts, 2, 36))
++>Example : Symbol(default, Decl(index2.ts, 1, 13))
+ 
+ Example.Foo = Foo
+->Example.Foo : Symbol(Example.Foo, Decl(index2.ts, 2, 36))
+->Example : Symbol(Example, Decl(index2.ts, 1, 13), Decl(index2.ts, 2, 36))
+->Foo : Symbol(Example.Foo, Decl(index2.ts, 2, 36))
++>Example.Foo : Symbol(Foo, Decl(index2.ts, 2, 36))
++>Example : Symbol(default, Decl(index2.ts, 1, 13))
++>Foo : Symbol(Foo, Decl(index2.ts, 2, 36))
+ >Foo : Symbol(Foo, Decl(index2.ts, 0, 8))
+ 
+ === index3.ts ===
+@@= skipped -13, +13 lines =@@
+ >Bar : Symbol(Bar, Decl(index3.ts, 0, 0))
+ 
+ export default function Example() {}
+->Example : Symbol(Example, Decl(index3.ts, 0, 19), Decl(index3.ts, 1, 36))
++>Example : Symbol(default, Decl(index3.ts, 0, 19))
+ 
+ Example.Bar = Bar
+->Example.Bar : Symbol(Example.Bar, Decl(index3.ts, 1, 36))
+->Example : Symbol(Example, Decl(index3.ts, 0, 19), Decl(index3.ts, 1, 36))
+->Bar : Symbol(Example.Bar, Decl(index3.ts, 1, 36))
++>Example.Bar : Symbol(Bar, Decl(index3.ts, 1, 36))
++>Example : Symbol(default, Decl(index3.ts, 0, 19))
++>Bar : Symbol(Bar, Decl(index3.ts, 1, 36))
+ >Bar : Symbol(Bar, Decl(index3.ts, 0, 0))
+ 
+ === index4.ts ===
+@@= skipped -16, +16 lines =@@
+ >B : Symbol(B, Decl(index4.ts, 0, 17))
+ 
+ export function C() {
+->C : Symbol(C, Decl(index4.ts, 2, 16), Decl(index4.ts, 6, 1), Decl(index4.ts, 8, 8))
++>C : Symbol(C, Decl(index4.ts, 2, 16))
+ 
+   return null;
+ }
+ 
+ C.A = A;
+->C.A : Symbol(C.A, Decl(index4.ts, 6, 1))
+->C : Symbol(C, Decl(index4.ts, 2, 16), Decl(index4.ts, 6, 1), Decl(index4.ts, 8, 8))
+->A : Symbol(C.A, Decl(index4.ts, 6, 1))
++>C.A : Symbol(A, Decl(index4.ts, 6, 1))
++>C : Symbol(C, Decl(index4.ts, 2, 16))
++>A : Symbol(A, Decl(index4.ts, 6, 1))
+ >A : Symbol(A, Decl(index4.ts, 0, 0))
+ 
+ C.B = B;
+->C.B : Symbol(C.B, Decl(index4.ts, 8, 8))
+->C : Symbol(C, Decl(index4.ts, 2, 16), Decl(index4.ts, 6, 1), Decl(index4.ts, 8, 8))
+->B : Symbol(C.B, Decl(index4.ts, 8, 8))
++>C.B : Symbol(B, Decl(index4.ts, 8, 8))
++>C : Symbol(C, Decl(index4.ts, 2, 16))
++>B : Symbol(B, Decl(index4.ts, 8, 8))
+ >B : Symbol(B, Decl(index4.ts, 0, 17))
+ 

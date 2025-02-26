@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag11.ts] ////
+
+=== /a.js ===
+/**
+ * @typedef {Object} T1
+ * @property {number} a
+ */
+
+/**
+ * @typedef {Object} T2
+ * @property {number} a
+ */
+
+/**
+ * @satisfies {T1}
+ * @satisfies {T2}
+ */
+const t1 = { a: 1 };
+>t1 : Symbol(t1, Decl(a.js, 14, 5))
+>a : Symbol(a, Decl(a.js, 14, 12))
+
+/**
+ * @satisfies {number}
+ */
+const t2 = /** @satisfies {number} */ (1);
+>t2 : Symbol(t2, Decl(a.js, 19, 5))
+

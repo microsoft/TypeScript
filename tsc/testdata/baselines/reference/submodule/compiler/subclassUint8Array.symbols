@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/subclassUint8Array.ts] ////
+
+=== subclassUint8Array.ts ===
+class CustomBuffer extends Uint8Array {
+>CustomBuffer : Symbol(CustomBuffer, Decl(subclassUint8Array.ts, 0, 0))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+}
+

@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedVisibility.ts] ////
+
+=== index.js ===
+const Obj = require("./obj");
+>Obj : Symbol(Obj, Decl(index.js, 0, 5))
+
+class Container {
+>Container : Symbol(Container, Decl(index.js, 0, 29))
+
+    constructor() {
+        this.usage = new Obj();
+>this : Symbol(Container, Decl(index.js, 0, 29))
+>Obj : Symbol(Obj, Decl(index.js, 0, 5))
+    }
+}
+
+module.exports = Container;
+>Container : Symbol(Container, Decl(index.js, 0, 29))
+

@@ -1,0 +1,111 @@
+--- old.typeGuardOfFormThisMemberErrors.symbols
++++ new.typeGuardOfFormThisMemberErrors.symbols
+@@= skipped -8, +8 lines =@@
+ >FileSystemObject : Symbol(FileSystemObject, Decl(typeGuardOfFormThisMemberErrors.ts, 1, 16))
+ 
+ 		isFSO: this is FileSystemObject;
+->isFSO : Symbol(FileSystemObject.isFSO, Decl(typeGuardOfFormThisMemberErrors.ts, 2, 32))
++>isFSO : Symbol(isFSO, Decl(typeGuardOfFormThisMemberErrors.ts, 2, 32))
+ >FileSystemObject : Symbol(FileSystemObject, Decl(typeGuardOfFormThisMemberErrors.ts, 1, 16))
+ 
+ 		get isFile(): this is File {
+->isFile : Symbol(FileSystemObject.isFile, Decl(typeGuardOfFormThisMemberErrors.ts, 3, 34), Decl(typeGuardOfFormThisMemberErrors.ts, 6, 3))
++>isFile : Symbol(isFile, Decl(typeGuardOfFormThisMemberErrors.ts, 3, 34), Decl(typeGuardOfFormThisMemberErrors.ts, 6, 3))
+ >File : Symbol(File, Decl(typeGuardOfFormThisMemberErrors.ts, 15, 2))
+ 
+ 			return this instanceof File;
+@@= skipped -12, +12 lines =@@
+ >File : Symbol(File, Decl(typeGuardOfFormThisMemberErrors.ts, 15, 2))
+ 		}
+ 		set isFile(param) {
+->isFile : Symbol(FileSystemObject.isFile, Decl(typeGuardOfFormThisMemberErrors.ts, 3, 34), Decl(typeGuardOfFormThisMemberErrors.ts, 6, 3))
++>isFile : Symbol(isFile, Decl(typeGuardOfFormThisMemberErrors.ts, 3, 34), Decl(typeGuardOfFormThisMemberErrors.ts, 6, 3))
+ >param : Symbol(param, Decl(typeGuardOfFormThisMemberErrors.ts, 7, 13))
+ 
+ 			// noop
+ 		}
+ 		get isDirectory(): this is Directory {
+->isDirectory : Symbol(FileSystemObject.isDirectory, Decl(typeGuardOfFormThisMemberErrors.ts, 9, 3))
++>isDirectory : Symbol(isDirectory, Decl(typeGuardOfFormThisMemberErrors.ts, 9, 3))
+ >Directory : Symbol(Directory, Decl(typeGuardOfFormThisMemberErrors.ts, 19, 2))
+ 
+ 			return this instanceof Directory;
+@@= skipped -14, +14 lines =@@
+ >Directory : Symbol(Directory, Decl(typeGuardOfFormThisMemberErrors.ts, 19, 2))
+ 		}
+ 		isNetworked: this is (Networked & this);
+->isNetworked : Symbol(FileSystemObject.isNetworked, Decl(typeGuardOfFormThisMemberErrors.ts, 12, 3))
++>isNetworked : Symbol(isNetworked, Decl(typeGuardOfFormThisMemberErrors.ts, 12, 3))
+ >Networked : Symbol(Networked, Decl(typeGuardOfFormThisMemberErrors.ts, 22, 2))
+ 
+ 		constructor(public path: string) {}
+->path : Symbol(FileSystemObject.path, Decl(typeGuardOfFormThisMemberErrors.ts, 14, 14))
++>path : Symbol(path, Decl(typeGuardOfFormThisMemberErrors.ts, 14, 14))
+ 	}
+ 
+ 	export class File extends FileSystemObject {
+@@= skipped -13, +13 lines =@@
+ 
+ 		constructor(path: string, public content: string) { super(path); }
+ >path : Symbol(path, Decl(typeGuardOfFormThisMemberErrors.ts, 18, 14))
+->content : Symbol(File.content, Decl(typeGuardOfFormThisMemberErrors.ts, 18, 27))
++>content : Symbol(content, Decl(typeGuardOfFormThisMemberErrors.ts, 18, 27))
+ >super : Symbol(FileSystemObject, Decl(typeGuardOfFormThisMemberErrors.ts, 1, 16))
+ >path : Symbol(path, Decl(typeGuardOfFormThisMemberErrors.ts, 18, 14))
+ 	}
+@@= skipped -9, +9 lines =@@
+ >FileSystemObject : Symbol(FileSystemObject, Decl(typeGuardOfFormThisMemberErrors.ts, 1, 16))
+ 
+ 		children: FileSystemObject[];
+->children : Symbol(Directory.children, Decl(typeGuardOfFormThisMemberErrors.ts, 20, 50))
++>children : Symbol(children, Decl(typeGuardOfFormThisMemberErrors.ts, 20, 50))
+ >FileSystemObject : Symbol(FileSystemObject, Decl(typeGuardOfFormThisMemberErrors.ts, 1, 16))
+ 	}
+ 	export interface Networked {
+ >Networked : Symbol(Networked, Decl(typeGuardOfFormThisMemberErrors.ts, 22, 2))
+ 
+ 		host: string;
+->host : Symbol(Networked.host, Decl(typeGuardOfFormThisMemberErrors.ts, 23, 29))
++>host : Symbol(host, Decl(typeGuardOfFormThisMemberErrors.ts, 23, 29))
+ 	}
+ 
+ 	let file: FileSystemObject = new File("foo/bar.txt", "foo");
+@@= skipped -16, +16 lines =@@
+ >File : Symbol(File, Decl(typeGuardOfFormThisMemberErrors.ts, 15, 2))
+ 
+ 	file.isNetworked = file.isFile;
+->file.isNetworked : Symbol(FileSystemObject.isNetworked, Decl(typeGuardOfFormThisMemberErrors.ts, 12, 3))
++>file.isNetworked : Symbol(isNetworked, Decl(typeGuardOfFormThisMemberErrors.ts, 12, 3))
+ >file : Symbol(file, Decl(typeGuardOfFormThisMemberErrors.ts, 27, 4))
+->isNetworked : Symbol(FileSystemObject.isNetworked, Decl(typeGuardOfFormThisMemberErrors.ts, 12, 3))
+->file.isFile : Symbol(FileSystemObject.isFile, Decl(typeGuardOfFormThisMemberErrors.ts, 3, 34), Decl(typeGuardOfFormThisMemberErrors.ts, 6, 3))
++>isNetworked : Symbol(isNetworked, Decl(typeGuardOfFormThisMemberErrors.ts, 12, 3))
++>file.isFile : Symbol(isFile, Decl(typeGuardOfFormThisMemberErrors.ts, 3, 34), Decl(typeGuardOfFormThisMemberErrors.ts, 6, 3))
+ >file : Symbol(file, Decl(typeGuardOfFormThisMemberErrors.ts, 27, 4))
+->isFile : Symbol(FileSystemObject.isFile, Decl(typeGuardOfFormThisMemberErrors.ts, 3, 34), Decl(typeGuardOfFormThisMemberErrors.ts, 6, 3))
++>isFile : Symbol(isFile, Decl(typeGuardOfFormThisMemberErrors.ts, 3, 34), Decl(typeGuardOfFormThisMemberErrors.ts, 6, 3))
+ 
+ 	file.isFSO = file.isNetworked;
+->file.isFSO : Symbol(FileSystemObject.isFSO, Decl(typeGuardOfFormThisMemberErrors.ts, 2, 32))
++>file.isFSO : Symbol(isFSO, Decl(typeGuardOfFormThisMemberErrors.ts, 2, 32))
+ >file : Symbol(file, Decl(typeGuardOfFormThisMemberErrors.ts, 27, 4))
+->isFSO : Symbol(FileSystemObject.isFSO, Decl(typeGuardOfFormThisMemberErrors.ts, 2, 32))
+->file.isNetworked : Symbol(FileSystemObject.isNetworked, Decl(typeGuardOfFormThisMemberErrors.ts, 12, 3))
++>isFSO : Symbol(isFSO, Decl(typeGuardOfFormThisMemberErrors.ts, 2, 32))
++>file.isNetworked : Symbol(isNetworked, Decl(typeGuardOfFormThisMemberErrors.ts, 12, 3))
+ >file : Symbol(file, Decl(typeGuardOfFormThisMemberErrors.ts, 27, 4))
+->isNetworked : Symbol(FileSystemObject.isNetworked, Decl(typeGuardOfFormThisMemberErrors.ts, 12, 3))
++>isNetworked : Symbol(isNetworked, Decl(typeGuardOfFormThisMemberErrors.ts, 12, 3))
+ 
+ 	file.isFile = file.isFSO;
+->file.isFile : Symbol(FileSystemObject.isFile, Decl(typeGuardOfFormThisMemberErrors.ts, 3, 34), Decl(typeGuardOfFormThisMemberErrors.ts, 6, 3))
++>file.isFile : Symbol(isFile, Decl(typeGuardOfFormThisMemberErrors.ts, 3, 34), Decl(typeGuardOfFormThisMemberErrors.ts, 6, 3))
+ >file : Symbol(file, Decl(typeGuardOfFormThisMemberErrors.ts, 27, 4))
+->isFile : Symbol(FileSystemObject.isFile, Decl(typeGuardOfFormThisMemberErrors.ts, 3, 34), Decl(typeGuardOfFormThisMemberErrors.ts, 6, 3))
+->file.isFSO : Symbol(FileSystemObject.isFSO, Decl(typeGuardOfFormThisMemberErrors.ts, 2, 32))
++>isFile : Symbol(isFile, Decl(typeGuardOfFormThisMemberErrors.ts, 3, 34), Decl(typeGuardOfFormThisMemberErrors.ts, 6, 3))
++>file.isFSO : Symbol(isFSO, Decl(typeGuardOfFormThisMemberErrors.ts, 2, 32))
+ >file : Symbol(file, Decl(typeGuardOfFormThisMemberErrors.ts, 27, 4))
+->isFSO : Symbol(FileSystemObject.isFSO, Decl(typeGuardOfFormThisMemberErrors.ts, 2, 32))
++>isFSO : Symbol(isFSO, Decl(typeGuardOfFormThisMemberErrors.ts, 2, 32))
+ }

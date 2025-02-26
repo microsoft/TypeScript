@@ -1,0 +1,20 @@
+--- old.superCallOutsideConstructor.symbols
++++ new.superCallOutsideConstructor.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(superCallOutsideConstructor.ts, 0, 0))
+ 
+     foo() { }
+->foo : Symbol(C.foo, Decl(superCallOutsideConstructor.ts, 0, 9))
++>foo : Symbol(foo, Decl(superCallOutsideConstructor.ts, 0, 9))
+ }
+  
+ class D extends C {
+@@= skipped -8, +8 lines =@@
+ >C : Symbol(C, Decl(superCallOutsideConstructor.ts, 0, 0))
+ 
+     x = super(); 
+->x : Symbol(D.x, Decl(superCallOutsideConstructor.ts, 4, 19))
++>x : Symbol(x, Decl(superCallOutsideConstructor.ts, 4, 19))
+  
+     constructor() {
+         super();

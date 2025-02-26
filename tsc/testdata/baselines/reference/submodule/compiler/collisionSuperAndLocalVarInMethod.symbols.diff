@@ -1,0 +1,29 @@
+--- old.collisionSuperAndLocalVarInMethod.symbols
++++ new.collisionSuperAndLocalVarInMethod.symbols
+@@= skipped -7, +7 lines =@@
+ >Foo : Symbol(Foo, Decl(collisionSuperAndLocalVarInMethod.ts, 0, 16))
+ 
+     x() {
+->x : Symbol(Foo.x, Decl(collisionSuperAndLocalVarInMethod.ts, 1, 11))
++>x : Symbol(x, Decl(collisionSuperAndLocalVarInMethod.ts, 1, 11))
+ 
+         var _super = 10; // No error
+ >_super : Symbol(_super, Decl(collisionSuperAndLocalVarInMethod.ts, 3, 11))
+@@= skipped -11, +11 lines =@@
+ >Foo : Symbol(Foo, Decl(collisionSuperAndLocalVarInMethod.ts, 0, 16))
+ 
+     public foo() {
+->foo : Symbol(b.foo, Decl(collisionSuperAndLocalVarInMethod.ts, 6, 21))
++>foo : Symbol(foo, Decl(collisionSuperAndLocalVarInMethod.ts, 6, 21))
+ 
+         var _super = 10; // Should be error 
+ >_super : Symbol(_super, Decl(collisionSuperAndLocalVarInMethod.ts, 8, 11))
+@@= skipped -11, +11 lines =@@
+ >Foo : Symbol(Foo, Decl(collisionSuperAndLocalVarInMethod.ts, 0, 16))
+ 
+     public foo() {
+->foo : Symbol(c.foo, Decl(collisionSuperAndLocalVarInMethod.ts, 11, 21))
++>foo : Symbol(foo, Decl(collisionSuperAndLocalVarInMethod.ts, 11, 21))
+ 
+         var x = () => {
+ >x : Symbol(x, Decl(collisionSuperAndLocalVarInMethod.ts, 13, 11))

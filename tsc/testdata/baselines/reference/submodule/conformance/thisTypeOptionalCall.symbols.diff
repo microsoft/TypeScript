@@ -1,0 +1,13 @@
+--- old.thisTypeOptionalCall.symbols
++++ new.thisTypeOptionalCall.symbols
+@@= skipped -18, +18 lines =@@
+ >R : Symbol(R, Decl(thisTypeOptionalCall.ts, 0, 38))
+ 
+     return fn?.bind(obj);
+->fn?.bind : Symbol(Function.bind, Decl(lib.es5.d.ts, --, --))
++>fn?.bind : Symbol(bind, Decl(lib.es5.d.ts, --, --))
+ >fn : Symbol(fn, Decl(thisTypeOptionalCall.ts, 0, 49))
+->bind : Symbol(Function.bind, Decl(lib.es5.d.ts, --, --))
++>bind : Symbol(bind, Decl(lib.es5.d.ts, --, --))
+ >obj : Symbol(obj, Decl(thisTypeOptionalCall.ts, 0, 42))
+ }

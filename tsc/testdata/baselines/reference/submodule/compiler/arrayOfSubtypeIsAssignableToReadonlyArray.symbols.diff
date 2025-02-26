@@ -1,0 +1,25 @@
+--- old.arrayOfSubtypeIsAssignableToReadonlyArray.symbols
++++ new.arrayOfSubtypeIsAssignableToReadonlyArray.symbols
+@@= skipped -2, +2 lines =@@
+ === arrayOfSubtypeIsAssignableToReadonlyArray.ts ===
+ class A { a }
+ >A : Symbol(A, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 0, 0))
+->a : Symbol(A.a, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 0, 9))
++>a : Symbol(a, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 0, 9))
+ 
+ class B extends A { b }
+ >B : Symbol(B, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 0, 13))
+ >A : Symbol(A, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 0, 0))
+->b : Symbol(B.b, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 1, 19))
++>b : Symbol(b, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 1, 19))
+ 
+ class C<T> extends Array<T> { c }
+ >C : Symbol(C, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 1, 23))
+ >T : Symbol(T, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 2, 8))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >T : Symbol(T, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 2, 8))
+->c : Symbol(C.c, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 2, 29))
++>c : Symbol(c, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 2, 29))
+ 
+ declare var ara: A[];
+ >ara : Symbol(ara, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 3, 11))

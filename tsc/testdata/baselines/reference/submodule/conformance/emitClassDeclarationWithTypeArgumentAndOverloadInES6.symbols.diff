@@ -1,0 +1,83 @@
+--- old.emitClassDeclarationWithTypeArgumentAndOverloadInES6.symbols
++++ new.emitClassDeclarationWithTypeArgumentAndOverloadInES6.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 8))
+ 
+     x: T;
+->x : Symbol(B.x, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 12))
++>x : Symbol(x, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 12))
+ >T : Symbol(T, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 8))
+ 
+     B: T;
+->B : Symbol(B.B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 1, 9))
++>B : Symbol(B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 1, 9))
+ >T : Symbol(T, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 8))
+ 
+     constructor(a: any)
+@@= skipped -18, +18 lines =@@
+     constructor(a: T) { this.B = a;}
+ >a : Symbol(a, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 6, 16))
+ >T : Symbol(T, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 8))
+->this.B : Symbol(B.B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 1, 9))
++>this.B : Symbol(B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 1, 9))
+ >this : Symbol(B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 0))
+->B : Symbol(B.B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 1, 9))
++>B : Symbol(B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 1, 9))
+ >a : Symbol(a, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 6, 16))
+ 
+     foo(a: T)
+->foo : Symbol(B.foo, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 6, 36), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 8, 13), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 9, 15), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 10, 18))
++>foo : Symbol(foo, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 6, 36), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 8, 13), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 9, 15), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 10, 18))
+ >a : Symbol(a, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 8, 8))
+ >T : Symbol(T, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 8))
+ 
+     foo(a: any)
+->foo : Symbol(B.foo, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 6, 36), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 8, 13), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 9, 15), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 10, 18))
++>foo : Symbol(foo, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 6, 36), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 8, 13), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 9, 15), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 10, 18))
+ >a : Symbol(a, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 9, 8))
+ 
+     foo(b: string)
+->foo : Symbol(B.foo, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 6, 36), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 8, 13), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 9, 15), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 10, 18))
++>foo : Symbol(foo, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 6, 36), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 8, 13), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 9, 15), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 10, 18))
+ >b : Symbol(b, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 10, 8))
+ 
+     foo(): T {
+->foo : Symbol(B.foo, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 6, 36), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 8, 13), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 9, 15), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 10, 18))
++>foo : Symbol(foo, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 6, 36), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 8, 13), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 9, 15), Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 10, 18))
+ >T : Symbol(T, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 8))
+ 
+         return this.x;
+->this.x : Symbol(B.x, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 12))
++>this.x : Symbol(x, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 12))
+ >this : Symbol(B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 0))
+->x : Symbol(B.x, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 12))
++>x : Symbol(x, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 12))
+     }
+ 
+     get BB(): T {
+->BB : Symbol(B.BB, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 13, 5))
++>BB : Symbol(BB, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 13, 5))
+ >T : Symbol(T, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 8))
+ 
+         return this.B;
+->this.B : Symbol(B.B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 1, 9))
++>this.B : Symbol(B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 1, 9))
+ >this : Symbol(B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 0))
+->B : Symbol(B.B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 1, 9))
++>B : Symbol(B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 1, 9))
+     }
+     set BBWith(c: T) {
+->BBWith : Symbol(B.BBWith, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 17, 5))
++>BBWith : Symbol(BBWith, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 17, 5))
+ >c : Symbol(c, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 18, 15))
+ >T : Symbol(T, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 8))
+ 
+         this.B = c;
+->this.B : Symbol(B.B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 1, 9))
++>this.B : Symbol(B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 1, 9))
+ >this : Symbol(B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 0, 0))
+->B : Symbol(B.B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 1, 9))
++>B : Symbol(B, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 1, 9))
+ >c : Symbol(c, Decl(emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts, 18, 15))
+     }
+ }

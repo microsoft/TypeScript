@@ -1,0 +1,22 @@
+--- old.nodeModulesImportAttributes(module=nodenext).symbols
++++ new.nodeModulesImportAttributes(module=nodenext).symbols
+@@= skipped -9, +9 lines =@@
+ 
+ const json2 = import("./package.json", { with: { type: "json" } }); // should be fine
+ >json2 : Symbol(json2, Decl(otherc.cts, 1, 5))
+->"./package.json" : Symbol("package", Decl(package.json, 0, 0))
+ >with : Symbol(with, Decl(otherc.cts, 1, 40))
+ >type : Symbol(type, Decl(otherc.cts, 1, 48))
+ 
+-=== package.json ===
+-{
+-    "name": "pkg",
+->"name" : Symbol("name", Decl(package.json, 0, 1))
+-
+-    "private": true,
+->"private" : Symbol("private", Decl(package.json, 1, 18))
+-
+-    "type": "module"
+->"type" : Symbol("type", Decl(package.json, 2, 20))
+-}
+-

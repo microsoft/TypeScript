@@ -1,0 +1,111 @@
+--- old.moduleNodeDefaultImports(module=nodenext).symbols
++++ new.moduleNodeDefaultImports(module=nodenext).symbols
+@@= skipped -11, +11 lines =@@
+ >a : Symbol(a, Decl(b.mts, 0, 6))
+ 
+ import { default as b } from "./mod.cjs";
+->default : Symbol(a, Decl(mod.cts, 0, 0))
++>default : Symbol(default, Decl(mod.cts, 0, 29))
+ >b : Symbol(b, Decl(b.mts, 1, 8))
+ 
+ import c, { default as d } from "./mod.cjs";
+ >c : Symbol(c, Decl(b.mts, 2, 6))
+->default : Symbol(a, Decl(mod.cts, 0, 0))
++>default : Symbol(default, Decl(mod.cts, 0, 29))
+ >d : Symbol(d, Decl(b.mts, 2, 11))
+ 
+ import * as self from "./b.mjs";
+ >self : Symbol(self, Decl(b.mts, 3, 6))
+ 
+ export { default } from "./mod.cjs";
+->default : Symbol(self.default, Decl(b.mts, 4, 8))
++>default : Symbol(default, Decl(b.mts, 4, 8))
+ 
+ export { default as def } from "./mod.cjs";
+->default : Symbol(a, Decl(mod.cts, 0, 0))
+->def : Symbol(self.def, Decl(b.mts, 5, 8))
++>default : Symbol(default, Decl(mod.cts, 0, 29))
++>def : Symbol(def, Decl(b.mts, 5, 8))
+ 
+ a === b;
+ >a : Symbol(a, Decl(b.mts, 0, 6))
+@@= skipped -32, +32 lines =@@
+ 
+ d === self.default;
+ >d : Symbol(d, Decl(b.mts, 2, 11))
+->self.default : Symbol(self.default, Decl(b.mts, 4, 8))
++>self.default : Symbol(default, Decl(b.mts, 4, 8))
+ >self : Symbol(self, Decl(b.mts, 3, 6))
+->default : Symbol(self.default, Decl(b.mts, 4, 8))
++>default : Symbol(default, Decl(b.mts, 4, 8))
+ 
+ self.default === self.def;
+->self.default : Symbol(self.default, Decl(b.mts, 4, 8))
++>self.default : Symbol(default, Decl(b.mts, 4, 8))
+ >self : Symbol(self, Decl(b.mts, 3, 6))
+->default : Symbol(self.default, Decl(b.mts, 4, 8))
+->self.def : Symbol(self.def, Decl(b.mts, 5, 8))
++>default : Symbol(default, Decl(b.mts, 4, 8))
++>self.def : Symbol(def, Decl(b.mts, 5, 8))
+ >self : Symbol(self, Decl(b.mts, 3, 6))
+->def : Symbol(self.def, Decl(b.mts, 5, 8))
++>def : Symbol(def, Decl(b.mts, 5, 8))
+ 
+ // should all fail
+ a();
+@@= skipped -26, +26 lines =@@
+ >d : Symbol(d, Decl(b.mts, 2, 11))
+ 
+ self.default();
+->self.default : Symbol(self.default, Decl(b.mts, 4, 8))
++>self.default : Symbol(default, Decl(b.mts, 4, 8))
+ >self : Symbol(self, Decl(b.mts, 3, 6))
+->default : Symbol(self.default, Decl(b.mts, 4, 8))
++>default : Symbol(default, Decl(b.mts, 4, 8))
+ 
+ self.def();
+->self.def : Symbol(self.def, Decl(b.mts, 5, 8))
++>self.def : Symbol(def, Decl(b.mts, 5, 8))
+ >self : Symbol(self, Decl(b.mts, 3, 6))
+->def : Symbol(self.def, Decl(b.mts, 5, 8))
++>def : Symbol(def, Decl(b.mts, 5, 8))
+ 
+ // should all work
+ a.default();
+->a.default : Symbol(a.default, Decl(mod.cts, 0, 29))
+ >a : Symbol(a, Decl(b.mts, 0, 6))
+->default : Symbol(a.default, Decl(mod.cts, 0, 29))
+ 
+ b.default();
+->b.default : Symbol(a.default, Decl(mod.cts, 0, 29))
+ >b : Symbol(b, Decl(b.mts, 1, 8))
+->default : Symbol(a.default, Decl(mod.cts, 0, 29))
+ 
+ c.default();
+->c.default : Symbol(a.default, Decl(mod.cts, 0, 29))
+ >c : Symbol(c, Decl(b.mts, 2, 6))
+->default : Symbol(a.default, Decl(mod.cts, 0, 29))
+ 
+ d.default();
+->d.default : Symbol(a.default, Decl(mod.cts, 0, 29))
+ >d : Symbol(d, Decl(b.mts, 2, 11))
+->default : Symbol(a.default, Decl(mod.cts, 0, 29))
+ 
+ self.default.default();
+->self.default.default : Symbol(a.default, Decl(mod.cts, 0, 29))
+->self.default : Symbol(self.default, Decl(b.mts, 4, 8))
++>self.default : Symbol(default, Decl(b.mts, 4, 8))
+ >self : Symbol(self, Decl(b.mts, 3, 6))
+->default : Symbol(self.default, Decl(b.mts, 4, 8))
+->default : Symbol(a.default, Decl(mod.cts, 0, 29))
++>default : Symbol(default, Decl(b.mts, 4, 8))
+ 
+ self.def.default();
+->self.def.default : Symbol(a.default, Decl(mod.cts, 0, 29))
+->self.def : Symbol(self.def, Decl(b.mts, 5, 8))
++>self.def : Symbol(def, Decl(b.mts, 5, 8))
+ >self : Symbol(self, Decl(b.mts, 3, 6))
+->def : Symbol(self.def, Decl(b.mts, 5, 8))
+->default : Symbol(a.default, Decl(mod.cts, 0, 29))
++>def : Symbol(def, Decl(b.mts, 5, 8))
+ 

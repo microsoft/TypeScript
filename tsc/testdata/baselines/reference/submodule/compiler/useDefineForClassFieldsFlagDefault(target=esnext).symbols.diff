@@ -1,0 +1,9 @@
+--- old.useDefineForClassFieldsFlagDefault(target=esnext).symbols
++++ new.useDefineForClassFieldsFlagDefault(target=esnext).symbols
+@@= skipped -6, +6 lines =@@
+     // For esNext should be emitted 'as is' because useDefineForClassFields defaults to true 
+     // For es2020 should be emitted as an assignment after the class definition (not Object.defineProperty) because useDefineForClassFields defaults to false
+     static x = 1; 
+->x : Symbol(Foo.x, Decl(useDefineForClassFieldsFlagDefault.ts, 0, 11))
++>x : Symbol(x, Decl(useDefineForClassFieldsFlagDefault.ts, 0, 11))
+ }

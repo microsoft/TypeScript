@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/javascriptThisAssignmentInStaticBlock.ts] ////
+
+=== /src/a.js ===
+class Thing {
+>Thing : Symbol(Thing, Decl(a.js, 0, 0))
+
+    static {
+        this.doSomething = () => {};
+>this : Symbol(Thing, Decl(a.js, 0, 0))
+    }
+}
+
+Thing.doSomething();
+>Thing : Symbol(Thing, Decl(a.js, 0, 0))
+
+// GH#46468
+class ElementsArray extends Array {
+>ElementsArray : Symbol(ElementsArray, Decl(a.js, 6, 20))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    static {
+        const superisArray = super.isArray;
+>superisArray : Symbol(superisArray, Decl(a.js, 11, 13))
+>super.isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ArrayConstructor, Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+
+        const customIsArray = (arg)=> superisArray(arg);
+>customIsArray : Symbol(customIsArray, Decl(a.js, 12, 13))
+>arg : Symbol(arg, Decl(a.js, 12, 31))
+>superisArray : Symbol(superisArray, Decl(a.js, 11, 13))
+>arg : Symbol(arg, Decl(a.js, 12, 31))
+
+        this.isArray = customIsArray;
+>this.isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(ElementsArray, Decl(a.js, 6, 20))
+>isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+>customIsArray : Symbol(customIsArray, Decl(a.js, 12, 13))
+    }
+}
+
+ElementsArray.isArray(new ElementsArray());
+>ElementsArray.isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+>ElementsArray : Symbol(ElementsArray, Decl(a.js, 6, 20))
+>isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+>ElementsArray : Symbol(ElementsArray, Decl(a.js, 6, 20))
+

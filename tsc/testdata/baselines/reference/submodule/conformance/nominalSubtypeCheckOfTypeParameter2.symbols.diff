@@ -1,0 +1,46 @@
+--- old.nominalSubtypeCheckOfTypeParameter2.symbols
++++ new.nominalSubtypeCheckOfTypeParameter2.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 0, 12))
+ 
+     bar: T;
+->bar : Symbol(B.bar, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 0, 16))
++>bar : Symbol(bar, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 0, 16))
+ >T : Symbol(T, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 0, 12))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >T : Symbol(T, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 5, 12))
+ 
+     foo: T;
+->foo : Symbol(A.foo, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 5, 29))
++>foo : Symbol(foo, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 5, 29))
+ >T : Symbol(T, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 5, 12))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >B : Symbol(B, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 0, 0))
+ 
+     baz: T;
+->baz : Symbol(A2.baz, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 10, 38))
++>baz : Symbol(baz, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 10, 38))
+ >T : Symbol(T, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 10, 13))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 14, 12))
+ 
+     bam: T;
+->bam : Symbol(C.bam, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 14, 16))
++>bam : Symbol(bam, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 14, 16))
+ >T : Symbol(T, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 14, 12))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 19, 13))
+ 
+     bing: T;
+->bing : Symbol(A3.bing, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 19, 33))
++>bing : Symbol(bing, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 19, 33))
+ >T : Symbol(T, Decl(nominalSubtypeCheckOfTypeParameter2.ts, 19, 13))
+ }

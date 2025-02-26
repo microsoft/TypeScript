@@ -1,0 +1,11 @@
+--- old.templateStringInFunctionParameterTypeES6.symbols
++++ new.templateStringInFunctionParameterTypeES6.symbols
+@@= skipped -2, +2 lines =@@
+ === templateStringInFunctionParameterTypeES6.ts ===
+ function f(`hello`);
+ >f : Symbol(f, Decl(templateStringInFunctionParameterTypeES6.ts, 0, 0), Decl(templateStringInFunctionParameterTypeES6.ts, 0, 20), Decl(templateStringInFunctionParameterTypeES6.ts, 1, 22))
+-> : Symbol((Missing), Decl(templateStringInFunctionParameterTypeES6.ts, 0, 11))
++> : Symbol(, Decl(templateStringInFunctionParameterTypeES6.ts, 0, 11))
+ 
+ function f(x: string);
+ >f : Symbol(f, Decl(templateStringInFunctionParameterTypeES6.ts, 0, 0), Decl(templateStringInFunctionParameterTypeES6.ts, 0, 20), Decl(templateStringInFunctionParameterTypeES6.ts, 1, 22))

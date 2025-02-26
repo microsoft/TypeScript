@@ -1,0 +1,32 @@
+--- old.inheritanceMemberAccessorOverridingAccessor.symbols
++++ new.inheritanceMemberAccessorOverridingAccessor.symbols
+@@= skipped -4, +4 lines =@@
+ >a : Symbol(a, Decl(inheritanceMemberAccessorOverridingAccessor.ts, 0, 0))
+ 
+     get x() {
+->x : Symbol(a.x, Decl(inheritanceMemberAccessorOverridingAccessor.ts, 0, 9), Decl(inheritanceMemberAccessorOverridingAccessor.ts, 3, 5))
++>x : Symbol(x, Decl(inheritanceMemberAccessorOverridingAccessor.ts, 0, 9), Decl(inheritanceMemberAccessorOverridingAccessor.ts, 3, 5))
+ 
+         return "20";
+     }
+     set x(aValue: string) {
+->x : Symbol(a.x, Decl(inheritanceMemberAccessorOverridingAccessor.ts, 0, 9), Decl(inheritanceMemberAccessorOverridingAccessor.ts, 3, 5))
++>x : Symbol(x, Decl(inheritanceMemberAccessorOverridingAccessor.ts, 0, 9), Decl(inheritanceMemberAccessorOverridingAccessor.ts, 3, 5))
+ >aValue : Symbol(aValue, Decl(inheritanceMemberAccessorOverridingAccessor.ts, 4, 10))
+ 
+     }
+@@= skipped -16, +16 lines =@@
+ >a : Symbol(a, Decl(inheritanceMemberAccessorOverridingAccessor.ts, 0, 0))
+ 
+     get x() {
+->x : Symbol(b.x, Decl(inheritanceMemberAccessorOverridingAccessor.ts, 9, 19), Decl(inheritanceMemberAccessorOverridingAccessor.ts, 12, 5))
++>x : Symbol(x, Decl(inheritanceMemberAccessorOverridingAccessor.ts, 9, 19), Decl(inheritanceMemberAccessorOverridingAccessor.ts, 12, 5))
+ 
+         return "20";
+     }
+     set x(aValue: string) {
+->x : Symbol(b.x, Decl(inheritanceMemberAccessorOverridingAccessor.ts, 9, 19), Decl(inheritanceMemberAccessorOverridingAccessor.ts, 12, 5))
++>x : Symbol(x, Decl(inheritanceMemberAccessorOverridingAccessor.ts, 9, 19), Decl(inheritanceMemberAccessorOverridingAccessor.ts, 12, 5))
+ >aValue : Symbol(aValue, Decl(inheritanceMemberAccessorOverridingAccessor.ts, 13, 10))
+ 
+     }

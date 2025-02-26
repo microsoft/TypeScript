@@ -1,0 +1,62 @@
+--- old.discriminateWithOptionalProperty4(exactoptionalpropertytypes=true).symbols
++++ new.discriminateWithOptionalProperty4(exactoptionalpropertytypes=true).symbols
+@@= skipped -18, +18 lines =@@
+ >a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 3, 17), Decl(discriminateWithOptionalProperty4.ts, 3, 17))
+ 
+     ? z.a.toString()
+->z.a.toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
++>z.a.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >z.a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 3, 17))
+ >z : Symbol(z, Decl(discriminateWithOptionalProperty4.ts, 3, 7))
+ >a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 3, 17))
+->toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+     : z.b.toString();
+->z.b.toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
++>z.b.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >z.b : Symbol(b, Decl(discriminateWithOptionalProperty4.ts, 3, 25))
+ >z : Symbol(z, Decl(discriminateWithOptionalProperty4.ts, 3, 7))
+ >b : Symbol(b, Decl(discriminateWithOptionalProperty4.ts, 3, 25))
+->toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+   const zWorkAround:
+ >zWorkAround : Symbol(zWorkAround, Decl(discriminateWithOptionalProperty4.ts, 9, 7))
+@@= skipped -29, +29 lines =@@
+ >zWorkAround.a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 10, 7), Decl(discriminateWithOptionalProperty4.ts, 11, 20))
+ >zWorkAround : Symbol(zWorkAround, Decl(discriminateWithOptionalProperty4.ts, 9, 7))
+ >a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 10, 7), Decl(discriminateWithOptionalProperty4.ts, 11, 20))
+->zWorkAround.a.toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
++>zWorkAround.a.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >zWorkAround.a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 10, 7))
+ >zWorkAround : Symbol(zWorkAround, Decl(discriminateWithOptionalProperty4.ts, 9, 7))
+ >a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 10, 7))
+->toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
+->zWorkAround.b.toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
++>zWorkAround.b.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >zWorkAround.b : Symbol(b, Decl(discriminateWithOptionalProperty4.ts, 11, 7))
+ >zWorkAround : Symbol(zWorkAround, Decl(discriminateWithOptionalProperty4.ts, 9, 7))
+ >b : Symbol(b, Decl(discriminateWithOptionalProperty4.ts, 11, 7))
+->toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+   "a" in z ? z.a.toString() : z.b.toString();
+ >z : Symbol(z, Decl(discriminateWithOptionalProperty4.ts, 3, 7))
+->z.a.toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
++>z.a.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >z.a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 3, 17), Decl(discriminateWithOptionalProperty4.ts, 3, 17))
+ >z : Symbol(z, Decl(discriminateWithOptionalProperty4.ts, 3, 7))
+ >a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 3, 17), Decl(discriminateWithOptionalProperty4.ts, 3, 17))
+->toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
+->z.b.toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
++>z.b.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >z.b : Symbol(b, Decl(discriminateWithOptionalProperty4.ts, 3, 25))
+ >z : Symbol(z, Decl(discriminateWithOptionalProperty4.ts, 3, 7))
+ >b : Symbol(b, Decl(discriminateWithOptionalProperty4.ts, 3, 25))
+->toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ }
+ 

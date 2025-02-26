@@ -1,0 +1,50 @@
+--- old.classAbstractUsingAbstractMethod1.symbols
++++ new.classAbstractUsingAbstractMethod1.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(classAbstractUsingAbstractMethod1.ts, 0, 0))
+ 
+     abstract foo() : number;
+->foo : Symbol(A.foo, Decl(classAbstractUsingAbstractMethod1.ts, 0, 18))
++>foo : Symbol(foo, Decl(classAbstractUsingAbstractMethod1.ts, 0, 18))
+ }
+ 
+ class B extends A {
+@@= skipped -8, +8 lines =@@
+ >A : Symbol(A, Decl(classAbstractUsingAbstractMethod1.ts, 0, 0))
+ 
+     foo() { return 1; }
+->foo : Symbol(B.foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
++>foo : Symbol(foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
+ }
+ 
+ abstract class C extends A  {
+@@= skipped -8, +8 lines =@@
+ >A : Symbol(A, Decl(classAbstractUsingAbstractMethod1.ts, 0, 0))
+ 
+     abstract foo() : number;
+->foo : Symbol(C.foo, Decl(classAbstractUsingAbstractMethod1.ts, 8, 29))
++>foo : Symbol(foo, Decl(classAbstractUsingAbstractMethod1.ts, 8, 29))
+ }
+ 
+ var a = new B;
+@@= skipped -8, +8 lines =@@
+ >B : Symbol(B, Decl(classAbstractUsingAbstractMethod1.ts, 2, 1))
+ 
+ a.foo();
+->a.foo : Symbol(B.foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
++>a.foo : Symbol(foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
+ >a : Symbol(a, Decl(classAbstractUsingAbstractMethod1.ts, 12, 3))
+->foo : Symbol(B.foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
++>foo : Symbol(foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
+ 
+ a = new C; // error, cannot instantiate abstract class.
+ >a : Symbol(a, Decl(classAbstractUsingAbstractMethod1.ts, 12, 3))
+ >C : Symbol(C, Decl(classAbstractUsingAbstractMethod1.ts, 6, 1))
+ 
+ a.foo();
+->a.foo : Symbol(B.foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
++>a.foo : Symbol(foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
+ >a : Symbol(a, Decl(classAbstractUsingAbstractMethod1.ts, 12, 3))
+->foo : Symbol(B.foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
++>foo : Symbol(foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
+ 

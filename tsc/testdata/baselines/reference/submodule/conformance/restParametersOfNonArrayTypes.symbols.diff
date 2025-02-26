@@ -1,0 +1,20 @@
+--- old.restParametersOfNonArrayTypes.symbols
++++ new.restParametersOfNonArrayTypes.symbols
+@@= skipped -21, +21 lines =@@
+ >C : Symbol(C, Decl(restParametersOfNonArrayTypes.ts, 4, 43))
+ 
+     foo(...x: C) { }
+->foo : Symbol(C.foo, Decl(restParametersOfNonArrayTypes.ts, 6, 9))
++>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes.ts, 6, 9))
+ >x : Symbol(x, Decl(restParametersOfNonArrayTypes.ts, 7, 8))
+ >C : Symbol(C, Decl(restParametersOfNonArrayTypes.ts, 4, 43))
+ }
+@@= skipped -12, +12 lines =@@
+ >x : Symbol(x, Decl(restParametersOfNonArrayTypes.ts, 11, 5))
+ 
+     foo(...x: number, ...y: number);
+->foo : Symbol(I.foo, Decl(restParametersOfNonArrayTypes.ts, 11, 19))
++>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes.ts, 11, 19))
+ >x : Symbol(x, Decl(restParametersOfNonArrayTypes.ts, 12, 8))
+ >y : Symbol(y, Decl(restParametersOfNonArrayTypes.ts, 12, 21))
+ }

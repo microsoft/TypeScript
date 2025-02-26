@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/signaturesUseJSDocForOptionalParameters.ts] ////
+
+=== jsDocOptionality.js ===
+function MyClass() {
+>MyClass : Symbol(MyClass, Decl(jsDocOptionality.js, 0, 0))
+
+  this.prop = null;
+}
+/**
+ * @param  {string} required
+ * @param  {string} [notRequired]
+ * @returns {MyClass}
+ */
+MyClass.prototype.optionalParam = function(required, notRequired) {
+>MyClass.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>MyClass : Symbol(MyClass, Decl(jsDocOptionality.js, 0, 0))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>required : Symbol(required, Decl(jsDocOptionality.js, 8, 43))
+>notRequired : Symbol(notRequired, Decl(jsDocOptionality.js, 8, 52))
+
+    return this;
+};
+let pInst = new MyClass();
+>pInst : Symbol(pInst, Decl(jsDocOptionality.js, 11, 3))
+>MyClass : Symbol(MyClass, Decl(jsDocOptionality.js, 0, 0))
+
+let c1 = pInst.optionalParam('hello')
+>c1 : Symbol(c1, Decl(jsDocOptionality.js, 12, 3))
+>pInst : Symbol(pInst, Decl(jsDocOptionality.js, 11, 3))
+
+let c2 = pInst.optionalParam('hello', null)
+>c2 : Symbol(c2, Decl(jsDocOptionality.js, 13, 3))
+>pInst : Symbol(pInst, Decl(jsDocOptionality.js, 11, 3))
+

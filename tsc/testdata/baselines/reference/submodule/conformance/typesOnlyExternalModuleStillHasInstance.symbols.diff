@@ -1,0 +1,24 @@
+--- old.typesOnlyExternalModuleStillHasInstance.symbols
++++ new.typesOnlyExternalModuleStillHasInstance.symbols
+@@= skipped -20, +20 lines =@@
+ >Person : Symbol(Person, Decl(foo_0.ts, 0, 0))
+ 
+ 	name: string;
+->name : Symbol(Person.name, Decl(foo_0.ts, 0, 25))
++>name : Symbol(name, Decl(foo_0.ts, 0, 25))
+ 
+ 	age: number;
+->age : Symbol(Person.age, Decl(foo_0.ts, 1, 14))
++>age : Symbol(age, Decl(foo_0.ts, 1, 14))
+ }
+ 
+ export module M2 {
+@@= skipped -13, +13 lines =@@
+ >I2 : Symbol(I2, Decl(foo_0.ts, 5, 18))
+ 
+ 		x: Person;
+->x : Symbol(I2.x, Decl(foo_0.ts, 6, 22))
++>x : Symbol(x, Decl(foo_0.ts, 6, 22))
+ >Person : Symbol(Person, Decl(foo_0.ts, 0, 0))
+ 	}
+ }

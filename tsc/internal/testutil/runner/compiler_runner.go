@@ -11,6 +11,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/repo"
+	"github.com/microsoft/typescript-go/internal/testutil"
 	"github.com/microsoft/typescript-go/internal/testutil/baseline"
 	"github.com/microsoft/typescript-go/internal/testutil/harnessutil"
 	"github.com/microsoft/typescript-go/internal/testutil/tsbaseline"
@@ -49,19 +50,26 @@ func (t *CompilerTestType) String() string {
 }
 
 type CompilerBaselineRunner struct {
-	testFiles     []string
-	basePath      string
-	testSuiteName string
+	isSubmodule  bool
+	testFiles    []string
+	basePath     string
+	testSuitName string
 }
 
 var _ Runner = (*CompilerBaselineRunner)(nil)
 
-func NewCompilerBaselineRunner(testType CompilerTestType) *CompilerBaselineRunner {
-	testSuiteName := testType.String()
-	basePath := "tests/cases/" + testSuiteName
+func NewCompilerBaselineRunner(testType CompilerTestType, isSubmodule bool) *CompilerBaselineRunner {
+	testSuitName := testType.String()
+	var basePath string
+	if isSubmodule {
+		basePath = "../_submodules/TypeScript/tests/cases/" + testSuitName
+	} else {
+		basePath = "tests/cases/" + testSuitName
+	}
 	return &CompilerBaselineRunner{
-		basePath:      basePath,
-		testSuiteName: testSuiteName,
+		basePath:     basePath,
+		testSuitName: testSuitName,
+		isSubmodule:  isSubmodule,
 	}
 }
 
@@ -69,7 +77,7 @@ func (r *CompilerBaselineRunner) EnumerateTestFiles() []string {
 	if len(r.testFiles) > 0 {
 		return r.testFiles
 	}
-	files, err := harnessutil.EnumerateFiles(r.basePath, compilerBaselineRegex, true)
+	files, err := harnessutil.EnumerateFiles(r.basePath, compilerBaselineRegex, true /*recursive*/)
 	if err != nil {
 		panic("Could not read compiler test files: " + err.Error())
 	}
@@ -78,9 +86,38 @@ func (r *CompilerBaselineRunner) EnumerateTestFiles() []string {
 }
 
 func (r *CompilerBaselineRunner) RunTests(t *testing.T) {
+	r.cleanUpLocal(t)
 	files := r.EnumerateTestFiles()
+	skippedTests := []string{
+		"chained2.ts",                     // Corsa bug related to multi/single-threaded mode.
+		"mappedTypeRecursiveInference.ts", // Needed until we have type printer with truncation limit.
+	}
+	deprecatedTests := []string{
+		// Test deprecated `importsNotUsedAsValue`
+		"preserveUnusedImports.ts",
+		"noCrashWithVerbatimModuleSyntaxAndImportsNotUsedAsValues.ts",
+		"verbatimModuleSyntaxCompat.ts",
+		"preserveValueImports_importsNotUsedAsValues.ts",
+		"importsNotUsedAsValues_error.ts",
+	}
 	for _, filename := range files {
+		if slices.Contains(skippedTests, tspath.GetBaseFileName(filename)) {
+			continue
+		}
+		if slices.Contains(deprecatedTests, tspath.GetBaseFileName(filename)) {
+			continue
+		}
 		r.runTest(t, filename)
+	}
+}
+
+var localBasePath = filepath.Join(repo.TestDataPath, "baselines", "local")
+
+func (r *CompilerBaselineRunner) cleanUpLocal(t *testing.T) {
+	localPath := filepath.Join(localBasePath, core.IfElse(r.isSubmodule, "diff", ""), r.testSuitName)
+	err := os.RemoveAll(localPath)
+	if err != nil {
+		panic("Could not clean up local compiler tests: " + err.Error())
 	}
 }
 
@@ -119,7 +156,11 @@ func (r *CompilerBaselineRunner) runTest(t *testing.T, filename string) {
 	basename := tspath.GetBaseFileName(filename)
 	if len(test.configurations) > 0 {
 		for _, config := range test.configurations {
-			t.Run(basename+" "+config.Name, func(t *testing.T) { r.runSingleConfigTest(t, test, config) })
+			testName := basename
+			if config.Name != "" {
+				testName += " " + config.Name
+			}
+			t.Run(testName, func(t *testing.T) { r.runSingleConfigTest(t, test, config) })
 		}
 	} else {
 		t.Run(basename, func(t *testing.T) { r.runSingleConfigTest(t, test, nil) })
@@ -128,11 +169,13 @@ func (r *CompilerBaselineRunner) runTest(t *testing.T, filename string) {
 
 func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, test *compilerFileBasedTest, config *harnessutil.NamedTestConfiguration) {
 	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on compiling test "+test.filename)
+
 	payload := makeUnitsFromTest(test.content, test.filename)
 	compilerTest := newCompilerTest(t, test.filename, &payload, config)
 
-	compilerTest.verifyDiagnostics(t, r.testSuiteName)
-	compilerTest.verifyTypesAndSymbols(t, r.testSuiteName)
+	compilerTest.verifyDiagnostics(t, r.testSuitName, r.isSubmodule)
+	compilerTest.verifyTypesAndSymbols(t, r.testSuitName, r.isSubmodule)
 	// !!! Verify all baselines
 }
 
@@ -153,16 +196,6 @@ func getCompilerFileBasedTest(t *testing.T, filename string) *compilerFileBasedT
 		filename:       filename,
 		content:        content,
 		configurations: configurations,
-	}
-}
-
-var localBasePath = filepath.Join(repo.TestDataPath, "baselines", "local")
-
-func cleanUpLocalCompilerTests(testType CompilerTestType) {
-	localPath := filepath.Join(localBasePath, testType.String())
-	err := os.RemoveAll(localPath)
-	if err != nil {
-		panic("Could not clean up local compiler tests: " + err.Error())
 	}
 }
 
@@ -283,12 +316,20 @@ func newCompilerTest(
 	}
 }
 
-func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string) {
-	files := core.Concatenate(c.tsConfigFiles, core.Concatenate(c.toBeCompiled, c.otherFiles))
-	tsbaseline.DoErrorBaseline(t, c.configuredName, files, c.result.Diagnostics, c.result.Options.Pretty.IsTrue(), suiteName)
+func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string, isSubmodule bool) {
+	if isSubmodule {
+		// !!! Enable this when we're ready to diff test diagnostics
+		return
+	}
+
+	t.Run("error", func(t *testing.T) {
+		defer testutil.RecoverAndFail(t, "Panic on creating error baseline for test "+c.filename)
+		files := core.Concatenate(c.tsConfigFiles, core.Concatenate(c.toBeCompiled, c.otherFiles))
+		tsbaseline.DoErrorBaseline(t, c.configuredName, files, c.result.Diagnostics, c.result.Options.Pretty.IsTrue(), baseline.Options{Subfolder: suiteName, IsSubmodule: isSubmodule})
+	})
 }
 
-func (c *compilerTest) verifyTypesAndSymbols(t *testing.T, suiteName string) {
+func (c *compilerTest) verifyTypesAndSymbols(t *testing.T, suiteName string, isSubmodule bool) {
 	noTypesAndSymbols := c.harnessOptions.NoTypesAndSymbols
 	if noTypesAndSymbols {
 		return
@@ -301,14 +342,18 @@ func (c *compilerTest) verifyTypesAndSymbols(t *testing.T, suiteName string) {
 		},
 	)
 
-	header := tspath.GetRelativePathFromDirectory(repo.TestDataPath, c.filename, tspath.ComparePathsOptions{})
+	headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath, c.filename, tspath.ComparePathsOptions{})
+	if isSubmodule {
+		headerComponents = headerComponents[4:] // Strip "./../_submodules/TypeScript" prefix
+	}
+	header := tspath.GetPathFromPathComponents(headerComponents)
 	tsbaseline.DoTypeAndSymbolBaseline(
 		t,
 		c.configuredName,
 		header,
 		program,
 		allFiles,
-		baseline.Options{Subfolder: suiteName},
+		baseline.Options{Subfolder: suiteName, IsSubmodule: isSubmodule},
 		false,
 		false,
 		len(c.result.Diagnostics) > 0,

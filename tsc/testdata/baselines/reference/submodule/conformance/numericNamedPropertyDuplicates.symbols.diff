@@ -1,0 +1,35 @@
+--- old.numericNamedPropertyDuplicates.symbols
++++ new.numericNamedPropertyDuplicates.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(numericNamedPropertyDuplicates.ts, 0, 0))
+ 
+     1: number;
+->1 : Symbol(C[1], Decl(numericNamedPropertyDuplicates.ts, 0, 9), Decl(numericNamedPropertyDuplicates.ts, 1, 14))
++>1 : Symbol(1, Decl(numericNamedPropertyDuplicates.ts, 0, 9), Decl(numericNamedPropertyDuplicates.ts, 1, 14))
+ 
+     1.0: number;
+->1.0 : Symbol(C[1], Decl(numericNamedPropertyDuplicates.ts, 0, 9), Decl(numericNamedPropertyDuplicates.ts, 1, 14))
++>1.0 : Symbol(1, Decl(numericNamedPropertyDuplicates.ts, 0, 9), Decl(numericNamedPropertyDuplicates.ts, 1, 14))
+ 
+     static 2: number;
+->2 : Symbol(C[2], Decl(numericNamedPropertyDuplicates.ts, 2, 16), Decl(numericNamedPropertyDuplicates.ts, 3, 21))
++>2 : Symbol(2, Decl(numericNamedPropertyDuplicates.ts, 2, 16), Decl(numericNamedPropertyDuplicates.ts, 3, 21))
+ 
+     static 2: number;
+->2 : Symbol(C[2], Decl(numericNamedPropertyDuplicates.ts, 2, 16), Decl(numericNamedPropertyDuplicates.ts, 3, 21))
++>2 : Symbol(2, Decl(numericNamedPropertyDuplicates.ts, 2, 16), Decl(numericNamedPropertyDuplicates.ts, 3, 21))
+ }
+ 
+ interface I {
+ >I : Symbol(I, Decl(numericNamedPropertyDuplicates.ts, 5, 1))
+ 
+     2: number;
+->2 : Symbol(I[2], Decl(numericNamedPropertyDuplicates.ts, 7, 13), Decl(numericNamedPropertyDuplicates.ts, 8, 14))
++>2 : Symbol(2, Decl(numericNamedPropertyDuplicates.ts, 7, 13), Decl(numericNamedPropertyDuplicates.ts, 8, 14))
+ 
+     2.: number;
+->2. : Symbol(I[2], Decl(numericNamedPropertyDuplicates.ts, 7, 13), Decl(numericNamedPropertyDuplicates.ts, 8, 14))
++>2. : Symbol(2, Decl(numericNamedPropertyDuplicates.ts, 7, 13), Decl(numericNamedPropertyDuplicates.ts, 8, 14))
+ }
+ 
+ var a: {

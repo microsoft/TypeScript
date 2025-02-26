@@ -1,0 +1,170 @@
+--- old.unusedPrivateMembers.symbols
++++ new.unusedPrivateMembers.symbols
+@@= skipped -4, +4 lines =@@
+ >Test1 : Symbol(Test1, Decl(unusedPrivateMembers.ts, 0, 0))
+ 
+     private initializeInternal() {
+->initializeInternal : Symbol(Test1.initializeInternal, Decl(unusedPrivateMembers.ts, 0, 13))
++>initializeInternal : Symbol(initializeInternal, Decl(unusedPrivateMembers.ts, 0, 13))
+     }
+ 
+     public test() {
+->test : Symbol(Test1.test, Decl(unusedPrivateMembers.ts, 2, 5))
++>test : Symbol(test, Decl(unusedPrivateMembers.ts, 2, 5))
+ 
+         var x = new Test1();
+ >x : Symbol(x, Decl(unusedPrivateMembers.ts, 5, 11))
+ >Test1 : Symbol(Test1, Decl(unusedPrivateMembers.ts, 0, 0))
+ 
+         x.initializeInternal();
+->x.initializeInternal : Symbol(Test1.initializeInternal, Decl(unusedPrivateMembers.ts, 0, 13))
++>x.initializeInternal : Symbol(initializeInternal, Decl(unusedPrivateMembers.ts, 0, 13))
+ >x : Symbol(x, Decl(unusedPrivateMembers.ts, 5, 11))
+->initializeInternal : Symbol(Test1.initializeInternal, Decl(unusedPrivateMembers.ts, 0, 13))
++>initializeInternal : Symbol(initializeInternal, Decl(unusedPrivateMembers.ts, 0, 13))
+     }
+ }
+ 
+@@= skipped -21, +21 lines =@@
+ >Test2 : Symbol(Test2, Decl(unusedPrivateMembers.ts, 8, 1))
+ 
+     private p = 0;
+->p : Symbol(Test2.p, Decl(unusedPrivateMembers.ts, 10, 13))
++>p : Symbol(p, Decl(unusedPrivateMembers.ts, 10, 13))
+ 
+     public test() {
+->test : Symbol(Test2.test, Decl(unusedPrivateMembers.ts, 11, 18))
++>test : Symbol(test, Decl(unusedPrivateMembers.ts, 11, 18))
+ 
+         var x = new Test2();
+ >x : Symbol(x, Decl(unusedPrivateMembers.ts, 13, 11))
+ >Test2 : Symbol(Test2, Decl(unusedPrivateMembers.ts, 8, 1))
+ 
+         x.p;
+->x.p : Symbol(Test2.p, Decl(unusedPrivateMembers.ts, 10, 13))
++>x.p : Symbol(p, Decl(unusedPrivateMembers.ts, 10, 13))
+ >x : Symbol(x, Decl(unusedPrivateMembers.ts, 13, 11))
+->p : Symbol(Test2.p, Decl(unusedPrivateMembers.ts, 10, 13))
++>p : Symbol(p, Decl(unusedPrivateMembers.ts, 10, 13))
+     }
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >Test3 : Symbol(Test3, Decl(unusedPrivateMembers.ts, 16, 1))
+ 
+     private get x () {
+->x : Symbol(Test3.x, Decl(unusedPrivateMembers.ts, 18, 13))
++>x : Symbol(x, Decl(unusedPrivateMembers.ts, 18, 13))
+ 
+         return 0;
+     }
+ 
+     public test() {
+->test : Symbol(Test3.test, Decl(unusedPrivateMembers.ts, 21, 5))
++>test : Symbol(test, Decl(unusedPrivateMembers.ts, 21, 5))
+ 
+         var x = new Test3();
+ >x : Symbol(x, Decl(unusedPrivateMembers.ts, 24, 11))
+ >Test3 : Symbol(Test3, Decl(unusedPrivateMembers.ts, 16, 1))
+ 
+         x.x;
+->x.x : Symbol(Test3.x, Decl(unusedPrivateMembers.ts, 18, 13))
++>x.x : Symbol(x, Decl(unusedPrivateMembers.ts, 18, 13))
+ >x : Symbol(x, Decl(unusedPrivateMembers.ts, 24, 11))
+->x : Symbol(Test3.x, Decl(unusedPrivateMembers.ts, 18, 13))
++>x : Symbol(x, Decl(unusedPrivateMembers.ts, 18, 13))
+     }
+ }
+ 
+@@= skipped -23, +23 lines =@@
+ >Test4 : Symbol(Test4, Decl(unusedPrivateMembers.ts, 27, 1))
+ 
+     private set x(v) {
+->x : Symbol(Test4.x, Decl(unusedPrivateMembers.ts, 29, 13))
++>x : Symbol(x, Decl(unusedPrivateMembers.ts, 29, 13))
+ >v : Symbol(v, Decl(unusedPrivateMembers.ts, 30, 18))
+ 
+         v;
+@@= skipped -8, +8 lines =@@
+     }
+ 
+     public test() {
+->test : Symbol(Test4.test, Decl(unusedPrivateMembers.ts, 32, 5))
++>test : Symbol(test, Decl(unusedPrivateMembers.ts, 32, 5))
+ 
+         var x = new Test4();
+ >x : Symbol(x, Decl(unusedPrivateMembers.ts, 35, 11))
+ >Test4 : Symbol(Test4, Decl(unusedPrivateMembers.ts, 27, 1))
+ 
+         x.x;
+->x.x : Symbol(Test4.x, Decl(unusedPrivateMembers.ts, 29, 13))
++>x.x : Symbol(x, Decl(unusedPrivateMembers.ts, 29, 13))
+ >x : Symbol(x, Decl(unusedPrivateMembers.ts, 35, 11))
+->x : Symbol(Test4.x, Decl(unusedPrivateMembers.ts, 29, 13))
++>x : Symbol(x, Decl(unusedPrivateMembers.ts, 29, 13))
+     }
+ }
+ 
+@@= skipped -18, +18 lines =@@
+ >T : Symbol(T, Decl(unusedPrivateMembers.ts, 40, 12))
+ 
+     private p: T;
+->p : Symbol(Test5.p, Decl(unusedPrivateMembers.ts, 40, 16))
++>p : Symbol(p, Decl(unusedPrivateMembers.ts, 40, 16))
+ >T : Symbol(T, Decl(unusedPrivateMembers.ts, 40, 12))
+ 
+     public test() {
+->test : Symbol(Test5.test, Decl(unusedPrivateMembers.ts, 41, 17))
++>test : Symbol(test, Decl(unusedPrivateMembers.ts, 41, 17))
+ 
+         var x = new Test5<number>();
+ >x : Symbol(x, Decl(unusedPrivateMembers.ts, 43, 11))
+ >Test5 : Symbol(Test5, Decl(unusedPrivateMembers.ts, 38, 1))
+ 
+         x.p;
+->x.p : Symbol(Test5.p, Decl(unusedPrivateMembers.ts, 40, 16))
++>x.p : Symbol(p, Decl(unusedPrivateMembers.ts, 40, 16))
+ >x : Symbol(x, Decl(unusedPrivateMembers.ts, 43, 11))
+->p : Symbol(Test5.p, Decl(unusedPrivateMembers.ts, 40, 16))
++>p : Symbol(p, Decl(unusedPrivateMembers.ts, 40, 16))
+     }
+ }
+ 
+@@= skipped -21, +21 lines =@@
+ >Test6 : Symbol(Test6, Decl(unusedPrivateMembers.ts, 46, 1))
+ 
+     private get a() {
+->a : Symbol(Test6.a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
++>a : Symbol(a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
+ 
+         return 0;
+     }
+     private set a(v) {
+->a : Symbol(Test6.a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
++>a : Symbol(a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
+ >v : Symbol(v, Decl(unusedPrivateMembers.ts, 52, 18))
+ 
+         v;
+ >v : Symbol(v, Decl(unusedPrivateMembers.ts, 52, 18))
+     }
+     private b = 0;
+->b : Symbol(Test6.b, Decl(unusedPrivateMembers.ts, 54, 5))
++>b : Symbol(b, Decl(unusedPrivateMembers.ts, 54, 5))
+ 
+     public test() {
+->test : Symbol(Test6.test, Decl(unusedPrivateMembers.ts, 55, 18))
++>test : Symbol(test, Decl(unusedPrivateMembers.ts, 55, 18))
+ 
+         var x = new Test6();
+ >x : Symbol(x, Decl(unusedPrivateMembers.ts, 58, 11))
+ >Test6 : Symbol(Test6, Decl(unusedPrivateMembers.ts, 46, 1))
+ 
+         x.a++;
+->x.a : Symbol(Test6.a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
++>x.a : Symbol(a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
+ >x : Symbol(x, Decl(unusedPrivateMembers.ts, 58, 11))
+->a : Symbol(Test6.a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
++>a : Symbol(a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
+     }
+ }
+ 

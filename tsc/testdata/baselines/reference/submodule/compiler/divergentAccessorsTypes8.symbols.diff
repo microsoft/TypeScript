@@ -1,0 +1,255 @@
+--- old.divergentAccessorsTypes8.symbols
++++ new.divergentAccessorsTypes8.symbols
+@@= skipped -6, +6 lines =@@
+ >Serializer : Symbol(Serializer, Decl(divergentAccessorsTypes8.ts, 0, 9))
+ 
+   set value(v: string | number | boolean);
+->value : Symbol(Serializer.value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
++>value : Symbol(value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
+ >v : Symbol(v, Decl(divergentAccessorsTypes8.ts, 3, 12))
+ 
+   get value(): string;
+->value : Symbol(Serializer.value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
++>value : Symbol(value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
+ }
+ declare let box: Serializer;
+ >box : Symbol(box, Decl(divergentAccessorsTypes8.ts, 6, 11))
+@@= skipped -13, +13 lines =@@
+ const v = box['value']
+ >v : Symbol(v, Decl(divergentAccessorsTypes8.ts, 7, 5))
+ >box : Symbol(box, Decl(divergentAccessorsTypes8.ts, 6, 11))
+->'value' : Symbol(Serializer.value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
++>'value' : Symbol(value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
+ 
+ box['value'] = true;
+ >box : Symbol(box, Decl(divergentAccessorsTypes8.ts, 6, 11))
+->'value' : Symbol(Serializer.value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
++>'value' : Symbol(value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
+ 
+ box['value'] = 42;
+ >box : Symbol(box, Decl(divergentAccessorsTypes8.ts, 6, 11))
+->'value' : Symbol(Serializer.value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
++>'value' : Symbol(value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
+ 
+ box['value'] = "hello";
+ >box : Symbol(box, Decl(divergentAccessorsTypes8.ts, 6, 11))
+->'value' : Symbol(Serializer.value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
++>'value' : Symbol(value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
+ 
+ interface Element {
+ >Element : Symbol(Element, Decl(divergentAccessorsTypes8.ts, 10, 23))
+ 
+     get style(): CSSStyleDeclaration;
+->style : Symbol(Element.style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
++>style : Symbol(style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
+ >CSSStyleDeclaration : Symbol(CSSStyleDeclaration, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+ 
+     set style(cssText: string);
+->style : Symbol(Element.style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
++>style : Symbol(style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
+ >cssText : Symbol(cssText, Decl(divergentAccessorsTypes8.ts, 14, 14))
+ }
+ 
+@@= skipped -32, +32 lines =@@
+ 
+ element['style'] = "color: red";
+ >element : Symbol(element, Decl(divergentAccessorsTypes8.ts, 17, 13))
+->'style' : Symbol(Element.style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
++>'style' : Symbol(style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
+ 
+ element['style'] = element.style;
+ >element : Symbol(element, Decl(divergentAccessorsTypes8.ts, 17, 13))
+->'style' : Symbol(Element.style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
+->element.style : Symbol(Element.style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
++>'style' : Symbol(style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
++>element.style : Symbol(style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
+ >element : Symbol(element, Decl(divergentAccessorsTypes8.ts, 17, 13))
+->style : Symbol(Element.style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
++>style : Symbol(style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
+ 
+ class One {
+ >One : Symbol(One, Decl(divergentAccessorsTypes8.ts, 19, 33))
+ 
+   get prop1(): string {
+->prop1 : Symbol(One.prop1, Decl(divergentAccessorsTypes8.ts, 21, 11), Decl(divergentAccessorsTypes8.ts, 24, 3))
++>prop1 : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 21, 11), Decl(divergentAccessorsTypes8.ts, 24, 3))
+ 
+     return "";
+   }
+   set prop1(s: string | number) {}
+->prop1 : Symbol(One.prop1, Decl(divergentAccessorsTypes8.ts, 21, 11), Decl(divergentAccessorsTypes8.ts, 24, 3))
++>prop1 : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 21, 11), Decl(divergentAccessorsTypes8.ts, 24, 3))
+ >s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 25, 12))
+ 
+   get prop2(): string {
+->prop2 : Symbol(One.prop2, Decl(divergentAccessorsTypes8.ts, 25, 34), Decl(divergentAccessorsTypes8.ts, 29, 3))
++>prop2 : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 25, 34), Decl(divergentAccessorsTypes8.ts, 29, 3))
+ 
+     return "";
+   }
+   set prop2(s: string | number) {}
+->prop2 : Symbol(One.prop2, Decl(divergentAccessorsTypes8.ts, 25, 34), Decl(divergentAccessorsTypes8.ts, 29, 3))
++>prop2 : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 25, 34), Decl(divergentAccessorsTypes8.ts, 29, 3))
+ >s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 30, 12))
+ 
+   prop3: number = 42;
+->prop3 : Symbol(One.prop3, Decl(divergentAccessorsTypes8.ts, 30, 34))
++>prop3 : Symbol(prop3, Decl(divergentAccessorsTypes8.ts, 30, 34))
+ 
+   get prop4(): string {
+->prop4 : Symbol(One.prop4, Decl(divergentAccessorsTypes8.ts, 32, 21), Decl(divergentAccessorsTypes8.ts, 36, 3))
++>prop4 : Symbol(prop4, Decl(divergentAccessorsTypes8.ts, 32, 21), Decl(divergentAccessorsTypes8.ts, 36, 3))
+ 
+     return "";
+   }
+   set prop4(s: string | number) {}
+->prop4 : Symbol(One.prop4, Decl(divergentAccessorsTypes8.ts, 32, 21), Decl(divergentAccessorsTypes8.ts, 36, 3))
++>prop4 : Symbol(prop4, Decl(divergentAccessorsTypes8.ts, 32, 21), Decl(divergentAccessorsTypes8.ts, 36, 3))
+ >s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 37, 12))
+ }
+ 
+@@= skipped -47, +47 lines =@@
+ >Two : Symbol(Two, Decl(divergentAccessorsTypes8.ts, 38, 1))
+ 
+   get prop1(): string {
+->prop1 : Symbol(Two.prop1, Decl(divergentAccessorsTypes8.ts, 40, 11), Decl(divergentAccessorsTypes8.ts, 43, 3))
++>prop1 : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 40, 11), Decl(divergentAccessorsTypes8.ts, 43, 3))
+ 
+     return "";
+   }
+   set prop1(s: string | number) {}
+->prop1 : Symbol(Two.prop1, Decl(divergentAccessorsTypes8.ts, 40, 11), Decl(divergentAccessorsTypes8.ts, 43, 3))
++>prop1 : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 40, 11), Decl(divergentAccessorsTypes8.ts, 43, 3))
+ >s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 44, 12))
+ 
+   get prop2(): string {
+->prop2 : Symbol(Two.prop2, Decl(divergentAccessorsTypes8.ts, 44, 34), Decl(divergentAccessorsTypes8.ts, 48, 3))
++>prop2 : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 44, 34), Decl(divergentAccessorsTypes8.ts, 48, 3))
+ 
+     return "";
+   }
+   set prop2(s: string) {}
+->prop2 : Symbol(Two.prop2, Decl(divergentAccessorsTypes8.ts, 44, 34), Decl(divergentAccessorsTypes8.ts, 48, 3))
++>prop2 : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 44, 34), Decl(divergentAccessorsTypes8.ts, 48, 3))
+ >s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 49, 12))
+ 
+   get prop3(): string {
+->prop3 : Symbol(Two.prop3, Decl(divergentAccessorsTypes8.ts, 49, 25), Decl(divergentAccessorsTypes8.ts, 53, 3))
++>prop3 : Symbol(prop3, Decl(divergentAccessorsTypes8.ts, 49, 25), Decl(divergentAccessorsTypes8.ts, 53, 3))
+ 
+     return "";
+   }
+   set prop3(s: string | boolean) {}
+->prop3 : Symbol(Two.prop3, Decl(divergentAccessorsTypes8.ts, 49, 25), Decl(divergentAccessorsTypes8.ts, 53, 3))
++>prop3 : Symbol(prop3, Decl(divergentAccessorsTypes8.ts, 49, 25), Decl(divergentAccessorsTypes8.ts, 53, 3))
+ >s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 54, 12))
+ 
+   get prop4(): string {
+->prop4 : Symbol(Two.prop4, Decl(divergentAccessorsTypes8.ts, 54, 35), Decl(divergentAccessorsTypes8.ts, 58, 3))
++>prop4 : Symbol(prop4, Decl(divergentAccessorsTypes8.ts, 54, 35), Decl(divergentAccessorsTypes8.ts, 58, 3))
+ 
+     return "";
+   }
+   set prop4(s: string | boolean) {}
+->prop4 : Symbol(Two.prop4, Decl(divergentAccessorsTypes8.ts, 54, 35), Decl(divergentAccessorsTypes8.ts, 58, 3))
++>prop4 : Symbol(prop4, Decl(divergentAccessorsTypes8.ts, 54, 35), Decl(divergentAccessorsTypes8.ts, 58, 3))
+ >s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 59, 12))
+ }
+ 
+@@= skipped -116, +116 lines =@@
+ >Three : Symbol(Three, Decl(divergentAccessorsTypes8.ts, 86, 21))
+ 
+   get prop1(): string {
+->prop1 : Symbol(Three.prop1, Decl(divergentAccessorsTypes8.ts, 88, 13), Decl(divergentAccessorsTypes8.ts, 91, 3))
++>prop1 : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 88, 13), Decl(divergentAccessorsTypes8.ts, 91, 3))
+ 
+     return "";
+   }
+   set prop1(s: string | number) {}
+->prop1 : Symbol(Three.prop1, Decl(divergentAccessorsTypes8.ts, 88, 13), Decl(divergentAccessorsTypes8.ts, 91, 3))
++>prop1 : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 88, 13), Decl(divergentAccessorsTypes8.ts, 91, 3))
+ >s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 92, 12))
+ 
+   prop2: number = 42;
+->prop2 : Symbol(Three.prop2, Decl(divergentAccessorsTypes8.ts, 92, 34))
++>prop2 : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 92, 34))
+ }
+ 
+ class Four {
+ >Four : Symbol(Four, Decl(divergentAccessorsTypes8.ts, 95, 1))
+ 
+   get prop1(): "hello" {
+->prop1 : Symbol(Four.prop1, Decl(divergentAccessorsTypes8.ts, 97, 12), Decl(divergentAccessorsTypes8.ts, 100, 3))
++>prop1 : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 97, 12), Decl(divergentAccessorsTypes8.ts, 100, 3))
+ 
+     return "hello";
+   }
+   set prop1(s: "hello" | number) {}
+->prop1 : Symbol(Four.prop1, Decl(divergentAccessorsTypes8.ts, 97, 12), Decl(divergentAccessorsTypes8.ts, 100, 3))
++>prop1 : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 97, 12), Decl(divergentAccessorsTypes8.ts, 100, 3))
+ >s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 101, 12))
+ 
+   get prop2(): string {
+->prop2 : Symbol(Four.prop2, Decl(divergentAccessorsTypes8.ts, 101, 35), Decl(divergentAccessorsTypes8.ts, 105, 3))
++>prop2 : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 101, 35), Decl(divergentAccessorsTypes8.ts, 105, 3))
+ 
+     return "";
+   }
+   set prop2(s: string | 42) {}
+->prop2 : Symbol(Four.prop2, Decl(divergentAccessorsTypes8.ts, 101, 35), Decl(divergentAccessorsTypes8.ts, 105, 3))
++>prop2 : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 101, 35), Decl(divergentAccessorsTypes8.ts, 105, 3))
+ >s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 106, 12))
+ }
+ 
+@@= skipped -38, +38 lines =@@
+ >Five : Symbol(Five, Decl(divergentAccessorsTypes8.ts, 107, 1))
+ 
+   get prop1(): "hello" {
+->prop1 : Symbol(Five.prop1, Decl(divergentAccessorsTypes8.ts, 109, 12), Decl(divergentAccessorsTypes8.ts, 112, 3))
++>prop1 : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 109, 12), Decl(divergentAccessorsTypes8.ts, 112, 3))
+ 
+     return "hello";
+   }
+   set prop1(s: "hello" | boolean) {}
+->prop1 : Symbol(Five.prop1, Decl(divergentAccessorsTypes8.ts, 109, 12), Decl(divergentAccessorsTypes8.ts, 112, 3))
++>prop1 : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 109, 12), Decl(divergentAccessorsTypes8.ts, 112, 3))
+ >s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 113, 12))
+ 
+   get prop2(): string {
+->prop2 : Symbol(Five.prop2, Decl(divergentAccessorsTypes8.ts, 113, 36), Decl(divergentAccessorsTypes8.ts, 117, 3))
++>prop2 : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 113, 36), Decl(divergentAccessorsTypes8.ts, 117, 3))
+ 
+     return "";
+   }
+   set prop2(s: string | number | boolean) {}
+->prop2 : Symbol(Five.prop2, Decl(divergentAccessorsTypes8.ts, 113, 36), Decl(divergentAccessorsTypes8.ts, 117, 3))
++>prop2 : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 113, 36), Decl(divergentAccessorsTypes8.ts, 117, 3))
+ >s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 118, 12))
+ }
+ 
+@@= skipped -44, +44 lines =@@
+ >Six : Symbol(Six, Decl(divergentAccessorsTypes8.ts, 127, 22))
+ 
+   get prop1(): boolean | number {
+->prop1 : Symbol(Six.prop1, Decl(divergentAccessorsTypes8.ts, 129, 11), Decl(divergentAccessorsTypes8.ts, 132, 3))
++>prop1 : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 129, 11), Decl(divergentAccessorsTypes8.ts, 132, 3))
+ 
+     return 42;
+   }
+   set prop1(s: boolean | string) {}
+->prop1 : Symbol(Six.prop1, Decl(divergentAccessorsTypes8.ts, 129, 11), Decl(divergentAccessorsTypes8.ts, 132, 3))
++>prop1 : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 129, 11), Decl(divergentAccessorsTypes8.ts, 132, 3))
+ >s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 133, 12))
+ 
+   get prop2(): bigint | number {
+->prop2 : Symbol(Six.prop2, Decl(divergentAccessorsTypes8.ts, 133, 35), Decl(divergentAccessorsTypes8.ts, 137, 3))
++>prop2 : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 133, 35), Decl(divergentAccessorsTypes8.ts, 137, 3))
+ 
+     return 10;
+   }
+   set prop2(s: boolean | null) {}
+->prop2 : Symbol(Six.prop2, Decl(divergentAccessorsTypes8.ts, 133, 35), Decl(divergentAccessorsTypes8.ts, 137, 3))
++>prop2 : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 133, 35), Decl(divergentAccessorsTypes8.ts, 137, 3))
+ >s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 138, 12))
+ }
+ 

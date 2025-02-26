@@ -1,0 +1,20 @@
+--- old.declarationEmitForGlobalishSpecifierSymlink.symbols
++++ new.declarationEmitForGlobalishSpecifierSymlink.symbols
+@@= skipped -8, +8 lines =@@
+ >A : Symbol(A, Decl(impl.d.ts, 0, 26))
+ 
+     Val
+->Val : Symbol(A.Val, Decl(impl.d.ts, 1, 15))
++>Val : Symbol(Val, Decl(impl.d.ts, 1, 15))
+ }
+ === /p1/node_modules/typescript-fsa/index.d.ts ===
+ 
+@@= skipped -14, +14 lines =@@
+ >A : Symbol(A, Decl(impl.d.ts, 0, 26))
+ 
+     Val
+->Val : Symbol(A.Val, Decl(impl.d.ts, 1, 15))
++>Val : Symbol(Val, Decl(impl.d.ts, 1, 15))
+ }
+ === /p2/node_modules/typescript-fsa/index.d.ts ===
+ 

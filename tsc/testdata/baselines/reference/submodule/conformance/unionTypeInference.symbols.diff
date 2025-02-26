@@ -1,0 +1,32 @@
+--- old.unionTypeInference.symbols
++++ new.unionTypeInference.symbols
+@@= skipped -113, +113 lines =@@
+ >T : Symbol(T, Decl(unionTypeInference.ts, 32, 21))
+ 
+     then<U>(f: (x: T) => U | Foo<U>, g: U): Foo<U>;
+->then : Symbol(Foo.then, Decl(unionTypeInference.ts, 32, 25))
++>then : Symbol(then, Decl(unionTypeInference.ts, 32, 25))
+ >U : Symbol(U, Decl(unionTypeInference.ts, 33, 9))
+ >f : Symbol(f, Decl(unionTypeInference.ts, 33, 12))
+ >x : Symbol(x, Decl(unionTypeInference.ts, 33, 16))
+@@= skipped -18, +18 lines =@@
+ >T : Symbol(T, Decl(unionTypeInference.ts, 35, 21))
+ 
+     then<S>(f: (x: T) => S | Bar<S>, g: S): Bar<S>;
+->then : Symbol(Bar.then, Decl(unionTypeInference.ts, 35, 25))
++>then : Symbol(then, Decl(unionTypeInference.ts, 35, 25))
+ >S : Symbol(S, Decl(unionTypeInference.ts, 36, 9))
+ >f : Symbol(f, Decl(unionTypeInference.ts, 36, 12))
+ >x : Symbol(x, Decl(unionTypeInference.ts, 36, 16))
+@@= skipped -99, +99 lines =@@
+ 
+     for (const value of Object.values(deepPromisedWithIndexer)) {
+ >value : Symbol(value, Decl(unionTypeInference.ts, 62, 14))
+->Object.values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
++>Object.values : Symbol(values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
++>values : Symbol(values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+ >deepPromisedWithIndexer : Symbol(deepPromisedWithIndexer, Decl(unionTypeInference.ts, 61, 9))
+ 
+         const awaitedValue = await value;

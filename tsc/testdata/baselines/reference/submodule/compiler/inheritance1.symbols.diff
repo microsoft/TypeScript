@@ -1,0 +1,52 @@
+--- old.inheritance1.symbols
++++ new.inheritance1.symbols
+@@= skipped -4, +4 lines =@@
+ >Control : Symbol(Control, Decl(inheritance1.ts, 0, 0))
+ 
+     private state: any;
+->state : Symbol(Control.state, Decl(inheritance1.ts, 0, 15))
++>state : Symbol(state, Decl(inheritance1.ts, 0, 15))
+ }
+ interface SelectableControl extends Control {
+ >SelectableControl : Symbol(SelectableControl, Decl(inheritance1.ts, 2, 1))
+ >Control : Symbol(Control, Decl(inheritance1.ts, 0, 0))
+ 
+     select(): void;
+->select : Symbol(SelectableControl.select, Decl(inheritance1.ts, 3, 45))
++>select : Symbol(select, Decl(inheritance1.ts, 3, 45))
+ }
+ 
+ class Button extends Control implements SelectableControl {
+@@= skipped -16, +16 lines =@@
+ >SelectableControl : Symbol(SelectableControl, Decl(inheritance1.ts, 2, 1))
+ 
+     select() { }
+->select : Symbol(Button.select, Decl(inheritance1.ts, 7, 59))
++>select : Symbol(select, Decl(inheritance1.ts, 7, 59))
+ }
+ class TextBox extends Control {
+ >TextBox : Symbol(TextBox, Decl(inheritance1.ts, 9, 1))
+ >Control : Symbol(Control, Decl(inheritance1.ts, 0, 0))
+ 
+     select() { }
+->select : Symbol(TextBox.select, Decl(inheritance1.ts, 10, 31))
++>select : Symbol(select, Decl(inheritance1.ts, 10, 31))
+ }
+ class ImageBase extends Control implements SelectableControl{
+ >ImageBase : Symbol(ImageBase, Decl(inheritance1.ts, 12, 1))
+@@= skipped -23, +23 lines =@@
+ >SelectableControl : Symbol(SelectableControl, Decl(inheritance1.ts, 2, 1))
+ 
+     select() { }
+->select : Symbol(Locations.select, Decl(inheritance1.ts, 17, 46))
++>select : Symbol(select, Decl(inheritance1.ts, 17, 46))
+ }
+ class Locations1 {
+ >Locations1 : Symbol(Locations1, Decl(inheritance1.ts, 19, 1))
+ 
+     select() { }
+->select : Symbol(Locations1.select, Decl(inheritance1.ts, 20, 18))
++>select : Symbol(select, Decl(inheritance1.ts, 20, 18))
+ }
+ var sc: SelectableControl;
+ >sc : Symbol(sc, Decl(inheritance1.ts, 23, 3))

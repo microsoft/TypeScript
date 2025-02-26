@@ -1,0 +1,11 @@
+--- old.jsdocParameterParsingInvalidName.symbols
++++ new.jsdocParameterParsingInvalidName.symbols
+@@= skipped -7, +7 lines =@@
+      * @param {string} [`foo]
+      */
+     method(foo) {
+->method : Symbol(c.method, Decl(jsdocParameterParsingInvalidName.ts, 0, 9))
++>method : Symbol(method, Decl(jsdocParameterParsingInvalidName.ts, 0, 9))
+ >foo : Symbol(foo, Decl(jsdocParameterParsingInvalidName.ts, 4, 11))
+     }
+ }

@@ -1,0 +1,20 @@
+--- old.collisionRestParameterClassConstructor.symbols
++++ new.collisionRestParameterClassConstructor.symbols
+@@= skipped -46, +46 lines =@@
+ >c3 : Symbol(c3, Decl(collisionRestParameterClassConstructor.ts, 21, 1))
+ 
+     constructor(public _i: number, ...restParameters) { //_i is error
+->_i : Symbol(c3._i, Decl(collisionRestParameterClassConstructor.ts, 24, 16))
++>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 24, 16))
+ >restParameters : Symbol(restParameters, Decl(collisionRestParameterClassConstructor.ts, 24, 34))
+ 
+         var _i = 10; // no error
+@@= skipped -11, +11 lines =@@
+ >c3NoError : Symbol(c3NoError, Decl(collisionRestParameterClassConstructor.ts, 27, 1))
+ 
+     constructor(public _i: number) { // no error
+->_i : Symbol(c3NoError._i, Decl(collisionRestParameterClassConstructor.ts, 29, 16))
++>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 29, 16))
+ 
+         var _i = 10; // no error
+ >_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 29, 16), Decl(collisionRestParameterClassConstructor.ts, 30, 11))

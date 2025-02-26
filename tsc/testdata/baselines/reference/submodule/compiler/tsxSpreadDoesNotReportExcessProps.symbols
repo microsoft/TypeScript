@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/tsxSpreadDoesNotReportExcessProps.tsx] ////
+
+=== tsxSpreadDoesNotReportExcessProps.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from "react";
+>React : Symbol(React, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 2, 6))
+
+class MyComponent extends React.Component<{dataSource: number[], onClick?: any}, {}> {
+>MyComponent : Symbol(MyComponent, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 2, 26))
+>React.Component : Symbol(unknown)
+>React : Symbol(React, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 2, 6))
+>Component : Symbol(unknown)
+>dataSource : Symbol(dataSource, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 4, 43))
+>onClick : Symbol(onClick, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 4, 64))
+
+    render() {
+>render : Symbol(render, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 4, 86))
+
+        return (<div {...this.props} className="ok"></div>);
+>this : Symbol(MyComponent, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 2, 26))
+>className : Symbol(className, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 6, 36))
+    }
+}
+

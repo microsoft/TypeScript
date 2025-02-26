@@ -1,0 +1,89 @@
+--- old.partiallyDiscriminantedUnions.symbols
++++ new.partiallyDiscriminantedUnions.symbols
+@@= skipped -6, +6 lines =@@
+ >A1 : Symbol(A1, Decl(partiallyDiscriminantedUnions.ts, 0, 0))
+ 
+     type: 'a';
+->type : Symbol(A1.type, Decl(partiallyDiscriminantedUnions.ts, 2, 14))
++>type : Symbol(type, Decl(partiallyDiscriminantedUnions.ts, 2, 14))
+ 
+     subtype: 1;
+->subtype : Symbol(A1.subtype, Decl(partiallyDiscriminantedUnions.ts, 3, 14))
++>subtype : Symbol(subtype, Decl(partiallyDiscriminantedUnions.ts, 3, 14))
+ }
+ 
+ interface A2 {
+ >A2 : Symbol(A2, Decl(partiallyDiscriminantedUnions.ts, 5, 1))
+ 
+     type: 'a';
+->type : Symbol(A2.type, Decl(partiallyDiscriminantedUnions.ts, 7, 14))
++>type : Symbol(type, Decl(partiallyDiscriminantedUnions.ts, 7, 14))
+ 
+     subtype: 2;
+->subtype : Symbol(A2.subtype, Decl(partiallyDiscriminantedUnions.ts, 8, 14))
++>subtype : Symbol(subtype, Decl(partiallyDiscriminantedUnions.ts, 8, 14))
+ 
+     foo: number;
+->foo : Symbol(A2.foo, Decl(partiallyDiscriminantedUnions.ts, 9, 15))
++>foo : Symbol(foo, Decl(partiallyDiscriminantedUnions.ts, 9, 15))
+ }
+ 
+ interface B {
+ >B : Symbol(B, Decl(partiallyDiscriminantedUnions.ts, 11, 1))
+ 
+     type: 'b';
+->type : Symbol(B.type, Decl(partiallyDiscriminantedUnions.ts, 13, 13))
++>type : Symbol(type, Decl(partiallyDiscriminantedUnions.ts, 13, 13))
+ }
+ 
+ type AB = A1 | A2 | B;
+@@= skipped -48, +48 lines =@@
+ >subtype : Symbol(subtype, Decl(partiallyDiscriminantedUnions.ts, 3, 14), Decl(partiallyDiscriminantedUnions.ts, 8, 14))
+ 
+         ab.foo;
+->ab.foo : Symbol(A2.foo, Decl(partiallyDiscriminantedUnions.ts, 9, 15))
++>ab.foo : Symbol(foo, Decl(partiallyDiscriminantedUnions.ts, 9, 15))
+ >ab : Symbol(ab, Decl(partiallyDiscriminantedUnions.ts, 19, 5))
+->foo : Symbol(A2.foo, Decl(partiallyDiscriminantedUnions.ts, 9, 15))
++>foo : Symbol(foo, Decl(partiallyDiscriminantedUnions.ts, 9, 15))
+     }
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ 
+ class Square { kind: "square"; }
+ >Square : Symbol(Square, Decl(partiallyDiscriminantedUnions.ts, 25, 1))
+->kind : Symbol(Square.kind, Decl(partiallyDiscriminantedUnions.ts, 29, 14))
++>kind : Symbol(kind, Decl(partiallyDiscriminantedUnions.ts, 29, 14))
+ 
+ class Circle { kind: "circle"; }
+ >Circle : Symbol(Circle, Decl(partiallyDiscriminantedUnions.ts, 29, 32))
+->kind : Symbol(Circle.kind, Decl(partiallyDiscriminantedUnions.ts, 30, 14))
++>kind : Symbol(kind, Decl(partiallyDiscriminantedUnions.ts, 30, 14))
+ 
+ type Shape = Circle | Square;
+ >Shape : Symbol(Shape, Decl(partiallyDiscriminantedUnions.ts, 30, 32))
+@@= skipped -25, +25 lines =@@
+ >Shape : Symbol(Shape, Decl(partiallyDiscriminantedUnions.ts, 30, 32))
+ 
+     return !Array.isArray(s);
+->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>Array.isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(partiallyDiscriminantedUnions.ts, 35, 17))
+ }
+ 
+@@= skipped -16, +16 lines =@@
+ >s : Symbol(s, Decl(partiallyDiscriminantedUnions.ts, 39, 14))
+ 
+         if (s.kind === "circle") {
+->s.kind : Symbol(kind, Decl(partiallyDiscriminantedUnions.ts, 29, 14), Decl(partiallyDiscriminantedUnions.ts, 30, 14))
++>s.kind : Symbol(kind, Decl(partiallyDiscriminantedUnions.ts, 30, 14), Decl(partiallyDiscriminantedUnions.ts, 29, 14))
+ >s : Symbol(s, Decl(partiallyDiscriminantedUnions.ts, 39, 14))
+->kind : Symbol(kind, Decl(partiallyDiscriminantedUnions.ts, 29, 14), Decl(partiallyDiscriminantedUnions.ts, 30, 14))
++>kind : Symbol(kind, Decl(partiallyDiscriminantedUnions.ts, 30, 14), Decl(partiallyDiscriminantedUnions.ts, 29, 14))
+ 
+             let c: Circle = s;
+ >c : Symbol(c, Decl(partiallyDiscriminantedUnions.ts, 42, 15))

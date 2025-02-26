@@ -1,0 +1,19 @@
+--- old.optionalProperties01.symbols
++++ new.optionalProperties01.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(optionalProperties01.ts, 0, 0))
+ 
+   required1: string;
+->required1 : Symbol(Foo.required1, Decl(optionalProperties01.ts, 0, 15))
++>required1 : Symbol(required1, Decl(optionalProperties01.ts, 0, 15))
+ 
+   required2: string;
+->required2 : Symbol(Foo.required2, Decl(optionalProperties01.ts, 1, 20))
++>required2 : Symbol(required2, Decl(optionalProperties01.ts, 1, 20))
+ 
+   optional?: string;
+->optional : Symbol(Foo.optional, Decl(optionalProperties01.ts, 2, 20))
++>optional : Symbol(optional, Decl(optionalProperties01.ts, 2, 20))
+ }
+ 
+ const foo1 = { required1: "hello" } as Foo;

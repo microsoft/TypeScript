@@ -1,0 +1,50 @@
+--- old.overloadResolution.symbols
++++ new.overloadResolution.symbols
+@@= skipped -4, +4 lines =@@
+ >SomeBase : Symbol(SomeBase, Decl(overloadResolution.ts, 0, 0))
+ 
+     private n;
+->n : Symbol(SomeBase.n, Decl(overloadResolution.ts, 0, 16))
++>n : Symbol(n, Decl(overloadResolution.ts, 0, 16))
+ 
+     public s: string;
+->s : Symbol(SomeBase.s, Decl(overloadResolution.ts, 1, 14))
++>s : Symbol(s, Decl(overloadResolution.ts, 1, 14))
+ }
+ class SomeDerived1 extends SomeBase {
+ >SomeDerived1 : Symbol(SomeDerived1, Decl(overloadResolution.ts, 4, 1))
+ >SomeBase : Symbol(SomeBase, Decl(overloadResolution.ts, 0, 0))
+ 
+     private m;
+->m : Symbol(SomeDerived1.m, Decl(overloadResolution.ts, 5, 37))
++>m : Symbol(m, Decl(overloadResolution.ts, 5, 37))
+ }
+ class SomeDerived2 extends SomeBase {
+ >SomeDerived2 : Symbol(SomeDerived2, Decl(overloadResolution.ts, 7, 1))
+ >SomeBase : Symbol(SomeBase, Decl(overloadResolution.ts, 0, 0))
+ 
+     private m;
+->m : Symbol(SomeDerived2.m, Decl(overloadResolution.ts, 8, 37))
++>m : Symbol(m, Decl(overloadResolution.ts, 8, 37))
+ }
+ class SomeDerived3 extends SomeBase {
+ >SomeDerived3 : Symbol(SomeDerived3, Decl(overloadResolution.ts, 10, 1))
+ >SomeBase : Symbol(SomeBase, Decl(overloadResolution.ts, 0, 0))
+ 
+     private m;
+->m : Symbol(SomeDerived3.m, Decl(overloadResolution.ts, 11, 37))
++>m : Symbol(m, Decl(overloadResolution.ts, 11, 37))
+ }
+ 
+ 
+@@= skipped -245, +245 lines =@@
+ >s : Symbol(s, Decl(overloadResolution.ts, 21, 3), Decl(overloadResolution.ts, 22, 3), Decl(overloadResolution.ts, 37, 3), Decl(overloadResolution.ts, 51, 3), Decl(overloadResolution.ts, 52, 3) ... and 3 more)
+ >fn5 : Symbol(fn5, Decl(overloadResolution.ts, 84, 16), Decl(overloadResolution.ts, 87, 45), Decl(overloadResolution.ts, 88, 45))
+ >n : Symbol(n, Decl(overloadResolution.ts, 91, 13))
+->n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
++>n.substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
+ >n : Symbol(n, Decl(overloadResolution.ts, 91, 13))
+->substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
++>substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
+ 
+ 

@@ -1,0 +1,56 @@
+--- old.objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.symbols
++++ new.objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.symbols
+@@= skipped -8, +8 lines =@@
+ >A : Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 0, 0))
+ 
+     foo<T extends U, U extends Date>(x: T, y: U): string { return null; }
+->foo : Symbol(A.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 4, 9))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 4, 9))
+ >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 5, 8))
+ >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 5, 20))
+ >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 5, 20))
+@@= skipped -19, +19 lines =@@
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     foo(x: T, y: U): string { return null; }
+->foo : Symbol(B.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 8, 47))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 8, 47))
+ >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 9, 8))
+ >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 8, 8))
+ >y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 9, 13))
+@@= skipped -15, +15 lines =@@
+ >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     foo(x: T, y: U): string { return null; }
+->foo : Symbol(C.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 12, 40))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 12, 40))
+ >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 13, 8))
+ >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 12, 8))
+ >y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 13, 13))
+@@= skipped -15, +15 lines =@@
+ >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     foo(x: T, y: U): string { return null; }
+->foo : Symbol(D.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 16, 40))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 16, 40))
+ >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 17, 8))
+ >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 16, 8))
+ >y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 17, 13))
+@@= skipped -15, +15 lines =@@
+ >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     foo(x: T, y: U): string;
+->foo : Symbol(I.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 20, 44))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 20, 44))
+ >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 21, 8))
+ >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 20, 12))
+ >y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 21, 13))
+@@= skipped -11, +11 lines =@@
+ >I2 : Symbol(I2, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 22, 1))
+ 
+     foo<T extends U, U extends Boolean>(x: T, y: U): string;
+->foo : Symbol(I2.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 24, 14))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 24, 14))
+ >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 25, 8))
+ >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 25, 20))
+ >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 25, 20))

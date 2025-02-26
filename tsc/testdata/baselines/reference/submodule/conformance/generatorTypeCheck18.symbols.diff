@@ -1,0 +1,21 @@
+--- old.generatorTypeCheck18.symbols
++++ new.generatorTypeCheck18.symbols
+@@= skipped -2, +2 lines =@@
+ === generatorTypeCheck18.ts ===
+ class Foo { x: number }
+ >Foo : Symbol(Foo, Decl(generatorTypeCheck18.ts, 0, 0))
+->x : Symbol(Foo.x, Decl(generatorTypeCheck18.ts, 0, 11))
++>x : Symbol(x, Decl(generatorTypeCheck18.ts, 0, 11))
+ 
+ class Baz { z: number }
+ >Baz : Symbol(Baz, Decl(generatorTypeCheck18.ts, 0, 23))
+->z : Symbol(Baz.z, Decl(generatorTypeCheck18.ts, 1, 11))
++>z : Symbol(z, Decl(generatorTypeCheck18.ts, 1, 11))
+ 
+ function* g(): IterableIterator<Foo> {
+ >g : Symbol(g, Decl(generatorTypeCheck18.ts, 1, 23))
+->IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>IterableIterator : Symbol(IterableIterator)
+ >Foo : Symbol(Foo, Decl(generatorTypeCheck18.ts, 0, 0))
+ 
+     yield;

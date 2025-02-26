@@ -1,0 +1,167 @@
+--- old.subtypingWithConstructSignatures6.symbols
++++ new.subtypingWithConstructSignatures6.symbols
+@@= skipped -6, +6 lines =@@
+ 
+ class Base { foo: string; }
+ >Base : Symbol(Base, Decl(subtypingWithConstructSignatures6.ts, 0, 0))
+->foo : Symbol(Base.foo, Decl(subtypingWithConstructSignatures6.ts, 4, 12))
++>foo : Symbol(foo, Decl(subtypingWithConstructSignatures6.ts, 4, 12))
+ 
+ class Derived extends Base { bar: string; }
+ >Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures6.ts, 4, 27))
+ >Base : Symbol(Base, Decl(subtypingWithConstructSignatures6.ts, 0, 0))
+->bar : Symbol(Derived.bar, Decl(subtypingWithConstructSignatures6.ts, 5, 28))
++>bar : Symbol(bar, Decl(subtypingWithConstructSignatures6.ts, 5, 28))
+ 
+ class Derived2 extends Derived { baz: string; }
+ >Derived2 : Symbol(Derived2, Decl(subtypingWithConstructSignatures6.ts, 5, 43))
+ >Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures6.ts, 4, 27))
+->baz : Symbol(Derived2.baz, Decl(subtypingWithConstructSignatures6.ts, 6, 32))
++>baz : Symbol(baz, Decl(subtypingWithConstructSignatures6.ts, 6, 32))
+ 
+ class OtherDerived extends Base { bing: string; }
+ >OtherDerived : Symbol(OtherDerived, Decl(subtypingWithConstructSignatures6.ts, 6, 47))
+ >Base : Symbol(Base, Decl(subtypingWithConstructSignatures6.ts, 0, 0))
+->bing : Symbol(OtherDerived.bing, Decl(subtypingWithConstructSignatures6.ts, 7, 33))
++>bing : Symbol(bing, Decl(subtypingWithConstructSignatures6.ts, 7, 33))
+ 
+ interface A { // T
+ >A : Symbol(A, Decl(subtypingWithConstructSignatures6.ts, 7, 49))
+ 
+     // M's
+     a: new <T>(x: T) => T[];
+->a : Symbol(A.a, Decl(subtypingWithConstructSignatures6.ts, 9, 13))
++>a : Symbol(a, Decl(subtypingWithConstructSignatures6.ts, 9, 13))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 11, 12))
+ >x : Symbol(x, Decl(subtypingWithConstructSignatures6.ts, 11, 15))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 11, 12))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 11, 12))
+ 
+     a2: new <T>(x: T) => string[];
+->a2 : Symbol(A.a2, Decl(subtypingWithConstructSignatures6.ts, 11, 28))
++>a2 : Symbol(a2, Decl(subtypingWithConstructSignatures6.ts, 11, 28))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 12, 13))
+ >x : Symbol(x, Decl(subtypingWithConstructSignatures6.ts, 12, 16))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 12, 13))
+ 
+     a3: new <T>(x: T) => void;
+->a3 : Symbol(A.a3, Decl(subtypingWithConstructSignatures6.ts, 12, 34))
++>a3 : Symbol(a3, Decl(subtypingWithConstructSignatures6.ts, 12, 34))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 13, 13))
+ >x : Symbol(x, Decl(subtypingWithConstructSignatures6.ts, 13, 16))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 13, 13))
+ 
+     a4: new <T, U>(x: T, y: U) => string;
+->a4 : Symbol(A.a4, Decl(subtypingWithConstructSignatures6.ts, 13, 30))
++>a4 : Symbol(a4, Decl(subtypingWithConstructSignatures6.ts, 13, 30))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 14, 13))
+ >U : Symbol(U, Decl(subtypingWithConstructSignatures6.ts, 14, 15))
+ >x : Symbol(x, Decl(subtypingWithConstructSignatures6.ts, 14, 19))
+@@= skipped -50, +50 lines =@@
+ >U : Symbol(U, Decl(subtypingWithConstructSignatures6.ts, 14, 15))
+ 
+     a5: new <T, U>(x: (arg: T) => U) => T;
+->a5 : Symbol(A.a5, Decl(subtypingWithConstructSignatures6.ts, 14, 41))
++>a5 : Symbol(a5, Decl(subtypingWithConstructSignatures6.ts, 14, 41))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 15, 13))
+ >U : Symbol(U, Decl(subtypingWithConstructSignatures6.ts, 15, 15))
+ >x : Symbol(x, Decl(subtypingWithConstructSignatures6.ts, 15, 19))
+@@= skipped -10, +10 lines =@@
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 15, 13))
+ 
+     a6: new <T extends Base>(x: (arg: T) => Derived) => T;
+->a6 : Symbol(A.a6, Decl(subtypingWithConstructSignatures6.ts, 15, 42))
++>a6 : Symbol(a6, Decl(subtypingWithConstructSignatures6.ts, 15, 42))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 16, 13))
+ >Base : Symbol(Base, Decl(subtypingWithConstructSignatures6.ts, 0, 0))
+ >x : Symbol(x, Decl(subtypingWithConstructSignatures6.ts, 16, 29))
+@@= skipped -10, +10 lines =@@
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 16, 13))
+ 
+     a11: new <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
+->a11 : Symbol(A.a11, Decl(subtypingWithConstructSignatures6.ts, 16, 58))
++>a11 : Symbol(a11, Decl(subtypingWithConstructSignatures6.ts, 16, 58))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 17, 14))
+ >x : Symbol(x, Decl(subtypingWithConstructSignatures6.ts, 17, 17))
+ >foo : Symbol(foo, Decl(subtypingWithConstructSignatures6.ts, 17, 21))
+@@= skipped -13, +13 lines =@@
+ >Base : Symbol(Base, Decl(subtypingWithConstructSignatures6.ts, 0, 0))
+ 
+     a15: new <T>(x: { a: T; b: T }) => T[];
+->a15 : Symbol(A.a15, Decl(subtypingWithConstructSignatures6.ts, 17, 63))
++>a15 : Symbol(a15, Decl(subtypingWithConstructSignatures6.ts, 17, 63))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 18, 14))
+ >x : Symbol(x, Decl(subtypingWithConstructSignatures6.ts, 18, 17))
+ >a : Symbol(a, Decl(subtypingWithConstructSignatures6.ts, 18, 21))
+@@= skipped -10, +10 lines =@@
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 18, 14))
+ 
+     a16: new <T extends Base>(x: { a: T; b: T }) => T[];
+->a16 : Symbol(A.a16, Decl(subtypingWithConstructSignatures6.ts, 18, 43))
++>a16 : Symbol(a16, Decl(subtypingWithConstructSignatures6.ts, 18, 43))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 19, 14))
+ >Base : Symbol(Base, Decl(subtypingWithConstructSignatures6.ts, 0, 0))
+ >x : Symbol(x, Decl(subtypingWithConstructSignatures6.ts, 19, 30))
+@@= skipped -18, +18 lines =@@
+ >A : Symbol(A, Decl(subtypingWithConstructSignatures6.ts, 7, 49))
+ 
+     a: new (x: T) => T[]; 
+->a : Symbol(I.a, Decl(subtypingWithConstructSignatures6.ts, 23, 26))
++>a : Symbol(a, Decl(subtypingWithConstructSignatures6.ts, 23, 26))
+ >x : Symbol(x, Decl(subtypingWithConstructSignatures6.ts, 24, 12))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 23, 12))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 23, 12))
+@@= skipped -12, +12 lines =@@
+ >A : Symbol(A, Decl(subtypingWithConstructSignatures6.ts, 7, 49))
+ 
+     a2: new (x: T) => string[]; 
+->a2 : Symbol(I2.a2, Decl(subtypingWithConstructSignatures6.ts, 27, 27))
++>a2 : Symbol(a2, Decl(subtypingWithConstructSignatures6.ts, 27, 27))
+ >x : Symbol(x, Decl(subtypingWithConstructSignatures6.ts, 28, 13))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 27, 13))
+ }
+@@= skipped -11, +11 lines =@@
+ >A : Symbol(A, Decl(subtypingWithConstructSignatures6.ts, 7, 49))
+ 
+     a3: new (x: T) => T;
+->a3 : Symbol(I3.a3, Decl(subtypingWithConstructSignatures6.ts, 31, 27))
++>a3 : Symbol(a3, Decl(subtypingWithConstructSignatures6.ts, 31, 27))
+ >x : Symbol(x, Decl(subtypingWithConstructSignatures6.ts, 32, 13))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 31, 13))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 31, 13))
+@@= skipped -12, +12 lines =@@
+ >A : Symbol(A, Decl(subtypingWithConstructSignatures6.ts, 7, 49))
+ 
+     a4: new <U>(x: T, y: U) => string; 
+->a4 : Symbol(I4.a4, Decl(subtypingWithConstructSignatures6.ts, 35, 27))
++>a4 : Symbol(a4, Decl(subtypingWithConstructSignatures6.ts, 35, 27))
+ >U : Symbol(U, Decl(subtypingWithConstructSignatures6.ts, 36, 13))
+ >x : Symbol(x, Decl(subtypingWithConstructSignatures6.ts, 36, 16))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 35, 13))
+@@= skipped -14, +14 lines =@@
+ >A : Symbol(A, Decl(subtypingWithConstructSignatures6.ts, 7, 49))
+ 
+     a5: new <U>(x: (arg: T) => U) => T; 
+->a5 : Symbol(I5.a5, Decl(subtypingWithConstructSignatures6.ts, 39, 27))
++>a5 : Symbol(a5, Decl(subtypingWithConstructSignatures6.ts, 39, 27))
+ >U : Symbol(U, Decl(subtypingWithConstructSignatures6.ts, 40, 13))
+ >x : Symbol(x, Decl(subtypingWithConstructSignatures6.ts, 40, 16))
+ >arg : Symbol(arg, Decl(subtypingWithConstructSignatures6.ts, 40, 20))
+@@= skipped -15, +15 lines =@@
+ >A : Symbol(A, Decl(subtypingWithConstructSignatures6.ts, 7, 49))
+ 
+     a11: new <U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
+->a11 : Symbol(I7.a11, Decl(subtypingWithConstructSignatures6.ts, 43, 27))
++>a11 : Symbol(a11, Decl(subtypingWithConstructSignatures6.ts, 43, 27))
+ >U : Symbol(U, Decl(subtypingWithConstructSignatures6.ts, 44, 14))
+ >x : Symbol(x, Decl(subtypingWithConstructSignatures6.ts, 44, 17))
+ >foo : Symbol(foo, Decl(subtypingWithConstructSignatures6.ts, 44, 21))
+@@= skipped -19, +19 lines =@@
+ >A : Symbol(A, Decl(subtypingWithConstructSignatures6.ts, 7, 49))
+ 
+     a16: new (x: { a: T; b: T }) => T[]; 
+->a16 : Symbol(I9.a16, Decl(subtypingWithConstructSignatures6.ts, 47, 27))
++>a16 : Symbol(a16, Decl(subtypingWithConstructSignatures6.ts, 47, 27))
+ >x : Symbol(x, Decl(subtypingWithConstructSignatures6.ts, 48, 14))
+ >a : Symbol(a, Decl(subtypingWithConstructSignatures6.ts, 48, 18))
+ >T : Symbol(T, Decl(subtypingWithConstructSignatures6.ts, 47, 13))

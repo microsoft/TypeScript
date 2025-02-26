@@ -1,0 +1,47 @@
+--- old.localTypes4.symbols
++++ new.localTypes4.symbols
+@@= skipped -56, +56 lines =@@
+     // Local types are block scoped
+     interface T { x: number }
+ >T : Symbol(T, Decl(localTypes4.ts, 23, 15))
+->x : Symbol(T.x, Decl(localTypes4.ts, 25, 17))
++>x : Symbol(x, Decl(localTypes4.ts, 25, 17))
+ 
+     let v: T;
+ >v : Symbol(v, Decl(localTypes4.ts, 26, 7))
+ >T : Symbol(T, Decl(localTypes4.ts, 23, 15))
+ 
+     v.x = 10;
+->v.x : Symbol(T.x, Decl(localTypes4.ts, 25, 17))
++>v.x : Symbol(x, Decl(localTypes4.ts, 25, 17))
+ >v : Symbol(v, Decl(localTypes4.ts, 26, 7))
+->x : Symbol(T.x, Decl(localTypes4.ts, 25, 17))
++>x : Symbol(x, Decl(localTypes4.ts, 25, 17))
+ 
+     if (true) {
+         interface T { x: string }
+ >T : Symbol(T, Decl(localTypes4.ts, 28, 15))
+->x : Symbol(T.x, Decl(localTypes4.ts, 29, 21))
++>x : Symbol(x, Decl(localTypes4.ts, 29, 21))
+ 
+         let v: T;
+ >v : Symbol(v, Decl(localTypes4.ts, 30, 11))
+ >T : Symbol(T, Decl(localTypes4.ts, 28, 15))
+ 
+         v.x = "hello";
+->v.x : Symbol(T.x, Decl(localTypes4.ts, 29, 21))
++>v.x : Symbol(x, Decl(localTypes4.ts, 29, 21))
+ >v : Symbol(v, Decl(localTypes4.ts, 30, 11))
+->x : Symbol(T.x, Decl(localTypes4.ts, 29, 21))
++>x : Symbol(x, Decl(localTypes4.ts, 29, 21))
+     }
+     else {
+         v.x = 20;
+->v.x : Symbol(T.x, Decl(localTypes4.ts, 25, 17))
++>v.x : Symbol(x, Decl(localTypes4.ts, 25, 17))
+ >v : Symbol(v, Decl(localTypes4.ts, 26, 7))
+->x : Symbol(T.x, Decl(localTypes4.ts, 25, 17))
++>x : Symbol(x, Decl(localTypes4.ts, 25, 17))
+     }
+ }
+ 

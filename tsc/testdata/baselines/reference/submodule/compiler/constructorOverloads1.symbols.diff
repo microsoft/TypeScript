@@ -1,0 +1,32 @@
+--- old.constructorOverloads1.symbols
++++ new.constructorOverloads1.symbols
+@@= skipped -18, +18 lines =@@
+ 
+     }
+     bar1() {  /*WScript.Echo("bar1");*/ }
+->bar1 : Symbol(Foo.bar1, Decl(constructorOverloads1.ts, 8, 5))
++>bar1 : Symbol(bar1, Decl(constructorOverloads1.ts, 8, 5))
+ 
+     bar2() {  /*WScript.Echo("bar1");*/ }
+->bar2 : Symbol(Foo.bar2, Decl(constructorOverloads1.ts, 9, 41))
++>bar2 : Symbol(bar2, Decl(constructorOverloads1.ts, 9, 41))
+ }
+ 
+ var f1 = new Foo("hey");
+@@= skipped -27, +27 lines =@@
+ >f3 : Symbol(f3, Decl(constructorOverloads1.ts, 15, 3))
+ 
+ f1.bar1();
+->f1.bar1 : Symbol(Foo.bar1, Decl(constructorOverloads1.ts, 8, 5))
++>f1.bar1 : Symbol(bar1, Decl(constructorOverloads1.ts, 8, 5))
+ >f1 : Symbol(f1, Decl(constructorOverloads1.ts, 13, 3))
+->bar1 : Symbol(Foo.bar1, Decl(constructorOverloads1.ts, 8, 5))
++>bar1 : Symbol(bar1, Decl(constructorOverloads1.ts, 8, 5))
+ 
+ f1.bar2();
+->f1.bar2 : Symbol(Foo.bar2, Decl(constructorOverloads1.ts, 9, 41))
++>f1.bar2 : Symbol(bar2, Decl(constructorOverloads1.ts, 9, 41))
+ >f1 : Symbol(f1, Decl(constructorOverloads1.ts, 13, 3))
+->bar2 : Symbol(Foo.bar2, Decl(constructorOverloads1.ts, 9, 41))
++>bar2 : Symbol(bar2, Decl(constructorOverloads1.ts, 9, 41))
+ 

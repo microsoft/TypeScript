@@ -1,0 +1,10 @@
+--- old.moduleResolutionWithSymlinks_notInNodeModules.symbols
++++ new.moduleResolutionWithSymlinks_notInNodeModules.symbols
+@@= skipped -4, +4 lines =@@
+ >x : Symbol(x, Decl(app.ts, 0, 8))
+ 
+ import { x as x2 } from "./shared2/abc";
+->x : Symbol(x2, Decl(abc.ts, 0, 12))
+ >x2 : Symbol(x2, Decl(app.ts, 1, 8))
+ 
+ x + x2;

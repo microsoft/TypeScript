@@ -1,0 +1,126 @@
+--- old.moduleWithStatementsOfEveryKind.symbols
++++ new.moduleWithStatementsOfEveryKind.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     class A { s: string }
+ >A : Symbol(A, Decl(moduleWithStatementsOfEveryKind.ts, 0, 10))
+->s : Symbol(A.s, Decl(moduleWithStatementsOfEveryKind.ts, 1, 13))
++>s : Symbol(s, Decl(moduleWithStatementsOfEveryKind.ts, 1, 13))
+ 
+     class AA<T> { s: T }
+ >AA : Symbol(AA, Decl(moduleWithStatementsOfEveryKind.ts, 1, 25))
+ >T : Symbol(T, Decl(moduleWithStatementsOfEveryKind.ts, 2, 13))
+->s : Symbol(AA.s, Decl(moduleWithStatementsOfEveryKind.ts, 2, 17))
++>s : Symbol(s, Decl(moduleWithStatementsOfEveryKind.ts, 2, 17))
+ >T : Symbol(T, Decl(moduleWithStatementsOfEveryKind.ts, 2, 13))
+ 
+     interface I { id: number }
+ >I : Symbol(I, Decl(moduleWithStatementsOfEveryKind.ts, 2, 24))
+->id : Symbol(I.id, Decl(moduleWithStatementsOfEveryKind.ts, 3, 17))
++>id : Symbol(id, Decl(moduleWithStatementsOfEveryKind.ts, 3, 17))
+ 
+     class B extends AA<string> implements I { id: number }
+ >B : Symbol(B, Decl(moduleWithStatementsOfEveryKind.ts, 3, 30))
+ >AA : Symbol(AA, Decl(moduleWithStatementsOfEveryKind.ts, 1, 25))
+ >I : Symbol(I, Decl(moduleWithStatementsOfEveryKind.ts, 2, 24))
+->id : Symbol(B.id, Decl(moduleWithStatementsOfEveryKind.ts, 5, 45))
++>id : Symbol(id, Decl(moduleWithStatementsOfEveryKind.ts, 5, 45))
+ 
+     class BB<T> extends A {
+ >BB : Symbol(BB, Decl(moduleWithStatementsOfEveryKind.ts, 5, 58))
+@@= skipped -24, +24 lines =@@
+ >A : Symbol(A, Decl(moduleWithStatementsOfEveryKind.ts, 0, 10))
+ 
+         id: number;
+->id : Symbol(BB.id, Decl(moduleWithStatementsOfEveryKind.ts, 6, 27))
++>id : Symbol(id, Decl(moduleWithStatementsOfEveryKind.ts, 6, 27))
+     }
+ 
+     module Module {
+@@= skipped -8, +8 lines =@@
+ 
+         class A { s: string }
+ >A : Symbol(A, Decl(moduleWithStatementsOfEveryKind.ts, 10, 19))
+->s : Symbol(A.s, Decl(moduleWithStatementsOfEveryKind.ts, 11, 17))
++>s : Symbol(s, Decl(moduleWithStatementsOfEveryKind.ts, 11, 17))
+     }
+     enum Color { Blue, Red }
+ >Color : Symbol(Color, Decl(moduleWithStatementsOfEveryKind.ts, 12, 5))
+->Blue : Symbol(Color.Blue, Decl(moduleWithStatementsOfEveryKind.ts, 13, 16))
+->Red : Symbol(Color.Red, Decl(moduleWithStatementsOfEveryKind.ts, 13, 22))
++>Blue : Symbol(Blue, Decl(moduleWithStatementsOfEveryKind.ts, 13, 16))
++>Red : Symbol(Red, Decl(moduleWithStatementsOfEveryKind.ts, 13, 22))
+ 
+     var x = 12;
+ >x : Symbol(x, Decl(moduleWithStatementsOfEveryKind.ts, 14, 7))
+@@= skipped -37, +37 lines =@@
+ >DC : Symbol(DC, Decl(moduleWithStatementsOfEveryKind.ts, 22, 50))
+ 
+         static x: number;
+->x : Symbol(DC.x, Decl(moduleWithStatementsOfEveryKind.ts, 24, 22))
++>x : Symbol(x, Decl(moduleWithStatementsOfEveryKind.ts, 24, 22))
+     }
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ 
+     export class A { s: string }
+ >A : Symbol(A, Decl(moduleWithStatementsOfEveryKind.ts, 29, 10))
+->s : Symbol(A.s, Decl(moduleWithStatementsOfEveryKind.ts, 30, 20))
++>s : Symbol(s, Decl(moduleWithStatementsOfEveryKind.ts, 30, 20))
+ 
+     export class AA<T> { s: T }
+ >AA : Symbol(AA, Decl(moduleWithStatementsOfEveryKind.ts, 30, 32))
+ >T : Symbol(T, Decl(moduleWithStatementsOfEveryKind.ts, 31, 20))
+->s : Symbol(AA.s, Decl(moduleWithStatementsOfEveryKind.ts, 31, 24))
++>s : Symbol(s, Decl(moduleWithStatementsOfEveryKind.ts, 31, 24))
+ >T : Symbol(T, Decl(moduleWithStatementsOfEveryKind.ts, 31, 20))
+ 
+     export interface I { id: number }
+ >I : Symbol(I, Decl(moduleWithStatementsOfEveryKind.ts, 31, 31))
+->id : Symbol(I.id, Decl(moduleWithStatementsOfEveryKind.ts, 32, 24))
++>id : Symbol(id, Decl(moduleWithStatementsOfEveryKind.ts, 32, 24))
+ 
+     export class B extends AA<string> implements I { id: number }
+ >B : Symbol(B, Decl(moduleWithStatementsOfEveryKind.ts, 32, 37))
+ >AA : Symbol(AA, Decl(moduleWithStatementsOfEveryKind.ts, 30, 32))
+ >I : Symbol(I, Decl(moduleWithStatementsOfEveryKind.ts, 31, 31))
+->id : Symbol(B.id, Decl(moduleWithStatementsOfEveryKind.ts, 34, 52))
++>id : Symbol(id, Decl(moduleWithStatementsOfEveryKind.ts, 34, 52))
+ 
+     export class BB<T> extends A {
+ >BB : Symbol(BB, Decl(moduleWithStatementsOfEveryKind.ts, 34, 65))
+@@= skipped -24, +24 lines =@@
+ >A : Symbol(A, Decl(moduleWithStatementsOfEveryKind.ts, 29, 10))
+ 
+         id: number;
+->id : Symbol(BB.id, Decl(moduleWithStatementsOfEveryKind.ts, 35, 34))
++>id : Symbol(id, Decl(moduleWithStatementsOfEveryKind.ts, 35, 34))
+     }
+ 
+     export module Module {
+@@= skipped -8, +8 lines =@@
+ 
+         class A { s: string }
+ >A : Symbol(A, Decl(moduleWithStatementsOfEveryKind.ts, 39, 26))
+->s : Symbol(A.s, Decl(moduleWithStatementsOfEveryKind.ts, 40, 17))
++>s : Symbol(s, Decl(moduleWithStatementsOfEveryKind.ts, 40, 17))
+     }
+     export enum Color { Blue, Red }
+ >Color : Symbol(Color, Decl(moduleWithStatementsOfEveryKind.ts, 41, 5))
+->Blue : Symbol(Color.Blue, Decl(moduleWithStatementsOfEveryKind.ts, 42, 23))
+->Red : Symbol(Color.Red, Decl(moduleWithStatementsOfEveryKind.ts, 42, 29))
++>Blue : Symbol(Blue, Decl(moduleWithStatementsOfEveryKind.ts, 42, 23))
++>Red : Symbol(Red, Decl(moduleWithStatementsOfEveryKind.ts, 42, 29))
+ 
+     export var x = 12;
+ >x : Symbol(x, Decl(moduleWithStatementsOfEveryKind.ts, 43, 14))
+@@= skipped -37, +37 lines =@@
+ >DC : Symbol(DC, Decl(moduleWithStatementsOfEveryKind.ts, 51, 57))
+ 
+         static x: number;
+->x : Symbol(DC.x, Decl(moduleWithStatementsOfEveryKind.ts, 53, 29))
++>x : Symbol(x, Decl(moduleWithStatementsOfEveryKind.ts, 53, 29))
+     }
+ }
+ 

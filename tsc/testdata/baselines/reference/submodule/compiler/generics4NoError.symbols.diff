@@ -1,0 +1,22 @@
+--- old.generics4NoError.symbols
++++ new.generics4NoError.symbols
+@@= skipped -3, +3 lines =@@
+ class C<T> { private x: T; }
+ >C : Symbol(C, Decl(generics4NoError.ts, 0, 0))
+ >T : Symbol(T, Decl(generics4NoError.ts, 0, 8))
+->x : Symbol(C.x, Decl(generics4NoError.ts, 0, 12))
++>x : Symbol(x, Decl(generics4NoError.ts, 0, 12))
+ >T : Symbol(T, Decl(generics4NoError.ts, 0, 8))
+ 
+ interface X { f(): string; }
+ >X : Symbol(X, Decl(generics4NoError.ts, 0, 28))
+->f : Symbol(X.f, Decl(generics4NoError.ts, 1, 13))
++>f : Symbol(f, Decl(generics4NoError.ts, 1, 13))
+ 
+ interface Y { f(): boolean; }
+ >Y : Symbol(Y, Decl(generics4NoError.ts, 1, 28))
+->f : Symbol(Y.f, Decl(generics4NoError.ts, 2, 13))
++>f : Symbol(f, Decl(generics4NoError.ts, 2, 13))
+ 
+ var a: C<X>;
+ >a : Symbol(a, Decl(generics4NoError.ts, 3, 3))

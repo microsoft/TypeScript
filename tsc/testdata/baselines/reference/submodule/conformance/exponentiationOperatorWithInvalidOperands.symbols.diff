@@ -1,0 +1,125 @@
+--- old.exponentiationOperatorWithInvalidOperands.symbols
++++ new.exponentiationOperatorWithInvalidOperands.symbols
+@@= skipped -4, +4 lines =@@
+ // an enum type
+ enum E { a, b, c }
+ >E : Symbol(E, Decl(exponentiationOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
+->b : Symbol(E.b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
+->c : Symbol(E.c, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 14))
++>a : Symbol(a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
++>b : Symbol(b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
++>c : Symbol(c, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 14))
+ 
+ var a: any;
+ >a : Symbol(a, Decl(exponentiationOperatorWithInvalidOperands.ts, 4, 3))
+@@= skipped -208, +208 lines =@@
+ 
+ var r1g1 = E.a ** a; //ok
+ >r1g1 : Symbol(r1g1, Decl(exponentiationOperatorWithInvalidOperands.ts, 55, 3))
+->E.a : Symbol(E.a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(exponentiationOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
+ >a : Symbol(a, Decl(exponentiationOperatorWithInvalidOperands.ts, 4, 3))
+ 
+ var r1g2 = E.a ** b;
+ >r1g2 : Symbol(r1g2, Decl(exponentiationOperatorWithInvalidOperands.ts, 56, 3))
+->E.a : Symbol(E.a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(exponentiationOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
+ >b : Symbol(b, Decl(exponentiationOperatorWithInvalidOperands.ts, 5, 3))
+ 
+ var r1g3 = E.a ** c; //ok
+ >r1g3 : Symbol(r1g3, Decl(exponentiationOperatorWithInvalidOperands.ts, 57, 3))
+->E.a : Symbol(E.a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(exponentiationOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
+ >c : Symbol(c, Decl(exponentiationOperatorWithInvalidOperands.ts, 6, 3))
+ 
+ var r1g4 = E.a ** d;
+ >r1g4 : Symbol(r1g4, Decl(exponentiationOperatorWithInvalidOperands.ts, 58, 3))
+->E.a : Symbol(E.a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(exponentiationOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
+ >d : Symbol(d, Decl(exponentiationOperatorWithInvalidOperands.ts, 7, 3))
+ 
+ var r1g5 = E.a ** e;
+ >r1g5 : Symbol(r1g5, Decl(exponentiationOperatorWithInvalidOperands.ts, 59, 3))
+->E.a : Symbol(E.a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(exponentiationOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
+ >e : Symbol(e, Decl(exponentiationOperatorWithInvalidOperands.ts, 8, 3))
+ 
+ var r1g6 = E.a ** f;
+ >r1g6 : Symbol(r1g6, Decl(exponentiationOperatorWithInvalidOperands.ts, 60, 3))
+->E.a : Symbol(E.a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(exponentiationOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 8))
+ >f : Symbol(f, Decl(exponentiationOperatorWithInvalidOperands.ts, 9, 3))
+ 
+ var r1h1 = a ** E.b; //ok
+ >r1h1 : Symbol(r1h1, Decl(exponentiationOperatorWithInvalidOperands.ts, 62, 3))
+ >a : Symbol(a, Decl(exponentiationOperatorWithInvalidOperands.ts, 4, 3))
+->E.b : Symbol(E.b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(exponentiationOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r1h2 = b ** E.b;
+ >r1h2 : Symbol(r1h2, Decl(exponentiationOperatorWithInvalidOperands.ts, 63, 3))
+ >b : Symbol(b, Decl(exponentiationOperatorWithInvalidOperands.ts, 5, 3))
+->E.b : Symbol(E.b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(exponentiationOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r1h3 = c ** E.b; //ok
+ >r1h3 : Symbol(r1h3, Decl(exponentiationOperatorWithInvalidOperands.ts, 64, 3))
+ >c : Symbol(c, Decl(exponentiationOperatorWithInvalidOperands.ts, 6, 3))
+->E.b : Symbol(E.b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(exponentiationOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r1h4 = d ** E.b;
+ >r1h4 : Symbol(r1h4, Decl(exponentiationOperatorWithInvalidOperands.ts, 65, 3))
+ >d : Symbol(d, Decl(exponentiationOperatorWithInvalidOperands.ts, 7, 3))
+->E.b : Symbol(E.b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(exponentiationOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r1h5 = e ** E.b;
+ >r1h5 : Symbol(r1h5, Decl(exponentiationOperatorWithInvalidOperands.ts, 66, 3))
+ >e : Symbol(e, Decl(exponentiationOperatorWithInvalidOperands.ts, 8, 3))
+->E.b : Symbol(E.b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(exponentiationOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r1h6 = f ** E.b
+ >r1h6 : Symbol(r1h6, Decl(exponentiationOperatorWithInvalidOperands.ts, 67, 3))
+ >f : Symbol(f, Decl(exponentiationOperatorWithInvalidOperands.ts, 9, 3))
+->E.b : Symbol(E.b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(exponentiationOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(exponentiationOperatorWithInvalidOperands.ts, 2, 11))
+ 

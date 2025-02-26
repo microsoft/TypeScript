@@ -1,0 +1,14 @@
+--- old.nodeNextEsmImportsOfPackagesWithExtensionlessMains.symbols
++++ new.nodeNextEsmImportsOfPackagesWithExtensionlessMains.symbols
+@@= skipped -11, +11 lines =@@
+ 
+   return nullthrows(ip.address());
+ >nullthrows : Symbol(nullthrows, Decl(index.ts, 1, 6))
+->ip.address : Symbol(ip.address, Decl(index.d.ts, 0, 0))
++>ip.address : Symbol(address, Decl(index.d.ts, 0, 0))
+ >ip : Symbol(ip, Decl(index.ts, 0, 6))
+->address : Symbol(ip.address, Decl(index.d.ts, 0, 0))
++>address : Symbol(address, Decl(index.d.ts, 0, 0))
+ }
+ === node_modules/@types/ip/index.d.ts ===
+ export function address(): string;

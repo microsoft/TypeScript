@@ -1,0 +1,16 @@
+--- old.for-of58.symbols
++++ new.for-of58.symbols
+@@= skipped -18, +18 lines =@@
+ >arr : Symbol(arr, Decl(for-of58.ts, 3, 13))
+ 
+     item.x;
+->item.x : Symbol(x, Decl(for-of58.ts, 0, 10))
+ >item : Symbol(item, Decl(for-of58.ts, 5, 10))
+->x : Symbol(x, Decl(for-of58.ts, 0, 10))
+ 
+     item.y;
+->item.y : Symbol(y, Decl(for-of58.ts, 1, 10))
+ >item : Symbol(item, Decl(for-of58.ts, 5, 10))
+->y : Symbol(y, Decl(for-of58.ts, 1, 10))
+ }
+ 

@@ -1,0 +1,74 @@
+--- old.dependentDestructuredVariablesFromNestedPatterns.symbols
++++ new.dependentDestructuredVariablesFromNestedPatterns.symbols
+@@= skipped -44, +44 lines =@@
+ 
+   const promises = await Promise.allSettled(fn());
+ >promises : Symbol(promises, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 19, 7))
+->Promise.allSettled : Symbol(PromiseConstructor.allSettled, Decl(lib.es2020.promise.d.ts, --, --), Decl(lib.es2020.promise.d.ts, --, --))
++>Promise.allSettled : Symbol(allSettled, Decl(lib.es2020.promise.d.ts, --, --), Decl(lib.es2020.promise.d.ts, --, --))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+->allSettled : Symbol(PromiseConstructor.allSettled, Decl(lib.es2020.promise.d.ts, --, --), Decl(lib.es2020.promise.d.ts, --, --))
++>allSettled : Symbol(allSettled, Decl(lib.es2020.promise.d.ts, --, --), Decl(lib.es2020.promise.d.ts, --, --))
+ >fn : Symbol(fn, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 18, 58))
+ 
+   return promises.map((result) =>
+->promises.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>promises.map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >promises : Symbol(promises, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 19, 7))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >result : Symbol(result, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 21, 23))
+ 
+     result.status === "fulfilled"
+@@= skipped -17, +17 lines =@@
+ >status : Symbol(status, Decl(lib.es2020.promise.d.ts, --, --), Decl(lib.es2020.promise.d.ts, --, --))
+ 
+       ? [result.value, undefined]
+->result.value : Symbol(PromiseFulfilledResult.value, Decl(lib.es2020.promise.d.ts, --, --))
++>result.value : Symbol(value, Decl(lib.es2020.promise.d.ts, --, --))
+ >result : Symbol(result, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 21, 23))
+->value : Symbol(PromiseFulfilledResult.value, Decl(lib.es2020.promise.d.ts, --, --))
++>value : Symbol(value, Decl(lib.es2020.promise.d.ts, --, --))
+ >undefined : Symbol(undefined)
+ 
+       : [undefined, new Error(String(result.reason))],
+ >undefined : Symbol(undefined)
+ >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+ >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
+->result.reason : Symbol(PromiseRejectedResult.reason, Decl(lib.es2020.promise.d.ts, --, --))
++>result.reason : Symbol(reason, Decl(lib.es2020.promise.d.ts, --, --))
+ >result : Symbol(result, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 21, 23))
+->reason : Symbol(PromiseRejectedResult.reason, Decl(lib.es2020.promise.d.ts, --, --))
++>reason : Symbol(reason, Decl(lib.es2020.promise.d.ts, --, --))
+ 
+   ) as { [K in keyof T]: [Awaited<T[K]>, undefined] | [undefined, Error] };
+ >K : Symbol(K, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 25, 10))
+@@= skipped -32, +32 lines =@@
+ >myAllSettled : Symbol(myAllSettled, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 16, 1))
+ 
+     () => [Promise.resolve(0), Promise.reject(1)] as const,
+->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+->Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
++>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>Promise.reject : Symbol(reject, Decl(lib.es2015.promise.d.ts, --, --))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+->reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
++>reject : Symbol(reject, Decl(lib.es2015.promise.d.ts, --, --))
+ >const : Symbol(const)
+ 
+   );
+@@= skipped -24, +24 lines =@@
+ >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+ 
+   if (Math.random()) {
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ 
+     p1 = undefined;
+ >p1 : Symbol(p1, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 38, 17))

@@ -1,0 +1,32 @@
+--- old.genericsWithDuplicateTypeParameters1.symbols
++++ new.genericsWithDuplicateTypeParameters1.symbols
+@@= skipped -21, +21 lines =@@
+ >X : Symbol(X, Decl(genericsWithDuplicateTypeParameters1.ts, 2, 8), Decl(genericsWithDuplicateTypeParameters1.ts, 2, 10))
+ 
+     public f<x, x>() {}
+->f : Symbol(C.f, Decl(genericsWithDuplicateTypeParameters1.ts, 2, 15))
++>f : Symbol(f, Decl(genericsWithDuplicateTypeParameters1.ts, 2, 15))
+ >x : Symbol(x, Decl(genericsWithDuplicateTypeParameters1.ts, 3, 13), Decl(genericsWithDuplicateTypeParameters1.ts, 3, 15))
+ >x : Symbol(x, Decl(genericsWithDuplicateTypeParameters1.ts, 3, 13), Decl(genericsWithDuplicateTypeParameters1.ts, 3, 15))
+ 
+     public f2<X, X>(a: X, b: X): X { return null; }
+->f2 : Symbol(C.f2, Decl(genericsWithDuplicateTypeParameters1.ts, 3, 23))
++>f2 : Symbol(f2, Decl(genericsWithDuplicateTypeParameters1.ts, 3, 23))
+ >X : Symbol(X, Decl(genericsWithDuplicateTypeParameters1.ts, 4, 14), Decl(genericsWithDuplicateTypeParameters1.ts, 4, 16))
+ >X : Symbol(X, Decl(genericsWithDuplicateTypeParameters1.ts, 4, 14), Decl(genericsWithDuplicateTypeParameters1.ts, 4, 16))
+ >a : Symbol(a, Decl(genericsWithDuplicateTypeParameters1.ts, 4, 20))
+@@= skipped -21, +21 lines =@@
+ >X : Symbol(X, Decl(genericsWithDuplicateTypeParameters1.ts, 7, 12), Decl(genericsWithDuplicateTypeParameters1.ts, 7, 14))
+ 
+     f<X, X>();
+->f : Symbol(I.f, Decl(genericsWithDuplicateTypeParameters1.ts, 7, 19))
++>f : Symbol(f, Decl(genericsWithDuplicateTypeParameters1.ts, 7, 19))
+ >X : Symbol(X, Decl(genericsWithDuplicateTypeParameters1.ts, 8, 6), Decl(genericsWithDuplicateTypeParameters1.ts, 8, 8))
+ >X : Symbol(X, Decl(genericsWithDuplicateTypeParameters1.ts, 8, 6), Decl(genericsWithDuplicateTypeParameters1.ts, 8, 8))
+ 
+     f2<X, X>(a: X, b: X): X;
+->f2 : Symbol(I.f2, Decl(genericsWithDuplicateTypeParameters1.ts, 8, 14))
++>f2 : Symbol(f2, Decl(genericsWithDuplicateTypeParameters1.ts, 8, 14))
+ >X : Symbol(X, Decl(genericsWithDuplicateTypeParameters1.ts, 9, 7), Decl(genericsWithDuplicateTypeParameters1.ts, 9, 9))
+ >X : Symbol(X, Decl(genericsWithDuplicateTypeParameters1.ts, 9, 7), Decl(genericsWithDuplicateTypeParameters1.ts, 9, 9))
+ >a : Symbol(a, Decl(genericsWithDuplicateTypeParameters1.ts, 9, 13))

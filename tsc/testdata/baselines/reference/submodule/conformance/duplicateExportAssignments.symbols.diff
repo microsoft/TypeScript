@@ -1,0 +1,11 @@
+--- old.duplicateExportAssignments.symbols
++++ new.duplicateExportAssignments.symbols
+@@= skipped -36, +36 lines =@@
+ >y : Symbol(y, Decl(foo3.ts, 2, 1))
+ 
+ 	y: number;
+->y : Symbol(y.y, Decl(foo3.ts, 3, 9))
++>y : Symbol(y, Decl(foo3.ts, 3, 9))
+ }
+ export = x;
+ >x : Symbol(x, Decl(foo3.ts, 0, 0))

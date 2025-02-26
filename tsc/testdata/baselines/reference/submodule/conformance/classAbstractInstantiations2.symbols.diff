@@ -1,0 +1,80 @@
+--- old.classAbstractInstantiations2.symbols
++++ new.classAbstractInstantiations2.symbols
+@@= skipped -10, +10 lines =@@
+ >B : Symbol(B, Decl(classAbstractInstantiations2.ts, 2, 1))
+ 
+     foo(): number { return this.bar(); }
+->foo : Symbol(B.foo, Decl(classAbstractInstantiations2.ts, 4, 18))
+->this.bar : Symbol(B.bar, Decl(classAbstractInstantiations2.ts, 5, 40))
++>foo : Symbol(foo, Decl(classAbstractInstantiations2.ts, 4, 18))
++>this.bar : Symbol(bar, Decl(classAbstractInstantiations2.ts, 5, 40))
+ >this : Symbol(B, Decl(classAbstractInstantiations2.ts, 2, 1))
+->bar : Symbol(B.bar, Decl(classAbstractInstantiations2.ts, 5, 40))
++>bar : Symbol(bar, Decl(classAbstractInstantiations2.ts, 5, 40))
+ 
+     abstract bar() : number;
+->bar : Symbol(B.bar, Decl(classAbstractInstantiations2.ts, 5, 40))
++>bar : Symbol(bar, Decl(classAbstractInstantiations2.ts, 5, 40))
+ }
+ 
+ new B; // error
+@@= skipped -61, +61 lines =@@
+ >B : Symbol(B, Decl(classAbstractInstantiations2.ts, 2, 1))
+ 
+     bar() { return 1; }
+->bar : Symbol(E.bar, Decl(classAbstractInstantiations2.ts, 29, 19))
++>bar : Symbol(bar, Decl(classAbstractInstantiations2.ts, 29, 19))
+ }
+ 
+ abstract class F extends B {
+@@= skipped -8, +8 lines =@@
+ >B : Symbol(B, Decl(classAbstractInstantiations2.ts, 2, 1))
+ 
+     abstract foo() : number;
+->foo : Symbol(F.foo, Decl(classAbstractInstantiations2.ts, 33, 28))
++>foo : Symbol(foo, Decl(classAbstractInstantiations2.ts, 33, 28))
+ 
+     bar() { return 2; }
+->bar : Symbol(F.bar, Decl(classAbstractInstantiations2.ts, 34, 28))
++>bar : Symbol(bar, Decl(classAbstractInstantiations2.ts, 34, 28))
+ }
+ 
+ abstract class G {
+ >G : Symbol(G, Decl(classAbstractInstantiations2.ts, 36, 1))
+ 
+     abstract qux(x : number) : string;
+->qux : Symbol(G.qux, Decl(classAbstractInstantiations2.ts, 38, 18), Decl(classAbstractInstantiations2.ts, 39, 38))
++>qux : Symbol(qux, Decl(classAbstractInstantiations2.ts, 38, 18), Decl(classAbstractInstantiations2.ts, 39, 38))
+ >x : Symbol(x, Decl(classAbstractInstantiations2.ts, 39, 17))
+ 
+     abstract qux() : number;
+->qux : Symbol(G.qux, Decl(classAbstractInstantiations2.ts, 38, 18), Decl(classAbstractInstantiations2.ts, 39, 38))
++>qux : Symbol(qux, Decl(classAbstractInstantiations2.ts, 38, 18), Decl(classAbstractInstantiations2.ts, 39, 38))
+ 
+     y : number;
+->y : Symbol(G.y, Decl(classAbstractInstantiations2.ts, 40, 28))
++>y : Symbol(y, Decl(classAbstractInstantiations2.ts, 40, 28))
+ 
+     abstract quz(x : number, y : string) : boolean; // error -- declarations must be adjacent
+->quz : Symbol(G.quz, Decl(classAbstractInstantiations2.ts, 41, 15))
++>quz : Symbol(quz, Decl(classAbstractInstantiations2.ts, 41, 15))
+ >x : Symbol(x, Decl(classAbstractInstantiations2.ts, 42, 17))
+ >y : Symbol(y, Decl(classAbstractInstantiations2.ts, 42, 28))
+ 
+     abstract nom(): boolean;
+->nom : Symbol(G.nom, Decl(classAbstractInstantiations2.ts, 42, 51), Decl(classAbstractInstantiations2.ts, 44, 28))
++>nom : Symbol(nom, Decl(classAbstractInstantiations2.ts, 42, 51), Decl(classAbstractInstantiations2.ts, 44, 28))
+ 
+     nom(x : number): boolean; // error -- use of modifier abstract must match on all overloads.
+->nom : Symbol(G.nom, Decl(classAbstractInstantiations2.ts, 42, 51), Decl(classAbstractInstantiations2.ts, 44, 28))
++>nom : Symbol(nom, Decl(classAbstractInstantiations2.ts, 42, 51), Decl(classAbstractInstantiations2.ts, 44, 28))
+ >x : Symbol(x, Decl(classAbstractInstantiations2.ts, 45, 8))
+ }
+ 
+@@= skipped -36, +36 lines =@@
+ >H : Symbol(H, Decl(classAbstractInstantiations2.ts, 46, 1))
+ 
+     abstract baz() : number;
+->baz : Symbol(H.baz, Decl(classAbstractInstantiations2.ts, 48, 9))
++>baz : Symbol(baz, Decl(classAbstractInstantiations2.ts, 48, 9))
+ }

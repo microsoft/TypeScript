@@ -1,0 +1,89 @@
+--- old.bigintWithoutLib.symbols
++++ new.bigintWithoutLib.symbols
+@@= skipped -18, +18 lines =@@
+ 
+ bigintVal = bigintVal.valueOf(); // should error - bigintVal inferred as {}
+ >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+->bigintVal.valueOf : Symbol(Object.valueOf, Decl(lib.es5.d.ts, --, --))
++>bigintVal.valueOf : Symbol(valueOf, Decl(lib.es5.d.ts, --, --))
+ >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+->valueOf : Symbol(Object.valueOf, Decl(lib.es5.d.ts, --, --))
++>valueOf : Symbol(valueOf, Decl(lib.es5.d.ts, --, --))
+ 
+ let stringVal: string = bigintVal.toString(); // should not error - bigintVal inferred as {}
+ >stringVal : Symbol(stringVal, Decl(bigintWithoutLib.ts, 9, 3))
+->bigintVal.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>bigintVal.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+ stringVal = bigintVal.toString(2); // should error - bigintVal inferred as {}
+ >stringVal : Symbol(stringVal, Decl(bigintWithoutLib.ts, 9, 3))
+->bigintVal.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>bigintVal.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+ stringVal = bigintVal.toLocaleString(); // should not error - bigintVal inferred as {}
+ >stringVal : Symbol(stringVal, Decl(bigintWithoutLib.ts, 9, 3))
+->bigintVal.toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
++>bigintVal.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
+ >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+->toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
+ 
+ stringVal = bigintVal.toLocaleString('de-DE'); // should not error - bigintVal inferred as {}
+ >stringVal : Symbol(stringVal, Decl(bigintWithoutLib.ts, 9, 3))
+->bigintVal.toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
++>bigintVal.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
+ >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+->toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
+ 
+ stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }); // should not error - bigintVal inferred as {}
+ >stringVal : Symbol(stringVal, Decl(bigintWithoutLib.ts, 9, 3))
+->bigintVal.toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
++>bigintVal.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
+ >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+->toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
+ >style : Symbol(style, Decl(bigintWithoutLib.ts, 13, 47))
+ 
+ stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) // should not error - bigintVal inferred as {}
+ >stringVal : Symbol(stringVal, Decl(bigintWithoutLib.ts, 9, 3))
+->bigintVal.toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
++>bigintVal.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
+ >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+->toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
++>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
+ >style : Symbol(style, Decl(bigintWithoutLib.ts, 14, 47))
+ >currency : Symbol(currency, Decl(bigintWithoutLib.ts, 14, 66))
+ 
+@@= skipped -160, +160 lines =@@
+ 
+ // Test Intl methods with new parameter type
+ new Intl.NumberFormat("fr").format(3000n);
+->new Intl.NumberFormat("fr").format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --))
+->Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>new Intl.NumberFormat("fr").format : Symbol(format, Decl(lib.es5.d.ts, --, --))
++>Intl.NumberFormat : Symbol(NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
+->NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --))
++>NumberFormat : Symbol(NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>format : Symbol(format, Decl(lib.es5.d.ts, --, --))
+ 
+ new Intl.NumberFormat("fr").format(bigintVal);
+->new Intl.NumberFormat("fr").format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --))
+->Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>new Intl.NumberFormat("fr").format : Symbol(format, Decl(lib.es5.d.ts, --, --))
++>Intl.NumberFormat : Symbol(NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
+->NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --))
++>NumberFormat : Symbol(NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>format : Symbol(format, Decl(lib.es5.d.ts, --, --))
+ >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+ 

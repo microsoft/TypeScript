@@ -1,0 +1,20 @@
+--- old.esModuleInteropTslibHelpers.symbols
++++ new.esModuleInteropTslibHelpers.symbols
+@@= skipped -25, +25 lines =@@
+ 
+ === file3.ts ===
+ import {default as resolve} from "path";
+->default : Symbol(resolve, Decl(refs.d.ts, 0, 0))
++>default : Symbol("path", Decl(refs.d.ts, 0, 0))
+ >resolve : Symbol(resolve, Decl(file3.ts, 0, 8))
+ 
+ resolve("", "../");
+@@= skipped -12, +12 lines =@@
+ === file4.ts ===
+ import {Bar, default as resolve} from "path";
+ >Bar : Symbol(Bar, Decl(file4.ts, 0, 8))
+->default : Symbol(Bar, Decl(refs.d.ts, 0, 0))
++>default : Symbol("path", Decl(refs.d.ts, 0, 0))
+ >resolve : Symbol(resolve, Decl(file4.ts, 0, 12))
+ 
+ resolve("", "../");

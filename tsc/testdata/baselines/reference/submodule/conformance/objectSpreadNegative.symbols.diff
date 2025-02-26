@@ -1,0 +1,43 @@
+--- old.objectSpreadNegative.symbols
++++ new.objectSpreadNegative.symbols
+@@= skipped -10, +10 lines =@@
+ >PrivateOptionalX : Symbol(PrivateOptionalX, Decl(objectSpreadNegative.ts, 0, 25))
+ 
+     private x?: number;
+->x : Symbol(PrivateOptionalX.x, Decl(objectSpreadNegative.ts, 3, 24))
++>x : Symbol(x, Decl(objectSpreadNegative.ts, 3, 24))
+ }
+ class PublicX {
+ >PublicX : Symbol(PublicX, Decl(objectSpreadNegative.ts, 5, 1))
+ 
+     public x: number;
+->x : Symbol(PublicX.x, Decl(objectSpreadNegative.ts, 6, 15))
++>x : Symbol(x, Decl(objectSpreadNegative.ts, 6, 15))
+ }
+ declare let publicX: PublicX;
+ >publicX : Symbol(publicX, Decl(objectSpreadNegative.ts, 9, 11))
+@@= skipped -44, +44 lines =@@
+ // assignability as target
+ interface Bool { b: boolean };
+ >Bool : Symbol(Bool, Decl(objectSpreadNegative.ts, 15, 84))
+->b : Symbol(Bool.b, Decl(objectSpreadNegative.ts, 19, 16))
++>b : Symbol(b, Decl(objectSpreadNegative.ts, 19, 16))
+ 
+ interface Str { s: string };
+ >Str : Symbol(Str, Decl(objectSpreadNegative.ts, 19, 30))
+->s : Symbol(Str.s, Decl(objectSpreadNegative.ts, 20, 15))
++>s : Symbol(s, Decl(objectSpreadNegative.ts, 20, 15))
+ 
+ let spread = { ...{ b: true }, ...{s: "foo" } };
+ >spread : Symbol(spread, Decl(objectSpreadNegative.ts, 21, 3))
+@@= skipped -166, +166 lines =@@
+ // methods are skipped because they aren't enumerable
+ class C { p = 1; m() { } }
+ >C : Symbol(C, Decl(objectSpreadNegative.ts, 62, 18))
+->p : Symbol(C.p, Decl(objectSpreadNegative.ts, 65, 9))
+->m : Symbol(C.m, Decl(objectSpreadNegative.ts, 65, 16))
++>p : Symbol(p, Decl(objectSpreadNegative.ts, 65, 9))
++>m : Symbol(m, Decl(objectSpreadNegative.ts, 65, 16))
+ 
+ let c: C = new C()
+ >c : Symbol(c, Decl(objectSpreadNegative.ts, 66, 3))

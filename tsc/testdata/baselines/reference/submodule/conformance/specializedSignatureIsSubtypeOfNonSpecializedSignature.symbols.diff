@@ -1,0 +1,128 @@
+--- old.specializedSignatureIsSubtypeOfNonSpecializedSignature.symbols
++++ new.specializedSignatureIsSubtypeOfNonSpecializedSignature.symbols
+@@= skipped -19, +19 lines =@@
+ >C : Symbol(C, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 5, 24))
+ 
+     foo(x: 'a');
+->foo : Symbol(C.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 7, 9), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 8, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 9, 19))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 7, 9), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 8, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 9, 19))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 8, 8))
+ 
+     foo(x: string);
+->foo : Symbol(C.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 7, 9), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 8, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 9, 19))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 7, 9), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 8, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 9, 19))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 9, 8))
+ 
+     foo(x: any) { }
+->foo : Symbol(C.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 7, 9), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 8, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 9, 19))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 7, 9), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 8, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 9, 19))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 10, 8))
+ }
+ 
+@@= skipped -17, +17 lines =@@
+ >T : Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 13, 9))
+ 
+     foo(x: 'a');
+->foo : Symbol(C2.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 13, 13), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 14, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 15, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 16, 14))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 13, 13), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 14, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 15, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 16, 14))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 14, 8))
+ 
+     foo(x: string);
+->foo : Symbol(C2.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 13, 13), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 14, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 15, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 16, 14))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 13, 13), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 14, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 15, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 16, 14))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 15, 8))
+ 
+     foo(x: T);
+->foo : Symbol(C2.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 13, 13), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 14, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 15, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 16, 14))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 13, 13), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 14, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 15, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 16, 14))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 16, 8))
+ >T : Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 13, 9))
+ 
+     foo(x: any) { }
+->foo : Symbol(C2.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 13, 13), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 14, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 15, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 16, 14))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 13, 13), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 14, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 15, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 16, 14))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 17, 8))
+ }
+ 
+@@= skipped -23, +23 lines =@@
+ >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     foo(x: 'a');
+->foo : Symbol(C3.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 20, 28), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 21, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 22, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 23, 14))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 20, 28), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 21, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 22, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 23, 14))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 21, 8))
+ 
+     foo(x: string);
+->foo : Symbol(C3.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 20, 28), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 21, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 22, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 23, 14))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 20, 28), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 21, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 22, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 23, 14))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 22, 8))
+ 
+     foo(x: T);
+->foo : Symbol(C3.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 20, 28), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 21, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 22, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 23, 14))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 20, 28), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 21, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 22, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 23, 14))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 23, 8))
+ >T : Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 20, 9))
+ 
+     foo(x: any) { }
+->foo : Symbol(C3.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 20, 28), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 21, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 22, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 23, 14))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 20, 28), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 21, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 22, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 23, 14))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 24, 8))
+ }
+ 
+@@= skipped -30, +30 lines =@@
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 30, 5))
+ 
+     foo(x: 'a');
+->foo : Symbol(I.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 30, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 31, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 32, 19))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 30, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 31, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 32, 19))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 31, 8))
+ 
+     foo(x: string);
+->foo : Symbol(I.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 30, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 31, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 32, 19))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 30, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 31, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 32, 19))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 32, 8))
+ 
+     foo(x: number);
+->foo : Symbol(I.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 30, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 31, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 32, 19))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 30, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 31, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 32, 19))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 33, 8))
+ }
+ 
+@@= skipped -27, +27 lines =@@
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 39, 5))
+ 
+     foo(x: 'a');
+->foo : Symbol(I2.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 39, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 40, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 41, 19))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 39, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 40, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 41, 19))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 40, 8))
+ 
+     foo(x: string);
+->foo : Symbol(I2.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 39, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 40, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 41, 19))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 39, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 40, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 41, 19))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 41, 8))
+ 
+     foo(x: T);
+->foo : Symbol(I2.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 39, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 40, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 41, 19))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 39, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 40, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 41, 19))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 42, 8))
+ >T : Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 36, 13))
+ }
+@@= skipped -29, +29 lines =@@
+ >T : Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 45, 13))
+ 
+     foo(x: 'a');
+->foo : Symbol(I3.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 48, 11), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 49, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 50, 19))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 48, 11), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 49, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 50, 19))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 49, 8))
+ 
+     foo(x: string);
+->foo : Symbol(I3.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 48, 11), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 49, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 50, 19))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 48, 11), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 49, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 50, 19))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 50, 8))
+ 
+     foo(x: T);
+->foo : Symbol(I3.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 48, 11), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 49, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 50, 19))
++>foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 48, 11), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 49, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 50, 19))
+ >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 51, 8))
+ >T : Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 45, 13))
+ }

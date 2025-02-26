@@ -1,0 +1,22 @@
+--- old.tsxEmitSpreadAttribute(target=esnext).symbols
++++ new.tsxEmitSpreadAttribute(target=esnext).symbols
+@@= skipped -97, +97 lines =@@
+ 
+     return <div className={"T8"} { ...{ "__proto__": null } }>T8</div>;
+ >className : Symbol(className, Decl(test.tsx, 31, 15))
+->"__proto__" : Symbol("__proto__", Decl(test.tsx, 31, 39))
++>"__proto__" : Symbol(__proto__, Decl(test.tsx, 31, 39))
+ }
+ 
+ declare const __proto__: string;
+@@= skipped -28, +28 lines =@@
+ 
+     return <div className={"T10"} { ...{ ["__proto__"]: null } }>T10</div>;
+ >className : Symbol(className, Decl(test.tsx, 41, 15))
+->["__proto__"] : Symbol(["__proto__"], Decl(test.tsx, 41, 40))
+->"__proto__" : Symbol(["__proto__"], Decl(test.tsx, 41, 40))
++>["__proto__"] : Symbol(__proto__, Decl(test.tsx, 41, 40))
++>"__proto__" : Symbol(__proto__, Decl(test.tsx, 41, 40))
+ }
+ 
+ export function T11(a: any, b: any, c: any, d: any) {

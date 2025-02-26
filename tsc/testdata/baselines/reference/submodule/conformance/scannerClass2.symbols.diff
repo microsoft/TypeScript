@@ -1,0 +1,19 @@
+--- old.scannerClass2.symbols
++++ new.scannerClass2.symbols
+@@= skipped -4, +4 lines =@@
+ >LoggerAdapter : Symbol(LoggerAdapter, Decl(scannerClass2.ts, 0, 0))
+ 
+         constructor (public logger: ILogger) { 
+->logger : Symbol(LoggerAdapter.logger, Decl(scannerClass2.ts, 1, 21))
++>logger : Symbol(logger, Decl(scannerClass2.ts, 1, 21))
+ >ILogger : Symbol(ILogger)
+ 
+             this._information = this.logger.information();
+ >this : Symbol(LoggerAdapter, Decl(scannerClass2.ts, 0, 0))
+->this.logger : Symbol(LoggerAdapter.logger, Decl(scannerClass2.ts, 1, 21))
++>this.logger : Symbol(logger, Decl(scannerClass2.ts, 1, 21))
+ >this : Symbol(LoggerAdapter, Decl(scannerClass2.ts, 0, 0))
+->logger : Symbol(LoggerAdapter.logger, Decl(scannerClass2.ts, 1, 21))
++>logger : Symbol(logger, Decl(scannerClass2.ts, 1, 21))
+         }
+     }

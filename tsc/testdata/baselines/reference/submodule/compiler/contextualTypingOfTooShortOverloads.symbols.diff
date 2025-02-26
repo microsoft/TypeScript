@@ -1,0 +1,40 @@
+--- old.contextualTypingOfTooShortOverloads.symbols
++++ new.contextualTypingOfTooShortOverloads.symbols
+@@= skipped -28, +28 lines =@@
+ >MyApp : Symbol(MyApp, Decl(contextualTypingOfTooShortOverloads.ts, 10, 51))
+ 
+ app.use((err: any, req, res, next) => { return; });
+->app.use : Symbol(MyApp.use, Decl(contextualTypingOfTooShortOverloads.ts, 13, 17))
++>app.use : Symbol(use, Decl(contextualTypingOfTooShortOverloads.ts, 13, 17))
+ >app : Symbol(app, Decl(contextualTypingOfTooShortOverloads.ts, 9, 3))
+->use : Symbol(MyApp.use, Decl(contextualTypingOfTooShortOverloads.ts, 13, 17))
++>use : Symbol(use, Decl(contextualTypingOfTooShortOverloads.ts, 13, 17))
+ >err : Symbol(err, Decl(contextualTypingOfTooShortOverloads.ts, 10, 9))
+ >req : Symbol(req, Decl(contextualTypingOfTooShortOverloads.ts, 10, 18))
+ >res : Symbol(res, Decl(contextualTypingOfTooShortOverloads.ts, 10, 23))
+@@= skipped -13, +13 lines =@@
+ >MyApp : Symbol(MyApp, Decl(contextualTypingOfTooShortOverloads.ts, 10, 51))
+ 
+     use: IRouterHandler<this> & IRouterMatcher<this>;
+->use : Symbol(MyApp.use, Decl(contextualTypingOfTooShortOverloads.ts, 13, 17))
++>use : Symbol(use, Decl(contextualTypingOfTooShortOverloads.ts, 13, 17))
+ >IRouterHandler : Symbol(IRouterHandler, Decl(contextualTypingOfTooShortOverloads.ts, 15, 1))
+ >IRouterMatcher : Symbol(IRouterMatcher, Decl(contextualTypingOfTooShortOverloads.ts, 20, 1))
+ }
+@@= skipped -80, +80 lines =@@
+ >Request : Symbol(Request, Decl(contextualTypingOfTooShortOverloads.ts, 36, 1))
+ 
+     method: string;
+->method : Symbol(Request.method, Decl(contextualTypingOfTooShortOverloads.ts, 38, 19))
++>method : Symbol(method, Decl(contextualTypingOfTooShortOverloads.ts, 38, 19))
+ }
+ 
+ interface Response {
+ >Response : Symbol(Response, Decl(contextualTypingOfTooShortOverloads.ts, 40, 1))
+ 
+     statusCode: number;
+->statusCode : Symbol(Response.statusCode, Decl(contextualTypingOfTooShortOverloads.ts, 42, 20))
++>statusCode : Symbol(statusCode, Decl(contextualTypingOfTooShortOverloads.ts, 42, 20))
+ }
+ 
+ interface NextFunction {

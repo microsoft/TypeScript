@@ -1,0 +1,9 @@
+--- old.decoratorOnClass8.es6.symbols
++++ new.decoratorOnClass8.es6.symbols
+@@= skipped -12, +12 lines =@@
+ 
+ export default class {
+     static y = 1;
+->y : Symbol(default.y, Decl(decoratorOnClass8.es6.ts, 3, 22))
++>y : Symbol(y, Decl(decoratorOnClass8.es6.ts, 3, 22))
+ }

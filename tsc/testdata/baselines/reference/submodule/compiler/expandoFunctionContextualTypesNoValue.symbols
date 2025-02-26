@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/expandoFunctionContextualTypesNoValue.ts] ////
+
+=== expandoFunctionContextualTypesNoValue.ts ===
+// GH #38532
+import Foo from "blah";
+>Foo : Symbol(Foo, Decl(expandoFunctionContextualTypesNoValue.ts, 1, 23), Decl(expandoFunctionContextualTypesNoValue.ts, 1, 6))
+
+export function Foo() { }
+>Foo : Symbol(Foo, Decl(expandoFunctionContextualTypesNoValue.ts, 1, 23))
+
+Foo.bar = () => { };
+>Foo.bar : Symbol(bar, Decl(expandoFunctionContextualTypesNoValue.ts, 3, 25))
+>Foo : Symbol(Foo, Decl(expandoFunctionContextualTypesNoValue.ts, 1, 23), Decl(expandoFunctionContextualTypesNoValue.ts, 1, 6))
+>bar : Symbol(bar, Decl(expandoFunctionContextualTypesNoValue.ts, 3, 25))
+

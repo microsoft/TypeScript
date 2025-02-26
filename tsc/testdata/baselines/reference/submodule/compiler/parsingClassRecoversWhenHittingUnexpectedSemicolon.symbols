@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/parsingClassRecoversWhenHittingUnexpectedSemicolon.ts] ////
+
+=== parsingClassRecoversWhenHittingUnexpectedSemicolon.ts ===
+class C {
+>C : Symbol(C, Decl(parsingClassRecoversWhenHittingUnexpectedSemicolon.ts, 0, 0))
+
+    public f() { };
+>f : Symbol(f, Decl(parsingClassRecoversWhenHittingUnexpectedSemicolon.ts, 0, 9))
+
+    private m;
+>m : Symbol(m, Decl(parsingClassRecoversWhenHittingUnexpectedSemicolon.ts, 1, 19))
+}
+

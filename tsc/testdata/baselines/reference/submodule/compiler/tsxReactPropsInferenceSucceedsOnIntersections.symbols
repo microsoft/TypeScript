@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/tsxReactPropsInferenceSucceedsOnIntersections.tsx] ////
+
+=== tsxReactPropsInferenceSucceedsOnIntersections.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from "react";
+>React : Symbol(React, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 2, 6))
+
+export type ButtonProps<T = {}> = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+>ButtonProps : Symbol(ButtonProps, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 2, 26))
+>T : Symbol(T, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 4, 24))
+>React : Symbol(React, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 2, 6))
+>ButtonHTMLAttributes : Symbol(ButtonHTMLAttributes)
+>HTMLButtonElement : Symbol(HTMLButtonElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    outline?: boolean;
+>outline : Symbol(outline, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 4, 83))
+
+} & T;
+>T : Symbol(T, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 4, 24))
+
+declare class Button<T = {}> extends React.Component<ButtonProps<T>> { }
+>Button : Symbol(Button, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 6, 6))
+>T : Symbol(T, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 8, 21))
+>React.Component : Symbol(unknown)
+>React : Symbol(React, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 2, 6))
+>Component : Symbol(unknown)
+>ButtonProps : Symbol(ButtonProps, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 2, 26))
+>T : Symbol(T, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 8, 21))
+
+interface CustomButtonProps extends ButtonProps {
+>CustomButtonProps : Symbol(CustomButtonProps, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 8, 72))
+>ButtonProps : Symbol(ButtonProps, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 2, 26))
+
+    customProp: string;
+>customProp : Symbol(customProp, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 10, 49))
+}
+
+const CustomButton: React.SFC<CustomButtonProps> = props => <Button {...props} />;
+>CustomButton : Symbol(CustomButton, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 14, 5))
+>React : Symbol(React, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 2, 6))
+>SFC : Symbol(SFC)
+>CustomButtonProps : Symbol(CustomButtonProps, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 8, 72))
+>props : Symbol(props, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 14, 50))
+>Button : Symbol(Button, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 6, 6))
+>props : Symbol(props, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 14, 50))
+

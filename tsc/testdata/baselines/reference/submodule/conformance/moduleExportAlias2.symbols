@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/salsa/moduleExportAlias2.ts] ////
+
+=== index.js ===
+/// <reference path='node.d.ts' />
+const C = require("./semver")
+>C : Symbol(C, Decl(index.js, 1, 5))
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+
+var two = C.f(1)
+>two : Symbol(two, Decl(index.js, 2, 3))
+>C : Symbol(C, Decl(index.js, 1, 5))
+
+var c = new C
+>c : Symbol(c, Decl(index.js, 3, 3))
+>C : Symbol(C, Decl(index.js, 1, 5))
+
+=== node.d.ts ===
+declare function require(name: string): any;
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+>name : Symbol(name, Decl(node.d.ts, 0, 25))
+
+declare var exports: any;
+>exports : Symbol(exports, Decl(node.d.ts, 1, 11))
+
+declare var module: { exports: any };
+>module : Symbol(module, Decl(node.d.ts, 2, 11))
+>exports : Symbol(exports, Decl(node.d.ts, 2, 21))
+

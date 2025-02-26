@@ -1,0 +1,20 @@
+--- old.moduleAndInterfaceSharingName4.symbols
++++ new.moduleAndInterfaceSharingName4.symbols
+@@= skipped -7, +7 lines =@@
+ >x : Symbol(x, Decl(moduleAndInterfaceSharingName4.ts, 1, 7))
+ >D3 : Symbol(D3, Decl(moduleAndInterfaceSharingName4.ts, 0, 0))
+ >Color : Symbol(Color, Decl(moduleAndInterfaceSharingName4.ts, 1, 26))
+->Color : Symbol(Color.Color, Decl(moduleAndInterfaceSharingName4.ts, 3, 18))
++>Color : Symbol(Color, Decl(moduleAndInterfaceSharingName4.ts, 3, 18))
+ 
+     module Color {
+ >Color : Symbol(Color, Decl(moduleAndInterfaceSharingName4.ts, 1, 26))
+@@= skipped -9, +9 lines =@@
+ >Color : Symbol(Color, Decl(moduleAndInterfaceSharingName4.ts, 3, 18))
+ 
+             darker: Color;
+->darker : Symbol(Color.darker, Decl(moduleAndInterfaceSharingName4.ts, 4, 32))
++>darker : Symbol(darker, Decl(moduleAndInterfaceSharingName4.ts, 4, 32))
+ >Color : Symbol(Color, Decl(moduleAndInterfaceSharingName4.ts, 3, 18))
+         }
+     }

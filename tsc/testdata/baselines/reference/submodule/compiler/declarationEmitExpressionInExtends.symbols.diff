@@ -1,0 +1,21 @@
+--- old.declarationEmitExpressionInExtends.symbols
++++ new.declarationEmitExpressionInExtends.symbols
+@@= skipped -13, +13 lines =@@
+ >Q : Symbol(Q, Decl(declarationEmitExpressionInExtends.ts, 2, 1))
+ 
+     s: string;    
+->s : Symbol(Q.s, Decl(declarationEmitExpressionInExtends.ts, 4, 9))
++>s : Symbol(s, Decl(declarationEmitExpressionInExtends.ts, 4, 9))
+ }
+ 
+ class B extends x<string> {    
+@@= skipped -13, +13 lines =@@
+ >B : Symbol(B, Decl(declarationEmitExpressionInExtends.ts, 6, 1))
+ 
+ q.s;
+->q.s : Symbol(Q.s, Decl(declarationEmitExpressionInExtends.ts, 4, 9))
++>q.s : Symbol(s, Decl(declarationEmitExpressionInExtends.ts, 4, 9))
+ >q : Symbol(q, Decl(declarationEmitExpressionInExtends.ts, 11, 3))
+->s : Symbol(Q.s, Decl(declarationEmitExpressionInExtends.ts, 4, 9))
++>s : Symbol(s, Decl(declarationEmitExpressionInExtends.ts, 4, 9))
+ 

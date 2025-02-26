@@ -1,0 +1,35 @@
+--- old.overloadedConstructorFixesInferencesAppropriately.symbols
++++ new.overloadedConstructorFixesInferencesAppropriately.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 0, 14))
+ 
+     v: T;
+->v : Symbol(Box.v, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 0, 18))
++>v : Symbol(v, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 0, 18))
+ >T : Symbol(T, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 0, 14))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >ErrorResult : Symbol(ErrorResult, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 2, 1))
+ 
+     readonly error: true
+->error : Symbol(ErrorResult.error, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 4, 23))
++>error : Symbol(error, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 4, 23))
+ }
+ 
+ interface AsyncLoaderProps<TResult extends {}> {
+@@= skipped -8, +8 lines =@@
+ >TResult : Symbol(TResult, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 8, 27))
+ 
+     readonly asyncLoad: () => Box<TResult>;
+->asyncLoad : Symbol(AsyncLoaderProps.asyncLoad, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 8, 48))
++>asyncLoad : Symbol(asyncLoad, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 8, 48))
+ >Box : Symbol(Box, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 0, 0))
+ >TResult : Symbol(TResult, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 8, 27))
+ 
+     readonly children: (result: Exclude<TResult, ErrorResult>) => string;
+->children : Symbol(AsyncLoaderProps.children, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 9, 43))
++>children : Symbol(children, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 9, 43))
+ >result : Symbol(result, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 10, 24))
+ >Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+ >TResult : Symbol(TResult, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 8, 27))

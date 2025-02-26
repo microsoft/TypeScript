@@ -1,0 +1,39 @@
+--- old.propertyNameWithoutTypeAnnotation.symbols
++++ new.propertyNameWithoutTypeAnnotation.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(propertyNameWithoutTypeAnnotation.ts, 0, 0))
+ 
+     foo;
+->foo : Symbol(C.foo, Decl(propertyNameWithoutTypeAnnotation.ts, 0, 9))
++>foo : Symbol(foo, Decl(propertyNameWithoutTypeAnnotation.ts, 0, 9))
+ }
+ 
+ interface I {
+ >I : Symbol(I, Decl(propertyNameWithoutTypeAnnotation.ts, 2, 1))
+ 
+     foo;
+->foo : Symbol(I.foo, Decl(propertyNameWithoutTypeAnnotation.ts, 4, 13))
++>foo : Symbol(foo, Decl(propertyNameWithoutTypeAnnotation.ts, 4, 13))
+ }
+ 
+ var a: {
+@@= skipped -27, +27 lines =@@
+ // These should all be of type 'any'
+ var r1 = (new C()).foo;
+ >r1 : Symbol(r1, Decl(propertyNameWithoutTypeAnnotation.ts, 17, 3))
+->(new C()).foo : Symbol(C.foo, Decl(propertyNameWithoutTypeAnnotation.ts, 0, 9))
++>(new C()).foo : Symbol(foo, Decl(propertyNameWithoutTypeAnnotation.ts, 0, 9))
+ >C : Symbol(C, Decl(propertyNameWithoutTypeAnnotation.ts, 0, 0))
+->foo : Symbol(C.foo, Decl(propertyNameWithoutTypeAnnotation.ts, 0, 9))
++>foo : Symbol(foo, Decl(propertyNameWithoutTypeAnnotation.ts, 0, 9))
+ 
+ var r2 = (<I>null).foo;
+ >r2 : Symbol(r2, Decl(propertyNameWithoutTypeAnnotation.ts, 18, 3))
+->(<I>null).foo : Symbol(I.foo, Decl(propertyNameWithoutTypeAnnotation.ts, 4, 13))
++>(<I>null).foo : Symbol(foo, Decl(propertyNameWithoutTypeAnnotation.ts, 4, 13))
+ >I : Symbol(I, Decl(propertyNameWithoutTypeAnnotation.ts, 2, 1))
+->foo : Symbol(I.foo, Decl(propertyNameWithoutTypeAnnotation.ts, 4, 13))
++>foo : Symbol(foo, Decl(propertyNameWithoutTypeAnnotation.ts, 4, 13))
+ 
+ var r3 = a.foo;
+ >r3 : Symbol(r3, Decl(propertyNameWithoutTypeAnnotation.ts, 19, 3))

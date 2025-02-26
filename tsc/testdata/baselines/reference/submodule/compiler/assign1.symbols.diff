@@ -1,0 +1,15 @@
+--- old.assign1.symbols
++++ new.assign1.symbols
+@@= skipped -7, +7 lines =@@
+ >I : Symbol(I, Decl(assign1.ts, 0, 10))
+ 
+         salt:number;
+->salt : Symbol(I.salt, Decl(assign1.ts, 1, 17))
++>salt : Symbol(salt, Decl(assign1.ts, 1, 17))
+ 
+         pepper:number;
+->pepper : Symbol(I.pepper, Decl(assign1.ts, 2, 20))
++>pepper : Symbol(pepper, Decl(assign1.ts, 2, 20))
+     }
+ 
+     var x:I={salt:2,pepper:0};

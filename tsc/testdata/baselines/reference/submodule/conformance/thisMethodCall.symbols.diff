@@ -1,0 +1,21 @@
+--- old.thisMethodCall.symbols
++++ new.thisMethodCall.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(thisMethodCall.ts, 0, 0))
+ 
+     method?() {}
+->method : Symbol(C.method, Decl(thisMethodCall.ts, 0, 9))
++>method : Symbol(method, Decl(thisMethodCall.ts, 0, 9))
+ 
+     other() {
+->other : Symbol(C.other, Decl(thisMethodCall.ts, 1, 16))
++>other : Symbol(other, Decl(thisMethodCall.ts, 1, 16))
+ 
+         this.method?.();
+->this.method : Symbol(C.method, Decl(thisMethodCall.ts, 0, 9))
++>this.method : Symbol(method, Decl(thisMethodCall.ts, 0, 9))
+ >this : Symbol(C, Decl(thisMethodCall.ts, 0, 0))
+->method : Symbol(C.method, Decl(thisMethodCall.ts, 0, 9))
++>method : Symbol(method, Decl(thisMethodCall.ts, 0, 9))
+     }
+ }

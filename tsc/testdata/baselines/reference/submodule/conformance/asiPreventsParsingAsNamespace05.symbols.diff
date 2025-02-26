@@ -1,0 +1,13 @@
+--- old.asiPreventsParsingAsNamespace05.symbols
++++ new.asiPreventsParsingAsNamespace05.symbols
+@@= skipped -15, +15 lines =@@
+ >namespace : Symbol(namespace, Decl(asiPreventsParsingAsNamespace05.ts, 0, 3))
+ 
+ a.b.c
+->a.b.c : Symbol(a.b.c, Decl(asiPreventsParsingAsNamespace05.ts, 2, 14))
+->a.b : Symbol(a.b, Decl(asiPreventsParsingAsNamespace05.ts, 1, 12))
+ >a : Symbol(a, Decl(asiPreventsParsingAsNamespace05.ts, 0, 19))
+->b : Symbol(a.b, Decl(asiPreventsParsingAsNamespace05.ts, 1, 12))
+->c : Symbol(a.b.c, Decl(asiPreventsParsingAsNamespace05.ts, 2, 14))
+ {
+ }

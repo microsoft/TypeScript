@@ -1,0 +1,81 @@
+--- old.errorsInGenericTypeReference.symbols
++++ new.errorsInGenericTypeReference.symbols
+@@= skipped -14, +14 lines =@@
+ >testClass1 : Symbol(testClass1, Decl(errorsInGenericTypeReference.ts, 2, 16))
+ 
+     method<T>(): void { }
+->method : Symbol(testClass1.method, Decl(errorsInGenericTypeReference.ts, 6, 18))
++>method : Symbol(method, Decl(errorsInGenericTypeReference.ts, 6, 18))
+ >T : Symbol(T, Decl(errorsInGenericTypeReference.ts, 7, 11))
+ }
+ var tc1 = new testClass1();
+@@= skipped -8, +8 lines =@@
+ >testClass1 : Symbol(testClass1, Decl(errorsInGenericTypeReference.ts, 2, 16))
+ 
+ tc1.method<{ x: V }>(); // error: could not find symbol V
+->tc1.method : Symbol(testClass1.method, Decl(errorsInGenericTypeReference.ts, 6, 18))
++>tc1.method : Symbol(method, Decl(errorsInGenericTypeReference.ts, 6, 18))
+ >tc1 : Symbol(tc1, Decl(errorsInGenericTypeReference.ts, 9, 3))
+->method : Symbol(testClass1.method, Decl(errorsInGenericTypeReference.ts, 6, 18))
++>method : Symbol(method, Decl(errorsInGenericTypeReference.ts, 6, 18))
+ >x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 10, 12))
+ >V : Symbol(V)
+ 
+@@= skipped -24, +24 lines =@@
+ >testClass3 : Symbol(testClass3, Decl(errorsInGenericTypeReference.ts, 16, 37))
+ 
+     testMethod1(): Foo<{ x: V }> { return null; } // error: could not find symbol V
+->testMethod1 : Symbol(testClass3.testMethod1, Decl(errorsInGenericTypeReference.ts, 20, 18))
++>testMethod1 : Symbol(testMethod1, Decl(errorsInGenericTypeReference.ts, 20, 18))
+ >Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+ >x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 21, 24))
+ >V : Symbol(V)
+ 
+     static testMethod2(): Foo<{ x: V }> { return null } // error: could not find symbol V
+->testMethod2 : Symbol(testClass3.testMethod2, Decl(errorsInGenericTypeReference.ts, 21, 49))
++>testMethod2 : Symbol(testMethod2, Decl(errorsInGenericTypeReference.ts, 21, 49))
+ >Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+ >x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 22, 31))
+ >V : Symbol(V)
+ 
+     set a(value: Foo<{ x: V }>) { } // error: could not find symbol V
+->a : Symbol(testClass3.a, Decl(errorsInGenericTypeReference.ts, 22, 55))
++>a : Symbol(a, Decl(errorsInGenericTypeReference.ts, 22, 55))
+ >value : Symbol(value, Decl(errorsInGenericTypeReference.ts, 23, 10))
+ >Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+ >x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 23, 22))
+ >V : Symbol(V)
+ 
+     property: Foo<{ x: V }>; // error: could not find symbol V
+->property : Symbol(testClass3.property, Decl(errorsInGenericTypeReference.ts, 23, 35))
++>property : Symbol(property, Decl(errorsInGenericTypeReference.ts, 23, 35))
+ >Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+ >x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 24, 19))
+ >V : Symbol(V)
+@@= skipped -70, +70 lines =@@
+ >T : Symbol(T, Decl(errorsInGenericTypeReference.ts, 45, 17))
+ 
+     method<M extends { x: V }>(): void { } // error: could not find symbol V
+->method : Symbol(testClass6.method, Decl(errorsInGenericTypeReference.ts, 45, 21))
++>method : Symbol(method, Decl(errorsInGenericTypeReference.ts, 45, 21))
+ >M : Symbol(M, Decl(errorsInGenericTypeReference.ts, 46, 11))
+ >x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 46, 22))
+ >V : Symbol(V)
+@@= skipped -54, +54 lines =@@
+ >V : Symbol(V)
+ 
+     method(a: Foo<{ x: V }>): Foo<{ x: V }>; //2x: error: could not find symbol V
+->method : Symbol(testInterface2.method, Decl(errorsInGenericTypeReference.ts, 65, 31))
++>method : Symbol(method, Decl(errorsInGenericTypeReference.ts, 65, 31))
+ >a : Symbol(a, Decl(errorsInGenericTypeReference.ts, 66, 11))
+ >Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+ >x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 66, 19))
+@@= skipped -10, +10 lines =@@
+ >V : Symbol(V)
+ 
+     property: Foo<{ x: V }>; // error: could not find symbol V
+->property : Symbol(testInterface2.property, Decl(errorsInGenericTypeReference.ts, 66, 44))
++>property : Symbol(property, Decl(errorsInGenericTypeReference.ts, 66, 44))
+ >Foo : Symbol(Foo, Decl(errorsInGenericTypeReference.ts, 0, 21))
+ >x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 67, 19))
+ >V : Symbol(V)

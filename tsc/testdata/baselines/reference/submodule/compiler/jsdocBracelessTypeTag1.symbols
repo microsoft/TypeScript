@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/jsdocBracelessTypeTag1.ts] ////
+
+=== index.js ===
+/** @type () => string */
+function fn1() {
+>fn1 : Symbol(fn1, Decl(index.js, 0, 0))
+
+  return 42;
+}
+
+/** @type () => string */
+function fn2() {
+>fn2 : Symbol(fn2, Decl(index.js, 3, 1))
+
+  return "foo";
+}
+
+/** @type (arg: string) => string */
+function fn3(arg) {
+>fn3 : Symbol(fn3, Decl(index.js, 8, 1))
+>arg : Symbol(arg, Decl(index.js, 11, 13))
+
+  return arg;
+>arg : Symbol(arg, Decl(index.js, 11, 13))
+}
+
+/** @type ({ type: 'foo' } | { type: 'bar' }) & { prop: number } */
+const obj1 = { type: "foo", prop: 10 };
+>obj1 : Symbol(obj1, Decl(index.js, 16, 5))
+>type : Symbol(type, Decl(index.js, 16, 14))
+>prop : Symbol(prop, Decl(index.js, 16, 27))
+
+/** @type ({ type: 'foo' } | { type: 'bar' }) & { prop: number } */
+const obj2 = { type: "other", prop: 10 };
+>obj2 : Symbol(obj2, Decl(index.js, 19, 5))
+>type : Symbol(type, Decl(index.js, 19, 14))
+>prop : Symbol(prop, Decl(index.js, 19, 29))
+

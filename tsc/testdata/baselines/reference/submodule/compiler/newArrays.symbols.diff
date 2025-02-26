@@ -1,0 +1,43 @@
+--- old.newArrays.symbols
++++ new.newArrays.symbols
+@@= skipped -10, +10 lines =@@
+ >Gar : Symbol(Gar, Decl(newArrays.ts, 1, 13))
+ 
+ 		public fa: Foo[];
+->fa : Symbol(Gar.fa, Decl(newArrays.ts, 2, 12))
++>fa : Symbol(fa, Decl(newArrays.ts, 2, 12))
+ >Foo : Symbol(Foo, Decl(newArrays.ts, 0, 10))
+ 
+ 		public x = 10;
+->x : Symbol(Gar.x, Decl(newArrays.ts, 3, 19))
++>x : Symbol(x, Decl(newArrays.ts, 3, 19))
+ 
+ 		public y = 10;
+->y : Symbol(Gar.y, Decl(newArrays.ts, 4, 16))
++>y : Symbol(y, Decl(newArrays.ts, 4, 16))
+ 
+ 		public m () {
+->m : Symbol(Gar.m, Decl(newArrays.ts, 5, 16))
++>m : Symbol(m, Decl(newArrays.ts, 5, 16))
+ 
+ 			this.fa = new Array<Foo>(this.x * this.y);		
+->this.fa : Symbol(Gar.fa, Decl(newArrays.ts, 2, 12))
++>this.fa : Symbol(fa, Decl(newArrays.ts, 2, 12))
+ >this : Symbol(Gar, Decl(newArrays.ts, 1, 13))
+->fa : Symbol(Gar.fa, Decl(newArrays.ts, 2, 12))
++>fa : Symbol(fa, Decl(newArrays.ts, 2, 12))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Foo : Symbol(Foo, Decl(newArrays.ts, 0, 10))
+->this.x : Symbol(Gar.x, Decl(newArrays.ts, 3, 19))
++>this.x : Symbol(x, Decl(newArrays.ts, 3, 19))
+ >this : Symbol(Gar, Decl(newArrays.ts, 1, 13))
+->x : Symbol(Gar.x, Decl(newArrays.ts, 3, 19))
+->this.y : Symbol(Gar.y, Decl(newArrays.ts, 4, 16))
++>x : Symbol(x, Decl(newArrays.ts, 3, 19))
++>this.y : Symbol(y, Decl(newArrays.ts, 4, 16))
+ >this : Symbol(Gar, Decl(newArrays.ts, 1, 13))
+->y : Symbol(Gar.y, Decl(newArrays.ts, 4, 16))
++>y : Symbol(y, Decl(newArrays.ts, 4, 16))
+ 		}
+ 	}
+ }

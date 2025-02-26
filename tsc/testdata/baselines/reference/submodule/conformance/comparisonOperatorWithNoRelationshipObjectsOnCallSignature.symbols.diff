@@ -1,0 +1,28 @@
+--- old.comparisonOperatorWithNoRelationshipObjectsOnCallSignature.symbols
++++ new.comparisonOperatorWithNoRelationshipObjectsOnCallSignature.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts, 0, 0))
+ 
+     public a: string;
+->a : Symbol(Base.a, Decl(comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts, 0, 12))
++>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts, 0, 12))
+ }
+ 
+ class Derived extends Base {
+@@= skipped -8, +8 lines =@@
+ >Base : Symbol(Base, Decl(comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts, 0, 0))
+ 
+     public b: string;
+->b : Symbol(Derived.b, Decl(comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts, 4, 28))
++>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts, 4, 28))
+ }
+ 
+ class C {
+ >C : Symbol(C, Decl(comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts, 6, 1))
+ 
+     public c: string;
+->c : Symbol(C.c, Decl(comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts, 8, 9))
++>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts, 8, 9))
+ }
+ 
+ var a1: { fn(): Base };

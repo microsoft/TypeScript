@@ -1,0 +1,24 @@
+--- old.declInput3.symbols
++++ new.declInput3.symbols
+@@= skipped -9, +9 lines =@@
+ >bar : Symbol(bar, Decl(declInput3.ts, 2, 1))
+ 
+   public f() { return ''; }
+->f : Symbol(bar.f, Decl(declInput3.ts, 4, 11))
++>f : Symbol(f, Decl(declInput3.ts, 4, 11))
+ 
+   public g() { return {a: <bar>null, b: undefined, c: void 4 }; }
+->g : Symbol(bar.g, Decl(declInput3.ts, 5, 27))
++>g : Symbol(g, Decl(declInput3.ts, 5, 27))
+ >a : Symbol(a, Decl(declInput3.ts, 6, 23))
+ >bar : Symbol(bar, Decl(declInput3.ts, 2, 1))
+ >b : Symbol(b, Decl(declInput3.ts, 6, 36))
+@@= skipped -11, +11 lines =@@
+ >c : Symbol(c, Decl(declInput3.ts, 6, 50))
+ 
+   public h(x = 4, y = null, z = '') { x++; }
+->h : Symbol(bar.h, Decl(declInput3.ts, 6, 65))
++>h : Symbol(h, Decl(declInput3.ts, 6, 65))
+ >x : Symbol(x, Decl(declInput3.ts, 7, 11))
+ >y : Symbol(y, Decl(declInput3.ts, 7, 17))
+ >z : Symbol(z, Decl(declInput3.ts, 7, 27))

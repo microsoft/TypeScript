@@ -1,0 +1,11 @@
+--- old.parserEqualsGreaterThanAfterFunction2.symbols
++++ new.parserEqualsGreaterThanAfterFunction2.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === parserEqualsGreaterThanAfterFunction2.ts ===
+ function (a => b;
+-> : Symbol((Missing), Decl(parserEqualsGreaterThanAfterFunction2.ts, 0, 0))
++> : Symbol(, Decl(parserEqualsGreaterThanAfterFunction2.ts, 0, 0))
+ >a : Symbol(a, Decl(parserEqualsGreaterThanAfterFunction2.ts, 0, 10))
+ >b : Symbol(b, Decl(parserEqualsGreaterThanAfterFunction2.ts, 0, 14))
+ 

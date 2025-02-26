@@ -1,0 +1,10 @@
+--- old.templateStringMultiline3_ES6.symbols
++++ new.templateStringMultiline3_ES6.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === templateStringMultiline3_ES6.ts ===
+ 
+-// newlines are <CR>
+-`
+-\
+-`

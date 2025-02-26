@@ -1,0 +1,11 @@
+--- old.genericDefaultsErrors.symbols
++++ new.genericDefaultsErrors.symbols
+@@= skipped -131, +131 lines =@@
+ 
+ interface i10 { x: T; } // error
+ >i10 : Symbol(i10, Decl(genericDefaultsErrors.ts, 35, 30), Decl(genericDefaultsErrors.ts, 37, 23))
+->x : Symbol(i10.x, Decl(genericDefaultsErrors.ts, 37, 15))
++>x : Symbol(x, Decl(genericDefaultsErrors.ts, 37, 15))
+ >T : Symbol(T)
+ 
+ interface i10<T = number> {}

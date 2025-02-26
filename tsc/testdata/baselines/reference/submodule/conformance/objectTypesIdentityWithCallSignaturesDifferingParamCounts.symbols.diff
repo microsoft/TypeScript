@@ -1,0 +1,47 @@
+--- old.objectTypesIdentityWithCallSignaturesDifferingParamCounts.symbols
++++ new.objectTypesIdentityWithCallSignaturesDifferingParamCounts.symbols
+@@= skipped -6, +6 lines =@@
+ >A : Symbol(A, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 0, 0))
+ 
+     foo(x: string): string { return null; }
+->foo : Symbol(A.foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 2, 9))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 2, 9))
+ >x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 3, 8))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >B : Symbol(B, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 4, 1))
+ 
+     foo(x: string, y: string): string { return null; }
+->foo : Symbol(B.foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 6, 9))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 6, 9))
+ >x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 7, 8))
+ >y : Symbol(y, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 7, 18))
+ }
+@@= skipped -10, +10 lines =@@
+ >T : Symbol(T, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 10, 8))
+ 
+     foo(x: T, y: T): T { return null; }
+->foo : Symbol(C.foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 10, 12))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 10, 12))
+ >x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 11, 8))
+ >T : Symbol(T, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 10, 8))
+ >y : Symbol(y, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 11, 13))
+@@= skipped -12, +12 lines =@@
+ >I : Symbol(I, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 12, 1))
+ 
+     foo(x: string): string;
+->foo : Symbol(I.foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 14, 13))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 14, 13))
+ >x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 15, 8))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 18, 13))
+ 
+     foo(x: T): T;
+->foo : Symbol(I2.foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 18, 17))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 18, 17))
+ >x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 19, 8))
+ >T : Symbol(T, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 18, 13))
+ >T : Symbol(T, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 18, 13))

@@ -1,0 +1,21 @@
+--- old.genericClasses1.symbols
++++ new.genericClasses1.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(genericClasses1.ts, 0, 8))
+ 
+ 	public x: T;
+->x : Symbol(C.x, Decl(genericClasses1.ts, 0, 12))
++>x : Symbol(x, Decl(genericClasses1.ts, 0, 12))
+ >T : Symbol(T, Decl(genericClasses1.ts, 0, 8))
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ 
+ var y = v1.x; // should be 'string'
+ >y : Symbol(y, Decl(genericClasses1.ts, 6, 3))
+->v1.x : Symbol(C.x, Decl(genericClasses1.ts, 0, 12))
++>v1.x : Symbol(x, Decl(genericClasses1.ts, 0, 12))
+ >v1 : Symbol(v1, Decl(genericClasses1.ts, 4, 3))
+->x : Symbol(C.x, Decl(genericClasses1.ts, 0, 12))
++>x : Symbol(x, Decl(genericClasses1.ts, 0, 12))
+ 

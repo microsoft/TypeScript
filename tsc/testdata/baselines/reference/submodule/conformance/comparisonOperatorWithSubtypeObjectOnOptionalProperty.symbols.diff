@@ -1,0 +1,23 @@
+--- old.comparisonOperatorWithSubtypeObjectOnOptionalProperty.symbols
++++ new.comparisonOperatorWithSubtypeObjectOnOptionalProperty.symbols
+@@= skipped -4, +4 lines =@@
+ >I : Symbol(I, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 0, 0))
+ 
+     a: string;
+->a : Symbol(I.a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 0, 13))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 0, 13))
+ 
+     b?: number;
+->b : Symbol(I.b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 1, 14))
++>b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 1, 14))
+ }
+ 
+ interface J {
+ >J : Symbol(J, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 3, 1))
+ 
+     a: string;
+->a : Symbol(J.a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 5, 13))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts, 5, 13))
+ }
+ 
+ var a: I;

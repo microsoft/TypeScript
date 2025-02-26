@@ -1,0 +1,19 @@
+--- old.typePredicateAcceptingPartialOfRefinedType.symbols
++++ new.typePredicateAcceptingPartialOfRefinedType.symbols
+@@= skipped -6, +6 lines =@@
+ >Test : Symbol(Test, Decl(typePredicateAcceptingPartialOfRefinedType.ts, 0, 0))
+ 
+   testy?: string;
+->testy : Symbol(Test.testy, Decl(typePredicateAcceptingPartialOfRefinedType.ts, 2, 16))
++>testy : Symbol(testy, Decl(typePredicateAcceptingPartialOfRefinedType.ts, 2, 16))
+ }
+ 
+ interface Options {
+ >Options : Symbol(Options, Decl(typePredicateAcceptingPartialOfRefinedType.ts, 4, 1))
+ 
+   test: Test['testy'];
+->test : Symbol(Options.test, Decl(typePredicateAcceptingPartialOfRefinedType.ts, 6, 19))
++>test : Symbol(test, Decl(typePredicateAcceptingPartialOfRefinedType.ts, 6, 19))
+ >Test : Symbol(Test, Decl(typePredicateAcceptingPartialOfRefinedType.ts, 0, 0))
+ }
+ 

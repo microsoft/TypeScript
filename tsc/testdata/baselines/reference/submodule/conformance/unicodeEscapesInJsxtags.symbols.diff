@@ -1,0 +1,84 @@
+--- old.unicodeEscapesInJsxtags.symbols
++++ new.unicodeEscapesInJsxtags.symbols
+@@= skipped -4, +4 lines =@@
+ >React : Symbol(React, Decl(file.tsx, 0, 6))
+ 
+ declare global {
+->global : Symbol(global, Decl(file.tsx, 0, 31))
++>global : Symbol((Missing), Decl(file.tsx, 0, 31))
+ 
+     namespace JSX {
+->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1), Decl(file.tsx, 1, 16))
++>JSX : Symbol(JSX, Decl(file.tsx, 1, 16))
+ 
+         interface IntrinsicElements {
+->IntrinsicElements : Symbol(IntrinsicElements, Decl(react.d.ts, 2368, 78), Decl(file.tsx, 2, 19))
++>IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 2, 19))
+ 
+             "a-b": any;
+->"a-b" : Symbol(IntrinsicElements["a-b"], Decl(file.tsx, 3, 37))
++>"a-b" : Symbol("a-b", Decl(file.tsx, 3, 37))
+ 
+             "a-c": any;
+->"a-c" : Symbol(IntrinsicElements["a-c"], Decl(file.tsx, 4, 23))
++>"a-c" : Symbol("a-c", Decl(file.tsx, 4, 23))
+         }
+     }
+ }
+@@= skipped -20, +20 lines =@@
+ >Compa : Symbol(Compa, Decl(file.tsx, 9, 5))
+ >x : Symbol(x, Decl(file.tsx, 9, 15))
+ >x : Symbol(x, Decl(file.tsx, 9, 19))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+ >x : Symbol(x, Decl(file.tsx, 9, 15))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+ 
+ const x = { video: () => null }
+ >x : Symbol(x, Decl(file.tsx, 10, 5))
+@@= skipped -11, +9 lines =@@
+ // unicode escape sequence is not allowed in tag name or JSX attribute name.
+ // tag name:
+ ; <\u0061></a>
+->\u0061 : Symbol(JSX.IntrinsicElements.a, Decl(react.d.ts, 2370, 33))
+->a : Symbol(JSX.IntrinsicElements.a, Decl(react.d.ts, 2370, 33))
+-
+ ; <\u0061-b></a-b>
+->\u0061-b : Symbol(JSX.IntrinsicElements["a-b"], Decl(file.tsx, 3, 37))
+->a-b : Symbol(JSX.IntrinsicElements["a-b"], Decl(file.tsx, 3, 37))
+-
+ ; <a-\u0063></a-c>
+->a-\u0063 : Symbol(JSX.IntrinsicElements["a-c"], Decl(file.tsx, 4, 23))
+->a-c : Symbol(JSX.IntrinsicElements["a-c"], Decl(file.tsx, 4, 23))
+-
+ ; <Comp\u0061 x={12} />
+ >Comp\u0061 : Symbol(Compa, Decl(file.tsx, 9, 5))
+ >x : Symbol(x, Decl(file.tsx, 17, 13))
+@@= skipped -21, +12 lines =@@
+ >\u0076ideo : Symbol(video, Decl(file.tsx, 10, 11))
+ 
+ ; <\u{0061}></a>
+->\u{0061} : Symbol(JSX.IntrinsicElements.a, Decl(react.d.ts, 2370, 33))
+->a : Symbol(JSX.IntrinsicElements.a, Decl(react.d.ts, 2370, 33))
+-
+ ; <\u{0061}-b></a-b>
+->\u{0061}-b : Symbol(JSX.IntrinsicElements["a-b"], Decl(file.tsx, 3, 37))
+->a-b : Symbol(JSX.IntrinsicElements["a-b"], Decl(file.tsx, 3, 37))
+-
+ ; <a-\u{0063}></a-c>
+->a-\u{0063} : Symbol(JSX.IntrinsicElements["a-c"], Decl(file.tsx, 4, 23))
+->a-c : Symbol(JSX.IntrinsicElements["a-c"], Decl(file.tsx, 4, 23))
+-
+ ; <Comp\u{0061} x={12} />
+ >Comp\u{0061} : Symbol(Compa, Decl(file.tsx, 9, 5))
+ >x : Symbol(x, Decl(file.tsx, 22, 15))
+ 
+ // attribute name
+ ;<video data-\u0076ideo />
+->video : Symbol(JSX.IntrinsicElements.video, Decl(react.d.ts, 2481, 44))
+ >data-\u0076ideo : Symbol(data-\u0076ideo, Decl(file.tsx, 25, 7))
+ 
+ ;<video \u0073rc="" />
+->video : Symbol(JSX.IntrinsicElements.video, Decl(react.d.ts, 2481, 44))
+->\u0073rc : Symbol(\u0073rc, Decl(file.tsx, 26, 7))
++>\u0073rc : Symbol(src, Decl(file.tsx, 26, 7))
+ 

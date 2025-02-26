@@ -1,0 +1,16 @@
+--- old.genericCallWithFixedArguments.symbols
++++ new.genericCallWithFixedArguments.symbols
+@@= skipped -2, +2 lines =@@
+ === genericCallWithFixedArguments.ts ===
+ class A { foo() { } }
+ >A : Symbol(A, Decl(genericCallWithFixedArguments.ts, 0, 0))
+->foo : Symbol(A.foo, Decl(genericCallWithFixedArguments.ts, 0, 9))
++>foo : Symbol(foo, Decl(genericCallWithFixedArguments.ts, 0, 9))
+ 
+ class B { bar() { }} 
+ >B : Symbol(B, Decl(genericCallWithFixedArguments.ts, 0, 21))
+->bar : Symbol(B.bar, Decl(genericCallWithFixedArguments.ts, 1, 9))
++>bar : Symbol(bar, Decl(genericCallWithFixedArguments.ts, 1, 9))
+ 
+ function g<T, U>(x) { }
+ >g : Symbol(g, Decl(genericCallWithFixedArguments.ts, 1, 20))

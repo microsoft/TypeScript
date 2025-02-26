@@ -1,0 +1,11 @@
+--- old.contextualTypingOfObjectLiterals2.symbols
++++ new.contextualTypingOfObjectLiterals2.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(contextualTypingOfObjectLiterals2.ts, 0, 0))
+ 
+     foo: (t: string) => string;
+->foo : Symbol(Foo.foo, Decl(contextualTypingOfObjectLiterals2.ts, 0, 15))
++>foo : Symbol(foo, Decl(contextualTypingOfObjectLiterals2.ts, 0, 15))
+ >t : Symbol(t, Decl(contextualTypingOfObjectLiterals2.ts, 1, 10))
+ }
+ function f2(args: Foo) { }

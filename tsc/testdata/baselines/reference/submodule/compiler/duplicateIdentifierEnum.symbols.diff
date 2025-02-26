@@ -1,0 +1,56 @@
+--- old.duplicateIdentifierEnum.symbols
++++ new.duplicateIdentifierEnum.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(duplicateIdentifierEnum_A.ts, 0, 0))
+ 
+     bar
+->bar : Symbol(A.bar, Decl(duplicateIdentifierEnum_A.ts, 0, 8))
++>bar : Symbol(bar, Decl(duplicateIdentifierEnum_A.ts, 0, 8))
+ }
+ class A {
+ >A : Symbol(A, Decl(duplicateIdentifierEnum_A.ts, 2, 1))
+ 
+     foo: number;
+->foo : Symbol(A.foo, Decl(duplicateIdentifierEnum_A.ts, 3, 9))
++>foo : Symbol(foo, Decl(duplicateIdentifierEnum_A.ts, 3, 9))
+ }
+ 
+ interface B {
+ >B : Symbol(B, Decl(duplicateIdentifierEnum_A.ts, 5, 1))
+ 
+     foo: number;
+->foo : Symbol(B.foo, Decl(duplicateIdentifierEnum_A.ts, 7, 13))
++>foo : Symbol(foo, Decl(duplicateIdentifierEnum_A.ts, 7, 13))
+ }
+ const enum B {
+ >B : Symbol(B, Decl(duplicateIdentifierEnum_A.ts, 9, 1))
+ 
+     bar
+->bar : Symbol(B.bar, Decl(duplicateIdentifierEnum_A.ts, 10, 14))
++>bar : Symbol(bar, Decl(duplicateIdentifierEnum_A.ts, 10, 14))
+ }
+ 
+ const enum C {
+@@= skipped -36, +36 lines =@@
+ >D : Symbol(D, Decl(duplicateIdentifierEnum_A.ts, 19, 1))
+ 
+     bar
+->bar : Symbol(D.bar, Decl(duplicateIdentifierEnum_A.ts, 21, 8))
++>bar : Symbol(bar, Decl(duplicateIdentifierEnum_A.ts, 21, 8))
+ }
+ class E {
+ >E : Symbol(E, Decl(duplicateIdentifierEnum_A.ts, 23, 1))
+ 
+     foo: number;
+->foo : Symbol(E.foo, Decl(duplicateIdentifierEnum_A.ts, 24, 9))
++>foo : Symbol(foo, Decl(duplicateIdentifierEnum_A.ts, 24, 9))
+ }
+ // also make sure the error appears when trying to merge an enum in a separate file.
+ === duplicateIdentifierEnum_B.ts ===
+@@= skipped -19, +19 lines =@@
+ >E : Symbol(E, Decl(duplicateIdentifierEnum_B.ts, 2, 1))
+ 
+     bar
+->bar : Symbol(E.bar, Decl(duplicateIdentifierEnum_B.ts, 3, 8))
++>bar : Symbol(bar, Decl(duplicateIdentifierEnum_B.ts, 3, 8))
+ }

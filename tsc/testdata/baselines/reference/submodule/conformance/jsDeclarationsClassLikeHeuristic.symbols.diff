@@ -1,0 +1,10 @@
+--- old.jsDeclarationsClassLikeHeuristic.symbols
++++ new.jsDeclarationsClassLikeHeuristic.symbols
+@@= skipped -8, +8 lines =@@
+ >A : Symbol(A, Decl(index.js, 1, 3))
+ 
+ A.prototype.b = {};
+->A.prototype : Symbol(A.b, Decl(index.js, 2, 7))
+ >A : Symbol(A, Decl(index.js, 1, 3))
+->b : Symbol(A.b, Decl(index.js, 2, 7))
+ 

@@ -1,0 +1,39 @@
+--- old.superPropertyElementNoUnusedLexicalThisCapture.symbols
++++ new.superPropertyElementNoUnusedLexicalThisCapture.symbols
+@@= skipped -2, +2 lines =@@
+ === superPropertyElementNoUnusedLexicalThisCapture.ts ===
+ class A { x() {} }
+ >A : Symbol(A, Decl(superPropertyElementNoUnusedLexicalThisCapture.ts, 0, 0))
+->x : Symbol(A.x, Decl(superPropertyElementNoUnusedLexicalThisCapture.ts, 0, 9))
++>x : Symbol(x, Decl(superPropertyElementNoUnusedLexicalThisCapture.ts, 0, 9))
+ 
+ class B extends A {
+ >B : Symbol(B, Decl(superPropertyElementNoUnusedLexicalThisCapture.ts, 0, 18))
+@@= skipped -11, +11 lines =@@
+ >super : Symbol(A, Decl(superPropertyElementNoUnusedLexicalThisCapture.ts, 0, 0))
+     }
+     foo() {
+->foo : Symbol(B.foo, Decl(superPropertyElementNoUnusedLexicalThisCapture.ts, 5, 5))
++>foo : Symbol(foo, Decl(superPropertyElementNoUnusedLexicalThisCapture.ts, 5, 5))
+ 
+         return () => {
+             super.x;
+->super.x : Symbol(A.x, Decl(superPropertyElementNoUnusedLexicalThisCapture.ts, 0, 9))
++>super.x : Symbol(x, Decl(superPropertyElementNoUnusedLexicalThisCapture.ts, 0, 9))
+ >super : Symbol(A, Decl(superPropertyElementNoUnusedLexicalThisCapture.ts, 0, 0))
+->x : Symbol(A.x, Decl(superPropertyElementNoUnusedLexicalThisCapture.ts, 0, 9))
++>x : Symbol(x, Decl(superPropertyElementNoUnusedLexicalThisCapture.ts, 0, 9))
+         }
+     }
+     bar() {
+->bar : Symbol(B.bar, Decl(superPropertyElementNoUnusedLexicalThisCapture.ts, 10, 5))
++>bar : Symbol(bar, Decl(superPropertyElementNoUnusedLexicalThisCapture.ts, 10, 5))
+ 
+         return () => {
+             super["x"];
+ >super : Symbol(A, Decl(superPropertyElementNoUnusedLexicalThisCapture.ts, 0, 0))
+->"x" : Symbol(A.x, Decl(superPropertyElementNoUnusedLexicalThisCapture.ts, 0, 9))
++>"x" : Symbol(x, Decl(superPropertyElementNoUnusedLexicalThisCapture.ts, 0, 9))
+         }
+     }
+ }

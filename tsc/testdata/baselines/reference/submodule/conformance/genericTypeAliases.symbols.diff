@@ -1,0 +1,51 @@
+--- old.genericTypeAliases.symbols
++++ new.genericTypeAliases.symbols
+@@= skipped -131, +131 lines =@@
+ >B : Symbol(B, Decl(genericTypeAliases.ts, 41, 15))
+ 
+     a: A;
+->a : Symbol(AB.a, Decl(genericTypeAliases.ts, 41, 20))
++>a : Symbol(a, Decl(genericTypeAliases.ts, 41, 20))
+ >A : Symbol(A, Decl(genericTypeAliases.ts, 41, 13))
+ 
+     b: B;
+->b : Symbol(AB.b, Decl(genericTypeAliases.ts, 42, 9))
++>b : Symbol(b, Decl(genericTypeAliases.ts, 42, 9))
+ >B : Symbol(B, Decl(genericTypeAliases.ts, 41, 15))
+ }
+ 
+@@= skipped -22, +22 lines =@@
+ >T : Symbol(T, Decl(genericTypeAliases.ts, 48, 21))
+ 
+     tag: string;
+->tag : Symbol(TaggedPair.tag, Decl(genericTypeAliases.ts, 48, 41))
++>tag : Symbol(tag, Decl(genericTypeAliases.ts, 48, 41))
+ }
+ 
+ var p: TaggedPair<number>;
+@@= skipped -8, +8 lines =@@
+ >TaggedPair : Symbol(TaggedPair, Decl(genericTypeAliases.ts, 46, 24))
+ 
+ p.a = 1;
+->p.a : Symbol(AB.a, Decl(genericTypeAliases.ts, 41, 20))
++>p.a : Symbol(a, Decl(genericTypeAliases.ts, 41, 20))
+ >p : Symbol(p, Decl(genericTypeAliases.ts, 52, 3))
+->a : Symbol(AB.a, Decl(genericTypeAliases.ts, 41, 20))
++>a : Symbol(a, Decl(genericTypeAliases.ts, 41, 20))
+ 
+ p.b = 2;
+->p.b : Symbol(AB.b, Decl(genericTypeAliases.ts, 42, 9))
++>p.b : Symbol(b, Decl(genericTypeAliases.ts, 42, 9))
+ >p : Symbol(p, Decl(genericTypeAliases.ts, 52, 3))
+->b : Symbol(AB.b, Decl(genericTypeAliases.ts, 42, 9))
++>b : Symbol(b, Decl(genericTypeAliases.ts, 42, 9))
+ 
+ p.tag = "test";
+->p.tag : Symbol(TaggedPair.tag, Decl(genericTypeAliases.ts, 48, 41))
++>p.tag : Symbol(tag, Decl(genericTypeAliases.ts, 48, 41))
+ >p : Symbol(p, Decl(genericTypeAliases.ts, 52, 3))
+->tag : Symbol(TaggedPair.tag, Decl(genericTypeAliases.ts, 48, 41))
++>tag : Symbol(tag, Decl(genericTypeAliases.ts, 48, 41))
+ 
+ function f<A>() {
+ >f : Symbol(f, Decl(genericTypeAliases.ts, 55, 15))

@@ -1,0 +1,20 @@
+--- old.computedPropertyNames7_ES5.symbols
++++ new.computedPropertyNames7_ES5.symbols
+@@= skipped -4, +4 lines =@@
+ >E : Symbol(E, Decl(computedPropertyNames7_ES5.ts, 0, 0))
+ 
+     member
+->member : Symbol(E.member, Decl(computedPropertyNames7_ES5.ts, 0, 8))
++>member : Symbol(member, Decl(computedPropertyNames7_ES5.ts, 0, 8))
+ }
+ var v = {
+ >v : Symbol(v, Decl(computedPropertyNames7_ES5.ts, 3, 3))
+ 
+     [E.member]: 0
+ >[E.member] : Symbol([E.member], Decl(computedPropertyNames7_ES5.ts, 3, 9))
+->E.member : Symbol(E.member, Decl(computedPropertyNames7_ES5.ts, 0, 8))
++>E.member : Symbol(member, Decl(computedPropertyNames7_ES5.ts, 0, 8))
+ >E : Symbol(E, Decl(computedPropertyNames7_ES5.ts, 0, 0))
+->member : Symbol(E.member, Decl(computedPropertyNames7_ES5.ts, 0, 8))
++>member : Symbol(member, Decl(computedPropertyNames7_ES5.ts, 0, 8))
+ }

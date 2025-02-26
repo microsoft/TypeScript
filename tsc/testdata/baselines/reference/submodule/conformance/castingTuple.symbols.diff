@@ -1,0 +1,71 @@
+--- old.castingTuple.symbols
++++ new.castingTuple.symbols
+@@= skipped -5, +5 lines =@@
+ 
+ class A { a = 10; }
+ >A : Symbol(A, Decl(castingTuple.ts, 0, 15))
+->a : Symbol(A.a, Decl(castingTuple.ts, 1, 9))
++>a : Symbol(a, Decl(castingTuple.ts, 1, 9))
+ 
+ class C implements I { c };
+ >C : Symbol(C, Decl(castingTuple.ts, 1, 19))
+ >I : Symbol(I, Decl(castingTuple.ts, 0, 0))
+->c : Symbol(C.c, Decl(castingTuple.ts, 2, 22))
++>c : Symbol(c, Decl(castingTuple.ts, 2, 22))
+ 
+ class D implements I { d };
+ >D : Symbol(D, Decl(castingTuple.ts, 2, 27))
+ >I : Symbol(I, Decl(castingTuple.ts, 0, 0))
+->d : Symbol(D.d, Decl(castingTuple.ts, 3, 22))
++>d : Symbol(d, Decl(castingTuple.ts, 3, 22))
+ 
+ class E extends A { e };
+ >E : Symbol(E, Decl(castingTuple.ts, 3, 27))
+ >A : Symbol(A, Decl(castingTuple.ts, 0, 15))
+->e : Symbol(E.e, Decl(castingTuple.ts, 4, 19))
++>e : Symbol(e, Decl(castingTuple.ts, 4, 19))
+ 
+ class F extends A { f };
+ >F : Symbol(F, Decl(castingTuple.ts, 4, 24))
+ >A : Symbol(A, Decl(castingTuple.ts, 0, 15))
+->f : Symbol(F.f, Decl(castingTuple.ts, 5, 19))
++>f : Symbol(f, Decl(castingTuple.ts, 5, 19))
+ 
+ enum E1 { one }
+ >E1 : Symbol(E1, Decl(castingTuple.ts, 5, 24))
+->one : Symbol(E1.one, Decl(castingTuple.ts, 6, 9))
++>one : Symbol(one, Decl(castingTuple.ts, 6, 9))
+ 
+ enum E2 { one }
+ >E2 : Symbol(E2, Decl(castingTuple.ts, 6, 15))
+->one : Symbol(E2.one, Decl(castingTuple.ts, 7, 9))
++>one : Symbol(one, Decl(castingTuple.ts, 7, 9))
+ 
+ // no error
+ var numStrTuple: [number, string] = [5, "foo"];
+@@= skipped -73, +73 lines =@@
+ var eleFromCDA1 = classCDATuple[2]; // A
+ >eleFromCDA1 : Symbol(eleFromCDA1, Decl(castingTuple.ts, 18, 3))
+ >classCDATuple : Symbol(classCDATuple, Decl(castingTuple.ts, 17, 3))
+->2 : Symbol(2)
++>2 : Symbol("2")
+ 
+ var eleFromCDA2 = classCDATuple[5]; // C | D | A
+ >eleFromCDA2 : Symbol(eleFromCDA2, Decl(castingTuple.ts, 19, 3))
+@@= skipped -10, +10 lines =@@
+ >t10 : Symbol(t10, Decl(castingTuple.ts, 20, 3))
+ >E1 : Symbol(E1, Decl(castingTuple.ts, 5, 24))
+ >E2 : Symbol(E2, Decl(castingTuple.ts, 6, 15))
+->E1.one : Symbol(E1.one, Decl(castingTuple.ts, 6, 9))
++>E1.one : Symbol(one, Decl(castingTuple.ts, 6, 9))
+ >E1 : Symbol(E1, Decl(castingTuple.ts, 5, 24))
+->one : Symbol(E1.one, Decl(castingTuple.ts, 6, 9))
+->E2.one : Symbol(E2.one, Decl(castingTuple.ts, 7, 9))
++>one : Symbol(one, Decl(castingTuple.ts, 6, 9))
++>E2.one : Symbol(one, Decl(castingTuple.ts, 7, 9))
+ >E2 : Symbol(E2, Decl(castingTuple.ts, 6, 15))
+->one : Symbol(E2.one, Decl(castingTuple.ts, 7, 9))
++>one : Symbol(one, Decl(castingTuple.ts, 7, 9))
+ 
+ var t11 = <[number, number]>t10;
+ >t11 : Symbol(t11, Decl(castingTuple.ts, 21, 3))

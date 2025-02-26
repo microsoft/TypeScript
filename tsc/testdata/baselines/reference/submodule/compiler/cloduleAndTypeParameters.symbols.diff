@@ -1,0 +1,20 @@
+--- old.cloduleAndTypeParameters.symbols
++++ new.cloduleAndTypeParameters.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(cloduleAndTypeParameters.ts, 0, 0), Decl(cloduleAndTypeParameters.ts, 3, 1))
+ >T : Symbol(T, Decl(cloduleAndTypeParameters.ts, 0, 10))
+ >Foo : Symbol(Foo, Decl(cloduleAndTypeParameters.ts, 0, 0), Decl(cloduleAndTypeParameters.ts, 3, 1))
+->Bar : Symbol(Foo.Bar, Decl(cloduleAndTypeParameters.ts, 5, 12))
++>Bar : Symbol(Bar, Decl(cloduleAndTypeParameters.ts, 5, 12))
+ 
+   constructor() {
+   }
+@@= skipped -13, +13 lines =@@
+ >Bar : Symbol(Bar, Decl(cloduleAndTypeParameters.ts, 5, 12))
+ 
+     bar(): void;
+->bar : Symbol(Bar.bar, Decl(cloduleAndTypeParameters.ts, 6, 24))
++>bar : Symbol(bar, Decl(cloduleAndTypeParameters.ts, 6, 24))
+   }
+ 
+   export class Baz {

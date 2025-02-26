@@ -1,0 +1,84 @@
+--- old.duplicatePropertyNames.symbols
++++ new.duplicatePropertyNames.symbols
+@@= skipped -6, +6 lines =@@
+ >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 0, 0))
+ 
+     foo: string;
+->foo : Symbol(Number.foo, Decl(duplicatePropertyNames.ts, 2, 18), Decl(duplicatePropertyNames.ts, 3, 16))
++>foo : Symbol(foo, Decl(duplicatePropertyNames.ts, 2, 18), Decl(duplicatePropertyNames.ts, 3, 16))
+ 
+     foo: string;
+->foo : Symbol(Number.foo, Decl(duplicatePropertyNames.ts, 2, 18), Decl(duplicatePropertyNames.ts, 3, 16))
++>foo : Symbol(foo, Decl(duplicatePropertyNames.ts, 2, 18), Decl(duplicatePropertyNames.ts, 3, 16))
+ }
+ 
+ interface String {
+ >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 5, 1))
+ 
+     foo(): string;
+->foo : Symbol(String.foo, Decl(duplicatePropertyNames.ts, 7, 18), Decl(duplicatePropertyNames.ts, 8, 18))
++>foo : Symbol(foo, Decl(duplicatePropertyNames.ts, 7, 18), Decl(duplicatePropertyNames.ts, 8, 18))
+ 
+     foo(): string;
+->foo : Symbol(String.foo, Decl(duplicatePropertyNames.ts, 7, 18), Decl(duplicatePropertyNames.ts, 8, 18))
++>foo : Symbol(foo, Decl(duplicatePropertyNames.ts, 7, 18), Decl(duplicatePropertyNames.ts, 8, 18))
+ }
+ 
+ interface Array<T> {
+@@= skipped -21, +21 lines =@@
+ >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 12, 16))
+ 
+     foo: T;
+->foo : Symbol(Array.foo, Decl(duplicatePropertyNames.ts, 12, 20), Decl(duplicatePropertyNames.ts, 13, 11))
++>foo : Symbol(foo, Decl(duplicatePropertyNames.ts, 12, 20), Decl(duplicatePropertyNames.ts, 13, 11))
+ >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 12, 16))
+ 
+     foo: T;
+->foo : Symbol(Array.foo, Decl(duplicatePropertyNames.ts, 12, 20), Decl(duplicatePropertyNames.ts, 13, 11))
++>foo : Symbol(foo, Decl(duplicatePropertyNames.ts, 12, 20), Decl(duplicatePropertyNames.ts, 13, 11))
+ >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 12, 16))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >C : Symbol(C, Decl(duplicatePropertyNames.ts, 15, 1))
+ 
+     foo: string;
+->foo : Symbol(C.foo, Decl(duplicatePropertyNames.ts, 17, 9), Decl(duplicatePropertyNames.ts, 18, 16))
++>foo : Symbol(foo, Decl(duplicatePropertyNames.ts, 17, 9), Decl(duplicatePropertyNames.ts, 18, 16))
+ 
+     foo: string;
+->foo : Symbol(C.foo, Decl(duplicatePropertyNames.ts, 17, 9), Decl(duplicatePropertyNames.ts, 18, 16))
++>foo : Symbol(foo, Decl(duplicatePropertyNames.ts, 17, 9), Decl(duplicatePropertyNames.ts, 18, 16))
+ 
+     bar(x) { }
+->bar : Symbol(C.bar, Decl(duplicatePropertyNames.ts, 19, 16), Decl(duplicatePropertyNames.ts, 21, 14))
++>bar : Symbol(bar, Decl(duplicatePropertyNames.ts, 19, 16), Decl(duplicatePropertyNames.ts, 21, 14))
+ >x : Symbol(x, Decl(duplicatePropertyNames.ts, 21, 8))
+ 
+     bar(x) { }
+->bar : Symbol(C.bar, Decl(duplicatePropertyNames.ts, 19, 16), Decl(duplicatePropertyNames.ts, 21, 14))
++>bar : Symbol(bar, Decl(duplicatePropertyNames.ts, 19, 16), Decl(duplicatePropertyNames.ts, 21, 14))
+ >x : Symbol(x, Decl(duplicatePropertyNames.ts, 22, 8))
+ 
+     baz = () => { }
+->baz : Symbol(C.baz, Decl(duplicatePropertyNames.ts, 22, 14), Decl(duplicatePropertyNames.ts, 24, 19))
++>baz : Symbol(baz, Decl(duplicatePropertyNames.ts, 22, 14), Decl(duplicatePropertyNames.ts, 24, 19))
+ 
+     baz = () => { }
+->baz : Symbol(C.baz, Decl(duplicatePropertyNames.ts, 22, 14), Decl(duplicatePropertyNames.ts, 24, 19))
++>baz : Symbol(baz, Decl(duplicatePropertyNames.ts, 22, 14), Decl(duplicatePropertyNames.ts, 24, 19))
+ }
+ 
+ interface I {
+ >I : Symbol(I, Decl(duplicatePropertyNames.ts, 26, 1))
+ 
+     foo: string;
+->foo : Symbol(I.foo, Decl(duplicatePropertyNames.ts, 28, 13), Decl(duplicatePropertyNames.ts, 29, 16))
++>foo : Symbol(foo, Decl(duplicatePropertyNames.ts, 28, 13), Decl(duplicatePropertyNames.ts, 29, 16))
+ 
+     foo: string;
+->foo : Symbol(I.foo, Decl(duplicatePropertyNames.ts, 28, 13), Decl(duplicatePropertyNames.ts, 29, 16))
++>foo : Symbol(foo, Decl(duplicatePropertyNames.ts, 28, 13), Decl(duplicatePropertyNames.ts, 29, 16))
+ }
+ 
+ var a: {

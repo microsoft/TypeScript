@@ -1,0 +1,47 @@
+--- old.isolatedDeclarationErrorsObjects.symbols
++++ new.isolatedDeclarationErrorsObjects.symbols
+@@= skipped -15, +15 lines =@@
+ 
+     a: Math.random(),
+ >a : Symbol(a, Decl(isolatedDeclarationErrorsObjects.ts, 5, 19))
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ }
+ export const V = 1;
+ >V : Symbol(V, Decl(isolatedDeclarationErrorsObjects.ts, 8, 12))
+@@= skipped -15, +15 lines =@@
+ 
+         b: Math.random(),
+ >b : Symbol(b, Decl(isolatedDeclarationErrorsObjects.ts, 10, 8))
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ 
+     },
+     c: {
+@@= skipped -116, +116 lines =@@
+ >E : Symbol(E, Decl(isolatedDeclarationErrorsObjects.ts, 57, 23))
+ 
+     V = 10,
+->V : Symbol(E.V, Decl(isolatedDeclarationErrorsObjects.ts, 58, 8))
++>V : Symbol(V, Decl(isolatedDeclarationErrorsObjects.ts, 58, 8))
+ }
+ export const oWithComputedProperties = {
+ >oWithComputedProperties : Symbol(oWithComputedProperties, Decl(isolatedDeclarationErrorsObjects.ts, 61, 12))
+@@= skipped -22, +22 lines =@@
+ 
+     [E.V]: 1,
+ >[E.V] : Symbol([E.V], Decl(isolatedDeclarationErrorsObjects.ts, 65, 11))
+->E.V : Symbol(E.V, Decl(isolatedDeclarationErrorsObjects.ts, 58, 8))
++>E.V : Symbol(V, Decl(isolatedDeclarationErrorsObjects.ts, 58, 8))
+ >E : Symbol(E, Decl(isolatedDeclarationErrorsObjects.ts, 57, 23))
+->V : Symbol(E.V, Decl(isolatedDeclarationErrorsObjects.ts, 58, 8))
++>V : Symbol(V, Decl(isolatedDeclarationErrorsObjects.ts, 58, 8))
+ 
+     [str]: 0,
+ >[str] : Symbol([str], Decl(isolatedDeclarationErrorsObjects.ts, 66, 13))

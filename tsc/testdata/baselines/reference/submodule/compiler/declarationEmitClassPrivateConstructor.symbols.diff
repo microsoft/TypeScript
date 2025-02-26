@@ -1,0 +1,32 @@
+--- old.declarationEmitClassPrivateConstructor.symbols
++++ new.declarationEmitClassPrivateConstructor.symbols
+@@= skipped -16, +16 lines =@@
+ >ExportedClass2 : Symbol(ExportedClass2, Decl(declarationEmitClassPrivateConstructor.ts, 5, 1))
+ 
+     private constructor(private data: PrivateInterface) { }
+->data : Symbol(ExportedClass2.data, Decl(declarationEmitClassPrivateConstructor.ts, 8, 24))
++>data : Symbol(data, Decl(declarationEmitClassPrivateConstructor.ts, 8, 24))
+ >PrivateInterface : Symbol(PrivateInterface, Decl(declarationEmitClassPrivateConstructor.ts, 0, 0))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >ExportedClass3 : Symbol(ExportedClass3, Decl(declarationEmitClassPrivateConstructor.ts, 9, 1))
+ 
+     private constructor(private data: PrivateInterface, private n: number) { }
+->data : Symbol(ExportedClass3.data, Decl(declarationEmitClassPrivateConstructor.ts, 12, 24))
++>data : Symbol(data, Decl(declarationEmitClassPrivateConstructor.ts, 12, 24))
+ >PrivateInterface : Symbol(PrivateInterface, Decl(declarationEmitClassPrivateConstructor.ts, 0, 0))
+->n : Symbol(ExportedClass3.n, Decl(declarationEmitClassPrivateConstructor.ts, 12, 55))
++>n : Symbol(n, Decl(declarationEmitClassPrivateConstructor.ts, 12, 55))
+ }
+ 
+ export class ExportedClass4 {
+ >ExportedClass4 : Symbol(ExportedClass4, Decl(declarationEmitClassPrivateConstructor.ts, 13, 1))
+ 
+     private constructor(private data: PrivateInterface, public n:number) { }
+->data : Symbol(ExportedClass4.data, Decl(declarationEmitClassPrivateConstructor.ts, 16, 24))
++>data : Symbol(data, Decl(declarationEmitClassPrivateConstructor.ts, 16, 24))
+ >PrivateInterface : Symbol(PrivateInterface, Decl(declarationEmitClassPrivateConstructor.ts, 0, 0))
+->n : Symbol(ExportedClass4.n, Decl(declarationEmitClassPrivateConstructor.ts, 16, 55))
++>n : Symbol(n, Decl(declarationEmitClassPrivateConstructor.ts, 16, 55))
+ }

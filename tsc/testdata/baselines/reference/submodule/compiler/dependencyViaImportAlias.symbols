@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/dependencyViaImportAlias.ts] ////
+
+=== B.ts ===
+import a = require('A');
+>a : Symbol(a, Decl(B.ts, 0, 0))
+
+import A = a.A;
+>A : Symbol(A, Decl(B.ts, 0, 24))
+>a : Symbol(a, Decl(B.ts, 0, 0))
+>A : Symbol(unknown)
+
+export = A;
+>A : Symbol(A, Decl(B.ts, 0, 24))
+

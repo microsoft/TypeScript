@@ -1,0 +1,85 @@
+--- old.genericFunctionsAndConditionalInference.symbols
++++ new.genericFunctionsAndConditionalInference.symbols
+@@= skipped -48, +48 lines =@@
+ >A : Symbol(A, Decl(genericFunctionsAndConditionalInference.ts, 11, 18))
+ 
+     left: A
+->left : Symbol(Targets.left, Decl(genericFunctionsAndConditionalInference.ts, 11, 22))
++>left : Symbol(left, Decl(genericFunctionsAndConditionalInference.ts, 11, 22))
+ >A : Symbol(A, Decl(genericFunctionsAndConditionalInference.ts, 11, 18))
+ 
+     right: A
+->right : Symbol(Targets.right, Decl(genericFunctionsAndConditionalInference.ts, 12, 11))
++>right : Symbol(right, Decl(genericFunctionsAndConditionalInference.ts, 12, 11))
+ >A : Symbol(A, Decl(genericFunctionsAndConditionalInference.ts, 11, 18))
+ }
+ type Target = keyof Targets<any>
+@@= skipped -36, +36 lines =@@
+ >Target : Symbol(Target, Decl(genericFunctionsAndConditionalInference.ts, 14, 1))
+ 
+     _f: F
+->_f : Symbol(Ops._f, Decl(genericFunctionsAndConditionalInference.ts, 20, 33))
++>_f : Symbol(_f, Decl(genericFunctionsAndConditionalInference.ts, 20, 33))
+ >F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 20, 14))
+ 
+     str: Result<F, string>
+->str : Symbol(Ops.str, Decl(genericFunctionsAndConditionalInference.ts, 21, 9))
++>str : Symbol(str, Decl(genericFunctionsAndConditionalInference.ts, 21, 9))
+ >Result : Symbol(Result, Decl(genericFunctionsAndConditionalInference.ts, 15, 32))
+ >F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 20, 14))
+ 
+     num: Result<F, number>
+->num : Symbol(Ops.num, Decl(genericFunctionsAndConditionalInference.ts, 22, 26))
++>num : Symbol(num, Decl(genericFunctionsAndConditionalInference.ts, 22, 26))
+ >Result : Symbol(Result, Decl(genericFunctionsAndConditionalInference.ts, 15, 32))
+ >F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 20, 14))
+ 
+     lr<I, O>(a: Result<F, I>, o: Result<F, O>): Result<F, LR<F, I, O>>
+->lr : Symbol(Ops.lr, Decl(genericFunctionsAndConditionalInference.ts, 23, 26))
++>lr : Symbol(lr, Decl(genericFunctionsAndConditionalInference.ts, 23, 26))
+ >I : Symbol(I, Decl(genericFunctionsAndConditionalInference.ts, 24, 7))
+ >O : Symbol(O, Decl(genericFunctionsAndConditionalInference.ts, 24, 9))
+ >a : Symbol(a, Decl(genericFunctionsAndConditionalInference.ts, 24, 13))
+@@= skipped -33, +33 lines =@@
+ >O : Symbol(O, Decl(genericFunctionsAndConditionalInference.ts, 24, 9))
+ 
+     dict: <P>(p: {[k in keyof P]: Result<F, P[k]>}) => Result<F, P>
+->dict : Symbol(Ops.dict, Decl(genericFunctionsAndConditionalInference.ts, 24, 70))
++>dict : Symbol(dict, Decl(genericFunctionsAndConditionalInference.ts, 24, 70))
+ >P : Symbol(P, Decl(genericFunctionsAndConditionalInference.ts, 25, 11))
+ >p : Symbol(p, Decl(genericFunctionsAndConditionalInference.ts, 25, 14))
+ >k : Symbol(k, Decl(genericFunctionsAndConditionalInference.ts, 25, 19))
+@@= skipped -29, +29 lines =@@
+ >Ops : Symbol(Ops, Decl(genericFunctionsAndConditionalInference.ts, 18, 62))
+ >F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 30, 12))
+ >lr : Symbol(lr, Decl(genericFunctionsAndConditionalInference.ts, 30, 47))
+->at.lr : Symbol(Ops.lr, Decl(genericFunctionsAndConditionalInference.ts, 23, 26))
++>at.lr : Symbol(lr, Decl(genericFunctionsAndConditionalInference.ts, 23, 26))
+ >at : Symbol(at, Decl(genericFunctionsAndConditionalInference.ts, 30, 30))
+->lr : Symbol(Ops.lr, Decl(genericFunctionsAndConditionalInference.ts, 23, 26))
+->at.str : Symbol(Ops.str, Decl(genericFunctionsAndConditionalInference.ts, 21, 9))
++>lr : Symbol(lr, Decl(genericFunctionsAndConditionalInference.ts, 23, 26))
++>at.str : Symbol(str, Decl(genericFunctionsAndConditionalInference.ts, 21, 9))
+ >at : Symbol(at, Decl(genericFunctionsAndConditionalInference.ts, 30, 30))
+->str : Symbol(Ops.str, Decl(genericFunctionsAndConditionalInference.ts, 21, 9))
+->at.num : Symbol(Ops.num, Decl(genericFunctionsAndConditionalInference.ts, 22, 26))
++>str : Symbol(str, Decl(genericFunctionsAndConditionalInference.ts, 21, 9))
++>at.num : Symbol(num, Decl(genericFunctionsAndConditionalInference.ts, 22, 26))
+ >at : Symbol(at, Decl(genericFunctionsAndConditionalInference.ts, 30, 30))
+->num : Symbol(Ops.num, Decl(genericFunctionsAndConditionalInference.ts, 22, 26))
++>num : Symbol(num, Decl(genericFunctionsAndConditionalInference.ts, 22, 26))
+ 
+ const orphaned = <F extends Target>(at: Ops<F>) => at.dict(ok(at))
+ >orphaned : Symbol(orphaned, Decl(genericFunctionsAndConditionalInference.ts, 31, 5))
+@@= skipped -17, +17 lines =@@
+ >at : Symbol(at, Decl(genericFunctionsAndConditionalInference.ts, 31, 36))
+ >Ops : Symbol(Ops, Decl(genericFunctionsAndConditionalInference.ts, 18, 62))
+ >F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 31, 18))
+->at.dict : Symbol(Ops.dict, Decl(genericFunctionsAndConditionalInference.ts, 24, 70))
++>at.dict : Symbol(dict, Decl(genericFunctionsAndConditionalInference.ts, 24, 70))
+ >at : Symbol(at, Decl(genericFunctionsAndConditionalInference.ts, 31, 36))
+->dict : Symbol(Ops.dict, Decl(genericFunctionsAndConditionalInference.ts, 24, 70))
++>dict : Symbol(dict, Decl(genericFunctionsAndConditionalInference.ts, 24, 70))
+ >ok : Symbol(ok, Decl(genericFunctionsAndConditionalInference.ts, 30, 5))
+ >at : Symbol(at, Decl(genericFunctionsAndConditionalInference.ts, 31, 36))
+ 

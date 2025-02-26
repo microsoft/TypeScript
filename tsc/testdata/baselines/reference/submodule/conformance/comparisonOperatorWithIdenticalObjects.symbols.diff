@@ -1,0 +1,90 @@
+--- old.comparisonOperatorWithIdenticalObjects.symbols
++++ new.comparisonOperatorWithIdenticalObjects.symbols
+@@= skipped -4, +4 lines =@@
+ >A1 : Symbol(A1, Decl(comparisonOperatorWithIdenticalObjects.ts, 0, 0))
+ 
+     public a: string;
+->a : Symbol(A1.a, Decl(comparisonOperatorWithIdenticalObjects.ts, 0, 10))
++>a : Symbol(a, Decl(comparisonOperatorWithIdenticalObjects.ts, 0, 10))
+ 
+     public b: number;
+->b : Symbol(A1.b, Decl(comparisonOperatorWithIdenticalObjects.ts, 1, 21))
++>b : Symbol(b, Decl(comparisonOperatorWithIdenticalObjects.ts, 1, 21))
+ 
+     public c: boolean;
+->c : Symbol(A1.c, Decl(comparisonOperatorWithIdenticalObjects.ts, 2, 21))
++>c : Symbol(c, Decl(comparisonOperatorWithIdenticalObjects.ts, 2, 21))
+ 
+     public d: any;
+->d : Symbol(A1.d, Decl(comparisonOperatorWithIdenticalObjects.ts, 3, 22))
++>d : Symbol(d, Decl(comparisonOperatorWithIdenticalObjects.ts, 3, 22))
+ 
+     public e: Object;
+->e : Symbol(A1.e, Decl(comparisonOperatorWithIdenticalObjects.ts, 4, 18))
++>e : Symbol(e, Decl(comparisonOperatorWithIdenticalObjects.ts, 4, 18))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     public fn(a: string): string {
+->fn : Symbol(A1.fn, Decl(comparisonOperatorWithIdenticalObjects.ts, 5, 21))
++>fn : Symbol(fn, Decl(comparisonOperatorWithIdenticalObjects.ts, 5, 21))
+ >a : Symbol(a, Decl(comparisonOperatorWithIdenticalObjects.ts, 6, 14))
+ 
+         return null;
+@@= skipped -26, +26 lines =@@
+ >B1 : Symbol(B1, Decl(comparisonOperatorWithIdenticalObjects.ts, 9, 1))
+ 
+     public a: string;
+->a : Symbol(B1.a, Decl(comparisonOperatorWithIdenticalObjects.ts, 10, 10))
++>a : Symbol(a, Decl(comparisonOperatorWithIdenticalObjects.ts, 10, 10))
+ 
+     public b: number;
+->b : Symbol(B1.b, Decl(comparisonOperatorWithIdenticalObjects.ts, 11, 21))
++>b : Symbol(b, Decl(comparisonOperatorWithIdenticalObjects.ts, 11, 21))
+ 
+     public c: boolean;
+->c : Symbol(B1.c, Decl(comparisonOperatorWithIdenticalObjects.ts, 12, 21))
++>c : Symbol(c, Decl(comparisonOperatorWithIdenticalObjects.ts, 12, 21))
+ 
+     public d: any;
+->d : Symbol(B1.d, Decl(comparisonOperatorWithIdenticalObjects.ts, 13, 22))
++>d : Symbol(d, Decl(comparisonOperatorWithIdenticalObjects.ts, 13, 22))
+ 
+     public e: Object;
+->e : Symbol(B1.e, Decl(comparisonOperatorWithIdenticalObjects.ts, 14, 18))
++>e : Symbol(e, Decl(comparisonOperatorWithIdenticalObjects.ts, 14, 18))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     public fn(b: string): string {
+->fn : Symbol(B1.fn, Decl(comparisonOperatorWithIdenticalObjects.ts, 15, 21))
++>fn : Symbol(fn, Decl(comparisonOperatorWithIdenticalObjects.ts, 15, 21))
+ >b : Symbol(b, Decl(comparisonOperatorWithIdenticalObjects.ts, 16, 14))
+ 
+         return null;
+@@= skipped -27, +27 lines =@@
+ >Base : Symbol(Base, Decl(comparisonOperatorWithIdenticalObjects.ts, 19, 1))
+ 
+     private a: string;
+->a : Symbol(Base.a, Decl(comparisonOperatorWithIdenticalObjects.ts, 21, 12))
++>a : Symbol(a, Decl(comparisonOperatorWithIdenticalObjects.ts, 21, 12))
+ 
+     private fn(b: string): string {
+->fn : Symbol(Base.fn, Decl(comparisonOperatorWithIdenticalObjects.ts, 22, 22))
++>fn : Symbol(fn, Decl(comparisonOperatorWithIdenticalObjects.ts, 22, 22))
+ >b : Symbol(b, Decl(comparisonOperatorWithIdenticalObjects.ts, 23, 15))
+ 
+         return null;
+@@= skipped -19, +19 lines =@@
+ 
+ interface A3 { f(a: number): string; }
+ >A3 : Symbol(A3, Decl(comparisonOperatorWithIdenticalObjects.ts, 28, 25))
+->f : Symbol(A3.f, Decl(comparisonOperatorWithIdenticalObjects.ts, 30, 14))
++>f : Symbol(f, Decl(comparisonOperatorWithIdenticalObjects.ts, 30, 14))
+ >a : Symbol(a, Decl(comparisonOperatorWithIdenticalObjects.ts, 30, 17))
+ 
+ interface B3 { f(a: number): string; }
+ >B3 : Symbol(B3, Decl(comparisonOperatorWithIdenticalObjects.ts, 30, 38))
+->f : Symbol(B3.f, Decl(comparisonOperatorWithIdenticalObjects.ts, 31, 14))
++>f : Symbol(f, Decl(comparisonOperatorWithIdenticalObjects.ts, 31, 14))
+ >a : Symbol(a, Decl(comparisonOperatorWithIdenticalObjects.ts, 31, 17))
+ 
+ interface A4 { new (a: string): A1; }

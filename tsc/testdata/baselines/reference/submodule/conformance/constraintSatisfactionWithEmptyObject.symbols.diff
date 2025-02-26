@@ -1,0 +1,38 @@
+--- old.constraintSatisfactionWithEmptyObject.symbols
++++ new.constraintSatisfactionWithEmptyObject.symbols
+@@= skipped -27, +27 lines =@@
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     constructor(public x: T) { }
+->x : Symbol(C.x, Decl(constraintSatisfactionWithEmptyObject.ts, 9, 16))
++>x : Symbol(x, Decl(constraintSatisfactionWithEmptyObject.ts, 9, 16))
+ >T : Symbol(T, Decl(constraintSatisfactionWithEmptyObject.ts, 8, 8))
+ }
+ 
+@@= skipped -14, +14 lines =@@
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     x: T;
+->x : Symbol(I.x, Decl(constraintSatisfactionWithEmptyObject.ts, 14, 31))
++>x : Symbol(x, Decl(constraintSatisfactionWithEmptyObject.ts, 14, 31))
+ >T : Symbol(T, Decl(constraintSatisfactionWithEmptyObject.ts, 14, 12))
+ }
+ var i: I<{}>;
+@@= skipped -30, +30 lines =@@
+ >T : Symbol(T, Decl(constraintSatisfactionWithEmptyObject.ts, 25, 9))
+ 
+     constructor(public x: T) { }
+->x : Symbol(C2.x, Decl(constraintSatisfactionWithEmptyObject.ts, 26, 16))
++>x : Symbol(x, Decl(constraintSatisfactionWithEmptyObject.ts, 26, 16))
+ >T : Symbol(T, Decl(constraintSatisfactionWithEmptyObject.ts, 25, 9))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(constraintSatisfactionWithEmptyObject.ts, 31, 13))
+ 
+     x: T;
+->x : Symbol(I2.x, Decl(constraintSatisfactionWithEmptyObject.ts, 31, 28))
++>x : Symbol(x, Decl(constraintSatisfactionWithEmptyObject.ts, 31, 28))
+ >T : Symbol(T, Decl(constraintSatisfactionWithEmptyObject.ts, 31, 13))
+ }
+ var i2: I2<{}>;

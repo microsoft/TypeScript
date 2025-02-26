@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/asyncIIFE.ts] ////
+
+=== asyncIIFE.ts ===
+function f1() {
+>f1 : Symbol(f1, Decl(asyncIIFE.ts, 0, 0))
+
+    (async () => {
+        await 10
+        throw new Error();
+    })();
+
+    var x = 1;
+>x : Symbol(x, Decl(asyncIIFE.ts, 6, 7))
+}
+

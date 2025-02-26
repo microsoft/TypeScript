@@ -1,0 +1,26 @@
+--- old.narrowFromAnyWithTypePredicate.symbols
++++ new.narrowFromAnyWithTypePredicate.symbols
+@@= skipped -77, +77 lines =@@
+ >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+ 
+     x.message;
+->x.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
++>x.message : Symbol(message, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+->message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
++>message : Symbol(message, Decl(lib.es5.d.ts, --, --))
+ 
+     x.mesage;
+ >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+@@= skipped -13, +13 lines =@@
+ >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+ 
+     x.getDate();
+->x.getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
++>x.getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
+->getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
++>getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
+ 
+     x.getHuors();
+ >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))

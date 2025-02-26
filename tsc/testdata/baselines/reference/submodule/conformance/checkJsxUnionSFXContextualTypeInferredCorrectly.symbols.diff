@@ -1,0 +1,69 @@
+--- old.checkJsxUnionSFXContextualTypeInferredCorrectly.symbols
++++ new.checkJsxUnionSFXContextualTypeInferredCorrectly.symbols
+@@= skipped -9, +9 lines =@@
+ >PS : Symbol(PS, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 2, 26))
+ 
+     multi: false
+->multi : Symbol(PS.multi, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 4, 14))
++>multi : Symbol(multi, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 4, 14))
+ 
+     value: string | undefined
+->value : Symbol(PS.value, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 5, 16))
++>value : Symbol(value, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 5, 16))
+ 
+     onChange: (selection: string | undefined) => void
+->onChange : Symbol(PS.onChange, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 6, 29))
++>onChange : Symbol(onChange, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 6, 29))
+ >selection : Symbol(selection, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 7, 15))
+ }
+ 
+@@= skipped -14, +14 lines =@@
+ >PM : Symbol(PM, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 8, 1))
+ 
+     multi: true
+->multi : Symbol(PM.multi, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 10, 14))
++>multi : Symbol(multi, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 10, 14))
+ 
+     value: string[]
+->value : Symbol(PM.value, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 11, 15))
++>value : Symbol(value, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 11, 15))
+ 
+     onChange: (selection: string[]) => void
+->onChange : Symbol(PM.onChange, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 12, 19))
++>onChange : Symbol(onChange, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 12, 19))
+ >selection : Symbol(selection, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 13, 15))
+ }
+ 
+@@= skipped -17, +17 lines =@@
+ >PS : Symbol(PS, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 2, 26))
+ 
+     return <h1></h1>;
+->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2556, 106))
+->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2556, 106))
+ }
+ 
+ // Usage with React tsx
+@@= skipped -21, +19 lines =@@
+             onChange={val => console.log(val)} // <- this throws an error
+ >onChange : Symbol(onChange, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 25, 23))
+ >val : Symbol(val, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 26, 22))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >val : Symbol(val, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 26, 22))
+ 
+         />
+@@= skipped -22, +22 lines =@@
+     onChange: val => console.log(val) // <- this works fine
+ >onChange : Symbol(onChange, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 34, 15))
+ >val : Symbol(val, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 35, 13))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >val : Symbol(val, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 35, 13))
+ 
+ });

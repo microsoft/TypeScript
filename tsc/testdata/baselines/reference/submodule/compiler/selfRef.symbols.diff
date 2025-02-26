@@ -1,0 +1,24 @@
+--- old.selfRef.symbols
++++ new.selfRef.symbols
+@@= skipped -7, +7 lines =@@
+ >Test : Symbol(Test, Decl(selfRef.ts, 1, 1))
+     {
+       private name = "hello";
+->name : Symbol(Test.name, Decl(selfRef.ts, 3, 5))
++>name : Symbol(name, Decl(selfRef.ts, 3, 5))
+ 
+       public setName = function(value: string): void {
+->setName : Symbol(Test.setName, Decl(selfRef.ts, 4, 29))
++>setName : Symbol(setName, Decl(selfRef.ts, 4, 29))
+ >value : Symbol(value, Decl(selfRef.ts, 5, 32))
+ 
+ 	  (function () {
+@@= skipped -13, +13 lines =@@
+ 	  })();
+       }
+       public getName = function(): string {
+->getName : Symbol(Test.getName, Decl(selfRef.ts, 9, 7))
++>getName : Symbol(getName, Decl(selfRef.ts, 9, 7))
+ 
+           return name;
+       }

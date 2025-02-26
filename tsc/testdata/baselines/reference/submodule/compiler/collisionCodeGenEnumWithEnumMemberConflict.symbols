@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/collisionCodeGenEnumWithEnumMemberConflict.ts] ////
+
+=== collisionCodeGenEnumWithEnumMemberConflict.ts ===
+enum Color {
+>Color : Symbol(Color, Decl(collisionCodeGenEnumWithEnumMemberConflict.ts, 0, 0))
+
+    Color,
+>Color : Symbol(Color, Decl(collisionCodeGenEnumWithEnumMemberConflict.ts, 0, 12))
+
+    Thing = Color
+>Thing : Symbol(Thing, Decl(collisionCodeGenEnumWithEnumMemberConflict.ts, 1, 10))
+>Color : Symbol(Color, Decl(collisionCodeGenEnumWithEnumMemberConflict.ts, 0, 12))
+}

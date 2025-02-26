@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/ambientPropertyDeclarationInJs.ts] ////
+
+=== /test.js ===
+class Foo {
+>Foo : Symbol(Foo, Decl(test.js, 0, 0))
+
+    constructor() {
+        this.prop = {};
+>this.prop : Symbol(prop, Decl(test.js, 3, 5))
+>this : Symbol(Foo, Decl(test.js, 0, 0))
+>prop : Symbol(prop, Decl(test.js, 3, 5))
+    }
+
+    declare prop: string;
+>prop : Symbol(prop, Decl(test.js, 3, 5))
+
+    method() {
+>method : Symbol(method, Decl(test.js, 5, 25))
+
+        this.prop.foo
+>this.prop : Symbol(prop, Decl(test.js, 3, 5))
+>this : Symbol(Foo, Decl(test.js, 0, 0))
+>prop : Symbol(prop, Decl(test.js, 3, 5))
+    }
+}
+

@@ -1,0 +1,43 @@
+--- old.controlFlowIfStatement.symbols
++++ new.controlFlowIfStatement.symbols
+@@= skipped -83, +83 lines =@@
+ >data : Symbol(data, Decl(controlFlowIfStatement.ts, 36, 14))
+ 
+         return JSON.parse(data);
+->JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --))
++>JSON.parse : Symbol(parse, Decl(lib.es5.d.ts, --, --))
+ >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --))
++>parse : Symbol(parse, Decl(lib.es5.d.ts, --, --))
+ >data : Symbol(data, Decl(controlFlowIfStatement.ts, 36, 14))
+     }
+     else {
+@@= skipped -33, +33 lines =@@
+ >T : Symbol(T, Decl(controlFlowIfStatement.ts, 53, 12))
+ 
+   p: T;
+->p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
++>p : Symbol(p, Decl(controlFlowIfStatement.ts, 53, 16))
+ >T : Symbol(T, Decl(controlFlowIfStatement.ts, 53, 12))
+ }
+ function e(x: I<"A" | "B">) {
+@@= skipped -9, +9 lines =@@
+ >I : Symbol(I, Decl(controlFlowIfStatement.ts, 51, 1))
+ 
+     if (x.p === "A") {
+->x.p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
++>x.p : Symbol(p, Decl(controlFlowIfStatement.ts, 53, 16))
+ >x : Symbol(x, Decl(controlFlowIfStatement.ts, 56, 11))
+->p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
++>p : Symbol(p, Decl(controlFlowIfStatement.ts, 53, 16))
+ 
+         let a: "A" = (null as unknown as typeof x.p)
+ >a : Symbol(a, Decl(controlFlowIfStatement.ts, 58, 11))
+->x.p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
++>x.p : Symbol(p, Decl(controlFlowIfStatement.ts, 53, 16))
+ >x : Symbol(x, Decl(controlFlowIfStatement.ts, 56, 11))
+->p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
++>p : Symbol(p, Decl(controlFlowIfStatement.ts, 53, 16))
+     }
+ }
+ 

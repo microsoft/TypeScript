@@ -1,0 +1,72 @@
+--- old.autoAccessorNoUseDefineForClassFields.symbols
++++ new.autoAccessorNoUseDefineForClassFields.symbols
+@@= skipped -5, +5 lines =@@
+ >C1 : Symbol(C1, Decl(file1.ts, 0, 0))
+ 
+     static accessor x = 0;
+->x : Symbol(C1.x, Decl(file1.ts, 1, 10))
++>x : Symbol(x, Decl(file1.ts, 1, 10))
+ }
+ 
+ === file2.ts ===
+@@= skipped -8, +8 lines =@@
+ >C2 : Symbol(C2, Decl(file2.ts, 0, 0))
+ 
+     static accessor #x = 0;
+->#x : Symbol(C2.#x, Decl(file2.ts, 0, 10))
++>#x : Symbol(#x, Decl(file2.ts, 0, 10))
+ }
+ 
+ === file3.ts ===
+@@= skipped -8, +8 lines =@@
+ >C3 : Symbol(C3, Decl(file3.ts, 0, 0))
+ 
+     static accessor #x = 0;
+->x : Symbol(C3.x, Decl(file3.ts, 0, 10))
++>x : Symbol(x, Decl(file3.ts, 0, 10))
+ 
+     accessor #y = 0;
+ }
+@@= skipped -10, +10 lines =@@
+ >C3 : Symbol(C3, Decl(file3.ts, 0, 0))
+ 
+     accessor x = 0;
+->x : Symbol(C3.x, Decl(file3.ts, 0, 10))
++>x : Symbol(x, Decl(file3.ts, 0, 10))
+ }
+ 
+ === file4.ts ===
+@@= skipped -8, +8 lines =@@
+ >C4 : Symbol(C4, Decl(file4.ts, 0, 0))
+ 
+     accessor #x = 0;
+->#x : Symbol(C4.#x, Decl(file4.ts, 0, 10))
++>#x : Symbol(#x, Decl(file4.ts, 0, 10))
+ }
+ 
+ === file5.ts ===
+@@= skipped -8, +8 lines =@@
+ >C5 : Symbol(C5, Decl(file5.ts, 0, 0))
+ 
+     x = 0;
+->x : Symbol(C5.x, Decl(file5.ts, 0, 10))
++>x : Symbol(x, Decl(file5.ts, 0, 10))
+ 
+     accessor #x = 1;
+->#x : Symbol(C5.#x, Decl(file5.ts, 1, 10))
++>#x : Symbol(#x, Decl(file5.ts, 1, 10))
+ }
+ 
+ === file6.ts ===
+@@= skipped -11, +11 lines =@@
+ >C6 : Symbol(C6, Decl(file6.ts, 0, 0))
+ 
+     accessor #x = 0;
+->#x : Symbol(C6.#x, Decl(file6.ts, 0, 10))
++>#x : Symbol(#x, Decl(file6.ts, 0, 10))
+ 
+     x = 1;
+->x : Symbol(C6.x, Decl(file6.ts, 1, 20))
++>x : Symbol(x, Decl(file6.ts, 1, 20))
+ }
+ 

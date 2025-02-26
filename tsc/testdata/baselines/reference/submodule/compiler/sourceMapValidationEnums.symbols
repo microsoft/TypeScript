@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/sourceMapValidationEnums.ts] ////
+
+=== sourceMapValidationEnums.ts ===
+enum e {
+>e : Symbol(e, Decl(sourceMapValidationEnums.ts, 0, 0))
+
+    x,
+>x : Symbol(x, Decl(sourceMapValidationEnums.ts, 0, 8))
+
+    y,
+>y : Symbol(y, Decl(sourceMapValidationEnums.ts, 1, 6))
+
+    x
+>x : Symbol(x, Decl(sourceMapValidationEnums.ts, 2, 6))
+}
+enum e2 {
+>e2 : Symbol(e2, Decl(sourceMapValidationEnums.ts, 4, 1))
+
+    x = 10,
+>x : Symbol(x, Decl(sourceMapValidationEnums.ts, 5, 9))
+
+    y = 10,
+>y : Symbol(y, Decl(sourceMapValidationEnums.ts, 6, 11))
+
+    z,
+>z : Symbol(z, Decl(sourceMapValidationEnums.ts, 7, 11))
+
+    x2
+>x2 : Symbol(x2, Decl(sourceMapValidationEnums.ts, 8, 6))
+}
+enum e3 {
+>e3 : Symbol(e3, Decl(sourceMapValidationEnums.ts, 10, 1))
+}

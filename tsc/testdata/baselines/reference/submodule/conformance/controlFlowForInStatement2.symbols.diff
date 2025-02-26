@@ -1,0 +1,17 @@
+--- old.controlFlowForInStatement2.symbols
++++ new.controlFlowForInStatement2.symbols
+@@= skipped -8, +8 lines =@@
+ 
+ type A = { [keywordA]: number };
+ >A : Symbol(A, Decl(controlFlowForInStatement2.ts, 1, 21))
+->[keywordA] : Symbol([keywordA], Decl(controlFlowForInStatement2.ts, 3, 10))
++>[keywordA] : Symbol(a, Decl(controlFlowForInStatement2.ts, 3, 10))
+ >keywordA : Symbol(keywordA, Decl(controlFlowForInStatement2.ts, 0, 5))
+ 
+ type B = { [keywordB]: string };
+ >B : Symbol(B, Decl(controlFlowForInStatement2.ts, 3, 32))
+->[keywordB] : Symbol([keywordB], Decl(controlFlowForInStatement2.ts, 4, 10))
++>[keywordB] : Symbol(b, Decl(controlFlowForInStatement2.ts, 4, 10))
+ >keywordB : Symbol(keywordB, Decl(controlFlowForInStatement2.ts, 1, 5))
+ 
+ declare const c: A | B;

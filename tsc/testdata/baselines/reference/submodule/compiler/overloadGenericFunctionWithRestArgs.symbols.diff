@@ -1,0 +1,20 @@
+--- old.overloadGenericFunctionWithRestArgs.symbols
++++ new.overloadGenericFunctionWithRestArgs.symbols
+@@= skipped -5, +5 lines =@@
+ >V : Symbol(V, Decl(overloadGenericFunctionWithRestArgs.ts, 0, 8))
+ 
+     private id: V;
+->id : Symbol(B.id, Decl(overloadGenericFunctionWithRestArgs.ts, 0, 11))
++>id : Symbol(id, Decl(overloadGenericFunctionWithRestArgs.ts, 0, 11))
+ >V : Symbol(V, Decl(overloadGenericFunctionWithRestArgs.ts, 0, 8))
+ }
+ class A<U>{
+@@= skipped -8, +8 lines =@@
+ >U : Symbol(U, Decl(overloadGenericFunctionWithRestArgs.ts, 3, 8))
+ 
+     GetEnumerator: () => B<U>;
+->GetEnumerator : Symbol(A.GetEnumerator, Decl(overloadGenericFunctionWithRestArgs.ts, 3, 11))
++>GetEnumerator : Symbol(GetEnumerator, Decl(overloadGenericFunctionWithRestArgs.ts, 3, 11))
+ >B : Symbol(B, Decl(overloadGenericFunctionWithRestArgs.ts, 0, 0))
+ >U : Symbol(U, Decl(overloadGenericFunctionWithRestArgs.ts, 3, 8))
+ }

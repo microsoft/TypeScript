@@ -1,0 +1,32 @@
+--- old.stringTrim.symbols
++++ new.stringTrim.symbols
+@@= skipped -5, +5 lines =@@
+ 
+ trimmed = "abcde".trimEnd();
+ >trimmed : Symbol(trimmed, Decl(stringTrim.ts, 0, 3))
+->"abcde".trimEnd : Symbol(String.trimEnd, Decl(lib.es2019.string.d.ts, --, --))
+->trimEnd : Symbol(String.trimEnd, Decl(lib.es2019.string.d.ts, --, --))
++>"abcde".trimEnd : Symbol(trimEnd, Decl(lib.es2019.string.d.ts, --, --))
++>trimEnd : Symbol(trimEnd, Decl(lib.es2019.string.d.ts, --, --))
+ 
+ trimmed = "abcde".trimStart();
+ >trimmed : Symbol(trimmed, Decl(stringTrim.ts, 0, 3))
+->"abcde".trimStart : Symbol(String.trimStart, Decl(lib.es2019.string.d.ts, --, --))
+->trimStart : Symbol(String.trimStart, Decl(lib.es2019.string.d.ts, --, --))
++>"abcde".trimStart : Symbol(trimStart, Decl(lib.es2019.string.d.ts, --, --))
++>trimStart : Symbol(trimStart, Decl(lib.es2019.string.d.ts, --, --))
+ 
+ trimmed = "abcde".trimLeft();
+ >trimmed : Symbol(trimmed, Decl(stringTrim.ts, 0, 3))
+->"abcde".trimLeft : Symbol(String.trimLeft, Decl(lib.es2019.string.d.ts, --, --))
+->trimLeft : Symbol(String.trimLeft, Decl(lib.es2019.string.d.ts, --, --))
++>"abcde".trimLeft : Symbol(trimLeft, Decl(lib.es2019.string.d.ts, --, --))
++>trimLeft : Symbol(trimLeft, Decl(lib.es2019.string.d.ts, --, --))
+ 
+ trimmed = "abcde".trimRight();
+ >trimmed : Symbol(trimmed, Decl(stringTrim.ts, 0, 3))
+->"abcde".trimRight : Symbol(String.trimRight, Decl(lib.es2019.string.d.ts, --, --))
+->trimRight : Symbol(String.trimRight, Decl(lib.es2019.string.d.ts, --, --))
++>"abcde".trimRight : Symbol(trimRight, Decl(lib.es2019.string.d.ts, --, --))
++>trimRight : Symbol(trimRight, Decl(lib.es2019.string.d.ts, --, --))
+ 

@@ -1,0 +1,31 @@
+--- old.nameCollision.symbols
++++ new.nameCollision.symbols
+@@= skipped -28, +28 lines =@@
+ >B : Symbol(B, Decl(nameCollision.ts, 11, 10))
+ 
+         name: string;
+->name : Symbol(B.name, Decl(nameCollision.ts, 14, 13))
++>name : Symbol(name, Decl(nameCollision.ts, 14, 13))
+     }
+ }
+ 
+@@= skipped -39, +39 lines =@@
+ >Y : Symbol(Y, Decl(nameCollision.ts, 31, 12))
+ 
+         Red, Blue
+->Red : Symbol(Y.Red, Decl(nameCollision.ts, 32, 19))
+->Blue : Symbol(Y.Blue, Decl(nameCollision.ts, 33, 12))
++>Red : Symbol(Red, Decl(nameCollision.ts, 32, 19))
++>Blue : Symbol(Blue, Decl(nameCollision.ts, 33, 12))
+     }
+ }
+ 
+@@= skipped -14, +14 lines =@@
+ >D : Symbol(D, Decl(nameCollision.ts, 39, 10))
+ 
+         id: number;
+->id : Symbol(D.id, Decl(nameCollision.ts, 40, 24))
++>id : Symbol(id, Decl(nameCollision.ts, 40, 24))
+     }
+ 
+     export var E = 'hello';

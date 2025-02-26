@@ -1,0 +1,34 @@
+//// [tests/cases/conformance/salsa/typeFromContextualThisType.ts] ////
+
+=== bug25926.js ===
+/** @type {{ a(): void; b?(n: number): number; }} */
+const o1 = {
+>o1 : Symbol(o1, Decl(bug25926.js, 1, 5))
+
+    a() {
+>a : Symbol(a, Decl(bug25926.js, 1, 12))
+
+        this.b = n => n;
+>this : Symbol((Anonymous type), Decl(bug25926.js, 1, 10))
+>n : Symbol(n, Decl(bug25926.js, 3, 16))
+>n : Symbol(n, Decl(bug25926.js, 3, 16))
+    }
+};
+
+/** @type {{ d(): void; e?(n: number): number; f?(n: number): number; g?: number }} */
+const o2 = {
+>o2 : Symbol(o2, Decl(bug25926.js, 8, 5))
+
+    d() {
+>d : Symbol(d, Decl(bug25926.js, 8, 12))
+
+        this.e = this.f = m => this.g || m;
+>this : Symbol((Anonymous type), Decl(bug25926.js, 8, 10))
+>this : Symbol((Anonymous type), Decl(bug25926.js, 8, 10))
+>m : Symbol(m, Decl(bug25926.js, 10, 25))
+>this : Symbol((Anonymous type), Decl(bug25926.js, 8, 10))
+>m : Symbol(m, Decl(bug25926.js, 10, 25))
+    }
+};
+
+

@@ -1,0 +1,11 @@
+--- old.contextualTyping14.symbols
++++ new.contextualTyping14.symbols
+@@= skipped -2, +2 lines =@@
+ === contextualTyping14.ts ===
+ class foo { public bar:(a:number)=>number = function(a){return a}; }
+ >foo : Symbol(foo, Decl(contextualTyping14.ts, 0, 0))
+->bar : Symbol(foo.bar, Decl(contextualTyping14.ts, 0, 11))
++>bar : Symbol(bar, Decl(contextualTyping14.ts, 0, 11))
+ >a : Symbol(a, Decl(contextualTyping14.ts, 0, 24))
+ >a : Symbol(a, Decl(contextualTyping14.ts, 0, 53))
+ >a : Symbol(a, Decl(contextualTyping14.ts, 0, 53))

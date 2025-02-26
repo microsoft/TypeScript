@@ -1,0 +1,30 @@
+--- old.commonJSImportAsPrimaryExpression.symbols
++++ new.commonJSImportAsPrimaryExpression.symbols
+@@= skipped -4, +4 lines =@@
+ >foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
+ 
+ if(foo.C1.s1){
+->foo.C1.s1 : Symbol(foo.C1.s1, Decl(foo_0.ts, 1, 9))
+->foo.C1 : Symbol(foo.C1, Decl(foo_0.ts, 0, 0))
++>foo.C1.s1 : Symbol(s1, Decl(foo_0.ts, 1, 9))
++>foo.C1 : Symbol(C1, Decl(foo_0.ts, 0, 0))
+ >foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
+->C1 : Symbol(foo.C1, Decl(foo_0.ts, 0, 0))
+->s1 : Symbol(foo.C1.s1, Decl(foo_0.ts, 1, 9))
++>C1 : Symbol(C1, Decl(foo_0.ts, 0, 0))
++>s1 : Symbol(s1, Decl(foo_0.ts, 1, 9))
+ 
+ 	// Should cause runtime import
+ }
+@@= skipped -14, +14 lines =@@
+ >C1 : Symbol(C1, Decl(foo_0.ts, 0, 0))
+ 
+ 	m1 = 42;
+->m1 : Symbol(C1.m1, Decl(foo_0.ts, 0, 17))
++>m1 : Symbol(m1, Decl(foo_0.ts, 0, 17))
+ 
+ 	static s1 = true;
+->s1 : Symbol(C1.s1, Decl(foo_0.ts, 1, 9))
++>s1 : Symbol(s1, Decl(foo_0.ts, 1, 9))
+ }
+ 

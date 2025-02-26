@@ -1,0 +1,11 @@
+--- old.verbatimModuleSyntaxNoElisionESM.symbols
++++ new.verbatimModuleSyntaxNoElisionESM.symbols
+@@= skipped -54, +54 lines =@@
+ 
+ === /main5.ts ===
+ export default class C {} // ok
+->C : Symbol(C, Decl(main5.ts, 0, 0))
++>C : Symbol(default, Decl(main5.ts, 0, 0))
+ 
+ === /main6.ts ===
+ interface I {}

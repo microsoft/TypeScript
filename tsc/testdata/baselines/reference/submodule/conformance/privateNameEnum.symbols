@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameEnum.ts] ////
+
+=== privateNameEnum.ts ===
+enum E {
+>E : Symbol(E, Decl(privateNameEnum.ts, 0, 0))
+
+    #x
+>#x : Symbol(#x, Decl(privateNameEnum.ts, 0, 8))
+}
+

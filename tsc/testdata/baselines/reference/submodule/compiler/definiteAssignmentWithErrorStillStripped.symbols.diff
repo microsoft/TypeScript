@@ -1,0 +1,9 @@
+--- old.definiteAssignmentWithErrorStillStripped.symbols
++++ new.definiteAssignmentWithErrorStillStripped.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(definiteAssignmentWithErrorStillStripped.ts, 0, 0))
+ 
+     p!;
+->p : Symbol(C.p, Decl(definiteAssignmentWithErrorStillStripped.ts, 0, 9))
++>p : Symbol(p, Decl(definiteAssignmentWithErrorStillStripped.ts, 0, 9))
+ }

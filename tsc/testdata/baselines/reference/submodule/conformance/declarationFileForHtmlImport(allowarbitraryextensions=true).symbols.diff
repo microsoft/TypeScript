@@ -1,0 +1,52 @@
+--- old.declarationFileForHtmlImport(allowarbitraryextensions=true).symbols
++++ new.declarationFileForHtmlImport(allowarbitraryextensions=true).symbols
+@@= skipped -20, +20 lines =@@
+ >HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+ 
+     connectedCallback(): void;
+->connectedCallback : Symbol(HTML5Element.connectedCallback, Decl(component.d.html.ts, 9, 47))
++>connectedCallback : Symbol(connectedCallback, Decl(component.d.html.ts, 9, 47))
+ }
+ 
+ === file.ts ===
+@@= skipped -8, +8 lines =@@
+ >mod : Symbol(mod, Decl(file.ts, 0, 6))
+ 
+ window.customElements.define("my-html5-element", mod.HTML5Element);
+->window.customElements.define : Symbol(CustomElementRegistry.define, Decl(lib.dom.d.ts, --, --))
++>window.customElements.define : Symbol(define, Decl(lib.dom.d.ts, --, --))
+ >window.customElements : Symbol(customElements, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+ >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+ >customElements : Symbol(customElements, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+->define : Symbol(CustomElementRegistry.define, Decl(lib.dom.d.ts, --, --))
+->mod.HTML5Element : Symbol(mod.HTML5Element, Decl(component.d.html.ts, 7, 31))
++>define : Symbol(define, Decl(lib.dom.d.ts, --, --))
++>mod.HTML5Element : Symbol(HTML5Element, Decl(component.d.html.ts, 7, 31))
+ >mod : Symbol(mod, Decl(file.ts, 0, 6))
+->HTML5Element : Symbol(mod.HTML5Element, Decl(component.d.html.ts, 7, 31))
++>HTML5Element : Symbol(HTML5Element, Decl(component.d.html.ts, 7, 31))
+ 
+ if (document !== mod.default) {
+ >document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+->mod.default : Symbol(mod.default, Decl(component.d.html.ts, 3, 26))
++>mod.default : Symbol(default, Decl(component.d.html.ts, 3, 26))
+ >mod : Symbol(mod, Decl(file.ts, 0, 6))
+->default : Symbol(mod.default, Decl(component.d.html.ts, 3, 26))
++>default : Symbol(default, Decl(component.d.html.ts, 3, 26))
+ 
+     document.body.appendChild(mod.blogPost);
+->document.body.appendChild : Symbol(Node.appendChild, Decl(lib.dom.d.ts, --, --))
+->document.body : Symbol(Document.body, Decl(lib.dom.d.ts, --, --))
++>document.body.appendChild : Symbol(appendChild, Decl(lib.dom.d.ts, --, --))
++>document.body : Symbol(body, Decl(lib.dom.d.ts, --, --))
+ >document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+->body : Symbol(Document.body, Decl(lib.dom.d.ts, --, --))
+->appendChild : Symbol(Node.appendChild, Decl(lib.dom.d.ts, --, --))
+->mod.blogPost : Symbol(mod.blogPost, Decl(component.d.html.ts, 7, 12))
++>body : Symbol(body, Decl(lib.dom.d.ts, --, --))
++>appendChild : Symbol(appendChild, Decl(lib.dom.d.ts, --, --))
++>mod.blogPost : Symbol(blogPost, Decl(component.d.html.ts, 7, 12))
+ >mod : Symbol(mod, Decl(file.ts, 0, 6))
+->blogPost : Symbol(mod.blogPost, Decl(component.d.html.ts, 7, 12))
++>blogPost : Symbol(blogPost, Decl(component.d.html.ts, 7, 12))
+ }

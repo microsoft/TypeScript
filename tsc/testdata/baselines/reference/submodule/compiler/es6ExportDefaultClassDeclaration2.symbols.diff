@@ -1,0 +1,10 @@
+--- old.es6ExportDefaultClassDeclaration2.symbols
++++ new.es6ExportDefaultClassDeclaration2.symbols
+@@= skipped -2, +2 lines =@@
+ === es6ExportDefaultClassDeclaration2.ts ===
+ export default class {
+     method() { }
+->method : Symbol(default.method, Decl(es6ExportDefaultClassDeclaration2.ts, 0, 22))
++>method : Symbol(method, Decl(es6ExportDefaultClassDeclaration2.ts, 0, 22))
+ }
+ 

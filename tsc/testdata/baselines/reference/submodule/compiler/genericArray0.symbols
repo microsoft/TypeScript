@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/genericArray0.ts] ////
+
+=== genericArray0.ts ===
+var x:number[];
+>x : Symbol(x, Decl(genericArray0.ts, 0, 3))
+
+
+var y = x; 
+>y : Symbol(y, Decl(genericArray0.ts, 3, 3))
+>x : Symbol(x, Decl(genericArray0.ts, 0, 3))
+
+function map<U>() {
+>map : Symbol(map, Decl(genericArray0.ts, 3, 10))
+>U : Symbol(U, Decl(genericArray0.ts, 5, 13))
+
+    var ys: U[] = [];
+>ys : Symbol(ys, Decl(genericArray0.ts, 6, 7))
+>U : Symbol(U, Decl(genericArray0.ts, 5, 13))
+}
+

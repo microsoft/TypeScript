@@ -1,0 +1,11 @@
+--- old.declarationEmitCrossFileCopiedGeneratedImportType.symbols
++++ new.declarationEmitCrossFileCopiedGeneratedImportType.symbols
+@@= skipped -5, +5 lines =@@
+ >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     private _;
+->_ : Symbol(Foo._, Decl(index.d.ts, 0, 41))
++>_ : Symbol(_, Decl(index.d.ts, 0, 41))
+ }
+ === projB/index.d.ts ===
+ import { Foo } from "../projA";

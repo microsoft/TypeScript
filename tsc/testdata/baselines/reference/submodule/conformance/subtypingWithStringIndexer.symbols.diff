@@ -1,0 +1,23 @@
+--- old.subtypingWithStringIndexer.symbols
++++ new.subtypingWithStringIndexer.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ interface Base { foo: string; }
+ >Base : Symbol(Base, Decl(subtypingWithStringIndexer.ts, 0, 0))
+->foo : Symbol(Base.foo, Decl(subtypingWithStringIndexer.ts, 2, 16))
++>foo : Symbol(foo, Decl(subtypingWithStringIndexer.ts, 2, 16))
+ 
+ interface Derived extends Base { bar: string; }
+ >Derived : Symbol(Derived, Decl(subtypingWithStringIndexer.ts, 2, 31))
+ >Base : Symbol(Base, Decl(subtypingWithStringIndexer.ts, 0, 0))
+->bar : Symbol(Derived.bar, Decl(subtypingWithStringIndexer.ts, 3, 32))
++>bar : Symbol(bar, Decl(subtypingWithStringIndexer.ts, 3, 32))
+ 
+ interface Derived2 extends Derived { baz: string; }
+ >Derived2 : Symbol(Derived2, Decl(subtypingWithStringIndexer.ts, 3, 47))
+ >Derived : Symbol(Derived, Decl(subtypingWithStringIndexer.ts, 2, 31))
+->baz : Symbol(Derived2.baz, Decl(subtypingWithStringIndexer.ts, 4, 36))
++>baz : Symbol(baz, Decl(subtypingWithStringIndexer.ts, 4, 36))
+ 
+ class A {
+ >A : Symbol(A, Decl(subtypingWithStringIndexer.ts, 4, 51))

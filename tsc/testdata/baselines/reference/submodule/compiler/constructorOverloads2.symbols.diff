@@ -1,0 +1,30 @@
+--- old.constructorOverloads2.symbols
++++ new.constructorOverloads2.symbols
+@@= skipped -13, +13 lines =@@
+ >x : Symbol(x, Decl(constructorOverloads2.ts, 3, 16))
+     }
+     bar1() {  /*WScript.Echo("base bar1");*/ }
+->bar1 : Symbol(FooBase.bar1, Decl(constructorOverloads2.ts, 4, 5))
++>bar1 : Symbol(bar1, Decl(constructorOverloads2.ts, 4, 5))
+ }
+ 
+ class Foo extends FooBase {
+@@= skipped -25, +25 lines =@@
+ >x : Symbol(x, Decl(constructorOverloads2.ts, 12, 16))
+     }
+     bar1() {  /*WScript.Echo("bar1");*/ }
+->bar1 : Symbol(Foo.bar1, Decl(constructorOverloads2.ts, 14, 5))
++>bar1 : Symbol(bar1, Decl(constructorOverloads2.ts, 14, 5))
+ }
+ 
+ var f1 = new Foo("hey");
+@@= skipped -24, +24 lines =@@
+ >f3 : Symbol(f3, Decl(constructorOverloads2.ts, 20, 3))
+ 
+ f1.bar1();
+->f1.bar1 : Symbol(Foo.bar1, Decl(constructorOverloads2.ts, 14, 5))
++>f1.bar1 : Symbol(bar1, Decl(constructorOverloads2.ts, 14, 5))
+ >f1 : Symbol(f1, Decl(constructorOverloads2.ts, 18, 3))
+->bar1 : Symbol(Foo.bar1, Decl(constructorOverloads2.ts, 14, 5))
++>bar1 : Symbol(bar1, Decl(constructorOverloads2.ts, 14, 5))
+ 

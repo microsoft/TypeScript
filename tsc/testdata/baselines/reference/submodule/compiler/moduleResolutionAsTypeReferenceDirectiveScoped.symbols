@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/moduleResolutionAsTypeReferenceDirectiveScoped.ts] ////
+
+=== /a.ts ===
+import { typesCache } from "@scoped/typescache";
+>typesCache : Symbol(typesCache, Decl(a.ts, 0, 8))
+
+import { mangledTypes } from "@mangled/typescache";
+>mangledTypes : Symbol(mangledTypes, Decl(a.ts, 1, 8))
+
+import { nodeModulesCache } from "@scoped/nodemodulescache";
+>nodeModulesCache : Symbol(nodeModulesCache, Decl(a.ts, 2, 8))
+
+import { mangledNodeModules } from "@mangled/nodemodulescache";
+>mangledNodeModules : Symbol(mangledNodeModules, Decl(a.ts, 3, 8))
+
+import { atTypesCache } from "@scoped/attypescache";
+>atTypesCache : Symbol(atTypesCache, Decl(a.ts, 4, 8))
+
+import { mangledAtTypesCache } from "@mangled/attypescache";
+>mangledAtTypesCache : Symbol(mangledAtTypesCache, Decl(a.ts, 5, 8))
+

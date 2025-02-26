@@ -1,0 +1,19 @@
+--- old.es6modulekindWithES5Target12.symbols
++++ new.es6modulekindWithES5Target12.symbols
+@@= skipped -15, +15 lines =@@
+ >E : Symbol(E, Decl(es6modulekindWithES5Target12.ts, 5, 1), Decl(es6modulekindWithES5Target12.ts, 9, 1), Decl(es6modulekindWithES5Target12.ts, 13, 1), Decl(es6modulekindWithES5Target12.ts, 17, 1))
+ 
+     w = 1
+->w : Symbol(E.w, Decl(es6modulekindWithES5Target12.ts, 7, 15))
++>w : Symbol(w, Decl(es6modulekindWithES5Target12.ts, 7, 15))
+ }
+ 
+ export enum E {
+ >E : Symbol(E, Decl(es6modulekindWithES5Target12.ts, 5, 1), Decl(es6modulekindWithES5Target12.ts, 9, 1), Decl(es6modulekindWithES5Target12.ts, 13, 1), Decl(es6modulekindWithES5Target12.ts, 17, 1))
+ 
+     x = 2
+->x : Symbol(E.x, Decl(es6modulekindWithES5Target12.ts, 11, 15))
++>x : Symbol(x, Decl(es6modulekindWithES5Target12.ts, 11, 15))
+ }
+ 
+ export namespace E {

@@ -1,0 +1,11 @@
+--- old.declarationEmitLocalClassHasRequiredDeclare.symbols
++++ new.declarationEmitLocalClassHasRequiredDeclare.symbols
+@@= skipped -14, +14 lines =@@
+ >A : Symbol(A, Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 0, 0), Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 4, 11))
+ 
+     static X = X;
+->X : Symbol(A.X, Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 0, 28), Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 6, 16))
++>X : Symbol(X, Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 0, 28), Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 6, 16))
+ >X : Symbol(X, Decl(declarationEmitLocalClassHasRequiredDeclare.ts, 2, 1))
+ }
+ 

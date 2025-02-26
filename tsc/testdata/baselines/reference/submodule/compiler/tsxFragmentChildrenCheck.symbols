@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/tsxFragmentChildrenCheck.ts] ////
+
+=== my-component.tsx ===
+declare var React: any;
+>React : Symbol(React, Decl(my-component.tsx, 0, 11))
+
+export function MyComponent(props: any) {
+>MyComponent : Symbol(MyComponent, Decl(my-component.tsx, 0, 23))
+>props : Symbol(props, Decl(my-component.tsx, 2, 28))
+
+    return <span>my component</span>;
+}
+
+=== file1.tsx ===
+import * as React from 'react'
+>React : Symbol(React, Decl(file1.tsx, 0, 6))
+
+import { MyComponent } from './my-component'
+>MyComponent : Symbol(MyComponent, Decl(file1.tsx, 1, 8))
+
+const MY_STRING: string = 'Ceci n\'est pas une string.'
+>MY_STRING : Symbol(MY_STRING, Decl(file1.tsx, 3, 5))
+
+const MY_CLASSNAME: string = 'jeclass'
+>MY_CLASSNAME : Symbol(MY_CLASSNAME, Decl(file1.tsx, 4, 5))
+
+class RenderString extends React.PureComponent<any, any> {
+>RenderString : Symbol(RenderString, Decl(file1.tsx, 4, 38))
+>React.PureComponent : Symbol(unknown)
+>React : Symbol(React, Decl(file1.tsx, 0, 6))
+>PureComponent : Symbol(unknown)
+
+  render() {
+>render : Symbol(render, Decl(file1.tsx, 6, 58))
+
+    return (
+      <>
+        <MyComponent />
+>MyComponent : Symbol(MyComponent, Decl(file1.tsx, 1, 8))
+
+        <span>{ MY_STRING }</span>
+>MY_STRING : Symbol(MY_STRING, Decl(file1.tsx, 3, 5))
+
+        <span className={ MY_CLASSNAME } />
+>className : Symbol(className, Decl(file1.tsx, 12, 13))
+>MY_CLASSNAME : Symbol(MY_CLASSNAME, Decl(file1.tsx, 4, 5))
+
+      </>
+    )
+  }
+}
+
+export default RenderString
+>RenderString : Symbol(RenderString, Decl(file1.tsx, 4, 38))
+

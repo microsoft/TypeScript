@@ -1,0 +1,28 @@
+--- old.parseShortform.symbols
++++ new.parseShortform.symbols
+@@= skipped -4, +4 lines =@@
+ >I : Symbol(I, Decl(parseShortform.ts, 0, 0))
+ 
+     w: {
+->w : Symbol(I.w, Decl(parseShortform.ts, 0, 13))
++>w : Symbol(w, Decl(parseShortform.ts, 0, 13))
+ 
+         z: I;
+ >z : Symbol(z, Decl(parseShortform.ts, 1, 8))
+@@= skipped -19, +19 lines =@@
+ 
+     };
+     x: boolean;
+->x : Symbol(I.x, Decl(parseShortform.ts, 6, 6))
++>x : Symbol(x, Decl(parseShortform.ts, 6, 6))
+ 
+     y: (s: string) => boolean;
+->y : Symbol(I.y, Decl(parseShortform.ts, 7, 15))
++>y : Symbol(y, Decl(parseShortform.ts, 7, 15))
+ >s : Symbol(s, Decl(parseShortform.ts, 8, 8))
+ 
+     z: I; 
+->z : Symbol(I.z, Decl(parseShortform.ts, 8, 30))
++>z : Symbol(z, Decl(parseShortform.ts, 8, 30))
+ >I : Symbol(I, Decl(parseShortform.ts, 0, 0))
+ }

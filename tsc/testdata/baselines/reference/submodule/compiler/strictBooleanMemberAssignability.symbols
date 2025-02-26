@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/strictBooleanMemberAssignability.ts] ////
+
+=== strictBooleanMemberAssignability.ts ===
+class Abc {
+>Abc : Symbol(Abc, Decl(strictBooleanMemberAssignability.ts, 0, 0))
+
+    def: boolean
+>def : Symbol(def, Decl(strictBooleanMemberAssignability.ts, 0, 11))
+
+    constructor() {
+        this.def = true
+>this.def : Symbol(def, Decl(strictBooleanMemberAssignability.ts, 0, 11))
+>this : Symbol(Abc, Decl(strictBooleanMemberAssignability.ts, 0, 0))
+>def : Symbol(def, Decl(strictBooleanMemberAssignability.ts, 0, 11))
+    }
+}

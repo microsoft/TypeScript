@@ -1,0 +1,38 @@
+--- old.downlevelLetConst16.symbols
++++ new.downlevelLetConst16.symbols
+@@= skipped -89, +89 lines =@@
+ >A : Symbol(A, Decl(downlevelLetConst16.ts, 29, 1))
+ 
+     m1() {
+->m1 : Symbol(A.m1, Decl(downlevelLetConst16.ts, 31, 9))
++>m1 : Symbol(m1, Decl(downlevelLetConst16.ts, 31, 9))
+ 
+         let x = 1;
+ >x : Symbol(x, Decl(downlevelLetConst16.ts, 33, 11))
+@@= skipped -26, +26 lines =@@
+ >z : Symbol(z, Decl(downlevelLetConst16.ts, 37, 13))
+     }
+     m2() {
+->m2 : Symbol(A.m2, Decl(downlevelLetConst16.ts, 39, 5))
++>m2 : Symbol(m2, Decl(downlevelLetConst16.ts, 39, 5))
+         {
+             let x = 1;
+ >x : Symbol(x, Decl(downlevelLetConst16.ts, 42, 15))
+@@= skipped -36, +36 lines =@@
+ >B : Symbol(B, Decl(downlevelLetConst16.ts, 52, 1))
+ 
+     m1() {
+->m1 : Symbol(B.m1, Decl(downlevelLetConst16.ts, 54, 9))
++>m1 : Symbol(m1, Decl(downlevelLetConst16.ts, 54, 9))
+ 
+         const x = 1;
+ >x : Symbol(x, Decl(downlevelLetConst16.ts, 56, 13))
+@@= skipped -27, +27 lines =@@
+ 
+     }
+     m2() {
+->m2 : Symbol(B.m2, Decl(downlevelLetConst16.ts, 63, 5))
++>m2 : Symbol(m2, Decl(downlevelLetConst16.ts, 63, 5))
+         {
+             const x = 1;
+ >x : Symbol(x, Decl(downlevelLetConst16.ts, 66, 17))

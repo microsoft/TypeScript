@@ -1,0 +1,12 @@
+--- old.es6ImportDefaultBindingFollowedWithNamespaceBindingWithExport.symbols
++++ new.es6ImportDefaultBindingFollowedWithNamespaceBindingWithExport.symbols
+@@= skipped -10, +10 lines =@@
+ 
+ export var x: number = nameSpaceBinding.a;
+ >x : Symbol(x, Decl(client.ts, 1, 10))
+->nameSpaceBinding.a : Symbol(nameSpaceBinding.a, Decl(server.ts, 0, 10))
++>nameSpaceBinding.a : Symbol(a, Decl(server.ts, 0, 10))
+ >nameSpaceBinding : Symbol(nameSpaceBinding, Decl(client.ts, 0, 29))
+->a : Symbol(nameSpaceBinding.a, Decl(server.ts, 0, 10))
++>a : Symbol(a, Decl(server.ts, 0, 10))
+ 

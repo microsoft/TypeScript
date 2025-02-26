@@ -1,0 +1,82 @@
+--- old.overrideParameterProperty.symbols
++++ new.overrideParameterProperty.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+ 
+   p1!: string;
+->p1 : Symbol(Base.p1, Decl(overrideParameterProperty.ts, 0, 12))
++>p1 : Symbol(p1, Decl(overrideParameterProperty.ts, 0, 12))
+ }
+ 
+ class C1 extends Base {
+@@= skipped -8, +8 lines =@@
+ >Base : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+ 
+   constructor(public override p1: "hello") {
+->p1 : Symbol(C1.p1, Decl(overrideParameterProperty.ts, 5, 14))
++>p1 : Symbol(p1, Decl(overrideParameterProperty.ts, 5, 14))
+ 
+     super();
+ >super : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+ 
+     this.p1;
+->this.p1 : Symbol(C1.p1, Decl(overrideParameterProperty.ts, 5, 14))
++>this.p1 : Symbol(p1, Decl(overrideParameterProperty.ts, 5, 14))
+ >this : Symbol(C1, Decl(overrideParameterProperty.ts, 2, 1))
+->p1 : Symbol(C1.p1, Decl(overrideParameterProperty.ts, 5, 14))
++>p1 : Symbol(p1, Decl(overrideParameterProperty.ts, 5, 14))
+   }
+ }
+ 
+@@= skipped -17, +17 lines =@@
+ >Base : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+ 
+   constructor(override p1: "hello") {
+->p1 : Symbol(C2.p1, Decl(overrideParameterProperty.ts, 12, 14))
++>p1 : Symbol(p1, Decl(overrideParameterProperty.ts, 12, 14))
+ 
+     super();
+ >super : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+ 
+     this.p1;
+->this.p1 : Symbol(C2.p1, Decl(overrideParameterProperty.ts, 12, 14))
++>this.p1 : Symbol(p1, Decl(overrideParameterProperty.ts, 12, 14))
+ >this : Symbol(C2, Decl(overrideParameterProperty.ts, 9, 1))
+->p1 : Symbol(C2.p1, Decl(overrideParameterProperty.ts, 12, 14))
++>p1 : Symbol(p1, Decl(overrideParameterProperty.ts, 12, 14))
+   }
+ }
+ 
+@@= skipped -17, +17 lines =@@
+ >Base : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+ 
+   constructor(override public p1: "hello") {
+->p1 : Symbol(C3.p1, Decl(overrideParameterProperty.ts, 19, 14))
++>p1 : Symbol(p1, Decl(overrideParameterProperty.ts, 19, 14))
+ 
+     super();
+ >super : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+ 
+     this.p1;
+->this.p1 : Symbol(C3.p1, Decl(overrideParameterProperty.ts, 19, 14))
++>this.p1 : Symbol(p1, Decl(overrideParameterProperty.ts, 19, 14))
+ >this : Symbol(C3, Decl(overrideParameterProperty.ts, 16, 1))
+->p1 : Symbol(C3.p1, Decl(overrideParameterProperty.ts, 19, 14))
++>p1 : Symbol(p1, Decl(overrideParameterProperty.ts, 19, 14))
+   }
+ 
+   m(override p1: "hello") {}
+->m : Symbol(C3.m, Decl(overrideParameterProperty.ts, 22, 3))
++>m : Symbol(m, Decl(overrideParameterProperty.ts, 22, 3))
+ >p1 : Symbol(p1, Decl(overrideParameterProperty.ts, 24, 4))
+ }
+ 
+@@= skipped -21, +21 lines =@@
+ >Base : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+ 
+   constructor(public override p2: string) {
+->p2 : Symbol(C4.p2, Decl(overrideParameterProperty.ts, 28, 14))
++>p2 : Symbol(p2, Decl(overrideParameterProperty.ts, 28, 14))
+ 
+     super();
+ >super : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))

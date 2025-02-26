@@ -1,0 +1,18 @@
+--- old.inheritanceStaticPropertyOverridingProperty.symbols
++++ new.inheritanceStaticPropertyOverridingProperty.symbols
+@@= skipped -4, +4 lines =@@
+ >a : Symbol(a, Decl(inheritanceStaticPropertyOverridingProperty.ts, 0, 0))
+ 
+     static x: () => string;
+->x : Symbol(a.x, Decl(inheritanceStaticPropertyOverridingProperty.ts, 0, 9))
++>x : Symbol(x, Decl(inheritanceStaticPropertyOverridingProperty.ts, 0, 9))
+ }
+ 
+ class b extends a {
+@@= skipped -8, +8 lines =@@
+ >a : Symbol(a, Decl(inheritanceStaticPropertyOverridingProperty.ts, 0, 0))
+ 
+     static x: () => string;
+->x : Symbol(b.x, Decl(inheritanceStaticPropertyOverridingProperty.ts, 4, 19))
++>x : Symbol(x, Decl(inheritanceStaticPropertyOverridingProperty.ts, 4, 19))
+ }

@@ -1,0 +1,106 @@
+--- old.discriminantElementAccessCheck.symbols
++++ new.discriminantElementAccessCheck.symbols
+@@= skipped -9, +9 lines =@@
+ >TypeA : Symbol(TypeA, Decl(discriminantElementAccessCheck.ts, 0, 23))
+ 
+     kind: 'A';
+->kind : Symbol(TypeA.kind, Decl(discriminantElementAccessCheck.ts, 2, 17))
++>kind : Symbol(kind, Decl(discriminantElementAccessCheck.ts, 2, 17))
+ 
+     a: number;
+->a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
++>a : Symbol(a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+ }
+ interface TypeB {
+ >TypeB : Symbol(TypeB, Decl(discriminantElementAccessCheck.ts, 5, 1))
+ 
+     kind: 'B';
+->kind : Symbol(TypeB.kind, Decl(discriminantElementAccessCheck.ts, 6, 17))
++>kind : Symbol(kind, Decl(discriminantElementAccessCheck.ts, 6, 17))
+ 
+     b: string;
+->b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
++>b : Symbol(b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+ }
+ 
+ function assertNever(x: never) {
+@@= skipped -33, +33 lines =@@
+ >'kind' : Symbol(kind, Decl(discriminantElementAccessCheck.ts, 2, 17), Decl(discriminantElementAccessCheck.ts, 6, 17))
+ 
+         return val.b;
+->val.b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
++>val.b : Symbol(b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+ >val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 15, 22))
+->b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
++>b : Symbol(b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+ 
+     } else {
+         return val.a;
+->val.a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
++>val.a : Symbol(a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+ >val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 15, 22))
+->a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
++>a : Symbol(a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+     }
+ }
+ 
+@@= skipped -23, +23 lines =@@
+ 
+         case 'A':
+             return val.a;
+->val.a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
++>val.a : Symbol(a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+ >val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 23, 26))
+->a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
++>a : Symbol(a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+ 
+         case 'B':
+             return val.b;
+->val.b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
++>val.b : Symbol(b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+ >val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 23, 26))
+->b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
++>b : Symbol(b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+ 
+         default:
+             return assertNever(val);
+@@= skipped -27, +27 lines =@@
+ >`kind` : Symbol(kind, Decl(discriminantElementAccessCheck.ts, 2, 17), Decl(discriminantElementAccessCheck.ts, 6, 17))
+ 
+         return val.b;
+->val.b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
++>val.b : Symbol(b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+ >val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 34, 24))
+->b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
++>b : Symbol(b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+ 
+     } else {
+         return val.a;
+->val.a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
++>val.a : Symbol(a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+ >val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 34, 24))
+->a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
++>a : Symbol(a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+     }
+ }
+ 
+@@= skipped -23, +23 lines =@@
+ 
+         case 'A':
+             return val.a;
+->val.a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
++>val.a : Symbol(a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+ >val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 42, 28))
+->a : Symbol(TypeA.a, Decl(discriminantElementAccessCheck.ts, 3, 14))
++>a : Symbol(a, Decl(discriminantElementAccessCheck.ts, 3, 14))
+ 
+         case 'B':
+             return val.b;
+->val.b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
++>val.b : Symbol(b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+ >val : Symbol(val, Decl(discriminantElementAccessCheck.ts, 42, 28))
+->b : Symbol(TypeB.b, Decl(discriminantElementAccessCheck.ts, 7, 14))
++>b : Symbol(b, Decl(discriminantElementAccessCheck.ts, 7, 14))
+ 
+         default:
+             return assertNever(val);

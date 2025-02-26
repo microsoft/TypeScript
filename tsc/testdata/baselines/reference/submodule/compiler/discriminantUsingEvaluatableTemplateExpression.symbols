@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/discriminantUsingEvaluatableTemplateExpression.ts] ////
+
+=== discriminantUsingEvaluatableTemplateExpression.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/53888
+
+type S = { d: "s"; cb: (x: string) => void };
+>S : Symbol(S, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 0, 0))
+>d : Symbol(d, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 2, 10))
+>cb : Symbol(cb, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 2, 18))
+>x : Symbol(x, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 2, 24))
+
+type N = { d: "n"; cb: (x: number) => void };
+>N : Symbol(N, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 2, 45))
+>d : Symbol(d, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 3, 10))
+>cb : Symbol(cb, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 3, 18))
+>x : Symbol(x, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 3, 24))
+
+declare function foo(foo: S | N): void;
+>foo : Symbol(foo, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 3, 45))
+>foo : Symbol(foo, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 5, 21))
+>S : Symbol(S, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 0, 0))
+>N : Symbol(N, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 2, 45))
+
+foo({
+>foo : Symbol(foo, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 3, 45))
+
+  d: `${"s"}`,
+>d : Symbol(d, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 7, 5))
+
+  cb: (x) => {
+>cb : Symbol(cb, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 8, 14))
+>x : Symbol(x, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 9, 7))
+
+    x; // string
+>x : Symbol(x, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 9, 7))
+
+  },
+});
+

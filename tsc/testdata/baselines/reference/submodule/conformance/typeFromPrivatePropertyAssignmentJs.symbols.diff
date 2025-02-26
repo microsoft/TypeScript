@@ -1,0 +1,33 @@
+--- old.typeFromPrivatePropertyAssignmentJs.symbols
++++ new.typeFromPrivatePropertyAssignmentJs.symbols
+@@= skipped -7, +7 lines =@@
+ 
+     /** @type {{ foo?: string } | undefined } */
+     #a;
+->#a : Symbol(C.#a, Decl(a.js, 0, 9))
++>#a : Symbol(#a, Decl(a.js, 0, 9))
+ 
+     /** @type {{ foo?: string } | undefined } */
+     #b;
+->#b : Symbol(C.#b, Decl(a.js, 2, 7))
++>#b : Symbol(#b, Decl(a.js, 2, 7))
+ 
+     m() {
+->m : Symbol(C.m, Decl(a.js, 4, 7))
++>m : Symbol(m, Decl(a.js, 4, 7))
+ 
+         const a = this.#a || {};
+ >a : Symbol(a, Decl(a.js, 6, 13))
+->this.#a : Symbol(C.#a, Decl(a.js, 0, 9))
++>this.#a : Symbol(#a, Decl(a.js, 0, 9))
+ >this : Symbol(C, Decl(a.js, 0, 0))
+ 
+         this.#b = this.#b || {};
+->this.#b : Symbol(C.#b, Decl(a.js, 2, 7))
++>this.#b : Symbol(#b, Decl(a.js, 2, 7))
+ >this : Symbol(C, Decl(a.js, 0, 0))
+->this.#b : Symbol(C.#b, Decl(a.js, 2, 7))
++>this.#b : Symbol(#b, Decl(a.js, 2, 7))
+ >this : Symbol(C, Decl(a.js, 0, 0))
+     }
+ }

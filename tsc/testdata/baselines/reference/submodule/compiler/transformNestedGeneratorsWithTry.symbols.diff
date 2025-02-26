@@ -1,0 +1,14 @@
+--- old.transformNestedGeneratorsWithTry.symbols
++++ new.transformNestedGeneratorsWithTry.symbols
+@@= skipped -16, +16 lines =@@
+ 
+       try {
+         await Bluebird.resolve(); // -- remove this and it compiles
+->Bluebird.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>Bluebird.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >Bluebird : Symbol(Bluebird, Decl(main.ts, 1, 6))
+->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ 
+       } catch (error) { }
+ >error : Symbol(error, Decl(main.ts, 7, 15))

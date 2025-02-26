@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsCrossfileMerge.ts] ////
+
+=== index.js ===
+const m = require("./exporter");
+>m : Symbol(m, Decl(index.js, 0, 5))
+
+module.exports = m.default;
+>m : Symbol(m, Decl(index.js, 0, 5))
+
+module.exports.memberName = "thing";
+
+=== exporter.js ===
+function validate() {}
+>validate : Symbol(validate, Decl(exporter.js, 0, 0))
+
+export default validate;
+>validate : Symbol(validate, Decl(exporter.js, 0, 0))
+

@@ -1,0 +1,26 @@
+--- old.library_RegExpExecArraySlice.symbols
++++ new.library_RegExpExecArraySlice.symbols
+@@= skipped -6, +6 lines =@@
+ >RegExpExecArray : Symbol(RegExpExecArray, Decl(lib.es5.d.ts, --, --))
+ 
+ regExpExecArrayValue.slice();
+->regExpExecArrayValue.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
++>regExpExecArrayValue.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >regExpExecArrayValue : Symbol(regExpExecArrayValue, Decl(library_RegExpExecArraySlice.ts, 1, 3))
+->slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ 
+ regExpExecArrayValue.slice(0);
+->regExpExecArrayValue.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
++>regExpExecArrayValue.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >regExpExecArrayValue : Symbol(regExpExecArrayValue, Decl(library_RegExpExecArraySlice.ts, 1, 3))
+->slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ 
+ regExpExecArrayValue.slice(0,1);
+->regExpExecArrayValue.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
++>regExpExecArrayValue.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >regExpExecArrayValue : Symbol(regExpExecArrayValue, Decl(library_RegExpExecArraySlice.ts, 1, 3))
+->slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ 

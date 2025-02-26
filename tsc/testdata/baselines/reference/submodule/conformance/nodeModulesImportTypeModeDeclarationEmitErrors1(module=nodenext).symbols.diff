@@ -1,0 +1,42 @@
+--- old.nodeModulesImportTypeModeDeclarationEmitErrors1(module=nodenext).symbols
++++ new.nodeModulesImportTypeModeDeclarationEmitErrors1(module=nodenext).symbols
+@@= skipped -15, +15 lines =@@
+ >RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
+ 
+     & import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface;
+->ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
+ 
+ export const a = (null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface);
+ >a : Symbol(a, Decl(index.ts, 4, 12))
+@@= skipped -8, +7 lines =@@
+ 
+ export const b = (null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface);
+ >b : Symbol(b, Decl(index.ts, 5, 12))
+->ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
+ 
+ === /other.ts ===
+ // missing assert:
+@@= skipped -9, +8 lines =@@
+ 
+     & import("pkg", {"resolution-mode": "require"}).RequireInterface
+     & import("pkg", {"resolution-mode": "import"}).ImportInterface;
+->"pkg" : Symbol("/node_modules/pkg/import", Decl(import.d.ts, 0, 0))
+ >"resolution-mode" : Symbol("resolution-mode", Decl(other.ts, 3, 21))
+ 
+ export const a = (null as any as import("pkg", {"resolution-mode": "require"}).RequireInterface);
+@@= skipped -35, +34 lines =@@
+ >"resolution-mode" : Symbol("resolution-mode", Decl(other3.ts, 2, 23))
+ 
+     & import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface;
+->"pkg" : Symbol("/node_modules/pkg/import", Decl(import.d.ts, 0, 0))
+ >"resolution-mode" : Symbol("resolution-mode", Decl(other3.ts, 3, 23))
+ 
+ export const a = (null as any as import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface);
+@@= skipped -31, +30 lines =@@
+ >RequireInterface : Symbol(RequireInterface, Decl(other4.ts, 8, 57))
+ 
+     & import("pkg", Asserts2).ImportInterface;
+->"pkg" : Symbol("/node_modules/pkg/import", Decl(import.d.ts, 0, 0))
+ >Asserts2 : Symbol(Asserts2, Decl(other4.ts, 9, 46))
+ 
+ export const a = (null as any as import("pkg", Asserts1).RequireInterface);

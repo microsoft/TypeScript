@@ -1,0 +1,231 @@
+--- old.privateNameInInExpression(target=es2022).symbols
++++ new.privateNameInInExpression(target=es2022).symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(privateNameInInExpression.ts, 0, 0))
+ 
+     #field = 1;
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ 
+     static #staticField = 2;
+->#staticField : Symbol(Foo.#staticField, Decl(privateNameInInExpression.ts, 1, 15))
++>#staticField : Symbol(#staticField, Decl(privateNameInInExpression.ts, 1, 15))
+ 
+     #method() {}
+->#method : Symbol(Foo.#method, Decl(privateNameInInExpression.ts, 2, 28))
++>#method : Symbol(#method, Decl(privateNameInInExpression.ts, 2, 28))
+ 
+     static #staticMethod() {}
+->#staticMethod : Symbol(Foo.#staticMethod, Decl(privateNameInInExpression.ts, 3, 16))
++>#staticMethod : Symbol(#staticMethod, Decl(privateNameInInExpression.ts, 3, 16))
+ 
+     goodRhs(v: any) {
+->goodRhs : Symbol(Foo.goodRhs, Decl(privateNameInInExpression.ts, 4, 29))
++>goodRhs : Symbol(goodRhs, Decl(privateNameInInExpression.ts, 4, 29))
+ >v : Symbol(v, Decl(privateNameInInExpression.ts, 6, 12))
+ 
+         const a = #field in v;
+ >a : Symbol(a, Decl(privateNameInInExpression.ts, 7, 13))
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ >v : Symbol(v, Decl(privateNameInInExpression.ts, 6, 12))
+ 
+         const b = #field in v.p1.p2;
+ >b : Symbol(b, Decl(privateNameInInExpression.ts, 9, 13))
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ >v : Symbol(v, Decl(privateNameInInExpression.ts, 6, 12))
+ 
+         const c = #field in (v as {});
+ >c : Symbol(c, Decl(privateNameInInExpression.ts, 11, 13))
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ >v : Symbol(v, Decl(privateNameInInExpression.ts, 6, 12))
+ 
+         const d = #field in (v as Foo);
+ >d : Symbol(d, Decl(privateNameInInExpression.ts, 13, 13))
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ >v : Symbol(v, Decl(privateNameInInExpression.ts, 6, 12))
+ >Foo : Symbol(Foo, Decl(privateNameInInExpression.ts, 0, 0))
+ 
+         const e = #field in (v as never);
+ >e : Symbol(e, Decl(privateNameInInExpression.ts, 15, 13))
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ >v : Symbol(v, Decl(privateNameInInExpression.ts, 6, 12))
+ 
+         for (let f in #field in v as any) { /**/ } // unlikely but valid
+ >f : Symbol(f, Decl(privateNameInInExpression.ts, 17, 16))
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ >v : Symbol(v, Decl(privateNameInInExpression.ts, 6, 12))
+     }
+     badRhs(v: any) {
+->badRhs : Symbol(Foo.badRhs, Decl(privateNameInInExpression.ts, 18, 5))
++>badRhs : Symbol(badRhs, Decl(privateNameInInExpression.ts, 18, 5))
+ >v : Symbol(v, Decl(privateNameInInExpression.ts, 19, 11))
+ 
+         const a = #field in (v as unknown); // Bad - RHS of in must be object type or any
+ >a : Symbol(a, Decl(privateNameInInExpression.ts, 20, 13))
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ >v : Symbol(v, Decl(privateNameInInExpression.ts, 19, 11))
+ 
+         const b = #fiel in v; // Bad - typo in privateID
+@@= skipped -68, +68 lines =@@
+ 
+         for (let d in #field in v) { /**/ } // Bad - rhs of in should be a object/any
+ >d : Symbol(d, Decl(privateNameInInExpression.ts, 28, 16))
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ >v : Symbol(v, Decl(privateNameInInExpression.ts, 19, 11))
+     }
+     whitespace(v: any) {
+->whitespace : Symbol(Foo.whitespace, Decl(privateNameInInExpression.ts, 29, 5))
++>whitespace : Symbol(whitespace, Decl(privateNameInInExpression.ts, 29, 5))
+ >v : Symbol(v, Decl(privateNameInInExpression.ts, 30, 15))
+ 
+         const a = v && /*0*/#field/*1*/
+ >a : Symbol(a, Decl(privateNameInInExpression.ts, 31, 13))
+ >v : Symbol(v, Decl(privateNameInInExpression.ts, 30, 15))
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ 
+             /*2*/in/*3*/
+                 /*4*/v/*5*/
+ >v : Symbol(v, Decl(privateNameInInExpression.ts, 30, 15))
+     }
+     flow(u: unknown, n: never, fb: Foo | Bar, fs: FooSub, b: Bar, fsb: FooSub | Bar, fsfb: Foo | FooSub | Bar) {
+->flow : Symbol(Foo.flow, Decl(privateNameInInExpression.ts, 34, 5))
++>flow : Symbol(flow, Decl(privateNameInInExpression.ts, 34, 5))
+ >u : Symbol(u, Decl(privateNameInInExpression.ts, 35, 9))
+ >n : Symbol(n, Decl(privateNameInInExpression.ts, 35, 20))
+ >fb : Symbol(fb, Decl(privateNameInInExpression.ts, 35, 30))
+@@= skipped -39, +39 lines =@@
+ >u : Symbol(u, Decl(privateNameInInExpression.ts, 35, 9))
+ 
+             if (#field in n) {
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ >n : Symbol(n, Decl(privateNameInInExpression.ts, 35, 20))
+ 
+                 n; // good n is never
+@@= skipped -8, +8 lines =@@
+             }
+ 
+             if (#field in u) {
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ >u : Symbol(u, Decl(privateNameInInExpression.ts, 35, 9))
+ 
+                 u; // good u is Foo
+@@= skipped -15, +15 lines =@@
+ >u : Symbol(u, Decl(privateNameInInExpression.ts, 35, 9))
+ 
+                 if (#field in u) {
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ >u : Symbol(u, Decl(privateNameInInExpression.ts, 35, 9))
+ 
+                     u; // good u is Foo
+@@= skipped -12, +12 lines =@@
+                 }
+ 
+                 if (#method in u) {
+->#method : Symbol(Foo.#method, Decl(privateNameInInExpression.ts, 2, 28))
++>#method : Symbol(#method, Decl(privateNameInInExpression.ts, 2, 28))
+ >u : Symbol(u, Decl(privateNameInInExpression.ts, 35, 9))
+ 
+                     u; // good u is Foo
+@@= skipped -8, +8 lines =@@
+                 }
+ 
+                 if (#staticField in u) {
+->#staticField : Symbol(Foo.#staticField, Decl(privateNameInInExpression.ts, 1, 15))
++>#staticField : Symbol(#staticField, Decl(privateNameInInExpression.ts, 1, 15))
+ >u : Symbol(u, Decl(privateNameInInExpression.ts, 35, 9))
+ 
+                     u; // good u is typeof Foo
+@@= skipped -8, +8 lines =@@
+                 }
+ 
+                 if (#staticMethod in u) {
+->#staticMethod : Symbol(Foo.#staticMethod, Decl(privateNameInInExpression.ts, 3, 16))
++>#staticMethod : Symbol(#staticMethod, Decl(privateNameInInExpression.ts, 3, 16))
+ >u : Symbol(u, Decl(privateNameInInExpression.ts, 35, 9))
+ 
+                     u; // good u is typeof Foo
+@@= skipped -10, +10 lines =@@
+         }
+ 
+         if (#field in fb) {
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ >fb : Symbol(fb, Decl(privateNameInInExpression.ts, 35, 30))
+ 
+             fb; // good fb is Foo
+@@= skipped -12, +12 lines =@@
+         }
+ 
+         if (#field in fs) {
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ >fs : Symbol(fs, Decl(privateNameInInExpression.ts, 35, 45))
+ 
+             fs; // good fs is FooSub
+@@= skipped -12, +12 lines =@@
+         }
+ 
+         if (#field in b) {
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ >b : Symbol(b, Decl(privateNameInInExpression.ts, 35, 57))
+ 
+             b; // good b is 'Bar & Foo'
+@@= skipped -12, +12 lines =@@
+         }
+ 
+         if (#field in fsb) {
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ >fsb : Symbol(fsb, Decl(privateNameInInExpression.ts, 35, 65))
+ 
+             fsb; // good fsb is FooSub
+@@= skipped -12, +12 lines =@@
+         }
+ 
+         if (#field in fsfb) {
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ >fsfb : Symbol(fsfb, Decl(privateNameInInExpression.ts, 35, 84))
+ 
+             fsfb; // good fsfb is 'Foo | FooSub'
+@@= skipped -15, +15 lines =@@
+ >Nested : Symbol(Nested, Decl(privateNameInInExpression.ts, 97, 9))
+ 
+             m(v: any) {
+->m : Symbol(Nested.m, Decl(privateNameInInExpression.ts, 99, 22))
++>m : Symbol(m, Decl(privateNameInInExpression.ts, 99, 22))
+ >v : Symbol(v, Decl(privateNameInInExpression.ts, 100, 14))
+ 
+                 if (#field in v) {
+->#field : Symbol(Foo.#field, Decl(privateNameInInExpression.ts, 0, 11))
++>#field : Symbol(#field, Decl(privateNameInInExpression.ts, 0, 11))
+ >v : Symbol(v, Decl(privateNameInInExpression.ts, 100, 14))
+ 
+                     v; // good v is Foo
+@@= skipped -18, +18 lines =@@
+ class FooSub extends Foo { subTypeOfFoo = true }
+ >FooSub : Symbol(FooSub, Decl(privateNameInInExpression.ts, 107, 1))
+ >Foo : Symbol(Foo, Decl(privateNameInInExpression.ts, 0, 0))
+->subTypeOfFoo : Symbol(FooSub.subTypeOfFoo, Decl(privateNameInInExpression.ts, 109, 26))
++>subTypeOfFoo : Symbol(subTypeOfFoo, Decl(privateNameInInExpression.ts, 109, 26))
+ 
+ class Bar { notFoo = true }
+ >Bar : Symbol(Bar, Decl(privateNameInInExpression.ts, 109, 48))
+->notFoo : Symbol(Bar.notFoo, Decl(privateNameInInExpression.ts, 110, 11))
++>notFoo : Symbol(notFoo, Decl(privateNameInInExpression.ts, 110, 11))
+ 
+ function badSyntax(v: Foo) {
+ >badSyntax : Symbol(badSyntax, Decl(privateNameInInExpression.ts, 110, 27))

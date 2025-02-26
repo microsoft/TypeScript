@@ -1,0 +1,17 @@
+--- old.typeMatch2.symbols
++++ new.typeMatch2.symbols
+@@= skipped -29, +29 lines =@@
+ 
+ class Animal { private a; }
+ >Animal : Symbol(Animal, Decl(typeMatch2.ts, 6, 1))
+->a : Symbol(Animal.a, Decl(typeMatch2.ts, 8, 14))
++>a : Symbol(a, Decl(typeMatch2.ts, 8, 14))
+ 
+ class Giraffe extends Animal { private g; }
+ >Giraffe : Symbol(Giraffe, Decl(typeMatch2.ts, 8, 27))
+ >Animal : Symbol(Animal, Decl(typeMatch2.ts, 6, 1))
+->g : Symbol(Giraffe.g, Decl(typeMatch2.ts, 9, 30))
++>g : Symbol(g, Decl(typeMatch2.ts, 9, 30))
+ 
+ function f2() {
+ >f2 : Symbol(f2, Decl(typeMatch2.ts, 9, 43))

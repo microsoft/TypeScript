@@ -1,0 +1,11 @@
+--- old.destructuringWithNewExpression.symbols
++++ new.destructuringWithNewExpression.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(destructuringWithNewExpression.ts, 0, 0))
+ 
+     x = 0;
+->x : Symbol(C.x, Decl(destructuringWithNewExpression.ts, 0, 9))
++>x : Symbol(x, Decl(destructuringWithNewExpression.ts, 0, 9))
+ }
+ 
+ var { x } = new C;

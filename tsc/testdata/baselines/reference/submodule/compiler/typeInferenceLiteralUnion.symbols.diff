@@ -1,0 +1,42 @@
+--- old.typeInferenceLiteralUnion.symbols
++++ new.typeInferenceLiteralUnion.symbols
+@@= skipped -15, +15 lines =@@
+ >Numeric : Symbol(Numeric, Decl(typeInferenceLiteralUnion.ts, 4, 57))
+ 
+     valueOf(): number;
+->valueOf : Symbol(Numeric.valueOf, Decl(typeInferenceLiteralUnion.ts, 9, 19))
++>valueOf : Symbol(valueOf, Decl(typeInferenceLiteralUnion.ts, 9, 19))
+ }
+ 
+ // Not very useful, but meets Numeric
+@@= skipped -8, +8 lines =@@
+ >NumCoercible : Symbol(NumCoercible, Decl(typeInferenceLiteralUnion.ts, 11, 1))
+ 
+     public a: number;
+->a : Symbol(NumCoercible.a, Decl(typeInferenceLiteralUnion.ts, 14, 20))
++>a : Symbol(a, Decl(typeInferenceLiteralUnion.ts, 14, 20))
+ 
+     constructor(a: number) {
+ >a : Symbol(a, Decl(typeInferenceLiteralUnion.ts, 17, 16))
+ 
+         this.a = a;
+->this.a : Symbol(NumCoercible.a, Decl(typeInferenceLiteralUnion.ts, 14, 20))
++>this.a : Symbol(a, Decl(typeInferenceLiteralUnion.ts, 14, 20))
+ >this : Symbol(NumCoercible, Decl(typeInferenceLiteralUnion.ts, 11, 1))
+->a : Symbol(NumCoercible.a, Decl(typeInferenceLiteralUnion.ts, 14, 20))
++>a : Symbol(a, Decl(typeInferenceLiteralUnion.ts, 14, 20))
+ >a : Symbol(a, Decl(typeInferenceLiteralUnion.ts, 17, 16))
+     }
+     public valueOf() {
+->valueOf : Symbol(NumCoercible.valueOf, Decl(typeInferenceLiteralUnion.ts, 19, 5))
++>valueOf : Symbol(valueOf, Decl(typeInferenceLiteralUnion.ts, 19, 5))
+ 
+         return this.a;
+->this.a : Symbol(NumCoercible.a, Decl(typeInferenceLiteralUnion.ts, 14, 20))
++>this.a : Symbol(a, Decl(typeInferenceLiteralUnion.ts, 14, 20))
+ >this : Symbol(NumCoercible, Decl(typeInferenceLiteralUnion.ts, 11, 1))
+->a : Symbol(NumCoercible.a, Decl(typeInferenceLiteralUnion.ts, 14, 20))
++>a : Symbol(a, Decl(typeInferenceLiteralUnion.ts, 14, 20))
+     }
+ }
+ 

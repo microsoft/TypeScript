@@ -1,0 +1,41 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassStatic.ts] ////
+
+=== source.js ===
+class Handler {
+>Handler : Symbol(Handler, Decl(source.js, 0, 0))
+
+	static get OPTIONS() {
+>OPTIONS : Symbol(OPTIONS, Decl(source.js, 0, 15))
+
+		return 1;
+	}
+
+	process() {
+>process : Symbol(process, Decl(source.js, 3, 2))
+	}
+}
+Handler.statische = function() { }
+>Handler : Symbol(Handler, Decl(source.js, 0, 0))
+
+const Strings = {
+>Strings : Symbol(Strings, Decl(source.js, 9, 5))
+
+    a: "A",
+>a : Symbol(a, Decl(source.js, 9, 17))
+
+    b: "B"
+>b : Symbol(b, Decl(source.js, 10, 11))
+}
+
+module.exports = Handler;
+>Handler : Symbol(Handler, Decl(source.js, 0, 0))
+
+module.exports.Strings = Strings
+>Strings : Symbol(Strings, Decl(source.js, 9, 5))
+
+/**
+ * @typedef {Object} HandlerOptions
+ * @property {String} name
+ * Should be able to export a type alias at the same time.
+ */
+

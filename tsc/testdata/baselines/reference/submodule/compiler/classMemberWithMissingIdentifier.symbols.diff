@@ -1,0 +1,9 @@
+--- old.classMemberWithMissingIdentifier.symbols
++++ new.classMemberWithMissingIdentifier.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(classMemberWithMissingIdentifier.ts, 0, 0))
+ 
+     public {};
+-> : Symbol(C[(Missing)], Decl(classMemberWithMissingIdentifier.ts, 0, 9))
++> : Symbol(, Decl(classMemberWithMissingIdentifier.ts, 0, 9))
+ }

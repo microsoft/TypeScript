@@ -1,0 +1,63 @@
+--- old.subclassThisTypeAssignable01.symbols
++++ new.subclassThisTypeAssignable01.symbols
+@@= skipped -6, +6 lines =@@
+ >State : Symbol(State, Decl(tile1.ts, 0, 26))
+ 
+ 	oninit?(vnode: Vnode<Attrs, State>): number;
+->oninit : Symbol(Lifecycle.oninit, Decl(tile1.ts, 0, 35))
++>oninit : Symbol(oninit, Decl(tile1.ts, 0, 35))
+ >vnode : Symbol(vnode, Decl(tile1.ts, 1, 9))
+ >Vnode : Symbol(Vnode, Decl(tile1.ts, 3, 1))
+ >Attrs : Symbol(Attrs, Decl(tile1.ts, 0, 20))
+@@= skipped -22, +22 lines =@@
+ >State : Symbol(State, Decl(tile1.ts, 5, 22))
+ 
+ 	tag: Component<Attrs, State>;
+->tag : Symbol(Vnode.tag, Decl(tile1.ts, 5, 89))
++>tag : Symbol(tag, Decl(tile1.ts, 5, 89))
+ >Component : Symbol(Component, Decl(tile1.ts, 7, 1))
+ >Attrs : Symbol(Attrs, Decl(tile1.ts, 5, 16))
+ >State : Symbol(State, Decl(tile1.ts, 5, 22))
+@@= skipped -12, +12 lines =@@
+ >State : Symbol(State, Decl(tile1.ts, 9, 26))
+ 
+ 	view(this: State, vnode: Vnode<Attrs, State>): number;
+->view : Symbol(Component.view, Decl(tile1.ts, 9, 35))
++>view : Symbol(view, Decl(tile1.ts, 9, 35))
+ >this : Symbol(this, Decl(tile1.ts, 10, 6))
+ >State : Symbol(State, Decl(tile1.ts, 9, 26))
+ >vnode : Symbol(vnode, Decl(tile1.ts, 10, 18))
+@@= skipped -18, +18 lines =@@
+ >A : Symbol(A, Decl(tile1.ts, 13, 25))
+ 
+ 	oninit?(vnode: Vnode<A, this>): number;
+->oninit : Symbol(ClassComponent.oninit, Decl(tile1.ts, 13, 69))
++>oninit : Symbol(oninit, Decl(tile1.ts, 13, 69))
+ >vnode : Symbol(vnode, Decl(tile1.ts, 14, 9))
+ >Vnode : Symbol(Vnode, Decl(tile1.ts, 3, 1))
+ >A : Symbol(A, Decl(tile1.ts, 13, 25))
+ 
+ 	view(vnode: Vnode<A, this>): number;
+->view : Symbol(ClassComponent.view, Decl(tile1.ts, 14, 40))
++>view : Symbol(view, Decl(tile1.ts, 14, 40))
+ >vnode : Symbol(vnode, Decl(tile1.ts, 15, 6))
+ >Vnode : Symbol(Vnode, Decl(tile1.ts, 3, 1))
+ >A : Symbol(A, Decl(tile1.ts, 13, 25))
+@@= skipped -14, +14 lines =@@
+ 
+ interface MyAttrs { id: number }
+ >MyAttrs : Symbol(MyAttrs, Decl(tile1.ts, 16, 1))
+->id : Symbol(MyAttrs.id, Decl(tile1.ts, 18, 19))
++>id : Symbol(id, Decl(tile1.ts, 18, 19))
+ 
+ class C implements ClassComponent<MyAttrs> {
+ >C : Symbol(C, Decl(tile1.ts, 18, 32))
+@@= skipped -8, +8 lines =@@
+ >MyAttrs : Symbol(MyAttrs, Decl(tile1.ts, 16, 1))
+ 
+ 	view(v: Vnode<MyAttrs>) { return 0; }
+->view : Symbol(C.view, Decl(tile1.ts, 19, 44))
++>view : Symbol(view, Decl(tile1.ts, 19, 44))
+ >v : Symbol(v, Decl(tile1.ts, 20, 6))
+ >Vnode : Symbol(Vnode, Decl(tile1.ts, 3, 1))
+ >MyAttrs : Symbol(MyAttrs, Decl(tile1.ts, 16, 1))

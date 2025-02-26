@@ -1,0 +1,11 @@
+--- old.superCallFromClassThatHasNoBaseType1.symbols
++++ new.superCallFromClassThatHasNoBaseType1.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(superCallFromClassThatHasNoBaseType1.ts, 0, 0))
+ 
+     constructor(private map: (value: number) => string) {
+->map : Symbol(A.map, Decl(superCallFromClassThatHasNoBaseType1.ts, 1, 16))
++>map : Symbol(map, Decl(superCallFromClassThatHasNoBaseType1.ts, 1, 16))
+ >value : Symbol(value, Decl(superCallFromClassThatHasNoBaseType1.ts, 1, 30))
+ 
+     }

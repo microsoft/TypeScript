@@ -1,0 +1,11 @@
+--- old.metadataOfClassFromModule.symbols
++++ new.metadataOfClassFromModule.symbols
+@@= skipped -16, +16 lines =@@
+ 
+         @inject leftLeg: Leg;
+ >inject : Symbol(inject, Decl(metadataOfClassFromModule.ts, 0, 17))
+->leftLeg : Symbol(Person.leftLeg, Decl(metadataOfClassFromModule.ts, 6, 25))
++>leftLeg : Symbol(leftLeg, Decl(metadataOfClassFromModule.ts, 6, 25))
+ >Leg : Symbol(Leg, Decl(metadataOfClassFromModule.ts, 2, 62))
+     }
+ 

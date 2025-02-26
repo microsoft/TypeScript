@@ -1,0 +1,15 @@
+--- old.importImportOnlyModule.symbols
++++ new.importImportOnlyModule.symbols
+@@= skipped -12, +12 lines =@@
+ >C1 : Symbol(C1, Decl(foo_0.ts, 0, 0))
+ 
+ 	m1 = 42;
+->m1 : Symbol(C1.m1, Decl(foo_0.ts, 0, 17))
++>m1 : Symbol(m1, Decl(foo_0.ts, 0, 17))
+ 
+ 	static s1 = true;
+->s1 : Symbol(C1.s1, Decl(foo_0.ts, 1, 9))
++>s1 : Symbol(s1, Decl(foo_0.ts, 1, 9))
+ }
+ 
+ === foo_1.ts ===

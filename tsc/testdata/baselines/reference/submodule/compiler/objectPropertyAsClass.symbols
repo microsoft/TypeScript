@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/objectPropertyAsClass.ts] ////
+
+=== index.js ===
+const a1 = {
+>a1 : Symbol(a1, Decl(index.js, 0, 5))
+
+    foo() {
+>foo : Symbol(foo, Decl(index.js, 0, 12))
+
+        this.x = 0;
+    }
+}
+
+const a2 = {
+>a2 : Symbol(a2, Decl(index.js, 6, 5))
+
+    foo: function() {
+>foo : Symbol(foo, Decl(index.js, 6, 12))
+
+        this.x = 0;
+    }
+}
+
+const b1 = {
+>b1 : Symbol(b1, Decl(index.js, 12, 5))
+
+    /** @class */
+    foo() {
+>foo : Symbol(foo, Decl(index.js, 12, 12))
+
+        this.x = 0;
+    }
+}
+
+const b2 = {
+>b2 : Symbol(b2, Decl(index.js, 19, 5))
+
+    /** @class */
+    foo: function() {
+>foo : Symbol(foo, Decl(index.js, 19, 12))
+
+        this.x = 0;
+    }
+}
+

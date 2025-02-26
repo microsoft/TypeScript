@@ -1,0 +1,19 @@
+--- old.errorMessagesIntersectionTypes04.symbols
++++ new.errorMessagesIntersectionTypes04.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(errorMessagesIntersectionTypes04.ts, 0, 0))
+ 
+     a;
+->a : Symbol(A.a, Decl(errorMessagesIntersectionTypes04.ts, 0, 13))
++>a : Symbol(a, Decl(errorMessagesIntersectionTypes04.ts, 0, 13))
+ }
+ 
+ interface B {
+ >B : Symbol(B, Decl(errorMessagesIntersectionTypes04.ts, 2, 1))
+ 
+     b;
+->b : Symbol(B.b, Decl(errorMessagesIntersectionTypes04.ts, 4, 13))
++>b : Symbol(b, Decl(errorMessagesIntersectionTypes04.ts, 4, 13))
+ }
+ 
+ function f<T, U extends A, V extends U>(): void {

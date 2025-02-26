@@ -1,0 +1,173 @@
+--- old.classdecl.symbols
++++ new.classdecl.symbols
+@@= skipped -16, +16 lines =@@
+     }
+ 
+     public pgF() { }
+->pgF : Symbol(a.pgF, Decl(classdecl.ts, 6, 5))
++>pgF : Symbol(pgF, Decl(classdecl.ts, 6, 5))
+ 
+     public pv;
+->pv : Symbol(a.pv, Decl(classdecl.ts, 8, 20))
++>pv : Symbol(pv, Decl(classdecl.ts, 8, 20))
+ 
+     public get d() {
+->d : Symbol(a.d, Decl(classdecl.ts, 10, 14), Decl(classdecl.ts, 13, 5))
++>d : Symbol(d, Decl(classdecl.ts, 10, 14), Decl(classdecl.ts, 13, 5))
+ 
+         return 30;
+     }
+     public set d(a: number) {
+->d : Symbol(a.d, Decl(classdecl.ts, 10, 14), Decl(classdecl.ts, 13, 5))
++>d : Symbol(d, Decl(classdecl.ts, 10, 14), Decl(classdecl.ts, 13, 5))
+ >a : Symbol(a, Decl(classdecl.ts, 14, 17))
+     }
+ 
+     public static get p2() {
+->p2 : Symbol(a.p2, Decl(classdecl.ts, 15, 5))
++>p2 : Symbol(p2, Decl(classdecl.ts, 15, 5))
+ 
+         return { x: 30, y: 40 };
+ >x : Symbol(x, Decl(classdecl.ts, 18, 16))
+@@= skipped -24, +24 lines =@@
+     }
+ 
+     private static d2() {
+->d2 : Symbol(a.d2, Decl(classdecl.ts, 19, 5))
++>d2 : Symbol(d2, Decl(classdecl.ts, 19, 5))
+     }
+     private static get p3() {
+->p3 : Symbol(a.p3, Decl(classdecl.ts, 22, 5))
++>p3 : Symbol(p3, Decl(classdecl.ts, 22, 5))
+ 
+         return "string";
+     }
+     private pv3;
+->pv3 : Symbol(a.pv3, Decl(classdecl.ts, 25, 5))
++>pv3 : Symbol(pv3, Decl(classdecl.ts, 25, 5))
+ 
+     private foo(n: number): string;
+->foo : Symbol(a.foo, Decl(classdecl.ts, 26, 16), Decl(classdecl.ts, 28, 35), Decl(classdecl.ts, 29, 35))
++>foo : Symbol(foo, Decl(classdecl.ts, 26, 16), Decl(classdecl.ts, 28, 35), Decl(classdecl.ts, 29, 35))
+ >n : Symbol(n, Decl(classdecl.ts, 28, 16))
+ 
+     private foo(s: string): string;
+->foo : Symbol(a.foo, Decl(classdecl.ts, 26, 16), Decl(classdecl.ts, 28, 35), Decl(classdecl.ts, 29, 35))
++>foo : Symbol(foo, Decl(classdecl.ts, 26, 16), Decl(classdecl.ts, 28, 35), Decl(classdecl.ts, 29, 35))
+ >s : Symbol(s, Decl(classdecl.ts, 29, 16))
+ 
+     private foo(ns: any) {
+->foo : Symbol(a.foo, Decl(classdecl.ts, 26, 16), Decl(classdecl.ts, 28, 35), Decl(classdecl.ts, 29, 35))
++>foo : Symbol(foo, Decl(classdecl.ts, 26, 16), Decl(classdecl.ts, 28, 35), Decl(classdecl.ts, 29, 35))
+ >ns : Symbol(ns, Decl(classdecl.ts, 30, 16))
+ 
+         return ns.toString();
+@@= skipped -60, +60 lines =@@
+         }
+         export class ib2 implements m1.ib {
+ >ib2 : Symbol(ib2, Decl(classdecl.ts, 53, 9))
+->m1.ib : Symbol(m1.ib, Decl(classdecl.ts, 42, 5))
++>m1.ib : Symbol(ib, Decl(classdecl.ts, 42, 5))
+ >m1 : Symbol(m1, Decl(classdecl.ts, 36, 1))
+->ib : Symbol(m1.ib, Decl(classdecl.ts, 42, 5))
++>ib : Symbol(ib, Decl(classdecl.ts, 42, 5))
+         }
+     }
+ }
+ 
+ class c extends m1.b {
+ >c : Symbol(c, Decl(classdecl.ts, 57, 1))
+->m1.b : Symbol(m1.b, Decl(classdecl.ts, 38, 11))
++>m1.b : Symbol(b, Decl(classdecl.ts, 38, 11))
+ >m1 : Symbol(m1, Decl(classdecl.ts, 36, 1))
+->b : Symbol(m1.b, Decl(classdecl.ts, 38, 11))
++>b : Symbol(b, Decl(classdecl.ts, 38, 11))
+ }
+ 
+ class ib2 implements m1.ib {
+ >ib2 : Symbol(ib2, Decl(classdecl.ts, 60, 1))
+->m1.ib : Symbol(m1.ib, Decl(classdecl.ts, 42, 5))
++>m1.ib : Symbol(ib, Decl(classdecl.ts, 42, 5))
+ >m1 : Symbol(m1, Decl(classdecl.ts, 36, 1))
+->ib : Symbol(m1.ib, Decl(classdecl.ts, 42, 5))
++>ib : Symbol(ib, Decl(classdecl.ts, 42, 5))
+ }
+ 
+ declare class aAmbient {
+@@= skipped -31, +31 lines =@@
+ >s : Symbol(s, Decl(classdecl.ts, 67, 17))
+ 
+     public pgF(): void;
+->pgF : Symbol(aAmbient.pgF, Decl(classdecl.ts, 67, 28))
++>pgF : Symbol(pgF, Decl(classdecl.ts, 67, 28))
+ 
+     public pv;
+->pv : Symbol(aAmbient.pv, Decl(classdecl.ts, 68, 23))
++>pv : Symbol(pv, Decl(classdecl.ts, 68, 23))
+ 
+     public d : number;
+->d : Symbol(aAmbient.d, Decl(classdecl.ts, 69, 14))
++>d : Symbol(d, Decl(classdecl.ts, 69, 14))
+ 
+     static p2 : { x: number; y: number; };
+->p2 : Symbol(aAmbient.p2, Decl(classdecl.ts, 70, 22))
++>p2 : Symbol(p2, Decl(classdecl.ts, 70, 22))
+ >x : Symbol(x, Decl(classdecl.ts, 71, 17))
+ >y : Symbol(y, Decl(classdecl.ts, 71, 28))
+ 
+     static d2();
+->d2 : Symbol(aAmbient.d2, Decl(classdecl.ts, 71, 42))
++>d2 : Symbol(d2, Decl(classdecl.ts, 71, 42))
+ 
+     static p3;
+->p3 : Symbol(aAmbient.p3, Decl(classdecl.ts, 72, 16))
++>p3 : Symbol(p3, Decl(classdecl.ts, 72, 16))
+ 
+     private pv3;
+->pv3 : Symbol(aAmbient.pv3, Decl(classdecl.ts, 73, 14))
++>pv3 : Symbol(pv3, Decl(classdecl.ts, 73, 14))
+ 
+     private foo(s);
+->foo : Symbol(aAmbient.foo, Decl(classdecl.ts, 74, 16))
++>foo : Symbol(foo, Decl(classdecl.ts, 74, 16))
+ >s : Symbol(s, Decl(classdecl.ts, 75, 16))
+ }
+ 
+@@= skipped -31, +31 lines =@@
+ >d : Symbol(d, Decl(classdecl.ts, 76, 1))
+ 
+     private foo(n: number): string;
+->foo : Symbol(d.foo, Decl(classdecl.ts, 78, 9), Decl(classdecl.ts, 79, 35), Decl(classdecl.ts, 80, 35))
++>foo : Symbol(foo, Decl(classdecl.ts, 78, 9), Decl(classdecl.ts, 79, 35), Decl(classdecl.ts, 80, 35))
+ >n : Symbol(n, Decl(classdecl.ts, 79, 16))
+ 
+     private foo(s: string): string;
+->foo : Symbol(d.foo, Decl(classdecl.ts, 78, 9), Decl(classdecl.ts, 79, 35), Decl(classdecl.ts, 80, 35))
++>foo : Symbol(foo, Decl(classdecl.ts, 78, 9), Decl(classdecl.ts, 79, 35), Decl(classdecl.ts, 80, 35))
+ >s : Symbol(s, Decl(classdecl.ts, 80, 16))
+ 
+     private foo(ns: any) {
+->foo : Symbol(d.foo, Decl(classdecl.ts, 78, 9), Decl(classdecl.ts, 79, 35), Decl(classdecl.ts, 80, 35))
++>foo : Symbol(foo, Decl(classdecl.ts, 78, 9), Decl(classdecl.ts, 79, 35), Decl(classdecl.ts, 80, 35))
+ >ns : Symbol(ns, Decl(classdecl.ts, 81, 16))
+ 
+         return ns.toString();
+@@= skipped -20, +20 lines =@@
+ >e : Symbol(e, Decl(classdecl.ts, 84, 1))
+ 
+     private foo(s: string): string;
+->foo : Symbol(e.foo, Decl(classdecl.ts, 86, 9), Decl(classdecl.ts, 87, 35), Decl(classdecl.ts, 88, 35))
++>foo : Symbol(foo, Decl(classdecl.ts, 86, 9), Decl(classdecl.ts, 87, 35), Decl(classdecl.ts, 88, 35))
+ >s : Symbol(s, Decl(classdecl.ts, 87, 16))
+ 
+     private foo(n: number): string;
+->foo : Symbol(e.foo, Decl(classdecl.ts, 86, 9), Decl(classdecl.ts, 87, 35), Decl(classdecl.ts, 88, 35))
++>foo : Symbol(foo, Decl(classdecl.ts, 86, 9), Decl(classdecl.ts, 87, 35), Decl(classdecl.ts, 88, 35))
+ >n : Symbol(n, Decl(classdecl.ts, 88, 16))
+ 
+     private foo(ns: any) {
+->foo : Symbol(e.foo, Decl(classdecl.ts, 86, 9), Decl(classdecl.ts, 87, 35), Decl(classdecl.ts, 88, 35))
++>foo : Symbol(foo, Decl(classdecl.ts, 86, 9), Decl(classdecl.ts, 87, 35), Decl(classdecl.ts, 88, 35))
+ >ns : Symbol(ns, Decl(classdecl.ts, 89, 16))
+ 
+         return ns.toString();

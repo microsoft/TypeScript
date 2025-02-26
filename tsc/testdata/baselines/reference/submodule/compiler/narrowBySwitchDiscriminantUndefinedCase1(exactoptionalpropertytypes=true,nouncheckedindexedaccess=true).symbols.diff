@@ -1,0 +1,23 @@
+--- old.narrowBySwitchDiscriminantUndefinedCase1(exactoptionalpropertytypes=true,nouncheckedindexedaccess=true).symbols
++++ new.narrowBySwitchDiscriminantUndefinedCase1(exactoptionalpropertytypes=true,nouncheckedindexedaccess=true).symbols
+@@= skipped -6, +6 lines =@@
+ >A : Symbol(A, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 0, 0))
+ 
+   optionalProp?: "hello";
+->optionalProp : Symbol(A.optionalProp, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 2, 13))
++>optionalProp : Symbol(optionalProp, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 2, 13))
+ }
+ 
+ function func(arg: A) {
+@@= skipped -36, +36 lines =@@
+   const optionalProp = ["hello" as const][Math.random()];
+ >optionalProp : Symbol(optionalProp, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 20, 7))
+ >const : Symbol(const)
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ 
+   switch (optionalProp) {
+ >optionalProp : Symbol(optionalProp, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 20, 7))

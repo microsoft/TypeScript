@@ -1,0 +1,45 @@
+--- old.exportStarFromEmptyModule.symbols
++++ new.exportStarFromEmptyModule.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(exportStarFromEmptyModule_module1.ts, 0, 0))
+ 
+     static r;
+->r : Symbol(A.r, Decl(exportStarFromEmptyModule_module1.ts, 0, 16))
++>r : Symbol(r, Decl(exportStarFromEmptyModule_module1.ts, 0, 16))
+ }
+ 
+ === exportStarFromEmptyModule_module2.ts ===
+@@= skipped -15, +15 lines =@@
+ >A : Symbol(A, Decl(exportStarFromEmptyModule_module3.ts, 1, 52))
+ 
+     static q;
+->q : Symbol(A.q, Decl(exportStarFromEmptyModule_module3.ts, 3, 16))
++>q : Symbol(q, Decl(exportStarFromEmptyModule_module3.ts, 3, 16))
+ }
+ 
+ === exportStarFromEmptyModule_module4.ts ===
+@@= skipped -10, +10 lines =@@
+ var s: X.A;
+ >s : Symbol(s, Decl(exportStarFromEmptyModule_module4.ts, 1, 3))
+ >X : Symbol(X, Decl(exportStarFromEmptyModule_module4.ts, 0, 6))
+->A : Symbol(X.A, Decl(exportStarFromEmptyModule_module3.ts, 1, 52))
++>A : Symbol(A, Decl(exportStarFromEmptyModule_module3.ts, 1, 52))
+ 
+ X.A.q;
+->X.A.q : Symbol(X.A.q, Decl(exportStarFromEmptyModule_module3.ts, 3, 16))
+->X.A : Symbol(X.A, Decl(exportStarFromEmptyModule_module3.ts, 1, 52))
++>X.A.q : Symbol(q, Decl(exportStarFromEmptyModule_module3.ts, 3, 16))
++>X.A : Symbol(A, Decl(exportStarFromEmptyModule_module3.ts, 1, 52))
+ >X : Symbol(X, Decl(exportStarFromEmptyModule_module4.ts, 0, 6))
+->A : Symbol(X.A, Decl(exportStarFromEmptyModule_module3.ts, 1, 52))
+->q : Symbol(X.A.q, Decl(exportStarFromEmptyModule_module3.ts, 3, 16))
++>A : Symbol(A, Decl(exportStarFromEmptyModule_module3.ts, 1, 52))
++>q : Symbol(q, Decl(exportStarFromEmptyModule_module3.ts, 3, 16))
+ 
+ X.A.r; // Error
+->X.A : Symbol(X.A, Decl(exportStarFromEmptyModule_module3.ts, 1, 52))
++>X.A : Symbol(A, Decl(exportStarFromEmptyModule_module3.ts, 1, 52))
+ >X : Symbol(X, Decl(exportStarFromEmptyModule_module4.ts, 0, 6))
+->A : Symbol(X.A, Decl(exportStarFromEmptyModule_module3.ts, 1, 52))
++>A : Symbol(A, Decl(exportStarFromEmptyModule_module3.ts, 1, 52))
+ 

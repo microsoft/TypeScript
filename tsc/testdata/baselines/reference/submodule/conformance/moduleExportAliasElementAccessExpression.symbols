@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/salsa/moduleExportAliasElementAccessExpression.ts] ////
+
+=== moduleExportAliasElementAccessExpression.js ===
+function D () { }
+>D : Symbol(D, Decl(moduleExportAliasElementAccessExpression.js, 0, 0))
+
+exports["D"] = D;
+>D : Symbol(D, Decl(moduleExportAliasElementAccessExpression.js, 0, 0))
+
+ // (the only package I could find that uses spaces in identifiers is webidl-conversions)
+exports["Does not work yet"] = D;
+>D : Symbol(D, Decl(moduleExportAliasElementAccessExpression.js, 0, 0))
+

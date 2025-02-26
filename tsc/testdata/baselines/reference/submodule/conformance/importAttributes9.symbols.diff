@@ -1,0 +1,34 @@
+--- old.importAttributes9.symbols
++++ new.importAttributes9.symbols
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/importAttributes/importAttributes9.ts] ////
+ 
+-=== ./a.ts ===
++=== a.ts ===
+ 
+ export default {};
+ 
+-=== ./b.ts ===
++=== b.ts ===
+ declare global {
+->global : Symbol(global, Decl(b.ts, 0, 0))
++>global : Symbol((Missing), Decl(b.ts, 0, 0))
+ 
+     interface  ImportAttributes {
+ >ImportAttributes : Symbol(ImportAttributes, Decl(lib.es5.d.ts, --, --), Decl(b.ts, 0, 16))
+ 
+         type: "json"
+->type : Symbol(ImportAttributes.type, Decl(b.ts, 1, 33))
++>type : Symbol(type, Decl(b.ts, 1, 33))
+     }
+ }
+ 
+@@= skipped -25, +25 lines =@@
+ >f : Symbol(f, Decl(b.ts, 7, 8))
+ 
+     await import("./a", {
+->"./a" : Symbol(ns, Decl(a.ts, 0, 0))
+-
+         with: {
+ >with : Symbol(with, Decl(b.ts, 10, 25))
+ 

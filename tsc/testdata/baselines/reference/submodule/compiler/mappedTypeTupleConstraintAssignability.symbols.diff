@@ -1,0 +1,35 @@
+--- old.mappedTypeTupleConstraintAssignability.symbols
++++ new.mappedTypeTupleConstraintAssignability.symbols
+@@= skipped -26, +26 lines =@@
+ >T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 6, 22))
+ 
+   get enum(): Values<T>
+->enum : Symbol(ZodEnum.enum, Decl(mappedTypeTupleConstraintAssignability.ts, 6, 56))
++>enum : Symbol(enum, Decl(mappedTypeTupleConstraintAssignability.ts, 6, 56))
+ >Values : Symbol(Values, Decl(mappedTypeTupleConstraintAssignability.ts, 3, 40))
+ >T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 6, 22))
+ }
+@@= skipped -44, +44 lines =@@
+ >D : Symbol(D, Decl(mappedTypeTupleConstraintAssignability.ts, 19, 52))
+ 
+   __flags: F;
+->__flags : Symbol(ISchema.__flags, Decl(mappedTypeTupleConstraintAssignability.ts, 19, 63))
++>__flags : Symbol(__flags, Decl(mappedTypeTupleConstraintAssignability.ts, 19, 63))
+ >F : Symbol(F, Decl(mappedTypeTupleConstraintAssignability.ts, 19, 29))
+ 
+   __context: C;
+->__context : Symbol(ISchema.__context, Decl(mappedTypeTupleConstraintAssignability.ts, 20, 13))
++>__context : Symbol(__context, Decl(mappedTypeTupleConstraintAssignability.ts, 20, 13))
+ >C : Symbol(C, Decl(mappedTypeTupleConstraintAssignability.ts, 19, 20))
+ 
+   __outputType: T;
+->__outputType : Symbol(ISchema.__outputType, Decl(mappedTypeTupleConstraintAssignability.ts, 21, 15))
++>__outputType : Symbol(__outputType, Decl(mappedTypeTupleConstraintAssignability.ts, 21, 15))
+ >T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 19, 18))
+ 
+   __default: D;
+->__default : Symbol(ISchema.__default, Decl(mappedTypeTupleConstraintAssignability.ts, 22, 18))
++>__default : Symbol(__default, Decl(mappedTypeTupleConstraintAssignability.ts, 22, 18))
+ >D : Symbol(D, Decl(mappedTypeTupleConstraintAssignability.ts, 19, 52))
+ }
+ 

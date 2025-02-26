@@ -1,0 +1,11 @@
+--- old.incompatibleGenericTypes.symbols
++++ new.incompatibleGenericTypes.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(incompatibleGenericTypes.ts, 0, 13))
+ 
+   m1<U>(callback: (p: T) => U): I1<U>;
+->m1 : Symbol(I1.m1, Decl(incompatibleGenericTypes.ts, 0, 17))
++>m1 : Symbol(m1, Decl(incompatibleGenericTypes.ts, 0, 17))
+ >U : Symbol(U, Decl(incompatibleGenericTypes.ts, 2, 5))
+ >callback : Symbol(callback, Decl(incompatibleGenericTypes.ts, 2, 8))
+ >p : Symbol(p, Decl(incompatibleGenericTypes.ts, 2, 19))

@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/indirectSelfReference.ts] ////
+
+=== indirectSelfReference.ts ===
+class a extends b{ }
+>a : Symbol(a, Decl(indirectSelfReference.ts, 0, 0))
+>b : Symbol(b, Decl(indirectSelfReference.ts, 0, 20))
+
+class b extends a{ }
+>b : Symbol(b, Decl(indirectSelfReference.ts, 0, 20))
+>a : Symbol(a, Decl(indirectSelfReference.ts, 0, 0))
+

@@ -1,0 +1,70 @@
+--- old.emitClassExpressionInDeclarationFile2.symbols
++++ new.emitClassExpressionInDeclarationFile2.symbols
+@@= skipped -4, +4 lines =@@
+ >noPrivates : Symbol(noPrivates, Decl(emitClassExpressionInDeclarationFile2.ts, 0, 10))
+ 
+     static getTags() { }
+->getTags : Symbol(noPrivates.getTags, Decl(emitClassExpressionInDeclarationFile2.ts, 0, 31))
++>getTags : Symbol(getTags, Decl(emitClassExpressionInDeclarationFile2.ts, 0, 31))
+ 
+     tags() { }
+->tags : Symbol(noPrivates.tags, Decl(emitClassExpressionInDeclarationFile2.ts, 1, 24))
++>tags : Symbol(tags, Decl(emitClassExpressionInDeclarationFile2.ts, 1, 24))
+ 
+     private static ps = -1
+->ps : Symbol(noPrivates.ps, Decl(emitClassExpressionInDeclarationFile2.ts, 2, 14))
++>ps : Symbol(ps, Decl(emitClassExpressionInDeclarationFile2.ts, 2, 14))
+ 
+     private p = 12
+->p : Symbol(noPrivates.p, Decl(emitClassExpressionInDeclarationFile2.ts, 3, 26))
++>p : Symbol(p, Decl(emitClassExpressionInDeclarationFile2.ts, 3, 26))
+ }
+ 
+ // altered repro from #15066 to add private property
+@@= skipped -17, +17 lines =@@
+ >FooItem : Symbol(FooItem, Decl(emitClassExpressionInDeclarationFile2.ts, 5, 1))
+ 
+     foo(): void { }
+->foo : Symbol(FooItem.foo, Decl(emitClassExpressionInDeclarationFile2.ts, 8, 22))
++>foo : Symbol(foo, Decl(emitClassExpressionInDeclarationFile2.ts, 8, 22))
+ 
+     name?: string;
+->name : Symbol(FooItem.name, Decl(emitClassExpressionInDeclarationFile2.ts, 9, 19))
++>name : Symbol(name, Decl(emitClassExpressionInDeclarationFile2.ts, 9, 19))
+ 
+     private property = "capitalism"
+->property : Symbol(FooItem.property, Decl(emitClassExpressionInDeclarationFile2.ts, 10, 18))
++>property : Symbol(property, Decl(emitClassExpressionInDeclarationFile2.ts, 10, 18))
+ }
+ 
+ export type Constructor<T> = new(...args: any[]) => T;
+@@= skipped -27, +27 lines =@@
+ >Base : Symbol(Base, Decl(emitClassExpressionInDeclarationFile2.ts, 15, 57))
+ 
+         static getTags(): void { }
+->getTags : Symbol((Anonymous class).getTags, Decl(emitClassExpressionInDeclarationFile2.ts, 16, 31))
++>getTags : Symbol(getTags, Decl(emitClassExpressionInDeclarationFile2.ts, 16, 31))
+ 
+         tags(): void { }
+->tags : Symbol((Anonymous class).tags, Decl(emitClassExpressionInDeclarationFile2.ts, 17, 34))
++>tags : Symbol(tags, Decl(emitClassExpressionInDeclarationFile2.ts, 17, 34))
+     }
+ }
+ 
+@@= skipped -17, +17 lines =@@
+ >Test : Symbol(Test, Decl(emitClassExpressionInDeclarationFile2.ts, 20, 1))
+ 
+ Test.getTags()
+->Test.getTags : Symbol((Anonymous class).getTags, Decl(emitClassExpressionInDeclarationFile2.ts, 16, 31))
++>Test.getTags : Symbol(getTags, Decl(emitClassExpressionInDeclarationFile2.ts, 16, 31))
+ >Test : Symbol(Test, Decl(emitClassExpressionInDeclarationFile2.ts, 20, 1))
+->getTags : Symbol((Anonymous class).getTags, Decl(emitClassExpressionInDeclarationFile2.ts, 16, 31))
++>getTags : Symbol(getTags, Decl(emitClassExpressionInDeclarationFile2.ts, 16, 31))
+ 
+ test.tags();
+->test.tags : Symbol((Anonymous class).tags, Decl(emitClassExpressionInDeclarationFile2.ts, 17, 34))
++>test.tags : Symbol(tags, Decl(emitClassExpressionInDeclarationFile2.ts, 17, 34))
+ >test : Symbol(test, Decl(emitClassExpressionInDeclarationFile2.ts, 24, 5))
+->tags : Symbol((Anonymous class).tags, Decl(emitClassExpressionInDeclarationFile2.ts, 17, 34))
++>tags : Symbol(tags, Decl(emitClassExpressionInDeclarationFile2.ts, 17, 34))
+ 

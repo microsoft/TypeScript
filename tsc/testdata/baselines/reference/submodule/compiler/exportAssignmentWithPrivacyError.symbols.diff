@@ -1,0 +1,18 @@
+--- old.exportAssignmentWithPrivacyError.symbols
++++ new.exportAssignmentWithPrivacyError.symbols
+@@= skipped -12, +12 lines =@@
+ >connectexport : Symbol(connectexport, Decl(exportAssignmentWithPrivacyError.ts, 2, 1))
+ 
+     use: (mod: connectmodule) => connectexport;
+->use : Symbol(connectexport.use, Decl(exportAssignmentWithPrivacyError.ts, 3, 25))
++>use : Symbol(use, Decl(exportAssignmentWithPrivacyError.ts, 3, 25))
+ >mod : Symbol(mod, Decl(exportAssignmentWithPrivacyError.ts, 4, 10))
+ >connectmodule : Symbol(connectmodule, Decl(exportAssignmentWithPrivacyError.ts, 0, 0))
+ >connectexport : Symbol(connectexport, Decl(exportAssignmentWithPrivacyError.ts, 2, 1))
+ 
+     listen: (port: number) => void;
+->listen : Symbol(connectexport.listen, Decl(exportAssignmentWithPrivacyError.ts, 4, 47))
++>listen : Symbol(listen, Decl(exportAssignmentWithPrivacyError.ts, 4, 47))
+ >port : Symbol(port, Decl(exportAssignmentWithPrivacyError.ts, 5, 13))
+ }
+ 

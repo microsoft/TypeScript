@@ -1,0 +1,46 @@
+--- old.avoidCycleWithVoidExpressionReturnedFromArrow.symbols
++++ new.avoidCycleWithVoidExpressionReturnedFromArrow.symbols
+@@= skipped -9, +9 lines =@@
+ >HowlOptions : Symbol(HowlOptions, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 0, 67))
+ 
+   onplayerror?: HowlErrorCallback | undefined;
+->onplayerror : Symbol(HowlOptions.onplayerror, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 2, 23))
++>onplayerror : Symbol(onplayerror, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 2, 23))
+ >HowlErrorCallback : Symbol(HowlErrorCallback, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 0, 0))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >Howl : Symbol(Howl, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 4, 1))
+ 
+   constructor(public readonly options: HowlOptions) {}
+->options : Symbol(Howl.options, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 7, 14))
++>options : Symbol(options, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 7, 14))
+ >HowlOptions : Symbol(HowlOptions, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 0, 67))
+ 
+   once(name: "unlock", fn: () => void) {
+->once : Symbol(Howl.once, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 7, 54))
++>once : Symbol(once, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 7, 54))
+ >name : Symbol(name, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 8, 7))
+ >fn : Symbol(fn, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 8, 22))
+ 
+     console.log(name, fn);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >name : Symbol(name, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 8, 7))
+ >fn : Symbol(fn, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 8, 22))
+   }
+@@= skipped -23, +23 lines =@@
+ 
+   onplayerror: () => void instance.once("unlock", () => {}),
+ >onplayerror : Symbol(onplayerror, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 13, 27))
+->instance.once : Symbol(Howl.once, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 7, 54))
++>instance.once : Symbol(once, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 7, 54))
+ >instance : Symbol(instance, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 13, 5))
+->once : Symbol(Howl.once, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 7, 54))
++>once : Symbol(once, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 7, 54))
+ 
+ });
+ 

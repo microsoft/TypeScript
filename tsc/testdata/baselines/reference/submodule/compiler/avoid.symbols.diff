@@ -1,0 +1,22 @@
+--- old.avoid.symbols
++++ new.avoid.symbols
+@@= skipped -26, +26 lines =@@
+ >C : Symbol(C, Decl(avoid.ts, 7, 6))
+ 
+     g() {
+->g : Symbol(C.g, Decl(avoid.ts, 9, 9))
++>g : Symbol(g, Decl(avoid.ts, 9, 9))
+         
+     }
+ }
+ 
+ var z=new C().g(); // error void fn
+ >z : Symbol(z, Decl(avoid.ts, 15, 3))
+->new C().g : Symbol(C.g, Decl(avoid.ts, 9, 9))
++>new C().g : Symbol(g, Decl(avoid.ts, 9, 9))
+ >C : Symbol(C, Decl(avoid.ts, 7, 6))
+->g : Symbol(C.g, Decl(avoid.ts, 9, 9))
++>g : Symbol(g, Decl(avoid.ts, 9, 9))
+ 
+ var N=new f();  // ok with void fn
+ >N : Symbol(N, Decl(avoid.ts, 16, 3))

@@ -1,0 +1,15 @@
+--- old.systemNamespaceAliasEmit.symbols
++++ new.systemNamespaceAliasEmit.symbols
+@@= skipped -11, +11 lines =@@
+ >AnEnum : Symbol(AnEnum, Decl(systemNamespaceAliasEmit.ts, 2, 1))
+ 
+     ONE,
+->ONE : Symbol(AnEnum.ONE, Decl(systemNamespaceAliasEmit.ts, 4, 13))
++>ONE : Symbol(ONE, Decl(systemNamespaceAliasEmit.ts, 4, 13))
+ 
+     TWO
+->TWO : Symbol(AnEnum.TWO, Decl(systemNamespaceAliasEmit.ts, 5, 8))
++>TWO : Symbol(TWO, Decl(systemNamespaceAliasEmit.ts, 5, 8))
+ }
+ 
+ export {ns, AnEnum, ns as FooBar, AnEnum as BarEnum};

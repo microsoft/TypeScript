@@ -1,0 +1,11 @@
+--- old.typeParameterOrderReversal.symbols
++++ new.typeParameterOrderReversal.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(typeParameterOrderReversal.ts, 0, 12))
+ 
+     n: T;
+->n : Symbol(X.n, Decl(typeParameterOrderReversal.ts, 0, 16))
++>n : Symbol(n, Decl(typeParameterOrderReversal.ts, 0, 16))
+ >T : Symbol(T, Decl(typeParameterOrderReversal.ts, 0, 12))
+ }
+ 

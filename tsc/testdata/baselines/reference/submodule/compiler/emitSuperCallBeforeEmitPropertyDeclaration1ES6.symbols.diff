@@ -1,0 +1,20 @@
+--- old.emitSuperCallBeforeEmitPropertyDeclaration1ES6.symbols
++++ new.emitSuperCallBeforeEmitPropertyDeclaration1ES6.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(emitSuperCallBeforeEmitPropertyDeclaration1ES6.ts, 0, 0))
+ 
+     blub = 6;
+->blub : Symbol(A.blub, Decl(emitSuperCallBeforeEmitPropertyDeclaration1ES6.ts, 0, 9))
++>blub : Symbol(blub, Decl(emitSuperCallBeforeEmitPropertyDeclaration1ES6.ts, 0, 9))
+ }
+ 
+ 
+@@= skipped -9, +9 lines =@@
+ >A : Symbol(A, Decl(emitSuperCallBeforeEmitPropertyDeclaration1ES6.ts, 0, 0))
+ 
+     blub = 12;
+->blub : Symbol(B.blub, Decl(emitSuperCallBeforeEmitPropertyDeclaration1ES6.ts, 5, 19))
++>blub : Symbol(blub, Decl(emitSuperCallBeforeEmitPropertyDeclaration1ES6.ts, 5, 19))
+ 
+     constructor() {
+         'someStringForEgngInject';

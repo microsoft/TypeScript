@@ -1,0 +1,15 @@
+--- old.importTypeAmbientMissing.symbols
++++ new.importTypeAmbientMissing.symbols
+@@= skipped -7, +7 lines =@@
+ >Point : Symbol(Point, Decl(importTypeAmbientMissing.ts, 0, 22))
+ 
+         x: number;
+->x : Symbol(Point.x, Decl(importTypeAmbientMissing.ts, 1, 21))
++>x : Symbol(x, Decl(importTypeAmbientMissing.ts, 1, 21))
+ 
+         y: number;
+->y : Symbol(Point.y, Decl(importTypeAmbientMissing.ts, 2, 18))
++>y : Symbol(y, Decl(importTypeAmbientMissing.ts, 2, 18))
+     }
+     export = Point;
+ >Point : Symbol(Point, Decl(importTypeAmbientMissing.ts, 0, 22))

@@ -1,0 +1,10 @@
+--- old.constDeclarations-access2.symbols
++++ new.constDeclarations-access2.symbols
+@@= skipped -84, +84 lines =@@
+ >x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+ 
+ x.toString();
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ 

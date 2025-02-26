@@ -1,0 +1,24 @@
+--- old.conditionalOperatorConditionIsNumberType.symbols
++++ new.conditionalOperatorConditionIsNumberType.symbols
+@@= skipped -108, +108 lines =@@
+ >exprBoolean2 : Symbol(exprBoolean2, Decl(conditionalOperatorConditionIsNumberType.ts, 10, 3))
+ 
+ "string".length ? exprNumber1 : exprNumber2;
+->"string".length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>"string".length : Symbol(length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >exprNumber1 : Symbol(exprNumber1, Decl(conditionalOperatorConditionIsNumberType.ts, 5, 3))
+ >exprNumber2 : Symbol(exprNumber2, Decl(conditionalOperatorConditionIsNumberType.ts, 11, 3))
+ 
+@@= skipped -100, +100 lines =@@
+ 
+ var resultIsNumber3 = "string".length ? exprNumber1 : exprNumber2;
+ >resultIsNumber3 : Symbol(resultIsNumber3, Decl(conditionalOperatorConditionIsNumberType.ts, 59, 3))
+->"string".length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>"string".length : Symbol(length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >exprNumber1 : Symbol(exprNumber1, Decl(conditionalOperatorConditionIsNumberType.ts, 5, 3))
+ >exprNumber2 : Symbol(exprNumber2, Decl(conditionalOperatorConditionIsNumberType.ts, 11, 3))
+ 

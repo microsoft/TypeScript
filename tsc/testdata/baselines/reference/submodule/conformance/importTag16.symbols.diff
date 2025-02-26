@@ -1,0 +1,11 @@
+--- old.importTag16.symbols
++++ new.importTag16.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === a.ts ===
+ export default interface Foo {}
+->Foo : Symbol(Foo, Decl(a.ts, 0, 0))
++>Foo : Symbol(default, Decl(a.ts, 0, 0))
+ 
+ export interface I {}
+ >I : Symbol(I, Decl(a.ts, 0, 31))

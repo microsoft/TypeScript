@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/salsa/enumMergeWithExpando.ts] ////
+
+=== lovefield-ts.d.ts ===
+// bug #27352, crashes from github.com/google/lovefield
+declare namespace lf {
+>lf : Symbol(lf, Decl(lovefield-ts.d.ts, 0, 0))
+
+    export enum Order { ASC, DESC }
+>Order : Symbol(Order, Decl(lovefield-ts.d.ts, 1, 22))
+>ASC : Symbol(ASC, Decl(lovefield-ts.d.ts, 2, 23))
+>DESC : Symbol(DESC, Decl(lovefield-ts.d.ts, 2, 28))
+}
+
+=== enums.js ===
+lf.Order = {}
+>lf.Order : Symbol(Order, Decl(lovefield-ts.d.ts, 1, 22))
+>lf : Symbol(lf, Decl(lovefield-ts.d.ts, 0, 0))
+>Order : Symbol(Order, Decl(lovefield-ts.d.ts, 1, 22))
+
+lf.Order.DESC = 0;
+>lf.Order.DESC : Symbol(DESC, Decl(lovefield-ts.d.ts, 2, 28))
+>lf.Order : Symbol(Order, Decl(lovefield-ts.d.ts, 1, 22))
+>lf : Symbol(lf, Decl(lovefield-ts.d.ts, 0, 0))
+>Order : Symbol(Order, Decl(lovefield-ts.d.ts, 1, 22))
+>DESC : Symbol(DESC, Decl(lovefield-ts.d.ts, 2, 28))
+
+lf.Order.ASC = 1;
+>lf.Order.ASC : Symbol(ASC, Decl(lovefield-ts.d.ts, 2, 23))
+>lf.Order : Symbol(Order, Decl(lovefield-ts.d.ts, 1, 22))
+>lf : Symbol(lf, Decl(lovefield-ts.d.ts, 0, 0))
+>Order : Symbol(Order, Decl(lovefield-ts.d.ts, 1, 22))
+>ASC : Symbol(ASC, Decl(lovefield-ts.d.ts, 2, 23))
+

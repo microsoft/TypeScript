@@ -1,0 +1,10 @@
+--- old.privateNameConstructorReserved.symbols
++++ new.privateNameConstructorReserved.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(privateNameConstructorReserved.ts, 0, 0))
+ 
+     #constructor() {}      // Error: `#constructor` is a reserved word.
+->#constructor : Symbol(A.#constructor, Decl(privateNameConstructorReserved.ts, 0, 9))
++>#constructor : Symbol(#constructor, Decl(privateNameConstructorReserved.ts, 0, 9))
+ }
+ 

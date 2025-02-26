@@ -1,0 +1,81 @@
+--- old.interfaceDeclaration1.symbols
++++ new.interfaceDeclaration1.symbols
+@@= skipped -4, +4 lines =@@
+ >I1 : Symbol(I1, Decl(interfaceDeclaration1.ts, 0, 0))
+ 
+     item:number;
+->item : Symbol(I1.item, Decl(interfaceDeclaration1.ts, 0, 14), Decl(interfaceDeclaration1.ts, 1, 16))
++>item : Symbol(item, Decl(interfaceDeclaration1.ts, 0, 14), Decl(interfaceDeclaration1.ts, 1, 16))
+ 
+     item:number;
+->item : Symbol(I1.item, Decl(interfaceDeclaration1.ts, 0, 14), Decl(interfaceDeclaration1.ts, 1, 16))
++>item : Symbol(item, Decl(interfaceDeclaration1.ts, 0, 14), Decl(interfaceDeclaration1.ts, 1, 16))
+ }
+ 
+ interface I2 {
+ >I2 : Symbol(I2, Decl(interfaceDeclaration1.ts, 3, 1))
+ 
+     item:any;
+->item : Symbol(I2.item, Decl(interfaceDeclaration1.ts, 5, 14), Decl(interfaceDeclaration1.ts, 6, 13))
++>item : Symbol(item, Decl(interfaceDeclaration1.ts, 5, 14), Decl(interfaceDeclaration1.ts, 6, 13))
+ 
+     item:number;
+->item : Symbol(I2.item, Decl(interfaceDeclaration1.ts, 5, 14), Decl(interfaceDeclaration1.ts, 6, 13))
++>item : Symbol(item, Decl(interfaceDeclaration1.ts, 5, 14), Decl(interfaceDeclaration1.ts, 6, 13))
+ }
+ 
+ interface I3 {
+ >I3 : Symbol(I3, Decl(interfaceDeclaration1.ts, 8, 1))
+ 
+     prototype:number;
+->prototype : Symbol(I3.prototype, Decl(interfaceDeclaration1.ts, 10, 14))
++>prototype : Symbol(prototype, Decl(interfaceDeclaration1.ts, 10, 14))
+ }
+ 
+ interface I4 {
+ >I4 : Symbol(I4, Decl(interfaceDeclaration1.ts, 12, 1))
+ 
+     class:number;
+->class : Symbol(I4.class, Decl(interfaceDeclaration1.ts, 14, 14))
++>class : Symbol(class, Decl(interfaceDeclaration1.ts, 14, 14))
+ 
+     number:number;
+->number : Symbol(I4.number, Decl(interfaceDeclaration1.ts, 15, 17))
++>number : Symbol(number, Decl(interfaceDeclaration1.ts, 15, 17))
+ 
+     super:number;
+->super : Symbol(I4.super, Decl(interfaceDeclaration1.ts, 16, 18))
++>super : Symbol(super, Decl(interfaceDeclaration1.ts, 16, 18))
+ 
+     prototype:number;
+->prototype : Symbol(I4.prototype, Decl(interfaceDeclaration1.ts, 17, 17))
++>prototype : Symbol(prototype, Decl(interfaceDeclaration1.ts, 17, 17))
+ }
+ 
+ interface I5 extends I5 { 
+@@= skipped -44, +44 lines =@@
+ >I5 : Symbol(I5, Decl(interfaceDeclaration1.ts, 19, 1))
+ 
+     foo():void;
+->foo : Symbol(I5.foo, Decl(interfaceDeclaration1.ts, 21, 25))
++>foo : Symbol(foo, Decl(interfaceDeclaration1.ts, 21, 25))
+ }
+ 
+ interface I6 {
+@@= skipped -42, +42 lines =@@
+ >i10 : Symbol(i10, Decl(interfaceDeclaration1.ts, 41, 27))
+ 
+ 	foo():number;
+->foo : Symbol(i10.foo, Decl(interfaceDeclaration1.ts, 43, 15))
++>foo : Symbol(foo, Decl(interfaceDeclaration1.ts, 43, 15))
+ }
+ 
+ interface i11{
+ >i11 : Symbol(i11, Decl(interfaceDeclaration1.ts, 45, 1))
+ 
+ 	foo():string;
+->foo : Symbol(i11.foo, Decl(interfaceDeclaration1.ts, 47, 14))
++>foo : Symbol(foo, Decl(interfaceDeclaration1.ts, 47, 14))
+ }
+ 
+ interface i12 extends i10, i11 { }

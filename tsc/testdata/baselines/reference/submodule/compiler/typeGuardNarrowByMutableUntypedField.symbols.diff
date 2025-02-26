@@ -1,0 +1,12 @@
+--- old.typeGuardNarrowByMutableUntypedField.symbols
++++ new.typeGuardNarrowByMutableUntypedField.symbols
+@@= skipped -22, +22 lines =@@
+ 
+     let x: number = arrayLikeOrIterable.length;
+ >x : Symbol(x, Decl(typeGuardNarrowByMutableUntypedField.ts, 3, 7))
+->arrayLikeOrIterable.length : Symbol(ArrayLike.length, Decl(lib.es5.d.ts, --, --))
++>arrayLikeOrIterable.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >arrayLikeOrIterable : Symbol(arrayLikeOrIterable, Decl(typeGuardNarrowByMutableUntypedField.ts, 1, 13))
+->length : Symbol(ArrayLike.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }

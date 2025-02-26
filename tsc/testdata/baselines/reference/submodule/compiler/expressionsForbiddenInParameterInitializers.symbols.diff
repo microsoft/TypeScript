@@ -1,0 +1,10 @@
+--- old.expressionsForbiddenInParameterInitializers.symbols
++++ new.expressionsForbiddenInParameterInitializers.symbols
+@@= skipped -3, +3 lines =@@
+ export async function foo({ foo = await import("./bar") }) {
+ >foo : Symbol(foo, Decl(bar.ts, 0, 0))
+ >foo : Symbol(foo, Decl(bar.ts, 0, 27))
+->"./bar" : Symbol("bar", Decl(bar.ts, 0, 0))
+ }
+ 
+ export function* foo2({ foo = yield "a" }) {

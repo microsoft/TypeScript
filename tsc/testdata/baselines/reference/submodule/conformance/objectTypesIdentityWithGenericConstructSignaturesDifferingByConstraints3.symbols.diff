@@ -1,0 +1,36 @@
+--- old.objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.symbols
++++ new.objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.symbols
+@@= skipped -6, +6 lines =@@
+ 
+ class One { foo: string }
+ >One : Symbol(One, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 0, 0))
+->foo : Symbol(One.foo, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 4, 11))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 4, 11))
+ 
+ class Two { foo: string }
+ >Two : Symbol(Two, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 4, 25))
+->foo : Symbol(Two.foo, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 5, 11))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 5, 11))
+ 
+ interface Three { foo: string }
+ >Three : Symbol(Three, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 5, 25))
+->foo : Symbol(Three.foo, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 6, 17))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 6, 17))
+ 
+ interface Four<T> { foo: T }
+ >Four : Symbol(Four, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 6, 31))
+ >T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 7, 15))
+->foo : Symbol(Four.foo, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 7, 19))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 7, 19))
+ >T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 7, 15))
+ 
+ interface Five<T> extends Four<T> { }
+@@= skipped -28, +28 lines =@@
+ >U : Symbol(U, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 9, 16))
+ 
+     foo: T;
+->foo : Symbol(Six.foo, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 9, 21))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 9, 21))
+ >T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3.ts, 9, 14))
+ }
+ 

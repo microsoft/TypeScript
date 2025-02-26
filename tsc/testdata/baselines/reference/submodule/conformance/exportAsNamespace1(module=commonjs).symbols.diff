@@ -1,0 +1,27 @@
+--- old.exportAsNamespace1(module=commonjs).symbols
++++ new.exportAsNamespace1(module=commonjs).symbols
+@@= skipped -18, +18 lines =@@
+ >foo : Symbol(foo, Decl(2.ts, 0, 6))
+ 
+ foo.ns.a;
+->foo.ns.a : Symbol(foo.ns.a, Decl(0.ts, 0, 12))
+->foo.ns : Symbol(foo.ns, Decl(1.ts, 0, 6))
++>foo.ns.a : Symbol(a, Decl(0.ts, 0, 12))
++>foo.ns : Symbol(ns, Decl(1.ts, 0, 6))
+ >foo : Symbol(foo, Decl(2.ts, 0, 6))
+->ns : Symbol(foo.ns, Decl(1.ts, 0, 6))
+->a : Symbol(foo.ns.a, Decl(0.ts, 0, 12))
++>ns : Symbol(ns, Decl(1.ts, 0, 6))
++>a : Symbol(a, Decl(0.ts, 0, 12))
+ 
+ foo.ns.b;
+->foo.ns.b : Symbol(foo.ns.b, Decl(0.ts, 1, 12))
+->foo.ns : Symbol(foo.ns, Decl(1.ts, 0, 6))
++>foo.ns.b : Symbol(b, Decl(0.ts, 1, 12))
++>foo.ns : Symbol(ns, Decl(1.ts, 0, 6))
+ >foo : Symbol(foo, Decl(2.ts, 0, 6))
+->ns : Symbol(foo.ns, Decl(1.ts, 0, 6))
+->b : Symbol(foo.ns.b, Decl(0.ts, 1, 12))
++>ns : Symbol(ns, Decl(1.ts, 0, 6))
++>b : Symbol(b, Decl(0.ts, 1, 12))
+ 

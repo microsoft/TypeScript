@@ -1,0 +1,23 @@
+--- old.mappedTypesArraysTuples.symbols
++++ new.mappedTypesArraysTuples.symbols
+@@= skipped -288, +288 lines =@@
+     let x: Box<any> | undefined = a.pop();
+ >x : Symbol(x, Decl(mappedTypesArraysTuples.ts, 72, 7))
+ >Box : Symbol(Box, Decl(mappedTypesArraysTuples.ts, 0, 0))
+->a.pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
++>a.pop : Symbol(pop, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 71, 29))
+->pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
++>pop : Symbol(pop, Decl(lib.es5.d.ts, --, --))
+ 
+     let y: Box<any>[] = a.concat(a);
+ >y : Symbol(y, Decl(mappedTypesArraysTuples.ts, 73, 7))
+ >Box : Symbol(Box, Decl(mappedTypesArraysTuples.ts, 0, 0))
+->a.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>a.concat : Symbol(concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 71, 29))
+->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>concat : Symbol(concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 71, 29))
+ }
+ 

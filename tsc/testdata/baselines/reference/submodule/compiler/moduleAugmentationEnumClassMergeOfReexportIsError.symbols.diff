@@ -1,0 +1,37 @@
+--- old.moduleAugmentationEnumClassMergeOfReexportIsError.symbols
++++ new.moduleAugmentationEnumClassMergeOfReexportIsError.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(file.ts, 0, 0))
+ 
+     member: string;
+->member : Symbol(Foo.member, Decl(file.ts, 0, 18))
++>member : Symbol(member, Decl(file.ts, 0, 18))
+ }
+ === reexport.ts ===
+ 
+@@= skipped -10, +10 lines =@@
+ >ns : Symbol(ns, Decl(augment.ts, 0, 6))
+ 
+ declare module "./reexport" {
+->"./reexport" : Symbol(ns, Decl(reexport.ts, 0, 0), Decl(augment.ts, 0, 33))
++>"./reexport" : Symbol(""reexport.ts"", Decl(reexport.ts, 0, 0), Decl(augment.ts, 0, 33))
+ 
+     export enum Foo {
+ >Foo : Symbol(Foo, Decl(augment.ts, 2, 29))
+ 
+         A, B, C
+->A : Symbol(Foo.A, Decl(augment.ts, 3, 21))
+->B : Symbol(Foo.B, Decl(augment.ts, 4, 10))
+->C : Symbol(Foo.C, Decl(augment.ts, 4, 13))
++>A : Symbol(A, Decl(augment.ts, 3, 21))
++>B : Symbol(B, Decl(augment.ts, 4, 10))
++>C : Symbol(C, Decl(augment.ts, 4, 13))
+     }
+ }
+ 
+ declare const f: ns.Foo; //is this the enum or the class? should be an error.
+ >f : Symbol(f, Decl(augment.ts, 8, 13))
+ >ns : Symbol(ns, Decl(augment.ts, 0, 6))
+->Foo : Symbol(ns.Foo, Decl(augment.ts, 2, 29))
++>Foo : Symbol(Foo, Decl(augment.ts, 2, 29))
+ 

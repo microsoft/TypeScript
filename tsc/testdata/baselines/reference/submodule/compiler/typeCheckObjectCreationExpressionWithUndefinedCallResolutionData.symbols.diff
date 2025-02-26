@@ -1,0 +1,14 @@
+--- old.typeCheckObjectCreationExpressionWithUndefinedCallResolutionData.symbols
++++ new.typeCheckObjectCreationExpressionWithUndefinedCallResolutionData.symbols
+@@= skipped -4, +4 lines =@@
+ >f : Symbol(f, Decl(file2.ts, 0, 0))
+ 
+ f.foo();
+->f.foo : Symbol(f.foo, Decl(file1.ts, 0, 0))
++>f.foo : Symbol(foo, Decl(file1.ts, 0, 0))
+ >f : Symbol(f, Decl(file2.ts, 0, 0))
+->foo : Symbol(f.foo, Decl(file1.ts, 0, 0))
++>foo : Symbol(foo, Decl(file1.ts, 0, 0))
+ 
+ === file1.ts ===
+ export function foo() {

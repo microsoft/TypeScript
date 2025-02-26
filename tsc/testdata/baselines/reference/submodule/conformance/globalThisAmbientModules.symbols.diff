@@ -1,0 +1,11 @@
+--- old.globalThisAmbientModules.symbols
++++ new.globalThisAmbientModules.symbols
+@@= skipped -31, +31 lines =@@
+ >GlobalOk2 : Symbol(GlobalOk2, Decl(globalThisAmbientModules.ts, 8, 51))
+ >globalThis : Symbol(globalThis)
+ >namespaceModule : Symbol(namespaceModule, Decl(globalThisAmbientModules.ts, 4, 44))
+->typ : Symbol(namespaceModule.typ, Decl(globalThisAmbientModules.ts, 5, 27))
++>typ : Symbol(typ, Decl(globalThisAmbientModules.ts, 5, 27))
+ 
+ const bad1: (typeof globalThis)["\"ambientModule\""] = 'ambientModule'
+ >bad1 : Symbol(bad1, Decl(globalThisAmbientModules.ts, 10, 5))

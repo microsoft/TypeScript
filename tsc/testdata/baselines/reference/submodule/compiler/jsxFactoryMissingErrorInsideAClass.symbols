@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/jsxFactoryMissingErrorInsideAClass.ts] ////
+
+=== test.tsx ===
+export class C {
+>C : Symbol(C, Decl(test.tsx, 0, 0))
+
+    factory() {
+>factory : Symbol(factory, Decl(test.tsx, 0, 16))
+
+        return <div></div>;
+    }
+}
+

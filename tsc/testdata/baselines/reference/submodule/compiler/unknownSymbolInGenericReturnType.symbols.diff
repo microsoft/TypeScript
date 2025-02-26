@@ -1,0 +1,32 @@
+--- old.unknownSymbolInGenericReturnType.symbols
++++ new.unknownSymbolInGenericReturnType.symbols
+@@= skipped -4, +4 lines =@@
+ >Linq : Symbol(Linq, Decl(unknownSymbolInGenericReturnType.ts, 0, 0))
+ 
+     public static select<T, S>(values: T[], func: (v: T) => A): any[] {
+->select : Symbol(Linq.select, Decl(unknownSymbolInGenericReturnType.ts, 0, 12))
++>select : Symbol(select, Decl(unknownSymbolInGenericReturnType.ts, 0, 12))
+ >T : Symbol(T, Decl(unknownSymbolInGenericReturnType.ts, 1, 25))
+ >S : Symbol(S, Decl(unknownSymbolInGenericReturnType.ts, 1, 27))
+ >values : Symbol(values, Decl(unknownSymbolInGenericReturnType.ts, 1, 31))
+@@= skipped -13, +13 lines =@@
+         var result = new Array(values.length);
+ >result : Symbol(result, Decl(unknownSymbolInGenericReturnType.ts, 2, 11))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->values.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>values.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >values : Symbol(values, Decl(unknownSymbolInGenericReturnType.ts, 1, 31))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+  
+         for (var i = 0; i < values.length; i++) {
+ >i : Symbol(i, Decl(unknownSymbolInGenericReturnType.ts, 4, 16))
+ >i : Symbol(i, Decl(unknownSymbolInGenericReturnType.ts, 4, 16))
+->values.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>values.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >values : Symbol(values, Decl(unknownSymbolInGenericReturnType.ts, 1, 31))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >i : Symbol(i, Decl(unknownSymbolInGenericReturnType.ts, 4, 16))
+ 
+             result[i] = func(values[i]);

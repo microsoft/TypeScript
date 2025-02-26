@@ -1,0 +1,38 @@
+--- old.clinterfaces.symbols
++++ new.clinterfaces.symbols
+@@= skipped -21, +21 lines =@@
+ >T : Symbol(T, Decl(clinterfaces.ts, 7, 14), Decl(clinterfaces.ts, 11, 10))
+ 
+     a: string;
+->a : Symbol(Foo.a, Decl(clinterfaces.ts, 7, 18))
++>a : Symbol(a, Decl(clinterfaces.ts, 7, 18))
+ }
+ 
+ class Foo<T>{
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(clinterfaces.ts, 7, 14), Decl(clinterfaces.ts, 11, 10))
+ 
+     b: number;
+->b : Symbol(Foo.b, Decl(clinterfaces.ts, 11, 13))
++>b : Symbol(b, Decl(clinterfaces.ts, 11, 13))
+ }
+ 
+ class Bar<T>{
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(clinterfaces.ts, 15, 10), Decl(clinterfaces.ts, 19, 14))
+ 
+     b: number;
+->b : Symbol(Bar.b, Decl(clinterfaces.ts, 15, 13))
++>b : Symbol(b, Decl(clinterfaces.ts, 15, 13))
+ }
+ 
+ interface Bar<T> {
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(clinterfaces.ts, 15, 10), Decl(clinterfaces.ts, 19, 14))
+ 
+     a: string;
+->a : Symbol(Bar.a, Decl(clinterfaces.ts, 19, 18))
++>a : Symbol(a, Decl(clinterfaces.ts, 19, 18))
+ }
+ 
+ export = Foo;

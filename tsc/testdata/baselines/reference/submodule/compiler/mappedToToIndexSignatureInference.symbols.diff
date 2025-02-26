@@ -1,0 +1,13 @@
+--- old.mappedToToIndexSignatureInference.symbols
++++ new.mappedToToIndexSignatureInference.symbols
+@@= skipped -31, +31 lines =@@
+ 
+ enum E { A = 'foo', B = 'bar' }
+ >E : Symbol(E, Decl(mappedToToIndexSignatureInference.ts, 6, 86))
+->A : Symbol(E.A, Decl(mappedToToIndexSignatureInference.ts, 8, 8))
+->B : Symbol(E.B, Decl(mappedToToIndexSignatureInference.ts, 8, 19))
++>A : Symbol(A, Decl(mappedToToIndexSignatureInference.ts, 8, 8))
++>B : Symbol(B, Decl(mappedToToIndexSignatureInference.ts, 8, 19))
+ 
+ let x: E[] = enumValues(E);
+ >x : Symbol(x, Decl(mappedToToIndexSignatureInference.ts, 10, 3))

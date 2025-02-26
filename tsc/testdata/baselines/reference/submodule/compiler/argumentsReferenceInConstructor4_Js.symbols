@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/argumentsReferenceInConstructor4_Js.ts] ////
+
+=== /a.js ===
+class A {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+	/**
+	 * Constructor
+	 *
+	 * @param {object} [foo={}]
+	 */
+	constructor(foo = {}) {
+>foo : Symbol(foo, Decl(a.js, 6, 13))
+
+		const key = "bar";
+>key : Symbol(key, Decl(a.js, 7, 7))
+
+		/**
+		 * @type object
+		 */
+		this.foo = foo;
+>this : Symbol(A, Decl(a.js, 0, 0))
+>foo : Symbol(foo, Decl(a.js, 6, 13))
+
+		/**
+		 * @type object
+		 */
+		const arguments = this.arguments;
+>arguments : Symbol(arguments, Decl(a.js, 17, 7))
+>this.arguments : Symbol(arguments, Decl(a.js, 33, 2))
+>this : Symbol(A, Decl(a.js, 0, 0))
+>arguments : Symbol(arguments, Decl(a.js, 33, 2))
+
+		/**
+		 * @type object
+		 */
+		this.bar = arguments.bar;
+>this : Symbol(A, Decl(a.js, 0, 0))
+>arguments.bar : Symbol(bar, Decl(a.js, 36, 10))
+>arguments : Symbol(arguments, Decl(a.js, 17, 7))
+>bar : Symbol(bar, Decl(a.js, 36, 10))
+
+		/**
+		 * @type object
+		 */
+		this.baz = arguments[key];
+>this : Symbol(A, Decl(a.js, 0, 0))
+>arguments : Symbol(arguments, Decl(a.js, 17, 7))
+>key : Symbol(key, Decl(a.js, 7, 7))
+
+		/**
+		 * @type object
+		 */
+		this.options = arguments;
+>this : Symbol(A, Decl(a.js, 0, 0))
+>arguments : Symbol(arguments, Decl(a.js, 17, 7))
+	}
+
+	get arguments() {
+>arguments : Symbol(arguments, Decl(a.js, 33, 2))
+
+		return { bar: {} };
+>bar : Symbol(bar, Decl(a.js, 36, 10))
+	}
+}
+

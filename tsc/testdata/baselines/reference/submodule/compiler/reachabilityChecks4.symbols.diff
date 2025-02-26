@@ -1,0 +1,48 @@
+--- old.reachabilityChecks4.symbols
++++ new.reachabilityChecks4.symbols
+@@= skipped -60, +60 lines =@@
+ >Transition : Symbol(Transition, Decl(reachabilityChecks4.ts, 31, 52))
+ 
+   behavior: Behavior
+->behavior : Symbol(Transition.behavior, Decl(reachabilityChecks4.ts, 33, 22))
++>behavior : Symbol(behavior, Decl(reachabilityChecks4.ts, 33, 22))
+ >Behavior : Symbol(Behavior, Decl(reachabilityChecks4.ts, 26, 1))
+ 
+   direction: Direction
+->direction : Symbol(Transition.direction, Decl(reachabilityChecks4.ts, 34, 20))
++>direction : Symbol(direction, Decl(reachabilityChecks4.ts, 34, 20))
+ >Direction : Symbol(Direction, Decl(reachabilityChecks4.ts, 30, 37))
+ }
+ 
+@@= skipped -14, +14 lines =@@
+ >Transition : Symbol(Transition, Decl(reachabilityChecks4.ts, 31, 52))
+ 
+     switch (transition.behavior) {
+->transition.behavior : Symbol(Transition.behavior, Decl(reachabilityChecks4.ts, 33, 22))
++>transition.behavior : Symbol(behavior, Decl(reachabilityChecks4.ts, 33, 22))
+ >transition : Symbol(transition, Decl(reachabilityChecks4.ts, 38, 12))
+->behavior : Symbol(Transition.behavior, Decl(reachabilityChecks4.ts, 33, 22))
++>behavior : Symbol(behavior, Decl(reachabilityChecks4.ts, 33, 22))
+ 
+         case 'SLIDE':
+             switch (transition.direction) {
+->transition.direction : Symbol(Transition.direction, Decl(reachabilityChecks4.ts, 34, 20))
++>transition.direction : Symbol(direction, Decl(reachabilityChecks4.ts, 34, 20))
+ >transition : Symbol(transition, Decl(reachabilityChecks4.ts, 38, 12))
+->direction : Symbol(Transition.direction, Decl(reachabilityChecks4.ts, 34, 20))
++>direction : Symbol(direction, Decl(reachabilityChecks4.ts, 34, 20))
+ 
+                 case 'LEFT':
+                     return []
+@@= skipped -21, +21 lines =@@
+             }
+         case 'SLIDE_OUT':
+             switch (transition.direction) {
+->transition.direction : Symbol(Transition.direction, Decl(reachabilityChecks4.ts, 34, 20))
++>transition.direction : Symbol(direction, Decl(reachabilityChecks4.ts, 34, 20))
+ >transition : Symbol(transition, Decl(reachabilityChecks4.ts, 38, 12))
+->direction : Symbol(Transition.direction, Decl(reachabilityChecks4.ts, 34, 20))
++>direction : Symbol(direction, Decl(reachabilityChecks4.ts, 34, 20))
+ 
+                 case 'LEFT':
+                     return []

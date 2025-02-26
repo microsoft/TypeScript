@@ -1,0 +1,35 @@
+--- old.moduleResolutionWithSuffixes_one_jsModule.symbols
++++ new.moduleResolutionWithSuffixes_one_jsModule.symbols
+@@= skipped -6, +6 lines =@@
+ === /foo.ios.js ===
+ "use strict";
+ exports.__esModule = true;
+->exports.__esModule : Symbol(__esModule, Decl(foo.ios.js, 0, 13))
+->exports : Symbol(__esModule, Decl(foo.ios.js, 0, 13))
+->__esModule : Symbol(__esModule, Decl(foo.ios.js, 0, 13))
+-
+ function ios() {}
+ >ios : Symbol(ios, Decl(foo.ios.js, 1, 26))
+ 
+ exports.ios = ios;
+->exports.ios : Symbol(ios, Decl(foo.ios.js, 2, 17))
+->exports : Symbol(ios, Decl(foo.ios.js, 2, 17))
+->ios : Symbol(ios, Decl(foo.ios.js, 2, 17))
+ >ios : Symbol(ios, Decl(foo.ios.js, 1, 26))
+ 
+ === /foo.js ===
+ "use strict";
+ exports.__esModule = true;
+->exports.__esModule : Symbol(__esModule, Decl(foo.js, 0, 13))
+->exports : Symbol(__esModule, Decl(foo.js, 0, 13))
+->__esModule : Symbol(__esModule, Decl(foo.js, 0, 13))
+-
+ function base() {}
+ >base : Symbol(base, Decl(foo.js, 1, 26))
+ 
+ exports.base = base;
+->exports.base : Symbol(base, Decl(foo.js, 2, 18))
+->exports : Symbol(base, Decl(foo.js, 2, 18))
+->base : Symbol(base, Decl(foo.js, 2, 18))
+ >base : Symbol(base, Decl(foo.js, 1, 26))
+ 

@@ -1,0 +1,70 @@
+--- old.excessiveStackDepthFlatArray.symbols
++++ new.excessiveStackDepthFlatArray.symbols
+@@= skipped -41, +41 lines =@@
+ >T : Symbol(T, Decl(index.tsx, 10, 27))
+ 
+     children?: ReactNode;
+->children : Symbol(HTMLAttributes.children, Decl(index.tsx, 10, 31))
++>children : Symbol(children, Decl(index.tsx, 10, 31))
+ >ReactNode : Symbol(ReactNode, Decl(index.tsx, 12, 3))
+   }
+   type ReactNode = ReactChild | ReactFragment | boolean | null | undefined;
+@@= skipped -31, +31 lines =@@
+ >IntrinsicElements : Symbol(IntrinsicElements, Decl(index.tsx, 19, 23))
+ 
+     ul: React.DetailedHTMLProps<React.HTMLAttributes<HTMLUListElement>, HTMLUListElement>;
+->ul : Symbol(IntrinsicElements.ul, Decl(index.tsx, 20, 31))
++>ul : Symbol(ul, Decl(index.tsx, 20, 31))
+ >React : Symbol(React, Decl(index.tsx, 6, 3), Decl(index.tsx, 25, 11))
+->DetailedHTMLProps : Symbol(React.DetailedHTMLProps, Decl(index.tsx, 8, 25))
++>DetailedHTMLProps : Symbol(DetailedHTMLProps, Decl(index.tsx, 8, 25))
+ >React : Symbol(React, Decl(index.tsx, 6, 3), Decl(index.tsx, 25, 11))
+->HTMLAttributes : Symbol(React.HTMLAttributes, Decl(index.tsx, 9, 61))
++>HTMLAttributes : Symbol(HTMLAttributes, Decl(index.tsx, 9, 61))
+ >HTMLUListElement : Symbol(HTMLUListElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+ >HTMLUListElement : Symbol(HTMLUListElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+ 
+     li: React.DetailedHTMLProps<React.HTMLAttributes<HTMLLIElement>, HTMLLIElement>;
+->li : Symbol(IntrinsicElements.li, Decl(index.tsx, 21, 90))
++>li : Symbol(li, Decl(index.tsx, 21, 90))
+ >React : Symbol(React, Decl(index.tsx, 6, 3), Decl(index.tsx, 25, 11))
+->DetailedHTMLProps : Symbol(React.DetailedHTMLProps, Decl(index.tsx, 8, 25))
++>DetailedHTMLProps : Symbol(DetailedHTMLProps, Decl(index.tsx, 8, 25))
+ >React : Symbol(React, Decl(index.tsx, 6, 3), Decl(index.tsx, 25, 11))
+->HTMLAttributes : Symbol(React.HTMLAttributes, Decl(index.tsx, 9, 61))
++>HTMLAttributes : Symbol(HTMLAttributes, Decl(index.tsx, 9, 61))
+ >HTMLLIElement : Symbol(HTMLLIElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+ >HTMLLIElement : Symbol(HTMLLIElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+   }
+@@= skipped -29, +29 lines =@@
+ 
+   return (
+     <ul>
+->ul : Symbol(JSX.IntrinsicElements.ul, Decl(index.tsx, 20, 31))
+-
+       <li>All</li>
+->li : Symbol(JSX.IntrinsicElements.li, Decl(index.tsx, 21, 90))
+->li : Symbol(JSX.IntrinsicElements.li, Decl(index.tsx, 21, 90))
+-
+       {categories.map((category) => (
+->categories.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>categories.map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >categories : Symbol(categories, Decl(index.tsx, 28, 7))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >category : Symbol(category, Decl(index.tsx, 33, 23))
+ 
+         <li key={category}>{category}</li> // Error about 'key' only
+->li : Symbol(JSX.IntrinsicElements.li, Decl(index.tsx, 21, 90))
+ >key : Symbol(key, Decl(index.tsx, 34, 11))
+ >category : Symbol(category, Decl(index.tsx, 33, 23))
+ >category : Symbol(category, Decl(index.tsx, 33, 23))
+->li : Symbol(JSX.IntrinsicElements.li, Decl(index.tsx, 21, 90))
+ 
+       ))}
+     </ul>
+->ul : Symbol(JSX.IntrinsicElements.ul, Decl(index.tsx, 20, 31))
+-
+   );
+ };
+ 

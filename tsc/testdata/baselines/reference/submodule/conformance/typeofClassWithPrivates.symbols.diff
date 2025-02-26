@@ -1,0 +1,24 @@
+--- old.typeofClassWithPrivates.symbols
++++ new.typeofClassWithPrivates.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(typeofClassWithPrivates.ts, 0, 8))
+ 
+     private a: number;
+->a : Symbol(C.a, Decl(typeofClassWithPrivates.ts, 0, 12))
++>a : Symbol(a, Decl(typeofClassWithPrivates.ts, 0, 12))
+ 
+     private static b: number;
+->b : Symbol(C.b, Decl(typeofClassWithPrivates.ts, 1, 22))
++>b : Symbol(b, Decl(typeofClassWithPrivates.ts, 1, 22))
+ 
+     x: T;
+->x : Symbol(C.x, Decl(typeofClassWithPrivates.ts, 2, 29))
++>x : Symbol(x, Decl(typeofClassWithPrivates.ts, 2, 29))
+ >T : Symbol(T, Decl(typeofClassWithPrivates.ts, 0, 8))
+ 
+     static y: T;
+->y : Symbol(C.y, Decl(typeofClassWithPrivates.ts, 3, 9))
++>y : Symbol(y, Decl(typeofClassWithPrivates.ts, 3, 9))
+ >T : Symbol(T)
+ }
+ 

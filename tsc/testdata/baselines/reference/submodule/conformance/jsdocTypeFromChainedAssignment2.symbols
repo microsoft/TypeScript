@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeFromChainedAssignment2.ts] ////
+
+=== use.js ===
+var mod = require('./mod');
+>mod : Symbol(mod, Decl(use.js, 0, 3))
+
+mod.f('no')
+>mod : Symbol(mod, Decl(use.js, 0, 3))
+
+mod.g('also no')
+>mod : Symbol(mod, Decl(use.js, 0, 3))
+
+mod.h(0)
+>mod : Symbol(mod, Decl(use.js, 0, 3))
+
+mod.i(1)
+>mod : Symbol(mod, Decl(use.js, 0, 3))
+

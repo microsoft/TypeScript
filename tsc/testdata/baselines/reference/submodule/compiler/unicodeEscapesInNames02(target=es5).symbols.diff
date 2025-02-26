@@ -1,0 +1,45 @@
+--- old.unicodeEscapesInNames02(target=es5).symbols
++++ new.unicodeEscapesInNames02(target=es5).symbols
+@@= skipped -2, +2 lines =@@
+ === extendedEscapesForAstralsInVarsAndClasses.ts ===
+ // U+102A7 CARIAN LETTER A2
+ var 𐊧: string;
+->string : Symbol(string, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 7))
++>string : Symbol(string, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 6))
+ 
+ var \u{102A7}: string;
+ >u : Symbol(u, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 5))
+ >A7 : Symbol(A7, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 7))
+ 
+ if (Math.random()) {
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ 
+     𐊧 = "hello";
+ }
+@@= skipped -23, +23 lines =@@
+ >Foo : Symbol(Foo, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 9, 1))
+ 
+     \u{102A7}: string;
+->u : Symbol(Foo.u, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 12, 5))
++>u : Symbol(u, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 12, 5))
+ >A7 : Symbol(A7, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 7))
+->string : Symbol(string, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 7))
++>string : Symbol(string, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 6))
+ 
+     constructor() {
+         this.\u{102A7} = " world";
+@@= skipped -29, +29 lines =@@
+ === astralAsSurrogatePair.ts ===
+ import { _𐊧 as \uD800\uDEA7 } from "./extendedEscapesForAstralsInVarsAndClasses.js";
+ >_ : Symbol(_, Decl(astralAsSurrogatePair.ts, 0, 8))
+->as : Symbol(as, Decl(astralAsSurrogatePair.ts, 0, 12))
+->uD800 : Symbol(uD800, Decl(astralAsSurrogatePair.ts, 0, 17))
+->uDEA7 : Symbol(uDEA7, Decl(astralAsSurrogatePair.ts, 0, 23))
++>as : Symbol(as, Decl(astralAsSurrogatePair.ts, 0, 11))
++>uD800 : Symbol(uD800, Decl(astralAsSurrogatePair.ts, 0, 16))
++>uDEA7 : Symbol(uDEA7, Decl(astralAsSurrogatePair.ts, 0, 22))
+ 

@@ -1,0 +1,27 @@
+--- old.tsxResolveExternalModuleExportsTypes.symbols
++++ new.tsxResolveExternalModuleExportsTypes.symbols
+@@= skipped -3, +3 lines =@@
+ declare var a: a.Foo;
+ >a : Symbol(a, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 21), Decl(index.d.ts, 0, 23))
+ >a : Symbol(a, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 21), Decl(index.d.ts, 0, 23))
+->Foo : Symbol(a.Foo, Decl(index.d.ts, 1, 21), Decl(index.d.ts, 2, 21))
++>Foo : Symbol(Foo, Decl(index.d.ts, 1, 21), Decl(index.d.ts, 2, 21))
+ 
+ declare namespace a {
+ >a : Symbol(a, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 21), Decl(index.d.ts, 0, 23))
+@@= skipped -25, +25 lines =@@
+ >Foo : Symbol(Foo, Decl(index.d.ts, 1, 21), Decl(index.d.ts, 2, 21))
+ 
+         Test: null;
+->Test : Symbol(Foo.Test, Decl(index.d.ts, 4, 19))
++>Test : Symbol(Test, Decl(index.d.ts, 4, 19))
+     }
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ 
+ const Foo = (<h1></h1>);
+ >Foo : Symbol(Foo, Decl(foo.tsx, 1, 5))
+->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+ 

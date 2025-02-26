@@ -1,0 +1,21 @@
+--- old.interfaceDoesNotDependOnBaseTypes.symbols
++++ new.interfaceDoesNotDependOnBaseTypes.symbols
+@@= skipped -8, +8 lines =@@
+ >x : Symbol(x, Decl(interfaceDoesNotDependOnBaseTypes.ts, 0, 3))
+ 
+     x.push("");
+->x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(interfaceDoesNotDependOnBaseTypes.ts, 0, 3))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ 
+     x.push([""]);
+->x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(interfaceDoesNotDependOnBaseTypes.ts, 0, 3))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ type StringTree = string | StringTreeArray;

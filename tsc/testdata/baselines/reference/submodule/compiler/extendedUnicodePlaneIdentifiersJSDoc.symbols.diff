@@ -1,0 +1,19 @@
+--- old.extendedUnicodePlaneIdentifiersJSDoc.symbols
++++ new.extendedUnicodePlaneIdentifiersJSDoc.symbols
+@@= skipped -8, +8 lines =@@
+ function foo(𝑚, 𝑀) {
+ >foo : Symbol(foo, Decl(file.js, 0, 0))
+ >𝑚 : Symbol(𝑚, Decl(file.js, 5, 13))
+->𝑀 : Symbol(𝑀, Decl(file.js, 5, 16))
++>𝑀 : Symbol(𝑀, Decl(file.js, 5, 15))
+ 
+     console.log(𝑀 + 𝑚);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->𝑀 : Symbol(𝑀, Decl(file.js, 5, 16))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>𝑀 : Symbol(𝑀, Decl(file.js, 5, 15))
+ >𝑚 : Symbol(𝑚, Decl(file.js, 5, 13))
+ }

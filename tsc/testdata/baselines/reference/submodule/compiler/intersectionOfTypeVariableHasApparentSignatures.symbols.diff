@@ -1,0 +1,20 @@
+--- old.intersectionOfTypeVariableHasApparentSignatures.symbols
++++ new.intersectionOfTypeVariableHasApparentSignatures.symbols
+@@= skipped -5, +5 lines =@@
+ >P : Symbol(P, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 0, 20))
+ 
+     props: Readonly<P> & Readonly<{ children?: {} }>;
+->props : Symbol(Component.props, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 0, 24))
++>props : Symbol(props, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 0, 24))
+ >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+ >P : Symbol(P, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 0, 20))
+ >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+@@= skipped -11, +11 lines =@@
+ >Props : Symbol(Props, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 2, 1))
+ 
+     children?: (items: {x: number}) => void
+->children : Symbol(Props.children, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 4, 17))
++>children : Symbol(children, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 4, 17))
+ >items : Symbol(items, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 5, 16))
+ >x : Symbol(x, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 5, 24))
+ }

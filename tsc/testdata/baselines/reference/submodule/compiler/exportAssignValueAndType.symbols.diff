@@ -1,0 +1,24 @@
+--- old.exportAssignValueAndType.symbols
++++ new.exportAssignValueAndType.symbols
+@@= skipped -5, +5 lines =@@
+ 
+ 	export interface Server { openPort: number; }
+ >Server : Symbol(Server, Decl(exportAssignValueAndType.ts, 0, 21))
+->openPort : Symbol(Server.openPort, Decl(exportAssignValueAndType.ts, 1, 26))
++>openPort : Symbol(openPort, Decl(exportAssignValueAndType.ts, 1, 26))
+ }
+ 
+ interface server {
+@@= skipped -8, +8 lines =@@
+ 
+     (): http.Server;
+ >http : Symbol(http, Decl(exportAssignValueAndType.ts, 0, 0))
+->Server : Symbol(http.Server, Decl(exportAssignValueAndType.ts, 0, 21))
++>Server : Symbol(Server, Decl(exportAssignValueAndType.ts, 0, 21))
+ 
+     startTime: Date;
+->startTime : Symbol(server.startTime, Decl(exportAssignValueAndType.ts, 5, 20))
++>startTime : Symbol(startTime, Decl(exportAssignValueAndType.ts, 5, 20))
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ }
+  

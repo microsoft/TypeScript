@@ -1,0 +1,8 @@
+--- old.corrupted.symbols
++++ new.corrupted.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === corrupted.ts ===
+ 
+-ï¿½ï¿½ï¿½
++Æ¼Á

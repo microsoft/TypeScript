@@ -1,0 +1,28 @@
+--- old.numericIndexerConstraint3.symbols
++++ new.numericIndexerConstraint3.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(numericIndexerConstraint3.ts, 0, 0))
+ 
+     foo: number;
+->foo : Symbol(A.foo, Decl(numericIndexerConstraint3.ts, 0, 9))
++>foo : Symbol(foo, Decl(numericIndexerConstraint3.ts, 0, 9))
+ }
+ 
+ class B extends A {
+@@= skipped -8, +8 lines =@@
+ >A : Symbol(A, Decl(numericIndexerConstraint3.ts, 0, 0))
+ 
+     bar: string;
+->bar : Symbol(B.bar, Decl(numericIndexerConstraint3.ts, 4, 19))
++>bar : Symbol(bar, Decl(numericIndexerConstraint3.ts, 4, 19))
+ }
+ 
+ class C {
+ >C : Symbol(C, Decl(numericIndexerConstraint3.ts, 6, 1))
+ 
+     0: B;
+->0 : Symbol(C[0], Decl(numericIndexerConstraint3.ts, 8, 9))
++>0 : Symbol(0, Decl(numericIndexerConstraint3.ts, 8, 9))
+ >B : Symbol(B, Decl(numericIndexerConstraint3.ts, 2, 1))
+ 
+     [x: number]: A;

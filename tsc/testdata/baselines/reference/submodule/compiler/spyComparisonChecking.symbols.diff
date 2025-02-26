@@ -1,0 +1,38 @@
+--- old.spyComparisonChecking.symbols
++++ new.spyComparisonChecking.symbols
+@@= skipped -7, +7 lines =@@
+ >params : Symbol(params, Decl(spyComparisonChecking.ts, 1, 5))
+ 
+     identity: string;
+->identity : Symbol(Spy.identity, Decl(spyComparisonChecking.ts, 1, 28))
++>identity : Symbol(identity, Decl(spyComparisonChecking.ts, 1, 28))
+ 
+     and: Function;
+->and : Symbol(Spy.and, Decl(spyComparisonChecking.ts, 3, 21))
++>and : Symbol(and, Decl(spyComparisonChecking.ts, 3, 21))
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     mostRecentCall: { args: any[]; };
+->mostRecentCall : Symbol(Spy.mostRecentCall, Decl(spyComparisonChecking.ts, 4, 18))
++>mostRecentCall : Symbol(mostRecentCall, Decl(spyComparisonChecking.ts, 4, 18))
+ >args : Symbol(args, Decl(spyComparisonChecking.ts, 5, 21))
+ 
+     argsForCall: any[];
+->argsForCall : Symbol(Spy.argsForCall, Decl(spyComparisonChecking.ts, 5, 37))
++>argsForCall : Symbol(argsForCall, Decl(spyComparisonChecking.ts, 5, 37))
+ }
+ 
+ type SpyObj<T> = T & {
+@@= skipped -59, +59 lines =@@
+ >methodNames : Symbol(methodNames, Decl(spyComparisonChecking.ts, 16, 33))
+ 
+         spyObj[methodName].and.returnValue(1);
+->spyObj[methodName].and : Symbol(Spy.and, Decl(spyComparisonChecking.ts, 3, 21))
++>spyObj[methodName].and : Symbol(and, Decl(spyComparisonChecking.ts, 3, 21))
+ >spyObj : Symbol(spyObj, Decl(spyComparisonChecking.ts, 17, 9))
+ >methodName : Symbol(methodName, Decl(spyComparisonChecking.ts, 18, 14))
+->and : Symbol(Spy.and, Decl(spyComparisonChecking.ts, 3, 21))
++>and : Symbol(and, Decl(spyComparisonChecking.ts, 3, 21))
+     }
+     return spyObj;
+ >spyObj : Symbol(spyObj, Decl(spyComparisonChecking.ts, 17, 9))

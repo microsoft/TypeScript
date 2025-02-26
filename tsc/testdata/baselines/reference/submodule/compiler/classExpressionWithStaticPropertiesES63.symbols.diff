@@ -1,0 +1,38 @@
+--- old.classExpressionWithStaticPropertiesES63.symbols
++++ new.classExpressionWithStaticPropertiesES63.symbols
+@@= skipped -13, +13 lines =@@
+ >i : Symbol(i, Decl(classExpressionWithStaticPropertiesES63.ts, 2, 8))
+ 
+     arr.push(class C {
+->arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>arr.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(classExpressionWithStaticPropertiesES63.ts, 1, 5))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >C : Symbol(C, Decl(classExpressionWithStaticPropertiesES63.ts, 3, 13))
+ 
+         static x = i;
+->x : Symbol(C.x, Decl(classExpressionWithStaticPropertiesES63.ts, 3, 22))
++>x : Symbol(x, Decl(classExpressionWithStaticPropertiesES63.ts, 3, 22))
+ >i : Symbol(i, Decl(classExpressionWithStaticPropertiesES63.ts, 2, 8))
+ 
+         static y = () => C.x * 2;
+->y : Symbol(C.y, Decl(classExpressionWithStaticPropertiesES63.ts, 4, 21))
+->C.x : Symbol(C.x, Decl(classExpressionWithStaticPropertiesES63.ts, 3, 22))
++>y : Symbol(y, Decl(classExpressionWithStaticPropertiesES63.ts, 4, 21))
++>C.x : Symbol(x, Decl(classExpressionWithStaticPropertiesES63.ts, 3, 22))
+ >C : Symbol(C, Decl(classExpressionWithStaticPropertiesES63.ts, 3, 13))
+->x : Symbol(C.x, Decl(classExpressionWithStaticPropertiesES63.ts, 3, 22))
++>x : Symbol(x, Decl(classExpressionWithStaticPropertiesES63.ts, 3, 22))
+ 
+     });
+ }
+ arr.forEach(C => console.log(C.y()));
+->arr.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>arr.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(classExpressionWithStaticPropertiesES63.ts, 1, 5))
+->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >C : Symbol(C, Decl(classExpressionWithStaticPropertiesES63.ts, 8, 12))
+ >console : Symbol(console, Decl(classExpressionWithStaticPropertiesES63.ts, 0, 11))
+ >C.y : Symbol(y, Decl(classExpressionWithStaticPropertiesES63.ts, 1, 12))

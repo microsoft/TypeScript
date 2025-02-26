@@ -1,0 +1,50 @@
+--- old.usingDeclarationsWithIteratorObject.symbols
++++ new.usingDeclarationsWithIteratorObject.symbols
+@@= skipped -17, +17 lines =@@
+ >Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+ 
+     next() { return { done: true, value: undefined }; }
+->next : Symbol(MyIterator.next, Decl(usingDeclarationsWithIteratorObject.ts, 4, 43))
++>next : Symbol(next, Decl(usingDeclarationsWithIteratorObject.ts, 4, 43))
+ >done : Symbol(done, Decl(usingDeclarationsWithIteratorObject.ts, 5, 21))
+ >value : Symbol(value, Decl(usingDeclarationsWithIteratorObject.ts, 5, 33))
+ >undefined : Symbol(undefined)
+@@= skipped -20, +20 lines =@@
+ 
+     using it2 = Iterator.from(i)
+ >it2 : Symbol(it2, Decl(usingDeclarationsWithIteratorObject.ts, 12, 9))
+->Iterator.from : Symbol(IteratorConstructor.from, Decl(lib.esnext.iterator.d.ts, --, --))
++>Iterator.from : Symbol(from, Decl(lib.esnext.iterator.d.ts, --, --))
+ >Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+->from : Symbol(IteratorConstructor.from, Decl(lib.esnext.iterator.d.ts, --, --))
++>from : Symbol(from, Decl(lib.esnext.iterator.d.ts, --, --))
+ >i : Symbol(i, Decl(usingDeclarationsWithIteratorObject.ts, 0, 13))
+ 
+     using it3 = new MyIterator();
+@@= skipped -11, +11 lines =@@
+ 
+     using it4 = [].values();
+ >it4 : Symbol(it4, Decl(usingDeclarationsWithIteratorObject.ts, 14, 9))
+->[].values : Symbol(Array.values, Decl(lib.es2015.iterable.d.ts, --, --))
+->values : Symbol(Array.values, Decl(lib.es2015.iterable.d.ts, --, --))
++>[].values : Symbol(values, Decl(lib.es2015.iterable.d.ts, --, --))
++>values : Symbol(values, Decl(lib.es2015.iterable.d.ts, --, --))
+ 
+     using it5 = new Map<string, string>().entries();
+ >it5 : Symbol(it5, Decl(usingDeclarationsWithIteratorObject.ts, 15, 9))
+->new Map<string, string>().entries : Symbol(Map.entries, Decl(lib.es2015.iterable.d.ts, --, --))
++>new Map<string, string>().entries : Symbol(entries, Decl(lib.es2015.iterable.d.ts, --, --))
+ >Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->entries : Symbol(Map.entries, Decl(lib.es2015.iterable.d.ts, --, --))
++>entries : Symbol(entries, Decl(lib.es2015.iterable.d.ts, --, --))
+ 
+     using it6 = new Set<string>().keys();
+ >it6 : Symbol(it6, Decl(usingDeclarationsWithIteratorObject.ts, 16, 9))
+->new Set<string>().keys : Symbol(Set.keys, Decl(lib.es2015.iterable.d.ts, --, --))
++>new Set<string>().keys : Symbol(keys, Decl(lib.es2015.iterable.d.ts, --, --))
+ >Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+->keys : Symbol(Set.keys, Decl(lib.es2015.iterable.d.ts, --, --))
++>keys : Symbol(keys, Decl(lib.es2015.iterable.d.ts, --, --))
+ 
+     // should fail
+     using it7 = i;

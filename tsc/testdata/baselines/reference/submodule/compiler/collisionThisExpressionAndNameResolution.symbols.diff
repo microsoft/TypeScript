@@ -1,0 +1,11 @@
+--- old.collisionThisExpressionAndNameResolution.symbols
++++ new.collisionThisExpressionAndNameResolution.symbols
+@@= skipped -11, +11 lines =@@
+ >Foo : Symbol(Foo, Decl(collisionThisExpressionAndNameResolution.ts, 2, 1))
+ 
+     x() {
+->x : Symbol(Foo.x, Decl(collisionThisExpressionAndNameResolution.ts, 3, 11))
++>x : Symbol(x, Decl(collisionThisExpressionAndNameResolution.ts, 3, 11))
+ 
+         var _this = 10; // Local var. No this capture in x(), so no conflict.
+ >_this : Symbol(_this, Decl(collisionThisExpressionAndNameResolution.ts, 5, 11))

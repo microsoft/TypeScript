@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/contextualReturnTypeOfIIFE2.ts] ////
+
+=== contextualReturnTypeOfIIFE2.ts ===
+declare namespace app {
+>app : Symbol(app, Decl(contextualReturnTypeOfIIFE2.ts, 0, 0))
+
+  function foo(): void;
+>foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
+}
+
+app.foo.bar = (function () {
+>app.foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
+>app : Symbol(app, Decl(contextualReturnTypeOfIIFE2.ts, 0, 0))
+>foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
+
+  const someFun = (arg: number) => {};
+>someFun : Symbol(someFun, Decl(contextualReturnTypeOfIIFE2.ts, 5, 7))
+>arg : Symbol(arg, Decl(contextualReturnTypeOfIIFE2.ts, 5, 19))
+
+  return { someFun };
+>someFun : Symbol(someFun, Decl(contextualReturnTypeOfIIFE2.ts, 6, 10))
+
+})();
+
+app.foo.bar.someFun(1);
+>app.foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
+>app : Symbol(app, Decl(contextualReturnTypeOfIIFE2.ts, 0, 0))
+>foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
+

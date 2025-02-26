@@ -1,0 +1,30 @@
+--- old.importAliasInModuleAugmentation.symbols
++++ new.importAliasInModuleAugmentation.symbols
+@@= skipped -10, +10 lines =@@
+ 
+     export interface y { s: string }
+ >y : Symbol(y, Decl(importAliasInModuleAugmentation.ts, 3, 16), Decl(importAliasInModuleAugmentation.ts, 3, 24))
+->s : Symbol(y.s, Decl(importAliasInModuleAugmentation.ts, 4, 24))
++>s : Symbol(s, Decl(importAliasInModuleAugmentation.ts, 4, 24))
+ }
+ 
+ declare global {
+@@= skipped -9, +9 lines =@@
+     export import x = A.y;
+ >x : Symbol(x, Decl(importAliasInModuleAugmentation.ts, 7, 16))
+ >A : Symbol(A, Decl(importAliasInModuleAugmentation.ts, 0, 10))
+->y : Symbol(x, Decl(importAliasInModuleAugmentation.ts, 3, 16), Decl(importAliasInModuleAugmentation.ts, 3, 24))
++>y : Symbol(y, Decl(importAliasInModuleAugmentation.ts, 3, 16), Decl(importAliasInModuleAugmentation.ts, 3, 24))
+ 
+     // Should still error
+     import f = require("fs");
+@@= skipped -17, +17 lines =@@
+ >s : Symbol(s, Decl(importAliasInModuleAugmentation.ts, 15, 12))
+ 
+ void s.s;
+->s.s : Symbol(x.s, Decl(importAliasInModuleAugmentation.ts, 4, 24))
++>s.s : Symbol(s, Decl(importAliasInModuleAugmentation.ts, 4, 24))
+ >s : Symbol(s, Decl(importAliasInModuleAugmentation.ts, 15, 3))
+->s : Symbol(x.s, Decl(importAliasInModuleAugmentation.ts, 4, 24))
++>s : Symbol(s, Decl(importAliasInModuleAugmentation.ts, 4, 24))
+ 

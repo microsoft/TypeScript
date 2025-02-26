@@ -1,0 +1,19 @@
+--- old.classImplementsClass3.symbols
++++ new.classImplementsClass3.symbols
+@@= skipped -2, +2 lines =@@
+ === classImplementsClass3.ts ===
+ class A { foo(): number { return 1; } }
+ >A : Symbol(A, Decl(classImplementsClass3.ts, 0, 0))
+->foo : Symbol(A.foo, Decl(classImplementsClass3.ts, 0, 9))
++>foo : Symbol(foo, Decl(classImplementsClass3.ts, 0, 9))
+ 
+ class C implements A {
+ >C : Symbol(C, Decl(classImplementsClass3.ts, 0, 39))
+ >A : Symbol(A, Decl(classImplementsClass3.ts, 0, 0))
+ 
+     foo() {
+->foo : Symbol(C.foo, Decl(classImplementsClass3.ts, 1, 22))
++>foo : Symbol(foo, Decl(classImplementsClass3.ts, 1, 22))
+ 
+         return 1;
+     }

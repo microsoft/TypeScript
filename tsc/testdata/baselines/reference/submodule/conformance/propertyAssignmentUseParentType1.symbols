@@ -1,0 +1,37 @@
+//// [tests/cases/conformance/salsa/propertyAssignmentUseParentType1.ts] ////
+
+=== propertyAssignmentUseParentType1.ts ===
+interface N {
+>N : Symbol(N, Decl(propertyAssignmentUseParentType1.ts, 0, 0))
+
+    (): boolean
+    num: 123;
+>num : Symbol(num, Decl(propertyAssignmentUseParentType1.ts, 1, 15))
+}
+export const interfaced: N = () => true;
+>interfaced : Symbol(interfaced, Decl(propertyAssignmentUseParentType1.ts, 4, 12))
+>N : Symbol(N, Decl(propertyAssignmentUseParentType1.ts, 0, 0))
+
+interfaced.num = 123;
+>interfaced.num : Symbol(num, Decl(propertyAssignmentUseParentType1.ts, 1, 15))
+>interfaced : Symbol(interfaced, Decl(propertyAssignmentUseParentType1.ts, 4, 12))
+>num : Symbol(num, Decl(propertyAssignmentUseParentType1.ts, 1, 15))
+
+export const inlined: { (): boolean; nun: 456 } = () => true;
+>inlined : Symbol(inlined, Decl(propertyAssignmentUseParentType1.ts, 7, 12))
+>nun : Symbol(nun, Decl(propertyAssignmentUseParentType1.ts, 7, 36))
+
+inlined.nun = 456;
+>inlined.nun : Symbol(nun, Decl(propertyAssignmentUseParentType1.ts, 7, 36))
+>inlined : Symbol(inlined, Decl(propertyAssignmentUseParentType1.ts, 7, 12))
+>nun : Symbol(nun, Decl(propertyAssignmentUseParentType1.ts, 7, 36))
+
+export const ignoreJsdoc = () => true;
+>ignoreJsdoc : Symbol(ignoreJsdoc, Decl(propertyAssignmentUseParentType1.ts, 10, 12))
+
+/** @type {string} make sure to ignore jsdoc! */
+ignoreJsdoc.extra = 111
+>ignoreJsdoc.extra : Symbol(extra, Decl(propertyAssignmentUseParentType1.ts, 10, 38))
+>ignoreJsdoc : Symbol(ignoreJsdoc, Decl(propertyAssignmentUseParentType1.ts, 10, 12))
+>extra : Symbol(extra, Decl(propertyAssignmentUseParentType1.ts, 10, 38))
+

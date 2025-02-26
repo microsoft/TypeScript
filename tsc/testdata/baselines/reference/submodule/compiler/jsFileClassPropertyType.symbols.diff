@@ -1,0 +1,18 @@
+--- old.jsFileClassPropertyType.symbols
++++ new.jsFileClassPropertyType.symbols
+@@= skipped -5, +5 lines =@@
+ 
+   constructor () {
+       this.p = 0;
+->this.p : Symbol(C.p, Decl(foo.js, 1, 18))
+ >this : Symbol(C, Decl(foo.js, 0, 0))
+->p : Symbol(C.p, Decl(foo.js, 1, 18))
+   }
+ }
+ 
+ === bar.ts ===
+ (new C()).p = "string";
+->(new C()).p : Symbol(C.p, Decl(foo.js, 1, 18))
+ >C : Symbol(C, Decl(foo.js, 0, 0))
+->p : Symbol(C.p, Decl(foo.js, 1, 18))
+ 

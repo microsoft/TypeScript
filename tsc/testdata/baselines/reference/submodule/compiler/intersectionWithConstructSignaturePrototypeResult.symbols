@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/intersectionWithConstructSignaturePrototypeResult.ts] ////
+
+=== intersectionWithConstructSignaturePrototypeResult.ts ===
+declare class EmberObject {}
+>EmberObject : Symbol(EmberObject, Decl(intersectionWithConstructSignaturePrototypeResult.ts, 0, 0))
+
+type PersonType = Readonly<typeof EmberObject> &
+>PersonType : Symbol(PersonType, Decl(intersectionWithConstructSignaturePrototypeResult.ts, 0, 28))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>EmberObject : Symbol(EmberObject, Decl(intersectionWithConstructSignaturePrototypeResult.ts, 0, 0))
+
+  (new (properties?: object) => {
+>properties : Symbol(properties, Decl(intersectionWithConstructSignaturePrototypeResult.ts, 3, 8))
+
+    firstName: string;
+>firstName : Symbol(firstName, Decl(intersectionWithConstructSignaturePrototypeResult.ts, 3, 33))
+
+    lastName: string;
+>lastName : Symbol(lastName, Decl(intersectionWithConstructSignaturePrototypeResult.ts, 4, 22))
+
+  } & EmberObject) &
+>EmberObject : Symbol(EmberObject, Decl(intersectionWithConstructSignaturePrototypeResult.ts, 0, 0))
+
+  (new (...args: any[]) => {
+>args : Symbol(args, Decl(intersectionWithConstructSignaturePrototypeResult.ts, 7, 8))
+
+    firstName: string;
+>firstName : Symbol(firstName, Decl(intersectionWithConstructSignaturePrototypeResult.ts, 7, 28))
+
+    lastName: string;
+>lastName : Symbol(lastName, Decl(intersectionWithConstructSignaturePrototypeResult.ts, 8, 22))
+
+  } & EmberObject);
+>EmberObject : Symbol(EmberObject, Decl(intersectionWithConstructSignaturePrototypeResult.ts, 0, 0))
+
+type PersonPrototype = PersonType["prototype"];
+>PersonPrototype : Symbol(PersonPrototype, Decl(intersectionWithConstructSignaturePrototypeResult.ts, 10, 19))
+>PersonType : Symbol(PersonType, Decl(intersectionWithConstructSignaturePrototypeResult.ts, 0, 28))
+

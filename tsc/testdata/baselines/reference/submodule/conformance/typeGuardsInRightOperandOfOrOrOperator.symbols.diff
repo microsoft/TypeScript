@@ -1,0 +1,35 @@
+--- old.typeGuardsInRightOperandOfOrOrOperator.symbols
++++ new.typeGuardsInRightOperandOfOrOrOperator.symbols
+@@= skipped -9, +9 lines =@@
+ 
+     return typeof x !== "string" || x.length === 10; // string
+ >x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 3, 13))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 3, 13))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ function foo2(x: number | string) {
+ >foo2 : Symbol(foo2, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 5, 1))
+@@= skipped -97, +97 lines =@@
+         // change value of x
+         ? ((x = 10) && x.toString()) // number | boolean | string
+ >x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+         // do not change value
+         : ((y = x) && x.toString()))); // number | boolean | string
+ >y : Symbol(y, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 34, 7))
+ >x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
+->x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ }
+ 

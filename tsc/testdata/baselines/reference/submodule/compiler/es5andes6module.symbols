@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/es5andes6module.ts] ////
+
+=== es5andes6module.ts ===
+export default class A
+>A : Symbol(default, Decl(es5andes6module.ts, 0, 0))
+{
+    constructor ()
+    {
+
+    }
+
+    public B()
+>B : Symbol(B, Decl(es5andes6module.ts, 5, 5))
+    {
+        return 42;
+    }
+}
+

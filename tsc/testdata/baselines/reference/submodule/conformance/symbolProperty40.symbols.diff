@@ -1,0 +1,44 @@
+--- old.symbolProperty40.symbols
++++ new.symbolProperty40.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(symbolProperty40.ts, 0, 0))
+ 
+     [Symbol.iterator](x: string): string;
+->[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(symbolProperty40.ts, 0, 9), Decl(symbolProperty40.ts, 1, 41), Decl(symbolProperty40.ts, 2, 41))
+->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(symbolProperty40.ts, 0, 9))
+ >x : Symbol(x, Decl(symbolProperty40.ts, 1, 22))
+ 
+     [Symbol.iterator](x: number): number;
+->[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(symbolProperty40.ts, 0, 9), Decl(symbolProperty40.ts, 1, 41), Decl(symbolProperty40.ts, 2, 41))
+->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(symbolProperty40.ts, 1, 41))
+ >x : Symbol(x, Decl(symbolProperty40.ts, 2, 22))
+ 
+     [Symbol.iterator](x: any) {
+->[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(symbolProperty40.ts, 0, 9), Decl(symbolProperty40.ts, 1, 41), Decl(symbolProperty40.ts, 2, 41))
+->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(symbolProperty40.ts, 2, 41))
+ >x : Symbol(x, Decl(symbolProperty40.ts, 3, 22))
+ 
+         return undefined;
+@@= skipped -31, +22 lines =@@
+ 
+ c[Symbol.iterator]("");
+ >c : Symbol(c, Decl(symbolProperty40.ts, 8, 3))
+->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+ 
+ c[Symbol.iterator](0);
+ >c : Symbol(c, Decl(symbolProperty40.ts, 8, 3))
+->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+ 

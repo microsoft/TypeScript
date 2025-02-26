@@ -1,0 +1,34 @@
+--- old.destructuringTuple.symbols
++++ new.destructuringTuple.symbols
+@@= skipped -22, +22 lines =@@
+ 
+ const [oops1] = [1, 2, 3].reduce((accu, el) => accu.concat(el), []);
+ >oops1 : Symbol(oops1, Decl(destructuringTuple.ts, 10, 7))
+->[1, 2, 3].reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>[1, 2, 3].reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >accu : Symbol(accu, Decl(destructuringTuple.ts, 10, 34))
+ >el : Symbol(el, Decl(destructuringTuple.ts, 10, 39))
+->accu.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>accu.concat : Symbol(concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >accu : Symbol(accu, Decl(destructuringTuple.ts, 10, 34))
+->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>concat : Symbol(concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >el : Symbol(el, Decl(destructuringTuple.ts, 10, 39))
+ 
+ const [oops2] = [1, 2, 3].reduce((acc: number[], e) => acc.concat(e), []);
+ >oops2 : Symbol(oops2, Decl(destructuringTuple.ts, 12, 7))
+->[1, 2, 3].reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>[1, 2, 3].reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >acc : Symbol(acc, Decl(destructuringTuple.ts, 12, 34))
+ >e : Symbol(e, Decl(destructuringTuple.ts, 12, 48))
+->acc.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>acc.concat : Symbol(concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >acc : Symbol(acc, Decl(destructuringTuple.ts, 12, 34))
+->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>concat : Symbol(concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >e : Symbol(e, Decl(destructuringTuple.ts, 12, 48))
+ 

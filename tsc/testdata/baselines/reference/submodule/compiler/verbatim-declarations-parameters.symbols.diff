@@ -1,0 +1,23 @@
+--- old.verbatim-declarations-parameters.symbols
++++ new.verbatim-declarations-parameters.symbols
+@@= skipped -14, +14 lines =@@
+   constructor(
+     // Type node is accurate, preserve
+     public reuseTypeNode?: Map | undefined,
+->reuseTypeNode : Symbol(Foo.reuseTypeNode, Decl(verbatim-declarations-parameters.ts, 3, 14))
++>reuseTypeNode : Symbol(reuseTypeNode, Decl(verbatim-declarations-parameters.ts, 3, 14))
+ >Map : Symbol(Map, Decl(verbatim-declarations-parameters.ts, 0, 0))
+ 
+     public reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">,
+->reuseTypeNode2 : Symbol(Foo.reuseTypeNode2, Decl(verbatim-declarations-parameters.ts, 5, 43))
++>reuseTypeNode2 : Symbol(reuseTypeNode2, Decl(verbatim-declarations-parameters.ts, 5, 43))
+ >Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+ >MapOrUndefined : Symbol(MapOrUndefined, Decl(verbatim-declarations-parameters.ts, 0, 38))
+ 
+     // Resolve type node, requires adding | undefined
+     public resolveType?: Map,
+->resolveType : Symbol(Foo.resolveType, Decl(verbatim-declarations-parameters.ts, 6, 61))
++>resolveType : Symbol(resolveType, Decl(verbatim-declarations-parameters.ts, 6, 61))
+ >Map : Symbol(Map, Decl(verbatim-declarations-parameters.ts, 0, 0))
+ 
+   ) { }

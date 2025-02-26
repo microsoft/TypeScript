@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/jsFileCompilationPublicMethodSyntaxOfClass.ts] ////
+
+=== a.js ===
+class C {
+>C : Symbol(C, Decl(a.js, 0, 0))
+
+    public foo() {
+>foo : Symbol(foo, Decl(a.js, 0, 9))
+    }
+}

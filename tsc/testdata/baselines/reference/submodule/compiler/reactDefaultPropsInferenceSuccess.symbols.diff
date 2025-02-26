@@ -1,0 +1,150 @@
+--- old.reactDefaultPropsInferenceSuccess.symbols
++++ new.reactDefaultPropsInferenceSuccess.symbols
+@@= skipped -9, +9 lines =@@
+ >BaseProps : Symbol(BaseProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 2, 26))
+ 
+   when?: ((value: string) => boolean) | "a" | "b";
+->when : Symbol(BaseProps.when, Decl(reactDefaultPropsInferenceSuccess.tsx, 4, 21))
++>when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 4, 21))
+ >value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 5, 11))
+ 
+   error?: boolean;
+->error : Symbol(BaseProps.error, Decl(reactDefaultPropsInferenceSuccess.tsx, 5, 50))
++>error : Symbol(error, Decl(reactDefaultPropsInferenceSuccess.tsx, 5, 50))
+ }
+ 
+ interface Props extends BaseProps {
+@@= skipped -17, +17 lines =@@
+ >P : Symbol(P, Decl(reactDefaultPropsInferenceSuccess.tsx, 12, 20))
+ >Props : Symbol(Props, Decl(reactDefaultPropsInferenceSuccess.tsx, 7, 1))
+ >BaseProps : Symbol(BaseProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 2, 26))
+->React.Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
++>React.Component : Symbol(unknown)
+ >React : Symbol(React, Decl(reactDefaultPropsInferenceSuccess.tsx, 2, 6))
+->Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
++>Component : Symbol(unknown)
+ >P : Symbol(P, Decl(reactDefaultPropsInferenceSuccess.tsx, 12, 20))
+ 
+   static defaultProps = {
+->defaultProps : Symbol(FieldFeedback.defaultProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 12, 77))
++>defaultProps : Symbol(defaultProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 12, 77))
+ 
+     when: () => true
+ >when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 13, 25))
+@@= skipped -14, +14 lines =@@
+   };
+ 
+   render() {
+->render : Symbol(FieldFeedback.render, Decl(reactDefaultPropsInferenceSuccess.tsx, 15, 4))
++>render : Symbol(render, Decl(reactDefaultPropsInferenceSuccess.tsx, 15, 4))
+ 
+     return <div>Hello</div>;
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+   }
+ }
+ 
+@@= skipped -22, +20 lines =@@
+ >FieldFeedback : Symbol(FieldFeedback, Decl(reactDefaultPropsInferenceSuccess.tsx, 10, 1))
+ >when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 26, 34))
+ >value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 26, 41))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 26, 41))
+ 
+ class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> {
+@@= skipped -10, +10 lines =@@
+ >P : Symbol(P, Decl(reactDefaultPropsInferenceSuccess.tsx, 28, 24))
+ >Props : Symbol(Props, Decl(reactDefaultPropsInferenceSuccess.tsx, 7, 1))
+ >BaseProps : Symbol(BaseProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 2, 26))
+->React.Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
++>React.Component : Symbol(unknown)
+ >React : Symbol(React, Decl(reactDefaultPropsInferenceSuccess.tsx, 2, 6))
+->Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
++>Component : Symbol(unknown)
+ >P : Symbol(P, Decl(reactDefaultPropsInferenceSuccess.tsx, 28, 24))
+ 
+   static defaultProps: BaseProps = {
+->defaultProps : Symbol(FieldFeedbackBeta.defaultProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 28, 81))
++>defaultProps : Symbol(defaultProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 28, 81))
+ >BaseProps : Symbol(BaseProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 2, 26))
+ 
+     when: () => true
+@@= skipped -15, +15 lines =@@
+   };
+ 
+   render() {
+->render : Symbol(FieldFeedbackBeta.render, Decl(reactDefaultPropsInferenceSuccess.tsx, 31, 4))
++>render : Symbol(render, Decl(reactDefaultPropsInferenceSuccess.tsx, 31, 4))
+ 
+     return <div>Hello</div>;
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+   }
+ }
+ 
+@@= skipped -24, +22 lines =@@
+ >FieldFeedbackBeta : Symbol(FieldFeedbackBeta, Decl(reactDefaultPropsInferenceSuccess.tsx, 26, 73))
+ >when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 42, 39))
+ >value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 42, 46))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 42, 46))
+ >error : Symbol(error, Decl(reactDefaultPropsInferenceSuccess.tsx, 42, 74))
+ >FieldFeedbackBeta : Symbol(FieldFeedbackBeta, Decl(reactDefaultPropsInferenceSuccess.tsx, 26, 73))
+@@= skipped -12, +12 lines =@@
+ >Props : Symbol(Props, Decl(reactDefaultPropsInferenceSuccess.tsx, 7, 1))
+ 
+   when: (value: string) => boolean;
+->when : Symbol(MyPropsProps.when, Decl(reactDefaultPropsInferenceSuccess.tsx, 44, 38))
++>when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 44, 38))
+ >value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 45, 9))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >P : Symbol(P, Decl(reactDefaultPropsInferenceSuccess.tsx, 48, 21))
+ 
+   static defaultProps = {
+->defaultProps : Symbol(FieldFeedback2.defaultProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 48, 86))
++>defaultProps : Symbol(defaultProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 48, 86))
+ 
+     when: () => true
+ >when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 49, 25))
+@@= skipped -8, +8 lines =@@
+   };
+ 
+   render() {
+->render : Symbol(FieldFeedback2.render, Decl(reactDefaultPropsInferenceSuccess.tsx, 51, 4))
++>render : Symbol(render, Decl(reactDefaultPropsInferenceSuccess.tsx, 51, 4))
+ 
+     this.props.when("now"); // OK, always defined
+->this.props.when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 44, 38))
+->this.props : Symbol(React.Component.props, Decl(react16.d.ts, 367, 32))
+ >this : Symbol(FieldFeedback2, Decl(reactDefaultPropsInferenceSuccess.tsx, 46, 1))
+->props : Symbol(React.Component.props, Decl(react16.d.ts, 367, 32))
+->when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 44, 38))
+ 
+     return <div>Hello</div>;
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+   }
+ }
+ 
+@@= skipped -29, +23 lines =@@
+ >FieldFeedback2 : Symbol(FieldFeedback2, Decl(reactDefaultPropsInferenceSuccess.tsx, 46, 1))
+ >when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 63, 35))
+ >value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 63, 42))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 63, 42))
+ 
+ // OK

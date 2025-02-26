@@ -1,0 +1,17 @@
+--- old.instanceOfInExternalModules.symbols
++++ new.instanceOfInExternalModules.symbols
+@@= skipped -10, +10 lines =@@
+ 
+     return value instanceof Bar.Foo;
+ >value : Symbol(value, Decl(instanceOfInExternalModules_1.ts, 2, 15))
+->Bar.Foo : Symbol(Bar.Foo, Decl(instanceOfInExternalModules_require.ts, 0, 0))
+ >Bar : Symbol(Bar, Decl(instanceOfInExternalModules_1.ts, 0, 0))
+->Foo : Symbol(Bar.Foo, Decl(instanceOfInExternalModules_require.ts, 0, 0))
+ }
+ 
+ === instanceOfInExternalModules_require.ts ===
+ export class Foo { foo: string; }
+ >Foo : Symbol(Foo, Decl(instanceOfInExternalModules_require.ts, 0, 0))
+->foo : Symbol(Foo.foo, Decl(instanceOfInExternalModules_require.ts, 0, 18))
++>foo : Symbol(foo, Decl(instanceOfInExternalModules_require.ts, 0, 18))
+ 

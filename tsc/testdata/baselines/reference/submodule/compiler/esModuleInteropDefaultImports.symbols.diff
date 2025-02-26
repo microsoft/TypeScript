@@ -1,0 +1,108 @@
+--- old.esModuleInteropDefaultImports.symbols
++++ new.esModuleInteropDefaultImports.symbols
+@@= skipped -30, +30 lines =@@
+ >self : Symbol(self, Decl(b.ts, 3, 6))
+ 
+ export { default } from "./a";
+->default : Symbol(self.default, Decl(b.ts, 4, 8))
++>default : Symbol(default, Decl(b.ts, 4, 8))
+ 
+ export { default as def } from "./a";
+ >default : Symbol(mod, Decl(a.ts, 0, 30))
+->def : Symbol(self.def, Decl(b.ts, 5, 8))
++>def : Symbol(def, Decl(b.ts, 5, 8))
+ 
+ a === b;
+ >a : Symbol(a, Decl(b.ts, 0, 6))
+@@= skipped -20, +20 lines =@@
+ 
+ d === self.default;
+ >d : Symbol(d, Decl(b.ts, 2, 11))
+->self.default : Symbol(self.default, Decl(b.ts, 4, 8))
++>self.default : Symbol(default, Decl(b.ts, 4, 8))
+ >self : Symbol(self, Decl(b.ts, 3, 6))
+->default : Symbol(self.default, Decl(b.ts, 4, 8))
++>default : Symbol(default, Decl(b.ts, 4, 8))
+ 
+ self.default === self.def;
+->self.default : Symbol(self.default, Decl(b.ts, 4, 8))
++>self.default : Symbol(default, Decl(b.ts, 4, 8))
+ >self : Symbol(self, Decl(b.ts, 3, 6))
+->default : Symbol(self.default, Decl(b.ts, 4, 8))
+->self.def : Symbol(self.def, Decl(b.ts, 5, 8))
++>default : Symbol(default, Decl(b.ts, 4, 8))
++>self.def : Symbol(def, Decl(b.ts, 5, 8))
+ >self : Symbol(self, Decl(b.ts, 3, 6))
+->def : Symbol(self.def, Decl(b.ts, 5, 8))
++>def : Symbol(def, Decl(b.ts, 5, 8))
+ 
+ // should all fail
+ a();
+@@= skipped -26, +26 lines =@@
+ >d : Symbol(d, Decl(b.ts, 2, 11))
+ 
+ self.default();
+->self.default : Symbol(self.default, Decl(b.ts, 4, 8))
++>self.default : Symbol(default, Decl(b.ts, 4, 8))
+ >self : Symbol(self, Decl(b.ts, 3, 6))
+->default : Symbol(self.default, Decl(b.ts, 4, 8))
++>default : Symbol(default, Decl(b.ts, 4, 8))
+ 
+ self.def();
+->self.def : Symbol(self.def, Decl(b.ts, 5, 8))
++>self.def : Symbol(def, Decl(b.ts, 5, 8))
+ >self : Symbol(self, Decl(b.ts, 3, 6))
+->def : Symbol(self.def, Decl(b.ts, 5, 8))
++>def : Symbol(def, Decl(b.ts, 5, 8))
+ 
+ // should all work
+ a.default();
+->a.default : Symbol(a.default, Decl(mod.ts, 0, 29))
++>a.default : Symbol(default, Decl(mod.ts, 0, 29))
+ >a : Symbol(a, Decl(b.ts, 0, 6))
+->default : Symbol(a.default, Decl(mod.ts, 0, 29))
++>default : Symbol(default, Decl(mod.ts, 0, 29))
+ 
+ b.default();
+->b.default : Symbol(a.default, Decl(mod.ts, 0, 29))
++>b.default : Symbol(default, Decl(mod.ts, 0, 29))
+ >b : Symbol(b, Decl(b.ts, 1, 8))
+->default : Symbol(a.default, Decl(mod.ts, 0, 29))
++>default : Symbol(default, Decl(mod.ts, 0, 29))
+ 
+ c.default();
+->c.default : Symbol(a.default, Decl(mod.ts, 0, 29))
++>c.default : Symbol(default, Decl(mod.ts, 0, 29))
+ >c : Symbol(c, Decl(b.ts, 2, 6))
+->default : Symbol(a.default, Decl(mod.ts, 0, 29))
++>default : Symbol(default, Decl(mod.ts, 0, 29))
+ 
+ d.default();
+->d.default : Symbol(a.default, Decl(mod.ts, 0, 29))
++>d.default : Symbol(default, Decl(mod.ts, 0, 29))
+ >d : Symbol(d, Decl(b.ts, 2, 11))
+->default : Symbol(a.default, Decl(mod.ts, 0, 29))
++>default : Symbol(default, Decl(mod.ts, 0, 29))
+ 
+ self.default.default();
+->self.default.default : Symbol(a.default, Decl(mod.ts, 0, 29))
+->self.default : Symbol(self.default, Decl(b.ts, 4, 8))
++>self.default.default : Symbol(default, Decl(mod.ts, 0, 29))
++>self.default : Symbol(default, Decl(b.ts, 4, 8))
+ >self : Symbol(self, Decl(b.ts, 3, 6))
+->default : Symbol(self.default, Decl(b.ts, 4, 8))
+->default : Symbol(a.default, Decl(mod.ts, 0, 29))
++>default : Symbol(default, Decl(b.ts, 4, 8))
++>default : Symbol(default, Decl(mod.ts, 0, 29))
+ 
+ self.def.default();
+->self.def.default : Symbol(a.default, Decl(mod.ts, 0, 29))
+->self.def : Symbol(self.def, Decl(b.ts, 5, 8))
++>self.def.default : Symbol(default, Decl(mod.ts, 0, 29))
++>self.def : Symbol(def, Decl(b.ts, 5, 8))
+ >self : Symbol(self, Decl(b.ts, 3, 6))
+->def : Symbol(self.def, Decl(b.ts, 5, 8))
+->default : Symbol(a.default, Decl(mod.ts, 0, 29))
++>def : Symbol(def, Decl(b.ts, 5, 8))
++>default : Symbol(default, Decl(mod.ts, 0, 29))
+ 

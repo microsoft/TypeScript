@@ -1,0 +1,32 @@
+--- old.constructorDefaultValuesReferencingThis.symbols
++++ new.constructorDefaultValuesReferencingThis.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(constructorDefaultValuesReferencingThis.ts, 0, 0))
+ 
+     public baseProp = 1;
+->baseProp : Symbol(C.baseProp, Decl(constructorDefaultValuesReferencingThis.ts, 0, 9))
++>baseProp : Symbol(baseProp, Decl(constructorDefaultValuesReferencingThis.ts, 0, 9))
+ 
+     constructor(x = this) { }
+ >x : Symbol(x, Decl(constructorDefaultValuesReferencingThis.ts, 2, 16))
+@@= skipped -21, +21 lines =@@
+ >T : Symbol(T, Decl(constructorDefaultValuesReferencingThis.ts, 9, 8))
+ 
+     constructor(public x = this) { }
+->x : Symbol(E.x, Decl(constructorDefaultValuesReferencingThis.ts, 10, 16))
++>x : Symbol(x, Decl(constructorDefaultValuesReferencingThis.ts, 10, 16))
+ >this : Symbol(E, Decl(constructorDefaultValuesReferencingThis.ts, 7, 1))
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ 
+     constructor(y = this.baseProp) {
+ >y : Symbol(y, Decl(constructorDefaultValuesReferencingThis.ts, 14, 16))
+->this.baseProp : Symbol(C.baseProp, Decl(constructorDefaultValuesReferencingThis.ts, 0, 9))
++>this.baseProp : Symbol(baseProp, Decl(constructorDefaultValuesReferencingThis.ts, 0, 9))
+ >this : Symbol(F, Decl(constructorDefaultValuesReferencingThis.ts, 11, 1))
+->baseProp : Symbol(C.baseProp, Decl(constructorDefaultValuesReferencingThis.ts, 0, 9))
++>baseProp : Symbol(baseProp, Decl(constructorDefaultValuesReferencingThis.ts, 0, 9))
+ 
+         super();
+ >super : Symbol(C, Decl(constructorDefaultValuesReferencingThis.ts, 0, 0))

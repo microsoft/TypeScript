@@ -1,0 +1,18 @@
+--- old.superWithGenerics.symbols
++++ new.superWithGenerics.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(superWithGenerics.ts, 0, 16))
+ 
+     m<U>(): B<U>;
+->m : Symbol(B.m, Decl(superWithGenerics.ts, 0, 20))
++>m : Symbol(m, Decl(superWithGenerics.ts, 0, 20))
+ >U : Symbol(U, Decl(superWithGenerics.ts, 1, 6))
+ >B : Symbol(B, Decl(superWithGenerics.ts, 0, 0))
+ >U : Symbol(U, Decl(superWithGenerics.ts, 1, 6))
+ 
+     static g(): B<any>;
+->g : Symbol(B.g, Decl(superWithGenerics.ts, 1, 17))
++>g : Symbol(g, Decl(superWithGenerics.ts, 1, 17))
+ >B : Symbol(B, Decl(superWithGenerics.ts, 0, 0))
+ }
+ 

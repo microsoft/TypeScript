@@ -1,0 +1,69 @@
+--- old.recursiveConditionalCrash3.symbols
++++ new.recursiveConditionalCrash3.symbols
+@@= skipped -33, +33 lines =@@
+ >Base : Symbol(Base, Decl(recursiveConditionalCrash3.ts, 12, 1))
+ 
+     id: string,
+->id : Symbol(User.id, Decl(recursiveConditionalCrash3.ts, 18, 29))
++>id : Symbol(id, Decl(recursiveConditionalCrash3.ts, 18, 29))
+ 
+     role: CanBeExpanded<Role>,
+->role : Symbol(User.role, Decl(recursiveConditionalCrash3.ts, 19, 15))
++>role : Symbol(role, Decl(recursiveConditionalCrash3.ts, 19, 15))
+ >CanBeExpanded : Symbol(CanBeExpanded, Decl(recursiveConditionalCrash3.ts, 2, 9))
+ >Role : Symbol(Role, Decl(recursiveConditionalCrash3.ts, 22, 1))
+ 
+     note: string,
+->note : Symbol(User.note, Decl(recursiveConditionalCrash3.ts, 20, 30))
++>note : Symbol(note, Decl(recursiveConditionalCrash3.ts, 20, 30))
+ }
+ 
+ interface Role extends Base {
+@@= skipped -16, +16 lines =@@
+ >Base : Symbol(Base, Decl(recursiveConditionalCrash3.ts, 12, 1))
+ 
+     id: string,
+->id : Symbol(Role.id, Decl(recursiveConditionalCrash3.ts, 24, 29))
++>id : Symbol(id, Decl(recursiveConditionalCrash3.ts, 24, 29))
+ 
+     user: CanBeExpanded<User>,
+->user : Symbol(Role.user, Decl(recursiveConditionalCrash3.ts, 25, 15))
++>user : Symbol(user, Decl(recursiveConditionalCrash3.ts, 25, 15))
+ >CanBeExpanded : Symbol(CanBeExpanded, Decl(recursiveConditionalCrash3.ts, 2, 9))
+ >User : Symbol(User, Decl(recursiveConditionalCrash3.ts, 16, 1))
+ 
+     x: string
+->x : Symbol(Role.x, Decl(recursiveConditionalCrash3.ts, 26, 30))
++>x : Symbol(x, Decl(recursiveConditionalCrash3.ts, 26, 30))
+ }
+ 
+ // This interface will be expanded in circular way.
+@@= skipped -17, +17 lines =@@
+ >Base : Symbol(Base, Decl(recursiveConditionalCrash3.ts, 12, 1))
+ 
+     id: string,
+->id : Symbol(X.id, Decl(recursiveConditionalCrash3.ts, 31, 26))
++>id : Symbol(id, Decl(recursiveConditionalCrash3.ts, 31, 26))
+ 
+     name: string,
+->name : Symbol(X.name, Decl(recursiveConditionalCrash3.ts, 32, 15))
++>name : Symbol(name, Decl(recursiveConditionalCrash3.ts, 32, 15))
+ 
+     user: CanBeExpanded<User>,
+->user : Symbol(X.user, Decl(recursiveConditionalCrash3.ts, 33, 17))
++>user : Symbol(user, Decl(recursiveConditionalCrash3.ts, 33, 17))
+ >CanBeExpanded : Symbol(CanBeExpanded, Decl(recursiveConditionalCrash3.ts, 2, 9))
+ >User : Symbol(User, Decl(recursiveConditionalCrash3.ts, 16, 1))
+ 
+     role: CanBeExpanded<Role>
+->role : Symbol(X.role, Decl(recursiveConditionalCrash3.ts, 34, 30))
++>role : Symbol(role, Decl(recursiveConditionalCrash3.ts, 34, 30))
+ >CanBeExpanded : Symbol(CanBeExpanded, Decl(recursiveConditionalCrash3.ts, 2, 9))
+ >Role : Symbol(Role, Decl(recursiveConditionalCrash3.ts, 22, 1))
+ 
+     roles: CanBeExpanded<Role[]>
+->roles : Symbol(X.roles, Decl(recursiveConditionalCrash3.ts, 35, 29))
++>roles : Symbol(roles, Decl(recursiveConditionalCrash3.ts, 35, 29))
+ >CanBeExpanded : Symbol(CanBeExpanded, Decl(recursiveConditionalCrash3.ts, 2, 9))
+ >Role : Symbol(Role, Decl(recursiveConditionalCrash3.ts, 22, 1))
+ }

@@ -1,0 +1,24 @@
+--- old.conditionalTypeClassMembers.symbols
++++ new.conditionalTypeClassMembers.symbols
+@@= skipped -4, +4 lines =@@
+ >MyRecord : Symbol(MyRecord, Decl(conditionalTypeClassMembers.ts, 0, 0))
+ 
+     private a();
+->a : Symbol(MyRecord.a, Decl(conditionalTypeClassMembers.ts, 0, 24))
++>a : Symbol(a, Decl(conditionalTypeClassMembers.ts, 0, 24))
+ 
+     b(): unknown;
+->b : Symbol(MyRecord.b, Decl(conditionalTypeClassMembers.ts, 1, 16))
++>b : Symbol(b, Decl(conditionalTypeClassMembers.ts, 1, 16))
+ }
+ 
+ declare class MySet<TSet extends MyRecord> {
+@@= skipped -12, +12 lines =@@
+ >MyRecord : Symbol(MyRecord, Decl(conditionalTypeClassMembers.ts, 0, 0))
+ 
+     public item(): TSet;
+->item : Symbol(MySet.item, Decl(conditionalTypeClassMembers.ts, 5, 44))
++>item : Symbol(item, Decl(conditionalTypeClassMembers.ts, 5, 44))
+ >TSet : Symbol(TSet, Decl(conditionalTypeClassMembers.ts, 5, 20))
+ }
+ 

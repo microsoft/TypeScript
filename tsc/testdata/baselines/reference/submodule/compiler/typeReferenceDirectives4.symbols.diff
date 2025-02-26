@@ -1,0 +1,26 @@
+--- old.typeReferenceDirectives4.symbols
++++ new.typeReferenceDirectives4.symbols
+@@= skipped -5, +5 lines =@@
+ 
+ let x: $;
+ >x : Symbol(x, Decl(app.ts, 3, 3))
+->$ : Symbol($, Decl(ref.d.ts, 0, 0), Decl(index.d.ts, 0, 11))
++>$ : Symbol($, Decl(ref.d.ts, 0, 0))
+ 
+ let y = () => x
+ >y : Symbol(y, Decl(app.ts, 4, 3))
+@@= skipped -8, +8 lines =@@
+ 
+ === /ref.d.ts ===
+ interface $ { x }
+->$ : Symbol($, Decl(ref.d.ts, 0, 0), Decl(index.d.ts, 0, 11))
+->x : Symbol($.x, Decl(ref.d.ts, 0, 13))
++>$ : Symbol($, Decl(ref.d.ts, 0, 0))
++>x : Symbol(x, Decl(ref.d.ts, 0, 13))
+ 
+-=== /types/lib/index.d.ts ===
+-declare let $: { x: number }
+->$ : Symbol($, Decl(ref.d.ts, 0, 0), Decl(index.d.ts, 0, 11))
+->x : Symbol(x, Decl(index.d.ts, 0, 16))
+-
+-

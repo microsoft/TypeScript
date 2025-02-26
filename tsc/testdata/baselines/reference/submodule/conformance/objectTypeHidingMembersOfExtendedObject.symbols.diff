@@ -1,0 +1,96 @@
+--- old.objectTypeHidingMembersOfExtendedObject.symbols
++++ new.objectTypeHidingMembersOfExtendedObject.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(objectTypeHidingMembersOfExtendedObject.ts, 0, 0))
+ 
+     foo: string;
+->foo : Symbol(A.foo, Decl(objectTypeHidingMembersOfExtendedObject.ts, 0, 9))
++>foo : Symbol(foo, Decl(objectTypeHidingMembersOfExtendedObject.ts, 0, 9))
+ }
+ 
+ class B extends A {
+@@= skipped -8, +8 lines =@@
+ >A : Symbol(A, Decl(objectTypeHidingMembersOfExtendedObject.ts, 0, 0))
+ 
+     bar: string;
+->bar : Symbol(B.bar, Decl(objectTypeHidingMembersOfExtendedObject.ts, 4, 19))
++>bar : Symbol(bar, Decl(objectTypeHidingMembersOfExtendedObject.ts, 4, 19))
+ }
+ 
+ interface Object {
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(objectTypeHidingMembersOfExtendedObject.ts, 6, 1))
+ 
+     data: A;
+->data : Symbol(Object.data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 8, 18))
++>data : Symbol(data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 8, 18))
+ >A : Symbol(A, Decl(objectTypeHidingMembersOfExtendedObject.ts, 0, 0))
+ 
+     [x: string]: Object;
+@@= skipped -19, +19 lines =@@
+ >C : Symbol(C, Decl(objectTypeHidingMembersOfExtendedObject.ts, 11, 1))
+ 
+     valueOf() { }
+->valueOf : Symbol(C.valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 13, 9))
++>valueOf : Symbol(valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 13, 9))
+ 
+     data: B;
+->data : Symbol(C.data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 14, 17))
++>data : Symbol(data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 14, 17))
+ >B : Symbol(B, Decl(objectTypeHidingMembersOfExtendedObject.ts, 2, 1))
+ 
+     [x: string]: any;
+@@= skipped -16, +16 lines =@@
+ 
+ var r1: void = c.valueOf();
+ >r1 : Symbol(r1, Decl(objectTypeHidingMembersOfExtendedObject.ts, 20, 3))
+->c.valueOf : Symbol(C.valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 13, 9))
++>c.valueOf : Symbol(valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 13, 9))
+ >c : Symbol(c, Decl(objectTypeHidingMembersOfExtendedObject.ts, 19, 3))
+->valueOf : Symbol(C.valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 13, 9))
++>valueOf : Symbol(valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 13, 9))
+ 
+ var r1b: B = c.data;
+ >r1b : Symbol(r1b, Decl(objectTypeHidingMembersOfExtendedObject.ts, 21, 3))
+ >B : Symbol(B, Decl(objectTypeHidingMembersOfExtendedObject.ts, 2, 1))
+->c.data : Symbol(C.data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 14, 17))
++>c.data : Symbol(data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 14, 17))
+ >c : Symbol(c, Decl(objectTypeHidingMembersOfExtendedObject.ts, 19, 3))
+->data : Symbol(C.data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 14, 17))
++>data : Symbol(data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 14, 17))
+ 
+ var r1c = r1b['hm']; // should be 'Object'
+ >r1c : Symbol(r1c, Decl(objectTypeHidingMembersOfExtendedObject.ts, 22, 3))
+@@= skipped -23, +23 lines =@@
+ >I : Symbol(I, Decl(objectTypeHidingMembersOfExtendedObject.ts, 23, 18))
+ 
+     valueOf(): void;
+->valueOf : Symbol(I.valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 25, 13))
++>valueOf : Symbol(valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 25, 13))
+ 
+     data: B;
+->data : Symbol(I.data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 26, 20))
++>data : Symbol(data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 26, 20))
+ >B : Symbol(B, Decl(objectTypeHidingMembersOfExtendedObject.ts, 2, 1))
+ 
+     [x: string]: any;
+@@= skipped -16, +16 lines =@@
+ 
+ var r2: void = i.valueOf();
+ >r2 : Symbol(r2, Decl(objectTypeHidingMembersOfExtendedObject.ts, 32, 3))
+->i.valueOf : Symbol(I.valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 25, 13))
++>i.valueOf : Symbol(valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 25, 13))
+ >i : Symbol(i, Decl(objectTypeHidingMembersOfExtendedObject.ts, 31, 3))
+->valueOf : Symbol(I.valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 25, 13))
++>valueOf : Symbol(valueOf, Decl(objectTypeHidingMembersOfExtendedObject.ts, 25, 13))
+ 
+ var r2b: B = i.data;
+ >r2b : Symbol(r2b, Decl(objectTypeHidingMembersOfExtendedObject.ts, 33, 3))
+ >B : Symbol(B, Decl(objectTypeHidingMembersOfExtendedObject.ts, 2, 1))
+->i.data : Symbol(I.data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 26, 20))
++>i.data : Symbol(data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 26, 20))
+ >i : Symbol(i, Decl(objectTypeHidingMembersOfExtendedObject.ts, 31, 3))
+->data : Symbol(I.data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 26, 20))
++>data : Symbol(data, Decl(objectTypeHidingMembersOfExtendedObject.ts, 26, 20))
+ 
+ var r2c = r2b['hm']; // should be 'Object'
+ >r2c : Symbol(r2c, Decl(objectTypeHidingMembersOfExtendedObject.ts, 34, 3))

@@ -1,0 +1,28 @@
+--- old.comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.symbols
++++ new.comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 0, 0))
+ 
+     public a: string;
+->a : Symbol(Base.a, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 0, 12))
++>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 0, 12))
+ }
+ 
+ class Derived extends Base {
+@@= skipped -8, +8 lines =@@
+ >Base : Symbol(Base, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 0, 0))
+ 
+     public b: string;
+->b : Symbol(Derived.b, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 4, 28))
++>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 4, 28))
+ }
+ 
+ class C {
+ >C : Symbol(C, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 6, 1))
+ 
+     public c: string;
+->c : Symbol(C.c, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 8, 9))
++>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 8, 9))
+ }
+ 
+ var a1: { new <T>(x: T): T };

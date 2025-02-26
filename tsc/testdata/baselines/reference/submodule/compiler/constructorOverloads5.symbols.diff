@@ -1,0 +1,37 @@
+--- old.constructorOverloads5.symbols
++++ new.constructorOverloads5.symbols
+@@= skipped -28, +28 lines =@@
+ >flags : Symbol(flags, Decl(constructorOverloads5.ts, 7, 36))
+ 
+         exec(string: string): string[];
+->exec : Symbol(RegExp.exec, Decl(constructorOverloads5.ts, 7, 52))
++>exec : Symbol(exec, Decl(constructorOverloads5.ts, 7, 52))
+ >string : Symbol(string, Decl(constructorOverloads5.ts, 8, 13))
+ 
+         test(string: string): boolean;
+->test : Symbol(RegExp.test, Decl(constructorOverloads5.ts, 8, 39))
++>test : Symbol(test, Decl(constructorOverloads5.ts, 8, 39))
+ >string : Symbol(string, Decl(constructorOverloads5.ts, 9, 13))
+ 
+         source: string;
+->source : Symbol(RegExp.source, Decl(constructorOverloads5.ts, 9, 38))
++>source : Symbol(source, Decl(constructorOverloads5.ts, 9, 38))
+ 
+         global: boolean;
+->global : Symbol(RegExp.global, Decl(constructorOverloads5.ts, 10, 23))
++>global : Symbol(global, Decl(constructorOverloads5.ts, 10, 23))
+ 
+         ignoreCase: boolean;
+->ignoreCase : Symbol(RegExp.ignoreCase, Decl(constructorOverloads5.ts, 11, 24))
++>ignoreCase : Symbol(ignoreCase, Decl(constructorOverloads5.ts, 11, 24))
+ 
+         multiline: boolean;
+->multiline : Symbol(RegExp.multiline, Decl(constructorOverloads5.ts, 12, 28))
++>multiline : Symbol(multiline, Decl(constructorOverloads5.ts, 12, 28))
+ 
+         lastIndex: boolean;
+->lastIndex : Symbol(RegExp.lastIndex, Decl(constructorOverloads5.ts, 13, 27))
++>lastIndex : Symbol(lastIndex, Decl(constructorOverloads5.ts, 13, 27))
+     }
+ }
+ 

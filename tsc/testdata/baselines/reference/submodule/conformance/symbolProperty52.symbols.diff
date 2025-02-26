@@ -1,0 +1,16 @@
+--- old.symbolProperty52.symbols
++++ new.symbolProperty52.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     [Symbol.nonsense]: 0
+ >[Symbol.nonsense] : Symbol([Symbol.nonsense], Decl(symbolProperty52.ts, 0, 11))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ 
+ };
+ 
+@@= skipped -9, +8 lines =@@
+ 
+ obj[Symbol.nonsense];
+ >obj : Symbol(obj, Decl(symbolProperty52.ts, 0, 3))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ 

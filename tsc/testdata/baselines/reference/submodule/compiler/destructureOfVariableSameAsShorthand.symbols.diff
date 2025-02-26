@@ -1,0 +1,62 @@
+--- old.destructureOfVariableSameAsShorthand.symbols
++++ new.destructureOfVariableSameAsShorthand.symbols
+@@= skipped -6, +6 lines =@@
+ >T : Symbol(T, Decl(destructureOfVariableSameAsShorthand.ts, 1, 24))
+ 
+     data: T;
+->data : Symbol(AxiosResponse.data, Decl(destructureOfVariableSameAsShorthand.ts, 1, 36))
++>data : Symbol(data, Decl(destructureOfVariableSameAsShorthand.ts, 1, 36))
+ >T : Symbol(T, Decl(destructureOfVariableSameAsShorthand.ts, 1, 24))
+ }
+ 
+@@= skipped -18, +18 lines =@@
+ 
+     // These work examples as expected
+     get().then((response) => {
+->get().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
++>get().then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+ >get : Symbol(get, Decl(destructureOfVariableSameAsShorthand.ts, 3, 1))
+->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
++>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+ >response : Symbol(response, Decl(destructureOfVariableSameAsShorthand.ts, 9, 16))
+ 
+         // body is never
+         const body = response.data;
+ >body : Symbol(body, Decl(destructureOfVariableSameAsShorthand.ts, 11, 13))
+->response.data : Symbol(AxiosResponse.data, Decl(destructureOfVariableSameAsShorthand.ts, 1, 36))
++>response.data : Symbol(data, Decl(destructureOfVariableSameAsShorthand.ts, 1, 36))
+ >response : Symbol(response, Decl(destructureOfVariableSameAsShorthand.ts, 9, 16))
+->data : Symbol(AxiosResponse.data, Decl(destructureOfVariableSameAsShorthand.ts, 1, 36))
++>data : Symbol(data, Decl(destructureOfVariableSameAsShorthand.ts, 1, 36))
+ 
+     })
+     get().then(({ data }) => {
+->get().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
++>get().then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+ >get : Symbol(get, Decl(destructureOfVariableSameAsShorthand.ts, 3, 1))
+->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
++>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+ >data : Symbol(data, Decl(destructureOfVariableSameAsShorthand.ts, 13, 17))
+ 
+         // data is never
+@@= skipped -28, +28 lines =@@
+     // body is never
+     const body = response.data;
+ >body : Symbol(body, Decl(destructureOfVariableSameAsShorthand.ts, 18, 9))
+->response.data : Symbol(AxiosResponse.data, Decl(destructureOfVariableSameAsShorthand.ts, 1, 36))
++>response.data : Symbol(data, Decl(destructureOfVariableSameAsShorthand.ts, 1, 36))
+ >response : Symbol(response, Decl(destructureOfVariableSameAsShorthand.ts, 16, 9))
+->data : Symbol(AxiosResponse.data, Decl(destructureOfVariableSameAsShorthand.ts, 1, 36))
++>data : Symbol(data, Decl(destructureOfVariableSameAsShorthand.ts, 1, 36))
+ 
+     // data is never
+     const { data } = await get<never>();
+@@= skipped -12, +12 lines =@@
+     // The following did not work as expected.
+     // shouldBeNever should be never, but was any
+     const { data: shouldBeNever } = await get();
+->data : Symbol(AxiosResponse.data, Decl(destructureOfVariableSameAsShorthand.ts, 1, 36))
++>data : Symbol(data, Decl(destructureOfVariableSameAsShorthand.ts, 1, 36))
+ >shouldBeNever : Symbol(shouldBeNever, Decl(destructureOfVariableSameAsShorthand.ts, 24, 11))
+ >get : Symbol(get, Decl(destructureOfVariableSameAsShorthand.ts, 3, 1))
+ }

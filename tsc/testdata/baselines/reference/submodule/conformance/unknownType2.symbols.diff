@@ -1,0 +1,275 @@
+--- old.unknownType2.symbols
++++ new.unknownType2.symbols
+@@= skipped -37, +37 lines =@@
+ 
+     const y = u.toString(10);
+ >y : Symbol(y, Decl(unknownType2.ts, 12, 9))
+->u.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>u.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ if (u === true || u === false) {
+@@= skipped -201, +201 lines =@@
+ >NumberEnum : Symbol(NumberEnum, Decl(unknownType2.ts, 90, 1))
+ 
+     A,
+->A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 92, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 92, 17))
+ 
+     B,
+->B : Symbol(NumberEnum.B, Decl(unknownType2.ts, 93, 6))
++>B : Symbol(B, Decl(unknownType2.ts, 93, 6))
+ 
+     C
+->C : Symbol(NumberEnum.C, Decl(unknownType2.ts, 94, 6))
++>C : Symbol(C, Decl(unknownType2.ts, 94, 6))
+ }
+ 
+ enum StringEnum {
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+ 
+     A = "A",
+->A : Symbol(StringEnum.A, Decl(unknownType2.ts, 98, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 98, 17))
+ 
+     B = "B",
+->B : Symbol(StringEnum.B, Decl(unknownType2.ts, 99, 12))
++>B : Symbol(B, Decl(unknownType2.ts, 99, 12))
+ 
+     C = "C"
+->C : Symbol(StringEnum.C, Decl(unknownType2.ts, 100, 12))
++>C : Symbol(C, Decl(unknownType2.ts, 100, 12))
+ }
+ 
+ if (u === NumberEnum || u === StringEnum) {
+@@= skipped -35, +35 lines =@@
+ 
+ if (u === NumberEnum.A) {
+ >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+->NumberEnum.A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 92, 17))
++>NumberEnum.A : Symbol(A, Decl(unknownType2.ts, 92, 17))
+ >NumberEnum : Symbol(NumberEnum, Decl(unknownType2.ts, 90, 1))
+->A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 92, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 92, 17))
+ 
+     let a: NumberEnum.A = u
+ >a : Symbol(a, Decl(unknownType2.ts, 109, 7))
+ >NumberEnum : Symbol(NumberEnum, Decl(unknownType2.ts, 90, 1))
+->A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 92, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 92, 17))
+ >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+ }
+ 
+ if (u === StringEnum.B) {
+ >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+->StringEnum.B : Symbol(StringEnum.B, Decl(unknownType2.ts, 99, 12))
++>StringEnum.B : Symbol(B, Decl(unknownType2.ts, 99, 12))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->B : Symbol(StringEnum.B, Decl(unknownType2.ts, 99, 12))
++>B : Symbol(B, Decl(unknownType2.ts, 99, 12))
+ 
+     let b: StringEnum.B = u
+ >b : Symbol(b, Decl(unknownType2.ts, 113, 7))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->B : Symbol(StringEnum.B, Decl(unknownType2.ts, 99, 12))
++>B : Symbol(B, Decl(unknownType2.ts, 99, 12))
+ >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+ }
+ 
+@@= skipped -32, +32 lines =@@
+ >x : Symbol(x, Decl(unknownType2.ts, 116, 24))
+ 
+         case StringEnum.A:
+->StringEnum.A : Symbol(StringEnum.A, Decl(unknownType2.ts, 98, 17))
++>StringEnum.A : Symbol(A, Decl(unknownType2.ts, 98, 17))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->A : Symbol(StringEnum.A, Decl(unknownType2.ts, 98, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 98, 17))
+ 
+             const a: StringEnum.A = x;
+ >a : Symbol(a, Decl(unknownType2.ts, 119, 17))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->A : Symbol(StringEnum.A, Decl(unknownType2.ts, 98, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 98, 17))
+ >x : Symbol(x, Decl(unknownType2.ts, 116, 24))
+ 
+             break;
+         case StringEnum.B:
+->StringEnum.B : Symbol(StringEnum.B, Decl(unknownType2.ts, 99, 12))
++>StringEnum.B : Symbol(B, Decl(unknownType2.ts, 99, 12))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->B : Symbol(StringEnum.B, Decl(unknownType2.ts, 99, 12))
++>B : Symbol(B, Decl(unknownType2.ts, 99, 12))
+ 
+             const b: StringEnum.B = x;
+ >b : Symbol(b, Decl(unknownType2.ts, 122, 17))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->B : Symbol(StringEnum.B, Decl(unknownType2.ts, 99, 12))
++>B : Symbol(B, Decl(unknownType2.ts, 99, 12))
+ >x : Symbol(x, Decl(unknownType2.ts, 116, 24))
+ 
+             break;
+         case StringEnum.C:
+->StringEnum.C : Symbol(StringEnum.C, Decl(unknownType2.ts, 100, 12))
++>StringEnum.C : Symbol(C, Decl(unknownType2.ts, 100, 12))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->C : Symbol(StringEnum.C, Decl(unknownType2.ts, 100, 12))
++>C : Symbol(C, Decl(unknownType2.ts, 100, 12))
+ 
+             const c: StringEnum.C = x;
+ >c : Symbol(c, Decl(unknownType2.ts, 125, 17))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->C : Symbol(StringEnum.C, Decl(unknownType2.ts, 100, 12))
++>C : Symbol(C, Decl(unknownType2.ts, 100, 12))
+ >x : Symbol(x, Decl(unknownType2.ts, 116, 24))
+ 
+             break;
+@@= skipped -51, +51 lines =@@
+ >x : Symbol(x, Decl(unknownType2.ts, 131, 31))
+ 
+         case StringEnum.A:
+->StringEnum.A : Symbol(StringEnum.A, Decl(unknownType2.ts, 98, 17))
++>StringEnum.A : Symbol(A, Decl(unknownType2.ts, 98, 17))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->A : Symbol(StringEnum.A, Decl(unknownType2.ts, 98, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 98, 17))
+ 
+             const a: StringEnum.A = x;
+ >a : Symbol(a, Decl(unknownType2.ts, 134, 17))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->A : Symbol(StringEnum.A, Decl(unknownType2.ts, 98, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 98, 17))
+ >x : Symbol(x, Decl(unknownType2.ts, 131, 31))
+ 
+         case StringEnum.B:
+->StringEnum.B : Symbol(StringEnum.B, Decl(unknownType2.ts, 99, 12))
++>StringEnum.B : Symbol(B, Decl(unknownType2.ts, 99, 12))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->B : Symbol(StringEnum.B, Decl(unknownType2.ts, 99, 12))
++>B : Symbol(B, Decl(unknownType2.ts, 99, 12))
+ 
+             const b: StringEnum.A | StringEnum.B = x;
+ >b : Symbol(b, Decl(unknownType2.ts, 136, 17))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->A : Symbol(StringEnum.A, Decl(unknownType2.ts, 98, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 98, 17))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->B : Symbol(StringEnum.B, Decl(unknownType2.ts, 99, 12))
++>B : Symbol(B, Decl(unknownType2.ts, 99, 12))
+ >x : Symbol(x, Decl(unknownType2.ts, 131, 31))
+ 
+         case StringEnum.C:
+->StringEnum.C : Symbol(StringEnum.C, Decl(unknownType2.ts, 100, 12))
++>StringEnum.C : Symbol(C, Decl(unknownType2.ts, 100, 12))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->C : Symbol(StringEnum.C, Decl(unknownType2.ts, 100, 12))
++>C : Symbol(C, Decl(unknownType2.ts, 100, 12))
+ 
+             const c: StringEnum.A | StringEnum.B | StringEnum.C = x;
+ >c : Symbol(c, Decl(unknownType2.ts, 138, 17))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->A : Symbol(StringEnum.A, Decl(unknownType2.ts, 98, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 98, 17))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->B : Symbol(StringEnum.B, Decl(unknownType2.ts, 99, 12))
++>B : Symbol(B, Decl(unknownType2.ts, 99, 12))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->C : Symbol(StringEnum.C, Decl(unknownType2.ts, 100, 12))
++>C : Symbol(C, Decl(unknownType2.ts, 100, 12))
+ >x : Symbol(x, Decl(unknownType2.ts, 131, 31))
+ 
+             const all: StringEnum = x;
+@@= skipped -261, +261 lines =@@
+ 
+     if (u !== NumberEnum.A) { }
+ >u : Symbol(u, Decl(unknownType2.ts, 232, 22))
+->NumberEnum.A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 92, 17))
++>NumberEnum.A : Symbol(A, Decl(unknownType2.ts, 92, 17))
+ >NumberEnum : Symbol(NumberEnum, Decl(unknownType2.ts, 90, 1))
+->A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 92, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 92, 17))
+ 
+     else {
+         const a: NumberEnum.A = u;
+ >a : Symbol(a, Decl(unknownType2.ts, 240, 13))
+ >NumberEnum : Symbol(NumberEnum, Decl(unknownType2.ts, 90, 1))
+->A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 92, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 92, 17))
+ >u : Symbol(u, Decl(unknownType2.ts, 232, 22))
+     }
+ 
+ 
+     if (u !== NumberEnum.A && u !== NumberEnum.B && u !== StringEnum.A) { }
+ >u : Symbol(u, Decl(unknownType2.ts, 232, 22))
+->NumberEnum.A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 92, 17))
++>NumberEnum.A : Symbol(A, Decl(unknownType2.ts, 92, 17))
+ >NumberEnum : Symbol(NumberEnum, Decl(unknownType2.ts, 90, 1))
+->A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 92, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 92, 17))
+ >u : Symbol(u, Decl(unknownType2.ts, 232, 22))
+->NumberEnum.B : Symbol(NumberEnum.B, Decl(unknownType2.ts, 93, 6))
++>NumberEnum.B : Symbol(B, Decl(unknownType2.ts, 93, 6))
+ >NumberEnum : Symbol(NumberEnum, Decl(unknownType2.ts, 90, 1))
+->B : Symbol(NumberEnum.B, Decl(unknownType2.ts, 93, 6))
++>B : Symbol(B, Decl(unknownType2.ts, 93, 6))
+ >u : Symbol(u, Decl(unknownType2.ts, 232, 22))
+->StringEnum.A : Symbol(StringEnum.A, Decl(unknownType2.ts, 98, 17))
++>StringEnum.A : Symbol(A, Decl(unknownType2.ts, 98, 17))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->A : Symbol(StringEnum.A, Decl(unknownType2.ts, 98, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 98, 17))
+ 
+     else {
+         const aOrB: NumberEnum.A | NumberEnum.B | StringEnum.A  = u;
+ >aOrB : Symbol(aOrB, Decl(unknownType2.ts, 246, 13))
+ >NumberEnum : Symbol(NumberEnum, Decl(unknownType2.ts, 90, 1))
+->A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 92, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 92, 17))
+ >NumberEnum : Symbol(NumberEnum, Decl(unknownType2.ts, 90, 1))
+->B : Symbol(NumberEnum.B, Decl(unknownType2.ts, 93, 6))
++>B : Symbol(B, Decl(unknownType2.ts, 93, 6))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->A : Symbol(StringEnum.A, Decl(unknownType2.ts, 98, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 98, 17))
+ >u : Symbol(u, Decl(unknownType2.ts, 232, 22))
+     }
+ 
+     // equivalent to
+     if (!(u === NumberEnum.A || u === NumberEnum.B || u === StringEnum.A)) { }
+ >u : Symbol(u, Decl(unknownType2.ts, 232, 22))
+->NumberEnum.A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 92, 17))
++>NumberEnum.A : Symbol(A, Decl(unknownType2.ts, 92, 17))
+ >NumberEnum : Symbol(NumberEnum, Decl(unknownType2.ts, 90, 1))
+->A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 92, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 92, 17))
+ >u : Symbol(u, Decl(unknownType2.ts, 232, 22))
+->NumberEnum.B : Symbol(NumberEnum.B, Decl(unknownType2.ts, 93, 6))
++>NumberEnum.B : Symbol(B, Decl(unknownType2.ts, 93, 6))
+ >NumberEnum : Symbol(NumberEnum, Decl(unknownType2.ts, 90, 1))
+->B : Symbol(NumberEnum.B, Decl(unknownType2.ts, 93, 6))
++>B : Symbol(B, Decl(unknownType2.ts, 93, 6))
+ >u : Symbol(u, Decl(unknownType2.ts, 232, 22))
+->StringEnum.A : Symbol(StringEnum.A, Decl(unknownType2.ts, 98, 17))
++>StringEnum.A : Symbol(A, Decl(unknownType2.ts, 98, 17))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->A : Symbol(StringEnum.A, Decl(unknownType2.ts, 98, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 98, 17))
+ 
+     else {
+         const aOrB: NumberEnum.A | NumberEnum.B | StringEnum.A  = u;
+ >aOrB : Symbol(aOrB, Decl(unknownType2.ts, 252, 13))
+ >NumberEnum : Symbol(NumberEnum, Decl(unknownType2.ts, 90, 1))
+->A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 92, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 92, 17))
+ >NumberEnum : Symbol(NumberEnum, Decl(unknownType2.ts, 90, 1))
+->B : Symbol(NumberEnum.B, Decl(unknownType2.ts, 93, 6))
++>B : Symbol(B, Decl(unknownType2.ts, 93, 6))
+ >StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 96, 1))
+->A : Symbol(StringEnum.A, Decl(unknownType2.ts, 98, 17))
++>A : Symbol(A, Decl(unknownType2.ts, 98, 17))
+ >u : Symbol(u, Decl(unknownType2.ts, 232, 22))
+     }
+ }

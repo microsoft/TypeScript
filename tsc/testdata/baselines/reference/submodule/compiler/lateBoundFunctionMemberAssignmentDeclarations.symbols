@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/lateBoundFunctionMemberAssignmentDeclarations.ts] ////
+
+=== index.ts ===
+export function foo() {}
+>foo : Symbol(foo, Decl(index.ts, 0, 0))
+
+foo.bar = 12;
+>foo.bar : Symbol(bar, Decl(index.ts, 0, 24))
+>foo : Symbol(foo, Decl(index.ts, 0, 0))
+>bar : Symbol(bar, Decl(index.ts, 0, 24))
+
+const _private = Symbol();
+>_private : Symbol(_private, Decl(index.ts, 2, 5))
+
+foo[_private] = "ok";
+>foo : Symbol(foo, Decl(index.ts, 0, 0))
+>_private : Symbol(_private, Decl(index.ts, 2, 5))
+
+const x: string = foo[_private];
+>x : Symbol(x, Decl(index.ts, 5, 5))
+>foo : Symbol(foo, Decl(index.ts, 0, 0))
+>_private : Symbol(_private, Decl(index.ts, 2, 5))
+

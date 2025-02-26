@@ -1,0 +1,211 @@
+--- old.jsDeclarationsClasses.symbols
++++ new.jsDeclarationsClasses.symbols
+@@= skipped -7, +7 lines =@@
+ >B : Symbol(B, Decl(index.js, 0, 17))
+ 
+     static cat = "cat";
+->cat : Symbol(B.cat, Decl(index.js, 2, 16))
++>cat : Symbol(cat, Decl(index.js, 2, 16))
+ }
+ 
+ export class C {
+ >C : Symbol(C, Decl(index.js, 4, 1))
+ 
+     static Cls = class {}
+->Cls : Symbol(C.Cls, Decl(index.js, 6, 16))
++>Cls : Symbol(Cls, Decl(index.js, 6, 16))
+ }
+ 
+ export class D {
+@@= skipped -32, +32 lines =@@
+      * @type {T & U}
+      */
+     field;
+->field : Symbol(E.field, Decl(index.js, 21, 16))
++>field : Symbol(field, Decl(index.js, 21, 16))
+ 
+     // @readonly is currently unsupported, it seems - included here just in case that changes
+     /**
+@@= skipped -8, +8 lines =@@
+      * @readonly
+      */
+     readonlyField;
+->readonlyField : Symbol(E.readonlyField, Decl(index.js, 25, 10))
++>readonlyField : Symbol(readonlyField, Decl(index.js, 25, 10))
+ 
+     initializedField = 12;
+->initializedField : Symbol(E.initializedField, Decl(index.js, 32, 18))
++>initializedField : Symbol(initializedField, Decl(index.js, 32, 18))
+ 
+     /**
+      * @return {U}
+      */
+     get f1() { return /** @type {*} */(null); }
+->f1 : Symbol(E.f1, Decl(index.js, 34, 26), Decl(index.js, 39, 47))
++>f1 : Symbol(f1, Decl(index.js, 34, 26), Decl(index.js, 39, 47))
+ 
+     /**
+      * @param {U} _p
+      */
+     set f1(_p) {}
+->f1 : Symbol(E.f1, Decl(index.js, 34, 26), Decl(index.js, 39, 47))
++>f1 : Symbol(f1, Decl(index.js, 34, 26), Decl(index.js, 39, 47))
+ >_p : Symbol(_p, Decl(index.js, 44, 11))
+ 
+     /**
+      * @return {U}
+      */
+     get f2() { return /** @type {*} */(null); }
+->f2 : Symbol(E.f2, Decl(index.js, 44, 17))
++>f2 : Symbol(f2, Decl(index.js, 44, 17))
+ 
+     /**
+      * @param {U} _p
+      */
+     set f3(_p) {}
+->f3 : Symbol(E.f3, Decl(index.js, 49, 47))
++>f3 : Symbol(f3, Decl(index.js, 49, 47))
+ >_p : Symbol(_p, Decl(index.js, 54, 11))
+ 
+     /**
+@@= skipped -44, +44 lines =@@
+      * @type {string}
+      */
+     static staticField;
+->staticField : Symbol(E.staticField, Decl(index.js, 60, 24))
++>staticField : Symbol(staticField, Decl(index.js, 60, 24))
+ 
+     // @readonly is currently unsupported, it seems - included here just in case that changes
+     /**
+@@= skipped -8, +8 lines =@@
+      * @readonly
+      */
+     static staticReadonlyField;
+->staticReadonlyField : Symbol(E.staticReadonlyField, Decl(index.js, 66, 23))
++>staticReadonlyField : Symbol(staticReadonlyField, Decl(index.js, 66, 23))
+ 
+     static staticInitializedField = 12;
+->staticInitializedField : Symbol(E.staticInitializedField, Decl(index.js, 73, 31))
++>staticInitializedField : Symbol(staticInitializedField, Decl(index.js, 73, 31))
+ 
+     /**
+      * @return {string}
+      */
+     static get s1() { return ""; }
+->s1 : Symbol(E.s1, Decl(index.js, 75, 39), Decl(index.js, 80, 34))
++>s1 : Symbol(s1, Decl(index.js, 75, 39), Decl(index.js, 80, 34))
+ 
+     /**
+      * @param {string} _p
+      */
+     static set s1(_p) {}
+->s1 : Symbol(E.s1, Decl(index.js, 75, 39), Decl(index.js, 80, 34))
++>s1 : Symbol(s1, Decl(index.js, 75, 39), Decl(index.js, 80, 34))
+ >_p : Symbol(_p, Decl(index.js, 85, 18))
+ 
+     /**
+      * @return {string}
+      */
+     static get s2() { return ""; }
+->s2 : Symbol(E.s2, Decl(index.js, 85, 24))
++>s2 : Symbol(s2, Decl(index.js, 85, 24))
+ 
+     /**
+      * @param {string} _p
+      */
+     static set s3(_p) {}
+->s3 : Symbol(E.s3, Decl(index.js, 90, 34))
++>s3 : Symbol(s3, Decl(index.js, 90, 34))
+ >_p : Symbol(_p, Decl(index.js, 95, 18))
+ }
+ 
+@@= skipped -42, +42 lines =@@
+      * @type {T & U}
+      */
+     field;
+->field : Symbol(F.field, Decl(index.js, 101, 16))
++>field : Symbol(field, Decl(index.js, 101, 16))
+ 
+     /**
+      * @param {T} a
+@@= skipped -16, +16 lines =@@
+      * @param {B} b
+      */
+     static create(a, b) { return new F(a, b); }
+->create : Symbol(F.create, Decl(index.js, 110, 24))
++>create : Symbol(create, Decl(index.js, 110, 24))
+ >a : Symbol(a, Decl(index.js, 117, 18))
+ >b : Symbol(b, Decl(index.js, 117, 20))
+ >F : Symbol(F, Decl(index.js, 96, 1))
+@@= skipped -41, +41 lines =@@
+ 
+     constructor() {
+         this.p1 = 12;
+->this.p1 : Symbol(K.p1, Decl(index.js, 136, 19))
+ >this : Symbol(K, Decl(index.js, 132, 17))
+->p1 : Symbol(K.p1, Decl(index.js, 136, 19))
+ 
+         this.p2 = "ok";
+->this.p2 : Symbol(K.p2, Decl(index.js, 137, 21))
+ >this : Symbol(K, Decl(index.js, 132, 17))
+->p2 : Symbol(K.p2, Decl(index.js, 137, 21))
+     }
+ 
+     method() {
+->method : Symbol(K.method, Decl(index.js, 139, 5))
++>method : Symbol(method, Decl(index.js, 139, 5))
+ 
+         return this.p1;
+->this.p1 : Symbol(K.p1, Decl(index.js, 136, 19))
+ >this : Symbol(K, Decl(index.js, 132, 17))
+->p1 : Symbol(K.p1, Decl(index.js, 136, 19))
+     }
+ }
+ 
+@@= skipped -29, +23 lines =@@
+ 
+     constructor() {
+         this.prop = 12;
+->this.prop : Symbol(M.prop, Decl(index.js, 149, 19))
+ >this : Symbol(M, Decl(index.js, 146, 27))
+->prop : Symbol(M.prop, Decl(index.js, 149, 19))
+     }
+ }
+ 
+@@= skipped -24, +22 lines =@@
+ >super : Symbol(L, Decl(index.js, 144, 1))
+ 
+         this.another = param;
+->this.another : Symbol(N.another, Decl(index.js, 163, 16))
+ >this : Symbol(N, Decl(index.js, 152, 1))
+->another : Symbol(N.another, Decl(index.js, 163, 16))
+ >param : Symbol(param, Decl(index.js, 162, 16))
+     }
+ }
+@@= skipped -26, +24 lines =@@
+ >param : Symbol(param, Decl(index.js, 176, 16))
+ 
+         this.another2 = param;
+->this.another2 : Symbol(O.another2, Decl(index.js, 177, 21))
+ >this : Symbol(O, Decl(index.js, 166, 1))
+->another2 : Symbol(O.another2, Decl(index.js, 177, 21))
+ >param : Symbol(param, Decl(index.js, 176, 16))
+     }
+ }
+@@= skipped -18, +16 lines =@@
+ >HasStatics : Symbol(HasStatics, Decl(index.js, 184, 38))
+ 
+     static staticMethod() {}
+->staticMethod : Symbol(HasStatics.staticMethod, Decl(index.js, 186, 25))
++>staticMethod : Symbol(staticMethod, Decl(index.js, 186, 25))
+ }
+ 
+ export class ExtendsStatics extends HasStatics {
+@@= skipped -8, +8 lines =@@
+ >HasStatics : Symbol(HasStatics, Decl(index.js, 184, 38))
+ 
+     static also() {}
+->also : Symbol(ExtendsStatics.also, Decl(index.js, 190, 48))
++>also : Symbol(also, Decl(index.js, 190, 48))
+ }
+ 

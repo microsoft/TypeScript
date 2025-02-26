@@ -1,0 +1,73 @@
+--- old.classExtendingClassLikeType.symbols
++++ new.classExtendingClassLikeType.symbols
+@@= skipped -6, +6 lines =@@
+ >U : Symbol(U, Decl(classExtendingClassLikeType.ts, 0, 17))
+ 
+     x: T;
+->x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
++>x : Symbol(x, Decl(classExtendingClassLikeType.ts, 0, 22))
+ >T : Symbol(T, Decl(classExtendingClassLikeType.ts, 0, 15))
+ 
+     y: U;
+->y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
++>y : Symbol(y, Decl(classExtendingClassLikeType.ts, 1, 9))
+ >U : Symbol(U, Decl(classExtendingClassLikeType.ts, 0, 17))
+ }
+ 
+@@= skipped -64, +64 lines =@@
+ >super : Symbol(BaseConstructor, Decl(classExtendingClassLikeType.ts, 7, 1))
+ 
+         this.x = "x";
+->this.x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
++>this.x : Symbol(x, Decl(classExtendingClassLikeType.ts, 0, 22))
+ >this : Symbol(D1, Decl(classExtendingClassLikeType.ts, 16, 44))
+->x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
++>x : Symbol(x, Decl(classExtendingClassLikeType.ts, 0, 22))
+ 
+         this.y = "y";
+->this.y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
++>this.y : Symbol(y, Decl(classExtendingClassLikeType.ts, 1, 9))
+ >this : Symbol(D1, Decl(classExtendingClassLikeType.ts, 16, 44))
+->y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
++>y : Symbol(y, Decl(classExtendingClassLikeType.ts, 1, 9))
+     }
+ }
+ 
+@@= skipped -23, +23 lines =@@
+ >super : Symbol(BaseConstructor, Decl(classExtendingClassLikeType.ts, 7, 1))
+ 
+         this.x = 1;
+->this.x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
++>this.x : Symbol(x, Decl(classExtendingClassLikeType.ts, 0, 22))
+ >this : Symbol(D2, Decl(classExtendingClassLikeType.ts, 24, 1))
+->x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
++>x : Symbol(x, Decl(classExtendingClassLikeType.ts, 0, 22))
+ 
+         this.y = 2;
+->this.y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
++>this.y : Symbol(y, Decl(classExtendingClassLikeType.ts, 1, 9))
+ >this : Symbol(D2, Decl(classExtendingClassLikeType.ts, 24, 1))
+->y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
++>y : Symbol(y, Decl(classExtendingClassLikeType.ts, 1, 9))
+     }
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >super : Symbol(BaseConstructor, Decl(classExtendingClassLikeType.ts, 7, 1))
+ 
+         this.x = "x";
+->this.x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
++>this.x : Symbol(x, Decl(classExtendingClassLikeType.ts, 0, 22))
+ >this : Symbol(D3, Decl(classExtendingClassLikeType.ts, 33, 1))
+->x : Symbol(Base.x, Decl(classExtendingClassLikeType.ts, 0, 22))
++>x : Symbol(x, Decl(classExtendingClassLikeType.ts, 0, 22))
+ 
+         this.y = 2;
+->this.y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
++>this.y : Symbol(y, Decl(classExtendingClassLikeType.ts, 1, 9))
+ >this : Symbol(D3, Decl(classExtendingClassLikeType.ts, 33, 1))
+->y : Symbol(Base.y, Decl(classExtendingClassLikeType.ts, 1, 9))
++>y : Symbol(y, Decl(classExtendingClassLikeType.ts, 1, 9))
+     }
+ }
+ 

@@ -1,0 +1,28 @@
+--- old.narrowingUnionToUnion.symbols
++++ new.narrowingUnionToUnion.symbols
+@@= skipped -75, +75 lines =@@
+ 
+ declare class X { x: string }
+ >X : Symbol(X, Decl(narrowingUnionToUnion.ts, 28, 1))
+->x : Symbol(X.x, Decl(narrowingUnionToUnion.ts, 30, 17))
++>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 30, 17))
+ 
+ declare class XS extends X { xs: string }
+ >XS : Symbol(XS, Decl(narrowingUnionToUnion.ts, 30, 29))
+ >X : Symbol(X, Decl(narrowingUnionToUnion.ts, 28, 1))
+->xs : Symbol(XS.xs, Decl(narrowingUnionToUnion.ts, 31, 28))
++>xs : Symbol(xs, Decl(narrowingUnionToUnion.ts, 31, 28))
+ 
+ declare class Y { y: string }
+ >Y : Symbol(Y, Decl(narrowingUnionToUnion.ts, 31, 41))
+->y : Symbol(Y.y, Decl(narrowingUnionToUnion.ts, 33, 17))
++>y : Symbol(y, Decl(narrowingUnionToUnion.ts, 33, 17))
+ 
+ declare class YS extends Y { ys: string }
+ >YS : Symbol(YS, Decl(narrowingUnionToUnion.ts, 33, 29))
+ >Y : Symbol(Y, Decl(narrowingUnionToUnion.ts, 31, 41))
+->ys : Symbol(YS.ys, Decl(narrowingUnionToUnion.ts, 34, 28))
++>ys : Symbol(ys, Decl(narrowingUnionToUnion.ts, 34, 28))
+ 
+ declare function isXSorY(obj: unknown): obj is XS | Y;
+ >isXSorY : Symbol(isXSorY, Decl(narrowingUnionToUnion.ts, 34, 41))

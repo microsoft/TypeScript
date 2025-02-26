@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReexportedCjsAlias.ts] ////
+
+=== main.js ===
+const { SomeClass, SomeClass: Another } = require('./lib');
+>SomeClass : Symbol(SomeClass, Decl(main.js, 0, 7))
+>Another : Symbol(Another, Decl(main.js, 0, 18))
+
+module.exports = {
+    SomeClass,
+>SomeClass : Symbol(SomeClass, Decl(main.js, 2, 18))
+
+    Another
+>Another : Symbol(Another, Decl(main.js, 3, 14))
+}

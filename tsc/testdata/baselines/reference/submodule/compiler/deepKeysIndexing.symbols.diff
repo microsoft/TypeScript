@@ -1,0 +1,62 @@
+--- old.deepKeysIndexing.symbols
++++ new.deepKeysIndexing.symbols
+@@= skipped -70, +70 lines =@@
+ >DeepObject : Symbol(DeepObject, Decl(deepKeysIndexing.ts, 0, 0))
+ 
+   a: {
+->a : Symbol(Foo.a, Decl(deepKeysIndexing.ts, 22, 34))
++>a : Symbol(a, Decl(deepKeysIndexing.ts, 22, 34))
+ 
+     "1": 123;
+ >"1" : Symbol("1", Decl(deepKeysIndexing.ts, 23, 6))
+@@= skipped -20, +20 lines =@@
+ >DeepObject : Symbol(DeepObject, Decl(deepKeysIndexing.ts, 0, 0))
+ 
+   broken<
+->broken : Symbol(Bar.broken, Decl(deepKeysIndexing.ts, 30, 33))
++>broken : Symbol(broken, Decl(deepKeysIndexing.ts, 30, 33))
+ 
+     K1 extends keyof O,
+ >K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 31, 9))
+@@= skipped -27, +27 lines =@@
+ >V : Symbol(V, Decl(deepKeysIndexing.ts, 33, 34))
+ 
+   working<
+->working : Symbol(Bar.working, Decl(deepKeysIndexing.ts, 35, 32))
++>working : Symbol(working, Decl(deepKeysIndexing.ts, 35, 32))
+ 
+     K1 extends keyof O,
+ >K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 37, 10))
+@@= skipped -27, +27 lines =@@
+ >V : Symbol(V, Decl(deepKeysIndexing.ts, 39, 35))
+ 
+   workaround<
+->workaround : Symbol(Bar.workaround, Decl(deepKeysIndexing.ts, 41, 32))
++>workaround : Symbol(workaround, Decl(deepKeysIndexing.ts, 41, 32))
+ 
+     K1 extends keyof O,
+ >K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 43, 13))
+@@= skipped -34, +34 lines =@@
+ 
+ // all 3 of the below should error on passing `true` for `"1"`
+ bar.broken("a", "1", true); // was broken in the past - with 2nd argument incorrectly of type "1" | "2" | "3".
+->bar.broken : Symbol(Bar.broken, Decl(deepKeysIndexing.ts, 30, 33))
++>bar.broken : Symbol(broken, Decl(deepKeysIndexing.ts, 30, 33))
+ >bar : Symbol(bar, Decl(deepKeysIndexing.ts, 50, 5))
+->broken : Symbol(Bar.broken, Decl(deepKeysIndexing.ts, 30, 33))
++>broken : Symbol(broken, Decl(deepKeysIndexing.ts, 30, 33))
+ 
+ bar.working("a", "1", true); // ok - true is not allowed
+->bar.working : Symbol(Bar.working, Decl(deepKeysIndexing.ts, 35, 32))
++>bar.working : Symbol(working, Decl(deepKeysIndexing.ts, 35, 32))
+ >bar : Symbol(bar, Decl(deepKeysIndexing.ts, 50, 5))
+->working : Symbol(Bar.working, Decl(deepKeysIndexing.ts, 35, 32))
++>working : Symbol(working, Decl(deepKeysIndexing.ts, 35, 32))
+ 
+ bar.workaround("a", "1", true); // ok - true is not allowed
+->bar.workaround : Symbol(Bar.workaround, Decl(deepKeysIndexing.ts, 41, 32))
++>bar.workaround : Symbol(workaround, Decl(deepKeysIndexing.ts, 41, 32))
+ >bar : Symbol(bar, Decl(deepKeysIndexing.ts, 50, 5))
+->workaround : Symbol(Bar.workaround, Decl(deepKeysIndexing.ts, 41, 32))
++>workaround : Symbol(workaround, Decl(deepKeysIndexing.ts, 41, 32))
+ 

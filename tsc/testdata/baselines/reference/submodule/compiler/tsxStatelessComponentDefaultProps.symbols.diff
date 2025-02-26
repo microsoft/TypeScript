@@ -1,0 +1,36 @@
+--- old.tsxStatelessComponentDefaultProps.symbols
++++ new.tsxStatelessComponentDefaultProps.symbols
+@@= skipped -9, +9 lines =@@
+ >Props : Symbol(Props, Decl(tsxStatelessComponentDefaultProps.tsx, 2, 26))
+ 
+     text: string;
+->text : Symbol(Props.text, Decl(tsxStatelessComponentDefaultProps.tsx, 3, 17))
++>text : Symbol(text, Decl(tsxStatelessComponentDefaultProps.tsx, 3, 17))
+ }
+ 
+ function BackButton(_props: Props) {
+->BackButton : Symbol(BackButton, Decl(tsxStatelessComponentDefaultProps.tsx, 5, 1), Decl(tsxStatelessComponentDefaultProps.tsx, 9, 1))
++>BackButton : Symbol(BackButton, Decl(tsxStatelessComponentDefaultProps.tsx, 5, 1))
+ >_props : Symbol(_props, Decl(tsxStatelessComponentDefaultProps.tsx, 7, 20))
+ >Props : Symbol(Props, Decl(tsxStatelessComponentDefaultProps.tsx, 2, 26))
+ 
+     return <div />
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+ }
+ BackButton.defaultProps = {
+->BackButton.defaultProps : Symbol(BackButton.defaultProps, Decl(tsxStatelessComponentDefaultProps.tsx, 9, 1))
+->BackButton : Symbol(BackButton, Decl(tsxStatelessComponentDefaultProps.tsx, 5, 1), Decl(tsxStatelessComponentDefaultProps.tsx, 9, 1))
+->defaultProps : Symbol(BackButton.defaultProps, Decl(tsxStatelessComponentDefaultProps.tsx, 9, 1))
++>BackButton.defaultProps : Symbol(defaultProps, Decl(tsxStatelessComponentDefaultProps.tsx, 9, 1))
++>BackButton : Symbol(BackButton, Decl(tsxStatelessComponentDefaultProps.tsx, 5, 1))
++>defaultProps : Symbol(defaultProps, Decl(tsxStatelessComponentDefaultProps.tsx, 9, 1))
+ 
+     text: 'Go Back',
+ >text : Symbol(text, Decl(tsxStatelessComponentDefaultProps.tsx, 10, 27))
+@@= skipped -22, +21 lines =@@
+ };
+ let a = <BackButton />
+ >a : Symbol(a, Decl(tsxStatelessComponentDefaultProps.tsx, 13, 3))
+->BackButton : Symbol(BackButton, Decl(tsxStatelessComponentDefaultProps.tsx, 5, 1), Decl(tsxStatelessComponentDefaultProps.tsx, 9, 1))
++>BackButton : Symbol(BackButton, Decl(tsxStatelessComponentDefaultProps.tsx, 5, 1))
+ 

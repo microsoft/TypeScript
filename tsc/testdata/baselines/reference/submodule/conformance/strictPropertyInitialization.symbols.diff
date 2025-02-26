@@ -1,0 +1,431 @@
+--- old.strictPropertyInitialization.symbols
++++ new.strictPropertyInitialization.symbols
+@@= skipped -6, +6 lines =@@
+ >C1 : Symbol(C1, Decl(strictPropertyInitialization.ts, 0, 0))
+ 
+     a: number;  // Error
+->a : Symbol(C1.a, Decl(strictPropertyInitialization.ts, 2, 10))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 2, 10))
+ 
+     b: number | undefined;
+->b : Symbol(C1.b, Decl(strictPropertyInitialization.ts, 3, 14))
++>b : Symbol(b, Decl(strictPropertyInitialization.ts, 3, 14))
+ 
+     c: number | null;  // Error
+->c : Symbol(C1.c, Decl(strictPropertyInitialization.ts, 4, 26))
++>c : Symbol(c, Decl(strictPropertyInitialization.ts, 4, 26))
+ 
+     d?: number;
+->d : Symbol(C1.d, Decl(strictPropertyInitialization.ts, 5, 21))
++>d : Symbol(d, Decl(strictPropertyInitialization.ts, 5, 21))
+ 
+     #f: number; //Error
+->#f : Symbol(C1.#f, Decl(strictPropertyInitialization.ts, 6, 15))
++>#f : Symbol(#f, Decl(strictPropertyInitialization.ts, 6, 15))
+ 
+     #g: number | undefined;
+->#g : Symbol(C1.#g, Decl(strictPropertyInitialization.ts, 7, 15))
++>#g : Symbol(#g, Decl(strictPropertyInitialization.ts, 7, 15))
+ 
+     #h: number | null; //Error
+->#h : Symbol(C1.#h, Decl(strictPropertyInitialization.ts, 8, 27))
++>#h : Symbol(#h, Decl(strictPropertyInitialization.ts, 8, 27))
+ 
+     #i?: number;
+->#i : Symbol(C1.#i, Decl(strictPropertyInitialization.ts, 9, 22))
++>#i : Symbol(#i, Decl(strictPropertyInitialization.ts, 9, 22))
+ }
+ 
+ // No strict initialization checks in ambient contexts
+@@= skipped -30, +30 lines =@@
+ >C2 : Symbol(C2, Decl(strictPropertyInitialization.ts, 11, 1))
+ 
+     a: number;
+->a : Symbol(C2.a, Decl(strictPropertyInitialization.ts, 15, 18))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 15, 18))
+ 
+     b: number | undefined;
+->b : Symbol(C2.b, Decl(strictPropertyInitialization.ts, 16, 14))
++>b : Symbol(b, Decl(strictPropertyInitialization.ts, 16, 14))
+ 
+     c: number | null;
+->c : Symbol(C2.c, Decl(strictPropertyInitialization.ts, 17, 26))
++>c : Symbol(c, Decl(strictPropertyInitialization.ts, 17, 26))
+ 
+     d?: number;
+->d : Symbol(C2.d, Decl(strictPropertyInitialization.ts, 18, 21))
++>d : Symbol(d, Decl(strictPropertyInitialization.ts, 18, 21))
+     
+     #f: number;
+->#f : Symbol(C2.#f, Decl(strictPropertyInitialization.ts, 19, 15))
++>#f : Symbol(#f, Decl(strictPropertyInitialization.ts, 19, 15))
+ 
+     #g: number | undefined;
+->#g : Symbol(C2.#g, Decl(strictPropertyInitialization.ts, 21, 15))
++>#g : Symbol(#g, Decl(strictPropertyInitialization.ts, 21, 15))
+ 
+     #h: number | null;
+->#h : Symbol(C2.#h, Decl(strictPropertyInitialization.ts, 22, 27))
++>#h : Symbol(#h, Decl(strictPropertyInitialization.ts, 22, 27))
+ 
+     #i?: number;
+->#i : Symbol(C2.#i, Decl(strictPropertyInitialization.ts, 23, 22))
++>#i : Symbol(#i, Decl(strictPropertyInitialization.ts, 23, 22))
+ }
+ 
+ // No strict initialization checks for static members
+@@= skipped -30, +30 lines =@@
+ >C3 : Symbol(C3, Decl(strictPropertyInitialization.ts, 25, 1))
+ 
+     static a: number;
+->a : Symbol(C3.a, Decl(strictPropertyInitialization.ts, 29, 10))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 29, 10))
+ 
+     static b: number | undefined;
+->b : Symbol(C3.b, Decl(strictPropertyInitialization.ts, 30, 21))
++>b : Symbol(b, Decl(strictPropertyInitialization.ts, 30, 21))
+ 
+     static c: number | null;
+->c : Symbol(C3.c, Decl(strictPropertyInitialization.ts, 31, 33))
++>c : Symbol(c, Decl(strictPropertyInitialization.ts, 31, 33))
+ 
+     static d?: number;
+->d : Symbol(C3.d, Decl(strictPropertyInitialization.ts, 32, 28))
++>d : Symbol(d, Decl(strictPropertyInitialization.ts, 32, 28))
+ }
+ 
+ // Initializer satisfies strict initialization check
+@@= skipped -18, +18 lines =@@
+ >C4 : Symbol(C4, Decl(strictPropertyInitialization.ts, 34, 1))
+ 
+     a = 0;
+->a : Symbol(C4.a, Decl(strictPropertyInitialization.ts, 38, 10))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 38, 10))
+ 
+     b: number = 0;
+->b : Symbol(C4.b, Decl(strictPropertyInitialization.ts, 39, 10))
++>b : Symbol(b, Decl(strictPropertyInitialization.ts, 39, 10))
+ 
+     c: string = "abc";
+->c : Symbol(C4.c, Decl(strictPropertyInitialization.ts, 40, 18))
++>c : Symbol(c, Decl(strictPropertyInitialization.ts, 40, 18))
+ 
+     #d = 0
+->#d : Symbol(C4.#d, Decl(strictPropertyInitialization.ts, 41, 22))
++>#d : Symbol(#d, Decl(strictPropertyInitialization.ts, 41, 22))
+ 
+     #e: number = 0
+->#e : Symbol(C4.#e, Decl(strictPropertyInitialization.ts, 42, 10))
++>#e : Symbol(#e, Decl(strictPropertyInitialization.ts, 42, 10))
+ 
+     #f: string= "abc"
+->#f : Symbol(C4.#f, Decl(strictPropertyInitialization.ts, 43, 18))
++>#f : Symbol(#f, Decl(strictPropertyInitialization.ts, 43, 18))
+ }
+ 
+ // Assignment in constructor satisfies strict initialization check
+@@= skipped -24, +24 lines =@@
+ >C5 : Symbol(C5, Decl(strictPropertyInitialization.ts, 45, 1))
+ 
+     a: number;
+->a : Symbol(C5.a, Decl(strictPropertyInitialization.ts, 49, 10))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 49, 10))
+ 
+     #b: number;
+->#b : Symbol(C5.#b, Decl(strictPropertyInitialization.ts, 50, 14))
++>#b : Symbol(#b, Decl(strictPropertyInitialization.ts, 50, 14))
+ 
+     constructor() {
+         this.a = 0;
+->this.a : Symbol(C5.a, Decl(strictPropertyInitialization.ts, 49, 10))
++>this.a : Symbol(a, Decl(strictPropertyInitialization.ts, 49, 10))
+ >this : Symbol(C5, Decl(strictPropertyInitialization.ts, 45, 1))
+->a : Symbol(C5.a, Decl(strictPropertyInitialization.ts, 49, 10))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 49, 10))
+ 
+         this.#b = 0;
+->this.#b : Symbol(C5.#b, Decl(strictPropertyInitialization.ts, 50, 14))
++>this.#b : Symbol(#b, Decl(strictPropertyInitialization.ts, 50, 14))
+ >this : Symbol(C5, Decl(strictPropertyInitialization.ts, 45, 1))
+     }
+ }
+@@= skipped -23, +23 lines =@@
+ >C6 : Symbol(C6, Decl(strictPropertyInitialization.ts, 56, 1))
+ 
+     a: number;  // Error
+->a : Symbol(C6.a, Decl(strictPropertyInitialization.ts, 60, 10))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 60, 10))
+ 
+     #b: number
+->#b : Symbol(C6.#b, Decl(strictPropertyInitialization.ts, 61, 14))
++>#b : Symbol(#b, Decl(strictPropertyInitialization.ts, 61, 14))
+ 
+     constructor(cond: boolean) {
+ >cond : Symbol(cond, Decl(strictPropertyInitialization.ts, 63, 16))
+@@= skipped -14, +14 lines =@@
+             return;
+         }
+         this.a = 0;
+->this.a : Symbol(C6.a, Decl(strictPropertyInitialization.ts, 60, 10))
++>this.a : Symbol(a, Decl(strictPropertyInitialization.ts, 60, 10))
+ >this : Symbol(C6, Decl(strictPropertyInitialization.ts, 56, 1))
+->a : Symbol(C6.a, Decl(strictPropertyInitialization.ts, 60, 10))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 60, 10))
+ 
+         this.#b = 0;
+->this.#b : Symbol(C6.#b, Decl(strictPropertyInitialization.ts, 61, 14))
++>this.#b : Symbol(#b, Decl(strictPropertyInitialization.ts, 61, 14))
+ >this : Symbol(C6, Decl(strictPropertyInitialization.ts, 56, 1))
+     }
+ }
+@@= skipped -14, +14 lines =@@
+ >C7 : Symbol(C7, Decl(strictPropertyInitialization.ts, 70, 1))
+ 
+     a: number;
+->a : Symbol(C7.a, Decl(strictPropertyInitialization.ts, 72, 10))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 72, 10))
+ 
+     #b: number;
+->#b : Symbol(C7.#b, Decl(strictPropertyInitialization.ts, 73, 14))
++>#b : Symbol(#b, Decl(strictPropertyInitialization.ts, 73, 14))
+ 
+     constructor(cond: boolean) {
+ >cond : Symbol(cond, Decl(strictPropertyInitialization.ts, 75, 16))
+@@= skipped -12, +12 lines =@@
+ >cond : Symbol(cond, Decl(strictPropertyInitialization.ts, 75, 16))
+ 
+             this.a = 1;
+->this.a : Symbol(C7.a, Decl(strictPropertyInitialization.ts, 72, 10))
++>this.a : Symbol(a, Decl(strictPropertyInitialization.ts, 72, 10))
+ >this : Symbol(C7, Decl(strictPropertyInitialization.ts, 70, 1))
+->a : Symbol(C7.a, Decl(strictPropertyInitialization.ts, 72, 10))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 72, 10))
+ 
+             this.#b = 1;
+->this.#b : Symbol(C7.#b, Decl(strictPropertyInitialization.ts, 73, 14))
++>this.#b : Symbol(#b, Decl(strictPropertyInitialization.ts, 73, 14))
+ >this : Symbol(C7, Decl(strictPropertyInitialization.ts, 70, 1))
+ 
+             return;
+         }
+         this.a = 0;
+->this.a : Symbol(C7.a, Decl(strictPropertyInitialization.ts, 72, 10))
++>this.a : Symbol(a, Decl(strictPropertyInitialization.ts, 72, 10))
+ >this : Symbol(C7, Decl(strictPropertyInitialization.ts, 70, 1))
+->a : Symbol(C7.a, Decl(strictPropertyInitialization.ts, 72, 10))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 72, 10))
+ 
+         this.#b = 1;
+->this.#b : Symbol(C7.#b, Decl(strictPropertyInitialization.ts, 73, 14))
++>this.#b : Symbol(#b, Decl(strictPropertyInitialization.ts, 73, 14))
+ >this : Symbol(C7, Decl(strictPropertyInitialization.ts, 70, 1))
+     }
+ }
+@@= skipped -27, +27 lines =@@
+ >C8 : Symbol(C8, Decl(strictPropertyInitialization.ts, 84, 1))
+ 
+     a: number;  // Error
+->a : Symbol(C8.a, Decl(strictPropertyInitialization.ts, 88, 10))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 88, 10))
+ 
+     "b": number;
+->"b" : Symbol(C8["b"], Decl(strictPropertyInitialization.ts, 89, 14))
++>"b" : Symbol(b, Decl(strictPropertyInitialization.ts, 89, 14))
+ 
+     0: number;
+->0 : Symbol(C8[0], Decl(strictPropertyInitialization.ts, 90, 16))
++>0 : Symbol(0, Decl(strictPropertyInitialization.ts, 90, 16))
+ }
+ 
+ // No strict initialization checks for abstract members
+@@= skipped -15, +15 lines =@@
+ >C9 : Symbol(C9, Decl(strictPropertyInitialization.ts, 92, 1))
+ 
+     abstract a: number;
+->a : Symbol(C9.a, Decl(strictPropertyInitialization.ts, 96, 19))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 96, 19))
+ 
+     abstract b: number | undefined;
+->b : Symbol(C9.b, Decl(strictPropertyInitialization.ts, 97, 23))
++>b : Symbol(b, Decl(strictPropertyInitialization.ts, 97, 23))
+ 
+     abstract c: number | null;
+->c : Symbol(C9.c, Decl(strictPropertyInitialization.ts, 98, 35))
++>c : Symbol(c, Decl(strictPropertyInitialization.ts, 98, 35))
+ 
+     abstract d?: number;
+->d : Symbol(C9.d, Decl(strictPropertyInitialization.ts, 99, 30))
++>d : Symbol(d, Decl(strictPropertyInitialization.ts, 99, 30))
+ }
+ 
+ // Properties with non-undefined types must be assigned before they can be accessed
+@@= skipped -19, +19 lines =@@
+ >C10 : Symbol(C10, Decl(strictPropertyInitialization.ts, 101, 1))
+ 
+     a: number;
+->a : Symbol(C10.a, Decl(strictPropertyInitialization.ts, 106, 11))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 106, 11))
+ 
+     b: number;
+->b : Symbol(C10.b, Decl(strictPropertyInitialization.ts, 107, 14))
++>b : Symbol(b, Decl(strictPropertyInitialization.ts, 107, 14))
+ 
+     c?: number;
+->c : Symbol(C10.c, Decl(strictPropertyInitialization.ts, 108, 14))
++>c : Symbol(c, Decl(strictPropertyInitialization.ts, 108, 14))
+ 
+     #d: number;
+->#d : Symbol(C10.#d, Decl(strictPropertyInitialization.ts, 109, 15))
++>#d : Symbol(#d, Decl(strictPropertyInitialization.ts, 109, 15))
+ 
+     constructor() {
+         let x = this.a;  // Error
+ >x : Symbol(x, Decl(strictPropertyInitialization.ts, 112, 11))
+->this.a : Symbol(C10.a, Decl(strictPropertyInitialization.ts, 106, 11))
++>this.a : Symbol(a, Decl(strictPropertyInitialization.ts, 106, 11))
+ >this : Symbol(C10, Decl(strictPropertyInitialization.ts, 101, 1))
+->a : Symbol(C10.a, Decl(strictPropertyInitialization.ts, 106, 11))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 106, 11))
+ 
+         this.a = this.b;  // Error
+->this.a : Symbol(C10.a, Decl(strictPropertyInitialization.ts, 106, 11))
++>this.a : Symbol(a, Decl(strictPropertyInitialization.ts, 106, 11))
+ >this : Symbol(C10, Decl(strictPropertyInitialization.ts, 101, 1))
+->a : Symbol(C10.a, Decl(strictPropertyInitialization.ts, 106, 11))
+->this.b : Symbol(C10.b, Decl(strictPropertyInitialization.ts, 107, 14))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 106, 11))
++>this.b : Symbol(b, Decl(strictPropertyInitialization.ts, 107, 14))
+ >this : Symbol(C10, Decl(strictPropertyInitialization.ts, 101, 1))
+->b : Symbol(C10.b, Decl(strictPropertyInitialization.ts, 107, 14))
++>b : Symbol(b, Decl(strictPropertyInitialization.ts, 107, 14))
+ 
+         this.b = this.#d //Error
+->this.b : Symbol(C10.b, Decl(strictPropertyInitialization.ts, 107, 14))
++>this.b : Symbol(b, Decl(strictPropertyInitialization.ts, 107, 14))
+ >this : Symbol(C10, Decl(strictPropertyInitialization.ts, 101, 1))
+->b : Symbol(C10.b, Decl(strictPropertyInitialization.ts, 107, 14))
+->this.#d : Symbol(C10.#d, Decl(strictPropertyInitialization.ts, 109, 15))
++>b : Symbol(b, Decl(strictPropertyInitialization.ts, 107, 14))
++>this.#d : Symbol(#d, Decl(strictPropertyInitialization.ts, 109, 15))
+ >this : Symbol(C10, Decl(strictPropertyInitialization.ts, 101, 1))
+ 
+         this.b = x;
+->this.b : Symbol(C10.b, Decl(strictPropertyInitialization.ts, 107, 14))
++>this.b : Symbol(b, Decl(strictPropertyInitialization.ts, 107, 14))
+ >this : Symbol(C10, Decl(strictPropertyInitialization.ts, 101, 1))
+->b : Symbol(C10.b, Decl(strictPropertyInitialization.ts, 107, 14))
++>b : Symbol(b, Decl(strictPropertyInitialization.ts, 107, 14))
+ >x : Symbol(x, Decl(strictPropertyInitialization.ts, 112, 11))
+ 
+         this.#d = x;
+->this.#d : Symbol(C10.#d, Decl(strictPropertyInitialization.ts, 109, 15))
++>this.#d : Symbol(#d, Decl(strictPropertyInitialization.ts, 109, 15))
+ >this : Symbol(C10, Decl(strictPropertyInitialization.ts, 101, 1))
+ >x : Symbol(x, Decl(strictPropertyInitialization.ts, 112, 11))
+ 
+         let y = this.c;
+ >y : Symbol(y, Decl(strictPropertyInitialization.ts, 117, 11))
+->this.c : Symbol(C10.c, Decl(strictPropertyInitialization.ts, 108, 14))
++>this.c : Symbol(c, Decl(strictPropertyInitialization.ts, 108, 14))
+ >this : Symbol(C10, Decl(strictPropertyInitialization.ts, 101, 1))
+->c : Symbol(C10.c, Decl(strictPropertyInitialization.ts, 108, 14))
++>c : Symbol(c, Decl(strictPropertyInitialization.ts, 108, 14))
+     }
+ }
+ 
+@@= skipped -61, +61 lines =@@
+ >C11 : Symbol(C11, Decl(strictPropertyInitialization.ts, 123, 34))
+ 
+     a: number;
+->a : Symbol(C11.a, Decl(strictPropertyInitialization.ts, 125, 11))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 125, 11))
+ 
+     #b: number;
+->#b : Symbol(C11.#b, Decl(strictPropertyInitialization.ts, 126, 14))
++>#b : Symbol(#b, Decl(strictPropertyInitialization.ts, 126, 14))
+ 
+     constructor() {
+         this.a = someValue();
+->this.a : Symbol(C11.a, Decl(strictPropertyInitialization.ts, 125, 11))
++>this.a : Symbol(a, Decl(strictPropertyInitialization.ts, 125, 11))
+ >this : Symbol(C11, Decl(strictPropertyInitialization.ts, 123, 34))
+->a : Symbol(C11.a, Decl(strictPropertyInitialization.ts, 125, 11))
++>a : Symbol(a, Decl(strictPropertyInitialization.ts, 125, 11))
+ >someValue : Symbol(someValue, Decl(strictPropertyInitialization.ts, 119, 1))
+ 
+         this.#b = someValue();
+->this.#b : Symbol(C11.#b, Decl(strictPropertyInitialization.ts, 126, 14))
++>this.#b : Symbol(#b, Decl(strictPropertyInitialization.ts, 126, 14))
+ >this : Symbol(C11, Decl(strictPropertyInitialization.ts, 123, 34))
+ >someValue : Symbol(someValue, Decl(strictPropertyInitialization.ts, 119, 1))
+     }
+@@= skipped -24, +24 lines =@@
+ 
+ const b = Symbol();
+ >b : Symbol(b, Decl(strictPropertyInitialization.ts, 135, 5))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ 
+ class C12 {
+ >C12 : Symbol(C12, Decl(strictPropertyInitialization.ts, 135, 19))
+ 
+     [a]: number;
+->[a] : Symbol(C12[a], Decl(strictPropertyInitialization.ts, 137, 11))
++>[a] : Symbol(a, Decl(strictPropertyInitialization.ts, 137, 11))
+ >a : Symbol(a, Decl(strictPropertyInitialization.ts, 134, 5))
+ 
+     [b]: number;
+->[b] : Symbol(C12[b], Decl(strictPropertyInitialization.ts, 138, 16))
++>[b] : Symbol([b], Decl(strictPropertyInitialization.ts, 138, 16))
+ >b : Symbol(b, Decl(strictPropertyInitialization.ts, 135, 5))
+ 
+     ['c']: number;
+->['c'] : Symbol(C12['c'], Decl(strictPropertyInitialization.ts, 139, 16))
+->'c' : Symbol(C12['c'], Decl(strictPropertyInitialization.ts, 139, 16))
++>['c'] : Symbol(c, Decl(strictPropertyInitialization.ts, 139, 16))
++>'c' : Symbol(c, Decl(strictPropertyInitialization.ts, 139, 16))
+ 
+     constructor() {
+         this[a] = 1;
+@@= skipped -28, +27 lines =@@
+ 
+         this['c'] = 1;
+ >this : Symbol(C12, Decl(strictPropertyInitialization.ts, 135, 19))
+->'c' : Symbol(C12['c'], Decl(strictPropertyInitialization.ts, 139, 16))
++>'c' : Symbol(c, Decl(strictPropertyInitialization.ts, 139, 16))
+     }
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >E : Symbol(E, Decl(strictPropertyInitialization.ts, 147, 1))
+ 
+     A = "A",
+->A : Symbol(E.A, Decl(strictPropertyInitialization.ts, 149, 8))
++>A : Symbol(A, Decl(strictPropertyInitialization.ts, 149, 8))
+ 
+     B = "B"
+->B : Symbol(E.B, Decl(strictPropertyInitialization.ts, 150, 12))
++>B : Symbol(B, Decl(strictPropertyInitialization.ts, 150, 12))
+ }
+ class C13 {
+ >C13 : Symbol(C13, Decl(strictPropertyInitialization.ts, 152, 1))
+ 
+     [E.A]: number;
+->[E.A] : Symbol(C13[E.A], Decl(strictPropertyInitialization.ts, 153, 11))
+->E.A : Symbol(E.A, Decl(strictPropertyInitialization.ts, 149, 8))
++>[E.A] : Symbol(A, Decl(strictPropertyInitialization.ts, 153, 11))
++>E.A : Symbol(A, Decl(strictPropertyInitialization.ts, 149, 8))
+ >E : Symbol(E, Decl(strictPropertyInitialization.ts, 147, 1))
+->A : Symbol(E.A, Decl(strictPropertyInitialization.ts, 149, 8))
++>A : Symbol(A, Decl(strictPropertyInitialization.ts, 149, 8))
+ 
+     constructor() {
+         this[E.A] = 1;
+ >this : Symbol(C13, Decl(strictPropertyInitialization.ts, 152, 1))
+->E.A : Symbol(E.A, Decl(strictPropertyInitialization.ts, 149, 8))
++>E.A : Symbol(A, Decl(strictPropertyInitialization.ts, 149, 8))
+ >E : Symbol(E, Decl(strictPropertyInitialization.ts, 147, 1))
+->A : Symbol(E.A, Decl(strictPropertyInitialization.ts, 149, 8))
++>A : Symbol(A, Decl(strictPropertyInitialization.ts, 149, 8))
+     }
+ }
+ 

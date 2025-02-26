@@ -1,0 +1,59 @@
+--- old.unionPropertyExistence.symbols
++++ new.unionPropertyExistence.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(unionPropertyExistence.ts, 0, 0))
+ 
+     inAll: string;
+->inAll : Symbol(A.inAll, Decl(unionPropertyExistence.ts, 0, 13))
++>inAll : Symbol(inAll, Decl(unionPropertyExistence.ts, 0, 13))
+ 
+     notInB: string;
+->notInB : Symbol(A.notInB, Decl(unionPropertyExistence.ts, 1, 18))
++>notInB : Symbol(notInB, Decl(unionPropertyExistence.ts, 1, 18))
+ 
+     notInC: string;
+->notInC : Symbol(A.notInC, Decl(unionPropertyExistence.ts, 2, 19))
++>notInC : Symbol(notInC, Decl(unionPropertyExistence.ts, 2, 19))
+ }
+ 
+ interface B {
+ >B : Symbol(B, Decl(unionPropertyExistence.ts, 4, 1))
+ 
+     inAll: boolean;
+->inAll : Symbol(B.inAll, Decl(unionPropertyExistence.ts, 6, 13))
++>inAll : Symbol(inAll, Decl(unionPropertyExistence.ts, 6, 13))
+ 
+     onlyInB: number;
+->onlyInB : Symbol(B.onlyInB, Decl(unionPropertyExistence.ts, 7, 19))
++>onlyInB : Symbol(onlyInB, Decl(unionPropertyExistence.ts, 7, 19))
+ 
+     notInC: string;
+->notInC : Symbol(B.notInC, Decl(unionPropertyExistence.ts, 8, 20))
++>notInC : Symbol(notInC, Decl(unionPropertyExistence.ts, 8, 20))
+ }
+ 
+ interface C {
+ >C : Symbol(C, Decl(unionPropertyExistence.ts, 10, 1))
+ 
+     inAll: number;
+->inAll : Symbol(C.inAll, Decl(unionPropertyExistence.ts, 12, 13))
++>inAll : Symbol(inAll, Decl(unionPropertyExistence.ts, 12, 13))
+ 
+     notInB: string;
+->notInB : Symbol(C.notInB, Decl(unionPropertyExistence.ts, 13, 18))
++>notInB : Symbol(notInB, Decl(unionPropertyExistence.ts, 13, 18))
+ }
+ 
+ type AB = A | B;
+@@= skipped -64, +64 lines =@@
+ >bFoo : Symbol(bFoo, Decl(unionPropertyExistence.ts, 24, 13))
+ 
+ x.length; // Ok
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(unionPropertyExistence.ts, 23, 13))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ bFoo.length;
+ >bFoo : Symbol(bFoo, Decl(unionPropertyExistence.ts, 24, 13))

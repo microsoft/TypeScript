@@ -1,0 +1,16 @@
+--- old.decoratorInAmbientContext.symbols
++++ new.decoratorInAmbientContext.symbols
+@@= skipped -14, +14 lines =@@
+ 
+     @decorator declare a: number;
+ >decorator : Symbol(decorator, Decl(decoratorInAmbientContext.ts, 0, 0))
+->a : Symbol(Foo.a, Decl(decoratorInAmbientContext.ts, 3, 11))
++>a : Symbol(a, Decl(decoratorInAmbientContext.ts, 3, 11))
+ 
+     @decorator declare [b]: number;
+ >decorator : Symbol(decorator, Decl(decoratorInAmbientContext.ts, 0, 0))
+->[b] : Symbol(Foo[b], Decl(decoratorInAmbientContext.ts, 4, 33))
++>[b] : Symbol([b], Decl(decoratorInAmbientContext.ts, 4, 33))
+ >b : Symbol(b, Decl(decoratorInAmbientContext.ts, 2, 5))
+ }
+ 

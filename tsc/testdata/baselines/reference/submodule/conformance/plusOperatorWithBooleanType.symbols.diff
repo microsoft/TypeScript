@@ -1,0 +1,64 @@
+--- old.plusOperatorWithBooleanType.symbols
++++ new.plusOperatorWithBooleanType.symbols
+@@= skipped -11, +11 lines =@@
+ >A : Symbol(A, Decl(plusOperatorWithBooleanType.ts, 3, 40))
+ 
+     public a: boolean;
+->a : Symbol(A.a, Decl(plusOperatorWithBooleanType.ts, 5, 9))
++>a : Symbol(a, Decl(plusOperatorWithBooleanType.ts, 5, 9))
+ 
+     static foo() { return false; }
+->foo : Symbol(A.foo, Decl(plusOperatorWithBooleanType.ts, 6, 22))
++>foo : Symbol(foo, Decl(plusOperatorWithBooleanType.ts, 6, 22))
+ }
+ module M {
+ >M : Symbol(M, Decl(plusOperatorWithBooleanType.ts, 8, 1))
+@@= skipped -33, +33 lines =@@
+ // boolean type expressions
+ var ResultIsNumber4 = +objA.a;
+ >ResultIsNumber4 : Symbol(ResultIsNumber4, Decl(plusOperatorWithBooleanType.ts, 23, 3))
+->objA.a : Symbol(A.a, Decl(plusOperatorWithBooleanType.ts, 5, 9))
++>objA.a : Symbol(a, Decl(plusOperatorWithBooleanType.ts, 5, 9))
+ >objA : Symbol(objA, Decl(plusOperatorWithBooleanType.ts, 13, 3))
+->a : Symbol(A.a, Decl(plusOperatorWithBooleanType.ts, 5, 9))
++>a : Symbol(a, Decl(plusOperatorWithBooleanType.ts, 5, 9))
+ 
+ var ResultIsNumber5 = +M.n;
+ >ResultIsNumber5 : Symbol(ResultIsNumber5, Decl(plusOperatorWithBooleanType.ts, 24, 3))
+->M.n : Symbol(M.n, Decl(plusOperatorWithBooleanType.ts, 10, 14))
++>M.n : Symbol(n, Decl(plusOperatorWithBooleanType.ts, 10, 14))
+ >M : Symbol(M, Decl(plusOperatorWithBooleanType.ts, 8, 1))
+->n : Symbol(M.n, Decl(plusOperatorWithBooleanType.ts, 10, 14))
++>n : Symbol(n, Decl(plusOperatorWithBooleanType.ts, 10, 14))
+ 
+ var ResultIsNumber6 = +foo();
+ >ResultIsNumber6 : Symbol(ResultIsNumber6, Decl(plusOperatorWithBooleanType.ts, 25, 3))
+@@= skipped -16, +16 lines =@@
+ 
+ var ResultIsNumber7 = +A.foo();
+ >ResultIsNumber7 : Symbol(ResultIsNumber7, Decl(plusOperatorWithBooleanType.ts, 26, 3))
+->A.foo : Symbol(A.foo, Decl(plusOperatorWithBooleanType.ts, 6, 22))
++>A.foo : Symbol(foo, Decl(plusOperatorWithBooleanType.ts, 6, 22))
+ >A : Symbol(A, Decl(plusOperatorWithBooleanType.ts, 3, 40))
+->foo : Symbol(A.foo, Decl(plusOperatorWithBooleanType.ts, 6, 22))
++>foo : Symbol(foo, Decl(plusOperatorWithBooleanType.ts, 6, 22))
+ 
+ // miss assignment operators
+ +true;
+@@= skipped -14, +14 lines =@@
+ 
+ +true, false;
+ +objA.a;
+->objA.a : Symbol(A.a, Decl(plusOperatorWithBooleanType.ts, 5, 9))
++>objA.a : Symbol(a, Decl(plusOperatorWithBooleanType.ts, 5, 9))
+ >objA : Symbol(objA, Decl(plusOperatorWithBooleanType.ts, 13, 3))
+->a : Symbol(A.a, Decl(plusOperatorWithBooleanType.ts, 5, 9))
++>a : Symbol(a, Decl(plusOperatorWithBooleanType.ts, 5, 9))
+ 
+ +M.n;
+->M.n : Symbol(M.n, Decl(plusOperatorWithBooleanType.ts, 10, 14))
++>M.n : Symbol(n, Decl(plusOperatorWithBooleanType.ts, 10, 14))
+ >M : Symbol(M, Decl(plusOperatorWithBooleanType.ts, 8, 1))
+->n : Symbol(M.n, Decl(plusOperatorWithBooleanType.ts, 10, 14))
++>n : Symbol(n, Decl(plusOperatorWithBooleanType.ts, 10, 14))
+ 

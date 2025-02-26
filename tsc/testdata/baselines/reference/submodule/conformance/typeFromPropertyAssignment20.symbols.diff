@@ -1,0 +1,31 @@
+--- old.typeFromPropertyAssignment20.symbols
++++ new.typeFromPropertyAssignment20.symbols
+@@= skipped -12, +12 lines =@@
+ >Async : Symbol(Async, Decl(bluebird.js, 1, 23))
+ 
+             this._trampolineEnabled = true;
+->this._trampolineEnabled : Symbol(Async._trampolineEnabled, Decl(bluebird.js, 2, 26), Decl(bluebird.js, 7, 20))
+->this : Symbol(Async, Decl(bluebird.js, 1, 23))
+->_trampolineEnabled : Symbol(Async._trampolineEnabled, Decl(bluebird.js, 2, 26), Decl(bluebird.js, 7, 20))
+         }
+ 
+         Async.prototype.disableTrampolineIfNecessary = function dtin(b) {
+->Async.prototype : Symbol(Async.disableTrampolineIfNecessary, Decl(bluebird.js, 4, 9))
++>Async.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+ >Async : Symbol(Async, Decl(bluebird.js, 1, 23))
+->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+->disableTrampolineIfNecessary : Symbol(Async.disableTrampolineIfNecessary, Decl(bluebird.js, 4, 9))
++>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+ >dtin : Symbol(dtin, Decl(bluebird.js, 6, 54))
+ >b : Symbol(b, Decl(bluebird.js, 6, 69))
+ 
+@@= skipped -17, +13 lines =@@
+ >b : Symbol(b, Decl(bluebird.js, 6, 69))
+ 
+                 this._trampolineEnabled = false;
+->this._trampolineEnabled : Symbol(Async._trampolineEnabled, Decl(bluebird.js, 2, 26), Decl(bluebird.js, 7, 20))
+->this : Symbol(Async, Decl(bluebird.js, 1, 23))
+->_trampolineEnabled : Symbol(Async._trampolineEnabled, Decl(bluebird.js, 2, 26), Decl(bluebird.js, 7, 20))
+             }
+         };
+     })

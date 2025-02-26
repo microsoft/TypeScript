@@ -1,0 +1,23 @@
+--- old.varianceRepeatedlyPropegatesWithUnreliableFlag.symbols
++++ new.varianceRepeatedlyPropegatesWithUnreliableFlag.symbols
+@@= skipped -37, +37 lines =@@
+ >T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 6, 12))
+ 
+     fn<K extends keyof T>(p1: P1<Pick<T, K>>, p2: P2<Pick<T, K>>): void;
+->fn : Symbol(I.fn, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 6, 16))
++>fn : Symbol(fn, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 6, 16))
+ >K : Symbol(K, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 7, 7))
+ >T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 6, 12))
+ >p1 : Symbol(p1, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 7, 26))
+@@= skipped -28, +28 lines =@@
+ 
+ // Commenting out the below line will remove the error on the `const _i: I<A> = i;`
+ i.fn(null as any, p2);
+->i.fn : Symbol(I.fn, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 6, 16))
++>i.fn : Symbol(fn, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 6, 16))
+ >i : Symbol(i, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 10, 5))
+->fn : Symbol(I.fn, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 6, 16))
++>fn : Symbol(fn, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 6, 16))
+ >p2 : Symbol(p2, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 11, 5))
+ 
+ const _i: I<A> = i;

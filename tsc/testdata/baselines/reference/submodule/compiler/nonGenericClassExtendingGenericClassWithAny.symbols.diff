@@ -1,0 +1,11 @@
+--- old.nonGenericClassExtendingGenericClassWithAny.symbols
++++ new.nonGenericClassExtendingGenericClassWithAny.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(nonGenericClassExtendingGenericClassWithAny.ts, 0, 10))
+ 
+     t: T;
+->t : Symbol(Foo.t, Decl(nonGenericClassExtendingGenericClassWithAny.ts, 0, 14))
++>t : Symbol(t, Decl(nonGenericClassExtendingGenericClassWithAny.ts, 0, 14))
+ >T : Symbol(T, Decl(nonGenericClassExtendingGenericClassWithAny.ts, 0, 10))
+ }
+ 

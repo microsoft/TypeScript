@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment22.ts] ////
+
+=== npm-install.js ===
+function Installer () {
+>Installer : Symbol(Installer, Decl(npm-install.js, 0, 0))
+
+    this.args = 0
+}
+Installer.prototype.loadArgMetadata = function (next) {
+>Installer.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Installer : Symbol(Installer, Decl(npm-install.js, 0, 0))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>next : Symbol(next, Decl(npm-install.js, 3, 48))
+
+    // ArrowFunction isn't treated as a this-container
+    (args) => {
+>args : Symbol(args, Decl(npm-install.js, 5, 5))
+
+        this.args = 'hi'
+        this.newProperty = 1
+    }
+}
+var i = new Installer()
+>i : Symbol(i, Decl(npm-install.js, 10, 3))
+>Installer : Symbol(Installer, Decl(npm-install.js, 0, 0))
+
+i.newProperty = i.args // ok, number ==> number | undefined
+>i : Symbol(i, Decl(npm-install.js, 10, 3))
+>i : Symbol(i, Decl(npm-install.js, 10, 3))
+

@@ -1,0 +1,12 @@
+--- old.valuesMergingAcrossModules.symbols
++++ new.valuesMergingAcrossModules.symbols
+@@= skipped -31, +31 lines =@@
+ >A : Symbol(A, Decl(c.ts, 0, 8), Decl(c.ts, 0, 24))
+ 
+ A.displayName;
+->A.displayName : Symbol(A.displayName, Decl(c.ts, 2, 14))
++>A.displayName : Symbol(displayName, Decl(c.ts, 2, 14))
+ >A : Symbol(A, Decl(c.ts, 0, 8), Decl(c.ts, 0, 24))
+->displayName : Symbol(A.displayName, Decl(c.ts, 2, 14))
++>displayName : Symbol(displayName, Decl(c.ts, 2, 14))
+ 

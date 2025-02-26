@@ -1,0 +1,15 @@
+--- old.spreadContextualTypedBindingPattern.symbols
++++ new.spreadContextualTypedBindingPattern.symbols
+@@= skipped -5, +5 lines =@@
+ >Person : Symbol(Person, Decl(spreadContextualTypedBindingPattern.ts, 0, 0))
+ 
+   naam: string,
+->naam : Symbol(Person.naam, Decl(spreadContextualTypedBindingPattern.ts, 1, 18))
++>naam : Symbol(naam, Decl(spreadContextualTypedBindingPattern.ts, 1, 18))
+ 
+   age: number
+->age : Symbol(Person.age, Decl(spreadContextualTypedBindingPattern.ts, 2, 15))
++>age : Symbol(age, Decl(spreadContextualTypedBindingPattern.ts, 2, 15))
+ }
+ 
+ declare const bob: Person

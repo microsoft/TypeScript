@@ -1,0 +1,46 @@
+//// [tests/cases/conformance/salsa/moduleExportNestedNamespaces.ts] ////
+
+=== mod.js ===
+module.exports.n = {};
+module.exports.n.K = function C() {
+>C : Symbol(C, Decl(mod.js, 1, 20))
+
+    this.x = 10;
+}
+module.exports.Classic = class {
+    constructor() {
+        this.p = 1
+>this : Symbol(Classic, Decl(mod.js, 4, 24))
+    }
+}
+
+=== use.js ===
+import * as s from './mod'
+>s : Symbol(s, Decl(use.js, 0, 6))
+
+var k = new s.n.K()
+>k : Symbol(k, Decl(use.js, 2, 3))
+>s : Symbol(s, Decl(use.js, 0, 6))
+
+k.x
+>k : Symbol(k, Decl(use.js, 2, 3))
+
+var classic = new s.Classic()
+>classic : Symbol(classic, Decl(use.js, 4, 3))
+>s : Symbol(s, Decl(use.js, 0, 6))
+
+
+/** @param {s.n.K} c
+    @param {s.Classic} classic */
+function f(c, classic) {
+>f : Symbol(f, Decl(use.js, 4, 29))
+>c : Symbol(c, Decl(use.js, 9, 11))
+>classic : Symbol(classic, Decl(use.js, 9, 13))
+
+    c.x
+>c : Symbol(c, Decl(use.js, 9, 11))
+
+    classic.p
+>classic : Symbol(classic, Decl(use.js, 9, 13))
+}
+

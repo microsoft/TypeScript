@@ -1,0 +1,11 @@
+--- old.doubleMixinConditionalTypeBaseClassWorks.symbols
++++ new.doubleMixinConditionalTypeBaseClassWorks.symbols
+@@= skipped -11, +11 lines =@@
+ >Base : Symbol(Base, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 39))
+ >C : Symbol(C, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 16))
+ >Base : Symbol(Base, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 39))
+->_fooPrivate : Symbol((Anonymous class)._fooPrivate, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 71))
++>_fooPrivate : Symbol(_fooPrivate, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 71))
+ 
+ type FooConstructor = typeof Mixin1 extends (a: Constructor) => infer Cls ? Cls : never;
+ >FooConstructor : Symbol(FooConstructor, Decl(doubleMixinConditionalTypeBaseClassWorks.ts, 2, 98))

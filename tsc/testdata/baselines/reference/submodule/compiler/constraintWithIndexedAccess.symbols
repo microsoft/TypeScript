@@ -1,0 +1,165 @@
+//// [tests/cases/compiler/constraintWithIndexedAccess.ts] ////
+
+=== constraintWithIndexedAccess.ts ===
+// #52399
+type DataFetchFns = {
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+
+    Boat: {
+>Boat : Symbol(Boat, Decl(constraintWithIndexedAccess.ts, 1, 21))
+
+        requiresLicense: (id: string) => boolean;
+>requiresLicense : Symbol(requiresLicense, Decl(constraintWithIndexedAccess.ts, 2, 11))
+>id : Symbol(id, Decl(constraintWithIndexedAccess.ts, 3, 26))
+
+        maxGroundSpeed: (id: string) => number;
+>maxGroundSpeed : Symbol(maxGroundSpeed, Decl(constraintWithIndexedAccess.ts, 3, 49))
+>id : Symbol(id, Decl(constraintWithIndexedAccess.ts, 4, 25))
+
+        description: (id: string) => string;
+>description : Symbol(description, Decl(constraintWithIndexedAccess.ts, 4, 47))
+>id : Symbol(id, Decl(constraintWithIndexedAccess.ts, 5, 22))
+
+        displacement: (id: string) => number;
+>displacement : Symbol(displacement, Decl(constraintWithIndexedAccess.ts, 5, 44))
+>id : Symbol(id, Decl(constraintWithIndexedAccess.ts, 6, 23))
+
+        name: (id: string) => string;
+>name : Symbol(name, Decl(constraintWithIndexedAccess.ts, 6, 45))
+>id : Symbol(id, Decl(constraintWithIndexedAccess.ts, 7, 15))
+
+    };
+    Plane: {
+>Plane : Symbol(Plane, Decl(constraintWithIndexedAccess.ts, 8, 6))
+
+        requiresLicense: (id: string) => boolean;
+>requiresLicense : Symbol(requiresLicense, Decl(constraintWithIndexedAccess.ts, 9, 12))
+>id : Symbol(id, Decl(constraintWithIndexedAccess.ts, 10, 26))
+
+        maxGroundSpeed: (id: string) => number;
+>maxGroundSpeed : Symbol(maxGroundSpeed, Decl(constraintWithIndexedAccess.ts, 10, 49))
+>id : Symbol(id, Decl(constraintWithIndexedAccess.ts, 11, 25))
+
+        maxTakeoffWeight: (id: string) => number;
+>maxTakeoffWeight : Symbol(maxTakeoffWeight, Decl(constraintWithIndexedAccess.ts, 11, 47))
+>id : Symbol(id, Decl(constraintWithIndexedAccess.ts, 12, 27))
+
+        maxCruisingAltitude: (id: string) => number;
+>maxCruisingAltitude : Symbol(maxCruisingAltitude, Decl(constraintWithIndexedAccess.ts, 12, 49))
+>id : Symbol(id, Decl(constraintWithIndexedAccess.ts, 13, 30))
+
+        name: (id: string) => string;
+>name : Symbol(name, Decl(constraintWithIndexedAccess.ts, 13, 52))
+>id : Symbol(id, Decl(constraintWithIndexedAccess.ts, 14, 15))
+    }
+}
+export type NoTypeParamBoatRequired<F extends keyof DataFetchFns['Boat']> = ReturnType<DataFetchFns['Boat'][F]>;
+>NoTypeParamBoatRequired : Symbol(NoTypeParamBoatRequired, Decl(constraintWithIndexedAccess.ts, 16, 1))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 17, 36))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 17, 36))
+
+type TypeHardcodedAsParameterWithoutReturnType<T extends 'Boat', F extends keyof DataFetchFns[T]> = DataFetchFns[T][F];
+>TypeHardcodedAsParameterWithoutReturnType : Symbol(TypeHardcodedAsParameterWithoutReturnType, Decl(constraintWithIndexedAccess.ts, 17, 112))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 18, 47))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 18, 64))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 18, 47))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 18, 47))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 18, 64))
+
+export type allAreFunctionsAsExpected = TypeHardcodedAsParameterWithoutReturnType<'Boat', keyof DataFetchFns['Boat']>;
+>allAreFunctionsAsExpected : Symbol(allAreFunctionsAsExpected, Decl(constraintWithIndexedAccess.ts, 18, 119))
+>TypeHardcodedAsParameterWithoutReturnType : Symbol(TypeHardcodedAsParameterWithoutReturnType, Decl(constraintWithIndexedAccess.ts, 17, 112))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+
+export type returnTypeOfFunctions = ReturnType<allAreFunctionsAsExpected>; //string | number | boolean as expected
+>returnTypeOfFunctions : Symbol(returnTypeOfFunctions, Decl(constraintWithIndexedAccess.ts, 19, 118))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>allAreFunctionsAsExpected : Symbol(allAreFunctionsAsExpected, Decl(constraintWithIndexedAccess.ts, 18, 119))
+
+export type SucceedingCombo = ReturnType<TypeHardcodedAsParameterWithoutReturnType<'Boat', keyof DataFetchFns['Boat']>>;
+>SucceedingCombo : Symbol(SucceedingCombo, Decl(constraintWithIndexedAccess.ts, 20, 74))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>TypeHardcodedAsParameterWithoutReturnType : Symbol(TypeHardcodedAsParameterWithoutReturnType, Decl(constraintWithIndexedAccess.ts, 17, 112))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+
+export type FailingCombo<T extends 'Boat', F extends keyof DataFetchFns[T]> = ReturnType<TypeHardcodedAsParameterWithoutReturnType<T,F>>;
+>FailingCombo : Symbol(FailingCombo, Decl(constraintWithIndexedAccess.ts, 21, 120))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 22, 25))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 22, 42))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 22, 25))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>TypeHardcodedAsParameterWithoutReturnType : Symbol(TypeHardcodedAsParameterWithoutReturnType, Decl(constraintWithIndexedAccess.ts, 17, 112))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 22, 25))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 22, 42))
+
+export type TypeHardcodedAsParameter<T extends 'Boat', F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[T][F]>;
+>TypeHardcodedAsParameter : Symbol(TypeHardcodedAsParameter, Decl(constraintWithIndexedAccess.ts, 22, 137))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 23, 37))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 23, 54))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 23, 37))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 23, 37))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 23, 54))
+
+type VehicleSelector<T extends keyof DataFetchFns> = DataFetchFns[T];
+>VehicleSelector : Symbol(VehicleSelector, Decl(constraintWithIndexedAccess.ts, 23, 121))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 24, 21))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 24, 21))
+
+export type TypeHardcodedAsParameter2<T extends 'Boat', F extends keyof DataFetchFns[T]> = ReturnType<VehicleSelector<T>[F]>;
+>TypeHardcodedAsParameter2 : Symbol(TypeHardcodedAsParameter2, Decl(constraintWithIndexedAccess.ts, 24, 69))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 25, 38))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 25, 55))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 25, 38))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>VehicleSelector : Symbol(VehicleSelector, Decl(constraintWithIndexedAccess.ts, 23, 121))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 25, 38))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 25, 55))
+
+export type TypeGeneric1<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[T][F]>;
+>TypeGeneric1 : Symbol(TypeGeneric1, Decl(constraintWithIndexedAccess.ts, 25, 125))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 26, 25))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 26, 54))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 26, 25))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 26, 25))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 26, 54))
+
+export type TypeGeneric2<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[T][T]>; // error
+>TypeGeneric2 : Symbol(TypeGeneric2, Decl(constraintWithIndexedAccess.ts, 26, 121))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 27, 25))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 27, 54))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 27, 25))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 27, 25))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 27, 25))
+
+export type TypeGeneric3<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[F][F]>; // error
+>TypeGeneric3 : Symbol(TypeGeneric3, Decl(constraintWithIndexedAccess.ts, 27, 121))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 28, 25))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 28, 54))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(constraintWithIndexedAccess.ts, 28, 25))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 28, 54))
+>F : Symbol(F, Decl(constraintWithIndexedAccess.ts, 28, 54))
+

@@ -1,0 +1,12 @@
+--- old.modFunctionCrash.symbols
++++ new.modFunctionCrash.symbols
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ Q.f(function() {this;});
+->Q.f : Symbol(Q.f, Decl(modFunctionCrash.ts, 0, 18))
++>Q.f : Symbol(f, Decl(modFunctionCrash.ts, 0, 18))
+ >Q : Symbol(Q, Decl(modFunctionCrash.ts, 0, 0))
+->f : Symbol(Q.f, Decl(modFunctionCrash.ts, 0, 18))
++>f : Symbol(f, Decl(modFunctionCrash.ts, 0, 18))
+ 

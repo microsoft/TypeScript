@@ -1,0 +1,26 @@
+--- old.isolatedModulesImportConstEnum.symbols
++++ new.isolatedModulesImportConstEnum.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(file1.ts, 0, 8))
+ 
+ console.log(Foo.BAR);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->Foo.BAR : Symbol(Foo.BAR, Decl(file2.ts, 0, 23))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>Foo.BAR : Symbol(BAR, Decl(file2.ts, 0, 23))
+ >Foo : Symbol(Foo, Decl(file1.ts, 0, 8))
+->BAR : Symbol(Foo.BAR, Decl(file2.ts, 0, 23))
++>BAR : Symbol(BAR, Decl(file2.ts, 0, 23))
+ 
+ === file2.ts ===
+ export const enum Foo {
+ >Foo : Symbol(Foo, Decl(file2.ts, 0, 0))
+ 
+   BAR,
+->BAR : Symbol(Foo.BAR, Decl(file2.ts, 0, 23))
++>BAR : Symbol(BAR, Decl(file2.ts, 0, 23))
+ }
+ 

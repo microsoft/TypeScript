@@ -1,0 +1,77 @@
+--- old.tooFewArgumentsInGenericFunctionTypedArgument.symbols
++++ new.tooFewArgumentsInGenericFunctionTypedArgument.symbols
+@@= skipped -6, +6 lines =@@
+ >U : Symbol(U, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 23))
+ 
+     length: number;
+->length : Symbol(Collection.length, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 28))
++>length : Symbol(length, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 28))
+ 
+     add(x: T, y: U): void;
+->add : Symbol(Collection.add, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 1, 19))
++>add : Symbol(add, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 1, 19))
+ >x : Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 2, 8))
+ >T : Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 21))
+ >y : Symbol(y, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 2, 13))
+ >U : Symbol(U, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 23))
+ 
+     remove(x: T, y: U): boolean;
+->remove : Symbol(Collection.remove, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 2, 26))
++>remove : Symbol(remove, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 2, 26))
+ >x : Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 3, 11))
+ >T : Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 21))
+ >y : Symbol(y, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 3, 16))
+@@= skipped -20, +20 lines =@@
+ >Combinators : Symbol(Combinators, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 4, 1))
+ 
+     map<T, U, V>(c: Collection<T,U>, f: (x: T, y: U) => V): Collection<T, V>;
+->map : Symbol(Combinators.map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
++>map : Symbol(map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
+ >T : Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 8))
+ >U : Symbol(U, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 10))
+ >V : Symbol(V, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 13))
+@@= skipped -19, +19 lines =@@
+ >V : Symbol(V, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 13))
+ 
+     map<T, U>(c: Collection<T,U>, f: (x: T, y: U) => any): Collection<any, any>;
+->map : Symbol(Combinators.map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
++>map : Symbol(map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
+ >T : Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 7, 8))
+ >U : Symbol(U, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 7, 10))
+ >c : Symbol(c, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 7, 14))
+@@= skipped -24, +24 lines =@@
+ 
+ var r1a = _.map(c2, (x) => { return x.toFixed() }); 
+ >r1a : Symbol(r1a, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 11, 3))
+->_.map : Symbol(Combinators.map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
++>_.map : Symbol(map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
+ >_ : Symbol(_, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 10, 3))
+->map : Symbol(Combinators.map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
++>map : Symbol(map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
+ >c2 : Symbol(c2, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 9, 3))
+ >x : Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 11, 21))
+->x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>x.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 11, 21))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+ var rf1 = (x: number) => { return x.toFixed() };
+ >rf1 : Symbol(rf1, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 12, 3))
+ >x : Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 12, 11))
+->x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>x.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 12, 11))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+ var r1b = _.map(c2, rf1); 
+ >r1b : Symbol(r1b, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 13, 3))
+->_.map : Symbol(Combinators.map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
++>_.map : Symbol(map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
+ >_ : Symbol(_, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 10, 3))
+->map : Symbol(Combinators.map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
++>map : Symbol(map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
+ >c2 : Symbol(c2, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 9, 3))
+ >rf1 : Symbol(rf1, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 12, 3))
+ 

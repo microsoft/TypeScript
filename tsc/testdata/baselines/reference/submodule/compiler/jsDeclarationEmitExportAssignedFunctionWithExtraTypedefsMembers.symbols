@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/jsDeclarationEmitExportAssignedFunctionWithExtraTypedefsMembers.ts] ////
+
+=== index.js ===
+/**
+ * @typedef Options
+ * @property {string} opt
+ */
+
+/**
+ * @param {Options} options
+ */
+module.exports = function loader(options) {}
+>loader : Symbol(loader, Decl(index.js, 8, 16))
+>options : Symbol(options, Decl(index.js, 8, 33))
+

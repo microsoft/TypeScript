@@ -1,0 +1,15 @@
+--- old.declarationFilesForNodeNativeModules(allowarbitraryextensions=false).symbols
++++ new.declarationFilesForNodeNativeModules(allowarbitraryextensions=false).symbols
+@@= skipped -4, +4 lines =@@
+ >mod : Symbol(mod, Decl(main.ts, 0, 0))
+ 
+ mod.doNativeThing("good");
++>mod.doNativeThing : Symbol(doNativeThing, Decl(native.d.node.ts, 0, 0))
+ >mod : Symbol(mod, Decl(main.ts, 0, 0))
++>doNativeThing : Symbol(doNativeThing, Decl(native.d.node.ts, 0, 0))
+ 
++=== dir/native.d.node.ts ===
++export function doNativeThing(flag: string): unknown;
++>doNativeThing : Symbol(doNativeThing, Decl(native.d.node.ts, 0, 0))
++>flag : Symbol(flag, Decl(native.d.node.ts, 0, 30))
++

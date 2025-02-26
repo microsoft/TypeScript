@@ -1,0 +1,138 @@
+--- old.typeGuardsAsAssertions.symbols
++++ new.typeGuardsAsAssertions.symbols
+@@= skipped -14, +14 lines =@@
+ 
+ export interface None { readonly none: string; }
+ >None : Symbol(None, Decl(typeGuardsAsAssertions.ts, 4, 41))
+->none : Symbol(None.none, Decl(typeGuardsAsAssertions.ts, 6, 23))
++>none : Symbol(none, Decl(typeGuardsAsAssertions.ts, 6, 23))
+ 
+ export interface Some<a> { readonly some: a; }
+ >Some : Symbol(Some, Decl(typeGuardsAsAssertions.ts, 6, 48))
+ >a : Symbol(a, Decl(typeGuardsAsAssertions.ts, 7, 22))
+->some : Symbol(Some.some, Decl(typeGuardsAsAssertions.ts, 7, 26))
++>some : Symbol(some, Decl(typeGuardsAsAssertions.ts, 7, 26))
+ >a : Symbol(a, Decl(typeGuardsAsAssertions.ts, 7, 22))
+ 
+ export const none : None = { none: '' };
+@@= skipped -63, +63 lines =@@
+ >someFrom : Symbol(someFrom, Decl(typeGuardsAsAssertions.ts, 13, 1))
+ >isSome : Symbol(isSome, Decl(typeGuardsAsAssertions.ts, 9, 40))
+ >result : Symbol(result, Decl(typeGuardsAsAssertions.ts, 20, 7))
+->result.some : Symbol(Some.some, Decl(typeGuardsAsAssertions.ts, 7, 26))
++>result.some : Symbol(some, Decl(typeGuardsAsAssertions.ts, 7, 26))
+ >result : Symbol(result, Decl(typeGuardsAsAssertions.ts, 20, 7))
+->some : Symbol(Some.some, Decl(typeGuardsAsAssertions.ts, 7, 26))
++>some : Symbol(some, Decl(typeGuardsAsAssertions.ts, 7, 26))
+ >makeSome : Symbol(makeSome, Decl(typeGuardsAsAssertions.ts, 19, 22))
+ 
+         result;  // Some<r>
+@@= skipped -28, +28 lines =@@
+         x = typeof x === "string" ? x.slice() : "abc";
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 30, 7))
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 30, 7))
+->x.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>x.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 30, 7))
+->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ 
+         x;  // string
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 30, 7))
+@@= skipped -31, +31 lines =@@
+ 
+             x = x.slice();
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 41, 7))
+->x.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>x.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 41, 7))
+->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+         }
+         else {
+             x = "abc";
+@@= skipped -122, +122 lines =@@
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+ 
+     x!.slice();
+->x!.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>x!.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ 
+     x = "";
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+ 
+     x!.slice();
+->x!.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>x!.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ 
+     x = undefined;
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+ >undefined : Symbol(undefined)
+ 
+     x!.slice();
+->x!.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>x!.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ 
+     x = null;
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+ 
+     x!.slice();
+->x!.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>x!.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ 
+     x = <undefined | null>undefined;
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+ >undefined : Symbol(undefined)
+ 
+     x!.slice();
+->x!.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>x!.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ 
+     x = <string | undefined>"";
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+ 
+     x!.slice();
+->x!.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>x!.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ 
+     x = <string | null>"";
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+ 
+     x!.slice();
+->x!.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>x!.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 105, 7))
+->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function f7() {
+@@= skipped -62, +62 lines =@@
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 122, 7))
+ 
+     x!.slice();
+->x!.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>x!.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 122, 7))
+->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ }
+ 

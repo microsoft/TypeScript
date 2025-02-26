@@ -1,0 +1,38 @@
+--- old.derivedClassOverridesPrivates.symbols
++++ new.derivedClassOverridesPrivates.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(derivedClassOverridesPrivates.ts, 0, 0))
+ 
+     private x: { foo: string };
+->x : Symbol(Base.x, Decl(derivedClassOverridesPrivates.ts, 0, 12))
++>x : Symbol(x, Decl(derivedClassOverridesPrivates.ts, 0, 12))
+ >foo : Symbol(foo, Decl(derivedClassOverridesPrivates.ts, 1, 16))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >Base : Symbol(Base, Decl(derivedClassOverridesPrivates.ts, 0, 0))
+ 
+     private x: { foo: string; bar: string; }; // error
+->x : Symbol(Derived.x, Decl(derivedClassOverridesPrivates.ts, 4, 28))
++>x : Symbol(x, Decl(derivedClassOverridesPrivates.ts, 4, 28))
+ >foo : Symbol(foo, Decl(derivedClassOverridesPrivates.ts, 5, 16))
+ >bar : Symbol(bar, Decl(derivedClassOverridesPrivates.ts, 5, 29))
+ }
+@@= skipped -9, +9 lines =@@
+ >Base2 : Symbol(Base2, Decl(derivedClassOverridesPrivates.ts, 6, 1))
+ 
+     private static y: { foo: string };
+->y : Symbol(Base2.y, Decl(derivedClassOverridesPrivates.ts, 8, 13))
++>y : Symbol(y, Decl(derivedClassOverridesPrivates.ts, 8, 13))
+ >foo : Symbol(foo, Decl(derivedClassOverridesPrivates.ts, 9, 23))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >Base2 : Symbol(Base2, Decl(derivedClassOverridesPrivates.ts, 6, 1))
+ 
+     private static y: { foo: string; bar: string; }; // error
+->y : Symbol(Derived2.y, Decl(derivedClassOverridesPrivates.ts, 12, 30))
++>y : Symbol(y, Decl(derivedClassOverridesPrivates.ts, 12, 30))
+ >foo : Symbol(foo, Decl(derivedClassOverridesPrivates.ts, 13, 23))
+ >bar : Symbol(bar, Decl(derivedClassOverridesPrivates.ts, 13, 36))
+ }

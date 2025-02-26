@@ -1,0 +1,11 @@
+--- old.genericRestParameters3.symbols
++++ new.genericRestParameters3.symbols
+@@= skipped -93, +93 lines =@@
+ >E : Symbol(E, Decl(genericRestParameters3.ts, 28, 20))
+ 
+     hello: number;
+->hello : Symbol(CoolArray.hello, Decl(genericRestParameters3.ts, 28, 41))
++>hello : Symbol(hello, Decl(genericRestParameters3.ts, 28, 41))
+ }
+ 
+ declare function foo<T extends any[]>(cb: (...args: T) => void): void;

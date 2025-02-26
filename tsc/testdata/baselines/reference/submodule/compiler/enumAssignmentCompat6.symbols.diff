@@ -1,0 +1,179 @@
+--- old.enumAssignmentCompat6.symbols
++++ new.enumAssignmentCompat6.symbols
+@@= skipped -7, +7 lines =@@
+ >DiagnosticCategory : Symbol(DiagnosticCategory, Decl(a.ts, 0, 20))
+ 
+         Warning,
+->Warning : Symbol(DiagnosticCategory.Warning, Decl(a.ts, 1, 36))
++>Warning : Symbol(Warning, Decl(a.ts, 1, 36))
+ 
+         Error,
+->Error : Symbol(DiagnosticCategory.Error, Decl(a.ts, 2, 16))
++>Error : Symbol(Error, Decl(a.ts, 2, 16))
+ 
+         Suggestion,
+->Suggestion : Symbol(DiagnosticCategory.Suggestion, Decl(a.ts, 3, 14))
++>Suggestion : Symbol(Suggestion, Decl(a.ts, 3, 14))
+ 
+         Message,
+->Message : Symbol(DiagnosticCategory.Message, Decl(a.ts, 4, 19))
++>Message : Symbol(Message, Decl(a.ts, 4, 19))
+     }
+ 
+     export enum DiagnosticCategory2 {
+ >DiagnosticCategory2 : Symbol(DiagnosticCategory2, Decl(a.ts, 6, 5))
+ 
+         Warning,
+->Warning : Symbol(DiagnosticCategory2.Warning, Decl(a.ts, 8, 37))
++>Warning : Symbol(Warning, Decl(a.ts, 8, 37))
+ 
+         Error,
+->Error : Symbol(DiagnosticCategory2.Error, Decl(a.ts, 9, 16))
++>Error : Symbol(Error, Decl(a.ts, 9, 16))
+ 
+         Suggestion,
+->Suggestion : Symbol(DiagnosticCategory2.Suggestion, Decl(a.ts, 10, 14))
++>Suggestion : Symbol(Suggestion, Decl(a.ts, 10, 14))
+ 
+         Message,
+->Message : Symbol(DiagnosticCategory2.Message, Decl(a.ts, 11, 19))
++>Message : Symbol(Message, Decl(a.ts, 11, 19))
+     }
+ }
+ 
+@@= skipped -36, +36 lines =@@
+ >DiagnosticCategory : Symbol(DiagnosticCategory, Decl(a.ts, 16, 19))
+ 
+         Warning = "Warning",
+->Warning : Symbol(DiagnosticCategory.Warning, Decl(a.ts, 17, 36))
++>Warning : Symbol(Warning, Decl(a.ts, 17, 36))
+ 
+         Error = "Error",
+->Error : Symbol(DiagnosticCategory.Error, Decl(a.ts, 18, 28))
++>Error : Symbol(Error, Decl(a.ts, 18, 28))
+ 
+         Suggestion = "Suggestion",
+->Suggestion : Symbol(DiagnosticCategory.Suggestion, Decl(a.ts, 19, 24))
++>Suggestion : Symbol(Suggestion, Decl(a.ts, 19, 24))
+ 
+         Message = "Message",
+->Message : Symbol(DiagnosticCategory.Message, Decl(a.ts, 20, 34))
++>Message : Symbol(Message, Decl(a.ts, 20, 34))
+     }
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >DiagnosticCategory : Symbol(DiagnosticCategory, Decl(a.ts, 25, 28))
+ 
+         Warning,
+->Warning : Symbol(DiagnosticCategory.Warning, Decl(a.ts, 26, 36))
++>Warning : Symbol(Warning, Decl(a.ts, 26, 36))
+ 
+         Error,
+->Error : Symbol(DiagnosticCategory.Error, Decl(a.ts, 27, 16))
++>Error : Symbol(Error, Decl(a.ts, 27, 16))
+ 
+         Suggestion,
+->Suggestion : Symbol(DiagnosticCategory.Suggestion, Decl(a.ts, 28, 14))
++>Suggestion : Symbol(Suggestion, Decl(a.ts, 28, 14))
+ 
+         Message,
+->Message : Symbol(DiagnosticCategory.Message, Decl(a.ts, 29, 19))
++>Message : Symbol(Message, Decl(a.ts, 29, 19))
+     }
+ }
+ 
+@@= skipped -17, +17 lines =@@
+ >f : Symbol(f, Decl(a.ts, 32, 1))
+ >x : Symbol(x, Decl(a.ts, 34, 11))
+ >numerics : Symbol(numerics, Decl(a.ts, 0, 0))
+->DiagnosticCategory : Symbol(numerics.DiagnosticCategory, Decl(a.ts, 0, 20))
++>DiagnosticCategory : Symbol(DiagnosticCategory, Decl(a.ts, 0, 20))
+ >y : Symbol(y, Decl(a.ts, 34, 42))
+ >strings : Symbol(strings, Decl(a.ts, 14, 1))
+->DiagnosticCategory : Symbol(strings.DiagnosticCategory, Decl(a.ts, 16, 19))
++>DiagnosticCategory : Symbol(DiagnosticCategory, Decl(a.ts, 16, 19))
+ 
+     x = y;
+ >x : Symbol(x, Decl(a.ts, 34, 11))
+@@= skipped -18, +18 lines =@@
+ >g : Symbol(g, Decl(a.ts, 37, 1))
+ >x : Symbol(x, Decl(a.ts, 39, 11))
+ >numerics : Symbol(numerics, Decl(a.ts, 0, 0))
+->DiagnosticCategory2 : Symbol(numerics.DiagnosticCategory2, Decl(a.ts, 6, 5))
++>DiagnosticCategory2 : Symbol(DiagnosticCategory2, Decl(a.ts, 6, 5))
+ >y : Symbol(y, Decl(a.ts, 39, 43))
+ >strings : Symbol(strings, Decl(a.ts, 14, 1))
+->DiagnosticCategory : Symbol(strings.DiagnosticCategory, Decl(a.ts, 16, 19))
++>DiagnosticCategory : Symbol(DiagnosticCategory, Decl(a.ts, 16, 19))
+ 
+     x = y;
+ >x : Symbol(x, Decl(a.ts, 39, 11))
+@@= skipped -18, +18 lines =@@
+ >h : Symbol(h, Decl(a.ts, 42, 1))
+ >x : Symbol(x, Decl(a.ts, 44, 11))
+ >numerics : Symbol(numerics, Decl(a.ts, 0, 0))
+->DiagnosticCategory : Symbol(numerics.DiagnosticCategory, Decl(a.ts, 0, 20))
++>DiagnosticCategory : Symbol(DiagnosticCategory, Decl(a.ts, 0, 20))
+ >y : Symbol(y, Decl(a.ts, 44, 42))
+ >ambients : Symbol(ambients, Decl(a.ts, 23, 1))
+->DiagnosticCategory : Symbol(ambients.DiagnosticCategory, Decl(a.ts, 25, 28))
++>DiagnosticCategory : Symbol(DiagnosticCategory, Decl(a.ts, 25, 28))
+ 
+     x = y;
+ >x : Symbol(x, Decl(a.ts, 44, 11))
+@@= skipped -18, +18 lines =@@
+ >i : Symbol(i, Decl(a.ts, 47, 1))
+ >x : Symbol(x, Decl(a.ts, 49, 11))
+ >strings : Symbol(strings, Decl(a.ts, 14, 1))
+->DiagnosticCategory : Symbol(strings.DiagnosticCategory, Decl(a.ts, 16, 19))
++>DiagnosticCategory : Symbol(DiagnosticCategory, Decl(a.ts, 16, 19))
+ >y : Symbol(y, Decl(a.ts, 49, 41))
+ >ambients : Symbol(ambients, Decl(a.ts, 23, 1))
+->DiagnosticCategory : Symbol(ambients.DiagnosticCategory, Decl(a.ts, 25, 28))
++>DiagnosticCategory : Symbol(DiagnosticCategory, Decl(a.ts, 25, 28))
+ 
+     x = y;
+ >x : Symbol(x, Decl(a.ts, 49, 11))
+@@= skipped -19, +19 lines =@@
+ >DiagnosticCategory : Symbol(DiagnosticCategory, Decl(f.ts, 0, 0))
+ 
+     Warning,
+->Warning : Symbol(DiagnosticCategory.Warning, Decl(f.ts, 0, 32))
++>Warning : Symbol(Warning, Decl(f.ts, 0, 32))
+ 
+     Error,
+->Error : Symbol(DiagnosticCategory.Error, Decl(f.ts, 1, 12))
++>Error : Symbol(Error, Decl(f.ts, 1, 12))
+ 
+     Suggestion,
+->Suggestion : Symbol(DiagnosticCategory.Suggestion, Decl(f.ts, 2, 10))
++>Suggestion : Symbol(Suggestion, Decl(f.ts, 2, 10))
+ 
+     Message,
+->Message : Symbol(DiagnosticCategory.Message, Decl(f.ts, 3, 15))
++>Message : Symbol(Message, Decl(f.ts, 3, 15))
+ }
+ 
+ export let x: DiagnosticCategory;
+@@= skipped -21, +21 lines =@@
+ >DiagnosticCategory : Symbol(DiagnosticCategory, Decl(f.ts, 9, 8))
+ 
+         Warning = "Warning",
+->Warning : Symbol(DiagnosticCategory.Warning, Decl(f.ts, 10, 29))
++>Warning : Symbol(Warning, Decl(f.ts, 10, 29))
+ 
+         Error = "Error",
+->Error : Symbol(DiagnosticCategory.Error, Decl(f.ts, 11, 28))
++>Error : Symbol(Error, Decl(f.ts, 11, 28))
+ 
+         Suggestion = "Suggestion",
+->Suggestion : Symbol(DiagnosticCategory.Suggestion, Decl(f.ts, 12, 24))
++>Suggestion : Symbol(Suggestion, Decl(f.ts, 12, 24))
+ 
+         Message = "Message",
+->Message : Symbol(DiagnosticCategory.Message, Decl(f.ts, 13, 34))
++>Message : Symbol(Message, Decl(f.ts, 13, 34))
+     }
+     function f(y: DiagnosticCategory) {
+ >f : Symbol(f, Decl(f.ts, 15, 5))

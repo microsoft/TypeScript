@@ -1,0 +1,10 @@
+--- old.typeParametersInStaticProperties.symbols
++++ new.typeParametersInStaticProperties.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(typeParametersInStaticProperties.ts, 0, 10))
+ 
+     static P: T;
+->P : Symbol(foo.P, Decl(typeParametersInStaticProperties.ts, 0, 14))
++>P : Symbol(P, Decl(typeParametersInStaticProperties.ts, 0, 14))
+ >T : Symbol(T)
+ } 

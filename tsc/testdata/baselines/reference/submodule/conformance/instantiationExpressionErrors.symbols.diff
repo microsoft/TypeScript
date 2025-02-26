@@ -1,0 +1,90 @@
+--- old.instantiationExpressionErrors.symbols
++++ new.instantiationExpressionErrors.symbols
+@@= skipped -200, +200 lines =@@
+ >C1 : Symbol(C1, Decl(instantiationExpressionErrors.ts, 76, 10))
+ 
+     static specialFoo = f<string>
+->specialFoo : Symbol(C1.specialFoo, Decl(instantiationExpressionErrors.ts, 78, 10))
++>specialFoo : Symbol(specialFoo, Decl(instantiationExpressionErrors.ts, 78, 10))
+ >f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+ 
+     static bar = 123
+->bar : Symbol(C1.bar, Decl(instantiationExpressionErrors.ts, 79, 33))
++>bar : Symbol(bar, Decl(instantiationExpressionErrors.ts, 79, 33))
+ }
+ 
+ class C2 {
+ >C2 : Symbol(C2, Decl(instantiationExpressionErrors.ts, 81, 1))
+ 
+     public specialFoo = f<string>
+->specialFoo : Symbol(C2.specialFoo, Decl(instantiationExpressionErrors.ts, 83, 10))
++>specialFoo : Symbol(specialFoo, Decl(instantiationExpressionErrors.ts, 83, 10))
+ >f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+ 
+     public bar = 123
+->bar : Symbol(C2.bar, Decl(instantiationExpressionErrors.ts, 84, 33))
++>bar : Symbol(bar, Decl(instantiationExpressionErrors.ts, 84, 33))
+ }
+ 
+ class C3 {
+ >C3 : Symbol(C3, Decl(instantiationExpressionErrors.ts, 86, 1))
+ 
+     private specialFoo = f<string>
+->specialFoo : Symbol(C3.specialFoo, Decl(instantiationExpressionErrors.ts, 88, 10))
++>specialFoo : Symbol(specialFoo, Decl(instantiationExpressionErrors.ts, 88, 10))
+ >f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+ 
+     private bar = 123
+->bar : Symbol(C3.bar, Decl(instantiationExpressionErrors.ts, 89, 34))
++>bar : Symbol(bar, Decl(instantiationExpressionErrors.ts, 89, 34))
+ }
+ 
+ class C4 {
+ >C4 : Symbol(C4, Decl(instantiationExpressionErrors.ts, 91, 1))
+ 
+     protected specialFoo = f<string>
+->specialFoo : Symbol(C4.specialFoo, Decl(instantiationExpressionErrors.ts, 93, 10))
++>specialFoo : Symbol(specialFoo, Decl(instantiationExpressionErrors.ts, 93, 10))
+ >f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+ 
+     protected bar = 123
+->bar : Symbol(C4.bar, Decl(instantiationExpressionErrors.ts, 94, 36))
++>bar : Symbol(bar, Decl(instantiationExpressionErrors.ts, 94, 36))
+ }
+ 
+ // Repro from #49551
+ 
+ const enum MyVer { v1 = 1, v2 = 2 }
+ >MyVer : Symbol(MyVer, Decl(instantiationExpressionErrors.ts, 96, 1))
+->v1 : Symbol(MyVer.v1, Decl(instantiationExpressionErrors.ts, 100, 18))
+->v2 : Symbol(MyVer.v2, Decl(instantiationExpressionErrors.ts, 100, 26))
++>v1 : Symbol(v1, Decl(instantiationExpressionErrors.ts, 100, 18))
++>v2 : Symbol(v2, Decl(instantiationExpressionErrors.ts, 100, 26))
+ 
+ let ver = 21
+ >ver : Symbol(ver, Decl(instantiationExpressionErrors.ts, 101, 3))
+@@= skipped -53, +53 lines =@@
+ const a = ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2)
+ >a : Symbol(a, Decl(instantiationExpressionErrors.ts, 102, 5))
+ >ver : Symbol(ver, Decl(instantiationExpressionErrors.ts, 101, 3))
+->MyVer.v1 : Symbol(MyVer.v1, Decl(instantiationExpressionErrors.ts, 100, 18))
++>MyVer.v1 : Symbol(v1, Decl(instantiationExpressionErrors.ts, 100, 18))
+ >MyVer : Symbol(MyVer, Decl(instantiationExpressionErrors.ts, 96, 1))
+->v1 : Symbol(MyVer.v1, Decl(instantiationExpressionErrors.ts, 100, 18))
+->MyVer.v2 : Symbol(MyVer.v2, Decl(instantiationExpressionErrors.ts, 100, 26))
++>v1 : Symbol(v1, Decl(instantiationExpressionErrors.ts, 100, 18))
++>MyVer.v2 : Symbol(v2, Decl(instantiationExpressionErrors.ts, 100, 26))
+ >MyVer : Symbol(MyVer, Decl(instantiationExpressionErrors.ts, 96, 1))
+->v2 : Symbol(MyVer.v2, Decl(instantiationExpressionErrors.ts, 100, 26))
+->MyVer.v1 : Symbol(MyVer.v1, Decl(instantiationExpressionErrors.ts, 100, 18))
++>v2 : Symbol(v2, Decl(instantiationExpressionErrors.ts, 100, 26))
++>MyVer.v1 : Symbol(v1, Decl(instantiationExpressionErrors.ts, 100, 18))
+ >MyVer : Symbol(MyVer, Decl(instantiationExpressionErrors.ts, 96, 1))
+->v1 : Symbol(MyVer.v1, Decl(instantiationExpressionErrors.ts, 100, 18))
+->MyVer.v2 : Symbol(MyVer.v2, Decl(instantiationExpressionErrors.ts, 100, 26))
++>v1 : Symbol(v1, Decl(instantiationExpressionErrors.ts, 100, 18))
++>MyVer.v2 : Symbol(v2, Decl(instantiationExpressionErrors.ts, 100, 26))
+ >MyVer : Symbol(MyVer, Decl(instantiationExpressionErrors.ts, 96, 1))
+->v2 : Symbol(MyVer.v2, Decl(instantiationExpressionErrors.ts, 100, 26))
++>v2 : Symbol(v2, Decl(instantiationExpressionErrors.ts, 100, 26))
+ 

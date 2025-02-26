@@ -1,0 +1,11 @@
+--- old.primtiveTypesAreIdentical.symbols
++++ new.primtiveTypesAreIdentical.symbols
+@@= skipped -68, +68 lines =@@
+ 
+ enum E { A }
+ >E : Symbol(E, Decl(primtiveTypesAreIdentical.ts, 21, 25))
+->A : Symbol(E.A, Decl(primtiveTypesAreIdentical.ts, 23, 8))
++>A : Symbol(A, Decl(primtiveTypesAreIdentical.ts, 23, 8))
+ 
+ function foo6(x: E);
+ >foo6 : Symbol(foo6, Decl(primtiveTypesAreIdentical.ts, 23, 12), Decl(primtiveTypesAreIdentical.ts, 24, 20), Decl(primtiveTypesAreIdentical.ts, 25, 20))

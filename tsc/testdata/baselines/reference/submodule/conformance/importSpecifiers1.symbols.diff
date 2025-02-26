@@ -1,0 +1,34 @@
+--- old.importSpecifiers1.symbols
++++ new.importSpecifiers1.symbols
+@@= skipped -24, +24 lines =@@
+ 
+ === /b.ts ===
+ import { type as as } from "./mod.js";
+->type : Symbol(as, Decl(mod.ts, 1, 12))
++>type : Symbol(type, Decl(mod.ts, 1, 12))
+ >as : Symbol(as, Decl(b.ts, 0, 8))
+ 
+ type; // Error (cannot resolve name)
+@@= skipped -24, +24 lines =@@
+ 
+ === /e.ts ===
+ import { type type as as } from "./mod.js";
+->type : Symbol(as, Decl(mod.ts, 1, 12))
++>type : Symbol(type, Decl(mod.ts, 1, 12))
+ >as : Symbol(as, Decl(e.ts, 0, 8))
+ 
+ import { type as type } from "./mod.js";
+->type : Symbol(as, Decl(mod.ts, 1, 12))
++>type : Symbol(type, Decl(mod.ts, 1, 12))
+ >type : Symbol(type, Decl(e.ts, 1, 8))
+ 
+ type;
+@@= skipped -18, +18 lines =@@
+ >import : Symbol(import, Decl(f.ts, 0, 8))
+ 
+ import { type as export } from "./mod.js"; // Error
+->type : Symbol(export, Decl(mod.ts, 1, 12))
++>type : Symbol(type, Decl(mod.ts, 1, 12))
+ >export : Symbol(export, Decl(f.ts, 1, 8))
+ 
+ import { type as as export } from "./mod.js"; // Error

@@ -1,0 +1,14 @@
+--- old.narrowByClauseExpressionInSwitchTrue1.symbols
++++ new.narrowByClauseExpressionInSwitchTrue1.symbols
+@@= skipped -93, +93 lines =@@
+ >x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue1.ts, 31, 3))
+ 
+     x.trim();
+->x.trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
++>x.trim : Symbol(trim, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue1.ts, 31, 3))
+->trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
++>trim : Symbol(trim, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ type SomeType = { type: "SomeType" };

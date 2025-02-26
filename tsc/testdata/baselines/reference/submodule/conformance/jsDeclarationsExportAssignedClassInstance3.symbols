@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedClassInstance3.ts] ////
+
+=== index.js ===
+class Foo {
+>Foo : Symbol(Foo, Decl(index.js, 0, 0))
+
+    static stat = 10;
+>stat : Symbol(stat, Decl(index.js, 0, 11))
+
+    member = 10;
+>member : Symbol(member, Decl(index.js, 1, 21))
+}
+
+module.exports = new Foo();
+>Foo : Symbol(Foo, Decl(index.js, 0, 0))
+
+module.exports.additional = 20;

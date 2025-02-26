@@ -1,0 +1,10 @@
+--- old.importsInAmbientModules3.symbols
++++ new.importsInAmbientModules3.symbols
+@@= skipped -6, +6 lines =@@
+     import C = require("external");
+ >C : Symbol(C, Decl(main.ts, 0, 20))
+ }
+-=== external.d.ts ===
+-export default class C {}
+->C : Symbol(C, Decl(external.d.ts, 0, 0))
+-

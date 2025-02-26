@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/declarationEmitFunctionKeywordProp.ts] ////
+
+=== declarationEmitFunctionKeywordProp.ts ===
+function foo() {}
+>foo : Symbol(foo, Decl(declarationEmitFunctionKeywordProp.ts, 0, 0))
+
+foo.null = true;
+>foo.null : Symbol(null, Decl(declarationEmitFunctionKeywordProp.ts, 0, 17))
+>foo : Symbol(foo, Decl(declarationEmitFunctionKeywordProp.ts, 0, 0))
+>null : Symbol(null, Decl(declarationEmitFunctionKeywordProp.ts, 0, 17))
+
+function bar() {}
+>bar : Symbol(bar, Decl(declarationEmitFunctionKeywordProp.ts, 1, 16))
+
+bar.async = true;
+>bar.async : Symbol(async, Decl(declarationEmitFunctionKeywordProp.ts, 3, 17))
+>bar : Symbol(bar, Decl(declarationEmitFunctionKeywordProp.ts, 1, 16))
+>async : Symbol(async, Decl(declarationEmitFunctionKeywordProp.ts, 3, 17))
+
+bar.normal = false;
+>bar.normal : Symbol(normal, Decl(declarationEmitFunctionKeywordProp.ts, 4, 17))
+>bar : Symbol(bar, Decl(declarationEmitFunctionKeywordProp.ts, 1, 16))
+>normal : Symbol(normal, Decl(declarationEmitFunctionKeywordProp.ts, 4, 17))
+
+function baz() {}
+>baz : Symbol(baz, Decl(declarationEmitFunctionKeywordProp.ts, 5, 19))
+
+baz.class = true;
+>baz.class : Symbol(class, Decl(declarationEmitFunctionKeywordProp.ts, 7, 17))
+>baz : Symbol(baz, Decl(declarationEmitFunctionKeywordProp.ts, 5, 19))
+>class : Symbol(class, Decl(declarationEmitFunctionKeywordProp.ts, 7, 17))
+
+baz.normal = false;
+>baz.normal : Symbol(normal, Decl(declarationEmitFunctionKeywordProp.ts, 8, 17))
+>baz : Symbol(baz, Decl(declarationEmitFunctionKeywordProp.ts, 5, 19))
+>normal : Symbol(normal, Decl(declarationEmitFunctionKeywordProp.ts, 8, 17))
+

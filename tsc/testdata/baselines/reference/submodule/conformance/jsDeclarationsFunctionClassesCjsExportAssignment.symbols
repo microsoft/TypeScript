@@ -1,0 +1,101 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionClassesCjsExportAssignment.ts] ////
+
+=== timer.js ===
+/**
+ * @param {number} timeout
+ */
+function Timer(timeout) {
+>Timer : Symbol(Timer, Decl(timer.js, 0, 0))
+>timeout : Symbol(timeout, Decl(timer.js, 3, 15))
+
+    this.timeout = timeout;
+>timeout : Symbol(timeout, Decl(timer.js, 3, 15))
+}
+module.exports = Timer;
+>Timer : Symbol(Timer, Decl(timer.js, 0, 0))
+
+=== hook.js ===
+/**
+ * @typedef {(arg: import("./context")) => void} HookHandler
+ */
+/**
+ * @param {HookHandler} handle
+ */
+function Hook(handle) {
+>Hook : Symbol(Hook, Decl(hook.js, 0, 0))
+>handle : Symbol(handle, Decl(hook.js, 6, 14))
+
+    this.handle = handle;
+>handle : Symbol(handle, Decl(hook.js, 6, 14))
+}
+module.exports = Hook;
+>Hook : Symbol(Hook, Decl(hook.js, 0, 0))
+
+=== context.js ===
+/**
+ * Imports
+ *
+ * @typedef {import("./timer")} Timer
+ * @typedef {import("./hook")} Hook
+ * @typedef {import("./hook").HookHandler} HookHandler
+ */
+
+/**
+ * Input type definition
+ *
+ * @typedef {Object} Input
+ * @prop {Timer} timer
+ * @prop {Hook} hook
+ */
+ 
+/**
+ * State type definition
+ *
+ * @typedef {Object} State
+ * @prop {Timer} timer
+ * @prop {Hook} hook
+ */
+
+/**
+ * New `Context`
+ *
+ * @class
+ * @param {Input} input
+ */
+
+function Context(input) {
+>Context : Symbol(Context, Decl(context.js, 0, 0))
+>input : Symbol(input, Decl(context.js, 31, 17))
+
+    if (!(this instanceof Context)) {
+>Context : Symbol(Context, Decl(context.js, 0, 0))
+
+      return new Context(input)
+>Context : Symbol(Context, Decl(context.js, 0, 0))
+>input : Symbol(input, Decl(context.js, 31, 17))
+    }
+    this.state = this.construct(input);
+>input : Symbol(input, Decl(context.js, 31, 17))
+}
+Context.prototype = {
+>Context.prototype : Symbol(prototype, Decl(context.js, 36, 1))
+>Context : Symbol(Context, Decl(context.js, 0, 0))
+>prototype : Symbol(prototype, Decl(context.js, 36, 1))
+
+    /**
+     * @param {Input} input
+     * @param {HookHandler=} handle
+     * @returns {State}
+     */
+    construct(input, handle = () => void 0) {
+>construct : Symbol(construct, Decl(context.js, 37, 21))
+>input : Symbol(input, Decl(context.js, 43, 14))
+>handle : Symbol(handle, Decl(context.js, 43, 20))
+
+        return input;
+>input : Symbol(input, Decl(context.js, 43, 14))
+    }
+}
+module.exports = Context;
+>Context : Symbol(Context, Decl(context.js, 0, 0))
+

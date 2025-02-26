@@ -1,0 +1,54 @@
+--- old.nodeModulesJson.symbols
++++ new.nodeModulesJson.symbols
+@@= skipped -4, +4 lines =@@
+ >oops : Symbol(oops, Decl(index.d.ts, 0, 0))
+ >json : Symbol(json, Decl(index.d.ts, 0, 21))
+ 
+-=== /node_modules/actually-json/index.json ===
+-
+-{}
+-
+ === /node_modules/actually-json/typed.d.json.ts ===
+ declare const _default: {};
+ >_default : Symbol(_default, Decl(typed.d.json.ts, 0, 13))
+@@= skipped -11, +7 lines =@@
+ export default _default;
+ >_default : Symbol(_default, Decl(typed.d.json.ts, 0, 13))
+ 
+-=== /config.json ===
+-{
+-  "version": 1
+->"version" : Symbol("version", Decl(config.json, 0, 1))
+-}
+-
+ === /main.mts ===
+ import { oops } from "not.json"; // Ok
+ >oops : Symbol(oops, Decl(main.mts, 0, 8))
+@@= skipped -20, +14 lines =@@
+ >config : Symbol(config, Decl(main.mts, 4, 6))
+ 
+ import { default as config1 } from "./config.json" with { type: "json" }; // Ok
+->default : Symbol(config, Decl(config.json, 0, 0))
+ >config1 : Symbol(config1, Decl(main.mts, 5, 8))
+ 
+ import config2 from "./config.json"; // Error, no attribute
+@@= skipped -16, +15 lines =@@
+ >config3 : Symbol(config3, Decl(main.mts, 8, 6))
+ 
+ config3.default; // Ok
+->config3.default : Symbol("/config")
+ >config3 : Symbol(config3, Decl(main.mts, 8, 6))
+->default : Symbol("/config")
+ 
+ === /loosey.cts ===
+ import config from "./config.json" with { type: "json" }; // Error
+@@= skipped -18, +16 lines =@@
+ >config3 : Symbol(config3, Decl(loosey.cts, 3, 6))
+ 
+ config3.version; // Ok
+->config3.version : Symbol(version, Decl(config.json, 0, 1))
+ >config3 : Symbol(config3, Decl(loosey.cts, 3, 6))
+->version : Symbol(version, Decl(config.json, 0, 1))
+ 
+ config3.default; // Error
+ >config3 : Symbol(config3, Decl(loosey.cts, 3, 6))

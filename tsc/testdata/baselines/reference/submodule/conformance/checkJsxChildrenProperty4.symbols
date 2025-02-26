@@ -1,0 +1,94 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty4.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+interface IUser {
+>IUser : Symbol(IUser, Decl(file.tsx, 0, 32))
+
+    Name: string;
+>Name : Symbol(Name, Decl(file.tsx, 2, 17))
+}
+
+interface IFetchUserProps {
+>IFetchUserProps : Symbol(IFetchUserProps, Decl(file.tsx, 4, 1))
+
+    children: (user: IUser) => JSX.Element;
+>children : Symbol(children, Decl(file.tsx, 6, 27))
+>user : Symbol(user, Decl(file.tsx, 7, 15))
+>IUser : Symbol(IUser, Decl(file.tsx, 0, 32))
+>JSX : Symbol(JSX)
+>Element : Symbol(Element)
+}
+
+class FetchUser extends React.Component<IFetchUserProps, any> {
+>FetchUser : Symbol(FetchUser, Decl(file.tsx, 8, 1))
+>React.Component : Symbol(unknown)
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(unknown)
+>IFetchUserProps : Symbol(IFetchUserProps, Decl(file.tsx, 4, 1))
+
+    render() {
+>render : Symbol(render, Decl(file.tsx, 10, 63))
+
+        return this.state
+>this : Symbol(FetchUser, Decl(file.tsx, 8, 1))
+
+            ? this.props.children(this.state.result)
+>this : Symbol(FetchUser, Decl(file.tsx, 8, 1))
+>this : Symbol(FetchUser, Decl(file.tsx, 8, 1))
+
+            : null;
+    }
+}
+
+// Error
+function UserName() {
+>UserName : Symbol(UserName, Decl(file.tsx, 16, 1))
+
+    return (
+        <FetchUser>
+>FetchUser : Symbol(FetchUser, Decl(file.tsx, 8, 1))
+
+            { user => (
+>user : Symbol(user, Decl(file.tsx, 22, 13))
+
+                <h1>{ user.NAme }</h1>
+>user : Symbol(user, Decl(file.tsx, 22, 13))
+
+            ) }
+        </FetchUser>
+>FetchUser : Symbol(FetchUser, Decl(file.tsx, 8, 1))
+
+    );
+}
+
+function UserName1() {
+>UserName1 : Symbol(UserName1, Decl(file.tsx, 27, 1))
+
+    return (
+        <FetchUser>
+>FetchUser : Symbol(FetchUser, Decl(file.tsx, 8, 1))
+
+
+            
+            { user => (
+>user : Symbol(user, Decl(file.tsx, 35, 13))
+
+                <h1>{ user.Name }</h1>
+>user : Symbol(user, Decl(file.tsx, 35, 13))
+
+            ) }
+            { user => (
+>user : Symbol(user, Decl(file.tsx, 38, 13))
+
+                <h1>{ user.Name }</h1>
+>user : Symbol(user, Decl(file.tsx, 38, 13))
+
+            ) }
+        </FetchUser>
+>FetchUser : Symbol(FetchUser, Decl(file.tsx, 8, 1))
+
+    );
+}

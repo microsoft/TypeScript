@@ -1,0 +1,14 @@
+--- old.externalModuleReferenceOfImportDeclarationWithExportModifier.symbols
++++ new.externalModuleReferenceOfImportDeclarationWithExportModifier.symbols
+@@= skipped -4, +4 lines =@@
+ >file1 : Symbol(file1, Decl(externalModuleReferenceOfImportDeclarationWithExportModifier_1.ts, 0, 0))
+ 
+ file1.foo();
+->file1.foo : Symbol(file1.foo, Decl(externalModuleReferenceOfImportDeclarationWithExportModifier_0.ts, 0, 0))
+ >file1 : Symbol(file1, Decl(externalModuleReferenceOfImportDeclarationWithExportModifier_1.ts, 0, 0))
+->foo : Symbol(file1.foo, Decl(externalModuleReferenceOfImportDeclarationWithExportModifier_0.ts, 0, 0))
+ 
+-=== externalModuleReferenceOfImportDeclarationWithExportModifier_0.ts ===
+-export function foo() { };
+->foo : Symbol(foo, Decl(externalModuleReferenceOfImportDeclarationWithExportModifier_0.ts, 0, 0))
+-

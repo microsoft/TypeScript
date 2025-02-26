@@ -1,0 +1,410 @@
+--- old.privacyImport.symbols
++++ new.privacyImport.symbols
+@@= skipped -67, +67 lines =@@
+ 
+     export var m1_im1_private_v1_public = m1_im1_private.c1;
+ >m1_im1_private_v1_public : Symbol(m1_im1_private_v1_public, Decl(privacyImport.ts, 38, 14))
+->m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImport.ts, 1, 32))
++>m1_im1_private.c1 : Symbol(c1, Decl(privacyImport.ts, 1, 32))
+ >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImport.ts, 19, 5))
+->c1 : Symbol(m1_im1_private.c1, Decl(privacyImport.ts, 1, 32))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 1, 32))
+ 
+     export var m1_im1_private_v2_public = new m1_im1_private.c1();
+ >m1_im1_private_v2_public : Symbol(m1_im1_private_v2_public, Decl(privacyImport.ts, 39, 14))
+->m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImport.ts, 1, 32))
++>m1_im1_private.c1 : Symbol(c1, Decl(privacyImport.ts, 1, 32))
+ >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImport.ts, 19, 5))
+->c1 : Symbol(m1_im1_private.c1, Decl(privacyImport.ts, 1, 32))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 1, 32))
+ 
+     export var m1_im1_private_v3_public = m1_im1_private.f1;
+ >m1_im1_private_v3_public : Symbol(m1_im1_private_v3_public, Decl(privacyImport.ts, 40, 14))
+->m1_im1_private.f1 : Symbol(m1_im1_private.f1, Decl(privacyImport.ts, 3, 9))
++>m1_im1_private.f1 : Symbol(f1, Decl(privacyImport.ts, 3, 9))
+ >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImport.ts, 19, 5))
+->f1 : Symbol(m1_im1_private.f1, Decl(privacyImport.ts, 3, 9))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 3, 9))
+ 
+     export var m1_im1_private_v4_public = m1_im1_private.f1();
+ >m1_im1_private_v4_public : Symbol(m1_im1_private_v4_public, Decl(privacyImport.ts, 41, 14))
+->m1_im1_private.f1 : Symbol(m1_im1_private.f1, Decl(privacyImport.ts, 3, 9))
++>m1_im1_private.f1 : Symbol(f1, Decl(privacyImport.ts, 3, 9))
+ >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImport.ts, 19, 5))
+->f1 : Symbol(m1_im1_private.f1, Decl(privacyImport.ts, 3, 9))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 3, 9))
+ 
+     var m1_im1_private_v1_private = m1_im1_private.c1;
+ >m1_im1_private_v1_private : Symbol(m1_im1_private_v1_private, Decl(privacyImport.ts, 42, 7))
+->m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImport.ts, 1, 32))
++>m1_im1_private.c1 : Symbol(c1, Decl(privacyImport.ts, 1, 32))
+ >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImport.ts, 19, 5))
+->c1 : Symbol(m1_im1_private.c1, Decl(privacyImport.ts, 1, 32))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 1, 32))
+ 
+     var m1_im1_private_v2_private = new m1_im1_private.c1();
+ >m1_im1_private_v2_private : Symbol(m1_im1_private_v2_private, Decl(privacyImport.ts, 43, 7))
+->m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImport.ts, 1, 32))
++>m1_im1_private.c1 : Symbol(c1, Decl(privacyImport.ts, 1, 32))
+ >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImport.ts, 19, 5))
+->c1 : Symbol(m1_im1_private.c1, Decl(privacyImport.ts, 1, 32))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 1, 32))
+ 
+     var m1_im1_private_v3_private = m1_im1_private.f1;
+ >m1_im1_private_v3_private : Symbol(m1_im1_private_v3_private, Decl(privacyImport.ts, 44, 7))
+->m1_im1_private.f1 : Symbol(m1_im1_private.f1, Decl(privacyImport.ts, 3, 9))
++>m1_im1_private.f1 : Symbol(f1, Decl(privacyImport.ts, 3, 9))
+ >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImport.ts, 19, 5))
+->f1 : Symbol(m1_im1_private.f1, Decl(privacyImport.ts, 3, 9))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 3, 9))
+ 
+     var m1_im1_private_v4_private = m1_im1_private.f1();
+ >m1_im1_private_v4_private : Symbol(m1_im1_private_v4_private, Decl(privacyImport.ts, 45, 7))
+->m1_im1_private.f1 : Symbol(m1_im1_private.f1, Decl(privacyImport.ts, 3, 9))
++>m1_im1_private.f1 : Symbol(f1, Decl(privacyImport.ts, 3, 9))
+ >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImport.ts, 19, 5))
+->f1 : Symbol(m1_im1_private.f1, Decl(privacyImport.ts, 3, 9))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 3, 9))
+ 
+ 
+     import m1_im2_private = m1_M2_private;
+@@= skipped -53, +53 lines =@@
+ 
+     export var m1_im2_private_v1_public = m1_im2_private.c1;
+ >m1_im2_private_v1_public : Symbol(m1_im2_private_v1_public, Decl(privacyImport.ts, 49, 14))
+->m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImport.ts, 11, 26))
++>m1_im2_private.c1 : Symbol(c1, Decl(privacyImport.ts, 11, 26))
+ >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImport.ts, 45, 56))
+->c1 : Symbol(m1_im2_private.c1, Decl(privacyImport.ts, 11, 26))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 11, 26))
+ 
+     export var m1_im2_private_v2_public = new m1_im2_private.c1();
+ >m1_im2_private_v2_public : Symbol(m1_im2_private_v2_public, Decl(privacyImport.ts, 50, 14))
+->m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImport.ts, 11, 26))
++>m1_im2_private.c1 : Symbol(c1, Decl(privacyImport.ts, 11, 26))
+ >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImport.ts, 45, 56))
+->c1 : Symbol(m1_im2_private.c1, Decl(privacyImport.ts, 11, 26))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 11, 26))
+ 
+     export var m1_im2_private_v3_public = m1_im2_private.f1;
+ >m1_im2_private_v3_public : Symbol(m1_im2_private_v3_public, Decl(privacyImport.ts, 51, 14))
+->m1_im2_private.f1 : Symbol(m1_im2_private.f1, Decl(privacyImport.ts, 13, 9))
++>m1_im2_private.f1 : Symbol(f1, Decl(privacyImport.ts, 13, 9))
+ >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImport.ts, 45, 56))
+->f1 : Symbol(m1_im2_private.f1, Decl(privacyImport.ts, 13, 9))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 13, 9))
+ 
+     export var m1_im2_private_v4_public = m1_im2_private.f1();
+ >m1_im2_private_v4_public : Symbol(m1_im2_private_v4_public, Decl(privacyImport.ts, 52, 14))
+->m1_im2_private.f1 : Symbol(m1_im2_private.f1, Decl(privacyImport.ts, 13, 9))
++>m1_im2_private.f1 : Symbol(f1, Decl(privacyImport.ts, 13, 9))
+ >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImport.ts, 45, 56))
+->f1 : Symbol(m1_im2_private.f1, Decl(privacyImport.ts, 13, 9))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 13, 9))
+ 
+     var m1_im2_private_v1_private = m1_im2_private.c1;
+ >m1_im2_private_v1_private : Symbol(m1_im2_private_v1_private, Decl(privacyImport.ts, 53, 7))
+->m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImport.ts, 11, 26))
++>m1_im2_private.c1 : Symbol(c1, Decl(privacyImport.ts, 11, 26))
+ >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImport.ts, 45, 56))
+->c1 : Symbol(m1_im2_private.c1, Decl(privacyImport.ts, 11, 26))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 11, 26))
+ 
+     var m1_im2_private_v2_private = new m1_im2_private.c1();
+ >m1_im2_private_v2_private : Symbol(m1_im2_private_v2_private, Decl(privacyImport.ts, 54, 7))
+->m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImport.ts, 11, 26))
++>m1_im2_private.c1 : Symbol(c1, Decl(privacyImport.ts, 11, 26))
+ >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImport.ts, 45, 56))
+->c1 : Symbol(m1_im2_private.c1, Decl(privacyImport.ts, 11, 26))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 11, 26))
+ 
+     var m1_im2_private_v3_private = m1_im2_private.f1;
+ >m1_im2_private_v3_private : Symbol(m1_im2_private_v3_private, Decl(privacyImport.ts, 55, 7))
+->m1_im2_private.f1 : Symbol(m1_im2_private.f1, Decl(privacyImport.ts, 13, 9))
++>m1_im2_private.f1 : Symbol(f1, Decl(privacyImport.ts, 13, 9))
+ >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImport.ts, 45, 56))
+->f1 : Symbol(m1_im2_private.f1, Decl(privacyImport.ts, 13, 9))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 13, 9))
+ 
+     var m1_im2_private_v4_private = m1_im2_private.f1();
+ >m1_im2_private_v4_private : Symbol(m1_im2_private_v4_private, Decl(privacyImport.ts, 56, 7))
+->m1_im2_private.f1 : Symbol(m1_im2_private.f1, Decl(privacyImport.ts, 13, 9))
++>m1_im2_private.f1 : Symbol(f1, Decl(privacyImport.ts, 13, 9))
+ >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImport.ts, 45, 56))
+->f1 : Symbol(m1_im2_private.f1, Decl(privacyImport.ts, 13, 9))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 13, 9))
+ 
+     //import m1_im3_private = require("m1_M3_public");
+     //export var m1_im3_private_v1_public = m1_im3_private.c1;
+@@= skipped -145, +145 lines =@@
+ 
+     export var m1_im1_private_v1_public = m1_im1_private.c1;
+ >m1_im1_private_v1_public : Symbol(m1_im1_private_v1_public, Decl(privacyImport.ts, 122, 14))
+->m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImport.ts, 85, 32))
++>m1_im1_private.c1 : Symbol(c1, Decl(privacyImport.ts, 85, 32))
+ >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImport.ts, 103, 5))
+->c1 : Symbol(m1_im1_private.c1, Decl(privacyImport.ts, 85, 32))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 85, 32))
+ 
+     export var m1_im1_private_v2_public = new m1_im1_private.c1();
+ >m1_im1_private_v2_public : Symbol(m1_im1_private_v2_public, Decl(privacyImport.ts, 123, 14))
+->m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImport.ts, 85, 32))
++>m1_im1_private.c1 : Symbol(c1, Decl(privacyImport.ts, 85, 32))
+ >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImport.ts, 103, 5))
+->c1 : Symbol(m1_im1_private.c1, Decl(privacyImport.ts, 85, 32))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 85, 32))
+ 
+     export var m1_im1_private_v3_public = m1_im1_private.f1;
+ >m1_im1_private_v3_public : Symbol(m1_im1_private_v3_public, Decl(privacyImport.ts, 124, 14))
+->m1_im1_private.f1 : Symbol(m1_im1_private.f1, Decl(privacyImport.ts, 87, 9))
++>m1_im1_private.f1 : Symbol(f1, Decl(privacyImport.ts, 87, 9))
+ >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImport.ts, 103, 5))
+->f1 : Symbol(m1_im1_private.f1, Decl(privacyImport.ts, 87, 9))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 87, 9))
+ 
+     export var m1_im1_private_v4_public = m1_im1_private.f1();
+ >m1_im1_private_v4_public : Symbol(m1_im1_private_v4_public, Decl(privacyImport.ts, 125, 14))
+->m1_im1_private.f1 : Symbol(m1_im1_private.f1, Decl(privacyImport.ts, 87, 9))
++>m1_im1_private.f1 : Symbol(f1, Decl(privacyImport.ts, 87, 9))
+ >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImport.ts, 103, 5))
+->f1 : Symbol(m1_im1_private.f1, Decl(privacyImport.ts, 87, 9))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 87, 9))
+ 
+     var m1_im1_private_v1_private = m1_im1_private.c1;
+ >m1_im1_private_v1_private : Symbol(m1_im1_private_v1_private, Decl(privacyImport.ts, 126, 7))
+->m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImport.ts, 85, 32))
++>m1_im1_private.c1 : Symbol(c1, Decl(privacyImport.ts, 85, 32))
+ >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImport.ts, 103, 5))
+->c1 : Symbol(m1_im1_private.c1, Decl(privacyImport.ts, 85, 32))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 85, 32))
+ 
+     var m1_im1_private_v2_private = new m1_im1_private.c1();
+ >m1_im1_private_v2_private : Symbol(m1_im1_private_v2_private, Decl(privacyImport.ts, 127, 7))
+->m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImport.ts, 85, 32))
++>m1_im1_private.c1 : Symbol(c1, Decl(privacyImport.ts, 85, 32))
+ >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImport.ts, 103, 5))
+->c1 : Symbol(m1_im1_private.c1, Decl(privacyImport.ts, 85, 32))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 85, 32))
+ 
+     var m1_im1_private_v3_private = m1_im1_private.f1;
+ >m1_im1_private_v3_private : Symbol(m1_im1_private_v3_private, Decl(privacyImport.ts, 128, 7))
+->m1_im1_private.f1 : Symbol(m1_im1_private.f1, Decl(privacyImport.ts, 87, 9))
++>m1_im1_private.f1 : Symbol(f1, Decl(privacyImport.ts, 87, 9))
+ >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImport.ts, 103, 5))
+->f1 : Symbol(m1_im1_private.f1, Decl(privacyImport.ts, 87, 9))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 87, 9))
+ 
+     var m1_im1_private_v4_private = m1_im1_private.f1();
+ >m1_im1_private_v4_private : Symbol(m1_im1_private_v4_private, Decl(privacyImport.ts, 129, 7))
+->m1_im1_private.f1 : Symbol(m1_im1_private.f1, Decl(privacyImport.ts, 87, 9))
++>m1_im1_private.f1 : Symbol(f1, Decl(privacyImport.ts, 87, 9))
+ >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImport.ts, 103, 5))
+->f1 : Symbol(m1_im1_private.f1, Decl(privacyImport.ts, 87, 9))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 87, 9))
+ 
+ 
+     import m1_im2_private = m2_M2_private;
+@@= skipped -53, +53 lines =@@
+ 
+     export var m1_im2_private_v1_public = m1_im2_private.c1;
+ >m1_im2_private_v1_public : Symbol(m1_im2_private_v1_public, Decl(privacyImport.ts, 133, 14))
+->m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImport.ts, 95, 26))
++>m1_im2_private.c1 : Symbol(c1, Decl(privacyImport.ts, 95, 26))
+ >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImport.ts, 129, 56))
+->c1 : Symbol(m1_im2_private.c1, Decl(privacyImport.ts, 95, 26))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 95, 26))
+ 
+     export var m1_im2_private_v2_public = new m1_im2_private.c1();
+ >m1_im2_private_v2_public : Symbol(m1_im2_private_v2_public, Decl(privacyImport.ts, 134, 14))
+->m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImport.ts, 95, 26))
++>m1_im2_private.c1 : Symbol(c1, Decl(privacyImport.ts, 95, 26))
+ >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImport.ts, 129, 56))
+->c1 : Symbol(m1_im2_private.c1, Decl(privacyImport.ts, 95, 26))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 95, 26))
+ 
+     export var m1_im2_private_v3_public = m1_im2_private.f1;
+ >m1_im2_private_v3_public : Symbol(m1_im2_private_v3_public, Decl(privacyImport.ts, 135, 14))
+->m1_im2_private.f1 : Symbol(m1_im2_private.f1, Decl(privacyImport.ts, 97, 9))
++>m1_im2_private.f1 : Symbol(f1, Decl(privacyImport.ts, 97, 9))
+ >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImport.ts, 129, 56))
+->f1 : Symbol(m1_im2_private.f1, Decl(privacyImport.ts, 97, 9))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 97, 9))
+ 
+     export var m1_im2_private_v4_public = m1_im2_private.f1();
+ >m1_im2_private_v4_public : Symbol(m1_im2_private_v4_public, Decl(privacyImport.ts, 136, 14))
+->m1_im2_private.f1 : Symbol(m1_im2_private.f1, Decl(privacyImport.ts, 97, 9))
++>m1_im2_private.f1 : Symbol(f1, Decl(privacyImport.ts, 97, 9))
+ >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImport.ts, 129, 56))
+->f1 : Symbol(m1_im2_private.f1, Decl(privacyImport.ts, 97, 9))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 97, 9))
+ 
+     var m1_im2_private_v1_private = m1_im2_private.c1;
+ >m1_im2_private_v1_private : Symbol(m1_im2_private_v1_private, Decl(privacyImport.ts, 137, 7))
+->m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImport.ts, 95, 26))
++>m1_im2_private.c1 : Symbol(c1, Decl(privacyImport.ts, 95, 26))
+ >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImport.ts, 129, 56))
+->c1 : Symbol(m1_im2_private.c1, Decl(privacyImport.ts, 95, 26))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 95, 26))
+ 
+     var m1_im2_private_v2_private = new m1_im2_private.c1();
+ >m1_im2_private_v2_private : Symbol(m1_im2_private_v2_private, Decl(privacyImport.ts, 138, 7))
+->m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImport.ts, 95, 26))
++>m1_im2_private.c1 : Symbol(c1, Decl(privacyImport.ts, 95, 26))
+ >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImport.ts, 129, 56))
+->c1 : Symbol(m1_im2_private.c1, Decl(privacyImport.ts, 95, 26))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 95, 26))
+ 
+     var m1_im2_private_v3_private = m1_im2_private.f1;
+ >m1_im2_private_v3_private : Symbol(m1_im2_private_v3_private, Decl(privacyImport.ts, 139, 7))
+->m1_im2_private.f1 : Symbol(m1_im2_private.f1, Decl(privacyImport.ts, 97, 9))
++>m1_im2_private.f1 : Symbol(f1, Decl(privacyImport.ts, 97, 9))
+ >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImport.ts, 129, 56))
+->f1 : Symbol(m1_im2_private.f1, Decl(privacyImport.ts, 97, 9))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 97, 9))
+ 
+     var m1_im2_private_v4_private = m1_im2_private.f1();
+ >m1_im2_private_v4_private : Symbol(m1_im2_private_v4_private, Decl(privacyImport.ts, 140, 7))
+->m1_im2_private.f1 : Symbol(m1_im2_private.f1, Decl(privacyImport.ts, 97, 9))
++>m1_im2_private.f1 : Symbol(f1, Decl(privacyImport.ts, 97, 9))
+ >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImport.ts, 129, 56))
+->f1 : Symbol(m1_im2_private.f1, Decl(privacyImport.ts, 97, 9))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 97, 9))
+ 
+     //import m1_im3_private = require("m2_M3_public");
+     //export var m1_im3_private_v1_public = m1_im3_private.c1;
+@@= skipped -144, +144 lines =@@
+ 
+ export var glo_im1_private_v1_public = glo_im1_private.c1;
+ >glo_im1_private_v1_public : Symbol(glo_im1_private_v1_public, Decl(privacyImport.ts, 207, 10))
+->glo_im1_private.c1 : Symbol(glo_im1_private.c1, Decl(privacyImport.ts, 169, 29))
++>glo_im1_private.c1 : Symbol(c1, Decl(privacyImport.ts, 169, 29))
+ >glo_im1_private : Symbol(glo_im1_private, Decl(privacyImport.ts, 195, 1))
+->c1 : Symbol(glo_im1_private.c1, Decl(privacyImport.ts, 169, 29))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 169, 29))
+ 
+ export var glo_im1_private_v2_public = new glo_im1_private.c1();
+ >glo_im1_private_v2_public : Symbol(glo_im1_private_v2_public, Decl(privacyImport.ts, 208, 10))
+->glo_im1_private.c1 : Symbol(glo_im1_private.c1, Decl(privacyImport.ts, 169, 29))
++>glo_im1_private.c1 : Symbol(c1, Decl(privacyImport.ts, 169, 29))
+ >glo_im1_private : Symbol(glo_im1_private, Decl(privacyImport.ts, 195, 1))
+->c1 : Symbol(glo_im1_private.c1, Decl(privacyImport.ts, 169, 29))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 169, 29))
+ 
+ export var glo_im1_private_v3_public = glo_im1_private.f1;
+ >glo_im1_private_v3_public : Symbol(glo_im1_private_v3_public, Decl(privacyImport.ts, 209, 10))
+->glo_im1_private.f1 : Symbol(glo_im1_private.f1, Decl(privacyImport.ts, 171, 5))
++>glo_im1_private.f1 : Symbol(f1, Decl(privacyImport.ts, 171, 5))
+ >glo_im1_private : Symbol(glo_im1_private, Decl(privacyImport.ts, 195, 1))
+->f1 : Symbol(glo_im1_private.f1, Decl(privacyImport.ts, 171, 5))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 171, 5))
+ 
+ export var glo_im1_private_v4_public = glo_im1_private.f1();
+ >glo_im1_private_v4_public : Symbol(glo_im1_private_v4_public, Decl(privacyImport.ts, 210, 10))
+->glo_im1_private.f1 : Symbol(glo_im1_private.f1, Decl(privacyImport.ts, 171, 5))
++>glo_im1_private.f1 : Symbol(f1, Decl(privacyImport.ts, 171, 5))
+ >glo_im1_private : Symbol(glo_im1_private, Decl(privacyImport.ts, 195, 1))
+->f1 : Symbol(glo_im1_private.f1, Decl(privacyImport.ts, 171, 5))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 171, 5))
+ 
+ var glo_im1_private_v1_private = glo_im1_private.c1;
+ >glo_im1_private_v1_private : Symbol(glo_im1_private_v1_private, Decl(privacyImport.ts, 211, 3))
+->glo_im1_private.c1 : Symbol(glo_im1_private.c1, Decl(privacyImport.ts, 169, 29))
++>glo_im1_private.c1 : Symbol(c1, Decl(privacyImport.ts, 169, 29))
+ >glo_im1_private : Symbol(glo_im1_private, Decl(privacyImport.ts, 195, 1))
+->c1 : Symbol(glo_im1_private.c1, Decl(privacyImport.ts, 169, 29))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 169, 29))
+ 
+ var glo_im1_private_v2_private = new glo_im1_private.c1();
+ >glo_im1_private_v2_private : Symbol(glo_im1_private_v2_private, Decl(privacyImport.ts, 212, 3))
+->glo_im1_private.c1 : Symbol(glo_im1_private.c1, Decl(privacyImport.ts, 169, 29))
++>glo_im1_private.c1 : Symbol(c1, Decl(privacyImport.ts, 169, 29))
+ >glo_im1_private : Symbol(glo_im1_private, Decl(privacyImport.ts, 195, 1))
+->c1 : Symbol(glo_im1_private.c1, Decl(privacyImport.ts, 169, 29))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 169, 29))
+ 
+ var glo_im1_private_v3_private = glo_im1_private.f1;
+ >glo_im1_private_v3_private : Symbol(glo_im1_private_v3_private, Decl(privacyImport.ts, 213, 3))
+->glo_im1_private.f1 : Symbol(glo_im1_private.f1, Decl(privacyImport.ts, 171, 5))
++>glo_im1_private.f1 : Symbol(f1, Decl(privacyImport.ts, 171, 5))
+ >glo_im1_private : Symbol(glo_im1_private, Decl(privacyImport.ts, 195, 1))
+->f1 : Symbol(glo_im1_private.f1, Decl(privacyImport.ts, 171, 5))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 171, 5))
+ 
+ var glo_im1_private_v4_private = glo_im1_private.f1();
+ >glo_im1_private_v4_private : Symbol(glo_im1_private_v4_private, Decl(privacyImport.ts, 214, 3))
+->glo_im1_private.f1 : Symbol(glo_im1_private.f1, Decl(privacyImport.ts, 171, 5))
++>glo_im1_private.f1 : Symbol(f1, Decl(privacyImport.ts, 171, 5))
+ >glo_im1_private : Symbol(glo_im1_private, Decl(privacyImport.ts, 195, 1))
+->f1 : Symbol(glo_im1_private.f1, Decl(privacyImport.ts, 171, 5))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 171, 5))
+ 
+ 
+ //import glo_im2_private = require("glo_M2_public");
+@@= skipped -63, +63 lines =@@
+ 
+ export var glo_im3_private_v1_public = glo_im3_private.c1;
+ >glo_im3_private_v1_public : Symbol(glo_im3_private_v1_public, Decl(privacyImport.ts, 228, 10))
+->glo_im3_private.c1 : Symbol(glo_im3_private.c1, Decl(privacyImport.ts, 187, 30))
++>glo_im3_private.c1 : Symbol(c1, Decl(privacyImport.ts, 187, 30))
+ >glo_im3_private : Symbol(glo_im3_private, Decl(privacyImport.ts, 214, 54))
+->c1 : Symbol(glo_im3_private.c1, Decl(privacyImport.ts, 187, 30))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 187, 30))
+ 
+ export var glo_im3_private_v2_public = new glo_im3_private.c1();
+ >glo_im3_private_v2_public : Symbol(glo_im3_private_v2_public, Decl(privacyImport.ts, 229, 10))
+->glo_im3_private.c1 : Symbol(glo_im3_private.c1, Decl(privacyImport.ts, 187, 30))
++>glo_im3_private.c1 : Symbol(c1, Decl(privacyImport.ts, 187, 30))
+ >glo_im3_private : Symbol(glo_im3_private, Decl(privacyImport.ts, 214, 54))
+->c1 : Symbol(glo_im3_private.c1, Decl(privacyImport.ts, 187, 30))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 187, 30))
+ 
+ export var glo_im3_private_v3_public = glo_im3_private.f1;
+ >glo_im3_private_v3_public : Symbol(glo_im3_private_v3_public, Decl(privacyImport.ts, 230, 10))
+->glo_im3_private.f1 : Symbol(glo_im3_private.f1, Decl(privacyImport.ts, 189, 5))
++>glo_im3_private.f1 : Symbol(f1, Decl(privacyImport.ts, 189, 5))
+ >glo_im3_private : Symbol(glo_im3_private, Decl(privacyImport.ts, 214, 54))
+->f1 : Symbol(glo_im3_private.f1, Decl(privacyImport.ts, 189, 5))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 189, 5))
+ 
+ export var glo_im3_private_v4_public = glo_im3_private.f1();
+ >glo_im3_private_v4_public : Symbol(glo_im3_private_v4_public, Decl(privacyImport.ts, 231, 10))
+->glo_im3_private.f1 : Symbol(glo_im3_private.f1, Decl(privacyImport.ts, 189, 5))
++>glo_im3_private.f1 : Symbol(f1, Decl(privacyImport.ts, 189, 5))
+ >glo_im3_private : Symbol(glo_im3_private, Decl(privacyImport.ts, 214, 54))
+->f1 : Symbol(glo_im3_private.f1, Decl(privacyImport.ts, 189, 5))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 189, 5))
+ 
+ var glo_im3_private_v1_private = glo_im3_private.c1;
+ >glo_im3_private_v1_private : Symbol(glo_im3_private_v1_private, Decl(privacyImport.ts, 232, 3))
+->glo_im3_private.c1 : Symbol(glo_im3_private.c1, Decl(privacyImport.ts, 187, 30))
++>glo_im3_private.c1 : Symbol(c1, Decl(privacyImport.ts, 187, 30))
+ >glo_im3_private : Symbol(glo_im3_private, Decl(privacyImport.ts, 214, 54))
+->c1 : Symbol(glo_im3_private.c1, Decl(privacyImport.ts, 187, 30))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 187, 30))
+ 
+ var glo_im3_private_v2_private = new glo_im3_private.c1();
+ >glo_im3_private_v2_private : Symbol(glo_im3_private_v2_private, Decl(privacyImport.ts, 233, 3))
+->glo_im3_private.c1 : Symbol(glo_im3_private.c1, Decl(privacyImport.ts, 187, 30))
++>glo_im3_private.c1 : Symbol(c1, Decl(privacyImport.ts, 187, 30))
+ >glo_im3_private : Symbol(glo_im3_private, Decl(privacyImport.ts, 214, 54))
+->c1 : Symbol(glo_im3_private.c1, Decl(privacyImport.ts, 187, 30))
++>c1 : Symbol(c1, Decl(privacyImport.ts, 187, 30))
+ 
+ var glo_im3_private_v3_private = glo_im3_private.f1;
+ >glo_im3_private_v3_private : Symbol(glo_im3_private_v3_private, Decl(privacyImport.ts, 234, 3))
+->glo_im3_private.f1 : Symbol(glo_im3_private.f1, Decl(privacyImport.ts, 189, 5))
++>glo_im3_private.f1 : Symbol(f1, Decl(privacyImport.ts, 189, 5))
+ >glo_im3_private : Symbol(glo_im3_private, Decl(privacyImport.ts, 214, 54))
+->f1 : Symbol(glo_im3_private.f1, Decl(privacyImport.ts, 189, 5))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 189, 5))
+ 
+ var glo_im3_private_v4_private = glo_im3_private.f1();
+ >glo_im3_private_v4_private : Symbol(glo_im3_private_v4_private, Decl(privacyImport.ts, 235, 3))
+->glo_im3_private.f1 : Symbol(glo_im3_private.f1, Decl(privacyImport.ts, 189, 5))
++>glo_im3_private.f1 : Symbol(f1, Decl(privacyImport.ts, 189, 5))
+ >glo_im3_private : Symbol(glo_im3_private, Decl(privacyImport.ts, 214, 54))
+->f1 : Symbol(glo_im3_private.f1, Decl(privacyImport.ts, 189, 5))
++>f1 : Symbol(f1, Decl(privacyImport.ts, 189, 5))
+ 
+ //import glo_im4_private = require("glo_M4_private");
+ //export var glo_im4_private_v1_public = glo_im4_private.c1;

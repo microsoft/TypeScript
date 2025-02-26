@@ -1,0 +1,11 @@
+--- old.augmentedTypesExternalModule1.symbols
++++ new.augmentedTypesExternalModule1.symbols
+@@= skipped -5, +5 lines =@@
+ 
+ class c5 { public foo() { } }
+ >c5 : Symbol(c5, Decl(augmentedTypesExternalModule1.ts, 0, 17), Decl(augmentedTypesExternalModule1.ts, 1, 29))
+->foo : Symbol(c5.foo, Decl(augmentedTypesExternalModule1.ts, 1, 10))
++>foo : Symbol(foo, Decl(augmentedTypesExternalModule1.ts, 1, 10))
+ 
+ module c5 { } // should be ok everywhere
+ >c5 : Symbol(c5, Decl(augmentedTypesExternalModule1.ts, 0, 17), Decl(augmentedTypesExternalModule1.ts, 1, 29))

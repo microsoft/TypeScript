@@ -1,0 +1,63 @@
+--- old.parserErrantSemicolonInClass1.symbols
++++ new.parserErrantSemicolonInClass1.symbols
+@@= skipped -16, +16 lines =@@
+     }
+ 
+     public pgF() { };
+->pgF : Symbol(a.pgF, Decl(parserErrantSemicolonInClass1.ts, 6, 5))
++>pgF : Symbol(pgF, Decl(parserErrantSemicolonInClass1.ts, 6, 5))
+ 
+     public pv;
+->pv : Symbol(a.pv, Decl(parserErrantSemicolonInClass1.ts, 8, 21))
++>pv : Symbol(pv, Decl(parserErrantSemicolonInClass1.ts, 8, 21))
+ 
+     public get d() {
+->d : Symbol(a.d, Decl(parserErrantSemicolonInClass1.ts, 10, 14), Decl(parserErrantSemicolonInClass1.ts, 13, 5))
++>d : Symbol(d, Decl(parserErrantSemicolonInClass1.ts, 10, 14), Decl(parserErrantSemicolonInClass1.ts, 13, 5))
+ 
+         return 30;
+     }
+     public set d() {
+->d : Symbol(a.d, Decl(parserErrantSemicolonInClass1.ts, 10, 14), Decl(parserErrantSemicolonInClass1.ts, 13, 5))
++>d : Symbol(d, Decl(parserErrantSemicolonInClass1.ts, 10, 14), Decl(parserErrantSemicolonInClass1.ts, 13, 5))
+     }
+ 
+     public static get p2() {
+->p2 : Symbol(a.p2, Decl(parserErrantSemicolonInClass1.ts, 15, 5))
++>p2 : Symbol(p2, Decl(parserErrantSemicolonInClass1.ts, 15, 5))
+ 
+         return { x: 30, y: 40 };
+ >x : Symbol(x, Decl(parserErrantSemicolonInClass1.ts, 18, 16))
+@@= skipped -23, +23 lines =@@
+     }
+ 
+     private static d2() {
+->d2 : Symbol(a.d2, Decl(parserErrantSemicolonInClass1.ts, 19, 5))
++>d2 : Symbol(d2, Decl(parserErrantSemicolonInClass1.ts, 19, 5))
+     }
+     private static get p3() {
+->p3 : Symbol(a.p3, Decl(parserErrantSemicolonInClass1.ts, 22, 5))
++>p3 : Symbol(p3, Decl(parserErrantSemicolonInClass1.ts, 22, 5))
+ 
+         return "string";
+     }
+     private pv3;
+->pv3 : Symbol(a.pv3, Decl(parserErrantSemicolonInClass1.ts, 25, 5))
++>pv3 : Symbol(pv3, Decl(parserErrantSemicolonInClass1.ts, 25, 5))
+ 
+     private foo(n: number): string;
+->foo : Symbol(a.foo, Decl(parserErrantSemicolonInClass1.ts, 26, 16), Decl(parserErrantSemicolonInClass1.ts, 28, 35), Decl(parserErrantSemicolonInClass1.ts, 29, 35))
++>foo : Symbol(foo, Decl(parserErrantSemicolonInClass1.ts, 26, 16), Decl(parserErrantSemicolonInClass1.ts, 28, 35), Decl(parserErrantSemicolonInClass1.ts, 29, 35))
+ >n : Symbol(n, Decl(parserErrantSemicolonInClass1.ts, 28, 16))
+ 
+     private foo(s: string): string;
+->foo : Symbol(a.foo, Decl(parserErrantSemicolonInClass1.ts, 26, 16), Decl(parserErrantSemicolonInClass1.ts, 28, 35), Decl(parserErrantSemicolonInClass1.ts, 29, 35))
++>foo : Symbol(foo, Decl(parserErrantSemicolonInClass1.ts, 26, 16), Decl(parserErrantSemicolonInClass1.ts, 28, 35), Decl(parserErrantSemicolonInClass1.ts, 29, 35))
+ >s : Symbol(s, Decl(parserErrantSemicolonInClass1.ts, 29, 16))
+ 
+     private foo(ns: any) {
+->foo : Symbol(a.foo, Decl(parserErrantSemicolonInClass1.ts, 26, 16), Decl(parserErrantSemicolonInClass1.ts, 28, 35), Decl(parserErrantSemicolonInClass1.ts, 29, 35))
++>foo : Symbol(foo, Decl(parserErrantSemicolonInClass1.ts, 26, 16), Decl(parserErrantSemicolonInClass1.ts, 28, 35), Decl(parserErrantSemicolonInClass1.ts, 29, 35))
+ >ns : Symbol(ns, Decl(parserErrantSemicolonInClass1.ts, 30, 16))
+ 
+         return ns.toString();

@@ -1,0 +1,37 @@
+--- old.elidedJSImport2(module=es2022).symbols
++++ new.elidedJSImport2(module=es2022).symbols
+@@= skipped -24, +24 lines =@@
+ >Foo : Symbol(Foo, Decl(other.d.ts, 0, 0))
+ 
+     bar: number;
+->bar : Symbol(Foo.bar, Decl(other.d.ts, 0, 22))
++>bar : Symbol(bar, Decl(other.d.ts, 0, 22))
+ }
+ 
+ export default interface Bar {
+->Bar : Symbol(Bar, Decl(other.d.ts, 2, 1))
++>Bar : Symbol(default, Decl(other.d.ts, 2, 1))
+ 
+     foo: number;
+->foo : Symbol(Bar.foo, Decl(other.d.ts, 4, 30))
++>foo : Symbol(foo, Decl(other.d.ts, 4, 30))
+ }
+ 
+ === other.js ===
+@@= skipped -15, +15 lines =@@
+ >Foo : Symbol(Foo, Decl(other.js, 0, 0))
+ 
+     bar = 2.4;
+->bar : Symbol(Foo.bar, Decl(other.js, 0, 18))
++>bar : Symbol(bar, Decl(other.js, 0, 18))
+ }
+ 
+ export default class Bar {
+->Bar : Symbol(Bar, Decl(other.js, 2, 1))
++>Bar : Symbol(default, Decl(other.js, 2, 1))
+ 
+     foo = 1.2;
+->foo : Symbol(Bar.foo, Decl(other.js, 4, 26))
++>foo : Symbol(foo, Decl(other.js, 4, 26))
+ }
+ 

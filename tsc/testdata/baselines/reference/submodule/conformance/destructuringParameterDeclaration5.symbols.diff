@@ -1,0 +1,29 @@
+--- old.destructuringParameterDeclaration5.symbols
++++ new.destructuringParameterDeclaration5.symbols
+@@= skipped -17, +17 lines =@@
+ >Class : Symbol(Class, Decl(destructuringParameterDeclaration5.ts, 2, 15))
+ 
+     foo: boolean;
+->foo : Symbol(SubClass.foo, Decl(destructuringParameterDeclaration5.ts, 7, 30))
++>foo : Symbol(foo, Decl(destructuringParameterDeclaration5.ts, 7, 30))
+ 
+     constructor() { super(); }
+ >super : Symbol(Class, Decl(destructuringParameterDeclaration5.ts, 2, 15))
+@@= skipped -11, +11 lines =@@
+ >F : Symbol(F, Decl(destructuringParameterDeclaration5.ts, 0, 0))
+ 
+     foo: boolean
+->foo : Symbol(D.foo, Decl(destructuringParameterDeclaration5.ts, 12, 22))
++>foo : Symbol(foo, Decl(destructuringParameterDeclaration5.ts, 12, 22))
+ 
+     constructor() { }
+ }
+@@= skipped -10, +10 lines =@@
+ >D : Symbol(D, Decl(destructuringParameterDeclaration5.ts, 10, 1))
+ 
+     bar: number
+->bar : Symbol(SubD.bar, Decl(destructuringParameterDeclaration5.ts, 17, 22))
++>bar : Symbol(bar, Decl(destructuringParameterDeclaration5.ts, 17, 22))
+ 
+     constructor() {
+         super();

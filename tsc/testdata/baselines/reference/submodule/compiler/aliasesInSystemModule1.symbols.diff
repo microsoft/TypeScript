@@ -1,0 +1,26 @@
+--- old.aliasesInSystemModule1.symbols
++++ new.aliasesInSystemModule1.symbols
+@@= skipped -6, +6 lines =@@
+ import cls = alias.Class;
+ >cls : Symbol(cls, Decl(aliasesInSystemModule1.ts, 0, 30))
+ >alias : Symbol(alias, Decl(aliasesInSystemModule1.ts, 0, 0))
+->Class : Symbol(alias)
++>Class : Symbol(unknown)
+ 
+ export import cls2 = alias.Class;
+ >cls2 : Symbol(cls2, Decl(aliasesInSystemModule1.ts, 1, 25))
+ >alias : Symbol(alias, Decl(aliasesInSystemModule1.ts, 0, 0))
+->Class : Symbol(alias)
++>Class : Symbol(unknown)
+ 
+ let x = new alias.Class();
+ >x : Symbol(x, Decl(aliasesInSystemModule1.ts, 4, 3))
+@@= skipped -25, +25 lines =@@
+   export import cls = alias.Class;
+ >cls : Symbol(cls, Decl(aliasesInSystemModule1.ts, 8, 10))
+ >alias : Symbol(alias, Decl(aliasesInSystemModule1.ts, 0, 0))
+->Class : Symbol(cls)
++>Class : Symbol(unknown)
+ 
+   let x = new alias.Class();
+ >x : Symbol(x, Decl(aliasesInSystemModule1.ts, 10, 5))

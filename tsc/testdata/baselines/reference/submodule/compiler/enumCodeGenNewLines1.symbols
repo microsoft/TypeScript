@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/enumCodeGenNewLines1.ts] ////
+
+=== enumCodeGenNewLines1.ts ===
+enum foo {
+>foo : Symbol(foo, Decl(enumCodeGenNewLines1.ts, 0, 0))
+
+  b = 1,
+>b : Symbol(b, Decl(enumCodeGenNewLines1.ts, 0, 10))
+
+  c = 2,
+>c : Symbol(c, Decl(enumCodeGenNewLines1.ts, 1, 8))
+
+  d = 3
+>d : Symbol(d, Decl(enumCodeGenNewLines1.ts, 2, 8))
+}
+

@@ -1,0 +1,11 @@
+--- old.thisInArrowFunctionInStaticInitializer1.symbols
++++ new.thisInArrowFunctionInStaticInitializer1.symbols
+@@= skipped -8, +8 lines =@@
+ >Vector : Symbol(Vector, Decl(thisInArrowFunctionInStaticInitializer1.ts, 0, 19))
+ 
+  static foo = () => {
+->foo : Symbol(Vector.foo, Decl(thisInArrowFunctionInStaticInitializer1.ts, 2, 14))
++>foo : Symbol(foo, Decl(thisInArrowFunctionInStaticInitializer1.ts, 2, 14))
+ 
+   // 'this' should be allowed in a static initializer.
+   log(this);

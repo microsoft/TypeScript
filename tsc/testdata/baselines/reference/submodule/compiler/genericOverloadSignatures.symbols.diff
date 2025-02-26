@@ -1,0 +1,33 @@
+--- old.genericOverloadSignatures.symbols
++++ new.genericOverloadSignatures.symbols
+@@= skipped -34, +34 lines =@@
+ >I2 : Symbol(I2, Decl(genericOverloadSignatures.ts, 7, 17))
+ 
+     f<T>(x: T): number;
+->f : Symbol(I2.f, Decl(genericOverloadSignatures.ts, 9, 14), Decl(genericOverloadSignatures.ts, 10, 23))
++>f : Symbol(f, Decl(genericOverloadSignatures.ts, 9, 14), Decl(genericOverloadSignatures.ts, 10, 23))
+ >T : Symbol(T, Decl(genericOverloadSignatures.ts, 10, 6))
+ >x : Symbol(x, Decl(genericOverloadSignatures.ts, 10, 9))
+ >T : Symbol(T, Decl(genericOverloadSignatures.ts, 10, 6))
+ 
+     f<T>(x: T): string;
+->f : Symbol(I2.f, Decl(genericOverloadSignatures.ts, 9, 14), Decl(genericOverloadSignatures.ts, 10, 23))
++>f : Symbol(f, Decl(genericOverloadSignatures.ts, 9, 14), Decl(genericOverloadSignatures.ts, 10, 23))
+ >T : Symbol(T, Decl(genericOverloadSignatures.ts, 11, 6))
+ >x : Symbol(x, Decl(genericOverloadSignatures.ts, 11, 9))
+ >T : Symbol(T, Decl(genericOverloadSignatures.ts, 11, 6))
+@@= skipped -17, +17 lines =@@
+ >T : Symbol(T, Decl(genericOverloadSignatures.ts, 14, 13))
+ 
+     f(x: T): number;
+->f : Symbol(I3.f, Decl(genericOverloadSignatures.ts, 14, 17), Decl(genericOverloadSignatures.ts, 15, 20))
++>f : Symbol(f, Decl(genericOverloadSignatures.ts, 14, 17), Decl(genericOverloadSignatures.ts, 15, 20))
+ >x : Symbol(x, Decl(genericOverloadSignatures.ts, 15, 6))
+ >T : Symbol(T, Decl(genericOverloadSignatures.ts, 14, 13))
+ 
+     f(x: T): string;
+->f : Symbol(I3.f, Decl(genericOverloadSignatures.ts, 14, 17), Decl(genericOverloadSignatures.ts, 15, 20))
++>f : Symbol(f, Decl(genericOverloadSignatures.ts, 14, 17), Decl(genericOverloadSignatures.ts, 15, 20))
+ >x : Symbol(x, Decl(genericOverloadSignatures.ts, 16, 6))
+ >T : Symbol(T, Decl(genericOverloadSignatures.ts, 14, 13))
+ }

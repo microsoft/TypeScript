@@ -1,0 +1,54 @@
+--- old.noImplicitAnyIndexingSuppressed.symbols
++++ new.noImplicitAnyIndexingSuppressed.symbols
+@@= skipped -4, +4 lines =@@
+ >MyEmusEnum : Symbol(MyEmusEnum, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 0))
+ 
+     emu
+->emu : Symbol(MyEmusEnum.emu, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 17))
++>emu : Symbol(emu, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 17))
+ }
+ 
+ // Should be okay; should be a string.
+@@= skipped -12, +12 lines =@@
+ var strRepresentation2 = MyEmusEnum[MyEmusEnum.emu]
+ >strRepresentation2 : Symbol(strRepresentation2, Decl(noImplicitAnyIndexingSuppressed.ts, 8, 3))
+ >MyEmusEnum : Symbol(MyEmusEnum, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 0))
+->MyEmusEnum.emu : Symbol(MyEmusEnum.emu, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 17))
++>MyEmusEnum.emu : Symbol(emu, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 17))
+ >MyEmusEnum : Symbol(MyEmusEnum, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 0))
+->emu : Symbol(MyEmusEnum.emu, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 17))
++>emu : Symbol(emu, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 17))
+ 
+ // Should be okay, as we suppress implicit 'any' property access checks
+ var strRepresentation3 = MyEmusEnum["monehh"];
+@@= skipped -13, +13 lines =@@
+ var strRepresentation4 = MyEmusEnum["emu"];
+ >strRepresentation4 : Symbol(strRepresentation4, Decl(noImplicitAnyIndexingSuppressed.ts, 14, 3))
+ >MyEmusEnum : Symbol(MyEmusEnum, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 0))
+->"emu" : Symbol(MyEmusEnum.emu, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 17))
++>"emu" : Symbol(emu, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 17))
+ 
+ 
+ // Should be okay, as we suppress implicit 'any' property access checks
+@@= skipped -59, +59 lines =@@
+ var mResult1 = m[MyEmusEnum.emu];
+ >mResult1 : Symbol(mResult1, Decl(noImplicitAnyIndexingSuppressed.ts, 42, 3))
+ >m : Symbol(m, Decl(noImplicitAnyIndexingSuppressed.ts, 35, 3))
+->MyEmusEnum.emu : Symbol(MyEmusEnum.emu, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 17))
++>MyEmusEnum.emu : Symbol(emu, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 17))
+ >MyEmusEnum : Symbol(MyEmusEnum, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 0))
+->emu : Symbol(MyEmusEnum.emu, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 17))
++>emu : Symbol(emu, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 17))
+ 
+ var mResult2 = m[MyEmusEnum[MyEmusEnum.emu]];
+ >mResult2 : Symbol(mResult2, Decl(noImplicitAnyIndexingSuppressed.ts, 43, 3))
+ >m : Symbol(m, Decl(noImplicitAnyIndexingSuppressed.ts, 35, 3))
+ >MyEmusEnum : Symbol(MyEmusEnum, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 0))
+->MyEmusEnum.emu : Symbol(MyEmusEnum.emu, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 17))
++>MyEmusEnum.emu : Symbol(emu, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 17))
+ >MyEmusEnum : Symbol(MyEmusEnum, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 0))
+->emu : Symbol(MyEmusEnum.emu, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 17))
++>emu : Symbol(emu, Decl(noImplicitAnyIndexingSuppressed.ts, 0, 17))
+ 
+ var mResult3 = m[hi];
+ >mResult3 : Symbol(mResult3, Decl(noImplicitAnyIndexingSuppressed.ts, 44, 3))

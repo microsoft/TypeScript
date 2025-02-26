@@ -1,0 +1,17 @@
+--- old.multipleDefaultExports01.symbols
++++ new.multipleDefaultExports01.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === m1.ts ===
+ export default class foo {
+->foo : Symbol(bar, Decl(m1.ts, 2, 1), Decl(m1.ts, 0, 0))
++>foo : Symbol(default, Decl(m1.ts, 2, 1), Decl(m1.ts, 0, 0))
+ 
+ }
+ 
+ export default function bar() {
+->bar : Symbol(bar, Decl(m1.ts, 2, 1), Decl(m1.ts, 0, 0))
++>bar : Symbol(default, Decl(m1.ts, 2, 1), Decl(m1.ts, 0, 0))
+ 
+ }
+ 

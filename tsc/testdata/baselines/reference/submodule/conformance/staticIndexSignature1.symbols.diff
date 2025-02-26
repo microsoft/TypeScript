@@ -1,0 +1,14 @@
+--- old.staticIndexSignature1.symbols
++++ new.staticIndexSignature1.symbols
+@@= skipped -14, +14 lines =@@
+ >C : Symbol(C, Decl(staticIndexSignature1.ts, 0, 0))
+ 
+ C.bar = 2;
+->C.bar : Symbol(C.__index, Decl(staticIndexSignature1.ts, 0, 9))
++>C.bar : Symbol((Missing), Decl(staticIndexSignature1.ts, 0, 9))
+ >C : Symbol(C, Decl(staticIndexSignature1.ts, 0, 0))
+->bar : Symbol(C.__index, Decl(staticIndexSignature1.ts, 0, 9))
++>bar : Symbol((Missing), Decl(staticIndexSignature1.ts, 0, 9))
+ 
+ const foo = C["foo"]
+ >foo : Symbol(foo, Decl(staticIndexSignature1.ts, 7, 5))

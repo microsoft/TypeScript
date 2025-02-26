@@ -1,0 +1,11 @@
+--- old.emitArrowFunctionWhenUsingArguments12_ES6.symbols
++++ new.emitArrowFunctionWhenUsingArguments12_ES6.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(emitArrowFunctionWhenUsingArguments12_ES6.ts, 0, 0))
+ 
+     f(arguments) {
+->f : Symbol(C.f, Decl(emitArrowFunctionWhenUsingArguments12_ES6.ts, 0, 9))
++>f : Symbol(f, Decl(emitArrowFunctionWhenUsingArguments12_ES6.ts, 0, 9))
+ >arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments12_ES6.ts, 1, 6))
+ 
+         var a = () => arguments;

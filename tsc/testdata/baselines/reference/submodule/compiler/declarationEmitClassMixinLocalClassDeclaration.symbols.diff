@@ -1,0 +1,11 @@
+--- old.declarationEmitClassMixinLocalClassDeclaration.symbols
++++ new.declarationEmitClassMixinLocalClassDeclaration.symbols
+@@= skipped -59, +59 lines =@@
+ >base : Symbol(base, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 17, 5))
+ 
+             num: number = 0
+->num : Symbol(XmlElement2.num, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 18, 40))
++>num : Symbol(num, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 18, 40))
+         }
+         return XmlElement2;
+ >XmlElement2 : Symbol(XmlElement2, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 17, 50))

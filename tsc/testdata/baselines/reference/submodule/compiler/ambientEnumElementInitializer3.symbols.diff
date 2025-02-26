@@ -1,0 +1,9 @@
+--- old.ambientEnumElementInitializer3.symbols
++++ new.ambientEnumElementInitializer3.symbols
+@@= skipped -4, +4 lines =@@
+ >E : Symbol(E, Decl(ambientEnumElementInitializer3.ts, 0, 0))
+ 
+  e = 3.3 // Decimal
+->e : Symbol(E.e, Decl(ambientEnumElementInitializer3.ts, 0, 16))
++>e : Symbol(e, Decl(ambientEnumElementInitializer3.ts, 0, 16))
+ }

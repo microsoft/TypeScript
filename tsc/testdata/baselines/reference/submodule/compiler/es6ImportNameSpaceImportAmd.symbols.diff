@@ -1,0 +1,12 @@
+--- old.es6ImportNameSpaceImportAmd.symbols
++++ new.es6ImportNameSpaceImportAmd.symbols
+@@= skipped -9, +9 lines =@@
+ 
+ var x = nameSpaceBinding.a;
+ >x : Symbol(x, Decl(es6ImportNameSpaceImportAmd_1.ts, 1, 3))
+->nameSpaceBinding.a : Symbol(nameSpaceBinding.a, Decl(es6ImportNameSpaceImportAmd_0.ts, 0, 10))
+ >nameSpaceBinding : Symbol(nameSpaceBinding, Decl(es6ImportNameSpaceImportAmd_1.ts, 0, 6))
+->a : Symbol(nameSpaceBinding.a, Decl(es6ImportNameSpaceImportAmd_0.ts, 0, 10))
+ 
+ import * as nameSpaceBinding2 from "es6ImportNameSpaceImportAmd_0"; // elide this
+ >nameSpaceBinding2 : Symbol(nameSpaceBinding2, Decl(es6ImportNameSpaceImportAmd_1.ts, 2, 6))

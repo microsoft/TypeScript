@@ -1,0 +1,112 @@
+//// [tests/cases/conformance/emitter/es2015/asyncGenerators/emitter.asyncGenerators.classMethods.es2015.ts] ////
+
+=== C1.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(C1.ts, 0, 0))
+
+    async * f() {
+>f : Symbol(f, Decl(C1.ts, 0, 10))
+    }
+}
+=== C2.ts ===
+class C2 {
+>C2 : Symbol(C2, Decl(C2.ts, 0, 0))
+
+    async * f() {
+>f : Symbol(f, Decl(C2.ts, 0, 10))
+
+        const x = yield;
+>x : Symbol(x, Decl(C2.ts, 2, 13))
+    }
+}
+=== C3.ts ===
+class C3 {
+>C3 : Symbol(C3, Decl(C3.ts, 0, 0))
+
+    async * f() {
+>f : Symbol(f, Decl(C3.ts, 0, 10))
+
+        const x = yield 1;
+>x : Symbol(x, Decl(C3.ts, 2, 13))
+    }
+}
+=== C4.ts ===
+class C4 {
+>C4 : Symbol(C4, Decl(C4.ts, 0, 0))
+
+    async * f() {
+>f : Symbol(f, Decl(C4.ts, 0, 10))
+
+        const x = yield* [1];
+>x : Symbol(x, Decl(C4.ts, 2, 13))
+    }
+}
+=== C5.ts ===
+class C5 {
+>C5 : Symbol(C5, Decl(C5.ts, 0, 0))
+
+    async * f() {
+>f : Symbol(f, Decl(C5.ts, 0, 10))
+
+        const x = yield* (async function*() { yield 1; })();
+>x : Symbol(x, Decl(C5.ts, 2, 13))
+    }
+}
+=== C6.ts ===
+class C6 {
+>C6 : Symbol(C6, Decl(C6.ts, 0, 0))
+
+    async * f() {
+>f : Symbol(f, Decl(C6.ts, 0, 10))
+
+        const x = await 1;
+>x : Symbol(x, Decl(C6.ts, 2, 13))
+    }
+}
+=== C7.ts ===
+class C7 {
+>C7 : Symbol(C7, Decl(C7.ts, 0, 0))
+
+    async * f() {
+>f : Symbol(f, Decl(C7.ts, 0, 10))
+
+        return 1;
+    }
+}
+=== C8.ts ===
+class C8 {
+>C8 : Symbol(C8, Decl(C8.ts, 0, 0))
+
+    g() {
+>g : Symbol(g, Decl(C8.ts, 0, 10))
+    }
+    async * f() {
+>f : Symbol(f, Decl(C8.ts, 2, 5))
+
+        this.g();
+>this.g : Symbol(g, Decl(C8.ts, 0, 10))
+>this : Symbol(C8, Decl(C8.ts, 0, 0))
+>g : Symbol(g, Decl(C8.ts, 0, 10))
+    }
+}
+=== C9.ts ===
+class B9 {
+>B9 : Symbol(B9, Decl(C9.ts, 0, 0))
+
+    g() {}
+>g : Symbol(g, Decl(C9.ts, 0, 10))
+}
+class C9 extends B9 {
+>C9 : Symbol(C9, Decl(C9.ts, 2, 1))
+>B9 : Symbol(B9, Decl(C9.ts, 0, 0))
+
+    async * f() {
+>f : Symbol(f, Decl(C9.ts, 3, 21))
+
+        super.g();
+>super.g : Symbol(g, Decl(C9.ts, 0, 10))
+>super : Symbol(B9, Decl(C9.ts, 0, 0))
+>g : Symbol(g, Decl(C9.ts, 0, 10))
+    }
+}
+

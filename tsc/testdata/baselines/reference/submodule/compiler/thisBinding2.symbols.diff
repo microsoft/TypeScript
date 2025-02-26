@@ -1,0 +1,46 @@
+--- old.thisBinding2.symbols
++++ new.thisBinding2.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(thisBinding2.ts, 0, 0))
+ 
+  x: number;
+->x : Symbol(C.x, Decl(thisBinding2.ts, 0, 9))
++>x : Symbol(x, Decl(thisBinding2.ts, 0, 9))
+ 
+     constructor() {
+         this.x = (() => {
+->this.x : Symbol(C.x, Decl(thisBinding2.ts, 0, 9))
++>this.x : Symbol(x, Decl(thisBinding2.ts, 0, 9))
+ >this : Symbol(C, Decl(thisBinding2.ts, 0, 0))
+->x : Symbol(C.x, Decl(thisBinding2.ts, 0, 9))
++>x : Symbol(x, Decl(thisBinding2.ts, 0, 9))
+ 
+    var x = 1;
+ >x : Symbol(x, Decl(thisBinding2.ts, 4, 6))
+ 
+    return this.x;
+->this.x : Symbol(C.x, Decl(thisBinding2.ts, 0, 9))
++>this.x : Symbol(x, Decl(thisBinding2.ts, 0, 9))
+ >this : Symbol(C, Decl(thisBinding2.ts, 0, 0))
+->x : Symbol(C.x, Decl(thisBinding2.ts, 0, 9))
++>x : Symbol(x, Decl(thisBinding2.ts, 0, 9))
+ 
+   })();
+   this.x = function() {
+->this.x : Symbol(C.x, Decl(thisBinding2.ts, 0, 9))
++>this.x : Symbol(x, Decl(thisBinding2.ts, 0, 9))
+ >this : Symbol(C, Decl(thisBinding2.ts, 0, 0))
+->x : Symbol(C.x, Decl(thisBinding2.ts, 0, 9))
++>x : Symbol(x, Decl(thisBinding2.ts, 0, 9))
+ 
+    var x = 1;
+ >x : Symbol(x, Decl(thisBinding2.ts, 8, 6))
+@@= skipped -48, +48 lines =@@
+ >setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --), Decl(thisBinding2.ts, 12, 1))
+ >x : Symbol(x, Decl(thisBinding2.ts, 17, 37))
+ >this.message : Symbol(message, Decl(thisBinding2.ts, 14, 17))
+->this : Symbol(messenger, Decl(thisBinding2.ts, 14, 15))
++>this : Symbol((Anonymous type), Decl(thisBinding2.ts, 14, 15))
+ >message : Symbol(message, Decl(thisBinding2.ts, 14, 17))
+     }
+ };

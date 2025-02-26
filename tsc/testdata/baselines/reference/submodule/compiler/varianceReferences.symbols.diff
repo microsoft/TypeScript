@@ -1,0 +1,20 @@
+--- old.varianceReferences.symbols
++++ new.varianceReferences.symbols
+@@= skipped -100, +100 lines =@@
+ >Value : Symbol(Value, Decl(varianceReferences.ts, 33, 16))
+ 
+   value: Value;
+->value : Symbol(Shape.value, Decl(varianceReferences.ts, 33, 24))
++>value : Symbol(value, Decl(varianceReferences.ts, 33, 24))
+ >Value : Symbol(Value, Decl(varianceReferences.ts, 33, 16))
+ }
+ 
+@@= skipped -31, +31 lines =@@
+ >Value : Symbol(Value, Decl(varianceReferences.ts, 45, 25))
+ 
+   value: Value;
+->value : Symbol(Level3of3Shape.value, Decl(varianceReferences.ts, 45, 33))
++>value : Symbol(value, Decl(varianceReferences.ts, 45, 33))
+ >Value : Symbol(Value, Decl(varianceReferences.ts, 45, 25))
+ }
+ 

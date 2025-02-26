@@ -1,0 +1,8 @@
+--- old.templateStringInInstanceOfES6.symbols
++++ new.templateStringInInstanceOfES6.symbols
+@@= skipped -2, +2 lines =@@
+ === templateStringInInstanceOfES6.ts ===
+ var x = `abc${ 0 }def` instanceof String;
+ >x : Symbol(x, Decl(templateStringInInstanceOfES6.ts, 0, 3))
+->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+ 

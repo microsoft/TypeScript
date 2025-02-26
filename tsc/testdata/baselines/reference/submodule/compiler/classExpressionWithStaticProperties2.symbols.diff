@@ -1,0 +1,32 @@
+--- old.classExpressionWithStaticProperties2.symbols
++++ new.classExpressionWithStaticProperties2.symbols
+@@= skipped -5, +5 lines =@@
+ >C : Symbol(C, Decl(classExpressionWithStaticProperties2.ts, 0, 7))
+ 
+     static a = 1;
+->a : Symbol(C.a, Decl(classExpressionWithStaticProperties2.ts, 0, 17))
++>a : Symbol(a, Decl(classExpressionWithStaticProperties2.ts, 0, 17))
+ 
+     static b
+->b : Symbol(C.b, Decl(classExpressionWithStaticProperties2.ts, 1, 17))
++>b : Symbol(b, Decl(classExpressionWithStaticProperties2.ts, 1, 17))
+ 
+     static c = {
+->c : Symbol(C.c, Decl(classExpressionWithStaticProperties2.ts, 2, 12))
++>c : Symbol(c, Decl(classExpressionWithStaticProperties2.ts, 2, 12))
+ 
+         x: "hi"
+ >x : Symbol(x, Decl(classExpressionWithStaticProperties2.ts, 3, 16))
+     }
+     static d = C.c.x + " world";
+->d : Symbol(C.d, Decl(classExpressionWithStaticProperties2.ts, 5, 5))
++>d : Symbol(d, Decl(classExpressionWithStaticProperties2.ts, 5, 5))
+ >C.c.x : Symbol(x, Decl(classExpressionWithStaticProperties2.ts, 3, 16))
+->C.c : Symbol(C.c, Decl(classExpressionWithStaticProperties2.ts, 2, 12))
++>C.c : Symbol(c, Decl(classExpressionWithStaticProperties2.ts, 2, 12))
+ >C : Symbol(C, Decl(classExpressionWithStaticProperties2.ts, 0, 7))
+->c : Symbol(C.c, Decl(classExpressionWithStaticProperties2.ts, 2, 12))
++>c : Symbol(c, Decl(classExpressionWithStaticProperties2.ts, 2, 12))
+ >x : Symbol(x, Decl(classExpressionWithStaticProperties2.ts, 3, 16))
+ 
+  };

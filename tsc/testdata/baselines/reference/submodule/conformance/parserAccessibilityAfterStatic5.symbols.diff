@@ -1,0 +1,10 @@
+--- old.parserAccessibilityAfterStatic5.symbols
++++ new.parserAccessibilityAfterStatic5.symbols
+@@= skipped -4, +4 lines =@@
+ >Outer : Symbol(Outer, Decl(parserAccessibilityAfterStatic5.ts, 0, 0))
+ {
+ static public
+->public : Symbol(Outer.public, Decl(parserAccessibilityAfterStatic5.ts, 1, 1))
++>public : Symbol(public, Decl(parserAccessibilityAfterStatic5.ts, 1, 1))
+ }
+ 

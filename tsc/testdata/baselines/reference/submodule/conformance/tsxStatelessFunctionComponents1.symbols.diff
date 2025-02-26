@@ -1,0 +1,39 @@
+--- old.tsxStatelessFunctionComponents1.symbols
++++ new.tsxStatelessFunctionComponents1.symbols
+@@= skipped -4, +4 lines =@@
+ >EmptyPropSFC : Symbol(EmptyPropSFC, Decl(file.tsx, 0, 0))
+ 
+     return <div> Default Greeting </div>;
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+ }
+ 
+ function Greet(x: {name: string}) {
+@@= skipped -10, +8 lines =@@
+ >name : Symbol(name, Decl(file.tsx, 4, 19))
+ 
+ 	return <div>Hello, {x}</div>;
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+ >x : Symbol(x, Decl(file.tsx, 4, 15))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+ }
+ function Meet({name = 'world'}) {
+ >Meet : Symbol(Meet, Decl(file.tsx, 6, 1))
+ >name : Symbol(name, Decl(file.tsx, 7, 15))
+ 
+ 	return <div>Hello, {name}</div>;
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+ >name : Symbol(name, Decl(file.tsx, 7, 15))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+ }
+ function MeetAndGreet(k: {"prop-name": string}) {
+ >MeetAndGreet : Symbol(MeetAndGreet, Decl(file.tsx, 9, 1))
+@@= skipped -19, +15 lines =@@
+ >"prop-name" : Symbol("prop-name", Decl(file.tsx, 10, 26))
+ 
+ 	return <div>Hi Hi</div>;
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+ }
+ 
+ // OK

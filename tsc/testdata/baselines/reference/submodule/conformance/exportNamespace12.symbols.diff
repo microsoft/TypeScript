@@ -1,0 +1,22 @@
+--- old.exportNamespace12.symbols
++++ new.exportNamespace12.symbols
+@@= skipped -7, +7 lines =@@
+ >types : Symbol(types, Decl(main.ts, 1, 6))
+ 
+ console.log(c) // Fails as expected, import is still allowed though.
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >c : Symbol(c, Decl(main.ts, 0, 8))
+ 
+ console.log(types.c) // Expected an error here.
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >types : Symbol(types, Decl(main.ts, 1, 6))
+ 
+ === types.ts ===

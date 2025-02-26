@@ -1,0 +1,20 @@
+--- old.varianceCantBeStrictWhileStructureIsnt.symbols
++++ new.varianceCantBeStrictWhileStructureIsnt.symbols
+@@= skipped -6, +6 lines =@@
+ >T : Symbol(T, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 1, 14))
+ 
+     member: (cb: T) => void;
+->member : Symbol(Foo.member, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 1, 18))
++>member : Symbol(member, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 1, 18))
+ >cb : Symbol(cb, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 2, 13))
+ >T : Symbol(T, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 1, 14))
+ }
+@@= skipped -10, +10 lines =@@
+ >T : Symbol(T, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 5, 14))
+ 
+     member: (cb: T) => void;
+->member : Symbol(Bar.member, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 5, 18))
++>member : Symbol(member, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 5, 18))
+ >cb : Symbol(cb, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 6, 13))
+ >T : Symbol(T, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 5, 14))
+ }

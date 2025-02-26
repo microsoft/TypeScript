@@ -1,0 +1,10 @@
+--- old.defaultExportInAwaitExpression01.symbols
++++ new.defaultExportInAwaitExpression01.symbols
+@@= skipped -2, +2 lines =@@
+ === a.ts ===
+ const x = new Promise( ( resolve, reject ) => { resolve( {} ); } );
+ >x : Symbol(x, Decl(a.ts, 0, 5))
+->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >resolve : Symbol(resolve, Decl(a.ts, 0, 24))
+ >reject : Symbol(reject, Decl(a.ts, 0, 33))
+ >resolve : Symbol(resolve, Decl(a.ts, 0, 24))

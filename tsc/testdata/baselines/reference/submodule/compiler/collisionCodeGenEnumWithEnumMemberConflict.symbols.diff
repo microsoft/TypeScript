@@ -1,0 +1,15 @@
+--- old.collisionCodeGenEnumWithEnumMemberConflict.symbols
++++ new.collisionCodeGenEnumWithEnumMemberConflict.symbols
+@@= skipped -4, +4 lines =@@
+ >Color : Symbol(Color, Decl(collisionCodeGenEnumWithEnumMemberConflict.ts, 0, 0))
+ 
+     Color,
+->Color : Symbol(Color.Color, Decl(collisionCodeGenEnumWithEnumMemberConflict.ts, 0, 12))
++>Color : Symbol(Color, Decl(collisionCodeGenEnumWithEnumMemberConflict.ts, 0, 12))
+ 
+     Thing = Color
+->Thing : Symbol(Color.Thing, Decl(collisionCodeGenEnumWithEnumMemberConflict.ts, 1, 10))
+->Color : Symbol(Color.Color, Decl(collisionCodeGenEnumWithEnumMemberConflict.ts, 0, 12))
++>Thing : Symbol(Thing, Decl(collisionCodeGenEnumWithEnumMemberConflict.ts, 1, 10))
++>Color : Symbol(Color, Decl(collisionCodeGenEnumWithEnumMemberConflict.ts, 0, 12))
+ }

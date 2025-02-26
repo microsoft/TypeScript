@@ -1,0 +1,16 @@
+--- old.recursiveGetterAccess.symbols
++++ new.recursiveGetterAccess.symbols
+@@= skipped -4, +4 lines =@@
+ >MyClass : Symbol(MyClass, Decl(recursiveGetterAccess.ts, 0, 0))
+ 
+ get testProp() { return this.testProp; }
+->testProp : Symbol(MyClass.testProp, Decl(recursiveGetterAccess.ts, 0, 15))
+->this.testProp : Symbol(MyClass.testProp, Decl(recursiveGetterAccess.ts, 0, 15))
++>testProp : Symbol(testProp, Decl(recursiveGetterAccess.ts, 0, 15))
++>this.testProp : Symbol(testProp, Decl(recursiveGetterAccess.ts, 0, 15))
+ >this : Symbol(MyClass, Decl(recursiveGetterAccess.ts, 0, 0))
+->testProp : Symbol(MyClass.testProp, Decl(recursiveGetterAccess.ts, 0, 15))
++>testProp : Symbol(testProp, Decl(recursiveGetterAccess.ts, 0, 15))
+ }
+  
+ 

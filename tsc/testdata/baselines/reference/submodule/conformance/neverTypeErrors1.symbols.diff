@@ -1,0 +1,19 @@
+--- old.neverTypeErrors1.symbols
++++ new.neverTypeErrors1.symbols
+@@= skipped -66, +66 lines =@@
+ >A : Symbol(A, Decl(neverTypeErrors1.ts, 27, 1))
+ 
+     foo: "a";
+->foo : Symbol(A.foo, Decl(neverTypeErrors1.ts, 31, 13))
++>foo : Symbol(foo, Decl(neverTypeErrors1.ts, 31, 13))
+ }
+ 
+ interface B {
+ >B : Symbol(B, Decl(neverTypeErrors1.ts, 33, 1))
+ 
+     foo: "b";
+->foo : Symbol(B.foo, Decl(neverTypeErrors1.ts, 35, 13))
++>foo : Symbol(foo, Decl(neverTypeErrors1.ts, 35, 13))
+ }
+ 
+ type Union = A & B;

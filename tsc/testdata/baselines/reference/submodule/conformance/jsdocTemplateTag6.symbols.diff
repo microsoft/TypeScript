@@ -1,0 +1,41 @@
+--- old.jsdocTemplateTag6.symbols
++++ new.jsdocTemplateTag6.symbols
+@@= skipped -88, +88 lines =@@
+ 
+     return x[0];
+ >x : Symbol(x, Decl(a.js, 40, 12))
+->0 : Symbol(0)
+ }
+ const t9 = f4([[1, "x"], [2, "y"]]);
+ >t9 : Symbol(t9, Decl(a.js, 43, 5))
+@@= skipped -24, +23 lines =@@
+ >obj : Symbol(obj, Decl(a.js, 51, 12))
+ 
+     return obj.x;
+->obj.x : Symbol(x, Decl(a.js, 48, 12))
+ >obj : Symbol(obj, Decl(a.js, 51, 12))
+->x : Symbol(x, Decl(a.js, 48, 12))
+ }
+ const t11 = f5({ x: [1, "x"], y: [2, "y"] });
+ >t11 : Symbol(t11, Decl(a.js, 54, 5))
+@@= skipped -37, +35 lines =@@
+      * @param {U} x
+      */
+     foo(x) {
+->foo : Symbol(C.foo, Decl(a.js, 64, 21))
++>foo : Symbol(foo, Decl(a.js, 64, 21))
+ >x : Symbol(x, Decl(a.js, 70, 8))
+ 
+         return x;
+@@= skipped -18, +18 lines =@@
+ 
+ const t14 = t13.foo(["a", ["b", "c"]]);
+ >t14 : Symbol(t14, Decl(a.js, 76, 5))
+->t13.foo : Symbol(C.foo, Decl(a.js, 64, 21))
++>t13.foo : Symbol(foo, Decl(a.js, 64, 21))
+ >t13 : Symbol(t13, Decl(a.js, 75, 5))
+->foo : Symbol(C.foo, Decl(a.js, 64, 21))
++>foo : Symbol(foo, Decl(a.js, 64, 21))
+ 
+ /**
+  * @template {readonly unknown[]} const T

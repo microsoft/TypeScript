@@ -1,0 +1,21 @@
+--- old.emptyIndexer.symbols
++++ new.emptyIndexer.symbols
+@@= skipped -4, +4 lines =@@
+ >I1 : Symbol(I1, Decl(emptyIndexer.ts, 0, 0))
+ 
+ 	m(): number;
+->m : Symbol(I1.m, Decl(emptyIndexer.ts, 0, 14))
++>m : Symbol(m, Decl(emptyIndexer.ts, 0, 14))
+ }
+ 
+ interface I2 {
+@@= skipped -18, +18 lines =@@
+ 
+ var n = x[''].m(); // should not crash compiler
+ >n : Symbol(n, Decl(emptyIndexer.ts, 11, 3))
+->x[''].m : Symbol(I1.m, Decl(emptyIndexer.ts, 0, 14))
++>x[''].m : Symbol(m, Decl(emptyIndexer.ts, 0, 14))
+ >x : Symbol(x, Decl(emptyIndexer.ts, 9, 3))
+->m : Symbol(I1.m, Decl(emptyIndexer.ts, 0, 14))
++>m : Symbol(m, Decl(emptyIndexer.ts, 0, 14))
+ 

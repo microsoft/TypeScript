@@ -1,0 +1,10 @@
+--- old.asyncArrowFunction1_es6.symbols
++++ new.asyncArrowFunction1_es6.symbols
+@@= skipped -2, +2 lines =@@
+ === asyncArrowFunction1_es6.ts ===
+ var foo = async (): Promise<void> => {
+ >foo : Symbol(foo, Decl(asyncArrowFunction1_es6.ts, 0, 3))
+->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Promise : Symbol(Promise)
+ 
+ };

@@ -1,0 +1,13 @@
+--- old.jsxAndTypeAssertion.symbols
++++ new.jsxAndTypeAssertion.symbols
+@@= skipped -25, +25 lines =@@
+ x = <foo>x</foo>, x = <foo/>;
+ 
+ <foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>
+->/foo/.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+->test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
++>/foo/.test : Symbol(test, Decl(lib.es5.d.ts, --, --))
++>test : Symbol(test, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(jsxAndTypeAssertion.tsx, 4, 3))
+ 
+     

@@ -1,0 +1,29 @@
+--- old.tsxSpreadAttributesResolution10.symbols
++++ new.tsxSpreadAttributesResolution10.symbols
+@@= skipped -7, +7 lines =@@
+ >OptionProp : Symbol(OptionProp, Decl(file.tsx, 0, 32))
+ 
+     x?: 2
+->x : Symbol(OptionProp.x, Decl(file.tsx, 2, 22))
++>x : Symbol(x, Decl(file.tsx, 2, 22))
+ }
+ 
+ class Opt extends React.Component<OptionProp, {}> {
+ >Opt : Symbol(Opt, Decl(file.tsx, 4, 1))
+->React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
++>React.Component : Symbol(unknown)
+ >React : Symbol(React, Decl(file.tsx, 0, 0))
+->Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
++>Component : Symbol(unknown)
+ >OptionProp : Symbol(OptionProp, Decl(file.tsx, 0, 32))
+ 
+     render() {
+->render : Symbol(Opt.render, Decl(file.tsx, 6, 51))
++>render : Symbol(render, Decl(file.tsx, 6, 51))
+ 
+         return <div>Hello</div>;
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+     }
+ }
+ 

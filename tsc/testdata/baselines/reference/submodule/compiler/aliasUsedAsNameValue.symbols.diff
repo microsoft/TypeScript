@@ -1,0 +1,14 @@
+--- old.aliasUsedAsNameValue.symbols
++++ new.aliasUsedAsNameValue.symbols
+@@= skipped -13, +13 lines =@@
+ 
+     //var x = mod.id; // TODO needed hack that mod is loaded
+     b.b(mod);
+->b.b : Symbol(b.b, Decl(aliasUsedAsNameValue_1.ts, 0, 0))
++>b.b : Symbol(b, Decl(aliasUsedAsNameValue_1.ts, 0, 0))
+ >b : Symbol(b, Decl(aliasUsedAsNameValue_2.ts, 2, 49))
+->b : Symbol(b.b, Decl(aliasUsedAsNameValue_1.ts, 0, 0))
++>b : Symbol(b, Decl(aliasUsedAsNameValue_1.ts, 0, 0))
+ >mod : Symbol(mod, Decl(aliasUsedAsNameValue_2.ts, 0, 0))
+ }
+ 

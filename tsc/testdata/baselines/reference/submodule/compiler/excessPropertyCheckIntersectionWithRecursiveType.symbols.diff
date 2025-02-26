@@ -1,0 +1,11 @@
+--- old.excessPropertyCheckIntersectionWithRecursiveType.symbols
++++ new.excessPropertyCheckIntersectionWithRecursiveType.symbols
+@@= skipped -232, +232 lines =@@
+ >User : Symbol(User, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 69, 31))
+ 
+   name: string;
+->name : Symbol(User.name, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 71, 16))
++>name : Symbol(name, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 71, 16))
+ }
+ 
+ type GrandUser = BuildTree<User, 2>;

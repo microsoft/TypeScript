@@ -1,0 +1,56 @@
+--- old.multiline.symbols
++++ new.multiline.symbols
+@@= skipped -6, +6 lines =@@
+ /**
+  @ts-ignore */
+ texts.push(100);
+->texts.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
++>texts.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >texts : Symbol(texts, Decl(a.ts, 0, 12))
+->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ 
+ /**
+  @ts-expect-error */
+ texts.push(100);
+->texts.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
++>texts.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >texts : Symbol(texts, Decl(a.ts, 0, 12))
+->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ 
+ /**
+  @ts-expect-error */
+ texts.push("100");
+->texts.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
++>texts.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >texts : Symbol(texts, Decl(a.ts, 0, 12))
+->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ 
+ === b.tsx ===
+ import * as React from "react";
+@@= skipped -28, +28 lines =@@
+ >foo : Symbol(foo, Decl(b.tsx, 2, 36))
+ 
+   return <div />;
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+ }
+ 
+ let x = (
+ >x : Symbol(x, Decl(b.tsx, 6, 3))
+ 
+   <div>
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+-
+     {/*
+    @ts-ignore */}
+     <MyComponent foo={100} />
+@@= skipped -50, +47 lines =@@
+ >foo : Symbol(foo, Decl(b.tsx, 32, 16))
+ 
+   </div>
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+-
+ );
+ 

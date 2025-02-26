@@ -1,0 +1,23 @@
+--- old.switchWithConstrainedTypeVariable.symbols
++++ new.switchWithConstrainedTypeVariable.symbols
+@@= skipped -13, +13 lines =@@
+ 
+     case 'a':
+       key.toLowerCase();
+->key.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>key.toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+ >key : Symbol(key, Decl(switchWithConstrainedTypeVariable.ts, 2, 40))
+->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+ 
+       break;
+     default:
+       key.toLowerCase();
+->key.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>key.toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+ >key : Symbol(key, Decl(switchWithConstrainedTypeVariable.ts, 2, 40))
+->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+ 
+       break;
+   }

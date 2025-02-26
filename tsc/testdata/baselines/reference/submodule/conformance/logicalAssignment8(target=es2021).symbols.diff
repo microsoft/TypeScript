@@ -1,0 +1,44 @@
+--- old.logicalAssignment8(target=es2021).symbols
++++ new.logicalAssignment8(target=es2021).symbols
+@@= skipped -9, +9 lines =@@
+ >results : Symbol(results, Decl(logicalAssignment8.ts, 2, 14))
+ 
+     (results ||= bar?.value ?? []).push(100);
+->(results ||= bar?.value ?? []).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>(results ||= bar?.value ?? []).push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >results : Symbol(results, Decl(logicalAssignment8.ts, 2, 14))
+ >bar?.value : Symbol(value, Decl(logicalAssignment8.ts, 0, 20))
+ >bar : Symbol(bar, Decl(logicalAssignment8.ts, 0, 13))
+ >value : Symbol(value, Decl(logicalAssignment8.ts, 0, 20))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function foo2(results: number[] | undefined) {
+@@= skipped -13, +13 lines =@@
+ >results : Symbol(results, Decl(logicalAssignment8.ts, 6, 14))
+ 
+     (results ??= bar?.value ?? []).push(100);
+->(results ??= bar?.value ?? []).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>(results ??= bar?.value ?? []).push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >results : Symbol(results, Decl(logicalAssignment8.ts, 6, 14))
+ >bar?.value : Symbol(value, Decl(logicalAssignment8.ts, 0, 20))
+ >bar : Symbol(bar, Decl(logicalAssignment8.ts, 0, 13))
+ >value : Symbol(value, Decl(logicalAssignment8.ts, 0, 20))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function foo3(results: number[] | undefined) {
+@@= skipped -13, +13 lines =@@
+ >results : Symbol(results, Decl(logicalAssignment8.ts, 10, 14))
+ 
+     (results &&= bar?.value ?? []).push(100);
+->(results &&= bar?.value ?? []).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+ >results : Symbol(results, Decl(logicalAssignment8.ts, 10, 14))
+ >bar?.value : Symbol(value, Decl(logicalAssignment8.ts, 0, 20))
+ >bar : Symbol(bar, Decl(logicalAssignment8.ts, 0, 13))
+ >value : Symbol(value, Decl(logicalAssignment8.ts, 0, 20))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+ }
+ 

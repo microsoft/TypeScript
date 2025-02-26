@@ -1,0 +1,34 @@
+--- old.extendFromAny.symbols
++++ new.extendFromAny.symbols
+@@= skipped -8, +8 lines =@@
+ >Base : Symbol(Base, Decl(extendFromAny.ts, 0, 11))
+ 
+     known = 1;
+->known : Symbol(C.known, Decl(extendFromAny.ts, 1, 22))
++>known : Symbol(known, Decl(extendFromAny.ts, 1, 22))
+ 
+     static sknown = 2;
+->sknown : Symbol(C.sknown, Decl(extendFromAny.ts, 2, 14))
++>sknown : Symbol(sknown, Decl(extendFromAny.ts, 2, 14))
+ }
+ 
+ let c = new C();
+@@= skipped -11, +11 lines =@@
+ >C : Symbol(C, Decl(extendFromAny.ts, 0, 22))
+ 
+ c.known.length; // error, 'known' has no 'length' property
+->c.known : Symbol(C.known, Decl(extendFromAny.ts, 1, 22))
++>c.known : Symbol(known, Decl(extendFromAny.ts, 1, 22))
+ >c : Symbol(c, Decl(extendFromAny.ts, 6, 3))
+->known : Symbol(C.known, Decl(extendFromAny.ts, 1, 22))
++>known : Symbol(known, Decl(extendFromAny.ts, 1, 22))
+ 
+ C.sknown.length; // error, 'sknown' has no 'length' property
+->C.sknown : Symbol(C.sknown, Decl(extendFromAny.ts, 2, 14))
++>C.sknown : Symbol(sknown, Decl(extendFromAny.ts, 2, 14))
+ >C : Symbol(C, Decl(extendFromAny.ts, 0, 22))
+->sknown : Symbol(C.sknown, Decl(extendFromAny.ts, 2, 14))
++>sknown : Symbol(sknown, Decl(extendFromAny.ts, 2, 14))
+ 
+ c.unknown.length; // ok, unknown: any
+ >c : Symbol(c, Decl(extendFromAny.ts, 6, 3))

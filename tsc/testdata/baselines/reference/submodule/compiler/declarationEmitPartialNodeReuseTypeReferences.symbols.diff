@@ -1,0 +1,31 @@
+--- old.declarationEmitPartialNodeReuseTypeReferences.symbols
++++ new.declarationEmitPartialNodeReuseTypeReferences.symbols
+@@= skipped -20, +20 lines =@@
+ >PrivateSpecialString : Symbol(PrivateSpecialString, Decl(a.ts, 0, 35))
+ >p3 : Symbol(p3, Decl(a.ts, 6, 62))
+ >N : Symbol(N, Decl(a.ts, 1, 35))
+->SpecialString : Symbol(N.SpecialString, Decl(a.ts, 3, 20))
++>SpecialString : Symbol(SpecialString, Decl(a.ts, 3, 20))
+ >foo : Symbol(foo, Decl(a.ts, 6, 97))
+ >SpecialString : Symbol(SpecialString, Decl(a.ts, 0, 0))
+ >bar : Symbol(bar, Decl(a.ts, 6, 117))
+ >PrivateSpecialString : Symbol(PrivateSpecialString, Decl(a.ts, 0, 35))
+ >baz : Symbol(baz, Decl(a.ts, 6, 144))
+ >N : Symbol(N, Decl(a.ts, 1, 35))
+->SpecialString : Symbol(N.SpecialString, Decl(a.ts, 3, 20))
++>SpecialString : Symbol(SpecialString, Decl(a.ts, 3, 20))
+ 
+ === b.ts ===
+ import * as a from "./a";
+@@= skipped -15, +15 lines =@@
+ 
+ export const g = a.o
+ >g : Symbol(g, Decl(b.ts, 1, 12))
+->a.o : Symbol(a.o, Decl(a.ts, 6, 12))
++>a.o : Symbol(o, Decl(a.ts, 6, 12))
+ >a : Symbol(a, Decl(b.ts, 0, 6))
+->o : Symbol(a.o, Decl(a.ts, 6, 12))
++>o : Symbol(o, Decl(a.ts, 6, 12))
+ 
+ === c.ts ===
+ import { o, SpecialString } from "./a";

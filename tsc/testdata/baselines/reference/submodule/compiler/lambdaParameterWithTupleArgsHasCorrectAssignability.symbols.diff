@@ -1,0 +1,43 @@
+--- old.lambdaParameterWithTupleArgsHasCorrectAssignability.symbols
++++ new.lambdaParameterWithTupleArgsHasCorrectAssignability.symbols
+@@= skipped -21, +21 lines =@@
+ >MyTuple : Symbol(MyTuple, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 0, 22))
+ 
+     from: GenericFunction<T> | undefined;
+->from : Symbol(GenericClass.from, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 5, 39))
++>from : Symbol(from, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 5, 39))
+ >GenericFunction : Symbol(GenericFunction, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 1, 47))
+ >T : Symbol(T, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 5, 19))
+ }
+@@= skipped -30, +30 lines =@@
+ >consumeClass : Symbol(consumeClass, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 11, 1))
+ >createClass : Symbol(createClass, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 7, 1))
+ >str : Symbol(str, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 16, 25))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->str.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>str.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >str : Symbol(str, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 16, 25))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ // should work
+ consumeClass(createClass((str, _unused_num) => console.log(str.length)));
+@@= skipped -13, +13 lines =@@
+ >createClass : Symbol(createClass, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 7, 1))
+ >str : Symbol(str, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 19, 26))
+ >_unused_num : Symbol(_unused_num, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 19, 30))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->str.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>str.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >str : Symbol(str, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 19, 26))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 

@@ -1,0 +1,43 @@
+--- old.expressionWithJSDocTypeArguments.symbols
++++ new.expressionWithJSDocTypeArguments.symbols
+@@= skipped -13, +13 lines =@@
+ class Bar<T> { constructor(public x: T) { } }
+ >Bar : Symbol(Bar, Decl(expressionWithJSDocTypeArguments.ts, 2, 37))
+ >T : Symbol(T, Decl(expressionWithJSDocTypeArguments.ts, 4, 10))
+->x : Symbol(Bar.x, Decl(expressionWithJSDocTypeArguments.ts, 4, 27))
++>x : Symbol(x, Decl(expressionWithJSDocTypeArguments.ts, 4, 27))
+ >T : Symbol(T, Decl(expressionWithJSDocTypeArguments.ts, 4, 10))
+ 
+ // Errors expected on all of the following
+@@= skipped -8, +8 lines =@@
+ const WhatFoo = foo<?>;
+ >WhatFoo : Symbol(WhatFoo, Decl(expressionWithJSDocTypeArguments.ts, 8, 5))
+ >foo : Symbol(foo, Decl(expressionWithJSDocTypeArguments.ts, 0, 0))
++> : Symbol(unknown)
+ 
+ const HuhFoo = foo<string?>;
+ >HuhFoo : Symbol(HuhFoo, Decl(expressionWithJSDocTypeArguments.ts, 9, 5))
+@@= skipped -16, +17 lines =@@
+ type TWhatFoo = typeof foo<?>;
+ >TWhatFoo : Symbol(TWhatFoo, Decl(expressionWithJSDocTypeArguments.ts, 11, 32))
+ >foo : Symbol(foo, Decl(expressionWithJSDocTypeArguments.ts, 0, 0))
++> : Symbol(unknown)
+ 
+ type THuhFoo = typeof foo<string?>;
+ >THuhFoo : Symbol(THuhFoo, Decl(expressionWithJSDocTypeArguments.ts, 13, 30))
+@@= skipped -16, +17 lines =@@
+ const WhatBar = Bar<?>;
+ >WhatBar : Symbol(WhatBar, Decl(expressionWithJSDocTypeArguments.ts, 18, 5))
+ >Bar : Symbol(Bar, Decl(expressionWithJSDocTypeArguments.ts, 2, 37))
++> : Symbol(unknown)
+ 
+ const HuhBar = Bar<string?>;
+ >HuhBar : Symbol(HuhBar, Decl(expressionWithJSDocTypeArguments.ts, 19, 5))
+@@= skipped -16, +17 lines =@@
+ type TWhatBar = typeof Bar<?>;
+ >TWhatBar : Symbol(TWhatBar, Decl(expressionWithJSDocTypeArguments.ts, 21, 32))
+ >Bar : Symbol(Bar, Decl(expressionWithJSDocTypeArguments.ts, 2, 37))
++> : Symbol(unknown)
+ 
+ type THuhBar = typeof Bar<string?>;
+ >THuhBar : Symbol(THuhBar, Decl(expressionWithJSDocTypeArguments.ts, 23, 30))

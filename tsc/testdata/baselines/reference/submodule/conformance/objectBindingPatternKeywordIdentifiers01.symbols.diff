@@ -1,0 +1,10 @@
+--- old.objectBindingPatternKeywordIdentifiers01.symbols
++++ new.objectBindingPatternKeywordIdentifiers01.symbols
+@@= skipped -2, +2 lines =@@
+ === objectBindingPatternKeywordIdentifiers01.ts ===
+ var { while } = { while: 1 }
+ >while : Symbol(while, Decl(objectBindingPatternKeywordIdentifiers01.ts, 0, 17))
+-> : Symbol((Missing), Decl(objectBindingPatternKeywordIdentifiers01.ts, 0, 5))
++> : Symbol(, Decl(objectBindingPatternKeywordIdentifiers01.ts, 0, 5))
+ >while : Symbol(while, Decl(objectBindingPatternKeywordIdentifiers01.ts, 0, 17))
+ 

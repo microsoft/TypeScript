@@ -1,0 +1,9 @@
+--- old.asyncFunctionDeclaration11_es6.symbols
++++ new.asyncFunctionDeclaration11_es6.symbols
+@@= skipped -2, +2 lines =@@
+ === asyncFunctionDeclaration11_es6.ts ===
+ async function await(): Promise<void> {
+ >await : Symbol(await, Decl(asyncFunctionDeclaration11_es6.ts, 0, 0))
+->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Promise : Symbol(Promise)
+ }

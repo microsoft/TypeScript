@@ -1,0 +1,11 @@
+--- old.internalAliasFunctionInsideLocalModuleWithExport.symbols
++++ new.internalAliasFunctionInsideLocalModuleWithExport.symbols
+@@= skipped -18, +18 lines =@@
+     export import b = a.foo;
+ >b : Symbol(b, Decl(internalAliasFunctionInsideLocalModuleWithExport.ts, 6, 17))
+ >a : Symbol(a, Decl(internalAliasFunctionInsideLocalModuleWithExport.ts, 0, 0))
+->foo : Symbol(b, Decl(internalAliasFunctionInsideLocalModuleWithExport.ts, 0, 17))
++>foo : Symbol(foo, Decl(internalAliasFunctionInsideLocalModuleWithExport.ts, 0, 17))
+ 
+     export var bVal = b(10);
+ >bVal : Symbol(bVal, Decl(internalAliasFunctionInsideLocalModuleWithExport.ts, 8, 14))

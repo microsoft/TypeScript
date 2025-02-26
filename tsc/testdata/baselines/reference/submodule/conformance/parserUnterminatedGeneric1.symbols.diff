@@ -1,0 +1,11 @@
+--- old.parserUnterminatedGeneric1.symbols
++++ new.parserUnterminatedGeneric1.symbols
+@@= skipped -4, +4 lines =@@
+ >IQService : Symbol(IQService, Decl(parserUnterminatedGeneric1.ts, 0, 0))
+ 
+         all(promises: IPromise < any > []): IPromise<
+->all : Symbol(IQService.all, Decl(parserUnterminatedGeneric1.ts, 0, 22))
++>all : Symbol(all, Decl(parserUnterminatedGeneric1.ts, 0, 22))
+ >promises : Symbol(promises, Decl(parserUnterminatedGeneric1.ts, 1, 12))
+ >IPromise : Symbol(IPromise)
+ >IPromise : Symbol(IPromise)

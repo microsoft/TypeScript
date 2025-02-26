@@ -1,0 +1,92 @@
+--- old.mappedTypeAsClauses.symbols
++++ new.mappedTypeAsClauses.symbols
+@@= skipped -136, +136 lines =@@
+ >Person : Symbol(Person, Decl(mappedTypeAsClauses.ts, 35, 2))
+ 
+     readonly name: string;
+->name : Symbol(Person.name, Decl(mappedTypeAsClauses.ts, 37, 18))
++>name : Symbol(name, Decl(mappedTypeAsClauses.ts, 37, 18))
+ 
+     age: number;
+->age : Symbol(Person.age, Decl(mappedTypeAsClauses.ts, 38, 26))
++>age : Symbol(age, Decl(mappedTypeAsClauses.ts, 38, 26))
+ 
+     location?: string;
+->location : Symbol(Person.location, Decl(mappedTypeAsClauses.ts, 39, 16))
++>location : Symbol(location, Decl(mappedTypeAsClauses.ts, 39, 16))
+ }
+ 
+ type LazyPerson = Lazyify<Person>;
+@@= skipped -65, +65 lines =@@
+ >Car : Symbol(Car, Decl(mappedTypeAsClauses.ts, 58, 21))
+ 
+     name: string;
+->name : Symbol(Car.name, Decl(mappedTypeAsClauses.ts, 62, 15))
++>name : Symbol(name, Decl(mappedTypeAsClauses.ts, 62, 15))
+ 
+     seats: number;
+->seats : Symbol(Car.seats, Decl(mappedTypeAsClauses.ts, 63, 17))
++>seats : Symbol(seats, Decl(mappedTypeAsClauses.ts, 63, 17))
+ 
+     engine: Engine;
+->engine : Symbol(Car.engine, Decl(mappedTypeAsClauses.ts, 64, 18))
++>engine : Symbol(engine, Decl(mappedTypeAsClauses.ts, 64, 18))
+ >Engine : Symbol(Engine, Decl(mappedTypeAsClauses.ts, 67, 1))
+ 
+     wheels: Wheel[];
+->wheels : Symbol(Car.wheels, Decl(mappedTypeAsClauses.ts, 65, 19))
++>wheels : Symbol(wheels, Decl(mappedTypeAsClauses.ts, 65, 19))
+ >Wheel : Symbol(Wheel, Decl(mappedTypeAsClauses.ts, 72, 1))
+ }
+ 
+@@= skipped -18, +18 lines =@@
+ >Engine : Symbol(Engine, Decl(mappedTypeAsClauses.ts, 67, 1))
+ 
+     manufacturer: string;
+->manufacturer : Symbol(Engine.manufacturer, Decl(mappedTypeAsClauses.ts, 69, 18))
++>manufacturer : Symbol(manufacturer, Decl(mappedTypeAsClauses.ts, 69, 18))
+ 
+     horsepower: number;
+->horsepower : Symbol(Engine.horsepower, Decl(mappedTypeAsClauses.ts, 70, 25))
++>horsepower : Symbol(horsepower, Decl(mappedTypeAsClauses.ts, 70, 25))
+ }
+ 
+ interface Wheel {
+ >Wheel : Symbol(Wheel, Decl(mappedTypeAsClauses.ts, 72, 1))
+ 
+     type: "summer" | "winter";
+->type : Symbol(Wheel.type, Decl(mappedTypeAsClauses.ts, 74, 17))
++>type : Symbol(type, Decl(mappedTypeAsClauses.ts, 74, 17))
+ 
+     radius: number;
+->radius : Symbol(Wheel.radius, Decl(mappedTypeAsClauses.ts, 75, 30))
++>radius : Symbol(radius, Decl(mappedTypeAsClauses.ts, 75, 30))
+ }
+ 
+ type Primitive = string | number | boolean;
+@@= skipped -176, +176 lines =@@
+ >M : Symbol(M, Decl(mappedTypeAsClauses.ts, 119, 90))
+ 
+     a: boolean;
+->a : Symbol(M.a, Decl(mappedTypeAsClauses.ts, 121, 13))
++>a : Symbol(a, Decl(mappedTypeAsClauses.ts, 121, 13))
+ 
+     b: number;
+->b : Symbol(M.b, Decl(mappedTypeAsClauses.ts, 122, 15))
++>b : Symbol(b, Decl(mappedTypeAsClauses.ts, 122, 15))
+ }
+ 
+ function f(x: KeysExtendedBy<M, number>) {
+@@= skipped -21, +21 lines =@@
+ 
+ type NameMap = { 'a': 'x', 'b': 'y', 'c': 'z' };
+ >NameMap : Symbol(NameMap, Decl(mappedTypeAsClauses.ts, 130, 7))
+->'a' : Symbol('a', Decl(mappedTypeAsClauses.ts, 132, 16))
+->'b' : Symbol('b', Decl(mappedTypeAsClauses.ts, 132, 26))
+->'c' : Symbol('c', Decl(mappedTypeAsClauses.ts, 132, 36))
++>'a' : Symbol(a, Decl(mappedTypeAsClauses.ts, 132, 16))
++>'b' : Symbol(b, Decl(mappedTypeAsClauses.ts, 132, 26))
++>'c' : Symbol(c, Decl(mappedTypeAsClauses.ts, 132, 36))
+ 
+ // Distributive, will be simplified
+ 

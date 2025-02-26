@@ -1,0 +1,20 @@
+--- old.es6ImportNamedImportMergeErrors.symbols
++++ new.es6ImportNamedImportMergeErrors.symbols
+@@= skipped -23, +23 lines =@@
+ >a : Symbol(a, Decl(es6ImportNamedImportMergeErrors_1.ts, 0, 8), Decl(es6ImportNamedImportMergeErrors_1.ts, 0, 56))
+ 
+ import { x as x1 } from "./es6ImportNamedImportMergeErrors_0";
+->x : Symbol(x1, Decl(es6ImportNamedImportMergeErrors_0.ts, 1, 10))
++>x : Symbol(x, Decl(es6ImportNamedImportMergeErrors_0.ts, 1, 10))
+ >x1 : Symbol(x1, Decl(es6ImportNamedImportMergeErrors_1.ts, 2, 8), Decl(es6ImportNamedImportMergeErrors_1.ts, 2, 62))
+ 
+ interface x1 { } // shouldnt be error
+@@= skipped -13, +13 lines =@@
+ >x : Symbol(x, Decl(es6ImportNamedImportMergeErrors_1.ts, 4, 8), Decl(es6ImportNamedImportMergeErrors_1.ts, 5, 3))
+ 
+ import { x as x44 } from "./es6ImportNamedImportMergeErrors_0"; // should be error
+->x : Symbol(x1, Decl(es6ImportNamedImportMergeErrors_0.ts, 1, 10))
++>x : Symbol(x, Decl(es6ImportNamedImportMergeErrors_0.ts, 1, 10))
+ >x44 : Symbol(x44, Decl(es6ImportNamedImportMergeErrors_1.ts, 6, 8), Decl(es6ImportNamedImportMergeErrors_1.ts, 7, 3))
+ 
+ var x44 = 10; 

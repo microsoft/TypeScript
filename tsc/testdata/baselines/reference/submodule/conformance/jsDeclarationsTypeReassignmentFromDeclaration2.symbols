@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeReassignmentFromDeclaration2.ts] ////
+
+=== index.js ===
+const items = require("./some-mod")();
+>items : Symbol(items, Decl(index.js, 0, 5))
+
+module.exports = items;
+>items : Symbol(items, Decl(index.js, 0, 5))
+

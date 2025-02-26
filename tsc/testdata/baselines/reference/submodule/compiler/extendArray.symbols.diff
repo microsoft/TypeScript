@@ -1,0 +1,35 @@
+--- old.extendArray.symbols
++++ new.extendArray.symbols
+@@= skipped -4, +4 lines =@@
+ >a : Symbol(a, Decl(extendArray.ts, 0, 3))
+ 
+ a.forEach(function (v,i,a) {});
+->a.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>a.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(extendArray.ts, 0, 3))
+->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >v : Symbol(v, Decl(extendArray.ts, 1, 20))
+ >i : Symbol(i, Decl(extendArray.ts, 1, 22))
+ >a : Symbol(a, Decl(extendArray.ts, 1, 24))
+@@= skipped -15, +15 lines =@@
+ >Array : Symbol(Array, Decl(extendArray.ts, 4, 22))
+ 
+     collect(fn:(e:_element) => _element[]) : any[];
+->collect : Symbol(Array.collect, Decl(extendArray.ts, 5, 19))
++>collect : Symbol(collect, Decl(extendArray.ts, 5, 19))
+ >fn : Symbol(fn, Decl(extendArray.ts, 6, 12))
+ >e : Symbol(e, Decl(extendArray.ts, 6, 16))
+ >_element : Symbol(_element)
+@@= skipped -37, +37 lines =@@
+ >j : Symbol(j, Decl(extendArray.ts, 16, 16))
+ 
+             res.push(tmp[j]);
+->res.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>res.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >res : Symbol(res, Decl(extendArray.ts, 13, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >tmp : Symbol(tmp, Decl(extendArray.ts, 15, 11))
+ >j : Symbol(j, Decl(extendArray.ts, 16, 16))
+         }

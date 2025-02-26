@@ -1,0 +1,10 @@
+--- old.namedTupleMembersErrors.symbols
++++ new.namedTupleMembersErrors.symbols
+@@= skipped -26, +26 lines =@@
+ 
+ export type OptTrailing = [first: string, rest: ...string[]?]; // dots+question on element disallowed
+ >OptTrailing : Symbol(OptTrailing, Decl(namedTupleMembersErrors.ts, 11, 58))
++> : Symbol(unknown)
+ 
+ export type OptRest = [first: string, ...rest?: string[]]; // rest+optional disallowed
+ >OptRest : Symbol(OptRest, Decl(namedTupleMembersErrors.ts, 13, 62))

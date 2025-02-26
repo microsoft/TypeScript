@@ -1,0 +1,19 @@
+--- old.initializersInAmbientEnums.symbols
++++ new.initializersInAmbientEnums.symbols
+@@= skipped -4, +4 lines =@@
+ >E : Symbol(E, Decl(initializersInAmbientEnums.ts, 0, 0))
+ 
+     a = 10,
+->a : Symbol(E.a, Decl(initializersInAmbientEnums.ts, 0, 16))
++>a : Symbol(a, Decl(initializersInAmbientEnums.ts, 0, 16))
+ 
+     b = a,
+->b : Symbol(E.b, Decl(initializersInAmbientEnums.ts, 1, 11))
+->a : Symbol(E.a, Decl(initializersInAmbientEnums.ts, 0, 16))
++>b : Symbol(b, Decl(initializersInAmbientEnums.ts, 1, 11))
++>a : Symbol(a, Decl(initializersInAmbientEnums.ts, 0, 16))
+ 
+     e = 10 << 2 * 8,
+->e : Symbol(E.e, Decl(initializersInAmbientEnums.ts, 2, 10))
++>e : Symbol(e, Decl(initializersInAmbientEnums.ts, 2, 10))
+ }

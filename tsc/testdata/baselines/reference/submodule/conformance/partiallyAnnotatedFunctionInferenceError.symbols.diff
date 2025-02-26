@@ -1,0 +1,20 @@
+--- old.partiallyAnnotatedFunctionInferenceError.symbols
++++ new.partiallyAnnotatedFunctionInferenceError.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(partiallyAnnotatedFunctionInferenceError.ts, 0, 0))
+ 
+   test: string
+->test : Symbol(C.test, Decl(partiallyAnnotatedFunctionInferenceError.ts, 0, 9))
++>test : Symbol(test, Decl(partiallyAnnotatedFunctionInferenceError.ts, 0, 9))
+ }
+ 
+ class D extends C {
+@@= skipped -8, +8 lines =@@
+ >C : Symbol(C, Decl(partiallyAnnotatedFunctionInferenceError.ts, 0, 0))
+ 
+   test2: string
+->test2 : Symbol(D.test2, Decl(partiallyAnnotatedFunctionInferenceError.ts, 4, 19))
++>test2 : Symbol(test2, Decl(partiallyAnnotatedFunctionInferenceError.ts, 4, 19))
+ }
+ 
+ declare function testError<T extends C>(a: (t: T, t1: T) => void): T

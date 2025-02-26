@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/jsdoc/moduleExportsElementAccessAssignment.ts] ////
+
+=== mod2.js ===
+const mod1 = require("./mod1");
+>mod1 : Symbol(mod1, Decl(mod2.js, 0, 5))
+
+mod1.a;
+>mod1 : Symbol(mod1, Decl(mod2.js, 0, 5))
+
+mod1.b;
+>mod1 : Symbol(mod1, Decl(mod2.js, 0, 5))
+
+mod1.c;
+>mod1 : Symbol(mod1, Decl(mod2.js, 0, 5))
+
+mod1.d;
+>mod1 : Symbol(mod1, Decl(mod2.js, 0, 5))
+
+mod1.d.e;
+>mod1 : Symbol(mod1, Decl(mod2.js, 0, 5))
+
+mod1.default;
+>mod1 : Symbol(mod1, Decl(mod2.js, 0, 5))
+

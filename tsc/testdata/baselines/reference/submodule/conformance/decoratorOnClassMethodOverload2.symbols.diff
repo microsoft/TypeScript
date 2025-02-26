@@ -1,0 +1,16 @@
+--- old.decoratorOnClassMethodOverload2.symbols
++++ new.decoratorOnClassMethodOverload2.symbols
+@@= skipped -15, +15 lines =@@
+ >C : Symbol(C, Decl(decoratorOnClassMethodOverload2.ts, 0, 126))
+ 
+     method()
+->method : Symbol(C.method, Decl(decoratorOnClassMethodOverload2.ts, 2, 9), Decl(decoratorOnClassMethodOverload2.ts, 3, 12))
++>method : Symbol(method, Decl(decoratorOnClassMethodOverload2.ts, 2, 9), Decl(decoratorOnClassMethodOverload2.ts, 3, 12))
+ 
+     @dec
+ >dec : Symbol(dec, Decl(decoratorOnClassMethodOverload2.ts, 0, 0))
+ 
+     method() { }
+->method : Symbol(C.method, Decl(decoratorOnClassMethodOverload2.ts, 2, 9), Decl(decoratorOnClassMethodOverload2.ts, 3, 12))
++>method : Symbol(method, Decl(decoratorOnClassMethodOverload2.ts, 2, 9), Decl(decoratorOnClassMethodOverload2.ts, 3, 12))
+ }

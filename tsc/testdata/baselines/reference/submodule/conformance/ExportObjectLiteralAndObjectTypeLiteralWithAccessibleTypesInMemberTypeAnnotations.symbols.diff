@@ -1,0 +1,13 @@
+--- old.ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.symbols
++++ new.ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.symbols
+@@= skipped -7, +7 lines =@@
+ >Point : Symbol(Point, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 0, 10))
+ 
+         constructor(public x: number, public y: number) { }
+->x : Symbol(Point.x, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 3, 20))
+->y : Symbol(Point.y, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 3, 37))
++>x : Symbol(x, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 3, 20))
++>y : Symbol(y, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 3, 37))
+     }
+ 
+     export var Origin: Point = { x: 0, y: 0 };

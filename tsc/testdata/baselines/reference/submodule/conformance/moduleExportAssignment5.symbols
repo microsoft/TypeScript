@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/salsa/moduleExportAssignment5.ts] ////
+
+=== axios.js ===
+class Axios {
+>Axios : Symbol(Axios, Decl(axios.js, 0, 0))
+
+    constructor() {
+    }
+    m() { }
+>m : Symbol(m, Decl(axios.js, 2, 5))
+}
+var axios = new Axios();
+>axios : Symbol(axios, Decl(axios.js, 5, 3))
+>Axios : Symbol(Axios, Decl(axios.js, 0, 0))
+
+// none of the 3 references should have a use-before-def error
+axios.m()
+>axios.m : Symbol(m, Decl(axios.js, 2, 5))
+>axios : Symbol(axios, Decl(axios.js, 5, 3))
+>m : Symbol(m, Decl(axios.js, 2, 5))
+
+module.exports = axios;
+>axios : Symbol(axios, Decl(axios.js, 5, 3))
+
+module.exports.default = axios;
+>axios : Symbol(axios, Decl(axios.js, 5, 3))
+

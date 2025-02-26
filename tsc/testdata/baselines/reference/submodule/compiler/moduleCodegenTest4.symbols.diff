@@ -1,0 +1,13 @@
+--- old.moduleCodegenTest4.symbols
++++ new.moduleCodegenTest4.symbols
+@@= skipped -5, +5 lines =@@
+ >x : Symbol(x, Decl(moduleCodegenTest4.ts, 0, 30))
+ 
+ Baz.x = "goodbye";
+->Baz.x : Symbol(Baz.x, Decl(moduleCodegenTest4.ts, 0, 30))
++>Baz.x : Symbol(x, Decl(moduleCodegenTest4.ts, 0, 30))
+ >Baz : Symbol(Baz, Decl(moduleCodegenTest4.ts, 0, 0))
+->x : Symbol(Baz.x, Decl(moduleCodegenTest4.ts, 0, 30))
++>x : Symbol(x, Decl(moduleCodegenTest4.ts, 0, 30))
+ 
+ void 0;

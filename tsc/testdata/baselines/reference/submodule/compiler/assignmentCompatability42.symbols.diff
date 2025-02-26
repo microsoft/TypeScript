@@ -1,0 +1,41 @@
+--- old.assignmentCompatability42.symbols
++++ new.assignmentCompatability42.symbols
+@@= skipped -7, +7 lines =@@
+ >interfaceWithPublicAndOptional : Symbol(interfaceWithPublicAndOptional, Decl(assignmentCompatability42.ts, 0, 18))
+ >T : Symbol(T, Decl(assignmentCompatability42.ts, 1, 52))
+ >U : Symbol(U, Decl(assignmentCompatability42.ts, 1, 54))
+->one : Symbol(interfaceWithPublicAndOptional.one, Decl(assignmentCompatability42.ts, 1, 58))
++>one : Symbol(one, Decl(assignmentCompatability42.ts, 1, 58))
+ >T : Symbol(T, Decl(assignmentCompatability42.ts, 1, 52))
+->two : Symbol(interfaceWithPublicAndOptional.two, Decl(assignmentCompatability42.ts, 1, 66))
++>two : Symbol(two, Decl(assignmentCompatability42.ts, 1, 66))
+ >U : Symbol(U, Decl(assignmentCompatability42.ts, 1, 54))
+ >obj4 : Symbol(obj4, Decl(assignmentCompatability42.ts, 1, 83))
+ >interfaceWithPublicAndOptional : Symbol(interfaceWithPublicAndOptional, Decl(assignmentCompatability42.ts, 0, 18))
+@@= skipped -19, +19 lines =@@
+ >classWithPublicPrivate : Symbol(classWithPublicPrivate, Decl(assignmentCompatability42.ts, 4, 18))
+ >T : Symbol(T, Decl(assignmentCompatability42.ts, 5, 44))
+ >U : Symbol(U, Decl(assignmentCompatability42.ts, 5, 46))
+->one : Symbol(classWithPublicPrivate.one, Decl(assignmentCompatability42.ts, 5, 63))
++>one : Symbol(one, Decl(assignmentCompatability42.ts, 5, 63))
+ >T : Symbol(T, Decl(assignmentCompatability42.ts, 5, 44))
+->two : Symbol(classWithPublicPrivate.two, Decl(assignmentCompatability42.ts, 5, 77))
++>two : Symbol(two, Decl(assignmentCompatability42.ts, 5, 77))
+ >U : Symbol(U, Decl(assignmentCompatability42.ts, 5, 46))
+ >x7 : Symbol(x7, Decl(assignmentCompatability42.ts, 5, 104))
+ >classWithPublicPrivate : Symbol(classWithPublicPrivate, Decl(assignmentCompatability42.ts, 4, 18))
+@@= skipped -12, +12 lines =@@
+ >x7 : Symbol(x7, Decl(assignmentCompatability42.ts, 5, 104))
+ }
+ __test2__.__val__x7 = __test1__.__val__obj4
+->__test2__.__val__x7 : Symbol(__test2__.__val__x7, Decl(assignmentCompatability42.ts, 6, 14))
++>__test2__.__val__x7 : Symbol(__val__x7, Decl(assignmentCompatability42.ts, 6, 14))
+ >__test2__ : Symbol(__test2__, Decl(assignmentCompatability42.ts, 3, 1))
+->__val__x7 : Symbol(__test2__.__val__x7, Decl(assignmentCompatability42.ts, 6, 14))
+->__test1__.__val__obj4 : Symbol(__test1__.__val__obj4, Decl(assignmentCompatability42.ts, 2, 14))
++>__val__x7 : Symbol(__val__x7, Decl(assignmentCompatability42.ts, 6, 14))
++>__test1__.__val__obj4 : Symbol(__val__obj4, Decl(assignmentCompatability42.ts, 2, 14))
+ >__test1__ : Symbol(__test1__, Decl(assignmentCompatability42.ts, 0, 0))
+->__val__obj4 : Symbol(__test1__.__val__obj4, Decl(assignmentCompatability42.ts, 2, 14))
++>__val__obj4 : Symbol(__val__obj4, Decl(assignmentCompatability42.ts, 2, 14))
+ 

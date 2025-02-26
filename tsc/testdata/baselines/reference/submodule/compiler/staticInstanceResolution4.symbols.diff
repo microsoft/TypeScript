@@ -1,0 +1,11 @@
+--- old.staticInstanceResolution4.symbols
++++ new.staticInstanceResolution4.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(staticInstanceResolution4.ts, 0, 0))
+ 
+    public foo() {}
+->foo : Symbol(A.foo, Decl(staticInstanceResolution4.ts, 0, 9))
++>foo : Symbol(foo, Decl(staticInstanceResolution4.ts, 0, 9))
+ }
+ 
+ A.foo();

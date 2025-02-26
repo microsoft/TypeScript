@@ -1,0 +1,91 @@
+--- old.esDecorators-preservesThis.symbols
++++ new.esDecorators-preservesThis.symbols
+@@= skipped -6, +6 lines =@@
+ >DecoratorProvider : Symbol(DecoratorProvider, Decl(esDecorators-preservesThis.ts, 0, 0))
+ 
+     decorate<T>(this: DecoratorProvider, v: T, ctx: DecoratorContext): T;
+->decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
++>decorate : Symbol(decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+ >T : Symbol(T, Decl(esDecorators-preservesThis.ts, 3, 13))
+ >this : Symbol(this, Decl(esDecorators-preservesThis.ts, 3, 16))
+ >DecoratorProvider : Symbol(DecoratorProvider, Decl(esDecorators-preservesThis.ts, 0, 0))
+@@= skipped -20, +20 lines =@@
+ >C : Symbol(C, Decl(esDecorators-preservesThis.ts, 6, 42))
+ 
+     @instance.decorate
+->instance.decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
++>instance.decorate : Symbol(decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+ >instance : Symbol(instance, Decl(esDecorators-preservesThis.ts, 6, 13))
+->decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
++>decorate : Symbol(decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+ 
+     method1() { }
+->method1 : Symbol(C.method1, Decl(esDecorators-preservesThis.ts, 9, 9))
++>method1 : Symbol(method1, Decl(esDecorators-preservesThis.ts, 9, 9))
+ 
+     @(instance["decorate"])
+ >instance : Symbol(instance, Decl(esDecorators-preservesThis.ts, 6, 13))
+->"decorate" : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
++>"decorate" : Symbol(decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+ 
+     method2() { }
+->method2 : Symbol(C.method2, Decl(esDecorators-preservesThis.ts, 11, 17))
++>method2 : Symbol(method2, Decl(esDecorators-preservesThis.ts, 11, 17))
+ 
+     // even in parens
+     @((instance.decorate))
+->instance.decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
++>instance.decorate : Symbol(decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+ >instance : Symbol(instance, Decl(esDecorators-preservesThis.ts, 6, 13))
+->decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
++>decorate : Symbol(decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+ 
+     method3() { }
+->method3 : Symbol(C.method3, Decl(esDecorators-preservesThis.ts, 14, 17))
++>method3 : Symbol(method3, Decl(esDecorators-preservesThis.ts, 14, 17))
+ }
+ 
+ // preserve `this` for `super` access
+@@= skipped -30, +30 lines =@@
+ >DecoratorProvider : Symbol(DecoratorProvider, Decl(esDecorators-preservesThis.ts, 0, 0))
+ 
+     m() {
+->m : Symbol(D.m, Decl(esDecorators-preservesThis.ts, 22, 35))
++>m : Symbol(m, Decl(esDecorators-preservesThis.ts, 22, 35))
+ 
+         class C {
+ >C : Symbol(C, Decl(esDecorators-preservesThis.ts, 23, 9))
+ 
+             @(super.decorate)
+->super.decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
++>super.decorate : Symbol(decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+ >super : Symbol(DecoratorProvider, Decl(esDecorators-preservesThis.ts, 0, 0))
+->decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
++>decorate : Symbol(decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+ 
+             method1() { }
+->method1 : Symbol(C.method1, Decl(esDecorators-preservesThis.ts, 24, 17))
++>method1 : Symbol(method1, Decl(esDecorators-preservesThis.ts, 24, 17))
+ 
+             @(super["decorate"])
+ >super : Symbol(DecoratorProvider, Decl(esDecorators-preservesThis.ts, 0, 0))
+->"decorate" : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
++>"decorate" : Symbol(decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+ 
+             method2() { }
+->method2 : Symbol(C.method2, Decl(esDecorators-preservesThis.ts, 26, 25))
++>method2 : Symbol(method2, Decl(esDecorators-preservesThis.ts, 26, 25))
+ 
+             @((super.decorate))
+->super.decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
++>super.decorate : Symbol(decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+ >super : Symbol(DecoratorProvider, Decl(esDecorators-preservesThis.ts, 0, 0))
+->decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
++>decorate : Symbol(decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
+ 
+             method3() { }
+->method3 : Symbol(C.method3, Decl(esDecorators-preservesThis.ts, 29, 25))
++>method3 : Symbol(method3, Decl(esDecorators-preservesThis.ts, 29, 25))
+         }
+     }
+ }

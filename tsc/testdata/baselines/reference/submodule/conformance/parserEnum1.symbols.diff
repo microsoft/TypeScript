@@ -1,0 +1,21 @@
+--- old.parserEnum1.symbols
++++ new.parserEnum1.symbols
+@@= skipped -4, +4 lines =@@
+ >SignatureFlags : Symbol(SignatureFlags, Decl(parserEnum1.ts, 0, 0))
+ 
+         None = 0,
+->None : Symbol(SignatureFlags.None, Decl(parserEnum1.ts, 0, 32))
++>None : Symbol(None, Decl(parserEnum1.ts, 0, 32))
+ 
+         IsIndexer = 1,
+->IsIndexer : Symbol(SignatureFlags.IsIndexer, Decl(parserEnum1.ts, 1, 17))
++>IsIndexer : Symbol(IsIndexer, Decl(parserEnum1.ts, 1, 17))
+ 
+         IsStringIndexer = 1 << 1,
+->IsStringIndexer : Symbol(SignatureFlags.IsStringIndexer, Decl(parserEnum1.ts, 2, 22))
++>IsStringIndexer : Symbol(IsStringIndexer, Decl(parserEnum1.ts, 2, 22))
+ 
+         IsNumberIndexer = 1 << 2,
+->IsNumberIndexer : Symbol(SignatureFlags.IsNumberIndexer, Decl(parserEnum1.ts, 3, 33))
++>IsNumberIndexer : Symbol(IsNumberIndexer, Decl(parserEnum1.ts, 3, 33))
+     }

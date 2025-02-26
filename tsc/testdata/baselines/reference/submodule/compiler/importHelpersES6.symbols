@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/importHelpersES6.ts] ////
+
+=== a.ts ===
+declare var dec: any;
+>dec : Symbol(dec, Decl(a.ts, 0, 11))
+
+@dec export class A {
+>dec : Symbol(dec, Decl(a.ts, 0, 11))
+>A : Symbol(A, Decl(a.ts, 0, 21))
+
+    #x: number = 1;
+>#x : Symbol(#x, Decl(a.ts, 1, 21))
+
+    async f() { this.#x = await this.#x; }
+>f : Symbol(f, Decl(a.ts, 2, 19))
+>this.#x : Symbol(#x, Decl(a.ts, 1, 21))
+>this : Symbol(A, Decl(a.ts, 0, 21))
+>this.#x : Symbol(#x, Decl(a.ts, 1, 21))
+>this : Symbol(A, Decl(a.ts, 0, 21))
+
+    g(u) { return #x in u; }
+>g : Symbol(g, Decl(a.ts, 3, 42))
+>u : Symbol(u, Decl(a.ts, 4, 6))
+>#x : Symbol(#x, Decl(a.ts, 1, 21))
+>u : Symbol(u, Decl(a.ts, 4, 6))
+}
+
+const o = { a: 1 };
+>o : Symbol(o, Decl(a.ts, 7, 5))
+>a : Symbol(a, Decl(a.ts, 7, 11))
+
+const y = { ...o };
+>y : Symbol(y, Decl(a.ts, 8, 5))
+>o : Symbol(o, Decl(a.ts, 7, 5))
+
+=== tslib.d.ts ===
+export declare function __extends(d: Function, b: Function): void;
+>__extends : Symbol(__extends, Decl(tslib.d.ts, 0, 0))
+>d : Symbol(d, Decl(tslib.d.ts, 0, 34))
+>Function : Symbol(Function)
+>b : Symbol(b, Decl(tslib.d.ts, 0, 46))
+>Function : Symbol(Function)
+
+export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;
+>__decorate : Symbol(__decorate, Decl(tslib.d.ts, 0, 66))
+>decorators : Symbol(decorators, Decl(tslib.d.ts, 1, 35))
+>Function : Symbol(Function)
+>target : Symbol(target, Decl(tslib.d.ts, 1, 58))
+>key : Symbol(key, Decl(tslib.d.ts, 1, 71))
+>desc : Symbol(desc, Decl(tslib.d.ts, 1, 94))
+
+export declare function __param(paramIndex: number, decorator: Function): Function;
+>__param : Symbol(__param, Decl(tslib.d.ts, 1, 112))
+>paramIndex : Symbol(paramIndex, Decl(tslib.d.ts, 2, 32))
+>decorator : Symbol(decorator, Decl(tslib.d.ts, 2, 51))
+>Function : Symbol(Function)
+>Function : Symbol(Function)
+
+export declare function __metadata(metadataKey: any, metadataValue: any): Function;
+>__metadata : Symbol(__metadata, Decl(tslib.d.ts, 2, 83))
+>metadataKey : Symbol(metadataKey, Decl(tslib.d.ts, 3, 35))
+>metadataValue : Symbol(metadataValue, Decl(tslib.d.ts, 3, 52))
+>Function : Symbol(Function)
+
+export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
+>__awaiter : Symbol(__awaiter, Decl(tslib.d.ts, 3, 83))
+>thisArg : Symbol(thisArg, Decl(tslib.d.ts, 4, 34))
+>_arguments : Symbol(_arguments, Decl(tslib.d.ts, 4, 47))
+>P : Symbol(P, Decl(tslib.d.ts, 4, 64))
+>Function : Symbol(Function)
+>generator : Symbol(generator, Decl(tslib.d.ts, 4, 77))
+>Function : Symbol(Function)
+
+export declare function __classPrivateFieldGet(a: any, b: any, c: any, d: any): any;
+>__classPrivateFieldGet : Symbol(__classPrivateFieldGet, Decl(tslib.d.ts, 4, 104))
+>a : Symbol(a, Decl(tslib.d.ts, 5, 47))
+>b : Symbol(b, Decl(tslib.d.ts, 5, 54))
+>c : Symbol(c, Decl(tslib.d.ts, 5, 62))
+>d : Symbol(d, Decl(tslib.d.ts, 5, 70))
+
+export declare function __classPrivateFieldSet(a: any, b: any, c: any, d: any, e: any): any;
+>__classPrivateFieldSet : Symbol(__classPrivateFieldSet, Decl(tslib.d.ts, 5, 84))
+>a : Symbol(a, Decl(tslib.d.ts, 6, 47))
+>b : Symbol(b, Decl(tslib.d.ts, 6, 54))
+>c : Symbol(c, Decl(tslib.d.ts, 6, 62))
+>d : Symbol(d, Decl(tslib.d.ts, 6, 70))
+>e : Symbol(e, Decl(tslib.d.ts, 6, 78))
+
+export declare function __classPrivateFieldIn(a: any, b: any): boolean;
+>__classPrivateFieldIn : Symbol(__classPrivateFieldIn, Decl(tslib.d.ts, 6, 92))
+>a : Symbol(a, Decl(tslib.d.ts, 7, 46))
+>b : Symbol(b, Decl(tslib.d.ts, 7, 53))
+

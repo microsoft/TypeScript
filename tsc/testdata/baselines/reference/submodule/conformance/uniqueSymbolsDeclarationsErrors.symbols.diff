@@ -1,0 +1,102 @@
+--- old.uniqueSymbolsDeclarationsErrors.symbols
++++ new.uniqueSymbolsDeclarationsErrors.symbols
+@@= skipped -5, +5 lines =@@
+ 
+ interface I { readonly readonlyType: unique symbol; }
+ >I : Symbol(I, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 31))
+->readonlyType : Symbol(I.readonlyType, Decl(uniqueSymbolsDeclarationsErrors.ts, 1, 13))
++>readonlyType : Symbol(readonlyType, Decl(uniqueSymbolsDeclarationsErrors.ts, 1, 13))
+ 
+ // not allowed when emitting declarations
+ 
+@@= skipped -32, +32 lines =@@
+ >classExpression : Symbol(classExpression, Decl(uniqueSymbolsDeclarationsErrors.ts, 14, 12))
+ 
+     method1(p: typeof s): typeof s {
+->method1 : Symbol(classExpression.method1, Decl(uniqueSymbolsDeclarationsErrors.ts, 14, 38))
++>method1 : Symbol(method1, Decl(uniqueSymbolsDeclarationsErrors.ts, 14, 38))
+ >p : Symbol(p, Decl(uniqueSymbolsDeclarationsErrors.ts, 15, 12))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
+@@= skipped -9, +9 lines =@@
+ >p : Symbol(p, Decl(uniqueSymbolsDeclarationsErrors.ts, 15, 12))
+     }
+     method2(p: I["readonlyType"]): I["readonlyType"] {
+->method2 : Symbol(classExpression.method2, Decl(uniqueSymbolsDeclarationsErrors.ts, 17, 5))
++>method2 : Symbol(method2, Decl(uniqueSymbolsDeclarationsErrors.ts, 17, 5))
+ >p : Symbol(p, Decl(uniqueSymbolsDeclarationsErrors.ts, 18, 12))
+ >I : Symbol(I, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 31))
+ >I : Symbol(I, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 31))
+@@= skipped -25, +25 lines =@@
+ >InterfaceWithPrivateNamedProperties : Symbol(InterfaceWithPrivateNamedProperties, Decl(uniqueSymbolsDeclarationsErrors.ts, 25, 1))
+ 
+     [s]: any;
+->[s] : Symbol(InterfaceWithPrivateNamedProperties[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 27, 54))
++>[s] : Symbol([s], Decl(uniqueSymbolsDeclarationsErrors.ts, 27, 54))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >InterfaceWithPrivateNamedMethods : Symbol(InterfaceWithPrivateNamedMethods, Decl(uniqueSymbolsDeclarationsErrors.ts, 29, 1))
+ 
+     [s](): any;
+->[s] : Symbol(InterfaceWithPrivateNamedMethods[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 31, 51))
++>[s] : Symbol([s], Decl(uniqueSymbolsDeclarationsErrors.ts, 31, 51))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
+ }
+ 
+@@= skipped -24, +24 lines =@@
+ >ClassWithPrivateNamedProperties : Symbol(ClassWithPrivateNamedProperties, Decl(uniqueSymbolsDeclarationsErrors.ts, 41, 1))
+ 
+     [s]: any;
+->[s] : Symbol(ClassWithPrivateNamedProperties[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 43, 46))
++>[s] : Symbol([s], Decl(uniqueSymbolsDeclarationsErrors.ts, 43, 46))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
+ 
+     static [s]: any;
+->[s] : Symbol(ClassWithPrivateNamedProperties[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 44, 13))
++>[s] : Symbol([s], Decl(uniqueSymbolsDeclarationsErrors.ts, 44, 13))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >ClassWithPrivateNamedMethods : Symbol(ClassWithPrivateNamedMethods, Decl(uniqueSymbolsDeclarationsErrors.ts, 46, 1))
+ 
+     [s]() {}
+->[s] : Symbol(ClassWithPrivateNamedMethods[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 48, 43))
++>[s] : Symbol([s], Decl(uniqueSymbolsDeclarationsErrors.ts, 48, 43))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
+ 
+     static [s]() {}
+->[s] : Symbol(ClassWithPrivateNamedMethods[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 49, 12))
++>[s] : Symbol([s], Decl(uniqueSymbolsDeclarationsErrors.ts, 49, 12))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >ClassWithPrivateNamedAccessors : Symbol(ClassWithPrivateNamedAccessors, Decl(uniqueSymbolsDeclarationsErrors.ts, 51, 1))
+ 
+     get [s](): any { return undefined; }
+->[s] : Symbol(ClassWithPrivateNamedAccessors[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 53, 45), Decl(uniqueSymbolsDeclarationsErrors.ts, 54, 40))
++>[s] : Symbol([s], Decl(uniqueSymbolsDeclarationsErrors.ts, 53, 45), Decl(uniqueSymbolsDeclarationsErrors.ts, 54, 40))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
+ >undefined : Symbol(undefined)
+ 
+     set [s](v: any) { }
+->[s] : Symbol(ClassWithPrivateNamedAccessors[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 53, 45), Decl(uniqueSymbolsDeclarationsErrors.ts, 54, 40))
++>[s] : Symbol([s], Decl(uniqueSymbolsDeclarationsErrors.ts, 53, 45), Decl(uniqueSymbolsDeclarationsErrors.ts, 54, 40))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
+ >v : Symbol(v, Decl(uniqueSymbolsDeclarationsErrors.ts, 55, 12))
+ 
+     static get [s](): any { return undefined; }
+->[s] : Symbol(ClassWithPrivateNamedAccessors[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 55, 23), Decl(uniqueSymbolsDeclarationsErrors.ts, 56, 47))
++>[s] : Symbol([s], Decl(uniqueSymbolsDeclarationsErrors.ts, 55, 23), Decl(uniqueSymbolsDeclarationsErrors.ts, 56, 47))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
+ >undefined : Symbol(undefined)
+ 
+     static set [s](v: any) { }
+->[s] : Symbol(ClassWithPrivateNamedAccessors[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 55, 23), Decl(uniqueSymbolsDeclarationsErrors.ts, 56, 47))
++>[s] : Symbol([s], Decl(uniqueSymbolsDeclarationsErrors.ts, 55, 23), Decl(uniqueSymbolsDeclarationsErrors.ts, 56, 47))
+ >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
+ >v : Symbol(v, Decl(uniqueSymbolsDeclarationsErrors.ts, 57, 19))
+ }

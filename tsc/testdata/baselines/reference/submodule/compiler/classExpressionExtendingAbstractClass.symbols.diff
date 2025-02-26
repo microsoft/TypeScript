@@ -1,0 +1,11 @@
+--- old.classExpressionExtendingAbstractClass.symbols
++++ new.classExpressionExtendingAbstractClass.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(classExpressionExtendingAbstractClass.ts, 0, 0))
+ 
+     abstract foo(): void;
+->foo : Symbol(A.foo, Decl(classExpressionExtendingAbstractClass.ts, 0, 18))
++>foo : Symbol(foo, Decl(classExpressionExtendingAbstractClass.ts, 0, 18))
+ }
+ 
+ var C = class extends A {     // no error reported!

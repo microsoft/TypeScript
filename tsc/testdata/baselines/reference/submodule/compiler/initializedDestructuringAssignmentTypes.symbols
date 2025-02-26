@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/initializedDestructuringAssignmentTypes.ts] ////
+
+=== initializedDestructuringAssignmentTypes.ts ===
+const [, a = ''] = ''.match('') || [];
+>a : Symbol(a, Decl(initializedDestructuringAssignmentTypes.ts, 0, 8))
+>''.match : Symbol(match, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(lib.es5.d.ts, --, --))
+
+a.toFixed()
+>a : Symbol(a, Decl(initializedDestructuringAssignmentTypes.ts, 0, 8))
+

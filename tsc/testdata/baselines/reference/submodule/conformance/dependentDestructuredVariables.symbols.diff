@@ -1,0 +1,502 @@
+--- old.dependentDestructuredVariables.symbols
++++ new.dependentDestructuredVariables.symbols
+@@= skipped -21, +21 lines =@@
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 4, 14))
+ 
+         payload.toFixed();
+->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>payload.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 4, 20))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+     }
+     if (kind === 'B') {
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 4, 14))
+ 
+         payload.toUpperCase();
+->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>payload.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 4, 20))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 
+@@= skipped -28, +28 lines =@@
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 14, 11))
+ 
+         payload.toFixed();
+->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>payload.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 14, 17))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+     }
+     if (kind === 'B') {
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 14, 11))
+ 
+         payload.toUpperCase();
+->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>payload.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 14, 17))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 
+@@= skipped -25, +25 lines =@@
+ 
+         case 'A':
+             payload.toFixed();
+->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>payload.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 23, 20))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+             break;
+         case 'B':
+             payload.toUpperCase();
+->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>payload.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 23, 20))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ 
+             break;
+         default:
+@@= skipped -31, +31 lines =@@
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 37, 32))
+ 
+         payload.toFixed();
+->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>payload.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 37, 38))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+     }
+     if (kind === 'B') {
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 37, 32))
+ 
+         payload.toUpperCase();
+->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>payload.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 37, 38))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 
+@@= skipped -30, +30 lines =@@
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 47, 11))
+ 
+         payload.toFixed();
+->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>payload.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 47, 17))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+     }
+     if (kind === 'B') {
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 47, 11))
+ 
+         payload.toUpperCase();
+->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>payload.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 47, 17))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 
+@@= skipped -38, +38 lines =@@
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 60, 14))
+ 
+             payload.toFixed();
+->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>payload.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 60, 20))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+         }
+         if (kind === 'B') {
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 60, 14))
+ 
+             payload.toUpperCase();
+->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>payload.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 60, 20))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+         }
+     }
+ }
+@@= skipped -32, +32 lines =@@
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 72, 11))
+ 
+             payload.toFixed();
+->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>payload.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 72, 17))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+         }
+         if (kind === 'B') {
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 72, 11))
+ 
+             payload.toUpperCase();
+->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>payload.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 72, 17))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+         }
+     }
+ }
+@@= skipped -34, +34 lines =@@
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 85, 15))
+ 
+             payload.toFixed();
+->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>payload.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 85, 21))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+         }
+         if (kind === 'B') {
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 85, 15))
+ 
+             payload.toUpperCase();
+->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>payload.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 85, 21))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+         }
+     }
+ }
+@@= skipped -29, +29 lines =@@
+ 
+             case 'A':
+                 payload.toFixed();
+->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>payload.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 95, 20))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+                 break;
+             case 'B':
+                 payload.toUpperCase();
+->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>payload.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 95, 20))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ 
+                 break;
+             default:
+@@= skipped -83, +83 lines =@@
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 135, 17))
+ 
+         data.toFixed();
+->data.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>data.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >data : Symbol(data, Decl(dependentDestructuredVariables.ts, 135, 22))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+     }
+     if (kind === 'B') {
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 135, 17))
+ 
+         data.toUpperCase();
+->data.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>data.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >data : Symbol(data, Decl(dependentDestructuredVariables.ts, 135, 22))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ interface A<T> { variant: 'a', value: T }
+ >A : Symbol(A, Decl(dependentDestructuredVariables.ts, 142, 1))
+ >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 146, 12))
+->variant : Symbol(A.variant, Decl(dependentDestructuredVariables.ts, 146, 16))
+->value : Symbol(A.value, Decl(dependentDestructuredVariables.ts, 146, 30))
++>variant : Symbol(variant, Decl(dependentDestructuredVariables.ts, 146, 16))
++>value : Symbol(value, Decl(dependentDestructuredVariables.ts, 146, 30))
+ >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 146, 12))
+ 
+ interface B<T> { variant: 'b', value: Array<T> }
+ >B : Symbol(B, Decl(dependentDestructuredVariables.ts, 146, 41))
+ >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 148, 12))
+->variant : Symbol(B.variant, Decl(dependentDestructuredVariables.ts, 148, 16))
+->value : Symbol(B.value, Decl(dependentDestructuredVariables.ts, 148, 30))
++>variant : Symbol(variant, Decl(dependentDestructuredVariables.ts, 148, 16))
++>value : Symbol(value, Decl(dependentDestructuredVariables.ts, 148, 30))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+ >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 148, 12))
+ 
+@@= skipped -111, +111 lines =@@
+ const { value, done } = it.next();
+ >value : Symbol(value, Decl(dependentDestructuredVariables.ts, 184, 7))
+ >done : Symbol(done, Decl(dependentDestructuredVariables.ts, 184, 14))
+->it.next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
++>it.next : Symbol(next, Decl(lib.es2015.iterable.d.ts, --, --))
+ >it : Symbol(it, Decl(dependentDestructuredVariables.ts, 183, 11))
+->next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
++>next : Symbol(next, Decl(lib.es2015.iterable.d.ts, --, --))
+ 
+ if (!done) {
+ >done : Symbol(done, Decl(dependentDestructuredVariables.ts, 184, 14))
+@@= skipped -28, +28 lines =@@
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 193, 5))
+ 
+         data.toFixed();
+->data.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>data.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >data : Symbol(data, Decl(dependentDestructuredVariables.ts, 193, 10))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+     }
+     if (kind === 'B') {
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 193, 5))
+ 
+         data.toUpperCase();
+->data.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>data.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >data : Symbol(data, Decl(dependentDestructuredVariables.ts, 193, 10))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+     }
+ });
+ 
+@@= skipped -24, +24 lines =@@
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 202, 63))
+ 
+         payload.toFixed();
+->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>payload.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 202, 68))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+     }
+     if (kind === 'B') {
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 202, 63))
+ 
+         payload.toUpperCase();
+->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>payload.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 202, 68))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+     }
+ };
+ 
+@@= skipped -24, +24 lines =@@
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 211, 55))
+ 
+         payload.toFixed();
+->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>payload.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 211, 60))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+     }
+     else {
+         payload;  // undefined
+@@= skipped -26, +26 lines =@@
+ >err : Symbol(err, Decl(dependentDestructuredVariables.ts, 222, 19))
+ 
+         data.length;
+->data.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>data.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >data : Symbol(data, Decl(dependentDestructuredVariables.ts, 222, 23))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+     }
+     else {
+         err.message;
+->err.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
++>err.message : Symbol(message, Decl(lib.es5.d.ts, --, --))
+ >err : Symbol(err, Decl(dependentDestructuredVariables.ts, 222, 19))
+->message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
++>message : Symbol(message, Decl(lib.es5.d.ts, --, --))
+     }
+ });
+ 
+@@= skipped -31, +31 lines =@@
+ 
+         case "add":
+             console.log(args.a + args.b);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >args.a : Symbol(a, Decl(dependentDestructuredVariables.ts, 231, 28))
+ >args : Symbol(args, Decl(dependentDestructuredVariables.ts, 233, 52))
+ >a : Symbol(a, Decl(dependentDestructuredVariables.ts, 231, 28))
+@@= skipped -13, +13 lines =@@
+             break;
+         case "concat":
+             console.log(args.firstArr.concat(args.secondArr));
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->args.firstArr.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>args.firstArr.concat : Symbol(concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >args.firstArr : Symbol(firstArr, Decl(dependentDestructuredVariables.ts, 231, 67))
+ >args : Symbol(args, Decl(dependentDestructuredVariables.ts, 233, 52))
+ >firstArr : Symbol(firstArr, Decl(dependentDestructuredVariables.ts, 231, 67))
+->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>concat : Symbol(concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >args.secondArr : Symbol(secondArr, Decl(dependentDestructuredVariables.ts, 231, 84))
+ >args : Symbol(args, Decl(dependentDestructuredVariables.ts, 233, 52))
+ >secondArr : Symbol(secondArr, Decl(dependentDestructuredVariables.ts, 231, 84))
+@@= skipped -201, +201 lines =@@
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 321, 19))
+ 
+         payload.toFixed();  // error
+->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>payload.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 321, 24))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+     }
+     if (kind === "b") {
+ >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 321, 19))
+ 
+         payload.toUpperCase();  // error
+->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>payload.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 321, 24))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+     }
+ };
+ 
+@@= skipped -144, +144 lines =@@
+ >ClientEvents : Symbol(ClientEvents, Decl(dependentDestructuredVariables.ts, 386, 1))
+ 
+     warn: [message: string];
+->warn : Symbol(ClientEvents.warn, Decl(dependentDestructuredVariables.ts, 390, 24))
++>warn : Symbol(warn, Decl(dependentDestructuredVariables.ts, 390, 24))
+ 
+     shardDisconnect: [closeEvent: CloseEvent, shardId: number];
+->shardDisconnect : Symbol(ClientEvents.shardDisconnect, Decl(dependentDestructuredVariables.ts, 391, 28))
++>shardDisconnect : Symbol(shardDisconnect, Decl(dependentDestructuredVariables.ts, 391, 28))
+ >CloseEvent : Symbol(CloseEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+ }
+   
+@@= skipped -11, +11 lines =@@
+ >Client : Symbol(Client, Decl(dependentDestructuredVariables.ts, 393, 1))
+ 
+     public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
+->on : Symbol(Client.on, Decl(dependentDestructuredVariables.ts, 395, 22))
++>on : Symbol(on, Decl(dependentDestructuredVariables.ts, 395, 22))
+ >K : Symbol(K, Decl(dependentDestructuredVariables.ts, 396, 14))
+ >ClientEvents : Symbol(ClientEvents, Decl(dependentDestructuredVariables.ts, 386, 1))
+ >event : Symbol(event, Decl(dependentDestructuredVariables.ts, 396, 44))
+@@= skipped -16, +16 lines =@@
+ >Client : Symbol(Client, Decl(dependentDestructuredVariables.ts, 393, 1))
+ 
+ bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
+->bot.on : Symbol(Client.on, Decl(dependentDestructuredVariables.ts, 395, 22))
++>bot.on : Symbol(on, Decl(dependentDestructuredVariables.ts, 395, 22))
+ >bot : Symbol(bot, Decl(dependentDestructuredVariables.ts, 399, 5))
+->on : Symbol(Client.on, Decl(dependentDestructuredVariables.ts, 395, 22))
++>on : Symbol(on, Decl(dependentDestructuredVariables.ts, 395, 22))
+ >event : Symbol(event, Decl(dependentDestructuredVariables.ts, 400, 27))
+ >shard : Symbol(shard, Decl(dependentDestructuredVariables.ts, 400, 33))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >shard : Symbol(shard, Decl(dependentDestructuredVariables.ts, 400, 33))
+->event.code : Symbol(CloseEvent.code, Decl(lib.dom.d.ts, --, --))
++>event.code : Symbol(code, Decl(lib.dom.d.ts, --, --))
+ >event : Symbol(event, Decl(dependentDestructuredVariables.ts, 400, 27))
+->code : Symbol(CloseEvent.code, Decl(lib.dom.d.ts, --, --))
+->event.wasClean : Symbol(CloseEvent.wasClean, Decl(lib.dom.d.ts, --, --))
++>code : Symbol(code, Decl(lib.dom.d.ts, --, --))
++>event.wasClean : Symbol(wasClean, Decl(lib.dom.d.ts, --, --))
+ >event : Symbol(event, Decl(dependentDestructuredVariables.ts, 400, 27))
+->wasClean : Symbol(CloseEvent.wasClean, Decl(lib.dom.d.ts, --, --))
+->event.reason : Symbol(CloseEvent.reason, Decl(lib.dom.d.ts, --, --))
++>wasClean : Symbol(wasClean, Decl(lib.dom.d.ts, --, --))
++>event.reason : Symbol(reason, Decl(lib.dom.d.ts, --, --))
+ >event : Symbol(event, Decl(dependentDestructuredVariables.ts, 400, 27))
+->reason : Symbol(CloseEvent.reason, Decl(lib.dom.d.ts, --, --))
++>reason : Symbol(reason, Decl(lib.dom.d.ts, --, --))
+ 
+ bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));
+->bot.on : Symbol(Client.on, Decl(dependentDestructuredVariables.ts, 395, 22))
++>bot.on : Symbol(on, Decl(dependentDestructuredVariables.ts, 395, 22))
+ >bot : Symbol(bot, Decl(dependentDestructuredVariables.ts, 399, 5))
+->on : Symbol(Client.on, Decl(dependentDestructuredVariables.ts, 395, 22))
++>on : Symbol(on, Decl(dependentDestructuredVariables.ts, 395, 22))
+ >event : Symbol(event, Decl(dependentDestructuredVariables.ts, 401, 25))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->event.code : Symbol(CloseEvent.code, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>event.code : Symbol(code, Decl(lib.dom.d.ts, --, --))
+ >event : Symbol(event, Decl(dependentDestructuredVariables.ts, 401, 25))
+->code : Symbol(CloseEvent.code, Decl(lib.dom.d.ts, --, --))
+->event.wasClean : Symbol(CloseEvent.wasClean, Decl(lib.dom.d.ts, --, --))
++>code : Symbol(code, Decl(lib.dom.d.ts, --, --))
++>event.wasClean : Symbol(wasClean, Decl(lib.dom.d.ts, --, --))
+ >event : Symbol(event, Decl(dependentDestructuredVariables.ts, 401, 25))
+->wasClean : Symbol(CloseEvent.wasClean, Decl(lib.dom.d.ts, --, --))
+->event.reason : Symbol(CloseEvent.reason, Decl(lib.dom.d.ts, --, --))
++>wasClean : Symbol(wasClean, Decl(lib.dom.d.ts, --, --))
++>event.reason : Symbol(reason, Decl(lib.dom.d.ts, --, --))
+ >event : Symbol(event, Decl(dependentDestructuredVariables.ts, 401, 25))
+->reason : Symbol(CloseEvent.reason, Decl(lib.dom.d.ts, --, --))
++>reason : Symbol(reason, Decl(lib.dom.d.ts, --, --))
+ 
+ // Destructuring tuple types with different arities
+ 
+@@= skipped -108, +108 lines =@@
+ >y : Symbol(y, Decl(dependentDestructuredVariables.ts, 436, 33))
+ 
+   if (Math.random()) {
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ 
+     x = 1;
+ >x : Symbol(x, Decl(dependentDestructuredVariables.ts, 436, 31))
+@@= skipped -21, +21 lines =@@
+ >y : Symbol(y, Decl(dependentDestructuredVariables.ts, 445, 33))
+ 
+   if (Math.random()) {
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ 
+     y = 2;
+ >y : Symbol(y, Decl(dependentDestructuredVariables.ts, 445, 33))
+@@= skipped -24, +24 lines =@@
+ >y : Symbol(y, Decl(dependentDestructuredVariables.ts, 456, 82))
+ 
+   if (Math.random()) {
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ 
+     y = 2;
+ >y : Symbol(y, Decl(dependentDestructuredVariables.ts, 456, 82))

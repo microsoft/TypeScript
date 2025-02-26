@@ -1,0 +1,12 @@
+--- old.classExtendsInterfaceInModule.symbols
++++ new.classExtendsInterfaceInModule.symbols
+@@= skipped -33, +33 lines =@@
+ 
+ class D extends Mod.Nested.I {}
+ >D : Symbol(D, Decl(classExtendsInterfaceInModule.ts, 11, 1))
+->Mod.Nested : Symbol(Mod.Nested, Decl(classExtendsInterfaceInModule.ts, 7, 12))
++>Mod.Nested : Symbol(Nested, Decl(classExtendsInterfaceInModule.ts, 7, 12))
+ >Mod : Symbol(Mod, Decl(classExtendsInterfaceInModule.ts, 5, 30))
+->Nested : Symbol(Mod.Nested, Decl(classExtendsInterfaceInModule.ts, 7, 12))
++>Nested : Symbol(Nested, Decl(classExtendsInterfaceInModule.ts, 7, 12))
+ 

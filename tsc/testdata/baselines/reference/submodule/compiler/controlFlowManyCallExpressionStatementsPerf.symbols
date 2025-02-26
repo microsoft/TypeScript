@@ -1,0 +1,295 @@
+//// [tests/cases/compiler/controlFlowManyCallExpressionStatementsPerf.ts] ////
+
+=== controlFlowManyCallExpressionStatementsPerf.ts ===
+function test(x: boolean): boolean { return x; }
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>x : Symbol(x, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 14))
+>x : Symbol(x, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 14))
+
+let state = true;
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+if (state) {
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+
+  test(state as any && state);
+>test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+>state : Symbol(state, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 2, 3))
+}
+

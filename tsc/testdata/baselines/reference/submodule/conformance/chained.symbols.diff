@@ -1,0 +1,20 @@
+--- old.chained.symbols
++++ new.chained.symbols
+@@= skipped -2, +2 lines =@@
+ === /a.ts ===
+ class A { a!: string }
+ >A : Symbol(A, Decl(a.ts, 0, 0))
+->a : Symbol(A.a, Decl(a.ts, 0, 9))
++>a : Symbol(a, Decl(a.ts, 0, 9))
+ 
+ export type { A as B };
+ >A : Symbol(A, Decl(a.ts, 0, 0))
+@@= skipped -12, +12 lines =@@
+ 
+ === /b.ts ===
+ import { Z as Y } from './a';
+->Z : Symbol(Y, Decl(a.ts, 1, 23))
++>Z : Symbol(Z, Decl(a.ts, 1, 23))
+ >Y : Symbol(Y, Decl(b.ts, 0, 8))
+ 
+ export { B as C } from './a';

@@ -1,0 +1,29 @@
+--- old.namespaceMergedWithFunctionWithOverloadsUsage.symbols
++++ new.namespaceMergedWithFunctionWithOverloadsUsage.symbols
+@@= skipped -14, +14 lines =@@
+ >Whatever : Symbol(Whatever, Decl(file.d.ts, 0, 23))
+ 
+         prop: any;
+->prop : Symbol(Whatever.prop, Decl(file.d.ts, 1, 24))
++>prop : Symbol(prop, Decl(file.d.ts, 1, 24))
+     }
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >Foo : Symbol(Foo, Decl(file.d.ts, 4, 1), Decl(file.d.ts, 6, 48), Decl(file.d.ts, 0, 0))
+ >opts : Symbol(opts, Decl(file.d.ts, 6, 21))
+ >Foo : Symbol(Foo, Decl(file.d.ts, 4, 1), Decl(file.d.ts, 6, 48), Decl(file.d.ts, 0, 0))
+->Whatever : Symbol(Foo.Whatever, Decl(file.d.ts, 0, 23))
++>Whatever : Symbol(Whatever, Decl(file.d.ts, 0, 23))
+ 
+ declare function Foo(cb: Function, opts?: Foo.Whatever): void;
+ >Foo : Symbol(Foo, Decl(file.d.ts, 4, 1), Decl(file.d.ts, 6, 48), Decl(file.d.ts, 0, 0))
+@@= skipped -8, +8 lines =@@
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >opts : Symbol(opts, Decl(file.d.ts, 7, 34))
+ >Foo : Symbol(Foo, Decl(file.d.ts, 4, 1), Decl(file.d.ts, 6, 48), Decl(file.d.ts, 0, 0))
+->Whatever : Symbol(Foo.Whatever, Decl(file.d.ts, 0, 23))
++>Whatever : Symbol(Whatever, Decl(file.d.ts, 0, 23))
+ 
+ export = Foo;
+ >Foo : Symbol(Foo, Decl(file.d.ts, 4, 1), Decl(file.d.ts, 6, 48), Decl(file.d.ts, 0, 0))

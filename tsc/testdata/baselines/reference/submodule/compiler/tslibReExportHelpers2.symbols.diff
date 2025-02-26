@@ -1,0 +1,22 @@
+--- old.tslibReExportHelpers2.symbols
++++ new.tslibReExportHelpers2.symbols
+@@= skipped -60, +60 lines =@@
+ 
+   constructor() {
+     console.log(Foo.#test());
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->Foo.#test : Symbol(Foo.#test, Decl(index.mts, 3, 3))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>Foo.#test : Symbol(#test, Decl(index.mts, 3, 3))
+ >Foo : Symbol(Foo, Decl(index.mts, 0, 0))
+   }
+ 
+   static #test() {
+->#test : Symbol(Foo.#test, Decl(index.mts, 3, 3))
++>#test : Symbol(#test, Decl(index.mts, 3, 3))
+ 
+     return 'success';
+   }

@@ -1,0 +1,11 @@
+--- old.varBlock.symbols
++++ new.varBlock.symbols
+@@= skipped -25, +25 lines =@@
+ >C : Symbol(C, Decl(varBlock.ts, 7, 20))
+ 
+         constructor (public c = 10);
+->c : Symbol(C.c, Decl(varBlock.ts, 10, 21))
++>c : Symbol(c, Decl(varBlock.ts, 10, 21))
+     }
+ }
+ 

@@ -1,0 +1,20 @@
+--- old.typeOfThisInFunctionExpression.symbols
++++ new.typeOfThisInFunctionExpression.symbols
+@@= skipped -37, +37 lines =@@
+ >C : Symbol(C, Decl(typeOfThisInFunctionExpression.ts, 15, 1))
+ 
+     x = function () {
+->x : Symbol(C.x, Decl(typeOfThisInFunctionExpression.ts, 17, 9))
++>x : Symbol(x, Decl(typeOfThisInFunctionExpression.ts, 17, 9))
+ 
+         var q: any;
+ >q : Symbol(q, Decl(typeOfThisInFunctionExpression.ts, 19, 11), Decl(typeOfThisInFunctionExpression.ts, 20, 11))
+@@= skipped -9, +9 lines =@@
+ >q : Symbol(q, Decl(typeOfThisInFunctionExpression.ts, 19, 11), Decl(typeOfThisInFunctionExpression.ts, 20, 11))
+     }
+     y = function ff() {
+->y : Symbol(C.y, Decl(typeOfThisInFunctionExpression.ts, 21, 5))
++>y : Symbol(y, Decl(typeOfThisInFunctionExpression.ts, 21, 5))
+ >ff : Symbol(ff, Decl(typeOfThisInFunctionExpression.ts, 22, 7))
+ 
+         var q: any;

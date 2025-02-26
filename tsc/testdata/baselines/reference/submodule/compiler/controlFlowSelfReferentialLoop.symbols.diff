@@ -1,0 +1,35 @@
+--- old.controlFlowSelfReferentialLoop.symbols
++++ new.controlFlowSelfReferentialLoop.symbols
+@@= skipped -109, +109 lines =@@
+     for (k=0;k<x.length;k+=16) {
+ >k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+ >k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+->x.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
+ 
+         AA=a; BB=b; CC=c; DD=d;
+@@= skipped -729, +729 lines =@@
+ >DataShape : Symbol(DataShape, Decl(controlFlowSelfReferentialLoop.ts, 99, 19))
+ 
+   message: { id: string }
+->message : Symbol(DataShape.message, Decl(controlFlowSelfReferentialLoop.ts, 103, 21))
++>message : Symbol(message, Decl(controlFlowSelfReferentialLoop.ts, 103, 21))
+ >id : Symbol(id, Decl(controlFlowSelfReferentialLoop.ts, 104, 12))
+ }
+ 
+@@= skipped -24, +24 lines =@@
+ 
+     const message = data.message
+ >message : Symbol(message, Decl(controlFlowSelfReferentialLoop.ts, 115, 9))
+->data.message : Symbol(DataShape.message, Decl(controlFlowSelfReferentialLoop.ts, 103, 21))
++>data.message : Symbol(message, Decl(controlFlowSelfReferentialLoop.ts, 103, 21))
+ >data : Symbol(data, Decl(controlFlowSelfReferentialLoop.ts, 114, 9))
+->message : Symbol(DataShape.message, Decl(controlFlowSelfReferentialLoop.ts, 103, 21))
++>message : Symbol(message, Decl(controlFlowSelfReferentialLoop.ts, 103, 21))
+ 
+     id = message.id
+ >id : Symbol(id, Decl(controlFlowSelfReferentialLoop.ts, 112, 5))

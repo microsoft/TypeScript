@@ -1,0 +1,15 @@
+--- old.genericClassesInModule.symbols
++++ new.genericClassesInModule.symbols
+@@= skipped -13, +13 lines =@@
+ 
+ var a = new Foo.B<Foo.A>();
+ >a : Symbol(a, Decl(genericClassesInModule.ts, 7, 3))
+->Foo.B : Symbol(Foo.B, Decl(genericClassesInModule.ts, 0, 12))
++>Foo.B : Symbol(B, Decl(genericClassesInModule.ts, 0, 12))
+ >Foo : Symbol(Foo, Decl(genericClassesInModule.ts, 0, 0))
+->B : Symbol(Foo.B, Decl(genericClassesInModule.ts, 0, 12))
++>B : Symbol(B, Decl(genericClassesInModule.ts, 0, 12))
+ >Foo : Symbol(Foo, Decl(genericClassesInModule.ts, 0, 0))
+->A : Symbol(Foo.A, Decl(genericClassesInModule.ts, 2, 24))
++>A : Symbol(A, Decl(genericClassesInModule.ts, 2, 24))
+ 

@@ -1,0 +1,20 @@
+--- old.declFileTypeAnnotationTypeAlias.symbols
++++ new.declFileTypeAnnotationTypeAlias.symbols
+@@= skipped -29, +29 lines =@@
+     export type MC = m.c;
+ >MC : Symbol(MC, Decl(declFileTypeAnnotationTypeAlias.ts, 12, 5))
+ >m : Symbol(m, Decl(declFileTypeAnnotationTypeAlias.ts, 7, 22))
+->c : Symbol(m.c, Decl(declFileTypeAnnotationTypeAlias.ts, 9, 21))
++>c : Symbol(c, Decl(declFileTypeAnnotationTypeAlias.ts, 9, 21))
+ 
+     export type fc = () => c;
+ >fc : Symbol(fc, Decl(declFileTypeAnnotationTypeAlias.ts, 14, 25))
+@@= skipped -11, +11 lines =@@
+ >Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(declFileTypeAnnotationTypeAlias.ts, 17, 1))
+ 
+     someMethod();
+->someMethod : Symbol(Window.someMethod, Decl(declFileTypeAnnotationTypeAlias.ts, 19, 18))
++>someMethod : Symbol(someMethod, Decl(declFileTypeAnnotationTypeAlias.ts, 19, 18))
+ }
+ 
+ module M {

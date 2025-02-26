@@ -1,0 +1,143 @@
+--- old.controlFlowAliasedDiscriminants.symbols
++++ new.controlFlowAliasedDiscriminants.symbols
+@@= skipped -62, +62 lines =@@
+ >isSuccess3 : Symbol(isSuccess3, Decl(controlFlowAliasedDiscriminants.ts, 17, 20))
+ 
+     data1.toExponential();  // should ok
+->data1.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>data1.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >data1 : Symbol(data1, Decl(controlFlowAliasedDiscriminants.ts, 15, 7))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ 
+     data2.toExponential();  // should ok
+->data2.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>data2.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >data2 : Symbol(data2, Decl(controlFlowAliasedDiscriminants.ts, 16, 7))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ 
+     data3.toExponential();  // should ok
+->data3.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>data3.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >data3 : Symbol(data3, Decl(controlFlowAliasedDiscriminants.ts, 17, 7))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ const areSuccess = isSuccess1 && isSuccess2 && isSuccess3;
+@@= skipped -25, +25 lines =@@
+ >areSuccess : Symbol(areSuccess, Decl(controlFlowAliasedDiscriminants.ts, 25, 5))
+ 
+     data1.toExponential();  // should ok
+->data1.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>data1.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >data1 : Symbol(data1, Decl(controlFlowAliasedDiscriminants.ts, 15, 7))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ 
+     data2.toExponential();  // should ok
+->data2.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>data2.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >data2 : Symbol(data2, Decl(controlFlowAliasedDiscriminants.ts, 16, 7))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ 
+     data3.toExponential();  // should ok
+->data3.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>data3.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >data3 : Symbol(data3, Decl(controlFlowAliasedDiscriminants.ts, 17, 7))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ {
+@@= skipped -47, +47 lines =@@
+ >areSuccess : Symbol(areSuccess, Decl(controlFlowAliasedDiscriminants.ts, 36, 9))
+ 
+         data1.toExponential();  // should error
+->data1.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+ >data1 : Symbol(data1, Decl(controlFlowAliasedDiscriminants.ts, 33, 9))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+ 
+         data2.toExponential();  // should error
+->data2.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+ >data2 : Symbol(data2, Decl(controlFlowAliasedDiscriminants.ts, 34, 9))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+ 
+         data3.toExponential();  // should ok
+->data3.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>data3.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >data3 : Symbol(data3, Decl(controlFlowAliasedDiscriminants.ts, 35, 11))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 
+@@= skipped -44, +40 lines =@@
+ >arrayAllSuccess : Symbol(arrayAllSuccess, Decl(controlFlowAliasedDiscriminants.ts, 49, 9))
+ 
+         bar1.toExponential();  // should ok
+->bar1.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>bar1.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >bar1 : Symbol(bar1, Decl(controlFlowAliasedDiscriminants.ts, 46, 16))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ 
+         bar2.toExponential();  // should ok
+->bar2.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>bar2.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >bar2 : Symbol(bar2, Decl(controlFlowAliasedDiscriminants.ts, 47, 16))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ 
+         bar3.toExponential();  // should ok
+->bar3.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>bar3.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >bar3 : Symbol(bar3, Decl(controlFlowAliasedDiscriminants.ts, 48, 16))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 
+@@= skipped -42, +42 lines =@@
+ >arrayAllSuccess : Symbol(arrayAllSuccess, Decl(controlFlowAliasedDiscriminants.ts, 61, 9))
+ 
+         bar1.toExponential();   // should ok
+->bar1.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>bar1.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >bar1 : Symbol(bar1, Decl(controlFlowAliasedDiscriminants.ts, 58, 16))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ 
+         bar2.toExponential();   // should error
+->bar2.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+ >bar2 : Symbol(bar2, Decl(controlFlowAliasedDiscriminants.ts, 59, 14))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+ 
+         bar3.toExponential();   // should error
+->bar3.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+ >bar3 : Symbol(bar3, Decl(controlFlowAliasedDiscriminants.ts, 60, 14))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 
+@@= skipped -128, +124 lines =@@
+ >areSuccess : Symbol(areSuccess, Decl(controlFlowAliasedDiscriminants.ts, 107, 7))
+ 
+     data1.toExponential();
+->data1.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>data1.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >data1 : Symbol(data1, Decl(controlFlowAliasedDiscriminants.ts, 104, 36))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ 
+     data2.toExponential();
+->data2.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>data2.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >data2 : Symbol(data2, Decl(controlFlowAliasedDiscriminants.ts, 105, 9))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+   }
+ }
+ 

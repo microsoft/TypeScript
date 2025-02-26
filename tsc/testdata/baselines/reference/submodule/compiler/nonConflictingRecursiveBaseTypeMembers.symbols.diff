@@ -1,0 +1,20 @@
+--- old.nonConflictingRecursiveBaseTypeMembers.symbols
++++ new.nonConflictingRecursiveBaseTypeMembers.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 0, 12))
+ 
+     x: C<T>
+->x : Symbol(A.x, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 0, 16))
++>x : Symbol(x, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 0, 16))
+ >C : Symbol(C, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 6, 1))
+ >T : Symbol(T, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 0, 12))
+ }
+@@= skipped -10, +10 lines =@@
+ >T : Symbol(T, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 4, 12))
+ 
+     x: C<T>
+->x : Symbol(B.x, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 4, 16))
++>x : Symbol(x, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 4, 16))
+ >C : Symbol(C, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 6, 1))
+ >T : Symbol(T, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 4, 12))
+ }

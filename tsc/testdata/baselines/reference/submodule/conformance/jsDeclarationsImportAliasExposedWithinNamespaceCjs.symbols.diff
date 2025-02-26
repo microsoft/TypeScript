@@ -1,0 +1,58 @@
+--- old.jsDeclarationsImportAliasExposedWithinNamespaceCjs.symbols
++++ new.jsDeclarationsImportAliasExposedWithinNamespaceCjs.symbols
+@@= skipped -2, +2 lines =@@
+ === file2.js ===
+ const {myTypes} = require('./file.js');
+ >myTypes : Symbol(myTypes, Decl(file2.js, 0, 7))
+->require : Symbol(require)
+->'./file.js' : Symbol("file", Decl(file.js, 0, 0))
+ 
+ /**
+  * @namespace testFnTypes
+@@= skipped -9, +7 lines =@@
+  * @type {Object<string,*>}
+  */
+ const testFnTypes = {
+->testFnTypes : Symbol(testFnTypes, Decl(file2.js, 7, 5), Decl(file2.js, 11, 37))
++>testFnTypes : Symbol(testFnTypes, Decl(file2.js, 7, 5))
+ 
+     // SOME PROPS HERE
+ };
+@@= skipped -29, +29 lines =@@
+ }
+ 
+ module.exports = {testFn, testFnTypes};
+->module.exports : Symbol(module.exports, Decl(file2.js, 0, 0))
+->module : Symbol(module, Decl(file2.js, 25, 1))
+->exports : Symbol(module.exports, Decl(file2.js, 0, 0))
+ >testFn : Symbol(testFn, Decl(file2.js, 27, 18))
+ >testFnTypes : Symbol(testFnTypes, Decl(file2.js, 27, 25))
+ 
+-=== file.js ===
+-/**
+- * @namespace myTypes
+- * @global
+- * @type {Object<string,*>}
+- */
+-const myTypes = {
+->myTypes : Symbol(myTypes, Decl(file.js, 5, 5), Decl(file.js, 9, 50), Decl(file.js, 12, 12), Decl(file.js, 17, 38))
+-
+-    // SOME PROPS HERE
+-};
+-
+-/** @typedef {string|RegExp|Array<string|RegExp>} myTypes.typeA */
+-
+-/**
+- * @typedef myTypes.typeB
+- * @property {myTypes.typeA}    prop1 - Prop 1.
+- * @property {string}           prop2 - Prop 2.
+- */
+-
+-/** @typedef {myTypes.typeB|Function} myTypes.typeC */
+-
+-exports.myTypes = myTypes;
+->exports.myTypes : Symbol(myTypes, Decl(file.js, 7, 2))
+->exports : Symbol(myTypes, Decl(file.js, 7, 2))
+->myTypes : Symbol(myTypes, Decl(file.js, 7, 2))
+->myTypes : Symbol(myTypes, Decl(file.js, 5, 5), Decl(file.js, 9, 50), Decl(file.js, 12, 12), Decl(file.js, 17, 38))
+-

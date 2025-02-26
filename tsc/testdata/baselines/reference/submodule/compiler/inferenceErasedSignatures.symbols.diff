@@ -1,0 +1,114 @@
+--- old.inferenceErasedSignatures.symbols
++++ new.inferenceErasedSignatures.symbols
+@@= skipped -6, +6 lines =@@
+ >SomeBaseClass : Symbol(SomeBaseClass, Decl(inferenceErasedSignatures.ts, 0, 0))
+ 
+     set<K extends keyof this>(key: K, value: this[K]): this[K];
+->set : Symbol(SomeBaseClass.set, Decl(inferenceErasedSignatures.ts, 2, 29))
++>set : Symbol(set, Decl(inferenceErasedSignatures.ts, 2, 29))
+ >K : Symbol(K, Decl(inferenceErasedSignatures.ts, 3, 8))
+ >key : Symbol(key, Decl(inferenceErasedSignatures.ts, 3, 30))
+ >K : Symbol(K, Decl(inferenceErasedSignatures.ts, 3, 8))
+@@= skipped -17, +17 lines =@@
+ >SomeBaseClass : Symbol(SomeBaseClass, Decl(inferenceErasedSignatures.ts, 0, 0))
+ 
+     foo!: (r?: R) => void;
+->foo : Symbol(SomeAbstractClass.foo, Decl(inferenceErasedSignatures.ts, 6, 65))
++>foo : Symbol(foo, Decl(inferenceErasedSignatures.ts, 6, 65))
+ >r : Symbol(r, Decl(inferenceErasedSignatures.ts, 7, 11))
+ >R : Symbol(R, Decl(inferenceErasedSignatures.ts, 6, 38))
+ 
+     bar!: (r?: any) => void;
+->bar : Symbol(SomeAbstractClass.bar, Decl(inferenceErasedSignatures.ts, 7, 26))
++>bar : Symbol(bar, Decl(inferenceErasedSignatures.ts, 7, 26))
+ >r : Symbol(r, Decl(inferenceErasedSignatures.ts, 8, 11))
+ 
+     abstract baz(c: C): Promise<M>;
+->baz : Symbol(SomeAbstractClass.baz, Decl(inferenceErasedSignatures.ts, 8, 28))
++>baz : Symbol(baz, Decl(inferenceErasedSignatures.ts, 8, 28))
+ >c : Symbol(c, Decl(inferenceErasedSignatures.ts, 9, 17))
+ >C : Symbol(C, Decl(inferenceErasedSignatures.ts, 6, 33))
+->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Promise : Symbol(Promise)
+ >M : Symbol(M, Decl(inferenceErasedSignatures.ts, 6, 35))
+ }
+ 
+@@= skipped -21, +21 lines =@@
+ >SomeAbstractClass : Symbol(SomeAbstractClass, Decl(inferenceErasedSignatures.ts, 4, 1))
+ 
+     async baz(context: number): Promise<string> {
+->baz : Symbol(SomeClass.baz, Decl(inferenceErasedSignatures.ts, 12, 68))
++>baz : Symbol(baz, Decl(inferenceErasedSignatures.ts, 12, 68))
+ >context : Symbol(context, Decl(inferenceErasedSignatures.ts, 13, 14))
+->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Promise : Symbol(Promise)
+ 
+         return `${context}`;
+ >context : Symbol(context, Decl(inferenceErasedSignatures.ts, 13, 14))
+@@= skipped -56, +56 lines =@@
+ >T2 : Symbol(T2, Decl(inferenceErasedSignatures.ts, 28, 22))
+ 
+     set<K extends keyof this>(key: K, value: this[K]): this[K];
+->set : Symbol(BaseType.set, Decl(inferenceErasedSignatures.ts, 28, 29))
++>set : Symbol(set, Decl(inferenceErasedSignatures.ts, 28, 29))
+ >K : Symbol(K, Decl(inferenceErasedSignatures.ts, 29, 8))
+ >key : Symbol(key, Decl(inferenceErasedSignatures.ts, 29, 30))
+ >K : Symbol(K, Decl(inferenceErasedSignatures.ts, 29, 8))
+@@= skipped -9, +9 lines =@@
+ >K : Symbol(K, Decl(inferenceErasedSignatures.ts, 29, 8))
+ 
+     useT1(c: T1): void;
+->useT1 : Symbol(BaseType.useT1, Decl(inferenceErasedSignatures.ts, 29, 63))
++>useT1 : Symbol(useT1, Decl(inferenceErasedSignatures.ts, 29, 63))
+ >c : Symbol(c, Decl(inferenceErasedSignatures.ts, 30, 10))
+ >T1 : Symbol(T1, Decl(inferenceErasedSignatures.ts, 28, 19))
+ 
+     useT2(r?: T2): void;
+->useT2 : Symbol(BaseType.useT2, Decl(inferenceErasedSignatures.ts, 30, 23))
++>useT2 : Symbol(useT2, Decl(inferenceErasedSignatures.ts, 30, 23))
+ >r : Symbol(r, Decl(inferenceErasedSignatures.ts, 31, 10))
+ >T2 : Symbol(T2, Decl(inferenceErasedSignatures.ts, 28, 22))
+ 
+     unrelatedButSomehowRelevant(r?: any): void;
+->unrelatedButSomehowRelevant : Symbol(BaseType.unrelatedButSomehowRelevant, Decl(inferenceErasedSignatures.ts, 31, 24))
++>unrelatedButSomehowRelevant : Symbol(unrelatedButSomehowRelevant, Decl(inferenceErasedSignatures.ts, 31, 24))
+ >r : Symbol(r, Decl(inferenceErasedSignatures.ts, 32, 32))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ 
+     // This declaration shouldn't do anything...
+     useT1(_: number): void
+->useT1 : Symbol(InheritedType.useT1, Decl(inferenceErasedSignatures.ts, 35, 59))
++>useT1 : Symbol(useT1, Decl(inferenceErasedSignatures.ts, 35, 59))
+ >_ : Symbol(_, Decl(inferenceErasedSignatures.ts, 37, 10))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >StructuralVersion : Symbol(StructuralVersion, Decl(inferenceErasedSignatures.ts, 38, 1))
+ 
+     set<K extends keyof this>(key: K, value: this[K]): this[K];
+->set : Symbol(StructuralVersion.set, Decl(inferenceErasedSignatures.ts, 41, 30))
++>set : Symbol(set, Decl(inferenceErasedSignatures.ts, 41, 30))
+ >K : Symbol(K, Decl(inferenceErasedSignatures.ts, 42, 8))
+ >key : Symbol(key, Decl(inferenceErasedSignatures.ts, 42, 30))
+ >K : Symbol(K, Decl(inferenceErasedSignatures.ts, 42, 8))
+@@= skipped -9, +9 lines =@@
+ >K : Symbol(K, Decl(inferenceErasedSignatures.ts, 42, 8))
+ 
+     useT1(c: number): void;
+->useT1 : Symbol(StructuralVersion.useT1, Decl(inferenceErasedSignatures.ts, 42, 63))
++>useT1 : Symbol(useT1, Decl(inferenceErasedSignatures.ts, 42, 63))
+ >c : Symbol(c, Decl(inferenceErasedSignatures.ts, 43, 10))
+ 
+     useT2(r?: boolean): void;
+->useT2 : Symbol(StructuralVersion.useT2, Decl(inferenceErasedSignatures.ts, 43, 27))
++>useT2 : Symbol(useT2, Decl(inferenceErasedSignatures.ts, 43, 27))
+ >r : Symbol(r, Decl(inferenceErasedSignatures.ts, 44, 10))
+ 
+     unrelatedButSomehowRelevant(r?: any): void;
+->unrelatedButSomehowRelevant : Symbol(StructuralVersion.unrelatedButSomehowRelevant, Decl(inferenceErasedSignatures.ts, 44, 29))
++>unrelatedButSomehowRelevant : Symbol(unrelatedButSomehowRelevant, Decl(inferenceErasedSignatures.ts, 44, 29))
+ >r : Symbol(r, Decl(inferenceErasedSignatures.ts, 45, 32))
+ }
+ 

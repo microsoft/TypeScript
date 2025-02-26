@@ -1,0 +1,54 @@
+//// [tests/cases/conformance/jsdoc/checkExportsObjectAssignPrototypeProperty.ts] ////
+
+=== validator.ts ===
+import "./";
+
+import Person = require("./mod1");
+>Person : Symbol(Person, Decl(validator.ts, 0, 12))
+
+const m1 = new Person("Name")
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+>Person : Symbol(Person, Decl(validator.ts, 0, 12))
+
+m1.thing;
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+
+m1.readonlyProp;
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+
+m1.rwAccessors;
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+
+m1.readonlyAccessor;
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+
+m1.setonlyAccessor;
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+
+// allowed assignments
+m1.thing = 10;
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+
+m1.rwAccessors = 11;
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+
+m1.setonlyAccessor = "yes";
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+
+// disallowed assignments
+m1.readonlyProp = "name";
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+
+m1.readonlyAccessor = 12;
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+
+m1.thing = "no";
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+
+m1.rwAccessors = "no";
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+
+m1.setonlyAccessor = 0;
+>m1 : Symbol(m1, Decl(validator.ts, 4, 5))
+
+

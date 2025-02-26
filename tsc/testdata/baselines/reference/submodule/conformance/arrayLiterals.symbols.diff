@@ -1,0 +1,32 @@
+--- old.arrayLiterals.symbols
++++ new.arrayLiterals.symbols
+@@= skipped -24, +24 lines =@@
+ 
+ class C { private p; }
+ >C : Symbol(C, Decl(arrayLiterals.ts, 14, 41))
+->p : Symbol(C.p, Decl(arrayLiterals.ts, 16, 9))
++>p : Symbol(p, Decl(arrayLiterals.ts, 16, 9))
+ 
+ var classArr = [new C(), new C()];
+ >classArr : Symbol(classArr, Decl(arrayLiterals.ts, 17, 3))
+@@= skipped -43, +43 lines =@@
+ // Contextual type C with numeric index signature of type Base makes array literal of Derived have type Base[]
+ class Base { private p; }
+ >Base : Symbol(Base, Decl(arrayLiterals.ts, 24, 63))
+->p : Symbol(Base.p, Decl(arrayLiterals.ts, 27, 12))
++>p : Symbol(p, Decl(arrayLiterals.ts, 27, 12))
+ 
+ class Derived1 extends Base { private m };
+ >Derived1 : Symbol(Derived1, Decl(arrayLiterals.ts, 27, 25))
+ >Base : Symbol(Base, Decl(arrayLiterals.ts, 24, 63))
+->m : Symbol(Derived1.m, Decl(arrayLiterals.ts, 28, 29))
++>m : Symbol(m, Decl(arrayLiterals.ts, 28, 29))
+ 
+ class Derived2 extends Base { private n };
+ >Derived2 : Symbol(Derived2, Decl(arrayLiterals.ts, 28, 42))
+ >Base : Symbol(Base, Decl(arrayLiterals.ts, 24, 63))
+->n : Symbol(Derived2.n, Decl(arrayLiterals.ts, 29, 29))
++>n : Symbol(n, Decl(arrayLiterals.ts, 29, 29))
+ 
+ var context3: Base[] = [new Derived1(), new Derived2()];
+ >context3 : Symbol(context3, Decl(arrayLiterals.ts, 30, 3))

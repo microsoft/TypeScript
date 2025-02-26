@@ -1,0 +1,17 @@
+--- old.underscoreEscapedNameInEnum.symbols
++++ new.underscoreEscapedNameInEnum.symbols
+@@= skipped -4, +4 lines =@@
+ >E : Symbol(E, Decl(underscoreEscapedNameInEnum.ts, 0, 0))
+ 
+     "__foo" = 1,
+->"__foo" : Symbol(E["__foo"], Decl(underscoreEscapedNameInEnum.ts, 0, 8))
++>"__foo" : Symbol(__foo, Decl(underscoreEscapedNameInEnum.ts, 0, 8))
+ 
+     bar = E["__foo"] + 1
+->bar : Symbol(E.bar, Decl(underscoreEscapedNameInEnum.ts, 1, 16))
++>bar : Symbol(bar, Decl(underscoreEscapedNameInEnum.ts, 1, 16))
+ >E : Symbol(E, Decl(underscoreEscapedNameInEnum.ts, 0, 0))
+->"__foo" : Symbol(E["__foo"], Decl(underscoreEscapedNameInEnum.ts, 0, 8))
++>"__foo" : Symbol(__foo, Decl(underscoreEscapedNameInEnum.ts, 0, 8))
+ }
+ 

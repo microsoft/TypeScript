@@ -1,0 +1,280 @@
+//// [tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts] ////
+
+=== scannerS7.6_A4.2_T1.ts ===
+// Copyright 2009 the Sputnik authors.  All rights reserved.
+// This code is governed by the BSD license found in the LICENSE file.
+
+/**
+ * Correct interpretation of RUSSIAN ALPHABET
+ *
+ * @path ch07/7.6/S7.6_A4.2_T1.js
+ * @description Check RUSSIAN CAPITAL ALPHABET
+ */
+
+//CHECK#А-Я
+var \u0410 = 1;
+>\u0410 : Symbol(А, Decl(scannerS7.6_A4.2_T1.ts, 11, 3))
+
+if (А !== 1) {
+>А : Symbol(А, Decl(scannerS7.6_A4.2_T1.ts, 11, 3))
+
+  $ERROR('#А');
+}
+var \u0411 = 1;
+>\u0411 : Symbol(Б, Decl(scannerS7.6_A4.2_T1.ts, 15, 3))
+
+if (Б !== 1) {
+>Б : Symbol(Б, Decl(scannerS7.6_A4.2_T1.ts, 15, 3))
+
+  $ERROR('#Б');
+}
+var \u0412 = 1;
+>\u0412 : Symbol(В, Decl(scannerS7.6_A4.2_T1.ts, 19, 3))
+
+if (В !== 1) {
+>В : Symbol(В, Decl(scannerS7.6_A4.2_T1.ts, 19, 3))
+
+  $ERROR('#В');
+}
+var \u0413 = 1;
+>\u0413 : Symbol(Г, Decl(scannerS7.6_A4.2_T1.ts, 23, 3))
+
+if (Г !== 1) {
+>Г : Symbol(Г, Decl(scannerS7.6_A4.2_T1.ts, 23, 3))
+
+  $ERROR('#Г');
+}
+var \u0414 = 1;
+>\u0414 : Symbol(Д, Decl(scannerS7.6_A4.2_T1.ts, 27, 3))
+
+if (Д !== 1) {
+>Д : Symbol(Д, Decl(scannerS7.6_A4.2_T1.ts, 27, 3))
+
+  $ERROR('#Д');
+}
+var \u0415 = 1;
+>\u0415 : Symbol(Е, Decl(scannerS7.6_A4.2_T1.ts, 31, 3))
+
+if (Е !== 1) {
+>Е : Symbol(Е, Decl(scannerS7.6_A4.2_T1.ts, 31, 3))
+
+  $ERROR('#Е');
+}
+var \u0416 = 1;
+>\u0416 : Symbol(Ж, Decl(scannerS7.6_A4.2_T1.ts, 35, 3))
+
+if (Ж !== 1) {
+>Ж : Symbol(Ж, Decl(scannerS7.6_A4.2_T1.ts, 35, 3))
+
+  $ERROR('#Ж');
+}
+var \u0417 = 1;
+>\u0417 : Symbol(З, Decl(scannerS7.6_A4.2_T1.ts, 39, 3))
+
+if (З !== 1) {
+>З : Symbol(З, Decl(scannerS7.6_A4.2_T1.ts, 39, 3))
+
+  $ERROR('#З');
+}
+var \u0418 = 1;
+>\u0418 : Symbol(И, Decl(scannerS7.6_A4.2_T1.ts, 43, 3))
+
+if (И !== 1) {
+>И : Symbol(И, Decl(scannerS7.6_A4.2_T1.ts, 43, 3))
+
+  $ERROR('#И');
+}
+var \u0419 = 1;
+>\u0419 : Symbol(Й, Decl(scannerS7.6_A4.2_T1.ts, 47, 3))
+
+if (Й !== 1) {
+>Й : Symbol(Й, Decl(scannerS7.6_A4.2_T1.ts, 47, 3))
+
+  $ERROR('#Й');
+}
+var \u041A = 1;
+>\u041A : Symbol(К, Decl(scannerS7.6_A4.2_T1.ts, 51, 3))
+
+if (К !== 1) {
+>К : Symbol(К, Decl(scannerS7.6_A4.2_T1.ts, 51, 3))
+
+  $ERROR('#К');
+}
+var \u041B = 1;
+>\u041B : Symbol(Л, Decl(scannerS7.6_A4.2_T1.ts, 55, 3))
+
+if (Л !== 1) {
+>Л : Symbol(Л, Decl(scannerS7.6_A4.2_T1.ts, 55, 3))
+
+  $ERROR('#Л');
+}
+var \u041C = 1;
+>\u041C : Symbol(М, Decl(scannerS7.6_A4.2_T1.ts, 59, 3))
+
+if (М !== 1) {
+>М : Symbol(М, Decl(scannerS7.6_A4.2_T1.ts, 59, 3))
+
+  $ERROR('#М');
+}
+var \u041D = 1;
+>\u041D : Symbol(Н, Decl(scannerS7.6_A4.2_T1.ts, 63, 3))
+
+if (Н !== 1) {
+>Н : Symbol(Н, Decl(scannerS7.6_A4.2_T1.ts, 63, 3))
+
+  $ERROR('#Н');
+}
+var \u041E = 1;
+>\u041E : Symbol(О, Decl(scannerS7.6_A4.2_T1.ts, 67, 3))
+
+if (О !== 1) {
+>О : Symbol(О, Decl(scannerS7.6_A4.2_T1.ts, 67, 3))
+
+  $ERROR('#О');
+}
+var \u041F = 1;
+>\u041F : Symbol(П, Decl(scannerS7.6_A4.2_T1.ts, 71, 3))
+
+if (П !== 1) {
+>П : Symbol(П, Decl(scannerS7.6_A4.2_T1.ts, 71, 3))
+
+  $ERROR('#П');
+}
+var \u0420 = 1;
+>\u0420 : Symbol(Р, Decl(scannerS7.6_A4.2_T1.ts, 75, 3))
+
+if (Р !== 1) {
+>Р : Symbol(Р, Decl(scannerS7.6_A4.2_T1.ts, 75, 3))
+
+  $ERROR('#Р');
+}
+var \u0421 = 1;
+>\u0421 : Symbol(С, Decl(scannerS7.6_A4.2_T1.ts, 79, 3))
+
+if (С !== 1) {
+>С : Symbol(С, Decl(scannerS7.6_A4.2_T1.ts, 79, 3))
+
+  $ERROR('#С');
+}
+var \u0422 = 1;
+>\u0422 : Symbol(Т, Decl(scannerS7.6_A4.2_T1.ts, 83, 3))
+
+if (Т !== 1) {
+>Т : Symbol(Т, Decl(scannerS7.6_A4.2_T1.ts, 83, 3))
+
+  $ERROR('#Т');
+}
+var \u0423 = 1;
+>\u0423 : Symbol(У, Decl(scannerS7.6_A4.2_T1.ts, 87, 3))
+
+if (У !== 1) {
+>У : Symbol(У, Decl(scannerS7.6_A4.2_T1.ts, 87, 3))
+
+  $ERROR('#У');
+}
+var \u0424 = 1;
+>\u0424 : Symbol(Ф, Decl(scannerS7.6_A4.2_T1.ts, 91, 3))
+
+if (Ф !== 1) {
+>Ф : Symbol(Ф, Decl(scannerS7.6_A4.2_T1.ts, 91, 3))
+
+  $ERROR('#Ф');
+}
+var \u0425 = 1;
+>\u0425 : Symbol(Х, Decl(scannerS7.6_A4.2_T1.ts, 95, 3))
+
+if (Х !== 1) {
+>Х : Symbol(Х, Decl(scannerS7.6_A4.2_T1.ts, 95, 3))
+
+  $ERROR('#Х');
+}
+var \u0426 = 1;
+>\u0426 : Symbol(Ц, Decl(scannerS7.6_A4.2_T1.ts, 99, 3))
+
+if (Ц !== 1) {
+>Ц : Symbol(Ц, Decl(scannerS7.6_A4.2_T1.ts, 99, 3))
+
+  $ERROR('#Ц');
+}
+var \u0427 = 1;
+>\u0427 : Symbol(Ч, Decl(scannerS7.6_A4.2_T1.ts, 103, 3))
+
+if (Ч !== 1) {
+>Ч : Symbol(Ч, Decl(scannerS7.6_A4.2_T1.ts, 103, 3))
+
+  $ERROR('#Ч');
+}
+var \u0428 = 1;
+>\u0428 : Symbol(Ш, Decl(scannerS7.6_A4.2_T1.ts, 107, 3))
+
+if (Ш !== 1) {
+>Ш : Symbol(Ш, Decl(scannerS7.6_A4.2_T1.ts, 107, 3))
+
+  $ERROR('#Ш');
+}
+var \u0429 = 1;
+>\u0429 : Symbol(Щ, Decl(scannerS7.6_A4.2_T1.ts, 111, 3))
+
+if (Щ !== 1) {
+>Щ : Symbol(Щ, Decl(scannerS7.6_A4.2_T1.ts, 111, 3))
+
+  $ERROR('#Щ');
+}
+var \u042A = 1;
+>\u042A : Symbol(Ъ, Decl(scannerS7.6_A4.2_T1.ts, 115, 3))
+
+if (Ъ !== 1) {
+>Ъ : Symbol(Ъ, Decl(scannerS7.6_A4.2_T1.ts, 115, 3))
+
+  $ERROR('#Ъ');
+}
+var \u042B = 1;
+>\u042B : Symbol(Ы, Decl(scannerS7.6_A4.2_T1.ts, 119, 3))
+
+if (Ы !== 1) {
+>Ы : Symbol(Ы, Decl(scannerS7.6_A4.2_T1.ts, 119, 3))
+
+  $ERROR('#Ы');
+}
+var \u042C = 1;
+>\u042C : Symbol(Ь, Decl(scannerS7.6_A4.2_T1.ts, 123, 3))
+
+if (Ь !== 1) {
+>Ь : Symbol(Ь, Decl(scannerS7.6_A4.2_T1.ts, 123, 3))
+
+  $ERROR('#Ь');
+}
+var \u042D = 1;
+>\u042D : Symbol(Э, Decl(scannerS7.6_A4.2_T1.ts, 127, 3))
+
+if (Э !== 1) {
+>Э : Symbol(Э, Decl(scannerS7.6_A4.2_T1.ts, 127, 3))
+
+  $ERROR('#Э');
+}
+var \u042E = 1;
+>\u042E : Symbol(Ю, Decl(scannerS7.6_A4.2_T1.ts, 131, 3))
+
+if (Ю !== 1) {
+>Ю : Symbol(Ю, Decl(scannerS7.6_A4.2_T1.ts, 131, 3))
+
+  $ERROR('#Ю');
+}
+var \u042F = 1;
+>\u042F : Symbol(Я, Decl(scannerS7.6_A4.2_T1.ts, 135, 3))
+
+if (Я !== 1) {
+>Я : Symbol(Я, Decl(scannerS7.6_A4.2_T1.ts, 135, 3))
+
+  $ERROR('#Я');
+}
+var \u0401 = 1;
+>\u0401 : Symbol(Ё, Decl(scannerS7.6_A4.2_T1.ts, 139, 3))
+
+if (Ё !== 1) {
+>Ё : Symbol(Ё, Decl(scannerS7.6_A4.2_T1.ts, 139, 3))
+
+  $ERROR('#Ё');
+}
+
+

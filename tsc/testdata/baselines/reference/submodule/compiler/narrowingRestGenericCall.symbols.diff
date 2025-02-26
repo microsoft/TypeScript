@@ -1,0 +1,31 @@
+--- old.narrowingRestGenericCall.symbols
++++ new.narrowingRestGenericCall.symbols
+@@= skipped -4, +4 lines =@@
+ >Slugs : Symbol(Slugs, Decl(narrowingRestGenericCall.ts, 0, 0))
+ 
+   foo: string;
+->foo : Symbol(Slugs.foo, Decl(narrowingRestGenericCall.ts, 0, 17))
++>foo : Symbol(foo, Decl(narrowingRestGenericCall.ts, 0, 17))
+ 
+   bar: string;
+->bar : Symbol(Slugs.bar, Decl(narrowingRestGenericCall.ts, 1, 14))
++>bar : Symbol(bar, Decl(narrowingRestGenericCall.ts, 1, 14))
+ }
+ 
+ function call<T extends object>(obj: T, cb: (val: T) => void) {
+@@= skipped -31, +31 lines =@@
+ >rest : Symbol(rest, Decl(narrowingRestGenericCall.ts, 10, 16))
+ 
+   console.log(rest.bar);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->rest.bar : Symbol(Slugs.bar, Decl(narrowingRestGenericCall.ts, 1, 14))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>rest.bar : Symbol(bar, Decl(narrowingRestGenericCall.ts, 1, 14))
+ >rest : Symbol(rest, Decl(narrowingRestGenericCall.ts, 10, 16))
+->bar : Symbol(Slugs.bar, Decl(narrowingRestGenericCall.ts, 1, 14))
++>bar : Symbol(bar, Decl(narrowingRestGenericCall.ts, 1, 14))
+ 
+ });

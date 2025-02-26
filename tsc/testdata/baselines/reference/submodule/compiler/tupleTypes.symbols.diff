@@ -1,0 +1,74 @@
+--- old.tupleTypes.symbols
++++ new.tupleTypes.symbols
+@@= skipped -18, +18 lines =@@
+ var t0 = t[0];   // number
+ >t0 : Symbol(t0, Decl(tupleTypes.ts, 6, 3), Decl(tupleTypes.ts, 7, 3))
+ >t : Symbol(t, Decl(tupleTypes.ts, 5, 3))
+->0 : Symbol(0)
++>0 : Symbol("0")
+ 
+ var t0: number;
+ >t0 : Symbol(t0, Decl(tupleTypes.ts, 6, 3), Decl(tupleTypes.ts, 7, 3))
+@@= skipped -8, +8 lines =@@
+ var t1 = t[1];   // string
+ >t1 : Symbol(t1, Decl(tupleTypes.ts, 8, 3), Decl(tupleTypes.ts, 9, 3))
+ >t : Symbol(t, Decl(tupleTypes.ts, 5, 3))
+->1 : Symbol(1)
++>1 : Symbol("1")
+ 
+ var t1: string;
+ >t1 : Symbol(t1, Decl(tupleTypes.ts, 8, 3), Decl(tupleTypes.ts, 9, 3))
+@@= skipped -31, +31 lines =@@
+ >tf : Symbol(tf, Decl(tupleTypes.ts, 19, 3))
+ >x : Symbol(x, Decl(tupleTypes.ts, 19, 18))
+ >x : Symbol(x, Decl(tupleTypes.ts, 19, 51))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(tupleTypes.ts, 19, 51))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ declare function ff<T, U>(a: T, b: [T, (x: T) => U]): U;
+ >ff : Symbol(ff, Decl(tupleTypes.ts, 19, 67))
+@@= skipped -21, +21 lines =@@
+ >ff1 : Symbol(ff1, Decl(tupleTypes.ts, 22, 3), Decl(tupleTypes.ts, 23, 3))
+ >ff : Symbol(ff, Decl(tupleTypes.ts, 19, 67))
+ >x : Symbol(x, Decl(tupleTypes.ts, 22, 29))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(tupleTypes.ts, 22, 29))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ var ff1: number;
+ >ff1 : Symbol(ff1, Decl(tupleTypes.ts, 22, 3), Decl(tupleTypes.ts, 23, 3))
+@@= skipped -30, +30 lines =@@
+ var tt0 = tt[0];
+ >tt0 : Symbol(tt0, Decl(tupleTypes.ts, 30, 3), Decl(tupleTypes.ts, 31, 3))
+ >tt : Symbol(tt, Decl(tupleTypes.ts, 29, 3))
+->0 : Symbol(0)
++>0 : Symbol("0")
+ 
+ var tt0: number;
+ >tt0 : Symbol(tt0, Decl(tupleTypes.ts, 30, 3), Decl(tupleTypes.ts, 31, 3))
+@@= skipped -8, +8 lines =@@
+ var tt1 = tt[1];
+ >tt1 : Symbol(tt1, Decl(tupleTypes.ts, 32, 3), Decl(tupleTypes.ts, 33, 3))
+ >tt : Symbol(tt, Decl(tupleTypes.ts, 29, 3))
+->1 : Symbol(1)
++>1 : Symbol("1")
+ 
+ var tt1: string;
+ >tt1 : Symbol(tt1, Decl(tupleTypes.ts, 32, 3), Decl(tupleTypes.ts, 33, 3))
+@@= skipped -102, +102 lines =@@
+ >b3 : Symbol(b3, Decl(tupleTypes.ts, 61, 13))
+ 
+ b3.length = 0; // Error
+->b3.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
++>b3.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >b3 : Symbol(b3, Decl(tupleTypes.ts, 61, 13))
+->length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ declare const b4: [number?];
+ >b4 : Symbol(b4, Decl(tupleTypes.ts, 63, 13))

@@ -1,0 +1,21 @@
+--- old.jsDeclarationsFunctionJSDoc.symbols
++++ new.jsDeclarationsFunctionJSDoc.symbols
+@@= skipped -29, +29 lines =@@
+          * Field is always null
+          */
+         this.field = b;
+->this.field : Symbol(Aleph.field, Decl(source.js, 16, 23))
+ >this : Symbol(Aleph, Decl(source.js, 5, 28))
+->field : Symbol(Aleph.field, Decl(source.js, 16, 23))
+ >b : Symbol(b, Decl(source.js, 16, 18))
+     }
+ 
+@@= skipped -11, +9 lines =@@
+      * @returns {void}
+      */
+     doIt() {}
+->doIt : Symbol(Aleph.doIt, Decl(source.js, 21, 5))
++>doIt : Symbol(doIt, Decl(source.js, 21, 5))
+ }
+ 
+ /**

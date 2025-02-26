@@ -1,0 +1,9 @@
+--- old.declFileAliasUseBeforeDeclaration2.symbols
++++ new.declFileAliasUseBeforeDeclaration2.symbols
+@@= skipped -17, +17 lines =@@
+     import E = A.C;
+ >E : Symbol(E, Decl(declFileAliasUseBeforeDeclaration2.ts, 6, 5))
+ >A : Symbol(A, Decl(declFileAliasUseBeforeDeclaration2.ts, 0, 23))
+->C : Symbol(E, Decl(declFileAliasUseBeforeDeclaration2.ts, 1, 14))
++>C : Symbol(C, Decl(declFileAliasUseBeforeDeclaration2.ts, 1, 14))
+ }

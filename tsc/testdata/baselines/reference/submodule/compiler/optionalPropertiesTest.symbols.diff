@@ -1,0 +1,64 @@
+--- old.optionalPropertiesTest.symbols
++++ new.optionalPropertiesTest.symbols
+@@= skipped -10, +10 lines =@@
+ >IFoo : Symbol(IFoo, Decl(optionalPropertiesTest.ts, 0, 50))
+ {
+     id: number;
+->id : Symbol(IFoo.id, Decl(optionalPropertiesTest.ts, 3, 1))
++>id : Symbol(id, Decl(optionalPropertiesTest.ts, 3, 1))
+ 
+     name?: string;
+->name : Symbol(IFoo.name, Decl(optionalPropertiesTest.ts, 4, 15))
++>name : Symbol(name, Decl(optionalPropertiesTest.ts, 4, 15))
+ 
+     print?(): void;
+->print : Symbol(IFoo.print, Decl(optionalPropertiesTest.ts, 5, 18))
++>print : Symbol(print, Decl(optionalPropertiesTest.ts, 5, 18))
+ }
+ 
+ 
+@@= skipped -34, +34 lines =@@
+ 
+ var s = foo.name || "default";
+ >s : Symbol(s, Decl(optionalPropertiesTest.ts, 16, 3))
+->foo.name : Symbol(IFoo.name, Decl(optionalPropertiesTest.ts, 4, 15))
++>foo.name : Symbol(name, Decl(optionalPropertiesTest.ts, 4, 15))
+ >foo : Symbol(foo, Decl(optionalPropertiesTest.ts, 10, 3))
+->name : Symbol(IFoo.name, Decl(optionalPropertiesTest.ts, 4, 15))
++>name : Symbol(name, Decl(optionalPropertiesTest.ts, 4, 15))
+ 
+ if (foo.print !== undefined) foo.print();
+->foo.print : Symbol(IFoo.print, Decl(optionalPropertiesTest.ts, 5, 18))
++>foo.print : Symbol(print, Decl(optionalPropertiesTest.ts, 5, 18))
+ >foo : Symbol(foo, Decl(optionalPropertiesTest.ts, 10, 3))
+->print : Symbol(IFoo.print, Decl(optionalPropertiesTest.ts, 5, 18))
++>print : Symbol(print, Decl(optionalPropertiesTest.ts, 5, 18))
+ >undefined : Symbol(undefined)
+->foo.print : Symbol(IFoo.print, Decl(optionalPropertiesTest.ts, 5, 18))
++>foo.print : Symbol(print, Decl(optionalPropertiesTest.ts, 5, 18))
+ >foo : Symbol(foo, Decl(optionalPropertiesTest.ts, 10, 3))
+->print : Symbol(IFoo.print, Decl(optionalPropertiesTest.ts, 5, 18))
++>print : Symbol(print, Decl(optionalPropertiesTest.ts, 5, 18))
+ 
+ interface i1 { M: () => void; };
+ >i1 : Symbol(i1, Decl(optionalPropertiesTest.ts, 17, 41))
+->M : Symbol(i1.M, Decl(optionalPropertiesTest.ts, 19, 14))
++>M : Symbol(M, Decl(optionalPropertiesTest.ts, 19, 14))
+ 
+ interface i2 { M?: () => void; };
+ >i2 : Symbol(i2, Decl(optionalPropertiesTest.ts, 19, 32))
+->M : Symbol(i2.M, Decl(optionalPropertiesTest.ts, 20, 14))
++>M : Symbol(M, Decl(optionalPropertiesTest.ts, 20, 14))
+ 
+ interface i3 { M: number; };
+ >i3 : Symbol(i3, Decl(optionalPropertiesTest.ts, 20, 33))
+->M : Symbol(i3.M, Decl(optionalPropertiesTest.ts, 21, 14))
++>M : Symbol(M, Decl(optionalPropertiesTest.ts, 21, 14))
+ 
+ interface i4 { M?: number; };
+ >i4 : Symbol(i4, Decl(optionalPropertiesTest.ts, 21, 28))
+->M : Symbol(i4.M, Decl(optionalPropertiesTest.ts, 22, 14))
++>M : Symbol(M, Decl(optionalPropertiesTest.ts, 22, 14))
+ 
+ var test1: i1 = {};
+ >test1 : Symbol(test1, Decl(optionalPropertiesTest.ts, 24, 3))

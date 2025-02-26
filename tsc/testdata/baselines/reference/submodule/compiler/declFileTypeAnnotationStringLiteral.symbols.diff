@@ -1,0 +1,14 @@
+--- old.declFileTypeAnnotationStringLiteral.symbols
++++ new.declFileTypeAnnotationStringLiteral.symbols
+@@= skipped -20, +20 lines =@@
+ >a : Symbol(a, Decl(declFileTypeAnnotationStringLiteral.ts, 3, 13))
+ 
+         return a.length;
+->a.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>a.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(declFileTypeAnnotationStringLiteral.ts, 3, 13))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+     }
+ 
+     return a;

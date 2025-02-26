@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/ambient/ambientEnumDeclaration1.ts] ////
+
+=== ambientEnumDeclaration1.ts ===
+// In ambient enum declarations, all values specified in enum member declarations must be classified as constant enum expressions.
+
+declare enum E {
+>E : Symbol(E, Decl(ambientEnumDeclaration1.ts, 0, 0))
+
+    a = 10,
+>a : Symbol(a, Decl(ambientEnumDeclaration1.ts, 2, 16))
+
+    b = 10 + 1,
+>b : Symbol(b, Decl(ambientEnumDeclaration1.ts, 3, 11))
+
+    c = b,
+>c : Symbol(c, Decl(ambientEnumDeclaration1.ts, 4, 15))
+>b : Symbol(b, Decl(ambientEnumDeclaration1.ts, 3, 11))
+
+    d = (c) + 1,
+>d : Symbol(d, Decl(ambientEnumDeclaration1.ts, 5, 10))
+>c : Symbol(c, Decl(ambientEnumDeclaration1.ts, 4, 15))
+
+    e = 10 << 2 * 8,
+>e : Symbol(e, Decl(ambientEnumDeclaration1.ts, 6, 16))
+}

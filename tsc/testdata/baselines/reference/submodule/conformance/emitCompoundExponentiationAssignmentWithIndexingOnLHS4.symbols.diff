@@ -1,0 +1,61 @@
+--- old.emitCompoundExponentiationAssignmentWithIndexingOnLHS4.symbols
++++ new.emitCompoundExponentiationAssignmentWithIndexingOnLHS4.symbols
+@@= skipped -12, +12 lines =@@
+ 
+     let idx = Math.floor(Math.random() * max);
+ >idx : Symbol(idx, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 3, 7))
+->Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
++>Math.floor : Symbol(floor, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>floor : Symbol(floor, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >max : Symbol(max, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 1, 22))
+ 
+     return idx;
+@@= skipped -18, +18 lines =@@
+ array1[incrementIdx(array1.length)] **= 3;
+ >array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+ >incrementIdx : Symbol(incrementIdx, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 0, 22))
+->array1.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>array1.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ array1[incrementIdx(array1.length)] **= array1[incrementIdx(array1.length)] **= 2;
+ >array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+ >incrementIdx : Symbol(incrementIdx, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 0, 22))
+->array1.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>array1.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+ >incrementIdx : Symbol(incrementIdx, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 0, 22))
+->array1.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>array1.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+ array1[incrementIdx(array1.length)] **= array1[incrementIdx(array1.length)] ** 2;
+ >array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+ >incrementIdx : Symbol(incrementIdx, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 0, 22))
+->array1.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>array1.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+ >incrementIdx : Symbol(incrementIdx, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 0, 22))
+->array1.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>array1.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >array1 : Symbol(array1, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts, 7, 3))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 

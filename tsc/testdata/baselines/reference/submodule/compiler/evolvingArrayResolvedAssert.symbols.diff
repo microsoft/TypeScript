@@ -1,0 +1,14 @@
+--- old.evolvingArrayResolvedAssert.symbols
++++ new.evolvingArrayResolvedAssert.symbols
+@@= skipped -8, +8 lines =@@
+ >C : Symbol(C, Decl(evolvingArrayResolvedAssert.ts, 0, 3))
+ 
+     if (C.hasOwnProperty(a)) {
+->C.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
++>C.hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+ >C : Symbol(C, Decl(evolvingArrayResolvedAssert.ts, 0, 3))
+->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
++>hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(evolvingArrayResolvedAssert.ts, 1, 8))
+     }
+ }

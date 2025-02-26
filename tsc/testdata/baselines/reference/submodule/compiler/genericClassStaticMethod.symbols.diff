@@ -1,0 +1,20 @@
+--- old.genericClassStaticMethod.symbols
++++ new.genericClassStaticMethod.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(genericClassStaticMethod.ts, 0, 10))
+ 
+     static getFoo() {
+->getFoo : Symbol(Foo.getFoo, Decl(genericClassStaticMethod.ts, 0, 14))
++>getFoo : Symbol(getFoo, Decl(genericClassStaticMethod.ts, 0, 14))
+     }
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ >T : Symbol(T, Decl(genericClassStaticMethod.ts, 5, 10))
+ 
+     static getFoo() {
+->getFoo : Symbol(Bar.getFoo, Decl(genericClassStaticMethod.ts, 5, 29))
++>getFoo : Symbol(getFoo, Decl(genericClassStaticMethod.ts, 5, 29))
+     }
+ }
+ 

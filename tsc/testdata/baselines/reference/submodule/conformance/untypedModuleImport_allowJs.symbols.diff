@@ -1,0 +1,17 @@
+--- old.untypedModuleImport_allowJs.symbols
++++ new.untypedModuleImport_allowJs.symbols
+@@= skipped -4, +4 lines =@@
+ >foo : Symbol(foo, Decl(a.ts, 0, 6))
+ 
+ foo.bar();
+->foo.bar : Symbol(bar, Decl(index.js, 0, 19))
+ >foo : Symbol(foo, Decl(a.ts, 0, 6))
+->bar : Symbol(bar, Decl(index.js, 0, 19))
+ 
+-=== /node_modules/foo/index.js ===
+-exports.default = { bar() { return 0; } }
+->exports.default : Symbol(default, Decl(index.js, 0, 0))
+->exports : Symbol(default, Decl(index.js, 0, 0))
+->default : Symbol(default, Decl(index.js, 0, 0))
+->bar : Symbol(bar, Decl(index.js, 0, 19))
+-

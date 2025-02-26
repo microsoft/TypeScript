@@ -1,0 +1,88 @@
+--- old.numericIndexingResults.symbols
++++ new.numericIndexingResults.symbols
+@@= skipped -7, +7 lines =@@
+ >x : Symbol(x, Decl(numericIndexingResults.ts, 1, 5))
+ 
+     1 = '';
+->1 : Symbol(C[1], Decl(numericIndexingResults.ts, 1, 24))
++>1 : Symbol(1, Decl(numericIndexingResults.ts, 1, 24))
+ 
+     "2" = ''
+->"2" : Symbol(C["2"], Decl(numericIndexingResults.ts, 2, 11))
++>"2" : Symbol("2", Decl(numericIndexingResults.ts, 2, 11))
+ }
+ 
+ var c: C;
+@@= skipped -13, +13 lines =@@
+ var r1 = c['1'];
+ >r1 : Symbol(r1, Decl(numericIndexingResults.ts, 7, 3), Decl(numericIndexingResults.ts, 21, 3), Decl(numericIndexingResults.ts, 34, 3))
+ >c : Symbol(c, Decl(numericIndexingResults.ts, 6, 3))
+->'1' : Symbol(C[1], Decl(numericIndexingResults.ts, 1, 24))
++>'1' : Symbol(1, Decl(numericIndexingResults.ts, 1, 24))
+ 
+ var r2 = c['2'];
+ >r2 : Symbol(r2, Decl(numericIndexingResults.ts, 8, 3), Decl(numericIndexingResults.ts, 22, 3), Decl(numericIndexingResults.ts, 35, 3))
+ >c : Symbol(c, Decl(numericIndexingResults.ts, 6, 3))
+->'2' : Symbol(C["2"], Decl(numericIndexingResults.ts, 2, 11))
++>'2' : Symbol("2", Decl(numericIndexingResults.ts, 2, 11))
+ 
+ var r3 = c['3'];
+ >r3 : Symbol(r3, Decl(numericIndexingResults.ts, 9, 3), Decl(numericIndexingResults.ts, 23, 3), Decl(numericIndexingResults.ts, 36, 3), Decl(numericIndexingResults.ts, 44, 3), Decl(numericIndexingResults.ts, 52, 3))
+@@= skipped -14, +14 lines =@@
+ var r4 = c[1];
+ >r4 : Symbol(r4, Decl(numericIndexingResults.ts, 10, 3), Decl(numericIndexingResults.ts, 24, 3), Decl(numericIndexingResults.ts, 37, 3), Decl(numericIndexingResults.ts, 45, 3), Decl(numericIndexingResults.ts, 53, 3))
+ >c : Symbol(c, Decl(numericIndexingResults.ts, 6, 3))
+->1 : Symbol(C[1], Decl(numericIndexingResults.ts, 1, 24))
++>1 : Symbol(1, Decl(numericIndexingResults.ts, 1, 24))
+ 
+ var r5 = c[2];
+ >r5 : Symbol(r5, Decl(numericIndexingResults.ts, 11, 3), Decl(numericIndexingResults.ts, 25, 3), Decl(numericIndexingResults.ts, 38, 3), Decl(numericIndexingResults.ts, 46, 3), Decl(numericIndexingResults.ts, 54, 3))
+ >c : Symbol(c, Decl(numericIndexingResults.ts, 6, 3))
+->2 : Symbol(C["2"], Decl(numericIndexingResults.ts, 2, 11))
++>2 : Symbol("2", Decl(numericIndexingResults.ts, 2, 11))
+ 
+ var r6 = c[3];
+ >r6 : Symbol(r6, Decl(numericIndexingResults.ts, 12, 3), Decl(numericIndexingResults.ts, 26, 3), Decl(numericIndexingResults.ts, 39, 3), Decl(numericIndexingResults.ts, 47, 3), Decl(numericIndexingResults.ts, 55, 3))
+@@= skipped -18, +18 lines =@@
+ >x : Symbol(x, Decl(numericIndexingResults.ts, 15, 5))
+ 
+     1: string;
+->1 : Symbol(I[1], Decl(numericIndexingResults.ts, 15, 24))
++>1 : Symbol(1, Decl(numericIndexingResults.ts, 15, 24))
+ 
+     "2": string;
+->"2" : Symbol(I["2"], Decl(numericIndexingResults.ts, 16, 14))
++>"2" : Symbol("2", Decl(numericIndexingResults.ts, 16, 14))
+ }
+ 
+ var i: I
+@@= skipped -13, +13 lines =@@
+ var r1 = i['1'];
+ >r1 : Symbol(r1, Decl(numericIndexingResults.ts, 7, 3), Decl(numericIndexingResults.ts, 21, 3), Decl(numericIndexingResults.ts, 34, 3))
+ >i : Symbol(i, Decl(numericIndexingResults.ts, 20, 3))
+->'1' : Symbol(I[1], Decl(numericIndexingResults.ts, 15, 24))
++>'1' : Symbol(1, Decl(numericIndexingResults.ts, 15, 24))
+ 
+ var r2 = i['2'];
+ >r2 : Symbol(r2, Decl(numericIndexingResults.ts, 8, 3), Decl(numericIndexingResults.ts, 22, 3), Decl(numericIndexingResults.ts, 35, 3))
+ >i : Symbol(i, Decl(numericIndexingResults.ts, 20, 3))
+->'2' : Symbol(I["2"], Decl(numericIndexingResults.ts, 16, 14))
++>'2' : Symbol("2", Decl(numericIndexingResults.ts, 16, 14))
+ 
+ var r3 = i['3'];
+ >r3 : Symbol(r3, Decl(numericIndexingResults.ts, 9, 3), Decl(numericIndexingResults.ts, 23, 3), Decl(numericIndexingResults.ts, 36, 3), Decl(numericIndexingResults.ts, 44, 3), Decl(numericIndexingResults.ts, 52, 3))
+@@= skipped -14, +14 lines =@@
+ var r4 = i[1];
+ >r4 : Symbol(r4, Decl(numericIndexingResults.ts, 10, 3), Decl(numericIndexingResults.ts, 24, 3), Decl(numericIndexingResults.ts, 37, 3), Decl(numericIndexingResults.ts, 45, 3), Decl(numericIndexingResults.ts, 53, 3))
+ >i : Symbol(i, Decl(numericIndexingResults.ts, 20, 3))
+->1 : Symbol(I[1], Decl(numericIndexingResults.ts, 15, 24))
++>1 : Symbol(1, Decl(numericIndexingResults.ts, 15, 24))
+ 
+ var r5 = i[2];
+ >r5 : Symbol(r5, Decl(numericIndexingResults.ts, 11, 3), Decl(numericIndexingResults.ts, 25, 3), Decl(numericIndexingResults.ts, 38, 3), Decl(numericIndexingResults.ts, 46, 3), Decl(numericIndexingResults.ts, 54, 3))
+ >i : Symbol(i, Decl(numericIndexingResults.ts, 20, 3))
+->2 : Symbol(I["2"], Decl(numericIndexingResults.ts, 16, 14))
++>2 : Symbol("2", Decl(numericIndexingResults.ts, 16, 14))
+ 
+ var r6 = i[3];
+ >r6 : Symbol(r6, Decl(numericIndexingResults.ts, 12, 3), Decl(numericIndexingResults.ts, 26, 3), Decl(numericIndexingResults.ts, 39, 3), Decl(numericIndexingResults.ts, 47, 3), Decl(numericIndexingResults.ts, 55, 3))

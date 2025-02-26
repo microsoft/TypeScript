@@ -1,0 +1,42 @@
+--- old.declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.symbols
++++ new.declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.symbols
+@@= skipped -75, +75 lines =@@
+     function foo111(): m2.public2 {
+ >foo111 : Symbol(foo111, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 39, 5))
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 34, 5))
+->public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
++>public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
+ 
+         return;
+     }
+@@= skipped -8, +8 lines =@@
+ >foo112 : Symbol(foo112, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 43, 5))
+ 
+         return new m2.public2();
+->m2.public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
++>m2.public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 34, 5))
+->public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
++>public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
+     }
+ 
+     export function foo113(): m2.public2 {
+ >foo113 : Symbol(foo113, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 46, 5))
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 34, 5))
+->public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
++>public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
+ 
+         return;
+     }
+@@= skipped -16, +16 lines =@@
+ >foo114 : Symbol(foo114, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 50, 5))
+ 
+         return new m2.public2();
+->m2.public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
++>m2.public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 34, 5))
+->public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
++>public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 36, 15))
+     }
+ }
+ 

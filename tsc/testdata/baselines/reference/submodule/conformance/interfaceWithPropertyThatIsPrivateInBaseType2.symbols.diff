@@ -1,0 +1,36 @@
+--- old.interfaceWithPropertyThatIsPrivateInBaseType2.symbols
++++ new.interfaceWithPropertyThatIsPrivateInBaseType2.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(interfaceWithPropertyThatIsPrivateInBaseType2.ts, 0, 0))
+ 
+     private x() {}
+->x : Symbol(Base.x, Decl(interfaceWithPropertyThatIsPrivateInBaseType2.ts, 0, 12))
++>x : Symbol(x, Decl(interfaceWithPropertyThatIsPrivateInBaseType2.ts, 0, 12))
+ }
+ 
+ interface Foo extends Base { // error
+@@= skipped -8, +8 lines =@@
+ >Base : Symbol(Base, Decl(interfaceWithPropertyThatIsPrivateInBaseType2.ts, 0, 0))
+ 
+     x(): any;
+->x : Symbol(Foo.x, Decl(interfaceWithPropertyThatIsPrivateInBaseType2.ts, 4, 28))
++>x : Symbol(x, Decl(interfaceWithPropertyThatIsPrivateInBaseType2.ts, 4, 28))
+ }
+ 
+ class Base2<T> {
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(interfaceWithPropertyThatIsPrivateInBaseType2.ts, 8, 12))
+ 
+     private x() { }
+->x : Symbol(Base2.x, Decl(interfaceWithPropertyThatIsPrivateInBaseType2.ts, 8, 16))
++>x : Symbol(x, Decl(interfaceWithPropertyThatIsPrivateInBaseType2.ts, 8, 16))
+ }
+ 
+ interface Foo2<T> extends Base2<T> { // error
+@@= skipped -10, +10 lines =@@
+ >T : Symbol(T, Decl(interfaceWithPropertyThatIsPrivateInBaseType2.ts, 12, 15))
+ 
+     x(): any;
+->x : Symbol(Foo2.x, Decl(interfaceWithPropertyThatIsPrivateInBaseType2.ts, 12, 36))
++>x : Symbol(x, Decl(interfaceWithPropertyThatIsPrivateInBaseType2.ts, 12, 36))
+ }

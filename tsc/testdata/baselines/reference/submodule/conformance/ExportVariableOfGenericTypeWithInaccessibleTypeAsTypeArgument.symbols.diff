@@ -1,0 +1,11 @@
+--- old.ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.symbols
++++ new.ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.symbols
+@@= skipped -7, +7 lines =@@
+ >B : Symbol(B, Decl(ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.ts, 0, 10))
+ 
+         id: number;
+->id : Symbol(B.id, Decl(ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.ts, 1, 13))
++>id : Symbol(id, Decl(ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.ts, 1, 13))
+     }
+ 
+     export var beez: Array<B>;

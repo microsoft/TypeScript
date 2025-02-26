@@ -1,0 +1,11 @@
+--- old.contextualTypeBasedOnIntersectionWithAnyInTheMix2.symbols
++++ new.contextualTypeBasedOnIntersectionWithAnyInTheMix2.symbols
+@@= skipped -50, +50 lines =@@
+ >MDXProps : Symbol(MDXProps, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 17, 2))
+ 
+   components?: MDXComponents;
+->components : Symbol(MDXProps.components, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 19, 27))
++>components : Symbol(components, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 19, 27))
+ >MDXComponents : Symbol(MDXComponents, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 13, 1))
+ }
+ 

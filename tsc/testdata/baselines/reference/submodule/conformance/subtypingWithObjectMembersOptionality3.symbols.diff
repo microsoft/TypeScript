@@ -1,0 +1,69 @@
+--- old.subtypingWithObjectMembersOptionality3.symbols
++++ new.subtypingWithObjectMembersOptionality3.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ interface Base { foo: string; }
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembersOptionality3.ts, 0, 0))
+->foo : Symbol(Base.foo, Decl(subtypingWithObjectMembersOptionality3.ts, 2, 16))
++>foo : Symbol(foo, Decl(subtypingWithObjectMembersOptionality3.ts, 2, 16))
+ 
+ interface Derived extends Base { bar: string; }
+ >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersOptionality3.ts, 2, 31))
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembersOptionality3.ts, 0, 0))
+->bar : Symbol(Derived.bar, Decl(subtypingWithObjectMembersOptionality3.ts, 3, 32))
++>bar : Symbol(bar, Decl(subtypingWithObjectMembersOptionality3.ts, 3, 32))
+ 
+ interface T {
+ >T : Symbol(T, Decl(subtypingWithObjectMembersOptionality3.ts, 3, 47))
+ 
+     Foo?: Base;
+->Foo : Symbol(T.Foo, Decl(subtypingWithObjectMembersOptionality3.ts, 5, 13))
++>Foo : Symbol(Foo, Decl(subtypingWithObjectMembersOptionality3.ts, 5, 13))
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembersOptionality3.ts, 0, 0))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >T : Symbol(T, Decl(subtypingWithObjectMembersOptionality3.ts, 3, 47))
+ 
+     Foo2: Derived // ok
+->Foo2 : Symbol(S.Foo2, Decl(subtypingWithObjectMembersOptionality3.ts, 9, 23))
++>Foo2 : Symbol(Foo2, Decl(subtypingWithObjectMembersOptionality3.ts, 9, 23))
+ >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersOptionality3.ts, 2, 31))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >T2 : Symbol(T2, Decl(subtypingWithObjectMembersOptionality3.ts, 11, 1))
+ 
+     1?: Base;
+->1 : Symbol(T2[1], Decl(subtypingWithObjectMembersOptionality3.ts, 13, 14))
++>1 : Symbol(1, Decl(subtypingWithObjectMembersOptionality3.ts, 13, 14))
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembersOptionality3.ts, 0, 0))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >T2 : Symbol(T2, Decl(subtypingWithObjectMembersOptionality3.ts, 11, 1))
+ 
+     2: Derived; // ok
+->2 : Symbol(S2[2], Decl(subtypingWithObjectMembersOptionality3.ts, 17, 25))
++>2 : Symbol(2, Decl(subtypingWithObjectMembersOptionality3.ts, 17, 25))
+ >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersOptionality3.ts, 2, 31))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >T3 : Symbol(T3, Decl(subtypingWithObjectMembersOptionality3.ts, 19, 1))
+ 
+     '1'?: Base;
+->'1' : Symbol(T3['1'], Decl(subtypingWithObjectMembersOptionality3.ts, 21, 14))
++>'1' : Symbol('1', Decl(subtypingWithObjectMembersOptionality3.ts, 21, 14))
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembersOptionality3.ts, 0, 0))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >T3 : Symbol(T3, Decl(subtypingWithObjectMembersOptionality3.ts, 19, 1))
+ 
+     '1.0': Derived; // ok
+->'1.0' : Symbol(S3['1.0'], Decl(subtypingWithObjectMembersOptionality3.ts, 25, 25))
++>'1.0' : Symbol('1.0', Decl(subtypingWithObjectMembersOptionality3.ts, 25, 25))
+ >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersOptionality3.ts, 2, 31))
+ }
+ 

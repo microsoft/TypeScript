@@ -1,0 +1,24 @@
+--- old.jsDeclarationsExportAssignmentExpressionPlusSecondary.symbols
++++ new.jsDeclarationsExportAssignmentExpressionPlusSecondary.symbols
+@@= skipped -11, +11 lines =@@
+ 
+ };
+ module.exports = {
+->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+->module : Symbol(export=, Decl(index.js, 3, 2))
+->exports : Symbol(export=, Decl(index.js, 3, 2))
+-
+     thing: "ok",
+ >thing : Symbol(thing, Decl(index.js, 4, 18))
+ 
+@@= skipped -18, +14 lines =@@
+     }
+ };
+ module.exports.Strings = Strings;
+->module.exports.Strings : Symbol(Strings, Decl(index.js, 10, 2))
+->module.exports : Symbol(Strings, Decl(index.js, 10, 2))
+->module : Symbol(module, Decl(index.js, 3, 2))
+->exports : Symbol(module.exports, Decl(index.js, 0, 0))
+->Strings : Symbol(Strings, Decl(index.js, 10, 2))
+ >Strings : Symbol(Strings, Decl(index.js, 0, 5))
+ 

@@ -1,0 +1,81 @@
+--- old.conditionalOperatorWithIdenticalBCT.symbols
++++ new.conditionalOperatorWithIdenticalBCT.symbols
+@@= skipped -3, +3 lines =@@
+ //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have identical best common type
+ class X { propertyX: any; propertyX1: number; propertyX2: string };
+ >X : Symbol(X, Decl(conditionalOperatorWithIdenticalBCT.ts, 0, 0))
+->propertyX : Symbol(X.propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
+->propertyX1 : Symbol(X.propertyX1, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 25))
+->propertyX2 : Symbol(X.propertyX2, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 45))
++>propertyX : Symbol(propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
++>propertyX1 : Symbol(propertyX1, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 25))
++>propertyX2 : Symbol(propertyX2, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 45))
+ 
+ class A extends X { propertyA: number };
+ >A : Symbol(A, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 67))
+ >X : Symbol(X, Decl(conditionalOperatorWithIdenticalBCT.ts, 0, 0))
+->propertyA : Symbol(A.propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
++>propertyA : Symbol(propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
+ 
+ class B extends X { propertyB: string };
+ >B : Symbol(B, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 40))
+ >X : Symbol(X, Decl(conditionalOperatorWithIdenticalBCT.ts, 0, 0))
+->propertyB : Symbol(B.propertyB, Decl(conditionalOperatorWithIdenticalBCT.ts, 3, 19))
++>propertyB : Symbol(propertyB, Decl(conditionalOperatorWithIdenticalBCT.ts, 3, 19))
+ 
+ var x: X;
+ >x : Symbol(x, Decl(conditionalOperatorWithIdenticalBCT.ts, 5, 3))
+@@= skipped -65, +65 lines =@@
+ >t : Symbol(t, Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 14))
+ >A : Symbol(A, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 67))
+ >m : Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 37))
+->m.propertyX : Symbol(X.propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
++>m.propertyX : Symbol(propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
+ >m : Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 37))
+->propertyX : Symbol(X.propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
++>propertyX : Symbol(propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
+ >n : Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 58))
+->n.propertyA : Symbol(A.propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
++>n.propertyA : Symbol(propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
+ >n : Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 58))
+->propertyA : Symbol(A.propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
++>propertyA : Symbol(propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
+ 
+ //Cond ? Expr1 : Expr2,  Expr2 is supertype
+ //Be Not contextually typed
+@@= skipped -47, +47 lines =@@
+ >t : Symbol(t, Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 14))
+ >A : Symbol(A, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 67))
+ >m : Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 37))
+->m.propertyA : Symbol(A.propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
++>m.propertyA : Symbol(propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
+ >m : Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 37))
+->propertyA : Symbol(A.propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
++>propertyA : Symbol(propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
+ >n : Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 58))
+->n.propertyX : Symbol(X.propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
++>n.propertyX : Symbol(propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
+ >n : Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 58))
+->propertyX : Symbol(X.propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
++>propertyX : Symbol(propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
+ 
+ //Result = Cond ? Expr1 : Expr2,  Result is supertype
+ //Contextually typed
+@@= skipped -21, +21 lines =@@
+ >t : Symbol(t, Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 15))
+ >X : Symbol(X, Decl(conditionalOperatorWithIdenticalBCT.ts, 0, 0))
+ >m : Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 38))
+->m.propertyX1 : Symbol(X.propertyX1, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 25))
++>m.propertyX1 : Symbol(propertyX1, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 25))
+ >m : Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 38))
+->propertyX1 : Symbol(X.propertyX1, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 25))
++>propertyX1 : Symbol(propertyX1, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 25))
+ >n : Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 60))
+->n.propertyX2 : Symbol(X.propertyX2, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 45))
++>n.propertyX2 : Symbol(propertyX2, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 45))
+ >n : Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 60))
+->propertyX2 : Symbol(X.propertyX2, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 45))
++>propertyX2 : Symbol(propertyX2, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 45))
+ 
+ //Expr1 and Expr2 are literals
+ var result11: any = true ? 1 : 'string';

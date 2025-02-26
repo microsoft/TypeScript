@@ -1,0 +1,10 @@
+--- old.for-of49.symbols
++++ new.for-of49.symbols
+@@= skipped -6, +6 lines =@@
+ 
+ var map = new Map([["", true]]);
+ >map : Symbol(map, Decl(for-of49.ts, 1, 3))
+->Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ 
+ for ([k, ...[v]] of map) {
+ >k : Symbol(k, Decl(for-of49.ts, 0, 3))

@@ -1,0 +1,17 @@
+--- old.contextuallyTypedJsxAttribute.symbols
++++ new.contextuallyTypedJsxAttribute.symbols
+@@= skipped -4, +4 lines =@@
+ >Elements : Symbol(Elements, Decl(index.tsx, 0, 0))
+ 
+   foo: { callback?: (value: number) => void };
+->foo : Symbol(Elements.foo, Decl(index.tsx, 0, 20))
++>foo : Symbol(foo, Decl(index.tsx, 0, 20))
+ >callback : Symbol(callback, Decl(index.tsx, 1, 8))
+ >value : Symbol(value, Decl(index.tsx, 1, 21))
+ 
+   bar: { callback?: (value: string) => void };
+->bar : Symbol(Elements.bar, Decl(index.tsx, 1, 46))
++>bar : Symbol(bar, Decl(index.tsx, 1, 46))
+ >callback : Symbol(callback, Decl(index.tsx, 2, 8))
+ >value : Symbol(value, Decl(index.tsx, 2, 21))
+ }

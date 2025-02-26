@@ -1,0 +1,102 @@
+--- old.blockScopedVariablesUseBeforeDef.symbols
++++ new.blockScopedVariablesUseBeforeDef.symbols
+@@= skipped -40, +40 lines =@@
+ >X : Symbol(X, Decl(blockScopedVariablesUseBeforeDef.ts, 15, 17))
+ 
+         m() { return x;}
+->m : Symbol(X.m, Decl(blockScopedVariablesUseBeforeDef.ts, 16, 13))
++>m : Symbol(m, Decl(blockScopedVariablesUseBeforeDef.ts, 16, 13))
+ >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 19, 7))
+     }
+     let x;
+@@= skipped -14, +14 lines =@@
+ >y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 23, 7))
+ 
+         m() { return x; }
+->m : Symbol(y.m, Decl(blockScopedVariablesUseBeforeDef.ts, 23, 19))
++>m : Symbol(m, Decl(blockScopedVariablesUseBeforeDef.ts, 23, 19))
+ >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 26, 7))
+ 
+     };
+@@= skipped -40, +40 lines =@@
+ >A : Symbol(A, Decl(blockScopedVariablesUseBeforeDef.ts, 41, 17))
+ 
+         a = x;
+->a : Symbol(A.a, Decl(blockScopedVariablesUseBeforeDef.ts, 42, 13))
++>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 42, 13))
+ >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 45, 7))
+     }
+     let x;
+@@= skipped -14, +14 lines =@@
+ >y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 49, 7))
+ 
+         a = x;
+->a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 49, 19))
++>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 49, 19))
+ >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 52, 7))
+     }
+     let x;
+@@= skipped -14, +14 lines =@@
+ >y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 56, 7))
+ 
+         static a = x;
+->a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 56, 19))
++>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 56, 19))
+ >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 59, 7))
+     }
+     let x;
+@@= skipped -14, +14 lines =@@
+ >A : Symbol(A, Decl(blockScopedVariablesUseBeforeDef.ts, 62, 18))
+ 
+         static a = x;
+->a : Symbol(A.a, Decl(blockScopedVariablesUseBeforeDef.ts, 63, 13))
++>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 63, 13))
+ >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 66, 7))
+     }
+     let x;
+@@= skipped -17, +17 lines =@@
+ >y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 71, 11))
+ 
+             static a = x;
+->a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 71, 23))
++>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 71, 23))
+ >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 75, 7))
+         }
+     }
+@@= skipped -18, +18 lines =@@
+ >y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 11))
+ 
+             a;
+->a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 23))
++>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 23))
+ 
+             constructor() {
+                 this.a = x;
+->this.a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 23))
++>this.a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 23))
+ >this : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 15))
+->a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 23))
++>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 23))
+ >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 87, 7))
+             }
+         }
+@@= skipped -56, +56 lines =@@
+ 
+     ] = ((): [number, number] => {
+         (() => console.log(a))();  // should error
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 106, 11))
+ 
+         console.log(a);            // should error
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 106, 11))
+ 
+         const b = () => a;         // should be ok

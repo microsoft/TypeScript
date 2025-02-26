@@ -1,0 +1,28 @@
+--- old.typePredicatesInUnion3.symbols
++++ new.typePredicatesInUnion3.symbols
+@@= skipped -104, +104 lines =@@
+ >Type1 : Symbol(Type1, Decl(typePredicatesInUnion3.ts, 36, 49))
+ 
+     attribute: number | null = null;
+->attribute : Symbol(Type1.attribute, Decl(typePredicatesInUnion3.ts, 38, 13))
++>attribute : Symbol(attribute, Decl(typePredicatesInUnion3.ts, 38, 13))
+ 
+     predicate(): this is HasAttribute<Type1> {
+->predicate : Symbol(Type1.predicate, Decl(typePredicatesInUnion3.ts, 39, 36))
++>predicate : Symbol(predicate, Decl(typePredicatesInUnion3.ts, 39, 36))
+ >HasAttribute : Symbol(HasAttribute, Decl(typePredicatesInUnion3.ts, 32, 1))
+ >Type1 : Symbol(Type1, Decl(typePredicatesInUnion3.ts, 36, 49))
+ 
+@@= skipped -15, +15 lines =@@
+ >Type2 : Symbol(Type2, Decl(typePredicatesInUnion3.ts, 43, 1))
+ 
+     attribute: number | null = null;
+->attribute : Symbol(Type2.attribute, Decl(typePredicatesInUnion3.ts, 45, 13))
++>attribute : Symbol(attribute, Decl(typePredicatesInUnion3.ts, 45, 13))
+ 
+     predicate(): boolean {
+->predicate : Symbol(Type2.predicate, Decl(typePredicatesInUnion3.ts, 46, 36))
++>predicate : Symbol(predicate, Decl(typePredicatesInUnion3.ts, 46, 36))
+ 
+         return true;
+     }

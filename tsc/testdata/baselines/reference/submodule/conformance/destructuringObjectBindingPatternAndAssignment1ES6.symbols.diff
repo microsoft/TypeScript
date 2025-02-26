@@ -1,0 +1,11 @@
+--- old.destructuringObjectBindingPatternAndAssignment1ES6.symbols
++++ new.destructuringObjectBindingPatternAndAssignment1ES6.symbols
+@@= skipped -96, +96 lines =@@
+ 
+     return {
+         "prop1": 2
+->"prop1" : Symbol("prop1", Decl(destructuringObjectBindingPatternAndAssignment1ES6.ts, 47, 12))
++>"prop1" : Symbol(prop1, Decl(destructuringObjectBindingPatternAndAssignment1ES6.ts, 47, 12))
+     }
+ }
+ 

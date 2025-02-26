@@ -1,0 +1,29 @@
+--- old.declareDottedExtend.symbols
++++ new.declareDottedExtend.symbols
+@@= skipped -11, +11 lines =@@
+ import ab = A.B;
+ >ab : Symbol(ab, Decl(declareDottedExtend.ts, 3, 1))
+ >A : Symbol(A, Decl(declareDottedExtend.ts, 0, 0))
+->B : Symbol(ab, Decl(declareDottedExtend.ts, 0, 17))
++>B : Symbol(B, Decl(declareDottedExtend.ts, 0, 17))
+ 
+ class D extends ab.C{ }
+ >D : Symbol(D, Decl(declareDottedExtend.ts, 5, 16))
+->ab.C : Symbol(ab.C, Decl(declareDottedExtend.ts, 1, 1))
++>ab.C : Symbol(C, Decl(declareDottedExtend.ts, 1, 1))
+ >ab : Symbol(ab, Decl(declareDottedExtend.ts, 3, 1))
+->C : Symbol(ab.C, Decl(declareDottedExtend.ts, 1, 1))
++>C : Symbol(C, Decl(declareDottedExtend.ts, 1, 1))
+ 
+ class E extends A.B.C{ }
+ >E : Symbol(E, Decl(declareDottedExtend.ts, 7, 23))
+->A.B.C : Symbol(ab.C, Decl(declareDottedExtend.ts, 1, 1))
+->A.B : Symbol(ab, Decl(declareDottedExtend.ts, 0, 17))
++>A.B.C : Symbol(C, Decl(declareDottedExtend.ts, 1, 1))
++>A.B : Symbol(B, Decl(declareDottedExtend.ts, 0, 17))
+ >A : Symbol(A, Decl(declareDottedExtend.ts, 0, 0))
+->B : Symbol(ab, Decl(declareDottedExtend.ts, 0, 17))
+->C : Symbol(ab.C, Decl(declareDottedExtend.ts, 1, 1))
++>B : Symbol(B, Decl(declareDottedExtend.ts, 0, 17))
++>C : Symbol(C, Decl(declareDottedExtend.ts, 1, 1))
+ 

@@ -1,0 +1,34 @@
+--- old.verbatimModuleSyntaxRestrictionsCJS.symbols
++++ new.verbatimModuleSyntaxRestrictionsCJS.symbols
+@@= skipped -31, +31 lines =@@
+ >funciton : Symbol(funciton, Decl(main.ts, 2, 8))
+ 
+ import type { funciton as funciton2 } from "./decl"; // ok I guess?
+->funciton : Symbol(esmy2.funciton, Decl(decl.d.ts, 1, 20))
++>funciton : Symbol(funciton, Decl(decl.d.ts, 1, 20))
+ >funciton2 : Symbol(funciton2, Decl(main.ts, 3, 13))
+ 
+ import("./decl"); // error
+->"./decl" : Symbol("/decl", Decl(decl.d.ts, 0, 0))
+-
+ type T = typeof import("./decl"); // ok
+ >T : Symbol(T, Decl(main.ts, 4, 17))
+ 
+@@= skipped -32, +30 lines =@@
+ >x : Symbol(x, Decl(main.ts, 14, 16))
+ }
+ export default interface Default {} // sketchy, but ok
+->Default : Symbol(Default, Decl(main.ts, 15, 1))
++>Default : Symbol(default, Decl(main.ts, 15, 1))
+ 
+ === /main2.ts ===
+ export interface I {}
+@@= skipped -28, +28 lines =@@
+ 
+ === /main5.ts ===
+ export default class C {} // error
+->C : Symbol(C, Decl(main5.ts, 0, 0))
++>C : Symbol(default, Decl(main5.ts, 0, 0))
+ 
+ === /main6.ts ===
+ interface I {}

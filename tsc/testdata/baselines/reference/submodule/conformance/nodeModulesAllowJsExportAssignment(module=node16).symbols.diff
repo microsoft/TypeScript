@@ -1,0 +1,12 @@
+--- old.nodeModulesAllowJsExportAssignment(module=node16).symbols
++++ new.nodeModulesAllowJsExportAssignment(module=node16).symbols
+@@= skipped -13, +13 lines =@@
+ >a : Symbol(a, Decl(file.js, 1, 5))
+ 
+ module.exports = a;
+->module.exports : Symbol(module.exports, Decl(file.js, 0, 0))
+->module : Symbol(export=, Decl(file.js, 1, 13))
+->exports : Symbol(export=, Decl(file.js, 1, 13))
+ >a : Symbol(a, Decl(file.js, 1, 5))
+ 
+ === index.js ===

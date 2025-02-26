@@ -1,0 +1,11 @@
+--- old.generatorES6_2.symbols
++++ new.generatorES6_2.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(generatorES6_2.ts, 0, 0))
+ 
+     public * foo() {
+->foo : Symbol(C.foo, Decl(generatorES6_2.ts, 0, 9))
++>foo : Symbol(foo, Decl(generatorES6_2.ts, 0, 9))
+ 
+         yield 1
+     }

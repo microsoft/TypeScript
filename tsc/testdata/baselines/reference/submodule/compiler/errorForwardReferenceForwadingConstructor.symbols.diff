@@ -1,0 +1,11 @@
+--- old.errorForwardReferenceForwadingConstructor.symbols
++++ new.errorForwardReferenceForwadingConstructor.symbols
+@@= skipped -16, +16 lines =@@
+ 
+ class base { constructor(public n: number) { } }
+ >base : Symbol(base, Decl(errorForwardReferenceForwadingConstructor.ts, 5, 1))
+->n : Symbol(base.n, Decl(errorForwardReferenceForwadingConstructor.ts, 7, 25))
++>n : Symbol(n, Decl(errorForwardReferenceForwadingConstructor.ts, 7, 25))
+ 
+ class derived extends base { }
+ >derived : Symbol(derived, Decl(errorForwardReferenceForwadingConstructor.ts, 7, 48))

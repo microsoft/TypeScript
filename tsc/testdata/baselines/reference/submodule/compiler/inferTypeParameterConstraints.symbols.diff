@@ -1,0 +1,30 @@
+--- old.inferTypeParameterConstraints.symbols
++++ new.inferTypeParameterConstraints.symbols
+@@= skipped -57, +57 lines =@@
+ >V : Symbol(V, Decl(inferTypeParameterConstraints.ts, 20, 16))
+ 
+   protected fake(): V {
+->fake : Symbol(BaseClass.fake, Decl(inferTypeParameterConstraints.ts, 20, 20))
++>fake : Symbol(fake, Decl(inferTypeParameterConstraints.ts, 20, 20))
+ >V : Symbol(V, Decl(inferTypeParameterConstraints.ts, 20, 16))
+ 
+     throw new Error("");
+@@= skipped -15, +15 lines =@@
+ >V : Symbol(V, Decl(inferTypeParameterConstraints.ts, 26, 12))
+ 
+   child = true;
+->child : Symbol(Klass.child, Decl(inferTypeParameterConstraints.ts, 26, 37))
++>child : Symbol(child, Decl(inferTypeParameterConstraints.ts, 26, 37))
+ }
+ 
+ type Constructor<V, P extends BaseClass<V>> = new () => P;
+@@= skipped -32, +32 lines =@@
+ >U : Symbol(U, Decl(inferTypeParameterConstraints.ts, 31, 69))
+ 
+ m.child; // ok
+->m.child : Symbol(Klass.child, Decl(inferTypeParameterConstraints.ts, 26, 37))
++>m.child : Symbol(child, Decl(inferTypeParameterConstraints.ts, 26, 37))
+ >m : Symbol(m, Decl(inferTypeParameterConstraints.ts, 35, 11))
+->child : Symbol(Klass.child, Decl(inferTypeParameterConstraints.ts, 26, 37))
++>child : Symbol(child, Decl(inferTypeParameterConstraints.ts, 26, 37))
+ 

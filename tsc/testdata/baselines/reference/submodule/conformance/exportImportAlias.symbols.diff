@@ -1,0 +1,166 @@
+--- old.exportImportAlias.symbols
++++ new.exportImportAlias.symbols
+@@= skipped -12, +12 lines =@@
+ >Point : Symbol(Point, Decl(exportImportAlias.ts, 4, 32))
+ 
+         constructor(public x: number, public y: number) { }
+->x : Symbol(Point.x, Decl(exportImportAlias.ts, 6, 20))
+->y : Symbol(Point.y, Decl(exportImportAlias.ts, 6, 37))
++>x : Symbol(x, Decl(exportImportAlias.ts, 6, 20))
++>y : Symbol(y, Decl(exportImportAlias.ts, 6, 37))
+     }
+     export module B {
+ >B : Symbol(B, Decl(exportImportAlias.ts, 7, 5))
+@@= skipped -10, +10 lines =@@
+ >Id : Symbol(Id, Decl(exportImportAlias.ts, 8, 21))
+ 
+             name: string;
+->name : Symbol(Id.name, Decl(exportImportAlias.ts, 9, 29))
++>name : Symbol(name, Decl(exportImportAlias.ts, 9, 29))
+         }
+     }
+ }
+@@= skipped -10, +10 lines =@@
+ 
+     export import a = A;
+ >a : Symbol(a, Decl(exportImportAlias.ts, 15, 10))
+->A : Symbol(a, Decl(exportImportAlias.ts, 0, 0))
++>A : Symbol(A, Decl(exportImportAlias.ts, 0, 0))
+ }
+ 
+ var a: string = C.a.x;
+ >a : Symbol(a, Decl(exportImportAlias.ts, 19, 3))
+->C.a.x : Symbol(A.x, Decl(exportImportAlias.ts, 4, 14))
+->C.a : Symbol(C.a, Decl(exportImportAlias.ts, 15, 10))
++>C.a.x : Symbol(x, Decl(exportImportAlias.ts, 4, 14))
++>C.a : Symbol(a, Decl(exportImportAlias.ts, 15, 10))
+ >C : Symbol(C, Decl(exportImportAlias.ts, 13, 1))
+->a : Symbol(C.a, Decl(exportImportAlias.ts, 15, 10))
+->x : Symbol(A.x, Decl(exportImportAlias.ts, 4, 14))
++>a : Symbol(a, Decl(exportImportAlias.ts, 15, 10))
++>x : Symbol(x, Decl(exportImportAlias.ts, 4, 14))
+ 
+ var b: { x: number; y: number; } = new C.a.Point(0, 0);
+ >b : Symbol(b, Decl(exportImportAlias.ts, 20, 3))
+ >x : Symbol(x, Decl(exportImportAlias.ts, 20, 8))
+ >y : Symbol(y, Decl(exportImportAlias.ts, 20, 19))
+->C.a.Point : Symbol(A.Point, Decl(exportImportAlias.ts, 4, 32))
+->C.a : Symbol(C.a, Decl(exportImportAlias.ts, 15, 10))
++>C.a.Point : Symbol(Point, Decl(exportImportAlias.ts, 4, 32))
++>C.a : Symbol(a, Decl(exportImportAlias.ts, 15, 10))
+ >C : Symbol(C, Decl(exportImportAlias.ts, 13, 1))
+->a : Symbol(C.a, Decl(exportImportAlias.ts, 15, 10))
+->Point : Symbol(A.Point, Decl(exportImportAlias.ts, 4, 32))
++>a : Symbol(a, Decl(exportImportAlias.ts, 15, 10))
++>Point : Symbol(Point, Decl(exportImportAlias.ts, 4, 32))
+ 
+ var c: { name: string };
+ >c : Symbol(c, Decl(exportImportAlias.ts, 21, 3), Decl(exportImportAlias.ts, 22, 3))
+@@= skipped -28, +28 lines =@@
+ var c: C.a.B.Id;
+ >c : Symbol(c, Decl(exportImportAlias.ts, 21, 3), Decl(exportImportAlias.ts, 22, 3))
+ >C : Symbol(C, Decl(exportImportAlias.ts, 13, 1))
+->a : Symbol(C.a, Decl(exportImportAlias.ts, 15, 10))
+->B : Symbol(A.B, Decl(exportImportAlias.ts, 7, 5))
+->Id : Symbol(A.B.Id, Decl(exportImportAlias.ts, 8, 21))
++>a : Symbol(a, Decl(exportImportAlias.ts, 15, 10))
++>B : Symbol(B, Decl(exportImportAlias.ts, 7, 5))
++>Id : Symbol(Id, Decl(exportImportAlias.ts, 8, 21))
+ 
+ module X {
+ >X : Symbol(X, Decl(exportImportAlias.ts, 22, 16))
+@@= skipped -20, +20 lines =@@
+ >Point : Symbol(Point, Decl(exportImportAlias.ts, 29, 21))
+ 
+             constructor(public x: number, public y: number) { }
+->x : Symbol(Point.x, Decl(exportImportAlias.ts, 31, 24))
+->y : Symbol(Point.y, Decl(exportImportAlias.ts, 31, 41))
++>x : Symbol(x, Decl(exportImportAlias.ts, 31, 24))
++>y : Symbol(y, Decl(exportImportAlias.ts, 31, 41))
+         }
+     }
+ }
+@@= skipped -13, +13 lines =@@
+     export import y = X.Y;
+ >y : Symbol(y, Decl(exportImportAlias.ts, 36, 10))
+ >X : Symbol(X, Decl(exportImportAlias.ts, 22, 16))
+->Y : Symbol(y, Decl(exportImportAlias.ts, 24, 10), Decl(exportImportAlias.ts, 27, 5))
++>Y : Symbol(Y, Decl(exportImportAlias.ts, 24, 10), Decl(exportImportAlias.ts, 27, 5))
+ }
+ 
+ var m: number = Z.y();
+ >m : Symbol(m, Decl(exportImportAlias.ts, 42, 3))
+->Z.y : Symbol(Z.y, Decl(exportImportAlias.ts, 36, 10))
++>Z.y : Symbol(y, Decl(exportImportAlias.ts, 36, 10))
+ >Z : Symbol(Z, Decl(exportImportAlias.ts, 34, 1))
+->y : Symbol(Z.y, Decl(exportImportAlias.ts, 36, 10))
++>y : Symbol(y, Decl(exportImportAlias.ts, 36, 10))
+ 
+ var n: { x: number; y: number; } = new Z.y.Point(0, 0);
+ >n : Symbol(n, Decl(exportImportAlias.ts, 43, 3))
+ >x : Symbol(x, Decl(exportImportAlias.ts, 43, 8))
+ >y : Symbol(y, Decl(exportImportAlias.ts, 43, 19))
+->Z.y.Point : Symbol(X.Y.Point, Decl(exportImportAlias.ts, 29, 21))
+->Z.y : Symbol(Z.y, Decl(exportImportAlias.ts, 36, 10))
++>Z.y.Point : Symbol(Point, Decl(exportImportAlias.ts, 29, 21))
++>Z.y : Symbol(y, Decl(exportImportAlias.ts, 36, 10))
+ >Z : Symbol(Z, Decl(exportImportAlias.ts, 34, 1))
+->y : Symbol(Z.y, Decl(exportImportAlias.ts, 36, 10))
+->Point : Symbol(X.Y.Point, Decl(exportImportAlias.ts, 29, 21))
++>y : Symbol(y, Decl(exportImportAlias.ts, 36, 10))
++>Point : Symbol(Point, Decl(exportImportAlias.ts, 29, 21))
+ 
+ module K {
+ >K : Symbol(K, Decl(exportImportAlias.ts, 43, 55))
+@@= skipped -26, +26 lines =@@
+ >L : Symbol(L, Decl(exportImportAlias.ts, 45, 10), Decl(exportImportAlias.ts, 48, 5))
+ 
+         constructor(public name: string) { }
+->name : Symbol(L.name, Decl(exportImportAlias.ts, 47, 20))
++>name : Symbol(name, Decl(exportImportAlias.ts, 47, 20))
+     }
+ 
+     export module L {
+@@= skipped -13, +13 lines =@@
+ >Point : Symbol(Point, Decl(exportImportAlias.ts, 51, 26))
+ 
+             x: number;
+->x : Symbol(Point.x, Decl(exportImportAlias.ts, 52, 32))
++>x : Symbol(x, Decl(exportImportAlias.ts, 52, 32))
+ 
+             y: number;
+->y : Symbol(Point.y, Decl(exportImportAlias.ts, 53, 22))
++>y : Symbol(y, Decl(exportImportAlias.ts, 53, 22))
+         }
+     }
+ }
+@@= skipped -14, +14 lines =@@
+     export import D = K.L;
+ >D : Symbol(D, Decl(exportImportAlias.ts, 59, 10))
+ >K : Symbol(K, Decl(exportImportAlias.ts, 43, 55))
+->L : Symbol(D, Decl(exportImportAlias.ts, 45, 10), Decl(exportImportAlias.ts, 48, 5))
++>L : Symbol(L, Decl(exportImportAlias.ts, 45, 10), Decl(exportImportAlias.ts, 48, 5))
+ }
+ 
+ var o: { name: string };
+@@= skipped -9, +9 lines =@@
+ 
+ var o = new M.D('Hello');
+ >o : Symbol(o, Decl(exportImportAlias.ts, 63, 3), Decl(exportImportAlias.ts, 64, 3))
+->M.D : Symbol(M.D, Decl(exportImportAlias.ts, 59, 10))
++>M.D : Symbol(D, Decl(exportImportAlias.ts, 59, 10))
+ >M : Symbol(M, Decl(exportImportAlias.ts, 57, 1))
+->D : Symbol(M.D, Decl(exportImportAlias.ts, 59, 10))
++>D : Symbol(D, Decl(exportImportAlias.ts, 59, 10))
+ 
+ var p: { x: number; y: number; }
+ >p : Symbol(p, Decl(exportImportAlias.ts, 66, 3), Decl(exportImportAlias.ts, 67, 3))
+@@= skipped -12, +12 lines =@@
+ var p: M.D.Point;
+ >p : Symbol(p, Decl(exportImportAlias.ts, 66, 3), Decl(exportImportAlias.ts, 67, 3))
+ >M : Symbol(M, Decl(exportImportAlias.ts, 57, 1))
+->D : Symbol(M.D, Decl(exportImportAlias.ts, 59, 10))
+->Point : Symbol(K.L.Point, Decl(exportImportAlias.ts, 51, 26))
++>D : Symbol(D, Decl(exportImportAlias.ts, 59, 10))
++>Point : Symbol(Point, Decl(exportImportAlias.ts, 51, 26))
+ 

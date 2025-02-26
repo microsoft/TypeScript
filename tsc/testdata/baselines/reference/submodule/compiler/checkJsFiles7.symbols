@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/checkJsFiles7.ts] ////
+
+=== a.js ===
+class C {
+>C : Symbol(C, Decl(a.js, 0, 0))
+
+	constructor() {
+		/** @type {boolean} */
+		this.a = true;
+>this : Symbol(C, Decl(a.js, 0, 0))
+
+		this.a = !!this.a;
+>this : Symbol(C, Decl(a.js, 0, 0))
+>this : Symbol(C, Decl(a.js, 0, 0))
+	}
+}

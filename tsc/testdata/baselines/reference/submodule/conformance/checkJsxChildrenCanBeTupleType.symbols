@@ -1,0 +1,47 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx] ////
+
+=== checkJsxChildrenCanBeTupleType.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from 'react'
+>React : Symbol(React, Decl(checkJsxChildrenCanBeTupleType.tsx, 2, 6))
+
+interface ResizablePanelProps {
+>ResizablePanelProps : Symbol(ResizablePanelProps, Decl(checkJsxChildrenCanBeTupleType.tsx, 2, 25))
+
+  children: [React.ReactNode, React.ReactNode]
+>children : Symbol(children, Decl(checkJsxChildrenCanBeTupleType.tsx, 4, 31))
+>React : Symbol(React, Decl(checkJsxChildrenCanBeTupleType.tsx, 2, 6))
+>ReactNode : Symbol(ReactNode)
+>React : Symbol(React, Decl(checkJsxChildrenCanBeTupleType.tsx, 2, 6))
+>ReactNode : Symbol(ReactNode)
+}
+
+class ResizablePanel extends React.Component<
+>ResizablePanel : Symbol(ResizablePanel, Decl(checkJsxChildrenCanBeTupleType.tsx, 6, 1))
+>React.Component : Symbol(unknown)
+>React : Symbol(React, Decl(checkJsxChildrenCanBeTupleType.tsx, 2, 6))
+>Component : Symbol(unknown)
+
+  ResizablePanelProps, any> {}
+>ResizablePanelProps : Symbol(ResizablePanelProps, Decl(checkJsxChildrenCanBeTupleType.tsx, 2, 25))
+
+const test = <ResizablePanel>
+>test : Symbol(test, Decl(checkJsxChildrenCanBeTupleType.tsx, 11, 5))
+>ResizablePanel : Symbol(ResizablePanel, Decl(checkJsxChildrenCanBeTupleType.tsx, 6, 1))
+
+  <div />
+  <div />
+</ResizablePanel>
+>ResizablePanel : Symbol(ResizablePanel, Decl(checkJsxChildrenCanBeTupleType.tsx, 6, 1))
+
+const testErr = <ResizablePanel>
+>testErr : Symbol(testErr, Decl(checkJsxChildrenCanBeTupleType.tsx, 16, 5))
+>ResizablePanel : Symbol(ResizablePanel, Decl(checkJsxChildrenCanBeTupleType.tsx, 6, 1))
+
+  <div />
+  <div />
+  <div />
+</ResizablePanel>
+>ResizablePanel : Symbol(ResizablePanel, Decl(checkJsxChildrenCanBeTupleType.tsx, 6, 1))
+

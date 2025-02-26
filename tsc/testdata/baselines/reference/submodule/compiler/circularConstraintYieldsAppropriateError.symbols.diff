@@ -1,0 +1,39 @@
+--- old.circularConstraintYieldsAppropriateError.symbols
++++ new.circularConstraintYieldsAppropriateError.symbols
+@@= skipped -6, +6 lines =@@
+ >T : Symbol(T, Decl(circularConstraintYieldsAppropriateError.ts, 1, 15))
+ 
+     bar: T
+->bar : Symbol(BaseType.bar, Decl(circularConstraintYieldsAppropriateError.ts, 1, 19))
++>bar : Symbol(bar, Decl(circularConstraintYieldsAppropriateError.ts, 1, 19))
+ >T : Symbol(T, Decl(circularConstraintYieldsAppropriateError.ts, 1, 15))
+ }
+ 
+@@= skipped -14, +14 lines =@@
+ >T : Symbol(T, Decl(circularConstraintYieldsAppropriateError.ts, 5, 43))
+ 
+     baz: string;
+->baz : Symbol(NextType.baz, Decl(circularConstraintYieldsAppropriateError.ts, 5, 84))
++>baz : Symbol(baz, Decl(circularConstraintYieldsAppropriateError.ts, 5, 84))
+ }
+ 
+ class Foo extends NextType<Foo> {
+@@= skipped -9, +9 lines =@@
+ >Foo : Symbol(Foo, Decl(circularConstraintYieldsAppropriateError.ts, 7, 1))
+ 
+     someProp: {
+->someProp : Symbol(Foo.someProp, Decl(circularConstraintYieldsAppropriateError.ts, 9, 33))
++>someProp : Symbol(someProp, Decl(circularConstraintYieldsAppropriateError.ts, 9, 33))
+ 
+         test: true
+ >test : Symbol(test, Decl(circularConstraintYieldsAppropriateError.ts, 10, 15))
+@@= skipped -12, +12 lines =@@
+ >Foo : Symbol(Foo, Decl(circularConstraintYieldsAppropriateError.ts, 7, 1))
+ 
+ foo.bar.test
+->foo.bar.test : Symbol(test, Decl(circularConstraintYieldsAppropriateError.ts, 10, 15))
+->foo.bar : Symbol(BaseType.bar, Decl(circularConstraintYieldsAppropriateError.ts, 1, 19))
+ >foo : Symbol(foo, Decl(circularConstraintYieldsAppropriateError.ts, 15, 5))
+->bar : Symbol(BaseType.bar, Decl(circularConstraintYieldsAppropriateError.ts, 1, 19))
+->test : Symbol(test, Decl(circularConstraintYieldsAppropriateError.ts, 10, 15))
+ 

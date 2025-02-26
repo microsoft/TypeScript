@@ -1,0 +1,11 @@
+--- old.duplicatePackage_globalMerge.symbols
++++ new.duplicatePackage_globalMerge.symbols
+@@= skipped -22, +22 lines =@@
+ 
+ === /tests/node_modules/@types/react/index.d.ts ===
+ 
+->global : Symbol(global, Decl(index.d.ts, 0, 0))
+-
+ === /node_modules/@types/react/index.d.ts ===
+ declare global { }
+ >global : Symbol(global, Decl(index.d.ts, 0, 0))

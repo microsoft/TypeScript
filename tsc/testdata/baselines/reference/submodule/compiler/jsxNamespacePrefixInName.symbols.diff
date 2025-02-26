@@ -1,0 +1,11 @@
+--- old.jsxNamespacePrefixInName.symbols
++++ new.jsxNamespacePrefixInName.symbols
+@@= skipped -78, +78 lines =@@
+ >beginOfIdent1 : Symbol(beginOfIdent1, Decl(jsxNamespacePrefixInName.tsx, 23, 3))
+ >a : Symbol(a, Decl(jsxNamespacePrefixInName.tsx, 23, 22))
+ >attr : Symbol(attr, Decl(jsxNamespacePrefixInName.tsx, 23, 23))
+->"value" : Symbol("value", Decl(jsxNamespacePrefixInName.tsx, 23, 30))
++>"value" : Symbol(value, Decl(jsxNamespacePrefixInName.tsx, 23, 30))
+ 
+ var beginOfIdent2 = <a :attr={"value"} />;
+ >beginOfIdent2 : Symbol(beginOfIdent2, Decl(jsxNamespacePrefixInName.tsx, 24, 3))

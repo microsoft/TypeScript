@@ -1,0 +1,20 @@
+--- old.objectIndexer.symbols
++++ new.objectIndexer.symbols
+@@= skipped -19, +19 lines =@@
+ >Emitter : Symbol(Emitter, Decl(objectIndexer.ts, 6, 1))
+ 
+     private listeners: IMap;
+->listeners : Symbol(Emitter.listeners, Decl(objectIndexer.ts, 8, 15))
++>listeners : Symbol(listeners, Decl(objectIndexer.ts, 8, 15))
+ >IMap : Symbol(IMap, Decl(objectIndexer.ts, 2, 1))
+ 
+     constructor () {
+         this.listeners = {};
+->this.listeners : Symbol(Emitter.listeners, Decl(objectIndexer.ts, 8, 15))
++>this.listeners : Symbol(listeners, Decl(objectIndexer.ts, 8, 15))
+ >this : Symbol(Emitter, Decl(objectIndexer.ts, 6, 1))
+->listeners : Symbol(Emitter.listeners, Decl(objectIndexer.ts, 8, 15))
++>listeners : Symbol(listeners, Decl(objectIndexer.ts, 8, 15))
+     }
+ }
+ 

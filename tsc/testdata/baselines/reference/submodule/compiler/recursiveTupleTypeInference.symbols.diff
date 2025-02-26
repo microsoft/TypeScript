@@ -1,0 +1,11 @@
+--- old.recursiveTupleTypeInference.symbols
++++ new.recursiveTupleTypeInference.symbols
+@@= skipped -35, +35 lines =@@
+ >K : Symbol(K, Decl(recursiveTupleTypeInference.ts, 10, 47))
+ 
+     b: number | null;
+->b : Symbol(K.b, Decl(recursiveTupleTypeInference.ts, 12, 13))
++>b : Symbol(b, Decl(recursiveTupleTypeInference.ts, 12, 13))
+ }
+ 
+ const gK: { [key in keyof K]: A } = { b: ["number", "null"] };

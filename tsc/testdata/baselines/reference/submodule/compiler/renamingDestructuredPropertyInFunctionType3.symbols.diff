@@ -1,0 +1,15 @@
+--- old.renamingDestructuredPropertyInFunctionType3.symbols
++++ new.renamingDestructuredPropertyInFunctionType3.symbols
+@@= skipped -2, +2 lines =@@
+ === renamingDestructuredPropertyInFunctionType3.ts ===
+ const sym = Symbol();
+ >sym : Symbol(sym, Decl(renamingDestructuredPropertyInFunctionType3.ts, 0, 5))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ 
+ type O = Record<symbol, unknown>
+ >O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType3.ts, 0, 21))
+->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
++>Record : Symbol(Record)
+ 
+ type F14 = ({ [sym]: string }: O) => void; // Error
+ >F14 : Symbol(F14, Decl(renamingDestructuredPropertyInFunctionType3.ts, 1, 32))

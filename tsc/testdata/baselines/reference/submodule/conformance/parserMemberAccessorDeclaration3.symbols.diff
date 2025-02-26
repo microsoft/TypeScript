@@ -1,0 +1,9 @@
+--- old.parserMemberAccessorDeclaration3.symbols
++++ new.parserMemberAccessorDeclaration3.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(parserMemberAccessorDeclaration3.ts, 0, 0))
+ 
+   get 0() { }
+->0 : Symbol(C[0], Decl(parserMemberAccessorDeclaration3.ts, 0, 9))
++>0 : Symbol(0, Decl(parserMemberAccessorDeclaration3.ts, 0, 9))
+ }

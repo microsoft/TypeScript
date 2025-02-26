@@ -1,0 +1,25 @@
+--- old.uniqueSymbolsDeclarationsInJsErrors.symbols
++++ new.uniqueSymbolsDeclarationsInJsErrors.symbols
+@@= skipped -7, +7 lines =@@
+      * @type {unique symbol}
+      */
+     static readwriteStaticType;
+->readwriteStaticType : Symbol(C.readwriteStaticType, Decl(uniqueSymbolsDeclarationsInJsErrors.js, 0, 9))
++>readwriteStaticType : Symbol(readwriteStaticType, Decl(uniqueSymbolsDeclarationsInJsErrors.js, 0, 9))
+ 
+     /**
+      * @type {unique symbol}
+      * @readonly
+      */
+     static readonlyType;
+->readonlyType : Symbol(C.readonlyType, Decl(uniqueSymbolsDeclarationsInJsErrors.js, 4, 31))
++>readonlyType : Symbol(readonlyType, Decl(uniqueSymbolsDeclarationsInJsErrors.js, 4, 31))
+ 
+     /**
+      * @type {unique symbol}
+      */
+     static readwriteType;
+->readwriteType : Symbol(C.readwriteType, Decl(uniqueSymbolsDeclarationsInJsErrors.js, 9, 24))
++>readwriteType : Symbol(readwriteType, Decl(uniqueSymbolsDeclarationsInJsErrors.js, 9, 24))
+ }
+ 

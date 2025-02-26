@@ -1,0 +1,23 @@
+--- old.nestedLoops.symbols
++++ new.nestedLoops.symbols
+@@= skipped -22, +22 lines =@@
+ >innerArray : Symbol(innerArray, Decl(nestedLoops.ts, 4, 11))
+ 
+                 this.aFunction((newValue, oldValue) => {
+->this.aFunction : Symbol(Test.aFunction, Decl(nestedLoops.ts, 12, 5))
++>this.aFunction : Symbol(aFunction, Decl(nestedLoops.ts, 12, 5))
+ >this : Symbol(Test, Decl(nestedLoops.ts, 0, 0))
+->aFunction : Symbol(Test.aFunction, Decl(nestedLoops.ts, 12, 5))
++>aFunction : Symbol(aFunction, Decl(nestedLoops.ts, 12, 5))
+ >newValue : Symbol(newValue, Decl(nestedLoops.ts, 8, 32))
+ >oldValue : Symbol(oldValue, Decl(nestedLoops.ts, 8, 41))
+ 
+@@= skipped -17, +17 lines =@@
+     }
+ 
+     public aFunction(func: (newValue: any, oldValue: any) => void): void {
+->aFunction : Symbol(Test.aFunction, Decl(nestedLoops.ts, 12, 5))
++>aFunction : Symbol(aFunction, Decl(nestedLoops.ts, 12, 5))
+ >func : Symbol(func, Decl(nestedLoops.ts, 14, 21))
+ >newValue : Symbol(newValue, Decl(nestedLoops.ts, 14, 28))
+ >oldValue : Symbol(oldValue, Decl(nestedLoops.ts, 14, 42))

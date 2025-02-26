@@ -1,0 +1,176 @@
+--- old.mergedInterfacesWithMultipleBases2.symbols
++++ new.mergedInterfacesWithMultipleBases2.symbols
+@@= skipped -7, +7 lines =@@
+ >C : Symbol(C, Decl(mergedInterfacesWithMultipleBases2.ts, 0, 0))
+ 
+     a: number;
+->a : Symbol(C.a, Decl(mergedInterfacesWithMultipleBases2.ts, 3, 9))
++>a : Symbol(a, Decl(mergedInterfacesWithMultipleBases2.ts, 3, 9))
+ }
+ 
+ class C2 {
+ >C2 : Symbol(C2, Decl(mergedInterfacesWithMultipleBases2.ts, 5, 1))
+ 
+     b: number;
+->b : Symbol(C2.b, Decl(mergedInterfacesWithMultipleBases2.ts, 7, 10))
++>b : Symbol(b, Decl(mergedInterfacesWithMultipleBases2.ts, 7, 10))
+ }
+ 
+ class C3 {
+ >C3 : Symbol(C3, Decl(mergedInterfacesWithMultipleBases2.ts, 9, 1))
+ 
+     c: string;
+->c : Symbol(C3.c, Decl(mergedInterfacesWithMultipleBases2.ts, 11, 10))
++>c : Symbol(c, Decl(mergedInterfacesWithMultipleBases2.ts, 11, 10))
+ }
+ 
+ class C4 {
+ >C4 : Symbol(C4, Decl(mergedInterfacesWithMultipleBases2.ts, 13, 1))
+ 
+     d: string;
+->d : Symbol(C4.d, Decl(mergedInterfacesWithMultipleBases2.ts, 15, 10))
++>d : Symbol(d, Decl(mergedInterfacesWithMultipleBases2.ts, 15, 10))
+ }
+ 
+ 
+@@= skipped -31, +31 lines =@@
+ >C3 : Symbol(C3, Decl(mergedInterfacesWithMultipleBases2.ts, 9, 1))
+ 
+     y: string;
+->y : Symbol(A.y, Decl(mergedInterfacesWithMultipleBases2.ts, 20, 27))
++>y : Symbol(y, Decl(mergedInterfacesWithMultipleBases2.ts, 20, 27))
+ }
+ 
+ interface A extends C2, C4 {
+@@= skipped -9, +9 lines =@@
+ >C4 : Symbol(C4, Decl(mergedInterfacesWithMultipleBases2.ts, 13, 1))
+ 
+     z: string;
+->z : Symbol(A.z, Decl(mergedInterfacesWithMultipleBases2.ts, 24, 28))
++>z : Symbol(z, Decl(mergedInterfacesWithMultipleBases2.ts, 24, 28))
+ }
+ 
+ class D implements A {
+@@= skipped -8, +8 lines =@@
+ >A : Symbol(A, Decl(mergedInterfacesWithMultipleBases2.ts, 17, 1), Decl(mergedInterfacesWithMultipleBases2.ts, 22, 1))
+ 
+     a: number;
+->a : Symbol(D.a, Decl(mergedInterfacesWithMultipleBases2.ts, 28, 22))
++>a : Symbol(a, Decl(mergedInterfacesWithMultipleBases2.ts, 28, 22))
+ 
+     b: number;
+->b : Symbol(D.b, Decl(mergedInterfacesWithMultipleBases2.ts, 29, 14))
++>b : Symbol(b, Decl(mergedInterfacesWithMultipleBases2.ts, 29, 14))
+ 
+     c: string;
+->c : Symbol(D.c, Decl(mergedInterfacesWithMultipleBases2.ts, 30, 14))
++>c : Symbol(c, Decl(mergedInterfacesWithMultipleBases2.ts, 30, 14))
+ 
+     d: string;
+->d : Symbol(D.d, Decl(mergedInterfacesWithMultipleBases2.ts, 31, 14))
++>d : Symbol(d, Decl(mergedInterfacesWithMultipleBases2.ts, 31, 14))
+ 
+     y: string;
+->y : Symbol(D.y, Decl(mergedInterfacesWithMultipleBases2.ts, 32, 14))
++>y : Symbol(y, Decl(mergedInterfacesWithMultipleBases2.ts, 32, 14))
+ 
+     z: string;
+->z : Symbol(D.z, Decl(mergedInterfacesWithMultipleBases2.ts, 33, 14))
++>z : Symbol(z, Decl(mergedInterfacesWithMultipleBases2.ts, 33, 14))
+ }
+ 
+ var a: A;
+@@= skipped -24, +24 lines =@@
+ 
+ var r = a.a;
+ >r : Symbol(r, Decl(mergedInterfacesWithMultipleBases2.ts, 38, 3))
+->a.a : Symbol(C.a, Decl(mergedInterfacesWithMultipleBases2.ts, 3, 9))
++>a.a : Symbol(a, Decl(mergedInterfacesWithMultipleBases2.ts, 3, 9))
+ >a : Symbol(a, Decl(mergedInterfacesWithMultipleBases2.ts, 37, 3))
+->a : Symbol(C.a, Decl(mergedInterfacesWithMultipleBases2.ts, 3, 9))
++>a : Symbol(a, Decl(mergedInterfacesWithMultipleBases2.ts, 3, 9))
+ 
+ // generic interfaces in a module
+ module M {
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 42, 12))
+ 
+         a: T;
+->a : Symbol(C.a, Decl(mergedInterfacesWithMultipleBases2.ts, 42, 16))
++>a : Symbol(a, Decl(mergedInterfacesWithMultipleBases2.ts, 42, 16))
+ >T : Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 42, 12))
+     }
+ 
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 46, 13))
+ 
+         b: T;
+->b : Symbol(C2.b, Decl(mergedInterfacesWithMultipleBases2.ts, 46, 17))
++>b : Symbol(b, Decl(mergedInterfacesWithMultipleBases2.ts, 46, 17))
+ >T : Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 46, 13))
+     }
+ 
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 50, 13))
+ 
+         c: T;
+->c : Symbol(C3.c, Decl(mergedInterfacesWithMultipleBases2.ts, 50, 17))
++>c : Symbol(c, Decl(mergedInterfacesWithMultipleBases2.ts, 50, 17))
+ >T : Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 50, 13))
+     }
+ 
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 54, 13))
+ 
+         d: T;
+->d : Symbol(C4.d, Decl(mergedInterfacesWithMultipleBases2.ts, 54, 17))
++>d : Symbol(d, Decl(mergedInterfacesWithMultipleBases2.ts, 54, 17))
+ >T : Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 54, 13))
+     }
+ 
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 58, 16), Decl(mergedInterfacesWithMultipleBases2.ts, 62, 16))
+ 
+         y: T;
+->y : Symbol(A.y, Decl(mergedInterfacesWithMultipleBases2.ts, 58, 40))
++>y : Symbol(y, Decl(mergedInterfacesWithMultipleBases2.ts, 58, 40))
+ >T : Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 58, 16), Decl(mergedInterfacesWithMultipleBases2.ts, 62, 16))
+     }
+ 
+@@= skipped -11, +11 lines =@@
+ >C4 : Symbol(C4, Decl(mergedInterfacesWithMultipleBases2.ts, 52, 5))
+ 
+         z: T;
+->z : Symbol(A.z, Decl(mergedInterfacesWithMultipleBases2.ts, 62, 51))
++>z : Symbol(z, Decl(mergedInterfacesWithMultipleBases2.ts, 62, 51))
+ >T : Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 58, 16), Decl(mergedInterfacesWithMultipleBases2.ts, 62, 16))
+     }
+ 
+@@= skipped -9, +9 lines =@@
+ >A : Symbol(A, Decl(mergedInterfacesWithMultipleBases2.ts, 56, 5), Decl(mergedInterfacesWithMultipleBases2.ts, 60, 5))
+ 
+         a: boolean;
+->a : Symbol(D.a, Decl(mergedInterfacesWithMultipleBases2.ts, 66, 35))
++>a : Symbol(a, Decl(mergedInterfacesWithMultipleBases2.ts, 66, 35))
+ 
+         b: string;
+->b : Symbol(D.b, Decl(mergedInterfacesWithMultipleBases2.ts, 67, 19))
++>b : Symbol(b, Decl(mergedInterfacesWithMultipleBases2.ts, 67, 19))
+ 
+         c: boolean;
+->c : Symbol(D.c, Decl(mergedInterfacesWithMultipleBases2.ts, 68, 18))
++>c : Symbol(c, Decl(mergedInterfacesWithMultipleBases2.ts, 68, 18))
+ 
+         d: string;
+->d : Symbol(D.d, Decl(mergedInterfacesWithMultipleBases2.ts, 69, 19))
++>d : Symbol(d, Decl(mergedInterfacesWithMultipleBases2.ts, 69, 19))
+ 
+         y: boolean;
+->y : Symbol(D.y, Decl(mergedInterfacesWithMultipleBases2.ts, 70, 18))
++>y : Symbol(y, Decl(mergedInterfacesWithMultipleBases2.ts, 70, 18))
+ 
+         z: boolean;
+->z : Symbol(D.z, Decl(mergedInterfacesWithMultipleBases2.ts, 71, 19))
++>z : Symbol(z, Decl(mergedInterfacesWithMultipleBases2.ts, 71, 19))
+     }
+ }

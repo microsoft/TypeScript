@@ -1,0 +1,41 @@
+--- old.declarationMapsMultifile.symbols
++++ new.declarationMapsMultifile.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(a.ts, 0, 0))
+ 
+     doThing(x: {a: number}) {
+->doThing : Symbol(Foo.doThing, Decl(a.ts, 0, 18))
++>doThing : Symbol(doThing, Decl(a.ts, 0, 18))
+ >x : Symbol(x, Decl(a.ts, 1, 12))
+ >a : Symbol(a, Decl(a.ts, 1, 16))
+ 
+@@= skipped -11, +11 lines =@@
+ >a : Symbol(a, Decl(a.ts, 1, 16))
+     }
+     static make() {
+->make : Symbol(Foo.make, Decl(a.ts, 3, 5))
++>make : Symbol(make, Decl(a.ts, 3, 5))
+ 
+         return new Foo();
+ >Foo : Symbol(Foo, Decl(a.ts, 0, 0))
+@@= skipped -15, +15 lines =@@
+ >Foo : Symbol(Foo, Decl(index.ts, 0, 8))
+ 
+ c.doThing({a: 42});
+->c.doThing : Symbol(Foo.doThing, Decl(a.ts, 0, 18))
++>c.doThing : Symbol(doThing, Decl(a.ts, 0, 18))
+ >c : Symbol(c, Decl(index.ts, 2, 5))
+->doThing : Symbol(Foo.doThing, Decl(a.ts, 0, 18))
++>doThing : Symbol(doThing, Decl(a.ts, 0, 18))
+ >a : Symbol(a, Decl(index.ts, 3, 11))
+ 
+ export let x = c.doThing({a: 12});
+ >x : Symbol(x, Decl(index.ts, 5, 10))
+->c.doThing : Symbol(Foo.doThing, Decl(a.ts, 0, 18))
++>c.doThing : Symbol(doThing, Decl(a.ts, 0, 18))
+ >c : Symbol(c, Decl(index.ts, 2, 5))
+->doThing : Symbol(Foo.doThing, Decl(a.ts, 0, 18))
++>doThing : Symbol(doThing, Decl(a.ts, 0, 18))
+ >a : Symbol(a, Decl(index.ts, 5, 26))
+ 
+ export { c, Foo };

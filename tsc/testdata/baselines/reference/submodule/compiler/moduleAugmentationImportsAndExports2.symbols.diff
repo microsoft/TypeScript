@@ -1,0 +1,75 @@
+--- old.moduleAugmentationImportsAndExports2.symbols
++++ new.moduleAugmentationImportsAndExports2.symbols
+@@= skipped -8, +8 lines =@@
+ >B : Symbol(B, Decl(f2.ts, 0, 0))
+ 
+     n: number;
+->n : Symbol(B.n, Decl(f2.ts, 0, 16))
++>n : Symbol(n, Decl(f2.ts, 0, 16))
+ }
+ 
+ === f3.ts ===
+@@= skipped -8, +8 lines =@@
+ >A : Symbol(A, Decl(f3.ts, 0, 8))
+ 
+ A.prototype.foo = function () { return undefined; }
+->A.prototype : Symbol(A.prototype)
++>A.prototype : Symbol(prototype)
+ >A : Symbol(A, Decl(f3.ts, 0, 8))
+->prototype : Symbol(A.prototype)
++>prototype : Symbol(prototype)
+ >undefined : Symbol(undefined)
+ 
+ namespace N {
+@@= skipped -10, +10 lines =@@
+ 
+     export interface Ifc { a }
+ >Ifc : Symbol(Ifc, Decl(f3.ts, 4, 13))
+->a : Symbol(Ifc.a, Decl(f3.ts, 5, 26))
++>a : Symbol(a, Decl(f3.ts, 5, 26))
+ 
+     export interface Cls { a }
+ >Cls : Symbol(Cls, Decl(f3.ts, 5, 30))
+->a : Symbol(Cls.a, Decl(f3.ts, 6, 26))
++>a : Symbol(a, Decl(f3.ts, 6, 26))
+ }
+ 
+ declare module "./f1" {
+->"./f1" : Symbol("f1", Decl(f1.ts, 0, 0), Decl(f3.ts, 7, 1))
++>"./f1" : Symbol(""f1.ts"", Decl(f1.ts, 0, 0), Decl(f3.ts, 7, 1))
+ 
+     import {B} from "./f2";
+ >B : Symbol(B, Decl(f3.ts, 10, 12))
+@@= skipped -19, +19 lines =@@
+     import I = N.Ifc;
+ >I : Symbol(I, Decl(f3.ts, 11, 27))
+ >N : Symbol(N, Decl(f3.ts, 2, 51))
+->Ifc : Symbol(I, Decl(f3.ts, 4, 13))
++>Ifc : Symbol(Ifc, Decl(f3.ts, 4, 13))
+ 
+     import C = N.Cls;
+ >C : Symbol(C, Decl(f3.ts, 12, 21))
+ >N : Symbol(N, Decl(f3.ts, 2, 51))
+->Cls : Symbol(C, Decl(f3.ts, 5, 30))
++>Cls : Symbol(Cls, Decl(f3.ts, 5, 30))
+ 
+     // should have explicit export
+     interface A {
+ >A : Symbol(A, Decl(f3.ts, 13, 21))
+ 
+         foo(): B;
+->foo : Symbol(A.foo, Decl(f3.ts, 15, 17))
++>foo : Symbol(foo, Decl(f3.ts, 15, 17))
+ >B : Symbol(B, Decl(f3.ts, 10, 12))
+ 
+         bar(): I;
+->bar : Symbol(A.bar, Decl(f3.ts, 16, 17))
++>bar : Symbol(bar, Decl(f3.ts, 16, 17))
+ >I : Symbol(I, Decl(f3.ts, 11, 27))
+ 
+         baz(): C;
+->baz : Symbol(A.baz, Decl(f3.ts, 17, 17))
++>baz : Symbol(baz, Decl(f3.ts, 17, 17))
+ >C : Symbol(C, Decl(f3.ts, 12, 21))
+     }
+ }

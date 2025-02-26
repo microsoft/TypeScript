@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_contextualTyping2.ts] ////
+
+=== typeSatisfaction_contextualTyping2.ts ===
+let obj: { f(s: string): void } & Record<string, unknown> = {
+>obj : Symbol(obj, Decl(typeSatisfaction_contextualTyping2.ts, 0, 3))
+>f : Symbol(f, Decl(typeSatisfaction_contextualTyping2.ts, 0, 10))
+>s : Symbol(s, Decl(typeSatisfaction_contextualTyping2.ts, 0, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    f(s) { }, // "incorrect" implicit any on 's'
+>f : Symbol(f, Decl(typeSatisfaction_contextualTyping2.ts, 0, 61))
+>s : Symbol(s, Decl(typeSatisfaction_contextualTyping2.ts, 1, 6))
+
+    g(s) { }
+>g : Symbol(g, Decl(typeSatisfaction_contextualTyping2.ts, 1, 13))
+>s : Symbol(s, Decl(typeSatisfaction_contextualTyping2.ts, 2, 6))
+
+} satisfies { g(s: string): void } & Record<string, unknown>;
+>g : Symbol(g, Decl(typeSatisfaction_contextualTyping2.ts, 3, 13))
+>s : Symbol(s, Decl(typeSatisfaction_contextualTyping2.ts, 3, 16))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+// This needs to not crash (outer node is not expression)
+({ f(x) { } }) satisfies { f(s: string): void };
+>f : Symbol(f, Decl(typeSatisfaction_contextualTyping2.ts, 6, 2))
+>x : Symbol(x, Decl(typeSatisfaction_contextualTyping2.ts, 6, 5))
+>f : Symbol(f, Decl(typeSatisfaction_contextualTyping2.ts, 6, 26))
+>s : Symbol(s, Decl(typeSatisfaction_contextualTyping2.ts, 6, 29))
+

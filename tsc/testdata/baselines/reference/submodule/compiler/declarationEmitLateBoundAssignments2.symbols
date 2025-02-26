@@ -1,0 +1,160 @@
+//// [tests/cases/compiler/declarationEmitLateBoundAssignments2.ts] ////
+
+=== declarationEmitLateBoundAssignments2.ts ===
+// https://github.com/microsoft/TypeScript/issues/54811
+
+const c = "C"
+>c : Symbol(c, Decl(declarationEmitLateBoundAssignments2.ts, 2, 5))
+
+const num = 1
+>num : Symbol(num, Decl(declarationEmitLateBoundAssignments2.ts, 3, 5))
+
+const numStr = "10"
+>numStr : Symbol(numStr, Decl(declarationEmitLateBoundAssignments2.ts, 4, 5))
+
+const withWhitespace = "foo bar"
+>withWhitespace : Symbol(withWhitespace, Decl(declarationEmitLateBoundAssignments2.ts, 5, 5))
+
+const emoji = "🤷‍♂️"
+>emoji : Symbol(emoji, Decl(declarationEmitLateBoundAssignments2.ts, 6, 5))
+
+export function decl() {}
+>decl : Symbol(decl, Decl(declarationEmitLateBoundAssignments2.ts, 6, 20))
+
+decl["B"] = 'foo'
+>decl : Symbol(decl, Decl(declarationEmitLateBoundAssignments2.ts, 6, 20))
+>"B" : Symbol(B, Decl(declarationEmitLateBoundAssignments2.ts, 8, 25))
+
+export function decl2() {}
+>decl2 : Symbol(decl2, Decl(declarationEmitLateBoundAssignments2.ts, 9, 17))
+
+decl2[c] = 0
+>decl2 : Symbol(decl2, Decl(declarationEmitLateBoundAssignments2.ts, 9, 17))
+>c : Symbol(c, Decl(declarationEmitLateBoundAssignments2.ts, 2, 5))
+
+export function decl3() {}
+>decl3 : Symbol(decl3, Decl(declarationEmitLateBoundAssignments2.ts, 12, 12))
+
+decl3[77] = 0
+>decl3 : Symbol(decl3, Decl(declarationEmitLateBoundAssignments2.ts, 12, 12))
+>77 : Symbol(77, Decl(declarationEmitLateBoundAssignments2.ts, 14, 26))
+
+export function decl4() {}
+>decl4 : Symbol(decl4, Decl(declarationEmitLateBoundAssignments2.ts, 15, 13))
+
+decl4[num] = 0
+>decl4 : Symbol(decl4, Decl(declarationEmitLateBoundAssignments2.ts, 15, 13))
+>num : Symbol(num, Decl(declarationEmitLateBoundAssignments2.ts, 3, 5))
+
+export function decl5() {}
+>decl5 : Symbol(decl5, Decl(declarationEmitLateBoundAssignments2.ts, 18, 14))
+
+decl5["101"] = 0
+>decl5 : Symbol(decl5, Decl(declarationEmitLateBoundAssignments2.ts, 18, 14))
+>"101" : Symbol("101", Decl(declarationEmitLateBoundAssignments2.ts, 20, 26))
+
+export function decl6() {}
+>decl6 : Symbol(decl6, Decl(declarationEmitLateBoundAssignments2.ts, 21, 16))
+
+decl6[numStr] = 0
+>decl6 : Symbol(decl6, Decl(declarationEmitLateBoundAssignments2.ts, 21, 16))
+>numStr : Symbol(numStr, Decl(declarationEmitLateBoundAssignments2.ts, 4, 5))
+
+export function decl7() {}
+>decl7 : Symbol(decl7, Decl(declarationEmitLateBoundAssignments2.ts, 24, 17))
+
+decl7["qwe rty"] = 0
+>decl7 : Symbol(decl7, Decl(declarationEmitLateBoundAssignments2.ts, 24, 17))
+>"qwe rty" : Symbol("qwe rty", Decl(declarationEmitLateBoundAssignments2.ts, 26, 26))
+
+export function decl8() {}
+>decl8 : Symbol(decl8, Decl(declarationEmitLateBoundAssignments2.ts, 27, 20))
+
+decl8[withWhitespace] = 0
+>decl8 : Symbol(decl8, Decl(declarationEmitLateBoundAssignments2.ts, 27, 20))
+>withWhitespace : Symbol(withWhitespace, Decl(declarationEmitLateBoundAssignments2.ts, 5, 5))
+
+export function decl9() {}
+>decl9 : Symbol(decl9, Decl(declarationEmitLateBoundAssignments2.ts, 30, 25))
+
+decl9["🤪"] = 0
+>decl9 : Symbol(decl9, Decl(declarationEmitLateBoundAssignments2.ts, 30, 25))
+>"🤪" : Symbol("🤪", Decl(declarationEmitLateBoundAssignments2.ts, 32, 26))
+
+export function decl10() {}
+>decl10 : Symbol(decl10, Decl(declarationEmitLateBoundAssignments2.ts, 33, 14))
+
+decl10[emoji] = 0
+>decl10 : Symbol(decl10, Decl(declarationEmitLateBoundAssignments2.ts, 33, 14))
+>emoji : Symbol(emoji, Decl(declarationEmitLateBoundAssignments2.ts, 6, 5))
+
+export const arrow = () => {}
+>arrow : Symbol(arrow, Decl(declarationEmitLateBoundAssignments2.ts, 38, 12))
+
+arrow["B"] = 'bar'
+>arrow : Symbol(arrow, Decl(declarationEmitLateBoundAssignments2.ts, 38, 12))
+>"B" : Symbol(B, Decl(declarationEmitLateBoundAssignments2.ts, 38, 29))
+
+export const arrow2 = () => {}
+>arrow2 : Symbol(arrow2, Decl(declarationEmitLateBoundAssignments2.ts, 41, 12))
+
+arrow2[c] = 100
+>arrow2 : Symbol(arrow2, Decl(declarationEmitLateBoundAssignments2.ts, 41, 12))
+>c : Symbol(c, Decl(declarationEmitLateBoundAssignments2.ts, 2, 5))
+
+export const arrow3 = () => {}
+>arrow3 : Symbol(arrow3, Decl(declarationEmitLateBoundAssignments2.ts, 44, 12))
+
+arrow3[77] = 0
+>arrow3 : Symbol(arrow3, Decl(declarationEmitLateBoundAssignments2.ts, 44, 12))
+>77 : Symbol(77, Decl(declarationEmitLateBoundAssignments2.ts, 44, 30))
+
+export const arrow4 = () => {}
+>arrow4 : Symbol(arrow4, Decl(declarationEmitLateBoundAssignments2.ts, 47, 12))
+
+arrow4[num] = 0
+>arrow4 : Symbol(arrow4, Decl(declarationEmitLateBoundAssignments2.ts, 47, 12))
+>num : Symbol(num, Decl(declarationEmitLateBoundAssignments2.ts, 3, 5))
+
+export const arrow5 = () => {}
+>arrow5 : Symbol(arrow5, Decl(declarationEmitLateBoundAssignments2.ts, 50, 12))
+
+arrow5["101"] = 0
+>arrow5 : Symbol(arrow5, Decl(declarationEmitLateBoundAssignments2.ts, 50, 12))
+>"101" : Symbol("101", Decl(declarationEmitLateBoundAssignments2.ts, 50, 30))
+
+export const arrow6 = () => {}
+>arrow6 : Symbol(arrow6, Decl(declarationEmitLateBoundAssignments2.ts, 53, 12))
+
+arrow6[numStr] = 0
+>arrow6 : Symbol(arrow6, Decl(declarationEmitLateBoundAssignments2.ts, 53, 12))
+>numStr : Symbol(numStr, Decl(declarationEmitLateBoundAssignments2.ts, 4, 5))
+
+export const arrow7 = () => {}
+>arrow7 : Symbol(arrow7, Decl(declarationEmitLateBoundAssignments2.ts, 56, 12))
+
+arrow7["qwe rty"] = 0
+>arrow7 : Symbol(arrow7, Decl(declarationEmitLateBoundAssignments2.ts, 56, 12))
+>"qwe rty" : Symbol("qwe rty", Decl(declarationEmitLateBoundAssignments2.ts, 56, 30))
+
+export const arrow8 = () => {}
+>arrow8 : Symbol(arrow8, Decl(declarationEmitLateBoundAssignments2.ts, 59, 12))
+
+arrow8[withWhitespace] = 0
+>arrow8 : Symbol(arrow8, Decl(declarationEmitLateBoundAssignments2.ts, 59, 12))
+>withWhitespace : Symbol(withWhitespace, Decl(declarationEmitLateBoundAssignments2.ts, 5, 5))
+
+export const arrow9 = () => {}
+>arrow9 : Symbol(arrow9, Decl(declarationEmitLateBoundAssignments2.ts, 62, 12))
+
+arrow9["🤪"] = 0
+>arrow9 : Symbol(arrow9, Decl(declarationEmitLateBoundAssignments2.ts, 62, 12))
+>"🤪" : Symbol("🤪", Decl(declarationEmitLateBoundAssignments2.ts, 62, 30))
+
+export const arrow10 = () => {}
+>arrow10 : Symbol(arrow10, Decl(declarationEmitLateBoundAssignments2.ts, 65, 12))
+
+arrow10[emoji] = 0
+>arrow10 : Symbol(arrow10, Decl(declarationEmitLateBoundAssignments2.ts, 65, 12))
+>emoji : Symbol(emoji, Decl(declarationEmitLateBoundAssignments2.ts, 6, 5))
+

@@ -1,0 +1,25 @@
+--- old.parametersWithNoAnnotationAreAny.symbols
++++ new.parametersWithNoAnnotationAreAny.symbols
+@@= skipped -26, +26 lines =@@
+ >C : Symbol(C, Decl(parametersWithNoAnnotationAreAny.ts, 3, 21))
+ 
+     foo(x) {
+->foo : Symbol(C.foo, Decl(parametersWithNoAnnotationAreAny.ts, 5, 9))
++>foo : Symbol(foo, Decl(parametersWithNoAnnotationAreAny.ts, 5, 9))
+ >x : Symbol(x, Decl(parametersWithNoAnnotationAreAny.ts, 6, 8))
+ 
+         return x;
+@@= skipped -12, +12 lines =@@
+ >I : Symbol(I, Decl(parametersWithNoAnnotationAreAny.ts, 9, 1))
+ 
+     foo(x);
+->foo : Symbol(I.foo, Decl(parametersWithNoAnnotationAreAny.ts, 11, 13))
++>foo : Symbol(foo, Decl(parametersWithNoAnnotationAreAny.ts, 11, 13))
+ >x : Symbol(x, Decl(parametersWithNoAnnotationAreAny.ts, 12, 8))
+ 
+     foo2(x, y);
+->foo2 : Symbol(I.foo2, Decl(parametersWithNoAnnotationAreAny.ts, 12, 11))
++>foo2 : Symbol(foo2, Decl(parametersWithNoAnnotationAreAny.ts, 12, 11))
+ >x : Symbol(x, Decl(parametersWithNoAnnotationAreAny.ts, 13, 9))
+ >y : Symbol(y, Decl(parametersWithNoAnnotationAreAny.ts, 13, 11))
+ }

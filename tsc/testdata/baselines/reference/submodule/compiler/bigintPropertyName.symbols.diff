@@ -1,0 +1,33 @@
+--- old.bigintPropertyName.symbols
++++ new.bigintPropertyName.symbols
+@@= skipped -46, +46 lines =@@
+ >G : Symbol(G, Decl(g.ts, 0, 0))
+ 
+     2n: string;
+->2n : Symbol(G[2n], Decl(g.ts, 0, 13))
++>2n : Symbol(2n, Decl(g.ts, 0, 13))
+ }
+ interface H {
+ >H : Symbol(H, Decl(g.ts, 2, 1))
+ 
+     "3n": string;
+->"3n" : Symbol(H["3n"], Decl(g.ts, 3, 13))
++>"3n" : Symbol("3n", Decl(g.ts, 3, 13))
+ }
+ class K {
+ >K : Symbol(K, Decl(g.ts, 5, 1))
+ 
+     4n = 0;
+->4n : Symbol(K[4n], Decl(g.ts, 6, 9))
++>4n : Symbol(4n, Decl(g.ts, 6, 9))
+ }
+  
+ class L {
+ >L : Symbol(L, Decl(g.ts, 8, 1))
+ 
+     "5n" = 0;
+->"5n" : Symbol(L["5n"], Decl(g.ts, 10, 9))
++>"5n" : Symbol("5n", Decl(g.ts, 10, 9))
+ }
+ 
+ const g : G = { 2n: "propertyNameError2" };

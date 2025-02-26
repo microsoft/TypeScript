@@ -1,0 +1,39 @@
+--- old.invariantGenericErrorElaboration.symbols
++++ new.invariantGenericErrorElaboration.symbols
+@@= skipped -18, +18 lines =@@
+ >A : Symbol(A, Decl(invariantGenericErrorElaboration.ts, 5, 18))
+ 
+   constraint: Constraint<this>
+->constraint : Symbol(Runtype.constraint, Decl(invariantGenericErrorElaboration.ts, 5, 22))
++>constraint : Symbol(constraint, Decl(invariantGenericErrorElaboration.ts, 5, 22))
+ >Constraint : Symbol(Constraint, Decl(invariantGenericErrorElaboration.ts, 16, 81))
+ 
+   witness: A
+->witness : Symbol(Runtype.witness, Decl(invariantGenericErrorElaboration.ts, 6, 30))
++>witness : Symbol(witness, Decl(invariantGenericErrorElaboration.ts, 6, 30))
+ >A : Symbol(A, Decl(invariantGenericErrorElaboration.ts, 5, 18))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >Runtype : Symbol(Runtype, Decl(invariantGenericErrorElaboration.ts, 3, 29))
+ 
+   tag: 'number'
+->tag : Symbol(Num.tag, Decl(invariantGenericErrorElaboration.ts, 10, 39))
++>tag : Symbol(tag, Decl(invariantGenericErrorElaboration.ts, 10, 39))
+ }
+ declare const Num: Num
+ >Num : Symbol(Num, Decl(invariantGenericErrorElaboration.ts, 8, 1), Decl(invariantGenericErrorElaboration.ts, 13, 13))
+@@= skipped -35, +35 lines =@@
+ >A : Symbol(A, Decl(invariantGenericErrorElaboration.ts, 18, 21))
+ 
+   underlying: A,
+->underlying : Symbol(Constraint.underlying, Decl(invariantGenericErrorElaboration.ts, 18, 76))
++>underlying : Symbol(underlying, Decl(invariantGenericErrorElaboration.ts, 18, 76))
+ >A : Symbol(A, Decl(invariantGenericErrorElaboration.ts, 18, 21))
+ 
+   check: (x: A['witness']) => void,
+->check : Symbol(Constraint.check, Decl(invariantGenericErrorElaboration.ts, 19, 16))
++>check : Symbol(check, Decl(invariantGenericErrorElaboration.ts, 19, 16))
+ >x : Symbol(x, Decl(invariantGenericErrorElaboration.ts, 20, 10))
+ >A : Symbol(A, Decl(invariantGenericErrorElaboration.ts, 18, 21))
+ }

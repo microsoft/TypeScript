@@ -1,0 +1,29 @@
+--- old.switchStatements.symbols
++++ new.switchStatements.symbols
+@@= skipped -44, +44 lines =@@
+ >M : Symbol(M, Decl(switchStatements.ts, 0, 0))
+ 
+     case M.fn(1):
+->M.fn : Symbol(M.fn, Decl(switchStatements.ts, 0, 10))
++>M.fn : Symbol(fn, Decl(switchStatements.ts, 0, 10))
+ >M : Symbol(M, Decl(switchStatements.ts, 0, 0))
+->fn : Symbol(M.fn, Decl(switchStatements.ts, 0, 10))
++>fn : Symbol(fn, Decl(switchStatements.ts, 0, 10))
+ 
+     case <T>(x: number) => '':
+ >T : Symbol(T, Decl(switchStatements.ts, 23, 10))
+@@= skipped -18, +18 lines =@@
+ // basic assignable check, rest covered in tests for 'assignment compatibility'
+ class C { id: number; }
+ >C : Symbol(C, Decl(switchStatements.ts, 26, 1))
+->id : Symbol(C.id, Decl(switchStatements.ts, 29, 9))
++>id : Symbol(id, Decl(switchStatements.ts, 29, 9))
+ 
+ class D extends C { name: string }
+ >D : Symbol(D, Decl(switchStatements.ts, 29, 23))
+ >C : Symbol(C, Decl(switchStatements.ts, 26, 1))
+->name : Symbol(D.name, Decl(switchStatements.ts, 30, 19))
++>name : Symbol(name, Decl(switchStatements.ts, 30, 19))
+ 
+ switch (new C()) {
+ >C : Symbol(C, Decl(switchStatements.ts, 26, 1))

@@ -1,0 +1,15 @@
+--- old.recursiveFunctionTypes1.symbols
++++ new.recursiveFunctionTypes1.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(recursiveFunctionTypes1.ts, 0, 0))
+ 
+      static g(t: typeof C.g){ }
+->g : Symbol(C.g, Decl(recursiveFunctionTypes1.ts, 0, 9))
++>g : Symbol(g, Decl(recursiveFunctionTypes1.ts, 0, 9))
+ >t : Symbol(t, Decl(recursiveFunctionTypes1.ts, 1, 14))
+->C.g : Symbol(C.g, Decl(recursiveFunctionTypes1.ts, 0, 9))
++>C.g : Symbol(g, Decl(recursiveFunctionTypes1.ts, 0, 9))
+ >C : Symbol(C, Decl(recursiveFunctionTypes1.ts, 0, 0))
+->g : Symbol(C.g, Decl(recursiveFunctionTypes1.ts, 0, 9))
++>g : Symbol(g, Decl(recursiveFunctionTypes1.ts, 0, 9))
+ }

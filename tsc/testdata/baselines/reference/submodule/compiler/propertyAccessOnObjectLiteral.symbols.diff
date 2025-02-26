@@ -1,0 +1,22 @@
+--- old.propertyAccessOnObjectLiteral.symbols
++++ new.propertyAccessOnObjectLiteral.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(propertyAccessOnObjectLiteral.ts, 0, 0))
+ 
+ (<A>{}).toString();
+->(<A>{}).toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>(<A>{}).toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >A : Symbol(A, Decl(propertyAccessOnObjectLiteral.ts, 0, 0))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+ (() => {
+     (<A>{}).toString();
+->(<A>{}).toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>(<A>{}).toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >A : Symbol(A, Decl(propertyAccessOnObjectLiteral.ts, 0, 0))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+ })();
+ 

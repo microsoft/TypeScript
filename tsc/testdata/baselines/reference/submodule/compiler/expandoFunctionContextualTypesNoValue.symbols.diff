@@ -1,0 +1,16 @@
+--- old.expandoFunctionContextualTypesNoValue.symbols
++++ new.expandoFunctionContextualTypesNoValue.symbols
+@@= skipped -5, +5 lines =@@
+ >Foo : Symbol(Foo, Decl(expandoFunctionContextualTypesNoValue.ts, 1, 23), Decl(expandoFunctionContextualTypesNoValue.ts, 1, 6))
+ 
+ export function Foo() { }
+->Foo : Symbol(Foo, Decl(expandoFunctionContextualTypesNoValue.ts, 1, 23), Decl(expandoFunctionContextualTypesNoValue.ts, 3, 25))
++>Foo : Symbol(Foo, Decl(expandoFunctionContextualTypesNoValue.ts, 1, 23))
+ 
+ Foo.bar = () => { };
+->Foo.bar : Symbol(Foo.bar, Decl(expandoFunctionContextualTypesNoValue.ts, 3, 25))
++>Foo.bar : Symbol(bar, Decl(expandoFunctionContextualTypesNoValue.ts, 3, 25))
+ >Foo : Symbol(Foo, Decl(expandoFunctionContextualTypesNoValue.ts, 1, 23), Decl(expandoFunctionContextualTypesNoValue.ts, 1, 6))
+->bar : Symbol(Foo.bar, Decl(expandoFunctionContextualTypesNoValue.ts, 3, 25))
++>bar : Symbol(bar, Decl(expandoFunctionContextualTypesNoValue.ts, 3, 25))
+ 

@@ -1,0 +1,103 @@
+--- old.assignmentCompatWithDiscriminatedUnion.symbols
++++ new.assignmentCompatWithDiscriminatedUnion.symbols
+@@= skipped -313, +313 lines =@@
+ >Blue : Symbol(Blue, Decl(assignmentCompatWithDiscriminatedUnion.ts, 107, 19))
+ 
+         color: 'blue'
+->color : Symbol(Blue.color, Decl(assignmentCompatWithDiscriminatedUnion.ts, 108, 20))
++>color : Symbol(color, Decl(assignmentCompatWithDiscriminatedUnion.ts, 108, 20))
+     }
+     interface Yellow {
+ >Yellow : Symbol(Yellow, Decl(assignmentCompatWithDiscriminatedUnion.ts, 110, 5))
+ 
+         color?: 'yellow',
+->color : Symbol(Yellow.color, Decl(assignmentCompatWithDiscriminatedUnion.ts, 111, 22))
++>color : Symbol(color, Decl(assignmentCompatWithDiscriminatedUnion.ts, 111, 22))
+     }
+     function draw(val: Blue | Yellow) { }
+ >draw : Symbol(draw, Decl(assignmentCompatWithDiscriminatedUnion.ts, 113, 5))
+@@= skipped -31, +31 lines =@@
+ 
+     interface ILinearAxis { type: "linear"; }
+ >ILinearAxis : Symbol(ILinearAxis, Decl(assignmentCompatWithDiscriminatedUnion.ts, 122, 19))
+->type : Symbol(ILinearAxis.type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 123, 27))
++>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 123, 27))
+ 
+     interface ICategoricalAxis { type: "categorical"; }
+ >ICategoricalAxis : Symbol(ICategoricalAxis, Decl(assignmentCompatWithDiscriminatedUnion.ts, 123, 45))
+->type : Symbol(ICategoricalAxis.type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 125, 32))
++>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 125, 32))
+ 
+     type IAxis = ILinearAxis | ICategoricalAxis;
+ >IAxis : Symbol(IAxis, Decl(assignmentCompatWithDiscriminatedUnion.ts, 125, 55))
+@@= skipped -38, +38 lines =@@
+ >undefined : Symbol(undefined)
+ 
+     good.type = getAxisType();
+->good.type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 123, 27), Decl(assignmentCompatWithDiscriminatedUnion.ts, 125, 32))
++>good.type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 125, 32), Decl(assignmentCompatWithDiscriminatedUnion.ts, 123, 27))
+ >good : Symbol(good, Decl(assignmentCompatWithDiscriminatedUnion.ts, 139, 9))
+->type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 123, 27), Decl(assignmentCompatWithDiscriminatedUnion.ts, 125, 32))
++>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 125, 32), Decl(assignmentCompatWithDiscriminatedUnion.ts, 123, 27))
+ >getAxisType : Symbol(getAxisType, Decl(assignmentCompatWithDiscriminatedUnion.ts, 128, 46))
+ }
+ 
+@@= skipped -14, +14 lines =@@
+ >ThingTypeOne : Symbol(ThingTypeOne, Decl(assignmentCompatWithDiscriminatedUnion.ts, 144, 19))
+ 
+         type: 'one';
+->type : Symbol(ThingTypeOne.type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 145, 28))
++>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 145, 28))
+     }
+ 
+     interface ThingTypeTwo {
+ >ThingTypeTwo : Symbol(ThingTypeTwo, Decl(assignmentCompatWithDiscriminatedUnion.ts, 147, 5))
+ 
+         type: 'two';
+->type : Symbol(ThingTypeTwo.type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 149, 28))
++>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 149, 28))
+     }
+ 
+     type ThingType = 'one' | 'two';
+@@= skipped -66, +66 lines =@@
+ >A1 : Symbol(A1, Decl(assignmentCompatWithDiscriminatedUnion.ts, 178, 19))
+ 
+         type: "A1";
+->type : Symbol(A1.type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 179, 18))
++>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 179, 18))
+     }
+     interface A2 {
+ >A2 : Symbol(A2, Decl(assignmentCompatWithDiscriminatedUnion.ts, 181, 5))
+ 
+         type: "A2";
+->type : Symbol(A2.type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 182, 18))
++>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 182, 18))
+     }
+     type AU = A1 | A2;
+ >AU : Symbol(AU, Decl(assignmentCompatWithDiscriminatedUnion.ts, 184, 5))
+@@= skipped -60, +60 lines =@@
+ 
+     enum MyEnum { A = 1, B = 2 }
+ >MyEnum : Symbol(MyEnum, Decl(assignmentCompatWithDiscriminatedUnion.ts, 203, 19))
+->A : Symbol(MyEnum.A, Decl(assignmentCompatWithDiscriminatedUnion.ts, 204, 17))
+->B : Symbol(MyEnum.B, Decl(assignmentCompatWithDiscriminatedUnion.ts, 204, 24))
++>A : Symbol(A, Decl(assignmentCompatWithDiscriminatedUnion.ts, 204, 17))
++>B : Symbol(B, Decl(assignmentCompatWithDiscriminatedUnion.ts, 204, 24))
+ 
+     type TypeA = { kind: MyEnum.A, id?: number };
+ >TypeA : Symbol(TypeA, Decl(assignmentCompatWithDiscriminatedUnion.ts, 204, 32))
+ >kind : Symbol(kind, Decl(assignmentCompatWithDiscriminatedUnion.ts, 206, 18))
+ >MyEnum : Symbol(MyEnum, Decl(assignmentCompatWithDiscriminatedUnion.ts, 203, 19))
+->A : Symbol(MyEnum.A, Decl(assignmentCompatWithDiscriminatedUnion.ts, 204, 17))
++>A : Symbol(A, Decl(assignmentCompatWithDiscriminatedUnion.ts, 204, 17))
+ >id : Symbol(id, Decl(assignmentCompatWithDiscriminatedUnion.ts, 206, 34))
+     
+     type TypeB = { kind: MyEnum.B } & ({ id?: undefined } | { id: number });
+ >TypeB : Symbol(TypeB, Decl(assignmentCompatWithDiscriminatedUnion.ts, 206, 49))
+ >kind : Symbol(kind, Decl(assignmentCompatWithDiscriminatedUnion.ts, 208, 18))
+ >MyEnum : Symbol(MyEnum, Decl(assignmentCompatWithDiscriminatedUnion.ts, 203, 19))
+->B : Symbol(MyEnum.B, Decl(assignmentCompatWithDiscriminatedUnion.ts, 204, 24))
++>B : Symbol(B, Decl(assignmentCompatWithDiscriminatedUnion.ts, 204, 24))
+ >id : Symbol(id, Decl(assignmentCompatWithDiscriminatedUnion.ts, 208, 40))
+ >id : Symbol(id, Decl(assignmentCompatWithDiscriminatedUnion.ts, 208, 61))
+     

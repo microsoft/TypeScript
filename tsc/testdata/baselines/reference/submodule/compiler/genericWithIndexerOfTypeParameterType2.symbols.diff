@@ -1,0 +1,28 @@
+--- old.genericWithIndexerOfTypeParameterType2.symbols
++++ new.genericWithIndexerOfTypeParameterType2.symbols
+@@= skipped -6, +6 lines =@@
+ >CollectionItem : Symbol(CollectionItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 6, 1))
+ 
+     _itemsByKey: { [key: string]: TItem; };
+->_itemsByKey : Symbol(Collection._itemsByKey, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 55))
++>_itemsByKey : Symbol(_itemsByKey, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 55))
+ >key : Symbol(key, Decl(genericWithIndexerOfTypeParameterType2.ts, 1, 20))
+ >TItem : Symbol(TItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 24))
+ }
+@@= skipped -11, +11 lines =@@
+ >ListItem : Symbol(ListItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 8, 30))
+ 
+     Bar() {}
+->Bar : Symbol(List.Bar, Decl(genericWithIndexerOfTypeParameterType2.ts, 4, 47))
++>Bar : Symbol(Bar, Decl(genericWithIndexerOfTypeParameterType2.ts, 4, 47))
+ }
+ 
+ export class CollectionItem {}
+@@= skipped -11, +11 lines =@@
+ >CollectionItem : Symbol(CollectionItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 6, 1))
+ 
+     __isNew: boolean;
+->__isNew : Symbol(ListItem.__isNew, Decl(genericWithIndexerOfTypeParameterType2.ts, 10, 46))
++>__isNew : Symbol(__isNew, Decl(genericWithIndexerOfTypeParameterType2.ts, 10, 46))
+ }
+ 

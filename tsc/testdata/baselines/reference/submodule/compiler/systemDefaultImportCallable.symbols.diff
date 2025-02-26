@@ -1,0 +1,24 @@
+--- old.systemDefaultImportCallable.symbols
++++ new.systemDefaultImportCallable.symbols
+@@= skipped -19, +19 lines =@@
+     var repeat: typeof core.String.repeat;
+ >repeat : Symbol(repeat, Decl(core-js.d.ts, 6, 7))
+ >core.String.repeat : Symbol(repeat, Decl(core-js.d.ts, 1, 17))
+->core.String : Symbol(core.String, Decl(core-js.d.ts, 1, 7))
++>core.String : Symbol(String, Decl(core-js.d.ts, 1, 7))
+ >core : Symbol(core, Decl(core-js.d.ts, 0, 0))
+->String : Symbol(core.String, Decl(core-js.d.ts, 1, 7))
++>String : Symbol(String, Decl(core-js.d.ts, 1, 7))
+ >repeat : Symbol(repeat, Decl(core-js.d.ts, 1, 17))
+ 
+     export default repeat;
+@@= skipped -15, +15 lines =@@
+ const _: string = repeat(new Date().toUTCString() + " ", 2);
+ >_ : Symbol(_, Decl(greeter.ts, 2, 5))
+ >repeat : Symbol(repeat, Decl(greeter.ts, 0, 6))
+->new Date().toUTCString : Symbol(Date.toUTCString, Decl(lib.es5.d.ts, --, --))
++>new Date().toUTCString : Symbol(toUTCString, Decl(lib.es5.d.ts, --, --))
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+->toUTCString : Symbol(Date.toUTCString, Decl(lib.es5.d.ts, --, --))
++>toUTCString : Symbol(toUTCString, Decl(lib.es5.d.ts, --, --))
+ 

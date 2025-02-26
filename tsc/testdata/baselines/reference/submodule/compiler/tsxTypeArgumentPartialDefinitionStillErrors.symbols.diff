@@ -1,0 +1,11 @@
+--- old.tsxTypeArgumentPartialDefinitionStillErrors.symbols
++++ new.tsxTypeArgumentPartialDefinitionStillErrors.symbols
+@@= skipped -7, +7 lines =@@
+ >Element : Symbol(Element, Decl(file.tsx, 0, 23))
+ 
+         render(): Element | string | false;
+->render : Symbol(Element.render, Decl(file.tsx, 1, 23))
++>render : Symbol(render, Decl(file.tsx, 1, 23))
+ >Element : Symbol(Element, Decl(file.tsx, 0, 23))
+     }
+ }

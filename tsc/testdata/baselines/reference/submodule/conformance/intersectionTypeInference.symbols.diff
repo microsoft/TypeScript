@@ -1,0 +1,20 @@
+--- old.intersectionTypeInference.symbols
++++ new.intersectionTypeInference.symbols
+@@= skipped -59, +59 lines =@@
+ >T : Symbol(T, Decl(intersectionTypeInference.ts, 13, 12))
+ 
+     a: T;
+->a : Symbol(A.a, Decl(intersectionTypeInference.ts, 13, 16))
++>a : Symbol(a, Decl(intersectionTypeInference.ts, 13, 16))
+ >T : Symbol(T, Decl(intersectionTypeInference.ts, 13, 12))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >U : Symbol(U, Decl(intersectionTypeInference.ts, 17, 12))
+ 
+     b: U;
+->b : Symbol(B.b, Decl(intersectionTypeInference.ts, 17, 16))
++>b : Symbol(b, Decl(intersectionTypeInference.ts, 17, 16))
+ >U : Symbol(U, Decl(intersectionTypeInference.ts, 17, 12))
+ }
+ 

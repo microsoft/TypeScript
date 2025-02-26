@@ -1,0 +1,13 @@
+--- old.jsDeclarationsExportAssignmentWithKeywordName.symbols
++++ new.jsDeclarationsExportAssignmentWithKeywordName.symbols
+@@= skipped -4, +4 lines =@@
+ >x : Symbol(x, Decl(index.js, 0, 3))
+ 
+ module.exports = {
+->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+->module : Symbol(export=, Decl(index.js, 0, 11))
+->exports : Symbol(export=, Decl(index.js, 0, 11))
+-
+     extends: 'base',
+ >extends : Symbol(extends, Decl(index.js, 1, 18))
+ 

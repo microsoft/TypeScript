@@ -1,0 +1,53 @@
+--- old.typeFromPropertyAssignment24.symbols
++++ new.typeFromPropertyAssignment24.symbols
+@@= skipped -2, +2 lines =@@
+ === usage.js ===
+ // note that usage is first in the compilation
+ Outer.Inner.Message = function() {
+->Outer.Inner.Message : Symbol(Outer.Inner.Message, Decl(usage.js, 0, 0))
+->Outer.Inner : Symbol(Outer.Inner, Decl(usage.js, 1, 6), Decl(def.js, 0, 14))
+->Outer : Symbol(Outer, Decl(usage.js, 0, 0), Decl(def.js, 0, 3), Decl(def.js, 0, 14))
+->Inner : Symbol(Outer.Inner, Decl(usage.js, 1, 6), Decl(def.js, 0, 14))
+->Message : Symbol(Outer.Inner.Message, Decl(usage.js, 0, 0))
++>Outer : Symbol(Outer, Decl(def.js, 0, 3))
+ 
+ };
+ 
+ var y = new Outer.Inner()
+ >y : Symbol(y, Decl(usage.js, 4, 3))
+->Outer.Inner : Symbol(Outer.Inner, Decl(usage.js, 1, 6), Decl(def.js, 0, 14))
+->Outer : Symbol(Outer, Decl(usage.js, 0, 0), Decl(def.js, 0, 3), Decl(def.js, 0, 14))
+->Inner : Symbol(Outer.Inner, Decl(usage.js, 1, 6), Decl(def.js, 0, 14))
++>Outer : Symbol(Outer, Decl(def.js, 0, 3))
+ 
+ y.name
+->y.name : Symbol(Inner.name, Decl(def.js, 1, 21))
+ >y : Symbol(y, Decl(usage.js, 4, 3))
+->name : Symbol(Inner.name, Decl(def.js, 1, 21))
+ 
+ /** @type {Outer.Inner} should be instance type, not static type */
+ var x;
+ >x : Symbol(x, Decl(usage.js, 7, 3))
+ 
+ x.name
+->x.name : Symbol(Inner.name, Decl(def.js, 1, 21))
+ >x : Symbol(x, Decl(usage.js, 7, 3))
+->name : Symbol(Inner.name, Decl(def.js, 1, 21))
+ 
+ === def.js ===
+ var Outer = {}
+->Outer : Symbol(Outer, Decl(usage.js, 0, 0), Decl(def.js, 0, 3), Decl(def.js, 0, 14))
++>Outer : Symbol(Outer, Decl(def.js, 0, 3))
+ 
+ Outer.Inner = class {
+->Outer.Inner : Symbol(Outer.Inner, Decl(usage.js, 1, 6), Decl(def.js, 0, 14))
+->Outer : Symbol(Outer, Decl(usage.js, 0, 0), Decl(def.js, 0, 3), Decl(def.js, 0, 14))
+->Inner : Symbol(Outer.Inner, Decl(usage.js, 1, 6), Decl(def.js, 0, 14))
++>Outer : Symbol(Outer, Decl(def.js, 0, 3))
+ 
+   name() {
+->name : Symbol(Inner.name, Decl(def.js, 1, 21))
++>name : Symbol(name, Decl(def.js, 1, 21))
+ 
+     return 'hi'
+   }

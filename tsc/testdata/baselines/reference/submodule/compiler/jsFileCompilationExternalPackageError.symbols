@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/jsFileCompilationExternalPackageError.ts] ////
+
+=== moduleA/a.js ===
+import {a} from "b";
+>a : Symbol(a, Decl(a.js, 0, 8))
+
+a++;
+>a : Symbol(a, Decl(a.js, 0, 8))
+
+import {c} from "c";
+>c : Symbol(c, Decl(a.js, 2, 8))
+
+c++;
+>c : Symbol(c, Decl(a.js, 2, 8))
+
+=== node_modules/b.ts ===
+var a = 10;
+>a : Symbol(a, Decl(b.ts, 0, 3))
+
+=== node_modules/c.js ===
+
+exports.a = 10;
+c = 10;
+

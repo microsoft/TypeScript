@@ -1,0 +1,24 @@
+--- old.parseClassDeclarationInStrictModeByDefaultInES6.symbols
++++ new.parseClassDeclarationInStrictModeByDefaultInES6.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(parseClassDeclarationInStrictModeByDefaultInES6.ts, 0, 0))
+ 
+     interface = 10;
+->interface : Symbol(C.interface, Decl(parseClassDeclarationInStrictModeByDefaultInES6.ts, 0, 9))
++>interface : Symbol(interface, Decl(parseClassDeclarationInStrictModeByDefaultInES6.ts, 0, 9))
+ 
+     public implements() { }
+->implements : Symbol(C.implements, Decl(parseClassDeclarationInStrictModeByDefaultInES6.ts, 1, 19))
++>implements : Symbol(implements, Decl(parseClassDeclarationInStrictModeByDefaultInES6.ts, 1, 19))
+ 
+     public foo(arguments: any) { }
+->foo : Symbol(C.foo, Decl(parseClassDeclarationInStrictModeByDefaultInES6.ts, 2, 27))
++>foo : Symbol(foo, Decl(parseClassDeclarationInStrictModeByDefaultInES6.ts, 2, 27))
+ >arguments : Symbol(arguments, Decl(parseClassDeclarationInStrictModeByDefaultInES6.ts, 3, 15))
+ 
+     private bar(eval:any) {
+->bar : Symbol(C.bar, Decl(parseClassDeclarationInStrictModeByDefaultInES6.ts, 3, 34))
++>bar : Symbol(bar, Decl(parseClassDeclarationInStrictModeByDefaultInES6.ts, 3, 34))
+ >eval : Symbol(eval, Decl(parseClassDeclarationInStrictModeByDefaultInES6.ts, 4, 16))
+ 
+         arguments = "hello";

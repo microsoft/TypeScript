@@ -1,0 +1,11 @@
+--- old.namespaceNotMergedWithFunctionDefaultExport.symbols
++++ new.namespaceNotMergedWithFunctionDefaultExport.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === replace-in-file/types/index.d.ts ===
+ declare module 'replace-in-file' {
+->'replace-in-file' : Symbol("replace-in-file", Decl(index.d.ts, 0, 0))
++>'replace-in-file' : Symbol('replace-in-file', Decl(index.d.ts, 0, 0))
+ 
+   export function replaceInFile(config: unknown): Promise<unknown[]>;
+ >replaceInFile : Symbol(replaceInFile, Decl(index.d.ts, 0, 34))

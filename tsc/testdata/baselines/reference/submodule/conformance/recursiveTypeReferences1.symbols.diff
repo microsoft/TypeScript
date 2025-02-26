@@ -1,0 +1,137 @@
+--- old.recursiveTypeReferences1.symbols
++++ new.recursiveTypeReferences1.symbols
+@@= skipped -62, +62 lines =@@
+ interface Box<T> { value: T };
+ >Box : Symbol(Box, Decl(recursiveTypeReferences1.ts, 19, 2))
+ >T : Symbol(T, Decl(recursiveTypeReferences1.ts, 21, 14))
+->value : Symbol(Box.value, Decl(recursiveTypeReferences1.ts, 21, 18))
++>value : Symbol(value, Decl(recursiveTypeReferences1.ts, 21, 18))
+ >T : Symbol(T, Decl(recursiveTypeReferences1.ts, 21, 14))
+ 
+ type T1 = Box<T1>;
+@@= skipped -291, +291 lines =@@
+ >HTMLUListElement : Symbol(HTMLUListElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+ 
+   return html('ul', node.map(([el, children], i) => {
+->node.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>node.map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >node : Symbol(node, Decl(recursiveTypeReferences1.ts, 100, 15))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >el : Symbol(el, Decl(recursiveTypeReferences1.ts, 101, 31))
+ >children : Symbol(children, Decl(recursiveTypeReferences1.ts, 101, 34))
+ >i : Symbol(i, Decl(recursiveTypeReferences1.ts, 101, 45))
+@@= skipped -15, +15 lines =@@
+     return html('li', [
+       html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),
+ >href : Symbol(href, Decl(recursiveTypeReferences1.ts, 104, 17))
+->el.id : Symbol(Element.id, Decl(lib.dom.d.ts, --, --))
++>el.id : Symbol(id, Decl(lib.dom.d.ts, --, --))
+ >el : Symbol(el, Decl(recursiveTypeReferences1.ts, 101, 31))
+->id : Symbol(Element.id, Decl(lib.dom.d.ts, --, --))
++>id : Symbol(id, Decl(lib.dom.d.ts, --, --))
+ >rel : Symbol(rel, Decl(recursiveTypeReferences1.ts, 104, 36))
+ >'data-index' : Symbol('data-index', Decl(recursiveTypeReferences1.ts, 104, 53))
+->idx.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
++>idx.join : Symbol(join, Decl(lib.es5.d.ts, --, --))
+ >idx : Symbol(idx, Decl(recursiveTypeReferences1.ts, 102, 9))
+->join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+->el.textContent : Symbol(Node.textContent, Decl(lib.dom.d.ts, --, --))
++>join : Symbol(join, Decl(lib.es5.d.ts, --, --))
++>el.textContent : Symbol(textContent, Decl(lib.dom.d.ts, --, --))
+ >el : Symbol(el, Decl(recursiveTypeReferences1.ts, 101, 31))
+->textContent : Symbol(Node.textContent, Decl(lib.dom.d.ts, --, --))
++>textContent : Symbol(textContent, Decl(lib.dom.d.ts, --, --))
+ 
+       children.length > 0 ? parse(children, idx) : frag()
+->children.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>children.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >children : Symbol(children, Decl(recursiveTypeReferences1.ts, 101, 34))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >parse : Symbol(parse, Decl(recursiveTypeReferences1.ts, 98, 41))
+ >children : Symbol(children, Decl(recursiveTypeReferences1.ts, 101, 34))
+ >idx : Symbol(idx, Decl(recursiveTypeReferences1.ts, 102, 9))
+@@= skipped -31, +31 lines =@@
+ >Tree : Symbol(Tree, Decl(recursiveTypeReferences1.ts, 94, 19))
+ 
+   return hs
+->hs    .reduce<HTMLHeadingElement[][]>((hss, h) => {      const hs = hss.pop()!;      return hs.length === 0 || level(h) > level(hs[0])        ? concat(hss, [concat(hs, [h])])        : concat(hss, [hs, [h]]);    }, [[]])    .reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->hs    .reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>hs    .reduce<HTMLHeadingElement[][]>((hss, h) => {      const hs = hss.pop()!;      return hs.length === 0 || level(h) > level(hs[0])        ? concat(hss, [concat(hs, [h])])        : concat(hss, [hs, [h]]);    }, [[]])    .reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>hs    .reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 110, 14))
+ 
+     .reduce<HTMLHeadingElement[][]>((hss, h) => {
+->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >HTMLHeadingElement : Symbol(HTMLHeadingElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+ >hss : Symbol(hss, Decl(recursiveTypeReferences1.ts, 112, 37))
+ >h : Symbol(h, Decl(recursiveTypeReferences1.ts, 112, 41))
+ 
+       const hs = hss.pop()!;
+ >hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 113, 11))
+->hss.pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
++>hss.pop : Symbol(pop, Decl(lib.es5.d.ts, --, --))
+ >hss : Symbol(hss, Decl(recursiveTypeReferences1.ts, 112, 37))
+->pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
++>pop : Symbol(pop, Decl(lib.es5.d.ts, --, --))
+ 
+       return hs.length === 0 || level(h) > level(hs[0])
+->hs.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>hs.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 113, 11))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >level : Symbol(level, Decl(recursiveTypeReferences1.ts, 123, 1))
+ >h : Symbol(h, Decl(recursiveTypeReferences1.ts, 112, 41))
+ >level : Symbol(level, Decl(recursiveTypeReferences1.ts, 123, 1))
+@@= skipped -37, +37 lines =@@
+ 
+     }, [[]])
+     .reduce<Tree>((node, hs) =>
+->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Tree : Symbol(Tree, Decl(recursiveTypeReferences1.ts, 94, 19))
+ >node : Symbol(node, Decl(recursiveTypeReferences1.ts, 118, 19))
+ >hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 118, 24))
+ 
+       hs.length === 0
+->hs.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>hs.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 118, 24))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+         ? node
+ >node : Symbol(node, Decl(recursiveTypeReferences1.ts, 118, 19))
+@@= skipped -16, +16 lines =@@
+         : concat<Tree[number]>(node, [[hs.shift()!, cons(hs)]])
+ >Tree : Symbol(Tree, Decl(recursiveTypeReferences1.ts, 94, 19))
+ >node : Symbol(node, Decl(recursiveTypeReferences1.ts, 118, 19))
+->hs.shift : Symbol(Array.shift, Decl(lib.es5.d.ts, --, --))
++>hs.shift : Symbol(shift, Decl(lib.es5.d.ts, --, --))
+ >hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 118, 24))
+->shift : Symbol(Array.shift, Decl(lib.es5.d.ts, --, --))
++>shift : Symbol(shift, Decl(lib.es5.d.ts, --, --))
+ >cons : Symbol(cons, Decl(recursiveTypeReferences1.ts, 108, 1))
+ >hs : Symbol(hs, Decl(recursiveTypeReferences1.ts, 118, 24))
+ 
+@@= skipped -16, +16 lines =@@
+ 
+   assert(isFinite(+h.tagName[1]));
+ >isFinite : Symbol(isFinite, Decl(lib.es5.d.ts, --, --))
+->h.tagName : Symbol(Element.tagName, Decl(lib.dom.d.ts, --, --))
++>h.tagName : Symbol(tagName, Decl(lib.dom.d.ts, --, --))
+ >h : Symbol(h, Decl(recursiveTypeReferences1.ts, 125, 15))
+->tagName : Symbol(Element.tagName, Decl(lib.dom.d.ts, --, --))
++>tagName : Symbol(tagName, Decl(lib.dom.d.ts, --, --))
+ 
+   return +h.tagName[1];
+->h.tagName : Symbol(Element.tagName, Decl(lib.dom.d.ts, --, --))
++>h.tagName : Symbol(tagName, Decl(lib.dom.d.ts, --, --))
+ >h : Symbol(h, Decl(recursiveTypeReferences1.ts, 125, 15))
+->tagName : Symbol(Element.tagName, Decl(lib.dom.d.ts, --, --))
++>tagName : Symbol(tagName, Decl(lib.dom.d.ts, --, --))
+ }
+ 

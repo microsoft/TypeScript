@@ -1,0 +1,15 @@
+--- old.mappedTypeWithCombinedTypeMappers.symbols
++++ new.mappedTypeWithCombinedTypeMappers.symbols
+@@= skipped -34, +34 lines =@@
+ >Input : Symbol(Input, Decl(mappedTypeWithCombinedTypeMappers.ts, 8, 1))
+ 
+     x: string;
+->x : Symbol(Input.x, Decl(mappedTypeWithCombinedTypeMappers.ts, 10, 17))
++>x : Symbol(x, Decl(mappedTypeWithCombinedTypeMappers.ts, 10, 17))
+ 
+     y: number;
+->y : Symbol(Input.y, Decl(mappedTypeWithCombinedTypeMappers.ts, 11, 14))
++>y : Symbol(y, Decl(mappedTypeWithCombinedTypeMappers.ts, 11, 14))
+ }
+ 
+ declare const output: Meta<Input, boolean>;

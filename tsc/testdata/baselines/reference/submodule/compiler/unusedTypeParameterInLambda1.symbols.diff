@@ -1,0 +1,11 @@
+--- old.unusedTypeParameterInLambda1.symbols
++++ new.unusedTypeParameterInLambda1.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(unusedTypeParameterInLambda1.ts, 0, 0))
+ 
+     public f1() {
+->f1 : Symbol(A.f1, Decl(unusedTypeParameterInLambda1.ts, 0, 9))
++>f1 : Symbol(f1, Decl(unusedTypeParameterInLambda1.ts, 0, 9))
+ 
+         return <T>() => {
+ >T : Symbol(T, Decl(unusedTypeParameterInLambda1.ts, 2, 16))

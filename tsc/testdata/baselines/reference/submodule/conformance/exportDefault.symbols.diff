@@ -1,0 +1,24 @@
+--- old.exportDefault.symbols
++++ new.exportDefault.symbols
+@@= skipped -22, +22 lines =@@
+ >types : Symbol(types, Decl(d.ts, 0, 6))
+ 
+ new types.A(); // Error
+->types.A : Symbol(types.A, Decl(a.ts, 0, 0))
++>types.A : Symbol(A, Decl(a.ts, 0, 0))
+ >types : Symbol(types, Decl(d.ts, 0, 6))
+->A : Symbol(types.A, Decl(a.ts, 0, 0))
++>A : Symbol(A, Decl(a.ts, 0, 0))
+ 
+ === /e.ts ===
+ import types = require('./b');
+@@= skipped -23, +23 lines =@@
+ >types : Symbol(types, Decl(g.ts, 0, 6))
+ 
+ new types.A(); // Error
+->types.A : Symbol(types.A, Decl(a.ts, 0, 0))
++>types.A : Symbol(A, Decl(a.ts, 0, 0))
+ >types : Symbol(types, Decl(g.ts, 0, 6))
+->A : Symbol(types.A, Decl(a.ts, 0, 0))
++>A : Symbol(A, Decl(a.ts, 0, 0))
+ 

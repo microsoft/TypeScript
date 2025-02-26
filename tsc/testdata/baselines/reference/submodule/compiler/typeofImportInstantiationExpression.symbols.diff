@@ -1,0 +1,32 @@
+--- old.typeofImportInstantiationExpression.symbols
++++ new.typeofImportInstantiationExpression.symbols
+@@= skipped -8, +8 lines =@@
+ >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+ 
+     "__is_argument__"?: true;
+->"__is_argument__" : Symbol(Arg["__is_argument__"], Decl(input.ts, 0, 82))
++>"__is_argument__" : Symbol(__is_argument__, Decl(input.ts, 0, 82))
+ 
+     meta?: T;
+->meta : Symbol(Arg.meta, Decl(input.ts, 1, 29))
++>meta : Symbol(meta, Decl(input.ts, 1, 29))
+ >T : Symbol(T, Decl(input.ts, 0, 14))
+ 
+     params?: Params;
+->params : Symbol(Arg.params, Decl(input.ts, 2, 13))
++>params : Symbol(params, Decl(input.ts, 2, 13))
+ >Params : Symbol(Params, Decl(input.ts, 0, 22))
+ }
+ 
+@@= skipped -21, +21 lines =@@
+ >Arg : Symbol(Arg, Decl(input.ts, 0, 0))
+ >T : Symbol(T, Decl(input.ts, 6, 27))
+ >U : Symbol(U, Decl(input.ts, 6, 35))
+->arg.params : Symbol(Arg.params, Decl(input.ts, 2, 13))
++>arg.params : Symbol(params, Decl(input.ts, 2, 13))
+ >arg : Symbol(arg, Decl(input.ts, 6, 89))
+->params : Symbol(Arg.params, Decl(input.ts, 2, 13))
++>params : Symbol(params, Decl(input.ts, 2, 13))
+ >U : Symbol(U, Decl(input.ts, 6, 35))
+ 
+ === main.ts ===

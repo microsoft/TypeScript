@@ -1,0 +1,14 @@
+--- old.parser643728.symbols
++++ new.parser643728.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(parser643728.ts, 0, 0))
+ 
+     foo;
+->foo : Symbol(C.foo, Decl(parser643728.ts, 0, 13))
++>foo : Symbol(foo, Decl(parser643728.ts, 0, 13))
+ 
+     new;
+->new : Symbol(C.new, Decl(parser643728.ts, 1, 8))
++>new : Symbol(new, Decl(parser643728.ts, 1, 8))
+ }
+ 

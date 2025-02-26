@@ -1,0 +1,24 @@
+--- old.indexSignatureAndMappedType.symbols
++++ new.indexSignatureAndMappedType.symbols
+@@= skipped -79, +79 lines =@@
+ >IBaseEntity : Symbol(IBaseEntity, Decl(indexSignatureAndMappedType.ts, 22, 2))
+ 
+     name: string;
+->name : Symbol(IBaseEntity.name, Decl(indexSignatureAndMappedType.ts, 24, 23))
++>name : Symbol(name, Decl(indexSignatureAndMappedType.ts, 24, 23))
+ 
+     properties: Dictionary;
+->properties : Symbol(IBaseEntity.properties, Decl(indexSignatureAndMappedType.ts, 25, 17))
++>properties : Symbol(properties, Decl(indexSignatureAndMappedType.ts, 25, 17))
+ >Dictionary : Symbol(Dictionary, Decl(indexSignatureAndMappedType.ts, 16, 1))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >IBaseEntity : Symbol(IBaseEntity, Decl(indexSignatureAndMappedType.ts, 22, 2))
+ 
+     properties: Record<T, string>;
+->properties : Symbol(IEntity.properties, Decl(indexSignatureAndMappedType.ts, 29, 57))
++>properties : Symbol(properties, Decl(indexSignatureAndMappedType.ts, 29, 57))
+ >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+ >T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 29, 18))
+ }

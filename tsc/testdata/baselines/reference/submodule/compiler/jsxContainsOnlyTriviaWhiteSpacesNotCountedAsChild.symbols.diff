@@ -1,0 +1,20 @@
+--- old.jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.symbols
++++ new.jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.symbols
+@@= skipped -7, +7 lines =@@
+ >ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 0, 15))
+ 
+     children: {};
+->children : Symbol(ElementChildrenAttribute.children, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 1, 45))
++>children : Symbol(children, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 1, 45))
+   }
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >Props : Symbol(Props, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 4, 1))
+ 
+   className?: string | undefined;
+->className : Symbol(Props.className, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 6, 17))
++>className : Symbol(className, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 6, 17))
+ }
+ 
+ function NoticeList(props: Props) {

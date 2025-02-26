@@ -1,0 +1,211 @@
+--- old.tsxLibraryManagedAttributes.symbols
++++ new.tsxLibraryManagedAttributes.symbols
+@@= skipped -56, +56 lines =@@
+ >propFullName : Symbol(propFullName, Decl(tsxLibraryManagedAttributes.tsx, 9, 72))
+ 
+     isRequired: PropTypeChecker<U, true>;
+->isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
++>isRequired : Symbol(isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+ >PropTypeChecker : Symbol(PropTypeChecker, Decl(tsxLibraryManagedAttributes.tsx, 7, 41))
+ >U : Symbol(U, Decl(tsxLibraryManagedAttributes.tsx, 8, 26))
+ 
+     [checkedType]: TRequired extends true ? U : U | null | undefined;
+->[checkedType] : Symbol(PropTypeChecker[checkedType], Decl(tsxLibraryManagedAttributes.tsx, 10, 41))
++>[checkedType] : Symbol([checkedType], Decl(tsxLibraryManagedAttributes.tsx, 10, 41))
+ >checkedType : Symbol(checkedType, Decl(tsxLibraryManagedAttributes.tsx, 7, 13))
+ >TRequired : Symbol(TRequired, Decl(tsxLibraryManagedAttributes.tsx, 8, 28))
+ >U : Symbol(U, Decl(tsxLibraryManagedAttributes.tsx, 8, 26))
+@@= skipped -43, +43 lines =@@
+ >P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 22, 29))
+ 
+     props: P & Readonly<{children: ReactNode[]}>;
+->props : Symbol(ReactComponent.props, Decl(tsxLibraryManagedAttributes.tsx, 23, 26))
++>props : Symbol(props, Decl(tsxLibraryManagedAttributes.tsx, 23, 26))
+ >P : Symbol(P, Decl(tsxLibraryManagedAttributes.tsx, 22, 29))
+ >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+ >children : Symbol(children, Decl(tsxLibraryManagedAttributes.tsx, 24, 25))
+ >ReactNode : Symbol(ReactNode, Decl(tsxLibraryManagedAttributes.tsx, 18, 1))
+ 
+     setState(s: Partial<S>): S;
+->setState : Symbol(ReactComponent.setState, Decl(tsxLibraryManagedAttributes.tsx, 24, 49))
++>setState : Symbol(setState, Decl(tsxLibraryManagedAttributes.tsx, 24, 49))
+ >s : Symbol(s, Decl(tsxLibraryManagedAttributes.tsx, 25, 13))
+ >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+ >S : Symbol(S, Decl(tsxLibraryManagedAttributes.tsx, 22, 34))
+ >S : Symbol(S, Decl(tsxLibraryManagedAttributes.tsx, 22, 34))
+ 
+     render(): ReactNode;
+->render : Symbol(ReactComponent.render, Decl(tsxLibraryManagedAttributes.tsx, 25, 31))
++>render : Symbol(render, Decl(tsxLibraryManagedAttributes.tsx, 25, 31))
+ >ReactNode : Symbol(ReactNode, Decl(tsxLibraryManagedAttributes.tsx, 18, 1))
+ }
+ 
+@@= skipped -76, +76 lines =@@
+ >ReactComponent : Symbol(ReactComponent, Decl(tsxLibraryManagedAttributes.tsx, 20, 58))
+ 
+     static propTypes = {
+->propTypes : Symbol(Component.propTypes, Decl(tsxLibraryManagedAttributes.tsx, 42, 40))
++>propTypes : Symbol(propTypes, Decl(tsxLibraryManagedAttributes.tsx, 42, 40))
+ 
+         foo: PropTypes.number,
+ >foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 43, 24))
+->PropTypes.number : Symbol(PropTypes.number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
++>PropTypes.number : Symbol(number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
+ >PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+->number : Symbol(PropTypes.number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
++>number : Symbol(number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
+ 
+         bar: PropTypes.node,
+ >bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 44, 30))
+->PropTypes.node : Symbol(PropTypes.node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
++>PropTypes.node : Symbol(node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
+ >PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+->node : Symbol(PropTypes.node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
++>node : Symbol(node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
+ 
+         baz: PropTypes.string.isRequired,
+ >baz : Symbol(baz, Decl(tsxLibraryManagedAttributes.tsx, 45, 28))
+->PropTypes.string.isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+->PropTypes.string : Symbol(PropTypes.string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
++>PropTypes.string.isRequired : Symbol(isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
++>PropTypes.string : Symbol(string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
+ >PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+->string : Symbol(PropTypes.string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
+->isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
++>string : Symbol(string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
++>isRequired : Symbol(isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+ 
+     };
+     static defaultProps = {
+->defaultProps : Symbol(Component.defaultProps, Decl(tsxLibraryManagedAttributes.tsx, 47, 6))
++>defaultProps : Symbol(defaultProps, Decl(tsxLibraryManagedAttributes.tsx, 47, 6))
+ 
+         foo: 42,
+ >foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 48, 27))
+@@= skipped -75, +75 lines =@@
+ >ReactComponent : Symbol(ReactComponent, Decl(tsxLibraryManagedAttributes.tsx, 20, 58))
+ 
+     static propTypes = {
+->propTypes : Symbol(JustPropTypes.propTypes, Decl(tsxLibraryManagedAttributes.tsx, 60, 44))
++>propTypes : Symbol(propTypes, Decl(tsxLibraryManagedAttributes.tsx, 60, 44))
+ 
+         foo: PropTypes.number,
+ >foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 61, 24))
+->PropTypes.number : Symbol(PropTypes.number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
++>PropTypes.number : Symbol(number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
+ >PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+->number : Symbol(PropTypes.number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
++>number : Symbol(number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
+ 
+         bar: PropTypes.node.isRequired,
+ >bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 62, 30))
+->PropTypes.node.isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+->PropTypes.node : Symbol(PropTypes.node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
++>PropTypes.node.isRequired : Symbol(isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
++>PropTypes.node : Symbol(node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
+ >PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+->node : Symbol(PropTypes.node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
+->isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
++>node : Symbol(node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
++>isRequired : Symbol(isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+ 
+     };
+ }
+@@= skipped -47, +47 lines =@@
+ >ReactComponent : Symbol(ReactComponent, Decl(tsxLibraryManagedAttributes.tsx, 20, 58))
+ 
+     static defaultProps = {
+->defaultProps : Symbol(JustDefaultProps.defaultProps, Decl(tsxLibraryManagedAttributes.tsx, 72, 47))
++>defaultProps : Symbol(defaultProps, Decl(tsxLibraryManagedAttributes.tsx, 72, 47))
+ 
+         foo: 42,
+ >foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 73, 27))
+@@= skipped -28, +28 lines =@@
+ >FooProps : Symbol(FooProps, Decl(tsxLibraryManagedAttributes.tsx, 80, 40))
+ 
+     foo: string;
+->foo : Symbol(FooProps.foo, Decl(tsxLibraryManagedAttributes.tsx, 82, 20))
++>foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 82, 20))
+ }
+ 
+ class BothWithSpecifiedGeneric extends ReactComponent<FooProps> {
+@@= skipped -9, +9 lines =@@
+ >FooProps : Symbol(FooProps, Decl(tsxLibraryManagedAttributes.tsx, 80, 40))
+ 
+     static propTypes = {
+->propTypes : Symbol(BothWithSpecifiedGeneric.propTypes, Decl(tsxLibraryManagedAttributes.tsx, 86, 65))
++>propTypes : Symbol(propTypes, Decl(tsxLibraryManagedAttributes.tsx, 86, 65))
+ 
+         foo: PropTypes.string,
+ >foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 87, 24))
+->PropTypes.string : Symbol(PropTypes.string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
++>PropTypes.string : Symbol(string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
+ >PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+->string : Symbol(PropTypes.string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
++>string : Symbol(string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
+ 
+         bar: PropTypes.node,
+ >bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 88, 30))
+->PropTypes.node : Symbol(PropTypes.node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
++>PropTypes.node : Symbol(node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
+ >PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+->node : Symbol(PropTypes.node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
++>node : Symbol(node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
+ 
+         baz: PropTypes.number.isRequired,
+ >baz : Symbol(baz, Decl(tsxLibraryManagedAttributes.tsx, 89, 28))
+->PropTypes.number.isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+->PropTypes.number : Symbol(PropTypes.number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
++>PropTypes.number.isRequired : Symbol(isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
++>PropTypes.number : Symbol(number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
+ >PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+->number : Symbol(PropTypes.number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
+->isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
++>number : Symbol(number, Decl(tsxLibraryManagedAttributes.tsx, 15, 16))
++>isRequired : Symbol(isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+ 
+     };
+     static defaultProps = {
+->defaultProps : Symbol(BothWithSpecifiedGeneric.defaultProps, Decl(tsxLibraryManagedAttributes.tsx, 91, 6))
++>defaultProps : Symbol(defaultProps, Decl(tsxLibraryManagedAttributes.tsx, 91, 6))
+ 
+         foo: "yo",
+ >foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 92, 27))
+@@= skipped -76, +76 lines =@@
+ >FooProps : Symbol(FooProps, Decl(tsxLibraryManagedAttributes.tsx, 80, 40))
+ 
+     static propTypes = {
+->propTypes : Symbol(JustPropTypesWithSpecifiedGeneric.propTypes, Decl(tsxLibraryManagedAttributes.tsx, 103, 74))
++>propTypes : Symbol(propTypes, Decl(tsxLibraryManagedAttributes.tsx, 103, 74))
+ 
+         foo: PropTypes.string,
+ >foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 104, 24))
+->PropTypes.string : Symbol(PropTypes.string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
++>PropTypes.string : Symbol(string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
+ >PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+->string : Symbol(PropTypes.string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
++>string : Symbol(string, Decl(tsxLibraryManagedAttributes.tsx, 16, 16))
+ 
+         bar: PropTypes.node.isRequired,
+ >bar : Symbol(bar, Decl(tsxLibraryManagedAttributes.tsx, 105, 30))
+->PropTypes.node.isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+->PropTypes.node : Symbol(PropTypes.node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
++>PropTypes.node.isRequired : Symbol(isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
++>PropTypes.node : Symbol(node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
+ >PropTypes : Symbol(PropTypes, Decl(tsxLibraryManagedAttributes.tsx, 12, 1))
+->node : Symbol(PropTypes.node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
+->isRequired : Symbol(PropTypeChecker.isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
++>node : Symbol(node, Decl(tsxLibraryManagedAttributes.tsx, 17, 16))
++>isRequired : Symbol(isRequired, Decl(tsxLibraryManagedAttributes.tsx, 9, 104))
+ 
+     };
+ }
+@@= skipped -47, +47 lines =@@
+ >FooProps : Symbol(FooProps, Decl(tsxLibraryManagedAttributes.tsx, 80, 40))
+ 
+     static defaultProps = {
+->defaultProps : Symbol(JustDefaultPropsWithSpecifiedGeneric.defaultProps, Decl(tsxLibraryManagedAttributes.tsx, 114, 77))
++>defaultProps : Symbol(defaultProps, Decl(tsxLibraryManagedAttributes.tsx, 114, 77))
+ 
+         foo: "no",
+ >foo : Symbol(foo, Decl(tsxLibraryManagedAttributes.tsx, 115, 27))

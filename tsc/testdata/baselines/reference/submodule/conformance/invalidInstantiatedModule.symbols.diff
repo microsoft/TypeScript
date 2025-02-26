@@ -1,0 +1,33 @@
+--- old.invalidInstantiatedModule.symbols
++++ new.invalidInstantiatedModule.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     export class Point { x: number; y: number }
+ >Point : Symbol(Point, Decl(invalidInstantiatedModule.ts, 0, 10))
+->x : Symbol(Point.x, Decl(invalidInstantiatedModule.ts, 1, 24))
+->y : Symbol(Point.y, Decl(invalidInstantiatedModule.ts, 1, 35))
++>x : Symbol(x, Decl(invalidInstantiatedModule.ts, 1, 24))
++>y : Symbol(y, Decl(invalidInstantiatedModule.ts, 1, 35))
+ 
+     export var Point = 1;  // Error
+ >Point : Symbol(Point, Decl(invalidInstantiatedModule.ts, 2, 14))
+@@= skipped -12, +12 lines =@@
+ 
+     export interface Point { x: number; y: number }
+ >Point : Symbol(Point, Decl(invalidInstantiatedModule.ts, 5, 11), Decl(invalidInstantiatedModule.ts, 7, 14))
+->x : Symbol(Point.x, Decl(invalidInstantiatedModule.ts, 6, 28))
+->y : Symbol(Point.y, Decl(invalidInstantiatedModule.ts, 6, 39))
++>x : Symbol(x, Decl(invalidInstantiatedModule.ts, 6, 28))
++>y : Symbol(y, Decl(invalidInstantiatedModule.ts, 6, 39))
+ 
+     export var Point = 1;
+ >Point : Symbol(Point, Decl(invalidInstantiatedModule.ts, 5, 11), Decl(invalidInstantiatedModule.ts, 7, 14))
+@@= skipped -14, +14 lines =@@
+ var p: m.Point; // Error
+ >p : Symbol(p, Decl(invalidInstantiatedModule.ts, 11, 3))
+ >m : Symbol(m)
+->Point : Symbol(m.Point)
++>Point : Symbol(Point)
+ 
+ 
+  

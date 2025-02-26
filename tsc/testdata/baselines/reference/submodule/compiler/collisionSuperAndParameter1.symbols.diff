@@ -1,0 +1,11 @@
+--- old.collisionSuperAndParameter1.symbols
++++ new.collisionSuperAndParameter1.symbols
+@@= skipped -9, +9 lines =@@
+ >Foo : Symbol(Foo, Decl(collisionSuperAndParameter1.ts, 0, 0))
+ 
+     x() {
+->x : Symbol(Foo2.x, Decl(collisionSuperAndParameter1.ts, 3, 24))
++>x : Symbol(x, Decl(collisionSuperAndParameter1.ts, 3, 24))
+ 
+         var lambda = (_super: number) => { // Error 
+ >lambda : Symbol(lambda, Decl(collisionSuperAndParameter1.ts, 5, 11))

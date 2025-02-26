@@ -1,0 +1,9 @@
+--- old.enumWithParenthesizedInitializer1.symbols
++++ new.enumWithParenthesizedInitializer1.symbols
+@@= skipped -4, +4 lines =@@
+ >E : Symbol(E, Decl(enumWithParenthesizedInitializer1.ts, 0, 0))
+ 
+  e = -(3
+->e : Symbol(E.e, Decl(enumWithParenthesizedInitializer1.ts, 0, 8))
++>e : Symbol(e, Decl(enumWithParenthesizedInitializer1.ts, 0, 8))
+ }

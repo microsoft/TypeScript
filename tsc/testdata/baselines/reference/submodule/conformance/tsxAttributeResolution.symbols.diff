@@ -1,0 +1,11 @@
+--- old.tsxAttributeResolution.symbols
++++ new.tsxAttributeResolution.symbols
+@@= skipped -7, +7 lines =@@
+ >IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxAttributeResolution.tsx, 0, 23))
+ 
+ 		x: { y: number; z: string; };
+->x : Symbol(IntrinsicElements.x, Decl(tsxAttributeResolution.tsx, 1, 30))
++>x : Symbol(x, Decl(tsxAttributeResolution.tsx, 1, 30))
+ >y : Symbol(y, Decl(tsxAttributeResolution.tsx, 2, 6))
+ >z : Symbol(z, Decl(tsxAttributeResolution.tsx, 2, 17))
+ 	}

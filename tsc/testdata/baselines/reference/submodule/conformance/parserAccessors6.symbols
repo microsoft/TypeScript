@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors6.ts] ////
+
+=== parserAccessors6.ts ===
+declare class C {
+>C : Symbol(C, Decl(parserAccessors6.ts, 0, 0))
+
+  set foo(v) { }
+>foo : Symbol(foo, Decl(parserAccessors6.ts, 0, 17))
+>v : Symbol(v, Decl(parserAccessors6.ts, 1, 10))
+}

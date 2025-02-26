@@ -1,0 +1,14 @@
+--- old.modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.symbols
++++ new.modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.symbols
+@@= skipped -53, +53 lines =@@
+     }
+ };
+ o.hasOwnProperty(Symbol.hasInstance);
+->o.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
++>o.hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+ >o : Symbol(o, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 22, 3))
+->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
++>hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+ 
+ // Using Es6 proxy
+ var t = {}

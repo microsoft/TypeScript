@@ -1,0 +1,12 @@
+--- old.argumentsReferenceInConstructor1_Js.symbols
++++ new.argumentsReferenceInConstructor1_Js.symbols
+@@= skipped -15, +15 lines =@@
+ 		 * @type object
+ 		 */
+ 		this.arguments = foo;
+->this.arguments : Symbol(A.arguments, Decl(a.js, 6, 24))
+ >this : Symbol(A, Decl(a.js, 0, 0))
+->arguments : Symbol(A.arguments, Decl(a.js, 6, 24))
+ >foo : Symbol(foo, Decl(a.js, 6, 13))
+ 	}
+ }

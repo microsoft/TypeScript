@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/salsa/moduleExportAlias5.ts] ////
+
+=== bug24754.js ===
+// #24754
+const webpack = function (){
+>webpack : Symbol(webpack, Decl(bug24754.js, 1, 5))
+}
+exports = module.exports = webpack;
+>webpack : Symbol(webpack, Decl(bug24754.js, 1, 5))
+
+exports.version = 1001;
+
+webpack.WebpackOptionsDefaulter = 1111;
+>webpack.WebpackOptionsDefaulter : Symbol(WebpackOptionsDefaulter, Decl(bug24754.js, 4, 23))
+>webpack : Symbol(webpack, Decl(bug24754.js, 1, 5))
+>WebpackOptionsDefaulter : Symbol(WebpackOptionsDefaulter, Decl(bug24754.js, 4, 23))
+

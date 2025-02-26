@@ -1,0 +1,9 @@
+--- old.varArgWithNoParamName.symbols
++++ new.varArgWithNoParamName.symbols
+@@= skipped -2, +2 lines =@@
+ === varArgWithNoParamName.ts ===
+ function t1(...) {}
+ >t1 : Symbol(t1, Decl(varArgWithNoParamName.ts, 0, 0))
+-> : Symbol((Missing), Decl(varArgWithNoParamName.ts, 0, 12))
++> : Symbol(, Decl(varArgWithNoParamName.ts, 0, 12))
+ 

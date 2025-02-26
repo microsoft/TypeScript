@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/numericIndexerConstraint.ts] ////
+
+=== numericIndexerConstraint.ts ===
+class C {
+>C : Symbol(C, Decl(numericIndexerConstraint.ts, 0, 0))
+
+    0: number;
+>0 : Symbol(0, Decl(numericIndexerConstraint.ts, 0, 9))
+
+    [x: number]: RegExp;
+>x : Symbol(x, Decl(numericIndexerConstraint.ts, 2, 5))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}

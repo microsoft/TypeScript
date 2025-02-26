@@ -1,0 +1,374 @@
+//// [tests/cases/compiler/templateLiteralEscapeSequence.ts] ////
+
+=== templateLiteralEscapeSequence.ts ===
+declare function tag(template: TemplateStringsArray, ...substitutions: any[]): string;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+>template : Symbol(template, Decl(templateLiteralEscapeSequence.ts, 0, 21))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>substitutions : Symbol(substitutions, Decl(templateLiteralEscapeSequence.ts, 0, 52))
+
+`\u`;
+`\u0`;
+`\u00`;
+`\u000`;
+`\u0000`;
+`\u{}`;
+`\u{ffffff}`;
+`\x`;
+`\x0`;
+`\x00`;
+`${0}\u`;
+`${0}\u0`;
+`${0}\u00`;
+`${0}\u000`;
+`${0}\u0000`;
+`${0}\u{}`;
+`${0}\u{ffffff}`;
+`${0}\x`;
+`${0}\x0`;
+`${0}\x00`;
+`\u${0}`;
+`\u0${0}`;
+`\u00${0}`;
+`\u000${0}`;
+`\u0000${0}`;
+`\u{}${0}`;
+`\u{ffffff}${0}`;
+`\x${0}`;
+`\x0${0}`;
+`\x00${0}`;
+`${0}\u${0}`;
+`${0}\u0${0}`;
+`${0}\u00${0}`;
+`${0}\u000${0}`;
+`${0}\u0000${0}`;
+`${0}\u{}${0}`;
+`${0}\u{ffffff}${0}`;
+`${0}\x${0}`;
+`${0}\x0${0}`;
+`${0}\x00${0}`;
+
+tag`\u`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\u0`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\u00`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\u000`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\u0000`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\u{}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\u{ffffff}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\x`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\x0`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\x00`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\u`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\u0`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\u00`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\u000`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\u0000`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\u{}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\u{ffffff}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\x`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\x0`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\x00`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\u${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\u0${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\u00${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\u000${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\u0000${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\u{}${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\u{ffffff}${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\x${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\x0${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\x00${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\u${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\u0${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\u00${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\u000${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\u0000${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\u{}${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\u{ffffff}${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\x${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\x0${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\x00${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`0${00}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`0${05}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`0${000}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`0${005}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`0${055}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${00}0`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${05}0`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${000}0`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${005}0`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${055}0`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\0`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\5`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\00`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\05`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\55`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\000`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\005`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\055`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\0`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\5`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\00`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\05`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\55`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\000`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\005`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\055`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\0${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\5${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\00${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\05${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\55${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\000${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\005${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\055${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\0${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\5${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\00${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\05${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\55${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\000${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\005${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`${0}\055${0}`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\1`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\01`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\001`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\17`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\017`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\0017`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\177`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\18`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\018`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\0018`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\4`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\47`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\047`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\0047`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\477`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\48`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\048`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\0048`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\8`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\87`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\087`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\0087`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\877`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\88`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\088`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+
+tag`\0088`;
+>tag : Symbol(tag, Decl(templateLiteralEscapeSequence.ts, 0, 0))
+

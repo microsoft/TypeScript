@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/salsa/commonJSImportClassTypeReference.ts] ////
+
+=== main.js ===
+const { K } = require("./mod1");
+>K : Symbol(K, Decl(main.js, 0, 7))
+
+/** @param {K} k */
+function f(k) {
+>f : Symbol(f, Decl(main.js, 0, 32))
+>k : Symbol(k, Decl(main.js, 2, 11))
+
+    k.values()
+>k : Symbol(k, Decl(main.js, 2, 11))
+}
+
+=== mod1.js ===
+class K {
+>K : Symbol(K, Decl(mod1.js, 0, 0))
+
+    values() {
+>values : Symbol(values, Decl(mod1.js, 0, 9))
+
+        return new K()
+>K : Symbol(K, Decl(main.js, 0, 7))
+    }
+}
+exports.K = K;
+>K : Symbol(K, Decl(main.js, 0, 7))
+

@@ -1,0 +1,38 @@
+--- old.inferenceAndHKTs.symbols
++++ new.inferenceAndHKTs.symbols
+@@= skipped -6, +6 lines =@@
+ >TypeLambda : Symbol(TypeLambda, Decl(inferenceAndHKTs.ts, 0, 0))
+ 
+     readonly A: unknown;
+->A : Symbol(TypeLambda.A, Decl(inferenceAndHKTs.ts, 2, 29))
++>A : Symbol(A, Decl(inferenceAndHKTs.ts, 2, 29))
+ }
+ 
+ export interface TypeClass<F extends TypeLambda> {
+@@= skipped -9, +9 lines =@@
+ >TypeLambda : Symbol(TypeLambda, Decl(inferenceAndHKTs.ts, 0, 0))
+ 
+     readonly _F: F;
+->_F : Symbol(TypeClass._F, Decl(inferenceAndHKTs.ts, 6, 50))
++>_F : Symbol(_F, Decl(inferenceAndHKTs.ts, 6, 50))
+ >F : Symbol(F, Decl(inferenceAndHKTs.ts, 6, 27))
+ }
+ 
+@@= skipped -28, +28 lines =@@
+ >A : Symbol(A, Decl(inferenceAndHKTs.ts, 14, 19))
+ 
+     value: A;
+->value : Symbol(T.value, Decl(inferenceAndHKTs.ts, 14, 23))
++>value : Symbol(value, Decl(inferenceAndHKTs.ts, 14, 23))
+ >A : Symbol(A, Decl(inferenceAndHKTs.ts, 14, 19))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >TypeLambda : Symbol(TypeLambda, Decl(inferenceAndHKTs.ts, 0, 0))
+ 
+     readonly type: T<this["A"]>;
+->type : Symbol(TTypeLambda.type, Decl(inferenceAndHKTs.ts, 18, 49))
++>type : Symbol(type, Decl(inferenceAndHKTs.ts, 18, 49))
+ >T : Symbol(T, Decl(inferenceAndHKTs.ts, 12, 39))
+ }
+ 

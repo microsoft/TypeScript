@@ -1,0 +1,47 @@
+--- old.objectTypesIdentityWithGenericCallSignaturesOptionalParams3.symbols
++++ new.objectTypesIdentityWithGenericCallSignaturesOptionalParams3.symbols
+@@= skipped -8, +8 lines =@@
+ >A : Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 0, 0))
+ 
+     foo<T, U>(x: T, y?: U): T { return null; }
+->foo : Symbol(A.foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 4, 9))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 4, 9))
+ >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 5, 8))
+ >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 5, 10))
+ >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 5, 14))
+@@= skipped -16, +16 lines =@@
+ >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 8, 10))
+ 
+     foo(x: T, y: U): T { return null; }
+->foo : Symbol(B.foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 8, 15))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 8, 15))
+ >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 9, 8))
+ >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 8, 8))
+ >y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 9, 13))
+@@= skipped -14, +14 lines =@@
+ >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 12, 10))
+ 
+     foo(x: T, y?: U): T { return null; }
+->foo : Symbol(C.foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 12, 15))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 12, 15))
+ >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 13, 8))
+ >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 12, 8))
+ >y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 13, 13))
+@@= skipped -14, +14 lines =@@
+ >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 16, 14))
+ 
+     foo(x: T, y?: U): T;
+->foo : Symbol(I.foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 16, 19))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 16, 19))
+ >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 17, 8))
+ >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 16, 12))
+ >y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 17, 13))
+@@= skipped -12, +12 lines =@@
+ >I2 : Symbol(I2, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 18, 1))
+ 
+     foo<T, U>(x: T, y: U): T;
+->foo : Symbol(I2.foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 20, 14))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 20, 14))
+ >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 21, 8))
+ >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 21, 10))
+ >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 21, 14))

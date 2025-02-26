@@ -1,0 +1,37 @@
+--- old.aliasUsageInFunctionExpression.symbols
++++ new.aliasUsageInFunctionExpression.symbols
+@@= skipped -10, +10 lines =@@
+ >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInFunctionExpression_main.ts, 1, 69))
+ 
+     VisualizationModel: typeof Backbone.Model;
+->VisualizationModel : Symbol(IHasVisualizationModel.VisualizationModel, Decl(aliasUsageInFunctionExpression_main.ts, 2, 34))
+->Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
++>VisualizationModel : Symbol(VisualizationModel, Decl(aliasUsageInFunctionExpression_main.ts, 2, 34))
++>Backbone.Model : Symbol(Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
+ >Backbone : Symbol(Backbone, Decl(aliasUsageInFunctionExpression_main.ts, 0, 0))
+->Model : Symbol(Backbone.Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
++>Model : Symbol(Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
+ }
+ var f = (x: IHasVisualizationModel) => x;
+ >f : Symbol(f, Decl(aliasUsageInFunctionExpression_main.ts, 5, 3))
+@@= skipped -21, +21 lines =@@
+ >Model : Symbol(Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
+ 
+     public someData: string;
+->someData : Symbol(Model.someData, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 20))
++>someData : Symbol(someData, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 20))
+ }
+ 
+ === aliasUsageInFunctionExpression_moduleA.ts ===
+@@= skipped -9, +9 lines =@@
+ 
+ export class VisualizationModel extends Backbone.Model {
+ >VisualizationModel : Symbol(VisualizationModel, Decl(aliasUsageInFunctionExpression_moduleA.ts, 0, 71))
+->Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
++>Backbone.Model : Symbol(Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
+ >Backbone : Symbol(Backbone, Decl(aliasUsageInFunctionExpression_moduleA.ts, 0, 0))
+->Model : Symbol(Backbone.Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
++>Model : Symbol(Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
+ 
+     // interesting stuff here
+ }

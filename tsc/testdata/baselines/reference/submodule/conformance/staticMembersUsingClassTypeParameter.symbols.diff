@@ -1,0 +1,44 @@
+--- old.staticMembersUsingClassTypeParameter.symbols
++++ new.staticMembersUsingClassTypeParameter.symbols
+@@= skipped -6, +6 lines =@@
+ >T : Symbol(T, Decl(staticMembersUsingClassTypeParameter.ts, 1, 8))
+ 
+     static x: T;
+->x : Symbol(C.x, Decl(staticMembersUsingClassTypeParameter.ts, 1, 12))
++>x : Symbol(x, Decl(staticMembersUsingClassTypeParameter.ts, 1, 12))
+ >T : Symbol(T)
+ 
+     static f(x: T) {}
+->f : Symbol(C.f, Decl(staticMembersUsingClassTypeParameter.ts, 2, 16))
++>f : Symbol(f, Decl(staticMembersUsingClassTypeParameter.ts, 2, 16))
+ >x : Symbol(x, Decl(staticMembersUsingClassTypeParameter.ts, 3, 13))
+ >T : Symbol(T)
+ }
+@@= skipped -15, +15 lines =@@
+ >U : Symbol(U, Decl(staticMembersUsingClassTypeParameter.ts, 6, 11))
+ 
+     static x: U;
+->x : Symbol(C2.x, Decl(staticMembersUsingClassTypeParameter.ts, 6, 16))
++>x : Symbol(x, Decl(staticMembersUsingClassTypeParameter.ts, 6, 16))
+ >U : Symbol(U)
+ 
+     static f(x: U) { }
+->f : Symbol(C2.f, Decl(staticMembersUsingClassTypeParameter.ts, 7, 16))
++>f : Symbol(f, Decl(staticMembersUsingClassTypeParameter.ts, 7, 16))
+ >x : Symbol(x, Decl(staticMembersUsingClassTypeParameter.ts, 8, 13))
+ >U : Symbol(U)
+ }
+@@= skipped -15, +15 lines =@@
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ 
+     static x: T;
+->x : Symbol(C3.x, Decl(staticMembersUsingClassTypeParameter.ts, 11, 26))
++>x : Symbol(x, Decl(staticMembersUsingClassTypeParameter.ts, 11, 26))
+ >T : Symbol(T)
+ 
+     static f(x: T) { }
+->f : Symbol(C3.f, Decl(staticMembersUsingClassTypeParameter.ts, 12, 16))
++>f : Symbol(f, Decl(staticMembersUsingClassTypeParameter.ts, 12, 16))
+ >x : Symbol(x, Decl(staticMembersUsingClassTypeParameter.ts, 13, 13))
+ >T : Symbol(T)
+ }

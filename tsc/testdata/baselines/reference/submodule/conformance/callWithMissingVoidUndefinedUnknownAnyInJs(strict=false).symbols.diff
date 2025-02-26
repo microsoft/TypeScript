@@ -1,0 +1,85 @@
+--- old.callWithMissingVoidUndefinedUnknownAnyInJs(strict=false).symbols
++++ new.callWithMissingVoidUndefinedUnknownAnyInJs(strict=false).symbols
+@@= skipped -19, +19 lines =@@
+ interface I<T> { m(p: T): void; }
+ >I : Symbol(I, Decl(defs.d.ts, 3, 34))
+ >T : Symbol(T, Decl(defs.d.ts, 5, 12))
+->m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
++>m : Symbol(m, Decl(defs.d.ts, 5, 16))
+ >p : Symbol(p, Decl(defs.d.ts, 5, 19))
+ >T : Symbol(T, Decl(defs.d.ts, 5, 12))
+ 
+@@= skipped -26, +26 lines =@@
+ >f1 : Symbol(f1, Decl(defs.d.ts, 0, 0))
+ 
+ o1.m();
+->o1.m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
++>o1.m : Symbol(m, Decl(defs.d.ts, 5, 16))
+ >o1 : Symbol(o1, Decl(defs.d.ts, 6, 13))
+->m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
++>m : Symbol(m, Decl(defs.d.ts, 5, 16))
+ 
+ // new behavior: treat 'undefined', 'unknown', and 'any' as optional in non-strict mode
+ f2();
+@@= skipped -15, +15 lines =@@
+ >f4 : Symbol(f4, Decl(defs.d.ts, 2, 38))
+ 
+ o2.m();
+->o2.m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
++>o2.m : Symbol(m, Decl(defs.d.ts, 5, 16))
+ >o2 : Symbol(o2, Decl(defs.d.ts, 7, 13))
+->m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
++>m : Symbol(m, Decl(defs.d.ts, 5, 16))
+ 
+ o3.m();
+->o3.m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
++>o3.m : Symbol(m, Decl(defs.d.ts, 5, 16))
+ >o3 : Symbol(o3, Decl(defs.d.ts, 8, 13))
+->m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
++>m : Symbol(m, Decl(defs.d.ts, 5, 16))
+ 
+ o4.m();
+->o4.m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
++>o4.m : Symbol(m, Decl(defs.d.ts, 5, 16))
+ >o4 : Symbol(o4, Decl(defs.d.ts, 9, 13))
+->m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
++>m : Symbol(m, Decl(defs.d.ts, 5, 16))
+ 
+ === tsfile.ts ===
+ // current behavior: treat trailing `void` as optional
+@@= skipped -20, +20 lines =@@
+ >f1 : Symbol(f1, Decl(defs.d.ts, 0, 0))
+ 
+ o1.m();
+->o1.m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
++>o1.m : Symbol(m, Decl(defs.d.ts, 5, 16))
+ >o1 : Symbol(o1, Decl(defs.d.ts, 6, 13))
+->m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
++>m : Symbol(m, Decl(defs.d.ts, 5, 16))
+ 
+ // no change in behavior
+ f2();
+@@= skipped -15, +15 lines =@@
+ >f4 : Symbol(f4, Decl(defs.d.ts, 2, 38))
+ 
+ o2.m();
+->o2.m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
++>o2.m : Symbol(m, Decl(defs.d.ts, 5, 16))
+ >o2 : Symbol(o2, Decl(defs.d.ts, 7, 13))
+->m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
++>m : Symbol(m, Decl(defs.d.ts, 5, 16))
+ 
+ o3.m();
+->o3.m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
++>o3.m : Symbol(m, Decl(defs.d.ts, 5, 16))
+ >o3 : Symbol(o3, Decl(defs.d.ts, 8, 13))
+->m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
++>m : Symbol(m, Decl(defs.d.ts, 5, 16))
+ 
+ o4.m();
+->o4.m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
++>o4.m : Symbol(m, Decl(defs.d.ts, 5, 16))
+ >o4 : Symbol(o4, Decl(defs.d.ts, 9, 13))
+->m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
++>m : Symbol(m, Decl(defs.d.ts, 5, 16))
+ 

@@ -1,0 +1,19 @@
+--- old.duplicatePackage_relativeImportWithinPackage_scoped.symbols
++++ new.duplicatePackage_relativeImportWithinPackage_scoped.symbols
+@@= skipped -15, +15 lines =@@
+ >C : Symbol(C, Decl(index.d.ts, 0, 0))
+ 
+     private x: number;
+->x : Symbol(C.x, Decl(index.d.ts, 0, 16))
++>x : Symbol(x, Decl(index.d.ts, 0, 16))
+ }
+ 
+ === /node_modules/a/index.d.ts ===
+@@= skipped -25, +25 lines =@@
+ >C : Symbol(C, Decl(index.d.ts, 0, 0))
+ 
+     private x: number;
+->x : Symbol(C.x, Decl(index.d.ts, 0, 16))
++>x : Symbol(x, Decl(index.d.ts, 0, 16))
+ }
+ 

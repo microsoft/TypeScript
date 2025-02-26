@@ -1,0 +1,27 @@
+--- old.classAbstractExtends.symbols
++++ new.classAbstractExtends.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(classAbstractExtends.ts, 0, 0))
+ 
+     foo() {}
+->foo : Symbol(A.foo, Decl(classAbstractExtends.ts, 0, 9))
++>foo : Symbol(foo, Decl(classAbstractExtends.ts, 0, 9))
+ }
+ 
+ abstract class B extends A {
+@@= skipped -8, +8 lines =@@
+ >A : Symbol(A, Decl(classAbstractExtends.ts, 0, 0))
+ 
+     abstract bar();
+->bar : Symbol(B.bar, Decl(classAbstractExtends.ts, 4, 28))
++>bar : Symbol(bar, Decl(classAbstractExtends.ts, 4, 28))
+ }
+ 
+ class C extends B { }
+@@= skipped -16, +16 lines =@@
+ >B : Symbol(B, Decl(classAbstractExtends.ts, 2, 1))
+ 
+     bar() {}
+->bar : Symbol(E.bar, Decl(classAbstractExtends.ts, 12, 19))
++>bar : Symbol(bar, Decl(classAbstractExtends.ts, 12, 19))
+ }

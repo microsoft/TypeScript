@@ -1,0 +1,44 @@
+--- old.doYouNeedToChangeYourTargetLibraryES2016Plus.symbols
++++ new.doYouNeedToChangeYourTargetLibraryES2016Plus.symbols
+@@= skipped -25, +25 lines =@@
+ 
+ const testIntlFormatToParts = new Intl.DateTimeFormat("en-US").formatToParts();
+ >testIntlFormatToParts : Symbol(testIntlFormatToParts, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 9, 5))
+->Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Intl.DateTimeFormat : Symbol(DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
+->DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>DateTimeFormat : Symbol(DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+ const testAtomics = Atomics.add(new Uint8Array(0), 0, 0);
+ >testAtomics : Symbol(testAtomics, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 10, 5))
+@@= skipped -18, +18 lines =@@
+ 
+ const testRegExpMatchArrayGroups = "2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g).groups;
+ >testRegExpMatchArrayGroups : Symbol(testRegExpMatchArrayGroups, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 15, 5))
+->"2019-04-30".match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>"2019-04-30".match : Symbol(match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>match : Symbol(match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ 
+ const testRegExpExecArrayGroups = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec("2019-04-30").groups;
+ >testRegExpExecArrayGroups : Symbol(testRegExpExecArrayGroups, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 16, 5))
+->/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
+->exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
++>/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec : Symbol(exec, Decl(lib.es5.d.ts, --, --))
++>exec : Symbol(exec, Decl(lib.es5.d.ts, --, --))
+ 
+ const testRegExpDotAll = /foo/g.dotAll;
+ >testRegExpDotAll : Symbol(testRegExpDotAll, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 17, 5))
+@@= skipped -33, +33 lines =@@
+ 
+ const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
+ >testNumberFormatFormatToParts : Symbol(testNumberFormatFormatToParts, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 23, 5))
+->Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Intl.NumberFormat : Symbol(NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
+->NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>NumberFormat : Symbol(NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+ // es2019
+ const testArrayFlat = [].flat();

@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/externalModules/umd2.ts] ////
+
+=== a.ts ===
+Foo.fn();
+let x: Foo.Thing;
+>x : Symbol(x, Decl(a.ts, 1, 3))
+>Foo : Symbol(Foo)
+>Thing : Symbol(Thing)
+
+let y: number = x.n;
+>y : Symbol(y, Decl(a.ts, 2, 3))
+>x : Symbol(x, Decl(a.ts, 1, 3))
+

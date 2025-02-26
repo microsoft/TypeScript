@@ -1,0 +1,39 @@
+--- old.divergentAccessorsTypes7.symbols
++++ new.divergentAccessorsTypes7.symbols
+@@= skipped -7, +7 lines =@@
+     constructor() {}
+ 
+     set value(value: string | ((item: S) => string)) {}
+->value : Symbol(Test.value, Decl(divergentAccessorsTypes7.ts, 1, 20), Decl(divergentAccessorsTypes7.ts, 3, 55))
++>value : Symbol(value, Decl(divergentAccessorsTypes7.ts, 1, 20), Decl(divergentAccessorsTypes7.ts, 3, 55))
+ >value : Symbol(value, Decl(divergentAccessorsTypes7.ts, 3, 14))
+ >item : Symbol(item, Decl(divergentAccessorsTypes7.ts, 3, 32))
+ >S : Symbol(S, Decl(divergentAccessorsTypes7.ts, 0, 11))
+ 
+     get value(): string {
+->value : Symbol(Test.value, Decl(divergentAccessorsTypes7.ts, 1, 20), Decl(divergentAccessorsTypes7.ts, 3, 55))
++>value : Symbol(value, Decl(divergentAccessorsTypes7.ts, 1, 20), Decl(divergentAccessorsTypes7.ts, 3, 55))
+ 
+         return null!;
+     }
+@@= skipped -30, +30 lines =@@
+ }>();
+ 
+ a.value = (item) => item.property
+->a.value : Symbol(Test.value, Decl(divergentAccessorsTypes7.ts, 1, 20), Decl(divergentAccessorsTypes7.ts, 3, 55))
++>a.value : Symbol(value, Decl(divergentAccessorsTypes7.ts, 1, 20), Decl(divergentAccessorsTypes7.ts, 3, 55))
+ >a : Symbol(a, Decl(divergentAccessorsTypes7.ts, 18, 5))
+->value : Symbol(Test.value, Decl(divergentAccessorsTypes7.ts, 1, 20), Decl(divergentAccessorsTypes7.ts, 3, 55))
++>value : Symbol(value, Decl(divergentAccessorsTypes7.ts, 1, 20), Decl(divergentAccessorsTypes7.ts, 3, 55))
+ >item : Symbol(item, Decl(divergentAccessorsTypes7.ts, 22, 11))
+ >item.property : Symbol(property, Decl(divergentAccessorsTypes7.ts, 18, 20))
+ >item : Symbol(item, Decl(divergentAccessorsTypes7.ts, 22, 11))
+@@= skipped -10, +10 lines =@@
+ 
+ a['value'] = (item) => item.property
+ >a : Symbol(a, Decl(divergentAccessorsTypes7.ts, 18, 5))
+->'value' : Symbol(Test.value, Decl(divergentAccessorsTypes7.ts, 1, 20), Decl(divergentAccessorsTypes7.ts, 3, 55))
++>'value' : Symbol(value, Decl(divergentAccessorsTypes7.ts, 1, 20), Decl(divergentAccessorsTypes7.ts, 3, 55))
+ >item : Symbol(item, Decl(divergentAccessorsTypes7.ts, 23, 14))
+ >item.property : Symbol(property, Decl(divergentAccessorsTypes7.ts, 18, 20))
+ >item : Symbol(item, Decl(divergentAccessorsTypes7.ts, 23, 14))

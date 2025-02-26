@@ -1,0 +1,11 @@
+--- old.typeParameterWithInvalidConstraintType.symbols
++++ new.typeParameterWithInvalidConstraintType.symbols
+@@= skipped -6, +6 lines =@@
+ >T : Symbol(T, Decl(typeParameterWithInvalidConstraintType.ts, 0, 8))
+ 
+     foo() {
+->foo : Symbol(A.foo, Decl(typeParameterWithInvalidConstraintType.ts, 0, 22))
++>foo : Symbol(foo, Decl(typeParameterWithInvalidConstraintType.ts, 0, 22))
+ 
+         var x: T;
+ >x : Symbol(x, Decl(typeParameterWithInvalidConstraintType.ts, 2, 11))

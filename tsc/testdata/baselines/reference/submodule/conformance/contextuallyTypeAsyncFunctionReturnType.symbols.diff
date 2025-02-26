@@ -1,0 +1,91 @@
+--- old.contextuallyTypeAsyncFunctionReturnType.symbols
++++ new.contextuallyTypeAsyncFunctionReturnType.symbols
+@@= skipped -2, +2 lines =@@
+ === contextuallyTypeAsyncFunctionReturnType.ts ===
+ interface Obj { key: "value"; }
+ >Obj : Symbol(Obj, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 0, 0))
+->key : Symbol(Obj.key, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 0, 15))
++>key : Symbol(key, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 0, 15))
+ 
+ async function fn1(): Promise<Obj> {
+ >fn1 : Symbol(fn1, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 0, 31))
+@@= skipped -56, +56 lines =@@
+ >Context : Symbol(Context, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 20, 1))
+ 
+   private _runnable;
+->_runnable : Symbol(Context._runnable, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 22, 23))
++>_runnable : Symbol(_runnable, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 22, 23))
+ }
+ type Done = (err?: any) => void;
+ >Done : Symbol(Done, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 24, 1))
+@@= skipped -49, +49 lines =@@
+ >ProcessTreeNode : Symbol(ProcessTreeNode, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 36, 33))
+ 
+   pid: number;
+->pid : Symbol(ProcessTreeNode.pid, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 38, 27))
++>pid : Symbol(pid, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 38, 27))
+ 
+   name: string;
+->name : Symbol(ProcessTreeNode.name, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 39, 14))
++>name : Symbol(name, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 39, 14))
+ 
+   memory?: number;
+->memory : Symbol(ProcessTreeNode.memory, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 40, 15))
++>memory : Symbol(memory, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 40, 15))
+ 
+   commandLine?: string;
+->commandLine : Symbol(ProcessTreeNode.commandLine, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 41, 18))
++>commandLine : Symbol(commandLine, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 41, 18))
+ 
+   children: ProcessTreeNode[];
+->children : Symbol(ProcessTreeNode.children, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 42, 23))
++>children : Symbol(children, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 42, 23))
+ >ProcessTreeNode : Symbol(ProcessTreeNode, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 36, 33))
+ }
+ 
+@@= skipped -60, +60 lines =@@
+ >ILocalExtension : Symbol(ILocalExtension, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 61, 3))
+ 
+   isApplicationScoped: boolean;
+->isApplicationScoped : Symbol(ILocalExtension.isApplicationScoped, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 63, 27))
++>isApplicationScoped : Symbol(isApplicationScoped, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 63, 27))
+ 
+   publisherId: string | null;
+->publisherId : Symbol(ILocalExtension.publisherId, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 64, 31))
++>publisherId : Symbol(publisherId, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 64, 31))
+ }
+ type Metadata = {
+ >Metadata : Symbol(Metadata, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 66, 1))
+@@= skipped -39, +39 lines =@@
+ >Metadata : Symbol(Metadata, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 66, 1))
+ 
+     await Promise.all(
+->Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>Promise.all : Symbol(all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+->all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>all : Symbol(all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ 
+       fromExtensions
+->fromExtensions        .filter((e) => !e.isApplicationScoped)        .map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+->fromExtensions        .filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>fromExtensions        .filter((e) => !e.isApplicationScoped)        .map : Symbol(map, Decl(lib.es5.d.ts, --, --))
++>fromExtensions        .filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >fromExtensions : Symbol(fromExtensions, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 74, 30))
+ 
+         .filter((e) => !e.isApplicationScoped)
+->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >e : Symbol(e, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 80, 17))
+->e.isApplicationScoped : Symbol(ILocalExtension.isApplicationScoped, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 63, 27))
++>e.isApplicationScoped : Symbol(isApplicationScoped, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 63, 27))
+ >e : Symbol(e, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 80, 17))
+->isApplicationScoped : Symbol(ILocalExtension.isApplicationScoped, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 63, 27))
++>isApplicationScoped : Symbol(isApplicationScoped, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 63, 27))
+ 
+         .map(async (e) => [e, await scanMetadata(e)])
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >e : Symbol(e, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 81, 20))
+ >e : Symbol(e, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 81, 20))
+ >scanMetadata : Symbol(scanMetadata, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 69, 2))

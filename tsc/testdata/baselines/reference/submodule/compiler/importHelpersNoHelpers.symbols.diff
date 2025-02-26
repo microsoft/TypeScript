@@ -1,0 +1,20 @@
+--- old.importHelpersNoHelpers.symbols
++++ new.importHelpersNoHelpers.symbols
+@@= skipped -18, +18 lines =@@
+ >C : Symbol(C, Decl(external.ts, 4, 21))
+ 
+     method(@dec x: number) {
+->method : Symbol(C.method, Decl(external.ts, 7, 9))
++>method : Symbol(method, Decl(external.ts, 7, 9))
+ >dec : Symbol(dec, Decl(external.ts, 4, 11))
+ >x : Symbol(x, Decl(external.ts, 8, 11))
+     }
+@@= skipped -40, +40 lines =@@
+ >C : Symbol(C, Decl(script.ts, 3, 21))
+ 
+     method(@dec x: number) {
+->method : Symbol(C.method, Decl(script.ts, 6, 9))
++>method : Symbol(method, Decl(script.ts, 6, 9))
+ >dec : Symbol(dec, Decl(script.ts, 3, 11))
+ >x : Symbol(x, Decl(script.ts, 7, 11))
+     }

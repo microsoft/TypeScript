@@ -1,0 +1,9 @@
+--- old.mergeWithImportedNamespace.symbols
++++ new.mergeWithImportedNamespace.symbols
+@@= skipped -13, +13 lines =@@
+ 
+     export interface I {x: any}
+ >I : Symbol(I, Decl(f2.ts, 1, 20))
+->x : Symbol(I.x, Decl(f2.ts, 2, 24))
++>x : Symbol(x, Decl(f2.ts, 2, 24))
+ }

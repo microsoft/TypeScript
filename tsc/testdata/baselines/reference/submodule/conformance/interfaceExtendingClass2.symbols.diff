@@ -1,0 +1,28 @@
+--- old.interfaceExtendingClass2.symbols
++++ new.interfaceExtendingClass2.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(interfaceExtendingClass2.ts, 0, 0))
+ 
+     x: string;
+->x : Symbol(Foo.x, Decl(interfaceExtendingClass2.ts, 0, 11))
++>x : Symbol(x, Decl(interfaceExtendingClass2.ts, 0, 11))
+ 
+     y() { }
+->y : Symbol(Foo.y, Decl(interfaceExtendingClass2.ts, 1, 14))
++>y : Symbol(y, Decl(interfaceExtendingClass2.ts, 1, 14))
+ 
+     get Z() {
+->Z : Symbol(Foo.Z, Decl(interfaceExtendingClass2.ts, 2, 11))
++>Z : Symbol(Z, Decl(interfaceExtendingClass2.ts, 2, 11))
+ 
+         return 1;
+     }
+@@= skipped -20, +20 lines =@@
+ >Foo : Symbol(Foo, Decl(interfaceExtendingClass2.ts, 0, 0))
+ 
+     a: {
+->a : Symbol(I2.a, Decl(interfaceExtendingClass2.ts, 9, 26))
++>a : Symbol(a, Decl(interfaceExtendingClass2.ts, 9, 26))
+ 
+         toString: () => {
+ >toString : Symbol(toString, Decl(interfaceExtendingClass2.ts, 10, 8))

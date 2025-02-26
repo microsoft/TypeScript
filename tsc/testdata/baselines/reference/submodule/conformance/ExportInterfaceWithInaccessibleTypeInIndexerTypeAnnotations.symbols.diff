@@ -1,0 +1,15 @@
+--- old.ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.symbols
++++ new.ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.symbols
+@@= skipped -7, +7 lines =@@
+ >Point : Symbol(Point, Decl(ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.ts, 0, 10))
+ 
+         x: number;
+->x : Symbol(Point.x, Decl(ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.ts, 2, 21))
++>x : Symbol(x, Decl(ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.ts, 2, 21))
+ 
+         y: number;
+->y : Symbol(Point.y, Decl(ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.ts, 3, 18))
++>y : Symbol(y, Decl(ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.ts, 3, 18))
+     }
+ 
+     export interface points {

@@ -1,0 +1,41 @@
+--- old.contextualReturnTypeOfIIFE2.symbols
++++ new.contextualReturnTypeOfIIFE2.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === contextualReturnTypeOfIIFE2.ts ===
+ declare namespace app {
+->app : Symbol(app, Decl(contextualReturnTypeOfIIFE2.ts, 0, 0), Decl(contextualReturnTypeOfIIFE2.ts, 2, 1))
++>app : Symbol(app, Decl(contextualReturnTypeOfIIFE2.ts, 0, 0))
+ 
+   function foo(): void;
+->foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23), Decl(contextualReturnTypeOfIIFE2.ts, 4, 4))
++>foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
+ }
+ 
+ app.foo.bar = (function () {
+->app.foo.bar : Symbol(app.foo.bar, Decl(contextualReturnTypeOfIIFE2.ts, 2, 1))
+->app.foo : Symbol(app.foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23), Decl(contextualReturnTypeOfIIFE2.ts, 4, 4))
+->app : Symbol(app, Decl(contextualReturnTypeOfIIFE2.ts, 0, 0), Decl(contextualReturnTypeOfIIFE2.ts, 2, 1))
+->foo : Symbol(app.foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23), Decl(contextualReturnTypeOfIIFE2.ts, 4, 4))
+->bar : Symbol(app.foo.bar, Decl(contextualReturnTypeOfIIFE2.ts, 2, 1))
++>app.foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
++>app : Symbol(app, Decl(contextualReturnTypeOfIIFE2.ts, 0, 0))
++>foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
+ 
+   const someFun = (arg: number) => {};
+ >someFun : Symbol(someFun, Decl(contextualReturnTypeOfIIFE2.ts, 5, 7))
+@@= skipped -23, +21 lines =@@
+ })();
+ 
+ app.foo.bar.someFun(1);
+->app.foo.bar.someFun : Symbol(someFun, Decl(contextualReturnTypeOfIIFE2.ts, 6, 10))
+->app.foo.bar : Symbol(app.foo.bar, Decl(contextualReturnTypeOfIIFE2.ts, 2, 1))
+->app.foo : Symbol(app.foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23), Decl(contextualReturnTypeOfIIFE2.ts, 4, 4))
+->app : Symbol(app, Decl(contextualReturnTypeOfIIFE2.ts, 0, 0), Decl(contextualReturnTypeOfIIFE2.ts, 2, 1))
+->foo : Symbol(app.foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23), Decl(contextualReturnTypeOfIIFE2.ts, 4, 4))
+->bar : Symbol(app.foo.bar, Decl(contextualReturnTypeOfIIFE2.ts, 2, 1))
+->someFun : Symbol(someFun, Decl(contextualReturnTypeOfIIFE2.ts, 6, 10))
++>app.foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
++>app : Symbol(app, Decl(contextualReturnTypeOfIIFE2.ts, 0, 0))
++>foo : Symbol(foo, Decl(contextualReturnTypeOfIIFE2.ts, 0, 23))
+ 

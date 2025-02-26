@@ -1,0 +1,20 @@
+--- old.requiredInitializedParameter2.symbols
++++ new.requiredInitializedParameter2.symbols
+@@= skipped -4, +4 lines =@@
+ >I1 : Symbol(I1, Decl(requiredInitializedParameter2.ts, 0, 0))
+ 
+     method();
+->method : Symbol(I1.method, Decl(requiredInitializedParameter2.ts, 0, 14))
++>method : Symbol(method, Decl(requiredInitializedParameter2.ts, 0, 14))
+ }
+ 
+ class C1 implements I1 {
+@@= skipped -8, +8 lines =@@
+ >I1 : Symbol(I1, Decl(requiredInitializedParameter2.ts, 0, 0))
+ 
+     method(a = 0, b) { }
+->method : Symbol(C1.method, Decl(requiredInitializedParameter2.ts, 4, 24))
++>method : Symbol(method, Decl(requiredInitializedParameter2.ts, 4, 24))
+ >a : Symbol(a, Decl(requiredInitializedParameter2.ts, 5, 11))
+ >b : Symbol(b, Decl(requiredInitializedParameter2.ts, 5, 17))
+ }

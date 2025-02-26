@@ -1,0 +1,50 @@
+--- old.tsxAttributeResolution16.symbols
++++ new.tsxAttributeResolution16.symbols
+@@= skipped -7, +7 lines =@@
+ >Address : Symbol(Address, Decl(file.tsx, 0, 32))
+ 
+   street: string;
+->street : Symbol(Address.street, Decl(file.tsx, 2, 19))
++>street : Symbol(street, Decl(file.tsx, 2, 19))
+ 
+   country: string;
+->country : Symbol(Address.country, Decl(file.tsx, 3, 17))
++>country : Symbol(country, Decl(file.tsx, 3, 17))
+ }
+ 
+ interface CanadianAddress extends Address {
+@@= skipped -11, +11 lines =@@
+ >Address : Symbol(Address, Decl(file.tsx, 0, 32))
+ 
+     postalCode: string;
+->postalCode : Symbol(CanadianAddress.postalCode, Decl(file.tsx, 7, 43))
++>postalCode : Symbol(postalCode, Decl(file.tsx, 7, 43))
+ }
+ 
+ interface AmericanAddress extends Address {
+@@= skipped -8, +8 lines =@@
+ >Address : Symbol(Address, Decl(file.tsx, 0, 32))
+ 
+     zipCode: string;
+->zipCode : Symbol(AmericanAddress.zipCode, Decl(file.tsx, 11, 43))
++>zipCode : Symbol(zipCode, Decl(file.tsx, 11, 43))
+ }
+ 
+ type Properties = CanadianAddress | AmericanAddress;
+@@= skipped -10, +10 lines =@@
+ 
+ export class AddressComp extends React.Component<Properties, void> {
+ >AddressComp : Symbol(AddressComp, Decl(file.tsx, 15, 52))
+->React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
++>React.Component : Symbol(unknown)
+ >React : Symbol(React, Decl(file.tsx, 0, 0))
+->Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
++>Component : Symbol(unknown)
+ >Properties : Symbol(Properties, Decl(file.tsx, 13, 1))
+ 
+   public render() {
+->render : Symbol(AddressComp.render, Decl(file.tsx, 17, 68))
++>render : Symbol(render, Decl(file.tsx, 17, 68))
+ 
+     return null;
+   }

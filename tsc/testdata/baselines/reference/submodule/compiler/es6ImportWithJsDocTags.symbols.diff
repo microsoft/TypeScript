@@ -1,0 +1,26 @@
+--- old.es6ImportWithJsDocTags.symbols
++++ new.es6ImportWithJsDocTags.symbols
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/es6ImportWithJsDocTags.ts] ////
+ 
+-=== ./a.js ===
++=== a.js ===
+ export const foo = 1;
+ >foo : Symbol(foo, Decl(a.js, 0, 12))
+ 
+-=== ./b.js ===
++=== b.js ===
+ 'use strict';
+ 
+ /** @private */
+@@= skipped -12, +12 lines =@@
+ >foo : Symbol(foo, Decl(b.js, 4, 8))
+ 
+ console.log(foo);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >foo : Symbol(foo, Decl(b.js, 4, 8))
+ 

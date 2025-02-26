@@ -1,0 +1,128 @@
+--- old.subtypingWithObjectMembers5.symbols
++++ new.subtypingWithObjectMembers5.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembers5.ts, 0, 0))
+ 
+     foo: string;
+->foo : Symbol(Base.foo, Decl(subtypingWithObjectMembers5.ts, 0, 16))
++>foo : Symbol(foo, Decl(subtypingWithObjectMembers5.ts, 0, 16))
+ }
+ 
+ interface Derived extends Base {
+@@= skipped -8, +8 lines =@@
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembers5.ts, 0, 0))
+ 
+     bar: string;
+->bar : Symbol(Derived.bar, Decl(subtypingWithObjectMembers5.ts, 4, 32))
++>bar : Symbol(bar, Decl(subtypingWithObjectMembers5.ts, 4, 32))
+ }
+ 
+ // N and M have the same name, same accessibility, same optionality, and N is a subtype of M
+@@= skipped -12, +12 lines =@@
+ >A : Symbol(A, Decl(subtypingWithObjectMembers5.ts, 10, 20))
+ 
+         foo: Base;
+->foo : Symbol(A.foo, Decl(subtypingWithObjectMembers5.ts, 11, 17))
++>foo : Symbol(foo, Decl(subtypingWithObjectMembers5.ts, 11, 17))
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembers5.ts, 0, 0))
+     }
+ 
+@@= skipped -9, +9 lines =@@
+ >A : Symbol(A, Decl(subtypingWithObjectMembers5.ts, 10, 20))
+ 
+         fooo: Derived; // error
+->fooo : Symbol(B.fooo, Decl(subtypingWithObjectMembers5.ts, 15, 26))
++>fooo : Symbol(fooo, Decl(subtypingWithObjectMembers5.ts, 15, 26))
+ >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers5.ts, 2, 1))
+     }
+ 
+@@= skipped -8, +8 lines =@@
+ >A2 : Symbol(A2, Decl(subtypingWithObjectMembers5.ts, 17, 5))
+ 
+         1: Base;
+->1 : Symbol(A2[1], Decl(subtypingWithObjectMembers5.ts, 19, 18))
++>1 : Symbol(1, Decl(subtypingWithObjectMembers5.ts, 19, 18))
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembers5.ts, 0, 0))
+     }
+ 
+@@= skipped -9, +9 lines =@@
+ >A2 : Symbol(A2, Decl(subtypingWithObjectMembers5.ts, 17, 5))
+ 
+         2: Derived; // error
+->2 : Symbol(B2[2], Decl(subtypingWithObjectMembers5.ts, 23, 28))
++>2 : Symbol(2, Decl(subtypingWithObjectMembers5.ts, 23, 28))
+ >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers5.ts, 2, 1))
+     }
+ 
+@@= skipped -8, +8 lines =@@
+ >A3 : Symbol(A3, Decl(subtypingWithObjectMembers5.ts, 25, 5))
+ 
+         '1': Base;
+->'1' : Symbol(A3['1'], Decl(subtypingWithObjectMembers5.ts, 27, 18))
++>'1' : Symbol('1', Decl(subtypingWithObjectMembers5.ts, 27, 18))
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembers5.ts, 0, 0))
+     }
+ 
+@@= skipped -9, +9 lines =@@
+ >A3 : Symbol(A3, Decl(subtypingWithObjectMembers5.ts, 25, 5))
+ 
+         '1.0': Derived; // error
+->'1.0' : Symbol(B3['1.0'], Decl(subtypingWithObjectMembers5.ts, 31, 28))
++>'1.0' : Symbol('1.0', Decl(subtypingWithObjectMembers5.ts, 31, 28))
+ >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers5.ts, 2, 1))
+     }
+ }
+@@= skipped -13, +13 lines =@@
+ >A : Symbol(A, Decl(subtypingWithObjectMembers5.ts, 37, 17))
+ 
+         foo?: Base;
+->foo : Symbol(A.foo, Decl(subtypingWithObjectMembers5.ts, 38, 17))
++>foo : Symbol(foo, Decl(subtypingWithObjectMembers5.ts, 38, 17))
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembers5.ts, 0, 0))
+     }
+ 
+@@= skipped -9, +9 lines =@@
+ >A : Symbol(A, Decl(subtypingWithObjectMembers5.ts, 37, 17))
+ 
+         fooo: Derived; // weak type error
+->fooo : Symbol(B.fooo, Decl(subtypingWithObjectMembers5.ts, 42, 26))
++>fooo : Symbol(fooo, Decl(subtypingWithObjectMembers5.ts, 42, 26))
+ >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers5.ts, 2, 1))
+     }
+ 
+@@= skipped -8, +8 lines =@@
+ >A2 : Symbol(A2, Decl(subtypingWithObjectMembers5.ts, 44, 5))
+ 
+         1?: Base;
+->1 : Symbol(A2[1], Decl(subtypingWithObjectMembers5.ts, 46, 18))
++>1 : Symbol(1, Decl(subtypingWithObjectMembers5.ts, 46, 18))
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembers5.ts, 0, 0))
+     }
+ 
+@@= skipped -9, +9 lines =@@
+ >A2 : Symbol(A2, Decl(subtypingWithObjectMembers5.ts, 44, 5))
+ 
+         2: Derived; // weak type error
+->2 : Symbol(B2[2], Decl(subtypingWithObjectMembers5.ts, 50, 28))
++>2 : Symbol(2, Decl(subtypingWithObjectMembers5.ts, 50, 28))
+ >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers5.ts, 2, 1))
+     }
+ 
+@@= skipped -8, +8 lines =@@
+ >A3 : Symbol(A3, Decl(subtypingWithObjectMembers5.ts, 52, 5))
+ 
+         '1'?: Base;
+->'1' : Symbol(A3['1'], Decl(subtypingWithObjectMembers5.ts, 54, 18))
++>'1' : Symbol('1', Decl(subtypingWithObjectMembers5.ts, 54, 18))
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembers5.ts, 0, 0))
+     }
+ 
+@@= skipped -9, +9 lines =@@
+ >A3 : Symbol(A3, Decl(subtypingWithObjectMembers5.ts, 52, 5))
+ 
+         '1.0': Derived; // weak type error
+->'1.0' : Symbol(B3['1.0'], Decl(subtypingWithObjectMembers5.ts, 58, 28))
++>'1.0' : Symbol('1.0', Decl(subtypingWithObjectMembers5.ts, 58, 28))
+ >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers5.ts, 2, 1))
+     }
+ }

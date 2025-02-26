@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/moduleExports1.ts] ////
+
+=== moduleExports1.ts ===
+export module TypeScript.Strasse.Street {
+>TypeScript : Symbol(TypeScript, Decl(moduleExports1.ts, 0, 0))
+>Strasse : Symbol(Strasse, Decl(moduleExports1.ts, 0, 25))
+>Street : Symbol(Street, Decl(moduleExports1.ts, 0, 33))
+
+	export class Rue {
+>Rue : Symbol(Rue, Decl(moduleExports1.ts, 0, 41))
+
+		public address:string;
+>address : Symbol(address, Decl(moduleExports1.ts, 1, 19))
+	}	
+}
+
+var rue = new TypeScript.Strasse.Street.Rue();
+>rue : Symbol(rue, Decl(moduleExports1.ts, 6, 3))
+>TypeScript : Symbol(TypeScript, Decl(moduleExports1.ts, 0, 0))
+
+rue.address = "1 Main Street";
+>rue : Symbol(rue, Decl(moduleExports1.ts, 6, 3))
+
+void 0;
+
+if (!module.exports) module.exports = "";

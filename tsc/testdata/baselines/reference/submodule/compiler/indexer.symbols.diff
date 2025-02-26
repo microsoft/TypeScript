@@ -1,0 +1,21 @@
+--- old.indexer.symbols
++++ new.indexer.symbols
+@@= skipped -4, +4 lines =@@
+ >JQueryElement : Symbol(JQueryElement, Decl(indexer.ts, 0, 0))
+ 
+     id:string;
+->id : Symbol(JQueryElement.id, Decl(indexer.ts, 0, 25))
++>id : Symbol(id, Decl(indexer.ts, 0, 25))
+ }
+ 
+ interface JQuery {
+@@= skipped -20, +20 lines =@@
+ >id : Symbol(id, Decl(indexer.ts, 8, 37))
+ 
+ jq[0].id;
+->jq[0].id : Symbol(JQueryElement.id, Decl(indexer.ts, 0, 25))
++>jq[0].id : Symbol(id, Decl(indexer.ts, 0, 25))
+ >jq : Symbol(jq, Decl(indexer.ts, 8, 3))
+->id : Symbol(JQueryElement.id, Decl(indexer.ts, 0, 25))
++>id : Symbol(id, Decl(indexer.ts, 0, 25))
+ 

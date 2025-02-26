@@ -1,0 +1,10 @@
+--- old.exportSpecifiers_js.symbols
++++ new.exportSpecifiers_js.symbols
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/externalModules/typeOnly/exportSpecifiers_js.ts] ////
+ 
+-=== ./a.js ===
++=== a.js ===
+ const foo = 0;
+ >foo : Symbol(foo, Decl(a.js, 0, 5))
+ 

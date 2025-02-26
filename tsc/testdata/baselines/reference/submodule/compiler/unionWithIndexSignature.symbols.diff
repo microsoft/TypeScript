@@ -1,0 +1,20 @@
+--- old.unionWithIndexSignature.symbols
++++ new.unionWithIndexSignature.symbols
+@@= skipped -4, +4 lines =@@
+ >NumList : Symbol(NumList, Decl(unionWithIndexSignature.ts, 0, 0))
+ 
+   kind: 'n';
+->kind : Symbol(NumList.kind, Decl(unionWithIndexSignature.ts, 0, 19))
++>kind : Symbol(kind, Decl(unionWithIndexSignature.ts, 0, 19))
+ 
+   [x: number]: number;
+ >x : Symbol(x, Decl(unionWithIndexSignature.ts, 2, 3))
+@@= skipped -9, +9 lines =@@
+ >StrList : Symbol(StrList, Decl(unionWithIndexSignature.ts, 3, 1))
+ 
+   kind: 's';
+->kind : Symbol(StrList.kind, Decl(unionWithIndexSignature.ts, 4, 19))
++>kind : Symbol(kind, Decl(unionWithIndexSignature.ts, 4, 19))
+ 
+   [x: number]: string;
+ >x : Symbol(x, Decl(unionWithIndexSignature.ts, 6, 3))

@@ -1,0 +1,27 @@
+--- old.classImplementsClass5.symbols
++++ new.classImplementsClass5.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(classImplementsClass5.ts, 0, 0))
+ 
+     private x = 1;
+->x : Symbol(A.x, Decl(classImplementsClass5.ts, 0, 9))
++>x : Symbol(x, Decl(classImplementsClass5.ts, 0, 9))
+ 
+     foo(): number { return 1; }
+->foo : Symbol(A.foo, Decl(classImplementsClass5.ts, 1, 18))
++>foo : Symbol(foo, Decl(classImplementsClass5.ts, 1, 18))
+ }
+ class C implements A {
+ >C : Symbol(C, Decl(classImplementsClass5.ts, 3, 1))
+ >A : Symbol(A, Decl(classImplementsClass5.ts, 0, 0))
+ 
+     private x = 1;
+->x : Symbol(C.x, Decl(classImplementsClass5.ts, 4, 22))
++>x : Symbol(x, Decl(classImplementsClass5.ts, 4, 22))
+ 
+     foo() {
+->foo : Symbol(C.foo, Decl(classImplementsClass5.ts, 5, 18))
++>foo : Symbol(foo, Decl(classImplementsClass5.ts, 5, 18))
+ 
+         return 1;
+     }

@@ -1,0 +1,11 @@
+--- old.privateNamesUnique-4.symbols
++++ new.privateNamesUnique-4.symbols
+@@= skipped -13, +13 lines =@@
+ 
+ class C { #something: number }
+ >C : Symbol(C, Decl(privateNamesUnique-4.ts, 2, 20))
+->#something : Symbol(C.#something, Decl(privateNamesUnique-4.ts, 4, 9))
++>#something : Symbol(#something, Decl(privateNamesUnique-4.ts, 4, 9))
+ 
+ const c: C = a;
+ >c : Symbol(c, Decl(privateNamesUnique-4.ts, 5, 5))

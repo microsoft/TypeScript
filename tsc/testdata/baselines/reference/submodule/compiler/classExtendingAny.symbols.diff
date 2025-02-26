@@ -1,0 +1,46 @@
+--- old.classExtendingAny.symbols
++++ new.classExtendingAny.symbols
+@@= skipped -8, +8 lines =@@
+ >Err : Symbol(Err, Decl(a.ts, 0, 11))
+ 
+     payload: string
+->payload : Symbol(A.payload, Decl(a.ts, 1, 21))
++>payload : Symbol(payload, Decl(a.ts, 1, 21))
+ 
+     constructor() {
+         super(1,2,3,3,4,56)
+@@= skipped -8, +8 lines =@@
+         super['unknown']
+     }
+     process() {
+->process : Symbol(A.process, Decl(a.ts, 7, 5))
++>process : Symbol(process, Decl(a.ts, 7, 5))
+ 
+         return this.payload + "!";
+->this.payload : Symbol(A.payload, Decl(a.ts, 1, 21))
++>this.payload : Symbol(payload, Decl(a.ts, 1, 21))
+ >this : Symbol(A, Decl(a.ts, 0, 20))
+->payload : Symbol(A.payload, Decl(a.ts, 1, 21))
++>payload : Symbol(payload, Decl(a.ts, 1, 21))
+     }
+ }
+ 
+@@= skipped -26, +26 lines =@@
+     constructor() {
+         super()
+         this.wat = 12
+->this.wat : Symbol(B.wat, Decl(b.js, 2, 15))
+ >this : Symbol(B, Decl(b.js, 0, 0))
+->wat : Symbol(B.wat, Decl(b.js, 2, 15))
+     }
+     f() {
+->f : Symbol(B.f, Decl(b.js, 4, 5))
++>f : Symbol(f, Decl(b.js, 4, 5))
+ 
+         this.wat
+->this.wat : Symbol(B.wat, Decl(b.js, 2, 15))
+ >this : Symbol(B, Decl(b.js, 0, 0))
+->wat : Symbol(B.wat, Decl(b.js, 2, 15))
+ 
+         this.wit
+ >this : Symbol(B, Decl(b.js, 0, 0))

@@ -1,0 +1,59 @@
+--- old.narrowingPastLastAssignment.symbols
++++ new.narrowingPastLastAssignment.symbols
+@@= skipped -49, +49 lines =@@
+ >C : Symbol(C, Decl(narrowingPastLastAssignment.ts, 18, 7))
+ 
+         foo() { x /* number */ }
+->foo : Symbol(C.foo, Decl(narrowingPastLastAssignment.ts, 18, 19))
++>foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 18, 19))
+ >x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 14, 7))
+ 
+     };
+@@= skipped -20, +20 lines =@@
+ >A : Symbol(A, Decl(narrowingPastLastAssignment.ts, 24, 44))
+ 
+         foo() { x /* string | number */ }
+->foo : Symbol(A.foo, Decl(narrowingPastLastAssignment.ts, 25, 13))
++>foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 25, 13))
+ >x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 14, 7))
+     }
+ }
+@@= skipped -272, +272 lines =@@
+ 
+     let foo = fooMap.get("a");
+ >foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 147, 7))
+->fooMap.get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
++>fooMap.get : Symbol(get, Decl(lib.es2015.collection.d.ts, --, --))
+ >fooMap : Symbol(fooMap, Decl(narrowingPastLastAssignment.ts, 145, 9))
+->get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
++>get : Symbol(get, Decl(lib.es2015.collection.d.ts, --, --))
+ 
+     if (foo == null) {
+ >foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 147, 7))
+@@= skipped -11, +11 lines =@@
+ >foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 147, 7))
+     }
+     values.forEach(v => foo.push(v));
+->values.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>values.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >values : Symbol(values, Decl(narrowingPastLastAssignment.ts, 146, 9))
+->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >v : Symbol(v, Decl(narrowingPastLastAssignment.ts, 151, 19))
+->foo.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>foo.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 147, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >v : Symbol(v, Decl(narrowingPastLastAssignment.ts, 151, 19))
+ }
+ 
+@@= skipped -22, +22 lines =@@
+ 
+     return () => {
+         foo.toLocaleLowerCase();
+->foo.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
+ >foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 156, 7))
+->toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
+     }
+ }

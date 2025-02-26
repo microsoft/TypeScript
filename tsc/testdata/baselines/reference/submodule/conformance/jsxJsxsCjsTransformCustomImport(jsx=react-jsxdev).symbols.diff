@@ -1,0 +1,17 @@
+--- old.jsxJsxsCjsTransformCustomImport(jsx=react-jsxdev).symbols
++++ new.jsxJsxsCjsTransformCustomImport(jsx=react-jsxdev).symbols
+@@= skipped -5, +5 lines =@@
+ >a : Symbol(a, Decl(jsxJsxsCjsTransformCustomImport.tsx, 1, 5))
+ 
+   <p></p>
+->p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
+->p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
+-
+   text
+   <div className="foo"></div>
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+ >className : Symbol(className, Decl(jsxJsxsCjsTransformCustomImport.tsx, 4, 6))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+ 
+ </>
+ 

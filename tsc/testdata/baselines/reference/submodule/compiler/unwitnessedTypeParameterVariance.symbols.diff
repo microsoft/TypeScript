@@ -1,0 +1,20 @@
+--- old.unwitnessedTypeParameterVariance.symbols
++++ new.unwitnessedTypeParameterVariance.symbols
+@@= skipped -7, +7 lines =@@
+ >O : Symbol(O, Decl(unwitnessedTypeParameterVariance.ts, 2, 25))
+ 
+     read: (origin: O) => CalcValue<O>;
+->read : Symbol(CalcObj.read, Decl(unwitnessedTypeParameterVariance.ts, 2, 29))
++>read : Symbol(read, Decl(unwitnessedTypeParameterVariance.ts, 2, 29))
+ >origin : Symbol(origin, Decl(unwitnessedTypeParameterVariance.ts, 3, 11))
+ >O : Symbol(O, Decl(unwitnessedTypeParameterVariance.ts, 2, 25))
+ >CalcValue : Symbol(CalcValue, Decl(unwitnessedTypeParameterVariance.ts, 4, 1))
+@@= skipped -42, +42 lines =@@
+ >T : Symbol(T, Decl(unwitnessedTypeParameterVariance.ts, 15, 12))
+ 
+     prop: A<T>;
+->prop : Symbol(B.prop, Decl(unwitnessedTypeParameterVariance.ts, 15, 16))
++>prop : Symbol(prop, Decl(unwitnessedTypeParameterVariance.ts, 15, 16))
+ >A : Symbol(A, Decl(unwitnessedTypeParameterVariance.ts, 11, 1))
+ >T : Symbol(T, Decl(unwitnessedTypeParameterVariance.ts, 15, 12))
+ }

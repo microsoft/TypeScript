@@ -1,0 +1,14 @@
+--- old.typeSatisfaction_propertyValueConformance1(nopropertyaccessfromindexsignature=true).symbols
++++ new.typeSatisfaction_propertyValueConformance1(nopropertyaccessfromindexsignature=true).symbols
+@@= skipped -34, +34 lines =@@
+ 
+ // Should fail under --noPropertyAccessFromIndexSignature
+ console.log(x.z);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x : Symbol(x, Decl(typeSatisfaction_propertyValueConformance1.ts, 3, 5))
+ 
+ const m: boolean = x.m;

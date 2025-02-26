@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/restParamModifier2.ts] ////
+
+=== restParamModifier2.ts ===
+class C {
+>C : Symbol(C, Decl(restParamModifier2.ts, 0, 0))
+
+    constructor(public ...rest: string[]) {}
+>rest : Symbol(rest, Decl(restParamModifier2.ts, 1, 16))
+}

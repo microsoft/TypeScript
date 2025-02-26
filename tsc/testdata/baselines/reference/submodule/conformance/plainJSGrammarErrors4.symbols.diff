@@ -1,0 +1,19 @@
+--- old.plainJSGrammarErrors4.symbols
++++ new.plainJSGrammarErrors4.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(plainJSGrammarErrors4.js, 0, 0))
+ 
+     #a;
+->#a : Symbol(A.#a, Decl(plainJSGrammarErrors4.js, 0, 9))
++>#a : Symbol(#a, Decl(plainJSGrammarErrors4.js, 0, 9))
+ 
+     m() {
+->m : Symbol(A.m, Decl(plainJSGrammarErrors4.js, 1, 7))
++>m : Symbol(m, Decl(plainJSGrammarErrors4.js, 1, 7))
+ 
+         this.#a; // ok
+->this.#a : Symbol(A.#a, Decl(plainJSGrammarErrors4.js, 0, 9))
++>this.#a : Symbol(#a, Decl(plainJSGrammarErrors4.js, 0, 9))
+ >this : Symbol(A, Decl(plainJSGrammarErrors4.js, 0, 0))
+ 
+         this.#b; // error

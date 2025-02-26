@@ -1,0 +1,71 @@
+//// [tests/cases/conformance/salsa/jsObjectsMarkedAsOpenEnded.ts] ////
+
+=== a.js ===
+var variable = {};
+>variable : Symbol(variable, Decl(a.js, 0, 3))
+
+variable.a = 0;
+>variable : Symbol(variable, Decl(a.js, 0, 3))
+
+class C {
+>C : Symbol(C, Decl(a.js, 1, 15))
+
+    initializedMember = {};
+>initializedMember : Symbol(initializedMember, Decl(a.js, 3, 9))
+
+    constructor() {
+        this.member = {};
+>this : Symbol(C, Decl(a.js, 1, 15))
+
+        this.member.a = 0;
+>this : Symbol(C, Decl(a.js, 1, 15))
+    }
+}
+
+var obj = {
+>obj : Symbol(obj, Decl(a.js, 11, 3))
+
+    property: {}
+>property : Symbol(property, Decl(a.js, 11, 11))
+
+};
+
+obj.property.a = 0;
+>obj.property : Symbol(property, Decl(a.js, 11, 11))
+>obj : Symbol(obj, Decl(a.js, 11, 3))
+>property : Symbol(property, Decl(a.js, 11, 11))
+
+var arr = [{}];
+>arr : Symbol(arr, Decl(a.js, 17, 3))
+
+function getObj() {
+>getObj : Symbol(getObj, Decl(a.js, 17, 15))
+
+    return {};
+}
+
+
+=== b.ts ===
+variable.a = 1;
+>variable : Symbol(variable, Decl(a.js, 0, 3))
+
+(new C()).member.a = 1;
+>C : Symbol(C, Decl(a.js, 1, 15))
+
+(new C()).initializedMember.a = 1;
+>(new C()).initializedMember : Symbol(initializedMember, Decl(a.js, 3, 9))
+>C : Symbol(C, Decl(a.js, 1, 15))
+>initializedMember : Symbol(initializedMember, Decl(a.js, 3, 9))
+
+obj.property.a = 1;
+>obj.property : Symbol(property, Decl(a.js, 11, 11))
+>obj : Symbol(obj, Decl(a.js, 11, 3))
+>property : Symbol(property, Decl(a.js, 11, 11))
+
+arr[0].a = 1;
+>arr : Symbol(arr, Decl(a.js, 17, 3))
+
+getObj().a = 1;
+>getObj : Symbol(getObj, Decl(a.js, 17, 15))
+
+

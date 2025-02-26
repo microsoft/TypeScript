@@ -1,0 +1,12 @@
+--- old.jsDeclarationsDocCommentsOnConsts.symbols
++++ new.jsDeclarationsDocCommentsOnConsts.symbols
+@@= skipped -20, +20 lines =@@
+ }
+ 
+ module.exports = {x, b}
+->module.exports : Symbol(module.exports, Decl(index1.js, 0, 0))
+->module : Symbol(module, Decl(index1.js, 12, 1))
+->exports : Symbol(module.exports, Decl(index1.js, 0, 0))
+ >x : Symbol(x, Decl(index1.js, 14, 18))
+ >b : Symbol(b, Decl(index1.js, 14, 20))
+ 

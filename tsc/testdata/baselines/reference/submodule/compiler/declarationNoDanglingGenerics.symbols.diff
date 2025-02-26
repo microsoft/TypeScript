@@ -1,0 +1,62 @@
+--- old.declarationNoDanglingGenerics.symbols
++++ new.declarationNoDanglingGenerics.symbols
+@@= skipped -33, +33 lines =@@
+ 
+   return class {
+     static readonly THE_KIND: TKind = kind;
+->THE_KIND : Symbol((Anonymous class).THE_KIND, Decl(declarationNoDanglingGenerics.ts, 12, 16))
++>THE_KIND : Symbol(THE_KIND, Decl(declarationNoDanglingGenerics.ts, 12, 16))
+ >TKind : Symbol(TKind, Decl(declarationNoDanglingGenerics.ts, 9, 22))
+ >kind : Symbol(kind, Decl(declarationNoDanglingGenerics.ts, 9, 44))
+ 
+     readonly kind: TKind = kind;
+->kind : Symbol((Anonymous class).kind, Decl(declarationNoDanglingGenerics.ts, 13, 43))
++>kind : Symbol(kind, Decl(declarationNoDanglingGenerics.ts, 13, 43))
+ >TKind : Symbol(TKind, Decl(declarationNoDanglingGenerics.ts, 9, 22))
+ >kind : Symbol(kind, Decl(declarationNoDanglingGenerics.ts, 9, 44))
+ 
+@@= skipped -16, +16 lines =@@
+ >Kinds : Symbol(Kinds, Decl(declarationNoDanglingGenerics.ts, 16, 1))
+ 
+   static readonly A = "A";
+->A : Symbol(Kinds.A, Decl(declarationNoDanglingGenerics.ts, 18, 13))
++>A : Symbol(A, Decl(declarationNoDanglingGenerics.ts, 18, 13))
+ 
+   static readonly B = "B";
+->B : Symbol(Kinds.B, Decl(declarationNoDanglingGenerics.ts, 19, 26))
++>B : Symbol(B, Decl(declarationNoDanglingGenerics.ts, 19, 26))
+ 
+   static readonly C = "C";
+->C : Symbol(Kinds.C, Decl(declarationNoDanglingGenerics.ts, 20, 26))
++>C : Symbol(C, Decl(declarationNoDanglingGenerics.ts, 20, 26))
+ }
+ 
+ export class AKind extends ClassFactory(Kinds.A) {
+ >AKind : Symbol(AKind, Decl(declarationNoDanglingGenerics.ts, 22, 1))
+ >ClassFactory : Symbol(ClassFactory, Decl(declarationNoDanglingGenerics.ts, 7, 1))
+->Kinds.A : Symbol(Kinds.A, Decl(declarationNoDanglingGenerics.ts, 18, 13))
++>Kinds.A : Symbol(A, Decl(declarationNoDanglingGenerics.ts, 18, 13))
+ >Kinds : Symbol(Kinds, Decl(declarationNoDanglingGenerics.ts, 16, 1))
+->A : Symbol(Kinds.A, Decl(declarationNoDanglingGenerics.ts, 18, 13))
++>A : Symbol(A, Decl(declarationNoDanglingGenerics.ts, 18, 13))
+ }
+ 
+ export class BKind extends ClassFactory(Kinds.B) {
+ >BKind : Symbol(BKind, Decl(declarationNoDanglingGenerics.ts, 25, 1))
+ >ClassFactory : Symbol(ClassFactory, Decl(declarationNoDanglingGenerics.ts, 7, 1))
+->Kinds.B : Symbol(Kinds.B, Decl(declarationNoDanglingGenerics.ts, 19, 26))
++>Kinds.B : Symbol(B, Decl(declarationNoDanglingGenerics.ts, 19, 26))
+ >Kinds : Symbol(Kinds, Decl(declarationNoDanglingGenerics.ts, 16, 1))
+->B : Symbol(Kinds.B, Decl(declarationNoDanglingGenerics.ts, 19, 26))
++>B : Symbol(B, Decl(declarationNoDanglingGenerics.ts, 19, 26))
+ }
+ 
+ export class CKind extends ClassFactory(Kinds.C) {
+ >CKind : Symbol(CKind, Decl(declarationNoDanglingGenerics.ts, 28, 1))
+ >ClassFactory : Symbol(ClassFactory, Decl(declarationNoDanglingGenerics.ts, 7, 1))
+->Kinds.C : Symbol(Kinds.C, Decl(declarationNoDanglingGenerics.ts, 20, 26))
++>Kinds.C : Symbol(C, Decl(declarationNoDanglingGenerics.ts, 20, 26))
+ >Kinds : Symbol(Kinds, Decl(declarationNoDanglingGenerics.ts, 16, 1))
+->C : Symbol(Kinds.C, Decl(declarationNoDanglingGenerics.ts, 20, 26))
++>C : Symbol(C, Decl(declarationNoDanglingGenerics.ts, 20, 26))
+ }

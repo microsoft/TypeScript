@@ -1,0 +1,28 @@
+--- old.typeVariableConstraintedToAliasNotAssignableToUnion.symbols
++++ new.typeVariableConstraintedToAliasNotAssignableToUnion.symbols
+@@= skipped -5, +5 lines =@@
+ >S : Symbol(S, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 0, 25))
+ 
+     _field: S;
+->_field : Symbol(TableClass._field, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 0, 35))
++>_field : Symbol(_field, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 0, 35))
+ >S : Symbol(S, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 0, 25))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >Something : Symbol(Something, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 4, 31))
+ 
+     prop: number;
+->prop : Symbol(Something.prop, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 6, 21))
++>prop : Symbol(prop, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 6, 21))
+ }
+ 
+ interface SomethingElse {
+ >SomethingElse : Symbol(SomethingElse, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 8, 1))
+ 
+     prop2: string;
+->prop2 : Symbol(SomethingElse.prop2, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 10, 25))
++>prop2 : Symbol(prop2, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 10, 25))
+ }
+ 
+ declare let aBoolean: boolean;

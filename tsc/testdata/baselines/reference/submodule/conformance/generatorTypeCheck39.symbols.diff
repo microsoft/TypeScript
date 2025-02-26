@@ -1,0 +1,10 @@
+--- old.generatorTypeCheck39.symbols
++++ new.generatorTypeCheck39.symbols
+@@= skipped -17, +17 lines =@@
+ >C : Symbol(C, Decl(generatorTypeCheck39.ts, 3, 15))
+ 
+         x = yield 0;
+->x : Symbol(C.x, Decl(generatorTypeCheck39.ts, 5, 13))
++>x : Symbol(x, Decl(generatorTypeCheck39.ts, 5, 13))
+     }
+ }

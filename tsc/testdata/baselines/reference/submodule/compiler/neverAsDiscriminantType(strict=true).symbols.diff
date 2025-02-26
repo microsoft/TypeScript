@@ -1,0 +1,145 @@
+--- old.neverAsDiscriminantType(strict=true).symbols
++++ new.neverAsDiscriminantType(strict=true).symbols
+@@= skipped -59, +59 lines =@@
+ >D : Symbol(D, Decl(neverAsDiscriminantType.ts, 18, 96))
+ 
+     op: O
+->op : Symbol(GatewayPayloadStructure.op, Decl(neverAsDiscriminantType.ts, 18, 101))
++>op : Symbol(op, Decl(neverAsDiscriminantType.ts, 18, 101))
+ >O : Symbol(O, Decl(neverAsDiscriminantType.ts, 18, 41))
+ 
+     d: D
+->d : Symbol(GatewayPayloadStructure.d, Decl(neverAsDiscriminantType.ts, 19, 9))
++>d : Symbol(d, Decl(neverAsDiscriminantType.ts, 19, 9))
+ >D : Symbol(D, Decl(neverAsDiscriminantType.ts, 18, 96))
+ 
+     t?: T
+->t : Symbol(GatewayPayloadStructure.t, Decl(neverAsDiscriminantType.ts, 20, 8))
++>t : Symbol(t, Decl(neverAsDiscriminantType.ts, 20, 8))
+ >T : Symbol(T, Decl(neverAsDiscriminantType.ts, 18, 65))
+ 
+     s?: number
+->s : Symbol(GatewayPayloadStructure.s, Decl(neverAsDiscriminantType.ts, 21, 9))
++>s : Symbol(s, Decl(neverAsDiscriminantType.ts, 21, 9))
+ }
+ 
+ export type GatewayPayload = {
+@@= skipped -23, +23 lines =@@
+ >GatewayOpcode : Symbol(GatewayOpcode, Decl(neverAsDiscriminantType.ts, 35, 1))
+ >O : Symbol(O, Decl(neverAsDiscriminantType.ts, 26, 5))
+ >GatewayOpcode : Symbol(GatewayOpcode, Decl(neverAsDiscriminantType.ts, 35, 1))
+->DISPATCH : Symbol(GatewayOpcode.DISPATCH, Decl(neverAsDiscriminantType.ts, 37, 27))
++>DISPATCH : Symbol(DISPATCH, Decl(neverAsDiscriminantType.ts, 37, 27))
+ 
+     ? {
+         [T in keyof GatewayEvents]: GatewayPayloadStructure<GatewayOpcode.DISPATCH, T, GatewayEvents[T]>
+@@= skipped -8, +8 lines =@@
+ >GatewayEvents : Symbol(GatewayEvents, Decl(neverAsDiscriminantType.ts, 49, 1))
+ >GatewayPayloadStructure : Symbol(GatewayPayloadStructure, Decl(neverAsDiscriminantType.ts, 14, 1))
+ >GatewayOpcode : Symbol(GatewayOpcode, Decl(neverAsDiscriminantType.ts, 35, 1))
+->DISPATCH : Symbol(GatewayOpcode.DISPATCH, Decl(neverAsDiscriminantType.ts, 37, 27))
++>DISPATCH : Symbol(DISPATCH, Decl(neverAsDiscriminantType.ts, 37, 27))
+ >T : Symbol(T, Decl(neverAsDiscriminantType.ts, 28, 9))
+ >GatewayEvents : Symbol(GatewayEvents, Decl(neverAsDiscriminantType.ts, 49, 1))
+ >T : Symbol(T, Decl(neverAsDiscriminantType.ts, 28, 9))
+@@= skipped -23, +23 lines =@@
+ >GatewayParams : Symbol(GatewayParams, Decl(neverAsDiscriminantType.ts, 31, 16))
+ 
+     [GatewayOpcode.HELLO]: { b: 1 }
+->[GatewayOpcode.HELLO] : Symbol(GatewayParams[GatewayOpcode.HELLO], Decl(neverAsDiscriminantType.ts, 33, 32))
+->GatewayOpcode.HELLO : Symbol(GatewayOpcode.HELLO, Decl(neverAsDiscriminantType.ts, 46, 24))
++>[GatewayOpcode.HELLO] : Symbol([GatewayOpcode.HELLO], Decl(neverAsDiscriminantType.ts, 33, 32))
++>GatewayOpcode.HELLO : Symbol(HELLO, Decl(neverAsDiscriminantType.ts, 46, 24))
+ >GatewayOpcode : Symbol(GatewayOpcode, Decl(neverAsDiscriminantType.ts, 35, 1))
+->HELLO : Symbol(GatewayOpcode.HELLO, Decl(neverAsDiscriminantType.ts, 46, 24))
++>HELLO : Symbol(HELLO, Decl(neverAsDiscriminantType.ts, 46, 24))
+ >b : Symbol(b, Decl(neverAsDiscriminantType.ts, 34, 28))
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ >GatewayOpcode : Symbol(GatewayOpcode, Decl(neverAsDiscriminantType.ts, 35, 1))
+ 
+     DISPATCH = 0,
+->DISPATCH : Symbol(GatewayOpcode.DISPATCH, Decl(neverAsDiscriminantType.ts, 37, 27))
++>DISPATCH : Symbol(DISPATCH, Decl(neverAsDiscriminantType.ts, 37, 27))
+ 
+     HEARTBEAT = 1,
+->HEARTBEAT : Symbol(GatewayOpcode.HEARTBEAT, Decl(neverAsDiscriminantType.ts, 38, 17))
++>HEARTBEAT : Symbol(HEARTBEAT, Decl(neverAsDiscriminantType.ts, 38, 17))
+ 
+     IDENTIFY = 2,
+->IDENTIFY : Symbol(GatewayOpcode.IDENTIFY, Decl(neverAsDiscriminantType.ts, 39, 18))
++>IDENTIFY : Symbol(IDENTIFY, Decl(neverAsDiscriminantType.ts, 39, 18))
+ 
+     PRESENCE_UPDATE = 3,
+->PRESENCE_UPDATE : Symbol(GatewayOpcode.PRESENCE_UPDATE, Decl(neverAsDiscriminantType.ts, 40, 17))
++>PRESENCE_UPDATE : Symbol(PRESENCE_UPDATE, Decl(neverAsDiscriminantType.ts, 40, 17))
+ 
+     VOICE_STATE_UPDATE = 4,
+->VOICE_STATE_UPDATE : Symbol(GatewayOpcode.VOICE_STATE_UPDATE, Decl(neverAsDiscriminantType.ts, 41, 24))
++>VOICE_STATE_UPDATE : Symbol(VOICE_STATE_UPDATE, Decl(neverAsDiscriminantType.ts, 41, 24))
+ 
+     RESUME = 6,
+->RESUME : Symbol(GatewayOpcode.RESUME, Decl(neverAsDiscriminantType.ts, 42, 27))
++>RESUME : Symbol(RESUME, Decl(neverAsDiscriminantType.ts, 42, 27))
+ 
+     RECONNECT = 7,
+->RECONNECT : Symbol(GatewayOpcode.RECONNECT, Decl(neverAsDiscriminantType.ts, 43, 15))
++>RECONNECT : Symbol(RECONNECT, Decl(neverAsDiscriminantType.ts, 43, 15))
+ 
+     REQUEST_GUILD_MEMBERS = 8,
+->REQUEST_GUILD_MEMBERS : Symbol(GatewayOpcode.REQUEST_GUILD_MEMBERS, Decl(neverAsDiscriminantType.ts, 44, 18))
++>REQUEST_GUILD_MEMBERS : Symbol(REQUEST_GUILD_MEMBERS, Decl(neverAsDiscriminantType.ts, 44, 18))
+ 
+     INVALID_SESSION = 9,
+->INVALID_SESSION : Symbol(GatewayOpcode.INVALID_SESSION, Decl(neverAsDiscriminantType.ts, 45, 30))
++>INVALID_SESSION : Symbol(INVALID_SESSION, Decl(neverAsDiscriminantType.ts, 45, 30))
+ 
+     HELLO = 10,
+->HELLO : Symbol(GatewayOpcode.HELLO, Decl(neverAsDiscriminantType.ts, 46, 24))
++>HELLO : Symbol(HELLO, Decl(neverAsDiscriminantType.ts, 46, 24))
+ 
+     HEARTBEAT_ACK = 11,
+->HEARTBEAT_ACK : Symbol(GatewayOpcode.HEARTBEAT_ACK, Decl(neverAsDiscriminantType.ts, 47, 15))
++>HEARTBEAT_ACK : Symbol(HEARTBEAT_ACK, Decl(neverAsDiscriminantType.ts, 47, 15))
+ }
+ 
+ export interface GatewayEvents {
+ >GatewayEvents : Symbol(GatewayEvents, Decl(neverAsDiscriminantType.ts, 49, 1))
+ 
+     MESSAGE_CREATE: { a: 1 }
+->MESSAGE_CREATE : Symbol(GatewayEvents.MESSAGE_CREATE, Decl(neverAsDiscriminantType.ts, 51, 32))
++>MESSAGE_CREATE : Symbol(MESSAGE_CREATE, Decl(neverAsDiscriminantType.ts, 51, 32))
+ >a : Symbol(a, Decl(neverAsDiscriminantType.ts, 52, 21))
+ 
+     MESSAGE_UPDATE: { a: 2 }
+->MESSAGE_UPDATE : Symbol(GatewayEvents.MESSAGE_UPDATE, Decl(neverAsDiscriminantType.ts, 52, 28))
++>MESSAGE_UPDATE : Symbol(MESSAGE_UPDATE, Decl(neverAsDiscriminantType.ts, 52, 28))
+ >a : Symbol(a, Decl(neverAsDiscriminantType.ts, 53, 21))
+ 
+     MESSAGE_DELETE: { a: 3 }
+->MESSAGE_DELETE : Symbol(GatewayEvents.MESSAGE_DELETE, Decl(neverAsDiscriminantType.ts, 53, 28))
++>MESSAGE_DELETE : Symbol(MESSAGE_DELETE, Decl(neverAsDiscriminantType.ts, 53, 28))
+ >a : Symbol(a, Decl(neverAsDiscriminantType.ts, 54, 21))
+ }
+ 
+@@= skipped -60, +60 lines =@@
+ >GatewayPayload : Symbol(GatewayPayload, Decl(neverAsDiscriminantType.ts, 23, 1))
+ 
+     if (input.t === 'MESSAGE_CREATE') {
+->input.t : Symbol(GatewayPayloadStructure.t, Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8) ... and 8 more)
++>input.t : Symbol(t, Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8) ... and 8 more)
+ >input : Symbol(input, Decl(neverAsDiscriminantType.ts, 59, 35))
+->t : Symbol(GatewayPayloadStructure.t, Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8) ... and 8 more)
++>t : Symbol(t, Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8) ... and 8 more)
+ 
+         assertMessage(input.d)
+ >assertMessage : Symbol(assertMessage, Decl(neverAsDiscriminantType.ts, 55, 1))
+->input.d : Symbol(GatewayPayloadStructure.d, Decl(neverAsDiscriminantType.ts, 19, 9))
++>input.d : Symbol(d, Decl(neverAsDiscriminantType.ts, 19, 9))
+ >input : Symbol(input, Decl(neverAsDiscriminantType.ts, 59, 35))
+->d : Symbol(GatewayPayloadStructure.d, Decl(neverAsDiscriminantType.ts, 19, 9))
++>d : Symbol(d, Decl(neverAsDiscriminantType.ts, 19, 9))
+     }
+ }
+ 

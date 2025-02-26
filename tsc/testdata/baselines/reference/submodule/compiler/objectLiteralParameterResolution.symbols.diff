@@ -1,0 +1,32 @@
+--- old.objectLiteralParameterResolution.symbols
++++ new.objectLiteralParameterResolution.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(objectLiteralParameterResolution.ts, 0, 0))
+ 
+     extend<T>(target: T, ...objs: any[]): T;
+->extend : Symbol(Foo.extend, Decl(objectLiteralParameterResolution.ts, 0, 14), Decl(objectLiteralParameterResolution.ts, 1, 44))
++>extend : Symbol(extend, Decl(objectLiteralParameterResolution.ts, 0, 14), Decl(objectLiteralParameterResolution.ts, 1, 44))
+ >T : Symbol(T, Decl(objectLiteralParameterResolution.ts, 1, 11))
+ >target : Symbol(target, Decl(objectLiteralParameterResolution.ts, 1, 14))
+ >T : Symbol(T, Decl(objectLiteralParameterResolution.ts, 1, 11))
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(objectLiteralParameterResolution.ts, 1, 11))
+ 
+     extend<T>(deep: boolean, target: T, ...objs: any[]): T;
+->extend : Symbol(Foo.extend, Decl(objectLiteralParameterResolution.ts, 0, 14), Decl(objectLiteralParameterResolution.ts, 1, 44))
++>extend : Symbol(extend, Decl(objectLiteralParameterResolution.ts, 0, 14), Decl(objectLiteralParameterResolution.ts, 1, 44))
+ >T : Symbol(T, Decl(objectLiteralParameterResolution.ts, 2, 11))
+ >deep : Symbol(deep, Decl(objectLiteralParameterResolution.ts, 2, 14))
+ >target : Symbol(target, Decl(objectLiteralParameterResolution.ts, 2, 28))
+@@= skipped -14, +14 lines =@@
+ 
+ var s = $.extend({
+ >s : Symbol(s, Decl(objectLiteralParameterResolution.ts, 5, 3))
+->$.extend : Symbol(Foo.extend, Decl(objectLiteralParameterResolution.ts, 0, 14), Decl(objectLiteralParameterResolution.ts, 1, 44))
++>$.extend : Symbol(extend, Decl(objectLiteralParameterResolution.ts, 0, 14), Decl(objectLiteralParameterResolution.ts, 1, 44))
+ >$ : Symbol($, Decl(objectLiteralParameterResolution.ts, 4, 11))
+->extend : Symbol(Foo.extend, Decl(objectLiteralParameterResolution.ts, 0, 14), Decl(objectLiteralParameterResolution.ts, 1, 44))
++>extend : Symbol(extend, Decl(objectLiteralParameterResolution.ts, 0, 14), Decl(objectLiteralParameterResolution.ts, 1, 44))
+ 
+     type: "GET" ,
+ >type : Symbol(type, Decl(objectLiteralParameterResolution.ts, 5, 18))

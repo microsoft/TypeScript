@@ -1,0 +1,12 @@
+--- old.exportDefaultAsyncFunction2.symbols
++++ new.exportDefaultAsyncFunction2.symbols
+@@= skipped -17, +17 lines =@@
+ export default async(() => await(Promise.resolve(1)));
+ >async : Symbol(async, Decl(a.ts, 0, 8))
+ >await : Symbol(await, Decl(a.ts, 0, 15))
+->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ 
+ === b.ts ===
+ 

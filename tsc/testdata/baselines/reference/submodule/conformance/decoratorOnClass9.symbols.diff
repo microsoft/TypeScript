@@ -1,0 +1,30 @@
+--- old.decoratorOnClass9.symbols
++++ new.decoratorOnClass9.symbols
+@@= skipped -15, +15 lines =@@
+ >A : Symbol(A, Decl(decoratorOnClass9.ts, 0, 21))
+ 
+     static x = 1;
+->x : Symbol(B.x, Decl(decoratorOnClass9.ts, 6, 19))
++>x : Symbol(x, Decl(decoratorOnClass9.ts, 6, 19))
+ 
+     static y = B.x;
+->y : Symbol(B.y, Decl(decoratorOnClass9.ts, 7, 17))
+->B.x : Symbol(B.x, Decl(decoratorOnClass9.ts, 6, 19))
++>y : Symbol(y, Decl(decoratorOnClass9.ts, 7, 17))
++>B.x : Symbol(x, Decl(decoratorOnClass9.ts, 6, 19))
+ >B : Symbol(B, Decl(decoratorOnClass9.ts, 2, 10))
+->x : Symbol(B.x, Decl(decoratorOnClass9.ts, 6, 19))
++>x : Symbol(x, Decl(decoratorOnClass9.ts, 6, 19))
+ 
+     m() {
+->m : Symbol(B.m, Decl(decoratorOnClass9.ts, 8, 19))
++>m : Symbol(m, Decl(decoratorOnClass9.ts, 8, 19))
+ 
+         return B.x;
+->B.x : Symbol(B.x, Decl(decoratorOnClass9.ts, 6, 19))
++>B.x : Symbol(x, Decl(decoratorOnClass9.ts, 6, 19))
+ >B : Symbol(B, Decl(decoratorOnClass9.ts, 2, 10))
+->x : Symbol(B.x, Decl(decoratorOnClass9.ts, 6, 19))
++>x : Symbol(x, Decl(decoratorOnClass9.ts, 6, 19))
+     }
+ }

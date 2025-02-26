@@ -1,0 +1,29 @@
+--- old.contextualTypeArrayReturnType.symbols
++++ new.contextualTypeArrayReturnType.symbols
+@@= skipped -4, +4 lines =@@
+ >IBookStyle : Symbol(IBookStyle, Decl(contextualTypeArrayReturnType.ts, 0, 0))
+ 
+     initialLeftPageTransforms?: (width: number) => NamedTransform[];
+->initialLeftPageTransforms : Symbol(IBookStyle.initialLeftPageTransforms, Decl(contextualTypeArrayReturnType.ts, 0, 22))
++>initialLeftPageTransforms : Symbol(initialLeftPageTransforms, Decl(contextualTypeArrayReturnType.ts, 0, 22))
+ >width : Symbol(width, Decl(contextualTypeArrayReturnType.ts, 1, 33))
+ >NamedTransform : Symbol(NamedTransform, Decl(contextualTypeArrayReturnType.ts, 2, 1))
+ }
+@@= skipped -17, +17 lines =@@
+ >Transform3D : Symbol(Transform3D, Decl(contextualTypeArrayReturnType.ts, 6, 1))
+ 
+     cachedCss: string;
+->cachedCss : Symbol(Transform3D.cachedCss, Decl(contextualTypeArrayReturnType.ts, 8, 23))
++>cachedCss : Symbol(cachedCss, Decl(contextualTypeArrayReturnType.ts, 8, 23))
+ }
+ 
+ var style: IBookStyle = {
+@@= skipped -13, +13 lines =@@
+ 
+         return [
+             {'ry': null }
+->'ry' : Symbol('ry', Decl(contextualTypeArrayReturnType.ts, 15, 13))
++>'ry' : Symbol(ry, Decl(contextualTypeArrayReturnType.ts, 15, 13))
+ 
+         ];
+     }

@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/jsdocUnexpectedCharacter.ts] ////
+
+=== /a.js ===
+/** @x # */
+var UI = {};
+>UI : Symbol(UI, Decl(a.js, 1, 3))
+

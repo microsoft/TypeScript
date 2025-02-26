@@ -1,0 +1,22 @@
+--- old.commentOnSignature1.symbols
++++ new.commentOnSignature1.symbols
+@@= skipped -52, +52 lines =@@
+ 
+     // dont keep this comment
+     foo(a: string);
+->foo : Symbol(c.foo, Decl(a.ts, 18, 5), Decl(a.ts, 21, 19), Decl(a.ts, 23, 19))
++>foo : Symbol(foo, Decl(a.ts, 18, 5), Decl(a.ts, 21, 19), Decl(a.ts, 23, 19))
+ >a : Symbol(a, Decl(a.ts, 21, 8))
+ 
+     /*! keep this pinned comment */
+     foo(a: number);
+->foo : Symbol(c.foo, Decl(a.ts, 18, 5), Decl(a.ts, 21, 19), Decl(a.ts, 23, 19))
++>foo : Symbol(foo, Decl(a.ts, 18, 5), Decl(a.ts, 21, 19), Decl(a.ts, 23, 19))
+ >a : Symbol(a, Decl(a.ts, 23, 8))
+ 
+     foo(a: any) {
+->foo : Symbol(c.foo, Decl(a.ts, 18, 5), Decl(a.ts, 21, 19), Decl(a.ts, 23, 19))
++>foo : Symbol(foo, Decl(a.ts, 18, 5), Decl(a.ts, 21, 19), Decl(a.ts, 23, 19))
+ >a : Symbol(a, Decl(a.ts, 24, 8))
+     }
+ }

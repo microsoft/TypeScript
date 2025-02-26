@@ -1,0 +1,26 @@
+--- old.symbolLinkDeclarationEmitModuleNames.symbols
++++ new.symbolLinkDeclarationEmitModuleNames.symbols
+@@= skipped -16, +16 lines =@@
+ 
+ export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(null as any); // line in question
+ >CONTROLLER_CLASS : Symbol(CONTROLLER_CLASS, Decl(usage.ts, 3, 12))
+->BindingKey.create : Symbol(BindingKey.create, Decl(bindingkey.ts, 2, 21))
+ >BindingKey : Symbol(BindingKey, Decl(usage.ts, 1, 8))
+->create : Symbol(BindingKey.create, Decl(bindingkey.ts, 2, 21))
+ >ControllerClass : Symbol(ControllerClass, Decl(usage.ts, 0, 8))
+ 
+ === monorepo/context/src/value-promise.ts ===
+@@= skipped -21, +19 lines =@@
+ >T : Symbol(T, Decl(bindingkey.ts, 1, 24))
+ 
+   readonly __type: T;
+->__type : Symbol(BindingKey.__type, Decl(bindingkey.ts, 1, 28))
++>__type : Symbol(__type, Decl(bindingkey.ts, 1, 28))
+ >T : Symbol(T, Decl(bindingkey.ts, 1, 24))
+ 
+   static create<T extends Constructor<any>>(ctor: T) {
+->create : Symbol(BindingKey.create, Decl(bindingkey.ts, 2, 21))
++>create : Symbol(create, Decl(bindingkey.ts, 2, 21))
+ >T : Symbol(T, Decl(bindingkey.ts, 3, 16))
+ >Constructor : Symbol(Constructor, Decl(bindingkey.ts, 0, 8))
+ >ctor : Symbol(ctor, Decl(bindingkey.ts, 3, 44))

@@ -1,0 +1,42 @@
+--- old.contextualTypeCaching.symbols
++++ new.contextualTypeCaching.symbols
+@@= skipped -7, +7 lines =@@
+ >T : Symbol(T, Decl(contextualTypeCaching.ts, 2, 23))
+ 
+     callback: (response: T) => void;
+->callback : Symbol(Event.callback, Decl(contextualTypeCaching.ts, 2, 27))
++>callback : Symbol(callback, Decl(contextualTypeCaching.ts, 2, 27))
+ >response : Symbol(response, Decl(contextualTypeCaching.ts, 3, 15))
+ >T : Symbol(T, Decl(contextualTypeCaching.ts, 2, 23))
+ 
+     nested: {
+->nested : Symbol(Event.nested, Decl(contextualTypeCaching.ts, 3, 36))
++>nested : Symbol(nested, Decl(contextualTypeCaching.ts, 3, 36))
+ 
+         nestedCallback: (response: T) => void;
+ >nestedCallback : Symbol(nestedCallback, Decl(contextualTypeCaching.ts, 4, 13))
+@@= skipped -59, +59 lines =@@
+ >MyCompiler : Symbol(MyCompiler, Decl(contextualTypeCaching.ts, 21, 3))
+ 
+   compile(): void;
+->compile : Symbol(MyCompiler.compile, Decl(contextualTypeCaching.ts, 24, 26))
++>compile : Symbol(compile, Decl(contextualTypeCaching.ts, 24, 26))
+ }
+ interface WebpackPluginInstance {
+ >WebpackPluginInstance : Symbol(WebpackPluginInstance, Decl(contextualTypeCaching.ts, 26, 1))
+ 
+   apply: (compiler: MyCompiler) => void;
+->apply : Symbol(WebpackPluginInstance.apply, Decl(contextualTypeCaching.ts, 27, 33))
++>apply : Symbol(apply, Decl(contextualTypeCaching.ts, 27, 33))
+ >compiler : Symbol(compiler, Decl(contextualTypeCaching.ts, 28, 10))
+ >MyCompiler : Symbol(MyCompiler, Decl(contextualTypeCaching.ts, 21, 3))
+ }
+@@= skipped -21, +21 lines =@@
+ >Optimization : Symbol(Optimization, Decl(contextualTypeCaching.ts, 30, 78))
+ 
+   minimizer?: (WebpackPluginInstance | WebpackPluginFunction)[];
+->minimizer : Symbol(Optimization.minimizer, Decl(contextualTypeCaching.ts, 31, 24))
++>minimizer : Symbol(minimizer, Decl(contextualTypeCaching.ts, 31, 24))
+ >WebpackPluginInstance : Symbol(WebpackPluginInstance, Decl(contextualTypeCaching.ts, 26, 1))
+ >WebpackPluginFunction : Symbol(WebpackPluginFunction, Decl(contextualTypeCaching.ts, 29, 1))
+ }

@@ -1,0 +1,10 @@
+--- old.jsFileCompilationMethodOverloadSyntax.symbols
++++ new.jsFileCompilationMethodOverloadSyntax.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(a.js, 0, 0))
+ 
+   foo();
+->foo : Symbol(A.foo, Decl(a.js, 0, 9))
++>foo : Symbol(foo, Decl(a.js, 0, 9))
+ }
+ 

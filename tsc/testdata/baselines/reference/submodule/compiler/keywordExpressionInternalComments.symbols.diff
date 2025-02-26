@@ -1,0 +1,12 @@
+--- old.keywordExpressionInternalComments.symbols
++++ new.keywordExpressionInternalComments.symbols
+@@= skipped -10, +10 lines =@@
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+ /*1*/ delete /*2*/ Array.toString /*3*/;
+->Array.toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
++>Array.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 

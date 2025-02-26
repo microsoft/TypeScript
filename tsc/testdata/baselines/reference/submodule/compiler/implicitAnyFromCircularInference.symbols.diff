@@ -1,0 +1,36 @@
+--- old.implicitAnyFromCircularInference.symbols
++++ new.implicitAnyFromCircularInference.symbols
+@@= skipped -62, +62 lines =@@
+ >A : Symbol(A, Decl(implicitAnyFromCircularInference.ts, 29, 1))
+ 
+     s: string;
+->s : Symbol(A.s, Decl(implicitAnyFromCircularInference.ts, 31, 13))
++>s : Symbol(s, Decl(implicitAnyFromCircularInference.ts, 31, 13))
+ }
+ 
+ function foo(x: A): string { return "abc"; }
+@@= skipped -12, +12 lines =@@
+ >C : Symbol(C, Decl(implicitAnyFromCircularInference.ts, 35, 44))
+ 
+     s = foo(this);
+->s : Symbol(C.s, Decl(implicitAnyFromCircularInference.ts, 37, 9))
++>s : Symbol(s, Decl(implicitAnyFromCircularInference.ts, 37, 9))
+ >foo : Symbol(foo, Decl(implicitAnyFromCircularInference.ts, 33, 1))
+ >this : Symbol(C, Decl(implicitAnyFromCircularInference.ts, 35, 44))
+ }
+@@= skipped -10, +10 lines =@@
+ 
+     // Error expected
+     get x() {
+->x : Symbol(D.x, Decl(implicitAnyFromCircularInference.ts, 41, 9))
++>x : Symbol(x, Decl(implicitAnyFromCircularInference.ts, 41, 9))
+ 
+         return this.x;
+->this.x : Symbol(D.x, Decl(implicitAnyFromCircularInference.ts, 41, 9))
++>this.x : Symbol(x, Decl(implicitAnyFromCircularInference.ts, 41, 9))
+ >this : Symbol(D, Decl(implicitAnyFromCircularInference.ts, 39, 1))
+->x : Symbol(D.x, Decl(implicitAnyFromCircularInference.ts, 41, 9))
++>x : Symbol(x, Decl(implicitAnyFromCircularInference.ts, 41, 9))
+     }
+ }
+ 

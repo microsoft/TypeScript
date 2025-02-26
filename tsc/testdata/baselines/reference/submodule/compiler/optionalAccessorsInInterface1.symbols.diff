@@ -1,0 +1,28 @@
+--- old.optionalAccessorsInInterface1.symbols
++++ new.optionalAccessorsInInterface1.symbols
+@@= skipped -4, +4 lines =@@
+ >MyPropertyDescriptor : Symbol(MyPropertyDescriptor, Decl(optionalAccessorsInInterface1.ts, 0, 0))
+ 
+     get? (): any;
+->get : Symbol(MyPropertyDescriptor.get, Decl(optionalAccessorsInInterface1.ts, 0, 32))
++>get : Symbol(get, Decl(optionalAccessorsInInterface1.ts, 0, 32))
+ 
+     set? (v: any): void;
+->set : Symbol(MyPropertyDescriptor.set, Decl(optionalAccessorsInInterface1.ts, 1, 17))
++>set : Symbol(set, Decl(optionalAccessorsInInterface1.ts, 1, 17))
+ >v : Symbol(v, Decl(optionalAccessorsInInterface1.ts, 2, 10))
+ }
+ 
+@@= skipped -22, +22 lines =@@
+ >MyPropertyDescriptor2 : Symbol(MyPropertyDescriptor2, Decl(optionalAccessorsInInterface1.ts, 6, 65))
+ 
+     get?: () => any;
+->get : Symbol(MyPropertyDescriptor2.get, Decl(optionalAccessorsInInterface1.ts, 8, 33))
++>get : Symbol(get, Decl(optionalAccessorsInInterface1.ts, 8, 33))
+ 
+     set?: (v: any) => void;
+->set : Symbol(MyPropertyDescriptor2.set, Decl(optionalAccessorsInInterface1.ts, 9, 20))
++>set : Symbol(set, Decl(optionalAccessorsInInterface1.ts, 9, 20))
+ >v : Symbol(v, Decl(optionalAccessorsInInterface1.ts, 10, 11))
+ }
+ 

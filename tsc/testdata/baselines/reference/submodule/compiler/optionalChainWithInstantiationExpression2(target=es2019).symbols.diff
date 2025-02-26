@@ -1,0 +1,11 @@
+--- old.optionalChainWithInstantiationExpression2(target=es2019).symbols
++++ new.optionalChainWithInstantiationExpression2(target=es2019).symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(optionalChainWithInstantiationExpression2.ts, 0, 0))
+ 
+     c: number;
+->c : Symbol(A.c, Decl(optionalChainWithInstantiationExpression2.ts, 0, 21))
++>c : Symbol(c, Decl(optionalChainWithInstantiationExpression2.ts, 0, 21))
+ 
+     <T>(): T;
+ >T : Symbol(T, Decl(optionalChainWithInstantiationExpression2.ts, 2, 5))

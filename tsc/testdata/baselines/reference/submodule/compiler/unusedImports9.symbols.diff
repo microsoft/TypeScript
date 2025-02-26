@@ -1,0 +1,11 @@
+--- old.unusedImports9.symbols
++++ new.unusedImports9.symbols
+@@= skipped -8, +8 lines =@@
+ >Calculator : Symbol(Calculator, Decl(file1.ts, 0, 0))
+ 
+     handleChar() {}
+->handleChar : Symbol(Calculator.handleChar, Decl(file1.ts, 0, 25))
++>handleChar : Symbol(handleChar, Decl(file1.ts, 0, 25))
+ }
+ 
+ export function test() {

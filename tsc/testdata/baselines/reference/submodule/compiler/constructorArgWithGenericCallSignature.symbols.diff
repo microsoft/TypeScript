@@ -1,0 +1,26 @@
+--- old.constructorArgWithGenericCallSignature.symbols
++++ new.constructorArgWithGenericCallSignature.symbols
+@@= skipped -28, +28 lines =@@
+ var func: Test.MyFunc;
+ >func : Symbol(func, Decl(constructorArgWithGenericCallSignature.ts, 10, 3))
+ >Test : Symbol(Test, Decl(constructorArgWithGenericCallSignature.ts, 0, 0))
+->MyFunc : Symbol(Test.MyFunc, Decl(constructorArgWithGenericCallSignature.ts, 0, 13))
++>MyFunc : Symbol(MyFunc, Decl(constructorArgWithGenericCallSignature.ts, 0, 13))
+ 
+ Test.F(func); // OK
+->Test.F : Symbol(Test.F, Decl(constructorArgWithGenericCallSignature.ts, 6, 5))
++>Test.F : Symbol(F, Decl(constructorArgWithGenericCallSignature.ts, 6, 5))
+ >Test : Symbol(Test, Decl(constructorArgWithGenericCallSignature.ts, 0, 0))
+->F : Symbol(Test.F, Decl(constructorArgWithGenericCallSignature.ts, 6, 5))
++>F : Symbol(F, Decl(constructorArgWithGenericCallSignature.ts, 6, 5))
+ >func : Symbol(func, Decl(constructorArgWithGenericCallSignature.ts, 10, 3))
+ 
+ var test = new Test.MyClass(func); // Should be OK
+ >test : Symbol(test, Decl(constructorArgWithGenericCallSignature.ts, 12, 3))
+->Test.MyClass : Symbol(Test.MyClass, Decl(constructorArgWithGenericCallSignature.ts, 3, 5))
++>Test.MyClass : Symbol(MyClass, Decl(constructorArgWithGenericCallSignature.ts, 3, 5))
+ >Test : Symbol(Test, Decl(constructorArgWithGenericCallSignature.ts, 0, 0))
+->MyClass : Symbol(Test.MyClass, Decl(constructorArgWithGenericCallSignature.ts, 3, 5))
++>MyClass : Symbol(MyClass, Decl(constructorArgWithGenericCallSignature.ts, 3, 5))
+ >func : Symbol(func, Decl(constructorArgWithGenericCallSignature.ts, 10, 3))
+ 

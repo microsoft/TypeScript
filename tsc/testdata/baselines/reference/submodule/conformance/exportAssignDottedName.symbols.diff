@@ -1,0 +1,14 @@
+--- old.exportAssignDottedName.symbols
++++ new.exportAssignDottedName.symbols
+@@= skipped -4, +4 lines =@@
+ >foo1 : Symbol(foo1, Decl(foo2.ts, 0, 0))
+ 
+ export = foo1.x; // Ok
+->foo1.x : Symbol(foo1.x, Decl(foo1.ts, 0, 0))
++>foo1.x : Symbol(x, Decl(foo1.ts, 0, 0))
+ >foo1 : Symbol(foo1, Decl(foo2.ts, 0, 0))
+->x : Symbol(foo1.x, Decl(foo1.ts, 0, 0))
++>x : Symbol(x, Decl(foo1.ts, 0, 0))
+ 
+ === foo1.ts ===
+ export function x(){

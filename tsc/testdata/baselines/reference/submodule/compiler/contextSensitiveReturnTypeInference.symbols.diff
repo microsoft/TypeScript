@@ -1,0 +1,59 @@
+--- old.contextSensitiveReturnTypeInference.symbols
++++ new.contextSensitiveReturnTypeInference.symbols
+@@= skipped -6, +6 lines =@@
+ >IData : Symbol(IData, Decl(contextSensitiveReturnTypeInference.ts, 0, 0))
+ 
+   bar: boolean
+->bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
++>bar : Symbol(bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+ }
+ 
+ declare function test<TDependencies>(
+@@= skipped -42, +42 lines =@@
+ 
+     fn2: data.bar
+ >fn2 : Symbol(fn2, Decl(contextSensitiveReturnTypeInference.ts, 17, 40))
+->data.bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
++>data.bar : Symbol(bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+ >data : Symbol(data, Decl(contextSensitiveReturnTypeInference.ts, 16, 8))
+->bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
++>bar : Symbol(bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+ 
+   }),
+   DEPS
+@@= skipped -26, +26 lines =@@
+ 
+     fn2: data.bar
+ >fn2 : Symbol(fn2, Decl(contextSensitiveReturnTypeInference.ts, 25, 40))
+->data.bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
++>data.bar : Symbol(bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+ >data : Symbol(data, Decl(contextSensitiveReturnTypeInference.ts, 24, 21))
+->bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
++>bar : Symbol(bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+ 
+   }),
+   DEPS
+@@= skipped -25, +25 lines =@@
+ 
+     fn2: data.bar
+ >fn2 : Symbol(fn2, Decl(contextSensitiveReturnTypeInference.ts, 33, 24))
+->data.bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
++>data.bar : Symbol(bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+ >data : Symbol(data, Decl(contextSensitiveReturnTypeInference.ts, 32, 8))
+->bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
++>bar : Symbol(bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+ 
+   }),
+   DEPS
+@@= skipped -26, +26 lines =@@
+ 
+       fn2: data.bar
+ >fn2 : Symbol(fn2, Decl(contextSensitiveReturnTypeInference.ts, 42, 32))
+->data.bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
++>data.bar : Symbol(bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+ >data : Symbol(data, Decl(contextSensitiveReturnTypeInference.ts, 40, 8))
+->bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
++>bar : Symbol(bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+     }
+   },
+   DEPS

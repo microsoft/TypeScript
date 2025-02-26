@@ -1,0 +1,21 @@
+--- old.jsdocAccessEnumType.symbols
++++ new.jsdocAccessEnumType.symbols
+@@= skipped -2, +2 lines =@@
+ === /a.ts ===
+ export enum E { A }
+ >E : Symbol(E, Decl(a.ts, 0, 0))
+->A : Symbol(E.A, Decl(a.ts, 0, 15))
++>A : Symbol(A, Decl(a.ts, 0, 15))
+ 
+ === /b.js ===
+ import { E } from "./a";
+@@= skipped -9, +9 lines =@@
+ /** @type {E} */
+ const e = E.A;
+ >e : Symbol(e, Decl(b.js, 2, 5))
+->E.A : Symbol(E.A, Decl(a.ts, 0, 15))
++>E.A : Symbol(A, Decl(a.ts, 0, 15))
+ >E : Symbol(E, Decl(b.js, 0, 8))
+->A : Symbol(E.A, Decl(a.ts, 0, 15))
++>A : Symbol(A, Decl(a.ts, 0, 15))
+ 

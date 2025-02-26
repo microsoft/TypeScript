@@ -1,0 +1,11 @@
+--- old.privatePropertyInUnion.symbols
++++ new.privatePropertyInUnion.symbols
+@@= skipped -9, +9 lines =@@
+ >SyncableObject : Symbol(SyncableObject, Decl(privatePropertyInUnion.ts, 2, 28))
+ 
+   private foo: unknown;
+->foo : Symbol(SyncableObject.foo, Decl(privatePropertyInUnion.ts, 4, 22))
++>foo : Symbol(foo, Decl(privatePropertyInUnion.ts, 4, 22))
+ }
+ 
+ interface SyncableRef<T extends ISyncableObject> {}

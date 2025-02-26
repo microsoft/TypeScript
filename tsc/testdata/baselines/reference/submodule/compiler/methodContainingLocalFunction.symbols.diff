@@ -1,0 +1,47 @@
+--- old.methodContainingLocalFunction.symbols
++++ new.methodContainingLocalFunction.symbols
+@@= skipped -6, +6 lines =@@
+ >T : Symbol(T, Decl(methodContainingLocalFunction.ts, 1, 20))
+ 
+     public exhibitBug() {
+->exhibitBug : Symbol(BugExhibition.exhibitBug, Decl(methodContainingLocalFunction.ts, 1, 24))
++>exhibitBug : Symbol(exhibitBug, Decl(methodContainingLocalFunction.ts, 1, 24))
+ 
+         function localFunction() { }
+ >localFunction : Symbol(localFunction, Decl(methodContainingLocalFunction.ts, 2, 25))
+@@= skipped -19, +19 lines =@@
+ >T : Symbol(T, Decl(methodContainingLocalFunction.ts, 9, 21))
+ 
+     private static get exhibitBug() {
+->exhibitBug : Symbol(BugExhibition2.exhibitBug, Decl(methodContainingLocalFunction.ts, 9, 25))
++>exhibitBug : Symbol(exhibitBug, Decl(methodContainingLocalFunction.ts, 9, 25))
+ 
+         function localFunction() { }
+ >localFunction : Symbol(localFunction, Decl(methodContainingLocalFunction.ts, 10, 37))
+@@= skipped -21, +21 lines =@@
+ >T : Symbol(T, Decl(methodContainingLocalFunction.ts, 18, 21))
+ 
+     public exhibitBug() {
+->exhibitBug : Symbol(BugExhibition3.exhibitBug, Decl(methodContainingLocalFunction.ts, 18, 25))
++>exhibitBug : Symbol(exhibitBug, Decl(methodContainingLocalFunction.ts, 18, 25))
+ 
+         function localGenericFunction<U>(u?: U) { }
+ >localGenericFunction : Symbol(localGenericFunction, Decl(methodContainingLocalFunction.ts, 19, 25))
+@@= skipped -21, +21 lines =@@
+ >C : Symbol(C, Decl(methodContainingLocalFunction.ts, 24, 1))
+ 
+     exhibit() {
+->exhibit : Symbol(C.exhibit, Decl(methodContainingLocalFunction.ts, 26, 9))
++>exhibit : Symbol(exhibit, Decl(methodContainingLocalFunction.ts, 26, 9))
+ 
+         var funcExpr = <U>(u?: U) => { };
+ >funcExpr : Symbol(funcExpr, Decl(methodContainingLocalFunction.ts, 28, 11))
+@@= skipped -39, +39 lines =@@
+ >E : Symbol(E, Decl(methodContainingLocalFunction.ts, 40, 1))
+ 
+     A = (() => {
+->A : Symbol(E.A, Decl(methodContainingLocalFunction.ts, 42, 8))
++>A : Symbol(A, Decl(methodContainingLocalFunction.ts, 42, 8))
+ 
+         function localFunction() { }
+ >localFunction : Symbol(localFunction, Decl(methodContainingLocalFunction.ts, 43, 16))

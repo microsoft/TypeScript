@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/pathMappingBasedModuleResolution7_classic.ts] ////
+
+=== c:/root/src/file1.ts ===
+import {x} from "./project/file2";
+>x : Symbol(x, Decl(file1.ts, 0, 8))
+
+import {y} from "module3";
+>y : Symbol(y, Decl(file1.ts, 1, 8))
+
+declare function use(x: string);
+>use : Symbol(use, Decl(file1.ts, 1, 26))
+>x : Symbol(x, Decl(file1.ts, 3, 21))
+
+use(x.toFixed());
+>use : Symbol(use, Decl(file1.ts, 1, 26))
+>x : Symbol(x, Decl(file1.ts, 0, 8))
+
+use(y.toFixed());
+>use : Symbol(use, Decl(file1.ts, 1, 26))
+>y : Symbol(y, Decl(file1.ts, 1, 8))
+
+=== c:/root/src/file3.d.ts ===
+export let x: number;
+>x : Symbol(x, Decl(file3.d.ts, 0, 10))
+

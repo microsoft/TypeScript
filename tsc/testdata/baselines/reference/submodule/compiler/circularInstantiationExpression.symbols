@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/circularInstantiationExpression.ts] ////
+
+=== circularInstantiationExpression.ts ===
+declare function foo<T>(t: T): typeof foo<T>;
+>foo : Symbol(foo, Decl(circularInstantiationExpression.ts, 0, 0))
+>T : Symbol(T, Decl(circularInstantiationExpression.ts, 0, 21))
+>t : Symbol(t, Decl(circularInstantiationExpression.ts, 0, 24))
+>T : Symbol(T, Decl(circularInstantiationExpression.ts, 0, 21))
+>foo : Symbol(foo, Decl(circularInstantiationExpression.ts, 0, 0))
+>T : Symbol(T, Decl(circularInstantiationExpression.ts, 0, 21))
+
+foo("");
+>foo : Symbol(foo, Decl(circularInstantiationExpression.ts, 0, 0))
+

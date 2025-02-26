@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/jsdoc/jsdocImportType.ts] ////
+
+=== use.js ===
+/// <reference path='./types.d.ts'/>
+/** @typedef {import("./mod1")} C
+ * @type {C} */
+var c;
+>c : Symbol(c, Decl(use.js, 3, 3))
+
+c.chunk;
+>c : Symbol(c, Decl(use.js, 3, 3))
+
+const D = require("./mod1");
+>D : Symbol(D, Decl(use.js, 6, 5))
+>require : Symbol(require, Decl(types.d.ts, 0, 0))
+
+/** @type {D} */
+var d;
+>d : Symbol(d, Decl(use.js, 8, 3))
+
+d.chunk;
+>d : Symbol(d, Decl(use.js, 8, 3))
+
+=== types.d.ts ===
+declare function require(name: string): any;
+>require : Symbol(require, Decl(types.d.ts, 0, 0))
+>name : Symbol(name, Decl(types.d.ts, 0, 25))
+
+declare var exports: any;
+>exports : Symbol(exports, Decl(types.d.ts, 1, 11))
+
+declare var module: { exports: any };
+>module : Symbol(module, Decl(types.d.ts, 2, 11))
+>exports : Symbol(exports, Decl(types.d.ts, 2, 21))
+

@@ -1,0 +1,10 @@
+--- old.asyncGetter_es5.symbols
++++ new.asyncGetter_es5.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(asyncGetter_es5.ts, 0, 0))
+ 
+   async get foo() {
+->foo : Symbol(C.foo, Decl(asyncGetter_es5.ts, 0, 9))
++>foo : Symbol(foo, Decl(asyncGetter_es5.ts, 0, 9))
+   }
+ }

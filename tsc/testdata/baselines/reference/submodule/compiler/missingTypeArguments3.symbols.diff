@@ -1,0 +1,144 @@
+--- old.missingTypeArguments3.symbols
++++ new.missingTypeArguments3.symbols
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(missingTypeArguments3.ts, 2, 25))
+ 
+         OrderByDescending(keySelector?: string): OrderedEnumerable<T>;
+->OrderByDescending : Symbol(Enumerable.OrderByDescending, Decl(missingTypeArguments3.ts, 2, 29))
++>OrderByDescending : Symbol(OrderByDescending, Decl(missingTypeArguments3.ts, 2, 29))
+ >keySelector : Symbol(keySelector, Decl(missingTypeArguments3.ts, 3, 26))
+ >OrderedEnumerable : Symbol(OrderedEnumerable, Decl(missingTypeArguments3.ts, 7, 5))
+ >T : Symbol(T, Decl(missingTypeArguments3.ts, 2, 25))
+ 
+         GroupBy<TKey>(keySelector: (element: T) => TKey): Enumerable<Grouping<TKey, T>>;
+->GroupBy : Symbol(Enumerable.GroupBy, Decl(missingTypeArguments3.ts, 3, 70), Decl(missingTypeArguments3.ts, 4, 88))
++>GroupBy : Symbol(GroupBy, Decl(missingTypeArguments3.ts, 3, 70), Decl(missingTypeArguments3.ts, 4, 88))
+ >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 4, 16))
+ >keySelector : Symbol(keySelector, Decl(missingTypeArguments3.ts, 4, 22))
+ >element : Symbol(element, Decl(missingTypeArguments3.ts, 4, 36))
+@@= skipped -18, +18 lines =@@
+ >T : Symbol(T, Decl(missingTypeArguments3.ts, 2, 25))
+ 
+         GroupBy<TKey, TElement>(keySelector: (element: T) => TKey, elementSelector: (element: T) => TElement): Enumerable<Grouping<TKey, TElement>>;
+->GroupBy : Symbol(Enumerable.GroupBy, Decl(missingTypeArguments3.ts, 3, 70), Decl(missingTypeArguments3.ts, 4, 88))
++>GroupBy : Symbol(GroupBy, Decl(missingTypeArguments3.ts, 3, 70), Decl(missingTypeArguments3.ts, 4, 88))
+ >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 5, 16))
+ >TElement : Symbol(TElement, Decl(missingTypeArguments3.ts, 5, 21))
+ >keySelector : Symbol(keySelector, Decl(missingTypeArguments3.ts, 5, 32))
+@@= skipped -17, +17 lines =@@
+ >TElement : Symbol(TElement, Decl(missingTypeArguments3.ts, 5, 21))
+ 
+         ToDictionary<TKey>(keySelector: (element: T) => TKey): Dictionary<TKey, T>;
+->ToDictionary : Symbol(Enumerable.ToDictionary, Decl(missingTypeArguments3.ts, 5, 148))
++>ToDictionary : Symbol(ToDictionary, Decl(missingTypeArguments3.ts, 5, 148))
+ >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 6, 21))
+ >keySelector : Symbol(keySelector, Decl(missingTypeArguments3.ts, 6, 27))
+ >element : Symbol(element, Decl(missingTypeArguments3.ts, 6, 41))
+@@= skipped -18, +18 lines =@@
+ >T : Symbol(T, Decl(missingTypeArguments3.ts, 9, 32))
+ 
+         ThenBy<TCompare>(keySelector: (element: T) => TCompare): OrderedEnumerable<T>; // used to incorrectly think this was missing a type argument
+->ThenBy : Symbol(OrderedEnumerable.ThenBy, Decl(missingTypeArguments3.ts, 9, 58))
++>ThenBy : Symbol(ThenBy, Decl(missingTypeArguments3.ts, 9, 58))
+ >TCompare : Symbol(TCompare, Decl(missingTypeArguments3.ts, 10, 15))
+ >keySelector : Symbol(keySelector, Decl(missingTypeArguments3.ts, 10, 25))
+ >element : Symbol(element, Decl(missingTypeArguments3.ts, 10, 39))
+@@= skipped -18, +18 lines =@@
+ >TElement : Symbol(TElement, Decl(missingTypeArguments3.ts, 13, 28))
+ 
+         Key(): TKey;
+->Key : Symbol(Grouping.Key, Decl(missingTypeArguments3.ts, 13, 69))
++>Key : Symbol(Key, Decl(missingTypeArguments3.ts, 13, 69))
+ >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 13, 23))
+     }
+ 
+@@= skipped -10, +10 lines =@@
+ >TElement : Symbol(TElement, Decl(missingTypeArguments3.ts, 17, 26))
+ 
+         Count(): number;
+->Count : Symbol(Lookup.Count, Decl(missingTypeArguments3.ts, 17, 38))
++>Count : Symbol(Count, Decl(missingTypeArguments3.ts, 17, 38))
+ 
+         Get(key): Enumerable<any>;
+->Get : Symbol(Lookup.Get, Decl(missingTypeArguments3.ts, 18, 24))
++>Get : Symbol(Get, Decl(missingTypeArguments3.ts, 18, 24))
+ >key : Symbol(key, Decl(missingTypeArguments3.ts, 19, 12))
+ >Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+ 
+         Contains(key): boolean;
+->Contains : Symbol(Lookup.Contains, Decl(missingTypeArguments3.ts, 19, 34))
++>Contains : Symbol(Contains, Decl(missingTypeArguments3.ts, 19, 34))
+ >key : Symbol(key, Decl(missingTypeArguments3.ts, 20, 17))
+ 
+         ToEnumerable(): Enumerable<Grouping<TKey, any>>;
+->ToEnumerable : Symbol(Lookup.ToEnumerable, Decl(missingTypeArguments3.ts, 20, 31))
++>ToEnumerable : Symbol(ToEnumerable, Decl(missingTypeArguments3.ts, 20, 31))
+ >Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+ >Grouping : Symbol(Grouping, Decl(missingTypeArguments3.ts, 11, 5))
+ >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 17, 21))
+@@= skipped -24, +24 lines =@@
+ >TValue : Symbol(TValue, Decl(missingTypeArguments3.ts, 24, 30))
+ 
+         Add(key: TKey, value: TValue): void;
+->Add : Symbol(Dictionary.Add, Decl(missingTypeArguments3.ts, 24, 40))
++>Add : Symbol(Add, Decl(missingTypeArguments3.ts, 24, 40))
+ >key : Symbol(key, Decl(missingTypeArguments3.ts, 25, 12))
+ >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 24, 25))
+ >value : Symbol(value, Decl(missingTypeArguments3.ts, 25, 22))
+ >TValue : Symbol(TValue, Decl(missingTypeArguments3.ts, 24, 30))
+ 
+         Get(ke: TKey): TValue;
+->Get : Symbol(Dictionary.Get, Decl(missingTypeArguments3.ts, 25, 44))
++>Get : Symbol(Get, Decl(missingTypeArguments3.ts, 25, 44))
+ >ke : Symbol(ke, Decl(missingTypeArguments3.ts, 26, 12))
+ >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 24, 25))
+ >TValue : Symbol(TValue, Decl(missingTypeArguments3.ts, 24, 30))
+ 
+         Set(key: TKey, value: TValue): boolean;
+->Set : Symbol(Dictionary.Set, Decl(missingTypeArguments3.ts, 26, 30))
++>Set : Symbol(Set, Decl(missingTypeArguments3.ts, 26, 30))
+ >key : Symbol(key, Decl(missingTypeArguments3.ts, 27, 12))
+ >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 24, 25))
+ >value : Symbol(value, Decl(missingTypeArguments3.ts, 27, 22))
+ >TValue : Symbol(TValue, Decl(missingTypeArguments3.ts, 24, 30))
+ 
+         Contains(key: TKey): boolean;
+->Contains : Symbol(Dictionary.Contains, Decl(missingTypeArguments3.ts, 27, 47))
++>Contains : Symbol(Contains, Decl(missingTypeArguments3.ts, 27, 47))
+ >key : Symbol(key, Decl(missingTypeArguments3.ts, 28, 17))
+ >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 24, 25))
+ 
+         Clear(): void;
+->Clear : Symbol(Dictionary.Clear, Decl(missingTypeArguments3.ts, 28, 37))
++>Clear : Symbol(Clear, Decl(missingTypeArguments3.ts, 28, 37))
+ 
+         Remove(key: TKey): void;
+->Remove : Symbol(Dictionary.Remove, Decl(missingTypeArguments3.ts, 29, 22))
++>Remove : Symbol(Remove, Decl(missingTypeArguments3.ts, 29, 22))
+ >key : Symbol(key, Decl(missingTypeArguments3.ts, 30, 15))
+ >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 24, 25))
+ 
+         Count(): number;
+->Count : Symbol(Dictionary.Count, Decl(missingTypeArguments3.ts, 30, 32))
++>Count : Symbol(Count, Decl(missingTypeArguments3.ts, 30, 32))
+ 
+         ToEnumerable(): Enumerable<KeyValuePair<TKey, TValue>>;
+->ToEnumerable : Symbol(Dictionary.ToEnumerable, Decl(missingTypeArguments3.ts, 31, 24))
++>ToEnumerable : Symbol(ToEnumerable, Decl(missingTypeArguments3.ts, 31, 24))
+ >Enumerable : Symbol(Enumerable, Decl(missingTypeArguments3.ts, 0, 21))
+ >KeyValuePair : Symbol(KeyValuePair, Decl(missingTypeArguments3.ts, 33, 5))
+ >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 24, 25))
+@@= skipped -49, +49 lines =@@
+ >TValue : Symbol(TValue, Decl(missingTypeArguments3.ts, 35, 32))
+ 
+         Key: TKey;
+->Key : Symbol(KeyValuePair.Key, Decl(missingTypeArguments3.ts, 35, 42))
++>Key : Symbol(Key, Decl(missingTypeArguments3.ts, 35, 42))
+ >TKey : Symbol(TKey, Decl(missingTypeArguments3.ts, 35, 27))
+ 
+         Value: TValue;
+->Value : Symbol(KeyValuePair.Value, Decl(missingTypeArguments3.ts, 36, 18))
++>Value : Symbol(Value, Decl(missingTypeArguments3.ts, 36, 18))
+ >TValue : Symbol(TValue, Decl(missingTypeArguments3.ts, 35, 32))
+     }
+ }

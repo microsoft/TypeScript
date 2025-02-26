@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts] ////
+
+=== homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts ===
+type HandleOptions<O> = {
+>HandleOptions : Symbol(HandleOptions, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 0, 0))
+>O : Symbol(O, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 0, 19))
+
+    [I in keyof O]: {
+>I : Symbol(I, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 1, 5))
+>O : Symbol(O, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 0, 19))
+
+        value: O[I];
+>value : Symbol(value, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 1, 21))
+>O : Symbol(O, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 0, 19))
+>I : Symbol(I, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 1, 5))
+
+    };
+};
+
+declare function func1<
+>func1 : Symbol(func1, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 4, 2))
+
+    T extends Record<PropertyKey, readonly any[]>,
+>T : Symbol(T, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 6, 23))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+
+>(fields: {
+>fields : Symbol(fields, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 8, 2))
+
+    [K in keyof T]: {
+>K : Symbol(K, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 9, 5))
+>T : Symbol(T, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 6, 23))
+
+        label: string;
+>label : Symbol(label, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 9, 21))
+
+        options: [...HandleOptions<T[K]>];
+>options : Symbol(options, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 10, 22))
+>HandleOptions : Symbol(HandleOptions, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 0, 0))
+>T : Symbol(T, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 6, 23))
+>K : Symbol(K, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 9, 5))
+
+    };
+}): T;
+>T : Symbol(T, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 6, 23))
+
+const result = func1({
+>result : Symbol(result, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 15, 5))
+>func1 : Symbol(func1, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 4, 2))
+
+    prop: {
+>prop : Symbol(prop, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 15, 22))
+
+        label: "first",
+>label : Symbol(label, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 16, 11))
+
+        options: [
+>options : Symbol(options, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 17, 23))
+            {
+                value: 123,
+>value : Symbol(value, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 19, 13))
+
+            },
+            {
+                value: "foo",
+>value : Symbol(value, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 22, 13))
+
+            },
+        ],
+    },
+    other: {
+>other : Symbol(other, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 26, 6))
+
+        label: "second",
+>label : Symbol(label, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 27, 12))
+
+        options: [
+>options : Symbol(options, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 28, 24))
+            {
+                value: "bar",
+>value : Symbol(value, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 30, 13))
+
+            },
+            {
+                value: true,
+>value : Symbol(value, Decl(homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts, 33, 13))
+
+            },
+        ],
+    },
+});
+

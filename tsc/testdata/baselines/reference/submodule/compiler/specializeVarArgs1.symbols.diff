@@ -1,0 +1,21 @@
+--- old.specializeVarArgs1.symbols
++++ new.specializeVarArgs1.symbols
+@@= skipped -15, +15 lines =@@
+ {
+ 
+     push(...values: T[]);
+->push : Symbol(ObservableArray.push, Decl(specializeVarArgs1.ts, 6, 1))
++>push : Symbol(push, Decl(specializeVarArgs1.ts, 6, 1))
+ >values : Symbol(values, Decl(specializeVarArgs1.ts, 8, 9))
+ >T : Symbol(T, Decl(specializeVarArgs1.ts, 4, 26))
+ 
+@@= skipped -21, +21 lines =@@
+ >observableArray : Symbol(observableArray, Decl(specializeVarArgs1.ts, 10, 1))
+ 
+ a.push('Some Value');
+->a.push : Symbol(ObservableArray.push, Decl(specializeVarArgs1.ts, 6, 1))
++>a.push : Symbol(push, Decl(specializeVarArgs1.ts, 6, 1))
+ >a : Symbol(a, Decl(specializeVarArgs1.ts, 18, 3))
+->push : Symbol(ObservableArray.push, Decl(specializeVarArgs1.ts, 6, 1))
++>push : Symbol(push, Decl(specializeVarArgs1.ts, 6, 1))
+ 

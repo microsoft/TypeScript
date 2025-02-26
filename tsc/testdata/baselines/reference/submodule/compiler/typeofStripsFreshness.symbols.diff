@@ -1,0 +1,11 @@
+--- old.typeofStripsFreshness.symbols
++++ new.typeofStripsFreshness.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(typeofStripsFreshness.ts, 0, 21))
+ 
+     elems: T[];
+->elems : Symbol(Collection.elems, Decl(typeofStripsFreshness.ts, 0, 25))
++>elems : Symbol(elems, Decl(typeofStripsFreshness.ts, 0, 25))
+ >T : Symbol(T, Decl(typeofStripsFreshness.ts, 0, 21))
+ }
+ interface CollectionStatic {

@@ -1,0 +1,10 @@
+--- old.parserGetAccessorWithTypeParameters1.symbols
++++ new.parserGetAccessorWithTypeParameters1.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(parserGetAccessorWithTypeParameters1.ts, 0, 0))
+ 
+   get foo<T>() { }
+->foo : Symbol(C.foo, Decl(parserGetAccessorWithTypeParameters1.ts, 0, 9))
++>foo : Symbol(foo, Decl(parserGetAccessorWithTypeParameters1.ts, 0, 9))
+ >T : Symbol(T, Decl(parserGetAccessorWithTypeParameters1.ts, 1, 10))
+ }

@@ -1,0 +1,27 @@
+--- old.jsdocImportTypeReferenceToClassAlias.symbols
++++ new.jsdocImportTypeReferenceToClassAlias.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(mod1.js, 0, 0))
+ 
+     s() { }
+->s : Symbol(C.s, Decl(mod1.js, 0, 9))
++>s : Symbol(s, Decl(mod1.js, 0, 9))
+ }
+ module.exports.C = C
+->module.exports.C : Symbol(C, Decl(mod1.js, 2, 1))
+->module.exports : Symbol(C, Decl(mod1.js, 2, 1))
+->module : Symbol(module, Decl(mod1.js, 2, 1))
+->exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
+->C : Symbol(C, Decl(mod1.js, 2, 1))
+ >C : Symbol(C, Decl(mod1.js, 0, 0))
+ 
+ === test.js ===
+@@= skipped -18, +13 lines =@@
+ >c : Symbol(c, Decl(test.js, 2, 14))
+ 
+     c.s
+->c.s : Symbol(C.s, Decl(mod1.js, 0, 9))
+ >c : Symbol(c, Decl(test.js, 2, 14))
+->s : Symbol(C.s, Decl(mod1.js, 0, 9))
+ }
+ 

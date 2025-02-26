@@ -1,0 +1,32 @@
+--- old.jsNoImplicitAnyNoCascadingReferenceErrors.symbols
++++ new.jsNoImplicitAnyNoCascadingReferenceErrors.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === somelib.d.ts ===
+ export declare class Foo<T> {
+->Foo : Symbol(Foo, Decl(somelib.d.ts, --, --))
+->T : Symbol(T, Decl(somelib.d.ts, --, --))
++>Foo : Symbol(Foo, Decl(somelib.d.ts, 0, 0))
++>T : Symbol(T, Decl(somelib.d.ts, 0, 25))
+ 
+     prop: T;
+->prop : Symbol(Foo.prop, Decl(somelib.d.ts, --, --))
+->T : Symbol(T, Decl(somelib.d.ts, --, --))
++>prop : Symbol(prop, Decl(somelib.d.ts, 0, 29))
++>T : Symbol(T, Decl(somelib.d.ts, 0, 25))
+ }
+ === index.js ===
+ import {Foo} from "./somelib";
+@@= skipped -17, +17 lines =@@
+ 
+     constructor() {
+         super();
+->super : Symbol(Foo, Decl(somelib.d.ts, --, --))
+-
+         this.prop.alpha = 12;
+->this.prop : Symbol(Foo.prop, Decl(somelib.d.ts, --, --))
+ >this : Symbol(MyFoo, Decl(index.js, 0, 30))
+->prop : Symbol(Foo.prop, Decl(somelib.d.ts, --, --))
+     }
+ }
+ 

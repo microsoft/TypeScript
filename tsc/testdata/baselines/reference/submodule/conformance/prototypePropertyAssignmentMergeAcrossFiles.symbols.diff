@@ -1,0 +1,22 @@
+--- old.prototypePropertyAssignmentMergeAcrossFiles.symbols
++++ new.prototypePropertyAssignmentMergeAcrossFiles.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 0))
+ 
+     this.a = 1
+->this.a : Symbol(C.a, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 14))
+->this : Symbol(C, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 0))
+->a : Symbol(C.a, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 14))
+ }
+ 
+ === other.js ===
+ C.prototype.foo = function() { return this.a }
+->C.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
++>C.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+ >C : Symbol(C, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 0))
+->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+->this.a : Symbol(C.a, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 14))
+->this : Symbol(C, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 0))
+->a : Symbol(C.a, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 14))
++>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+ 

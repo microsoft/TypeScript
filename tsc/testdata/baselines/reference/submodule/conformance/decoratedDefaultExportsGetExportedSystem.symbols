@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/es6/moduleExportsSystem/decoratedDefaultExportsGetExportedSystem.ts] ////
+
+=== a.ts ===
+var decorator: ClassDecorator;
+>decorator : Symbol(decorator, Decl(a.ts, 0, 3))
+>ClassDecorator : Symbol(ClassDecorator)
+
+@decorator
+>decorator : Symbol(decorator, Decl(a.ts, 0, 3))
+
+export default class Foo {}
+>Foo : Symbol(default, Decl(a.ts, 0, 30))
+
+=== b.ts ===
+var decorator: ClassDecorator;
+>decorator : Symbol(decorator, Decl(b.ts, 0, 3))
+>ClassDecorator : Symbol(ClassDecorator)
+
+@decorator
+>decorator : Symbol(decorator, Decl(b.ts, 0, 3))
+
+export default class {}

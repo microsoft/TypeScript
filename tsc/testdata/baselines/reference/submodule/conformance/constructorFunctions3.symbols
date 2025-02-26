@@ -1,0 +1,83 @@
+//// [tests/cases/conformance/salsa/constructorFunctions3.ts] ////
+
+=== a.js ===
+function Instance() {
+>Instance : Symbol(Instance, Decl(a.js, 0, 0))
+
+    this.i = 'simple'
+}
+var i = new Instance();
+>i : Symbol(i, Decl(a.js, 3, 3))
+>Instance : Symbol(Instance, Decl(a.js, 0, 0))
+
+Instance;
+>Instance : Symbol(Instance, Decl(a.js, 0, 0))
+
+i;
+>i : Symbol(i, Decl(a.js, 3, 3))
+
+function StaticToo() {
+>StaticToo : Symbol(StaticToo, Decl(a.js, 5, 2))
+
+    this.i = 'more complex'
+}
+StaticToo.property = 'yep'
+>StaticToo.property : Symbol(property, Decl(a.js, 9, 1))
+>StaticToo : Symbol(StaticToo, Decl(a.js, 5, 2))
+>property : Symbol(property, Decl(a.js, 9, 1))
+
+var s = new StaticToo();
+>s : Symbol(s, Decl(a.js, 11, 3))
+>StaticToo : Symbol(StaticToo, Decl(a.js, 5, 2))
+
+s;
+>s : Symbol(s, Decl(a.js, 11, 3))
+
+StaticToo;
+>StaticToo : Symbol(StaticToo, Decl(a.js, 5, 2))
+
+// Both!
+function A () {
+>A : Symbol(A, Decl(a.js, 13, 10))
+
+    this.x = 1
+    /** @type {1} */
+    this.second = 1
+}
+/** @param {number} n */
+A.prototype.z = function f(n) {
+>A.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(a.js, 13, 10))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(a.js, 22, 15))
+>n : Symbol(n, Decl(a.js, 22, 27))
+
+    return n + this.x
+>n : Symbol(n, Decl(a.js, 22, 27))
+}
+/** @param {number} m */
+A.t = function g(m) {
+>A.t : Symbol(t, Decl(a.js, 24, 1))
+>A : Symbol(A, Decl(a.js, 13, 10))
+>t : Symbol(t, Decl(a.js, 24, 1))
+>g : Symbol(g, Decl(a.js, 26, 5))
+>m : Symbol(m, Decl(a.js, 26, 17))
+
+    return m + 1
+>m : Symbol(m, Decl(a.js, 26, 17))
+}
+var a = new A()
+>a : Symbol(a, Decl(a.js, 29, 3))
+>A : Symbol(A, Decl(a.js, 13, 10))
+
+a.z(3)
+>a : Symbol(a, Decl(a.js, 29, 3))
+
+A.t(2)
+>A.t : Symbol(t, Decl(a.js, 24, 1))
+>A : Symbol(A, Decl(a.js, 13, 10))
+>t : Symbol(t, Decl(a.js, 24, 1))
+
+a.second = 1
+>a : Symbol(a, Decl(a.js, 29, 3))
+

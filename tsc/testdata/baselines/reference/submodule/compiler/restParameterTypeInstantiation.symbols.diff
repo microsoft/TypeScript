@@ -1,0 +1,27 @@
+--- old.restParameterTypeInstantiation.symbols
++++ new.restParameterTypeInstantiation.symbols
+@@= skipped -7, +7 lines =@@
+ >TG : Symbol(TG, Decl(restParameterTypeInstantiation.ts, 2, 22))
+ 
+   f: string
+->f : Symbol(TestGeneric.f, Decl(restParameterTypeInstantiation.ts, 2, 27))
++>f : Symbol(f, Decl(restParameterTypeInstantiation.ts, 2, 27))
+ 
+   g: TG
+->g : Symbol(TestGeneric.g, Decl(restParameterTypeInstantiation.ts, 3, 11))
++>g : Symbol(g, Decl(restParameterTypeInstantiation.ts, 3, 11))
+ >TG : Symbol(TG, Decl(restParameterTypeInstantiation.ts, 2, 22))
+ }
+ 
+@@= skipped -21, +21 lines =@@
+ 
+ const result: number = removeF<number>({ f: '', g: 3 }).g
+ >result : Symbol(result, Decl(restParameterTypeInstantiation.ts, 11, 5))
+->removeF<number>({ f: '', g: 3 }).g : Symbol(TestGeneric.g, Decl(restParameterTypeInstantiation.ts, 3, 11))
++>removeF<number>({ f: '', g: 3 }).g : Symbol(g, Decl(restParameterTypeInstantiation.ts, 3, 11))
+ >removeF : Symbol(removeF, Decl(restParameterTypeInstantiation.ts, 7, 5))
+ >f : Symbol(f, Decl(restParameterTypeInstantiation.ts, 11, 40))
+ >g : Symbol(g, Decl(restParameterTypeInstantiation.ts, 11, 47))
+->g : Symbol(TestGeneric.g, Decl(restParameterTypeInstantiation.ts, 3, 11))
++>g : Symbol(g, Decl(restParameterTypeInstantiation.ts, 3, 11))
+ 

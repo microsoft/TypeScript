@@ -1,0 +1,16 @@
+--- old.renamingDestructuredPropertyInFunctionType.symbols
++++ new.renamingDestructuredPropertyInFunctionType.symbols
+@@= skipped -170, +170 lines =@@
+ >I : Symbol(I, Decl(renamingDestructuredPropertyInFunctionType.ts, 32, 41))
+ 
+   method1(arg: number): any; // OK
+->method1 : Symbol(I.method1, Decl(renamingDestructuredPropertyInFunctionType.ts, 34, 13))
++>method1 : Symbol(method1, Decl(renamingDestructuredPropertyInFunctionType.ts, 34, 13))
+ >arg : Symbol(arg, Decl(renamingDestructuredPropertyInFunctionType.ts, 35, 10))
+ 
+   method2({ a: string }): any; // Error
+->method2 : Symbol(I.method2, Decl(renamingDestructuredPropertyInFunctionType.ts, 35, 28))
++>method2 : Symbol(method2, Decl(renamingDestructuredPropertyInFunctionType.ts, 35, 28))
+ >a : Symbol(a)
+ >string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 36, 11))
+ 

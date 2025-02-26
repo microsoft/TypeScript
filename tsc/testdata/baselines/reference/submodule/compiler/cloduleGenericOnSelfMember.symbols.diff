@@ -1,0 +1,21 @@
+--- old.cloduleGenericOnSelfMember.symbols
++++ new.cloduleGenericOnSelfMember.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(cloduleGenericOnSelfMember.ts, 0, 18))
+ 
+     field: T;
+->field : Symbol(ServiceBase.field, Decl(cloduleGenericOnSelfMember.ts, 0, 22))
++>field : Symbol(field, Decl(cloduleGenericOnSelfMember.ts, 0, 22))
+ >T : Symbol(T, Decl(cloduleGenericOnSelfMember.ts, 0, 18))
+ }
+ class Service extends ServiceBase<typeof Service.Base> {
+ >Service : Symbol(Service, Decl(cloduleGenericOnSelfMember.ts, 2, 1), Decl(cloduleGenericOnSelfMember.ts, 4, 1))
+ >ServiceBase : Symbol(ServiceBase, Decl(cloduleGenericOnSelfMember.ts, 0, 0))
+->Service.Base : Symbol(Service.Base, Decl(cloduleGenericOnSelfMember.ts, 6, 16))
++>Service.Base : Symbol(Base, Decl(cloduleGenericOnSelfMember.ts, 6, 16))
+ >Service : Symbol(Service, Decl(cloduleGenericOnSelfMember.ts, 2, 1), Decl(cloduleGenericOnSelfMember.ts, 4, 1))
+->Base : Symbol(Service.Base, Decl(cloduleGenericOnSelfMember.ts, 6, 16))
++>Base : Symbol(Base, Decl(cloduleGenericOnSelfMember.ts, 6, 16))
+ }
+ namespace Service {
+ >Service : Symbol(Service, Decl(cloduleGenericOnSelfMember.ts, 2, 1), Decl(cloduleGenericOnSelfMember.ts, 4, 1))

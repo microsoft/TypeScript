@@ -1,0 +1,38 @@
+--- old.typeGuardsDefeat.symbols
++++ new.typeGuardsDefeat.symbols
+@@= skipped -19, +19 lines =@@
+ >f : Symbol(f, Decl(typeGuardsDefeat.ts, 2, 34))
+ 
+         return x.length; // string
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsDefeat.ts, 2, 13))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+     }
+     else {
+         return x++; // number
+@@= skipped -17, +17 lines =@@
+ >x : Symbol(x, Decl(typeGuardsDefeat.ts, 14, 14))
+ 
+         return x.length; // string
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsDefeat.ts, 14, 14))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+     }
+     else {
+         var f = function () {
+@@= skipped -28, +28 lines =@@
+ >x : Symbol(x, Decl(typeGuardsDefeat.ts, 26, 14))
+ 
+         return x.length; // string
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsDefeat.ts, 26, 14))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+     }
+     else {
+         var f = () => x * x;

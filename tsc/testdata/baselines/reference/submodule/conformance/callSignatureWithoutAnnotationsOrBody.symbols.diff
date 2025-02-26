@@ -1,0 +1,23 @@
+--- old.callSignatureWithoutAnnotationsOrBody.symbols
++++ new.callSignatureWithoutAnnotationsOrBody.symbols
+@@= skipped -15, +15 lines =@@
+ 
+     ();
+     f();
+->f : Symbol(I.f, Decl(callSignatureWithoutAnnotationsOrBody.ts, 6, 7))
++>f : Symbol(f, Decl(callSignatureWithoutAnnotationsOrBody.ts, 6, 7))
+ }
+ var i: I;
+ >i : Symbol(i, Decl(callSignatureWithoutAnnotationsOrBody.ts, 9, 3))
+@@= skipped -12, +12 lines =@@
+ 
+ var r3 = i.f();
+ >r3 : Symbol(r3, Decl(callSignatureWithoutAnnotationsOrBody.ts, 11, 3))
+->i.f : Symbol(I.f, Decl(callSignatureWithoutAnnotationsOrBody.ts, 6, 7))
++>i.f : Symbol(f, Decl(callSignatureWithoutAnnotationsOrBody.ts, 6, 7))
+ >i : Symbol(i, Decl(callSignatureWithoutAnnotationsOrBody.ts, 9, 3))
+->f : Symbol(I.f, Decl(callSignatureWithoutAnnotationsOrBody.ts, 6, 7))
++>f : Symbol(f, Decl(callSignatureWithoutAnnotationsOrBody.ts, 6, 7))
+ 
+ var a: {
+ >a : Symbol(a, Decl(callSignatureWithoutAnnotationsOrBody.ts, 13, 3))

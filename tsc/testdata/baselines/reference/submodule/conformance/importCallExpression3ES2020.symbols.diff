@@ -1,0 +1,31 @@
+--- old.importCallExpression3ES2020.symbols
++++ new.importCallExpression3ES2020.symbols
+@@= skipped -4, +4 lines =@@
+ >B : Symbol(B, Decl(0.ts, 0, 0))
+ 
+     print() { return "I am B"}
+->print : Symbol(B.print, Decl(0.ts, 0, 16))
++>print : Symbol(print, Decl(0.ts, 0, 16))
+ }
+ 
+ === 2.ts ===
+@@= skipped -10, +10 lines =@@
+     class C extends (await import("./0")).B {}
+ >C : Symbol(C, Decl(2.ts, 0, 22))
+ >(await import("./0")).B : Symbol(B, Decl(0.ts, 0, 0))
+->"./0" : Symbol("0", Decl(0.ts, 0, 0))
+ >B : Symbol(B, Decl(0.ts, 0, 0))
+ 
+     var c = new C();
+@@= skipped -8, +7 lines =@@
+ >C : Symbol(C, Decl(2.ts, 0, 22))
+ 
+     c.print();
+->c.print : Symbol(B.print, Decl(0.ts, 0, 16))
++>c.print : Symbol(print, Decl(0.ts, 0, 16))
+ >c : Symbol(c, Decl(2.ts, 2, 7))
+->print : Symbol(B.print, Decl(0.ts, 0, 16))
++>print : Symbol(print, Decl(0.ts, 0, 16))
+ }
+ foo();
+ >foo : Symbol(foo, Decl(2.ts, 0, 0))

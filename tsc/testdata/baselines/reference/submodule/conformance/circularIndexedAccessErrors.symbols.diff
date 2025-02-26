@@ -1,0 +1,55 @@
+--- old.circularIndexedAccessErrors.symbols
++++ new.circularIndexedAccessErrors.symbols
+@@= skipped -40, +40 lines =@@
+ >T : Symbol(T, Decl(circularIndexedAccessErrors.ts, 12, 13))
+ 
+     x: T["x"];
+->x : Symbol(T3.x, Decl(circularIndexedAccessErrors.ts, 12, 31))
++>x : Symbol(x, Decl(circularIndexedAccessErrors.ts, 12, 31))
+ >T : Symbol(T, Decl(circularIndexedAccessErrors.ts, 12, 13))
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ >T : Symbol(T, Decl(circularIndexedAccessErrors.ts, 16, 13))
+ 
+     x: T4<T>["x"];  // Error
+->x : Symbol(T4.x, Decl(circularIndexedAccessErrors.ts, 16, 31))
++>x : Symbol(x, Decl(circularIndexedAccessErrors.ts, 16, 31))
+ >T4 : Symbol(T4, Decl(circularIndexedAccessErrors.ts, 14, 1))
+ >T : Symbol(T, Decl(circularIndexedAccessErrors.ts, 16, 13))
+ }
+@@= skipped -9, +9 lines =@@
+ >C1 : Symbol(C1, Decl(circularIndexedAccessErrors.ts, 18, 1))
+ 
+     x: C1["x"];  // Error
+->x : Symbol(C1.x, Decl(circularIndexedAccessErrors.ts, 20, 10))
++>x : Symbol(x, Decl(circularIndexedAccessErrors.ts, 20, 10))
+ >C1 : Symbol(C1, Decl(circularIndexedAccessErrors.ts, 18, 1))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >C2 : Symbol(C2, Decl(circularIndexedAccessErrors.ts, 22, 1))
+ 
+     x: this["y"];
+->x : Symbol(C2.x, Decl(circularIndexedAccessErrors.ts, 24, 10))
++>x : Symbol(x, Decl(circularIndexedAccessErrors.ts, 24, 10))
+ 
+     y: this["z"];
+->y : Symbol(C2.y, Decl(circularIndexedAccessErrors.ts, 25, 17))
++>y : Symbol(y, Decl(circularIndexedAccessErrors.ts, 25, 17))
+ 
+     z: this["x"];
+->z : Symbol(C2.z, Decl(circularIndexedAccessErrors.ts, 26, 17))
++>z : Symbol(z, Decl(circularIndexedAccessErrors.ts, 26, 17))
+ }
+ 
+ // Repro from #12627
+@@= skipped -15, +15 lines =@@
+ >Foo : Symbol(Foo, Decl(circularIndexedAccessErrors.ts, 28, 1))
+ 
+     hello: boolean;
+->hello : Symbol(Foo.hello, Decl(circularIndexedAccessErrors.ts, 32, 15))
++>hello : Symbol(hello, Decl(circularIndexedAccessErrors.ts, 32, 15))
+ }
+ 
+ function foo<T extends Foo | T["hello"]>() {

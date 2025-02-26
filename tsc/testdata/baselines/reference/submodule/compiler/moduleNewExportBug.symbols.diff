@@ -1,0 +1,25 @@
+--- old.moduleNewExportBug.symbols
++++ new.moduleNewExportBug.symbols
+@@= skipped -10, +10 lines =@@
+ >bar : Symbol(bar, Decl(moduleNewExportBug.ts, 2, 7))
+ 
+         foo (bar:any):any;
+->foo : Symbol(mInt.foo, Decl(moduleNewExportBug.ts, 2, 20))
++>foo : Symbol(foo, Decl(moduleNewExportBug.ts, 2, 20))
+ >bar : Symbol(bar, Decl(moduleNewExportBug.ts, 3, 13))
+ 	}
+  
+     class C { public moo() {}}
+ >C : Symbol(C, Decl(moduleNewExportBug.ts, 4, 2))
+->moo : Symbol(C.moo, Decl(moduleNewExportBug.ts, 6, 13))
++>moo : Symbol(moo, Decl(moduleNewExportBug.ts, 6, 13))
+ }
+ 
+ var c : mod1.C; // ERROR: C should not be visible
+ >c : Symbol(c, Decl(moduleNewExportBug.ts, 9, 3))
+ >mod1 : Symbol(mod1, Decl(moduleNewExportBug.ts, 0, 0))
+->C : Symbol(mod1.C)
++>C : Symbol(C)
+ 
+ 
+ 

@@ -1,0 +1,9 @@
+--- old.extendBaseClassBeforeItsDeclared.symbols
++++ new.extendBaseClassBeforeItsDeclared.symbols
+@@= skipped -6, +6 lines =@@
+  
+ class base { constructor (public n: number) { } }
+ >base : Symbol(base, Decl(extendBaseClassBeforeItsDeclared.ts, 0, 30))
+->n : Symbol(base.n, Decl(extendBaseClassBeforeItsDeclared.ts, 2, 26))
++>n : Symbol(n, Decl(extendBaseClassBeforeItsDeclared.ts, 2, 26))
+ 

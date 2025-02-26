@@ -1,0 +1,31 @@
+--- old.typeGuardNarrowsIndexedAccessOfKnownProperty4.symbols
++++ new.typeGuardNarrowsIndexedAccessOfKnownProperty4.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 0, 0))
+ 
+     x: number | undefined;
+->x : Symbol(Foo.x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 0, 11))
++>x : Symbol(x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 0, 11))
+ 
+     constructor() {
+         this.x = 5;
+->this.x : Symbol(Foo.x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 0, 11))
++>this.x : Symbol(x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 0, 11))
+ >this : Symbol(Foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 0, 0))
+->x : Symbol(Foo.x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 0, 11))
++>x : Symbol(x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 0, 11))
+ 
+         this.x;    // number
+->this.x : Symbol(Foo.x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 0, 11))
++>this.x : Symbol(x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 0, 11))
+ >this : Symbol(Foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 0, 0))
+->x : Symbol(Foo.x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 0, 11))
++>x : Symbol(x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 0, 11))
+ 
+         this['x']; // number
+ >this : Symbol(Foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 0, 0))
+->'x' : Symbol(Foo.x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 0, 11))
++>'x' : Symbol(x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 0, 11))
+ 
+         const key = 'x';
+ >key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty4.ts, 9, 13))

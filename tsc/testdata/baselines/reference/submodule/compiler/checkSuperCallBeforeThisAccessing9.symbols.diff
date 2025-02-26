@@ -1,0 +1,12 @@
+--- old.checkSuperCallBeforeThisAccessing9.symbols
++++ new.checkSuperCallBeforeThisAccessing9.symbols
+@@= skipped -12, +12 lines =@@
+ >this : Symbol(Derived, Decl(noSuperInJSDocExtends.js, 0, 15))
+ 
+         this.x = 10;
+->this.x : Symbol(Derived.x, Decl(noSuperInJSDocExtends.js, 4, 13))
+ >this : Symbol(Derived, Decl(noSuperInJSDocExtends.js, 0, 15))
+->x : Symbol(Derived.x, Decl(noSuperInJSDocExtends.js, 4, 13))
+ 
+         var that = this;
+ >that : Symbol(that, Decl(noSuperInJSDocExtends.js, 6, 11))

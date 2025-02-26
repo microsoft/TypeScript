@@ -1,0 +1,238 @@
+--- old.recursiveClassReferenceTest.symbols
++++ new.recursiveClassReferenceTest.symbols
+@@= skipped -7, +7 lines =@@
+ 
+ declare module Sample.Thing {
+ >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
+->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
++>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
+ 
+ 	export interface IWidget {
+ >IWidget : Symbol(IWidget, Decl(recursiveClassReferenceTest.ts, 5, 29))
+ 
+ 		getDomNode(): any;
+->getDomNode : Symbol(IWidget.getDomNode, Decl(recursiveClassReferenceTest.ts, 7, 27))
++>getDomNode : Symbol(getDomNode, Decl(recursiveClassReferenceTest.ts, 7, 27))
+ 
+ 		destroy();
+->destroy : Symbol(IWidget.destroy, Decl(recursiveClassReferenceTest.ts, 8, 20))
++>destroy : Symbol(destroy, Decl(recursiveClassReferenceTest.ts, 8, 20))
+ 
+ 		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
+->gar : Symbol(IWidget.gar, Decl(recursiveClassReferenceTest.ts, 9, 12))
++>gar : Symbol(gar, Decl(recursiveClassReferenceTest.ts, 9, 12))
+ >runner : Symbol(runner, Decl(recursiveClassReferenceTest.ts, 10, 6))
+ >widget : Symbol(widget, Decl(recursiveClassReferenceTest.ts, 10, 14))
+ >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
+->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
++>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
+ >IWidget : Symbol(IWidget, Decl(recursiveClassReferenceTest.ts, 5, 29))
+ 	}
+ 
+@@= skipped -24, +24 lines =@@
+ >ICodeThing : Symbol(ICodeThing, Decl(recursiveClassReferenceTest.ts, 11, 2))
+   
+   		getDomNode(): Element;
+->getDomNode : Symbol(ICodeThing.getDomNode, Decl(recursiveClassReferenceTest.ts, 13, 30))
++>getDomNode : Symbol(getDomNode, Decl(recursiveClassReferenceTest.ts, 13, 30))
+ >Element : Symbol(Element)
+ 		
+ 		addWidget(widgetId:string, widget:IWidget);
+->addWidget : Symbol(ICodeThing.addWidget, Decl(recursiveClassReferenceTest.ts, 15, 26))
++>addWidget : Symbol(addWidget, Decl(recursiveClassReferenceTest.ts, 15, 26))
+ >widgetId : Symbol(widgetId, Decl(recursiveClassReferenceTest.ts, 17, 12))
+ >widget : Symbol(widget, Decl(recursiveClassReferenceTest.ts, 17, 28))
+ >IWidget : Symbol(IWidget, Decl(recursiveClassReferenceTest.ts, 5, 29))
+ 
+ 		
+ 		focus(); 
+->focus : Symbol(ICodeThing.focus, Decl(recursiveClassReferenceTest.ts, 17, 45))
++>focus : Symbol(focus, Decl(recursiveClassReferenceTest.ts, 17, 45))
+ 		
+ 		//addWidget(widget: Sample.Thing.Widgets.IWidget);
+ 	}
+@@= skipped -20, +20 lines =@@
+ >IAction : Symbol(IAction, Decl(recursiveClassReferenceTest.ts, 23, 2))
+ 
+ 		run(Thing:ICodeThing):boolean;
+->run : Symbol(IAction.run, Decl(recursiveClassReferenceTest.ts, 25, 27))
++>run : Symbol(run, Decl(recursiveClassReferenceTest.ts, 25, 27))
+ >Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 26, 6))
+ >ICodeThing : Symbol(ICodeThing, Decl(recursiveClassReferenceTest.ts, 11, 2))
+ 
+ 		getId():string;
+->getId : Symbol(IAction.getId, Decl(recursiveClassReferenceTest.ts, 26, 32))
++>getId : Symbol(getId, Decl(recursiveClassReferenceTest.ts, 26, 32))
+ 	}	
+ }
+ 
+@@= skipped -17, +17 lines =@@
+ 
+ 	export class StartFindAction implements Sample.Thing.IAction {
+ >StartFindAction : Symbol(StartFindAction, Decl(recursiveClassReferenceTest.ts, 31, 34))
+->Sample.Thing.IAction : Symbol(Sample.Thing.IAction, Decl(recursiveClassReferenceTest.ts, 23, 2))
+->Sample.Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
++>Sample.Thing.IAction : Symbol(IAction, Decl(recursiveClassReferenceTest.ts, 23, 2))
++>Sample.Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
+ >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
+->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
+->IAction : Symbol(Sample.Thing.IAction, Decl(recursiveClassReferenceTest.ts, 23, 2))
++>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
++>IAction : Symbol(IAction, Decl(recursiveClassReferenceTest.ts, 23, 2))
+ 		
+ 		public getId() { return "yo"; }
+->getId : Symbol(StartFindAction.getId, Decl(recursiveClassReferenceTest.ts, 32, 63))
++>getId : Symbol(getId, Decl(recursiveClassReferenceTest.ts, 32, 63))
+ 		
+ 		public run(Thing:Sample.Thing.ICodeThing):boolean {
+->run : Symbol(StartFindAction.run, Decl(recursiveClassReferenceTest.ts, 34, 33))
++>run : Symbol(run, Decl(recursiveClassReferenceTest.ts, 34, 33))
+ >Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 36, 13))
+ >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
+->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
+->ICodeThing : Symbol(Sample.Thing.ICodeThing, Decl(recursiveClassReferenceTest.ts, 11, 2))
++>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
++>ICodeThing : Symbol(ICodeThing, Decl(recursiveClassReferenceTest.ts, 11, 2))
+ 
+ 			return true;
+ 		}
+@@= skipped -23, +23 lines =@@
+ 
+ module Sample.Thing.Widgets {
+ >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
+->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
++>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 43, 14))
+ >Widgets : Symbol(Widgets, Decl(recursiveClassReferenceTest.ts, 43, 20))
+ 
+ 	export class FindWidget implements Sample.Thing.IWidget {
+ >FindWidget : Symbol(FindWidget, Decl(recursiveClassReferenceTest.ts, 43, 29))
+ >Sample.Thing.IWidget : Symbol(IWidget, Decl(recursiveClassReferenceTest.ts, 5, 29))
+->Sample.Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
++>Sample.Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
+ >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
+->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
++>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
+ >IWidget : Symbol(IWidget, Decl(recursiveClassReferenceTest.ts, 5, 29))
+ 
+ 		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
+->gar : Symbol(FindWidget.gar, Decl(recursiveClassReferenceTest.ts, 44, 58))
++>gar : Symbol(gar, Decl(recursiveClassReferenceTest.ts, 44, 58))
+ >runner : Symbol(runner, Decl(recursiveClassReferenceTest.ts, 46, 13))
+ >widget : Symbol(widget, Decl(recursiveClassReferenceTest.ts, 46, 21))
+ >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
+->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
++>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
+ >IWidget : Symbol(IWidget, Decl(recursiveClassReferenceTest.ts, 5, 29))
+ >runner : Symbol(runner, Decl(recursiveClassReferenceTest.ts, 46, 13))
+ >this : Symbol(FindWidget, Decl(recursiveClassReferenceTest.ts, 43, 29))
+ 			
+ 		private domNode:any = null;
+->domNode : Symbol(FindWidget.domNode, Decl(recursiveClassReferenceTest.ts, 46, 91))
++>domNode : Symbol(domNode, Decl(recursiveClassReferenceTest.ts, 46, 91))
+ 
+ 		constructor(private codeThing: Sample.Thing.ICodeThing) {
+->codeThing : Symbol(FindWidget.codeThing, Decl(recursiveClassReferenceTest.ts, 49, 14))
++>codeThing : Symbol(codeThing, Decl(recursiveClassReferenceTest.ts, 49, 14))
+ >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
+->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
++>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
+ >ICodeThing : Symbol(ICodeThing, Decl(recursiveClassReferenceTest.ts, 11, 2))
+ 
+ 		    // scenario 1
+ 		    codeThing.addWidget("addWidget", this);
+->codeThing.addWidget : Symbol(ICodeThing.addWidget, Decl(recursiveClassReferenceTest.ts, 15, 26))
++>codeThing.addWidget : Symbol(addWidget, Decl(recursiveClassReferenceTest.ts, 15, 26))
+ >codeThing : Symbol(codeThing, Decl(recursiveClassReferenceTest.ts, 49, 14))
+->addWidget : Symbol(ICodeThing.addWidget, Decl(recursiveClassReferenceTest.ts, 15, 26))
++>addWidget : Symbol(addWidget, Decl(recursiveClassReferenceTest.ts, 15, 26))
+ >this : Symbol(FindWidget, Decl(recursiveClassReferenceTest.ts, 43, 29))
+ 		}
+ 		
+ 		public getDomNode() {
+->getDomNode : Symbol(FindWidget.getDomNode, Decl(recursiveClassReferenceTest.ts, 52, 3))
++>getDomNode : Symbol(getDomNode, Decl(recursiveClassReferenceTest.ts, 52, 3))
+ 
+ 			return domNode;
+ 		}
+ 		
+ 		public destroy() {
+->destroy : Symbol(FindWidget.destroy, Decl(recursiveClassReferenceTest.ts, 56, 3))
++>destroy : Symbol(destroy, Decl(recursiveClassReferenceTest.ts, 56, 3))
+ 
+ 		}
+ 
+@@= skipped -54, +54 lines =@@
+ 
+ interface IMode { getInitialState(): IState;} 
+ >IMode : Symbol(IMode, Decl(recursiveClassReferenceTest.ts, 63, 1))
+->getInitialState : Symbol(IMode.getInitialState, Decl(recursiveClassReferenceTest.ts, 65, 17))
++>getInitialState : Symbol(getInitialState, Decl(recursiveClassReferenceTest.ts, 65, 17))
+ >IState : Symbol(IState, Decl(recursiveClassReferenceTest.ts, 66, 88))
+ 
+ class AbstractMode implements IMode { public getInitialState(): IState { return null;} }
+ >AbstractMode : Symbol(AbstractMode, Decl(recursiveClassReferenceTest.ts, 65, 45))
+ >IMode : Symbol(IMode, Decl(recursiveClassReferenceTest.ts, 63, 1))
+->getInitialState : Symbol(AbstractMode.getInitialState, Decl(recursiveClassReferenceTest.ts, 66, 37))
++>getInitialState : Symbol(getInitialState, Decl(recursiveClassReferenceTest.ts, 66, 37))
+ >IState : Symbol(IState, Decl(recursiveClassReferenceTest.ts, 66, 88))
+ 
+ interface IState {}
+@@= skipped -16, +16 lines =@@
+ >Window : Symbol(Window, Decl(recursiveClassReferenceTest.ts, 68, 19))
+ 
+     opener: Window;
+->opener : Symbol(Window.opener, Decl(recursiveClassReferenceTest.ts, 70, 18))
++>opener : Symbol(opener, Decl(recursiveClassReferenceTest.ts, 70, 18))
+ >Window : Symbol(Window, Decl(recursiveClassReferenceTest.ts, 68, 19))
+ }
+ declare var self: Window;
+@@= skipped -9, +9 lines =@@
+ 
+ module Sample.Thing.Languages.PlainText {
+ >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
+->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
++>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 75, 14))
+ >Languages : Symbol(Languages, Decl(recursiveClassReferenceTest.ts, 75, 20))
+ >PlainText : Symbol(PlainText, Decl(recursiveClassReferenceTest.ts, 75, 30))
+ 	
+@@= skipped -9, +9 lines =@@
+ >IState : Symbol(IState, Decl(recursiveClassReferenceTest.ts, 66, 88))
+ 
+         constructor(private mode: IMode) { }
+->mode : Symbol(State.mode, Decl(recursiveClassReferenceTest.ts, 78, 20))
++>mode : Symbol(mode, Decl(recursiveClassReferenceTest.ts, 78, 20))
+ >IMode : Symbol(IMode, Decl(recursiveClassReferenceTest.ts, 63, 1))
+ 
+ 		public clone():IState {
+->clone : Symbol(State.clone, Decl(recursiveClassReferenceTest.ts, 78, 44))
++>clone : Symbol(clone, Decl(recursiveClassReferenceTest.ts, 78, 44))
+ >IState : Symbol(IState, Decl(recursiveClassReferenceTest.ts, 66, 88))
+ 
+ 			return this;
+@@= skipped -12, +12 lines =@@
+ 		}
+ 
+ 		public equals(other:IState):boolean {
+->equals : Symbol(State.equals, Decl(recursiveClassReferenceTest.ts, 81, 3))
++>equals : Symbol(equals, Decl(recursiveClassReferenceTest.ts, 81, 3))
+ >other : Symbol(other, Decl(recursiveClassReferenceTest.ts, 83, 16))
+ >IState : Symbol(IState, Decl(recursiveClassReferenceTest.ts, 66, 88))
+ 
+@@= skipped -10, +10 lines =@@
+ 		}
+ 		
+ 		public getMode(): IMode { return mode; }
+->getMode : Symbol(State.getMode, Decl(recursiveClassReferenceTest.ts, 85, 3))
++>getMode : Symbol(getMode, Decl(recursiveClassReferenceTest.ts, 85, 3))
+ >IMode : Symbol(IMode, Decl(recursiveClassReferenceTest.ts, 63, 1))
+ 	}
+ 	
+@@= skipped -10, +10 lines =@@
+ 
+ 		// scenario 2
+ 		public getInitialState(): IState {
+->getInitialState : Symbol(Mode.getInitialState, Decl(recursiveClassReferenceTest.ts, 90, 41))
++>getInitialState : Symbol(getInitialState, Decl(recursiveClassReferenceTest.ts, 90, 41))
+ >IState : Symbol(IState, Decl(recursiveClassReferenceTest.ts, 66, 88))
+ 
+ 			return new State(self);

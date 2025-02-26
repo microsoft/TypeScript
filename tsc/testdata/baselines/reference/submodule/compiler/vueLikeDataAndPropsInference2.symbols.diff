@@ -1,0 +1,30 @@
+--- old.vueLikeDataAndPropsInference2.symbols
++++ new.vueLikeDataAndPropsInference2.symbols
+@@= skipped -4, +4 lines =@@
+ >Instance : Symbol(Instance, Decl(vueLikeDataAndPropsInference2.ts, 0, 0))
+ 
+     _instanceBrand: never
+->_instanceBrand : Symbol(Instance._instanceBrand, Decl(vueLikeDataAndPropsInference2.ts, 0, 20))
++>_instanceBrand : Symbol(_instanceBrand, Decl(vueLikeDataAndPropsInference2.ts, 0, 20))
+ }
+ 
+ type DataDef<Data, Props> = (this: Readonly<Props> & Instance) => Data
+@@= skipped -39, +39 lines =@@
+ 
+     > {
+     data?: Data
+->data : Symbol(Options.data, Decl(vueLikeDataAndPropsInference2.ts, 13, 7))
++>data : Symbol(data, Decl(vueLikeDataAndPropsInference2.ts, 13, 7))
+ >Data : Symbol(Data, Decl(vueLikeDataAndPropsInference2.ts, 10, 18))
+ 
+     props?: PropsDef
+->props : Symbol(Options.props, Decl(vueLikeDataAndPropsInference2.ts, 14, 15))
++>props : Symbol(props, Decl(vueLikeDataAndPropsInference2.ts, 14, 15))
+ >PropsDef : Symbol(PropsDef, Decl(vueLikeDataAndPropsInference2.ts, 11, 49))
+ 
+     watch?: Record<string, WatchHandler<any>>
+->watch : Symbol(Options.watch, Decl(vueLikeDataAndPropsInference2.ts, 15, 20))
++>watch : Symbol(watch, Decl(vueLikeDataAndPropsInference2.ts, 15, 20))
+ >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+ >WatchHandler : Symbol(WatchHandler, Decl(vueLikeDataAndPropsInference2.ts, 17, 1))
+ }

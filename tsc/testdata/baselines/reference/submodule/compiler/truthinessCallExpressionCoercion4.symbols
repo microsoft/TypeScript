@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/truthinessCallExpressionCoercion4.ts] ////
+
+=== a.js ===
+function fn() {}
+>fn : Symbol(fn, Decl(a.js, 0, 0))
+
+if (typeof module === 'object' && module.exports) {
+    module.exports = fn;
+>fn : Symbol(fn, Decl(a.js, 0, 0))
+}
+

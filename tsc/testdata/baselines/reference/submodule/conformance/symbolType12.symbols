@@ -1,0 +1,98 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType12.ts] ////
+
+=== symbolType12.ts ===
+var s = Symbol.for("assign");
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+var str = "";
+>str : Symbol(str, Decl(symbolType12.ts, 1, 3))
+
+s *= s;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s *= 0;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s /= s;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s /= 0;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s %= s;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s %= 0;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s += s;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s += 0;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s += "";
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+str += s;
+>str : Symbol(str, Decl(symbolType12.ts, 1, 3))
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s -= s;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s -= 0;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s <<= s;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s <<= 0;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s >>= s;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s >>= 0;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s >>>= s;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s >>>= 0;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s &= s;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s &= 0;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s ^= s;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s ^= 0;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s |= s;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+s |= 0;
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+
+str += (s || str);
+>str : Symbol(str, Decl(symbolType12.ts, 1, 3))
+>s : Symbol(s, Decl(symbolType12.ts, 0, 3))
+>str : Symbol(str, Decl(symbolType12.ts, 1, 3))
+

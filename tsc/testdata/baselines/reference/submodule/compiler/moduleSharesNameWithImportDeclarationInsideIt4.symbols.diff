@@ -1,0 +1,16 @@
+--- old.moduleSharesNameWithImportDeclarationInsideIt4.symbols
++++ new.moduleSharesNameWithImportDeclarationInsideIt4.symbols
+@@= skipped -20, +20 lines =@@
+     import M = Z.M;
+ >M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt4.ts, 5, 12), Decl(moduleSharesNameWithImportDeclarationInsideIt4.ts, 6, 19))
+ >Z : Symbol(Z, Decl(moduleSharesNameWithImportDeclarationInsideIt4.ts, 0, 0))
+->M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt4.ts, 0, 9))
+ 
+     export function bar() {
+ >bar : Symbol(bar, Decl(moduleSharesNameWithImportDeclarationInsideIt4.ts, 7, 19))
+     }
+     M.bar(); // Should call Z.M.bar
+->M.bar : Symbol(M.bar, Decl(moduleSharesNameWithImportDeclarationInsideIt4.ts, 0, 12))
+ >M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt4.ts, 5, 12), Decl(moduleSharesNameWithImportDeclarationInsideIt4.ts, 6, 19))
+->bar : Symbol(M.bar, Decl(moduleSharesNameWithImportDeclarationInsideIt4.ts, 0, 12))
+ }

@@ -1,0 +1,119 @@
+--- old.moduleVisibilityTest2.symbols
++++ new.moduleVisibilityTest2.symbols
+@@= skipped -17, +17 lines =@@
+ import OuterInnerAlias = OuterMod.OuterInnerMod;
+ >OuterInnerAlias : Symbol(OuterInnerAlias, Decl(moduleVisibilityTest2.ts, 6, 1))
+ >OuterMod : Symbol(OuterMod, Decl(moduleVisibilityTest2.ts, 0, 0))
+->OuterInnerMod : Symbol(OuterInnerAlias, Decl(moduleVisibilityTest2.ts, 1, 55))
++>OuterInnerMod : Symbol(OuterInnerMod, Decl(moduleVisibilityTest2.ts, 1, 55))
+ 
+ module M {
+ >M : Symbol(M, Decl(moduleVisibilityTest2.ts, 8, 48), Decl(moduleVisibilityTest2.ts, 51, 1))
+@@= skipped -16, +16 lines =@@
+ >E : Symbol(E, Decl(moduleVisibilityTest2.ts, 14, 2))
+ 
+ 		A,
+->A : Symbol(E.A, Decl(moduleVisibilityTest2.ts, 16, 9))
++>A : Symbol(A, Decl(moduleVisibilityTest2.ts, 16, 9))
+ 
+ 		B,
+->B : Symbol(E.B, Decl(moduleVisibilityTest2.ts, 17, 4))
++>B : Symbol(B, Decl(moduleVisibilityTest2.ts, 17, 4))
+ 
+ 		C,
+->C : Symbol(E.C, Decl(moduleVisibilityTest2.ts, 18, 4))
++>C : Symbol(C, Decl(moduleVisibilityTest2.ts, 18, 4))
+ 	}
+ 
+ 	var x = 5;
+@@= skipped -25, +25 lines =@@
+ >I : Symbol(I, Decl(moduleVisibilityTest2.ts, 25, 15))
+ 
+ 		someMethod():number;
+->someMethod : Symbol(I.someMethod, Decl(moduleVisibilityTest2.ts, 28, 14))
++>someMethod : Symbol(someMethod, Decl(moduleVisibilityTest2.ts, 28, 14))
+ 	}
+ 
+ 	 class B {public b = 0;}
+ >B : Symbol(B, Decl(moduleVisibilityTest2.ts, 30, 2))
+->b : Symbol(B.b, Decl(moduleVisibilityTest2.ts, 32, 11))
++>b : Symbol(b, Decl(moduleVisibilityTest2.ts, 32, 11))
+ 
+ 	 export class C implements I {
+ >C : Symbol(C, Decl(moduleVisibilityTest2.ts, 32, 25))
+ >I : Symbol(I, Decl(moduleVisibilityTest2.ts, 25, 15))
+ 
+ 		public someMethodThatCallsAnOuterMethod() {return OuterInnerAlias.someExportedOuterInnerFunc();}
+->someMethodThatCallsAnOuterMethod : Symbol(C.someMethodThatCallsAnOuterMethod, Decl(moduleVisibilityTest2.ts, 34, 31))
+->OuterInnerAlias.someExportedOuterInnerFunc : Symbol(OuterInnerAlias.someExportedOuterInnerFunc, Decl(moduleVisibilityTest2.ts, 3, 30))
++>someMethodThatCallsAnOuterMethod : Symbol(someMethodThatCallsAnOuterMethod, Decl(moduleVisibilityTest2.ts, 34, 31))
++>OuterInnerAlias.someExportedOuterInnerFunc : Symbol(someExportedOuterInnerFunc, Decl(moduleVisibilityTest2.ts, 3, 30))
+ >OuterInnerAlias : Symbol(OuterInnerAlias, Decl(moduleVisibilityTest2.ts, 6, 1))
+->someExportedOuterInnerFunc : Symbol(OuterInnerAlias.someExportedOuterInnerFunc, Decl(moduleVisibilityTest2.ts, 3, 30))
++>someExportedOuterInnerFunc : Symbol(someExportedOuterInnerFunc, Decl(moduleVisibilityTest2.ts, 3, 30))
+ 
+ 		public someMethodThatCallsAnInnerMethod() {return InnerMod.someExportedInnerFunc();}
+->someMethodThatCallsAnInnerMethod : Symbol(C.someMethodThatCallsAnInnerMethod, Decl(moduleVisibilityTest2.ts, 35, 98))
+->InnerMod.someExportedInnerFunc : Symbol(InnerMod.someExportedInnerFunc, Decl(moduleVisibilityTest2.ts, 12, 18))
++>someMethodThatCallsAnInnerMethod : Symbol(someMethodThatCallsAnInnerMethod, Decl(moduleVisibilityTest2.ts, 35, 98))
++>InnerMod.someExportedInnerFunc : Symbol(someExportedInnerFunc, Decl(moduleVisibilityTest2.ts, 12, 18))
+ >InnerMod : Symbol(InnerMod, Decl(moduleVisibilityTest2.ts, 10, 10))
+->someExportedInnerFunc : Symbol(InnerMod.someExportedInnerFunc, Decl(moduleVisibilityTest2.ts, 12, 18))
++>someExportedInnerFunc : Symbol(someExportedInnerFunc, Decl(moduleVisibilityTest2.ts, 12, 18))
+ 
+ 		public someMethodThatCallsAnOuterInnerMethod() {return OuterMod.someExportedOuterFunc();}
+->someMethodThatCallsAnOuterInnerMethod : Symbol(C.someMethodThatCallsAnOuterInnerMethod, Decl(moduleVisibilityTest2.ts, 36, 86))
+->OuterMod.someExportedOuterFunc : Symbol(OuterMod.someExportedOuterFunc, Decl(moduleVisibilityTest2.ts, 0, 17))
++>someMethodThatCallsAnOuterInnerMethod : Symbol(someMethodThatCallsAnOuterInnerMethod, Decl(moduleVisibilityTest2.ts, 36, 86))
++>OuterMod.someExportedOuterFunc : Symbol(someExportedOuterFunc, Decl(moduleVisibilityTest2.ts, 0, 17))
+ >OuterMod : Symbol(OuterMod, Decl(moduleVisibilityTest2.ts, 0, 0))
+->someExportedOuterFunc : Symbol(OuterMod.someExportedOuterFunc, Decl(moduleVisibilityTest2.ts, 0, 17))
++>someExportedOuterFunc : Symbol(someExportedOuterFunc, Decl(moduleVisibilityTest2.ts, 0, 17))
+ 
+ 		public someMethod() { return 0; }
+->someMethod : Symbol(C.someMethod, Decl(moduleVisibilityTest2.ts, 37, 91))
++>someMethod : Symbol(someMethod, Decl(moduleVisibilityTest2.ts, 37, 91))
+ 
+ 		public someProp = 1;
+->someProp : Symbol(C.someProp, Decl(moduleVisibilityTest2.ts, 38, 35))
++>someProp : Symbol(someProp, Decl(moduleVisibilityTest2.ts, 38, 35))
+ 
+ 		constructor() {
+ 		    function someInnerFunc() { return 2; }
+@@= skipped -66, +66 lines =@@
+ var cprime : M.I = <M.I>null;
+ >cprime : Symbol(cprime, Decl(moduleVisibilityTest2.ts, 58, 3))
+ >M : Symbol(M, Decl(moduleVisibilityTest2.ts, 8, 48), Decl(moduleVisibilityTest2.ts, 51, 1))
+->I : Symbol(M.I)
++>I : Symbol(I)
+ >M : Symbol(M, Decl(moduleVisibilityTest2.ts, 8, 48), Decl(moduleVisibilityTest2.ts, 51, 1))
+->I : Symbol(M.I)
++>I : Symbol(I)
+ 
+ var c = new M.C();
+ >c : Symbol(c, Decl(moduleVisibilityTest2.ts, 60, 3))
+->M.C : Symbol(M.C, Decl(moduleVisibilityTest2.ts, 32, 25))
++>M.C : Symbol(C, Decl(moduleVisibilityTest2.ts, 32, 25))
+ >M : Symbol(M, Decl(moduleVisibilityTest2.ts, 8, 48), Decl(moduleVisibilityTest2.ts, 51, 1))
+->C : Symbol(M.C, Decl(moduleVisibilityTest2.ts, 32, 25))
++>C : Symbol(C, Decl(moduleVisibilityTest2.ts, 32, 25))
+ 
+ var z = M.x;
+ >z : Symbol(z, Decl(moduleVisibilityTest2.ts, 61, 3))
+@@= skipped -20, +20 lines =@@
+ 
+ var omega = M.exported_var;
+ >omega : Symbol(omega, Decl(moduleVisibilityTest2.ts, 63, 3))
+->M.exported_var : Symbol(M.exported_var, Decl(moduleVisibilityTest2.ts, 23, 19))
++>M.exported_var : Symbol(exported_var, Decl(moduleVisibilityTest2.ts, 23, 19))
+ >M : Symbol(M, Decl(moduleVisibilityTest2.ts, 8, 48), Decl(moduleVisibilityTest2.ts, 51, 1))
+->exported_var : Symbol(M.exported_var, Decl(moduleVisibilityTest2.ts, 23, 19))
++>exported_var : Symbol(exported_var, Decl(moduleVisibilityTest2.ts, 23, 19))
+ 
+ c.someMethodThatCallsAnOuterMethod();
+->c.someMethodThatCallsAnOuterMethod : Symbol(M.C.someMethodThatCallsAnOuterMethod, Decl(moduleVisibilityTest2.ts, 34, 31))
++>c.someMethodThatCallsAnOuterMethod : Symbol(someMethodThatCallsAnOuterMethod, Decl(moduleVisibilityTest2.ts, 34, 31))
+ >c : Symbol(c, Decl(moduleVisibilityTest2.ts, 60, 3))
+->someMethodThatCallsAnOuterMethod : Symbol(M.C.someMethodThatCallsAnOuterMethod, Decl(moduleVisibilityTest2.ts, 34, 31))
++>someMethodThatCallsAnOuterMethod : Symbol(someMethodThatCallsAnOuterMethod, Decl(moduleVisibilityTest2.ts, 34, 31))
+ 

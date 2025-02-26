@@ -1,0 +1,74 @@
+--- old.callWithMissingVoid.symbols
++++ new.callWithMissingVoid.symbols
+@@= skipped -6, +6 lines =@@
+ >T : Symbol(T, Decl(callWithMissingVoid.ts, 1, 8))
+ 
+     f(t: T) {
+->f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
++>f : Symbol(f, Decl(callWithMissingVoid.ts, 1, 12))
+ >t : Symbol(t, Decl(callWithMissingVoid.ts, 2, 6))
+ >T : Symbol(T, Decl(callWithMissingVoid.ts, 1, 8))
+ 
+@@= skipped -15, +15 lines =@@
+ >X : Symbol(X, Decl(callWithMissingVoid.ts, 0, 0))
+ 
+ x.f() // no error because f expects void
+->x.f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
++>x.f : Symbol(f, Decl(callWithMissingVoid.ts, 1, 12))
+ >x : Symbol(x, Decl(callWithMissingVoid.ts, 7, 13))
+->f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
++>f : Symbol(f, Decl(callWithMissingVoid.ts, 1, 12))
+ 
+ declare const xUnion: X<void | number>;
+ >xUnion : Symbol(xUnion, Decl(callWithMissingVoid.ts, 10, 13))
+ >X : Symbol(X, Decl(callWithMissingVoid.ts, 0, 0))
+ 
+ xUnion.f(42) // no error because f accepts number
+->xUnion.f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
++>xUnion.f : Symbol(f, Decl(callWithMissingVoid.ts, 1, 12))
+ >xUnion : Symbol(xUnion, Decl(callWithMissingVoid.ts, 10, 13))
+->f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
++>f : Symbol(f, Decl(callWithMissingVoid.ts, 1, 12))
+ 
+ xUnion.f() // no error because f accepts void
+->xUnion.f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
++>xUnion.f : Symbol(f, Decl(callWithMissingVoid.ts, 1, 12))
+ >xUnion : Symbol(xUnion, Decl(callWithMissingVoid.ts, 10, 13))
+->f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
++>f : Symbol(f, Decl(callWithMissingVoid.ts, 1, 12))
+ 
+ declare const xAny: X<any>;
+ >xAny : Symbol(xAny, Decl(callWithMissingVoid.ts, 14, 13))
+ >X : Symbol(X, Decl(callWithMissingVoid.ts, 0, 0))
+ 
+ xAny.f() // error, any still expects an argument
+->xAny.f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
++>xAny.f : Symbol(f, Decl(callWithMissingVoid.ts, 1, 12))
+ >xAny : Symbol(xAny, Decl(callWithMissingVoid.ts, 14, 13))
+->f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
++>f : Symbol(f, Decl(callWithMissingVoid.ts, 1, 12))
+ 
+ declare const xUnknown: X<unknown>;
+ >xUnknown : Symbol(xUnknown, Decl(callWithMissingVoid.ts, 17, 13))
+ >X : Symbol(X, Decl(callWithMissingVoid.ts, 0, 0))
+ 
+ xUnknown.f() // error, unknown still expects an argument
+->xUnknown.f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
++>xUnknown.f : Symbol(f, Decl(callWithMissingVoid.ts, 1, 12))
+ >xUnknown : Symbol(xUnknown, Decl(callWithMissingVoid.ts, 17, 13))
+->f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
++>f : Symbol(f, Decl(callWithMissingVoid.ts, 1, 12))
+ 
+ declare const xNever: X<never>;
+ >xNever : Symbol(xNever, Decl(callWithMissingVoid.ts, 20, 13))
+ >X : Symbol(X, Decl(callWithMissingVoid.ts, 0, 0))
+ 
+ xNever.f() // error, never still expects an argument
+->xNever.f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
++>xNever.f : Symbol(f, Decl(callWithMissingVoid.ts, 1, 12))
+ >xNever : Symbol(xNever, Decl(callWithMissingVoid.ts, 20, 13))
+->f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
++>f : Symbol(f, Decl(callWithMissingVoid.ts, 1, 12))
+ 
+ 
+ // Promise has previously been updated to work without arguments, but to show this fixes the issue too.

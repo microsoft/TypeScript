@@ -1,0 +1,90 @@
+--- old.typeofOperatorWithBooleanType.symbols
++++ new.typeofOperatorWithBooleanType.symbols
+@@= skipped -11, +11 lines =@@
+ >A : Symbol(A, Decl(typeofOperatorWithBooleanType.ts, 3, 40))
+ 
+     public a: boolean;
+->a : Symbol(A.a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
++>a : Symbol(a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
+ 
+     static foo() { return false; }
+->foo : Symbol(A.foo, Decl(typeofOperatorWithBooleanType.ts, 6, 22))
++>foo : Symbol(foo, Decl(typeofOperatorWithBooleanType.ts, 6, 22))
+ }
+ module M {
+ >M : Symbol(M, Decl(typeofOperatorWithBooleanType.ts, 8, 1))
+@@= skipped -33, +33 lines =@@
+ // boolean type expressions
+ var ResultIsString4 = typeof objA.a;
+ >ResultIsString4 : Symbol(ResultIsString4, Decl(typeofOperatorWithBooleanType.ts, 23, 3))
+->objA.a : Symbol(A.a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
++>objA.a : Symbol(a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
+ >objA : Symbol(objA, Decl(typeofOperatorWithBooleanType.ts, 13, 3))
+->a : Symbol(A.a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
++>a : Symbol(a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
+ 
+ var ResultIsString5 = typeof M.n;
+ >ResultIsString5 : Symbol(ResultIsString5, Decl(typeofOperatorWithBooleanType.ts, 24, 3))
+->M.n : Symbol(M.n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
++>M.n : Symbol(n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
+ >M : Symbol(M, Decl(typeofOperatorWithBooleanType.ts, 8, 1))
+->n : Symbol(M.n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
++>n : Symbol(n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
+ 
+ var ResultIsString6 = typeof foo();
+ >ResultIsString6 : Symbol(ResultIsString6, Decl(typeofOperatorWithBooleanType.ts, 25, 3))
+@@= skipped -16, +16 lines =@@
+ 
+ var ResultIsString7 = typeof A.foo();
+ >ResultIsString7 : Symbol(ResultIsString7, Decl(typeofOperatorWithBooleanType.ts, 26, 3))
+->A.foo : Symbol(A.foo, Decl(typeofOperatorWithBooleanType.ts, 6, 22))
++>A.foo : Symbol(foo, Decl(typeofOperatorWithBooleanType.ts, 6, 22))
+ >A : Symbol(A, Decl(typeofOperatorWithBooleanType.ts, 3, 40))
+->foo : Symbol(A.foo, Decl(typeofOperatorWithBooleanType.ts, 6, 22))
++>foo : Symbol(foo, Decl(typeofOperatorWithBooleanType.ts, 6, 22))
+ 
+ // multiple typeof  operator
+ var ResultIsString8 = typeof typeof BOOLEAN;
+@@= skipped -19, +19 lines =@@
+ 
+ typeof true, false;
+ typeof objA.a;
+->objA.a : Symbol(A.a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
++>objA.a : Symbol(a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
+ >objA : Symbol(objA, Decl(typeofOperatorWithBooleanType.ts, 13, 3))
+->a : Symbol(A.a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
++>a : Symbol(a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
+ 
+ typeof M.n;
+->M.n : Symbol(M.n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
++>M.n : Symbol(n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
+ >M : Symbol(M, Decl(typeofOperatorWithBooleanType.ts, 8, 1))
+->n : Symbol(M.n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
++>n : Symbol(n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
+ 
+ // use typeof in type query
+ var z: boolean;
+@@= skipped -36, +36 lines =@@
+ >a : Symbol(a, Decl(typeofOperatorWithBooleanType.ts, 45, 9))
+ 
+ z: typeof objA.a;
+->objA.a : Symbol(A.a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
++>objA.a : Symbol(a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
+ >objA : Symbol(objA, Decl(typeofOperatorWithBooleanType.ts, 13, 3))
+->a : Symbol(A.a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
++>a : Symbol(a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
+ 
+ z: typeof A.foo;
+->A.foo : Symbol(A.foo, Decl(typeofOperatorWithBooleanType.ts, 6, 22))
++>A.foo : Symbol(foo, Decl(typeofOperatorWithBooleanType.ts, 6, 22))
+ >A : Symbol(A, Decl(typeofOperatorWithBooleanType.ts, 3, 40))
+->foo : Symbol(A.foo, Decl(typeofOperatorWithBooleanType.ts, 6, 22))
++>foo : Symbol(foo, Decl(typeofOperatorWithBooleanType.ts, 6, 22))
+ 
+ z: typeof M.n;
+->M.n : Symbol(M.n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
++>M.n : Symbol(n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
+ >M : Symbol(M, Decl(typeofOperatorWithBooleanType.ts, 8, 1))
+->n : Symbol(M.n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
++>n : Symbol(n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
+ 

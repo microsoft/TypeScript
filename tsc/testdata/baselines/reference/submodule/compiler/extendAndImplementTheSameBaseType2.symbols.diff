@@ -1,0 +1,58 @@
+--- old.extendAndImplementTheSameBaseType2.symbols
++++ new.extendAndImplementTheSameBaseType2.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(extendAndImplementTheSameBaseType2.ts, 0, 8))
+ 
+     foo: number
+->foo : Symbol(C.foo, Decl(extendAndImplementTheSameBaseType2.ts, 0, 12))
++>foo : Symbol(foo, Decl(extendAndImplementTheSameBaseType2.ts, 0, 12))
+ 
+     bar(): T {
+->bar : Symbol(C.bar, Decl(extendAndImplementTheSameBaseType2.ts, 1, 15))
++>bar : Symbol(bar, Decl(extendAndImplementTheSameBaseType2.ts, 1, 15))
+ >T : Symbol(T, Decl(extendAndImplementTheSameBaseType2.ts, 0, 8))
+ 
+         return null;
+@@= skipped -15, +15 lines =@@
+ >C : Symbol(C, Decl(extendAndImplementTheSameBaseType2.ts, 0, 0))
+ 
+     baz() { }
+->baz : Symbol(D.baz, Decl(extendAndImplementTheSameBaseType2.ts, 6, 48))
++>baz : Symbol(baz, Decl(extendAndImplementTheSameBaseType2.ts, 6, 48))
+ }
+ 
+ var d: D = new D();
+@@= skipped -10, +10 lines =@@
+ 
+ var r: string = d.foo;
+ >r : Symbol(r, Decl(extendAndImplementTheSameBaseType2.ts, 11, 3))
+->d.foo : Symbol(C.foo, Decl(extendAndImplementTheSameBaseType2.ts, 0, 12))
++>d.foo : Symbol(foo, Decl(extendAndImplementTheSameBaseType2.ts, 0, 12))
+ >d : Symbol(d, Decl(extendAndImplementTheSameBaseType2.ts, 10, 3))
+->foo : Symbol(C.foo, Decl(extendAndImplementTheSameBaseType2.ts, 0, 12))
++>foo : Symbol(foo, Decl(extendAndImplementTheSameBaseType2.ts, 0, 12))
+ 
+ var r2: number = d.foo;
+ >r2 : Symbol(r2, Decl(extendAndImplementTheSameBaseType2.ts, 12, 3))
+->d.foo : Symbol(C.foo, Decl(extendAndImplementTheSameBaseType2.ts, 0, 12))
++>d.foo : Symbol(foo, Decl(extendAndImplementTheSameBaseType2.ts, 0, 12))
+ >d : Symbol(d, Decl(extendAndImplementTheSameBaseType2.ts, 10, 3))
+->foo : Symbol(C.foo, Decl(extendAndImplementTheSameBaseType2.ts, 0, 12))
++>foo : Symbol(foo, Decl(extendAndImplementTheSameBaseType2.ts, 0, 12))
+ 
+ var r3: string = d.bar();
+ >r3 : Symbol(r3, Decl(extendAndImplementTheSameBaseType2.ts, 14, 3))
+->d.bar : Symbol(C.bar, Decl(extendAndImplementTheSameBaseType2.ts, 1, 15))
++>d.bar : Symbol(bar, Decl(extendAndImplementTheSameBaseType2.ts, 1, 15))
+ >d : Symbol(d, Decl(extendAndImplementTheSameBaseType2.ts, 10, 3))
+->bar : Symbol(C.bar, Decl(extendAndImplementTheSameBaseType2.ts, 1, 15))
++>bar : Symbol(bar, Decl(extendAndImplementTheSameBaseType2.ts, 1, 15))
+ 
+ var r4: number = d.bar();
+ >r4 : Symbol(r4, Decl(extendAndImplementTheSameBaseType2.ts, 15, 3))
+->d.bar : Symbol(C.bar, Decl(extendAndImplementTheSameBaseType2.ts, 1, 15))
++>d.bar : Symbol(bar, Decl(extendAndImplementTheSameBaseType2.ts, 1, 15))
+ >d : Symbol(d, Decl(extendAndImplementTheSameBaseType2.ts, 10, 3))
+->bar : Symbol(C.bar, Decl(extendAndImplementTheSameBaseType2.ts, 1, 15))
++>bar : Symbol(bar, Decl(extendAndImplementTheSameBaseType2.ts, 1, 15))
+ 

@@ -1,0 +1,12 @@
+//// [tests/cases/conformance/jsdoc/jsdocPrivateName2.ts] ////
+
+=== jsdocPrivateName1.js ===
+
+// Expecting parse error for private field
+
+/**
+ * @typedef A
+ * @type {object}
+ * @property {string} #id
+ */
+

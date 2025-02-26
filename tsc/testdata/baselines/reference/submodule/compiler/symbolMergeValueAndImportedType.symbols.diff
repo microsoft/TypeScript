@@ -1,0 +1,14 @@
+--- old.symbolMergeValueAndImportedType.symbols
++++ new.symbolMergeValueAndImportedType.symbols
+@@= skipped -7, +7 lines =@@
+ >X : Symbol(X, Decl(main.ts, 0, 8), Decl(main.ts, 1, 5))
+ 
+ console.log('X is ' + X);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >X : Symbol(X, Decl(main.ts, 0, 8), Decl(main.ts, 1, 5))
+ 
+ === other.ts ===

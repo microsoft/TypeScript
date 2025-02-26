@@ -1,0 +1,11 @@
+--- old.globalThisDeclarationEmit3.symbols
++++ new.globalThisDeclarationEmit3.symbols
+@@= skipped -10, +10 lines =@@
+ === variable.ts ===
+ import mod = globalThis;
+ >mod : Symbol(mod, Decl(variable.ts, 0, 0))
+->globalThis : Symbol(mod)
++>globalThis : Symbol(globalThis)
+ 
+ export { mod as variable };
+ >mod : Symbol(mod, Decl(variable.ts, 0, 0))

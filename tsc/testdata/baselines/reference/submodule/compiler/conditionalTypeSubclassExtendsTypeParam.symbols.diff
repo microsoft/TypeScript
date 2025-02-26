@@ -1,0 +1,11 @@
+--- old.conditionalTypeSubclassExtendsTypeParam.symbols
++++ new.conditionalTypeSubclassExtendsTypeParam.symbols
+@@= skipped -7, +7 lines =@@
+ >MR : Symbol(MR, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 0, 33))
+ 
+     public getField2<K extends keyof M>(): Field<M[K], [K] extends [keyof MR] ? MR[K] : M[K]>
+->getField2 : Symbol(Model.getField2, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 0, 50))
++>getField2 : Symbol(getField2, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 0, 50))
+ >K : Symbol(K, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 1, 21))
+ >M : Symbol(M, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 0, 20))
+ >Field : Symbol(Field, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 2, 1))

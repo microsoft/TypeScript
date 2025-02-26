@@ -1,0 +1,17 @@
+--- old.lateBoundConstraintTypeChecksCorrectly.symbols
++++ new.lateBoundConstraintTypeChecksCorrectly.symbols
+@@= skipped -16, +16 lines =@@
+ >T : Symbol(T, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 5, 21))
+ 
+   [fooProp]: T;
+->[fooProp] : Symbol(Foo[fooProp], Decl(lateBoundConstraintTypeChecksCorrectly.ts, 5, 25))
++>[fooProp] : Symbol([fooProp], Decl(lateBoundConstraintTypeChecksCorrectly.ts, 5, 25))
+ >fooProp : Symbol(fooProp, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 0, 13))
+ >T : Symbol(T, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 5, 21))
+ 
+   [barProp]: string;
+->[barProp] : Symbol(Foo[barProp], Decl(lateBoundConstraintTypeChecksCorrectly.ts, 6, 15))
++>[barProp] : Symbol([barProp], Decl(lateBoundConstraintTypeChecksCorrectly.ts, 6, 15))
+ >barProp : Symbol(barProp, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 1, 13))
+ }
+ 

@@ -1,0 +1,156 @@
+--- old.genericClassWithObjectTypeArgsAndConstraints.symbols
++++ new.genericClassWithObjectTypeArgsAndConstraints.symbols
+@@= skipped -7, +7 lines =@@
+ >C : Symbol(C, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 0, 0))
+ 
+     x: string;
+->x : Symbol(C.x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 3, 9))
++>x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 3, 9))
+ }
+ 
+ class D {
+ >D : Symbol(D, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 5, 1))
+ 
+     x: string;
+->x : Symbol(D.x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 7, 9))
++>x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 7, 9))
+ 
+     y: string;
+->y : Symbol(D.y, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 8, 14))
++>y : Symbol(y, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 8, 14))
+ }
+ 
+ class X<T> {
+@@= skipped -18, +18 lines =@@
+ >T : Symbol(T, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 12, 8))
+ 
+     x: T;
+->x : Symbol(X.x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 12, 12))
++>x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 12, 12))
+ >T : Symbol(T, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 12, 8))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 17, 23))
+ 
+         foo<T extends { x: string }>(t: X<T>, t2: X<T>) {
+->foo : Symbol(G.foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 17, 38))
++>foo : Symbol(foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 17, 38))
+ >T : Symbol(T, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 18, 12))
+ >x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 18, 23))
+ >t : Symbol(t, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 18, 37))
+@@= skipped -37, +37 lines =@@
+ 
+     var r = g.foo(c1, d1);
+ >r : Symbol(r, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 27, 7), Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 37, 7))
+->g.foo : Symbol(G.foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 17, 38))
++>g.foo : Symbol(foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 17, 38))
+ >g : Symbol(g, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 26, 7))
+->foo : Symbol(G.foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 17, 38))
++>foo : Symbol(foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 17, 38))
+ >c1 : Symbol(c1, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 24, 7))
+ >d1 : Symbol(d1, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 25, 7))
+ 
+     var r2 = g.foo(c1, c1);
+ >r2 : Symbol(r2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 28, 7), Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 38, 7))
+->g.foo : Symbol(G.foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 17, 38))
++>g.foo : Symbol(foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 17, 38))
+ >g : Symbol(g, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 26, 7))
+->foo : Symbol(G.foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 17, 38))
++>foo : Symbol(foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 17, 38))
+ >c1 : Symbol(c1, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 24, 7))
+ >c1 : Symbol(c1, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 24, 7))
+ 
+@@= skipped -20, +20 lines =@@
+ >C : Symbol(C, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 0, 0))
+ 
+         foo2<T extends C>(t: X<T>, t2: X<T>) {
+->foo2 : Symbol(G2.foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 30, 27))
++>foo2 : Symbol(foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 30, 27))
+ >T : Symbol(T, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 31, 13))
+ >C : Symbol(C, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 0, 0))
+ >t : Symbol(t, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 31, 26))
+@@= skipped -25, +25 lines =@@
+ 
+     var r = g2.foo2(c1, d1);
+ >r : Symbol(r, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 27, 7), Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 37, 7))
+->g2.foo2 : Symbol(G2.foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 30, 27))
++>g2.foo2 : Symbol(foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 30, 27))
+ >g2 : Symbol(g2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 36, 7))
+->foo2 : Symbol(G2.foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 30, 27))
++>foo2 : Symbol(foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 30, 27))
+ >c1 : Symbol(c1, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 24, 7))
+ >d1 : Symbol(d1, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 25, 7))
+ 
+     var r2 = g2.foo2(c1, c1);
+ >r2 : Symbol(r2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 28, 7), Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 38, 7))
+->g2.foo2 : Symbol(G2.foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 30, 27))
++>g2.foo2 : Symbol(foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 30, 27))
+ >g2 : Symbol(g2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 36, 7))
+->foo2 : Symbol(G2.foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 30, 27))
++>foo2 : Symbol(foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 30, 27))
+ >c1 : Symbol(c1, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 24, 7))
+ >c1 : Symbol(c1, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 24, 7))
+ }
+@@= skipped -24, +24 lines =@@
+ >x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 42, 27))
+ 
+         foo<T extends { x: string }>(t: X<T>, t2: X<T>): T;
+->foo : Symbol(G.foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 42, 42))
++>foo : Symbol(foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 42, 42))
+ >T : Symbol(T, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 43, 12))
+ >x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 43, 23))
+ >t : Symbol(t, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 43, 37))
+@@= skipped -30, +30 lines =@@
+ 
+     var r = g.foo(c1, d1);
+ >r : Symbol(r, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 49, 7), Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 57, 7))
+->g.foo : Symbol(G.foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 42, 42))
++>g.foo : Symbol(foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 42, 42))
+ >g : Symbol(g, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 48, 7))
+->foo : Symbol(G.foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 42, 42))
++>foo : Symbol(foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 42, 42))
+ >c1 : Symbol(c1, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 46, 7))
+ >d1 : Symbol(d1, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 47, 7))
+ 
+     var r2 = g.foo(c1, c1);
+ >r2 : Symbol(r2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 50, 7), Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 58, 7))
+->g.foo : Symbol(G.foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 42, 42))
++>g.foo : Symbol(foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 42, 42))
+ >g : Symbol(g, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 48, 7))
+->foo : Symbol(G.foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 42, 42))
++>foo : Symbol(foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 42, 42))
+ >c1 : Symbol(c1, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 46, 7))
+ >c1 : Symbol(c1, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 46, 7))
+ 
+@@= skipped -20, +20 lines =@@
+ >C : Symbol(C, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 0, 0))
+ 
+         foo2<T extends C>(t: X<T>, t2: X<T>): T;
+->foo2 : Symbol(G2.foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 52, 31))
++>foo2 : Symbol(foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 52, 31))
+ >T : Symbol(T, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 53, 13))
+ >C : Symbol(C, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 0, 0))
+ >t : Symbol(t, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 53, 26))
+@@= skipped -19, +19 lines =@@
+ 
+     var r = g2.foo2(c1, d1);
+ >r : Symbol(r, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 49, 7), Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 57, 7))
+->g2.foo2 : Symbol(G2.foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 52, 31))
++>g2.foo2 : Symbol(foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 52, 31))
+ >g2 : Symbol(g2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 56, 7))
+->foo2 : Symbol(G2.foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 52, 31))
++>foo2 : Symbol(foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 52, 31))
+ >c1 : Symbol(c1, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 46, 7))
+ >d1 : Symbol(d1, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 47, 7))
+ 
+     var r2 = g2.foo2(c1, c1);
+ >r2 : Symbol(r2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 50, 7), Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 58, 7))
+->g2.foo2 : Symbol(G2.foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 52, 31))
++>g2.foo2 : Symbol(foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 52, 31))
+ >g2 : Symbol(g2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 56, 7))
+->foo2 : Symbol(G2.foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 52, 31))
++>foo2 : Symbol(foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 52, 31))
+ >c1 : Symbol(c1, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 46, 7))
+ >c1 : Symbol(c1, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 46, 7))
+ }

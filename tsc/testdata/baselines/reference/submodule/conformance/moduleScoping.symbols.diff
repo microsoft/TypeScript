@@ -1,0 +1,14 @@
+--- old.moduleScoping.symbols
++++ new.moduleScoping.symbols
+@@= skipped -31, +31 lines =@@
+ 
+ var t3 = file3.v3;
+ >t3 : Symbol(t3, Decl(file4.ts, 3, 3))
+->file3.v3 : Symbol(file3.v3, Decl(file3.ts, 0, 10))
++>file3.v3 : Symbol(v3, Decl(file3.ts, 0, 10))
+ >file3 : Symbol(file3, Decl(file4.ts, 0, 0))
+->v3 : Symbol(file3.v3, Decl(file3.ts, 0, 10))
++>v3 : Symbol(v3, Decl(file3.ts, 0, 10))
+ 
+ var v4 = {a: true, b: NaN};  // Should shadow global v2 in this module
+ >v4 : Symbol(v4, Decl(file4.ts, 4, 3))

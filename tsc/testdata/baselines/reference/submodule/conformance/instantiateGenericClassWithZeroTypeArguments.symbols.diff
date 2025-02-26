@@ -1,0 +1,25 @@
+--- old.instantiateGenericClassWithZeroTypeArguments.symbols
++++ new.instantiateGenericClassWithZeroTypeArguments.symbols
+@@= skipped -7, +7 lines =@@
+ >T : Symbol(T, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 2, 8))
+ 
+     x: T;
+->x : Symbol(C.x, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 2, 12))
++>x : Symbol(x, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 2, 12))
+ >T : Symbol(T, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 2, 8))
+ }
+ 
+@@= skipped -14, +14 lines =@@
+ >U : Symbol(U, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 10))
+ 
+     x: T
+->x : Symbol(D.x, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 15))
++>x : Symbol(x, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 15))
+ >T : Symbol(T, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 8))
+ 
+     y: U
+->y : Symbol(D.y, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 9, 8))
++>y : Symbol(y, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 9, 8))
+ >U : Symbol(U, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 10))
+ }
+ 

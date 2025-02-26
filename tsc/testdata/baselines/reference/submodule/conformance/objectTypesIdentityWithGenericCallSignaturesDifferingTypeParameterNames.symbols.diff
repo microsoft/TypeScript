@@ -1,0 +1,47 @@
+--- old.objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.symbols
++++ new.objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.symbols
+@@= skipped -6, +6 lines =@@
+ >A : Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 0, 0))
+ 
+     foo<T>(x: T): T { return null; }
+->foo : Symbol(A.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 2, 9))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 2, 9))
+ >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 3, 8))
+ >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 3, 11))
+ >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 3, 8))
+@@= skipped -12, +12 lines =@@
+ >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 6, 8))
+ 
+     foo(x: U): U { return null; }
+->foo : Symbol(B.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 6, 12))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 6, 12))
+ >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 7, 8))
+ >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 6, 8))
+ >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 6, 8))
+@@= skipped -11, +11 lines =@@
+ >V : Symbol(V, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 10, 8))
+ 
+     foo(x: V): V { return null; }
+->foo : Symbol(C.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 10, 12))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 10, 12))
+ >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 11, 8))
+ >V : Symbol(V, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 10, 8))
+ >V : Symbol(V, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 10, 8))
+@@= skipped -11, +11 lines =@@
+ >X : Symbol(X, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 14, 12))
+ 
+     foo(x: X): X;
+->foo : Symbol(I.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 14, 16))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 14, 16))
+ >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 15, 8))
+ >X : Symbol(X, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 14, 12))
+ >X : Symbol(X, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 14, 12))
+@@= skipped -10, +10 lines =@@
+ >I2 : Symbol(I2, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 16, 1))
+ 
+     foo<Y>(x: Y): Y;
+->foo : Symbol(I2.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 18, 14))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 18, 14))
+ >Y : Symbol(Y, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 19, 8))
+ >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 19, 11))
+ >Y : Symbol(Y, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts, 19, 8))

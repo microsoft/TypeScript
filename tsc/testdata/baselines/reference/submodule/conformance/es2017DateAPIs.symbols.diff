@@ -1,0 +1,12 @@
+--- old.es2017DateAPIs.symbols
++++ new.es2017DateAPIs.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === es2017DateAPIs.ts ===
+ Date.UTC(2017);
+->Date.UTC : Symbol(DateConstructor.UTC, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.date.d.ts, --, --))
++>Date.UTC : Symbol(UTC, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.date.d.ts, --, --))
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->UTC : Symbol(DateConstructor.UTC, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.date.d.ts, --, --))
++>UTC : Symbol(UTC, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.date.d.ts, --, --))
+ 

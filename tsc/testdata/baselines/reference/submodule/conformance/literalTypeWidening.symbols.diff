@@ -1,0 +1,63 @@
+--- old.literalTypeWidening.symbols
++++ new.literalTypeWidening.symbols
+@@= skipped -345, +345 lines =@@
+ >K : Symbol(K, Decl(literalTypeWidening.ts, 112, 20))
+ 
+   keys.forEach(key => result[key] = true)
+->keys.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>keys.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >keys : Symbol(keys, Decl(literalTypeWidening.ts, 112, 38))
+->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >key : Symbol(key, Decl(literalTypeWidening.ts, 114, 15))
+ >result : Symbol(result, Decl(literalTypeWidening.ts, 113, 7))
+ >key : Symbol(key, Decl(literalTypeWidening.ts, 114, 15))
+@@= skipped -22, +22 lines =@@
+ >K : Symbol(K, Decl(literalTypeWidening.ts, 118, 21))
+ 
+   return Object.keys(obj) as K[]
+->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
++>Object.keys : Symbol(keys, Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
++>keys : Symbol(keys, Decl(lib.es5.d.ts, --, --))
+ >obj : Symbol(obj, Decl(literalTypeWidening.ts, 118, 42))
+ >K : Symbol(K, Decl(literalTypeWidening.ts, 118, 21))
+ }
+@@= skipped -28, +28 lines =@@
+ const arr: Obj[] = langCodes.map(code => ({ code }))
+ >arr : Symbol(arr, Decl(literalTypeWidening.ts, 128, 5))
+ >Obj : Symbol(Obj, Decl(literalTypeWidening.ts, 120, 1))
+->langCodes.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>langCodes.map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >langCodes : Symbol(langCodes, Decl(literalTypeWidening.ts, 126, 12))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >code : Symbol(code, Decl(literalTypeWidening.ts, 128, 33))
+ >code : Symbol(code, Decl(literalTypeWidening.ts, 128, 43))
+ 
+@@= skipped -40, +40 lines =@@
+ 
+ enum E { A, B }
+ >E : Symbol(E, Decl(literalTypeWidening.ts, 139, 44))
+->A : Symbol(E.A, Decl(literalTypeWidening.ts, 140, 8))
+->B : Symbol(E.B, Decl(literalTypeWidening.ts, 140, 11))
++>A : Symbol(A, Decl(literalTypeWidening.ts, 140, 8))
++>B : Symbol(B, Decl(literalTypeWidening.ts, 140, 11))
+ 
+ const a = f(E.A);
+ >a : Symbol(a, Decl(literalTypeWidening.ts, 141, 5))
+ >f : Symbol(f, Decl(literalTypeWidening.ts, 135, 1))
+->E.A : Symbol(E.A, Decl(literalTypeWidening.ts, 140, 8))
++>E.A : Symbol(A, Decl(literalTypeWidening.ts, 140, 8))
+ >E : Symbol(E, Decl(literalTypeWidening.ts, 139, 44))
+->A : Symbol(E.A, Decl(literalTypeWidening.ts, 140, 8))
++>A : Symbol(A, Decl(literalTypeWidening.ts, 140, 8))
+ 
+ const b: E.A = a;
+ >b : Symbol(b, Decl(literalTypeWidening.ts, 142, 5))
+ >E : Symbol(E, Decl(literalTypeWidening.ts, 139, 44))
+->A : Symbol(E.A, Decl(literalTypeWidening.ts, 140, 8))
++>A : Symbol(A, Decl(literalTypeWidening.ts, 140, 8))
+ >a : Symbol(a, Decl(literalTypeWidening.ts, 141, 5))
+ 

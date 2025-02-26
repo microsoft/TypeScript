@@ -1,0 +1,90 @@
+--- old.narrowingAssignmentReadonlyRespectsAssertion.symbols
++++ new.narrowingAssignmentReadonlyRespectsAssertion.symbols
+@@= skipped -7, +7 lines =@@
+ >T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 2, 19))
+ 
+   readonly val1: T | ReadonlyArray<T>;
+->val1 : Symbol(TestCase.val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 2, 47))
++>val1 : Symbol(val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 2, 47))
+ >T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 2, 19))
+ >ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+ >T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 2, 19))
+ 
+   readonly val2: ReadonlyArray<T>;
+->val2 : Symbol(TestCase.val2, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 3, 38))
++>val2 : Symbol(val2, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 3, 38))
+ >ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+ >T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 2, 19))
+ }
+@@= skipped -16, +16 lines =@@
+ >T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 7, 27))
+ 
+   cases: T[];
+->cases : Symbol(MultiCaseFixture.cases, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 7, 31))
++>cases : Symbol(cases, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 7, 31))
+ >T : Symbol(T, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 7, 27))
+ }
+ 
+@@= skipped -51, +51 lines =@@
+ >subDataFunc : Symbol(subDataFunc, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 9, 1))
+ 
+   fixture.cases.forEach(({ val1, val2 }) => {
+->fixture.cases.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+->fixture.cases : Symbol(MultiCaseFixture.cases, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 7, 31))
++>fixture.cases.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
++>fixture.cases : Symbol(cases, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 7, 31))
+ >fixture : Symbol(fixture, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 25, 7))
+->cases : Symbol(MultiCaseFixture.cases, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 7, 31))
+->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>cases : Symbol(cases, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 7, 31))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >val1 : Symbol(val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 26, 26))
+ >val2 : Symbol(val2, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 26, 32))
+ 
+       if (Array.isArray(val1)) {
+->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>Array.isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ >val1 : Symbol(val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 26, 26))
+ 
+           // This should retain val1 as being an array
+           const reversedVal1 = val1.slice().reverse();
+ >reversedVal1 : Symbol(reversedVal1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 29, 15))
+->val1.slice().reverse : Symbol(Array.reverse, Decl(lib.es5.d.ts, --, --))
+->val1.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
++>val1.slice().reverse : Symbol(reverse, Decl(lib.es5.d.ts, --, --))
++>val1.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >val1 : Symbol(val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 26, 26))
+->slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+->reverse : Symbol(Array.reverse, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
++>reverse : Symbol(reverse, Decl(lib.es5.d.ts, --, --))
+ 
+           console.log(reversedVal1);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >reversedVal1 : Symbol(reversedVal1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 29, 15))
+ 
+       } else {
+           console.log(val1);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >val1 : Symbol(val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 26, 26))
+       }
+       console.log(val2);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >val2 : Symbol(val2, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 26, 32))
+ 
+   });

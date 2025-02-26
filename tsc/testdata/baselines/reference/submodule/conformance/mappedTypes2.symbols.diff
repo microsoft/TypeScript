@@ -1,0 +1,89 @@
+--- old.mappedTypes2.symbols
++++ new.mappedTypes2.symbols
+@@= skipped -155, +155 lines =@@
+ >Point : Symbol(Point, Decl(mappedTypes2.ts, 28, 48))
+ 
+     x: number;
+->x : Symbol(Point.x, Decl(mappedTypes2.ts, 30, 17))
++>x : Symbol(x, Decl(mappedTypes2.ts, 30, 17))
+ 
+     y: number;
+->y : Symbol(Point.y, Decl(mappedTypes2.ts, 31, 14))
++>y : Symbol(y, Decl(mappedTypes2.ts, 31, 14))
+ }
+ 
+ interface Shape {
+ >Shape : Symbol(Shape, Decl(mappedTypes2.ts, 33, 1))
+ 
+     name: string;
+->name : Symbol(Shape.name, Decl(mappedTypes2.ts, 35, 17))
++>name : Symbol(name, Decl(mappedTypes2.ts, 35, 17))
+ 
+     width: number;
+->width : Symbol(Shape.width, Decl(mappedTypes2.ts, 36, 17))
++>width : Symbol(width, Decl(mappedTypes2.ts, 36, 17))
+ 
+     height: number;
+->height : Symbol(Shape.height, Decl(mappedTypes2.ts, 37, 18))
++>height : Symbol(height, Decl(mappedTypes2.ts, 37, 18))
+ 
+     location: Point;
+->location : Symbol(Shape.location, Decl(mappedTypes2.ts, 38, 19))
++>location : Symbol(location, Decl(mappedTypes2.ts, 38, 19))
+ >Point : Symbol(Point, Decl(mappedTypes2.ts, 28, 48))
+ }
+ 
+@@= skipped -27, +27 lines =@@
+ >PartialShape : Symbol(PartialShape, Decl(mappedTypes2.ts, 40, 1))
+ 
+     name?: string;
+->name : Symbol(PartialShape.name, Decl(mappedTypes2.ts, 42, 24))
++>name : Symbol(name, Decl(mappedTypes2.ts, 42, 24))
+ 
+     width?: number;
+->width : Symbol(PartialShape.width, Decl(mappedTypes2.ts, 43, 18))
++>width : Symbol(width, Decl(mappedTypes2.ts, 43, 18))
+ 
+     height?: number;
+->height : Symbol(PartialShape.height, Decl(mappedTypes2.ts, 44, 19))
++>height : Symbol(height, Decl(mappedTypes2.ts, 44, 19))
+ 
+     location?: Point;
+->location : Symbol(PartialShape.location, Decl(mappedTypes2.ts, 45, 20))
++>location : Symbol(location, Decl(mappedTypes2.ts, 45, 20))
+ >Point : Symbol(Point, Decl(mappedTypes2.ts, 28, 48))
+ }
+ 
+@@= skipped -17, +17 lines =@@
+ >ReadonlyShape : Symbol(ReadonlyShape, Decl(mappedTypes2.ts, 47, 1))
+ 
+     readonly name: string;
+->name : Symbol(ReadonlyShape.name, Decl(mappedTypes2.ts, 49, 25))
++>name : Symbol(name, Decl(mappedTypes2.ts, 49, 25))
+ 
+     readonly width: number;
+->width : Symbol(ReadonlyShape.width, Decl(mappedTypes2.ts, 50, 26))
++>width : Symbol(width, Decl(mappedTypes2.ts, 50, 26))
+ 
+     readonly height: number;
+->height : Symbol(ReadonlyShape.height, Decl(mappedTypes2.ts, 51, 27))
++>height : Symbol(height, Decl(mappedTypes2.ts, 51, 27))
+ 
+     readonly location: Point;
+->location : Symbol(ReadonlyShape.location, Decl(mappedTypes2.ts, 52, 28))
++>location : Symbol(location, Decl(mappedTypes2.ts, 52, 28))
+ >Point : Symbol(Point, Decl(mappedTypes2.ts, 28, 48))
+ }
+ 
+@@= skipped -97, +97 lines =@@
+ >mapObject : Symbol(mapObject, Decl(mappedTypes2.ts, 26, 78))
+ >rec : Symbol(rec, Decl(mappedTypes2.ts, 78, 9))
+ >s : Symbol(s, Decl(mappedTypes2.ts, 79, 34))
+->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(mappedTypes2.ts, 79, 34))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function f5(shape: Shape) {

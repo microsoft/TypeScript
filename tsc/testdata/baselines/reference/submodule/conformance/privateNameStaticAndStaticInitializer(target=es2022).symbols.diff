@@ -1,0 +1,15 @@
+--- old.privateNameStaticAndStaticInitializer(target=es2022).symbols
++++ new.privateNameStaticAndStaticInitializer(target=es2022).symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(privateNameStaticAndStaticInitializer.ts, 0, 0))
+ 
+   static #foo = 1;
+->#foo : Symbol(A.#foo, Decl(privateNameStaticAndStaticInitializer.ts, 0, 9))
++>#foo : Symbol(#foo, Decl(privateNameStaticAndStaticInitializer.ts, 0, 9))
+ 
+   static #prop = 2;
+->#prop : Symbol(A.#prop, Decl(privateNameStaticAndStaticInitializer.ts, 1, 18))
++>#prop : Symbol(#prop, Decl(privateNameStaticAndStaticInitializer.ts, 1, 18))
+ }
+ 
+ 

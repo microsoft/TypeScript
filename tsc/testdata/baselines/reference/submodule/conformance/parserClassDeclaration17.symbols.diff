@@ -1,0 +1,19 @@
+--- old.parserClassDeclaration17.symbols
++++ new.parserClassDeclaration17.symbols
+@@= skipped -4, +4 lines =@@
+ >Enumerator : Symbol(Enumerator, Decl(parserClassDeclaration17.ts, 0, 0))
+ 
+     public atEnd(): boolean;
+->atEnd : Symbol(Enumerator.atEnd, Decl(parserClassDeclaration17.ts, 0, 26))
++>atEnd : Symbol(atEnd, Decl(parserClassDeclaration17.ts, 0, 26))
+ 
+     public moveNext();
+->moveNext : Symbol(Enumerator.moveNext, Decl(parserClassDeclaration17.ts, 1, 28))
++>moveNext : Symbol(moveNext, Decl(parserClassDeclaration17.ts, 1, 28))
+ 
+     public item(): any;
+->item : Symbol(Enumerator.item, Decl(parserClassDeclaration17.ts, 2, 22))
++>item : Symbol(item, Decl(parserClassDeclaration17.ts, 2, 22))
+ 
+     constructor (o: any);
+ >o : Symbol(o, Decl(parserClassDeclaration17.ts, 4, 17))

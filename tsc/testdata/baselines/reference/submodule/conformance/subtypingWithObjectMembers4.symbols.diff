@@ -1,0 +1,72 @@
+--- old.subtypingWithObjectMembers4.symbols
++++ new.subtypingWithObjectMembers4.symbols
+@@= skipped -6, +6 lines =@@
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembers4.ts, 0, 0))
+ 
+     foo: string;
+->foo : Symbol(Base.foo, Decl(subtypingWithObjectMembers4.ts, 2, 12))
++>foo : Symbol(foo, Decl(subtypingWithObjectMembers4.ts, 2, 12))
+ }
+ 
+ class Derived extends Base {
+@@= skipped -8, +8 lines =@@
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembers4.ts, 0, 0))
+ 
+     bar: string;
+->bar : Symbol(Derived.bar, Decl(subtypingWithObjectMembers4.ts, 6, 28))
++>bar : Symbol(bar, Decl(subtypingWithObjectMembers4.ts, 6, 28))
+ }
+ 
+ class A {
+ >A : Symbol(A, Decl(subtypingWithObjectMembers4.ts, 8, 1))
+ 
+     foo: Base;
+->foo : Symbol(A.foo, Decl(subtypingWithObjectMembers4.ts, 10, 9))
++>foo : Symbol(foo, Decl(subtypingWithObjectMembers4.ts, 10, 9))
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembers4.ts, 0, 0))
+ }
+ 
+@@= skipped -16, +16 lines =@@
+ >A : Symbol(A, Decl(subtypingWithObjectMembers4.ts, 8, 1))
+ 
+     fooo: Derived; // ok, inherits foo
+->fooo : Symbol(B.fooo, Decl(subtypingWithObjectMembers4.ts, 14, 19))
++>fooo : Symbol(fooo, Decl(subtypingWithObjectMembers4.ts, 14, 19))
+ >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers4.ts, 4, 1))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >A2 : Symbol(A2, Decl(subtypingWithObjectMembers4.ts, 16, 1))
+ 
+     1: Base; 
+->1 : Symbol(A2[1], Decl(subtypingWithObjectMembers4.ts, 18, 10))
++>1 : Symbol(1, Decl(subtypingWithObjectMembers4.ts, 18, 10))
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembers4.ts, 0, 0))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >A2 : Symbol(A2, Decl(subtypingWithObjectMembers4.ts, 16, 1))
+ 
+     1.1: Derived; // ok, inherits 1
+->1.1 : Symbol(B2[1.1], Decl(subtypingWithObjectMembers4.ts, 22, 21))
++>1.1 : Symbol(1.1, Decl(subtypingWithObjectMembers4.ts, 22, 21))
+ >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers4.ts, 4, 1))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >A3 : Symbol(A3, Decl(subtypingWithObjectMembers4.ts, 24, 1))
+ 
+     '1': Base;
+->'1' : Symbol(A3['1'], Decl(subtypingWithObjectMembers4.ts, 26, 10))
++>'1' : Symbol('1', Decl(subtypingWithObjectMembers4.ts, 26, 10))
+ >Base : Symbol(Base, Decl(subtypingWithObjectMembers4.ts, 0, 0))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >A3 : Symbol(A3, Decl(subtypingWithObjectMembers4.ts, 24, 1))
+ 
+     '1.1': Derived; // ok, inherits '1'
+->'1.1' : Symbol(B3['1.1'], Decl(subtypingWithObjectMembers4.ts, 30, 21))
++>'1.1' : Symbol('1.1', Decl(subtypingWithObjectMembers4.ts, 30, 21))
+ >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers4.ts, 4, 1))
+ }

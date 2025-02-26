@@ -1,0 +1,11 @@
+--- old.symbolType18.symbols
++++ new.symbolType18.symbols
+@@= skipped -2, +2 lines =@@
+ === symbolType18.ts ===
+ interface Foo { prop }
+ >Foo : Symbol(Foo, Decl(symbolType18.ts, 0, 0))
+->prop : Symbol(Foo.prop, Decl(symbolType18.ts, 0, 15))
++>prop : Symbol(prop, Decl(symbolType18.ts, 0, 15))
+ 
+ var x: symbol | Foo;
+ >x : Symbol(x, Decl(symbolType18.ts, 1, 3))

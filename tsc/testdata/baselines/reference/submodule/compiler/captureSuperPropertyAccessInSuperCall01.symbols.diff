@@ -1,0 +1,22 @@
+--- old.captureSuperPropertyAccessInSuperCall01.symbols
++++ new.captureSuperPropertyAccessInSuperCall01.symbols
+@@= skipped -7, +7 lines =@@
+ >f : Symbol(f, Decl(captureSuperPropertyAccessInSuperCall01.ts, 1, 13))
+ 	}
+ 	public blah(): string { return ""; }
+->blah : Symbol(A.blah, Decl(captureSuperPropertyAccessInSuperCall01.ts, 2, 2))
++>blah : Symbol(blah, Decl(captureSuperPropertyAccessInSuperCall01.ts, 2, 2))
+ }
+ 
+ class B extends A {
+@@= skipped -10, +10 lines =@@
+ 	constructor() {
+ 		super(() => { return super.blah(); })
+ >super : Symbol(A, Decl(captureSuperPropertyAccessInSuperCall01.ts, 0, 0))
+->super.blah : Symbol(A.blah, Decl(captureSuperPropertyAccessInSuperCall01.ts, 2, 2))
++>super.blah : Symbol(blah, Decl(captureSuperPropertyAccessInSuperCall01.ts, 2, 2))
+ >super : Symbol(A, Decl(captureSuperPropertyAccessInSuperCall01.ts, 0, 0))
+->blah : Symbol(A.blah, Decl(captureSuperPropertyAccessInSuperCall01.ts, 2, 2))
++>blah : Symbol(blah, Decl(captureSuperPropertyAccessInSuperCall01.ts, 2, 2))
+ 	}
+ }

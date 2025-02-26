@@ -1,0 +1,15 @@
+--- old.objectLiteralFunctionArgContextualTyping2.symbols
++++ new.objectLiteralFunctionArgContextualTyping2.symbols
+@@= skipped -4, +4 lines =@@
+ >I2 : Symbol(I2, Decl(objectLiteralFunctionArgContextualTyping2.ts, 0, 0))
+ 
+     value: string;
+->value : Symbol(I2.value, Decl(objectLiteralFunctionArgContextualTyping2.ts, 0, 14))
++>value : Symbol(value, Decl(objectLiteralFunctionArgContextualTyping2.ts, 0, 14))
+ 
+     doStuff: (t: string) => string;
+->doStuff : Symbol(I2.doStuff, Decl(objectLiteralFunctionArgContextualTyping2.ts, 1, 18))
++>doStuff : Symbol(doStuff, Decl(objectLiteralFunctionArgContextualTyping2.ts, 1, 18))
+ >t : Symbol(t, Decl(objectLiteralFunctionArgContextualTyping2.ts, 2, 14))
+ }
+ 

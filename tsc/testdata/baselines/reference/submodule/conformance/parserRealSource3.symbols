@@ -1,0 +1,345 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserRealSource3.ts] ////
+
+=== parserRealSource3.ts ===
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+
+///<reference path='typescript.ts' />
+
+module TypeScript {
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource3.ts, 0, 0))
+
+    // Note: Any addition to the NodeType should also be supported with addition to AstWalkerDetailCallback
+    export enum NodeType {
+>NodeType : Symbol(NodeType, Decl(parserRealSource3.ts, 5, 19))
+
+        None,
+>None : Symbol(None, Decl(parserRealSource3.ts, 7, 26))
+
+        Empty,
+>Empty : Symbol(Empty, Decl(parserRealSource3.ts, 8, 13))
+
+        EmptyExpr,
+>EmptyExpr : Symbol(EmptyExpr, Decl(parserRealSource3.ts, 9, 14))
+
+        True,
+>True : Symbol(True, Decl(parserRealSource3.ts, 10, 18))
+
+        False,
+>False : Symbol(False, Decl(parserRealSource3.ts, 11, 13))
+
+        This,
+>This : Symbol(This, Decl(parserRealSource3.ts, 12, 14))
+
+        Super,
+>Super : Symbol(Super, Decl(parserRealSource3.ts, 13, 13))
+
+        QString,
+>QString : Symbol(QString, Decl(parserRealSource3.ts, 14, 14))
+
+        Regex,
+>Regex : Symbol(Regex, Decl(parserRealSource3.ts, 15, 16))
+
+        Null,
+>Null : Symbol(Null, Decl(parserRealSource3.ts, 16, 14))
+
+        ArrayLit,
+>ArrayLit : Symbol(ArrayLit, Decl(parserRealSource3.ts, 17, 13))
+
+        ObjectLit,
+>ObjectLit : Symbol(ObjectLit, Decl(parserRealSource3.ts, 18, 17))
+
+        Void,
+>Void : Symbol(Void, Decl(parserRealSource3.ts, 19, 18))
+
+        Comma,
+>Comma : Symbol(Comma, Decl(parserRealSource3.ts, 20, 13))
+
+        Pos,
+>Pos : Symbol(Pos, Decl(parserRealSource3.ts, 21, 14))
+
+        Neg,
+>Neg : Symbol(Neg, Decl(parserRealSource3.ts, 22, 12))
+
+        Delete,
+>Delete : Symbol(Delete, Decl(parserRealSource3.ts, 23, 12))
+
+        Await,
+>Await : Symbol(Await, Decl(parserRealSource3.ts, 24, 15))
+
+        In,
+>In : Symbol(In, Decl(parserRealSource3.ts, 25, 14))
+
+        Dot,
+>Dot : Symbol(Dot, Decl(parserRealSource3.ts, 26, 11))
+
+        From,
+>From : Symbol(From, Decl(parserRealSource3.ts, 27, 12))
+
+        Is,
+>Is : Symbol(Is, Decl(parserRealSource3.ts, 28, 13))
+
+        InstOf,
+>InstOf : Symbol(InstOf, Decl(parserRealSource3.ts, 29, 11))
+
+        Typeof,
+>Typeof : Symbol(Typeof, Decl(parserRealSource3.ts, 30, 15))
+
+        NumberLit,
+>NumberLit : Symbol(NumberLit, Decl(parserRealSource3.ts, 31, 15))
+
+        Name,
+>Name : Symbol(Name, Decl(parserRealSource3.ts, 32, 18))
+
+        TypeRef,
+>TypeRef : Symbol(TypeRef, Decl(parserRealSource3.ts, 33, 13))
+
+        Index,
+>Index : Symbol(Index, Decl(parserRealSource3.ts, 34, 16))
+
+        Call,
+>Call : Symbol(Call, Decl(parserRealSource3.ts, 35, 14))
+
+        New,
+>New : Symbol(New, Decl(parserRealSource3.ts, 36, 13))
+
+        Asg,
+>Asg : Symbol(Asg, Decl(parserRealSource3.ts, 37, 12))
+
+        AsgAdd,
+>AsgAdd : Symbol(AsgAdd, Decl(parserRealSource3.ts, 38, 12))
+
+        AsgSub,
+>AsgSub : Symbol(AsgSub, Decl(parserRealSource3.ts, 39, 15))
+
+        AsgDiv,
+>AsgDiv : Symbol(AsgDiv, Decl(parserRealSource3.ts, 40, 15))
+
+        AsgMul,
+>AsgMul : Symbol(AsgMul, Decl(parserRealSource3.ts, 41, 15))
+
+        AsgMod,
+>AsgMod : Symbol(AsgMod, Decl(parserRealSource3.ts, 42, 15))
+
+        AsgAnd,
+>AsgAnd : Symbol(AsgAnd, Decl(parserRealSource3.ts, 43, 15))
+
+        AsgXor,
+>AsgXor : Symbol(AsgXor, Decl(parserRealSource3.ts, 44, 15))
+
+        AsgOr,
+>AsgOr : Symbol(AsgOr, Decl(parserRealSource3.ts, 45, 15))
+
+        AsgLsh,
+>AsgLsh : Symbol(AsgLsh, Decl(parserRealSource3.ts, 46, 14))
+
+        AsgRsh,
+>AsgRsh : Symbol(AsgRsh, Decl(parserRealSource3.ts, 47, 15))
+
+        AsgRs2,
+>AsgRs2 : Symbol(AsgRs2, Decl(parserRealSource3.ts, 48, 15))
+
+        ConditionalExpression,
+>ConditionalExpression : Symbol(ConditionalExpression, Decl(parserRealSource3.ts, 49, 15))
+
+        LogOr,
+>LogOr : Symbol(LogOr, Decl(parserRealSource3.ts, 50, 30))
+
+        LogAnd,
+>LogAnd : Symbol(LogAnd, Decl(parserRealSource3.ts, 51, 14))
+
+        Or,
+>Or : Symbol(Or, Decl(parserRealSource3.ts, 52, 15))
+
+        Xor,
+>Xor : Symbol(Xor, Decl(parserRealSource3.ts, 53, 11))
+
+        And,
+>And : Symbol(And, Decl(parserRealSource3.ts, 54, 12))
+
+        Eq,
+>Eq : Symbol(Eq, Decl(parserRealSource3.ts, 55, 12))
+
+        Ne,
+>Ne : Symbol(Ne, Decl(parserRealSource3.ts, 56, 11))
+
+        Eqv,
+>Eqv : Symbol(Eqv, Decl(parserRealSource3.ts, 57, 11))
+
+        NEqv,
+>NEqv : Symbol(NEqv, Decl(parserRealSource3.ts, 58, 12))
+
+        Lt,
+>Lt : Symbol(Lt, Decl(parserRealSource3.ts, 59, 13))
+
+        Le,
+>Le : Symbol(Le, Decl(parserRealSource3.ts, 60, 11))
+
+        Gt,
+>Gt : Symbol(Gt, Decl(parserRealSource3.ts, 61, 11))
+
+        Ge,
+>Ge : Symbol(Ge, Decl(parserRealSource3.ts, 62, 11))
+
+        Add,
+>Add : Symbol(Add, Decl(parserRealSource3.ts, 63, 11))
+
+        Sub,
+>Sub : Symbol(Sub, Decl(parserRealSource3.ts, 64, 12))
+
+        Mul,
+>Mul : Symbol(Mul, Decl(parserRealSource3.ts, 65, 12))
+
+        Div,
+>Div : Symbol(Div, Decl(parserRealSource3.ts, 66, 12))
+
+        Mod,
+>Mod : Symbol(Mod, Decl(parserRealSource3.ts, 67, 12))
+
+        Lsh,
+>Lsh : Symbol(Lsh, Decl(parserRealSource3.ts, 68, 12))
+
+        Rsh,
+>Rsh : Symbol(Rsh, Decl(parserRealSource3.ts, 69, 12))
+
+        Rs2,
+>Rs2 : Symbol(Rs2, Decl(parserRealSource3.ts, 70, 12))
+
+        Not,
+>Not : Symbol(Not, Decl(parserRealSource3.ts, 71, 12))
+
+        LogNot,
+>LogNot : Symbol(LogNot, Decl(parserRealSource3.ts, 72, 12))
+
+        IncPre,
+>IncPre : Symbol(IncPre, Decl(parserRealSource3.ts, 73, 15))
+
+        DecPre,
+>DecPre : Symbol(DecPre, Decl(parserRealSource3.ts, 74, 15))
+
+        IncPost,
+>IncPost : Symbol(IncPost, Decl(parserRealSource3.ts, 75, 15))
+
+        DecPost,
+>DecPost : Symbol(DecPost, Decl(parserRealSource3.ts, 76, 16))
+
+        TypeAssertion,
+>TypeAssertion : Symbol(TypeAssertion, Decl(parserRealSource3.ts, 77, 16))
+
+        FuncDecl,
+>FuncDecl : Symbol(FuncDecl, Decl(parserRealSource3.ts, 78, 22))
+
+        Member,
+>Member : Symbol(Member, Decl(parserRealSource3.ts, 79, 17))
+
+        VarDecl,
+>VarDecl : Symbol(VarDecl, Decl(parserRealSource3.ts, 80, 15))
+
+        ArgDecl,
+>ArgDecl : Symbol(ArgDecl, Decl(parserRealSource3.ts, 81, 16))
+
+        Return,
+>Return : Symbol(Return, Decl(parserRealSource3.ts, 82, 16))
+
+        Break,
+>Break : Symbol(Break, Decl(parserRealSource3.ts, 83, 15))
+
+        Continue,
+>Continue : Symbol(Continue, Decl(parserRealSource3.ts, 84, 14))
+
+        Throw,
+>Throw : Symbol(Throw, Decl(parserRealSource3.ts, 85, 17))
+
+        For,
+>For : Symbol(For, Decl(parserRealSource3.ts, 86, 14))
+
+        ForIn,
+>ForIn : Symbol(ForIn, Decl(parserRealSource3.ts, 87, 12))
+
+        If,
+>If : Symbol(If, Decl(parserRealSource3.ts, 88, 14))
+
+        While,
+>While : Symbol(While, Decl(parserRealSource3.ts, 89, 11))
+
+        DoWhile,
+>DoWhile : Symbol(DoWhile, Decl(parserRealSource3.ts, 90, 14))
+
+        Block,
+>Block : Symbol(Block, Decl(parserRealSource3.ts, 91, 16))
+
+        Case,
+>Case : Symbol(Case, Decl(parserRealSource3.ts, 92, 14))
+
+        Switch,
+>Switch : Symbol(Switch, Decl(parserRealSource3.ts, 93, 13))
+
+        Try,
+>Try : Symbol(Try, Decl(parserRealSource3.ts, 94, 15))
+
+        TryCatch,
+>TryCatch : Symbol(TryCatch, Decl(parserRealSource3.ts, 95, 12))
+
+        TryFinally,
+>TryFinally : Symbol(TryFinally, Decl(parserRealSource3.ts, 96, 17))
+
+        Finally,
+>Finally : Symbol(Finally, Decl(parserRealSource3.ts, 97, 19))
+
+        Catch,
+>Catch : Symbol(Catch, Decl(parserRealSource3.ts, 98, 16))
+
+        List,
+>List : Symbol(List, Decl(parserRealSource3.ts, 99, 14))
+
+        Script,
+>Script : Symbol(Script, Decl(parserRealSource3.ts, 100, 13))
+
+        ClassDeclaration,
+>ClassDeclaration : Symbol(ClassDeclaration, Decl(parserRealSource3.ts, 101, 15))
+
+        InterfaceDeclaration,
+>InterfaceDeclaration : Symbol(InterfaceDeclaration, Decl(parserRealSource3.ts, 102, 25))
+
+        ModuleDeclaration,
+>ModuleDeclaration : Symbol(ModuleDeclaration, Decl(parserRealSource3.ts, 103, 29))
+
+        ImportDeclaration,
+>ImportDeclaration : Symbol(ImportDeclaration, Decl(parserRealSource3.ts, 104, 26))
+
+        With,
+>With : Symbol(With, Decl(parserRealSource3.ts, 105, 26))
+
+        Label,
+>Label : Symbol(Label, Decl(parserRealSource3.ts, 106, 13))
+
+        LabeledStatement,
+>LabeledStatement : Symbol(LabeledStatement, Decl(parserRealSource3.ts, 107, 14))
+
+        EBStart,
+>EBStart : Symbol(EBStart, Decl(parserRealSource3.ts, 108, 25))
+
+        GotoEB,
+>GotoEB : Symbol(GotoEB, Decl(parserRealSource3.ts, 109, 16))
+
+        EndCode,
+>EndCode : Symbol(EndCode, Decl(parserRealSource3.ts, 110, 15))
+
+        Error,
+>Error : Symbol(Error, Decl(parserRealSource3.ts, 111, 16))
+
+        Comment,
+>Comment : Symbol(Comment, Decl(parserRealSource3.ts, 112, 14))
+
+        Debugger,
+>Debugger : Symbol(Debugger, Decl(parserRealSource3.ts, 113, 16))
+
+        GeneralNode = FuncDecl,
+>GeneralNode : Symbol(GeneralNode, Decl(parserRealSource3.ts, 114, 17))
+>FuncDecl : Symbol(FuncDecl, Decl(parserRealSource3.ts, 78, 22))
+
+        LastAsg = AsgRs2,
+>LastAsg : Symbol(LastAsg, Decl(parserRealSource3.ts, 115, 31))
+>AsgRs2 : Symbol(AsgRs2, Decl(parserRealSource3.ts, 48, 15))
+    }
+}

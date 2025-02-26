@@ -1,0 +1,57 @@
+--- old.destructuringParameterDeclaration2.symbols
++++ new.destructuringParameterDeclaration2.symbols
+@@= skipped -26, +26 lines =@@
+ >F1 : Symbol(F1, Decl(destructuringParameterDeclaration2.ts, 7, 34))
+ 
+     b0(z = 10, [[a, b], d, {u}] = [[1, 2], "string", { u: false }]);  // Error, no function body
+->b0 : Symbol(F1.b0, Decl(destructuringParameterDeclaration2.ts, 14, 14))
++>b0 : Symbol(b0, Decl(destructuringParameterDeclaration2.ts, 14, 14))
+ >z : Symbol(z, Decl(destructuringParameterDeclaration2.ts, 15, 7))
+ >a : Symbol(a, Decl(destructuringParameterDeclaration2.ts, 15, 17))
+ >b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 15, 19))
+@@= skipped -126, +126 lines =@@
+ >F2 : Symbol(F2, Decl(destructuringParameterDeclaration2.ts, 46, 27))
+ 
+     d3([a, b, c]?);
+->d3 : Symbol(F2.d3, Decl(destructuringParameterDeclaration2.ts, 48, 14))
++>d3 : Symbol(d3, Decl(destructuringParameterDeclaration2.ts, 48, 14))
+ >a : Symbol(a, Decl(destructuringParameterDeclaration2.ts, 49, 8))
+ >b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 49, 10))
+ >c : Symbol(c, Decl(destructuringParameterDeclaration2.ts, 49, 13))
+ 
+     d4({x, y, z}?);
+->d4 : Symbol(F2.d4, Decl(destructuringParameterDeclaration2.ts, 49, 19))
++>d4 : Symbol(d4, Decl(destructuringParameterDeclaration2.ts, 49, 19))
+ >x : Symbol(x, Decl(destructuringParameterDeclaration2.ts, 50, 8))
+ >y : Symbol(y, Decl(destructuringParameterDeclaration2.ts, 50, 10))
+ >z : Symbol(z, Decl(destructuringParameterDeclaration2.ts, 50, 13))
+ 
+     e0([a, b, c]);
+->e0 : Symbol(F2.e0, Decl(destructuringParameterDeclaration2.ts, 50, 19))
++>e0 : Symbol(e0, Decl(destructuringParameterDeclaration2.ts, 50, 19))
+ >a : Symbol(a, Decl(destructuringParameterDeclaration2.ts, 51, 8))
+ >b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 51, 10))
+ >c : Symbol(c, Decl(destructuringParameterDeclaration2.ts, 51, 13))
+@@= skipped -23, +23 lines =@@
+ >F2 : Symbol(F2, Decl(destructuringParameterDeclaration2.ts, 46, 27))
+ 
+     d3([a, b, c]?) { }  // Error, binding pattern can't be optional in implementation signature
+->d3 : Symbol(C4.d3, Decl(destructuringParameterDeclaration2.ts, 54, 24))
++>d3 : Symbol(d3, Decl(destructuringParameterDeclaration2.ts, 54, 24))
+ >a : Symbol(a, Decl(destructuringParameterDeclaration2.ts, 55, 8))
+ >b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 55, 10))
+ >c : Symbol(c, Decl(destructuringParameterDeclaration2.ts, 55, 13))
+ 
+     d4({x, y, c}) { }
+->d4 : Symbol(C4.d4, Decl(destructuringParameterDeclaration2.ts, 55, 22))
++>d4 : Symbol(d4, Decl(destructuringParameterDeclaration2.ts, 55, 22))
+ >x : Symbol(x, Decl(destructuringParameterDeclaration2.ts, 56, 8))
+ >y : Symbol(y, Decl(destructuringParameterDeclaration2.ts, 56, 10))
+ >c : Symbol(c, Decl(destructuringParameterDeclaration2.ts, 56, 13))
+ 
+     e0([a, b, q]) { }
+->e0 : Symbol(C4.e0, Decl(destructuringParameterDeclaration2.ts, 56, 21))
++>e0 : Symbol(e0, Decl(destructuringParameterDeclaration2.ts, 56, 21))
+ >a : Symbol(a, Decl(destructuringParameterDeclaration2.ts, 57, 8))
+ >b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 57, 10))
+ >q : Symbol(q, Decl(destructuringParameterDeclaration2.ts, 57, 13))

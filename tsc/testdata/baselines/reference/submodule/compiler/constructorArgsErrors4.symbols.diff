@@ -1,0 +1,11 @@
+--- old.constructorArgsErrors4.symbols
++++ new.constructorArgsErrors4.symbols
+@@= skipped -4, +4 lines =@@
+ >foo : Symbol(foo, Decl(constructorArgsErrors4.ts, 0, 0))
+ 
+     constructor (private public a: number) {
+->a : Symbol(foo.a, Decl(constructorArgsErrors4.ts, 1, 17))
++>a : Symbol(a, Decl(constructorArgsErrors4.ts, 1, 17))
+     }
+ }
+ 

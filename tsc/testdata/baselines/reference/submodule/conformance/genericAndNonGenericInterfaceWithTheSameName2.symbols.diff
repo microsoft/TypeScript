@@ -1,0 +1,38 @@
+--- old.genericAndNonGenericInterfaceWithTheSameName2.symbols
++++ new.genericAndNonGenericInterfaceWithTheSameName2.symbols
+@@= skipped -10, +10 lines =@@
+ >T : Symbol(T, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 3, 16))
+ 
+         bar: T;
+->bar : Symbol(A.bar, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 3, 20))
++>bar : Symbol(bar, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 3, 20))
+ >T : Symbol(T, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 3, 16))
+     }
+ }
+@@= skipped -12, +12 lines =@@
+ >A : Symbol(A, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 8, 11))
+ 
+         foo: string;
+->foo : Symbol(A.foo, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 9, 17))
++>foo : Symbol(foo, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 9, 17))
+     }
+ }
+ 
+@@= skipped -15, +15 lines =@@
+ >T : Symbol(T, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 16, 20))
+ 
+             bar: T;
+->bar : Symbol(A.bar, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 16, 24))
++>bar : Symbol(bar, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 16, 24))
+ >T : Symbol(T, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 16, 20))
+         }
+     }
+@@= skipped -12, +12 lines =@@
+ >A : Symbol(A, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 21, 15))
+ 
+             foo: string;
+->foo : Symbol(A.foo, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 22, 21))
++>foo : Symbol(foo, Decl(genericAndNonGenericInterfaceWithTheSameName2.ts, 22, 21))
+         }
+     }
+ }

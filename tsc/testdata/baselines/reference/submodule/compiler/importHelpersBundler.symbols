@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/importHelpersBundler.ts] ////
+
+=== /node_modules/tslib/tslib.d.ts ===
+
+export {};
+
+=== /node_modules/tslib/modules/index.d.ts ===
+export declare var __rest: any;
+>__rest : Symbol(__rest, Decl(index.d.ts, 0, 18))
+
+=== /main.ts ===
+export function foo(args: any) {
+>foo : Symbol(foo, Decl(main.ts, 0, 0))
+>args : Symbol(args, Decl(main.ts, 0, 20))
+
+  const { bar, ...extraArgs } = args;
+>bar : Symbol(bar, Decl(main.ts, 1, 9))
+>extraArgs : Symbol(extraArgs, Decl(main.ts, 1, 14))
+>args : Symbol(args, Decl(main.ts, 0, 20))
+
+  return extraArgs;
+>extraArgs : Symbol(extraArgs, Decl(main.ts, 1, 14))
+}
+

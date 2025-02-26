@@ -1,0 +1,51 @@
+--- old.overloadResolutionClassConstructors.symbols
++++ new.overloadResolutionClassConstructors.symbols
+@@= skipped -4, +4 lines =@@
+ >SomeBase : Symbol(SomeBase, Decl(overloadResolutionClassConstructors.ts, 0, 0))
+ 
+     private n;
+->n : Symbol(SomeBase.n, Decl(overloadResolutionClassConstructors.ts, 0, 16))
++>n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 0, 16))
+ 
+     public s: string;
+->s : Symbol(SomeBase.s, Decl(overloadResolutionClassConstructors.ts, 1, 14))
++>s : Symbol(s, Decl(overloadResolutionClassConstructors.ts, 1, 14))
+ }
+ class SomeDerived1 extends SomeBase {
+ >SomeDerived1 : Symbol(SomeDerived1, Decl(overloadResolutionClassConstructors.ts, 4, 1))
+ >SomeBase : Symbol(SomeBase, Decl(overloadResolutionClassConstructors.ts, 0, 0))
+ 
+     private m;
+->m : Symbol(SomeDerived1.m, Decl(overloadResolutionClassConstructors.ts, 5, 37))
++>m : Symbol(m, Decl(overloadResolutionClassConstructors.ts, 5, 37))
+ }
+ class SomeDerived2 extends SomeBase {
+ >SomeDerived2 : Symbol(SomeDerived2, Decl(overloadResolutionClassConstructors.ts, 7, 1))
+ >SomeBase : Symbol(SomeBase, Decl(overloadResolutionClassConstructors.ts, 0, 0))
+ 
+     private m;
+->m : Symbol(SomeDerived2.m, Decl(overloadResolutionClassConstructors.ts, 8, 37))
++>m : Symbol(m, Decl(overloadResolutionClassConstructors.ts, 8, 37))
+ }
+ class SomeDerived3 extends SomeBase {
+ >SomeDerived3 : Symbol(SomeDerived3, Decl(overloadResolutionClassConstructors.ts, 10, 1))
+ >SomeBase : Symbol(SomeBase, Decl(overloadResolutionClassConstructors.ts, 0, 0))
+ 
+     private m;
+->m : Symbol(SomeDerived3.m, Decl(overloadResolutionClassConstructors.ts, 11, 37))
++>m : Symbol(m, Decl(overloadResolutionClassConstructors.ts, 11, 37))
+ }
+ 
+ 
+@@= skipped -213, +213 lines =@@
+ new fn5((n) => n.substr(0));
+ >fn5 : Symbol(fn5, Decl(overloadResolutionClassConstructors.ts, 87, 20))
+ >n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 96, 9))
+->n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
++>n.substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
+ >n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 96, 9))
+->substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
++>substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
+ 
+ new fn5((n) => n.blah); // Error
+ >fn5 : Symbol(fn5, Decl(overloadResolutionClassConstructors.ts, 87, 20))

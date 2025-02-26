@@ -1,0 +1,101 @@
+--- old.umd-augmentation-1.symbols
++++ new.umd-augmentation-1.symbols
+@@= skipped -6, +6 lines =@@
+ 
+ let v = new m.Vector(3, 2);
+ >v : Symbol(v, Decl(b.ts, 2, 3))
+->m.Vector : Symbol(m.Vector, Decl(index.d.ts, 5, 1), Decl(math2d-augment.d.ts, 2, 25))
++>m.Vector : Symbol(Vector, Decl(index.d.ts, 5, 1), Decl(math2d-augment.d.ts, 2, 25))
+ >m : Symbol(m, Decl(b.ts, 1, 6))
+->Vector : Symbol(m.Vector, Decl(index.d.ts, 5, 1), Decl(math2d-augment.d.ts, 2, 25))
++>Vector : Symbol(Vector, Decl(index.d.ts, 5, 1), Decl(math2d-augment.d.ts, 2, 25))
+ 
+ let magnitude = m.getLength(v);
+ >magnitude : Symbol(magnitude, Decl(b.ts, 3, 3))
+->m.getLength : Symbol(m.getLength, Decl(index.d.ts, 13, 1))
++>m.getLength : Symbol(getLength, Decl(index.d.ts, 13, 1))
+ >m : Symbol(m, Decl(b.ts, 1, 6))
+->getLength : Symbol(m.getLength, Decl(index.d.ts, 13, 1))
++>getLength : Symbol(getLength, Decl(index.d.ts, 13, 1))
+ >v : Symbol(v, Decl(b.ts, 2, 3))
+ 
+ let p: m.Point = v.translate(5, 5);
+ >p : Symbol(p, Decl(b.ts, 4, 3))
+ >m : Symbol(m, Decl(b.ts, 1, 6))
+->Point : Symbol(m.Point, Decl(index.d.ts, 0, 27))
+->v.translate : Symbol(m.Vector.translate, Decl(index.d.ts, 10, 35))
++>Point : Symbol(Point, Decl(index.d.ts, 0, 27))
++>v.translate : Symbol(translate, Decl(index.d.ts, 10, 35))
+ >v : Symbol(v, Decl(b.ts, 2, 3))
+->translate : Symbol(m.Vector.translate, Decl(index.d.ts, 10, 35))
++>translate : Symbol(translate, Decl(index.d.ts, 10, 35))
+ 
+ p = v.reverse();
+ >p : Symbol(p, Decl(b.ts, 4, 3))
+->v.reverse : Symbol(m.Vector.reverse, Decl(math2d-augment.d.ts, 4, 19))
++>v.reverse : Symbol(reverse, Decl(math2d-augment.d.ts, 4, 19))
+ >v : Symbol(v, Decl(b.ts, 2, 3))
+->reverse : Symbol(m.Vector.reverse, Decl(math2d-augment.d.ts, 4, 19))
++>reverse : Symbol(reverse, Decl(math2d-augment.d.ts, 4, 19))
+ 
+ var t = p.x;
+ >t : Symbol(t, Decl(b.ts, 6, 3))
+->p.x : Symbol(m.Point.x, Decl(index.d.ts, 2, 24))
++>p.x : Symbol(x, Decl(index.d.ts, 2, 24))
+ >p : Symbol(p, Decl(b.ts, 4, 3))
+->x : Symbol(m.Point.x, Decl(index.d.ts, 2, 24))
++>x : Symbol(x, Decl(index.d.ts, 2, 24))
+ 
+ === node_modules/math2d/index.d.ts ===
+ export as namespace Math2d;
+@@= skipped -39, +39 lines =@@
+ >Point : Symbol(Point, Decl(index.d.ts, 0, 27))
+ 
+ 	x: number;
+->x : Symbol(Point.x, Decl(index.d.ts, 2, 24))
++>x : Symbol(x, Decl(index.d.ts, 2, 24))
+ 
+ 	y: number;
+->y : Symbol(Point.y, Decl(index.d.ts, 3, 11))
++>y : Symbol(y, Decl(index.d.ts, 3, 11))
+ }
+ 
+ export class Vector implements Point {
+@@= skipped -11, +11 lines =@@
+ >Point : Symbol(Point, Decl(index.d.ts, 0, 27))
+ 
+ 	x: number;
+->x : Symbol(Vector.x, Decl(index.d.ts, 7, 38))
++>x : Symbol(x, Decl(index.d.ts, 7, 38))
+ 
+ 	y: number;
+->y : Symbol(Vector.y, Decl(index.d.ts, 8, 11))
++>y : Symbol(y, Decl(index.d.ts, 8, 11))
+ 
+ 	constructor(x: number, y: number);
+ >x : Symbol(x, Decl(index.d.ts, 10, 13))
+ >y : Symbol(y, Decl(index.d.ts, 10, 23))
+ 
+ 	translate(dx: number, dy: number): Vector;
+->translate : Symbol(Vector.translate, Decl(index.d.ts, 10, 35))
++>translate : Symbol(translate, Decl(index.d.ts, 10, 35))
+ >dx : Symbol(dx, Decl(index.d.ts, 12, 11))
+ >dy : Symbol(dy, Decl(index.d.ts, 12, 22))
+ >Vector : Symbol(Vector, Decl(index.d.ts, 5, 1), Decl(math2d-augment.d.ts, 2, 25))
+@@= skipped -27, +27 lines =@@
+ 
+ // Augment the module
+ declare module 'math2d' {
+->'math2d' : Symbol(Math2d, Decl(index.d.ts, 0, 0), Decl(math2d-augment.d.ts, 0, 33))
++>'math2d' : Symbol(""node_modules/math2d/index.d.ts"", Decl(index.d.ts, 0, 0), Decl(math2d-augment.d.ts, 0, 33))
+ 
+ 	// Add a method to the class
+ 	interface Vector {
+ >Vector : Symbol(Vector, Decl(index.d.ts, 5, 1), Decl(math2d-augment.d.ts, 2, 25))
+ 
+ 		reverse(): Math2d.Point;
+->reverse : Symbol(Vector.reverse, Decl(math2d-augment.d.ts, 4, 19))
++>reverse : Symbol(reverse, Decl(math2d-augment.d.ts, 4, 19))
+ >Math2d : Symbol(Math2d, Decl(math2d-augment.d.ts, 0, 6))
+ >Point : Symbol(Point, Decl(index.d.ts, 0, 27))
+ 	}

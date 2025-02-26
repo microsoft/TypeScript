@@ -1,0 +1,31 @@
+--- old.disallowLineTerminatorBeforeArrow.symbols
++++ new.disallowLineTerminatorBeforeArrow.symbols
+@@= skipped -149, +149 lines =@@
+         }
+ 
+         public m = ()
+->m : Symbol(City.m, Decl(disallowLineTerminatorBeforeArrow.ts, 59, 9))
++>m : Symbol(m, Decl(disallowLineTerminatorBeforeArrow.ts, 59, 9))
+ 
+             => 2 * 2 * 2
+     }
+@@= skipped -9, +9 lines =@@
+ >Enum : Symbol(Enum, Decl(disallowLineTerminatorBeforeArrow.ts, 63, 5))
+ 
+         claw = (()
+->claw : Symbol(Enum.claw, Decl(disallowLineTerminatorBeforeArrow.ts, 65, 22))
++>claw : Symbol(claw, Decl(disallowLineTerminatorBeforeArrow.ts, 65, 22))
+ 
+             => 10)()
+     }
+@@= skipped -11, +11 lines =@@
+ 
+         => new City(Enum.claw);
+ >City : Symbol(City, Decl(disallowLineTerminatorBeforeArrow.ts, 55, 10))
+->Enum.claw : Symbol(Enum.claw, Decl(disallowLineTerminatorBeforeArrow.ts, 65, 22))
++>Enum.claw : Symbol(claw, Decl(disallowLineTerminatorBeforeArrow.ts, 65, 22))
+ >Enum : Symbol(Enum, Decl(disallowLineTerminatorBeforeArrow.ts, 63, 5))
+->claw : Symbol(Enum.claw, Decl(disallowLineTerminatorBeforeArrow.ts, 65, 22))
++>claw : Symbol(claw, Decl(disallowLineTerminatorBeforeArrow.ts, 65, 22))
+ }
+ 

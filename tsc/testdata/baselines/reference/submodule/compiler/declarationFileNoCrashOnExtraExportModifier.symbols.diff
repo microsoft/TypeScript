@@ -1,0 +1,25 @@
+--- old.declarationFileNoCrashOnExtraExportModifier.symbols
++++ new.declarationFileNoCrashOnExtraExportModifier.symbols
+@@= skipped -10, +10 lines =@@
+ >p : Symbol(p, Decl(input.ts, 2, 16))
+ 
+     t: number;
+->t : Symbol(exports.t, Decl(input.ts, 2, 27))
++>t : Symbol(t, Decl(input.ts, 2, 27))
+ }
+ export class Sub {
+ >Sub : Symbol(Sub, Decl(input.ts, 4, 1))
+ 
+     instance!: {
+->instance : Symbol(Sub.instance, Decl(input.ts, 5, 18))
++>instance : Symbol(instance, Decl(input.ts, 5, 18))
+ 
+         t: number;
+ >t : Symbol(t, Decl(input.ts, 6, 16))
+@@= skipped -17, +17 lines =@@
+ >exports : Symbol(exports, Decl(input.ts, 0, 17), Decl(input.ts, 9, 1))
+ 
+     export { Sub };
+->Sub : Symbol(exports.Sub, Decl(input.ts, 11, 12))
++>Sub : Symbol(Sub, Decl(input.ts, 11, 12))
+ }

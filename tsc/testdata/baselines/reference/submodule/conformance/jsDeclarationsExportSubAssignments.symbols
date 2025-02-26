@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportSubAssignments.ts] ////
+
+=== cls.js ===
+const Strings = {
+>Strings : Symbol(Strings, Decl(cls.js, 0, 5))
+
+    a: "A",
+>a : Symbol(a, Decl(cls.js, 0, 17))
+
+    b: "B"
+>b : Symbol(b, Decl(cls.js, 1, 11))
+
+};
+class Foo {}
+>Foo : Symbol(Foo, Decl(cls.js, 3, 2))
+
+module.exports = Foo;
+>Foo : Symbol(Foo, Decl(cls.js, 3, 2))
+
+module.exports.Strings = Strings;
+>Strings : Symbol(Strings, Decl(cls.js, 0, 5))
+

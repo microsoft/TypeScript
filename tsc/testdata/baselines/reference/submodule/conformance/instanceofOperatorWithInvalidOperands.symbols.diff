@@ -1,0 +1,11 @@
+--- old.instanceofOperatorWithInvalidOperands.symbols
++++ new.instanceofOperatorWithInvalidOperands.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(instanceofOperatorWithInvalidOperands.ts, 0, 0))
+ 
+     foo() { }
+->foo : Symbol(C.foo, Decl(instanceofOperatorWithInvalidOperands.ts, 0, 9))
++>foo : Symbol(foo, Decl(instanceofOperatorWithInvalidOperands.ts, 0, 9))
+ }
+ 
+ var x: any;

@@ -1,0 +1,26 @@
+--- old.unicodeEscapesInJSDoc.symbols
++++ new.unicodeEscapesInJSDoc.symbols
+@@= skipped -10, +10 lines =@@
+ >aa : Symbol(aa, Decl(file.js, 4, 15))
+ 
+     console.log(a + aa);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >a : Symbol(a, Decl(file.js, 4, 13))
+ >aa : Symbol(aa, Decl(file.js, 4, 15))
+ }
+@@= skipped -17, +17 lines =@@
+ >aa : Symbol(aa, Decl(file.js, 12, 15))
+ 
+     console.log(a + aa);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >a : Symbol(a, Decl(file.js, 12, 13))
+ >aa : Symbol(aa, Decl(file.js, 12, 15))
+ }

@@ -1,0 +1,99 @@
+--- old.inlineJsxFactoryLocalTypeGlobalFallback.symbols
++++ new.inlineJsxFactoryLocalTypeGlobalFallback.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === renderer.d.ts ===
+ declare global {
+->global : Symbol(global, Decl(renderer.d.ts, 0, 0))
++>global : Symbol((Missing), Decl(renderer.d.ts, 0, 0))
+ 
+     namespace JSX {
+ >JSX : Symbol(JSX, Decl(renderer.d.ts, 0, 16))
+@@= skipped -15, +15 lines =@@
+ >Element : Symbol(Element, Decl(renderer.d.ts, 4, 9))
+ 
+             __domBrand: void;
+->__domBrand : Symbol(Element.__domBrand, Decl(renderer.d.ts, 5, 27))
++>__domBrand : Symbol(__domBrand, Decl(renderer.d.ts, 5, 27))
+ 
+             children: Element[];
+->children : Symbol(Element.children, Decl(renderer.d.ts, 6, 29))
++>children : Symbol(children, Decl(renderer.d.ts, 6, 29))
+ >Element : Symbol(Element, Decl(renderer.d.ts, 4, 9))
+ 
+             props: {};
+->props : Symbol(Element.props, Decl(renderer.d.ts, 7, 32))
++>props : Symbol(props, Decl(renderer.d.ts, 7, 32))
+         }
+         interface ElementAttributesProperty { props: any; }
+ >ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(renderer.d.ts, 9, 9))
+->props : Symbol(ElementAttributesProperty.props, Decl(renderer.d.ts, 10, 45))
++>props : Symbol(props, Decl(renderer.d.ts, 10, 45))
+ 
+         interface ElementChildrenAttribute { children: any; }
+ >ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(renderer.d.ts, 10, 59))
+->children : Symbol(ElementChildrenAttribute.children, Decl(renderer.d.ts, 11, 44))
++>children : Symbol(children, Decl(renderer.d.ts, 11, 44))
+     }
+ }
+ export function dom(): JSX.Element;
+ >dom : Symbol(dom, Decl(renderer.d.ts, 13, 1))
+ >JSX : Symbol(JSX, Decl(renderer.d.ts, 0, 16))
+->Element : Symbol(JSX.Element, Decl(renderer.d.ts, 4, 9))
++>Element : Symbol(Element, Decl(renderer.d.ts, 4, 9))
+ 
+ === renderer2.d.ts ===
+ export namespace predom {
+@@= skipped -40, +40 lines =@@
+ >Element : Symbol(Element, Decl(renderer2.d.ts, 4, 9))
+ 
+             __predomBrand: void;
+->__predomBrand : Symbol(Element.__predomBrand, Decl(renderer2.d.ts, 5, 27))
++>__predomBrand : Symbol(__predomBrand, Decl(renderer2.d.ts, 5, 27))
+ 
+             children: Element[];
+->children : Symbol(Element.children, Decl(renderer2.d.ts, 6, 32))
++>children : Symbol(children, Decl(renderer2.d.ts, 6, 32))
+ >Element : Symbol(Element, Decl(renderer2.d.ts, 4, 9))
+ 
+             props: {};
+->props : Symbol(Element.props, Decl(renderer2.d.ts, 7, 32))
++>props : Symbol(props, Decl(renderer2.d.ts, 7, 32))
+         }
+         interface ElementAttributesProperty { props: any; }
+ >ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(renderer2.d.ts, 9, 9))
+->props : Symbol(ElementAttributesProperty.props, Decl(renderer2.d.ts, 10, 45))
++>props : Symbol(props, Decl(renderer2.d.ts, 10, 45))
+ 
+         interface ElementChildrenAttribute { children: any; }
+ >ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(renderer2.d.ts, 10, 59))
+->children : Symbol(ElementChildrenAttribute.children, Decl(renderer2.d.ts, 11, 44))
++>children : Symbol(children, Decl(renderer2.d.ts, 11, 44))
+     }
+ }
+ export function predom(): predom.JSX.Element;
+ >predom : Symbol(predom, Decl(renderer2.d.ts, 13, 1), Decl(renderer2.d.ts, 0, 0))
+ >predom : Symbol(predom, Decl(renderer2.d.ts, 13, 1), Decl(renderer2.d.ts, 0, 0))
+->JSX : Symbol(predom.JSX, Decl(renderer2.d.ts, 0, 25))
+->Element : Symbol(predom.JSX.Element, Decl(renderer2.d.ts, 4, 9))
++>JSX : Symbol(JSX, Decl(renderer2.d.ts, 0, 25))
++>Element : Symbol(Element, Decl(renderer2.d.ts, 4, 9))
+ 
+ === component.tsx ===
+ /** @jsx predom */
+@@= skipped -30, +30 lines =@@
+ >predom : Symbol(predom, Decl(component.tsx, 1, 8))
+ 
+ export default <h></h>
+->h : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
+->h : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
+ 
+ === index.tsx ===
+ /** @jsx dom */
+@@= skipped -17, +15 lines =@@
+ 
+ elem = <h></h>; // Expect assignability error here
+ >elem : Symbol(elem, Decl(index.tsx, 3, 3))
+->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+ 

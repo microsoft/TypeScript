@@ -1,0 +1,92 @@
+--- old.objectTypeWithStringNamedPropertyOfIllegalCharacters.symbols
++++ new.objectTypeWithStringNamedPropertyOfIllegalCharacters.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 0, 0))
+ 
+     "   ": number;
+->"   " : Symbol(C["   "], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 0, 9))
++>"   " : Symbol("   ", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 0, 9))
+ 
+     "a   b": string;
+->"a   b" : Symbol(C["a   b"], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 1, 18))
++>"a   b" : Symbol("a   b", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 1, 18))
+ 
+     "~!@#$%^&*()_+{}|:'<>?\/.,`": number;
+->"~!@#$%^&*()_+{}|:'<>?\/.,`" : Symbol(C["~!@#$%^&*()_+{}|:'<>?/.,`"], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 2, 20))
++>"~!@#$%^&*()_+{}|:'<>?\/.,`" : Symbol("~!@#$%^&*()_+{}|:'<>?\/.,`", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 2, 20))
+ 
+     "a\a": number;
+->"a\a" : Symbol(C["aa"], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 3, 41))
++>"a\a" : Symbol(aa, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 3, 41))
+ 
+     static "a ": number
+->"a " : Symbol(C["a "], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 4, 18))
++>"a " : Symbol("a ", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 4, 18))
+ }
+ 
+ var c: C;
+@@= skipped -22, +22 lines =@@
+ var r = c["   "];
+ >r : Symbol(r, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 9, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 22, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 35, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 47, 3))
+ >c : Symbol(c, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 8, 3))
+->"   " : Symbol(C["   "], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 0, 9))
++>"   " : Symbol("   ", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 0, 9))
+ 
+ var r2 = c["    "];
+ >r2 : Symbol(r2, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 10, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 23, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 36, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 48, 3))
+@@= skipped -9, +9 lines =@@
+ var r3 = c["a   b"];
+ >r3 : Symbol(r3, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 11, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 24, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 37, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 49, 3))
+ >c : Symbol(c, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 8, 3))
+->"a   b" : Symbol(C["a   b"], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 1, 18))
++>"a   b" : Symbol("a   b", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 1, 18))
+ 
+ // BUG 817263
+ var r4 = c["~!@#$%^&*()_+{}|:'<>?\/.,`"];
+ >r4 : Symbol(r4, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 13, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 26, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 39, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 51, 3))
+ >c : Symbol(c, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 8, 3))
+->"~!@#$%^&*()_+{}|:'<>?\/.,`" : Symbol(C["~!@#$%^&*()_+{}|:'<>?/.,`"], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 2, 20))
++>"~!@#$%^&*()_+{}|:'<>?\/.,`" : Symbol("~!@#$%^&*()_+{}|:'<>?\/.,`", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 2, 20))
+ 
+ interface I {
+ >I : Symbol(I, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 13, 41))
+ 
+     "   ": number;
+->"   " : Symbol(I["   "], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 15, 13))
++>"   " : Symbol("   ", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 15, 13))
+ 
+     "a   b": string;
+->"a   b" : Symbol(I["a   b"], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 16, 18))
++>"a   b" : Symbol("a   b", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 16, 18))
+ 
+     "~!@#$%^&*()_+{}|:'<>?\/.,`": number;
+->"~!@#$%^&*()_+{}|:'<>?\/.,`" : Symbol(I["~!@#$%^&*()_+{}|:'<>?/.,`"], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 17, 20))
++>"~!@#$%^&*()_+{}|:'<>?\/.,`" : Symbol("~!@#$%^&*()_+{}|:'<>?\/.,`", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 17, 20))
+ }
+ 
+ var i: I;
+@@= skipped -28, +28 lines =@@
+ var r = i["   "];
+ >r : Symbol(r, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 9, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 22, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 35, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 47, 3))
+ >i : Symbol(i, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 21, 3))
+->"   " : Symbol(I["   "], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 15, 13))
++>"   " : Symbol("   ", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 15, 13))
+ 
+ var r2 = i["    "];
+ >r2 : Symbol(r2, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 10, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 23, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 36, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 48, 3))
+@@= skipped -9, +9 lines =@@
+ var r3 = i["a   b"];
+ >r3 : Symbol(r3, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 11, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 24, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 37, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 49, 3))
+ >i : Symbol(i, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 21, 3))
+->"a   b" : Symbol(I["a   b"], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 16, 18))
++>"a   b" : Symbol("a   b", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 16, 18))
+ 
+ // BUG 817263
+ var r4 = i["~!@#$%^&*()_+{}|:'<>?\/.,`"];
+ >r4 : Symbol(r4, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 13, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 26, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 39, 3), Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 51, 3))
+ >i : Symbol(i, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 21, 3))
+->"~!@#$%^&*()_+{}|:'<>?\/.,`" : Symbol(I["~!@#$%^&*()_+{}|:'<>?/.,`"], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 17, 20))
++>"~!@#$%^&*()_+{}|:'<>?\/.,`" : Symbol("~!@#$%^&*()_+{}|:'<>?\/.,`", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 17, 20))
+ 
+ 
+ var a: {

@@ -1,0 +1,91 @@
+--- old.assignmentCompatWithObjectMembersOptionality.symbols
++++ new.assignmentCompatWithObjectMembersOptionality.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ class Base { foo: string; }
+ >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersOptionality.ts, 0, 0))
+->foo : Symbol(Base.foo, Decl(assignmentCompatWithObjectMembersOptionality.ts, 2, 12))
++>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembersOptionality.ts, 2, 12))
+ 
+ class Derived extends Base { bar: string; }
+ >Derived : Symbol(Derived, Decl(assignmentCompatWithObjectMembersOptionality.ts, 2, 27))
+ >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersOptionality.ts, 0, 0))
+->bar : Symbol(Derived.bar, Decl(assignmentCompatWithObjectMembersOptionality.ts, 3, 28))
++>bar : Symbol(bar, Decl(assignmentCompatWithObjectMembersOptionality.ts, 3, 28))
+ 
+ class Derived2 extends Derived { baz: string; }
+ >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithObjectMembersOptionality.ts, 3, 43))
+ >Derived : Symbol(Derived, Decl(assignmentCompatWithObjectMembersOptionality.ts, 2, 27))
+->baz : Symbol(Derived2.baz, Decl(assignmentCompatWithObjectMembersOptionality.ts, 4, 32))
++>baz : Symbol(baz, Decl(assignmentCompatWithObjectMembersOptionality.ts, 4, 32))
+ 
+ module TargetHasOptional {
+ >TargetHasOptional : Symbol(TargetHasOptional, Decl(assignmentCompatWithObjectMembersOptionality.ts, 4, 47))
+@@= skipped -20, +20 lines =@@
+ >C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality.ts, 6, 26))
+ 
+         opt?: Base
+->opt : Symbol(C.opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 8, 17))
++>opt : Symbol(opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 8, 17))
+ >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersOptionality.ts, 0, 0))
+     }
+     var c: C;
+@@= skipped -23, +23 lines =@@
+ >D : Symbol(D, Decl(assignmentCompatWithObjectMembersOptionality.ts, 14, 41))
+ 
+         opt: Base;
+->opt : Symbol(D.opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 17, 17))
++>opt : Symbol(opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 17, 17))
+ >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersOptionality.ts, 0, 0))
+     }
+     interface E {
+ >E : Symbol(E, Decl(assignmentCompatWithObjectMembersOptionality.ts, 19, 5))
+ 
+         opt: Derived;
+->opt : Symbol(E.opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 20, 17))
++>opt : Symbol(opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 20, 17))
+ >Derived : Symbol(Derived, Decl(assignmentCompatWithObjectMembersOptionality.ts, 2, 27))
+     }
+     interface F {
+ >F : Symbol(F, Decl(assignmentCompatWithObjectMembersOptionality.ts, 22, 5))
+ 
+         opt?: Derived;
+->opt : Symbol(F.opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 23, 17))
++>opt : Symbol(opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 23, 17))
+ >Derived : Symbol(Derived, Decl(assignmentCompatWithObjectMembersOptionality.ts, 2, 27))
+     }
+     var d: D;
+@@= skipped -91, +91 lines =@@
+ >C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality.ts, 48, 26))
+ 
+         opt: Base
+->opt : Symbol(C.opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 50, 17))
++>opt : Symbol(opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 50, 17))
+ >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersOptionality.ts, 0, 0))
+     }
+     var c: C;
+@@= skipped -22, +22 lines =@@
+ >D : Symbol(D, Decl(assignmentCompatWithObjectMembersOptionality.ts, 56, 31))
+ 
+         opt?: Base;
+->opt : Symbol(D.opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 59, 17))
++>opt : Symbol(opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 59, 17))
+ >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersOptionality.ts, 0, 0))
+     }
+     interface E {
+ >E : Symbol(E, Decl(assignmentCompatWithObjectMembersOptionality.ts, 61, 5))
+ 
+         opt?: Derived;
+->opt : Symbol(E.opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 62, 17))
++>opt : Symbol(opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 62, 17))
+ >Derived : Symbol(Derived, Decl(assignmentCompatWithObjectMembersOptionality.ts, 2, 27))
+     }
+     interface F {
+ >F : Symbol(F, Decl(assignmentCompatWithObjectMembersOptionality.ts, 64, 5))
+ 
+         opt: Derived;
+->opt : Symbol(F.opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 65, 17))
++>opt : Symbol(opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 65, 17))
+ >Derived : Symbol(Derived, Decl(assignmentCompatWithObjectMembersOptionality.ts, 2, 27))
+     }
+     var d: D;

@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/genericCallInferenceConditionalType2.ts] ////
+
+=== genericCallInferenceConditionalType2.ts ===
+// https://github.com/microsoft/TypeScript/issues/59490
+
+type ComponentProps<T> = T extends (props: infer P) => unknown ? P : never;
+>ComponentProps : Symbol(ComponentProps, Decl(genericCallInferenceConditionalType2.ts, 0, 0))
+>T : Symbol(T, Decl(genericCallInferenceConditionalType2.ts, 2, 20))
+>T : Symbol(T, Decl(genericCallInferenceConditionalType2.ts, 2, 20))
+>props : Symbol(props, Decl(genericCallInferenceConditionalType2.ts, 2, 36))
+>P : Symbol(P, Decl(genericCallInferenceConditionalType2.ts, 2, 48))
+>P : Symbol(P, Decl(genericCallInferenceConditionalType2.ts, 2, 48))
+
+declare function wrapComponent<P>(
+>wrapComponent : Symbol(wrapComponent, Decl(genericCallInferenceConditionalType2.ts, 2, 75))
+>P : Symbol(P, Decl(genericCallInferenceConditionalType2.ts, 4, 31))
+
+  component: (props: P) => unknown,
+>component : Symbol(component, Decl(genericCallInferenceConditionalType2.ts, 4, 34))
+>props : Symbol(props, Decl(genericCallInferenceConditionalType2.ts, 5, 14))
+>P : Symbol(P, Decl(genericCallInferenceConditionalType2.ts, 4, 31))
+
+): (props: P) => unknown;
+>props : Symbol(props, Decl(genericCallInferenceConditionalType2.ts, 6, 4))
+>P : Symbol(P, Decl(genericCallInferenceConditionalType2.ts, 4, 31))
+
+const WrappedComponent = wrapComponent(
+>WrappedComponent : Symbol(WrappedComponent, Decl(genericCallInferenceConditionalType2.ts, 8, 5))
+>wrapComponent : Symbol(wrapComponent, Decl(genericCallInferenceConditionalType2.ts, 2, 75))
+
+  <T extends string = "span">(props: {
+>T : Symbol(T, Decl(genericCallInferenceConditionalType2.ts, 9, 3))
+>props : Symbol(props, Decl(genericCallInferenceConditionalType2.ts, 9, 30))
+
+    as?: T | undefined;
+>as : Symbol(as, Decl(genericCallInferenceConditionalType2.ts, 9, 38))
+>T : Symbol(T, Decl(genericCallInferenceConditionalType2.ts, 9, 3))
+
+    className?: string;
+>className : Symbol(className, Decl(genericCallInferenceConditionalType2.ts, 10, 23))
+
+  }) => {
+    return null;
+  },
+);
+
+type RetrievedProps = ComponentProps<typeof WrappedComponent>;
+>RetrievedProps : Symbol(RetrievedProps, Decl(genericCallInferenceConditionalType2.ts, 15, 2))
+>ComponentProps : Symbol(ComponentProps, Decl(genericCallInferenceConditionalType2.ts, 0, 0))
+>WrappedComponent : Symbol(WrappedComponent, Decl(genericCallInferenceConditionalType2.ts, 8, 5))
+
+declare const f: <T>(f: (x: T) => unknown) => (x: T) => unknown
+>f : Symbol(f, Decl(genericCallInferenceConditionalType2.ts, 19, 13))
+>T : Symbol(T, Decl(genericCallInferenceConditionalType2.ts, 19, 18))
+>f : Symbol(f, Decl(genericCallInferenceConditionalType2.ts, 19, 21))
+>x : Symbol(x, Decl(genericCallInferenceConditionalType2.ts, 19, 25))
+>T : Symbol(T, Decl(genericCallInferenceConditionalType2.ts, 19, 18))
+>x : Symbol(x, Decl(genericCallInferenceConditionalType2.ts, 19, 47))
+>T : Symbol(T, Decl(genericCallInferenceConditionalType2.ts, 19, 18))
+
+declare const g: <T extends unknown = string>(x: { foo: T }) => unknown
+>g : Symbol(g, Decl(genericCallInferenceConditionalType2.ts, 20, 13))
+>T : Symbol(T, Decl(genericCallInferenceConditionalType2.ts, 20, 18))
+>x : Symbol(x, Decl(genericCallInferenceConditionalType2.ts, 20, 46))
+>foo : Symbol(foo, Decl(genericCallInferenceConditionalType2.ts, 20, 50))
+>T : Symbol(T, Decl(genericCallInferenceConditionalType2.ts, 20, 18))
+
+const h = f(g)
+>h : Symbol(h, Decl(genericCallInferenceConditionalType2.ts, 22, 5))
+>f : Symbol(f, Decl(genericCallInferenceConditionalType2.ts, 19, 13))
+>g : Symbol(g, Decl(genericCallInferenceConditionalType2.ts, 20, 13))
+
+type FirstParameter<T> = T extends (x: infer P) => unknown ? P : unknown
+>FirstParameter : Symbol(FirstParameter, Decl(genericCallInferenceConditionalType2.ts, 22, 14))
+>T : Symbol(T, Decl(genericCallInferenceConditionalType2.ts, 24, 20))
+>T : Symbol(T, Decl(genericCallInferenceConditionalType2.ts, 24, 20))
+>x : Symbol(x, Decl(genericCallInferenceConditionalType2.ts, 24, 36))
+>P : Symbol(P, Decl(genericCallInferenceConditionalType2.ts, 24, 44))
+>P : Symbol(P, Decl(genericCallInferenceConditionalType2.ts, 24, 44))
+
+type X = FirstParameter<typeof h>['foo']
+>X : Symbol(X, Decl(genericCallInferenceConditionalType2.ts, 24, 72))
+>FirstParameter : Symbol(FirstParameter, Decl(genericCallInferenceConditionalType2.ts, 22, 14))
+>h : Symbol(h, Decl(genericCallInferenceConditionalType2.ts, 22, 5))
+

@@ -1,0 +1,26 @@
+--- old.inlineJsxFactoryOverridesCompilerOption.symbols
++++ new.inlineJsxFactoryOverridesCompilerOption.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === renderer.d.ts ===
+ declare global {
+->global : Symbol(global, Decl(renderer.d.ts, 0, 0))
++>global : Symbol((Missing), Decl(renderer.d.ts, 0, 0))
+ 
+     namespace JSX {
+ >JSX : Symbol(JSX, Decl(renderer.d.ts, 0, 16))
+@@= skipped -26, +26 lines =@@
+ >dom : Symbol(dom, Decl(reacty.tsx, 1, 8))
+ 
+ <h></h>
+->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+-
+ === index.tsx ===
+ import { p } from "./renderer";
+ >p : Symbol(p, Decl(index.tsx, 0, 8))
+ 
+ <h></h>
+->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+ 

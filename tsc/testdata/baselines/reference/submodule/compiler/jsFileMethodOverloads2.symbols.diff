@@ -1,0 +1,46 @@
+--- old.jsFileMethodOverloads2.symbols
++++ new.jsFileMethodOverloads2.symbols
+@@= skipped -14, +14 lines =@@
+ >value : Symbol(value, Decl(jsFileMethodOverloads2.js, 8, 14))
+ 
+     this.value = value;
+->this.value : Symbol(Example.value, Decl(jsFileMethodOverloads2.js, 8, 22))
+ >this : Symbol(Example, Decl(jsFileMethodOverloads2.js, 0, 0))
+->value : Symbol(Example.value, Decl(jsFileMethodOverloads2.js, 8, 22))
+ >value : Symbol(value, Decl(jsFileMethodOverloads2.js, 8, 14))
+   }
+ 
+@@= skipped -18, +16 lines =@@
+    * @returns {string}
+    */
+   getTypeName() {
+->getTypeName : Symbol(Example.getTypeName, Decl(jsFileMethodOverloads2.js, 10, 3))
++>getTypeName : Symbol(getTypeName, Decl(jsFileMethodOverloads2.js, 10, 3))
+ 
+     return typeof this.value;
+->this.value : Symbol(Example.value, Decl(jsFileMethodOverloads2.js, 8, 22))
+ >this : Symbol(Example, Decl(jsFileMethodOverloads2.js, 0, 0))
+->value : Symbol(Example.value, Decl(jsFileMethodOverloads2.js, 8, 22))
+   }
+ 
+   /**
+@@= skipped -21, +19 lines =@@
+    * @returns {unknown}
+    */
+   transform(fn) {
+->transform : Symbol(Example.transform, Decl(jsFileMethodOverloads2.js, 25, 3))
++>transform : Symbol(transform, Decl(jsFileMethodOverloads2.js, 25, 3))
+ >fn : Symbol(fn, Decl(jsFileMethodOverloads2.js, 39, 12))
+ 
+     return fn ? fn(this.value) : this.value;
+ >fn : Symbol(fn, Decl(jsFileMethodOverloads2.js, 39, 12))
+ >fn : Symbol(fn, Decl(jsFileMethodOverloads2.js, 39, 12))
+->this.value : Symbol(Example.value, Decl(jsFileMethodOverloads2.js, 8, 22))
+ >this : Symbol(Example, Decl(jsFileMethodOverloads2.js, 0, 0))
+->value : Symbol(Example.value, Decl(jsFileMethodOverloads2.js, 8, 22))
+->this.value : Symbol(Example.value, Decl(jsFileMethodOverloads2.js, 8, 22))
+ >this : Symbol(Example, Decl(jsFileMethodOverloads2.js, 0, 0))
+->value : Symbol(Example.value, Decl(jsFileMethodOverloads2.js, 8, 22))
+   }
+ }
+ 

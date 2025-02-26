@@ -1,0 +1,10 @@
+--- old.methodInAmbientClass1.symbols
++++ new.methodInAmbientClass1.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(methodInAmbientClass1.ts, 0, 0))
+ 
+     	fn(): boolean {
+->fn : Symbol(Foo.fn, Decl(methodInAmbientClass1.ts, 0, 23))
++>fn : Symbol(fn, Decl(methodInAmbientClass1.ts, 0, 23))
+     	}
+     }

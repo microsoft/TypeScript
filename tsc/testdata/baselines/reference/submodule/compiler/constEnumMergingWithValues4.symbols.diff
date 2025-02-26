@@ -1,0 +1,11 @@
+--- old.constEnumMergingWithValues4.symbols
++++ new.constEnumMergingWithValues4.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     const enum E { X }
+ >E : Symbol(E, Decl(m1.ts, 0, 12))
+->X : Symbol(E.X, Decl(m1.ts, 1, 18))
++>X : Symbol(X, Decl(m1.ts, 1, 18))
+ }
+ 
+ module foo {

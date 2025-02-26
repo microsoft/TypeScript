@@ -1,0 +1,32 @@
+--- old.typeParamExtendsOtherTypeParam.symbols
++++ new.typeParamExtendsOtherTypeParam.symbols
+@@= skipped -14, +14 lines =@@
+ >T : Symbol(T, Decl(typeParamExtendsOtherTypeParam.ts, 1, 8))
+ 
+     data: A<Object, Object>;
+->data : Symbol(B.data, Decl(typeParamExtendsOtherTypeParam.ts, 1, 40))
++>data : Symbol(data, Decl(typeParamExtendsOtherTypeParam.ts, 1, 40))
+ >A : Symbol(A, Decl(typeParamExtendsOtherTypeParam.ts, 0, 0))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+@@= skipped -65, +65 lines =@@
+ >I1 : Symbol(I1, Decl(typeParamExtendsOtherTypeParam.ts, 16, 51))
+ 
+     a: string;
+->a : Symbol(I1.a, Decl(typeParamExtendsOtherTypeParam.ts, 18, 14))
++>a : Symbol(a, Decl(typeParamExtendsOtherTypeParam.ts, 18, 14))
+ }
+ 
+ interface I2 {
+ >I2 : Symbol(I2, Decl(typeParamExtendsOtherTypeParam.ts, 20, 1))
+ 
+     a: string;
+->a : Symbol(I2.a, Decl(typeParamExtendsOtherTypeParam.ts, 22, 14))
++>a : Symbol(a, Decl(typeParamExtendsOtherTypeParam.ts, 22, 14))
+ 
+     b: number;
+->b : Symbol(I2.b, Decl(typeParamExtendsOtherTypeParam.ts, 23, 14))
++>b : Symbol(b, Decl(typeParamExtendsOtherTypeParam.ts, 23, 14))
+ }
+ 
+ var x7: A<I2, I1>;

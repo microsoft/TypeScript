@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/constInClassExpression.ts] ////
+
+=== constInClassExpression.ts ===
+let C = class {
+>C : Symbol(C, Decl(constInClassExpression.ts, 0, 3))
+
+    const a = 4;
+>a : Symbol(a, Decl(constInClassExpression.ts, 0, 15))
+
+};
+

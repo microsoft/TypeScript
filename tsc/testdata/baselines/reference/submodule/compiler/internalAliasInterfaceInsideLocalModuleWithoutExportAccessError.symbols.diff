@@ -1,0 +1,18 @@
+--- old.internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.symbols
++++ new.internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.symbols
+@@= skipped -14, +14 lines =@@
+     import b = a.I;
+ >b : Symbol(b, Decl(internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts, 5, 17))
+ >a : Symbol(a, Decl(internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts, 0, 0))
+->I : Symbol(b, Decl(internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts, 0, 17))
++>I : Symbol(I, Decl(internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts, 0, 17))
+ 
+     export var x: b;
+ >x : Symbol(x, Decl(internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts, 7, 14))
+@@= skipped -10, +10 lines =@@
+ var x: c.b;
+ >x : Symbol(x, Decl(internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts, 10, 3))
+ >c : Symbol(c, Decl(internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts, 3, 1))
+->b : Symbol(c.b)
++>b : Symbol(b)
+ 

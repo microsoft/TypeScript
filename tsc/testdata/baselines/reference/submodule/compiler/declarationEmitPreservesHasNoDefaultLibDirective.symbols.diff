@@ -1,0 +1,43 @@
+--- old.declarationEmitPreservesHasNoDefaultLibDirective.symbols
++++ new.declarationEmitPreservesHasNoDefaultLibDirective.symbols
+@@= skipped -5, +5 lines =@@
+ >Foo : Symbol(Foo, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 0, 0))
+ 
+     public: string;
+->public : Symbol(Foo.public, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 1, 11))
++>public : Symbol(public, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 1, 11))
+ }
+ interface Array<T> {}
+->Array : Symbol(Array, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 3, 1))
+->T : Symbol(T, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 4, 16))
++>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 3, 1))
++>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 4, 16))
+ 
+ interface Boolean {}
+->Boolean : Symbol(Boolean, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 4, 21))
++>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 4, 21))
+ 
+ interface Function {}
+->Function : Symbol(Function, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 5, 20))
++>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 5, 20))
+ 
+ interface IArguments {}
+->IArguments : Symbol(IArguments, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 6, 21))
++>IArguments : Symbol(IArguments, Decl(lib.es5.d.ts, --, --), Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 6, 21))
+ 
+ interface Number {}
+->Number : Symbol(Number, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 7, 23))
++>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 7, 23))
+ 
+ interface Object {}
+->Object : Symbol(Object, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 8, 19))
++>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 8, 19))
+ 
+ interface RegExp {}
+->RegExp : Symbol(RegExp, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 9, 19))
++>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 9, 19))
+ 
+ interface String {}
+->String : Symbol(String, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 10, 19))
++>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 10, 19))
+ 

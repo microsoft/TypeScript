@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/stripInternal1.ts] ////
+
+=== stripInternal1.ts ===
+class C {
+>C : Symbol(C, Decl(stripInternal1.ts, 0, 0))
+
+  foo(): void { }
+>foo : Symbol(foo, Decl(stripInternal1.ts, 0, 9))
+
+  // @internal
+  bar(): void { }
+>bar : Symbol(bar, Decl(stripInternal1.ts, 1, 17))
+}

@@ -1,0 +1,14 @@
+--- old.typeParameterAndArgumentOfSameName1.symbols
++++ new.typeParameterAndArgumentOfSameName1.symbols
+@@= skipped -10, +10 lines =@@
+ 
+     var r = A.toExponential(123);
+ >r : Symbol(r, Decl(typeParameterAndArgumentOfSameName1.ts, 1, 7))
+->A.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>A.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >A : Symbol(A, Decl(typeParameterAndArgumentOfSameName1.ts, 0, 11), Decl(typeParameterAndArgumentOfSameName1.ts, 0, 29))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ 
+     return null;
+ }

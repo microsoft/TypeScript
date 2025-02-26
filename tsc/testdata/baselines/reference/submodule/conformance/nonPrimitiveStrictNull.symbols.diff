@@ -1,0 +1,65 @@
+--- old.nonPrimitiveStrictNull.symbols
++++ new.nonPrimitiveStrictNull.symbols
+@@= skipped -16, +16 lines =@@
+ >e : Symbol(e, Decl(nonPrimitiveStrictNull.ts, 4, 3))
+ 
+ a.toString; // error
+->a.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>a.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(nonPrimitiveStrictNull.ts, 0, 3))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+ a = undefined; // error
+ >a : Symbol(a, Decl(nonPrimitiveStrictNull.ts, 0, 3))
+@@= skipped -54, +54 lines =@@
+ >d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+ 
+     d.toString(); // error, object | null
+->d.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+ >d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+ 
+ } else {
+     d.toString(); // error, undefined
+@@= skipped -17, +15 lines =@@
+ 
+ } else {
+     d.toString(); // object
+->d.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>d.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ if (d === null) {
+@@= skipped -13, +13 lines =@@
+ 
+ } else {
+     d.toString(); // error, object | undefined
+->d.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+ >d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ if (typeof d === 'undefined') {
+@@= skipped -13, +11 lines =@@
+ 
+ } else {
+     d.toString(); // error, object | null
+->d.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+ >d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ interface Proxy<T extends object> {}
+@@= skipped -25, +23 lines =@@
+ >Blah : Symbol(Blah, Decl(nonPrimitiveStrictNull.ts, 52, 24))
+ 
+   foo: number;
+->foo : Symbol(Blah.foo, Decl(nonPrimitiveStrictNull.ts, 54, 16))
++>foo : Symbol(foo, Decl(nonPrimitiveStrictNull.ts, 54, 16))
+ }
+ 
+ var u: Proxy<Blah>; // ok

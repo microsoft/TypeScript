@@ -1,0 +1,29 @@
+--- old.nonPrimitiveAndEmptyObject.symbols
++++ new.nonPrimitiveAndEmptyObject.symbols
+@@= skipped -6, +6 lines =@@
+ >BarProps : Symbol(BarProps, Decl(nonPrimitiveAndEmptyObject.ts, 0, 0))
+ 
+     barProp?: string;
+->barProp : Symbol(BarProps.barProp, Decl(nonPrimitiveAndEmptyObject.ts, 2, 27))
++>barProp : Symbol(barProp, Decl(nonPrimitiveAndEmptyObject.ts, 2, 27))
+ }
+ 
+ export interface FooProps {
+ >FooProps : Symbol(FooProps, Decl(nonPrimitiveAndEmptyObject.ts, 4, 1))
+ 
+     fooProps?: BarProps & object;
+->fooProps : Symbol(FooProps.fooProps, Decl(nonPrimitiveAndEmptyObject.ts, 6, 27))
++>fooProps : Symbol(fooProps, Decl(nonPrimitiveAndEmptyObject.ts, 6, 27))
+ >BarProps : Symbol(BarProps, Decl(nonPrimitiveAndEmptyObject.ts, 0, 0))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >foo : Symbol(foo, Decl(nonPrimitiveAndEmptyObject.ts, 10, 13))
+ 
+ fooProps.barProp;
+->fooProps.barProp : Symbol(BarProps.barProp, Decl(nonPrimitiveAndEmptyObject.ts, 2, 27))
++>fooProps.barProp : Symbol(barProp, Decl(nonPrimitiveAndEmptyObject.ts, 2, 27))
+ >fooProps : Symbol(fooProps, Decl(nonPrimitiveAndEmptyObject.ts, 11, 7))
+->barProp : Symbol(BarProps.barProp, Decl(nonPrimitiveAndEmptyObject.ts, 2, 27))
++>barProp : Symbol(barProp, Decl(nonPrimitiveAndEmptyObject.ts, 2, 27))
+ 

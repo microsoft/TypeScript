@@ -1,0 +1,11 @@
+--- old.implicitAnyWidenToAny.symbols
++++ new.implicitAnyWidenToAny.symbols
+@@= skipped -20, +20 lines =@@
+ >AnimalObj : Symbol(AnimalObj, Decl(implicitAnyWidenToAny.ts, 4, 20))
+ 
+       x:any;
+->x : Symbol(AnimalObj.x, Decl(implicitAnyWidenToAny.ts, 7, 17))
++>x : Symbol(x, Decl(implicitAnyWidenToAny.ts, 7, 17))
+ }
+ var foo = 5;
+ >foo : Symbol(foo, Decl(implicitAnyWidenToAny.ts, 10, 3))

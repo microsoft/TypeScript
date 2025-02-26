@@ -1,0 +1,31 @@
+--- old.es6modulekindWithES5Target11.symbols
++++ new.es6modulekindWithES5Target11.symbols
+@@= skipped -8, +8 lines =@@
+ >foo : Symbol(foo, Decl(es6modulekindWithES5Target11.ts, 0, 0))
+ 
+ export default class C {
+->C : Symbol(C, Decl(es6modulekindWithES5Target11.ts, 0, 42))
++>C : Symbol(default, Decl(es6modulekindWithES5Target11.ts, 0, 42))
+ 
+     static x() { return C.y; }
+->x : Symbol(C.x, Decl(es6modulekindWithES5Target11.ts, 2, 24))
+->C.y : Symbol(C.y, Decl(es6modulekindWithES5Target11.ts, 3, 30))
+->C : Symbol(C, Decl(es6modulekindWithES5Target11.ts, 0, 42))
+->y : Symbol(C.y, Decl(es6modulekindWithES5Target11.ts, 3, 30))
++>x : Symbol(x, Decl(es6modulekindWithES5Target11.ts, 2, 24))
++>C.y : Symbol(y, Decl(es6modulekindWithES5Target11.ts, 3, 30))
++>C : Symbol(default, Decl(es6modulekindWithES5Target11.ts, 0, 42))
++>y : Symbol(y, Decl(es6modulekindWithES5Target11.ts, 3, 30))
+ 
+     static y = 1
+->y : Symbol(C.y, Decl(es6modulekindWithES5Target11.ts, 3, 30))
++>y : Symbol(y, Decl(es6modulekindWithES5Target11.ts, 3, 30))
+ 
+     p = 1;
+->p : Symbol(C.p, Decl(es6modulekindWithES5Target11.ts, 4, 16))
++>p : Symbol(p, Decl(es6modulekindWithES5Target11.ts, 4, 16))
+ 
+     method() { }
+->method : Symbol(C.method, Decl(es6modulekindWithES5Target11.ts, 5, 10))
++>method : Symbol(method, Decl(es6modulekindWithES5Target11.ts, 5, 10))
+ }

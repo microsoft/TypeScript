@@ -1,0 +1,19 @@
+--- old.deeplyNestedAssignabilityIssue.symbols
++++ new.deeplyNestedAssignabilityIssue.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(deeplyNestedAssignabilityIssue.ts, 0, 0))
+ 
+     a: number;
+->a : Symbol(A.a, Decl(deeplyNestedAssignabilityIssue.ts, 0, 13))
++>a : Symbol(a, Decl(deeplyNestedAssignabilityIssue.ts, 0, 13))
+ }
+ 
+ interface Large {
+ >Large : Symbol(Large, Decl(deeplyNestedAssignabilityIssue.ts, 2, 1))
+ 
+     something: {
+->something : Symbol(Large.something, Decl(deeplyNestedAssignabilityIssue.ts, 4, 17))
++>something : Symbol(something, Decl(deeplyNestedAssignabilityIssue.ts, 4, 17))
+ 
+         another: {
+ >another : Symbol(another, Decl(deeplyNestedAssignabilityIssue.ts, 5, 16))

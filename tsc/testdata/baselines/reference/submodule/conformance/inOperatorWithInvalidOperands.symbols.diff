@@ -1,0 +1,23 @@
+--- old.inOperatorWithInvalidOperands.symbols
++++ new.inOperatorWithInvalidOperands.symbols
+@@= skipped -5, +5 lines =@@
+ 
+ enum E { a }
+ >E : Symbol(E, Decl(inOperatorWithInvalidOperands.ts, 0, 12))
+->a : Symbol(E.a, Decl(inOperatorWithInvalidOperands.ts, 1, 8))
++>a : Symbol(a, Decl(inOperatorWithInvalidOperands.ts, 1, 8))
+ 
+ var x: any;
+ >x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
+@@= skipped -59, +59 lines =@@
+ 
+ var ra7 = E.a in x;
+ >ra7 : Symbol(ra7, Decl(inOperatorWithInvalidOperands.ts, 20, 3))
+->E.a : Symbol(E.a, Decl(inOperatorWithInvalidOperands.ts, 1, 8))
++>E.a : Symbol(a, Decl(inOperatorWithInvalidOperands.ts, 1, 8))
+ >E : Symbol(E, Decl(inOperatorWithInvalidOperands.ts, 0, 12))
+->a : Symbol(E.a, Decl(inOperatorWithInvalidOperands.ts, 1, 8))
++>a : Symbol(a, Decl(inOperatorWithInvalidOperands.ts, 1, 8))
+ >x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
+ 
+ var ra8 = false in x;

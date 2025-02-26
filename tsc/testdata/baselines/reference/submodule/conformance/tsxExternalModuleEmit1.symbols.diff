@@ -1,0 +1,43 @@
+--- old.tsxExternalModuleEmit1.symbols
++++ new.tsxExternalModuleEmit1.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === react.d.ts ===
+ declare module 'react' {
+->'react' : Symbol("react", Decl(react.d.ts, 0, 0))
++>'react' : Symbol('react', Decl(react.d.ts, 0, 0))
+ 
+ 	class Component<T, U> { }
+ >Component : Symbol(Component, Decl(react.d.ts, 0, 24))
+@@= skipped -18, +18 lines =@@
+ 
+ export class App extends React.Component<any, any> {
+ >App : Symbol(App, Decl(app.tsx, 3, 34))
+->React.Component : Symbol(React.Component, Decl(react.d.ts, 0, 24))
++>React.Component : Symbol(Component, Decl(react.d.ts, 0, 24))
+ >React : Symbol(React, Decl(app.tsx, 0, 6))
+->Component : Symbol(React.Component, Decl(react.d.ts, 0, 24))
++>Component : Symbol(Component, Decl(react.d.ts, 0, 24))
+ 
+     render() {
+->render : Symbol(App.render, Decl(app.tsx, 5, 52))
++>render : Symbol(render, Decl(app.tsx, 5, 52))
+ 
+         return <Button />;
+ >Button : Symbol(Button, Decl(app.tsx, 3, 8))
+@@= skipped -19, +19 lines =@@
+ 
+ export class Button extends React.Component<any, any> {
+ >Button : Symbol(Button, Decl(button.tsx, 0, 31))
+->React.Component : Symbol(React.Component, Decl(react.d.ts, 0, 24))
++>React.Component : Symbol(Component, Decl(react.d.ts, 0, 24))
+ >React : Symbol(React, Decl(button.tsx, 0, 6))
+->Component : Symbol(React.Component, Decl(react.d.ts, 0, 24))
++>Component : Symbol(Component, Decl(react.d.ts, 0, 24))
+ 
+     render() {
+->render : Symbol(Button.render, Decl(button.tsx, 2, 55))
++>render : Symbol(render, Decl(button.tsx, 2, 55))
+ 
+         return <button>Some button</button>;
+     }

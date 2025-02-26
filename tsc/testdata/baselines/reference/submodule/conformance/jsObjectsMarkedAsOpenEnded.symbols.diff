@@ -1,0 +1,78 @@
+--- old.jsObjectsMarkedAsOpenEnded.symbols
++++ new.jsObjectsMarkedAsOpenEnded.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === a.js ===
+ var variable = {};
+->variable : Symbol(variable, Decl(a.js, 0, 3), Decl(a.js, 0, 18))
++>variable : Symbol(variable, Decl(a.js, 0, 3))
+ 
+ variable.a = 0;
+->variable.a : Symbol(variable.a, Decl(a.js, 0, 18))
+->variable : Symbol(variable, Decl(a.js, 0, 3), Decl(a.js, 0, 18))
+->a : Symbol(variable.a, Decl(a.js, 0, 18))
++>variable : Symbol(variable, Decl(a.js, 0, 3))
+ 
+ class C {
+ >C : Symbol(C, Decl(a.js, 1, 15))
+ 
+     initializedMember = {};
+->initializedMember : Symbol(C.initializedMember, Decl(a.js, 3, 9))
++>initializedMember : Symbol(initializedMember, Decl(a.js, 3, 9))
+ 
+     constructor() {
+         this.member = {};
+->this.member : Symbol(C.member, Decl(a.js, 5, 19))
+ >this : Symbol(C, Decl(a.js, 1, 15))
+->member : Symbol(C.member, Decl(a.js, 5, 19))
+ 
+         this.member.a = 0;
+->this.member : Symbol(C.member, Decl(a.js, 5, 19))
+ >this : Symbol(C, Decl(a.js, 1, 15))
+->member : Symbol(C.member, Decl(a.js, 5, 19))
+     }
+ }
+ 
+ var obj = {
+->obj : Symbol(obj, Decl(a.js, 11, 3), Decl(a.js, 13, 2))
++>obj : Symbol(obj, Decl(a.js, 11, 3))
+ 
+     property: {}
+ >property : Symbol(property, Decl(a.js, 11, 11))
+@@= skipped -36, +30 lines =@@
+ 
+ obj.property.a = 0;
+ >obj.property : Symbol(property, Decl(a.js, 11, 11))
+->obj : Symbol(obj, Decl(a.js, 11, 3), Decl(a.js, 13, 2))
++>obj : Symbol(obj, Decl(a.js, 11, 3))
+ >property : Symbol(property, Decl(a.js, 11, 11))
+ 
+ var arr = [{}];
+@@= skipped -15, +15 lines =@@
+ 
+ === b.ts ===
+ variable.a = 1;
+->variable.a : Symbol(variable.a, Decl(a.js, 0, 18))
+->variable : Symbol(variable, Decl(a.js, 0, 3), Decl(a.js, 0, 18))
+->a : Symbol(variable.a, Decl(a.js, 0, 18))
++>variable : Symbol(variable, Decl(a.js, 0, 3))
+ 
+ (new C()).member.a = 1;
+->(new C()).member : Symbol(C.member, Decl(a.js, 5, 19))
+ >C : Symbol(C, Decl(a.js, 1, 15))
+->member : Symbol(C.member, Decl(a.js, 5, 19))
+ 
+ (new C()).initializedMember.a = 1;
+->(new C()).initializedMember : Symbol(C.initializedMember, Decl(a.js, 3, 9))
++>(new C()).initializedMember : Symbol(initializedMember, Decl(a.js, 3, 9))
+ >C : Symbol(C, Decl(a.js, 1, 15))
+->initializedMember : Symbol(C.initializedMember, Decl(a.js, 3, 9))
++>initializedMember : Symbol(initializedMember, Decl(a.js, 3, 9))
+ 
+ obj.property.a = 1;
+ >obj.property : Symbol(property, Decl(a.js, 11, 11))
+->obj : Symbol(obj, Decl(a.js, 11, 3), Decl(a.js, 13, 2))
++>obj : Symbol(obj, Decl(a.js, 11, 3))
+ >property : Symbol(property, Decl(a.js, 11, 11))
+ 
+ arr[0].a = 1;

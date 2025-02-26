@@ -1,0 +1,11 @@
+--- old.contextualTypeAppliedToVarArgs.symbols
++++ new.contextualTypeAppliedToVarArgs.symbols
+@@= skipped -16, +16 lines =@@
+ 
+ 
+     Bar() {
+->Bar : Symbol(Foo.Bar, Decl(contextualTypeAppliedToVarArgs.ts, 4, 10))
++>Bar : Symbol(Bar, Decl(contextualTypeAppliedToVarArgs.ts, 4, 10))
+ 
+         delegate(this, function (source, args2)
+ >delegate : Symbol(delegate, Decl(contextualTypeAppliedToVarArgs.ts, 0, 0))

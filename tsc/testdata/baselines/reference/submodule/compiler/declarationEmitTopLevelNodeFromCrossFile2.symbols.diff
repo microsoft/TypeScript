@@ -1,0 +1,11 @@
+--- old.declarationEmitTopLevelNodeFromCrossFile2.symbols
++++ new.declarationEmitTopLevelNodeFromCrossFile2.symbols
+@@= skipped -29, +29 lines =@@
+ >T : Symbol(T, Decl(box.d.ts, 0, 25))
+ 
+     value: T;
+->value : Symbol(Box.value, Decl(box.d.ts, 0, 29))
++>value : Symbol(value, Decl(box.d.ts, 0, 29))
+ >T : Symbol(T, Decl(box.d.ts, 0, 25))
+ 
+     constructor(value: T);

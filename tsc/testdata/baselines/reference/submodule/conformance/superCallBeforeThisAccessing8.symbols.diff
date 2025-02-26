@@ -1,0 +1,23 @@
+--- old.superCallBeforeThisAccessing8.symbols
++++ new.superCallBeforeThisAccessing8.symbols
+@@= skipped -11, +11 lines =@@
+ >Base : Symbol(Base, Decl(superCallBeforeThisAccessing8.ts, 0, 0))
+ 
+     private _t;
+->_t : Symbol(D._t, Decl(superCallBeforeThisAccessing8.ts, 3, 22))
++>_t : Symbol(_t, Decl(superCallBeforeThisAccessing8.ts, 3, 22))
+ 
+     constructor() {
+         let x = {
+@@= skipped -13, +13 lines =@@
+ 
+             j: this._t,  // no error
+ >j : Symbol(j, Decl(superCallBeforeThisAccessing8.ts, 7, 32))
+->this._t : Symbol(D._t, Decl(superCallBeforeThisAccessing8.ts, 3, 22))
++>this._t : Symbol(_t, Decl(superCallBeforeThisAccessing8.ts, 3, 22))
+ >this : Symbol(D, Decl(superCallBeforeThisAccessing8.ts, 2, 1))
+->_t : Symbol(D._t, Decl(superCallBeforeThisAccessing8.ts, 3, 22))
++>_t : Symbol(_t, Decl(superCallBeforeThisAccessing8.ts, 3, 22))
+         }
+     }
+ }

@@ -1,0 +1,28 @@
+--- old.templateLiteralTypesPatterns.symbols
++++ new.templateLiteralTypesPatterns.symbols
+@@= skipped -467, +467 lines =@@
+ >BB : Symbol(BB, Decl(templateLiteralTypesPatterns.ts, 193, 18))
+ 
+     abstract get(id: Id<AA>): void;
+->get : Symbol(BB.get, Decl(templateLiteralTypesPatterns.ts, 195, 26))
++>get : Symbol(get, Decl(templateLiteralTypesPatterns.ts, 195, 26))
+ >id : Symbol(id, Decl(templateLiteralTypesPatterns.ts, 196, 17))
+ >Id : Symbol(Id, Decl(templateLiteralTypesPatterns.ts, 187, 1))
+ >AA : Symbol(AA, Decl(templateLiteralTypesPatterns.ts, 191, 66))
+ 
+     update(id: Id<AA>): void {
+->update : Symbol(BB.update, Decl(templateLiteralTypesPatterns.ts, 196, 35))
++>update : Symbol(update, Decl(templateLiteralTypesPatterns.ts, 196, 35))
+ >id : Symbol(id, Decl(templateLiteralTypesPatterns.ts, 197, 11))
+ >Id : Symbol(Id, Decl(templateLiteralTypesPatterns.ts, 187, 1))
+ >AA : Symbol(AA, Decl(templateLiteralTypesPatterns.ts, 191, 66))
+ 
+         this.get(id!);
+->this.get : Symbol(BB.get, Decl(templateLiteralTypesPatterns.ts, 195, 26))
++>this.get : Symbol(get, Decl(templateLiteralTypesPatterns.ts, 195, 26))
+ >this : Symbol(BB, Decl(templateLiteralTypesPatterns.ts, 193, 18))
+->get : Symbol(BB.get, Decl(templateLiteralTypesPatterns.ts, 195, 26))
++>get : Symbol(get, Decl(templateLiteralTypesPatterns.ts, 195, 26))
+ >id : Symbol(id, Decl(templateLiteralTypesPatterns.ts, 197, 11))
+     }
+ }

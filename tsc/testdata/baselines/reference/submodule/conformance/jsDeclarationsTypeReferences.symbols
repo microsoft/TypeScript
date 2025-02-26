@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeReferences.ts] ////
+
+=== index.js ===
+/// <reference types="node" />
+
+const Something = require("fs").Something;
+>Something : Symbol(Something, Decl(index.js, 2, 5))
+
+const thing = new Something();
+>thing : Symbol(thing, Decl(index.js, 4, 5))
+>Something : Symbol(Something, Decl(index.js, 2, 5))
+
+module.exports = {
+    thing
+>thing : Symbol(thing, Decl(index.js, 6, 18))
+
+};
+
+=== node_modules/@types/node/index.d.ts ===
+declare module "fs" {
+>"fs" : Symbol("fs", Decl(index.d.ts, 0, 0))
+
+    export class Something {}
+>Something : Symbol(Something, Decl(index.d.ts, 0, 21))
+}

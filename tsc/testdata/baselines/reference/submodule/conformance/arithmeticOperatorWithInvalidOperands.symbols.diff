@@ -1,0 +1,1133 @@
+--- old.arithmeticOperatorWithInvalidOperands.symbols
++++ new.arithmeticOperatorWithInvalidOperands.symbols
+@@= skipped -4, +4 lines =@@
+ // an enum type
+ enum E { a, b, c }
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+->c : Symbol(E.c, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 14))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 14))
+ 
+ var a: any;
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+@@= skipped -208, +208 lines =@@
+ 
+ var r1g1 = E.a * a; //ok
+ >r1g1 : Symbol(r1g1, Decl(arithmeticOperatorWithInvalidOperands.ts, 55, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+ 
+ var r1g2 = E.a * b;
+ >r1g2 : Symbol(r1g2, Decl(arithmeticOperatorWithInvalidOperands.ts, 56, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+ 
+ var r1g3 = E.a * c; //ok
+ >r1g3 : Symbol(r1g3, Decl(arithmeticOperatorWithInvalidOperands.ts, 57, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+ 
+ var r1g4 = E.a * d;
+ >r1g4 : Symbol(r1g4, Decl(arithmeticOperatorWithInvalidOperands.ts, 58, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+ 
+ var r1g5 = E.a * e;
+ >r1g5 : Symbol(r1g5, Decl(arithmeticOperatorWithInvalidOperands.ts, 59, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+ 
+ var r1g6 = E.a * f;
+ >r1g6 : Symbol(r1g6, Decl(arithmeticOperatorWithInvalidOperands.ts, 60, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+ 
+ var r1h1 = a * E.b; //ok
+ >r1h1 : Symbol(r1h1, Decl(arithmeticOperatorWithInvalidOperands.ts, 62, 3))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r1h2 = b * E.b;
+ >r1h2 : Symbol(r1h2, Decl(arithmeticOperatorWithInvalidOperands.ts, 63, 3))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r1h3 = c * E.b; //ok
+ >r1h3 : Symbol(r1h3, Decl(arithmeticOperatorWithInvalidOperands.ts, 64, 3))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r1h4 = d * E.b;
+ >r1h4 : Symbol(r1h4, Decl(arithmeticOperatorWithInvalidOperands.ts, 65, 3))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r1h5 = e * E.b;
+ >r1h5 : Symbol(r1h5, Decl(arithmeticOperatorWithInvalidOperands.ts, 66, 3))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r1h6 = f * E.b;
+ >r1h6 : Symbol(r1h6, Decl(arithmeticOperatorWithInvalidOperands.ts, 67, 3))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ // operator /
+ var r2a1 = a / a; //ok
+@@= skipped -265, +265 lines =@@
+ 
+ var r2g1 = E.a / a; //ok
+ >r2g1 : Symbol(r2g1, Decl(arithmeticOperatorWithInvalidOperands.ts, 112, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+ 
+ var r2g2 = E.a / b;
+ >r2g2 : Symbol(r2g2, Decl(arithmeticOperatorWithInvalidOperands.ts, 113, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+ 
+ var r2g3 = E.a / c; //ok
+ >r2g3 : Symbol(r2g3, Decl(arithmeticOperatorWithInvalidOperands.ts, 114, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+ 
+ var r2g4 = E.a / d;
+ >r2g4 : Symbol(r2g4, Decl(arithmeticOperatorWithInvalidOperands.ts, 115, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+ 
+ var r2g5 = E.a / e;
+ >r2g5 : Symbol(r2g5, Decl(arithmeticOperatorWithInvalidOperands.ts, 116, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+ 
+ var r2g6 = E.a / f;
+ >r2g6 : Symbol(r2g6, Decl(arithmeticOperatorWithInvalidOperands.ts, 117, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+ 
+ var r2h1 = a / E.b; //ok
+ >r2h1 : Symbol(r2h1, Decl(arithmeticOperatorWithInvalidOperands.ts, 119, 3))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r2h2 = b / E.b;
+ >r2h2 : Symbol(r2h2, Decl(arithmeticOperatorWithInvalidOperands.ts, 120, 3))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r2h3 = c / E.b; //ok
+ >r2h3 : Symbol(r2h3, Decl(arithmeticOperatorWithInvalidOperands.ts, 121, 3))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r2h4 = d / E.b;
+ >r2h4 : Symbol(r2h4, Decl(arithmeticOperatorWithInvalidOperands.ts, 122, 3))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r2h5 = e / E.b;
+ >r2h5 : Symbol(r2h5, Decl(arithmeticOperatorWithInvalidOperands.ts, 123, 3))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r2h6 = f / E.b;
+ >r2h6 : Symbol(r2h6, Decl(arithmeticOperatorWithInvalidOperands.ts, 124, 3))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ // operator %
+ var r3a1 = a % a; //ok
+@@= skipped -265, +265 lines =@@
+ 
+ var r3g1 = E.a % a; //ok
+ >r3g1 : Symbol(r3g1, Decl(arithmeticOperatorWithInvalidOperands.ts, 169, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+ 
+ var r3g2 = E.a % b;
+ >r3g2 : Symbol(r3g2, Decl(arithmeticOperatorWithInvalidOperands.ts, 170, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+ 
+ var r3g3 = E.a % c; //ok
+ >r3g3 : Symbol(r3g3, Decl(arithmeticOperatorWithInvalidOperands.ts, 171, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+ 
+ var r3g4 = E.a % d;
+ >r3g4 : Symbol(r3g4, Decl(arithmeticOperatorWithInvalidOperands.ts, 172, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+ 
+ var r3g5 = E.a % e;
+ >r3g5 : Symbol(r3g5, Decl(arithmeticOperatorWithInvalidOperands.ts, 173, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+ 
+ var r3g6 = E.a % f;
+ >r3g6 : Symbol(r3g6, Decl(arithmeticOperatorWithInvalidOperands.ts, 174, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+ 
+ var r3h1 = a % E.b; //ok
+ >r3h1 : Symbol(r3h1, Decl(arithmeticOperatorWithInvalidOperands.ts, 176, 3))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r3h2 = b % E.b;
+ >r3h2 : Symbol(r3h2, Decl(arithmeticOperatorWithInvalidOperands.ts, 177, 3))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r3h3 = c % E.b; //ok
+ >r3h3 : Symbol(r3h3, Decl(arithmeticOperatorWithInvalidOperands.ts, 178, 3))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r3h4 = d % E.b;
+ >r3h4 : Symbol(r3h4, Decl(arithmeticOperatorWithInvalidOperands.ts, 179, 3))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r3h5 = e % E.b;
+ >r3h5 : Symbol(r3h5, Decl(arithmeticOperatorWithInvalidOperands.ts, 180, 3))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r3h6 = f % E.b;
+ >r3h6 : Symbol(r3h6, Decl(arithmeticOperatorWithInvalidOperands.ts, 181, 3))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ // operator -
+ var r4a1 = a - a; //ok
+@@= skipped -265, +265 lines =@@
+ 
+ var r4g1 = E.a - a; //ok
+ >r4g1 : Symbol(r4g1, Decl(arithmeticOperatorWithInvalidOperands.ts, 226, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+ 
+ var r4g2 = E.a - b;
+ >r4g2 : Symbol(r4g2, Decl(arithmeticOperatorWithInvalidOperands.ts, 227, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+ 
+ var r4g3 = E.a - c; //ok
+ >r4g3 : Symbol(r4g3, Decl(arithmeticOperatorWithInvalidOperands.ts, 228, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+ 
+ var r4g4 = E.a - d;
+ >r4g4 : Symbol(r4g4, Decl(arithmeticOperatorWithInvalidOperands.ts, 229, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+ 
+ var r4g5 = E.a - e;
+ >r4g5 : Symbol(r4g5, Decl(arithmeticOperatorWithInvalidOperands.ts, 230, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+ 
+ var r4g6 = E.a - f;
+ >r4g6 : Symbol(r4g6, Decl(arithmeticOperatorWithInvalidOperands.ts, 231, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+ 
+ var r4h1 = a - E.b; //ok
+ >r4h1 : Symbol(r4h1, Decl(arithmeticOperatorWithInvalidOperands.ts, 233, 3))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r4h2 = b - E.b;
+ >r4h2 : Symbol(r4h2, Decl(arithmeticOperatorWithInvalidOperands.ts, 234, 3))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r4h3 = c - E.b; //ok
+ >r4h3 : Symbol(r4h3, Decl(arithmeticOperatorWithInvalidOperands.ts, 235, 3))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r4h4 = d - E.b;
+ >r4h4 : Symbol(r4h4, Decl(arithmeticOperatorWithInvalidOperands.ts, 236, 3))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r4h5 = e - E.b;
+ >r4h5 : Symbol(r4h5, Decl(arithmeticOperatorWithInvalidOperands.ts, 237, 3))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r4h6 = f - E.b;
+ >r4h6 : Symbol(r4h6, Decl(arithmeticOperatorWithInvalidOperands.ts, 238, 3))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ // operator <<
+ var r5a1 = a << a; //ok
+@@= skipped -265, +265 lines =@@
+ 
+ var r5g1 = E.a << a; //ok
+ >r5g1 : Symbol(r5g1, Decl(arithmeticOperatorWithInvalidOperands.ts, 283, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+ 
+ var r5g2 = E.a << b;
+ >r5g2 : Symbol(r5g2, Decl(arithmeticOperatorWithInvalidOperands.ts, 284, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+ 
+ var r5g3 = E.a << c; //ok
+ >r5g3 : Symbol(r5g3, Decl(arithmeticOperatorWithInvalidOperands.ts, 285, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+ 
+ var r5g4 = E.a << d;
+ >r5g4 : Symbol(r5g4, Decl(arithmeticOperatorWithInvalidOperands.ts, 286, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+ 
+ var r5g5 = E.a << e;
+ >r5g5 : Symbol(r5g5, Decl(arithmeticOperatorWithInvalidOperands.ts, 287, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+ 
+ var r5g6 = E.a << f;
+ >r5g6 : Symbol(r5g6, Decl(arithmeticOperatorWithInvalidOperands.ts, 288, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+ 
+ var r5h1 = a << E.b; //ok
+ >r5h1 : Symbol(r5h1, Decl(arithmeticOperatorWithInvalidOperands.ts, 290, 3))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r5h2 = b << E.b;
+ >r5h2 : Symbol(r5h2, Decl(arithmeticOperatorWithInvalidOperands.ts, 291, 3))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r5h3 = c << E.b; //ok
+ >r5h3 : Symbol(r5h3, Decl(arithmeticOperatorWithInvalidOperands.ts, 292, 3))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r5h4 = d << E.b;
+ >r5h4 : Symbol(r5h4, Decl(arithmeticOperatorWithInvalidOperands.ts, 293, 3))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r5h5 = e << E.b;
+ >r5h5 : Symbol(r5h5, Decl(arithmeticOperatorWithInvalidOperands.ts, 294, 3))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r5h6 = f << E.b;
+ >r5h6 : Symbol(r5h6, Decl(arithmeticOperatorWithInvalidOperands.ts, 295, 3))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ // operator >>
+ var r6a1 = a >> a; //ok
+@@= skipped -265, +265 lines =@@
+ 
+ var r6g1 = E.a >> a; //ok
+ >r6g1 : Symbol(r6g1, Decl(arithmeticOperatorWithInvalidOperands.ts, 340, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+ 
+ var r6g2 = E.a >> b;
+ >r6g2 : Symbol(r6g2, Decl(arithmeticOperatorWithInvalidOperands.ts, 341, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+ 
+ var r6g3 = E.a >> c; //ok
+ >r6g3 : Symbol(r6g3, Decl(arithmeticOperatorWithInvalidOperands.ts, 342, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+ 
+ var r6g4 = E.a >> d;
+ >r6g4 : Symbol(r6g4, Decl(arithmeticOperatorWithInvalidOperands.ts, 343, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+ 
+ var r6g5 = E.a >> e;
+ >r6g5 : Symbol(r6g5, Decl(arithmeticOperatorWithInvalidOperands.ts, 344, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+ 
+ var r6g6 = E.a >> f;
+ >r6g6 : Symbol(r6g6, Decl(arithmeticOperatorWithInvalidOperands.ts, 345, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+ 
+ var r6h1 = a >> E.b; //ok
+ >r6h1 : Symbol(r6h1, Decl(arithmeticOperatorWithInvalidOperands.ts, 347, 3))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r6h2 = b >> E.b;
+ >r6h2 : Symbol(r6h2, Decl(arithmeticOperatorWithInvalidOperands.ts, 348, 3))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r6h3 = c >> E.b; //ok
+ >r6h3 : Symbol(r6h3, Decl(arithmeticOperatorWithInvalidOperands.ts, 349, 3))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r6h4 = d >> E.b;
+ >r6h4 : Symbol(r6h4, Decl(arithmeticOperatorWithInvalidOperands.ts, 350, 3))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r6h5 = e >> E.b;
+ >r6h5 : Symbol(r6h5, Decl(arithmeticOperatorWithInvalidOperands.ts, 351, 3))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r6h6 = f >> E.b;
+ >r6h6 : Symbol(r6h6, Decl(arithmeticOperatorWithInvalidOperands.ts, 352, 3))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ // operator >>>
+ var r7a1 = a >>> a; //ok
+@@= skipped -265, +265 lines =@@
+ 
+ var r7g1 = E.a >>> a; //ok
+ >r7g1 : Symbol(r7g1, Decl(arithmeticOperatorWithInvalidOperands.ts, 397, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+ 
+ var r7g2 = E.a >>> b;
+ >r7g2 : Symbol(r7g2, Decl(arithmeticOperatorWithInvalidOperands.ts, 398, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+ 
+ var r7g3 = E.a >>> c; //ok
+ >r7g3 : Symbol(r7g3, Decl(arithmeticOperatorWithInvalidOperands.ts, 399, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+ 
+ var r7g4 = E.a >>> d;
+ >r7g4 : Symbol(r7g4, Decl(arithmeticOperatorWithInvalidOperands.ts, 400, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+ 
+ var r7g5 = E.a >>> e;
+ >r7g5 : Symbol(r7g5, Decl(arithmeticOperatorWithInvalidOperands.ts, 401, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+ 
+ var r7g6 = E.a >>> f;
+ >r7g6 : Symbol(r7g6, Decl(arithmeticOperatorWithInvalidOperands.ts, 402, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+ 
+ var r7h1 = a >>> E.b; //ok
+ >r7h1 : Symbol(r7h1, Decl(arithmeticOperatorWithInvalidOperands.ts, 404, 3))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r7h2 = b >>> E.b;
+ >r7h2 : Symbol(r7h2, Decl(arithmeticOperatorWithInvalidOperands.ts, 405, 3))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r7h3 = c >>> E.b; //ok
+ >r7h3 : Symbol(r7h3, Decl(arithmeticOperatorWithInvalidOperands.ts, 406, 3))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r7h4 = d >>> E.b;
+ >r7h4 : Symbol(r7h4, Decl(arithmeticOperatorWithInvalidOperands.ts, 407, 3))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r7h5 = e >>> E.b;
+ >r7h5 : Symbol(r7h5, Decl(arithmeticOperatorWithInvalidOperands.ts, 408, 3))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r7h6 = f >>> E.b;
+ >r7h6 : Symbol(r7h6, Decl(arithmeticOperatorWithInvalidOperands.ts, 409, 3))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ // operator &
+ var r8a1 = a & a; //ok
+@@= skipped -265, +265 lines =@@
+ 
+ var r8g1 = E.a & a; //ok
+ >r8g1 : Symbol(r8g1, Decl(arithmeticOperatorWithInvalidOperands.ts, 454, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+ 
+ var r8g2 = E.a & b;
+ >r8g2 : Symbol(r8g2, Decl(arithmeticOperatorWithInvalidOperands.ts, 455, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+ 
+ var r8g3 = E.a & c; //ok
+ >r8g3 : Symbol(r8g3, Decl(arithmeticOperatorWithInvalidOperands.ts, 456, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+ 
+ var r8g4 = E.a & d;
+ >r8g4 : Symbol(r8g4, Decl(arithmeticOperatorWithInvalidOperands.ts, 457, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+ 
+ var r8g5 = E.a & e;
+ >r8g5 : Symbol(r8g5, Decl(arithmeticOperatorWithInvalidOperands.ts, 458, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+ 
+ var r8g6 = E.a & f;
+ >r8g6 : Symbol(r8g6, Decl(arithmeticOperatorWithInvalidOperands.ts, 459, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+ 
+ var r8h1 = a & E.b; //ok
+ >r8h1 : Symbol(r8h1, Decl(arithmeticOperatorWithInvalidOperands.ts, 461, 3))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r8h2 = b & E.b;
+ >r8h2 : Symbol(r8h2, Decl(arithmeticOperatorWithInvalidOperands.ts, 462, 3))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r8h3 = c & E.b; //ok
+ >r8h3 : Symbol(r8h3, Decl(arithmeticOperatorWithInvalidOperands.ts, 463, 3))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r8h4 = d & E.b;
+ >r8h4 : Symbol(r8h4, Decl(arithmeticOperatorWithInvalidOperands.ts, 464, 3))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r8h5 = e & E.b;
+ >r8h5 : Symbol(r8h5, Decl(arithmeticOperatorWithInvalidOperands.ts, 465, 3))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r8h6 = f & E.b;
+ >r8h6 : Symbol(r8h6, Decl(arithmeticOperatorWithInvalidOperands.ts, 466, 3))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ // operator ^
+ var r9a1 = a ^ a; //ok
+@@= skipped -265, +265 lines =@@
+ 
+ var r9g1 = E.a ^ a; //ok
+ >r9g1 : Symbol(r9g1, Decl(arithmeticOperatorWithInvalidOperands.ts, 511, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+ 
+ var r9g2 = E.a ^ b;
+ >r9g2 : Symbol(r9g2, Decl(arithmeticOperatorWithInvalidOperands.ts, 512, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+ 
+ var r9g3 = E.a ^ c; //ok
+ >r9g3 : Symbol(r9g3, Decl(arithmeticOperatorWithInvalidOperands.ts, 513, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+ 
+ var r9g4 = E.a ^ d;
+ >r9g4 : Symbol(r9g4, Decl(arithmeticOperatorWithInvalidOperands.ts, 514, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+ 
+ var r9g5 = E.a ^ e;
+ >r9g5 : Symbol(r9g5, Decl(arithmeticOperatorWithInvalidOperands.ts, 515, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+ 
+ var r9g6 = E.a ^ f;
+ >r9g6 : Symbol(r9g6, Decl(arithmeticOperatorWithInvalidOperands.ts, 516, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+ 
+ var r9h1 = a ^ E.b; //ok
+ >r9h1 : Symbol(r9h1, Decl(arithmeticOperatorWithInvalidOperands.ts, 518, 3))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r9h2 = b ^ E.b;
+ >r9h2 : Symbol(r9h2, Decl(arithmeticOperatorWithInvalidOperands.ts, 519, 3))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r9h3 = c ^ E.b; //ok
+ >r9h3 : Symbol(r9h3, Decl(arithmeticOperatorWithInvalidOperands.ts, 520, 3))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r9h4 = d ^ E.b;
+ >r9h4 : Symbol(r9h4, Decl(arithmeticOperatorWithInvalidOperands.ts, 521, 3))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r9h5 = e ^ E.b;
+ >r9h5 : Symbol(r9h5, Decl(arithmeticOperatorWithInvalidOperands.ts, 522, 3))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r9h6 = f ^ E.b;
+ >r9h6 : Symbol(r9h6, Decl(arithmeticOperatorWithInvalidOperands.ts, 523, 3))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ // operator |
+ var r10a1 = a | a; //ok
+@@= skipped -265, +265 lines =@@
+ 
+ var r10g1 = E.a | a; //ok
+ >r10g1 : Symbol(r10g1, Decl(arithmeticOperatorWithInvalidOperands.ts, 568, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+ 
+ var r10g2 = E.a | b;
+ >r10g2 : Symbol(r10g2, Decl(arithmeticOperatorWithInvalidOperands.ts, 569, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+ 
+ var r10g3 = E.a | c; //ok
+ >r10g3 : Symbol(r10g3, Decl(arithmeticOperatorWithInvalidOperands.ts, 570, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+ 
+ var r10g4 = E.a | d;
+ >r10g4 : Symbol(r10g4, Decl(arithmeticOperatorWithInvalidOperands.ts, 571, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+ 
+ var r10g5 = E.a | e;
+ >r10g5 : Symbol(r10g5, Decl(arithmeticOperatorWithInvalidOperands.ts, 572, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+ 
+ var r10g6 = E.a | f;
+ >r10g6 : Symbol(r10g6, Decl(arithmeticOperatorWithInvalidOperands.ts, 573, 3))
+->E.a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>E.a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
++>a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 8))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+ 
+ var r10h1 = a | E.b; //ok
+ >r10h1 : Symbol(r10h1, Decl(arithmeticOperatorWithInvalidOperands.ts, 575, 3))
+ >a : Symbol(a, Decl(arithmeticOperatorWithInvalidOperands.ts, 4, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r10h2 = b | E.b;
+ >r10h2 : Symbol(r10h2, Decl(arithmeticOperatorWithInvalidOperands.ts, 576, 3))
+ >b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 5, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r10h3 = c | E.b; //ok
+ >r10h3 : Symbol(r10h3, Decl(arithmeticOperatorWithInvalidOperands.ts, 577, 3))
+ >c : Symbol(c, Decl(arithmeticOperatorWithInvalidOperands.ts, 6, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r10h4 = d | E.b;
+ >r10h4 : Symbol(r10h4, Decl(arithmeticOperatorWithInvalidOperands.ts, 578, 3))
+ >d : Symbol(d, Decl(arithmeticOperatorWithInvalidOperands.ts, 7, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r10h5 = e | E.b;
+ >r10h5 : Symbol(r10h5, Decl(arithmeticOperatorWithInvalidOperands.ts, 579, 3))
+ >e : Symbol(e, Decl(arithmeticOperatorWithInvalidOperands.ts, 8, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 
+ var r10h6 = f | E.b;
+ >r10h6 : Symbol(r10h6, Decl(arithmeticOperatorWithInvalidOperands.ts, 580, 3))
+ >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
+->E.b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>E.b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ >E : Symbol(E, Decl(arithmeticOperatorWithInvalidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
++>b : Symbol(b, Decl(arithmeticOperatorWithInvalidOperands.ts, 2, 11))
+ 

@@ -1,0 +1,11 @@
+--- old.recursiveBaseConstructorCreation1.symbols
++++ new.recursiveBaseConstructorCreation1.symbols
+@@= skipped -4, +4 lines =@@
+ >C1 : Symbol(C1, Decl(recursiveBaseConstructorCreation1.ts, 0, 0))
+ 
+ public func(param: C2): any { }
+->func : Symbol(C1.func, Decl(recursiveBaseConstructorCreation1.ts, 0, 10))
++>func : Symbol(func, Decl(recursiveBaseConstructorCreation1.ts, 0, 10))
+ >param : Symbol(param, Decl(recursiveBaseConstructorCreation1.ts, 1, 12))
+ >C2 : Symbol(C2, Decl(recursiveBaseConstructorCreation1.ts, 2, 1))
+ }

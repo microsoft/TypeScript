@@ -1,0 +1,104 @@
+--- old.mappedTypeIndexedAccessConstraint.symbols
++++ new.mappedTypeIndexedAccessConstraint.symbols
+@@= skipped -53, +53 lines =@@
+ >K : Symbol(K, Decl(mappedTypeIndexedAccessConstraint.ts, 10, 13))
+ 
+     m1.toString();  // Error
+->m1.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ >m1 : Symbol(m1, Decl(mappedTypeIndexedAccessConstraint.ts, 10, 33))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ 
+     m1?.toString();
+->m1?.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>m1?.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >m1 : Symbol(m1, Decl(mappedTypeIndexedAccessConstraint.ts, 10, 33))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+     m2.toString();  // Error
+->m2.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ >m2 : Symbol(m2, Decl(mappedTypeIndexedAccessConstraint.ts, 10, 43))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ 
+     m2?.toString();
+->m2?.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>m2?.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >m2 : Symbol(m2, Decl(mappedTypeIndexedAccessConstraint.ts, 10, 43))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+     m3.toString();  // Error
+->m3.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ >m3 : Symbol(m3, Decl(mappedTypeIndexedAccessConstraint.ts, 10, 54))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ 
+     m3?.toString();
+->m3?.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>m3?.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >m3 : Symbol(m3, Decl(mappedTypeIndexedAccessConstraint.ts, 10, 54))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ // Repro from #57487
+@@= skipped -57, +51 lines =@@
+ >mapped : Symbol(mapped, Decl(mappedTypeIndexedAccessConstraint.ts, 26, 5))
+ >key : Symbol(key, Decl(mappedTypeIndexedAccessConstraint.ts, 28, 54))
+ >K : Symbol(K, Decl(mappedTypeIndexedAccessConstraint.ts, 28, 23))
+->mapped[key].toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ >mapped : Symbol(mapped, Decl(mappedTypeIndexedAccessConstraint.ts, 26, 5))
+ >key : Symbol(key, Decl(mappedTypeIndexedAccessConstraint.ts, 28, 54))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ 
+ // Additional repro from #57487
+ 
+@@= skipped -63, +61 lines =@@
+ >foo : Symbol(foo, Decl(mappedTypeIndexedAccessConstraint.ts, 45, 86))
+ >v : Symbol(v, Decl(mappedTypeIndexedAccessConstraint.ts, 46, 11))
+ >i : Symbol(i, Decl(mappedTypeIndexedAccessConstraint.ts, 46, 14))
+->v.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>v.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >v : Symbol(v, Decl(mappedTypeIndexedAccessConstraint.ts, 46, 11))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >i : Symbol(i, Decl(mappedTypeIndexedAccessConstraint.ts, 46, 14))
+ 
+     "12": ({ v, i }) => Number(v) + i,
+@@= skipped -93, +93 lines =@@
+ >Obj2 : Symbol(Obj2, Decl(mappedTypeIndexedAccessConstraint.ts, 62, 2))
+ >key : Symbol(key, Decl(mappedTypeIndexedAccessConstraint.ts, 73, 44))
+ >K : Symbol(K, Decl(mappedTypeIndexedAccessConstraint.ts, 73, 22))
+->mapIntersection[key].toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>mapIntersection[key].toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >mapIntersection : Symbol(mapIntersection, Decl(mappedTypeIndexedAccessConstraint.ts, 69, 13))
+ >key : Symbol(key, Decl(mappedTypeIndexedAccessConstraint.ts, 73, 44))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+ declare const resolved: { a?: number | undefined; b: number; c: number };
+ >resolved : Symbol(resolved, Decl(mappedTypeIndexedAccessConstraint.ts, 75, 13))
+@@= skipped -17, +17 lines =@@
+ >Obj2 : Symbol(Obj2, Decl(mappedTypeIndexedAccessConstraint.ts, 62, 2))
+ >key : Symbol(key, Decl(mappedTypeIndexedAccessConstraint.ts, 77, 46))
+ >K : Symbol(K, Decl(mappedTypeIndexedAccessConstraint.ts, 77, 24))
+->resolved[key].toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>resolved[key].toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >resolved : Symbol(resolved, Decl(mappedTypeIndexedAccessConstraint.ts, 75, 13))
+ >key : Symbol(key, Decl(mappedTypeIndexedAccessConstraint.ts, 77, 46))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+ // Additional repro from #57860
+ 
+@@= skipped -29, +29 lines =@@
+ >K : Symbol(K, Decl(mappedTypeIndexedAccessConstraint.ts, 85, 14))
+ 
+     obj[key].length;
+->obj[key].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>obj[key].length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >obj : Symbol(obj, Decl(mappedTypeIndexedAccessConstraint.ts, 85, 35))
+ >key : Symbol(key, Decl(mappedTypeIndexedAccessConstraint.ts, 85, 78))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ 

@@ -1,0 +1,16 @@
+--- old.badInferenceLowerPriorityThanGoodInference.symbols
++++ new.badInferenceLowerPriorityThanGoodInference.symbols
+@@= skipped -7, +7 lines =@@
+ >A : Symbol(A, Decl(badInferenceLowerPriorityThanGoodInference.ts, 2, 14))
+ 
+     a: A;
+->a : Symbol(Foo.a, Decl(badInferenceLowerPriorityThanGoodInference.ts, 2, 18))
++>a : Symbol(a, Decl(badInferenceLowerPriorityThanGoodInference.ts, 2, 18))
+ >A : Symbol(A, Decl(badInferenceLowerPriorityThanGoodInference.ts, 2, 14))
+ 
+     b: (x: A) => void;
+->b : Symbol(Foo.b, Decl(badInferenceLowerPriorityThanGoodInference.ts, 3, 9))
++>b : Symbol(b, Decl(badInferenceLowerPriorityThanGoodInference.ts, 3, 9))
+ >x : Symbol(x, Decl(badInferenceLowerPriorityThanGoodInference.ts, 4, 8))
+ >A : Symbol(A, Decl(badInferenceLowerPriorityThanGoodInference.ts, 2, 14))
+ }

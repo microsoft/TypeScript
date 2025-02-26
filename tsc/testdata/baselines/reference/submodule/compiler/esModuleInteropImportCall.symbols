@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/esModuleInteropImportCall.ts] ////
+
+=== foo.d.ts ===
+declare function foo(): void;
+>foo : Symbol(foo, Decl(foo.d.ts, 0, 0), Decl(foo.d.ts, 0, 29))
+
+declare namespace foo {}
+>foo : Symbol(foo, Decl(foo.d.ts, 0, 0), Decl(foo.d.ts, 0, 29))
+
+export = foo;
+>foo : Symbol(foo, Decl(foo.d.ts, 0, 0), Decl(foo.d.ts, 0, 29))
+
+=== index.ts ===
+import("./foo").then(f => {
+>import("./foo").then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(index.ts, 0, 21))
+
+    f.default;
+>f.default : Symbol(default)
+>f : Symbol(f, Decl(index.ts, 0, 21))
+>default : Symbol(default)
+
+});

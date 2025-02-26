@@ -1,0 +1,11 @@
+--- old.baseTypeOrderChecking.symbols
++++ new.baseTypeOrderChecking.symbols
+@@= skipped -33, +33 lines =@@
+ {
+ 
+                public memberVariable: Class2;
+->memberVariable : Symbol(Class3.memberVariable, Decl(baseTypeOrderChecking.ts, 22, 1))
++>memberVariable : Symbol(memberVariable, Decl(baseTypeOrderChecking.ts, 22, 1))
+ >Class2 : Symbol(Class2, Decl(baseTypeOrderChecking.ts, 8, 1))
+ 
+ }

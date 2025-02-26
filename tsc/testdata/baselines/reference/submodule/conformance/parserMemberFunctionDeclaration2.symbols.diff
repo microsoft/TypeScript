@@ -1,0 +1,11 @@
+--- old.parserMemberFunctionDeclaration2.symbols
++++ new.parserMemberFunctionDeclaration2.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(parserMemberFunctionDeclaration2.ts, 0, 0))
+ 
+     static static Foo() { }
+->static : Symbol(C.static, Decl(parserMemberFunctionDeclaration2.ts, 0, 9))
+->Foo : Symbol(C.Foo, Decl(parserMemberFunctionDeclaration2.ts, 1, 17))
++>static : Symbol(static, Decl(parserMemberFunctionDeclaration2.ts, 0, 9))
++>Foo : Symbol(Foo, Decl(parserMemberFunctionDeclaration2.ts, 1, 17))
+ }

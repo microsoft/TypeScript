@@ -1,0 +1,35 @@
+--- old.classFunctionMerging2.symbols
++++ new.classFunctionMerging2.symbols
+@@= skipped -7, +7 lines =@@
+ >p : Symbol(p, Decl(classFunctionMerging2.ts, 1, 16))
+ 
+     a: number;
+->a : Symbol(A.a, Decl(classFunctionMerging2.ts, 1, 27))
++>a : Symbol(a, Decl(classFunctionMerging2.ts, 1, 27))
+ }
+ 
+ declare function B(p: string): B;
+@@= skipped -16, +16 lines =@@
+ >p : Symbol(p, Decl(classFunctionMerging2.ts, 7, 16))
+ 
+     b: number;
+->b : Symbol(B.b, Decl(classFunctionMerging2.ts, 7, 27))
++>b : Symbol(b, Decl(classFunctionMerging2.ts, 7, 27))
+ }
+ 
+ let b = new B("Hey")
+@@= skipped -8, +8 lines =@@
+ >B : Symbol(B, Decl(classFunctionMerging2.ts, 3, 1), Decl(classFunctionMerging2.ts, 5, 33))
+ 
+ console.log(b.a)
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->b.a : Symbol(A.a, Decl(classFunctionMerging2.ts, 1, 27))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>b.a : Symbol(a, Decl(classFunctionMerging2.ts, 1, 27))
+ >b : Symbol(b, Decl(classFunctionMerging2.ts, 11, 3))
+->a : Symbol(A.a, Decl(classFunctionMerging2.ts, 1, 27))
++>a : Symbol(a, Decl(classFunctionMerging2.ts, 1, 27))
+ 

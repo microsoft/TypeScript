@@ -1,0 +1,11 @@
+--- old.systemModule11.symbols
++++ new.systemModule11.symbols
+@@= skipped -30, +30 lines =@@
+ >z : Symbol(z, Decl(file3.ts, 0, 10))
+ 
+ export default function foo() {}
+->foo : Symbol(foo, Decl(file3.ts, 0, 28))
++>foo : Symbol(default, Decl(file3.ts, 0, 28))
+ 
+ export * from 'bar';
+ 

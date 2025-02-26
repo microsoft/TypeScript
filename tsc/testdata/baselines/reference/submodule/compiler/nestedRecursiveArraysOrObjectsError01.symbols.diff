@@ -1,0 +1,11 @@
+--- old.nestedRecursiveArraysOrObjectsError01.symbols
++++ new.nestedRecursiveArraysOrObjectsError01.symbols
+@@= skipped -14, +14 lines =@@
+ >StyleBase : Symbol(StyleBase, Decl(nestedRecursiveArraysOrObjectsError01.ts, 1, 44))
+ 
+     foo: string;
+->foo : Symbol(StyleBase.foo, Decl(nestedRecursiveArraysOrObjectsError01.ts, 2, 21))
++>foo : Symbol(foo, Decl(nestedRecursiveArraysOrObjectsError01.ts, 2, 21))
+ }
+ 
+ const blah: Style = [

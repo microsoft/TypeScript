@@ -1,0 +1,11 @@
+--- old.declarationEmitComputedNameCausesImportToBePainted.symbols
++++ new.declarationEmitComputedNameCausesImportToBePainted.symbols
+@@= skipped -8, +8 lines =@@
+ >Context : Symbol(Context, Decl(context.ts, 0, 28))
+ 
+   [Key]: string;
+->[Key] : Symbol(Context[Key], Decl(context.ts, 1, 26))
++>[Key] : Symbol([Key], Decl(context.ts, 1, 26))
+ >Key : Symbol(Key, Decl(context.ts, 0, 12))
+ }
+ === index.ts ===

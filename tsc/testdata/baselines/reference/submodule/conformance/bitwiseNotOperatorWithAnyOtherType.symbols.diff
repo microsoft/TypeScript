@@ -1,0 +1,66 @@
+--- old.bitwiseNotOperatorWithAnyOtherType.symbols
++++ new.bitwiseNotOperatorWithAnyOtherType.symbols
+@@= skipped -32, +32 lines =@@
+ >A : Symbol(A, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 11, 1))
+ 
+     public a: any;
+->a : Symbol(A.a, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 12, 9))
++>a : Symbol(a, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 12, 9))
+ 
+     static foo() {
+->foo : Symbol(A.foo, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 13, 18))
++>foo : Symbol(foo, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 13, 18))
+ 
+         var a;
+ >a : Symbol(a, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 15, 11))
+@@= skipped -74, +74 lines =@@
+ 
+ var ResultIsNumber11 = ~objA.a;
+ >ResultIsNumber11 : Symbol(ResultIsNumber11, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 40, 3))
+->objA.a : Symbol(A.a, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 12, 9))
++>objA.a : Symbol(a, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 12, 9))
+ >objA : Symbol(objA, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 22, 3))
+->a : Symbol(A.a, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 12, 9))
++>a : Symbol(a, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 12, 9))
+ 
+ var ResultIsNumber12 = ~M.n;
+ >ResultIsNumber12 : Symbol(ResultIsNumber12, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 41, 3))
+->M.n : Symbol(M.n, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 20, 14))
++>M.n : Symbol(n, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 20, 14))
+ >M : Symbol(M, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 18, 1))
+->n : Symbol(M.n, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 20, 14))
++>n : Symbol(n, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 20, 14))
+ 
+ var ResultIsNumber13 = ~foo();
+ >ResultIsNumber13 : Symbol(ResultIsNumber13, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 42, 3))
+@@= skipped -16, +16 lines =@@
+ 
+ var ResultIsNumber14 = ~A.foo();
+ >ResultIsNumber14 : Symbol(ResultIsNumber14, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 43, 3))
+->A.foo : Symbol(A.foo, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 13, 18))
++>A.foo : Symbol(foo, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 13, 18))
+ >A : Symbol(A, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 11, 1))
+->foo : Symbol(A.foo, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 13, 18))
++>foo : Symbol(foo, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 13, 18))
+ 
+ var ResultIsNumber15 = ~(ANY + ANY1);
+ >ResultIsNumber15 : Symbol(ResultIsNumber15, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 44, 3))
+@@= skipped -51, +51 lines =@@
+ >y : Symbol(y, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 6, 18))
+ 
+ ~objA.a;
+->objA.a : Symbol(A.a, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 12, 9))
++>objA.a : Symbol(a, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 12, 9))
+ >objA : Symbol(objA, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 22, 3))
+->a : Symbol(A.a, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 12, 9))
++>a : Symbol(a, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 12, 9))
+ 
+ ~M.n;
+->M.n : Symbol(M.n, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 20, 14))
++>M.n : Symbol(n, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 20, 14))
+ >M : Symbol(M, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 18, 1))
+->n : Symbol(M.n, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 20, 14))
++>n : Symbol(n, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 20, 14))
+ 
+ ~~obj1.x;
+ >obj1.x : Symbol(x, Decl(bitwiseNotOperatorWithAnyOtherType.ts, 6, 12))

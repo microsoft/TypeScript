@@ -1,0 +1,11 @@
+--- old.classMemberInitializerScoping2(target=es2017,usedefineforclassfields=true).symbols
++++ new.classMemberInitializerScoping2(target=es2017,usedefineforclassfields=true).symbols
+@@= skipped -7, +7 lines =@@
+ >C : Symbol(C, Decl(classMemberInitializerScoping2.ts, 0, 11))
+ 
+     p = x
+->p : Symbol(C.p, Decl(classMemberInitializerScoping2.ts, 1, 9))
++>p : Symbol(p, Decl(classMemberInitializerScoping2.ts, 1, 9))
+ >x : Symbol(x, Decl(classMemberInitializerScoping2.ts, 0, 5))
+ 
+     constructor(x: string) { }

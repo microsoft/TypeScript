@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionWithDefaultAssignedMember.ts] ////
+
+=== index.js ===
+function foo() {}
+>foo : Symbol(foo, Decl(index.js, 0, 0))
+
+foo.foo = foo;
+>foo.foo : Symbol(foo, Decl(index.js, 0, 17))
+>foo : Symbol(foo, Decl(index.js, 0, 0))
+>foo : Symbol(foo, Decl(index.js, 0, 17))
+>foo : Symbol(foo, Decl(index.js, 0, 0))
+
+foo.default = foo;
+>foo.default : Symbol(default, Decl(index.js, 2, 14))
+>foo : Symbol(foo, Decl(index.js, 0, 0))
+>default : Symbol(default, Decl(index.js, 2, 14))
+>foo : Symbol(foo, Decl(index.js, 0, 0))
+
+module.exports = foo;
+>foo : Symbol(foo, Decl(index.js, 0, 0))
+

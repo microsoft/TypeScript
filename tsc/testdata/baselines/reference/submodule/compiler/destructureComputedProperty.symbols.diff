@@ -1,0 +1,20 @@
+--- old.destructureComputedProperty.symbols
++++ new.destructureComputedProperty.symbols
+@@= skipped -15, +15 lines =@@
+ 
+ class C { private p: number; }
+ >C : Symbol(C, Decl(destructureComputedProperty.ts, 2, 26))
+->p : Symbol(C.p, Decl(destructureComputedProperty.ts, 4, 9))
++>p : Symbol(p, Decl(destructureComputedProperty.ts, 4, 9))
+ 
+ const nameP = "p";
+ >nameP : Symbol(nameP, Decl(destructureComputedProperty.ts, 5, 5))
+@@= skipped -20, +20 lines =@@
+ >C : Symbol(C, Decl(destructureComputedProperty.ts, 2, 26))
+ 
+ const { p: p3 } = new C();
+->p : Symbol(C.p, Decl(destructureComputedProperty.ts, 4, 9))
++>p : Symbol(p, Decl(destructureComputedProperty.ts, 4, 9))
+ >p3 : Symbol(p3, Decl(destructureComputedProperty.ts, 9, 7))
+ >C : Symbol(C, Decl(destructureComputedProperty.ts, 2, 26))
+ 

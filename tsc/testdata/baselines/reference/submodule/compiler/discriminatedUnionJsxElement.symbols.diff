@@ -1,0 +1,64 @@
+--- old.discriminatedUnionJsxElement.symbols
++++ new.discriminatedUnionJsxElement.symbols
+@@= skipped -7, +7 lines =@@
+ >MenuItemVariant : Symbol(MenuItemVariant, Decl(discriminatedUnionJsxElement.tsx, 2, 16))
+ >ListItemVariant : Symbol(ListItemVariant, Decl(discriminatedUnionJsxElement.tsx, 11, 98))
+ >ListItemVariant : Symbol(ListItemVariant, Decl(discriminatedUnionJsxElement.tsx, 11, 98))
+->OneLine : Symbol(ListItemVariant.OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
++>OneLine : Symbol(OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
+ 
+     menuItemsVariant?: MenuItemVariant;
+->menuItemsVariant : Symbol(IData.menuItemsVariant, Decl(discriminatedUnionJsxElement.tsx, 2, 84))
++>menuItemsVariant : Symbol(menuItemsVariant, Decl(discriminatedUnionJsxElement.tsx, 2, 84))
+ >MenuItemVariant : Symbol(MenuItemVariant, Decl(discriminatedUnionJsxElement.tsx, 2, 16))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >MenuItemVariant : Symbol(MenuItemVariant, Decl(discriminatedUnionJsxElement.tsx, 6, 14))
+ >ListItemVariant : Symbol(ListItemVariant, Decl(discriminatedUnionJsxElement.tsx, 11, 98))
+ >ListItemVariant : Symbol(ListItemVariant, Decl(discriminatedUnionJsxElement.tsx, 11, 98))
+->OneLine : Symbol(ListItemVariant.OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
++>OneLine : Symbol(OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
+ >data : Symbol(data, Decl(discriminatedUnionJsxElement.tsx, 6, 81))
+ >IData : Symbol(IData, Decl(discriminatedUnionJsxElement.tsx, 0, 0))
+ >MenuItemVariant : Symbol(MenuItemVariant, Decl(discriminatedUnionJsxElement.tsx, 6, 14))
+ 
+     const listItemVariant = data.menuItemsVariant ?? ListItemVariant.OneLine;
+ >listItemVariant : Symbol(listItemVariant, Decl(discriminatedUnionJsxElement.tsx, 7, 9))
+->data.menuItemsVariant : Symbol(IData.menuItemsVariant, Decl(discriminatedUnionJsxElement.tsx, 2, 84))
++>data.menuItemsVariant : Symbol(menuItemsVariant, Decl(discriminatedUnionJsxElement.tsx, 2, 84))
+ >data : Symbol(data, Decl(discriminatedUnionJsxElement.tsx, 6, 81))
+->menuItemsVariant : Symbol(IData.menuItemsVariant, Decl(discriminatedUnionJsxElement.tsx, 2, 84))
+->ListItemVariant.OneLine : Symbol(ListItemVariant.OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
++>menuItemsVariant : Symbol(menuItemsVariant, Decl(discriminatedUnionJsxElement.tsx, 2, 84))
++>ListItemVariant.OneLine : Symbol(OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
+ >ListItemVariant : Symbol(ListItemVariant, Decl(discriminatedUnionJsxElement.tsx, 11, 98))
+->OneLine : Symbol(ListItemVariant.OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
++>OneLine : Symbol(OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
+ 
+     return <ListItem variant={listItemVariant} />;
+ >ListItem : Symbol(ListItem, Decl(discriminatedUnionJsxElement.tsx, 16, 1))
+@@= skipped -24, +24 lines =@@
+ >IListItemData : Symbol(IListItemData, Decl(discriminatedUnionJsxElement.tsx, 9, 1))
+ >variant : Symbol(variant, Decl(discriminatedUnionJsxElement.tsx, 11, 22))
+ >ListItemVariant : Symbol(ListItemVariant, Decl(discriminatedUnionJsxElement.tsx, 11, 98))
+->Avatar : Symbol(ListItemVariant.Avatar, Decl(discriminatedUnionJsxElement.tsx, 14, 12))
++>Avatar : Symbol(Avatar, Decl(discriminatedUnionJsxElement.tsx, 14, 12))
+ >variant : Symbol(variant, Decl(discriminatedUnionJsxElement.tsx, 11, 61))
+ >ListItemVariant : Symbol(ListItemVariant, Decl(discriminatedUnionJsxElement.tsx, 11, 98))
+->OneLine : Symbol(ListItemVariant.OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
++>OneLine : Symbol(OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
+ 
+ enum ListItemVariant {
+ >ListItemVariant : Symbol(ListItemVariant, Decl(discriminatedUnionJsxElement.tsx, 11, 98))
+ 
+     OneLine,
+->OneLine : Symbol(ListItemVariant.OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
++>OneLine : Symbol(OneLine, Decl(discriminatedUnionJsxElement.tsx, 13, 22))
+ 
+     Avatar,
+->Avatar : Symbol(ListItemVariant.Avatar, Decl(discriminatedUnionJsxElement.tsx, 14, 12))
++>Avatar : Symbol(Avatar, Decl(discriminatedUnionJsxElement.tsx, 14, 12))
+ }
+ 
+ function ListItem(_data: IListItemData) {

@@ -1,0 +1,11 @@
+--- old.classHeritageWithTrailingSeparator.symbols
++++ new.classHeritageWithTrailingSeparator.symbols
+@@= skipped -2, +2 lines =@@
+ === classHeritageWithTrailingSeparator.ts ===
+ class C { foo: number }
+ >C : Symbol(C, Decl(classHeritageWithTrailingSeparator.ts, 0, 0))
+->foo : Symbol(C.foo, Decl(classHeritageWithTrailingSeparator.ts, 0, 9))
++>foo : Symbol(foo, Decl(classHeritageWithTrailingSeparator.ts, 0, 9))
+ 
+ class D extends C, {
+ >D : Symbol(D, Decl(classHeritageWithTrailingSeparator.ts, 0, 23))

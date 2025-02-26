@@ -1,0 +1,11 @@
+--- old.numberAssignableToEnum.symbols
++++ new.numberAssignableToEnum.symbols
+@@= skipped -2, +2 lines =@@
+ === numberAssignableToEnum.ts ===
+ enum E { A }
+ >E : Symbol(E, Decl(numberAssignableToEnum.ts, 0, 0))
+->A : Symbol(E.A, Decl(numberAssignableToEnum.ts, 0, 8))
++>A : Symbol(A, Decl(numberAssignableToEnum.ts, 0, 8))
+ 
+ var n: number;
+ >n : Symbol(n, Decl(numberAssignableToEnum.ts, 1, 3))

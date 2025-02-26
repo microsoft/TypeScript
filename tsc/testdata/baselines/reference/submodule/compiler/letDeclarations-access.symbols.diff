@@ -1,0 +1,10 @@
+--- old.letDeclarations-access.symbols
++++ new.letDeclarations-access.symbols
+@@= skipped -81, +81 lines =@@
+ >x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+ 
+ x.toString();
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+ 

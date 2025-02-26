@@ -1,0 +1,79 @@
+--- old.everyTypeWithInitializer.symbols
++++ new.everyTypeWithInitializer.symbols
+@@= skipped -4, +4 lines =@@
+ >I : Symbol(I, Decl(everyTypeWithInitializer.ts, 0, 0))
+ 
+     id: number;
+->id : Symbol(I.id, Decl(everyTypeWithInitializer.ts, 0, 13))
++>id : Symbol(id, Decl(everyTypeWithInitializer.ts, 0, 13))
+ }
+ 
+ class C implements I {
+@@= skipped -8, +8 lines =@@
+ >I : Symbol(I, Decl(everyTypeWithInitializer.ts, 0, 0))
+ 
+     id: number;
+->id : Symbol(C.id, Decl(everyTypeWithInitializer.ts, 4, 22))
++>id : Symbol(id, Decl(everyTypeWithInitializer.ts, 4, 22))
+ }
+ 
+ class D<T>{
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(everyTypeWithInitializer.ts, 8, 8))
+ 
+     source: T;
+->source : Symbol(D.source, Decl(everyTypeWithInitializer.ts, 8, 11))
++>source : Symbol(source, Decl(everyTypeWithInitializer.ts, 8, 11))
+ >T : Symbol(T, Decl(everyTypeWithInitializer.ts, 8, 8))
+ 
+     recurse: D<T>;
+->recurse : Symbol(D.recurse, Decl(everyTypeWithInitializer.ts, 9, 14))
++>recurse : Symbol(recurse, Decl(everyTypeWithInitializer.ts, 9, 14))
+ >D : Symbol(D, Decl(everyTypeWithInitializer.ts, 6, 1))
+ >T : Symbol(T, Decl(everyTypeWithInitializer.ts, 8, 8))
+ 
+     wrapped: D<D<T>>
+->wrapped : Symbol(D.wrapped, Decl(everyTypeWithInitializer.ts, 10, 18))
++>wrapped : Symbol(wrapped, Decl(everyTypeWithInitializer.ts, 10, 18))
+ >D : Symbol(D, Decl(everyTypeWithInitializer.ts, 6, 1))
+ >D : Symbol(D, Decl(everyTypeWithInitializer.ts, 6, 1))
+ >T : Symbol(T, Decl(everyTypeWithInitializer.ts, 8, 8))
+@@= skipped -26, +26 lines =@@
+ >A : Symbol(A, Decl(everyTypeWithInitializer.ts, 16, 10))
+ 
+         name: string;
+->name : Symbol(A.name, Decl(everyTypeWithInitializer.ts, 17, 20))
++>name : Symbol(name, Decl(everyTypeWithInitializer.ts, 17, 20))
+     }
+ 
+     export function F2(x: number): string { return x.toString(); }
+ >F2 : Symbol(F2, Decl(everyTypeWithInitializer.ts, 19, 5))
+ >x : Symbol(x, Decl(everyTypeWithInitializer.ts, 21, 23))
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(everyTypeWithInitializer.ts, 21, 23))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ var aNumber = 9.9;
+@@= skipped -63, +63 lines =@@
+ 
+ var aClassInModule = new M.A();
+ >aClassInModule : Symbol(aClassInModule, Decl(everyTypeWithInitializer.ts, 42, 3))
+->M.A : Symbol(M.A, Decl(everyTypeWithInitializer.ts, 16, 10))
++>M.A : Symbol(A, Decl(everyTypeWithInitializer.ts, 16, 10))
+ >M : Symbol(M, Decl(everyTypeWithInitializer.ts, 14, 44))
+->A : Symbol(M.A, Decl(everyTypeWithInitializer.ts, 16, 10))
++>A : Symbol(A, Decl(everyTypeWithInitializer.ts, 16, 10))
+ 
+ var aFunctionInModule = M.F2;
+ >aFunctionInModule : Symbol(aFunctionInModule, Decl(everyTypeWithInitializer.ts, 43, 3))
+->M.F2 : Symbol(M.F2, Decl(everyTypeWithInitializer.ts, 19, 5))
++>M.F2 : Symbol(F2, Decl(everyTypeWithInitializer.ts, 19, 5))
+ >M : Symbol(M, Decl(everyTypeWithInitializer.ts, 14, 44))
+->F2 : Symbol(M.F2, Decl(everyTypeWithInitializer.ts, 19, 5))
++>F2 : Symbol(F2, Decl(everyTypeWithInitializer.ts, 19, 5))
+ 
+ // no initializer or annotation, so this is an 'any'
+ var x;

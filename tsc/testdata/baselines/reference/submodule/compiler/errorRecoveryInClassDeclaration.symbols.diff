@@ -1,0 +1,11 @@
+--- old.errorRecoveryInClassDeclaration.symbols
++++ new.errorRecoveryInClassDeclaration.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(errorRecoveryInClassDeclaration.ts, 0, 0))
+ 
+     public bar() {
+->bar : Symbol(C.bar, Decl(errorRecoveryInClassDeclaration.ts, 0, 9))
++>bar : Symbol(bar, Decl(errorRecoveryInClassDeclaration.ts, 0, 9))
+ 
+         var v = foo(
+ >v : Symbol(v, Decl(errorRecoveryInClassDeclaration.ts, 2, 11))

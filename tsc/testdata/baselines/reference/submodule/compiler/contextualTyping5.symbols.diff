@@ -1,0 +1,10 @@
+--- old.contextualTyping5.symbols
++++ new.contextualTyping5.symbols
+@@= skipped -2, +2 lines =@@
+ === contextualTyping5.ts ===
+ class foo { public bar:{id:number;} = { }; }
+ >foo : Symbol(foo, Decl(contextualTyping5.ts, 0, 0))
+->bar : Symbol(foo.bar, Decl(contextualTyping5.ts, 0, 11))
++>bar : Symbol(bar, Decl(contextualTyping5.ts, 0, 11))
+ >id : Symbol(id, Decl(contextualTyping5.ts, 0, 24))
+ 

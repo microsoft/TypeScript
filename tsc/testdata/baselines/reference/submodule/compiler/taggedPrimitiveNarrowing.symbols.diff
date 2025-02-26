@@ -1,0 +1,25 @@
+--- old.taggedPrimitiveNarrowing.symbols
++++ new.taggedPrimitiveNarrowing.symbols
+@@= skipped -16, +16 lines =@@
+ >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+     }
+     return hash.length;
+->hash.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>hash.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >hash : Symbol(hash, Decl(taggedPrimitiveNarrowing.ts, 2, 23))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function getHashLength2<T extends { __tag__: unknown}>(hash: string & T): number {
+@@= skipped -19, +19 lines =@@
+ >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+     }
+     return hash.length;
+->hash.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>hash.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >hash : Symbol(hash, Decl(taggedPrimitiveNarrowing.ts, 9, 55))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ 

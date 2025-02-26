@@ -1,0 +1,38 @@
+--- old.exponentiationOperatorWithUndefinedValueAndValidOperands.symbols
++++ new.exponentiationOperatorWithUndefinedValueAndValidOperands.symbols
+@@= skipped -7, +7 lines =@@
+ >E : Symbol(E, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 0, 0))
+ 
+     a,
+->a : Symbol(E.a, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 3, 8))
++>a : Symbol(a, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 3, 8))
+ 
+     b
+->b : Symbol(E.b, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 4, 6))
++>b : Symbol(b, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 4, 6))
+ }
+ 
+ var a: any;
+@@= skipped -30, +30 lines =@@
+ var rk4 = undefined ** E.a;
+ >rk4 : Symbol(rk4, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 15, 3))
+ >undefined : Symbol(undefined)
+->E.a : Symbol(E.a, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 3, 8))
++>E.a : Symbol(a, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 3, 8))
+ >E : Symbol(E, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 0, 0))
+->a : Symbol(E.a, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 3, 8))
++>a : Symbol(a, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 3, 8))
+ 
+ var rk5 = a ** undefined;
+ >rk5 : Symbol(rk5, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 16, 3))
+@@= skipped -20, +20 lines =@@
+ 
+ var rk8 = E.b ** undefined;
+ >rk8 : Symbol(rk8, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 19, 3))
+->E.b : Symbol(E.b, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 4, 6))
++>E.b : Symbol(b, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 4, 6))
+ >E : Symbol(E, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 0, 0))
+->b : Symbol(E.b, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 4, 6))
++>b : Symbol(b, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 4, 6))
+ >undefined : Symbol(undefined)
+ 

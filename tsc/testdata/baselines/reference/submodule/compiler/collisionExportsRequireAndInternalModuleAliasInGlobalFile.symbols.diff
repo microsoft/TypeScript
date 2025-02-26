@@ -1,0 +1,47 @@
+--- old.collisionExportsRequireAndInternalModuleAliasInGlobalFile.symbols
++++ new.collisionExportsRequireAndInternalModuleAliasInGlobalFile.symbols
+@@= skipped -10, +10 lines =@@
+ import exports = mOfGloalFile.c;
+ >exports : Symbol(exports, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 3, 1))
+ >mOfGloalFile : Symbol(mOfGloalFile, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 0))
+->c : Symbol(exports, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 21))
++>c : Symbol(c, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 21))
+ 
+ import require = mOfGloalFile.c;
+ >require : Symbol(require, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 4, 32))
+ >mOfGloalFile : Symbol(mOfGloalFile, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 0))
+->c : Symbol(exports, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 21))
++>c : Symbol(c, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 21))
+ 
+ new exports();
+ >exports : Symbol(exports, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 3, 1))
+@@= skipped -19, +19 lines =@@
+     import exports = mOfGloalFile.c;
+ >exports : Symbol(exports, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 9, 11))
+ >mOfGloalFile : Symbol(mOfGloalFile, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 0))
+->c : Symbol(exports, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 21))
++>c : Symbol(c, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 21))
+ 
+     import require = mOfGloalFile.c;
+ >require : Symbol(require, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 10, 36))
+ >mOfGloalFile : Symbol(mOfGloalFile, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 0))
+->c : Symbol(exports, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 21))
++>c : Symbol(c, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 21))
+ 
+     new exports();
+ >exports : Symbol(exports, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 9, 11))
+@@= skipped -20, +20 lines =@@
+     export import exports = mOfGloalFile.c;
+ >exports : Symbol(exports, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 16, 11))
+ >mOfGloalFile : Symbol(mOfGloalFile, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 0))
+->c : Symbol(exports, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 21))
++>c : Symbol(c, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 21))
+ 
+     export import require = mOfGloalFile.c;
+ >require : Symbol(require, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 17, 43))
+ >mOfGloalFile : Symbol(mOfGloalFile, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 0))
+->c : Symbol(exports, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 21))
++>c : Symbol(c, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 21))
+ 
+     new exports();
+ >exports : Symbol(exports, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 16, 11))

@@ -1,0 +1,24 @@
+--- old.decoratedDefaultExportsGetExportedSystem.symbols
++++ new.decoratedDefaultExportsGetExportedSystem.symbols
+@@= skipped -2, +2 lines =@@
+ === a.ts ===
+ var decorator: ClassDecorator;
+ >decorator : Symbol(decorator, Decl(a.ts, 0, 3))
+->ClassDecorator : Symbol(ClassDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
++>ClassDecorator : Symbol(ClassDecorator)
+ 
+ @decorator
+ >decorator : Symbol(decorator, Decl(a.ts, 0, 3))
+ 
+ export default class Foo {}
+->Foo : Symbol(Foo, Decl(a.ts, 0, 30))
++>Foo : Symbol(default, Decl(a.ts, 0, 30))
+ 
+ === b.ts ===
+ var decorator: ClassDecorator;
+ >decorator : Symbol(decorator, Decl(b.ts, 0, 3))
+->ClassDecorator : Symbol(ClassDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
++>ClassDecorator : Symbol(ClassDecorator)
+ 
+ @decorator
+ >decorator : Symbol(decorator, Decl(b.ts, 0, 3))

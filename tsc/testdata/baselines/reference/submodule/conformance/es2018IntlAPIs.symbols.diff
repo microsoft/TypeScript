@@ -1,0 +1,56 @@
+--- old.es2018IntlAPIs.symbols
++++ new.es2018IntlAPIs.symbols
+@@= skipped -11, +11 lines =@@
+ >const : Symbol(const)
+ 
+ console.log(Intl.PluralRules.supportedLocalesOf(locales, options).join(', '));
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->Intl.PluralRules.supportedLocalesOf(locales, options).join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+->Intl.PluralRules.supportedLocalesOf : Symbol(Intl.PluralRulesConstructor.supportedLocalesOf, Decl(lib.es2018.intl.d.ts, --, --))
+->Intl.PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>Intl.PluralRules.supportedLocalesOf(locales, options).join : Symbol(join, Decl(lib.es5.d.ts, --, --))
++>Intl.PluralRules.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2018.intl.d.ts, --, --))
++>Intl.PluralRules : Symbol(PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
+->PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
+->supportedLocalesOf : Symbol(Intl.PluralRulesConstructor.supportedLocalesOf, Decl(lib.es2018.intl.d.ts, --, --))
++>PluralRules : Symbol(PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
++>supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2018.intl.d.ts, --, --))
+ >locales : Symbol(locales, Decl(es2018IntlAPIs.ts, 2, 5))
+ >options : Symbol(options, Decl(es2018IntlAPIs.ts, 3, 5))
+->join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
++>join : Symbol(join, Decl(lib.es5.d.ts, --, --))
+ 
+ const [ part ] = new Intl.NumberFormat().formatToParts();
+ >part : Symbol(part, Decl(es2018IntlAPIs.ts, 6, 7))
+->new Intl.NumberFormat().formatToParts : Symbol(Intl.NumberFormat.formatToParts, Decl(lib.es2018.intl.d.ts, --, --))
+->Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
++>new Intl.NumberFormat().formatToParts : Symbol(formatToParts, Decl(lib.es2018.intl.d.ts, --, --))
++>Intl.NumberFormat : Symbol(NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
+ >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
+->NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
+->formatToParts : Symbol(Intl.NumberFormat.formatToParts, Decl(lib.es2018.intl.d.ts, --, --))
++>NumberFormat : Symbol(NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
++>formatToParts : Symbol(formatToParts, Decl(lib.es2018.intl.d.ts, --, --))
+ 
+ console.log(part.type, part.value);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->part.type : Symbol(Intl.NumberFormatPart.type, Decl(lib.es2018.intl.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>part.type : Symbol(type, Decl(lib.es2018.intl.d.ts, --, --))
+ >part : Symbol(part, Decl(es2018IntlAPIs.ts, 6, 7))
+->type : Symbol(Intl.NumberFormatPart.type, Decl(lib.es2018.intl.d.ts, --, --))
+->part.value : Symbol(Intl.NumberFormatPart.value, Decl(lib.es2018.intl.d.ts, --, --))
++>type : Symbol(type, Decl(lib.es2018.intl.d.ts, --, --))
++>part.value : Symbol(value, Decl(lib.es2018.intl.d.ts, --, --))
+ >part : Symbol(part, Decl(es2018IntlAPIs.ts, 6, 7))
+->value : Symbol(Intl.NumberFormatPart.value, Decl(lib.es2018.intl.d.ts, --, --))
++>value : Symbol(value, Decl(lib.es2018.intl.d.ts, --, --))
+ 

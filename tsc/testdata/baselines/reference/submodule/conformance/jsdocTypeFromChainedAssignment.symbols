@@ -1,0 +1,61 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeFromChainedAssignment.ts] ////
+
+=== a.js ===
+function A () {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+    this.x = 1
+    /** @type {1} */
+    this.first = this.second = 1
+}
+/** @param {number} n */
+A.prototype.y = A.prototype.z = function f(n) {
+>A.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(a.js, 0, 0))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>A.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(a.js, 0, 0))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(a.js, 6, 31))
+>n : Symbol(n, Decl(a.js, 6, 43))
+
+    return n + this.x
+>n : Symbol(n, Decl(a.js, 6, 43))
+}
+/** @param {number} m */
+A.s = A.t = function g(m) {
+>A.s : Symbol(s, Decl(a.js, 8, 1))
+>A : Symbol(A, Decl(a.js, 0, 0))
+>s : Symbol(s, Decl(a.js, 8, 1))
+>A.t : Symbol(t, Decl(a.js, 10, 5))
+>A : Symbol(A, Decl(a.js, 0, 0))
+>t : Symbol(t, Decl(a.js, 10, 5))
+>g : Symbol(g, Decl(a.js, 10, 11))
+>m : Symbol(m, Decl(a.js, 10, 23))
+
+    return m + this.x
+>m : Symbol(m, Decl(a.js, 10, 23))
+}
+var a = new A()
+>a : Symbol(a, Decl(a.js, 13, 3))
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+a.y('no') // error
+>a : Symbol(a, Decl(a.js, 13, 3))
+
+a.z('not really') // error
+>a : Symbol(a, Decl(a.js, 13, 3))
+
+A.s('still no') // error
+>A.s : Symbol(s, Decl(a.js, 8, 1))
+>A : Symbol(A, Decl(a.js, 0, 0))
+>s : Symbol(s, Decl(a.js, 8, 1))
+
+A.t('not here either') // error
+>A.t : Symbol(t, Decl(a.js, 10, 5))
+>A : Symbol(A, Decl(a.js, 0, 0))
+>t : Symbol(t, Decl(a.js, 10, 5))
+
+a.first = 10 // error: '10' isn't assignable to '1'
+>a : Symbol(a, Decl(a.js, 13, 3))
+

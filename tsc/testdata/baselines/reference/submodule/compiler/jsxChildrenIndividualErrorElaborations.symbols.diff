@@ -1,0 +1,29 @@
+--- old.jsxChildrenIndividualErrorElaborations.symbols
++++ new.jsxChildrenIndividualErrorElaborations.symbols
+@@= skipped -8, +8 lines =@@
+ >Props : Symbol(Props, Decl(index.tsx, 1, 31))
+ 
+   children: (x: number) => string;
+->children : Symbol(Props.children, Decl(index.tsx, 3, 17))
++>children : Symbol(children, Decl(index.tsx, 3, 17))
+ >x : Symbol(x, Decl(index.tsx, 4, 13))
+ }
+ 
+@@= skipped -53, +53 lines =@@
+ >PropsArr : Symbol(PropsArr, Decl(index.tsx, 25, 7))
+ 
+   children: ((x: number) => string)[];
+->children : Symbol(PropsArr.children, Decl(index.tsx, 27, 20))
++>children : Symbol(children, Decl(index.tsx, 27, 20))
+ >x : Symbol(x, Decl(index.tsx, 28, 14))
+ }
+ 
+@@= skipped -57, +57 lines =@@
+ >PropsMixed : Symbol(PropsMixed, Decl(index.tsx, 51, 32))
+ 
+   children: Cb | Cb[];
+->children : Symbol(PropsMixed.children, Decl(index.tsx, 52, 22))
++>children : Symbol(children, Decl(index.tsx, 52, 22))
+ >Cb : Symbol(Cb, Decl(index.tsx, 49, 8))
+ >Cb : Symbol(Cb, Decl(index.tsx, 49, 8))
+ }

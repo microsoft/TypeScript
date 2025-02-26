@@ -1,0 +1,14 @@
+--- old.subtypingWithOptionalProperties.symbols
++++ new.subtypingWithOptionalProperties.symbols
+@@= skipped -28, +28 lines =@@
+ >r.s : Symbol(s, Decl(subtypingWithOptionalProperties.ts, 4, 12))
+ >r : Symbol(r, Decl(subtypingWithOptionalProperties.ts, 8, 3))
+ >s : Symbol(s, Decl(subtypingWithOptionalProperties.ts, 4, 12))
+->r.s.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>r.s.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >r.s : Symbol(s, Decl(subtypingWithOptionalProperties.ts, 4, 12))
+ >r : Symbol(r, Decl(subtypingWithOptionalProperties.ts, 8, 3))
+ >s : Symbol(s, Decl(subtypingWithOptionalProperties.ts, 4, 12))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 

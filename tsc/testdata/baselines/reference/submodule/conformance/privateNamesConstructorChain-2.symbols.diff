@@ -1,0 +1,42 @@
+--- old.privateNamesConstructorChain-2.symbols
++++ new.privateNamesConstructorChain-2.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(privateNamesConstructorChain-2.ts, 0, 13))
+ 
+     #foo = 3;
+->#foo : Symbol(Parent.#foo, Decl(privateNamesConstructorChain-2.ts, 0, 17))
++>#foo : Symbol(#foo, Decl(privateNamesConstructorChain-2.ts, 0, 17))
+ 
+     static #bar = 5;
+->#bar : Symbol(Parent.#bar, Decl(privateNamesConstructorChain-2.ts, 1, 13))
++>#bar : Symbol(#bar, Decl(privateNamesConstructorChain-2.ts, 1, 13))
+ 
+     accessChildProps() {
+->accessChildProps : Symbol(Parent.accessChildProps, Decl(privateNamesConstructorChain-2.ts, 2, 20))
++>accessChildProps : Symbol(accessChildProps, Decl(privateNamesConstructorChain-2.ts, 2, 20))
+ 
+         new Child<string>().#foo; // OK (`#foo` was added when `Parent`'s constructor was called on `child`)
+->new Child<string>().#foo : Symbol(Parent.#foo, Decl(privateNamesConstructorChain-2.ts, 0, 17))
++>new Child<string>().#foo : Symbol(#foo, Decl(privateNamesConstructorChain-2.ts, 0, 17))
+ >Child : Symbol(Child, Decl(privateNamesConstructorChain-2.ts, 7, 1))
+ 
+         Child.#bar;       // Error: not found
+@@= skipped -24, +24 lines =@@
+ >T : Symbol(T, Decl(privateNamesConstructorChain-2.ts, 9, 12))
+ 
+     #foo = "foo";       // OK (Child's #foo does not conflict, as `Parent`'s `#foo` is not accessible)
+->#foo : Symbol(Child.#foo, Decl(privateNamesConstructorChain-2.ts, 9, 34))
++>#foo : Symbol(#foo, Decl(privateNamesConstructorChain-2.ts, 9, 34))
+ 
+     #bar = "bar";       // OK
+->#bar : Symbol(Child.#bar, Decl(privateNamesConstructorChain-2.ts, 10, 17))
++>#bar : Symbol(#bar, Decl(privateNamesConstructorChain-2.ts, 10, 17))
+ }
+ 
+ new Parent<number>().accessChildProps();
+->new Parent<number>().accessChildProps : Symbol(Parent.accessChildProps, Decl(privateNamesConstructorChain-2.ts, 2, 20))
++>new Parent<number>().accessChildProps : Symbol(accessChildProps, Decl(privateNamesConstructorChain-2.ts, 2, 20))
+ >Parent : Symbol(Parent, Decl(privateNamesConstructorChain-2.ts, 0, 0))
+->accessChildProps : Symbol(Parent.accessChildProps, Decl(privateNamesConstructorChain-2.ts, 2, 20))
++>accessChildProps : Symbol(accessChildProps, Decl(privateNamesConstructorChain-2.ts, 2, 20))
+ 

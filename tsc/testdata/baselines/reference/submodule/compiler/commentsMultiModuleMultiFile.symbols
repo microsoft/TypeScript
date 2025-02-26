@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/commentsMultiModuleMultiFile.ts] ////
+
+=== commentsMultiModuleMultiFile_1.ts ===
+import m = require('commentsMultiModuleMultiFile_0');
+>m : Symbol(m, Decl(commentsMultiModuleMultiFile_1.ts, 0, 0))
+
+/** this is multi module 3 comment*/
+export module multiM {
+>multiM : Symbol(multiM, Decl(commentsMultiModuleMultiFile_1.ts, 0, 53))
+
+    /** class d comment*/
+    export class d {
+>d : Symbol(d, Decl(commentsMultiModuleMultiFile_1.ts, 2, 22))
+    }
+
+    /// class f comment
+    export class f {
+>f : Symbol(f, Decl(commentsMultiModuleMultiFile_1.ts, 5, 5))
+    }
+}
+new multiM.d();
+>multiM.d : Symbol(d, Decl(commentsMultiModuleMultiFile_1.ts, 2, 22))
+>multiM : Symbol(multiM, Decl(commentsMultiModuleMultiFile_1.ts, 0, 53))
+>d : Symbol(d, Decl(commentsMultiModuleMultiFile_1.ts, 2, 22))
+

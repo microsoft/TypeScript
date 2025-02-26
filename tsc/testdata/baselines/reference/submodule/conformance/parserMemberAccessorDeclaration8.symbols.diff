@@ -1,0 +1,11 @@
+--- old.parserMemberAccessorDeclaration8.symbols
++++ new.parserMemberAccessorDeclaration8.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(parserMemberAccessorDeclaration8.ts, 0, 0))
+ 
+     static static get Foo() { }
+->static : Symbol(C.static, Decl(parserMemberAccessorDeclaration8.ts, 0, 9))
+->Foo : Symbol(C.Foo, Decl(parserMemberAccessorDeclaration8.ts, 1, 17))
++>static : Symbol(static, Decl(parserMemberAccessorDeclaration8.ts, 0, 9))
++>Foo : Symbol(Foo, Decl(parserMemberAccessorDeclaration8.ts, 1, 17))
+ }

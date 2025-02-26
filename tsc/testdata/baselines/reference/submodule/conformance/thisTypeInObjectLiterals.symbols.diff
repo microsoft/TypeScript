@@ -1,0 +1,84 @@
+--- old.thisTypeInObjectLiterals.symbols
++++ new.thisTypeInObjectLiterals.symbols
+@@= skipped -10, +10 lines =@@
+ >m : Symbol(m, Decl(thisTypeInObjectLiterals.ts, 1, 13))
+ 
+         return this.d.length;
+->this.d.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>this.d.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >this.d : Symbol(d, Decl(thisTypeInObjectLiterals.ts, 0, 9))
+->this : Symbol(o, Decl(thisTypeInObjectLiterals.ts, 0, 7))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals.ts, 0, 7))
+ >d : Symbol(d, Decl(thisTypeInObjectLiterals.ts, 0, 9))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+     },
+     f: function() {
+ >f : Symbol(f, Decl(thisTypeInObjectLiterals.ts, 4, 6))
+ 
+         return this.d.length;
+->this.d.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>this.d.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >this.d : Symbol(d, Decl(thisTypeInObjectLiterals.ts, 0, 9))
+->this : Symbol(o, Decl(thisTypeInObjectLiterals.ts, 0, 7))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals.ts, 0, 7))
+ >d : Symbol(d, Decl(thisTypeInObjectLiterals.ts, 0, 9))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 
+@@= skipped -30, +30 lines =@@
+ 
+         return this.passthrough(this.a);
+ >this.passthrough : Symbol(passthrough, Decl(thisTypeInObjectLiterals.ts, 14, 6))
+->this : Symbol(mutuallyRecursive, Decl(thisTypeInObjectLiterals.ts, 10, 23))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals.ts, 10, 23))
+ >passthrough : Symbol(passthrough, Decl(thisTypeInObjectLiterals.ts, 14, 6))
+ >this.a : Symbol(a, Decl(thisTypeInObjectLiterals.ts, 10, 25))
+->this : Symbol(mutuallyRecursive, Decl(thisTypeInObjectLiterals.ts, 10, 23))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals.ts, 10, 23))
+ >a : Symbol(a, Decl(thisTypeInObjectLiterals.ts, 10, 25))
+ 
+     },
+@@= skipped -13, +13 lines =@@
+ 
+         return this.sub1(n);
+ >this.sub1 : Symbol(sub1, Decl(thisTypeInObjectLiterals.ts, 17, 6))
+->this : Symbol(mutuallyRecursive, Decl(thisTypeInObjectLiterals.ts, 10, 23))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals.ts, 10, 23))
+ >sub1 : Symbol(sub1, Decl(thisTypeInObjectLiterals.ts, 17, 6))
+ >n : Symbol(n, Decl(thisTypeInObjectLiterals.ts, 15, 16))
+ 
+@@= skipped -14, +14 lines =@@
+ 
+             return this.passthrough(n - 1);
+ >this.passthrough : Symbol(passthrough, Decl(thisTypeInObjectLiterals.ts, 14, 6))
+->this : Symbol(mutuallyRecursive, Decl(thisTypeInObjectLiterals.ts, 10, 23))
++>this : Symbol((Anonymous type), Decl(thisTypeInObjectLiterals.ts, 10, 23))
+ >passthrough : Symbol(passthrough, Decl(thisTypeInObjectLiterals.ts, 14, 6))
+ >n : Symbol(n, Decl(thisTypeInObjectLiterals.ts, 18, 9))
+         }
+@@= skipped -18, +18 lines =@@
+ >I : Symbol(I, Decl(thisTypeInObjectLiterals.ts, 25, 42))
+ 
+     a: number;
+->a : Symbol(I.a, Decl(thisTypeInObjectLiterals.ts, 26, 13))
++>a : Symbol(a, Decl(thisTypeInObjectLiterals.ts, 26, 13))
+ 
+     start(): number;
+->start : Symbol(I.start, Decl(thisTypeInObjectLiterals.ts, 27, 14))
++>start : Symbol(start, Decl(thisTypeInObjectLiterals.ts, 27, 14))
+ 
+     passthrough(n: number): number;
+->passthrough : Symbol(I.passthrough, Decl(thisTypeInObjectLiterals.ts, 28, 20))
++>passthrough : Symbol(passthrough, Decl(thisTypeInObjectLiterals.ts, 28, 20))
+ >n : Symbol(n, Decl(thisTypeInObjectLiterals.ts, 29, 16))
+ 
+     sub1(n: number): number;
+->sub1 : Symbol(I.sub1, Decl(thisTypeInObjectLiterals.ts, 29, 35))
++>sub1 : Symbol(sub1, Decl(thisTypeInObjectLiterals.ts, 29, 35))
+ >n : Symbol(n, Decl(thisTypeInObjectLiterals.ts, 30, 9))
+ }
+ var impl: I = mutuallyRecursive;

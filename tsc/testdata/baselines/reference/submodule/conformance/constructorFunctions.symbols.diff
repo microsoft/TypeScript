@@ -1,0 +1,59 @@
+--- old.constructorFunctions.symbols
++++ new.constructorFunctions.symbols
+@@= skipped -4, +4 lines =@@
+ >C1 : Symbol(C1, Decl(index.js, 0, 0))
+ 
+     if (!(this instanceof C1)) return new C1();
+->this : Symbol(C1, Decl(index.js, 0, 0))
+ >C1 : Symbol(C1, Decl(index.js, 0, 0))
+ >C1 : Symbol(C1, Decl(index.js, 0, 0))
+ 
+     this.x = 1;
+->this.x : Symbol(C1.x, Decl(index.js, 1, 47))
+->this : Symbol(C1, Decl(index.js, 0, 0))
+->x : Symbol(C1.x, Decl(index.js, 1, 47))
+ }
+ 
+ const c1_v1 = C1();
+@@= skipped -22, +18 lines =@@
+ >C2 : Symbol(C2, Decl(index.js, 8, 3))
+ 
+     if (!(this instanceof C2)) return new C2();
+->this : Symbol(C2, Decl(index.js, 8, 8))
+ >C2 : Symbol(C2, Decl(index.js, 8, 3))
+ >C2 : Symbol(C2, Decl(index.js, 8, 3))
+ 
+     this.x = 1;
+->this.x : Symbol(C2.x, Decl(index.js, 9, 47))
+->this : Symbol(C2, Decl(index.js, 8, 8))
+->x : Symbol(C2.x, Decl(index.js, 9, 47))
+-
+ };
+ 
+ const c2_v1 = C2();
+@@= skipped -24, +19 lines =@@
+ >C3 : Symbol(C3, Decl(index.js, 14, 23))
+ 
+     if (!(this instanceof C3)) return new C3();
+->this : Symbol(C3, Decl(index.js, 14, 23))
+ >C3 : Symbol(C3, Decl(index.js, 14, 23))
+ >C3 : Symbol(C3, Decl(index.js, 14, 23))
+ 
+@@= skipped -19, +18 lines =@@
+ >C4 : Symbol(C4, Decl(index.js, 25, 3))
+ 
+     if (!(this instanceof C4)) return new C4();
+->this : Symbol(C4, Decl(index.js, 25, 8))
+ >C4 : Symbol(C4, Decl(index.js, 25, 3))
+ >C4 : Symbol(C4, Decl(index.js, 25, 3))
+ 
+@@= skipped -38, +37 lines =@@
+ >C6 : Symbol(C6, Decl(index.js, 38, 12))
+ 
+   this.functions = [x => x, x => x + 1, x => x - 1]
+->this.functions : Symbol(C6.functions, Decl(index.js, 41, 15))
+->this : Symbol(C6, Decl(index.js, 38, 12))
+->functions : Symbol(C6.functions, Decl(index.js, 41, 15))
+ >x : Symbol(x, Decl(index.js, 42, 20))
+ >x : Symbol(x, Decl(index.js, 42, 20))
+ >x : Symbol(x, Decl(index.js, 42, 27))

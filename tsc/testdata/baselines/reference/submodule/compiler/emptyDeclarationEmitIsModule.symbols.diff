@@ -1,0 +1,9 @@
+--- old.emptyDeclarationEmitIsModule.symbols
++++ new.emptyDeclarationEmitIsModule.symbols
+@@= skipped -12, +12 lines =@@
+ >Bar : Symbol(Bar, Decl(index.ts, 0, 26))
+ 
+     x: string
+->x : Symbol(Bar.x, Decl(index.ts, 1, 22))
++>x : Symbol(x, Decl(index.ts, 1, 22))
+ }

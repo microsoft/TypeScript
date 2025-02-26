@@ -1,0 +1,11 @@
+--- old.multipleExportDefault4.symbols
++++ new.multipleExportDefault4.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === multipleExportDefault4.ts ===
+ export default class C { }
+->C : Symbol(C, Decl(multipleExportDefault4.ts, 0, 0))
++>C : Symbol(default, Decl(multipleExportDefault4.ts, 0, 0))
+ 
+ export default {
+     uhoh: "another default",

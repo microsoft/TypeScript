@@ -1,0 +1,30 @@
+--- old.emitRestParametersMethod.symbols
++++ new.emitRestParametersMethod.symbols
+@@= skipped -8, +8 lines =@@
+ >rest : Symbol(rest, Decl(emitRestParametersMethod.ts, 1, 29))
+ 
+     public bar(...rest) { }
+->bar : Symbol(C.bar, Decl(emitRestParametersMethod.ts, 1, 42))
++>bar : Symbol(bar, Decl(emitRestParametersMethod.ts, 1, 42))
+ >rest : Symbol(rest, Decl(emitRestParametersMethod.ts, 3, 15))
+ 
+     public foo(x: number, ...rest) { }
+->foo : Symbol(C.foo, Decl(emitRestParametersMethod.ts, 3, 27))
++>foo : Symbol(foo, Decl(emitRestParametersMethod.ts, 3, 27))
+ >x : Symbol(x, Decl(emitRestParametersMethod.ts, 4, 15))
+ >rest : Symbol(rest, Decl(emitRestParametersMethod.ts, 4, 25))
+ }
+@@= skipped -16, +16 lines =@@
+ >rest : Symbol(rest, Decl(emitRestParametersMethod.ts, 8, 16))
+ 
+     public bar(...rest) { }
+->bar : Symbol(D.bar, Decl(emitRestParametersMethod.ts, 8, 28))
++>bar : Symbol(bar, Decl(emitRestParametersMethod.ts, 8, 28))
+ >rest : Symbol(rest, Decl(emitRestParametersMethod.ts, 10, 15))
+ 
+     public foo(x: number, ...rest) { }
+->foo : Symbol(D.foo, Decl(emitRestParametersMethod.ts, 10, 27))
++>foo : Symbol(foo, Decl(emitRestParametersMethod.ts, 10, 27))
+ >x : Symbol(x, Decl(emitRestParametersMethod.ts, 11, 15))
+ >rest : Symbol(rest, Decl(emitRestParametersMethod.ts, 11, 25))
+ }

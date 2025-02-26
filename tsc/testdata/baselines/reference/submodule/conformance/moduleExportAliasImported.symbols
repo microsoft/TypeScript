@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/salsa/moduleExportAliasImported.ts] ////
+
+=== bug28014.js ===
+exports.version = 1
+function alias() { }
+>alias : Symbol(alias, Decl(bug28014.js, 0, 19))
+
+module.exports = alias
+>alias : Symbol(alias, Decl(bug28014.js, 0, 19))
+
+=== importer.js ===
+
+import('./bug28014')
+

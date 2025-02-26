@@ -1,0 +1,29 @@
+--- old.functionConstraintSatisfaction.symbols
++++ new.functionConstraintSatisfaction.symbols
+@@= skipped -24, +24 lines =@@
+ >C : Symbol(C, Decl(functionConstraintSatisfaction.ts, 7, 9))
+ 
+     foo: string;
+->foo : Symbol(C.foo, Decl(functionConstraintSatisfaction.ts, 9, 9))
++>foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 9, 9))
+ }
+ 
+ var a: { (): string };
+@@= skipped -80, +80 lines =@@
+ >T : Symbol(T, Decl(functionConstraintSatisfaction.ts, 32, 9))
+ 
+     foo: T;
+->foo : Symbol(C2.foo, Decl(functionConstraintSatisfaction.ts, 32, 13))
++>foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 32, 13))
+ >T : Symbol(T, Decl(functionConstraintSatisfaction.ts, 32, 9))
+ }
+ 
+@@= skipped -90, +90 lines =@@
+ interface F2 extends Function { foo: string; }
+ >F2 : Symbol(F2, Decl(functionConstraintSatisfaction.ts, 47, 18))
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->foo : Symbol(F2.foo, Decl(functionConstraintSatisfaction.ts, 49, 31))
++>foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 49, 31))
+ 
+ var f2: F2;
+ >f2 : Symbol(f2, Decl(functionConstraintSatisfaction.ts, 50, 3))

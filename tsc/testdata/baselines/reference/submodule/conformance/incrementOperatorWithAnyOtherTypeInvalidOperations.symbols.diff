@@ -1,0 +1,39 @@
+--- old.incrementOperatorWithAnyOtherTypeInvalidOperations.symbols
++++ new.incrementOperatorWithAnyOtherTypeInvalidOperations.symbols
+@@= skipped -28, +28 lines =@@
+ >A : Symbol(A, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 9, 1))
+ 
+     public a: any;
+->a : Symbol(A.a, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 10, 9))
++>a : Symbol(a, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 10, 9))
+ 
+     static foo(): any {
+->foo : Symbol(A.foo, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 11, 18))
++>foo : Symbol(foo, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 11, 18))
+ 
+         var a;
+ >a : Symbol(a, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 13, 11))
+@@= skipped -91, +91 lines =@@
+ 
+ var ResultIsNumber18 = ++A.foo();
+ >ResultIsNumber18 : Symbol(ResultIsNumber18, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 46, 3))
+->A.foo : Symbol(A.foo, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 11, 18))
++>A.foo : Symbol(foo, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 11, 18))
+ >A : Symbol(A, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 9, 1))
+->foo : Symbol(A.foo, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 11, 18))
++>foo : Symbol(foo, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 11, 18))
+ 
+ var ResultIsNumber19 = ++(null + undefined);
+ >ResultIsNumber19 : Symbol(ResultIsNumber19, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 47, 3))
+@@= skipped -34, +34 lines =@@
+ 
+ var ResultIsNumber25 = A.foo()++;
+ >ResultIsNumber25 : Symbol(ResultIsNumber25, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 54, 3))
+->A.foo : Symbol(A.foo, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 11, 18))
++>A.foo : Symbol(foo, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 11, 18))
+ >A : Symbol(A, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 9, 1))
+->foo : Symbol(A.foo, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 11, 18))
++>foo : Symbol(foo, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 11, 18))
+ 
+ var ResultIsNumber26 = (null + undefined)++;
+ >ResultIsNumber26 : Symbol(ResultIsNumber26, Decl(incrementOperatorWithAnyOtherTypeInvalidOperations.ts, 55, 3))

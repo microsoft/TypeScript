@@ -1,0 +1,11 @@
+--- old.noExcessiveStackDepthError.symbols
++++ new.noExcessiveStackDepthError.symbols
+@@= skipped -7, +7 lines =@@
+ >T : Symbol(T, Decl(noExcessiveStackDepthError.ts, 2, 23))
+ 
+     foo: T;
+->foo : Symbol(FindOperator.foo, Decl(noExcessiveStackDepthError.ts, 2, 27))
++>foo : Symbol(foo, Decl(noExcessiveStackDepthError.ts, 2, 27))
+ >T : Symbol(T, Decl(noExcessiveStackDepthError.ts, 2, 23))
+ }
+ 

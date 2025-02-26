@@ -1,0 +1,85 @@
+--- old.instanceOfAssignability.symbols
++++ new.instanceOfAssignability.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(instanceOfAssignability.ts, 0, 0))
+ 
+ 	foo: string|number;
+->foo : Symbol(Base.foo, Decl(instanceOfAssignability.ts, 0, 16))
++>foo : Symbol(foo, Decl(instanceOfAssignability.ts, 0, 16))
+ 
+ 	optional?: number;
+->optional : Symbol(Base.optional, Decl(instanceOfAssignability.ts, 1, 20))
++>optional : Symbol(optional, Decl(instanceOfAssignability.ts, 1, 20))
+ }
+ 
+ // Derived1 is assignable to, but not a subtype of, Base
+@@= skipped -12, +12 lines =@@
+ >Base : Symbol(Base, Decl(instanceOfAssignability.ts, 0, 0))
+ 
+ 	foo: string;
+->foo : Symbol(Derived1.foo, Decl(instanceOfAssignability.ts, 6, 32))
++>foo : Symbol(foo, Decl(instanceOfAssignability.ts, 6, 32))
+ }
+ // Derived2 is a subtype of Base that is not assignable to Derived1
+ class Derived2 implements Base {
+@@= skipped -8, +8 lines =@@
+ >Base : Symbol(Base, Decl(instanceOfAssignability.ts, 0, 0))
+ 
+ 	foo: number;
+->foo : Symbol(Derived2.foo, Decl(instanceOfAssignability.ts, 10, 32))
++>foo : Symbol(foo, Decl(instanceOfAssignability.ts, 10, 32))
+ 
+ 	optional: number;
+->optional : Symbol(Derived2.optional, Decl(instanceOfAssignability.ts, 11, 13))
++>optional : Symbol(optional, Decl(instanceOfAssignability.ts, 11, 13))
+ }
+ 
+ class Animal {
+ >Animal : Symbol(Animal, Decl(instanceOfAssignability.ts, 13, 1))
+ 
+ 	move;
+->move : Symbol(Animal.move, Decl(instanceOfAssignability.ts, 15, 14))
++>move : Symbol(move, Decl(instanceOfAssignability.ts, 15, 14))
+ }
+ class Mammal extends Animal { milk; }
+ >Mammal : Symbol(Mammal, Decl(instanceOfAssignability.ts, 17, 1))
+ >Animal : Symbol(Animal, Decl(instanceOfAssignability.ts, 13, 1))
+->milk : Symbol(Mammal.milk, Decl(instanceOfAssignability.ts, 18, 29))
++>milk : Symbol(milk, Decl(instanceOfAssignability.ts, 18, 29))
+ 
+ class Giraffe extends Mammal { neck; }
+ >Giraffe : Symbol(Giraffe, Decl(instanceOfAssignability.ts, 18, 37))
+ >Mammal : Symbol(Mammal, Decl(instanceOfAssignability.ts, 17, 1))
+->neck : Symbol(Giraffe.neck, Decl(instanceOfAssignability.ts, 19, 30))
++>neck : Symbol(neck, Decl(instanceOfAssignability.ts, 19, 30))
+ 
+ function fn1(x: Array<number>|Array<string>|boolean) {
+ >fn1 : Symbol(fn1, Decl(instanceOfAssignability.ts, 19, 38))
+@@= skipped -148, +148 lines =@@
+ 
+ interface Alpha { a }
+ >Alpha : Symbol(Alpha, Decl(instanceOfAssignability.ts, 75, 1))
+->a : Symbol(Alpha.a, Decl(instanceOfAssignability.ts, 77, 17))
++>a : Symbol(a, Decl(instanceOfAssignability.ts, 77, 17))
+ 
+ interface Beta { b }
+ >Beta : Symbol(Beta, Decl(instanceOfAssignability.ts, 77, 21))
+->b : Symbol(Beta.b, Decl(instanceOfAssignability.ts, 78, 16))
++>b : Symbol(b, Decl(instanceOfAssignability.ts, 78, 16))
+ 
+ interface Gamma { c }
+ >Gamma : Symbol(Gamma, Decl(instanceOfAssignability.ts, 78, 20))
+->c : Symbol(Gamma.c, Decl(instanceOfAssignability.ts, 79, 17))
++>c : Symbol(c, Decl(instanceOfAssignability.ts, 79, 17))
+ 
+ class ABC { a; b; c; }
+ >ABC : Symbol(ABC, Decl(instanceOfAssignability.ts, 79, 21))
+->a : Symbol(ABC.a, Decl(instanceOfAssignability.ts, 80, 11))
+->b : Symbol(ABC.b, Decl(instanceOfAssignability.ts, 80, 14))
+->c : Symbol(ABC.c, Decl(instanceOfAssignability.ts, 80, 17))
++>a : Symbol(a, Decl(instanceOfAssignability.ts, 80, 11))
++>b : Symbol(b, Decl(instanceOfAssignability.ts, 80, 14))
++>c : Symbol(c, Decl(instanceOfAssignability.ts, 80, 17))
+ 
+ function fn8(x: Alpha|Beta|Gamma) {
+ >fn8 : Symbol(fn8, Decl(instanceOfAssignability.ts, 80, 22))

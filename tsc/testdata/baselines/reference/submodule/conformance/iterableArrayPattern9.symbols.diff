@@ -1,0 +1,36 @@
+--- old.iterableArrayPattern9.symbols
++++ new.iterableArrayPattern9.symbols
+@@= skipped -8, +8 lines =@@
+ 
+ class Bar { x }
+ >Bar : Symbol(Bar, Decl(iterableArrayPattern9.ts, 0, 42))
+->x : Symbol(Bar.x, Decl(iterableArrayPattern9.ts, 1, 11))
++>x : Symbol(x, Decl(iterableArrayPattern9.ts, 1, 11))
+ 
+ class Foo extends Bar { y }
+ >Foo : Symbol(Foo, Decl(iterableArrayPattern9.ts, 1, 15))
+ >Bar : Symbol(Bar, Decl(iterableArrayPattern9.ts, 0, 42))
+->y : Symbol(Foo.y, Decl(iterableArrayPattern9.ts, 2, 23))
++>y : Symbol(y, Decl(iterableArrayPattern9.ts, 2, 23))
+ 
+ class FooIterator {
+ >FooIterator : Symbol(FooIterator, Decl(iterableArrayPattern9.ts, 2, 27))
+ 
+     next() {
+->next : Symbol(FooIterator.next, Decl(iterableArrayPattern9.ts, 3, 19))
++>next : Symbol(next, Decl(iterableArrayPattern9.ts, 3, 19))
+ 
+         return {
+             value: new Foo,
+@@= skipped -25, +25 lines =@@
+     }
+ 
+     [Symbol.iterator]() {
+->[Symbol.iterator] : Symbol(FooIterator[Symbol.iterator], Decl(iterableArrayPattern9.ts, 9, 5))
+->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(iterableArrayPattern9.ts, 9, 5))
+ 
+         return this;
+ >this : Symbol(FooIterator, Decl(iterableArrayPattern9.ts, 2, 27))

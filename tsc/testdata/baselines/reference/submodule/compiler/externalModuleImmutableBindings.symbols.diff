@@ -1,0 +1,128 @@
+--- old.externalModuleImmutableBindings.symbols
++++ new.externalModuleImmutableBindings.symbols
+@@= skipped -12, +12 lines =@@
+ >n : Symbol(n, Decl(f2.ts, 3, 3))
+ 
+ stuff.x = 0;
+->stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>stuff.x : Symbol(x, Decl(f1.ts, 0, 10))
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+->x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>x : Symbol(x, Decl(f1.ts, 0, 10))
+ 
+ stuff['x'] = 1;
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+->'x' : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>'x' : Symbol(x, Decl(f1.ts, 0, 10))
+ 
+ stuff.blah = 2;
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+@@= skipped -16, +16 lines =@@
+ >n : Symbol(n, Decl(f2.ts, 3, 3))
+ 
+ stuff.x++;
+->stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>stuff.x : Symbol(x, Decl(f1.ts, 0, 10))
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+->x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>x : Symbol(x, Decl(f1.ts, 0, 10))
+ 
+ stuff['x']++;
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+->'x' : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>'x' : Symbol(x, Decl(f1.ts, 0, 10))
+ 
+ stuff['blah']++;
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+@@= skipped -16, +16 lines =@@
+ >n : Symbol(n, Decl(f2.ts, 3, 3))
+ 
+ (stuff.x) = 0;
+->stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>stuff.x : Symbol(x, Decl(f1.ts, 0, 10))
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+->x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>x : Symbol(x, Decl(f1.ts, 0, 10))
+ 
+ (stuff['x']) = 1;
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+->'x' : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>'x' : Symbol(x, Decl(f1.ts, 0, 10))
+ 
+ (stuff.blah) = 2;
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+@@= skipped -16, +16 lines =@@
+ >n : Symbol(n, Decl(f2.ts, 3, 3))
+ 
+ (stuff.x)++;
+->stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>stuff.x : Symbol(x, Decl(f1.ts, 0, 10))
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+->x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>x : Symbol(x, Decl(f1.ts, 0, 10))
+ 
+ (stuff['x'])++;
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+->'x' : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>'x' : Symbol(x, Decl(f1.ts, 0, 10))
+ 
+ (stuff['blah'])++;
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+@@= skipped -16, +16 lines =@@
+ >n : Symbol(n, Decl(f2.ts, 3, 3))
+ 
+ for (stuff.x in []) {}
+->stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>stuff.x : Symbol(x, Decl(f1.ts, 0, 10))
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+->x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>x : Symbol(x, Decl(f1.ts, 0, 10))
+ 
+ for (stuff.x of []) {}
+->stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>stuff.x : Symbol(x, Decl(f1.ts, 0, 10))
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+->x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>x : Symbol(x, Decl(f1.ts, 0, 10))
+ 
+ for (stuff['x'] in []) {}
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+->'x' : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>'x' : Symbol(x, Decl(f1.ts, 0, 10))
+ 
+ for (stuff['x'] of []) {}
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+->'x' : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>'x' : Symbol(x, Decl(f1.ts, 0, 10))
+ 
+ for (stuff.blah in []) {}
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+@@= skipped -32, +32 lines =@@
+ >n : Symbol(n, Decl(f2.ts, 3, 3))
+ 
+ for ((stuff.x) in []) {}
+->stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>stuff.x : Symbol(x, Decl(f1.ts, 0, 10))
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+->x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>x : Symbol(x, Decl(f1.ts, 0, 10))
+ 
+ for ((stuff.x) of []) {}
+->stuff.x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>stuff.x : Symbol(x, Decl(f1.ts, 0, 10))
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+->x : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>x : Symbol(x, Decl(f1.ts, 0, 10))
+ 
+ for ((stuff['x']) in []) {}
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+->'x' : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>'x' : Symbol(x, Decl(f1.ts, 0, 10))
+ 
+ for ((stuff['x']) of []) {}
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))
+->'x' : Symbol(stuff.x, Decl(f1.ts, 0, 10))
++>'x' : Symbol(x, Decl(f1.ts, 0, 10))
+ 
+ for ((stuff.blah) in []) {}
+ >stuff : Symbol(stuff, Decl(f2.ts, 1, 6))

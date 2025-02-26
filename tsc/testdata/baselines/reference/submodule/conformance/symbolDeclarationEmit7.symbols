@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit7.ts] ////
+
+=== symbolDeclarationEmit7.ts ===
+var obj: {
+>obj : Symbol(obj, Decl(symbolDeclarationEmit7.ts, 0, 3))
+
+    [Symbol.isConcatSpreadable]: string;
+>[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(symbolDeclarationEmit7.ts, 0, 10))
+}

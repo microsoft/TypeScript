@@ -1,0 +1,25 @@
+--- old.internalAliasUninitializedModuleInsideLocalModuleWithExport.symbols
++++ new.internalAliasUninitializedModuleInsideLocalModuleWithExport.symbols
+@@= skipped -10, +10 lines =@@
+ >I : Symbol(I, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 1, 21))
+ 
+             foo();
+->foo : Symbol(I.foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 2, 28))
++>foo : Symbol(foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 2, 28))
+         }
+     }
+ }
+@@= skipped -16, +16 lines =@@
+     export var x: b.I;
+ >x : Symbol(x, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 10, 14))
+ >b : Symbol(b, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 8, 17))
+->I : Symbol(b.I, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 1, 21))
++>I : Symbol(I, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 1, 21))
+ 
+     x.foo();
+->x.foo : Symbol(b.I.foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 2, 28))
++>x.foo : Symbol(foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 2, 28))
+ >x : Symbol(x, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 10, 14))
+->foo : Symbol(b.I.foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 2, 28))
++>foo : Symbol(foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 2, 28))
+ }

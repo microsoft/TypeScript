@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/stringTrim.ts] ////
+
+=== stringTrim.ts ===
+var trimmed: string;
+>trimmed : Symbol(trimmed, Decl(stringTrim.ts, 0, 3))
+
+trimmed = "abcde".trimEnd();
+>trimmed : Symbol(trimmed, Decl(stringTrim.ts, 0, 3))
+>"abcde".trimEnd : Symbol(trimEnd, Decl(lib.es2019.string.d.ts, --, --))
+>trimEnd : Symbol(trimEnd, Decl(lib.es2019.string.d.ts, --, --))
+
+trimmed = "abcde".trimStart();
+>trimmed : Symbol(trimmed, Decl(stringTrim.ts, 0, 3))
+>"abcde".trimStart : Symbol(trimStart, Decl(lib.es2019.string.d.ts, --, --))
+>trimStart : Symbol(trimStart, Decl(lib.es2019.string.d.ts, --, --))
+
+trimmed = "abcde".trimLeft();
+>trimmed : Symbol(trimmed, Decl(stringTrim.ts, 0, 3))
+>"abcde".trimLeft : Symbol(trimLeft, Decl(lib.es2019.string.d.ts, --, --))
+>trimLeft : Symbol(trimLeft, Decl(lib.es2019.string.d.ts, --, --))
+
+trimmed = "abcde".trimRight();
+>trimmed : Symbol(trimmed, Decl(stringTrim.ts, 0, 3))
+>"abcde".trimRight : Symbol(trimRight, Decl(lib.es2019.string.d.ts, --, --))
+>trimRight : Symbol(trimRight, Decl(lib.es2019.string.d.ts, --, --))
+

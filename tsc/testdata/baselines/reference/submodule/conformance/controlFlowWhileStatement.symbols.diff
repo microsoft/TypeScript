@@ -1,0 +1,14 @@
+--- old.controlFlowWhileStatement.symbols
++++ new.controlFlowWhileStatement.symbols
+@@= skipped -76, +76 lines =@@
+ 
+     while (x = x.length) {
+ >x : Symbol(x, Decl(controlFlowWhileStatement.ts, 28, 7))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowWhileStatement.ts, 28, 7))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+         x; // number
+ >x : Symbol(x, Decl(controlFlowWhileStatement.ts, 28, 7))

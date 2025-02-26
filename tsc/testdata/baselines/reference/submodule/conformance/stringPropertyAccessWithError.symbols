@@ -1,0 +1,11 @@
+//// [tests/cases/conformance/types/primitives/string/stringPropertyAccessWithError.ts] ////
+
+=== stringPropertyAccessWithError.ts ===
+var x = '';
+>x : Symbol(x, Decl(stringPropertyAccessWithError.ts, 0, 3))
+
+var d = x['charAt']('invalid'); // error
+>d : Symbol(d, Decl(stringPropertyAccessWithError.ts, 1, 3))
+>x : Symbol(x, Decl(stringPropertyAccessWithError.ts, 0, 3))
+>'charAt' : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
+

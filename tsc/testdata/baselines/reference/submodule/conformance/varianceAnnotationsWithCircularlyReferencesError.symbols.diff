@@ -1,0 +1,13 @@
+--- old.varianceAnnotationsWithCircularlyReferencesError.symbols
++++ new.varianceAnnotationsWithCircularlyReferencesError.symbols
+@@= skipped -2, +2 lines =@@
+ === varianceAnnotationsWithCircularlyReferencesError.ts ===
+ type T1<in in> = T1 // Error: circularly references 
+ >T1 : Symbol(T1, Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 0))
+-> : Symbol((Missing), Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 8), Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 10))
+-> : Symbol((Missing), Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 8), Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 10))
++> : Symbol("", Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 8), Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 10))
++> : Symbol("", Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 8), Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 10))
+ >T1 : Symbol(T1, Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 0))
+ 
+ type T2<out out> = T2 // Error: circularly references 

@@ -1,0 +1,32 @@
+--- old.typeUsedAsValueError2.symbols
++++ new.typeUsedAsValueError2.symbols
+@@= skipped -7, +7 lines =@@
+ >HelloNamespace : Symbol(HelloNamespace, Decl(world.ts, 0, 50))
+ 
+ HelloInterface.world;
++>HelloInterface : Symbol(HelloInterface, Decl(world.ts, 0, 0))
++
+ HelloNamespace.world;
+-=== helloInterface.ts ===
+-interface HelloInterface {
+->HelloInterface : Symbol(HelloInterface, Decl(helloInterface.ts, 0, 0))
++>HelloNamespace : Symbol(HelloNamespace, Decl(world.ts, 0, 50))
+ 
+-    world: any;
+->world : Symbol(HelloInterface.world, Decl(helloInterface.ts, 0, 26))
+-}
+-
+-export = HelloInterface;
+->HelloInterface : Symbol(HelloInterface, Decl(helloInterface.ts, 0, 0))
+-
+-=== helloNamespace.ts ===
+-namespace HelloNamespace {
+->HelloNamespace : Symbol(HelloNamespace, Decl(helloNamespace.ts, 0, 0))
+-
+-    export type world = any;
+->world : Symbol(world, Decl(helloNamespace.ts, 0, 26))
+-}
+-
+-export = HelloNamespace;
+->HelloNamespace : Symbol(HelloNamespace, Decl(helloNamespace.ts, 0, 0))
+-

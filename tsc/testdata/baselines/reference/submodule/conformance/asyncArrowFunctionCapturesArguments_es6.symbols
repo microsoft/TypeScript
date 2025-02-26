@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunctionCapturesArguments_es6.ts] ////
+
+=== asyncArrowFunctionCapturesArguments_es6.ts ===
+class C {
+>C : Symbol(C, Decl(asyncArrowFunctionCapturesArguments_es6.ts, 0, 0))
+
+   method() {
+>method : Symbol(method, Decl(asyncArrowFunctionCapturesArguments_es6.ts, 0, 9))
+
+      function other() {}
+>other : Symbol(other, Decl(asyncArrowFunctionCapturesArguments_es6.ts, 1, 13))
+
+      var fn = async () => await other.apply(this, arguments);
+>fn : Symbol(fn, Decl(asyncArrowFunctionCapturesArguments_es6.ts, 3, 9))
+>other : Symbol(other, Decl(asyncArrowFunctionCapturesArguments_es6.ts, 1, 13))
+>this : Symbol(C, Decl(asyncArrowFunctionCapturesArguments_es6.ts, 0, 0))
+>arguments : Symbol(arguments)
+   }
+}
+
+function f() {
+>f : Symbol(f, Decl(asyncArrowFunctionCapturesArguments_es6.ts, 5, 1))
+
+   return async () => async () => arguments.length;
+>arguments : Symbol(arguments)
+}

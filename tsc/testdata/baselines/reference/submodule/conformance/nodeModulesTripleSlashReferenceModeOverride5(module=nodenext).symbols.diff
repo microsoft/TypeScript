@@ -1,0 +1,23 @@
+--- old.nodeModulesTripleSlashReferenceModeOverride5(module=nodenext).symbols
++++ new.nodeModulesTripleSlashReferenceModeOverride5(module=nodenext).symbols
+@@= skipped -5, +5 lines =@@
+ // Both `foo` and `bar` should resolve, as _both_ entrypoints are included by the two
+ // references above.
+ foo;
+->foo : Symbol(foo, Decl(import.d.ts, 2, 7))
+-
+ bar;
+ >bar : Symbol(bar, Decl(require.d.ts, 2, 7))
+ 
+ export {};
+-=== /node_modules/pkg/import.d.ts ===
+-export {};
+-declare global {
+->global : Symbol(global, Decl(import.d.ts, 0, 10))
+-
+-    var foo: number;
+->foo : Symbol(foo, Decl(import.d.ts, 2, 7))
+-}
+ === /node_modules/pkg/require.d.ts ===
+ export {};
+ declare global {

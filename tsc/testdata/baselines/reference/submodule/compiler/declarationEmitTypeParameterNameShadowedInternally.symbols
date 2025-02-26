@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/declarationEmitTypeParameterNameShadowedInternally.ts] ////
+
+=== declarationEmitTypeParameterNameShadowedInternally.ts ===
+export const foo = <T,>(x: T) => {
+>foo : Symbol(foo, Decl(declarationEmitTypeParameterNameShadowedInternally.ts, 0, 12))
+>T : Symbol(T, Decl(declarationEmitTypeParameterNameShadowedInternally.ts, 0, 20))
+>x : Symbol(x, Decl(declarationEmitTypeParameterNameShadowedInternally.ts, 0, 24))
+>T : Symbol(T, Decl(declarationEmitTypeParameterNameShadowedInternally.ts, 0, 20))
+
+	const inner = <T,>(y: T) => [x, y] as const;
+>inner : Symbol(inner, Decl(declarationEmitTypeParameterNameShadowedInternally.ts, 1, 6))
+>T : Symbol(T, Decl(declarationEmitTypeParameterNameShadowedInternally.ts, 1, 16))
+>y : Symbol(y, Decl(declarationEmitTypeParameterNameShadowedInternally.ts, 1, 20))
+>T : Symbol(T, Decl(declarationEmitTypeParameterNameShadowedInternally.ts, 1, 16))
+>x : Symbol(x, Decl(declarationEmitTypeParameterNameShadowedInternally.ts, 0, 24))
+>y : Symbol(y, Decl(declarationEmitTypeParameterNameShadowedInternally.ts, 1, 20))
+>const : Symbol(const)
+
+	return inner;
+>inner : Symbol(inner, Decl(declarationEmitTypeParameterNameShadowedInternally.ts, 1, 6))
+}
+

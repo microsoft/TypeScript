@@ -1,0 +1,18 @@
+--- old.parserModuleDeclaration11.symbols
++++ new.parserModuleDeclaration11.symbols
+@@= skipped -11, +11 lines =@@
+ >s : Symbol(s, Decl(parserModuleDeclaration11.ts, 2, 24))
+ }
+ string.foo("abc");
+->string.foo : Symbol(string.foo, Decl(parserModuleDeclaration11.ts, 1, 19))
++>string.foo : Symbol(foo, Decl(parserModuleDeclaration11.ts, 1, 19))
+ >string : Symbol(string, Decl(parserModuleDeclaration11.ts, 0, 0))
+->foo : Symbol(string.foo, Decl(parserModuleDeclaration11.ts, 1, 19))
++>foo : Symbol(foo, Decl(parserModuleDeclaration11.ts, 1, 19))
+ 
+ var x: string.X;
+ >x : Symbol(x, Decl(parserModuleDeclaration11.ts, 5, 3))
+ >string : Symbol(string, Decl(parserModuleDeclaration11.ts, 0, 0))
+->X : Symbol(string.X, Decl(parserModuleDeclaration11.ts, 0, 23))
++>X : Symbol(X, Decl(parserModuleDeclaration11.ts, 0, 23))
+ 

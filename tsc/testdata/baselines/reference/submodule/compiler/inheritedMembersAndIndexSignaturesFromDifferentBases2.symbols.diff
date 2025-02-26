@@ -1,0 +1,11 @@
+--- old.inheritedMembersAndIndexSignaturesFromDifferentBases2.symbols
++++ new.inheritedMembersAndIndexSignaturesFromDifferentBases2.symbols
+@@= skipped -13, +13 lines =@@
+ >B : Symbol(B, Decl(inheritedMembersAndIndexSignaturesFromDifferentBases2.ts, 2, 1))
+ 
+     foo: number;
+->foo : Symbol(B.foo, Decl(inheritedMembersAndIndexSignaturesFromDifferentBases2.ts, 4, 13))
++>foo : Symbol(foo, Decl(inheritedMembersAndIndexSignaturesFromDifferentBases2.ts, 4, 13))
+ }
+ 
+ interface C extends B, A<string> { } // Should succeed

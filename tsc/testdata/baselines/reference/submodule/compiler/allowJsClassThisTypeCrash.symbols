@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/allowJsClassThisTypeCrash.ts] ////
+
+=== app.js ===
+const f = function() {};
+>f : Symbol(f, Decl(app.js, 0, 5))
+
+var g = f;
+>g : Symbol(g, Decl(app.js, 1, 3))
+>f : Symbol(f, Decl(app.js, 0, 5))
+
+g.prototype.m = function () {
+>g.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>g : Symbol(g, Decl(app.js, 1, 3))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+
+  this;
+};

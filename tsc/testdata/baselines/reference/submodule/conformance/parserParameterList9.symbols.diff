@@ -1,0 +1,10 @@
+--- old.parserParameterList9.symbols
++++ new.parserParameterList9.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(parserParameterList9.ts, 0, 0))
+ 
+    foo(...bar?) { }
+->foo : Symbol(C.foo, Decl(parserParameterList9.ts, 0, 9))
++>foo : Symbol(foo, Decl(parserParameterList9.ts, 0, 9))
+ >bar : Symbol(bar, Decl(parserParameterList9.ts, 1, 7))
+ }

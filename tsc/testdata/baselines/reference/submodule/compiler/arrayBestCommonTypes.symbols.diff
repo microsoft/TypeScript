@@ -1,0 +1,292 @@
+--- old.arrayBestCommonTypes.symbols
++++ new.arrayBestCommonTypes.symbols
+@@= skipped -23, +23 lines =@@
+ >f : Symbol(f, Decl(arrayBestCommonTypes.ts, 4, 34))
+ 
+         public voidIfAny(x: boolean, y?: boolean): number;
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >x : Symbol(x, Decl(arrayBestCommonTypes.ts, 8, 25))
+ >y : Symbol(y, Decl(arrayBestCommonTypes.ts, 8, 36))
+ 
+         public voidIfAny(x: string, y?: boolean): number;
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >x : Symbol(x, Decl(arrayBestCommonTypes.ts, 9, 25))
+ >y : Symbol(y, Decl(arrayBestCommonTypes.ts, 9, 35))
+ 
+         public voidIfAny(x: number, y?: boolean): number;
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >x : Symbol(x, Decl(arrayBestCommonTypes.ts, 10, 25))
+ >y : Symbol(y, Decl(arrayBestCommonTypes.ts, 10, 35))
+ 
+         public voidIfAny(x: any, y = false): any { return null; }
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >x : Symbol(x, Decl(arrayBestCommonTypes.ts, 11, 25))
+ >y : Symbol(y, Decl(arrayBestCommonTypes.ts, 11, 32))
+ 
+         public x() {
+->x : Symbol(f.x, Decl(arrayBestCommonTypes.ts, 11, 65))
++>x : Symbol(x, Decl(arrayBestCommonTypes.ts, 11, 65))
+ 
+             <number>(this.voidIfAny([4, 2][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 4, 34))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ 
+             <number>(this.voidIfAny([4, 2, undefined][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 4, 34))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >undefined : Symbol(undefined)
+ 
+             <number>(this.voidIfAny([undefined, 2, 4][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 4, 34))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >undefined : Symbol(undefined)
+ 
+             <number>(this.voidIfAny([null, 2, 4][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 4, 34))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ 
+             <number>(this.voidIfAny([2, 4, null][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 4, 34))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ 
+             <number>(this.voidIfAny([undefined, 4, null][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 4, 34))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >undefined : Symbol(undefined)
+ 
+             <number>(this.voidIfAny(['', "q"][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 4, 34))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ 
+             <number>(this.voidIfAny(['', "q", undefined][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 4, 34))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >undefined : Symbol(undefined)
+ 
+             <number>(this.voidIfAny([undefined, "q", ''][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 4, 34))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >undefined : Symbol(undefined)
+ 
+             <number>(this.voidIfAny([null, "q", ''][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 4, 34))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ 
+             <number>(this.voidIfAny(["q", '', null][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 4, 34))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ 
+             <number>(this.voidIfAny([undefined, '', null][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 4, 34))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >undefined : Symbol(undefined)
+ 
+             <number>(this.voidIfAny([[3, 4], [null]][0][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 4, 34))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 7, 13), Decl(arrayBestCommonTypes.ts, 8, 58), Decl(arrayBestCommonTypes.ts, 9, 57), Decl(arrayBestCommonTypes.ts, 10, 57))
+ 
+ 
+             var t1: { x: number; y: base; }[] = [{ x: 7, y: new derived() }, { x: 5, y: new base() }];
+@@= skipped -209, +209 lines =@@
+ 
+     interface iface { x: string; }
+ >iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 53, 22))
+->x : Symbol(iface.x, Decl(arrayBestCommonTypes.ts, 54, 21))
++>x : Symbol(x, Decl(arrayBestCommonTypes.ts, 54, 21))
+ 
+     class base implements iface { x: string; y: string; }
+ >base : Symbol(base, Decl(arrayBestCommonTypes.ts, 54, 34))
+ >iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 53, 22))
+->x : Symbol(base.x, Decl(arrayBestCommonTypes.ts, 55, 33))
+->y : Symbol(base.y, Decl(arrayBestCommonTypes.ts, 55, 44))
++>x : Symbol(x, Decl(arrayBestCommonTypes.ts, 55, 33))
++>y : Symbol(y, Decl(arrayBestCommonTypes.ts, 55, 44))
+ 
+     class base2 implements iface { x: string; z: string; }
+ >base2 : Symbol(base2, Decl(arrayBestCommonTypes.ts, 55, 57))
+ >iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 53, 22))
+->x : Symbol(base2.x, Decl(arrayBestCommonTypes.ts, 56, 34))
+->z : Symbol(base2.z, Decl(arrayBestCommonTypes.ts, 56, 45))
++>x : Symbol(x, Decl(arrayBestCommonTypes.ts, 56, 34))
++>z : Symbol(z, Decl(arrayBestCommonTypes.ts, 56, 45))
+ 
+     class derived extends base { a: string; }
+ >derived : Symbol(derived, Decl(arrayBestCommonTypes.ts, 56, 58))
+ >base : Symbol(base, Decl(arrayBestCommonTypes.ts, 54, 34))
+->a : Symbol(derived.a, Decl(arrayBestCommonTypes.ts, 57, 32))
++>a : Symbol(a, Decl(arrayBestCommonTypes.ts, 57, 32))
+ 
+ 
+     class f {
+ >f : Symbol(f, Decl(arrayBestCommonTypes.ts, 57, 45))
+ 
+         public voidIfAny(x: boolean, y?: boolean): number;
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >x : Symbol(x, Decl(arrayBestCommonTypes.ts, 61, 25))
+ >y : Symbol(y, Decl(arrayBestCommonTypes.ts, 61, 36))
+ 
+         public voidIfAny(x: string, y?: boolean): number;
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >x : Symbol(x, Decl(arrayBestCommonTypes.ts, 62, 25))
+ >y : Symbol(y, Decl(arrayBestCommonTypes.ts, 62, 35))
+ 
+         public voidIfAny(x: number, y?: boolean): number;
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >x : Symbol(x, Decl(arrayBestCommonTypes.ts, 63, 25))
+ >y : Symbol(y, Decl(arrayBestCommonTypes.ts, 63, 35))
+ 
+         public voidIfAny(x: any, y = false): any { return null; }
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >x : Symbol(x, Decl(arrayBestCommonTypes.ts, 64, 25))
+ >y : Symbol(y, Decl(arrayBestCommonTypes.ts, 64, 32))
+ 
+         public x() {
+->x : Symbol(f.x, Decl(arrayBestCommonTypes.ts, 64, 65))
++>x : Symbol(x, Decl(arrayBestCommonTypes.ts, 64, 65))
+ 
+             <number>(this.voidIfAny([4, 2][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 57, 45))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ 
+             <number>(this.voidIfAny([4, 2, undefined][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 57, 45))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >undefined : Symbol(undefined)
+ 
+             <number>(this.voidIfAny([undefined, 2, 4][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 57, 45))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >undefined : Symbol(undefined)
+ 
+             <number>(this.voidIfAny([null, 2, 4][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 57, 45))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ 
+             <number>(this.voidIfAny([2, 4, null][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 57, 45))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ 
+             <number>(this.voidIfAny([undefined, 4, null][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 57, 45))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >undefined : Symbol(undefined)
+ 
+             <number>(this.voidIfAny(['', "q"][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 57, 45))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ 
+             <number>(this.voidIfAny(['', "q", undefined][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 57, 45))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >undefined : Symbol(undefined)
+ 
+             <number>(this.voidIfAny([undefined, "q", ''][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 57, 45))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >undefined : Symbol(undefined)
+ 
+             <number>(this.voidIfAny([null, "q", ''][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 57, 45))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ 
+             <number>(this.voidIfAny(["q", '', null][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 57, 45))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ 
+             <number>(this.voidIfAny([undefined, '', null][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 57, 45))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >undefined : Symbol(undefined)
+ 
+             <number>(this.voidIfAny([[3, 4], [null]][0][0]));
+->this.voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>this.voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ >this : Symbol(f, Decl(arrayBestCommonTypes.ts, 57, 45))
+->voidIfAny : Symbol(f.voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
++>voidIfAny : Symbol(voidIfAny, Decl(arrayBestCommonTypes.ts, 60, 13), Decl(arrayBestCommonTypes.ts, 61, 58), Decl(arrayBestCommonTypes.ts, 62, 57), Decl(arrayBestCommonTypes.ts, 63, 57))
+ 
+ 
+             var t1: { x: number; y: base; }[] = [{ x: 7, y: new derived() }, { x: 5, y: new base() }];

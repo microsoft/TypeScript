@@ -1,0 +1,60 @@
+--- old.intersectionTypeReadonly.symbols
++++ new.intersectionTypeReadonly.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(intersectionTypeReadonly.ts, 0, 0))
+ 
+     readonly value: number;
+->value : Symbol(Base.value, Decl(intersectionTypeReadonly.ts, 0, 16))
++>value : Symbol(value, Decl(intersectionTypeReadonly.ts, 0, 16))
+ }
+ interface Identical {
+ >Identical : Symbol(Identical, Decl(intersectionTypeReadonly.ts, 2, 1))
+ 
+     readonly value: number;
+->value : Symbol(Identical.value, Decl(intersectionTypeReadonly.ts, 3, 21))
++>value : Symbol(value, Decl(intersectionTypeReadonly.ts, 3, 21))
+ }
+ interface Mutable {
+ >Mutable : Symbol(Mutable, Decl(intersectionTypeReadonly.ts, 5, 1))
+ 
+     value: number;
+->value : Symbol(Mutable.value, Decl(intersectionTypeReadonly.ts, 6, 19))
++>value : Symbol(value, Decl(intersectionTypeReadonly.ts, 6, 19))
+ }
+ interface DifferentType {
+ >DifferentType : Symbol(DifferentType, Decl(intersectionTypeReadonly.ts, 8, 1))
+ 
+     readonly value: string;
+->value : Symbol(DifferentType.value, Decl(intersectionTypeReadonly.ts, 9, 25))
++>value : Symbol(value, Decl(intersectionTypeReadonly.ts, 9, 25))
+ }
+ interface DifferentName {
+ >DifferentName : Symbol(DifferentName, Decl(intersectionTypeReadonly.ts, 11, 1))
+ 
+     readonly other: number;
+->other : Symbol(DifferentName.other, Decl(intersectionTypeReadonly.ts, 12, 25))
++>other : Symbol(other, Decl(intersectionTypeReadonly.ts, 12, 25))
+ }
+ let base: Base;
+ >base : Symbol(base, Decl(intersectionTypeReadonly.ts, 15, 3))
+ >Base : Symbol(Base, Decl(intersectionTypeReadonly.ts, 0, 0))
+ 
+ base.value = 12 // error, lhs can't be a readonly property
+->base.value : Symbol(Base.value, Decl(intersectionTypeReadonly.ts, 0, 16))
++>base.value : Symbol(value, Decl(intersectionTypeReadonly.ts, 0, 16))
+ >base : Symbol(base, Decl(intersectionTypeReadonly.ts, 15, 3))
+->value : Symbol(Base.value, Decl(intersectionTypeReadonly.ts, 0, 16))
++>value : Symbol(value, Decl(intersectionTypeReadonly.ts, 0, 16))
+ 
+ let identical: Base & Identical;
+ >identical : Symbol(identical, Decl(intersectionTypeReadonly.ts, 17, 3))
+@@= skipped -71, +71 lines =@@
+ >DifferentName : Symbol(DifferentName, Decl(intersectionTypeReadonly.ts, 11, 1))
+ 
+ differentName.value = 12; // error, property 'value' doesn't exist
+->differentName.value : Symbol(Base.value, Decl(intersectionTypeReadonly.ts, 0, 16))
++>differentName.value : Symbol(value, Decl(intersectionTypeReadonly.ts, 0, 16))
+ >differentName : Symbol(differentName, Decl(intersectionTypeReadonly.ts, 23, 3))
+->value : Symbol(Base.value, Decl(intersectionTypeReadonly.ts, 0, 16))
++>value : Symbol(value, Decl(intersectionTypeReadonly.ts, 0, 16))
+ 

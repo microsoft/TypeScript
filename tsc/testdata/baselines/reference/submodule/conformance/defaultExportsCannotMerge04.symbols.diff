@@ -1,0 +1,11 @@
+--- old.defaultExportsCannotMerge04.symbols
++++ new.defaultExportsCannotMerge04.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === defaultExportsCannotMerge04.ts ===
+ export default function Foo() {
+->Foo : Symbol(Foo, Decl(defaultExportsCannotMerge04.ts, 0, 0))
++>Foo : Symbol(default, Decl(defaultExportsCannotMerge04.ts, 0, 0))
+ }
+ 
+ namespace Foo {

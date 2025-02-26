@@ -1,0 +1,40 @@
+--- old.mixinAbstractClassesReturnTypeInference.symbols
++++ new.mixinAbstractClassesReturnTypeInference.symbols
+@@= skipped -4, +4 lines =@@
+ >Mixin1 : Symbol(Mixin1, Decl(mixinAbstractClassesReturnTypeInference.ts, 0, 0))
+ 
+     mixinMethod(): void;
+->mixinMethod : Symbol(Mixin1.mixinMethod, Decl(mixinAbstractClassesReturnTypeInference.ts, 0, 18))
++>mixinMethod : Symbol(mixinMethod, Decl(mixinAbstractClassesReturnTypeInference.ts, 0, 18))
+ }
+ 
+ abstract class AbstractBase {
+ >AbstractBase : Symbol(AbstractBase, Decl(mixinAbstractClassesReturnTypeInference.ts, 2, 1))
+ 
+     abstract abstractBaseMethod(): void;
+->abstractBaseMethod : Symbol(AbstractBase.abstractBaseMethod, Decl(mixinAbstractClassesReturnTypeInference.ts, 4, 29))
++>abstractBaseMethod : Symbol(abstractBaseMethod, Decl(mixinAbstractClassesReturnTypeInference.ts, 4, 29))
+ }
+ 
+ function Mixin2<TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) {
+@@= skipped -25, +25 lines =@@
+ >Mixin1 : Symbol(Mixin1, Decl(mixinAbstractClassesReturnTypeInference.ts, 0, 0))
+ 
+         mixinMethod(): void {}
+->mixinMethod : Symbol(MixinClass.mixinMethod, Decl(mixinAbstractClassesReturnTypeInference.ts, 11, 67))
++>mixinMethod : Symbol(mixinMethod, Decl(mixinAbstractClassesReturnTypeInference.ts, 11, 67))
+ 
+         static staticMixinMethod(): void {}
+->staticMixinMethod : Symbol(MixinClass.staticMixinMethod, Decl(mixinAbstractClassesReturnTypeInference.ts, 12, 30))
++>staticMixinMethod : Symbol(staticMixinMethod, Decl(mixinAbstractClassesReturnTypeInference.ts, 12, 30))
+     }
+     return MixinClass;
+ >MixinClass : Symbol(MixinClass, Decl(mixinAbstractClassesReturnTypeInference.ts, 8, 87))
+@@= skipped -15, +15 lines =@@
+ >AbstractBase : Symbol(AbstractBase, Decl(mixinAbstractClassesReturnTypeInference.ts, 2, 1))
+ 
+     abstractBaseMethod() {}
+->abstractBaseMethod : Symbol(DerivedFromAbstract2.abstractBaseMethod, Decl(mixinAbstractClassesReturnTypeInference.ts, 18, 57))
++>abstractBaseMethod : Symbol(abstractBaseMethod, Decl(mixinAbstractClassesReturnTypeInference.ts, 18, 57))
+ }
+ 

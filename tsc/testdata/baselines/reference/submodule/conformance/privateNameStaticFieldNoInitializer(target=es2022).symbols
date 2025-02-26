@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldNoInitializer.ts] ////
+
+=== privateNameStaticFieldNoInitializer.ts ===
+const C = class {
+>C : Symbol(C, Decl(privateNameStaticFieldNoInitializer.ts, 0, 5))
+
+    static #x;
+>#x : Symbol(#x, Decl(privateNameStaticFieldNoInitializer.ts, 0, 17))
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(privateNameStaticFieldNoInitializer.ts, 2, 1))
+
+    static #x;
+>#x : Symbol(#x, Decl(privateNameStaticFieldNoInitializer.ts, 4, 10))
+}
+

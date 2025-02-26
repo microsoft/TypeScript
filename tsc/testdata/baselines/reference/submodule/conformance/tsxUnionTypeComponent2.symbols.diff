@@ -1,0 +1,11 @@
+--- old.tsxUnionTypeComponent2.symbols
++++ new.tsxUnionTypeComponent2.symbols
+@@= skipped -6, +6 lines =@@
+ type Invalid1 = React.ComponentClass<any> | number;
+ >Invalid1 : Symbol(Invalid1, Decl(file.tsx, 0, 32))
+ >React : Symbol(React, Decl(file.tsx, 0, 0))
+->ComponentClass : Symbol(React.ComponentClass, Decl(react.d.ts, 205, 5))
++>ComponentClass : Symbol(ComponentClass)
+ 
+ const X: Invalid1 = 1;
+ >X : Symbol(X, Decl(file.tsx, 4, 5))

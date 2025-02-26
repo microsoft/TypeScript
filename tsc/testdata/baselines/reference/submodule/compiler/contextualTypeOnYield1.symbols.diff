@@ -1,0 +1,20 @@
+--- old.contextualTypeOnYield1.symbols
++++ new.contextualTypeOnYield1.symbols
+@@= skipped -2, +2 lines =@@
+ === contextualTypeOnYield1.ts ===
+ type FuncOrGeneratorFunc = () => (number | Generator<(arg: number) => void, any, void>)
+ >FuncOrGeneratorFunc : Symbol(FuncOrGeneratorFunc, Decl(contextualTypeOnYield1.ts, 0, 0))
+->Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
++>Generator : Symbol(Generator)
+ >arg : Symbol(arg, Decl(contextualTypeOnYield1.ts, 0, 54))
+ 
+ const f: FuncOrGeneratorFunc = function*() {
+@@= skipped -9, +9 lines =@@
+ 
+   yield (num) => console.log(num); // `num` should be inferred to have type `number`.
+ >num : Symbol(num, Decl(contextualTypeOnYield1.ts, 3, 9))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+ >num : Symbol(num, Decl(contextualTypeOnYield1.ts, 3, 9))
+ }

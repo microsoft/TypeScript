@@ -1,0 +1,35 @@
+--- old.targetEs6DecoratorMetadataImportNotElided.symbols
++++ new.targetEs6DecoratorMetadataImportNotElided.symbols
+@@= skipped -15, +15 lines =@@
+ >MyComponent : Symbol(MyComponent, Decl(index.ts, 0, 44))
+ 
+     _ref: TemplateRef;
+->_ref : Symbol(MyComponent._ref, Decl(index.ts, 2, 26))
++>_ref : Symbol(_ref, Decl(index.ts, 2, 26))
+ >TemplateRef : Symbol(TemplateRef, Decl(index.ts, 0, 15))
+ 
+     @Input()
+ >Input : Symbol(Input, Decl(index.ts, 0, 8))
+ 
+     get ref() { return this._ref; }
+->ref : Symbol(MyComponent.ref, Decl(index.ts, 3, 22), Decl(index.ts, 6, 35))
+->this._ref : Symbol(MyComponent._ref, Decl(index.ts, 2, 26))
++>ref : Symbol(ref, Decl(index.ts, 3, 22), Decl(index.ts, 6, 35))
++>this._ref : Symbol(_ref, Decl(index.ts, 2, 26))
+ >this : Symbol(MyComponent, Decl(index.ts, 0, 44))
+->_ref : Symbol(MyComponent._ref, Decl(index.ts, 2, 26))
++>_ref : Symbol(_ref, Decl(index.ts, 2, 26))
+ 
+     set ref(value: TemplateRef) { this._ref = value; }
+->ref : Symbol(MyComponent.ref, Decl(index.ts, 3, 22), Decl(index.ts, 6, 35))
++>ref : Symbol(ref, Decl(index.ts, 3, 22), Decl(index.ts, 6, 35))
+ >value : Symbol(value, Decl(index.ts, 7, 12))
+ >TemplateRef : Symbol(TemplateRef, Decl(index.ts, 0, 15))
+->this._ref : Symbol(MyComponent._ref, Decl(index.ts, 2, 26))
++>this._ref : Symbol(_ref, Decl(index.ts, 2, 26))
+ >this : Symbol(MyComponent, Decl(index.ts, 0, 44))
+->_ref : Symbol(MyComponent._ref, Decl(index.ts, 2, 26))
++>_ref : Symbol(_ref, Decl(index.ts, 2, 26))
+ >value : Symbol(value, Decl(index.ts, 7, 12))
+ }
+ 

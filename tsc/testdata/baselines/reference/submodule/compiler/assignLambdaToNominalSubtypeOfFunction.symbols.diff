@@ -1,0 +1,11 @@
+--- old.assignLambdaToNominalSubtypeOfFunction.symbols
++++ new.assignLambdaToNominalSubtypeOfFunction.symbols
+@@= skipped -5, +5 lines =@@
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     x: number;
+->x : Symbol(IResultCallback.x, Decl(assignLambdaToNominalSubtypeOfFunction.ts, 0, 44))
++>x : Symbol(x, Decl(assignLambdaToNominalSubtypeOfFunction.ts, 0, 44))
+ }
+ 
+ function fn(cb: IResultCallback) { }

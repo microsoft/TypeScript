@@ -1,0 +1,20 @@
+--- old.twiceNestedKeyofIndexInference.symbols
++++ new.twiceNestedKeyofIndexInference.symbols
+@@= skipped -100, +100 lines =@@
+ >State : Symbol(State, Decl(twiceNestedKeyofIndexInference.ts, 12, 130))
+ 
+     a: {
+->a : Symbol(State.a, Decl(twiceNestedKeyofIndexInference.ts, 15, 17))
++>a : Symbol(a, Decl(twiceNestedKeyofIndexInference.ts, 15, 17))
+ 
+         b: string;
+ >b : Symbol(b, Decl(twiceNestedKeyofIndexInference.ts, 16, 8))
+@@= skipped -10, +10 lines =@@
+ 
+     };
+     d: boolean;
+->d : Symbol(State.d, Decl(twiceNestedKeyofIndexInference.ts, 19, 6))
++>d : Symbol(d, Decl(twiceNestedKeyofIndexInference.ts, 19, 6))
+ }
+ 
+ const state: State = {

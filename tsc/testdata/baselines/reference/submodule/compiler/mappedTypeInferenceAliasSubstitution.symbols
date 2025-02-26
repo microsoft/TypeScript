@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/mappedTypeInferenceAliasSubstitution.ts] ////
+
+=== mappedTypeInferenceAliasSubstitution.ts ===
+// repro from #31616
+
+const v = { test: { smth: 5 } };
+>v : Symbol(v, Decl(mappedTypeInferenceAliasSubstitution.ts, 2, 5))
+>test : Symbol(test, Decl(mappedTypeInferenceAliasSubstitution.ts, 2, 11))
+>smth : Symbol(smth, Decl(mappedTypeInferenceAliasSubstitution.ts, 2, 19))
+
+type Field<A extends string, R> = { [K in A]: R }
+>Field : Symbol(Field, Decl(mappedTypeInferenceAliasSubstitution.ts, 2, 32))
+>A : Symbol(A, Decl(mappedTypeInferenceAliasSubstitution.ts, 4, 11))
+>R : Symbol(R, Decl(mappedTypeInferenceAliasSubstitution.ts, 4, 28))
+>K : Symbol(K, Decl(mappedTypeInferenceAliasSubstitution.ts, 4, 37))
+>A : Symbol(A, Decl(mappedTypeInferenceAliasSubstitution.ts, 4, 11))
+>R : Symbol(R, Decl(mappedTypeInferenceAliasSubstitution.ts, 4, 28))
+
+const f = <A extends string, B extends string, R>(x: { [K in A]: Field<B, R> }): R => ({} as any);
+>f : Symbol(f, Decl(mappedTypeInferenceAliasSubstitution.ts, 6, 5))
+>A : Symbol(A, Decl(mappedTypeInferenceAliasSubstitution.ts, 6, 11))
+>B : Symbol(B, Decl(mappedTypeInferenceAliasSubstitution.ts, 6, 28))
+>R : Symbol(R, Decl(mappedTypeInferenceAliasSubstitution.ts, 6, 46))
+>x : Symbol(x, Decl(mappedTypeInferenceAliasSubstitution.ts, 6, 50))
+>K : Symbol(K, Decl(mappedTypeInferenceAliasSubstitution.ts, 6, 56))
+>A : Symbol(A, Decl(mappedTypeInferenceAliasSubstitution.ts, 6, 11))
+>Field : Symbol(Field, Decl(mappedTypeInferenceAliasSubstitution.ts, 2, 32))
+>B : Symbol(B, Decl(mappedTypeInferenceAliasSubstitution.ts, 6, 28))
+>R : Symbol(R, Decl(mappedTypeInferenceAliasSubstitution.ts, 6, 46))
+>R : Symbol(R, Decl(mappedTypeInferenceAliasSubstitution.ts, 6, 46))
+
+const r1 = f(v);
+>r1 : Symbol(r1, Decl(mappedTypeInferenceAliasSubstitution.ts, 7, 5))
+>f : Symbol(f, Decl(mappedTypeInferenceAliasSubstitution.ts, 6, 5))
+>v : Symbol(v, Decl(mappedTypeInferenceAliasSubstitution.ts, 2, 5))
+
+const g = <A extends string, B extends string, R>(x: Field<A, Field<B, R>>): R => ({} as any);
+>g : Symbol(g, Decl(mappedTypeInferenceAliasSubstitution.ts, 9, 5))
+>A : Symbol(A, Decl(mappedTypeInferenceAliasSubstitution.ts, 9, 11))
+>B : Symbol(B, Decl(mappedTypeInferenceAliasSubstitution.ts, 9, 28))
+>R : Symbol(R, Decl(mappedTypeInferenceAliasSubstitution.ts, 9, 46))
+>x : Symbol(x, Decl(mappedTypeInferenceAliasSubstitution.ts, 9, 50))
+>Field : Symbol(Field, Decl(mappedTypeInferenceAliasSubstitution.ts, 2, 32))
+>A : Symbol(A, Decl(mappedTypeInferenceAliasSubstitution.ts, 9, 11))
+>Field : Symbol(Field, Decl(mappedTypeInferenceAliasSubstitution.ts, 2, 32))
+>B : Symbol(B, Decl(mappedTypeInferenceAliasSubstitution.ts, 9, 28))
+>R : Symbol(R, Decl(mappedTypeInferenceAliasSubstitution.ts, 9, 46))
+>R : Symbol(R, Decl(mappedTypeInferenceAliasSubstitution.ts, 9, 46))
+
+const r2 = g(v);
+>r2 : Symbol(r2, Decl(mappedTypeInferenceAliasSubstitution.ts, 10, 5))
+>g : Symbol(g, Decl(mappedTypeInferenceAliasSubstitution.ts, 9, 5))
+>v : Symbol(v, Decl(mappedTypeInferenceAliasSubstitution.ts, 2, 5))
+

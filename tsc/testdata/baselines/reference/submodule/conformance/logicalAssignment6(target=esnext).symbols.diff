@@ -1,0 +1,38 @@
+--- old.logicalAssignment6(target=esnext).symbols
++++ new.logicalAssignment6(target=esnext).symbols
+@@= skipped -6, +6 lines =@@
+ >results1 : Symbol(results1, Decl(logicalAssignment6.ts, 0, 44))
+ 
+     (results ||= (results1 ||= [])).push(100);
+->(results ||= (results1 ||= [])).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>(results ||= (results1 ||= [])).push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >results : Symbol(results, Decl(logicalAssignment6.ts, 0, 14))
+ >results1 : Symbol(results1, Decl(logicalAssignment6.ts, 0, 44))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function foo2(results: number[] | undefined, results1: number[] | undefined) {
+@@= skipped -12, +12 lines =@@
+ >results1 : Symbol(results1, Decl(logicalAssignment6.ts, 4, 44))
+ 
+     (results ??= (results1 ??= [])).push(100);
+->(results ??= (results1 ??= [])).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>(results ??= (results1 ??= [])).push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >results : Symbol(results, Decl(logicalAssignment6.ts, 4, 14))
+ >results1 : Symbol(results1, Decl(logicalAssignment6.ts, 4, 44))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function foo3(results: number[] | undefined, results1: number[] | undefined) {
+@@= skipped -12, +12 lines =@@
+ >results1 : Symbol(results1, Decl(logicalAssignment6.ts, 8, 44))
+ 
+     (results &&= (results1 &&= [])).push(100);
+->(results &&= (results1 &&= [])).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+ >results : Symbol(results, Decl(logicalAssignment6.ts, 8, 14))
+ >results1 : Symbol(results1, Decl(logicalAssignment6.ts, 8, 44))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+ }
+ 

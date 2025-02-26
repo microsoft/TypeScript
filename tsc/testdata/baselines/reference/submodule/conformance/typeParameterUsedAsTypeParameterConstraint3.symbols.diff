@@ -1,0 +1,50 @@
+--- old.typeParameterUsedAsTypeParameterConstraint3.symbols
++++ new.typeParameterUsedAsTypeParameterConstraint3.symbols
+@@= skipped -30, +30 lines =@@
+ >V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 23, 17))
+ 
+     x: T;
+->x : Symbol(I.x, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 23, 22))
++>x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 23, 22))
+ >T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 23, 12))
+ 
+     y: U;
+->y : Symbol(I.y, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 24, 9))
++>y : Symbol(y, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 24, 9))
+ >U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 23, 14))
+ 
+     z: V;
+->z : Symbol(I.z, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 25, 9))
++>z : Symbol(z, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 25, 9))
+ >V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 23, 17))
+ 
+     foo<W extends V>(x: W): T;
+->foo : Symbol(I.foo, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 26, 9))
++>foo : Symbol(foo, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 26, 9))
+ >W : Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 27, 8))
+ >V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 23, 17))
+ >x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 27, 21))
+@@= skipped -27, +27 lines =@@
+ >U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 30, 18))
+ 
+     x: T;
+->x : Symbol(I2.x, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 30, 23))
++>x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 30, 23))
+ >T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 30, 15))
+ 
+     y: U;
+->y : Symbol(I2.y, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 31, 9))
++>y : Symbol(y, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 31, 9))
+ >U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 30, 18))
+ 
+     z: V;
+->z : Symbol(I2.z, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 32, 9))
++>z : Symbol(z, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 32, 9))
+ >V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 30, 13))
+ 
+     foo<W extends V>(x: W): T;
+->foo : Symbol(I2.foo, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 33, 9))
++>foo : Symbol(foo, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 33, 9))
+ >W : Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 34, 8))
+ >V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 30, 13))
+ >x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 34, 21))

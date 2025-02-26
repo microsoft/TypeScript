@@ -1,0 +1,14 @@
+--- old.systemJsForInNoException.symbols
++++ new.systemJsForInNoException.symbols
+@@= skipped -9, +9 lines =@@
+ >obj : Symbol(obj, Decl(systemJsForInNoException.ts, 0, 12))
+ 
+     console.log(obj[key]);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >obj : Symbol(obj, Decl(systemJsForInNoException.ts, 0, 12))
+ >key : Symbol(key, Decl(systemJsForInNoException.ts, 1, 8))
+ 

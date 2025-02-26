@@ -1,0 +1,52 @@
+--- old.importClause_namespaceImport.symbols
++++ new.importClause_namespaceImport.symbols
+@@= skipped -2, +2 lines =@@
+ === /a.ts ===
+ export class A { a!: string }
+ >A : Symbol(A, Decl(a.ts, 0, 0))
+->a : Symbol(A.a, Decl(a.ts, 0, 16))
++>a : Symbol(a, Decl(a.ts, 0, 16))
+ 
+ export class B { b!: number }
+ >B : Symbol(B, Decl(a.ts, 0, 29))
+->b : Symbol(B.b, Decl(a.ts, 1, 16))
++>b : Symbol(b, Decl(a.ts, 1, 16))
+ 
+ export type C<T> = T;
+ >C : Symbol(C, Decl(a.ts, 1, 29))
+@@= skipped -22, +22 lines =@@
+ >types : Symbol(types, Decl(b.ts, 0, 11))
+ 
+ types.Value;
+->types.Value : Symbol(types.Value, Decl(a.ts, 3, 12))
++>types.Value : Symbol(Value, Decl(a.ts, 3, 12))
+ >types : Symbol(types, Decl(b.ts, 0, 11))
+->Value : Symbol(types.Value, Decl(a.ts, 3, 12))
++>Value : Symbol(Value, Decl(a.ts, 3, 12))
+ 
+ let v: types.Value;
+ >v : Symbol(v, Decl(b.ts, 3, 3))
+ >types : Symbol(types, Decl(b.ts, 0, 11))
+->Value : Symbol(types.Value)
++>Value : Symbol(Value)
+ 
+ const a: types.A = {};
+ >a : Symbol(a, Decl(b.ts, 4, 5))
+ >types : Symbol(types, Decl(b.ts, 0, 11))
+->A : Symbol(types.A, Decl(a.ts, 0, 0))
++>A : Symbol(A, Decl(a.ts, 0, 0))
+ 
+ const b: types.B = {};
+ >b : Symbol(b, Decl(b.ts, 5, 5))
+ >types : Symbol(types, Decl(b.ts, 0, 11))
+->B : Symbol(types.B, Decl(a.ts, 0, 29))
++>B : Symbol(B, Decl(a.ts, 0, 29))
+ 
+ const c: types.C<string> = "";
+ >c : Symbol(c, Decl(b.ts, 6, 5))
+ >types : Symbol(types, Decl(b.ts, 0, 11))
+->C : Symbol(types.C, Decl(a.ts, 1, 29))
++>C : Symbol(C, Decl(a.ts, 1, 29))
+ 
+ const d = { types };
+ >d : Symbol(d, Decl(b.ts, 7, 5))

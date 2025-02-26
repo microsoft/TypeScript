@@ -1,0 +1,47 @@
+//// [tests/cases/conformance/salsa/propertyAssignmentUseParentType3.ts] ////
+
+=== propertyAssignmentUseParentType3.ts ===
+// don't use the parent type if it's a function declaration (#33741)
+
+function foo1(): number {
+>foo1 : Symbol(foo1, Decl(propertyAssignmentUseParentType3.ts, 0, 0))
+
+    return 123;
+}
+foo1.toFixed = "";
+>foo1.toFixed : Symbol(toFixed, Decl(propertyAssignmentUseParentType3.ts, 4, 1))
+>foo1 : Symbol(foo1, Decl(propertyAssignmentUseParentType3.ts, 0, 0))
+>toFixed : Symbol(toFixed, Decl(propertyAssignmentUseParentType3.ts, 4, 1))
+
+function foo2(): any[] {
+>foo2 : Symbol(foo2, Decl(propertyAssignmentUseParentType3.ts, 5, 18))
+
+    return [];
+}
+foo2.join = "";
+>foo2.join : Symbol(join, Decl(propertyAssignmentUseParentType3.ts, 9, 1))
+>foo2 : Symbol(foo2, Decl(propertyAssignmentUseParentType3.ts, 5, 18))
+>join : Symbol(join, Decl(propertyAssignmentUseParentType3.ts, 9, 1))
+
+function foo3(): string {
+>foo3 : Symbol(foo3, Decl(propertyAssignmentUseParentType3.ts, 10, 15))
+
+    return "";
+}
+foo3.trim = "";
+>foo3.trim : Symbol(trim, Decl(propertyAssignmentUseParentType3.ts, 14, 1))
+>foo3 : Symbol(foo3, Decl(propertyAssignmentUseParentType3.ts, 10, 15))
+>trim : Symbol(trim, Decl(propertyAssignmentUseParentType3.ts, 14, 1))
+
+function foo4(): ({x: number}) {
+>foo4 : Symbol(foo4, Decl(propertyAssignmentUseParentType3.ts, 15, 15))
+>x : Symbol(x, Decl(propertyAssignmentUseParentType3.ts, 17, 19))
+
+    return {x: 123};
+>x : Symbol(x, Decl(propertyAssignmentUseParentType3.ts, 18, 12))
+}
+foo4.x = "456";
+>foo4.x : Symbol(x, Decl(propertyAssignmentUseParentType3.ts, 19, 1))
+>foo4 : Symbol(foo4, Decl(propertyAssignmentUseParentType3.ts, 15, 15))
+>x : Symbol(x, Decl(propertyAssignmentUseParentType3.ts, 19, 1))
+

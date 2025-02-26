@@ -1,0 +1,9 @@
+--- old.enumGenericTypeClash.symbols
++++ new.enumGenericTypeClash.symbols
+@@= skipped -8, +8 lines =@@
+ 
+ enum X { MyVal }
+ >X : Symbol(X, Decl(enumGenericTypeClash.ts, 0, 18))
+->MyVal : Symbol(X.MyVal, Decl(enumGenericTypeClash.ts, 1, 8))
++>MyVal : Symbol(MyVal, Decl(enumGenericTypeClash.ts, 1, 8))
+ 

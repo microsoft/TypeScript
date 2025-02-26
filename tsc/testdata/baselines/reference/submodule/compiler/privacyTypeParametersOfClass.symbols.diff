@@ -1,0 +1,56 @@
+--- old.privacyTypeParametersOfClass.symbols
++++ new.privacyTypeParametersOfClass.symbols
+@@= skipped -15, +15 lines =@@
+ >privateClass : Symbol(privateClass, Decl(privacyTypeParametersOfClass.ts, 0, 0))
+ 
+     myMethod(val: T): T { // Error
+->myMethod : Symbol(publicClassWithPrivateTypeParameters.myMethod, Decl(privacyTypeParametersOfClass.ts, 7, 75))
++>myMethod : Symbol(myMethod, Decl(privacyTypeParametersOfClass.ts, 7, 75))
+ >val : Symbol(val, Decl(privacyTypeParametersOfClass.ts, 8, 13))
+ >T : Symbol(T, Decl(privacyTypeParametersOfClass.ts, 7, 50))
+ >T : Symbol(T, Decl(privacyTypeParametersOfClass.ts, 7, 50))
+@@= skipped -16, +16 lines =@@
+ >publicClass : Symbol(publicClass, Decl(privacyTypeParametersOfClass.ts, 1, 1))
+ 
+     myMethod(val: T): T { // No Error
+->myMethod : Symbol(publicClassWithPublicTypeParameters.myMethod, Decl(privacyTypeParametersOfClass.ts, 13, 73))
++>myMethod : Symbol(myMethod, Decl(privacyTypeParametersOfClass.ts, 13, 73))
+ >val : Symbol(val, Decl(privacyTypeParametersOfClass.ts, 14, 13))
+ >T : Symbol(T, Decl(privacyTypeParametersOfClass.ts, 13, 49))
+ >T : Symbol(T, Decl(privacyTypeParametersOfClass.ts, 13, 49))
+@@= skipped -16, +16 lines =@@
+ >privateClass : Symbol(privateClass, Decl(privacyTypeParametersOfClass.ts, 0, 0))
+ 
+     myMethod(val: T): T { // No Error
+->myMethod : Symbol(privateClassWithPrivateTypeParameters.myMethod, Decl(privacyTypeParametersOfClass.ts, 19, 69))
++>myMethod : Symbol(myMethod, Decl(privacyTypeParametersOfClass.ts, 19, 69))
+ >val : Symbol(val, Decl(privacyTypeParametersOfClass.ts, 20, 13))
+ >T : Symbol(T, Decl(privacyTypeParametersOfClass.ts, 19, 44))
+ >T : Symbol(T, Decl(privacyTypeParametersOfClass.ts, 19, 44))
+@@= skipped -16, +16 lines =@@
+ >publicClass : Symbol(publicClass, Decl(privacyTypeParametersOfClass.ts, 1, 1))
+ 
+     myMethod(val: T): T { // No Error
+->myMethod : Symbol(privateClassWithPublicTypeParameters.myMethod, Decl(privacyTypeParametersOfClass.ts, 25, 67))
++>myMethod : Symbol(myMethod, Decl(privacyTypeParametersOfClass.ts, 25, 67))
+ >val : Symbol(val, Decl(privacyTypeParametersOfClass.ts, 26, 13))
+ >T : Symbol(T, Decl(privacyTypeParametersOfClass.ts, 25, 43))
+ >T : Symbol(T, Decl(privacyTypeParametersOfClass.ts, 25, 43))
+@@= skipped -15, +15 lines =@@
+ >T : Symbol(T, Decl(privacyTypeParametersOfClass.ts, 31, 63))
+ 
+     myMethod(val: T): T { // No Error
+->myMethod : Symbol(publicClassWithPublicTypeParametersWithoutExtends.myMethod, Decl(privacyTypeParametersOfClass.ts, 31, 67))
++>myMethod : Symbol(myMethod, Decl(privacyTypeParametersOfClass.ts, 31, 67))
+ >val : Symbol(val, Decl(privacyTypeParametersOfClass.ts, 32, 13))
+ >T : Symbol(T, Decl(privacyTypeParametersOfClass.ts, 31, 63))
+ >T : Symbol(T, Decl(privacyTypeParametersOfClass.ts, 31, 63))
+@@= skipped -15, +15 lines =@@
+ >T : Symbol(T, Decl(privacyTypeParametersOfClass.ts, 37, 57))
+ 
+     myMethod(val: T): T { // No Error
+->myMethod : Symbol(privateClassWithPublicTypeParametersWithoutExtends.myMethod, Decl(privacyTypeParametersOfClass.ts, 37, 61))
++>myMethod : Symbol(myMethod, Decl(privacyTypeParametersOfClass.ts, 37, 61))
+ >val : Symbol(val, Decl(privacyTypeParametersOfClass.ts, 38, 13))
+ >T : Symbol(T, Decl(privacyTypeParametersOfClass.ts, 37, 57))
+ >T : Symbol(T, Decl(privacyTypeParametersOfClass.ts, 37, 57))

@@ -1,0 +1,28 @@
+--- old.discriminantsAndTypePredicates.symbols
++++ new.discriminantsAndTypePredicates.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ interface A { type: 'A' }
+ >A : Symbol(A, Decl(discriminantsAndTypePredicates.ts, 0, 0))
+->type : Symbol(A.type, Decl(discriminantsAndTypePredicates.ts, 2, 13))
++>type : Symbol(type, Decl(discriminantsAndTypePredicates.ts, 2, 13))
+ 
+ interface B { type: 'B' }
+ >B : Symbol(B, Decl(discriminantsAndTypePredicates.ts, 2, 25))
+->type : Symbol(B.type, Decl(discriminantsAndTypePredicates.ts, 3, 13))
++>type : Symbol(type, Decl(discriminantsAndTypePredicates.ts, 3, 13))
+ 
+ function isA(x: A | B): x is A { return x.type === 'A'; }
+ >isA : Symbol(isA, Decl(discriminantsAndTypePredicates.ts, 3, 25))
+@@= skipped -79, +79 lines =@@
+ >x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 20, 14))
+ 
+     if (x.type === 'B') {
+->x.type : Symbol(B.type, Decl(discriminantsAndTypePredicates.ts, 3, 13))
++>x.type : Symbol(type, Decl(discriminantsAndTypePredicates.ts, 3, 13))
+ >x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 20, 14))
+->type : Symbol(B.type, Decl(discriminantsAndTypePredicates.ts, 3, 13))
++>type : Symbol(type, Decl(discriminantsAndTypePredicates.ts, 3, 13))
+ 
+         return x;  // B
+ >x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 20, 14))

@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport7.ts] ////
+
+=== usage.js ===
+const x = require("./lateBoundAssignmentDeclarationSupport7.js");
+>x : Symbol(x, Decl(usage.js, 0, 5))
+
+const y = x.F["my-fake-sym"];
+>y : Symbol(y, Decl(usage.js, 1, 5))
+>x : Symbol(x, Decl(usage.js, 0, 5))
+
+const z = x.F[x.S];
+>z : Symbol(z, Decl(usage.js, 2, 5))
+>x : Symbol(x, Decl(usage.js, 0, 5))
+>x : Symbol(x, Decl(usage.js, 0, 5))
+

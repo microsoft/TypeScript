@@ -1,0 +1,14 @@
+--- old.inKeywordNarrowingWithNoUncheckedIndexedAccess.symbols
++++ new.inKeywordNarrowingWithNoUncheckedIndexedAccess.symbols
+@@= skipped -61, +61 lines =@@
+ >obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 24, 12))
+ 
+     if (obj.hasOwnProperty("test")) {
+->obj.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
++>obj.hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+ >obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 24, 12))
+->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
++>hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+ 
+         obj.test;  // string
+ >obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 24, 12))

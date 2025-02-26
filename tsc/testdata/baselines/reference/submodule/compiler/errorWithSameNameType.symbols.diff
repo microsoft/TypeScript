@@ -1,0 +1,35 @@
+--- old.errorWithSameNameType.symbols
++++ new.errorWithSameNameType.symbols
+@@= skipped -4, +4 lines =@@
+ >F : Symbol(F, Decl(a.ts, 0, 0))
+ 
+     foo1: number
+->foo1 : Symbol(F.foo1, Decl(a.ts, 0, 20))
++>foo1 : Symbol(foo1, Decl(a.ts, 0, 20))
+ }
+ 
+ === b.ts ===
+@@= skipped -8, +8 lines =@@
+ >F : Symbol(F, Decl(b.ts, 0, 0))
+ 
+     foo2: number
+->foo2 : Symbol(F.foo2, Decl(b.ts, 0, 20))
++>foo2 : Symbol(foo2, Decl(b.ts, 0, 20))
+ }
+ 
+ === c.ts ===
+@@= skipped -13, +13 lines =@@
+ let a: A.F
+ >a : Symbol(a, Decl(c.ts, 3, 3))
+ >A : Symbol(A, Decl(c.ts, 0, 6))
+->F : Symbol(A.F, Decl(a.ts, 0, 0))
++>F : Symbol(F, Decl(a.ts, 0, 0))
+ 
+ let b: B.F
+ >b : Symbol(b, Decl(c.ts, 4, 3))
+ >B : Symbol(B, Decl(c.ts, 1, 6))
+->F : Symbol(B.F, Decl(b.ts, 0, 0))
++>F : Symbol(F, Decl(b.ts, 0, 0))
+ 
+ if (a === b) {
+ >a : Symbol(a, Decl(c.ts, 3, 3))

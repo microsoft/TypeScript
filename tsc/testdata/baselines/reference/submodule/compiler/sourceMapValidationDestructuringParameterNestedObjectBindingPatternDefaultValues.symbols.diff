@@ -1,0 +1,38 @@
+--- old.sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.symbols
++++ new.sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.symbols
+@@= skipped -11, +11 lines =@@
+ >Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 2, 1))
+ 
+     name: string;
+->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 3, 17))
++>name : Symbol(name, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 3, 17))
+ 
+     skills: {
+->skills : Symbol(Robot.skills, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 4, 17))
++>skills : Symbol(skills, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 4, 17))
+ 
+         primary?: string;
+ >primary : Symbol(primary, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 5, 13))
+@@= skipped -25, +25 lines =@@
+ >foo1 : Symbol(foo1, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 10, 88))
+     {
+         skills: {
+->skills : Symbol(Robot.skills, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 4, 17))
++>skills : Symbol(skills, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 4, 17))
+ 
+             primary: primaryA = "primary",
+ >primary : Symbol(primary, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 5, 13))
+@@= skipped -28, +28 lines =@@
+ >foo2 : Symbol(foo2, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 20, 1))
+     {
+         name: nameC = "name",
+->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 3, 17))
++>name : Symbol(name, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 3, 17))
+ >nameC : Symbol(nameC, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 22, 5))
+ 
+         skills: {
+->skills : Symbol(Robot.skills, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 4, 17))
++>skills : Symbol(skills, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 4, 17))
+ 
+             primary: primaryB = "primary",
+ >primary : Symbol(primary, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 5, 13))

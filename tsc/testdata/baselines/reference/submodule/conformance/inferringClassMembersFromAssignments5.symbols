@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/salsa/inferringClassMembersFromAssignments5.ts] ////
+
+=== a.js ===
+class Base {
+>Base : Symbol(Base, Decl(a.js, 0, 0))
+
+    m() {
+>m : Symbol(m, Decl(a.js, 0, 12))
+
+        this.p = 1
+>this : Symbol(Base, Decl(a.js, 0, 0))
+    }
+}
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(a.js, 4, 1))
+>Base : Symbol(Base, Decl(a.js, 0, 0))
+
+    constructor() {
+        super();
+>super : Symbol(Base, Decl(a.js, 0, 0))
+
+        // should be OK, and p should have type number from this assignment
+        this.p = 1
+>this : Symbol(Derived, Decl(a.js, 4, 1))
+    }
+    test() {
+>test : Symbol(test, Decl(a.js, 10, 5))
+
+        return this.p
+>this : Symbol(Derived, Decl(a.js, 4, 1))
+    }
+}
+

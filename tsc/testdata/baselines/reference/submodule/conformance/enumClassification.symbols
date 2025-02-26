@@ -1,0 +1,169 @@
+//// [tests/cases/conformance/enums/enumClassification.ts] ////
+
+=== enumClassification.ts ===
+// An enum type where each member has no initializer or an initializer that specififes
+// a numeric literal, a string literal, or a single identifier naming another member in
+// the enum type is classified as a literal enum type. An enum type that doesn't adhere
+// to this pattern is classified as a numeric enum type.
+
+// Examples of literal enum types
+
+enum E01 {
+>E01 : Symbol(E01, Decl(enumClassification.ts, 0, 0))
+
+    A
+>A : Symbol(A, Decl(enumClassification.ts, 7, 10))
+}
+
+enum E02 {
+>E02 : Symbol(E02, Decl(enumClassification.ts, 9, 1))
+
+    A = 123
+>A : Symbol(A, Decl(enumClassification.ts, 11, 10))
+}
+
+enum E03 {
+>E03 : Symbol(E03, Decl(enumClassification.ts, 13, 1))
+
+    A = "hello"
+>A : Symbol(A, Decl(enumClassification.ts, 15, 10))
+}
+
+enum E04 {
+>E04 : Symbol(E04, Decl(enumClassification.ts, 17, 1))
+
+    A,
+>A : Symbol(A, Decl(enumClassification.ts, 19, 10))
+
+    B,
+>B : Symbol(B, Decl(enumClassification.ts, 20, 6))
+
+    C
+>C : Symbol(C, Decl(enumClassification.ts, 21, 6))
+}
+
+enum E05 {
+>E05 : Symbol(E05, Decl(enumClassification.ts, 23, 1))
+
+    A,
+>A : Symbol(A, Decl(enumClassification.ts, 25, 10))
+
+    B = 10,
+>B : Symbol(B, Decl(enumClassification.ts, 26, 6))
+
+    C
+>C : Symbol(C, Decl(enumClassification.ts, 27, 11))
+}
+
+enum E06 {
+>E06 : Symbol(E06, Decl(enumClassification.ts, 29, 1))
+
+    A = "one",
+>A : Symbol(A, Decl(enumClassification.ts, 31, 10))
+
+    B = "two",
+>B : Symbol(B, Decl(enumClassification.ts, 32, 14))
+
+    C = "three"
+>C : Symbol(C, Decl(enumClassification.ts, 33, 14))
+}
+
+enum E07 {
+>E07 : Symbol(E07, Decl(enumClassification.ts, 35, 1))
+
+    A,
+>A : Symbol(A, Decl(enumClassification.ts, 37, 10))
+
+    B,
+>B : Symbol(B, Decl(enumClassification.ts, 38, 6))
+
+    C = "hi",
+>C : Symbol(C, Decl(enumClassification.ts, 39, 6))
+
+    D = 10,
+>D : Symbol(D, Decl(enumClassification.ts, 40, 13))
+
+    E,
+>E : Symbol(E, Decl(enumClassification.ts, 41, 11))
+
+    F = "bye"
+>F : Symbol(F, Decl(enumClassification.ts, 42, 6))
+}
+
+enum E08 {
+>E08 : Symbol(E08, Decl(enumClassification.ts, 44, 1))
+
+    A = 10,
+>A : Symbol(A, Decl(enumClassification.ts, 46, 10))
+
+    B = "hello",
+>B : Symbol(B, Decl(enumClassification.ts, 47, 11))
+
+    C = A,
+>C : Symbol(C, Decl(enumClassification.ts, 48, 16))
+>A : Symbol(A, Decl(enumClassification.ts, 46, 10))
+
+    D = B,
+>D : Symbol(D, Decl(enumClassification.ts, 49, 10))
+>B : Symbol(B, Decl(enumClassification.ts, 47, 11))
+
+    E = C,
+>E : Symbol(E, Decl(enumClassification.ts, 50, 10))
+>C : Symbol(C, Decl(enumClassification.ts, 48, 16))
+}
+
+// Examples of numeric enum types with only constant members
+
+enum E10 {}
+>E10 : Symbol(E10, Decl(enumClassification.ts, 52, 1))
+
+enum E11 {
+>E11 : Symbol(E11, Decl(enumClassification.ts, 56, 11))
+
+    A = +0,
+>A : Symbol(A, Decl(enumClassification.ts, 58, 10))
+
+    B,
+>B : Symbol(B, Decl(enumClassification.ts, 59, 11))
+
+    C
+>C : Symbol(C, Decl(enumClassification.ts, 60, 6))
+}
+
+enum E12 {
+>E12 : Symbol(E12, Decl(enumClassification.ts, 62, 1))
+
+    A = 1 << 0,
+>A : Symbol(A, Decl(enumClassification.ts, 64, 10))
+
+    B = 1 << 1,
+>B : Symbol(B, Decl(enumClassification.ts, 65, 15))
+
+    C = 1 << 2
+>C : Symbol(C, Decl(enumClassification.ts, 66, 15))
+}
+
+// Examples of numeric enum types with constant and computed members
+
+enum E20 {
+>E20 : Symbol(E20, Decl(enumClassification.ts, 68, 1))
+
+    A = "foo".length,
+>A : Symbol(A, Decl(enumClassification.ts, 72, 10))
+>"foo".length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+
+    B = A + 1,
+>B : Symbol(B, Decl(enumClassification.ts, 73, 21))
+>A : Symbol(A, Decl(enumClassification.ts, 72, 10))
+
+    C = +"123",
+>C : Symbol(C, Decl(enumClassification.ts, 74, 14))
+
+    D = Math.sin(1)
+>D : Symbol(D, Decl(enumClassification.ts, 75, 15))
+>Math.sin : Symbol(sin, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sin : Symbol(sin, Decl(lib.es5.d.ts, --, --))
+}
+

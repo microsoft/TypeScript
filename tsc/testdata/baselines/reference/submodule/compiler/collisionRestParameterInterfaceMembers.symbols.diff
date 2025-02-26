@@ -1,0 +1,16 @@
+--- old.collisionRestParameterInterfaceMembers.symbols
++++ new.collisionRestParameterInterfaceMembers.symbols
+@@= skipped -35, +35 lines =@@
+ >i3 : Symbol(i3, Decl(collisionRestParameterInterfaceMembers.ts, 14, 1))
+ 
+     foo (_i: number, ...restParameters); // no error - no code gen
+->foo : Symbol(i3.foo, Decl(collisionRestParameterInterfaceMembers.ts, 17, 14))
++>foo : Symbol(foo, Decl(collisionRestParameterInterfaceMembers.ts, 17, 14))
+ >_i : Symbol(_i, Decl(collisionRestParameterInterfaceMembers.ts, 18, 9))
+ >restParameters : Symbol(restParameters, Decl(collisionRestParameterInterfaceMembers.ts, 18, 20))
+ 
+     fooNoError (_i: number);  // no error
+->fooNoError : Symbol(i3.fooNoError, Decl(collisionRestParameterInterfaceMembers.ts, 18, 40))
++>fooNoError : Symbol(fooNoError, Decl(collisionRestParameterInterfaceMembers.ts, 18, 40))
+ >_i : Symbol(_i, Decl(collisionRestParameterInterfaceMembers.ts, 19, 16))
+ }

@@ -1,0 +1,32 @@
+--- old.unusedLocalsAndParameters.symbols
++++ new.unusedLocalsAndParameters.symbols
+@@= skipped -32, +32 lines =@@
+ 
+     // Method declaration paramter
+     method(a) {
+->method : Symbol(C.method, Decl(unusedLocalsAndParameters.ts, 17, 9))
++>method : Symbol(method, Decl(unusedLocalsAndParameters.ts, 17, 9))
+ >a : Symbol(a, Decl(unusedLocalsAndParameters.ts, 19, 11))
+     }
+     // Accessor declaration paramter
+     set x(v: number) {
+->x : Symbol(C.x, Decl(unusedLocalsAndParameters.ts, 20, 5))
++>x : Symbol(x, Decl(unusedLocalsAndParameters.ts, 20, 5))
+ >v : Symbol(v, Decl(unusedLocalsAndParameters.ts, 22, 10))
+     }
+ }
+@@= skipped -15, +15 lines =@@
+ 
+     // Method declaration paramter
+     method(a) {
+->method : Symbol(E.method, Decl(unusedLocalsAndParameters.ts, 26, 15))
++>method : Symbol(method, Decl(unusedLocalsAndParameters.ts, 26, 15))
+ >a : Symbol(a, Decl(unusedLocalsAndParameters.ts, 28, 11))
+     }
+     // Accessor declaration paramter
+     set x(v: number) {
+->x : Symbol(E.x, Decl(unusedLocalsAndParameters.ts, 29, 5))
++>x : Symbol(x, Decl(unusedLocalsAndParameters.ts, 29, 5))
+ >v : Symbol(v, Decl(unusedLocalsAndParameters.ts, 31, 10))
+     }
+ }

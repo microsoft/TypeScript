@@ -1,0 +1,15 @@
+--- old.jsFileClassSelfReferencedProperty.symbols
++++ new.jsFileClassSelfReferencedProperty.symbols
+@@= skipped -5, +5 lines =@@
+ 
+   constructor () {
+     this.testStackOverflow = this.testStackOverflow.bind(this)
+->this.testStackOverflow : Symbol(StackOverflowTest.testStackOverflow, Decl(foo.js, 1, 18))
+ >this : Symbol(StackOverflowTest, Decl(foo.js, 0, 0))
+->testStackOverflow : Symbol(StackOverflowTest.testStackOverflow, Decl(foo.js, 1, 18))
+->this.testStackOverflow : Symbol(StackOverflowTest.testStackOverflow, Decl(foo.js, 1, 18))
+ >this : Symbol(StackOverflowTest, Decl(foo.js, 0, 0))
+->testStackOverflow : Symbol(StackOverflowTest.testStackOverflow, Decl(foo.js, 1, 18))
+ >this : Symbol(StackOverflowTest, Decl(foo.js, 0, 0))
+   }
+ }

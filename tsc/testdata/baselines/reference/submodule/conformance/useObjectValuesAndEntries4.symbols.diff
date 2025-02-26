@@ -1,0 +1,25 @@
+--- old.useObjectValuesAndEntries4.symbols
++++ new.useObjectValuesAndEntries4.symbols
+@@= skipped -7, +7 lines =@@
+ 
+ for (var x of Object.values(o)) {
+ >x : Symbol(x, Decl(useObjectValuesAndEntries4.ts, 2, 8))
+->Object.values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
++>Object.values : Symbol(values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
++>values : Symbol(values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+ >o : Symbol(o, Decl(useObjectValuesAndEntries4.ts, 0, 3))
+ 
+     let y = x;
+@@= skipped -12, +12 lines =@@
+ 
+ var entries = Object.entries(o);
+ >entries : Symbol(entries, Decl(useObjectValuesAndEntries4.ts, 6, 3))
+->Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
++>Object.entries : Symbol(entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
++>entries : Symbol(entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+ >o : Symbol(o, Decl(useObjectValuesAndEntries4.ts, 0, 3))
+ 

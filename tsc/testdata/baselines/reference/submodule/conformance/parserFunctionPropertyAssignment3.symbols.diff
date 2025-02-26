@@ -1,0 +1,9 @@
+--- old.parserFunctionPropertyAssignment3.symbols
++++ new.parserFunctionPropertyAssignment3.symbols
+@@= skipped -2, +2 lines =@@
+ === parserFunctionPropertyAssignment3.ts ===
+ var v = { "foo"() { } };
+ >v : Symbol(v, Decl(parserFunctionPropertyAssignment3.ts, 0, 3))
+->"foo" : Symbol("foo", Decl(parserFunctionPropertyAssignment3.ts, 0, 9))
++>"foo" : Symbol(foo, Decl(parserFunctionPropertyAssignment3.ts, 0, 9))
+ 

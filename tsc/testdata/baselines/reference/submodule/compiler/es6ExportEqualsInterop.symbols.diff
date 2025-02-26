@@ -1,0 +1,289 @@
+--- old.es6ExportEqualsInterop.symbols
++++ new.es6ExportEqualsInterop.symbols
+@@= skipped -35, +35 lines =@@
+ 
+ z1.a;
+ z2.a;
+->z2.a : Symbol(a2, Decl(modules.d.ts, 9, 14))
++>z2.a : Symbol(a, Decl(modules.d.ts, 9, 14))
+ >z2 : Symbol(z2, Decl(main.ts, 3, 33))
+->a : Symbol(a2, Decl(modules.d.ts, 9, 14))
++>a : Symbol(a, Decl(modules.d.ts, 9, 14))
+ 
+ z3.a;
+->z3.a : Symbol(a3, Decl(modules.d.ts, 21, 14))
++>z3.a : Symbol(a, Decl(modules.d.ts, 21, 14))
+ >z3 : Symbol(z3, Decl(main.ts, 4, 32))
+->a : Symbol(a3, Decl(modules.d.ts, 21, 14))
++>a : Symbol(a, Decl(modules.d.ts, 21, 14))
+ 
+ z4.a;
+->z4.a : Symbol(z4.a, Decl(modules.d.ts, 30, 18))
++>z4.a : Symbol(a, Decl(modules.d.ts, 30, 18))
+ >z4 : Symbol(z4, Decl(main.ts, 5, 42))
+->a : Symbol(z4.a, Decl(modules.d.ts, 30, 18))
++>a : Symbol(a, Decl(modules.d.ts, 30, 18))
+ 
+ z5.a;
+->z5.a : Symbol(z5.a, Decl(modules.d.ts, 42, 18))
++>z5.a : Symbol(a, Decl(modules.d.ts, 42, 18))
+ >z5 : Symbol(z5, Decl(main.ts, 6, 30))
+->a : Symbol(z5.a, Decl(modules.d.ts, 42, 18))
++>a : Symbol(a, Decl(modules.d.ts, 42, 18))
+ 
+ z6.a;
+->z6.a : Symbol(a6, Decl(modules.d.ts, 55, 14))
++>z6.a : Symbol(a, Decl(modules.d.ts, 55, 14))
+ >z6 : Symbol(z6, Decl(main.ts, 7, 40))
+->a : Symbol(a6, Decl(modules.d.ts, 55, 14))
++>a : Symbol(a, Decl(modules.d.ts, 55, 14))
+ 
+ z7.a;
+ >z7 : Symbol(z7, Decl(main.ts, 8, 39))
+ 
+ z8.a;
+->z8.a : Symbol(z8.a, Decl(modules.d.ts, 70, 18))
++>z8.a : Symbol(a, Decl(modules.d.ts, 70, 18))
+ >z8 : Symbol(z8, Decl(main.ts, 9, 32))
+->a : Symbol(z8.a, Decl(modules.d.ts, 70, 18))
++>a : Symbol(a, Decl(modules.d.ts, 70, 18))
+ 
+ z9.a;
+ >z9 : Symbol(z9, Decl(main.ts, 10, 39))
+ 
+ z0.a;
+->z0.a : Symbol(z0.a, Decl(modules.d.ts, 90, 18))
++>z0.a : Symbol(a, Decl(modules.d.ts, 90, 18))
+ >z0 : Symbol(z0, Decl(main.ts, 11, 29))
+->a : Symbol(z0.a, Decl(modules.d.ts, 90, 18))
++>a : Symbol(a, Decl(modules.d.ts, 90, 18))
+ 
+ // default import
+ import x1 from "interface";
+@@= skipped -104, +104 lines =@@
+ 
+ y1.a;
+ y2.a;
+->y2.a : Symbol(a2, Decl(modules.d.ts, 9, 14))
++>y2.a : Symbol(a, Decl(modules.d.ts, 9, 14))
+ >y2 : Symbol(y2, Decl(main.ts, 39, 6))
+->a : Symbol(a2, Decl(modules.d.ts, 9, 14))
++>a : Symbol(a, Decl(modules.d.ts, 9, 14))
+ 
+ y3.a;
+->y3.a : Symbol(a3, Decl(modules.d.ts, 21, 14))
++>y3.a : Symbol(a, Decl(modules.d.ts, 21, 14))
+ >y3 : Symbol(y3, Decl(main.ts, 40, 6))
+->a : Symbol(a3, Decl(modules.d.ts, 21, 14))
++>a : Symbol(a, Decl(modules.d.ts, 21, 14))
+ 
+ y4.a;
+->y4.a : Symbol(z4.a, Decl(modules.d.ts, 30, 18))
++>y4.a : Symbol(a, Decl(modules.d.ts, 30, 18))
+ >y4 : Symbol(y4, Decl(main.ts, 41, 6))
+->a : Symbol(z4.a, Decl(modules.d.ts, 30, 18))
++>a : Symbol(a, Decl(modules.d.ts, 30, 18))
+ 
+ y5.a;
+->y5.a : Symbol(z5.a, Decl(modules.d.ts, 42, 18))
++>y5.a : Symbol(a, Decl(modules.d.ts, 42, 18))
+ >y5 : Symbol(y5, Decl(main.ts, 42, 6))
+->a : Symbol(z5.a, Decl(modules.d.ts, 42, 18))
++>a : Symbol(a, Decl(modules.d.ts, 42, 18))
+ 
+ y6.a;
+->y6.a : Symbol(a6, Decl(modules.d.ts, 55, 14))
++>y6.a : Symbol(a, Decl(modules.d.ts, 55, 14))
+ >y6 : Symbol(y6, Decl(main.ts, 43, 6))
+->a : Symbol(a6, Decl(modules.d.ts, 55, 14))
++>a : Symbol(a, Decl(modules.d.ts, 55, 14))
+ 
+ y7.a;
+ >y7 : Symbol(y7, Decl(main.ts, 44, 6))
+ 
+ y8.a;
+->y8.a : Symbol(z8.a, Decl(modules.d.ts, 70, 18))
++>y8.a : Symbol(a, Decl(modules.d.ts, 70, 18))
+ >y8 : Symbol(y8, Decl(main.ts, 45, 6))
+->a : Symbol(z8.a, Decl(modules.d.ts, 70, 18))
++>a : Symbol(a, Decl(modules.d.ts, 70, 18))
+ 
+ y9.a;
+ >y9 : Symbol(y9, Decl(main.ts, 46, 6))
+ 
+ y0.a;
+->y0.a : Symbol(z0.a, Decl(modules.d.ts, 90, 18))
++>y0.a : Symbol(a, Decl(modules.d.ts, 90, 18))
+ >y0 : Symbol(y0, Decl(main.ts, 47, 6))
+->a : Symbol(z0.a, Decl(modules.d.ts, 90, 18))
++>a : Symbol(a, Decl(modules.d.ts, 90, 18))
+ 
+ // named import
+ import { a as a1 } from "interface";
+ >a1 : Symbol(a1, Decl(main.ts, 61, 8))
+ 
+ import { a as a2 } from "variable";
+->a : Symbol(a2, Decl(modules.d.ts, 9, 14))
++>a : Symbol(a, Decl(modules.d.ts, 9, 14))
+ >a2 : Symbol(a2, Decl(main.ts, 62, 8))
+ 
+ import { a as a3 } from "interface-variable";
+->a : Symbol(a3, Decl(modules.d.ts, 21, 14))
++>a : Symbol(a, Decl(modules.d.ts, 21, 14))
+ >a3 : Symbol(a3, Decl(main.ts, 63, 8))
+ 
+ import { a as a4 } from "module";
+->a : Symbol(z4.a, Decl(modules.d.ts, 30, 18))
++>a : Symbol(a, Decl(modules.d.ts, 30, 18))
+ >a4 : Symbol(a4, Decl(main.ts, 64, 8))
+ 
+ import { a as a5 } from "interface-module";
+->a : Symbol(z5.a, Decl(modules.d.ts, 42, 18))
++>a : Symbol(a, Decl(modules.d.ts, 42, 18))
+ >a5 : Symbol(a5, Decl(main.ts, 65, 8))
+ 
+ import { a as a6 } from "variable-module";
+->a : Symbol(a6, Decl(modules.d.ts, 55, 14))
++>a : Symbol(a, Decl(modules.d.ts, 55, 14))
+ >a6 : Symbol(a6, Decl(main.ts, 66, 8))
+ 
+ import { a as a7 } from "function";
+ >a7 : Symbol(a7, Decl(main.ts, 67, 8))
+ 
+ import { a as a8 } from "function-module";
+->a : Symbol(z8.a, Decl(modules.d.ts, 70, 18))
++>a : Symbol(a, Decl(modules.d.ts, 70, 18))
+ >a8 : Symbol(a8, Decl(main.ts, 68, 8))
+ 
+ import { a as a9 } from "class";
+ >a9 : Symbol(a9, Decl(main.ts, 69, 8))
+ 
+ import { a as a0 } from "class-module";
+->a : Symbol(z0.a, Decl(modules.d.ts, 90, 18))
++>a : Symbol(a, Decl(modules.d.ts, 90, 18))
+ >a0 : Symbol(a0, Decl(main.ts, 70, 8))
+ 
+ a1;
+@@= skipped -113, +113 lines =@@
+ >a1 : Symbol(a1, Decl(main.ts, 84, 8))
+ 
+ export { a as a2 } from "variable";
+->a : Symbol(a2, Decl(modules.d.ts, 9, 14))
++>a : Symbol(a, Decl(modules.d.ts, 9, 14))
+ >a2 : Symbol(a2, Decl(main.ts, 85, 8))
+ 
+ export { a as a3 } from "interface-variable";
+->a : Symbol(a3, Decl(modules.d.ts, 21, 14))
++>a : Symbol(a, Decl(modules.d.ts, 21, 14))
+ >a3 : Symbol(a3, Decl(main.ts, 86, 8))
+ 
+ export { a as a4 } from "module";
+->a : Symbol(z4.a, Decl(modules.d.ts, 30, 18))
++>a : Symbol(a, Decl(modules.d.ts, 30, 18))
+ >a4 : Symbol(a4, Decl(main.ts, 87, 8))
+ 
+ export { a as a5 } from "interface-module";
+->a : Symbol(z5.a, Decl(modules.d.ts, 42, 18))
++>a : Symbol(a, Decl(modules.d.ts, 42, 18))
+ >a5 : Symbol(a5, Decl(main.ts, 88, 8))
+ 
+ export { a as a6 } from "variable-module";
+->a : Symbol(a6, Decl(modules.d.ts, 55, 14))
++>a : Symbol(a, Decl(modules.d.ts, 55, 14))
+ >a6 : Symbol(a6, Decl(main.ts, 89, 8))
+ 
+ export { a as a7 } from "function";
+ >a7 : Symbol(a7, Decl(main.ts, 90, 8))
+ 
+ export { a as a8 } from "function-module";
+->a : Symbol(z8.a, Decl(modules.d.ts, 70, 18))
++>a : Symbol(a, Decl(modules.d.ts, 70, 18))
+ >a8 : Symbol(a8, Decl(main.ts, 91, 8))
+ 
+ export { a as a9 } from "class";
+ >a9 : Symbol(a9, Decl(main.ts, 92, 8))
+ 
+ export { a as a0 } from "class-module";
+->a : Symbol(z0.a, Decl(modules.d.ts, 90, 18))
++>a : Symbol(a, Decl(modules.d.ts, 90, 18))
+ >a0 : Symbol(a0, Decl(main.ts, 93, 8))
+ 
+ // export-star
+@@= skipped -53, +53 lines =@@
+ >Foo : Symbol(Foo, Decl(modules.d.ts, 0, 28))
+ 
+         x: number;
+->x : Symbol(Foo.x, Decl(modules.d.ts, 1, 19))
++>x : Symbol(x, Decl(modules.d.ts, 1, 19))
+ 
+         y: number;
+->y : Symbol(Foo.y, Decl(modules.d.ts, 2, 18))
++>y : Symbol(y, Decl(modules.d.ts, 2, 18))
+     }
+     export = Foo;
+ >Foo : Symbol(Foo, Decl(modules.d.ts, 0, 28))
+@@= skipped -32, +32 lines =@@
+ >Foo : Symbol(Foo, Decl(modules.d.ts, 16, 37), Decl(modules.d.ts, 21, 7))
+ 
+         x: number;
+->x : Symbol(Foo.x, Decl(modules.d.ts, 17, 19))
++>x : Symbol(x, Decl(modules.d.ts, 17, 19))
+ 
+         y: number;
+->y : Symbol(Foo.y, Decl(modules.d.ts, 18, 18))
++>y : Symbol(y, Decl(modules.d.ts, 18, 18))
+     }
+     var Foo: {
+ >Foo : Symbol(Foo, Decl(modules.d.ts, 16, 37), Decl(modules.d.ts, 21, 7))
+@@= skipped -41, +41 lines =@@
+ >Foo : Symbol(Foo, Decl(modules.d.ts, 36, 35), Decl(modules.d.ts, 40, 5))
+ 
+         x: number;
+->x : Symbol(Foo.x, Decl(modules.d.ts, 37, 19))
++>x : Symbol(x, Decl(modules.d.ts, 37, 19))
+ 
+         y: number;
+->y : Symbol(Foo.y, Decl(modules.d.ts, 38, 18))
++>y : Symbol(y, Decl(modules.d.ts, 38, 18))
+     }
+     module Foo {
+ >Foo : Symbol(Foo, Decl(modules.d.ts, 36, 35), Decl(modules.d.ts, 40, 5))
+@@= skipped -28, +28 lines =@@
+ >Bar : Symbol(Bar, Decl(modules.d.ts, 49, 16))
+ 
+             x: number;
+->x : Symbol(Bar.x, Decl(modules.d.ts, 50, 23))
++>x : Symbol(x, Decl(modules.d.ts, 50, 23))
+ 
+             y: number;
+->y : Symbol(Bar.y, Decl(modules.d.ts, 51, 22))
++>y : Symbol(y, Decl(modules.d.ts, 51, 22))
+         }
+     }
+     var Foo: {
+@@= skipped -55, +55 lines =@@
+ >Foo : Symbol(Foo, Decl(modules.d.ts, 76, 24))
+ 
+         x: number;
+->x : Symbol(Foo.x, Decl(modules.d.ts, 77, 15))
++>x : Symbol(x, Decl(modules.d.ts, 77, 15))
+ 
+         y: number;
+->y : Symbol(Foo.y, Decl(modules.d.ts, 78, 18))
++>y : Symbol(y, Decl(modules.d.ts, 78, 18))
+     }
+     export = Foo;
+ >Foo : Symbol(Foo, Decl(modules.d.ts, 76, 24))
+@@= skipped -16, +16 lines =@@
+ >Foo : Symbol(Foo, Decl(modules.d.ts, 84, 31), Decl(modules.d.ts, 88, 5))
+ 
+         x: number;
+->x : Symbol(Foo.x, Decl(modules.d.ts, 85, 15))
++>x : Symbol(x, Decl(modules.d.ts, 85, 15))
+ 
+         y: number;
+->y : Symbol(Foo.y, Decl(modules.d.ts, 86, 18))
++>y : Symbol(y, Decl(modules.d.ts, 86, 18))
+     }
+     module Foo {
+ >Foo : Symbol(Foo, Decl(modules.d.ts, 84, 31), Decl(modules.d.ts, 88, 5))

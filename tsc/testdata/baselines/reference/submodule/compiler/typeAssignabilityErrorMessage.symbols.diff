@@ -1,0 +1,35 @@
+--- old.typeAssignabilityErrorMessage.symbols
++++ new.typeAssignabilityErrorMessage.symbols
+@@= skipped -6, +6 lines =@@
+ >ThroughStream : Symbol(ThroughStream, Decl(typeAssignabilityErrorMessage.ts, 0, 0))
+ 
+     a: string;
+->a : Symbol(ThroughStream.a, Decl(typeAssignabilityErrorMessage.ts, 2, 25))
++>a : Symbol(a, Decl(typeAssignabilityErrorMessage.ts, 2, 25))
+ }
+ interface ReadStream {
+ >ReadStream : Symbol(ReadStream, Decl(typeAssignabilityErrorMessage.ts, 4, 1))
+ 
+     f: string;
+->f : Symbol(ReadStream.f, Decl(typeAssignabilityErrorMessage.ts, 5, 22))
++>f : Symbol(f, Decl(typeAssignabilityErrorMessage.ts, 5, 22))
+ 
+     g: number;
+->g : Symbol(ReadStream.g, Decl(typeAssignabilityErrorMessage.ts, 6, 14))
++>g : Symbol(g, Decl(typeAssignabilityErrorMessage.ts, 6, 14))
+ 
+     h: boolean;
+->h : Symbol(ReadStream.h, Decl(typeAssignabilityErrorMessage.ts, 7, 14))
++>h : Symbol(h, Decl(typeAssignabilityErrorMessage.ts, 7, 14))
+ 
+     i: BigInt;
+->i : Symbol(ReadStream.i, Decl(typeAssignabilityErrorMessage.ts, 8, 15))
++>i : Symbol(i, Decl(typeAssignabilityErrorMessage.ts, 8, 15))
+ >BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+ 
+     j: symbol;
+->j : Symbol(ReadStream.j, Decl(typeAssignabilityErrorMessage.ts, 9, 14))
++>j : Symbol(j, Decl(typeAssignabilityErrorMessage.ts, 9, 14))
+ }
+ function foo(): ReadStream {
+ >foo : Symbol(foo, Decl(typeAssignabilityErrorMessage.ts, 11, 1))

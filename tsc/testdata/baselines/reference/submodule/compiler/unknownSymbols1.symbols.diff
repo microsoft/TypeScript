@@ -1,0 +1,16 @@
+--- old.unknownSymbols1.symbols
++++ new.unknownSymbols1.symbols
+@@= skipped -30, +30 lines =@@
+ >T : Symbol(T, Decl(unknownSymbols1.ts, 10, 8))
+ 
+     foo: asdf;
+->foo : Symbol(C.foo, Decl(unknownSymbols1.ts, 10, 12))
++>foo : Symbol(foo, Decl(unknownSymbols1.ts, 10, 12))
+ >asdf : Symbol(asdf)
+ 
+     bar: C<asdf>;
+->bar : Symbol(C.bar, Decl(unknownSymbols1.ts, 11, 14))
++>bar : Symbol(bar, Decl(unknownSymbols1.ts, 11, 14))
+ >C : Symbol(C, Decl(unknownSymbols1.ts, 8, 16))
+ >asdf : Symbol(asdf)
+ }

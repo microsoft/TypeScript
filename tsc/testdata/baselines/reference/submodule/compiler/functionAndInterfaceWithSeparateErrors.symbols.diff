@@ -1,0 +1,9 @@
+--- old.functionAndInterfaceWithSeparateErrors.symbols
++++ new.functionAndInterfaceWithSeparateErrors.symbols
+@@= skipped -15, +15 lines =@@
+ >s : Symbol(s, Decl(functionAndInterfaceWithSeparateErrors.ts, 4, 5))
+ 
+     prop: number;
+->prop : Symbol(Foo.prop, Decl(functionAndInterfaceWithSeparateErrors.ts, 4, 24))
++>prop : Symbol(prop, Decl(functionAndInterfaceWithSeparateErrors.ts, 4, 24))
+ }

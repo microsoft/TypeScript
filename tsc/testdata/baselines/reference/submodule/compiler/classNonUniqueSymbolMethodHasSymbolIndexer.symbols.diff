@@ -1,0 +1,20 @@
+--- old.classNonUniqueSymbolMethodHasSymbolIndexer.symbols
++++ new.classNonUniqueSymbolMethodHasSymbolIndexer.symbols
+@@= skipped -7, +7 lines =@@
+ >A : Symbol(A, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 0, 24))
+ 
+     [a]() { return 1 };
+->[a] : Symbol(A[a], Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 1, 16))
++>[a] : Symbol([a], Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 1, 16))
+ >a : Symbol(a, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 0, 13))
+ }
+ declare const e1: A[typeof a]; // no error, `A` has `symbol` index
+@@= skipped -27, +27 lines =@@
+ >Mix : Symbol(Mix, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 6, 46))
+ 
+     [a]() { return 1 };
+->[a] : Symbol((Anonymous class)[a], Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 9, 32))
++>[a] : Symbol([a], Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 9, 32))
+ >a : Symbol(a, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 0, 13))
+ 
+ });

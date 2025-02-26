@@ -1,0 +1,23 @@
+--- old.genericCallWithObjectTypeArgsAndConstraints5.symbols
++++ new.genericCallWithObjectTypeArgsAndConstraints5.symbols
+@@= skipped -6, +6 lines =@@
+ >C : Symbol(C, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 0, 0))
+ 
+     x: string;
+->x : Symbol(C.x, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 2, 9))
++>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 2, 9))
+ }
+ 
+ class D {
+ >D : Symbol(D, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 4, 1))
+ 
+     x: string;
+->x : Symbol(D.x, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 6, 9))
++>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 6, 9))
+ 
+     y: string;
+->y : Symbol(D.y, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 7, 14))
++>y : Symbol(y, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 7, 14))
+ }
+ 
+ function foo<T, U extends T>(t: T, t2: U) {

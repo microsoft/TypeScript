@@ -1,0 +1,15 @@
+--- old.importHelpersWithExportStarAs(esmoduleinterop=false,module=system).symbols
++++ new.importHelpersWithExportStarAs(esmoduleinterop=false,module=system).symbols
+@@= skipped -9, +9 lines =@@
+ 
+ === tslib.d.ts ===
+ declare module "tslib" {
+->"tslib" : Symbol("tslib", Decl(tslib.d.ts, --, --))
++>"tslib" : Symbol("tslib", Decl(tslib.d.ts, 0, 0))
+ 
+     function __importStar(m: any): void;
+->__importStar : Symbol(__importStar, Decl(tslib.d.ts, --, --))
+->m : Symbol(m, Decl(tslib.d.ts, --, --))
++>__importStar : Symbol(__importStar, Decl(tslib.d.ts, 0, 24))
++>m : Symbol(m, Decl(tslib.d.ts, 1, 26))
+ }

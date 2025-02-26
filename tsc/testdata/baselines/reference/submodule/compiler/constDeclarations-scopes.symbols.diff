@@ -1,0 +1,29 @@
+--- old.constDeclarations-scopes.symbols
++++ new.constDeclarations-scopes.symbols
+@@= skipped -227, +227 lines =@@
+     }
+ 
+     method() {
+->method : Symbol(C.method, Decl(constDeclarations-scopes.ts, 116, 5))
++>method : Symbol(method, Decl(constDeclarations-scopes.ts, 116, 5))
+ 
+         const c = 0;
+ >c : Symbol(c, Decl(constDeclarations-scopes.ts, 119, 13))
+@@= skipped -11, +11 lines =@@
+     }
+ 
+     get v() {
+->v : Symbol(C.v, Decl(constDeclarations-scopes.ts, 121, 5), Decl(constDeclarations-scopes.ts, 127, 5))
++>v : Symbol(v, Decl(constDeclarations-scopes.ts, 121, 5), Decl(constDeclarations-scopes.ts, 127, 5))
+ 
+         const c = 0;
+ >c : Symbol(c, Decl(constDeclarations-scopes.ts, 124, 13))
+@@= skipped -14, +14 lines =@@
+     }
+ 
+     set v(value) {
+->v : Symbol(C.v, Decl(constDeclarations-scopes.ts, 121, 5), Decl(constDeclarations-scopes.ts, 127, 5))
++>v : Symbol(v, Decl(constDeclarations-scopes.ts, 121, 5), Decl(constDeclarations-scopes.ts, 127, 5))
+ >value : Symbol(value, Decl(constDeclarations-scopes.ts, 129, 10))
+ 
+         const c = 0;

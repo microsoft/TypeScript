@@ -1,0 +1,37 @@
+--- old.aliasUsageInGenericFunction.symbols
++++ new.aliasUsageInGenericFunction.symbols
+@@= skipped -10, +10 lines =@@
+ >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInGenericFunction_main.ts, 1, 66))
+ 
+     VisualizationModel: typeof Backbone.Model;
+->VisualizationModel : Symbol(IHasVisualizationModel.VisualizationModel, Decl(aliasUsageInGenericFunction_main.ts, 2, 34))
+->Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInGenericFunction_backbone.ts, 0, 0))
++>VisualizationModel : Symbol(VisualizationModel, Decl(aliasUsageInGenericFunction_main.ts, 2, 34))
++>Backbone.Model : Symbol(Model, Decl(aliasUsageInGenericFunction_backbone.ts, 0, 0))
+ >Backbone : Symbol(Backbone, Decl(aliasUsageInGenericFunction_main.ts, 0, 0))
+->Model : Symbol(Backbone.Model, Decl(aliasUsageInGenericFunction_backbone.ts, 0, 0))
++>Model : Symbol(Model, Decl(aliasUsageInGenericFunction_backbone.ts, 0, 0))
+ }
+ function foo<T extends { a: IHasVisualizationModel }>(x: T) {
+ >foo : Symbol(foo, Decl(aliasUsageInGenericFunction_main.ts, 4, 1))
+@@= skipped -33, +33 lines =@@
+ >Model : Symbol(Model, Decl(aliasUsageInGenericFunction_backbone.ts, 0, 0))
+ 
+     public someData: string;
+->someData : Symbol(Model.someData, Decl(aliasUsageInGenericFunction_backbone.ts, 0, 20))
++>someData : Symbol(someData, Decl(aliasUsageInGenericFunction_backbone.ts, 0, 20))
+ }
+ 
+ === aliasUsageInGenericFunction_moduleA.ts ===
+@@= skipped -9, +9 lines =@@
+ 
+ export class VisualizationModel extends Backbone.Model {
+ >VisualizationModel : Symbol(VisualizationModel, Decl(aliasUsageInGenericFunction_moduleA.ts, 0, 68))
+->Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInGenericFunction_backbone.ts, 0, 0))
++>Backbone.Model : Symbol(Model, Decl(aliasUsageInGenericFunction_backbone.ts, 0, 0))
+ >Backbone : Symbol(Backbone, Decl(aliasUsageInGenericFunction_moduleA.ts, 0, 0))
+->Model : Symbol(Backbone.Model, Decl(aliasUsageInGenericFunction_backbone.ts, 0, 0))
++>Model : Symbol(Model, Decl(aliasUsageInGenericFunction_backbone.ts, 0, 0))
+ 
+     // interesting stuff here
+ }

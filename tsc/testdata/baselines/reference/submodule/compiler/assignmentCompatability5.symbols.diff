@@ -1,0 +1,38 @@
+--- old.assignmentCompatability5.symbols
++++ new.assignmentCompatability5.symbols
+@@= skipped -7, +7 lines =@@
+ >interfaceWithPublicAndOptional : Symbol(interfaceWithPublicAndOptional, Decl(assignmentCompatability5.ts, 0, 18))
+ >T : Symbol(T, Decl(assignmentCompatability5.ts, 1, 52))
+ >U : Symbol(U, Decl(assignmentCompatability5.ts, 1, 54))
+->one : Symbol(interfaceWithPublicAndOptional.one, Decl(assignmentCompatability5.ts, 1, 58))
++>one : Symbol(one, Decl(assignmentCompatability5.ts, 1, 58))
+ >T : Symbol(T, Decl(assignmentCompatability5.ts, 1, 52))
+->two : Symbol(interfaceWithPublicAndOptional.two, Decl(assignmentCompatability5.ts, 1, 66))
++>two : Symbol(two, Decl(assignmentCompatability5.ts, 1, 66))
+ >U : Symbol(U, Decl(assignmentCompatability5.ts, 1, 54))
+ >obj4 : Symbol(obj4, Decl(assignmentCompatability5.ts, 1, 83))
+ >interfaceWithPublicAndOptional : Symbol(interfaceWithPublicAndOptional, Decl(assignmentCompatability5.ts, 0, 18))
+@@= skipped -18, +18 lines =@@
+     export                   interface interfaceOne<T> { one: T; };                var obj1: interfaceOne<number> = { one: 1 };;
+ >interfaceOne : Symbol(interfaceOne, Decl(assignmentCompatability5.ts, 4, 18))
+ >T : Symbol(T, Decl(assignmentCompatability5.ts, 5, 52))
+->one : Symbol(interfaceOne.one, Decl(assignmentCompatability5.ts, 5, 56))
++>one : Symbol(one, Decl(assignmentCompatability5.ts, 5, 56))
+ >T : Symbol(T, Decl(assignmentCompatability5.ts, 5, 52))
+ >obj1 : Symbol(obj1, Decl(assignmentCompatability5.ts, 5, 86))
+ >interfaceOne : Symbol(interfaceOne, Decl(assignmentCompatability5.ts, 4, 18))
+@@= skipped -11, +11 lines =@@
+ >obj1 : Symbol(obj1, Decl(assignmentCompatability5.ts, 5, 86))
+ }
+ __test2__.__val__obj1 = __test1__.__val__obj4
+->__test2__.__val__obj1 : Symbol(__test2__.__val__obj1, Decl(assignmentCompatability5.ts, 6, 14))
++>__test2__.__val__obj1 : Symbol(__val__obj1, Decl(assignmentCompatability5.ts, 6, 14))
+ >__test2__ : Symbol(__test2__, Decl(assignmentCompatability5.ts, 3, 1))
+->__val__obj1 : Symbol(__test2__.__val__obj1, Decl(assignmentCompatability5.ts, 6, 14))
+->__test1__.__val__obj4 : Symbol(__test1__.__val__obj4, Decl(assignmentCompatability5.ts, 2, 14))
++>__val__obj1 : Symbol(__val__obj1, Decl(assignmentCompatability5.ts, 6, 14))
++>__test1__.__val__obj4 : Symbol(__val__obj4, Decl(assignmentCompatability5.ts, 2, 14))
+ >__test1__ : Symbol(__test1__, Decl(assignmentCompatability5.ts, 0, 0))
+->__val__obj4 : Symbol(__test1__.__val__obj4, Decl(assignmentCompatability5.ts, 2, 14))
++>__val__obj4 : Symbol(__val__obj4, Decl(assignmentCompatability5.ts, 2, 14))
+ 

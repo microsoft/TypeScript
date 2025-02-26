@@ -1,0 +1,11 @@
+--- old.genericArrayWithoutTypeAnnotation.symbols
++++ new.genericArrayWithoutTypeAnnotation.symbols
+@@= skipped -8, +8 lines =@@
+ >Bar : Symbol(Bar, Decl(genericArrayWithoutTypeAnnotation.ts, 1, 1))
+ 
+     public getBar(foo: IFoo[]) {
+->getBar : Symbol(Bar.getBar, Decl(genericArrayWithoutTypeAnnotation.ts, 2, 11))
++>getBar : Symbol(getBar, Decl(genericArrayWithoutTypeAnnotation.ts, 2, 11))
+ >foo : Symbol(foo, Decl(genericArrayWithoutTypeAnnotation.ts, 3, 18))
+ >IFoo : Symbol(IFoo, Decl(genericArrayWithoutTypeAnnotation.ts, 0, 0))
+     }

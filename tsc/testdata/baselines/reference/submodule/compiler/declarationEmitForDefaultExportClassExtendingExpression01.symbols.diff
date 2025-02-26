@@ -1,0 +1,20 @@
+--- old.declarationEmitForDefaultExportClassExtendingExpression01.symbols
++++ new.declarationEmitForDefaultExportClassExtendingExpression01.symbols
+@@= skipped -4, +4 lines =@@
+ >Greeter : Symbol(Greeter, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 0, 0))
+ 
+     getGreeting(): string;
+->getGreeting : Symbol(Greeter.getGreeting, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 0, 19))
++>getGreeting : Symbol(getGreeting, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 0, 19))
+ }
+ 
+ interface GreeterConstructor {
+@@= skipped -14, +14 lines =@@
+ >A : Symbol(A, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 6, 1))
+ 
+     getGreeting() {
+->getGreeting : Symbol(A.getGreeting, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 8, 9))
++>getGreeting : Symbol(getGreeting, Decl(declarationEmitForDefaultExportClassExtendingExpression01.ts, 8, 9))
+ 
+         return 'hello';
+     }

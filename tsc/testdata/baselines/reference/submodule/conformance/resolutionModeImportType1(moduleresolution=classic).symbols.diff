@@ -1,0 +1,18 @@
+--- old.resolutionModeImportType1(moduleresolution=classic).symbols
++++ new.resolutionModeImportType1(moduleresolution=classic).symbols
+@@= skipped -10, +10 lines =@@
+ === /app.ts ===
+ type Default = typeof import("foo").x;
+ >Default : Symbol(Default, Decl(app.ts, 0, 0))
++>x : Symbol(x, Decl(index.d.cts, 0, 20))
+ 
+ type Import = typeof import("foo", { assert: { "resolution-mode": "import" } }).x;
+ >Import : Symbol(Import, Decl(app.ts, 0, 38))
++>x : Symbol(x, Decl(index.d.cts, 0, 20))
+ 
+ type Require = typeof import("foo", { assert: { "resolution-mode": "require" } }).x;
+ >Require : Symbol(Require, Decl(app.ts, 1, 82))
++>x : Symbol(x, Decl(index.d.cts, 0, 20))
+ 
+ // resolution-mode does not enforce file extension in `bundler`, just sets conditions
+ type ImportRelative = typeof import("./other", { assert: { "resolution-mode": "import" } }).x;

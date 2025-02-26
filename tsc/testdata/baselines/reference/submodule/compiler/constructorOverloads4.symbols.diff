@@ -1,0 +1,19 @@
+--- old.constructorOverloads4.symbols
++++ new.constructorOverloads4.symbols
+@@= skipped -21, +21 lines =@@
+ 
+ 
+ (new M.Function("return 5"))();
+->M.Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50), Decl(constructorOverloads4.ts, 0, 18))
++>M.Function : Symbol(Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50), Decl(constructorOverloads4.ts, 0, 18))
+ >M : Symbol(M, Decl(constructorOverloads4.ts, 0, 0))
+->Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50), Decl(constructorOverloads4.ts, 0, 18))
++>Function : Symbol(Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50), Decl(constructorOverloads4.ts, 0, 18))
+ 
+ M.Function("yo");
+->M.Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50), Decl(constructorOverloads4.ts, 0, 18))
++>M.Function : Symbol(Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50), Decl(constructorOverloads4.ts, 0, 18))
+ >M : Symbol(M, Decl(constructorOverloads4.ts, 0, 0))
+->Function : Symbol(M.Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50), Decl(constructorOverloads4.ts, 0, 18))
++>Function : Symbol(Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50), Decl(constructorOverloads4.ts, 0, 18))
+ 

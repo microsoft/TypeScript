@@ -1,0 +1,11 @@
+--- old.slightlyIndirectedDeepObjectLiteralElaborations.symbols
++++ new.slightlyIndirectedDeepObjectLiteralElaborations.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 0, 0))
+ 
+     a: {
+->a : Symbol(Foo.a, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 0, 15))
++>a : Symbol(a, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 0, 15))
+ 
+         b: {
+ >b : Symbol(b, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 1, 8))

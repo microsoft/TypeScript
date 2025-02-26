@@ -1,0 +1,14 @@
+--- old.staticsInConstructorBodies.symbols
++++ new.staticsInConstructorBodies.symbols
+@@= skipped -5, +5 lines =@@
+ 
+ 	constructor() {
+ 		static p1 = 0; // ERROR
+->p1 : Symbol(C.p1, Decl(staticsInConstructorBodies.ts, 1, 16))
++>p1 : Symbol(p1, Decl(staticsInConstructorBodies.ts, 1, 16))
+ 
+ 		static m1() {} // ERROR
+->m1 : Symbol(C.m1, Decl(staticsInConstructorBodies.ts, 2, 16))
++>m1 : Symbol(m1, Decl(staticsInConstructorBodies.ts, 2, 16))
+ 	}
+ }

@@ -1,0 +1,39 @@
+--- old.tsxSpreadAttributesResolution13.symbols
++++ new.tsxSpreadAttributesResolution13.symbols
+@@= skipped -7, +7 lines =@@
+ >ComponentProps : Symbol(ComponentProps, Decl(file.tsx, 0, 32))
+ 
+     property1: string;
+->property1 : Symbol(ComponentProps.property1, Decl(file.tsx, 2, 26))
++>property1 : Symbol(property1, Decl(file.tsx, 2, 26))
+ 
+     property2: number;
+->property2 : Symbol(ComponentProps.property2, Decl(file.tsx, 3, 22))
++>property2 : Symbol(property2, Decl(file.tsx, 3, 22))
+ }
+ 
+ export default function Component(props: ComponentProps) {
+->Component : Symbol(Component, Decl(file.tsx, 5, 1))
++>Component : Symbol(default, Decl(file.tsx, 5, 1))
+ >props : Symbol(props, Decl(file.tsx, 7, 34))
+ >ComponentProps : Symbol(ComponentProps, Decl(file.tsx, 0, 32))
+ 
+@@= skipped -36, +36 lines =@@
+ >AnotherComponentProps : Symbol(AnotherComponentProps, Decl(file.tsx, 17, 1))
+ 
+     property1: string;
+->property1 : Symbol(AnotherComponentProps.property1, Decl(file.tsx, 19, 33))
++>property1 : Symbol(property1, Decl(file.tsx, 19, 33))
+ }
+ 
+ function ChildComponent({ property1 }: AnotherComponentProps) {
+@@= skipped -10, +10 lines =@@
+ 
+     return (
+         <span>{property1}</span>
+->span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
+ >property1 : Symbol(property1, Decl(file.tsx, 23, 25))
+->span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
+ 
+     );
+ }

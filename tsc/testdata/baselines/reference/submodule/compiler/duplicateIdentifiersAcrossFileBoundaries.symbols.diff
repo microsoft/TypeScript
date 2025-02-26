@@ -1,0 +1,11 @@
+--- old.duplicateIdentifiersAcrossFileBoundaries.symbols
++++ new.duplicateIdentifiersAcrossFileBoundaries.symbols
+@@= skipped -19, +19 lines =@@
+ >Foo : Symbol(Foo, Decl(file1.ts, 4, 10), Decl(file2.ts, 4, 10))
+ 
+     static x: number;
+->x : Symbol(Foo.x, Decl(file1.ts, 6, 11))
++>x : Symbol(x, Decl(file1.ts, 6, 11))
+ }
+ 
+ module N {

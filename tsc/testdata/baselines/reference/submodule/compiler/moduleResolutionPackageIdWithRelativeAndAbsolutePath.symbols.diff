@@ -1,0 +1,27 @@
+--- old.moduleResolutionPackageIdWithRelativeAndAbsolutePath.symbols
++++ new.moduleResolutionPackageIdWithRelativeAndAbsolutePath.symbols
+@@= skipped -11, +11 lines =@@
+ >Option : Symbol(Option, Decl(Option.d.ts, 0, 0))
+ 
+     someProperty: string;
+->someProperty : Symbol(Option.someProperty, Decl(Option.d.ts, 0, 21))
++>someProperty : Symbol(someProperty, Decl(Option.d.ts, 0, 21))
+ }
+ === /shared/lib/app.d.ts ===
+ import { Option } from "troublesome-lib/lib/Option";
+@@= skipped -26, +26 lines =@@
+ >Compactable : Symbol(Compactable, Decl(Compactable.d.ts, 0, 34))
+ 
+     option: Option;
+->option : Symbol(Compactable.option, Decl(Compactable.d.ts, 1, 26))
++>option : Symbol(option, Decl(Compactable.d.ts, 1, 26))
+ >Option : Symbol(Option, Decl(Compactable.d.ts, 0, 8))
+ }
+ === /project/node_modules/troublesome-lib/lib/Option.d.ts ===
+@@= skipped -8, +8 lines =@@
+ >Option : Symbol(Option, Decl(Option.d.ts, 0, 0))
+ 
+     someProperty: string;
+->someProperty : Symbol(Option.someProperty, Decl(Option.d.ts, 0, 21))
++>someProperty : Symbol(someProperty, Decl(Option.d.ts, 0, 21))
+ }

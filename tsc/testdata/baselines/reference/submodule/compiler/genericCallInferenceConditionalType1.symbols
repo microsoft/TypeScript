@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/genericCallInferenceConditionalType1.ts] ////
+
+=== genericCallInferenceConditionalType1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59108
+
+declare const f: <T>(f: (x: T) => unknown) => (x: T) => unknown;
+>f : Symbol(f, Decl(genericCallInferenceConditionalType1.ts, 2, 13))
+>T : Symbol(T, Decl(genericCallInferenceConditionalType1.ts, 2, 18))
+>f : Symbol(f, Decl(genericCallInferenceConditionalType1.ts, 2, 21))
+>x : Symbol(x, Decl(genericCallInferenceConditionalType1.ts, 2, 25))
+>T : Symbol(T, Decl(genericCallInferenceConditionalType1.ts, 2, 18))
+>x : Symbol(x, Decl(genericCallInferenceConditionalType1.ts, 2, 47))
+>T : Symbol(T, Decl(genericCallInferenceConditionalType1.ts, 2, 18))
+
+declare const g: <T extends unknown>(x: { foo: T }) => unknown;
+>g : Symbol(g, Decl(genericCallInferenceConditionalType1.ts, 3, 13))
+>T : Symbol(T, Decl(genericCallInferenceConditionalType1.ts, 3, 18))
+>x : Symbol(x, Decl(genericCallInferenceConditionalType1.ts, 3, 37))
+>foo : Symbol(foo, Decl(genericCallInferenceConditionalType1.ts, 3, 41))
+>T : Symbol(T, Decl(genericCallInferenceConditionalType1.ts, 3, 18))
+
+const h = f(g);
+>h : Symbol(h, Decl(genericCallInferenceConditionalType1.ts, 5, 5))
+>f : Symbol(f, Decl(genericCallInferenceConditionalType1.ts, 2, 13))
+>g : Symbol(g, Decl(genericCallInferenceConditionalType1.ts, 3, 13))
+
+type FirstParameter<T> = T extends (x: infer P) => unknown ? P : unknown;
+>FirstParameter : Symbol(FirstParameter, Decl(genericCallInferenceConditionalType1.ts, 5, 15))
+>T : Symbol(T, Decl(genericCallInferenceConditionalType1.ts, 7, 20))
+>T : Symbol(T, Decl(genericCallInferenceConditionalType1.ts, 7, 20))
+>x : Symbol(x, Decl(genericCallInferenceConditionalType1.ts, 7, 36))
+>P : Symbol(P, Decl(genericCallInferenceConditionalType1.ts, 7, 44))
+>P : Symbol(P, Decl(genericCallInferenceConditionalType1.ts, 7, 44))
+
+type X = FirstParameter<typeof h>["foo"];
+>X : Symbol(X, Decl(genericCallInferenceConditionalType1.ts, 7, 73))
+>FirstParameter : Symbol(FirstParameter, Decl(genericCallInferenceConditionalType1.ts, 5, 15))
+>h : Symbol(h, Decl(genericCallInferenceConditionalType1.ts, 5, 5))
+

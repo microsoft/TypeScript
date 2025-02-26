@@ -1,0 +1,26 @@
+--- old.ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.symbols
++++ new.ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.symbols
+@@= skipped -7, +7 lines =@@
+ >Point : Symbol(Point, Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts, 0, 10))
+ 
+         x: number;
+->x : Symbol(Point.x, Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts, 2, 24))
++>x : Symbol(x, Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts, 2, 24))
+ 
+         y: number;
+->y : Symbol(Point.y, Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts, 3, 18))
++>y : Symbol(y, Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts, 3, 18))
+     }
+ 
+     export class Line {
+ >Line : Symbol(Line, Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts, 5, 5))
+ 
+         constructor(public start: Point, public end: Point) { }
+->start : Symbol(Line.start, Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts, 8, 20))
++>start : Symbol(start, Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts, 8, 20))
+ >Point : Symbol(Point, Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts, 0, 10))
+->end : Symbol(Line.end, Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts, 8, 40))
++>end : Symbol(end, Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts, 8, 40))
+ >Point : Symbol(Point, Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts, 0, 10))
+     }
+ 

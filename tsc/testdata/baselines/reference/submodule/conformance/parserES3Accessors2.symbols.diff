@@ -1,0 +1,10 @@
+--- old.parserES3Accessors2.symbols
++++ new.parserES3Accessors2.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(parserES3Accessors2.ts, 0, 0))
+ 
+     set Foo(a) { }
+->Foo : Symbol(C.Foo, Decl(parserES3Accessors2.ts, 0, 9))
++>Foo : Symbol(Foo, Decl(parserES3Accessors2.ts, 0, 9))
+ >a : Symbol(a, Decl(parserES3Accessors2.ts, 1, 12))
+ }

@@ -1,0 +1,64 @@
+--- old.bitwiseNotOperatorWithEnumType.symbols
++++ new.bitwiseNotOperatorWithEnumType.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ enum ENUM1 { A, B, "" };
+ >ENUM1 : Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
+->A : Symbol(ENUM1.A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
+->B : Symbol(ENUM1.B, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 15))
+->"" : Symbol(ENUM1[""], Decl(bitwiseNotOperatorWithEnumType.ts, 2, 18))
++>A : Symbol(A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
++>B : Symbol(B, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 15))
++>"" : Symbol("", Decl(bitwiseNotOperatorWithEnumType.ts, 2, 18))
+ 
+ // enum type var
+ var ResultIsNumber1 = ~ENUM1;
+@@= skipped -13, +13 lines =@@
+ var ResultIsNumber2 = ~ENUM1["A"];
+ >ResultIsNumber2 : Symbol(ResultIsNumber2, Decl(bitwiseNotOperatorWithEnumType.ts, 8, 3))
+ >ENUM1 : Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
+->"A" : Symbol(ENUM1.A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
++>"A" : Symbol(A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
+ 
+ var ResultIsNumber3 = ~(ENUM1.A + ENUM1["B"]);
+ >ResultIsNumber3 : Symbol(ResultIsNumber3, Decl(bitwiseNotOperatorWithEnumType.ts, 9, 3))
+->ENUM1.A : Symbol(ENUM1.A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
++>ENUM1.A : Symbol(A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
+ >ENUM1 : Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
+->A : Symbol(ENUM1.A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
++>A : Symbol(A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
+ >ENUM1 : Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
+->"B" : Symbol(ENUM1.B, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 15))
++>"B" : Symbol(B, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 15))
+ 
+ // multiple ~ operators
+ var ResultIsNumber4 = ~~~(ENUM1["A"] + ENUM1.B);
+ >ResultIsNumber4 : Symbol(ResultIsNumber4, Decl(bitwiseNotOperatorWithEnumType.ts, 12, 3))
+ >ENUM1 : Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
+->"A" : Symbol(ENUM1.A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
+->ENUM1.B : Symbol(ENUM1.B, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 15))
++>"A" : Symbol(A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
++>ENUM1.B : Symbol(B, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 15))
+ >ENUM1 : Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
+->B : Symbol(ENUM1.B, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 15))
++>B : Symbol(B, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 15))
+ 
+ // miss assignment operators
+ ~ENUM1;
+@@= skipped -25, +25 lines =@@
+ 
+ ~ENUM1["A"];
+ >ENUM1 : Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
+->"A" : Symbol(ENUM1.A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
++>"A" : Symbol(A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
+ 
+ ~ENUM1.A, ~ENUM1["B"];
+->ENUM1.A : Symbol(ENUM1.A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
++>ENUM1.A : Symbol(A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
+ >ENUM1 : Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
+->A : Symbol(ENUM1.A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
++>A : Symbol(A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
+ >ENUM1 : Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
+->"B" : Symbol(ENUM1.B, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 15))
++>"B" : Symbol(B, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 15))
+ 

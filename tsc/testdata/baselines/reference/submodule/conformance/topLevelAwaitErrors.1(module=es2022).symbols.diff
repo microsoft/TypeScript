@@ -1,0 +1,52 @@
+--- old.topLevelAwaitErrors.1(module=es2022).symbols
++++ new.topLevelAwaitErrors.1(module=es2022).symbols
+@@= skipped -33, +33 lines =@@
+ 
+     @await
+     ["foo"]() {}
+->["foo"] : Symbol(C4["foo"], Decl(topLevelAwaitErrors.1.ts, 24, 10))
+->"foo" : Symbol(C4["foo"], Decl(topLevelAwaitErrors.1.ts, 24, 10))
++>["foo"] : Symbol(foo, Decl(topLevelAwaitErrors.1.ts, 24, 10))
++>"foo" : Symbol(foo, Decl(topLevelAwaitErrors.1.ts, 24, 10))
+ }
+ class C5 {
+ >C5 : Symbol(C5, Decl(topLevelAwaitErrors.1.ts, 27, 1))
+ 
+     @await(1)
+     ["foo"]() {}
+->["foo"] : Symbol(C5["foo"], Decl(topLevelAwaitErrors.1.ts, 28, 10))
+->"foo" : Symbol(C5["foo"], Decl(topLevelAwaitErrors.1.ts, 28, 10))
++>["foo"] : Symbol(foo, Decl(topLevelAwaitErrors.1.ts, 28, 10))
++>"foo" : Symbol(foo, Decl(topLevelAwaitErrors.1.ts, 28, 10))
+ }
+ class C6 {
+ >C6 : Symbol(C6, Decl(topLevelAwaitErrors.1.ts, 31, 1))
+ 
+     @(await)
+     ["foo"]() {}
+->["foo"] : Symbol(C6["foo"], Decl(topLevelAwaitErrors.1.ts, 32, 10))
+->"foo" : Symbol(C6["foo"], Decl(topLevelAwaitErrors.1.ts, 32, 10))
++>["foo"] : Symbol(foo, Decl(topLevelAwaitErrors.1.ts, 32, 10))
++>"foo" : Symbol(foo, Decl(topLevelAwaitErrors.1.ts, 32, 10))
+ }
+ 
+ // await in parameter decorators should fail
+@@= skipped -25, +25 lines =@@
+ >C7 : Symbol(C7, Decl(topLevelAwaitErrors.1.ts, 35, 1))
+ 
+     method1(@await [x]) {}
+->method1 : Symbol(C7.method1, Decl(topLevelAwaitErrors.1.ts, 38, 10))
++>method1 : Symbol(method1, Decl(topLevelAwaitErrors.1.ts, 38, 10))
+ >x : Symbol(x, Decl(topLevelAwaitErrors.1.ts, 39, 20))
+ 
+     method2(@await(1) [x]) {}
+->method2 : Symbol(C7.method2, Decl(topLevelAwaitErrors.1.ts, 39, 26))
++>method2 : Symbol(method2, Decl(topLevelAwaitErrors.1.ts, 39, 26))
+ >x : Symbol(x, Decl(topLevelAwaitErrors.1.ts, 40, 23))
+ 
+     method3(@(await) [x]) {}
+->method3 : Symbol(C7.method3, Decl(topLevelAwaitErrors.1.ts, 40, 29))
++>method3 : Symbol(method3, Decl(topLevelAwaitErrors.1.ts, 40, 29))
+ >x : Symbol(x, Decl(topLevelAwaitErrors.1.ts, 41, 22))
+ }
+ 

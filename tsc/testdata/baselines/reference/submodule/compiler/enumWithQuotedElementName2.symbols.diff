@@ -1,0 +1,9 @@
+--- old.enumWithQuotedElementName2.symbols
++++ new.enumWithQuotedElementName2.symbols
+@@= skipped -4, +4 lines =@@
+ >E : Symbol(E, Decl(enumWithQuotedElementName2.ts, 0, 0))
+ 
+    "fo'o",
+->"fo'o" : Symbol(E["fo'o"], Decl(enumWithQuotedElementName2.ts, 0, 8))
++>"fo'o" : Symbol("fo'o", Decl(enumWithQuotedElementName2.ts, 0, 8))
+ }

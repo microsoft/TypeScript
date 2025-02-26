@@ -1,0 +1,27 @@
+--- old.superNoModifiersCrash.symbols
++++ new.superNoModifiersCrash.symbols
+@@= skipped -4, +4 lines =@@
+ >Parent : Symbol(Parent, Decl(File.js, 0, 0))
+ 
+     initialize() {
+->initialize : Symbol(Parent.initialize, Decl(File.js, 0, 14))
++>initialize : Symbol(initialize, Decl(File.js, 0, 14))
+ 
+         super.initialize(...arguments)
+ >arguments : Symbol(arguments)
+ 
+         return this.asdf = ''
+->this.asdf : Symbol(Parent.asdf, Decl(File.js, 3, 14))
+ >this : Symbol(Parent, Decl(File.js, 0, 0))
+->asdf : Symbol(Parent.asdf, Decl(File.js, 3, 14))
+     }
+   }
+ 
+@@= skipped -17, +15 lines =@@
+ >Parent : Symbol(Parent, Decl(File.js, 0, 0))
+ 
+     initialize() {
+->initialize : Symbol(Child.initialize, Decl(File.js, 7, 28))
++>initialize : Symbol(initialize, Decl(File.js, 7, 28))
+     }
+ }

@@ -1,0 +1,14 @@
+--- old.typeGuardOfFormTypeOfFunction.symbols
++++ new.typeGuardOfFormTypeOfFunction.symbols
+@@= skipped -151, +151 lines =@@
+ >item : Symbol(item, Decl(typeGuardOfFormTypeOfFunction.ts, 67, 13))
+ 
+             item.call(obj);
+->item.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
++>item.call : Symbol(call, Decl(lib.es5.d.ts, --, --))
+ >item : Symbol(item, Decl(typeGuardOfFormTypeOfFunction.ts, 67, 13))
+->call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
++>call : Symbol(call, Decl(lib.es5.d.ts, --, --))
+ >obj : Symbol(obj, Decl(typeGuardOfFormTypeOfFunction.ts, 65, 36))
+     }
+ }

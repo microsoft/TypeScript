@@ -1,0 +1,14 @@
+--- old.declarationEmitFBoundedTypeParams.symbols
++++ new.declarationEmitFBoundedTypeParams.symbols
+@@= skipped -14, +14 lines =@@
+ >a : Symbol(a, Decl(declarationEmitFBoundedTypeParams.ts, 2, 16))
+ 
+     result.push(value);
+->result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>result.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >result : Symbol(result, Decl(declarationEmitFBoundedTypeParams.ts, 2, 32))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >value : Symbol(value, Decl(declarationEmitFBoundedTypeParams.ts, 2, 44))
+ 
+     return result;

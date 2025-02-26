@@ -1,0 +1,18 @@
+--- old.augmentedTypesModules2.symbols
++++ new.augmentedTypesModules2.symbols
+@@= skipped -53, +53 lines =@@
+ module m2f { export interface I { foo(): void } } 
+ >m2f : Symbol(m2f, Decl(augmentedTypesModules2.ts, 20, 14), Decl(augmentedTypesModules2.ts, 22, 19))
+ >I : Symbol(I, Decl(augmentedTypesModules2.ts, 23, 12))
+->foo : Symbol(I.foo, Decl(augmentedTypesModules2.ts, 23, 33))
++>foo : Symbol(foo, Decl(augmentedTypesModules2.ts, 23, 33))
+ 
+ function m2g() { };
+ >m2g : Symbol(m2g, Decl(augmentedTypesModules2.ts, 23, 49), Decl(augmentedTypesModules2.ts, 25, 19))
+@@= skipped -8, +8 lines =@@
+ module m2g { export class C { foo() { } } } 
+ >m2g : Symbol(m2g, Decl(augmentedTypesModules2.ts, 23, 49), Decl(augmentedTypesModules2.ts, 25, 19))
+ >C : Symbol(C, Decl(augmentedTypesModules2.ts, 26, 12))
+->foo : Symbol(C.foo, Decl(augmentedTypesModules2.ts, 26, 29))
++>foo : Symbol(foo, Decl(augmentedTypesModules2.ts, 26, 29))
+ 

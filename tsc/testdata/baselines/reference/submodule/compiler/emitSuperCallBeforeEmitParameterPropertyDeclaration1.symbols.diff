@@ -1,0 +1,20 @@
+--- old.emitSuperCallBeforeEmitParameterPropertyDeclaration1.symbols
++++ new.emitSuperCallBeforeEmitParameterPropertyDeclaration1.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(emitSuperCallBeforeEmitParameterPropertyDeclaration1.ts, 0, 0))
+ 
+     blub = 6;
+->blub : Symbol(A.blub, Decl(emitSuperCallBeforeEmitParameterPropertyDeclaration1.ts, 0, 9))
++>blub : Symbol(blub, Decl(emitSuperCallBeforeEmitParameterPropertyDeclaration1.ts, 0, 9))
+ }
+ 
+ 
+@@= skipped -9, +9 lines =@@
+ >A : Symbol(A, Decl(emitSuperCallBeforeEmitParameterPropertyDeclaration1.ts, 0, 0))
+ 
+     constructor(public x: number) {
+->x : Symbol(B.x, Decl(emitSuperCallBeforeEmitParameterPropertyDeclaration1.ts, 6, 16))
++>x : Symbol(x, Decl(emitSuperCallBeforeEmitParameterPropertyDeclaration1.ts, 6, 16))
+ 
+         "use strict";
+         'someStringForEgngInject';

@@ -1,0 +1,23 @@
+--- old.heterogeneousArrayLiterals.symbols
++++ new.heterogeneousArrayLiterals.symbols
+@@= skipped -53, +53 lines =@@
+ 
+ class Base { foo: string; }
+ >Base : Symbol(Base, Decl(heterogeneousArrayLiterals.ts, 18, 32))
+->foo : Symbol(Base.foo, Decl(heterogeneousArrayLiterals.ts, 20, 12))
++>foo : Symbol(foo, Decl(heterogeneousArrayLiterals.ts, 20, 12))
+ 
+ class Derived extends Base { bar: string; }
+ >Derived : Symbol(Derived, Decl(heterogeneousArrayLiterals.ts, 20, 27), Decl(heterogeneousArrayLiterals.ts, 25, 23))
+ >Base : Symbol(Base, Decl(heterogeneousArrayLiterals.ts, 18, 32))
+->bar : Symbol(Derived.bar, Decl(heterogeneousArrayLiterals.ts, 21, 28))
++>bar : Symbol(bar, Decl(heterogeneousArrayLiterals.ts, 21, 28))
+ 
+ class Derived2 extends Base { baz: string; }
+ >Derived2 : Symbol(Derived2, Decl(heterogeneousArrayLiterals.ts, 21, 43))
+ >Base : Symbol(Base, Decl(heterogeneousArrayLiterals.ts, 18, 32))
+->baz : Symbol(Derived2.baz, Decl(heterogeneousArrayLiterals.ts, 22, 29))
++>baz : Symbol(baz, Decl(heterogeneousArrayLiterals.ts, 22, 29))
+ 
+ var base: Base;
+ >base : Symbol(base, Decl(heterogeneousArrayLiterals.ts, 23, 3))

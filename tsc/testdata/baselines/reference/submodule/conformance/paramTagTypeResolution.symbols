@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/jsdoc/paramTagTypeResolution.ts] ////
+
+=== main.js ===
+var f = require('./first');
+>f : Symbol(f, Decl(main.js, 0, 3))
+
+f(1, n => { })
+>f : Symbol(f, Decl(main.js, 0, 3))
+>n : Symbol(n, Decl(main.js, 1, 4))
+

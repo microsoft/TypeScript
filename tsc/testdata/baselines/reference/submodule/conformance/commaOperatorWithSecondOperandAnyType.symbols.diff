@@ -1,0 +1,24 @@
+--- old.commaOperatorWithSecondOperandAnyType.symbols
++++ new.commaOperatorWithSecondOperandAnyType.symbols
+@@= skipped -76, +76 lines =@@
+ 
+ "string", [null, 1];
+ "string".charAt(0), [null, 1];
+->"string".charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+->charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
++>"string".charAt : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
++>charAt : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
+ 
+ true, x("any");
+ >x : Symbol(x, Decl(commaOperatorWithSecondOperandAnyType.ts, 21, 3))
+@@= skipped -24, +24 lines =@@
+ 
+ var resultIsAny9 = ("string".charAt(0), undefined);
+ >resultIsAny9 : Symbol(resultIsAny9, Decl(commaOperatorWithSecondOperandAnyType.ts, 33, 3))
+->"string".charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+->charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
++>"string".charAt : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
++>charAt : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
+ >undefined : Symbol(undefined)
+ 
+ var resultIsAny10 = (true, x("any"));

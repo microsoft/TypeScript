@@ -1,0 +1,35 @@
+--- old.nonPrimitiveNarrow.symbols
++++ new.nonPrimitiveNarrow.symbols
+@@= skipped -4, +4 lines =@@
+ >Narrow : Symbol(Narrow, Decl(nonPrimitiveNarrow.ts, 0, 0))
+ 
+     narrowed: boolean
+->narrowed : Symbol(Narrow.narrowed, Decl(nonPrimitiveNarrow.ts, 0, 14))
++>narrowed : Symbol(narrowed, Decl(nonPrimitiveNarrow.ts, 0, 14))
+ }
+ 
+ var a: object
+@@= skipped -11, +11 lines =@@
+ >Narrow : Symbol(Narrow, Decl(nonPrimitiveNarrow.ts, 0, 0))
+ 
+     a.narrowed; // ok
+->a.narrowed : Symbol(Narrow.narrowed, Decl(nonPrimitiveNarrow.ts, 0, 14))
++>a.narrowed : Symbol(narrowed, Decl(nonPrimitiveNarrow.ts, 0, 14))
+ >a : Symbol(a, Decl(nonPrimitiveNarrow.ts, 4, 3))
+->narrowed : Symbol(Narrow.narrowed, Decl(nonPrimitiveNarrow.ts, 0, 14))
++>narrowed : Symbol(narrowed, Decl(nonPrimitiveNarrow.ts, 0, 14))
+ 
+     a = 123; // error
+ >a : Symbol(a, Decl(nonPrimitiveNarrow.ts, 4, 3))
+@@= skipped -22, +22 lines =@@
+ >b : Symbol(b, Decl(nonPrimitiveNarrow.ts, 15, 3))
+ 
+    b.toString(); // ok, object | null
+->b.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>b.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >b : Symbol(b, Decl(nonPrimitiveNarrow.ts, 15, 3))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+ } else {
+    b.toString(); // error, never

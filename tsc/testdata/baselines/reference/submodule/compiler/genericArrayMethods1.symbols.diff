@@ -1,0 +1,11 @@
+--- old.genericArrayMethods1.symbols
++++ new.genericArrayMethods1.symbols
+@@= skipped -2, +2 lines =@@
+ === genericArrayMethods1.ts ===
+ var x:string[] =  [0,1].slice(0); // this should be an error
+ >x : Symbol(x, Decl(genericArrayMethods1.ts, 0, 3))
+->[0,1].slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+->slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
++>[0,1].slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ 

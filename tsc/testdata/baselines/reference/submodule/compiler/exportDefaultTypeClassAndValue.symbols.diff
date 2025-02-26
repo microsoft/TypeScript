@@ -1,0 +1,11 @@
+--- old.exportDefaultTypeClassAndValue.symbols
++++ new.exportDefaultTypeClassAndValue.symbols
+@@= skipped -7, +7 lines =@@
+ >foo : Symbol(foo, Decl(exportDefaultTypeClassAndValue.ts, 0, 5))
+ 
+ export default class Foo {}
+->Foo : Symbol(foo, Decl(exportDefaultTypeClassAndValue.ts, 0, 13), Decl(exportDefaultTypeClassAndValue.ts, 1, 18))
++>Foo : Symbol(default, Decl(exportDefaultTypeClassAndValue.ts, 0, 13), Decl(exportDefaultTypeClassAndValue.ts, 1, 18))
+ 
+ type Bar = {}
+ >Bar : Symbol(Bar, Decl(exportDefaultTypeClassAndValue.ts, 2, 27))

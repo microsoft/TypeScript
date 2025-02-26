@@ -1,0 +1,82 @@
+--- old.awaitedTypeStrictNull.symbols
++++ new.awaitedTypeStrictNull.symbols
+@@= skipped -94, +94 lines =@@
+ 
+ interface BadPromise { then(cb: (value: BadPromise) => void): void; }
+ >BadPromise : Symbol(BadPromise, Decl(awaitedTypeStrictNull.ts, 18, 50))
+->then : Symbol(BadPromise.then, Decl(awaitedTypeStrictNull.ts, 20, 22))
++>then : Symbol(then, Decl(awaitedTypeStrictNull.ts, 20, 22))
+ >cb : Symbol(cb, Decl(awaitedTypeStrictNull.ts, 20, 28))
+ >value : Symbol(value, Decl(awaitedTypeStrictNull.ts, 20, 33))
+ >BadPromise : Symbol(BadPromise, Decl(awaitedTypeStrictNull.ts, 18, 50))
+@@= skipped -12, +12 lines =@@
+ 
+ interface BadPromise1 { then(cb: (value: BadPromise2) => void): void; }
+ >BadPromise1 : Symbol(BadPromise1, Decl(awaitedTypeStrictNull.ts, 21, 31))
+->then : Symbol(BadPromise1.then, Decl(awaitedTypeStrictNull.ts, 23, 23))
++>then : Symbol(then, Decl(awaitedTypeStrictNull.ts, 23, 23))
+ >cb : Symbol(cb, Decl(awaitedTypeStrictNull.ts, 23, 29))
+ >value : Symbol(value, Decl(awaitedTypeStrictNull.ts, 23, 34))
+ >BadPromise2 : Symbol(BadPromise2, Decl(awaitedTypeStrictNull.ts, 23, 71))
+ 
+ interface BadPromise2 { then(cb: (value: BadPromise1) => void): void; }
+ >BadPromise2 : Symbol(BadPromise2, Decl(awaitedTypeStrictNull.ts, 23, 71))
+->then : Symbol(BadPromise2.then, Decl(awaitedTypeStrictNull.ts, 24, 23))
++>then : Symbol(then, Decl(awaitedTypeStrictNull.ts, 24, 23))
+ >cb : Symbol(cb, Decl(awaitedTypeStrictNull.ts, 24, 29))
+ >value : Symbol(value, Decl(awaitedTypeStrictNull.ts, 24, 34))
+ >BadPromise1 : Symbol(BadPromise1, Decl(awaitedTypeStrictNull.ts, 21, 31))
+@@= skipped -61, +61 lines =@@
+ >bbb : Symbol(bbb, Decl(awaitedTypeStrictNull.ts, 36, 7))
+ 
+     ] = await Promise.all([
+->Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>Promise.all : Symbol(all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+->all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>all : Symbol(all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ 
+         MaybePromise(1),
+ >MaybePromise : Symbol(MaybePromise, Decl(awaitedTypeStrictNull.ts, 31, 54), Decl(awaitedTypeStrictNull.ts, 28, 69))
+@@= skipped -23, +23 lines =@@
+ 
+ 	// Should result in `Promise<T>` instead of `Promise<Awaited<T>>`.
+ 	async post<T = D>() { return this.request<T>(); }
+->post : Symbol(Api.post, Decl(awaitedTypeStrictNull.ts, 48, 19))
++>post : Symbol(post, Decl(awaitedTypeStrictNull.ts, 48, 19))
+ >T : Symbol(T, Decl(awaitedTypeStrictNull.ts, 50, 12))
+ >D : Symbol(D, Decl(awaitedTypeStrictNull.ts, 48, 10))
+->this.request : Symbol(Api.request, Decl(awaitedTypeStrictNull.ts, 50, 50))
++>this.request : Symbol(request, Decl(awaitedTypeStrictNull.ts, 50, 50))
+ >this : Symbol(Api, Decl(awaitedTypeStrictNull.ts, 45, 1))
+->request : Symbol(Api.request, Decl(awaitedTypeStrictNull.ts, 50, 50))
++>request : Symbol(request, Decl(awaitedTypeStrictNull.ts, 50, 50))
+ >T : Symbol(T, Decl(awaitedTypeStrictNull.ts, 50, 12))
+ 
+ 	async request<D>(): Promise<D> { throw new Error(); }
+->request : Symbol(Api.request, Decl(awaitedTypeStrictNull.ts, 50, 50))
++>request : Symbol(request, Decl(awaitedTypeStrictNull.ts, 50, 50))
+ >D : Symbol(D, Decl(awaitedTypeStrictNull.ts, 51, 15))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+ >D : Symbol(D, Decl(awaitedTypeStrictNull.ts, 51, 15))
+@@= skipped -22, +22 lines =@@
+ 
+ interface Obj { x: number }
+ >Obj : Symbol(Obj, Decl(awaitedTypeStrictNull.ts, 54, 23))
+->x : Symbol(Obj.x, Decl(awaitedTypeStrictNull.ts, 55, 15))
++>x : Symbol(x, Decl(awaitedTypeStrictNull.ts, 55, 15))
+ 
+ async function fn<T>(): Promise<T extends object ? { [K in keyof T]: Obj } : Obj> {
+ >fn : Symbol(fn, Decl(awaitedTypeStrictNull.ts, 55, 27))
+@@= skipped -15, +15 lines =@@
+ 	// Per #45924, this was failing due to incorrect inference both above and here.
+ 	// Should not error.
+ 	return api.post();
+->api.post : Symbol(Api.post, Decl(awaitedTypeStrictNull.ts, 48, 19))
++>api.post : Symbol(post, Decl(awaitedTypeStrictNull.ts, 48, 19))
+ >api : Symbol(api, Decl(awaitedTypeStrictNull.ts, 54, 13))
+->post : Symbol(Api.post, Decl(awaitedTypeStrictNull.ts, 48, 19))
++>post : Symbol(post, Decl(awaitedTypeStrictNull.ts, 48, 19))
+ }
+ 
+ // helps with tests where '.types' just prints out the type alias name

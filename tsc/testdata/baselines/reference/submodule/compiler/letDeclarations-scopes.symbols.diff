@@ -1,0 +1,29 @@
+--- old.letDeclarations-scopes.symbols
++++ new.letDeclarations-scopes.symbols
+@@= skipped -248, +248 lines =@@
+     }
+ 
+     method() {
+->method : Symbol(C.method, Decl(letDeclarations-scopes.ts, 126, 5))
++>method : Symbol(method, Decl(letDeclarations-scopes.ts, 126, 5))
+ 
+         let l = 0;
+ >l : Symbol(l, Decl(letDeclarations-scopes.ts, 129, 11))
+@@= skipped -11, +11 lines =@@
+     }
+ 
+     get v() {
+->v : Symbol(C.v, Decl(letDeclarations-scopes.ts, 131, 5), Decl(letDeclarations-scopes.ts, 137, 5))
++>v : Symbol(v, Decl(letDeclarations-scopes.ts, 131, 5), Decl(letDeclarations-scopes.ts, 137, 5))
+ 
+         let l = 0;
+ >l : Symbol(l, Decl(letDeclarations-scopes.ts, 134, 11))
+@@= skipped -14, +14 lines =@@
+     }
+ 
+     set v(value) {
+->v : Symbol(C.v, Decl(letDeclarations-scopes.ts, 131, 5), Decl(letDeclarations-scopes.ts, 137, 5))
++>v : Symbol(v, Decl(letDeclarations-scopes.ts, 131, 5), Decl(letDeclarations-scopes.ts, 137, 5))
+ >value : Symbol(value, Decl(letDeclarations-scopes.ts, 139, 10))
+ 
+         let l = 0;

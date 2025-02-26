@@ -1,0 +1,103 @@
+--- old.typeGuardFunctionOfFormThisErrors.symbols
++++ new.typeGuardFunctionOfFormThisErrors.symbols
+@@= skipped -4, +4 lines =@@
+ >RoyalGuard : Symbol(RoyalGuard, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 0))
+ 
+     isLeader(): this is LeadGuard {
+->isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
++>isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
+ >LeadGuard : Symbol(LeadGuard, Decl(typeGuardFunctionOfFormThisErrors.ts, 7, 1))
+ 
+         return this instanceof LeadGuard;
+@@= skipped -8, +8 lines =@@
+ >LeadGuard : Symbol(LeadGuard, Decl(typeGuardFunctionOfFormThisErrors.ts, 7, 1))
+     }
+     isFollower(): this is FollowerGuard {
+->isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
+ >FollowerGuard : Symbol(FollowerGuard, Decl(typeGuardFunctionOfFormThisErrors.ts, 11, 1))
+ 
+         return this instanceof FollowerGuard;
+@@= skipped -14, +14 lines =@@
+ >RoyalGuard : Symbol(RoyalGuard, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 0))
+ 
+     lead(): void {};
+->lead : Symbol(LeadGuard.lead, Decl(typeGuardFunctionOfFormThisErrors.ts, 9, 36))
++>lead : Symbol(lead, Decl(typeGuardFunctionOfFormThisErrors.ts, 9, 36))
+ }
+ 
+ class FollowerGuard extends RoyalGuard {
+@@= skipped -8, +8 lines =@@
+ >RoyalGuard : Symbol(RoyalGuard, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 0))
+ 
+     follow(): void {};
+->follow : Symbol(FollowerGuard.follow, Decl(typeGuardFunctionOfFormThisErrors.ts, 13, 40))
++>follow : Symbol(follow, Decl(typeGuardFunctionOfFormThisErrors.ts, 13, 40))
+ }
+ 
+ interface GuardInterface extends RoyalGuard {}
+@@= skipped -19, +19 lines =@@
+ 
+ // Mismatched guards shouldn't be assignable
+ b.isFollower = b.isLeader;
+->b.isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
++>b.isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
+ >b : Symbol(b, Decl(typeGuardFunctionOfFormThisErrors.ts, 19, 3))
+->isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
+->b.isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
++>b.isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
+ >b : Symbol(b, Decl(typeGuardFunctionOfFormThisErrors.ts, 19, 3))
+->isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
++>isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
+ 
+ b.isLeader = b.isFollower;
+->b.isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
++>b.isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
+ >b : Symbol(b, Decl(typeGuardFunctionOfFormThisErrors.ts, 19, 3))
+->isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
+->b.isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
++>isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
++>b.isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
+ >b : Symbol(b, Decl(typeGuardFunctionOfFormThisErrors.ts, 19, 3))
+->isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
+ 
+ a.isFollower = a.isLeader;
+->a.isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
++>a.isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
+ >a : Symbol(a, Decl(typeGuardFunctionOfFormThisErrors.ts, 18, 3))
+->isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
+->a.isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
++>a.isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
+ >a : Symbol(a, Decl(typeGuardFunctionOfFormThisErrors.ts, 18, 3))
+->isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
++>isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
+ 
+ a.isLeader = a.isFollower;
+->a.isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
++>a.isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
+ >a : Symbol(a, Decl(typeGuardFunctionOfFormThisErrors.ts, 18, 3))
+->isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
+->a.isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
++>isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 18))
++>a.isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
+ >a : Symbol(a, Decl(typeGuardFunctionOfFormThisErrors.ts, 18, 3))
+->isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
+ 
+ function invalidGuard(c: any): this is number {
+ >invalidGuard : Symbol(invalidGuard, Decl(typeGuardFunctionOfFormThisErrors.ts, 26, 26))
+@@= skipped -79, +79 lines =@@
+ 
+ let detached = a.isFollower;
+ >detached : Symbol(detached, Decl(typeGuardFunctionOfFormThisErrors.ts, 51, 3))
+->a.isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
++>a.isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
+ >a : Symbol(a, Decl(typeGuardFunctionOfFormThisErrors.ts, 18, 3))
+->isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
++>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThisErrors.ts, 3, 5))
+ 
+ if (detached()) {
+ >detached : Symbol(detached, Decl(typeGuardFunctionOfFormThisErrors.ts, 51, 3))

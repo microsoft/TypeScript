@@ -1,0 +1,32 @@
+--- old.validNullAssignments.symbols
++++ new.validNullAssignments.symbols
+@@= skipped -21, +21 lines =@@
+ 
+ enum E { A }
+ >E : Symbol(E, Decl(validNullAssignments.ts, 6, 9))
+->A : Symbol(E.A, Decl(validNullAssignments.ts, 8, 8))
++>A : Symbol(A, Decl(validNullAssignments.ts, 8, 8))
+ 
+ E.A = null; // error
+->E.A : Symbol(E.A, Decl(validNullAssignments.ts, 8, 8))
++>E.A : Symbol(A, Decl(validNullAssignments.ts, 8, 8))
+ >E : Symbol(E, Decl(validNullAssignments.ts, 6, 9))
+->A : Symbol(E.A, Decl(validNullAssignments.ts, 8, 8))
++>A : Symbol(A, Decl(validNullAssignments.ts, 8, 8))
+ 
+ class C { foo: string }
+ >C : Symbol(C, Decl(validNullAssignments.ts, 9, 11))
+->foo : Symbol(C.foo, Decl(validNullAssignments.ts, 11, 9))
++>foo : Symbol(foo, Decl(validNullAssignments.ts, 11, 9))
+ 
+ var f: C;
+ >f : Symbol(f, Decl(validNullAssignments.ts, 12, 3))
+@@= skipped -23, +23 lines =@@
+ 
+ interface I { foo: string }
+ >I : Symbol(I, Decl(validNullAssignments.ts, 14, 9))
+->foo : Symbol(I.foo, Decl(validNullAssignments.ts, 16, 13))
++>foo : Symbol(foo, Decl(validNullAssignments.ts, 16, 13))
+ 
+ var g: I;
+ >g : Symbol(g, Decl(validNullAssignments.ts, 17, 3))

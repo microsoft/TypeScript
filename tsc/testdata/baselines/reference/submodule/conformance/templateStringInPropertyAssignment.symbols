@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/es6/templates/templateStringInPropertyAssignment.ts] ////
+
+=== templateStringInPropertyAssignment.ts ===
+var x = {
+>x : Symbol(x, Decl(templateStringInPropertyAssignment.ts, 0, 3))
+
+    a: `abc${ 123 }def${ 456 }ghi`
+>a : Symbol(a, Decl(templateStringInPropertyAssignment.ts, 0, 9))
+}

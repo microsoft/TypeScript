@@ -1,0 +1,14 @@
+--- old.paramTagOnFunctionUsingArguments.symbols
++++ new.paramTagOnFunctionUsingArguments.symbols
+@@= skipped -17, +17 lines =@@
+   for (var i = 0, l = arguments.length; i < l; i++) {
+ >i : Symbol(i, Decl(a.js, 5, 10))
+ >l : Symbol(l, Decl(a.js, 5, 17))
+->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
++>arguments.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >arguments : Symbol(arguments)
+->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >i : Symbol(i, Decl(a.js, 5, 10))
+ >l : Symbol(l, Decl(a.js, 5, 17))
+ >i : Symbol(i, Decl(a.js, 5, 10))

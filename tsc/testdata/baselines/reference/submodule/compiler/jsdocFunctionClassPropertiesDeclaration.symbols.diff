@@ -1,0 +1,26 @@
+--- old.jsdocFunctionClassPropertiesDeclaration.symbols
++++ new.jsdocFunctionClassPropertiesDeclaration.symbols
+@@= skipped -10, +10 lines =@@
+ >y : Symbol(y, Decl(a.js, 4, 22))
+ 
+     if (!(this instanceof Foo)) {
+->this : Symbol(Foo, Decl(a.js, 0, 0))
+ >Foo : Symbol(Foo, Decl(a.js, 0, 0))
+ 
+         return new Foo(x, y);
+@@= skipped -9, +8 lines =@@
+ >y : Symbol(y, Decl(a.js, 4, 22))
+     }
+     this.x = x;
+->this.x : Symbol(Foo.x, Decl(a.js, 7, 5))
+->this : Symbol(Foo, Decl(a.js, 0, 0))
+->x : Symbol(Foo.x, Decl(a.js, 7, 5))
+ >x : Symbol(x, Decl(a.js, 4, 20))
+ 
+     this.y = y;
+->this.y : Symbol(Foo.y, Decl(a.js, 8, 15))
+->this : Symbol(Foo, Decl(a.js, 0, 0))
+->y : Symbol(Foo.y, Decl(a.js, 8, 15))
+ >y : Symbol(y, Decl(a.js, 4, 22))
+ }
+ 

@@ -1,0 +1,15 @@
+--- old.templateLiteralTypes5.symbols
++++ new.templateLiteralTypes5.symbols
+@@= skipped -5, +5 lines =@@
+ >TypeMap : Symbol(TypeMap, Decl(templateLiteralTypes5.ts, 0, 0))
+ 
+   a: "A";
+->a : Symbol(TypeMap.a, Decl(templateLiteralTypes5.ts, 1, 19))
++>a : Symbol(a, Decl(templateLiteralTypes5.ts, 1, 19))
+ 
+   b: "B";
+->b : Symbol(TypeMap.b, Decl(templateLiteralTypes5.ts, 2, 9))
++>b : Symbol(b, Decl(templateLiteralTypes5.ts, 2, 9))
+ }
+ declare const f: <T0 extends "a" | "b">(x: `${T0}`) => TypeMap[T0];
+ >f : Symbol(f, Decl(templateLiteralTypes5.ts, 5, 13))

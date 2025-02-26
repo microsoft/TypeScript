@@ -1,0 +1,11 @@
+--- old.infinitelyExpandingTypes5.symbols
++++ new.infinitelyExpandingTypes5.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(infinitelyExpandingTypes5.ts, 0, 16))
+ 
+     foo(x: T): Query<T[]>;
+->foo : Symbol(Query.foo, Decl(infinitelyExpandingTypes5.ts, 0, 20))
++>foo : Symbol(foo, Decl(infinitelyExpandingTypes5.ts, 0, 20))
+ >x : Symbol(x, Decl(infinitelyExpandingTypes5.ts, 1, 8))
+ >T : Symbol(T, Decl(infinitelyExpandingTypes5.ts, 0, 16))
+ >Query : Symbol(Query, Decl(infinitelyExpandingTypes5.ts, 0, 0))

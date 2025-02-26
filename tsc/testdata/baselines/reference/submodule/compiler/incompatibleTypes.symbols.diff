@@ -1,0 +1,73 @@
+--- old.incompatibleTypes.symbols
++++ new.incompatibleTypes.symbols
+@@= skipped -4, +4 lines =@@
+ >IFoo1 : Symbol(IFoo1, Decl(incompatibleTypes.ts, 0, 0))
+ 
+     p1(): number;
+->p1 : Symbol(IFoo1.p1, Decl(incompatibleTypes.ts, 0, 17))
++>p1 : Symbol(p1, Decl(incompatibleTypes.ts, 0, 17))
+ }
+ 
+ class C1 implements IFoo1 { // incompatible on the return type
+@@= skipped -8, +8 lines =@@
+ >IFoo1 : Symbol(IFoo1, Decl(incompatibleTypes.ts, 0, 0))
+ 
+     public p1() {
+->p1 : Symbol(C1.p1, Decl(incompatibleTypes.ts, 4, 27))
++>p1 : Symbol(p1, Decl(incompatibleTypes.ts, 4, 27))
+ 
+         return "s";
+     }
+@@= skipped -10, +10 lines =@@
+ >IFoo2 : Symbol(IFoo2, Decl(incompatibleTypes.ts, 8, 1))
+ 
+     p1(s:string): number;
+->p1 : Symbol(IFoo2.p1, Decl(incompatibleTypes.ts, 10, 17))
++>p1 : Symbol(p1, Decl(incompatibleTypes.ts, 10, 17))
+ >s : Symbol(s, Decl(incompatibleTypes.ts, 11, 7))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >IFoo2 : Symbol(IFoo2, Decl(incompatibleTypes.ts, 8, 1))
+ 
+     public p1(n:number) {
+->p1 : Symbol(C2.p1, Decl(incompatibleTypes.ts, 14, 27))
++>p1 : Symbol(p1, Decl(incompatibleTypes.ts, 14, 27))
+ >n : Symbol(n, Decl(incompatibleTypes.ts, 15, 14))
+ 
+         return 0;
+@@= skipped -11, +11 lines =@@
+ >IFoo3 : Symbol(IFoo3, Decl(incompatibleTypes.ts, 18, 1))
+ 
+     p1: string;
+->p1 : Symbol(IFoo3.p1, Decl(incompatibleTypes.ts, 20, 17))
++>p1 : Symbol(p1, Decl(incompatibleTypes.ts, 20, 17))
+ }
+ 
+ class C3 implements IFoo3 { // incompatible on the property type
+@@= skipped -8, +8 lines =@@
+ >IFoo3 : Symbol(IFoo3, Decl(incompatibleTypes.ts, 18, 1))
+ 
+     public p1: number;
+->p1 : Symbol(C3.p1, Decl(incompatibleTypes.ts, 24, 27))
++>p1 : Symbol(p1, Decl(incompatibleTypes.ts, 24, 27))
+ }
+ 
+ interface IFoo4 {
+ >IFoo4 : Symbol(IFoo4, Decl(incompatibleTypes.ts, 26, 1))
+ 
+     p1: { a: { a: string; }; b: string; };
+->p1 : Symbol(IFoo4.p1, Decl(incompatibleTypes.ts, 28, 17))
++>p1 : Symbol(p1, Decl(incompatibleTypes.ts, 28, 17))
+ >a : Symbol(a, Decl(incompatibleTypes.ts, 29, 9))
+ >a : Symbol(a, Decl(incompatibleTypes.ts, 29, 14))
+ >b : Symbol(b, Decl(incompatibleTypes.ts, 29, 28))
+@@= skipped -18, +18 lines =@@
+ >IFoo4 : Symbol(IFoo4, Decl(incompatibleTypes.ts, 26, 1))
+ 
+     public p1: { c: { b: string; }; d: string; };
+->p1 : Symbol(C4.p1, Decl(incompatibleTypes.ts, 32, 27))
++>p1 : Symbol(p1, Decl(incompatibleTypes.ts, 32, 27))
+ >c : Symbol(c, Decl(incompatibleTypes.ts, 33, 16))
+ >b : Symbol(b, Decl(incompatibleTypes.ts, 33, 21))
+ >d : Symbol(d, Decl(incompatibleTypes.ts, 33, 35))

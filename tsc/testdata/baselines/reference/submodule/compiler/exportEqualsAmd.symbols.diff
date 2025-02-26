@@ -1,0 +1,11 @@
+--- old.exportEqualsAmd.symbols
++++ new.exportEqualsAmd.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === exportEqualsAmd.ts ===
+ export = { ["hi"]: "there" };
+->["hi"] : Symbol(["hi"], Decl(exportEqualsAmd.ts, 0, 10))
+->"hi" : Symbol(["hi"], Decl(exportEqualsAmd.ts, 0, 10))
++>["hi"] : Symbol(hi, Decl(exportEqualsAmd.ts, 0, 10))
++>"hi" : Symbol(hi, Decl(exportEqualsAmd.ts, 0, 10))
+ 

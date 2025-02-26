@@ -1,0 +1,20 @@
+--- old.jsDeclarationsClassImplementsGenericsSerialization.symbols
++++ new.jsDeclarationsClassImplementsGenericsSerialization.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(interface.ts, 0, 25))
+ 
+     encode(value: T): Uint8Array
+->encode : Symbol(Encoder.encode, Decl(interface.ts, 0, 29))
++>encode : Symbol(encode, Decl(interface.ts, 0, 29))
+ >value : Symbol(value, Decl(interface.ts, 1, 11))
+ >T : Symbol(T, Decl(interface.ts, 0, 25))
+ >Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+@@= skipped -17, +17 lines =@@
+      * @param {T} value 
+      */
+     encode(value) {
+->encode : Symbol(Encoder.encode, Decl(lib.js, 4, 22))
++>encode : Symbol(encode, Decl(lib.js, 4, 22))
+ >value : Symbol(value, Decl(lib.js, 8, 11))
+ 
+         return new Uint8Array(0)

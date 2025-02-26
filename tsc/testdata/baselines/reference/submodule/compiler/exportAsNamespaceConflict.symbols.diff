@@ -1,0 +1,11 @@
+--- old.exportAsNamespaceConflict.symbols
++++ new.exportAsNamespaceConflict.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === /a.d.ts ===
+ declare global { namespace N {} }
+->global : Symbol(global, Decl(a.d.ts, 0, 0))
++>global : Symbol((Missing), Decl(a.d.ts, 0, 0))
+ >N : Symbol(N, Decl(a.d.ts, 0, 16))
+ 
+ export = N;

@@ -1,0 +1,29 @@
+--- old.emitDefaultParametersMethodES6.symbols
++++ new.emitDefaultParametersMethodES6.symbols
+@@= skipped -10, +10 lines =@@
+ >y : Symbol(y, Decl(emitDefaultParametersMethodES6.ts, 1, 49))
+ 
+     public foo(x: string, t = false) { }
+->foo : Symbol(C.foo, Decl(emitDefaultParametersMethodES6.ts, 1, 66))
++>foo : Symbol(foo, Decl(emitDefaultParametersMethodES6.ts, 1, 66))
+ >x : Symbol(x, Decl(emitDefaultParametersMethodES6.ts, 3, 15))
+ >t : Symbol(t, Decl(emitDefaultParametersMethodES6.ts, 3, 25))
+ 
+     public foo1(x: string, t = false, ...rest) { }
+->foo1 : Symbol(C.foo1, Decl(emitDefaultParametersMethodES6.ts, 3, 40))
++>foo1 : Symbol(foo1, Decl(emitDefaultParametersMethodES6.ts, 3, 40))
+ >x : Symbol(x, Decl(emitDefaultParametersMethodES6.ts, 4, 16))
+ >t : Symbol(t, Decl(emitDefaultParametersMethodES6.ts, 4, 26))
+ >rest : Symbol(rest, Decl(emitDefaultParametersMethodES6.ts, 4, 37))
+ 
+     public bar(t = false) { }
+->bar : Symbol(C.bar, Decl(emitDefaultParametersMethodES6.ts, 4, 50))
++>bar : Symbol(bar, Decl(emitDefaultParametersMethodES6.ts, 4, 50))
+ >t : Symbol(t, Decl(emitDefaultParametersMethodES6.ts, 5, 15))
+ 
+     public boo(t = false, ...rest) { }
+->boo : Symbol(C.boo, Decl(emitDefaultParametersMethodES6.ts, 5, 29))
++>boo : Symbol(boo, Decl(emitDefaultParametersMethodES6.ts, 5, 29))
+ >t : Symbol(t, Decl(emitDefaultParametersMethodES6.ts, 6, 15))
+ >rest : Symbol(rest, Decl(emitDefaultParametersMethodES6.ts, 6, 25))
+ }

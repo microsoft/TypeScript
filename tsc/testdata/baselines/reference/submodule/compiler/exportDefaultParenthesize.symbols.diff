@@ -1,0 +1,13 @@
+--- old.exportDefaultParenthesize.symbols
++++ new.exportDefaultParenthesize.symbols
+@@= skipped -75, +75 lines =@@
+ === comma.ts ===
+ export default {
+     ['foo']: 42
+->['foo'] : Symbol(['foo'], Decl(comma.ts, 0, 16))
+->'foo' : Symbol(['foo'], Decl(comma.ts, 0, 16))
++>['foo'] : Symbol(foo, Decl(comma.ts, 0, 16))
++>'foo' : Symbol(foo, Decl(comma.ts, 0, 16))
+ 
+ };
+ 

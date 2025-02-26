@@ -1,0 +1,24 @@
+--- old.prototypes.symbols
++++ new.prototypes.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === prototypes.ts ===
+ Object.prototype; // ok
+->Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.es5.d.ts, --, --))
++>Object.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->prototype : Symbol(ObjectConstructor.prototype, Decl(lib.es5.d.ts, --, --))
++>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+ 
+ new Object().prototype; // error
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+@@= skipped -11, +11 lines =@@
+ >f : Symbol(f, Decl(prototypes.ts, 1, 23))
+ 
+ f.prototype;
+->f.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
++>f.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+ >f : Symbol(f, Decl(prototypes.ts, 1, 23))
+->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
++>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+ 

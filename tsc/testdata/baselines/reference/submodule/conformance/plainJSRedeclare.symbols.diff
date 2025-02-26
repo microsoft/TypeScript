@@ -1,0 +1,12 @@
+--- old.plainJSRedeclare.symbols
++++ new.plainJSRedeclare.symbols
+@@= skipped -7, +7 lines =@@
+ >orbitol : Symbol(orbitol, Decl(plainJSRedeclare.js, 1, 3))
+ 
+ orbitol.toExponential()
+->orbitol.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>orbitol.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >orbitol : Symbol(orbitol, Decl(plainJSRedeclare.js, 0, 5))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ 

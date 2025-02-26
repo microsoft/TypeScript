@@ -1,0 +1,16 @@
+--- old.generativeRecursionWithTypeOf.symbols
++++ new.generativeRecursionWithTypeOf.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(generativeRecursionWithTypeOf.ts, 0, 8))
+ 
+     static foo(x: number) { }
+->foo : Symbol(C.foo, Decl(generativeRecursionWithTypeOf.ts, 0, 12))
++>foo : Symbol(foo, Decl(generativeRecursionWithTypeOf.ts, 0, 12))
+ >x : Symbol(x, Decl(generativeRecursionWithTypeOf.ts, 1, 15))
+ 
+     type: T;
+->type : Symbol(C.type, Decl(generativeRecursionWithTypeOf.ts, 1, 29))
++>type : Symbol(type, Decl(generativeRecursionWithTypeOf.ts, 1, 29))
+ >T : Symbol(T, Decl(generativeRecursionWithTypeOf.ts, 0, 8))
+ }
+ 

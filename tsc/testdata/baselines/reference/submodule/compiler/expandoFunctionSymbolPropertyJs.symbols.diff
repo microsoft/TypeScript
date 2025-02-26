@@ -1,0 +1,11 @@
+--- old.expandoFunctionSymbolPropertyJs.symbols
++++ new.expandoFunctionSymbolPropertyJs.symbols
+@@= skipped -9, +9 lines =@@
+ 
+   (): void;
+   readonly [symb]: boolean;
+->[symb] : Symbol(TestSymb[symb], Decl(types.ts, 3, 11))
++>[symb] : Symbol([symb], Decl(types.ts, 3, 11))
+ >symb : Symbol(symb, Decl(types.ts, 0, 12))
+ }
+ 

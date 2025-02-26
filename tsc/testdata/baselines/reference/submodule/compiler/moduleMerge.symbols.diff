@@ -1,0 +1,20 @@
+--- old.moduleMerge.symbols
++++ new.moduleMerge.symbols
+@@= skipped -9, +9 lines =@@
+ >B : Symbol(B, Decl(moduleMerge.ts, 3, 1))
+     {
+         public Hello(): string
+->Hello : Symbol(B.Hello, Decl(moduleMerge.ts, 5, 5))
++>Hello : Symbol(Hello, Decl(moduleMerge.ts, 5, 5))
+         {
+             return "from private B";
+         }
+@@= skipped -14, +14 lines =@@
+ >B : Symbol(B, Decl(moduleMerge.ts, 14, 1))
+     {
+         public Hello(): string
+->Hello : Symbol(B.Hello, Decl(moduleMerge.ts, 16, 5))
++>Hello : Symbol(Hello, Decl(moduleMerge.ts, 16, 5))
+         {
+             return "from export B";
+         }

@@ -1,0 +1,37 @@
+--- old.tsxSpreadAttributesResolution11.symbols
++++ new.tsxSpreadAttributesResolution11.symbols
+@@= skipped -29, +29 lines =@@
+ >Prop : Symbol(Prop, Decl(file.tsx, 9, 1))
+ 
+     x: 2
+->x : Symbol(Prop.x, Decl(file.tsx, 11, 16))
++>x : Symbol(x, Decl(file.tsx, 11, 16))
+ 
+     y: true
+->y : Symbol(Prop.y, Decl(file.tsx, 12, 8))
++>y : Symbol(y, Decl(file.tsx, 12, 8))
+ 
+     overwrite: string
+->overwrite : Symbol(Prop.overwrite, Decl(file.tsx, 13, 11))
++>overwrite : Symbol(overwrite, Decl(file.tsx, 13, 11))
+ }
+ 
+ class OverWriteAttr extends React.Component<Prop, {}> {
+ >OverWriteAttr : Symbol(OverWriteAttr, Decl(file.tsx, 15, 1))
+->React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
++>React.Component : Symbol(unknown)
+ >React : Symbol(React, Decl(file.tsx, 0, 0))
+->Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
++>Component : Symbol(unknown)
+ >Prop : Symbol(Prop, Decl(file.tsx, 9, 1))
+ 
+     render() {
+->render : Symbol(OverWriteAttr.render, Decl(file.tsx, 17, 55))
++>render : Symbol(render, Decl(file.tsx, 17, 55))
+ 
+         return <div>Hello</div>;
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+     }
+ }
+ 

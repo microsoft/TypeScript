@@ -1,0 +1,22 @@
+--- old.jsxIntrinsicElementsCompatability.symbols
++++ new.jsxIntrinsicElementsCompatability.symbols
+@@= skipped -10, +10 lines =@@
+ >props : Symbol(props, Decl(jsxIntrinsicElementsCompatability.tsx, 2, 49))
+ >element : Symbol(element, Decl(jsxIntrinsicElementsCompatability.tsx, 2, 57))
+ >T : Symbol(T, Decl(jsxIntrinsicElementsCompatability.tsx, 2, 23))
+->JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+->IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(react16.d.ts, 2514, 86))
++>JSX : Symbol(JSX)
++>IntrinsicElements : Symbol(IntrinsicElements)
+ >T : Symbol(T, Decl(jsxIntrinsicElementsCompatability.tsx, 2, 23))
+->JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+->Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
++>JSX : Symbol(JSX)
++>Element : Symbol(Element)
+ 
+     // Just so the return value is RectElement, the rendered element doesnt matter
+     return <div />
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+ }
+ 
+ function Test<T extends 'button' | 'a'>(el: T) {

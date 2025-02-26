@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/salsa/varRequireFromJavascript.ts] ////
+
+=== use.js ===
+var ex = require('./ex')
+>ex : Symbol(ex, Decl(use.js, 0, 3))
+
+// values work
+var crunch = new ex.Crunch(1);
+>crunch : Symbol(crunch, Decl(use.js, 3, 3))
+>ex : Symbol(ex, Decl(use.js, 0, 3))
+
+crunch.n
+>crunch : Symbol(crunch, Decl(use.js, 3, 3))
+
+
+// types work
+/**
+ * @param {ex.Crunch} wrap
+ */
+function f(wrap) {
+>f : Symbol(f, Decl(use.js, 4, 8))
+>wrap : Symbol(wrap, Decl(use.js, 11, 11))
+
+    wrap.n
+>wrap : Symbol(wrap, Decl(use.js, 11, 11))
+}
+

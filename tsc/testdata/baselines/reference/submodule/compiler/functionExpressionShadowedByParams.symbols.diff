@@ -1,0 +1,26 @@
+--- old.functionExpressionShadowedByParams.symbols
++++ new.functionExpressionShadowedByParams.symbols
+@@= skipped -5, +5 lines =@@
+ >b1 : Symbol(b1, Decl(functionExpressionShadowedByParams.ts, 0, 12))
+ 
+    b1.toPrecision(2); // should not error
+->b1.toPrecision : Symbol(Number.toPrecision, Decl(lib.es5.d.ts, --, --))
++>b1.toPrecision : Symbol(toPrecision, Decl(lib.es5.d.ts, --, --))
+ >b1 : Symbol(b1, Decl(functionExpressionShadowedByParams.ts, 0, 12))
+->toPrecision : Symbol(Number.toPrecision, Decl(lib.es5.d.ts, --, --))
++>toPrecision : Symbol(toPrecision, Decl(lib.es5.d.ts, --, --))
+ 
+    b1(12); // should error
+ >b1 : Symbol(b1, Decl(functionExpressionShadowedByParams.ts, 0, 12))
+@@= skipped -18, +18 lines =@@
+ >b : Symbol(b, Decl(functionExpressionShadowedByParams.ts, 7, 17))
+ 
+       b.toPrecision(2); // should not error
+->b.toPrecision : Symbol(Number.toPrecision, Decl(lib.es5.d.ts, --, --))
++>b.toPrecision : Symbol(toPrecision, Decl(lib.es5.d.ts, --, --))
+ >b : Symbol(b, Decl(functionExpressionShadowedByParams.ts, 7, 17))
+->toPrecision : Symbol(Number.toPrecision, Decl(lib.es5.d.ts, --, --))
++>toPrecision : Symbol(toPrecision, Decl(lib.es5.d.ts, --, --))
+ 
+       b.apply(null, null); // should error
+ >b : Symbol(b, Decl(functionExpressionShadowedByParams.ts, 7, 17))

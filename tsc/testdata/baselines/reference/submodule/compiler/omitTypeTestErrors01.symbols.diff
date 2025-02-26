@@ -1,0 +1,19 @@
+--- old.omitTypeTestErrors01.symbols
++++ new.omitTypeTestErrors01.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(omitTypeTestErrors01.ts, 0, 0))
+ 
+     a: string;
+->a : Symbol(Foo.a, Decl(omitTypeTestErrors01.ts, 0, 15))
++>a : Symbol(a, Decl(omitTypeTestErrors01.ts, 0, 15))
+ 
+     b: number;
+->b : Symbol(Foo.b, Decl(omitTypeTestErrors01.ts, 1, 14))
++>b : Symbol(b, Decl(omitTypeTestErrors01.ts, 1, 14))
+ 
+     c: boolean;
+->c : Symbol(Foo.c, Decl(omitTypeTestErrors01.ts, 2, 14))
++>c : Symbol(c, Decl(omitTypeTestErrors01.ts, 2, 14))
+ }
+ 
+ export type Bar = Omit<Foo, "c">;

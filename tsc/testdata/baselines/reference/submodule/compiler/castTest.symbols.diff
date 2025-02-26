@@ -1,0 +1,26 @@
+--- old.castTest.symbols
++++ new.castTest.symbols
+@@= skipped -32, +32 lines =@@
+ >Point : Symbol(Point, Decl(castTest.ts, 10, 37))
+ {
+     x: number;
+->x : Symbol(Point.x, Decl(castTest.ts, 13, 1))
++>x : Symbol(x, Decl(castTest.ts, 13, 1))
+ 
+     y: number;
+->y : Symbol(Point.y, Decl(castTest.ts, 14, 14))
++>y : Symbol(y, Decl(castTest.ts, 14, 14))
+ 
+     add(dx: number, dy: number): Point;
+->add : Symbol(Point.add, Decl(castTest.ts, 15, 14))
++>add : Symbol(add, Decl(castTest.ts, 15, 14))
+ >dx : Symbol(dx, Decl(castTest.ts, 16, 8))
+ >dy : Symbol(dy, Decl(castTest.ts, 16, 19))
+ >Point : Symbol(Point, Decl(castTest.ts, 10, 37))
+ 
+     mult(p: Point): Point;
+->mult : Symbol(Point.mult, Decl(castTest.ts, 16, 39))
++>mult : Symbol(mult, Decl(castTest.ts, 16, 39))
+ >p : Symbol(p, Decl(castTest.ts, 17, 9))
+ >Point : Symbol(Point, Decl(castTest.ts, 10, 37))
+ >Point : Symbol(Point, Decl(castTest.ts, 10, 37))

@@ -1,0 +1,16 @@
+--- old.indexedAccessCanBeHighOrder.symbols
++++ new.indexedAccessCanBeHighOrder.symbols
+@@= skipped -55, +55 lines =@@
+ 
+ r[0][r[1]] = o[r[1]];
+ >r : Symbol(r, Decl(indexedAccessCanBeHighOrder.ts, 9, 5))
+->0 : Symbol(0)
++>0 : Symbol("0")
+ >r : Symbol(r, Decl(indexedAccessCanBeHighOrder.ts, 9, 5))
+->1 : Symbol(1)
++>1 : Symbol("1")
+ >o : Symbol(o, Decl(indexedAccessCanBeHighOrder.ts, 8, 5))
+ >r : Symbol(r, Decl(indexedAccessCanBeHighOrder.ts, 9, 5))
+->1 : Symbol(1)
++>1 : Symbol("1")
+ 

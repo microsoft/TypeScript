@@ -1,0 +1,50 @@
+--- old.asyncAwaitWithCapturedBlockScopeVar.symbols
++++ new.asyncAwaitWithCapturedBlockScopeVar.symbols
+@@= skipped -13, +13 lines =@@
+ 
+         await 1;
+         ar.push(() => i);
+->ar.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>ar.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >ar : Symbol(ar, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 1, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 2, 12))
+     }
+ }
+@@= skipped -20, +20 lines =@@
+ 
+         await 1;
+         ar.push(() => i);
+->ar.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>ar.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >ar : Symbol(ar, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 9, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 10, 12))
+ 
+         break;
+@@= skipped -22, +22 lines =@@
+ 
+         await 1;
+         ar.push(() => i);
+->ar.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>ar.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >ar : Symbol(ar, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 18, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 19, 12))
+ 
+         continue;
+@@= skipped -23, +23 lines =@@
+ 
+         await 1;
+         ar.push(() => i);
+->ar.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>ar.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >ar : Symbol(ar, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 27, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >i : Symbol(i, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 28, 12))
+ 
+         return 1;

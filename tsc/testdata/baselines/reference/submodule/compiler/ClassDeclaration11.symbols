@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/ClassDeclaration11.ts] ////
+
+=== ClassDeclaration11.ts ===
+class C {
+>C : Symbol(C, Decl(ClassDeclaration11.ts, 0, 0))
+
+   constructor();
+   foo() { }
+>foo : Symbol(foo, Decl(ClassDeclaration11.ts, 1, 17))
+}

@@ -20,6 +20,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/repo"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/testutil"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
@@ -195,70 +196,70 @@ var harnessCommandLineOptions = []*tsoptions.CommandLineOption{
 	},
 	{
 		Name: "useCaseSensitiveFileNames",
-		Kind: "boolean",
+		Kind: tsoptions.CommandLineOptionTypeBoolean,
 	},
 	{
 		Name: "baselineFile",
-		Kind: "string",
+		Kind: tsoptions.CommandLineOptionTypeString,
 	},
 	{
 		Name: "includeBuiltFile",
-		Kind: "string",
+		Kind: tsoptions.CommandLineOptionTypeString,
 	},
 	{
 		Name: "fileName",
-		Kind: "string",
+		Kind: tsoptions.CommandLineOptionTypeString,
 	},
 	{
 		Name: "libFiles",
-		Kind: "string",
+		Kind: tsoptions.CommandLineOptionTypeList,
 	},
 	{
 		Name: "noErrorTruncation",
-		Kind: "boolean",
+		Kind: tsoptions.CommandLineOptionTypeBoolean,
 	},
 	{
 		Name: "suppressOutputPathCheck",
-		Kind: "boolean",
+		Kind: tsoptions.CommandLineOptionTypeBoolean,
 	},
 	{
 		Name: "noImplicitReferences",
-		Kind: "boolean",
+		Kind: tsoptions.CommandLineOptionTypeBoolean,
 	},
 	{
 		Name: "currentDirectory",
-		Kind: "string",
+		Kind: tsoptions.CommandLineOptionTypeString,
 	},
 	{
 		Name: "symlink",
-		Kind: "string",
+		Kind: tsoptions.CommandLineOptionTypeString,
 	},
 	{
 		Name: "link",
-		Kind: "string",
+		Kind: tsoptions.CommandLineOptionTypeString,
 	},
 	{
-		Name: "noKindsAndSymbols",
-		Kind: "boolean",
+		Name: "noTypesAndSymbols",
+		Kind: tsoptions.CommandLineOptionTypeBoolean,
 	},
 	// Emitted js baseline will print full paths for every output file
 	{
 		Name: "fullEmitPaths",
-		Kind: "boolean",
+		Kind: tsoptions.CommandLineOptionTypeBoolean,
 	},
 	{
 		Name: "noCheck",
-		Kind: "boolean",
+		Kind: tsoptions.CommandLineOptionTypeBoolean,
 	},
 	// used to enable error collection in `transpile` baselines
 	{
 		Name: "reportDiagnostics",
-		Kind: "boolean",
+		Kind: tsoptions.CommandLineOptionTypeBoolean,
 	},
 	// Adds suggestion diagnostics to error baselines
 	{
 		Name: "captureSuggestions",
-		Kind: "boolean",
+		Kind: tsoptions.CommandLineOptionTypeBoolean,
 	},
 }
 
@@ -310,6 +311,8 @@ func parseHarnessOption(t *testing.T, key string, value any, options *HarnessOpt
 		t.Fatalf("Unknown harness option '%s'.", key)
 	}
 }
+
+var deprecatedModuleResolution []string = []string{"node", "classic", "node10"}
 
 func getOptionValue(t *testing.T, option *tsoptions.CommandLineOption, value string) tsoptions.CompilerOptionsValue {
 	switch option.Kind {
@@ -419,7 +422,7 @@ func compileFilesWithHost(
 	// 	delete compilerOptions.project;
 	// }
 
-	// !!! Need actual `createProgram` and `getPreEmitDiagnostics` program for this
+	// !!! Need `getPreEmitDiagnostics` program for this
 	// pre-emit/post-emit error comparison requires declaration emit twice, which can be slow. If it's unlikely to flag any error consistency issues
 	// and if the test is running `skipLibCheck` - an indicator that we want the tets to run quickly - skip the before/after error comparison, too
 	// skipErrorComparison := len(rootFiles) >= 100 || options.SkipLibCheck == core.TSTrue && options.Declaration == core.TSTrue
@@ -487,12 +490,12 @@ func newCompilationResult(
 	}
 }
 
-// !!! Temporary while we don't have the real `createProgram`
 func createProgram(host compiler.CompilerHost, options *core.CompilerOptions, rootFiles []string) *compiler.Program {
 	programOptions := compiler.ProgramOptions{
-		RootFiles: rootFiles,
-		Host:      host,
-		Options:   options,
+		RootFiles:      rootFiles,
+		Host:           host,
+		Options:        options,
+		SingleThreaded: testutil.TestProgramIsSingleThreaded(),
 	}
 	program := compiler.NewProgram(programOptions)
 	return program
@@ -539,9 +542,9 @@ func getFileBasedTestConfigurationDescription(config TestConfiguration) string {
 	keys := slices.Sorted(maps.Keys(config))
 	for i, key := range keys {
 		if i > 0 {
-			output.WriteString(", ")
+			output.WriteString(",")
 		}
-		fmt.Fprintf(&output, "%s=%s", key, config[key])
+		fmt.Fprintf(&output, "%s=%s", key, strings.ToLower(config[key]))
 	}
 	return output.String()
 }
@@ -627,7 +630,9 @@ func splitOptionValues(t *testing.T, value string, option string) []string {
 	// add (and deduplicate) all included entries
 	for _, include := range includes {
 		value := getValueOfOptionString(t, option, include)
-		variations[value] = include
+		if _, ok := variations[value]; !ok {
+			variations[value] = include
+		}
 	}
 
 	allValues := getAllValuesForOption(option)
@@ -635,7 +640,9 @@ func splitOptionValues(t *testing.T, value string, option string) []string {
 		// add all entries
 		for _, include := range allValues {
 			value := getValueOfOptionString(t, option, include)
-			variations[value] = include
+			if _, ok := variations[value]; !ok {
+				variations[value] = include
+			}
 		}
 	}
 
@@ -655,6 +662,10 @@ func getValueOfOptionString(t *testing.T, option string, value string) tsoptions
 	optionDecl := getCommandLineOption(option)
 	if optionDecl == nil {
 		t.Fatalf("Unknown option '%s'", option)
+	}
+	// TODO(gabritto): remove this when we deprecate the tests containing those option values
+	if optionDecl.Name == "moduleResolution" && slices.Contains(deprecatedModuleResolution, strings.ToLower(value)) {
+		return value
 	}
 	return getOptionValue(t, optionDecl, value)
 }

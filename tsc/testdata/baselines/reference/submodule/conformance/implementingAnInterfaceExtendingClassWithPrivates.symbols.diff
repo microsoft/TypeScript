@@ -1,0 +1,53 @@
+--- old.implementingAnInterfaceExtendingClassWithPrivates.symbols
++++ new.implementingAnInterfaceExtendingClassWithPrivates.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 0, 0))
+ 
+     private x: string;
+->x : Symbol(Foo.x, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 0, 11))
++>x : Symbol(x, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 0, 11))
+ }
+ 
+ interface I extends Foo {
+@@= skipped -8, +8 lines =@@
+ >Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 0, 0))
+ 
+     y: number;
+->y : Symbol(I.y, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 4, 25))
++>y : Symbol(y, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 4, 25))
+ }
+ 
+ class Bar implements I { // error
+@@= skipped -13, +13 lines =@@
+ >I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 2, 1))
+ 
+     y: number;
+->y : Symbol(Bar2.y, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 11, 25))
++>y : Symbol(y, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 11, 25))
+ }
+ 
+ class Bar3 implements I { // error
+@@= skipped -8, +8 lines =@@
+ >I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 2, 1))
+ 
+     x: string;
+->x : Symbol(Bar3.x, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 15, 25))
++>x : Symbol(x, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 15, 25))
+ 
+     y: number;
+->y : Symbol(Bar3.y, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 16, 14))
++>y : Symbol(y, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 16, 14))
+ }
+ 
+ class Bar4 implements I { // error
+@@= skipped -11, +11 lines =@@
+ >I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 2, 1))
+ 
+     private x: string;
+->x : Symbol(Bar4.x, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 20, 25))
++>x : Symbol(x, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 20, 25))
+ 
+     y: number;
+->y : Symbol(Bar4.y, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 21, 22))
++>y : Symbol(y, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 21, 22))
+ }

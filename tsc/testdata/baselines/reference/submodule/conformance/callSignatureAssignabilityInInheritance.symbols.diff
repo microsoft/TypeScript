@@ -1,0 +1,74 @@
+--- old.callSignatureAssignabilityInInheritance.symbols
++++ new.callSignatureAssignabilityInInheritance.symbols
+@@= skipped -73, +73 lines =@@
+ 
+         // M's
+         a: (x: number) => void;
+->a : Symbol(Base.a, Decl(callSignatureAssignabilityInInheritance.ts, 34, 20))
++>a : Symbol(a, Decl(callSignatureAssignabilityInInheritance.ts, 34, 20))
+ >x : Symbol(x, Decl(callSignatureAssignabilityInInheritance.ts, 36, 12))
+ 
+         a2: (x: number, y: number) => void;
+->a2 : Symbol(Base.a2, Decl(callSignatureAssignabilityInInheritance.ts, 36, 31))
++>a2 : Symbol(a2, Decl(callSignatureAssignabilityInInheritance.ts, 36, 31))
+ >x : Symbol(x, Decl(callSignatureAssignabilityInInheritance.ts, 37, 13))
+ >y : Symbol(y, Decl(callSignatureAssignabilityInInheritance.ts, 37, 23))
+ 
+         a3: <T>(x: T) => void;
+->a3 : Symbol(Base.a3, Decl(callSignatureAssignabilityInInheritance.ts, 37, 43))
++>a3 : Symbol(a3, Decl(callSignatureAssignabilityInInheritance.ts, 37, 43))
+ >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance.ts, 38, 13))
+ >x : Symbol(x, Decl(callSignatureAssignabilityInInheritance.ts, 38, 16))
+ >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance.ts, 38, 13))
+@@= skipped -22, +22 lines =@@
+ 
+         // N's
+         a: (x: number) => number; // ok because base returns void
+->a : Symbol(I.a, Decl(callSignatureAssignabilityInInheritance.ts, 42, 30))
++>a : Symbol(a, Decl(callSignatureAssignabilityInInheritance.ts, 42, 30))
+ >x : Symbol(x, Decl(callSignatureAssignabilityInInheritance.ts, 44, 12))
+ 
+         a2: (x: number, y: number) => boolean; // ok because base returns void
+->a2 : Symbol(I.a2, Decl(callSignatureAssignabilityInInheritance.ts, 44, 33))
++>a2 : Symbol(a2, Decl(callSignatureAssignabilityInInheritance.ts, 44, 33))
+ >x : Symbol(x, Decl(callSignatureAssignabilityInInheritance.ts, 45, 13))
+ >y : Symbol(y, Decl(callSignatureAssignabilityInInheritance.ts, 45, 23))
+ 
+         a3: <T>(x: T) => string; // ok because base returns void
+->a3 : Symbol(I.a3, Decl(callSignatureAssignabilityInInheritance.ts, 45, 46))
++>a3 : Symbol(a3, Decl(callSignatureAssignabilityInInheritance.ts, 45, 46))
+ >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance.ts, 46, 13))
+ >x : Symbol(x, Decl(callSignatureAssignabilityInInheritance.ts, 46, 16))
+ >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance.ts, 46, 13))
+@@= skipped -20, +20 lines =@@
+ 
+         // M's
+         a: (x: number) => number;
+->a : Symbol(Base2.a, Decl(callSignatureAssignabilityInInheritance.ts, 49, 21))
++>a : Symbol(a, Decl(callSignatureAssignabilityInInheritance.ts, 49, 21))
+ >x : Symbol(x, Decl(callSignatureAssignabilityInInheritance.ts, 51, 12))
+ 
+         a2: <T>(x: T) => T;
+->a2 : Symbol(Base2.a2, Decl(callSignatureAssignabilityInInheritance.ts, 51, 33))
++>a2 : Symbol(a2, Decl(callSignatureAssignabilityInInheritance.ts, 51, 33))
+ >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance.ts, 52, 13))
+ >x : Symbol(x, Decl(callSignatureAssignabilityInInheritance.ts, 52, 16))
+ >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance.ts, 52, 13))
+@@= skipped -18, +18 lines =@@
+ 
+         // N's
+         a: (x: number) => string; // error because base returns non-void;
+->a : Symbol(I2.a, Decl(callSignatureAssignabilityInInheritance.ts, 56, 32))
++>a : Symbol(a, Decl(callSignatureAssignabilityInInheritance.ts, 56, 32))
+ >x : Symbol(x, Decl(callSignatureAssignabilityInInheritance.ts, 58, 12))
+     }
+ 
+@@= skipped -11, +11 lines =@@
+ 
+         // N's
+         a2: <T>(x: T) => string; // error because base returns non-void;
+->a2 : Symbol(I3.a2, Decl(callSignatureAssignabilityInInheritance.ts, 62, 32))
++>a2 : Symbol(a2, Decl(callSignatureAssignabilityInInheritance.ts, 62, 32))
+ >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance.ts, 64, 13))
+ >x : Symbol(x, Decl(callSignatureAssignabilityInInheritance.ts, 64, 16))
+ >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance.ts, 64, 13))

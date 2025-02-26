@@ -1,0 +1,9 @@
+--- old.extendsClauseAlreadySeen.symbols
++++ new.extendsClauseAlreadySeen.symbols
+@@= skipped -10, +10 lines =@@
+ >C : Symbol(C, Decl(extendsClauseAlreadySeen.ts, 0, 0))
+ 
+     baz() { }
+->baz : Symbol(D.baz, Decl(extendsClauseAlreadySeen.ts, 3, 29))
++>baz : Symbol(baz, Decl(extendsClauseAlreadySeen.ts, 3, 29))
+ }

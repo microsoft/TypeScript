@@ -1,0 +1,45 @@
+--- old.contextualTypeWithUnionTypeCallSignatures.symbols
++++ new.contextualTypeWithUnionTypeCallSignatures.symbols
+@@= skipped -11, +11 lines =@@
+ >IWithNoCallSignatures : Symbol(IWithNoCallSignatures, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 0, 0))
+ 
+     foo: string;
+->foo : Symbol(IWithNoCallSignatures.foo, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 7, 33))
++>foo : Symbol(foo, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 7, 33))
+ }
+ interface IWithCallSignatures {
+ >IWithCallSignatures : Symbol(IWithCallSignatures, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 9, 1))
+@@= skipped -37, +37 lines =@@
+ >IWithNoCallSignatures : Symbol(IWithNoCallSignatures, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 0, 0))
+ >IWithCallSignatures : Symbol(IWithCallSignatures, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 9, 1))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 25, 52))
+->a.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>a.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 25, 52))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+ // With call signatures with different return type
+ var x2: IWithCallSignatures | IWithCallSignatures2 = a => a.toString(); // Like iWithCallSignatures
+@@= skipped -10, +10 lines =@@
+ >IWithCallSignatures : Symbol(IWithCallSignatures, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 9, 1))
+ >IWithCallSignatures2 : Symbol(IWithCallSignatures2, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 12, 1))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 28, 52))
+->a.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>a.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 28, 52))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+ var x2: IWithCallSignatures | IWithCallSignatures2 = a => a; // Like iWithCallSignatures2
+ >x2 : Symbol(x2, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 28, 3), Decl(contextualTypeWithUnionTypeCallSignatures.ts, 29, 3))
+@@= skipped -25, +25 lines =@@
+ >IWithCallSignatures : Symbol(IWithCallSignatures, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 9, 1))
+ >IWithCallSignatures4 : Symbol(IWithCallSignatures4, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 18, 1))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 35, 52))
+->a.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>a.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 35, 52))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 

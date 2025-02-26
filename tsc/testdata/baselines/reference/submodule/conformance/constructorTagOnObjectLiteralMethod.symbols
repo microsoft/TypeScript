@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/jsdoc/constructorTagOnObjectLiteralMethod.ts] ////
+
+=== example.js ===
+const obj = {
+>obj : Symbol(obj, Decl(example.js, 0, 5))
+
+  /** @constructor */
+  Foo() { this.bar = "bar" }
+>Foo : Symbol(Foo, Decl(example.js, 0, 13))
+
+};
+(new obj.Foo()).bar
+>obj.Foo : Symbol(Foo, Decl(example.js, 0, 13))
+>obj : Symbol(obj, Decl(example.js, 0, 5))
+>Foo : Symbol(Foo, Decl(example.js, 0, 13))
+

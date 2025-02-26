@@ -1,0 +1,31 @@
+--- old.returnStatements.symbols
++++ new.returnStatements.symbols
+@@= skipped -30, +30 lines =@@
+ 
+ interface I { id: number }
+ >I : Symbol(I, Decl(returnStatements.ts, 8, 31))
+->id : Symbol(I.id, Decl(returnStatements.ts, 10, 13))
++>id : Symbol(id, Decl(returnStatements.ts, 10, 13))
+ 
+ class C implements I {
+ >C : Symbol(C, Decl(returnStatements.ts, 10, 26))
+ >I : Symbol(I, Decl(returnStatements.ts, 8, 31))
+ 
+     id: number;
+->id : Symbol(C.id, Decl(returnStatements.ts, 11, 22))
++>id : Symbol(id, Decl(returnStatements.ts, 11, 22))
+ 
+     dispose() {}
+->dispose : Symbol(C.dispose, Decl(returnStatements.ts, 12, 15))
++>dispose : Symbol(dispose, Decl(returnStatements.ts, 12, 15))
+ }
+ class D extends C {
+ >D : Symbol(D, Decl(returnStatements.ts, 14, 1))
+ >C : Symbol(C, Decl(returnStatements.ts, 10, 26))
+ 
+     name: string;
+->name : Symbol(D.name, Decl(returnStatements.ts, 15, 19))
++>name : Symbol(name, Decl(returnStatements.ts, 15, 19))
+ }
+ function fn10(): I { return { id: 12 }; } 
+ >fn10 : Symbol(fn10, Decl(returnStatements.ts, 17, 1))

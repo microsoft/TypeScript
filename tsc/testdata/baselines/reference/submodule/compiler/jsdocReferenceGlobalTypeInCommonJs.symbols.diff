@@ -1,0 +1,31 @@
+--- old.jsdocReferenceGlobalTypeInCommonJs.symbols
++++ new.jsdocReferenceGlobalTypeInCommonJs.symbols
+@@= skipped -2, +2 lines =@@
+ === a.js ===
+ const other = require('./other');
+ >other : Symbol(other, Decl(a.js, 0, 5))
+->require : Symbol(require)
+->'./other' : Symbol("other", Decl(other.d.ts, 0, 0))
+ 
+ /** @type {Puppeteer.Keyboard} */
+ var ppk;
+ >ppk : Symbol(ppk, Decl(a.js, 2, 3))
+ 
+ Puppeteer.connect;
+->Puppeteer.connect : Symbol(Puppeteer.connect, Decl(puppet.d.ts, 3, 1))
++>Puppeteer.connect : Symbol(connect, Decl(puppet.d.ts, 3, 1))
+ >Puppeteer : Symbol(Puppeteer, Decl(puppet.d.ts, 0, 0))
+->connect : Symbol(Puppeteer.connect, Decl(puppet.d.ts, 3, 1))
++>connect : Symbol(connect, Decl(puppet.d.ts, 3, 1))
+ 
+ === puppet.d.ts ===
+ export as namespace Puppeteer;
+@@= skipped -20, +18 lines =@@
+ >Keyboard : Symbol(Keyboard, Decl(puppet.d.ts, 0, 30))
+ 
+     key: string
+->key : Symbol(Keyboard.key, Decl(puppet.d.ts, 1, 27))
++>key : Symbol(key, Decl(puppet.d.ts, 1, 27))
+ }
+ export function connect(name: string): void;
+ >connect : Symbol(connect, Decl(puppet.d.ts, 3, 1))

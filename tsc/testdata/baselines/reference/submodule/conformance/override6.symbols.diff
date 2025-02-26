@@ -1,0 +1,32 @@
+--- old.override6.symbols
++++ new.override6.symbols
+@@= skipped -4, +4 lines =@@
+ >B : Symbol(B, Decl(override6.ts, 0, 0))
+ 
+     public baz: number = 1;
+->baz : Symbol(B.baz, Decl(override6.ts, 0, 9))
++>baz : Symbol(baz, Decl(override6.ts, 0, 9))
+ 
+     constructor(public foo: string, public bar: number) {
+->foo : Symbol(B.foo, Decl(override6.ts, 2, 16))
+->bar : Symbol(B.bar, Decl(override6.ts, 2, 35))
++>foo : Symbol(foo, Decl(override6.ts, 2, 16))
++>bar : Symbol(bar, Decl(override6.ts, 2, 35))
+ 
+     }
+ }
+@@= skipped -14, +14 lines =@@
+ >B : Symbol(B, Decl(override6.ts, 0, 0))
+ 
+     public bar: number = 1
+->bar : Symbol(D.bar, Decl(override6.ts, 7, 19))
++>bar : Symbol(bar, Decl(override6.ts, 7, 19))
+ 
+     constructor(public foo: string, public baz: number) {
+->foo : Symbol(D.foo, Decl(override6.ts, 9, 16))
+->baz : Symbol(D.baz, Decl(override6.ts, 9, 35))
++>foo : Symbol(foo, Decl(override6.ts, 9, 16))
++>baz : Symbol(baz, Decl(override6.ts, 9, 35))
+ 
+         super(foo, 42)
+ >super : Symbol(B, Decl(override6.ts, 0, 0))

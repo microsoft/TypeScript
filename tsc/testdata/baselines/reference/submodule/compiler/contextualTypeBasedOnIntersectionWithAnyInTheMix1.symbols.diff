@@ -1,0 +1,33 @@
+--- old.contextualTypeBasedOnIntersectionWithAnyInTheMix1.symbols
++++ new.contextualTypeBasedOnIntersectionWithAnyInTheMix1.symbols
+@@= skipped -37, +37 lines =@@
+ 
+ > {
+   attrs<
+->attrs : Symbol(StyledFunction.attrs, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 9, 3))
++>attrs : Symbol(attrs, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 9, 3))
+ 
+     U,
+ >U : Symbol(U, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 10, 8))
+@@= skipped -54, +54 lines =@@
+ >BaseProps : Symbol(BaseProps, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 24, 38))
+ 
+   as?: "select" | "input";
+->as : Symbol(BaseProps.as, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 26, 21))
++>as : Symbol(as, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 26, 21))
+ }
+ 
+ declare const Flex: (props: BaseProps) => null;
+@@= skipped -10, +10 lines =@@
+ 
+ export const StyledSelect = styled(Flex).attrs({
+ >StyledSelect : Symbol(StyledSelect, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 32, 12))
+->styled(Flex).attrs : Symbol(StyledFunction.attrs, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 9, 3))
++>styled(Flex).attrs : Symbol(attrs, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 9, 3))
+ >styled : Symbol(styled, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 24, 13))
+ >Flex : Symbol(Flex, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 30, 13))
+->attrs : Symbol(StyledFunction.attrs, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 9, 3))
++>attrs : Symbol(attrs, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 9, 3))
+ 
+   as: "select",
+ >as : Symbol(as, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts, 32, 48))

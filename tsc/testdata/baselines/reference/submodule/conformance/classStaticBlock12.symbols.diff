@@ -1,0 +1,16 @@
+--- old.classStaticBlock12.symbols
++++ new.classStaticBlock12.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(classStaticBlock12.ts, 0, 0))
+ 
+   static #x = 1;
+->#x : Symbol(C.#x, Decl(classStaticBlock12.ts, 0, 9))
++>#x : Symbol(#x, Decl(classStaticBlock12.ts, 0, 9))
+   
+   static {
+     C.#x;
+->C.#x : Symbol(C.#x, Decl(classStaticBlock12.ts, 0, 9))
++>C.#x : Symbol(#x, Decl(classStaticBlock12.ts, 0, 9))
+ >C : Symbol(C, Decl(classStaticBlock12.ts, 0, 0))
+   }
+ }

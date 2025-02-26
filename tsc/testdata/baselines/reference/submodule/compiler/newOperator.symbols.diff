@@ -1,0 +1,42 @@
+--- old.newOperator.symbols
++++ new.newOperator.symbols
+@@= skipped -27, +27 lines =@@
+ 
+ // Use in LHS of expression?
+ (new Date()).toString();
+->(new Date()).toString : Symbol(Date.toString, Decl(lib.es5.d.ts, --, --))
++>(new Date()).toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+->toString : Symbol(Date.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+ // Various spacing
+ var t3 = new string[]( );
+@@= skipped -68, +68 lines =@@
+ >T : Symbol(T, Decl(newOperator.ts, 47, 10))
+ 
+         x: number;
+->x : Symbol(T.x, Decl(newOperator.ts, 48, 20))
++>x : Symbol(x, Decl(newOperator.ts, 48, 20))
+     }
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >S : Symbol(S, Decl(newOperator.ts, 51, 1))
+ 
+     public get xs(): M.T[] {
+->xs : Symbol(S.xs, Decl(newOperator.ts, 53, 9))
++>xs : Symbol(xs, Decl(newOperator.ts, 53, 9))
+ >M : Symbol(M, Decl(newOperator.ts, 45, 19))
+->T : Symbol(M.T, Decl(newOperator.ts, 47, 10))
++>T : Symbol(T, Decl(newOperator.ts, 47, 10))
+ 
+         return new M.T[];
+->M.T : Symbol(M.T, Decl(newOperator.ts, 47, 10))
++>M.T : Symbol(T, Decl(newOperator.ts, 47, 10))
+ >M : Symbol(M, Decl(newOperator.ts, 45, 19))
+->T : Symbol(M.T, Decl(newOperator.ts, 47, 10))
++>T : Symbol(T, Decl(newOperator.ts, 47, 10))
+     }
+ }
+ 

@@ -1,0 +1,18 @@
+--- old.declFileTypeAnnotationTypeLiteral.symbols
++++ new.declFileTypeAnnotationTypeLiteral.symbols
+@@= skipped -36, +36 lines =@@
+     new (a: string): m.c;
+ >a : Symbol(a, Decl(declFileTypeAnnotationTypeLiteral.ts, 17, 9))
+ >m : Symbol(m, Decl(declFileTypeAnnotationTypeLiteral.ts, 3, 1))
+->c : Symbol(m.c, Decl(declFileTypeAnnotationTypeLiteral.ts, 4, 10))
++>c : Symbol(c, Decl(declFileTypeAnnotationTypeLiteral.ts, 4, 10))
+ 
+     // Indexers
+     [n: number]: c;
+@@= skipped -45, +45 lines =@@
+ >z : Symbol(z, Decl(declFileTypeAnnotationTypeLiteral.ts, 37, 3))
+ >a : Symbol(a, Decl(declFileTypeAnnotationTypeLiteral.ts, 37, 12))
+ >m : Symbol(m, Decl(declFileTypeAnnotationTypeLiteral.ts, 3, 1))
+->c : Symbol(m.c, Decl(declFileTypeAnnotationTypeLiteral.ts, 4, 10))
++>c : Symbol(c, Decl(declFileTypeAnnotationTypeLiteral.ts, 4, 10))
+ 

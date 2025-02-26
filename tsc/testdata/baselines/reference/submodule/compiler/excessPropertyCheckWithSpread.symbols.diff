@@ -1,0 +1,27 @@
+--- old.excessPropertyCheckWithSpread.symbols
++++ new.excessPropertyCheckWithSpread.symbols
+@@= skipped -9, +9 lines =@@
+ >I : Symbol(I, Decl(excessPropertyCheckWithSpread.ts, 0, 39))
+ 
+     readonly n: number;
+->n : Symbol(I.n, Decl(excessPropertyCheckWithSpread.ts, 1, 13))
++>n : Symbol(n, Decl(excessPropertyCheckWithSpread.ts, 1, 13))
+ }
+ declare let i: I;
+ >i : Symbol(i, Decl(excessPropertyCheckWithSpread.ts, 4, 11))
+@@= skipped -15, +15 lines =@@
+ >R : Symbol(R, Decl(excessPropertyCheckWithSpread.ts, 5, 18))
+ 
+     opt?: number
+->opt : Symbol(R.opt, Decl(excessPropertyCheckWithSpread.ts, 7, 13))
++>opt : Symbol(opt, Decl(excessPropertyCheckWithSpread.ts, 7, 13))
+ }
+ interface L {
+ >L : Symbol(L, Decl(excessPropertyCheckWithSpread.ts, 9, 1))
+ 
+     opt: string
+->opt : Symbol(L.opt, Decl(excessPropertyCheckWithSpread.ts, 10, 13))
++>opt : Symbol(opt, Decl(excessPropertyCheckWithSpread.ts, 10, 13))
+ }
+ declare let l: L;
+ >l : Symbol(l, Decl(excessPropertyCheckWithSpread.ts, 13, 11))

@@ -1,0 +1,226 @@
+//// [tests/cases/compiler/pickOfLargeObjectUnionWorks.ts] ////
+
+=== pickOfLargeObjectUnionWorks.ts ===
+interface HTMLDataAttributes {
+>HTMLDataAttributes : Symbol(HTMLDataAttributes, Decl(pickOfLargeObjectUnionWorks.ts, 0, 0))
+
+    [data: `data-${string}`]: unknown
+>data : Symbol(data, Decl(pickOfLargeObjectUnionWorks.ts, 1, 5))
+}
+
+interface Base {
+>Base : Symbol(Base, Decl(pickOfLargeObjectUnionWorks.ts, 2, 1))
+
+    id: string;
+>id : Symbol(id, Decl(pickOfLargeObjectUnionWorks.ts, 4, 16))
+
+    prop01: string;
+>prop01 : Symbol(prop01, Decl(pickOfLargeObjectUnionWorks.ts, 5, 15))
+
+    prop02: string;
+>prop02 : Symbol(prop02, Decl(pickOfLargeObjectUnionWorks.ts, 6, 19))
+
+    prop03: string;
+>prop03 : Symbol(prop03, Decl(pickOfLargeObjectUnionWorks.ts, 7, 19))
+
+    prop04: string;
+>prop04 : Symbol(prop04, Decl(pickOfLargeObjectUnionWorks.ts, 8, 19))
+
+    prop05: string;
+>prop05 : Symbol(prop05, Decl(pickOfLargeObjectUnionWorks.ts, 9, 19))
+
+    prop06: string;
+>prop06 : Symbol(prop06, Decl(pickOfLargeObjectUnionWorks.ts, 10, 19))
+
+    prop07: string;
+>prop07 : Symbol(prop07, Decl(pickOfLargeObjectUnionWorks.ts, 11, 19))
+
+    prop08: string;
+>prop08 : Symbol(prop08, Decl(pickOfLargeObjectUnionWorks.ts, 12, 19))
+
+    prop09: string;
+>prop09 : Symbol(prop09, Decl(pickOfLargeObjectUnionWorks.ts, 13, 19))
+
+    prop10: string;
+>prop10 : Symbol(prop10, Decl(pickOfLargeObjectUnionWorks.ts, 14, 19))
+
+    prop11: string;
+>prop11 : Symbol(prop11, Decl(pickOfLargeObjectUnionWorks.ts, 15, 19))
+
+    prop12: string;
+>prop12 : Symbol(prop12, Decl(pickOfLargeObjectUnionWorks.ts, 16, 19))
+
+    prop13: string;
+>prop13 : Symbol(prop13, Decl(pickOfLargeObjectUnionWorks.ts, 17, 19))
+
+    prop14: string;
+>prop14 : Symbol(prop14, Decl(pickOfLargeObjectUnionWorks.ts, 18, 19))
+
+    prop15: string;
+>prop15 : Symbol(prop15, Decl(pickOfLargeObjectUnionWorks.ts, 19, 19))
+
+    prop16: string;
+>prop16 : Symbol(prop16, Decl(pickOfLargeObjectUnionWorks.ts, 20, 19))
+
+    prop17: string;
+>prop17 : Symbol(prop17, Decl(pickOfLargeObjectUnionWorks.ts, 21, 19))
+
+    prop18: string;
+>prop18 : Symbol(prop18, Decl(pickOfLargeObjectUnionWorks.ts, 22, 19))
+
+    prop19: string;
+>prop19 : Symbol(prop19, Decl(pickOfLargeObjectUnionWorks.ts, 23, 19))
+
+    prop20: string;
+>prop20 : Symbol(prop20, Decl(pickOfLargeObjectUnionWorks.ts, 24, 19))
+
+    prop21: string;
+>prop21 : Symbol(prop21, Decl(pickOfLargeObjectUnionWorks.ts, 25, 19))
+
+    prop22: string;
+>prop22 : Symbol(prop22, Decl(pickOfLargeObjectUnionWorks.ts, 26, 19))
+
+    prop23: string;
+>prop23 : Symbol(prop23, Decl(pickOfLargeObjectUnionWorks.ts, 27, 19))
+
+    prop24: string;
+>prop24 : Symbol(prop24, Decl(pickOfLargeObjectUnionWorks.ts, 28, 19))
+
+    prop25: string;
+>prop25 : Symbol(prop25, Decl(pickOfLargeObjectUnionWorks.ts, 29, 19))
+
+    prop26: string;
+>prop26 : Symbol(prop26, Decl(pickOfLargeObjectUnionWorks.ts, 30, 19))
+
+    prop27: string;
+>prop27 : Symbol(prop27, Decl(pickOfLargeObjectUnionWorks.ts, 31, 19))
+
+    prop28: string;
+>prop28 : Symbol(prop28, Decl(pickOfLargeObjectUnionWorks.ts, 32, 19))
+
+    prop29: string;
+>prop29 : Symbol(prop29, Decl(pickOfLargeObjectUnionWorks.ts, 33, 19))
+
+    prop30: string;
+>prop30 : Symbol(prop30, Decl(pickOfLargeObjectUnionWorks.ts, 34, 19))
+
+    prop31: string;
+>prop31 : Symbol(prop31, Decl(pickOfLargeObjectUnionWorks.ts, 35, 19))
+
+    prop32: string;
+>prop32 : Symbol(prop32, Decl(pickOfLargeObjectUnionWorks.ts, 36, 19))
+
+    prop33: string;
+>prop33 : Symbol(prop33, Decl(pickOfLargeObjectUnionWorks.ts, 37, 19))
+
+    prop34: string;
+>prop34 : Symbol(prop34, Decl(pickOfLargeObjectUnionWorks.ts, 38, 19))
+
+    prop35: string;
+>prop35 : Symbol(prop35, Decl(pickOfLargeObjectUnionWorks.ts, 39, 19))
+
+    prop36: string;
+>prop36 : Symbol(prop36, Decl(pickOfLargeObjectUnionWorks.ts, 40, 19))
+
+    prop37: string;
+>prop37 : Symbol(prop37, Decl(pickOfLargeObjectUnionWorks.ts, 41, 19))
+  }
+  
+  interface A extends Base, HTMLDataAttributes {
+>A : Symbol(A, Decl(pickOfLargeObjectUnionWorks.ts, 43, 3))
+>Base : Symbol(Base, Decl(pickOfLargeObjectUnionWorks.ts, 2, 1))
+>HTMLDataAttributes : Symbol(HTMLDataAttributes, Decl(pickOfLargeObjectUnionWorks.ts, 0, 0))
+
+    a1: string;
+>a1 : Symbol(a1, Decl(pickOfLargeObjectUnionWorks.ts, 45, 48))
+
+    a2: string;
+>a2 : Symbol(a2, Decl(pickOfLargeObjectUnionWorks.ts, 46, 15))
+
+    a3: string;
+>a3 : Symbol(a3, Decl(pickOfLargeObjectUnionWorks.ts, 47, 15))
+
+    a4: string;
+>a4 : Symbol(a4, Decl(pickOfLargeObjectUnionWorks.ts, 48, 15))
+
+    a5: string;
+>a5 : Symbol(a5, Decl(pickOfLargeObjectUnionWorks.ts, 49, 15))
+
+    a6: string;
+>a6 : Symbol(a6, Decl(pickOfLargeObjectUnionWorks.ts, 50, 15))
+
+    a7: string;
+>a7 : Symbol(a7, Decl(pickOfLargeObjectUnionWorks.ts, 51, 15))
+
+    a8: string;
+>a8 : Symbol(a8, Decl(pickOfLargeObjectUnionWorks.ts, 52, 15))
+  }
+  
+  interface B extends Base, HTMLDataAttributes {
+>B : Symbol(B, Decl(pickOfLargeObjectUnionWorks.ts, 54, 3))
+>Base : Symbol(Base, Decl(pickOfLargeObjectUnionWorks.ts, 2, 1))
+>HTMLDataAttributes : Symbol(HTMLDataAttributes, Decl(pickOfLargeObjectUnionWorks.ts, 0, 0))
+
+    b1: string;
+>b1 : Symbol(b1, Decl(pickOfLargeObjectUnionWorks.ts, 56, 48))
+
+    b2: string;
+>b2 : Symbol(b2, Decl(pickOfLargeObjectUnionWorks.ts, 57, 15))
+
+    b3: string;
+>b3 : Symbol(b3, Decl(pickOfLargeObjectUnionWorks.ts, 58, 15))
+
+    b4: string;
+>b4 : Symbol(b4, Decl(pickOfLargeObjectUnionWorks.ts, 59, 15))
+
+    b5: string;
+>b5 : Symbol(b5, Decl(pickOfLargeObjectUnionWorks.ts, 60, 15))
+
+    b6: string;
+>b6 : Symbol(b6, Decl(pickOfLargeObjectUnionWorks.ts, 61, 15))
+
+    b7: string;
+>b7 : Symbol(b7, Decl(pickOfLargeObjectUnionWorks.ts, 62, 15))
+
+    b8: string;
+>b8 : Symbol(b8, Decl(pickOfLargeObjectUnionWorks.ts, 63, 15))
+  }
+  
+  interface C extends Base, HTMLDataAttributes {
+>C : Symbol(C, Decl(pickOfLargeObjectUnionWorks.ts, 65, 3))
+>Base : Symbol(Base, Decl(pickOfLargeObjectUnionWorks.ts, 2, 1))
+>HTMLDataAttributes : Symbol(HTMLDataAttributes, Decl(pickOfLargeObjectUnionWorks.ts, 0, 0))
+
+    c1: string;
+>c1 : Symbol(c1, Decl(pickOfLargeObjectUnionWorks.ts, 67, 48))
+
+    c2: string;
+>c2 : Symbol(c2, Decl(pickOfLargeObjectUnionWorks.ts, 68, 15))
+
+    c3: string;
+>c3 : Symbol(c3, Decl(pickOfLargeObjectUnionWorks.ts, 69, 15))
+
+    c4: string;
+>c4 : Symbol(c4, Decl(pickOfLargeObjectUnionWorks.ts, 70, 15))
+
+    c5: string;
+>c5 : Symbol(c5, Decl(pickOfLargeObjectUnionWorks.ts, 71, 15))
+
+    c6: string;
+>c6 : Symbol(c6, Decl(pickOfLargeObjectUnionWorks.ts, 72, 15))
+
+    c7: string;
+>c7 : Symbol(c7, Decl(pickOfLargeObjectUnionWorks.ts, 73, 15))
+
+    c8: string;
+>c8 : Symbol(c8, Decl(pickOfLargeObjectUnionWorks.ts, 74, 15))
+  }
+  
+  const xyz: Pick<A | B | C, 'id'> = {id: 'id'}
+>xyz : Symbol(xyz, Decl(pickOfLargeObjectUnionWorks.ts, 78, 7))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(pickOfLargeObjectUnionWorks.ts, 43, 3))
+>B : Symbol(B, Decl(pickOfLargeObjectUnionWorks.ts, 54, 3))
+>C : Symbol(C, Decl(pickOfLargeObjectUnionWorks.ts, 65, 3))
+>id : Symbol(id, Decl(pickOfLargeObjectUnionWorks.ts, 78, 38))
+

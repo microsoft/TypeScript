@@ -1,0 +1,81 @@
+--- old.everyTypeWithAnnotationAndInitializer.symbols
++++ new.everyTypeWithAnnotationAndInitializer.symbols
+@@= skipped -4, +4 lines =@@
+ >I : Symbol(I, Decl(everyTypeWithAnnotationAndInitializer.ts, 0, 0))
+ 
+     id: number;
+->id : Symbol(I.id, Decl(everyTypeWithAnnotationAndInitializer.ts, 0, 13))
++>id : Symbol(id, Decl(everyTypeWithAnnotationAndInitializer.ts, 0, 13))
+ }
+ 
+ class C implements I {
+@@= skipped -8, +8 lines =@@
+ >I : Symbol(I, Decl(everyTypeWithAnnotationAndInitializer.ts, 0, 0))
+ 
+     id: number;
+->id : Symbol(C.id, Decl(everyTypeWithAnnotationAndInitializer.ts, 4, 22))
++>id : Symbol(id, Decl(everyTypeWithAnnotationAndInitializer.ts, 4, 22))
+ }
+ 
+ class D<T>{
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(everyTypeWithAnnotationAndInitializer.ts, 8, 8))
+ 
+     source: T;
+->source : Symbol(D.source, Decl(everyTypeWithAnnotationAndInitializer.ts, 8, 11))
++>source : Symbol(source, Decl(everyTypeWithAnnotationAndInitializer.ts, 8, 11))
+ >T : Symbol(T, Decl(everyTypeWithAnnotationAndInitializer.ts, 8, 8))
+ 
+     recurse: D<T>;
+->recurse : Symbol(D.recurse, Decl(everyTypeWithAnnotationAndInitializer.ts, 9, 14))
++>recurse : Symbol(recurse, Decl(everyTypeWithAnnotationAndInitializer.ts, 9, 14))
+ >D : Symbol(D, Decl(everyTypeWithAnnotationAndInitializer.ts, 6, 1))
+ >T : Symbol(T, Decl(everyTypeWithAnnotationAndInitializer.ts, 8, 8))
+ 
+     wrapped: D<D<T>>
+->wrapped : Symbol(D.wrapped, Decl(everyTypeWithAnnotationAndInitializer.ts, 10, 18))
++>wrapped : Symbol(wrapped, Decl(everyTypeWithAnnotationAndInitializer.ts, 10, 18))
+ >D : Symbol(D, Decl(everyTypeWithAnnotationAndInitializer.ts, 6, 1))
+ >D : Symbol(D, Decl(everyTypeWithAnnotationAndInitializer.ts, 6, 1))
+ >T : Symbol(T, Decl(everyTypeWithAnnotationAndInitializer.ts, 8, 8))
+@@= skipped -26, +26 lines =@@
+ >A : Symbol(A, Decl(everyTypeWithAnnotationAndInitializer.ts, 16, 10))
+ 
+         name: string;
+->name : Symbol(A.name, Decl(everyTypeWithAnnotationAndInitializer.ts, 17, 20))
++>name : Symbol(name, Decl(everyTypeWithAnnotationAndInitializer.ts, 17, 20))
+     }
+ 
+     export function F2(x: number): string { return x.toString(); }
+ >F2 : Symbol(F2, Decl(everyTypeWithAnnotationAndInitializer.ts, 19, 5))
+ >x : Symbol(x, Decl(everyTypeWithAnnotationAndInitializer.ts, 21, 23))
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(everyTypeWithAnnotationAndInitializer.ts, 21, 23))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ var aNumber: number = 9.9;
+@@= skipped -86, +86 lines =@@
+ var aClassInModule: M.A = new M.A();
+ >aClassInModule : Symbol(aClassInModule, Decl(everyTypeWithAnnotationAndInitializer.ts, 44, 3))
+ >M : Symbol(M, Decl(everyTypeWithAnnotationAndInitializer.ts, 14, 44))
+->A : Symbol(M.A, Decl(everyTypeWithAnnotationAndInitializer.ts, 16, 10))
+->M.A : Symbol(M.A, Decl(everyTypeWithAnnotationAndInitializer.ts, 16, 10))
++>A : Symbol(A, Decl(everyTypeWithAnnotationAndInitializer.ts, 16, 10))
++>M.A : Symbol(A, Decl(everyTypeWithAnnotationAndInitializer.ts, 16, 10))
+ >M : Symbol(M, Decl(everyTypeWithAnnotationAndInitializer.ts, 14, 44))
+->A : Symbol(M.A, Decl(everyTypeWithAnnotationAndInitializer.ts, 16, 10))
++>A : Symbol(A, Decl(everyTypeWithAnnotationAndInitializer.ts, 16, 10))
+ 
+ var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';
+ >aFunctionInModule : Symbol(aFunctionInModule, Decl(everyTypeWithAnnotationAndInitializer.ts, 45, 3))
+->M.F2 : Symbol(M.F2, Decl(everyTypeWithAnnotationAndInitializer.ts, 19, 5))
++>M.F2 : Symbol(F2, Decl(everyTypeWithAnnotationAndInitializer.ts, 19, 5))
+ >M : Symbol(M, Decl(everyTypeWithAnnotationAndInitializer.ts, 14, 44))
+->F2 : Symbol(M.F2, Decl(everyTypeWithAnnotationAndInitializer.ts, 19, 5))
++>F2 : Symbol(F2, Decl(everyTypeWithAnnotationAndInitializer.ts, 19, 5))
+ >x : Symbol(x, Decl(everyTypeWithAnnotationAndInitializer.ts, 45, 38))
+ 
+ 

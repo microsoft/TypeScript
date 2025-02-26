@@ -1,0 +1,11 @@
+--- old.propertyParameterWithQuestionMark.symbols
++++ new.propertyParameterWithQuestionMark.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(propertyParameterWithQuestionMark.ts, 0, 0))
+ 
+     constructor(public x?) { }
+->x : Symbol(C.x, Decl(propertyParameterWithQuestionMark.ts, 1, 16))
++>x : Symbol(x, Decl(propertyParameterWithQuestionMark.ts, 1, 16))
+ }
+ 
+ // x should be an optional property

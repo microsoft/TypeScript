@@ -1,0 +1,22 @@
+--- old.internalAliasClassInsideLocalModuleWithoutExport.symbols
++++ new.internalAliasClassInsideLocalModuleWithoutExport.symbols
+@@= skipped -7, +7 lines =@@
+ >c : Symbol(c, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 0, 17))
+ 
+         foo(a: number) {
+->foo : Symbol(c.foo, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 1, 20))
++>foo : Symbol(foo, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 1, 20))
+ >a : Symbol(a, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 2, 12))
+ 
+             return a;
+@@= skipped -26, +26 lines =@@
+ 
+         var cReturnVal = cProp.foo(10);
+ >cReturnVal : Symbol(cReturnVal, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 12, 11))
+->cProp.foo : Symbol(c.foo, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 1, 20))
++>cProp.foo : Symbol(foo, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 1, 20))
+ >cProp : Symbol(cProp, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 11, 18))
+->foo : Symbol(c.foo, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 1, 20))
++>foo : Symbol(foo, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 1, 20))
+     }
+ }

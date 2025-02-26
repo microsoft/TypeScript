@@ -1,0 +1,19 @@
+--- old.reverseMappedTupleContext.symbols
++++ new.reverseMappedTupleContext.symbols
+@@= skipped -85, +85 lines =@@
+ >CompilerOptions : Symbol(CompilerOptions, Decl(reverseMappedTupleContext.ts, 21, 3))
+ 
+   allowUnreachableCode?: boolean;
+->allowUnreachableCode : Symbol(CompilerOptions.allowUnreachableCode, Decl(reverseMappedTupleContext.ts, 23, 27))
++>allowUnreachableCode : Symbol(allowUnreachableCode, Decl(reverseMappedTupleContext.ts, 23, 27))
+ 
+   allowUnusedLabels?: boolean;
+->allowUnusedLabels : Symbol(CompilerOptions.allowUnusedLabels, Decl(reverseMappedTupleContext.ts, 24, 33))
++>allowUnusedLabels : Symbol(allowUnusedLabels, Decl(reverseMappedTupleContext.ts, 24, 33))
+ 
+   alwaysStrict?: boolean;
+->alwaysStrict : Symbol(CompilerOptions.alwaysStrict, Decl(reverseMappedTupleContext.ts, 25, 30))
++>alwaysStrict : Symbol(alwaysStrict, Decl(reverseMappedTupleContext.ts, 25, 30))
+ }
+ type KeepLiteralStrings<T extends string[]> = {
+ >KeepLiteralStrings : Symbol(KeepLiteralStrings, Decl(reverseMappedTupleContext.ts, 27, 1))

@@ -1,0 +1,162 @@
+//// [tests/cases/compiler/inferTypesWithFixedTupleExtendsAtVariadicPosition.ts] ////
+
+=== inferTypesWithFixedTupleExtendsAtVariadicPosition.ts ===
+// repro #51138
+
+type SubTup2FixedLength<T extends unknown[]> = T extends [
+>SubTup2FixedLength : Symbol(SubTup2FixedLength, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 0, 0))
+>T : Symbol(T, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 2, 24))
+>T : Symbol(T, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 2, 24))
+
+  ...infer B extends [any, any],
+>B : Symbol(B, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 3, 10))
+
+  any
+]
+  ? B
+>B : Symbol(B, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 3, 10))
+
+  : never;
+
+type SubTup2FixedLengthTest = SubTup2FixedLength<[a: 0, b: 1, c: 2]>;
+>SubTup2FixedLengthTest : Symbol(SubTup2FixedLengthTest, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 7, 10))
+>SubTup2FixedLength : Symbol(SubTup2FixedLength, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 0, 0))
+
+type SubTup2Variadic<T extends unknown[]> = T extends [
+>SubTup2Variadic : Symbol(SubTup2Variadic, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 9, 69))
+>T : Symbol(T, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 11, 21))
+>T : Symbol(T, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 11, 21))
+
+  ...infer B extends [any, any],
+>B : Symbol(B, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 12, 10))
+
+  ...any
+]
+  ? B
+>B : Symbol(B, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 12, 10))
+
+  : never;
+
+type SubTup2VariadicTest = SubTup2Variadic<[a: 0, b: 1, ...c: 2[]]>;
+>SubTup2VariadicTest : Symbol(SubTup2VariadicTest, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 16, 10))
+>SubTup2Variadic : Symbol(SubTup2Variadic, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 9, 69))
+
+type SubTup2VariadicTest2 = SubTup2Variadic<[a: 0, b: 1, c: 2, ...d: 3[]]>;
+>SubTup2VariadicTest2 : Symbol(SubTup2VariadicTest2, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 18, 68))
+>SubTup2Variadic : Symbol(SubTup2Variadic, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 9, 69))
+
+type SubTup2VariadicAndRest<T extends unknown[]> = T extends [
+>SubTup2VariadicAndRest : Symbol(SubTup2VariadicAndRest, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 19, 75))
+>T : Symbol(T, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 21, 28))
+>T : Symbol(T, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 21, 28))
+
+    ...infer B extends [any, any],
+>B : Symbol(B, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 22, 12))
+
+    ...(infer C)[]
+>C : Symbol(C, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 23, 13))
+
+]
+    ? [...B, ...[C]]
+>B : Symbol(B, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 22, 12))
+>C : Symbol(C, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 23, 13))
+
+    : never;
+
+type SubTup2VariadicAndRestTest = SubTup2VariadicAndRest<[a: 0, b: 1, ...c: 2[]]>;
+>SubTup2VariadicAndRestTest : Symbol(SubTup2VariadicAndRestTest, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 26, 12))
+>SubTup2VariadicAndRest : Symbol(SubTup2VariadicAndRest, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 19, 75))
+
+type SubTup2TrailingVariadic<T extends unknown[]> = T extends [
+>SubTup2TrailingVariadic : Symbol(SubTup2TrailingVariadic, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 28, 82))
+>T : Symbol(T, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 30, 29))
+>T : Symbol(T, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 30, 29))
+
+  ...any,
+  ...infer B extends [any, any],
+>B : Symbol(B, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 32, 10))
+
+]
+  ? B
+>B : Symbol(B, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 32, 10))
+
+  : never;
+
+type SubTup2TrailingVariadicTest = SubTup2TrailingVariadic<[...a: 0[], b: 1, c: 2]>;
+>SubTup2TrailingVariadicTest : Symbol(SubTup2TrailingVariadicTest, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 35, 10))
+>SubTup2TrailingVariadic : Symbol(SubTup2TrailingVariadic, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 28, 82))
+
+type SubTup2TrailingVariadicTest2 = SubTup2TrailingVariadic<[...a: 0[], b: 1, c: 2, d: 3]>;
+>SubTup2TrailingVariadicTest2 : Symbol(SubTup2TrailingVariadicTest2, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 37, 84))
+>SubTup2TrailingVariadic : Symbol(SubTup2TrailingVariadic, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 28, 82))
+
+type SubTup2RestAndTrailingVariadic2<T extends unknown[]> = T extends [
+>SubTup2RestAndTrailingVariadic2 : Symbol(SubTup2RestAndTrailingVariadic2, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 38, 91))
+>T : Symbol(T, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 40, 37))
+>T : Symbol(T, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 40, 37))
+
+    ...(infer C)[],
+>C : Symbol(C, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 41, 13))
+
+    ...infer B extends [any, any],
+>B : Symbol(B, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 42, 12))
+
+]
+    ? [C, ...B]
+>C : Symbol(C, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 41, 13))
+>B : Symbol(B, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 42, 12))
+
+    : never;
+
+type SubTup2RestAndTrailingVariadic2Test = SubTup2RestAndTrailingVariadic2<[...a: 0[], b: 1, c: 2]>;
+>SubTup2RestAndTrailingVariadic2Test : Symbol(SubTup2RestAndTrailingVariadic2Test, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 45, 12))
+>SubTup2RestAndTrailingVariadic2 : Symbol(SubTup2RestAndTrailingVariadic2, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 38, 91))
+
+type SubTup2VariadicWithLeadingFixedElements<T extends unknown[]> = T extends [
+>SubTup2VariadicWithLeadingFixedElements : Symbol(SubTup2VariadicWithLeadingFixedElements, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 47, 100))
+>T : Symbol(T, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 49, 45))
+>T : Symbol(T, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 49, 45))
+
+  any,
+  ...infer B extends [any, any],
+>B : Symbol(B, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 51, 10))
+
+  ...any
+]
+  ? B
+>B : Symbol(B, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 51, 10))
+
+  : never;
+
+type SubTup2VariadicWithLeadingFixedElementsTest = SubTup2VariadicWithLeadingFixedElements<[a: 0, b: 1, c: 2, ...d: 3[]]>;
+>SubTup2VariadicWithLeadingFixedElementsTest : Symbol(SubTup2VariadicWithLeadingFixedElementsTest, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 55, 10))
+>SubTup2VariadicWithLeadingFixedElements : Symbol(SubTup2VariadicWithLeadingFixedElements, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 47, 100))
+
+type SubTup2VariadicWithLeadingFixedElementsTest2 = SubTup2VariadicWithLeadingFixedElements<[a: 0, b: 1, c: 2, d: 3, ...e: 4[]]>;
+>SubTup2VariadicWithLeadingFixedElementsTest2 : Symbol(SubTup2VariadicWithLeadingFixedElementsTest2, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 57, 122))
+>SubTup2VariadicWithLeadingFixedElements : Symbol(SubTup2VariadicWithLeadingFixedElements, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 47, 100))
+
+type SubTup2TrailingVariadicWithTrailingFixedElements<T extends unknown[]> = T extends [
+>SubTup2TrailingVariadicWithTrailingFixedElements : Symbol(SubTup2TrailingVariadicWithTrailingFixedElements, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 58, 129))
+>T : Symbol(T, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 60, 54))
+>T : Symbol(T, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 60, 54))
+
+  ...any,
+  ...infer B extends [any, any],
+>B : Symbol(B, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 62, 10))
+
+  any,
+]
+  ? B
+>B : Symbol(B, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 62, 10))
+
+  : never;
+
+type SubTup2TrailingVariadicWithTrailingFixedElementsTest = SubTup2TrailingVariadicWithTrailingFixedElements<[...a: 0[], b: 1, c: 2, d: 3]>;
+>SubTup2TrailingVariadicWithTrailingFixedElementsTest : Symbol(SubTup2TrailingVariadicWithTrailingFixedElementsTest, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 66, 10))
+>SubTup2TrailingVariadicWithTrailingFixedElements : Symbol(SubTup2TrailingVariadicWithTrailingFixedElements, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 58, 129))
+
+type SubTup2TrailingVariadicWithTrailingFixedElementsTest2 = SubTup2TrailingVariadicWithTrailingFixedElements<[...a: 0[], b: 1, c: 2, d: 3, e: 4]>;
+>SubTup2TrailingVariadicWithTrailingFixedElementsTest2 : Symbol(SubTup2TrailingVariadicWithTrailingFixedElementsTest2, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 68, 140))
+>SubTup2TrailingVariadicWithTrailingFixedElements : Symbol(SubTup2TrailingVariadicWithTrailingFixedElements, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 58, 129))
+

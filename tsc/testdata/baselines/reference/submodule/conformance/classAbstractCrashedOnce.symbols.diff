@@ -1,0 +1,20 @@
+--- old.classAbstractCrashedOnce.symbols
++++ new.classAbstractCrashedOnce.symbols
+@@= skipped -4, +4 lines =@@
+ >foo : Symbol(foo, Decl(classAbstractCrashedOnce.ts, 0, 0))
+ 
+     protected abstract test();
+->test : Symbol(foo.test, Decl(classAbstractCrashedOnce.ts, 0, 20))
++>test : Symbol(test, Decl(classAbstractCrashedOnce.ts, 0, 20))
+ }
+ 
+ class bar extends foo {
+@@= skipped -8, +8 lines =@@
+ >foo : Symbol(foo, Decl(classAbstractCrashedOnce.ts, 0, 0))
+ 
+     test() {
+->test : Symbol(bar.test, Decl(classAbstractCrashedOnce.ts, 4, 23))
++>test : Symbol(test, Decl(classAbstractCrashedOnce.ts, 4, 23))
+ 
+         this.
+ >this : Symbol(bar, Decl(classAbstractCrashedOnce.ts, 2, 1))

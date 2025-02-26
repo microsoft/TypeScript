@@ -1,0 +1,24 @@
+--- old.getAccessorWithImpliedReturnTypeAndFunctionClassMerge.symbols
++++ new.getAccessorWithImpliedReturnTypeAndFunctionClassMerge.symbols
+@@= skipped -49, +49 lines =@@
+ >T : Symbol(T, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 14, 16))
+ 
+     each(iterator: _.ListIterator<T, void>, context?: any): void;
+->each : Symbol(_.each, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 14, 20))
++>each : Symbol(each, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 14, 20))
+ >iterator : Symbol(iterator, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 15, 9))
+ >_ : Symbol(_, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 0), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 45), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 1, 38), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 12, 1))
+->ListIterator : Symbol(_.ListIterator, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 7, 29))
++>ListIterator : Symbol(ListIterator, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 7, 29))
+ >T : Symbol(T, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 14, 16))
+ >context : Symbol(context, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 15, 43))
+ }
+@@= skipped -15, +15 lines =@@
+ >MyClass : Symbol(MyClass, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 18, 17))
+ 
+         public get myGetter() {
+->myGetter : Symbol(MyClass.myGetter, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 19, 26))
++>myGetter : Symbol(myGetter, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 19, 26))
+ 
+             var obj:any = {};
+ >obj : Symbol(obj, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 21, 15))

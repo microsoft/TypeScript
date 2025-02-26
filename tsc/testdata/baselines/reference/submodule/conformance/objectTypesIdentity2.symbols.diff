@@ -1,0 +1,55 @@
+--- old.objectTypesIdentity2.symbols
++++ new.objectTypesIdentity2.symbols
+@@= skipped -6, +6 lines =@@
+ >A : Symbol(A, Decl(objectTypesIdentity2.ts, 0, 0))
+ 
+     foo: number;
+->foo : Symbol(A.foo, Decl(objectTypesIdentity2.ts, 2, 9))
++>foo : Symbol(foo, Decl(objectTypesIdentity2.ts, 2, 9))
+ }
+ 
+ class B {
+ >B : Symbol(B, Decl(objectTypesIdentity2.ts, 4, 1))
+ 
+     foo: boolean;
+->foo : Symbol(B.foo, Decl(objectTypesIdentity2.ts, 6, 9))
++>foo : Symbol(foo, Decl(objectTypesIdentity2.ts, 6, 9))
+ }
+ 
+ class C<T> {
+@@= skipped -15, +15 lines =@@
+ >T : Symbol(T, Decl(objectTypesIdentity2.ts, 10, 8))
+ 
+     foo: T;
+->foo : Symbol(C.foo, Decl(objectTypesIdentity2.ts, 10, 12))
++>foo : Symbol(foo, Decl(objectTypesIdentity2.ts, 10, 12))
+ >T : Symbol(T, Decl(objectTypesIdentity2.ts, 10, 8))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >I : Symbol(I, Decl(objectTypesIdentity2.ts, 12, 1))
+ 
+     foo: Date;
+->foo : Symbol(I.foo, Decl(objectTypesIdentity2.ts, 14, 13))
++>foo : Symbol(foo, Decl(objectTypesIdentity2.ts, 14, 13))
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ 
+ enum E { A }
+ >E : Symbol(E, Decl(objectTypesIdentity2.ts, 18, 23))
+->A : Symbol(E.A, Decl(objectTypesIdentity2.ts, 19, 8))
++>A : Symbol(A, Decl(objectTypesIdentity2.ts, 19, 8))
+ 
+ var b = { foo: E.A };
+ >b : Symbol(b, Decl(objectTypesIdentity2.ts, 20, 3))
+ >foo : Symbol(foo, Decl(objectTypesIdentity2.ts, 20, 9))
+->E.A : Symbol(E.A, Decl(objectTypesIdentity2.ts, 19, 8))
++>E.A : Symbol(A, Decl(objectTypesIdentity2.ts, 19, 8))
+ >E : Symbol(E, Decl(objectTypesIdentity2.ts, 18, 23))
+->A : Symbol(E.A, Decl(objectTypesIdentity2.ts, 19, 8))
++>A : Symbol(A, Decl(objectTypesIdentity2.ts, 19, 8))
+ 
+ function foo5(x: A);
+ >foo5 : Symbol(foo5, Decl(objectTypesIdentity2.ts, 20, 21), Decl(objectTypesIdentity2.ts, 22, 20), Decl(objectTypesIdentity2.ts, 23, 20))

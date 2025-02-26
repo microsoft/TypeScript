@@ -1,0 +1,67 @@
+--- old.keyofAndIndexedAccessErrors.symbols
++++ new.keyofAndIndexedAccessErrors.symbols
+@@= skipped -4, +4 lines =@@
+ >Shape : Symbol(Shape, Decl(keyofAndIndexedAccessErrors.ts, 0, 0))
+ 
+     name: string;
+->name : Symbol(Shape.name, Decl(keyofAndIndexedAccessErrors.ts, 0, 13))
++>name : Symbol(name, Decl(keyofAndIndexedAccessErrors.ts, 0, 13))
+ 
+     width: number;
+->width : Symbol(Shape.width, Decl(keyofAndIndexedAccessErrors.ts, 1, 17))
++>width : Symbol(width, Decl(keyofAndIndexedAccessErrors.ts, 1, 17))
+ 
+     height: number;
+->height : Symbol(Shape.height, Decl(keyofAndIndexedAccessErrors.ts, 2, 18))
++>height : Symbol(height, Decl(keyofAndIndexedAccessErrors.ts, 2, 18))
+ 
+     visible: boolean;
+->visible : Symbol(Shape.visible, Decl(keyofAndIndexedAccessErrors.ts, 3, 19))
++>visible : Symbol(visible, Decl(keyofAndIndexedAccessErrors.ts, 3, 19))
+ }
+ 
+ type Dictionary<T> = { [x: string]: T };
+@@= skipped -528, +528 lines =@@
+ >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+ 
+   testy: T;
+->testy : Symbol(Test.testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
++>testy : Symbol(testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
+ >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 156, 11))
+ 
+   constructor(t: T) {
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 156, 11))
+ 
+     this.testy = t;
+->this.testy : Symbol(Test.testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
++>this.testy : Symbol(testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
+ >this : Symbol(Test, Decl(keyofAndIndexedAccessErrors.ts, 152, 1))
+->testy : Symbol(Test.testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
++>testy : Symbol(testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
+ >t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 159, 14))
+   }
+ 
+   public t(key: keyof T): number {
+->t : Symbol(Test.t, Decl(keyofAndIndexedAccessErrors.ts, 161, 3))
++>t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 161, 3))
+ >key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 163, 11))
+ >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 156, 11))
+ 
+     this.testy[key] += 1; // Error
+->this.testy : Symbol(Test.testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
++>this.testy : Symbol(testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
+ >this : Symbol(Test, Decl(keyofAndIndexedAccessErrors.ts, 152, 1))
+->testy : Symbol(Test.testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
++>testy : Symbol(testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
+ >key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 163, 11))
+ 
+     return this.testy[key];
+->this.testy : Symbol(Test.testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
++>this.testy : Symbol(testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
+ >this : Symbol(Test, Decl(keyofAndIndexedAccessErrors.ts, 152, 1))
+->testy : Symbol(Test.testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
++>testy : Symbol(testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
+ >key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 163, 11))
+   }
+ }

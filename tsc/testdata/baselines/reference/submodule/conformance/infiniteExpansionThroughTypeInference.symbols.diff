@@ -1,0 +1,18 @@
+--- old.infiniteExpansionThroughTypeInference.symbols
++++ new.infiniteExpansionThroughTypeInference.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(infiniteExpansionThroughTypeInference.ts, 0, 12))
+ 
+     x: G<G<T>> // infinitely expanding type reference
+->x : Symbol(G.x, Decl(infiniteExpansionThroughTypeInference.ts, 0, 16))
++>x : Symbol(x, Decl(infiniteExpansionThroughTypeInference.ts, 0, 16))
+ >G : Symbol(G, Decl(infiniteExpansionThroughTypeInference.ts, 0, 0))
+ >G : Symbol(G, Decl(infiniteExpansionThroughTypeInference.ts, 0, 0))
+ >T : Symbol(T, Decl(infiniteExpansionThroughTypeInference.ts, 0, 12))
+ 
+     y: T
+->y : Symbol(G.y, Decl(infiniteExpansionThroughTypeInference.ts, 1, 14))
++>y : Symbol(y, Decl(infiniteExpansionThroughTypeInference.ts, 1, 14))
+ >T : Symbol(T, Decl(infiniteExpansionThroughTypeInference.ts, 0, 12))
+ }
+ 

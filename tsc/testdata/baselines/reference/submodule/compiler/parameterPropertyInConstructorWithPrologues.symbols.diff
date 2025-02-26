@@ -1,0 +1,171 @@
+--- old.parameterPropertyInConstructorWithPrologues.symbols
++++ new.parameterPropertyInConstructorWithPrologues.symbols
+@@= skipped -9, +9 lines =@@
+ >Foo1 : Symbol(Foo1, Decl(parameterPropertyInConstructorWithPrologues.ts, 2, 10))
+ 
+   constructor(private A: string) {
+->A : Symbol(Foo1.A, Decl(parameterPropertyInConstructorWithPrologues.ts, 5, 14))
++>A : Symbol(A, Decl(parameterPropertyInConstructorWithPrologues.ts, 5, 14))
+ 
+     "ngInject1";
+   }
+@@= skipped -10, +10 lines =@@
+ >Foo2 : Symbol(Foo2, Decl(parameterPropertyInConstructorWithPrologues.ts, 8, 1))
+ 
+   constructor(private A: string, private B: string) {
+->A : Symbol(Foo2.A, Decl(parameterPropertyInConstructorWithPrologues.ts, 11, 14))
+->B : Symbol(Foo2.B, Decl(parameterPropertyInConstructorWithPrologues.ts, 11, 32))
++>A : Symbol(A, Decl(parameterPropertyInConstructorWithPrologues.ts, 11, 14))
++>B : Symbol(B, Decl(parameterPropertyInConstructorWithPrologues.ts, 11, 32))
+ 
+     "ngInject1";
+     "ngInject2";
+@@= skipped -12, +12 lines =@@
+ >Foo3 : Symbol(Foo3, Decl(parameterPropertyInConstructorWithPrologues.ts, 15, 1))
+ 
+   constructor(private A: string, private B: string, private C: string) {
+->A : Symbol(Foo3.A, Decl(parameterPropertyInConstructorWithPrologues.ts, 18, 14))
+->B : Symbol(Foo3.B, Decl(parameterPropertyInConstructorWithPrologues.ts, 18, 32))
+->C : Symbol(Foo3.C, Decl(parameterPropertyInConstructorWithPrologues.ts, 18, 51))
++>A : Symbol(A, Decl(parameterPropertyInConstructorWithPrologues.ts, 18, 14))
++>B : Symbol(B, Decl(parameterPropertyInConstructorWithPrologues.ts, 18, 32))
++>C : Symbol(C, Decl(parameterPropertyInConstructorWithPrologues.ts, 18, 51))
+ 
+     "ngInject1";
+     "ngInject2";
+@@= skipped -13, +13 lines =@@
+ >Foo4 : Symbol(Foo4, Decl(parameterPropertyInConstructorWithPrologues.ts, 22, 1))
+ 
+   constructor(private A: string) {
+->A : Symbol(Foo4.A, Decl(parameterPropertyInConstructorWithPrologues.ts, 25, 14))
++>A : Symbol(A, Decl(parameterPropertyInConstructorWithPrologues.ts, 25, 14))
+ 
+     "ngInject1";
+     console.log("hi");
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+   }
+ }
+ 
+@@= skipped -14, +14 lines =@@
+ >Foo5 : Symbol(Foo5, Decl(parameterPropertyInConstructorWithPrologues.ts, 29, 1))
+ 
+   constructor(private A: string, private B: string) {
+->A : Symbol(Foo5.A, Decl(parameterPropertyInConstructorWithPrologues.ts, 32, 14))
+->B : Symbol(Foo5.B, Decl(parameterPropertyInConstructorWithPrologues.ts, 32, 32))
++>A : Symbol(A, Decl(parameterPropertyInConstructorWithPrologues.ts, 32, 14))
++>B : Symbol(B, Decl(parameterPropertyInConstructorWithPrologues.ts, 32, 32))
+ 
+     "ngInject1";
+     "ngInject2";
+     console.log("hi");
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+   }
+ }
+ 
+@@= skipped -16, +16 lines =@@
+ >Foo6 : Symbol(Foo6, Decl(parameterPropertyInConstructorWithPrologues.ts, 37, 1))
+ 
+   constructor(private A: string, private B: string, private C: string) {
+->A : Symbol(Foo6.A, Decl(parameterPropertyInConstructorWithPrologues.ts, 40, 14))
+->B : Symbol(Foo6.B, Decl(parameterPropertyInConstructorWithPrologues.ts, 40, 32))
+->C : Symbol(Foo6.C, Decl(parameterPropertyInConstructorWithPrologues.ts, 40, 51))
++>A : Symbol(A, Decl(parameterPropertyInConstructorWithPrologues.ts, 40, 14))
++>B : Symbol(B, Decl(parameterPropertyInConstructorWithPrologues.ts, 40, 32))
++>C : Symbol(C, Decl(parameterPropertyInConstructorWithPrologues.ts, 40, 51))
+ 
+     "ngInject1";
+     "ngInject2";
+     console.log("hi");
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+   }
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ 
+   constructor(
+     private member: boolean,
+->member : Symbol(Foo7.member, Decl(parameterPropertyInConstructorWithPrologues.ts, 48, 14))
++>member : Symbol(member, Decl(parameterPropertyInConstructorWithPrologues.ts, 48, 14))
+ 
+   ) {
+     "ngInject1";
+@@= skipped -8, +8 lines =@@
+ >super : Symbol(C, Decl(parameterPropertyInConstructorWithPrologues.ts, 0, 0))
+ 
+     console.log("hi");
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+   }
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ 
+   constructor(
+     private member: boolean,
+->member : Symbol(Foo8.member, Decl(parameterPropertyInConstructorWithPrologues.ts, 58, 14))
++>member : Symbol(member, Decl(parameterPropertyInConstructorWithPrologues.ts, 58, 14))
+ 
+   ) {
+     "ngInject1";
+@@= skipped -8, +8 lines =@@
+ >super : Symbol(C, Decl(parameterPropertyInConstructorWithPrologues.ts, 0, 0))
+ 
+     this.m();
+->this.m : Symbol(Foo8.m, Decl(parameterPropertyInConstructorWithPrologues.ts, 65, 3))
++>this.m : Symbol(m, Decl(parameterPropertyInConstructorWithPrologues.ts, 65, 3))
+ >this : Symbol(Foo8, Decl(parameterPropertyInConstructorWithPrologues.ts, 55, 1))
+->m : Symbol(Foo8.m, Decl(parameterPropertyInConstructorWithPrologues.ts, 65, 3))
++>m : Symbol(m, Decl(parameterPropertyInConstructorWithPrologues.ts, 65, 3))
+ 
+     console.log("hi");
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+   }
+ 
+   m() {}
+->m : Symbol(Foo8.m, Decl(parameterPropertyInConstructorWithPrologues.ts, 65, 3))
++>m : Symbol(m, Decl(parameterPropertyInConstructorWithPrologues.ts, 65, 3))
+ }
+ 
+ class Foo9 extends C {
+@@= skipped -25, +25 lines =@@
+ >super : Symbol(C, Decl(parameterPropertyInConstructorWithPrologues.ts, 0, 0))
+ 
+     this.m();
+->this.m : Symbol(Foo9.m, Decl(parameterPropertyInConstructorWithPrologues.ts, 77, 3))
++>this.m : Symbol(m, Decl(parameterPropertyInConstructorWithPrologues.ts, 77, 3))
+ >this : Symbol(Foo9, Decl(parameterPropertyInConstructorWithPrologues.ts, 68, 1))
+->m : Symbol(Foo9.m, Decl(parameterPropertyInConstructorWithPrologues.ts, 77, 3))
++>m : Symbol(m, Decl(parameterPropertyInConstructorWithPrologues.ts, 77, 3))
+ 
+     console.log("hi");
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+   }
+ 
+   m() {}
+->m : Symbol(Foo9.m, Decl(parameterPropertyInConstructorWithPrologues.ts, 77, 3))
++>m : Symbol(m, Decl(parameterPropertyInConstructorWithPrologues.ts, 77, 3))
+ }
+ 

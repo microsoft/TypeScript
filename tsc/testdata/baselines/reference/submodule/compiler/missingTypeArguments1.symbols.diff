@@ -1,0 +1,92 @@
+--- old.missingTypeArguments1.symbols
++++ new.missingTypeArguments1.symbols
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(missingTypeArguments1.ts, 2, 8))
+ 
+     p1: () => X;
+->p1 : Symbol(X.p1, Decl(missingTypeArguments1.ts, 2, 12))
++>p1 : Symbol(p1, Decl(missingTypeArguments1.ts, 2, 12))
+ >X : Symbol(X, Decl(missingTypeArguments1.ts, 1, 13))
+ }
+ var a: X<number>;
+@@= skipped -12, +12 lines =@@
+ >T : Symbol(T, Decl(missingTypeArguments1.ts, 7, 9))
+ 
+     p2: { [idx: number]: X2 } 
+->p2 : Symbol(X2.p2, Decl(missingTypeArguments1.ts, 7, 13))
++>p2 : Symbol(p2, Decl(missingTypeArguments1.ts, 7, 13))
+ >idx : Symbol(idx, Decl(missingTypeArguments1.ts, 8, 11))
+ >X2 : Symbol(X2, Decl(missingTypeArguments1.ts, 5, 17))
+ }
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(missingTypeArguments1.ts, 12, 9))
+ 
+     p3: X3[]
+->p3 : Symbol(X3.p3, Decl(missingTypeArguments1.ts, 12, 13))
++>p3 : Symbol(p3, Decl(missingTypeArguments1.ts, 12, 13))
+ >X3 : Symbol(X3, Decl(missingTypeArguments1.ts, 10, 19))
+ }
+ var a3: X3<number>;
+@@= skipped -12, +12 lines =@@
+ >T : Symbol(T, Decl(missingTypeArguments1.ts, 17, 9))
+ 
+     p4: I<X4>
+->p4 : Symbol(X4.p4, Decl(missingTypeArguments1.ts, 17, 13))
++>p4 : Symbol(p4, Decl(missingTypeArguments1.ts, 17, 13))
+ >I : Symbol(I, Decl(missingTypeArguments1.ts, 0, 0))
+ >X4 : Symbol(X4, Decl(missingTypeArguments1.ts, 15, 19))
+ }
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(missingTypeArguments1.ts, 22, 9))
+ 
+     p5: X5
+->p5 : Symbol(X5.p5, Decl(missingTypeArguments1.ts, 22, 13))
++>p5 : Symbol(p5, Decl(missingTypeArguments1.ts, 22, 13))
+ >X5 : Symbol(X5, Decl(missingTypeArguments1.ts, 20, 19))
+ }
+ var a5: X5<number>;
+@@= skipped -12, +12 lines =@@
+ >T : Symbol(T, Decl(missingTypeArguments1.ts, 27, 9))
+ 
+     p6: () => Y;
+->p6 : Symbol(X6.p6, Decl(missingTypeArguments1.ts, 27, 13))
++>p6 : Symbol(p6, Decl(missingTypeArguments1.ts, 27, 13))
+ >Y : Symbol(Y, Decl(missingTypeArguments1.ts, 0, 18))
+ }
+ var a6: X6<number>;
+@@= skipped -12, +12 lines =@@
+ >T : Symbol(T, Decl(missingTypeArguments1.ts, 32, 9))
+ 
+     p7: { [idx: number]: Y } 
+->p7 : Symbol(X7.p7, Decl(missingTypeArguments1.ts, 32, 13))
++>p7 : Symbol(p7, Decl(missingTypeArguments1.ts, 32, 13))
+ >idx : Symbol(idx, Decl(missingTypeArguments1.ts, 33, 11))
+ >Y : Symbol(Y, Decl(missingTypeArguments1.ts, 0, 18))
+ }
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(missingTypeArguments1.ts, 37, 9))
+ 
+     p8: Y[]
+->p8 : Symbol(X8.p8, Decl(missingTypeArguments1.ts, 37, 13))
++>p8 : Symbol(p8, Decl(missingTypeArguments1.ts, 37, 13))
+ >Y : Symbol(Y, Decl(missingTypeArguments1.ts, 0, 18))
+ }
+ var a8: X8<number>;
+@@= skipped -12, +12 lines =@@
+ >T : Symbol(T, Decl(missingTypeArguments1.ts, 42, 9))
+ 
+     p9: I<Y>
+->p9 : Symbol(X9.p9, Decl(missingTypeArguments1.ts, 42, 13))
++>p9 : Symbol(p9, Decl(missingTypeArguments1.ts, 42, 13))
+ >I : Symbol(I, Decl(missingTypeArguments1.ts, 0, 0))
+ >Y : Symbol(Y, Decl(missingTypeArguments1.ts, 0, 18))
+ }
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(missingTypeArguments1.ts, 47, 10))
+ 
+     pa: Y
+->pa : Symbol(X10.pa, Decl(missingTypeArguments1.ts, 47, 14))
++>pa : Symbol(pa, Decl(missingTypeArguments1.ts, 47, 14))
+ >Y : Symbol(Y, Decl(missingTypeArguments1.ts, 0, 18))
+ }
+ var a10: X10<number>;

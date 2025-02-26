@@ -1,0 +1,16 @@
+--- old.destructureOptionalParameter.symbols
++++ new.destructureOptionalParameter.symbols
+@@= skipped -27, +27 lines =@@
+ 
+ interface Type { t: void }
+ >Type : Symbol(Type, Decl(destructureOptionalParameter.ts, 5, 1))
+->t : Symbol(Type.t, Decl(destructureOptionalParameter.ts, 9, 16))
++>t : Symbol(t, Decl(destructureOptionalParameter.ts, 9, 16))
+ 
+ interface QueryMetadata { q: void }
+ >QueryMetadata : Symbol(QueryMetadata, Decl(destructureOptionalParameter.ts, 9, 26))
+->q : Symbol(QueryMetadata.q, Decl(destructureOptionalParameter.ts, 10, 25))
++>q : Symbol(q, Decl(destructureOptionalParameter.ts, 10, 25))
+ 
+ interface QueryMetadataFactory {
+ >QueryMetadataFactory : Symbol(QueryMetadataFactory, Decl(destructureOptionalParameter.ts, 10, 35))

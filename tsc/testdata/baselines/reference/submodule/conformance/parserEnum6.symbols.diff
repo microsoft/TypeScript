@@ -1,0 +1,13 @@
+--- old.parserEnum6.symbols
++++ new.parserEnum6.symbols
+@@= skipped -4, +4 lines =@@
+ >E : Symbol(E, Decl(parserEnum6.ts, 0, 0))
+ 
+   "A", "B", "C"
+->"A" : Symbol(E["A"], Decl(parserEnum6.ts, 0, 8))
+->"B" : Symbol(E["B"], Decl(parserEnum6.ts, 1, 6))
+->"C" : Symbol(E["C"], Decl(parserEnum6.ts, 1, 11))
++>"A" : Symbol(A, Decl(parserEnum6.ts, 0, 8))
++>"B" : Symbol(B, Decl(parserEnum6.ts, 1, 6))
++>"C" : Symbol(C, Decl(parserEnum6.ts, 1, 11))
+ }

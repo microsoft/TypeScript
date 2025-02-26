@@ -1,0 +1,14 @@
+--- old.topLevelModuleDeclarationAndFile.symbols
++++ new.topLevelModuleDeclarationAndFile.symbols
+@@= skipped -10, +10 lines =@@
+ 
+ var z2 = foo.y() + 10; // Should resolve
+ >z2 : Symbol(z2, Decl(foo_2.ts, 3, 3))
+->foo.y : Symbol(foo.y, Decl(foo_1.ts, 1, 11))
++>foo.y : Symbol(y, Decl(foo_1.ts, 1, 11))
+ >foo : Symbol(foo, Decl(foo_2.ts, 0, 0))
+->y : Symbol(foo.y, Decl(foo_1.ts, 1, 11))
++>y : Symbol(y, Decl(foo_1.ts, 1, 11))
+ 
+ === foo_1.ts ===
+ declare module "vs/foo_0" {

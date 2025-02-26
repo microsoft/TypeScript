@@ -1,0 +1,12 @@
+--- old.moduleCodeGenTest3.symbols
++++ new.moduleCodeGenTest3.symbols
+@@= skipped -5, +5 lines =@@
+ >x : Symbol(x, Decl(moduleCodeGenTest3.ts, 0, 23))
+ 
+ Baz.x = "goodbye";
+->Baz.x : Symbol(Baz.x, Decl(moduleCodeGenTest3.ts, 0, 23))
++>Baz.x : Symbol(x, Decl(moduleCodeGenTest3.ts, 0, 23))
+ >Baz : Symbol(Baz, Decl(moduleCodeGenTest3.ts, 0, 0))
+->x : Symbol(Baz.x, Decl(moduleCodeGenTest3.ts, 0, 23))
++>x : Symbol(x, Decl(moduleCodeGenTest3.ts, 0, 23))
+ 

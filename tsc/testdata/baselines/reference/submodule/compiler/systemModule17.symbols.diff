@@ -1,0 +1,23 @@
+--- old.systemModule17.symbols
++++ new.systemModule17.symbols
+@@= skipped -26, +26 lines =@@
+ import IX = N.x;
+ >IX : Symbol(IX, Decl(f2.ts, 6, 1))
+ >N : Symbol(N, Decl(f2.ts, 1, 15))
+->x : Symbol(IX, Decl(f2.ts, 4, 11))
++>x : Symbol(x, Decl(f2.ts, 4, 11))
+ 
+ import II = N.I;
+ >II : Symbol(II, Decl(f2.ts, 8, 16))
+ >N : Symbol(N, Decl(f2.ts, 1, 15))
+->I : Symbol(II, Decl(f2.ts, 4, 18))
++>I : Symbol(I, Decl(f2.ts, 4, 18))
+ 
+ import { A, A as EA, I as EI } from "f1";
+ >A : Symbol(A, Decl(f2.ts, 10, 8))
+->A : Symbol(A, Decl(f1.ts, 0, 0))
+ >EA : Symbol(EA, Decl(f2.ts, 10, 11))
+->I : Symbol(EI, Decl(f1.ts, 0, 17))
+ >EI : Symbol(EI, Decl(f2.ts, 10, 20))
+ 
+ export {x};

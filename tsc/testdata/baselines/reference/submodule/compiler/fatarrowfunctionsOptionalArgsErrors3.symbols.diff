@@ -1,0 +1,9 @@
+--- old.fatarrowfunctionsOptionalArgsErrors3.symbols
++++ new.fatarrowfunctionsOptionalArgsErrors3.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === fatarrowfunctionsOptionalArgsErrors3.ts ===
+ (...) => 105;
+-> : Symbol((Missing), Decl(fatarrowfunctionsOptionalArgsErrors3.ts, 0, 1))
++> : Symbol(, Decl(fatarrowfunctionsOptionalArgsErrors3.ts, 0, 1))
+ 

@@ -1,0 +1,28 @@
+--- old.moduleAndInterfaceWithSameName.symbols
++++ new.moduleAndInterfaceWithSameName.symbols
+@@= skipped -14, +14 lines =@@
+ >Bar : Symbol(Bar, Decl(moduleAndInterfaceWithSameName.ts, 0, 13), Decl(moduleAndInterfaceWithSameName.ts, 3, 5))
+ 
+         y: string;
+->y : Symbol(Bar.y, Decl(moduleAndInterfaceWithSameName.ts, 5, 26))
++>y : Symbol(y, Decl(moduleAndInterfaceWithSameName.ts, 5, 26))
+     }
+ }
+ 
+@@= skipped -18, +18 lines =@@
+ >Bar : Symbol(Bar, Decl(moduleAndInterfaceWithSameName.ts, 13, 5))
+ 
+         y: string;
+->y : Symbol(Foo2.Bar.y, Decl(moduleAndInterfaceWithSameName.ts, 15, 26))
++>y : Symbol(y, Decl(moduleAndInterfaceWithSameName.ts, 15, 26))
+     }
+ }
+ 
+@@= skipped -22, +22 lines =@@
+ >Bar : Symbol(Bar, Decl(moduleAndInterfaceWithSameName.ts, 22, 13), Decl(moduleAndInterfaceWithSameName.ts, 25, 5))
+ 
+         y: string;
+->y : Symbol(Bar.y, Decl(moduleAndInterfaceWithSameName.ts, 27, 19))
++>y : Symbol(y, Decl(moduleAndInterfaceWithSameName.ts, 27, 19))
+     }
+ }

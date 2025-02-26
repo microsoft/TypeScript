@@ -1,0 +1,232 @@
+--- old.parser.asyncGenerators.classMethods.es2018.symbols
++++ new.parser.asyncGenerators.classMethods.es2018.symbols
+@@= skipped -4, +4 lines =@@
+ >C1 : Symbol(C1, Decl(methodIsOk.ts, 0, 0))
+ 
+     async * f() {
+->f : Symbol(C1.f, Decl(methodIsOk.ts, 0, 10))
++>f : Symbol(f, Decl(methodIsOk.ts, 0, 10))
+     }
+ }
+ === awaitMethodNameIsOk.ts ===
+@@= skipped -8, +8 lines =@@
+ >C2 : Symbol(C2, Decl(awaitMethodNameIsOk.ts, 0, 0))
+ 
+     async * await() {
+->await : Symbol(C2.await, Decl(awaitMethodNameIsOk.ts, 0, 10))
++>await : Symbol(await, Decl(awaitMethodNameIsOk.ts, 0, 10))
+     }
+ }
+ === yieldMethodNameIsOk.ts ===
+@@= skipped -8, +8 lines =@@
+ >C3 : Symbol(C3, Decl(yieldMethodNameIsOk.ts, 0, 0))
+ 
+     async * yield() {
+->yield : Symbol(C3.yield, Decl(yieldMethodNameIsOk.ts, 0, 10))
++>yield : Symbol(yield, Decl(yieldMethodNameIsOk.ts, 0, 10))
+     }
+ }
+ === awaitParameterIsError.ts ===
+@@= skipped -8, +8 lines =@@
+ >C4 : Symbol(C4, Decl(awaitParameterIsError.ts, 0, 0))
+ 
+     async * f(await) {
+->f : Symbol(C4.f, Decl(awaitParameterIsError.ts, 0, 10))
++>f : Symbol(f, Decl(awaitParameterIsError.ts, 0, 10))
+ >await : Symbol(await, Decl(awaitParameterIsError.ts, 1, 14))
+     }
+ }
+@@= skipped -9, +9 lines =@@
+ >C5 : Symbol(C5, Decl(yieldParameterIsError.ts, 0, 0))
+ 
+     async * f(yield) {
+->f : Symbol(C5.f, Decl(yieldParameterIsError.ts, 0, 10))
++>f : Symbol(f, Decl(yieldParameterIsError.ts, 0, 10))
+ >yield : Symbol(yield, Decl(yieldParameterIsError.ts, 1, 14))
+     }
+ }
+@@= skipped -9, +9 lines =@@
+ >C6 : Symbol(C6, Decl(awaitInParameterInitializerIsError.ts, 0, 0))
+ 
+     async * f(a = await 1) {
+->f : Symbol(C6.f, Decl(awaitInParameterInitializerIsError.ts, 0, 10))
++>f : Symbol(f, Decl(awaitInParameterInitializerIsError.ts, 0, 10))
+ >a : Symbol(a, Decl(awaitInParameterInitializerIsError.ts, 1, 14))
+     }
+ }
+@@= skipped -9, +9 lines =@@
+ >C7 : Symbol(C7, Decl(yieldInParameterInitializerIsError.ts, 0, 0))
+ 
+     async * f(a = yield) {
+->f : Symbol(C7.f, Decl(yieldInParameterInitializerIsError.ts, 0, 10))
++>f : Symbol(f, Decl(yieldInParameterInitializerIsError.ts, 0, 10))
+ >a : Symbol(a, Decl(yieldInParameterInitializerIsError.ts, 1, 14))
+     }
+ }
+@@= skipped -9, +9 lines =@@
+ >C8 : Symbol(C8, Decl(nestedAsyncGeneratorIsOk.ts, 0, 0))
+ 
+     async * f() {
+->f : Symbol(C8.f, Decl(nestedAsyncGeneratorIsOk.ts, 0, 10))
++>f : Symbol(f, Decl(nestedAsyncGeneratorIsOk.ts, 0, 10))
+ 
+         async function * g() {
+ >g : Symbol(g, Decl(nestedAsyncGeneratorIsOk.ts, 1, 17))
+@@= skipped -12, +12 lines =@@
+ >C9 : Symbol(C9, Decl(nestedFunctionDeclarationNamedYieldIsError.ts, 0, 0))
+ 
+     async * f() {
+->f : Symbol(C9.f, Decl(nestedFunctionDeclarationNamedYieldIsError.ts, 0, 10))
++>f : Symbol(f, Decl(nestedFunctionDeclarationNamedYieldIsError.ts, 0, 10))
+ 
+         function yield() {
+ >yield : Symbol(yield, Decl(nestedFunctionDeclarationNamedYieldIsError.ts, 1, 17))
+@@= skipped -12, +12 lines =@@
+ >C10 : Symbol(C10, Decl(nestedFunctionExpressionNamedYieldIsError.ts, 0, 0))
+ 
+     async * f() {
+->f : Symbol(C10.f, Decl(nestedFunctionExpressionNamedYieldIsError.ts, 0, 11))
++>f : Symbol(f, Decl(nestedFunctionExpressionNamedYieldIsError.ts, 0, 11))
+ 
+         const x = function yield() {
+ >x : Symbol(x, Decl(nestedFunctionExpressionNamedYieldIsError.ts, 2, 13))
+@@= skipped -14, +14 lines =@@
+ >C11 : Symbol(C11, Decl(nestedFunctionDeclarationNamedAwaitIsError.ts, 0, 0))
+ 
+     async * f() {
+->f : Symbol(C11.f, Decl(nestedFunctionDeclarationNamedAwaitIsError.ts, 0, 11))
++>f : Symbol(f, Decl(nestedFunctionDeclarationNamedAwaitIsError.ts, 0, 11))
+ 
+         function await() {
+ >await : Symbol(await, Decl(nestedFunctionDeclarationNamedAwaitIsError.ts, 1, 17))
+@@= skipped -12, +12 lines =@@
+ >C12 : Symbol(C12, Decl(nestedFunctionExpressionNamedAwaitIsError.ts, 0, 0))
+ 
+     async * f() {
+->f : Symbol(C12.f, Decl(nestedFunctionExpressionNamedAwaitIsError.ts, 0, 11))
++>f : Symbol(f, Decl(nestedFunctionExpressionNamedAwaitIsError.ts, 0, 11))
+ 
+         const x = function await() {
+ >x : Symbol(x, Decl(nestedFunctionExpressionNamedAwaitIsError.ts, 2, 13))
+@@= skipped -14, +14 lines =@@
+ >C13 : Symbol(C13, Decl(yieldIsOk.ts, 0, 0))
+ 
+     async * f() {
+->f : Symbol(C13.f, Decl(yieldIsOk.ts, 0, 11))
++>f : Symbol(f, Decl(yieldIsOk.ts, 0, 11))
+ 
+         yield;
+     }
+@@= skipped -10, +10 lines =@@
+ >C14 : Symbol(C14, Decl(yieldWithValueIsOk.ts, 0, 0))
+ 
+     async * f() {
+->f : Symbol(C14.f, Decl(yieldWithValueIsOk.ts, 0, 11))
++>f : Symbol(f, Decl(yieldWithValueIsOk.ts, 0, 11))
+ 
+         yield 1;
+     }
+@@= skipped -10, +10 lines =@@
+ >C15 : Symbol(C15, Decl(yieldStarMissingValueIsError.ts, 0, 0))
+ 
+     async * f() {
+->f : Symbol(C15.f, Decl(yieldStarMissingValueIsError.ts, 0, 11))
++>f : Symbol(f, Decl(yieldStarMissingValueIsError.ts, 0, 11))
+ 
+         yield *;
+     }
+@@= skipped -10, +10 lines =@@
+ >C16 : Symbol(C16, Decl(yieldStarWithValueIsOk.ts, 0, 0))
+ 
+     async * f() {
+->f : Symbol(C16.f, Decl(yieldStarWithValueIsOk.ts, 0, 11))
++>f : Symbol(f, Decl(yieldStarWithValueIsOk.ts, 0, 11))
+ 
+         yield * [];
+     }
+@@= skipped -10, +10 lines =@@
+ >C17 : Symbol(C17, Decl(awaitWithValueIsOk.ts, 0, 0))
+ 
+     async * f() {
+->f : Symbol(C17.f, Decl(awaitWithValueIsOk.ts, 0, 11))
++>f : Symbol(f, Decl(awaitWithValueIsOk.ts, 0, 11))
+ 
+         await 1;
+     }
+@@= skipped -10, +10 lines =@@
+ >C18 : Symbol(C18, Decl(awaitMissingValueIsError.ts, 0, 0))
+ 
+     async * f() {
+->f : Symbol(C18.f, Decl(awaitMissingValueIsError.ts, 0, 11))
++>f : Symbol(f, Decl(awaitMissingValueIsError.ts, 0, 11))
+ 
+         await;
+     }
+@@= skipped -13, +13 lines =@@
+ >C19 : Symbol(C19, Decl(awaitAsTypeIsOk.ts, 0, 18))
+ 
+     async * f() {
+->f : Symbol(C19.f, Decl(awaitAsTypeIsOk.ts, 1, 11))
++>f : Symbol(f, Decl(awaitAsTypeIsOk.ts, 1, 11))
+ 
+         let x: await;
+ >x : Symbol(x, Decl(awaitAsTypeIsOk.ts, 3, 11))
+@@= skipped -15, +15 lines =@@
+ >C20 : Symbol(C20, Decl(yieldAsTypeIsStrictError.ts, 0, 18))
+ 
+     async * f() {
+->f : Symbol(C20.f, Decl(yieldAsTypeIsStrictError.ts, 1, 11))
++>f : Symbol(f, Decl(yieldAsTypeIsStrictError.ts, 1, 11))
+ 
+         let x: yield;
+ >x : Symbol(x, Decl(yieldAsTypeIsStrictError.ts, 3, 11))
+@@= skipped -12, +12 lines =@@
+ >C21 : Symbol(C21, Decl(yieldInClassComputedPropertyIsError.ts, 0, 0))
+ 
+     async * [yield]() {
+->[yield] : Symbol(C21[yield], Decl(yieldInClassComputedPropertyIsError.ts, 0, 11))
++>[yield] : Symbol([yield], Decl(yieldInClassComputedPropertyIsError.ts, 0, 11))
+     }
+ }
+ === yieldInNestedComputedPropertyIsOk.ts ===
+@@= skipped -8, +8 lines =@@
+ >C22 : Symbol(C22, Decl(yieldInNestedComputedPropertyIsOk.ts, 0, 0))
+ 
+     async * f() {
+->f : Symbol(C22.f, Decl(yieldInNestedComputedPropertyIsOk.ts, 0, 11))
++>f : Symbol(f, Decl(yieldInNestedComputedPropertyIsOk.ts, 0, 11))
+ 
+         const x = { [yield]: 1 };
+ >x : Symbol(x, Decl(yieldInNestedComputedPropertyIsOk.ts, 2, 13))
+@@= skipped -12, +12 lines =@@
+ >C23 : Symbol(C23, Decl(asyncGeneratorGetAccessorIsError.ts, 0, 0))
+ 
+     async * get x() {
+->get : Symbol(C23.get, Decl(asyncGeneratorGetAccessorIsError.ts, 0, 11))
+->x : Symbol(C23.x, Decl(asyncGeneratorGetAccessorIsError.ts, 1, 15))
++>get : Symbol(get, Decl(asyncGeneratorGetAccessorIsError.ts, 0, 11))
++>x : Symbol(x, Decl(asyncGeneratorGetAccessorIsError.ts, 1, 15))
+ 
+         return 1;
+     }
+@@= skipped -11, +11 lines =@@
+ >C24 : Symbol(C24, Decl(asyncGeneratorSetAccessorIsError.ts, 0, 0))
+ 
+     async * set x(value: number) {
+->set : Symbol(C24.set, Decl(asyncGeneratorSetAccessorIsError.ts, 0, 11))
+->x : Symbol(C24.x, Decl(asyncGeneratorSetAccessorIsError.ts, 1, 15))
++>set : Symbol(set, Decl(asyncGeneratorSetAccessorIsError.ts, 0, 11))
++>x : Symbol(x, Decl(asyncGeneratorSetAccessorIsError.ts, 1, 15))
+ >value : Symbol(value, Decl(asyncGeneratorSetAccessorIsError.ts, 1, 18))
+     }
+ }
+@@= skipped -10, +10 lines =@@
+ >C25 : Symbol(C25, Decl(asyncGeneratorPropertyIsError.ts, 0, 0))
+ 
+     async * x = 1;
+->x : Symbol(C25.x, Decl(asyncGeneratorPropertyIsError.ts, 0, 11))
+->1 : Symbol(C25[1], Decl(asyncGeneratorPropertyIsError.ts, 1, 15))
++>x : Symbol(x, Decl(asyncGeneratorPropertyIsError.ts, 0, 11))
++>1 : Symbol(1, Decl(asyncGeneratorPropertyIsError.ts, 1, 15))
+ }
+ 

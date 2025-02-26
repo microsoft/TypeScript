@@ -1,0 +1,25 @@
+--- old.commaOperatorWithSecondOperandNumberType.symbols
++++ new.commaOperatorWithSecondOperandNumberType.symbols
+@@= skipped -80, +80 lines =@@
+ >NUMBER : Symbol(NUMBER, Decl(commaOperatorWithSecondOperandNumberType.ts, 2, 3))
+ 
+ STRING.trim(), NUMBER = 1;
+->STRING.trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
++>STRING.trim : Symbol(trim, Decl(lib.es5.d.ts, --, --))
+ >STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandNumberType.ts, 3, 3))
+->trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
++>trim : Symbol(trim, Decl(lib.es5.d.ts, --, --))
+ >NUMBER : Symbol(NUMBER, Decl(commaOperatorWithSecondOperandNumberType.ts, 2, 3))
+ 
+ var resultIsNumber6 = (null, NUMBER);
+@@= skipped -28, +28 lines =@@
+ 
+ var resultIsNumber11 = (STRING.trim(), NUMBER = 1);
+ >resultIsNumber11 : Symbol(resultIsNumber11, Decl(commaOperatorWithSecondOperandNumberType.ts, 33, 3))
+->STRING.trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
++>STRING.trim : Symbol(trim, Decl(lib.es5.d.ts, --, --))
+ >STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandNumberType.ts, 3, 3))
+->trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
++>trim : Symbol(trim, Decl(lib.es5.d.ts, --, --))
+ >NUMBER : Symbol(NUMBER, Decl(commaOperatorWithSecondOperandNumberType.ts, 2, 3))
+ 

@@ -1,0 +1,11 @@
+--- old.exportDefaultVariable.symbols
++++ new.exportDefaultVariable.symbols
+@@= skipped -6, +6 lines =@@
+ >io : Symbol(io, Decl(exportDefaultVariable.ts, 2, 11))
+ 
+ declare module 'module' {
+->'module' : Symbol("module", Decl(exportDefaultVariable.ts, 2, 20))
++>'module' : Symbol('module', Decl(exportDefaultVariable.ts, 2, 20))
+ 
+     export default io;
+ >io : Symbol(io, Decl(exportDefaultVariable.ts, 2, 11))

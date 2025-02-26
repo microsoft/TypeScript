@@ -1,0 +1,139 @@
+--- old.incrementOperatorWithUnsupportedStringType.symbols
++++ new.incrementOperatorWithUnsupportedStringType.symbols
+@@= skipped -14, +14 lines =@@
+ >A : Symbol(A, Decl(incrementOperatorWithUnsupportedStringType.ts, 4, 37))
+ 
+     public a: string;
+->a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
++>a : Symbol(a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
+ 
+     static foo() { return ""; }
+->foo : Symbol(A.foo, Decl(incrementOperatorWithUnsupportedStringType.ts, 7, 21))
++>foo : Symbol(foo, Decl(incrementOperatorWithUnsupportedStringType.ts, 7, 21))
+ }
+ module M {
+ >M : Symbol(M, Decl(incrementOperatorWithUnsupportedStringType.ts, 9, 1))
+@@= skipped -67, +67 lines =@@
+ // string type expressions
+ var ResultIsNumber11 = ++objA.a;
+ >ResultIsNumber11 : Symbol(ResultIsNumber11, Decl(incrementOperatorWithUnsupportedStringType.ts, 33, 3))
+->objA.a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
++>objA.a : Symbol(a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
+ >objA : Symbol(objA, Decl(incrementOperatorWithUnsupportedStringType.ts, 14, 3))
+->a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
++>a : Symbol(a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
+ 
+ var ResultIsNumber12 = ++M.n;
+ >ResultIsNumber12 : Symbol(ResultIsNumber12, Decl(incrementOperatorWithUnsupportedStringType.ts, 34, 3))
+->M.n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
++>M.n : Symbol(n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
+ >M : Symbol(M, Decl(incrementOperatorWithUnsupportedStringType.ts, 9, 1))
+->n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
++>n : Symbol(n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
+ 
+ var ResultIsNumber13 = ++STRING1[0];
+ >ResultIsNumber13 : Symbol(ResultIsNumber13, Decl(incrementOperatorWithUnsupportedStringType.ts, 35, 3))
+@@= skipped -20, +20 lines =@@
+ 
+ var ResultIsNumber15 = ++A.foo();
+ >ResultIsNumber15 : Symbol(ResultIsNumber15, Decl(incrementOperatorWithUnsupportedStringType.ts, 37, 3))
+->A.foo : Symbol(A.foo, Decl(incrementOperatorWithUnsupportedStringType.ts, 7, 21))
++>A.foo : Symbol(foo, Decl(incrementOperatorWithUnsupportedStringType.ts, 7, 21))
+ >A : Symbol(A, Decl(incrementOperatorWithUnsupportedStringType.ts, 4, 37))
+->foo : Symbol(A.foo, Decl(incrementOperatorWithUnsupportedStringType.ts, 7, 21))
++>foo : Symbol(foo, Decl(incrementOperatorWithUnsupportedStringType.ts, 7, 21))
+ 
+ var ResultIsNumber16 = ++(STRING + STRING);
+ >ResultIsNumber16 : Symbol(ResultIsNumber16, Decl(incrementOperatorWithUnsupportedStringType.ts, 38, 3))
+@@= skipped -11, +11 lines =@@
+ 
+ var ResultIsNumber17 = objA.a++;
+ >ResultIsNumber17 : Symbol(ResultIsNumber17, Decl(incrementOperatorWithUnsupportedStringType.ts, 40, 3))
+->objA.a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
++>objA.a : Symbol(a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
+ >objA : Symbol(objA, Decl(incrementOperatorWithUnsupportedStringType.ts, 14, 3))
+->a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
++>a : Symbol(a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
+ 
+ var ResultIsNumber18 = M.n++;
+ >ResultIsNumber18 : Symbol(ResultIsNumber18, Decl(incrementOperatorWithUnsupportedStringType.ts, 41, 3))
+->M.n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
++>M.n : Symbol(n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
+ >M : Symbol(M, Decl(incrementOperatorWithUnsupportedStringType.ts, 9, 1))
+->n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
++>n : Symbol(n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
+ 
+ var ResultIsNumber19 = STRING1[0]++;
+ >ResultIsNumber19 : Symbol(ResultIsNumber19, Decl(incrementOperatorWithUnsupportedStringType.ts, 42, 3))
+@@= skipped -20, +20 lines =@@
+ 
+ var ResultIsNumber21 = A.foo()++;
+ >ResultIsNumber21 : Symbol(ResultIsNumber21, Decl(incrementOperatorWithUnsupportedStringType.ts, 44, 3))
+->A.foo : Symbol(A.foo, Decl(incrementOperatorWithUnsupportedStringType.ts, 7, 21))
++>A.foo : Symbol(foo, Decl(incrementOperatorWithUnsupportedStringType.ts, 7, 21))
+ >A : Symbol(A, Decl(incrementOperatorWithUnsupportedStringType.ts, 4, 37))
+->foo : Symbol(A.foo, Decl(incrementOperatorWithUnsupportedStringType.ts, 7, 21))
++>foo : Symbol(foo, Decl(incrementOperatorWithUnsupportedStringType.ts, 7, 21))
+ 
+ var ResultIsNumber22 = (STRING + STRING)++;
+ >ResultIsNumber22 : Symbol(ResultIsNumber22, Decl(incrementOperatorWithUnsupportedStringType.ts, 45, 3))
+@@= skipped -24, +24 lines =@@
+ >foo : Symbol(foo, Decl(incrementOperatorWithUnsupportedStringType.ts, 2, 33))
+ 
+ ++objA.a;
+->objA.a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
++>objA.a : Symbol(a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
+ >objA : Symbol(objA, Decl(incrementOperatorWithUnsupportedStringType.ts, 14, 3))
+->a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
++>a : Symbol(a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
+ 
+ ++M.n;
+->M.n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
++>M.n : Symbol(n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
+ >M : Symbol(M, Decl(incrementOperatorWithUnsupportedStringType.ts, 9, 1))
+->n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
++>n : Symbol(n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
+ 
+ ++objA.a, M.n;
+->objA.a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
++>objA.a : Symbol(a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
+ >objA : Symbol(objA, Decl(incrementOperatorWithUnsupportedStringType.ts, 14, 3))
+->a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
+->M.n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
++>a : Symbol(a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
++>M.n : Symbol(n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
+ >M : Symbol(M, Decl(incrementOperatorWithUnsupportedStringType.ts, 9, 1))
+->n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
++>n : Symbol(n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
+ 
+ ""++;
+ STRING++;
+@@= skipped -31, +31 lines =@@
+ >foo : Symbol(foo, Decl(incrementOperatorWithUnsupportedStringType.ts, 2, 33))
+ 
+ objA.a++;
+->objA.a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
++>objA.a : Symbol(a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
+ >objA : Symbol(objA, Decl(incrementOperatorWithUnsupportedStringType.ts, 14, 3))
+->a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
++>a : Symbol(a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
+ 
+ M.n++;
+->M.n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
++>M.n : Symbol(n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
+ >M : Symbol(M, Decl(incrementOperatorWithUnsupportedStringType.ts, 9, 1))
+->n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
++>n : Symbol(n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
+ 
+ objA.a++, M.n++;
+->objA.a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
++>objA.a : Symbol(a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
+ >objA : Symbol(objA, Decl(incrementOperatorWithUnsupportedStringType.ts, 14, 3))
+->a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
+->M.n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
++>a : Symbol(a, Decl(incrementOperatorWithUnsupportedStringType.ts, 6, 9))
++>M.n : Symbol(n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
+ >M : Symbol(M, Decl(incrementOperatorWithUnsupportedStringType.ts, 9, 1))
+->n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
++>n : Symbol(n, Decl(incrementOperatorWithUnsupportedStringType.ts, 11, 14))
+ 

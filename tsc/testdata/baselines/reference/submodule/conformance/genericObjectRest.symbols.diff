@@ -1,0 +1,14 @@
+--- old.genericObjectRest.symbols
++++ new.genericObjectRest.symbols
+@@= skipped -49, +49 lines =@@
+ 
+ const sa = Symbol();
+ >sa : Symbol(sa, Decl(genericObjectRest.ts, 11, 5))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ 
+ const sb = Symbol();
+ >sb : Symbol(sb, Decl(genericObjectRest.ts, 12, 5))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ 
+ function f2<T extends { [sa]: string, [sb]: number }>(obj: T) {
+ >f2 : Symbol(f2, Decl(genericObjectRest.ts, 12, 20))

@@ -1,0 +1,9 @@
+--- old.parserComputedPropertyName11.symbols
++++ new.parserComputedPropertyName11.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(parserComputedPropertyName11.ts, 0, 0))
+ 
+    [e]();
+->[e] : Symbol(C[e], Decl(parserComputedPropertyName11.ts, 0, 9))
++>[e] : Symbol([e], Decl(parserComputedPropertyName11.ts, 0, 9))
+ }

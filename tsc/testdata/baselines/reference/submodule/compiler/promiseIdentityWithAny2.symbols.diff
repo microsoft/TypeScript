@@ -1,0 +1,38 @@
+--- old.promiseIdentityWithAny2.symbols
++++ new.promiseIdentityWithAny2.symbols
+@@= skipped -6, +6 lines =@@
+ >V : Symbol(V, Decl(promiseIdentityWithAny2.ts, 0, 28))
+ 
+     then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
+->then : Symbol(IPromise.then, Decl(promiseIdentityWithAny2.ts, 0, 33))
++>then : Symbol(then, Decl(promiseIdentityWithAny2.ts, 0, 33))
+ >U : Symbol(U, Decl(promiseIdentityWithAny2.ts, 1, 9))
+ >W : Symbol(W, Decl(promiseIdentityWithAny2.ts, 1, 11))
+ >callback : Symbol(callback, Decl(promiseIdentityWithAny2.ts, 1, 15))
+@@= skipped -19, +19 lines =@@
+ >V : Symbol(V, Decl(promiseIdentityWithAny2.ts, 3, 20))
+ 
+     then(callback: (x: T) => Promise<any, any>): Promise<any, any>;
+->then : Symbol(Promise.then, Decl(promiseIdentityWithAny2.ts, 3, 25))
++>then : Symbol(then, Decl(promiseIdentityWithAny2.ts, 3, 25))
+ >callback : Symbol(callback, Decl(promiseIdentityWithAny2.ts, 4, 9))
+ >x : Symbol(x, Decl(promiseIdentityWithAny2.ts, 4, 20))
+ >T : Symbol(T, Decl(promiseIdentityWithAny2.ts, 3, 18))
+@@= skipped -24, +24 lines =@@
+ >V : Symbol(V, Decl(promiseIdentityWithAny2.ts, 12, 22))
+ 
+     then<U, W>(callback: (x: T) => IPromise2<U, W>): IPromise2<U, W>;
+->then : Symbol(IPromise2.then, Decl(promiseIdentityWithAny2.ts, 12, 27))
++>then : Symbol(then, Decl(promiseIdentityWithAny2.ts, 12, 27))
+ >U : Symbol(U, Decl(promiseIdentityWithAny2.ts, 13, 9))
+ >W : Symbol(W, Decl(promiseIdentityWithAny2.ts, 13, 11))
+ >callback : Symbol(callback, Decl(promiseIdentityWithAny2.ts, 13, 15))
+@@= skipped -19, +19 lines =@@
+ >V : Symbol(V, Decl(promiseIdentityWithAny2.ts, 15, 21))
+ 
+     then<U, W>(callback: (x: T) => Promise2<string, any>): Promise2<any, any>; // Uses string instead of any!
+->then : Symbol(Promise2.then, Decl(promiseIdentityWithAny2.ts, 15, 26))
++>then : Symbol(then, Decl(promiseIdentityWithAny2.ts, 15, 26))
+ >U : Symbol(U, Decl(promiseIdentityWithAny2.ts, 16, 9))
+ >W : Symbol(W, Decl(promiseIdentityWithAny2.ts, 16, 11))
+ >callback : Symbol(callback, Decl(promiseIdentityWithAny2.ts, 16, 15))

@@ -1,0 +1,33 @@
+--- old.destructuringAssignment_private.symbols
++++ new.destructuringAssignment_private.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(destructuringAssignment_private.ts, 0, 0))
+ 
+     private x = 0;
+->x : Symbol(C.x, Decl(destructuringAssignment_private.ts, 0, 9))
++>x : Symbol(x, Decl(destructuringAssignment_private.ts, 0, 9))
+ 
+     private o = [{ a: 1 }];
+->o : Symbol(C.o, Decl(destructuringAssignment_private.ts, 1, 18))
++>o : Symbol(o, Decl(destructuringAssignment_private.ts, 1, 18))
+ >a : Symbol(a, Decl(destructuringAssignment_private.ts, 2, 18))
+ }
+ let x: number;
+@@= skipped -26, +26 lines =@@
+ 
+ ([{ a: { [nameX]: x } }] = [{ a: new C() }]);
+ >a : Symbol(a, Decl(destructuringAssignment_private.ts, 9, 3))
+->[nameX] : Symbol([nameX], Decl(destructuringAssignment_private.ts, 9, 8))
++>[nameX] : Symbol(x, Decl(destructuringAssignment_private.ts, 9, 8))
+ >nameX : Symbol(nameX, Decl(destructuringAssignment_private.ts, 8, 5))
+ >x : Symbol(x, Decl(destructuringAssignment_private.ts, 4, 3))
+ >a : Symbol(a, Decl(destructuringAssignment_private.ts, 9, 29))
+@@= skipped -10, +10 lines =@@
+ >nameO : Symbol(nameO, Decl(destructuringAssignment_private.ts, 11, 5))
+ 
+ ({ [nameO]: [{ a: x }]} = new C());
+->[nameO] : Symbol([nameO], Decl(destructuringAssignment_private.ts, 12, 2))
++>[nameO] : Symbol(o, Decl(destructuringAssignment_private.ts, 12, 2))
+ >nameO : Symbol(nameO, Decl(destructuringAssignment_private.ts, 11, 5))
+ >a : Symbol(a, Decl(destructuringAssignment_private.ts, 12, 14))
+ >x : Symbol(x, Decl(destructuringAssignment_private.ts, 4, 3))

@@ -1,0 +1,42 @@
+--- old.expandoFunctionExpressionsWithDynamicNames2.symbols
++++ new.expandoFunctionExpressionsWithDynamicNames2.symbols
+@@= skipped -9, +9 lines =@@
+ 
+   (): void;
+   [mySymbol]: true;
+->[mySymbol] : Symbol(Foo[mySymbol], Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 2, 11))
++>[mySymbol] : Symbol([mySymbol], Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 2, 11))
+ >mySymbol : Symbol(mySymbol, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 0, 5))
+ }
+ const foo: Foo = () => {};
+->foo : Symbol(foo, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 5, 5), Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 5, 26))
++>foo : Symbol(foo, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 5, 5))
+ >Foo : Symbol(Foo, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 0, 26))
+ 
+ foo[mySymbol] = true;
+->foo : Symbol(foo, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 5, 5), Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 5, 26))
++>foo : Symbol(foo, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 5, 5))
+ >mySymbol : Symbol(mySymbol, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 0, 5))
+ 
+ interface Bar {
+@@= skipped -16, +16 lines =@@
+ 
+   (): void;
+   test: true;
+->test : Symbol(Bar.test, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 9, 11))
++>test : Symbol(test, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 9, 11))
+ }
+ const t = "test" as const;
+ >t : Symbol(t, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 12, 5))
+ >const : Symbol(const)
+ 
+ const bar: Bar = () => {};
+->bar : Symbol(bar, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 13, 5), Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 13, 26))
++>bar : Symbol(bar, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 13, 5))
+ >Bar : Symbol(Bar, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 6, 21))
+ 
+ bar[t] = true;
+->bar : Symbol(bar, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 13, 5), Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 13, 26))
++>bar : Symbol(bar, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 13, 5))
+ >t : Symbol(t, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 12, 5))
+ 

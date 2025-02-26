@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/declarationEmitExpandoPropertyPrivateName.ts] ////
+
+=== a.ts ===
+interface I {}
+>I : Symbol(I, Decl(a.ts, 0, 0))
+
+export function f(): I { return null as I; }
+>f : Symbol(f, Decl(a.ts, 0, 14))
+>I : Symbol(I, Decl(a.ts, 0, 0))
+>I : Symbol(I, Decl(a.ts, 0, 0))
+
+=== b.ts ===
+import {f} from "./a";
+>f : Symbol(f, Decl(b.ts, 0, 8))
+
+export function q() {}
+>q : Symbol(q, Decl(b.ts, 0, 22))
+
+q.val = f();
+>q.val : Symbol(val, Decl(b.ts, 2, 22))
+>q : Symbol(q, Decl(b.ts, 0, 22))
+>val : Symbol(val, Decl(b.ts, 2, 22))
+>f : Symbol(f, Decl(b.ts, 0, 8))
+

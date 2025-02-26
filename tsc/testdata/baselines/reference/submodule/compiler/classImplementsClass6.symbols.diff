@@ -1,0 +1,25 @@
+--- old.classImplementsClass6.symbols
++++ new.classImplementsClass6.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(classImplementsClass6.ts, 0, 0))
+ 
+     static bar(): string {
+->bar : Symbol(A.bar, Decl(classImplementsClass6.ts, 0, 9))
++>bar : Symbol(bar, Decl(classImplementsClass6.ts, 0, 9))
+ 
+         return "";
+     }
+     foo(): number { return 1; }
+->foo : Symbol(A.foo, Decl(classImplementsClass6.ts, 3, 5))
++>foo : Symbol(foo, Decl(classImplementsClass6.ts, 3, 5))
+ }
+ class C implements A {
+ >C : Symbol(C, Decl(classImplementsClass6.ts, 5, 1))
+ >A : Symbol(A, Decl(classImplementsClass6.ts, 0, 0))
+     
+     foo() {
+->foo : Symbol(C.foo, Decl(classImplementsClass6.ts, 6, 22))
++>foo : Symbol(foo, Decl(classImplementsClass6.ts, 6, 22))
+ 
+         return 1;
+     }

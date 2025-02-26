@@ -1,0 +1,20 @@
+--- old.bundlerSyntaxRestrictions(module=esnext).symbols
++++ new.bundlerSyntaxRestrictions(module=esnext).symbols
+@@= skipped -32, +32 lines =@@
+ === /mainJs.js ===
+ import {} from "./a";
+ import("./a");
+->"./a" : Symbol(_, Decl(a.ts, 0, 0))
+-
+ const _ = require("./a");
+ >_ : Symbol(_, Decl(mainJs.js, 2, 5))
+ >require : Symbol(require, Decl(index.d.ts, 0, 11))
+->"./a" : Symbol(_, Decl(a.ts, 0, 0))
+ 
+ _.a; // any
+->_.a : Symbol(_.a, Decl(a.ts, 0, 12))
+ >_ : Symbol(_, Decl(mainJs.js, 2, 5))
+->a : Symbol(_.a, Decl(a.ts, 0, 12))
+ 
+ === /main.ts ===
+ import {} from "./a";

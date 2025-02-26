@@ -1,0 +1,50 @@
+--- old.genericTypeParameterEquivalence2.symbols
++++ new.genericTypeParameterEquivalence2.symbols
+@@= skipped -25, +25 lines =@@
+ 
+         return f(g.apply(null, a));
+ >f : Symbol(f, Decl(genericTypeParameterEquivalence2.ts, 1, 26))
+->g.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
++>g.apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
+ >g : Symbol(g, Decl(genericTypeParameterEquivalence2.ts, 1, 41))
+->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
++>apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(genericTypeParameterEquivalence2.ts, 2, 21))
+ 
+     };
+@@= skipped -22, +22 lines =@@
+     for (var i = 0; i < list.length; ++i) {
+ >i : Symbol(i, Decl(genericTypeParameterEquivalence2.ts, 9, 12))
+ >i : Symbol(i, Decl(genericTypeParameterEquivalence2.ts, 9, 12))
+->list.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>list.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >list : Symbol(list, Decl(genericTypeParameterEquivalence2.ts, 8, 20))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >i : Symbol(i, Decl(genericTypeParameterEquivalence2.ts, 9, 12))
+ 
+         f(list[i], i);
+@@= skipped -37, +37 lines =@@
+ >el : Symbol(el, Decl(genericTypeParameterEquivalence2.ts, 17, 17))
+ 
+             ret.push(el);
+->ret.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>ret.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >ret : Symbol(ret, Decl(genericTypeParameterEquivalence2.ts, 16, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >el : Symbol(el, Decl(genericTypeParameterEquivalence2.ts, 17, 17))
+         }
+     } );
+@@= skipped -19, +19 lines =@@
+ >A : Symbol(A, Decl(genericTypeParameterEquivalence2.ts, 27, 17))
+ 
+     return ar.length;
+->ar.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>ar.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >ar : Symbol(ar, Decl(genericTypeParameterEquivalence2.ts, 27, 20))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ // curry1 :: ((a,b)->c) -> (a->(b->c))

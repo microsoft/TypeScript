@@ -1,0 +1,11 @@
+--- old.assignmentCompatWithGenericCallSignatures4.symbols
++++ new.assignmentCompatWithGenericCallSignatures4.symbols
+@@= skipped -7, +7 lines =@@
+ >T : Symbol(T, Decl(assignmentCompatWithGenericCallSignatures4.ts, 2, 13))
+ 
+     p: T
+->p : Symbol(I2.p, Decl(assignmentCompatWithGenericCallSignatures4.ts, 2, 17))
++>p : Symbol(p, Decl(assignmentCompatWithGenericCallSignatures4.ts, 2, 17))
+ >T : Symbol(T, Decl(assignmentCompatWithGenericCallSignatures4.ts, 2, 13))
+ }
+ 

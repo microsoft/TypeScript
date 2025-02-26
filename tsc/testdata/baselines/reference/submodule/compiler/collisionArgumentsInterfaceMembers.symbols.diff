@@ -1,0 +1,22 @@
+--- old.collisionArgumentsInterfaceMembers.symbols
++++ new.collisionArgumentsInterfaceMembers.symbols
+@@= skipped -49, +49 lines =@@
+ >i3 : Symbol(i3, Decl(collisionArgumentsInterfaceMembers.ts, 20, 1))
+ 
+     foo(i: number, ...arguments); // no error - no code gen
+->foo : Symbol(i3.foo, Decl(collisionArgumentsInterfaceMembers.ts, 23, 14))
++>foo : Symbol(foo, Decl(collisionArgumentsInterfaceMembers.ts, 23, 14))
+ >i : Symbol(i, Decl(collisionArgumentsInterfaceMembers.ts, 24, 8))
+ >arguments : Symbol(arguments, Decl(collisionArgumentsInterfaceMembers.ts, 24, 18))
+ 
+     foo1(arguments: number, ...rest); // no error - no code gen
+->foo1 : Symbol(i3.foo1, Decl(collisionArgumentsInterfaceMembers.ts, 24, 33))
++>foo1 : Symbol(foo1, Decl(collisionArgumentsInterfaceMembers.ts, 24, 33))
+ >arguments : Symbol(arguments, Decl(collisionArgumentsInterfaceMembers.ts, 25, 9))
+ >rest : Symbol(rest, Decl(collisionArgumentsInterfaceMembers.ts, 25, 27))
+ 
+     fooNoError(arguments: number);  // no error
+->fooNoError : Symbol(i3.fooNoError, Decl(collisionArgumentsInterfaceMembers.ts, 25, 37))
++>fooNoError : Symbol(fooNoError, Decl(collisionArgumentsInterfaceMembers.ts, 25, 37))
+ >arguments : Symbol(arguments, Decl(collisionArgumentsInterfaceMembers.ts, 26, 15))
+ }

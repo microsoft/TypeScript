@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution1.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+class Poisoned extends React.Component<{}, {}> {
+>Poisoned : Symbol(Poisoned, Decl(file.tsx, 0, 32))
+>React.Component : Symbol(unknown)
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(unknown)
+
+    render() {
+>render : Symbol(render, Decl(file.tsx, 2, 48))
+
+        return <div>Hello</div>;
+    }
+}
+
+const obj = {};
+>obj : Symbol(obj, Decl(file.tsx, 8, 5))
+
+// OK
+let p = <Poisoned {...obj} />;
+>p : Symbol(p, Decl(file.tsx, 11, 3))
+>Poisoned : Symbol(Poisoned, Decl(file.tsx, 0, 32))
+>obj : Symbol(obj, Decl(file.tsx, 8, 5))
+
+let y = <Poisoned />;
+>y : Symbol(y, Decl(file.tsx, 12, 3))
+>Poisoned : Symbol(Poisoned, Decl(file.tsx, 0, 32))
+

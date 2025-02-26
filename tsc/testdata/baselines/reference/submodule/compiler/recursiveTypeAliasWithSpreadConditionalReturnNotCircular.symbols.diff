@@ -1,0 +1,61 @@
+--- old.recursiveTypeAliasWithSpreadConditionalReturnNotCircular.symbols
++++ new.recursiveTypeAliasWithSpreadConditionalReturnNotCircular.symbols
+@@= skipped -6, +6 lines =@@
+ >T : Symbol(T, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 1, 24))
+ 
+ 	zip1<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray1<O>]>;
+->zip1 : Symbol(Option.zip1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 1, 28))
++>zip1 : Symbol(zip1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 1, 28))
+ >O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 6))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
+@@= skipped -12, +12 lines =@@
+ >O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 6))
+ 
+ 	zip2<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray2<O>]>;
+->zip2 : Symbol(Option.zip2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 88))
++>zip2 : Symbol(zip2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 88))
+ >O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 6))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
+@@= skipped -12, +12 lines =@@
+ >O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 6))
+ 
+ 	zip3<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray3<O>]>;
+->zip3 : Symbol(Option.zip3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 88))
++>zip3 : Symbol(zip3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 88))
+ >O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 6, 6))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
+@@= skipped -68, +68 lines =@@
+ 
+ const zipped1 = opt1.zip1(opt2, opt3);
+ >zipped1 : Symbol(zipped1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 22, 5))
+->opt1.zip1 : Symbol(Option.zip1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 1, 28))
++>opt1.zip1 : Symbol(zip1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 1, 28))
+ >opt1 : Symbol(opt1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 18, 13))
+->zip1 : Symbol(Option.zip1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 1, 28))
++>zip1 : Symbol(zip1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 1, 28))
+ >opt2 : Symbol(opt2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 19, 13))
+ >opt3 : Symbol(opt3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 20, 13))
+ 
+ const zipped2 = opt1.zip2(opt2, opt3);
+ >zipped2 : Symbol(zipped2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 23, 5))
+->opt1.zip2 : Symbol(Option.zip2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 88))
++>opt1.zip2 : Symbol(zip2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 88))
+ >opt1 : Symbol(opt1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 18, 13))
+->zip2 : Symbol(Option.zip2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 88))
++>zip2 : Symbol(zip2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 88))
+ >opt2 : Symbol(opt2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 19, 13))
+ >opt3 : Symbol(opt3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 20, 13))
+ 
+ const zipped3 = opt1.zip3(opt2, opt3);
+ >zipped3 : Symbol(zipped3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 24, 5))
+->opt1.zip3 : Symbol(Option.zip3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 88))
++>opt1.zip3 : Symbol(zip3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 88))
+ >opt1 : Symbol(opt1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 18, 13))
+->zip3 : Symbol(Option.zip3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 88))
++>zip3 : Symbol(zip3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 88))
+ >opt2 : Symbol(opt2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 19, 13))
+ >opt3 : Symbol(opt3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 20, 13))
+ 

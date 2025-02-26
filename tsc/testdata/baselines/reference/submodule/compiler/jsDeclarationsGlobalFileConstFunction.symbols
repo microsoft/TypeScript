@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/jsDeclarationsGlobalFileConstFunction.ts] ////
+
+=== file.js ===
+const SomeConstructor = function () {
+>SomeConstructor : Symbol(SomeConstructor, Decl(file.js, 0, 5))
+
+	this.x = 1;
+};
+
+const SomeConstructor2 = function () {
+>SomeConstructor2 : Symbol(SomeConstructor2, Decl(file.js, 4, 5))
+
+};
+SomeConstructor2.staticMember = "str";
+>SomeConstructor2.staticMember : Symbol(staticMember, Decl(file.js, 5, 2))
+>SomeConstructor2 : Symbol(SomeConstructor2, Decl(file.js, 4, 5))
+>staticMember : Symbol(staticMember, Decl(file.js, 5, 2))
+
+const SomeConstructor3 = function () {
+>SomeConstructor3 : Symbol(SomeConstructor3, Decl(file.js, 8, 5))
+
+	this.x = 1;
+};
+SomeConstructor3.staticMember = "str";
+>SomeConstructor3.staticMember : Symbol(staticMember, Decl(file.js, 10, 2))
+>SomeConstructor3 : Symbol(SomeConstructor3, Decl(file.js, 8, 5))
+>staticMember : Symbol(staticMember, Decl(file.js, 10, 2))
+

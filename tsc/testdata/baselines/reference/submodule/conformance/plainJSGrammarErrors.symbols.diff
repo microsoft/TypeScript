@@ -1,0 +1,234 @@
+--- old.plainJSGrammarErrors.symbols
++++ new.plainJSGrammarErrors.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     // #private mistakes
+     q = #unbound
+->q : Symbol(C.q, Decl(plainJSGrammarErrors.js, 0, 9))
++>q : Symbol(q, Decl(plainJSGrammarErrors.js, 0, 9))
+ 
+     m() {
+->m : Symbol(C.m, Decl(plainJSGrammarErrors.js, 2, 16))
++>m : Symbol(m, Decl(plainJSGrammarErrors.js, 2, 16))
+ 
+         #p
+         if (#po in this) {
+@@= skipped -11, +11 lines =@@
+         }
+     }
+     #m() {
+->#m : Symbol(C.#m, Decl(plainJSGrammarErrors.js, 7, 5))
++>#m : Symbol(#m, Decl(plainJSGrammarErrors.js, 7, 5))
+ 
+          this.#m = () => {}
+->this.#m : Symbol(C.#m, Decl(plainJSGrammarErrors.js, 7, 5))
++>this.#m : Symbol(#m, Decl(plainJSGrammarErrors.js, 7, 5))
+ >this : Symbol(C, Decl(plainJSGrammarErrors.js, 0, 0))
+     }
+     // await in static block
+@@= skipped -12, +12 lines =@@
+ >x : Symbol(x, Decl(plainJSGrammarErrors.js, 13, 24))
+ 
+             console.log(x)
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x : Symbol(x, Decl(plainJSGrammarErrors.js, 13, 24))
+         }
+         return null
+@@= skipped -11, +11 lines =@@
+     static constructor() { }
+     async constructor() { }
+     const x = 1
+->x : Symbol(C.x, Decl(plainJSGrammarErrors.js, 20, 27))
++>x : Symbol(x, Decl(plainJSGrammarErrors.js, 20, 27))
+ 
+     const y() {
+->y : Symbol(C.y, Decl(plainJSGrammarErrors.js, 21, 15))
++>y : Symbol(y, Decl(plainJSGrammarErrors.js, 21, 15))
+ 
+         return 12
+     }
+     async async extremelyAsync() {
+->extremelyAsync : Symbol(C.extremelyAsync, Decl(plainJSGrammarErrors.js, 24, 5))
++>extremelyAsync : Symbol(extremelyAsync, Decl(plainJSGrammarErrors.js, 24, 5))
+     }
+     async static oorder(){ }
+->oorder : Symbol(C.oorder, Decl(plainJSGrammarErrors.js, 26, 5))
++>oorder : Symbol(oorder, Decl(plainJSGrammarErrors.js, 26, 5))
+ 
+     export cantExportProperty = 1
+->cantExportProperty : Symbol(C.cantExportProperty, Decl(plainJSGrammarErrors.js, 27, 28))
++>cantExportProperty : Symbol(cantExportProperty, Decl(plainJSGrammarErrors.js, 27, 28))
+ 
+     export cantExportMethod() {
+->cantExportMethod : Symbol(C.cantExportMethod, Decl(plainJSGrammarErrors.js, 28, 33))
++>cantExportMethod : Symbol(cantExportMethod, Decl(plainJSGrammarErrors.js, 28, 33))
+     }
+ 
+     // accessor mistakes
+     get incorporeal();
+->incorporeal : Symbol(C.incorporeal, Decl(plainJSGrammarErrors.js, 30, 5))
++>incorporeal : Symbol(incorporeal, Decl(plainJSGrammarErrors.js, 30, 5))
+ 
+     get parametric(n) { return 1 }
+->parametric : Symbol(C.parametric, Decl(plainJSGrammarErrors.js, 33, 22))
++>parametric : Symbol(parametric, Decl(plainJSGrammarErrors.js, 33, 22))
+ >n : Symbol(n, Decl(plainJSGrammarErrors.js, 34, 19))
+ 
+     set invariant() { }
+->invariant : Symbol(C.invariant, Decl(plainJSGrammarErrors.js, 34, 34))
++>invariant : Symbol(invariant, Decl(plainJSGrammarErrors.js, 34, 34))
+ 
+     set binary(fst, snd) { }
+->binary : Symbol(C.binary, Decl(plainJSGrammarErrors.js, 35, 23))
++>binary : Symbol(binary, Decl(plainJSGrammarErrors.js, 35, 23))
+ >fst : Symbol(fst, Decl(plainJSGrammarErrors.js, 36, 15))
+ >snd : Symbol(snd, Decl(plainJSGrammarErrors.js, 36, 19))
+ 
+     set variable(...n) { }
+->variable : Symbol(C.variable, Decl(plainJSGrammarErrors.js, 36, 28))
++>variable : Symbol(variable, Decl(plainJSGrammarErrors.js, 36, 28))
+ >n : Symbol(n, Decl(plainJSGrammarErrors.js, 37, 17))
+ 
+     // other
+     "constructor" = 16
+->"constructor" : Symbol(C["constructor"], Decl(plainJSGrammarErrors.js, 37, 26))
++>"constructor" : Symbol(constructor, Decl(plainJSGrammarErrors.js, 37, 26))
+ }
+ class {
+     missingName = true
+->missingName : Symbol(__missing.missingName, Decl(plainJSGrammarErrors.js, 42, 7))
++>missingName : Symbol(missingName, Decl(plainJSGrammarErrors.js, 42, 7))
+ }
+ class Doubler extends C extends C { }
+ >Doubler : Symbol(Doubler, Decl(plainJSGrammarErrors.js, 44, 1))
+@@= skipped -99, +99 lines =@@
+ >CantAsyncClass : Symbol(CantAsyncClass, Decl(plainJSGrammarErrors.js, 59, 40))
+ 
+     async cantAsyncPropert = 1
+->cantAsyncPropert : Symbol(CantAsyncClass.cantAsyncPropert, Decl(plainJSGrammarErrors.js, 60, 28))
++>cantAsyncPropert : Symbol(cantAsyncPropert, Decl(plainJSGrammarErrors.js, 60, 28))
+ }
+ async const cantAsyncConst = 2
+ >cantAsyncConst : Symbol(cantAsyncConst, Decl(plainJSGrammarErrors.js, 63, 11))
+@@= skipped -107, +107 lines =@@
+ 
+     [console.log('oh no'),2]: 'hi',
+ >[console.log('oh no'),2] : Symbol([console.log('oh no'),2], Decl(plainJSGrammarErrors.js, 102, 11))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ 
+     #noPrivate: 3,
+ >#noPrivate : Symbol(#noPrivate, Decl(plainJSGrammarErrors.js, 103, 35))
+@@= skipped -66, +66 lines =@@
+ >l : Symbol(l, Decl(plainJSGrammarErrors.js, 129, 12))
+ 
+     console.log(x)
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x : Symbol(x, Decl(plainJSGrammarErrors.js, 96, 3), Decl(plainJSGrammarErrors.js, 97, 3))
+ }
+ for (const cantHaveInit = 1 of [1,2,3]) {
+ >cantHaveInit : Symbol(cantHaveInit, Decl(plainJSGrammarErrors.js, 133, 10))
+ 
+     console.log(cantHaveInit)
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >cantHaveInit : Symbol(cantHaveInit, Decl(plainJSGrammarErrors.js, 133, 10))
+ }
+ for (const cantHaveInit = 1 in [1,2,3]) {
+ >cantHaveInit : Symbol(cantHaveInit, Decl(plainJSGrammarErrors.js, 136, 10))
+ 
+     console.log(cantHaveInit)
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >cantHaveInit : Symbol(cantHaveInit, Decl(plainJSGrammarErrors.js, 136, 10))
+ }
+ for (let y, x of [1,2,3]) {
+@@= skipped -28, +28 lines =@@
+ >x : Symbol(x, Decl(plainJSGrammarErrors.js, 139, 11))
+ 
+     console.log(x)
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x : Symbol(x, Decl(plainJSGrammarErrors.js, 139, 11))
+ }
+ for (let y, x in [1,2,3]) {
+@@= skipped -10, +10 lines =@@
+ >x : Symbol(x, Decl(plainJSGrammarErrors.js, 142, 11))
+ 
+     console.log(x)
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x : Symbol(x, Decl(plainJSGrammarErrors.js, 142, 11))
+ }
+ 
+@@= skipped -15, +15 lines =@@
+ 
+     case false:
+         console.log('no')
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ 
+     default:
+         console.log('yes')
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ 
+     default:
+         console.log('wat')
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ }
+ try {
+     throw 2
+@@= skipped -26, +26 lines =@@
+ >e : Symbol(e, Decl(plainJSGrammarErrors.js, 160, 9))
+ 
+     console.log(e)
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >e : Symbol(e, Decl(plainJSGrammarErrors.js, 160, 9))
+ }
+ try {
+@@= skipped -65, +65 lines =@@
+ 
+ function foo() { new.targe }
+ >foo : Symbol(foo, Decl(plainJSGrammarErrors.js, 200, 32))
+->new.targe : Symbol(foo, Decl(plainJSGrammarErrors.js, 200, 32))
+ 
+ const nullaryDynamicImport = import()
+ >nullaryDynamicImport : Symbol(nullaryDynamicImport, Decl(plainJSGrammarErrors.js, 202, 5))

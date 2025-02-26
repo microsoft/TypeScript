@@ -1,0 +1,14 @@
+--- old.typeGuardsInExternalModule.symbols
++++ new.typeGuardsInExternalModule.symbols
+@@= skipped -15, +15 lines =@@
+ 
+     num = var1.length; // string
+ >num : Symbol(num, Decl(typeGuardsInExternalModule.ts, 4, 3))
+->var1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>var1.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >var1 : Symbol(var1, Decl(typeGuardsInExternalModule.ts, 5, 3))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ else {
+     num = var1; // number

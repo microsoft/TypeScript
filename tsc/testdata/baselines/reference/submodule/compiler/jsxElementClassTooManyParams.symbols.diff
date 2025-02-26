@@ -1,0 +1,46 @@
+--- old.jsxElementClassTooManyParams.symbols
++++ new.jsxElementClassTooManyParams.symbols
+@@= skipped -12, +12 lines =@@
+ >TOther : Symbol(TOther, Decl(jsxElementClassTooManyParams.tsx, 2, 53))
+ 
+         ref?: TClass;
+->ref : Symbol(IntrinsicClassAttributes.ref, Decl(jsxElementClassTooManyParams.tsx, 2, 69))
++>ref : Symbol(ref, Decl(jsxElementClassTooManyParams.tsx, 2, 69))
+ >TClass : Symbol(TClass, Decl(jsxElementClassTooManyParams.tsx, 2, 46))
+ 
+         item?: TOther;
+->item : Symbol(IntrinsicClassAttributes.item, Decl(jsxElementClassTooManyParams.tsx, 3, 21))
++>item : Symbol(item, Decl(jsxElementClassTooManyParams.tsx, 3, 21))
+ >TOther : Symbol(TOther, Decl(jsxElementClassTooManyParams.tsx, 2, 53))
+     }
+     export interface ElementClass extends Element {}
+@@= skipped -13, +13 lines =@@
+ 
+     export interface ElementAttributesProperty { props: {}; }
+ >ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(jsxElementClassTooManyParams.tsx, 6, 52))
+->props : Symbol(ElementAttributesProperty.props, Decl(jsxElementClassTooManyParams.tsx, 7, 48))
++>props : Symbol(props, Decl(jsxElementClassTooManyParams.tsx, 7, 48))
+ 
+     export interface ElementChildrenAttribute { children: {}; }
+ >ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(jsxElementClassTooManyParams.tsx, 7, 61))
+->children : Symbol(ElementChildrenAttribute.children, Decl(jsxElementClassTooManyParams.tsx, 8, 47))
++>children : Symbol(children, Decl(jsxElementClassTooManyParams.tsx, 8, 47))
+ 
+     export interface IntrinsicAttributes {}
+ >IntrinsicAttributes : Symbol(IntrinsicAttributes, Decl(jsxElementClassTooManyParams.tsx, 8, 63))
+@@= skipped -18, +18 lines =@@
+ >ElemClass : Symbol(ElemClass, Decl(jsxElementClassTooManyParams.tsx, 11, 1))
+ >T : Symbol(T, Decl(jsxElementClassTooManyParams.tsx, 12, 16))
+ >x : Symbol(x, Decl(jsxElementClassTooManyParams.tsx, 12, 27))
+->JSX.ElementClass : Symbol(JSX.ElementClass, Decl(jsxElementClassTooManyParams.tsx, 5, 5))
++>JSX.ElementClass : Symbol(ElementClass, Decl(jsxElementClassTooManyParams.tsx, 5, 5))
+ >JSX : Symbol(JSX, Decl(jsxElementClassTooManyParams.tsx, 0, 0))
+->ElementClass : Symbol(JSX.ElementClass, Decl(jsxElementClassTooManyParams.tsx, 5, 5))
++>ElementClass : Symbol(ElementClass, Decl(jsxElementClassTooManyParams.tsx, 5, 5))
+ 
+     constructor(public props: T) {}
+->props : Symbol(ElemClass.props, Decl(jsxElementClassTooManyParams.tsx, 13, 16))
++>props : Symbol(props, Decl(jsxElementClassTooManyParams.tsx, 13, 16))
+ >T : Symbol(T, Decl(jsxElementClassTooManyParams.tsx, 12, 16))
+ }
+ const elem = <ElemClass x={12} y={24} />

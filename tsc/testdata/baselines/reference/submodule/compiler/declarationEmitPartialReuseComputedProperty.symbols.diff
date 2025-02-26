@@ -1,0 +1,11 @@
+--- old.declarationEmitPartialReuseComputedProperty.symbols
++++ new.declarationEmitPartialReuseComputedProperty.symbols
+@@= skipped -11, +11 lines =@@
+ 
+ export const o = () => null! as { [n]: string, foo: string, [poz]: number, [neg]: number }
+ >o : Symbol(o, Decl(a.ts, 3, 12))
+->[n] : Symbol([n], Decl(a.ts, 3, 33))
++>[n] : Symbol(A, Decl(a.ts, 3, 33))
+ >n : Symbol(n, Decl(a.ts, 0, 12))
+ >foo : Symbol(foo, Decl(a.ts, 3, 46))
+ >[poz] : Symbol([poz], Decl(a.ts, 3, 59))

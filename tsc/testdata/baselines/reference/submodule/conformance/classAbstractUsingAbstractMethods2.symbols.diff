@@ -1,0 +1,44 @@
+--- old.classAbstractUsingAbstractMethods2.symbols
++++ new.classAbstractUsingAbstractMethods2.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(classAbstractUsingAbstractMethods2.ts, 0, 0))
+ 
+     abstract foo();
+->foo : Symbol(A.foo, Decl(classAbstractUsingAbstractMethods2.ts, 0, 9))
++>foo : Symbol(foo, Decl(classAbstractUsingAbstractMethods2.ts, 0, 9))
+ }
+ 
+ class B extends A  {}
+@@= skipped -16, +16 lines =@@
+ >A : Symbol(A, Decl(classAbstractUsingAbstractMethods2.ts, 0, 0))
+ 
+     foo() {}
+->foo : Symbol(D.foo, Decl(classAbstractUsingAbstractMethods2.ts, 8, 19))
++>foo : Symbol(foo, Decl(classAbstractUsingAbstractMethods2.ts, 8, 19))
+ }
+ 
+ abstract class E extends A {
+@@= skipped -8, +8 lines =@@
+ >A : Symbol(A, Decl(classAbstractUsingAbstractMethods2.ts, 0, 0))
+ 
+     foo() {}
+->foo : Symbol(E.foo, Decl(classAbstractUsingAbstractMethods2.ts, 12, 28))
++>foo : Symbol(foo, Decl(classAbstractUsingAbstractMethods2.ts, 12, 28))
+ }
+ 
+ abstract class AA {
+ >AA : Symbol(AA, Decl(classAbstractUsingAbstractMethods2.ts, 14, 1))
+ 
+     abstract foo();
+->foo : Symbol(AA.foo, Decl(classAbstractUsingAbstractMethods2.ts, 16, 19))
++>foo : Symbol(foo, Decl(classAbstractUsingAbstractMethods2.ts, 16, 19))
+ }
+ 
+ class BB extends AA  {}
+@@= skipped -23, +23 lines =@@
+ >AA : Symbol(AA, Decl(classAbstractUsingAbstractMethods2.ts, 14, 1))
+ 
+     foo() {}
+->foo : Symbol(DD.foo, Decl(classAbstractUsingAbstractMethods2.ts, 24, 21))
++>foo : Symbol(foo, Decl(classAbstractUsingAbstractMethods2.ts, 24, 21))
+ }

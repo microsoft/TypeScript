@@ -1,0 +1,162 @@
+--- old.correlatedUnions.symbols
++++ new.correlatedUnions.symbols
+@@= skipped -73, +73 lines =@@
+ >v : Symbol(v, Decl(correlatedUnions.ts, 18, 26))
+ >f : Symbol(f, Decl(correlatedUnions.ts, 18, 33))
+ >v : Symbol(v, Decl(correlatedUnions.ts, 18, 36))
+->v.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>v.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ >v : Symbol(v, Decl(correlatedUnions.ts, 18, 36))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ 
+ // --------
+ 
+@@= skipped -130, +130 lines =@@
+     foo: s => s.length,
+ >foo : Symbol(foo, Decl(correlatedUnions.ts, 59, 30))
+ >s : Symbol(s, Decl(correlatedUnions.ts, 60, 8))
+->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(correlatedUnions.ts, 60, 8))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+     bar: n => n.toFixed(2)
+ >bar : Symbol(bar, Decl(correlatedUnions.ts, 60, 23))
+ >n : Symbol(n, Decl(correlatedUnions.ts, 61, 8))
+->n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>n.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >n : Symbol(n, Decl(correlatedUnions.ts, 61, 8))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+ };
+ 
+@@= skipped -60, +60 lines =@@
+ >K : Symbol(K, Decl(correlatedUnions.ts, 75, 17))
+ 
+     data.forEach(block => {
+->data.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>data.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >data : Symbol(data, Decl(correlatedUnions.ts, 75, 33))
+->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >block : Symbol(block, Decl(correlatedUnions.ts, 76, 17))
+ 
+         if (block.type in handlers) {
+@@= skipped -143, +143 lines =@@
+ >events : Symbol(events, Decl(correlatedUnions.ts, 112, 57))
+ 
+         document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once });
+->document.addEventListener : Symbol(Document.addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
++>document.addEventListener : Symbol(addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+ >document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+->addEventListener : Symbol(Document.addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
++>addEventListener : Symbol(addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+ >event.name : Symbol(name, Decl(correlatedUnions.ts, 106, 57))
+ >event : Symbol(event, Decl(correlatedUnions.ts, 113, 14))
+ >name : Symbol(name, Decl(correlatedUnions.ts, 106, 57))
+@@= skipped -46, +46 lines =@@
+     callback: ev => console.log(ev),
+ >callback : Symbol(callback, Decl(correlatedUnions.ts, 123, 18))
+ >ev : Symbol(ev, Decl(correlatedUnions.ts, 124, 13))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >ev : Symbol(ev, Decl(correlatedUnions.ts, 124, 13))
+ 
+ });
+@@= skipped -17, +17 lines =@@
+     callback: ev => console.log(ev),
+ >callback : Symbol(callback, Decl(correlatedUnions.ts, 128, 19))
+ >ev : Symbol(ev, Decl(correlatedUnions.ts, 129, 13))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >ev : Symbol(ev, Decl(correlatedUnions.ts, 129, 13))
+ 
+ });
+@@= skipped -19, +19 lines =@@
+ >name : Symbol(name, Decl(correlatedUnions.ts, 135, 5))
+ >callback : Symbol(callback, Decl(correlatedUnions.ts, 135, 20))
+ >ev : Symbol(ev, Decl(correlatedUnions.ts, 135, 30))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >ev : Symbol(ev, Decl(correlatedUnions.ts, 135, 30))
+ 
+     { name: "scroll", callback: ev => console.log(ev) },
+ >name : Symbol(name, Decl(correlatedUnions.ts, 136, 5))
+ >callback : Symbol(callback, Decl(correlatedUnions.ts, 136, 21))
+ >ev : Symbol(ev, Decl(correlatedUnions.ts, 136, 31))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >ev : Symbol(ev, Decl(correlatedUnions.ts, 136, 31))
+ 
+ ]);
+@@= skipped -194, +194 lines =@@
+ >MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
+ 
+     someKey: {
+->someKey : Symbol(MyObj.someKey, Decl(correlatedUnions.ts, 185, 17))
++>someKey : Symbol(someKey, Decl(correlatedUnions.ts, 185, 17))
+ 
+       name: string;
+ >name : Symbol(name, Decl(correlatedUnions.ts, 186, 14))
+     }
+     someOtherKey: {
+->someOtherKey : Symbol(MyObj.someOtherKey, Decl(correlatedUnions.ts, 188, 5))
++>someOtherKey : Symbol(someOtherKey, Decl(correlatedUnions.ts, 188, 5))
+ 
+       name: number;
+ >name : Symbol(name, Decl(correlatedUnions.ts, 189, 19))
+@@= skipped -78, +78 lines =@@
+ >Foo : Symbol(Foo, Decl(correlatedUnions.ts, 209, 1))
+ 
+     bar?: string
+->bar : Symbol(Foo.bar, Decl(correlatedUnions.ts, 213, 15))
++>bar : Symbol(bar, Decl(correlatedUnions.ts, 213, 15))
+ }
+ 
+ function foo<T extends keyof Foo>(prop: T, f: Required<Foo>) {
+@@= skipped -71, +71 lines =@@
+ >Original : Symbol(Original, Decl(correlatedUnions.ts, 234, 60))
+ 
+   prop1: {
+->prop1 : Symbol(Original.prop1, Decl(correlatedUnions.ts, 238, 20))
++>prop1 : Symbol(prop1, Decl(correlatedUnions.ts, 238, 20))
+ 
+     subProp1: string;
+ >subProp1 : Symbol(subProp1, Decl(correlatedUnions.ts, 239, 10))
+@@= skipped -10, +10 lines =@@
+ 
+   };
+   prop2: {
+->prop2 : Symbol(Original.prop2, Decl(correlatedUnions.ts, 242, 4))
++>prop2 : Symbol(prop2, Decl(correlatedUnions.ts, 242, 4))
+ 
+     subProp3: string;
+ >subProp3 : Symbol(subProp3, Decl(correlatedUnions.ts, 243, 10))
+@@= skipped -94, +94 lines =@@
+ >Config : Symbol(Config, Decl(correlatedUnions.ts, 269, 2))
+ 
+   string: string;
+->string : Symbol(Config.string, Decl(correlatedUnions.ts, 272, 18))
++>string : Symbol(string, Decl(correlatedUnions.ts, 272, 18))
+ 
+   number: number;
+->number : Symbol(Config.number, Decl(correlatedUnions.ts, 273, 17))
++>number : Symbol(number, Decl(correlatedUnions.ts, 273, 17))
+ }
+ 
+ function getConfigOrDefault<T extends keyof Config>(

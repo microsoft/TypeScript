@@ -1,0 +1,40 @@
+--- old.inferenceOptionalPropertiesToIndexSignatures.symbols
++++ new.inferenceOptionalPropertiesToIndexSignatures.symbols
+@@= skipped -52, +52 lines =@@
+ 
+ const param2 = Math.random() < 0.5 ? 'value2' : null;
+ >param2 : Symbol(param2, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 14, 5))
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ 
+ const obj = {
+ >obj : Symbol(obj, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 16, 5))
+@@= skipped -18, +18 lines =@@
+ 
+ const query = Object.entries(obj).map(
+ >query : Symbol(query, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 21, 5))
+->Object.entries(obj).map(    ([k, v]) => `${k}=${encodeURIComponent(v)}`).join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+->Object.entries(obj).map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+->Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
++>Object.entries(obj).map(    ([k, v]) => `${k}=${encodeURIComponent(v)}`).join : Symbol(join, Decl(lib.es5.d.ts, --, --))
++>Object.entries(obj).map : Symbol(map, Decl(lib.es5.d.ts, --, --))
++>Object.entries : Symbol(entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
++>entries : Symbol(entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+ >obj : Symbol(obj, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 16, 5))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ 
+     ([k, v]) => `${k}=${encodeURIComponent(v)}`
+ >k : Symbol(k, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 22, 6))
+@@= skipped -16, +16 lines =@@
+ >v : Symbol(v, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 22, 8))
+ 
+ ).join('&');
+->join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
++>join : Symbol(join, Decl(lib.es5.d.ts, --, --))
+ 

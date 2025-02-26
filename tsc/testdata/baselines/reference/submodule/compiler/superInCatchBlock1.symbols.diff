@@ -1,0 +1,31 @@
+--- old.superInCatchBlock1.symbols
++++ new.superInCatchBlock1.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(superInCatchBlock1.ts, 0, 0))
+ 
+  m(): void { }
+->m : Symbol(A.m, Decl(superInCatchBlock1.ts, 0, 9))
++>m : Symbol(m, Decl(superInCatchBlock1.ts, 0, 9))
+ }
+ class B extends A {
+ >B : Symbol(B, Decl(superInCatchBlock1.ts, 2, 1))
+ >A : Symbol(A, Decl(superInCatchBlock1.ts, 0, 0))
+ 
+  m() {
+->m : Symbol(B.m, Decl(superInCatchBlock1.ts, 3, 19))
++>m : Symbol(m, Decl(superInCatchBlock1.ts, 3, 19))
+ 
+   try {
+   }
+@@= skipped -15, +15 lines =@@
+ >e : Symbol(e, Decl(superInCatchBlock1.ts, 7, 9))
+ 
+    super.m();
+->super.m : Symbol(A.m, Decl(superInCatchBlock1.ts, 0, 9))
++>super.m : Symbol(m, Decl(superInCatchBlock1.ts, 0, 9))
+ >super : Symbol(A, Decl(superInCatchBlock1.ts, 0, 0))
+->m : Symbol(A.m, Decl(superInCatchBlock1.ts, 0, 9))
++>m : Symbol(m, Decl(superInCatchBlock1.ts, 0, 9))
+   }
+  }
+ }

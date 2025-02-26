@@ -1,0 +1,10 @@
+--- old.enumWithNaNProperty.symbols
++++ new.enumWithNaNProperty.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(enumWithNaNProperty.ts, 0, 0))
+ 
+     NaN = 1
+->NaN : Symbol(A.NaN, Decl(enumWithNaNProperty.ts, 0, 8))
++>NaN : Symbol(NaN, Decl(enumWithNaNProperty.ts, 0, 8))
+ }
+ 

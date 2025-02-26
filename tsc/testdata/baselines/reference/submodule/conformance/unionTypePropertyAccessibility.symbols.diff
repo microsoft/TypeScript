@@ -1,0 +1,68 @@
+--- old.unionTypePropertyAccessibility.symbols
++++ new.unionTypePropertyAccessibility.symbols
+@@= skipped -4, +4 lines =@@
+ >Default : Symbol(Default, Decl(unionTypePropertyAccessibility.ts, 0, 0))
+ 
+     member: string;
+->member : Symbol(Default.member, Decl(unionTypePropertyAccessibility.ts, 0, 15))
++>member : Symbol(member, Decl(unionTypePropertyAccessibility.ts, 0, 15))
+ }
+ 
+ class Public {
+ >Public : Symbol(Public, Decl(unionTypePropertyAccessibility.ts, 2, 1))
+ 
+     public member: string;
+->member : Symbol(Public.member, Decl(unionTypePropertyAccessibility.ts, 4, 14))
++>member : Symbol(member, Decl(unionTypePropertyAccessibility.ts, 4, 14))
+ }
+ 
+ class Protected {
+ >Protected : Symbol(Protected, Decl(unionTypePropertyAccessibility.ts, 6, 1))
+ 
+     protected member: string;
+->member : Symbol(Protected.member, Decl(unionTypePropertyAccessibility.ts, 8, 17))
++>member : Symbol(member, Decl(unionTypePropertyAccessibility.ts, 8, 17))
+ }
+ 
+ class Private {
+ >Private : Symbol(Private, Decl(unionTypePropertyAccessibility.ts, 10, 1))
+ 
+     private member: number;
+->member : Symbol(Private.member, Decl(unionTypePropertyAccessibility.ts, 12, 15))
++>member : Symbol(member, Decl(unionTypePropertyAccessibility.ts, 12, 15))
+ }
+ 
+ var v1: Default;
+@@= skipped -102, +102 lines =@@
+ >Protected : Symbol(Protected, Decl(unionTypePropertyAccessibility.ts, 6, 1))
+ 
+ v1.member;
+->v1.member : Symbol(Default.member, Decl(unionTypePropertyAccessibility.ts, 0, 15))
++>v1.member : Symbol(member, Decl(unionTypePropertyAccessibility.ts, 0, 15))
+ >v1 : Symbol(v1, Decl(unionTypePropertyAccessibility.ts, 16, 3))
+->member : Symbol(Default.member, Decl(unionTypePropertyAccessibility.ts, 0, 15))
++>member : Symbol(member, Decl(unionTypePropertyAccessibility.ts, 0, 15))
+ 
+ v2.member;
+->v2.member : Symbol(Public.member, Decl(unionTypePropertyAccessibility.ts, 4, 14))
++>v2.member : Symbol(member, Decl(unionTypePropertyAccessibility.ts, 4, 14))
+ >v2 : Symbol(v2, Decl(unionTypePropertyAccessibility.ts, 17, 3))
+->member : Symbol(Public.member, Decl(unionTypePropertyAccessibility.ts, 4, 14))
++>member : Symbol(member, Decl(unionTypePropertyAccessibility.ts, 4, 14))
+ 
+ v3.member;
+->v3.member : Symbol(Protected.member, Decl(unionTypePropertyAccessibility.ts, 8, 17))
++>v3.member : Symbol(member, Decl(unionTypePropertyAccessibility.ts, 8, 17))
+ >v3 : Symbol(v3, Decl(unionTypePropertyAccessibility.ts, 18, 3))
+->member : Symbol(Protected.member, Decl(unionTypePropertyAccessibility.ts, 8, 17))
++>member : Symbol(member, Decl(unionTypePropertyAccessibility.ts, 8, 17))
+ 
+ v4.member;
+->v4.member : Symbol(Private.member, Decl(unionTypePropertyAccessibility.ts, 12, 15))
++>v4.member : Symbol(member, Decl(unionTypePropertyAccessibility.ts, 12, 15))
+ >v4 : Symbol(v4, Decl(unionTypePropertyAccessibility.ts, 19, 3))
+->member : Symbol(Private.member, Decl(unionTypePropertyAccessibility.ts, 12, 15))
++>member : Symbol(member, Decl(unionTypePropertyAccessibility.ts, 12, 15))
+ 
+ v5.member;
+ >v5.member : Symbol(member, Decl(unionTypePropertyAccessibility.ts, 0, 15), Decl(unionTypePropertyAccessibility.ts, 4, 14))

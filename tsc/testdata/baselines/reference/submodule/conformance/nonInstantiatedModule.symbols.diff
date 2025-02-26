@@ -1,0 +1,89 @@
+--- old.nonInstantiatedModule.symbols
++++ new.nonInstantiatedModule.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     export interface Point { x: number; y: number }
+ >Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 0, 10))
+->x : Symbol(Point.x, Decl(nonInstantiatedModule.ts, 1, 28))
+->y : Symbol(Point.y, Decl(nonInstantiatedModule.ts, 1, 39))
++>x : Symbol(x, Decl(nonInstantiatedModule.ts, 1, 28))
++>y : Symbol(y, Decl(nonInstantiatedModule.ts, 1, 39))
+ 
+     export var a = 1;
+ >a : Symbol(a, Decl(nonInstantiatedModule.ts, 2, 14))
+@@= skipped -21, +21 lines =@@
+ 
+ var a1 = M.a;
+ >a1 : Symbol(a1, Decl(nonInstantiatedModule.ts, 9, 3), Decl(nonInstantiatedModule.ts, 10, 3))
+->M.a : Symbol(M.a, Decl(nonInstantiatedModule.ts, 2, 14))
++>M.a : Symbol(a, Decl(nonInstantiatedModule.ts, 2, 14))
+ >M : Symbol(M, Decl(nonInstantiatedModule.ts, 0, 0))
+->a : Symbol(M.a, Decl(nonInstantiatedModule.ts, 2, 14))
++>a : Symbol(a, Decl(nonInstantiatedModule.ts, 2, 14))
+ 
+ var a2: number;
+ >a2 : Symbol(a2, Decl(nonInstantiatedModule.ts, 12, 3), Decl(nonInstantiatedModule.ts, 13, 3))
+ 
+ var a2 = m.a;
+ >a2 : Symbol(a2, Decl(nonInstantiatedModule.ts, 12, 3), Decl(nonInstantiatedModule.ts, 13, 3))
+->m.a : Symbol(M.a, Decl(nonInstantiatedModule.ts, 2, 14))
++>m.a : Symbol(a, Decl(nonInstantiatedModule.ts, 2, 14))
+ >m : Symbol(m, Decl(nonInstantiatedModule.ts, 6, 3), Decl(nonInstantiatedModule.ts, 7, 3))
+->a : Symbol(M.a, Decl(nonInstantiatedModule.ts, 2, 14))
++>a : Symbol(a, Decl(nonInstantiatedModule.ts, 2, 14))
+ 
+ module M2 {
+ >M2 : Symbol(M2, Decl(nonInstantiatedModule.ts, 13, 13))
+@@= skipped -33, +33 lines =@@
+ >Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
+ 
+         x: number;
+->x : Symbol(Point.x, Decl(nonInstantiatedModule.ts, 22, 28))
++>x : Symbol(x, Decl(nonInstantiatedModule.ts, 22, 28))
+ 
+         y: number;
+->y : Symbol(Point.y, Decl(nonInstantiatedModule.ts, 23, 18))
++>y : Symbol(y, Decl(nonInstantiatedModule.ts, 23, 18))
+     }
+ }
+ 
+@@= skipped -15, +15 lines =@@
+ var p: M2.Point;
+ >p : Symbol(p, Decl(nonInstantiatedModule.ts, 28, 3), Decl(nonInstantiatedModule.ts, 29, 3))
+ >M2 : Symbol(M2, Decl(nonInstantiatedModule.ts, 13, 13))
+->Point : Symbol(M2.Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
++>Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
+ 
+ var p2: { Origin() : { x: number; y: number; } };
+ >p2 : Symbol(p2, Decl(nonInstantiatedModule.ts, 31, 3), Decl(nonInstantiatedModule.ts, 32, 3))
+@@= skipped -10, +10 lines =@@
+ 
+ var p2: typeof M2.Point;
+ >p2 : Symbol(p2, Decl(nonInstantiatedModule.ts, 31, 3), Decl(nonInstantiatedModule.ts, 32, 3))
+->M2.Point : Symbol(M2.Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
++>M2.Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
+ >M2 : Symbol(M2, Decl(nonInstantiatedModule.ts, 13, 13))
+->Point : Symbol(M2.Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
++>Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
+ 
+ module M3 {
+ >M3 : Symbol(M3, Decl(nonInstantiatedModule.ts, 32, 24))
+@@= skipped -14, +14 lines =@@
+ >Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 35, 25))
+ 
+             x: number; y: number;
+->x : Symbol(Point.x, Decl(nonInstantiatedModule.ts, 36, 32))
+->y : Symbol(Point.y, Decl(nonInstantiatedModule.ts, 37, 22))
++>x : Symbol(x, Decl(nonInstantiatedModule.ts, 36, 32))
++>y : Symbol(y, Decl(nonInstantiatedModule.ts, 37, 22))
+         }
+     }
+ 
+@@= skipped -9, +9 lines =@@
+ >Utils : Symbol(Utils, Decl(nonInstantiatedModule.ts, 34, 11), Decl(nonInstantiatedModule.ts, 39, 5))
+ 
+         name: string;
+->name : Symbol(Utils.name, Decl(nonInstantiatedModule.ts, 41, 24))
++>name : Symbol(name, Decl(nonInstantiatedModule.ts, 41, 24))
+     }
+ }

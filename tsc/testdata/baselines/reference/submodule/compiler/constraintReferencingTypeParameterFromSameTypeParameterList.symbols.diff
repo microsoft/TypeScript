@@ -1,0 +1,11 @@
+--- old.constraintReferencingTypeParameterFromSameTypeParameterList.symbols
++++ new.constraintReferencingTypeParameterFromSameTypeParameterList.symbols
+@@= skipped -42, +42 lines =@@
+ >U : Symbol(U, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 16, 15))
+ 
+     method1<X, Y extends T>();
+->method1 : Symbol(I3.method1, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 16, 35))
++>method1 : Symbol(method1, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 16, 35))
+ >X : Symbol(X, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 17, 12))
+ >Y : Symbol(Y, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 17, 14))
+ >T : Symbol(T, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 16, 13))

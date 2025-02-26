@@ -1,0 +1,23 @@
+--- old.symbolProperty58.symbols
++++ new.symbolProperty58.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === symbolProperty58.ts ===
+ interface SymbolConstructor {
+->SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(symbolProperty58.ts, 0, 0))
++>SymbolConstructor : Symbol(SymbolConstructor, Decl(symbolProperty58.ts, 0, 0))
+ 
+     foo: string;
+->foo : Symbol(SymbolConstructor.foo, Decl(symbolProperty58.ts, 0, 29))
++>foo : Symbol(foo, Decl(symbolProperty58.ts, 0, 29))
+ }
+ 
+ var obj = {
+@@= skipped -11, +11 lines =@@
+ 
+     [Symbol.foo]: 0
+ >[Symbol.foo] : Symbol([Symbol.foo], Decl(symbolProperty58.ts, 4, 11))
+->Symbol.foo : Symbol(SymbolConstructor.foo, Decl(symbolProperty58.ts, 0, 29))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->foo : Symbol(SymbolConstructor.foo, Decl(symbolProperty58.ts, 0, 29))
+ }

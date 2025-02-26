@@ -1,0 +1,32 @@
+--- old.computedPropertyNames31_ES5.symbols
++++ new.computedPropertyNames31_ES5.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(computedPropertyNames31_ES5.ts, 0, 0))
+ 
+     bar() {
+->bar : Symbol(Base.bar, Decl(computedPropertyNames31_ES5.ts, 0, 12))
++>bar : Symbol(bar, Decl(computedPropertyNames31_ES5.ts, 0, 12))
+ 
+         return 0;
+     }
+@@= skipped -10, +10 lines =@@
+ >Base : Symbol(Base, Decl(computedPropertyNames31_ES5.ts, 0, 0))
+ 
+     foo() {
+->foo : Symbol(C.foo, Decl(computedPropertyNames31_ES5.ts, 5, 22))
++>foo : Symbol(foo, Decl(computedPropertyNames31_ES5.ts, 5, 22))
+ 
+         () => {
+             var obj = {
+@@= skipped -8, +8 lines =@@
+ 
+                 [super.bar()]() { } // needs capture
+ >[super.bar()] : Symbol([super.bar()], Decl(computedPropertyNames31_ES5.ts, 8, 23))
+->super.bar : Symbol(Base.bar, Decl(computedPropertyNames31_ES5.ts, 0, 12))
++>super.bar : Symbol(bar, Decl(computedPropertyNames31_ES5.ts, 0, 12))
+ >super : Symbol(Base, Decl(computedPropertyNames31_ES5.ts, 0, 0))
+->bar : Symbol(Base.bar, Decl(computedPropertyNames31_ES5.ts, 0, 12))
++>bar : Symbol(bar, Decl(computedPropertyNames31_ES5.ts, 0, 12))
+ 
+             };
+         }

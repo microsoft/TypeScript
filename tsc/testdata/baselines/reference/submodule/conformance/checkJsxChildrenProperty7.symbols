@@ -1,0 +1,86 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty7.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+interface Prop {
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+
+    a: number,
+>a : Symbol(a, Decl(file.tsx, 2, 16))
+
+    b: string,
+>b : Symbol(b, Decl(file.tsx, 3, 14))
+
+    children: JSX.Element | JSX.Element[];
+>children : Symbol(children, Decl(file.tsx, 4, 14))
+>JSX : Symbol(JSX)
+>Element : Symbol(Element)
+>JSX : Symbol(JSX)
+>Element : Symbol(Element)
+}
+
+class Button extends React.Component<any, any> {
+>Button : Symbol(Button, Decl(file.tsx, 6, 1))
+>React.Component : Symbol(unknown)
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(unknown)
+
+    render() {
+>render : Symbol(render, Decl(file.tsx, 8, 48))
+
+        return (<div>My Button</div>)
+    }
+}
+
+function AnotherButton(p: any) {
+>AnotherButton : Symbol(AnotherButton, Decl(file.tsx, 12, 1))
+>p : Symbol(p, Decl(file.tsx, 14, 23))
+
+    return <h1>Just Another Button</h1>;
+}
+
+function Comp(p: Prop) {
+>Comp : Symbol(Comp, Decl(file.tsx, 16, 1))
+>p : Symbol(p, Decl(file.tsx, 18, 14))
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+
+    return <div>{p.b}</div>;
+>p.b : Symbol(b, Decl(file.tsx, 3, 14))
+>p : Symbol(p, Decl(file.tsx, 18, 14))
+>b : Symbol(b, Decl(file.tsx, 3, 14))
+}
+
+// Error: whitespaces matters
+let k1 = <Comp a={10} b="hi"><Button />  <AnotherButton /></Comp>;
+>k1 : Symbol(k1, Decl(file.tsx, 23, 3))
+>Comp : Symbol(Comp, Decl(file.tsx, 16, 1))
+>a : Symbol(a, Decl(file.tsx, 23, 14))
+>b : Symbol(b, Decl(file.tsx, 23, 21))
+>Button : Symbol(Button, Decl(file.tsx, 6, 1))
+>AnotherButton : Symbol(AnotherButton, Decl(file.tsx, 12, 1))
+>Comp : Symbol(Comp, Decl(file.tsx, 16, 1))
+
+let k2 = <Comp a={10} b="hi"><Button />
+>k2 : Symbol(k2, Decl(file.tsx, 24, 3))
+>Comp : Symbol(Comp, Decl(file.tsx, 16, 1))
+>a : Symbol(a, Decl(file.tsx, 24, 14))
+>b : Symbol(b, Decl(file.tsx, 24, 21))
+>Button : Symbol(Button, Decl(file.tsx, 6, 1))
+
+    <AnotherButton />  </Comp>;
+>AnotherButton : Symbol(AnotherButton, Decl(file.tsx, 12, 1))
+>Comp : Symbol(Comp, Decl(file.tsx, 16, 1))
+
+let k3 = <Comp a={10} b="hi">    <Button />
+>k3 : Symbol(k3, Decl(file.tsx, 26, 3))
+>Comp : Symbol(Comp, Decl(file.tsx, 16, 1))
+>a : Symbol(a, Decl(file.tsx, 26, 14))
+>b : Symbol(b, Decl(file.tsx, 26, 21))
+>Button : Symbol(Button, Decl(file.tsx, 6, 1))
+
+    <AnotherButton /></Comp>;
+>AnotherButton : Symbol(AnotherButton, Decl(file.tsx, 12, 1))
+>Comp : Symbol(Comp, Decl(file.tsx, 16, 1))
+

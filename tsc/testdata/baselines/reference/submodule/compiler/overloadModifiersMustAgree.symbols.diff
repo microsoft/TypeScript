@@ -1,0 +1,28 @@
+--- old.overloadModifiersMustAgree.symbols
++++ new.overloadModifiersMustAgree.symbols
+@@= skipped -4, +4 lines =@@
+ >baz : Symbol(baz, Decl(overloadModifiersMustAgree.ts, 0, 0))
+ 
+     public foo();
+->foo : Symbol(baz.foo, Decl(overloadModifiersMustAgree.ts, 0, 11), Decl(overloadModifiersMustAgree.ts, 1, 17))
++>foo : Symbol(foo, Decl(overloadModifiersMustAgree.ts, 0, 11), Decl(overloadModifiersMustAgree.ts, 1, 17))
+ 
+     private foo(bar?: any) { } // error - access modifiers do not agree
+->foo : Symbol(baz.foo, Decl(overloadModifiersMustAgree.ts, 0, 11), Decl(overloadModifiersMustAgree.ts, 1, 17))
++>foo : Symbol(foo, Decl(overloadModifiersMustAgree.ts, 0, 11), Decl(overloadModifiersMustAgree.ts, 1, 17))
+ >bar : Symbol(bar, Decl(overloadModifiersMustAgree.ts, 2, 16))
+ }
+ 
+@@= skipped -22, +22 lines =@@
+ >I : Symbol(I, Decl(overloadModifiersMustAgree.ts, 7, 28))
+ 
+     foo? ();
+->foo : Symbol(I.foo, Decl(overloadModifiersMustAgree.ts, 9, 13), Decl(overloadModifiersMustAgree.ts, 10, 12))
++>foo : Symbol(foo, Decl(overloadModifiersMustAgree.ts, 9, 13), Decl(overloadModifiersMustAgree.ts, 10, 12))
+ 
+     foo(s: string);
+->foo : Symbol(I.foo, Decl(overloadModifiersMustAgree.ts, 9, 13), Decl(overloadModifiersMustAgree.ts, 10, 12))
++>foo : Symbol(foo, Decl(overloadModifiersMustAgree.ts, 9, 13), Decl(overloadModifiersMustAgree.ts, 10, 12))
+ >s : Symbol(s, Decl(overloadModifiersMustAgree.ts, 11, 8))
+ }
+ 

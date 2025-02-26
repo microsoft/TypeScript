@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment37.ts] ////
+
+=== use.js ===
+const util = require('./mod')
+>util : Symbol(util, Decl(use.js, 0, 5))
+
+function n() {
+>n : Symbol(n, Decl(use.js, 0, 29))
+
+    util.existy // no error
+>util : Symbol(util, Decl(use.js, 0, 5))
+}
+util.existy // no error
+>util : Symbol(util, Decl(use.js, 0, 5))
+

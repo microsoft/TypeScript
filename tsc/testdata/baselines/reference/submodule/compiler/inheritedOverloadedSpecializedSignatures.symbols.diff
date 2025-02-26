@@ -1,0 +1,14 @@
+--- old.inheritedOverloadedSpecializedSignatures.symbols
++++ new.inheritedOverloadedSpecializedSignatures.symbols
+@@= skipped -21, +21 lines =@@
+ 
+ // Should not error
+ b('foo').charAt(0);
+->b('foo').charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
++>b('foo').charAt : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
+ >b : Symbol(b, Decl(inheritedOverloadedSpecializedSignatures.ts, 8, 3))
+->charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
++>charAt : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
+ 
+ interface A {
+ >A : Symbol(A, Decl(inheritedOverloadedSpecializedSignatures.ts, 0, 0), Decl(inheritedOverloadedSpecializedSignatures.ts, 10, 19), Decl(inheritedOverloadedSpecializedSignatures.ts, 19, 1))

@@ -51,6 +51,6 @@ func (host *emitHost) WriteFile(fileName string, text string, writeByteOrderMark
 }
 
 func (host *emitHost) GetEmitResolver(file *ast.SourceFile, skipDiagnostics bool) checker.EmitResolver {
-	checker := host.program.getTypeCheckerForFile(file)
+	checker := host.program.GetTypeCheckerForFile(file)
 	return checker.GetEmitResolver(file, skipDiagnostics)
 }

@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/dottedNamesInSystem.ts] ////
+
+=== dottedNamesInSystem.ts ===
+export namespace A.B.C {
+>A : Symbol(A, Decl(dottedNamesInSystem.ts, 0, 0))
+>B : Symbol(B, Decl(dottedNamesInSystem.ts, 0, 19))
+>C : Symbol(C, Decl(dottedNamesInSystem.ts, 0, 21))
+
+    export function foo() {}
+>foo : Symbol(foo, Decl(dottedNamesInSystem.ts, 0, 24))
+}
+
+export function bar() {
+>bar : Symbol(bar, Decl(dottedNamesInSystem.ts, 2, 1))
+
+    return A.B.C.foo();
+>A : Symbol(A, Decl(dottedNamesInSystem.ts, 0, 0))
+}

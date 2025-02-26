@@ -1,0 +1,22 @@
+--- old.genericConstraintSatisfaction1.symbols
++++ new.genericConstraintSatisfaction1.symbols
+@@= skipped -5, +5 lines =@@
+ >S : Symbol(S, Decl(genericConstraintSatisfaction1.ts, 0, 12))
+ 
+    f: <T extends S>(x: T) => void
+->f : Symbol(I.f, Decl(genericConstraintSatisfaction1.ts, 0, 16))
++>f : Symbol(f, Decl(genericConstraintSatisfaction1.ts, 0, 16))
+ >T : Symbol(T, Decl(genericConstraintSatisfaction1.ts, 1, 7))
+ >S : Symbol(S, Decl(genericConstraintSatisfaction1.ts, 0, 12))
+ >x : Symbol(x, Decl(genericConstraintSatisfaction1.ts, 1, 20))
+@@= skipped -13, +13 lines =@@
+ >s : Symbol(s, Decl(genericConstraintSatisfaction1.ts, 4, 10))
+ 
+ x.f({s: 1})
+->x.f : Symbol(I.f, Decl(genericConstraintSatisfaction1.ts, 0, 16))
++>x.f : Symbol(f, Decl(genericConstraintSatisfaction1.ts, 0, 16))
+ >x : Symbol(x, Decl(genericConstraintSatisfaction1.ts, 4, 3))
+->f : Symbol(I.f, Decl(genericConstraintSatisfaction1.ts, 0, 16))
++>f : Symbol(f, Decl(genericConstraintSatisfaction1.ts, 0, 16))
+ >s : Symbol(s, Decl(genericConstraintSatisfaction1.ts, 5, 5))
+ 

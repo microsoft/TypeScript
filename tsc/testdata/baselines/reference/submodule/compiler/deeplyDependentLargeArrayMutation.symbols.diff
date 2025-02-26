@@ -1,0 +1,154 @@
+--- old.deeplyDependentLargeArrayMutation.symbols
++++ new.deeplyDependentLargeArrayMutation.symbols
+@@= skipped -9, +9 lines =@@
+ 
+     arr[arr.length] = 'value'; 
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value'; 
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value'; 
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value'; 
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value'; 
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value';
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+     arr[arr.length] = 'value'; 
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(foo.js, 2, 7))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ }

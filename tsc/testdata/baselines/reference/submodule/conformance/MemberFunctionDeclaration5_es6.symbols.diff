@@ -1,0 +1,9 @@
+--- old.MemberFunctionDeclaration5_es6.symbols
++++ new.MemberFunctionDeclaration5_es6.symbols
+@@= skipped -5, +5 lines =@@
+ 
+    *
+ }
+-> : Symbol(C[(Missing)], Decl(MemberFunctionDeclaration5_es6.ts, 0, 9))
++> : Symbol(, Decl(MemberFunctionDeclaration5_es6.ts, 0, 9))
+ 

@@ -1,0 +1,32 @@
+--- old.dynamicImportWithNestedThis_es5.symbols
++++ new.dynamicImportWithNestedThis_es5.symbols
+@@= skipped -5, +5 lines =@@
+ >C : Symbol(C, Decl(dynamicImportWithNestedThis_es5.ts, 0, 0))
+ 
+ 	private _path = './other';
+->_path : Symbol(C._path, Decl(dynamicImportWithNestedThis_es5.ts, 1, 9))
++>_path : Symbol(_path, Decl(dynamicImportWithNestedThis_es5.ts, 1, 9))
+ 
+ 	dynamic() {
+->dynamic : Symbol(C.dynamic, Decl(dynamicImportWithNestedThis_es5.ts, 2, 27))
++>dynamic : Symbol(dynamic, Decl(dynamicImportWithNestedThis_es5.ts, 2, 27))
+ 
+ 		return import(this._path);
+->this._path : Symbol(C._path, Decl(dynamicImportWithNestedThis_es5.ts, 1, 9))
++>this._path : Symbol(_path, Decl(dynamicImportWithNestedThis_es5.ts, 1, 9))
+ >this : Symbol(C, Decl(dynamicImportWithNestedThis_es5.ts, 0, 0))
+->_path : Symbol(C._path, Decl(dynamicImportWithNestedThis_es5.ts, 1, 9))
++>_path : Symbol(_path, Decl(dynamicImportWithNestedThis_es5.ts, 1, 9))
+ 	}
+ }
+ 
+@@= skipped -17, +17 lines =@@
+ >C : Symbol(C, Decl(dynamicImportWithNestedThis_es5.ts, 0, 0))
+ 
+ c.dynamic();
+->c.dynamic : Symbol(C.dynamic, Decl(dynamicImportWithNestedThis_es5.ts, 2, 27))
++>c.dynamic : Symbol(dynamic, Decl(dynamicImportWithNestedThis_es5.ts, 2, 27))
+ >c : Symbol(c, Decl(dynamicImportWithNestedThis_es5.ts, 9, 5))
+->dynamic : Symbol(C.dynamic, Decl(dynamicImportWithNestedThis_es5.ts, 2, 27))
++>dynamic : Symbol(dynamic, Decl(dynamicImportWithNestedThis_es5.ts, 2, 27))
+ 

@@ -1,0 +1,36 @@
+--- old.classOrder2.symbols
++++ new.classOrder2.symbols
+@@= skipped -5, +5 lines =@@
+ >B : Symbol(B, Decl(classOrder2.ts, 4, 1))
+ 
+   foo() { this.bar(); }
+->foo : Symbol(A.foo, Decl(classOrder2.ts, 0, 19))
+->this.bar : Symbol(B.bar, Decl(classOrder2.ts, 6, 9))
++>foo : Symbol(foo, Decl(classOrder2.ts, 0, 19))
++>this.bar : Symbol(bar, Decl(classOrder2.ts, 6, 9))
+ >this : Symbol(A, Decl(classOrder2.ts, 0, 0))
+->bar : Symbol(B.bar, Decl(classOrder2.ts, 6, 9))
++>bar : Symbol(bar, Decl(classOrder2.ts, 6, 9))
+ 
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ >B : Symbol(B, Decl(classOrder2.ts, 4, 1))
+ 
+   bar() { }
+->bar : Symbol(B.bar, Decl(classOrder2.ts, 6, 9))
++>bar : Symbol(bar, Decl(classOrder2.ts, 6, 9))
+ 
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ >A : Symbol(A, Decl(classOrder2.ts, 0, 0))
+ 
+ a.foo();
+->a.foo : Symbol(A.foo, Decl(classOrder2.ts, 0, 19))
++>a.foo : Symbol(foo, Decl(classOrder2.ts, 0, 19))
+ >a : Symbol(a, Decl(classOrder2.ts, 13, 3))
+->foo : Symbol(A.foo, Decl(classOrder2.ts, 0, 19))
++>foo : Symbol(foo, Decl(classOrder2.ts, 0, 19))
+ 
+ 

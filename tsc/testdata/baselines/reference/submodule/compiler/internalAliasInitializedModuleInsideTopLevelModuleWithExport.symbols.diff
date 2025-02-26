@@ -1,0 +1,14 @@
+--- old.internalAliasInitializedModuleInsideTopLevelModuleWithExport.symbols
++++ new.internalAliasInitializedModuleInsideTopLevelModuleWithExport.symbols
+@@= skipped -20, +20 lines =@@
+ export var x: b.c = new b.c();
+ >x : Symbol(x, Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts, 8, 10))
+ >b : Symbol(b, Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts, 5, 1))
+->c : Symbol(b.c, Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts, 1, 21))
+->b.c : Symbol(b.c, Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts, 1, 21))
++>c : Symbol(c, Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts, 1, 21))
++>b.c : Symbol(c, Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts, 1, 21))
+ >b : Symbol(b, Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts, 5, 1))
+->c : Symbol(b.c, Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts, 1, 21))
++>c : Symbol(c, Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts, 1, 21))
+ 

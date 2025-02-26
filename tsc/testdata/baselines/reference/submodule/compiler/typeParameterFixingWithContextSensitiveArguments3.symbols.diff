@@ -1,0 +1,30 @@
+--- old.typeParameterFixingWithContextSensitiveArguments3.symbols
++++ new.typeParameterFixingWithContextSensitiveArguments3.symbols
+@@= skipped -24, +24 lines =@@
+ 
+ interface A { a: A; }
+ >A : Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 0, 102))
+->a : Symbol(A.a, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 1, 13))
++>a : Symbol(a, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 1, 13))
+ >A : Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 0, 102))
+ 
+ interface B extends A { b: B; }
+ >B : Symbol(B, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 1, 21))
+ >A : Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 0, 102))
+->b : Symbol(B.b, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 2, 23))
++>b : Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 2, 23))
+ >B : Symbol(B, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 1, 21))
+ 
+ var a: A, b: B;
+@@= skipped -21, +21 lines =@@
+ >a : Symbol(a, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 4, 3))
+ >b : Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 4, 9))
+ >u2 : Symbol(u2, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 6, 15))
+->u2.b : Symbol(B.b, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 2, 23))
++>u2.b : Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 2, 23))
+ >u2 : Symbol(u2, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 6, 15))
+->b : Symbol(B.b, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 2, 23))
++>b : Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 2, 23))
+ >t2 : Symbol(t2, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 6, 27))
+ >t2 : Symbol(t2, Decl(typeParameterFixingWithContextSensitiveArguments3.ts, 6, 27))
+ 

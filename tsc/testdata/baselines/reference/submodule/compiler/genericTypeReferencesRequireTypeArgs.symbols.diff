@@ -1,0 +1,20 @@
+--- old.genericTypeReferencesRequireTypeArgs.symbols
++++ new.genericTypeReferencesRequireTypeArgs.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(genericTypeReferencesRequireTypeArgs.ts, 0, 8))
+ 
+    foo(): T { return null }
+->foo : Symbol(C.foo, Decl(genericTypeReferencesRequireTypeArgs.ts, 0, 12))
++>foo : Symbol(foo, Decl(genericTypeReferencesRequireTypeArgs.ts, 0, 12))
+ >T : Symbol(T, Decl(genericTypeReferencesRequireTypeArgs.ts, 0, 8))
+ }
+ interface I<T> {
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(genericTypeReferencesRequireTypeArgs.ts, 3, 12))
+ 
+    bar(): T;
+->bar : Symbol(I.bar, Decl(genericTypeReferencesRequireTypeArgs.ts, 3, 16))
++>bar : Symbol(bar, Decl(genericTypeReferencesRequireTypeArgs.ts, 3, 16))
+ >T : Symbol(T, Decl(genericTypeReferencesRequireTypeArgs.ts, 3, 12))
+ }
+ var c1: C; // error

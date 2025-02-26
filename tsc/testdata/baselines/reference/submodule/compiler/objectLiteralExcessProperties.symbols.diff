@@ -1,0 +1,19 @@
+--- old.objectLiteralExcessProperties.symbols
++++ new.objectLiteralExcessProperties.symbols
+@@= skipped -4, +4 lines =@@
+ >Book : Symbol(Book, Decl(objectLiteralExcessProperties.ts, 0, 0))
+ 
+     foreword: string;
+->foreword : Symbol(Book.foreword, Decl(objectLiteralExcessProperties.ts, 0, 16))
++>foreword : Symbol(foreword, Decl(objectLiteralExcessProperties.ts, 0, 16))
+ }
+ 
+ interface Cover {
+ >Cover : Symbol(Cover, Decl(objectLiteralExcessProperties.ts, 2, 1))
+ 
+     color?: string;
+->color : Symbol(Cover.color, Decl(objectLiteralExcessProperties.ts, 4, 17))
++>color : Symbol(color, Decl(objectLiteralExcessProperties.ts, 4, 17))
+ }
+ 
+ var b1: Book = { forword: "oops" };

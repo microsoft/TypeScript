@@ -1,0 +1,17 @@
+--- old.moduleAndInterfaceSharingName2.symbols
++++ new.moduleAndInterfaceSharingName2.symbols
+@@= skipped -15, +15 lines =@@
+ var z: X.Y.Z = null;
+ >z : Symbol(z, Decl(moduleAndInterfaceSharingName2.ts, 6, 3))
+ >X : Symbol(X, Decl(moduleAndInterfaceSharingName2.ts, 0, 0))
+->Y : Symbol(X.Y, Decl(moduleAndInterfaceSharingName2.ts, 0, 10), Decl(moduleAndInterfaceSharingName2.ts, 3, 5))
+->Z : Symbol(X.Y.Z, Decl(moduleAndInterfaceSharingName2.ts, 1, 21))
++>Y : Symbol(Y, Decl(moduleAndInterfaceSharingName2.ts, 0, 10), Decl(moduleAndInterfaceSharingName2.ts, 3, 5))
++>Z : Symbol(Z, Decl(moduleAndInterfaceSharingName2.ts, 1, 21))
+ 
+ var z2: X.Y<string>;
+ >z2 : Symbol(z2, Decl(moduleAndInterfaceSharingName2.ts, 7, 3))
+ >X : Symbol(X, Decl(moduleAndInterfaceSharingName2.ts, 0, 0))
+->Y : Symbol(X.Y, Decl(moduleAndInterfaceSharingName2.ts, 0, 10), Decl(moduleAndInterfaceSharingName2.ts, 3, 5))
++>Y : Symbol(Y, Decl(moduleAndInterfaceSharingName2.ts, 0, 10), Decl(moduleAndInterfaceSharingName2.ts, 3, 5))
+ 

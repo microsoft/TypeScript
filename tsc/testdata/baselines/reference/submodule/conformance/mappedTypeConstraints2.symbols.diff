@@ -1,0 +1,27 @@
+--- old.mappedTypeConstraints2.symbols
++++ new.mappedTypeConstraints2.symbols
+@@= skipped -197, +197 lines =@@
+ >Bounds : Symbol(Bounds, Decl(mappedTypeConstraints2.ts, 50, 71))
+ 
+     min: number;
+->min : Symbol(Bounds.min, Decl(mappedTypeConstraints2.ts, 54, 18))
++>min : Symbol(min, Decl(mappedTypeConstraints2.ts, 54, 18))
+ 
+     max: number;
+->max : Symbol(Bounds.max, Decl(mappedTypeConstraints2.ts, 55, 16))
++>max : Symbol(max, Decl(mappedTypeConstraints2.ts, 55, 16))
+ }
+ 
+ type NumericBoundsOf<T> = {
+@@= skipped -31, +31 lines =@@
+     for (const [key, val] of Object.entries(obj)) {
+ >key : Symbol(key, Decl(mappedTypeConstraints2.ts, 64, 16))
+ >val : Symbol(val, Decl(mappedTypeConstraints2.ts, 64, 20))
+->Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
++>Object.entries : Symbol(entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
++>entries : Symbol(entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+ >obj : Symbol(obj, Decl(mappedTypeConstraints2.ts, 63, 36))
+ 
+         const boundsForKey = bounds[key as keyof NumericBoundsOf<T>];

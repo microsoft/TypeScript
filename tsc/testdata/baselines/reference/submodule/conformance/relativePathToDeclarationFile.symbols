@@ -1,0 +1,45 @@
+//// [tests/cases/conformance/externalModules/relativePathToDeclarationFile.ts] ////
+
+=== test/file1.ts ===
+import foo = require('foo');
+>foo : Symbol(foo, Decl(file1.ts, 0, 0))
+
+import other = require('./other');
+>other : Symbol(other, Decl(file1.ts, 0, 28))
+
+import relMod = require('./sub/relMod');
+>relMod : Symbol(relMod, Decl(file1.ts, 1, 34))
+
+if(foo.M2.x){
+>foo : Symbol(foo, Decl(file1.ts, 0, 0))
+
+	var x = new relMod(other.M2.x.charCodeAt(0));
+>x : Symbol(x, Decl(file1.ts, 5, 4))
+>relMod : Symbol(relMod, Decl(file1.ts, 1, 34))
+>other.M2.x.charCodeAt : Symbol(charCodeAt, Decl(lib.es5.d.ts, --, --))
+>other.M2.x : Symbol(x, Decl(other.d.ts, 1, 11))
+>other.M2 : Symbol(M2, Decl(other.d.ts, 0, 0))
+>other : Symbol(other, Decl(file1.ts, 0, 28))
+>M2 : Symbol(M2, Decl(other.d.ts, 0, 0))
+>x : Symbol(x, Decl(other.d.ts, 1, 11))
+>charCodeAt : Symbol(charCodeAt, Decl(lib.es5.d.ts, --, --))
+}
+
+=== test/other.d.ts ===
+export declare module M2 {
+>M2 : Symbol(M2, Decl(other.d.ts, 0, 0))
+
+	export var x: string;
+>x : Symbol(x, Decl(other.d.ts, 1, 11))
+}
+
+=== test/sub/relMod.d.ts ===
+declare class Test {
+>Test : Symbol(Test, Decl(relMod.d.ts, 0, 0))
+
+	constructor(x: number);
+>x : Symbol(x, Decl(relMod.d.ts, 1, 13))
+}
+export = Test;
+>Test : Symbol(Test, Decl(relMod.d.ts, 0, 0))
+

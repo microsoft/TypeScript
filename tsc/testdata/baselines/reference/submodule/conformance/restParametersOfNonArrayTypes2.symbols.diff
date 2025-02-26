@@ -1,0 +1,38 @@
+--- old.restParametersOfNonArrayTypes2.symbols
++++ new.restParametersOfNonArrayTypes2.symbols
+@@= skipped -35, +35 lines =@@
+ >C : Symbol(C, Decl(restParametersOfNonArrayTypes2.ts, 8, 46))
+ 
+     foo(...x: MyThing) { }
+->foo : Symbol(C.foo, Decl(restParametersOfNonArrayTypes2.ts, 10, 9))
++>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes2.ts, 10, 9))
+ >x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 11, 8))
+ >MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+ }
+@@= skipped -13, +13 lines =@@
+ >MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+ 
+     foo(...x: MyThing, ...y: MyThing);
+->foo : Symbol(I.foo, Decl(restParametersOfNonArrayTypes2.ts, 15, 20))
++>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes2.ts, 15, 20))
+ >x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 16, 8))
+ >MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+ >y : Symbol(y, Decl(restParametersOfNonArrayTypes2.ts, 16, 22))
+@@= skipped -67, +67 lines =@@
+ >C2 : Symbol(C2, Decl(restParametersOfNonArrayTypes2.ts, 35, 64))
+ 
+     foo(...x: MyThing2<string>) { }
+->foo : Symbol(C2.foo, Decl(restParametersOfNonArrayTypes2.ts, 37, 10))
++>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes2.ts, 37, 10))
+ >x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 38, 8))
+ >MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+ }
+@@= skipped -13, +13 lines =@@
+ >MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+ 
+     foo(...x: MyThing2<string>, ...y: MyThing2<string>);
+->foo : Symbol(I2.foo, Decl(restParametersOfNonArrayTypes2.ts, 42, 29))
++>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes2.ts, 42, 29))
+ >x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 43, 8))
+ >MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+ >y : Symbol(y, Decl(restParametersOfNonArrayTypes2.ts, 43, 31))

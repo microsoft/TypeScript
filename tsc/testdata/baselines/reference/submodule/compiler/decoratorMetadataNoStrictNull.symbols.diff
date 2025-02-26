@@ -1,0 +1,14 @@
+--- old.decoratorMetadataNoStrictNull.symbols
++++ new.decoratorMetadataNoStrictNull.symbols
+@@= skipped -11, +11 lines =@@
+ 
+   @dec public foo: string | null;
+ >dec : Symbol(dec, Decl(decoratorMetadataNoStrictNull.ts, 0, 5))
+->foo : Symbol(Foo.foo, Decl(decoratorMetadataNoStrictNull.ts, 2, 11))
++>foo : Symbol(foo, Decl(decoratorMetadataNoStrictNull.ts, 2, 11))
+ 
+   @dec public bar: string;
+ >dec : Symbol(dec, Decl(decoratorMetadataNoStrictNull.ts, 0, 5))
+->bar : Symbol(Foo.bar, Decl(decoratorMetadataNoStrictNull.ts, 3, 33))
++>bar : Symbol(bar, Decl(decoratorMetadataNoStrictNull.ts, 3, 33))
+ }

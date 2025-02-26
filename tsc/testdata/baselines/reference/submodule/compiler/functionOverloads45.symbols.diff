@@ -1,0 +1,23 @@
+--- old.functionOverloads45.symbols
++++ new.functionOverloads45.symbols
+@@= skipped -2, +2 lines =@@
+ === functionOverloads45.ts ===
+ interface Animal { animal }
+ >Animal : Symbol(Animal, Decl(functionOverloads45.ts, 0, 0))
+->animal : Symbol(Animal.animal, Decl(functionOverloads45.ts, 0, 18))
++>animal : Symbol(animal, Decl(functionOverloads45.ts, 0, 18))
+ 
+ interface Dog extends Animal { dog }
+ >Dog : Symbol(Dog, Decl(functionOverloads45.ts, 0, 27))
+ >Animal : Symbol(Animal, Decl(functionOverloads45.ts, 0, 0))
+->dog : Symbol(Dog.dog, Decl(functionOverloads45.ts, 1, 30))
++>dog : Symbol(dog, Decl(functionOverloads45.ts, 1, 30))
+ 
+ interface Cat extends Animal { cat }
+ >Cat : Symbol(Cat, Decl(functionOverloads45.ts, 1, 36))
+ >Animal : Symbol(Animal, Decl(functionOverloads45.ts, 0, 0))
+->cat : Symbol(Cat.cat, Decl(functionOverloads45.ts, 2, 30))
++>cat : Symbol(cat, Decl(functionOverloads45.ts, 2, 30))
+ 
+ function foo1(bar: { a:number }[]): Cat;
+ >foo1 : Symbol(foo1, Decl(functionOverloads45.ts, 2, 36), Decl(functionOverloads45.ts, 4, 40), Decl(functionOverloads45.ts, 5, 40))

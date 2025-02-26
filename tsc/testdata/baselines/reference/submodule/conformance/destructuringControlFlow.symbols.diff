@@ -1,0 +1,52 @@
+--- old.destructuringControlFlow.symbols
++++ new.destructuringControlFlow.symbols
+@@= skipped -33, +33 lines =@@
+     let a0 = obj[0];  // number | null
+ >a0 : Symbol(a0, Decl(destructuringControlFlow.ts, 9, 7))
+ >obj : Symbol(obj, Decl(destructuringControlFlow.ts, 8, 12))
+->0 : Symbol(0)
++>0 : Symbol("0")
+ 
+     let a1 = obj[1];  // string | null
+ >a1 : Symbol(a1, Decl(destructuringControlFlow.ts, 10, 7))
+ >obj : Symbol(obj, Decl(destructuringControlFlow.ts, 8, 12))
+->1 : Symbol(1)
++>1 : Symbol("1")
+ 
+     let [b0, b1] = obj;
+ >b0 : Symbol(b0, Decl(destructuringControlFlow.ts, 11, 9))
+@@= skipped -19, +19 lines =@@
+ 
+     if (obj[0] && obj[1]) {
+ >obj : Symbol(obj, Decl(destructuringControlFlow.ts, 8, 12))
+->0 : Symbol(0)
++>0 : Symbol("0")
+ >obj : Symbol(obj, Decl(destructuringControlFlow.ts, 8, 12))
+->1 : Symbol(1)
++>1 : Symbol("1")
+ 
+         let c0 = obj[0];  // number
+ >c0 : Symbol(c0, Decl(destructuringControlFlow.ts, 14, 11))
+ >obj : Symbol(obj, Decl(destructuringControlFlow.ts, 8, 12))
+->0 : Symbol(0)
++>0 : Symbol("0")
+ 
+         let c1 = obj[1];  // string
+ >c1 : Symbol(c1, Decl(destructuringControlFlow.ts, 15, 11))
+ >obj : Symbol(obj, Decl(destructuringControlFlow.ts, 8, 12))
+->1 : Symbol(1)
++>1 : Symbol("1")
+ 
+         let [d0, d1] = obj;
+ >d0 : Symbol(d0, Decl(destructuringControlFlow.ts, 16, 13))
+@@= skipped -62, +62 lines =@@
+ >x : Symbol(x, Decl(destructuringControlFlow.ts, 30, 6))
+ 
+     ({ ["x"]: x } = 0);  // Error
+->["x"] : Symbol(["x"], Decl(destructuringControlFlow.ts, 31, 6))
+->"x" : Symbol(["x"], Decl(destructuringControlFlow.ts, 31, 6))
++>["x"] : Symbol(x, Decl(destructuringControlFlow.ts, 31, 6))
++>"x" : Symbol(x, Decl(destructuringControlFlow.ts, 31, 6))
+ >x : Symbol(x, Decl(destructuringControlFlow.ts, 29, 7))
+ 
+     ({ ["x" + ""]: x } = 0);  // Errpr

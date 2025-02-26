@@ -1,0 +1,15 @@
+--- old.objectLiteralContextualTyping.symbols
++++ new.objectLiteralContextualTyping.symbols
+@@= skipped -9, +9 lines =@@
+ >Item : Symbol(Item, Decl(objectLiteralContextualTyping.ts, 0, 0))
+ 
+     name: string;
+->name : Symbol(Item.name, Decl(objectLiteralContextualTyping.ts, 5, 16))
++>name : Symbol(name, Decl(objectLiteralContextualTyping.ts, 5, 16))
+ 
+     description?: string;
+->description : Symbol(Item.description, Decl(objectLiteralContextualTyping.ts, 6, 17))
++>description : Symbol(description, Decl(objectLiteralContextualTyping.ts, 6, 17))
+ }
+ 
+ declare function foo(item: Item): string;

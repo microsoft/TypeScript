@@ -1,0 +1,34 @@
+--- old.recursiveConditionalCrash4.symbols
++++ new.recursiveConditionalCrash4.symbols
+@@= skipped -17, +17 lines =@@
+ > = It extends StrIter.Iterator
+ >It : Symbol(It, Decl(recursiveConditionalCrash4.ts, 4, 33))
+ >StrIter : Symbol(StrIter)
+->Iterator : Symbol(StrIter.Iterator)
++>Iterator : Symbol(Iterator)
+ 
+   ? StrIter.CutAt<Str, It> extends `${infer $Rest}`
+ >StrIter : Symbol(StrIter)
+->CutAt : Symbol(StrIter.CutAt)
++>CutAt : Symbol(CutAt)
+ >Str : Symbol(Str, Decl(recursiveConditionalCrash4.ts, 2, 16))
+ >It : Symbol(It, Decl(recursiveConditionalCrash4.ts, 4, 33))
+ >$Rest : Symbol($Rest, Decl(recursiveConditionalCrash4.ts, 7, 43))
+@@= skipped -15, +15 lines =@@
+ >Add : Symbol(Add)
+ >Length : Symbol(Length, Decl(recursiveConditionalCrash4.ts, 3, 21))
+ >StrIter : Symbol(StrIter)
+->Value : Symbol(StrIter.Value)
++>Value : Symbol(Value)
+ >It : Symbol(It, Decl(recursiveConditionalCrash4.ts, 4, 33))
+ >It : Symbol(It, Decl(recursiveConditionalCrash4.ts, 4, 33))
+ 
+@@= skipped -9, +9 lines =@@
+ >Str : Symbol(Str, Decl(recursiveConditionalCrash4.ts, 2, 16))
+ >Length : Symbol(Length, Decl(recursiveConditionalCrash4.ts, 3, 21))
+ >StrIter : Symbol(StrIter)
+->Prev : Symbol(StrIter.Prev)
++>Prev : Symbol(Prev)
+ >It : Symbol(It, Decl(recursiveConditionalCrash4.ts, 4, 33))
+ 
+   : Length;

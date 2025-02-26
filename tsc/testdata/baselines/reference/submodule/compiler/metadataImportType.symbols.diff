@@ -1,0 +1,9 @@
+--- old.metadataImportType.symbols
++++ new.metadataImportType.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     @test
+     b: import('./b').B
+->b : Symbol(A.b, Decl(metadataImportType.ts, 0, 16))
++>b : Symbol(b, Decl(metadataImportType.ts, 0, 16))
+ }

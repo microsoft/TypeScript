@@ -1,0 +1,41 @@
+--- old.declarationEmitBindingPatternWithReservedWord.symbols
++++ new.declarationEmitBindingPatternWithReservedWord.symbols
+@@= skipped -31, +31 lines =@@
+ >LocaleData : Symbol(LocaleData, Decl(declarationEmitBindingPatternWithReservedWord.ts, 0, 0))
+ 
+     app: unknown;
+->app : Symbol(GetLocalesOptions.app, Decl(declarationEmitBindingPatternWithReservedWord.ts, 7, 58))
++>app : Symbol(app, Decl(declarationEmitBindingPatternWithReservedWord.ts, 7, 58))
+ 
+     default: ConvertLocaleConfig<T>;
+->default : Symbol(GetLocalesOptions.default, Decl(declarationEmitBindingPatternWithReservedWord.ts, 8, 17))
++>default : Symbol(default, Decl(declarationEmitBindingPatternWithReservedWord.ts, 8, 17))
+ >ConvertLocaleConfig : Symbol(ConvertLocaleConfig, Decl(declarationEmitBindingPatternWithReservedWord.ts, 0, 39))
+ >T : Symbol(T, Decl(declarationEmitBindingPatternWithReservedWord.ts, 7, 35))
+ 
+     config?: LocaleConfig<T> | undefined;
+->config : Symbol(GetLocalesOptions.config, Decl(declarationEmitBindingPatternWithReservedWord.ts, 9, 36))
++>config : Symbol(config, Decl(declarationEmitBindingPatternWithReservedWord.ts, 9, 36))
+ >LocaleConfig : Symbol(LocaleConfig, Decl(declarationEmitBindingPatternWithReservedWord.ts, 4, 2))
+ >T : Symbol(T, Decl(declarationEmitBindingPatternWithReservedWord.ts, 7, 35))
+ 
+     name?: string;
+->name : Symbol(GetLocalesOptions.name, Decl(declarationEmitBindingPatternWithReservedWord.ts, 10, 41))
++>name : Symbol(name, Decl(declarationEmitBindingPatternWithReservedWord.ts, 10, 41))
+ }
+ 
+ export const getLocales = <T extends LocaleData>({
+@@= skipped -28, +28 lines =@@
+ >name : Symbol(name, Decl(declarationEmitBindingPatternWithReservedWord.ts, 15, 8))
+ 
+     default: defaultLocalesConfig,
+->default : Symbol(GetLocalesOptions.default, Decl(declarationEmitBindingPatternWithReservedWord.ts, 8, 17))
++>default : Symbol(default, Decl(declarationEmitBindingPatternWithReservedWord.ts, 8, 17))
+ >defaultLocalesConfig : Symbol(defaultLocalesConfig, Decl(declarationEmitBindingPatternWithReservedWord.ts, 16, 9))
+ 
+     config: userLocalesConfig = {},
+->config : Symbol(GetLocalesOptions.config, Decl(declarationEmitBindingPatternWithReservedWord.ts, 9, 36))
++>config : Symbol(config, Decl(declarationEmitBindingPatternWithReservedWord.ts, 9, 36))
+ >userLocalesConfig : Symbol(userLocalesConfig, Decl(declarationEmitBindingPatternWithReservedWord.ts, 17, 34))
+ 
+ }: GetLocalesOptions<T>): ConvertLocaleConfig<T> => {

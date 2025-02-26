@@ -1,0 +1,41 @@
+--- old.parserInterfaceDeclaration9.symbols
++++ new.parserInterfaceDeclaration9.symbols
+@@= skipped -4, +4 lines =@@
+ >I1 : Symbol(I1, Decl(parserInterfaceDeclaration9.ts, 0, 0))
+ 
+     get foo(): number,
+->foo : Symbol(I1.foo, Decl(parserInterfaceDeclaration9.ts, 0, 14), Decl(parserInterfaceDeclaration9.ts, 1, 22))
++>foo : Symbol(foo, Decl(parserInterfaceDeclaration9.ts, 0, 14), Decl(parserInterfaceDeclaration9.ts, 1, 22))
+ 
+     set foo(value: number),
+->foo : Symbol(I1.foo, Decl(parserInterfaceDeclaration9.ts, 0, 14), Decl(parserInterfaceDeclaration9.ts, 1, 22))
++>foo : Symbol(foo, Decl(parserInterfaceDeclaration9.ts, 0, 14), Decl(parserInterfaceDeclaration9.ts, 1, 22))
+ >value : Symbol(value, Decl(parserInterfaceDeclaration9.ts, 2, 12))
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ >I2 : Symbol(I2, Decl(parserInterfaceDeclaration9.ts, 3, 1))
+ 
+     get foo(): number;
+->foo : Symbol(I2.foo, Decl(parserInterfaceDeclaration9.ts, 5, 14), Decl(parserInterfaceDeclaration9.ts, 6, 22))
++>foo : Symbol(foo, Decl(parserInterfaceDeclaration9.ts, 5, 14), Decl(parserInterfaceDeclaration9.ts, 6, 22))
+ 
+     set foo(value: number);
+->foo : Symbol(I2.foo, Decl(parserInterfaceDeclaration9.ts, 5, 14), Decl(parserInterfaceDeclaration9.ts, 6, 22))
++>foo : Symbol(foo, Decl(parserInterfaceDeclaration9.ts, 5, 14), Decl(parserInterfaceDeclaration9.ts, 6, 22))
+ >value : Symbol(value, Decl(parserInterfaceDeclaration9.ts, 7, 12))
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ >I3 : Symbol(I3, Decl(parserInterfaceDeclaration9.ts, 8, 1))
+ 
+     get foo(): number
+->foo : Symbol(I3.foo, Decl(parserInterfaceDeclaration9.ts, 10, 14), Decl(parserInterfaceDeclaration9.ts, 11, 21))
++>foo : Symbol(foo, Decl(parserInterfaceDeclaration9.ts, 10, 14), Decl(parserInterfaceDeclaration9.ts, 11, 21))
+ 
+     set foo(value: number)
+->foo : Symbol(I3.foo, Decl(parserInterfaceDeclaration9.ts, 10, 14), Decl(parserInterfaceDeclaration9.ts, 11, 21))
++>foo : Symbol(foo, Decl(parserInterfaceDeclaration9.ts, 10, 14), Decl(parserInterfaceDeclaration9.ts, 11, 21))
+ >value : Symbol(value, Decl(parserInterfaceDeclaration9.ts, 12, 12))
+ }
+ 

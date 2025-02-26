@@ -1,0 +1,76 @@
+--- old.ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.symbols
++++ new.ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.symbols
+@@= skipped -7, +7 lines =@@
+ >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 2, 15))
+ 
+     id: string;
+->id : Symbol(clodule1.id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 2, 18))
++>id : Symbol(id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 2, 18))
+ 
+     value: T;
+->value : Symbol(clodule1.value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 4, 15))
++>value : Symbol(value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 4, 15))
+ >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 2, 15))
+ }
+ 
+@@= skipped -21, +21 lines =@@
+ >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 12, 15))
+ 
+     id: string;
+->id : Symbol(clodule2.id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 12, 18))
++>id : Symbol(id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 12, 18))
+ 
+     value: T;
+->value : Symbol(clodule2.value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 14, 15))
++>value : Symbol(value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 14, 15))
+ >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 12, 15))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >T : Symbol(T)
+ 
+         id: string;
+->id : Symbol(D.id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 21, 25))
++>id : Symbol(id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 21, 25))
+ 
+         value: U;
+->value : Symbol(D.value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 22, 19))
++>value : Symbol(value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 22, 19))
+ >U : Symbol(U, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 21, 12))
+     }
+ }
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 27, 15))
+ 
+     id: string;
+->id : Symbol(clodule3.id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 27, 18))
++>id : Symbol(id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 27, 18))
+ 
+     value: T;
+->value : Symbol(clodule3.value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 29, 15))
++>value : Symbol(value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 29, 15))
+ >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 27, 15))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 37, 15))
+ 
+     id: string;
+->id : Symbol(clodule4.id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 37, 18))
++>id : Symbol(id, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 37, 18))
+ 
+     value: T;
+->value : Symbol(clodule4.value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 39, 15))
++>value : Symbol(value, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 39, 15))
+ >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 37, 15))
+ }
+ 
+@@= skipped -14, +14 lines =@@
+ >D : Symbol(D, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 43, 17))
+ 
+         name: T;
+->name : Symbol(D.name, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 44, 13))
++>name : Symbol(name, Decl(ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts, 44, 13))
+ >T : Symbol(T)
+     }
+ }

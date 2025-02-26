@@ -1,0 +1,32 @@
+--- old.assignmentLHSIsValue.symbols
++++ new.assignmentLHSIsValue.symbols
+@@= skipped -13, +13 lines =@@
+ >value : Symbol(value, Decl(assignmentLHSIsValue.ts, 1, 3))
+ 
+     foo() { this = value; }
+->foo : Symbol(C.foo, Decl(assignmentLHSIsValue.ts, 5, 35))
++>foo : Symbol(foo, Decl(assignmentLHSIsValue.ts, 5, 35))
+ >this : Symbol(C, Decl(assignmentLHSIsValue.ts, 1, 15))
+ >value : Symbol(value, Decl(assignmentLHSIsValue.ts, 1, 3))
+ 
+     static sfoo() { this = value; }
+->sfoo : Symbol(C.sfoo, Decl(assignmentLHSIsValue.ts, 6, 27))
++>sfoo : Symbol(sfoo, Decl(assignmentLHSIsValue.ts, 6, 27))
+ >this : Symbol(C, Decl(assignmentLHSIsValue.ts, 1, 15))
+ >value : Symbol(value, Decl(assignmentLHSIsValue.ts, 1, 3))
+ }
+@@= skipped -80, +80 lines =@@
+ >value : Symbol(value, Decl(assignmentLHSIsValue.ts, 1, 3))
+ 
+     foo() { super = value }
+->foo : Symbol(Derived.foo, Decl(assignmentLHSIsValue.ts, 41, 45))
++>foo : Symbol(foo, Decl(assignmentLHSIsValue.ts, 41, 45))
+ >super : Symbol(C, Decl(assignmentLHSIsValue.ts, 1, 15))
+ >value : Symbol(value, Decl(assignmentLHSIsValue.ts, 1, 3))
+ 
+     static sfoo() { super = value; }
+->sfoo : Symbol(Derived.sfoo, Decl(assignmentLHSIsValue.ts, 43, 27))
++>sfoo : Symbol(sfoo, Decl(assignmentLHSIsValue.ts, 43, 27))
+ >super : Symbol(C, Decl(assignmentLHSIsValue.ts, 1, 15))
+ >value : Symbol(value, Decl(assignmentLHSIsValue.ts, 1, 3))
+ }

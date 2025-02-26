@@ -1,0 +1,11 @@
+--- old.enumTagImported.symbols
++++ new.enumTagImported.symbols
+@@= skipped -24, +24 lines =@@
+ === mod1.js ===
+ /** @enum {string} */
+ export const TestEnum = {
+->TestEnum : Symbol(TestEnum, Decl(mod1.js, 1, 12), Decl(mod1.js, 0, 4))
++>TestEnum : Symbol(TestEnum, Decl(mod1.js, 1, 12))
+ 
+     ADD: 'add',
+ >ADD : Symbol(ADD, Decl(mod1.js, 1, 25))

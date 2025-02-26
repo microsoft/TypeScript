@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/esModuleIntersectionCrash.ts] ////
+
+=== mod.d.ts ===
+export = modObj;
+>modObj : Symbol(modObj, Decl(mod.d.ts, 1, 13), Decl(mod.d.ts, 1, 42))
+
+declare const modObj: modObj.A & modObj.B;
+>modObj : Symbol(modObj, Decl(mod.d.ts, 1, 13), Decl(mod.d.ts, 1, 42))
+>modObj : Symbol(modObj, Decl(mod.d.ts, 1, 13), Decl(mod.d.ts, 1, 42))
+>A : Symbol(A, Decl(mod.d.ts, 2, 26))
+>modObj : Symbol(modObj, Decl(mod.d.ts, 1, 13), Decl(mod.d.ts, 1, 42))
+>B : Symbol(B, Decl(mod.d.ts, 3, 40))
+
+declare namespace modObj {
+>modObj : Symbol(modObj, Decl(mod.d.ts, 1, 13), Decl(mod.d.ts, 1, 42))
+
+    interface A { (): void; a: string; }
+>A : Symbol(A, Decl(mod.d.ts, 2, 26))
+>a : Symbol(a, Decl(mod.d.ts, 3, 27))
+
+    interface B { (x: string): void; b: string; }
+>B : Symbol(B, Decl(mod.d.ts, 3, 40))
+>x : Symbol(x, Decl(mod.d.ts, 4, 19))
+>b : Symbol(b, Decl(mod.d.ts, 4, 36))
+}
+=== idx.ts ===
+import * as mod from "./mod";
+>mod : Symbol(mod, Decl(idx.ts, 0, 6))
+
+mod.a;
+>mod.a : Symbol(a, Decl(mod.d.ts, 3, 27))
+>mod : Symbol(mod, Decl(idx.ts, 0, 6))
+>a : Symbol(a, Decl(mod.d.ts, 3, 27))
+
+mod.b;
+>mod.b : Symbol(b, Decl(mod.d.ts, 4, 36))
+>mod : Symbol(mod, Decl(idx.ts, 0, 6))
+>b : Symbol(b, Decl(mod.d.ts, 4, 36))
+

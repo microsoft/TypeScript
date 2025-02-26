@@ -1,0 +1,45 @@
+--- old.classStaticBlock16.symbols
++++ new.classStaticBlock16.symbols
+@@= skipped -9, +9 lines =@@
+ >C : Symbol(C, Decl(classStaticBlock16.ts, 0, 27))
+ 
+   #x = 1
+->#x : Symbol(C.#x, Decl(classStaticBlock16.ts, 1, 9))
++>#x : Symbol(#x, Decl(classStaticBlock16.ts, 1, 9))
+ 
+   constructor(x: number) {
+ >x : Symbol(x, Decl(classStaticBlock16.ts, 3, 14))
+ 
+     this.#x = x;
+->this.#x : Symbol(C.#x, Decl(classStaticBlock16.ts, 1, 9))
++>this.#x : Symbol(#x, Decl(classStaticBlock16.ts, 1, 9))
+ >this : Symbol(C, Decl(classStaticBlock16.ts, 0, 27))
+ >x : Symbol(x, Decl(classStaticBlock16.ts, 3, 14))
+   }
+@@= skipped -17, +17 lines =@@
+ >getX : Symbol(getX, Decl(classStaticBlock16.ts, 0, 3))
+ >obj : Symbol(obj, Decl(classStaticBlock16.ts, 9, 12))
+ >C : Symbol(C, Decl(classStaticBlock16.ts, 0, 27))
+->obj.#x : Symbol(C.#x, Decl(classStaticBlock16.ts, 1, 9))
++>obj.#x : Symbol(#x, Decl(classStaticBlock16.ts, 1, 9))
+ >obj : Symbol(obj, Decl(classStaticBlock16.ts, 9, 12))
+ 
+     getY = (obj: D) => obj.#y;
+@@= skipped -20, +20 lines =@@
+ >D : Symbol(D, Decl(classStaticBlock16.ts, 14, 27))
+ 
+   #y = 1
+->#y : Symbol(D.#y, Decl(classStaticBlock16.ts, 15, 9))
++>#y : Symbol(#y, Decl(classStaticBlock16.ts, 15, 9))
+ 
+   static {
+     // getY has privileged access to y
+@@= skipped -14, +14 lines =@@
+ >getY : Symbol(getY, Decl(classStaticBlock16.ts, 14, 3))
+ >obj : Symbol(obj, Decl(classStaticBlock16.ts, 21, 12))
+ >D : Symbol(D, Decl(classStaticBlock16.ts, 14, 27))
+->obj.#y : Symbol(D.#y, Decl(classStaticBlock16.ts, 15, 9))
++>obj.#y : Symbol(#y, Decl(classStaticBlock16.ts, 15, 9))
+ >obj : Symbol(obj, Decl(classStaticBlock16.ts, 21, 12))
+   }
+ }

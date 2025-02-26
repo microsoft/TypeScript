@@ -1,0 +1,20 @@
+--- old.multivar.symbols
++++ new.multivar.symbols
+@@= skipped -33, +33 lines =@@
+ >C : Symbol(C, Decl(multivar.ts, 8, 11))
+ 
+         constructor (public b) {
+->b : Symbol(C.b, Decl(multivar.ts, 11, 21))
++>b : Symbol(b, Decl(multivar.ts, 11, 21))
+         }
+     }
+ 
+@@= skipped -8, +8 lines =@@
+ >C2 : Symbol(C2, Decl(multivar.ts, 13, 5))
+ 
+         constructor (public b) {
+->b : Symbol(C2.b, Decl(multivar.ts, 16, 21))
++>b : Symbol(b, Decl(multivar.ts, 16, 21))
+         }
+     }
+     var m;

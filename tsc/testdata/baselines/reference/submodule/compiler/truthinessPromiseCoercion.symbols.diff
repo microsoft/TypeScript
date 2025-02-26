@@ -1,0 +1,73 @@
+--- old.truthinessPromiseCoercion.symbols
++++ new.truthinessPromiseCoercion.symbols
+@@= skipped -31, +31 lines =@@
+ 
+     p ? f.arguments : f.arguments;
+ >p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+->f.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
++>f.arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
+ >f : Symbol(f, Decl(truthinessPromiseCoercion.ts, 3, 39))
+->arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+->f.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
++>arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
++>f.arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
+ >f : Symbol(f, Decl(truthinessPromiseCoercion.ts, 3, 39))
+->arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
++>arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
+ 
+     !!p ? f.arguments : f.arguments;
+ >p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+->f.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
++>f.arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
+ >f : Symbol(f, Decl(truthinessPromiseCoercion.ts, 3, 39))
+->arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+->f.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
++>arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
++>f.arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
+ >f : Symbol(f, Decl(truthinessPromiseCoercion.ts, 3, 39))
+->arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
++>arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
+ 
+     p2 ? f.arguments : f.arguments;
+ >p2 : Symbol(p2, Decl(truthinessPromiseCoercion.ts, 1, 13))
+->f.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
++>f.arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
+ >f : Symbol(f, Decl(truthinessPromiseCoercion.ts, 3, 39))
+->arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
+->f.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
++>arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
++>f.arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
+ >f : Symbol(f, Decl(truthinessPromiseCoercion.ts, 3, 39))
+->arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
++>arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ // all ok
+@@= skipped -38, +38 lines =@@
+     }
+     if (p && p.then.length) {}
+ >p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+->p.then.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+->p.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
++>p.then.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
++>p.then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+ >p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+->length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
++>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+     if (p) {
+ >p : Symbol(p, Decl(truthinessPromiseCoercion.ts, 0, 13))
+@@= skipped -62, +62 lines =@@
+ >pf : Symbol(pf, Decl(truthinessPromiseCoercion.ts, 2, 42))
+ 
+         pf().then();
+->pf().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
++>pf().then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+ >pf : Symbol(pf, Decl(truthinessPromiseCoercion.ts, 2, 42))
+->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
++>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+     }
+     return "false";
+ }

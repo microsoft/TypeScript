@@ -1,0 +1,55 @@
+--- old.shadowedInternalModule.symbols
++++ new.shadowedInternalModule.symbols
+@@= skipped -14, +14 lines =@@
+ >Point : Symbol(Point, Decl(shadowedInternalModule.ts, 3, 14), Decl(shadowedInternalModule.ts, 3, 37))
+ 
+         x: number;
+->x : Symbol(Point.x, Decl(shadowedInternalModule.ts, 4, 28))
++>x : Symbol(x, Decl(shadowedInternalModule.ts, 4, 28))
+ 
+         y: number;
+->y : Symbol(Point.y, Decl(shadowedInternalModule.ts, 5, 18))
++>y : Symbol(y, Decl(shadowedInternalModule.ts, 5, 18))
+     }
+ } 
+ 
+@@= skipped -17, +17 lines =@@
+ 
+     import Point = A;
+ >Point : Symbol(Point, Decl(shadowedInternalModule.ts, 11, 27))
+->A : Symbol(Point, Decl(shadowedInternalModule.ts, 0, 0))
++>A : Symbol(A, Decl(shadowedInternalModule.ts, 0, 0))
+ }
+ 
+ module X {
+@@= skipped -13, +13 lines =@@
+ >Point : Symbol(Point, Decl(shadowedInternalModule.ts, 16, 21))
+ 
+             x: number;
+->x : Symbol(Point.x, Decl(shadowedInternalModule.ts, 17, 31))
++>x : Symbol(x, Decl(shadowedInternalModule.ts, 17, 31))
+ 
+             y: number
+->y : Symbol(Point.y, Decl(shadowedInternalModule.ts, 18, 22))
++>y : Symbol(y, Decl(shadowedInternalModule.ts, 18, 22))
+         }
+     }
+ 
+@@= skipped -11, +11 lines =@@
+ >Y : Symbol(Y, Decl(shadowedInternalModule.ts, 15, 10), Decl(shadowedInternalModule.ts, 21, 5))
+ 
+         name: string;
+->name : Symbol(Y.name, Decl(shadowedInternalModule.ts, 23, 20))
++>name : Symbol(name, Decl(shadowedInternalModule.ts, 23, 20))
+     }
+ }
+ 
+@@= skipped -43, +43 lines =@@
+   import any = b.A;
+ >any : Symbol(any, Decl(shadowedInternalModule.ts, 45, 10))
+ >b : Symbol(b, Decl(shadowedInternalModule.ts, 38, 1))
+->A : Symbol(any, Decl(shadowedInternalModule.ts, 40, 10), Decl(shadowedInternalModule.ts, 41, 24))
++>A : Symbol(A, Decl(shadowedInternalModule.ts, 40, 10), Decl(shadowedInternalModule.ts, 41, 24))
+ }
+ 
+ //

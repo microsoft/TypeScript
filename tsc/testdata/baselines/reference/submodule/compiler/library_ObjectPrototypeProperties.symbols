@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/library_ObjectPrototypeProperties.ts] ////
+
+=== library_ObjectPrototypeProperties.ts ===
+// Properties of the Object Prototype Object as per ES5 spec
+// http://www.ecma-international.org/ecma-262/5.1/#sec-15.2.4
+Object.prototype.constructor;
+>Object.prototype.constructor : Symbol(constructor, Decl(lib.es5.d.ts, --, --))
+>Object.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>constructor : Symbol(constructor, Decl(lib.es5.d.ts, --, --))
+
+Object.prototype.toString();
+>Object.prototype.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+>Object.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+
+Object.prototype.toLocaleString();
+>Object.prototype.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
+>Object.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
+
+Object.prototype.valueOf();
+>Object.prototype.valueOf : Symbol(valueOf, Decl(lib.es5.d.ts, --, --))
+>Object.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>valueOf : Symbol(valueOf, Decl(lib.es5.d.ts, --, --))
+
+Object.prototype.hasOwnProperty("string");
+>Object.prototype.hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>Object.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+
+Object.prototype.isPrototypeOf(Object);
+>Object.prototype.isPrototypeOf : Symbol(isPrototypeOf, Decl(lib.es5.d.ts, --, --))
+>Object.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>isPrototypeOf : Symbol(isPrototypeOf, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+Object.prototype.propertyIsEnumerable("string");
+>Object.prototype.propertyIsEnumerable : Symbol(propertyIsEnumerable, Decl(lib.es5.d.ts, --, --))
+>Object.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>propertyIsEnumerable : Symbol(propertyIsEnumerable, Decl(lib.es5.d.ts, --, --))
+

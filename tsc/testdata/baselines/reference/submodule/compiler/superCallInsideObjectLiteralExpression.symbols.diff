@@ -1,0 +1,11 @@
+--- old.superCallInsideObjectLiteralExpression.symbols
++++ new.superCallInsideObjectLiteralExpression.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(superCallInsideObjectLiteralExpression.ts, 0, 0))
+ 
+     foo() {
+->foo : Symbol(A.foo, Decl(superCallInsideObjectLiteralExpression.ts, 0, 9))
++>foo : Symbol(foo, Decl(superCallInsideObjectLiteralExpression.ts, 0, 9))
+     }
+ }
+ 

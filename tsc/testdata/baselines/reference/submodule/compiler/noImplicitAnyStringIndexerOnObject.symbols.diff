@@ -1,0 +1,68 @@
+--- old.noImplicitAnyStringIndexerOnObject.symbols
++++ new.noImplicitAnyStringIndexerOnObject.symbols
+@@= skipped -215, +215 lines =@@
+ 
+ enum NumEnum { a, b }
+ >NumEnum : Symbol(NumEnum, Decl(noImplicitAnyStringIndexerOnObject.ts, 71, 7))
+->a : Symbol(NumEnum.a, Decl(noImplicitAnyStringIndexerOnObject.ts, 73, 14))
+->b : Symbol(NumEnum.b, Decl(noImplicitAnyStringIndexerOnObject.ts, 73, 17))
++>a : Symbol(a, Decl(noImplicitAnyStringIndexerOnObject.ts, 73, 14))
++>b : Symbol(b, Decl(noImplicitAnyStringIndexerOnObject.ts, 73, 17))
+ 
+ let numEnumKey: NumEnum;
+ >numEnumKey : Symbol(numEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 74, 3))
+@@= skipped -14, +14 lines =@@
+ 
+ enum StrEnum { a = "a", b = "b" }
+ >StrEnum : Symbol(StrEnum, Decl(noImplicitAnyStringIndexerOnObject.ts, 75, 14))
+->a : Symbol(StrEnum.a, Decl(noImplicitAnyStringIndexerOnObject.ts, 78, 14))
+->b : Symbol(StrEnum.b, Decl(noImplicitAnyStringIndexerOnObject.ts, 78, 23))
++>a : Symbol(a, Decl(noImplicitAnyStringIndexerOnObject.ts, 78, 14))
++>b : Symbol(b, Decl(noImplicitAnyStringIndexerOnObject.ts, 78, 23))
+ 
+ let strEnumKey: StrEnum;
+ >strEnumKey : Symbol(strEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 79, 3))
+@@= skipped -18, +18 lines =@@
+ >T : Symbol(T, Decl(noImplicitAnyStringIndexerOnObject.ts, 83, 18))
+ 
+   get(key: K): T;
+->get : Symbol(MyMap.get, Decl(noImplicitAnyStringIndexerOnObject.ts, 83, 23))
++>get : Symbol(get, Decl(noImplicitAnyStringIndexerOnObject.ts, 83, 23))
+ >key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 84, 6))
+ >K : Symbol(K, Decl(noImplicitAnyStringIndexerOnObject.ts, 83, 16))
+ >T : Symbol(T, Decl(noImplicitAnyStringIndexerOnObject.ts, 83, 18))
+ 
+   set(key: K, value: T): void;
+->set : Symbol(MyMap.set, Decl(noImplicitAnyStringIndexerOnObject.ts, 84, 17))
++>set : Symbol(set, Decl(noImplicitAnyStringIndexerOnObject.ts, 84, 17))
+ >key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 85, 6))
+ >K : Symbol(K, Decl(noImplicitAnyStringIndexerOnObject.ts, 83, 16))
+ >value : Symbol(value, Decl(noImplicitAnyStringIndexerOnObject.ts, 85, 13))
+@@= skipped -15, +15 lines =@@
+ 
+ interface Dog { bark(): void; }
+ >Dog : Symbol(Dog, Decl(noImplicitAnyStringIndexerOnObject.ts, 86, 1))
+->bark : Symbol(Dog.bark, Decl(noImplicitAnyStringIndexerOnObject.ts, 88, 15))
++>bark : Symbol(bark, Decl(noImplicitAnyStringIndexerOnObject.ts, 88, 15))
+ 
+ let rover: Dog = { bark() {} };
+ >rover : Symbol(rover, Decl(noImplicitAnyStringIndexerOnObject.ts, 89, 3))
+@@= skipped -20, +20 lines =@@
+ >I : Symbol(I, Decl(noImplicitAnyStringIndexerOnObject.ts, 92, 21))
+ 
+   prop: MyMap<string, string>
+->prop : Symbol(I.prop, Decl(noImplicitAnyStringIndexerOnObject.ts, 94, 13))
++>prop : Symbol(prop, Decl(noImplicitAnyStringIndexerOnObject.ts, 94, 13))
+ >MyMap : Symbol(MyMap, Decl(noImplicitAnyStringIndexerOnObject.ts, 80, 14))
+ }
+ declare const m: I;
+@@= skipped -8, +8 lines =@@
+ >I : Symbol(I, Decl(noImplicitAnyStringIndexerOnObject.ts, 92, 21))
+ 
+ m.prop['a'];
+->m.prop : Symbol(I.prop, Decl(noImplicitAnyStringIndexerOnObject.ts, 94, 13))
++>m.prop : Symbol(prop, Decl(noImplicitAnyStringIndexerOnObject.ts, 94, 13))
+ >m : Symbol(m, Decl(noImplicitAnyStringIndexerOnObject.ts, 97, 13))
+->prop : Symbol(I.prop, Decl(noImplicitAnyStringIndexerOnObject.ts, 94, 13))
++>prop : Symbol(prop, Decl(noImplicitAnyStringIndexerOnObject.ts, 94, 13))
+ 

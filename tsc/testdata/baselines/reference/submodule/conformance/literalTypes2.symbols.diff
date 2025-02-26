@@ -1,0 +1,242 @@
+--- old.literalTypes2.symbols
++++ new.literalTypes2.symbols
+@@= skipped -4, +4 lines =@@
+ >E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+ 
+     A, B, C
+->A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+->B : Symbol(E.B, Decl(literalTypes2.ts, 1, 6))
+->C : Symbol(E.C, Decl(literalTypes2.ts, 1, 9))
++>A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
++>B : Symbol(B, Decl(literalTypes2.ts, 1, 6))
++>C : Symbol(C, Decl(literalTypes2.ts, 1, 9))
+ }
+ 
+ let cond: boolean;
+@@= skipped -14, +14 lines =@@
+ >p2 : Symbol(p2, Decl(literalTypes2.ts, 6, 19))
+ >p3 : Symbol(p3, Decl(literalTypes2.ts, 6, 31))
+ >p4 : Symbol(p4, Decl(literalTypes2.ts, 6, 42))
+->E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>E.A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ >E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+->A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ 
+     var v1 = 1;
+ >v1 : Symbol(v1, Decl(literalTypes2.ts, 7, 7))
+@@= skipped -27, +27 lines =@@
+ 
+     var v8 = E.A;
+ >v8 : Symbol(v8, Decl(literalTypes2.ts, 14, 7))
+->E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>E.A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ >E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+->A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ 
+     let x1 = 1;
+ >x1 : Symbol(x1, Decl(literalTypes2.ts, 15, 7))
+@@= skipped -27, +27 lines =@@
+ 
+     var x8 = E.A;
+ >x8 : Symbol(x8, Decl(literalTypes2.ts, 22, 7))
+->E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>E.A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ >E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+->A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ 
+     const c1 = 1;
+ >c1 : Symbol(c1, Decl(literalTypes2.ts, 23, 9))
+@@= skipped -27, +27 lines =@@
+ 
+     const c8 = E.A;
+ >c8 : Symbol(c8, Decl(literalTypes2.ts, 30, 9))
+->E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>E.A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ >E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+->A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ }
+ 
+ function f2(p1: 1 = 1, p2: "abc" = "abc", p3: true = true, p4: E.A = E.A) {
+@@= skipped -12, +12 lines =@@
+ >p3 : Symbol(p3, Decl(literalTypes2.ts, 33, 41))
+ >p4 : Symbol(p4, Decl(literalTypes2.ts, 33, 58))
+ >E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+->A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+->E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
++>E.A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ >E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+->A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ 
+     var v1: 1 = 1;
+ >v1 : Symbol(v1, Decl(literalTypes2.ts, 34, 7))
+@@= skipped -20, +20 lines =@@
+     var v5: E.A = E.A;
+ >v5 : Symbol(v5, Decl(literalTypes2.ts, 38, 7))
+ >E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+->A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+->E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
++>E.A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ >E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+->A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ 
+     let x1: 1 = 1;
+ >x1 : Symbol(x1, Decl(literalTypes2.ts, 39, 7))
+@@= skipped -20, +20 lines =@@
+     let x5: E.A = E.A;
+ >x5 : Symbol(x5, Decl(literalTypes2.ts, 43, 7))
+ >E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+->A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
+->E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
++>E.A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ >E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+->A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ }
+ 
+ function f3() {
+@@= skipped -20, +20 lines =@@
+     const c3 = cond ? E.A : cond ? true : 123;
+ >c3 : Symbol(c3, Decl(literalTypes2.ts, 49, 9))
+ >cond : Symbol(cond, Decl(literalTypes2.ts, 4, 3))
+->E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>E.A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ >E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+->A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ >cond : Symbol(cond, Decl(literalTypes2.ts, 4, 3))
+ 
+     const c4 = cond ? "abc" : null;
+@@= skipped -66, +66 lines =@@
+ >C1 : Symbol(C1, Decl(literalTypes2.ts, 63, 1))
+ 
+     x1 = 1;
+->x1 : Symbol(C1.x1, Decl(literalTypes2.ts, 65, 10))
++>x1 : Symbol(x1, Decl(literalTypes2.ts, 65, 10))
+ 
+     x2 = -123;
+->x2 : Symbol(C1.x2, Decl(literalTypes2.ts, 66, 11))
++>x2 : Symbol(x2, Decl(literalTypes2.ts, 66, 11))
+ 
+     x3 = 3 + 4;
+->x3 : Symbol(C1.x3, Decl(literalTypes2.ts, 67, 14))
++>x3 : Symbol(x3, Decl(literalTypes2.ts, 67, 14))
+ 
+     x4 = "abc";
+->x4 : Symbol(C1.x4, Decl(literalTypes2.ts, 68, 15))
++>x4 : Symbol(x4, Decl(literalTypes2.ts, 68, 15))
+ 
+     x5 = "";
+->x5 : Symbol(C1.x5, Decl(literalTypes2.ts, 69, 15))
++>x5 : Symbol(x5, Decl(literalTypes2.ts, 69, 15))
+ 
+     x6 = "abc" + "def";
+->x6 : Symbol(C1.x6, Decl(literalTypes2.ts, 70, 12))
++>x6 : Symbol(x6, Decl(literalTypes2.ts, 70, 12))
+ 
+     x7 = true;
+->x7 : Symbol(C1.x7, Decl(literalTypes2.ts, 71, 23))
++>x7 : Symbol(x7, Decl(literalTypes2.ts, 71, 23))
+ 
+     x8 = E.A;
+->x8 : Symbol(C1.x8, Decl(literalTypes2.ts, 72, 14))
+->E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>x8 : Symbol(x8, Decl(literalTypes2.ts, 72, 14))
++>E.A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ >E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+->A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ 
+     readonly c1 = 1;
+->c1 : Symbol(C1.c1, Decl(literalTypes2.ts, 73, 13))
++>c1 : Symbol(c1, Decl(literalTypes2.ts, 73, 13))
+ 
+     readonly c2 = -123;
+->c2 : Symbol(C1.c2, Decl(literalTypes2.ts, 74, 20))
++>c2 : Symbol(c2, Decl(literalTypes2.ts, 74, 20))
+ 
+     readonly c3 = 3 + 4;
+->c3 : Symbol(C1.c3, Decl(literalTypes2.ts, 75, 23))
++>c3 : Symbol(c3, Decl(literalTypes2.ts, 75, 23))
+ 
+     readonly c4 = "abc";
+->c4 : Symbol(C1.c4, Decl(literalTypes2.ts, 76, 24))
++>c4 : Symbol(c4, Decl(literalTypes2.ts, 76, 24))
+ 
+     readonly c5 = "";
+->c5 : Symbol(C1.c5, Decl(literalTypes2.ts, 77, 24))
++>c5 : Symbol(c5, Decl(literalTypes2.ts, 77, 24))
+ 
+     readonly c6 = "abc" + "def";
+->c6 : Symbol(C1.c6, Decl(literalTypes2.ts, 78, 21))
++>c6 : Symbol(c6, Decl(literalTypes2.ts, 78, 21))
+ 
+     readonly c7 = true;
+->c7 : Symbol(C1.c7, Decl(literalTypes2.ts, 79, 32))
++>c7 : Symbol(c7, Decl(literalTypes2.ts, 79, 32))
+ 
+     readonly c8 = E.A;
+->c8 : Symbol(C1.c8, Decl(literalTypes2.ts, 80, 23))
+->E.A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>c8 : Symbol(c8, Decl(literalTypes2.ts, 80, 23))
++>E.A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ >E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+->A : Symbol(E.A, Decl(literalTypes2.ts, 0, 8))
++>A : Symbol(A, Decl(literalTypes2.ts, 0, 8))
+ }
+ 
+ function f4() {
+@@= skipped -154, +154 lines =@@
+ >C2 : Symbol(C2, Decl(literalTypes2.ts, 120, 1))
+ 
+     foo() {
+->foo : Symbol(C2.foo, Decl(literalTypes2.ts, 122, 10))
++>foo : Symbol(foo, Decl(literalTypes2.ts, 122, 10))
+ 
+         return 0;
+     }
+     bar() {
+->bar : Symbol(C2.bar, Decl(literalTypes2.ts, 125, 5))
++>bar : Symbol(bar, Decl(literalTypes2.ts, 125, 5))
+ 
+         return cond ? 0 : 1;
+ >cond : Symbol(cond, Decl(literalTypes2.ts, 4, 3))
+@@= skipped -26, +26 lines =@@
+ 
+     const f4 = () => E.C;
+ >f4 : Symbol(f4, Decl(literalTypes2.ts, 135, 9))
+->E.C : Symbol(E.C, Decl(literalTypes2.ts, 1, 9))
++>E.C : Symbol(C, Decl(literalTypes2.ts, 1, 9))
+ >E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
+->C : Symbol(E.C, Decl(literalTypes2.ts, 1, 9))
++>C : Symbol(C, Decl(literalTypes2.ts, 1, 9))
+ 
+     const f5 = (): "foo" => "foo";
+ >f5 : Symbol(f5, Decl(literalTypes2.ts, 136, 9))
+@@= skipped -157, +157 lines =@@
+ 
+     let result = a.slice();
+ >result : Symbol(result, Decl(literalTypes2.ts, 169, 7))
+->a.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
++>a.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(literalTypes2.ts, 168, 19))
+->slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
+ 
+     result.push(x);
+->result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>result.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >result : Symbol(result, Decl(literalTypes2.ts, 169, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(literalTypes2.ts, 168, 26))
+ 
+     return result;

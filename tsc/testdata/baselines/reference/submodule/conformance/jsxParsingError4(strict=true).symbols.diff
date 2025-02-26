@@ -1,0 +1,20 @@
+--- old.jsxParsingError4(strict=true).symbols
++++ new.jsxParsingError4(strict=true).symbols
+@@= skipped -18, +18 lines =@@
+ >a : Symbol(a, Decl(a.tsx, 7, 5))
+ 
+   <public-foo></public-foo>
+->public-foo : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 2, 33))
+->public-foo : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 2, 33))
+-
+ );
+ 
+ const b = (
+ >b : Symbol(b, Decl(a.tsx, 11, 5))
+ 
+   <public></public>
+->public : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 2, 33))
+->public : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 2, 33))
+-
+ );
+ 

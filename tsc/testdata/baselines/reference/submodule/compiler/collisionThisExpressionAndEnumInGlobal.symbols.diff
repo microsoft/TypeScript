@@ -1,0 +1,15 @@
+--- old.collisionThisExpressionAndEnumInGlobal.symbols
++++ new.collisionThisExpressionAndEnumInGlobal.symbols
+@@= skipped -4, +4 lines =@@
+ >_this : Symbol(_this, Decl(collisionThisExpressionAndEnumInGlobal.ts, 0, 0))
+ 
+     _thisVal1,
+->_thisVal1 : Symbol(_this._thisVal1, Decl(collisionThisExpressionAndEnumInGlobal.ts, 0, 12))
++>_thisVal1 : Symbol(_thisVal1, Decl(collisionThisExpressionAndEnumInGlobal.ts, 0, 12))
+ 
+     _thisVal2,
+->_thisVal2 : Symbol(_this._thisVal2, Decl(collisionThisExpressionAndEnumInGlobal.ts, 1, 14))
++>_thisVal2 : Symbol(_thisVal2, Decl(collisionThisExpressionAndEnumInGlobal.ts, 1, 14))
+ }
+ var f = () => this;
+ >f : Symbol(f, Decl(collisionThisExpressionAndEnumInGlobal.ts, 4, 3))

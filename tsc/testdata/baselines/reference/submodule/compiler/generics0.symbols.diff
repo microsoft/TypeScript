@@ -1,0 +1,21 @@
+--- old.generics0.symbols
++++ new.generics0.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(generics0.ts, 0, 12))
+ 
+     x: T;
+->x : Symbol(G.x, Decl(generics0.ts, 0, 16))
++>x : Symbol(x, Decl(generics0.ts, 0, 16))
+ >T : Symbol(T, Decl(generics0.ts, 0, 12))
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ 
+ var z = v2.x; // 'y' should be of type 'string'
+ >z : Symbol(z, Decl(generics0.ts, 6, 3))
+->v2.x : Symbol(G.x, Decl(generics0.ts, 0, 16))
++>v2.x : Symbol(x, Decl(generics0.ts, 0, 16))
+ >v2 : Symbol(v2, Decl(generics0.ts, 4, 3))
+->x : Symbol(G.x, Decl(generics0.ts, 0, 16))
++>x : Symbol(x, Decl(generics0.ts, 0, 16))
+ 

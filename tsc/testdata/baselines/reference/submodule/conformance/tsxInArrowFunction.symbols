@@ -1,0 +1,39 @@
+//// [tests/cases/conformance/jsx/tsxInArrowFunction.tsx] ////
+
+=== tsxInArrowFunction.tsx ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(tsxInArrowFunction.tsx, 0, 0))
+
+    interface Element { }
+>Element : Symbol(Element, Decl(tsxInArrowFunction.tsx, 0, 23))
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxInArrowFunction.tsx, 1, 25))
+
+        div: {
+>div : Symbol(div, Decl(tsxInArrowFunction.tsx, 2, 33))
+
+            text?: string;
+>text : Symbol(text, Decl(tsxInArrowFunction.tsx, 3, 14))
+        }
+    }
+}
+
+
+// didn't work
+<div>{() => <div text="wat" />}</div>;
+>text : Symbol(text, Decl(tsxInArrowFunction.tsx, 11, 16))
+
+// didn't work
+<div>{x => <div text="wat" />}</div>;
+>x : Symbol(x, Decl(tsxInArrowFunction.tsx, 14, 6))
+>text : Symbol(text, Decl(tsxInArrowFunction.tsx, 14, 15))
+
+// worked
+<div>{() => (<div text="wat" />)}</div>;
+>text : Symbol(text, Decl(tsxInArrowFunction.tsx, 17, 17))
+
+// worked (!)
+<div>{() => <div text="wat"></div>}</div>;
+>text : Symbol(text, Decl(tsxInArrowFunction.tsx, 20, 16))
+

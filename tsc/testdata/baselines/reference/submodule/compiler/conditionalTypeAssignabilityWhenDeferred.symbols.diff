@@ -1,0 +1,28 @@
+--- old.conditionalTypeAssignabilityWhenDeferred.symbols
++++ new.conditionalTypeAssignabilityWhenDeferred.symbols
+@@= skipped -107, +107 lines =@@
+   var x: T | null = Math.random() > 0.5 ? null : t;
+ >x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 31, 5))
+ >T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 30, 11))
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >t : Symbol(t, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 30, 14))
+ 
+   onlyNullablePlease(x); // should work
+@@= skipped -205, +205 lines =@@
+ >Foo2 : Symbol(Foo2, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 88, 16))
+ 
+   prop!: Wrapped<string>;
+->prop : Symbol(Foo2.prop, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 90, 12))
++>prop : Symbol(prop, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 90, 12))
+ >Wrapped : Symbol(Wrapped, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 79, 1))
+ 
+   method() {
+->method : Symbol(Foo2.method, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 91, 25))
++>method : Symbol(method, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 91, 25))
+ 
+     set(this, "prop", "hi"); // <-- type error
+ >set : Symbol(set, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 82, 52))

@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue2.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue2.ts ===
+// https://github.com/microsoft/TypeScript/issues/55986
+
+declare const f: 'a' | 'b' | 'c';
+>f : Symbol(f, Decl(narrowByClauseExpressionInSwitchTrue2.ts, 2, 13))
+
+switch(true) {
+    case f === 'a':
+>f : Symbol(f, Decl(narrowByClauseExpressionInSwitchTrue2.ts, 2, 13))
+
+    case f === 'b':
+>f : Symbol(f, Decl(narrowByClauseExpressionInSwitchTrue2.ts, 2, 13))
+
+        f;
+>f : Symbol(f, Decl(narrowByClauseExpressionInSwitchTrue2.ts, 2, 13))
+
+        break
+    default:
+        f;
+>f : Symbol(f, Decl(narrowByClauseExpressionInSwitchTrue2.ts, 2, 13))
+}
+
+f;
+>f : Symbol(f, Decl(narrowByClauseExpressionInSwitchTrue2.ts, 2, 13))
+
+switch(true) {
+    case f === 'a':
+>f : Symbol(f, Decl(narrowByClauseExpressionInSwitchTrue2.ts, 2, 13))
+
+        f;
+>f : Symbol(f, Decl(narrowByClauseExpressionInSwitchTrue2.ts, 2, 13))
+
+    case f === 'b':
+>f : Symbol(f, Decl(narrowByClauseExpressionInSwitchTrue2.ts, 2, 13))
+
+        f;
+>f : Symbol(f, Decl(narrowByClauseExpressionInSwitchTrue2.ts, 2, 13))
+
+        break
+    default:
+        f;
+>f : Symbol(f, Decl(narrowByClauseExpressionInSwitchTrue2.ts, 2, 13))
+}
+
+f;
+>f : Symbol(f, Decl(narrowByClauseExpressionInSwitchTrue2.ts, 2, 13))
+

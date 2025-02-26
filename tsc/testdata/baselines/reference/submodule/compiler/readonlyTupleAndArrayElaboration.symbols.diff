@@ -1,0 +1,14 @@
+--- old.readonlyTupleAndArrayElaboration.symbols
++++ new.readonlyTupleAndArrayElaboration.symbols
+@@= skipped -13, +13 lines =@@
+ >y : Symbol(y, Decl(readonlyTupleAndArrayElaboration.ts, 5, 31))
+ 
+     return Math.sqrt(x ** 2 + y ** 2);
+->Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
++>Math.sqrt : Symbol(sqrt, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
++>sqrt : Symbol(sqrt, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(readonlyTupleAndArrayElaboration.ts, 5, 29))
+ >y : Symbol(y, Decl(readonlyTupleAndArrayElaboration.ts, 5, 31))
+ }

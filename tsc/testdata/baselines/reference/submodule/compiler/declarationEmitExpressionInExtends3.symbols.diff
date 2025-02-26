@@ -1,0 +1,42 @@
+--- old.declarationEmitExpressionInExtends3.symbols
++++ new.declarationEmitExpressionInExtends3.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(declarationEmitExpressionInExtends3.ts, 0, 27))
+ 
+ 	x: T;
+->x : Symbol(ExportedClass.x, Decl(declarationEmitExpressionInExtends3.ts, 0, 31))
++>x : Symbol(x, Decl(declarationEmitExpressionInExtends3.ts, 0, 31))
+ >T : Symbol(T, Decl(declarationEmitExpressionInExtends3.ts, 0, 27))
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ >U : Symbol(U, Decl(declarationEmitExpressionInExtends3.ts, 4, 19))
+ 
+     x: T;
+->x : Symbol(LocalClass.x, Decl(declarationEmitExpressionInExtends3.ts, 4, 24))
++>x : Symbol(x, Decl(declarationEmitExpressionInExtends3.ts, 4, 24))
+ >T : Symbol(T, Decl(declarationEmitExpressionInExtends3.ts, 4, 17))
+ 
+     y: U;
+->y : Symbol(LocalClass.y, Decl(declarationEmitExpressionInExtends3.ts, 5, 9))
++>y : Symbol(y, Decl(declarationEmitExpressionInExtends3.ts, 5, 9))
+ >U : Symbol(U, Decl(declarationEmitExpressionInExtends3.ts, 4, 19))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >ExportedInterface : Symbol(ExportedInterface, Decl(declarationEmitExpressionInExtends3.ts, 7, 1))
+ 
+     x: number;
+->x : Symbol(ExportedInterface.x, Decl(declarationEmitExpressionInExtends3.ts, 9, 36))
++>x : Symbol(x, Decl(declarationEmitExpressionInExtends3.ts, 9, 36))
+ }
+ 
+ interface LocalInterface {
+ >LocalInterface : Symbol(LocalInterface, Decl(declarationEmitExpressionInExtends3.ts, 11, 1))
+ 
+     x: number;
+->x : Symbol(LocalInterface.x, Decl(declarationEmitExpressionInExtends3.ts, 13, 26))
++>x : Symbol(x, Decl(declarationEmitExpressionInExtends3.ts, 13, 26))
+ }
+ 
+ function getLocalClass<T>(c: T) {

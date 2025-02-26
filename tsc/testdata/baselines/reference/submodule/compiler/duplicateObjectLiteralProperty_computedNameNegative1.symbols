@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/duplicateObjectLiteralProperty_computedNameNegative1.ts] ////
+
+=== duplicateObjectLiteralProperty_computedNameNegative1.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/56341
+
+function bar(props: { x?: string; y?: string }) {
+>bar : Symbol(bar, Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 0, 0))
+>props : Symbol(props, Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 2, 13))
+>x : Symbol(x, Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 2, 21))
+>y : Symbol(y, Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 2, 33))
+
+  const { x = "", y = "" } = props;
+>x : Symbol(x, Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 3, 9))
+>y : Symbol(y, Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 3, 17))
+>props : Symbol(props, Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 2, 13))
+
+  return {
+    [x]: 1,
+>[x] : Symbol([x], Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 4, 10))
+>x : Symbol(x, Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 3, 9))
+
+    [y]: 2,
+>[y] : Symbol([y], Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 5, 11))
+>y : Symbol(y, Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 3, 17))
+
+  };
+}
+
+function foo({ x = "", y = "" }: { x?: string; y?: string }) {
+>foo : Symbol(foo, Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 8, 1))
+>x : Symbol(x, Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 10, 14))
+>y : Symbol(y, Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 10, 22))
+>x : Symbol(x, Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 10, 34))
+>y : Symbol(y, Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 10, 46))
+
+  return {
+    [x]: 1,
+>[x] : Symbol([x], Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 11, 10))
+>x : Symbol(x, Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 10, 14))
+
+    [y]: 2,
+>[y] : Symbol([y], Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 12, 11))
+>y : Symbol(y, Decl(duplicateObjectLiteralProperty_computedNameNegative1.ts, 10, 22))
+
+  };
+}
+

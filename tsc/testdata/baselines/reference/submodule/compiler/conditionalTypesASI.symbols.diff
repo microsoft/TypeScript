@@ -1,0 +1,14 @@
+--- old.conditionalTypesASI.symbols
++++ new.conditionalTypesASI.symbols
+@@= skipped -6, +6 lines =@@
+ >JSONSchema4 : Symbol(JSONSchema4, Decl(conditionalTypesASI.ts, 0, 0))
+ 
+   a?: number
+->a : Symbol(JSONSchema4.a, Decl(conditionalTypesASI.ts, 2, 23))
++>a : Symbol(a, Decl(conditionalTypesASI.ts, 2, 23))
+ 
+   extends?: string | string[]
+->extends : Symbol(JSONSchema4.extends, Decl(conditionalTypesASI.ts, 3, 12))
++>extends : Symbol(extends, Decl(conditionalTypesASI.ts, 3, 12))
+ }
+ 

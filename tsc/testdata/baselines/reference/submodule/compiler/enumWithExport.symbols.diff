@@ -1,0 +1,9 @@
+--- old.enumWithExport.symbols
++++ new.enumWithExport.symbols
+@@= skipped -10, +10 lines =@@
+ >x : Symbol(x, Decl(enumWithExport.ts, 0, 0), Decl(enumWithExport.ts, 2, 1))
+ 
+   z = y
+->z : Symbol(x.z, Decl(enumWithExport.ts, 3, 8))
++>z : Symbol(z, Decl(enumWithExport.ts, 3, 8))
+ }

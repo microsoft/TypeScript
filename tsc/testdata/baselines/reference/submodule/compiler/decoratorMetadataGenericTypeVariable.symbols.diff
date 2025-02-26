@@ -1,0 +1,11 @@
+--- old.decoratorMetadataGenericTypeVariable.symbols
++++ new.decoratorMetadataGenericTypeVariable.symbols
+@@= skipped -6, +6 lines =@@
+ 
+   @Decorate
+   member: TypeVariable;
+->member : Symbol(C.member, Decl(decoratorMetadataGenericTypeVariable.ts, 0, 30))
++>member : Symbol(member, Decl(decoratorMetadataGenericTypeVariable.ts, 0, 30))
+ >TypeVariable : Symbol(TypeVariable, Decl(decoratorMetadataGenericTypeVariable.ts, 0, 15))
+ }
+ 

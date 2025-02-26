@@ -1,0 +1,83 @@
+--- old.superPropertyAccess1.symbols
++++ new.superPropertyAccess1.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(superPropertyAccess1.ts, 0, 0))
+ 
+     public foo() { }
+->foo : Symbol(C.foo, Decl(superPropertyAccess1.ts, 0, 9))
++>foo : Symbol(foo, Decl(superPropertyAccess1.ts, 0, 9))
+ 
+     public get x() {
+->x : Symbol(C.x, Decl(superPropertyAccess1.ts, 1, 20))
++>x : Symbol(x, Decl(superPropertyAccess1.ts, 1, 20))
+ 
+         return 1;
+     }
+ 
+     public bar() { }
+->bar : Symbol(C.bar, Decl(superPropertyAccess1.ts, 4, 5))
++>bar : Symbol(bar, Decl(superPropertyAccess1.ts, 4, 5))
+ }
+ 
+ class D extends C {
+@@= skipped -17, +17 lines =@@
+ >C : Symbol(C, Decl(superPropertyAccess1.ts, 0, 0))
+ 
+     public foo() {
+->foo : Symbol(D.foo, Decl(superPropertyAccess1.ts, 9, 19))
++>foo : Symbol(foo, Decl(superPropertyAccess1.ts, 9, 19))
+ 
+         super.bar();
+->super.bar : Symbol(C.bar, Decl(superPropertyAccess1.ts, 4, 5))
++>super.bar : Symbol(bar, Decl(superPropertyAccess1.ts, 4, 5))
+ >super : Symbol(C, Decl(superPropertyAccess1.ts, 0, 0))
+->bar : Symbol(C.bar, Decl(superPropertyAccess1.ts, 4, 5))
++>bar : Symbol(bar, Decl(superPropertyAccess1.ts, 4, 5))
+ 
+         super.x;  // error
+->super.x : Symbol(C.x, Decl(superPropertyAccess1.ts, 1, 20))
++>super.x : Symbol(x, Decl(superPropertyAccess1.ts, 1, 20))
+ >super : Symbol(C, Decl(superPropertyAccess1.ts, 0, 0))
+->x : Symbol(C.x, Decl(superPropertyAccess1.ts, 1, 20))
++>x : Symbol(x, Decl(superPropertyAccess1.ts, 1, 20))
+     }    
+ 
+     constructor() {
+@@= skipped -18, +18 lines =@@
+ >super : Symbol(C, Decl(superPropertyAccess1.ts, 0, 0))
+ 
+         super.bar();
+->super.bar : Symbol(C.bar, Decl(superPropertyAccess1.ts, 4, 5))
++>super.bar : Symbol(bar, Decl(superPropertyAccess1.ts, 4, 5))
+ >super : Symbol(C, Decl(superPropertyAccess1.ts, 0, 0))
+->bar : Symbol(C.bar, Decl(superPropertyAccess1.ts, 4, 5))
++>bar : Symbol(bar, Decl(superPropertyAccess1.ts, 4, 5))
+ 
+         super.x;  // error
+->super.x : Symbol(C.x, Decl(superPropertyAccess1.ts, 1, 20))
++>super.x : Symbol(x, Decl(superPropertyAccess1.ts, 1, 20))
+ >super : Symbol(C, Decl(superPropertyAccess1.ts, 0, 0))
+->x : Symbol(C.x, Decl(superPropertyAccess1.ts, 1, 20))
++>x : Symbol(x, Decl(superPropertyAccess1.ts, 1, 20))
+     }
+ 
+     public get y() {
+->y : Symbol(D.y, Decl(superPropertyAccess1.ts, 19, 5))
++>y : Symbol(y, Decl(superPropertyAccess1.ts, 19, 5))
+ 
+         super.bar();
+->super.bar : Symbol(C.bar, Decl(superPropertyAccess1.ts, 4, 5))
++>super.bar : Symbol(bar, Decl(superPropertyAccess1.ts, 4, 5))
+ >super : Symbol(C, Decl(superPropertyAccess1.ts, 0, 0))
+->bar : Symbol(C.bar, Decl(superPropertyAccess1.ts, 4, 5))
++>bar : Symbol(bar, Decl(superPropertyAccess1.ts, 4, 5))
+ 
+         super.x; // error
+->super.x : Symbol(C.x, Decl(superPropertyAccess1.ts, 1, 20))
++>super.x : Symbol(x, Decl(superPropertyAccess1.ts, 1, 20))
+ >super : Symbol(C, Decl(superPropertyAccess1.ts, 0, 0))
+->x : Symbol(C.x, Decl(superPropertyAccess1.ts, 1, 20))
++>x : Symbol(x, Decl(superPropertyAccess1.ts, 1, 20))
+ 
+         return 1;
+     }

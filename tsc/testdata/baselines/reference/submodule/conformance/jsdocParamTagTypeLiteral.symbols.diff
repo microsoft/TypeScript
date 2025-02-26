@@ -1,0 +1,61 @@
+--- old.jsdocParamTagTypeLiteral.symbols
++++ new.jsdocParamTagTypeLiteral.symbols
+@@= skipped -26, +26 lines =@@
+ >opts1 : Symbol(opts1, Decl(0.js, 16, 14))
+ 
+     opts1.x;
+->opts1.x : Symbol(x, Decl(0.js, 11, 3))
+ >opts1 : Symbol(opts1, Decl(0.js, 16, 14))
+->x : Symbol(x, Decl(0.js, 11, 3))
+ }
+ 
+ foo1({x: 'abc'});
+@@= skipped -19, +17 lines =@@
+ >opts2 : Symbol(opts2, Decl(0.js, 27, 14))
+ 
+     opts2[0].anotherX;
+->opts2[0].anotherX : Symbol(anotherX, Decl(0.js, 24, 3))
+ >opts2 : Symbol(opts2, Decl(0.js, 27, 14))
+->anotherX : Symbol(anotherX, Decl(0.js, 24, 3))
+ }
+ 
+ foo2([{anotherX: "world"}]);
+@@= skipped -18, +16 lines =@@
+ >opts3 : Symbol(opts3, Decl(0.js, 37, 14))
+ 
+     opts3.x;
+->opts3.x : Symbol(x, Decl(0.js, 35, 3))
+ >opts3 : Symbol(opts3, Decl(0.js, 37, 14))
+->x : Symbol(x, Decl(0.js, 35, 3))
+ }
+ foo3({x: 'abc'});
+ >foo3 : Symbol(foo3, Decl(0.js, 31, 28))
+@@= skipped -20, +18 lines =@@
+ >opts4 : Symbol(opts4, Decl(0.js, 49, 14))
+ 
+     opts4[0].x;
+->opts4[0].x : Symbol(x, Decl(0.js, 44, 3))
+ >opts4 : Symbol(opts4, Decl(0.js, 49, 14))
+->x : Symbol(x, Decl(0.js, 44, 3))
+ }
+ 
+ foo4([{ x: 'hi' }]);
+@@= skipped -24, +22 lines =@@
+ >opts5 : Symbol(opts5, Decl(0.js, 65, 14))
+ 
+     opts5[0].what.bad[0].idea;
+->opts5[0].what.bad[0].idea : Symbol(idea, Decl(0.js, 61, 3))
+->opts5[0].what.bad : Symbol(bad, Decl(0.js, 60, 3))
+->opts5[0].what : Symbol(what, Decl(0.js, 58, 3))
+ >opts5 : Symbol(opts5, Decl(0.js, 65, 14))
+->what : Symbol(what, Decl(0.js, 58, 3))
+->bad : Symbol(bad, Decl(0.js, 60, 3))
+->idea : Symbol(idea, Decl(0.js, 61, 3))
+ 
+     opts5[0].unnest;
+->opts5[0].unnest : Symbol(unnest, Decl(0.js, 63, 3))
+ >opts5 : Symbol(opts5, Decl(0.js, 65, 14))
+->unnest : Symbol(unnest, Decl(0.js, 63, 3))
+ }
+ 
+ foo5([{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 }]);

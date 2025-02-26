@@ -1,0 +1,26 @@
+--- old.genericCapturingFunctionNarrowing.symbols
++++ new.genericCapturingFunctionNarrowing.symbols
+@@= skipped -22, +22 lines =@@
+ >thing : Symbol(thing, Decl(genericCapturingFunctionNarrowing.ts, 0, 163))
+ 
+         console.log(thing.foo);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >thing.foo : Symbol(foo, Decl(genericCapturingFunctionNarrowing.ts, 0, 45))
+ >thing : Symbol(thing, Decl(genericCapturingFunctionNarrowing.ts, 0, 163))
+ >foo : Symbol(foo, Decl(genericCapturingFunctionNarrowing.ts, 0, 45))
+@@= skipped -10, +10 lines =@@
+     else {
+         // I would expect this to work because the type should be narrowed in this branch to `Second`
+         console.log(thing.bar); // Error: Property 'bar' does not exist on type 'First | Second'.
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >thing.bar : Symbol(bar, Decl(genericCapturingFunctionNarrowing.ts, 0, 77))
+ >thing : Symbol(thing, Decl(genericCapturingFunctionNarrowing.ts, 0, 163))
+ >bar : Symbol(bar, Decl(genericCapturingFunctionNarrowing.ts, 0, 77))

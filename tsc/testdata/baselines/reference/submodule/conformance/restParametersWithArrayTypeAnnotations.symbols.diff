@@ -1,0 +1,38 @@
+--- old.restParametersWithArrayTypeAnnotations.symbols
++++ new.restParametersWithArrayTypeAnnotations.symbols
+@@= skipped -20, +20 lines =@@
+ >C : Symbol(C, Decl(restParametersWithArrayTypeAnnotations.ts, 4, 48))
+ 
+     foo(...x: number[]) { }
+->foo : Symbol(C.foo, Decl(restParametersWithArrayTypeAnnotations.ts, 6, 9))
++>foo : Symbol(foo, Decl(restParametersWithArrayTypeAnnotations.ts, 6, 9))
+ >x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 7, 8))
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ >x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 11, 5))
+ 
+     foo(...x: number[], ...y: number[]);
+->foo : Symbol(I.foo, Decl(restParametersWithArrayTypeAnnotations.ts, 11, 21))
++>foo : Symbol(foo, Decl(restParametersWithArrayTypeAnnotations.ts, 11, 21))
+ >x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 12, 8))
+ >y : Symbol(y, Decl(restParametersWithArrayTypeAnnotations.ts, 12, 23))
+ }
+@@= skipped -59, +59 lines =@@
+ >C2 : Symbol(C2, Decl(restParametersWithArrayTypeAnnotations.ts, 31, 58))
+ 
+     foo(...x: Array<string>) { }
+->foo : Symbol(C2.foo, Decl(restParametersWithArrayTypeAnnotations.ts, 33, 10))
++>foo : Symbol(foo, Decl(restParametersWithArrayTypeAnnotations.ts, 33, 10))
+ >x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 34, 8))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ }
+@@= skipped -13, +13 lines =@@
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     foo(...x: Array<string>, ...y: Array<string>);
+->foo : Symbol(I2.foo, Decl(restParametersWithArrayTypeAnnotations.ts, 38, 26))
++>foo : Symbol(foo, Decl(restParametersWithArrayTypeAnnotations.ts, 38, 26))
+ >x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 39, 8))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >y : Symbol(y, Decl(restParametersWithArrayTypeAnnotations.ts, 39, 28))

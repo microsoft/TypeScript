@@ -1,0 +1,28 @@
+--- old.genericCallWithObjectTypeArgsAndConstraints2.symbols
++++ new.genericCallWithObjectTypeArgsAndConstraints2.symbols
+@@= skipped -7, +7 lines =@@
+ >Base : Symbol(Base, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 0, 0))
+ 
+     x: string;
+->x : Symbol(Base.x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 3, 12))
++>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 3, 12))
+ }
+ class Derived extends Base {
+ >Derived : Symbol(Derived, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 5, 1))
+ >Base : Symbol(Base, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 0, 0))
+ 
+     y: string;
+->y : Symbol(Derived.y, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 6, 28))
++>y : Symbol(y, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 6, 28))
+ }
+ 
+ function f<T extends Base>(x: { foo: T; bar: T }) {
+@@= skipped -49, +49 lines =@@
+ >T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 18, 12))
+ 
+     a: T;
+->a : Symbol(I.a, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 18, 16))
++>a : Symbol(a, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 18, 16))
+ >T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 18, 12))
+ }
+ function f2<T extends Base>(x: I<T>) {

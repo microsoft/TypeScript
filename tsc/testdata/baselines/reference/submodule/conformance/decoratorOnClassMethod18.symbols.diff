@@ -1,0 +1,17 @@
+--- old.decoratorOnClassMethod18.symbols
++++ new.decoratorOnClassMethod18.symbols
+@@= skipped -7, +7 lines =@@
+ >Foo : Symbol(Foo, Decl(decoratorOnClassMethod18.ts, 0, 27))
+ 
+     p1
+->p1 : Symbol(Foo.p1, Decl(decoratorOnClassMethod18.ts, 2, 11))
++>p1 : Symbol(p1, Decl(decoratorOnClassMethod18.ts, 2, 11))
+ 
+     @decorator()
+ >decorator : Symbol(decorator, Decl(decoratorOnClassMethod18.ts, 0, 11))
+ 
+     p2;
+->p2 : Symbol(Foo.p2, Decl(decoratorOnClassMethod18.ts, 3, 6))
++>p2 : Symbol(p2, Decl(decoratorOnClassMethod18.ts, 3, 6))
+ }
+ 

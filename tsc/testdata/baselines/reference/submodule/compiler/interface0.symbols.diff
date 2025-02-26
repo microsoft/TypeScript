@@ -1,0 +1,11 @@
+--- old.interface0.symbols
++++ new.interface0.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(interface0.ts, 0, 18))
+ 
+     x: T;
+->x : Symbol(Generic.x, Decl(interface0.ts, 0, 22))
++>x : Symbol(x, Decl(interface0.ts, 0, 22))
+ >T : Symbol(T, Decl(interface0.ts, 0, 18))
+ }
+ 

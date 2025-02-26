@@ -1,0 +1,20 @@
+--- old.identicalGenericConditionalsWithInferRelated.symbols
++++ new.identicalGenericConditionalsWithInferRelated.symbols
+@@= skipped -66, +66 lines =@@
+ >X : Symbol(X, Decl(identicalGenericConditionalsWithInferRelated.ts, 16, 5))
+ 
+     decode<C extends Constructor<any>>(ctor: C): MappedResult<C extends Constructor<infer T> ? T : never>
+->decode : Symbol(X.decode, Decl(identicalGenericConditionalsWithInferRelated.ts, 19, 13))
++>decode : Symbol(decode, Decl(identicalGenericConditionalsWithInferRelated.ts, 19, 13))
+ >C : Symbol(C, Decl(identicalGenericConditionalsWithInferRelated.ts, 20, 11))
+ >Constructor : Symbol(Constructor, Decl(identicalGenericConditionalsWithInferRelated.ts, 8, 1))
+ >ctor : Symbol(ctor, Decl(identicalGenericConditionalsWithInferRelated.ts, 20, 39))
+@@= skipped -17, +17 lines =@@
+ >X : Symbol(X, Decl(identicalGenericConditionalsWithInferRelated.ts, 16, 5))
+ 
+     decode<C extends Constructor<any>>(ctor: C): MappedResult<C extends Constructor<infer T> ? T : never> {
+->decode : Symbol(Y.decode, Decl(identicalGenericConditionalsWithInferRelated.ts, 23, 22))
++>decode : Symbol(decode, Decl(identicalGenericConditionalsWithInferRelated.ts, 23, 22))
+ >C : Symbol(C, Decl(identicalGenericConditionalsWithInferRelated.ts, 24, 11))
+ >Constructor : Symbol(Constructor, Decl(identicalGenericConditionalsWithInferRelated.ts, 8, 1))
+ >ctor : Symbol(ctor, Decl(identicalGenericConditionalsWithInferRelated.ts, 24, 39))

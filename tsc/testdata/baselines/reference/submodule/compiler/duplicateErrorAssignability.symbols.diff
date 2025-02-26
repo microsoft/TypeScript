@@ -1,0 +1,18 @@
+--- old.duplicateErrorAssignability.symbols
++++ new.duplicateErrorAssignability.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(duplicateErrorAssignability.ts, 0, 0))
+ 
+     x: number;
+->x : Symbol(A.x, Decl(duplicateErrorAssignability.ts, 0, 13))
++>x : Symbol(x, Decl(duplicateErrorAssignability.ts, 0, 13))
+ }
+ interface B {
+ >B : Symbol(B, Decl(duplicateErrorAssignability.ts, 2, 1))
+ 
+     y: string;
+->y : Symbol(B.y, Decl(duplicateErrorAssignability.ts, 3, 13))
++>y : Symbol(y, Decl(duplicateErrorAssignability.ts, 3, 13))
+ }
+ 
+ declare let b: B;

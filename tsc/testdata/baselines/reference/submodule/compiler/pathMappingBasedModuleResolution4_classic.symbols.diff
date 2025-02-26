@@ -1,0 +1,29 @@
+--- old.pathMappingBasedModuleResolution4_classic.symbols
++++ new.pathMappingBasedModuleResolution4_classic.symbols
+@@= skipped -9, +9 lines =@@
+ 
+ use(x.toExponential());
+ >use : Symbol(use, Decl(file1.ts, 0, 31))
+->x.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(file1.ts, 0, 8))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+ 
+ === c:/root/folder2/file2.ts ===
+ import {x as a} from "./file3"  // found with baseurl
+->x : Symbol(a, Decl(file3.ts, 0, 10))
++>x : Symbol(x, Decl(file3.ts, 0, 10))
+ >a : Symbol(a, Decl(file2.ts, 0, 8))
+ 
+ import {y as b} from "file4"    // found with fallback
+->y : Symbol(b, Decl(file4.ts, 0, 10))
+ >b : Symbol(b, Decl(file2.ts, 1, 8))
+ 
+ export var x = a + b;
+@@= skipped -22, +19 lines =@@
+ export var x = 1;
+ >x : Symbol(x, Decl(file3.ts, 0, 10))
+ 
+-=== c:/file4.ts ===
+-export var y = 100;
+->y : Symbol(y, Decl(file4.ts, 0, 10))
+-

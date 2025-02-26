@@ -1,0 +1,20 @@
+--- old.genericRecursiveImplicitConstructorErrors1.symbols
++++ new.genericRecursiveImplicitConstructorErrors1.symbols
+@@= skipped -14, +14 lines =@@
+ >PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors1.ts, 0, 34))
+ 
+   public addSpecialization<A,B,C>(signature: PullSignatureSymbol<A,B,C>, typeArguments: PullTypeSymbol<any,any,any>[]): void;
+->addSpecialization : Symbol(PullSignatureSymbol.addSpecialization, Decl(genericRecursiveImplicitConstructorErrors1.ts, 2, 56))
++>addSpecialization : Symbol(addSpecialization, Decl(genericRecursiveImplicitConstructorErrors1.ts, 2, 56))
+ >A : Symbol(A, Decl(genericRecursiveImplicitConstructorErrors1.ts, 3, 27))
+ >B : Symbol(B, Decl(genericRecursiveImplicitConstructorErrors1.ts, 3, 29))
+ >C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors1.ts, 3, 31))
+@@= skipped -20, +20 lines =@@
+ >PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors1.ts, 0, 34))
+ 
+     public findTypeParameter<A,B,C>(name: string): PullTypeParameterSymbol<A,B,C>;
+->findTypeParameter : Symbol(PullTypeSymbol.findTypeParameter, Decl(genericRecursiveImplicitConstructorErrors1.ts, 5, 51))
++>findTypeParameter : Symbol(findTypeParameter, Decl(genericRecursiveImplicitConstructorErrors1.ts, 5, 51))
+ >A : Symbol(A, Decl(genericRecursiveImplicitConstructorErrors1.ts, 6, 29))
+ >B : Symbol(B, Decl(genericRecursiveImplicitConstructorErrors1.ts, 6, 31))
+ >C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors1.ts, 6, 33))

@@ -1,0 +1,54 @@
+--- old.esDecorators-classDeclaration-outerThisReference(target=es2021).symbols
++++ new.esDecorators-classDeclaration-outerThisReference(target=es2021).symbols
+@@= skipped -19, +19 lines =@@
+ >this : Symbol(globalThis)
+ 
+     b = 2;
+->b : Symbol(A.b, Decl(esDecorators-classDeclaration-outerThisReference.ts, 6, 9))
++>b : Symbol(b, Decl(esDecorators-classDeclaration-outerThisReference.ts, 6, 9))
+ }
+ 
+ // `this` should point to the outer `this`, and maintain the correct evaluation order with respect to computed
+@@= skipped -15, +15 lines =@@
+ 
+     // @ts-ignore
+     [f(this)] = 1;
+->[f(this)] : Symbol(B[f(this)], Decl(esDecorators-classDeclaration-outerThisReference.ts, 15, 9))
++>[f(this)] : Symbol([f(this)], Decl(esDecorators-classDeclaration-outerThisReference.ts, 15, 9))
+ >f : Symbol(f, Decl(esDecorators-classDeclaration-outerThisReference.ts, 2, 11))
+ >this : Symbol(B, Decl(esDecorators-classDeclaration-outerThisReference.ts, 9, 1))
+ 
+@@= skipped -9, +9 lines =@@
+ >this : Symbol(globalThis)
+ 
+     b = 2;
+->b : Symbol(B.b, Decl(esDecorators-classDeclaration-outerThisReference.ts, 17, 18))
++>b : Symbol(b, Decl(esDecorators-classDeclaration-outerThisReference.ts, 17, 18))
+ 
+     // @ts-ignore
+     [f(this)] = 3;
+->[f(this)] : Symbol(B[f(this)], Decl(esDecorators-classDeclaration-outerThisReference.ts, 20, 10))
++>[f(this)] : Symbol([f(this)], Decl(esDecorators-classDeclaration-outerThisReference.ts, 20, 10))
+ >f : Symbol(f, Decl(esDecorators-classDeclaration-outerThisReference.ts, 2, 11))
+ >this : Symbol(B, Decl(esDecorators-classDeclaration-outerThisReference.ts, 9, 1))
+ }
+@@= skipped -19, +19 lines =@@
+ >C : Symbol(C, Decl(esDecorators-classDeclaration-outerThisReference.ts, 24, 1))
+ 
+     #a = 1;
+->#a : Symbol(C.#a, Decl(esDecorators-classDeclaration-outerThisReference.ts, 29, 9))
++>#a : Symbol(#a, Decl(esDecorators-classDeclaration-outerThisReference.ts, 29, 9))
+ 
+     @dec(this, (x: C) => x.#a)
+ >dec : Symbol(dec, Decl(esDecorators-classDeclaration-outerThisReference.ts, 0, 11))
+ >this : Symbol(globalThis)
+ >x : Symbol(x, Decl(esDecorators-classDeclaration-outerThisReference.ts, 32, 16))
+ >C : Symbol(C, Decl(esDecorators-classDeclaration-outerThisReference.ts, 24, 1))
+->x.#a : Symbol(C.#a, Decl(esDecorators-classDeclaration-outerThisReference.ts, 29, 9))
++>x.#a : Symbol(#a, Decl(esDecorators-classDeclaration-outerThisReference.ts, 29, 9))
+ >x : Symbol(x, Decl(esDecorators-classDeclaration-outerThisReference.ts, 32, 16))
+ 
+     b = 2;
+->b : Symbol(C.b, Decl(esDecorators-classDeclaration-outerThisReference.ts, 30, 11))
++>b : Symbol(b, Decl(esDecorators-classDeclaration-outerThisReference.ts, 30, 11))
+ }

@@ -1,0 +1,20 @@
+--- old.relatedViaDiscriminatedTypeNoError.symbols
++++ new.relatedViaDiscriminatedTypeNoError.symbols
+@@= skipped -4, +4 lines =@@
+ >Model : Symbol(Model, Decl(relatedViaDiscriminatedTypeNoError.ts, 0, 0))
+ 
+     constructor(public flag: boolean) {}
+->flag : Symbol(Model.flag, Decl(relatedViaDiscriminatedTypeNoError.ts, 1, 16))
++>flag : Symbol(flag, Decl(relatedViaDiscriminatedTypeNoError.ts, 1, 16))
+ }
+ 
+ type DiscriminatedUnion = { flag: true } | { flag: false };
+@@= skipped -14, +14 lines =@@
+ >DiscriminatedUnion : Symbol(DiscriminatedUnion, Decl(relatedViaDiscriminatedTypeNoError.ts, 2, 1))
+ 
+     constructor(public model: T) { }
+->model : Symbol(A.model, Decl(relatedViaDiscriminatedTypeNoError.ts, 6, 16))
++>model : Symbol(model, Decl(relatedViaDiscriminatedTypeNoError.ts, 6, 16))
+ >T : Symbol(T, Decl(relatedViaDiscriminatedTypeNoError.ts, 5, 8))
+ }
+ 

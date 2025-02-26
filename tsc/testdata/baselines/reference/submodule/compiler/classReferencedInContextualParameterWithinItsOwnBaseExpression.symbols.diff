@@ -1,0 +1,23 @@
+--- old.classReferencedInContextualParameterWithinItsOwnBaseExpression.symbols
++++ new.classReferencedInContextualParameterWithinItsOwnBaseExpression.symbols
+@@= skipped -14, +14 lines =@@
+ >A : Symbol(A, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 4, 17))
+ 
+   readonly pretty?: Pretty<A>;
+->pretty : Symbol(Schema.pretty, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 4, 21))
++>pretty : Symbol(pretty, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 4, 21))
+ >Pretty : Symbol(Pretty, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 0, 0))
+ >A : Symbol(A, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 4, 17))
+ }
+@@= skipped -80, +80 lines =@@
+     pretty: (a) => JSON.stringify(a),
+ >pretty : Symbol(pretty, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 33, 3))
+ >a : Symbol(a, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 34, 13))
+->JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>JSON.stringify : Symbol(stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>stringify : Symbol(stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 34, 13))
+ 
+   },

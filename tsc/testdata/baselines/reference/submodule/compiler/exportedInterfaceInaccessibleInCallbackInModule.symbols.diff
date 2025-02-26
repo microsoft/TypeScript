@@ -1,0 +1,11 @@
+--- old.exportedInterfaceInaccessibleInCallbackInModule.symbols
++++ new.exportedInterfaceInaccessibleInCallbackInModule.symbols
+@@= skipped -25, +25 lines =@@
+ 	
+     // removing this method fixes the error squiggle.....
+ 	public then<U>(success?: (value:V)=>TPromise<U>, error?: (err:any)=>TPromise<U>, progress?:ProgressCallback): TPromise<U>;
+->then : Symbol(TPromise.then, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 7, 119))
++>then : Symbol(then, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 7, 119))
+ >U : Symbol(U, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 10, 13))
+ >success : Symbol(success, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 10, 16))
+ >value : Symbol(value, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 10, 27))

@@ -1,0 +1,106 @@
+--- old.parserRealSource7.symbols
++++ new.parserRealSource7.symbols
+@@= skipped -12, +12 lines =@@
+ >Continuation : Symbol(Continuation, Decl(parserRealSource7.ts, 5, 19))
+ 
+         public exceptionBlock = -1;
+->exceptionBlock : Symbol(Continuation.exceptionBlock, Decl(parserRealSource7.ts, 6, 31))
++>exceptionBlock : Symbol(exceptionBlock, Decl(parserRealSource7.ts, 6, 31))
+ 
+         constructor (public normalBlock: number) { }
+->normalBlock : Symbol(Continuation.normalBlock, Decl(parserRealSource7.ts, 8, 21))
++>normalBlock : Symbol(normalBlock, Decl(parserRealSource7.ts, 8, 21))
+     }
+ 
+     function getBaseTypeLinks(bases: ASTList, baseTypeLinks: TypeLink[]) {
+@@= skipped -50, +50 lines =@@
+ 
+                 baseTypeLinks[baseTypeLinks.length] = typeLink;
+ >baseTypeLinks : Symbol(baseTypeLinks, Decl(parserRealSource7.ts, 11, 45))
+->baseTypeLinks.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>baseTypeLinks.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >baseTypeLinks : Symbol(baseTypeLinks, Decl(parserRealSource7.ts, 11, 45))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >typeLink : Symbol(typeLink, Decl(parserRealSource7.ts, 20, 19))
+             }
+         }
+@@= skipped -177, +177 lines =@@
+ >IAliasScopeContext : Symbol(IAliasScopeContext, Decl(parserRealSource7.ts, 79, 34))
+ 
+         topLevelScope: ScopeChain;
+->topLevelScope : Symbol(IAliasScopeContext.topLevelScope, Decl(parserRealSource7.ts, 81, 41))
++>topLevelScope : Symbol(topLevelScope, Decl(parserRealSource7.ts, 81, 41))
+ >ScopeChain : Symbol(ScopeChain)
+ 
+         members: IHashTable;
+->members : Symbol(IAliasScopeContext.members, Decl(parserRealSource7.ts, 82, 34))
++>members : Symbol(members, Decl(parserRealSource7.ts, 82, 34))
+ >IHashTable : Symbol(IHashTable)
+ 
+         tcContext: TypeCollectionContext;
+->tcContext : Symbol(IAliasScopeContext.tcContext, Decl(parserRealSource7.ts, 83, 28))
++>tcContext : Symbol(tcContext, Decl(parserRealSource7.ts, 83, 28))
+ >TypeCollectionContext : Symbol(TypeCollectionContext)
+     }
+ 
+@@= skipped -69, +69 lines =@@
+ >id : Symbol(id, Decl(parserRealSource7.ts, 104, 31))
+ 
+                     if (context.members) {
+->context.members : Symbol(IAliasScopeContext.members, Decl(parserRealSource7.ts, 82, 34))
++>context.members : Symbol(members, Decl(parserRealSource7.ts, 82, 34))
+ >context : Symbol(context, Decl(parserRealSource7.ts, 97, 44))
+->members : Symbol(IAliasScopeContext.members, Decl(parserRealSource7.ts, 82, 34))
++>members : Symbol(members, Decl(parserRealSource7.ts, 82, 34))
+ 
+                         return context.members.lookup(name);
+->context.members : Symbol(IAliasScopeContext.members, Decl(parserRealSource7.ts, 82, 34))
++>context.members : Symbol(members, Decl(parserRealSource7.ts, 82, 34))
+ >context : Symbol(context, Decl(parserRealSource7.ts, 97, 44))
+->members : Symbol(IAliasScopeContext.members, Decl(parserRealSource7.ts, 82, 34))
++>members : Symbol(members, Decl(parserRealSource7.ts, 82, 34))
+ >name : Symbol(name, Decl(parserRealSource7.ts, 101, 19))
+                     }
+                     else {
+                         return findTypeSymbolInScopeChain(name, context.topLevelScope);
+ >findTypeSymbolInScopeChain : Symbol(findTypeSymbolInScopeChain, Decl(parserRealSource7.ts, 85, 5))
+ >name : Symbol(name, Decl(parserRealSource7.ts, 101, 19))
+->context.topLevelScope : Symbol(IAliasScopeContext.topLevelScope, Decl(parserRealSource7.ts, 81, 41))
++>context.topLevelScope : Symbol(topLevelScope, Decl(parserRealSource7.ts, 81, 41))
+ >context : Symbol(context, Decl(parserRealSource7.ts, 97, 44))
+->topLevelScope : Symbol(IAliasScopeContext.topLevelScope, Decl(parserRealSource7.ts, 81, 41))
++>topLevelScope : Symbol(topLevelScope, Decl(parserRealSource7.ts, 81, 41))
+                     }
+                 }
+ 
+@@= skipped -25, +25 lines =@@
+ 
+                     symbol = context.tcContext.checker.findSymbolForDynamicModule(name, context.tcContext.script.locationInfo.filename, findSym);
+ >symbol : Symbol(symbol, Decl(parserRealSource7.ts, 98, 11))
+->context.tcContext : Symbol(IAliasScopeContext.tcContext, Decl(parserRealSource7.ts, 83, 28))
++>context.tcContext : Symbol(tcContext, Decl(parserRealSource7.ts, 83, 28))
+ >context : Symbol(context, Decl(parserRealSource7.ts, 97, 44))
+->tcContext : Symbol(IAliasScopeContext.tcContext, Decl(parserRealSource7.ts, 83, 28))
++>tcContext : Symbol(tcContext, Decl(parserRealSource7.ts, 83, 28))
+ >name : Symbol(name, Decl(parserRealSource7.ts, 101, 19))
+->context.tcContext : Symbol(IAliasScopeContext.tcContext, Decl(parserRealSource7.ts, 83, 28))
++>context.tcContext : Symbol(tcContext, Decl(parserRealSource7.ts, 83, 28))
+ >context : Symbol(context, Decl(parserRealSource7.ts, 97, 44))
+->tcContext : Symbol(IAliasScopeContext.tcContext, Decl(parserRealSource7.ts, 83, 28))
++>tcContext : Symbol(tcContext, Decl(parserRealSource7.ts, 83, 28))
+ >findSym : Symbol(findSym, Decl(parserRealSource7.ts, 104, 19))
+                 }
+                 else {
+@@= skipped -65, +65 lines =@@
+ >members : Symbol(members, Decl(parserRealSource7.ts, 139, 19))
+ 
+                     context.members = members.publicMembers;
+->context.members : Symbol(IAliasScopeContext.members, Decl(parserRealSource7.ts, 82, 34))
++>context.members : Symbol(members, Decl(parserRealSource7.ts, 82, 34))
+ >context : Symbol(context, Decl(parserRealSource7.ts, 97, 44))
+->members : Symbol(IAliasScopeContext.members, Decl(parserRealSource7.ts, 82, 34))
++>members : Symbol(members, Decl(parserRealSource7.ts, 82, 34))
+ >members : Symbol(members, Decl(parserRealSource7.ts, 139, 19))
+                 }
+             }

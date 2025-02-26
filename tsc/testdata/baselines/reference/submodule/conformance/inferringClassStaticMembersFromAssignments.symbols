@@ -1,0 +1,108 @@
+//// [tests/cases/conformance/salsa/inferringClassStaticMembersFromAssignments.ts] ////
+
+=== a.js ===
+export class C1 { }
+>C1 : Symbol(C1, Decl(a.js, 0, 0))
+
+C1.staticProp = 0;
+>C1 : Symbol(C1, Decl(a.js, 0, 0))
+
+export function F1() { }
+>F1 : Symbol(F1, Decl(a.js, 1, 18))
+
+F1.staticProp = 0;
+>F1.staticProp : Symbol(staticProp, Decl(a.js, 3, 24))
+>F1 : Symbol(F1, Decl(a.js, 1, 18))
+>staticProp : Symbol(staticProp, Decl(a.js, 3, 24))
+
+export var C2 = class { };
+>C2 : Symbol(C2, Decl(a.js, 6, 10))
+
+C2.staticProp = 0;
+>C2 : Symbol(C2, Decl(a.js, 6, 10))
+
+export let F2 = function () { };
+>F2 : Symbol(F2, Decl(a.js, 9, 10))
+
+F2.staticProp = 0;
+>F2 : Symbol(F2, Decl(a.js, 9, 10))
+
+=== global.js ===
+class C3 { }
+>C3 : Symbol(C3, Decl(global.js, 0, 0))
+
+C3.staticProp = 0;
+>C3 : Symbol(C3, Decl(global.js, 0, 0))
+
+function F3() { }
+>F3 : Symbol(F3, Decl(global.js, 1, 18))
+
+F3.staticProp = 0;
+>F3.staticProp : Symbol(staticProp, Decl(global.js, 3, 17))
+>F3 : Symbol(F3, Decl(global.js, 1, 18))
+>staticProp : Symbol(staticProp, Decl(global.js, 3, 17))
+
+var C4 = class { };
+>C4 : Symbol(C4, Decl(global.js, 6, 3))
+
+C4.staticProp = 0;
+>C4 : Symbol(C4, Decl(global.js, 6, 3))
+
+let F4 = function () { };
+>F4 : Symbol(F4, Decl(global.js, 9, 3))
+
+F4.staticProp = 0;
+>F4 : Symbol(F4, Decl(global.js, 9, 3))
+
+=== b.ts ===
+import * as a from "./a";
+>a : Symbol(a, Decl(b.ts, 0, 6))
+
+var n: number;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+
+var n = a.C1.staticProp;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+>a.C1 : Symbol(C1, Decl(a.js, 0, 0))
+>a : Symbol(a, Decl(b.ts, 0, 6))
+>C1 : Symbol(C1, Decl(a.js, 0, 0))
+
+var n = a.C2.staticProp;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+>a.C2 : Symbol(C2, Decl(a.js, 6, 10))
+>a : Symbol(a, Decl(b.ts, 0, 6))
+>C2 : Symbol(C2, Decl(a.js, 6, 10))
+
+var n = a.F1.staticProp;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+>a.F1.staticProp : Symbol(staticProp, Decl(a.js, 3, 24))
+>a.F1 : Symbol(F1, Decl(a.js, 1, 18))
+>a : Symbol(a, Decl(b.ts, 0, 6))
+>F1 : Symbol(F1, Decl(a.js, 1, 18))
+>staticProp : Symbol(staticProp, Decl(a.js, 3, 24))
+
+var n = a.F2.staticProp;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+>a.F2 : Symbol(F2, Decl(a.js, 9, 10))
+>a : Symbol(a, Decl(b.ts, 0, 6))
+>F2 : Symbol(F2, Decl(a.js, 9, 10))
+
+
+var n = C3.staticProp;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+>C3 : Symbol(C3, Decl(global.js, 0, 0))
+
+var n = C4.staticProp;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+>C4 : Symbol(C4, Decl(global.js, 6, 3))
+
+var n = F3.staticProp;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+>F3.staticProp : Symbol(staticProp, Decl(global.js, 3, 17))
+>F3 : Symbol(F3, Decl(global.js, 1, 18))
+>staticProp : Symbol(staticProp, Decl(global.js, 3, 17))
+
+var n = F4.staticProp;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+>F4 : Symbol(F4, Decl(global.js, 9, 3))
+

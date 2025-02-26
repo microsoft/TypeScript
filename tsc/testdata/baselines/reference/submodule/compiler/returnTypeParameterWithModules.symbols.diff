@@ -1,0 +1,41 @@
+--- old.returnTypeParameterWithModules.symbols
++++ new.returnTypeParameterWithModules.symbols
+@@= skipped -13, +13 lines =@@
+ >A : Symbol(A, Decl(returnTypeParameterWithModules.ts, 1, 27))
+ 
+         return Array.prototype.reduce.apply(ar, e ? [f, e] : [f]);
+->Array.prototype.reduce.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+->Array.prototype.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->Array.prototype : Symbol(ArrayConstructor.prototype, Decl(lib.es5.d.ts, --, --))
++>Array.prototype.reduce.apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
++>Array.prototype.reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Array.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->prototype : Symbol(ArrayConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
++>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
+ >ar : Symbol(ar, Decl(returnTypeParameterWithModules.ts, 1, 30))
+ >e : Symbol(e, Decl(returnTypeParameterWithModules.ts, 1, 36))
+ >f : Symbol(f, Decl(returnTypeParameterWithModules.ts, 1, 33))
+@@= skipped -20, +20 lines =@@
+ 
+   import A = M1
+ >A : Symbol(A, Decl(returnTypeParameterWithModules.ts, 5, 11))
+->M1 : Symbol(A, Decl(returnTypeParameterWithModules.ts, 0, 0))
++>M1 : Symbol(M1, Decl(returnTypeParameterWithModules.ts, 0, 0))
+ 
+   export function compose() {
+ >compose : Symbol(compose, Decl(returnTypeParameterWithModules.ts, 6, 15))
+ 
+         A.reduce(arguments, compose2);
+->A.reduce : Symbol(A.reduce, Decl(returnTypeParameterWithModules.ts, 0, 11))
++>A.reduce : Symbol(reduce, Decl(returnTypeParameterWithModules.ts, 0, 11))
+ >A : Symbol(A, Decl(returnTypeParameterWithModules.ts, 5, 11))
+->reduce : Symbol(A.reduce, Decl(returnTypeParameterWithModules.ts, 0, 11))
++>reduce : Symbol(reduce, Decl(returnTypeParameterWithModules.ts, 0, 11))
+ >arguments : Symbol(arguments)
+ >compose2 : Symbol(compose2, Decl(returnTypeParameterWithModules.ts, 9, 6))
+ 

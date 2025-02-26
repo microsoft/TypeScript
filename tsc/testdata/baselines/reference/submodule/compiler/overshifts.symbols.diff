@@ -1,0 +1,110 @@
+--- old.overshifts.symbols
++++ new.overshifts.symbols
+@@= skipped -106, +106 lines =@@
+ >One : Symbol(One, Decl(overshifts.ts, 53, 13))
+ 
+     A = 1 << 1, // ok
+->A : Symbol(One.A, Decl(overshifts.ts, 55, 10))
++>A : Symbol(A, Decl(overshifts.ts, 55, 10))
+ 
+     B = 1 << 32, // overshift
+->B : Symbol(One.B, Decl(overshifts.ts, 56, 15))
++>B : Symbol(B, Decl(overshifts.ts, 56, 15))
+ 
+     C = 1 << 123,
+->C : Symbol(One.C, Decl(overshifts.ts, 57, 16))
++>C : Symbol(C, Decl(overshifts.ts, 57, 16))
+ 
+     D = 1 << 1024,
+->D : Symbol(One.D, Decl(overshifts.ts, 58, 17))
++>D : Symbol(D, Decl(overshifts.ts, 58, 17))
+ 
+     E = 1 << -1, // OK-ish
+->E : Symbol(One.E, Decl(overshifts.ts, 59, 18))
++>E : Symbol(E, Decl(overshifts.ts, 59, 18))
+ 
+     F = 1 << -32, // backwards overshift
+->F : Symbol(One.F, Decl(overshifts.ts, 60, 16))
++>F : Symbol(F, Decl(overshifts.ts, 60, 16))
+ 
+     G = 1 << -123,
+->G : Symbol(One.G, Decl(overshifts.ts, 61, 17))
++>G : Symbol(G, Decl(overshifts.ts, 61, 17))
+ 
+     H = 1 << -1024,
+->H : Symbol(One.H, Decl(overshifts.ts, 62, 18))
++>H : Symbol(H, Decl(overshifts.ts, 62, 18))
+ }
+ 
+ enum Two {
+ >Two : Symbol(Two, Decl(overshifts.ts, 64, 1))
+ 
+     A = 0xFF_FF_FF_FF >> 1, // ok
+->A : Symbol(Two.A, Decl(overshifts.ts, 66, 10))
++>A : Symbol(A, Decl(overshifts.ts, 66, 10))
+ 
+     B = 0xFF_FF_FF_FF >> 32, // overshift
+->B : Symbol(Two.B, Decl(overshifts.ts, 67, 27))
++>B : Symbol(B, Decl(overshifts.ts, 67, 27))
+ 
+     C = 0xFF_FF_FF_FF >> 123,
+->C : Symbol(Two.C, Decl(overshifts.ts, 68, 28))
++>C : Symbol(C, Decl(overshifts.ts, 68, 28))
+ 
+     D = 0xFF_FF_FF_FF >> 1024,
+->D : Symbol(Two.D, Decl(overshifts.ts, 69, 29))
++>D : Symbol(D, Decl(overshifts.ts, 69, 29))
+ 
+     E = 0xFF_FF_FF_FF >> -1, // OK-ish
+->E : Symbol(Two.E, Decl(overshifts.ts, 70, 30))
++>E : Symbol(E, Decl(overshifts.ts, 70, 30))
+ 
+     F = 0xFF_FF_FF_FF >> -32, // backwards overshift
+->F : Symbol(Two.F, Decl(overshifts.ts, 71, 28))
++>F : Symbol(F, Decl(overshifts.ts, 71, 28))
+ 
+     G = 0xFF_FF_FF_FF >> -123,
+->G : Symbol(Two.G, Decl(overshifts.ts, 72, 29))
++>G : Symbol(G, Decl(overshifts.ts, 72, 29))
+ 
+     H = 0xFF_FF_FF_FF >> -1024,
+->H : Symbol(Two.H, Decl(overshifts.ts, 73, 30))
++>H : Symbol(H, Decl(overshifts.ts, 73, 30))
+ }
+ 
+ enum Three {
+ >Three : Symbol(Three, Decl(overshifts.ts, 75, 1))
+ 
+     A = 0xFF_FF_FF_FF >>> 1, // ok
+->A : Symbol(Three.A, Decl(overshifts.ts, 77, 12))
++>A : Symbol(A, Decl(overshifts.ts, 77, 12))
+ 
+     B = 0xFF_FF_FF_FF >>> 32, // overshift
+->B : Symbol(Three.B, Decl(overshifts.ts, 78, 28))
++>B : Symbol(B, Decl(overshifts.ts, 78, 28))
+ 
+     C = 0xFF_FF_FF_FF >>> 123,
+->C : Symbol(Three.C, Decl(overshifts.ts, 79, 29))
++>C : Symbol(C, Decl(overshifts.ts, 79, 29))
+ 
+     D = 0xFF_FF_FF_FF >>> 1024,
+->D : Symbol(Three.D, Decl(overshifts.ts, 80, 30))
++>D : Symbol(D, Decl(overshifts.ts, 80, 30))
+ 
+     E = 0xFF_FF_FF_FF >>> -1, // OK-ish
+->E : Symbol(Three.E, Decl(overshifts.ts, 81, 31))
++>E : Symbol(E, Decl(overshifts.ts, 81, 31))
+ 
+     F = 0xFF_FF_FF_FF >>> -32, // backwards overshift
+->F : Symbol(Three.F, Decl(overshifts.ts, 82, 29))
++>F : Symbol(F, Decl(overshifts.ts, 82, 29))
+ 
+     G = 0xFF_FF_FF_FF >>> -123,
+->G : Symbol(Three.G, Decl(overshifts.ts, 83, 30))
++>G : Symbol(G, Decl(overshifts.ts, 83, 30))
+ 
+     H = 0xFF_FF_FF_FF >>> -1024,
+->H : Symbol(Three.H, Decl(overshifts.ts, 84, 31))
++>H : Symbol(H, Decl(overshifts.ts, 84, 31))
+ }
+ 

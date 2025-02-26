@@ -1,0 +1,11 @@
+--- old.tsxUnionSpread.symbols
++++ new.tsxUnionSpread.symbols
+@@= skipped -26, +26 lines =@@
+ >info : Symbol(info, Decl(index.tsx, 8, 25))
+ >AnimalInfo : Symbol(AnimalInfo, Decl(index.tsx, 5, 39))
+ >JSX : Symbol(JSX, Decl(index.tsx, 0, 0))
+->Element : Symbol(JSX.Element, Decl(index.tsx, 0, 15))
++>Element : Symbol(Element, Decl(index.tsx, 0, 15))
+ 
+     return undefined as any;
+ >undefined : Symbol(undefined)

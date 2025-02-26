@@ -1,0 +1,39 @@
+--- old.incrementOperatorWithNumberTypeInvalidOperations.symbols
++++ new.incrementOperatorWithNumberTypeInvalidOperations.symbols
+@@= skipped -14, +14 lines =@@
+ >A : Symbol(A, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 4, 36))
+ 
+     public a: number;
+->a : Symbol(A.a, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 6, 9))
++>a : Symbol(a, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 6, 9))
+ 
+     static foo() { return 1; }
+->foo : Symbol(A.foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 7, 21))
++>foo : Symbol(foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 7, 21))
+ }
+ module M {
+ >M : Symbol(M, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 9, 1))
+@@= skipped -63, +63 lines =@@
+ 
+ var ResultIsNumber10 = ++A.foo();
+ >ResultIsNumber10 : Symbol(ResultIsNumber10, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 31, 3))
+->A.foo : Symbol(A.foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 7, 21))
++>A.foo : Symbol(foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 7, 21))
+ >A : Symbol(A, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 4, 36))
+->foo : Symbol(A.foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 7, 21))
++>foo : Symbol(foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 7, 21))
+ 
+ var ResultIsNumber11 = ++(NUMBER + NUMBER);
+ >ResultIsNumber11 : Symbol(ResultIsNumber11, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 32, 3))
+@@= skipped -15, +15 lines =@@
+ 
+ var ResultIsNumber13 = A.foo()++;
+ >ResultIsNumber13 : Symbol(ResultIsNumber13, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 35, 3))
+->A.foo : Symbol(A.foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 7, 21))
++>A.foo : Symbol(foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 7, 21))
+ >A : Symbol(A, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 4, 36))
+->foo : Symbol(A.foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 7, 21))
++>foo : Symbol(foo, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 7, 21))
+ 
+ var ResultIsNumber14 = (NUMBER + NUMBER)++;
+ >ResultIsNumber14 : Symbol(ResultIsNumber14, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 36, 3))

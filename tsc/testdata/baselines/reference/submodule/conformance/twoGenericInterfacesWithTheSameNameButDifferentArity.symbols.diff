@@ -1,0 +1,74 @@
+--- old.twoGenericInterfacesWithTheSameNameButDifferentArity.symbols
++++ new.twoGenericInterfacesWithTheSameNameButDifferentArity.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 0, 12), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 4, 12))
+ 
+     x: T;
+->x : Symbol(A.x, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 0, 16))
++>x : Symbol(x, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 0, 16))
+ >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 0, 12), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 4, 12))
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ >U : Symbol(U, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 4, 14))
+ 
+     y: T;
+->y : Symbol(A.y, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 4, 19))
++>y : Symbol(y, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 4, 19))
+ >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 0, 12), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 4, 12))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 9, 16), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 13, 16))
+ 
+         x: T;
+->x : Symbol(A.x, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 9, 20))
++>x : Symbol(x, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 9, 20))
+ >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 9, 16), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 13, 16))
+     }
+ 
+@@= skipped -10, +10 lines =@@
+ >U : Symbol(U, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 13, 18))
+ 
+         y: T;
+->y : Symbol(A.y, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 13, 23))
++>y : Symbol(y, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 13, 23))
+ >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 9, 16), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 13, 16))
+     }
+ }
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 19, 16))
+ 
+         x: T;
+->x : Symbol(A.x, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 19, 20))
++>x : Symbol(x, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 19, 20))
+ >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 19, 16))
+     }
+ }
+@@= skipped -14, +14 lines =@@
+ >U : Symbol(U, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 25, 18))
+ 
+         y: T;
+->y : Symbol(A.y, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 25, 23))
++>y : Symbol(y, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 25, 23))
+ >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 25, 16))
+     }
+ }
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 31, 23), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 37, 23))
+ 
+         x: T;
+->x : Symbol(A.x, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 31, 27))
++>x : Symbol(x, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 31, 27))
+ >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 31, 23), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 37, 23))
+     }
+ }
+@@= skipped -14, +14 lines =@@
+ >U : Symbol(U, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 37, 25))
+ 
+         y: T;
+->y : Symbol(A.y, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 37, 30))
++>y : Symbol(y, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 37, 30))
+ >T : Symbol(T, Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 31, 23), Decl(twoGenericInterfacesWithTheSameNameButDifferentArity.ts, 37, 23))
+     }
+ }

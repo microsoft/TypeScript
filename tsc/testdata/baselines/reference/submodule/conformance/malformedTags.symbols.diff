@@ -1,0 +1,12 @@
+--- old.malformedTags.symbols
++++ new.malformedTags.symbols
+@@= skipped -7, +7 lines =@@
+  */
+ var isArray = Array.isArray;
+ >isArray : Symbol(isArray, Decl(myFile02.js, 5, 3))
+->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>Array.isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ 

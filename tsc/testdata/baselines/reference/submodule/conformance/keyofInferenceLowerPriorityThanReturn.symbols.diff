@@ -1,0 +1,83 @@
+--- old.keyofInferenceLowerPriorityThanReturn.symbols
++++ new.keyofInferenceLowerPriorityThanReturn.symbols
+@@= skipped -5, +5 lines =@@
+ >Write : Symbol(Write, Decl(keyofInferenceLowerPriorityThanReturn.ts, 0, 0))
+ 
+     protected dummy: Write;
+->dummy : Symbol(Write.dummy, Decl(keyofInferenceLowerPriorityThanReturn.ts, 1, 21))
++>dummy : Symbol(dummy, Decl(keyofInferenceLowerPriorityThanReturn.ts, 1, 21))
+ >Write : Symbol(Write, Decl(keyofInferenceLowerPriorityThanReturn.ts, 0, 0))
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ >a : Symbol(a, Decl(keyofInferenceLowerPriorityThanReturn.ts, 5, 20))
+ 
+     protected dummy: [Col<s, a>, s, a];
+->dummy : Symbol(Col.dummy, Decl(keyofInferenceLowerPriorityThanReturn.ts, 5, 25))
++>dummy : Symbol(dummy, Decl(keyofInferenceLowerPriorityThanReturn.ts, 5, 25))
+ >Col : Symbol(Col, Decl(keyofInferenceLowerPriorityThanReturn.ts, 3, 1))
+ >s : Symbol(s, Decl(keyofInferenceLowerPriorityThanReturn.ts, 5, 18))
+ >a : Symbol(a, Decl(keyofInferenceLowerPriorityThanReturn.ts, 5, 20))
+@@= skipped -14, +14 lines =@@
+ >Def : Symbol(Def, Decl(keyofInferenceLowerPriorityThanReturn.ts, 9, 24))
+ 
+     protected dummy: [Table<Req, Def>, Req, Def];
+->dummy : Symbol(Table.dummy, Decl(keyofInferenceLowerPriorityThanReturn.ts, 9, 31))
++>dummy : Symbol(dummy, Decl(keyofInferenceLowerPriorityThanReturn.ts, 9, 31))
+ >Table : Symbol(Table, Decl(keyofInferenceLowerPriorityThanReturn.ts, 7, 1))
+ >Req : Symbol(Req, Decl(keyofInferenceLowerPriorityThanReturn.ts, 9, 20))
+ >Def : Symbol(Def, Decl(keyofInferenceLowerPriorityThanReturn.ts, 9, 24))
+@@= skipped -37, +37 lines =@@
+ >Cols : Symbol(Cols, Decl(keyofInferenceLowerPriorityThanReturn.ts, 19, 29))
+ 
+     public static tableColumns<Cols>(cols: (keyof Cols)[]): ConflictTarget<Cols>;
+->tableColumns : Symbol(ConflictTarget.tableColumns, Decl(keyofInferenceLowerPriorityThanReturn.ts, 19, 36))
++>tableColumns : Symbol(tableColumns, Decl(keyofInferenceLowerPriorityThanReturn.ts, 19, 36))
+ >Cols : Symbol(Cols, Decl(keyofInferenceLowerPriorityThanReturn.ts, 20, 31))
+ >cols : Symbol(cols, Decl(keyofInferenceLowerPriorityThanReturn.ts, 20, 37))
+ >Cols : Symbol(Cols, Decl(keyofInferenceLowerPriorityThanReturn.ts, 20, 31))
+@@= skipped -8, +8 lines =@@
+ >Cols : Symbol(Cols, Decl(keyofInferenceLowerPriorityThanReturn.ts, 20, 31))
+ 
+     protected dummy: [ConflictTarget<Cols>, Cols];
+->dummy : Symbol(ConflictTarget.dummy, Decl(keyofInferenceLowerPriorityThanReturn.ts, 20, 81))
++>dummy : Symbol(dummy, Decl(keyofInferenceLowerPriorityThanReturn.ts, 20, 81))
+ >ConflictTarget : Symbol(ConflictTarget, Decl(keyofInferenceLowerPriorityThanReturn.ts, 17, 6))
+ >Cols : Symbol(Cols, Decl(keyofInferenceLowerPriorityThanReturn.ts, 19, 29))
+ >Cols : Symbol(Cols, Decl(keyofInferenceLowerPriorityThanReturn.ts, 19, 29))
+@@= skipped -18, +18 lines =@@
+ >BookReq : Symbol(BookReq, Decl(keyofInferenceLowerPriorityThanReturn.ts, 26, 54))
+ 
+     readonly title: string;
+->title : Symbol(BookReq.title, Decl(keyofInferenceLowerPriorityThanReturn.ts, 28, 19))
++>title : Symbol(title, Decl(keyofInferenceLowerPriorityThanReturn.ts, 28, 19))
+ 
+     readonly serial: number;
+->serial : Symbol(BookReq.serial, Decl(keyofInferenceLowerPriorityThanReturn.ts, 29, 27))
++>serial : Symbol(serial, Decl(keyofInferenceLowerPriorityThanReturn.ts, 29, 27))
+ }
+ 
+ interface BookDef {
+ >BookDef : Symbol(BookDef, Decl(keyofInferenceLowerPriorityThanReturn.ts, 31, 1))
+ 
+     readonly author: string;
+->author : Symbol(BookDef.author, Decl(keyofInferenceLowerPriorityThanReturn.ts, 33, 19))
++>author : Symbol(author, Decl(keyofInferenceLowerPriorityThanReturn.ts, 33, 19))
+ 
+     readonly numPages: number | null;
+->numPages : Symbol(BookDef.numPages, Decl(keyofInferenceLowerPriorityThanReturn.ts, 34, 28))
++>numPages : Symbol(numPages, Decl(keyofInferenceLowerPriorityThanReturn.ts, 34, 28))
+ }
+ 
+ 
+@@= skipped -40, +40 lines =@@
+     insertOnConflictDoNothing(bookTable, ConflictTarget.tableColumns(["serial"]));  // <-- No error here; should use the type inferred for the return type of `tableColumns`
+ >insertOnConflictDoNothing : Symbol(insertOnConflictDoNothing, Decl(keyofInferenceLowerPriorityThanReturn.ts, 36, 1))
+ >bookTable : Symbol(bookTable, Decl(keyofInferenceLowerPriorityThanReturn.ts, 26, 5))
+->ConflictTarget.tableColumns : Symbol(ConflictTarget.tableColumns, Decl(keyofInferenceLowerPriorityThanReturn.ts, 19, 36))
++>ConflictTarget.tableColumns : Symbol(tableColumns, Decl(keyofInferenceLowerPriorityThanReturn.ts, 19, 36))
+ >ConflictTarget : Symbol(ConflictTarget, Decl(keyofInferenceLowerPriorityThanReturn.ts, 17, 6))
+->tableColumns : Symbol(ConflictTarget.tableColumns, Decl(keyofInferenceLowerPriorityThanReturn.ts, 19, 36))
++>tableColumns : Symbol(tableColumns, Decl(keyofInferenceLowerPriorityThanReturn.ts, 19, 36))
+ }
+ 

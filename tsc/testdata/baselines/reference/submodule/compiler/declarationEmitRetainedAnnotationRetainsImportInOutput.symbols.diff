@@ -1,0 +1,20 @@
+--- old.declarationEmitRetainedAnnotationRetainsImportInOutput.symbols
++++ new.declarationEmitRetainedAnnotationRetainsImportInOutput.symbols
+@@= skipped -24, +24 lines =@@
+ >E : Symbol(E, Decl(index.ts, 2, 20))
+ >i : Symbol(i, Decl(index.ts, 2, 23))
+ >E : Symbol(E, Decl(index.ts, 0, 6))
+->Whatever : Symbol(E.Whatever, Decl(index.d.ts, 0, 0))
++>Whatever : Symbol(Whatever, Decl(index.d.ts, 0, 0))
+ >E : Symbol(E, Decl(index.ts, 2, 20))
+ >E : Symbol(E, Decl(index.ts, 0, 6))
+->Whatever : Symbol(E.Whatever, Decl(index.d.ts, 0, 0))
++>Whatever : Symbol(Whatever, Decl(index.d.ts, 0, 0))
+ >E : Symbol(E, Decl(index.ts, 2, 20))
+->E.something : Symbol(E.something, Decl(index.d.ts, 0, 33))
++>E.something : Symbol(something, Decl(index.d.ts, 0, 33))
+ >E : Symbol(E, Decl(index.ts, 0, 6))
+->something : Symbol(E.something, Decl(index.d.ts, 0, 33))
++>something : Symbol(something, Decl(index.d.ts, 0, 33))
+ >i : Symbol(i, Decl(index.ts, 2, 23))
+ 

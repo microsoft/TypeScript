@@ -1,0 +1,9 @@
+--- old.quotedFunctionName2.symbols
++++ new.quotedFunctionName2.symbols
+@@= skipped -4, +4 lines =@@
+ >Test1 : Symbol(Test1, Decl(quotedFunctionName2.ts, 0, 0))
+ 
+   static "prop1"() { }
+->"prop1" : Symbol(Test1["prop1"], Decl(quotedFunctionName2.ts, 0, 13))
++>"prop1" : Symbol(prop1, Decl(quotedFunctionName2.ts, 0, 13))
+ }

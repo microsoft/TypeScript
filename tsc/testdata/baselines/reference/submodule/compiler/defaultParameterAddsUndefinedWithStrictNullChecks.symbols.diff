@@ -1,0 +1,62 @@
+--- old.defaultParameterAddsUndefinedWithStrictNullChecks.symbols
++++ new.defaultParameterAddsUndefinedWithStrictNullChecks.symbols
+@@= skipped -6, +6 lines =@@
+ >addUndefined2 : Symbol(addUndefined2, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 0, 31))
+ 
+     return addUndefined1.length + (addUndefined2 || 0);
+->addUndefined1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>addUndefined1.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >addUndefined1 : Symbol(addUndefined1, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 0, 11))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >addUndefined2 : Symbol(addUndefined2, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 0, 31))
+ }
+ function g(addUndefined = "J", addDefined: number) {
+@@= skipped -11, +11 lines =@@
+ >addDefined : Symbol(addDefined, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 3, 30))
+ 
+     return addUndefined.length + addDefined;
+->addUndefined.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>addUndefined.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >addUndefined : Symbol(addUndefined, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 3, 11))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >addDefined : Symbol(addDefined, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 3, 30))
+ }
+ let total = f() + f('a', 1) + f('b') + f(undefined, 2);
+@@= skipped -25, +25 lines =@@
+ >b : Symbol(b, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 9, 35))
+ 
+     x.length;
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 9, 14))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function foo2(x = "string", b: number) {
+@@= skipped -11, +11 lines =@@
+ >b : Symbol(b, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 13, 27))
+ 
+     x.length; // ok, should be string
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 13, 14))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function foo3(x: string | undefined = "string", b: number) {
+@@= skipped -11, +11 lines =@@
+ >b : Symbol(b, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 17, 47))
+ 
+     x.length; // ok, should be string
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 17, 14))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+     x = undefined;
+ >x : Symbol(x, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 17, 14))

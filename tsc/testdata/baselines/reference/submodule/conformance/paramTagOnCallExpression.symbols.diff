@@ -1,0 +1,11 @@
+--- old.paramTagOnCallExpression.symbols
++++ new.paramTagOnCallExpression.symbols
+@@= skipped -8, +8 lines =@@
+ // from util
+ /** @param {function} ctor - A big long explanation follows */
+ exports.inherits = factory('inherits')
+->exports.inherits : Symbol(inherits, Decl(a.js, 0, 0))
+->exports : Symbol(inherits, Decl(a.js, 0, 0))
+->inherits : Symbol(inherits, Decl(a.js, 0, 0))
+ >factory : Symbol(factory, Decl(decls.d.ts, 0, 0))
+ 

@@ -1,0 +1,24 @@
+--- old.staticMemberAccessOffDerivedType1.symbols
++++ new.staticMemberAccessOffDerivedType1.symbols
+@@= skipped -4, +4 lines =@@
+ >SomeBase : Symbol(SomeBase, Decl(staticMemberAccessOffDerivedType1.ts, 0, 0))
+ 
+     static GetNumber() {
+->GetNumber : Symbol(SomeBase.GetNumber, Decl(staticMemberAccessOffDerivedType1.ts, 0, 16))
++>GetNumber : Symbol(GetNumber, Decl(staticMemberAccessOffDerivedType1.ts, 0, 16))
+ 
+         return 2;
+     }
+@@= skipped -10, +10 lines =@@
+ >SomeBase : Symbol(SomeBase, Decl(staticMemberAccessOffDerivedType1.ts, 0, 0))
+ 
+     static SomeNumber = P.GetNumber();
+->SomeNumber : Symbol(P.SomeNumber, Decl(staticMemberAccessOffDerivedType1.ts, 5, 26))
+->P.GetNumber : Symbol(SomeBase.GetNumber, Decl(staticMemberAccessOffDerivedType1.ts, 0, 16))
++>SomeNumber : Symbol(SomeNumber, Decl(staticMemberAccessOffDerivedType1.ts, 5, 26))
++>P.GetNumber : Symbol(GetNumber, Decl(staticMemberAccessOffDerivedType1.ts, 0, 16))
+ >P : Symbol(P, Decl(staticMemberAccessOffDerivedType1.ts, 4, 1))
+->GetNumber : Symbol(SomeBase.GetNumber, Decl(staticMemberAccessOffDerivedType1.ts, 0, 16))
++>GetNumber : Symbol(GetNumber, Decl(staticMemberAccessOffDerivedType1.ts, 0, 16))
+ }
+ 

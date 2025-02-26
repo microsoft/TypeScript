@@ -1,0 +1,27 @@
+--- old.moduleAugmentationOfAlias.symbols
++++ new.moduleAugmentationOfAlias.symbols
+@@= skipped -9, +9 lines =@@
+ === /b.ts ===
+ export {};
+ declare module './a' {
+->'./a' : Symbol("/a", Decl(a.ts, 0, 0), Decl(b.ts, 0, 10))
++>'./a' : Symbol(""/a.ts"", Decl(a.ts, 0, 0), Decl(b.ts, 0, 10))
+ 
+     export default interface I { x: number; }
+ >I : Symbol(I, Decl(a.ts, 0, 0), Decl(b.ts, 1, 22))
+->x : Symbol(I.x, Decl(b.ts, 2, 32))
++>x : Symbol(x, Decl(b.ts, 2, 32))
+ }
+ 
+ === /c.ts ===
+@@= skipped -17, +17 lines =@@
+ >I : Symbol(I, Decl(c.ts, 0, 6))
+ 
+     i.x;
+->i.x : Symbol(I.x, Decl(b.ts, 2, 32))
++>i.x : Symbol(x, Decl(b.ts, 2, 32))
+ >i : Symbol(i, Decl(c.ts, 1, 11))
+->x : Symbol(I.x, Decl(b.ts, 2, 32))
++>x : Symbol(x, Decl(b.ts, 2, 32))
+ }
+ 

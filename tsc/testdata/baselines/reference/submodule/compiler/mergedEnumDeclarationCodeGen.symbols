@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/mergedEnumDeclarationCodeGen.ts] ////
+
+=== mergedEnumDeclarationCodeGen.ts ===
+enum E {
+>E : Symbol(E, Decl(mergedEnumDeclarationCodeGen.ts, 0, 0), Decl(mergedEnumDeclarationCodeGen.ts, 3, 1))
+
+    a,
+>a : Symbol(a, Decl(mergedEnumDeclarationCodeGen.ts, 0, 8))
+
+    b = a
+>b : Symbol(b, Decl(mergedEnumDeclarationCodeGen.ts, 1, 6))
+>a : Symbol(a, Decl(mergedEnumDeclarationCodeGen.ts, 0, 8))
+}
+enum E {
+>E : Symbol(E, Decl(mergedEnumDeclarationCodeGen.ts, 0, 0), Decl(mergedEnumDeclarationCodeGen.ts, 3, 1))
+
+    c = a
+>c : Symbol(c, Decl(mergedEnumDeclarationCodeGen.ts, 4, 8))
+>a : Symbol(a, Decl(mergedEnumDeclarationCodeGen.ts, 0, 8))
+}

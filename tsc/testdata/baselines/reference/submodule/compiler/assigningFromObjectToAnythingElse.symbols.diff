@@ -1,0 +1,24 @@
+--- old.assigningFromObjectToAnythingElse.symbols
++++ new.assigningFromObjectToAnythingElse.symbols
+@@= skipped -15, +15 lines =@@
+ var a: String = Object.create<Object>("");
+ >a : Symbol(a, Decl(assigningFromObjectToAnythingElse.ts, 4, 3))
+ >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+ var c: String = Object.create<Number>(1);
+ >c : Symbol(c, Decl(assigningFromObjectToAnythingElse.ts, 5, 3))
+ >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+ var w: Error = new Object();

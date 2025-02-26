@@ -1,0 +1,15 @@
+--- old.declFileAmbientExternalModuleWithSingleExportedModule.symbols
++++ new.declFileAmbientExternalModuleWithSingleExportedModule.symbols
+@@= skipped -7, +7 lines =@@
+ export var x: SubModule.m.m3.c;
+ >x : Symbol(x, Decl(declFileAmbientExternalModuleWithSingleExportedModule_1.ts, 2, 10))
+ >SubModule : Symbol(SubModule, Decl(declFileAmbientExternalModuleWithSingleExportedModule_1.ts, 0, 0))
+->m : Symbol(SubModule.m, Decl(declFileAmbientExternalModuleWithSingleExportedModule_0.ts, 0, 28))
+->m3 : Symbol(SubModule.m.m3, Decl(declFileAmbientExternalModuleWithSingleExportedModule_0.ts, 1, 21))
+->c : Symbol(SubModule.m.m3.c, Decl(declFileAmbientExternalModuleWithSingleExportedModule_0.ts, 2, 26))
++>m : Symbol(m, Decl(declFileAmbientExternalModuleWithSingleExportedModule_0.ts, 0, 28))
++>m3 : Symbol(m3, Decl(declFileAmbientExternalModuleWithSingleExportedModule_0.ts, 1, 21))
++>c : Symbol(c, Decl(declFileAmbientExternalModuleWithSingleExportedModule_0.ts, 2, 26))
+ 
+ 
+ === declFileAmbientExternalModuleWithSingleExportedModule_0.ts ===

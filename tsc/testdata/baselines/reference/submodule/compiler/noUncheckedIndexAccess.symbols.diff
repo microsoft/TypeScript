@@ -1,0 +1,84 @@
+--- old.noUncheckedIndexAccess.symbols
++++ new.noUncheckedIndexAccess.symbols
+@@= skipped -4, +4 lines =@@
+ >Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
+ 
+     Sausage,
+->Sausage : Symbol(Meat.Sausage, Decl(noUncheckedIndexAccess.ts, 0, 11))
++>Sausage : Symbol(Sausage, Decl(noUncheckedIndexAccess.ts, 0, 11))
+ 
+     Bacon
+->Bacon : Symbol(Meat.Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
++>Bacon : Symbol(Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
+   }
+   const sausage = Meat.Sausage
+ >sausage : Symbol(sausage, Decl(noUncheckedIndexAccess.ts, 4, 7))
+->Meat.Sausage : Symbol(Meat.Sausage, Decl(noUncheckedIndexAccess.ts, 0, 11))
++>Meat.Sausage : Symbol(Sausage, Decl(noUncheckedIndexAccess.ts, 0, 11))
+ >Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
+->Sausage : Symbol(Meat.Sausage, Decl(noUncheckedIndexAccess.ts, 0, 11))
++>Sausage : Symbol(Sausage, Decl(noUncheckedIndexAccess.ts, 0, 11))
+ 
+   const valueSausage = Meat[sausage]
+ >valueSausage : Symbol(valueSausage, Decl(noUncheckedIndexAccess.ts, 5, 7))
+@@= skipped -18, +18 lines =@@
+ 
+   const bacon = Meat.Bacon
+ >bacon : Symbol(bacon, Decl(noUncheckedIndexAccess.ts, 7, 7))
+->Meat.Bacon : Symbol(Meat.Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
++>Meat.Bacon : Symbol(Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
+ >Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
+->Bacon : Symbol(Meat.Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
++>Bacon : Symbol(Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
+ 
+   const valueBacon = Meat[bacon]
+ >valueBacon : Symbol(valueBacon, Decl(noUncheckedIndexAccess.ts, 8, 7))
+@@= skipped -12, +12 lines =@@
+   const union: Meat.Bacon | Meat.Sausage = Meat.Bacon
+ >union : Symbol(union, Decl(noUncheckedIndexAccess.ts, 10, 7))
+ >Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
+->Bacon : Symbol(Meat.Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
++>Bacon : Symbol(Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
+ >Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
+->Sausage : Symbol(Meat.Sausage, Decl(noUncheckedIndexAccess.ts, 0, 11))
+->Meat.Bacon : Symbol(Meat.Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
++>Sausage : Symbol(Sausage, Decl(noUncheckedIndexAccess.ts, 0, 11))
++>Meat.Bacon : Symbol(Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
+ >Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
+->Bacon : Symbol(Meat.Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
++>Bacon : Symbol(Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
+ 
+   const valueUnion = Meat[union]
+ >valueUnion : Symbol(valueUnion, Decl(noUncheckedIndexAccess.ts, 11, 7))
+@@= skipped -29, +29 lines =@@
+ >A : Symbol(A, Decl(noUncheckedIndexAccess.ts, 17, 37))
+ 
+     a, b, c
+->a : Symbol(A.a, Decl(noUncheckedIndexAccess.ts, 19, 10))
+->b : Symbol(A.b, Decl(noUncheckedIndexAccess.ts, 20, 6))
+->c : Symbol(A.c, Decl(noUncheckedIndexAccess.ts, 20, 9))
++>a : Symbol(a, Decl(noUncheckedIndexAccess.ts, 19, 10))
++>b : Symbol(b, Decl(noUncheckedIndexAccess.ts, 20, 6))
++>c : Symbol(c, Decl(noUncheckedIndexAccess.ts, 20, 9))
+   }
+   enum B {
+ >B : Symbol(B, Decl(noUncheckedIndexAccess.ts, 21, 3))
+ 
+     x, y, z
+->x : Symbol(B.x, Decl(noUncheckedIndexAccess.ts, 22, 10))
+->y : Symbol(B.y, Decl(noUncheckedIndexAccess.ts, 23, 6))
+->z : Symbol(B.z, Decl(noUncheckedIndexAccess.ts, 23, 9))
++>x : Symbol(x, Decl(noUncheckedIndexAccess.ts, 22, 10))
++>y : Symbol(y, Decl(noUncheckedIndexAccess.ts, 23, 6))
++>z : Symbol(z, Decl(noUncheckedIndexAccess.ts, 23, 9))
+   }
+   
+   const value3 = A[B.x];
+ >value3 : Symbol(value3, Decl(noUncheckedIndexAccess.ts, 26, 7))
+ >A : Symbol(A, Decl(noUncheckedIndexAccess.ts, 17, 37))
+->B.x : Symbol(B.x, Decl(noUncheckedIndexAccess.ts, 22, 10))
++>B.x : Symbol(x, Decl(noUncheckedIndexAccess.ts, 22, 10))
+ >B : Symbol(B, Decl(noUncheckedIndexAccess.ts, 21, 3))
+->x : Symbol(B.x, Decl(noUncheckedIndexAccess.ts, 22, 10))
++>x : Symbol(x, Decl(noUncheckedIndexAccess.ts, 22, 10))
+ 

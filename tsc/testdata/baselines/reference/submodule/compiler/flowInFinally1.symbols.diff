@@ -1,0 +1,22 @@
+--- old.flowInFinally1.symbols
++++ new.flowInFinally1.symbols
+@@= skipped -5, +5 lines =@@
+ 
+   constructor() { }
+   method() { }
+->method : Symbol(A.method, Decl(flowInFinally1.ts, 1, 19))
++>method : Symbol(method, Decl(flowInFinally1.ts, 1, 19))
+ }
+ 
+ let a: A | null = null;
+@@= skipped -17, +17 lines =@@
+ >a : Symbol(a, Decl(flowInFinally1.ts, 5, 3))
+ 
+     a.method();
+->a.method : Symbol(A.method, Decl(flowInFinally1.ts, 1, 19))
++>a.method : Symbol(method, Decl(flowInFinally1.ts, 1, 19))
+ >a : Symbol(a, Decl(flowInFinally1.ts, 5, 3))
+->method : Symbol(A.method, Decl(flowInFinally1.ts, 1, 19))
++>method : Symbol(method, Decl(flowInFinally1.ts, 1, 19))
+   }
+ }

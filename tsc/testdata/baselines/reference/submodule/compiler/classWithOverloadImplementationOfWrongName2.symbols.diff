@@ -1,0 +1,19 @@
+--- old.classWithOverloadImplementationOfWrongName2.symbols
++++ new.classWithOverloadImplementationOfWrongName2.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(classWithOverloadImplementationOfWrongName2.ts, 0, 0))
+ 
+     foo(): string;
+->foo : Symbol(C.foo, Decl(classWithOverloadImplementationOfWrongName2.ts, 0, 9), Decl(classWithOverloadImplementationOfWrongName2.ts, 2, 19))
++>foo : Symbol(foo, Decl(classWithOverloadImplementationOfWrongName2.ts, 0, 9), Decl(classWithOverloadImplementationOfWrongName2.ts, 2, 19))
+ 
+     bar(x): any { }
+->bar : Symbol(C.bar, Decl(classWithOverloadImplementationOfWrongName2.ts, 1, 18))
++>bar : Symbol(bar, Decl(classWithOverloadImplementationOfWrongName2.ts, 1, 18))
+ >x : Symbol(x, Decl(classWithOverloadImplementationOfWrongName2.ts, 2, 8))
+ 
+     foo(x): number;
+->foo : Symbol(C.foo, Decl(classWithOverloadImplementationOfWrongName2.ts, 0, 9), Decl(classWithOverloadImplementationOfWrongName2.ts, 2, 19))
++>foo : Symbol(foo, Decl(classWithOverloadImplementationOfWrongName2.ts, 0, 9), Decl(classWithOverloadImplementationOfWrongName2.ts, 2, 19))
+ >x : Symbol(x, Decl(classWithOverloadImplementationOfWrongName2.ts, 3, 8))
+ }

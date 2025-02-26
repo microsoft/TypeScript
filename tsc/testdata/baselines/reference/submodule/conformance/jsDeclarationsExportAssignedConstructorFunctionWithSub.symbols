@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub.ts] ////
+
+=== jsDeclarationsExportAssignedConstructorFunctionWithSub.js ===
+/**
+ * @param {number} p
+ */
+module.exports = function (p) {
+>p : Symbol(p, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 3, 27))
+
+    this.t = 12 + p;
+>p : Symbol(p, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 3, 27))
+}
+module.exports.Sub = function() {
+    this.instance = new module.exports(10);
+}
+module.exports.Sub.prototype = { }
+

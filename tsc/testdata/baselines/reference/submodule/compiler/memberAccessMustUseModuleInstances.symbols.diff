@@ -1,0 +1,22 @@
+--- old.memberAccessMustUseModuleInstances.symbols
++++ new.memberAccessMustUseModuleInstances.symbols
+@@= skipped -5, +5 lines =@@
+ >WinJS : Symbol(WinJS, Decl(memberAccessMustUseModuleInstances_1.ts, 0, 0))
+ 
+ WinJS.Promise.timeout(10);
+->WinJS.Promise.timeout : Symbol(WinJS.Promise.timeout, Decl(memberAccessMustUseModuleInstances_0.ts, 0, 22))
+->WinJS.Promise : Symbol(WinJS.Promise, Decl(memberAccessMustUseModuleInstances_0.ts, 0, 0))
+ >WinJS : Symbol(WinJS, Decl(memberAccessMustUseModuleInstances_1.ts, 0, 0))
+->Promise : Symbol(WinJS.Promise, Decl(memberAccessMustUseModuleInstances_0.ts, 0, 0))
+->timeout : Symbol(WinJS.Promise.timeout, Decl(memberAccessMustUseModuleInstances_0.ts, 0, 22))
+ 
+ === memberAccessMustUseModuleInstances_0.ts ===
+ export class Promise {
+ >Promise : Symbol(Promise, Decl(memberAccessMustUseModuleInstances_0.ts, 0, 0))
+ 
+     static timeout(delay: number): Promise {
+->timeout : Symbol(Promise.timeout, Decl(memberAccessMustUseModuleInstances_0.ts, 0, 22))
++>timeout : Symbol(timeout, Decl(memberAccessMustUseModuleInstances_0.ts, 0, 22))
+ >delay : Symbol(delay, Decl(memberAccessMustUseModuleInstances_0.ts, 1, 19))
+ >Promise : Symbol(Promise, Decl(memberAccessMustUseModuleInstances_0.ts, 0, 0))
+ 

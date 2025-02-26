@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment19.ts] ////
+
+=== index.js ===
+/// <reference path='./types.d.ts'/>
+const C = require("./semver")
+>C : Symbol(C, Decl(index.js, 1, 5))
+>require : Symbol(require, Decl(types.d.ts, 0, 11))
+
+var two = C.f(1)
+>two : Symbol(two, Decl(index.js, 2, 3))
+>C : Symbol(C, Decl(index.js, 1, 5))
+
+=== types.d.ts ===
+declare var require: any;
+>require : Symbol(require, Decl(types.d.ts, 0, 11))
+
+declare var module: any;
+>module : Symbol(module, Decl(types.d.ts, 1, 11))
+

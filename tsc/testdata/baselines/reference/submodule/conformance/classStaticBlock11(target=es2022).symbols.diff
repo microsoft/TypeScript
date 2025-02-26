@@ -1,0 +1,27 @@
+--- old.classStaticBlock11(target=es2022).symbols
++++ new.classStaticBlock11(target=es2022).symbols
+@@= skipped -7, +7 lines =@@
+ >C : Symbol(C, Decl(classStaticBlock11.ts, 0, 9))
+ 
+   #x = 1
+->#x : Symbol(C.#x, Decl(classStaticBlock11.ts, 1, 9))
++>#x : Symbol(#x, Decl(classStaticBlock11.ts, 1, 9))
+ 
+   constructor(x: number) {
+ >x : Symbol(x, Decl(classStaticBlock11.ts, 3, 14))
+ 
+     this.#x = x;
+->this.#x : Symbol(C.#x, Decl(classStaticBlock11.ts, 1, 9))
++>this.#x : Symbol(#x, Decl(classStaticBlock11.ts, 1, 9))
+ >this : Symbol(C, Decl(classStaticBlock11.ts, 0, 9))
+ >x : Symbol(x, Decl(classStaticBlock11.ts, 3, 14))
+   }
+@@= skipped -17, +17 lines =@@
+ >getX : Symbol(getX, Decl(classStaticBlock11.ts, 0, 3))
+ >obj : Symbol(obj, Decl(classStaticBlock11.ts, 9, 12))
+ >C : Symbol(C, Decl(classStaticBlock11.ts, 0, 9))
+->obj.#x : Symbol(C.#x, Decl(classStaticBlock11.ts, 1, 9))
++>obj.#x : Symbol(#x, Decl(classStaticBlock11.ts, 1, 9))
+ >obj : Symbol(obj, Decl(classStaticBlock11.ts, 9, 12))
+   }
+ }

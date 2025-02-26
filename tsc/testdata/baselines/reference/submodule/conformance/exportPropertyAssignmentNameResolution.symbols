@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/salsa/exportPropertyAssignmentNameResolution.ts] ////
+
+=== bug24492.js ===
+
+module.exports.D = class { }
+new D()
+

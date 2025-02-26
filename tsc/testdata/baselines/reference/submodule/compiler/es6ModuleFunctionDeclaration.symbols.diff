@@ -1,0 +1,12 @@
+--- old.es6ModuleFunctionDeclaration.symbols
++++ new.es6ModuleFunctionDeclaration.symbols
+@@= skipped -55, +55 lines =@@
+ >foo4 : Symbol(foo4, Decl(es6ModuleFunctionDeclaration.ts, 19, 5))
+ 
+     m1.foo3();
+->m1.foo3 : Symbol(m1.foo3, Decl(es6ModuleFunctionDeclaration.ts, 7, 18))
++>m1.foo3 : Symbol(foo3, Decl(es6ModuleFunctionDeclaration.ts, 7, 18))
+ >m1 : Symbol(m1, Decl(es6ModuleFunctionDeclaration.ts, 5, 7))
+->foo3 : Symbol(m1.foo3, Decl(es6ModuleFunctionDeclaration.ts, 7, 18))
++>foo3 : Symbol(foo3, Decl(es6ModuleFunctionDeclaration.ts, 7, 18))
+ }

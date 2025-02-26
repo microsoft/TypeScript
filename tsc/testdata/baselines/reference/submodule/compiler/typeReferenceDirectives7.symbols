@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/typeReferenceDirectives7.ts] ////
+
+=== /app.ts ===
+/// <reference types="lib"/>
+
+export let $ = 1;
+>$ : Symbol($, Decl(app.ts, 2, 10))
+
+export let x: typeof $;
+>x : Symbol(x, Decl(app.ts, 4, 10))
+>$ : Symbol($, Decl(app.ts, 2, 10))
+
+export let y = () => x
+>y : Symbol(y, Decl(app.ts, 5, 10))
+>x : Symbol(x, Decl(app.ts, 4, 10))
+

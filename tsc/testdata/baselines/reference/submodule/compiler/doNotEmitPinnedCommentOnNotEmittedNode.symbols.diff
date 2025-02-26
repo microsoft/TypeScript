@@ -1,0 +1,17 @@
+--- old.doNotEmitPinnedCommentOnNotEmittedNode.symbols
++++ new.doNotEmitPinnedCommentOnNotEmittedNode.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     /*! remove pinned comment anywhere else */
+     public foo(x: string, y: any)
+->foo : Symbol(C.foo, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 0, 9), Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 2, 33))
++>foo : Symbol(foo, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 0, 9), Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 2, 33))
+ >x : Symbol(x, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 2, 15))
+ >y : Symbol(y, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 2, 25))
+ 
+     public foo(x: string, y: number) { }
+->foo : Symbol(C.foo, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 0, 9), Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 2, 33))
++>foo : Symbol(foo, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 0, 9), Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 2, 33))
+ >x : Symbol(x, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 3, 15))
+ >y : Symbol(y, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 3, 25))
+ }

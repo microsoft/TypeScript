@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/checkJsdocTypeTagOnExportAssignment1.ts] ////
+
+=== checkJsdocTypeTagOnExportAssignment1.js ===
+
+=== a.js ===
+/**
+ * @typedef {Object} Foo
+ * @property {boolean} a
+ * @property {boolean} b
+ */
+
+/** @type {Foo} */
+export default { c: false };
+>c : Symbol(c, Decl(a.js, 7, 16))
+
+=== b.js ===
+import a from "./a";
+>a : Symbol(a, Decl(b.js, 0, 6))
+
+a;
+>a : Symbol(a, Decl(b.js, 0, 6))
+

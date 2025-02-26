@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/reactTagNameComponentWithPropsNoOOM2.tsx] ////
+
+=== reactTagNameComponentWithPropsNoOOM2.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from "react";
+>React : Symbol(React, Decl(reactTagNameComponentWithPropsNoOOM2.tsx, 2, 6))
+
+declare const Tag: keyof React.ReactHTML;
+>Tag : Symbol(Tag, Decl(reactTagNameComponentWithPropsNoOOM2.tsx, 3, 13))
+>React : Symbol(React, Decl(reactTagNameComponentWithPropsNoOOM2.tsx, 2, 6))
+>ReactHTML : Symbol(ReactHTML)
+
+const classes = "";
+>classes : Symbol(classes, Decl(reactTagNameComponentWithPropsNoOOM2.tsx, 5, 5))
+
+const rest: React.HTMLAttributes<HTMLElement> = {};
+>rest : Symbol(rest, Decl(reactTagNameComponentWithPropsNoOOM2.tsx, 6, 5))
+>React : Symbol(React, Decl(reactTagNameComponentWithPropsNoOOM2.tsx, 2, 6))
+>HTMLAttributes : Symbol(HTMLAttributes)
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+const children: any[] = [];
+>children : Symbol(children, Decl(reactTagNameComponentWithPropsNoOOM2.tsx, 7, 5))
+
+<Tag className={classes} {...rest}>
+>Tag : Symbol(Tag, Decl(reactTagNameComponentWithPropsNoOOM2.tsx, 3, 13))
+>className : Symbol(className, Decl(reactTagNameComponentWithPropsNoOOM2.tsx, 8, 4))
+>classes : Symbol(classes, Decl(reactTagNameComponentWithPropsNoOOM2.tsx, 5, 5))
+>rest : Symbol(rest, Decl(reactTagNameComponentWithPropsNoOOM2.tsx, 6, 5))
+
+{children}
+>children : Symbol(children, Decl(reactTagNameComponentWithPropsNoOOM2.tsx, 7, 5))
+
+</Tag>
+>Tag : Symbol(Tag, Decl(reactTagNameComponentWithPropsNoOOM2.tsx, 3, 13))
+

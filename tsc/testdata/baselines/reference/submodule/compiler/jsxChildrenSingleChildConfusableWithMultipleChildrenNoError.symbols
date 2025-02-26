@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx] ////
+
+=== jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from 'react'
+>React : Symbol(React, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 2, 6))
+
+type Tab = [string, React.ReactNode]  // [tabName, tabContent]
+>Tab : Symbol(Tab, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 2, 30))
+>React : Symbol(React, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 2, 6))
+>ReactNode : Symbol(ReactNode)
+
+interface Props {
+>Props : Symbol(Props, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 4, 36))
+
+    children: Tab[]
+>children : Symbol(children, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 6, 17))
+>Tab : Symbol(Tab, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 2, 30))
+}
+
+function TabLayout(props: Props) {
+>TabLayout : Symbol(TabLayout, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 8, 1))
+>props : Symbol(props, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 10, 19))
+>Props : Symbol(Props, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 4, 36))
+
+    return <div/>
+}
+
+export class App extends React.Component<{}> {
+>App : Symbol(App, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 12, 1))
+>React.Component : Symbol(unknown)
+>React : Symbol(React, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 2, 6))
+>Component : Symbol(unknown)
+
+    render() {
+>render : Symbol(render, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 14, 46))
+
+        return <TabLayout>
+>TabLayout : Symbol(TabLayout, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 8, 1))
+
+            {[
+                ['Users', <div/>],
+                ['Products', <div/>]
+            ]}
+        </TabLayout>
+>TabLayout : Symbol(TabLayout, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 8, 1))
+    }
+}

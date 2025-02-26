@@ -1,0 +1,14 @@
+--- old.inferentialTypingObjectLiteralMethod2.symbols
++++ new.inferentialTypingObjectLiteralMethod2.symbols
+@@= skipped -31, +31 lines =@@
+ >foo : Symbol(foo, Decl(inferentialTypingObjectLiteralMethod2.ts, 2, 1))
+ >method : Symbol(method, Decl(inferentialTypingObjectLiteralMethod2.ts, 4, 9))
+ >p1 : Symbol(p1, Decl(inferentialTypingObjectLiteralMethod2.ts, 4, 17))
+->p1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>p1.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >p1 : Symbol(p1, Decl(inferentialTypingObjectLiteralMethod2.ts, 4, 17))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >method : Symbol(method, Decl(inferentialTypingObjectLiteralMethod2.ts, 4, 46))
+ >p2 : Symbol(p2, Decl(inferentialTypingObjectLiteralMethod2.ts, 4, 54))
+ >undefined : Symbol(undefined)

@@ -1,0 +1,104 @@
+--- old.es6ClassTest.symbols
++++ new.es6ClassTest.symbols
+@@= skipped -4, +4 lines =@@
+ >Bar : Symbol(Bar, Decl(es6ClassTest.ts, 0, 0))
+ 
+     public goo: number;
+->goo : Symbol(Bar.goo, Decl(es6ClassTest.ts, 0, 11))
++>goo : Symbol(goo, Decl(es6ClassTest.ts, 0, 11))
+ 
+     public prop1(x) {
+->prop1 : Symbol(Bar.prop1, Decl(es6ClassTest.ts, 1, 23))
++>prop1 : Symbol(prop1, Decl(es6ClassTest.ts, 1, 23))
+ >x : Symbol(x, Decl(es6ClassTest.ts, 2, 17))
+ 
+         return x;
+@@= skipped -20, +20 lines =@@
+ >Bar : Symbol(Bar, Decl(es6ClassTest.ts, 0, 0))
+ 
+ 	foo:number;
+->foo : Symbol(Foo.foo, Decl(es6ClassTest.ts, 10, 24))
++>foo : Symbol(foo, Decl(es6ClassTest.ts, 10, 24))
+ 
+ 	gar = 0;
+->gar : Symbol(Foo.gar, Decl(es6ClassTest.ts, 11, 12))
++>gar : Symbol(gar, Decl(es6ClassTest.ts, 11, 12))
+ 
+ 	zoo:string = "zoo";
+->zoo : Symbol(Foo.zoo, Decl(es6ClassTest.ts, 12, 9))
++>zoo : Symbol(zoo, Decl(es6ClassTest.ts, 12, 9))
+ 
+ 	x: any;
+->x : Symbol(Foo.x, Decl(es6ClassTest.ts, 13, 20))
++>x : Symbol(x, Decl(es6ClassTest.ts, 13, 20))
+ 
+ 	bar() { return 0; }
+->bar : Symbol(Foo.bar, Decl(es6ClassTest.ts, 14, 8))
++>bar : Symbol(bar, Decl(es6ClassTest.ts, 14, 8))
+ 
+ 	private boo();
+->boo : Symbol(Foo.boo, Decl(es6ClassTest.ts, 16, 20), Decl(es6ClassTest.ts, 18, 15))
++>boo : Symbol(boo, Decl(es6ClassTest.ts, 16, 20), Decl(es6ClassTest.ts, 18, 15))
+ 
+ 	private boo(x?) { return x; }
+->boo : Symbol(Foo.boo, Decl(es6ClassTest.ts, 16, 20), Decl(es6ClassTest.ts, 18, 15))
++>boo : Symbol(boo, Decl(es6ClassTest.ts, 16, 20), Decl(es6ClassTest.ts, 18, 15))
+ >x : Symbol(x, Decl(es6ClassTest.ts, 19, 13))
+ >x : Symbol(x, Decl(es6ClassTest.ts, 19, 13))
+ 
+     static statVal = 0;
+->statVal : Symbol(Foo.statVal, Decl(es6ClassTest.ts, 19, 30))
++>statVal : Symbol(statVal, Decl(es6ClassTest.ts, 19, 30))
+ 
+ 	constructor();
+ 	constructor(x?, private y?:string, public z?=0) {
+ >x : Symbol(x, Decl(es6ClassTest.ts, 24, 13))
+->y : Symbol(Foo.y, Decl(es6ClassTest.ts, 24, 16))
+->z : Symbol(Foo.z, Decl(es6ClassTest.ts, 24, 35))
++>y : Symbol(y, Decl(es6ClassTest.ts, 24, 16))
++>z : Symbol(z, Decl(es6ClassTest.ts, 24, 35))
+ 
+         super(x);
+ >super : Symbol(Bar, Decl(es6ClassTest.ts, 0, 0))
+ >x : Symbol(x, Decl(es6ClassTest.ts, 24, 13))
+ 
+ 		this.x = x;
+->this.x : Symbol(Foo.x, Decl(es6ClassTest.ts, 13, 20))
++>this.x : Symbol(x, Decl(es6ClassTest.ts, 13, 20))
+ >this : Symbol(Foo, Decl(es6ClassTest.ts, 7, 1))
+->x : Symbol(Foo.x, Decl(es6ClassTest.ts, 13, 20))
++>x : Symbol(x, Decl(es6ClassTest.ts, 13, 20))
+ >x : Symbol(x, Decl(es6ClassTest.ts, 24, 13))
+ 
+         this.gar = 5;
+->this.gar : Symbol(Foo.gar, Decl(es6ClassTest.ts, 11, 12))
++>this.gar : Symbol(gar, Decl(es6ClassTest.ts, 11, 12))
+ >this : Symbol(Foo, Decl(es6ClassTest.ts, 7, 1))
+->gar : Symbol(Foo.gar, Decl(es6ClassTest.ts, 11, 12))
++>gar : Symbol(gar, Decl(es6ClassTest.ts, 11, 12))
+ 	 }
+ }
+ 
+@@= skipped -59, +59 lines =@@
+ >Provide : Symbol(Provide, Decl(es6ClassTest.ts, 33, 27))
+ 
+ 		foo:number;
+->foo : Symbol(Provide.foo, Decl(es6ClassTest.ts, 34, 23))
++>foo : Symbol(foo, Decl(es6ClassTest.ts, 34, 23))
+ 
+ 		zoo:string;
+->zoo : Symbol(Provide.zoo, Decl(es6ClassTest.ts, 35, 13))
++>zoo : Symbol(zoo, Decl(es6ClassTest.ts, 35, 13))
+ 
+ 		constructor();
+ 		
+ 		private boo();
+->boo : Symbol(Provide.boo, Decl(es6ClassTest.ts, 38, 16))
++>boo : Symbol(boo, Decl(es6ClassTest.ts, 38, 16))
+ 
+ 		bar();
+->bar : Symbol(Provide.bar, Decl(es6ClassTest.ts, 40, 16))
++>bar : Symbol(bar, Decl(es6ClassTest.ts, 40, 16))
+ 	}
+ }
+ 

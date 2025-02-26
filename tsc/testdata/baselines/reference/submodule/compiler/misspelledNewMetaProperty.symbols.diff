@@ -1,0 +1,8 @@
+--- old.misspelledNewMetaProperty.symbols
++++ new.misspelledNewMetaProperty.symbols
+@@= skipped -2, +2 lines =@@
+ === misspelledNewMetaProperty.ts ===
+ function foo(){new.targ}
+ >foo : Symbol(foo, Decl(misspelledNewMetaProperty.ts, 0, 0))
+->new.targ : Symbol(foo, Decl(misspelledNewMetaProperty.ts, 0, 0))
+ 

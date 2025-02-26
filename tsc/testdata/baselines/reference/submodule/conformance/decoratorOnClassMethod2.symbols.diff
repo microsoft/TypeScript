@@ -1,0 +1,9 @@
+--- old.decoratorOnClassMethod2.symbols
++++ new.decoratorOnClassMethod2.symbols
+@@= skipped -16, +16 lines =@@
+ 
+     @dec public method() {}
+ >dec : Symbol(dec, Decl(decoratorOnClassMethod2.ts, 0, 0))
+->method : Symbol(C.method, Decl(decoratorOnClassMethod2.ts, 2, 9))
++>method : Symbol(method, Decl(decoratorOnClassMethod2.ts, 2, 9))
+ }

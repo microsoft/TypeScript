@@ -1,0 +1,15 @@
+--- old.declarationEmitNoNonRequiredParens.symbols
++++ new.declarationEmitNoNonRequiredParens.symbols
+@@= skipped -4, +4 lines =@@
+ >Test : Symbol(Test, Decl(declarationEmitNoNonRequiredParens.ts, 0, 0))
+ 
+     A, B, C
+->A : Symbol(Test.A, Decl(declarationEmitNoNonRequiredParens.ts, 0, 18))
+->B : Symbol(Test.B, Decl(declarationEmitNoNonRequiredParens.ts, 1, 6))
+->C : Symbol(Test.C, Decl(declarationEmitNoNonRequiredParens.ts, 1, 9))
++>A : Symbol(A, Decl(declarationEmitNoNonRequiredParens.ts, 0, 18))
++>B : Symbol(B, Decl(declarationEmitNoNonRequiredParens.ts, 1, 6))
++>C : Symbol(C, Decl(declarationEmitNoNonRequiredParens.ts, 1, 9))
+ }
+ 
+ export type TestType = typeof Test;

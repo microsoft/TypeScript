@@ -1,0 +1,44 @@
+--- old.numericIndexExpressions.symbols
++++ new.numericIndexExpressions.symbols
+@@= skipped -4, +4 lines =@@
+ >Numbers1 : Symbol(Numbers1, Decl(numericIndexExpressions.ts, 0, 0))
+ 
+     1: string;
+->1 : Symbol(Numbers1[1], Decl(numericIndexExpressions.ts, 0, 20))
++>1 : Symbol(1, Decl(numericIndexExpressions.ts, 0, 20))
+ }
+ interface Strings1 {
+ >Strings1 : Symbol(Strings1, Decl(numericIndexExpressions.ts, 2, 1))
+ 
+     '1': string;
+->'1' : Symbol(Strings1['1'], Decl(numericIndexExpressions.ts, 3, 20))
++>'1' : Symbol('1', Decl(numericIndexExpressions.ts, 3, 20))
+ }
+  
+  
+@@= skipped -16, +16 lines =@@
+ 
+ x[1] = 4; // error
+ >x : Symbol(x, Decl(numericIndexExpressions.ts, 8, 3))
+->1 : Symbol(Numbers1[1], Decl(numericIndexExpressions.ts, 0, 20))
++>1 : Symbol(1, Decl(numericIndexExpressions.ts, 0, 20))
+ 
+ x['1'] = 4; // error
+ >x : Symbol(x, Decl(numericIndexExpressions.ts, 8, 3))
+->'1' : Symbol(Numbers1[1], Decl(numericIndexExpressions.ts, 0, 20))
++>'1' : Symbol(1, Decl(numericIndexExpressions.ts, 0, 20))
+ 
+ var y: Strings1;
+ >y : Symbol(y, Decl(numericIndexExpressions.ts, 12, 3))
+@@= skipped -12, +12 lines =@@
+ 
+ y['1'] = 4; // should be error
+ >y : Symbol(y, Decl(numericIndexExpressions.ts, 12, 3))
+->'1' : Symbol(Strings1['1'], Decl(numericIndexExpressions.ts, 3, 20))
++>'1' : Symbol('1', Decl(numericIndexExpressions.ts, 3, 20))
+ 
+ y[1] = 4; // should be error
+ >y : Symbol(y, Decl(numericIndexExpressions.ts, 12, 3))
+->1 : Symbol(Strings1['1'], Decl(numericIndexExpressions.ts, 3, 20))
++>1 : Symbol('1', Decl(numericIndexExpressions.ts, 3, 20))
+ 

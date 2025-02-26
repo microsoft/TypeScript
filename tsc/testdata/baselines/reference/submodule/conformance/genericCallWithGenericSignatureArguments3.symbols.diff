@@ -1,0 +1,38 @@
+--- old.genericCallWithGenericSignatureArguments3.symbols
++++ new.genericCallWithGenericSignatureArguments3.symbols
+@@= skipped -69, +69 lines =@@
+ 
+ enum E { A }
+ >E : Symbol(E, Decl(genericCallWithGenericSignatureArguments3.ts, 13, 49))
+->A : Symbol(E.A, Decl(genericCallWithGenericSignatureArguments3.ts, 15, 8))
++>A : Symbol(A, Decl(genericCallWithGenericSignatureArguments3.ts, 15, 8))
+ 
+ enum F { A }
+ >F : Symbol(F, Decl(genericCallWithGenericSignatureArguments3.ts, 15, 12))
+->A : Symbol(F.A, Decl(genericCallWithGenericSignatureArguments3.ts, 16, 8))
++>A : Symbol(A, Decl(genericCallWithGenericSignatureArguments3.ts, 16, 8))
+ 
+ var r6 = foo(E.A, (x: number) => E.A, (x: F) => F.A); // number => number 
+ >r6 : Symbol(r6, Decl(genericCallWithGenericSignatureArguments3.ts, 18, 3))
+ >foo : Symbol(foo, Decl(genericCallWithGenericSignatureArguments3.ts, 0, 0))
+->E.A : Symbol(E.A, Decl(genericCallWithGenericSignatureArguments3.ts, 15, 8))
++>E.A : Symbol(A, Decl(genericCallWithGenericSignatureArguments3.ts, 15, 8))
+ >E : Symbol(E, Decl(genericCallWithGenericSignatureArguments3.ts, 13, 49))
+->A : Symbol(E.A, Decl(genericCallWithGenericSignatureArguments3.ts, 15, 8))
++>A : Symbol(A, Decl(genericCallWithGenericSignatureArguments3.ts, 15, 8))
+ >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments3.ts, 18, 19))
+->E.A : Symbol(E.A, Decl(genericCallWithGenericSignatureArguments3.ts, 15, 8))
++>E.A : Symbol(A, Decl(genericCallWithGenericSignatureArguments3.ts, 15, 8))
+ >E : Symbol(E, Decl(genericCallWithGenericSignatureArguments3.ts, 13, 49))
+->A : Symbol(E.A, Decl(genericCallWithGenericSignatureArguments3.ts, 15, 8))
++>A : Symbol(A, Decl(genericCallWithGenericSignatureArguments3.ts, 15, 8))
+ >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments3.ts, 18, 39))
+ >F : Symbol(F, Decl(genericCallWithGenericSignatureArguments3.ts, 15, 12))
+->F.A : Symbol(F.A, Decl(genericCallWithGenericSignatureArguments3.ts, 16, 8))
++>F.A : Symbol(A, Decl(genericCallWithGenericSignatureArguments3.ts, 16, 8))
+ >F : Symbol(F, Decl(genericCallWithGenericSignatureArguments3.ts, 15, 12))
+->A : Symbol(F.A, Decl(genericCallWithGenericSignatureArguments3.ts, 16, 8))
++>A : Symbol(A, Decl(genericCallWithGenericSignatureArguments3.ts, 16, 8))
+ 
+ 
+ function foo2<T, U>(x: T, a: (x: T) => U, b: (x: T) => U) {

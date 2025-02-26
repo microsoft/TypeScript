@@ -30,7 +30,7 @@ var (
 	diagnosticsLocationPattern = regexp.MustCompile(`(?i)(lib.*\.d\.ts):\d+:\d+`)
 )
 
-func DoErrorBaseline(t *testing.T, baselinePath string, inputFiles []*harnessutil.TestFile, errors []*ast.Diagnostic, pretty bool, subfolder string) {
+func DoErrorBaseline(t *testing.T, baselinePath string, inputFiles []*harnessutil.TestFile, errors []*ast.Diagnostic, pretty bool, opts baseline.Options) {
 	baselinePath = tsExtension.ReplaceAllString(baselinePath, ".errors.txt")
 	var errorBaseline string
 	if len(errors) > 0 {
@@ -38,7 +38,7 @@ func DoErrorBaseline(t *testing.T, baselinePath string, inputFiles []*harnessuti
 	} else {
 		errorBaseline = baseline.NoContent
 	}
-	baseline.Run(t, baselinePath, errorBaseline, baseline.Options{Subfolder: subfolder})
+	baseline.Run(t, baselinePath, errorBaseline, opts)
 }
 
 func minimalDiagnosticsToString(diagnostics []*ast.Diagnostic, pretty bool) string {

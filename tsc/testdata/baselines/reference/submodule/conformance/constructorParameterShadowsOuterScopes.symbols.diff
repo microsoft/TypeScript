@@ -1,0 +1,20 @@
+--- old.constructorParameterShadowsOuterScopes.symbols
++++ new.constructorParameterShadowsOuterScopes.symbols
+@@= skipped -12, +12 lines =@@
+ >C : Symbol(C, Decl(constructorParameterShadowsOuterScopes.ts, 5, 10))
+ 
+     b = x; // error, evaluated in scope of constructor, cannot reference x
+->b : Symbol(C.b, Decl(constructorParameterShadowsOuterScopes.ts, 6, 9))
++>b : Symbol(b, Decl(constructorParameterShadowsOuterScopes.ts, 6, 9))
+ >x : Symbol(x, Decl(constructorParameterShadowsOuterScopes.ts, 5, 3))
+ 
+     constructor(x: string) {
+@@= skipped -18, +18 lines =@@
+ >D : Symbol(D, Decl(constructorParameterShadowsOuterScopes.ts, 13, 10))
+ 
+     b = y; // error, evaluated in scope of constructor, cannot reference y
+->b : Symbol(D.b, Decl(constructorParameterShadowsOuterScopes.ts, 14, 9))
++>b : Symbol(b, Decl(constructorParameterShadowsOuterScopes.ts, 14, 9))
+ >y : Symbol(y, Decl(constructorParameterShadowsOuterScopes.ts, 13, 3))
+ 
+     constructor(x: string) {

@@ -1,0 +1,11 @@
+--- old.metadataReferencedWithinFilteredUnion.symbols
++++ new.metadataReferencedWithinFilteredUnion.symbols
+@@= skipped -20, +20 lines =@@
+ >decorate : Symbol(decorate, Decl(Class2.ts, 0, 34))
+ 
+     get prop(): Class1 | undefined {
+->prop : Symbol(Class2.prop, Decl(Class2.ts, 5, 21))
++>prop : Symbol(prop, Decl(Class2.ts, 5, 21))
+ >Class1 : Symbol(Class1, Decl(Class2.ts, 0, 8))
+ 
+         return undefined;

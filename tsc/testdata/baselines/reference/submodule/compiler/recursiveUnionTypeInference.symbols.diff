@@ -1,0 +1,11 @@
+--- old.recursiveUnionTypeInference.symbols
++++ new.recursiveUnionTypeInference.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(recursiveUnionTypeInference.ts, 0, 14))
+ 
+     x: T;
+->x : Symbol(Foo.x, Decl(recursiveUnionTypeInference.ts, 0, 18))
++>x : Symbol(x, Decl(recursiveUnionTypeInference.ts, 0, 18))
+ >T : Symbol(T, Decl(recursiveUnionTypeInference.ts, 0, 14))
+ }
+ 

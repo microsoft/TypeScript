@@ -1,0 +1,19 @@
+--- old.indexedAccessPrivateMemberOfGenericConstraint.symbols
++++ new.indexedAccessPrivateMemberOfGenericConstraint.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 0, 0))
+ 
+   private a: number;
+->a : Symbol(A.a, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 0, 9))
++>a : Symbol(a, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 0, 9))
+ }
+ 
+ class B {
+ >B : Symbol(B, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 2, 1))
+ 
+   private a: string;
+->a : Symbol(B.a, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 4, 9))
++>a : Symbol(a, Decl(indexedAccessPrivateMemberOfGenericConstraint.ts, 4, 9))
+ }
+ 
+ type X<T extends A> = [T["a"], (T | B)["a"]];

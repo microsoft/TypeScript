@@ -1,0 +1,29 @@
+--- old.declFileGenericClassWithGenericExtendedClass.symbols
++++ new.declFileGenericClassWithGenericExtendedClass.symbols
+@@= skipped -4, +4 lines =@@
+ >IFoo : Symbol(IFoo, Decl(declFileGenericClassWithGenericExtendedClass.ts, 0, 0))
+ 
+     baz: Baz;
+->baz : Symbol(IFoo.baz, Decl(declFileGenericClassWithGenericExtendedClass.ts, 0, 16))
++>baz : Symbol(baz, Decl(declFileGenericClassWithGenericExtendedClass.ts, 0, 16))
+ >Baz : Symbol(Baz, Decl(declFileGenericClassWithGenericExtendedClass.ts, 7, 1))
+ }
+ class Base<T> { }
+@@= skipped -18, +18 lines =@@
+ >T : Symbol(T, Decl(declFileGenericClassWithGenericExtendedClass.ts, 5, 15))
+ 
+     derived: Derived<T>;
+->derived : Symbol(IBar.derived, Decl(declFileGenericClassWithGenericExtendedClass.ts, 5, 19))
++>derived : Symbol(derived, Decl(declFileGenericClassWithGenericExtendedClass.ts, 5, 19))
+ >Derived : Symbol(Derived, Decl(declFileGenericClassWithGenericExtendedClass.ts, 3, 17))
+ >T : Symbol(T, Decl(declFileGenericClassWithGenericExtendedClass.ts, 5, 15))
+ }
+@@= skipped -10, +10 lines =@@
+ >Baz : Symbol(Baz, Decl(declFileGenericClassWithGenericExtendedClass.ts, 7, 1))
+ 
+     derived: Derived<Baz>;
+->derived : Symbol(Baz.derived, Decl(declFileGenericClassWithGenericExtendedClass.ts, 8, 32))
++>derived : Symbol(derived, Decl(declFileGenericClassWithGenericExtendedClass.ts, 8, 32))
+ >Derived : Symbol(Derived, Decl(declFileGenericClassWithGenericExtendedClass.ts, 3, 17))
+ >Baz : Symbol(Baz, Decl(declFileGenericClassWithGenericExtendedClass.ts, 7, 1))
+ }

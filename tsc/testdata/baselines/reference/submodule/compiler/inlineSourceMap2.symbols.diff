@@ -1,0 +1,13 @@
+--- old.inlineSourceMap2.symbols
++++ new.inlineSourceMap2.symbols
+@@= skipped -6, +6 lines =@@
+ >x : Symbol(x, Decl(inlineSourceMap2.ts, 2, 3))
+ 
+ console.log(x);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x : Symbol(x, Decl(inlineSourceMap2.ts, 2, 3))
+ 

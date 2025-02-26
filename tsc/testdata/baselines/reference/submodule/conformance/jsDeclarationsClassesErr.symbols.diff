@@ -1,0 +1,20 @@
+--- old.jsDeclarationsClassesErr.symbols
++++ new.jsDeclarationsClassesErr.symbols
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(index.js, 3, 15))
+ 
+     field: T;
+->field : Symbol(M.field, Decl(index.js, 3, 19))
++>field : Symbol(field, Decl(index.js, 3, 19))
+ >T : Symbol(T, Decl(index.js, 3, 15))
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ >U : Symbol(U, Decl(index.js, 7, 15))
+ 
+     other: U;
+->other : Symbol(N.other, Decl(index.js, 7, 32))
++>other : Symbol(other, Decl(index.js, 7, 32))
+ >U : Symbol(U, Decl(index.js, 7, 15))
+ }
+ 

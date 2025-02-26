@@ -1,0 +1,106 @@
+--- old.unionTypeMembers.symbols
++++ new.unionTypeMembers.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(unionTypeMembers.ts, 0, 13))
+ 
+     commonMethodType(a: string): string;
+->commonMethodType : Symbol(I1.commonMethodType, Decl(unionTypeMembers.ts, 0, 17))
++>commonMethodType : Symbol(commonMethodType, Decl(unionTypeMembers.ts, 0, 17))
+ >a : Symbol(a, Decl(unionTypeMembers.ts, 1, 21))
+ 
+     commonPropertyType: string;
+->commonPropertyType : Symbol(I1.commonPropertyType, Decl(unionTypeMembers.ts, 1, 40))
++>commonPropertyType : Symbol(commonPropertyType, Decl(unionTypeMembers.ts, 1, 40))
+ 
+     commonMethodDifferentParameterType(a: string): string;
+->commonMethodDifferentParameterType : Symbol(I1.commonMethodDifferentParameterType, Decl(unionTypeMembers.ts, 2, 31))
++>commonMethodDifferentParameterType : Symbol(commonMethodDifferentParameterType, Decl(unionTypeMembers.ts, 2, 31))
+ >a : Symbol(a, Decl(unionTypeMembers.ts, 4, 39))
+ 
+     commonMethodDifferentReturnType(a: string): string;
+->commonMethodDifferentReturnType : Symbol(I1.commonMethodDifferentReturnType, Decl(unionTypeMembers.ts, 4, 58))
++>commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(unionTypeMembers.ts, 4, 58))
+ >a : Symbol(a, Decl(unionTypeMembers.ts, 5, 36))
+ 
+     commonPropertyDifferenType: string;
+->commonPropertyDifferenType : Symbol(I1.commonPropertyDifferenType, Decl(unionTypeMembers.ts, 5, 55))
++>commonPropertyDifferenType : Symbol(commonPropertyDifferenType, Decl(unionTypeMembers.ts, 5, 55))
+ 
+     commonMethodWithTypeParameter(a: T): T;
+->commonMethodWithTypeParameter : Symbol(I1.commonMethodWithTypeParameter, Decl(unionTypeMembers.ts, 6, 39))
++>commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(unionTypeMembers.ts, 6, 39))
+ >a : Symbol(a, Decl(unionTypeMembers.ts, 8, 34))
+ >T : Symbol(T, Decl(unionTypeMembers.ts, 0, 13))
+ >T : Symbol(T, Decl(unionTypeMembers.ts, 0, 13))
+ 
+     commonMethodWithOwnTypeParameter<U>(a: U): U;
+->commonMethodWithOwnTypeParameter : Symbol(I1.commonMethodWithOwnTypeParameter, Decl(unionTypeMembers.ts, 8, 43))
++>commonMethodWithOwnTypeParameter : Symbol(commonMethodWithOwnTypeParameter, Decl(unionTypeMembers.ts, 8, 43))
+ >U : Symbol(U, Decl(unionTypeMembers.ts, 9, 37))
+ >a : Symbol(a, Decl(unionTypeMembers.ts, 9, 40))
+ >U : Symbol(U, Decl(unionTypeMembers.ts, 9, 37))
+ >U : Symbol(U, Decl(unionTypeMembers.ts, 9, 37))
+ 
+     methodOnlyInI1(a: string): string;
+->methodOnlyInI1 : Symbol(I1.methodOnlyInI1, Decl(unionTypeMembers.ts, 9, 49))
++>methodOnlyInI1 : Symbol(methodOnlyInI1, Decl(unionTypeMembers.ts, 9, 49))
+ >a : Symbol(a, Decl(unionTypeMembers.ts, 11, 19))
+ 
+     propertyOnlyInI1: string;
+->propertyOnlyInI1 : Symbol(I1.propertyOnlyInI1, Decl(unionTypeMembers.ts, 11, 38))
++>propertyOnlyInI1 : Symbol(propertyOnlyInI1, Decl(unionTypeMembers.ts, 11, 38))
+ }
+ 
+ interface I2<T> {
+@@= skipped -43, +43 lines =@@
+ >T : Symbol(T, Decl(unionTypeMembers.ts, 15, 13))
+ 
+     commonMethodType(a: string): string;
+->commonMethodType : Symbol(I2.commonMethodType, Decl(unionTypeMembers.ts, 15, 17))
++>commonMethodType : Symbol(commonMethodType, Decl(unionTypeMembers.ts, 15, 17))
+ >a : Symbol(a, Decl(unionTypeMembers.ts, 16, 21))
+ 
+     commonPropertyType: string;
+->commonPropertyType : Symbol(I2.commonPropertyType, Decl(unionTypeMembers.ts, 16, 40))
++>commonPropertyType : Symbol(commonPropertyType, Decl(unionTypeMembers.ts, 16, 40))
+ 
+     commonMethodDifferentParameterType(a: number): number;
+->commonMethodDifferentParameterType : Symbol(I2.commonMethodDifferentParameterType, Decl(unionTypeMembers.ts, 17, 31))
++>commonMethodDifferentParameterType : Symbol(commonMethodDifferentParameterType, Decl(unionTypeMembers.ts, 17, 31))
+ >a : Symbol(a, Decl(unionTypeMembers.ts, 19, 39))
+ 
+     commonMethodDifferentReturnType(a: string): number;
+->commonMethodDifferentReturnType : Symbol(I2.commonMethodDifferentReturnType, Decl(unionTypeMembers.ts, 19, 58))
++>commonMethodDifferentReturnType : Symbol(commonMethodDifferentReturnType, Decl(unionTypeMembers.ts, 19, 58))
+ >a : Symbol(a, Decl(unionTypeMembers.ts, 20, 36))
+ 
+     commonPropertyDifferenType: number;
+->commonPropertyDifferenType : Symbol(I2.commonPropertyDifferenType, Decl(unionTypeMembers.ts, 20, 55))
++>commonPropertyDifferenType : Symbol(commonPropertyDifferenType, Decl(unionTypeMembers.ts, 20, 55))
+ 
+     commonMethodWithTypeParameter(a: T): T;
+->commonMethodWithTypeParameter : Symbol(I2.commonMethodWithTypeParameter, Decl(unionTypeMembers.ts, 21, 39))
++>commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(unionTypeMembers.ts, 21, 39))
+ >a : Symbol(a, Decl(unionTypeMembers.ts, 23, 34))
+ >T : Symbol(T, Decl(unionTypeMembers.ts, 15, 13))
+ >T : Symbol(T, Decl(unionTypeMembers.ts, 15, 13))
+ 
+     commonMethodWithOwnTypeParameter<U>(a: U): U;
+->commonMethodWithOwnTypeParameter : Symbol(I2.commonMethodWithOwnTypeParameter, Decl(unionTypeMembers.ts, 23, 43))
++>commonMethodWithOwnTypeParameter : Symbol(commonMethodWithOwnTypeParameter, Decl(unionTypeMembers.ts, 23, 43))
+ >U : Symbol(U, Decl(unionTypeMembers.ts, 24, 37))
+ >a : Symbol(a, Decl(unionTypeMembers.ts, 24, 40))
+ >U : Symbol(U, Decl(unionTypeMembers.ts, 24, 37))
+ >U : Symbol(U, Decl(unionTypeMembers.ts, 24, 37))
+ 
+     methodOnlyInI2(a: string): string;
+->methodOnlyInI2 : Symbol(I2.methodOnlyInI2, Decl(unionTypeMembers.ts, 24, 49))
++>methodOnlyInI2 : Symbol(methodOnlyInI2, Decl(unionTypeMembers.ts, 24, 49))
+ >a : Symbol(a, Decl(unionTypeMembers.ts, 26, 19))
+ 
+     propertyOnlyInI2: string;
+->propertyOnlyInI2 : Symbol(I2.propertyOnlyInI2, Decl(unionTypeMembers.ts, 26, 38))
++>propertyOnlyInI2 : Symbol(propertyOnlyInI2, Decl(unionTypeMembers.ts, 26, 38))
+ }
+ 
+ // a union type U has those members that are present in every one of its constituent types, 

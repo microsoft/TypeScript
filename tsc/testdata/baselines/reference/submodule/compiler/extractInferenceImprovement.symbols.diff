@@ -1,0 +1,43 @@
+--- old.extractInferenceImprovement.symbols
++++ new.extractInferenceImprovement.symbols
+@@= skipped -9, +9 lines =@@
+ >obj : Symbol(obj, Decl(extractInferenceImprovement.ts, 1, 44))
+ >T : Symbol(T, Decl(extractInferenceImprovement.ts, 1, 22))
+ >key : Symbol(key, Decl(extractInferenceImprovement.ts, 1, 51))
+->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
++>Extract : Symbol(Extract)
+ >K : Symbol(K, Decl(extractInferenceImprovement.ts, 1, 24))
+ >T : Symbol(T, Decl(extractInferenceImprovement.ts, 1, 22))
+ >K : Symbol(K, Decl(extractInferenceImprovement.ts, 1, 24))
+@@= skipped -14, +14 lines =@@
+ >getProperty3 : Symbol(getProperty3, Decl(extractInferenceImprovement.ts, 3, 1))
+ >T : Symbol(T, Decl(extractInferenceImprovement.ts, 5, 22))
+ >K : Symbol(K, Decl(extractInferenceImprovement.ts, 5, 24))
+->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
++>Extract : Symbol(Extract)
+ >T : Symbol(T, Decl(extractInferenceImprovement.ts, 5, 22))
+ >obj : Symbol(obj, Decl(extractInferenceImprovement.ts, 5, 61))
+ >T : Symbol(T, Decl(extractInferenceImprovement.ts, 5, 22))
+@@= skipped -16, +16 lines =@@
+ 
+ const s = Symbol();
+ >s : Symbol(s, Decl(extractInferenceImprovement.ts, 9, 5))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ 
+ interface StrNum {
+ >StrNum : Symbol(StrNum, Decl(extractInferenceImprovement.ts, 9, 19))
+ 
+     first: string;
+->first : Symbol(StrNum.first, Decl(extractInferenceImprovement.ts, 10, 18))
++>first : Symbol(first, Decl(extractInferenceImprovement.ts, 10, 18))
+ 
+     second: number;
+->second : Symbol(StrNum.second, Decl(extractInferenceImprovement.ts, 11, 18))
++>second : Symbol(second, Decl(extractInferenceImprovement.ts, 11, 18))
+ 
+     [s]: string;
+->[s] : Symbol(StrNum[s], Decl(extractInferenceImprovement.ts, 12, 19))
++>[s] : Symbol([s], Decl(extractInferenceImprovement.ts, 12, 19))
+ >s : Symbol(s, Decl(extractInferenceImprovement.ts, 9, 5))
+ }
+ const obj: StrNum = {} as any;

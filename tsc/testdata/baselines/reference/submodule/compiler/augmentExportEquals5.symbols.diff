@@ -1,0 +1,103 @@
+--- old.augmentExportEquals5.symbols
++++ new.augmentExportEquals5.symbols
+@@= skipped -19, +19 lines =@@
+     function e(): e.Express;
+ >e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
+ >e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
+->Express : Symbol(e.Express, Decl(express.d.ts, 52, 9))
++>Express : Symbol(Express, Decl(express.d.ts, 52, 9))
+ 
+     namespace e {
+ >e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
+@@= skipped -9, +9 lines =@@
+ >IRoute : Symbol(IRoute, Decl(express.d.ts, 8, 17))
+ 
+             all(...handler: RequestHandler[]): IRoute;
+->all : Symbol(IRoute.all, Decl(express.d.ts, 9, 26))
++>all : Symbol(all, Decl(express.d.ts, 9, 26))
+ >handler : Symbol(handler, Decl(express.d.ts, 10, 16))
+ >RequestHandler : Symbol(RequestHandler, Decl(express.d.ts, 38, 9))
+ >IRoute : Symbol(IRoute, Decl(express.d.ts, 8, 17))
+@@= skipped -24, +24 lines =@@
+ >RequestHandler : Symbol(RequestHandler, Decl(express.d.ts, 38, 9))
+ 
+             route(path: string): IRoute;
+->route : Symbol(IRouter.route, Decl(express.d.ts, 17, 53))
++>route : Symbol(route, Decl(express.d.ts, 17, 53))
+ >path : Symbol(path, Decl(express.d.ts, 18, 18))
+ >IRoute : Symbol(IRoute, Decl(express.d.ts, 8, 17))
+         }
+@@= skipped -22, +22 lines =@@
+ 
+         interface Request extends Express.Request {
+ >Request : Symbol(Request, Decl(express.d.ts, 25, 49), Decl(augmentation.ts, 2, 26))
+->Express.Request : Symbol(Express.Request, Decl(express.d.ts, 0, 24))
++>Express.Request : Symbol(Request, Decl(express.d.ts, 0, 24))
+ >Express : Symbol(Express, Decl(express.d.ts, 0, 0))
+->Request : Symbol(Express.Request, Decl(express.d.ts, 0, 24))
++>Request : Symbol(Request, Decl(express.d.ts, 0, 24))
+ 
+             get (name: string): string;
+->get : Symbol(Request.get, Decl(express.d.ts, 27, 51))
++>get : Symbol(get, Decl(express.d.ts, 27, 51))
+ >name : Symbol(name, Decl(express.d.ts, 29, 17))
+         }
+ 
+         interface Response extends Express.Response {
+ >Response : Symbol(Response, Decl(express.d.ts, 30, 9))
+->Express.Response : Symbol(Express.Response, Decl(express.d.ts, 1, 32))
++>Express.Response : Symbol(Response, Decl(express.d.ts, 1, 32))
+ >Express : Symbol(Express, Decl(express.d.ts, 0, 0))
+->Response : Symbol(Express.Response, Decl(express.d.ts, 1, 32))
++>Response : Symbol(Response, Decl(express.d.ts, 1, 32))
+ 
+             charset: string;
+->charset : Symbol(Response.charset, Decl(express.d.ts, 32, 53))
++>charset : Symbol(charset, Decl(express.d.ts, 32, 53))
+         }
+ 
+         interface ErrorRequestHandler {
+@@= skipped -65, +65 lines =@@
+ >Application : Symbol(Application, Decl(express.d.ts, 48, 9))
+ >IRouter : Symbol(IRouter, Decl(express.d.ts, 15, 9))
+ >Application : Symbol(Application, Decl(express.d.ts, 48, 9))
+->Express.Application : Symbol(Express.Application, Decl(express.d.ts, 2, 33))
++>Express.Application : Symbol(Application, Decl(express.d.ts, 2, 33))
+ >Express : Symbol(Express, Decl(express.d.ts, 0, 0))
+->Application : Symbol(Express.Application, Decl(express.d.ts, 2, 33))
++>Application : Symbol(Application, Decl(express.d.ts, 2, 33))
+ 
+             routes: any;
+->routes : Symbol(Application.routes, Decl(express.d.ts, 50, 81))
++>routes : Symbol(routes, Decl(express.d.ts, 50, 81))
+         }
+ 
+         interface Express extends Application {
+@@= skipped -13, +13 lines =@@
+ >Application : Symbol(Application, Decl(express.d.ts, 48, 9))
+ 
+             createApplication(): Application;
+->createApplication : Symbol(Express.createApplication, Decl(express.d.ts, 54, 47))
++>createApplication : Symbol(createApplication, Decl(express.d.ts, 54, 47))
+ >Application : Symbol(Application, Decl(express.d.ts, 48, 9))
+         }
+ 
+@@= skipped -24, +24 lines =@@
+ >Request : Symbol(Request, Decl(express.d.ts, 25, 49), Decl(augmentation.ts, 2, 26))
+ 
+         id: number;
+->id : Symbol(Request.id, Decl(augmentation.ts, 3, 23))
++>id : Symbol(id, Decl(augmentation.ts, 3, 23))
+     }
+ }
+ 
+@@= skipped -15, +15 lines =@@
+ 
+ const y = x.id;
+ >y : Symbol(y, Decl(consumer.ts, 3, 5))
+->x.id : Symbol(Request.id, Decl(augmentation.ts, 3, 23))
++>x.id : Symbol(id, Decl(augmentation.ts, 3, 23))
+ >x : Symbol(x, Decl(consumer.ts, 2, 3))
+->id : Symbol(Request.id, Decl(augmentation.ts, 3, 23))
++>id : Symbol(id, Decl(augmentation.ts, 3, 23))
+ 

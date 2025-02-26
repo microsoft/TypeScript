@@ -1,0 +1,25 @@
+--- old.errorsWithInvokablesInUnions01.symbols
++++ new.errorsWithInvokablesInUnions01.symbols
+@@= skipped -21, +21 lines =@@
+ >TScope : Symbol(TScope, Decl(errorsWithInvokablesInUnions01.ts, 8, 28))
+ 
+     pre?: IDirectiveLinkFn<TScope>;
+->pre : Symbol(IDirectivePrePost.pre, Decl(errorsWithInvokablesInUnions01.ts, 8, 37))
++>pre : Symbol(pre, Decl(errorsWithInvokablesInUnions01.ts, 8, 37))
+ >IDirectiveLinkFn : Symbol(IDirectiveLinkFn, Decl(errorsWithInvokablesInUnions01.ts, 2, 1))
+ >TScope : Symbol(TScope, Decl(errorsWithInvokablesInUnions01.ts, 8, 28))
+ 
+     post?: IDirectiveLinkFn<TScope>;
+->post : Symbol(IDirectivePrePost.post, Decl(errorsWithInvokablesInUnions01.ts, 9, 35))
++>post : Symbol(post, Decl(errorsWithInvokablesInUnions01.ts, 9, 35))
+ >IDirectiveLinkFn : Symbol(IDirectiveLinkFn, Decl(errorsWithInvokablesInUnions01.ts, 2, 1))
+ >TScope : Symbol(TScope, Decl(errorsWithInvokablesInUnions01.ts, 8, 28))
+ }
+@@= skipped -24, +24 lines =@@
+ >IDirectivePrePost : Symbol(IDirectivePrePost, Decl(errorsWithInvokablesInUnions01.ts, 6, 1))
+ 
+     someUnaccountedProp: any;
+->someUnaccountedProp : Symbol(ctor.someUnaccountedProp, Decl(errorsWithInvokablesInUnions01.ts, 15, 96))
++>someUnaccountedProp : Symbol(someUnaccountedProp, Decl(errorsWithInvokablesInUnions01.ts, 15, 96))
+ }
+ 

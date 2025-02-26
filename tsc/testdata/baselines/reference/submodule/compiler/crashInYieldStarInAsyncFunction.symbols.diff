@@ -1,0 +1,14 @@
+--- old.crashInYieldStarInAsyncFunction.symbols
++++ new.crashInYieldStarInAsyncFunction.symbols
+@@= skipped -6, +6 lines =@@
+ 
+     [Symbol.asyncIterator]() {
+ >[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(crashInYieldStarInAsyncFunction.ts, 1, 11))
+->Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
++>Symbol.asyncIterator : Symbol(asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+->asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
++>asyncIterator : Symbol(asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+ 
+         return {
+             next() {

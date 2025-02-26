@@ -1,0 +1,14 @@
+--- old.overloadResolutionOverNonCTLambdas.symbols
++++ new.overloadResolutionOverNonCTLambdas.symbols
+@@= skipped -15, +15 lines =@@
+ 
+     var result= message.replace(/\{(\d+)\}/g, function(match, ...rest) {
+ >result : Symbol(result, Decl(overloadResolutionOverNonCTLambdas.ts, 6, 7))
+->message.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>message.replace : Symbol(replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >message : Symbol(message, Decl(overloadResolutionOverNonCTLambdas.ts, 5, 16))
+->replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>replace : Symbol(replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >match : Symbol(match, Decl(overloadResolutionOverNonCTLambdas.ts, 6, 55))
+ >rest : Symbol(rest, Decl(overloadResolutionOverNonCTLambdas.ts, 6, 61))
+ 

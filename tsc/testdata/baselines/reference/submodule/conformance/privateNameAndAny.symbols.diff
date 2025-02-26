@@ -1,0 +1,41 @@
+--- old.privateNameAndAny.symbols
++++ new.privateNameAndAny.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(privateNameAndAny.ts, 0, 0))
+ 
+     #foo = true;
+->#foo : Symbol(A.#foo, Decl(privateNameAndAny.ts, 0, 9))
++>#foo : Symbol(#foo, Decl(privateNameAndAny.ts, 0, 9))
+ 
+     static #baz = 10;
+->#baz : Symbol(A.#baz, Decl(privateNameAndAny.ts, 1, 16))
++>#baz : Symbol(#baz, Decl(privateNameAndAny.ts, 1, 16))
+ 
+     static #m() {}
+->#m : Symbol(A.#m, Decl(privateNameAndAny.ts, 2, 21))
++>#m : Symbol(#m, Decl(privateNameAndAny.ts, 2, 21))
+ 
+     method(thing: any) {
+->method : Symbol(A.method, Decl(privateNameAndAny.ts, 3, 18))
++>method : Symbol(method, Decl(privateNameAndAny.ts, 3, 18))
+ >thing : Symbol(thing, Decl(privateNameAndAny.ts, 4, 11))
+ 
+         thing.#foo; // OK
+@@= skipped -28, +28 lines =@@
+ >thing : Symbol(thing, Decl(privateNameAndAny.ts, 4, 11))
+     }
+     methodU(thing: unknown) {
+->methodU : Symbol(A.methodU, Decl(privateNameAndAny.ts, 10, 5))
++>methodU : Symbol(methodU, Decl(privateNameAndAny.ts, 10, 5))
+ >thing : Symbol(thing, Decl(privateNameAndAny.ts, 11, 12))
+ 
+         thing.#foo;
+@@= skipped -19, +19 lines =@@
+ >thing : Symbol(thing, Decl(privateNameAndAny.ts, 11, 12))
+     }
+     methodN(thing: never) {
+->methodN : Symbol(A.methodN, Decl(privateNameAndAny.ts, 17, 5))
++>methodN : Symbol(methodN, Decl(privateNameAndAny.ts, 17, 5))
+ >thing : Symbol(thing, Decl(privateNameAndAny.ts, 18, 12))
+ 
+         thing.#foo;

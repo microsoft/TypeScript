@@ -1,0 +1,11 @@
+--- old.nullishCoalescingOperator1.symbols
++++ new.nullishCoalescingOperator1.symbols
+@@= skipped -38, +38 lines =@@
+ 
+ interface I { a: string }
+ >I : Symbol(I, Decl(nullishCoalescingOperator1.ts, 13, 44))
+->a : Symbol(I.a, Decl(nullishCoalescingOperator1.ts, 15, 13))
++>a : Symbol(a, Decl(nullishCoalescingOperator1.ts, 15, 13))
+ 
+ declare const d1: I | undefined | null
+ >d1 : Symbol(d1, Decl(nullishCoalescingOperator1.ts, 16, 13))

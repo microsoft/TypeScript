@@ -1,0 +1,20 @@
+--- old.namespaces2.symbols
++++ new.namespaces2.symbols
+@@= skipped -14, +14 lines =@@
+ var c: A.B.C = new A.B.C();
+ >c : Symbol(c, Decl(namespaces2.ts, 6, 3))
+ >A : Symbol(A, Decl(namespaces2.ts, 0, 0))
+->B : Symbol(A.B, Decl(namespaces2.ts, 0, 10))
+->C : Symbol(A.B.C, Decl(namespaces2.ts, 1, 21))
+->A.B.C : Symbol(A.B.C, Decl(namespaces2.ts, 1, 21))
+->A.B : Symbol(A.B, Decl(namespaces2.ts, 0, 10))
++>B : Symbol(B, Decl(namespaces2.ts, 0, 10))
++>C : Symbol(C, Decl(namespaces2.ts, 1, 21))
++>A.B.C : Symbol(C, Decl(namespaces2.ts, 1, 21))
++>A.B : Symbol(B, Decl(namespaces2.ts, 0, 10))
+ >A : Symbol(A, Decl(namespaces2.ts, 0, 0))
+->B : Symbol(A.B, Decl(namespaces2.ts, 0, 10))
+->C : Symbol(A.B.C, Decl(namespaces2.ts, 1, 21))
++>B : Symbol(B, Decl(namespaces2.ts, 0, 10))
++>C : Symbol(C, Decl(namespaces2.ts, 1, 21))
+ 

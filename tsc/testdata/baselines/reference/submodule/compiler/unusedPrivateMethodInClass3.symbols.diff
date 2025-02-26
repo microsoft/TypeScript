@@ -1,0 +1,27 @@
+--- old.unusedPrivateMethodInClass3.symbols
++++ new.unusedPrivateMethodInClass3.symbols
+@@= skipped -4, +4 lines =@@
+ >greeter : Symbol(greeter, Decl(unusedPrivateMethodInClass3.ts, 0, 0))
+ 
+     private function1() {
+->function1 : Symbol(greeter.function1, Decl(unusedPrivateMethodInClass3.ts, 0, 15))
++>function1 : Symbol(function1, Decl(unusedPrivateMethodInClass3.ts, 0, 15))
+ 
+         var y = 10;
+ >y : Symbol(y, Decl(unusedPrivateMethodInClass3.ts, 2, 11))
+     }
+ 
+     private function2() {
+->function2 : Symbol(greeter.function2, Decl(unusedPrivateMethodInClass3.ts, 3, 5))
++>function2 : Symbol(function2, Decl(unusedPrivateMethodInClass3.ts, 3, 5))
+ 
+         var y = 10;
+ >y : Symbol(y, Decl(unusedPrivateMethodInClass3.ts, 6, 11))
+     }
+ 
+     public function3() {
+->function3 : Symbol(greeter.function3, Decl(unusedPrivateMethodInClass3.ts, 7, 5))
++>function3 : Symbol(function3, Decl(unusedPrivateMethodInClass3.ts, 7, 5))
+ 
+         var y = 10;
+ >y : Symbol(y, Decl(unusedPrivateMethodInClass3.ts, 10, 11))

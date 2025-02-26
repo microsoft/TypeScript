@@ -1,0 +1,184 @@
+--- old.looseThisTypeInFunctions.symbols
++++ new.looseThisTypeInFunctions.symbols
+@@= skipped -4, +4 lines =@@
+ >I : Symbol(I, Decl(looseThisTypeInFunctions.ts, 0, 0))
+ 
+     n: number;
+->n : Symbol(I.n, Decl(looseThisTypeInFunctions.ts, 0, 13))
++>n : Symbol(n, Decl(looseThisTypeInFunctions.ts, 0, 13))
+ 
+     explicitThis(this: this, m: number): number;
+->explicitThis : Symbol(I.explicitThis, Decl(looseThisTypeInFunctions.ts, 1, 14))
++>explicitThis : Symbol(explicitThis, Decl(looseThisTypeInFunctions.ts, 1, 14))
+ >this : Symbol(this, Decl(looseThisTypeInFunctions.ts, 2, 17))
+ >m : Symbol(m, Decl(looseThisTypeInFunctions.ts, 2, 28))
+ }
+@@= skipped -11, +11 lines =@@
+ >Unused : Symbol(Unused, Decl(looseThisTypeInFunctions.ts, 3, 1))
+ 
+     implicitNoThis(m: number): number;
+->implicitNoThis : Symbol(Unused.implicitNoThis, Decl(looseThisTypeInFunctions.ts, 4, 18))
++>implicitNoThis : Symbol(implicitNoThis, Decl(looseThisTypeInFunctions.ts, 4, 18))
+ >m : Symbol(m, Decl(looseThisTypeInFunctions.ts, 5, 19))
+ }
+ class C implements I {
+@@= skipped -8, +8 lines =@@
+ >I : Symbol(I, Decl(looseThisTypeInFunctions.ts, 0, 0))
+ 
+     n: number;
+->n : Symbol(C.n, Decl(looseThisTypeInFunctions.ts, 7, 22))
++>n : Symbol(n, Decl(looseThisTypeInFunctions.ts, 7, 22))
+ 
+     explicitThis(this: this, m: number): number {
+->explicitThis : Symbol(C.explicitThis, Decl(looseThisTypeInFunctions.ts, 8, 14))
++>explicitThis : Symbol(explicitThis, Decl(looseThisTypeInFunctions.ts, 8, 14))
+ >this : Symbol(this, Decl(looseThisTypeInFunctions.ts, 9, 17))
+ >m : Symbol(m, Decl(looseThisTypeInFunctions.ts, 9, 28))
+ 
+         return this.n + m;
+->this.n : Symbol(C.n, Decl(looseThisTypeInFunctions.ts, 7, 22))
++>this.n : Symbol(n, Decl(looseThisTypeInFunctions.ts, 7, 22))
+ >this : Symbol(this, Decl(looseThisTypeInFunctions.ts, 9, 17))
+->n : Symbol(C.n, Decl(looseThisTypeInFunctions.ts, 7, 22))
++>n : Symbol(n, Decl(looseThisTypeInFunctions.ts, 7, 22))
+ >m : Symbol(m, Decl(looseThisTypeInFunctions.ts, 9, 28))
+     }
+     implicitThis(m: number): number {
+->implicitThis : Symbol(C.implicitThis, Decl(looseThisTypeInFunctions.ts, 11, 5))
++>implicitThis : Symbol(implicitThis, Decl(looseThisTypeInFunctions.ts, 11, 5))
+ >m : Symbol(m, Decl(looseThisTypeInFunctions.ts, 12, 17))
+ 
+         return this.n + m;
+->this.n : Symbol(C.n, Decl(looseThisTypeInFunctions.ts, 7, 22))
++>this.n : Symbol(n, Decl(looseThisTypeInFunctions.ts, 7, 22))
+ >this : Symbol(C, Decl(looseThisTypeInFunctions.ts, 6, 1))
+->n : Symbol(C.n, Decl(looseThisTypeInFunctions.ts, 7, 22))
++>n : Symbol(n, Decl(looseThisTypeInFunctions.ts, 7, 22))
+ >m : Symbol(m, Decl(looseThisTypeInFunctions.ts, 12, 17))
+     }
+     explicitVoid(this: void, m: number): number {
+->explicitVoid : Symbol(C.explicitVoid, Decl(looseThisTypeInFunctions.ts, 14, 5))
++>explicitVoid : Symbol(explicitVoid, Decl(looseThisTypeInFunctions.ts, 14, 5))
+ >this : Symbol(this, Decl(looseThisTypeInFunctions.ts, 15, 17))
+ >m : Symbol(m, Decl(looseThisTypeInFunctions.ts, 15, 28))
+ 
+@@= skipped -37, +37 lines =@@
+ >C : Symbol(C, Decl(looseThisTypeInFunctions.ts, 6, 1))
+ 
+ c.explicitVoid = c.explicitThis; // error, 'void' is missing everything
+->c.explicitVoid : Symbol(C.explicitVoid, Decl(looseThisTypeInFunctions.ts, 14, 5))
++>c.explicitVoid : Symbol(explicitVoid, Decl(looseThisTypeInFunctions.ts, 14, 5))
+ >c : Symbol(c, Decl(looseThisTypeInFunctions.ts, 19, 3))
+->explicitVoid : Symbol(C.explicitVoid, Decl(looseThisTypeInFunctions.ts, 14, 5))
+->c.explicitThis : Symbol(C.explicitThis, Decl(looseThisTypeInFunctions.ts, 8, 14))
++>explicitVoid : Symbol(explicitVoid, Decl(looseThisTypeInFunctions.ts, 14, 5))
++>c.explicitThis : Symbol(explicitThis, Decl(looseThisTypeInFunctions.ts, 8, 14))
+ >c : Symbol(c, Decl(looseThisTypeInFunctions.ts, 19, 3))
+->explicitThis : Symbol(C.explicitThis, Decl(looseThisTypeInFunctions.ts, 8, 14))
++>explicitThis : Symbol(explicitThis, Decl(looseThisTypeInFunctions.ts, 8, 14))
+ 
+ let o = {
+ >o : Symbol(o, Decl(looseThisTypeInFunctions.ts, 21, 3))
+@@= skipped -20, +20 lines =@@
+         return m + this.n.length; // error, 'length' does not exist on 'number'
+ >m : Symbol(m, Decl(looseThisTypeInFunctions.ts, 23, 28))
+ >this.n : Symbol(n, Decl(looseThisTypeInFunctions.ts, 21, 9))
+->this : Symbol(o, Decl(looseThisTypeInFunctions.ts, 21, 7))
++>this : Symbol((Anonymous type), Decl(looseThisTypeInFunctions.ts, 21, 7))
+ >n : Symbol(n, Decl(looseThisTypeInFunctions.ts, 21, 9))
+ 
+     },
+@@= skipped -28, +28 lines =@@
+ 
+          return m + this.n.length;  // error, this.n: number, no member 'length'
+ >m : Symbol(m, Decl(looseThisTypeInFunctions.ts, 31, 28))
+->this.n : Symbol(I.n, Decl(looseThisTypeInFunctions.ts, 0, 13))
++>this.n : Symbol(n, Decl(looseThisTypeInFunctions.ts, 0, 13))
+ >this : Symbol(this, Decl(looseThisTypeInFunctions.ts, 2, 17))
+->n : Symbol(I.n, Decl(looseThisTypeInFunctions.ts, 0, 13))
++>n : Symbol(n, Decl(looseThisTypeInFunctions.ts, 0, 13))
+ 
+     },
+ }
+ let x = i.explicitThis;
+ >x : Symbol(x, Decl(looseThisTypeInFunctions.ts, 35, 3))
+->i.explicitThis : Symbol(I.explicitThis, Decl(looseThisTypeInFunctions.ts, 1, 14))
++>i.explicitThis : Symbol(explicitThis, Decl(looseThisTypeInFunctions.ts, 1, 14))
+ >i : Symbol(i, Decl(looseThisTypeInFunctions.ts, 28, 3))
+->explicitThis : Symbol(I.explicitThis, Decl(looseThisTypeInFunctions.ts, 1, 14))
++>explicitThis : Symbol(explicitThis, Decl(looseThisTypeInFunctions.ts, 1, 14))
+ 
+ let n = x(12); // callee:void doesn't match this:I
+ >n : Symbol(n, Decl(looseThisTypeInFunctions.ts, 36, 3))
+@@= skipped -22, +22 lines =@@
+ 
+ let y = u.implicitNoThis;
+ >y : Symbol(y, Decl(looseThisTypeInFunctions.ts, 38, 3))
+->u.implicitNoThis : Symbol(Unused.implicitNoThis, Decl(looseThisTypeInFunctions.ts, 4, 18))
++>u.implicitNoThis : Symbol(implicitNoThis, Decl(looseThisTypeInFunctions.ts, 4, 18))
+ >u : Symbol(u, Decl(looseThisTypeInFunctions.ts, 37, 3))
+->implicitNoThis : Symbol(Unused.implicitNoThis, Decl(looseThisTypeInFunctions.ts, 4, 18))
++>implicitNoThis : Symbol(implicitNoThis, Decl(looseThisTypeInFunctions.ts, 4, 18))
+ 
+ n = y(12); // ok, callee:void matches this:any
+ >n : Symbol(n, Decl(looseThisTypeInFunctions.ts, 36, 3))
+ >y : Symbol(y, Decl(looseThisTypeInFunctions.ts, 38, 3))
+ 
+ c.explicitVoid = c.implicitThis // ok, implicitThis(this:any)
+->c.explicitVoid : Symbol(C.explicitVoid, Decl(looseThisTypeInFunctions.ts, 14, 5))
++>c.explicitVoid : Symbol(explicitVoid, Decl(looseThisTypeInFunctions.ts, 14, 5))
+ >c : Symbol(c, Decl(looseThisTypeInFunctions.ts, 19, 3))
+->explicitVoid : Symbol(C.explicitVoid, Decl(looseThisTypeInFunctions.ts, 14, 5))
+->c.implicitThis : Symbol(C.implicitThis, Decl(looseThisTypeInFunctions.ts, 11, 5))
++>explicitVoid : Symbol(explicitVoid, Decl(looseThisTypeInFunctions.ts, 14, 5))
++>c.implicitThis : Symbol(implicitThis, Decl(looseThisTypeInFunctions.ts, 11, 5))
+ >c : Symbol(c, Decl(looseThisTypeInFunctions.ts, 19, 3))
+->implicitThis : Symbol(C.implicitThis, Decl(looseThisTypeInFunctions.ts, 11, 5))
++>implicitThis : Symbol(implicitThis, Decl(looseThisTypeInFunctions.ts, 11, 5))
+ 
+ o.implicitThis = c.implicitThis; // ok, implicitThis(this:any)
+ >o.implicitThis : Symbol(implicitThis, Decl(looseThisTypeInFunctions.ts, 25, 6))
+ >o : Symbol(o, Decl(looseThisTypeInFunctions.ts, 21, 3))
+ >implicitThis : Symbol(implicitThis, Decl(looseThisTypeInFunctions.ts, 25, 6))
+->c.implicitThis : Symbol(C.implicitThis, Decl(looseThisTypeInFunctions.ts, 11, 5))
++>c.implicitThis : Symbol(implicitThis, Decl(looseThisTypeInFunctions.ts, 11, 5))
+ >c : Symbol(c, Decl(looseThisTypeInFunctions.ts, 19, 3))
+->implicitThis : Symbol(C.implicitThis, Decl(looseThisTypeInFunctions.ts, 11, 5))
++>implicitThis : Symbol(implicitThis, Decl(looseThisTypeInFunctions.ts, 11, 5))
+ 
+ o.implicitThis = c.explicitThis; // ok, implicitThis(this:any) is assignable to explicitThis(this: this)
+ >o.implicitThis : Symbol(implicitThis, Decl(looseThisTypeInFunctions.ts, 25, 6))
+ >o : Symbol(o, Decl(looseThisTypeInFunctions.ts, 21, 3))
+ >implicitThis : Symbol(implicitThis, Decl(looseThisTypeInFunctions.ts, 25, 6))
+->c.explicitThis : Symbol(C.explicitThis, Decl(looseThisTypeInFunctions.ts, 8, 14))
++>c.explicitThis : Symbol(explicitThis, Decl(looseThisTypeInFunctions.ts, 8, 14))
+ >c : Symbol(c, Decl(looseThisTypeInFunctions.ts, 19, 3))
+->explicitThis : Symbol(C.explicitThis, Decl(looseThisTypeInFunctions.ts, 8, 14))
++>explicitThis : Symbol(explicitThis, Decl(looseThisTypeInFunctions.ts, 8, 14))
+ 
+ o.implicitThis = i.explicitThis;
+ >o.implicitThis : Symbol(implicitThis, Decl(looseThisTypeInFunctions.ts, 25, 6))
+ >o : Symbol(o, Decl(looseThisTypeInFunctions.ts, 21, 3))
+ >implicitThis : Symbol(implicitThis, Decl(looseThisTypeInFunctions.ts, 25, 6))
+->i.explicitThis : Symbol(I.explicitThis, Decl(looseThisTypeInFunctions.ts, 1, 14))
++>i.explicitThis : Symbol(explicitThis, Decl(looseThisTypeInFunctions.ts, 1, 14))
+ >i : Symbol(i, Decl(looseThisTypeInFunctions.ts, 28, 3))
+->explicitThis : Symbol(I.explicitThis, Decl(looseThisTypeInFunctions.ts, 1, 14))
++>explicitThis : Symbol(explicitThis, Decl(looseThisTypeInFunctions.ts, 1, 14))
+ 
+ i.explicitThis = function(m) {
+->i.explicitThis : Symbol(I.explicitThis, Decl(looseThisTypeInFunctions.ts, 1, 14))
++>i.explicitThis : Symbol(explicitThis, Decl(looseThisTypeInFunctions.ts, 1, 14))
+ >i : Symbol(i, Decl(looseThisTypeInFunctions.ts, 28, 3))
+->explicitThis : Symbol(I.explicitThis, Decl(looseThisTypeInFunctions.ts, 1, 14))
++>explicitThis : Symbol(explicitThis, Decl(looseThisTypeInFunctions.ts, 1, 14))
+ >m : Symbol(m, Decl(looseThisTypeInFunctions.ts, 44, 26))
+ 
+      return this.n.length;  // error, this.n: number
+->this.n : Symbol(I.n, Decl(looseThisTypeInFunctions.ts, 0, 13))
++>this.n : Symbol(n, Decl(looseThisTypeInFunctions.ts, 0, 13))
+ >this : Symbol(this, Decl(looseThisTypeInFunctions.ts, 2, 17))
+->n : Symbol(I.n, Decl(looseThisTypeInFunctions.ts, 0, 13))
++>n : Symbol(n, Decl(looseThisTypeInFunctions.ts, 0, 13))
+ }
+ 

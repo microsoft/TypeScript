@@ -1,0 +1,10 @@
+--- old.templateStringMultiline3.symbols
++++ new.templateStringMultiline3.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === templateStringMultiline3.ts ===
+ 
++
+ // newlines are <CR>
+ `
+ \

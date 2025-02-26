@@ -1,0 +1,11 @@
+--- old.jsxFactoryQualifiedNameWithEs5.symbols
++++ new.jsxFactoryQualifiedNameWithEs5.symbols
+@@= skipped -14, +14 lines =@@
+ >Component : Symbol(Component, Decl(index.tsx, 3, 41))
+ 
+     renderCallback() {
+->renderCallback : Symbol(Component.renderCallback, Decl(index.tsx, 5, 17))
++>renderCallback : Symbol(renderCallback, Decl(index.tsx, 5, 17))
+ 
+         return <div>test</div>;
+     }

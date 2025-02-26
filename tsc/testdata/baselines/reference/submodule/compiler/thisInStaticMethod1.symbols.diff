@@ -1,0 +1,29 @@
+--- old.thisInStaticMethod1.symbols
++++ new.thisInStaticMethod1.symbols
+@@= skipped -4, +4 lines =@@
+ >foo : Symbol(foo, Decl(thisInStaticMethod1.ts, 0, 0))
+ 
+  static x = 3;
+->x : Symbol(foo.x, Decl(thisInStaticMethod1.ts, 0, 11))
++>x : Symbol(x, Decl(thisInStaticMethod1.ts, 0, 11))
+ 
+  static bar() {
+->bar : Symbol(foo.bar, Decl(thisInStaticMethod1.ts, 1, 14))
++>bar : Symbol(bar, Decl(thisInStaticMethod1.ts, 1, 14))
+ 
+   return this.x;
+->this.x : Symbol(foo.x, Decl(thisInStaticMethod1.ts, 0, 11))
++>this.x : Symbol(x, Decl(thisInStaticMethod1.ts, 0, 11))
+ >this : Symbol(foo, Decl(thisInStaticMethod1.ts, 0, 0))
+->x : Symbol(foo.x, Decl(thisInStaticMethod1.ts, 0, 11))
++>x : Symbol(x, Decl(thisInStaticMethod1.ts, 0, 11))
+  } 
+ } 
+ var x = foo.bar();
+ >x : Symbol(x, Decl(thisInStaticMethod1.ts, 6, 3))
+->foo.bar : Symbol(foo.bar, Decl(thisInStaticMethod1.ts, 1, 14))
++>foo.bar : Symbol(bar, Decl(thisInStaticMethod1.ts, 1, 14))
+ >foo : Symbol(foo, Decl(thisInStaticMethod1.ts, 0, 0))
+->bar : Symbol(foo.bar, Decl(thisInStaticMethod1.ts, 1, 14))
++>bar : Symbol(bar, Decl(thisInStaticMethod1.ts, 1, 14))
+ 

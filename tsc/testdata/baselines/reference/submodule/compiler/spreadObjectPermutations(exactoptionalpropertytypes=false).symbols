@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/spreadObjectPermutations.ts] ////
+
+=== spreadObjectPermutations.ts ===
+declare const a: { x: string | number };
+>a : Symbol(a, Decl(spreadObjectPermutations.ts, 0, 13))
+>x : Symbol(x, Decl(spreadObjectPermutations.ts, 0, 18))
+
+declare const b: { x?: string | number };
+>b : Symbol(b, Decl(spreadObjectPermutations.ts, 1, 13))
+>x : Symbol(x, Decl(spreadObjectPermutations.ts, 1, 18))
+
+declare const c: { x?: string | number | undefined };
+>c : Symbol(c, Decl(spreadObjectPermutations.ts, 2, 13))
+>x : Symbol(x, Decl(spreadObjectPermutations.ts, 2, 18))
+
+const v_a = { ...a };
+>v_a : Symbol(v_a, Decl(spreadObjectPermutations.ts, 4, 5))
+>a : Symbol(a, Decl(spreadObjectPermutations.ts, 0, 13))
+
+const v_b = { ...b };
+>v_b : Symbol(v_b, Decl(spreadObjectPermutations.ts, 5, 5))
+>b : Symbol(b, Decl(spreadObjectPermutations.ts, 1, 13))
+
+const v_c = { ...c };
+>v_c : Symbol(v_c, Decl(spreadObjectPermutations.ts, 6, 5))
+>c : Symbol(c, Decl(spreadObjectPermutations.ts, 2, 13))
+
+const v_ab = { ...a, ...b };
+>v_ab : Symbol(v_ab, Decl(spreadObjectPermutations.ts, 7, 5))
+>a : Symbol(a, Decl(spreadObjectPermutations.ts, 0, 13))
+>b : Symbol(b, Decl(spreadObjectPermutations.ts, 1, 13))
+
+const v_ac = { ...a, ...c };
+>v_ac : Symbol(v_ac, Decl(spreadObjectPermutations.ts, 8, 5))
+>a : Symbol(a, Decl(spreadObjectPermutations.ts, 0, 13))
+>c : Symbol(c, Decl(spreadObjectPermutations.ts, 2, 13))
+
+const v_ba = { ...b, ...a };
+>v_ba : Symbol(v_ba, Decl(spreadObjectPermutations.ts, 9, 5))
+>b : Symbol(b, Decl(spreadObjectPermutations.ts, 1, 13))
+>a : Symbol(a, Decl(spreadObjectPermutations.ts, 0, 13))
+
+const v_bc = { ...b, ...c };
+>v_bc : Symbol(v_bc, Decl(spreadObjectPermutations.ts, 10, 5))
+>b : Symbol(b, Decl(spreadObjectPermutations.ts, 1, 13))
+>c : Symbol(c, Decl(spreadObjectPermutations.ts, 2, 13))
+
+const v_ca = { ...c, ...a };
+>v_ca : Symbol(v_ca, Decl(spreadObjectPermutations.ts, 11, 5))
+>c : Symbol(c, Decl(spreadObjectPermutations.ts, 2, 13))
+>a : Symbol(a, Decl(spreadObjectPermutations.ts, 0, 13))
+
+const v_cb = { ...c, ...b };
+>v_cb : Symbol(v_cb, Decl(spreadObjectPermutations.ts, 12, 5))
+>c : Symbol(c, Decl(spreadObjectPermutations.ts, 2, 13))
+>b : Symbol(b, Decl(spreadObjectPermutations.ts, 1, 13))
+
+const v_abc = { ...a, ...b, ...c };
+>v_abc : Symbol(v_abc, Decl(spreadObjectPermutations.ts, 13, 5))
+>a : Symbol(a, Decl(spreadObjectPermutations.ts, 0, 13))
+>b : Symbol(b, Decl(spreadObjectPermutations.ts, 1, 13))
+>c : Symbol(c, Decl(spreadObjectPermutations.ts, 2, 13))
+
+const v_acb = { ...a, ...c, ...b };
+>v_acb : Symbol(v_acb, Decl(spreadObjectPermutations.ts, 14, 5))
+>a : Symbol(a, Decl(spreadObjectPermutations.ts, 0, 13))
+>c : Symbol(c, Decl(spreadObjectPermutations.ts, 2, 13))
+>b : Symbol(b, Decl(spreadObjectPermutations.ts, 1, 13))
+
+const v_bac = { ...b, ...a, ...c };
+>v_bac : Symbol(v_bac, Decl(spreadObjectPermutations.ts, 15, 5))
+>b : Symbol(b, Decl(spreadObjectPermutations.ts, 1, 13))
+>a : Symbol(a, Decl(spreadObjectPermutations.ts, 0, 13))
+>c : Symbol(c, Decl(spreadObjectPermutations.ts, 2, 13))
+
+const v_bca = { ...b, ...c, ...a };
+>v_bca : Symbol(v_bca, Decl(spreadObjectPermutations.ts, 16, 5))
+>b : Symbol(b, Decl(spreadObjectPermutations.ts, 1, 13))
+>c : Symbol(c, Decl(spreadObjectPermutations.ts, 2, 13))
+>a : Symbol(a, Decl(spreadObjectPermutations.ts, 0, 13))
+
+const v_cab = { ...c, ...a, ...b };
+>v_cab : Symbol(v_cab, Decl(spreadObjectPermutations.ts, 17, 5))
+>c : Symbol(c, Decl(spreadObjectPermutations.ts, 2, 13))
+>a : Symbol(a, Decl(spreadObjectPermutations.ts, 0, 13))
+>b : Symbol(b, Decl(spreadObjectPermutations.ts, 1, 13))
+
+const v_cba = { ...c, ...b, ...a };
+>v_cba : Symbol(v_cba, Decl(spreadObjectPermutations.ts, 18, 5))
+>c : Symbol(c, Decl(spreadObjectPermutations.ts, 2, 13))
+>b : Symbol(b, Decl(spreadObjectPermutations.ts, 1, 13))
+>a : Symbol(a, Decl(spreadObjectPermutations.ts, 0, 13))
+

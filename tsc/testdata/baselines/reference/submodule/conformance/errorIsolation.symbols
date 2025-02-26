@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/jsdoc/errorIsolation.ts] ////
+
+=== errorIsolation.js ===
+const async = { doSomething: _ => {} };
+>async : Symbol(async, Decl(errorIsolation.js, 0, 5))
+>doSomething : Symbol(doSomething, Decl(errorIsolation.js, 0, 15))
+>_ : Symbol(_, Decl(errorIsolation.js, 0, 28))
+
+async.doSomething(
+>async.doSomething : Symbol(doSomething, Decl(errorIsolation.js, 0, 15))
+>async : Symbol(async, Decl(errorIsolation.js, 0, 5))
+>doSomething : Symbol(doSomething, Decl(errorIsolation.js, 0, 15))
+
+	/***/
+	() => {}
+);

@@ -1,0 +1,29 @@
+--- old.assignmentCompatWithConstructSignatures5.symbols
++++ new.assignmentCompatWithConstructSignatures5.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ class Base { foo: string; }
+ >Base : Symbol(Base, Decl(assignmentCompatWithConstructSignatures5.ts, 0, 0))
+->foo : Symbol(Base.foo, Decl(assignmentCompatWithConstructSignatures5.ts, 2, 12))
++>foo : Symbol(foo, Decl(assignmentCompatWithConstructSignatures5.ts, 2, 12))
+ 
+ class Derived extends Base { bar: string; }
+ >Derived : Symbol(Derived, Decl(assignmentCompatWithConstructSignatures5.ts, 2, 27))
+ >Base : Symbol(Base, Decl(assignmentCompatWithConstructSignatures5.ts, 0, 0))
+->bar : Symbol(Derived.bar, Decl(assignmentCompatWithConstructSignatures5.ts, 3, 28))
++>bar : Symbol(bar, Decl(assignmentCompatWithConstructSignatures5.ts, 3, 28))
+ 
+ class Derived2 extends Derived { baz: string; }
+ >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithConstructSignatures5.ts, 3, 43))
+ >Derived : Symbol(Derived, Decl(assignmentCompatWithConstructSignatures5.ts, 2, 27))
+->baz : Symbol(Derived2.baz, Decl(assignmentCompatWithConstructSignatures5.ts, 4, 32))
++>baz : Symbol(baz, Decl(assignmentCompatWithConstructSignatures5.ts, 4, 32))
+ 
+ class OtherDerived extends Base { bing: string; }
+ >OtherDerived : Symbol(OtherDerived, Decl(assignmentCompatWithConstructSignatures5.ts, 4, 47))
+ >Base : Symbol(Base, Decl(assignmentCompatWithConstructSignatures5.ts, 0, 0))
+->bing : Symbol(OtherDerived.bing, Decl(assignmentCompatWithConstructSignatures5.ts, 5, 33))
++>bing : Symbol(bing, Decl(assignmentCompatWithConstructSignatures5.ts, 5, 33))
+ 
+ var a: new <T>(x: T) => T[];
+ >a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 7, 3))

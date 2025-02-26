@@ -1,0 +1,19 @@
+--- old.callbackOnConstructor.symbols
++++ new.callbackOnConstructor.symbols
+@@= skipped -4, +4 lines =@@
+ >Preferences : Symbol(Preferences, Decl(callbackOnConstructor.js, 0, 0))
+ 
+   assignability = "no"
+->assignability : Symbol(Preferences.assignability, Decl(callbackOnConstructor.js, 0, 26))
++>assignability : Symbol(assignability, Decl(callbackOnConstructor.js, 0, 26))
+ 
+   /**
+    * @callback ValueGetter_2
+@@= skipped -15, +15 lines =@@
+ var ooscope2 = s => s.length > 0
+ >ooscope2 : Symbol(ooscope2, Decl(callbackOnConstructor.js, 12, 3))
+ >s : Symbol(s, Decl(callbackOnConstructor.js, 12, 14))
+->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(callbackOnConstructor.js, 12, 14))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+ 

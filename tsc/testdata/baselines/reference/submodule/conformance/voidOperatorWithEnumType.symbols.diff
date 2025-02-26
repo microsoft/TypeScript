@@ -1,0 +1,52 @@
+--- old.voidOperatorWithEnumType.symbols
++++ new.voidOperatorWithEnumType.symbols
+@@= skipped -7, +7 lines =@@
+ 
+ enum ENUM1 { A, B, "" };
+ >ENUM1 : Symbol(ENUM1, Decl(voidOperatorWithEnumType.ts, 2, 14))
+->A : Symbol(ENUM1.A, Decl(voidOperatorWithEnumType.ts, 3, 12))
+->B : Symbol(ENUM1.B, Decl(voidOperatorWithEnumType.ts, 3, 15))
+->"" : Symbol(ENUM1[""], Decl(voidOperatorWithEnumType.ts, 3, 18))
++>A : Symbol(A, Decl(voidOperatorWithEnumType.ts, 3, 12))
++>B : Symbol(B, Decl(voidOperatorWithEnumType.ts, 3, 15))
++>"" : Symbol("", Decl(voidOperatorWithEnumType.ts, 3, 18))
+ 
+ // enum type var
+ var ResultIsAny1 = void ENUM;
+@@= skipped -17, +17 lines =@@
+ var ResultIsAny3 = void ENUM1["A"];
+ >ResultIsAny3 : Symbol(ResultIsAny3, Decl(voidOperatorWithEnumType.ts, 10, 3))
+ >ENUM1 : Symbol(ENUM1, Decl(voidOperatorWithEnumType.ts, 2, 14))
+->"A" : Symbol(ENUM1.A, Decl(voidOperatorWithEnumType.ts, 3, 12))
++>"A" : Symbol(A, Decl(voidOperatorWithEnumType.ts, 3, 12))
+ 
+ var ResultIsAny4 = void (ENUM[0] + ENUM1["B"]);
+ >ResultIsAny4 : Symbol(ResultIsAny4, Decl(voidOperatorWithEnumType.ts, 11, 3))
+ >ENUM : Symbol(ENUM, Decl(voidOperatorWithEnumType.ts, 0, 0))
+ >ENUM1 : Symbol(ENUM1, Decl(voidOperatorWithEnumType.ts, 2, 14))
+->"B" : Symbol(ENUM1.B, Decl(voidOperatorWithEnumType.ts, 3, 15))
++>"B" : Symbol(B, Decl(voidOperatorWithEnumType.ts, 3, 15))
+ 
+ // multiple void  operators
+ var ResultIsAny5 = void void ENUM;
+@@= skipped -16, +16 lines =@@
+ var ResultIsAny6 = void void void (ENUM[0] + ENUM1.B);
+ >ResultIsAny6 : Symbol(ResultIsAny6, Decl(voidOperatorWithEnumType.ts, 15, 3))
+ >ENUM : Symbol(ENUM, Decl(voidOperatorWithEnumType.ts, 0, 0))
+->ENUM1.B : Symbol(ENUM1.B, Decl(voidOperatorWithEnumType.ts, 3, 15))
++>ENUM1.B : Symbol(B, Decl(voidOperatorWithEnumType.ts, 3, 15))
+ >ENUM1 : Symbol(ENUM1, Decl(voidOperatorWithEnumType.ts, 2, 14))
+->B : Symbol(ENUM1.B, Decl(voidOperatorWithEnumType.ts, 3, 15))
++>B : Symbol(B, Decl(voidOperatorWithEnumType.ts, 3, 15))
+ 
+ // miss assignment operators
+ void ENUM;
+@@= skipped -13, +13 lines =@@
+ 
+ void ENUM1["B"];
+ >ENUM1 : Symbol(ENUM1, Decl(voidOperatorWithEnumType.ts, 2, 14))
+->"B" : Symbol(ENUM1.B, Decl(voidOperatorWithEnumType.ts, 3, 15))
++>"B" : Symbol(B, Decl(voidOperatorWithEnumType.ts, 3, 15))
+ 
+ void ENUM, ENUM1;
+ >ENUM : Symbol(ENUM, Decl(voidOperatorWithEnumType.ts, 0, 0))

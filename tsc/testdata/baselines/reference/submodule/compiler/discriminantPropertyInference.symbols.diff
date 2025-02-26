@@ -1,0 +1,38 @@
+--- old.discriminantPropertyInference.symbols
++++ new.discriminantPropertyInference.symbols
+@@= skipped -60, +60 lines =@@
+     cb: n => n.toFixed()
+ >cb : Symbol(cb, Decl(discriminantPropertyInference.ts, 24, 16))
+ >n : Symbol(n, Decl(discriminantPropertyInference.ts, 25, 7))
+->n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>n.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >n : Symbol(n, Decl(discriminantPropertyInference.ts, 25, 7))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+ });
+ 
+@@= skipped -17, +17 lines =@@
+     cb: n => n.toFixed()
+ >cb : Symbol(cb, Decl(discriminantPropertyInference.ts, 30, 20))
+ >n : Symbol(n, Decl(discriminantPropertyInference.ts, 31, 7))
+->n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>n.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >n : Symbol(n, Decl(discriminantPropertyInference.ts, 31, 7))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+ });
+ 
+@@= skipped -13, +13 lines =@@
+     cb: n => n.toFixed()
+ >cb : Symbol(cb, Decl(discriminantPropertyInference.ts, 35, 3))
+ >n : Symbol(n, Decl(discriminantPropertyInference.ts, 36, 7))
+->n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>n.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >n : Symbol(n, Decl(discriminantPropertyInference.ts, 36, 7))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+ });
+ 

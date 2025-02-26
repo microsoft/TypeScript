@@ -1,0 +1,85 @@
+--- old.subtypingWithCallSignaturesWithSpecializedSignatures.symbols
++++ new.subtypingWithCallSignaturesWithSpecializedSignatures.symbols
+@@= skipped -81, +81 lines =@@
+ 
+         // M's
+         a: {
+->a : Symbol(Base.a, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 38, 20))
++>a : Symbol(a, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 38, 20))
+ 
+             (x: 'a'): void;
+ >x : Symbol(x, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 41, 13))
+@@= skipped -9, +9 lines =@@
+ >x : Symbol(x, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 42, 13))
+         }
+         a2: {
+->a2 : Symbol(Base.a2, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 43, 9))
++>a2 : Symbol(a2, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 43, 9))
+ 
+             (x: 'a', y: number): void;
+ >x : Symbol(x, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 45, 13))
+@@= skipped -11, +11 lines =@@
+ >y : Symbol(y, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 46, 23))
+         }
+         a3: <T>(x: T) => void;
+->a3 : Symbol(Base.a3, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 47, 9))
++>a3 : Symbol(a3, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 47, 9))
+ >T : Symbol(T, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 48, 13))
+ >x : Symbol(x, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 48, 16))
+ >T : Symbol(T, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 48, 13))
+@@= skipped -13, +13 lines =@@
+ 
+         // N's
+         a: (x: string) => number; // ok because base returns void
+->a : Symbol(I.a, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 52, 30))
++>a : Symbol(a, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 52, 30))
+ >x : Symbol(x, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 54, 12))
+ 
+         a2: (x: string, y: number) => boolean; // ok because base returns void
+->a2 : Symbol(I.a2, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 54, 33))
++>a2 : Symbol(a2, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 54, 33))
+ >x : Symbol(x, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 55, 13))
+ >y : Symbol(y, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 55, 23))
+ 
+         a3: <T>(x: T) => string; // ok because base returns void
+->a3 : Symbol(I.a3, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 55, 46))
++>a3 : Symbol(a3, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 55, 46))
+ >T : Symbol(T, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 56, 13))
+ >x : Symbol(x, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 56, 16))
+ >T : Symbol(T, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 56, 13))
+@@= skipped -20, +20 lines =@@
+ 
+         // M's
+         a: {
+->a : Symbol(Base2.a, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 59, 21))
++>a : Symbol(a, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 59, 21))
+ 
+             (x: 'a'): number;
+ >x : Symbol(x, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 62, 13))
+@@= skipped -9, +9 lines =@@
+ >x : Symbol(x, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 63, 13))
+         }
+         a2: <T>(x: T) => T;
+->a2 : Symbol(Base2.a2, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 64, 9))
++>a2 : Symbol(a2, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 64, 9))
+ >T : Symbol(T, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 65, 13))
+ >x : Symbol(x, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 65, 16))
+ >T : Symbol(T, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 65, 13))
+@@= skipped -14, +14 lines =@@
+ 
+         // N's
+         a: (x: string) => string; // error because base returns non-void;
+->a : Symbol(I2.a, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 69, 32))
++>a : Symbol(a, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 69, 32))
+ >x : Symbol(x, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 71, 12))
+     }
+ 
+@@= skipped -11, +11 lines =@@
+ 
+         // N's
+         a2: <T>(x: T) => string; // error because base returns non-void;
+->a2 : Symbol(I3.a2, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 75, 32))
++>a2 : Symbol(a2, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 75, 32))
+ >T : Symbol(T, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 77, 13))
+ >x : Symbol(x, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 77, 16))
+ >T : Symbol(T, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 77, 13))

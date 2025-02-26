@@ -1,0 +1,32 @@
+--- old.indexTypeCheck.symbols
++++ new.indexTypeCheck.symbols
+@@= skipped -123, +123 lines =@@
+ >Benchmark : Symbol(Benchmark, Decl(indexTypeCheck.ts, 53, 5))
+ 
+     public results: { [x:string]: any; } = <{ [x:string]: any; }>{};
+->results : Symbol(Benchmark.results, Decl(indexTypeCheck.ts, 55, 17))
++>results : Symbol(results, Decl(indexTypeCheck.ts, 55, 17))
+ >x : Symbol(x, Decl(indexTypeCheck.ts, 57, 23))
+ >x : Symbol(x, Decl(indexTypeCheck.ts, 57, 47))
+ 
+     public addTimingFor(name: string, timing: number) {
+->addTimingFor : Symbol(Benchmark.addTimingFor, Decl(indexTypeCheck.ts, 57, 68))
++>addTimingFor : Symbol(addTimingFor, Decl(indexTypeCheck.ts, 57, 68))
+ >name : Symbol(name, Decl(indexTypeCheck.ts, 59, 24))
+ >timing : Symbol(timing, Decl(indexTypeCheck.ts, 59, 37))
+ 
+         this.results[name] = this.results[name];
+->this.results : Symbol(Benchmark.results, Decl(indexTypeCheck.ts, 55, 17))
++>this.results : Symbol(results, Decl(indexTypeCheck.ts, 55, 17))
+ >this : Symbol(Benchmark, Decl(indexTypeCheck.ts, 53, 5))
+->results : Symbol(Benchmark.results, Decl(indexTypeCheck.ts, 55, 17))
++>results : Symbol(results, Decl(indexTypeCheck.ts, 55, 17))
+ >name : Symbol(name, Decl(indexTypeCheck.ts, 59, 24))
+->this.results : Symbol(Benchmark.results, Decl(indexTypeCheck.ts, 55, 17))
++>this.results : Symbol(results, Decl(indexTypeCheck.ts, 55, 17))
+ >this : Symbol(Benchmark, Decl(indexTypeCheck.ts, 53, 5))
+->results : Symbol(Benchmark.results, Decl(indexTypeCheck.ts, 55, 17))
++>results : Symbol(results, Decl(indexTypeCheck.ts, 55, 17))
+ >name : Symbol(name, Decl(indexTypeCheck.ts, 59, 24))
+     }
+ }

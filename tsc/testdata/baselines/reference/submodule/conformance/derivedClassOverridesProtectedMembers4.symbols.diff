@@ -1,0 +1,28 @@
+--- old.derivedClassOverridesProtectedMembers4.symbols
++++ new.derivedClassOverridesProtectedMembers4.symbols
+@@= skipped -13, +13 lines =@@
+ >Base : Symbol(Base, Decl(derivedClassOverridesProtectedMembers4.ts, 1, 36))
+ 
+     protected a: typeof x;
+->a : Symbol(Base.a, Decl(derivedClassOverridesProtectedMembers4.ts, 3, 12))
++>a : Symbol(a, Decl(derivedClassOverridesProtectedMembers4.ts, 3, 12))
+ >x : Symbol(x, Decl(derivedClassOverridesProtectedMembers4.ts, 0, 3))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >Base : Symbol(Base, Decl(derivedClassOverridesProtectedMembers4.ts, 1, 36))
+ 
+     public a: typeof x;
+->a : Symbol(Derived1.a, Decl(derivedClassOverridesProtectedMembers4.ts, 7, 29))
++>a : Symbol(a, Decl(derivedClassOverridesProtectedMembers4.ts, 7, 29))
+ >x : Symbol(x, Decl(derivedClassOverridesProtectedMembers4.ts, 0, 3))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >Derived1 : Symbol(Derived1, Decl(derivedClassOverridesProtectedMembers4.ts, 5, 1))
+ 
+     protected a: typeof x; // Error, parent was public
+->a : Symbol(Derived2.a, Decl(derivedClassOverridesProtectedMembers4.ts, 11, 33))
++>a : Symbol(a, Decl(derivedClassOverridesProtectedMembers4.ts, 11, 33))
+ >x : Symbol(x, Decl(derivedClassOverridesProtectedMembers4.ts, 0, 3))
+ }

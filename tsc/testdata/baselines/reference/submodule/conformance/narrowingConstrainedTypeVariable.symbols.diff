@@ -1,0 +1,11 @@
+--- old.narrowingConstrainedTypeVariable.symbols
++++ new.narrowingConstrainedTypeVariable.symbols
+@@= skipped -60, +60 lines =@@
+ 
+ class E { x: string | undefined }
+ >E : Symbol(E, Decl(narrowingConstrainedTypeVariable.ts, 22, 1))
+->x : Symbol(E.x, Decl(narrowingConstrainedTypeVariable.ts, 24, 9))
++>x : Symbol(x, Decl(narrowingConstrainedTypeVariable.ts, 24, 9))
+ 
+ function f3<T extends E>(v: T | { x: string }) {
+ >f3 : Symbol(f3, Decl(narrowingConstrainedTypeVariable.ts, 24, 33))

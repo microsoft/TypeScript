@@ -1,0 +1,38 @@
+--- old.checkerInitializationCrash.symbols
++++ new.checkerInitializationCrash.symbols
+@@= skipped -10, +10 lines =@@
+ >FullCalendarVDom : Symbol(FullCalendarVDom, Decl(index.d.ts, 1, 16), Decl(index.d.ts, 1, 16))
+ 
+     export import VNode = react.ReactNode;
+->VNode : Symbol(FullCalendarVDom.VNode, Decl(index.d.ts, 2, 30))
++>VNode : Symbol(VNode, Decl(index.d.ts, 2, 30))
+ >react : Symbol(react, Decl(index.d.ts, 0, 6))
+->ReactNode : Symbol(react.ReactNode, Decl(index.d.ts, 2, 25))
++>ReactNode : Symbol(ReactNode, Decl(index.d.ts, 2, 25))
+   }
+ }
+ 
+ export default class FullCalendar {
+->FullCalendar : Symbol(FullCalendar, Decl(index.d.ts, 5, 1))
++>FullCalendar : Symbol(default, Decl(index.d.ts, 5, 1))
+ }
+ 
+ === /node_modules/@fullcalendar/core/index.d.ts ===
+@@= skipped -15, +15 lines =@@
+ >preact : Symbol(preact, Decl(index.d.ts, 0, 6))
+ 
+ declare global {
+->global : Symbol(global, Decl(index.d.ts, 0, 33))
++>global : Symbol((Missing), Decl(index.d.ts, 0, 33))
+ 
+   namespace FullCalendarVDom {
+ >FullCalendarVDom : Symbol(FullCalendarVDom, Decl(index.d.ts, 1, 16), Decl(index.d.ts, 1, 16))
+@@= skipped -8, +8 lines =@@
+     type VNode = preact.VNode<any>;
+ >VNode : Symbol(VNode, Decl(index.d.ts, 2, 30))
+ >preact : Symbol(preact, Decl(index.d.ts, 0, 6))
+->VNode : Symbol(preact.VNode, Decl(index.d.ts, 0, 27))
++>VNode : Symbol(VNode, Decl(index.d.ts, 0, 27))
+   }
+ }
+ 

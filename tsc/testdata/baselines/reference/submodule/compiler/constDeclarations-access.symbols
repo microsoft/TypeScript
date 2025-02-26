@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/constDeclarations-access.ts] ////
+
+=== file1.ts ===
+const x = 0
+>x : Symbol(x, Decl(file1.ts, 0, 5))
+
+=== file2.ts ===
+x++;
+>x : Symbol(x, Decl(file1.ts, 0, 5))
+

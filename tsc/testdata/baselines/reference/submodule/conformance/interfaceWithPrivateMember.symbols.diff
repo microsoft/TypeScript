@@ -1,0 +1,20 @@
+--- old.interfaceWithPrivateMember.symbols
++++ new.interfaceWithPrivateMember.symbols
+@@= skipped -6, +6 lines =@@
+ >I : Symbol(I, Decl(interfaceWithPrivateMember.ts, 0, 0))
+ 
+     private x: string;
+->x : Symbol(I.x, Decl(interfaceWithPrivateMember.ts, 2, 13))
++>x : Symbol(x, Decl(interfaceWithPrivateMember.ts, 2, 13))
+ }
+ 
+ interface I2<T> {
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(interfaceWithPrivateMember.ts, 6, 13))
+ 
+     private y: T;
+->y : Symbol(I2.y, Decl(interfaceWithPrivateMember.ts, 6, 17))
++>y : Symbol(y, Decl(interfaceWithPrivateMember.ts, 6, 17))
+ >T : Symbol(T, Decl(interfaceWithPrivateMember.ts, 6, 13))
+ }
+ 

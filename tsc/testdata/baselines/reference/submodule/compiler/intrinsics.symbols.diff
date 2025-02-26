@@ -1,0 +1,14 @@
+--- old.intrinsics.symbols
++++ new.intrinsics.symbols
+@@= skipped -22, +22 lines =@@
+ 
+ __proto__ = 0; // Error, __proto__ not defined
+ m1.__proto__ = 0;
+->m1.__proto__ : Symbol(m1.__proto__, Decl(intrinsics.ts, 3, 14))
++>m1.__proto__ : Symbol(__proto__, Decl(intrinsics.ts, 3, 14))
+ >m1 : Symbol(m1, Decl(intrinsics.ts, 0, 35))
+->__proto__ : Symbol(m1.__proto__, Decl(intrinsics.ts, 3, 14))
++>__proto__ : Symbol(__proto__, Decl(intrinsics.ts, 3, 14))
+ 
+ class Foo<__proto__> { }
+ >Foo : Symbol(Foo, Decl(intrinsics.ts, 10, 17))

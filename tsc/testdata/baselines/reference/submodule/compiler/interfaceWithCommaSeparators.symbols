@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/interfaceWithCommaSeparators.ts] ////
+
+=== interfaceWithCommaSeparators.ts ===
+var v: { bar(): void, baz }
+>v : Symbol(v, Decl(interfaceWithCommaSeparators.ts, 0, 3))
+>bar : Symbol(bar, Decl(interfaceWithCommaSeparators.ts, 0, 8))
+>baz : Symbol(baz, Decl(interfaceWithCommaSeparators.ts, 0, 21))
+
+interface Foo { bar(): void, baz }
+>Foo : Symbol(Foo, Decl(interfaceWithCommaSeparators.ts, 0, 27))
+>bar : Symbol(bar, Decl(interfaceWithCommaSeparators.ts, 1, 15))
+>baz : Symbol(baz, Decl(interfaceWithCommaSeparators.ts, 1, 28))
+

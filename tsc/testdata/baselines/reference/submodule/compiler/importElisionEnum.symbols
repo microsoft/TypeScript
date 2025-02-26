@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/importElisionEnum.ts] ////
+
+=== enum.ts ===
+export enum MyEnum {
+>MyEnum : Symbol(MyEnum, Decl(enum.ts, 0, 0))
+
+  a = 0,
+>a : Symbol(a, Decl(enum.ts, 0, 20))
+
+  b,
+>b : Symbol(b, Decl(enum.ts, 1, 8))
+
+  c,
+>c : Symbol(c, Decl(enum.ts, 2, 4))
+
+  d
+>d : Symbol(d, Decl(enum.ts, 3, 4))
+}
+
+=== index.ts ===
+import { MyEnum as MyEnumFromModule } from "./enum";
+>MyEnum : Symbol(MyEnum, Decl(enum.ts, 0, 0))
+>MyEnumFromModule : Symbol(MyEnumFromModule, Decl(index.ts, 0, 8))
+
+enum MyEnum {
+>MyEnum : Symbol(MyEnum, Decl(index.ts, 0, 52))
+
+  a = MyEnumFromModule.a
+>a : Symbol(a, Decl(index.ts, 2, 13))
+>MyEnumFromModule.a : Symbol(a, Decl(enum.ts, 0, 20))
+>MyEnumFromModule : Symbol(MyEnumFromModule, Decl(index.ts, 0, 8))
+>a : Symbol(a, Decl(enum.ts, 0, 20))
+}

@@ -1,0 +1,37 @@
+--- old.staticFactory1.symbols
++++ new.staticFactory1.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(staticFactory1.ts, 0, 0))
+ 
+     foo() { return 1; }
+->foo : Symbol(Base.foo, Decl(staticFactory1.ts, 0, 12))
++>foo : Symbol(foo, Decl(staticFactory1.ts, 0, 12))
+ 
+     static create() {
+->create : Symbol(Base.create, Decl(staticFactory1.ts, 1, 23))
++>create : Symbol(create, Decl(staticFactory1.ts, 1, 23))
+ 
+         return new this();
+ >this : Symbol(Base, Decl(staticFactory1.ts, 0, 0))
+@@= skipped -15, +15 lines =@@
+ >Base : Symbol(Base, Decl(staticFactory1.ts, 0, 0))
+ 
+     foo() { return 2; }
+->foo : Symbol(Derived.foo, Decl(staticFactory1.ts, 7, 28))
++>foo : Symbol(foo, Decl(staticFactory1.ts, 7, 28))
+ }
+ var d = Derived.create(); 
+ >d : Symbol(d, Decl(staticFactory1.ts, 10, 3))
+->Derived.create : Symbol(Base.create, Decl(staticFactory1.ts, 1, 23))
++>Derived.create : Symbol(create, Decl(staticFactory1.ts, 1, 23))
+ >Derived : Symbol(Derived, Decl(staticFactory1.ts, 5, 1))
+->create : Symbol(Base.create, Decl(staticFactory1.ts, 1, 23))
++>create : Symbol(create, Decl(staticFactory1.ts, 1, 23))
+ 
+ d.foo();  
+->d.foo : Symbol(Base.foo, Decl(staticFactory1.ts, 0, 12))
++>d.foo : Symbol(foo, Decl(staticFactory1.ts, 0, 12))
+ >d : Symbol(d, Decl(staticFactory1.ts, 10, 3))
+->foo : Symbol(Base.foo, Decl(staticFactory1.ts, 0, 12))
++>foo : Symbol(foo, Decl(staticFactory1.ts, 0, 12))
+ 

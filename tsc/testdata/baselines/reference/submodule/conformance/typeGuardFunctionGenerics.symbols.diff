@@ -1,0 +1,52 @@
+--- old.typeGuardFunctionGenerics.symbols
++++ new.typeGuardFunctionGenerics.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(typeGuardFunctionGenerics.ts, 0, 0))
+ 
+     propA: number;
+->propA : Symbol(A.propA, Decl(typeGuardFunctionGenerics.ts, 0, 9))
++>propA : Symbol(propA, Decl(typeGuardFunctionGenerics.ts, 0, 9))
+ }
+ 
+ class B {
+ >B : Symbol(B, Decl(typeGuardFunctionGenerics.ts, 2, 1))
+ 
+     propB: number;
+->propB : Symbol(B.propB, Decl(typeGuardFunctionGenerics.ts, 4, 9))
++>propB : Symbol(propB, Decl(typeGuardFunctionGenerics.ts, 4, 9))
+ }
+ 
+ class C extends A {
+@@= skipped -15, +15 lines =@@
+ >A : Symbol(A, Decl(typeGuardFunctionGenerics.ts, 0, 0))
+ 
+     propC: number;
+->propC : Symbol(C.propC, Decl(typeGuardFunctionGenerics.ts, 8, 19))
++>propC : Symbol(propC, Decl(typeGuardFunctionGenerics.ts, 8, 19))
+ }
+ 
+ declare function isB(p1): p1 is B;
+@@= skipped -85, +85 lines =@@
+ >a : Symbol(a, Decl(typeGuardFunctionGenerics.ts, 22, 3))
+ 
+     a.propC;
+->a.propC : Symbol(C.propC, Decl(typeGuardFunctionGenerics.ts, 8, 19))
++>a.propC : Symbol(propC, Decl(typeGuardFunctionGenerics.ts, 8, 19))
+ >a : Symbol(a, Decl(typeGuardFunctionGenerics.ts, 22, 3))
+->propC : Symbol(C.propC, Decl(typeGuardFunctionGenerics.ts, 8, 19))
++>propC : Symbol(propC, Decl(typeGuardFunctionGenerics.ts, 8, 19))
+ }
+ let test2: B = funC(isB);
+ >test2 : Symbol(test2, Decl(typeGuardFunctionGenerics.ts, 27, 3))
+@@= skipped -16, +16 lines =@@
+ >a : Symbol(a, Decl(typeGuardFunctionGenerics.ts, 22, 3))
+ 
+     a.propC;
+->a.propC : Symbol(C.propC, Decl(typeGuardFunctionGenerics.ts, 8, 19))
++>a.propC : Symbol(propC, Decl(typeGuardFunctionGenerics.ts, 8, 19))
+ >a : Symbol(a, Decl(typeGuardFunctionGenerics.ts, 22, 3))
+->propC : Symbol(C.propC, Decl(typeGuardFunctionGenerics.ts, 8, 19))
++>propC : Symbol(propC, Decl(typeGuardFunctionGenerics.ts, 8, 19))
+ }
+ let test3: B = funE(isB, 1);
+ >test3 : Symbol(test3, Decl(typeGuardFunctionGenerics.ts, 31, 3))

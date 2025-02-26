@@ -1,0 +1,10 @@
+--- old.parserAccessibilityAfterStatic7.symbols
++++ new.parserAccessibilityAfterStatic7.symbols
+@@= skipped -4, +4 lines =@@
+ >Outer : Symbol(Outer, Decl(parserAccessibilityAfterStatic7.ts, 0, 0))
+ {
+ static public intI() {}
+->intI : Symbol(Outer.intI, Decl(parserAccessibilityAfterStatic7.ts, 1, 1))
++>intI : Symbol(intI, Decl(parserAccessibilityAfterStatic7.ts, 1, 1))
+ }
+ 

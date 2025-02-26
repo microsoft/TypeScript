@@ -1,0 +1,60 @@
+--- old.spellingUncheckedJS.symbols
++++ new.spellingUncheckedJS.symbols
+@@= skipped -21, +21 lines =@@
+ >Classe : Symbol(Classe, Decl(spellingUncheckedJS.js, 10, 1))
+ 
+     non = 'oui'
+->non : Symbol(Classe.non, Decl(spellingUncheckedJS.js, 11, 14))
++>non : Symbol(non, Decl(spellingUncheckedJS.js, 11, 14))
+ 
+     methode() {
+->methode : Symbol(Classe.methode, Decl(spellingUncheckedJS.js, 12, 15))
++>methode : Symbol(methode, Decl(spellingUncheckedJS.js, 12, 15))
+ 
+         // no error on 'this' references
+         return this.none
+@@= skipped -15, +15 lines =@@
+ >Classe : Symbol(Classe, Decl(spellingUncheckedJS.js, 10, 1))
+ 
+     methode() {
+->methode : Symbol(Derivee.methode, Decl(spellingUncheckedJS.js, 18, 30))
++>methode : Symbol(methode, Decl(spellingUncheckedJS.js, 18, 30))
+ 
+         // no error on 'super' references
+         return super.none
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ var object = {
+->object : Symbol(object, Decl(spellingUncheckedJS.js, 26, 3), Decl(spellingUncheckedJS.js, 29, 15), Decl(spellingUncheckedJS.js, 30, 18))
++>object : Symbol(object, Decl(spellingUncheckedJS.js, 26, 3))
+ 
+     spaaace: 3
+ >spaaace : Symbol(spaaace, Decl(spellingUncheckedJS.js, 26, 14))
+ }
+ object.spaaaace // error on read
+->object : Symbol(object, Decl(spellingUncheckedJS.js, 26, 3), Decl(spellingUncheckedJS.js, 29, 15), Decl(spellingUncheckedJS.js, 30, 18))
++>object : Symbol(object, Decl(spellingUncheckedJS.js, 26, 3))
+ 
+ object.spaace = 12 // error on write
+->object : Symbol(object, Decl(spellingUncheckedJS.js, 26, 3), Decl(spellingUncheckedJS.js, 29, 15), Decl(spellingUncheckedJS.js, 30, 18))
++>object : Symbol(object, Decl(spellingUncheckedJS.js, 26, 3))
+ 
+ object.fresh = 12 // OK
+->object : Symbol(object, Decl(spellingUncheckedJS.js, 26, 3), Decl(spellingUncheckedJS.js, 29, 15), Decl(spellingUncheckedJS.js, 30, 18))
++>object : Symbol(object, Decl(spellingUncheckedJS.js, 26, 3))
+ 
+ other.puuuce // OK, from another file
+ >other : Symbol(other, Decl(other.js, 3, 3))
+@@= skipped -23, +23 lines =@@
+ // No suggestions for globals from other files
+ const atoc = setIntegral(() => console.log('ok'), 500)
+ >atoc : Symbol(atoc, Decl(spellingUncheckedJS.js, 36, 5))
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ 
+ AudioBuffin // etc
+ Jimmy

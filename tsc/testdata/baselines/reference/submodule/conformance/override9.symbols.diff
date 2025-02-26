@@ -1,0 +1,35 @@
+--- old.override9.symbols
++++ new.override9.symbols
+@@= skipped -4, +4 lines =@@
+ >B : Symbol(B, Decl(override9.ts, 0, 0))
+ 
+     foo (): void
+->foo : Symbol(B.foo, Decl(override9.ts, 0, 13))
++>foo : Symbol(foo, Decl(override9.ts, 0, 13))
+ 
+     bar (): void
+->bar : Symbol(B.bar, Decl(override9.ts, 1, 16))
++>bar : Symbol(bar, Decl(override9.ts, 1, 16))
+ }
+ 
+ interface D extends B {
+@@= skipped -11, +11 lines =@@
+ >B : Symbol(B, Decl(override9.ts, 0, 0))
+ 
+     foo (): void;
+->foo : Symbol(D.foo, Decl(override9.ts, 5, 23))
++>foo : Symbol(foo, Decl(override9.ts, 5, 23))
+ 
+     override bar(): void;
+->bar : Symbol(D.bar, Decl(override9.ts, 6, 17))
++>bar : Symbol(bar, Decl(override9.ts, 6, 17))
+ 
+     baz(): void;
+->baz : Symbol(D.baz, Decl(override9.ts, 7, 25))
++>baz : Symbol(baz, Decl(override9.ts, 7, 25))
+ 
+     override bazz(): void;
+->bazz : Symbol(D.bazz, Decl(override9.ts, 8, 16))
++>bazz : Symbol(bazz, Decl(override9.ts, 8, 16))
+ }
+ 

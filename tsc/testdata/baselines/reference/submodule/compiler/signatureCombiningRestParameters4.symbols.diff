@@ -1,0 +1,61 @@
+--- old.signatureCombiningRestParameters4.symbols
++++ new.signatureCombiningRestParameters4.symbols
+@@= skipped -5, +5 lines =@@
+ >Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 0, 19))
+ 
+   type: string;
+->type : Symbol(Node.type, Decl(signatureCombiningRestParameters4.ts, 0, 35))
++>type : Symbol(type, Decl(signatureCombiningRestParameters4.ts, 0, 35))
+ 
+   name: string;
+->name : Symbol(Node.name, Decl(signatureCombiningRestParameters4.ts, 1, 15))
++>name : Symbol(name, Decl(signatureCombiningRestParameters4.ts, 1, 15))
+ 
+   parent: Node | null;
+->parent : Symbol(Node.parent, Decl(signatureCombiningRestParameters4.ts, 2, 15))
++>parent : Symbol(parent, Decl(signatureCombiningRestParameters4.ts, 2, 15))
+ >Node : Symbol(Node, Decl(signatureCombiningRestParameters4.ts, 0, 0))
+ 
+   child: Node | null;
+->child : Symbol(Node.child, Decl(signatureCombiningRestParameters4.ts, 3, 22))
++>child : Symbol(child, Decl(signatureCombiningRestParameters4.ts, 3, 22))
+ >Node : Symbol(Node, Decl(signatureCombiningRestParameters4.ts, 0, 0))
+ 
+   options: Options;
+->options : Symbol(Node.options, Decl(signatureCombiningRestParameters4.ts, 4, 21))
++>options : Symbol(options, Decl(signatureCombiningRestParameters4.ts, 4, 21))
+ >Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 0, 19))
+ }
+ 
+@@= skipped -23, +23 lines =@@
+ >Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 8, 21))
+ 
+   extendMarkSchema?:
+->extendMarkSchema : Symbol(NodeConfig.extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 8, 37))
++>extendMarkSchema : Symbol(extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 8, 37))
+ 
+     | ((
+         this: {
+@@= skipped -29, +29 lines =@@
+ >Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 20, 19))
+ 
+   options: Options;
+->options : Symbol(Mark.options, Decl(signatureCombiningRestParameters4.ts, 20, 35))
++>options : Symbol(options, Decl(signatureCombiningRestParameters4.ts, 20, 35))
+ >Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 20, 19))
+ 
+   config: MarkConfig;
+->config : Symbol(Mark.config, Decl(signatureCombiningRestParameters4.ts, 21, 19))
++>config : Symbol(config, Decl(signatureCombiningRestParameters4.ts, 21, 19))
+ >MarkConfig : Symbol(MarkConfig, Decl(signatureCombiningRestParameters4.ts, 23, 1))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 25, 21))
+ 
+   extendMarkSchema?:
+->extendMarkSchema : Symbol(MarkConfig.extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 25, 37))
++>extendMarkSchema : Symbol(extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 25, 37))
+ 
+     | ((
+         this: {

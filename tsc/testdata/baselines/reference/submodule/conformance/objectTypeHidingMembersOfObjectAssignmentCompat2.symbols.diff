@@ -1,0 +1,20 @@
+--- old.objectTypeHidingMembersOfObjectAssignmentCompat2.symbols
++++ new.objectTypeHidingMembersOfObjectAssignmentCompat2.symbols
+@@= skipped -4, +4 lines =@@
+ >I : Symbol(I, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 0, 0))
+ 
+     toString(): number;
+->toString : Symbol(I.toString, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 0, 13))
++>toString : Symbol(toString, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 0, 13))
+ }
+ 
+ var i: I;
+@@= skipped -23, +23 lines =@@
+ >C : Symbol(C, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 7, 6))
+ 
+     toString(): number { return 1; }
+->toString : Symbol(C.toString, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 9, 9))
++>toString : Symbol(toString, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 9, 9))
+ }
+ var c: C;
+ >c : Symbol(c, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 12, 3))

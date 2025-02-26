@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/verbatimModuleSyntaxDefaultValue.ts] ////
+
+=== index.ts ===
+class Task {}
+>Task : Symbol(Task, Decl(index.ts, 0, 0))
+
+function task(): Task { return new Task(); }
+>task : Symbol(task, Decl(index.ts, 0, 13))
+>Task : Symbol(Task, Decl(index.ts, 0, 0))
+>Task : Symbol(Task, Decl(index.ts, 0, 0))
+
+export const build = task();
+>build : Symbol(build, Decl(index.ts, 4, 12))
+>task : Symbol(task, Decl(index.ts, 0, 13))
+
+export default build;
+>build : Symbol(build, Decl(index.ts, 4, 12))
+

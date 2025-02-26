@@ -1,0 +1,32 @@
+--- old.defaultExportsCannotMerge02.symbols
++++ new.defaultExportsCannotMerge02.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === m1.ts ===
+ export default class Decl {
+->Decl : Symbol(Decl, Decl(m1.ts, 0, 0))
++>Decl : Symbol(default, Decl(m1.ts, 0, 0))
+ }
+ 
+ export interface Decl {
+ >Decl : Symbol(Decl, Decl(m1.ts, 1, 1), Decl(m1.ts, 6, 1))
+ 
+     p1: number;
+->p1 : Symbol(Decl.p1, Decl(m1.ts, 3, 23))
++>p1 : Symbol(p1, Decl(m1.ts, 3, 23))
+ 
+     p2: number;
+->p2 : Symbol(Decl.p2, Decl(m1.ts, 4, 15))
++>p2 : Symbol(p2, Decl(m1.ts, 4, 15))
+ }
+ 
+ export namespace Decl {
+@@= skipped -35, +35 lines =@@
+ var y: Entity.I;
+ >y : Symbol(y, Decl(m2.ts, 5, 3))
+ >Entity : Symbol(Entity, Decl(m2.ts, 0, 6))
+->I : Symbol(Entity.I)
++>I : Symbol(I)
+ 
+ var z = new Entity();
+ >z : Symbol(z, Decl(m2.ts, 6, 3))

@@ -1,0 +1,31 @@
+--- old.nonExportedElementsOfMergedModules.symbols
++++ new.nonExportedElementsOfMergedModules.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     enum A { X }
+ >A : Symbol(A, Decl(nonExportedElementsOfMergedModules.ts, 0, 12))
+->X : Symbol(A.X, Decl(nonExportedElementsOfMergedModules.ts, 1, 12))
++>X : Symbol(X, Decl(nonExportedElementsOfMergedModules.ts, 1, 12))
+ 
+     module B {
+ >B : Symbol(B, Decl(nonExportedElementsOfMergedModules.ts, 1, 16))
+@@= skipped -15, +15 lines =@@
+ 
+     enum A { Y }
+ >A : Symbol(A, Decl(nonExportedElementsOfMergedModules.ts, 7, 12))
+->Y : Symbol(A.Y, Decl(nonExportedElementsOfMergedModules.ts, 8, 12))
++>Y : Symbol(Y, Decl(nonExportedElementsOfMergedModules.ts, 8, 12))
+ 
+     module B {
+ >B : Symbol(B, Decl(nonExportedElementsOfMergedModules.ts, 8, 16))
+@@= skipped -12, +12 lines =@@
+ >B : Symbol(B, Decl(nonExportedElementsOfMergedModules.ts, 8, 16))
+ 
+     B.y;
+->B.y : Symbol(B.y, Decl(nonExportedElementsOfMergedModules.ts, 10, 18))
++>B.y : Symbol(y, Decl(nonExportedElementsOfMergedModules.ts, 10, 18))
+ >B : Symbol(B, Decl(nonExportedElementsOfMergedModules.ts, 8, 16))
+->y : Symbol(B.y, Decl(nonExportedElementsOfMergedModules.ts, 10, 18))
++>y : Symbol(y, Decl(nonExportedElementsOfMergedModules.ts, 10, 18))
+ }
+ 

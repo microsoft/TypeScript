@@ -1,0 +1,11 @@
+--- old.classMemberInitializerWithLamdaScoping5.symbols
++++ new.classMemberInitializerWithLamdaScoping5.symbols
+@@= skipped -17, +17 lines =@@
+     }
+ 
+     messageHandler = (message: string) => {
+->messageHandler : Symbol(Greeter.messageHandler, Decl(classMemberInitializerWithLamdaScoping5.ts, 5, 5))
++>messageHandler : Symbol(messageHandler, Decl(classMemberInitializerWithLamdaScoping5.ts, 5, 5))
+ >message : Symbol(message, Decl(classMemberInitializerWithLamdaScoping5.ts, 7, 22))
+ 
+         console.log(message); // This shouldnt be error

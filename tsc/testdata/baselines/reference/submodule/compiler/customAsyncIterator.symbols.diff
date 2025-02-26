@@ -1,0 +1,28 @@
+--- old.customAsyncIterator.symbols
++++ new.customAsyncIterator.symbols
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(customAsyncIterator.ts, 1, 23))
+ 
+     constructor(private constant: T) {
+->constant : Symbol(ConstantIterator.constant, Decl(customAsyncIterator.ts, 2, 16))
++>constant : Symbol(constant, Decl(customAsyncIterator.ts, 2, 16))
+ >T : Symbol(T, Decl(customAsyncIterator.ts, 1, 23))
+     }
+     async next(value?: T): Promise<IteratorResult<T>> {
+->next : Symbol(ConstantIterator.next, Decl(customAsyncIterator.ts, 3, 5))
++>next : Symbol(next, Decl(customAsyncIterator.ts, 3, 5))
+ >value : Symbol(value, Decl(customAsyncIterator.ts, 4, 15))
+ >T : Symbol(T, Decl(customAsyncIterator.ts, 1, 23))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+@@= skipped -19, +19 lines =@@
+         }
+         return { value: this.constant, done: false };
+ >value : Symbol(value, Decl(customAsyncIterator.ts, 8, 16))
+->this.constant : Symbol(ConstantIterator.constant, Decl(customAsyncIterator.ts, 2, 16))
++>this.constant : Symbol(constant, Decl(customAsyncIterator.ts, 2, 16))
+ >this : Symbol(ConstantIterator, Decl(customAsyncIterator.ts, 0, 0))
+->constant : Symbol(ConstantIterator.constant, Decl(customAsyncIterator.ts, 2, 16))
++>constant : Symbol(constant, Decl(customAsyncIterator.ts, 2, 16))
+ >done : Symbol(done, Decl(customAsyncIterator.ts, 8, 38))
+     }
+ }

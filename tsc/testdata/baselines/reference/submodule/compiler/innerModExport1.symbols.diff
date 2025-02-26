@@ -1,0 +1,12 @@
+--- old.innerModExport1.symbols
++++ new.innerModExport1.symbols
+@@= skipped -30, +30 lines =@@
+ }
+ 
+ Outer.ExportFunc();
+->Outer.ExportFunc : Symbol(Outer.ExportFunc, Decl(innerModExport1.ts, 8, 46))
++>Outer.ExportFunc : Symbol(ExportFunc, Decl(innerModExport1.ts, 8, 46))
+ >Outer : Symbol(Outer, Decl(innerModExport1.ts, 0, 0))
+->ExportFunc : Symbol(Outer.ExportFunc, Decl(innerModExport1.ts, 8, 46))
++>ExportFunc : Symbol(ExportFunc, Decl(innerModExport1.ts, 8, 46))
+ 

@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/salsa/moduleExportAssignment3.ts] ////
+
+=== npm.js ===
+var mod = require('./mod')
+>mod : Symbol(mod, Decl(npm.js, 0, 3))
+
+mod() // should be callable from here too
+>mod : Symbol(mod, Decl(npm.js, 0, 3))
+

@@ -1,0 +1,19 @@
+--- old.decoratorOnClassAccessor1.es6.symbols
++++ new.decoratorOnClassAccessor1.es6.symbols
+@@= skipped -6, +6 lines =@@
+ >target : Symbol(target, Decl(decoratorOnClassAccessor1.es6.ts, 0, 24))
+ >propertyKey : Symbol(propertyKey, Decl(decoratorOnClassAccessor1.es6.ts, 0, 36))
+ >descriptor : Symbol(descriptor, Decl(decoratorOnClassAccessor1.es6.ts, 0, 57))
+->TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
++>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor)
+ >T : Symbol(T, Decl(decoratorOnClassAccessor1.es6.ts, 0, 21))
+->TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
++>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor)
+ >T : Symbol(T, Decl(decoratorOnClassAccessor1.es6.ts, 0, 21))
+ 
+ export default class {
+     @dec get accessor() { return 1; }
+ >dec : Symbol(dec, Decl(decoratorOnClassAccessor1.es6.ts, 0, 0))
+->accessor : Symbol(default.accessor, Decl(decoratorOnClassAccessor1.es6.ts, 2, 22))
++>accessor : Symbol(accessor, Decl(decoratorOnClassAccessor1.es6.ts, 2, 22))
+ }

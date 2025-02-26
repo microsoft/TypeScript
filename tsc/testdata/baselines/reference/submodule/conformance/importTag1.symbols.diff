@@ -1,0 +1,11 @@
+--- old.importTag1.symbols
++++ new.importTag1.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(types.ts, 0, 0))
+ 
+     a: number;
+->a : Symbol(Foo.a, Decl(types.ts, 0, 22))
++>a : Symbol(a, Decl(types.ts, 0, 22))
+ }
+ 
+ === /foo.js ===

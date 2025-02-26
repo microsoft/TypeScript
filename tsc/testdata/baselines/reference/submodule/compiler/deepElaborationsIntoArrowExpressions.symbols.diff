@@ -1,0 +1,11 @@
+--- old.deepElaborationsIntoArrowExpressions.symbols
++++ new.deepElaborationsIntoArrowExpressions.symbols
+@@= skipped -16, +16 lines =@@
+ >Foo : Symbol(Foo, Decl(deepElaborationsIntoArrowExpressions.ts, 4, 2))
+ 
+     a: number;
+->a : Symbol(Foo.a, Decl(deepElaborationsIntoArrowExpressions.ts, 6, 15))
++>a : Symbol(a, Decl(deepElaborationsIntoArrowExpressions.ts, 6, 15))
+ }
+ 
+ function foo1(): () => Foo {

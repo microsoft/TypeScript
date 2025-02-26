@@ -1,0 +1,32 @@
+--- old.undeclaredModuleError.symbols
++++ new.undeclaredModuleError.symbols
+@@= skipped -9, +9 lines =@@
+ >accept : Symbol(accept, Decl(undeclaredModuleError.ts, 1, 30))
+ >stat : Symbol(stat, Decl(undeclaredModuleError.ts, 1, 40))
+ >fs : Symbol(fs, Decl(undeclaredModuleError.ts, 0, 0))
+->Stats : Symbol(fs.Stats)
++>Stats : Symbol(Stats)
+ >name : Symbol(name, Decl(undeclaredModuleError.ts, 1, 55))
+ >callback : Symbol(callback, Decl(undeclaredModuleError.ts, 1, 81))
+ >error : Symbol(error, Decl(undeclaredModuleError.ts, 1, 93))
+@@= skipped -9, +9 lines =@@
+ >name : Symbol(name, Decl(undeclaredModuleError.ts, 1, 117))
+ >stat : Symbol(stat, Decl(undeclaredModuleError.ts, 1, 131))
+ >fs : Symbol(fs, Decl(undeclaredModuleError.ts, 0, 0))
+->Stats : Symbol(fs.Stats)
++>Stats : Symbol(Stats)
+ 
+ function join(...paths: string[]) {}
+ >join : Symbol(join, Decl(undeclaredModuleError.ts, 1, 165))
+@@= skipped -26, +26 lines =@@
+ >files : Symbol(files, Decl(undeclaredModuleError.ts, 8, 26))
+ 
+                 files.forEach((file) => {
+->files.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>files.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >files : Symbol(files, Decl(undeclaredModuleError.ts, 8, 26))
+->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >file : Symbol(file, Decl(undeclaredModuleError.ts, 9, 31))
+ 
+                     var fullPath = join(IDoNotExist);

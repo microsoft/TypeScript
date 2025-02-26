@@ -1,0 +1,77 @@
+--- old.externModule.symbols
++++ new.externModule.symbols
+@@= skipped -5, +5 lines =@@
+ >XDate : Symbol(XDate, Decl(externModule.ts, 0, 16))
+ 
+ 		public getDay():number;
+->getDay : Symbol(XDate.getDay, Decl(externModule.ts, 1, 24))
++>getDay : Symbol(getDay, Decl(externModule.ts, 1, 24))
+ 
+ 		public getXDate():number;
+->getXDate : Symbol(XDate.getXDate, Decl(externModule.ts, 2, 25))
++>getXDate : Symbol(getXDate, Decl(externModule.ts, 2, 25))
+ 
+ 		// etc.
+ 
+@@= skipped -56, +56 lines =@@
+ 	    constructor();
+ 	    
+ 	    static parse(string: string): number;
+->parse : Symbol(XDate.parse, Decl(externModule.ts, 17, 19))
++>parse : Symbol(parse, Decl(externModule.ts, 17, 19))
+ >string : Symbol(string, Decl(externModule.ts, 19, 18))
+ 
+ 	    static UTC(year: number, month: number): number;
+->UTC : Symbol(XDate.UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
++>UTC : Symbol(UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
+ >year : Symbol(year, Decl(externModule.ts, 20, 16))
+ >month : Symbol(month, Decl(externModule.ts, 20, 29))
+ 
+ 	    static UTC(year: number, month: number, date: number): number;
+->UTC : Symbol(XDate.UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
++>UTC : Symbol(UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
+ >year : Symbol(year, Decl(externModule.ts, 21, 16))
+ >month : Symbol(month, Decl(externModule.ts, 21, 29))
+ >date : Symbol(date, Decl(externModule.ts, 21, 44))
+ 
+ 	    static UTC(year: number, month: number, date: number, hours: number): number;
+->UTC : Symbol(XDate.UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
++>UTC : Symbol(UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
+ >year : Symbol(year, Decl(externModule.ts, 22, 16))
+ >month : Symbol(month, Decl(externModule.ts, 22, 29))
+ >date : Symbol(date, Decl(externModule.ts, 22, 44))
+ >hours : Symbol(hours, Decl(externModule.ts, 22, 58))
+ 
+ 	    static UTC(year: number, month: number, date: number, hours: number, minutes: number): number;
+->UTC : Symbol(XDate.UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
++>UTC : Symbol(UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
+ >year : Symbol(year, Decl(externModule.ts, 23, 16))
+ >month : Symbol(month, Decl(externModule.ts, 23, 29))
+ >date : Symbol(date, Decl(externModule.ts, 23, 44))
+@@= skipped -30, +30 lines =@@
+ >minutes : Symbol(minutes, Decl(externModule.ts, 23, 73))
+ 
+ 	    static UTC(year: number, month: number, date: number, hours: number, minutes: number, seconds: number): number;
+->UTC : Symbol(XDate.UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
++>UTC : Symbol(UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
+ >year : Symbol(year, Decl(externModule.ts, 24, 16))
+ >month : Symbol(month, Decl(externModule.ts, 24, 29))
+ >date : Symbol(date, Decl(externModule.ts, 24, 44))
+@@= skipped -9, +9 lines =@@
+ >seconds : Symbol(seconds, Decl(externModule.ts, 24, 90))
+ 
+ 	    static UTC(year: number, month: number, date: number, hours: number, minutes: number, seconds: number,
+->UTC : Symbol(XDate.UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
++>UTC : Symbol(UTC, Decl(externModule.ts, 19, 42), Decl(externModule.ts, 20, 53), Decl(externModule.ts, 21, 67), Decl(externModule.ts, 22, 82), Decl(externModule.ts, 23, 99) ... and 1 more)
+ >year : Symbol(year, Decl(externModule.ts, 25, 16))
+ >month : Symbol(month, Decl(externModule.ts, 25, 29))
+ >date : Symbol(date, Decl(externModule.ts, 25, 44))
+@@= skipped -12, +12 lines =@@
+ >ms : Symbol(ms, Decl(externModule.ts, 25, 107))
+ 
+ 	    static now(): number;
+->now : Symbol(XDate.now, Decl(externModule.ts, 26, 31))
++>now : Symbol(now, Decl(externModule.ts, 26, 31))
+     }
+ }
+ 

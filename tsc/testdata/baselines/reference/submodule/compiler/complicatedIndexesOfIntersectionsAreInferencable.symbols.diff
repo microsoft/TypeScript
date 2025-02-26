@@ -1,0 +1,22 @@
+--- old.complicatedIndexesOfIntersectionsAreInferencable.symbols
++++ new.complicatedIndexesOfIntersectionsAreInferencable.symbols
+@@= skipped -5, +5 lines =@@
+ >Values : Symbol(Values, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 0, 23))
+ 
+     initialValues: Values;
+->initialValues : Symbol(FormikConfig.initialValues, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 0, 32))
++>initialValues : Symbol(initialValues, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 0, 32))
+ >Values : Symbol(Values, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 0, 23))
+ 
+     validate?: (props: Values) => void;
+->validate : Symbol(FormikConfig.validate, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 1, 26))
++>validate : Symbol(validate, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 1, 26))
+ >props : Symbol(props, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 2, 16))
+ >Values : Symbol(Values, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 0, 23))
+ 
+     validateOnChange?: boolean;
+->validateOnChange : Symbol(FormikConfig.validateOnChange, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 2, 39))
++>validateOnChange : Symbol(validateOnChange, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 2, 39))
+ }
+ 
+ declare function Func<Values = object, ExtraProps = {}>(

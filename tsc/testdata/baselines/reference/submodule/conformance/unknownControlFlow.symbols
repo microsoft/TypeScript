@@ -1,0 +1,1047 @@
+//// [tests/cases/conformance/types/unknown/unknownControlFlow.ts] ////
+
+=== unknownControlFlow.ts ===
+type T01 = {} & string;  // {} & string
+>T01 : Symbol(T01, Decl(unknownControlFlow.ts, 0, 0))
+
+type T02 = {} & 'a';  // 'a'
+>T02 : Symbol(T02, Decl(unknownControlFlow.ts, 0, 23))
+
+type T03 = {} & object;  // object
+>T03 : Symbol(T03, Decl(unknownControlFlow.ts, 1, 20))
+
+type T04 = {} & { x: number };  // { x: number }
+>T04 : Symbol(T04, Decl(unknownControlFlow.ts, 2, 23))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 3, 17))
+
+type T05 = {} & null;  // never
+>T05 : Symbol(T05, Decl(unknownControlFlow.ts, 3, 30))
+
+type T06 = {} & undefined;  // never
+>T06 : Symbol(T06, Decl(unknownControlFlow.ts, 4, 21))
+
+type T07 = undefined & void;  // undefined
+>T07 : Symbol(T07, Decl(unknownControlFlow.ts, 5, 26))
+
+type T10 = string & {};  // Specially preserved
+>T10 : Symbol(T10, Decl(unknownControlFlow.ts, 6, 28))
+
+type T11 = number & {};  // Specially preserved
+>T11 : Symbol(T11, Decl(unknownControlFlow.ts, 8, 23))
+
+type T12 = bigint & {};  // Specially preserved
+>T12 : Symbol(T12, Decl(unknownControlFlow.ts, 9, 23))
+
+type ThisNode = {};
+>ThisNode : Symbol(ThisNode, Decl(unknownControlFlow.ts, 10, 23))
+
+type ThatNode = {};
+>ThatNode : Symbol(ThatNode, Decl(unknownControlFlow.ts, 12, 19))
+
+type ThisOrThatNode = ThisNode | ThatNode;
+>ThisOrThatNode : Symbol(ThisOrThatNode, Decl(unknownControlFlow.ts, 13, 19))
+>ThisNode : Symbol(ThisNode, Decl(unknownControlFlow.ts, 10, 23))
+>ThatNode : Symbol(ThatNode, Decl(unknownControlFlow.ts, 12, 19))
+
+function f01(u: unknown) {
+>f01 : Symbol(f01, Decl(unknownControlFlow.ts, 14, 42))
+>u : Symbol(u, Decl(unknownControlFlow.ts, 16, 13))
+
+    let x1: {} = u;  // Error
+>x1 : Symbol(x1, Decl(unknownControlFlow.ts, 17, 7))
+>u : Symbol(u, Decl(unknownControlFlow.ts, 16, 13))
+
+    let x2: {} | null | undefined = u;
+>x2 : Symbol(x2, Decl(unknownControlFlow.ts, 18, 7))
+>u : Symbol(u, Decl(unknownControlFlow.ts, 16, 13))
+
+    let x3: {} | { x: string } | null | undefined = u;
+>x3 : Symbol(x3, Decl(unknownControlFlow.ts, 19, 7))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 19, 18))
+>u : Symbol(u, Decl(unknownControlFlow.ts, 16, 13))
+
+    let x4: ThisOrThatNode | null | undefined = u;
+>x4 : Symbol(x4, Decl(unknownControlFlow.ts, 20, 7))
+>ThisOrThatNode : Symbol(ThisOrThatNode, Decl(unknownControlFlow.ts, 13, 19))
+>u : Symbol(u, Decl(unknownControlFlow.ts, 16, 13))
+}
+
+function f10(x: unknown) {
+>f10 : Symbol(f10, Decl(unknownControlFlow.ts, 21, 1))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 23, 13))
+
+    if (x) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 23, 13))
+
+        x;  // {}
+>x : Symbol(x, Decl(unknownControlFlow.ts, 23, 13))
+    }
+    else {
+        x;  // unknown
+>x : Symbol(x, Decl(unknownControlFlow.ts, 23, 13))
+    }
+    if (!x) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 23, 13))
+
+        x;  // unknown
+>x : Symbol(x, Decl(unknownControlFlow.ts, 23, 13))
+    }
+    else {
+        x;  // {}
+>x : Symbol(x, Decl(unknownControlFlow.ts, 23, 13))
+    }
+}
+
+function f11<T>(x: T) {
+>f11 : Symbol(f11, Decl(unknownControlFlow.ts, 36, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 38, 13))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 38, 16))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 38, 13))
+
+    if (x) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 38, 16))
+
+        x;  // T & {}
+>x : Symbol(x, Decl(unknownControlFlow.ts, 38, 16))
+    }
+    else {
+        x;  // T
+>x : Symbol(x, Decl(unknownControlFlow.ts, 38, 16))
+    }
+    if (!x) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 38, 16))
+
+        x;  // T
+>x : Symbol(x, Decl(unknownControlFlow.ts, 38, 16))
+    }
+    else {
+        x;  // T & {}
+>x : Symbol(x, Decl(unknownControlFlow.ts, 38, 16))
+    }
+}
+
+function f12<T extends {}>(x: T) {
+>f12 : Symbol(f12, Decl(unknownControlFlow.ts, 51, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 53, 13))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 53, 27))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 53, 13))
+
+    if (x) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 53, 27))
+
+        x;  // T
+>x : Symbol(x, Decl(unknownControlFlow.ts, 53, 27))
+    }
+    else {
+        x;  // T
+>x : Symbol(x, Decl(unknownControlFlow.ts, 53, 27))
+    }
+}
+
+function f20(x: unknown) {
+>f20 : Symbol(f20, Decl(unknownControlFlow.ts, 60, 1))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 62, 13))
+
+    if (x !== undefined) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 62, 13))
+>undefined : Symbol(undefined)
+
+        x;  // {} | null
+>x : Symbol(x, Decl(unknownControlFlow.ts, 62, 13))
+    }
+    else {
+        x;  // undefined
+>x : Symbol(x, Decl(unknownControlFlow.ts, 62, 13))
+    }
+    if (x !== null) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 62, 13))
+
+        x;  // {} | undefined
+>x : Symbol(x, Decl(unknownControlFlow.ts, 62, 13))
+    }
+    else {
+        x;  // null
+>x : Symbol(x, Decl(unknownControlFlow.ts, 62, 13))
+    }
+    if (x !== undefined && x !== null) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 62, 13))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(unknownControlFlow.ts, 62, 13))
+
+        x;  // {}
+>x : Symbol(x, Decl(unknownControlFlow.ts, 62, 13))
+    }
+    else {
+        x;  // null | undefined
+>x : Symbol(x, Decl(unknownControlFlow.ts, 62, 13))
+    }
+    if (x != undefined) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 62, 13))
+>undefined : Symbol(undefined)
+
+        x;  // {}
+>x : Symbol(x, Decl(unknownControlFlow.ts, 62, 13))
+    }
+    else {
+        x;  // null | undefined
+>x : Symbol(x, Decl(unknownControlFlow.ts, 62, 13))
+    }
+    if (x != null) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 62, 13))
+
+        x;  // {}
+>x : Symbol(x, Decl(unknownControlFlow.ts, 62, 13))
+    }
+    else {
+        x;  // null | undefined
+>x : Symbol(x, Decl(unknownControlFlow.ts, 62, 13))
+    }
+}
+
+function f21<T>(x: T) {
+>f21 : Symbol(f21, Decl(unknownControlFlow.ts, 93, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 95, 13))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 95, 16))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 95, 13))
+
+    if (x !== undefined) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 95, 16))
+>undefined : Symbol(undefined)
+
+        x;  // T & ({} | null)
+>x : Symbol(x, Decl(unknownControlFlow.ts, 95, 16))
+    }
+    else {
+        x;  // T
+>x : Symbol(x, Decl(unknownControlFlow.ts, 95, 16))
+    }
+    if (x !== null) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 95, 16))
+
+        x;  // T & ({} | undefined)
+>x : Symbol(x, Decl(unknownControlFlow.ts, 95, 16))
+    }
+    else {
+        x;  // T
+>x : Symbol(x, Decl(unknownControlFlow.ts, 95, 16))
+    }
+    if (x !== undefined && x !== null) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 95, 16))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(unknownControlFlow.ts, 95, 16))
+
+        x;  // T & {}
+>x : Symbol(x, Decl(unknownControlFlow.ts, 95, 16))
+    }
+    else {
+        x;  // T
+>x : Symbol(x, Decl(unknownControlFlow.ts, 95, 16))
+    }
+    if (x != undefined) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 95, 16))
+>undefined : Symbol(undefined)
+
+        x;  // T & {}
+>x : Symbol(x, Decl(unknownControlFlow.ts, 95, 16))
+    }
+    else {
+        x;  // T
+>x : Symbol(x, Decl(unknownControlFlow.ts, 95, 16))
+    }
+    if (x != null) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 95, 16))
+
+        x;  // T & {}
+>x : Symbol(x, Decl(unknownControlFlow.ts, 95, 16))
+    }
+    else {
+        x;  // T
+>x : Symbol(x, Decl(unknownControlFlow.ts, 95, 16))
+    }
+}
+
+function f22<T extends {} | undefined>(x: T) {
+>f22 : Symbol(f22, Decl(unknownControlFlow.ts, 126, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 128, 13))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 128, 39))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 128, 13))
+
+    if (x !== undefined) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 128, 39))
+>undefined : Symbol(undefined)
+
+        x;  // T & {}
+>x : Symbol(x, Decl(unknownControlFlow.ts, 128, 39))
+    }
+    else {
+        x;  // T
+>x : Symbol(x, Decl(unknownControlFlow.ts, 128, 39))
+    }
+    if (x !== null) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 128, 39))
+
+        x;  // T
+>x : Symbol(x, Decl(unknownControlFlow.ts, 128, 39))
+    }
+    else {
+        x;  // T
+>x : Symbol(x, Decl(unknownControlFlow.ts, 128, 39))
+    }
+    if (x !== undefined && x !== null) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 128, 39))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(unknownControlFlow.ts, 128, 39))
+
+        x;  // T & {}
+>x : Symbol(x, Decl(unknownControlFlow.ts, 128, 39))
+    }
+    else {
+        x;  // T
+>x : Symbol(x, Decl(unknownControlFlow.ts, 128, 39))
+    }
+    if (x != undefined) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 128, 39))
+>undefined : Symbol(undefined)
+
+        x;  // T & {}
+>x : Symbol(x, Decl(unknownControlFlow.ts, 128, 39))
+    }
+    else {
+        x;  // T
+>x : Symbol(x, Decl(unknownControlFlow.ts, 128, 39))
+    }
+    if (x != null) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 128, 39))
+
+        x;  // T & {}
+>x : Symbol(x, Decl(unknownControlFlow.ts, 128, 39))
+    }
+    else {
+        x;  // T
+>x : Symbol(x, Decl(unknownControlFlow.ts, 128, 39))
+    }
+}
+
+function f23<T>(x: T | undefined | null) {
+>f23 : Symbol(f23, Decl(unknownControlFlow.ts, 159, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 161, 13))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 161, 16))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 161, 13))
+
+    if (x !== undefined) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 161, 16))
+>undefined : Symbol(undefined)
+
+        x;  // T & {} | null
+>x : Symbol(x, Decl(unknownControlFlow.ts, 161, 16))
+    }
+    if (x !== null) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 161, 16))
+
+        x;  // T & {} | undefined
+>x : Symbol(x, Decl(unknownControlFlow.ts, 161, 16))
+    }
+    if (x != undefined) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 161, 16))
+>undefined : Symbol(undefined)
+
+        x;  // T & {}
+>x : Symbol(x, Decl(unknownControlFlow.ts, 161, 16))
+    }
+    if (x != null) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 161, 16))
+
+        x;  // T & {}
+>x : Symbol(x, Decl(unknownControlFlow.ts, 161, 16))
+    }
+}
+
+function f30(x: {}) {
+>f30 : Symbol(f30, Decl(unknownControlFlow.ts, 174, 1))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 176, 13))
+
+    if (typeof x === "object") {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 176, 13))
+
+        x;  // object
+>x : Symbol(x, Decl(unknownControlFlow.ts, 176, 13))
+    }
+}
+
+function f31<T>(x: T) {
+>f31 : Symbol(f31, Decl(unknownControlFlow.ts, 180, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 182, 13))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 182, 16))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 182, 13))
+
+    if (typeof x === "object") {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 182, 16))
+
+        x;  // T & object | T & null
+>x : Symbol(x, Decl(unknownControlFlow.ts, 182, 16))
+    }
+    if (x && typeof x === "object") {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 182, 16))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 182, 16))
+
+        x;  // T & object
+>x : Symbol(x, Decl(unknownControlFlow.ts, 182, 16))
+    }
+    if (typeof x === "object" && x) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 182, 16))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 182, 16))
+
+        x;  // T & object
+>x : Symbol(x, Decl(unknownControlFlow.ts, 182, 16))
+    }
+}
+
+function f32<T extends {} | undefined>(x: T) {
+>f32 : Symbol(f32, Decl(unknownControlFlow.ts, 192, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 194, 13))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 194, 39))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 194, 13))
+
+    if (typeof x === "object") {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 194, 39))
+
+        x;  // T & object
+>x : Symbol(x, Decl(unknownControlFlow.ts, 194, 39))
+    }
+}
+
+function possiblyNull<T>(x: T) {
+>possiblyNull : Symbol(possiblyNull, Decl(unknownControlFlow.ts, 198, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 200, 22))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 200, 25))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 200, 22))
+
+    return !!true ? x : null;  // T | null
+>x : Symbol(x, Decl(unknownControlFlow.ts, 200, 25))
+}
+
+function possiblyUndefined<T>(x: T) {
+>possiblyUndefined : Symbol(possiblyUndefined, Decl(unknownControlFlow.ts, 202, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 204, 27))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 204, 30))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 204, 27))
+
+    return !!true ? x : undefined;  // T | undefined
+>x : Symbol(x, Decl(unknownControlFlow.ts, 204, 30))
+>undefined : Symbol(undefined)
+}
+
+function possiblyNullOrUndefined<T>(x: T) {
+>possiblyNullOrUndefined : Symbol(possiblyNullOrUndefined, Decl(unknownControlFlow.ts, 206, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 208, 33))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 208, 36))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 208, 33))
+
+    return possiblyUndefined(possiblyNull(x));  // T | null | undefined
+>possiblyUndefined : Symbol(possiblyUndefined, Decl(unknownControlFlow.ts, 202, 1))
+>possiblyNull : Symbol(possiblyNull, Decl(unknownControlFlow.ts, 198, 1))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 208, 36))
+}
+
+function ensureNotNull<T>(x: T) {
+>ensureNotNull : Symbol(ensureNotNull, Decl(unknownControlFlow.ts, 210, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 212, 23))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 212, 26))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 212, 23))
+
+    if (x === null) throw Error();
+>x : Symbol(x, Decl(unknownControlFlow.ts, 212, 26))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    return x;  // T & ({} | undefined)
+>x : Symbol(x, Decl(unknownControlFlow.ts, 212, 26))
+}
+
+function ensureNotUndefined<T>(x: T) {
+>ensureNotUndefined : Symbol(ensureNotUndefined, Decl(unknownControlFlow.ts, 215, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 217, 28))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 217, 31))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 217, 28))
+
+    if (x === undefined) throw Error();
+>x : Symbol(x, Decl(unknownControlFlow.ts, 217, 31))
+>undefined : Symbol(undefined)
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    return x;  // T & ({} | null)
+>x : Symbol(x, Decl(unknownControlFlow.ts, 217, 31))
+}
+
+function ensureNotNullOrUndefined<T>(x: T) {
+>ensureNotNullOrUndefined : Symbol(ensureNotNullOrUndefined, Decl(unknownControlFlow.ts, 220, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 222, 34))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 222, 37))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 222, 34))
+
+    return ensureNotUndefined(ensureNotNull(x));  // T & {}
+>ensureNotUndefined : Symbol(ensureNotUndefined, Decl(unknownControlFlow.ts, 215, 1))
+>ensureNotNull : Symbol(ensureNotNull, Decl(unknownControlFlow.ts, 210, 1))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 222, 37))
+}
+
+function f40(a: string | undefined, b: number | null | undefined) {
+>f40 : Symbol(f40, Decl(unknownControlFlow.ts, 224, 1))
+>a : Symbol(a, Decl(unknownControlFlow.ts, 226, 13))
+>b : Symbol(b, Decl(unknownControlFlow.ts, 226, 35))
+
+    let a1 = ensureNotNullOrUndefined(a);  // string
+>a1 : Symbol(a1, Decl(unknownControlFlow.ts, 227, 7))
+>ensureNotNullOrUndefined : Symbol(ensureNotNullOrUndefined, Decl(unknownControlFlow.ts, 220, 1))
+>a : Symbol(a, Decl(unknownControlFlow.ts, 226, 13))
+
+    let b1 = ensureNotNullOrUndefined(b);  // number
+>b1 : Symbol(b1, Decl(unknownControlFlow.ts, 228, 7))
+>ensureNotNullOrUndefined : Symbol(ensureNotNullOrUndefined, Decl(unknownControlFlow.ts, 220, 1))
+>b : Symbol(b, Decl(unknownControlFlow.ts, 226, 35))
+}
+
+type QQ<T> = NonNullable<NonNullable<NonNullable<T>>>;
+>QQ : Symbol(QQ, Decl(unknownControlFlow.ts, 229, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 231, 8))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 231, 8))
+
+function f41<T>(a: T) {
+>f41 : Symbol(f41, Decl(unknownControlFlow.ts, 231, 54))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 233, 13))
+>a : Symbol(a, Decl(unknownControlFlow.ts, 233, 16))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 233, 13))
+
+    let a1 = ensureNotUndefined(ensureNotNull(a));  // T & {}
+>a1 : Symbol(a1, Decl(unknownControlFlow.ts, 234, 7))
+>ensureNotUndefined : Symbol(ensureNotUndefined, Decl(unknownControlFlow.ts, 215, 1))
+>ensureNotNull : Symbol(ensureNotNull, Decl(unknownControlFlow.ts, 210, 1))
+>a : Symbol(a, Decl(unknownControlFlow.ts, 233, 16))
+
+    let a2 = ensureNotNull(ensureNotUndefined(a));  // T & {}
+>a2 : Symbol(a2, Decl(unknownControlFlow.ts, 235, 7))
+>ensureNotNull : Symbol(ensureNotNull, Decl(unknownControlFlow.ts, 210, 1))
+>ensureNotUndefined : Symbol(ensureNotUndefined, Decl(unknownControlFlow.ts, 215, 1))
+>a : Symbol(a, Decl(unknownControlFlow.ts, 233, 16))
+
+    let a3 = ensureNotNull(ensureNotNull(a));  // T & {} | T & undefined
+>a3 : Symbol(a3, Decl(unknownControlFlow.ts, 236, 7))
+>ensureNotNull : Symbol(ensureNotNull, Decl(unknownControlFlow.ts, 210, 1))
+>ensureNotNull : Symbol(ensureNotNull, Decl(unknownControlFlow.ts, 210, 1))
+>a : Symbol(a, Decl(unknownControlFlow.ts, 233, 16))
+
+    let a4 = ensureNotUndefined(ensureNotUndefined(a));  // T & {} | T & null
+>a4 : Symbol(a4, Decl(unknownControlFlow.ts, 237, 7))
+>ensureNotUndefined : Symbol(ensureNotUndefined, Decl(unknownControlFlow.ts, 215, 1))
+>ensureNotUndefined : Symbol(ensureNotUndefined, Decl(unknownControlFlow.ts, 215, 1))
+>a : Symbol(a, Decl(unknownControlFlow.ts, 233, 16))
+
+    let a5 = ensureNotNullOrUndefined(ensureNotNullOrUndefined(a));  // T & {}
+>a5 : Symbol(a5, Decl(unknownControlFlow.ts, 238, 7))
+>ensureNotNullOrUndefined : Symbol(ensureNotNullOrUndefined, Decl(unknownControlFlow.ts, 220, 1))
+>ensureNotNullOrUndefined : Symbol(ensureNotNullOrUndefined, Decl(unknownControlFlow.ts, 220, 1))
+>a : Symbol(a, Decl(unknownControlFlow.ts, 233, 16))
+
+    let a6 = ensureNotNull(possiblyNullOrUndefined(a));  // T & {} | undefined
+>a6 : Symbol(a6, Decl(unknownControlFlow.ts, 239, 7))
+>ensureNotNull : Symbol(ensureNotNull, Decl(unknownControlFlow.ts, 210, 1))
+>possiblyNullOrUndefined : Symbol(possiblyNullOrUndefined, Decl(unknownControlFlow.ts, 206, 1))
+>a : Symbol(a, Decl(unknownControlFlow.ts, 233, 16))
+
+    let a7 = ensureNotUndefined(possiblyNullOrUndefined(a));  // T & {} | null
+>a7 : Symbol(a7, Decl(unknownControlFlow.ts, 240, 7))
+>ensureNotUndefined : Symbol(ensureNotUndefined, Decl(unknownControlFlow.ts, 215, 1))
+>possiblyNullOrUndefined : Symbol(possiblyNullOrUndefined, Decl(unknownControlFlow.ts, 206, 1))
+>a : Symbol(a, Decl(unknownControlFlow.ts, 233, 16))
+
+    let a8 = ensureNotNull(possiblyUndefined(a));  // T & {} | undefined
+>a8 : Symbol(a8, Decl(unknownControlFlow.ts, 241, 7))
+>ensureNotNull : Symbol(ensureNotNull, Decl(unknownControlFlow.ts, 210, 1))
+>possiblyUndefined : Symbol(possiblyUndefined, Decl(unknownControlFlow.ts, 202, 1))
+>a : Symbol(a, Decl(unknownControlFlow.ts, 233, 16))
+
+    let a9 = ensureNotUndefined(possiblyNull(a));  // T & {} | null
+>a9 : Symbol(a9, Decl(unknownControlFlow.ts, 242, 7))
+>ensureNotUndefined : Symbol(ensureNotUndefined, Decl(unknownControlFlow.ts, 215, 1))
+>possiblyNull : Symbol(possiblyNull, Decl(unknownControlFlow.ts, 198, 1))
+>a : Symbol(a, Decl(unknownControlFlow.ts, 233, 16))
+}
+
+// Repro from #48468
+
+function deepEquals<T>(a: T, b: T): boolean {
+>deepEquals : Symbol(deepEquals, Decl(unknownControlFlow.ts, 243, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 247, 20))
+>a : Symbol(a, Decl(unknownControlFlow.ts, 247, 23))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 247, 20))
+>b : Symbol(b, Decl(unknownControlFlow.ts, 247, 28))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 247, 20))
+
+    if (typeof a !== 'object' || typeof b !== 'object' || !a || !b) {
+>a : Symbol(a, Decl(unknownControlFlow.ts, 247, 23))
+>b : Symbol(b, Decl(unknownControlFlow.ts, 247, 28))
+>a : Symbol(a, Decl(unknownControlFlow.ts, 247, 23))
+>b : Symbol(b, Decl(unknownControlFlow.ts, 247, 28))
+
+        return false;
+    }
+    if (Array.isArray(a) || Array.isArray(b)) {
+>Array.isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(unknownControlFlow.ts, 247, 23))
+>Array.isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(unknownControlFlow.ts, 247, 28))
+
+        return false;
+    }
+    if (Object.keys(a).length !== Object.keys(b).length) { // Error here
+>Object.keys(a).length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(keys, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(keys, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(unknownControlFlow.ts, 247, 23))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>Object.keys(b).length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(keys, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(keys, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(unknownControlFlow.ts, 247, 28))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+
+        return false;
+    }
+    return true;
+}
+
+// Repro from #49386
+
+function foo<T>(x: T | null) {
+>foo : Symbol(foo, Decl(unknownControlFlow.ts, 258, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 262, 13))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 262, 16))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 262, 13))
+
+    let y = x;
+>y : Symbol(y, Decl(unknownControlFlow.ts, 263, 7))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 262, 16))
+
+    if (y !== null) {
+>y : Symbol(y, Decl(unknownControlFlow.ts, 263, 7))
+
+        y;
+>y : Symbol(y, Decl(unknownControlFlow.ts, 263, 7))
+    }
+}
+
+// We allow an unconstrained object of a generic type `T` to be indexed by a key of type `keyof T`
+// without a check that the object is non-undefined and non-null. This is safe because `keyof T`
+// is `never` (meaning no possible keys) for any `T` that includes `undefined` or `null`.
+
+function ff1<T>(t: T, k: keyof T) {
+>ff1 : Symbol(ff1, Decl(unknownControlFlow.ts, 267, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 273, 13))
+>t : Symbol(t, Decl(unknownControlFlow.ts, 273, 16))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 273, 13))
+>k : Symbol(k, Decl(unknownControlFlow.ts, 273, 21))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 273, 13))
+
+    t[k];
+>t : Symbol(t, Decl(unknownControlFlow.ts, 273, 16))
+>k : Symbol(k, Decl(unknownControlFlow.ts, 273, 21))
+}
+
+function ff2<T>(t: T & {}, k: keyof T) {
+>ff2 : Symbol(ff2, Decl(unknownControlFlow.ts, 275, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 277, 13))
+>t : Symbol(t, Decl(unknownControlFlow.ts, 277, 16))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 277, 13))
+>k : Symbol(k, Decl(unknownControlFlow.ts, 277, 26))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 277, 13))
+
+    t[k];
+>t : Symbol(t, Decl(unknownControlFlow.ts, 277, 16))
+>k : Symbol(k, Decl(unknownControlFlow.ts, 277, 26))
+}
+
+function ff3<T>(t: T, k: keyof (T & {})) {
+>ff3 : Symbol(ff3, Decl(unknownControlFlow.ts, 279, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 281, 13))
+>t : Symbol(t, Decl(unknownControlFlow.ts, 281, 16))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 281, 13))
+>k : Symbol(k, Decl(unknownControlFlow.ts, 281, 21))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 281, 13))
+
+    t[k];  // Error
+>t : Symbol(t, Decl(unknownControlFlow.ts, 281, 16))
+>k : Symbol(k, Decl(unknownControlFlow.ts, 281, 21))
+}
+
+function ff4<T>(t: T & {}, k: keyof (T & {})) {
+>ff4 : Symbol(ff4, Decl(unknownControlFlow.ts, 283, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 285, 13))
+>t : Symbol(t, Decl(unknownControlFlow.ts, 285, 16))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 285, 13))
+>k : Symbol(k, Decl(unknownControlFlow.ts, 285, 26))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 285, 13))
+
+    t[k];
+>t : Symbol(t, Decl(unknownControlFlow.ts, 285, 16))
+>k : Symbol(k, Decl(unknownControlFlow.ts, 285, 26))
+}
+
+ff1(null, 'foo');  // Error
+>ff1 : Symbol(ff1, Decl(unknownControlFlow.ts, 267, 1))
+
+ff2(null, 'foo');  // Error
+>ff2 : Symbol(ff2, Decl(unknownControlFlow.ts, 275, 1))
+
+ff3(null, 'foo');
+>ff3 : Symbol(ff3, Decl(unknownControlFlow.ts, 279, 1))
+
+ff4(null, 'foo');  // Error
+>ff4 : Symbol(ff4, Decl(unknownControlFlow.ts, 283, 1))
+
+// Repro from #49681
+
+type Foo = { [key: string]: unknown };
+>Foo : Symbol(Foo, Decl(unknownControlFlow.ts, 292, 17))
+>key : Symbol(key, Decl(unknownControlFlow.ts, 296, 14))
+
+type NullableFoo = Foo | undefined;
+>NullableFoo : Symbol(NullableFoo, Decl(unknownControlFlow.ts, 296, 38))
+>Foo : Symbol(Foo, Decl(unknownControlFlow.ts, 292, 17))
+
+type Bar<T extends NullableFoo> = NonNullable<T>[string];
+>Bar : Symbol(Bar, Decl(unknownControlFlow.ts, 297, 35))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 299, 9))
+>NullableFoo : Symbol(NullableFoo, Decl(unknownControlFlow.ts, 296, 38))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 299, 9))
+
+// Generics and intersections with {}
+
+function fx0<T>(value: T & ({} | null)) {
+>fx0 : Symbol(fx0, Decl(unknownControlFlow.ts, 299, 57))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 303, 13))
+>value : Symbol(value, Decl(unknownControlFlow.ts, 303, 16))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 303, 13))
+
+    if (value === 42) {
+>value : Symbol(value, Decl(unknownControlFlow.ts, 303, 16))
+
+        value;  // T & {}
+>value : Symbol(value, Decl(unknownControlFlow.ts, 303, 16))
+    }
+    else {
+        value;  // T & ({} | null)
+>value : Symbol(value, Decl(unknownControlFlow.ts, 303, 16))
+    }
+}
+
+function fx1<T extends unknown>(value: T & ({} | null)) {
+>fx1 : Symbol(fx1, Decl(unknownControlFlow.ts, 310, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 312, 13))
+>value : Symbol(value, Decl(unknownControlFlow.ts, 312, 32))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 312, 13))
+
+    if (value === 42) {
+>value : Symbol(value, Decl(unknownControlFlow.ts, 312, 32))
+
+        value;  // T & {}
+>value : Symbol(value, Decl(unknownControlFlow.ts, 312, 32))
+    }
+    else {
+        value;  // T & ({} | null)
+>value : Symbol(value, Decl(unknownControlFlow.ts, 312, 32))
+    }
+}
+
+function fx2<T extends {}>(value: T & ({} | null)) {
+>fx2 : Symbol(fx2, Decl(unknownControlFlow.ts, 319, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 321, 13))
+>value : Symbol(value, Decl(unknownControlFlow.ts, 321, 27))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 321, 13))
+
+    if (value === 42) {
+>value : Symbol(value, Decl(unknownControlFlow.ts, 321, 27))
+
+        value;  // T & {}
+>value : Symbol(value, Decl(unknownControlFlow.ts, 321, 27))
+    }
+    else {
+        value;  // T & ({} | null)
+>value : Symbol(value, Decl(unknownControlFlow.ts, 321, 27))
+    }
+}
+
+function fx3<T extends {} | undefined>(value: T & ({} | null)) {
+>fx3 : Symbol(fx3, Decl(unknownControlFlow.ts, 328, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 330, 13))
+>value : Symbol(value, Decl(unknownControlFlow.ts, 330, 39))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 330, 13))
+
+    if (value === 42) {
+>value : Symbol(value, Decl(unknownControlFlow.ts, 330, 39))
+
+        value;  // T & {}
+>value : Symbol(value, Decl(unknownControlFlow.ts, 330, 39))
+    }
+    else {
+        value;  // T & ({} | null)
+>value : Symbol(value, Decl(unknownControlFlow.ts, 330, 39))
+    }
+}
+
+function fx4<T extends {} | null>(value: T & ({} | null)) {
+>fx4 : Symbol(fx4, Decl(unknownControlFlow.ts, 337, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 339, 13))
+>value : Symbol(value, Decl(unknownControlFlow.ts, 339, 34))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 339, 13))
+
+    if (value === 42) {
+>value : Symbol(value, Decl(unknownControlFlow.ts, 339, 34))
+
+        value;  // T & {}
+>value : Symbol(value, Decl(unknownControlFlow.ts, 339, 34))
+    }
+    else {
+        value;  // T & ({} | null)
+>value : Symbol(value, Decl(unknownControlFlow.ts, 339, 34))
+    }
+}
+
+function fx5<T extends {} | null | undefined>(value: T & ({} | null)) {
+>fx5 : Symbol(fx5, Decl(unknownControlFlow.ts, 346, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 348, 13))
+>value : Symbol(value, Decl(unknownControlFlow.ts, 348, 46))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 348, 13))
+
+    if (value === 42) {
+>value : Symbol(value, Decl(unknownControlFlow.ts, 348, 46))
+
+        value;  // T & {}
+>value : Symbol(value, Decl(unknownControlFlow.ts, 348, 46))
+    }
+    else {
+        value;  // T & ({} | null)
+>value : Symbol(value, Decl(unknownControlFlow.ts, 348, 46))
+    }
+}
+
+// Double-equals narrowing
+
+function fx10(x: string | number, y: number) {
+>fx10 : Symbol(fx10, Decl(unknownControlFlow.ts, 355, 1))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 359, 14))
+>y : Symbol(y, Decl(unknownControlFlow.ts, 359, 33))
+
+    if (x == y) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 359, 14))
+>y : Symbol(y, Decl(unknownControlFlow.ts, 359, 33))
+
+        x;  // string | number
+>x : Symbol(x, Decl(unknownControlFlow.ts, 359, 14))
+    }
+    else {
+        x;  // string | number
+>x : Symbol(x, Decl(unknownControlFlow.ts, 359, 14))
+    }
+    if (x != y) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 359, 14))
+>y : Symbol(y, Decl(unknownControlFlow.ts, 359, 33))
+
+        x;  // string | number
+>x : Symbol(x, Decl(unknownControlFlow.ts, 359, 14))
+    }
+    else {
+        x;  // string | number
+>x : Symbol(x, Decl(unknownControlFlow.ts, 359, 14))
+    }
+}
+
+// Repros from #50706
+
+function SendBlob(encoding: unknown) {
+>SendBlob : Symbol(SendBlob, Decl(unknownControlFlow.ts, 372, 1))
+>encoding : Symbol(encoding, Decl(unknownControlFlow.ts, 376, 18))
+
+    if (encoding !== undefined && encoding !== 'utf8') {
+>encoding : Symbol(encoding, Decl(unknownControlFlow.ts, 376, 18))
+>undefined : Symbol(undefined)
+>encoding : Symbol(encoding, Decl(unknownControlFlow.ts, 376, 18))
+
+        throw new Error('encoding');
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    encoding;
+>encoding : Symbol(encoding, Decl(unknownControlFlow.ts, 376, 18))
+
+};
+
+function doSomething1<T extends unknown>(value: T): T {
+>doSomething1 : Symbol(doSomething1, Decl(unknownControlFlow.ts, 381, 2))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 383, 22))
+>value : Symbol(value, Decl(unknownControlFlow.ts, 383, 41))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 383, 22))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 383, 22))
+
+    if (value === undefined) {
+>value : Symbol(value, Decl(unknownControlFlow.ts, 383, 41))
+>undefined : Symbol(undefined)
+
+        return value;
+>value : Symbol(value, Decl(unknownControlFlow.ts, 383, 41))
+    }
+    if (value === 42) {
+>value : Symbol(value, Decl(unknownControlFlow.ts, 383, 41))
+
+        throw Error('Meaning of life value');
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    return value;
+>value : Symbol(value, Decl(unknownControlFlow.ts, 383, 41))
+}
+
+function doSomething2(value: unknown): void {
+>doSomething2 : Symbol(doSomething2, Decl(unknownControlFlow.ts, 391, 1))
+>value : Symbol(value, Decl(unknownControlFlow.ts, 393, 22))
+
+    if (value === undefined) {
+>value : Symbol(value, Decl(unknownControlFlow.ts, 393, 22))
+>undefined : Symbol(undefined)
+
+        return;
+    }
+    if (value === 42) {
+>value : Symbol(value, Decl(unknownControlFlow.ts, 393, 22))
+
+        value;
+>value : Symbol(value, Decl(unknownControlFlow.ts, 393, 22))
+    }
+}
+
+// Repro from #51009
+
+type TypeA = {
+>TypeA : Symbol(TypeA, Decl(unknownControlFlow.ts, 400, 1))
+
+    A: 'A',
+>A : Symbol(A, Decl(unknownControlFlow.ts, 404, 14))
+
+    B: 'B',
+>B : Symbol(B, Decl(unknownControlFlow.ts, 405, 11))
+}
+
+type TypeB = {
+>TypeB : Symbol(TypeB, Decl(unknownControlFlow.ts, 407, 1))
+
+    A: 'A',
+>A : Symbol(A, Decl(unknownControlFlow.ts, 409, 14))
+
+    B: 'B',
+>B : Symbol(B, Decl(unknownControlFlow.ts, 410, 11))
+
+    C: 'C',
+>C : Symbol(C, Decl(unknownControlFlow.ts, 411, 11))
+}
+
+type R<T extends keyof TypeA> =
+>R : Symbol(R, Decl(unknownControlFlow.ts, 413, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 415, 7))
+>TypeA : Symbol(TypeA, Decl(unknownControlFlow.ts, 400, 1))
+
+    T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never;
+>T : Symbol(T, Decl(unknownControlFlow.ts, 415, 7))
+>TypeB : Symbol(TypeB, Decl(unknownControlFlow.ts, 407, 1))
+>TypeA : Symbol(TypeA, Decl(unknownControlFlow.ts, 400, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 415, 7))
+>TypeB : Symbol(TypeB, Decl(unknownControlFlow.ts, 407, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 415, 7))
+
+type R2<T extends PropertyKey> =
+>R2 : Symbol(R2, Decl(unknownControlFlow.ts, 416, 57))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 418, 8))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+
+    T extends keyof TypeA ? T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never : never;
+>T : Symbol(T, Decl(unknownControlFlow.ts, 418, 8))
+>TypeA : Symbol(TypeA, Decl(unknownControlFlow.ts, 400, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 418, 8))
+>TypeB : Symbol(TypeB, Decl(unknownControlFlow.ts, 407, 1))
+>TypeA : Symbol(TypeA, Decl(unknownControlFlow.ts, 400, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 418, 8))
+>TypeB : Symbol(TypeB, Decl(unknownControlFlow.ts, 407, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 418, 8))
+
+// Repro from #51041
+
+type AB = "A" | "B";
+>AB : Symbol(AB, Decl(unknownControlFlow.ts, 419, 89))
+
+function x<T_AB extends AB>(x: T_AB & undefined, y: any) {
+>x : Symbol(x, Decl(unknownControlFlow.ts, 423, 20))
+>T_AB : Symbol(T_AB, Decl(unknownControlFlow.ts, 425, 11))
+>AB : Symbol(AB, Decl(unknownControlFlow.ts, 419, 89))
+>x : Symbol(x, Decl(unknownControlFlow.ts, 425, 28))
+>T_AB : Symbol(T_AB, Decl(unknownControlFlow.ts, 425, 11))
+>y : Symbol(y, Decl(unknownControlFlow.ts, 425, 48))
+
+    let r2: never = y as T_AB & undefined;
+>r2 : Symbol(r2, Decl(unknownControlFlow.ts, 426, 7))
+>y : Symbol(y, Decl(unknownControlFlow.ts, 425, 48))
+>T_AB : Symbol(T_AB, Decl(unknownControlFlow.ts, 425, 11))
+} 
+
+// Repro from #51538
+
+type Left = 'left';
+>Left : Symbol(Left, Decl(unknownControlFlow.ts, 427, 1))
+
+type Right = 'right' & { right: 'right' };
+>Right : Symbol(Right, Decl(unknownControlFlow.ts, 431, 19))
+>right : Symbol(right, Decl(unknownControlFlow.ts, 432, 24))
+
+type Either = Left | Right;
+>Either : Symbol(Either, Decl(unknownControlFlow.ts, 432, 42))
+>Left : Symbol(Left, Decl(unknownControlFlow.ts, 427, 1))
+>Right : Symbol(Right, Decl(unknownControlFlow.ts, 431, 19))
+
+function assertNever(v: never): never {
+>assertNever : Symbol(assertNever, Decl(unknownControlFlow.ts, 433, 27))
+>v : Symbol(v, Decl(unknownControlFlow.ts, 435, 21))
+
+    throw new Error('never');
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function fx20(value: Either) {
+>fx20 : Symbol(fx20, Decl(unknownControlFlow.ts, 437, 1))
+>value : Symbol(value, Decl(unknownControlFlow.ts, 439, 14))
+>Either : Symbol(Either, Decl(unknownControlFlow.ts, 432, 42))
+
+    if (value === 'left') {
+>value : Symbol(value, Decl(unknownControlFlow.ts, 439, 14))
+
+        const foo: 'left' = value;
+>foo : Symbol(foo, Decl(unknownControlFlow.ts, 441, 13))
+>value : Symbol(value, Decl(unknownControlFlow.ts, 439, 14))
+    }
+    else if (value === 'right') {
+>value : Symbol(value, Decl(unknownControlFlow.ts, 439, 14))
+
+        const bar: 'right' = value;
+>bar : Symbol(bar, Decl(unknownControlFlow.ts, 444, 13))
+>value : Symbol(value, Decl(unknownControlFlow.ts, 439, 14))
+    }
+    else {
+        assertNever(value);
+>assertNever : Symbol(assertNever, Decl(unknownControlFlow.ts, 433, 27))
+>value : Symbol(value, Decl(unknownControlFlow.ts, 439, 14))
+    }
+}
+

@@ -1,0 +1,80 @@
+--- old.forStatements.symbols
++++ new.forStatements.symbols
+@@= skipped -4, +4 lines =@@
+ >I : Symbol(I, Decl(forStatements.ts, 0, 0))
+ 
+     id: number;
+->id : Symbol(I.id, Decl(forStatements.ts, 0, 13))
++>id : Symbol(id, Decl(forStatements.ts, 0, 13))
+ }
+ 
+ class C implements I {
+@@= skipped -8, +8 lines =@@
+ >I : Symbol(I, Decl(forStatements.ts, 0, 0))
+ 
+     id: number;
+->id : Symbol(C.id, Decl(forStatements.ts, 4, 22))
++>id : Symbol(id, Decl(forStatements.ts, 4, 22))
+ }
+ 
+ class D<T>{
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(forStatements.ts, 8, 8))
+ 
+     source: T;
+->source : Symbol(D.source, Decl(forStatements.ts, 8, 11))
++>source : Symbol(source, Decl(forStatements.ts, 8, 11))
+ >T : Symbol(T, Decl(forStatements.ts, 8, 8))
+ 
+     recurse: D<T>;
+->recurse : Symbol(D.recurse, Decl(forStatements.ts, 9, 14))
++>recurse : Symbol(recurse, Decl(forStatements.ts, 9, 14))
+ >D : Symbol(D, Decl(forStatements.ts, 6, 1))
+ >T : Symbol(T, Decl(forStatements.ts, 8, 8))
+ 
+     wrapped: D<D<T>>
+->wrapped : Symbol(D.wrapped, Decl(forStatements.ts, 10, 18))
++>wrapped : Symbol(wrapped, Decl(forStatements.ts, 10, 18))
+ >D : Symbol(D, Decl(forStatements.ts, 6, 1))
+ >D : Symbol(D, Decl(forStatements.ts, 6, 1))
+ >T : Symbol(T, Decl(forStatements.ts, 8, 8))
+@@= skipped -26, +26 lines =@@
+ >A : Symbol(A, Decl(forStatements.ts, 16, 10))
+ 
+         name: string;
+->name : Symbol(A.name, Decl(forStatements.ts, 17, 20))
++>name : Symbol(name, Decl(forStatements.ts, 17, 20))
+     }
+ 
+     export function F2(x: number): string { return x.toString(); }
+ >F2 : Symbol(F2, Decl(forStatements.ts, 19, 5))
+ >x : Symbol(x, Decl(forStatements.ts, 21, 23))
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(forStatements.ts, 21, 23))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ for(var aNumber: number = 9.9;;){} 
+@@= skipped -86, +86 lines =@@
+ for(var aClassInModule: M.A = new M.A();;){}
+ >aClassInModule : Symbol(aClassInModule, Decl(forStatements.ts, 44, 7))
+ >M : Symbol(M, Decl(forStatements.ts, 14, 44))
+->A : Symbol(M.A, Decl(forStatements.ts, 16, 10))
+->M.A : Symbol(M.A, Decl(forStatements.ts, 16, 10))
++>A : Symbol(A, Decl(forStatements.ts, 16, 10))
++>M.A : Symbol(A, Decl(forStatements.ts, 16, 10))
+ >M : Symbol(M, Decl(forStatements.ts, 14, 44))
+->A : Symbol(M.A, Decl(forStatements.ts, 16, 10))
++>A : Symbol(A, Decl(forStatements.ts, 16, 10))
+ 
+ for(var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';;){}
+ >aFunctionInModule : Symbol(aFunctionInModule, Decl(forStatements.ts, 45, 7))
+->M.F2 : Symbol(M.F2, Decl(forStatements.ts, 19, 5))
++>M.F2 : Symbol(F2, Decl(forStatements.ts, 19, 5))
+ >M : Symbol(M, Decl(forStatements.ts, 14, 44))
+->F2 : Symbol(M.F2, Decl(forStatements.ts, 19, 5))
++>F2 : Symbol(F2, Decl(forStatements.ts, 19, 5))
+ >x : Symbol(x, Decl(forStatements.ts, 45, 42))
+ 

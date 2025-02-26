@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/es7/trailingCommasInGetter.ts] ////
+
+=== trailingCommasInGetter.ts ===
+class X {
+>X : Symbol(X, Decl(trailingCommasInGetter.ts, 0, 0))
+
+    get x(,) { return 0; }
+>x : Symbol(x, Decl(trailingCommasInGetter.ts, 0, 9))
+}
+

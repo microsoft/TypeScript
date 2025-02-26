@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/commonJsExportTypeDeclarationError.ts] ////
+
+=== test.js ===
+module.exports = {
+   message: ""
+>message : Symbol(message, Decl(test.js, 0, 18))
+}
+
+=== types1.ts ===
+import test from "./test";
+>test : Symbol(test, Decl(types1.ts, 0, 6), Decl(types1.ts, 0, 26))
+
+export type test
+>test : Symbol(test, Decl(types1.ts, 0, 26))
+
+> : Symbol(unknown)
+
+=== types2.ts ===
+import test from "./test";
+>test : Symbol(test, Decl(types2.ts, 0, 6), Decl(types2.ts, 0, 26))
+
+export type test = 
+>test : Symbol(test, Decl(types2.ts, 0, 26))
+
+> : Symbol(unknown)
+
+=== types3.ts ===
+import test from "./test";
+>test : Symbol(test, Decl(types3.ts, 0, 6), Decl(types3.ts, 0, 26))
+
+export type test = test;
+>test : Symbol(test, Decl(types3.ts, 0, 26))
+>test : Symbol(test, Decl(types3.ts, 0, 6), Decl(types3.ts, 0, 26))
+

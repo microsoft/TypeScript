@@ -1,0 +1,38 @@
+--- old.importsImplicitlyReadonly.symbols
++++ new.importsImplicitlyReadonly.symbols
+@@= skipped -26, +26 lines =@@
+ >x : Symbol(x, Decl(a.ts, 0, 10))
+ 
+ a1.y = 1;  // Error
+->a1.y : Symbol(a1.y, Decl(a.ts, 2, 8))
++>a1.y : Symbol(y, Decl(a.ts, 2, 8))
+ >a1 : Symbol(a1, Decl(b.ts, 1, 6))
+->y : Symbol(a1.y, Decl(a.ts, 2, 8))
++>y : Symbol(y, Decl(a.ts, 2, 8))
+ 
+ a2.x = 1;
+ >a2.x : Symbol(x, Decl(a.ts, 0, 10))
+@@= skipped -10, +10 lines =@@
+ >x : Symbol(x, Decl(a.ts, 0, 10))
+ 
+ a2.y = 1;
+->a2.y : Symbol(a1.y, Decl(a.ts, 2, 8))
++>a2.y : Symbol(y, Decl(a.ts, 2, 8))
+ >a2 : Symbol(a2, Decl(b.ts, 1, 26))
+->y : Symbol(a1.y, Decl(a.ts, 2, 8))
++>y : Symbol(y, Decl(a.ts, 2, 8))
+ 
+ a3.x = 1;
+ >a3.x : Symbol(x, Decl(a.ts, 0, 10))
+@@= skipped -10, +10 lines =@@
+ >x : Symbol(x, Decl(a.ts, 0, 10))
+ 
+ a3.y = 1;
+->a3.y : Symbol(a1.y, Decl(a.ts, 2, 8))
++>a3.y : Symbol(y, Decl(a.ts, 2, 8))
+ >a3 : Symbol(a3, Decl(b.ts, 3, 5))
+->y : Symbol(a1.y, Decl(a.ts, 2, 8))
++>y : Symbol(y, Decl(a.ts, 2, 8))
+ 
+ === a.ts ===
+ export var x = 1;

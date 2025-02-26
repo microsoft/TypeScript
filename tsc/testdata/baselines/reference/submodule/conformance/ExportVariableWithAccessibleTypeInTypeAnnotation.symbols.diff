@@ -1,0 +1,15 @@
+--- old.ExportVariableWithAccessibleTypeInTypeAnnotation.symbols
++++ new.ExportVariableWithAccessibleTypeInTypeAnnotation.symbols
+@@= skipped -7, +7 lines =@@
+ >Point : Symbol(Point, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 0, 10))
+ 
+         x: number;
+->x : Symbol(Point.x, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 2, 28))
++>x : Symbol(x, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 2, 28))
+ 
+         y: number;
+->y : Symbol(Point.y, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 3, 18))
++>y : Symbol(y, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 3, 18))
+     }
+ 
+     // valid since Point is exported

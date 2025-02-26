@@ -1,0 +1,16 @@
+--- old.innerExtern.symbols
++++ new.innerExtern.symbols
+@@= skipped -16, +16 lines =@@
+ >C : Symbol(C, Decl(innerExtern.ts, 4, 21))
+ 
+             x = BB.Elephant.X;
+->x : Symbol(C.x, Decl(innerExtern.ts, 5, 24))
+->BB.Elephant : Symbol(BB.Elephant, Decl(innerExtern.ts, 2, 18))
++>x : Symbol(x, Decl(innerExtern.ts, 5, 24))
++>BB.Elephant : Symbol(Elephant, Decl(innerExtern.ts, 2, 18))
+ >BB : Symbol(BB, Decl(innerExtern.ts, 0, 10))
+->Elephant : Symbol(BB.Elephant, Decl(innerExtern.ts, 2, 18))
++>Elephant : Symbol(Elephant, Decl(innerExtern.ts, 2, 18))
+         }
+     }
+ }

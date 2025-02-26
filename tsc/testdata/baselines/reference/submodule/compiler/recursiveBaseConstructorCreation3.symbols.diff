@@ -1,0 +1,11 @@
+--- old.recursiveBaseConstructorCreation3.symbols
++++ new.recursiveBaseConstructorCreation3.symbols
+@@= skipped -11, +11 lines =@@
+ >T : Symbol(T, Decl(recursiveBaseConstructorCreation3.ts, 2, 18))
+ 
+     foo: xyz;
+->foo : Symbol(abc.foo, Decl(recursiveBaseConstructorCreation3.ts, 2, 38))
++>foo : Symbol(foo, Decl(recursiveBaseConstructorCreation3.ts, 2, 38))
+ >xyz : Symbol(xyz, Decl(recursiveBaseConstructorCreation3.ts, 4, 1))
+ }
+ declare class xyz extends abc {

@@ -1,0 +1,23 @@
+--- old.superCallsInConstructor.symbols
++++ new.superCallsInConstructor.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(superCallsInConstructor.ts, 0, 0))
+ 
+     foo() {}
+->foo : Symbol(C.foo, Decl(superCallsInConstructor.ts, 0, 9))
++>foo : Symbol(foo, Decl(superCallsInConstructor.ts, 0, 9))
+ 
+     bar() {}
+->bar : Symbol(C.bar, Decl(superCallsInConstructor.ts, 1, 12))
++>bar : Symbol(bar, Decl(superCallsInConstructor.ts, 1, 12))
+ }
+ 
+ class Base {
+ >Base : Symbol(Base, Decl(superCallsInConstructor.ts, 3, 1))
+ 
+     x: string;
+->x : Symbol(Base.x, Decl(superCallsInConstructor.ts, 5, 12))
++>x : Symbol(x, Decl(superCallsInConstructor.ts, 5, 12))
+ }
+  
+ class Derived extends Base {

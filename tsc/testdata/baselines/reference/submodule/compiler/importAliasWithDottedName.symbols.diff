@@ -1,0 +1,22 @@
+--- old.importAliasWithDottedName.symbols
++++ new.importAliasWithDottedName.symbols
+@@= skipped -24, +24 lines =@@
+ 
+     var r = N.y;
+ >r : Symbol(r, Decl(importAliasWithDottedName.ts, 9, 7))
+->N.y : Symbol(N.y, Decl(importAliasWithDottedName.ts, 3, 18))
++>N.y : Symbol(y, Decl(importAliasWithDottedName.ts, 3, 18))
+ >N : Symbol(N, Decl(importAliasWithDottedName.ts, 7, 10))
+->y : Symbol(N.y, Decl(importAliasWithDottedName.ts, 3, 18))
++>y : Symbol(y, Decl(importAliasWithDottedName.ts, 3, 18))
+ 
+     var r2 = M.N.y;
+ >r2 : Symbol(r2, Decl(importAliasWithDottedName.ts, 10, 7))
+->M.N.y : Symbol(N.y, Decl(importAliasWithDottedName.ts, 3, 18))
++>M.N.y : Symbol(y, Decl(importAliasWithDottedName.ts, 3, 18))
+ >M.N : Symbol(N, Decl(importAliasWithDottedName.ts, 1, 21))
+ >M : Symbol(M, Decl(importAliasWithDottedName.ts, 0, 0))
+ >N : Symbol(N, Decl(importAliasWithDottedName.ts, 1, 21))
+->y : Symbol(N.y, Decl(importAliasWithDottedName.ts, 3, 18))
++>y : Symbol(y, Decl(importAliasWithDottedName.ts, 3, 18))
+ }

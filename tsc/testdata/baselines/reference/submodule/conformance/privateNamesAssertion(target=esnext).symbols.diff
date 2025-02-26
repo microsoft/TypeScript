@@ -1,0 +1,48 @@
+--- old.privateNamesAssertion(target=esnext).symbols
++++ new.privateNamesAssertion(target=esnext).symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(privateNamesAssertion.ts, 0, 0))
+ 
+     #p1: (v: any) => asserts v is string = (v) => {
+->#p1 : Symbol(Foo.#p1, Decl(privateNamesAssertion.ts, 0, 11))
++>#p1 : Symbol(#p1, Decl(privateNamesAssertion.ts, 0, 11))
+ >v : Symbol(v, Decl(privateNamesAssertion.ts, 1, 10))
+ >v : Symbol(v, Decl(privateNamesAssertion.ts, 1, 10))
+ >v : Symbol(v, Decl(privateNamesAssertion.ts, 1, 44))
+@@= skipped -13, +13 lines =@@
+         }
+     }
+     m1(v: unknown) {
+->m1 : Symbol(Foo.m1, Decl(privateNamesAssertion.ts, 5, 5))
++>m1 : Symbol(m1, Decl(privateNamesAssertion.ts, 5, 5))
+ >v : Symbol(v, Decl(privateNamesAssertion.ts, 6, 7))
+ 
+         this.#p1(v);
+->this.#p1 : Symbol(Foo.#p1, Decl(privateNamesAssertion.ts, 0, 11))
++>this.#p1 : Symbol(#p1, Decl(privateNamesAssertion.ts, 0, 11))
+ >this : Symbol(Foo, Decl(privateNamesAssertion.ts, 0, 0))
+ >v : Symbol(v, Decl(privateNamesAssertion.ts, 6, 7))
+ 
+@@= skipped -17, +17 lines =@@
+ >Foo2 : Symbol(Foo2, Decl(privateNamesAssertion.ts, 10, 1))
+ 
+     #p1(v: any): asserts v is string {
+->#p1 : Symbol(Foo2.#p1, Decl(privateNamesAssertion.ts, 12, 12))
++>#p1 : Symbol(#p1, Decl(privateNamesAssertion.ts, 12, 12))
+ >v : Symbol(v, Decl(privateNamesAssertion.ts, 13, 8))
+ >v : Symbol(v, Decl(privateNamesAssertion.ts, 13, 8))
+ 
+@@= skipped -12, +12 lines =@@
+         }
+     }
+     m1(v: unknown) {
+->m1 : Symbol(Foo2.m1, Decl(privateNamesAssertion.ts, 17, 5))
++>m1 : Symbol(m1, Decl(privateNamesAssertion.ts, 17, 5))
+ >v : Symbol(v, Decl(privateNamesAssertion.ts, 18, 7))
+ 
+         this.#p1(v);
+->this.#p1 : Symbol(Foo2.#p1, Decl(privateNamesAssertion.ts, 12, 12))
++>this.#p1 : Symbol(#p1, Decl(privateNamesAssertion.ts, 12, 12))
+ >this : Symbol(Foo2, Decl(privateNamesAssertion.ts, 10, 1))
+ >v : Symbol(v, Decl(privateNamesAssertion.ts, 18, 7))
+ 

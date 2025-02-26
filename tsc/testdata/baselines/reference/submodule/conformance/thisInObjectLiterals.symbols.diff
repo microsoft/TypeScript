@@ -1,0 +1,36 @@
+--- old.thisInObjectLiterals.symbols
++++ new.thisInObjectLiterals.symbols
+@@= skipped -4, +4 lines =@@
+ >MyClass : Symbol(MyClass, Decl(thisInObjectLiterals.ts, 0, 0))
+ 
+     t: number;
+->t : Symbol(MyClass.t, Decl(thisInObjectLiterals.ts, 0, 15))
++>t : Symbol(t, Decl(thisInObjectLiterals.ts, 0, 15))
+ 
+     fn() {
+->fn : Symbol(MyClass.fn, Decl(thisInObjectLiterals.ts, 1, 14))
++>fn : Symbol(fn, Decl(thisInObjectLiterals.ts, 1, 14))
+ 
+         type ContainingThis = this;
+ >ContainingThis : Symbol(ContainingThis, Decl(thisInObjectLiterals.ts, 3, 10))
+@@= skipped -14, +14 lines =@@
+ >x : Symbol(x, Decl(thisInObjectLiterals.ts, 6, 17))
+ >this : Symbol(MyClass, Decl(thisInObjectLiterals.ts, 0, 0))
+ >y : Symbol(y, Decl(thisInObjectLiterals.ts, 6, 26))
+->this.t : Symbol(MyClass.t, Decl(thisInObjectLiterals.ts, 0, 15))
++>this.t : Symbol(t, Decl(thisInObjectLiterals.ts, 0, 15))
+ >this : Symbol(MyClass, Decl(thisInObjectLiterals.ts, 0, 0))
+->t : Symbol(MyClass.t, Decl(thisInObjectLiterals.ts, 0, 15))
++>t : Symbol(t, Decl(thisInObjectLiterals.ts, 0, 15))
+ 
+         var t: { x: ContainingThis; y: number };
+ >t : Symbol(t, Decl(thisInObjectLiterals.ts, 6, 11), Decl(thisInObjectLiterals.ts, 7, 11))
+@@= skipped -20, +20 lines =@@
+ >f : Symbol(f, Decl(thisInObjectLiterals.ts, 12, 11))
+ 
+         return this.spaaace;
+->this : Symbol(obj, Decl(thisInObjectLiterals.ts, 12, 9))
++>this : Symbol((Anonymous type), Decl(thisInObjectLiterals.ts, 12, 9))
+     }
+ };
+ var obj: { f: () => any; };

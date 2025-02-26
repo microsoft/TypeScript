@@ -1,0 +1,42 @@
+--- old.es5ExportDefaultClassDeclaration3.symbols
++++ new.es5ExportDefaultClassDeclaration3.symbols
+@@= skipped -2, +2 lines =@@
+ === es5ExportDefaultClassDeclaration3.ts ===
+ var before: C = new C();
+ >before : Symbol(before, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 3))
+->C : Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
+->C : Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
++>C : Symbol(default, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
++>C : Symbol(default, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
+ 
+ export default class C {
+->C : Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
++>C : Symbol(default, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
+ 
+     method(): C {
+->method : Symbol(C.method, Decl(es5ExportDefaultClassDeclaration3.ts, 2, 24))
+->C : Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
++>method : Symbol(method, Decl(es5ExportDefaultClassDeclaration3.ts, 2, 24))
++>C : Symbol(default, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
+ 
+         return new C();
+->C : Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
++>C : Symbol(default, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
+     }
+ }
+ 
+ var after: C = new C();
+ >after : Symbol(after, Decl(es5ExportDefaultClassDeclaration3.ts, 8, 3))
+->C : Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
+->C : Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
++>C : Symbol(default, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
++>C : Symbol(default, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
+ 
+ var t: typeof C = C;
+ >t : Symbol(t, Decl(es5ExportDefaultClassDeclaration3.ts, 10, 3))
+->C : Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
+->C : Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
++>C : Symbol(default, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
++>C : Symbol(default, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))
+ 
+ 

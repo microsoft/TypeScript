@@ -1,0 +1,57 @@
+--- old.objectTypeWithCallSignatureHidingMembersOfFunction.symbols
++++ new.objectTypeWithCallSignatureHidingMembersOfFunction.symbols
+@@= skipped -8, +8 lines =@@
+ 
+     (): void;
+     apply(a: any, b?: any): void;
+->apply : Symbol(I.apply, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 4, 13))
++>apply : Symbol(apply, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 4, 13))
+ >a : Symbol(a, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 5, 10))
+ >b : Symbol(b, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 5, 17))
+ 
+     call(thisArg: number, ...argArray: number[]): any;
+->call : Symbol(I.call, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 5, 33))
++>call : Symbol(call, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 5, 33))
+ >thisArg : Symbol(thisArg, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 6, 9))
+ >argArray : Symbol(argArray, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 6, 25))
+ }
+@@= skipped -18, +18 lines =@@
+ >r1 : Symbol(r1, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 10, 3))
+ >a : Symbol(a, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 10, 9))
+ >b : Symbol(b, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 10, 16))
+->i.apply : Symbol(I.apply, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 4, 13))
++>i.apply : Symbol(apply, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 4, 13))
+ >i : Symbol(i, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 9, 3))
+->apply : Symbol(I.apply, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 4, 13))
++>apply : Symbol(apply, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 4, 13))
+ 
+ var r1b: (thisArg: number, ...argArray: number[]) => void = i.call;
+ >r1b : Symbol(r1b, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 11, 3))
+ >thisArg : Symbol(thisArg, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 11, 10))
+ >argArray : Symbol(argArray, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 11, 26))
+->i.call : Symbol(I.call, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 5, 33))
++>i.call : Symbol(call, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 5, 33))
+ >i : Symbol(i, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 9, 3))
+->call : Symbol(I.call, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 5, 33))
++>call : Symbol(call, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 5, 33))
+ 
+ var r1c = i.arguments;
+ >r1c : Symbol(r1c, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 12, 3))
+->i.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
++>i.arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
+ >i : Symbol(i, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 9, 3))
+->arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
++>arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
+ 
+ var x: {
+ >x : Symbol(x, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 14, 3))
+@@= skipped -51, +51 lines =@@
+ 
+ var r2c = x.arguments;
+ >r2c : Symbol(r2c, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 22, 3))
+->x.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
++>x.arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 14, 3))
+->arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
++>arguments : Symbol(arguments, Decl(lib.es5.d.ts, --, --))
+ 

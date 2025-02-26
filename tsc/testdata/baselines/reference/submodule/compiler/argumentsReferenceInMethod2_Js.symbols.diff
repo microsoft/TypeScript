@@ -1,0 +1,19 @@
+--- old.argumentsReferenceInMethod2_Js.symbols
++++ new.argumentsReferenceInMethod2_Js.symbols
+@@= skipped -7, +7 lines =@@
+ 	 * @param {object} [foo={}]
+ 	 */
+ 	m(foo = {}) {
+->m : Symbol(A.m, Decl(a.js, 0, 9))
++>m : Symbol(m, Decl(a.js, 0, 9))
+ >foo : Symbol(foo, Decl(a.js, 4, 3))
+ 
+ 		/**
+@@= skipped -8, +8 lines =@@
+ 		 */
+ 		this["arguments"] = foo;
+ >this : Symbol(A, Decl(a.js, 0, 0))
+->"arguments" : Symbol(A["arguments"], Decl(a.js, 4, 14))
+ >foo : Symbol(foo, Decl(a.js, 4, 3))
+ 	}
+ }

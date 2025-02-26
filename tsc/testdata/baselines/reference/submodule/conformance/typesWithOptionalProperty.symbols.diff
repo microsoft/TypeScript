@@ -1,0 +1,19 @@
+--- old.typesWithOptionalProperty.symbols
++++ new.typesWithOptionalProperty.symbols
+@@= skipped -6, +6 lines =@@
+ >I : Symbol(I, Decl(typesWithOptionalProperty.ts, 0, 0))
+ 
+     foo: string;
+->foo : Symbol(I.foo, Decl(typesWithOptionalProperty.ts, 2, 13))
++>foo : Symbol(foo, Decl(typesWithOptionalProperty.ts, 2, 13))
+ 
+     bar?: number;
+->bar : Symbol(I.bar, Decl(typesWithOptionalProperty.ts, 3, 16))
++>bar : Symbol(bar, Decl(typesWithOptionalProperty.ts, 3, 16))
+ 
+     baz? (): string;
+->baz : Symbol(I.baz, Decl(typesWithOptionalProperty.ts, 4, 17))
++>baz : Symbol(baz, Decl(typesWithOptionalProperty.ts, 4, 17))
+ }
+ 
+ var a: {

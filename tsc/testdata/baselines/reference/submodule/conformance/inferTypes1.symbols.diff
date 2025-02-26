@@ -1,0 +1,49 @@
+--- old.inferTypes1.symbols
++++ new.inferTypes1.symbols
+@@= skipped -69, +69 lines =@@
+ >C : Symbol(C, Decl(inferTypes1.ts, 16, 1))
+ 
+     x = 0;
+->x : Symbol(C.x, Decl(inferTypes1.ts, 18, 9))
++>x : Symbol(x, Decl(inferTypes1.ts, 18, 9))
+ 
+     y = 0;
+->y : Symbol(C.y, Decl(inferTypes1.ts, 19, 10))
++>y : Symbol(y, Decl(inferTypes1.ts, 19, 10))
+ }
+ 
+ abstract class Abstract {
+ >Abstract : Symbol(Abstract, Decl(inferTypes1.ts, 21, 1))
+ 
+     x = 0;
+->x : Symbol(Abstract.x, Decl(inferTypes1.ts, 23, 25))
++>x : Symbol(x, Decl(inferTypes1.ts, 23, 25))
+ 
+     y = 0;
+->y : Symbol(Abstract.y, Decl(inferTypes1.ts, 24, 10))
++>y : Symbol(y, Decl(inferTypes1.ts, 24, 10))
+ }
+ 
+ type T10 = ReturnType<() => string>;  // string
+@@= skipped -506, +506 lines =@@
+ >MyClass : Symbol(MyClass, Decl(inferTypes1.ts, 129, 1))
+ 
+     toJSON(): "correct";
+->toJSON : Symbol(MyClass.toJSON, Decl(inferTypes1.ts, 131, 23))
++>toJSON : Symbol(toJSON, Decl(inferTypes1.ts, 131, 23))
+ }
+ 
+ type JsonifiedExample = Jsonified<Example>;
+@@= skipped -122, +122 lines =@@
+ >test : Symbol(test, Decl(inferTypes1.ts, 159, 41))
+ 
+     a: 1,
+->a : Symbol(test.a, Decl(inferTypes1.ts, 161, 16))
++>a : Symbol(a, Decl(inferTypes1.ts, 161, 16))
+ 
+     b: void
+->b : Symbol(test.b, Decl(inferTypes1.ts, 162, 9))
++>b : Symbol(b, Decl(inferTypes1.ts, 162, 9))
+ }
+ 
+ type T80 = MatchingKeys<test, void>;

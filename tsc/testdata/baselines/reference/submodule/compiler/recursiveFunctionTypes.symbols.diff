@@ -1,0 +1,24 @@
+--- old.recursiveFunctionTypes.symbols
++++ new.recursiveFunctionTypes.symbols
+@@= skipped -51, +51 lines =@@
+ >C : Symbol(C, Decl(recursiveFunctionTypes.ts, 16, 19))
+ 
+      static g(t: typeof C.g){ }
+->g : Symbol(C.g, Decl(recursiveFunctionTypes.ts, 18, 9))
++>g : Symbol(g, Decl(recursiveFunctionTypes.ts, 18, 9))
+ >t : Symbol(t, Decl(recursiveFunctionTypes.ts, 19, 14))
+->C.g : Symbol(C.g, Decl(recursiveFunctionTypes.ts, 18, 9))
++>C.g : Symbol(g, Decl(recursiveFunctionTypes.ts, 18, 9))
+ >C : Symbol(C, Decl(recursiveFunctionTypes.ts, 16, 19))
+->g : Symbol(C.g, Decl(recursiveFunctionTypes.ts, 18, 9))
++>g : Symbol(g, Decl(recursiveFunctionTypes.ts, 18, 9))
+ }
+ C.g(3); // error
+->C.g : Symbol(C.g, Decl(recursiveFunctionTypes.ts, 18, 9))
++>C.g : Symbol(g, Decl(recursiveFunctionTypes.ts, 18, 9))
+ >C : Symbol(C, Decl(recursiveFunctionTypes.ts, 16, 19))
+->g : Symbol(C.g, Decl(recursiveFunctionTypes.ts, 18, 9))
++>g : Symbol(g, Decl(recursiveFunctionTypes.ts, 18, 9))
+ 
+ var f4: () => typeof f4;
+ >f4 : Symbol(f4, Decl(recursiveFunctionTypes.ts, 23, 3))

@@ -1,0 +1,53 @@
+--- old.tsxSpreadAttributesResolution4.symbols
++++ new.tsxSpreadAttributesResolution4.symbols
+@@= skipped -7, +7 lines =@@
+ >PoisonedProp : Symbol(PoisonedProp, Decl(file.tsx, 0, 32))
+ 
+     x: string;
+->x : Symbol(PoisonedProp.x, Decl(file.tsx, 2, 24))
++>x : Symbol(x, Decl(file.tsx, 2, 24))
+ 
+     y: 2;
+->y : Symbol(PoisonedProp.y, Decl(file.tsx, 3, 14))
++>y : Symbol(y, Decl(file.tsx, 3, 14))
+ }
+ 
+ class Poisoned extends React.Component<PoisonedProp, {}> {
+ >Poisoned : Symbol(Poisoned, Decl(file.tsx, 5, 1))
+->React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
++>React.Component : Symbol(unknown)
+ >React : Symbol(React, Decl(file.tsx, 0, 0))
+->Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
++>Component : Symbol(unknown)
+ >PoisonedProp : Symbol(PoisonedProp, Decl(file.tsx, 0, 32))
+ 
+     render() {
+->render : Symbol(Poisoned.render, Decl(file.tsx, 7, 58))
++>render : Symbol(render, Decl(file.tsx, 7, 58))
+ 
+         return <div>Hello</div>;
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+     }
+ }
+ 
+@@= skipped -42, +40 lines =@@
+ 
+ class EmptyProp extends React.Component<{}, {}> {
+ >EmptyProp : Symbol(EmptyProp, Decl(file.tsx, 19, 30))
+->React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
++>React.Component : Symbol(unknown)
+ >React : Symbol(React, Decl(file.tsx, 0, 0))
+->Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
++>Component : Symbol(unknown)
+ 
+     render() {
+->render : Symbol(EmptyProp.render, Decl(file.tsx, 21, 49))
++>render : Symbol(render, Decl(file.tsx, 21, 49))
+ 
+         return <div>Default hi</div>;
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+     }
+ }
+ 

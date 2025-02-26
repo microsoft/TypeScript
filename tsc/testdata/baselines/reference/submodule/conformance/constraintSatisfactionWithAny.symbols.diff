@@ -1,0 +1,29 @@
+--- old.constraintSatisfactionWithAny.symbols
++++ new.constraintSatisfactionWithAny.symbols
+@@= skipped -71, +71 lines =@@
+ >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     constructor(public x: T) { }
+->x : Symbol(C.x, Decl(constraintSatisfactionWithAny.ts, 23, 16))
++>x : Symbol(x, Decl(constraintSatisfactionWithAny.ts, 23, 16))
+ >T : Symbol(T, Decl(constraintSatisfactionWithAny.ts, 22, 8))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >x : Symbol(x, Decl(constraintSatisfactionWithAny.ts, 29, 20))
+ 
+     constructor(public x: T) { }
+->x : Symbol(C2.x, Decl(constraintSatisfactionWithAny.ts, 30, 16))
++>x : Symbol(x, Decl(constraintSatisfactionWithAny.ts, 30, 16))
+ >T : Symbol(T, Decl(constraintSatisfactionWithAny.ts, 29, 9))
+ }
+ 
+@@= skipped -30, +30 lines =@@
+ >T : Symbol(T, Decl(constraintSatisfactionWithAny.ts, 43, 20))
+ 
+     constructor(public x: T) { }
+->x : Symbol(C4.x, Decl(constraintSatisfactionWithAny.ts, 44, 16))
++>x : Symbol(x, Decl(constraintSatisfactionWithAny.ts, 44, 16))
+ >T : Symbol(T, Decl(constraintSatisfactionWithAny.ts, 43, 9))
+ }
+ 

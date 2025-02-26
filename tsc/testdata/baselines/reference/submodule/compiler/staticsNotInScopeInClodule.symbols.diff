@@ -1,0 +1,11 @@
+--- old.staticsNotInScopeInClodule.symbols
++++ new.staticsNotInScopeInClodule.symbols
+@@= skipped -4, +4 lines =@@
+ >Clod : Symbol(Clod, Decl(staticsNotInScopeInClodule.ts, 0, 0), Decl(staticsNotInScopeInClodule.ts, 2, 1))
+ 
+     static x = 10;
+->x : Symbol(Clod.x, Decl(staticsNotInScopeInClodule.ts, 0, 12))
++>x : Symbol(x, Decl(staticsNotInScopeInClodule.ts, 0, 12))
+ }
+ 
+ module Clod {

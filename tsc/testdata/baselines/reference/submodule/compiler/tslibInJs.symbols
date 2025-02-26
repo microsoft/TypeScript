@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/tslibInJs.ts] ////
+
+=== main.js ===
+"use strict";
+const { foo } = require("bar");
+>foo : Symbol(foo, Decl(main.js, 1, 7))
+

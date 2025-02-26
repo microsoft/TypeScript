@@ -1,0 +1,11 @@
+--- old.declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.symbols
++++ new.declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.symbols
+@@= skipped -8, +8 lines =@@
+ >User : Symbol(User, Decl(declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.ts, 0, 29))
+ 
+     private [_data] : any;
+->[_data] : Symbol(User[_data], Decl(declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.ts, 2, 19))
++>[_data] : Symbol([_data], Decl(declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.ts, 2, 19))
+ >_data : Symbol(_data, Decl(declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.ts, 0, 5))
+ 
+ };

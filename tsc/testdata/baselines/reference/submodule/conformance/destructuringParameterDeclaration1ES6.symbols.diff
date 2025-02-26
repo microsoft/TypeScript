@@ -1,0 +1,83 @@
+--- old.destructuringParameterDeclaration1ES6.symbols
++++ new.destructuringParameterDeclaration1ES6.symbols
+@@= skipped -83, +83 lines =@@
+ >F1 : Symbol(F1, Decl(destructuringParameterDeclaration1ES6.ts, 22, 67))
+ 
+     b5(z, y, [, a, b], {p, m: { q, r}});
+->b5 : Symbol(F1.b5, Decl(destructuringParameterDeclaration1ES6.ts, 24, 14))
++>b5 : Symbol(b5, Decl(destructuringParameterDeclaration1ES6.ts, 24, 14))
+ >z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 25, 7))
+ >y : Symbol(y, Decl(destructuringParameterDeclaration1ES6.ts, 25, 9))
+ >a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 25, 15))
+@@= skipped -47, +47 lines =@@
+ // If the declaration specifies a binding pattern, the parameter type is the implied type of that binding pattern (section 5.1.3)
+ enum Foo { a }
+ >Foo : Symbol(Foo, Decl(destructuringParameterDeclaration1ES6.ts, 33, 34))
+->a : Symbol(Foo.a, Decl(destructuringParameterDeclaration1ES6.ts, 37, 10))
++>a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 37, 10))
+ 
+ function c0({z: {x, y: {j}}}) { }
+ >c0 : Symbol(c0, Decl(destructuringParameterDeclaration1ES6.ts, 37, 14))
+@@= skipped -82, +82 lines =@@
+ >F2 : Symbol(F2, Decl(destructuringParameterDeclaration1ES6.ts, 57, 38))
+ 
+     d3([a, b, c]?);
+->d3 : Symbol(F2.d3, Decl(destructuringParameterDeclaration1ES6.ts, 63, 14))
++>d3 : Symbol(d3, Decl(destructuringParameterDeclaration1ES6.ts, 63, 14))
+ >a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 64, 8))
+ >b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 64, 10))
+ >c : Symbol(c, Decl(destructuringParameterDeclaration1ES6.ts, 64, 13))
+ 
+     d4({x, y, z}?);
+->d4 : Symbol(F2.d4, Decl(destructuringParameterDeclaration1ES6.ts, 64, 19))
++>d4 : Symbol(d4, Decl(destructuringParameterDeclaration1ES6.ts, 64, 19))
+ >x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 65, 8))
+ >y : Symbol(y, Decl(destructuringParameterDeclaration1ES6.ts, 65, 10))
+ >z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 65, 13))
+ 
+     e0([a, b, c]);
+->e0 : Symbol(F2.e0, Decl(destructuringParameterDeclaration1ES6.ts, 65, 19))
++>e0 : Symbol(e0, Decl(destructuringParameterDeclaration1ES6.ts, 65, 19))
+ >a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 66, 8))
+ >b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 66, 10))
+ >c : Symbol(c, Decl(destructuringParameterDeclaration1ES6.ts, 66, 13))
+@@= skipped -24, +24 lines =@@
+ 
+     constructor() { }
+     d3() { }
+->d3 : Symbol(C2.d3, Decl(destructuringParameterDeclaration1ES6.ts, 70, 21))
++>d3 : Symbol(d3, Decl(destructuringParameterDeclaration1ES6.ts, 70, 21))
+ 
+     d4() { }
+->d4 : Symbol(C2.d4, Decl(destructuringParameterDeclaration1ES6.ts, 71, 12))
++>d4 : Symbol(d4, Decl(destructuringParameterDeclaration1ES6.ts, 71, 12))
+ 
+     e0([a, b, c]) { }
+->e0 : Symbol(C2.e0, Decl(destructuringParameterDeclaration1ES6.ts, 72, 12))
++>e0 : Symbol(e0, Decl(destructuringParameterDeclaration1ES6.ts, 72, 12))
+ >a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 73, 8))
+ >b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 73, 10))
+ >c : Symbol(c, Decl(destructuringParameterDeclaration1ES6.ts, 73, 13))
+@@= skipped -17, +17 lines =@@
+ >F2 : Symbol(F2, Decl(destructuringParameterDeclaration1ES6.ts, 57, 38))
+ 
+     d3([a, b, c]) { }
+->d3 : Symbol(C3.d3, Decl(destructuringParameterDeclaration1ES6.ts, 76, 24))
++>d3 : Symbol(d3, Decl(destructuringParameterDeclaration1ES6.ts, 76, 24))
+ >a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 77, 8))
+ >b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 77, 10))
+ >c : Symbol(c, Decl(destructuringParameterDeclaration1ES6.ts, 77, 13))
+ 
+     d4({x, y, z}) { }
+->d4 : Symbol(C3.d4, Decl(destructuringParameterDeclaration1ES6.ts, 77, 21))
++>d4 : Symbol(d4, Decl(destructuringParameterDeclaration1ES6.ts, 77, 21))
+ >x : Symbol(x, Decl(destructuringParameterDeclaration1ES6.ts, 78, 8))
+ >y : Symbol(y, Decl(destructuringParameterDeclaration1ES6.ts, 78, 10))
+ >z : Symbol(z, Decl(destructuringParameterDeclaration1ES6.ts, 78, 13))
+ 
+     e0([a, b, c]) { }
+->e0 : Symbol(C3.e0, Decl(destructuringParameterDeclaration1ES6.ts, 78, 21))
++>e0 : Symbol(e0, Decl(destructuringParameterDeclaration1ES6.ts, 78, 21))
+ >a : Symbol(a, Decl(destructuringParameterDeclaration1ES6.ts, 79, 8))
+ >b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 79, 10))
+ >c : Symbol(c, Decl(destructuringParameterDeclaration1ES6.ts, 79, 13))

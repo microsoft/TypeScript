@@ -1,0 +1,22 @@
+--- old.strictBindCallApply2.symbols
++++ new.strictBindCallApply2.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ interface Foo { blub: string };
+ >Foo : Symbol(Foo, Decl(strictBindCallApply2.ts, 0, 0))
+->blub : Symbol(Foo.blub, Decl(strictBindCallApply2.ts, 2, 15))
++>blub : Symbol(blub, Decl(strictBindCallApply2.ts, 2, 15))
+ 
+ function fn(this: Foo) {}
+ >fn : Symbol(fn, Decl(strictBindCallApply2.ts, 2, 31))
+@@= skipped -14, +14 lines =@@
+ 
+ const fb = fn.bind({ blub: "blub" });
+ >fb : Symbol(fb, Decl(strictBindCallApply2.ts, 7, 5))
+->fn.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>fn.bind : Symbol(bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >fn : Symbol(fn, Decl(strictBindCallApply2.ts, 2, 31))
+->bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>bind : Symbol(bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >blub : Symbol(blub, Decl(strictBindCallApply2.ts, 7, 20))
+ 

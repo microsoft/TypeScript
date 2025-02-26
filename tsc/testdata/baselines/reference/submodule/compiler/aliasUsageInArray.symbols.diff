@@ -1,0 +1,37 @@
+--- old.aliasUsageInArray.symbols
++++ new.aliasUsageInArray.symbols
+@@= skipped -10, +10 lines =@@
+ >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInArray_main.ts, 1, 56))
+ 
+     VisualizationModel: typeof Backbone.Model;
+->VisualizationModel : Symbol(IHasVisualizationModel.VisualizationModel, Decl(aliasUsageInArray_main.ts, 2, 34))
+->Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInArray_backbone.ts, 0, 0))
++>VisualizationModel : Symbol(VisualizationModel, Decl(aliasUsageInArray_main.ts, 2, 34))
++>Backbone.Model : Symbol(Model, Decl(aliasUsageInArray_backbone.ts, 0, 0))
+ >Backbone : Symbol(Backbone, Decl(aliasUsageInArray_main.ts, 0, 0))
+->Model : Symbol(Backbone.Model, Decl(aliasUsageInArray_backbone.ts, 0, 0))
++>Model : Symbol(Model, Decl(aliasUsageInArray_backbone.ts, 0, 0))
+ }
+ 
+ var xs: IHasVisualizationModel[] = [moduleA];
+@@= skipped -21, +21 lines =@@
+ >Model : Symbol(Model, Decl(aliasUsageInArray_backbone.ts, 0, 0))
+ 
+     public someData: string;
+->someData : Symbol(Model.someData, Decl(aliasUsageInArray_backbone.ts, 0, 20))
++>someData : Symbol(someData, Decl(aliasUsageInArray_backbone.ts, 0, 20))
+ }
+ 
+ === aliasUsageInArray_moduleA.ts ===
+@@= skipped -9, +9 lines =@@
+ 
+ export class VisualizationModel extends Backbone.Model {
+ >VisualizationModel : Symbol(VisualizationModel, Decl(aliasUsageInArray_moduleA.ts, 0, 58))
+->Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInArray_backbone.ts, 0, 0))
++>Backbone.Model : Symbol(Model, Decl(aliasUsageInArray_backbone.ts, 0, 0))
+ >Backbone : Symbol(Backbone, Decl(aliasUsageInArray_moduleA.ts, 0, 0))
+->Model : Symbol(Backbone.Model, Decl(aliasUsageInArray_backbone.ts, 0, 0))
++>Model : Symbol(Model, Decl(aliasUsageInArray_backbone.ts, 0, 0))
+ 
+     // interesting stuff here
+ }

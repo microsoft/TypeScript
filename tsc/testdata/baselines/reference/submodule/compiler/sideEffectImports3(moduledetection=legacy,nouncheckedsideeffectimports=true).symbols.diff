@@ -1,0 +1,12 @@
+--- old.sideEffectImports3(moduledetection=legacy,nouncheckedsideeffectimports=true).symbols
++++ new.sideEffectImports3(moduledetection=legacy,nouncheckedsideeffectimports=true).symbols
+@@= skipped -5, +5 lines =@@
+ 
+ === not-a-module.ts ===
+ console.log("Hello, world!");
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ 

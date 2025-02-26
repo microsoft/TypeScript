@@ -1,0 +1,218 @@
+--- old.contextualTypeShouldBeLiteral.symbols
++++ new.contextualTypeShouldBeLiteral.symbols
+@@= skipped -4, +4 lines =@@
+ >X : Symbol(X, Decl(contextualTypeShouldBeLiteral.ts, 0, 0))
+ 
+     type: 'x';
+->type : Symbol(X.type, Decl(contextualTypeShouldBeLiteral.ts, 0, 13))
++>type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 0, 13))
+ 
+     value: string;
+->value : Symbol(X.value, Decl(contextualTypeShouldBeLiteral.ts, 1, 14))
++>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 1, 14))
+ 
+     method(): void;
+->method : Symbol(X.method, Decl(contextualTypeShouldBeLiteral.ts, 2, 18))
++>method : Symbol(method, Decl(contextualTypeShouldBeLiteral.ts, 2, 18))
+ }
+ 
+ interface Y {
+ >Y : Symbol(Y, Decl(contextualTypeShouldBeLiteral.ts, 4, 1))
+ 
+     type: 'y';
+->type : Symbol(Y.type, Decl(contextualTypeShouldBeLiteral.ts, 6, 13))
++>type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 6, 13))
+ 
+     value: 'none' | 'done';
+->value : Symbol(Y.value, Decl(contextualTypeShouldBeLiteral.ts, 7, 14))
++>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 7, 14))
+ 
+     method(): void;
+->method : Symbol(Y.method, Decl(contextualTypeShouldBeLiteral.ts, 8, 27))
++>method : Symbol(method, Decl(contextualTypeShouldBeLiteral.ts, 8, 27))
+ }
+ 
+ function foo(bar: X | Y) { }
+@@= skipped -44, +44 lines =@@
+ >this : Symbol(Y, Decl(contextualTypeShouldBeLiteral.ts, 4, 1))
+ 
+         this.type;
+->this.type : Symbol(Y.type, Decl(contextualTypeShouldBeLiteral.ts, 6, 13))
++>this.type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 6, 13))
+ >this : Symbol(Y, Decl(contextualTypeShouldBeLiteral.ts, 4, 1))
+->type : Symbol(Y.type, Decl(contextualTypeShouldBeLiteral.ts, 6, 13))
++>type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 6, 13))
+ 
+         this.value;
+->this.value : Symbol(Y.value, Decl(contextualTypeShouldBeLiteral.ts, 7, 14))
++>this.value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 7, 14))
+ >this : Symbol(Y, Decl(contextualTypeShouldBeLiteral.ts, 4, 1))
+->value : Symbol(Y.value, Decl(contextualTypeShouldBeLiteral.ts, 7, 14))
++>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 7, 14))
+     }
+ });
+ 
+@@= skipped -15, +15 lines =@@
+ >X2 : Symbol(X2, Decl(contextualTypeShouldBeLiteral.ts, 22, 3))
+ 
+     type1: 'x';
+->type1 : Symbol(X2.type1, Decl(contextualTypeShouldBeLiteral.ts, 24, 14))
++>type1 : Symbol(type1, Decl(contextualTypeShouldBeLiteral.ts, 24, 14))
+ 
+     value: string;
+->value : Symbol(X2.value, Decl(contextualTypeShouldBeLiteral.ts, 25, 15))
++>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 25, 15))
+ 
+     method(): void;
+->method : Symbol(X2.method, Decl(contextualTypeShouldBeLiteral.ts, 26, 18))
++>method : Symbol(method, Decl(contextualTypeShouldBeLiteral.ts, 26, 18))
+ }
+ 
+ interface Y2 {
+ >Y2 : Symbol(Y2, Decl(contextualTypeShouldBeLiteral.ts, 28, 1))
+ 
+     type2: 'y';
+->type2 : Symbol(Y2.type2, Decl(contextualTypeShouldBeLiteral.ts, 30, 14))
++>type2 : Symbol(type2, Decl(contextualTypeShouldBeLiteral.ts, 30, 14))
+ 
+     value: 'none' | 'done';
+->value : Symbol(Y2.value, Decl(contextualTypeShouldBeLiteral.ts, 31, 15))
++>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 31, 15))
+ 
+     method(): void;
+->method : Symbol(Y2.method, Decl(contextualTypeShouldBeLiteral.ts, 32, 27))
++>method : Symbol(method, Decl(contextualTypeShouldBeLiteral.ts, 32, 27))
+ }
+ 
+ function foo2(bar: X2 | Y2) { }
+@@= skipped -42, +42 lines =@@
+ 
+         this;
+         this.value;
+->this.value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 25, 15), Decl(contextualTypeShouldBeLiteral.ts, 31, 15))
+->value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 25, 15), Decl(contextualTypeShouldBeLiteral.ts, 31, 15))
+     }
+ });
+ 
+@@= skipped -9, +7 lines =@@
+ >X3 : Symbol(X3, Decl(contextualTypeShouldBeLiteral.ts, 45, 3))
+ 
+     type: 'x';
+->type : Symbol(X3.type, Decl(contextualTypeShouldBeLiteral.ts, 47, 14))
++>type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 47, 14))
+ 
+     value: 1 | 2 | 3;
+->value : Symbol(X3.value, Decl(contextualTypeShouldBeLiteral.ts, 48, 14))
++>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 48, 14))
+ 
+     xtra: number;
+->xtra : Symbol(X3.xtra, Decl(contextualTypeShouldBeLiteral.ts, 49, 21))
++>xtra : Symbol(xtra, Decl(contextualTypeShouldBeLiteral.ts, 49, 21))
+ }
+ 
+ interface Y3 {
+ >Y3 : Symbol(Y3, Decl(contextualTypeShouldBeLiteral.ts, 51, 1))
+ 
+     type: 'y';
+->type : Symbol(Y3.type, Decl(contextualTypeShouldBeLiteral.ts, 53, 14))
++>type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 53, 14))
+ 
+     value: 11 | 12 | 13;
+->value : Symbol(Y3.value, Decl(contextualTypeShouldBeLiteral.ts, 54, 14))
++>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 54, 14))
+ 
+     ytra: number;
+->ytra : Symbol(Y3.ytra, Decl(contextualTypeShouldBeLiteral.ts, 55, 24))
++>ytra : Symbol(ytra, Decl(contextualTypeShouldBeLiteral.ts, 55, 24))
+ }
+ 
+ let xy: X3 | Y3 = {
+@@= skipped -46, +46 lines =@@
+ >LikeA : Symbol(LikeA, Decl(contextualTypeShouldBeLiteral.ts, 65, 3))
+ 
+     x: 'x';
+->x : Symbol(LikeA.x, Decl(contextualTypeShouldBeLiteral.ts, 68, 17))
++>x : Symbol(x, Decl(contextualTypeShouldBeLiteral.ts, 68, 17))
+ 
+     y: 'y';
+->y : Symbol(LikeA.y, Decl(contextualTypeShouldBeLiteral.ts, 69, 11))
++>y : Symbol(y, Decl(contextualTypeShouldBeLiteral.ts, 69, 11))
+ 
+     value: string;
+->value : Symbol(LikeA.value, Decl(contextualTypeShouldBeLiteral.ts, 70, 11))
++>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 70, 11))
+ 
+     method(): void;
+->method : Symbol(LikeA.method, Decl(contextualTypeShouldBeLiteral.ts, 71, 18))
++>method : Symbol(method, Decl(contextualTypeShouldBeLiteral.ts, 71, 18))
+ }
+ 
+ interface LikeB {
+ >LikeB : Symbol(LikeB, Decl(contextualTypeShouldBeLiteral.ts, 73, 1))
+ 
+     x: 'xx';
+->x : Symbol(LikeB.x, Decl(contextualTypeShouldBeLiteral.ts, 75, 17))
++>x : Symbol(x, Decl(contextualTypeShouldBeLiteral.ts, 75, 17))
+ 
+     y: 'yy';
+->y : Symbol(LikeB.y, Decl(contextualTypeShouldBeLiteral.ts, 76, 12))
++>y : Symbol(y, Decl(contextualTypeShouldBeLiteral.ts, 76, 12))
+ 
+     value: number;
+->value : Symbol(LikeB.value, Decl(contextualTypeShouldBeLiteral.ts, 77, 12))
++>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 77, 12))
+ 
+     method(): void;
+->method : Symbol(LikeB.method, Decl(contextualTypeShouldBeLiteral.ts, 78, 18))
++>method : Symbol(method, Decl(contextualTypeShouldBeLiteral.ts, 78, 18))
+ }
+ 
+ let xyz: LikeA | LikeB = {
+@@= skipped -49, +49 lines =@@
+ >this : Symbol(LikeA, Decl(contextualTypeShouldBeLiteral.ts, 65, 3))
+ 
+         this.x;
+->this.x : Symbol(LikeA.x, Decl(contextualTypeShouldBeLiteral.ts, 68, 17))
++>this.x : Symbol(x, Decl(contextualTypeShouldBeLiteral.ts, 68, 17))
+ >this : Symbol(LikeA, Decl(contextualTypeShouldBeLiteral.ts, 65, 3))
+->x : Symbol(LikeA.x, Decl(contextualTypeShouldBeLiteral.ts, 68, 17))
++>x : Symbol(x, Decl(contextualTypeShouldBeLiteral.ts, 68, 17))
+ 
+         this.y;
+->this.y : Symbol(LikeA.y, Decl(contextualTypeShouldBeLiteral.ts, 69, 11))
++>this.y : Symbol(y, Decl(contextualTypeShouldBeLiteral.ts, 69, 11))
+ >this : Symbol(LikeA, Decl(contextualTypeShouldBeLiteral.ts, 65, 3))
+->y : Symbol(LikeA.y, Decl(contextualTypeShouldBeLiteral.ts, 69, 11))
++>y : Symbol(y, Decl(contextualTypeShouldBeLiteral.ts, 69, 11))
+ 
+         this.value;
+->this.value : Symbol(LikeA.value, Decl(contextualTypeShouldBeLiteral.ts, 70, 11))
++>this.value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 70, 11))
+ >this : Symbol(LikeA, Decl(contextualTypeShouldBeLiteral.ts, 65, 3))
+->value : Symbol(LikeA.value, Decl(contextualTypeShouldBeLiteral.ts, 70, 11))
++>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 70, 11))
+     }
+ };
+ 
+@@= skipped -25, +25 lines =@@
+ >TestObject : Symbol(TestObject, Decl(contextualTypeShouldBeLiteral.ts, 94, 4))
+ 
+   type?: 'object';
+->type : Symbol(TestObject.type, Decl(contextualTypeShouldBeLiteral.ts, 98, 22))
++>type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 98, 22))
+ 
+   items: {
+->items : Symbol(TestObject.items, Decl(contextualTypeShouldBeLiteral.ts, 99, 18))
++>items : Symbol(items, Decl(contextualTypeShouldBeLiteral.ts, 99, 18))
+ 
+     [k: string]: TestGeneric;
+ >k : Symbol(k, Decl(contextualTypeShouldBeLiteral.ts, 101, 5))
+@@= skipped -16, +16 lines =@@
+ >TestString : Symbol(TestString, Decl(contextualTypeShouldBeLiteral.ts, 103, 1))
+ 
+   type: 'string';
+->type : Symbol(TestString.type, Decl(contextualTypeShouldBeLiteral.ts, 105, 22))
++>type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 105, 22))
+ }
+ 
+ type TestGeneric = (TestString | TestObject) & { [k: string]: any; };

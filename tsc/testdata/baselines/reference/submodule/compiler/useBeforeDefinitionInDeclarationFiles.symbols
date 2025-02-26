@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/useBeforeDefinitionInDeclarationFiles.ts] ////
+
+=== declaration.d.ts ===
+export declare class ClassWithSymbols {
+>ClassWithSymbols : Symbol(ClassWithSymbols, Decl(declaration.d.ts, 0, 0))
+
+  public readonly [Namespace.locallyExportedCustomSymbol]: string;
+>[Namespace.locallyExportedCustomSymbol] : Symbol([Namespace.locallyExportedCustomSymbol], Decl(declaration.d.ts, 0, 39))
+>Namespace.locallyExportedCustomSymbol : Symbol(locallyExportedCustomSymbol, Decl(declaration.d.ts, 5, 14))
+>Namespace : Symbol(Namespace, Decl(declaration.d.ts, 3, 1))
+>locallyExportedCustomSymbol : Symbol(locallyExportedCustomSymbol, Decl(declaration.d.ts, 5, 14))
+
+  public [Namespace.fullyExportedCustomSymbol](): void;
+>[Namespace.fullyExportedCustomSymbol] : Symbol([Namespace.fullyExportedCustomSymbol], Decl(declaration.d.ts, 1, 66))
+>Namespace.fullyExportedCustomSymbol : Symbol(fullyExportedCustomSymbol, Decl(declaration.d.ts, 6, 14))
+>Namespace : Symbol(Namespace, Decl(declaration.d.ts, 3, 1))
+>fullyExportedCustomSymbol : Symbol(fullyExportedCustomSymbol, Decl(declaration.d.ts, 6, 14))
+}
+export namespace Namespace {
+>Namespace : Symbol(Namespace, Decl(declaration.d.ts, 3, 1))
+
+  export const locallyExportedCustomSymbol: unique symbol;
+>locallyExportedCustomSymbol : Symbol(locallyExportedCustomSymbol, Decl(declaration.d.ts, 5, 14))
+
+  export const fullyExportedCustomSymbol: unique symbol;
+>fullyExportedCustomSymbol : Symbol(fullyExportedCustomSymbol, Decl(declaration.d.ts, 6, 14))
+}
+

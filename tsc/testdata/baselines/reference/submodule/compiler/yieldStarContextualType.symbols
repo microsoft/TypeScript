@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/yieldStarContextualType.ts] ////
+
+=== yieldStarContextualType.ts ===
+declare const g: <T, U, V>() => Generator<T, U, V>;
+>g : Symbol(g, Decl(yieldStarContextualType.ts, 0, 13))
+>T : Symbol(T, Decl(yieldStarContextualType.ts, 0, 18))
+>U : Symbol(U, Decl(yieldStarContextualType.ts, 0, 20))
+>V : Symbol(V, Decl(yieldStarContextualType.ts, 0, 23))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>T : Symbol(T, Decl(yieldStarContextualType.ts, 0, 18))
+>U : Symbol(U, Decl(yieldStarContextualType.ts, 0, 20))
+>V : Symbol(V, Decl(yieldStarContextualType.ts, 0, 23))
+
+function* f(): Generator<string, void, unknown> {
+>f : Symbol(f, Decl(yieldStarContextualType.ts, 0, 51))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+    const x1 = yield* g();
+>x1 : Symbol(x1, Decl(yieldStarContextualType.ts, 3, 9))
+>g : Symbol(g, Decl(yieldStarContextualType.ts, 0, 13))
+
+    const x2: number = yield* g();
+>x2 : Symbol(x2, Decl(yieldStarContextualType.ts, 4, 9))
+>g : Symbol(g, Decl(yieldStarContextualType.ts, 0, 13))
+}

@@ -1,0 +1,53 @@
+--- old.ambientConstLiterals.symbols
++++ new.ambientConstLiterals.symbols
+@@= skipped -13, +13 lines =@@
+ 
+ enum E { A, B, C, "non identifier" }
+ >E : Symbol(E, Decl(ambientConstLiterals.ts, 2, 1))
+->A : Symbol(E.A, Decl(ambientConstLiterals.ts, 4, 8))
+->B : Symbol(E.B, Decl(ambientConstLiterals.ts, 4, 11))
+->C : Symbol(E.C, Decl(ambientConstLiterals.ts, 4, 14))
+->"non identifier" : Symbol(E["non identifier"], Decl(ambientConstLiterals.ts, 4, 17))
++>A : Symbol(A, Decl(ambientConstLiterals.ts, 4, 8))
++>B : Symbol(B, Decl(ambientConstLiterals.ts, 4, 11))
++>C : Symbol(C, Decl(ambientConstLiterals.ts, 4, 14))
++>"non identifier" : Symbol("non identifier", Decl(ambientConstLiterals.ts, 4, 17))
+ 
+ const c1 = "abc";
+ >c1 : Symbol(c1, Decl(ambientConstLiterals.ts, 6, 5))
+@@= skipped -32, +32 lines =@@
+ 
+ const c8 = E.A;
+ >c8 : Symbol(c8, Decl(ambientConstLiterals.ts, 13, 5))
+->E.A : Symbol(E.A, Decl(ambientConstLiterals.ts, 4, 8))
++>E.A : Symbol(A, Decl(ambientConstLiterals.ts, 4, 8))
+ >E : Symbol(E, Decl(ambientConstLiterals.ts, 2, 1))
+->A : Symbol(E.A, Decl(ambientConstLiterals.ts, 4, 8))
++>A : Symbol(A, Decl(ambientConstLiterals.ts, 4, 8))
+ 
+ const c8b = E["non identifier"];
+ >c8b : Symbol(c8b, Decl(ambientConstLiterals.ts, 14, 5))
+ >E : Symbol(E, Decl(ambientConstLiterals.ts, 2, 1))
+->"non identifier" : Symbol(E["non identifier"], Decl(ambientConstLiterals.ts, 4, 17))
++>"non identifier" : Symbol("non identifier", Decl(ambientConstLiterals.ts, 4, 17))
+ 
+ const c9 = { x: "abc" };
+ >c9 : Symbol(c9, Decl(ambientConstLiterals.ts, 15, 5))
+@@= skipped -24, +24 lines =@@
+ 
+ const c13 = Math.random() > 0.5 ? "abc" : "def";
+ >c13 : Symbol(c13, Decl(ambientConstLiterals.ts, 19, 5))
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ 
+ const c14 = Math.random() > 0.5 ? 123 : 456;
+ >c14 : Symbol(c14, Decl(ambientConstLiterals.ts, 20, 5))
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ 

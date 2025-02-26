@@ -1,0 +1,31 @@
+--- old.internalAliasClassInsideLocalModuleWithoutExportAccessError.symbols
++++ new.internalAliasClassInsideLocalModuleWithoutExportAccessError.symbols
+@@= skipped -7, +7 lines =@@
+ >c : Symbol(c, Decl(internalAliasClassInsideLocalModuleWithoutExportAccessError.ts, 0, 17))
+ 
+         foo(a: number) {
+->foo : Symbol(c.foo, Decl(internalAliasClassInsideLocalModuleWithoutExportAccessError.ts, 1, 20))
++>foo : Symbol(foo, Decl(internalAliasClassInsideLocalModuleWithoutExportAccessError.ts, 1, 20))
+ >a : Symbol(a, Decl(internalAliasClassInsideLocalModuleWithoutExportAccessError.ts, 2, 12))
+ 
+             return a;
+@@= skipped -26, +26 lines =@@
+ 
+         var cReturnVal = cProp.foo(10);
+ >cReturnVal : Symbol(cReturnVal, Decl(internalAliasClassInsideLocalModuleWithoutExportAccessError.ts, 12, 11))
+->cProp.foo : Symbol(c.foo, Decl(internalAliasClassInsideLocalModuleWithoutExportAccessError.ts, 1, 20))
++>cProp.foo : Symbol(foo, Decl(internalAliasClassInsideLocalModuleWithoutExportAccessError.ts, 1, 20))
+ >cProp : Symbol(cProp, Decl(internalAliasClassInsideLocalModuleWithoutExportAccessError.ts, 11, 18))
+->foo : Symbol(c.foo, Decl(internalAliasClassInsideLocalModuleWithoutExportAccessError.ts, 1, 20))
++>foo : Symbol(foo, Decl(internalAliasClassInsideLocalModuleWithoutExportAccessError.ts, 1, 20))
+     }
+ }
+ 
+ export var d = new m2.m3.c();
+ >d : Symbol(d, Decl(internalAliasClassInsideLocalModuleWithoutExportAccessError.ts, 16, 10))
+->m2.m3 : Symbol(m2.m3, Decl(internalAliasClassInsideLocalModuleWithoutExportAccessError.ts, 8, 18))
++>m2.m3 : Symbol(m3, Decl(internalAliasClassInsideLocalModuleWithoutExportAccessError.ts, 8, 18))
+ >m2 : Symbol(m2, Decl(internalAliasClassInsideLocalModuleWithoutExportAccessError.ts, 6, 1))
+->m3 : Symbol(m2.m3, Decl(internalAliasClassInsideLocalModuleWithoutExportAccessError.ts, 8, 18))
++>m3 : Symbol(m3, Decl(internalAliasClassInsideLocalModuleWithoutExportAccessError.ts, 8, 18))
+ 

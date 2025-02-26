@@ -1,0 +1,31 @@
+--- old.libMembers.symbols
++++ new.libMembers.symbols
+@@= skipped -4, +4 lines =@@
+ >s : Symbol(s, Decl(libMembers.ts, 0, 3))
+ 
+ s.substring(0);
+->s.substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
++>s.substring : Symbol(substring, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(libMembers.ts, 0, 3))
+->substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
++>substring : Symbol(substring, Decl(lib.es5.d.ts, --, --))
+ 
+ s.substring(3,4);
+->s.substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
++>s.substring : Symbol(substring, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(libMembers.ts, 0, 3))
+->substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
++>substring : Symbol(substring, Decl(lib.es5.d.ts, --, --))
+ 
+ s.subby(12);   // error unresolved
+ >s : Symbol(s, Decl(libMembers.ts, 0, 3))
+ 
+ String.fromCharCode(12);
+->String.fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
++>String.fromCharCode : Symbol(fromCharCode, Decl(lib.es5.d.ts, --, --))
+ >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
++>fromCharCode : Symbol(fromCharCode, Decl(lib.es5.d.ts, --, --))
+ 
+ module M {
+ >M : Symbol(M, Decl(libMembers.ts, 4, 24))

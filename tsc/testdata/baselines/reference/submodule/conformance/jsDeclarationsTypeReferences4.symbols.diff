@@ -1,0 +1,13 @@
+--- old.jsDeclarationsTypeReferences4.symbols
++++ new.jsDeclarationsTypeReferences4.symbols
+@@= skipped -14, +14 lines =@@
+ 
+         const Something = require("fs").Something;
+ >Something : Symbol(Something, Decl(index.js, 6, 13))
+->require("fs").Something : Symbol(Something, Decl(index.d.ts, 0, 21))
+->require : Symbol(require)
+->"fs" : Symbol("fs", Decl(index.d.ts, 0, 0))
+->Something : Symbol(Something, Decl(index.d.ts, 0, 21))
+ 
+         const thing = new Something();
+ >thing : Symbol(thing, Decl(index.js, 7, 13))

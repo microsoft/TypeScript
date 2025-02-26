@@ -1,0 +1,96 @@
+--- old.acceptSymbolAsWeakType.symbols
++++ new.acceptSymbolAsWeakType.symbols
+@@= skipped -10, +10 lines =@@
+ >s : Symbol(s, Decl(acceptSymbolAsWeakType.ts, 0, 5))
+ 
+ ws.add(s);
+->ws.add : Symbol(WeakSet.add, Decl(lib.es2015.collection.d.ts, --, --))
++>ws.add : Symbol(add, Decl(lib.es2015.collection.d.ts, --, --))
+ >ws : Symbol(ws, Decl(acceptSymbolAsWeakType.ts, 2, 5))
+->add : Symbol(WeakSet.add, Decl(lib.es2015.collection.d.ts, --, --))
++>add : Symbol(add, Decl(lib.es2015.collection.d.ts, --, --))
+ >s : Symbol(s, Decl(acceptSymbolAsWeakType.ts, 0, 5))
+ 
+ ws.has(s);
+->ws.has : Symbol(WeakSet.has, Decl(lib.es2015.collection.d.ts, --, --))
++>ws.has : Symbol(has, Decl(lib.es2015.collection.d.ts, --, --))
+ >ws : Symbol(ws, Decl(acceptSymbolAsWeakType.ts, 2, 5))
+->has : Symbol(WeakSet.has, Decl(lib.es2015.collection.d.ts, --, --))
++>has : Symbol(has, Decl(lib.es2015.collection.d.ts, --, --))
+ >s : Symbol(s, Decl(acceptSymbolAsWeakType.ts, 0, 5))
+ 
+ ws.delete(s);
+->ws.delete : Symbol(WeakSet.delete, Decl(lib.es2015.collection.d.ts, --, --))
++>ws.delete : Symbol(delete, Decl(lib.es2015.collection.d.ts, --, --))
+ >ws : Symbol(ws, Decl(acceptSymbolAsWeakType.ts, 2, 5))
+->delete : Symbol(WeakSet.delete, Decl(lib.es2015.collection.d.ts, --, --))
++>delete : Symbol(delete, Decl(lib.es2015.collection.d.ts, --, --))
+ >s : Symbol(s, Decl(acceptSymbolAsWeakType.ts, 0, 5))
+ 
+ const wm = new WeakMap([[s, false]]);
+@@= skipped -23, +23 lines =@@
+ >s : Symbol(s, Decl(acceptSymbolAsWeakType.ts, 0, 5))
+ 
+ wm.set(s, true);
+->wm.set : Symbol(WeakMap.set, Decl(lib.es2015.collection.d.ts, --, --))
++>wm.set : Symbol(set, Decl(lib.es2015.collection.d.ts, --, --))
+ >wm : Symbol(wm, Decl(acceptSymbolAsWeakType.ts, 7, 5))
+->set : Symbol(WeakMap.set, Decl(lib.es2015.collection.d.ts, --, --))
++>set : Symbol(set, Decl(lib.es2015.collection.d.ts, --, --))
+ >s : Symbol(s, Decl(acceptSymbolAsWeakType.ts, 0, 5))
+ 
+ wm.has(s);
+->wm.has : Symbol(WeakMap.has, Decl(lib.es2015.collection.d.ts, --, --))
++>wm.has : Symbol(has, Decl(lib.es2015.collection.d.ts, --, --))
+ >wm : Symbol(wm, Decl(acceptSymbolAsWeakType.ts, 7, 5))
+->has : Symbol(WeakMap.has, Decl(lib.es2015.collection.d.ts, --, --))
++>has : Symbol(has, Decl(lib.es2015.collection.d.ts, --, --))
+ >s : Symbol(s, Decl(acceptSymbolAsWeakType.ts, 0, 5))
+ 
+ wm.get(s);
+->wm.get : Symbol(WeakMap.get, Decl(lib.es2015.collection.d.ts, --, --))
++>wm.get : Symbol(get, Decl(lib.es2015.collection.d.ts, --, --))
+ >wm : Symbol(wm, Decl(acceptSymbolAsWeakType.ts, 7, 5))
+->get : Symbol(WeakMap.get, Decl(lib.es2015.collection.d.ts, --, --))
++>get : Symbol(get, Decl(lib.es2015.collection.d.ts, --, --))
+ >s : Symbol(s, Decl(acceptSymbolAsWeakType.ts, 0, 5))
+ 
+ wm.delete(s);
+->wm.delete : Symbol(WeakMap.delete, Decl(lib.es2015.collection.d.ts, --, --))
++>wm.delete : Symbol(delete, Decl(lib.es2015.collection.d.ts, --, --))
+ >wm : Symbol(wm, Decl(acceptSymbolAsWeakType.ts, 7, 5))
+->delete : Symbol(WeakMap.delete, Decl(lib.es2015.collection.d.ts, --, --))
++>delete : Symbol(delete, Decl(lib.es2015.collection.d.ts, --, --))
+ >s : Symbol(s, Decl(acceptSymbolAsWeakType.ts, 0, 5))
+ 
+ const wr = new WeakRef(s);
+@@= skipped -29, +29 lines =@@
+ >s : Symbol(s, Decl(acceptSymbolAsWeakType.ts, 0, 5))
+ 
+ wr.deref();
+->wr.deref : Symbol(WeakRef.deref, Decl(lib.es2021.weakref.d.ts, --, --))
++>wr.deref : Symbol(deref, Decl(lib.es2021.weakref.d.ts, --, --))
+ >wr : Symbol(wr, Decl(acceptSymbolAsWeakType.ts, 13, 5))
+->deref : Symbol(WeakRef.deref, Decl(lib.es2021.weakref.d.ts, --, --))
++>deref : Symbol(deref, Decl(lib.es2021.weakref.d.ts, --, --))
+ 
+ const f = new FinalizationRegistry(() => {});
+ >f : Symbol(f, Decl(acceptSymbolAsWeakType.ts, 16, 5))
+ >FinalizationRegistry : Symbol(FinalizationRegistry, Decl(lib.es2021.weakref.d.ts, --, --), Decl(lib.es2021.weakref.d.ts, --, --))
+ 
+ f.register(s, null);
+->f.register : Symbol(FinalizationRegistry.register, Decl(lib.es2021.weakref.d.ts, --, --))
++>f.register : Symbol(register, Decl(lib.es2021.weakref.d.ts, --, --))
+ >f : Symbol(f, Decl(acceptSymbolAsWeakType.ts, 16, 5))
+->register : Symbol(FinalizationRegistry.register, Decl(lib.es2021.weakref.d.ts, --, --))
++>register : Symbol(register, Decl(lib.es2021.weakref.d.ts, --, --))
+ >s : Symbol(s, Decl(acceptSymbolAsWeakType.ts, 0, 5))
+ 
+ f.unregister(s);
+->f.unregister : Symbol(FinalizationRegistry.unregister, Decl(lib.es2021.weakref.d.ts, --, --))
++>f.unregister : Symbol(unregister, Decl(lib.es2021.weakref.d.ts, --, --))
+ >f : Symbol(f, Decl(acceptSymbolAsWeakType.ts, 16, 5))
+->unregister : Symbol(FinalizationRegistry.unregister, Decl(lib.es2021.weakref.d.ts, --, --))
++>unregister : Symbol(unregister, Decl(lib.es2021.weakref.d.ts, --, --))
+ >s : Symbol(s, Decl(acceptSymbolAsWeakType.ts, 0, 5))
+ 

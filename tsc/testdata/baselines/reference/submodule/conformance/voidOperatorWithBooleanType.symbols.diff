@@ -1,0 +1,64 @@
+--- old.voidOperatorWithBooleanType.symbols
++++ new.voidOperatorWithBooleanType.symbols
+@@= skipped -11, +11 lines =@@
+ >A : Symbol(A, Decl(voidOperatorWithBooleanType.ts, 3, 40))
+ 
+     public a: boolean;
+->a : Symbol(A.a, Decl(voidOperatorWithBooleanType.ts, 5, 9))
++>a : Symbol(a, Decl(voidOperatorWithBooleanType.ts, 5, 9))
+ 
+     static foo() { return false; }
+->foo : Symbol(A.foo, Decl(voidOperatorWithBooleanType.ts, 6, 22))
++>foo : Symbol(foo, Decl(voidOperatorWithBooleanType.ts, 6, 22))
+ }
+ module M {
+ >M : Symbol(M, Decl(voidOperatorWithBooleanType.ts, 8, 1))
+@@= skipped -33, +33 lines =@@
+ // boolean type expressions
+ var ResultIsAny4 = void objA.a;
+ >ResultIsAny4 : Symbol(ResultIsAny4, Decl(voidOperatorWithBooleanType.ts, 23, 3))
+->objA.a : Symbol(A.a, Decl(voidOperatorWithBooleanType.ts, 5, 9))
++>objA.a : Symbol(a, Decl(voidOperatorWithBooleanType.ts, 5, 9))
+ >objA : Symbol(objA, Decl(voidOperatorWithBooleanType.ts, 13, 3))
+->a : Symbol(A.a, Decl(voidOperatorWithBooleanType.ts, 5, 9))
++>a : Symbol(a, Decl(voidOperatorWithBooleanType.ts, 5, 9))
+ 
+ var ResultIsAny5 = void M.n;
+ >ResultIsAny5 : Symbol(ResultIsAny5, Decl(voidOperatorWithBooleanType.ts, 24, 3))
+->M.n : Symbol(M.n, Decl(voidOperatorWithBooleanType.ts, 10, 14))
++>M.n : Symbol(n, Decl(voidOperatorWithBooleanType.ts, 10, 14))
+ >M : Symbol(M, Decl(voidOperatorWithBooleanType.ts, 8, 1))
+->n : Symbol(M.n, Decl(voidOperatorWithBooleanType.ts, 10, 14))
++>n : Symbol(n, Decl(voidOperatorWithBooleanType.ts, 10, 14))
+ 
+ var ResultIsAny6 = void foo();
+ >ResultIsAny6 : Symbol(ResultIsAny6, Decl(voidOperatorWithBooleanType.ts, 25, 3))
+@@= skipped -16, +16 lines =@@
+ 
+ var ResultIsAny7 = void A.foo();
+ >ResultIsAny7 : Symbol(ResultIsAny7, Decl(voidOperatorWithBooleanType.ts, 26, 3))
+->A.foo : Symbol(A.foo, Decl(voidOperatorWithBooleanType.ts, 6, 22))
++>A.foo : Symbol(foo, Decl(voidOperatorWithBooleanType.ts, 6, 22))
+ >A : Symbol(A, Decl(voidOperatorWithBooleanType.ts, 3, 40))
+->foo : Symbol(A.foo, Decl(voidOperatorWithBooleanType.ts, 6, 22))
++>foo : Symbol(foo, Decl(voidOperatorWithBooleanType.ts, 6, 22))
+ 
+ // multiple void  operator
+ var ResultIsAny8 = void void BOOLEAN;
+@@= skipped -19, +19 lines =@@
+ 
+ void true, false;
+ void objA.a;
+->objA.a : Symbol(A.a, Decl(voidOperatorWithBooleanType.ts, 5, 9))
++>objA.a : Symbol(a, Decl(voidOperatorWithBooleanType.ts, 5, 9))
+ >objA : Symbol(objA, Decl(voidOperatorWithBooleanType.ts, 13, 3))
+->a : Symbol(A.a, Decl(voidOperatorWithBooleanType.ts, 5, 9))
++>a : Symbol(a, Decl(voidOperatorWithBooleanType.ts, 5, 9))
+ 
+ void M.n;
+->M.n : Symbol(M.n, Decl(voidOperatorWithBooleanType.ts, 10, 14))
++>M.n : Symbol(n, Decl(voidOperatorWithBooleanType.ts, 10, 14))
+ >M : Symbol(M, Decl(voidOperatorWithBooleanType.ts, 8, 1))
+->n : Symbol(M.n, Decl(voidOperatorWithBooleanType.ts, 10, 14))
++>n : Symbol(n, Decl(voidOperatorWithBooleanType.ts, 10, 14))
+ 

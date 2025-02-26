@@ -1,0 +1,17 @@
+--- old.indexerConstraints.symbols
++++ new.indexerConstraints.symbols
+@@= skipped -2, +2 lines =@@
+ === indexerConstraints.ts ===
+ interface A { a: number; }
+ >A : Symbol(A, Decl(indexerConstraints.ts, 0, 0))
+->a : Symbol(A.a, Decl(indexerConstraints.ts, 0, 13))
++>a : Symbol(a, Decl(indexerConstraints.ts, 0, 13))
+ 
+ interface B extends A { b: number; }
+ >B : Symbol(B, Decl(indexerConstraints.ts, 0, 26))
+ >A : Symbol(A, Decl(indexerConstraints.ts, 0, 0))
+->b : Symbol(B.b, Decl(indexerConstraints.ts, 1, 23))
++>b : Symbol(b, Decl(indexerConstraints.ts, 1, 23))
+ 
+ // Good case
+ interface D {

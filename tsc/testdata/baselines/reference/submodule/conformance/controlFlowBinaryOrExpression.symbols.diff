@@ -1,0 +1,54 @@
+--- old.controlFlowBinaryOrExpression.symbols
++++ new.controlFlowBinaryOrExpression.symbols
+@@= skipped -27, +27 lines =@@
+ >NodeList : Symbol(NodeList, Decl(controlFlowBinaryOrExpression.ts, 8, 2))
+ 
+     length: number;
+->length : Symbol(NodeList.length, Decl(controlFlowBinaryOrExpression.ts, 10, 27))
++>length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27))
+ }
+ 
+ export interface HTMLCollection {
+ >HTMLCollection : Symbol(HTMLCollection, Decl(controlFlowBinaryOrExpression.ts, 12, 1))
+ 
+     length: number;
+->length : Symbol(HTMLCollection.length, Decl(controlFlowBinaryOrExpression.ts, 14, 33))
++>length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 14, 33))
+ }
+ 
+ declare function isNodeList(sourceObj: any): sourceObj is NodeList;
+@@= skipped -38, +38 lines =@@
+ >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
+ 
+     sourceObj.length;
+->sourceObj.length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27), Decl(controlFlowBinaryOrExpression.ts, 14, 33))
++>sourceObj.length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 14, 33), Decl(controlFlowBinaryOrExpression.ts, 10, 27))
+ >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
+->length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27), Decl(controlFlowBinaryOrExpression.ts, 14, 33))
++>length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 14, 33), Decl(controlFlowBinaryOrExpression.ts, 10, 27))
+ }
+ 
+ if (isHTMLCollection(sourceObj)) {
+@@= skipped -10, +10 lines =@@
+ >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
+ 
+     sourceObj.length;
+->sourceObj.length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27), Decl(controlFlowBinaryOrExpression.ts, 14, 33))
++>sourceObj.length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 14, 33), Decl(controlFlowBinaryOrExpression.ts, 10, 27))
+ >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
+->length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27), Decl(controlFlowBinaryOrExpression.ts, 14, 33))
++>length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 14, 33), Decl(controlFlowBinaryOrExpression.ts, 10, 27))
+ }
+ 
+ if (isNodeList(sourceObj) || isHTMLCollection(sourceObj)) {
+@@= skipped -12, +12 lines =@@
+ >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
+ 
+     sourceObj.length;
+->sourceObj.length : Symbol(NodeList.length, Decl(controlFlowBinaryOrExpression.ts, 10, 27))
++>sourceObj.length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 14, 33))
+ >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
+->length : Symbol(NodeList.length, Decl(controlFlowBinaryOrExpression.ts, 10, 27))
++>length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 14, 33))
+ }
+ 

@@ -1,0 +1,21 @@
+--- old.classExpressionTest1.symbols
++++ new.classExpressionTest1.symbols
+@@= skipped -8, +8 lines =@@
+ >X : Symbol(X, Decl(classExpressionTest1.ts, 1, 12))
+ 
+         f<T>() {
+->f : Symbol(C.f, Decl(classExpressionTest1.ts, 1, 16))
++>f : Symbol(f, Decl(classExpressionTest1.ts, 1, 16))
+ >T : Symbol(T, Decl(classExpressionTest1.ts, 2, 10))
+ 
+             var t: T;
+@@= skipped -22, +22 lines =@@
+ >C : Symbol(C, Decl(classExpressionTest1.ts, 0, 14))
+ 
+     return v.f<string>();
+->v.f : Symbol(C.f, Decl(classExpressionTest1.ts, 1, 16))
++>v.f : Symbol(f, Decl(classExpressionTest1.ts, 1, 16))
+ >v : Symbol(v, Decl(classExpressionTest1.ts, 9, 7))
+->f : Symbol(C.f, Decl(classExpressionTest1.ts, 1, 16))
++>f : Symbol(f, Decl(classExpressionTest1.ts, 1, 16))
+ }

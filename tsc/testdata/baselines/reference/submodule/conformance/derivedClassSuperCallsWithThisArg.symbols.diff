@@ -1,0 +1,38 @@
+--- old.derivedClassSuperCallsWithThisArg.symbols
++++ new.derivedClassSuperCallsWithThisArg.symbols
+@@= skipped -4, +4 lines =@@
+ >Base : Symbol(Base, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 0))
+ 
+     x: string;
+->x : Symbol(Base.x, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 12))
++>x : Symbol(x, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 12))
+ 
+     constructor(a) { }
+ >a : Symbol(a, Decl(derivedClassSuperCallsWithThisArg.ts, 2, 16))
+@@= skipped -22, +22 lines =@@
+ >Base : Symbol(Base, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 0))
+ 
+     constructor(public a: string) {
+->a : Symbol(Derived2.a, Decl(derivedClassSuperCallsWithThisArg.ts, 12, 16))
++>a : Symbol(a, Decl(derivedClassSuperCallsWithThisArg.ts, 12, 16))
+ 
+         super(this); // error
+ >super : Symbol(Base, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 0))
+@@= skipped -13, +13 lines =@@
+ >Base : Symbol(Base, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 0))
+ 
+     constructor(public a: string) {
+->a : Symbol(Derived3.a, Decl(derivedClassSuperCallsWithThisArg.ts, 18, 16))
++>a : Symbol(a, Decl(derivedClassSuperCallsWithThisArg.ts, 18, 16))
+ 
+         super(() => this); // error
+ >super : Symbol(Base, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 0))
+@@= skipped -13, +13 lines =@@
+ >Base : Symbol(Base, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 0))
+ 
+     constructor(public a: string) {
+->a : Symbol(Derived4.a, Decl(derivedClassSuperCallsWithThisArg.ts, 24, 16))
++>a : Symbol(a, Decl(derivedClassSuperCallsWithThisArg.ts, 24, 16))
+ 
+         super(function () { return this; }); // ok
+ >super : Symbol(Base, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 0))

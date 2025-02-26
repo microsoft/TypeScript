@@ -1,0 +1,20 @@
+--- old.conflictingDeclarationsImportFromNamespace2.symbols
++++ new.conflictingDeclarationsImportFromNamespace2.symbols
+@@= skipped -10, +10 lines =@@
+ >LoDashStatic : Symbol(LoDashStatic, Decl(index.d.ts, 4, 21), Decl(object.d.ts, 1, 26))
+ 
+       pick: <T extends object, U extends keyof T>(
+->pick : Symbol(LoDashStatic.pick, Decl(object.d.ts, 2, 28))
++>pick : Symbol(pick, Decl(object.d.ts, 2, 28))
+ >T : Symbol(T, Decl(object.d.ts, 3, 13))
+ >U : Symbol(U, Decl(object.d.ts, 3, 30))
+ >T : Symbol(T, Decl(object.d.ts, 3, 13))
+@@= skipped -39, +39 lines =@@
+ declare const _: _.LoDashStatic;
+ >_ : Symbol(_, Decl(index.d.ts, 3, 13), Decl(index.d.ts, 3, 32), Decl(object.d.ts, 0, 30))
+ >_ : Symbol(_, Decl(index.d.ts, 3, 13), Decl(index.d.ts, 3, 32), Decl(object.d.ts, 0, 30))
+->LoDashStatic : Symbol(_.LoDashStatic, Decl(index.d.ts, 4, 21), Decl(object.d.ts, 1, 26))
++>LoDashStatic : Symbol(LoDashStatic, Decl(index.d.ts, 4, 21), Decl(object.d.ts, 1, 26))
+ 
+ declare namespace _ {
+ >_ : Symbol(_, Decl(index.d.ts, 3, 13), Decl(index.d.ts, 3, 32), Decl(object.d.ts, 0, 30))

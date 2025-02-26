@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/declarationEmitReexportedSymlinkReference2.ts] ////
+
+=== monorepo/pkg3/src/index.ts ===
+
+export * from './keys';
+=== monorepo/pkg3/src/keys.ts ===
+import {MetadataAccessor} from "@raymondfeng/pkg2";
+>MetadataAccessor : Symbol(MetadataAccessor, Decl(keys.ts, 0, 8))
+
+export const ADMIN = MetadataAccessor.create<boolean>('1');
+>ADMIN : Symbol(ADMIN, Decl(keys.ts, 2, 12))
+>MetadataAccessor : Symbol(MetadataAccessor, Decl(keys.ts, 0, 8))
+

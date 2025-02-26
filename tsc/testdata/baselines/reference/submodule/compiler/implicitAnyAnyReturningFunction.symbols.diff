@@ -1,0 +1,18 @@
+--- old.implicitAnyAnyReturningFunction.symbols
++++ new.implicitAnyAnyReturningFunction.symbols
+@@= skipped -20, +20 lines =@@
+ >C : Symbol(C, Decl(implicitAnyAnyReturningFunction.ts, 7, 1))
+ 
+     public A() {
+->A : Symbol(C.A, Decl(implicitAnyAnyReturningFunction.ts, 9, 9))
++>A : Symbol(A, Decl(implicitAnyAnyReturningFunction.ts, 9, 9))
+ 
+         return <any>"";
+     }
+ 
+     public B() {
+->B : Symbol(C.B, Decl(implicitAnyAnyReturningFunction.ts, 12, 5))
++>B : Symbol(B, Decl(implicitAnyAnyReturningFunction.ts, 12, 5))
+ 
+         var someLocal: any = {};
+ >someLocal : Symbol(someLocal, Decl(implicitAnyAnyReturningFunction.ts, 15, 11))

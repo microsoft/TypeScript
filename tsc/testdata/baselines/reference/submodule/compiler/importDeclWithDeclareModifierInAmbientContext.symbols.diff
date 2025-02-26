@@ -1,0 +1,11 @@
+--- old.importDeclWithDeclareModifierInAmbientContext.symbols
++++ new.importDeclWithDeclareModifierInAmbientContext.symbols
+@@= skipped -13, +13 lines =@@
+     declare export import a = x.c;
+ >a : Symbol(a, Decl(importDeclWithDeclareModifierInAmbientContext.ts, 4, 5))
+ >x : Symbol(x, Decl(importDeclWithDeclareModifierInAmbientContext.ts, 0, 20))
+->c : Symbol(a, Decl(importDeclWithDeclareModifierInAmbientContext.ts, 1, 14))
++>c : Symbol(c, Decl(importDeclWithDeclareModifierInAmbientContext.ts, 1, 14))
+ 
+     var b: a;
+ >b : Symbol(b, Decl(importDeclWithDeclareModifierInAmbientContext.ts, 6, 7))

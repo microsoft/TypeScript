@@ -1,0 +1,26 @@
+--- old.nodeModulesAllowJsImportMeta(module=node16).symbols
++++ new.nodeModulesAllowJsImportMeta(module=node16).symbols
+@@= skipped -3, +3 lines =@@
+ // cjs format file
+ const x = import.meta.url;
+ >x : Symbol(x, Decl(index.js, 1, 5))
+->import.meta.url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
+->import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+->meta : Symbol(ImportMetaExpression.meta)
+->url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
++>meta : Symbol(meta)
+ 
+ export {x};
+ >x : Symbol(x, Decl(index.js, 2, 8))
+@@= skipped -12, +9 lines =@@
+ // esm format file
+ const x = import.meta.url;
+ >x : Symbol(x, Decl(index.js, 1, 5))
+->import.meta.url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
+->import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+->meta : Symbol(ImportMetaExpression.meta)
+->url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
++>meta : Symbol(meta)
+ 
+ export {x};
+ >x : Symbol(x, Decl(index.js, 2, 8))

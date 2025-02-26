@@ -1,0 +1,19 @@
+--- old.conditionalTypeVarianceBigArrayConstraintsPerformance.symbols
++++ new.conditionalTypeVarianceBigArrayConstraintsPerformance.symbols
+@@= skipped -8, +8 lines =@@
+ 
+     T extends keyof JSX.IntrinsicElements
+ >T : Symbol(T, Decl(conditionalTypeVarianceBigArrayConstraintsPerformance.ts, 2, 11))
+->JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+->IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(react16.d.ts, 2514, 86))
++>JSX : Symbol(JSX)
++>IntrinsicElements : Symbol(IntrinsicElements)
+ 
+         ? JSX.IntrinsicElements[T]
+->JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+->IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(react16.d.ts, 2514, 86))
++>JSX : Symbol(JSX)
++>IntrinsicElements : Symbol(IntrinsicElements)
+ >T : Symbol(T, Decl(conditionalTypeVarianceBigArrayConstraintsPerformance.ts, 2, 11))
+ 
+         : any;

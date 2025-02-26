@@ -1,0 +1,38 @@
+--- old.promiseIdentity.symbols
++++ new.promiseIdentity.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(promiseIdentity.ts, 0, 26))
+ 
+     then<U>(callback: (x: T) => IPromise<U>): IPromise<U>;
+->then : Symbol(IPromise.then, Decl(promiseIdentity.ts, 0, 30))
++>then : Symbol(then, Decl(promiseIdentity.ts, 0, 30))
+ >U : Symbol(U, Decl(promiseIdentity.ts, 1, 9))
+ >callback : Symbol(callback, Decl(promiseIdentity.ts, 1, 12))
+ >x : Symbol(x, Decl(promiseIdentity.ts, 1, 23))
+@@= skipped -15, +15 lines =@@
+ >T : Symbol(T, Decl(promiseIdentity.ts, 3, 18))
+ 
+     then<U>(callback: (x: T) => Promise<U>): Promise<U>;
+->then : Symbol(Promise.then, Decl(promiseIdentity.ts, 3, 22))
++>then : Symbol(then, Decl(promiseIdentity.ts, 3, 22))
+ >U : Symbol(U, Decl(promiseIdentity.ts, 4, 9))
+ >callback : Symbol(callback, Decl(promiseIdentity.ts, 4, 12))
+ >x : Symbol(x, Decl(promiseIdentity.ts, 4, 23))
+@@= skipped -25, +25 lines =@@
+ >V : Symbol(V, Decl(promiseIdentity.ts, 10, 22))
+ 
+     then<U, W>(callback: (x: T) => IPromise2<U, W>): IPromise2<W, U>;
+->then : Symbol(IPromise2.then, Decl(promiseIdentity.ts, 10, 27))
++>then : Symbol(then, Decl(promiseIdentity.ts, 10, 27))
+ >U : Symbol(U, Decl(promiseIdentity.ts, 11, 9))
+ >W : Symbol(W, Decl(promiseIdentity.ts, 11, 11))
+ >callback : Symbol(callback, Decl(promiseIdentity.ts, 11, 15))
+@@= skipped -19, +19 lines =@@
+ >V : Symbol(V, Decl(promiseIdentity.ts, 13, 21))
+ 
+     then<U, W>(callback: (x: V) => Promise2<U, T>): Promise2<T, W>; // Uses V instead of T in callback's parameter
+->then : Symbol(Promise2.then, Decl(promiseIdentity.ts, 13, 26))
++>then : Symbol(then, Decl(promiseIdentity.ts, 13, 26))
+ >U : Symbol(U, Decl(promiseIdentity.ts, 14, 9))
+ >W : Symbol(W, Decl(promiseIdentity.ts, 14, 11))
+ >callback : Symbol(callback, Decl(promiseIdentity.ts, 14, 15))

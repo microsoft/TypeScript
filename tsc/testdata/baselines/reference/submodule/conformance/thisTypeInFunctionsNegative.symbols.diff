@@ -1,0 +1,621 @@
+--- old.thisTypeInFunctionsNegative.symbols
++++ new.thisTypeInFunctionsNegative.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
+ 
+     n: number;
+->n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
++>n : Symbol(n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
+ 
+     explicitThis(this: this, m: number): number {
+->explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
++>explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 2, 17))
+ >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 2, 28))
+ 
+         return this.n + m;
+->this.n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
++>this.n : Symbol(n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 2, 17))
+->n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
++>n : Symbol(n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
+ >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 2, 28))
+     }
+     implicitThis(m: number): number {
+->implicitThis : Symbol(C.implicitThis, Decl(thisTypeInFunctionsNegative.ts, 4, 5))
++>implicitThis : Symbol(implicitThis, Decl(thisTypeInFunctionsNegative.ts, 4, 5))
+ >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 5, 17))
+ 
+         return this.n + m;
+->this.n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
++>this.n : Symbol(n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
+ >this : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
+->n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
++>n : Symbol(n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
+ >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 5, 17))
+     }
+     explicitC(this: C, m: number): number {
+->explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
++>explicitC : Symbol(explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 8, 14))
+ >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
+ >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 8, 22))
+ 
+         return this.n + m;
+->this.n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
++>this.n : Symbol(n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 8, 14))
+->n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
++>n : Symbol(n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
+ >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 8, 22))
+     }
+     explicitProperty(this: {n: number}, m: number): number {
+->explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
++>explicitProperty : Symbol(explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 11, 21))
+ >n : Symbol(n, Decl(thisTypeInFunctionsNegative.ts, 11, 28))
+ >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 11, 39))
+@@= skipped -48, +48 lines =@@
+ >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 11, 39))
+     }
+     explicitVoid(this: void, m: number): number {
+->explicitVoid : Symbol(C.explicitVoid, Decl(thisTypeInFunctionsNegative.ts, 13, 5))
++>explicitVoid : Symbol(explicitVoid, Decl(thisTypeInFunctionsNegative.ts, 13, 5))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 14, 17))
+ >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 14, 28))
+ 
+@@= skipped -13, +13 lines =@@
+ >D : Symbol(D, Decl(thisTypeInFunctionsNegative.ts, 17, 1))
+ 
+ 	x: number;
+->x : Symbol(D.x, Decl(thisTypeInFunctionsNegative.ts, 18, 9))
++>x : Symbol(x, Decl(thisTypeInFunctionsNegative.ts, 18, 9))
+ 
+ 	explicitThis(this: this, m: number): number {
+->explicitThis : Symbol(D.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
++>explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 20, 14))
+ >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 20, 25))
+ 
+ 		return this.x + m;
+->this.x : Symbol(D.x, Decl(thisTypeInFunctionsNegative.ts, 18, 9))
++>this.x : Symbol(x, Decl(thisTypeInFunctionsNegative.ts, 18, 9))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 20, 14))
+->x : Symbol(D.x, Decl(thisTypeInFunctionsNegative.ts, 18, 9))
++>x : Symbol(x, Decl(thisTypeInFunctionsNegative.ts, 18, 9))
+ >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 20, 25))
+ 	}
+ 	explicitD(this: D, m: number): number {
+->explicitD : Symbol(D.explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
++>explicitD : Symbol(explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 23, 11))
+ >D : Symbol(D, Decl(thisTypeInFunctionsNegative.ts, 17, 1))
+ >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 23, 19))
+ 
+ 		return this.x + m;
+->this.x : Symbol(D.x, Decl(thisTypeInFunctionsNegative.ts, 18, 9))
++>this.x : Symbol(x, Decl(thisTypeInFunctionsNegative.ts, 18, 9))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 23, 11))
+->x : Symbol(D.x, Decl(thisTypeInFunctionsNegative.ts, 18, 9))
++>x : Symbol(x, Decl(thisTypeInFunctionsNegative.ts, 18, 9))
+ >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 23, 19))
+ 	}
+ }
+@@= skipped -30, +30 lines =@@
+ >I : Symbol(I, Decl(thisTypeInFunctionsNegative.ts, 26, 1))
+ 
+     a: number;
+->a : Symbol(I.a, Decl(thisTypeInFunctionsNegative.ts, 27, 13))
++>a : Symbol(a, Decl(thisTypeInFunctionsNegative.ts, 27, 13))
+ 
+     explicitVoid1(this: void): number;
+->explicitVoid1 : Symbol(I.explicitVoid1, Decl(thisTypeInFunctionsNegative.ts, 28, 14))
++>explicitVoid1 : Symbol(explicitVoid1, Decl(thisTypeInFunctionsNegative.ts, 28, 14))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 29, 18))
+ 
+     explicitVoid2(this: void): number;
+->explicitVoid2 : Symbol(I.explicitVoid2, Decl(thisTypeInFunctionsNegative.ts, 29, 38))
++>explicitVoid2 : Symbol(explicitVoid2, Decl(thisTypeInFunctionsNegative.ts, 29, 38))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 30, 18))
+ 
+     explicitStructural(this: {a: number}): number;
+->explicitStructural : Symbol(I.explicitStructural, Decl(thisTypeInFunctionsNegative.ts, 30, 38))
++>explicitStructural : Symbol(explicitStructural, Decl(thisTypeInFunctionsNegative.ts, 30, 38))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 31, 23))
+ >a : Symbol(a, Decl(thisTypeInFunctionsNegative.ts, 31, 30))
+ 
+     explicitInterface(this: I): number;
+->explicitInterface : Symbol(I.explicitInterface, Decl(thisTypeInFunctionsNegative.ts, 31, 50))
++>explicitInterface : Symbol(explicitInterface, Decl(thisTypeInFunctionsNegative.ts, 31, 50))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 32, 22))
+ >I : Symbol(I, Decl(thisTypeInFunctionsNegative.ts, 26, 1))
+ 
+     explicitThis(this: this): number; // TODO: Allow `this` types for interfaces
+->explicitThis : Symbol(I.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 32, 39))
++>explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 32, 39))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 33, 17))
+ }
+ let impl: I = {
+@@= skipped -52, +52 lines =@@
+ >explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 42, 32))
+ 
+         return this.a;
+->this.a : Symbol(I.a, Decl(thisTypeInFunctionsNegative.ts, 27, 13))
++>this.a : Symbol(a, Decl(thisTypeInFunctionsNegative.ts, 27, 13))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 33, 17))
+->a : Symbol(I.a, Decl(thisTypeInFunctionsNegative.ts, 27, 13))
++>a : Symbol(a, Decl(thisTypeInFunctionsNegative.ts, 27, 13))
+ 
+     },
+ }
+ let implExplicitStructural = impl.explicitStructural;
+ >implExplicitStructural : Symbol(implExplicitStructural, Decl(thisTypeInFunctionsNegative.ts, 47, 3))
+->impl.explicitStructural : Symbol(I.explicitStructural, Decl(thisTypeInFunctionsNegative.ts, 30, 38))
++>impl.explicitStructural : Symbol(explicitStructural, Decl(thisTypeInFunctionsNegative.ts, 30, 38))
+ >impl : Symbol(impl, Decl(thisTypeInFunctionsNegative.ts, 35, 3))
+->explicitStructural : Symbol(I.explicitStructural, Decl(thisTypeInFunctionsNegative.ts, 30, 38))
++>explicitStructural : Symbol(explicitStructural, Decl(thisTypeInFunctionsNegative.ts, 30, 38))
+ 
+ implExplicitStructural(); // error, no 'a' in 'void'
+ >implExplicitStructural : Symbol(implExplicitStructural, Decl(thisTypeInFunctionsNegative.ts, 47, 3))
+ 
+ let implExplicitInterface = impl.explicitInterface;
+ >implExplicitInterface : Symbol(implExplicitInterface, Decl(thisTypeInFunctionsNegative.ts, 49, 3))
+->impl.explicitInterface : Symbol(I.explicitInterface, Decl(thisTypeInFunctionsNegative.ts, 31, 50))
++>impl.explicitInterface : Symbol(explicitInterface, Decl(thisTypeInFunctionsNegative.ts, 31, 50))
+ >impl : Symbol(impl, Decl(thisTypeInFunctionsNegative.ts, 35, 3))
+->explicitInterface : Symbol(I.explicitInterface, Decl(thisTypeInFunctionsNegative.ts, 31, 50))
++>explicitInterface : Symbol(explicitInterface, Decl(thisTypeInFunctionsNegative.ts, 31, 50))
+ 
+ implExplicitInterface(); // error, no 'a' in 'void' 
+ >implExplicitInterface : Symbol(implExplicitInterface, Decl(thisTypeInFunctionsNegative.ts, 49, 3))
+@@= skipped -115, +115 lines =@@
+ >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
+ 
+ c.explicitC(); // not enough arguments
+->c.explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
++>c.explicitC : Symbol(explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
++>explicitC : Symbol(explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
+ 
+ c.explicitC('wrong type');
+->c.explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
++>c.explicitC : Symbol(explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
++>explicitC : Symbol(explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
+ 
+ c.explicitC(13, 'too many arguments');
+->c.explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
++>c.explicitC : Symbol(explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
++>explicitC : Symbol(explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
+ 
+ c.explicitThis(); // not enough arguments
+->c.explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
++>c.explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
++>explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
+ 
+ c.explicitThis('wrong type 2');
+->c.explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
++>c.explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
++>explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
+ 
+ c.explicitThis(14, 'too many arguments 2');
+->c.explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
++>c.explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
++>explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
+ 
+ c.implicitThis(); // not enough arguments
+->c.implicitThis : Symbol(C.implicitThis, Decl(thisTypeInFunctionsNegative.ts, 4, 5))
++>c.implicitThis : Symbol(implicitThis, Decl(thisTypeInFunctionsNegative.ts, 4, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->implicitThis : Symbol(C.implicitThis, Decl(thisTypeInFunctionsNegative.ts, 4, 5))
++>implicitThis : Symbol(implicitThis, Decl(thisTypeInFunctionsNegative.ts, 4, 5))
+ 
+ c.implicitThis('wrong type 2');
+->c.implicitThis : Symbol(C.implicitThis, Decl(thisTypeInFunctionsNegative.ts, 4, 5))
++>c.implicitThis : Symbol(implicitThis, Decl(thisTypeInFunctionsNegative.ts, 4, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->implicitThis : Symbol(C.implicitThis, Decl(thisTypeInFunctionsNegative.ts, 4, 5))
++>implicitThis : Symbol(implicitThis, Decl(thisTypeInFunctionsNegative.ts, 4, 5))
+ 
+ c.implicitThis(14, 'too many arguments 2');
+->c.implicitThis : Symbol(C.implicitThis, Decl(thisTypeInFunctionsNegative.ts, 4, 5))
++>c.implicitThis : Symbol(implicitThis, Decl(thisTypeInFunctionsNegative.ts, 4, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->implicitThis : Symbol(C.implicitThis, Decl(thisTypeInFunctionsNegative.ts, 4, 5))
++>implicitThis : Symbol(implicitThis, Decl(thisTypeInFunctionsNegative.ts, 4, 5))
+ 
+ c.explicitProperty(); // not enough arguments
+->c.explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
++>c.explicitProperty : Symbol(explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
++>explicitProperty : Symbol(explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
+ 
+ c.explicitProperty('wrong type 3');
+->c.explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
++>c.explicitProperty : Symbol(explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
++>explicitProperty : Symbol(explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
+ 
+ c.explicitProperty(15, 'too many arguments 3');
+->c.explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
++>c.explicitProperty : Symbol(explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
++>explicitProperty : Symbol(explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
+ 
+ // oops, this triggers contextual typing, which needs to be updated to understand that =>'s `this` is void.
+ let specifiedToVoid: (this: void, x: number) => number = explicitStructural;
+@@= skipped -101, +101 lines =@@
+ 
+     explicitThis: c.explicitThis,
+ >explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 94, 10))
+->c.explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
++>c.explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
++>explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
+ 
+     explicitC: c.explicitC,
+ >explicitC : Symbol(explicitC, Decl(thisTypeInFunctionsNegative.ts, 95, 33))
+->c.explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
++>c.explicitC : Symbol(explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
++>explicitC : Symbol(explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
+ 
+     explicitProperty: c.explicitProperty,
+ >explicitProperty : Symbol(explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 96, 27))
+->c.explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
++>c.explicitProperty : Symbol(explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
++>explicitProperty : Symbol(explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
+ 
+     explicitVoid: c.explicitVoid
+ >explicitVoid : Symbol(explicitVoid, Decl(thisTypeInFunctionsNegative.ts, 97, 41))
+->c.explicitVoid : Symbol(C.explicitVoid, Decl(thisTypeInFunctionsNegative.ts, 13, 5))
++>c.explicitVoid : Symbol(explicitVoid, Decl(thisTypeInFunctionsNegative.ts, 13, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitVoid : Symbol(C.explicitVoid, Decl(thisTypeInFunctionsNegative.ts, 13, 5))
++>explicitVoid : Symbol(explicitVoid, Decl(thisTypeInFunctionsNegative.ts, 13, 5))
+ 
+ };;
+ 
+@@= skipped -37, +37 lines =@@
+ 
+ // from differing object types
+ c.explicitC = function(this: D, m: number) { return this.x + m };
+->c.explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
++>c.explicitC : Symbol(explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
++>explicitC : Symbol(explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 106, 23))
+ >D : Symbol(D, Decl(thisTypeInFunctionsNegative.ts, 17, 1))
+ >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 106, 31))
+->this.x : Symbol(D.x, Decl(thisTypeInFunctionsNegative.ts, 18, 9))
++>this.x : Symbol(x, Decl(thisTypeInFunctionsNegative.ts, 18, 9))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 106, 23))
+->x : Symbol(D.x, Decl(thisTypeInFunctionsNegative.ts, 18, 9))
++>x : Symbol(x, Decl(thisTypeInFunctionsNegative.ts, 18, 9))
+ >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 106, 31))
+ 
+ c.explicitProperty = explicitXProperty;
+->c.explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
++>c.explicitProperty : Symbol(explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
++>explicitProperty : Symbol(explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
+ >explicitXProperty : Symbol(explicitXProperty, Decl(thisTypeInFunctionsNegative.ts, 103, 3))
+ 
+ c.explicitC = d.explicitD;
+->c.explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
++>c.explicitC : Symbol(explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
+->d.explicitD : Symbol(D.explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
++>explicitC : Symbol(explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
++>d.explicitD : Symbol(explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
+ >d : Symbol(d, Decl(thisTypeInFunctionsNegative.ts, 102, 3))
+->explicitD : Symbol(D.explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
++>explicitD : Symbol(explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
+ 
+ c.explicitC = d.explicitThis;
+->c.explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
++>c.explicitC : Symbol(explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
+->d.explicitThis : Symbol(D.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
++>explicitC : Symbol(explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))
++>d.explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
+ >d : Symbol(d, Decl(thisTypeInFunctionsNegative.ts, 102, 3))
+->explicitThis : Symbol(D.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
++>explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
+ 
+ c.explicitThis = d.explicitD;
+->c.explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
++>c.explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
+->d.explicitD : Symbol(D.explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
++>explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
++>d.explicitD : Symbol(explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
+ >d : Symbol(d, Decl(thisTypeInFunctionsNegative.ts, 102, 3))
+->explicitD : Symbol(D.explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
++>explicitD : Symbol(explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
+ 
+ c.explicitThis = d.explicitThis;
+->c.explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
++>c.explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
+->d.explicitThis : Symbol(D.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
++>explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
++>d.explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
+ >d : Symbol(d, Decl(thisTypeInFunctionsNegative.ts, 102, 3))
+->explicitThis : Symbol(D.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
++>explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
+ 
+ c.explicitProperty = d.explicitD;
+->c.explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
++>c.explicitProperty : Symbol(explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
+->d.explicitD : Symbol(D.explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
++>explicitProperty : Symbol(explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
++>d.explicitD : Symbol(explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
+ >d : Symbol(d, Decl(thisTypeInFunctionsNegative.ts, 102, 3))
+->explicitD : Symbol(D.explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
++>explicitD : Symbol(explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
+ 
+ c.explicitThis = d.explicitThis;
+->c.explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
++>c.explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
+->d.explicitThis : Symbol(D.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
++>explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 1, 14))
++>d.explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
+ >d : Symbol(d, Decl(thisTypeInFunctionsNegative.ts, 102, 3))
+->explicitThis : Symbol(D.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
++>explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
+ 
+ c.explicitVoid = d.explicitD;
+->c.explicitVoid : Symbol(C.explicitVoid, Decl(thisTypeInFunctionsNegative.ts, 13, 5))
++>c.explicitVoid : Symbol(explicitVoid, Decl(thisTypeInFunctionsNegative.ts, 13, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitVoid : Symbol(C.explicitVoid, Decl(thisTypeInFunctionsNegative.ts, 13, 5))
+->d.explicitD : Symbol(D.explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
++>explicitVoid : Symbol(explicitVoid, Decl(thisTypeInFunctionsNegative.ts, 13, 5))
++>d.explicitD : Symbol(explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
+ >d : Symbol(d, Decl(thisTypeInFunctionsNegative.ts, 102, 3))
+->explicitD : Symbol(D.explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
++>explicitD : Symbol(explicitD, Decl(thisTypeInFunctionsNegative.ts, 22, 2))
+ 
+ c.explicitVoid = d.explicitThis;
+->c.explicitVoid : Symbol(C.explicitVoid, Decl(thisTypeInFunctionsNegative.ts, 13, 5))
++>c.explicitVoid : Symbol(explicitVoid, Decl(thisTypeInFunctionsNegative.ts, 13, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitVoid : Symbol(C.explicitVoid, Decl(thisTypeInFunctionsNegative.ts, 13, 5))
+->d.explicitThis : Symbol(D.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
++>explicitVoid : Symbol(explicitVoid, Decl(thisTypeInFunctionsNegative.ts, 13, 5))
++>d.explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
+ >d : Symbol(d, Decl(thisTypeInFunctionsNegative.ts, 102, 3))
+->explicitThis : Symbol(D.explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
++>explicitThis : Symbol(explicitThis, Decl(thisTypeInFunctionsNegative.ts, 19, 11))
+ 
+ /// class-based polymorphic assignability (with inheritance!) ///
+ 
+@@= skipped -87, +87 lines =@@
+ >Base1 : Symbol(Base1, Decl(thisTypeInFunctionsNegative.ts, 116, 32))
+ 
+     x: number
+->x : Symbol(Base1.x, Decl(thisTypeInFunctionsNegative.ts, 120, 13))
++>x : Symbol(x, Decl(thisTypeInFunctionsNegative.ts, 120, 13))
+ 
+     public polymorphic(this: this): number { return this.x; }
+->polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 121, 13))
++>polymorphic : Symbol(polymorphic, Decl(thisTypeInFunctionsNegative.ts, 121, 13))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 122, 23))
+->this.x : Symbol(Base1.x, Decl(thisTypeInFunctionsNegative.ts, 120, 13))
++>this.x : Symbol(x, Decl(thisTypeInFunctionsNegative.ts, 120, 13))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 122, 23))
+->x : Symbol(Base1.x, Decl(thisTypeInFunctionsNegative.ts, 120, 13))
++>x : Symbol(x, Decl(thisTypeInFunctionsNegative.ts, 120, 13))
+ 
+     explicit(this: Base1): number { return this.x; }
+->explicit : Symbol(Base1.explicit, Decl(thisTypeInFunctionsNegative.ts, 122, 61))
++>explicit : Symbol(explicit, Decl(thisTypeInFunctionsNegative.ts, 122, 61))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 123, 13))
+ >Base1 : Symbol(Base1, Decl(thisTypeInFunctionsNegative.ts, 116, 32))
+->this.x : Symbol(Base1.x, Decl(thisTypeInFunctionsNegative.ts, 120, 13))
++>this.x : Symbol(x, Decl(thisTypeInFunctionsNegative.ts, 120, 13))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 123, 13))
+->x : Symbol(Base1.x, Decl(thisTypeInFunctionsNegative.ts, 120, 13))
++>x : Symbol(x, Decl(thisTypeInFunctionsNegative.ts, 120, 13))
+ 
+     static explicitStatic(this: typeof Base1): number { return this.x; }
+->explicitStatic : Symbol(Base1.explicitStatic, Decl(thisTypeInFunctionsNegative.ts, 123, 52))
++>explicitStatic : Symbol(explicitStatic, Decl(thisTypeInFunctionsNegative.ts, 123, 52))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 124, 26))
+ >Base1 : Symbol(Base1, Decl(thisTypeInFunctionsNegative.ts, 116, 32))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 124, 26))
+@@= skipped -28, +28 lines =@@
+ >Base1 : Symbol(Base1, Decl(thisTypeInFunctionsNegative.ts, 116, 32))
+ 
+     y: number
+->y : Symbol(Derived1.y, Decl(thisTypeInFunctionsNegative.ts, 126, 30))
++>y : Symbol(y, Decl(thisTypeInFunctionsNegative.ts, 126, 30))
+ }
+ class Base2 {
+ >Base2 : Symbol(Base2, Decl(thisTypeInFunctionsNegative.ts, 128, 1))
+ 
+     y: number
+->y : Symbol(Base2.y, Decl(thisTypeInFunctionsNegative.ts, 129, 13))
++>y : Symbol(y, Decl(thisTypeInFunctionsNegative.ts, 129, 13))
+ 
+     polymorphic(this: this): number { return this.y; }
+->polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
++>polymorphic : Symbol(polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 131, 16))
+->this.y : Symbol(Base2.y, Decl(thisTypeInFunctionsNegative.ts, 129, 13))
++>this.y : Symbol(y, Decl(thisTypeInFunctionsNegative.ts, 129, 13))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 131, 16))
+->y : Symbol(Base2.y, Decl(thisTypeInFunctionsNegative.ts, 129, 13))
++>y : Symbol(y, Decl(thisTypeInFunctionsNegative.ts, 129, 13))
+ 
+     explicit(this: Base1): number { return this.x; }
+->explicit : Symbol(Base2.explicit, Decl(thisTypeInFunctionsNegative.ts, 131, 54))
++>explicit : Symbol(explicit, Decl(thisTypeInFunctionsNegative.ts, 131, 54))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 132, 13))
+ >Base1 : Symbol(Base1, Decl(thisTypeInFunctionsNegative.ts, 116, 32))
+->this.x : Symbol(Base1.x, Decl(thisTypeInFunctionsNegative.ts, 120, 13))
++>this.x : Symbol(x, Decl(thisTypeInFunctionsNegative.ts, 120, 13))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 132, 13))
+->x : Symbol(Base1.x, Decl(thisTypeInFunctionsNegative.ts, 120, 13))
++>x : Symbol(x, Decl(thisTypeInFunctionsNegative.ts, 120, 13))
+ }
+ class Derived2 extends Base2 {
+ >Derived2 : Symbol(Derived2, Decl(thisTypeInFunctionsNegative.ts, 133, 1))
+ >Base2 : Symbol(Base2, Decl(thisTypeInFunctionsNegative.ts, 128, 1))
+ 
+     x: number
+->x : Symbol(Derived2.x, Decl(thisTypeInFunctionsNegative.ts, 134, 30))
++>x : Symbol(x, Decl(thisTypeInFunctionsNegative.ts, 134, 30))
+ }
+ 
+ 
+@@= skipped -49, +49 lines =@@
+ >Derived2 : Symbol(Derived2, Decl(thisTypeInFunctionsNegative.ts, 133, 1))
+ 
+ b1.polymorphic = b2.polymorphic // error, 'this.y' not in Base1: { x }
+->b1.polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 121, 13))
++>b1.polymorphic : Symbol(polymorphic, Decl(thisTypeInFunctionsNegative.ts, 121, 13))
+ >b1 : Symbol(b1, Decl(thisTypeInFunctionsNegative.ts, 139, 3))
+->polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 121, 13))
+->b2.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
++>polymorphic : Symbol(polymorphic, Decl(thisTypeInFunctionsNegative.ts, 121, 13))
++>b2.polymorphic : Symbol(polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
+ >b2 : Symbol(b2, Decl(thisTypeInFunctionsNegative.ts, 141, 3))
+->polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
++>polymorphic : Symbol(polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
+ 
+ b1.explicit = b2.polymorphic // error, 'y' not in Base1: { x }
+->b1.explicit : Symbol(Base1.explicit, Decl(thisTypeInFunctionsNegative.ts, 122, 61))
++>b1.explicit : Symbol(explicit, Decl(thisTypeInFunctionsNegative.ts, 122, 61))
+ >b1 : Symbol(b1, Decl(thisTypeInFunctionsNegative.ts, 139, 3))
+->explicit : Symbol(Base1.explicit, Decl(thisTypeInFunctionsNegative.ts, 122, 61))
+->b2.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
++>explicit : Symbol(explicit, Decl(thisTypeInFunctionsNegative.ts, 122, 61))
++>b2.polymorphic : Symbol(polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
+ >b2 : Symbol(b2, Decl(thisTypeInFunctionsNegative.ts, 141, 3))
+->polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
++>polymorphic : Symbol(polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
+ 
+ d1.explicit = b2.polymorphic // error, 'y' not in Base1: { x }
+->d1.explicit : Symbol(Base1.explicit, Decl(thisTypeInFunctionsNegative.ts, 122, 61))
++>d1.explicit : Symbol(explicit, Decl(thisTypeInFunctionsNegative.ts, 122, 61))
+ >d1 : Symbol(d1, Decl(thisTypeInFunctionsNegative.ts, 140, 3))
+->explicit : Symbol(Base1.explicit, Decl(thisTypeInFunctionsNegative.ts, 122, 61))
+->b2.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
++>explicit : Symbol(explicit, Decl(thisTypeInFunctionsNegative.ts, 122, 61))
++>b2.polymorphic : Symbol(polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
+ >b2 : Symbol(b2, Decl(thisTypeInFunctionsNegative.ts, 141, 3))
+->polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
++>polymorphic : Symbol(polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
+ 
+ ////// use this-type for construction with new ////
+ function VoidThis(this: void) {
+@@= skipped -40, +40 lines =@@
+     constructor(this: ThisConstructor, private n: number) {
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 157, 16))
+ >ThisConstructor : Symbol(ThisConstructor, Decl(thisTypeInFunctionsNegative.ts, 153, 30))
+->n : Symbol(ThisConstructor.n, Decl(thisTypeInFunctionsNegative.ts, 157, 38))
++>n : Symbol(n, Decl(thisTypeInFunctionsNegative.ts, 157, 38))
+     }
+ }
+ interface ThisConstructorInterface {
+@@= skipped -26, +26 lines =@@
+ >modifiers : Symbol(modifiers, Decl(thisTypeInFunctionsNegative.ts, 164, 64))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 167, 19))
+ >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
+->this.n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
++>this.n : Symbol(n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 167, 19))
+->n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
++>n : Symbol(n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
+ 
+ function restParam(...this: C): number { return this.n; }
+ >restParam : Symbol(restParam, Decl(thisTypeInFunctionsNegative.ts, 167, 60))
+-> : Symbol((Missing), Decl(thisTypeInFunctionsNegative.ts, 168, 19))
++> : Symbol(, Decl(thisTypeInFunctionsNegative.ts, 168, 19))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 168, 22))
+ >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
+ 
+ function optional(this?: C): number { return this.n; }
+ >optional : Symbol(optional, Decl(thisTypeInFunctionsNegative.ts, 168, 57))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 169, 18))
+-> : Symbol((Missing), Decl(thisTypeInFunctionsNegative.ts, 169, 22))
++> : Symbol(, Decl(thisTypeInFunctionsNegative.ts, 169, 22))
+ >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 169, 18))
+ 
+@@= skipped -21, +21 lines =@@
+ >decorated : Symbol(decorated, Decl(thisTypeInFunctionsNegative.ts, 169, 54))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 170, 19))
+ >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
+->this.n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
++>this.n : Symbol(n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 170, 19))
+->n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
++>n : Symbol(n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
+ 
+ function initializer(this: C = new C()): number { return this.n; }
+ >initializer : Symbol(initializer, Decl(thisTypeInFunctionsNegative.ts, 170, 62))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 171, 21))
+ >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
+-> : Symbol((Missing), Decl(thisTypeInFunctionsNegative.ts, 171, 30))
++> : Symbol(, Decl(thisTypeInFunctionsNegative.ts, 171, 30))
+ >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 171, 34))
+ >this : Symbol(globalThis)
+ 
+ // can't name parameters 'this' in a lambda.
+ c.explicitProperty = (this, m) => m + this.n;
+->c.explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
++>c.explicitProperty : Symbol(explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
+ >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
+->explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
++>explicitProperty : Symbol(explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 174, 22))
+ >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 174, 27))
+ >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 174, 27))
+@@= skipped -53, +53 lines =@@
+ >Base2 : Symbol(Base2, Decl(thisTypeInFunctionsNegative.ts, 128, 1))
+ 
+     f(this: this) {
+->f : Symbol(Derived3.f, Decl(thisTypeInFunctionsNegative.ts, 179, 30))
++>f : Symbol(f, Decl(thisTypeInFunctionsNegative.ts, 179, 30))
+ >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 180, 6))
+ 
+         super.polymorphic();
+->super.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
++>super.polymorphic : Symbol(polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
+ >super : Symbol(Base2, Decl(thisTypeInFunctionsNegative.ts, 128, 1))
+->polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
++>polymorphic : Symbol(polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
+     }
+ }
+ 

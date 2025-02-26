@@ -1,0 +1,11 @@
+--- old.es6-umd.symbols
++++ new.es6-umd.symbols
+@@= skipped -9, +9 lines =@@
+     }
+ 
+     public B()
+->B : Symbol(A.B, Decl(es6-umd.ts, 5, 5))
++>B : Symbol(B, Decl(es6-umd.ts, 5, 5))
+     {
+         return 42;
+     }

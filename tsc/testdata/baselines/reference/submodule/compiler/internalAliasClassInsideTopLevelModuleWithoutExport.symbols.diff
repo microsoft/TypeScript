@@ -1,0 +1,30 @@
+--- old.internalAliasClassInsideTopLevelModuleWithoutExport.symbols
++++ new.internalAliasClassInsideTopLevelModuleWithoutExport.symbols
+@@= skipped -7, +7 lines =@@
+ >c : Symbol(c, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 0, 17))
+ 
+         foo(a: number) {
+->foo : Symbol(c.foo, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 1, 20))
++>foo : Symbol(foo, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 1, 20))
+ >a : Symbol(a, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 2, 12))
+ 
+             return a;
+@@= skipped -12, +12 lines =@@
+ import xc = x.c;
+ >xc : Symbol(xc, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 6, 1))
+ >x : Symbol(x, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 0, 0))
+->c : Symbol(xc, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 0, 17))
++>c : Symbol(c, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 0, 17))
+ 
+ export var cProp = new xc();
+ >cProp : Symbol(cProp, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 9, 10))
+@@= skipped -8, +8 lines =@@
+ 
+ var cReturnVal = cProp.foo(10);
+ >cReturnVal : Symbol(cReturnVal, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 10, 3))
+->cProp.foo : Symbol(xc.foo, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 1, 20))
++>cProp.foo : Symbol(foo, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 1, 20))
+ >cProp : Symbol(cProp, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 9, 10))
+->foo : Symbol(xc.foo, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 1, 20))
++>foo : Symbol(foo, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 1, 20))
+ 

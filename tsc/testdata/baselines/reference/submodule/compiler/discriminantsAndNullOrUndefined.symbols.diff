@@ -1,0 +1,16 @@
+--- old.discriminantsAndNullOrUndefined.symbols
++++ new.discriminantsAndNullOrUndefined.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ interface A { kind: 'A'; }
+ >A : Symbol(A, Decl(discriminantsAndNullOrUndefined.ts, 0, 0))
+->kind : Symbol(A.kind, Decl(discriminantsAndNullOrUndefined.ts, 2, 13))
++>kind : Symbol(kind, Decl(discriminantsAndNullOrUndefined.ts, 2, 13))
+ 
+ interface B { kind: 'B'; }
+ >B : Symbol(B, Decl(discriminantsAndNullOrUndefined.ts, 2, 26))
+->kind : Symbol(B.kind, Decl(discriminantsAndNullOrUndefined.ts, 3, 13))
++>kind : Symbol(kind, Decl(discriminantsAndNullOrUndefined.ts, 3, 13))
+ 
+ type C = A | B | undefined;
+ >C : Symbol(C, Decl(discriminantsAndNullOrUndefined.ts, 3, 26))

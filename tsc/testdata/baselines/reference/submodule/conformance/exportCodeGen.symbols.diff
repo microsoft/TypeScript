@@ -1,0 +1,46 @@
+--- old.exportCodeGen.symbols
++++ new.exportCodeGen.symbols
+@@= skipped -59, +59 lines =@@
+ 
+     export enum Color { Red }
+ >Color : Symbol(Color, Decl(exportCodeGen.ts, 32, 10))
+->Red : Symbol(Color.Red, Decl(exportCodeGen.ts, 33, 23))
++>Red : Symbol(Red, Decl(exportCodeGen.ts, 33, 23))
+ 
+     export function fn() { }
+ >fn : Symbol(fn, Decl(exportCodeGen.ts, 33, 29))
+ 
+     export interface I { id: number }
+ >I : Symbol(I, Decl(exportCodeGen.ts, 34, 28))
+->id : Symbol(I.id, Decl(exportCodeGen.ts, 35, 24))
++>id : Symbol(id, Decl(exportCodeGen.ts, 35, 24))
+ 
+     export class C { name: string }
+ >C : Symbol(C, Decl(exportCodeGen.ts, 35, 37))
+->name : Symbol(C.name, Decl(exportCodeGen.ts, 36, 20))
++>name : Symbol(name, Decl(exportCodeGen.ts, 36, 20))
+ 
+     export module M {
+ >M : Symbol(M, Decl(exportCodeGen.ts, 36, 35))
+@@= skipped -28, +28 lines =@@
+ 
+     enum Color { Red }
+ >Color : Symbol(Color, Decl(exportCodeGen.ts, 44, 10))
+->Red : Symbol(Color.Red, Decl(exportCodeGen.ts, 45, 16))
++>Red : Symbol(Red, Decl(exportCodeGen.ts, 45, 16))
+ 
+     function fn() { }
+ >fn : Symbol(fn, Decl(exportCodeGen.ts, 45, 22))
+ 
+     interface I { id: number }
+ >I : Symbol(I, Decl(exportCodeGen.ts, 46, 21))
+->id : Symbol(I.id, Decl(exportCodeGen.ts, 47, 17))
++>id : Symbol(id, Decl(exportCodeGen.ts, 47, 17))
+ 
+     class C { name: string }
+ >C : Symbol(C, Decl(exportCodeGen.ts, 47, 30))
+->name : Symbol(C.name, Decl(exportCodeGen.ts, 48, 13))
++>name : Symbol(name, Decl(exportCodeGen.ts, 48, 13))
+ 
+     module M {
+ >M : Symbol(M, Decl(exportCodeGen.ts, 48, 28))

@@ -1,0 +1,11 @@
+--- old.parserSetAccessorWithTypeParameters1.symbols
++++ new.parserSetAccessorWithTypeParameters1.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(parserSetAccessorWithTypeParameters1.ts, 0, 0))
+ 
+    set foo<T>(v) { }
+->foo : Symbol(C.foo, Decl(parserSetAccessorWithTypeParameters1.ts, 0, 9))
++>foo : Symbol(foo, Decl(parserSetAccessorWithTypeParameters1.ts, 0, 9))
+ >T : Symbol(T, Decl(parserSetAccessorWithTypeParameters1.ts, 1, 11))
+ >v : Symbol(v, Decl(parserSetAccessorWithTypeParameters1.ts, 1, 14))
+ }

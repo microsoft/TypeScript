@@ -1,0 +1,11 @@
+--- old.computedPropertyNameAndTypeParameterConflict.symbols
++++ new.computedPropertyNameAndTypeParameterConflict.symbols
+@@= skipped -8, +8 lines =@@
+ >O : Symbol(O, Decl(computedPropertyNameAndTypeParameterConflict.ts, 1, 18))
+ 
+     [O]: number;
+->[O] : Symbol(Bar[O], Decl(computedPropertyNameAndTypeParameterConflict.ts, 1, 22))
++>[O] : Symbol([O], Decl(computedPropertyNameAndTypeParameterConflict.ts, 1, 22))
+ >O : Symbol(O, Decl(computedPropertyNameAndTypeParameterConflict.ts, 0, 13))
+ }
+ 

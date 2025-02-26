@@ -1,0 +1,11 @@
+--- old.duplicateIdentifiersAcrossContainerBoundaries.symbols
++++ new.duplicateIdentifiersAcrossContainerBoundaries.symbols
+@@= skipped -69, +69 lines =@@
+ >Foo : Symbol(Foo, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 33, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 37, 1))
+ 
+     static x: number;
+->x : Symbol(Foo.x, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 35, 11))
++>x : Symbol(x, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 35, 11))
+ }
+ 
+ module Foo {

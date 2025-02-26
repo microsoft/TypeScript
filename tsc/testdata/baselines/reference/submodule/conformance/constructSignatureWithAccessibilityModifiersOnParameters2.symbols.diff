@@ -1,0 +1,43 @@
+--- old.constructSignatureWithAccessibilityModifiersOnParameters2.symbols
++++ new.constructSignatureWithAccessibilityModifiersOnParameters2.symbols
+@@= skipped -6, +6 lines =@@
+ >C : Symbol(C, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 0, 0))
+ 
+     constructor(public x, private y);
+->x : Symbol(C.x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 3, 16), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 4, 16))
+->y : Symbol(C.y, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 3, 25), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 4, 25))
++>x : Symbol(x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 3, 16), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 4, 16))
++>y : Symbol(y, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 3, 25), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 4, 25))
+ 
+     constructor(public x, private y) { }
+->x : Symbol(C.x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 3, 16), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 4, 16))
+->y : Symbol(C.y, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 3, 25), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 4, 25))
++>x : Symbol(x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 3, 16), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 4, 16))
++>y : Symbol(y, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 3, 25), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 4, 25))
+ }
+ 
+ class C2 {
+ >C2 : Symbol(C2, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 5, 1))
+ 
+     constructor(private x);
+->x : Symbol(C2.x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 8, 16), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 9, 16))
++>x : Symbol(x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 8, 16), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 9, 16))
+ 
+     constructor(public x) { }
+->x : Symbol(C2.x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 8, 16), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 9, 16))
++>x : Symbol(x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 8, 16), Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 9, 16))
+ }
+ 
+ class C3 {
+ >C3 : Symbol(C3, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 10, 1))
+ 
+     constructor(private x);
+->x : Symbol(C3.x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 13, 16))
++>x : Symbol(x, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 13, 16))
+ 
+     constructor(private y) { }
+->y : Symbol(C3.y, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 14, 16))
++>y : Symbol(y, Decl(constructSignatureWithAccessibilityModifiersOnParameters2.ts, 14, 16))
+ }
+ 
+ interface I {

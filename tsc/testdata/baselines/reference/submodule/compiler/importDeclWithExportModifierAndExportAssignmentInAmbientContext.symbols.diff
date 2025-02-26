@@ -1,0 +1,11 @@
+--- old.importDeclWithExportModifierAndExportAssignmentInAmbientContext.symbols
++++ new.importDeclWithExportModifierAndExportAssignmentInAmbientContext.symbols
+@@= skipped -13, +13 lines =@@
+     export import a = x.c;
+ >a : Symbol(a, Decl(importDeclWithExportModifierAndExportAssignmentInAmbientContext.ts, 4, 5))
+ >x : Symbol(x, Decl(importDeclWithExportModifierAndExportAssignmentInAmbientContext.ts, 0, 20))
+->c : Symbol(a, Decl(importDeclWithExportModifierAndExportAssignmentInAmbientContext.ts, 1, 14))
++>c : Symbol(c, Decl(importDeclWithExportModifierAndExportAssignmentInAmbientContext.ts, 1, 14))
+ 
+     export = x;
+ >x : Symbol(x, Decl(importDeclWithExportModifierAndExportAssignmentInAmbientContext.ts, 0, 20))

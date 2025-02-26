@@ -1,0 +1,10 @@
+--- old.nodeModulesExportsBlocksSpecifierResolution(module=nodenext).symbols
++++ new.nodeModulesExportsBlocksSpecifierResolution(module=nodenext).symbols
+@@= skipped -7, +7 lines =@@
+ export const a = (await import("inner")).x();
+ >a : Symbol(a, Decl(index.ts, 2, 12))
+ >(await import("inner")).x : Symbol(x, Decl(index.d.ts, 1, 8))
+->"inner" : Symbol("node_modules/inner/index", Decl(index.d.ts, 0, 0))
+ >x : Symbol(x, Decl(index.d.ts, 1, 8))
+ 
+ === node_modules/inner/index.d.ts ===

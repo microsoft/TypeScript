@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/circularMappedTypeConstraint.ts] ////
+
+=== circularMappedTypeConstraint.ts ===
+// Repro from #56232
+
+declare function foo2<T extends { [P in keyof T & string as Capitalize<P>]: V }, V extends string>(a: T): T;
+>foo2 : Symbol(foo2, Decl(circularMappedTypeConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(circularMappedTypeConstraint.ts, 2, 22))
+>P : Symbol(P, Decl(circularMappedTypeConstraint.ts, 2, 35))
+>T : Symbol(T, Decl(circularMappedTypeConstraint.ts, 2, 22))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(circularMappedTypeConstraint.ts, 2, 35))
+>V : Symbol(V, Decl(circularMappedTypeConstraint.ts, 2, 80))
+>V : Symbol(V, Decl(circularMappedTypeConstraint.ts, 2, 80))
+>a : Symbol(a, Decl(circularMappedTypeConstraint.ts, 2, 99))
+>T : Symbol(T, Decl(circularMappedTypeConstraint.ts, 2, 22))
+>T : Symbol(T, Decl(circularMappedTypeConstraint.ts, 2, 22))
+
+export const r2 = foo2({A: "a"});
+>r2 : Symbol(r2, Decl(circularMappedTypeConstraint.ts, 3, 12))
+>foo2 : Symbol(foo2, Decl(circularMappedTypeConstraint.ts, 0, 0))
+>A : Symbol(A, Decl(circularMappedTypeConstraint.ts, 3, 24))
+

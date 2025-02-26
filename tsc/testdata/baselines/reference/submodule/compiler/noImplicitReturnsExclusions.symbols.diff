@@ -1,0 +1,41 @@
+--- old.noImplicitReturnsExclusions.symbols
++++ new.noImplicitReturnsExclusions.symbols
+@@= skipped -127, +127 lines =@@
+ >HistoryItem : Symbol(HistoryItem, Decl(noImplicitReturnsExclusions.ts, 55, 1))
+ 
+   input: {
+->input : Symbol(HistoryItem.input, Decl(noImplicitReturnsExclusions.ts, 57, 27))
++>input : Symbol(input, Decl(noImplicitReturnsExclusions.ts, 57, 27))
+ 
+     location: {
+ >location : Symbol(location, Decl(noImplicitReturnsExclusions.ts, 58, 10))
+@@= skipped -17, +17 lines =@@
+ >T : Symbol(T, Decl(noImplicitReturnsExclusions.ts, 65, 19))
+ 
+   then<TResult>(
+->then : Symbol(Thenable.then, Decl(noImplicitReturnsExclusions.ts, 65, 23), Decl(noImplicitReturnsExclusions.ts, 69, 23))
++>then : Symbol(then, Decl(noImplicitReturnsExclusions.ts, 65, 23), Decl(noImplicitReturnsExclusions.ts, 69, 23))
+ >TResult : Symbol(TResult, Decl(noImplicitReturnsExclusions.ts, 66, 7))
+ 
+     onfulfilled?: (value: T) => TResult | Thenable<TResult>,
+@@= skipped -23, +23 lines =@@
+ >TResult : Symbol(TResult, Decl(noImplicitReturnsExclusions.ts, 66, 7))
+ 
+   then<TResult>(
+->then : Symbol(Thenable.then, Decl(noImplicitReturnsExclusions.ts, 65, 23), Decl(noImplicitReturnsExclusions.ts, 69, 23))
++>then : Symbol(then, Decl(noImplicitReturnsExclusions.ts, 65, 23), Decl(noImplicitReturnsExclusions.ts, 69, 23))
+ >TResult : Symbol(TResult, Decl(noImplicitReturnsExclusions.ts, 70, 7))
+ 
+     onfulfilled?: (value: T) => TResult | Thenable<TResult>,
+@@= skipped -61, +61 lines =@@
+ >executeCommand : Symbol(executeCommand, Decl(noImplicitReturnsExclusions.ts, 74, 1))
+ >item.input.location.uri : Symbol(uri, Decl(noImplicitReturnsExclusions.ts, 59, 15))
+ >item.input.location : Symbol(location, Decl(noImplicitReturnsExclusions.ts, 58, 10))
+->item.input : Symbol(HistoryItem.input, Decl(noImplicitReturnsExclusions.ts, 57, 27))
++>item.input : Symbol(input, Decl(noImplicitReturnsExclusions.ts, 57, 27))
+ >item : Symbol(item, Decl(noImplicitReturnsExclusions.ts, 87, 59))
+->input : Symbol(HistoryItem.input, Decl(noImplicitReturnsExclusions.ts, 57, 27))
++>input : Symbol(input, Decl(noImplicitReturnsExclusions.ts, 57, 27))
+ >location : Symbol(location, Decl(noImplicitReturnsExclusions.ts, 58, 10))
+ >uri : Symbol(uri, Decl(noImplicitReturnsExclusions.ts, 59, 15))
+   }

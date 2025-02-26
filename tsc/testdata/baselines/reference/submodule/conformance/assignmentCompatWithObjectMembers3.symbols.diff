@@ -1,0 +1,35 @@
+--- old.assignmentCompatWithObjectMembers3.symbols
++++ new.assignmentCompatWithObjectMembers3.symbols
+@@= skipped -6, +6 lines =@@
+ class S implements S2 { foo: string; }
+ >S : Symbol(S, Decl(assignmentCompatWithObjectMembers3.ts, 0, 0))
+ >S2 : Symbol(S2, Decl(assignmentCompatWithObjectMembers3.ts, 6, 9))
+->foo : Symbol(S.foo, Decl(assignmentCompatWithObjectMembers3.ts, 3, 23))
++>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers3.ts, 3, 23))
+ 
+ class T implements T2 { foo: string; }
+ >T : Symbol(T, Decl(assignmentCompatWithObjectMembers3.ts, 3, 38))
+ >T2 : Symbol(T2, Decl(assignmentCompatWithObjectMembers3.ts, 8, 42))
+->foo : Symbol(T.foo, Decl(assignmentCompatWithObjectMembers3.ts, 4, 23))
++>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers3.ts, 4, 23))
+ 
+ var s: S;
+ >s : Symbol(s, Decl(assignmentCompatWithObjectMembers3.ts, 5, 3))
+@@= skipped -17, +17 lines =@@
+ 
+ interface S2 { foo: string; bar?: string }
+ >S2 : Symbol(S2, Decl(assignmentCompatWithObjectMembers3.ts, 6, 9))
+->foo : Symbol(S2.foo, Decl(assignmentCompatWithObjectMembers3.ts, 8, 14))
+->bar : Symbol(S2.bar, Decl(assignmentCompatWithObjectMembers3.ts, 8, 27))
++>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers3.ts, 8, 14))
++>bar : Symbol(bar, Decl(assignmentCompatWithObjectMembers3.ts, 8, 27))
+ 
+ interface T2 { foo: string; baz?: string }
+ >T2 : Symbol(T2, Decl(assignmentCompatWithObjectMembers3.ts, 8, 42))
+->foo : Symbol(T2.foo, Decl(assignmentCompatWithObjectMembers3.ts, 9, 14))
+->baz : Symbol(T2.baz, Decl(assignmentCompatWithObjectMembers3.ts, 9, 27))
++>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembers3.ts, 9, 14))
++>baz : Symbol(baz, Decl(assignmentCompatWithObjectMembers3.ts, 9, 27))
+ 
+ var s2: S2;
+ >s2 : Symbol(s2, Decl(assignmentCompatWithObjectMembers3.ts, 10, 3))

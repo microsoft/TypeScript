@@ -1,0 +1,11 @@
+--- old.declarationsForFileShadowingGlobalNoError.symbols
++++ new.declarationsForFileShadowingGlobalNoError.symbols
+@@= skipped -28, +28 lines =@@
+ >Base : Symbol(Base, Decl(index.ts, 5, 22))
+ 
+     get(domNode: DOMNode) {}
+->get : Symbol((Anonymous class).get, Decl(index.ts, 6, 29))
++>get : Symbol(get, Decl(index.ts, 6, 29))
+ >domNode : Symbol(domNode, Decl(index.ts, 7, 8))
+ >DOMNode : Symbol(DOMNode, Decl(index.ts, 1, 8))
+   }

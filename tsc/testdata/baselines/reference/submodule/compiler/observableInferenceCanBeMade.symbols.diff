@@ -1,0 +1,20 @@
+--- old.observableInferenceCanBeMade.symbols
++++ new.observableInferenceCanBeMade.symbols
+@@= skipped -33, +33 lines =@@
+ >T : Symbol(T, Decl(observableInferenceCanBeMade.ts, 7, 23))
+ 
+     subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): void;
+->subscribe : Symbol(Subscribable.subscribe, Decl(observableInferenceCanBeMade.ts, 7, 27))
++>subscribe : Symbol(subscribe, Decl(observableInferenceCanBeMade.ts, 7, 27))
+ >next : Symbol(next, Decl(observableInferenceCanBeMade.ts, 8, 14))
+ >value : Symbol(value, Decl(observableInferenceCanBeMade.ts, 8, 22))
+ >T : Symbol(T, Decl(observableInferenceCanBeMade.ts, 7, 23))
+@@= skipped -23, +23 lines =@@
+ >T : Symbol(T, Decl(observableInferenceCanBeMade.ts, 13, 25))
+ 
+     subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): void;
+->subscribe : Symbol(Observable.subscribe, Decl(observableInferenceCanBeMade.ts, 13, 56))
++>subscribe : Symbol(subscribe, Decl(observableInferenceCanBeMade.ts, 13, 56))
+ >next : Symbol(next, Decl(observableInferenceCanBeMade.ts, 14, 14))
+ >value : Symbol(value, Decl(observableInferenceCanBeMade.ts, 14, 22))
+ >T : Symbol(T, Decl(observableInferenceCanBeMade.ts, 13, 25))

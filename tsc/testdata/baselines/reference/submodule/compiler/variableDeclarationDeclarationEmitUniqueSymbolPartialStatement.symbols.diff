@@ -1,0 +1,11 @@
+--- old.variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.symbols
++++ new.variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.symbols
+@@= skipped -9, +9 lines =@@
+ >Foo : Symbol(Foo, Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 0, 33))
+ 
+     [key] = value;
+->[key] : Symbol(Foo[key], Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 2, 18))
++>[key] : Symbol([key], Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 2, 18))
+ >key : Symbol(key, Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 0, 5))
+ >value : Symbol(value, Decl(variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts, 0, 21))
+ }

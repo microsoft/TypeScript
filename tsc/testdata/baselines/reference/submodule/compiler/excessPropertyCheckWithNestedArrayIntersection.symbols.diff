@@ -1,0 +1,29 @@
+--- old.excessPropertyCheckWithNestedArrayIntersection.symbols
++++ new.excessPropertyCheckWithNestedArrayIntersection.symbols
+@@= skipped -4, +4 lines =@@
+ >ValueOnlyFields : Symbol(ValueOnlyFields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 0, 0))
+ 
+     fields: Array<{
+->fields : Symbol(ValueOnlyFields.fields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 0, 27))
++>fields : Symbol(fields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 0, 27))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+         value: number | null;
+@@= skipped -12, +12 lines =@@
+ >ValueAndKeyFields : Symbol(ValueAndKeyFields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 4, 1))
+ 
+     fields: Array<{
+->fields : Symbol(ValueAndKeyFields.fields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 5, 29))
++>fields : Symbol(fields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 5, 29))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+         key: string | null;
+@@= skipped -15, +15 lines =@@
+ >BugRepro : Symbol(BugRepro, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 10, 1))
+ 
+   dataType: ValueAndKeyFields & ValueOnlyFields;
+->dataType : Symbol(BugRepro.dataType, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 11, 20))
++>dataType : Symbol(dataType, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 11, 20))
+ >ValueAndKeyFields : Symbol(ValueAndKeyFields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 4, 1))
+ >ValueOnlyFields : Symbol(ValueOnlyFields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 0, 0))
+ }

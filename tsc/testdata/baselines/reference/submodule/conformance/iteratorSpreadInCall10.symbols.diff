@@ -1,0 +1,28 @@
+--- old.iteratorSpreadInCall10.symbols
++++ new.iteratorSpreadInCall10.symbols
+@@= skipped -11, +11 lines =@@
+ >SymbolIterator : Symbol(SymbolIterator, Decl(iteratorSpreadInCall10.ts, 0, 39))
+ 
+     next() {
+->next : Symbol(SymbolIterator.next, Decl(iteratorSpreadInCall10.ts, 1, 22))
++>next : Symbol(next, Decl(iteratorSpreadInCall10.ts, 1, 22))
+ 
+         return {
+             value: Symbol(),
+ >value : Symbol(value, Decl(iteratorSpreadInCall10.ts, 3, 16))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ 
+             done: false
+ >done : Symbol(done, Decl(iteratorSpreadInCall10.ts, 4, 28))
+@@= skipped -14, +13 lines =@@
+     }
+ 
+     [Symbol.iterator]() {
+->[Symbol.iterator] : Symbol(SymbolIterator[Symbol.iterator], Decl(iteratorSpreadInCall10.ts, 7, 5))
+->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(iteratorSpreadInCall10.ts, 7, 5))
+ 
+         return this;
+ >this : Symbol(SymbolIterator, Decl(iteratorSpreadInCall10.ts, 0, 39))

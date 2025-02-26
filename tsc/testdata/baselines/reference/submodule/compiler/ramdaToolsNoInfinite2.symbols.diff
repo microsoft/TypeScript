@@ -1,0 +1,133 @@
+--- old.ramdaToolsNoInfinite2.symbols
++++ new.ramdaToolsNoInfinite2.symbols
+@@= skipped -90, +90 lines =@@
+ >"Object/Keys" : Symbol("Object/Keys", Decl(ramdaToolsNoInfinite2.ts, 21, 1))
+ 
+     import { Keys as UKeys } from "Union/Keys";
+->Keys : Symbol(UKeys, Decl(ramdaToolsNoInfinite2.ts, 96, 34))
++>Keys : Symbol(Keys, Decl(ramdaToolsNoInfinite2.ts, 96, 34))
+ >UKeys : Symbol(UKeys, Decl(ramdaToolsNoInfinite2.ts, 23, 12))
+ 
+     export type Keys<O extends object> = UKeys<O>;
+@@= skipped -281, +281 lines =@@
+ >List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 112, 12))
+ 
+     import { Keys as UKeys } from "Union/Keys";
+->Keys : Symbol(UKeys, Decl(ramdaToolsNoInfinite2.ts, 96, 34))
++>Keys : Symbol(Keys, Decl(ramdaToolsNoInfinite2.ts, 96, 34))
+ >UKeys : Symbol(UKeys, Decl(ramdaToolsNoInfinite2.ts, 113, 12))
+ 
+     export type Keys<L extends List> = Exclude<UKeys<L>, keyof any[]> | number;
+@@= skipped -72, +72 lines =@@
+ >Depth : Symbol(Depth, Decl(ramdaToolsNoInfinite2.ts, 121, 12))
+ 
+         'flat': MergeFlat<O, O1>;
+->'flat' : Symbol('flat', Decl(ramdaToolsNoInfinite2.ts, 130, 92))
++>'flat' : Symbol(flat, Decl(ramdaToolsNoInfinite2.ts, 130, 92))
+ >MergeFlat : Symbol(MergeFlat, Decl(ramdaToolsNoInfinite2.ts, 122, 36))
+ >O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 130, 22))
+ >O1 : Symbol(O1, Decl(ramdaToolsNoInfinite2.ts, 130, 39))
+ 
+         'deep': MergeDeep<O, O1>;
+->'deep' : Symbol('deep', Decl(ramdaToolsNoInfinite2.ts, 131, 33))
++>'deep' : Symbol(deep, Decl(ramdaToolsNoInfinite2.ts, 131, 33))
+ >MergeDeep : Symbol(MergeDeep, Decl(ramdaToolsNoInfinite2.ts, 124, 97))
+ >O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 130, 22))
+ >O1 : Symbol(O1, Decl(ramdaToolsNoInfinite2.ts, 130, 39))
+@@= skipped -137, +137 lines =@@
+ >MergeFlat : Symbol(MergeFlat, Decl(ramdaToolsNoInfinite2.ts, 164, 12))
+ 
+     import { NonNullable as UNonNullable } from "Union/NonNullable";
+->NonNullable : Symbol(UNonNullable, Decl(ramdaToolsNoInfinite2.ts, 137, 40))
++>NonNullable : Symbol(NonNullable, Decl(ramdaToolsNoInfinite2.ts, 137, 40))
+ >UNonNullable : Symbol(UNonNullable, Decl(ramdaToolsNoInfinite2.ts, 165, 12))
+ 
+     import { Depth } from "Object/_Internal";
+@@= skipped -52, +52 lines =@@
+ >Depth : Symbol(Depth, Decl(ramdaToolsNoInfinite2.ts, 166, 12))
+ 
+         'flat': NonNullableFlat<O>;
+->'flat' : Symbol('flat', Decl(ramdaToolsNoInfinite2.ts, 180, 67))
++>'flat' : Symbol(flat, Decl(ramdaToolsNoInfinite2.ts, 180, 67))
+ >NonNullableFlat : Symbol(NonNullableFlat, Decl(ramdaToolsNoInfinite2.ts, 170, 39))
+ >O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 180, 25))
+ 
+         'deep': NonNullableDeep<O>;
+->'deep' : Symbol('deep', Decl(ramdaToolsNoInfinite2.ts, 181, 35))
++>'deep' : Symbol(deep, Decl(ramdaToolsNoInfinite2.ts, 181, 35))
+ >NonNullableDeep : Symbol(NonNullableDeep, Decl(ramdaToolsNoInfinite2.ts, 174, 11))
+ >O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 180, 25))
+ 
+@@= skipped -88, +88 lines =@@
+ >Numbers : Symbol(Numbers, Decl(ramdaToolsNoInfinite2.ts, 205, 342))
+ 
+         'string': {
+->'string' : Symbol('string', Decl(ramdaToolsNoInfinite2.ts, 207, 27))
++>'string' : Symbol(string, Decl(ramdaToolsNoInfinite2.ts, 207, 27))
+ 
+             'all': Format<IterationMap[KnownIterationMapKeys], 's'>;
+->'all' : Symbol('all', Decl(ramdaToolsNoInfinite2.ts, 208, 19))
++>'all' : Symbol(all, Decl(ramdaToolsNoInfinite2.ts, 208, 19))
+ >Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 197, 12))
+ >IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 196, 12))
+ >KnownIterationMapKeys : Symbol(KnownIterationMapKeys, Decl(ramdaToolsNoInfinite2.ts, 199, 42))
+@@= skipped -27, +27 lines =@@
+ 
+         };
+         'number': {
+->'number' : Symbol('number', Decl(ramdaToolsNoInfinite2.ts, 213, 10))
++>'number' : Symbol(number, Decl(ramdaToolsNoInfinite2.ts, 213, 10))
+ 
+             'all': Format<IterationMap[KnownIterationMapKeys], 'n'>;
+->'all' : Symbol('all', Decl(ramdaToolsNoInfinite2.ts, 214, 19))
++>'all' : Symbol(all, Decl(ramdaToolsNoInfinite2.ts, 214, 19))
+ >Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 197, 12))
+ >IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 196, 12))
+ >KnownIterationMapKeys : Symbol(KnownIterationMapKeys, Decl(ramdaToolsNoInfinite2.ts, 199, 42))
+@@= skipped -115, +115 lines =@@
+ >Formats : Symbol(Formats, Decl(ramdaToolsNoInfinite2.ts, 247, 12))
+ 
+         's': I[2];
+->'s' : Symbol('s', Decl(ramdaToolsNoInfinite2.ts, 249, 68))
++>'s' : Symbol(s, Decl(ramdaToolsNoInfinite2.ts, 249, 68))
+ >I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 249, 23))
+ 
+         'n': I[3];
+->'n' : Symbol('n', Decl(ramdaToolsNoInfinite2.ts, 250, 18))
++>'n' : Symbol(n, Decl(ramdaToolsNoInfinite2.ts, 250, 18))
+ >I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 249, 23))
+ 
+     }[fmt];
+@@= skipped -357, +357 lines =@@
+ >Formats : Symbol(Formats, Decl(ramdaToolsNoInfinite2.ts, 332, 12))
+ 
+         's': NumberOf<L['length']>;
+->'s' : Symbol('s', Decl(ramdaToolsNoInfinite2.ts, 335, 69))
++>'s' : Symbol(s, Decl(ramdaToolsNoInfinite2.ts, 335, 69))
+ >NumberOf : Symbol(NumberOf, Decl(ramdaToolsNoInfinite2.ts, 331, 12))
+ >L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 335, 23))
+ 
+         'n': L['length'];
+->'n' : Symbol('n', Decl(ramdaToolsNoInfinite2.ts, 336, 35))
++>'n' : Symbol(n, Decl(ramdaToolsNoInfinite2.ts, 336, 35))
+ >L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 335, 23))
+ 
+     }[fmt];
+@@= skipped -398, +398 lines =@@
+ >'40' : Symbol('40', Decl(ramdaToolsNoInfinite2.ts, 469, 42))
+ 
+         '__': ['__', '__', string, number, '-' | '0' | '+'];
+->'__' : Symbol('__', Decl(ramdaToolsNoInfinite2.ts, 470, 42))
++>'__' : Symbol(__, Decl(ramdaToolsNoInfinite2.ts, 470, 42))
+ 
+     };
+ 
+@@= skipped -48, +48 lines =@@
+ >Depth : Symbol(Depth, Decl(ramdaToolsNoInfinite2.ts, 488, 12))
+ 
+     import { NonNullable as ONonNullable } from "Object/NonNullable";
+->NonNullable : Symbol(ONonNullable, Decl(ramdaToolsNoInfinite2.ts, 183, 13))
++>NonNullable : Symbol(NonNullable, Decl(ramdaToolsNoInfinite2.ts, 183, 13))
+ >ONonNullable : Symbol(ONonNullable, Decl(ramdaToolsNoInfinite2.ts, 489, 12))
+ 
+     import { ListOf } from "Object/ListOf";

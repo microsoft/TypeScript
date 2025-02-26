@@ -1,0 +1,22 @@
+--- old.namespaceImportTypeQuery.symbols
++++ new.namespaceImportTypeQuery.symbols
+@@= skipped -15, +15 lines =@@
+ 
+ let A: typeof types.A;
+ >A : Symbol(A, Decl(b.ts, 1, 3))
+->types.A : Symbol(types.A, Decl(a.ts, 1, 13))
++>types.A : Symbol(A, Decl(a.ts, 1, 13))
+ >types : Symbol(types, Decl(b.ts, 0, 6))
+->A : Symbol(types.A, Decl(a.ts, 1, 13))
++>A : Symbol(A, Decl(a.ts, 1, 13))
+ 
+ let B: typeof types.B;
+ >B : Symbol(B, Decl(b.ts, 2, 3))
+->types.B : Symbol(types.B, Decl(a.ts, 1, 18))
++>types.B : Symbol(B, Decl(a.ts, 1, 18))
+ >types : Symbol(types, Decl(b.ts, 0, 6))
+->B : Symbol(types.B, Decl(a.ts, 1, 18))
++>B : Symbol(B, Decl(a.ts, 1, 18))
+ 
+ let t: typeof types = {
+ >t : Symbol(t, Decl(b.ts, 4, 3))

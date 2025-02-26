@@ -1,0 +1,11 @@
+--- old.templateStringWithPropertyAccess.symbols
++++ new.templateStringWithPropertyAccess.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === templateStringWithPropertyAccess.ts ===
+ `abc${0}abc`.indexOf(`abc`);
+->`abc${0}abc`.indexOf : Symbol(String.indexOf, Decl(lib.es5.d.ts, --, --))
+->indexOf : Symbol(String.indexOf, Decl(lib.es5.d.ts, --, --))
++>`abc${0}abc`.indexOf : Symbol(indexOf, Decl(lib.es5.d.ts, --, --))
++>indexOf : Symbol(indexOf, Decl(lib.es5.d.ts, --, --))
+ 

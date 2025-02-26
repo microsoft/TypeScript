@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/initializersInAmbientEnums.ts] ////
+
+=== initializersInAmbientEnums.ts ===
+declare enum E {
+>E : Symbol(E, Decl(initializersInAmbientEnums.ts, 0, 0))
+
+    a = 10,
+>a : Symbol(a, Decl(initializersInAmbientEnums.ts, 0, 16))
+
+    b = a,
+>b : Symbol(b, Decl(initializersInAmbientEnums.ts, 1, 11))
+>a : Symbol(a, Decl(initializersInAmbientEnums.ts, 0, 16))
+
+    e = 10 << 2 * 8,
+>e : Symbol(e, Decl(initializersInAmbientEnums.ts, 2, 10))
+}

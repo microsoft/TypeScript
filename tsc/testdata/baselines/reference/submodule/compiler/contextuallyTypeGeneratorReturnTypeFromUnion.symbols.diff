@@ -1,0 +1,14 @@
+--- old.contextuallyTypeGeneratorReturnTypeFromUnion.symbols
++++ new.contextuallyTypeGeneratorReturnTypeFromUnion.symbols
+@@= skipped -27, +27 lines =@@
+ 
+     const next = yield await Promise.resolve('')
+ >next : Symbol(next, Decl(contextuallyTypeGeneratorReturnTypeFromUnion.ts, 12, 9))
+->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ 
+     return next[0]
+ >next : Symbol(next, Decl(contextuallyTypeGeneratorReturnTypeFromUnion.ts, 12, 9))

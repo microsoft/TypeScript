@@ -1,0 +1,40 @@
+--- old.typeArgumentInferenceOrdering.symbols
++++ new.typeArgumentInferenceOrdering.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(typeArgumentInferenceOrdering.ts, 0, 0))
+ 
+     y: I;
+->y : Symbol(C.y, Decl(typeArgumentInferenceOrdering.ts, 0, 9))
++>y : Symbol(y, Decl(typeArgumentInferenceOrdering.ts, 0, 9))
+ >I : Symbol(I, Decl(typeArgumentInferenceOrdering.ts, 2, 1))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >I : Symbol(I, Decl(typeArgumentInferenceOrdering.ts, 2, 1))
+ 
+     x(): Goo;
+->x : Symbol(I.x, Decl(typeArgumentInferenceOrdering.ts, 4, 13))
++>x : Symbol(x, Decl(typeArgumentInferenceOrdering.ts, 4, 13))
+ >Goo : Symbol(Goo, Decl(typeArgumentInferenceOrdering.ts, 6, 1))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >Goo : Symbol(Goo, Decl(typeArgumentInferenceOrdering.ts, 6, 1))
+ 
+     p: string;
+->p : Symbol(Goo.p, Decl(typeArgumentInferenceOrdering.ts, 8, 15))
++>p : Symbol(p, Decl(typeArgumentInferenceOrdering.ts, 8, 15))
+ }
+ 
+ function foo<T>(f: { y: T }): T { return null }
+@@= skipped -13, +13 lines =@@
+ 
+ var x = foo(new C()).x; // was Error that property x does not exist on type {}
+ >x : Symbol(x, Decl(typeArgumentInferenceOrdering.ts, 13, 3))
+->foo(new C()).x : Symbol(I.x, Decl(typeArgumentInferenceOrdering.ts, 4, 13))
++>foo(new C()).x : Symbol(x, Decl(typeArgumentInferenceOrdering.ts, 4, 13))
+ >foo : Symbol(foo, Decl(typeArgumentInferenceOrdering.ts, 10, 1))
+ >C : Symbol(C, Decl(typeArgumentInferenceOrdering.ts, 0, 0))
+->x : Symbol(I.x, Decl(typeArgumentInferenceOrdering.ts, 4, 13))
++>x : Symbol(x, Decl(typeArgumentInferenceOrdering.ts, 4, 13))
+ 

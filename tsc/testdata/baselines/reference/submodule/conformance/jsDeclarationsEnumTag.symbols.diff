@@ -1,0 +1,55 @@
+--- old.jsDeclarationsEnumTag.symbols
++++ new.jsDeclarationsEnumTag.symbols
+@@= skipped -2, +2 lines =@@
+ === index.js ===
+ /** @enum {string} */
+ export const Target = {
+->Target : Symbol(Target, Decl(index.js, 1, 12), Decl(index.js, 0, 4))
++>Target : Symbol(Target, Decl(index.js, 1, 12))
+ 
+     START: "start",
+ >START : Symbol(START, Decl(index.js, 1, 23))
+@@= skipped -17, +17 lines =@@
+ }
+ /** @enum number */
+ export const Second = {
+->Second : Symbol(Second, Decl(index.js, 9, 12), Decl(index.js, 8, 4))
++>Second : Symbol(Second, Decl(index.js, 9, 12))
+ 
+     OK: 1,
+ >OK : Symbol(OK, Decl(index.js, 9, 23))
+@@= skipped -11, +11 lines =@@
+ }
+ /** @enum {function(number): number} */
+ export const Fs = {
+->Fs : Symbol(Fs, Decl(index.js, 15, 12), Decl(index.js, 14, 4))
++>Fs : Symbol(Fs, Decl(index.js, 15, 12))
+ 
+     ADD1: n => n + 1,
+ >ADD1 : Symbol(ADD1, Decl(index.js, 15, 19))
+@@= skipped -48, +48 lines =@@
+     var v = Target.START
+ >v : Symbol(v, Decl(index.js, 34, 7))
+ >Target.START : Symbol(START, Decl(index.js, 1, 23))
+->Target : Symbol(Target, Decl(index.js, 1, 12), Decl(index.js, 0, 4))
++>Target : Symbol(Target, Decl(index.js, 1, 12))
+ >START : Symbol(START, Decl(index.js, 1, 23))
+ 
+     v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
+@@= skipped -13, +13 lines =@@
+ 
+     // element access with arbitrary string is an error only with noImplicitAny
+     if (!Target[s]) {
+->Target : Symbol(Target, Decl(index.js, 1, 12), Decl(index.js, 0, 4))
++>Target : Symbol(Target, Decl(index.js, 1, 12))
+ >s : Symbol(s, Decl(index.js, 38, 19))
+ 
+         return null
+     }
+     else {
+         return Target[s]
+->Target : Symbol(Target, Decl(index.js, 1, 12), Decl(index.js, 0, 4))
++>Target : Symbol(Target, Decl(index.js, 1, 12))
+ >s : Symbol(s, Decl(index.js, 38, 19))
+     }
+ }

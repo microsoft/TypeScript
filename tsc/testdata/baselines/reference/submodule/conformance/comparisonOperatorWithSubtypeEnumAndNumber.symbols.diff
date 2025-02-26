@@ -1,0 +1,317 @@
+--- old.comparisonOperatorWithSubtypeEnumAndNumber.symbols
++++ new.comparisonOperatorWithSubtypeEnumAndNumber.symbols
+@@= skipped -2, +2 lines =@@
+ === comparisonOperatorWithSubtypeEnumAndNumber.ts ===
+ enum E { a, b, c }
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+->b : Symbol(E.b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 11))
+->c : Symbol(E.c, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 14))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>b : Symbol(b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 11))
++>c : Symbol(c, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 14))
+ 
+ var a: E;
+ >a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 2, 3))
+@@= skipped -24, +24 lines =@@
+ 
+ var ra3 = E.a < b;
+ >ra3 : Symbol(ra3, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 8, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >b : Symbol(b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 3, 3))
+ 
+ var ra4 = b < E.a;
+ >ra4 : Symbol(ra4, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 9, 3))
+ >b : Symbol(b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 3, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ var ra5 = E.a < 0;
+ >ra5 : Symbol(ra5, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 10, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ var ra6 = 0 < E.a;
+ >ra6 : Symbol(ra6, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 11, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ // operator >
+ var rb1 = a > b;
+@@= skipped -37, +37 lines =@@
+ 
+ var rb3 = E.a > b;
+ >rb3 : Symbol(rb3, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 16, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >b : Symbol(b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 3, 3))
+ 
+ var rb4 = b > E.a;
+ >rb4 : Symbol(rb4, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 17, 3))
+ >b : Symbol(b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 3, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ var rb5 = E.a > 0;
+ >rb5 : Symbol(rb5, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 18, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ var rb6 = 0 > E.a;
+ >rb6 : Symbol(rb6, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 19, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ // operator <=
+ var rc1 = a <= b;
+@@= skipped -37, +37 lines =@@
+ 
+ var rc3 = E.a <= b;
+ >rc3 : Symbol(rc3, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 24, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >b : Symbol(b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 3, 3))
+ 
+ var rc4 = b <= E.a;
+ >rc4 : Symbol(rc4, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 25, 3))
+ >b : Symbol(b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 3, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ var rc5 = E.a <= 0;
+ >rc5 : Symbol(rc5, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 26, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ var rc6 = 0 <= E.a;
+ >rc6 : Symbol(rc6, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 27, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ // operator >=
+ var rd1 = a >= b;
+@@= skipped -37, +37 lines =@@
+ 
+ var rd3 = E.a >= b;
+ >rd3 : Symbol(rd3, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 32, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >b : Symbol(b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 3, 3))
+ 
+ var rd4 = b >= E.a;
+ >rd4 : Symbol(rd4, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 33, 3))
+ >b : Symbol(b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 3, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ var rd5 = E.a >= 0;
+ >rd5 : Symbol(rd5, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 34, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ var rd6 = 0 >= E.a;
+ >rd6 : Symbol(rd6, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 35, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ // operator ==
+ var re1 = a == b;
+@@= skipped -37, +37 lines =@@
+ 
+ var re3 = E.a == b;
+ >re3 : Symbol(re3, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 40, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >b : Symbol(b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 3, 3))
+ 
+ var re4 = b == E.a;
+ >re4 : Symbol(re4, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 41, 3))
+ >b : Symbol(b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 3, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ var re5 = E.a == 0;
+ >re5 : Symbol(re5, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 42, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ var re6 = 0 == E.a;
+ >re6 : Symbol(re6, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 43, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ // operator !=
+ var rf1 = a != b;
+@@= skipped -37, +37 lines =@@
+ 
+ var rf3 = E.a != b;
+ >rf3 : Symbol(rf3, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 48, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >b : Symbol(b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 3, 3))
+ 
+ var rf4 = b != E.a;
+ >rf4 : Symbol(rf4, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 49, 3))
+ >b : Symbol(b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 3, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ var rf5 = E.a != 0;
+ >rf5 : Symbol(rf5, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 50, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ var rf6 = 0 != E.a;
+ >rf6 : Symbol(rf6, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 51, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ // operator ===
+ var rg1 = a === b;
+@@= skipped -37, +37 lines =@@
+ 
+ var rg3 = E.a === b;
+ >rg3 : Symbol(rg3, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 56, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >b : Symbol(b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 3, 3))
+ 
+ var rg4 = b === E.a;
+ >rg4 : Symbol(rg4, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 57, 3))
+ >b : Symbol(b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 3, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ var rg5 = E.a === 0;
+ >rg5 : Symbol(rg5, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 58, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ var rg6 = 0 === E.a;
+ >rg6 : Symbol(rg6, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 59, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ // operator !==
+ var rh1 = a !== b;
+@@= skipped -37, +37 lines =@@
+ 
+ var rh3 = E.a !== b;
+ >rh3 : Symbol(rh3, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 64, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >b : Symbol(b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 3, 3))
+ 
+ var rh4 = b !== E.a;
+ >rh4 : Symbol(rh4, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 65, 3))
+ >b : Symbol(b, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 3, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ var rh5 = E.a !== 0;
+ >rh5 : Symbol(rh5, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 66, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 
+ var rh6 = 0 !== E.a;
+ >rh6 : Symbol(rh6, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 67, 3))
+->E.a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>E.a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
+->a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
++>a : Symbol(a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))
+ 

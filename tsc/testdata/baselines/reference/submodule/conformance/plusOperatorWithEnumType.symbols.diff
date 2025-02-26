@@ -1,0 +1,43 @@
+--- old.plusOperatorWithEnumType.symbols
++++ new.plusOperatorWithEnumType.symbols
+@@= skipped -7, +7 lines =@@
+ 
+ enum ENUM1 { A, B, "" };
+ >ENUM1 : Symbol(ENUM1, Decl(plusOperatorWithEnumType.ts, 2, 14))
+->A : Symbol(ENUM1.A, Decl(plusOperatorWithEnumType.ts, 3, 12))
+->B : Symbol(ENUM1.B, Decl(plusOperatorWithEnumType.ts, 3, 15))
+->"" : Symbol(ENUM1[""], Decl(plusOperatorWithEnumType.ts, 3, 18))
++>A : Symbol(A, Decl(plusOperatorWithEnumType.ts, 3, 12))
++>B : Symbol(B, Decl(plusOperatorWithEnumType.ts, 3, 15))
++>"" : Symbol("", Decl(plusOperatorWithEnumType.ts, 3, 18))
+ 
+ // enum type var
+ var ResultIsNumber1 = +ENUM;
+@@= skipped -17, +17 lines =@@
+ var ResultIsNumber3 = +ENUM1["A"];
+ >ResultIsNumber3 : Symbol(ResultIsNumber3, Decl(plusOperatorWithEnumType.ts, 10, 3))
+ >ENUM1 : Symbol(ENUM1, Decl(plusOperatorWithEnumType.ts, 2, 14))
+->"A" : Symbol(ENUM1.A, Decl(plusOperatorWithEnumType.ts, 3, 12))
++>"A" : Symbol(A, Decl(plusOperatorWithEnumType.ts, 3, 12))
+ 
+ var ResultIsNumber4 = +(ENUM[0] + ENUM1["B"]);
+ >ResultIsNumber4 : Symbol(ResultIsNumber4, Decl(plusOperatorWithEnumType.ts, 11, 3))
+ >ENUM : Symbol(ENUM, Decl(plusOperatorWithEnumType.ts, 0, 0))
+ >ENUM1 : Symbol(ENUM1, Decl(plusOperatorWithEnumType.ts, 2, 14))
+->"B" : Symbol(ENUM1.B, Decl(plusOperatorWithEnumType.ts, 3, 15))
++>"B" : Symbol(B, Decl(plusOperatorWithEnumType.ts, 3, 15))
+ 
+ // miss assignment operators
+ +ENUM;
+@@= skipped -16, +16 lines =@@
+ >ENUM1 : Symbol(ENUM1, Decl(plusOperatorWithEnumType.ts, 2, 14))
+ 
+ +ENUM1.B;
+->ENUM1.B : Symbol(ENUM1.B, Decl(plusOperatorWithEnumType.ts, 3, 15))
++>ENUM1.B : Symbol(B, Decl(plusOperatorWithEnumType.ts, 3, 15))
+ >ENUM1 : Symbol(ENUM1, Decl(plusOperatorWithEnumType.ts, 2, 14))
+->B : Symbol(ENUM1.B, Decl(plusOperatorWithEnumType.ts, 3, 15))
++>B : Symbol(B, Decl(plusOperatorWithEnumType.ts, 3, 15))
+ 
+ +ENUM, ENUM1;
+ >ENUM : Symbol(ENUM, Decl(plusOperatorWithEnumType.ts, 0, 0))

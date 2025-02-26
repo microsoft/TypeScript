@@ -1,0 +1,11 @@
+--- old.thisTag3.symbols
++++ new.thisTag3.symbols
+@@= skipped -12, +12 lines =@@
+      * @param {string} a
+      */
+     p = (a) => this.fn("" + a);
+->p : Symbol(C.p, Decl(a.js, 4, 9))
++>p : Symbol(p, Decl(a.js, 4, 9))
+ >a : Symbol(a, Decl(a.js, 9, 9))
+ >this : Symbol(C, Decl(a.js, 0, 0))
+ >a : Symbol(a, Decl(a.js, 9, 9))

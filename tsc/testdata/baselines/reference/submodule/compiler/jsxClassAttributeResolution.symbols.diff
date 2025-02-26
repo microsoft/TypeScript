@@ -1,0 +1,11 @@
+--- old.jsxClassAttributeResolution.symbols
++++ new.jsxClassAttributeResolution.symbols
+@@= skipped -14, +14 lines =@@
+ >T : Symbol(T, Decl(index.d.ts, 0, 40))
+ 
+     ref: T
+->ref : Symbol(IntrinsicClassAttributesAlias.ref, Decl(index.d.ts, 0, 44))
++>ref : Symbol(ref, Decl(index.d.ts, 0, 44))
+ >T : Symbol(T, Decl(index.d.ts, 0, 40))
+ }
+ declare namespace JSX {

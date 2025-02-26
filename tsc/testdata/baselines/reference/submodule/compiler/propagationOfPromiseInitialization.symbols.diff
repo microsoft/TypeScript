@@ -1,0 +1,41 @@
+--- old.propagationOfPromiseInitialization.symbols
++++ new.propagationOfPromiseInitialization.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(propagationOfPromiseInitialization.ts, 0, 19))
+ 
+     then<TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult): IPromise<TResult>;
+->then : Symbol(IPromise.then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
++>then : Symbol(then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
+ >TResult : Symbol(TResult, Decl(propagationOfPromiseInitialization.ts, 1, 9))
+ >successCallback : Symbol(successCallback, Decl(propagationOfPromiseInitialization.ts, 1, 18))
+ >promiseValue : Symbol(promiseValue, Decl(propagationOfPromiseInitialization.ts, 1, 36))
+@@= skipped -18, +18 lines =@@
+ >IPromise : Symbol(IPromise, Decl(propagationOfPromiseInitialization.ts, 0, 0))
+ 
+ foo.then((x) => {
+->foo.then((x) => {    // x is inferred to be a number    return "asdf";}).then : Symbol(IPromise.then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
+->foo.then : Symbol(IPromise.then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
++>foo.then((x) => {    // x is inferred to be a number    return "asdf";}).then : Symbol(then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
++>foo.then : Symbol(then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
+ >foo : Symbol(foo, Decl(propagationOfPromiseInitialization.ts, 4, 3))
+->then : Symbol(IPromise.then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
++>then : Symbol(then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
+ >x : Symbol(x, Decl(propagationOfPromiseInitialization.ts, 5, 10))
+ 
+     // x is inferred to be a number
+     return "asdf";
+ }).then((x) => {
+->then : Symbol(IPromise.then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
++>then : Symbol(then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
+ >x : Symbol(x, Decl(propagationOfPromiseInitialization.ts, 8, 9))
+ 
+     // x is inferred to be string
+     x.length;
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(propagationOfPromiseInitialization.ts, 8, 9))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+     return 123;
+ });

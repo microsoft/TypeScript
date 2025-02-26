@@ -1,0 +1,11 @@
+--- old.genericFunctions3.symbols
++++ new.genericFunctions3.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(genericFunctions3.ts, 0, 16))
+ 
+     foo(x: string): Query<T[]>;
+->foo : Symbol(Query.foo, Decl(genericFunctions3.ts, 0, 20))
++>foo : Symbol(foo, Decl(genericFunctions3.ts, 0, 20))
+ >x : Symbol(x, Decl(genericFunctions3.ts, 1, 8))
+ >Query : Symbol(Query, Decl(genericFunctions3.ts, 0, 0))
+ >T : Symbol(T, Decl(genericFunctions3.ts, 0, 16))

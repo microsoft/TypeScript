@@ -1,0 +1,11 @@
+--- old.awaitInNonAsyncFunction.symbols
++++ new.awaitInNonAsyncFunction.symbols
+@@= skipped -77, +77 lines =@@
+ >p : Symbol(p, Decl(awaitInNonAsyncFunction.ts, 28, 14))
+   }
+   method(p: Promise<number>) {
+->method : Symbol(clazz.method, Decl(awaitInNonAsyncFunction.ts, 31, 3))
++>method : Symbol(method, Decl(awaitInNonAsyncFunction.ts, 31, 3))
+ >p : Symbol(p, Decl(awaitInNonAsyncFunction.ts, 32, 9))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+ 

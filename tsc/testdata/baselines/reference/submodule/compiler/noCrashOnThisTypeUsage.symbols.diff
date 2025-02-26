@@ -1,0 +1,39 @@
+--- old.noCrashOnThisTypeUsage.symbols
++++ new.noCrashOnThisTypeUsage.symbols
+@@= skipped -4, +4 lines =@@
+ >IListenable : Symbol(IListenable, Decl(noCrashOnThisTypeUsage.ts, 0, 0))
+ 
+     changeListeners: Function[] | null
+->changeListeners : Symbol(IListenable.changeListeners, Decl(noCrashOnThisTypeUsage.ts, 0, 23))
++>changeListeners : Symbol(changeListeners, Decl(noCrashOnThisTypeUsage.ts, 0, 23))
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean): void
+->observe : Symbol(IListenable.observe, Decl(noCrashOnThisTypeUsage.ts, 1, 38))
++>observe : Symbol(observe, Decl(noCrashOnThisTypeUsage.ts, 1, 38))
+ >handler : Symbol(handler, Decl(noCrashOnThisTypeUsage.ts, 2, 12))
+ >change : Symbol(change, Decl(noCrashOnThisTypeUsage.ts, 2, 22))
+ >oldValue : Symbol(oldValue, Decl(noCrashOnThisTypeUsage.ts, 2, 34))
+@@= skipped -26, +26 lines =@@
+ 
+     constructor(
+         public value: T
+->value : Symbol(ObservableValue.value, Decl(noCrashOnThisTypeUsage.ts, 9, 16))
++>value : Symbol(value, Decl(noCrashOnThisTypeUsage.ts, 9, 16))
+ >T : Symbol(T, Decl(noCrashOnThisTypeUsage.ts, 8, 29))
+ 
+     ) {
+@@= skipped -32, +32 lines =@@
+         });
+     }
+     changeListeners: Function[] | null = [];
+->changeListeners : Symbol(ObservableValue.changeListeners, Decl(noCrashOnThisTypeUsage.ts, 20, 5))
++>changeListeners : Symbol(changeListeners, Decl(noCrashOnThisTypeUsage.ts, 20, 5))
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) {}
+->observe : Symbol(ObservableValue.observe, Decl(noCrashOnThisTypeUsage.ts, 21, 44))
++>observe : Symbol(observe, Decl(noCrashOnThisTypeUsage.ts, 21, 44))
+ >handler : Symbol(handler, Decl(noCrashOnThisTypeUsage.ts, 22, 12))
+ >change : Symbol(change, Decl(noCrashOnThisTypeUsage.ts, 22, 22))
+ >oldValue : Symbol(oldValue, Decl(noCrashOnThisTypeUsage.ts, 22, 34))

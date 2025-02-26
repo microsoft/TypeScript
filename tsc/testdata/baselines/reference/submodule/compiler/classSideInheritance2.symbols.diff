@@ -1,0 +1,24 @@
+--- old.classSideInheritance2.symbols
++++ new.classSideInheritance2.symbols
+@@= skipped -4, +4 lines =@@
+ >IText : Symbol(IText, Decl(classSideInheritance2.ts, 0, 0))
+ 
+     foo: number;
+->foo : Symbol(IText.foo, Decl(classSideInheritance2.ts, 0, 17))
++>foo : Symbol(foo, Decl(classSideInheritance2.ts, 0, 17))
+ }
+ 
+ interface TextSpan {}
+@@= skipped -26, +26 lines =@@
+ >IText : Symbol(IText, Decl(classSideInheritance2.ts, 0, 0))
+ 
+         public foo: number;
+->foo : Symbol(TextBase.foo, Decl(classSideInheritance2.ts, 13, 33))
++>foo : Symbol(foo, Decl(classSideInheritance2.ts, 13, 33))
+ 
+         public subText(span: TextSpan): IText {
+->subText : Symbol(TextBase.subText, Decl(classSideInheritance2.ts, 14, 27))
++>subText : Symbol(subText, Decl(classSideInheritance2.ts, 14, 27))
+ >span : Symbol(span, Decl(classSideInheritance2.ts, 15, 23))
+ >TextSpan : Symbol(TextSpan, Decl(classSideInheritance2.ts, 2, 1))
+ >IText : Symbol(IText, Decl(classSideInheritance2.ts, 0, 0))

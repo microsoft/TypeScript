@@ -1,0 +1,21 @@
+--- old.unusedImports2.symbols
++++ new.unusedImports2.symbols
+@@= skipped -4, +4 lines =@@
+ >Calculator : Symbol(Calculator, Decl(file1.ts, 0, 0))
+ 
+     handleChar() {}
+->handleChar : Symbol(Calculator.handleChar, Decl(file1.ts, 0, 25))
++>handleChar : Symbol(handleChar, Decl(file1.ts, 0, 25))
+ }
+ 
+ export function test() {
+@@= skipped -20, +20 lines =@@
+ >Calculator : Symbol(Calculator, Decl(file2.ts, 0, 8))
+ 
+ x.handleChar();
+->x.handleChar : Symbol(Calculator.handleChar, Decl(file1.ts, 0, 25))
++>x.handleChar : Symbol(handleChar, Decl(file1.ts, 0, 25))
+ >x : Symbol(x, Decl(file2.ts, 3, 3))
+->handleChar : Symbol(Calculator.handleChar, Decl(file1.ts, 0, 25))
++>handleChar : Symbol(handleChar, Decl(file1.ts, 0, 25))
+ 

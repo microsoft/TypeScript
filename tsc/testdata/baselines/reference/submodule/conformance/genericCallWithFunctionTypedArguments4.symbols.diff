@@ -1,0 +1,16 @@
+--- old.genericCallWithFunctionTypedArguments4.symbols
++++ new.genericCallWithFunctionTypedArguments4.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ class C { foo: string }
+ >C : Symbol(C, Decl(genericCallWithFunctionTypedArguments4.ts, 0, 0))
+->foo : Symbol(C.foo, Decl(genericCallWithFunctionTypedArguments4.ts, 2, 9))
++>foo : Symbol(foo, Decl(genericCallWithFunctionTypedArguments4.ts, 2, 9))
+ 
+ class D { bar: string }
+ >D : Symbol(D, Decl(genericCallWithFunctionTypedArguments4.ts, 2, 23))
+->bar : Symbol(D.bar, Decl(genericCallWithFunctionTypedArguments4.ts, 3, 9))
++>bar : Symbol(bar, Decl(genericCallWithFunctionTypedArguments4.ts, 3, 9))
+ 
+ var a: {
+ >a : Symbol(a, Decl(genericCallWithFunctionTypedArguments4.ts, 4, 3))

@@ -1,0 +1,16 @@
+--- old.resolveNameWithNamspace.symbols
++++ new.resolveNameWithNamspace.symbols
+@@= skipped -29, +29 lines =@@
+ 
+ === app.js ===
+ exports.equal = myAssert.equal
+->exports.equal : Symbol(equal, Decl(app.js, 0, 0))
+->exports : Symbol(equal, Decl(app.js, 0, 0))
+->equal : Symbol(equal, Decl(app.js, 0, 0))
+ >myAssert : Symbol(myAssert, Decl(ns.ts, 0, 0), Decl(ns.ts, 4, 3))
+ 
+ exports.equal()
+->exports.equal : Symbol(equal, Decl(app.js, 0, 0))
+->exports : Symbol("app", Decl(app.js, 0, 0))
+->equal : Symbol(equal, Decl(app.js, 0, 0))
+-

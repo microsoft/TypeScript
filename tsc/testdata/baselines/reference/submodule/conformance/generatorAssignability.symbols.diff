@@ -1,0 +1,14 @@
+--- old.generatorAssignability.symbols
++++ new.generatorAssignability.symbols
+@@= skipped -145, +145 lines =@@
+     const o = {[Symbol.asyncIterator]: syncGenerator};
+ >o : Symbol(o, Decl(generatorAssignability.ts, 64, 9))
+ >[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(generatorAssignability.ts, 64, 15))
+->Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
++>Symbol.asyncIterator : Symbol(asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+->asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
++>asyncIterator : Symbol(asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+ >syncGenerator : Symbol(syncGenerator, Decl(generatorAssignability.ts, 59, 9))
+ 
+     for await (const x of o) {

@@ -1,0 +1,37 @@
+--- old.externalModuleAssignToVar.symbols
++++ new.externalModuleAssignToVar.symbols
+@@= skipped -8, +8 lines =@@
+ >y1 : Symbol(y1, Decl(externalModuleAssignToVar_core.ts, 2, 3))
+ >C : Symbol(C, Decl(externalModuleAssignToVar_core.ts, 2, 9))
+ >ext : Symbol(ext, Decl(externalModuleAssignToVar_core.ts, 0, 0))
+->C : Symbol(ext.C, Decl(externalModuleAssignToVar_core_require.ts, 0, 0))
++>C : Symbol(C)
+ >ext : Symbol(ext, Decl(externalModuleAssignToVar_core.ts, 0, 0))
+ 
+ y1 = ext; // ok
+@@= skipped -31, +31 lines =@@
+ >y3 : Symbol(y3, Decl(externalModuleAssignToVar_core.ts, 10, 3))
+ >ext3 : Symbol(ext3, Decl(externalModuleAssignToVar_core.ts, 7, 10))
+ 
+-=== externalModuleAssignToVar_ext.ts ===
+-class D { foo: string; }
+->D : Symbol(D, Decl(externalModuleAssignToVar_ext.ts, 0, 0))
+->foo : Symbol(D.foo, Decl(externalModuleAssignToVar_ext.ts, 0, 9))
+-
+-export = D;
+->D : Symbol(D, Decl(externalModuleAssignToVar_ext.ts, 0, 0))
+-
+ === externalModuleAssignToVar_core_require.ts ===
+ export class C { bar: string; }
+ >C : Symbol(C, Decl(externalModuleAssignToVar_core_require.ts, 0, 0))
+->bar : Symbol(C.bar, Decl(externalModuleAssignToVar_core_require.ts, 0, 16))
++>bar : Symbol(bar, Decl(externalModuleAssignToVar_core_require.ts, 0, 16))
+ 
+-=== externalModuleAssignToVar_core_require2.ts ===
+-class C { baz: string; }
+->C : Symbol(C, Decl(externalModuleAssignToVar_core_require2.ts, 0, 0))
+->baz : Symbol(C.baz, Decl(externalModuleAssignToVar_core_require2.ts, 0, 9))
+-
+-export = C;
+->C : Symbol(C, Decl(externalModuleAssignToVar_core_require2.ts, 0, 0))
+-

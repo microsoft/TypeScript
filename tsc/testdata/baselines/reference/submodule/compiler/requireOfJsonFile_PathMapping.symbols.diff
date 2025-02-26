@@ -1,0 +1,10 @@
+--- old.requireOfJsonFile_PathMapping.symbols
++++ new.requireOfJsonFile_PathMapping.symbols
+@@= skipped -3, +3 lines =@@
+ import foobar from "foo/bar/foobar.json";
+ >foobar : Symbol(foobar, Decl(a.ts, 0, 6))
+ 
+-=== /node_modules/foo/bar/foobar.json ===
+-{ "a": 10 }
+->"a" : Symbol("a", Decl(foobar.json, 0, 1))
+-

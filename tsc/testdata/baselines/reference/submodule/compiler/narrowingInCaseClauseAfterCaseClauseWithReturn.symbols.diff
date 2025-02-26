@@ -1,0 +1,71 @@
+--- old.narrowingInCaseClauseAfterCaseClauseWithReturn.symbols
++++ new.narrowingInCaseClauseAfterCaseClauseWithReturn.symbols
+@@= skipped -12, +12 lines =@@
+ 
+   switch (true) {
+     case arg.toUpperCase() === "A":
+->arg.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>arg.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 2, 15))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ 
+       return "A";
+ 
+     case arg.toUpperCase() === "B":
+->arg.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>arg.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 2, 15))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ 
+     case arg.toUpperCase() === "C":
+->arg.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>arg.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 2, 15))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ 
+     case arg.toUpperCase() === "D":
+->arg.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>arg.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 2, 15))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ 
+       return "B, C or D";
+   }
+@@= skipped -37, +37 lines =@@
+ 
+   switch (true) {
+     case arg.toUpperCase() === "A":
+->arg.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>arg.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 18, 15))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ 
+     case arg.toUpperCase() === "B":
+->arg.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>arg.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 18, 15))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ 
+     case arg.toUpperCase() === "C":
+->arg.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>arg.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 18, 15))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ 
+       return "A, B or C";
+     case arg.toUpperCase() === "D":
+->arg.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>arg.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 18, 15))
+->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
++>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
+ 
+       return "D";
+   }

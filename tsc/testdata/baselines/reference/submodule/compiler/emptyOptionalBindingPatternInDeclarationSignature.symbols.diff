@@ -1,0 +1,40 @@
+--- old.emptyOptionalBindingPatternInDeclarationSignature.symbols
++++ new.emptyOptionalBindingPatternInDeclarationSignature.symbols
+@@= skipped -22, +22 lines =@@
+ >C1 : Symbol(C1, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 5, 50))
+ 
+     method({}?: { x: string }): void
+->method : Symbol(C1.method, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 7, 18))
++>method : Symbol(method, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 7, 18))
+ >x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 8, 17))
+ 
+     static method2({}?: { x: string }): void
+->method2 : Symbol(C1.method2, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 8, 36))
++>method2 : Symbol(method2, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 8, 36))
+ >x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 9, 25))
+ 
+     static field: ({}?: { x: string }) => void
+->field : Symbol(C1.field, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 9, 44))
++>field : Symbol(field, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 9, 44))
+ >x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 11, 25))
+ 
+     static field2: ({}?: { x: string }) => void
+->field2 : Symbol(C1.field2, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 11, 46))
++>field2 : Symbol(field2, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 11, 46))
+ >x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 12, 26))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >I1 : Symbol(I1, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 13, 1))
+ 
+     method({}?: { x: string }): void
+->method : Symbol(I1.method, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 15, 14))
++>method : Symbol(method, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 15, 14))
+ >x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 16, 17))
+ 
+     method2: ({}?: { x: string }) => void
+->method2 : Symbol(I1.method2, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 16, 36))
++>method2 : Symbol(method2, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 16, 36))
+ >x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 17, 20))
+ }
+ 

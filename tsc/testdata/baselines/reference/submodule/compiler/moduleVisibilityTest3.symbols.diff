@@ -1,0 +1,32 @@
+--- old.moduleVisibilityTest3.symbols
++++ new.moduleVisibilityTest3.symbols
+@@= skipped -21, +21 lines =@@
+ 
+  import modes = _modes;
+ >modes : Symbol(modes, Decl(moduleVisibilityTest3.ts, 12, 15))
+->_modes : Symbol(modes, Decl(moduleVisibilityTest3.ts, 0, 0))
++>_modes : Symbol(_modes, Decl(moduleVisibilityTest3.ts, 0, 0))
+  
+  var i : modes.IMode;
+ >i : Symbol(i, Decl(moduleVisibilityTest3.ts, 15, 4))
+ >modes : Symbol(modes, Decl(moduleVisibilityTest3.ts, 12, 15))
+->IMode : Symbol(modes.IMode, Decl(moduleVisibilityTest3.ts, 0, 15))
++>IMode : Symbol(IMode, Decl(moduleVisibilityTest3.ts, 0, 15))
+   
+  // If you just use p1:modes, the compiler accepts it - should be an error
+  class Bug {
+@@= skipped -16, +16 lines =@@
+ >modes : Symbol(modes)
+ >p2 : Symbol(p2, Decl(moduleVisibilityTest3.ts, 19, 27))
+ >modes : Symbol(modes, Decl(moduleVisibilityTest3.ts, 12, 15))
+->Mode : Symbol(modes.Mode)
++>Mode : Symbol(Mode)
+ 
+          var x:modes.Mode;
+ >x : Symbol(x, Decl(moduleVisibilityTest3.ts, 20, 12))
+ >modes : Symbol(modes, Decl(moduleVisibilityTest3.ts, 12, 15))
+->Mode : Symbol(modes.Mode)
++>Mode : Symbol(Mode)
+      }
+     
+  }

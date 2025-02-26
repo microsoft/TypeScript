@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/jsdoc/callbackCrossModule.ts] ////
+
+=== mod1.js ===
+/** @callback Con - some kind of continuation
+ * @param {object | undefined} error
+ * @return {any} I don't even know what this should return
+ */
+module.exports = C
+>C : Symbol(C, Decl(mod1.js, 4, 18))
+
+function C() {
+>C : Symbol(C, Decl(mod1.js, 4, 18))
+
+    this.p = 1
+}
+
+=== use.js ===
+/** @param {import('./mod1').Con} k */
+function f(k) {
+>f : Symbol(f, Decl(use.js, 0, 0))
+>k : Symbol(k, Decl(use.js, 1, 11))
+
+    if (1 === 2 - 1) {
+        // I guess basic math works!
+    }
+    return k({ ok: true})
+>k : Symbol(k, Decl(use.js, 1, 11))
+>ok : Symbol(ok, Decl(use.js, 5, 14))
+}
+
+

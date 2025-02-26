@@ -1,0 +1,101 @@
+--- old.localTypes3.symbols
++++ new.localTypes3.symbols
+@@= skipped -12, +12 lines =@@
+ >Y : Symbol(Y, Decl(localTypes3.ts, 2, 18))
+ 
+             constructor(public x: X, public y: Y) { }
+->x : Symbol(C.x, Decl(localTypes3.ts, 3, 24))
++>x : Symbol(x, Decl(localTypes3.ts, 3, 24))
+ >X : Symbol(X, Decl(localTypes3.ts, 2, 16))
+->y : Symbol(C.y, Decl(localTypes3.ts, 3, 36))
++>y : Symbol(y, Decl(localTypes3.ts, 3, 36))
+ >Y : Symbol(Y, Decl(localTypes3.ts, 2, 18))
+         }
+         return C;
+@@= skipped -18, +18 lines =@@
+ 
+     let x = v.x;
+ >x : Symbol(x, Decl(localTypes3.ts, 9, 7))
+->v.x : Symbol(C.x, Decl(localTypes3.ts, 3, 24))
++>v.x : Symbol(x, Decl(localTypes3.ts, 3, 24))
+ >v : Symbol(v, Decl(localTypes3.ts, 8, 7))
+->x : Symbol(C.x, Decl(localTypes3.ts, 3, 24))
++>x : Symbol(x, Decl(localTypes3.ts, 3, 24))
+ 
+     let y = v.y;
+ >y : Symbol(y, Decl(localTypes3.ts, 10, 7))
+->v.y : Symbol(C.y, Decl(localTypes3.ts, 3, 36))
++>v.y : Symbol(y, Decl(localTypes3.ts, 3, 36))
+ >v : Symbol(v, Decl(localTypes3.ts, 8, 7))
+->y : Symbol(C.y, Decl(localTypes3.ts, 3, 36))
++>y : Symbol(y, Decl(localTypes3.ts, 3, 36))
+ }
+ 
+ function f2() {
+@@= skipped -25, +25 lines =@@
+ >Y : Symbol(Y, Decl(localTypes3.ts, 15, 16))
+ 
+             public x = x;
+->x : Symbol(C.x, Decl(localTypes3.ts, 15, 20))
++>x : Symbol(x, Decl(localTypes3.ts, 15, 20))
+ >x : Symbol(x, Decl(localTypes3.ts, 14, 18))
+ 
+             constructor(public y: Y) { }
+->y : Symbol(C.y, Decl(localTypes3.ts, 17, 24))
++>y : Symbol(y, Decl(localTypes3.ts, 17, 24))
+ >Y : Symbol(Y, Decl(localTypes3.ts, 15, 16))
+         }
+         return C;
+@@= skipped -20, +20 lines =@@
+ 
+     let x = v.x;
+ >x : Symbol(x, Decl(localTypes3.ts, 23, 7))
+->v.x : Symbol(C.x, Decl(localTypes3.ts, 15, 20))
++>v.x : Symbol(x, Decl(localTypes3.ts, 15, 20))
+ >v : Symbol(v, Decl(localTypes3.ts, 22, 7))
+->x : Symbol(C.x, Decl(localTypes3.ts, 15, 20))
++>x : Symbol(x, Decl(localTypes3.ts, 15, 20))
+ 
+     let y = v.y;
+ >y : Symbol(y, Decl(localTypes3.ts, 24, 7))
+->v.y : Symbol(C.y, Decl(localTypes3.ts, 17, 24))
++>v.y : Symbol(y, Decl(localTypes3.ts, 17, 24))
+ >v : Symbol(v, Decl(localTypes3.ts, 22, 7))
+->y : Symbol(C.y, Decl(localTypes3.ts, 17, 24))
++>y : Symbol(y, Decl(localTypes3.ts, 17, 24))
+ }
+ 
+ function f3() {
+@@= skipped -27, +27 lines =@@
+ >C : Symbol(C, Decl(localTypes3.ts, 28, 34))
+ 
+             public x = x;
+->x : Symbol(C.x, Decl(localTypes3.ts, 29, 17))
++>x : Symbol(x, Decl(localTypes3.ts, 29, 17))
+ >x : Symbol(x, Decl(localTypes3.ts, 28, 21))
+ 
+             public y = y;
+->y : Symbol(C.y, Decl(localTypes3.ts, 30, 25))
++>y : Symbol(y, Decl(localTypes3.ts, 30, 25))
+ >y : Symbol(y, Decl(localTypes3.ts, 28, 26))
+         }
+         return C;
+@@= skipped -20, +20 lines =@@
+ 
+     let x = v.x;
+ >x : Symbol(x, Decl(localTypes3.ts, 37, 7))
+->v.x : Symbol(C.x, Decl(localTypes3.ts, 29, 17))
++>v.x : Symbol(x, Decl(localTypes3.ts, 29, 17))
+ >v : Symbol(v, Decl(localTypes3.ts, 36, 7))
+->x : Symbol(C.x, Decl(localTypes3.ts, 29, 17))
++>x : Symbol(x, Decl(localTypes3.ts, 29, 17))
+ 
+     let y = v.y;
+ >y : Symbol(y, Decl(localTypes3.ts, 38, 7))
+->v.y : Symbol(C.y, Decl(localTypes3.ts, 30, 25))
++>v.y : Symbol(y, Decl(localTypes3.ts, 30, 25))
+ >v : Symbol(v, Decl(localTypes3.ts, 36, 7))
+->y : Symbol(C.y, Decl(localTypes3.ts, 30, 25))
++>y : Symbol(y, Decl(localTypes3.ts, 30, 25))
+ }
+ 

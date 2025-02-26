@@ -1,0 +1,23 @@
+--- old.jsdocOuterTypeParameters3.symbols
++++ new.jsdocOuterTypeParameters3.symbols
+@@= skipped -5, +5 lines =@@
+ >Baz : Symbol(Baz, Decl(jsdocOuterTypeParameters3.js, 0, 0))
+ 
+     m() {
+->m : Symbol(Baz.m, Decl(jsdocOuterTypeParameters3.js, 1, 11))
++>m : Symbol(m, Decl(jsdocOuterTypeParameters3.js, 1, 11))
+ 
+         class Bar {
+ >Bar : Symbol(Bar, Decl(jsdocOuterTypeParameters3.js, 2, 9))
+ 
+             static bar() { this.prototype.foo(); }
+->bar : Symbol(Bar.bar, Decl(jsdocOuterTypeParameters3.js, 3, 19))
+->this.prototype : Symbol(Bar.prototype)
++>bar : Symbol(bar, Decl(jsdocOuterTypeParameters3.js, 3, 19))
++>this.prototype : Symbol(prototype)
+ >this : Symbol(Bar, Decl(jsdocOuterTypeParameters3.js, 2, 9))
+->prototype : Symbol(Bar.prototype)
++>prototype : Symbol(prototype)
+         }
+     }
+ }

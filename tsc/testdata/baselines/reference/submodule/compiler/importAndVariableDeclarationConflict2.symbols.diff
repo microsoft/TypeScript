@@ -1,0 +1,18 @@
+--- old.importAndVariableDeclarationConflict2.symbols
++++ new.importAndVariableDeclarationConflict2.symbols
+@@= skipped -10, +10 lines =@@
+ import x = m.m;
+ >x : Symbol(x, Decl(importAndVariableDeclarationConflict2.ts, 2, 1))
+ >m : Symbol(m, Decl(importAndVariableDeclarationConflict2.ts, 0, 0))
+->m : Symbol(x, Decl(importAndVariableDeclarationConflict2.ts, 1, 12))
++>m : Symbol(m, Decl(importAndVariableDeclarationConflict2.ts, 1, 12))
+ 
+ class C {
+ >C : Symbol(C, Decl(importAndVariableDeclarationConflict2.ts, 4, 15))
+ 
+   public foo() {
+->foo : Symbol(C.foo, Decl(importAndVariableDeclarationConflict2.ts, 6, 9))
++>foo : Symbol(foo, Decl(importAndVariableDeclarationConflict2.ts, 6, 9))
+ 
+     var x = '';
+ >x : Symbol(x, Decl(importAndVariableDeclarationConflict2.ts, 8, 7))

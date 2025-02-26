@@ -1,0 +1,35 @@
+--- old.exportsAndImports1-es6.symbols
++++ new.exportsAndImports1-es6.symbols
+@@= skipped -16, +16 lines =@@
+ >E : Symbol(E, Decl(t1.ts, 5, 1))
+ 
+     A, B, C
+->A : Symbol(E.A, Decl(t1.ts, 6, 8))
+->B : Symbol(E.B, Decl(t1.ts, 7, 6))
+->C : Symbol(E.C, Decl(t1.ts, 7, 9))
++>A : Symbol(A, Decl(t1.ts, 6, 8))
++>B : Symbol(B, Decl(t1.ts, 7, 6))
++>C : Symbol(C, Decl(t1.ts, 7, 9))
+ }
+ const enum D {
+ >D : Symbol(D, Decl(t1.ts, 8, 1))
+ 
+     A, B, C
+->A : Symbol(D.A, Decl(t1.ts, 9, 14))
+->B : Symbol(D.B, Decl(t1.ts, 10, 6))
+->C : Symbol(D.C, Decl(t1.ts, 10, 9))
++>A : Symbol(A, Decl(t1.ts, 9, 14))
++>B : Symbol(B, Decl(t1.ts, 10, 6))
++>C : Symbol(C, Decl(t1.ts, 10, 9))
+ }
+ module M {
+ >M : Symbol(M, Decl(t1.ts, 11, 1))
+@@= skipped -31, +31 lines =@@
+ import a = M.x;
+ >a : Symbol(a, Decl(t1.ts, 19, 16))
+ >M : Symbol(M, Decl(t1.ts, 11, 1))
+->x : Symbol(a, Decl(t1.ts, 13, 14))
++>x : Symbol(x, Decl(t1.ts, 13, 14))
+ 
+ export { v, f, C, I, E, D, M, N, T, a };
+ >v : Symbol(v, Decl(t1.ts, 22, 8))

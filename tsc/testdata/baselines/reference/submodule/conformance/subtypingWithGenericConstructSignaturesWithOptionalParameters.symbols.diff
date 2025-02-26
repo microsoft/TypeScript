@@ -1,0 +1,605 @@
+--- old.subtypingWithGenericConstructSignaturesWithOptionalParameters.symbols
++++ new.subtypingWithGenericConstructSignaturesWithOptionalParameters.symbols
+@@= skipped -10, +10 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 3, 19))
+ 
+         a: new () => T;
+->a : Symbol(Base.a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 3, 23))
++>a : Symbol(a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 3, 23))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 3, 19))
+ 
+         a2: new (x?: T) => T;
+->a2 : Symbol(Base.a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 4, 23))
++>a2 : Symbol(a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 4, 23))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 5, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 3, 19))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 3, 19))
+ 
+         a3: new (x: T) => T;
+->a3 : Symbol(Base.a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 5, 29))
++>a3 : Symbol(a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 5, 29))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 6, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 3, 19))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 3, 19))
+ 
+         a4: new (x: T, y?: T) => T;
+->a4 : Symbol(Base.a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 6, 28))
++>a4 : Symbol(a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 6, 28))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 7, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 3, 19))
+ >y : Symbol(y, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 7, 22))
+@@= skipped -24, +24 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 3, 19))
+ 
+         a5: new (x?: T, y?: T) => T;
+->a5 : Symbol(Base.a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 7, 35))
++>a5 : Symbol(a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 7, 35))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 8, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 3, 19))
+ >y : Symbol(y, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 8, 23))
+@@= skipped -15, +15 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 11, 17))
+ 
+         a: new () => T; // ok, same T of required params
+->a : Symbol(I1.a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 11, 37))
++>a : Symbol(a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 11, 37))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 11, 17))
+     }
+ 
+@@= skipped -11, +11 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 15, 17))
+ 
+         a: new (x?: T) => T; // ok, same T of required params
+->a : Symbol(I2.a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 15, 37))
++>a : Symbol(a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 15, 37))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 16, 16))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 15, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 15, 17))
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 19, 17))
+ 
+         a: new (x: T) => T; // error, too many required params
+->a : Symbol(I3.a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 19, 37))
++>a : Symbol(a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 19, 37))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 20, 16))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 19, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 19, 17))
+@@= skipped -14, +14 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 24, 17))
+ 
+         a2: new () => T; // ok, same T of required params
+->a2 : Symbol(I4.a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 24, 37))
++>a2 : Symbol(a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 24, 37))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 24, 17))
+     }
+ 
+@@= skipped -11, +11 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 28, 17))
+ 
+         a2: new (x?: T) => T; // ok, same T of required params
+->a2 : Symbol(I5.a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 28, 37))
++>a2 : Symbol(a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 28, 37))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 29, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 28, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 28, 17))
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 32, 17))
+ 
+         a2: new (x: T) => T; // ok, same number of params
+->a2 : Symbol(I6.a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 32, 37))
++>a2 : Symbol(a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 32, 37))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 33, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 32, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 32, 17))
+@@= skipped -14, +14 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 37, 17))
+ 
+         a3: new () => T; // ok, fewer required params
+->a3 : Symbol(I7.a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 37, 37))
++>a3 : Symbol(a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 37, 37))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 37, 17))
+     }
+ 
+@@= skipped -11, +11 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 41, 17))
+ 
+         a3: new (x?: T) => T; // ok, fewer required params
+->a3 : Symbol(I8.a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 41, 37))
++>a3 : Symbol(a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 41, 37))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 42, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 41, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 41, 17))
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 45, 17))
+ 
+         a3: new (x: T) => T; // ok, same T of required params
+->a3 : Symbol(I9.a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 45, 37))
++>a3 : Symbol(a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 45, 37))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 46, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 45, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 45, 17))
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 49, 18))
+ 
+         a3: new (x: T, y: T) => T;  // error, too many required params
+->a3 : Symbol(I10.a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 49, 38))
++>a3 : Symbol(a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 49, 38))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 50, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 49, 18))
+ >y : Symbol(y, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 50, 22))
+@@= skipped -16, +16 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 54, 18))
+ 
+         a4: new () => T; // ok, fewer required params
+->a4 : Symbol(I11.a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 54, 38))
++>a4 : Symbol(a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 54, 38))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 54, 18))
+     }
+ 
+@@= skipped -11, +11 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 58, 18))
+ 
+         a4: new (x?: T, y?: T) => T; // ok, fewer required params
+->a4 : Symbol(I12.a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 58, 38))
++>a4 : Symbol(a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 58, 38))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 59, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 58, 18))
+ >y : Symbol(y, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 59, 23))
+@@= skipped -15, +15 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 62, 18))
+ 
+         a4: new (x: T) => T; // ok, same T of required params
+->a4 : Symbol(I13.a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 62, 38))
++>a4 : Symbol(a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 62, 38))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 63, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 62, 18))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 62, 18))
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 66, 18))
+ 
+         a4: new (x: T, y: T) => T;  // ok, same number of params
+->a4 : Symbol(I14.a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 66, 38))
++>a4 : Symbol(a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 66, 38))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 67, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 66, 18))
+ >y : Symbol(y, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 67, 22))
+@@= skipped -16, +16 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 71, 18))
+ 
+         a5: new () => T; // ok, fewer required params
+->a5 : Symbol(I15.a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 71, 38))
++>a5 : Symbol(a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 71, 38))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 71, 18))
+     }
+ 
+@@= skipped -11, +11 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 75, 18))
+ 
+         a5: new (x?: T, y?: T) => T; // ok, fewer required params
+->a5 : Symbol(I16.a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 75, 38))
++>a5 : Symbol(a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 75, 38))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 76, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 75, 18))
+ >y : Symbol(y, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 76, 23))
+@@= skipped -15, +15 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 79, 18))
+ 
+         a5: new (x: T) => T; // ok, all present params match
+->a5 : Symbol(I17.a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 79, 38))
++>a5 : Symbol(a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 79, 38))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 80, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 79, 18))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 79, 18))
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 83, 18))
+ 
+         a5: new (x: T, y: T) => T;  // ok, same number of params
+->a5 : Symbol(I18.a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 83, 38))
++>a5 : Symbol(a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 83, 38))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 84, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 83, 18))
+ >y : Symbol(y, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 84, 22))
+@@= skipped -17, +17 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a: new <T>() => T;
+->a : Symbol(Base2.a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 91, 21))
++>a : Symbol(a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 91, 21))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 92, 16))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 92, 16))
+ 
+         a2: new <T>(x?: T) => T;
+->a2 : Symbol(Base2.a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 92, 26))
++>a2 : Symbol(a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 92, 26))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 93, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 93, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 93, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 93, 17))
+ 
+         a3: new <T>(x: T) => T;
+->a3 : Symbol(Base2.a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 93, 32))
++>a3 : Symbol(a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 93, 32))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 94, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 94, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 94, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 94, 17))
+ 
+         a4: new <T>(x: T, y?: T) => T;
+->a4 : Symbol(Base2.a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 94, 31))
++>a4 : Symbol(a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 94, 31))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 95, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 95, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 95, 17))
+@@= skipped -28, +28 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 95, 17))
+ 
+         a5: new <T>(x?: T, y?: T) => T;
+->a5 : Symbol(Base2.a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 95, 38))
++>a5 : Symbol(a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 95, 38))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 96, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 96, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 96, 17))
+@@= skipped -15, +15 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a: new () => T; 
+->a : Symbol(I1.a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 99, 35))
++>a : Symbol(a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 99, 35))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 99, 17))
+     }
+ 
+@@= skipped -10, +10 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a: new (x?: T) => T;
+->a : Symbol(I2.a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 103, 35))
++>a : Symbol(a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 103, 35))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 104, 16))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 103, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 103, 17))
+@@= skipped -12, +12 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a: new (x: T) => T; 
+->a : Symbol(I3.a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 107, 35))
++>a : Symbol(a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 107, 35))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 108, 16))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 107, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 107, 17))
+@@= skipped -13, +13 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a2: new () => T; 
+->a2 : Symbol(I4.a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 112, 35))
++>a2 : Symbol(a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 112, 35))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 112, 17))
+     }
+ 
+@@= skipped -10, +10 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a2: new (x?: T) => T
+->a2 : Symbol(I5.a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 116, 35))
++>a2 : Symbol(a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 116, 35))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 117, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 116, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 116, 17))
+@@= skipped -12, +12 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a2: new (x: T) => T;
+->a2 : Symbol(I6.a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 120, 35))
++>a2 : Symbol(a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 120, 35))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 121, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 120, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 120, 17))
+@@= skipped -13, +13 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a3: new () => T;
+->a3 : Symbol(I7.a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 125, 35))
++>a3 : Symbol(a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 125, 35))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 125, 17))
+     }
+ 
+@@= skipped -10, +10 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a3: new (x?: T) => T; 
+->a3 : Symbol(I8.a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 129, 35))
++>a3 : Symbol(a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 129, 35))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 130, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 129, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 129, 17))
+@@= skipped -12, +12 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a3: new (x: T) => T; 
+->a3 : Symbol(I9.a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 133, 35))
++>a3 : Symbol(a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 133, 35))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 134, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 133, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 133, 17))
+@@= skipped -12, +12 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a3: new (x: T, y: T) => T;  
+->a3 : Symbol(I10.a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 137, 36))
++>a3 : Symbol(a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 137, 36))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 138, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 137, 18))
+ >y : Symbol(y, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 138, 22))
+@@= skipped -15, +15 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a4: new () => T; 
+->a4 : Symbol(I11.a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 142, 36))
++>a4 : Symbol(a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 142, 36))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 142, 18))
+     }
+ 
+@@= skipped -10, +10 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a4: new (x?: T, y?: T) => T; 
+->a4 : Symbol(I12.a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 146, 36))
++>a4 : Symbol(a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 146, 36))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 147, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 146, 18))
+ >y : Symbol(y, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 147, 23))
+@@= skipped -14, +14 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a4: new (x: T) => T; 
+->a4 : Symbol(I13.a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 150, 36))
++>a4 : Symbol(a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 150, 36))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 151, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 150, 18))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 150, 18))
+@@= skipped -12, +12 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a4: new (x: T, y: T) => T; 
+->a4 : Symbol(I14.a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 154, 36))
++>a4 : Symbol(a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 154, 36))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 155, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 154, 18))
+ >y : Symbol(y, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 155, 22))
+@@= skipped -15, +15 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a5: new () => T; 
+->a5 : Symbol(I15.a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 159, 36))
++>a5 : Symbol(a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 159, 36))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 159, 18))
+     }
+ 
+@@= skipped -10, +10 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a5: new (x?: T, y?: T) => T; 
+->a5 : Symbol(I16.a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 163, 36))
++>a5 : Symbol(a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 163, 36))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 164, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 163, 18))
+ >y : Symbol(y, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 164, 23))
+@@= skipped -14, +14 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a5: new (x: T) => T;
+->a5 : Symbol(I17.a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 167, 36))
++>a5 : Symbol(a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 167, 36))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 168, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 167, 18))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 167, 18))
+@@= skipped -12, +12 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 88, 33))
+ 
+         a5: new (x: T, y: T) => T; 
+->a5 : Symbol(I18.a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 171, 36))
++>a5 : Symbol(a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 171, 36))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 172, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 171, 18))
+ >y : Symbol(y, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 172, 22))
+@@= skipped -16, +16 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a: new <T>() => T;
+->a : Symbol(Base2.a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 178, 21))
++>a : Symbol(a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 178, 21))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 179, 16))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 179, 16))
+ 
+         a2: new <T>(x?: T) => T;
+->a2 : Symbol(Base2.a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 179, 26))
++>a2 : Symbol(a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 179, 26))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 180, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 180, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 180, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 180, 17))
+ 
+         a3: new <T>(x: T) => T;
+->a3 : Symbol(Base2.a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 180, 32))
++>a3 : Symbol(a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 180, 32))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 181, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 181, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 181, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 181, 17))
+ 
+         a4: new <T>(x: T, y?: T) => T;
+->a4 : Symbol(Base2.a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 181, 31))
++>a4 : Symbol(a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 181, 31))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 182, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 182, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 182, 17))
+@@= skipped -28, +28 lines =@@
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 182, 17))
+ 
+         a5: new <T>(x?: T, y?: T) => T;
+->a5 : Symbol(Base2.a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 182, 38))
++>a5 : Symbol(a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 182, 38))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 183, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 183, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 183, 17))
+@@= skipped -15, +15 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a: new <T>() => T; // ok, same number of required params
+->a : Symbol(I1.a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 187, 32))
++>a : Symbol(a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 187, 32))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 188, 16))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 188, 16))
+     }
+@@= skipped -10, +10 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a: new <T>(x?: T) => T; // error, not identical and contextual signature instatiation can't make inference from T to T
+->a : Symbol(I2.a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 191, 32))
++>a : Symbol(a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 191, 32))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 192, 16))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 192, 19))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 192, 16))
+@@= skipped -12, +12 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a: new <T>(x: T) => T; // error, not identical and contextual signature instatiation can't make inference from T to T
+->a : Symbol(I3.a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 195, 32))
++>a : Symbol(a, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 195, 32))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 196, 16))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 196, 19))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 196, 16))
+@@= skipped -13, +13 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a2: new <T>() => T; // error, not identical and contextual signature instatiation can't make inference from T to T
+->a2 : Symbol(I4.a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 200, 32))
++>a2 : Symbol(a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 200, 32))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 201, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 201, 17))
+     }
+@@= skipped -10, +10 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a2: new <T>(x?: T) => T; // ok, identical
+->a2 : Symbol(I5.a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 204, 32))
++>a2 : Symbol(a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 204, 32))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 205, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 205, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 205, 17))
+@@= skipped -12, +12 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a2: new <T>(x: T) => T; // ok, same number of params
+->a2 : Symbol(I6.a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 208, 32))
++>a2 : Symbol(a2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 208, 32))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 209, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 209, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 209, 17))
+@@= skipped -13, +13 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a3: new <T>() => T; // ok, fewer required params
+->a3 : Symbol(I7.a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 213, 32))
++>a3 : Symbol(a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 213, 32))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 214, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 214, 17))
+     }
+@@= skipped -10, +10 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a3: new <T>(x?: T) => T; // error, no inferences for T so {} not assignable to {} in return type
+->a3 : Symbol(I8.a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 217, 32))
++>a3 : Symbol(a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 217, 32))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 218, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 218, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 218, 17))
+@@= skipped -12, +12 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a3: new <T>(x: T) => T; // ok, identical, same number of required params
+->a3 : Symbol(I9.a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 221, 32))
++>a3 : Symbol(a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 221, 32))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 222, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 222, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 222, 17))
+@@= skipped -12, +12 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a3: new <T>(x: T, y: T) => T;  // error, too many required params
+->a3 : Symbol(I10.a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 225, 33))
++>a3 : Symbol(a3, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 225, 33))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 226, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 226, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 226, 17))
+@@= skipped -15, +15 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a4: new <T>() => T; // error, not identical and contextual signature instatiation can't make inference from T to T
+->a4 : Symbol(I11.a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 230, 33))
++>a4 : Symbol(a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 230, 33))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 231, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 231, 17))
+     }
+@@= skipped -10, +10 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a4: new <T>(x?: T, y?: T) => T; // ok, fewer required params
+->a4 : Symbol(I12.a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 234, 33))
++>a4 : Symbol(a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 234, 33))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 235, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 235, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 235, 17))
+@@= skipped -14, +14 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a4: new <T>(x: T) => T; // ok, same T of required params
+->a4 : Symbol(I13.a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 238, 33))
++>a4 : Symbol(a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 238, 33))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 239, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 239, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 239, 17))
+@@= skipped -12, +12 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a4: new <T>(x: T, y: T) => T;  // ok, same number of params
+->a4 : Symbol(I14.a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 242, 33))
++>a4 : Symbol(a4, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 242, 33))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 243, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 243, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 243, 17))
+@@= skipped -15, +15 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a5: new <T>() => T; // error, not identical and contextual signature instatiation can't make inference from T to T
+->a5 : Symbol(I15.a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 247, 33))
++>a5 : Symbol(a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 247, 33))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 248, 17))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 248, 17))
+     }
+@@= skipped -10, +10 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a5: new <T>(x?: T, y?: T) => T; // ok, fewer required params
+->a5 : Symbol(I16.a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 251, 33))
++>a5 : Symbol(a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 251, 33))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 252, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 252, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 252, 17))
+@@= skipped -14, +14 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a5: new <T>(x: T) => T; // ok, all present params match
+->a5 : Symbol(I17.a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 255, 33))
++>a5 : Symbol(a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 255, 33))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 256, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 256, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 256, 17))
+@@= skipped -12, +12 lines =@@
+ >Base2 : Symbol(Base2, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 176, 31))
+ 
+         a5: new <T>(x: T, y: T) => T;  // ok, same number of params
+->a5 : Symbol(I18.a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 259, 33))
++>a5 : Symbol(a5, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 259, 33))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 260, 17))
+ >x : Symbol(x, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 260, 20))
+ >T : Symbol(T, Decl(subtypingWithGenericConstructSignaturesWithOptionalParameters.ts, 260, 17))

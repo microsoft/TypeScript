@@ -1,0 +1,12 @@
+--- old.tsxElementResolution2.symbols
++++ new.tsxElementResolution2.symbols
+@@= skipped -16, +16 lines =@@
+ 
+ // OK
+ <div />;
+->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+ 
+ // OK
+ <span />;
+->span : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+-

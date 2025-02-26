@@ -1,0 +1,12 @@
+--- old.configFileExtendsAsList.symbols
++++ new.configFileExtendsAsList.symbols
+@@= skipped -8, +8 lines =@@
+ >y : Symbol(y, Decl(index.ts, 1, 3))
+ 
+ y.toLowerCase(); // strictNullChecks error
+->y.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>y.toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+ >y : Symbol(y, Decl(index.ts, 1, 3))
+->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
+ 

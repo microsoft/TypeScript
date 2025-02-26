@@ -1,0 +1,11 @@
+--- old.unusedTypeParameters5.symbols
++++ new.unusedTypeParameters5.symbols
+@@= skipped -5, +5 lines =@@
+ >Dummy : Symbol(Dummy, Decl(unusedTypeParameters5.ts, 0, 8))
+ 
+     public x: Dummy;
+->x : Symbol(A.x, Decl(unusedTypeParameters5.ts, 0, 16))
++>x : Symbol(x, Decl(unusedTypeParameters5.ts, 0, 16))
+ >Dummy : Symbol(Dummy, Decl(unusedTypeParameters5.ts, 0, 8))
+ }
+ 

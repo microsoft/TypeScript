@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsExpandoFunctions.ts] ////
+
+=== isolatedDeclarationErrorsExpandoFunctions.ts ===
+export function foo() {}
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 0))
+
+foo.apply = () => {}
+>foo.apply : Symbol(apply, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 24))
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 0))
+>apply : Symbol(apply, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 24))
+
+foo.call = ()=> {}
+>foo.call : Symbol(call, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 2, 20))
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 0))
+>call : Symbol(call, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 2, 20))
+
+foo.bind = ()=> {}
+>foo.bind : Symbol(bind, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 3, 18))
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 0))
+>bind : Symbol(bind, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 3, 18))
+
+foo.caller = ()=> {}
+>foo.caller : Symbol(caller, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 4, 18))
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 0))
+>caller : Symbol(caller, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 4, 18))
+
+foo.toString = ()=> {}
+>foo.toString : Symbol(toString, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 5, 20))
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 0))
+>toString : Symbol(toString, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 5, 20))
+
+foo.length = 10
+>foo.length : Symbol(length, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 6, 22), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 7, 15))
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 0))
+>length : Symbol(length, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 6, 22), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 7, 15))
+
+foo.length = 10
+>foo.length : Symbol(length, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 6, 22), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 7, 15))
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 0))
+>length : Symbol(length, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 6, 22), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 7, 15))
+

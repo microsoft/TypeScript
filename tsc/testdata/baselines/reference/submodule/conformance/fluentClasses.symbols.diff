@@ -1,0 +1,47 @@
+--- old.fluentClasses.symbols
++++ new.fluentClasses.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(fluentClasses.ts, 0, 0))
+ 
+     foo() {
+->foo : Symbol(A.foo, Decl(fluentClasses.ts, 0, 9))
++>foo : Symbol(foo, Decl(fluentClasses.ts, 0, 9))
+ 
+         return this;
+ >this : Symbol(A, Decl(fluentClasses.ts, 0, 0))
+@@= skipped -11, +11 lines =@@
+ >A : Symbol(A, Decl(fluentClasses.ts, 0, 0))
+ 
+     bar() {
+->bar : Symbol(B.bar, Decl(fluentClasses.ts, 5, 19))
++>bar : Symbol(bar, Decl(fluentClasses.ts, 5, 19))
+ 
+         return this;
+ >this : Symbol(B, Decl(fluentClasses.ts, 4, 1))
+@@= skipped -11, +11 lines =@@
+ >B : Symbol(B, Decl(fluentClasses.ts, 4, 1))
+ 
+     baz() {
+->baz : Symbol(C.baz, Decl(fluentClasses.ts, 10, 19))
++>baz : Symbol(baz, Decl(fluentClasses.ts, 10, 19))
+ 
+         return this;
+ >this : Symbol(C, Decl(fluentClasses.ts, 9, 1))
+@@= skipped -12, +12 lines =@@
+ 
+ var z = c.foo().bar().baz();  // Fluent pattern
+ >z : Symbol(z, Decl(fluentClasses.ts, 16, 3))
+->c.foo().bar().baz : Symbol(C.baz, Decl(fluentClasses.ts, 10, 19))
+->c.foo().bar : Symbol(B.bar, Decl(fluentClasses.ts, 5, 19))
+->c.foo : Symbol(A.foo, Decl(fluentClasses.ts, 0, 9))
++>c.foo().bar().baz : Symbol(baz, Decl(fluentClasses.ts, 10, 19))
++>c.foo().bar : Symbol(bar, Decl(fluentClasses.ts, 5, 19))
++>c.foo : Symbol(foo, Decl(fluentClasses.ts, 0, 9))
+ >c : Symbol(c, Decl(fluentClasses.ts, 15, 3))
+->foo : Symbol(A.foo, Decl(fluentClasses.ts, 0, 9))
+->bar : Symbol(B.bar, Decl(fluentClasses.ts, 5, 19))
+->baz : Symbol(C.baz, Decl(fluentClasses.ts, 10, 19))
++>foo : Symbol(foo, Decl(fluentClasses.ts, 0, 9))
++>bar : Symbol(bar, Decl(fluentClasses.ts, 5, 19))
++>baz : Symbol(baz, Decl(fluentClasses.ts, 10, 19))
+ 

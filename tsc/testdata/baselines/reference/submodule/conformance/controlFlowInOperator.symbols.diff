@@ -1,0 +1,38 @@
+--- old.controlFlowInOperator.symbols
++++ new.controlFlowInOperator.symbols
+@@= skipped -11, +11 lines =@@
+ 
+ type A = { [a]: number; };
+ >A : Symbol(A, Decl(controlFlowInOperator.ts, 2, 14))
+->[a] : Symbol([a], Decl(controlFlowInOperator.ts, 4, 10))
++>[a] : Symbol(a, Decl(controlFlowInOperator.ts, 4, 10))
+ >a : Symbol(a, Decl(controlFlowInOperator.ts, 0, 5))
+ 
+ type B = { [b]: string; };
+ >B : Symbol(B, Decl(controlFlowInOperator.ts, 4, 26))
+->[b] : Symbol([b], Decl(controlFlowInOperator.ts, 5, 10))
++>[b] : Symbol(b, Decl(controlFlowInOperator.ts, 5, 10))
+ >b : Symbol(b, Decl(controlFlowInOperator.ts, 1, 5))
+ 
+ declare const c: A | B;
+@@= skipped -21, +21 lines =@@
+ 
+     c['a']; // number;
+ >c : Symbol(c, Decl(controlFlowInOperator.ts, 7, 13))
+->'a' : Symbol([a], Decl(controlFlowInOperator.ts, 4, 10))
++>'a' : Symbol(a, Decl(controlFlowInOperator.ts, 4, 10))
+ }
+ 
+ if ('d' in c) {
+@@= skipped -60, +60 lines =@@
+   for (let i = 1; i < Number.MAX_VALUE; i++) {
+ >i : Symbol(i, Decl(controlFlowInOperator.ts, 39, 10))
+ >i : Symbol(i, Decl(controlFlowInOperator.ts, 39, 10))
+->Number.MAX_VALUE : Symbol(NumberConstructor.MAX_VALUE, Decl(lib.es5.d.ts, --, --))
++>Number.MAX_VALUE : Symbol(MAX_VALUE, Decl(lib.es5.d.ts, --, --))
+ >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->MAX_VALUE : Symbol(NumberConstructor.MAX_VALUE, Decl(lib.es5.d.ts, --, --))
++>MAX_VALUE : Symbol(MAX_VALUE, Decl(lib.es5.d.ts, --, --))
+ >i : Symbol(i, Decl(controlFlowInOperator.ts, 39, 10))
+ 
+     const newID = `${id}-${i}`;

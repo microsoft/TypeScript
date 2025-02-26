@@ -1,0 +1,22 @@
+--- old.covariance1.symbols
++++ new.covariance1.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     interface X { m1:number; }
+ >X : Symbol(X, Decl(covariance1.ts, 0, 10))
+->m1 : Symbol(X.m1, Decl(covariance1.ts, 2, 17))
++>m1 : Symbol(m1, Decl(covariance1.ts, 2, 17))
+ 
+     export class XX implements X { constructor(public m1:number) { } }
+ >XX : Symbol(XX, Decl(covariance1.ts, 2, 30))
+ >X : Symbol(X, Decl(covariance1.ts, 0, 10))
+->m1 : Symbol(XX.m1, Decl(covariance1.ts, 3, 47))
++>m1 : Symbol(m1, Decl(covariance1.ts, 3, 47))
+ 
+     interface Y { x:X; }
+ >Y : Symbol(Y, Decl(covariance1.ts, 3, 70))
+->x : Symbol(Y.x, Decl(covariance1.ts, 5, 17))
++>x : Symbol(x, Decl(covariance1.ts, 5, 17))
+ >X : Symbol(X, Decl(covariance1.ts, 0, 10))
+ 
+     export function f(y:Y) { }

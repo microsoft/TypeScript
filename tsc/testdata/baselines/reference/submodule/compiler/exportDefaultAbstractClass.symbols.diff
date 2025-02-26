@@ -1,0 +1,43 @@
+--- old.exportDefaultAbstractClass.symbols
++++ new.exportDefaultAbstractClass.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === a.ts ===
+ export default abstract class A { a: number; }
+->A : Symbol(A, Decl(a.ts, 0, 0))
+->a : Symbol(A.a, Decl(a.ts, 0, 33))
++>A : Symbol(default, Decl(a.ts, 0, 0))
++>a : Symbol(a, Decl(a.ts, 0, 33))
+ 
+ class B extends A {}
+ >B : Symbol(B, Decl(a.ts, 0, 46))
+->A : Symbol(A, Decl(a.ts, 0, 0))
++>A : Symbol(default, Decl(a.ts, 0, 0))
+ 
+ new B().a.toExponential();
+->new B().a.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+->new B().a : Symbol(A.a, Decl(a.ts, 0, 33))
++>new B().a.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
++>new B().a : Symbol(a, Decl(a.ts, 0, 33))
+ >B : Symbol(B, Decl(a.ts, 0, 46))
+->a : Symbol(A.a, Decl(a.ts, 0, 33))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>a : Symbol(a, Decl(a.ts, 0, 33))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ 
+ === b.ts ===
+ import A from './a';
+@@= skipped -23, +23 lines =@@
+ >A : Symbol(A, Decl(b.ts, 0, 6))
+ 
+ new C().a.toExponential();
+->new C().a.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+->new C().a : Symbol(A.a, Decl(a.ts, 0, 33))
++>new C().a.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
++>new C().a : Symbol(a, Decl(a.ts, 0, 33))
+ >C : Symbol(C, Decl(b.ts, 0, 20))
+->a : Symbol(A.a, Decl(a.ts, 0, 33))
+->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
++>a : Symbol(a, Decl(a.ts, 0, 33))
++>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
+ 

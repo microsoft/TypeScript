@@ -1,0 +1,14 @@
+--- old.promiseAllOnAny01.symbols
++++ new.promiseAllOnAny01.symbols
+@@= skipped -6, +6 lines =@@
+ 
+     let abc = await Promise.all(x);
+ >abc : Symbol(abc, Decl(promiseAllOnAny01.ts, 1, 7))
+->Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.promise.d.ts, --, --))
++>Promise.all : Symbol(all, Decl(lib.es2015.promise.d.ts, --, --))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+->all : Symbol(PromiseConstructor.all, Decl(lib.es2015.promise.d.ts, --, --))
++>all : Symbol(all, Decl(lib.es2015.promise.d.ts, --, --))
+ >x : Symbol(x, Decl(promiseAllOnAny01.ts, 0, 19))
+ 
+     let result: any[] = abc;

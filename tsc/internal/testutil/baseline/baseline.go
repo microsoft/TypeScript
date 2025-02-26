@@ -4,20 +4,89 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strings"
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/repo"
+	"github.com/pkg/diff"
 )
 
 type Options struct {
-	Subfolder string
+	Subfolder   string
+	IsSubmodule bool
 }
 
-const NoContent = "<no content>"
+const (
+	NoContent       = "<no content>"
+	submoduleFolder = "submodule"
+)
 
 func Run(t *testing.T, fileName string, actual string, opts Options) {
-	writeComparison(t, actual, fileName, false /*useSubmodule*/, opts)
+	if opts.IsSubmodule {
+		diff := getBaselineDiff(t, actual, fileName)
+		diffFileName := fileName + ".diff"
+		opts.Subfolder = filepath.Join(submoduleFolder, opts.Subfolder)
+		referenceFileName := referencePath(fileName, opts.Subfolder)
+		expected := NoContent
+		if content, err := os.ReadFile(referenceFileName); err == nil {
+			expected = string(content)
+		}
+		// Write original baseline in addition to diff baseline, if needed, but don't fail if they don't match
+		if actual != expected {
+			localFileName := localPath(fileName, opts.Subfolder)
+			if err := os.MkdirAll(filepath.Dir(localFileName), 0o755); err != nil {
+				t.Fatal(fmt.Errorf("failed to create directories for the local baseline file %s: %w", localFileName, err))
+			}
+			if err := os.WriteFile(localFileName, []byte(actual), 0o644); err != nil {
+				t.Fatal(fmt.Errorf("failed to write the local baseline file %s: %w", localFileName, err))
+			}
+		}
+		writeComparison(t, diff, diffFileName, false /*useSubmodule*/, opts)
+	} else {
+		writeComparison(t, actual, fileName, false /*useSubmodule*/, opts)
+	}
 }
+
+func getBaselineDiff(t *testing.T, actual string, fileName string) string {
+	expected := NoContent
+	refFileName := submoduleReferencePath(fileName, "" /*subfolder*/)
+	if content, err := os.ReadFile(refFileName); err == nil {
+		expected = string(content)
+	}
+	if actual == expected {
+		return NoContent
+	}
+	var b strings.Builder
+	if err := diff.Text("old."+fileName, "new."+fileName, expected, actual, &b); err != nil {
+		t.Fatalf("failed to diff the actual and expected content: %v", err)
+	}
+
+	// Remove line numbers from unified diff headers; this avoids adding/deleting
+	// lines in our baselines from causing knock-on header changes later in the diff.
+	s := b.String()
+
+	aCurLine := 1
+	bCurLine := 1
+	s = fixUnifiedDiff.ReplaceAllStringFunc(s, func(match string) string {
+		var aLine, aLineCount, bLine, bLineCount int
+		if _, err := fmt.Sscanf(match, "@@ -%d,%d +%d,%d @@", &aLine, &aLineCount, &bLine, &bLineCount); err != nil {
+			panic(fmt.Sprintf("failed to parse unified diff header: %v", err))
+		}
+		aDiff := aLine - aCurLine
+		bDiff := bLine - bCurLine
+		aCurLine = aLine
+		bCurLine = bLine
+
+		// Keep surrounded by @@, to make GitHub's grammar happy.
+		// https://github.com/textmate/diff.tmbundle/blob/0593bb775eab1824af97ef2172fd38822abd97d7/Syntaxes/Diff.plist#L68
+		return fmt.Sprintf("@@= skipped -%d, +%d lines =@@", aDiff, bDiff)
+	})
+
+	return s
+}
+
+var fixUnifiedDiff = regexp.MustCompile(`@@ -\d+,\d+ \+\d+,\d+ @@`)
 
 func RunAgainstSubmodule(t *testing.T, fileName string, actual string, opts Options) {
 	writeComparison(t, actual, fileName, true /*useSubmodule*/, opts)

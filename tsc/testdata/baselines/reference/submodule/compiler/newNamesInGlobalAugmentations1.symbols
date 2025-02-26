@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/newNamesInGlobalAugmentations1.ts] ////
+
+=== f1.d.ts ===
+export {};
+
+declare module M.M1 {
+>M : Symbol(M, Decl(f1.d.ts, 0, 10))
+>M1 : Symbol(M1, Decl(f1.d.ts, 2, 17))
+
+    export let x: number;
+>x : Symbol(x, Decl(f1.d.ts, 3, 14))
+}
+declare global {
+>global : Symbol(global, Decl(f1.d.ts, 4, 1))
+
+    interface SymbolConstructor {
+>SymbolConstructor : Symbol(SymbolConstructor, Decl(f1.d.ts, 5, 16))
+
+        observable: symbol;
+>observable : Symbol(observable, Decl(f1.d.ts, 6, 33))
+    }
+    class Cls {x}
+>Cls : Symbol(Cls, Decl(f1.d.ts, 8, 5))
+>x : Symbol(x, Decl(f1.d.ts, 9, 15))
+
+    let [a, b]: number[];
+>a : Symbol(a, Decl(f1.d.ts, 10, 9))
+>b : Symbol(b, Decl(f1.d.ts, 10, 11))
+
+    export import X = M.M1.x;
+>X : Symbol(X, Decl(f1.d.ts, 10, 25))
+>M : Symbol(M, Decl(f1.d.ts, 0, 10))
+>M1 : Symbol(M1, Decl(f1.d.ts, 2, 17))
+>x : Symbol(x, Decl(f1.d.ts, 3, 14))
+}
+
+=== main.ts ===
+Symbol.observable;
+new Cls().x
+>new Cls().x : Symbol(x, Decl(f1.d.ts, 9, 15))
+>Cls : Symbol(Cls, Decl(f1.d.ts, 8, 5))
+>x : Symbol(x, Decl(f1.d.ts, 9, 15))
+
+let c = a + b + X;
+>c : Symbol(c, Decl(main.ts, 2, 3))
+>a : Symbol(a, Decl(f1.d.ts, 10, 9))
+>b : Symbol(b, Decl(f1.d.ts, 10, 11))
+>X : Symbol(X, Decl(f1.d.ts, 10, 25))
+

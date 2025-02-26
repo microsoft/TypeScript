@@ -1,0 +1,15 @@
+--- old.circularGetAccessor(noimplicitany=true).symbols
++++ new.circularGetAccessor(noimplicitany=true).symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(circularGetAccessor.ts, 0, 0))
+ 
+     get foo(): typeof this.foo;
+->foo : Symbol(C.foo, Decl(circularGetAccessor.ts, 0, 17))
+->this.foo : Symbol(C.foo, Decl(circularGetAccessor.ts, 0, 17))
++>foo : Symbol(foo, Decl(circularGetAccessor.ts, 0, 17))
++>this.foo : Symbol(foo, Decl(circularGetAccessor.ts, 0, 17))
+ >this : Symbol(C, Decl(circularGetAccessor.ts, 0, 0))
+->foo : Symbol(C.foo, Decl(circularGetAccessor.ts, 0, 17))
++>foo : Symbol(foo, Decl(circularGetAccessor.ts, 0, 17))
+ }
+ 

@@ -1,0 +1,11 @@
+--- old.privateNameBadSuper.symbols
++++ new.privateNameBadSuper.symbols
+@@= skipped -8, +8 lines =@@
+ >B : Symbol(B, Decl(privateNameBadSuper.ts, 0, 0))
+ 
+   #x;
+->#x : Symbol(A.#x, Decl(privateNameBadSuper.ts, 1, 19))
++>#x : Symbol(#x, Decl(privateNameBadSuper.ts, 1, 19))
+ 
+   constructor() {
+     this;

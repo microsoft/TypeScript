@@ -1,0 +1,11 @@
+--- old.unusedLocalsInMethod2.symbols
++++ new.unusedLocalsInMethod2.symbols
+@@= skipped -4, +4 lines =@@
+ >greeter : Symbol(greeter, Decl(unusedLocalsInMethod2.ts, 0, 0))
+ 
+     public function1() {
+->function1 : Symbol(greeter.function1, Decl(unusedLocalsInMethod2.ts, 0, 15))
++>function1 : Symbol(function1, Decl(unusedLocalsInMethod2.ts, 0, 15))
+ 
+         var x, y = 10;
+ >x : Symbol(x, Decl(unusedLocalsInMethod2.ts, 2, 11))

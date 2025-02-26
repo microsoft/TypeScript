@@ -1,0 +1,59 @@
+--- old.inferenceDoesNotAddUndefinedOrNull.symbols
++++ new.inferenceDoesNotAddUndefinedOrNull.symbols
+@@= skipped -11, +11 lines =@@
+ >Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(inferenceDoesNotAddUndefinedOrNull.ts, 0, 63))
+ 
+     forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
+->forEachChild : Symbol(Node.forEachChild, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 2, 16))
++>forEachChild : Symbol(forEachChild, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 2, 16))
+ >T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 3, 17))
+ >cbNode : Symbol(cbNode, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 3, 20))
+ >node : Symbol(node, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 3, 29))
+@@= skipped -47, +47 lines =@@
+ >T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 9, 25))
+ 
+     node.forEachChild(child => {
+->node.forEachChild : Symbol(Node.forEachChild, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 2, 16))
++>node.forEachChild : Symbol(forEachChild, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 2, 16))
+ >node : Symbol(node, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 9, 28))
+->forEachChild : Symbol(Node.forEachChild, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 2, 16))
++>forEachChild : Symbol(forEachChild, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 2, 16))
+ >child : Symbol(child, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 11, 22))
+ 
+         const value = cb(child);
+@@= skipped -15, +15 lines =@@
+ >undefined : Symbol(undefined)
+ 
+             result.push(...toArray(value));
+->result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>result.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >result : Symbol(result, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 10, 9))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >toArray : Symbol(toArray, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 4, 1), Decl(inferenceDoesNotAddUndefinedOrNull.ts, 6, 49))
+ >value : Symbol(value, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 12, 13))
+         }
+@@= skipped -28, +28 lines =@@
+ >T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 20, 26))
+ 
+     node.forEachChild(child => {
+->node.forEachChild : Symbol(Node.forEachChild, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 2, 16))
++>node.forEachChild : Symbol(forEachChild, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 2, 16))
+ >node : Symbol(node, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 20, 29))
+->forEachChild : Symbol(Node.forEachChild, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 2, 16))
++>forEachChild : Symbol(forEachChild, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 2, 16))
+ >child : Symbol(child, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 22, 22))
+ 
+         const value = cb(child);
+@@= skipped -14, +14 lines =@@
+ >value : Symbol(value, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 23, 13))
+ 
+             result.push(...toArray(value));
+->result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>result.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >result : Symbol(result, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 21, 9))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >toArray : Symbol(toArray, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 4, 1), Decl(inferenceDoesNotAddUndefinedOrNull.ts, 6, 49))
+ >value : Symbol(value, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 23, 13))
+         }

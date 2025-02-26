@@ -1,0 +1,48 @@
+--- old.inferTypeConstraintInstantiationCircularity.symbols
++++ new.inferTypeConstraintInstantiationCircularity.symbols
+@@= skipped -32, +32 lines =@@
+ 
+ > {
+   tee: T;
+->tee : Symbol(X1.tee, Decl(inferTypeConstraintInstantiationCircularity.ts, 11, 3))
++>tee : Symbol(tee, Decl(inferTypeConstraintInstantiationCircularity.ts, 11, 3))
+ >T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 8, 13))
+ 
+   output: Output;
+->output : Symbol(X1.output, Decl(inferTypeConstraintInstantiationCircularity.ts, 12, 9))
++>output : Symbol(output, Decl(inferTypeConstraintInstantiationCircularity.ts, 12, 9))
+ >Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 9, 17))
+ }
+ 
+@@= skipped -30, +30 lines =@@
+ 
+ > {
+   tee: T;
+->tee : Symbol(X2.tee, Decl(inferTypeConstraintInstantiationCircularity.ts, 23, 3))
++>tee : Symbol(tee, Decl(inferTypeConstraintInstantiationCircularity.ts, 23, 3))
+ >T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 20, 13))
+ 
+   output: Output;
+->output : Symbol(X2.output, Decl(inferTypeConstraintInstantiationCircularity.ts, 24, 9))
++>output : Symbol(output, Decl(inferTypeConstraintInstantiationCircularity.ts, 24, 9))
+ >Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 21, 17))
+ }
+ 
+@@= skipped -87, +87 lines =@@
+ >Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 50, 18))
+ 
+   _type: Output;
+->_type : Symbol(ZodType._type, Decl(inferTypeConstraintInstantiationCircularity.ts, 50, 27))
++>_type : Symbol(_type, Decl(inferTypeConstraintInstantiationCircularity.ts, 50, 27))
+ >Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 50, 18))
+ }
+ 
+@@= skipped -36, +36 lines =@@
+ >Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 55, 24))
+ 
+   readonly _shape: T;
+->_shape : Symbol(ZodObject._shape, Decl(inferTypeConstraintInstantiationCircularity.ts, 63, 27))
++>_shape : Symbol(_shape, Decl(inferTypeConstraintInstantiationCircularity.ts, 63, 27))
+ >T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 54, 20))
+ }
+ 

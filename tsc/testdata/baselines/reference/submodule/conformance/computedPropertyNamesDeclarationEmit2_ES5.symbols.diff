@@ -1,0 +1,18 @@
+--- old.computedPropertyNamesDeclarationEmit2_ES5.symbols
++++ new.computedPropertyNamesDeclarationEmit2_ES5.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(computedPropertyNamesDeclarationEmit2_ES5.ts, 0, 0))
+ 
+     static ["" + ""]() { }
+->["" + ""] : Symbol(C["\" + \""], Decl(computedPropertyNamesDeclarationEmit2_ES5.ts, 0, 9))
++>["" + ""] : Symbol(["" + ""], Decl(computedPropertyNamesDeclarationEmit2_ES5.ts, 0, 9))
+ 
+     static get ["" + ""]() { return 0; }
+->["" + ""] : Symbol(C["\" + \""], Decl(computedPropertyNamesDeclarationEmit2_ES5.ts, 1, 26))
++>["" + ""] : Symbol(["" + ""], Decl(computedPropertyNamesDeclarationEmit2_ES5.ts, 1, 26))
+ 
+     static set ["" + ""](x) { }
+->["" + ""] : Symbol(C["\" + \""], Decl(computedPropertyNamesDeclarationEmit2_ES5.ts, 2, 40))
++>["" + ""] : Symbol(["" + ""], Decl(computedPropertyNamesDeclarationEmit2_ES5.ts, 2, 40))
+ >x : Symbol(x, Decl(computedPropertyNamesDeclarationEmit2_ES5.ts, 3, 25))
+ }

@@ -1,0 +1,40 @@
+--- old.typeParameterConstModifiers.symbols
++++ new.typeParameterConstModifiers.symbols
+@@= skipped -146, +146 lines =@@
+ >T : Symbol(T, Decl(typeParameterConstModifiers.ts, 35, 9))
+ 
+     foo<const U>(x: U) { return x; }
+->foo : Symbol(C1.foo, Decl(typeParameterConstModifiers.ts, 36, 24))
++>foo : Symbol(foo, Decl(typeParameterConstModifiers.ts, 36, 24))
+ >U : Symbol(U, Decl(typeParameterConstModifiers.ts, 37, 8))
+ >x : Symbol(x, Decl(typeParameterConstModifiers.ts, 37, 17))
+ >U : Symbol(U, Decl(typeParameterConstModifiers.ts, 37, 8))
+@@= skipped -17, +17 lines =@@
+ 
+ const c72 = c71.foo(['a', ['b', 'c']]);
+ >c72 : Symbol(c72, Decl(typeParameterConstModifiers.ts, 41, 5))
+->c71.foo : Symbol(C1.foo, Decl(typeParameterConstModifiers.ts, 36, 24))
++>c71.foo : Symbol(foo, Decl(typeParameterConstModifiers.ts, 36, 24))
+ >c71 : Symbol(c71, Decl(typeParameterConstModifiers.ts, 40, 5))
+->foo : Symbol(C1.foo, Decl(typeParameterConstModifiers.ts, 36, 24))
++>foo : Symbol(foo, Decl(typeParameterConstModifiers.ts, 36, 24))
+ 
+ const C2 = class <const T> {}
+ >C2 : Symbol(C2, Decl(typeParameterConstModifiers.ts, 43, 5))
+@@= skipped -25, +25 lines =@@
+ interface I1<const T> { x: T }  // Error
+ >I1 : Symbol(I1, Decl(typeParameterConstModifiers.ts, 46, 34))
+ >T : Symbol(T, Decl(typeParameterConstModifiers.ts, 48, 13))
+->x : Symbol(I1.x, Decl(typeParameterConstModifiers.ts, 48, 23))
++>x : Symbol(x, Decl(typeParameterConstModifiers.ts, 48, 23))
+ >T : Symbol(T, Decl(typeParameterConstModifiers.ts, 48, 13))
+ 
+ interface I2 {
+ >I2 : Symbol(I2, Decl(typeParameterConstModifiers.ts, 48, 30))
+ 
+     f<const T>(x: T): T;
+->f : Symbol(I2.f, Decl(typeParameterConstModifiers.ts, 50, 14))
++>f : Symbol(f, Decl(typeParameterConstModifiers.ts, 50, 14))
+ >T : Symbol(T, Decl(typeParameterConstModifiers.ts, 51, 6))
+ >x : Symbol(x, Decl(typeParameterConstModifiers.ts, 51, 15))
+ >T : Symbol(T, Decl(typeParameterConstModifiers.ts, 51, 6))

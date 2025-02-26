@@ -1,0 +1,11 @@
+--- old.testContainerList.symbols
++++ new.testContainerList.symbols
+@@= skipped -8, +8 lines =@@
+ >C : Symbol(C, Decl(testContainerList.ts, 1, 10))
+ 
+         constructor(public d: {}) { }
+->d : Symbol(C.d, Decl(testContainerList.ts, 3, 20))
++>d : Symbol(d, Decl(testContainerList.ts, 3, 20))
+     }
+ }
+ 

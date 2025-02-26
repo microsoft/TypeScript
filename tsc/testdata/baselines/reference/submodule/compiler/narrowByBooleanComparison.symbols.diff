@@ -1,0 +1,72 @@
+--- old.narrowByBooleanComparison.symbols
++++ new.narrowByBooleanComparison.symbols
+@@= skipped -120, +120 lines =@@
+ 
+     if (typeof foo !== 'string' && Array.isArray(foo) === false) {
+ >foo : Symbol(foo, Decl(narrowByBooleanComparison.ts, 50, 15))
+->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>Array.isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ >foo : Symbol(foo, Decl(narrowByBooleanComparison.ts, 50, 15))
+ 
+         throw new Error('Not a string or an array');
+@@= skipped -18, +18 lines =@@
+ >URIError : Symbol(URIError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     status?: number;
+->status : Symbol(WebError.status, Decl(narrowByBooleanComparison.ts, 58, 33))
++>status : Symbol(status, Decl(narrowByBooleanComparison.ts, 58, 33))
+ }
+ function test4() {
+ >test4 : Symbol(test4, Decl(narrowByBooleanComparison.ts, 60, 1))
+@@= skipped -13, +13 lines =@@
+         if (err instanceof WebError === false || err.status != 401) {
+ >err : Symbol(err, Decl(narrowByBooleanComparison.ts, 64, 13))
+ >WebError : Symbol(WebError, Decl(narrowByBooleanComparison.ts, 55, 1))
+->err.status : Symbol(WebError.status, Decl(narrowByBooleanComparison.ts, 58, 33))
++>err.status : Symbol(status, Decl(narrowByBooleanComparison.ts, 58, 33))
+ >err : Symbol(err, Decl(narrowByBooleanComparison.ts, 64, 13))
+->status : Symbol(WebError.status, Decl(narrowByBooleanComparison.ts, 58, 33))
++>status : Symbol(status, Decl(narrowByBooleanComparison.ts, 58, 33))
+ 
+             console.error(err);
+->console.error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
++>console.error : Symbol(error, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
++>error : Symbol(error, Decl(lib.dom.d.ts, --, --))
+ >err : Symbol(err, Decl(narrowByBooleanComparison.ts, 64, 13))
+         }
+     }
+@@= skipped -18, +18 lines =@@
+ >Entity : Symbol(Entity, Decl(narrowByBooleanComparison.ts, 69, 1))
+ 
+     type: string;
+->type : Symbol(Entity.type, Decl(narrowByBooleanComparison.ts, 72, 18))
++>type : Symbol(type, Decl(narrowByBooleanComparison.ts, 72, 18))
+ }
+ const ACTOR_TYPE = "actor";
+ >ACTOR_TYPE : Symbol(ACTOR_TYPE, Decl(narrowByBooleanComparison.ts, 75, 5))
+@@= skipped -10, +10 lines =@@
+ >Entity : Symbol(Entity, Decl(narrowByBooleanComparison.ts, 69, 1))
+ 
+     type: typeof ACTOR_TYPE;
+->type : Symbol(Actor.type, Decl(narrowByBooleanComparison.ts, 76, 32))
++>type : Symbol(type, Decl(narrowByBooleanComparison.ts, 76, 32))
+ >ACTOR_TYPE : Symbol(ACTOR_TYPE, Decl(narrowByBooleanComparison.ts, 75, 5))
+ }
+ function isActor(entity: Entity): entity is Actor {
+@@= skipped -11, +11 lines =@@
+ >Actor : Symbol(Actor, Decl(narrowByBooleanComparison.ts, 75, 27))
+ 
+     return entity.type === ACTOR_TYPE;
+->entity.type : Symbol(Entity.type, Decl(narrowByBooleanComparison.ts, 72, 18))
++>entity.type : Symbol(type, Decl(narrowByBooleanComparison.ts, 72, 18))
+ >entity : Symbol(entity, Decl(narrowByBooleanComparison.ts, 79, 17))
+->type : Symbol(Entity.type, Decl(narrowByBooleanComparison.ts, 72, 18))
++>type : Symbol(type, Decl(narrowByBooleanComparison.ts, 72, 18))
+ >ACTOR_TYPE : Symbol(ACTOR_TYPE, Decl(narrowByBooleanComparison.ts, 75, 5))
+ }
+ function test5(bin: Entity) {

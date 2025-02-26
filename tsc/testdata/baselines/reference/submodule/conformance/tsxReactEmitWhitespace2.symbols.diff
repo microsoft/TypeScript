@@ -1,0 +1,25 @@
+--- old.tsxReactEmitWhitespace2.symbols
++++ new.tsxReactEmitWhitespace2.symbols
+@@= skipped -18, +18 lines =@@
+ 
+ // Emit ' word' in the last string
+ <div>word <code>code</code> word</div>;
+->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+->code : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+->code : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+-
+ // Same here
+ <div><code>code</code> word</div>;
+->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+->code : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+->code : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+-
+ // And here
+ <div><code /> word</div>;
+->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+->code : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+ 
+ 

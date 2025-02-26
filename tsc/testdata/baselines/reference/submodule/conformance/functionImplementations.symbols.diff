@@ -1,0 +1,43 @@
+--- old.functionImplementations.symbols
++++ new.functionImplementations.symbols
+@@= skipped -150, +150 lines =@@
+ // FunctionExpression with no return type annotation with multiple return statements with subtype relation between returns
+ class Base { private m; }
+ >Base : Symbol(Base, Decl(functionImplementations.ts, 69, 4))
+->m : Symbol(Base.m, Decl(functionImplementations.ts, 76, 12))
++>m : Symbol(m, Decl(functionImplementations.ts, 76, 12))
+ 
+ class Derived extends Base { private q; }
+ >Derived : Symbol(Derived, Decl(functionImplementations.ts, 76, 25))
+ >Base : Symbol(Base, Decl(functionImplementations.ts, 69, 4))
+->q : Symbol(Derived.q, Decl(functionImplementations.ts, 77, 28))
++>q : Symbol(q, Decl(functionImplementations.ts, 77, 28))
+ 
+ var b: Base;
+ >b : Symbol(b, Decl(functionImplementations.ts, 78, 3), Decl(functionImplementations.ts, 79, 3))
+@@= skipped -111, +111 lines =@@
+ class Derived2 extends Base { private r: string; }
+ >Derived2 : Symbol(Derived2, Decl(functionImplementations.ts, 123, 1))
+ >Base : Symbol(Base, Decl(functionImplementations.ts, 69, 4))
+->r : Symbol(Derived2.r, Decl(functionImplementations.ts, 125, 29))
++>r : Symbol(r, Decl(functionImplementations.ts, 125, 29))
+ 
+ class AnotherClass { private x }
+ >AnotherClass : Symbol(AnotherClass, Decl(functionImplementations.ts, 125, 50))
+->x : Symbol(AnotherClass.x, Decl(functionImplementations.ts, 126, 20))
++>x : Symbol(x, Decl(functionImplementations.ts, 126, 20))
+ 
+ // if f is a contextually typed function expression, the inferred return type is the union type
+ // of the types of the return statement expressions in the function body, 
+@@= skipped -19, +19 lines =@@
+ >x : Symbol(x, Decl(functionImplementations.ts, 130, 40))
+ 
+     return x.toString();
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(functionImplementations.ts, 130, 40))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ }
+ var f8: (x: number) => any = x => { // should be (x: number) => Base
+ >f8 : Symbol(f8, Decl(functionImplementations.ts, 134, 3))

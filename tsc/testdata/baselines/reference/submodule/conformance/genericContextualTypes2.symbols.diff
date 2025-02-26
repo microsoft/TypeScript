@@ -1,0 +1,15 @@
+--- old.genericContextualTypes2.symbols
++++ new.genericContextualTypes2.symbols
+@@= skipped -49, +49 lines =@@
+ >TContext : Symbol(TContext, Decl(genericContextualTypes2.ts, 14, 23))
+ 
+   type: "xstate.assign";
+->type : Symbol(AssignAction.type, Decl(genericContextualTypes2.ts, 14, 34))
++>type : Symbol(type, Decl(genericContextualTypes2.ts, 14, 34))
+ 
+   exec: (arg: TContext, meta: Meta<TContext>) => void;
+->exec : Symbol(AssignAction.exec, Decl(genericContextualTypes2.ts, 15, 24))
++>exec : Symbol(exec, Decl(genericContextualTypes2.ts, 15, 24))
+ >arg : Symbol(arg, Decl(genericContextualTypes2.ts, 16, 9))
+ >TContext : Symbol(TContext, Decl(genericContextualTypes2.ts, 14, 23))
+ >meta : Symbol(meta, Decl(genericContextualTypes2.ts, 16, 23))

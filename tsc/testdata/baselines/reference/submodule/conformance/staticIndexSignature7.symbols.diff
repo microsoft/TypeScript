@@ -1,0 +1,19 @@
+--- old.staticIndexSignature7.symbols
++++ new.staticIndexSignature7.symbols
+@@= skipped -7, +7 lines =@@
+ >index : Symbol(index, Decl(staticIndexSignature7.ts, 1, 12))
+ 
+     static x = 12; // Should error, incompatible with index signature
+->x : Symbol(X.x, Decl(staticIndexSignature7.ts, 1, 35))
++>x : Symbol(x, Decl(staticIndexSignature7.ts, 1, 35))
+ }
+ class Y {
+ >Y : Symbol(Y, Decl(staticIndexSignature7.ts, 3, 1))
+@@= skipped -9, +9 lines =@@
+ >index : Symbol(index, Decl(staticIndexSignature7.ts, 5, 12))
+ 
+     static foo() {} // should error, incompatible with index signature
+->foo : Symbol(Y.foo, Decl(staticIndexSignature7.ts, 5, 35))
++>foo : Symbol(foo, Decl(staticIndexSignature7.ts, 5, 35))
+ }
+ 

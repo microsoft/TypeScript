@@ -1,0 +1,36 @@
+--- old.genericConstraint2.symbols
++++ new.genericConstraint2.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(genericConstraint2.ts, 0, 21))
+ 
+     comparer(other: T): number;
+->comparer : Symbol(Comparable.comparer, Decl(genericConstraint2.ts, 0, 25))
++>comparer : Symbol(comparer, Decl(genericConstraint2.ts, 0, 25))
+ >other : Symbol(other, Decl(genericConstraint2.ts, 1, 13))
+ >T : Symbol(T, Decl(genericConstraint2.ts, 0, 21))
+ }
+@@= skipped -23, +23 lines =@@
+ >y : Symbol(y, Decl(genericConstraint2.ts, 4, 47))
+ 
+     return x.comparer(y);
+->x.comparer : Symbol(Comparable.comparer, Decl(genericConstraint2.ts, 0, 25))
++>x.comparer : Symbol(comparer, Decl(genericConstraint2.ts, 0, 25))
+ >x : Symbol(x, Decl(genericConstraint2.ts, 4, 42))
+->comparer : Symbol(Comparable.comparer, Decl(genericConstraint2.ts, 0, 25))
++>comparer : Symbol(comparer, Decl(genericConstraint2.ts, 0, 25))
+ >y : Symbol(y, Decl(genericConstraint2.ts, 4, 47))
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ >Comparable : Symbol(Comparable, Decl(genericConstraint2.ts, 0, 0))
+ 
+     constructor(public currentValue: string) { }
+->currentValue : Symbol(ComparableString.currentValue, Decl(genericConstraint2.ts, 11, 16))
++>currentValue : Symbol(currentValue, Decl(genericConstraint2.ts, 11, 16))
+ 
+     localeCompare(other) {
+->localeCompare : Symbol(ComparableString.localeCompare, Decl(genericConstraint2.ts, 11, 48))
++>localeCompare : Symbol(localeCompare, Decl(genericConstraint2.ts, 11, 48))
+ >other : Symbol(other, Decl(genericConstraint2.ts, 13, 18))
+ 
+         return 0;

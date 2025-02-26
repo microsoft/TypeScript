@@ -1,0 +1,42 @@
+--- old.functionOverloadErrors.symbols
++++ new.functionOverloadErrors.symbols
+@@= skipped -139, +139 lines =@@
+ >T : Symbol(T, Decl(functionOverloadErrors.ts, 54, 15))
+ 
+     parents: List<List<T>>;
+->parents : Symbol(List.parents, Decl(functionOverloadErrors.ts, 54, 19))
++>parents : Symbol(parents, Decl(functionOverloadErrors.ts, 54, 19))
+ >List : Symbol(List, Decl(functionOverloadErrors.ts, 51, 19))
+ >List : Symbol(List, Decl(functionOverloadErrors.ts, 51, 19))
+ >T : Symbol(T, Decl(functionOverloadErrors.ts, 54, 15))
+@@= skipped -24, +24 lines =@@
+ >cls : Symbol(cls, Decl(functionOverloadErrors.ts, 59, 19))
+ 
+     public f();
+->f : Symbol(cls.f, Decl(functionOverloadErrors.ts, 62, 11), Decl(functionOverloadErrors.ts, 63, 15), Decl(functionOverloadErrors.ts, 64, 25))
++>f : Symbol(f, Decl(functionOverloadErrors.ts, 62, 11), Decl(functionOverloadErrors.ts, 63, 15), Decl(functionOverloadErrors.ts, 64, 25))
+ 
+     private f(s: string);
+->f : Symbol(cls.f, Decl(functionOverloadErrors.ts, 62, 11), Decl(functionOverloadErrors.ts, 63, 15), Decl(functionOverloadErrors.ts, 64, 25))
++>f : Symbol(f, Decl(functionOverloadErrors.ts, 62, 11), Decl(functionOverloadErrors.ts, 63, 15), Decl(functionOverloadErrors.ts, 64, 25))
+ >s : Symbol(s, Decl(functionOverloadErrors.ts, 64, 14))
+ 
+     f() { }
+->f : Symbol(cls.f, Decl(functionOverloadErrors.ts, 62, 11), Decl(functionOverloadErrors.ts, 63, 15), Decl(functionOverloadErrors.ts, 64, 25))
++>f : Symbol(f, Decl(functionOverloadErrors.ts, 62, 11), Decl(functionOverloadErrors.ts, 63, 15), Decl(functionOverloadErrors.ts, 64, 25))
+ 
+     private g(s: string);
+->g : Symbol(cls.g, Decl(functionOverloadErrors.ts, 65, 11), Decl(functionOverloadErrors.ts, 67, 25), Decl(functionOverloadErrors.ts, 68, 15))
++>g : Symbol(g, Decl(functionOverloadErrors.ts, 65, 11), Decl(functionOverloadErrors.ts, 67, 25), Decl(functionOverloadErrors.ts, 68, 15))
+ >s : Symbol(s, Decl(functionOverloadErrors.ts, 67, 14))
+ 
+     public g();
+->g : Symbol(cls.g, Decl(functionOverloadErrors.ts, 65, 11), Decl(functionOverloadErrors.ts, 67, 25), Decl(functionOverloadErrors.ts, 68, 15))
++>g : Symbol(g, Decl(functionOverloadErrors.ts, 65, 11), Decl(functionOverloadErrors.ts, 67, 25), Decl(functionOverloadErrors.ts, 68, 15))
+ 
+     g() { }
+->g : Symbol(cls.g, Decl(functionOverloadErrors.ts, 65, 11), Decl(functionOverloadErrors.ts, 67, 25), Decl(functionOverloadErrors.ts, 68, 15))
++>g : Symbol(g, Decl(functionOverloadErrors.ts, 65, 11), Decl(functionOverloadErrors.ts, 67, 25), Decl(functionOverloadErrors.ts, 68, 15))
+ }
+ 
+ //Function overloads with differing export

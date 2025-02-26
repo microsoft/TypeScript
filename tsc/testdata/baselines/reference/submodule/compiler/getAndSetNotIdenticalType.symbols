@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/getAndSetNotIdenticalType.ts] ////
+
+=== getAndSetNotIdenticalType.ts ===
+class C {
+>C : Symbol(C, Decl(getAndSetNotIdenticalType.ts, 0, 0))
+
+    get x(): number {
+>x : Symbol(x, Decl(getAndSetNotIdenticalType.ts, 0, 9), Decl(getAndSetNotIdenticalType.ts, 3, 5))
+
+        return 1;
+    }
+    set x(v: string) { }
+>x : Symbol(x, Decl(getAndSetNotIdenticalType.ts, 0, 9), Decl(getAndSetNotIdenticalType.ts, 3, 5))
+>v : Symbol(v, Decl(getAndSetNotIdenticalType.ts, 4, 10))
+}

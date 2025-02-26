@@ -1,0 +1,47 @@
+--- old.unionAndIntersectionInference3.symbols
++++ new.unionAndIntersectionInference3.symbols
+@@= skipped -63, +63 lines =@@
+ >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 12, 15))
+ 
+     test(value: T): void;
+->test : Symbol(Foo1.test, Decl(unionAndIntersectionInference3.ts, 12, 19))
++>test : Symbol(test, Decl(unionAndIntersectionInference3.ts, 12, 19))
+ >value : Symbol(value, Decl(unionAndIntersectionInference3.ts, 13, 9))
+ >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 12, 15))
+ }
+@@= skipped -10, +10 lines =@@
+ >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 16, 15))
+ 
+     test(value: T | PromiseLike<T>): void;
+->test : Symbol(Bar1.test, Decl(unionAndIntersectionInference3.ts, 16, 19))
++>test : Symbol(test, Decl(unionAndIntersectionInference3.ts, 16, 19))
+ >value : Symbol(value, Decl(unionAndIntersectionInference3.ts, 17, 9))
+ >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 16, 15))
+ >PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+@@= skipped -138, +138 lines =@@
+ declare class Component<P> { props: P }
+ >Component : Symbol(Component, Decl(unionAndIntersectionInference3.ts, 52, 18))
+ >P : Symbol(P, Decl(unionAndIntersectionInference3.ts, 56, 24))
+->props : Symbol(Component.props, Decl(unionAndIntersectionInference3.ts, 56, 28))
++>props : Symbol(props, Decl(unionAndIntersectionInference3.ts, 56, 28))
+ >P : Symbol(P, Decl(unionAndIntersectionInference3.ts, 56, 24))
+ 
+ export type ComponentClass<P> = new (props: P) => Component<P>;
+@@= skipped -27, +27 lines =@@
+ 
+ export interface RouteComponentProps { route: string }
+ >RouteComponentProps : Symbol(RouteComponentProps, Decl(unionAndIntersectionInference3.ts, 61, 72))
+->route : Symbol(RouteComponentProps.route, Decl(unionAndIntersectionInference3.ts, 63, 38))
++>route : Symbol(route, Decl(unionAndIntersectionInference3.ts, 63, 38))
+ 
+ declare function withRouter<
+ >withRouter : Symbol(withRouter, Decl(unionAndIntersectionInference3.ts, 63, 54))
+@@= skipped -30, +30 lines =@@
+ interface Props extends RouteComponentProps { username: string }
+ >Props : Symbol(Props, Decl(unionAndIntersectionInference3.ts, 70, 54))
+ >RouteComponentProps : Symbol(RouteComponentProps, Decl(unionAndIntersectionInference3.ts, 61, 72))
+->username : Symbol(Props.username, Decl(unionAndIntersectionInference3.ts, 72, 45))
++>username : Symbol(username, Decl(unionAndIntersectionInference3.ts, 72, 45))
+ 
+ declare const MyComponent: ComponentType<Props>;
+ >MyComponent : Symbol(MyComponent, Decl(unionAndIntersectionInference3.ts, 74, 13))

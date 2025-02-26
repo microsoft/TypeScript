@@ -1,0 +1,55 @@
+--- old.inheritanceOfGenericConstructorMethod2.symbols
++++ new.inheritanceOfGenericConstructorMethod2.symbols
+@@= skipped -15, +15 lines =@@
+ 
+    export class D1 extends M.C1 { }
+ >D1 : Symbol(D1, Decl(inheritanceOfGenericConstructorMethod2.ts, 4, 10))
+->M.C1 : Symbol(M.C1, Decl(inheritanceOfGenericConstructorMethod2.ts, 0, 10))
++>M.C1 : Symbol(C1, Decl(inheritanceOfGenericConstructorMethod2.ts, 0, 10))
+ >M : Symbol(M, Decl(inheritanceOfGenericConstructorMethod2.ts, 0, 0))
+->C1 : Symbol(M.C1, Decl(inheritanceOfGenericConstructorMethod2.ts, 0, 10))
++>C1 : Symbol(C1, Decl(inheritanceOfGenericConstructorMethod2.ts, 0, 10))
+ 
+    export class D2<T> extends M.C2<T> { }
+ >D2 : Symbol(D2, Decl(inheritanceOfGenericConstructorMethod2.ts, 5, 35))
+ >T : Symbol(T, Decl(inheritanceOfGenericConstructorMethod2.ts, 6, 19))
+->M.C2 : Symbol(M.C2, Decl(inheritanceOfGenericConstructorMethod2.ts, 1, 22))
++>M.C2 : Symbol(C2, Decl(inheritanceOfGenericConstructorMethod2.ts, 1, 22))
+ >M : Symbol(M, Decl(inheritanceOfGenericConstructorMethod2.ts, 0, 0))
+->C2 : Symbol(M.C2, Decl(inheritanceOfGenericConstructorMethod2.ts, 1, 22))
++>C2 : Symbol(C2, Decl(inheritanceOfGenericConstructorMethod2.ts, 1, 22))
+ >T : Symbol(T, Decl(inheritanceOfGenericConstructorMethod2.ts, 6, 19))
+ }
+ 
+ var c = new M.C2<number>(); // no error
+ >c : Symbol(c, Decl(inheritanceOfGenericConstructorMethod2.ts, 9, 3))
+->M.C2 : Symbol(M.C2, Decl(inheritanceOfGenericConstructorMethod2.ts, 1, 22))
++>M.C2 : Symbol(C2, Decl(inheritanceOfGenericConstructorMethod2.ts, 1, 22))
+ >M : Symbol(M, Decl(inheritanceOfGenericConstructorMethod2.ts, 0, 0))
+->C2 : Symbol(M.C2, Decl(inheritanceOfGenericConstructorMethod2.ts, 1, 22))
++>C2 : Symbol(C2, Decl(inheritanceOfGenericConstructorMethod2.ts, 1, 22))
+ 
+ var n = new N.D1(); // no error
+ >n : Symbol(n, Decl(inheritanceOfGenericConstructorMethod2.ts, 10, 3))
+->N.D1 : Symbol(N.D1, Decl(inheritanceOfGenericConstructorMethod2.ts, 4, 10))
++>N.D1 : Symbol(D1, Decl(inheritanceOfGenericConstructorMethod2.ts, 4, 10))
+ >N : Symbol(N, Decl(inheritanceOfGenericConstructorMethod2.ts, 3, 1))
+->D1 : Symbol(N.D1, Decl(inheritanceOfGenericConstructorMethod2.ts, 4, 10))
++>D1 : Symbol(D1, Decl(inheritanceOfGenericConstructorMethod2.ts, 4, 10))
+ 
+ var n2 = new N.D2<number>(); // error
+ >n2 : Symbol(n2, Decl(inheritanceOfGenericConstructorMethod2.ts, 11, 3))
+->N.D2 : Symbol(N.D2, Decl(inheritanceOfGenericConstructorMethod2.ts, 5, 35))
++>N.D2 : Symbol(D2, Decl(inheritanceOfGenericConstructorMethod2.ts, 5, 35))
+ >N : Symbol(N, Decl(inheritanceOfGenericConstructorMethod2.ts, 3, 1))
+->D2 : Symbol(N.D2, Decl(inheritanceOfGenericConstructorMethod2.ts, 5, 35))
++>D2 : Symbol(D2, Decl(inheritanceOfGenericConstructorMethod2.ts, 5, 35))
+ 
+ var n3 = new N.D2(); // no error, D2<any>
+ >n3 : Symbol(n3, Decl(inheritanceOfGenericConstructorMethod2.ts, 12, 3))
+->N.D2 : Symbol(N.D2, Decl(inheritanceOfGenericConstructorMethod2.ts, 5, 35))
++>N.D2 : Symbol(D2, Decl(inheritanceOfGenericConstructorMethod2.ts, 5, 35))
+ >N : Symbol(N, Decl(inheritanceOfGenericConstructorMethod2.ts, 3, 1))
+->D2 : Symbol(N.D2, Decl(inheritanceOfGenericConstructorMethod2.ts, 5, 35))
++>D2 : Symbol(D2, Decl(inheritanceOfGenericConstructorMethod2.ts, 5, 35))
+ 

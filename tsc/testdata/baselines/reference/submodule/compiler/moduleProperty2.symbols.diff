@@ -1,0 +1,12 @@
+--- old.moduleProperty2.symbols
++++ new.moduleProperty2.symbols
+@@= skipped -32, +32 lines =@@
+ 
+     var test4=M.z; // ok public property of M
+ >test4 : Symbol(test4, Decl(moduleProperty2.ts, 12, 7))
+->M.z : Symbol(M.z, Decl(moduleProperty2.ts, 5, 14))
++>M.z : Symbol(z, Decl(moduleProperty2.ts, 5, 14))
+ >M : Symbol(M, Decl(moduleProperty2.ts, 0, 0))
+->z : Symbol(M.z, Decl(moduleProperty2.ts, 5, 14))
++>z : Symbol(z, Decl(moduleProperty2.ts, 5, 14))
+ }

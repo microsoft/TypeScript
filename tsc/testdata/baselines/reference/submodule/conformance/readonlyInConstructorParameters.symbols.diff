@@ -1,0 +1,38 @@
+--- old.readonlyInConstructorParameters.symbols
++++ new.readonlyInConstructorParameters.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(readonlyInConstructorParameters.ts, 0, 0))
+ 
+     constructor(readonly x: number) {}
+->x : Symbol(C.x, Decl(readonlyInConstructorParameters.ts, 1, 16))
++>x : Symbol(x, Decl(readonlyInConstructorParameters.ts, 1, 16))
+ }
+ new C(1).x = 2;
+->new C(1).x : Symbol(C.x, Decl(readonlyInConstructorParameters.ts, 1, 16))
++>new C(1).x : Symbol(x, Decl(readonlyInConstructorParameters.ts, 1, 16))
+ >C : Symbol(C, Decl(readonlyInConstructorParameters.ts, 0, 0))
+->x : Symbol(C.x, Decl(readonlyInConstructorParameters.ts, 1, 16))
++>x : Symbol(x, Decl(readonlyInConstructorParameters.ts, 1, 16))
+ 
+ class E {
+ >E : Symbol(E, Decl(readonlyInConstructorParameters.ts, 3, 15))
+ 
+     constructor(readonly public x: number) {}
+->x : Symbol(E.x, Decl(readonlyInConstructorParameters.ts, 6, 16))
++>x : Symbol(x, Decl(readonlyInConstructorParameters.ts, 6, 16))
+ }
+ 
+ class F {
+ >F : Symbol(F, Decl(readonlyInConstructorParameters.ts, 7, 1))
+ 
+     constructor(private readonly x: number) {}
+->x : Symbol(F.x, Decl(readonlyInConstructorParameters.ts, 10, 16))
++>x : Symbol(x, Decl(readonlyInConstructorParameters.ts, 10, 16))
+ }
+ new F(1).x;
+->new F(1).x : Symbol(F.x, Decl(readonlyInConstructorParameters.ts, 10, 16))
++>new F(1).x : Symbol(x, Decl(readonlyInConstructorParameters.ts, 10, 16))
+ >F : Symbol(F, Decl(readonlyInConstructorParameters.ts, 7, 1))
+->x : Symbol(F.x, Decl(readonlyInConstructorParameters.ts, 10, 16))
++>x : Symbol(x, Decl(readonlyInConstructorParameters.ts, 10, 16))
+ 

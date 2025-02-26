@@ -1,0 +1,11 @@
+--- old.declarationFilesWithTypeReferences2.symbols
++++ new.declarationFilesWithTypeReferences2.symbols
+@@= skipped -4, +4 lines =@@
+ >Error2 : Symbol(Error2, Decl(index.d.ts, 0, 0))
+ 
+     stack2: string;
+->stack2 : Symbol(Error2.stack2, Decl(index.d.ts, 0, 18))
++>stack2 : Symbol(stack2, Decl(index.d.ts, 0, 18))
+ }
+ 
+ === /app.ts ===

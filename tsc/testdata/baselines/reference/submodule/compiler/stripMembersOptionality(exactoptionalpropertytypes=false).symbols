@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/stripMembersOptionality.ts] ////
+
+=== stripMembersOptionality.ts ===
+// repro from #52494
+
+declare const someVal: Required<{
+>someVal : Symbol(someVal, Decl(stripMembersOptionality.ts, 2, 13))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+
+    fn?(key: string): string | null;
+>fn : Symbol(fn, Decl(stripMembersOptionality.ts, 2, 33))
+>key : Symbol(key, Decl(stripMembersOptionality.ts, 3, 8))
+
+}>;
+someVal.fn("");
+>someVal.fn : Symbol(fn, Decl(stripMembersOptionality.ts, 2, 33))
+>someVal : Symbol(someVal, Decl(stripMembersOptionality.ts, 2, 13))
+>fn : Symbol(fn, Decl(stripMembersOptionality.ts, 2, 33))
+
+declare const someVal2: Required<{
+>someVal2 : Symbol(someVal2, Decl(stripMembersOptionality.ts, 7, 13))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+
+    fn?: (key: string) => string | null;
+>fn : Symbol(fn, Decl(stripMembersOptionality.ts, 7, 34))
+>key : Symbol(key, Decl(stripMembersOptionality.ts, 8, 10))
+
+}>;
+someVal2.fn("");
+>someVal2.fn : Symbol(fn, Decl(stripMembersOptionality.ts, 7, 34))
+>someVal2 : Symbol(someVal2, Decl(stripMembersOptionality.ts, 7, 13))
+>fn : Symbol(fn, Decl(stripMembersOptionality.ts, 7, 34))
+

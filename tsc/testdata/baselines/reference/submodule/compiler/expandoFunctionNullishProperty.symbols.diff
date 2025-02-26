@@ -1,0 +1,65 @@
+--- old.expandoFunctionNullishProperty.symbols
++++ new.expandoFunctionNullishProperty.symbols
+@@= skipped -7, +7 lines =@@
+ 
+   (): void;
+   readonly prop: null;
+->prop : Symbol(TestNull.prop, Decl(expandoFunctionNullishProperty.ts, 3, 11))
++>prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 3, 11))
+ }
+ 
+ export function testNull(): TestNull {
+@@= skipped -11, +11 lines =@@
+ >inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 7, 38))
+ 
+   inner.prop = null;
+->inner.prop : Symbol(inner.prop, Decl(expandoFunctionNullishProperty.ts, 8, 21))
++>inner.prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 8, 21))
+ >inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 7, 38))
+->prop : Symbol(inner.prop, Decl(expandoFunctionNullishProperty.ts, 8, 21))
++>prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 8, 21))
+ 
+   return inner;
+ >inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 7, 38))
+@@= skipped -13, +13 lines =@@
+ 
+   (): void;
+   prop: string | null;
+->prop : Symbol(TestNull2.prop, Decl(expandoFunctionNullishProperty.ts, 14, 11))
++>prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 14, 11))
+ }
+ 
+ export function testNull2(): TestNull2 {
+@@= skipped -11, +11 lines =@@
+ >inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 18, 40))
+ 
+   inner.prop = null;
+->inner.prop : Symbol(inner.prop, Decl(expandoFunctionNullishProperty.ts, 19, 21))
++>inner.prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 19, 21))
+ >inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 18, 40))
+->prop : Symbol(inner.prop, Decl(expandoFunctionNullishProperty.ts, 19, 21))
++>prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 19, 21))
+ 
+   return inner;
+ >inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 18, 40))
+@@= skipped -13, +13 lines =@@
+ 
+   (): void;
+   readonly prop: undefined;
+->prop : Symbol(TestUndefined.prop, Decl(expandoFunctionNullishProperty.ts, 25, 11))
++>prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 25, 11))
+ }
+ 
+ export function testUndefined(): TestUndefined {
+@@= skipped -11, +11 lines =@@
+ >inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 29, 48))
+ 
+   inner.prop = undefined;
+->inner.prop : Symbol(inner.prop, Decl(expandoFunctionNullishProperty.ts, 30, 21))
++>inner.prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 30, 21))
+ >inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 29, 48))
+->prop : Symbol(inner.prop, Decl(expandoFunctionNullishProperty.ts, 30, 21))
++>prop : Symbol(prop, Decl(expandoFunctionNullishProperty.ts, 30, 21))
+ >undefined : Symbol(undefined)
+ 
+   return inner;

@@ -1,0 +1,11 @@
+--- old.assignmentCompatability_checking-call-member-off-of-function-interface.symbols
++++ new.assignmentCompatability_checking-call-member-off-of-function-interface.symbols
+@@= skipped -6, +6 lines =@@
+ >Callable : Symbol(Callable, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 0, 0))
+ 
+     call(blah: any); // also works for 'apply'
+->call : Symbol(Callable.call, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 2, 20))
++>call : Symbol(call, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 2, 20))
+ >blah : Symbol(blah, Decl(assignmentCompatability_checking-call-member-off-of-function-interface.ts, 3, 9))
+ }
+ 

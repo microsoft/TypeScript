@@ -1,0 +1,15 @@
+--- old.importHelpersWithImportStarAs(esmoduleinterop=true,module=commonjs).symbols
++++ new.importHelpersWithImportStarAs(esmoduleinterop=true,module=commonjs).symbols
+@@= skipped -12, +12 lines =@@
+ 
+ === tslib.d.ts ===
+ declare module "tslib" {
+->"tslib" : Symbol("tslib", Decl(tslib.d.ts, --, --))
++>"tslib" : Symbol("tslib", Decl(tslib.d.ts, 0, 0))
+ 
+     function __importStar(m: any): void;
+->__importStar : Symbol(__importStar, Decl(tslib.d.ts, --, --))
+->m : Symbol(m, Decl(tslib.d.ts, --, --))
++>__importStar : Symbol(__importStar, Decl(tslib.d.ts, 0, 24))
++>m : Symbol(m, Decl(tslib.d.ts, 1, 26))
+ }

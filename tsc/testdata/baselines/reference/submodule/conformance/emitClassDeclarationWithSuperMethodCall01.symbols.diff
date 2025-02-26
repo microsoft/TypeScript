@@ -1,0 +1,27 @@
+--- old.emitClassDeclarationWithSuperMethodCall01.symbols
++++ new.emitClassDeclarationWithSuperMethodCall01.symbols
+@@= skipped -4, +4 lines =@@
+ >Parent : Symbol(Parent, Decl(emitClassDeclarationWithSuperMethodCall01.ts, 0, 0))
+ 
+     foo() {
+->foo : Symbol(Parent.foo, Decl(emitClassDeclarationWithSuperMethodCall01.ts, 0, 14))
++>foo : Symbol(foo, Decl(emitClassDeclarationWithSuperMethodCall01.ts, 0, 14))
+     }
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >Parent : Symbol(Parent, Decl(emitClassDeclarationWithSuperMethodCall01.ts, 0, 0))
+ 
+     foo() {
+->foo : Symbol(Foo.foo, Decl(emitClassDeclarationWithSuperMethodCall01.ts, 5, 26))
++>foo : Symbol(foo, Decl(emitClassDeclarationWithSuperMethodCall01.ts, 5, 26))
+ 
+         var x = () => super.foo();
+ >x : Symbol(x, Decl(emitClassDeclarationWithSuperMethodCall01.ts, 7, 11))
+->super.foo : Symbol(Parent.foo, Decl(emitClassDeclarationWithSuperMethodCall01.ts, 0, 14))
++>super.foo : Symbol(foo, Decl(emitClassDeclarationWithSuperMethodCall01.ts, 0, 14))
+ >super : Symbol(Parent, Decl(emitClassDeclarationWithSuperMethodCall01.ts, 0, 0))
+->foo : Symbol(Parent.foo, Decl(emitClassDeclarationWithSuperMethodCall01.ts, 0, 14))
++>foo : Symbol(foo, Decl(emitClassDeclarationWithSuperMethodCall01.ts, 0, 14))
+     }
+ }

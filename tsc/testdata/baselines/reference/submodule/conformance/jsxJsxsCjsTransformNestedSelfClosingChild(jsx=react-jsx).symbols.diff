@@ -1,0 +1,70 @@
+--- old.jsxJsxsCjsTransformNestedSelfClosingChild(jsx=react-jsx).symbols
++++ new.jsxJsxsCjsTransformNestedSelfClosingChild(jsx=react-jsx).symbols
+@@= skipped -5, +5 lines =@@
+ >React : Symbol(React, Decl(jsxJsxsCjsTransformNestedSelfClosingChild.tsx, 1, 11))
+ 
+ console.log(
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ 
+   <div>
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+-
+     <div />
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+-
+   </div>
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+-
+ )
+ 
+ console.log(
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ 
+   <div>
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+-
+     <div />
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+-
+     <div />
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+-
+   </div>
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+-
+ )
+ 
+ console.log(
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ 
+   <div>
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+-
+     {[1, 2].map(i => <div key={i}>{i}</div>)}
+->[1, 2].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>[1, 2].map : Symbol(map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >i : Symbol(i, Decl(jsxJsxsCjsTransformNestedSelfClosingChild.tsx, 18, 16))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+ >key : Symbol(key, Decl(jsxJsxsCjsTransformNestedSelfClosingChild.tsx, 18, 25))
+ >i : Symbol(i, Decl(jsxJsxsCjsTransformNestedSelfClosingChild.tsx, 18, 16))
+ >i : Symbol(i, Decl(jsxJsxsCjsTransformNestedSelfClosingChild.tsx, 18, 16))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+ 
+   </div>
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+-
+ )

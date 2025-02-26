@@ -1,0 +1,15 @@
+--- old.tsxGenericAttributesType2.symbols
++++ new.tsxGenericAttributesType2.symbols
+@@= skipped -9, +9 lines =@@
+ >x : Symbol(x, Decl(file.tsx, 2, 40))
+ >Component : Symbol(Component, Decl(file.tsx, 2, 54))
+ >React : Symbol(React, Decl(file.tsx, 0, 0))
+->StatelessComponent : Symbol(React.StatelessComponent, Decl(react.d.ts, 198, 40))
++>StatelessComponent : Symbol(StatelessComponent)
+ >T : Symbol(T, Decl(file.tsx, 2, 29))
+ >React : Symbol(React, Decl(file.tsx, 0, 0))
+->StatelessComponent : Symbol(React.StatelessComponent, Decl(react.d.ts, 198, 40))
++>StatelessComponent : Symbol(StatelessComponent)
+ >T : Symbol(T, Decl(file.tsx, 2, 29))
+ 
+     return (props) => <Component {...props} y={"blah"} ></Component>

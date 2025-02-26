@@ -1,0 +1,164 @@
+--- old.interfaceAssignmentCompat.symbols
++++ new.interfaceAssignmentCompat.symbols
+@@= skipped -7, +7 lines =@@
+ >Color : Symbol(Color, Decl(interfaceAssignmentCompat.ts, 0, 10))
+ 
+         Green,
+->Green : Symbol(Color.Green, Decl(interfaceAssignmentCompat.ts, 1, 23))
++>Green : Symbol(Green, Decl(interfaceAssignmentCompat.ts, 1, 23))
+ 
+         Blue,
+->Blue : Symbol(Color.Blue, Decl(interfaceAssignmentCompat.ts, 2, 14))
++>Blue : Symbol(Blue, Decl(interfaceAssignmentCompat.ts, 2, 14))
+ 
+         Brown,
+->Brown : Symbol(Color.Brown, Decl(interfaceAssignmentCompat.ts, 3, 13))
++>Brown : Symbol(Brown, Decl(interfaceAssignmentCompat.ts, 3, 13))
+     }
+ 
+     export interface IEye {
+ >IEye : Symbol(IEye, Decl(interfaceAssignmentCompat.ts, 5, 5))
+ 
+         color:number;
+->color : Symbol(IEye.color, Decl(interfaceAssignmentCompat.ts, 7, 27))
++>color : Symbol(color, Decl(interfaceAssignmentCompat.ts, 7, 27))
+     }
+ 
+     export interface IFrenchEye {
+ >IFrenchEye : Symbol(IFrenchEye, Decl(interfaceAssignmentCompat.ts, 9, 5))
+ 
+         coleur:number;
+->coleur : Symbol(IFrenchEye.coleur, Decl(interfaceAssignmentCompat.ts, 11, 33))
++>coleur : Symbol(coleur, Decl(interfaceAssignmentCompat.ts, 11, 33))
+     }
+ 
+     export function CompareEyes(a:IEye,b:IEye):number {
+@@= skipped -31, +31 lines =@@
+ >IEye : Symbol(IEye, Decl(interfaceAssignmentCompat.ts, 5, 5))
+ 
+         return a.color-b.color;
+->a.color : Symbol(IEye.color, Decl(interfaceAssignmentCompat.ts, 7, 27))
++>a.color : Symbol(color, Decl(interfaceAssignmentCompat.ts, 7, 27))
+ >a : Symbol(a, Decl(interfaceAssignmentCompat.ts, 15, 32))
+->color : Symbol(IEye.color, Decl(interfaceAssignmentCompat.ts, 7, 27))
+->b.color : Symbol(IEye.color, Decl(interfaceAssignmentCompat.ts, 7, 27))
++>color : Symbol(color, Decl(interfaceAssignmentCompat.ts, 7, 27))
++>b.color : Symbol(color, Decl(interfaceAssignmentCompat.ts, 7, 27))
+ >b : Symbol(b, Decl(interfaceAssignmentCompat.ts, 15, 39))
+->color : Symbol(IEye.color, Decl(interfaceAssignmentCompat.ts, 7, 27))
++>color : Symbol(color, Decl(interfaceAssignmentCompat.ts, 7, 27))
+     }
+ 
+     export function CompareYeux(a:IFrenchEye,b:IFrenchEye):number {
+@@= skipped -16, +16 lines =@@
+ >IFrenchEye : Symbol(IFrenchEye, Decl(interfaceAssignmentCompat.ts, 9, 5))
+ 
+         return a.coleur-b.coleur;
+->a.coleur : Symbol(IFrenchEye.coleur, Decl(interfaceAssignmentCompat.ts, 11, 33))
++>a.coleur : Symbol(coleur, Decl(interfaceAssignmentCompat.ts, 11, 33))
+ >a : Symbol(a, Decl(interfaceAssignmentCompat.ts, 19, 32))
+->coleur : Symbol(IFrenchEye.coleur, Decl(interfaceAssignmentCompat.ts, 11, 33))
+->b.coleur : Symbol(IFrenchEye.coleur, Decl(interfaceAssignmentCompat.ts, 11, 33))
++>coleur : Symbol(coleur, Decl(interfaceAssignmentCompat.ts, 11, 33))
++>b.coleur : Symbol(coleur, Decl(interfaceAssignmentCompat.ts, 11, 33))
+ >b : Symbol(b, Decl(interfaceAssignmentCompat.ts, 19, 45))
+->coleur : Symbol(IFrenchEye.coleur, Decl(interfaceAssignmentCompat.ts, 11, 33))
++>coleur : Symbol(coleur, Decl(interfaceAssignmentCompat.ts, 11, 33))
+     }
+ 
+     export function test() {
+@@= skipped -21, +21 lines =@@
+         x[0]={ color:Color.Brown };
+ >x : Symbol(x, Decl(interfaceAssignmentCompat.ts, 24, 11))
+ >color : Symbol(color, Decl(interfaceAssignmentCompat.ts, 27, 14))
+->Color.Brown : Symbol(Color.Brown, Decl(interfaceAssignmentCompat.ts, 3, 13))
++>Color.Brown : Symbol(Brown, Decl(interfaceAssignmentCompat.ts, 3, 13))
+ >Color : Symbol(Color, Decl(interfaceAssignmentCompat.ts, 0, 10))
+->Brown : Symbol(Color.Brown, Decl(interfaceAssignmentCompat.ts, 3, 13))
++>Brown : Symbol(Brown, Decl(interfaceAssignmentCompat.ts, 3, 13))
+ 
+         x[1]={ color:Color.Blue };
+ >x : Symbol(x, Decl(interfaceAssignmentCompat.ts, 24, 11))
+ >color : Symbol(color, Decl(interfaceAssignmentCompat.ts, 28, 14))
+->Color.Blue : Symbol(Color.Blue, Decl(interfaceAssignmentCompat.ts, 2, 14))
++>Color.Blue : Symbol(Blue, Decl(interfaceAssignmentCompat.ts, 2, 14))
+ >Color : Symbol(Color, Decl(interfaceAssignmentCompat.ts, 0, 10))
+->Blue : Symbol(Color.Blue, Decl(interfaceAssignmentCompat.ts, 2, 14))
++>Blue : Symbol(Blue, Decl(interfaceAssignmentCompat.ts, 2, 14))
+ 
+         x[2]={ color:Color.Green };
+ >x : Symbol(x, Decl(interfaceAssignmentCompat.ts, 24, 11))
+ >color : Symbol(color, Decl(interfaceAssignmentCompat.ts, 29, 14))
+->Color.Green : Symbol(Color.Green, Decl(interfaceAssignmentCompat.ts, 1, 23))
++>Color.Green : Symbol(Green, Decl(interfaceAssignmentCompat.ts, 1, 23))
+ >Color : Symbol(Color, Decl(interfaceAssignmentCompat.ts, 0, 10))
+->Green : Symbol(Color.Green, Decl(interfaceAssignmentCompat.ts, 1, 23))
++>Green : Symbol(Green, Decl(interfaceAssignmentCompat.ts, 1, 23))
+ 
+         x=x.sort(CompareYeux); // parameter mismatch
+ >x : Symbol(x, Decl(interfaceAssignmentCompat.ts, 24, 11))
+->x.sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
++>x.sort : Symbol(sort, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(interfaceAssignmentCompat.ts, 24, 11))
+->sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
++>sort : Symbol(sort, Decl(lib.es5.d.ts, --, --))
+ >CompareYeux : Symbol(CompareYeux, Decl(interfaceAssignmentCompat.ts, 17, 5))
+ 
+         // type of z inferred from specialized array type
+         var z=x.sort(CompareEyes); // ok
+ >z : Symbol(z, Decl(interfaceAssignmentCompat.ts, 33, 11))
+->x.sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
++>x.sort : Symbol(sort, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(interfaceAssignmentCompat.ts, 24, 11))
+->sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
++>sort : Symbol(sort, Decl(lib.es5.d.ts, --, --))
+ >CompareEyes : Symbol(CompareEyes, Decl(interfaceAssignmentCompat.ts, 13, 5))
+ 
+         for (var i=0,len=z.length;i<len;i++) {
+ >i : Symbol(i, Decl(interfaceAssignmentCompat.ts, 35, 16))
+ >len : Symbol(len, Decl(interfaceAssignmentCompat.ts, 35, 21))
+->z.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>z.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >z : Symbol(z, Decl(interfaceAssignmentCompat.ts, 33, 11))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >i : Symbol(i, Decl(interfaceAssignmentCompat.ts, 35, 16))
+ >len : Symbol(len, Decl(interfaceAssignmentCompat.ts, 35, 21))
+ >i : Symbol(i, Decl(interfaceAssignmentCompat.ts, 35, 16))
+@@= skipped -46, +46 lines =@@
+             result+=((Color._map[z[i].color])+"\r\n");
+ >result : Symbol(result, Decl(interfaceAssignmentCompat.ts, 25, 11))
+ >Color : Symbol(Color, Decl(interfaceAssignmentCompat.ts, 0, 10))
+->z[i].color : Symbol(IEye.color, Decl(interfaceAssignmentCompat.ts, 7, 27))
++>z[i].color : Symbol(color, Decl(interfaceAssignmentCompat.ts, 7, 27))
+ >z : Symbol(z, Decl(interfaceAssignmentCompat.ts, 33, 11))
+ >i : Symbol(i, Decl(interfaceAssignmentCompat.ts, 35, 16))
+->color : Symbol(IEye.color, Decl(interfaceAssignmentCompat.ts, 7, 27))
++>color : Symbol(color, Decl(interfaceAssignmentCompat.ts, 7, 27))
+         }
+ 
+         var eeks:IFrenchEye[] = [];
+@@= skipped -12, +12 lines =@@
+ 
+         for (var j=z.length=1;j>=0;j--) {
+ >j : Symbol(j, Decl(interfaceAssignmentCompat.ts, 40, 16))
+->z.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>z.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >z : Symbol(z, Decl(interfaceAssignmentCompat.ts, 33, 11))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >j : Symbol(j, Decl(interfaceAssignmentCompat.ts, 40, 16))
+ >j : Symbol(j, Decl(interfaceAssignmentCompat.ts, 40, 16))
+ 
+@@= skipped -22, +22 lines =@@
+ }
+ 
+ M.test();
+->M.test : Symbol(M.test, Decl(interfaceAssignmentCompat.ts, 21, 5))
++>M.test : Symbol(test, Decl(interfaceAssignmentCompat.ts, 21, 5))
+ >M : Symbol(M, Decl(interfaceAssignmentCompat.ts, 0, 0))
+->test : Symbol(M.test, Decl(interfaceAssignmentCompat.ts, 21, 5))
++>test : Symbol(test, Decl(interfaceAssignmentCompat.ts, 21, 5))
+ 
+ 
+ 

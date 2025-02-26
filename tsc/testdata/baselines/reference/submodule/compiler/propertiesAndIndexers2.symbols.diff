@@ -1,0 +1,34 @@
+--- old.propertiesAndIndexers2.symbols
++++ new.propertiesAndIndexers2.symbols
+@@= skipped -16, +16 lines =@@
+ >A : Symbol(A, Decl(propertiesAndIndexers2.ts, 0, 0))
+ 
+     c: string;
+->c : Symbol(B.c, Decl(propertiesAndIndexers2.ts, 6, 23))
++>c : Symbol(c, Decl(propertiesAndIndexers2.ts, 6, 23))
+ 
+     3: string;
+->3 : Symbol(B[3], Decl(propertiesAndIndexers2.ts, 7, 14))
++>3 : Symbol(3, Decl(propertiesAndIndexers2.ts, 7, 14))
+ 
+     Infinity: string;
+->Infinity : Symbol(B.Infinity, Decl(propertiesAndIndexers2.ts, 8, 14))
++>Infinity : Symbol(Infinity, Decl(propertiesAndIndexers2.ts, 8, 14))
+ 
+     "-Infinity": string;
+->"-Infinity" : Symbol(B["-Infinity"], Decl(propertiesAndIndexers2.ts, 9, 21))
++>"-Infinity" : Symbol("-Infinity", Decl(propertiesAndIndexers2.ts, 9, 21))
+ 
+     NaN: string;
+->NaN : Symbol(B.NaN, Decl(propertiesAndIndexers2.ts, 10, 24))
++>NaN : Symbol(NaN, Decl(propertiesAndIndexers2.ts, 10, 24))
+ 
+     "-NaN": string;
+->"-NaN" : Symbol(B["-NaN"], Decl(propertiesAndIndexers2.ts, 11, 16))
++>"-NaN" : Symbol("-NaN", Decl(propertiesAndIndexers2.ts, 11, 16))
+ 
+     6(): string;
+->6 : Symbol(B[6], Decl(propertiesAndIndexers2.ts, 12, 19))
++>6 : Symbol(6, Decl(propertiesAndIndexers2.ts, 12, 19))
+ }
+ 

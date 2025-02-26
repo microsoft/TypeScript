@@ -1,0 +1,11 @@
+--- old.implicitAnyInCatch.symbols
++++ new.implicitAnyInCatch.symbols
+@@= skipped -15, +15 lines =@@
+ >C : Symbol(C, Decl(implicitAnyInCatch.ts, 4, 25))
+ 
+     public temp() {
+->temp : Symbol(C.temp, Decl(implicitAnyInCatch.ts, 6, 9))
++>temp : Symbol(temp, Decl(implicitAnyInCatch.ts, 6, 9))
+ 
+         for (var x in this) {
+ >x : Symbol(x, Decl(implicitAnyInCatch.ts, 8, 16))

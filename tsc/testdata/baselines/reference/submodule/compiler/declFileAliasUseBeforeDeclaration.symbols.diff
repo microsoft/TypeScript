@@ -1,0 +1,11 @@
+--- old.declFileAliasUseBeforeDeclaration.symbols
++++ new.declFileAliasUseBeforeDeclaration.symbols
+@@= skipped -4, +4 lines =@@
+ >bar : Symbol(bar, Decl(declFileAliasUseBeforeDeclaration_test.ts, 0, 0))
+ >a : Symbol(a, Decl(declFileAliasUseBeforeDeclaration_test.ts, 0, 20))
+ >foo : Symbol(foo, Decl(declFileAliasUseBeforeDeclaration_test.ts, 0, 35))
+->Foo : Symbol(foo.Foo, Decl(declFileAliasUseBeforeDeclaration_foo.ts, 0, 0))
++>Foo : Symbol(Foo, Decl(declFileAliasUseBeforeDeclaration_foo.ts, 0, 0))
+ 
+ import foo = require("./declFileAliasUseBeforeDeclaration_foo");
+ >foo : Symbol(foo, Decl(declFileAliasUseBeforeDeclaration_test.ts, 0, 35))

@@ -1,0 +1,221 @@
+--- old.enumIsNotASubtypeOfAnythingButNumber.symbols
++++ new.enumIsNotASubtypeOfAnythingButNumber.symbols
+@@= skipped -4, +4 lines =@@
+ 
+ enum E { A }
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+->A : Symbol(E.A, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 2, 8))
++>A : Symbol(A, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 2, 8))
+ 
+ interface I {
+ >I : Symbol(I, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 2, 12))
+@@= skipped -9, +9 lines =@@
+ >x : Symbol(x, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 4, 5))
+ 
+     foo: E; // ok
+->foo : Symbol(I.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 4, 21))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 4, 21))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >x : Symbol(x, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 10, 5))
+ 
+     foo: E; // ok
+->foo : Symbol(I2.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 10, 24))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 10, 24))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >x : Symbol(x, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 16, 5))
+ 
+     foo: E;
+->foo : Symbol(I3.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 16, 24))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 16, 24))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >x : Symbol(x, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 22, 5))
+ 
+     foo: E;
+->foo : Symbol(I4.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 22, 25))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 22, 25))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ 
+     foo: E;
+->foo : Symbol(I5.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 28, 22))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 28, 22))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     foo: E;
+->foo : Symbol(I6.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 34, 24))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 34, 24))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >bar : Symbol(bar, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 40, 18))
+ 
+     foo: E;
+->foo : Symbol(I7.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 40, 33))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 40, 33))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >x : Symbol(x, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 46, 5))
+ 
+     foo: E;
+->foo : Symbol(I8.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 46, 26))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 46, 26))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >I8 : Symbol(I8, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 42, 1))
+ 
+     foo: E;
+->foo : Symbol(I9.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 52, 20))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 52, 20))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+ class A { foo: number; }
+ >A : Symbol(A, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 54, 1))
+->foo : Symbol(A.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 56, 9))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 56, 9))
+ 
+ interface I10 {
+ >I10 : Symbol(I10, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 56, 24))
+@@= skipped -16, +16 lines =@@
+ >A : Symbol(A, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 54, 1))
+ 
+     foo: E;
+->foo : Symbol(I10.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 58, 19))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 58, 19))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+ class A2<T> { foo: T; }
+ >A2 : Symbol(A2, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 60, 1))
+ >T : Symbol(T, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 62, 9))
+->foo : Symbol(A2.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 62, 13))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 62, 13))
+ >T : Symbol(T, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 62, 9))
+ 
+ interface I11 {
+@@= skipped -18, +18 lines =@@
+ >A2 : Symbol(A2, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 60, 1))
+ 
+     foo: E;
+->foo : Symbol(I11.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 64, 28))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 64, 28))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >x : Symbol(x, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 70, 18))
+ 
+     foo: E;
+->foo : Symbol(I12.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 70, 31))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 70, 31))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+@@= skipped -16, +16 lines =@@
+ >T : Symbol(T, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 76, 18))
+ 
+     foo: E;
+->foo : Symbol(I13.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 76, 32))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 76, 32))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+ 
+ enum E2 { A }
+ >E2 : Symbol(E2, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 78, 1))
+->A : Symbol(E2.A, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 81, 9))
++>A : Symbol(A, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 81, 9))
+ 
+ interface I14 {
+ >I14 : Symbol(I14, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 81, 13))
+@@= skipped -17, +17 lines =@@
+ >E2 : Symbol(E2, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 78, 1))
+ 
+     foo: E;
+->foo : Symbol(I14.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 83, 20))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 83, 20))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+@@= skipped -22, +22 lines =@@
+ >f : Symbol(f, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 85, 1), Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 88, 16))
+ 
+     foo: E;
+->foo : Symbol(I15.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 93, 26))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 93, 26))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+ 
+ class c { baz: string }
+ >c : Symbol(c, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 95, 1), Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 98, 23))
+->baz : Symbol(c.baz, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 98, 9))
++>baz : Symbol(baz, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 98, 9))
+ 
+ module c {
+ >c : Symbol(c, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 95, 1), Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 98, 23))
+@@= skipped -23, +23 lines =@@
+ >c : Symbol(c, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 95, 1), Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 98, 23))
+ 
+     foo: E;
+->foo : Symbol(I16.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 103, 26))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 103, 26))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+@@= skipped -14, +14 lines =@@
+ >T : Symbol(T, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 108, 14))
+ 
+     foo: E;
+->foo : Symbol(I17.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 109, 19))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 109, 19))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+@@= skipped -16, +16 lines =@@
+ >U : Symbol(U, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 114, 16))
+ 
+     foo: E;
+->foo : Symbol(I18.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 115, 19))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 115, 19))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     foo: E; // BUG 831833
+->foo : Symbol(I19.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 121, 24))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 121, 24))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >x : Symbol(x, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 127, 5))
+ 
+     foo: E; // BUG 831833
+->foo : Symbol(I20.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 127, 20))
++>foo : Symbol(foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 127, 20))
+ >E : Symbol(E, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 0, 0))
+ }

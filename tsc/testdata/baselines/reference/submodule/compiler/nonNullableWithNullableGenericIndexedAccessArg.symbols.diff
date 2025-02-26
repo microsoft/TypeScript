@@ -1,0 +1,20 @@
+--- old.nonNullableWithNullableGenericIndexedAccessArg.symbols
++++ new.nonNullableWithNullableGenericIndexedAccessArg.symbols
+@@= skipped -6, +6 lines =@@
+ >StateSchema : Symbol(StateSchema, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 0, 0))
+ 
+   states?: {
+->states : Symbol(StateSchema.states, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 2, 23))
++>states : Symbol(states, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 2, 23))
+ 
+     [key: string]: StateSchema;
+ >key : Symbol(key, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 4, 5))
+@@= skipped -15, +15 lines =@@
+ >StateSchema : Symbol(StateSchema, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 0, 0))
+ 
+   schema: TStateSchema;
+->schema : Symbol(StateNode.schema, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 8, 59))
++>schema : Symbol(schema, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 8, 59))
+ >TStateSchema : Symbol(TStateSchema, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 8, 24))
+ }
+ 

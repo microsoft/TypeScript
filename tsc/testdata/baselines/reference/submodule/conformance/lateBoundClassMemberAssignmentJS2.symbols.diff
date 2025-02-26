@@ -1,0 +1,11 @@
+--- old.lateBoundClassMemberAssignmentJS2.symbols
++++ new.lateBoundClassMemberAssignmentJS2.symbols
+@@= skipped -13, +13 lines =@@
+     }
+ 
+     method() {
+->method : Symbol(MyClass.method, Decl(lateBoundClassMemberAssignmentJS2.js, 4, 5))
++>method : Symbol(method, Decl(lateBoundClassMemberAssignmentJS2.js, 4, 5))
+ 
+         this[_sym] = "yep";
+ >this : Symbol(MyClass, Decl(lateBoundClassMemberAssignmentJS2.js, 0, 27))

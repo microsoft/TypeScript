@@ -1,0 +1,45 @@
+--- old.genericTypeReferenceWithoutTypeArgument2.symbols
++++ new.genericTypeReferenceWithoutTypeArgument2.symbols
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 3, 12))
+ 
+     foo: T;
+->foo : Symbol(I.foo, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 3, 16))
++>foo : Symbol(foo, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 3, 16))
+ >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 3, 12))
+ }
+ 
+@@= skipped -66, +66 lines =@@
+     export interface E<T> { foo: T }
+ >E : Symbol(E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
+ >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 25, 23))
+->foo : Symbol(E.foo, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 25, 27))
++>foo : Symbol(foo, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 25, 27))
+ >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 25, 23))
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >D3 : Symbol(D3, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 28, 24))
+ >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 29, 13))
+ >M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 22, 24))
+->E : Symbol(M.E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
++>E : Symbol(E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
+ 
+ interface I2 extends M.C { }
+ >I2 : Symbol(I2, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 29, 31))
+@@= skipped -17, +17 lines =@@
+ >i : Symbol(i, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 32, 33))
+ >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 33, 11))
+ >M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 22, 24))
+->E : Symbol(M.E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
++>E : Symbol(E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
+ >x : Symbol(x, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 33, 26))
+ >T : Symbol(T, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 33, 11))
+ 
+@@= skipped -11, +11 lines =@@
+ var k = <M.E>null;
+ >k : Symbol(k, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 36, 3))
+ >M : Symbol(M, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 22, 24))
+->E : Symbol(M.E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
++>E : Symbol(E, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 24, 10))
+ 

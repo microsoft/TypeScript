@@ -1,0 +1,35 @@
+--- old.instanceofOperatorWithInvalidOperands.es2015.symbols
++++ new.instanceofOperatorWithInvalidOperands.es2015.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 0, 0))
+ 
+     foo() { }
+->foo : Symbol(C.foo, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 0, 9))
++>foo : Symbol(foo, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 0, 9))
+ }
+ 
+ var x: any;
+@@= skipped -141, +141 lines =@@
+ var o4: {[Symbol.hasInstance](value: { x: number }): boolean;};
+ >o4 : Symbol(o4, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 48, 3))
+ >[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 48, 9))
+->Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Symbol.hasInstance : Symbol(hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>hasInstance : Symbol(hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >value : Symbol(value, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 48, 30))
+ >x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 48, 38))
+ 
+@@= skipped -19, +19 lines =@@
+ var o6: {[Symbol.hasInstance](value: unknown): number;};
+ >o6 : Symbol(o6, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 53, 3))
+ >[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 53, 9))
+->Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Symbol.hasInstance : Symbol(hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>hasInstance : Symbol(hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >value : Symbol(value, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 53, 30))
+ 
+ var rb11 = x instanceof o6;

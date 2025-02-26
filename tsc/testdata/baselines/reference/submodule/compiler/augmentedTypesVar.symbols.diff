@@ -1,0 +1,20 @@
+--- old.augmentedTypesVar.symbols
++++ new.augmentedTypesVar.symbols
+@@= skipped -32, +32 lines =@@
+ 
+ class x4a { public foo() { } } // error
+ >x4a : Symbol(x4a, Decl(augmentedTypesVar.ts, 15, 12))
+->foo : Symbol(x4a.foo, Decl(augmentedTypesVar.ts, 16, 11))
++>foo : Symbol(foo, Decl(augmentedTypesVar.ts, 16, 11))
+ 
+ // var then enum
+ var x5 = 1;
+@@= skipped -8, +8 lines =@@
+ 
+ enum x5 { One } // error
+ >x5 : Symbol(x5, Decl(augmentedTypesVar.ts, 19, 11))
+->One : Symbol(x5.One, Decl(augmentedTypesVar.ts, 20, 9))
++>One : Symbol(One, Decl(augmentedTypesVar.ts, 20, 9))
+ 
+ // var then module
+ var x6 = 1;

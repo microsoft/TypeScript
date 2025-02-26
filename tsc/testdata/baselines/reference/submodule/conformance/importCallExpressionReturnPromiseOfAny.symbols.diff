@@ -1,0 +1,41 @@
+--- old.importCallExpressionReturnPromiseOfAny.symbols
++++ new.importCallExpressionReturnPromiseOfAny.symbols
+@@= skipped -35, +35 lines =@@
+ 
+ var p1: Promise<any> = import(getSpecifier());
+ >p1 : Symbol(p1, Decl(1.ts, 10, 3), Decl(1.ts, 11, 3))
+->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Promise : Symbol(Promise)
+ >getSpecifier : Symbol(getSpecifier, Decl(1.ts, 0, 47))
+ 
+ var p11: Promise<typeof defaultModule> = import(getSpecifier());
+ >p11 : Symbol(p11, Decl(1.ts, 12, 3))
+->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Promise : Symbol(Promise)
+ >defaultModule : Symbol(defaultModule, Decl(1.ts, 0, 6))
+ >getSpecifier : Symbol(getSpecifier, Decl(1.ts, 0, 47))
+ 
+@@= skipped -13, +13 lines =@@
+ >p2 : Symbol(p2, Decl(1.ts, 13, 5))
+ >whatToLoad : Symbol(whatToLoad, Decl(1.ts, 3, 11))
+ >getSpecifier : Symbol(getSpecifier, Decl(1.ts, 0, 47))
+->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Promise : Symbol(Promise)
+ >defaultModule : Symbol(defaultModule, Decl(1.ts, 0, 6))
+ 
+ p1.then(zero => {
+->p1.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+ >p1 : Symbol(p1, Decl(1.ts, 10, 3), Decl(1.ts, 11, 3))
+->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+ >zero : Symbol(zero, Decl(1.ts, 14, 8))
+ 
+     return zero.foo();  // ok, zero is any
+@@= skipped -19, +17 lines =@@
+ 
+ var p3: Promise<typeof defaultModule> = import(j=getSpecifier());
+ >p3 : Symbol(p3, Decl(1.ts, 19, 3))
+->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Promise : Symbol(Promise)
+ >defaultModule : Symbol(defaultModule, Decl(1.ts, 0, 6))
+ >j : Symbol(j, Decl(1.ts, 18, 3))
+ >getSpecifier : Symbol(getSpecifier, Decl(1.ts, 0, 47))

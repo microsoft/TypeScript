@@ -1,0 +1,10 @@
+--- old.privateNameEnum.symbols
++++ new.privateNameEnum.symbols
+@@= skipped -4, +4 lines =@@
+ >E : Symbol(E, Decl(privateNameEnum.ts, 0, 0))
+ 
+     #x
+->#x : Symbol(E.#x, Decl(privateNameEnum.ts, 0, 8))
++>#x : Symbol(#x, Decl(privateNameEnum.ts, 0, 8))
+ }
+ 

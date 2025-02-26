@@ -1,0 +1,23 @@
+--- old.recursiveGenericUnionType2.symbols
++++ new.recursiveGenericUnionType2.symbols
+@@= skipped -41, +41 lines =@@
+ var x: Test1.Container<number>;
+ >x : Symbol(x, Decl(recursiveGenericUnionType2.ts, 14, 3))
+ >Test1 : Symbol(Test1, Decl(recursiveGenericUnionType2.ts, 0, 0))
+->Container : Symbol(Test1.Container, Decl(recursiveGenericUnionType2.ts, 0, 22))
++>Container : Symbol(Container, Decl(recursiveGenericUnionType2.ts, 0, 22))
+ 
+ var s1: Test1.IStringContainer;
+ >s1 : Symbol(s1, Decl(recursiveGenericUnionType2.ts, 16, 3))
+ >Test1 : Symbol(Test1, Decl(recursiveGenericUnionType2.ts, 0, 0))
+->IStringContainer : Symbol(Test1.IStringContainer, Decl(recursiveGenericUnionType2.ts, 3, 6))
++>IStringContainer : Symbol(IStringContainer, Decl(recursiveGenericUnionType2.ts, 3, 6))
+ 
+ var s2: Test2.IStringContainer;
+ >s2 : Symbol(s2, Decl(recursiveGenericUnionType2.ts, 17, 3))
+ >Test2 : Symbol(Test2, Decl(recursiveGenericUnionType2.ts, 5, 1))
+->IStringContainer : Symbol(Test2.IStringContainer, Decl(recursiveGenericUnionType2.ts, 10, 6))
++>IStringContainer : Symbol(IStringContainer, Decl(recursiveGenericUnionType2.ts, 10, 6))
+ 
+ s1 = s2;
+ >s1 : Symbol(s1, Decl(recursiveGenericUnionType2.ts, 16, 3))

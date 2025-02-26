@@ -1,0 +1,78 @@
+--- old.defaultPropsEmptyCurlyBecomesAnyForJs.symbols
++++ new.defaultPropsEmptyCurlyBecomesAnyForJs.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === library.d.ts ===
+ export class Foo<T = {}, U = {}> {
+->Foo : Symbol(Foo, Decl(library.d.ts, --, --))
+->T : Symbol(T, Decl(library.d.ts, --, --))
+->U : Symbol(U, Decl(library.d.ts, --, --))
++>Foo : Symbol(Foo, Decl(library.d.ts, 0, 0))
++>T : Symbol(T, Decl(library.d.ts, 0, 17))
++>U : Symbol(U, Decl(library.d.ts, 0, 24))
+ 
+     props: T;
+->props : Symbol(Foo.props, Decl(library.d.ts, --, --))
+->T : Symbol(T, Decl(library.d.ts, --, --))
++>props : Symbol(props, Decl(library.d.ts, 0, 34))
++>T : Symbol(T, Decl(library.d.ts, 0, 17))
+ 
+     state: U;
+->state : Symbol(Foo.state, Decl(library.d.ts, --, --))
+->U : Symbol(U, Decl(library.d.ts, --, --))
++>state : Symbol(state, Decl(library.d.ts, 1, 13))
++>U : Symbol(U, Decl(library.d.ts, 0, 24))
+ 
+     constructor(props: T, state: U);
+->props : Symbol(props, Decl(library.d.ts, --, --))
+->T : Symbol(T, Decl(library.d.ts, --, --))
+->state : Symbol(state, Decl(library.d.ts, --, --))
+->U : Symbol(U, Decl(library.d.ts, --, --))
++>props : Symbol(props, Decl(library.d.ts, 3, 16))
++>T : Symbol(T, Decl(library.d.ts, 0, 17))
++>state : Symbol(state, Decl(library.d.ts, 3, 25))
++>U : Symbol(U, Decl(library.d.ts, 0, 24))
+ }
+ 
+ === component.js ===
+@@= skipped -28, +28 lines =@@
+ >Foo : Symbol(Foo, Decl(component.js, 0, 8))
+ 
+     member;
+->member : Symbol(MyFoo.member, Decl(component.js, 1, 32))
++>member : Symbol(member, Decl(component.js, 1, 32))
+ }
+ 
+ === typed_component.ts ===
+@@= skipped -20, +20 lines =@@
+ >undefined : Symbol(undefined)
+ 
+         this.props.x;
+->this.props : Symbol(Foo.props, Decl(library.d.ts, --, --))
++>this.props : Symbol(props, Decl(library.d.ts, 0, 34))
+ >this : Symbol(TypedFoo, Decl(typed_component.ts, 0, 36))
+->props : Symbol(Foo.props, Decl(library.d.ts, --, --))
++>props : Symbol(props, Decl(library.d.ts, 0, 34))
+ 
+         this.props.y;
+->this.props : Symbol(Foo.props, Decl(library.d.ts, --, --))
++>this.props : Symbol(props, Decl(library.d.ts, 0, 34))
+ >this : Symbol(TypedFoo, Decl(typed_component.ts, 0, 36))
+->props : Symbol(Foo.props, Decl(library.d.ts, --, --))
++>props : Symbol(props, Decl(library.d.ts, 0, 34))
+ 
+         this.state.value;
+->this.state : Symbol(Foo.state, Decl(library.d.ts, --, --))
++>this.state : Symbol(state, Decl(library.d.ts, 1, 13))
+ >this : Symbol(TypedFoo, Decl(typed_component.ts, 0, 36))
+->state : Symbol(Foo.state, Decl(library.d.ts, --, --))
++>state : Symbol(state, Decl(library.d.ts, 1, 13))
+ 
+         this.member;
+->this.member : Symbol(MyFoo.member, Decl(component.js, 1, 32))
++>this.member : Symbol(member, Decl(component.js, 1, 32))
+ >this : Symbol(TypedFoo, Decl(typed_component.ts, 0, 36))
+->member : Symbol(MyFoo.member, Decl(component.js, 1, 32))
++>member : Symbol(member, Decl(component.js, 1, 32))
+     }
+ }

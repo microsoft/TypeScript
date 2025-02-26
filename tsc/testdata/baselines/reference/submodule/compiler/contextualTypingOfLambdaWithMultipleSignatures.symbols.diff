@@ -1,0 +1,27 @@
+--- old.contextualTypingOfLambdaWithMultipleSignatures.symbols
++++ new.contextualTypingOfLambdaWithMultipleSignatures.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 0))
+ 
+     getFoo(n: number): void;
+->getFoo : Symbol(Foo.getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
++>getFoo : Symbol(getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
+ >n : Symbol(n, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 11))
+ 
+     getFoo(s: string): void;
+->getFoo : Symbol(Foo.getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
++>getFoo : Symbol(getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
+ >s : Symbol(s, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 2, 11))
+ }
+ 
+@@= skipped -13, +13 lines =@@
+ >Foo : Symbol(Foo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 0))
+ 
+ foo.getFoo = bar => { };
+->foo.getFoo : Symbol(Foo.getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
++>foo.getFoo : Symbol(getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
+ >foo : Symbol(foo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 5, 3))
+->getFoo : Symbol(Foo.getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
++>getFoo : Symbol(getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
+ >bar : Symbol(bar, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 6, 12))
+ 

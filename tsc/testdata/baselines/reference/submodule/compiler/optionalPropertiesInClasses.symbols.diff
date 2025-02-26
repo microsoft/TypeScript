@@ -1,0 +1,44 @@
+--- old.optionalPropertiesInClasses.symbols
++++ new.optionalPropertiesInClasses.symbols
+@@= skipped -4, +4 lines =@@
+ >ifoo : Symbol(ifoo, Decl(optionalPropertiesInClasses.ts, 0, 0))
+ 
+ 	x?:number;
+->x : Symbol(ifoo.x, Decl(optionalPropertiesInClasses.ts, 0, 16))
++>x : Symbol(x, Decl(optionalPropertiesInClasses.ts, 0, 16))
+ 
+ 	y:number;
+->y : Symbol(ifoo.y, Decl(optionalPropertiesInClasses.ts, 1, 11))
++>y : Symbol(y, Decl(optionalPropertiesInClasses.ts, 1, 11))
+ }
+ 
+ class C1 implements ifoo {
+@@= skipped -11, +11 lines =@@
+ >ifoo : Symbol(ifoo, Decl(optionalPropertiesInClasses.ts, 0, 0))
+ 
+ 	public y:number;
+->y : Symbol(C1.y, Decl(optionalPropertiesInClasses.ts, 5, 26))
++>y : Symbol(y, Decl(optionalPropertiesInClasses.ts, 5, 26))
+ }
+ 
+ class C2 implements ifoo { // ERROR - still need 'y'
+@@= skipped -8, +8 lines =@@
+ >ifoo : Symbol(ifoo, Decl(optionalPropertiesInClasses.ts, 0, 0))
+ 
+ 	public x:number;
+->x : Symbol(C2.x, Decl(optionalPropertiesInClasses.ts, 9, 26))
++>x : Symbol(x, Decl(optionalPropertiesInClasses.ts, 9, 26))
+ }
+ 
+ class C3 implements ifoo {
+@@= skipped -8, +8 lines =@@
+ >ifoo : Symbol(ifoo, Decl(optionalPropertiesInClasses.ts, 0, 0))
+ 
+ 	public x:number;
+->x : Symbol(C3.x, Decl(optionalPropertiesInClasses.ts, 13, 26))
++>x : Symbol(x, Decl(optionalPropertiesInClasses.ts, 13, 26))
+ 
+ 	public y:number;
+->y : Symbol(C3.y, Decl(optionalPropertiesInClasses.ts, 14, 17))
++>y : Symbol(y, Decl(optionalPropertiesInClasses.ts, 14, 17))
+ }

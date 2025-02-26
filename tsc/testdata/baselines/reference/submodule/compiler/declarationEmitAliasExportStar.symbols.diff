@@ -1,0 +1,9 @@
+--- old.declarationEmitAliasExportStar.symbols
++++ new.declarationEmitAliasExportStar.symbols
+@@= skipped -14, +14 lines =@@
+ >thing2 : Symbol(thing2, Decl(index.ts, 1, 12))
+ >param : Symbol(param, Decl(index.ts, 1, 23))
+ >things : Symbol(things, Decl(index.ts, 0, 6))
+->ThingB : Symbol(things.ThingB, Decl(thingB.ts, 0, 0))
++>ThingB : Symbol(ThingB, Decl(thingB.ts, 0, 0))
+ 

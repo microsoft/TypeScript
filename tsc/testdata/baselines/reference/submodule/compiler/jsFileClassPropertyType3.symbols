@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/jsFileClassPropertyType3.ts] ////
+
+=== foo.js ===
+class C {
+>C : Symbol(C, Decl(foo.js, 0, 0))
+
+    constructor() {
+        if (cond) {
+            this.p = null;
+>this : Symbol(C, Decl(foo.js, 0, 0))
+        }
+        else {
+            this.p = 0;
+>this : Symbol(C, Decl(foo.js, 0, 0))
+        }
+    }
+}
+
+=== bar.ts ===
+(new C()).p = "string"; // Error
+>C : Symbol(C, Decl(foo.js, 0, 0))
+

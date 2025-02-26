@@ -1,0 +1,11 @@
+--- old.classAbstractDeclarations.d.symbols
++++ new.classAbstractDeclarations.d.symbols
+@@= skipped -10, +10 lines =@@
+ >AA : Symbol(AA, Decl(classAbstractDeclarations.d.ts, 2, 1))
+ 
+     abstract foo();
+->foo : Symbol(AA.foo, Decl(classAbstractDeclarations.d.ts, 4, 27))
++>foo : Symbol(foo, Decl(classAbstractDeclarations.d.ts, 4, 27))
+ }
+ 
+ declare abstract class BB extends AA {}

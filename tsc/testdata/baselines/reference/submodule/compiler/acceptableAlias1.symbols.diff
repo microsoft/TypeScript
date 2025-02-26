@@ -1,0 +1,9 @@
+--- old.acceptableAlias1.symbols
++++ new.acceptableAlias1.symbols
+@@= skipped -14, +14 lines =@@
+ import r = M.X;
+ >r : Symbol(r, Decl(acceptableAlias1.ts, 4, 1))
+ >M : Symbol(M, Decl(acceptableAlias1.ts, 0, 0))
+->X : Symbol(M.X, Decl(acceptableAlias1.ts, 2, 5))
++>X : Symbol(X, Decl(acceptableAlias1.ts, 2, 5))
+ 

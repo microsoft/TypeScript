@@ -1,0 +1,11 @@
+--- old.requireAsFunctionInExternalModule.symbols
++++ new.requireAsFunctionInExternalModule.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === c.js ===
+ export default function require(a) { }
+->require : Symbol(require, Decl(c.js, 0, 0))
++>require : Symbol(default, Decl(c.js, 0, 0))
+ >a : Symbol(a, Decl(c.js, 0, 32))
+ 
+ export function has(a) { return true }

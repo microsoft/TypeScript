@@ -1,0 +1,82 @@
+--- old.controlFlowForCatchAndFinally.symbols
++++ new.controlFlowForCatchAndFinally.symbols
+@@= skipped -76, +76 lines =@@
+ 
+ declare class Aborter { abort(): void };
+ >Aborter : Symbol(Aborter, Decl(controlFlowForCatchAndFinally.ts, 20, 1))
+->abort : Symbol(Aborter.abort, Decl(controlFlowForCatchAndFinally.ts, 22, 23))
++>abort : Symbol(abort, Decl(controlFlowForCatchAndFinally.ts, 22, 23))
+ 
+ class Foo {
+ >Foo : Symbol(Foo, Decl(controlFlowForCatchAndFinally.ts, 22, 40))
+ 
+     abortController: Aborter | undefined = undefined;
+->abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
++>abortController : Symbol(abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+ >Aborter : Symbol(Aborter, Decl(controlFlowForCatchAndFinally.ts, 20, 1))
+ >undefined : Symbol(undefined)
+ 
+     async operation() {
+->operation : Symbol(Foo.operation, Decl(controlFlowForCatchAndFinally.ts, 24, 53))
++>operation : Symbol(operation, Decl(controlFlowForCatchAndFinally.ts, 24, 53))
+ 
+         if (this.abortController !== undefined) {
+->this.abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
++>this.abortController : Symbol(abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+ >this : Symbol(Foo, Decl(controlFlowForCatchAndFinally.ts, 22, 40))
+->abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
++>abortController : Symbol(abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+ >undefined : Symbol(undefined)
+ 
+             this.abortController.abort();
+->this.abortController.abort : Symbol(Aborter.abort, Decl(controlFlowForCatchAndFinally.ts, 22, 23))
+->this.abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
++>this.abortController.abort : Symbol(abort, Decl(controlFlowForCatchAndFinally.ts, 22, 23))
++>this.abortController : Symbol(abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+ >this : Symbol(Foo, Decl(controlFlowForCatchAndFinally.ts, 22, 40))
+->abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+->abort : Symbol(Aborter.abort, Decl(controlFlowForCatchAndFinally.ts, 22, 23))
++>abortController : Symbol(abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
++>abort : Symbol(abort, Decl(controlFlowForCatchAndFinally.ts, 22, 23))
+ 
+             this.abortController = undefined;
+->this.abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
++>this.abortController : Symbol(abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+ >this : Symbol(Foo, Decl(controlFlowForCatchAndFinally.ts, 22, 40))
+->abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
++>abortController : Symbol(abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+ >undefined : Symbol(undefined)
+         }
+         try {
+             this.abortController = new Aborter();
+->this.abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
++>this.abortController : Symbol(abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+ >this : Symbol(Foo, Decl(controlFlowForCatchAndFinally.ts, 22, 40))
+->abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
++>abortController : Symbol(abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+ >Aborter : Symbol(Aborter, Decl(controlFlowForCatchAndFinally.ts, 20, 1))
+ 
+         } catch (error) {
+ >error : Symbol(error, Decl(controlFlowForCatchAndFinally.ts, 33, 17))
+ 
+             if (this.abortController !== undefined) {
+->this.abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
++>this.abortController : Symbol(abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+ >this : Symbol(Foo, Decl(controlFlowForCatchAndFinally.ts, 22, 40))
+->abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
++>abortController : Symbol(abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+ >undefined : Symbol(undefined)
+ 
+                 this.abortController.abort(); // ok
+->this.abortController.abort : Symbol(Aborter.abort, Decl(controlFlowForCatchAndFinally.ts, 22, 23))
+->this.abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
++>this.abortController.abort : Symbol(abort, Decl(controlFlowForCatchAndFinally.ts, 22, 23))
++>this.abortController : Symbol(abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+ >this : Symbol(Foo, Decl(controlFlowForCatchAndFinally.ts, 22, 40))
+->abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+->abort : Symbol(Aborter.abort, Decl(controlFlowForCatchAndFinally.ts, 22, 23))
++>abortController : Symbol(abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
++>abort : Symbol(abort, Decl(controlFlowForCatchAndFinally.ts, 22, 23))
+             }
+         }
+     }

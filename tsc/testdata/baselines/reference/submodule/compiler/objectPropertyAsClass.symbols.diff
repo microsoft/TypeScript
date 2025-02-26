@@ -1,0 +1,39 @@
+--- old.objectPropertyAsClass.symbols
++++ new.objectPropertyAsClass.symbols
+@@= skipped -7, +7 lines =@@
+ >foo : Symbol(foo, Decl(index.js, 0, 12))
+ 
+         this.x = 0;
+->this : Symbol(a1, Decl(index.js, 0, 10))
+->x : Symbol(x, Decl(index.js, 1, 11))
+     }
+ }
+ 
+@@= skipped -12, +10 lines =@@
+ >foo : Symbol(foo, Decl(index.js, 6, 12))
+ 
+         this.x = 0;
+->this : Symbol(a2, Decl(index.js, 6, 10))
+->x : Symbol(foo.x, Decl(index.js, 7, 21))
+     }
+ }
+ 
+@@= skipped -13, +11 lines =@@
+ >foo : Symbol(foo, Decl(index.js, 12, 12))
+ 
+         this.x = 0;
+->this : Symbol(b1, Decl(index.js, 12, 10))
+->x : Symbol(x, Decl(index.js, 14, 11))
+     }
+ }
+ 
+@@= skipped -13, +11 lines =@@
+ >foo : Symbol(foo, Decl(index.js, 19, 12))
+ 
+         this.x = 0;
+->this.x : Symbol(foo.x, Decl(index.js, 21, 21))
+->this : Symbol(foo, Decl(index.js, 21, 8))
+->x : Symbol(foo.x, Decl(index.js, 21, 21))
+     }
+ }
+ 

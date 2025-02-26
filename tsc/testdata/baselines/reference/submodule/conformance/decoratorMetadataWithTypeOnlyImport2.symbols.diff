@@ -1,0 +1,13 @@
+--- old.decoratorMetadataWithTypeOnlyImport2.symbols
++++ new.decoratorMetadataWithTypeOnlyImport2.symbols
+@@= skipped -21, +21 lines =@@
+ >decorator : Symbol(decorator, Decl(index.ts, 2, 13))
+ 
+   field: Services.Service;
+->field : Symbol(Main.field, Decl(index.ts, 3, 19))
++>field : Symbol(field, Decl(index.ts, 3, 19))
+ >Services : Symbol(Services, Decl(index.ts, 0, 13))
+->Service : Symbol(Services.Service, Decl(services.ts, 0, 27))
++>Service : Symbol(Service, Decl(services.ts, 0, 27))
+ }
+ 

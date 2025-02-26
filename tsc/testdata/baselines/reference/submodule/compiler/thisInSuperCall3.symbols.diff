@@ -1,0 +1,11 @@
+--- old.thisInSuperCall3.symbols
++++ new.thisInSuperCall3.symbols
+@@= skipped -12, +12 lines =@@
+ >Base : Symbol(Base, Decl(thisInSuperCall3.ts, 0, 0))
+ 
+     public x: number = 0;
+->x : Symbol(Foo.x, Decl(thisInSuperCall3.ts, 4, 24))
++>x : Symbol(x, Decl(thisInSuperCall3.ts, 4, 24))
+ 
+     constructor() {
+         super(this);

@@ -1,0 +1,11 @@
+--- old.es5-declaration-amd.symbols
++++ new.es5-declaration-amd.symbols
+@@= skipped -9, +9 lines =@@
+     }
+ 
+     public B()
+->B : Symbol(A.B, Decl(es5-declaration-amd.ts, 5, 5))
++>B : Symbol(B, Decl(es5-declaration-amd.ts, 5, 5))
+     {
+         return 42;
+     }

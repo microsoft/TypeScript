@@ -1,0 +1,18 @@
+--- old.inheritSameNamePrivatePropertiesFromSameOrigin.symbols
++++ new.inheritSameNamePrivatePropertiesFromSameOrigin.symbols
+@@= skipped -4, +4 lines =@@
+ >B : Symbol(B, Decl(inheritSameNamePrivatePropertiesFromSameOrigin.ts, 0, 0))
+ 
+     private x: number;
+->x : Symbol(B.x, Decl(inheritSameNamePrivatePropertiesFromSameOrigin.ts, 0, 9))
++>x : Symbol(x, Decl(inheritSameNamePrivatePropertiesFromSameOrigin.ts, 0, 9))
+ }
+ class C extends B { }
+ >C : Symbol(C, Decl(inheritSameNamePrivatePropertiesFromSameOrigin.ts, 2, 1))
+@@= skipped -16, +16 lines =@@
+ >C2 : Symbol(C2, Decl(inheritSameNamePrivatePropertiesFromSameOrigin.ts, 3, 21))
+ 
+     y: string;
+->y : Symbol(A.y, Decl(inheritSameNamePrivatePropertiesFromSameOrigin.ts, 7, 27))
++>y : Symbol(y, Decl(inheritSameNamePrivatePropertiesFromSameOrigin.ts, 7, 27))
+ }

@@ -1,0 +1,189 @@
+--- old.privacyGloVar.symbols
++++ new.privacyGloVar.symbols
+@@= skipped -7, +7 lines =@@
+ >C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+ 
+         private f1() {
+->f1 : Symbol(C1_public.f1, Decl(privacyGloVar.ts, 1, 28))
++>f1 : Symbol(f1, Decl(privacyGloVar.ts, 1, 28))
+         }
+     }
+ 
+@@= skipped -12, +12 lines =@@
+ >C3_public : Symbol(C3_public, Decl(privacyGloVar.ts, 7, 5))
+ 
+         private C3_v1_private: C1_public;
+->C3_v1_private : Symbol(C3_public.C3_v1_private, Decl(privacyGloVar.ts, 9, 28))
++>C3_v1_private : Symbol(C3_v1_private, Decl(privacyGloVar.ts, 9, 28))
+ >C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+ 
+         public C3_v2_public: C1_public;
+->C3_v2_public : Symbol(C3_public.C3_v2_public, Decl(privacyGloVar.ts, 10, 41))
++>C3_v2_public : Symbol(C3_v2_public, Decl(privacyGloVar.ts, 10, 41))
+ >C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+ 
+         private C3_v3_private: C2_private;
+->C3_v3_private : Symbol(C3_public.C3_v3_private, Decl(privacyGloVar.ts, 11, 39))
++>C3_v3_private : Symbol(C3_v3_private, Decl(privacyGloVar.ts, 11, 39))
+ >C2_private : Symbol(C2_private, Decl(privacyGloVar.ts, 4, 5))
+ 
+         public C3_v4_public: C2_private; // error
+->C3_v4_public : Symbol(C3_public.C3_v4_public, Decl(privacyGloVar.ts, 12, 42))
++>C3_v4_public : Symbol(C3_v4_public, Decl(privacyGloVar.ts, 12, 42))
+ >C2_private : Symbol(C2_private, Decl(privacyGloVar.ts, 4, 5))
+ 
+         private C3_v11_private = new C1_public();
+->C3_v11_private : Symbol(C3_public.C3_v11_private, Decl(privacyGloVar.ts, 13, 40))
++>C3_v11_private : Symbol(C3_v11_private, Decl(privacyGloVar.ts, 13, 40))
+ >C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+ 
+         public C3_v12_public = new C1_public();
+->C3_v12_public : Symbol(C3_public.C3_v12_public, Decl(privacyGloVar.ts, 15, 49))
++>C3_v12_public : Symbol(C3_v12_public, Decl(privacyGloVar.ts, 15, 49))
+ >C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+ 
+         private C3_v13_private = new C2_private();
+->C3_v13_private : Symbol(C3_public.C3_v13_private, Decl(privacyGloVar.ts, 16, 47))
++>C3_v13_private : Symbol(C3_v13_private, Decl(privacyGloVar.ts, 16, 47))
+ >C2_private : Symbol(C2_private, Decl(privacyGloVar.ts, 4, 5))
+ 
+         public C3_v14_public = new C2_private(); // error
+->C3_v14_public : Symbol(C3_public.C3_v14_public, Decl(privacyGloVar.ts, 17, 50))
++>C3_v14_public : Symbol(C3_v14_public, Decl(privacyGloVar.ts, 17, 50))
+ >C2_private : Symbol(C2_private, Decl(privacyGloVar.ts, 4, 5))
+ 
+         private C3_v21_private: C1_public = new C1_public();
+->C3_v21_private : Symbol(C3_public.C3_v21_private, Decl(privacyGloVar.ts, 18, 48))
++>C3_v21_private : Symbol(C3_v21_private, Decl(privacyGloVar.ts, 18, 48))
+ >C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+ >C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+ 
+         public C3_v22_public: C1_public = new C1_public();
+->C3_v22_public : Symbol(C3_public.C3_v22_public, Decl(privacyGloVar.ts, 20, 60))
++>C3_v22_public : Symbol(C3_v22_public, Decl(privacyGloVar.ts, 20, 60))
+ >C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+ >C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+ 
+         private C3_v23_private: C2_private = new C2_private();
+->C3_v23_private : Symbol(C3_public.C3_v23_private, Decl(privacyGloVar.ts, 21, 58))
++>C3_v23_private : Symbol(C3_v23_private, Decl(privacyGloVar.ts, 21, 58))
+ >C2_private : Symbol(C2_private, Decl(privacyGloVar.ts, 4, 5))
+ >C2_private : Symbol(C2_private, Decl(privacyGloVar.ts, 4, 5))
+ 
+         public C3_v24_public: C2_private = new C2_private(); // error
+->C3_v24_public : Symbol(C3_public.C3_v24_public, Decl(privacyGloVar.ts, 22, 62))
++>C3_v24_public : Symbol(C3_v24_public, Decl(privacyGloVar.ts, 22, 62))
+ >C2_private : Symbol(C2_private, Decl(privacyGloVar.ts, 4, 5))
+ >C2_private : Symbol(C2_private, Decl(privacyGloVar.ts, 4, 5))
+     }
+@@= skipped -56, +56 lines =@@
+ >C4_public : Symbol(C4_public, Decl(privacyGloVar.ts, 24, 5))
+ 
+         private C4_v1_private: C1_public;
+->C4_v1_private : Symbol(C4_public.C4_v1_private, Decl(privacyGloVar.ts, 26, 21))
++>C4_v1_private : Symbol(C4_v1_private, Decl(privacyGloVar.ts, 26, 21))
+ >C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+ 
+         public C4_v2_public: C1_public;
+->C4_v2_public : Symbol(C4_public.C4_v2_public, Decl(privacyGloVar.ts, 27, 41))
++>C4_v2_public : Symbol(C4_v2_public, Decl(privacyGloVar.ts, 27, 41))
+ >C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+ 
+         private C4_v3_private: C2_private;
+->C4_v3_private : Symbol(C4_public.C4_v3_private, Decl(privacyGloVar.ts, 28, 39))
++>C4_v3_private : Symbol(C4_v3_private, Decl(privacyGloVar.ts, 28, 39))
+ >C2_private : Symbol(C2_private, Decl(privacyGloVar.ts, 4, 5))
+ 
+         public C4_v4_public: C2_private;
+->C4_v4_public : Symbol(C4_public.C4_v4_public, Decl(privacyGloVar.ts, 29, 42))
++>C4_v4_public : Symbol(C4_v4_public, Decl(privacyGloVar.ts, 29, 42))
+ >C2_private : Symbol(C2_private, Decl(privacyGloVar.ts, 4, 5))
+ 
+         private C4_v11_private = new C1_public();
+->C4_v11_private : Symbol(C4_public.C4_v11_private, Decl(privacyGloVar.ts, 30, 40))
++>C4_v11_private : Symbol(C4_v11_private, Decl(privacyGloVar.ts, 30, 40))
+ >C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+ 
+         public C4_v12_public = new C1_public();
+->C4_v12_public : Symbol(C4_public.C4_v12_public, Decl(privacyGloVar.ts, 32, 49))
++>C4_v12_public : Symbol(C4_v12_public, Decl(privacyGloVar.ts, 32, 49))
+ >C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+ 
+         private C4_v13_private = new C2_private();
+->C4_v13_private : Symbol(C4_public.C4_v13_private, Decl(privacyGloVar.ts, 33, 47))
++>C4_v13_private : Symbol(C4_v13_private, Decl(privacyGloVar.ts, 33, 47))
+ >C2_private : Symbol(C2_private, Decl(privacyGloVar.ts, 4, 5))
+ 
+         public C4_v14_public = new C2_private();
+->C4_v14_public : Symbol(C4_public.C4_v14_public, Decl(privacyGloVar.ts, 34, 50))
++>C4_v14_public : Symbol(C4_v14_public, Decl(privacyGloVar.ts, 34, 50))
+ >C2_private : Symbol(C2_private, Decl(privacyGloVar.ts, 4, 5))
+ 
+         private C4_v21_private: C1_public = new C1_public();
+->C4_v21_private : Symbol(C4_public.C4_v21_private, Decl(privacyGloVar.ts, 35, 48))
++>C4_v21_private : Symbol(C4_v21_private, Decl(privacyGloVar.ts, 35, 48))
+ >C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+ >C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+ 
+         public C4_v22_public: C1_public = new C1_public();
+->C4_v22_public : Symbol(C4_public.C4_v22_public, Decl(privacyGloVar.ts, 37, 60))
++>C4_v22_public : Symbol(C4_v22_public, Decl(privacyGloVar.ts, 37, 60))
+ >C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+ >C1_public : Symbol(C1_public, Decl(privacyGloVar.ts, 0, 11))
+ 
+         private C4_v23_private: C2_private = new C2_private();
+->C4_v23_private : Symbol(C4_public.C4_v23_private, Decl(privacyGloVar.ts, 38, 58))
++>C4_v23_private : Symbol(C4_v23_private, Decl(privacyGloVar.ts, 38, 58))
+ >C2_private : Symbol(C2_private, Decl(privacyGloVar.ts, 4, 5))
+ >C2_private : Symbol(C2_private, Decl(privacyGloVar.ts, 4, 5))
+ 
+         public C4_v24_public: C2_private = new C2_private();
+->C4_v24_public : Symbol(C4_public.C4_v24_public, Decl(privacyGloVar.ts, 39, 62))
++>C4_v24_public : Symbol(C4_v24_public, Decl(privacyGloVar.ts, 39, 62))
+ >C2_private : Symbol(C2_private, Decl(privacyGloVar.ts, 4, 5))
+ >C2_private : Symbol(C2_private, Decl(privacyGloVar.ts, 4, 5))
+     }
+@@= skipped -109, +109 lines =@@
+ >glo_C1_public : Symbol(glo_C1_public, Decl(privacyGloVar.ts, 57, 1))
+ 
+     private f1() {
+->f1 : Symbol(glo_C1_public.f1, Decl(privacyGloVar.ts, 59, 21))
++>f1 : Symbol(f1, Decl(privacyGloVar.ts, 59, 21))
+     }
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >glo_C3_public : Symbol(glo_C3_public, Decl(privacyGloVar.ts, 62, 1))
+ 
+     private glo_C3_v1_private: glo_C1_public;
+->glo_C3_v1_private : Symbol(glo_C3_public.glo_C3_v1_private, Decl(privacyGloVar.ts, 64, 21))
++>glo_C3_v1_private : Symbol(glo_C3_v1_private, Decl(privacyGloVar.ts, 64, 21))
+ >glo_C1_public : Symbol(glo_C1_public, Decl(privacyGloVar.ts, 57, 1))
+ 
+     public glo_C3_v2_public: glo_C1_public;
+->glo_C3_v2_public : Symbol(glo_C3_public.glo_C3_v2_public, Decl(privacyGloVar.ts, 65, 45))
++>glo_C3_v2_public : Symbol(glo_C3_v2_public, Decl(privacyGloVar.ts, 65, 45))
+ >glo_C1_public : Symbol(glo_C1_public, Decl(privacyGloVar.ts, 57, 1))
+ 
+     private glo_C3_v11_private = new glo_C1_public();
+->glo_C3_v11_private : Symbol(glo_C3_public.glo_C3_v11_private, Decl(privacyGloVar.ts, 66, 43))
++>glo_C3_v11_private : Symbol(glo_C3_v11_private, Decl(privacyGloVar.ts, 66, 43))
+ >glo_C1_public : Symbol(glo_C1_public, Decl(privacyGloVar.ts, 57, 1))
+ 
+     public glo_C3_v12_public = new glo_C1_public();
+->glo_C3_v12_public : Symbol(glo_C3_public.glo_C3_v12_public, Decl(privacyGloVar.ts, 68, 53))
++>glo_C3_v12_public : Symbol(glo_C3_v12_public, Decl(privacyGloVar.ts, 68, 53))
+ >glo_C1_public : Symbol(glo_C1_public, Decl(privacyGloVar.ts, 57, 1))
+ 
+     private glo_C3_v21_private: glo_C1_public = new glo_C1_public();
+->glo_C3_v21_private : Symbol(glo_C3_public.glo_C3_v21_private, Decl(privacyGloVar.ts, 69, 51))
++>glo_C3_v21_private : Symbol(glo_C3_v21_private, Decl(privacyGloVar.ts, 69, 51))
+ >glo_C1_public : Symbol(glo_C1_public, Decl(privacyGloVar.ts, 57, 1))
+ >glo_C1_public : Symbol(glo_C1_public, Decl(privacyGloVar.ts, 57, 1))
+ 
+     public glo_C3_v22_public: glo_C1_public = new glo_C1_public();
+->glo_C3_v22_public : Symbol(glo_C3_public.glo_C3_v22_public, Decl(privacyGloVar.ts, 71, 68))
++>glo_C3_v22_public : Symbol(glo_C3_v22_public, Decl(privacyGloVar.ts, 71, 68))
+ >glo_C1_public : Symbol(glo_C1_public, Decl(privacyGloVar.ts, 57, 1))
+ >glo_C1_public : Symbol(glo_C1_public, Decl(privacyGloVar.ts, 57, 1))
+ }

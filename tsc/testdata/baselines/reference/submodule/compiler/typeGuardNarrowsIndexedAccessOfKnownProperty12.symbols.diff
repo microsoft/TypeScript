@@ -1,0 +1,38 @@
+--- old.typeGuardNarrowsIndexedAccessOfKnownProperty12.symbols
++++ new.typeGuardNarrowsIndexedAccessOfKnownProperty12.symbols
+@@= skipped -4, +4 lines =@@
+ >E : Symbol(E, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 0))
+ 
+     A = "A",
+->A : Symbol(E.A, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 8))
++>A : Symbol(A, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 8))
+ 
+     B = "B"
+->B : Symbol(E.B, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 1, 12))
++>B : Symbol(B, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 1, 12))
+ }
+ 
+ declare const m: { [K in E]: string | null };
+@@= skipped -13, +13 lines =@@
+ 
+ if (m[E.A] !== null) {
+ >m : Symbol(m, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 5, 13))
+->E.A : Symbol(E.A, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 8))
++>E.A : Symbol(A, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 8))
+ >E : Symbol(E, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 0))
+->A : Symbol(E.A, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 8))
++>A : Symbol(A, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 8))
+ 
+     m[E.A].toString(); // string
+->m[E.A].toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
++>m[E.A].toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >m : Symbol(m, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 5, 13))
+->E.A : Symbol(E.A, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 8))
++>E.A : Symbol(A, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 8))
+ >E : Symbol(E, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 0))
+->A : Symbol(E.A, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 8))
+->toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
++>A : Symbol(A, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 8))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ }
+ 

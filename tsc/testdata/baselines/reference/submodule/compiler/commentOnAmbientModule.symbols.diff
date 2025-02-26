@@ -1,0 +1,18 @@
+--- old.commentOnAmbientModule.symbols
++++ new.commentOnAmbientModule.symbols
+@@= skipped -6, +6 lines =@@
+ 
+     class foobar extends D.bar {
+ >foobar : Symbol(foobar, Decl(b.ts, 1, 18))
+->D.bar : Symbol(D.bar, Decl(a.ts, 11, 18))
++>D.bar : Symbol(bar, Decl(a.ts, 11, 18))
+ >D : Symbol(D, Decl(a.ts, 8, 1))
+->bar : Symbol(D.bar, Decl(a.ts, 11, 18))
++>bar : Symbol(bar, Decl(a.ts, 11, 18))
+ 
+         foo();
+->foo : Symbol(foobar.foo, Decl(b.ts, 2, 32))
++>foo : Symbol(foo, Decl(b.ts, 2, 32))
+     }
+ }
+ === a.ts ===

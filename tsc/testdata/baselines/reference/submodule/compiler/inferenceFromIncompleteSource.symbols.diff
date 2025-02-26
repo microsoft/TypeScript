@@ -1,0 +1,21 @@
+--- old.inferenceFromIncompleteSource.symbols
++++ new.inferenceFromIncompleteSource.symbols
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(inferenceFromIncompleteSource.ts, 2, 20))
+ 
+   items: T[];
+->items : Symbol(ListProps.items, Decl(inferenceFromIncompleteSource.ts, 2, 43))
++>items : Symbol(items, Decl(inferenceFromIncompleteSource.ts, 2, 43))
+ >T : Symbol(T, Decl(inferenceFromIncompleteSource.ts, 2, 20))
+ 
+   itemKey: K;
+->itemKey : Symbol(ListProps.itemKey, Decl(inferenceFromIncompleteSource.ts, 3, 13))
++>itemKey : Symbol(itemKey, Decl(inferenceFromIncompleteSource.ts, 3, 13))
+ >K : Symbol(K, Decl(inferenceFromIncompleteSource.ts, 2, 22))
+ 
+   prop: number;
+->prop : Symbol(ListProps.prop, Decl(inferenceFromIncompleteSource.ts, 4, 13))
++>prop : Symbol(prop, Decl(inferenceFromIncompleteSource.ts, 4, 13))
+ }
+ 
+ declare const Component: <T, K extends keyof T>(x: ListProps<T, K>) => void;

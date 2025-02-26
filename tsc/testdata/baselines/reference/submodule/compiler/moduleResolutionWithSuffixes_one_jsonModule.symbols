@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/moduleResolutionWithSuffixes_one_jsonModule.ts] ////
+
+=== /index.ts ===
+import foo from "./foo.json";
+>foo : Symbol(foo, Decl(index.ts, 0, 6))
+
+console.log(foo.ios);
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>foo : Symbol(foo, Decl(index.ts, 0, 6))
+

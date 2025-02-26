@@ -1,0 +1,9 @@
+--- old.jsxImportForSideEffectsNonExtantNoError.symbols
++++ new.jsxImportForSideEffectsNonExtantNoError.symbols
+@@= skipped -8, +8 lines =@@
+ 
+ const tag = <div></div>;
+ >tag : Symbol(tag, Decl(jsxImportForSideEffectsNonExtantNoError.tsx, 5, 5))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+ 

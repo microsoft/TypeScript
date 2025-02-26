@@ -1,0 +1,58 @@
+--- old.declFileTypeAnnotationTypeQuery.symbols
++++ new.declFileTypeAnnotationTypeQuery.symbols
+@@= skipped -37, +37 lines =@@
+ // Qualified name
+ function foo3(): typeof m.c {
+ >foo3 : Symbol(foo3, Decl(declFileTypeAnnotationTypeQuery.ts, 17, 1))
+->m.c : Symbol(m.c, Decl(declFileTypeAnnotationTypeQuery.ts, 2, 10))
++>m.c : Symbol(c, Decl(declFileTypeAnnotationTypeQuery.ts, 2, 10))
+ >m : Symbol(m, Decl(declFileTypeAnnotationTypeQuery.ts, 1, 1))
+->c : Symbol(m.c, Decl(declFileTypeAnnotationTypeQuery.ts, 2, 10))
++>c : Symbol(c, Decl(declFileTypeAnnotationTypeQuery.ts, 2, 10))
+ 
+     return m.c;
+->m.c : Symbol(m.c, Decl(declFileTypeAnnotationTypeQuery.ts, 2, 10))
++>m.c : Symbol(c, Decl(declFileTypeAnnotationTypeQuery.ts, 2, 10))
+ >m : Symbol(m, Decl(declFileTypeAnnotationTypeQuery.ts, 1, 1))
+->c : Symbol(m.c, Decl(declFileTypeAnnotationTypeQuery.ts, 2, 10))
++>c : Symbol(c, Decl(declFileTypeAnnotationTypeQuery.ts, 2, 10))
+ }
+ function foo4() {
+ >foo4 : Symbol(foo4, Decl(declFileTypeAnnotationTypeQuery.ts, 22, 1))
+ 
+     return m.c;
+->m.c : Symbol(m.c, Decl(declFileTypeAnnotationTypeQuery.ts, 2, 10))
++>m.c : Symbol(c, Decl(declFileTypeAnnotationTypeQuery.ts, 2, 10))
+ >m : Symbol(m, Decl(declFileTypeAnnotationTypeQuery.ts, 1, 1))
+->c : Symbol(m.c, Decl(declFileTypeAnnotationTypeQuery.ts, 2, 10))
++>c : Symbol(c, Decl(declFileTypeAnnotationTypeQuery.ts, 2, 10))
+ }
+ 
+ // Just the name with type arguments
+@@= skipped -36, +36 lines =@@
+ // Qualified name with type arguments
+ function foo7(): typeof m.g {
+ >foo7 : Symbol(foo7, Decl(declFileTypeAnnotationTypeQuery.ts, 33, 1))
+->m.g : Symbol(m.g, Decl(declFileTypeAnnotationTypeQuery.ts, 4, 5))
++>m.g : Symbol(g, Decl(declFileTypeAnnotationTypeQuery.ts, 4, 5))
+ >m : Symbol(m, Decl(declFileTypeAnnotationTypeQuery.ts, 1, 1))
+->g : Symbol(m.g, Decl(declFileTypeAnnotationTypeQuery.ts, 4, 5))
++>g : Symbol(g, Decl(declFileTypeAnnotationTypeQuery.ts, 4, 5))
+ 
+     return m.g
+->m.g : Symbol(m.g, Decl(declFileTypeAnnotationTypeQuery.ts, 4, 5))
++>m.g : Symbol(g, Decl(declFileTypeAnnotationTypeQuery.ts, 4, 5))
+ >m : Symbol(m, Decl(declFileTypeAnnotationTypeQuery.ts, 1, 1))
+->g : Symbol(m.g, Decl(declFileTypeAnnotationTypeQuery.ts, 4, 5))
++>g : Symbol(g, Decl(declFileTypeAnnotationTypeQuery.ts, 4, 5))
+ }
+ function foo8() {
+ >foo8 : Symbol(foo8, Decl(declFileTypeAnnotationTypeQuery.ts, 38, 1))
+ 
+     return m.g
+->m.g : Symbol(m.g, Decl(declFileTypeAnnotationTypeQuery.ts, 4, 5))
++>m.g : Symbol(g, Decl(declFileTypeAnnotationTypeQuery.ts, 4, 5))
+ >m : Symbol(m, Decl(declFileTypeAnnotationTypeQuery.ts, 1, 1))
+->g : Symbol(m.g, Decl(declFileTypeAnnotationTypeQuery.ts, 4, 5))
++>g : Symbol(g, Decl(declFileTypeAnnotationTypeQuery.ts, 4, 5))
+ }

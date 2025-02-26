@@ -1,0 +1,105 @@
+--- old.recursiveTypeComparison2.symbols
++++ new.recursiveTypeComparison2.symbols
+@@= skipped -20, +20 lines =@@
+ >T : Symbol(T, Decl(recursiveTypeComparison2.ts, 7, 25))
+ 
+         zip<U, V>(other: EventStream<U>, f: (a: T, b: U) => V): EventStream<V>;
+->zip : Symbol(Observable.zip, Decl(recursiveTypeComparison2.ts, 7, 29))
++>zip : Symbol(zip, Decl(recursiveTypeComparison2.ts, 7, 29))
+ >U : Symbol(U, Decl(recursiveTypeComparison2.ts, 8, 12))
+ >V : Symbol(V, Decl(recursiveTypeComparison2.ts, 8, 14))
+ >other : Symbol(other, Decl(recursiveTypeComparison2.ts, 8, 18))
+@@= skipped -16, +16 lines =@@
+ >V : Symbol(V, Decl(recursiveTypeComparison2.ts, 8, 14))
+ 
+         slidingWindow(max: number, min?: number): Property<T[]>;
+->slidingWindow : Symbol(Observable.slidingWindow, Decl(recursiveTypeComparison2.ts, 8, 79))
++>slidingWindow : Symbol(slidingWindow, Decl(recursiveTypeComparison2.ts, 8, 79))
+ >max : Symbol(max, Decl(recursiveTypeComparison2.ts, 9, 22))
+ >min : Symbol(min, Decl(recursiveTypeComparison2.ts, 9, 34))
+ >Property : Symbol(Property, Decl(recursiveTypeComparison2.ts, 19, 5))
+ >T : Symbol(T, Decl(recursiveTypeComparison2.ts, 7, 25))
+ 
+         log(): Observable<T>;
+->log : Symbol(Observable.log, Decl(recursiveTypeComparison2.ts, 9, 64))
++>log : Symbol(log, Decl(recursiveTypeComparison2.ts, 9, 64))
+ >Observable : Symbol(Observable, Decl(recursiveTypeComparison2.ts, 6, 5))
+ >T : Symbol(T, Decl(recursiveTypeComparison2.ts, 7, 25))
+ 
+         combine<U, V>(other: Observable<U>, f: (a: T, b: U) => V): Property<V>;
+->combine : Symbol(Observable.combine, Decl(recursiveTypeComparison2.ts, 10, 29))
++>combine : Symbol(combine, Decl(recursiveTypeComparison2.ts, 10, 29))
+ >U : Symbol(U, Decl(recursiveTypeComparison2.ts, 11, 16))
+ >V : Symbol(V, Decl(recursiveTypeComparison2.ts, 11, 18))
+ >other : Symbol(other, Decl(recursiveTypeComparison2.ts, 11, 22))
+@@= skipped -28, +28 lines =@@
+ >V : Symbol(V, Decl(recursiveTypeComparison2.ts, 11, 18))
+ 
+         withStateMachine<U, V>(initState: U, f: (state: U, event: Event<T>) => StateValue<U, V>): EventStream<V>;
+->withStateMachine : Symbol(Observable.withStateMachine, Decl(recursiveTypeComparison2.ts, 11, 79))
++>withStateMachine : Symbol(withStateMachine, Decl(recursiveTypeComparison2.ts, 11, 79))
+ >U : Symbol(U, Decl(recursiveTypeComparison2.ts, 12, 25))
+ >V : Symbol(V, Decl(recursiveTypeComparison2.ts, 12, 27))
+ >initState : Symbol(initState, Decl(recursiveTypeComparison2.ts, 12, 31))
+@@= skipped -18, +18 lines =@@
+ >V : Symbol(V, Decl(recursiveTypeComparison2.ts, 12, 27))
+ 
+         decode(mapping: Object): Property<any>;
+->decode : Symbol(Observable.decode, Decl(recursiveTypeComparison2.ts, 12, 113))
++>decode : Symbol(decode, Decl(recursiveTypeComparison2.ts, 12, 113))
+ >mapping : Symbol(mapping, Decl(recursiveTypeComparison2.ts, 13, 15))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Property : Symbol(Property, Decl(recursiveTypeComparison2.ts, 19, 5))
+ 
+         awaiting<U>(other: Observable<U>): Property<boolean>;
+->awaiting : Symbol(Observable.awaiting, Decl(recursiveTypeComparison2.ts, 13, 47))
++>awaiting : Symbol(awaiting, Decl(recursiveTypeComparison2.ts, 13, 47))
+ >U : Symbol(U, Decl(recursiveTypeComparison2.ts, 14, 17))
+ >other : Symbol(other, Decl(recursiveTypeComparison2.ts, 14, 20))
+ >Observable : Symbol(Observable, Decl(recursiveTypeComparison2.ts, 6, 5))
+@@= skipped -14, +14 lines =@@
+ >Property : Symbol(Property, Decl(recursiveTypeComparison2.ts, 19, 5))
+ 
+         endOnError(f?: (value: T) => boolean): Observable<T>;
+->endOnError : Symbol(Observable.endOnError, Decl(recursiveTypeComparison2.ts, 14, 61))
++>endOnError : Symbol(endOnError, Decl(recursiveTypeComparison2.ts, 14, 61))
+ >f : Symbol(f, Decl(recursiveTypeComparison2.ts, 15, 19))
+ >value : Symbol(value, Decl(recursiveTypeComparison2.ts, 15, 24))
+ >T : Symbol(T, Decl(recursiveTypeComparison2.ts, 7, 25))
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(recursiveTypeComparison2.ts, 7, 25))
+ 
+         withHandler(f: (event: Event<T>) => any): Observable<T>;
+->withHandler : Symbol(Observable.withHandler, Decl(recursiveTypeComparison2.ts, 15, 61))
++>withHandler : Symbol(withHandler, Decl(recursiveTypeComparison2.ts, 15, 61))
+ >f : Symbol(f, Decl(recursiveTypeComparison2.ts, 16, 20))
+ >event : Symbol(event, Decl(recursiveTypeComparison2.ts, 16, 24))
+ >Event : Symbol(Event, Decl(recursiveTypeComparison2.ts, 2, 22))
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(recursiveTypeComparison2.ts, 7, 25))
+ 
+         name(name: string): Observable<T>;
+->name : Symbol(Observable.name, Decl(recursiveTypeComparison2.ts, 16, 64))
++>name : Symbol(name, Decl(recursiveTypeComparison2.ts, 16, 64))
+ >name : Symbol(name, Decl(recursiveTypeComparison2.ts, 17, 13))
+ >Observable : Symbol(Observable, Decl(recursiveTypeComparison2.ts, 6, 5))
+ >T : Symbol(T, Decl(recursiveTypeComparison2.ts, 7, 25))
+ 
+         withDescription(...args: any[]): Observable<T>;
+->withDescription : Symbol(Observable.withDescription, Decl(recursiveTypeComparison2.ts, 17, 42))
++>withDescription : Symbol(withDescription, Decl(recursiveTypeComparison2.ts, 17, 42))
+ >args : Symbol(args, Decl(recursiveTypeComparison2.ts, 18, 24))
+ >Observable : Symbol(Observable, Decl(recursiveTypeComparison2.ts, 6, 5))
+ >T : Symbol(T, Decl(recursiveTypeComparison2.ts, 7, 25))
+@@= skipped -39, +39 lines =@@
+ var stuck: Bacon.Bus<number> = new Bacon.Bus();
+ >stuck : Symbol(stuck, Decl(recursiveTypeComparison2.ts, 29, 3))
+ >Bacon : Symbol(Bacon, Decl(recursiveTypeComparison2.ts, 0, 0))
+->Bus : Symbol(Bacon.Bus, Decl(recursiveTypeComparison2.ts, 23, 5), Decl(recursiveTypeComparison2.ts, 26, 7))
+->Bacon.Bus : Symbol(Bacon.Bus, Decl(recursiveTypeComparison2.ts, 23, 5), Decl(recursiveTypeComparison2.ts, 26, 7))
++>Bus : Symbol(Bus, Decl(recursiveTypeComparison2.ts, 23, 5), Decl(recursiveTypeComparison2.ts, 26, 7))
++>Bacon.Bus : Symbol(Bus, Decl(recursiveTypeComparison2.ts, 23, 5), Decl(recursiveTypeComparison2.ts, 26, 7))
+ >Bacon : Symbol(Bacon, Decl(recursiveTypeComparison2.ts, 0, 0))
+->Bus : Symbol(Bacon.Bus, Decl(recursiveTypeComparison2.ts, 23, 5), Decl(recursiveTypeComparison2.ts, 26, 7))
++>Bus : Symbol(Bus, Decl(recursiveTypeComparison2.ts, 23, 5), Decl(recursiveTypeComparison2.ts, 26, 7))
+ 

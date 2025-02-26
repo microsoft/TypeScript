@@ -1,0 +1,178 @@
+--- old.genericDefaultsJs.symbols
++++ new.genericDefaultsJs.symbols
+@@= skipped -21, +21 lines =@@
+ >T : Symbol(T, Decl(decls.d.ts, 2, 17))
+ 
+     y: T;
+->y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
++>y : Symbol(y, Decl(decls.d.ts, 2, 21))
+ >T : Symbol(T, Decl(decls.d.ts, 2, 17))
+ 
+     constructor(x?: T);
+@@= skipped -13, +13 lines =@@
+ >U : Symbol(U, Decl(decls.d.ts, 6, 19))
+ 
+     y: [T, U];
+->y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
++>y : Symbol(y, Decl(decls.d.ts, 6, 33))
+ >T : Symbol(T, Decl(decls.d.ts, 6, 17))
+ >U : Symbol(U, Decl(decls.d.ts, 6, 19))
+ 
+@@= skipped -31, +31 lines =@@
+ 
+ const C0_v0_y = C0_v0.y;
+ >C0_v0_y : Symbol(C0_v0_y, Decl(main.js, 7, 5))
+->C0_v0.y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
++>C0_v0.y : Symbol(y, Decl(decls.d.ts, 2, 21))
+ >C0_v0 : Symbol(C0_v0, Decl(main.js, 6, 5))
+->y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
++>y : Symbol(y, Decl(decls.d.ts, 2, 21))
+ 
+ const C0_v1 = new C0(1);
+ >C0_v1 : Symbol(C0_v1, Decl(main.js, 9, 5))
+@@= skipped -10, +10 lines =@@
+ 
+ const C0_v1_y = C0_v1.y;
+ >C0_v1_y : Symbol(C0_v1_y, Decl(main.js, 10, 5))
+->C0_v1.y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
++>C0_v1.y : Symbol(y, Decl(decls.d.ts, 2, 21))
+ >C0_v1 : Symbol(C0_v1, Decl(main.js, 9, 5))
+->y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
++>y : Symbol(y, Decl(decls.d.ts, 2, 21))
+ 
+ const C1_v0 = new C1();
+ >C1_v0 : Symbol(C1_v0, Decl(main.js, 12, 5))
+@@= skipped -10, +10 lines =@@
+ 
+ const C1_v0_y = C1_v0.y;
+ >C1_v0_y : Symbol(C1_v0_y, Decl(main.js, 13, 5))
+->C1_v0.y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
++>C1_v0.y : Symbol(y, Decl(decls.d.ts, 6, 33))
+ >C1_v0 : Symbol(C1_v0, Decl(main.js, 12, 5))
+->y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
++>y : Symbol(y, Decl(decls.d.ts, 6, 33))
+ 
+ const C1_v1 = new C1(1);
+ >C1_v1 : Symbol(C1_v1, Decl(main.js, 15, 5))
+@@= skipped -10, +10 lines =@@
+ 
+ const C1_v1_y = C1_v1.y;
+ >C1_v1_y : Symbol(C1_v1_y, Decl(main.js, 16, 5))
+->C1_v1.y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
++>C1_v1.y : Symbol(y, Decl(decls.d.ts, 6, 33))
+ >C1_v1 : Symbol(C1_v1, Decl(main.js, 15, 5))
+->y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
++>y : Symbol(y, Decl(decls.d.ts, 6, 33))
+ 
+ class C0_B0 extends C0 {}
+ >C0_B0 : Symbol(C0_B0, Decl(main.js, 16, 24))
+@@= skipped -14, +14 lines =@@
+ 
+     constructor() {
+         super();
+->super : Symbol(C0, Decl(decls.d.ts, 1, 50))
+     }
+ }
+ class C0_B2 extends C0 {
+@@= skipped -9, +8 lines =@@
+ 
+     constructor() {
+         super(1);
+->super : Symbol(C0, Decl(decls.d.ts, 1, 50))
+     }
+ }
+ 
+@@= skipped -10, +9 lines =@@
+ 
+ const C0_B0_v0_y = C0_B0_v0.y;
+ >C0_B0_v0_y : Symbol(C0_B0_v0_y, Decl(main.js, 31, 5))
+->C0_B0_v0.y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+ >C0_B0_v0 : Symbol(C0_B0_v0, Decl(main.js, 30, 5))
+->y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+ 
+ const C0_B0_v1 = new C0_B0(1);
+ >C0_B0_v1 : Symbol(C0_B0_v1, Decl(main.js, 33, 5))
+@@= skipped -10, +8 lines =@@
+ 
+ const C0_B0_v1_y = C0_B0_v1.y;
+ >C0_B0_v1_y : Symbol(C0_B0_v1_y, Decl(main.js, 34, 5))
+->C0_B0_v1.y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+ >C0_B0_v1 : Symbol(C0_B0_v1, Decl(main.js, 33, 5))
+->y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+ 
+ const C0_B1_v0 = new C0_B1();
+ >C0_B1_v0 : Symbol(C0_B1_v0, Decl(main.js, 36, 5))
+@@= skipped -10, +8 lines =@@
+ 
+ const C0_B1_v0_y = C0_B1_v0.y;
+ >C0_B1_v0_y : Symbol(C0_B1_v0_y, Decl(main.js, 37, 5))
+->C0_B1_v0.y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+ >C0_B1_v0 : Symbol(C0_B1_v0, Decl(main.js, 36, 5))
+->y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+ 
+ const C0_B2_v0 = new C0_B2();
+ >C0_B2_v0 : Symbol(C0_B2_v0, Decl(main.js, 39, 5))
+@@= skipped -10, +8 lines =@@
+ 
+ const C0_B2_v0_y = C0_B2_v0.y;
+ >C0_B2_v0_y : Symbol(C0_B2_v0_y, Decl(main.js, 40, 5))
+->C0_B2_v0.y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+ >C0_B2_v0 : Symbol(C0_B2_v0, Decl(main.js, 39, 5))
+->y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+ 
+ class C1_B0 extends C1 {}
+ >C1_B0 : Symbol(C1_B0, Decl(main.js, 40, 30))
+@@= skipped -14, +12 lines =@@
+ 
+     constructor() {
+         super();
+->super : Symbol(C1, Decl(decls.d.ts, 5, 1))
+     }
+ }
+ class C1_B2 extends C1 {
+@@= skipped -9, +8 lines =@@
+ 
+     constructor() {
+         super(1);
+->super : Symbol(C1, Decl(decls.d.ts, 5, 1))
+     }
+ }
+ 
+@@= skipped -10, +9 lines =@@
+ 
+ const C1_B0_v0_y = C1_B0_v0.y;
+ >C1_B0_v0_y : Symbol(C1_B0_v0_y, Decl(main.js, 55, 5))
+->C1_B0_v0.y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+ >C1_B0_v0 : Symbol(C1_B0_v0, Decl(main.js, 54, 5))
+->y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+ 
+ const C1_B0_v1 = new C1_B0(1);
+ >C1_B0_v1 : Symbol(C1_B0_v1, Decl(main.js, 57, 5))
+@@= skipped -10, +8 lines =@@
+ 
+ const C1_B0_v1_y = C1_B0_v1.y;
+ >C1_B0_v1_y : Symbol(C1_B0_v1_y, Decl(main.js, 58, 5))
+->C1_B0_v1.y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+ >C1_B0_v1 : Symbol(C1_B0_v1, Decl(main.js, 57, 5))
+->y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+ 
+ const C1_B1_v0 = new C1_B1();
+ >C1_B1_v0 : Symbol(C1_B1_v0, Decl(main.js, 60, 5))
+@@= skipped -10, +8 lines =@@
+ 
+ const C1_B1_v0_y = C1_B1_v0.y;
+ >C1_B1_v0_y : Symbol(C1_B1_v0_y, Decl(main.js, 61, 5))
+->C1_B1_v0.y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+ >C1_B1_v0 : Symbol(C1_B1_v0, Decl(main.js, 60, 5))
+->y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+ 
+ const C1_B2_v0 = new C1_B2();
+ >C1_B2_v0 : Symbol(C1_B2_v0, Decl(main.js, 63, 5))
+@@= skipped -10, +8 lines =@@
+ 
+ const C1_B2_v0_y = C1_B2_v0.y;
+ >C1_B2_v0_y : Symbol(C1_B2_v0_y, Decl(main.js, 64, 5))
+->C1_B2_v0.y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+ >C1_B2_v0 : Symbol(C1_B2_v0, Decl(main.js, 63, 5))
+->y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+ 

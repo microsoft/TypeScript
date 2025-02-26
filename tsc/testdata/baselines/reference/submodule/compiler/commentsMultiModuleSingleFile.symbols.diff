@@ -1,0 +1,19 @@
+--- old.commentsMultiModuleSingleFile.symbols
++++ new.commentsMultiModuleSingleFile.symbols
+@@= skipped -30, +30 lines =@@
+     }
+ }
+ new multiM.b();
+->multiM.b : Symbol(multiM.b, Decl(commentsMultiModuleSingleFile.ts, 1, 15))
++>multiM.b : Symbol(b, Decl(commentsMultiModuleSingleFile.ts, 1, 15))
+ >multiM : Symbol(multiM, Decl(commentsMultiModuleSingleFile.ts, 0, 0), Decl(commentsMultiModuleSingleFile.ts, 9, 1))
+->b : Symbol(multiM.b, Decl(commentsMultiModuleSingleFile.ts, 1, 15))
++>b : Symbol(b, Decl(commentsMultiModuleSingleFile.ts, 1, 15))
+ 
+ new multiM.c();
+->multiM.c : Symbol(multiM.c, Decl(commentsMultiModuleSingleFile.ts, 12, 15))
++>multiM.c : Symbol(c, Decl(commentsMultiModuleSingleFile.ts, 12, 15))
+ >multiM : Symbol(multiM, Decl(commentsMultiModuleSingleFile.ts, 0, 0), Decl(commentsMultiModuleSingleFile.ts, 9, 1))
+->c : Symbol(multiM.c, Decl(commentsMultiModuleSingleFile.ts, 12, 15))
++>c : Symbol(c, Decl(commentsMultiModuleSingleFile.ts, 12, 15))
+ 

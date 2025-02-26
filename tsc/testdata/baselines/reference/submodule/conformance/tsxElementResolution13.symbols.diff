@@ -1,0 +1,13 @@
+--- old.tsxElementResolution13.symbols
++++ new.tsxElementResolution13.symbols
+@@= skipped -8, +8 lines =@@
+ 
+ 	interface ElementAttributesProperty { pr1: any; pr2: any; }
+ >ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(file.tsx, 1, 22))
+->pr1 : Symbol(ElementAttributesProperty.pr1, Decl(file.tsx, 2, 38))
+->pr2 : Symbol(ElementAttributesProperty.pr2, Decl(file.tsx, 2, 48))
++>pr1 : Symbol(pr1, Decl(file.tsx, 2, 38))
++>pr2 : Symbol(pr2, Decl(file.tsx, 2, 48))
+ }
+ 
+ interface Obj1 {

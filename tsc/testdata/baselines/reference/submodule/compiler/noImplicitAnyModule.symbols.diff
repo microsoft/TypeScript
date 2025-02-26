@@ -1,0 +1,22 @@
+--- old.noImplicitAnyModule.symbols
++++ new.noImplicitAnyModule.symbols
+@@= skipped -15, +15 lines =@@
+ 
+         // Should return error for implicit `any` on parameter.
+         public f(x): any;
+->f : Symbol(Class.f, Decl(noImplicitAnyModule.ts, 6, 17))
++>f : Symbol(f, Decl(noImplicitAnyModule.ts, 6, 17))
+ >x : Symbol(x, Decl(noImplicitAnyModule.ts, 8, 17))
+ 
+         public g(x: any);
+->g : Symbol(Class.g, Decl(noImplicitAnyModule.ts, 8, 25))
++>g : Symbol(g, Decl(noImplicitAnyModule.ts, 8, 25))
+ >x : Symbol(x, Decl(noImplicitAnyModule.ts, 9, 17))
+ 
+         // Should not return error at all.
+         private h(x);
+->h : Symbol(Class.h, Decl(noImplicitAnyModule.ts, 9, 25))
++>h : Symbol(h, Decl(noImplicitAnyModule.ts, 9, 25))
+ >x : Symbol(x, Decl(noImplicitAnyModule.ts, 12, 18))
+     }
+ 

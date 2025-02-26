@@ -1,0 +1,65 @@
+--- old.privateInstanceVisibility.symbols
++++ new.privateInstanceVisibility.symbols
+@@= skipped -7, +7 lines =@@
+ >Example : Symbol(Example, Decl(privateInstanceVisibility.ts, 0, 13))
+  
+         private someNumber: number;
+->someNumber : Symbol(Example.someNumber, Decl(privateInstanceVisibility.ts, 2, 26))
++>someNumber : Symbol(someNumber, Decl(privateInstanceVisibility.ts, 2, 26))
+  
+         
+ 
+         public doSomething() {
+->doSomething : Symbol(Example.doSomething, Decl(privateInstanceVisibility.ts, 4, 35))
++>doSomething : Symbol(doSomething, Decl(privateInstanceVisibility.ts, 4, 35))
+  
+             var that = this;                      
+ >that : Symbol(that, Decl(privateInstanceVisibility.ts, 10, 15))
+@@= skipped -16, +16 lines =@@
+                 
+                 var num = that.someNumber;
+ >num : Symbol(num, Decl(privateInstanceVisibility.ts, 14, 19))
+->that.someNumber : Symbol(Example.someNumber, Decl(privateInstanceVisibility.ts, 2, 26))
++>that.someNumber : Symbol(someNumber, Decl(privateInstanceVisibility.ts, 2, 26))
+ >that : Symbol(that, Decl(privateInstanceVisibility.ts, 10, 15))
+->someNumber : Symbol(Example.someNumber, Decl(privateInstanceVisibility.ts, 2, 26))
++>someNumber : Symbol(someNumber, Decl(privateInstanceVisibility.ts, 2, 26))
+  
+             }
+  
+@@= skipped -18, +18 lines =@@
+ >C : Symbol(C, Decl(privateInstanceVisibility.ts, 22, 1))
+ 
+     private x: number;
+->x : Symbol(C.x, Decl(privateInstanceVisibility.ts, 26, 9))
++>x : Symbol(x, Decl(privateInstanceVisibility.ts, 26, 9))
+ 
+     getX() { return this.x; }
+->getX : Symbol(C.getX, Decl(privateInstanceVisibility.ts, 28, 22))
+->this.x : Symbol(C.x, Decl(privateInstanceVisibility.ts, 26, 9))
++>getX : Symbol(getX, Decl(privateInstanceVisibility.ts, 28, 22))
++>this.x : Symbol(x, Decl(privateInstanceVisibility.ts, 26, 9))
+ >this : Symbol(C, Decl(privateInstanceVisibility.ts, 22, 1))
+->x : Symbol(C.x, Decl(privateInstanceVisibility.ts, 26, 9))
++>x : Symbol(x, Decl(privateInstanceVisibility.ts, 26, 9))
+ 
+     clone(other: C) {
+->clone : Symbol(C.clone, Decl(privateInstanceVisibility.ts, 30, 29))
++>clone : Symbol(clone, Decl(privateInstanceVisibility.ts, 30, 29))
+ >other : Symbol(other, Decl(privateInstanceVisibility.ts, 32, 10))
+ >C : Symbol(C, Decl(privateInstanceVisibility.ts, 22, 1))
+ 
+         this.x = other.x;
+->this.x : Symbol(C.x, Decl(privateInstanceVisibility.ts, 26, 9))
++>this.x : Symbol(x, Decl(privateInstanceVisibility.ts, 26, 9))
+ >this : Symbol(C, Decl(privateInstanceVisibility.ts, 22, 1))
+->x : Symbol(C.x, Decl(privateInstanceVisibility.ts, 26, 9))
+->other.x : Symbol(C.x, Decl(privateInstanceVisibility.ts, 26, 9))
++>x : Symbol(x, Decl(privateInstanceVisibility.ts, 26, 9))
++>other.x : Symbol(x, Decl(privateInstanceVisibility.ts, 26, 9))
+ >other : Symbol(other, Decl(privateInstanceVisibility.ts, 32, 10))
+->x : Symbol(C.x, Decl(privateInstanceVisibility.ts, 26, 9))
++>x : Symbol(x, Decl(privateInstanceVisibility.ts, 26, 9))
+ 
+     }
+ }

@@ -1,0 +1,106 @@
+--- old.typeofProperty.symbols
++++ new.typeofProperty.symbols
+@@= skipped -4, +4 lines =@@
+ >I1 : Symbol(I1, Decl(typeofProperty.ts, 0, 0))
+ 
+     a: number;
+->a : Symbol(I1.a, Decl(typeofProperty.ts, 0, 14))
++>a : Symbol(a, Decl(typeofProperty.ts, 0, 14))
+ 
+     b: typeof a; // Should yield error (a is not a value)
+->b : Symbol(I1.b, Decl(typeofProperty.ts, 1, 14))
++>b : Symbol(b, Decl(typeofProperty.ts, 1, 14))
+ }
+ 
+ interface I2 {
+ >I2 : Symbol(I2, Decl(typeofProperty.ts, 3, 1))
+ 
+     c: typeof d; // Should yield error (d is not a value)
+->c : Symbol(I2.c, Decl(typeofProperty.ts, 5, 14))
++>c : Symbol(c, Decl(typeofProperty.ts, 5, 14))
+ 
+     d: string;
+->d : Symbol(I2.d, Decl(typeofProperty.ts, 6, 16))
++>d : Symbol(d, Decl(typeofProperty.ts, 6, 16))
+ }
+ 
+ interface I3 {
+ >I3 : Symbol(I3, Decl(typeofProperty.ts, 8, 1))
+ 
+     e: typeof e; // Should yield error (e is not a value)
+->e : Symbol(I3.e, Decl(typeofProperty.ts, 10, 14))
++>e : Symbol(e, Decl(typeofProperty.ts, 10, 14))
+ }
+ 
+ class C1 {
+ >C1 : Symbol(C1, Decl(typeofProperty.ts, 12, 1))
+ 
+     a: number;
+->a : Symbol(C1.a, Decl(typeofProperty.ts, 14, 10))
++>a : Symbol(a, Decl(typeofProperty.ts, 14, 10))
+ 
+     b: typeof a; // Should yield error (a is not a value)
+->b : Symbol(C1.b, Decl(typeofProperty.ts, 15, 14))
++>b : Symbol(b, Decl(typeofProperty.ts, 15, 14))
+ }
+ 
+ 
+@@= skipped -38, +38 lines =@@
+ >C2 : Symbol(C2, Decl(typeofProperty.ts, 17, 1))
+ 
+     c: typeof d; // Should yield error (d is not a value)
+->c : Symbol(C2.c, Decl(typeofProperty.ts, 20, 10))
++>c : Symbol(c, Decl(typeofProperty.ts, 20, 10))
+ 
+     d: string;
+->d : Symbol(C2.d, Decl(typeofProperty.ts, 21, 16))
++>d : Symbol(d, Decl(typeofProperty.ts, 21, 16))
+ }
+ 
+ class C3 {
+ >C3 : Symbol(C3, Decl(typeofProperty.ts, 23, 1))
+ 
+     e: typeof e; // Should yield error (e is not a value)
+->e : Symbol(C3.e, Decl(typeofProperty.ts, 25, 10))
++>e : Symbol(e, Decl(typeofProperty.ts, 25, 10))
+ }
+ 
+ 
+@@= skipped -19, +19 lines =@@
+ >ValidInterface : Symbol(ValidInterface, Decl(typeofProperty.ts, 27, 1))
+ 
+     x: string;
+->x : Symbol(ValidInterface.x, Decl(typeofProperty.ts, 31, 26))
++>x : Symbol(x, Decl(typeofProperty.ts, 31, 26))
+ }
+ 
+ class ValidClass implements ValidInterface {
+@@= skipped -8, +8 lines =@@
+ >ValidInterface : Symbol(ValidInterface, Decl(typeofProperty.ts, 27, 1))
+ 
+     x: string;
+->x : Symbol(ValidClass.x, Decl(typeofProperty.ts, 35, 44))
++>x : Symbol(x, Decl(typeofProperty.ts, 35, 44))
+ }
+ 
+ var vcInstance = new ValidClass();
+@@= skipped -13, +13 lines =@@
+ 
+ var x1: typeof vcInstance.x; // x1: string
+ >x1 : Symbol(x1, Decl(typeofProperty.ts, 42, 3))
+->vcInstance.x : Symbol(ValidClass.x, Decl(typeofProperty.ts, 35, 44))
++>vcInstance.x : Symbol(x, Decl(typeofProperty.ts, 35, 44))
+ >vcInstance : Symbol(vcInstance, Decl(typeofProperty.ts, 39, 3))
+->x : Symbol(ValidClass.x, Decl(typeofProperty.ts, 35, 44))
++>x : Symbol(x, Decl(typeofProperty.ts, 35, 44))
+ 
+ var x2: typeof viInstance.x; // x2: string
+ >x2 : Symbol(x2, Decl(typeofProperty.ts, 43, 3))
+->viInstance.x : Symbol(ValidClass.x, Decl(typeofProperty.ts, 35, 44))
++>viInstance.x : Symbol(x, Decl(typeofProperty.ts, 35, 44))
+ >viInstance : Symbol(viInstance, Decl(typeofProperty.ts, 40, 3))
+->x : Symbol(ValidClass.x, Decl(typeofProperty.ts, 35, 44))
++>x : Symbol(x, Decl(typeofProperty.ts, 35, 44))
+ 
+ 
+ 

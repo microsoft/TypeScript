@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/interfaceImplementation2.ts] ////
+
+=== interfaceImplementation2.ts ===
+interface I1 {
+>I1 : Symbol(I1, Decl(interfaceImplementation2.ts, 0, 0))
+
+    iObj:{ };
+>iObj : Symbol(iObj, Decl(interfaceImplementation2.ts, 0, 14))
+
+    iNum:number;
+>iNum : Symbol(iNum, Decl(interfaceImplementation2.ts, 1, 13))
+
+    iAny:any;
+>iAny : Symbol(iAny, Decl(interfaceImplementation2.ts, 2, 16))
+
+    iFn():void;
+>iFn : Symbol(iFn, Decl(interfaceImplementation2.ts, 3, 13))
+}
+
+class C3 implements I1 {
+>C3 : Symbol(C3, Decl(interfaceImplementation2.ts, 5, 1))
+>I1 : Symbol(I1, Decl(interfaceImplementation2.ts, 0, 0))
+
+    public iObj:{ };
+>iObj : Symbol(iObj, Decl(interfaceImplementation2.ts, 7, 24))
+
+    public iNum:number;
+>iNum : Symbol(iNum, Decl(interfaceImplementation2.ts, 8, 20))
+
+    public iAny:any;
+>iAny : Symbol(iAny, Decl(interfaceImplementation2.ts, 9, 23))
+}
+

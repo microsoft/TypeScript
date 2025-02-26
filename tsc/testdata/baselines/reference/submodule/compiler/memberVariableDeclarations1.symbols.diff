@@ -1,0 +1,77 @@
+--- old.memberVariableDeclarations1.symbols
++++ new.memberVariableDeclarations1.symbols
+@@= skipped -6, +6 lines =@@
+ >Employee : Symbol(Employee, Decl(memberVariableDeclarations1.ts, 0, 0))
+ 
+     public name: string;
+->name : Symbol(Employee.name, Decl(memberVariableDeclarations1.ts, 2, 16))
++>name : Symbol(name, Decl(memberVariableDeclarations1.ts, 2, 16))
+ 
+     public address: string;
+->address : Symbol(Employee.address, Decl(memberVariableDeclarations1.ts, 3, 24))
++>address : Symbol(address, Decl(memberVariableDeclarations1.ts, 3, 24))
+ 
+     public retired = false;
+->retired : Symbol(Employee.retired, Decl(memberVariableDeclarations1.ts, 4, 27))
++>retired : Symbol(retired, Decl(memberVariableDeclarations1.ts, 4, 27))
+ 
+     public manager: Employee = null;
+->manager : Symbol(Employee.manager, Decl(memberVariableDeclarations1.ts, 5, 27))
++>manager : Symbol(manager, Decl(memberVariableDeclarations1.ts, 5, 27))
+ >Employee : Symbol(Employee, Decl(memberVariableDeclarations1.ts, 0, 0))
+ 
+     public reports: Employee[] = [];
+->reports : Symbol(Employee.reports, Decl(memberVariableDeclarations1.ts, 6, 36))
++>reports : Symbol(reports, Decl(memberVariableDeclarations1.ts, 6, 36))
+ >Employee : Symbol(Employee, Decl(memberVariableDeclarations1.ts, 0, 0))
+ }
+ 
+@@= skipped -21, +21 lines =@@
+ >Employee2 : Symbol(Employee2, Decl(memberVariableDeclarations1.ts, 8, 1))
+ 
+     public name: string;
+->name : Symbol(Employee2.name, Decl(memberVariableDeclarations1.ts, 10, 17))
++>name : Symbol(name, Decl(memberVariableDeclarations1.ts, 10, 17))
+ 
+     public address: string;
+->address : Symbol(Employee2.address, Decl(memberVariableDeclarations1.ts, 11, 24))
++>address : Symbol(address, Decl(memberVariableDeclarations1.ts, 11, 24))
+ 
+     public retired: boolean;
+->retired : Symbol(Employee2.retired, Decl(memberVariableDeclarations1.ts, 12, 27))
++>retired : Symbol(retired, Decl(memberVariableDeclarations1.ts, 12, 27))
+ 
+     public manager: Employee;
+->manager : Symbol(Employee2.manager, Decl(memberVariableDeclarations1.ts, 13, 28))
++>manager : Symbol(manager, Decl(memberVariableDeclarations1.ts, 13, 28))
+ >Employee : Symbol(Employee, Decl(memberVariableDeclarations1.ts, 0, 0))
+ 
+     public reports: Employee[];
+->reports : Symbol(Employee2.reports, Decl(memberVariableDeclarations1.ts, 14, 29))
++>reports : Symbol(reports, Decl(memberVariableDeclarations1.ts, 14, 29))
+ >Employee : Symbol(Employee, Decl(memberVariableDeclarations1.ts, 0, 0))
+ 
+     constructor() {
+         this.retired = false;
+->this.retired : Symbol(Employee2.retired, Decl(memberVariableDeclarations1.ts, 12, 27))
++>this.retired : Symbol(retired, Decl(memberVariableDeclarations1.ts, 12, 27))
+ >this : Symbol(Employee2, Decl(memberVariableDeclarations1.ts, 8, 1))
+->retired : Symbol(Employee2.retired, Decl(memberVariableDeclarations1.ts, 12, 27))
++>retired : Symbol(retired, Decl(memberVariableDeclarations1.ts, 12, 27))
+ 
+         this.manager = null;
+->this.manager : Symbol(Employee2.manager, Decl(memberVariableDeclarations1.ts, 13, 28))
++>this.manager : Symbol(manager, Decl(memberVariableDeclarations1.ts, 13, 28))
+ >this : Symbol(Employee2, Decl(memberVariableDeclarations1.ts, 8, 1))
+->manager : Symbol(Employee2.manager, Decl(memberVariableDeclarations1.ts, 13, 28))
++>manager : Symbol(manager, Decl(memberVariableDeclarations1.ts, 13, 28))
+ 
+         this.reports = [];
+->this.reports : Symbol(Employee2.reports, Decl(memberVariableDeclarations1.ts, 14, 29))
++>this.reports : Symbol(reports, Decl(memberVariableDeclarations1.ts, 14, 29))
+ >this : Symbol(Employee2, Decl(memberVariableDeclarations1.ts, 8, 1))
+->reports : Symbol(Employee2.reports, Decl(memberVariableDeclarations1.ts, 14, 29))
++>reports : Symbol(reports, Decl(memberVariableDeclarations1.ts, 14, 29))
+     }
+ }
+ 

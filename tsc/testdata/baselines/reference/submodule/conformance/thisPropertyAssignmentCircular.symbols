@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/salsa/thisPropertyAssignmentCircular.ts] ////
+
+=== thisPropertyAssignmentCircular.js ===
+export class Foo {
+>Foo : Symbol(Foo, Decl(thisPropertyAssignmentCircular.js, 0, 0))
+
+    constructor() {
+        this.foo = "Hello";
+>this : Symbol(Foo, Decl(thisPropertyAssignmentCircular.js, 0, 0))
+    }
+    slicey() {
+>slicey : Symbol(slicey, Decl(thisPropertyAssignmentCircular.js, 3, 5))
+
+        this.foo = this.foo.slice();
+>this : Symbol(Foo, Decl(thisPropertyAssignmentCircular.js, 0, 0))
+>this : Symbol(Foo, Decl(thisPropertyAssignmentCircular.js, 0, 0))
+    }
+    m() {
+>m : Symbol(m, Decl(thisPropertyAssignmentCircular.js, 6, 5))
+
+        this.foo
+>this : Symbol(Foo, Decl(thisPropertyAssignmentCircular.js, 0, 0))
+    }
+}
+
+/** @class */
+function C() {
+>C : Symbol(C, Decl(thisPropertyAssignmentCircular.js, 10, 1))
+
+    this.x = 0;
+    this.x = function() { this.x.toString(); }
+}
+

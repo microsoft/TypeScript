@@ -1,0 +1,11 @@
+--- old.narrowingConstrainedTypeParameter.symbols
++++ new.narrowingConstrainedTypeParameter.symbols
+@@= skipped -6, +6 lines =@@
+ >Pet : Symbol(Pet, Decl(narrowingConstrainedTypeParameter.ts, 0, 0))
+ 
+     name: string;
+->name : Symbol(Pet.name, Decl(narrowingConstrainedTypeParameter.ts, 2, 15))
++>name : Symbol(name, Decl(narrowingConstrainedTypeParameter.ts, 2, 15))
+ }
+ 
+ function isPet(pet: any): pet is Pet {

@@ -1,0 +1,28 @@
+--- old.constDeclarations-validContexts.symbols
++++ new.constDeclarations-validContexts.symbols
+@@= skipped -150, +150 lines =@@
+     }
+ 
+     method() {
+->method : Symbol(C.method, Decl(constDeclarations-validContexts.ts, 96, 5))
++>method : Symbol(method, Decl(constDeclarations-validContexts.ts, 96, 5))
+ 
+         const c25 = 0;
+ >c25 : Symbol(c25, Decl(constDeclarations-validContexts.ts, 99, 13))
+     }
+ 
+     get v() {
+->v : Symbol(C.v, Decl(constDeclarations-validContexts.ts, 100, 5), Decl(constDeclarations-validContexts.ts, 105, 5))
++>v : Symbol(v, Decl(constDeclarations-validContexts.ts, 100, 5), Decl(constDeclarations-validContexts.ts, 105, 5))
+ 
+         const c26 = 0;
+ >c26 : Symbol(c26, Decl(constDeclarations-validContexts.ts, 103, 13))
+@@= skipped -17, +17 lines =@@
+     }
+ 
+     set v(value) {
+->v : Symbol(C.v, Decl(constDeclarations-validContexts.ts, 100, 5), Decl(constDeclarations-validContexts.ts, 105, 5))
++>v : Symbol(v, Decl(constDeclarations-validContexts.ts, 100, 5), Decl(constDeclarations-validContexts.ts, 105, 5))
+ >value : Symbol(value, Decl(constDeclarations-validContexts.ts, 107, 10))
+ 
+         const c27 = value;

@@ -1,0 +1,42 @@
+--- old.jsdocTypeTagCast.symbols
++++ new.jsdocTypeTagCast.symbols
+@@= skipped -30, +30 lines =@@
+ 
+     constructor() {
+         this.p = 42;
+->this.p : Symbol(SomeBase.p, Decl(b.js, 15, 19))
+ >this : Symbol(SomeBase, Decl(b.js, 12, 33))
+->p : Symbol(SomeBase.p, Decl(b.js, 15, 19))
+     }
+ }
+ class SomeDerived extends SomeBase {
+@@= skipped -14, +12 lines =@@
+ >super : Symbol(SomeBase, Decl(b.js, 12, 33))
+ 
+         this.x = 42;
+->this.x : Symbol(SomeDerived.x, Decl(b.js, 21, 16))
+ >this : Symbol(SomeDerived, Decl(b.js, 18, 1))
+->x : Symbol(SomeDerived.x, Decl(b.js, 21, 16))
+     }
+ }
+ class SomeOther {
+@@= skipped -10, +8 lines =@@
+ 
+     constructor() {
+         this.q = 42;
+->this.q : Symbol(SomeOther.q, Decl(b.js, 26, 19))
+ >this : Symbol(SomeOther, Decl(b.js, 24, 1))
+->q : Symbol(SomeOther.q, Decl(b.js, 26, 19))
+     }
+ }
+ 
+@@= skipped -11, +9 lines =@@
+ 
+     /** @type {string|number} */
+     this.p = "bar";
+->this.p : Symbol(SomeFakeClass.p, Decl(b.js, 31, 26))
+->this : Symbol(SomeFakeClass, Decl(b.js, 29, 1))
+->p : Symbol(SomeFakeClass.p, Decl(b.js, 31, 26))
+ }
+ 
+ // Type assertion should check for assignability in either direction

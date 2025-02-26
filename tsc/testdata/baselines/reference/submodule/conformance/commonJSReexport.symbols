@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/salsa/commonJSReexport.ts] ////
+
+=== main.js ===
+const { hardline } = require('./second').nested;
+>hardline : Symbol(hardline, Decl(main.js, 0, 7))
+
+hardline
+>hardline : Symbol(hardline, Decl(main.js, 0, 7))
+

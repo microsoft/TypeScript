@@ -1,0 +1,11 @@
+--- old.asyncFunctionReturnExpressionErrorSpans.symbols
++++ new.asyncFunctionReturnExpressionErrorSpans.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 0, 0))
+ 
+     bar: {
+->bar : Symbol(Foo.bar, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 0, 15))
++>bar : Symbol(bar, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 0, 15))
+ 
+         baz: {
+ >baz : Symbol(baz, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 1, 10))

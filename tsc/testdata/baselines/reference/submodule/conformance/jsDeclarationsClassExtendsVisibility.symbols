@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassExtendsVisibility.ts] ////
+
+=== cls.js ===
+const Bar = require("./bar");
+>Bar : Symbol(Bar, Decl(cls.js, 0, 5))
+
+const Strings = {
+>Strings : Symbol(Strings, Decl(cls.js, 1, 5))
+
+    a: "A",
+>a : Symbol(a, Decl(cls.js, 1, 17))
+
+    b: "B"
+>b : Symbol(b, Decl(cls.js, 2, 11))
+
+};
+class Foo extends Bar {}
+>Foo : Symbol(Foo, Decl(cls.js, 4, 2))
+>Bar : Symbol(Bar, Decl(cls.js, 0, 5))
+
+module.exports = Foo;
+>Foo : Symbol(Foo, Decl(cls.js, 4, 2))
+
+module.exports.Strings = Strings;
+>Strings : Symbol(Strings, Decl(cls.js, 1, 5))
+

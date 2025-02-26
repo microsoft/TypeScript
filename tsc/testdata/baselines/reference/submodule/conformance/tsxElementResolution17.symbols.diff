@@ -1,0 +1,32 @@
+--- old.tsxElementResolution17.symbols
++++ new.tsxElementResolution17.symbols
+@@= skipped -9, +9 lines =@@
+ >s2 : Symbol(s2, Decl(consumer.tsx, 2, 33))
+ 
+ <s1.MyElement />;
+->s1.MyElement : Symbol(s1.MyElement, Decl(file.tsx, 5, 28))
++>s1.MyElement : Symbol(MyElement, Decl(file.tsx, 5, 28))
+ >s1 : Symbol(s1, Decl(consumer.tsx, 0, 0))
+->MyElement : Symbol(s1.MyElement, Decl(file.tsx, 5, 28))
++>MyElement : Symbol(MyElement, Decl(file.tsx, 5, 28))
+ 
+ === file.tsx ===
+ declare module JSX {
+@@= skipped -16, +16 lines =@@
+ }
+ 
+ declare module 'elements1' {
+->'elements1' : Symbol("elements1", Decl(file.tsx, 3, 1))
++>'elements1' : Symbol('elements1', Decl(file.tsx, 3, 1))
+ 
+ 	class MyElement {
+ >MyElement : Symbol(MyElement, Decl(file.tsx, 5, 28))
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ declare module 'elements2' {
+->'elements2' : Symbol("elements2", Decl(file.tsx, 9, 1))
++>'elements2' : Symbol('elements2', Decl(file.tsx, 9, 1))
+ 
+ 	class MyElement {
+ >MyElement : Symbol(MyElement, Decl(file.tsx, 11, 28))

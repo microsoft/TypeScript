@@ -1,0 +1,32 @@
+--- old.mergedClassNamespaceRecordCast.symbols
++++ new.mergedClassNamespaceRecordCast.symbols
+@@= skipped -2, +2 lines =@@
+ === mergedClassNamespaceRecordCast.ts ===
+ class C1 { foo() {} }
+ >C1 : Symbol(C1, Decl(mergedClassNamespaceRecordCast.ts, 0, 0))
+->foo : Symbol(C1.foo, Decl(mergedClassNamespaceRecordCast.ts, 0, 10))
++>foo : Symbol(foo, Decl(mergedClassNamespaceRecordCast.ts, 0, 10))
+ 
+ new C1() as Record<string, unknown>;
+ >C1 : Symbol(C1, Decl(mergedClassNamespaceRecordCast.ts, 0, 0))
+@@= skipped -9, +9 lines =@@
+ 
+ class C2 { foo() {} }
+ >C2 : Symbol(C2, Decl(mergedClassNamespaceRecordCast.ts, 2, 36), Decl(mergedClassNamespaceRecordCast.ts, 5, 21))
+->foo : Symbol(C2.foo, Decl(mergedClassNamespaceRecordCast.ts, 5, 10))
++>foo : Symbol(foo, Decl(mergedClassNamespaceRecordCast.ts, 5, 10))
+ 
+ namespace C2 { export const unrelated = 3; }
+ >C2 : Symbol(C2, Decl(mergedClassNamespaceRecordCast.ts, 2, 36), Decl(mergedClassNamespaceRecordCast.ts, 5, 21))
+@@= skipped -11, +11 lines =@@
+ >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+ 
+ C2.unrelated
+->C2.unrelated : Symbol(C2.unrelated, Decl(mergedClassNamespaceRecordCast.ts, 6, 27))
++>C2.unrelated : Symbol(unrelated, Decl(mergedClassNamespaceRecordCast.ts, 6, 27))
+ >C2 : Symbol(C2, Decl(mergedClassNamespaceRecordCast.ts, 2, 36), Decl(mergedClassNamespaceRecordCast.ts, 5, 21))
+->unrelated : Symbol(C2.unrelated, Decl(mergedClassNamespaceRecordCast.ts, 6, 27))
++>unrelated : Symbol(unrelated, Decl(mergedClassNamespaceRecordCast.ts, 6, 27))
+ 
+ new C2().unrelated
+ >C2 : Symbol(C2, Decl(mergedClassNamespaceRecordCast.ts, 2, 36), Decl(mergedClassNamespaceRecordCast.ts, 5, 21))

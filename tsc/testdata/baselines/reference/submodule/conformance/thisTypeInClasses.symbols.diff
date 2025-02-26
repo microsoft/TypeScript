@@ -1,0 +1,110 @@
+--- old.thisTypeInClasses.symbols
++++ new.thisTypeInClasses.symbols
+@@= skipped -4, +4 lines =@@
+ >C1 : Symbol(C1, Decl(thisTypeInClasses.ts, 0, 0))
+ 
+     x: this;
+->x : Symbol(C1.x, Decl(thisTypeInClasses.ts, 0, 10))
++>x : Symbol(x, Decl(thisTypeInClasses.ts, 0, 10))
+ 
+     f(x: this): this { return undefined; }
+->f : Symbol(C1.f, Decl(thisTypeInClasses.ts, 1, 12))
++>f : Symbol(f, Decl(thisTypeInClasses.ts, 1, 12))
+ >x : Symbol(x, Decl(thisTypeInClasses.ts, 2, 6))
+ >undefined : Symbol(undefined)
+ }
+@@= skipped -20, +20 lines =@@
+ >T : Symbol(T, Decl(thisTypeInClasses.ts, 9, 14))
+ 
+     x: T;
+->x : Symbol(Foo.x, Decl(thisTypeInClasses.ts, 9, 18))
++>x : Symbol(x, Decl(thisTypeInClasses.ts, 9, 18))
+ >T : Symbol(T, Decl(thisTypeInClasses.ts, 9, 14))
+ 
+     y: this;
+->y : Symbol(Foo.y, Decl(thisTypeInClasses.ts, 10, 9))
++>y : Symbol(y, Decl(thisTypeInClasses.ts, 10, 9))
+ }
+ 
+ class C3 {
+ >C3 : Symbol(C3, Decl(thisTypeInClasses.ts, 12, 1))
+ 
+     a: this[];
+->a : Symbol(C3.a, Decl(thisTypeInClasses.ts, 14, 10))
++>a : Symbol(a, Decl(thisTypeInClasses.ts, 14, 10))
+ 
+     b: [this, this];
+->b : Symbol(C3.b, Decl(thisTypeInClasses.ts, 15, 14))
++>b : Symbol(b, Decl(thisTypeInClasses.ts, 15, 14))
+ 
+     c: this | Date;
+->c : Symbol(C3.c, Decl(thisTypeInClasses.ts, 16, 20))
++>c : Symbol(c, Decl(thisTypeInClasses.ts, 16, 20))
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ 
+     d: this & Date;
+->d : Symbol(C3.d, Decl(thisTypeInClasses.ts, 17, 19))
++>d : Symbol(d, Decl(thisTypeInClasses.ts, 17, 19))
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ 
+     e: (((this)));
+->e : Symbol(C3.e, Decl(thisTypeInClasses.ts, 18, 19))
++>e : Symbol(e, Decl(thisTypeInClasses.ts, 18, 19))
+ 
+     f: (x: this) => this;
+->f : Symbol(C3.f, Decl(thisTypeInClasses.ts, 19, 18))
++>f : Symbol(f, Decl(thisTypeInClasses.ts, 19, 18))
+ >x : Symbol(x, Decl(thisTypeInClasses.ts, 20, 8))
+ 
+     g: new (x: this) => this;
+->g : Symbol(C3.g, Decl(thisTypeInClasses.ts, 20, 25))
++>g : Symbol(g, Decl(thisTypeInClasses.ts, 20, 25))
+ >x : Symbol(x, Decl(thisTypeInClasses.ts, 21, 12))
+ 
+     h: Foo<this>;
+->h : Symbol(C3.h, Decl(thisTypeInClasses.ts, 21, 29))
++>h : Symbol(h, Decl(thisTypeInClasses.ts, 21, 29))
+ >Foo : Symbol(Foo, Decl(thisTypeInClasses.ts, 7, 1))
+ 
+     i: Foo<this | (() => this)>;
+->i : Symbol(C3.i, Decl(thisTypeInClasses.ts, 22, 17))
++>i : Symbol(i, Decl(thisTypeInClasses.ts, 22, 17))
+ >Foo : Symbol(Foo, Decl(thisTypeInClasses.ts, 7, 1))
+ 
+     j: (x: any) => x is this;
+->j : Symbol(C3.j, Decl(thisTypeInClasses.ts, 23, 32))
++>j : Symbol(j, Decl(thisTypeInClasses.ts, 23, 32))
+ >x : Symbol(x, Decl(thisTypeInClasses.ts, 24, 8))
+ >x : Symbol(x, Decl(thisTypeInClasses.ts, 24, 8))
+ }
+@@= skipped -53, +53 lines =@@
+ >C4 : Symbol(C4, Decl(thisTypeInClasses.ts, 25, 1))
+ 
+     x: this;
+->x : Symbol(C4.x, Decl(thisTypeInClasses.ts, 27, 18))
++>x : Symbol(x, Decl(thisTypeInClasses.ts, 27, 18))
+ 
+     f(x: this): this;
+->f : Symbol(C4.f, Decl(thisTypeInClasses.ts, 28, 12))
++>f : Symbol(f, Decl(thisTypeInClasses.ts, 28, 12))
+ >x : Symbol(x, Decl(thisTypeInClasses.ts, 29, 6))
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ >C5 : Symbol(C5, Decl(thisTypeInClasses.ts, 30, 1))
+ 
+     foo() {
+->foo : Symbol(C5.foo, Decl(thisTypeInClasses.ts, 32, 10))
++>foo : Symbol(foo, Decl(thisTypeInClasses.ts, 32, 10))
+ 
+         let f1 = (x: this): this => this;
+ >f1 : Symbol(f1, Decl(thisTypeInClasses.ts, 34, 11))
+@@= skipped -35, +35 lines =@@
+         }
+     }
+     bar() {
+->bar : Symbol(C5.bar, Decl(thisTypeInClasses.ts, 43, 5))
++>bar : Symbol(bar, Decl(thisTypeInClasses.ts, 43, 5))
+ 
+         let x1 = <this>undefined;
+ >x1 : Symbol(x1, Decl(thisTypeInClasses.ts, 45, 11))

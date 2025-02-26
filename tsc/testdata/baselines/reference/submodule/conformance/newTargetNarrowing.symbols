@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/es6/newTarget/newTargetNarrowing.ts] ////
+
+=== newTargetNarrowing.ts ===
+function foo(x: true) { }
+>foo : Symbol(foo, Decl(newTargetNarrowing.ts, 0, 0))
+>x : Symbol(x, Decl(newTargetNarrowing.ts, 0, 13))
+
+function f() {
+>f : Symbol(f, Decl(newTargetNarrowing.ts, 0, 25))
+
+  if (new.target.marked === true) {
+>target : Symbol(f, Decl(newTargetNarrowing.ts, 0, 25))
+
+    foo(new.target.marked);
+>foo : Symbol(foo, Decl(newTargetNarrowing.ts, 0, 0))
+>target : Symbol(f, Decl(newTargetNarrowing.ts, 0, 25))
+  }
+}
+
+f.marked = true;
+>f.marked : Symbol(marked, Decl(newTargetNarrowing.ts, 6, 1))
+>f : Symbol(f, Decl(newTargetNarrowing.ts, 0, 25))
+>marked : Symbol(marked, Decl(newTargetNarrowing.ts, 6, 1))
+

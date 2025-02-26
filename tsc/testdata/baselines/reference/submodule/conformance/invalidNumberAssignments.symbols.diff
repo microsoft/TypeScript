@@ -1,0 +1,20 @@
+--- old.invalidNumberAssignments.symbols
++++ new.invalidNumberAssignments.symbols
+@@= skipped -22, +22 lines =@@
+ 
+ class C { foo: string; }
+ >C : Symbol(C, Decl(invalidNumberAssignments.ts, 5, 28))
+->foo : Symbol(C.foo, Decl(invalidNumberAssignments.ts, 7, 9))
++>foo : Symbol(foo, Decl(invalidNumberAssignments.ts, 7, 9))
+ 
+ var e: C = x;
+ >e : Symbol(e, Decl(invalidNumberAssignments.ts, 8, 3))
+@@= skipped -9, +9 lines =@@
+ 
+ interface I { bar: string; }
+ >I : Symbol(I, Decl(invalidNumberAssignments.ts, 8, 13))
+->bar : Symbol(I.bar, Decl(invalidNumberAssignments.ts, 10, 13))
++>bar : Symbol(bar, Decl(invalidNumberAssignments.ts, 10, 13))
+ 
+ var f: I = x;
+ >f : Symbol(f, Decl(invalidNumberAssignments.ts, 11, 3))

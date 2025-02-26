@@ -1,0 +1,10 @@
+--- old.commentOnStaticMember1.symbols
++++ new.commentOnStaticMember1.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     //Hello World
+     static foo(){
+->foo : Symbol(Greeter.foo, Decl(commentOnStaticMember1.ts, 0, 15))
++>foo : Symbol(foo, Decl(commentOnStaticMember1.ts, 0, 15))
+     }
+ }

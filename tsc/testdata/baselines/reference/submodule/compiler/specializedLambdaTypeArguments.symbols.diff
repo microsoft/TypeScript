@@ -1,0 +1,11 @@
+--- old.specializedLambdaTypeArguments.symbols
++++ new.specializedLambdaTypeArguments.symbols
+@@= skipped -5, +5 lines =@@
+ >A : Symbol(A, Decl(specializedLambdaTypeArguments.ts, 0, 8))
+ 
+ 	prop: X< <Tany>() => Tany >;
+->prop : Symbol(X.prop, Decl(specializedLambdaTypeArguments.ts, 0, 12))
++>prop : Symbol(prop, Decl(specializedLambdaTypeArguments.ts, 0, 12))
+ >X : Symbol(X, Decl(specializedLambdaTypeArguments.ts, 0, 0))
+ >Tany : Symbol(Tany, Decl(specializedLambdaTypeArguments.ts, 1, 11))
+ >Tany : Symbol(Tany, Decl(specializedLambdaTypeArguments.ts, 1, 11))

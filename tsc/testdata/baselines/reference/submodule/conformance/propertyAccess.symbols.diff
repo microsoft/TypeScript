@@ -1,0 +1,119 @@
+--- old.propertyAccess.symbols
++++ new.propertyAccess.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(propertyAccess.ts, 0, 0))
+ 
+     a: number;
+->a : Symbol(A.a, Decl(propertyAccess.ts, 0, 9))
++>a : Symbol(a, Decl(propertyAccess.ts, 0, 9))
+ }
+ class B extends A {
+ >B : Symbol(B, Decl(propertyAccess.ts, 2, 1))
+ >A : Symbol(A, Decl(propertyAccess.ts, 0, 0))
+ 
+     b: number;
+->b : Symbol(B.b, Decl(propertyAccess.ts, 3, 19))
++>b : Symbol(b, Decl(propertyAccess.ts, 3, 19))
+ }
+ enum Compass {
+ >Compass : Symbol(Compass, Decl(propertyAccess.ts, 5, 1))
+ 
+     North, South, East, West
+->North : Symbol(Compass.North, Decl(propertyAccess.ts, 6, 14))
+->South : Symbol(Compass.South, Decl(propertyAccess.ts, 7, 10))
+->East : Symbol(Compass.East, Decl(propertyAccess.ts, 7, 17))
+->West : Symbol(Compass.West, Decl(propertyAccess.ts, 7, 23))
++>North : Symbol(North, Decl(propertyAccess.ts, 6, 14))
++>South : Symbol(South, Decl(propertyAccess.ts, 7, 10))
++>East : Symbol(East, Decl(propertyAccess.ts, 7, 17))
++>West : Symbol(West, Decl(propertyAccess.ts, 7, 23))
+ }
+ 
+ var numIndex: { [n: number]: string } = { 3: 'three', 'three': 'three' };
+ >numIndex : Symbol(numIndex, Decl(propertyAccess.ts, 10, 3))
+ >n : Symbol(n, Decl(propertyAccess.ts, 10, 17))
+ >3 : Symbol(3, Decl(propertyAccess.ts, 10, 41))
+->'three' : Symbol('three', Decl(propertyAccess.ts, 10, 53))
++>'three' : Symbol(three, Decl(propertyAccess.ts, 10, 53))
+ 
+ var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East };
+ >strIndex : Symbol(strIndex, Decl(propertyAccess.ts, 11, 3))
+ >n : Symbol(n, Decl(propertyAccess.ts, 11, 17))
+ >Compass : Symbol(Compass, Decl(propertyAccess.ts, 5, 1))
+->'N' : Symbol('N', Decl(propertyAccess.ts, 11, 42))
+->Compass.North : Symbol(Compass.North, Decl(propertyAccess.ts, 6, 14))
++>'N' : Symbol(N, Decl(propertyAccess.ts, 11, 42))
++>Compass.North : Symbol(North, Decl(propertyAccess.ts, 6, 14))
+ >Compass : Symbol(Compass, Decl(propertyAccess.ts, 5, 1))
+->North : Symbol(Compass.North, Decl(propertyAccess.ts, 6, 14))
+->'E' : Symbol('E', Decl(propertyAccess.ts, 11, 62))
+->Compass.East : Symbol(Compass.East, Decl(propertyAccess.ts, 7, 17))
++>North : Symbol(North, Decl(propertyAccess.ts, 6, 14))
++>'E' : Symbol(E, Decl(propertyAccess.ts, 11, 62))
++>Compass.East : Symbol(East, Decl(propertyAccess.ts, 7, 17))
+ >Compass : Symbol(Compass, Decl(propertyAccess.ts, 5, 1))
+->East : Symbol(Compass.East, Decl(propertyAccess.ts, 7, 17))
++>East : Symbol(East, Decl(propertyAccess.ts, 7, 17))
+ 
+ var bothIndex:
+ >bothIndex : Symbol(bothIndex, Decl(propertyAccess.ts, 12, 3))
+@@= skipped -111, +111 lines =@@
+ // Dotted property access of property that exists on value's apparent type
+ var bb = obj.hasOwnProperty;
+ >bb : Symbol(bb, Decl(propertyAccess.ts, 41, 3))
+->obj.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
++>obj.hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+ >obj : Symbol(obj, Decl(propertyAccess.ts, 20, 3))
+->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
++>hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+ 
+ // Dotted property access of property that doesn't exist on value's apparent type
+ var cc = obj.qqq; // error
+@@= skipped -55, +55 lines =@@
+ var ii = numIndex[Compass.South];
+ >ii : Symbol(ii, Decl(propertyAccess.ts, 67, 3), Decl(propertyAccess.ts, 68, 3))
+ >numIndex : Symbol(numIndex, Decl(propertyAccess.ts, 10, 3))
+->Compass.South : Symbol(Compass.South, Decl(propertyAccess.ts, 7, 10))
++>Compass.South : Symbol(South, Decl(propertyAccess.ts, 7, 10))
+ >Compass : Symbol(Compass, Decl(propertyAccess.ts, 5, 1))
+->South : Symbol(Compass.South, Decl(propertyAccess.ts, 7, 10))
++>South : Symbol(South, Decl(propertyAccess.ts, 7, 10))
+ 
+ var ii: string;
+ >ii : Symbol(ii, Decl(propertyAccess.ts, 67, 3), Decl(propertyAccess.ts, 68, 3))
+@@= skipped -60, +60 lines =@@
+ var oo = strIndex[Compass.East];
+ >oo : Symbol(oo, Decl(propertyAccess.ts, 92, 3), Decl(propertyAccess.ts, 93, 3))
+ >strIndex : Symbol(strIndex, Decl(propertyAccess.ts, 11, 3))
+->Compass.East : Symbol(Compass.East, Decl(propertyAccess.ts, 7, 17))
++>Compass.East : Symbol(East, Decl(propertyAccess.ts, 7, 17))
+ >Compass : Symbol(Compass, Decl(propertyAccess.ts, 5, 1))
+->East : Symbol(Compass.East, Decl(propertyAccess.ts, 7, 17))
++>East : Symbol(East, Decl(propertyAccess.ts, 7, 17))
+ 
+ var oo: Compass;
+ >oo : Symbol(oo, Decl(propertyAccess.ts, 92, 3), Decl(propertyAccess.ts, 93, 3))
+@@= skipped -37, +37 lines =@@
+ var ss = noIndex[Compass.South];
+ >ss : Symbol(ss, Decl(propertyAccess.ts, 108, 3), Decl(propertyAccess.ts, 109, 3))
+ >noIndex : Symbol(noIndex, Decl(propertyAccess.ts, 16, 6))
+->Compass.South : Symbol(Compass.South, Decl(propertyAccess.ts, 7, 10))
++>Compass.South : Symbol(South, Decl(propertyAccess.ts, 7, 10))
+ >Compass : Symbol(Compass, Decl(propertyAccess.ts, 5, 1))
+->South : Symbol(Compass.South, Decl(propertyAccess.ts, 7, 10))
++>South : Symbol(South, Decl(propertyAccess.ts, 7, 10))
+ 
+ var ss: any;
+ >ss : Symbol(ss, Decl(propertyAccess.ts, 108, 3), Decl(propertyAccess.ts, 109, 3))
+@@= skipped -33, +33 lines =@@
+ var ww = bothIndex[Compass.East];
+ >ww : Symbol(ww, Decl(propertyAccess.ts, 123, 3), Decl(propertyAccess.ts, 124, 3))
+ >bothIndex : Symbol(bothIndex, Decl(propertyAccess.ts, 12, 3))
+->Compass.East : Symbol(Compass.East, Decl(propertyAccess.ts, 7, 17))
++>Compass.East : Symbol(East, Decl(propertyAccess.ts, 7, 17))
+ >Compass : Symbol(Compass, Decl(propertyAccess.ts, 5, 1))
+->East : Symbol(Compass.East, Decl(propertyAccess.ts, 7, 17))
++>East : Symbol(East, Decl(propertyAccess.ts, 7, 17))
+ 
+ var ww: B;
+ >ww : Symbol(ww, Decl(propertyAccess.ts, 123, 3), Decl(propertyAccess.ts, 124, 3))

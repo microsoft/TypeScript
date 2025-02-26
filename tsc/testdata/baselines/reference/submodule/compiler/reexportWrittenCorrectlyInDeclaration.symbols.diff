@@ -1,0 +1,13 @@
+--- old.reexportWrittenCorrectlyInDeclaration.symbols
++++ new.reexportWrittenCorrectlyInDeclaration.symbols
+@@= skipped -22, +22 lines =@@
+ >Test : Symbol(Test, Decl(Test.ts, 0, 35))
+ 
+     public method = (input: things.ThingA)  => { };
+->method : Symbol(Test.method, Decl(Test.ts, 2, 19))
++>method : Symbol(method, Decl(Test.ts, 2, 19))
+ >input : Symbol(input, Decl(Test.ts, 3, 21))
+ >things : Symbol(things, Decl(Test.ts, 0, 6))
+->ThingA : Symbol(things.ThingA, Decl(Things.ts, 0, 8))
++>ThingA : Symbol(ThingA, Decl(Things.ts, 0, 8))
+ }

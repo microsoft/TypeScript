@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/salsa/checkSpecialPropertyAssignments.ts] ////
+
+=== bug24252.js ===
+var A = {};
+>A : Symbol(A, Decl(bug24252.js, 0, 3))
+
+A.B = class {
+>A : Symbol(A, Decl(bug24252.js, 0, 3))
+
+    m() {
+>m : Symbol(m, Decl(bug24252.js, 1, 13))
+
+        /** @type {string[]} */
+        var x = [];
+>x : Symbol(x, Decl(bug24252.js, 4, 11))
+
+        /** @type {number[]} */
+        var y;
+>y : Symbol(y, Decl(bug24252.js, 6, 11))
+
+        y = x;
+>y : Symbol(y, Decl(bug24252.js, 6, 11))
+>x : Symbol(x, Decl(bug24252.js, 4, 11))
+    }
+};
+

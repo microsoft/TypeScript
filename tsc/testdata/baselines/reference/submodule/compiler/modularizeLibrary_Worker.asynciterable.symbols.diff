@@ -1,0 +1,34 @@
+--- old.modularizeLibrary_Worker.asynciterable.symbols
++++ new.modularizeLibrary_Worker.asynciterable.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === modularizeLibrary_Worker.asynciterable.ts ===
+ navigator.storage.getDirectory().then(async directory => {
+->navigator.storage.getDirectory().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+->navigator.storage.getDirectory : Symbol(StorageManager.getDirectory, Decl(lib.webworker.d.ts, --, --))
+->navigator.storage : Symbol(NavigatorStorage.storage, Decl(lib.webworker.d.ts, --, --))
++>navigator.storage.getDirectory().then : Symbol(then, Decl(lib.es5.d.ts, --, --))
++>navigator.storage.getDirectory : Symbol(getDirectory, Decl(lib.webworker.d.ts, --, --))
++>navigator.storage : Symbol(storage, Decl(lib.webworker.d.ts, --, --))
+ >navigator : Symbol(navigator, Decl(lib.webworker.d.ts, --, --))
+->storage : Symbol(NavigatorStorage.storage, Decl(lib.webworker.d.ts, --, --))
+->getDirectory : Symbol(StorageManager.getDirectory, Decl(lib.webworker.d.ts, --, --))
+->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
++>storage : Symbol(storage, Decl(lib.webworker.d.ts, --, --))
++>getDirectory : Symbol(getDirectory, Decl(lib.webworker.d.ts, --, --))
++>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+ >directory : Symbol(directory, Decl(modularizeLibrary_Worker.asynciterable.ts, 0, 43))
+ 
+     for await (const [key, handle] of directory) {
+@@= skipped -15, +15 lines =@@
+ >directory : Symbol(directory, Decl(modularizeLibrary_Worker.asynciterable.ts, 0, 43))
+ 
+         handle.kind;
+->handle.kind : Symbol(FileSystemHandle.kind, Decl(lib.webworker.d.ts, --, --))
++>handle.kind : Symbol(kind, Decl(lib.webworker.d.ts, --, --))
+ >handle : Symbol(handle, Decl(modularizeLibrary_Worker.asynciterable.ts, 1, 26))
+->kind : Symbol(FileSystemHandle.kind, Decl(lib.webworker.d.ts, --, --))
++>kind : Symbol(kind, Decl(lib.webworker.d.ts, --, --))
+     }
+ });
+ 

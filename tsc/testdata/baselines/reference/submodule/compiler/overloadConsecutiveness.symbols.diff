@@ -1,0 +1,24 @@
+--- old.overloadConsecutiveness.symbols
++++ new.overloadConsecutiveness.symbols
+@@= skipped -18, +18 lines =@@
+ >C : Symbol(C, Decl(overloadConsecutiveness.ts, 4, 32))
+ 
+ 	m1(), m1();
+->m1 : Symbol(C.m1, Decl(overloadConsecutiveness.ts, 6, 9), Decl(overloadConsecutiveness.ts, 7, 6))
+->m1 : Symbol(C.m1, Decl(overloadConsecutiveness.ts, 6, 9), Decl(overloadConsecutiveness.ts, 7, 6))
++>m1 : Symbol(m1, Decl(overloadConsecutiveness.ts, 6, 9), Decl(overloadConsecutiveness.ts, 7, 6))
++>m1 : Symbol(m1, Decl(overloadConsecutiveness.ts, 6, 9), Decl(overloadConsecutiveness.ts, 7, 6))
+ 
+ 	m2(), m2() {}
+->m2 : Symbol(C.m2, Decl(overloadConsecutiveness.ts, 7, 12), Decl(overloadConsecutiveness.ts, 8, 6))
+->m2 : Symbol(C.m2, Decl(overloadConsecutiveness.ts, 7, 12), Decl(overloadConsecutiveness.ts, 8, 6))
++>m2 : Symbol(m2, Decl(overloadConsecutiveness.ts, 7, 12), Decl(overloadConsecutiveness.ts, 8, 6))
++>m2 : Symbol(m2, Decl(overloadConsecutiveness.ts, 7, 12), Decl(overloadConsecutiveness.ts, 8, 6))
+ 
+ 	m3() {}, m3();
+->m3 : Symbol(C.m3, Decl(overloadConsecutiveness.ts, 8, 14), Decl(overloadConsecutiveness.ts, 9, 9))
+->m3 : Symbol(C.m3, Decl(overloadConsecutiveness.ts, 8, 14), Decl(overloadConsecutiveness.ts, 9, 9))
++>m3 : Symbol(m3, Decl(overloadConsecutiveness.ts, 8, 14), Decl(overloadConsecutiveness.ts, 9, 9))
++>m3 : Symbol(m3, Decl(overloadConsecutiveness.ts, 8, 14), Decl(overloadConsecutiveness.ts, 9, 9))
+ }
+ 

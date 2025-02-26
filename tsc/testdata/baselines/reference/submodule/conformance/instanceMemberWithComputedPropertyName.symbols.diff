@@ -1,0 +1,11 @@
+--- old.instanceMemberWithComputedPropertyName.symbols
++++ new.instanceMemberWithComputedPropertyName.symbols
+@@= skipped -9, +9 lines =@@
+ >C : Symbol(C, Decl(instanceMemberWithComputedPropertyName.ts, 2, 12))
+ 
+     [x] = true;
+->[x] : Symbol(C[x], Decl(instanceMemberWithComputedPropertyName.ts, 3, 9))
++>[x] : Symbol([x], Decl(instanceMemberWithComputedPropertyName.ts, 3, 9))
+ >x : Symbol(x, Decl(instanceMemberWithComputedPropertyName.ts, 2, 5))
+ 
+     constructor() {

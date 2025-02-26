@@ -1,0 +1,21 @@
+--- old.withImportDecl.symbols
++++ new.withImportDecl.symbols
+@@= skipped -69, +69 lines =@@
+ 
+ var b = new m3.A();
+ >b : Symbol(b, Decl(withImportDecl_1.ts, 36, 3))
+->m3.A : Symbol(m3.A, Decl(withImportDecl_0.ts, 0, 0))
+ >m3 : Symbol(m3, Decl(withImportDecl_1.ts, 32, 1))
+->A : Symbol(m3.A, Decl(withImportDecl_0.ts, 0, 0))
+ 
+ b.foo;
+->b.foo : Symbol(m3.A.foo, Decl(withImportDecl_0.ts, 0, 16))
+ >b : Symbol(b, Decl(withImportDecl_1.ts, 36, 3))
+->foo : Symbol(m3.A.foo, Decl(withImportDecl_0.ts, 0, 16))
+ 
+ === withImportDecl_0.ts ===
+ export class A { foo: string; }
+ >A : Symbol(A, Decl(withImportDecl_0.ts, 0, 0))
+->foo : Symbol(A.foo, Decl(withImportDecl_0.ts, 0, 16))
++>foo : Symbol(foo, Decl(withImportDecl_0.ts, 0, 16))
+ 

@@ -1,0 +1,15 @@
+--- old.constEnumPreserveEmitReexport.symbols
++++ new.constEnumPreserveEmitReexport.symbols
+@@= skipped -4, +4 lines =@@
+ >MyConstEnum : Symbol(MyConstEnum, Decl(ConstEnum.ts, 0, 0))
+ 
+     Foo,
+->Foo : Symbol(MyConstEnum.Foo, Decl(ConstEnum.ts, 0, 31))
++>Foo : Symbol(Foo, Decl(ConstEnum.ts, 0, 31))
+ 
+     Bar
+->Bar : Symbol(MyConstEnum.Bar, Decl(ConstEnum.ts, 1, 8))
++>Bar : Symbol(Bar, Decl(ConstEnum.ts, 1, 8))
+ 
+ };
+ === ImportExport.ts ===

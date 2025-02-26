@@ -1,0 +1,18 @@
+--- old.thisShadowingErrorSpans.symbols
++++ new.thisShadowingErrorSpans.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(thisShadowingErrorSpans.ts, 0, 0))
+ 
+     m() {
+->m : Symbol(C.m, Decl(thisShadowingErrorSpans.ts, 0, 9))
++>m : Symbol(m, Decl(thisShadowingErrorSpans.ts, 0, 9))
+ 
+         this.m();
+->this.m : Symbol(C.m, Decl(thisShadowingErrorSpans.ts, 0, 9))
++>this.m : Symbol(m, Decl(thisShadowingErrorSpans.ts, 0, 9))
+ >this : Symbol(C, Decl(thisShadowingErrorSpans.ts, 0, 0))
+->m : Symbol(C.m, Decl(thisShadowingErrorSpans.ts, 0, 9))
++>m : Symbol(m, Decl(thisShadowingErrorSpans.ts, 0, 9))
+ 
+         function f() {
+ >f : Symbol(f, Decl(thisShadowingErrorSpans.ts, 2, 17))

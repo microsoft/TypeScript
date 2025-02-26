@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/es5-system.ts] ////
+
+=== es5-system.ts ===
+export default class A
+>A : Symbol(default, Decl(es5-system.ts, 0, 0))
+{
+    constructor ()
+    {
+
+    }
+
+    public B()
+>B : Symbol(B, Decl(es5-system.ts, 5, 5))
+    {
+        return 42;
+    }
+}
+

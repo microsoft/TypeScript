@@ -1,0 +1,26 @@
+--- old.referenceSatisfiesExpression.symbols
++++ new.referenceSatisfiesExpression.symbols
+@@= skipped -43, +43 lines =@@
+ >g : Symbol(g, Decl(referenceSatisfiesExpression.ts, 16, 3))
+ 
+   console.log(g)
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >g : Symbol(g, Decl(referenceSatisfiesExpression.ts, 16, 3))
+ }
+ 
+@@= skipped -14, +14 lines =@@
+ >a : Symbol(a, Decl(referenceSatisfiesExpression.ts, 22, 30))
+ 
+   console.log(x)
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x : Symbol(x, Decl(referenceSatisfiesExpression.ts, 21, 3))
+ }
+ 

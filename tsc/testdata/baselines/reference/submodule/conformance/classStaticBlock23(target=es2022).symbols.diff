@@ -1,0 +1,43 @@
+--- old.classStaticBlock23(target=es2022).symbols
++++ new.classStaticBlock23(target=es2022).symbols
+@@= skipped -2, +2 lines =@@
+ === classStaticBlock23.ts ===
+ const nums = [1, 2, 3].map(n => Promise.resolve(n))
+ >nums : Symbol(nums, Decl(classStaticBlock23.ts, 0, 5))
+->[1, 2, 3].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>[1, 2, 3].map : Symbol(map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+ >n : Symbol(n, Decl(classStaticBlock23.ts, 0, 27))
+->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
++>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ >n : Symbol(n, Decl(classStaticBlock23.ts, 0, 27))
+ 
+ class C {
+@@= skipped -17, +17 lines =@@
+ >nums : Symbol(nums, Decl(classStaticBlock23.ts, 0, 5))
+ 
+         console.log(nn)
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >nn : Symbol(nn, Decl(classStaticBlock23.ts, 4, 20))
+     }
+   }
+@@= skipped -20, +20 lines =@@
+ >nums : Symbol(nums, Decl(classStaticBlock23.ts, 0, 5))
+ 
+           console.log(nn)
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >nn : Symbol(nn, Decl(classStaticBlock23.ts, 13, 22))
+       }
+     }

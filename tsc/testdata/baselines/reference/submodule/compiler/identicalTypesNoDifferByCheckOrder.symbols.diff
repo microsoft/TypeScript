@@ -1,0 +1,54 @@
+--- old.identicalTypesNoDifferByCheckOrder.symbols
++++ new.identicalTypesNoDifferByCheckOrder.symbols
+@@= skipped -4, +4 lines =@@
+ >SomeProps : Symbol(SomeProps, Decl(identicalTypesNoDifferByCheckOrder.ts, 0, 0))
+ 
+     x?: string;
+->x : Symbol(SomeProps.x, Decl(identicalTypesNoDifferByCheckOrder.ts, 0, 21))
++>x : Symbol(x, Decl(identicalTypesNoDifferByCheckOrder.ts, 0, 21))
+ 
+     y?: number;
+->y : Symbol(SomeProps.y, Decl(identicalTypesNoDifferByCheckOrder.ts, 1, 15))
++>y : Symbol(y, Decl(identicalTypesNoDifferByCheckOrder.ts, 1, 15))
+ 
+     renderAs?: FunctionComponent1<SomeProps>
+->renderAs : Symbol(SomeProps.renderAs, Decl(identicalTypesNoDifferByCheckOrder.ts, 2, 15))
++>renderAs : Symbol(renderAs, Decl(identicalTypesNoDifferByCheckOrder.ts, 2, 15))
+ >FunctionComponent1 : Symbol(FunctionComponent1, Decl(identicalTypesNoDifferByCheckOrder.ts, 17, 120))
+ >SomeProps : Symbol(SomeProps, Decl(identicalTypesNoDifferByCheckOrder.ts, 0, 0))
+ }
+@@= skipped -23, +23 lines =@@
+ >SomePropsClone : Symbol(SomePropsClone, Decl(identicalTypesNoDifferByCheckOrder.ts, 6, 72))
+ 
+     x?: string;
+->x : Symbol(SomePropsClone.x, Decl(identicalTypesNoDifferByCheckOrder.ts, 8, 26))
++>x : Symbol(x, Decl(identicalTypesNoDifferByCheckOrder.ts, 8, 26))
+ 
+     y?: number;
+->y : Symbol(SomePropsClone.y, Decl(identicalTypesNoDifferByCheckOrder.ts, 9, 15))
++>y : Symbol(y, Decl(identicalTypesNoDifferByCheckOrder.ts, 9, 15))
+ 
+     renderAs?: FunctionComponent2<SomeProps>
+->renderAs : Symbol(SomePropsClone.renderAs, Decl(identicalTypesNoDifferByCheckOrder.ts, 10, 15))
++>renderAs : Symbol(renderAs, Decl(identicalTypesNoDifferByCheckOrder.ts, 10, 15))
+ >FunctionComponent2 : Symbol(FunctionComponent2, Decl(identicalTypesNoDifferByCheckOrder.ts, 22, 1))
+ >SomeProps : Symbol(SomeProps, Decl(identicalTypesNoDifferByCheckOrder.ts, 0, 0))
+ }
+@@= skipped -49, +49 lines =@@
+ >children : Symbol(children, Decl(identicalTypesNoDifferByCheckOrder.ts, 20, 17))
+ 
+     propTypes?: WeakValidationMap<P>;
+->propTypes : Symbol(FunctionComponent1.propTypes, Decl(identicalTypesNoDifferByCheckOrder.ts, 20, 46))
++>propTypes : Symbol(propTypes, Decl(identicalTypesNoDifferByCheckOrder.ts, 20, 46))
+ >WeakValidationMap : Symbol(WeakValidationMap, Decl(identicalTypesNoDifferByCheckOrder.ts, 16, 43))
+ >P : Symbol(P, Decl(identicalTypesNoDifferByCheckOrder.ts, 19, 29))
+ }
+@@= skipped -15, +15 lines =@@
+ >children : Symbol(children, Decl(identicalTypesNoDifferByCheckOrder.ts, 25, 17))
+ 
+     propTypes?: WeakValidationMap<P>;
+->propTypes : Symbol(FunctionComponent2.propTypes, Decl(identicalTypesNoDifferByCheckOrder.ts, 25, 46))
++>propTypes : Symbol(propTypes, Decl(identicalTypesNoDifferByCheckOrder.ts, 25, 46))
+ >WeakValidationMap : Symbol(WeakValidationMap, Decl(identicalTypesNoDifferByCheckOrder.ts, 16, 43))
+ >P : Symbol(P, Decl(identicalTypesNoDifferByCheckOrder.ts, 24, 29))
+ }

@@ -1,0 +1,115 @@
+--- old.witness.symbols
++++ new.witness.symbols
+@@= skipped -20, +20 lines =@@
+ >InitClass : Symbol(InitClass, Decl(witness.ts, 5, 1))
+ 
+     x = this.x;
+->x : Symbol(InitClass.x, Decl(witness.ts, 6, 17))
+->this.x : Symbol(InitClass.x, Decl(witness.ts, 6, 17))
++>x : Symbol(x, Decl(witness.ts, 6, 17))
++>this.x : Symbol(x, Decl(witness.ts, 6, 17))
+ >this : Symbol(InitClass, Decl(witness.ts, 5, 1))
+->x : Symbol(InitClass.x, Decl(witness.ts, 6, 17))
++>x : Symbol(x, Decl(witness.ts, 6, 17))
+ 
+     fn() {
+->fn : Symbol(InitClass.fn, Decl(witness.ts, 7, 15))
++>fn : Symbol(fn, Decl(witness.ts, 7, 15))
+ 
+         var y = this.x;
+ >y : Symbol(y, Decl(witness.ts, 9, 11), Decl(witness.ts, 10, 11))
+->this.x : Symbol(InitClass.x, Decl(witness.ts, 6, 17))
++>this.x : Symbol(x, Decl(witness.ts, 6, 17))
+ >this : Symbol(InitClass, Decl(witness.ts, 5, 1))
+->x : Symbol(InitClass.x, Decl(witness.ts, 6, 17))
++>x : Symbol(x, Decl(witness.ts, 6, 17))
+ 
+         var y: any;
+ >y : Symbol(y, Decl(witness.ts, 9, 11), Decl(witness.ts, 10, 11))
+@@= skipped -213, +213 lines =@@
+ >C : Symbol(C, Decl(witness.ts, 83, 17))
+ 
+     fn1() {
+->fn1 : Symbol(C.fn1, Decl(witness.ts, 86, 9))
++>fn1 : Symbol(fn1, Decl(witness.ts, 86, 9))
+ 
+         return new (this.fn1())();
+->this.fn1 : Symbol(C.fn1, Decl(witness.ts, 86, 9))
++>this.fn1 : Symbol(fn1, Decl(witness.ts, 86, 9))
+ >this : Symbol(C, Decl(witness.ts, 83, 17))
+->fn1 : Symbol(C.fn1, Decl(witness.ts, 86, 9))
++>fn1 : Symbol(fn1, Decl(witness.ts, 86, 9))
+     }
+     fn2() {
+->fn2 : Symbol(C.fn2, Decl(witness.ts, 89, 5))
++>fn2 : Symbol(fn2, Decl(witness.ts, 89, 5))
+ 
+         return new (this.fn2());
+->this.fn2 : Symbol(C.fn2, Decl(witness.ts, 89, 5))
++>this.fn2 : Symbol(fn2, Decl(witness.ts, 89, 5))
+ >this : Symbol(C, Decl(witness.ts, 83, 17))
+->fn2 : Symbol(C.fn2, Decl(witness.ts, 89, 5))
++>fn2 : Symbol(fn2, Decl(witness.ts, 89, 5))
+     }
+     fn3() {
+->fn3 : Symbol(C.fn3, Decl(witness.ts, 92, 5))
++>fn3 : Symbol(fn3, Decl(witness.ts, 92, 5))
+ 
+         var a: new(x) => number;
+ >a : Symbol(a, Decl(witness.ts, 94, 11))
+@@= skipped -24, +24 lines =@@
+ 
+         return new a(this.fn3);
+ >a : Symbol(a, Decl(witness.ts, 94, 11))
+->this.fn3 : Symbol(C.fn3, Decl(witness.ts, 92, 5))
++>this.fn3 : Symbol(fn3, Decl(witness.ts, 92, 5))
+ >this : Symbol(C, Decl(witness.ts, 83, 17))
+->fn3 : Symbol(C.fn3, Decl(witness.ts, 92, 5))
++>fn3 : Symbol(fn3, Decl(witness.ts, 92, 5))
+     }
+ }
+ 
+@@= skipped -57, +57 lines =@@
+ >C2 : Symbol(C2, Decl(witness.ts, 116, 1))
+ 
+     n = this.n; // n: any
+->n : Symbol(C2.n, Decl(witness.ts, 119, 10))
+->this.n : Symbol(C2.n, Decl(witness.ts, 119, 10))
++>n : Symbol(n, Decl(witness.ts, 119, 10))
++>this.n : Symbol(n, Decl(witness.ts, 119, 10))
+ >this : Symbol(C2, Decl(witness.ts, 116, 1))
+->n : Symbol(C2.n, Decl(witness.ts, 119, 10))
++>n : Symbol(n, Decl(witness.ts, 119, 10))
+ }
+ var c2inst = new C2().n;
+ >c2inst : Symbol(c2inst, Decl(witness.ts, 122, 3), Decl(witness.ts, 123, 3))
+->new C2().n : Symbol(C2.n, Decl(witness.ts, 119, 10))
++>new C2().n : Symbol(n, Decl(witness.ts, 119, 10))
+ >C2 : Symbol(C2, Decl(witness.ts, 116, 1))
+->n : Symbol(C2.n, Decl(witness.ts, 119, 10))
++>n : Symbol(n, Decl(witness.ts, 119, 10))
+ 
+ var c2inst: any;
+ >c2inst : Symbol(c2inst, Decl(witness.ts, 122, 3), Decl(witness.ts, 123, 3))
+@@= skipped -19, +19 lines =@@
+ >C3 : Symbol(C3, Decl(witness.ts, 123, 16))
+ 
+     static q = C3.q;
+->q : Symbol(C3.q, Decl(witness.ts, 126, 10))
+->C3.q : Symbol(C3.q, Decl(witness.ts, 126, 10))
++>q : Symbol(q, Decl(witness.ts, 126, 10))
++>C3.q : Symbol(q, Decl(witness.ts, 126, 10))
+ >C3 : Symbol(C3, Decl(witness.ts, 123, 16))
+->q : Symbol(C3.q, Decl(witness.ts, 126, 10))
++>q : Symbol(q, Decl(witness.ts, 126, 10))
+ }
+ var qq = C3.q;
+ >qq : Symbol(qq, Decl(witness.ts, 129, 3), Decl(witness.ts, 130, 3))
+->C3.q : Symbol(C3.q, Decl(witness.ts, 126, 10))
++>C3.q : Symbol(q, Decl(witness.ts, 126, 10))
+ >C3 : Symbol(C3, Decl(witness.ts, 123, 16))
+->q : Symbol(C3.q, Decl(witness.ts, 126, 10))
++>q : Symbol(q, Decl(witness.ts, 126, 10))
+ 
+ var qq: any;
+ >qq : Symbol(qq, Decl(witness.ts, 129, 3), Decl(witness.ts, 130, 3))

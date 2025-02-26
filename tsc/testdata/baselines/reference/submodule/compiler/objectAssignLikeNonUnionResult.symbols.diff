@@ -1,0 +1,23 @@
+--- old.objectAssignLikeNonUnionResult.symbols
++++ new.objectAssignLikeNonUnionResult.symbols
+@@= skipped -4, +4 lines =@@
+ >Interface : Symbol(Interface, Decl(objectAssignLikeNonUnionResult.ts, 0, 0))
+ 
+     field: number;
+->field : Symbol(Interface.field, Decl(objectAssignLikeNonUnionResult.ts, 0, 21))
++>field : Symbol(field, Decl(objectAssignLikeNonUnionResult.ts, 0, 21))
+ }
+ const defaultValue: Interface = { field: 1 };
+ >defaultValue : Symbol(defaultValue, Decl(objectAssignLikeNonUnionResult.ts, 3, 5))
+@@= skipped -24, +24 lines =@@
+ >data1 : Symbol(data1, Decl(objectAssignLikeNonUnionResult.ts, 9, 5))
+ >assign : Symbol(assign, Decl(objectAssignLikeNonUnionResult.ts, 3, 45))
+ >defaultValue : Symbol(defaultValue, Decl(objectAssignLikeNonUnionResult.ts, 3, 5))
+->Date.now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
++>Date.now : Symbol(now, Decl(lib.es5.d.ts, --, --))
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+->now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
++>now : Symbol(now, Decl(lib.es5.d.ts, --, --))
+ >field : Symbol(field, Decl(objectAssignLikeNonUnionResult.ts, 9, 53))
+ 
+ type ExtractRawComponent<T> = T extends { __raw: infer C } ? [L1: T, L2: C] : [R1: T];

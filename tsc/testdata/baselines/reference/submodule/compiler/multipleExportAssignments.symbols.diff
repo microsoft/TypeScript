@@ -1,0 +1,18 @@
+--- old.multipleExportAssignments.symbols
++++ new.multipleExportAssignments.symbols
+@@= skipped -12, +12 lines =@@
+ >connectExport : Symbol(connectExport, Decl(multipleExportAssignments.ts, 2, 1))
+ 
+     use: (mod: connectModule) => connectExport;
+->use : Symbol(connectExport.use, Decl(multipleExportAssignments.ts, 3, 25))
++>use : Symbol(use, Decl(multipleExportAssignments.ts, 3, 25))
+ >mod : Symbol(mod, Decl(multipleExportAssignments.ts, 4, 10))
+ >connectModule : Symbol(connectModule, Decl(multipleExportAssignments.ts, 0, 0))
+ >connectExport : Symbol(connectExport, Decl(multipleExportAssignments.ts, 2, 1))
+ 
+     listen: (port: number) => void;
+->listen : Symbol(connectExport.listen, Decl(multipleExportAssignments.ts, 4, 47))
++>listen : Symbol(listen, Decl(multipleExportAssignments.ts, 4, 47))
+ >port : Symbol(port, Decl(multipleExportAssignments.ts, 5, 13))
+ }
+ var server: {

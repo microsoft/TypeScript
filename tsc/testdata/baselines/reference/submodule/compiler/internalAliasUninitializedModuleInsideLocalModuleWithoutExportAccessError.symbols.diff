@@ -1,0 +1,35 @@
+--- old.internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.symbols
++++ new.internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.symbols
+@@= skipped -10, +10 lines =@@
+ >I : Symbol(I, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 1, 21))
+ 
+             foo();
+->foo : Symbol(I.foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 2, 28))
++>foo : Symbol(foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 2, 28))
+         }
+     }
+ }
+@@= skipped -16, +16 lines =@@
+     export var x: b.I;
+ >x : Symbol(x, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 10, 14))
+ >b : Symbol(b, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 8, 17))
+->I : Symbol(b.I, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 1, 21))
++>I : Symbol(I, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 1, 21))
+ 
+     x.foo();
+->x.foo : Symbol(b.I.foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 2, 28))
++>x.foo : Symbol(foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 2, 28))
+ >x : Symbol(x, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 10, 14))
+->foo : Symbol(b.I.foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 2, 28))
++>foo : Symbol(foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 2, 28))
+ }
+ 
+ 
+ export var z: c.b.I;
+ >z : Symbol(z, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 15, 10))
+ >c : Symbol(c, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 6, 1))
+->b : Symbol(c.b)
+->I : Symbol(c.b.I)
++>b : Symbol(b)
++>I : Symbol(I)
+ 

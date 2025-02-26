@@ -1,0 +1,19 @@
+--- old.typeVariableConstraintIntersections.symbols
++++ new.typeVariableConstraintIntersections.symbols
+@@= skipped -288, +288 lines =@@
+ >OptionHandlers : Symbol(OptionHandlers, Decl(typeVariableConstraintIntersections.ts, 76, 37))
+ 
+   "one": option => option.s,
+->"one" : Symbol("one", Decl(typeVariableConstraintIntersections.ts, 82, 40))
++>"one" : Symbol(one, Decl(typeVariableConstraintIntersections.ts, 82, 40))
+ >option : Symbol(option, Decl(typeVariableConstraintIntersections.ts, 83, 8))
+ >option.s : Symbol(s, Decl(typeVariableConstraintIntersections.ts, 66, 14))
+ >option : Symbol(option, Decl(typeVariableConstraintIntersections.ts, 83, 8))
+ >s : Symbol(s, Decl(typeVariableConstraintIntersections.ts, 66, 14))
+ 
+   "two": option => option.x + "," + option.y,
+->"two" : Symbol("two", Decl(typeVariableConstraintIntersections.ts, 83, 28))
++>"two" : Symbol(two, Decl(typeVariableConstraintIntersections.ts, 83, 28))
+ >option : Symbol(option, Decl(typeVariableConstraintIntersections.ts, 84, 8))
+ >option.x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 71, 14))
+ >option : Symbol(option, Decl(typeVariableConstraintIntersections.ts, 84, 8))

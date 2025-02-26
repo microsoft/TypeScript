@@ -1,0 +1,11 @@
+--- old.requireOfJsonFileWithComputedPropertyName.symbols
++++ new.requireOfJsonFileWithComputedPropertyName.symbols
+@@= skipped -18, +18 lines =@@
+ >b2 : Symbol(b2, Decl(file1.ts, 1, 11))
+ }
+ 
+-=== b.json ===
+-{
+-    [a]: 10
+->[a] : Symbol([a], Decl(b.json, 0, 1))
+-}

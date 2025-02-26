@@ -1,0 +1,10 @@
+--- old.aliasAssignments.symbols
++++ new.aliasAssignments.symbols
+@@= skipped -22, +22 lines =@@
+ >someClass : Symbol(someClass, Decl(aliasAssignments_moduleA.ts, 0, 0))
+ 
+     public someData: string;
+->someData : Symbol(someClass.someData, Decl(aliasAssignments_moduleA.ts, 0, 24))
++>someData : Symbol(someData, Decl(aliasAssignments_moduleA.ts, 0, 24))
+ }
+ 

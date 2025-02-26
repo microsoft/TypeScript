@@ -1,0 +1,56 @@
+--- old.anyAssignabilityInInheritance.symbols
++++ new.anyAssignabilityInInheritance.symbols
+@@= skipped -9, +9 lines =@@
+ >x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 3, 5))
+ 
+     foo: any; // ok, any identical to itself
+->foo : Symbol(I.foo, Decl(anyAssignabilityInInheritance.ts, 3, 21))
++>foo : Symbol(foo, Decl(anyAssignabilityInInheritance.ts, 3, 21))
+ }
+ 
+ var a: any;
+@@= skipped -105, +105 lines =@@
+ 
+ interface I8 { foo: string }
+ >I8 : Symbol(I8, Decl(anyAssignabilityInInheritance.ts, 35, 17))
+->foo : Symbol(I8.foo, Decl(anyAssignabilityInInheritance.ts, 37, 14))
++>foo : Symbol(foo, Decl(anyAssignabilityInInheritance.ts, 37, 14))
+ 
+ declare function foo9(x: I8): I8;
+ >foo9 : Symbol(foo9, Decl(anyAssignabilityInInheritance.ts, 37, 28), Decl(anyAssignabilityInInheritance.ts, 38, 33))
+@@= skipped -19, +19 lines =@@
+ 
+ class A { foo: number; }
+ >A : Symbol(A, Decl(anyAssignabilityInInheritance.ts, 40, 17))
+->foo : Symbol(A.foo, Decl(anyAssignabilityInInheritance.ts, 42, 9))
++>foo : Symbol(foo, Decl(anyAssignabilityInInheritance.ts, 42, 9))
+ 
+ declare function foo10(x: A): A;
+ >foo10 : Symbol(foo10, Decl(anyAssignabilityInInheritance.ts, 42, 24), Decl(anyAssignabilityInInheritance.ts, 43, 32))
+@@= skipped -20, +20 lines =@@
+ class A2<T> { foo: T; }
+ >A2 : Symbol(A2, Decl(anyAssignabilityInInheritance.ts, 45, 17))
+ >T : Symbol(T, Decl(anyAssignabilityInInheritance.ts, 47, 9))
+->foo : Symbol(A2.foo, Decl(anyAssignabilityInInheritance.ts, 47, 13))
++>foo : Symbol(foo, Decl(anyAssignabilityInInheritance.ts, 47, 13))
+ >T : Symbol(T, Decl(anyAssignabilityInInheritance.ts, 47, 9))
+ 
+ declare function foo11(x: A2<string>): A2<string>;
+@@= skipped -56, +56 lines =@@
+ 
+ enum E { A }
+ >E : Symbol(E, Decl(anyAssignabilityInInheritance.ts, 58, 17))
+->A : Symbol(E.A, Decl(anyAssignabilityInInheritance.ts, 60, 8))
++>A : Symbol(A, Decl(anyAssignabilityInInheritance.ts, 60, 8))
+ 
+ declare function foo14(x: E): E;
+ >foo14 : Symbol(foo14, Decl(anyAssignabilityInInheritance.ts, 60, 12), Decl(anyAssignabilityInInheritance.ts, 61, 32))
+@@= skipped -43, +43 lines =@@
+ 
+ class CC { baz: string }
+ >CC : Symbol(CC, Decl(anyAssignabilityInInheritance.ts, 71, 17), Decl(anyAssignabilityInInheritance.ts, 73, 24))
+->baz : Symbol(CC.baz, Decl(anyAssignabilityInInheritance.ts, 73, 10))
++>baz : Symbol(baz, Decl(anyAssignabilityInInheritance.ts, 73, 10))
+ 
+ module CC {
+ >CC : Symbol(CC, Decl(anyAssignabilityInInheritance.ts, 71, 17), Decl(anyAssignabilityInInheritance.ts, 73, 24))

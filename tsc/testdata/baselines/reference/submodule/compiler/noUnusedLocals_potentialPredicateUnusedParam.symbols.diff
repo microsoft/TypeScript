@@ -1,0 +1,13 @@
+--- old.noUnusedLocals_potentialPredicateUnusedParam.symbols
++++ new.noUnusedLocals_potentialPredicateUnusedParam.symbols
+@@= skipped -5, +5 lines =@@
+ >a : Symbol(a, Decl(noUnusedLocals_potentialPredicateUnusedParam.ts, 0, 39))
+ 
+   return !!Math.random();
+->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ }
+ 

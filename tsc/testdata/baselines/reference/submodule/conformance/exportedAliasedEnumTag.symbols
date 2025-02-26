@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/jsdoc/exportedAliasedEnumTag.ts] ////
+
+=== exportedAliasedEnumTag.js ===
+var middlewarify = module.exports = {};
+>middlewarify : Symbol(middlewarify, Decl(exportedAliasedEnumTag.js, 0, 3))
+
+/** @enum */
+middlewarify.Type = {
+>middlewarify : Symbol(middlewarify, Decl(exportedAliasedEnumTag.js, 0, 3))
+
+  BEFORE: 'before'
+>BEFORE : Symbol(BEFORE, Decl(exportedAliasedEnumTag.js, 3, 21))
+
+};
+

@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit13.ts] ////
+
+=== symbolDeclarationEmit13.ts ===
+class C {
+>C : Symbol(C, Decl(symbolDeclarationEmit13.ts, 0, 0))
+
+    get [Symbol.toPrimitive]() { return ""; }
+>[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(symbolDeclarationEmit13.ts, 0, 9))
+
+    set [Symbol.toStringTag](x) { }
+>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(symbolDeclarationEmit13.ts, 1, 45))
+>x : Symbol(x, Decl(symbolDeclarationEmit13.ts, 2, 29))
+}

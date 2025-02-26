@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/reactImportUnusedInNewJSXEmit.tsx] ////
+
+=== index.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from "react";
+>React : Symbol(React, Decl(index.tsx, 2, 6))
+
+function Bar() {
+>Bar : Symbol(Bar, Decl(index.tsx, 2, 26))
+
+  return <div />;
+}
+
+export function Foo() {
+>Foo : Symbol(Foo, Decl(index.tsx, 6, 1))
+
+  return <Bar />;
+>Bar : Symbol(Bar, Decl(index.tsx, 2, 26))
+}

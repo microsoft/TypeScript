@@ -1,0 +1,136 @@
+//// [tests/cases/compiler/intersectionConstraintReduction.ts] ////
+
+=== intersectionConstraintReduction.ts ===
+type Test1<K1 extends keyof any, K2 extends keyof any> =
+>Test1 : Symbol(Test1, Decl(intersectionConstraintReduction.ts, 0, 0))
+>K1 : Symbol(K1, Decl(intersectionConstraintReduction.ts, 0, 11))
+>K2 : Symbol(K2, Decl(intersectionConstraintReduction.ts, 0, 32))
+
+    MustBeKey<Extract<K1, keyof any> & K1 & K2>;
+>MustBeKey : Symbol(MustBeKey, Decl(intersectionConstraintReduction.ts, 4, 48))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>K1 : Symbol(K1, Decl(intersectionConstraintReduction.ts, 0, 11))
+>K1 : Symbol(K1, Decl(intersectionConstraintReduction.ts, 0, 11))
+>K2 : Symbol(K2, Decl(intersectionConstraintReduction.ts, 0, 32))
+
+type Test2<K1 extends keyof any, K2 extends keyof any> =
+>Test2 : Symbol(Test2, Decl(intersectionConstraintReduction.ts, 1, 48))
+>K1 : Symbol(K1, Decl(intersectionConstraintReduction.ts, 3, 11))
+>K2 : Symbol(K2, Decl(intersectionConstraintReduction.ts, 3, 32))
+
+    MustBeKey<K1 & K2 & Extract<K1, keyof any>>;
+>MustBeKey : Symbol(MustBeKey, Decl(intersectionConstraintReduction.ts, 4, 48))
+>K1 : Symbol(K1, Decl(intersectionConstraintReduction.ts, 3, 11))
+>K2 : Symbol(K2, Decl(intersectionConstraintReduction.ts, 3, 32))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>K1 : Symbol(K1, Decl(intersectionConstraintReduction.ts, 3, 11))
+
+type MustBeKey<K extends keyof any> = K;
+>MustBeKey : Symbol(MustBeKey, Decl(intersectionConstraintReduction.ts, 4, 48))
+>K : Symbol(K, Decl(intersectionConstraintReduction.ts, 6, 15))
+>K : Symbol(K, Decl(intersectionConstraintReduction.ts, 6, 15))
+
+// https://github.com/microsoft/TypeScript/issues/58370
+
+type AnyKey = number | string | symbol;
+>AnyKey : Symbol(AnyKey, Decl(intersectionConstraintReduction.ts, 6, 40))
+
+type ReturnTypeKeyof<Obj extends object> = Obj extends object
+>ReturnTypeKeyof : Symbol(ReturnTypeKeyof, Decl(intersectionConstraintReduction.ts, 10, 39))
+>Obj : Symbol(Obj, Decl(intersectionConstraintReduction.ts, 12, 21))
+>Obj : Symbol(Obj, Decl(intersectionConstraintReduction.ts, 12, 21))
+
+    ? [keyof Obj] extends [never]
+>Obj : Symbol(Obj, Decl(intersectionConstraintReduction.ts, 12, 21))
+
+        ? never
+        : { [Key in keyof Obj as string]-?: () => Key }[string]
+>Key : Symbol(Key, Decl(intersectionConstraintReduction.ts, 15, 13))
+>Obj : Symbol(Obj, Decl(intersectionConstraintReduction.ts, 12, 21))
+>Key : Symbol(Key, Decl(intersectionConstraintReduction.ts, 15, 13))
+
+    : never;
+
+type KeyIfSignatureOfObject<
+>KeyIfSignatureOfObject : Symbol(KeyIfSignatureOfObject, Decl(intersectionConstraintReduction.ts, 16, 12))
+
+    Obj extends object,
+>Obj : Symbol(Obj, Decl(intersectionConstraintReduction.ts, 18, 28))
+
+    Key extends AnyKey,
+>Key : Symbol(Key, Decl(intersectionConstraintReduction.ts, 19, 23))
+>AnyKey : Symbol(AnyKey, Decl(intersectionConstraintReduction.ts, 6, 40))
+
+    ReturnTypeKeys = ReturnTypeKeyof<Obj>,
+>ReturnTypeKeys : Symbol(ReturnTypeKeys, Decl(intersectionConstraintReduction.ts, 20, 23))
+>ReturnTypeKeyof : Symbol(ReturnTypeKeyof, Decl(intersectionConstraintReduction.ts, 10, 39))
+>Obj : Symbol(Obj, Decl(intersectionConstraintReduction.ts, 18, 28))
+
+> = ReturnTypeKeys extends () => Key ? ((() => Key) extends ReturnTypeKeys ? Key : never) : never;
+>ReturnTypeKeys : Symbol(ReturnTypeKeys, Decl(intersectionConstraintReduction.ts, 20, 23))
+>Key : Symbol(Key, Decl(intersectionConstraintReduction.ts, 19, 23))
+>Key : Symbol(Key, Decl(intersectionConstraintReduction.ts, 19, 23))
+>ReturnTypeKeys : Symbol(ReturnTypeKeys, Decl(intersectionConstraintReduction.ts, 20, 23))
+>Key : Symbol(Key, Decl(intersectionConstraintReduction.ts, 19, 23))
+
+export type Reduced1<Obj extends object, Key extends AnyKey, Value, ObjKeys extends keyof Obj = keyof Obj> =
+>Reduced1 : Symbol(Reduced1, Decl(intersectionConstraintReduction.ts, 22, 98))
+>Obj : Symbol(Obj, Decl(intersectionConstraintReduction.ts, 24, 21))
+>Key : Symbol(Key, Decl(intersectionConstraintReduction.ts, 24, 40))
+>AnyKey : Symbol(AnyKey, Decl(intersectionConstraintReduction.ts, 6, 40))
+>Value : Symbol(Value, Decl(intersectionConstraintReduction.ts, 24, 60))
+>ObjKeys : Symbol(ObjKeys, Decl(intersectionConstraintReduction.ts, 24, 67))
+>Obj : Symbol(Obj, Decl(intersectionConstraintReduction.ts, 24, 21))
+>Obj : Symbol(Obj, Decl(intersectionConstraintReduction.ts, 24, 21))
+
+    Key extends KeyIfSignatureOfObject<Obj, Key>
+>Key : Symbol(Key, Decl(intersectionConstraintReduction.ts, 24, 40))
+>KeyIfSignatureOfObject : Symbol(KeyIfSignatureOfObject, Decl(intersectionConstraintReduction.ts, 16, 12))
+>Obj : Symbol(Obj, Decl(intersectionConstraintReduction.ts, 24, 21))
+>Key : Symbol(Key, Decl(intersectionConstraintReduction.ts, 24, 40))
+
+        ? Key extends ObjKeys
+>Key : Symbol(Key, Decl(intersectionConstraintReduction.ts, 24, 40))
+>ObjKeys : Symbol(ObjKeys, Decl(intersectionConstraintReduction.ts, 24, 67))
+
+            ? { [K in Key]: Value }
+>K : Symbol(K, Decl(intersectionConstraintReduction.ts, 27, 17))
+>Key : Symbol(Key, Decl(intersectionConstraintReduction.ts, 24, 40))
+>Value : Symbol(Value, Decl(intersectionConstraintReduction.ts, 24, 60))
+
+            : never
+        : never;
+
+export type Reduced2<Obj extends object, Key extends AnyKey, Value, ObjKeys extends keyof Obj = keyof Obj> =
+>Reduced2 : Symbol(Reduced2, Decl(intersectionConstraintReduction.ts, 29, 16))
+>Obj : Symbol(Obj, Decl(intersectionConstraintReduction.ts, 31, 21))
+>Key : Symbol(Key, Decl(intersectionConstraintReduction.ts, 31, 40))
+>AnyKey : Symbol(AnyKey, Decl(intersectionConstraintReduction.ts, 6, 40))
+>Value : Symbol(Value, Decl(intersectionConstraintReduction.ts, 31, 60))
+>ObjKeys : Symbol(ObjKeys, Decl(intersectionConstraintReduction.ts, 31, 67))
+>Obj : Symbol(Obj, Decl(intersectionConstraintReduction.ts, 31, 21))
+>Obj : Symbol(Obj, Decl(intersectionConstraintReduction.ts, 31, 21))
+
+    Key extends AnyKey
+>Key : Symbol(Key, Decl(intersectionConstraintReduction.ts, 31, 40))
+>AnyKey : Symbol(AnyKey, Decl(intersectionConstraintReduction.ts, 6, 40))
+
+        ? Key extends KeyIfSignatureOfObject<Obj, Key>
+>Key : Symbol(Key, Decl(intersectionConstraintReduction.ts, 31, 40))
+>KeyIfSignatureOfObject : Symbol(KeyIfSignatureOfObject, Decl(intersectionConstraintReduction.ts, 16, 12))
+>Obj : Symbol(Obj, Decl(intersectionConstraintReduction.ts, 31, 21))
+>Key : Symbol(Key, Decl(intersectionConstraintReduction.ts, 31, 40))
+
+            ? Key extends ObjKeys
+>Key : Symbol(Key, Decl(intersectionConstraintReduction.ts, 31, 40))
+>ObjKeys : Symbol(ObjKeys, Decl(intersectionConstraintReduction.ts, 31, 67))
+
+               ? { [K in Key]: Value }
+>K : Symbol(K, Decl(intersectionConstraintReduction.ts, 35, 20))
+>Key : Symbol(Key, Decl(intersectionConstraintReduction.ts, 31, 40))
+>Value : Symbol(Value, Decl(intersectionConstraintReduction.ts, 31, 60))
+
+               : never
+            : never
+        : never;
+

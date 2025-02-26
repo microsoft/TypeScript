@@ -1,0 +1,40 @@
+--- old.typeParameterUsedAsTypeParameterConstraint4.symbols
++++ new.typeParameterUsedAsTypeParameterConstraint4.symbols
+@@= skipped -12, +12 lines =@@
+ >U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 3, 10))
+ 
+     z: W; // error
+->z : Symbol(C.z, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 3, 38))
++>z : Symbol(z, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 3, 38))
+ >W : Symbol(W)
+ 
+     foo<W extends V>(x: W): T {
+->foo : Symbol(C.foo, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 4, 9))
++>foo : Symbol(foo, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 4, 9))
+ >W : Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 5, 8))
+ >V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 3, 23))
+ >x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 5, 21))
+@@= skipped -29, +29 lines =@@
+ >U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 11, 14))
+ 
+     x: T;
+->x : Symbol(I.x, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 11, 42))
++>x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 11, 42))
+ >T : Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 11, 12))
+ 
+     y: U;
+->y : Symbol(I.y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 12, 9))
++>y : Symbol(y, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 12, 9))
+ >U : Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 11, 14))
+ 
+     z: W; // error
+->z : Symbol(I.z, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 13, 9))
++>z : Symbol(z, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 13, 9))
+ >W : Symbol(W)
+ 
+     foo<W extends V>(x: W): T;
+->foo : Symbol(I.foo, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 14, 9))
++>foo : Symbol(foo, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 14, 9))
+ >W : Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 15, 8))
+ >V : Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 11, 27))
+ >x : Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint4.ts, 15, 21))

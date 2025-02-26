@@ -1,0 +1,19 @@
+--- old.circularMultipleAssignmentDeclaration.symbols
++++ new.circularMultipleAssignmentDeclaration.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === circularMultipleAssignmentDeclaration.js ===
+ ns.next = ns.next || { shared: {} };
+->ns.next : Symbol(ns.next, Decl(circularMultipleAssignmentDeclaration.js, 0, 0), Decl(circularMultipleAssignmentDeclaration.js, 1, 3))
+->ns : Symbol(ns, Decl(circularMultipleAssignmentDeclaration.js, 0, 0), Decl(circularMultipleAssignmentDeclaration.js, 0, 36))
+->next : Symbol(ns.next, Decl(circularMultipleAssignmentDeclaration.js, 0, 0), Decl(circularMultipleAssignmentDeclaration.js, 1, 3))
+->ns.next : Symbol(ns.next, Decl(circularMultipleAssignmentDeclaration.js, 0, 0), Decl(circularMultipleAssignmentDeclaration.js, 1, 3))
+->ns : Symbol(ns, Decl(circularMultipleAssignmentDeclaration.js, 0, 0), Decl(circularMultipleAssignmentDeclaration.js, 0, 36))
+->next : Symbol(ns.next, Decl(circularMultipleAssignmentDeclaration.js, 0, 0), Decl(circularMultipleAssignmentDeclaration.js, 1, 3))
+ >shared : Symbol(shared, Decl(circularMultipleAssignmentDeclaration.js, 0, 22))
+ 
+ ns.next.shared.mymethod = {};
+->ns.next : Symbol(ns.next, Decl(circularMultipleAssignmentDeclaration.js, 0, 0), Decl(circularMultipleAssignmentDeclaration.js, 1, 3))
+->ns : Symbol(ns, Decl(circularMultipleAssignmentDeclaration.js, 0, 0), Decl(circularMultipleAssignmentDeclaration.js, 0, 36))
+->next : Symbol(ns.next, Decl(circularMultipleAssignmentDeclaration.js, 0, 0), Decl(circularMultipleAssignmentDeclaration.js, 1, 3))
+ 

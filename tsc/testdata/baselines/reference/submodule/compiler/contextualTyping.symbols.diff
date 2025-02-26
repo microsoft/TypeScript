@@ -1,0 +1,209 @@
+--- old.contextualTyping.symbols
++++ new.contextualTyping.symbols
+@@= skipped -5, +5 lines =@@
+ >IFoo : Symbol(IFoo, Decl(contextualTyping.ts, 0, 0))
+ 
+     n: number;
+->n : Symbol(IFoo.n, Decl(contextualTyping.ts, 1, 16))
++>n : Symbol(n, Decl(contextualTyping.ts, 1, 16))
+ 
+     s: string;
+->s : Symbol(IFoo.s, Decl(contextualTyping.ts, 2, 14))
++>s : Symbol(s, Decl(contextualTyping.ts, 2, 14))
+ 
+     f(i: number, s: string): string;
+->f : Symbol(IFoo.f, Decl(contextualTyping.ts, 3, 14))
++>f : Symbol(f, Decl(contextualTyping.ts, 3, 14))
+ >i : Symbol(i, Decl(contextualTyping.ts, 4, 6))
+ >s : Symbol(s, Decl(contextualTyping.ts, 4, 16))
+ 
+     a: number[];
+->a : Symbol(IFoo.a, Decl(contextualTyping.ts, 4, 36))
++>a : Symbol(a, Decl(contextualTyping.ts, 4, 36))
+ }
+ 
+ interface IBar {
+ >IBar : Symbol(IBar, Decl(contextualTyping.ts, 6, 1))
+ 
+     foo: IFoo;
+->foo : Symbol(IBar.foo, Decl(contextualTyping.ts, 8, 16))
++>foo : Symbol(foo, Decl(contextualTyping.ts, 8, 16))
+ >IFoo : Symbol(IFoo, Decl(contextualTyping.ts, 0, 0))
+ }
+ 
+@@= skipped -27, +27 lines =@@
+ >C1T5 : Symbol(C1T5, Decl(contextualTyping.ts, 10, 1))
+ 
+     foo: (i: number, s: string) => number = function(i) {
+->foo : Symbol(C1T5.foo, Decl(contextualTyping.ts, 13, 12))
++>foo : Symbol(foo, Decl(contextualTyping.ts, 13, 12))
+ >i : Symbol(i, Decl(contextualTyping.ts, 14, 10))
+ >s : Symbol(s, Decl(contextualTyping.ts, 14, 20))
+ >i : Symbol(i, Decl(contextualTyping.ts, 14, 53))
+@@= skipped -134, +134 lines =@@
+ >C4T5 : Symbol(C4T5, Decl(contextualTyping.ts, 52, 2))
+ 
+     foo: (i: number, s: string) => string;
+->foo : Symbol(C4T5.foo, Decl(contextualTyping.ts, 55, 12))
++>foo : Symbol(foo, Decl(contextualTyping.ts, 55, 12))
+ >i : Symbol(i, Decl(contextualTyping.ts, 56, 10))
+ >s : Symbol(s, Decl(contextualTyping.ts, 56, 20))
+ 
+     constructor() {
+         this.foo = function(i, s) {
+->this.foo : Symbol(C4T5.foo, Decl(contextualTyping.ts, 55, 12))
++>this.foo : Symbol(foo, Decl(contextualTyping.ts, 55, 12))
+ >this : Symbol(C4T5, Decl(contextualTyping.ts, 52, 2))
+->foo : Symbol(C4T5.foo, Decl(contextualTyping.ts, 55, 12))
++>foo : Symbol(foo, Decl(contextualTyping.ts, 55, 12))
+ >i : Symbol(i, Decl(contextualTyping.ts, 58, 28))
+ >s : Symbol(s, Decl(contextualTyping.ts, 58, 30))
+ 
+@@= skipped -65, +65 lines =@@
+ >IPlaceHolder : Symbol(IPlaceHolder, Decl(contextualTyping.ts, 78, 25))
+ 
+     t1: (s: string) => string;
+->t1 : Symbol(IPlaceHolder.t1, Decl(contextualTyping.ts, 81, 24))
++>t1 : Symbol(t1, Decl(contextualTyping.ts, 81, 24))
+ >s : Symbol(s, Decl(contextualTyping.ts, 82, 9))
+ 
+     t2: IFoo;
+->t2 : Symbol(IPlaceHolder.t2, Decl(contextualTyping.ts, 82, 30))
++>t2 : Symbol(t2, Decl(contextualTyping.ts, 82, 30))
+ >IFoo : Symbol(IFoo, Decl(contextualTyping.ts, 0, 0))
+ 
+     t3: number[];
+->t3 : Symbol(IPlaceHolder.t3, Decl(contextualTyping.ts, 83, 13))
++>t3 : Symbol(t3, Decl(contextualTyping.ts, 83, 13))
+ 
+     t4: () => IFoo;
+->t4 : Symbol(IPlaceHolder.t4, Decl(contextualTyping.ts, 84, 17))
++>t4 : Symbol(t4, Decl(contextualTyping.ts, 84, 17))
+ >IFoo : Symbol(IFoo, Decl(contextualTyping.ts, 0, 0))
+ 
+     t5: (n: number) => IFoo;
+->t5 : Symbol(IPlaceHolder.t5, Decl(contextualTyping.ts, 85, 19))
++>t5 : Symbol(t5, Decl(contextualTyping.ts, 85, 19))
+ >n : Symbol(n, Decl(contextualTyping.ts, 86, 9))
+ >IFoo : Symbol(IFoo, Decl(contextualTyping.ts, 0, 0))
+ 
+     t6: (n: number, s: string) => IFoo;
+->t6 : Symbol(IPlaceHolder.t6, Decl(contextualTyping.ts, 86, 28))
++>t6 : Symbol(t6, Decl(contextualTyping.ts, 86, 28))
+ >n : Symbol(n, Decl(contextualTyping.ts, 87, 9))
+ >s : Symbol(s, Decl(contextualTyping.ts, 87, 19))
+ >IFoo : Symbol(IFoo, Decl(contextualTyping.ts, 0, 0))
+ 
+     t7: {
+->t7 : Symbol(IPlaceHolder.t7, Decl(contextualTyping.ts, 87, 39))
++>t7 : Symbol(t7, Decl(contextualTyping.ts, 87, 39))
+ 
+             (n: number, s: string): number;    
+ >n : Symbol(n, Decl(contextualTyping.ts, 89, 13))
+@@= skipped -35, +35 lines =@@
+             //(s1: string, s2: string): number;
+         };
+     t8: (n: number, s: string) => number;
+->t8 : Symbol(IPlaceHolder.t8, Decl(contextualTyping.ts, 91, 10))
++>t8 : Symbol(t8, Decl(contextualTyping.ts, 91, 10))
+ >n : Symbol(n, Decl(contextualTyping.ts, 92, 9))
+ >s : Symbol(s, Decl(contextualTyping.ts, 92, 19))
+ 
+     t9: number[][];
+->t9 : Symbol(IPlaceHolder.t9, Decl(contextualTyping.ts, 92, 41))
++>t9 : Symbol(t9, Decl(contextualTyping.ts, 92, 41))
+ 
+     t10: IFoo[];
+->t10 : Symbol(IPlaceHolder.t10, Decl(contextualTyping.ts, 93, 19))
++>t10 : Symbol(t10, Decl(contextualTyping.ts, 93, 19))
+ >IFoo : Symbol(IFoo, Decl(contextualTyping.ts, 0, 0))
+ 
+     t11: {(n: number, s: string): string;}[];
+->t11 : Symbol(IPlaceHolder.t11, Decl(contextualTyping.ts, 94, 16))
++>t11 : Symbol(t11, Decl(contextualTyping.ts, 94, 16))
+ >n : Symbol(n, Decl(contextualTyping.ts, 95, 11))
+ >s : Symbol(s, Decl(contextualTyping.ts, 95, 21))
+ 
+     t12: IBar;
+->t12 : Symbol(IPlaceHolder.t12, Decl(contextualTyping.ts, 95, 45))
++>t12 : Symbol(t12, Decl(contextualTyping.ts, 95, 45))
+ >IBar : Symbol(IBar, Decl(contextualTyping.ts, 6, 1))
+ 
+     t13: IFoo;
+->t13 : Symbol(IPlaceHolder.t13, Decl(contextualTyping.ts, 96, 14))
++>t13 : Symbol(t13, Decl(contextualTyping.ts, 96, 14))
+ >IFoo : Symbol(IFoo, Decl(contextualTyping.ts, 0, 0))
+ 
+     t14: IFoo;
+->t14 : Symbol(IPlaceHolder.t14, Decl(contextualTyping.ts, 97, 14))
++>t14 : Symbol(t14, Decl(contextualTyping.ts, 97, 14))
+ >IFoo : Symbol(IFoo, Decl(contextualTyping.ts, 0, 0))
+     }
+ 
+@@= skipped -377, +377 lines =@@
+ >y : Symbol(y, Decl(contextualTyping.ts, 198, 28))
+ 
+       x: number;
+->x : Symbol(Point.x, Decl(contextualTyping.ts, 198, 40))
++>x : Symbol(x, Decl(contextualTyping.ts, 198, 40))
+ 
+       y: number;
+->y : Symbol(Point.y, Decl(contextualTyping.ts, 199, 16))
++>y : Symbol(y, Decl(contextualTyping.ts, 199, 16))
+ 
+       add(dx: number, dy: number): Point;
+->add : Symbol(Point.add, Decl(contextualTyping.ts, 200, 16))
++>add : Symbol(add, Decl(contextualTyping.ts, 200, 16))
+ >dx : Symbol(dx, Decl(contextualTyping.ts, 201, 10))
+ >dy : Symbol(dy, Decl(contextualTyping.ts, 201, 21))
+ >Point : Symbol(Point, Decl(contextualTyping.ts, 192, 19))
+ 
+       static origin: Point;
+->origin : Symbol(Point.origin, Decl(contextualTyping.ts, 201, 41))
++>origin : Symbol(origin, Decl(contextualTyping.ts, 201, 41))
+ >Point : Symbol(Point, Decl(contextualTyping.ts, 192, 19))
+ 
+ }
+ 
+ Point.origin = new Point(0, 0);
+->Point.origin : Symbol(Point.origin, Decl(contextualTyping.ts, 201, 41))
++>Point.origin : Symbol(origin, Decl(contextualTyping.ts, 201, 41))
+ >Point : Symbol(Point, Decl(contextualTyping.ts, 192, 19))
+->origin : Symbol(Point.origin, Decl(contextualTyping.ts, 201, 41))
++>origin : Symbol(origin, Decl(contextualTyping.ts, 201, 41))
+ >Point : Symbol(Point, Decl(contextualTyping.ts, 192, 19))
+ 
+ Point.prototype.add = function(dx, dy) {
+->Point.prototype.add : Symbol(Point.add, Decl(contextualTyping.ts, 200, 16))
+->Point.prototype : Symbol(Point.prototype)
++>Point.prototype.add : Symbol(add, Decl(contextualTyping.ts, 200, 16))
++>Point.prototype : Symbol(prototype)
+ >Point : Symbol(Point, Decl(contextualTyping.ts, 192, 19))
+->prototype : Symbol(Point.prototype)
+->add : Symbol(Point.add, Decl(contextualTyping.ts, 200, 16))
++>prototype : Symbol(prototype)
++>add : Symbol(add, Decl(contextualTyping.ts, 200, 16))
+ >dx : Symbol(dx, Decl(contextualTyping.ts, 208, 31))
+ >dy : Symbol(dy, Decl(contextualTyping.ts, 208, 34))
+ 
+@@= skipped -40, +40 lines =@@
+ };
+ 
+ Point.prototype = {
+->Point.prototype : Symbol(Point.prototype)
++>Point.prototype : Symbol(prototype)
+ >Point : Symbol(Point, Decl(contextualTyping.ts, 192, 19))
+->prototype : Symbol(Point.prototype)
++>prototype : Symbol(prototype)
+ 
+     x: 0,
+ >x : Symbol(x, Decl(contextualTyping.ts, 212, 19))
+@@= skipped -24, +24 lines =@@
+ 
+ interface A { x: string; }
+ >A : Symbol(A, Decl(contextualTyping.ts, 218, 2))
+->x : Symbol(A.x, Decl(contextualTyping.ts, 220, 13))
++>x : Symbol(x, Decl(contextualTyping.ts, 220, 13))
+ 
+ interface B extends A { }
+ >B : Symbol(B, Decl(contextualTyping.ts, 220, 26))

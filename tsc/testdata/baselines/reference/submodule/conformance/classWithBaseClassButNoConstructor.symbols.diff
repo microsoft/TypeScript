@@ -1,0 +1,38 @@
+--- old.classWithBaseClassButNoConstructor.symbols
++++ new.classWithBaseClassButNoConstructor.symbols
+@@= skipped -12, +12 lines =@@
+ >Base : Symbol(Base, Decl(classWithBaseClassButNoConstructor.ts, 0, 0))
+ 
+     foo: string;
+->foo : Symbol(C.foo, Decl(classWithBaseClassButNoConstructor.ts, 4, 22))
++>foo : Symbol(foo, Decl(classWithBaseClassButNoConstructor.ts, 4, 22))
+ }
+ 
+ var r = C;
+@@= skipped -34, +34 lines =@@
+ >U : Symbol(U, Decl(classWithBaseClassButNoConstructor.ts, 16, 10))
+ 
+     foo: U;
+->foo : Symbol(D.foo, Decl(classWithBaseClassButNoConstructor.ts, 16, 33))
++>foo : Symbol(foo, Decl(classWithBaseClassButNoConstructor.ts, 16, 33))
+ >U : Symbol(U, Decl(classWithBaseClassButNoConstructor.ts, 16, 10))
+ }
+ 
+@@= skipped -24, +24 lines =@@
+ >Base2 : Symbol(Base2, Decl(classWithBaseClassButNoConstructor.ts, 10, 18))
+ 
+     foo: U;
+->foo : Symbol(D2.foo, Decl(classWithBaseClassButNoConstructor.ts, 25, 46))
++>foo : Symbol(foo, Decl(classWithBaseClassButNoConstructor.ts, 25, 46))
+ >U : Symbol(U, Decl(classWithBaseClassButNoConstructor.ts, 25, 11))
+ }
+ 
+@@= skipped -21, +21 lines =@@
+ >Base2 : Symbol(Base2, Decl(classWithBaseClassButNoConstructor.ts, 10, 18))
+ 
+     foo: string;
+->foo : Symbol(D3.foo, Decl(classWithBaseClassButNoConstructor.ts, 33, 40))
++>foo : Symbol(foo, Decl(classWithBaseClassButNoConstructor.ts, 33, 40))
+ }
+ 
+ var r4 = D3;

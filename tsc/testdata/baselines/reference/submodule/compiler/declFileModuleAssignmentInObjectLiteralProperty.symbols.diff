@@ -1,0 +1,13 @@
+--- old.declFileModuleAssignmentInObjectLiteralProperty.symbols
++++ new.declFileModuleAssignmentInObjectLiteralProperty.symbols
+@@= skipped -18, +18 lines =@@
+     m2: { c: m1.c },
+ >m2 : Symbol(m2, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 5, 18))
+ >c : Symbol(c, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 6, 9))
+->m1.c : Symbol(m1.c, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 0, 11))
++>m1.c : Symbol(c, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 0, 11))
+ >m1 : Symbol(m1, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 0, 0))
+->c : Symbol(m1.c, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 0, 11))
++>c : Symbol(c, Decl(declFileModuleAssignmentInObjectLiteralProperty.ts, 0, 11))
+ 
+ };

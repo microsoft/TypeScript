@@ -1,0 +1,11 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of57.ts] ////
+
+=== for-of57.ts ===
+var iter: Iterable<number>;
+>iter : Symbol(iter, Decl(for-of57.ts, 0, 3))
+>Iterable : Symbol(Iterable)
+
+for (let num of iter) { }
+>num : Symbol(num, Decl(for-of57.ts, 1, 8))
+>iter : Symbol(iter, Decl(for-of57.ts, 0, 3))
+

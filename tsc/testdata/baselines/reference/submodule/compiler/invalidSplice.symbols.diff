@@ -1,0 +1,11 @@
+--- old.invalidSplice.symbols
++++ new.invalidSplice.symbols
+@@= skipped -2, +2 lines =@@
+ === invalidSplice.ts ===
+ var arr = [].splice(0,3,4,5);
+ >arr : Symbol(arr, Decl(invalidSplice.ts, 0, 3))
+->[].splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>[].splice : Symbol(splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>splice : Symbol(splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 

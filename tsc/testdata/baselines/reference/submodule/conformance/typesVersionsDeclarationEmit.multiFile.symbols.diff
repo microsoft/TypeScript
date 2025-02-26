@@ -1,0 +1,20 @@
+--- old.typesVersionsDeclarationEmit.multiFile.symbols
++++ new.typesVersionsDeclarationEmit.multiFile.symbols
+@@= skipped -14, +14 lines =@@
+ >vb : Symbol(vb, Decl(main.ts, 4, 12))
+ >fb : Symbol(fb, Decl(main.ts, 1, 8))
+ 
+-=== node_modules/ext/ts3.1/index.d.ts ===
++=== node_modules/ext/index.d.ts ===
+ export interface A {}
+ >A : Symbol(A, Decl(index.d.ts, 0, 0))
+ 
+@@= skipped -8, +8 lines =@@
+ >fa : Symbol(fa, Decl(index.d.ts, 0, 21))
+ >A : Symbol(A, Decl(index.d.ts, 0, 0))
+ 
+-=== node_modules/ext/ts3.1/other.d.ts ===
++=== node_modules/ext/other.d.ts ===
+ export interface B {}
+ >B : Symbol(B, Decl(other.d.ts, 0, 0))
+ 

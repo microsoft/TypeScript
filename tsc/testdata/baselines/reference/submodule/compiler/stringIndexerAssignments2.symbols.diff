@@ -1,0 +1,31 @@
+--- old.stringIndexerAssignments2.symbols
++++ new.stringIndexerAssignments2.symbols
+@@= skipped -7, +7 lines =@@
+ >index : Symbol(index, Decl(stringIndexerAssignments2.ts, 1, 5))
+ 
+     one: string;
+->one : Symbol(C1.one, Decl(stringIndexerAssignments2.ts, 1, 27))
++>one : Symbol(one, Decl(stringIndexerAssignments2.ts, 1, 27))
+ }
+ 
+ class C2 {
+ >C2 : Symbol(C2, Decl(stringIndexerAssignments2.ts, 3, 1))
+ 
+     one: string;
+->one : Symbol(C2.one, Decl(stringIndexerAssignments2.ts, 5, 10))
++>one : Symbol(one, Decl(stringIndexerAssignments2.ts, 5, 10))
+ }
+ 
+ class C3 {
+ >C3 : Symbol(C3, Decl(stringIndexerAssignments2.ts, 7, 1))
+ 
+     one: number;
+->one : Symbol(C3.one, Decl(stringIndexerAssignments2.ts, 9, 10))
++>one : Symbol(one, Decl(stringIndexerAssignments2.ts, 9, 10))
+ 
+     two: string;
+->two : Symbol(C3.two, Decl(stringIndexerAssignments2.ts, 10, 16))
++>two : Symbol(two, Decl(stringIndexerAssignments2.ts, 10, 16))
+ }
+ 
+ var x: C1;

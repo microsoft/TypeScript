@@ -1,0 +1,40 @@
+--- old.duplicatePackage.symbols
++++ new.duplicatePackage.symbols
+@@= skipped -28, +28 lines =@@
+ 
+ === /node_modules/a/node_modules/x/index.d.ts ===
+ export default class X {
+->X : Symbol(X, Decl(index.d.ts, 0, 0))
++>X : Symbol(default, Decl(index.d.ts, 0, 0))
+ 
+     private x: number;
+->x : Symbol(X.x, Decl(index.d.ts, 0, 24))
++>x : Symbol(x, Decl(index.d.ts, 0, 24))
+ }
+ 
+ === /node_modules/b/index.d.ts ===
+@@= skipped -15, +15 lines =@@
+ >X : Symbol(X, Decl(index.d.ts, 0, 6))
+ 
+ === /node_modules/b/node_modules/x/index.d.ts ===
++
+ content not parsed
+->X : Symbol(X, Decl(index.d.ts, 0, 0))
+ 
+->x : Symbol(X.x, Decl(index.d.ts, 0, 24))
+-
+ === /node_modules/c/index.d.ts ===
+ import X from "x";
+ >X : Symbol(X, Decl(index.d.ts, 0, 6))
+@@= skipped -15, +13 lines =@@
+ 
+ === /node_modules/c/node_modules/x/index.d.ts ===
+ export default class X {
+->X : Symbol(X, Decl(index.d.ts, 0, 0))
++>X : Symbol(default, Decl(index.d.ts, 0, 0))
+ 
+     private x: number;
+->x : Symbol(X.x, Decl(index.d.ts, 0, 24))
++>x : Symbol(x, Decl(index.d.ts, 0, 24))
+ }
+ 

@@ -1,0 +1,46 @@
+--- old.classBlockScoping.symbols
++++ new.classBlockScoping.symbols
+@@= skipped -15, +15 lines =@@
+ >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 3, 9))
+ 
+       static y = new Foo();
+->y : Symbol(Foo.y, Decl(classBlockScoping.ts, 3, 21))
++>y : Symbol(y, Decl(classBlockScoping.ts, 3, 21))
+ >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 3, 9))
+ 
+       static x() {
+->x : Symbol(Foo.x, Decl(classBlockScoping.ts, 4, 27))
++>x : Symbol(x, Decl(classBlockScoping.ts, 4, 27))
+ 
+         new Foo();
+ >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 3, 9))
+       }
+ 
+       m() {
+->m : Symbol(Foo.m, Decl(classBlockScoping.ts, 8, 7))
++>m : Symbol(m, Decl(classBlockScoping.ts, 8, 7))
+ 
+         new Foo();
+ >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 3, 9))
+@@= skipped -26, +26 lines =@@
+ >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 17, 8))
+ 
+       static y = new Foo();
+->y : Symbol(Foo.y, Decl(classBlockScoping.ts, 18, 15))
++>y : Symbol(y, Decl(classBlockScoping.ts, 18, 15))
+ >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 17, 8))
+ 
+       static x() {
+->x : Symbol(Foo.x, Decl(classBlockScoping.ts, 19, 27))
++>x : Symbol(x, Decl(classBlockScoping.ts, 19, 27))
+ 
+         new Foo();
+ >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 17, 8))
+       }
+ 
+       m() {
+->m : Symbol(Foo.m, Decl(classBlockScoping.ts, 23, 7))
++>m : Symbol(m, Decl(classBlockScoping.ts, 23, 7))
+ 
+         new Foo();
+ >Foo : Symbol(Foo, Decl(classBlockScoping.ts, 17, 8))

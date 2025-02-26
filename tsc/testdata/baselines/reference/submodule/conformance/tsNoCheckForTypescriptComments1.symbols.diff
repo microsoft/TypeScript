@@ -1,0 +1,19 @@
+--- old.tsNoCheckForTypescriptComments1.symbols
++++ new.tsNoCheckForTypescriptComments1.symbols
+@@= skipped -9, +9 lines =@@
+ >Aleph : Symbol(Aleph, Decl(file.ts, 2, 24))
+ 
+   q: number;
+->q : Symbol(Aleph.q, Decl(file.ts, 4, 24))
++>q : Symbol(q, Decl(file.ts, 4, 24))
+ }
+ 
+ export class Bet implements Aleph {
+@@= skipped -8, +8 lines =@@
+ >Aleph : Symbol(Aleph, Decl(file.ts, 2, 24))
+ 
+   q: string = 'lol'; // And so will this implements error
+->q : Symbol(Bet.q, Decl(file.ts, 8, 35))
++>q : Symbol(q, Decl(file.ts, 8, 35))
+ }
+ 

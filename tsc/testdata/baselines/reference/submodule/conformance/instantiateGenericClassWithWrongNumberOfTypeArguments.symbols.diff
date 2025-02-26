@@ -1,0 +1,25 @@
+--- old.instantiateGenericClassWithWrongNumberOfTypeArguments.symbols
++++ new.instantiateGenericClassWithWrongNumberOfTypeArguments.symbols
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 3, 8))
+ 
+     x: T;
+->x : Symbol(C.x, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 3, 12))
++>x : Symbol(x, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 3, 12))
+ >T : Symbol(T, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 3, 8))
+ }
+ 
+@@= skipped -14, +14 lines =@@
+ >U : Symbol(U, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 9, 10))
+ 
+     x: T
+->x : Symbol(D.x, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 9, 15))
++>x : Symbol(x, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 9, 15))
+ >T : Symbol(T, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 9, 8))
+ 
+     y: U
+->y : Symbol(D.y, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 10, 8))
++>y : Symbol(y, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 10, 8))
+ >U : Symbol(U, Decl(instantiateGenericClassWithWrongNumberOfTypeArguments.ts, 9, 10))
+ }
+ 

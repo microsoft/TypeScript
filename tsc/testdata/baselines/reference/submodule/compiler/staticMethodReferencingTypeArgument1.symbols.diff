@@ -1,0 +1,51 @@
+--- old.staticMethodReferencingTypeArgument1.symbols
++++ new.staticMethodReferencingTypeArgument1.symbols
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(staticMethodReferencingTypeArgument1.ts, 1, 22))
+ 
+         next: List<T>;
+->next : Symbol(List.next, Decl(staticMethodReferencingTypeArgument1.ts, 1, 26))
++>next : Symbol(next, Decl(staticMethodReferencingTypeArgument1.ts, 1, 26))
+ >List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 15))
+ >T : Symbol(T, Decl(staticMethodReferencingTypeArgument1.ts, 1, 22))
+ 
+         prev: List<T>;
+->prev : Symbol(List.prev, Decl(staticMethodReferencingTypeArgument1.ts, 2, 22))
++>prev : Symbol(prev, Decl(staticMethodReferencingTypeArgument1.ts, 2, 22))
+ >List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 15))
+ >T : Symbol(T, Decl(staticMethodReferencingTypeArgument1.ts, 1, 22))
+ 
+         constructor(public isHead: boolean, public data: T) {
+->isHead : Symbol(List.isHead, Decl(staticMethodReferencingTypeArgument1.ts, 5, 20))
+->data : Symbol(List.data, Decl(staticMethodReferencingTypeArgument1.ts, 5, 43))
++>isHead : Symbol(isHead, Decl(staticMethodReferencingTypeArgument1.ts, 5, 20))
++>data : Symbol(data, Decl(staticMethodReferencingTypeArgument1.ts, 5, 43))
+ >T : Symbol(T, Decl(staticMethodReferencingTypeArgument1.ts, 1, 22))
+         }
+ 
+         static MakeHead(): List<T> {
+->MakeHead : Symbol(List.MakeHead, Decl(staticMethodReferencingTypeArgument1.ts, 6, 9))
++>MakeHead : Symbol(MakeHead, Decl(staticMethodReferencingTypeArgument1.ts, 6, 9))
+ >List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 15))
+ >T : Symbol(T)
+ 
+@@= skipped -28, +28 lines =@@
+ >T : Symbol(T)
+ 
+             entry.prev = entry;
+->entry.prev : Symbol(List.prev, Decl(staticMethodReferencingTypeArgument1.ts, 2, 22))
++>entry.prev : Symbol(prev, Decl(staticMethodReferencingTypeArgument1.ts, 2, 22))
+ >entry : Symbol(entry, Decl(staticMethodReferencingTypeArgument1.ts, 9, 15))
+->prev : Symbol(List.prev, Decl(staticMethodReferencingTypeArgument1.ts, 2, 22))
++>prev : Symbol(prev, Decl(staticMethodReferencingTypeArgument1.ts, 2, 22))
+ >entry : Symbol(entry, Decl(staticMethodReferencingTypeArgument1.ts, 9, 15))
+ 
+             entry.next = entry;
+->entry.next : Symbol(List.next, Decl(staticMethodReferencingTypeArgument1.ts, 1, 26))
++>entry.next : Symbol(next, Decl(staticMethodReferencingTypeArgument1.ts, 1, 26))
+ >entry : Symbol(entry, Decl(staticMethodReferencingTypeArgument1.ts, 9, 15))
+->next : Symbol(List.next, Decl(staticMethodReferencingTypeArgument1.ts, 1, 26))
++>next : Symbol(next, Decl(staticMethodReferencingTypeArgument1.ts, 1, 26))
+ >entry : Symbol(entry, Decl(staticMethodReferencingTypeArgument1.ts, 9, 15))
+ 
+             return entry;

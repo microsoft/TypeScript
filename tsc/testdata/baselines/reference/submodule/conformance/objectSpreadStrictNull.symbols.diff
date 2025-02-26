@@ -1,0 +1,26 @@
+--- old.objectSpreadStrictNull.symbols
++++ new.objectSpreadStrictNull.symbols
+@@= skipped -106, +106 lines =@@
+ >Fields : Symbol(Fields, Decl(objectSpreadStrictNull.ts, 27, 44))
+ 
+     foo: number;
+->foo : Symbol(Fields.foo, Decl(objectSpreadStrictNull.ts, 29, 18))
++>foo : Symbol(foo, Decl(objectSpreadStrictNull.ts, 29, 18))
+ 
+     bar: string;
+->bar : Symbol(Fields.bar, Decl(objectSpreadStrictNull.ts, 30, 16))
++>bar : Symbol(bar, Decl(objectSpreadStrictNull.ts, 30, 16))
+ }
+ interface NearlyPartialFields {
+ >NearlyPartialFields : Symbol(NearlyPartialFields, Decl(objectSpreadStrictNull.ts, 32, 1))
+ 
+     foo: number | undefined;
+->foo : Symbol(NearlyPartialFields.foo, Decl(objectSpreadStrictNull.ts, 33, 31))
++>foo : Symbol(foo, Decl(objectSpreadStrictNull.ts, 33, 31))
+ 
+     bar: string | undefined;
+->bar : Symbol(NearlyPartialFields.bar, Decl(objectSpreadStrictNull.ts, 34, 28))
++>bar : Symbol(bar, Decl(objectSpreadStrictNull.ts, 34, 28))
+ }
+ function g(fields: Fields, partialFields: Partial<Fields>, nearlyPartialFields: NearlyPartialFields) {
+ >g : Symbol(g, Decl(objectSpreadStrictNull.ts, 36, 1))

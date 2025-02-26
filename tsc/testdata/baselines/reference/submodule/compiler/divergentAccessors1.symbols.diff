@@ -1,0 +1,35 @@
+--- old.divergentAccessors1.symbols
++++ new.divergentAccessors1.symbols
+@@= skipped -7, +7 lines =@@
+ >IHasGetSet : Symbol(IHasGetSet, Decl(divergentAccessors1.ts, 2, 1))
+ 
+         get foo(): number;
+->foo : Symbol(IHasGetSet.foo, Decl(divergentAccessors1.ts, 3, 26), Decl(divergentAccessors1.ts, 4, 26))
++>foo : Symbol(foo, Decl(divergentAccessors1.ts, 3, 26), Decl(divergentAccessors1.ts, 4, 26))
+ 
+         set foo(v: number | string);
+->foo : Symbol(IHasGetSet.foo, Decl(divergentAccessors1.ts, 3, 26), Decl(divergentAccessors1.ts, 4, 26))
++>foo : Symbol(foo, Decl(divergentAccessors1.ts, 3, 26), Decl(divergentAccessors1.ts, 4, 26))
+ >v : Symbol(v, Decl(divergentAccessors1.ts, 5, 16))
+     }
+     
+@@= skipped -12, +12 lines =@@
+ >IHasGetSet : Symbol(IHasGetSet, Decl(divergentAccessors1.ts, 2, 1))
+ 
+     ihgs.foo = "32";
+->ihgs.foo : Symbol(IHasGetSet.foo, Decl(divergentAccessors1.ts, 3, 26), Decl(divergentAccessors1.ts, 4, 26))
++>ihgs.foo : Symbol(foo, Decl(divergentAccessors1.ts, 3, 26), Decl(divergentAccessors1.ts, 4, 26))
+ >ihgs : Symbol(ihgs, Decl(divergentAccessors1.ts, 8, 9))
+->foo : Symbol(IHasGetSet.foo, Decl(divergentAccessors1.ts, 3, 26), Decl(divergentAccessors1.ts, 4, 26))
++>foo : Symbol(foo, Decl(divergentAccessors1.ts, 3, 26), Decl(divergentAccessors1.ts, 4, 26))
+ 
+     let r_ihgs_foo: number = ihgs.foo;
+ >r_ihgs_foo : Symbol(r_ihgs_foo, Decl(divergentAccessors1.ts, 10, 7))
+->ihgs.foo : Symbol(IHasGetSet.foo, Decl(divergentAccessors1.ts, 3, 26), Decl(divergentAccessors1.ts, 4, 26))
++>ihgs.foo : Symbol(foo, Decl(divergentAccessors1.ts, 3, 26), Decl(divergentAccessors1.ts, 4, 26))
+ >ihgs : Symbol(ihgs, Decl(divergentAccessors1.ts, 8, 9))
+->foo : Symbol(IHasGetSet.foo, Decl(divergentAccessors1.ts, 3, 26), Decl(divergentAccessors1.ts, 4, 26))
++>foo : Symbol(foo, Decl(divergentAccessors1.ts, 3, 26), Decl(divergentAccessors1.ts, 4, 26))
+ }
+ 
+ {

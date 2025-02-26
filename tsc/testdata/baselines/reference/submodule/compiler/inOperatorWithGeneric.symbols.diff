@@ -1,0 +1,11 @@
+--- old.inOperatorWithGeneric.symbols
++++ new.inOperatorWithGeneric.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(inOperatorWithGeneric.ts, 0, 8))
+ 
+     foo(x:T) {
+->foo : Symbol(C.foo, Decl(inOperatorWithGeneric.ts, 0, 12))
++>foo : Symbol(foo, Decl(inOperatorWithGeneric.ts, 0, 12))
+ >x : Symbol(x, Decl(inOperatorWithGeneric.ts, 1, 8))
+ >T : Symbol(T, Decl(inOperatorWithGeneric.ts, 0, 8))
+ 

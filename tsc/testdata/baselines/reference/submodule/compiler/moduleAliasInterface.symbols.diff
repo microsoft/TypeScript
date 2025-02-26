@@ -1,0 +1,93 @@
+--- old.moduleAliasInterface.symbols
++++ new.moduleAliasInterface.symbols
+@@= skipped -21, +21 lines =@@
+ 
+  import modes = _modes;
+ >modes : Symbol(modes, Decl(moduleAliasInterface.ts, 12, 15))
+->_modes : Symbol(modes, Decl(moduleAliasInterface.ts, 0, 0))
++>_modes : Symbol(_modes, Decl(moduleAliasInterface.ts, 0, 0))
+  
+  var i : modes.IMode;
+ >i : Symbol(i, Decl(moduleAliasInterface.ts, 15, 4))
+ >modes : Symbol(modes, Decl(moduleAliasInterface.ts, 12, 15))
+->IMode : Symbol(modes.IMode, Decl(moduleAliasInterface.ts, 0, 15))
++>IMode : Symbol(IMode, Decl(moduleAliasInterface.ts, 0, 15))
+   
+  // If you just use p1:modes, the compiler accepts it - should be an error
+  class Bug { 
+@@= skipped -14, +14 lines =@@
+   constructor(p1: modes.IMode, p2: modes.Mode) { }// should be an error on p2 - it's not exported
+ >p1 : Symbol(p1, Decl(moduleAliasInterface.ts, 19, 14))
+ >modes : Symbol(modes, Decl(moduleAliasInterface.ts, 12, 15))
+->IMode : Symbol(modes.IMode, Decl(moduleAliasInterface.ts, 0, 15))
++>IMode : Symbol(IMode, Decl(moduleAliasInterface.ts, 0, 15))
+ >p2 : Symbol(p2, Decl(moduleAliasInterface.ts, 19, 30))
+ >modes : Symbol(modes, Decl(moduleAliasInterface.ts, 12, 15))
+->Mode : Symbol(modes.Mode, Decl(moduleAliasInterface.ts, 3, 2))
++>Mode : Symbol(Mode, Decl(moduleAliasInterface.ts, 3, 2))
+ 
+   public foo(p1:modes.IMode) {
+->foo : Symbol(Bug.foo, Decl(moduleAliasInterface.ts, 19, 50))
++>foo : Symbol(foo, Decl(moduleAliasInterface.ts, 19, 50))
+ >p1 : Symbol(p1, Decl(moduleAliasInterface.ts, 20, 13))
+ >modes : Symbol(modes, Decl(moduleAliasInterface.ts, 12, 15))
+->IMode : Symbol(modes.IMode, Decl(moduleAliasInterface.ts, 0, 15))
++>IMode : Symbol(IMode, Decl(moduleAliasInterface.ts, 0, 15))
+    
+   } 
+  }
+@@= skipped -25, +25 lines =@@
+  var i : modesOuter.IMode;
+ >i : Symbol(i, Decl(moduleAliasInterface.ts, 29, 4))
+ >modesOuter : Symbol(modesOuter, Decl(moduleAliasInterface.ts, 24, 1))
+->IMode : Symbol(modesOuter.IMode, Decl(moduleAliasInterface.ts, 0, 15))
++>IMode : Symbol(IMode, Decl(moduleAliasInterface.ts, 0, 15))
+  
+  class Bug {
+ >Bug : Symbol(Bug, Decl(moduleAliasInterface.ts, 29, 26))
+@@= skipped -8, +8 lines =@@
+      constructor(p1: modesOuter.IMode, p2: modesOuter.Mode) { }// no error here, since modesOuter is declared externally
+ >p1 : Symbol(p1, Decl(moduleAliasInterface.ts, 32, 17))
+ >modesOuter : Symbol(modesOuter, Decl(moduleAliasInterface.ts, 24, 1))
+->IMode : Symbol(modesOuter.IMode, Decl(moduleAliasInterface.ts, 0, 15))
++>IMode : Symbol(IMode, Decl(moduleAliasInterface.ts, 0, 15))
+ >p2 : Symbol(p2, Decl(moduleAliasInterface.ts, 32, 38))
+ >modesOuter : Symbol(modesOuter, Decl(moduleAliasInterface.ts, 24, 1))
+->Mode : Symbol(modesOuter.Mode, Decl(moduleAliasInterface.ts, 3, 2))
++>Mode : Symbol(Mode, Decl(moduleAliasInterface.ts, 3, 2))
+   
+  }
+  
+@@= skipped -17, +17 lines =@@
+       constructor(p1: Foo.Bar, p2: modesOuter.Mode) { }
+ >p1 : Symbol(p1, Decl(moduleAliasInterface.ts, 39, 18))
+ >Foo : Symbol(Foo, Decl(moduleAliasInterface.ts, 34, 2))
+->Bar : Symbol(Foo.Bar, Decl(moduleAliasInterface.ts, 36, 14))
++>Bar : Symbol(Bar, Decl(moduleAliasInterface.ts, 36, 14))
+ >p2 : Symbol(p2, Decl(moduleAliasInterface.ts, 39, 30))
+ >modesOuter : Symbol(modesOuter, Decl(moduleAliasInterface.ts, 24, 1))
+->Mode : Symbol(modesOuter.Mode, Decl(moduleAliasInterface.ts, 3, 2))
++>Mode : Symbol(Mode, Decl(moduleAliasInterface.ts, 3, 2))
+   }
+ }
+ 
+@@= skipped -22, +22 lines =@@
+ 
+     import A1Alias1 = A1;
+ >A1Alias1 : Symbol(A1Alias1, Decl(moduleAliasInterface.ts, 48, 11))
+->A1 : Symbol(A1Alias1, Decl(moduleAliasInterface.ts, 41, 1))
++>A1 : Symbol(A1, Decl(moduleAliasInterface.ts, 41, 1))
+     
+     var i : A1Alias1.A1I1;   
+ >i : Symbol(i, Decl(moduleAliasInterface.ts, 51, 7))
+ >A1Alias1 : Symbol(A1Alias1, Decl(moduleAliasInterface.ts, 48, 11))
+->A1I1 : Symbol(A1Alias1.A1I1, Decl(moduleAliasInterface.ts, 43, 11))
++>A1I1 : Symbol(A1I1, Decl(moduleAliasInterface.ts, 43, 11))
+ 
+     var c : A1Alias1.A1C1;
+ >c : Symbol(c, Decl(moduleAliasInterface.ts, 52, 7))
+ >A1Alias1 : Symbol(A1Alias1, Decl(moduleAliasInterface.ts, 48, 11))
+->A1C1 : Symbol(A1Alias1.A1C1, Decl(moduleAliasInterface.ts, 44, 28))
++>A1C1 : Symbol(A1C1, Decl(moduleAliasInterface.ts, 44, 28))
+ }
+ 

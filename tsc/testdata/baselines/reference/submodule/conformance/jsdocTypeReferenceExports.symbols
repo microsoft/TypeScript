@@ -1,0 +1,11 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceExports.ts] ////
+
+=== bug27342.js ===
+module.exports = {}
+/**
+ * @type {exports}
+ */
+var x
+>x : Symbol(x, Decl(bug27342.js, 4, 3))
+
+

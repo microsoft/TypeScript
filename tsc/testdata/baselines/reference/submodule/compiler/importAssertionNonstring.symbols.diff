@@ -1,0 +1,11 @@
+--- old.importAssertionNonstring.symbols
++++ new.importAssertionNonstring.symbols
+@@= skipped -18, +18 lines =@@
+ 
+ import * as thing6 from "./mod.mjs" assert {type: "json", field: 0..toString()}
+ >thing6 : Symbol(thing6, Decl(mod.mts, 10, 6))
+->0..toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>0..toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 

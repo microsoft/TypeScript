@@ -1,0 +1,18 @@
+--- old.contextualSignatureConditionalTypeInstantiationUsingDefault.symbols
++++ new.contextualSignatureConditionalTypeInstantiationUsingDefault.symbols
+@@= skipped -6, +6 lines =@@
+ >TypegenDisabled : Symbol(TypegenDisabled, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 0, 0))
+ 
+   "@@xstate/typegen": false;
+->"@@xstate/typegen" : Symbol(TypegenDisabled["@@xstate/typegen"], Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 2, 34))
++>"@@xstate/typegen" : Symbol("@@xstate/typegen", Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 2, 34))
+ }
+ export interface TypegenEnabled {
+ >TypegenEnabled : Symbol(TypegenEnabled, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 4, 1))
+ 
+   "@@xstate/typegen": true;
+->"@@xstate/typegen" : Symbol(TypegenEnabled["@@xstate/typegen"], Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 5, 33))
++>"@@xstate/typegen" : Symbol("@@xstate/typegen", Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 5, 33))
+ }
+ 
+ type ActionFunction<TEvent extends { type: string }> = (event: TEvent) => void;

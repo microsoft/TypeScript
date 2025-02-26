@@ -1,0 +1,116 @@
+--- old.typeGuardsInFunctionAndModuleBlock.symbols
++++ new.typeGuardsInFunctionAndModuleBlock.symbols
+@@= skipped -23, +23 lines =@@
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
+ 
+                 ? x.toString() // boolean
+->x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+                 : x.toString(); // number
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+         } ();
+ }
+@@= skipped -33, +33 lines =@@
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
+ 
+                 ? x.toString() // boolean
+->x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+                 : x.toString(); // number
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+         } (x); // x here is narrowed to number | boolean
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
+@@= skipped -31, +31 lines =@@
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
+ 
+                 ? x.toString() // boolean
+->x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+                 : x.toString(); // number
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+         })();
+ }
+@@= skipped -32, +32 lines =@@
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
+ 
+                 ? x.toString() // boolean
+->x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+                 : x.toString(); // number
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+         })(x); // x here is narrowed to number | boolean
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
+@@= skipped -62, +62 lines =@@
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
+ 
+             ? x.toString() // boolean
+->x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+             : x.toString(); // number
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+         }
+     }
+ }
+@@= skipped -41, +41 lines =@@
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
+ 
+             ? x.toString() // boolean
+->x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+             : x.toString(); // number
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+         }
+     }
+ }

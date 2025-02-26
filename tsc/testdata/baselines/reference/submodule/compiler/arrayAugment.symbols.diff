@@ -1,0 +1,23 @@
+--- old.arrayAugment.symbols
++++ new.arrayAugment.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(arrayAugment.ts, 0, 16))
+ 
+     split: (parts: number) => T[][];
+->split : Symbol(Array.split, Decl(arrayAugment.ts, 0, 20))
++>split : Symbol(split, Decl(arrayAugment.ts, 0, 20))
+ >parts : Symbol(parts, Decl(arrayAugment.ts, 1, 12))
+ >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(arrayAugment.ts, 0, 16))
+ }
+@@= skipped -10, +10 lines =@@
+ 
+ var y = x.split(4);
+ >y : Symbol(y, Decl(arrayAugment.ts, 5, 3), Decl(arrayAugment.ts, 6, 3))
+->x.split : Symbol(Array.split, Decl(arrayAugment.ts, 0, 20))
++>x.split : Symbol(split, Decl(arrayAugment.ts, 0, 20))
+ >x : Symbol(x, Decl(arrayAugment.ts, 4, 3))
+->split : Symbol(Array.split, Decl(arrayAugment.ts, 0, 20))
++>split : Symbol(split, Decl(arrayAugment.ts, 0, 20))
+ 
+ var y: string[][]; // Expect no error here
+ >y : Symbol(y, Decl(arrayAugment.ts, 5, 3), Decl(arrayAugment.ts, 6, 3))

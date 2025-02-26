@@ -1,0 +1,11 @@
+--- old.declarationEmitExportAssignedNamespaceNoTripleSlashTypesReference.symbols
++++ new.declarationEmitExportAssignedNamespaceNoTripleSlashTypesReference.symbols
+@@= skipped -38, +38 lines =@@
+ >T : Symbol(T, Decl(index.d.ts, 4, 35), Decl(index.d.ts, 6, 28))
+ 
+         css?: any
+->css : Symbol(DOMAttributes.css, Decl(index.d.ts, 6, 32))
++>css : Symbol(css, Decl(index.d.ts, 6, 32))
+     }
+ }
+ 

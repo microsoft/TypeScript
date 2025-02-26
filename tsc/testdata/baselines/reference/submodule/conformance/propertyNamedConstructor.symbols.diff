@@ -1,0 +1,20 @@
+--- old.propertyNamedConstructor.symbols
++++ new.propertyNamedConstructor.symbols
+@@= skipped -4, +4 lines =@@
+ >X1 : Symbol(X1, Decl(propertyNamedConstructor.ts, 0, 0))
+ 
+   "constructor" = 3; // Error
+->"constructor" : Symbol(X1["constructor"], Decl(propertyNamedConstructor.ts, 0, 10))
++>"constructor" : Symbol(constructor, Decl(propertyNamedConstructor.ts, 0, 10))
+ }
+ 
+ class X2 {
+ >X2 : Symbol(X2, Decl(propertyNamedConstructor.ts, 2, 1))
+ 
+   ["constructor"] = 3;
+->["constructor"] : Symbol(X2["constructor"], Decl(propertyNamedConstructor.ts, 4, 10))
+->"constructor" : Symbol(X2["constructor"], Decl(propertyNamedConstructor.ts, 4, 10))
++>["constructor"] : Symbol(constructor, Decl(propertyNamedConstructor.ts, 4, 10))
++>"constructor" : Symbol(constructor, Decl(propertyNamedConstructor.ts, 4, 10))
+ }
+ 

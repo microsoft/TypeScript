@@ -1,0 +1,36 @@
+--- old.overrideInterfaceProperty.symbols
++++ new.overrideInterfaceProperty.symbols
+@@= skipped -6, +6 lines =@@
+ >V : Symbol(V, Decl(overrideInterfaceProperty.ts, 0, 16))
+ 
+     readonly size: number;
+->size : Symbol(Mup.size, Decl(overrideInterfaceProperty.ts, 0, 21))
++>size : Symbol(size, Decl(overrideInterfaceProperty.ts, 0, 21))
+ }
+ interface MupConstructor {
+ >MupConstructor : Symbol(MupConstructor, Decl(overrideInterfaceProperty.ts, 2, 1))
+@@= skipped -19, +19 lines =@@
+ >V : Symbol(V, Decl(overrideInterfaceProperty.ts, 5, 10))
+ 
+     readonly prototype: Mup<any, any>;
+->prototype : Symbol(MupConstructor.prototype, Decl(overrideInterfaceProperty.ts, 5, 72))
++>prototype : Symbol(prototype, Decl(overrideInterfaceProperty.ts, 5, 72))
+ >Mup : Symbol(Mup, Decl(overrideInterfaceProperty.ts, 0, 0), Decl(overrideInterfaceProperty.ts, 8, 11))
+ }
+ declare var Mup: MupConstructor;
+@@= skipped -13, +13 lines =@@
+ 
+     // ok, because Mup is an interface
+     get size() { return 0 }
+->size : Symbol(Sizz.size, Decl(overrideInterfaceProperty.ts, 10, 24))
++>size : Symbol(size, Decl(overrideInterfaceProperty.ts, 10, 24))
+ }
+ class Kasizz extends Mup {
+ >Kasizz : Symbol(Kasizz, Decl(overrideInterfaceProperty.ts, 13, 1))
+ >Mup : Symbol(Mup, Decl(overrideInterfaceProperty.ts, 0, 0), Decl(overrideInterfaceProperty.ts, 8, 11))
+ 
+     size = -1
+->size : Symbol(Kasizz.size, Decl(overrideInterfaceProperty.ts, 14, 26))
++>size : Symbol(size, Decl(overrideInterfaceProperty.ts, 14, 26))
+ }
+ 

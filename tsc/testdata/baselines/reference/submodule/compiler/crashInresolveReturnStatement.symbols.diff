@@ -1,0 +1,35 @@
+--- old.crashInresolveReturnStatement.symbols
++++ new.crashInresolveReturnStatement.symbols
+@@= skipped -4, +4 lines =@@
+ >WorkItemToolbar : Symbol(WorkItemToolbar, Decl(crashInresolveReturnStatement.ts, 0, 0))
+ 
+     public onToolbarItemClick() {
+->onToolbarItemClick : Symbol(WorkItemToolbar.onToolbarItemClick, Decl(crashInresolveReturnStatement.ts, 0, 23))
++>onToolbarItemClick : Symbol(onToolbarItemClick, Decl(crashInresolveReturnStatement.ts, 0, 23))
+ 
+         WITDialogs.createCopyOfWorkItem();
+->WITDialogs.createCopyOfWorkItem : Symbol(WITDialogs.createCopyOfWorkItem, Decl(crashInresolveReturnStatement.ts, 12, 18))
++>WITDialogs.createCopyOfWorkItem : Symbol(createCopyOfWorkItem, Decl(crashInresolveReturnStatement.ts, 12, 18))
+ >WITDialogs : Symbol(WITDialogs, Decl(crashInresolveReturnStatement.ts, 11, 1))
+->createCopyOfWorkItem : Symbol(WITDialogs.createCopyOfWorkItem, Decl(crashInresolveReturnStatement.ts, 12, 18))
++>createCopyOfWorkItem : Symbol(createCopyOfWorkItem, Decl(crashInresolveReturnStatement.ts, 12, 18))
+     }
+ }
+ class CreateCopyOfWorkItemDialog {
+ >CreateCopyOfWorkItemDialog : Symbol(CreateCopyOfWorkItemDialog, Decl(crashInresolveReturnStatement.ts, 4, 1))
+ 
+     public getDialogResult() {
+->getDialogResult : Symbol(CreateCopyOfWorkItemDialog.getDialogResult, Decl(crashInresolveReturnStatement.ts, 5, 34))
++>getDialogResult : Symbol(getDialogResult, Decl(crashInresolveReturnStatement.ts, 5, 34))
+ 
+         return null;
+     }
+@@= skipped -27, +27 lines =@@
+ >WITDialogs : Symbol(WITDialogs, Decl(crashInresolveReturnStatement.ts, 11, 1))
+ 
+     public static createCopyOfWorkItem() {
+->createCopyOfWorkItem : Symbol(WITDialogs.createCopyOfWorkItem, Decl(crashInresolveReturnStatement.ts, 12, 18))
++>createCopyOfWorkItem : Symbol(createCopyOfWorkItem, Decl(crashInresolveReturnStatement.ts, 12, 18))
+ 
+         createWorkItemDialog(CreateCopyOfWorkItemDialog);
+ >createWorkItemDialog : Symbol(createWorkItemDialog, Decl(crashInresolveReturnStatement.ts, 9, 1))

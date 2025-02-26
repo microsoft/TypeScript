@@ -1,0 +1,65 @@
+--- old.fuzzy.symbols
++++ new.fuzzy.symbols
+@@= skipped -7, +7 lines =@@
+ >I : Symbol(I, Decl(fuzzy.ts, 0, 10))
+ 
+         works:()=>R;
+->works : Symbol(I.works, Decl(fuzzy.ts, 1, 24))
++>works : Symbol(works, Decl(fuzzy.ts, 1, 24))
+ >R : Symbol(R, Decl(fuzzy.ts, 5, 5))
+ 
+         alsoWorks:()=>R;
+->alsoWorks : Symbol(I.alsoWorks, Decl(fuzzy.ts, 2, 20))
++>alsoWorks : Symbol(alsoWorks, Decl(fuzzy.ts, 2, 20))
+ >R : Symbol(R, Decl(fuzzy.ts, 5, 5))
+ 
+         doesntWork:()=>R;
+->doesntWork : Symbol(I.doesntWork, Decl(fuzzy.ts, 3, 24))
++>doesntWork : Symbol(doesntWork, Decl(fuzzy.ts, 3, 24))
+ >R : Symbol(R, Decl(fuzzy.ts, 5, 5))
+     }
+ 
+@@= skipped -16, +16 lines =@@
+ >R : Symbol(R, Decl(fuzzy.ts, 5, 5))
+ 
+         anything:number;
+->anything : Symbol(R.anything, Decl(fuzzy.ts, 7, 24))
++>anything : Symbol(anything, Decl(fuzzy.ts, 7, 24))
+ 
+         oneI:I;
+->oneI : Symbol(R.oneI, Decl(fuzzy.ts, 8, 24))
++>oneI : Symbol(oneI, Decl(fuzzy.ts, 8, 24))
+ >I : Symbol(I, Decl(fuzzy.ts, 0, 10))
+     }
+ 
+@@= skipped -12, +12 lines =@@
+ >I : Symbol(I, Decl(fuzzy.ts, 0, 10))
+ 
+         constructor(public x:number) {
+->x : Symbol(C.x, Decl(fuzzy.ts, 13, 20))
++>x : Symbol(x, Decl(fuzzy.ts, 13, 20))
+         }
+         works():R {
+->works : Symbol(C.works, Decl(fuzzy.ts, 14, 9))
++>works : Symbol(works, Decl(fuzzy.ts, 14, 9))
+ >R : Symbol(R, Decl(fuzzy.ts, 5, 5))
+ 
+             return <R>({ anything: 1 });
+@@= skipped -12, +12 lines =@@
+         }
+ 
+         doesntWork():R {
+->doesntWork : Symbol(C.doesntWork, Decl(fuzzy.ts, 17, 9))
++>doesntWork : Symbol(doesntWork, Decl(fuzzy.ts, 17, 9))
+ >R : Symbol(R, Decl(fuzzy.ts, 5, 5))
+ 
+             return { anything:1, oneI:this };
+@@= skipped -10, +10 lines =@@
+         }
+ 
+         worksToo():R {
+->worksToo : Symbol(C.worksToo, Decl(fuzzy.ts, 21, 9))
++>worksToo : Symbol(worksToo, Decl(fuzzy.ts, 21, 9))
+ >R : Symbol(R, Decl(fuzzy.ts, 5, 5))
+ 
+             return <R>({ oneI: this });

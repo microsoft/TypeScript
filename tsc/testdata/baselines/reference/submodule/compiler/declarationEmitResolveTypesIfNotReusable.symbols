@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/declarationEmitResolveTypesIfNotReusable.ts] ////
+
+=== decl.ts ===
+const u = "X";
+>u : Symbol(u, Decl(decl.ts, 0, 5))
+
+type A = { a: { b : "value of b", notNecessary: typeof u }}
+>A : Symbol(A, Decl(decl.ts, 0, 14))
+>a : Symbol(a, Decl(decl.ts, 1, 10))
+>b : Symbol(b, Decl(decl.ts, 1, 15))
+>notNecessary : Symbol(notNecessary, Decl(decl.ts, 1, 33))
+>u : Symbol(u, Decl(decl.ts, 0, 5))
+
+const a = { a: "value of a", notNecessary: u } as const
+>a : Symbol(a, Decl(decl.ts, 2, 5))
+>a : Symbol(a, Decl(decl.ts, 2, 11))
+>notNecessary : Symbol(notNecessary, Decl(decl.ts, 2, 28))
+>u : Symbol(u, Decl(decl.ts, 0, 5))
+>const : Symbol(const)
+
+
+export const o1 = (o: A['a']['b']) => {}
+>o1 : Symbol(o1, Decl(decl.ts, 5, 12))
+>o : Symbol(o, Decl(decl.ts, 5, 19))
+>A : Symbol(A, Decl(decl.ts, 0, 14))
+
+export const o2 = (o: (typeof a)['a']) => {}
+>o2 : Symbol(o2, Decl(decl.ts, 7, 12))
+>o : Symbol(o, Decl(decl.ts, 7, 19))
+>a : Symbol(a, Decl(decl.ts, 2, 5))
+
+export const o3 = (o:  typeof a['a']) => {}
+>o3 : Symbol(o3, Decl(decl.ts, 8, 12))
+>o : Symbol(o, Decl(decl.ts, 8, 19))
+>a : Symbol(a, Decl(decl.ts, 2, 5))
+
+export const o4 = (o: keyof (A['a'])) => {}
+>o4 : Symbol(o4, Decl(decl.ts, 10, 12))
+>o : Symbol(o, Decl(decl.ts, 10, 19))
+>A : Symbol(A, Decl(decl.ts, 0, 14))
+
+=== main.ts ===
+import * as d  from './decl'
+>d : Symbol(d, Decl(main.ts, 0, 6))
+
+export const f = {...d}
+>f : Symbol(f, Decl(main.ts, 2, 12))
+>d : Symbol(d, Decl(main.ts, 0, 6))
+

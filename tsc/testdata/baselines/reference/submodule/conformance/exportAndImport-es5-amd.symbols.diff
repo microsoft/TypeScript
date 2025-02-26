@@ -1,0 +1,20 @@
+--- old.exportAndImport-es5-amd.symbols
++++ new.exportAndImport-es5-amd.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === m1.ts ===
+ export default function f1() {
+->f1 : Symbol(f1, Decl(m1.ts, 0, 0))
++>f1 : Symbol(default, Decl(m1.ts, 0, 0))
+ }
+ 
+ === m2.ts ===
+@@= skipped -8, +8 lines =@@
+ >f1 : Symbol(f1, Decl(m2.ts, 0, 6))
+ 
+ export default function f2() {
+->f2 : Symbol(f2, Decl(m2.ts, 0, 22))
++>f2 : Symbol(default, Decl(m2.ts, 0, 22))
+ 
+     f1();
+ >f1 : Symbol(f1, Decl(m2.ts, 0, 6))

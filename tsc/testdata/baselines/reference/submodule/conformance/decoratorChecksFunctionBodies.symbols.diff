@@ -1,0 +1,11 @@
+--- old.decoratorChecksFunctionBodies.symbols
++++ new.decoratorChecksFunctionBodies.symbols
+@@= skipped -26, +26 lines =@@
+ 
+     })
+     m() {
+->m : Symbol(A.m, Decl(decoratorChecksFunctionBodies.ts, 4, 9))
++>m : Symbol(m, Decl(decoratorChecksFunctionBodies.ts, 4, 9))
+ 
+     }
+ }

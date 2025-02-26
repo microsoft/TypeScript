@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/jsdoc/constructorTagWithThisTag.ts] ////
+
+=== classthisboth.js ===
+/**
+ * @class
+ * @this {{ e: number, m: number }}
+ * this-tag should win, both 'e' and 'm' should be defined.
+ */
+function C() {
+>C : Symbol(C, Decl(classthisboth.js, 0, 0))
+
+    this.e = this.m + 1
+}
+

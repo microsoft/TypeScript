@@ -1,0 +1,33 @@
+--- old.scopeResolutionIdentifiers.symbols
++++ new.scopeResolutionIdentifiers.symbols
+@@= skipped -51, +51 lines =@@
+ >C : Symbol(C, Decl(scopeResolutionIdentifiers.ts, 19, 1))
+ 
+     s: Date;
+->s : Symbol(C.s, Decl(scopeResolutionIdentifiers.ts, 21, 9))
++>s : Symbol(s, Decl(scopeResolutionIdentifiers.ts, 21, 9))
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ 
+     n = this.s;
+->n : Symbol(C.n, Decl(scopeResolutionIdentifiers.ts, 22, 12))
+->this.s : Symbol(C.s, Decl(scopeResolutionIdentifiers.ts, 21, 9))
++>n : Symbol(n, Decl(scopeResolutionIdentifiers.ts, 22, 12))
++>this.s : Symbol(s, Decl(scopeResolutionIdentifiers.ts, 21, 9))
+ >this : Symbol(C, Decl(scopeResolutionIdentifiers.ts, 19, 1))
+->s : Symbol(C.s, Decl(scopeResolutionIdentifiers.ts, 21, 9))
++>s : Symbol(s, Decl(scopeResolutionIdentifiers.ts, 21, 9))
+ 
+     x() {
+->x : Symbol(C.x, Decl(scopeResolutionIdentifiers.ts, 23, 15))
++>x : Symbol(x, Decl(scopeResolutionIdentifiers.ts, 23, 15))
+ 
+         var p = this.n;
+ >p : Symbol(p, Decl(scopeResolutionIdentifiers.ts, 25, 11), Decl(scopeResolutionIdentifiers.ts, 26, 11))
+->this.n : Symbol(C.n, Decl(scopeResolutionIdentifiers.ts, 22, 12))
++>this.n : Symbol(n, Decl(scopeResolutionIdentifiers.ts, 22, 12))
+ >this : Symbol(C, Decl(scopeResolutionIdentifiers.ts, 19, 1))
+->n : Symbol(C.n, Decl(scopeResolutionIdentifiers.ts, 22, 12))
++>n : Symbol(n, Decl(scopeResolutionIdentifiers.ts, 22, 12))
+ 
+         var p: Date;
+ >p : Symbol(p, Decl(scopeResolutionIdentifiers.ts, 25, 11), Decl(scopeResolutionIdentifiers.ts, 26, 11))

@@ -1,0 +1,14 @@
+--- old.symbolProperty33.symbols
++++ new.symbolProperty33.symbols
+@@= skipped -5, +5 lines =@@
+ >C2 : Symbol(C2, Decl(symbolProperty33.ts, 4, 1))
+ 
+     [Symbol.toStringTag]() {
+->[Symbol.toStringTag] : Symbol(C1[Symbol.toStringTag], Decl(symbolProperty33.ts, 0, 21))
+->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(symbolProperty33.ts, 0, 21))
+ 
+         return { x: "" };
+ >x : Symbol(x, Decl(symbolProperty33.ts, 2, 16))

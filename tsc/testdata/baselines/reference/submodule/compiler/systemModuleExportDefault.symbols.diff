@@ -1,0 +1,19 @@
+--- old.systemModuleExportDefault.symbols
++++ new.systemModuleExportDefault.symbols
+@@= skipped -5, +5 lines =@@
+ 
+ === file2.ts ===
+ export default function foo() {}
+->foo : Symbol(foo, Decl(file2.ts, 0, 0))
++>foo : Symbol(default, Decl(file2.ts, 0, 0))
+ 
+ === file3.ts ===
+ 
+@@= skipped -8, +8 lines =@@
+ 
+ === file4.ts ===
+ export default class C {}
+->C : Symbol(C, Decl(file4.ts, 0, 0))
++>C : Symbol(default, Decl(file4.ts, 0, 0))
+ 
+ 

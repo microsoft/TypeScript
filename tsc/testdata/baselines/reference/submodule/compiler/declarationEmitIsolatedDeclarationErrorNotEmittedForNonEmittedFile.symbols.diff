@@ -1,0 +1,77 @@
+--- old.declarationEmitIsolatedDeclarationErrorNotEmittedForNonEmittedFile.symbols
++++ new.declarationEmitIsolatedDeclarationErrorNotEmittedForNonEmittedFile.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(config.d.ts, 0, 28))
+ 
+     prop: T;
+->prop : Symbol(RootConfig.prop, Decl(config.d.ts, 0, 32))
++>prop : Symbol(prop, Decl(config.d.ts, 0, 32))
+ >T : Symbol(T, Decl(config.d.ts, 0, 28))
+ }
+ === node_modules/@trpc/server/internals/utils.d.ts ===
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(utils.d.ts, 0, 37))
+ 
+     prop: T;
+->prop : Symbol(ErrorFormatterShape.prop, Decl(utils.d.ts, 0, 44))
++>prop : Symbol(prop, Decl(utils.d.ts, 0, 44))
+ >T : Symbol(T, Decl(utils.d.ts, 0, 37))
+ }
+ export type PickFirstDefined<TType, TPick> = undefined extends TType
+@@= skipped -25, +25 lines =@@
+ >U : Symbol(U, Decl(utils.d.ts, 8, 37))
+ 
+     prop: [T, U];
+->prop : Symbol(ErrorFormatter.prop, Decl(utils.d.ts, 8, 44))
++>prop : Symbol(prop, Decl(utils.d.ts, 8, 44))
+ >T : Symbol(T, Decl(utils.d.ts, 8, 32))
+ >U : Symbol(U, Decl(utils.d.ts, 8, 37))
+ }
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(utils.d.ts, 11, 35))
+ 
+     prop: T;
+->prop : Symbol(DefaultErrorShape.prop, Decl(utils.d.ts, 11, 42))
++>prop : Symbol(prop, Decl(utils.d.ts, 11, 42))
+ >T : Symbol(T, Decl(utils.d.ts, 11, 35))
+ }
+ === node_modules/@trpc/server/middleware.d.ts ===
+@@= skipped -10, +10 lines =@@
+ >U : Symbol(U, Decl(middleware.d.ts, 0, 41))
+ 
+     prop: [T, U];
+->prop : Symbol(MiddlewareFunction.prop, Decl(middleware.d.ts, 0, 48))
++>prop : Symbol(prop, Decl(middleware.d.ts, 0, 48))
+ >T : Symbol(T, Decl(middleware.d.ts, 0, 36))
+ >U : Symbol(U, Decl(middleware.d.ts, 0, 41))
+ }
+@@= skipped -10, +10 lines =@@
+ >U : Symbol(U, Decl(middleware.d.ts, 3, 40))
+ 
+     prop: [T, U];
+->prop : Symbol(MiddlewareBuilder.prop, Decl(middleware.d.ts, 3, 47))
++>prop : Symbol(prop, Decl(middleware.d.ts, 3, 47))
+ >T : Symbol(T, Decl(middleware.d.ts, 3, 35))
+ >U : Symbol(U, Decl(middleware.d.ts, 3, 40))
+ }
+@@= skipped -19, +19 lines =@@
+ >TParams : Symbol(TParams, Decl(index.d.ts, 2, 26))
+ 
+     create<TOptions extends Record<string, any>>(): {
+->create : Symbol(TRPCBuilder.create, Decl(index.d.ts, 2, 36))
++>create : Symbol(create, Decl(index.d.ts, 2, 36))
+ >TOptions : Symbol(TOptions, Decl(index.d.ts, 3, 11))
+ >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+ 
+@@= skipped -68, +68 lines =@@
+ 
+ const trpc = initTRPC.create();
+ >trpc : Symbol(trpc, Decl(index.ts, 2, 5))
+->initTRPC.create : Symbol(TRPCBuilder.create, Decl(index.d.ts, 2, 36))
++>initTRPC.create : Symbol(create, Decl(index.d.ts, 2, 36))
+ >initTRPC : Symbol(initTRPC, Decl(index.ts, 0, 8))
+->create : Symbol(TRPCBuilder.create, Decl(index.d.ts, 2, 36))
++>create : Symbol(create, Decl(index.d.ts, 2, 36))
+ 
+ export const middleware = trpc.middleware;
+ >middleware : Symbol(middleware, Decl(index.ts, 4, 12))

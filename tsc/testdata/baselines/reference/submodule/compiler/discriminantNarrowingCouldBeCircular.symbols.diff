@@ -1,0 +1,26 @@
+--- old.discriminantNarrowingCouldBeCircular.symbols
++++ new.discriminantNarrowingCouldBeCircular.symbols
+@@= skipped -74, +74 lines =@@
+     if (!parents || !parent || !parents.includes(parent.a))
+ >parents : Symbol(parents, Decl(discriminantNarrowingCouldBeCircular.ts, 19, 9))
+ >parent : Symbol(parent, Decl(discriminantNarrowingCouldBeCircular.ts, 18, 9))
+->parents.includes : Symbol(Array.includes, Decl(lib.es2016.array.include.d.ts, --, --))
++>parents.includes : Symbol(includes, Decl(lib.es2016.array.include.d.ts, --, --))
+ >parents : Symbol(parents, Decl(discriminantNarrowingCouldBeCircular.ts, 19, 9))
+->includes : Symbol(Array.includes, Decl(lib.es2016.array.include.d.ts, --, --))
++>includes : Symbol(includes, Decl(lib.es2016.array.include.d.ts, --, --))
+ >parent.a : Symbol(a, Decl(discriminantNarrowingCouldBeCircular.ts, 11, 19))
+ >parent : Symbol(parent, Decl(discriminantNarrowingCouldBeCircular.ts, 18, 9))
+ >a : Symbol(a, Decl(discriminantNarrowingCouldBeCircular.ts, 11, 19))
+@@= skipped -45, +45 lines =@@
+ >deeperKeys : Symbol(deeperKeys, Decl(discriminantNarrowingCouldBeCircular.ts, 34, 13))
+ >isPlainObject2 : Symbol(isPlainObject2, Decl(discriminantNarrowingCouldBeCircular.ts, 24, 1))
+ >deeper : Symbol(deeper, Decl(discriminantNarrowingCouldBeCircular.ts, 33, 13))
+->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>Object.keys : Symbol(keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>keys : Symbol(keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >deeper : Symbol(deeper, Decl(discriminantNarrowingCouldBeCircular.ts, 33, 13))
+       }
+   }

@@ -1,0 +1,11 @@
+--- old.exportNamespace11.symbols
++++ new.exportNamespace11.symbols
+@@= skipped -6, +6 lines =@@
+ const ghost: intermediate.Ghost = new intermediate.Ghost()
+ >ghost : Symbol(ghost, Decl(main.ts, 1, 5))
+ >intermediate : Symbol(intermediate, Decl(main.ts, 0, 6))
+->Ghost : Symbol(intermediate.Ghost, Decl(ghost.ts, 0, 0))
++>Ghost : Symbol(Ghost, Decl(ghost.ts, 0, 0))
+ >intermediate : Symbol(intermediate, Decl(main.ts, 0, 6))
+ 
+ === intermediate.ts ===

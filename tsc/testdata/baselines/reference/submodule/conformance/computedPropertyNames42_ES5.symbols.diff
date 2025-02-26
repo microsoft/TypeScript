@@ -1,0 +1,28 @@
+--- old.computedPropertyNames42_ES5.symbols
++++ new.computedPropertyNames42_ES5.symbols
+@@= skipped -2, +2 lines =@@
+ === computedPropertyNames42_ES5.ts ===
+ class Foo { x }
+ >Foo : Symbol(Foo, Decl(computedPropertyNames42_ES5.ts, 0, 0))
+->x : Symbol(Foo.x, Decl(computedPropertyNames42_ES5.ts, 0, 11))
++>x : Symbol(x, Decl(computedPropertyNames42_ES5.ts, 0, 11))
+ 
+ class Foo2 { x; y }
+ >Foo2 : Symbol(Foo2, Decl(computedPropertyNames42_ES5.ts, 0, 15))
+->x : Symbol(Foo2.x, Decl(computedPropertyNames42_ES5.ts, 1, 12))
+->y : Symbol(Foo2.y, Decl(computedPropertyNames42_ES5.ts, 1, 15))
++>x : Symbol(x, Decl(computedPropertyNames42_ES5.ts, 1, 12))
++>y : Symbol(y, Decl(computedPropertyNames42_ES5.ts, 1, 15))
+ 
+ class C {
+ >C : Symbol(C, Decl(computedPropertyNames42_ES5.ts, 1, 19))
+@@= skipped -16, +16 lines =@@
+ 
+     // Computed properties
+     [""]: Foo;
+->[""] : Symbol(C[""], Decl(computedPropertyNames42_ES5.ts, 4, 22))
+->"" : Symbol(C[""], Decl(computedPropertyNames42_ES5.ts, 4, 22))
++>[""] : Symbol([""], Decl(computedPropertyNames42_ES5.ts, 4, 22))
++>"" : Symbol([""], Decl(computedPropertyNames42_ES5.ts, 4, 22))
+ >Foo : Symbol(Foo, Decl(computedPropertyNames42_ES5.ts, 0, 0))
+ }

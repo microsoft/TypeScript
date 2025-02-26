@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/parenthesizedSatisfiesExpressionWithComments.ts] ////
+
+=== parenthesizedSatisfiesExpressionWithComments.ts ===
+"use strict";
+const a = (/*comm*/ 10 satisfies number);
+>a : Symbol(a, Decl(parenthesizedSatisfiesExpressionWithComments.ts, 1, 5))
+
+const b = ((/*comm*/ 10 satisfies number));
+>b : Symbol(b, Decl(parenthesizedSatisfiesExpressionWithComments.ts, 2, 5))
+

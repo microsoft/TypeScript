@@ -1,0 +1,107 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue10.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue10.ts ===
+function foo(cond1: boolean, cond2: boolean) {
+>foo : Symbol(foo, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 0, 0))
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 0, 13))
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 0, 28))
+
+    switch (true) {
+        case cond1 || cond2:
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 0, 13))
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 0, 28))
+
+            cond1; // boolean
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 0, 13))
+
+            //  ^?
+            cond2; // boolean
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 0, 28))
+
+            //  ^?
+            break;
+
+        case cond2:
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 0, 28))
+
+            cond1; // false
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 0, 13))
+
+            //  ^?
+            cond2;; // never
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 0, 28))
+
+            //  ^?
+            break;
+
+        default:
+            cond1; // false
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 0, 13))
+
+            //  ^?
+            cond2; // false
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 0, 28))
+
+            //  ^?
+            break;
+    }
+
+    cond1; // boolean
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 0, 13))
+
+    //  ^?
+    cond2; // boolean
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 0, 28))
+
+    //  ^?
+}
+
+function blah(cond1: boolean, cond2: boolean) {
+>blah : Symbol(blah, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 28, 1))
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 30, 14))
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 30, 29))
+
+    if (cond1 || cond2) {
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 30, 14))
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 30, 29))
+
+        cond1; // boolean
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 30, 14))
+
+        //  ^?
+        cond2; // boolean
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 30, 29))
+
+        //  ^?
+    } else if (cond2) {
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 30, 29))
+
+        cond1; // false
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 30, 14))
+
+        //  ^?
+        cond2; // never
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 30, 29))
+
+        //  ^?
+    } else {
+        cond1; // false
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 30, 14))
+
+        //  ^?
+        cond2; // false
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 30, 29))
+
+        //  ^?
+    }
+
+    cond1; // boolean
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 30, 14))
+
+    //  ^?
+    cond2; // boolean
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue10.ts, 30, 29))
+
+    //  ^?
+}
+

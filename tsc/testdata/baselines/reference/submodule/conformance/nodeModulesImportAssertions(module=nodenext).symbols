@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/node/nodeModulesImportAssertions.ts] ////
+
+=== index.ts ===
+import json from "./package.json" assert { type: "json" };
+>json : Symbol(json, Decl(index.ts, 0, 6))
+
+=== otherc.cts ===
+import json from "./package.json" assert { type: "json" }; // should error, cjs mode imports don't support assertions
+>json : Symbol(json, Decl(otherc.cts, 0, 6))
+
+const json2 = import("./package.json", { assert: { type: "json" } }); // should be fine
+>json2 : Symbol(json2, Decl(otherc.cts, 1, 5))
+>assert : Symbol(assert, Decl(otherc.cts, 1, 40))
+>type : Symbol(type, Decl(otherc.cts, 1, 50))
+

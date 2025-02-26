@@ -1,0 +1,27 @@
+--- old.derivedClassOverridesPrivateFunction1.symbols
++++ new.derivedClassOverridesPrivateFunction1.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     constructor() {
+         this._init();
+->this._init : Symbol(BaseClass._init, Decl(derivedClassOverridesPrivateFunction1.ts, 3, 5))
++>this._init : Symbol(_init, Decl(derivedClassOverridesPrivateFunction1.ts, 3, 5))
+ >this : Symbol(BaseClass, Decl(derivedClassOverridesPrivateFunction1.ts, 0, 0))
+->_init : Symbol(BaseClass._init, Decl(derivedClassOverridesPrivateFunction1.ts, 3, 5))
++>_init : Symbol(_init, Decl(derivedClassOverridesPrivateFunction1.ts, 3, 5))
+     }
+     private _init() {
+->_init : Symbol(BaseClass._init, Decl(derivedClassOverridesPrivateFunction1.ts, 3, 5))
++>_init : Symbol(_init, Decl(derivedClassOverridesPrivateFunction1.ts, 3, 5))
+     }
+ }
+ class DerivedClass extends BaseClass {
+@@= skipped -17, +17 lines =@@
+ >super : Symbol(BaseClass, Decl(derivedClassOverridesPrivateFunction1.ts, 0, 0))
+     }
+     private _init() {
+->_init : Symbol(DerivedClass._init, Decl(derivedClassOverridesPrivateFunction1.ts, 10, 5))
++>_init : Symbol(_init, Decl(derivedClassOverridesPrivateFunction1.ts, 10, 5))
+     }
+ }
+ new DerivedClass();

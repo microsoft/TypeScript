@@ -1,0 +1,11 @@
+--- old.moduleAugmentationWithNonExistentNamedImport.symbols
++++ new.moduleAugmentationWithNonExistentNamedImport.symbols
+@@= skipped -14, +14 lines =@@
+ }
+ 
+ declare global {
+->global : Symbol(global, Decl(foo.d.ts, 5, 1))
++>global : Symbol((Missing), Decl(foo.d.ts, 5, 1))
+ 
+     namespace Bar { }
+ >Bar : Symbol(Bar, Decl(foo.d.ts, 7, 16))

@@ -1,0 +1,126 @@
+--- old.intersectionThisTypes.symbols
++++ new.intersectionThisTypes.symbols
+@@= skipped -4, +4 lines =@@
+ >Thing1 : Symbol(Thing1, Decl(intersectionThisTypes.ts, 0, 0))
+ 
+     a: number;
+->a : Symbol(Thing1.a, Decl(intersectionThisTypes.ts, 0, 18))
++>a : Symbol(a, Decl(intersectionThisTypes.ts, 0, 18))
+ 
+     self(): this;
+->self : Symbol(Thing1.self, Decl(intersectionThisTypes.ts, 1, 14))
++>self : Symbol(self, Decl(intersectionThisTypes.ts, 1, 14))
+ }
+ 
+ interface Thing2 {
+ >Thing2 : Symbol(Thing2, Decl(intersectionThisTypes.ts, 3, 1))
+ 
+     b: number;
+->b : Symbol(Thing2.b, Decl(intersectionThisTypes.ts, 5, 18))
++>b : Symbol(b, Decl(intersectionThisTypes.ts, 5, 18))
+ 
+     me(): this;
+->me : Symbol(Thing2.me, Decl(intersectionThisTypes.ts, 6, 14))
++>me : Symbol(me, Decl(intersectionThisTypes.ts, 6, 14))
+ }
+ 
+ type Thing3 = Thing1 & Thing2;
+@@= skipped -32, +32 lines =@@
+ 
+     t = t.self();
+ >t : Symbol(t, Decl(intersectionThisTypes.ts, 13, 12))
+->t.self : Symbol(Thing1.self, Decl(intersectionThisTypes.ts, 1, 14))
++>t.self : Symbol(self, Decl(intersectionThisTypes.ts, 1, 14))
+ >t : Symbol(t, Decl(intersectionThisTypes.ts, 13, 12))
+->self : Symbol(Thing1.self, Decl(intersectionThisTypes.ts, 1, 14))
++>self : Symbol(self, Decl(intersectionThisTypes.ts, 1, 14))
+ 
+     t = t.me().self().me();
+ >t : Symbol(t, Decl(intersectionThisTypes.ts, 13, 12))
+->t.me().self().me : Symbol(Thing2.me, Decl(intersectionThisTypes.ts, 6, 14))
+->t.me().self : Symbol(Thing1.self, Decl(intersectionThisTypes.ts, 1, 14))
+->t.me : Symbol(Thing2.me, Decl(intersectionThisTypes.ts, 6, 14))
++>t.me().self().me : Symbol(me, Decl(intersectionThisTypes.ts, 6, 14))
++>t.me().self : Symbol(self, Decl(intersectionThisTypes.ts, 1, 14))
++>t.me : Symbol(me, Decl(intersectionThisTypes.ts, 6, 14))
+ >t : Symbol(t, Decl(intersectionThisTypes.ts, 13, 12))
+->me : Symbol(Thing2.me, Decl(intersectionThisTypes.ts, 6, 14))
+->self : Symbol(Thing1.self, Decl(intersectionThisTypes.ts, 1, 14))
+->me : Symbol(Thing2.me, Decl(intersectionThisTypes.ts, 6, 14))
++>me : Symbol(me, Decl(intersectionThisTypes.ts, 6, 14))
++>self : Symbol(self, Decl(intersectionThisTypes.ts, 1, 14))
++>me : Symbol(me, Decl(intersectionThisTypes.ts, 6, 14))
+ }
+ 
+ interface Thing5 extends Thing4 {
+@@= skipped -20, +20 lines =@@
+ >Thing4 : Symbol(Thing4, Decl(intersectionThisTypes.ts, 10, 30))
+ 
+     c: string;
+->c : Symbol(Thing5.c, Decl(intersectionThisTypes.ts, 18, 33))
++>c : Symbol(c, Decl(intersectionThisTypes.ts, 18, 33))
+ }
+ 
+ function f2(t: Thing5) {
+@@= skipped -10, +10 lines =@@
+ 
+     t = t.self();
+ >t : Symbol(t, Decl(intersectionThisTypes.ts, 22, 12))
+->t.self : Symbol(Thing1.self, Decl(intersectionThisTypes.ts, 1, 14))
++>t.self : Symbol(self, Decl(intersectionThisTypes.ts, 1, 14))
+ >t : Symbol(t, Decl(intersectionThisTypes.ts, 22, 12))
+->self : Symbol(Thing1.self, Decl(intersectionThisTypes.ts, 1, 14))
++>self : Symbol(self, Decl(intersectionThisTypes.ts, 1, 14))
+ 
+     t = t.me().self().me();
+ >t : Symbol(t, Decl(intersectionThisTypes.ts, 22, 12))
+->t.me().self().me : Symbol(Thing2.me, Decl(intersectionThisTypes.ts, 6, 14))
+->t.me().self : Symbol(Thing1.self, Decl(intersectionThisTypes.ts, 1, 14))
+->t.me : Symbol(Thing2.me, Decl(intersectionThisTypes.ts, 6, 14))
++>t.me().self().me : Symbol(me, Decl(intersectionThisTypes.ts, 6, 14))
++>t.me().self : Symbol(self, Decl(intersectionThisTypes.ts, 1, 14))
++>t.me : Symbol(me, Decl(intersectionThisTypes.ts, 6, 14))
+ >t : Symbol(t, Decl(intersectionThisTypes.ts, 22, 12))
+->me : Symbol(Thing2.me, Decl(intersectionThisTypes.ts, 6, 14))
+->self : Symbol(Thing1.self, Decl(intersectionThisTypes.ts, 1, 14))
+->me : Symbol(Thing2.me, Decl(intersectionThisTypes.ts, 6, 14))
++>me : Symbol(me, Decl(intersectionThisTypes.ts, 6, 14))
++>self : Symbol(self, Decl(intersectionThisTypes.ts, 1, 14))
++>me : Symbol(me, Decl(intersectionThisTypes.ts, 6, 14))
+ }
+ 
+ interface Component {
+ >Component : Symbol(Component, Decl(intersectionThisTypes.ts, 25, 1))
+ 
+     extend<T>(props: T): this & T;
+->extend : Symbol(Component.extend, Decl(intersectionThisTypes.ts, 27, 21))
++>extend : Symbol(extend, Decl(intersectionThisTypes.ts, 27, 21))
+ >T : Symbol(T, Decl(intersectionThisTypes.ts, 28, 11))
+ >props : Symbol(props, Decl(intersectionThisTypes.ts, 28, 14))
+ >T : Symbol(T, Decl(intersectionThisTypes.ts, 28, 11))
+@@= skipped -31, +31 lines =@@
+ >Component : Symbol(Component, Decl(intersectionThisTypes.ts, 25, 1))
+ 
+     title: string;
+->title : Symbol(Label.title, Decl(intersectionThisTypes.ts, 31, 35))
++>title : Symbol(title, Decl(intersectionThisTypes.ts, 31, 35))
+ }
+ 
+ function test(label: Label) {
+@@= skipped -10, +10 lines =@@
+ 
+     const extended = label.extend({ id: 67 }).extend({ tag: "hello" });
+ >extended : Symbol(extended, Decl(intersectionThisTypes.ts, 36, 9))
+->label.extend({ id: 67 }).extend : Symbol(Component.extend, Decl(intersectionThisTypes.ts, 27, 21))
+->label.extend : Symbol(Component.extend, Decl(intersectionThisTypes.ts, 27, 21))
++>label.extend({ id: 67 }).extend : Symbol(extend, Decl(intersectionThisTypes.ts, 27, 21))
++>label.extend : Symbol(extend, Decl(intersectionThisTypes.ts, 27, 21))
+ >label : Symbol(label, Decl(intersectionThisTypes.ts, 35, 14))
+->extend : Symbol(Component.extend, Decl(intersectionThisTypes.ts, 27, 21))
++>extend : Symbol(extend, Decl(intersectionThisTypes.ts, 27, 21))
+ >id : Symbol(id, Decl(intersectionThisTypes.ts, 36, 35))
+->extend : Symbol(Component.extend, Decl(intersectionThisTypes.ts, 27, 21))
++>extend : Symbol(extend, Decl(intersectionThisTypes.ts, 27, 21))
+ >tag : Symbol(tag, Decl(intersectionThisTypes.ts, 36, 54))
+ 
+     extended.id;  // Ok

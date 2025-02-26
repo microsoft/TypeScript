@@ -1,0 +1,21 @@
+--- old.unusedTypeParameters_templateTag2.symbols
++++ new.unusedTypeParameters_templateTag2.symbols
+@@= skipped -10, +10 lines =@@
+     constructor() {
+         /** @type {T} */
+         this.p;
+->this.p : Symbol(C1.p, Decl(a.js, 5, 19))
+ >this : Symbol(C1, Decl(a.js, 0, 0))
+->p : Symbol(C1.p, Decl(a.js, 5, 19))
+     }
+ }
+ 
+@@= skipped -24, +22 lines =@@
+     constructor() {
+         /** @type {T} */
+         this.p;
+->this.p : Symbol(C3.p, Decl(a.js, 22, 19))
+ >this : Symbol(C3, Decl(a.js, 16, 1))
+->p : Symbol(C3.p, Decl(a.js, 22, 19))
+     }
+ }

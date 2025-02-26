@@ -1,0 +1,14 @@
+--- old.letShadowedByNameInNestedScope.symbols
++++ new.letShadowedByNameInNestedScope.symbols
+@@= skipped -14, +14 lines =@@
+ >_x : Symbol(_x, Decl(letShadowedByNameInNestedScope.ts, 4, 11))
+ 
+         console.log(x);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >x : Symbol(x, Decl(letShadowedByNameInNestedScope.ts, 2, 7))
+ 
+     })();

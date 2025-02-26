@@ -1,0 +1,20 @@
+--- old.declarationEmitClassAccessorsJs1.symbols
++++ new.declarationEmitClassAccessorsJs1.symbols
+@@= skipped -9, +9 lines =@@
+    * @returns {string}
+    */
+   get path() {
+->path : Symbol(VFile.path, Decl(index.js, 2, 20), Decl(index.js, 8, 3))
++>path : Symbol(path, Decl(index.js, 2, 20), Decl(index.js, 8, 3))
+ 
+     return ''
+   }
+@@= skipped -9, +9 lines =@@
+    * @param {URL | string} path
+    */
+   set path(path) {
+->path : Symbol(VFile.path, Decl(index.js, 2, 20), Decl(index.js, 8, 3))
++>path : Symbol(path, Decl(index.js, 2, 20), Decl(index.js, 8, 3))
+ >path : Symbol(path, Decl(index.js, 13, 11))
+   }
+ }

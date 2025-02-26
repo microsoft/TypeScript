@@ -1,0 +1,11 @@
+--- old.parserStatementIsNotAMemberVariableDeclaration1.symbols
++++ new.parserStatementIsNotAMemberVariableDeclaration1.symbols
+@@= skipped -3, +3 lines =@@
+ return {
+ 
+   "set": function (key, value) {
+->"set" : Symbol("set", Decl(parserStatementIsNotAMemberVariableDeclaration1.ts, 0, 8))
++>"set" : Symbol(set, Decl(parserStatementIsNotAMemberVariableDeclaration1.ts, 0, 8))
+ >key : Symbol(key, Decl(parserStatementIsNotAMemberVariableDeclaration1.ts, 2, 19))
+ >value : Symbol(value, Decl(parserStatementIsNotAMemberVariableDeclaration1.ts, 2, 23))
+ 

@@ -1,0 +1,57 @@
+--- old.inferrenceInfiniteLoopWithSubtyping.symbols
++++ new.inferrenceInfiniteLoopWithSubtyping.symbols
+@@= skipped -24, +24 lines =@@
+ >EnumTypeComposer : Symbol(EnumTypeComposer, Decl(graphql-compose.d.ts, 3, 100))
+ 
+   public setFields(fields: { [name: string]: { [key: string]: any } }): this;
+->setFields : Symbol(EnumTypeComposer.setFields, Decl(graphql-compose.d.ts, 5, 31))
++>setFields : Symbol(setFields, Decl(graphql-compose.d.ts, 5, 31))
+ >fields : Symbol(fields, Decl(graphql-compose.d.ts, 6, 19))
+ >name : Symbol(name, Decl(graphql-compose.d.ts, 6, 30))
+ >key : Symbol(key, Decl(graphql-compose.d.ts, 6, 48))
+@@= skipped -12, +12 lines =@@
+ >TContext : Symbol(TContext, Decl(graphql-compose.d.ts, 9, 40))
+ 
+   public setFields(fields: ObjMapReadOnly<Resolver>): this;
+->setFields : Symbol(ObjectTypeComposer.setFields, Decl(graphql-compose.d.ts, 9, 52))
++>setFields : Symbol(setFields, Decl(graphql-compose.d.ts, 9, 52))
+ >fields : Symbol(fields, Decl(graphql-compose.d.ts, 10, 19))
+ >ObjMapReadOnly : Symbol(ObjMapReadOnly, Decl(graphql-compose.d.ts, 0, 0))
+ >Resolver : Symbol(Resolver, Decl(graphql-compose.d.ts, 13, 1))
+ 
+   public addResolver<TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition> }): this;
+->addResolver : Symbol(ObjectTypeComposer.addResolver, Decl(graphql-compose.d.ts, 10, 59))
++>addResolver : Symbol(addResolver, Decl(graphql-compose.d.ts, 10, 59))
+ >TResolverSource : Symbol(TResolverSource, Decl(graphql-compose.d.ts, 12, 21))
+ >opts : Symbol(opts, Decl(graphql-compose.d.ts, 12, 38))
+ >type : Symbol(type, Decl(graphql-compose.d.ts, 12, 45))
+@@= skipped -18, +18 lines =@@
+ >Resolver : Symbol(Resolver, Decl(graphql-compose.d.ts, 13, 1))
+ 
+   public wrapArgs<NewContext>(
+->wrapArgs : Symbol(Resolver.wrapArgs, Decl(graphql-compose.d.ts, 15, 23))
++>wrapArgs : Symbol(wrapArgs, Decl(graphql-compose.d.ts, 15, 23))
+ >NewContext : Symbol(NewContext, Decl(graphql-compose.d.ts, 16, 18))
+ 
+     cb: () => {
+@@= skipped -15, +15 lines =@@
+   ): void;
+ 
+   public wrapType(cb: () => ComposeOutputTypeDefinition): void;
+->wrapType : Symbol(Resolver.wrapType, Decl(graphql-compose.d.ts, 20, 10))
++>wrapType : Symbol(wrapType, Decl(graphql-compose.d.ts, 20, 10))
+ >cb : Symbol(cb, Decl(graphql-compose.d.ts, 22, 18))
+ >ComposeOutputTypeDefinition : Symbol(ComposeOutputTypeDefinition, Decl(graphql-compose.d.ts, 1, 37))
+ }
+@@= skipped -15, +15 lines =@@
+ >ObjectTypeComposer : Symbol(ObjectTypeComposer, Decl(app.ts, 0, 8))
+ 
+ User.addResolver({
+->User.addResolver : Symbol(ObjectTypeComposer.addResolver, Decl(graphql-compose.d.ts, 10, 59))
++>User.addResolver : Symbol(addResolver, Decl(graphql-compose.d.ts, 10, 59))
+ >User : Symbol(User, Decl(app.ts, 2, 13))
+->addResolver : Symbol(ObjectTypeComposer.addResolver, Decl(graphql-compose.d.ts, 10, 59))
++>addResolver : Symbol(addResolver, Decl(graphql-compose.d.ts, 10, 59))
+ 
+   type: User, // `User as any` fix the problem
+ >type : Symbol(type, Decl(app.ts, 4, 18))

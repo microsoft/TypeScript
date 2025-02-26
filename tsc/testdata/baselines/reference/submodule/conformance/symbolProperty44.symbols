@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty44.ts] ////
+
+=== symbolProperty44.ts ===
+class C {
+>C : Symbol(C, Decl(symbolProperty44.ts, 0, 0))
+
+    get [Symbol.hasInstance]() {
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(symbolProperty44.ts, 0, 9))
+
+        return "";
+    }
+    get [Symbol.hasInstance]() {
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(symbolProperty44.ts, 3, 5))
+
+        return "";
+    }
+}

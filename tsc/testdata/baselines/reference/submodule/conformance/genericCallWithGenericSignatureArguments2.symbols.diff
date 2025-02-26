@@ -1,0 +1,76 @@
+--- old.genericCallWithGenericSignatureArguments2.symbols
++++ new.genericCallWithGenericSignatureArguments2.symbols
+@@= skipped -114, +114 lines =@@
+ 
+     enum E { A }
+ >E : Symbol(E, Decl(genericCallWithGenericSignatureArguments2.ts, 26, 5))
+->A : Symbol(E.A, Decl(genericCallWithGenericSignatureArguments2.ts, 28, 12))
++>A : Symbol(A, Decl(genericCallWithGenericSignatureArguments2.ts, 28, 12))
+ 
+     enum F { A }
+ >F : Symbol(F, Decl(genericCallWithGenericSignatureArguments2.ts, 28, 16))
+->A : Symbol(F.A, Decl(genericCallWithGenericSignatureArguments2.ts, 29, 12))
++>A : Symbol(A, Decl(genericCallWithGenericSignatureArguments2.ts, 29, 12))
+ 
+     function foo3<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
+ >foo3 : Symbol(foo3, Decl(genericCallWithGenericSignatureArguments2.ts, 29, 16))
+@@= skipped -33, +33 lines =@@
+     var r7 = foo3(E.A, (x) => E.A, (x) => F.A); // error
+ >r7 : Symbol(r7, Decl(genericCallWithGenericSignatureArguments2.ts, 36, 7))
+ >foo3 : Symbol(foo3, Decl(genericCallWithGenericSignatureArguments2.ts, 29, 16))
+->E.A : Symbol(E.A, Decl(genericCallWithGenericSignatureArguments2.ts, 28, 12))
++>E.A : Symbol(A, Decl(genericCallWithGenericSignatureArguments2.ts, 28, 12))
+ >E : Symbol(E, Decl(genericCallWithGenericSignatureArguments2.ts, 26, 5))
+->A : Symbol(E.A, Decl(genericCallWithGenericSignatureArguments2.ts, 28, 12))
++>A : Symbol(A, Decl(genericCallWithGenericSignatureArguments2.ts, 28, 12))
+ >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 36, 24))
+->E.A : Symbol(E.A, Decl(genericCallWithGenericSignatureArguments2.ts, 28, 12))
++>E.A : Symbol(A, Decl(genericCallWithGenericSignatureArguments2.ts, 28, 12))
+ >E : Symbol(E, Decl(genericCallWithGenericSignatureArguments2.ts, 26, 5))
+->A : Symbol(E.A, Decl(genericCallWithGenericSignatureArguments2.ts, 28, 12))
++>A : Symbol(A, Decl(genericCallWithGenericSignatureArguments2.ts, 28, 12))
+ >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 36, 36))
+->F.A : Symbol(F.A, Decl(genericCallWithGenericSignatureArguments2.ts, 29, 12))
++>F.A : Symbol(A, Decl(genericCallWithGenericSignatureArguments2.ts, 29, 12))
+ >F : Symbol(F, Decl(genericCallWithGenericSignatureArguments2.ts, 28, 16))
+->A : Symbol(F.A, Decl(genericCallWithGenericSignatureArguments2.ts, 29, 12))
++>A : Symbol(A, Decl(genericCallWithGenericSignatureArguments2.ts, 29, 12))
+ }
+ 
+ module TU {
+@@= skipped -126, +126 lines =@@
+ 
+     enum E { A }
+ >E : Symbol(E, Decl(genericCallWithGenericSignatureArguments2.ts, 61, 5))
+->A : Symbol(E.A, Decl(genericCallWithGenericSignatureArguments2.ts, 63, 12))
++>A : Symbol(A, Decl(genericCallWithGenericSignatureArguments2.ts, 63, 12))
+ 
+     enum F { A }
+ >F : Symbol(F, Decl(genericCallWithGenericSignatureArguments2.ts, 63, 16))
+->A : Symbol(F.A, Decl(genericCallWithGenericSignatureArguments2.ts, 64, 12))
++>A : Symbol(A, Decl(genericCallWithGenericSignatureArguments2.ts, 64, 12))
+ 
+     function foo3<T>(x: T, a: (x: T) => T, b: (x: U) => U) {
+ >foo3 : Symbol(foo3, Decl(genericCallWithGenericSignatureArguments2.ts, 64, 16))
+@@= skipped -33, +33 lines =@@
+     var r7 = foo3(E.A, (x) => E.A, (x) => F.A);
+ >r7 : Symbol(r7, Decl(genericCallWithGenericSignatureArguments2.ts, 71, 7))
+ >foo3 : Symbol(foo3, Decl(genericCallWithGenericSignatureArguments2.ts, 64, 16))
+->E.A : Symbol(E.A, Decl(genericCallWithGenericSignatureArguments2.ts, 63, 12))
++>E.A : Symbol(A, Decl(genericCallWithGenericSignatureArguments2.ts, 63, 12))
+ >E : Symbol(E, Decl(genericCallWithGenericSignatureArguments2.ts, 61, 5))
+->A : Symbol(E.A, Decl(genericCallWithGenericSignatureArguments2.ts, 63, 12))
++>A : Symbol(A, Decl(genericCallWithGenericSignatureArguments2.ts, 63, 12))
+ >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 71, 24))
+->E.A : Symbol(E.A, Decl(genericCallWithGenericSignatureArguments2.ts, 63, 12))
++>E.A : Symbol(A, Decl(genericCallWithGenericSignatureArguments2.ts, 63, 12))
+ >E : Symbol(E, Decl(genericCallWithGenericSignatureArguments2.ts, 61, 5))
+->A : Symbol(E.A, Decl(genericCallWithGenericSignatureArguments2.ts, 63, 12))
++>A : Symbol(A, Decl(genericCallWithGenericSignatureArguments2.ts, 63, 12))
+ >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 71, 36))
+->F.A : Symbol(F.A, Decl(genericCallWithGenericSignatureArguments2.ts, 64, 12))
++>F.A : Symbol(A, Decl(genericCallWithGenericSignatureArguments2.ts, 64, 12))
+ >F : Symbol(F, Decl(genericCallWithGenericSignatureArguments2.ts, 63, 16))
+->A : Symbol(F.A, Decl(genericCallWithGenericSignatureArguments2.ts, 64, 12))
++>A : Symbol(A, Decl(genericCallWithGenericSignatureArguments2.ts, 64, 12))
+ }

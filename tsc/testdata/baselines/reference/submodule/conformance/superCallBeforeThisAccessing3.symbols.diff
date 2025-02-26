@@ -1,0 +1,30 @@
+--- old.superCallBeforeThisAccessing3.symbols
++++ new.superCallBeforeThisAccessing3.symbols
+@@= skipped -11, +11 lines =@@
+ >Base : Symbol(Base, Decl(superCallBeforeThisAccessing3.ts, 0, 0))
+ 
+     private _t;
+->_t : Symbol(D._t, Decl(superCallBeforeThisAccessing3.ts, 3, 22))
++>_t : Symbol(_t, Decl(superCallBeforeThisAccessing3.ts, 3, 22))
+ 
+     constructor() {
+         let x = () => { this._t };
+ >x : Symbol(x, Decl(superCallBeforeThisAccessing3.ts, 6, 11))
+->this._t : Symbol(D._t, Decl(superCallBeforeThisAccessing3.ts, 3, 22))
++>this._t : Symbol(_t, Decl(superCallBeforeThisAccessing3.ts, 3, 22))
+ >this : Symbol(D, Decl(superCallBeforeThisAccessing3.ts, 2, 1))
+->_t : Symbol(D._t, Decl(superCallBeforeThisAccessing3.ts, 3, 22))
++>_t : Symbol(_t, Decl(superCallBeforeThisAccessing3.ts, 3, 22))
+ 
+         x();  // no error; we only check super is called before this when the container is a constructor
+ >x : Symbol(x, Decl(superCallBeforeThisAccessing3.ts, 6, 11))
+ 
+         this._t;  // error
+->this._t : Symbol(D._t, Decl(superCallBeforeThisAccessing3.ts, 3, 22))
++>this._t : Symbol(_t, Decl(superCallBeforeThisAccessing3.ts, 3, 22))
+ >this : Symbol(D, Decl(superCallBeforeThisAccessing3.ts, 2, 1))
+->_t : Symbol(D._t, Decl(superCallBeforeThisAccessing3.ts, 3, 22))
++>_t : Symbol(_t, Decl(superCallBeforeThisAccessing3.ts, 3, 22))
+ 
+         super(undefined);
+ >super : Symbol(Base, Decl(superCallBeforeThisAccessing3.ts, 0, 0))

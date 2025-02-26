@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionPrototypeStatic.ts] ////
+
+=== source.js ===
+module.exports = MyClass;
+>MyClass : Symbol(MyClass, Decl(source.js, 0, 25))
+
+function MyClass() {}
+>MyClass : Symbol(MyClass, Decl(source.js, 0, 25))
+
+MyClass.staticMethod = function() {}
+>MyClass.staticMethod : Symbol(staticMethod, Decl(source.js, 2, 21))
+>MyClass : Symbol(MyClass, Decl(source.js, 0, 25))
+>staticMethod : Symbol(staticMethod, Decl(source.js, 2, 21))
+
+MyClass.prototype.method = function() {}
+>MyClass.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>MyClass : Symbol(MyClass, Decl(source.js, 0, 25))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+
+MyClass.staticProperty = 123;
+>MyClass.staticProperty : Symbol(staticProperty, Decl(source.js, 4, 40))
+>MyClass : Symbol(MyClass, Decl(source.js, 0, 25))
+>staticProperty : Symbol(staticProperty, Decl(source.js, 4, 40))
+
+/**
+ * Callback to be invoked when test execution is complete.
+ *
+ * @callback DoneCB
+ * @param {number} failures - Number of failures that occurred.
+ */

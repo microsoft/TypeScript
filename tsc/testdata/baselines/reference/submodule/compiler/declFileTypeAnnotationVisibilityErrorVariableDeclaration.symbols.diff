@@ -1,0 +1,32 @@
+--- old.declFileTypeAnnotationVisibilityErrorVariableDeclaration.symbols
++++ new.declFileTypeAnnotationVisibilityErrorVariableDeclaration.symbols
+@@= skipped -55, +55 lines =@@
+     var x3: m2.public2;
+ >x3 : Symbol(x3, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 25, 7))
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 18, 34))
+->public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 20, 15))
++>public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 20, 15))
+ 
+     var y3 = new m2.public2();
+ >y3 : Symbol(y3, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 26, 7))
+->m2.public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 20, 15))
++>m2.public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 20, 15))
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 18, 34))
+->public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 20, 15))
++>public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 20, 15))
+ 
+     export var k3: m2.public2;
+ >k3 : Symbol(k3, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 28, 14))
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 18, 34))
+->public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 20, 15))
++>public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 20, 15))
+ 
+     export var l3 = new m2.public2();
+ >l3 : Symbol(l3, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 29, 14))
+->m2.public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 20, 15))
++>m2.public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 20, 15))
+ >m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 18, 34))
+->public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 20, 15))
++>public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts, 20, 15))
+ }
+ 

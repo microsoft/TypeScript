@@ -1,0 +1,163 @@
+//// [tests/cases/compiler/parameterPropertyInConstructorWithPrologues.ts] ////
+
+=== parameterPropertyInConstructorWithPrologues.ts ===
+// https://github.com/microsoft/TypeScript/issues/48671
+
+class C {}
+>C : Symbol(C, Decl(parameterPropertyInConstructorWithPrologues.ts, 0, 0))
+
+class Foo1 {
+>Foo1 : Symbol(Foo1, Decl(parameterPropertyInConstructorWithPrologues.ts, 2, 10))
+
+  constructor(private A: string) {
+>A : Symbol(A, Decl(parameterPropertyInConstructorWithPrologues.ts, 5, 14))
+
+    "ngInject1";
+  }
+}
+
+class Foo2 {
+>Foo2 : Symbol(Foo2, Decl(parameterPropertyInConstructorWithPrologues.ts, 8, 1))
+
+  constructor(private A: string, private B: string) {
+>A : Symbol(A, Decl(parameterPropertyInConstructorWithPrologues.ts, 11, 14))
+>B : Symbol(B, Decl(parameterPropertyInConstructorWithPrologues.ts, 11, 32))
+
+    "ngInject1";
+    "ngInject2";
+  }
+}
+
+class Foo3 {
+>Foo3 : Symbol(Foo3, Decl(parameterPropertyInConstructorWithPrologues.ts, 15, 1))
+
+  constructor(private A: string, private B: string, private C: string) {
+>A : Symbol(A, Decl(parameterPropertyInConstructorWithPrologues.ts, 18, 14))
+>B : Symbol(B, Decl(parameterPropertyInConstructorWithPrologues.ts, 18, 32))
+>C : Symbol(C, Decl(parameterPropertyInConstructorWithPrologues.ts, 18, 51))
+
+    "ngInject1";
+    "ngInject2";
+  }
+}
+
+class Foo4 {
+>Foo4 : Symbol(Foo4, Decl(parameterPropertyInConstructorWithPrologues.ts, 22, 1))
+
+  constructor(private A: string) {
+>A : Symbol(A, Decl(parameterPropertyInConstructorWithPrologues.ts, 25, 14))
+
+    "ngInject1";
+    console.log("hi");
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+  }
+}
+
+class Foo5 {
+>Foo5 : Symbol(Foo5, Decl(parameterPropertyInConstructorWithPrologues.ts, 29, 1))
+
+  constructor(private A: string, private B: string) {
+>A : Symbol(A, Decl(parameterPropertyInConstructorWithPrologues.ts, 32, 14))
+>B : Symbol(B, Decl(parameterPropertyInConstructorWithPrologues.ts, 32, 32))
+
+    "ngInject1";
+    "ngInject2";
+    console.log("hi");
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+  }
+}
+
+class Foo6 {
+>Foo6 : Symbol(Foo6, Decl(parameterPropertyInConstructorWithPrologues.ts, 37, 1))
+
+  constructor(private A: string, private B: string, private C: string) {
+>A : Symbol(A, Decl(parameterPropertyInConstructorWithPrologues.ts, 40, 14))
+>B : Symbol(B, Decl(parameterPropertyInConstructorWithPrologues.ts, 40, 32))
+>C : Symbol(C, Decl(parameterPropertyInConstructorWithPrologues.ts, 40, 51))
+
+    "ngInject1";
+    "ngInject2";
+    console.log("hi");
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+  }
+}
+
+class Foo7 extends C {
+>Foo7 : Symbol(Foo7, Decl(parameterPropertyInConstructorWithPrologues.ts, 45, 1))
+>C : Symbol(C, Decl(parameterPropertyInConstructorWithPrologues.ts, 0, 0))
+
+  constructor(
+    private member: boolean,
+>member : Symbol(member, Decl(parameterPropertyInConstructorWithPrologues.ts, 48, 14))
+
+  ) {
+    "ngInject1";
+    super();
+>super : Symbol(C, Decl(parameterPropertyInConstructorWithPrologues.ts, 0, 0))
+
+    console.log("hi");
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+  }
+}
+
+class Foo8 extends C {
+>Foo8 : Symbol(Foo8, Decl(parameterPropertyInConstructorWithPrologues.ts, 55, 1))
+>C : Symbol(C, Decl(parameterPropertyInConstructorWithPrologues.ts, 0, 0))
+
+  constructor(
+    private member: boolean,
+>member : Symbol(member, Decl(parameterPropertyInConstructorWithPrologues.ts, 58, 14))
+
+  ) {
+    "ngInject1";
+    super();
+>super : Symbol(C, Decl(parameterPropertyInConstructorWithPrologues.ts, 0, 0))
+
+    this.m();
+>this.m : Symbol(m, Decl(parameterPropertyInConstructorWithPrologues.ts, 65, 3))
+>this : Symbol(Foo8, Decl(parameterPropertyInConstructorWithPrologues.ts, 55, 1))
+>m : Symbol(m, Decl(parameterPropertyInConstructorWithPrologues.ts, 65, 3))
+
+    console.log("hi");
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+  }
+
+  m() {}
+>m : Symbol(m, Decl(parameterPropertyInConstructorWithPrologues.ts, 65, 3))
+}
+
+class Foo9 extends C {
+>Foo9 : Symbol(Foo9, Decl(parameterPropertyInConstructorWithPrologues.ts, 68, 1))
+>C : Symbol(C, Decl(parameterPropertyInConstructorWithPrologues.ts, 0, 0))
+
+  constructor() {
+    "ngInject1";
+    "ngInject2";
+    super();
+>super : Symbol(C, Decl(parameterPropertyInConstructorWithPrologues.ts, 0, 0))
+
+    this.m();
+>this.m : Symbol(m, Decl(parameterPropertyInConstructorWithPrologues.ts, 77, 3))
+>this : Symbol(Foo9, Decl(parameterPropertyInConstructorWithPrologues.ts, 68, 1))
+>m : Symbol(m, Decl(parameterPropertyInConstructorWithPrologues.ts, 77, 3))
+
+    console.log("hi");
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+  }
+
+  m() {}
+>m : Symbol(m, Decl(parameterPropertyInConstructorWithPrologues.ts, 77, 3))
+}
+

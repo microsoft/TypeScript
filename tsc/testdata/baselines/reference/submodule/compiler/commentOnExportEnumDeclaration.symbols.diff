@@ -1,0 +1,13 @@
+--- old.commentOnExportEnumDeclaration.symbols
++++ new.commentOnExportEnumDeclaration.symbols
+@@= skipped -7, +7 lines =@@
+ >Color : Symbol(Color, Decl(commentOnExportEnumDeclaration.ts, 0, 0))
+ 
+     r, g, b
+->r : Symbol(Color.r, Decl(commentOnExportEnumDeclaration.ts, 3, 19))
+->g : Symbol(Color.g, Decl(commentOnExportEnumDeclaration.ts, 4, 6))
+->b : Symbol(Color.b, Decl(commentOnExportEnumDeclaration.ts, 4, 9))
++>r : Symbol(r, Decl(commentOnExportEnumDeclaration.ts, 3, 19))
++>g : Symbol(g, Decl(commentOnExportEnumDeclaration.ts, 4, 6))
++>b : Symbol(b, Decl(commentOnExportEnumDeclaration.ts, 4, 9))
+ }

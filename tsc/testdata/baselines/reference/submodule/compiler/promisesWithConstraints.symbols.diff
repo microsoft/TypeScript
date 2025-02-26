@@ -1,0 +1,36 @@
+--- old.promisesWithConstraints.symbols
++++ new.promisesWithConstraints.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 18))
+ 
+     then<U>(cb: (x: T) => Promise<U>): Promise<U>;
+->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 22))
++>then : Symbol(then, Decl(lib.es5.d.ts, --, --), Decl(promisesWithConstraints.ts, 0, 22))
+ >U : Symbol(U, Decl(promisesWithConstraints.ts, 1, 9))
+ >cb : Symbol(cb, Decl(promisesWithConstraints.ts, 1, 12))
+ >x : Symbol(x, Decl(promisesWithConstraints.ts, 1, 17))
+@@= skipped -17, +17 lines =@@
+ >x : Symbol(x, Decl(promisesWithConstraints.ts, 4, 30))
+ 
+     then<U extends { x: any; }>(cb: (x: T) => Promise<U>): Promise<U>;
+->then : Symbol(CPromise.then, Decl(promisesWithConstraints.ts, 4, 43))
++>then : Symbol(then, Decl(promisesWithConstraints.ts, 4, 43))
+ >U : Symbol(U, Decl(promisesWithConstraints.ts, 5, 9))
+ >x : Symbol(x, Decl(promisesWithConstraints.ts, 5, 20))
+ >cb : Symbol(cb, Decl(promisesWithConstraints.ts, 5, 32))
+@@= skipped -14, +14 lines =@@
+ 
+ interface Foo { x; }
+ >Foo : Symbol(Foo, Decl(promisesWithConstraints.ts, 6, 1))
+->x : Symbol(Foo.x, Decl(promisesWithConstraints.ts, 8, 15))
++>x : Symbol(x, Decl(promisesWithConstraints.ts, 8, 15))
+ 
+ interface Bar { x; y; }
+ >Bar : Symbol(Bar, Decl(promisesWithConstraints.ts, 8, 20))
+->x : Symbol(Bar.x, Decl(promisesWithConstraints.ts, 9, 15))
+->y : Symbol(Bar.y, Decl(promisesWithConstraints.ts, 9, 18))
++>x : Symbol(x, Decl(promisesWithConstraints.ts, 9, 15))
++>y : Symbol(y, Decl(promisesWithConstraints.ts, 9, 18))
+ 
+ var a: Promise<Foo>;
+ >a : Symbol(a, Decl(promisesWithConstraints.ts, 11, 3))

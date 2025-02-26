@@ -1,0 +1,11 @@
+--- old.narrowingDestructuring.symbols
++++ new.narrowingDestructuring.symbols
+@@= skipped -139, +139 lines =@@
+ 
+     if (typeof x[0] === 'number') {
+ >x : Symbol(x, Decl(narrowingDestructuring.ts, 33, 77))
+->0 : Symbol(0)
++>0 : Symbol("0")
+ 
+         const [head, ...tail] = x;
+ >head : Symbol(head, Decl(narrowingDestructuring.ts, 36, 15))

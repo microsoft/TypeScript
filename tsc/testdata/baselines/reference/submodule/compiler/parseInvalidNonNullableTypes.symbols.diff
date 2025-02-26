@@ -1,0 +1,23 @@
+--- old.parseInvalidNonNullableTypes.symbols
++++ new.parseInvalidNonNullableTypes.symbols
+@@= skipped -6, +6 lines =@@
+ >a : Symbol(a, Decl(parseInvalidNonNullableTypes.ts, 0, 12))
+ 
+     return true;
++>return : Symbol(return, Decl(parseInvalidNonNullableTypes.ts, 0, 38))
+ }
+ 
+ function f2(a: string): a is !string {
+@@= skipped -13, +14 lines =@@
+ function f3(a: string!) {}
+ >f3 : Symbol(f3, Decl(parseInvalidNonNullableTypes.ts, 6, 1))
+ >a : Symbol(a, Decl(parseInvalidNonNullableTypes.ts, 8, 12))
++> : Symbol(, Decl(parseInvalidNonNullableTypes.ts, 8, 21))
+ 
+ function f4(a: number!) {}
+ >f4 : Symbol(f4, Decl(parseInvalidNonNullableTypes.ts, 8, 26))
+ >a : Symbol(a, Decl(parseInvalidNonNullableTypes.ts, 9, 12))
++> : Symbol(, Decl(parseInvalidNonNullableTypes.ts, 9, 21))
+ 
+ function f5(a: !string) {}
+ >f5 : Symbol(f5, Decl(parseInvalidNonNullableTypes.ts, 9, 26))

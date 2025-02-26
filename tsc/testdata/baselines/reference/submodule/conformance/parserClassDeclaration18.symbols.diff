@@ -1,0 +1,9 @@
+--- old.parserClassDeclaration18.symbols
++++ new.parserClassDeclaration18.symbols
+@@= skipped -13, +13 lines =@@
+ >x : Symbol(x, Decl(parserClassDeclaration18.ts, 3, 16))
+     }
+     bar1():void;
+->bar1 : Symbol(FooBase.bar1, Decl(parserClassDeclaration18.ts, 4, 5))
++>bar1 : Symbol(bar1, Decl(parserClassDeclaration18.ts, 4, 5))
+ }

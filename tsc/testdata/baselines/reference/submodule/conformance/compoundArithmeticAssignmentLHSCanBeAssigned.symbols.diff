@@ -1,0 +1,15 @@
+--- old.compoundArithmeticAssignmentLHSCanBeAssigned.symbols
++++ new.compoundArithmeticAssignmentLHSCanBeAssigned.symbols
+@@= skipped -2, +2 lines =@@
+ === compoundArithmeticAssignmentLHSCanBeAssigned.ts ===
+ enum E { a, b, c }
+ >E : Symbol(E, Decl(compoundArithmeticAssignmentLHSCanBeAssigned.ts, 0, 0))
+->a : Symbol(E.a, Decl(compoundArithmeticAssignmentLHSCanBeAssigned.ts, 0, 8))
+->b : Symbol(E.b, Decl(compoundArithmeticAssignmentLHSCanBeAssigned.ts, 0, 11))
+->c : Symbol(E.c, Decl(compoundArithmeticAssignmentLHSCanBeAssigned.ts, 0, 14))
++>a : Symbol(a, Decl(compoundArithmeticAssignmentLHSCanBeAssigned.ts, 0, 8))
++>b : Symbol(b, Decl(compoundArithmeticAssignmentLHSCanBeAssigned.ts, 0, 11))
++>c : Symbol(c, Decl(compoundArithmeticAssignmentLHSCanBeAssigned.ts, 0, 14))
+ 
+ var a: any;
+ >a : Symbol(a, Decl(compoundArithmeticAssignmentLHSCanBeAssigned.ts, 2, 3))

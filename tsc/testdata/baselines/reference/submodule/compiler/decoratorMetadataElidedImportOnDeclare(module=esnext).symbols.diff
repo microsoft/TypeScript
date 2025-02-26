@@ -1,0 +1,11 @@
+--- old.decoratorMetadataElidedImportOnDeclare(module=esnext).symbols
++++ new.decoratorMetadataElidedImportOnDeclare(module=esnext).symbols
+@@= skipped -20, +20 lines =@@
+ >whatever : Symbol(whatever, Decl(index.ts, 0, 42))
+ 
+     declare prop: Observable<string>;
+->prop : Symbol(Test.prop, Decl(index.ts, 4, 12))
++>prop : Symbol(prop, Decl(index.ts, 4, 12))
+ >Observable : Symbol(Observable, Decl(index.ts, 0, 8))
+ }
+ 

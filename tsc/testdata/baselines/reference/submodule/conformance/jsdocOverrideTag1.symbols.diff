@@ -1,0 +1,58 @@
+--- old.jsdocOverrideTag1.symbols
++++ new.jsdocOverrideTag1.symbols
+@@= skipped -9, +9 lines =@@
+      * @returns {boolean}
+      */
+     foo (a) {
+->foo : Symbol(A.foo, Decl(0.js, 0, 9))
++>foo : Symbol(foo, Decl(0.js, 0, 9))
+ >a : Symbol(a, Decl(0.js, 7, 9))
+ 
+         return typeof a === 'string'
+ >a : Symbol(a, Decl(0.js, 7, 9))
+     }
+     bar () {
+->bar : Symbol(A.bar, Decl(0.js, 9, 5))
++>bar : Symbol(bar, Decl(0.js, 9, 5))
+ 
+     }
+ }
+@@= skipped -23, +23 lines =@@
+      * @returns {boolean}
+      */
+     foo (a) {
+->foo : Symbol(B.foo, Decl(0.js, 15, 19))
++>foo : Symbol(foo, Decl(0.js, 15, 19))
+ >a : Symbol(a, Decl(0.js, 22, 9))
+ 
+         return super.foo(a)
+->super.foo : Symbol(A.foo, Decl(0.js, 0, 9))
++>super.foo : Symbol(foo, Decl(0.js, 0, 9))
+ >super : Symbol(A, Decl(0.js, 0, 0))
+->foo : Symbol(A.foo, Decl(0.js, 0, 9))
++>foo : Symbol(foo, Decl(0.js, 0, 9))
+ >a : Symbol(a, Decl(0.js, 22, 9))
+     }
+ 
+     bar () {
+->bar : Symbol(B.bar, Decl(0.js, 24, 5))
++>bar : Symbol(bar, Decl(0.js, 24, 5))
+ 
+     }
+ 
+     /** @override */
+     baz () {
+->baz : Symbol(B.baz, Decl(0.js, 28, 5))
++>baz : Symbol(baz, Decl(0.js, 28, 5))
+ 
+     }
+ }
+@@= skipped -28, +28 lines =@@
+ 
+     /** @override */
+     foo () {
+->foo : Symbol(C.foo, Decl(0.js, 37, 9))
++>foo : Symbol(foo, Decl(0.js, 37, 9))
+ 
+     }
+ }

@@ -1,0 +1,11 @@
+--- old.typeGuardOfFormTypeOfString.symbols
++++ new.typeGuardOfFormTypeOfString.symbols
+@@= skipped -2, +2 lines =@@
+ === typeGuardOfFormTypeOfString.ts ===
+ class C { private p: string };
+ >C : Symbol(C, Decl(typeGuardOfFormTypeOfString.ts, 0, 0))
+->p : Symbol(C.p, Decl(typeGuardOfFormTypeOfString.ts, 0, 9))
++>p : Symbol(p, Decl(typeGuardOfFormTypeOfString.ts, 0, 9))
+ 
+ var str: string;
+ >str : Symbol(str, Decl(typeGuardOfFormTypeOfString.ts, 2, 3))

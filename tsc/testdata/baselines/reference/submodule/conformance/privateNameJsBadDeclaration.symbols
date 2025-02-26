@@ -1,0 +1,45 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameJsBadDeclaration.ts] ////
+
+=== privateNameJsPrototype.js ===
+function A() { }
+>A : Symbol(A, Decl(privateNameJsPrototype.js, 0, 0))
+
+A.prototype = {
+>A.prototype : Symbol(prototype, Decl(privateNameJsPrototype.js, 0, 16))
+>A : Symbol(A, Decl(privateNameJsPrototype.js, 0, 0))
+>prototype : Symbol(prototype, Decl(privateNameJsPrototype.js, 0, 16))
+
+  #x: 1,         // Error
+>#x : Symbol(#x, Decl(privateNameJsPrototype.js, 1, 15))
+
+  #m() {},       // Error
+>#m : Symbol(#m, Decl(privateNameJsPrototype.js, 2, 8))
+
+  get #p() { return "" } // Error
+>#p : Symbol(#p, Decl(privateNameJsPrototype.js, 3, 10))
+}
+class B { }
+>B : Symbol(B, Decl(privateNameJsPrototype.js, 5, 1))
+
+B.prototype = {
+>B.prototype : Symbol(prototype)
+>B : Symbol(B, Decl(privateNameJsPrototype.js, 5, 1))
+>prototype : Symbol(prototype)
+
+  #y: 2,         // Error
+>#y : Symbol(#y, Decl(privateNameJsPrototype.js, 7, 15))
+
+  #m() {},       // Error
+>#m : Symbol(#m, Decl(privateNameJsPrototype.js, 8, 8))
+
+  get #p() { return "" } // Error
+>#p : Symbol(#p, Decl(privateNameJsPrototype.js, 9, 10))
+}
+class C {
+>C : Symbol(C, Decl(privateNameJsPrototype.js, 11, 1))
+
+  constructor() {
+    this.#z = 3;
+>this : Symbol(C, Decl(privateNameJsPrototype.js, 11, 1))
+  }
+}

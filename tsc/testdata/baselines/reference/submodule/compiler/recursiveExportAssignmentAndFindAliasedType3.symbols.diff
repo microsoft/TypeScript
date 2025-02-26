@@ -1,0 +1,13 @@
+--- old.recursiveExportAssignmentAndFindAliasedType3.symbols
++++ new.recursiveExportAssignmentAndFindAliasedType3.symbols
+@@= skipped -40, +40 lines =@@
+ >self : Symbol(self, Decl(recursiveExportAssignmentAndFindAliasedType3_moduleDef.d.ts, 8, 26))
+ }
+ 
+-=== recursiveExportAssignmentAndFindAliasedType3_moduleB.ts ===
+-class ClassB { }
+->ClassB : Symbol(ClassB, Decl(recursiveExportAssignmentAndFindAliasedType3_moduleB.ts, 0, 0))
+-
+-export = ClassB;
+->ClassB : Symbol(ClassB, Decl(recursiveExportAssignmentAndFindAliasedType3_moduleB.ts, 0, 0))
+-

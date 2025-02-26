@@ -1,0 +1,21 @@
+--- old.esDecorators-classDeclaration-commonjs-classNamespaceMerge.symbols
++++ new.esDecorators-classDeclaration-commonjs-classNamespaceMerge.symbols
+@@= skipped -10, +10 lines =@@
+ >Example : Symbol(Example, Decl(esDecorators-classDeclaration-commonjs-classNamespaceMerge.ts, 0, 22), Decl(esDecorators-classDeclaration-commonjs-classNamespaceMerge.ts, 5, 1))
+ 
+     static foo() {}
+->foo : Symbol(Example.foo, Decl(esDecorators-classDeclaration-commonjs-classNamespaceMerge.ts, 3, 22))
++>foo : Symbol(foo, Decl(esDecorators-classDeclaration-commonjs-classNamespaceMerge.ts, 3, 22))
+ }
+ 
+ export namespace Example {
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ Example.foo();
+->Example.foo : Symbol(Example.foo, Decl(esDecorators-classDeclaration-commonjs-classNamespaceMerge.ts, 3, 22))
++>Example.foo : Symbol(foo, Decl(esDecorators-classDeclaration-commonjs-classNamespaceMerge.ts, 3, 22))
+ >Example : Symbol(Example, Decl(esDecorators-classDeclaration-commonjs-classNamespaceMerge.ts, 0, 22), Decl(esDecorators-classDeclaration-commonjs-classNamespaceMerge.ts, 5, 1))
+->foo : Symbol(Example.foo, Decl(esDecorators-classDeclaration-commonjs-classNamespaceMerge.ts, 3, 22))
++>foo : Symbol(foo, Decl(esDecorators-classDeclaration-commonjs-classNamespaceMerge.ts, 3, 22))
+ 

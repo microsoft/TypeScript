@@ -1,0 +1,18 @@
+--- old.jsdocLinkTag7.symbols
++++ new.jsdocLinkTag7.symbols
+@@= skipped -14, +14 lines =@@
+      * {@linkplain this.#c}
+      */
+     a() { }
+->a : Symbol(Foo.a, Decl(a.js, 0, 11))
++>a : Symbol(a, Decl(a.js, 0, 11))
+ 
+     b() { }
+->b : Symbol(Foo.b, Decl(a.js, 11, 11))
++>b : Symbol(b, Decl(a.js, 11, 11))
+ 
+     #c() { }
+->#c : Symbol(Foo.#c, Decl(a.js, 12, 11))
++>#c : Symbol(#c, Decl(a.js, 12, 11))
+ }
+ 

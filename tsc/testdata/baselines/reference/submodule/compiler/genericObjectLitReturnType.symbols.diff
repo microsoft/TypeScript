@@ -1,0 +1,23 @@
+--- old.genericObjectLitReturnType.symbols
++++ new.genericObjectLitReturnType.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(genericObjectLitReturnType.ts, 0, 8))
+ {
+     f(t: T) { return { a: t }; }
+->f : Symbol(X.f, Decl(genericObjectLitReturnType.ts, 1, 1))
++>f : Symbol(f, Decl(genericObjectLitReturnType.ts, 1, 1))
+ >t : Symbol(t, Decl(genericObjectLitReturnType.ts, 2, 6))
+ >T : Symbol(T, Decl(genericObjectLitReturnType.ts, 0, 8))
+ >a : Symbol(a, Decl(genericObjectLitReturnType.ts, 2, 22))
+@@= skipped -14, +14 lines =@@
+ 
+ var t1 = x.f(5);
+ >t1 : Symbol(t1, Decl(genericObjectLitReturnType.ts, 7, 3))
+->x.f : Symbol(X.f, Decl(genericObjectLitReturnType.ts, 1, 1))
++>x.f : Symbol(f, Decl(genericObjectLitReturnType.ts, 1, 1))
+ >x : Symbol(x, Decl(genericObjectLitReturnType.ts, 6, 3))
+->f : Symbol(X.f, Decl(genericObjectLitReturnType.ts, 1, 1))
++>f : Symbol(f, Decl(genericObjectLitReturnType.ts, 1, 1))
+ 
+ t1.a = 5; // Should not error: t1 should have type {a: number}, instead has type {a: T}
+ >t1.a : Symbol(a, Decl(genericObjectLitReturnType.ts, 2, 22))

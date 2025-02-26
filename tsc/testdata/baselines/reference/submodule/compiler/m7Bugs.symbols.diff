@@ -1,0 +1,29 @@
+--- old.m7Bugs.symbols
++++ new.m7Bugs.symbols
+@@= skipped -5, +5 lines =@@
+ >ISomething : Symbol(ISomething, Decl(m7Bugs.ts, 0, 0))
+ 
+    something: number;
+->something : Symbol(ISomething.something, Decl(m7Bugs.ts, 1, 22))
++>something : Symbol(something, Decl(m7Bugs.ts, 1, 22))
+ }
+ 
+ var s: ISomething = <ISomething>({ });
+@@= skipped -12, +12 lines =@@
+ // scenario 2
+ interface A { x: string; }
+ >A : Symbol(A, Decl(m7Bugs.ts, 5, 38))
+->x : Symbol(A.x, Decl(m7Bugs.ts, 9, 13))
++>x : Symbol(x, Decl(m7Bugs.ts, 9, 13))
+ 
+ interface B extends A { }
+ >B : Symbol(B, Decl(m7Bugs.ts, 9, 26))
+@@= skipped -15, +15 lines =@@
+ >C1 : Symbol(C1, Decl(m7Bugs.ts, 13, 18))
+ 
+ 	public x: string;
+->x : Symbol(C1.x, Decl(m7Bugs.ts, 15, 10))
++>x : Symbol(x, Decl(m7Bugs.ts, 15, 10))
+ }
+ 
+ class C2 extends C1 {}

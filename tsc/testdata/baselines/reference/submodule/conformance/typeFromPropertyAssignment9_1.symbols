@@ -1,0 +1,92 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment9_1.ts] ////
+
+=== a.js ===
+var my = my ?? {};
+>my : Symbol(my, Decl(a.js, 0, 3))
+>my : Symbol(my, Decl(a.js, 0, 3))
+
+/** @param {number} n */
+my.method = function(n) {
+>my : Symbol(my, Decl(a.js, 0, 3))
+>n : Symbol(n, Decl(a.js, 2, 21))
+
+    return n + 1;
+>n : Symbol(n, Decl(a.js, 2, 21))
+}
+my.number = 1;
+>my : Symbol(my, Decl(a.js, 0, 3))
+
+my.object = {};
+>my : Symbol(my, Decl(a.js, 0, 3))
+
+my.predicate = my.predicate ?? {};
+>my : Symbol(my, Decl(a.js, 0, 3))
+>my : Symbol(my, Decl(a.js, 0, 3))
+
+my.predicate.query = function () {
+>my : Symbol(my, Decl(a.js, 0, 3))
+
+    var me = this;
+>me : Symbol(me, Decl(a.js, 9, 7))
+
+    me.property = false;
+>me : Symbol(me, Decl(a.js, 9, 7))
+
+};
+var q = new my.predicate.query();
+>q : Symbol(q, Decl(a.js, 12, 3))
+>my : Symbol(my, Decl(a.js, 0, 3))
+
+my.predicate.query.another = function () {
+>my : Symbol(my, Decl(a.js, 0, 3))
+
+    return 1;
+}
+my.predicate.query.result = 'none'
+>my : Symbol(my, Decl(a.js, 0, 3))
+
+/** @param {number} first
+ *  @param {number} second
+ */
+my.predicate.sort = my.predicate.sort ?? function (first, second) {
+>my : Symbol(my, Decl(a.js, 0, 3))
+>my : Symbol(my, Decl(a.js, 0, 3))
+>first : Symbol(first, Decl(a.js, 20, 51))
+>second : Symbol(second, Decl(a.js, 20, 57))
+
+    return first > second ? first : second;
+>first : Symbol(first, Decl(a.js, 20, 51))
+>second : Symbol(second, Decl(a.js, 20, 57))
+>first : Symbol(first, Decl(a.js, 20, 51))
+>second : Symbol(second, Decl(a.js, 20, 57))
+}
+my.predicate.type = class {
+>my : Symbol(my, Decl(a.js, 0, 3))
+
+    m() { return 101; }
+>m : Symbol(m, Decl(a.js, 23, 27))
+}
+
+
+// global-ish prefixes
+var min = window.min ?? {};
+>min : Symbol(min, Decl(a.js, 29, 3))
+>window.min : Symbol(min, Decl(a.js, 29, 3))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>min : Symbol(min, Decl(a.js, 29, 3))
+
+min.nest = this.min.nest ?? function () { };
+>min : Symbol(min, Decl(a.js, 29, 3))
+>this.min : Symbol(min, Decl(a.js, 29, 3))
+>this : Symbol(globalThis)
+>min : Symbol(min, Decl(a.js, 29, 3))
+
+min.nest.other = self.min.nest.other ?? class { };
+>min : Symbol(min, Decl(a.js, 29, 3))
+>self.min : Symbol(min, Decl(a.js, 29, 3))
+>self : Symbol(self, Decl(lib.dom.d.ts, --, --))
+>min : Symbol(min, Decl(a.js, 29, 3))
+
+min.property = global.min.property ?? {};
+>min : Symbol(min, Decl(a.js, 29, 3))
+

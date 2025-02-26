@@ -1,0 +1,110 @@
+--- old.ramdaToolsNoInfinite.symbols
++++ new.ramdaToolsNoInfinite.symbols
+@@= skipped -272, +272 lines =@@
+         T1[Tools.Pos<I>] extends R.Placeholder
+ >T1 : Symbol(T1, Decl(ramdaToolsNoInfinite.ts, 88, 15))
+ >Tools : Symbol(Tools, Decl(ramdaToolsNoInfinite.ts, 0, 0))
+->Pos : Symbol(Tools.Pos, Decl(ramdaToolsNoInfinite.ts, 45, 42))
++>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite.ts, 45, 42))
+ >I : Symbol(I, Decl(ramdaToolsNoInfinite.ts, 88, 68))
+ >R : Symbol(R, Decl(ramdaToolsNoInfinite.ts, 81, 1))
+->Placeholder : Symbol(R.Placeholder, Decl(ramdaToolsNoInfinite.ts, 83, 21))
++>Placeholder : Symbol(Placeholder, Decl(ramdaToolsNoInfinite.ts, 83, 21))
+ 
+         ? Tools.Append<T2[Tools.Pos<I>], TN>
+ >Tools : Symbol(Tools, Decl(ramdaToolsNoInfinite.ts, 0, 0))
+->Append : Symbol(Tools.Append, Decl(ramdaToolsNoInfinite.ts, 75, 74))
++>Append : Symbol(Append, Decl(ramdaToolsNoInfinite.ts, 75, 74))
+ >T2 : Symbol(T2, Decl(ramdaToolsNoInfinite.ts, 88, 32))
+ >Tools : Symbol(Tools, Decl(ramdaToolsNoInfinite.ts, 0, 0))
+->Pos : Symbol(Tools.Pos, Decl(ramdaToolsNoInfinite.ts, 45, 42))
++>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite.ts, 45, 42))
+ >I : Symbol(I, Decl(ramdaToolsNoInfinite.ts, 88, 68))
+ >TN : Symbol(TN, Decl(ramdaToolsNoInfinite.ts, 88, 50))
+ 
+@@= skipped -25, +25 lines =@@
+ >I : Symbol(I, Decl(ramdaToolsNoInfinite.ts, 93, 85))
+ 
+         0: GapsOf<T1, T2, GapOf<T1, T2, TN, I> extends infer G ? Tools.Cast<G, any[]> : never, Tools.Next<I>>;
+->0 : Symbol(GapsOfWorker[0], Decl(ramdaToolsNoInfinite.ts, 93, 109))
++>0 : Symbol(0, Decl(ramdaToolsNoInfinite.ts, 93, 109))
+ >GapsOf : Symbol(GapsOf, Decl(ramdaToolsNoInfinite.ts, 96, 5))
+ >T1 : Symbol(T1, Decl(ramdaToolsNoInfinite.ts, 93, 27))
+ >T2 : Symbol(T2, Decl(ramdaToolsNoInfinite.ts, 93, 44))
+@@= skipped -11, +11 lines =@@
+ >I : Symbol(I, Decl(ramdaToolsNoInfinite.ts, 93, 85))
+ >G : Symbol(G, Decl(ramdaToolsNoInfinite.ts, 94, 60))
+ >Tools : Symbol(Tools, Decl(ramdaToolsNoInfinite.ts, 0, 0))
+->Cast : Symbol(Tools.Cast, Decl(ramdaToolsNoInfinite.ts, 43, 6))
++>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite.ts, 43, 6))
+ >G : Symbol(G, Decl(ramdaToolsNoInfinite.ts, 94, 60))
+ >Tools : Symbol(Tools, Decl(ramdaToolsNoInfinite.ts, 0, 0))
+->Next : Symbol(Tools.Next, Decl(ramdaToolsNoInfinite.ts, 48, 18))
++>Next : Symbol(Next, Decl(ramdaToolsNoInfinite.ts, 48, 18))
+ >I : Symbol(I, Decl(ramdaToolsNoInfinite.ts, 93, 85))
+ 
+         1: Tools.Concat<TN, Tools.Drop<Tools.Pos<I>, T2> extends infer D ? Tools.Cast<D, any[]> : never>;
+->1 : Symbol(GapsOfWorker[1], Decl(ramdaToolsNoInfinite.ts, 94, 110))
++>1 : Symbol(1, Decl(ramdaToolsNoInfinite.ts, 94, 110))
+ >Tools : Symbol(Tools, Decl(ramdaToolsNoInfinite.ts, 0, 0))
+->Concat : Symbol(Tools.Concat, Decl(ramdaToolsNoInfinite.ts, 72, 6))
++>Concat : Symbol(Concat, Decl(ramdaToolsNoInfinite.ts, 72, 6))
+ >TN : Symbol(TN, Decl(ramdaToolsNoInfinite.ts, 93, 62))
+ >Tools : Symbol(Tools, Decl(ramdaToolsNoInfinite.ts, 0, 0))
+->Drop : Symbol(Tools.Drop, Decl(ramdaToolsNoInfinite.ts, 34, 12))
++>Drop : Symbol(Drop, Decl(ramdaToolsNoInfinite.ts, 34, 12))
+ >Tools : Symbol(Tools, Decl(ramdaToolsNoInfinite.ts, 0, 0))
+->Pos : Symbol(Tools.Pos, Decl(ramdaToolsNoInfinite.ts, 45, 42))
++>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite.ts, 45, 42))
+ >I : Symbol(I, Decl(ramdaToolsNoInfinite.ts, 93, 85))
+ >T2 : Symbol(T2, Decl(ramdaToolsNoInfinite.ts, 93, 44))
+ >D : Symbol(D, Decl(ramdaToolsNoInfinite.ts, 95, 70))
+ >Tools : Symbol(Tools, Decl(ramdaToolsNoInfinite.ts, 0, 0))
+->Cast : Symbol(Tools.Cast, Decl(ramdaToolsNoInfinite.ts, 43, 6))
++>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite.ts, 43, 6))
+ >D : Symbol(D, Decl(ramdaToolsNoInfinite.ts, 95, 70))
+     }
+     type GapsOf<T1 extends any[], T2 extends any[], TN extends any[] = [], I extends any[] = []> = GapsOfWorker<T1, T2, TN, I>[
+@@= skipped -36, +36 lines =@@
+ 
+         Tools.Pos<I> extends Tools.Length<T1>
+ >Tools : Symbol(Tools, Decl(ramdaToolsNoInfinite.ts, 0, 0))
+->Pos : Symbol(Tools.Pos, Decl(ramdaToolsNoInfinite.ts, 45, 42))
++>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite.ts, 45, 42))
+ >I : Symbol(I, Decl(ramdaToolsNoInfinite.ts, 97, 74))
+ >Tools : Symbol(Tools, Decl(ramdaToolsNoInfinite.ts, 0, 0))
+->Length : Symbol(Tools.Length, Decl(ramdaToolsNoInfinite.ts, 26, 6))
++>Length : Symbol(Length, Decl(ramdaToolsNoInfinite.ts, 26, 6))
+ >T1 : Symbol(T1, Decl(ramdaToolsNoInfinite.ts, 97, 16))
+ 
+         ? 1
+@@= skipped -20, +20 lines =@@
+ >T : Symbol(T, Decl(ramdaToolsNoInfinite.ts, 103, 21))
+ >K : Symbol(K, Decl(ramdaToolsNoInfinite.ts, 104, 9))
+ >R : Symbol(R, Decl(ramdaToolsNoInfinite.ts, 81, 1))
+->Placeholder : Symbol(R.Placeholder, Decl(ramdaToolsNoInfinite.ts, 83, 21))
++>Placeholder : Symbol(Placeholder, Decl(ramdaToolsNoInfinite.ts, 83, 21))
+ 
+     };
+ 
+@@= skipped -33, +33 lines =@@
+ >T : Symbol(T, Decl(ramdaToolsNoInfinite.ts, 114, 9))
+ >args : Symbol(args, Decl(ramdaToolsNoInfinite.ts, 114, 26))
+ >Tools : Symbol(Tools, Decl(ramdaToolsNoInfinite.ts, 0, 0))
+->Cast : Symbol(Tools.Cast, Decl(ramdaToolsNoInfinite.ts, 43, 6))
++>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite.ts, 43, 6))
+ >Tools : Symbol(Tools, Decl(ramdaToolsNoInfinite.ts, 0, 0))
+->Cast : Symbol(Tools.Cast, Decl(ramdaToolsNoInfinite.ts, 43, 6))
++>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite.ts, 43, 6))
+ >T : Symbol(T, Decl(ramdaToolsNoInfinite.ts, 114, 9))
+ >Gaps : Symbol(Gaps, Decl(ramdaToolsNoInfinite.ts, 109, 6))
+ >Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+@@= skipped -23, +23 lines =@@
+ >F : Symbol(F, Decl(ramdaToolsNoInfinite.ts, 113, 15))
+ >G : Symbol(G, Decl(ramdaToolsNoInfinite.ts, 116, 68))
+ >Tools : Symbol(Tools, Decl(ramdaToolsNoInfinite.ts, 0, 0))
+->Cast : Symbol(Tools.Cast, Decl(ramdaToolsNoInfinite.ts, 43, 6))
++>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite.ts, 43, 6))
+ >G : Symbol(G, Decl(ramdaToolsNoInfinite.ts, 116, 68))
+ >ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+ >F : Symbol(F, Decl(ramdaToolsNoInfinite.ts, 113, 15))

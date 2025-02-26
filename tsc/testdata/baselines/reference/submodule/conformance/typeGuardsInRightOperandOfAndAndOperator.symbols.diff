@@ -1,0 +1,35 @@
+--- old.typeGuardsInRightOperandOfAndAndOperator.symbols
++++ new.typeGuardsInRightOperandOfAndAndOperator.symbols
+@@= skipped -8, +8 lines =@@
+ 
+     return typeof x === "string" && x.length === 10; // string
+ >x : Symbol(x, Decl(typeGuardsInRightOperandOfAndAndOperator.ts, 2, 13))
+->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInRightOperandOfAndAndOperator.ts, 2, 13))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }
+ function foo2(x: number | string) {
+ >foo2 : Symbol(foo2, Decl(typeGuardsInRightOperandOfAndAndOperator.ts, 4, 1))
+@@= skipped -97, +97 lines =@@
+         // change value of x
+         ? ((x = 10) && x.toString()) // x is number
+ >x : Symbol(x, Decl(typeGuardsInRightOperandOfAndAndOperator.ts, 32, 14))
+->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInRightOperandOfAndAndOperator.ts, 32, 14))
+->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ 
+         // do not change value
+         : ((y = x) && x.toString()))); // x is boolean
+ >y : Symbol(y, Decl(typeGuardsInRightOperandOfAndAndOperator.ts, 33, 7))
+ >x : Symbol(x, Decl(typeGuardsInRightOperandOfAndAndOperator.ts, 32, 14))
+->x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(typeGuardsInRightOperandOfAndAndOperator.ts, 32, 14))
+->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
+ }
+ 

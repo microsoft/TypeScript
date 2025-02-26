@@ -1,0 +1,11 @@
+--- old.nestedHomomorphicMappedTypesWithArrayConstraint1.symbols
++++ new.nestedHomomorphicMappedTypesWithArrayConstraint1.symbols
+@@= skipped -19, +19 lines =@@
+ >TArgs : Symbol(TArgs, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 6, 26))
+ 
+     calledWith(...args: Partial<MatchArguments<TArgs>>): boolean;
+->calledWith : Symbol(SinonSpyCallApi.calledWith, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 6, 56))
++>calledWith : Symbol(calledWith, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 6, 56))
+ >args : Symbol(args, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 7, 15))
+ >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+ >MatchArguments : Symbol(MatchArguments, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 0, 0))

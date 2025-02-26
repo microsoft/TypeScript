@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts] ////
+
+=== decoratorMetadata-jsdoc.ts ===
+declare var decorator: any;
+>decorator : Symbol(decorator, Decl(decoratorMetadata-jsdoc.ts, 0, 11))
+
+class X {
+>X : Symbol(X, Decl(decoratorMetadata-jsdoc.ts, 0, 27))
+
+    @decorator()
+>decorator : Symbol(decorator, Decl(decoratorMetadata-jsdoc.ts, 0, 11))
+
+    a?: string?;
+>a : Symbol(a, Decl(decoratorMetadata-jsdoc.ts, 2, 9))
+
+    @decorator()
+>decorator : Symbol(decorator, Decl(decoratorMetadata-jsdoc.ts, 0, 11))
+
+    b?: string!;
+>b : Symbol(b, Decl(decoratorMetadata-jsdoc.ts, 4, 16))
+
+    @decorator()
+>decorator : Symbol(decorator, Decl(decoratorMetadata-jsdoc.ts, 0, 11))
+
+    c?: *;
+}

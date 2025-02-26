@@ -1,0 +1,11 @@
+--- old.moduleAugmentationGlobal8.symbols
++++ new.moduleAugmentationGlobal8.symbols
+@@= skipped -9, +9 lines =@@
+         interface Array<T> { x }
+ >Array : Symbol(Array, Decl(moduleAugmentationGlobal8.ts, 1, 20))
+ >T : Symbol(T, Decl(moduleAugmentationGlobal8.ts, 2, 24))
+->x : Symbol(Array.x, Decl(moduleAugmentationGlobal8.ts, 2, 28))
++>x : Symbol(x, Decl(moduleAugmentationGlobal8.ts, 2, 28))
+     }
+ }
+ export {}

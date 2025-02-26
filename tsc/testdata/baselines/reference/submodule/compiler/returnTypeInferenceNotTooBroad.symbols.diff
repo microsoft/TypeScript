@@ -1,0 +1,15 @@
+--- old.returnTypeInferenceNotTooBroad.symbols
++++ new.returnTypeInferenceNotTooBroad.symbols
+@@= skipped -14, +14 lines =@@
+ >T : Symbol(T, Decl(returnTypeInferenceNotTooBroad.ts, 1, 15))
+ 
+     low?: number;
+->low : Symbol(Opts.low, Decl(returnTypeInferenceNotTooBroad.ts, 1, 19))
++>low : Symbol(low, Decl(returnTypeInferenceNotTooBroad.ts, 1, 19))
+ 
+     sign?: T
+->sign : Symbol(Opts.sign, Decl(returnTypeInferenceNotTooBroad.ts, 2, 17))
++>sign : Symbol(sign, Decl(returnTypeInferenceNotTooBroad.ts, 2, 17))
+ >T : Symbol(T, Decl(returnTypeInferenceNotTooBroad.ts, 1, 15))
+ }
+ interface Wrapper<T> {

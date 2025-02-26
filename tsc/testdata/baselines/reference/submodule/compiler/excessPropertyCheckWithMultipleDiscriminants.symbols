@@ -1,0 +1,327 @@
+//// [tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts] ////
+
+=== excessPropertyCheckWithMultipleDiscriminants.ts ===
+// Repro from #32657
+
+interface Base<T> {
+>Base : Symbol(Base, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 0, 0))
+>T : Symbol(T, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 2, 15))
+
+    value: T;
+>value : Symbol(value, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 2, 19))
+>T : Symbol(T, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 2, 15))
+}
+
+interface Int extends Base<number> {
+>Int : Symbol(Int, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 4, 1))
+>Base : Symbol(Base, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 0, 0))
+
+    type: "integer";
+>type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 6, 36))
+
+    multipleOf?: number;
+>multipleOf : Symbol(multipleOf, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 7, 20))
+}
+
+interface Float extends Base<number> {
+>Float : Symbol(Float, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 9, 1))
+>Base : Symbol(Base, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 0, 0))
+
+    type: "number";
+>type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 11, 38))
+}
+
+interface Str extends Base<string> {
+>Str : Symbol(Str, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 13, 1))
+>Base : Symbol(Base, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 0, 0))
+
+    type: "string";
+>type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 15, 36))
+
+    format?: string;
+>format : Symbol(format, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 16, 19))
+}
+
+interface Bool extends Base<boolean> {
+>Bool : Symbol(Bool, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 18, 1))
+>Base : Symbol(Base, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 0, 0))
+
+    type: "boolean";
+>type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 20, 38))
+}
+
+type Primitive = Int | Float | Str | Bool;
+>Primitive : Symbol(Primitive, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 22, 1))
+>Int : Symbol(Int, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 4, 1))
+>Float : Symbol(Float, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 9, 1))
+>Str : Symbol(Str, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 13, 1))
+>Bool : Symbol(Bool, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 18, 1))
+
+const foo: Primitive = {
+>foo : Symbol(foo, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 26, 5))
+>Primitive : Symbol(Primitive, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 22, 1))
+
+    type: "number",
+>type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 26, 24))
+
+    value: 10,
+>value : Symbol(value, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 27, 19))
+
+    multipleOf: 5, // excess property
+>multipleOf : Symbol(multipleOf, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 28, 14))
+
+    format: "what?"
+>format : Symbol(format, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 29, 18))
+}
+
+
+type DisjointDiscriminants = { p1: 'left'; p2: true; p3: number } | { p1: 'right'; p2: false; p4: string } | { p1: 'left'; p2: boolean };
+>DisjointDiscriminants : Symbol(DisjointDiscriminants, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 31, 1))
+>p1 : Symbol(p1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 34, 30))
+>p2 : Symbol(p2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 34, 42))
+>p3 : Symbol(p3, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 34, 52))
+>p1 : Symbol(p1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 34, 69))
+>p2 : Symbol(p2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 34, 82))
+>p4 : Symbol(p4, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 34, 93))
+>p1 : Symbol(p1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 34, 110))
+>p2 : Symbol(p2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 34, 122))
+
+// This has excess error because variant three is the only applicable case.
+const a: DisjointDiscriminants = {
+>a : Symbol(a, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 37, 5))
+>DisjointDiscriminants : Symbol(DisjointDiscriminants, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 31, 1))
+
+    p1: 'left',
+>p1 : Symbol(p1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 37, 34))
+
+    p2: false,
+>p2 : Symbol(p2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 38, 15))
+
+    p3: 42,
+>p3 : Symbol(p3, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 39, 14))
+
+    p4: "hello"
+>p4 : Symbol(p4, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 40, 11))
+
+};
+
+// This has excess error because variant two is not applicable.
+const b: DisjointDiscriminants = {
+>b : Symbol(b, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 45, 5))
+>DisjointDiscriminants : Symbol(DisjointDiscriminants, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 31, 1))
+
+    p1: 'left',
+>p1 : Symbol(p1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 45, 34))
+
+    p2: true,
+>p2 : Symbol(p2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 46, 15))
+
+    p3: 42,
+>p3 : Symbol(p3, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 47, 13))
+
+    p4: "hello"
+>p4 : Symbol(p4, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 48, 11))
+
+};
+
+// This has excess error because variant two is the only applicable case
+const c: DisjointDiscriminants = {
+>c : Symbol(c, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 53, 5))
+>DisjointDiscriminants : Symbol(DisjointDiscriminants, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 31, 1))
+
+    p1: 'right',
+>p1 : Symbol(p1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 53, 34))
+
+    p2: false,
+>p2 : Symbol(p2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 54, 16))
+
+    p3: 42,
+>p3 : Symbol(p3, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 55, 14))
+
+    p4: "hello"
+>p4 : Symbol(p4, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 56, 11))
+
+};
+
+// Repro from #51873
+
+interface Common {
+>Common : Symbol(Common, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 58, 2))
+
+    type: "A" | "B" | "C" | "D";
+>type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 62, 18))
+
+    n: number;
+>n : Symbol(n, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 63, 32))
+}
+interface A {
+>A : Symbol(A, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 65, 1))
+
+    type: "A";
+>type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 66, 13))
+
+    a?: number;
+>a : Symbol(a, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 67, 14))
+}
+interface B {
+>B : Symbol(B, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 69, 1))
+
+    type: "B";
+>type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 70, 13))
+
+    b?: number;
+>b : Symbol(b, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 71, 14))
+}
+
+type CommonWithOverlappingOptionals = Common | (Common & A) | (Common & B);
+>CommonWithOverlappingOptionals : Symbol(CommonWithOverlappingOptionals, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 73, 1))
+>Common : Symbol(Common, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 58, 2))
+>Common : Symbol(Common, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 58, 2))
+>A : Symbol(A, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 65, 1))
+>Common : Symbol(Common, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 58, 2))
+>B : Symbol(B, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 69, 1))
+
+// Should reject { b } because reduced to Common | (Common & A)
+const c1: CommonWithOverlappingOptionals = {
+>c1 : Symbol(c1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 78, 5))
+>CommonWithOverlappingOptionals : Symbol(CommonWithOverlappingOptionals, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 73, 1))
+
+    type: "A",
+>type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 78, 44))
+
+    n: 1,
+>n : Symbol(n, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 79, 14))
+
+    a: 1,
+>a : Symbol(a, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 80, 9))
+
+    b: 1  // excess property
+>b : Symbol(b, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 81, 9))
+}
+
+type CommonWithDisjointOverlappingOptionals = Common | A | B;
+>CommonWithDisjointOverlappingOptionals : Symbol(CommonWithDisjointOverlappingOptionals, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 83, 1))
+>Common : Symbol(Common, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 58, 2))
+>A : Symbol(A, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 65, 1))
+>B : Symbol(B, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 69, 1))
+
+// Should still reject { b } because reduced to Common | A, even though these are now disjoint
+const c2: CommonWithDisjointOverlappingOptionals = {
+>c2 : Symbol(c2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 88, 5))
+>CommonWithDisjointOverlappingOptionals : Symbol(CommonWithDisjointOverlappingOptionals, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 83, 1))
+
+    type: "A",
+>type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 88, 52))
+
+    n: 1,
+>n : Symbol(n, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 89, 14))
+
+    a: 1,
+>a : Symbol(a, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 90, 9))
+
+    b: 1  // excess property
+>b : Symbol(b, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 91, 9))
+}
+
+// Repro from https://github.com/microsoft/TypeScript/pull/51884#issuecomment-1472736068
+
+export type BaseAttribute<T> = {
+>BaseAttribute : Symbol(BaseAttribute, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 93, 1))
+>T : Symbol(T, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 97, 26))
+
+    type?: string | undefined;
+>type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 97, 32))
+
+    required?: boolean | undefined;
+>required : Symbol(required, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 98, 30))
+
+    defaultsTo?: T | undefined;
+>defaultsTo : Symbol(defaultsTo, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 99, 35))
+>T : Symbol(T, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 97, 26))
+
+};
+
+export type Attribute =
+>Attribute : Symbol(Attribute, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 101, 2))
+
+    | string
+    | StringAttribute
+>StringAttribute : Symbol(StringAttribute, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 112, 21))
+
+    | NumberAttribute
+>NumberAttribute : Symbol(NumberAttribute, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 116, 2))
+
+    | OneToOneAttribute
+>OneToOneAttribute : Symbol(OneToOneAttribute, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 121, 2))
+
+export type Attribute2 =
+>Attribute2 : Symbol(Attribute2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 107, 23))
+
+    | string
+    | StringAttribute
+>StringAttribute : Symbol(StringAttribute, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 112, 21))
+
+    | NumberAttribute
+>NumberAttribute : Symbol(NumberAttribute, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 116, 2))
+
+export type StringAttribute = BaseAttribute<string> & {
+>StringAttribute : Symbol(StringAttribute, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 112, 21))
+>BaseAttribute : Symbol(BaseAttribute, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 93, 1))
+
+    type: 'string';
+>type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 114, 55))
+
+};
+
+export type NumberAttribute = BaseAttribute<number> & {
+>NumberAttribute : Symbol(NumberAttribute, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 116, 2))
+>BaseAttribute : Symbol(BaseAttribute, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 93, 1))
+
+    type: 'number';
+>type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 118, 55))
+
+    autoIncrement?: boolean | undefined;
+>autoIncrement : Symbol(autoIncrement, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 119, 19))
+
+};
+
+export type OneToOneAttribute = BaseAttribute<any> & {
+>OneToOneAttribute : Symbol(OneToOneAttribute, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 121, 2))
+>BaseAttribute : Symbol(BaseAttribute, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 93, 1))
+
+    model: string;
+>model : Symbol(model, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 123, 54))
+
+};
+
+// both should error due to excess properties
+const attributes: Attribute = {
+>attributes : Symbol(attributes, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 128, 5))
+>Attribute : Symbol(Attribute, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 101, 2))
+
+    type: 'string',
+>type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 128, 31))
+
+    autoIncrement: true,
+>autoIncrement : Symbol(autoIncrement, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 129, 19))
+
+    required: true,
+>required : Symbol(required, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 130, 24))
+
+};
+
+const attributes2: Attribute2 = {
+>attributes2 : Symbol(attributes2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 134, 5))
+>Attribute2 : Symbol(Attribute2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 107, 23))
+
+    type: 'string',
+>type : Symbol(type, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 134, 33))
+
+    autoIncrement: true,
+>autoIncrement : Symbol(autoIncrement, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 135, 19))
+
+    required: true,
+>required : Symbol(required, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 136, 24))
+
+};
+

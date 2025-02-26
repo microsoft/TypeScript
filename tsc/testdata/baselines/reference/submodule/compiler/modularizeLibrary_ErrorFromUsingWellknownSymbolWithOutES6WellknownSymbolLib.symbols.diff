@@ -1,0 +1,14 @@
+--- old.modularizeLibrary_ErrorFromUsingWellknownSymbolWithOutES6WellknownSymbolLib.symbols
++++ new.modularizeLibrary_ErrorFromUsingWellknownSymbolWithOutES6WellknownSymbolLib.symbols
+@@= skipped -7, +7 lines =@@
+ >z : Symbol(z, Decl(modularizeLibrary_ErrorFromUsingWellknownSymbolWithOutES6WellknownSymbolLib.ts, 0, 32))
+ 
+     return Array.from(arguments);
+->Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>Array.from : Symbol(from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+->from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>from : Symbol(from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >arguments : Symbol(arguments)
+ }
+ 

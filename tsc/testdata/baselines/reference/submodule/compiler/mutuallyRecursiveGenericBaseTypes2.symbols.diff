@@ -1,0 +1,11 @@
+--- old.mutuallyRecursiveGenericBaseTypes2.symbols
++++ new.mutuallyRecursiveGenericBaseTypes2.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 0, 10))
+ {
+     bar(): foo2<T[]> { return null; }
+->bar : Symbol(foo.bar, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 1, 1))
++>bar : Symbol(bar, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 1, 1))
+ >foo2 : Symbol(foo2, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 3, 1))
+ >T : Symbol(T, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 0, 10))
+ }

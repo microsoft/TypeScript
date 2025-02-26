@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/downlevelLetConst5.ts] ////
+
+=== downlevelLetConst5.ts ===
+const a: number = 1
+>a : Symbol(a, Decl(downlevelLetConst5.ts, 0, 5))
+

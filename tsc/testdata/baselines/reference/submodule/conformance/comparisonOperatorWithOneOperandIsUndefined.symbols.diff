@@ -1,0 +1,15 @@
+--- old.comparisonOperatorWithOneOperandIsUndefined.symbols
++++ new.comparisonOperatorWithOneOperandIsUndefined.symbols
+@@= skipped -6, +6 lines =@@
+ 
+ enum E { a, b, c }
+ >E : Symbol(E, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 24))
+->a : Symbol(E.a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 2, 8))
+->b : Symbol(E.b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 2, 11))
+->c : Symbol(E.c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 2, 14))
++>a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 2, 8))
++>b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 2, 11))
++>c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 2, 14))
+ 
+ function foo<T>(t: T) {
+ >foo : Symbol(foo, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 2, 18))

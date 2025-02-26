@@ -1,0 +1,35 @@
+--- old.complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.symbols
++++ new.complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.symbols
+@@= skipped -4, +4 lines =@@
+ >TextChannel : Symbol(TextChannel, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 0, 0))
+ 
+     id: string;
+->id : Symbol(TextChannel.id, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 0, 23))
++>id : Symbol(id, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 0, 23))
+ 
+     type: 'text';
+->type : Symbol(TextChannel.type, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 1, 15))
++>type : Symbol(type, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 1, 15))
+ 
+     phoneNumber: string;
+->phoneNumber : Symbol(TextChannel.phoneNumber, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 2, 17))
++>phoneNumber : Symbol(phoneNumber, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 2, 17))
+ }
+ 
+ interface EmailChannel {
+ >EmailChannel : Symbol(EmailChannel, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 4, 1))
+ 
+     id: string;
+->id : Symbol(EmailChannel.id, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 6, 24))
++>id : Symbol(id, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 6, 24))
+ 
+     type: 'email';
+->type : Symbol(EmailChannel.type, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 7, 15))
++>type : Symbol(type, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 7, 15))
+ 
+     addres: string;
+->addres : Symbol(EmailChannel.addres, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 8, 18))
++>addres : Symbol(addres, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 8, 18))
+ }
+ 
+ type Channel = TextChannel | EmailChannel;

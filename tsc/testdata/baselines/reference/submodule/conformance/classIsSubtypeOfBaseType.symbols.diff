@@ -1,0 +1,29 @@
+--- old.classIsSubtypeOfBaseType.symbols
++++ new.classIsSubtypeOfBaseType.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(classIsSubtypeOfBaseType.ts, 0, 11))
+ 
+     foo: T;
+->foo : Symbol(Base.foo, Decl(classIsSubtypeOfBaseType.ts, 0, 15))
++>foo : Symbol(foo, Decl(classIsSubtypeOfBaseType.ts, 0, 15))
+ >T : Symbol(T, Decl(classIsSubtypeOfBaseType.ts, 0, 11))
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ >bar : Symbol(bar, Decl(classIsSubtypeOfBaseType.ts, 4, 28))
+ 
+     foo: {
+->foo : Symbol(Derived.foo, Decl(classIsSubtypeOfBaseType.ts, 4, 46))
++>foo : Symbol(foo, Decl(classIsSubtypeOfBaseType.ts, 4, 46))
+ 
+         bar: string; baz: number; // ok
+ >bar : Symbol(bar, Decl(classIsSubtypeOfBaseType.ts, 5, 10))
+@@= skipped -14, +14 lines =@@
+ >bar : Symbol(bar, Decl(classIsSubtypeOfBaseType.ts, 10, 29))
+ 
+     foo: {
+->foo : Symbol(Derived2.foo, Decl(classIsSubtypeOfBaseType.ts, 10, 47))
++>foo : Symbol(foo, Decl(classIsSubtypeOfBaseType.ts, 10, 47))
+ 
+         bar?: string; // error
+ >bar : Symbol(bar, Decl(classIsSubtypeOfBaseType.ts, 11, 10))

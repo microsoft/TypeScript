@@ -1,0 +1,29 @@
+--- old.jsxEmptyExpressionNotCountedAsChild2.symbols
++++ new.jsxEmptyExpressionNotCountedAsChild2.symbols
+@@= skipped -5, +5 lines =@@
+ export {}
+ 
+ declare global {
+->global : Symbol(global, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 2, 9))
++>global : Symbol((Missing), Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 2, 9))
+ 
+     namespace JSX {
+ >JSX : Symbol(JSX, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 4, 16))
+@@= skipped -12, +12 lines =@@
+ >ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 6, 27))
+ 
+             __properties__: {};
+->__properties__ : Symbol(ElementAttributesProperty.__properties__, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 7, 45))
++>__properties__ : Symbol(__properties__, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 7, 45))
+         }
+         interface IntrinsicElements {
+ >IntrinsicElements : Symbol(IntrinsicElements, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 9, 9))
+@@= skipped -12, +12 lines =@@
+ >ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 12, 9))
+ 
+             __children__: {};
+->__children__ : Symbol(ElementChildrenAttribute.__children__, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 13, 44))
++>__children__ : Symbol(__children__, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 13, 44))
+         }
+     }
+ }

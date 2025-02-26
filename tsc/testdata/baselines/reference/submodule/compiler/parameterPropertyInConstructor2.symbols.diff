@@ -1,0 +1,17 @@
+--- old.parameterPropertyInConstructor2.symbols
++++ new.parameterPropertyInConstructor2.symbols
+@@= skipped -7, +7 lines =@@
+ >Customers : Symbol(Customers, Decl(parameterPropertyInConstructor2.ts, 0, 12))
+ 
+     constructor(public names: string);
+->names : Symbol(Customers.names, Decl(parameterPropertyInConstructor2.ts, 2, 16), Decl(parameterPropertyInConstructor2.ts, 3, 16))
++>names : Symbol(names, Decl(parameterPropertyInConstructor2.ts, 2, 16), Decl(parameterPropertyInConstructor2.ts, 3, 16))
+ 
+     constructor(public names: string, public ages: number) {
+->names : Symbol(Customers.names, Decl(parameterPropertyInConstructor2.ts, 2, 16), Decl(parameterPropertyInConstructor2.ts, 3, 16))
+->ages : Symbol(Customers.ages, Decl(parameterPropertyInConstructor2.ts, 3, 37))
++>names : Symbol(names, Decl(parameterPropertyInConstructor2.ts, 2, 16), Decl(parameterPropertyInConstructor2.ts, 3, 16))
++>ages : Symbol(ages, Decl(parameterPropertyInConstructor2.ts, 3, 37))
+     }
+   }
+ }

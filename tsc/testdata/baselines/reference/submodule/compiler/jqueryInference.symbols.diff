@@ -1,0 +1,18 @@
+--- old.jqueryInference.symbols
++++ new.jqueryInference.symbols
+@@= skipped -7, +7 lines =@@
+ >U : Symbol(U, Decl(jqueryInference.ts, 1, 22))
+ 
+     then(cb: (t: T) => void): void;
+->then : Symbol(MyPromise.then, Decl(jqueryInference.ts, 1, 27))
++>then : Symbol(then, Decl(jqueryInference.ts, 1, 27))
+ >cb : Symbol(cb, Decl(jqueryInference.ts, 2, 9))
+ >t : Symbol(t, Decl(jqueryInference.ts, 2, 14))
+ >T : Symbol(T, Decl(jqueryInference.ts, 1, 20))
+ 
+     thenUnion(cb: (t: T | U) => void): this;
+->thenUnion : Symbol(MyPromise.thenUnion, Decl(jqueryInference.ts, 2, 35))
++>thenUnion : Symbol(thenUnion, Decl(jqueryInference.ts, 2, 35))
+ >cb : Symbol(cb, Decl(jqueryInference.ts, 3, 14))
+ >t : Symbol(t, Decl(jqueryInference.ts, 3, 19))
+ >T : Symbol(T, Decl(jqueryInference.ts, 1, 20))

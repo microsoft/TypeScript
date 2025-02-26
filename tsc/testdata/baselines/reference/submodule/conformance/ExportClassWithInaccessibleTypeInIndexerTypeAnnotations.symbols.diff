@@ -1,0 +1,15 @@
+--- old.ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.symbols
++++ new.ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.symbols
+@@= skipped -7, +7 lines =@@
+ >Point : Symbol(Point, Decl(ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts, 0, 10))
+ 
+         x: number;
+->x : Symbol(Point.x, Decl(ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts, 2, 17))
++>x : Symbol(x, Decl(ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts, 2, 17))
+ 
+         y: number;
+->y : Symbol(Point.y, Decl(ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts, 3, 18))
++>y : Symbol(y, Decl(ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts, 3, 18))
+     }
+ 
+     export class points {

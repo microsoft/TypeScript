@@ -1,0 +1,11 @@
+--- old.avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.symbols
++++ new.avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.symbols
+@@= skipped -4, +4 lines =@@
+ >Dog : Symbol(Dog, Decl(avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts, 0, 0))
+ 
+     barkable: true
+->barkable : Symbol(Dog.barkable, Decl(avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts, 0, 15))
++>barkable : Symbol(barkable, Decl(avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts, 0, 15))
+ }
+ 
+ declare function getRover(): Dog

@@ -1,0 +1,11 @@
+--- old.indexer2.symbols
++++ new.indexer2.symbols
+@@= skipped -7, +7 lines =@@
+ >IDirectChildrenMap : Symbol(IDirectChildrenMap, Decl(indexer2.ts, 0, 32))
+ 
+         hasOwnProperty(objectId: number) : boolean; 
+->hasOwnProperty : Symbol(IDirectChildrenMap.hasOwnProperty, Decl(indexer2.ts, 1, 30))
++>hasOwnProperty : Symbol(hasOwnProperty, Decl(indexer2.ts, 1, 30))
+ >objectId : Symbol(objectId, Decl(indexer2.ts, 2, 23))
+ 
+         [objectId: number] : IHeapObjectProperty[]; 

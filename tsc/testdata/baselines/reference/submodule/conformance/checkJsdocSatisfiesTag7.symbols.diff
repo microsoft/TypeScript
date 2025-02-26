@@ -1,0 +1,26 @@
+--- old.checkJsdocSatisfiesTag7.symbols
++++ new.checkJsdocSatisfiesTag7.symbols
+@@= skipped -19, +19 lines =@@
+ // Should be OK -- retain info that a is number and b is string
+ let a = p.a.toFixed();
+ >a : Symbol(a, Decl(a.js, 9, 3))
+->p.a.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>p.a.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >p.a : Symbol(a, Decl(a.js, 2, 54))
+ >p : Symbol(p, Decl(a.js, 2, 5))
+ >a : Symbol(a, Decl(a.js, 2, 54))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+ let b = p.b.substring(1);
+ >b : Symbol(b, Decl(a.js, 10, 3))
+->p.b.substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
++>p.b.substring : Symbol(substring, Decl(lib.es5.d.ts, --, --))
+ >p.b : Symbol(b, Decl(a.js, 3, 9))
+ >p : Symbol(p, Decl(a.js, 2, 5))
+ >b : Symbol(b, Decl(a.js, 3, 9))
+->substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
++>substring : Symbol(substring, Decl(lib.es5.d.ts, --, --))
+ 
+ // Should error even though 'd' is in 'Keys'
+ let d = p.d;

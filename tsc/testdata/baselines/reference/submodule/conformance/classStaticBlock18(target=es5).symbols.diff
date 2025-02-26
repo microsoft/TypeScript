@@ -1,0 +1,19 @@
+--- old.classStaticBlock18(target=es5).symbols
++++ new.classStaticBlock18(target=es5).symbols
+@@= skipped -5, +5 lines =@@
+ 
+   return class {
+     static foo = 1;
+->foo : Symbol((Anonymous class).foo, Decl(classStaticBlock18.ts, 1, 16))
++>foo : Symbol(foo, Decl(classStaticBlock18.ts, 1, 16))
+ 
+     static {
+       const c = class {
+ >c : Symbol(c, Decl(classStaticBlock18.ts, 4, 11))
+ 
+         static bar = 2;
+->bar : Symbol(c.bar, Decl(classStaticBlock18.ts, 4, 23))
++>bar : Symbol(bar, Decl(classStaticBlock18.ts, 4, 23))
+ 
+         static {
+           // do

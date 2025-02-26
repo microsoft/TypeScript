@@ -1,0 +1,19 @@
+--- old.override16(target=esnext).symbols
++++ new.override16(target=esnext).symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(override16.ts, 0, 0))
+ 
+     foo?: string;
+->foo : Symbol(A.foo, Decl(override16.ts, 0, 9))
++>foo : Symbol(foo, Decl(override16.ts, 0, 9))
+ }
+ 
+ class B extends A {
+@@= skipped -8, +8 lines =@@
+ >A : Symbol(A, Decl(override16.ts, 0, 0))
+ 
+     override foo = "string";
+->foo : Symbol(B.foo, Decl(override16.ts, 4, 19))
++>foo : Symbol(foo, Decl(override16.ts, 4, 19))
+ }
+ 

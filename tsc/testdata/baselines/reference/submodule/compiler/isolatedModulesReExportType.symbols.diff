@@ -1,0 +1,11 @@
+--- old.isolatedModulesReExportType.symbols
++++ new.isolatedModulesReExportType.symbols
+@@= skipped -33, +33 lines =@@
+ 
+ // Ok, type-only import indicates that the export can be elided.
+ import type { T as TT } from "./exportT";
+->T : Symbol(NS.T, Decl(exportT.ts, 0, 0))
++>T : Symbol(T, Decl(exportT.ts, 0, 0))
+ >TT : Symbol(TT, Decl(user.ts, 19, 13))
+ 
+ export { TT };

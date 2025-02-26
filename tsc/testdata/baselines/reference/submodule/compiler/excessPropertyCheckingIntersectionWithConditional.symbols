@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/excessPropertyCheckingIntersectionWithConditional.ts] ////
+
+=== excessPropertyCheckingIntersectionWithConditional.ts ===
+type Foo<K> = K extends unknown ? { a: number } : unknown
+>Foo : Symbol(Foo, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 0, 0))
+>K : Symbol(K, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 0, 9))
+>K : Symbol(K, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 0, 9))
+>a : Symbol(a, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 0, 35))
+
+const createDefaultExample = <K,>(x: K): Foo<K> & { x: K; } => {
+>createDefaultExample : Symbol(createDefaultExample, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 1, 5))
+>K : Symbol(K, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 1, 30))
+>x : Symbol(x, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 1, 34))
+>K : Symbol(K, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 1, 30))
+>Foo : Symbol(Foo, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 0, 0))
+>K : Symbol(K, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 1, 30))
+>x : Symbol(x, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 1, 51))
+>K : Symbol(K, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 1, 30))
+
+  return { a: 1, x: x }; // okay in TS 4.7.4, error in TS 4.8.2
+>a : Symbol(a, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 2, 10))
+>x : Symbol(x, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 2, 16))
+>x : Symbol(x, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 1, 34))
+}

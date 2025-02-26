@@ -1,0 +1,8 @@
+//// [tests/cases/conformance/salsa/moduleExportAliasUnknown.ts] ////
+
+=== bug27025.js ===
+module.exports = window.nonprop;
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
+exports.foo = bar;
+

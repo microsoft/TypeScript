@@ -1,0 +1,109 @@
+--- old.interfaceClassMerging.symbols
++++ new.interfaceClassMerging.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(interfaceClassMerging.ts, 0, 0), Decl(interfaceClassMerging.ts, 5, 1))
+ 
+     method(a: number): string;
+->method : Symbol(Foo.method, Decl(interfaceClassMerging.ts, 0, 15))
++>method : Symbol(method, Decl(interfaceClassMerging.ts, 0, 15))
+ >a : Symbol(a, Decl(interfaceClassMerging.ts, 1, 11))
+ 
+     optionalMethod?(a: number): string;
+->optionalMethod : Symbol(Foo.optionalMethod, Decl(interfaceClassMerging.ts, 1, 30))
++>optionalMethod : Symbol(optionalMethod, Decl(interfaceClassMerging.ts, 1, 30))
+ >a : Symbol(a, Decl(interfaceClassMerging.ts, 2, 20))
+ 
+     property: string;
+->property : Symbol(Foo.property, Decl(interfaceClassMerging.ts, 2, 39))
++>property : Symbol(property, Decl(interfaceClassMerging.ts, 2, 39))
+ 
+     optionalProperty?: string;
+->optionalProperty : Symbol(Foo.optionalProperty, Decl(interfaceClassMerging.ts, 3, 21))
++>optionalProperty : Symbol(optionalProperty, Decl(interfaceClassMerging.ts, 3, 21))
+ }
+ 
+ class Foo {
+ >Foo : Symbol(Foo, Decl(interfaceClassMerging.ts, 0, 0), Decl(interfaceClassMerging.ts, 5, 1))
+ 
+     additionalProperty: string;
+->additionalProperty : Symbol(Foo.additionalProperty, Decl(interfaceClassMerging.ts, 7, 11))
++>additionalProperty : Symbol(additionalProperty, Decl(interfaceClassMerging.ts, 7, 11))
+ 
+     additionalMethod(a: number): string {
+->additionalMethod : Symbol(Foo.additionalMethod, Decl(interfaceClassMerging.ts, 8, 31))
++>additionalMethod : Symbol(additionalMethod, Decl(interfaceClassMerging.ts, 8, 31))
+ >a : Symbol(a, Decl(interfaceClassMerging.ts, 10, 21))
+ 
+         return this.method(0);
+->this.method : Symbol(Foo.method, Decl(interfaceClassMerging.ts, 0, 15))
++>this.method : Symbol(method, Decl(interfaceClassMerging.ts, 0, 15))
+ >this : Symbol(Foo, Decl(interfaceClassMerging.ts, 0, 0), Decl(interfaceClassMerging.ts, 5, 1))
+->method : Symbol(Foo.method, Decl(interfaceClassMerging.ts, 0, 15))
++>method : Symbol(method, Decl(interfaceClassMerging.ts, 0, 15))
+     }
+ }
+ 
+@@= skipped -36, +36 lines =@@
+ >Foo : Symbol(Foo, Decl(interfaceClassMerging.ts, 0, 0), Decl(interfaceClassMerging.ts, 5, 1))
+ 
+     method(a: number) {
+->method : Symbol(Bar.method, Decl(interfaceClassMerging.ts, 15, 23))
++>method : Symbol(method, Decl(interfaceClassMerging.ts, 15, 23))
+ >a : Symbol(a, Decl(interfaceClassMerging.ts, 16, 11))
+ 
+         return this.optionalProperty;
+->this.optionalProperty : Symbol(Foo.optionalProperty, Decl(interfaceClassMerging.ts, 3, 21))
++>this.optionalProperty : Symbol(optionalProperty, Decl(interfaceClassMerging.ts, 3, 21))
+ >this : Symbol(Bar, Decl(interfaceClassMerging.ts, 13, 1))
+->optionalProperty : Symbol(Foo.optionalProperty, Decl(interfaceClassMerging.ts, 3, 21))
++>optionalProperty : Symbol(optionalProperty, Decl(interfaceClassMerging.ts, 3, 21))
+     }
+ }
+ 
+@@= skipped -16, +16 lines =@@
+ >Bar : Symbol(Bar, Decl(interfaceClassMerging.ts, 13, 1))
+ 
+ bar.method(0);
+->bar.method : Symbol(Bar.method, Decl(interfaceClassMerging.ts, 15, 23))
++>bar.method : Symbol(method, Decl(interfaceClassMerging.ts, 15, 23))
+ >bar : Symbol(bar, Decl(interfaceClassMerging.ts, 22, 3))
+->method : Symbol(Bar.method, Decl(interfaceClassMerging.ts, 15, 23))
++>method : Symbol(method, Decl(interfaceClassMerging.ts, 15, 23))
+ 
+ bar.optionalMethod(1);
+->bar.optionalMethod : Symbol(Foo.optionalMethod, Decl(interfaceClassMerging.ts, 1, 30))
++>bar.optionalMethod : Symbol(optionalMethod, Decl(interfaceClassMerging.ts, 1, 30))
+ >bar : Symbol(bar, Decl(interfaceClassMerging.ts, 22, 3))
+->optionalMethod : Symbol(Foo.optionalMethod, Decl(interfaceClassMerging.ts, 1, 30))
++>optionalMethod : Symbol(optionalMethod, Decl(interfaceClassMerging.ts, 1, 30))
+ 
+ bar.property;
+->bar.property : Symbol(Foo.property, Decl(interfaceClassMerging.ts, 2, 39))
++>bar.property : Symbol(property, Decl(interfaceClassMerging.ts, 2, 39))
+ >bar : Symbol(bar, Decl(interfaceClassMerging.ts, 22, 3))
+->property : Symbol(Foo.property, Decl(interfaceClassMerging.ts, 2, 39))
++>property : Symbol(property, Decl(interfaceClassMerging.ts, 2, 39))
+ 
+ bar.optionalProperty;
+->bar.optionalProperty : Symbol(Foo.optionalProperty, Decl(interfaceClassMerging.ts, 3, 21))
++>bar.optionalProperty : Symbol(optionalProperty, Decl(interfaceClassMerging.ts, 3, 21))
+ >bar : Symbol(bar, Decl(interfaceClassMerging.ts, 22, 3))
+->optionalProperty : Symbol(Foo.optionalProperty, Decl(interfaceClassMerging.ts, 3, 21))
++>optionalProperty : Symbol(optionalProperty, Decl(interfaceClassMerging.ts, 3, 21))
+ 
+ bar.additionalProperty;
+->bar.additionalProperty : Symbol(Foo.additionalProperty, Decl(interfaceClassMerging.ts, 7, 11))
++>bar.additionalProperty : Symbol(additionalProperty, Decl(interfaceClassMerging.ts, 7, 11))
+ >bar : Symbol(bar, Decl(interfaceClassMerging.ts, 22, 3))
+->additionalProperty : Symbol(Foo.additionalProperty, Decl(interfaceClassMerging.ts, 7, 11))
++>additionalProperty : Symbol(additionalProperty, Decl(interfaceClassMerging.ts, 7, 11))
+ 
+ bar.additionalMethod(2);
+->bar.additionalMethod : Symbol(Foo.additionalMethod, Decl(interfaceClassMerging.ts, 8, 31))
++>bar.additionalMethod : Symbol(additionalMethod, Decl(interfaceClassMerging.ts, 8, 31))
+ >bar : Symbol(bar, Decl(interfaceClassMerging.ts, 22, 3))
+->additionalMethod : Symbol(Foo.additionalMethod, Decl(interfaceClassMerging.ts, 8, 31))
++>additionalMethod : Symbol(additionalMethod, Decl(interfaceClassMerging.ts, 8, 31))
+ 
+ var obj: {
+ >obj : Symbol(obj, Decl(interfaceClassMerging.ts, 30, 3))

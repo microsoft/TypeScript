@@ -1,0 +1,29 @@
+--- old.importCallExpressionInSystem2.symbols
++++ new.importCallExpressionInSystem2.symbols
+@@= skipped -4, +4 lines =@@
+ >B : Symbol(B, Decl(0.ts, 0, 0))
+ 
+     print() { return "I am B"}
+->print : Symbol(B.print, Decl(0.ts, 0, 16))
++>print : Symbol(print, Decl(0.ts, 0, 16))
+ }
+ 
+ === 2.ts ===
+@@= skipped -11, +11 lines =@@
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+ 
+     x.then(value => {
+->x.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
++>x.then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(2.ts, 1, 13))
+->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
++>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+ >value : Symbol(value, Decl(2.ts, 2, 11))
+ 
+         let b = new value.B();
+@@= skipped -17, +17 lines =@@
+ 
+ foo(import("./0"));
+ >foo : Symbol(foo, Decl(2.ts, 0, 0))
+->"./0" : Symbol("0", Decl(0.ts, 0, 0))
+ 

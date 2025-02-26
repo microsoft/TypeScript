@@ -1,0 +1,29 @@
+--- old.arrayLiteralTypeInference.symbols
++++ new.arrayLiteralTypeInference.symbols
+@@= skipped -4, +4 lines =@@
+ >Action : Symbol(Action, Decl(arrayLiteralTypeInference.ts, 0, 0))
+ 
+     id: number;
+->id : Symbol(Action.id, Decl(arrayLiteralTypeInference.ts, 0, 14))
++>id : Symbol(id, Decl(arrayLiteralTypeInference.ts, 0, 14))
+ }
+ 
+ class ActionA extends Action {
+@@= skipped -8, +8 lines =@@
+ >Action : Symbol(Action, Decl(arrayLiteralTypeInference.ts, 0, 0))
+ 
+     value: string;
+->value : Symbol(ActionA.value, Decl(arrayLiteralTypeInference.ts, 4, 30))
++>value : Symbol(value, Decl(arrayLiteralTypeInference.ts, 4, 30))
+ }
+ 
+ class ActionB extends Action {
+@@= skipped -8, +8 lines =@@
+ >Action : Symbol(Action, Decl(arrayLiteralTypeInference.ts, 0, 0))
+ 
+     trueNess: boolean;
+->trueNess : Symbol(ActionB.trueNess, Decl(arrayLiteralTypeInference.ts, 8, 30))
++>trueNess : Symbol(trueNess, Decl(arrayLiteralTypeInference.ts, 8, 30))
+ }
+ 
+ var x1: Action[] = [

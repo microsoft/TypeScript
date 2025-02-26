@@ -1,0 +1,36 @@
+--- old.internalAliasEnum.symbols
++++ new.internalAliasEnum.symbols
+@@= skipped -7, +7 lines =@@
+ >weekend : Symbol(weekend, Decl(internalAliasEnum.ts, 0, 10))
+ 
+         Friday,
+->Friday : Symbol(weekend.Friday, Decl(internalAliasEnum.ts, 1, 25))
++>Friday : Symbol(Friday, Decl(internalAliasEnum.ts, 1, 25))
+ 
+         Saturday,
+->Saturday : Symbol(weekend.Saturday, Decl(internalAliasEnum.ts, 2, 15))
++>Saturday : Symbol(Saturday, Decl(internalAliasEnum.ts, 2, 15))
+ 
+         Sunday
+->Sunday : Symbol(weekend.Sunday, Decl(internalAliasEnum.ts, 3, 17))
++>Sunday : Symbol(Sunday, Decl(internalAliasEnum.ts, 3, 17))
+     }
+ }
+ 
+@@= skipped -16, +16 lines =@@
+     import b = a.weekend;
+ >b : Symbol(b, Decl(internalAliasEnum.ts, 8, 10))
+ >a : Symbol(a, Decl(internalAliasEnum.ts, 0, 0))
+->weekend : Symbol(b, Decl(internalAliasEnum.ts, 0, 10))
++>weekend : Symbol(weekend, Decl(internalAliasEnum.ts, 0, 10))
+ 
+     export var bVal: b = b.Sunday;
+ >bVal : Symbol(bVal, Decl(internalAliasEnum.ts, 10, 14))
+ >b : Symbol(b, Decl(internalAliasEnum.ts, 8, 10))
+->b.Sunday : Symbol(b.Sunday, Decl(internalAliasEnum.ts, 3, 17))
++>b.Sunday : Symbol(Sunday, Decl(internalAliasEnum.ts, 3, 17))
+ >b : Symbol(b, Decl(internalAliasEnum.ts, 8, 10))
+->Sunday : Symbol(b.Sunday, Decl(internalAliasEnum.ts, 3, 17))
++>Sunday : Symbol(Sunday, Decl(internalAliasEnum.ts, 3, 17))
+ }
+ 

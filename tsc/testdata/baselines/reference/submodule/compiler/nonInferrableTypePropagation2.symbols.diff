@@ -1,0 +1,28 @@
+--- old.nonInferrableTypePropagation2.symbols
++++ new.nonInferrableTypePropagation2.symbols
+@@= skipped -14, +14 lines =@@
+ >E : Symbol(E, Decl(nonInferrableTypePropagation2.ts, 4, 15))
+ 
+     readonly _tag: 'Left'
+->_tag : Symbol(Left._tag, Decl(nonInferrableTypePropagation2.ts, 4, 19))
++>_tag : Symbol(_tag, Decl(nonInferrableTypePropagation2.ts, 4, 19))
+ 
+     readonly left: E
+->left : Symbol(Left.left, Decl(nonInferrableTypePropagation2.ts, 5, 25))
++>left : Symbol(left, Decl(nonInferrableTypePropagation2.ts, 5, 25))
+ >E : Symbol(E, Decl(nonInferrableTypePropagation2.ts, 4, 15))
+ }
+   
+@@= skipped -12, +12 lines =@@
+ >A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 9, 16))
+ 
+     readonly _tag: 'Right'
+->_tag : Symbol(Right._tag, Decl(nonInferrableTypePropagation2.ts, 9, 20))
++>_tag : Symbol(_tag, Decl(nonInferrableTypePropagation2.ts, 9, 20))
+ 
+     readonly right: A
+->right : Symbol(Right.right, Decl(nonInferrableTypePropagation2.ts, 10, 26))
++>right : Symbol(right, Decl(nonInferrableTypePropagation2.ts, 10, 26))
+ >A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 9, 16))
+ }
+ 

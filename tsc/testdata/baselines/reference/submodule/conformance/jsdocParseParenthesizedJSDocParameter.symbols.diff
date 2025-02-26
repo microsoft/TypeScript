@@ -1,0 +1,10 @@
+--- old.jsdocParseParenthesizedJSDocParameter.symbols
++++ new.jsdocParseParenthesizedJSDocParameter.symbols
+@@= skipped -4, +4 lines =@@
+ var x = s => s.toString()
+ >x : Symbol(x, Decl(paren.js, 1, 3))
+ >s : Symbol(s, Decl(paren.js, 1, 7))
+->s.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(paren.js, 1, 7))
+->toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+ 

@@ -1,0 +1,117 @@
+--- old.typeGuardOfFormIsTypeOnInterfaces.symbols
++++ new.typeGuardOfFormIsTypeOnInterfaces.symbols
+@@= skipped -7, +7 lines =@@
+ >C1 : Symbol(C1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 0, 0))
+ 
+     prototype: C1;
+->prototype : Symbol(C1.prototype, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 1, 11))
++>prototype : Symbol(prototype, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 1, 11))
+ >C1 : Symbol(C1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 0, 0))
+ 
+     p1: string;
+->p1 : Symbol(C1.p1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 2, 18))
++>p1 : Symbol(p1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 2, 18))
+ }
+ interface C2 {
+ >C2 : Symbol(C2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 4, 1))
+@@= skipped -13, +13 lines =@@
+ >C2 : Symbol(C2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 4, 1))
+ 
+     prototype: C2;
+->prototype : Symbol(C2.prototype, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 6, 11))
++>prototype : Symbol(prototype, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 6, 11))
+ >C2 : Symbol(C2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 4, 1))
+ 
+     p2: number;
+->p2 : Symbol(C2.p2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 7, 18))
++>p2 : Symbol(p2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 7, 18))
+ }
+ interface D1 extends C1 {
+ >D1 : Symbol(D1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 9, 1))
+ >C1 : Symbol(C1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 0, 0))
+ 
+     prototype: D1;
+->prototype : Symbol(D1.prototype, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 10, 25))
++>prototype : Symbol(prototype, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 10, 25))
+ >D1 : Symbol(D1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 9, 1))
+ 
+     p3: number;
+->p3 : Symbol(D1.p3, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 11, 18))
++>p3 : Symbol(p3, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 11, 18))
+ }
+ var str: string;
+ >str : Symbol(str, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 14, 3))
+@@= skipped -75, +75 lines =@@
+ >str : Symbol(str, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 14, 3))
+ >isC1 : Symbol(isC1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 16, 30))
+ >c1Orc2 : Symbol(c1Orc2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 34, 3))
+->c1Orc2.p1 : Symbol(C1.p1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 2, 18))
++>c1Orc2.p1 : Symbol(p1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 2, 18))
+ >c1Orc2 : Symbol(c1Orc2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 34, 3))
+->p1 : Symbol(C1.p1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 2, 18))
++>p1 : Symbol(p1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 2, 18))
+ 
+ num = isC2(c1Orc2) && c1Orc2.p2; // C2
+ >num : Symbol(num, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 15, 3))
+ >isC2 : Symbol(isC2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 21, 1))
+ >c1Orc2 : Symbol(c1Orc2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 34, 3))
+->c1Orc2.p2 : Symbol(C2.p2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 7, 18))
++>c1Orc2.p2 : Symbol(p2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 7, 18))
+ >c1Orc2 : Symbol(c1Orc2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 34, 3))
+->p2 : Symbol(C2.p2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 7, 18))
++>p2 : Symbol(p2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 7, 18))
+ 
+ str = isD1(c1Orc2) && c1Orc2.p1; // D1
+ >str : Symbol(str, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 14, 3))
+ >isD1 : Symbol(isD1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 25, 1))
+ >c1Orc2 : Symbol(c1Orc2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 34, 3))
+->c1Orc2.p1 : Symbol(C1.p1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 2, 18))
++>c1Orc2.p1 : Symbol(p1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 2, 18))
+ >c1Orc2 : Symbol(c1Orc2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 34, 3))
+->p1 : Symbol(C1.p1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 2, 18))
++>p1 : Symbol(p1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 2, 18))
+ 
+ num = isD1(c1Orc2) && c1Orc2.p3; // D1
+ >num : Symbol(num, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 15, 3))
+ >isD1 : Symbol(isD1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 25, 1))
+ >c1Orc2 : Symbol(c1Orc2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 34, 3))
+->c1Orc2.p3 : Symbol(D1.p3, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 11, 18))
++>c1Orc2.p3 : Symbol(p3, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 11, 18))
+ >c1Orc2 : Symbol(c1Orc2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 34, 3))
+->p3 : Symbol(D1.p3, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 11, 18))
++>p3 : Symbol(p3, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 11, 18))
+ 
+ var c2Ord1: C2 | D1;
+ >c2Ord1 : Symbol(c2Ord1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 40, 3))
+@@= skipped -37, +37 lines =@@
+ >num : Symbol(num, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 15, 3))
+ >isC2 : Symbol(isC2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 21, 1))
+ >c2Ord1 : Symbol(c2Ord1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 40, 3))
+->c2Ord1.p2 : Symbol(C2.p2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 7, 18))
++>c2Ord1.p2 : Symbol(p2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 7, 18))
+ >c2Ord1 : Symbol(c2Ord1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 40, 3))
+->p2 : Symbol(C2.p2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 7, 18))
++>p2 : Symbol(p2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 7, 18))
+ 
+ num = isD1(c2Ord1) && c2Ord1.p3; // D1
+ >num : Symbol(num, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 15, 3))
+ >isD1 : Symbol(isD1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 25, 1))
+ >c2Ord1 : Symbol(c2Ord1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 40, 3))
+->c2Ord1.p3 : Symbol(D1.p3, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 11, 18))
++>c2Ord1.p3 : Symbol(p3, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 11, 18))
+ >c2Ord1 : Symbol(c2Ord1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 40, 3))
+->p3 : Symbol(D1.p3, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 11, 18))
++>p3 : Symbol(p3, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 11, 18))
+ 
+ str = isD1(c2Ord1) && c2Ord1.p1; // D1
+ >str : Symbol(str, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 14, 3))
+ >isD1 : Symbol(isD1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 25, 1))
+ >c2Ord1 : Symbol(c2Ord1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 40, 3))
+->c2Ord1.p1 : Symbol(C1.p1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 2, 18))
++>c2Ord1.p1 : Symbol(p1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 2, 18))
+ >c2Ord1 : Symbol(c2Ord1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 40, 3))
+->p1 : Symbol(C1.p1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 2, 18))
++>p1 : Symbol(p1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 2, 18))
+ 
+ var r2: C2 | D1 = isC1(c2Ord1) && c2Ord1; // C2 | D1
+ >r2 : Symbol(r2, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 44, 3))

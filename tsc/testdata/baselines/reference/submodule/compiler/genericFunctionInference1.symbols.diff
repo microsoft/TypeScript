@@ -1,0 +1,99 @@
+--- old.genericFunctionInference1.symbols
++++ new.genericFunctionInference1.symbols
+@@= skipped -150, +150 lines =@@
+ >pipe : Symbol(pipe, Decl(genericFunctionInference1.ts, 0, 0), Decl(genericFunctionInference1.ts, 0, 84), Decl(genericFunctionInference1.ts, 1, 104))
+ >list : Symbol(list, Decl(genericFunctionInference1.ts, 2, 124))
+ >x : Symbol(x, Decl(genericFunctionInference1.ts, 17, 22))
+->x.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(genericFunctionInference1.ts, 17, 22))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+ const f10 = pipe(foo);
+ >f10 : Symbol(f10, Decl(genericFunctionInference1.ts, 18, 5))
+@@= skipped -137, +135 lines =@@
+ >pipe : Symbol(pipe, Decl(genericFunctionInference1.ts, 0, 0), Decl(genericFunctionInference1.ts, 0, 84), Decl(genericFunctionInference1.ts, 1, 104))
+ >list : Symbol(list, Decl(genericFunctionInference1.ts, 2, 124))
+ >x : Symbol(x, Decl(genericFunctionInference1.ts, 30, 43))
+->x.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(genericFunctionInference1.ts, 30, 43))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+ 
+ const g10: <T extends { value: T }>(x: T) => T = pipe(foo);
+ >g10 : Symbol(g10, Decl(genericFunctionInference1.ts, 31, 5))
+@@= skipped -247, +245 lines =@@
+ >y : Symbol(y, Decl(genericFunctionInference1.ts, 74, 26))
+ 
+     readonly x: number;
+->x : Symbol(Point.x, Decl(genericFunctionInference1.ts, 74, 38))
++>x : Symbol(x, Decl(genericFunctionInference1.ts, 74, 38))
+ 
+     readonly y: number;
+->y : Symbol(Point.y, Decl(genericFunctionInference1.ts, 75, 23))
++>y : Symbol(y, Decl(genericFunctionInference1.ts, 75, 23))
+ }
+ 
+ declare class Bag<T> {
+@@= skipped -15, +15 lines =@@
+ >T : Symbol(T, Decl(genericFunctionInference1.ts, 79, 18))
+ 
+     contains(value: T): boolean;
+->contains : Symbol(Bag.contains, Decl(genericFunctionInference1.ts, 80, 30))
++>contains : Symbol(contains, Decl(genericFunctionInference1.ts, 80, 30))
+ >value : Symbol(value, Decl(genericFunctionInference1.ts, 81, 13))
+ >T : Symbol(T, Decl(genericFunctionInference1.ts, 79, 18))
+ 
+     static foo: string;
+->foo : Symbol(Bag.foo, Decl(genericFunctionInference1.ts, 81, 32))
++>foo : Symbol(foo, Decl(genericFunctionInference1.ts, 81, 32))
+ }
+ 
+ function asFunction<A extends any[], B>(cf: new (...args: A) => B) {
+@@= skipped -55, +55 lines =@@
+ >P : Symbol(P, Decl(genericFunctionInference1.ts, 96, 19))
+ 
+     props: P;
+->props : Symbol(Comp.props, Decl(genericFunctionInference1.ts, 96, 23))
++>props : Symbol(props, Decl(genericFunctionInference1.ts, 96, 23))
+ >P : Symbol(P, Decl(genericFunctionInference1.ts, 96, 19))
+ 
+     constructor(props: P);
+@@= skipped -96, +96 lines =@@
+ >Data : Symbol(Data, Decl(genericFunctionInference1.ts, 124, 1))
+ 
+     key: number;
+->key : Symbol(Data.key, Decl(genericFunctionInference1.ts, 125, 23))
++>key : Symbol(key, Decl(genericFunctionInference1.ts, 125, 23))
+ 
+     value: Date;
+->value : Symbol(Data.value, Decl(genericFunctionInference1.ts, 126, 16))
+->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>value : Symbol(value, Decl(genericFunctionInference1.ts, 126, 16))
++>Date : Symbol(Date)
+ }
+ 
+ var data: Data[] = [];
+@@= skipped -101, +101 lines =@@
+     (arr: T[]) => arr.map(transform)
+ >arr : Symbol(arr, Decl(genericFunctionInference1.ts, 151, 5))
+ >T : Symbol(T, Decl(genericFunctionInference1.ts, 150, 13))
+->arr.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+ >arr : Symbol(arr, Decl(genericFunctionInference1.ts, 151, 5))
+->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+ >transform : Symbol(transform, Decl(genericFunctionInference1.ts, 150, 19))
+ 
+ const identityStr = (t: string) => t;
+@@= skipped -121, +119 lines =@@
+ 
+ const promise = Promise.resolve(1);
+ >promise : Symbol(promise, Decl(genericFunctionInference1.ts, 194, 5))
+->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+ 
+ promise.then(
+->promise.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+ >promise : Symbol(promise, Decl(genericFunctionInference1.ts, 194, 5))
+->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+ 
+     pipe(
+ >pipe : Symbol(pipe, Decl(genericFunctionInference1.ts, 0, 0), Decl(genericFunctionInference1.ts, 0, 84), Decl(genericFunctionInference1.ts, 1, 104))

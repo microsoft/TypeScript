@@ -1,0 +1,95 @@
+--- old.complicatedPrivacy.symbols
++++ new.complicatedPrivacy.symbols
+@@= skipped -20, +20 lines =@@
+ 
+         export class C2 implements m3.i3 {
+ >C2 : Symbol(C2, Decl(complicatedPrivacy.ts, 7, 9))
+->m3.i3 : Symbol(m3.i3, Decl(complicatedPrivacy.ts, 45, 9))
++>m3.i3 : Symbol(i3, Decl(complicatedPrivacy.ts, 45, 9))
+ >m3 : Symbol(m3, Decl(complicatedPrivacy.ts, 42, 5))
+->i3 : Symbol(m3.i3, Decl(complicatedPrivacy.ts, 45, 9))
++>i3 : Symbol(i3, Decl(complicatedPrivacy.ts, 45, 9))
+ 
+             public get p1(arg) {
+->p1 : Symbol(C2.p1, Decl(complicatedPrivacy.ts, 9, 42), Decl(complicatedPrivacy.ts, 12, 13))
++>p1 : Symbol(p1, Decl(complicatedPrivacy.ts, 9, 42), Decl(complicatedPrivacy.ts, 12, 13))
+ >arg : Symbol(arg, Decl(complicatedPrivacy.ts, 10, 26))
+ 
+                 return new C1();
+@@= skipped -13, +13 lines =@@
+             }
+ 
+             public set p1(arg1: C1) {
+->p1 : Symbol(C2.p1, Decl(complicatedPrivacy.ts, 9, 42), Decl(complicatedPrivacy.ts, 12, 13))
++>p1 : Symbol(p1, Decl(complicatedPrivacy.ts, 9, 42), Decl(complicatedPrivacy.ts, 12, 13))
+ >arg1 : Symbol(arg1, Decl(complicatedPrivacy.ts, 14, 26))
+ >C1 : Symbol(C1, Decl(complicatedPrivacy.ts, 50, 5))
+             }
+ 
+             public f55() {
+->f55 : Symbol(C2.f55, Decl(complicatedPrivacy.ts, 15, 13))
++>f55 : Symbol(f55, Decl(complicatedPrivacy.ts, 15, 13))
+ 
+                 return "Hello world";
+             }
+@@= skipped -68, +68 lines =@@
+ >i3 : Symbol(i3, Decl(complicatedPrivacy.ts, 45, 9))
+ 
+             f55(): string;
+->f55 : Symbol(i3.f55, Decl(complicatedPrivacy.ts, 47, 29))
++>f55 : Symbol(f55, Decl(complicatedPrivacy.ts, 47, 29))
+         }
+     }
+ 
+@@= skipped -12, +12 lines =@@
+ >i : Symbol(i, Decl(complicatedPrivacy.ts, 53, 5))
+ 
+         x: number;
+->x : Symbol(i.x, Decl(complicatedPrivacy.ts, 55, 17))
++>x : Symbol(x, Decl(complicatedPrivacy.ts, 55, 17))
+     }
+ 
+     export class C5 implements i {
+@@= skipped -8, +8 lines =@@
+ >i : Symbol(i, Decl(complicatedPrivacy.ts, 53, 5))
+ 
+         public x: number;
+->x : Symbol(C5.x, Decl(complicatedPrivacy.ts, 59, 34))
++>x : Symbol(x, Decl(complicatedPrivacy.ts, 59, 34))
+     }
+ 
+     export var v2: C1[];
+@@= skipped -20, +20 lines =@@
+ 
+         export class c_pr  implements mglo5.i5, mglo5.i6 {
+ >c_pr : Symbol(c_pr, Decl(complicatedPrivacy.ts, 70, 22))
+->mglo5.i5 : Symbol(mglo5.i5, Decl(complicatedPrivacy.ts, 94, 14))
++>mglo5.i5 : Symbol(i5, Decl(complicatedPrivacy.ts, 94, 14))
+ >mglo5 : Symbol(mglo5, Decl(complicatedPrivacy.ts, 92, 1))
+->i5 : Symbol(mglo5.i5, Decl(complicatedPrivacy.ts, 94, 14))
++>i5 : Symbol(i5, Decl(complicatedPrivacy.ts, 94, 14))
+ >mglo5 : Symbol(mglo5, Decl(complicatedPrivacy.ts, 92, 1))
+ 
+             f1() {
+->f1 : Symbol(c_pr.f1, Decl(complicatedPrivacy.ts, 72, 58))
++>f1 : Symbol(f1, Decl(complicatedPrivacy.ts, 72, 58))
+ 
+                 return "Hello";
+             }
+@@= skipped -44, +44 lines =@@
+ >i5 : Symbol(i5, Decl(complicatedPrivacy.ts, 94, 14))
+ 
+         f1(): string;
+->f1 : Symbol(i5.f1, Decl(complicatedPrivacy.ts, 95, 25))
++>f1 : Symbol(f1, Decl(complicatedPrivacy.ts, 95, 25))
+     }
+ 
+     interface i6 {
+ >i6 : Symbol(i6, Decl(complicatedPrivacy.ts, 97, 5))
+ 
+         f6(): number;
+->f6 : Symbol(i6.f6, Decl(complicatedPrivacy.ts, 99, 18))
++>f6 : Symbol(f6, Decl(complicatedPrivacy.ts, 99, 18))
+     }
+ }
+ 

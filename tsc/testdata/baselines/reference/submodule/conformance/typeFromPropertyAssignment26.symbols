@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment26.ts] ////
+
+=== bug24730.js ===
+var UI = {}
+>UI : Symbol(UI, Decl(bug24730.js, 0, 3))
+
+UI.TreeElement = class {
+>UI : Symbol(UI, Decl(bug24730.js, 0, 3))
+
+    constructor() {
+        this.treeOutline = 12
+>this : Symbol(TreeElement, Decl(bug24730.js, 1, 16))
+    }
+};
+UI.context = new UI.TreeElement()
+>UI : Symbol(UI, Decl(bug24730.js, 0, 3))
+>UI : Symbol(UI, Decl(bug24730.js, 0, 3))
+
+class C extends UI.TreeElement {
+>C : Symbol(C, Decl(bug24730.js, 6, 33))
+>UI : Symbol(UI, Decl(bug24730.js, 0, 3))
+
+    onpopulate() {
+>onpopulate : Symbol(onpopulate, Decl(bug24730.js, 8, 32))
+
+        this.doesNotExist
+>this : Symbol(C, Decl(bug24730.js, 6, 33))
+
+        this.treeOutline.doesntExistEither()
+>this : Symbol(C, Decl(bug24730.js, 6, 33))
+    }
+};
+

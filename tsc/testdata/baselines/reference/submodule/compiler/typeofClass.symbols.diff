@@ -1,0 +1,37 @@
+--- old.typeofClass.symbols
++++ new.typeofClass.symbols
+@@= skipped -4, +4 lines =@@
+ >K : Symbol(K, Decl(typeofClass.ts, 0, 0))
+ 
+     foo: number;
+->foo : Symbol(K.foo, Decl(typeofClass.ts, 0, 9))
++>foo : Symbol(foo, Decl(typeofClass.ts, 0, 9))
+ 
+     static bar: string;
+->bar : Symbol(K.bar, Decl(typeofClass.ts, 1, 16))
++>bar : Symbol(bar, Decl(typeofClass.ts, 1, 16))
+ }
+ 
+ var k1: K;
+@@= skipped -11, +11 lines =@@
+ >K : Symbol(K, Decl(typeofClass.ts, 0, 0))
+ 
+ k1.foo;
+->k1.foo : Symbol(K.foo, Decl(typeofClass.ts, 0, 9))
++>k1.foo : Symbol(foo, Decl(typeofClass.ts, 0, 9))
+ >k1 : Symbol(k1, Decl(typeofClass.ts, 5, 3))
+->foo : Symbol(K.foo, Decl(typeofClass.ts, 0, 9))
++>foo : Symbol(foo, Decl(typeofClass.ts, 0, 9))
+ 
+ k1.bar;
+ >k1 : Symbol(k1, Decl(typeofClass.ts, 5, 3))
+@@= skipped -15, +15 lines =@@
+ >k2 : Symbol(k2, Decl(typeofClass.ts, 8, 3))
+ 
+ k2.bar;
+->k2.bar : Symbol(K.bar, Decl(typeofClass.ts, 1, 16))
++>k2.bar : Symbol(bar, Decl(typeofClass.ts, 1, 16))
+ >k2 : Symbol(k2, Decl(typeofClass.ts, 8, 3))
+->bar : Symbol(K.bar, Decl(typeofClass.ts, 1, 16))
++>bar : Symbol(bar, Decl(typeofClass.ts, 1, 16))
+ 

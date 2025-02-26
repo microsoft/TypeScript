@@ -1,0 +1,15 @@
+--- old.destructuringParameterDeclaration7ES5iterable.symbols
++++ new.destructuringParameterDeclaration7ES5iterable.symbols
+@@= skipped -4, +4 lines =@@
+ >ISomething : Symbol(ISomething, Decl(destructuringParameterDeclaration7ES5iterable.ts, 0, 0))
+ 
+     foo: string,
+->foo : Symbol(ISomething.foo, Decl(destructuringParameterDeclaration7ES5iterable.ts, 0, 22))
++>foo : Symbol(foo, Decl(destructuringParameterDeclaration7ES5iterable.ts, 0, 22))
+ 
+     bar: string
+->bar : Symbol(ISomething.bar, Decl(destructuringParameterDeclaration7ES5iterable.ts, 1, 16))
++>bar : Symbol(bar, Decl(destructuringParameterDeclaration7ES5iterable.ts, 1, 16))
+ }
+ 
+ function foo({}, {foo, bar}: ISomething) {}

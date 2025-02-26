@@ -1,0 +1,29 @@
+--- old.augmentedTypesFunction.symbols
++++ new.augmentedTypesFunction.symbols
+@@= skipped -32, +32 lines =@@
+ 
+ class y3a { public foo() { } } // error
+ >y3a : Symbol(y3a, Decl(augmentedTypesFunction.ts, 13, 12), Decl(augmentedTypesFunction.ts, 15, 18))
+->foo : Symbol(y3a.foo, Decl(augmentedTypesFunction.ts, 16, 11))
++>foo : Symbol(foo, Decl(augmentedTypesFunction.ts, 16, 11))
+ 
+ // function then enum
+ function y4() { } // error
+@@= skipped -8, +8 lines =@@
+ 
+ enum y4 { One } // error
+ >y4 : Symbol(y4, Decl(augmentedTypesFunction.ts, 19, 17))
+->One : Symbol(y4.One, Decl(augmentedTypesFunction.ts, 20, 9))
++>One : Symbol(One, Decl(augmentedTypesFunction.ts, 20, 9))
+ 
+ // function then internal module
+ function y5() { }
+@@= skipped -29, +29 lines =@@
+ module y5c { export interface I { foo(): void } } // should be an error
+ >y5c : Symbol(y5c, Decl(augmentedTypesFunction.ts, 30, 32), Decl(augmentedTypesFunction.ts, 32, 18))
+ >I : Symbol(I, Decl(augmentedTypesFunction.ts, 33, 12))
+->foo : Symbol(I.foo, Decl(augmentedTypesFunction.ts, 33, 33))
++>foo : Symbol(foo, Decl(augmentedTypesFunction.ts, 33, 33))
+ 
+ // function then import, messes with other errors
+ //function y6() { }

@@ -1,0 +1,13 @@
+--- old.parserClassDeclaration19.symbols
++++ new.parserClassDeclaration19.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(parserClassDeclaration19.ts, 0, 0))
+ 
+     foo();
+->foo : Symbol(C.foo, Decl(parserClassDeclaration19.ts, 0, 9), Decl(parserClassDeclaration19.ts, 1, 10))
++>foo : Symbol(foo, Decl(parserClassDeclaration19.ts, 0, 9), Decl(parserClassDeclaration19.ts, 1, 10))
+ 
+     "foo"() { }
+->"foo" : Symbol(C.foo, Decl(parserClassDeclaration19.ts, 0, 9), Decl(parserClassDeclaration19.ts, 1, 10))
++>"foo" : Symbol(foo, Decl(parserClassDeclaration19.ts, 0, 9), Decl(parserClassDeclaration19.ts, 1, 10))
+ }

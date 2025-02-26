@@ -1,0 +1,20 @@
+--- old.taggedTemplateStringsWithManyCallAndMemberExpressions.symbols
++++ new.taggedTemplateStringsWithManyCallAndMemberExpressions.symbols
+@@= skipped -10, +10 lines =@@
+ >I : Symbol(I, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 0, 0))
+ 
+     member: {
+->member : Symbol(I.member, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 1, 55))
++>member : Symbol(member, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 1, 55))
+ 
+         new (s: string): {
+ >s : Symbol(s, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 3, 13))
+@@= skipped -19, +19 lines =@@
+ 
+ var x = new new new f `abc${ 0 }def`.member("hello")(42) === true;
+ >x : Symbol(x, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 12, 3))
+->f `abc${ 0 }def`.member : Symbol(I.member, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 1, 55))
+ >f : Symbol(f, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 10, 3))
+->member : Symbol(I.member, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 1, 55))
+ 
+ 

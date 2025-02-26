@@ -1,0 +1,72 @@
+--- old.definiteAssignmentAssertions.symbols
++++ new.definiteAssignmentAssertions.symbols
+@@= skipped -6, +6 lines =@@
+ >C1 : Symbol(C1, Decl(definiteAssignmentAssertions.ts, 0, 0))
+ 
+     a!: number;
+->a : Symbol(C1.a, Decl(definiteAssignmentAssertions.ts, 2, 10))
++>a : Symbol(a, Decl(definiteAssignmentAssertions.ts, 2, 10))
+ 
+     b: string;  // Error
+->b : Symbol(C1.b, Decl(definiteAssignmentAssertions.ts, 3, 15))
++>b : Symbol(b, Decl(definiteAssignmentAssertions.ts, 3, 15))
+ }
+ 
+ // Suppress definite assignment check in constructor
+@@= skipped -12, +12 lines =@@
+ >C2 : Symbol(C2, Decl(definiteAssignmentAssertions.ts, 5, 1))
+ 
+     a!: number;
+->a : Symbol(C2.a, Decl(definiteAssignmentAssertions.ts, 9, 10))
++>a : Symbol(a, Decl(definiteAssignmentAssertions.ts, 9, 10))
+ 
+     constructor() {
+         let x = this.a;
+ >x : Symbol(x, Decl(definiteAssignmentAssertions.ts, 12, 11))
+->this.a : Symbol(C2.a, Decl(definiteAssignmentAssertions.ts, 9, 10))
++>this.a : Symbol(a, Decl(definiteAssignmentAssertions.ts, 9, 10))
+ >this : Symbol(C2, Decl(definiteAssignmentAssertions.ts, 5, 1))
+->a : Symbol(C2.a, Decl(definiteAssignmentAssertions.ts, 9, 10))
++>a : Symbol(a, Decl(definiteAssignmentAssertions.ts, 9, 10))
+     }
+ }
+ 
+@@= skipped -17, +17 lines =@@
+ >C3 : Symbol(C3, Decl(definiteAssignmentAssertions.ts, 14, 1))
+ 
+     a! = 1;
+->a : Symbol(C3.a, Decl(definiteAssignmentAssertions.ts, 18, 10))
++>a : Symbol(a, Decl(definiteAssignmentAssertions.ts, 18, 10))
+ 
+     b!: number = 1;
+->b : Symbol(C3.b, Decl(definiteAssignmentAssertions.ts, 19, 11))
++>b : Symbol(b, Decl(definiteAssignmentAssertions.ts, 19, 11))
+ 
+     static c!: number;
+->c : Symbol(C3.c, Decl(definiteAssignmentAssertions.ts, 20, 19))
++>c : Symbol(c, Decl(definiteAssignmentAssertions.ts, 20, 19))
+ 
+     d!;
+->d : Symbol(C3.d, Decl(definiteAssignmentAssertions.ts, 21, 22))
++>d : Symbol(d, Decl(definiteAssignmentAssertions.ts, 21, 22))
+ }
+ 
+ // Definite assignment assertion not permitted in ambient context
+@@= skipped -18, +18 lines =@@
+ >C4 : Symbol(C4, Decl(definiteAssignmentAssertions.ts, 23, 1))
+ 
+     a!: number;
+->a : Symbol(C4.a, Decl(definiteAssignmentAssertions.ts, 27, 18))
++>a : Symbol(a, Decl(definiteAssignmentAssertions.ts, 27, 18))
+ }
+ 
+ // Definite assignment assertion not permitted on abstract property
+@@= skipped -9, +9 lines =@@
+ >C5 : Symbol(C5, Decl(definiteAssignmentAssertions.ts, 29, 1))
+ 
+     abstract a!: number;
+->a : Symbol(C5.a, Decl(definiteAssignmentAssertions.ts, 33, 19))
++>a : Symbol(a, Decl(definiteAssignmentAssertions.ts, 33, 19))
+ }
+ 
+ // Suppress definite assignment check for variable

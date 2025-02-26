@@ -1,0 +1,11 @@
+--- old.es6-amd.symbols
++++ new.es6-amd.symbols
+@@= skipped -9, +9 lines =@@
+     }
+ 
+     public B()
+->B : Symbol(A.B, Decl(es6-amd.ts, 5, 5))
++>B : Symbol(B, Decl(es6-amd.ts, 5, 5))
+     {
+         return 42;
+     }

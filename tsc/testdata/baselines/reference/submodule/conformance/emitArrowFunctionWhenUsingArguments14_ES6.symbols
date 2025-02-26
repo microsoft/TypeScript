@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments14_ES6.ts] ////
+
+=== emitArrowFunctionWhenUsingArguments14_ES6.ts ===
+function f() {
+>f : Symbol(f, Decl(emitArrowFunctionWhenUsingArguments14_ES6.ts, 0, 0))
+
+    if (Math.random()) {
+        let arguments = 100;
+>arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments14_ES6.ts, 2, 11))
+
+        return () => arguments;
+>arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments14_ES6.ts, 2, 11))
+    }
+}

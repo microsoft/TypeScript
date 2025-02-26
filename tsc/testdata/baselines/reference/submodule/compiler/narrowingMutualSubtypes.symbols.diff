@@ -1,0 +1,80 @@
+--- old.narrowingMutualSubtypes.symbols
++++ new.narrowingMutualSubtypes.symbols
+@@= skipped -262, +262 lines =@@
+ 
+     // "accidentally" guards the first branch on the length
+     if (Array.isArray(obj) && obj.length) {
+->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>Array.isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ >obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 104, 30))
+->obj.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>obj.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 104, 30))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+         for (let key in obj) {
+ >key : Symbol(key, Decl(narrowingMutualSubtypes.ts, 107, 16))
+@@= skipped -18, +18 lines =@@
+ >undefined : Symbol(undefined)
+ 
+                 console.log(obj[key])
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 104, 30))
+ >key : Symbol(key, Decl(narrowingMutualSubtypes.ts, 107, 16))
+             }
+@@= skipped -20, +20 lines =@@
+ >undefined : Symbol(undefined)
+ 
+                 console.log(obj[key])
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 104, 30))
+ >key : Symbol(key, Decl(narrowingMutualSubtypes.ts, 115, 16))
+             }
+@@= skipped -17, +17 lines =@@
+ >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+ 
+     if (Array.isArray(obj)) {
+->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>Array.isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ >obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 123, 30))
+ 
+         // obj should only be an array type here
+@@= skipped -16, +16 lines =@@
+ >undefined : Symbol(undefined)
+ 
+                 console.log(obj[key])
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 123, 30))
+ >key : Symbol(key, Decl(narrowingMutualSubtypes.ts, 126, 16))
+             }
+@@= skipped -20, +20 lines =@@
+ >undefined : Symbol(undefined)
+ 
+                 console.log(obj[key])
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >obj : Symbol(obj, Decl(narrowingMutualSubtypes.ts, 123, 30))
+ >key : Symbol(key, Decl(narrowingMutualSubtypes.ts, 134, 16))
+             }

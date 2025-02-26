@@ -1,0 +1,11 @@
+--- old.mappedTypeIndexSignatureModifiers.symbols
++++ new.mappedTypeIndexSignatureModifiers.symbols
+@@= skipped -18, +18 lines =@@
+ >Obj2 : Symbol(Obj2, Decl(mappedTypeIndexSignatureModifiers.ts, 5, 34))
+ 
+     concreteProp: 'hello';
+->concreteProp : Symbol(Obj2.concreteProp, Decl(mappedTypeIndexSignatureModifiers.ts, 7, 16))
++>concreteProp : Symbol(concreteProp, Decl(mappedTypeIndexSignatureModifiers.ts, 7, 16))
+ 
+     readonly [key: string]: string;
+ >key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 9, 14))

@@ -1,0 +1,11 @@
+--- old.jsxFactoryIdentifierAsParameter.symbols
++++ new.jsxFactoryIdentifierAsParameter.symbols
+@@= skipped -15, +15 lines =@@
+ >AppComponent : Symbol(AppComponent, Decl(test.tsx, 4, 1))
+ 
+     render(createElement) {
+->render : Symbol(AppComponent.render, Decl(test.tsx, 6, 27))
++>render : Symbol(render, Decl(test.tsx, 6, 27))
+ >createElement : Symbol(createElement, Decl(test.tsx, 7, 11))
+ 
+         return <div />;

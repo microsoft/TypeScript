@@ -1,0 +1,11 @@
+--- old.declarationEmitBundleWithAmbientReferences.symbols
++++ new.declarationEmitBundleWithAmbientReferences.symbols
+@@= skipped -43, +43 lines =@@
+ export const build = (): DatastoreResult.T<string> => {
+ >build : Symbol(build, Decl(conditional_directive_field.ts, 2, 12))
+ >DatastoreResult : Symbol(DatastoreResult, Decl(conditional_directive_field.ts, 0, 6))
+->T : Symbol(DatastoreResult.T, Decl(datastore_result.ts, 0, 36))
++>T : Symbol(T)
+ 
+ 	return null;
+ };

@@ -1,0 +1,41 @@
+--- old.neverInference.symbols
++++ new.neverInference.symbols
+@@= skipped -34, +34 lines =@@
+ >T : Symbol(T, Decl(neverInference.ts, 11, 21))
+ 
+     comparator: Comparator<T>,
+->comparator : Symbol(LinkedList.comparator, Decl(neverInference.ts, 11, 25))
++>comparator : Symbol(comparator, Decl(neverInference.ts, 11, 25))
+ >Comparator : Symbol(Comparator, Decl(neverInference.ts, 5, 24))
+ >T : Symbol(T, Decl(neverInference.ts, 11, 21))
+ 
+     nodes: Node<T>
+->nodes : Symbol(LinkedList.nodes, Decl(neverInference.ts, 12, 30))
++>nodes : Symbol(nodes, Decl(neverInference.ts, 12, 30))
+ >Node : Symbol(Node, Decl(neverInference.ts, 14, 1))
+ >T : Symbol(T, Decl(neverInference.ts, 11, 21))
+ }
+@@= skipped -58, +58 lines =@@
+ 
+ f2(Array.from([0]), [], (a1, a2) => a1 - a2);
+ >f2 : Symbol(f2, Decl(neverInference.ts, 21, 60))
+->Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
++>Array.from : Symbol(from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
++>from : Symbol(from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+ >a1 : Symbol(a1, Decl(neverInference.ts, 26, 25))
+ >a2 : Symbol(a2, Decl(neverInference.ts, 26, 28))
+ >a1 : Symbol(a1, Decl(neverInference.ts, 26, 25))
+@@= skipped -10, +10 lines =@@
+ 
+ f2(Array.from([]), [0], (a1, a2) => a1 - a2);
+ >f2 : Symbol(f2, Decl(neverInference.ts, 21, 60))
+->Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
++>Array.from : Symbol(from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
++>from : Symbol(from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+ >a1 : Symbol(a1, Decl(neverInference.ts, 27, 25))
+ >a2 : Symbol(a2, Decl(neverInference.ts, 27, 28))
+ >a1 : Symbol(a1, Decl(neverInference.ts, 27, 25))

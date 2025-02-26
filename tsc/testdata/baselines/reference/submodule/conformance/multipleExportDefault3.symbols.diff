@@ -1,0 +1,10 @@
+--- old.multipleExportDefault3.symbols
++++ new.multipleExportDefault3.symbols
+@@= skipped -7, +7 lines =@@
+ };
+ 
+ export default class C { }
+->C : Symbol(C, Decl(multipleExportDefault3.ts, 2, 2))
++>C : Symbol(default, Decl(multipleExportDefault3.ts, 2, 2))
+ 
+ 

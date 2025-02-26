@@ -1,0 +1,11 @@
+--- old.narrowingGenericTypeFromInstanceof01.symbols
++++ new.narrowingGenericTypeFromInstanceof01.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(narrowingGenericTypeFromInstanceof01.ts, 0, 8))
+ 
+     constructor(private a: string) { }
+->a : Symbol(A.a, Decl(narrowingGenericTypeFromInstanceof01.ts, 1, 16))
++>a : Symbol(a, Decl(narrowingGenericTypeFromInstanceof01.ts, 1, 16))
+ }
+ 
+ class B<T> {

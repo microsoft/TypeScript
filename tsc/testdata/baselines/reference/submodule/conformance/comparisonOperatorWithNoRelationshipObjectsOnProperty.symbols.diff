@@ -1,0 +1,35 @@
+--- old.comparisonOperatorWithNoRelationshipObjectsOnProperty.symbols
++++ new.comparisonOperatorWithNoRelationshipObjectsOnProperty.symbols
+@@= skipped -4, +4 lines =@@
+ >A1 : Symbol(A1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 0, 0))
+ 
+     public a: number;
+->a : Symbol(A1.a, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 0, 10))
++>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 0, 10))
+ }
+ 
+ class B1 {
+ >B1 : Symbol(B1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 2, 1))
+ 
+     public a: string;
+->a : Symbol(B1.a, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 4, 10))
++>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 4, 10))
+ }
+ 
+ class A2 {
+ >A2 : Symbol(A2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 6, 1))
+ 
+     private a: string;
+->a : Symbol(A2.a, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 8, 10))
++>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 8, 10))
+ }
+ 
+ class B2 {
+ >B2 : Symbol(B2, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 10, 1))
+ 
+     private a: string;
+->a : Symbol(B2.a, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 12, 10))
++>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 12, 10))
+ }
+ 
+ var a1: A1;

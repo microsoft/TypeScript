@@ -1,0 +1,129 @@
+--- old.taggedTemplatesWithTypeArguments1.symbols
++++ new.taggedTemplatesWithTypeArguments1.symbols
+@@= skipped -14, +14 lines =@@
+ >Stuff : Symbol(Stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 92))
+ 
+     x: number;
+->x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
++>x : Symbol(x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+ 
+     y: string;
+->y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
++>y : Symbol(y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+ 
+     z: boolean;
+->z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
++>z : Symbol(z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+ }
+ 
+ export const a = f<Stuff> `
+@@= skipped -17, +17 lines =@@
+     hello
+     ${stuff => stuff.x}
+ >stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 10, 6))
+->stuff.x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
++>stuff.x : Symbol(x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+ >stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 10, 6))
+->x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
++>x : Symbol(x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+ 
+     brave
+     ${stuff => stuff.y}
+ >stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 12, 6))
+->stuff.y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
++>stuff.y : Symbol(y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+ >stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 12, 6))
+->y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
++>y : Symbol(y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+ 
+     world
+     ${stuff => stuff.z}
+ >stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 14, 6))
+->stuff.z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
++>stuff.z : Symbol(z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+ >stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 14, 6))
+->z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
++>z : Symbol(z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+ 
+ `;
+ 
+@@= skipped -56, +56 lines =@@
+     hello
+     ${stuff => stuff.x}
+ >stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 23, 6))
+->stuff.x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
++>stuff.x : Symbol(x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+ >stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 23, 6))
+->x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
++>x : Symbol(x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+ 
+     brave
+     ${stuff => stuff.y}
+ >stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 25, 6))
+->stuff.y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
++>stuff.y : Symbol(y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+ >stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 25, 6))
+->y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
++>y : Symbol(y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+ 
+     world
+     ${stuff => stuff.z}
+ >stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 27, 6))
+->stuff.z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
++>stuff.z : Symbol(z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+ >stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 27, 6))
+->z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
++>z : Symbol(z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+ 
+ `;
+ 
+@@= skipped -48, +48 lines =@@
+ >input : Symbol(input, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 38))
+ 
+ c.returnedObjProp.x;
+->c.returnedObjProp.x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+->c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+ >c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
+->returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+->x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+ 
+ c.returnedObjProp.y;
+->c.returnedObjProp.y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+->c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+ >c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
+->returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+->y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+ 
+ c.returnedObjProp.z;
+->c.returnedObjProp.z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+->c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+ >c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
+->returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+->z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+ 
+ c = obj.prop<Stuff> `${(input) => ({ ...input })}`
+ >c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
+@@= skipped -30, +18 lines =@@
+ >input : Symbol(input, Decl(taggedTemplatesWithTypeArguments1.ts, 41, 24))
+ 
+ c.returnedObjProp.x;
+->c.returnedObjProp.x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+->c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+ >c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
+->returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+->x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+ 
+ c.returnedObjProp.y;
+->c.returnedObjProp.y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+->c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+ >c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
+->returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+->y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+ 
+ c.returnedObjProp.z;
+->c.returnedObjProp.z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+->c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+ >c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
+->returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+->z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+ 

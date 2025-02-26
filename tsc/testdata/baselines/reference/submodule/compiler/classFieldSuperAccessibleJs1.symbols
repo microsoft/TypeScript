@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/classFieldSuperAccessibleJs1.ts] ////
+
+=== index.js ===
+class C {
+>C : Symbol(C, Decl(index.js, 0, 0))
+
+  static blah1 = 123;
+>blah1 : Symbol(blah1, Decl(index.js, 0, 9))
+}
+C.blah2 = 456;
+>C : Symbol(C, Decl(index.js, 0, 0))
+
+class D extends C {
+>D : Symbol(D, Decl(index.js, 3, 14))
+>C : Symbol(C, Decl(index.js, 0, 0))
+
+  static {
+    console.log(super.blah1);
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>super.blah1 : Symbol(blah1, Decl(index.js, 0, 9))
+>super : Symbol(C, Decl(index.js, 0, 0))
+>blah1 : Symbol(blah1, Decl(index.js, 0, 9))
+
+    console.log(super.blah2);
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>super : Symbol(C, Decl(index.js, 0, 0))
+  }
+}
+

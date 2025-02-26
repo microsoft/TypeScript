@@ -1,0 +1,20 @@
+--- old.genericConstraint3.symbols
++++ new.genericConstraint3.symbols
+@@= skipped -3, +3 lines =@@
+ interface C<P> { x: P; }
+ >C : Symbol(C, Decl(genericConstraint3.ts, 0, 0))
+ >P : Symbol(P, Decl(genericConstraint3.ts, 0, 12))
+->x : Symbol(C.x, Decl(genericConstraint3.ts, 0, 16))
++>x : Symbol(x, Decl(genericConstraint3.ts, 0, 16))
+ >P : Symbol(P, Decl(genericConstraint3.ts, 0, 12))
+ 
+ interface A<T, U extends C<T>> { x: U; }
+@@= skipped -9, +9 lines =@@
+ >U : Symbol(U, Decl(genericConstraint3.ts, 1, 14))
+ >C : Symbol(C, Decl(genericConstraint3.ts, 0, 0))
+ >T : Symbol(T, Decl(genericConstraint3.ts, 1, 12))
+->x : Symbol(A.x, Decl(genericConstraint3.ts, 1, 32))
++>x : Symbol(x, Decl(genericConstraint3.ts, 1, 32))
+ >U : Symbol(U, Decl(genericConstraint3.ts, 1, 14))
+ 
+ interface B extends A<{}, { x: {} }> { } // Should not produce an error

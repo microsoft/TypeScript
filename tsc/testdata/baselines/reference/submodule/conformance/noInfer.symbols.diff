@@ -1,0 +1,57 @@
+--- old.noInfer.symbols
++++ new.noInfer.symbols
+@@= skipped -155, +155 lines =@@
+ 
+ declare class Animal { move(): void }
+ >Animal : Symbol(Animal, Decl(noInfer.ts, 38, 25))
+->move : Symbol(Animal.move, Decl(noInfer.ts, 40, 22))
++>move : Symbol(move, Decl(noInfer.ts, 40, 22))
+ 
+ declare class Dog extends Animal { woof(): void }
+ >Dog : Symbol(Dog, Decl(noInfer.ts, 40, 37))
+ >Animal : Symbol(Animal, Decl(noInfer.ts, 38, 25))
+->woof : Symbol(Dog.woof, Decl(noInfer.ts, 41, 34))
++>woof : Symbol(woof, Decl(noInfer.ts, 41, 34))
+ 
+ declare function doSomething<T>(value: T, getDefault: () => NoInfer<T>): void;
+ >doSomething : Symbol(doSomething, Decl(noInfer.ts, 41, 49))
+@@= skipped -141, +141 lines =@@
+ >T : Symbol(T, Decl(noInfer.ts, 71, 14))
+ 
+     constructor(private clazz: ExampleClass<T>, private _value: NoInfer<T>) {}
+->clazz : Symbol(OkClass.clazz, Decl(noInfer.ts, 72, 16))
++>clazz : Symbol(clazz, Decl(noInfer.ts, 72, 16))
+ >ExampleClass : Symbol(ExampleClass, Decl(noInfer.ts, 68, 36))
+ >T : Symbol(T, Decl(noInfer.ts, 71, 14))
+->_value : Symbol(OkClass._value, Decl(noInfer.ts, 72, 47))
++>_value : Symbol(_value, Decl(noInfer.ts, 72, 47))
+ >NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+ >T : Symbol(T, Decl(noInfer.ts, 71, 14))
+ 
+     get value(): T {
+->value : Symbol(OkClass.value, Decl(noInfer.ts, 72, 78))
++>value : Symbol(value, Decl(noInfer.ts, 72, 78))
+ >T : Symbol(T, Decl(noInfer.ts, 71, 14))
+ 
+         return this._value; // ok
+->this._value : Symbol(OkClass._value, Decl(noInfer.ts, 72, 47))
++>this._value : Symbol(_value, Decl(noInfer.ts, 72, 47))
+ >this : Symbol(OkClass, Decl(noInfer.ts, 70, 32))
+->_value : Symbol(OkClass._value, Decl(noInfer.ts, 72, 47))
++>_value : Symbol(_value, Decl(noInfer.ts, 72, 47))
+     }
+ }
+ class OkClass2<T> {
+@@= skipped -22, +22 lines =@@
+ >T : Symbol(T, Decl(noInfer.ts, 78, 15))
+ 
+     constructor(private clazz: ExampleClass<T>, public _value: NoInfer<T>) {}
+->clazz : Symbol(OkClass2.clazz, Decl(noInfer.ts, 79, 16))
++>clazz : Symbol(clazz, Decl(noInfer.ts, 79, 16))
+ >ExampleClass : Symbol(ExampleClass, Decl(noInfer.ts, 68, 36))
+ >T : Symbol(T, Decl(noInfer.ts, 78, 15))
+->_value : Symbol(OkClass2._value, Decl(noInfer.ts, 79, 47))
++>_value : Symbol(_value, Decl(noInfer.ts, 79, 47))
+ >NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+ >T : Symbol(T, Decl(noInfer.ts, 78, 15))
+ }

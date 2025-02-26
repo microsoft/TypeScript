@@ -1,0 +1,20 @@
+--- old.ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.symbols
++++ new.ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts, 0, 14))
+ 
+     id: string;
+->id : Symbol(clodule.id, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts, 0, 18))
++>id : Symbol(id, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts, 0, 18))
+ 
+     value: T;
+->value : Symbol(clodule.value, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts, 1, 15))
++>value : Symbol(value, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts, 1, 15))
+ >T : Symbol(T, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts, 0, 14))
+ 
+     static fn(id: string) { }
+->fn : Symbol(clodule.fn, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts, 2, 13))
++>fn : Symbol(fn, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts, 2, 13))
+ >id : Symbol(id, Decl(ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts, 4, 14))
+ }
+ 

@@ -1,0 +1,29 @@
+--- old.everyTypeAssignableToAny.symbols
++++ new.everyTypeAssignableToAny.symbols
+@@= skipped -7, +7 lines =@@
+ >C : Symbol(C, Decl(everyTypeAssignableToAny.ts, 0, 11))
+ 
+     foo: string;
+->foo : Symbol(C.foo, Decl(everyTypeAssignableToAny.ts, 2, 9))
++>foo : Symbol(foo, Decl(everyTypeAssignableToAny.ts, 2, 9))
+ }
+ var ac: C;
+ >ac : Symbol(ac, Decl(everyTypeAssignableToAny.ts, 5, 3))
+@@= skipped -10, +10 lines =@@
+ >I : Symbol(I, Decl(everyTypeAssignableToAny.ts, 5, 10))
+ 
+     foo: string;
+->foo : Symbol(I.foo, Decl(everyTypeAssignableToAny.ts, 6, 13))
++>foo : Symbol(foo, Decl(everyTypeAssignableToAny.ts, 6, 13))
+ }
+ var ai: I;
+ >ai : Symbol(ai, Decl(everyTypeAssignableToAny.ts, 9, 3))
+@@= skipped -8, +8 lines =@@
+ 
+ enum E { A }
+ >E : Symbol(E, Decl(everyTypeAssignableToAny.ts, 9, 10))
+->A : Symbol(E.A, Decl(everyTypeAssignableToAny.ts, 11, 8))
++>A : Symbol(A, Decl(everyTypeAssignableToAny.ts, 11, 8))
+ 
+ var ae: E;
+ >ae : Symbol(ae, Decl(everyTypeAssignableToAny.ts, 12, 3))

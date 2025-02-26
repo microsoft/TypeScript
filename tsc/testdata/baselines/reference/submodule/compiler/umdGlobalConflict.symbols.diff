@@ -1,0 +1,12 @@
+--- old.umdGlobalConflict.symbols
++++ new.umdGlobalConflict.symbols
+@@= skipped -24, +24 lines =@@
+ // Should be OK, first in wins
+ const p: string = Alpha.x;
+ >p : Symbol(p, Decl(global.ts, 1, 5))
+->Alpha.x : Symbol(Alpha.x, Decl(index.d.ts, 1, 10))
++>Alpha.x : Symbol(x, Decl(index.d.ts, 1, 10))
+ >Alpha : Symbol(Alpha, Decl(index.d.ts, 0, 0))
+->x : Symbol(Alpha.x, Decl(index.d.ts, 1, 10))
++>x : Symbol(x, Decl(index.d.ts, 1, 10))
+ 

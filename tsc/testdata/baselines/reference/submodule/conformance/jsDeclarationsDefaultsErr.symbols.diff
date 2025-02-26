@@ -1,0 +1,33 @@
+--- old.jsDeclarationsDefaultsErr.symbols
++++ new.jsDeclarationsDefaultsErr.symbols
+@@= skipped -5, +5 lines =@@
+ >Cls : Symbol(Cls, Decl(index1.js, 0, 0))
+ 
+     x = 12;
+->x : Symbol(Cls.x, Decl(index1.js, 1, 11))
++>x : Symbol(x, Decl(index1.js, 1, 11))
+ 
+     static y = "ok"
+->y : Symbol(Cls.y, Decl(index1.js, 2, 11))
++>y : Symbol(y, Decl(index1.js, 2, 11))
+ }
+ export default Cls;
+ >Cls : Symbol(Cls, Decl(index1.js, 0, 0))
+@@= skipped -15, +15 lines =@@
+ === index2.js ===
+ // merge type alias and class (error message improvement needed, see #32368)
+ export default class C {};
+->C : Symbol(C, Decl(index2.js, 0, 0))
++>C : Symbol(default, Decl(index2.js, 0, 0))
+ 
+ /**
+  * @typedef {string | number} default
+@@= skipped -13, +13 lines =@@
+ 
+ export {x as default};
+ >x : Symbol(x, Decl(index3.js, 1, 5))
+->default : Symbol(default, Decl(index3.js, 2, 8), Decl(index3.js, 4, 3))
++>default : Symbol(default, Decl(index3.js, 2, 8))
+ 
+ /**
+  * @typedef {string | number} default

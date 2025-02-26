@@ -1,0 +1,19 @@
+--- old.accessorBodyInTypeContext.symbols
++++ new.accessorBodyInTypeContext.symbols
+@@= skipped -21, +21 lines =@@
+ >X : Symbol(X, Decl(accessorBodyInTypeContext.ts, 6, 2))
+ 
+     get foo() { return 0 }
+->foo : Symbol(X.foo, Decl(accessorBodyInTypeContext.ts, 8, 13))
++>foo : Symbol(foo, Decl(accessorBodyInTypeContext.ts, 8, 13))
+ }
+ 
+ interface Y {
+ >Y : Symbol(Y, Decl(accessorBodyInTypeContext.ts, 10, 1))
+ 
+     set foo(v: any) { }
+->foo : Symbol(Y.foo, Decl(accessorBodyInTypeContext.ts, 12, 13))
++>foo : Symbol(foo, Decl(accessorBodyInTypeContext.ts, 12, 13))
+ >v : Symbol(v, Decl(accessorBodyInTypeContext.ts, 13, 12))
+ }
+ 

@@ -1,0 +1,57 @@
+--- old.additionOperatorWithInvalidOperands.symbols
++++ new.additionOperatorWithInvalidOperands.symbols
+@@= skipped -7, +7 lines =@@
+ >C : Symbol(C, Decl(additionOperatorWithInvalidOperands.ts, 0, 18))
+ 
+     public a: string;
+->a : Symbol(C.a, Decl(additionOperatorWithInvalidOperands.ts, 1, 9))
++>a : Symbol(a, Decl(additionOperatorWithInvalidOperands.ts, 1, 9))
+ 
+     static foo() { }
+->foo : Symbol(C.foo, Decl(additionOperatorWithInvalidOperands.ts, 2, 21))
++>foo : Symbol(foo, Decl(additionOperatorWithInvalidOperands.ts, 2, 21))
+ }
+ enum E { a, b, c }
+ >E : Symbol(E, Decl(additionOperatorWithInvalidOperands.ts, 4, 1))
+->a : Symbol(E.a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
+->b : Symbol(E.b, Decl(additionOperatorWithInvalidOperands.ts, 5, 11))
+->c : Symbol(E.c, Decl(additionOperatorWithInvalidOperands.ts, 5, 14))
++>a : Symbol(a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
++>b : Symbol(b, Decl(additionOperatorWithInvalidOperands.ts, 5, 11))
++>c : Symbol(c, Decl(additionOperatorWithInvalidOperands.ts, 5, 14))
+ 
+ module M { export var a }
+ >M : Symbol(M, Decl(additionOperatorWithInvalidOperands.ts, 5, 18))
+@@= skipped -113, +113 lines =@@
+ 
+ var r18 = E.a + new C();
+ >r18 : Symbol(r18, Decl(additionOperatorWithInvalidOperands.ts, 37, 3))
+->E.a : Symbol(E.a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
++>E.a : Symbol(a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
+ >E : Symbol(E, Decl(additionOperatorWithInvalidOperands.ts, 4, 1))
+->a : Symbol(E.a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
++>a : Symbol(a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
+ >C : Symbol(C, Decl(additionOperatorWithInvalidOperands.ts, 0, 18))
+ 
+ var r19 = E.a + C.foo();
+ >r19 : Symbol(r19, Decl(additionOperatorWithInvalidOperands.ts, 38, 3))
+->E.a : Symbol(E.a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
++>E.a : Symbol(a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
+ >E : Symbol(E, Decl(additionOperatorWithInvalidOperands.ts, 4, 1))
+->a : Symbol(E.a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
+->C.foo : Symbol(C.foo, Decl(additionOperatorWithInvalidOperands.ts, 2, 21))
++>a : Symbol(a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
++>C.foo : Symbol(foo, Decl(additionOperatorWithInvalidOperands.ts, 2, 21))
+ >C : Symbol(C, Decl(additionOperatorWithInvalidOperands.ts, 0, 18))
+->foo : Symbol(C.foo, Decl(additionOperatorWithInvalidOperands.ts, 2, 21))
++>foo : Symbol(foo, Decl(additionOperatorWithInvalidOperands.ts, 2, 21))
+ 
+ var r20 = E.a + M;
+ >r20 : Symbol(r20, Decl(additionOperatorWithInvalidOperands.ts, 39, 3))
+->E.a : Symbol(E.a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
++>E.a : Symbol(a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
+ >E : Symbol(E, Decl(additionOperatorWithInvalidOperands.ts, 4, 1))
+->a : Symbol(E.a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
++>a : Symbol(a, Decl(additionOperatorWithInvalidOperands.ts, 5, 8))
+ >M : Symbol(M, Decl(additionOperatorWithInvalidOperands.ts, 5, 18))
+ 

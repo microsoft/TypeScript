@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/noImplicitAnyUnionNormalizedObjectLiteral1.ts] ////
+
+=== noImplicitAnyUnionNormalizedObjectLiteral1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58150
+
+function doSthWithParams(params: unknown) {
+>doSthWithParams : Symbol(doSthWithParams, Decl(noImplicitAnyUnionNormalizedObjectLiteral1.ts, 0, 0))
+>params : Symbol(params, Decl(noImplicitAnyUnionNormalizedObjectLiteral1.ts, 2, 25))
+
+  if (typeof params !== "object") {
+>params : Symbol(params, Decl(noImplicitAnyUnionNormalizedObjectLiteral1.ts, 2, 25))
+
+    return {};
+  }
+
+  return {
+    c: "foo",
+>c : Symbol(c, Decl(noImplicitAnyUnionNormalizedObjectLiteral1.ts, 7, 10))
+
+    p: "bar",
+>p : Symbol(p, Decl(noImplicitAnyUnionNormalizedObjectLiteral1.ts, 8, 13))
+
+    s: "baz",
+>s : Symbol(s, Decl(noImplicitAnyUnionNormalizedObjectLiteral1.ts, 9, 13))
+
+  };
+}
+
+const bar = {
+>bar : Symbol(bar, Decl(noImplicitAnyUnionNormalizedObjectLiteral1.ts, 14, 5))
+
+  p: null,
+>p : Symbol(p, Decl(noImplicitAnyUnionNormalizedObjectLiteral1.ts, 14, 13))
+
+  s: null,
+>s : Symbol(s, Decl(noImplicitAnyUnionNormalizedObjectLiteral1.ts, 15, 10))
+
+  ...doSthWithParams({
+>doSthWithParams : Symbol(doSthWithParams, Decl(noImplicitAnyUnionNormalizedObjectLiteral1.ts, 0, 0))
+
+    p: "hello",
+>p : Symbol(p, Decl(noImplicitAnyUnionNormalizedObjectLiteral1.ts, 17, 22))
+
+    s: "world",
+>s : Symbol(s, Decl(noImplicitAnyUnionNormalizedObjectLiteral1.ts, 18, 15))
+
+  }),
+};
+

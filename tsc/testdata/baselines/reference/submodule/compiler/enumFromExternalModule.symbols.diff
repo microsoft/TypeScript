@@ -1,0 +1,22 @@
+--- old.enumFromExternalModule.symbols
++++ new.enumFromExternalModule.symbols
+@@= skipped -6, +6 lines =@@
+ 
+ var x = f.Mode.Open;
+ >x : Symbol(x, Decl(enumFromExternalModule_1.ts, 3, 3))
+->f.Mode.Open : Symbol(f.Mode.Open, Decl(enumFromExternalModule_0.ts, 0, 18))
+->f.Mode : Symbol(f.Mode, Decl(enumFromExternalModule_0.ts, 0, 0))
++>f.Mode.Open : Symbol(Open, Decl(enumFromExternalModule_0.ts, 0, 18))
++>f.Mode : Symbol(Mode, Decl(enumFromExternalModule_0.ts, 0, 0))
+ >f : Symbol(f, Decl(enumFromExternalModule_1.ts, 0, 0))
+->Mode : Symbol(f.Mode, Decl(enumFromExternalModule_0.ts, 0, 0))
+->Open : Symbol(f.Mode.Open, Decl(enumFromExternalModule_0.ts, 0, 18))
++>Mode : Symbol(Mode, Decl(enumFromExternalModule_0.ts, 0, 0))
++>Open : Symbol(Open, Decl(enumFromExternalModule_0.ts, 0, 18))
+ 
+ === enumFromExternalModule_0.ts ===
+ export enum Mode { Open }
+ >Mode : Symbol(Mode, Decl(enumFromExternalModule_0.ts, 0, 0))
+->Open : Symbol(Mode.Open, Decl(enumFromExternalModule_0.ts, 0, 18))
++>Open : Symbol(Open, Decl(enumFromExternalModule_0.ts, 0, 18))
+ 

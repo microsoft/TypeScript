@@ -1,0 +1,60 @@
+--- old.moduleDuplicateIdentifiers.symbols
++++ new.moduleDuplicateIdentifiers.symbols
+@@= skipped -10, +10 lines =@@
+ >Bar : Symbol(Bar, Decl(moduleDuplicateIdentifiers.ts, 1, 20), Decl(moduleDuplicateIdentifiers.ts, 5, 1))
+ 
+ 	_brand1: any;
+->_brand1 : Symbol(Bar._brand1, Decl(moduleDuplicateIdentifiers.ts, 3, 22))
++>_brand1 : Symbol(_brand1, Decl(moduleDuplicateIdentifiers.ts, 3, 22))
+ }
+ 
+ export interface Bar { // Shouldn't error
+ >Bar : Symbol(Bar, Decl(moduleDuplicateIdentifiers.ts, 1, 20), Decl(moduleDuplicateIdentifiers.ts, 5, 1))
+ 
+ 	_brand2: any;
+->_brand2 : Symbol(Bar._brand2, Decl(moduleDuplicateIdentifiers.ts, 7, 22))
++>_brand2 : Symbol(_brand2, Decl(moduleDuplicateIdentifiers.ts, 7, 22))
+ }
+ 
+ export namespace FooBar {
+@@= skipped -28, +28 lines =@@
+ >Kettle : Symbol(Kettle, Decl(moduleDuplicateIdentifiers.ts, 17, 1))
+ 
+ 	member1 = 2;
+->member1 : Symbol(Kettle.member1, Decl(moduleDuplicateIdentifiers.ts, 19, 21))
++>member1 : Symbol(member1, Decl(moduleDuplicateIdentifiers.ts, 19, 21))
+ }
+ 
+ export class Kettle { // Should error
+ >Kettle : Symbol(Kettle, Decl(moduleDuplicateIdentifiers.ts, 21, 1))
+ 
+ 	member2 = 42;
+->member2 : Symbol(Kettle.member2, Decl(moduleDuplicateIdentifiers.ts, 23, 21))
++>member2 : Symbol(member2, Decl(moduleDuplicateIdentifiers.ts, 23, 21))
+ }
+ 
+ export var Pot = 2;
+@@= skipped -20, +20 lines =@@
+ >Utensils : Symbol(Utensils, Decl(moduleDuplicateIdentifiers.ts, 28, 9), Decl(moduleDuplicateIdentifiers.ts, 34, 1))
+ 
+ 	Spoon,
+->Spoon : Symbol(Utensils.Spoon, Decl(moduleDuplicateIdentifiers.ts, 30, 22))
++>Spoon : Symbol(Spoon, Decl(moduleDuplicateIdentifiers.ts, 30, 22))
+ 
+ 	Fork,
+->Fork : Symbol(Utensils.Fork, Decl(moduleDuplicateIdentifiers.ts, 31, 7))
++>Fork : Symbol(Fork, Decl(moduleDuplicateIdentifiers.ts, 31, 7))
+ 
+ 	Knife
+->Knife : Symbol(Utensils.Knife, Decl(moduleDuplicateIdentifiers.ts, 32, 6))
++>Knife : Symbol(Knife, Decl(moduleDuplicateIdentifiers.ts, 32, 6))
+ }
+ 
+ export enum Utensils { // Shouldn't error
+ >Utensils : Symbol(Utensils, Decl(moduleDuplicateIdentifiers.ts, 28, 9), Decl(moduleDuplicateIdentifiers.ts, 34, 1))
+ 
+ 	Spork = 3
+->Spork : Symbol(Utensils.Spork, Decl(moduleDuplicateIdentifiers.ts, 36, 22))
++>Spork : Symbol(Spork, Decl(moduleDuplicateIdentifiers.ts, 36, 22))
+ }
+ 

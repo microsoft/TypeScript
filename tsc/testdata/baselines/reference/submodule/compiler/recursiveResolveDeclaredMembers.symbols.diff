@@ -1,0 +1,11 @@
+--- old.recursiveResolveDeclaredMembers.symbols
++++ new.recursiveResolveDeclaredMembers.symbols
+@@= skipped -4, +4 lines =@@
+ >F : Symbol(F, Decl(types.ts, 0, 0))
+ 
+     (): E;
+->E : Symbol(E, Decl(other.js, 0, 4))
++>E : Symbol(E)
+ }
+ export interface D<T extends F = F> {}
+ >D : Symbol(D, Decl(types.ts, 2, 1))

@@ -1,0 +1,51 @@
+--- old.inferenceExactOptionalProperties2.symbols
++++ new.inferenceExactOptionalProperties2.symbols
+@@= skipped -20, +20 lines =@@
+ >EventObject : Symbol(EventObject, Decl(inferenceExactOptionalProperties2.ts, 0, 28))
+ 
+   transition: (ev: TEvent) => unknown;
+->transition : Symbol(ActorLogic.transition, Decl(inferenceExactOptionalProperties2.ts, 6, 50))
++>transition : Symbol(transition, Decl(inferenceExactOptionalProperties2.ts, 6, 50))
+ >ev : Symbol(ev, Decl(inferenceExactOptionalProperties2.ts, 7, 15))
+ >TEvent : Symbol(TEvent, Decl(inferenceExactOptionalProperties2.ts, 6, 21))
+ }
+@@= skipped -13, +13 lines =@@
+ >ProvidedActor : Symbol(ProvidedActor, Decl(inferenceExactOptionalProperties2.ts, 10, 43))
+ 
+   src: string;
+->src : Symbol(ProvidedActor.src, Decl(inferenceExactOptionalProperties2.ts, 12, 25))
++>src : Symbol(src, Decl(inferenceExactOptionalProperties2.ts, 12, 25))
+ 
+   logic: UnknownActorLogic;
+->logic : Symbol(ProvidedActor.logic, Decl(inferenceExactOptionalProperties2.ts, 13, 14))
++>logic : Symbol(logic, Decl(inferenceExactOptionalProperties2.ts, 13, 14))
+ >UnknownActorLogic : Symbol(UnknownActorLogic, Decl(inferenceExactOptionalProperties2.ts, 8, 1))
+ }
+ 
+@@= skipped -14, +14 lines =@@
+ 
+   (): void;
+   _out_TActor?: TActor;
+->_out_TActor : Symbol(ActionFunction._out_TActor, Decl(inferenceExactOptionalProperties2.ts, 18, 11))
++>_out_TActor : Symbol(_out_TActor, Decl(inferenceExactOptionalProperties2.ts, 18, 11))
+ >TActor : Symbol(TActor, Decl(inferenceExactOptionalProperties2.ts, 17, 25))
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ 
+   (): void;
+   _out_TActor?: TActor;
+->_out_TActor : Symbol(AssignAction._out_TActor, Decl(inferenceExactOptionalProperties2.ts, 23, 11))
++>_out_TActor : Symbol(_out_TActor, Decl(inferenceExactOptionalProperties2.ts, 23, 11))
+ >TActor : Symbol(TActor, Decl(inferenceExactOptionalProperties2.ts, 22, 23))
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ >ProvidedActor : Symbol(ProvidedActor, Decl(inferenceExactOptionalProperties2.ts, 10, 43))
+ 
+   entry?: ActionFunction<TActor>;
+->entry : Symbol(MachineConfig.entry, Decl(inferenceExactOptionalProperties2.ts, 27, 55))
++>entry : Symbol(entry, Decl(inferenceExactOptionalProperties2.ts, 27, 55))
+ >ActionFunction : Symbol(ActionFunction, Decl(inferenceExactOptionalProperties2.ts, 15, 1))
+ >TActor : Symbol(TActor, Decl(inferenceExactOptionalProperties2.ts, 27, 24))
+ }

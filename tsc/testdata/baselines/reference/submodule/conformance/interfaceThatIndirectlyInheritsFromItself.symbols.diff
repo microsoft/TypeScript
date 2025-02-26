@@ -1,0 +1,55 @@
+--- old.interfaceThatIndirectlyInheritsFromItself.symbols
++++ new.interfaceThatIndirectlyInheritsFromItself.symbols
+@@= skipped -5, +5 lines =@@
+ >Derived2 : Symbol(Derived2, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 6, 1))
+ 
+     x: string;
+->x : Symbol(Base.x, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 0, 33))
++>x : Symbol(x, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 0, 33))
+ }
+ 
+ interface Derived extends Base {
+@@= skipped -8, +8 lines =@@
+ >Base : Symbol(Base, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 0, 0))
+ 
+     y: string;
+->y : Symbol(Derived.y, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 4, 32))
++>y : Symbol(y, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 4, 32))
+ }
+ 
+ interface Derived2 extends Derived {
+@@= skipped -8, +8 lines =@@
+ >Derived : Symbol(Derived, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 2, 1))
+ 
+     z: string;
+->z : Symbol(Derived2.z, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 8, 36))
++>z : Symbol(z, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 8, 36))
+ }
+ 
+ module Generic {
+@@= skipped -13, +13 lines =@@
+ >T : Symbol(T, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 13, 19))
+ 
+         x: string;
+->x : Symbol(Base.x, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 13, 43))
++>x : Symbol(x, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 13, 43))
+     }
+ 
+     interface Derived<T> extends Base<T> {
+@@= skipped -10, +10 lines =@@
+ >T : Symbol(T, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 17, 22))
+ 
+         y: string;
+->y : Symbol(Derived.y, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 17, 42))
++>y : Symbol(y, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 17, 42))
+     }
+ 
+     interface Derived2<T> extends Derived<T> {
+@@= skipped -10, +10 lines =@@
+ >T : Symbol(T, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 21, 23))
+ 
+         z: string;
+->z : Symbol(Derived2.z, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 21, 46))
++>z : Symbol(z, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 21, 46))
+     }
+ }

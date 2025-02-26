@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck26.ts] ////
+
+=== generatorTypeCheck26.ts ===
+function* g(): IterableIterator<(x: string) => number, (x: string) => number> {
+>g : Symbol(g, Decl(generatorTypeCheck26.ts, 0, 0))
+>IterableIterator : Symbol(IterableIterator)
+>x : Symbol(x, Decl(generatorTypeCheck26.ts, 0, 33))
+>x : Symbol(x, Decl(generatorTypeCheck26.ts, 0, 56))
+
+    yield x => x.length;
+>x : Symbol(x, Decl(generatorTypeCheck26.ts, 1, 9))
+>x : Symbol(x, Decl(generatorTypeCheck26.ts, 1, 9))
+
+    yield *[x => x.length];
+>x : Symbol(x, Decl(generatorTypeCheck26.ts, 2, 12))
+>x : Symbol(x, Decl(generatorTypeCheck26.ts, 2, 12))
+
+    return x => x.length;
+>x : Symbol(x, Decl(generatorTypeCheck26.ts, 3, 10))
+>x : Symbol(x, Decl(generatorTypeCheck26.ts, 3, 10))
+}

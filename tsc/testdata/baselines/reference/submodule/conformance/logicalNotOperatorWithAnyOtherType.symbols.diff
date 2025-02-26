@@ -1,0 +1,64 @@
+--- old.logicalNotOperatorWithAnyOtherType.symbols
++++ new.logicalNotOperatorWithAnyOtherType.symbols
+@@= skipped -32, +32 lines =@@
+ >A : Symbol(A, Decl(logicalNotOperatorWithAnyOtherType.ts, 10, 1))
+ 
+     public a: any;
+->a : Symbol(A.a, Decl(logicalNotOperatorWithAnyOtherType.ts, 11, 9))
++>a : Symbol(a, Decl(logicalNotOperatorWithAnyOtherType.ts, 11, 9))
+ 
+     static foo() {
+->foo : Symbol(A.foo, Decl(logicalNotOperatorWithAnyOtherType.ts, 12, 18))
++>foo : Symbol(foo, Decl(logicalNotOperatorWithAnyOtherType.ts, 12, 18))
+ 
+         var a;
+ >a : Symbol(a, Decl(logicalNotOperatorWithAnyOtherType.ts, 14, 11))
+@@= skipped -74, +74 lines =@@
+ 
+ var ResultIsBoolean12 = !objA.a;
+ >ResultIsBoolean12 : Symbol(ResultIsBoolean12, Decl(logicalNotOperatorWithAnyOtherType.ts, 39, 3))
+->objA.a : Symbol(A.a, Decl(logicalNotOperatorWithAnyOtherType.ts, 11, 9))
++>objA.a : Symbol(a, Decl(logicalNotOperatorWithAnyOtherType.ts, 11, 9))
+ >objA : Symbol(objA, Decl(logicalNotOperatorWithAnyOtherType.ts, 21, 3))
+->a : Symbol(A.a, Decl(logicalNotOperatorWithAnyOtherType.ts, 11, 9))
++>a : Symbol(a, Decl(logicalNotOperatorWithAnyOtherType.ts, 11, 9))
+ 
+ var ResultIsBoolean13 = !M.n;
+ >ResultIsBoolean13 : Symbol(ResultIsBoolean13, Decl(logicalNotOperatorWithAnyOtherType.ts, 40, 3))
+->M.n : Symbol(M.n, Decl(logicalNotOperatorWithAnyOtherType.ts, 19, 14))
++>M.n : Symbol(n, Decl(logicalNotOperatorWithAnyOtherType.ts, 19, 14))
+ >M : Symbol(M, Decl(logicalNotOperatorWithAnyOtherType.ts, 17, 1))
+->n : Symbol(M.n, Decl(logicalNotOperatorWithAnyOtherType.ts, 19, 14))
++>n : Symbol(n, Decl(logicalNotOperatorWithAnyOtherType.ts, 19, 14))
+ 
+ var ResultIsBoolean14 = !foo();
+ >ResultIsBoolean14 : Symbol(ResultIsBoolean14, Decl(logicalNotOperatorWithAnyOtherType.ts, 41, 3))
+@@= skipped -16, +16 lines =@@
+ 
+ var ResultIsBoolean15 = !A.foo();
+ >ResultIsBoolean15 : Symbol(ResultIsBoolean15, Decl(logicalNotOperatorWithAnyOtherType.ts, 42, 3))
+->A.foo : Symbol(A.foo, Decl(logicalNotOperatorWithAnyOtherType.ts, 12, 18))
++>A.foo : Symbol(foo, Decl(logicalNotOperatorWithAnyOtherType.ts, 12, 18))
+ >A : Symbol(A, Decl(logicalNotOperatorWithAnyOtherType.ts, 10, 1))
+->foo : Symbol(A.foo, Decl(logicalNotOperatorWithAnyOtherType.ts, 12, 18))
++>foo : Symbol(foo, Decl(logicalNotOperatorWithAnyOtherType.ts, 12, 18))
+ 
+ var ResultIsBoolean16 = !(ANY + ANY1);
+ >ResultIsBoolean16 : Symbol(ResultIsBoolean16, Decl(logicalNotOperatorWithAnyOtherType.ts, 43, 3))
+@@= skipped -46, +46 lines =@@
+ >ANY1 : Symbol(ANY1, Decl(logicalNotOperatorWithAnyOtherType.ts, 3, 3))
+ 
+ !objA.a;
+->objA.a : Symbol(A.a, Decl(logicalNotOperatorWithAnyOtherType.ts, 11, 9))
++>objA.a : Symbol(a, Decl(logicalNotOperatorWithAnyOtherType.ts, 11, 9))
+ >objA : Symbol(objA, Decl(logicalNotOperatorWithAnyOtherType.ts, 21, 3))
+->a : Symbol(A.a, Decl(logicalNotOperatorWithAnyOtherType.ts, 11, 9))
++>a : Symbol(a, Decl(logicalNotOperatorWithAnyOtherType.ts, 11, 9))
+ 
+ !M.n;
+->M.n : Symbol(M.n, Decl(logicalNotOperatorWithAnyOtherType.ts, 19, 14))
++>M.n : Symbol(n, Decl(logicalNotOperatorWithAnyOtherType.ts, 19, 14))
+ >M : Symbol(M, Decl(logicalNotOperatorWithAnyOtherType.ts, 17, 1))
+->n : Symbol(M.n, Decl(logicalNotOperatorWithAnyOtherType.ts, 19, 14))
++>n : Symbol(n, Decl(logicalNotOperatorWithAnyOtherType.ts, 19, 14))
+ 

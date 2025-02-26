@@ -1,0 +1,11 @@
+--- old.es6ImportNamedImportWithExport.symbols
++++ new.es6ImportNamedImportWithExport.symbols
+@@= skipped -105, +105 lines =@@
+ >z1 : Symbol(z1, Decl(client.ts, 18, 15))
+ 
+ export import { z2 as z3 } from "./server";
+->z2 : Symbol(z3, Decl(server.ts, 6, 10))
++>z2 : Symbol(z2, Decl(server.ts, 6, 10))
+ >z3 : Symbol(z3, Decl(client.ts, 20, 15))
+ 
+ export var z2 = z3; // z2 shouldn't give redeclare error

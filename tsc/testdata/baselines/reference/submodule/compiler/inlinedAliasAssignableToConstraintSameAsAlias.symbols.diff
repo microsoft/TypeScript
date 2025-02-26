@@ -1,0 +1,45 @@
+--- old.inlinedAliasAssignableToConstraintSameAsAlias.symbols
++++ new.inlinedAliasAssignableToConstraintSameAsAlias.symbols
+@@= skipped -4, +4 lines =@@
+ >RelationFields : Symbol(RelationFields, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 0, 0))
+ 
+   x: A;
+->x : Symbol(RelationFields.x, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 0, 26))
++>x : Symbol(x, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 0, 26))
+ >A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+ 
+   y: A[];
+->y : Symbol(RelationFields.y, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 1, 7))
++>y : Symbol(y, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 1, 7))
+ >A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+ 
+   z: A[];
+->z : Symbol(RelationFields.z, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 2, 9))
++>z : Symbol(z, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 2, 9))
+ >A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+ }
+ type Name = keyof RelationFields;
+@@= skipped -35, +35 lines =@@
+ >A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+ 
+   x: A;
+->x : Symbol(A.x, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 10, 9))
++>x : Symbol(x, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 10, 9))
+ >A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+ 
+   y: A[];
+->y : Symbol(A.y, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 11, 7))
++>y : Symbol(y, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 11, 7))
+ >A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+ 
+   z: A[];
+->z : Symbol(A.z, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 12, 9))
++>z : Symbol(z, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 12, 9))
+ >A : Symbol(A, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 8, 10))
+ 
+   whereRelated< // Works // Type is same as A1, but is not assignable to type A
+->whereRelated : Symbol(A.whereRelated, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 13, 9))
++>whereRelated : Symbol(whereRelated, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 13, 9))
+ 
+     RF extends RelationFields = RelationFields,
+ >RF : Symbol(RF, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 15, 15))

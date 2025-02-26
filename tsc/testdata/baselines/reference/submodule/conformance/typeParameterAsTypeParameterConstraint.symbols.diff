@@ -1,0 +1,19 @@
+--- old.typeParameterAsTypeParameterConstraint.symbols
++++ new.typeParameterAsTypeParameterConstraint.symbols
+@@= skipped -27, +27 lines =@@
+ >A : Symbol(A, Decl(typeParameterAsTypeParameterConstraint.ts, 6, 19))
+ 
+     foo: string;
+->foo : Symbol(A.foo, Decl(typeParameterAsTypeParameterConstraint.ts, 8, 13))
++>foo : Symbol(foo, Decl(typeParameterAsTypeParameterConstraint.ts, 8, 13))
+ }
+ interface B extends A {
+ >B : Symbol(B, Decl(typeParameterAsTypeParameterConstraint.ts, 10, 1))
+ >A : Symbol(A, Decl(typeParameterAsTypeParameterConstraint.ts, 6, 19))
+ 
+     bar: number;
+->bar : Symbol(B.bar, Decl(typeParameterAsTypeParameterConstraint.ts, 11, 23))
++>bar : Symbol(bar, Decl(typeParameterAsTypeParameterConstraint.ts, 11, 23))
+ }
+ var a: A;
+ >a : Symbol(a, Decl(typeParameterAsTypeParameterConstraint.ts, 14, 3))

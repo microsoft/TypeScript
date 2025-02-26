@@ -1,0 +1,271 @@
+--- old.subtypesOfTypeParameterWithConstraints.symbols
++++ new.subtypesOfTypeParameterWithConstraints.symbols
+@@= skipped -7, +7 lines =@@
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 2, 9))
+ 
+     foo: T;
+->foo : Symbol(C3.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 2, 13))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 2, 13))
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 2, 9))
+ }
+ 
+@@= skipped -17, +17 lines =@@
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 6, 9))
+ 
+     foo: T; // ok
+->foo : Symbol(D1.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 7, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 7, 19))
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 6, 9))
+ }
+ 
+@@= skipped -17, +17 lines =@@
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 11, 21))
+ 
+     foo: T; // ok
+->foo : Symbol(D2.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 12, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 12, 19))
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 11, 9))
+ }
+ 
+@@= skipped -17, +17 lines =@@
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 16, 9))
+ 
+     foo: U; // error
+->foo : Symbol(D3.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 17, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 17, 19))
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 16, 21))
+ }
+ 
+@@= skipped -17, +17 lines =@@
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 21, 21))
+ 
+     foo: U; // ok
+->foo : Symbol(D4.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 22, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 22, 19))
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 21, 21))
+ }
+ 
+@@= skipped -23, +23 lines =@@
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 30, 9))
+ 
+     foo: T; // ok
+->foo : Symbol(D5.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 31, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 31, 19))
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 30, 9))
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 35, 21))
+ 
+     foo: T;
+->foo : Symbol(D6.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 36, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 36, 19))
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 35, 9))
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 40, 34))
+ 
+     foo: T; // ok
+->foo : Symbol(D7.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 41, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 41, 19))
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 40, 9))
+ }
+ 
+@@= skipped -21, +21 lines =@@
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 47, 9))
+ 
+     foo: U; // error
+->foo : Symbol(D8.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 48, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 48, 19))
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 47, 21))
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 52, 21))
+ 
+     foo: U; // ok
+->foo : Symbol(D9.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 53, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 53, 19))
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 52, 21))
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 57, 35))
+ 
+     foo: U; // ok
+->foo : Symbol(D10.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 58, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 58, 19))
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 57, 22))
+ }
+ 
+@@= skipped -21, +21 lines =@@
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 64, 10))
+ 
+     foo: V; // error
+->foo : Symbol(D11.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 65, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 65, 19))
+ >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 64, 35))
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 69, 22))
+ 
+     foo: V; // error
+->foo : Symbol(D12.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 70, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 70, 19))
+ >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 69, 35))
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 74, 35))
+ 
+     foo: V; // ok
+->foo : Symbol(D13.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 75, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 75, 19))
+ >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 74, 35))
+ }
+ 
+@@= skipped -23, +23 lines =@@
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ 
+     foo: T; // ok
+->foo : Symbol(D14.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 83, 22))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 83, 22))
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 82, 10))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 87, 10))
+ 
+     foo: T; // ok
+->foo : Symbol(D15.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 88, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 88, 19))
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 87, 10))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 92, 22))
+ 
+     foo: T;
+->foo : Symbol(D16.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 93, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 93, 19))
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 92, 10))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 97, 35))
+ 
+     foo: T;
+->foo : Symbol(D17.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 98, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 98, 19))
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 97, 10))
+ }
+ 
+@@= skipped -22, +22 lines =@@
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ 
+     foo: T; // ok
+->foo : Symbol(D18.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 105, 22))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 105, 22))
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 104, 10))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 109, 10))
+ 
+     foo: U; // error
+->foo : Symbol(D19.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 110, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 110, 19))
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 109, 22))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 114, 22))
+ 
+     foo: U; // ok
+->foo : Symbol(D20.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 115, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 115, 19))
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 114, 22))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 119, 35))
+ 
+     foo: U;
+->foo : Symbol(D21.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 120, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 120, 19))
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 119, 22))
+ }
+ 
+@@= skipped -22, +22 lines =@@
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ 
+     foo: T; // ok
+->foo : Symbol(D22.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 127, 22))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 127, 22))
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 126, 10))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 131, 10))
+ 
+     foo: V; // error
+->foo : Symbol(D23.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 132, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 132, 19))
+ >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 131, 35))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 136, 22))
+ 
+     foo: V; // error
+->foo : Symbol(D24.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 137, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 137, 19))
+ >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 136, 35))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 141, 35))
+ 
+     foo: V; // ok
+->foo : Symbol(D25.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 142, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 142, 19))
+ >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 141, 35))
+ }
+ 
+@@= skipped -22, +22 lines =@@
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ 
+     foo: Date; // ok
+->foo : Symbol(D26.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 149, 22))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 149, 22))
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 153, 10))
+ 
+     foo: Date; // error
+->foo : Symbol(D27.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 154, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 154, 19))
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 158, 22))
+ 
+     foo: Date; // error
+->foo : Symbol(D28.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 159, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 159, 19))
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 163, 35))
+ 
+     foo: Date; // error
+->foo : Symbol(D29.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 164, 19))
++>foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 164, 19))
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ }

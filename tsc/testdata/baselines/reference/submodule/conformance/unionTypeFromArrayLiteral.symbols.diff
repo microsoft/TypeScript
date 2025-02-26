@@ -1,0 +1,28 @@
+--- old.unionTypeFromArrayLiteral.symbols
++++ new.unionTypeFromArrayLiteral.symbols
+@@= skipped -32, +32 lines =@@
+ } = ["hello", true, false, " hello", true, 10, "any"]; // Tuple
+ class C { foo() { } }
+ >C : Symbol(C, Decl(unionTypeFromArrayLiteral.ts, 13, 54))
+->foo : Symbol(C.foo, Decl(unionTypeFromArrayLiteral.ts, 14, 9))
++>foo : Symbol(foo, Decl(unionTypeFromArrayLiteral.ts, 14, 9))
+ 
+ class D { foo2() { } }
+ >D : Symbol(D, Decl(unionTypeFromArrayLiteral.ts, 14, 21))
+->foo2 : Symbol(D.foo2, Decl(unionTypeFromArrayLiteral.ts, 15, 9))
++>foo2 : Symbol(foo2, Decl(unionTypeFromArrayLiteral.ts, 15, 9))
+ 
+ class E extends C { foo3() { } }
+ >E : Symbol(E, Decl(unionTypeFromArrayLiteral.ts, 15, 22))
+ >C : Symbol(C, Decl(unionTypeFromArrayLiteral.ts, 13, 54))
+->foo3 : Symbol(E.foo3, Decl(unionTypeFromArrayLiteral.ts, 16, 19))
++>foo3 : Symbol(foo3, Decl(unionTypeFromArrayLiteral.ts, 16, 19))
+ 
+ class F extends C { foo4() { } }
+ >F : Symbol(F, Decl(unionTypeFromArrayLiteral.ts, 16, 32))
+ >C : Symbol(C, Decl(unionTypeFromArrayLiteral.ts, 13, 54))
+->foo4 : Symbol(F.foo4, Decl(unionTypeFromArrayLiteral.ts, 17, 19))
++>foo4 : Symbol(foo4, Decl(unionTypeFromArrayLiteral.ts, 17, 19))
+ 
+ var c: C, d: D, e: E, f: F;
+ >c : Symbol(c, Decl(unionTypeFromArrayLiteral.ts, 18, 3))

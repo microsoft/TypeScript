@@ -1,0 +1,22 @@
+--- old.ExportModuleWithAccessibleTypesOnItsExportedMembers.symbols
++++ new.ExportModuleWithAccessibleTypesOnItsExportedMembers.symbols
+@@= skipped -7, +7 lines =@@
+ >Point : Symbol(Point, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 0, 10))
+ 
+         constructor(public x: number, public y: number) { }
+->x : Symbol(Point.x, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 3, 20))
+->y : Symbol(Point.y, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 3, 37))
++>x : Symbol(x, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 3, 20))
++>y : Symbol(y, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 3, 37))
+     }
+ 
+     export module B {
+@@= skipped -24, +24 lines =@@
+             }
+ 
+             static fromOrigin(p: Point) {
+->fromOrigin : Symbol(Line.fromOrigin, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 12, 13))
++>fromOrigin : Symbol(fromOrigin, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 12, 13))
+ >p : Symbol(p, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 14, 30))
+ >Point : Symbol(Point, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 0, 10))
+ 

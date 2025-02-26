@@ -1,0 +1,135 @@
+--- old.controlFlowArrayErrors.symbols
++++ new.controlFlowArrayErrors.symbols
+@@= skipped -14, +14 lines =@@
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 3, 7))
+ 
+     x.push(5);
+->x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 3, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ 
+     let z = x;
+ >z : Symbol(z, Decl(controlFlowArrayErrors.ts, 6, 7))
+@@= skipped -23, +23 lines =@@
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 10, 7))
+ 
+     x.push(5);
+->x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 10, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ 
+     let z = x;
+ >z : Symbol(z, Decl(controlFlowArrayErrors.ts, 14, 7))
+@@= skipped -16, +16 lines =@@
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 18, 7))
+ 
+     x.push(5);
+->x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 18, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ 
+     function g() {
+ >g : Symbol(g, Decl(controlFlowArrayErrors.ts, 19, 14))
+@@= skipped -22, +22 lines =@@
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 26, 7))
+ 
+     x.push(true);      // Error
+->x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 26, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function f5() {
+@@= skipped -12, +12 lines =@@
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 32, 7))
+ 
+     x.push(true);          // Error
+->x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 32, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function f6() {
+@@= skipped -18, +18 lines =@@
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 37, 7))
+ 
+         x.push(5);
+->x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 37, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ 
+         x.push("hello");
+->x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 37, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+     }
+     else {
+         x = [true];  // Non-evolving array
+@@= skipped -17, +17 lines =@@
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 37, 7))
+ 
+     x.push(99);  // Error
+->x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>x.push : Symbol(push, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 37, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function f7() {
+@@= skipped -12, +12 lines =@@
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 51, 7))
+ 
+     x.push(5);
+->x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 51, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ 
+     let y = x;        // y has non-evolving array value
+ >y : Symbol(y, Decl(controlFlowArrayErrors.ts, 53, 7))
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 51, 7))
+ 
+     x.push("hello");  // Ok
+->x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 51, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ 
+     y.push("hello");  // Error
+->y.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>y.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >y : Symbol(y, Decl(controlFlowArrayErrors.ts, 53, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ function f8() {
+@@= skipped -26, +26 lines =@@
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 59, 9))
+ 
+     x.push(5);
+->x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>x.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 59, 9))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ 
+     function g() {
+ >g : Symbol(g, Decl(controlFlowArrayErrors.ts, 60, 14))

@@ -1,0 +1,19 @@
+--- old.conflictMarkerTrivia2.symbols
++++ new.conflictMarkerTrivia2.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(conflictMarkerTrivia2.ts, 0, 0))
+ 
+   foo() {
+->foo : Symbol(C.foo, Decl(conflictMarkerTrivia2.ts, 0, 9))
++>foo : Symbol(foo, Decl(conflictMarkerTrivia2.ts, 0, 9))
+ 
+ <<<<<<< B
+      a();
+@@= skipped -11, +11 lines =@@
+ >>>>>>> A
+ 
+   public bar() { }
+->bar : Symbol(C.bar, Decl(conflictMarkerTrivia2.ts, 4, 3))
++>bar : Symbol(bar, Decl(conflictMarkerTrivia2.ts, 4, 3))
+ }
+ 

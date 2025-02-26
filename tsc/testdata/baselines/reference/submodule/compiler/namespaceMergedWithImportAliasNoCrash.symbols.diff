@@ -1,0 +1,29 @@
+--- old.namespaceMergedWithImportAliasNoCrash.symbols
++++ new.namespaceMergedWithImportAliasNoCrash.symbols
+@@= skipped -10, +10 lines =@@
+ var x: Library.Bar; // should work
+ >x : Symbol(x, Decl(file1.ts, 3, 3))
+ >Library : Symbol(Library, Decl(file1.ts, 0, 0))
+->Bar : Symbol(Library.Bar, Decl(file1.ts, 0, 26))
++>Bar : Symbol(Bar, Decl(file1.ts, 0, 26))
+ 
+ Library.foo; // should be an error
+ === file2.ts ===
+@@= skipped -14, +14 lines =@@
+ >foo : Symbol(foo, Decl(file2.ts, 2, 16))
+ }
+ Lib.foo; // should work
+->Lib.foo : Symbol(Lib.foo, Decl(file2.ts, 2, 16))
++>Lib.foo : Symbol(foo, Decl(file2.ts, 2, 16))
+ >Lib : Symbol(Lib, Decl(file2.ts, 0, 6), Decl(file2.ts, 0, 31))
+->foo : Symbol(Lib.foo, Decl(file2.ts, 2, 16))
++>foo : Symbol(foo, Decl(file2.ts, 2, 16))
+ 
+ var x: Lib.Bar; // should be an error
+ >x : Symbol(x, Decl(file2.ts, 5, 3))
+ >Lib : Symbol(Lib, Decl(file2.ts, 0, 6), Decl(file2.ts, 0, 31))
+->Bar : Symbol(Lib.Bar)
++>Bar : Symbol(Bar)
+ 
+ export { Lib }
+ >Lib : Symbol(Lib, Decl(file2.ts, 6, 8))

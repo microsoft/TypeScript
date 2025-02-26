@@ -1,0 +1,15 @@
+--- old.logicalAndOperatorWithEveryType.symbols
++++ new.logicalAndOperatorWithEveryType.symbols
+@@= skipped -5, +5 lines =@@
+ 
+ enum E { a, b, c }
+ >E : Symbol(E, Decl(logicalAndOperatorWithEveryType.ts, 0, 0))
+->a : Symbol(E.a, Decl(logicalAndOperatorWithEveryType.ts, 3, 8))
+->b : Symbol(E.b, Decl(logicalAndOperatorWithEveryType.ts, 3, 11))
+->c : Symbol(E.c, Decl(logicalAndOperatorWithEveryType.ts, 3, 14))
++>a : Symbol(a, Decl(logicalAndOperatorWithEveryType.ts, 3, 8))
++>b : Symbol(b, Decl(logicalAndOperatorWithEveryType.ts, 3, 11))
++>c : Symbol(c, Decl(logicalAndOperatorWithEveryType.ts, 3, 14))
+ 
+ var a1: any;
+ >a1 : Symbol(a1, Decl(logicalAndOperatorWithEveryType.ts, 5, 3))

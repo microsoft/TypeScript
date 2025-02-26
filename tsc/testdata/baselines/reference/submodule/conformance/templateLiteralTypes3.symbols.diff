@@ -1,0 +1,11 @@
+--- old.templateLiteralTypes3.symbols
++++ new.templateLiteralTypes3.symbols
+@@= skipped -383, +383 lines =@@
+ >P : Symbol(P, Decl(templateLiteralTypes3.ts, 114, 16))
+ 
+     blah: string;
+->blah : Symbol(ITest.blah, Decl(templateLiteralTypes3.ts, 114, 78))
++>blah : Symbol(blah, Decl(templateLiteralTypes3.ts, 114, 78))
+ }
+ 
+ // Repro from #45906

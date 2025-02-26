@@ -1,0 +1,111 @@
+--- old.intTypeCheck.symbols
++++ new.intTypeCheck.symbols
+@@= skipped -5, +5 lines =@@
+ 
+     //Property Signatures
+     p;
+->p : Symbol(i1.p, Decl(intTypeCheck.ts, 0, 14))
++>p : Symbol(p, Decl(intTypeCheck.ts, 0, 14))
+ 
+     p1?;
+->p1 : Symbol(i1.p1, Decl(intTypeCheck.ts, 2, 6))
++>p1 : Symbol(p1, Decl(intTypeCheck.ts, 2, 6))
+ 
+     p2?: string;
+->p2 : Symbol(i1.p2, Decl(intTypeCheck.ts, 3, 8))
++>p2 : Symbol(p2, Decl(intTypeCheck.ts, 3, 8))
+ 
+     p3();
+->p3 : Symbol(i1.p3, Decl(intTypeCheck.ts, 4, 16))
++>p3 : Symbol(p3, Decl(intTypeCheck.ts, 4, 16))
+ 
+     p4? ();
+->p4 : Symbol(i1.p4, Decl(intTypeCheck.ts, 5, 9))
++>p4 : Symbol(p4, Decl(intTypeCheck.ts, 5, 9))
+ 
+     p5? (): void;
+->p5 : Symbol(i1.p5, Decl(intTypeCheck.ts, 6, 11))
++>p5 : Symbol(p5, Decl(intTypeCheck.ts, 6, 11))
+ 
+     p6(pa1): void;
+->p6 : Symbol(i1.p6, Decl(intTypeCheck.ts, 7, 17))
++>p6 : Symbol(p6, Decl(intTypeCheck.ts, 7, 17))
+ >pa1 : Symbol(pa1, Decl(intTypeCheck.ts, 8, 7))
+ 
+     p7? (pa1, pa2): void;
+->p7 : Symbol(i1.p7, Decl(intTypeCheck.ts, 8, 18))
++>p7 : Symbol(p7, Decl(intTypeCheck.ts, 8, 18))
+ >pa1 : Symbol(pa1, Decl(intTypeCheck.ts, 9, 9))
+ >pa2 : Symbol(pa2, Decl(intTypeCheck.ts, 9, 13))
+ }
+@@= skipped -80, +80 lines =@@
+ 
+     // Used to be indexer, now it is a computed property
+     [p];
+->[p] : Symbol(i4[p], Decl(intTypeCheck.ts, 32, 14))
++>[p] : Symbol([p], Decl(intTypeCheck.ts, 32, 14))
+ 
+     //Index Signatures
+     [p1: string];
+@@= skipped -31, +31 lines =@@
+ 
+ class Base { foo() { } }
+ >Base : Symbol(Base, Decl(intTypeCheck.ts, 43, 16))
+->foo : Symbol(Base.foo, Decl(intTypeCheck.ts, 45, 12))
++>foo : Symbol(foo, Decl(intTypeCheck.ts, 45, 12))
+ 
+ interface i11 {
+ >i11 : Symbol(i11, Decl(intTypeCheck.ts, 45, 24))
+@@= skipped -53, +53 lines =@@
+     
+     // Used to be indexer, now it is a computed property
+     [p];
+->[p] : Symbol(i11[p], Decl(intTypeCheck.ts, 67, 35))
++>[p] : Symbol([p], Decl(intTypeCheck.ts, 67, 35))
+ 
+     //Index Signatures
+     [p1: string];
+@@= skipped -12, +12 lines =@@
+ 
+     //Property Signatures
+     p;
+->p : Symbol(i11.p, Decl(intTypeCheck.ts, 73, 29))
++>p : Symbol(p, Decl(intTypeCheck.ts, 73, 29))
+ 
+     p1?;
+->p1 : Symbol(i11.p1, Decl(intTypeCheck.ts, 76, 6))
++>p1 : Symbol(p1, Decl(intTypeCheck.ts, 76, 6))
+ 
+     p2?: string;
+->p2 : Symbol(i11.p2, Decl(intTypeCheck.ts, 77, 8))
++>p2 : Symbol(p2, Decl(intTypeCheck.ts, 77, 8))
+ 
+     p3();
+->p3 : Symbol(i11.p3, Decl(intTypeCheck.ts, 78, 16))
++>p3 : Symbol(p3, Decl(intTypeCheck.ts, 78, 16))
+ 
+     p4? ();
+->p4 : Symbol(i11.p4, Decl(intTypeCheck.ts, 79, 9))
++>p4 : Symbol(p4, Decl(intTypeCheck.ts, 79, 9))
+ 
+     p5? (): void;
+->p5 : Symbol(i11.p5, Decl(intTypeCheck.ts, 80, 11))
++>p5 : Symbol(p5, Decl(intTypeCheck.ts, 80, 11))
+ 
+     p6(pa1): void;
+->p6 : Symbol(i11.p6, Decl(intTypeCheck.ts, 81, 17))
++>p6 : Symbol(p6, Decl(intTypeCheck.ts, 81, 17))
+ >pa1 : Symbol(pa1, Decl(intTypeCheck.ts, 82, 7))
+ 
+     p7(pa1, pa2): void;
+->p7 : Symbol(i11.p7, Decl(intTypeCheck.ts, 82, 18), Decl(intTypeCheck.ts, 83, 23))
++>p7 : Symbol(p7, Decl(intTypeCheck.ts, 82, 18), Decl(intTypeCheck.ts, 83, 23))
+ >pa1 : Symbol(pa1, Decl(intTypeCheck.ts, 83, 7))
+ >pa2 : Symbol(pa2, Decl(intTypeCheck.ts, 83, 11))
+ 
+     p7? (pa1, pa2): void;
+->p7 : Symbol(i11.p7, Decl(intTypeCheck.ts, 82, 18), Decl(intTypeCheck.ts, 83, 23))
++>p7 : Symbol(p7, Decl(intTypeCheck.ts, 82, 18), Decl(intTypeCheck.ts, 83, 23))
+ >pa1 : Symbol(pa1, Decl(intTypeCheck.ts, 84, 9))
+ >pa2 : Symbol(pa2, Decl(intTypeCheck.ts, 84, 13))
+ }

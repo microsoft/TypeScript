@@ -1,0 +1,276 @@
+--- old.mixinClassesMembers.symbols
++++ new.mixinClassesMembers.symbols
+@@= skipped -4, +4 lines =@@
+ >C1 : Symbol(C1, Decl(mixinClassesMembers.ts, 0, 0))
+ 
+     public a: number;
+->a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
++>a : Symbol(a, Decl(mixinClassesMembers.ts, 0, 18))
+ 
+     protected b: number;
+->b : Symbol(C1.b, Decl(mixinClassesMembers.ts, 1, 21))
++>b : Symbol(b, Decl(mixinClassesMembers.ts, 1, 21))
+ 
+     private c: number;
+->c : Symbol(C1.c, Decl(mixinClassesMembers.ts, 2, 24))
++>c : Symbol(c, Decl(mixinClassesMembers.ts, 2, 24))
+ 
+     constructor(s: string);
+ >s : Symbol(s, Decl(mixinClassesMembers.ts, 4, 16))
+@@= skipped -22, +22 lines =@@
+ >args : Symbol(args, Decl(mixinClassesMembers.ts, 9, 16))
+ 
+     p: number;
+->p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
++>p : Symbol(p, Decl(mixinClassesMembers.ts, 9, 32))
+ 
+     static p: number;
+->p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
++>p : Symbol(p, Decl(mixinClassesMembers.ts, 10, 14))
+ }
+ 
+ declare class M2 {
+@@= skipped -13, +13 lines =@@
+ >args : Symbol(args, Decl(mixinClassesMembers.ts, 15, 16))
+ 
+     f(): number;
+->f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
++>f : Symbol(f, Decl(mixinClassesMembers.ts, 15, 32))
+ 
+     static f(): number;
+->f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 16, 16))
++>f : Symbol(f, Decl(mixinClassesMembers.ts, 16, 16))
+ }
+ 
+ declare const Mixed1: typeof M1 & typeof C1;
+@@= skipped -81, +81 lines =@@
+ >Mixed1 : Symbol(Mixed1, Decl(mixinClassesMembers.ts, 20, 13))
+ 
+     x.a;
+->x.a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
++>x.a : Symbol(a, Decl(mixinClassesMembers.ts, 0, 18))
+ >x : Symbol(x, Decl(mixinClassesMembers.ts, 39, 7))
+->a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
++>a : Symbol(a, Decl(mixinClassesMembers.ts, 0, 18))
+ 
+     x.p;
+->x.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
++>x.p : Symbol(p, Decl(mixinClassesMembers.ts, 9, 32))
+ >x : Symbol(x, Decl(mixinClassesMembers.ts, 39, 7))
+->p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
++>p : Symbol(p, Decl(mixinClassesMembers.ts, 9, 32))
+ 
+     Mixed1.p;
+->Mixed1.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
++>Mixed1.p : Symbol(p, Decl(mixinClassesMembers.ts, 10, 14))
+ >Mixed1 : Symbol(Mixed1, Decl(mixinClassesMembers.ts, 20, 13))
+->p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
++>p : Symbol(p, Decl(mixinClassesMembers.ts, 10, 14))
+ }
+ 
+ function f3() {
+@@= skipped -23, +23 lines =@@
+ >Mixed2 : Symbol(Mixed2, Decl(mixinClassesMembers.ts, 21, 13))
+ 
+     x.a;
+->x.a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
++>x.a : Symbol(a, Decl(mixinClassesMembers.ts, 0, 18))
+ >x : Symbol(x, Decl(mixinClassesMembers.ts, 46, 7))
+->a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
++>a : Symbol(a, Decl(mixinClassesMembers.ts, 0, 18))
+ 
+     x.p;
+->x.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
++>x.p : Symbol(p, Decl(mixinClassesMembers.ts, 9, 32))
+ >x : Symbol(x, Decl(mixinClassesMembers.ts, 46, 7))
+->p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
++>p : Symbol(p, Decl(mixinClassesMembers.ts, 9, 32))
+ 
+     Mixed2.p;
+->Mixed2.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
++>Mixed2.p : Symbol(p, Decl(mixinClassesMembers.ts, 10, 14))
+ >Mixed2 : Symbol(Mixed2, Decl(mixinClassesMembers.ts, 21, 13))
+->p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
++>p : Symbol(p, Decl(mixinClassesMembers.ts, 10, 14))
+ }
+ 
+ function f4() {
+@@= skipped -23, +23 lines =@@
+ >Mixed3 : Symbol(Mixed3, Decl(mixinClassesMembers.ts, 22, 13))
+ 
+     x.a;
+->x.a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
++>x.a : Symbol(a, Decl(mixinClassesMembers.ts, 0, 18))
+ >x : Symbol(x, Decl(mixinClassesMembers.ts, 53, 7))
+->a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
++>a : Symbol(a, Decl(mixinClassesMembers.ts, 0, 18))
+ 
+     x.p;
+->x.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
++>x.p : Symbol(p, Decl(mixinClassesMembers.ts, 9, 32))
+ >x : Symbol(x, Decl(mixinClassesMembers.ts, 53, 7))
+->p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
++>p : Symbol(p, Decl(mixinClassesMembers.ts, 9, 32))
+ 
+     x.f();
+->x.f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
++>x.f : Symbol(f, Decl(mixinClassesMembers.ts, 15, 32))
+ >x : Symbol(x, Decl(mixinClassesMembers.ts, 53, 7))
+->f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
++>f : Symbol(f, Decl(mixinClassesMembers.ts, 15, 32))
+ 
+     Mixed3.p;
+->Mixed3.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
++>Mixed3.p : Symbol(p, Decl(mixinClassesMembers.ts, 10, 14))
+ >Mixed3 : Symbol(Mixed3, Decl(mixinClassesMembers.ts, 22, 13))
+->p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
++>p : Symbol(p, Decl(mixinClassesMembers.ts, 10, 14))
+ 
+     Mixed3.f();
+->Mixed3.f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 16, 16))
++>Mixed3.f : Symbol(f, Decl(mixinClassesMembers.ts, 16, 16))
+ >Mixed3 : Symbol(Mixed3, Decl(mixinClassesMembers.ts, 22, 13))
+->f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 16, 16))
++>f : Symbol(f, Decl(mixinClassesMembers.ts, 16, 16))
+ }
+ 
+ function f5() {
+@@= skipped -33, +33 lines =@@
+ >Mixed4 : Symbol(Mixed4, Decl(mixinClassesMembers.ts, 23, 13))
+ 
+     x.a;
+->x.a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
++>x.a : Symbol(a, Decl(mixinClassesMembers.ts, 0, 18))
+ >x : Symbol(x, Decl(mixinClassesMembers.ts, 62, 7))
+->a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
++>a : Symbol(a, Decl(mixinClassesMembers.ts, 0, 18))
+ 
+     x.p;
+->x.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
++>x.p : Symbol(p, Decl(mixinClassesMembers.ts, 9, 32))
+ >x : Symbol(x, Decl(mixinClassesMembers.ts, 62, 7))
+->p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
++>p : Symbol(p, Decl(mixinClassesMembers.ts, 9, 32))
+ 
+     x.f();
+->x.f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
++>x.f : Symbol(f, Decl(mixinClassesMembers.ts, 15, 32))
+ >x : Symbol(x, Decl(mixinClassesMembers.ts, 62, 7))
+->f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
++>f : Symbol(f, Decl(mixinClassesMembers.ts, 15, 32))
+ 
+     Mixed4.p;
+->Mixed4.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
++>Mixed4.p : Symbol(p, Decl(mixinClassesMembers.ts, 10, 14))
+ >Mixed4 : Symbol(Mixed4, Decl(mixinClassesMembers.ts, 23, 13))
+->p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
++>p : Symbol(p, Decl(mixinClassesMembers.ts, 10, 14))
+ 
+     Mixed4.f();
+->Mixed4.f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 16, 16))
++>Mixed4.f : Symbol(f, Decl(mixinClassesMembers.ts, 16, 16))
+ >Mixed4 : Symbol(Mixed4, Decl(mixinClassesMembers.ts, 23, 13))
+->f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 16, 16))
++>f : Symbol(f, Decl(mixinClassesMembers.ts, 16, 16))
+ }
+ 
+ function f6() {
+@@= skipped -33, +33 lines =@@
+ >Mixed5 : Symbol(Mixed5, Decl(mixinClassesMembers.ts, 24, 13))
+ 
+     x.p;
+->x.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
++>x.p : Symbol(p, Decl(mixinClassesMembers.ts, 9, 32))
+ >x : Symbol(x, Decl(mixinClassesMembers.ts, 71, 7))
+->p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
++>p : Symbol(p, Decl(mixinClassesMembers.ts, 9, 32))
+ 
+     x.f();
+->x.f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
++>x.f : Symbol(f, Decl(mixinClassesMembers.ts, 15, 32))
+ >x : Symbol(x, Decl(mixinClassesMembers.ts, 71, 7))
+->f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
++>f : Symbol(f, Decl(mixinClassesMembers.ts, 15, 32))
+ 
+     Mixed5.p;
+->Mixed5.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
++>Mixed5.p : Symbol(p, Decl(mixinClassesMembers.ts, 10, 14))
+ >Mixed5 : Symbol(Mixed5, Decl(mixinClassesMembers.ts, 24, 13))
+->p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 10, 14))
++>p : Symbol(p, Decl(mixinClassesMembers.ts, 10, 14))
+ 
+     Mixed5.f();
+->Mixed5.f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 16, 16))
++>Mixed5.f : Symbol(f, Decl(mixinClassesMembers.ts, 16, 16))
+ >Mixed5 : Symbol(Mixed5, Decl(mixinClassesMembers.ts, 24, 13))
+->f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 16, 16))
++>f : Symbol(f, Decl(mixinClassesMembers.ts, 16, 16))
+ }
+ 
+ class C2 extends Mixed1 {
+@@= skipped -27, +27 lines =@@
+     constructor() {
+         super("hello");
+         this.a;
+->this.a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
++>this.a : Symbol(a, Decl(mixinClassesMembers.ts, 0, 18))
+ >this : Symbol(C2, Decl(mixinClassesMembers.ts, 76, 1))
+->a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
++>a : Symbol(a, Decl(mixinClassesMembers.ts, 0, 18))
+ 
+         this.b;
+->this.b : Symbol(C1.b, Decl(mixinClassesMembers.ts, 1, 21))
++>this.b : Symbol(b, Decl(mixinClassesMembers.ts, 1, 21))
+ >this : Symbol(C2, Decl(mixinClassesMembers.ts, 76, 1))
+->b : Symbol(C1.b, Decl(mixinClassesMembers.ts, 1, 21))
++>b : Symbol(b, Decl(mixinClassesMembers.ts, 1, 21))
+ 
+         this.p;
+->this.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
++>this.p : Symbol(p, Decl(mixinClassesMembers.ts, 9, 32))
+ >this : Symbol(C2, Decl(mixinClassesMembers.ts, 76, 1))
+->p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
++>p : Symbol(p, Decl(mixinClassesMembers.ts, 9, 32))
+     }
+ }
+ 
+@@= skipped -23, +23 lines =@@
+     constructor() {
+         super(42);
+         this.a;
+->this.a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
++>this.a : Symbol(a, Decl(mixinClassesMembers.ts, 0, 18))
+ >this : Symbol(C3, Decl(mixinClassesMembers.ts, 85, 1))
+->a : Symbol(C1.a, Decl(mixinClassesMembers.ts, 0, 18))
++>a : Symbol(a, Decl(mixinClassesMembers.ts, 0, 18))
+ 
+         this.b;
+->this.b : Symbol(C1.b, Decl(mixinClassesMembers.ts, 1, 21))
++>this.b : Symbol(b, Decl(mixinClassesMembers.ts, 1, 21))
+ >this : Symbol(C3, Decl(mixinClassesMembers.ts, 85, 1))
+->b : Symbol(C1.b, Decl(mixinClassesMembers.ts, 1, 21))
++>b : Symbol(b, Decl(mixinClassesMembers.ts, 1, 21))
+ 
+         this.p;
+->this.p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
++>this.p : Symbol(p, Decl(mixinClassesMembers.ts, 9, 32))
+ >this : Symbol(C3, Decl(mixinClassesMembers.ts, 85, 1))
+->p : Symbol(M1.p, Decl(mixinClassesMembers.ts, 9, 32))
++>p : Symbol(p, Decl(mixinClassesMembers.ts, 9, 32))
+ 
+         this.f();
+->this.f : Symbol(C3.f, Decl(mixinClassesMembers.ts, 94, 5))
++>this.f : Symbol(f, Decl(mixinClassesMembers.ts, 94, 5))
+ >this : Symbol(C3, Decl(mixinClassesMembers.ts, 85, 1))
+->f : Symbol(C3.f, Decl(mixinClassesMembers.ts, 94, 5))
++>f : Symbol(f, Decl(mixinClassesMembers.ts, 94, 5))
+     }
+     f() { return super.f(); }
+->f : Symbol(C3.f, Decl(mixinClassesMembers.ts, 94, 5))
+->super.f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
+->f : Symbol(M2.f, Decl(mixinClassesMembers.ts, 15, 32))
++>f : Symbol(f, Decl(mixinClassesMembers.ts, 94, 5))
++>super.f : Symbol(f, Decl(mixinClassesMembers.ts, 15, 32))
++>f : Symbol(f, Decl(mixinClassesMembers.ts, 15, 32))
+ }
+ 

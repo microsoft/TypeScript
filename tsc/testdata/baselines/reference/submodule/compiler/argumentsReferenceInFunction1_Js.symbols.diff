@@ -1,0 +1,26 @@
+--- old.argumentsReferenceInFunction1_Js.symbols
++++ new.argumentsReferenceInFunction1_Js.symbols
+@@= skipped -16, +16 lines =@@
+ 
+   var len = args.length;
+ >len : Symbol(len, Decl(index.js, 4, 5))
+->args.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
++>args.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >args : Symbol(args, Decl(index.js, 3, 5))
+->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+   for (var x = args[i]; i < len; x = args[++i]) {
+ >x : Symbol(x, Decl(index.js, 5, 10))
+@@= skipped -27, +27 lines =@@
+ >debuglog : Symbol(debuglog, Decl(index.js, 11, 5))
+ 
+   return format.apply(null, arguments);
+->format.apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>format.apply : Symbol(apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >format : Symbol(format, Decl(index.js, 0, 5))
+->apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>apply : Symbol(apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >arguments : Symbol(arguments)
+ 
+ };

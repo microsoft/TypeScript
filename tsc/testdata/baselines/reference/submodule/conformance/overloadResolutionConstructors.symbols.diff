@@ -1,0 +1,49 @@
+--- old.overloadResolutionConstructors.symbols
++++ new.overloadResolutionConstructors.symbols
+@@= skipped -4, +4 lines =@@
+ >SomeBase : Symbol(SomeBase, Decl(overloadResolutionConstructors.ts, 0, 0))
+ 
+     private n;
+->n : Symbol(SomeBase.n, Decl(overloadResolutionConstructors.ts, 0, 16))
++>n : Symbol(n, Decl(overloadResolutionConstructors.ts, 0, 16))
+ 
+     public s: string;
+->s : Symbol(SomeBase.s, Decl(overloadResolutionConstructors.ts, 1, 14))
++>s : Symbol(s, Decl(overloadResolutionConstructors.ts, 1, 14))
+ }
+ class SomeDerived1 extends SomeBase {
+ >SomeDerived1 : Symbol(SomeDerived1, Decl(overloadResolutionConstructors.ts, 4, 1))
+ >SomeBase : Symbol(SomeBase, Decl(overloadResolutionConstructors.ts, 0, 0))
+ 
+     private m;
+->m : Symbol(SomeDerived1.m, Decl(overloadResolutionConstructors.ts, 5, 37))
++>m : Symbol(m, Decl(overloadResolutionConstructors.ts, 5, 37))
+ }
+ class SomeDerived2 extends SomeBase {
+ >SomeDerived2 : Symbol(SomeDerived2, Decl(overloadResolutionConstructors.ts, 7, 1))
+ >SomeBase : Symbol(SomeBase, Decl(overloadResolutionConstructors.ts, 0, 0))
+ 
+     private m;
+->m : Symbol(SomeDerived2.m, Decl(overloadResolutionConstructors.ts, 8, 37))
++>m : Symbol(m, Decl(overloadResolutionConstructors.ts, 8, 37))
+ }
+ class SomeDerived3 extends SomeBase {
+ >SomeDerived3 : Symbol(SomeDerived3, Decl(overloadResolutionConstructors.ts, 10, 1))
+ >SomeBase : Symbol(SomeBase, Decl(overloadResolutionConstructors.ts, 0, 0))
+ 
+     private m;
+->m : Symbol(SomeDerived3.m, Decl(overloadResolutionConstructors.ts, 11, 37))
++>m : Symbol(m, Decl(overloadResolutionConstructors.ts, 11, 37))
+ }
+ 
+ interface fn1 {
+@@= skipped -250, +250 lines =@@
+ >s : Symbol(s, Decl(overloadResolutionConstructors.ts, 22, 3), Decl(overloadResolutionConstructors.ts, 23, 3), Decl(overloadResolutionConstructors.ts, 39, 3), Decl(overloadResolutionConstructors.ts, 55, 3), Decl(overloadResolutionConstructors.ts, 56, 3) ... and 3 more)
+ >fn5 : Symbol(fn5, Decl(overloadResolutionConstructors.ts, 91, 20), Decl(overloadResolutionConstructors.ts, 98, 3))
+ >n : Symbol(n, Decl(overloadResolutionConstructors.ts, 100, 17))
+->n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
++>n.substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
+ >n : Symbol(n, Decl(overloadResolutionConstructors.ts, 100, 17))
+->substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
++>substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
+ 

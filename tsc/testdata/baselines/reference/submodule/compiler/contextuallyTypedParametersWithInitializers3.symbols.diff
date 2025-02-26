@@ -1,0 +1,11 @@
+--- old.contextuallyTypedParametersWithInitializers3.symbols
++++ new.contextuallyTypedParametersWithInitializers3.symbols
+@@= skipped -7, +7 lines =@@
+ >GraphActions : Symbol(GraphActions, Decl(contextuallyTypedParametersWithInitializers3.ts, 0, 40))
+ 
+   setDirection: (direction: CanvasDirection) => void;
+->setDirection : Symbol(GraphActions.setDirection, Decl(contextuallyTypedParametersWithInitializers3.ts, 2, 24))
++>setDirection : Symbol(setDirection, Decl(contextuallyTypedParametersWithInitializers3.ts, 2, 24))
+ >direction : Symbol(direction, Decl(contextuallyTypedParametersWithInitializers3.ts, 3, 17))
+ >CanvasDirection : Symbol(CanvasDirection, Decl(contextuallyTypedParametersWithInitializers3.ts, 0, 0))
+ }

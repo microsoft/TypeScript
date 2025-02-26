@@ -1,0 +1,45 @@
+--- old.unknownControlFlow.symbols
++++ new.unknownControlFlow.symbols
+@@= skipped -587, +587 lines =@@
+         return false;
+     }
+     if (Array.isArray(a) || Array.isArray(b)) {
+->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>Array.isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(unknownControlFlow.ts, 247, 23))
+->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>Array.isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
++>isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
+ >b : Symbol(b, Decl(unknownControlFlow.ts, 247, 28))
+ 
+         return false;
+     }
+     if (Object.keys(a).length !== Object.keys(b).length) { // Error here
+->Object.keys(a).length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
++>Object.keys(a).length : Symbol(length, Decl(lib.es5.d.ts, --, --))
++>Object.keys : Symbol(keys, Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
++>keys : Symbol(keys, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(unknownControlFlow.ts, 247, 23))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+->Object.keys(b).length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
++>Object.keys(b).length : Symbol(length, Decl(lib.es5.d.ts, --, --))
++>Object.keys : Symbol(keys, Decl(lib.es5.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
++>keys : Symbol(keys, Decl(lib.es5.d.ts, --, --))
+ >b : Symbol(b, Decl(unknownControlFlow.ts, 247, 28))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ 
+         return false;
+     }

@@ -1,0 +1,14 @@
+--- old.declarationEmitExportAliasVisibiilityMarking.symbols
++++ new.declarationEmitExportAliasVisibiilityMarking.symbols
+@@= skipped -26, +26 lines =@@
+ === index.ts ===
+ export let lazyCard = () => import('./Card').then(a => a.default);
+ >lazyCard : Symbol(lazyCard, Decl(index.ts, 0, 10))
+->import('./Card').then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+->'./Card' : Symbol("Card", Decl(Card.ts, 0, 0))
+->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
++>import('./Card').then : Symbol(then, Decl(lib.es5.d.ts, --, --))
++>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+ >a : Symbol(a, Decl(index.ts, 0, 50))
+ >a.default : Symbol(default, Decl(Card.ts, 0, 37))
+ >a : Symbol(a, Decl(index.ts, 0, 50))

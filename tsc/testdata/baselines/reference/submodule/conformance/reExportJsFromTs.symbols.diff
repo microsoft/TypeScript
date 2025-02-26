@@ -1,0 +1,13 @@
+--- old.reExportJsFromTs.symbols
++++ new.reExportJsFromTs.symbols
+@@= skipped -1, +1 lines =@@
+ 
+ === /lib/constants.js ===
+ module.exports = {
+->module.exports : Symbol(module.exports, Decl(constants.js, 0, 0))
+->module : Symbol(export=, Decl(constants.js, 0, 0))
+->exports : Symbol(export=, Decl(constants.js, 0, 0))
+-
+   str: 'x',
+ >str : Symbol(str, Decl(constants.js, 0, 18))
+ 

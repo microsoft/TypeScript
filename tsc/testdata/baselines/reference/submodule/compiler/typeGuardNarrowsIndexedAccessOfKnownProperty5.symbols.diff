@@ -1,0 +1,31 @@
+--- old.typeGuardNarrowsIndexedAccessOfKnownProperty5.symbols
++++ new.typeGuardNarrowsIndexedAccessOfKnownProperty5.symbols
+@@= skipped -49, +49 lines =@@
+ >Foo : Symbol(Foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty5.ts, 10, 1))
+ 
+     x: number | undefined;
+->x : Symbol(Foo.x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty5.ts, 12, 15))
++>x : Symbol(x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty5.ts, 12, 15))
+ }
+ const c: Foo[] = [];
+ >c : Symbol(c, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty5.ts, 15, 5))
+@@= skipped -10, +10 lines =@@
+ >cIndex : Symbol(cIndex, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty5.ts, 16, 5))
+ 
+ if (c[cIndex].x) {
+->c[cIndex].x : Symbol(Foo.x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty5.ts, 12, 15))
++>c[cIndex].x : Symbol(x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty5.ts, 12, 15))
+ >c : Symbol(c, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty5.ts, 15, 5))
+ >cIndex : Symbol(cIndex, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty5.ts, 16, 5))
+->x : Symbol(Foo.x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty5.ts, 12, 15))
++>x : Symbol(x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty5.ts, 12, 15))
+ 
+     c[cIndex].x // number
+->c[cIndex].x : Symbol(Foo.x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty5.ts, 12, 15))
++>c[cIndex].x : Symbol(x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty5.ts, 12, 15))
+ >c : Symbol(c, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty5.ts, 15, 5))
+ >cIndex : Symbol(cIndex, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty5.ts, 16, 5))
+->x : Symbol(Foo.x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty5.ts, 12, 15))
++>x : Symbol(x, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty5.ts, 12, 15))
+ }
+ 

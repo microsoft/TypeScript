@@ -1,0 +1,20 @@
+--- old.interfaceWithStringIndexerHidingBaseTypeIndexer.symbols
++++ new.interfaceWithStringIndexerHidingBaseTypeIndexer.symbols
+@@= skipped -8, +8 lines =@@
+ >a : Symbol(a, Decl(interfaceWithStringIndexerHidingBaseTypeIndexer.ts, 1, 18))
+ 
+     x: {
+->x : Symbol(Base.x, Decl(interfaceWithStringIndexerHidingBaseTypeIndexer.ts, 1, 30))
++>x : Symbol(x, Decl(interfaceWithStringIndexerHidingBaseTypeIndexer.ts, 1, 30))
+ 
+         a: number; b: number;
+ >a : Symbol(a, Decl(interfaceWithStringIndexerHidingBaseTypeIndexer.ts, 2, 8))
+@@= skipped -22, +22 lines =@@
+     };
+     // error
+     y: {
+->y : Symbol(Derived.y, Decl(interfaceWithStringIndexerHidingBaseTypeIndexer.ts, 10, 6))
++>y : Symbol(y, Decl(interfaceWithStringIndexerHidingBaseTypeIndexer.ts, 10, 6))
+ 
+         a: number;
+ >a : Symbol(a, Decl(interfaceWithStringIndexerHidingBaseTypeIndexer.ts, 12, 8))

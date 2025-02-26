@@ -1,0 +1,14 @@
+--- old.controlFlowParameter.symbols
++++ new.controlFlowParameter.symbols
+@@= skipped -12, +12 lines =@@
+   })()
+ ) {
+   console.log("ok"); // should not trigger 'Unreachable code detected.'
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ }
+ 
+ function f2(

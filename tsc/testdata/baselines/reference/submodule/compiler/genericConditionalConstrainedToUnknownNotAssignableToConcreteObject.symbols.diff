@@ -1,0 +1,23 @@
+--- old.genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.symbols
++++ new.genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.symbols
+@@= skipped -2, +2 lines =@@
+ === genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts ===
+ interface A { x: number }
+ >A : Symbol(A, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 0))
+->x : Symbol(A.x, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 13))
++>x : Symbol(x, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 13))
+ 
+ declare function isA(a: unknown): a is A;
+ >isA : Symbol(isA, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 25))
+@@= skipped -68, +68 lines =@@
+ 
+         // a2 is not narrowed
+         a2.x // error, but should be ok
+->a2.x : Symbol(A.x, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 13))
++>a2.x : Symbol(x, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 13))
+ >a2 : Symbol(a2, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 20, 2))
+->x : Symbol(A.x, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 13))
++>x : Symbol(x, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 13))
+     }
+ }
+ 

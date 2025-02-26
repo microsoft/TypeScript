@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/types/thisType/contextualThisTypeInJavascript.ts] ////
+
+=== context.js ===
+const obj = {
+>obj : Symbol(obj, Decl(context.js, 0, 5))
+
+    prop: 2,
+>prop : Symbol(prop, Decl(context.js, 0, 13))
+
+    method() {
+>method : Symbol(method, Decl(context.js, 1, 12))
+
+        this;
+        this.prop;
+        this.method;
+        this.unknown; // ok, obj has a string indexer
+    }
+}
+

@@ -1,0 +1,11 @@
+--- old.parserIndexSignature11.symbols
++++ new.parserIndexSignature11.symbols
+@@= skipped -4, +4 lines =@@
+ >I : Symbol(I, Decl(parserIndexSignature11.ts, 0, 0))
+ 
+         [p]; // Used to be indexer, now it is a computed property
+->[p] : Symbol(I[p], Decl(parserIndexSignature11.ts, 0, 13))
++>[p] : Symbol([p], Decl(parserIndexSignature11.ts, 0, 13))
+ 
+         [p1: string];
+ >p1 : Symbol(p1, Decl(parserIndexSignature11.ts, 2, 9))

@@ -1,0 +1,18 @@
+--- old.pushTypeGetTypeOfAlias.symbols
++++ new.pushTypeGetTypeOfAlias.symbols
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/pushTypeGetTypeOfAlias.ts] ////
+ 
+ === bar.js ===
+-module.exports = function () {};
+->module.exports : Symbol(module.exports, Decl(bar.js, 0, 0))
+->module : Symbol(export=, Decl(bar.js, 0, 0))
+->exports : Symbol(export=, Decl(bar.js, 0, 0))
+ 
++module.exports = function () {};
+ exports.blah = exports.someProp;
+->exports.blah : Symbol(blah, Decl(bar.js, 0, 32))
+->exports : Symbol(blah, Decl(bar.js, 0, 32))
+->blah : Symbol(blah, Decl(bar.js, 0, 32))
+->exports : Symbol("bar", Decl(bar.js, 0, 0))
+-

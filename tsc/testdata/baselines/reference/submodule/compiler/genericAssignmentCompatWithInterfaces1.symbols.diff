@@ -1,0 +1,38 @@
+--- old.genericAssignmentCompatWithInterfaces1.symbols
++++ new.genericAssignmentCompatWithInterfaces1.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 21))
+ 
+    compareTo(other: T): number;
+->compareTo : Symbol(Comparable.compareTo, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 25))
++>compareTo : Symbol(compareTo, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 25))
+ >other : Symbol(other, Decl(genericAssignmentCompatWithInterfaces1.ts, 1, 13))
+ >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 21))
+ }
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 3, 12))
+ 
+     x: Comparable<T>;
+->x : Symbol(I.x, Decl(genericAssignmentCompatWithInterfaces1.ts, 3, 16))
++>x : Symbol(x, Decl(genericAssignmentCompatWithInterfaces1.ts, 3, 16))
+ >Comparable : Symbol(Comparable, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 0))
+ >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 3, 12))
+ }
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 6, 12))
+ 
+    x: A<T>;
+->x : Symbol(K.x, Decl(genericAssignmentCompatWithInterfaces1.ts, 6, 16))
++>x : Symbol(x, Decl(genericAssignmentCompatWithInterfaces1.ts, 6, 16))
+ >A : Symbol(A, Decl(genericAssignmentCompatWithInterfaces1.ts, 8, 1))
+ >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 6, 12))
+ }
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 8))
+ >Comparable : Symbol(Comparable, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 0))
+ >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 8))
+->compareTo : Symbol(A.compareTo, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 37))
++>compareTo : Symbol(compareTo, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 37))
+ >other : Symbol(other, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 48))
+ >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 8))
+ 

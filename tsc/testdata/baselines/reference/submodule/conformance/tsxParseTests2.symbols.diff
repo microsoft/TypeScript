@@ -1,0 +1,17 @@
+--- old.tsxParseTests2.symbols
++++ new.tsxParseTests2.symbols
+@@= skipped -8, +8 lines =@@
+ 
+ 	interface IntrinsicElements { div; span; }
+ >IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
+->div : Symbol(IntrinsicElements.div, Decl(file.tsx, 2, 30))
+->span : Symbol(IntrinsicElements.span, Decl(file.tsx, 2, 35))
++>div : Symbol(div, Decl(file.tsx, 2, 30))
++>span : Symbol(span, Decl(file.tsx, 2, 35))
+ }
+ 
+ var x = </**/div></div>;
+ >x : Symbol(x, Decl(file.tsx, 5, 3))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(file.tsx, 2, 30))
+->div : Symbol(JSX.IntrinsicElements.div, Decl(file.tsx, 2, 30))
+ 

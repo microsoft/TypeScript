@@ -1,0 +1,63 @@
+--- old.additionOperatorWithNumberAndEnum.symbols
++++ new.additionOperatorWithNumberAndEnum.symbols
+@@= skipped -2, +2 lines =@@
+ === additionOperatorWithNumberAndEnum.ts ===
+ enum E { a, b }
+ >E : Symbol(E, Decl(additionOperatorWithNumberAndEnum.ts, 0, 0))
+->a : Symbol(E.a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
+->b : Symbol(E.b, Decl(additionOperatorWithNumberAndEnum.ts, 0, 11))
++>a : Symbol(a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
++>b : Symbol(b, Decl(additionOperatorWithNumberAndEnum.ts, 0, 11))
+ 
+ enum F { c, d }
+ >F : Symbol(F, Decl(additionOperatorWithNumberAndEnum.ts, 0, 15))
+->c : Symbol(F.c, Decl(additionOperatorWithNumberAndEnum.ts, 1, 8))
+->d : Symbol(F.d, Decl(additionOperatorWithNumberAndEnum.ts, 1, 11))
++>c : Symbol(c, Decl(additionOperatorWithNumberAndEnum.ts, 1, 8))
++>d : Symbol(d, Decl(additionOperatorWithNumberAndEnum.ts, 1, 11))
+ 
+ var a: number;
+ >a : Symbol(a, Decl(additionOperatorWithNumberAndEnum.ts, 3, 3))
+@@= skipped -46, +46 lines =@@
+ 
+ var r6 = E.a + 0;
+ >r6 : Symbol(r6, Decl(additionOperatorWithNumberAndEnum.ts, 13, 3))
+->E.a : Symbol(E.a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
++>E.a : Symbol(a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
+ >E : Symbol(E, Decl(additionOperatorWithNumberAndEnum.ts, 0, 0))
+->a : Symbol(E.a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
++>a : Symbol(a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
+ 
+ var r7 = E.a + E.b;
+ >r7 : Symbol(r7, Decl(additionOperatorWithNumberAndEnum.ts, 14, 3))
+->E.a : Symbol(E.a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
++>E.a : Symbol(a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
+ >E : Symbol(E, Decl(additionOperatorWithNumberAndEnum.ts, 0, 0))
+->a : Symbol(E.a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
+->E.b : Symbol(E.b, Decl(additionOperatorWithNumberAndEnum.ts, 0, 11))
++>a : Symbol(a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
++>E.b : Symbol(b, Decl(additionOperatorWithNumberAndEnum.ts, 0, 11))
+ >E : Symbol(E, Decl(additionOperatorWithNumberAndEnum.ts, 0, 0))
+->b : Symbol(E.b, Decl(additionOperatorWithNumberAndEnum.ts, 0, 11))
++>b : Symbol(b, Decl(additionOperatorWithNumberAndEnum.ts, 0, 11))
+ 
+ var r8 = E['a'] + E['b'];
+ >r8 : Symbol(r8, Decl(additionOperatorWithNumberAndEnum.ts, 15, 3))
+ >E : Symbol(E, Decl(additionOperatorWithNumberAndEnum.ts, 0, 0))
+->'a' : Symbol(E.a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
++>'a' : Symbol(a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
+ >E : Symbol(E, Decl(additionOperatorWithNumberAndEnum.ts, 0, 0))
+->'b' : Symbol(E.b, Decl(additionOperatorWithNumberAndEnum.ts, 0, 11))
++>'b' : Symbol(b, Decl(additionOperatorWithNumberAndEnum.ts, 0, 11))
+ 
+ var r9 = E['a'] + F['c'];
+ >r9 : Symbol(r9, Decl(additionOperatorWithNumberAndEnum.ts, 16, 3))
+ >E : Symbol(E, Decl(additionOperatorWithNumberAndEnum.ts, 0, 0))
+->'a' : Symbol(E.a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
++>'a' : Symbol(a, Decl(additionOperatorWithNumberAndEnum.ts, 0, 8))
+ >F : Symbol(F, Decl(additionOperatorWithNumberAndEnum.ts, 0, 15))
+->'c' : Symbol(F.c, Decl(additionOperatorWithNumberAndEnum.ts, 1, 8))
++>'c' : Symbol(c, Decl(additionOperatorWithNumberAndEnum.ts, 1, 8))
+ 
+ var r10 = a + c;
+ >r10 : Symbol(r10, Decl(additionOperatorWithNumberAndEnum.ts, 18, 3))

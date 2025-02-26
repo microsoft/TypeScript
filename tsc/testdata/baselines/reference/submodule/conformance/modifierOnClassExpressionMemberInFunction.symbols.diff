@@ -1,0 +1,18 @@
+--- old.modifierOnClassExpressionMemberInFunction.symbols
++++ new.modifierOnClassExpressionMemberInFunction.symbols
+@@= skipped -8, +8 lines =@@
+ >C : Symbol(C, Decl(modifierOnClassExpressionMemberInFunction.ts, 1, 11))
+ 
+         public prop1 = 1;
+->prop1 : Symbol(C.prop1, Decl(modifierOnClassExpressionMemberInFunction.ts, 1, 21))
++>prop1 : Symbol(prop1, Decl(modifierOnClassExpressionMemberInFunction.ts, 1, 21))
+ 
+         private foo() { }
+->foo : Symbol(C.foo, Decl(modifierOnClassExpressionMemberInFunction.ts, 2, 25))
++>foo : Symbol(foo, Decl(modifierOnClassExpressionMemberInFunction.ts, 2, 25))
+ 
+         static prop2 = 43;
+->prop2 : Symbol(C.prop2, Decl(modifierOnClassExpressionMemberInFunction.ts, 3, 25))
++>prop2 : Symbol(prop2, Decl(modifierOnClassExpressionMemberInFunction.ts, 3, 25))
+     }
+ }

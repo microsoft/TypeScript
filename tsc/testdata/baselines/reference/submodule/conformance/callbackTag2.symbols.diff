@@ -1,0 +1,12 @@
+--- old.callbackTag2.symbols
++++ new.callbackTag2.symbols
+@@= skipped -24, +24 lines =@@
+     constructor() {
+         /** @type {SharedId<S>} */
+         this.id;
+->this.id : Symbol(SharedClass.id, Decl(cb.js, 16, 19))
+ >this : Symbol(SharedClass, Decl(cb.js, 8, 28))
+->id : Symbol(SharedClass.id, Decl(cb.js, 16, 19))
+     }
+ }
+ /** @type {SharedId<number>} */

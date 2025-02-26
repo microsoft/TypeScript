@@ -1,0 +1,11 @@
+--- old.typeParameterConstModifiersWithIntersection.symbols
++++ new.typeParameterConstModifiersWithIntersection.symbols
+@@= skipped -8, +8 lines =@@
+ >type : Symbol(type, Decl(typeParameterConstModifiersWithIntersection.ts, 2, 29))
+ 
+   useIt: T1;
+->useIt : Symbol(Config.useIt, Decl(typeParameterConstModifiersWithIntersection.ts, 2, 47))
++>useIt : Symbol(useIt, Decl(typeParameterConstModifiersWithIntersection.ts, 2, 47))
+ >T1 : Symbol(T1, Decl(typeParameterConstModifiersWithIntersection.ts, 2, 17))
+ }
+ 

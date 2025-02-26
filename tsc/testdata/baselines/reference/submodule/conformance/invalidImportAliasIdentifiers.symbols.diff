@@ -1,0 +1,31 @@
+--- old.invalidImportAliasIdentifiers.symbols
++++ new.invalidImportAliasIdentifiers.symbols
+@@= skipped -12, +12 lines =@@
+ >C : Symbol(C, Decl(invalidImportAliasIdentifiers.ts, 4, 13))
+ 
+     name: string;
+->name : Symbol(C.name, Decl(invalidImportAliasIdentifiers.ts, 6, 9))
++>name : Symbol(name, Decl(invalidImportAliasIdentifiers.ts, 6, 9))
+ }
+ 
+ import c = C;
+@@= skipped -10, +10 lines =@@
+ >E : Symbol(E, Decl(invalidImportAliasIdentifiers.ts, 10, 13))
+ 
+     Red, Blue
+->Red : Symbol(e.Red, Decl(invalidImportAliasIdentifiers.ts, 12, 8))
+->Blue : Symbol(e.Blue, Decl(invalidImportAliasIdentifiers.ts, 13, 8))
++>Red : Symbol(Red, Decl(invalidImportAliasIdentifiers.ts, 12, 8))
++>Blue : Symbol(Blue, Decl(invalidImportAliasIdentifiers.ts, 13, 8))
+ }
+ 
+ import e = E;
+@@= skipped -12, +12 lines =@@
+ >I : Symbol(I, Decl(invalidImportAliasIdentifiers.ts, 16, 13))
+ 
+     id: number;
+->id : Symbol(I.id, Decl(invalidImportAliasIdentifiers.ts, 18, 13))
++>id : Symbol(id, Decl(invalidImportAliasIdentifiers.ts, 18, 13))
+ }
+ 
+ import i = I;

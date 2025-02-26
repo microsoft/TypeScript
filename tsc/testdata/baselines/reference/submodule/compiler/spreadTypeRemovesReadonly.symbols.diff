@@ -1,0 +1,11 @@
+--- old.spreadTypeRemovesReadonly.symbols
++++ new.spreadTypeRemovesReadonly.symbols
+@@= skipped -4, +4 lines =@@
+ >ReadonlyData : Symbol(ReadonlyData, Decl(spreadTypeRemovesReadonly.ts, 0, 0))
+ 
+     readonly value: string;
+->value : Symbol(ReadonlyData.value, Decl(spreadTypeRemovesReadonly.ts, 0, 24))
++>value : Symbol(value, Decl(spreadTypeRemovesReadonly.ts, 0, 24))
+ }
+ 
+ const data: ReadonlyData = { value: 'foo' };

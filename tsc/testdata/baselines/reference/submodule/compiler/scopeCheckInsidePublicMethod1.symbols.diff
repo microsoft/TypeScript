@@ -1,0 +1,15 @@
+--- old.scopeCheckInsidePublicMethod1.symbols
++++ new.scopeCheckInsidePublicMethod1.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(scopeCheckInsidePublicMethod1.ts, 0, 0))
+ 
+    static s;
+->s : Symbol(C.s, Decl(scopeCheckInsidePublicMethod1.ts, 0, 9))
++>s : Symbol(s, Decl(scopeCheckInsidePublicMethod1.ts, 0, 9))
+ 
+    public a() {
+->a : Symbol(C.a, Decl(scopeCheckInsidePublicMethod1.ts, 1, 12))
++>a : Symbol(a, Decl(scopeCheckInsidePublicMethod1.ts, 1, 12))
+ 
+       s = 1; // ERR
+    }

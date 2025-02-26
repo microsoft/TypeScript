@@ -1,0 +1,18 @@
+--- old.typeParameterFixingWithContextSensitiveArguments4.symbols
++++ new.typeParameterFixingWithContextSensitiveArguments4.symbols
+@@= skipped -24, +24 lines =@@
+ 
+ interface A { a: A; }
+ >A : Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 0, 93))
+->a : Symbol(A.a, Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 1, 13))
++>a : Symbol(a, Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 1, 13))
+ >A : Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 0, 93))
+ 
+ interface B extends A { b; }
+ >B : Symbol(B, Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 1, 21))
+ >A : Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 0, 93))
+->b : Symbol(B.b, Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 2, 23))
++>b : Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 2, 23))
+ 
+ var a: A, b: B;
+ >a : Symbol(a, Decl(typeParameterFixingWithContextSensitiveArguments4.ts, 4, 3))

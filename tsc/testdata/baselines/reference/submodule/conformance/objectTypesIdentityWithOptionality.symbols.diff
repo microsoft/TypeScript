@@ -1,0 +1,37 @@
+--- old.objectTypesIdentityWithOptionality.symbols
++++ new.objectTypesIdentityWithOptionality.symbols
+@@= skipped -6, +6 lines =@@
+ >A : Symbol(A, Decl(objectTypesIdentityWithOptionality.ts, 0, 0))
+ 
+     foo: string;
+->foo : Symbol(A.foo, Decl(objectTypesIdentityWithOptionality.ts, 2, 9))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithOptionality.ts, 2, 9))
+ }
+ 
+ class B {
+ >B : Symbol(B, Decl(objectTypesIdentityWithOptionality.ts, 4, 1))
+ 
+     foo: string;
+->foo : Symbol(B.foo, Decl(objectTypesIdentityWithOptionality.ts, 6, 9))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithOptionality.ts, 6, 9))
+ }
+ 
+ class C<T> {
+@@= skipped -15, +15 lines =@@
+ >T : Symbol(T, Decl(objectTypesIdentityWithOptionality.ts, 10, 8))
+ 
+     foo: T;
+->foo : Symbol(C.foo, Decl(objectTypesIdentityWithOptionality.ts, 10, 12))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithOptionality.ts, 10, 12))
+ >T : Symbol(T, Decl(objectTypesIdentityWithOptionality.ts, 10, 8))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >I : Symbol(I, Decl(objectTypesIdentityWithOptionality.ts, 12, 1))
+ 
+     foo?: string;
+->foo : Symbol(I.foo, Decl(objectTypesIdentityWithOptionality.ts, 14, 13))
++>foo : Symbol(foo, Decl(objectTypesIdentityWithOptionality.ts, 14, 13))
+ }
+ 
+ var a: { foo?: string; }

@@ -1,0 +1,19 @@
+--- old.assignFromBooleanInterface2.symbols
++++ new.assignFromBooleanInterface2.symbols
+@@= skipped -4, +4 lines =@@
+ >Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(assignFromBooleanInterface2.ts, 0, 0))
+ 
+     doStuff(): string;
+->doStuff : Symbol(Boolean.doStuff, Decl(assignFromBooleanInterface2.ts, 0, 19))
++>doStuff : Symbol(doStuff, Decl(assignFromBooleanInterface2.ts, 0, 19))
+ }
+ 
+ interface NotBoolean {
+ >NotBoolean : Symbol(NotBoolean, Decl(assignFromBooleanInterface2.ts, 2, 1))
+ 
+     doStuff(): string;
+->doStuff : Symbol(NotBoolean.doStuff, Decl(assignFromBooleanInterface2.ts, 4, 22))
++>doStuff : Symbol(doStuff, Decl(assignFromBooleanInterface2.ts, 4, 22))
+ }
+ 
+ var x = true;

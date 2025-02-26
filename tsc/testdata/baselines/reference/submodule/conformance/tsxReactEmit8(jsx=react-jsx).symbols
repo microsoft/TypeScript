@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/jsx/tsxReactEmit8.tsx] ////
+
+=== tsxReactEmit8.tsx ===
+/// <reference path="react16.d.ts" />
+
+<div>1</div>;
+<div key={"key-attr"}>2</div>;
+>key : Symbol(key, Decl(tsxReactEmit8.tsx, 3, 4))
+

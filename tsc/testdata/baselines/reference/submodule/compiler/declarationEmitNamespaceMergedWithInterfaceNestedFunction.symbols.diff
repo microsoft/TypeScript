@@ -1,0 +1,20 @@
+--- old.declarationEmitNamespaceMergedWithInterfaceNestedFunction.symbols
++++ new.declarationEmitNamespaceMergedWithInterfaceNestedFunction.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 0, 0))
+ 
+     item: Bar;
+->item : Symbol(Foo.item, Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 0, 22))
++>item : Symbol(item, Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 0, 22))
+ >Bar : Symbol(Bar, Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 2, 1), Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 6, 1))
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >Bar : Symbol(Bar, Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 2, 1), Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 6, 1))
+ 
+     baz(): void;
+->baz : Symbol(Bar.baz, Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 4, 15))
++>baz : Symbol(baz, Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 4, 15))
+ }
+ 
+ namespace Bar {

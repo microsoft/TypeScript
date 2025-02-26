@@ -1,0 +1,80 @@
+--- old.privateNamesAndGenericClasses-2.symbols
++++ new.privateNamesAndGenericClasses-2.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(privateNamesAndGenericClasses-2.ts, 0, 8))
+ 
+     #foo: T;
+->#foo : Symbol(C.#foo, Decl(privateNamesAndGenericClasses-2.ts, 0, 12))
++>#foo : Symbol(#foo, Decl(privateNamesAndGenericClasses-2.ts, 0, 12))
+ >T : Symbol(T, Decl(privateNamesAndGenericClasses-2.ts, 0, 8))
+ 
+     #bar(): T {
+->#bar : Symbol(C.#bar, Decl(privateNamesAndGenericClasses-2.ts, 1, 12))
++>#bar : Symbol(#bar, Decl(privateNamesAndGenericClasses-2.ts, 1, 12))
+ >T : Symbol(T, Decl(privateNamesAndGenericClasses-2.ts, 0, 8))
+ 
+       return this.#foo;
+->this.#foo : Symbol(C.#foo, Decl(privateNamesAndGenericClasses-2.ts, 0, 12))
++>this.#foo : Symbol(#foo, Decl(privateNamesAndGenericClasses-2.ts, 0, 12))
+ >this : Symbol(C, Decl(privateNamesAndGenericClasses-2.ts, 0, 0))
+     }
+     constructor(t: T) {
+@@= skipped -16, +16 lines =@@
+ >T : Symbol(T, Decl(privateNamesAndGenericClasses-2.ts, 0, 8))
+ 
+       this.#foo = t;
+->this.#foo : Symbol(C.#foo, Decl(privateNamesAndGenericClasses-2.ts, 0, 12))
++>this.#foo : Symbol(#foo, Decl(privateNamesAndGenericClasses-2.ts, 0, 12))
+ >this : Symbol(C, Decl(privateNamesAndGenericClasses-2.ts, 0, 0))
+ >t : Symbol(t, Decl(privateNamesAndGenericClasses-2.ts, 5, 16))
+ 
+       t = this.#bar();
+ >t : Symbol(t, Decl(privateNamesAndGenericClasses-2.ts, 5, 16))
+->this.#bar : Symbol(C.#bar, Decl(privateNamesAndGenericClasses-2.ts, 1, 12))
++>this.#bar : Symbol(#bar, Decl(privateNamesAndGenericClasses-2.ts, 1, 12))
+ >this : Symbol(C, Decl(privateNamesAndGenericClasses-2.ts, 0, 0))
+     }
+     set baz(t: T) {
+->baz : Symbol(C.baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
++>baz : Symbol(baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
+ >t : Symbol(t, Decl(privateNamesAndGenericClasses-2.ts, 9, 12))
+ >T : Symbol(T, Decl(privateNamesAndGenericClasses-2.ts, 0, 8))
+ 
+       this.#foo = t;
+->this.#foo : Symbol(C.#foo, Decl(privateNamesAndGenericClasses-2.ts, 0, 12))
++>this.#foo : Symbol(#foo, Decl(privateNamesAndGenericClasses-2.ts, 0, 12))
+ >this : Symbol(C, Decl(privateNamesAndGenericClasses-2.ts, 0, 0))
+ >t : Symbol(t, Decl(privateNamesAndGenericClasses-2.ts, 9, 12))
+ 
+     }
+     get baz(): T {
+->baz : Symbol(C.baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
++>baz : Symbol(baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
+ >T : Symbol(T, Decl(privateNamesAndGenericClasses-2.ts, 0, 8))
+ 
+       return this.#foo;
+->this.#foo : Symbol(C.#foo, Decl(privateNamesAndGenericClasses-2.ts, 0, 12))
++>this.#foo : Symbol(#foo, Decl(privateNamesAndGenericClasses-2.ts, 0, 12))
+ >this : Symbol(C, Decl(privateNamesAndGenericClasses-2.ts, 0, 0))
+     }
+ }
+@@= skipped -39, +39 lines =@@
+ >C : Symbol(C, Decl(privateNamesAndGenericClasses-2.ts, 0, 0))
+ 
+ a.baz = 5                                 // OK
+->a.baz : Symbol(C.baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
++>a.baz : Symbol(baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
+ >a : Symbol(a, Decl(privateNamesAndGenericClasses-2.ts, 18, 3))
+->baz : Symbol(C.baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
++>baz : Symbol(baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
+ 
+ const x: number = a.baz                   // OK
+ >x : Symbol(x, Decl(privateNamesAndGenericClasses-2.ts, 22, 5))
+->a.baz : Symbol(C.baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
++>a.baz : Symbol(baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
+ >a : Symbol(a, Decl(privateNamesAndGenericClasses-2.ts, 18, 3))
+->baz : Symbol(C.baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
++>baz : Symbol(baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
+ 
+ a.#foo;                                   // Error
+ >a : Symbol(a, Decl(privateNamesAndGenericClasses-2.ts, 18, 3))

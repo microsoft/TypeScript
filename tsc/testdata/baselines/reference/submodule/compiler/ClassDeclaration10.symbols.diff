@@ -1,0 +1,9 @@
+--- old.ClassDeclaration10.symbols
++++ new.ClassDeclaration10.symbols
+@@= skipped -5, +5 lines =@@
+ 
+    constructor();
+    foo();
+->foo : Symbol(C.foo, Decl(ClassDeclaration10.ts, 1, 17))
++>foo : Symbol(foo, Decl(ClassDeclaration10.ts, 1, 17))
+ }

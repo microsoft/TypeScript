@@ -1,0 +1,22 @@
+--- old.emitClassDeclarationWithStaticPropertyAssignmentInES6.symbols
++++ new.emitClassDeclarationWithStaticPropertyAssignmentInES6.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts, 0, 0))
+ 
+     static z: string = "Foo";
+->z : Symbol(C.z, Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts, 0, 9))
++>z : Symbol(z, Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts, 0, 9))
+ }
+ 
+ class D {
+ >D : Symbol(D, Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts, 2, 1))
+ 
+     x = 20000;
+->x : Symbol(D.x, Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts, 4, 9))
++>x : Symbol(x, Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts, 4, 9))
+ 
+     static b = true;
+->b : Symbol(D.b, Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts, 5, 14))
++>b : Symbol(b, Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts, 5, 14))
+ }
+ 

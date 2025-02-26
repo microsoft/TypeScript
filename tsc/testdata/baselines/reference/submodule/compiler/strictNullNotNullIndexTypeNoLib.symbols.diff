@@ -1,0 +1,93 @@
+--- old.strictNullNotNullIndexTypeNoLib.symbols
++++ new.strictNullNotNullIndexTypeNoLib.symbols
+@@= skipped -12, +12 lines =@@
+ >A : Symbol(A, Decl(strictNullNotNullIndexTypeNoLib.ts, 0, 50))
+ 
+     params?: { name: string; };
+->params : Symbol(A.params, Decl(strictNullNotNullIndexTypeNoLib.ts, 1, 13))
++>params : Symbol(params, Decl(strictNullNotNullIndexTypeNoLib.ts, 1, 13))
+ >name : Symbol(name, Decl(strictNullNotNullIndexTypeNoLib.ts, 2, 14))
+ }
+ 
+@@= skipped -10, +10 lines =@@
+ >A : Symbol(A, Decl(strictNullNotNullIndexTypeNoLib.ts, 0, 50))
+ 
+     attrs: Readonly<T>;
+->attrs : Symbol(Test.attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 5, 25))
+->Readonly : Symbol(Readonly, Decl(strictNullNotNullIndexTypeNoLib.ts, 0, 0))
++>attrs : Symbol(attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 5, 25))
++>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+ >T : Symbol(T, Decl(strictNullNotNullIndexTypeNoLib.ts, 5, 11))
+ 
+     m() {
+->m : Symbol(Test.m, Decl(strictNullNotNullIndexTypeNoLib.ts, 6, 23))
++>m : Symbol(m, Decl(strictNullNotNullIndexTypeNoLib.ts, 6, 23))
+ 
+         this.attrs.params!.name;
+ >this.attrs.params!.name : Symbol(name, Decl(strictNullNotNullIndexTypeNoLib.ts, 2, 14))
+ >this.attrs.params : Symbol(params, Decl(strictNullNotNullIndexTypeNoLib.ts, 1, 13))
+->this.attrs : Symbol(Test.attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 5, 25))
++>this.attrs : Symbol(attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 5, 25))
+ >this : Symbol(Test, Decl(strictNullNotNullIndexTypeNoLib.ts, 3, 1))
+->attrs : Symbol(Test.attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 5, 25))
++>attrs : Symbol(attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 5, 25))
+ >params : Symbol(params, Decl(strictNullNotNullIndexTypeNoLib.ts, 1, 13))
+ >name : Symbol(name, Decl(strictNullNotNullIndexTypeNoLib.ts, 2, 14))
+     }
+@@= skipped -22, +22 lines =@@
+ >Foo : Symbol(Foo, Decl(strictNullNotNullIndexTypeNoLib.ts, 11, 1))
+ 
+     foo?: number;
+->foo : Symbol(Foo.foo, Decl(strictNullNotNullIndexTypeNoLib.ts, 13, 15))
++>foo : Symbol(foo, Decl(strictNullNotNullIndexTypeNoLib.ts, 13, 15))
+ }
+ 
+ class FooClass<P extends Foo = Foo> {
+@@= skipped -10, +10 lines =@@
+ >Foo : Symbol(Foo, Decl(strictNullNotNullIndexTypeNoLib.ts, 11, 1))
+ 
+     properties: Readonly<P>;
+->properties : Symbol(FooClass.properties, Decl(strictNullNotNullIndexTypeNoLib.ts, 17, 37))
+->Readonly : Symbol(Readonly, Decl(strictNullNotNullIndexTypeNoLib.ts, 0, 0))
++>properties : Symbol(properties, Decl(strictNullNotNullIndexTypeNoLib.ts, 17, 37))
++>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+ >P : Symbol(P, Decl(strictNullNotNullIndexTypeNoLib.ts, 17, 15))
+ 
+     foo(): number {
+->foo : Symbol(FooClass.foo, Decl(strictNullNotNullIndexTypeNoLib.ts, 18, 28))
++>foo : Symbol(foo, Decl(strictNullNotNullIndexTypeNoLib.ts, 18, 28))
+ 
+         const { foo = 42 } = this.properties;
+ >foo : Symbol(foo, Decl(strictNullNotNullIndexTypeNoLib.ts, 21, 15))
+->this.properties : Symbol(FooClass.properties, Decl(strictNullNotNullIndexTypeNoLib.ts, 17, 37))
++>this.properties : Symbol(properties, Decl(strictNullNotNullIndexTypeNoLib.ts, 17, 37))
+ >this : Symbol(FooClass, Decl(strictNullNotNullIndexTypeNoLib.ts, 15, 1))
+->properties : Symbol(FooClass.properties, Decl(strictNullNotNullIndexTypeNoLib.ts, 17, 37))
++>properties : Symbol(properties, Decl(strictNullNotNullIndexTypeNoLib.ts, 17, 37))
+ 
+         return foo;
+ >foo : Symbol(foo, Decl(strictNullNotNullIndexTypeNoLib.ts, 21, 15))
+@@= skipped -24, +24 lines =@@
+ >A : Symbol(A, Decl(strictNullNotNullIndexTypeNoLib.ts, 0, 50))
+ 
+     attrs: Readonly<T>;
+->attrs : Symbol(Test2.attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 26, 26))
+->Readonly : Symbol(Readonly, Decl(strictNullNotNullIndexTypeNoLib.ts, 0, 0))
++>attrs : Symbol(attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 26, 26))
++>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+ >T : Symbol(T, Decl(strictNullNotNullIndexTypeNoLib.ts, 26, 12))
+ 
+     m() {
+->m : Symbol(Test2.m, Decl(strictNullNotNullIndexTypeNoLib.ts, 27, 23))
++>m : Symbol(m, Decl(strictNullNotNullIndexTypeNoLib.ts, 27, 23))
+ 
+         return this.attrs.params!; // Return type should maintain relationship with `T` after being not-null-asserted, ideally
+ >this.attrs.params : Symbol(params, Decl(strictNullNotNullIndexTypeNoLib.ts, 1, 13))
+->this.attrs : Symbol(Test2.attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 26, 26))
++>this.attrs : Symbol(attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 26, 26))
+ >this : Symbol(Test2, Decl(strictNullNotNullIndexTypeNoLib.ts, 24, 1))
+->attrs : Symbol(Test2.attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 26, 26))
++>attrs : Symbol(attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 26, 26))
+ >params : Symbol(params, Decl(strictNullNotNullIndexTypeNoLib.ts, 1, 13))
+     }
+ }

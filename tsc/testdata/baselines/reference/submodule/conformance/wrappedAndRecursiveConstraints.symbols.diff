@@ -1,0 +1,36 @@
+--- old.wrappedAndRecursiveConstraints.symbols
++++ new.wrappedAndRecursiveConstraints.symbols
+@@= skipped -8, +8 lines =@@
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ 
+     constructor(public data: T) { }
+->data : Symbol(C.data, Decl(wrappedAndRecursiveConstraints.ts, 3, 16))
++>data : Symbol(data, Decl(wrappedAndRecursiveConstraints.ts, 3, 16))
+ >T : Symbol(T, Decl(wrappedAndRecursiveConstraints.ts, 2, 8))
+ 
+     foo<U extends T>(x: U) {
+->foo : Symbol(C.foo, Decl(wrappedAndRecursiveConstraints.ts, 3, 35))
++>foo : Symbol(foo, Decl(wrappedAndRecursiveConstraints.ts, 3, 35))
+ >U : Symbol(U, Decl(wrappedAndRecursiveConstraints.ts, 4, 8))
+ >T : Symbol(T, Decl(wrappedAndRecursiveConstraints.ts, 2, 8))
+ >x : Symbol(x, Decl(wrappedAndRecursiveConstraints.ts, 4, 21))
+@@= skipped -20, +20 lines =@@
+ >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+ 
+     foo: string;
+->foo : Symbol(Foo.foo, Decl(wrappedAndRecursiveConstraints.ts, 9, 28))
++>foo : Symbol(foo, Decl(wrappedAndRecursiveConstraints.ts, 9, 28))
+ }
+ 
+ var y: Foo = null;
+@@= skipped -14, +14 lines =@@
+ 
+ var r = c.foo(y);
+ >r : Symbol(r, Decl(wrappedAndRecursiveConstraints.ts, 15, 3))
+->c.foo : Symbol(C.foo, Decl(wrappedAndRecursiveConstraints.ts, 3, 35))
++>c.foo : Symbol(foo, Decl(wrappedAndRecursiveConstraints.ts, 3, 35))
+ >c : Symbol(c, Decl(wrappedAndRecursiveConstraints.ts, 14, 3))
+->foo : Symbol(C.foo, Decl(wrappedAndRecursiveConstraints.ts, 3, 35))
++>foo : Symbol(foo, Decl(wrappedAndRecursiveConstraints.ts, 3, 35))
+ >y : Symbol(y, Decl(wrappedAndRecursiveConstraints.ts, 13, 3))
+ 

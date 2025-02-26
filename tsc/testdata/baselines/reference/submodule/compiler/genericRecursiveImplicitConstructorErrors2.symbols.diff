@@ -1,0 +1,33 @@
+--- old.genericRecursiveImplicitConstructorErrors2.symbols
++++ new.genericRecursiveImplicitConstructorErrors2.symbols
+@@= skipped -16, +16 lines =@@
+ >PullSymbolVisibility : Symbol(PullSymbolVisibility, Decl(genericRecursiveImplicitConstructorErrors2.ts, 3, 38))
+ 
+     Private,
+->Private : Symbol(PullSymbolVisibility.Private, Decl(genericRecursiveImplicitConstructorErrors2.ts, 4, 36))
++>Private : Symbol(Private, Decl(genericRecursiveImplicitConstructorErrors2.ts, 4, 36))
+ 
+     Public
+->Public : Symbol(PullSymbolVisibility.Public, Decl(genericRecursiveImplicitConstructorErrors2.ts, 5, 12))
++>Public : Symbol(Public, Decl(genericRecursiveImplicitConstructorErrors2.ts, 5, 12))
+   }
+ 　
+   export class PullSymbol {
+@@= skipped -17, +17 lines =@@
+     }
+     // link methods
+     public addOutgoingLink<A,B,C>(linkTo: PullSymbol, kind: SymbolLinkKind) {
+->addOutgoingLink : Symbol(PullSymbol.addOutgoingLink, Decl(genericRecursiveImplicitConstructorErrors2.ts, 12, 5))
++>addOutgoingLink : Symbol(addOutgoingLink, Decl(genericRecursiveImplicitConstructorErrors2.ts, 12, 5))
+ >A : Symbol(A, Decl(genericRecursiveImplicitConstructorErrors2.ts, 14, 27))
+ >B : Symbol(B, Decl(genericRecursiveImplicitConstructorErrors2.ts, 14, 29))
+ >C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors2.ts, 14, 31))
+@@= skipped -12, +12 lines =@@
+     }
+ 
+     public getType<A,B,C>(): PullTypeSymbol<A,B,C> {
+->getType : Symbol(PullSymbol.getType, Decl(genericRecursiveImplicitConstructorErrors2.ts, 16, 5))
++>getType : Symbol(getType, Decl(genericRecursiveImplicitConstructorErrors2.ts, 16, 5))
+ >A : Symbol(A, Decl(genericRecursiveImplicitConstructorErrors2.ts, 18, 19))
+ >B : Symbol(B, Decl(genericRecursiveImplicitConstructorErrors2.ts, 18, 21))
+ >C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors2.ts, 18, 23))

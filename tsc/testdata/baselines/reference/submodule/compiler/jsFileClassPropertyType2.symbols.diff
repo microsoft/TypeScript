@@ -1,0 +1,20 @@
+--- old.jsFileClassPropertyType2.symbols
++++ new.jsFileClassPropertyType2.symbols
+@@= skipped -6, +6 lines =@@
+     constructor() {
+       /** @type {number[]}*/
+       this.p = [];
+->this.p : Symbol(C.p, Decl(foo.js, 1, 19))
+ >this : Symbol(C, Decl(foo.js, 0, 0))
+->p : Symbol(C.p, Decl(foo.js, 1, 19))
+   }
+ }
+ 
+ === bar.ts ===
+ (new C()).p.push("string");
+->(new C()).p.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+->(new C()).p : Symbol(C.p, Decl(foo.js, 1, 19))
+ >C : Symbol(C, Decl(foo.js, 0, 0))
+->p : Symbol(C.p, Decl(foo.js, 1, 19))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+ 

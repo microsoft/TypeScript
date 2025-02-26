@@ -1,0 +1,14 @@
+--- old.for-of27.symbols
++++ new.for-of27.symbols
+@@= skipped -4, +4 lines =@@
+ >MyStringIterator : Symbol(MyStringIterator, Decl(for-of27.ts, 0, 0))
+ 
+     [Symbol.iterator]: any;
+->[Symbol.iterator] : Symbol(MyStringIterator[Symbol.iterator], Decl(for-of27.ts, 0, 24))
+->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(for-of27.ts, 0, 24))
+ }
+ 
+ for (var v of new MyStringIterator) { }

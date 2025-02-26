@@ -1,0 +1,18 @@
+--- old.inheritanceMemberPropertyOverridingMethod.symbols
++++ new.inheritanceMemberPropertyOverridingMethod.symbols
+@@= skipped -4, +4 lines =@@
+ >a : Symbol(a, Decl(inheritanceMemberPropertyOverridingMethod.ts, 0, 0))
+ 
+     x() {
+->x : Symbol(a.x, Decl(inheritanceMemberPropertyOverridingMethod.ts, 0, 9))
++>x : Symbol(x, Decl(inheritanceMemberPropertyOverridingMethod.ts, 0, 9))
+ 
+         return "20";
+     }
+@@= skipped -11, +11 lines =@@
+ >a : Symbol(a, Decl(inheritanceMemberPropertyOverridingMethod.ts, 0, 0))
+ 
+     x: () => string;
+->x : Symbol(b.x, Decl(inheritanceMemberPropertyOverridingMethod.ts, 6, 19))
++>x : Symbol(x, Decl(inheritanceMemberPropertyOverridingMethod.ts, 6, 19))
+ }

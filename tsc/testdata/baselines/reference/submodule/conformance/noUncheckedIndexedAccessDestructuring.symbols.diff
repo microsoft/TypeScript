@@ -1,0 +1,137 @@
+--- old.noUncheckedIndexedAccessDestructuring.symbols
++++ new.noUncheckedIndexedAccessDestructuring.symbols
+@@= skipped -14, +14 lines =@@
+ >strArray : Symbol(strArray, Decl(noUncheckedIndexedAccessDestructuring.ts, 0, 13))
+ 
+ s1.toString(); // Should error, s1 possibly undefined
+->s1.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+ >s1 : Symbol(s1, Decl(noUncheckedIndexedAccessDestructuring.ts, 6, 7))
+->toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+ 
+ // Destructuring a rest element -> do not include undefined
+ const [...s2] = strArray;
+@@= skipped -10, +8 lines =@@
+ >strArray : Symbol(strArray, Decl(noUncheckedIndexedAccessDestructuring.ts, 0, 13))
+ 
+ s2.push(undefined); // Should error, 'undefined' not part of s2's element type
+->s2.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>s2.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >s2 : Symbol(s2, Decl(noUncheckedIndexedAccessDestructuring.ts, 10, 7))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >undefined : Symbol(undefined)
+ 
+ // Destructuring a rest element -> do not include undefined
+@@= skipped -11, +11 lines =@@
+ >strArray : Symbol(strArray, Decl(noUncheckedIndexedAccessDestructuring.ts, 0, 13))
+ 
+ s3.push(undefined); // Should error, 'undefined' not part of s2's element type
+->s3.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>s3.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >s3 : Symbol(s3, Decl(noUncheckedIndexedAccessDestructuring.ts, 14, 10))
+->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
+ >undefined : Symbol(undefined)
+ 
+ // Declaration forms for object destructuring
+@@= skipped -16, +16 lines =@@
+ >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccessDestructuring.ts, 19, 13))
+ 
+ t1.toString(); // Should error, t1 possibly undefined
+->t1.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+ >t1 : Symbol(t1, Decl(noUncheckedIndexedAccessDestructuring.ts, 21, 7))
+->toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+ 
+ const { ...t2 } = strMap;
+ >t2 : Symbol(t2, Decl(noUncheckedIndexedAccessDestructuring.ts, 24, 7))
+ >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccessDestructuring.ts, 19, 13))
+ 
+ t2.z.toString(); // Should error
+->t2.z.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+ >t2 : Symbol(t2, Decl(noUncheckedIndexedAccessDestructuring.ts, 24, 7))
+->toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+ 
+ // Test intersections with declared properties
+ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
+@@= skipped -27, +23 lines =@@
+ >numMapPoint : Symbol(numMapPoint, Decl(noUncheckedIndexedAccessDestructuring.ts, 28, 13))
+ 
+     x.toFixed(); // Should OK
+->x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>x.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(noUncheckedIndexedAccessDestructuring.ts, 30, 11))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+     y.toFixed(); // Should OK
+->y.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>y.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >y : Symbol(y, Decl(noUncheckedIndexedAccessDestructuring.ts, 30, 14))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+     z.toFixed(); // Should error
+->z.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+ >z : Symbol(z, Decl(noUncheckedIndexedAccessDestructuring.ts, 30, 17))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ {
+@@= skipped -22, +20 lines =@@
+ >numMapPoint : Symbol(numMapPoint, Decl(noUncheckedIndexedAccessDestructuring.ts, 28, 13))
+ 
+     x.toFixed(); // Should OK
+->x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>x.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(noUncheckedIndexedAccessDestructuring.ts, 37, 11))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+     q.y.toFixed(); // Should OK
+->q.y.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>q.y.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >q.y : Symbol(y, Decl(noUncheckedIndexedAccessDestructuring.ts, 28, 39))
+ >q : Symbol(q, Decl(noUncheckedIndexedAccessDestructuring.ts, 37, 14))
+ >y : Symbol(y, Decl(noUncheckedIndexedAccessDestructuring.ts, 28, 39))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+     q.z.toFixed(); // Should error
+->q.z.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+ >q : Symbol(q, Decl(noUncheckedIndexedAccessDestructuring.ts, 37, 14))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ {
+@@= skipped -24, +22 lines =@@
+ >numMapPoint : Symbol(numMapPoint, Decl(noUncheckedIndexedAccessDestructuring.ts, 28, 13))
+ 
+     x.
+->x.    toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>x.    toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >x : Symbol(x, Decl(noUncheckedIndexedAccessDestructuring.ts, 44, 11))
+ 
+     toFixed(); // Should OK
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+     q.
+->q.    y.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>q.    y.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ >q.    y : Symbol(y, Decl(noUncheckedIndexedAccessDestructuring.ts, 28, 39))
+ >q : Symbol(q, Decl(noUncheckedIndexedAccessDestructuring.ts, 44, 14))
+ 
+     y.toFixed(); // Should OK
+ >y : Symbol(y, Decl(noUncheckedIndexedAccessDestructuring.ts, 28, 39))
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
++>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
+ 
+     q.
+->q.    z.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+ >q : Symbol(q, Decl(noUncheckedIndexedAccessDestructuring.ts, 44, 14))
+ 
+     z.toFixed(); // Should error
+->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+ }
+ 
+ 

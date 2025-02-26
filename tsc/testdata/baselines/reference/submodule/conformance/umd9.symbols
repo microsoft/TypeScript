@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/externalModules/umd9.ts] ////
+
+=== a.ts ===
+/// <reference path="foo.d.ts" />
+export const x = Foo; // OK in value position because allowUmdGlobalAccess: true
+>x : Symbol(x, Decl(a.ts, 1, 12))
+>Foo : Symbol(Foo, Decl(foo.d.ts, 3, 15))
+
+=== foo.d.ts ===
+declare class Thing {
+>Thing : Symbol(Thing, Decl(foo.d.ts, 0, 0))
+
+  foo(): number;
+>foo : Symbol(foo, Decl(foo.d.ts, 0, 21))
+}
+export = Thing;
+>Thing : Symbol(Thing, Decl(foo.d.ts, 0, 0))
+
+export as namespace Foo;
+>Foo : Symbol(Foo, Decl(foo.d.ts, 3, 15))
+

@@ -1,0 +1,11 @@
+--- old.es6ImportNamedImportInEs5.symbols
++++ new.es6ImportNamedImportInEs5.symbols
+@@= skipped -105, +105 lines =@@
+ >z1 : Symbol(z1, Decl(es6ImportNamedImportInEs5_1.ts, 18, 8))
+ 
+ import { z2 as z3 } from "./es6ImportNamedImportInEs5_0";
+->z2 : Symbol(z3, Decl(es6ImportNamedImportInEs5_0.ts, 6, 10))
++>z2 : Symbol(z2, Decl(es6ImportNamedImportInEs5_0.ts, 6, 10))
+ >z3 : Symbol(z3, Decl(es6ImportNamedImportInEs5_1.ts, 20, 8))
+ 
+ var z2 = z3; // z2 shouldn't give redeclare error

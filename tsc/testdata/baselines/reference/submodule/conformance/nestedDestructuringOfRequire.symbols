@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/salsa/nestedDestructuringOfRequire.ts] ////
+
+=== main.js ===
+const {
+    chalk: { grey }
+>grey : Symbol(grey, Decl(main.js, 1, 12))
+
+} = require('./mod1');
+grey
+>grey : Symbol(grey, Decl(main.js, 1, 12))
+
+chalk
+

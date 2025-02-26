@@ -1,0 +1,18 @@
+--- old.noImplicitAnyInContextuallyTypesFunctionParamter.symbols
++++ new.noImplicitAnyInContextuallyTypesFunctionParamter.symbols
+@@= skipped -4, +4 lines =@@
+ >regexMatchList : Symbol(regexMatchList, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 0, 3))
+ 
+ regexMatchList.forEach(match => ''.replace(match, ''));
+->regexMatchList.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>regexMatchList.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >regexMatchList : Symbol(regexMatchList, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 0, 3))
+->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
+ >match : Symbol(match, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 1, 23))
+->''.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>''.replace : Symbol(replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>replace : Symbol(replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >match : Symbol(match, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 1, 23))
+ 

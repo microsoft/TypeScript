@@ -1,0 +1,44 @@
+--- old.inferredReturnTypeIncorrectReuse1.symbols
++++ new.inferredReturnTypeIncorrectReuse1.symbols
+@@= skipped -19, +19 lines =@@
+ >t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 3, 15))
+ 
+     pipe<fn extends (In: t) => unknown>(fn: fn): Type<inferPipe<t, fn>>
+->pipe : Symbol(Type.pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 3, 19))
++>pipe : Symbol(pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 3, 19))
+ >fn : Symbol(fn, Decl(inferredReturnTypeIncorrectReuse1.ts, 4, 9), Decl(inferredReturnTypeIncorrectReuse1.ts, 4, 40))
+ >In : Symbol(In, Decl(inferredReturnTypeIncorrectReuse1.ts, 4, 21))
+ >t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 3, 15))
+@@= skipped -19, +19 lines =@@
+ /** Type<(In: string) => number> */
+ export const out = t.pipe(s => parseInt(s))
+ >out : Symbol(out, Decl(inferredReturnTypeIncorrectReuse1.ts, 10, 12))
+->t.pipe : Symbol(Type.pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 3, 19))
++>t.pipe : Symbol(pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 3, 19))
+ >t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 7, 13))
+->pipe : Symbol(Type.pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 3, 19))
++>pipe : Symbol(pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 3, 19))
+ >s : Symbol(s, Decl(inferredReturnTypeIncorrectReuse1.ts, 10, 26))
+ >parseInt : Symbol(parseInt, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(inferredReturnTypeIncorrectReuse1.ts, 10, 26))
+@@= skipped -45, +45 lines =@@
+ >t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 20, 16))
+ 
+ 	pipe<fn extends (In: t) => unknown>(fn: fn): Type<inferPipe2<t, fn>>
+->pipe : Symbol(Type2.pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 20, 20))
++>pipe : Symbol(pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 20, 20))
+ >fn : Symbol(fn, Decl(inferredReturnTypeIncorrectReuse1.ts, 21, 6), Decl(inferredReturnTypeIncorrectReuse1.ts, 21, 37))
+ >In : Symbol(In, Decl(inferredReturnTypeIncorrectReuse1.ts, 21, 18))
+ >t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 20, 16))
+@@= skipped -19, +19 lines =@@
+ /** Type<(In: string) => number> */
+ export const out2 = t2.pipe(s => parseInt(s))
+ >out2 : Symbol(out2, Decl(inferredReturnTypeIncorrectReuse1.ts, 27, 12))
+->t2.pipe : Symbol(Type2.pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 20, 20))
++>t2.pipe : Symbol(pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 20, 20))
+ >t2 : Symbol(t2, Decl(inferredReturnTypeIncorrectReuse1.ts, 24, 13))
+->pipe : Symbol(Type2.pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 20, 20))
++>pipe : Symbol(pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 20, 20))
+ >s : Symbol(s, Decl(inferredReturnTypeIncorrectReuse1.ts, 27, 28))
+ >parseInt : Symbol(parseInt, Decl(lib.es5.d.ts, --, --))
+ >s : Symbol(s, Decl(inferredReturnTypeIncorrectReuse1.ts, 27, 28))

@@ -1,0 +1,24 @@
+--- old.implicitAnyInAmbientDeclaration2.d.symbols
++++ new.implicitAnyInAmbientDeclaration2.d.symbols
+@@= skipped -11, +11 lines =@@
+ >C : Symbol(C, Decl(implicitAnyInAmbientDeclaration2.d.ts, 1, 16))
+ 
+     public publicMember;  // this should be an error
+->publicMember : Symbol(C.publicMember, Decl(implicitAnyInAmbientDeclaration2.d.ts, 2, 17))
++>publicMember : Symbol(publicMember, Decl(implicitAnyInAmbientDeclaration2.d.ts, 2, 17))
+ 
+     private privateMember;  // this should not be an error
+->privateMember : Symbol(C.privateMember, Decl(implicitAnyInAmbientDeclaration2.d.ts, 3, 24))
++>privateMember : Symbol(privateMember, Decl(implicitAnyInAmbientDeclaration2.d.ts, 3, 24))
+ 
+     public publicFunction(x);  // this should be an error
+->publicFunction : Symbol(C.publicFunction, Decl(implicitAnyInAmbientDeclaration2.d.ts, 4, 26))
++>publicFunction : Symbol(publicFunction, Decl(implicitAnyInAmbientDeclaration2.d.ts, 4, 26))
+ >x : Symbol(x, Decl(implicitAnyInAmbientDeclaration2.d.ts, 6, 26))
+ 
+     private privateFunction(privateParam);  // this should not be an error
+->privateFunction : Symbol(C.privateFunction, Decl(implicitAnyInAmbientDeclaration2.d.ts, 6, 29))
++>privateFunction : Symbol(privateFunction, Decl(implicitAnyInAmbientDeclaration2.d.ts, 6, 29))
+ >privateParam : Symbol(privateParam, Decl(implicitAnyInAmbientDeclaration2.d.ts, 7, 28))
+ 
+     private constructor(privateParam);  // this should not be an error

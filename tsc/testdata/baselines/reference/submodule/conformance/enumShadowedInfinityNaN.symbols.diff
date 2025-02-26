@@ -1,0 +1,20 @@
+--- old.enumShadowedInfinityNaN.symbols
++++ new.enumShadowedInfinityNaN.symbols
+@@= skipped -10, +10 lines =@@
+ >En : Symbol(En, Decl(enumShadowedInfinityNaN.ts, 3, 20))
+ 
+     X = Infinity
+->X : Symbol(En.X, Decl(enumShadowedInfinityNaN.ts, 4, 11))
++>X : Symbol(X, Decl(enumShadowedInfinityNaN.ts, 4, 11))
+ >Infinity : Symbol(Infinity, Decl(enumShadowedInfinityNaN.ts, 3, 5))
+   }
+ }
+@@= skipped -13, +13 lines =@@
+ >En : Symbol(En, Decl(enumShadowedInfinityNaN.ts, 10, 15))
+ 
+     X = NaN
+->X : Symbol(En.X, Decl(enumShadowedInfinityNaN.ts, 11, 11))
++>X : Symbol(X, Decl(enumShadowedInfinityNaN.ts, 11, 11))
+ >NaN : Symbol(NaN, Decl(enumShadowedInfinityNaN.ts, 10, 5))
+   }
+ }

@@ -1,0 +1,10 @@
+--- old.nodeModulesExportsSourceTs(module=nodenext).symbols
++++ new.nodeModulesExportsSourceTs(module=nodenext).symbols
+@@= skipped -7, +7 lines =@@
+ export const a = (await import("inner")).x();
+ >a : Symbol(a, Decl(index.ts, 2, 12))
+ >(await import("inner")).x : Symbol(x, Decl(index.ts, 1, 8))
+->"inner" : Symbol("node_modules/inner/index", Decl(index.ts, 0, 0))
+ >x : Symbol(x, Decl(index.ts, 1, 8))
+ 
+ import {a as a2} from "package";

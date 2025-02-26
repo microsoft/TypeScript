@@ -1,0 +1,11 @@
+--- old.unusedClassesinModule1.symbols
++++ new.unusedClassesinModule1.symbols
+@@= skipped -7, +7 lines =@@
+ >Calculator : Symbol(Calculator, Decl(unusedClassesinModule1.ts, 0, 10))
+ 
+         public handelChar() {
+->handelChar : Symbol(Calculator.handelChar, Decl(unusedClassesinModule1.ts, 1, 22))
++>handelChar : Symbol(handelChar, Decl(unusedClassesinModule1.ts, 1, 22))
+         }
+     }
+ }

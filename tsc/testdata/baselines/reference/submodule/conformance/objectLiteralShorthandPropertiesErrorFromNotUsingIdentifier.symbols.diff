@@ -1,0 +1,27 @@
+--- old.objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.symbols
++++ new.objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.symbols
+@@= skipped -5, +5 lines =@@
+ >y : Symbol(y, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 1, 3))
+ 
+     "stringLiteral",
+->"stringLiteral" : Symbol("stringLiteral", Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 1, 9))
++>"stringLiteral" : Symbol(stringLiteral, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 1, 9))
+ 
+     42,
+ >42 : Symbol(42, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 2, 20))
+@@= skipped -33, +33 lines =@@
+ 
+     a.b,
+ >a : Symbol(a, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 13, 9), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 14, 8), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 15, 12))
+-> : Symbol((Missing), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 14, 5))
++> : Symbol(, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 14, 5))
+ 
+     a["ss"],
+ >a : Symbol(a, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 13, 9), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 14, 8), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 15, 12))
+->["ss"] : Symbol(["ss"], Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 15, 5))
+->"ss" : Symbol(["ss"], Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 15, 5))
++>["ss"] : Symbol(ss, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 15, 5))
++>"ss" : Symbol(ss, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 15, 5))
+ 
+     a[1],
+ >a : Symbol(a, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 13, 9), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 14, 8), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 15, 12))

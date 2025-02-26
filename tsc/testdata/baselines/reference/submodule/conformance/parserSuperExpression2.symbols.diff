@@ -1,0 +1,11 @@
+--- old.parserSuperExpression2.symbols
++++ new.parserSuperExpression2.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(parserSuperExpression2.ts, 0, 0))
+ 
+   M() {
+->M : Symbol(C.M, Decl(parserSuperExpression2.ts, 0, 9))
++>M : Symbol(M, Decl(parserSuperExpression2.ts, 0, 9))
+ 
+     super<T>(0);
+ >T : Symbol(T)

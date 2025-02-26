@@ -1,0 +1,20 @@
+--- old.classSideInheritance3.symbols
++++ new.classSideInheritance3.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(classSideInheritance3.ts, 0, 0))
+ 
+     constructor(public x: string) {
+->x : Symbol(A.x, Decl(classSideInheritance3.ts, 1, 16))
++>x : Symbol(x, Decl(classSideInheritance3.ts, 1, 16))
+     }
+ }
+ class B extends A {
+@@= skipped -9, +9 lines =@@
+ 
+     constructor(x: string, public data: string) {
+ >x : Symbol(x, Decl(classSideInheritance3.ts, 5, 16))
+->data : Symbol(B.data, Decl(classSideInheritance3.ts, 5, 26))
++>data : Symbol(data, Decl(classSideInheritance3.ts, 5, 26))
+ 
+         super(x);
+ >super : Symbol(A, Decl(classSideInheritance3.ts, 0, 0))

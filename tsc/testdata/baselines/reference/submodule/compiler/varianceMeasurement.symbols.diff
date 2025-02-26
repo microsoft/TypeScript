@@ -1,0 +1,64 @@
+--- old.varianceMeasurement.symbols
++++ new.varianceMeasurement.symbols
+@@= skipped -8, +8 lines =@@
+ >T : Symbol(T, Decl(varianceMeasurement.ts, 3, 15))
+ 
+   x: T;
+->x : Symbol(Foo1.x, Decl(varianceMeasurement.ts, 3, 19))
++>x : Symbol(x, Decl(varianceMeasurement.ts, 3, 19))
+ >T : Symbol(T, Decl(varianceMeasurement.ts, 3, 15))
+ 
+   y: Foo1<(arg: T) => void>;
+->y : Symbol(Foo1.y, Decl(varianceMeasurement.ts, 4, 7))
++>y : Symbol(y, Decl(varianceMeasurement.ts, 4, 7))
+ >Foo1 : Symbol(Foo1, Decl(varianceMeasurement.ts, 0, 0))
+ >arg : Symbol(arg, Decl(varianceMeasurement.ts, 5, 11))
+ >T : Symbol(T, Decl(varianceMeasurement.ts, 3, 15))
+@@= skipped -31, +31 lines =@@
+ >T : Symbol(T, Decl(varianceMeasurement.ts, 14, 15))
+ 
+   x: T;
+->x : Symbol(Foo2.x, Decl(varianceMeasurement.ts, 14, 19))
++>x : Symbol(x, Decl(varianceMeasurement.ts, 14, 19))
+ >T : Symbol(T, Decl(varianceMeasurement.ts, 14, 15))
+ 
+   y: { x: (arg: T) => void, y: Foo2<(arg: T) => void>; }
+->y : Symbol(Foo2.y, Decl(varianceMeasurement.ts, 15, 7))
++>y : Symbol(y, Decl(varianceMeasurement.ts, 15, 7))
+ >x : Symbol(x, Decl(varianceMeasurement.ts, 16, 6))
+ >arg : Symbol(arg, Decl(varianceMeasurement.ts, 16, 11))
+ >T : Symbol(T, Decl(varianceMeasurement.ts, 14, 15))
+@@= skipped -108, +108 lines =@@
+ >B : Symbol(B, Decl(varianceMeasurement.ts, 48, 15))
+ 
+   then<C>(next: Fn<B, C>): Fn<A, C>;
+->then : Symbol(Fn.then, Decl(varianceMeasurement.ts, 49, 12))
++>then : Symbol(then, Decl(varianceMeasurement.ts, 49, 12))
+ >C : Symbol(C, Decl(varianceMeasurement.ts, 50, 7))
+ >next : Symbol(next, Decl(varianceMeasurement.ts, 50, 10))
+ >Fn : Symbol(Fn, Decl(varianceMeasurement.ts, 44, 31))
+@@= skipped -45, +45 lines =@@
+ >V : Symbol(V, Decl(varianceMeasurement.ts, 65, 18))
+ 
+   c: C<Dummy, V>;
+->c : Symbol(I.c, Decl(varianceMeasurement.ts, 65, 23))
++>c : Symbol(c, Decl(varianceMeasurement.ts, 65, 23))
+ >C : Symbol(C, Decl(varianceMeasurement.ts, 67, 1))
+ >Dummy : Symbol(Dummy, Decl(varianceMeasurement.ts, 65, 12))
+ >V : Symbol(V, Decl(varianceMeasurement.ts, 65, 18))
+@@= skipped -12, +12 lines =@@
+ >V : Symbol(V, Decl(varianceMeasurement.ts, 69, 14))
+ 
+   declare sub: I<Dummy, V>;
+->sub : Symbol(C.sub, Decl(varianceMeasurement.ts, 69, 19))
++>sub : Symbol(sub, Decl(varianceMeasurement.ts, 69, 19))
+ >I : Symbol(I, Decl(varianceMeasurement.ts, 61, 30))
+ >Dummy : Symbol(Dummy, Decl(varianceMeasurement.ts, 69, 8))
+ >V : Symbol(V, Decl(varianceMeasurement.ts, 69, 14))
+ 
+   declare covariance: V;
+->covariance : Symbol(C.covariance, Decl(varianceMeasurement.ts, 70, 27))
++>covariance : Symbol(covariance, Decl(varianceMeasurement.ts, 70, 27))
+ >V : Symbol(V, Decl(varianceMeasurement.ts, 69, 14))
+ }
+ 

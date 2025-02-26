@@ -1,0 +1,13 @@
+--- old.global.symbols
++++ new.global.symbols
+@@= skipped -17, +17 lines =@@
+ >x : Symbol(x, Decl(global.ts, 6, 3))
+ 
+ M.f(3);
+->M.f : Symbol(M.f, Decl(global.ts, 0, 10))
++>M.f : Symbol(f, Decl(global.ts, 0, 10))
+ >M : Symbol(M, Decl(global.ts, 0, 0))
+->f : Symbol(M.f, Decl(global.ts, 0, 10))
++>f : Symbol(f, Decl(global.ts, 0, 10))
+ 
+ 

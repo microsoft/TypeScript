@@ -1,0 +1,65 @@
+--- old.genericClasses2.symbols
++++ new.genericClasses2.symbols
+@@= skipped -5, +5 lines =@@
+ >T : Symbol(T, Decl(genericClasses2.ts, 0, 14))
+ 
+ 	a: T;
+->a : Symbol(Foo.a, Decl(genericClasses2.ts, 0, 18))
++>a : Symbol(a, Decl(genericClasses2.ts, 0, 18))
+ >T : Symbol(T, Decl(genericClasses2.ts, 0, 14))
+ }
+ 
+@@= skipped -9, +9 lines =@@
+ >T : Symbol(T, Decl(genericClasses2.ts, 4, 8))
+ 
+ 	public x: T;
+->x : Symbol(C.x, Decl(genericClasses2.ts, 4, 12))
++>x : Symbol(x, Decl(genericClasses2.ts, 4, 12))
+ >T : Symbol(T, Decl(genericClasses2.ts, 4, 8))
+ 
+ 	public y: Foo<T>;
+->y : Symbol(C.y, Decl(genericClasses2.ts, 5, 13))
++>y : Symbol(y, Decl(genericClasses2.ts, 5, 13))
+ >Foo : Symbol(Foo, Decl(genericClasses2.ts, 0, 0))
+ >T : Symbol(T, Decl(genericClasses2.ts, 4, 8))
+ 
+ 	public z: Foo<number>;
+->z : Symbol(C.z, Decl(genericClasses2.ts, 6, 18))
++>z : Symbol(z, Decl(genericClasses2.ts, 6, 18))
+ >Foo : Symbol(Foo, Decl(genericClasses2.ts, 0, 0))
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ 
+ var y = v1.x; // should be 'string'
+ >y : Symbol(y, Decl(genericClasses2.ts, 12, 3))
+->v1.x : Symbol(C.x, Decl(genericClasses2.ts, 4, 12))
++>v1.x : Symbol(x, Decl(genericClasses2.ts, 4, 12))
+ >v1 : Symbol(v1, Decl(genericClasses2.ts, 10, 3))
+->x : Symbol(C.x, Decl(genericClasses2.ts, 4, 12))
++>x : Symbol(x, Decl(genericClasses2.ts, 4, 12))
+ 
+ var w = v1.y.a; // should be 'string'
+ >w : Symbol(w, Decl(genericClasses2.ts, 13, 3))
+->v1.y.a : Symbol(Foo.a, Decl(genericClasses2.ts, 0, 18))
+->v1.y : Symbol(C.y, Decl(genericClasses2.ts, 5, 13))
++>v1.y.a : Symbol(a, Decl(genericClasses2.ts, 0, 18))
++>v1.y : Symbol(y, Decl(genericClasses2.ts, 5, 13))
+ >v1 : Symbol(v1, Decl(genericClasses2.ts, 10, 3))
+->y : Symbol(C.y, Decl(genericClasses2.ts, 5, 13))
+->a : Symbol(Foo.a, Decl(genericClasses2.ts, 0, 18))
++>y : Symbol(y, Decl(genericClasses2.ts, 5, 13))
++>a : Symbol(a, Decl(genericClasses2.ts, 0, 18))
+ 
+ var z = v1.z.a; // should be 'number'
+ >z : Symbol(z, Decl(genericClasses2.ts, 14, 3))
+->v1.z.a : Symbol(Foo.a, Decl(genericClasses2.ts, 0, 18))
+->v1.z : Symbol(C.z, Decl(genericClasses2.ts, 6, 18))
++>v1.z.a : Symbol(a, Decl(genericClasses2.ts, 0, 18))
++>v1.z : Symbol(z, Decl(genericClasses2.ts, 6, 18))
+ >v1 : Symbol(v1, Decl(genericClasses2.ts, 10, 3))
+->z : Symbol(C.z, Decl(genericClasses2.ts, 6, 18))
+->a : Symbol(Foo.a, Decl(genericClasses2.ts, 0, 18))
++>z : Symbol(z, Decl(genericClasses2.ts, 6, 18))
++>a : Symbol(a, Decl(genericClasses2.ts, 0, 18))
+ 

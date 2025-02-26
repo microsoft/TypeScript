@@ -1,0 +1,34 @@
+--- old.typeGuardsNestedAssignments.symbols
++++ new.typeGuardsNestedAssignments.symbols
+@@= skipped -4, +4 lines =@@
+ >Foo : Symbol(Foo, Decl(typeGuardsNestedAssignments.ts, 0, 0))
+ 
+     x: string;
+->x : Symbol(Foo.x, Decl(typeGuardsNestedAssignments.ts, 0, 11))
++>x : Symbol(x, Decl(typeGuardsNestedAssignments.ts, 0, 11))
+ }
+ 
+ declare function getFooOrNull(): Foo | null;
+@@= skipped -94, +94 lines =@@
+ 
+ while ((match = re.exec("xxx")) != null) {
+ >match : Symbol(match, Decl(typeGuardsNestedAssignments.ts, 40, 3))
+->re.exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
++>re.exec : Symbol(exec, Decl(lib.es5.d.ts, --, --))
+ >re : Symbol(re, Decl(typeGuardsNestedAssignments.ts, 39, 5))
+->exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
++>exec : Symbol(exec, Decl(lib.es5.d.ts, --, --))
+ 
+     const length = match[1].length + match[2].length
+ >length : Symbol(length, Decl(typeGuardsNestedAssignments.ts, 43, 9))
+->match[1].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>match[1].length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >match : Symbol(match, Decl(typeGuardsNestedAssignments.ts, 40, 3))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+->match[2].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
++>match[2].length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ >match : Symbol(match, Decl(typeGuardsNestedAssignments.ts, 40, 3))
+->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+ }

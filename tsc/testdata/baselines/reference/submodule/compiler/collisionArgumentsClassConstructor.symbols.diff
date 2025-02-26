@@ -1,0 +1,20 @@
+--- old.collisionArgumentsClassConstructor.symbols
++++ new.collisionArgumentsClassConstructor.symbols
+@@= skipped -57, +57 lines =@@
+ >c3 : Symbol(c3, Decl(collisionArgumentsClassConstructor.ts, 26, 1))
+ 
+     constructor(public arguments: number, ...restParameters) { //arguments is error
+->arguments : Symbol(c3.arguments, Decl(collisionArgumentsClassConstructor.ts, 29, 16))
++>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 29, 16))
+ >restParameters : Symbol(restParameters, Decl(collisionArgumentsClassConstructor.ts, 29, 41))
+ 
+         var arguments = 10; // no error
+@@= skipped -11, +11 lines =@@
+ >c3NoError : Symbol(c3NoError, Decl(collisionArgumentsClassConstructor.ts, 32, 1))
+ 
+     constructor(public arguments: number) { // no error
+->arguments : Symbol(c3NoError.arguments, Decl(collisionArgumentsClassConstructor.ts, 34, 16))
++>arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 34, 16))
+ 
+         var arguments = 10; // no error
+ >arguments : Symbol(arguments, Decl(collisionArgumentsClassConstructor.ts, 34, 16), Decl(collisionArgumentsClassConstructor.ts, 35, 11))

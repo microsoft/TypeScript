@@ -1,0 +1,9 @@
+--- old.recursiveInheritanceGeneric.symbols
++++ new.recursiveInheritanceGeneric.symbols
+@@= skipped -7, +7 lines =@@
+ >T : Symbol(T, Decl(recursiveInheritanceGeneric.ts, 0, 13))
+ 
+     foo():void;
+->foo : Symbol(I5.foo, Decl(recursiveInheritanceGeneric.ts, 0, 31))
++>foo : Symbol(foo, Decl(recursiveInheritanceGeneric.ts, 0, 31))
+ }  

@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/blockScopedNamespaceDifferentFile.ts] ////
+
+=== test.ts ===
+namespace C {
+>C : Symbol(C, Decl(test.ts, 0, 0))
+
+    export class Name {
+>Name : Symbol(Name, Decl(test.ts, 0, 13))
+
+        static funcData = A.AA.func();
+>funcData : Symbol(funcData, Decl(test.ts, 1, 23))
+>A.AA.func : Symbol(func, Decl(typings.d.ts, 1, 18))
+>A.AA : Symbol(AA, Decl(typings.d.ts, 0, 21))
+>A : Symbol(A, Decl(typings.d.ts, 0, 0))
+>AA : Symbol(AA, Decl(typings.d.ts, 0, 21))
+>func : Symbol(func, Decl(typings.d.ts, 1, 18))
+
+        static someConst = A.AA.foo;
+>someConst : Symbol(someConst, Decl(test.ts, 2, 38))
+>A.AA.foo : Symbol(foo, Decl(typings.d.ts, 3, 13))
+>A.AA : Symbol(AA, Decl(typings.d.ts, 0, 21))
+>A : Symbol(A, Decl(typings.d.ts, 0, 0))
+>AA : Symbol(AA, Decl(typings.d.ts, 0, 21))
+>foo : Symbol(foo, Decl(typings.d.ts, 3, 13))
+
+        constructor(parameters) {}
+>parameters : Symbol(parameters, Decl(test.ts, 5, 20))
+    }
+}
+
+=== typings.d.ts ===
+declare namespace A {
+>A : Symbol(A, Decl(typings.d.ts, 0, 0))
+
+    namespace AA {
+>AA : Symbol(AA, Decl(typings.d.ts, 0, 21))
+
+        function func(): number;
+>func : Symbol(func, Decl(typings.d.ts, 1, 18))
+
+        const foo = "";
+>foo : Symbol(foo, Decl(typings.d.ts, 3, 13))
+    }
+}
+

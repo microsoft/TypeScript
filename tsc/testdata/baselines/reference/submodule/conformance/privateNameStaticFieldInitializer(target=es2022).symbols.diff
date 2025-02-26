@@ -1,0 +1,14 @@
+--- old.privateNameStaticFieldInitializer(target=es2022).symbols
++++ new.privateNameStaticFieldInitializer(target=es2022).symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(privateNameStaticFieldInitializer.ts, 0, 0))
+ 
+     static #field = 10;
+->#field : Symbol(A.#field, Decl(privateNameStaticFieldInitializer.ts, 0, 9))
++>#field : Symbol(#field, Decl(privateNameStaticFieldInitializer.ts, 0, 9))
+ 
+     static #uninitialized;
+->#uninitialized : Symbol(A.#uninitialized, Decl(privateNameStaticFieldInitializer.ts, 1, 23))
++>#uninitialized : Symbol(#uninitialized, Decl(privateNameStaticFieldInitializer.ts, 1, 23))
+ }
+ 

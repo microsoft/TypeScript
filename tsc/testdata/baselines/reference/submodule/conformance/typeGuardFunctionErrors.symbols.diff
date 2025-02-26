@@ -1,0 +1,86 @@
+--- old.typeGuardFunctionErrors.symbols
++++ new.typeGuardFunctionErrors.symbols
+@@= skipped -4, +4 lines =@@
+ >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
+ 
+     propA: number;
+->propA : Symbol(A.propA, Decl(typeGuardFunctionErrors.ts, 0, 9))
++>propA : Symbol(propA, Decl(typeGuardFunctionErrors.ts, 0, 9))
+ }
+ 
+ class B {
+ >B : Symbol(B, Decl(typeGuardFunctionErrors.ts, 2, 1))
+ 
+     propB: number;
+->propB : Symbol(B.propB, Decl(typeGuardFunctionErrors.ts, 4, 9))
++>propB : Symbol(propB, Decl(typeGuardFunctionErrors.ts, 4, 9))
+ }
+ 
+ class C extends A {
+@@= skipped -15, +15 lines =@@
+ >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
+ 
+     propC: number;
+->propC : Symbol(C.propC, Decl(typeGuardFunctionErrors.ts, 8, 19))
++>propC : Symbol(propC, Decl(typeGuardFunctionErrors.ts, 8, 19))
+ }
+ 
+ function hasANonBooleanReturnStatement(x): x is A {
+@@= skipped -243, +243 lines =@@
+         return true;
+     }
+     get m1(p1: A): p1 is C {
+->m1 : Symbol(D.m1, Decl(typeGuardFunctionErrors.ts, 104, 5))
++>m1 : Symbol(m1, Decl(typeGuardFunctionErrors.ts, 104, 5))
+ >p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 105, 11))
+ >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
+ >p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 105, 11))
+@@= skipped -9, +9 lines =@@
+         return true;
+     }
+     set m2(p1: A): p1 is C {
+->m2 : Symbol(D.m2, Decl(typeGuardFunctionErrors.ts, 107, 5))
++>m2 : Symbol(m2, Decl(typeGuardFunctionErrors.ts, 107, 5))
+ >p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 108, 11))
+ >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
+ >p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 108, 11))
+@@= skipped -90, +90 lines =@@
+ >hasMissingParameter : Symbol(hasMissingParameter, Decl(typeGuardFunctionErrors.ts, 22, 1))
+ 
+     x.propA;
+->x.propA : Symbol(A.propA, Decl(typeGuardFunctionErrors.ts, 0, 9))
++>x.propA : Symbol(propA, Decl(typeGuardFunctionErrors.ts, 0, 9))
+ >x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 140, 3))
+->propA : Symbol(A.propA, Decl(typeGuardFunctionErrors.ts, 0, 9))
++>propA : Symbol(propA, Decl(typeGuardFunctionErrors.ts, 0, 9))
+ }
+ 
+ // repro #17297
+@@= skipped -31, +31 lines =@@
+ 
+ type Foo = { 'a': string; }
+ >Foo : Symbol(Foo, Decl(typeGuardFunctionErrors.ts, 151, 74))
+->'a' : Symbol('a', Decl(typeGuardFunctionErrors.ts, 153, 12))
++>'a' : Symbol(a, Decl(typeGuardFunctionErrors.ts, 153, 12))
+ 
+ type Bar = { 'a': number; }
+ >Bar : Symbol(Bar, Decl(typeGuardFunctionErrors.ts, 153, 27))
+->'a' : Symbol('a', Decl(typeGuardFunctionErrors.ts, 154, 12))
++>'a' : Symbol(a, Decl(typeGuardFunctionErrors.ts, 154, 12))
+ 
+ interface NeedsFoo<T extends Foo> {
+ >NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 154, 27))
+@@= skipped -12, +12 lines =@@
+ >Foo : Symbol(Foo, Decl(typeGuardFunctionErrors.ts, 151, 74))
+ 
+     foo: T;
+->foo : Symbol(NeedsFoo.foo, Decl(typeGuardFunctionErrors.ts, 156, 35))
++>foo : Symbol(foo, Decl(typeGuardFunctionErrors.ts, 156, 35))
+ >T : Symbol(T, Decl(typeGuardFunctionErrors.ts, 156, 19))
+ 
+     isFoo(): this is NeedsFoo<Bar>; // should error
+->isFoo : Symbol(NeedsFoo.isFoo, Decl(typeGuardFunctionErrors.ts, 157, 11))
++>isFoo : Symbol(isFoo, Decl(typeGuardFunctionErrors.ts, 157, 11))
+ >NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 154, 27))
+ >Bar : Symbol(Bar, Decl(typeGuardFunctionErrors.ts, 153, 27))
+ 

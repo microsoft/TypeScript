@@ -1,0 +1,11 @@
+--- old.constructorReturnsInvalidType.symbols
++++ new.constructorReturnsInvalidType.symbols
+@@= skipped -7, +7 lines =@@
+         return 1;
+     }
+     foo() { }
+->foo : Symbol(X.foo, Decl(constructorReturnsInvalidType.ts, 3, 5))
++>foo : Symbol(foo, Decl(constructorReturnsInvalidType.ts, 3, 5))
+ }
+  
+ var x = new X();

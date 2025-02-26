@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/declFileExportImportChain.ts] ////
+
+=== declFileExportImportChain_d.ts ===
+import c = require("declFileExportImportChain_c");
+>c : Symbol(c, Decl(declFileExportImportChain_d.ts, 0, 0))
+
+export var x: c.b1.a.m2.c1;
+>x : Symbol(x, Decl(declFileExportImportChain_d.ts, 1, 10))
+>c : Symbol(c, Decl(declFileExportImportChain_d.ts, 0, 0))
+>b1 : Symbol(b1)
+>a : Symbol(a)
+>m2 : Symbol(m2)
+>c1 : Symbol(c1)
+

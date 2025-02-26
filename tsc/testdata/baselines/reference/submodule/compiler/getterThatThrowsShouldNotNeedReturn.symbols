@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/getterThatThrowsShouldNotNeedReturn.ts] ////
+
+=== getterThatThrowsShouldNotNeedReturn.ts ===
+class Greeter {
+>Greeter : Symbol(Greeter, Decl(getterThatThrowsShouldNotNeedReturn.ts, 0, 0))
+
+ public get greet(): string {
+>greet : Symbol(greet, Decl(getterThatThrowsShouldNotNeedReturn.ts, 0, 15))
+
+  throw ''; // should not raise an error
+ }
+ public greeting(): string {
+>greeting : Symbol(greeting, Decl(getterThatThrowsShouldNotNeedReturn.ts, 3, 2))
+
+  throw ''; // should not raise an error
+ }
+}
+

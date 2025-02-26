@@ -1,0 +1,173 @@
+--- old.declarationEmitBindingPatternsUnused.symbols
++++ new.declarationEmitBindingPatternsUnused.symbols
+@@= skipped -162, +162 lines =@@
+ >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+ 	}
+ 	set x({ name: alias }: Named) {
+->x : Symbol(NotReferencedClass.x, Decl(declarationEmitBindingPatternsUnused.ts, 55, 2))
++>x : Symbol(x, Decl(declarationEmitBindingPatternsUnused.ts, 55, 2))
+ >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 56, 8))
+ >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+ 
+         console.log(alias);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 56, 8))
+     }
+ 	m({ name: alias }: Named) {
+->m : Symbol(NotReferencedClass.m, Decl(declarationEmitBindingPatternsUnused.ts, 58, 5))
++>m : Symbol(m, Decl(declarationEmitBindingPatternsUnused.ts, 58, 5))
+ >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 59, 4))
+ >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+ 
+         console.log(alias);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 59, 4))
+     }
+ }
+@@= skipped -34, +34 lines =@@
+ >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+ 
+ 		console.log(alias);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 65, 14))
+ 	}
+ 	set x({ name: alias }: Named) {
+->x : Symbol(ReferencedInCodeClas.x, Decl(declarationEmitBindingPatternsUnused.ts, 67, 2))
++>x : Symbol(x, Decl(declarationEmitBindingPatternsUnused.ts, 67, 2))
+ >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 68, 8))
+ >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+ 
+         console.log(alias);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 68, 8))
+     }
+ 	m({ name: alias }: Named) {
+->m : Symbol(ReferencedInCodeClas.m, Decl(declarationEmitBindingPatternsUnused.ts, 70, 5))
++>m : Symbol(m, Decl(declarationEmitBindingPatternsUnused.ts, 70, 5))
+ >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 71, 4))
+ >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+ 
+         console.log(alias);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 71, 4))
+     }
+ }
+@@= skipped -42, +42 lines =@@
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 77, 14))
+ 
+ 		console.log(alias);
+->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 77, 14))
+ 	}
+ 	set x({ name: alias }: Named & { o: typeof alias }) {
+->x : Symbol(ReferencedInSignartureClass.x, Decl(declarationEmitBindingPatternsUnused.ts, 79, 2))
++>x : Symbol(x, Decl(declarationEmitBindingPatternsUnused.ts, 79, 2))
+ >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 80, 8))
+ >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+@@= skipped -15, +15 lines =@@
+         
+     }
+ 	mReturnType({ name: alias }: Named): typeof alias {
+->mReturnType : Symbol(ReferencedInSignartureClass.mReturnType, Decl(declarationEmitBindingPatternsUnused.ts, 82, 5))
++>mReturnType : Symbol(mReturnType, Decl(declarationEmitBindingPatternsUnused.ts, 82, 5))
+ >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 83, 14))
+ >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+@@= skipped -9, +9 lines =@@
+         return null!
+     }
+ 	mRerturnTypeNested({ name: alias }: Named): NonNullable<typeof alias> {
+->mRerturnTypeNested : Symbol(ReferencedInSignartureClass.mRerturnTypeNested, Decl(declarationEmitBindingPatternsUnused.ts, 85, 5))
++>mRerturnTypeNested : Symbol(mRerturnTypeNested, Decl(declarationEmitBindingPatternsUnused.ts, 85, 5))
+ >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 86, 21))
+ >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+@@= skipped -10, +10 lines =@@
+         return null!
+     }
+     mParameter({ name: alias }: Named, p: typeof alias) {
+->mParameter : Symbol(ReferencedInSignartureClass.mParameter, Decl(declarationEmitBindingPatternsUnused.ts, 88, 5))
++>mParameter : Symbol(mParameter, Decl(declarationEmitBindingPatternsUnused.ts, 88, 5))
+ >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 89, 16))
+ >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+@@= skipped -68, +68 lines =@@
+ >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+ 
+ 	set x({ name: alias }: Named);
+->x : Symbol(NotReferencedInterface.x, Decl(declarationEmitBindingPatternsUnused.ts, 105, 35))
++>x : Symbol(x, Decl(declarationEmitBindingPatternsUnused.ts, 105, 35))
+ >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 106, 8))
+ >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+ 
+ 	m({ name: alias }: Named);
+->m : Symbol(NotReferencedInterface.m, Decl(declarationEmitBindingPatternsUnused.ts, 106, 31))
++>m : Symbol(m, Decl(declarationEmitBindingPatternsUnused.ts, 106, 31))
+ >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 107, 4))
+ >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+@@= skipped -42, +42 lines =@@
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 115, 7))
+ 
+ 	set x({ name: alias }: Named & { o: typeof alias })
+->x : Symbol(ReferencedInSignartureInterface.x, Decl(declarationEmitBindingPatternsUnused.ts, 115, 43))
++>x : Symbol(x, Decl(declarationEmitBindingPatternsUnused.ts, 115, 43))
+ >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 116, 8))
+ >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+@@= skipped -8, +8 lines =@@
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 116, 8))
+ 
+ 	mReturnType({ name: alias }: Named): typeof alias;
+->mReturnType : Symbol(ReferencedInSignartureInterface.mReturnType, Decl(declarationEmitBindingPatternsUnused.ts, 116, 52))
++>mReturnType : Symbol(mReturnType, Decl(declarationEmitBindingPatternsUnused.ts, 116, 52))
+ >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 117, 14))
+ >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 117, 14))
+ 
+ 	mRerturnTypeNested({ name: alias }: Named): NonNullable<typeof alias>;
+->mRerturnTypeNested : Symbol(ReferencedInSignartureInterface.mRerturnTypeNested, Decl(declarationEmitBindingPatternsUnused.ts, 117, 51))
++>mRerturnTypeNested : Symbol(mRerturnTypeNested, Decl(declarationEmitBindingPatternsUnused.ts, 117, 51))
+ >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 118, 21))
+ >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+@@= skipped -15, +15 lines =@@
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 118, 21))
+ 
+     mParameter({ name: alias }: Named, p: typeof alias);
+->mParameter : Symbol(ReferencedInSignartureInterface.mParameter, Decl(declarationEmitBindingPatternsUnused.ts, 118, 71))
++>mParameter : Symbol(mParameter, Decl(declarationEmitBindingPatternsUnused.ts, 118, 71))
+ >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+ >alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 119, 16))
+ >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))

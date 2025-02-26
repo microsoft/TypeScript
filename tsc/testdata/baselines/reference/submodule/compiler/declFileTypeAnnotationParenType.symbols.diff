@@ -1,0 +1,11 @@
+--- old.declFileTypeAnnotationParenType.symbols
++++ new.declFileTypeAnnotationParenType.symbols
+@@= skipped -4, +4 lines =@@
+ >c : Symbol(c, Decl(declFileTypeAnnotationParenType.ts, 0, 0))
+ 
+     private p: string;
+->p : Symbol(c.p, Decl(declFileTypeAnnotationParenType.ts, 0, 9))
++>p : Symbol(p, Decl(declFileTypeAnnotationParenType.ts, 0, 9))
+ }
+ 
+ var x: (() => c)[] = [() => new c()];

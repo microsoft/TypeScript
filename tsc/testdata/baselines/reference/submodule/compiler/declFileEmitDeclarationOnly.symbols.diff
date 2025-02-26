@@ -1,0 +1,26 @@
+--- old.declFileEmitDeclarationOnly.symbols
++++ new.declFileEmitDeclarationOnly.symbols
+@@= skipped -12, +12 lines =@@
+ >HelloWorld : Symbol(HelloWorld, Decl(helloworld.ts, 2, 1))
+ 
+   constructor(private name: string) {
+->name : Symbol(HelloWorld.name, Decl(helloworld.ts, 5, 14))
++>name : Symbol(name, Decl(helloworld.ts, 5, 14))
+   }
+ 
+   public hello() {
+->hello : Symbol(HelloWorld.hello, Decl(helloworld.ts, 6, 3))
++>hello : Symbol(hello, Decl(helloworld.ts, 6, 3))
+ 
+     Log.info(`Hello ${this.name}`);
+ >Log.info : Symbol(info, Decl(helloworld.ts, 0, 13))
+ >Log : Symbol(Log, Decl(helloworld.ts, 0, 5))
+ >info : Symbol(info, Decl(helloworld.ts, 0, 13))
+->this.name : Symbol(HelloWorld.name, Decl(helloworld.ts, 5, 14))
++>this.name : Symbol(name, Decl(helloworld.ts, 5, 14))
+ >this : Symbol(HelloWorld, Decl(helloworld.ts, 2, 1))
+->name : Symbol(HelloWorld.name, Decl(helloworld.ts, 5, 14))
++>name : Symbol(name, Decl(helloworld.ts, 5, 14))
+   }
+ }
+ 

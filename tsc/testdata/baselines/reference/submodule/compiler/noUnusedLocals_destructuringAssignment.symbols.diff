@@ -1,0 +1,24 @@
+--- old.noUnusedLocals_destructuringAssignment.symbols
++++ new.noUnusedLocals_destructuringAssignment.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(noUnusedLocals_destructuringAssignment.ts, 0, 0))
+ 
+     private x = 0;
+->x : Symbol(C.x, Decl(noUnusedLocals_destructuringAssignment.ts, 0, 9))
++>x : Symbol(x, Decl(noUnusedLocals_destructuringAssignment.ts, 0, 9))
+ 
+     m(): number {
+->m : Symbol(C.m, Decl(noUnusedLocals_destructuringAssignment.ts, 1, 18))
++>m : Symbol(m, Decl(noUnusedLocals_destructuringAssignment.ts, 1, 18))
+ 
+         let x: number;
+ >x : Symbol(x, Decl(noUnusedLocals_destructuringAssignment.ts, 4, 11))
+@@= skipped -17, +17 lines =@@
+     }
+ 
+     private f(): Function {
+->f : Symbol(C.f, Decl(noUnusedLocals_destructuringAssignment.ts, 7, 5))
++>f : Symbol(f, Decl(noUnusedLocals_destructuringAssignment.ts, 7, 5))
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+         let f: Function;

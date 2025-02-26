@@ -1,0 +1,94 @@
+--- old.discriminatedUnionTypes2.symbols
++++ new.discriminatedUnionTypes2.symbols
+@@= skipped -125, +125 lines =@@
+ >Result : Symbol(Result, Decl(discriminatedUnionTypes2.ts, 33, 1))
+ 
+     if (!x.error) {
+->x.error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 52), Decl(discriminatedUnionTypes2.ts, 35, 18))
++>x.error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 18), Decl(discriminatedUnionTypes2.ts, 35, 52))
+ >x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 37, 13))
+->error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 52), Decl(discriminatedUnionTypes2.ts, 35, 18))
++>error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 18), Decl(discriminatedUnionTypes2.ts, 35, 52))
+ 
+         x.value;
+ >x.value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 35, 37))
+@@= skipped -11, +11 lines =@@
+     }
+     else {
+         x.error.message;
+->x.error.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
++>x.error.message : Symbol(message, Decl(lib.es5.d.ts, --, --))
+ >x.error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 52))
+ >x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 37, 13))
+ >error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 52))
+->message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
++>message : Symbol(message, Decl(lib.es5.d.ts, --, --))
+     }
+ }
+ 
+@@= skipped -23, +23 lines =@@
+ >WithError : Symbol(WithError, Decl(discriminatedUnionTypes2.ts, 47, 34))
+ 
+     error: Error
+->error : Symbol(WithError.error, Decl(discriminatedUnionTypes2.ts, 51, 21))
++>error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 51, 21))
+ >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ 
+     data: null
+->data : Symbol(WithError.data, Decl(discriminatedUnionTypes2.ts, 52, 16))
++>data : Symbol(data, Decl(discriminatedUnionTypes2.ts, 52, 16))
+ }
+ 
+ interface WithoutError<Data> {
+@@= skipped -12, +12 lines =@@
+ >Data : Symbol(Data, Decl(discriminatedUnionTypes2.ts, 56, 23))
+ 
+     error: null
+->error : Symbol(WithoutError.error, Decl(discriminatedUnionTypes2.ts, 56, 30))
++>error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 56, 30))
+ 
+     data: Data
+->data : Symbol(WithoutError.data, Decl(discriminatedUnionTypes2.ts, 57, 15))
++>data : Symbol(data, Decl(discriminatedUnionTypes2.ts, 57, 15))
+ >Data : Symbol(Data, Decl(discriminatedUnionTypes2.ts, 56, 23))
+ }
+ 
+@@= skipped -28, +28 lines =@@
+ 
+         const error: null = carrier.error
+ >error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 65, 13))
+->carrier.error : Symbol(WithoutError.error, Decl(discriminatedUnionTypes2.ts, 56, 30))
++>carrier.error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 56, 30))
+ >carrier : Symbol(carrier, Decl(discriminatedUnionTypes2.ts, 63, 19))
+->error : Symbol(WithoutError.error, Decl(discriminatedUnionTypes2.ts, 56, 30))
++>error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 56, 30))
+ 
+         const data: Data = carrier.data
+ >data : Symbol(data, Decl(discriminatedUnionTypes2.ts, 66, 13))
+ >Data : Symbol(Data, Decl(discriminatedUnionTypes2.ts, 63, 13))
+->carrier.data : Symbol(WithoutError.data, Decl(discriminatedUnionTypes2.ts, 57, 15))
++>carrier.data : Symbol(data, Decl(discriminatedUnionTypes2.ts, 57, 15))
+ >carrier : Symbol(carrier, Decl(discriminatedUnionTypes2.ts, 63, 19))
+->data : Symbol(WithoutError.data, Decl(discriminatedUnionTypes2.ts, 57, 15))
++>data : Symbol(data, Decl(discriminatedUnionTypes2.ts, 57, 15))
+ 
+     } else {
+         const error: Error = carrier.error
+ >error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 68, 13))
+ >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->carrier.error : Symbol(WithError.error, Decl(discriminatedUnionTypes2.ts, 51, 21))
++>carrier.error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 51, 21))
+ >carrier : Symbol(carrier, Decl(discriminatedUnionTypes2.ts, 63, 19))
+->error : Symbol(WithError.error, Decl(discriminatedUnionTypes2.ts, 51, 21))
++>error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 51, 21))
+ 
+         const data: null = carrier.data
+ >data : Symbol(data, Decl(discriminatedUnionTypes2.ts, 69, 13))
+->carrier.data : Symbol(WithError.data, Decl(discriminatedUnionTypes2.ts, 52, 16))
++>carrier.data : Symbol(data, Decl(discriminatedUnionTypes2.ts, 52, 16))
+ >carrier : Symbol(carrier, Decl(discriminatedUnionTypes2.ts, 63, 19))
+->data : Symbol(WithError.data, Decl(discriminatedUnionTypes2.ts, 52, 16))
++>data : Symbol(data, Decl(discriminatedUnionTypes2.ts, 52, 16))
+     }
+ }
+ 
