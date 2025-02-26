@@ -1,3 +1,4 @@
+error TS2318: Cannot find global type 'IterableIterator'.
 commonjs.cts(1,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 commonjs.cts(2,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 index.ts(3,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -13,6 +14,7 @@ index.ts(68,6): error TS1294: This syntax is not allowed when 'erasableSyntaxOnl
 index.ts(69,7): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
+!!! error TS2318: Cannot find global type 'IterableIterator'.
 ==== index.ts (11 errors) ====
     class MyClassErr {
         // No parameter properties
@@ -110,6 +112,26 @@ index.ts(69,7): error TS1294: This syntax is not allowed when 'erasableSyntaxOnl
     (()=><any>({}))();
     (()=>(<any>{}))();
     <any>{};
+    
+    
+    // return and yield ASI
+    function *gen() {
+        yield <any>
+            1;
+        return <any>
+            1;
+    }
+    
+    // at the start of an ExpressionStatement if followed by an object literal; though I'm not sure why one would use it there
+    <unknown>{foo() {}}.foo();
+    
+    // at the start of an ExpressionStatement if followed by function keyword
+    <unknown>function() {}();
+    <unknown>function() {};
+    
+    // at the start of an ExpressionStatement if followed by an anonymous class expression
+    // note that this exact syntax currently emits invalid JS (no parenthesis added like for function above)
+    <unknown>class {}
     
 ==== commonjs.cts (2 errors) ====
     import foo = require("./other.cjs");
