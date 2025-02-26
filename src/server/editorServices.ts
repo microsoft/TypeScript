@@ -754,7 +754,7 @@ export interface DefaultConfiguredProjectResult {
     sentConfigDiag: Set<ConfiguredProject>;
     seenProjects: ConfigureProjectToLoadKind;
     seenConfigs: Set<NormalizedPath> | undefined;
-};
+}
 
 /** @internal */
 export interface FindCreateOrLoadConfiguredProjectResult {
