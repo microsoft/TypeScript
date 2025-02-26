@@ -133,3 +133,11 @@ declare function foo(): void;
 export = foo;
 >foo : Symbol(foo, Decl(other.d.cts, 0, 0))
 
+
+=== esm.mts ===
+const foo = 1234;
+>foo : Symbol(foo, Decl(esm.mts, 0, 5))
+
+export default foo;
+>foo : Symbol(foo, Decl(esm.mts, 0, 5))
+
