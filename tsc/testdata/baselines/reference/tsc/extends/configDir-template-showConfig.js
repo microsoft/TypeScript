@@ -1,9 +1,38 @@
 
-currentDirectory::/home/src/workspaces/project
+currentDirectory::/home/src/projects/myproject
 useCaseSensitiveFileNames::true
-Input::--verbose --build
+Input::--showConfig
+//// [/home/src/projects/myproject/main.ts] new file
 
-ExitStatus:: 1
+	// some comment
+	export const y = 10;
+	import { x } from "@myscope/sometype";
+
+//// [/home/src/projects/myproject/root2/other/sometype2/index.d.ts] new file
+
+	export const k = 10;
+
+//// [/home/src/projects/myproject/src/secondary.ts] new file
+
+	// some comment
+	export const z = 10;
+	import { k } from "other/sometype2";
+
+//// [/home/src/projects/myproject/tsconfig.json] new file
+{
+	"extends": "../configs/first/tsconfig.json",
+	"compilerOptions": {
+		"declaration": true,
+		"outDir": "outDir",
+		"traceResolution": true,
+	},
+}
+//// [/home/src/projects/myproject/types/sometype.ts] new file
+
+	export const x = 10;
+
+
+ExitStatus:: 5
 
 CompilerOptions::{
     "allowJs": null,
@@ -126,11 +155,14 @@ CompilerOptions::{
     "pretty": null,
     "version": null,
     "watch": null,
-    "showConfig": null,
+    "showConfig": true,
     "tscBuild": null
 }
 Output::
-error TS5093: Compiler option '--verbose' may only be used with '--build'.
-
-error TS6369: Option '--build' must be the first command line argument.
+No output
+//// [/home/src/projects/myproject/main.ts] no change
+//// [/home/src/projects/myproject/root2/other/sometype2/index.d.ts] no change
+//// [/home/src/projects/myproject/src/secondary.ts] no change
+//// [/home/src/projects/myproject/tsconfig.json] no change
+//// [/home/src/projects/myproject/types/sometype.ts] no change
 

@@ -3,7 +3,6 @@ currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::--moduleResolution nodenext  first.ts --module nodenext --target esnext --moduleDetection auto --jsx react --newLine crlf
 
-
 ExitStatus:: 0
 
 CompilerOptions::{
@@ -131,4 +130,6 @@ CompilerOptions::{
     "tscBuild": null
 }
 Output::
+//// [/home/src/workspaces/project/first.js] new file
+
 

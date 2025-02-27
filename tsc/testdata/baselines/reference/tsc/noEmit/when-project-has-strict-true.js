@@ -2,7 +2,15 @@
 currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::--noEmit
-
+//// [/home/src/workspaces/project/class1.ts] new file
+export class class1 {}
+//// [/home/src/workspaces/project/tsconfig.json] new file
+{
+	"compilerOptions": {
+		"incremental": true,
+		"strict": true,
+	},
+}
 
 ExitStatus:: 7
 
@@ -131,11 +139,7 @@ CompilerOptions::{
     "tscBuild": null
 }
 Output::
-//// [/home/src/workspaces/project/class1.ts]\nexport class class1 {}
-//// [/home/src/workspaces/project/tsconfig.json]\n{
-	"compilerOptions": {
-		"incremental": true,
-		"strict": true,
-	},
-}
+No output
+//// [/home/src/workspaces/project/class1.ts] no change
+//// [/home/src/workspaces/project/tsconfig.json] no change
 

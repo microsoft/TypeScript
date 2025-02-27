@@ -1,9 +1,19 @@
 
 currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
-Input::--verbose --build
+Input::--noCheck --outFile built
+//// [/home/src/workspaces/project/a.ts] new file
+export const a = "hello
+//// [/home/src/workspaces/project/b.ts] new file
+export const b = 10;
+//// [/home/src/workspaces/project/tsconfig.json] new file
+{
+	"compilerOptions": {
+		"declaration": true,
+	}
+}
 
-ExitStatus:: 1
+ExitStatus:: 2
 
 CompilerOptions::{
     "allowJs": null,
@@ -58,7 +68,7 @@ CompilerOptions::{
     "moduleDetectionKind": 0,
     "newLine": 0,
     "noEmit": null,
-    "noCheck": null,
+    "noCheck": true,
     "noErrorTruncation": null,
     "noFallthroughCasesInSwitch": null,
     "noImplicitAny": null,
@@ -76,7 +86,7 @@ CompilerOptions::{
     "noUncheckedSideEffectImports": null,
     "out": "",
     "outDir": "",
-    "outFile": "",
+    "outFile": "/home/src/workspaces/project/built",
     "paths": null,
     "preserveConstEnums": null,
     "preserveSymlinks": null,
@@ -130,7 +140,18 @@ CompilerOptions::{
     "tscBuild": null
 }
 Output::
-error TS5093: Compiler option '--verbose' may only be used with '--build'.
+a.ts(1,24): error TS1002: Unterminated string literal.
 
-error TS6369: Option '--build' must be the first command line argument.
+
+Found 1 error in a.ts[90m:1[0m
+
+//// [/home/src/workspaces/project/a.js] new file
+export const a = "hello;
+
+//// [/home/src/workspaces/project/a.ts] no change
+//// [/home/src/workspaces/project/b.js] new file
+export const b = 10;
+
+//// [/home/src/workspaces/project/b.ts] no change
+//// [/home/src/workspaces/project/tsconfig.json] no change
 

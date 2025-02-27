@@ -2,7 +2,8 @@
 currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::--lib es6  first.ts
-
+//// [/home/src/workspaces/project/first.ts] new file
+export const Key = Symbol()
 
 ExitStatus:: 0
 
@@ -133,5 +134,8 @@ CompilerOptions::{
     "tscBuild": null
 }
 Output::
-//// [/home/src/workspaces/project/first.ts]\nexport const Key = Symbol()
+//// [/home/src/workspaces/project/first.js] new file
+export const Key = Symbol();
+
+//// [/home/src/workspaces/project/first.ts] no change
 

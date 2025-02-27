@@ -3,7 +3,6 @@ currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::--help --all
 
-
 ExitStatus:: 1
 
 CompilerOptions::{
@@ -131,4 +130,5 @@ CompilerOptions::{
     "tscBuild": null
 }
 Output::
+No output
 

@@ -1,9 +1,38 @@
 
-currentDirectory::/home/src/workspaces/project
+currentDirectory::/home/src/projects/myproject
 useCaseSensitiveFileNames::true
-Input::--verbose --build
+Input::--explainFiles --outDir ${configDir}/outDir
+//// [/home/src/projects/myproject/main.ts] new file
 
-ExitStatus:: 1
+	// some comment
+	export const y = 10;
+	import { x } from "@myscope/sometype";
+
+//// [/home/src/projects/myproject/root2/other/sometype2/index.d.ts] new file
+
+	export const k = 10;
+
+//// [/home/src/projects/myproject/src/secondary.ts] new file
+
+	// some comment
+	export const z = 10;
+	import { k } from "other/sometype2";
+
+//// [/home/src/projects/myproject/tsconfig.json] new file
+{
+	"extends": "../configs/first/tsconfig.json",
+	"compilerOptions": {
+		"declaration": true,
+		"outDir": "outDir",
+		"traceResolution": true,
+	},
+}
+//// [/home/src/projects/myproject/types/sometype.ts] new file
+
+	export const x = 10;
+
+
+ExitStatus:: 2
 
 CompilerOptions::{
     "allowJs": null,
@@ -75,7 +104,7 @@ CompilerOptions::{
     "noImplicitOverride": null,
     "noUncheckedSideEffectImports": null,
     "out": "",
-    "outDir": "",
+    "outDir": "/home/src/projects/myproject/${configDir}/outDir",
     "outFile": "",
     "paths": null,
     "preserveConstEnums": null,
@@ -119,7 +148,7 @@ CompilerOptions::{
     "generateTrace": "",
     "listEmittedFiles": null,
     "listFiles": null,
-    "explainFiles": null,
+    "explainFiles": true,
     "listFilesOnly": null,
     "noEmitForJsFiles": null,
     "preserveWatchOutput": null,
@@ -130,7 +159,23 @@ CompilerOptions::{
     "tscBuild": null
 }
 Output::
-error TS5093: Compiler option '--verbose' may only be used with '--build'.
+src/secondary.ts(4,20): error TS2307: Cannot find module 'other/sometype2' or its corresponding type declarations.
 
-error TS6369: Option '--build' must be the first command line argument.
+
+Found 1 error in src/secondary.ts[90m:4[0m
+
+//// [/home/src/projects/myproject/${configDir}/outDir/main.js] new file
+export const y = 10;
+
+//// [/home/src/projects/myproject/${configDir}/outDir/src/secondary.js] new file
+export const z = 10;
+
+//// [/home/src/projects/myproject/${configDir}/outDir/types/sometype.js] new file
+export const x = 10;
+
+//// [/home/src/projects/myproject/main.ts] no change
+//// [/home/src/projects/myproject/root2/other/sometype2/index.d.ts] no change
+//// [/home/src/projects/myproject/src/secondary.ts] no change
+//// [/home/src/projects/myproject/tsconfig.json] no change
+//// [/home/src/projects/myproject/types/sometype.ts] no change
 

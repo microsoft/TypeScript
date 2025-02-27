@@ -515,6 +515,7 @@ type sourceMapEmitResult struct {
 
 func (p *Program) Emit(options *EmitOptions) *EmitResult {
 	// !!! performance measurement
+	p.BindSourceFiles()
 
 	host := &emitHost{program: p}
 
@@ -524,7 +525,6 @@ func (p *Program) Emit(options *EmitOptions) *EmitResult {
 		},
 	}
 	wg := core.NewWorkGroup(p.programOptions.SingleThreaded)
-
 	var emitters []*emitter
 	sourceFiles := getSourceFilesToEmit(host, options.TargetSourceFile, options.forceDtsEmit)
 

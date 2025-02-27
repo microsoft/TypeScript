@@ -145,82 +145,82 @@ func TestProjectReferences(t *testing.T) {
 	}).verify(t)
 }
 
-// func TestExtends(t *testing.T) {
-// 	t.Parallel()
-// if !bundled.Embedded {
-// 	// Without embedding, we'd need to read all of the lib files out from disk into the MapFS.
-// 	// Just skip this for now.
-// 	t.Skip("bundled files are not embedded")
-// }
-//
-// 	extendsSys := NewTestSys(FileMap{
-//         "/home/src/projects/configs/first/tsconfig.json": `{
-// 	extends: "../second/tsconfig.json",
-// 	include: ["${configDir}/src"],
-// 	compilerOptions: {
-// 		typeRoots: ["root1", "${configDir}/root2", "root3"],
-// 		types: [],
-// 	},
-// }`,
-//         "/home/src/projects/configs/second/tsconfig.json": `{
-// 	files: ["${configDir}/main.ts"],
-// 	compilerOptions: {
-// 		declarationDir: "${configDir}/decls",
-// 		paths: {
-// 			"@myscope/*": ["${configDir}/types/*"],
-// 			"other/*": ["other/*"],
-// 		},
-// 		baseUrl: "${configDir}",
-// 	},
-// 	watchOptions: {
-// 		excludeFiles: ["${configDir}/main.ts"],
-// 	},
-// }`,
-//         "/home/src/projects/myproject/tsconfig.json": `{
-// 	extends: "../configs/first/tsconfig.json",
-// 	compilerOptions: {
-// 		declaration: true,
-// 		outDir: "outDir",
-// 		traceResolution: true,
-// 	},
-// }`,
-//
-//         "/home/src/projects/myproject/main.ts": `
-// 	// some comment
-// 	export const y = 10;
-// 	import { x } from "@myscope/sometype";
-// `,
-//         "/home/src/projects/myproject/src/secondary.ts": `
-// 	// some comment
-// 	export const z = 10;
-// 	import { k } from "other/sometype2";
-// `,
-//         "/home/src/projects/myproject/types/sometype.ts": `
-// 	export const x = 10;
-// `,
-//         "/home/src/projects/myproject/root2/other/sometype2/index.d.ts": `
-// 	export const k = 10;
-// `,
-// 	}, "/home/src/projects/myproject" );
-//
-// 	cases := []tscInput{{
-//         scenario: "extends",
-//         subScenario: "configDir template",
-//         sys: extendsSys,
-//         commandLineArgs: []string{"--explainFiles"},
-//     },{
-//         scenario: "extends",
-//         subScenario: "configDir template showConfig",
-//         sys: extendsSys,
-//         commandLineArgs: []string{"--showConfig"},
-//     },{
-//         scenario: "extends",
-//         subScenario: "configDir template with commandline",
-//         sys: extendsSys,
-//         commandLineArgs: []string{"--explainFiles", "--outDir", "${configDir}/outDir"},
-//     }}
-//
-// 	for _, c := range cases {
-// 		c.verify(t)
-// 	}
-// }
+func TestExtends(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		// Without embedding, we'd need to read all of the lib files out from disk into the MapFS.
+		// Just skip this for now.
+		t.Skip("bundled files are not embedded")
+	}
+
+	extendsSysFiles := FileMap{
+		"/home/src/projects/configs/first/tsconfig.json": `{
+	"extends": "../second/tsconfig.json",
+	"include": ["${configDir}/src"],
+	"compilerOptions": {
+		"typeRoots": ["root1", "${configDir}/root2", "root3"],
+		"types": [],
+	},
+}`,
+		"/home/src/projects/configs/second/tsconfig.json": `{
+	"files": ["${configDir}/main.ts"],
+	"compilerOptions": {
+		"declarationDir": "${configDir}/decls",
+		"paths": {
+			"@myscope/*": ["${configDir}/types/*"],
+			"other/*": ["other/*"],
+		},
+		"baseUrl": "${configDir}",
+	},
+	"watchOptions": {
+		"excludeFiles": ["${configDir}/main.ts"],
+	},
+}`,
+		"/home/src/projects/myproject/tsconfig.json": `{
+	"extends": "../configs/first/tsconfig.json",
+	"compilerOptions": {
+		"declaration": true,
+		"outDir": "outDir",
+		"traceResolution": true,
+	},
+}`,
+
+		"/home/src/projects/myproject/main.ts": `
+	// some comment
+	export const y = 10;
+	import { x } from "@myscope/sometype";
+`,
+		"/home/src/projects/myproject/src/secondary.ts": `
+	// some comment
+	export const z = 10;
+	import { k } from "other/sometype2";
+`,
+		"/home/src/projects/myproject/types/sometype.ts": `
+	export const x = 10;
+`,
+		"/home/src/projects/myproject/root2/other/sometype2/index.d.ts": `
+	export const k = 10;
+`,
+	}
+
+	cases := []tscInput{{
+		scenario:        "extends",
+		subScenario:     "configDir template",
+		sys:             newTestSys(extendsSysFiles, "/home/src/projects/myproject"),
+		commandLineArgs: []string{"--explainFiles"},
+	}, {
+		scenario:        "extends",
+		subScenario:     "configDir template showConfig",
+		sys:             newTestSys(extendsSysFiles, "/home/src/projects/myproject"),
+		commandLineArgs: []string{"--showConfig"},
+	}, {
+		scenario:        "extends",
+		subScenario:     "configDir template with commandline",
+		sys:             newTestSys(extendsSysFiles, "/home/src/projects/myproject"),
+		commandLineArgs: []string{"--explainFiles", "--outDir", "${configDir}/outDir"},
+	}}
+
+	for _, c := range cases {
+		c.verify(t)
+	}
+}
