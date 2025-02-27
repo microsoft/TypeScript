@@ -46,8 +46,9 @@ func BenchmarkPackageJSON(b *testing.B) {
 
 		b.Run("ParseJSONText", func(b *testing.B) {
 			b.Run(f.Name(), func(b *testing.B) {
+				fileName := "/" + f.Name()
 				for range b.N {
-					parser.ParseJSONText(f.Name(), tspath.Path(f.Name()), string(content))
+					parser.ParseJSONText(fileName, tspath.Path(fileName), string(content))
 				}
 			})
 		})

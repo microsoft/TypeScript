@@ -515,14 +515,15 @@ func TestParseJsonConfigFileContent(t *testing.T) {
 		t.Run(rec.title+" with json api", func(t *testing.T) {
 			t.Parallel()
 			baselineParseConfigWith(t, rec.title+" with json api.js", rec.noSubmoduleBaseline, rec.input, func(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine {
+				configFileName := tspath.GetNormalizedAbsolutePath(config.configFileName, basePath)
 				path := tspath.ToPath(config.configFileName, basePath, host.FS().UseCaseSensitiveFileNames())
-				parsed, _ := tsoptions.ParseConfigFileTextToJson(config.configFileName, path, config.jsonText)
+				parsed, _ := tsoptions.ParseConfigFileTextToJson(configFileName, path, config.jsonText)
 				return tsoptions.ParseJsonConfigFileContent(
 					parsed,
 					host,
 					basePath,
 					nil,
-					tspath.GetNormalizedAbsolutePath(config.configFileName, basePath),
+					configFileName,
 					/*resolutionStack*/ nil,
 					/*extraFileExtensions*/ nil,
 					/*extendedConfigCache*/ nil,
@@ -539,8 +540,9 @@ func TestParseJsonSourceFileConfigFileContent(t *testing.T) {
 		t.Run(rec.title+" with jsonSourceFile api", func(t *testing.T) {
 			t.Parallel()
 			baselineParseConfigWith(t, rec.title+" with jsonSourceFile api.js", rec.noSubmoduleBaseline, rec.input, func(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine {
+				configFileName := tspath.GetNormalizedAbsolutePath(config.configFileName, basePath)
 				path := tspath.ToPath(config.configFileName, basePath, host.FS().UseCaseSensitiveFileNames())
-				parsed := parser.ParseJSONText(config.configFileName, path, config.jsonText)
+				parsed := parser.ParseJSONText(configFileName, path, config.jsonText)
 				tsConfigSourceFile := &tsoptions.TsConfigSourceFile{
 					SourceFile: parsed,
 				}
@@ -549,7 +551,7 @@ func TestParseJsonSourceFileConfigFileContent(t *testing.T) {
 					host,
 					host.GetCurrentDirectory(),
 					nil,
-					tspath.GetNormalizedAbsolutePath(config.configFileName, basePath),
+					configFileName,
 					/*resolutionStack*/ nil,
 					/*extraFileExtensions*/ nil,
 					/*extendedConfigCache*/ nil,

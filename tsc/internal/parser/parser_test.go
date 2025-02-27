@@ -31,8 +31,8 @@ func BenchmarkParse(b *testing.B) {
 		b.Run(f.Name(), func(b *testing.B) {
 			f.SkipIfNotExist(b)
 
-			fileName := f.Path()
-			path := tspath.ToPath(fileName, "", osvfs.FS().UseCaseSensitiveFileNames())
+			fileName := tspath.GetNormalizedAbsolutePath(f.Path(), "/")
+			path := tspath.ToPath(fileName, "/", osvfs.FS().UseCaseSensitiveFileNames())
 			sourceText := f.ReadFile(b)
 
 			for _, jsdoc := range jsdocModes {
@@ -74,14 +74,15 @@ func TestParseTypeScriptRepo(t *testing.T) {
 					sourceText, err := os.ReadFile(f.path)
 					assert.NilError(t, err)
 
-					path := tspath.ToPath(f.path, "", osvfs.FS().UseCaseSensitiveFileNames())
+					fileName := tspath.GetNormalizedAbsolutePath(f.path, repo.TypeScriptSubmodulePath)
+					path := tspath.ToPath(f.path, repo.TypeScriptSubmodulePath, osvfs.FS().UseCaseSensitiveFileNames())
 
 					var sourceFile *ast.SourceFile
 
 					if strings.HasSuffix(f.name, ".json") {
-						sourceFile = ParseJSONText(f.path, path, string(sourceText))
+						sourceFile = ParseJSONText(fileName, path, string(sourceText))
 					} else {
-						sourceFile = ParseSourceFile(f.path, path, string(sourceText), core.ScriptTargetESNext, scanner.JSDocParsingModeParseAll)
+						sourceFile = ParseSourceFile(fileName, path, string(sourceText), core.ScriptTargetESNext, scanner.JSDocParsingModeParseAll)
 					}
 
 					if !test.ignoreErrors {

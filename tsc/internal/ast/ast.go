@@ -2,6 +2,7 @@ package ast
 
 import (
 	"fmt"
+	"strings"
 	"sync"
 	"sync/atomic"
 
@@ -7834,6 +7835,10 @@ type SourceFile struct {
 }
 
 func (f *NodeFactory) NewSourceFile(text string, fileName string, path tspath.Path, statements *NodeList) *Node {
+	if (tspath.GetEncodedRootLength(fileName) == 0 && !strings.HasPrefix(fileName, "^/")) || fileName != tspath.NormalizePath(fileName) {
+		panic(fmt.Sprintf("fileName should be normalized and absolute: %q", fileName))
+	}
+
 	data := &SourceFile{}
 	data.Text = text
 	data.fileName = fileName

@@ -52,7 +52,7 @@ func TestGetTokenAtPosition(t *testing.T) {
 				return 0;
 			}
 		`
-		file := parser.ParseSourceFile("file.ts", "file.ts", fileText, core.ScriptTargetLatest, scanner.JSDocParsingModeParseAll)
+		file := parser.ParseSourceFile("/file.ts", "/file.ts", fileText, core.ScriptTargetLatest, scanner.JSDocParsingModeParseAll)
 		assert.Equal(t, astnav.GetTokenAtPosition(file, 0), astnav.GetTokenAtPosition(file, 0))
 	})
 }
@@ -86,7 +86,7 @@ func baselineTokens(t *testing.T, testName string, getTSTokens func(fileText str
 				positions[i] = i
 			}
 			tsTokens := getTSTokens(string(fileText), positions)
-			file := parser.ParseSourceFile("file.ts", "file.ts", string(fileText), core.ScriptTargetLatest, scanner.JSDocParsingModeParseAll)
+			file := parser.ParseSourceFile("/file.ts", "/file.ts", string(fileText), core.ScriptTargetLatest, scanner.JSDocParsingModeParseAll)
 
 			var output strings.Builder
 			currentRange := core.NewTextRange(0, 0)
