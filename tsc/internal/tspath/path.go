@@ -321,7 +321,140 @@ func GetNormalizedPathComponents(path string, currentDirectory string) []string 
 }
 
 func GetNormalizedAbsolutePath(fileName string, currentDirectory string) string {
-	return GetPathFromPathComponents(GetNormalizedPathComponents(fileName, currentDirectory))
+	rootLength := GetRootLength(fileName)
+	if rootLength == 0 && currentDirectory != "" {
+		fileName = CombinePaths(currentDirectory, fileName)
+	} else {
+		// CombinePaths normalizes slashes, so not necessary in other branch
+		fileName = NormalizeSlashes(fileName)
+	}
+	rootLength = GetRootLength(fileName)
+
+	if simpleNormalized, ok := simpleNormalizePath(fileName); ok {
+		length := len(simpleNormalized)
+		if length > rootLength {
+			return RemoveTrailingDirectorySeparator(simpleNormalized)
+		}
+		if length == rootLength && rootLength != 0 {
+			return EnsureTrailingDirectorySeparator(simpleNormalized)
+		}
+		return simpleNormalized
+	}
+
+	length := len(fileName)
+	root := fileName[:rootLength]
+	// `normalized` is only initialized once `fileName` is determined to be non-normalized.
+	// `changed` is set at the same time.
+	var changed bool
+	var normalized string
+	var segmentStart int
+	index := rootLength
+	normalizedUpTo := index
+	seenNonDotDotSegment := rootLength != 0
+	for index < length {
+		// At beginning of segment
+		segmentStart = index
+		ch := fileName[index]
+		for ch == '/' {
+			index++
+			if index < length {
+				ch = fileName[index]
+			} else {
+				break
+			}
+		}
+		if index > segmentStart {
+			// Seen superfluous separator
+			if !changed {
+				normalized = fileName[:max(rootLength, segmentStart-1)]
+				changed = true
+			}
+			if index == length {
+				break
+			}
+			segmentStart = index
+		}
+		// Past any superfluous separators
+		segmentEnd := strings.IndexByte(fileName[index+1:], '/')
+		if segmentEnd == -1 {
+			segmentEnd = length
+		} else {
+			segmentEnd += index + 1
+		}
+		segmentLength := segmentEnd - segmentStart
+		if segmentLength == 1 && fileName[index] == '.' {
+			// "." segment (skip)
+			if !changed {
+				normalized = fileName[:normalizedUpTo]
+				changed = true
+			}
+		} else if segmentLength == 2 && fileName[index] == '.' && fileName[index+1] == '.' {
+			// ".." segment
+			if !seenNonDotDotSegment {
+				if changed {
+					if len(normalized) == rootLength {
+						normalized += ".."
+					} else {
+						normalized += "/.."
+					}
+				} else {
+					normalizedUpTo = index + 2
+				}
+			} else if !changed {
+				if normalizedUpTo-1 >= 0 {
+					normalized = fileName[:max(rootLength, strings.LastIndexByte(fileName[:normalizedUpTo-1], '/'))]
+				} else {
+					normalized = fileName[:normalizedUpTo]
+				}
+				changed = true
+				seenNonDotDotSegment = (len(normalized) != rootLength || rootLength != 0) && normalized != ".." && !strings.HasSuffix(normalized, "/..")
+			} else {
+				lastSlash := strings.LastIndexByte(normalized, '/')
+				if lastSlash != -1 {
+					normalized = normalized[:max(rootLength, lastSlash)]
+				} else {
+					normalized = root
+				}
+				seenNonDotDotSegment = (len(normalized) != rootLength || rootLength != 0) && normalized != ".." && !strings.HasSuffix(normalized, "/..")
+			}
+		} else if changed {
+			if len(normalized) != rootLength {
+				normalized += "/"
+			}
+			seenNonDotDotSegment = true
+			normalized += fileName[segmentStart:segmentEnd]
+		} else {
+			seenNonDotDotSegment = true
+			normalizedUpTo = segmentEnd
+		}
+		index = segmentEnd + 1
+	}
+	if changed {
+		return normalized
+	}
+	if length > rootLength {
+		return RemoveTrailingDirectorySeparators(fileName)
+	}
+	if length == rootLength {
+		return EnsureTrailingDirectorySeparator(fileName)
+	}
+	return fileName
+}
+
+func simpleNormalizePath(path string) (string, bool) {
+	// Most paths don't require normalization
+	if !hasRelativePathSegment(path) {
+		return path, true
+	}
+	// Some paths only require cleanup of `/./` or leading `./`
+	simplified := strings.ReplaceAll(path, "/./", "/")
+	trimmed := strings.TrimPrefix(simplified, "./")
+	if trimmed != path && !hasRelativePathSegment(trimmed) && !(trimmed != simplified && strings.HasPrefix(trimmed, "/")) {
+		// If we trimmed a leading "./" and the path now starts with "/", we changed the meaning
+		path = trimmed
+		return path, true
+	}
+	return "", false
 }
 
 func hasRelativePathSegment(p string) bool {
@@ -350,19 +483,10 @@ func hasRelativePathSegment(p string) bool {
 
 func NormalizePath(path string) string {
 	path = NormalizeSlashes(path)
-	// Most paths don't require normalization
-	if !hasRelativePathSegment(path) {
-		return path
+	if normalized, ok := simpleNormalizePath(path); ok {
+		return normalized
 	}
-	// Some paths only require cleanup of `/./` or leading `./`
-	simplified := strings.ReplaceAll(path, "/./", "/")
-	simplified = strings.TrimPrefix(simplified, "./")
-	if simplified != path && !hasRelativePathSegment(simplified) {
-		path = simplified
-		return path
-	}
-	// Other paths require full normalization
-	normalized := GetPathFromPathComponents(reducePathComponents(GetPathComponents(path, "")))
+	normalized := GetNormalizedAbsolutePath(path, "")
 	if normalized != "" && HasTrailingDirectorySeparator(path) {
 		normalized = EnsureTrailingDirectorySeparator(normalized)
 	}
@@ -424,6 +548,13 @@ func RemoveTrailingDirectorySeparator(path string) string {
 
 func (p Path) RemoveTrailingDirectorySeparator() Path {
 	return Path(RemoveTrailingDirectorySeparator(string(p)))
+}
+
+func RemoveTrailingDirectorySeparators(path string) string {
+	for HasTrailingDirectorySeparator(path) {
+		path = RemoveTrailingDirectorySeparator(path)
+	}
+	return path
 }
 
 func EnsureTrailingDirectorySeparator(path string) string {

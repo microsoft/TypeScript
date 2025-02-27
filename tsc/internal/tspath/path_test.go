@@ -1,6 +1,7 @@
 package tspath
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 	"testing"
@@ -377,6 +378,21 @@ func TestGetNormalizedAbsolutePath(t *testing.T) {
 	assert.Equal(t, GetNormalizedAbsolutePath("/base/./a../b", ""), "/base/a../b")
 	assert.Equal(t, GetNormalizedAbsolutePath("/base/../a../b", ""), "/a../b")
 
+	assert.Equal(t, GetNormalizedAbsolutePath("a/..", ""), "")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a//", ""), "/a")
+	assert.Equal(t, GetNormalizedAbsolutePath("//a", "a"), "//a/")
+	assert.Equal(t, GetNormalizedAbsolutePath("/\\", ""), "//")
+	assert.Equal(t, GetNormalizedAbsolutePath("a///", "a"), "a/a")
+	assert.Equal(t, GetNormalizedAbsolutePath("/.//", ""), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("//\\\\", ""), "///")
+	assert.Equal(t, GetNormalizedAbsolutePath(".//a", "."), "a")
+	assert.Equal(t, GetNormalizedAbsolutePath("a/../..", ""), "..")
+	assert.Equal(t, GetNormalizedAbsolutePath("../..", "\\a"), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("a:", "b"), "a:/")
+	assert.Equal(t, GetNormalizedAbsolutePath("a/../..", ".."), "../..")
+	assert.Equal(t, GetNormalizedAbsolutePath("a/../..", "b"), "")
+	assert.Equal(t, GetNormalizedAbsolutePath("a//../..", ".."), "../..")
+
 	// Consecutive intermediate slashes are normalized to a single slash.
 	assert.Equal(t, GetNormalizedAbsolutePath("a//b", ""), "a/b")
 	assert.Equal(t, GetNormalizedAbsolutePath("a///b", ""), "a/b")
@@ -399,6 +415,75 @@ func TestGetNormalizedAbsolutePath(t *testing.T) {
 	assert.Equal(t, GetNormalizedAbsolutePath("a\\b//c", ""), "a/b/c")
 	assert.Equal(t, GetNormalizedAbsolutePath("\\a\\b\\\\c", ""), "/a/b/c")
 	assert.Equal(t, GetNormalizedAbsolutePath("\\\\a\\b\\\\c", ""), "//a/b/c")
+}
+
+var getNormalizedAbsolutePathTests = map[string][][]string{
+	"non-normalized inputs": {
+		{"/.", ""},
+		{"/./", ""},
+		{"/../", ""},
+		{"/a/", ""},
+		{"/a/.", ""},
+		{"/a/foo.", ""},
+		{"/a/./", ""},
+		{"/a/./b", ""},
+		{"/a/./b/", ""},
+		{"/a/..", ""},
+		{"/a/../", ""},
+		{"/a/../", ""},
+		{"/a/../b", ""},
+		{"/a/../b/", ""},
+		{"/a/..", ""},
+		{"/a/..", "/"},
+		{"/a/..", "b/"},
+		{"/a/..", "/b"},
+		{"/a/.", "b"},
+		{"/a/.", "."},
+	},
+	"normalized inputs": {
+		{"/a/b", ""},
+		{"/one/two/three", ""},
+		{"/users/root/project/src/foo.ts", ""},
+	},
+	"normalized inputs (long)": {
+		{"/a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/q/r/s/t/u/v/w/x/y/z", ""},
+		{"/one/two/three/four/five/six/seven/eight/nine/ten/eleven/twelve/thirteen/fourteen/fifteen/sixteen/seventeen/eighteen/nineteen/twenty", ""},
+		{"/users/root/project/src/foo/bar/baz/qux/quux/corge/grault/garply/waldo/fred/plugh/xyzzy/thud", ""},
+		{"/lorem/ipsum/dolor/sit/amet/consectetur/adipiscing/elit/sed/do/eiusmod/tempor/incididunt/ut/labore/et/dolore/magna/aliqua/ut/enim/ad/minim/veniam", ""},
+	},
+}
+
+func BenchmarkGetNormalizedAbsolutePath(b *testing.B) {
+	funcs := map[string]func(string, string) string{
+		"GetNormalizedAbsolutePath":       GetNormalizedAbsolutePath,
+		"GetNormalizedAbsolutePath (old)": getNormalizedAbsolutePath_old,
+	}
+	for name, tests := range getNormalizedAbsolutePathTests {
+		b.Run(name, func(b *testing.B) {
+			for fnName, fn := range funcs {
+				b.Run(fnName, func(b *testing.B) {
+					b.ReportAllocs()
+					for _, test := range tests {
+						for range b.N {
+							fn(test[0], test[1])
+						}
+					}
+				})
+			}
+		})
+	}
+}
+
+func FuzzGetNormalizedAbsolutePath(f *testing.F) {
+	for _, tests := range getNormalizedAbsolutePathTests {
+		for _, test := range tests {
+			f.Add(test[0], test[1])
+		}
+	}
+
+	f.Fuzz(func(t *testing.T, p string, dir string) {
+		assert.Equal(t, GetNormalizedAbsolutePath(p, dir), getNormalizedAbsolutePath_old(p, dir), fmt.Sprintf("p=%q, dir=%q", p, dir))
+	})
 }
 
 func TestGetRelativePathToDirectoryOrUrl(t *testing.T) {
@@ -593,4 +678,29 @@ func shortenName(name string) string {
 		return name[:20] + "...etc"
 	}
 	return name
+}
+
+func normalizePath_old(path string) string {
+	path = NormalizeSlashes(path)
+	// Most paths don't require normalization
+	if !hasRelativePathSegment(path) {
+		return path
+	}
+	// Some paths only require cleanup of `/./` or leading `./`
+	simplified := strings.ReplaceAll(path, "/./", "/")
+	simplified = strings.TrimPrefix(simplified, "./")
+	if simplified != path && !hasRelativePathSegment(simplified) {
+		path = simplified
+		return path
+	}
+	// Other paths require full normalization
+	normalized := GetPathFromPathComponents(reducePathComponents(GetPathComponents(path, "")))
+	if normalized != "" && HasTrailingDirectorySeparator(path) {
+		normalized = EnsureTrailingDirectorySeparator(normalized)
+	}
+	return normalized
+}
+
+func getNormalizedAbsolutePath_old(fileName string, currentDirectory string) string {
+	return GetPathFromPathComponents(GetNormalizedPathComponents(fileName, currentDirectory))
 }
