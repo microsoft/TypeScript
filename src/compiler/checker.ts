@@ -6207,6 +6207,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const context = syntacticContext as NodeBuilderContext;
                 if (context.bundled || context.enclosingFile !== getSourceFileOfNode(lit)) {
                     let name = lit.text;
+                    const originalName = name;
                     const nodeSymbol = getNodeLinks(parent).resolvedSymbol;
                     const meaning = parent.isTypeOf ? SymbolFlags.Value : SymbolFlags.Type;
                     const parentSymbol = nodeSymbol
@@ -6227,7 +6228,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             context.tracker.reportLikelyUnsafeImportRequiredError(name);
                         }
                     }
-                    return name;
+                    if (name !== originalName) {
+                        return name;
+                    }
                 }
             },
             canReuseTypeNode(context, typeNode) {
@@ -8831,10 +8834,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return setTextRange(context, setEmitFlags(name, EmitFlags.NoAsciiEscaping), node);
                 }
                 const updated = visitEachChildWorker(node, c => attachSymbolToLeftmostIdentifier(c), /*context*/ undefined);
-                if (updated !== node) {
-                    setTextRange(context, updated, node);
-                }
-                return updated;
+                return setTextRange(context, updated, node);
             }
         }
 
@@ -11821,7 +11821,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             // always widen a 'unique symbol' type if the type was created for a different declaration.
-            if (type.flags & TypeFlags.UniqueESSymbol && (isBindingElement(declaration) || !declaration.type) && type.symbol !== getSymbolOfDeclaration(declaration)) {
+            if (type.flags & TypeFlags.UniqueESSymbol && (isBindingElement(declaration) || !tryGetTypeFromEffectiveTypeNode(declaration)) && type.symbol !== getSymbolOfDeclaration(declaration)) {
                 type = esSymbolType;
             }
 
@@ -28732,7 +28732,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // parameter declared in the same parameter list is a candidate.
                 if (isIdentifier(expr)) {
                     const symbol = getResolvedSymbol(expr);
-                    const declaration = symbol.valueDeclaration;
+                    const declaration = getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
                     if (declaration && (isBindingElement(declaration) || isParameter(declaration)) && reference === declaration.parent && !declaration.initializer && !declaration.dotDotDotToken) {
                         return declaration;
                     }
