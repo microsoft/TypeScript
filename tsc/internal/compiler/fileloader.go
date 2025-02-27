@@ -46,7 +46,7 @@ func processAllProgramFiles(
 		compilerOptions:    compilerOptions,
 		resolver:           resolver,
 		tasksByFileName:    make(map[string]*parseTask),
-		defaultLibraryPath: host.DefaultLibraryPath(),
+		defaultLibraryPath: tspath.GetNormalizedAbsolutePath(host.DefaultLibraryPath(), host.GetCurrentDirectory()),
 		comparePathsOptions: tspath.ComparePathsOptions{
 			UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
 			CurrentDirectory:          host.GetCurrentDirectory(),
@@ -152,8 +152,13 @@ func (p *fileLoader) sortLibs(libFiles []*ast.SourceFile) {
 }
 
 func (p *fileLoader) getDefaultLibFilePriority(a *ast.SourceFile) int {
-	if tspath.ContainsPath(p.defaultLibraryPath, a.FileName(), p.comparePathsOptions) {
-		basename := tspath.GetBaseFileName(a.FileName())
+	// defaultLibraryPath and a.FileName() are absolute and normalized; a prefix check should suffice.
+	defaultLibraryPath := tspath.RemoveTrailingDirectorySeparator(p.defaultLibraryPath)
+	aFileName := a.FileName()
+
+	if strings.HasPrefix(aFileName, defaultLibraryPath) && len(aFileName) > len(defaultLibraryPath) && aFileName[len(defaultLibraryPath)] == tspath.DirectorySeparator {
+		// avoid tspath.GetBaseFileName; we know these paths are already absolute and normalized.
+		basename := aFileName[strings.LastIndexByte(aFileName, tspath.DirectorySeparator)+1:]
 		if basename == "lib.d.ts" || basename == "lib.es6.d.ts" {
 			return 0
 		}
