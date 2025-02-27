@@ -313,7 +313,7 @@ func Coalesce[T *U, U any](a T, b T) T {
 }
 
 func ComputeLineStarts(text string) []TextPos {
-	var result []TextPos
+	result := make([]TextPos, 0, strings.Count(text, "\n")+1)
 	pos := 0
 	lineStart := 0
 	for pos < len(text) {
