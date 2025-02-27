@@ -37,7 +37,7 @@ Print this message.
 
 
 [94m--init[39m
-Initializes a TypeScript project and creates a tsconfig.json file.
+Initializes a TypeScript project and creates a tsconfig.json file. Use '--init clean' to skip comments.
 
 [94m--listFilesOnly[39m
 Print names of files that are part of the compilation and then stop processing.
