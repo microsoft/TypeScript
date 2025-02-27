@@ -255,18 +255,21 @@ func (walker *typeWriterWalker) visitNode(node *ast.Node, isSymbolWalk bool) []*
 func forEachASTNode(node *ast.Node) []*ast.Node {
 	var result []*ast.Node
 	work := []*ast.Node{node}
+
+	var resChildren []*ast.Node
+	addChild := func(child *ast.Node) bool {
+		resChildren = append(resChildren, child)
+		return false
+	}
+
 	for len(work) > 0 {
 		elem := work[len(work)-1]
 		work = work[:len(work)-1]
 		result = append(result, elem)
-
-		var resChildren []*ast.Node
-		elem.ForEachChild(func(child *ast.Node) bool {
-			resChildren = append(resChildren, child)
-			return false
-		})
+		elem.ForEachChild(addChild)
 		slices.Reverse(resChildren)
 		work = append(work, resChildren...)
+		resChildren = resChildren[:0]
 	}
 	return result
 }
