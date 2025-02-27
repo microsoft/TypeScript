@@ -13,7 +13,7 @@ defaults:
     shell: bash
 
 jobs:
-  build:
+  test:
     runs-on: ['self-hosted', '1ES.Pool=TypeScript-1ES-GitHub-XL', '1ES.ImageOverride=mariner-2.0']
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -24,7 +24,20 @@ jobs:
           node-version: 'lts/*'
       - uses: ./.github/actions/setup-go
         with:
-          cache-name: merge-queue-build
+          cache-name: merge-queue-test
 
       - run: npm ci
       - run: npx hereby test:all
+
+  required:
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs:
+      - test
+
+    steps:
+      - name: Check required jobs
+        env:
+          NEEDS: ${{ toJson(needs) }}
+        run: |
+          ! echo $NEEDS | jq -e 'to_entries[] | { job: .key, result: .value.result } | select(.result != "success")'
