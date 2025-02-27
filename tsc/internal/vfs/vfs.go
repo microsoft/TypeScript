@@ -26,7 +26,9 @@ type FS interface {
 	GetAccessibleEntries(path string) Entries
 
 	// GetEntries returns the entries in the specified directory.
-	GetEntries(path string) []fs.DirEntry
+	GetEntries(path string) []DirEntry
+
+	Stat(path string) FileInfo
 
 	// WalkDir walks the file tree rooted at root, calling walkFn for each file or directory in the tree.
 	// It is has the same behavior as [fs.WalkDir], but with paths as [string].
@@ -42,8 +44,13 @@ type Entries struct {
 	Directories []string
 }
 
-// DirEntry is [fs.DirEntry].
-type DirEntry = fs.DirEntry
+type (
+	// DirEntry is [fs.DirEntry].
+	DirEntry = fs.DirEntry
+
+	// FileInfo is [fs.FileInfo].
+	FileInfo = fs.FileInfo
+)
 
 var (
 	ErrInvalid    = fs.ErrInvalid    // "invalid argument"

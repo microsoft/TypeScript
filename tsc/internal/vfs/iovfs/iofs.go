@@ -122,8 +122,13 @@ func (vfs *ioFS) GetAccessibleEntries(path string) vfs.Entries {
 	return vfs.common.GetAccessibleEntries(path)
 }
 
-func (vfs *ioFS) GetEntries(path string) []fs.DirEntry {
+func (vfs *ioFS) GetEntries(path string) []vfs.DirEntry {
 	return vfs.common.GetEntries(path)
+}
+
+func (vfs *ioFS) Stat(path string) vfs.FileInfo {
+	_ = internal.RootLength(path) // Assert path is rooted
+	return vfs.common.Stat(path)
 }
 
 func (vfs *ioFS) ReadFile(path string) (contents string, ok bool) {

@@ -2,7 +2,6 @@ package osvfs
 
 import (
 	"fmt"
-	"io/fs"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -93,8 +92,12 @@ func (vfs *osFS) GetAccessibleEntries(path string) vfs.Entries {
 	return vfs.common.GetAccessibleEntries(path)
 }
 
-func (vfs *osFS) GetEntries(path string) []fs.DirEntry {
+func (vfs *osFS) GetEntries(path string) []vfs.DirEntry {
 	return vfs.common.GetEntries(path)
+}
+
+func (vfs *osFS) Stat(path string) vfs.FileInfo {
+	return vfs.common.Stat(path)
 }
 
 func (vfs *osFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {

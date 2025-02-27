@@ -9,6 +9,7 @@ import (
 	"strings"
 	"sync"
 	"testing/fstest"
+	"time"
 
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
@@ -333,8 +334,9 @@ func (m *mapFS) WriteFile(path string, data []byte, perm fs.FileMode) error {
 	}
 
 	m.setEntry(path, m.getCanonicalPath(path), fstest.MapFile{
-		Data: data,
-		Mode: perm &^ umask,
+		Data:    data,
+		ModTime: time.Now(),
+		Mode:    perm &^ umask,
 	})
 
 	return nil

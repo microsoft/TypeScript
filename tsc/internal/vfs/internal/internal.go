@@ -40,7 +40,7 @@ func (vfs *Common) RootAndPath(path string) (fsys fs.FS, rootName string, rest s
 	return vfs.RootFor(rootName), rootName, rest
 }
 
-func (vfs *Common) stat(path string) fs.FileInfo {
+func (vfs *Common) Stat(path string) vfs.FileInfo {
 	fsys, _, rest := vfs.RootAndPath(path)
 	if fsys == nil {
 		return nil
@@ -53,12 +53,12 @@ func (vfs *Common) stat(path string) fs.FileInfo {
 }
 
 func (vfs *Common) FileExists(path string) bool {
-	stat := vfs.stat(path)
+	stat := vfs.Stat(path)
 	return stat != nil && !stat.IsDir()
 }
 
 func (vfs *Common) DirectoryExists(path string) bool {
-	stat := vfs.stat(path)
+	stat := vfs.Stat(path)
 	return stat != nil && stat.IsDir()
 }
 
@@ -86,7 +86,7 @@ func (vfs *Common) GetAccessibleEntries(path string) (result vfs.Entries) {
 
 		if entryType&fs.ModeSymlink != 0 {
 			// Easy case; UNIX-like system will clearly mark symlinks.
-			if stat := vfs.stat(path + "/" + entry.Name()); stat != nil {
+			if stat := vfs.Stat(path + "/" + entry.Name()); stat != nil {
 				addToResult(entry.Name(), stat.Mode())
 			}
 			continue
@@ -97,7 +97,7 @@ func (vfs *Common) GetAccessibleEntries(path string) (result vfs.Entries) {
 			// TODO(jakebailey): use syscall.Win32FileAttributeData instead
 			fullPath := path + "/" + entry.Name()
 			if realpath := vfs.Realpath(fullPath); fullPath != realpath {
-				if stat := vfs.stat(realpath); stat != nil {
+				if stat := vfs.Stat(realpath); stat != nil {
 					addToResult(entry.Name(), stat.Mode())
 				}
 			}
@@ -108,7 +108,7 @@ func (vfs *Common) GetAccessibleEntries(path string) (result vfs.Entries) {
 	return result
 }
 
-func (vfs *Common) GetEntries(path string) []fs.DirEntry {
+func (vfs *Common) GetEntries(path string) []vfs.DirEntry {
 	fsys, _, rest := vfs.RootAndPath(path)
 	if fsys == nil {
 		return nil
