@@ -102,9 +102,6 @@
 ->console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 ->console : Symbol(console, Decl(lib.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.d.ts, --, --))
-+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
-+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
-+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  
  const b8 = <MainButton {...{onClick() {}}} />;  // OK; method declaration get retained (See GitHub #13365)
  >b8 : Symbol(b8, Decl(file.tsx, 49, 5))

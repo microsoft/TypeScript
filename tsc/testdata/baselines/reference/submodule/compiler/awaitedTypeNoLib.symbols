@@ -12,7 +12,7 @@ type NotPromise<T> = T extends Thenable<unknown>
 
   : T extends PromiseLike<unknown>
 >T : Symbol(T, Decl(awaitedTypeNoLib.ts, 0, 16))
->PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike)
 
   ? never
   : T;

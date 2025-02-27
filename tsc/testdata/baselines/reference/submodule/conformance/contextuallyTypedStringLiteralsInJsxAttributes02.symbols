@@ -76,9 +76,6 @@ const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k h
 >MainButton : Symbol(MainButton, Decl(file.tsx, 13, 1), Decl(file.tsx, 15, 66), Decl(file.tsx, 16, 62))
 >onClick : Symbol(onClick, Decl(file.tsx, 26, 28))
 >k : Symbol(k, Decl(file.tsx, 26, 38))
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >k : Symbol(k, Decl(file.tsx, 26, 38))
 >extra : Symbol(extra, Decl(file.tsx, 26, 62))
 
@@ -87,9 +84,6 @@ const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type 
 >MainButton : Symbol(MainButton, Decl(file.tsx, 13, 1), Decl(file.tsx, 15, 66), Decl(file.tsx, 16, 62))
 >onClick : Symbol(onClick, Decl(file.tsx, 27, 22))
 >k : Symbol(k, Decl(file.tsx, 27, 33))
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >k : Symbol(k, Decl(file.tsx, 27, 33))
 >extra : Symbol(extra, Decl(file.tsx, 27, 54))
 
@@ -118,9 +112,6 @@ const c1 = <NoOverload  {...{onClick: (k) => {console.log(k)}}} extra />;  // k 
 >NoOverload : Symbol(NoOverload, Decl(file.tsx, 29, 44))
 >onClick : Symbol(onClick, Decl(file.tsx, 32, 29))
 >k : Symbol(k, Decl(file.tsx, 32, 39))
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >k : Symbol(k, Decl(file.tsx, 32, 39))
 >extra : Symbol(extra, Decl(file.tsx, 32, 63))
 

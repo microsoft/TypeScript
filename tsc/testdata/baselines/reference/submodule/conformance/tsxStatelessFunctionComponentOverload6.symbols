@@ -152,9 +152,6 @@ const b7 = <MainButton {...{onClick: () => { console.log("hi") }}} />;
 >b7 : Symbol(b7, Decl(file.tsx, 48, 5))
 >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
 >onClick : Symbol(onClick, Decl(file.tsx, 48, 28))
->console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 
 const b8 = <MainButton {...{onClick() {}}} />;  // OK; method declaration get retained (See GitHub #13365)
 >b8 : Symbol(b8, Decl(file.tsx, 49, 5))

@@ -84,7 +84,7 @@ interface InferParamProp<T> {
 
     values: Array<T>;
 >values : Symbol(values, Decl(file.tsx, 21, 29))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array)
 >T : Symbol(T, Decl(file.tsx, 21, 25))
 
     selectHandler: (selectedVal: T) => void;

@@ -14,9 +14,8 @@
  
      attrs: Readonly<T>;
 ->attrs : Symbol(Test.attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 5, 25))
-->Readonly : Symbol(Readonly, Decl(strictNullNotNullIndexTypeNoLib.ts, 0, 0))
 +>attrs : Symbol(attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 5, 25))
-+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+ >Readonly : Symbol(Readonly, Decl(strictNullNotNullIndexTypeNoLib.ts, 0, 0))
  >T : Symbol(T, Decl(strictNullNotNullIndexTypeNoLib.ts, 5, 11))
  
      m() {
@@ -48,9 +47,8 @@
  
      properties: Readonly<P>;
 ->properties : Symbol(FooClass.properties, Decl(strictNullNotNullIndexTypeNoLib.ts, 17, 37))
-->Readonly : Symbol(Readonly, Decl(strictNullNotNullIndexTypeNoLib.ts, 0, 0))
 +>properties : Symbol(properties, Decl(strictNullNotNullIndexTypeNoLib.ts, 17, 37))
-+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+ >Readonly : Symbol(Readonly, Decl(strictNullNotNullIndexTypeNoLib.ts, 0, 0))
  >P : Symbol(P, Decl(strictNullNotNullIndexTypeNoLib.ts, 17, 15))
  
      foo(): number {
@@ -72,9 +70,8 @@
  
      attrs: Readonly<T>;
 ->attrs : Symbol(Test2.attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 26, 26))
-->Readonly : Symbol(Readonly, Decl(strictNullNotNullIndexTypeNoLib.ts, 0, 0))
 +>attrs : Symbol(attrs, Decl(strictNullNotNullIndexTypeNoLib.ts, 26, 26))
-+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+ >Readonly : Symbol(Readonly, Decl(strictNullNotNullIndexTypeNoLib.ts, 0, 0))
  >T : Symbol(T, Decl(strictNullNotNullIndexTypeNoLib.ts, 26, 12))
  
      m() {
