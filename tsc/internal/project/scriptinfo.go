@@ -162,12 +162,8 @@ func (s *ScriptInfo) detachAllProjects() {
 		// if (isConfiguredProject(p)) {
 		// 	p.getCachedDirectoryStructureHost().addOrDeleteFile(this.fileName, this.path, FileWatcherEventKind.Deleted);
 		// }
-		isRoot := project.isRoot(s)
 		project.removeFile(s, false /*fileExists*/, false /*detachFromProject*/)
 		project.onFileAddedOrRemoved(s.isSymlink())
-		if isRoot && project.kind != KindInferred {
-			project.addMissingRootFile(s.fileName, s.path)
-		}
 	}
 	s.containingProjects = nil
 }

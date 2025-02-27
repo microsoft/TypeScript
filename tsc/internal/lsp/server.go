@@ -182,6 +182,10 @@ func (s *Server) handleMessage(req *lsproto.RequestMessage) error {
 		return s.handleDidOpen(req)
 	case *lsproto.DidChangeTextDocumentParams:
 		return s.handleDidChange(req)
+	case *lsproto.DidSaveTextDocumentParams:
+		return s.handleDidSave(req)
+	case *lsproto.DidCloseTextDocumentParams:
+		return s.handleDidClose(req)
 	case *lsproto.DocumentDiagnosticParams:
 		return s.handleDocumentDiagnostic(req)
 	case *lsproto.HoverParams:
@@ -214,7 +218,15 @@ func (s *Server) handleInitialize(req *lsproto.RequestMessage) error {
 		},
 		Capabilities: lsproto.ServerCapabilities{
 			TextDocumentSync: &lsproto.TextDocumentSyncOptionsOrTextDocumentSyncKind{
-				TextDocumentSyncKind: ptrTo(lsproto.TextDocumentSyncKindIncremental),
+				TextDocumentSyncOptions: &lsproto.TextDocumentSyncOptions{
+					OpenClose: ptrTo(true),
+					Change:    ptrTo(lsproto.TextDocumentSyncKindIncremental),
+					Save: &lsproto.BooleanOrSaveOptions{
+						SaveOptions: &lsproto.SaveOptions{
+							IncludeText: ptrTo(true),
+						},
+					},
+				},
 			},
 			HoverProvider: &lsproto.BooleanOrHoverOptions{
 				Boolean: ptrTo(true),
@@ -238,13 +250,13 @@ func (s *Server) handleInitialized(req *lsproto.RequestMessage) error {
 		Logger:             s.logger,
 	})
 	s.converters = &converters{projectService: s.projectService}
-	return s.sendResult(req.ID, nil)
+	return nil
 }
 
 func (s *Server) handleDidOpen(req *lsproto.RequestMessage) error {
 	params := req.Params.(*lsproto.DidOpenTextDocumentParams)
 	s.projectService.OpenFile(documentUriToFileName(params.TextDocument.Uri), params.TextDocument.Text, languageKindToScriptKind(params.TextDocument.LanguageId), "")
-	return s.sendResult(req.ID, nil)
+	return nil
 }
 
 func (s *Server) handleDidChange(req *lsproto.RequestMessage) error {
@@ -273,7 +285,19 @@ func (s *Server) handleDidChange(req *lsproto.RequestMessage) error {
 	}
 
 	s.projectService.ChangeFile(documentUriToFileName(params.TextDocument.Uri), changes)
-	return s.sendResult(req.ID, nil)
+	return nil
+}
+
+func (s *Server) handleDidSave(req *lsproto.RequestMessage) error {
+	params := req.Params.(*lsproto.DidSaveTextDocumentParams)
+	s.projectService.MarkFileSaved(documentUriToFileName(params.TextDocument.Uri), *params.Text)
+	return nil
+}
+
+func (s *Server) handleDidClose(req *lsproto.RequestMessage) error {
+	params := req.Params.(*lsproto.DidCloseTextDocumentParams)
+	s.projectService.CloseFile(documentUriToFileName(params.TextDocument.Uri))
+	return nil
 }
 
 func (s *Server) handleDocumentDiagnostic(req *lsproto.RequestMessage) error {

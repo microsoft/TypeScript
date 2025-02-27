@@ -123,6 +123,28 @@ func (s *Service) ChangeFile(fileName string, changes []ls.TextChange) {
 	s.applyChangesToFile(info, changes)
 }
 
+func (s *Service) CloseFile(fileName string) {
+	if info := s.getScriptInfo(s.toPath(fileName)); info != nil {
+		fileExists := !info.isDynamic && s.host.FS().FileExists(info.fileName)
+		info.close(fileExists)
+		for _, project := range info.containingProjects {
+			if project.kind == KindInferred && project.isRoot(info) {
+				project.removeFile(info, fileExists, true /*detachFromProject*/)
+			}
+		}
+		delete(s.openFiles, info.path)
+		if !fileExists {
+			s.handleDeletedFile(info, false /*deferredDelete*/)
+		}
+	}
+}
+
+func (s *Service) MarkFileSaved(fileName string, text string) {
+	if info := s.getScriptInfo(s.toPath(fileName)); info != nil {
+		info.setTextFromDisk(text)
+	}
+}
+
 func (s *Service) EnsureDefaultProjectForFile(fileName string) (*ScriptInfo, *Project) {
 	path := s.toPath(fileName)
 	if info := s.getScriptInfo(path); info != nil && !info.isOrphan() {
@@ -141,6 +163,11 @@ func (s *Service) EnsureDefaultProjectForFile(fileName string) (*ScriptInfo, *Pr
 
 func (s *Service) Close() {
 	// !!!
+}
+
+// SourceFileCount should only be used for testing.
+func (s *Service) SourceFileCount() int {
+	return s.documentRegistry.size()
 }
 
 func (s *Service) ensureProjectStructureUpToDate() {
@@ -183,45 +210,6 @@ func (s *Service) applyChangesToFile(info *ScriptInfo, changes []ls.TextChange) 
 	for _, change := range changes {
 		info.editContent(change)
 	}
-}
-
-func (s *Service) closeClientFile(path tspath.Path, skipAssignOrphanScriptInfosToInferredProject bool) bool {
-	if !skipAssignOrphanScriptInfosToInferredProject {
-		defer s.printProjects()
-	}
-	if info := s.getScriptInfo(path); info != nil {
-		return s.closeOpenFile(info, skipAssignOrphanScriptInfosToInferredProject)
-	}
-	return false
-}
-
-func (s *Service) closeOpenFile(info *ScriptInfo, skipAssignOrphanScriptInfosToInferredProject bool) bool {
-	fileExists := !info.isDynamic && s.host.FS().FileExists(info.fileName)
-	info.close(fileExists)
-	// s.stopWatchingConfigFilesForScriptInfo(info)
-
-	var ensureProjectsForOpenFiles bool
-	// !!! collect all projects that should be removed
-
-	delete(s.openFiles, info.path)
-
-	if !skipAssignOrphanScriptInfosToInferredProject && ensureProjectsForOpenFiles {
-		// !!!
-		// s.assignOrphanScriptInfoToInferredProject()
-	}
-
-	// Cleanup script infos that arent part of any project (eg. those could be closed script infos not referenced by any project)
-	// is postponed to next file open so that if file from same project is opened,
-	// we wont end up creating same script infos
-
-	// If the current info is being just closed - add the watcher file to track changes
-	// But if file was deleted, handle that part
-	if fileExists {
-		// s.watchClosedScriptInfo(info)
-	} else {
-		// s.handleDeletedFile(info /*deferredDelete*/, false)
-	}
-	return ensureProjectsForOpenFiles
 }
 
 func (s *Service) handleDeletedFile(info *ScriptInfo, deferredDelete bool) {
@@ -307,21 +295,26 @@ func (s *Service) getOrCreateScriptInfoWorker(fileName string, path tspath.Path,
 	info, ok := s.scriptInfos[path]
 	s.scriptInfosMu.RUnlock()
 
+	var fromDisk bool
 	if !ok {
 		if !openedByClient && !isDynamicFileName(fileName) {
 			if content, ok := s.host.FS().ReadFile(fileName); !ok {
 				return nil
 			} else {
 				fileContent = content
+				fromDisk = true
 			}
 		}
 
 		info = newScriptInfo(fileName, path, scriptKind)
-		info.setTextFromDisk(fileContent)
+		if fromDisk {
+			info.setTextFromDisk(fileContent)
+		}
+
 		s.scriptInfosMu.Lock()
 		defer s.scriptInfosMu.Unlock()
 		if prevVersion, ok := s.filenameToScriptInfoVersion[path]; ok {
-			info.version = prevVersion
+			info.version = prevVersion + 1
 			delete(s.filenameToScriptInfoVersion, path)
 		}
 		s.scriptInfos[path] = info
@@ -411,16 +404,11 @@ func (s *Service) findCreateOrReloadConfiguredProject(configFileName string, pro
 	switch projectLoadKind {
 	case projectLoadKindFind, projectLoadKindCreateReplay:
 		return project
-	case projectLoadKindCreate:
+	case projectLoadKindCreate, projectLoadKindReload:
 		if project == nil {
 			project = s.createConfiguredProject(configFileName, configFilePath)
-			s.loadConfiguredProject(project)
 		}
-	case projectLoadKindReload:
-		if project == nil {
-			project = s.createConfiguredProject(configFileName, configFilePath)
-			s.loadConfiguredProject(project)
-		}
+		s.loadConfiguredProject(project)
 	default:
 		panic("unhandled projectLoadKind")
 	}
@@ -591,7 +579,7 @@ func (s *Service) loadConfiguredProject(project *Project) {
 		project.compilerOptions = &core.CompilerOptions{}
 	}
 
-	project.updateGraph()
+	project.markAsDirty()
 }
 
 func (s *Service) printProjects() {

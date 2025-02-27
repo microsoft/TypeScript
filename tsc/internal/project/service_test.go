@@ -26,6 +26,7 @@ func TestService(t *testing.T) {
 	files := map[string]string{
 		"/home/projects/TS/p1/tsconfig.json": `{
 			"compilerOptions": {
+				"noLib": true,
 				"module": "nodenext",
 				"strict": true
 			},
@@ -112,6 +113,62 @@ func TestService(t *testing.T) {
 
 			service.ChangeFile("/home/projects/TS/p1/src/index.ts", []ls.TextChange{{TextRange: core.NewTextRange(0, 0), NewText: `import { y } from "../y";\n`}})
 			service.EnsureDefaultProjectForFile("/home/projects/TS/p1/y.ts")
+		})
+	})
+
+	t.Run("CloseFile", func(t *testing.T) {
+		t.Parallel()
+		t.Run("Configured projects", func(t *testing.T) {
+			t.Parallel()
+			t.Run("delete a file, close it, recreate it", func(t *testing.T) {
+				t.Parallel()
+				service, host := setup(files)
+				service.OpenFile("/home/projects/TS/p1/src/x.ts", files["/home/projects/TS/p1/src/x.ts"], core.ScriptKindTS, "")
+				service.OpenFile("/home/projects/TS/p1/src/index.ts", files["/home/projects/TS/p1/src/index.ts"], core.ScriptKindTS, "")
+				assert.Equal(t, service.SourceFileCount(), 2)
+
+				filesCopy := maps.Clone(files)
+				delete(filesCopy, "/home/projects/TS/p1/src/x.ts")
+				host.replaceFS(filesCopy)
+
+				service.CloseFile("/home/projects/TS/p1/src/x.ts")
+				assert.Check(t, service.GetScriptInfo("/home/projects/TS/p1/src/x.ts") == nil)
+				assert.Check(t, service.Projects()[0].GetProgram().GetSourceFile("/home/projects/TS/p1/src/x.ts") == nil)
+				assert.Equal(t, service.SourceFileCount(), 1)
+
+				filesCopy["/home/projects/TS/p1/src/x.ts"] = ``
+				host.replaceFS(filesCopy)
+				service.OpenFile("/home/projects/TS/p1/src/x.ts", filesCopy["/home/projects/TS/p1/src/x.ts"], core.ScriptKindTS, "")
+				assert.Equal(t, service.GetScriptInfo("/home/projects/TS/p1/src/x.ts").Text(), "")
+				assert.Check(t, service.Projects()[0].GetProgram().GetSourceFile("/home/projects/TS/p1/src/x.ts") != nil)
+				assert.Equal(t, service.Projects()[0].GetProgram().GetSourceFile("/home/projects/TS/p1/src/x.ts").Text, "")
+			})
+		})
+
+		t.Run("Inferred projects", func(t *testing.T) {
+			t.Parallel()
+			t.Run("delete a file, close it, recreate it", func(t *testing.T) {
+				t.Parallel()
+				filesCopy := maps.Clone(files)
+				delete(filesCopy, "/home/projects/TS/p1/tsconfig.json")
+				service, host := setup(filesCopy)
+				service.OpenFile("/home/projects/TS/p1/src/x.ts", files["/home/projects/TS/p1/src/x.ts"], core.ScriptKindTS, "")
+				service.OpenFile("/home/projects/TS/p1/src/index.ts", files["/home/projects/TS/p1/src/index.ts"], core.ScriptKindTS, "")
+
+				delete(filesCopy, "/home/projects/TS/p1/src/x.ts")
+				host.replaceFS(filesCopy)
+
+				service.CloseFile("/home/projects/TS/p1/src/x.ts")
+				assert.Check(t, service.GetScriptInfo("/home/projects/TS/p1/src/x.ts") == nil)
+				assert.Check(t, service.Projects()[0].GetProgram().GetSourceFile("/home/projects/TS/p1/src/x.ts") == nil)
+
+				filesCopy["/home/projects/TS/p1/src/x.ts"] = ``
+				host.replaceFS(filesCopy)
+				service.OpenFile("/home/projects/TS/p1/src/x.ts", filesCopy["/home/projects/TS/p1/src/x.ts"], core.ScriptKindTS, "")
+				assert.Equal(t, service.GetScriptInfo("/home/projects/TS/p1/src/x.ts").Text(), "")
+				assert.Check(t, service.Projects()[0].GetProgram().GetSourceFile("/home/projects/TS/p1/src/x.ts") != nil)
+				assert.Equal(t, service.Projects()[0].GetProgram().GetSourceFile("/home/projects/TS/p1/src/x.ts").Text, "")
+			})
 		})
 	})
 
@@ -214,6 +271,10 @@ func (p *projectServiceHost) Log(msg ...any) {
 // NewLine implements project.ProjectServiceHost.
 func (p *projectServiceHost) NewLine() string {
 	return "\n"
+}
+
+func (p *projectServiceHost) replaceFS(files map[string]string) {
+	p.fs = bundled.WrapFS(vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/))
 }
 
 var _ project.ServiceHost = (*projectServiceHost)(nil)

@@ -2,7 +2,6 @@ package project
 
 import (
 	"fmt"
-	"slices"
 	"strings"
 	"sync"
 
@@ -43,6 +42,7 @@ type Project struct {
 	hasAddedOrRemovedFiles    bool
 	hasAddedOrRemovedSymlinks bool
 	deferredClose             bool
+	reloadConfig              bool
 
 	currentDirectory string
 	// Inferred projects only
@@ -114,7 +114,13 @@ func (p *Project) GetProjectVersion() int {
 
 // GetRootFileNames implements LanguageServiceHost.
 func (p *Project) GetRootFileNames() []string {
-	return slices.Collect(p.rootFileNames.Values())
+	fileNames := make([]string, 0, p.rootFileNames.Size())
+	for path, fileName := range p.rootFileNames.Entries() {
+		if p.projectService.getScriptInfo(path) != nil {
+			fileNames = append(fileNames, fileName)
+		}
+	}
+	return fileNames
 }
 
 // GetSourceFile implements LanguageServiceHost.
@@ -127,8 +133,9 @@ func (p *Project) GetSourceFile(fileName string, path tspath.Path, languageVersi
 		)
 		if p.program != nil {
 			oldSourceFile = p.program.GetSourceFileByPath(scriptInfo.path)
+			oldCompilerOptions = p.program.GetCompilerOptions()
 		}
-		return p.projectService.documentRegistry.AcquireDocument(scriptInfo, p.GetCompilerOptions(), oldSourceFile, oldCompilerOptions)
+		return p.projectService.documentRegistry.acquireDocument(scriptInfo, p.GetCompilerOptions(), oldSourceFile, oldCompilerOptions)
 	}
 	return nil
 }
@@ -221,6 +228,12 @@ func (p *Project) updateGraph() bool {
 	oldProgram := p.program
 	hasAddedOrRemovedFiles := p.hasAddedOrRemovedFiles
 	p.initialLoadPending = false
+
+	if p.kind == KindConfigured && p.reloadConfig {
+		p.projectService.loadConfiguredProject(p)
+		p.reloadConfig = false
+	}
+
 	p.hasAddedOrRemovedFiles = false
 	p.hasAddedOrRemovedSymlinks = false
 	p.updateProgram()
@@ -230,6 +243,14 @@ func (p *Project) updateGraph() bool {
 		p.log(p.print(true /*writeFileNames*/, true /*writeFileExplanation*/, false /*writeFileVersionAndText*/))
 	} else if p.program != oldProgram {
 		p.log("Different program with same set of files")
+	}
+
+	if p.program != oldProgram && oldProgram != nil {
+		for _, oldSourceFile := range oldProgram.GetSourceFiles() {
+			if p.program.GetSourceFileByPath(oldSourceFile.Path()) == nil {
+				p.projectService.documentRegistry.releaseDocument(oldSourceFile, oldProgram.GetCompilerOptions())
+			}
+		}
 	}
 
 	return true
@@ -269,8 +290,14 @@ func (p *Project) isRoot(info *ScriptInfo) bool {
 
 func (p *Project) removeFile(info *ScriptInfo, fileExists bool, detachFromProject bool) {
 	if p.isRoot(info) {
-		p.rootFileNames.Delete(info.path)
+		switch p.kind {
+		case KindInferred:
+			p.rootFileNames.Delete(info.path)
+		case KindConfigured:
+			p.reloadConfig = true
+		}
 	}
+
 	// !!!
 	// if (fileExists) {
 	// 	// If file is present, just remove the resolutions for the file
@@ -296,11 +323,6 @@ func (p *Project) addRoot(info *ScriptInfo) {
 	}
 	p.rootFileNames.Set(info.path, info.fileName)
 	info.attachToProject(p)
-	p.markAsDirty()
-}
-
-func (p *Project) addMissingRootFile(fileName string, path tspath.Path) {
-	p.rootFileNames.Set(path, fileName)
 	p.markAsDirty()
 }
 
