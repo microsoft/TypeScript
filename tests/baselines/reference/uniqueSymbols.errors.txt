@@ -1,4 +1,4 @@
-uniqueSymbols.ts(272,27): error TS2352: Conversion of type 'typeof testErrorMessage1' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+uniqueSymbols.ts(272,27): error TS2352: Conversion of type 'symbol' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 
 
 ==== uniqueSymbols.ts (1 errors) ====
@@ -275,5 +275,5 @@ uniqueSymbols.ts(272,27): error TS2352: Conversion of type 'typeof testErrorMess
     
     const testErrorMessage1 = Symbol() as string;
                               ~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Conversion of type 'typeof testErrorMessage1' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352: Conversion of type 'symbol' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
     

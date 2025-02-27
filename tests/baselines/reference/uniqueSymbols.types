@@ -1487,8 +1487,8 @@ const testErrorMessage1 = Symbol() as string;
 >                  : ^^^^^^
 >Symbol() as string : string
 >                   : ^^^^^^
->Symbol() : unique symbol
->         : ^^^^^^^^^^^^^
+>Symbol() : symbol
+>         : ^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
 
