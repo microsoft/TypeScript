@@ -376,6 +376,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     protected readonly plugins: PluginModuleWithName[] = [];
 
     /**
+     * Used to determine whether enabled plugins have modified extra file extensions through ProjectService.setHostConfiguration
+     * See: https://github.com/microsoft/TypeScript/issues/61302
+     *
+     * @internal
+     */
+    hasPluginSetExtraFileExtensions = false;
+
+    /**
      * This is map from files to unresolved imports in it
      * Maop does not contain entries for files that do not have unresolved imports
      * This helps in containing the set of files to invalidate
@@ -2144,6 +2152,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         try {
             if (typeof pluginModuleFactory !== "function") {
                 this.projectService.logger.info(`Skipped loading plugin ${configEntry.name} because it did not expose a proper factory function`);
+                return;
+            }
+
+            if (this.plugins.some(p => p.name === configEntry.name)) {
+                this.hasPluginSetExtraFileExtensions = true;
                 return;
             }
 

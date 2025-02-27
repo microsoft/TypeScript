@@ -2935,8 +2935,10 @@ export class ProjectService {
             this.watchWildcards(configFilename, configFileExistenceInfo, project);
         }
         project.enablePluginsWithOptions(compilerOptions);
-        const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles(ProgramUpdateLevel.Full));
-        this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave, parsedCommandLine.watchOptions);
+        if (!project.hasPluginSetExtraFileExtensions) {
+            const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles(ProgramUpdateLevel.Full));
+            this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave, parsedCommandLine.watchOptions);
+        }
         tracing?.pop();
     }
 
