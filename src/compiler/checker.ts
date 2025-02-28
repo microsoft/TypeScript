@@ -45918,14 +45918,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const narrowedTypeParameters: TypeParameter[] = [];
         const narrowedTypes: Type[] = [];
-        for (const [typeParam, symbol, reference] of narrowableTypeParameters) {
-            const narrowReference = factory.cloneNode(reference); // Construct a reference that can be narrowed.
-            // Don't reuse the original reference's node id,
-            // because that could cause us to get a type that was cached for the original reference.
-            narrowReference.id = undefined;
+        for (const [typeParam, symbol, narrowReference] of narrowableTypeParameters) {
+            // Do not reuse node ids, as that could lead us to wrongly reuse cached information.
+            resetNodeId(narrowReference);
             // Set the symbol of the synthetic reference.
             // This allows us to get the type of the reference at a location where the reference is possibly shadowed.
-            getNodeLinks(narrowReference).resolvedSymbol = symbol;
+            let baseReference: Node = narrowReference;
+            while (isAccessExpression(baseReference)) {
+                baseReference = baseReference.expression;
+            }
+            getNodeLinks(baseReference).resolvedSymbol = symbol;
             setParent(narrowReference, narrowPosition.parent);
             narrowReference.flowNode = narrowFlowNode;
             const initialType = getNarrowableTypeForReference(typeParam, narrowReference, /*checkMode*/ undefined, /*forReturnTypeNarrowing*/ true);
@@ -45974,13 +45976,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkTypeAssignableToAndOptionallyElaborate(narrowedUnwrappedExprType, narrowedReturnType, errorNode, effectiveExpr);
     }
 
+    // Reset node ids of cloned nodes.
+    function resetNodeId(node: Node): void {
+        node.id = undefined;
+        forEachChildRecursively(node, resetNodeId);
+    }
+    
+    type NarrowableReference = Identifier | ElementAccessExpression | PropertyAccessExpression;
     /**
      * Narrowable type parameters are type parameters that:
      * (1) have a narrowable constraint;
      * (2) are syntactically used as the type of a single parameter in the function, and nothing else
      */
-    function getNarrowableTypeParameters(candidates: TypeParameter[]): [TypeParameter, Symbol, Identifier][] {
-        const narrowableParams: [TypeParameter, Symbol, Identifier][] = [];
+    function getNarrowableTypeParameters(candidates: TypeParameter[]): [TypeParameter, Symbol, NarrowableReference][] {
+        const narrowableParams: [TypeParameter, Symbol, NarrowableReference][] = [];
         for (const typeParam of candidates) {
             const constraint = getConstraintOfTypeParameter(typeParam);
             if (!constraint || !isNarrowableTypeParameterConstraint(constraint)) continue;
@@ -46008,9 +46017,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         paramReference = paramDecl;
                     }
                 }
-                if (!hasInvalidReference && referencePath) { // Valid type parameter reference: type parameter is narrowable
-                    const symbol = getResolvedSymbol(reference); // >> TODO: construct reference; get its symbol
-                    if (symbol !== unknownSymbol) narrowableParams.push([typeParam, symbol, reference]);
+                if (!hasInvalidReference && referencePath) {
+                    const symbolAndReference = constructNarrowableReference(paramReference!, referencePath);
+                    if (symbolAndReference) {
+                        if (symbolAndReference[0] && symbolAndReference[0] !== unknownSymbol) {
+                            narrowableParams.push([typeParam, symbolAndReference[0], symbolAndReference[1]]);
+                        }
+                    }
                 }
             }
         }
@@ -46062,10 +46075,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     const typeArgs = (typeNode as TypeReferenceNode).typeArguments;
                     // Type arguments that reference `T`
-                    const typeArgsReferenced = typeArgs?.filter(node => isTypeParameterReferenced(typeParam, node))
-                    if (!typeArgsReferenced || typeArgsReferenced.length == 0) return true; // Type reference unrelated to `T`
-                    if (typeArgsReferenced && typeArgsReferenced.length > 1) return false; // e.g. `Foo<T, T, ...>`
-                    const typeArg = typeArgsReferenced[0];
+                    const typeArgsReferencingT = typeArgs?.filter(node => isTypeParameterReferenced(typeParam, node))
+                    if (!typeArgsReferencingT || typeArgsReferencingT.length == 0) return true; // Type reference unrelated to `T`
+                    if (typeArgsReferencingT && typeArgsReferencingT.length > 1) return false; // e.g. `Foo<T, T, ...>`
+                    const typeArg = typeArgsReferencingT[0];
                     if (!(typeArg.kind & SyntaxKind.TypeReference)) return false; // e.g. `Foo<Wrapper<T>, ...>`
                     if (!type.symbol || !type.symbol.declarations || type.symbol.declarations.length != 1) return false;
                     const typeDeclaration = type.symbol.declarations[0];
@@ -46081,7 +46094,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const typeArgIndex = typeArgs!.findIndex(arg => arg === typeArg);
                     const matchingTypeParamDecl = aliasDeclaration.typeParameters?.[typeArgIndex];
                     if (!matchingTypeParamDecl) return false; // Shouldn't happen, unless there is an error in the input program.
-                    const matchingTypeParam = getTypeOfSymbol(getSymbolOfDeclaration(matchingTypeParamDecl)) as TypeParameter; // >> TODO: better way?
+                    const matchingTypeParam = getDeclaredTypeOfTypeParameter(matchingTypeParamDecl.symbol);
                     return getValidTypeParameterReference(typeDeclaration, matchingTypeParam, path);
                 case SyntaxKind.InterfaceDeclaration:
                     const extendsTypes = flatMap((typeNode as InterfaceDeclaration).heritageClauses, clause => clause.types);
@@ -46129,13 +46142,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!isPropertySignature(member)) {
                     return false; // Unsupported reference to `T`, e.g. `[s: string]: T`.
                 }
-                if (!isIdentifier(member.name) && !isStringLiteral(member.name)) { // >> TODO: support number literal? others?
+                if (!isIdentifier(member.name) && !isStringLiteral(member.name)) { // >> TODO: support others e.g. computed property?
                     return false; // Unsupported property name, e.g. `[c]: T`
                 }
                 if (member.questionToken) {
                     // >> TODO: account for property optionality
                 }
-                const result = getValidTypeParameterReference(member.type!, typeParam, [member.name, ...path])
+                const result = getValidTypeParameterReference(member.type!, typeParam, [...path, member.name])
                 if (!result) {
                     return false;
                 }
@@ -46157,13 +46170,65 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // `constructNarrowableReference(`param: { "a b": T }`, ["a b"])` ==> `param["a b"]`
         // `constructNarrowableReference(`{ b }: { b: T }`, [`b`])` ==> `b`
         // `constructNarrowableReference(`{ a }: { a: { b: T } }`, [`a`, `b`])` ==> `a.b`
-        function constructNarrowableReference(paramDecl: ParameterDeclaration, path: Name[]): PropertyAccessExpression {
-            // >> TODO: impl
-            // >> TODO: consider if we'll be able to get the symbol at this constructed location...
+        // `constructNarrowableReference(`{ a: { b }} : { a: { b: T }} }`, [`a`, `b`])` ==> `b`
+        function constructNarrowableReference(paramDecl: ParameterDeclaration, path: Name[]): [Symbol, NarrowableReference] | undefined {
+            let currentName = paramDecl.name;
+            let i = 0;
+            for (; i < path.length; i++) {
+                if (isIdentifier(currentName)) {
+                    break;
+                }
+                else if (isObjectBindingPattern(currentName)) {
+                    const name = path[i];
+                    let nameText: __String | undefined;
+                    if (isIdentifier(name)) nameText = name.escapedText
+                    else {
+                        const rawText = getLiteralPropertyNameText(name);
+                        if (rawText) nameText = escapeLeadingUnderscores(rawText);
+                    }
+                    // Find binding element corresponding to `name`.
+                    const element = currentName.elements.find(element => {
+                        const propertyName = getDestructuringPropertyName(element);
+                        const propertyNameText = propertyName && escapeLeadingUnderscores(propertyName);
+                        return nameText && propertyNameText && nameText === propertyNameText;
+                    });
+                    if (!element) {
+                        return undefined; // Shouldn't happen unless the program has errors.
+                    }
+                    currentName = element.name;
+                }
+                else {
+                    // Unsupported cases. Shouldn't happen unless the program has errors.
+                    return undefined;
+                }
+            }
+            if (!isIdentifier(currentName)) {
+                return undefined; // Shouldn't happen unless the program has errors.
+            }
+            let result: NarrowableReference = factory.cloneNode(currentName);
+            const initialSymbol = getSymbolOfDeclaration(currentName.parent as ParameterDeclaration | BindingElement);
+            for (let j = i; j < path.length; j++) {
+                result = addName(result, path[j]);
+            }
+            return [initialSymbol, result];
+        }
+
+        function addName(exp: NarrowableReference, name: Name): NarrowableReference {
+            name = factory.cloneNode(name);
+            if (isIdentifier(name)) {
+                const accessExp = factory.createPropertyAccessExpression(exp, name);
+                setParent(name, accessExp);
+                setParent(exp, accessExp);
+                return accessExp;
+            }
+            else {
+                const accessExp = factory.createElementAccessExpression(exp, name);
+                setParent(name, accessExp);
+                setParent(exp, accessExp);
+                return accessExp;
+            }
         }
     }
-
-
 
     /**
      * Determines if the type parameter constraint allows for narrowing of that type parameter.
