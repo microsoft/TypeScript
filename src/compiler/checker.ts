@@ -6115,9 +6115,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.PropertySignature:
                     case SyntaxKind.JSDocPropertyTag:
+                        if (!isOptionalDeclaration(declaration)) {
+                            return false;
+                        }
                         symbol ??= getSymbolOfDeclaration(declaration);
+                        if (!(symbol.flags & SymbolFlags.Property) || !(symbol as MappedSymbol).links?.mappedType) {
+                            return false;
+                        }
                         const type = getTypeOfSymbol(symbol);
-                        return !!(symbol.flags & SymbolFlags.Property && symbol.flags & SymbolFlags.Optional && isOptionalDeclaration(declaration) && (symbol as MappedSymbol).links?.mappedType && containsNonMissingUndefinedType(type));
+                        if (!containsNonMissingUndefinedType(type)) {
+                            return false;
+                        }
+                        const declaredType = getEffectiveTypeAnnotationNode(declaration);
+                        return !!(declaredType && !containsUndefinedType(getTypeFromTypeNodeWithoutContext(declaredType)));
                     case SyntaxKind.Parameter:
                     case SyntaxKind.JSDocParameterTag:
                         return requiresAddingImplicitUndefined(declaration, enclosingDeclaration);
