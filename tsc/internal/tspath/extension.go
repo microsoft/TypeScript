@@ -1,7 +1,6 @@
 package tspath
 
 import (
-	"path"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -90,7 +89,7 @@ func IsDeclarationFileName(fileName string) bool {
 }
 
 func GetDeclarationFileExtension(fileName string) string {
-	_, base := path.Split(fileName)
+	base := GetBaseFileName(fileName)
 	for _, ext := range supportedDeclarationExtensions {
 		if strings.HasSuffix(base, ext) {
 			return ext

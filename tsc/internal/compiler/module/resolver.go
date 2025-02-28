@@ -2,7 +2,6 @@ package module
 
 import (
 	"fmt"
-	"path"
 	"slices"
 	"strings"
 
@@ -1132,7 +1131,7 @@ func (r *resolutionState) loadModuleFromFile(extensions extensions, candidate st
 }
 
 func (r *resolutionState) loadModuleFromFileNoImplicitExtensions(extensions extensions, candidate string, onlyRecordFailures bool) *resolved {
-	base := path.Base(candidate)
+	base := tspath.GetBaseFileName(candidate)
 	if !strings.Contains(base, ".") {
 		return continueSearching() // extensionless import, no lookups performed, since we don't support extensionless files
 	}
