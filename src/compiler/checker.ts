@@ -42070,10 +42070,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const indexType = getTypeFromTypeNode(accessNode.indexType);
                 const objectType = getTypeFromTypeNode(accessNode.objectType);
                 const propertyName = getPropertyNameFromIndex(indexType, accessNode);
-                if (propertyName) {
+                if (propertyName && getEmitDeclarations(compilerOptions)) {
                     const propertySymbol = forEachType(getApparentType(objectType), t => getPropertyOfType(t, propertyName));
-                    if (propertySymbol && getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.NonPublicAccessibilityModifier) {
-                        error(accessNode, Diagnostics.Private_or_protected_member_0_cannot_be_accessed_via_indexed_access, unescapeLeadingUnderscores(propertyName));
+                    if (propertySymbol && getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.Private) {
+                        error(accessNode, Diagnostics.Private_member_0_cannot_be_accessed_via_indexed_access, unescapeLeadingUnderscores(propertyName));
                         return errorType;
                     }
                 }

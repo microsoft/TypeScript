@@ -4436,7 +4436,7 @@
         "category": "Error",
         "code": 4128
     },
-    "Private or protected member '{0}' cannot be accessed via indexed access.": {
+    "Private member '{0}' cannot be accessed via indexed access.": {
         "category": "Error",
         "code": 4129
     },
