@@ -29701,27 +29701,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isConstraintPosition(type: Type, node: Node) {
         const parent = node.parent;
-        // In an element access obj[x], we consider obj to be in a constraint position, except when obj is of
-        // a generic type without a nullable constraint and x is a generic type. This is because when both obj
-        // and x are of generic types T and K, we want the resulting type to be T[K].
+        // In an element access obj[key], we consider obj to be in a constraint position, except when
+        // obj and key both have generic types. When obj and key are of generic types T and K, we want
+        // the resulting type to be T[K].
         return parent.kind === SyntaxKind.PropertyAccessExpression ||
             parent.kind === SyntaxKind.QualifiedName ||
             parent.kind === SyntaxKind.CallExpression && (parent as CallExpression).expression === node ||
             parent.kind === SyntaxKind.NewExpression && (parent as NewExpression).expression === node ||
             parent.kind === SyntaxKind.ElementAccessExpression && (parent as ElementAccessExpression).expression === node &&
-                !(someType(type, isGenericTypeWithoutNullableConstraint) && isGenericIndexType(getTypeOfExpression((parent as ElementAccessExpression).argumentExpression)));
+                !(isGenericObjectType(type) && isGenericIndexType(getTypeOfExpression((parent as ElementAccessExpression).argumentExpression)));
     }
 
     function isGenericTypeWithUnionConstraint(type: Type): boolean {
         return type.flags & TypeFlags.Intersection ?
             some((type as IntersectionType).types, isGenericTypeWithUnionConstraint) :
             !!(type.flags & TypeFlags.Instantiable && getBaseConstraintOrType(type).flags & (TypeFlags.Nullable | TypeFlags.Union));
-    }
-
-    function isGenericTypeWithoutNullableConstraint(type: Type): boolean {
-        return type.flags & TypeFlags.Intersection ?
-            some((type as IntersectionType).types, isGenericTypeWithoutNullableConstraint) :
-            !!(type.flags & TypeFlags.Instantiable && !maybeTypeOfKind(getBaseConstraintOrType(type), TypeFlags.Nullable));
     }
 
     function hasContextualTypeWithNoGenericTypes(node: Node, checkMode: CheckMode | undefined) {
@@ -34772,14 +34766,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkIndexedAccess(node: ElementAccessExpression, checkMode: CheckMode | undefined): Type {
-        return node.flags & NodeFlags.OptionalChain ? checkElementAccessChain(node as ElementAccessChain, checkMode) :
-            checkElementAccessExpression(node, checkNonNullExpression(node.expression), checkMode);
-    }
-
-    function checkElementAccessChain(node: ElementAccessChain, checkMode: CheckMode | undefined) {
+        const isOptional = node.flags & NodeFlags.OptionalChain;
         const exprType = checkExpression(node.expression);
-        const nonOptionalType = getOptionalExpressionType(exprType, node.expression);
-        return propagateOptionalTypeMarker(checkElementAccessExpression(node, checkNonNullType(nonOptionalType, node.expression), checkMode), node, nonOptionalType !== exprType);
+        const nonOptionalType = isOptional ? getOptionalExpressionType(exprType, node.expression) : exprType;
+        const nonNullType = maybeTypeOfKind(nonOptionalType, TypeFlags.Unknown | TypeFlags.Nullable) ? checkNonNullType(nonOptionalType, node.expression) : nonOptionalType;
+        const elementType = checkElementAccessExpression(node, nonNullType, checkMode);
+        return isOptional ? propagateOptionalTypeMarker(elementType, node as ElementAccessChain, nonOptionalType !== exprType) : elementType;
     }
 
     function checkElementAccessExpression(node: ElementAccessExpression, exprType: Type, checkMode: CheckMode | undefined): Type {
