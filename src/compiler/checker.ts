@@ -37311,6 +37311,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (file && fileExtensionIsOneOf(file.fileName, [Extension.Cts, Extension.Mts])) {
                 grammarErrorOnNode(node, Diagnostics.This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Use_an_as_expression_instead);
             }
+            if (compilerOptions.erasableSyntaxOnly) {
+                const start = node.type.pos - "<".length;
+                const end = skipTrivia(file.text, node.type.end) + ">".length;
+                diagnostics.add(createFileDiagnostic(file, start, end - start, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled));
+            }
         }
         return checkAssertionWorker(node, checkMode);
     }
