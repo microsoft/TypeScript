@@ -40,7 +40,7 @@ type Binder struct {
 	file                    *ast.SourceFile
 	options                 *core.CompilerOptions
 	languageVersion         core.ScriptTarget
-	bind                    func(*ast.Node) bool
+	bindFunc                func(*ast.Node) bool
 	unreachableFlow         ast.FlowNode
 	reportedUnreachableFlow ast.FlowNode
 
@@ -99,7 +99,7 @@ func bindSourceFile(file *ast.SourceFile, options *core.CompilerOptions) {
 		b.languageVersion = options.GetEmitScriptTarget()
 		b.unreachableFlow.Flags = ast.FlowFlagsUnreachable
 		b.reportedUnreachableFlow.Flags = ast.FlowFlagsUnreachable
-		b.bind = b.bindWorker // Allocate closure once
+		b.bindFunc = b.bind // Allocate closure once
 		b.bind(file.AsNode())
 		file.SymbolCount = b.symbolCount
 		file.ClassifiableNames = b.classifiableNames
@@ -550,7 +550,7 @@ func (b *Binder) finishFlowLabel(label *ast.FlowLabel) *ast.FlowNode {
 	return label
 }
 
-func (b *Binder) bindWorker(node *ast.Node) bool {
+func (b *Binder) bind(node *ast.Node) bool {
 	if node == nil {
 		return false
 	}
@@ -1557,7 +1557,7 @@ func (b *Binder) bindChildren(node *ast.Node) {
 }
 
 func (b *Binder) bindEachChild(node *ast.Node) {
-	node.ForEachChild(b.bind)
+	node.ForEachChild(b.bindFunc)
 }
 
 func (b *Binder) bindEach(nodes []*ast.Node) {
@@ -1689,18 +1689,18 @@ func (b *Binder) setContinueTarget(node *ast.Node, target *ast.FlowLabel) *ast.F
 	return target
 }
 
-func (b *Binder) doWithConditionalBranches(action func(value *ast.Node) bool, value *ast.Node, trueTarget *ast.FlowLabel, falseTarget *ast.FlowLabel) {
+func (b *Binder) doWithConditionalBranches(action func(b *Binder, value *ast.Node) bool, value *ast.Node, trueTarget *ast.FlowLabel, falseTarget *ast.FlowLabel) {
 	savedTrueTarget := b.currentTrueTarget
 	savedFalseTarget := b.currentFalseTarget
 	b.currentTrueTarget = trueTarget
 	b.currentFalseTarget = falseTarget
-	action(value)
+	action(b, value)
 	b.currentTrueTarget = savedTrueTarget
 	b.currentFalseTarget = savedFalseTarget
 }
 
 func (b *Binder) bindCondition(node *ast.Node, trueTarget *ast.FlowLabel, falseTarget *ast.FlowLabel) {
-	b.doWithConditionalBranches(b.bind, node, trueTarget, falseTarget)
+	b.doWithConditionalBranches((*Binder).bind, node, trueTarget, falseTarget)
 	if node == nil || !isLogicalAssignmentExpression(node) && !ast.IsLogicalExpression(node) && !(ast.IsOptionalChain(node) && ast.IsOutermostOptionalChain(node)) {
 		b.addAntecedent(trueTarget, b.createFlowCondition(ast.FlowFlagsTrueCondition, b.currentFlow, node))
 		b.addAntecedent(falseTarget, b.createFlowCondition(ast.FlowFlagsFalseCondition, b.currentFlow, node))
@@ -2169,7 +2169,7 @@ func (b *Binder) bindLogicalLikeExpression(node *ast.Node, trueTarget *ast.FlowL
 	b.currentFlow = b.finishFlowLabel(preRightLabel)
 	b.bind(expr.OperatorToken)
 	if ast.IsLogicalOrCoalescingAssignmentOperator(expr.OperatorToken.Kind) {
-		b.doWithConditionalBranches(b.bind, expr.Right, trueTarget, falseTarget)
+		b.doWithConditionalBranches((*Binder).bind, expr.Right, trueTarget, falseTarget)
 		b.bindAssignmentTargetFlow(expr.Left)
 		b.addAntecedent(trueTarget, b.createFlowCondition(ast.FlowFlagsTrueCondition, b.currentFlow, node))
 		b.addAntecedent(falseTarget, b.createFlowCondition(ast.FlowFlagsFalseCondition, b.currentFlow, node))
@@ -2280,7 +2280,7 @@ func (b *Binder) bindOptionalChain(node *ast.Node, trueTarget *ast.FlowLabel, fa
 	if preChainLabel != nil {
 		b.currentFlow = b.finishFlowLabel(preChainLabel)
 	}
-	b.doWithConditionalBranches(b.bindOptionalChainRest, node, trueTarget, falseTarget)
+	b.doWithConditionalBranches((*Binder).bindOptionalChainRest, node, trueTarget, falseTarget)
 	if ast.IsOutermostOptionalChain(node) {
 		b.addAntecedent(trueTarget, b.createFlowCondition(ast.FlowFlagsTrueCondition, b.currentFlow, node))
 		b.addAntecedent(falseTarget, b.createFlowCondition(ast.FlowFlagsFalseCondition, b.currentFlow, node))
@@ -2288,7 +2288,7 @@ func (b *Binder) bindOptionalChain(node *ast.Node, trueTarget *ast.FlowLabel, fa
 }
 
 func (b *Binder) bindOptionalExpression(node *ast.Node, trueTarget *ast.FlowLabel, falseTarget *ast.FlowLabel) {
-	b.doWithConditionalBranches(b.bind, node, trueTarget, falseTarget)
+	b.doWithConditionalBranches((*Binder).bind, node, trueTarget, falseTarget)
 	if !ast.IsOptionalChain(node) || ast.IsOutermostOptionalChain(node) {
 		b.addAntecedent(trueTarget, b.createFlowCondition(ast.FlowFlagsTrueCondition, b.currentFlow, node))
 		b.addAntecedent(falseTarget, b.createFlowCondition(ast.FlowFlagsFalseCondition, b.currentFlow, node))
