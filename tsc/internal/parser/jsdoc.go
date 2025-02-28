@@ -338,7 +338,7 @@ func (p *Parser) isNextNonwhitespaceTokenEndOfFile() bool {
 
 func (p *Parser) skipWhitespace() {
 	if p.token == ast.KindWhitespaceTrivia || p.token == ast.KindNewLineTrivia {
-		if p.lookAhead(p.isNextNonwhitespaceTokenEndOfFile) {
+		if p.lookAhead((*Parser).isNextNonwhitespaceTokenEndOfFile) {
 			return
 			// Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
 		}
@@ -350,7 +350,7 @@ func (p *Parser) skipWhitespace() {
 
 func (p *Parser) skipWhitespaceOrAsterisk() string {
 	if p.token == ast.KindWhitespaceTrivia || p.token == ast.KindNewLineTrivia {
-		if p.lookAhead(p.isNextNonwhitespaceTokenEndOfFile) {
+		if p.lookAhead((*Parser).isNextNonwhitespaceTokenEndOfFile) {
 			return ""
 			// Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
 		}
@@ -725,7 +725,7 @@ func (p *Parser) parseParameterOrPropertyTag(start int, tagName *ast.IdentifierN
 	name, isBracketed := p.parseBracketNameInPropertyAndParamTag()
 	indentText := p.skipWhitespaceOrAsterisk()
 
-	if isNameFirst && p.lookAhead(func() bool { _, ok := p.parseJSDocLinkPrefix(); return !ok }) {
+	if isNameFirst && p.lookAhead(func(p *Parser) bool { _, ok := p.parseJSDocLinkPrefix(); return !ok }) {
 		typeExpression = p.tryParseTypeExpression()
 	}
 
@@ -802,7 +802,7 @@ func (p *Parser) parseTypeTag(previousTags []*ast.Node, start int, tagName *ast.
 }
 
 func (p *Parser) parseSeeTag(start int, tagName *ast.IdentifierNode, indent int, indentText string) *ast.Node {
-	isMarkdownOrJSDocLink := p.token == ast.KindOpenBracketToken || p.lookAhead(func() bool {
+	isMarkdownOrJSDocLink := p.token == ast.KindOpenBracketToken || p.lookAhead(func(p *Parser) bool {
 		return p.nextTokenJSDoc() == ast.KindAtToken && tokenIsIdentifierOrKeyword(p.nextTokenJSDoc()) && isJSDocLinkTag(p.scanner.TokenValue())
 	})
 	var nameExpression *ast.Node
