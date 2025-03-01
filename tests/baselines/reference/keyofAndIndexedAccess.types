@@ -695,11 +695,11 @@ function pluck<T, K extends keyof T>(array: T[], key: K) {
 >array.map(x => x[key]) : T[K][]
 >                       : ^^^^^^
 >array.map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
->          : ^ ^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>          : ^ ^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >array : T[]
 >      : ^^^
 >map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
->    : ^ ^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >x => x[key] : (x: T) => T[K]
 >            : ^ ^^^^^^^^^^^^
 >x : T
@@ -2429,9 +2429,9 @@ function f1(thing: Thing) {
 
 const assignTo2 = <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) =>
 >assignTo2 : <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) => (value: T[K1][K2]) => T[K1][K2]
->          : ^ ^^  ^^^^^^^^^       ^^  ^^^^^^^^^           ^^      ^^ ^^    ^^  ^^    ^^  ^^^^^^     ^^         ^^^^^^^^^^^^^^
+>          : ^ ^^  ^^^^^^^^^       ^^  ^^^^^^^^^           ^^      ^^ ^^    ^^  ^^    ^^  ^^^^^^                ^^^^^^^^^^^^^^
 ><T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) =>    (value: T[K1][K2]) => object[key1][key2] = value : <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) => (value: T[K1][K2]) => T[K1][K2]
->                                                                                                                                      : ^ ^^  ^^^^^^^^^       ^^  ^^^^^^^^^           ^^      ^^ ^^    ^^  ^^    ^^  ^^^^^^     ^^         ^^^^^^^^^^^^^^
+>                                                                                                                                      : ^ ^^  ^^^^^^^^^       ^^  ^^^^^^^^^           ^^      ^^ ^^    ^^  ^^    ^^  ^^^^^^                ^^^^^^^^^^^^^^
 >object : T
 >       : ^
 >key1 : K1
@@ -2575,12 +2575,12 @@ let c1 = new Component1({
 c1.get("hello");
 >c1.get("hello") : string
 >                : ^^^^^^
->c1.get : <K extends "hello">(key: K) => ({ hello: string; } & unknown)[K]
->       : ^ ^^^^^^^^^^^^^^^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^   ^^^^^^^  ^ 
+>c1.get : <K extends "hello">(key: K) => { hello: string; }[K]
+>       : ^ ^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c1 : Component1<{ hello: string; }, unknown>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->get : <K extends "hello">(key: K) => ({ hello: string; } & unknown)[K]
->    : ^ ^^^^^^^^^^^^^^^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^   ^^^^^^^  ^ 
+>get : <K extends "hello">(key: K) => { hello: string; }[K]
+>    : ^ ^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 

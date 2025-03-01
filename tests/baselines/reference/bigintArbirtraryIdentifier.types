@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/bigintArbirtraryIdentifier.ts] ////
+
+=== foo.ts ===
+const foo = 0n;
+>foo : 0n
+>    : ^^
+>0n : 0n
+>   : ^^
+
+export { foo as "0n" };
+>foo : 0n
+>    : ^^
+>"0n" : 0n
+>     : ^^
+
+=== correctUse.ts ===
+import { "0n" as foo } from "./foo";
+>foo : 0n
+>    : ^^
+
+export { foo as "0n" };
+>foo : 0n
+>    : ^^
+>"0n" : 0n
+>     : ^^
+
+=== badImport.ts ===
+import { 0n as foo } from "./foo";
+>0n as foo : foo
+>          : ^^^
+>0n : 0n
+>   : ^^
+>from : any
+>     : ^^^
+>"./foo" : "./foo"
+>        : ^^^^^^^
+
+=== badImport2.ts ===
+import { foo as 0n } from "./foo";
+>foo : any
+>    : ^^^
+> : any
+> : ^^^
+>from : any
+>     : ^^^
+>"./foo" : "./foo"
+>        : ^^^^^^^
+
+=== badExport.ts ===
+export { foo as 0n };
+>foo : any
+>    : ^^^
+> : any
+> : ^^^
+>0n : 0n
+>   : ^^
+
+=== badExport2.ts ===
+export { 0n as foo };
+>0n as foo : foo
+>          : ^^^
+>0n : 0n
+>   : ^^
+

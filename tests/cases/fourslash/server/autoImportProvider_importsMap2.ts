@@ -1,6 +1,6 @@
 /// <reference path="../fourslash.ts"/>
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// {
 ////   "compilerOptions": {
 ////     "module": "nodenext",
@@ -9,7 +9,7 @@
 ////   }
 //// }
 
-// @Filename: /package.json
+// @Filename: /home/src/workspaces/project/package.json
 //// {
 ////   "type": "module",
 ////   "imports": {
@@ -17,10 +17,10 @@
 ////   }
 //// }
 
-// @Filename: /src/internal/foo.ts
+// @Filename: /home/src/workspaces/project/src/internal/foo.ts
 //// export function something(name: string) {}
 
-// @Filename: /src/a.ts
+// @Filename: /home/src/workspaces/project/src/a.ts
 //// something/**/
 
 verify.importFixModuleSpecifiers("", ["#internal/foo.js"]);

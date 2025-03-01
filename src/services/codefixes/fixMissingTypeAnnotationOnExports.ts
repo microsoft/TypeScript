@@ -1,4 +1,14 @@
 import {
+    createCodeFixAction,
+    createCombinedCodeActions,
+    createImportAdder,
+    eachDiagnostic,
+    registerCodeFix,
+    typeNodeToAutoImportableTypeNode,
+    typePredicateToAutoImportableTypeNode,
+    typeToMinimizedReferenceType,
+} from "../_namespaces/ts.codefix.js";
+import {
     ArrayBindingPattern,
     ArrayLiteralExpression,
     AssertionExpression,
@@ -36,6 +46,7 @@ import {
     hasInitializer,
     hasSyntacticModifier,
     Identifier,
+    InternalNodeBuilderFlags,
     isArrayBindingPattern,
     isArrayLiteralExpression,
     isAssertionExpression,
@@ -91,21 +102,13 @@ import {
     TypeChecker,
     TypeFlags,
     TypeNode,
+    TypePredicate,
     UnionReduction,
     VariableDeclaration,
     VariableStatement,
     walkUpParenthesizedExpressions,
 } from "../_namespaces/ts.js";
-
-import {
-    createCodeFixAction,
-    createCombinedCodeActions,
-    createImportAdder,
-    eachDiagnostic,
-    registerCodeFix,
-    typeToAutoImportableTypeNode,
-} from "../_namespaces/ts.codefix.js";
-import { getIdentifierForNode } from "../refactors/helpers.js";
+import { getIdentifierForNode } from "../_namespaces/ts.refactor.js";
 
 const fixId = "fixMissingTypeAnnotationOnExports";
 
@@ -116,7 +119,7 @@ const extractExpression = "extract-expression";
 const errorCodes = [
     Diagnostics.Function_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Method_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations.code,
-    Diagnostics.At_least_one_accessor_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations.code,
+    Diagnostics.At_least_one_accessor_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Variable_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Parameter_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Property_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
@@ -132,7 +135,7 @@ const errorCodes = [
     Diagnostics.Default_exports_can_t_be_inferred_with_isolatedDeclarations.code,
     Diagnostics.Only_const_arrays_can_be_inferred_with_isolatedDeclarations.code,
     Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function.code,
-    Diagnostics.Declaration_emit_for_this_parameter_requires_implicitly_adding_undefined_to_it_s_type_This_is_not_supported_with_isolatedDeclarations.code,
+    Diagnostics.Declaration_emit_for_this_parameter_requires_implicitly_adding_undefined_to_its_type_This_is_not_supported_with_isolatedDeclarations.code,
     Diagnostics.Type_containing_private_name_0_can_t_be_used_with_isolatedDeclarations.code,
     Diagnostics.Add_satisfies_and_a_type_assertion_to_this_expression_satisfies_T_as_T_to_make_the_type_explicit.code,
 ];
@@ -158,8 +161,9 @@ const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals
     | NodeBuilderFlags.UseStructuralFallback
     | NodeBuilderFlags.AllowEmptyTuple
     | NodeBuilderFlags.GenerateNamesForShadowedTypeParams
-    | NodeBuilderFlags.NoTruncation
-    | NodeBuilderFlags.WriteComputedProps;
+    | NodeBuilderFlags.NoTruncation;
+
+const declarationEmitInternalNodeBuilderFlags = InternalNodeBuilderFlags.WriteComputedProps;
 
 enum TypePrintMode {
     // Prints its fully spelled out type
@@ -872,9 +876,28 @@ function withContext<T>(
             return relativeType(node);
         }
 
-        let type = isValueSignatureDeclaration(node) ?
-            tryGetReturnType(node) :
-            typeChecker.getTypeAtLocation(node);
+        let type: Type | undefined;
+
+        if (isValueSignatureDeclaration(node)) {
+            const signature = typeChecker.getSignatureFromDeclaration(node);
+            if (signature) {
+                const typePredicate = typeChecker.getTypePredicateOfSignature(signature);
+                if (typePredicate) {
+                    if (!typePredicate.type) {
+                        return emptyInferenceResult;
+                    }
+                    return {
+                        typeNode: typePredicateToTypeNode(typePredicate, findAncestor(node, isDeclaration) ?? sourceFile, getFlags(typePredicate.type)),
+                        mutatedTarget: false,
+                    };
+                }
+                type = typeChecker.getReturnTypeOfSignature(signature);
+            }
+        }
+        else {
+            type = typeChecker.getTypeAtLocation(node);
+        }
+
         if (!type) {
             return emptyInferenceResult;
         }
@@ -892,18 +915,22 @@ function withContext<T>(
             type = widenedType;
         }
 
-        if (isParameter(node) && typeChecker.requiresAddingImplicitUndefined(node)) {
+        const enclosingDeclaration = findAncestor(node, isDeclaration) ?? sourceFile;
+        if (isParameter(node) && typeChecker.requiresAddingImplicitUndefined(node, enclosingDeclaration)) {
             type = typeChecker.getUnionType([typeChecker.getUndefinedType(), type], UnionReduction.None);
         }
-        const flags = (
-                isVariableDeclaration(node) ||
-                (isPropertyDeclaration(node) && hasSyntacticModifier(node, ModifierFlags.Static | ModifierFlags.Readonly))
-            ) && type.flags & TypeFlags.UniqueESSymbol ?
-            NodeBuilderFlags.AllowUniqueESSymbolType : NodeBuilderFlags.None;
         return {
-            typeNode: typeToTypeNode(type, findAncestor(node, isDeclaration) ?? sourceFile, flags),
+            typeNode: typeToTypeNode(type, enclosingDeclaration, getFlags(type)),
             mutatedTarget: false,
         };
+
+        function getFlags(type: Type) {
+            return (
+                    isVariableDeclaration(node) ||
+                    (isPropertyDeclaration(node) && hasSyntacticModifier(node, ModifierFlags.Static | ModifierFlags.Readonly))
+                ) && type.flags & TypeFlags.UniqueESSymbol ?
+                NodeBuilderFlags.AllowUniqueESSymbolType : NodeBuilderFlags.None;
+        }
     }
 
     function createTypeOfFromEntityNameExpression(node: EntityNameExpression) {
@@ -1070,9 +1097,27 @@ function withContext<T>(
         return emptyInferenceResult;
     }
 
-    function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None) {
+    function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None): TypeNode | undefined {
         let isTruncated = false;
-        const result = typeToAutoImportableTypeNode(typeChecker, importAdder, type, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, {
+        const minimizedTypeNode = typeToMinimizedReferenceType(typeChecker, type, enclosingDeclaration, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
+            moduleResolverHost: program,
+            trackSymbol() {
+                return true;
+            },
+            reportTruncationError() {
+                isTruncated = true;
+            },
+        });
+        if (!minimizedTypeNode) {
+            return undefined;
+        }
+        const result = typeNodeToAutoImportableTypeNode(minimizedTypeNode, importAdder, scriptTarget);
+        return isTruncated ? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword) : result;
+    }
+
+    function typePredicateToTypeNode(typePredicate: TypePredicate, enclosingDeclaration: Node, flags = NodeBuilderFlags.None): TypeNode | undefined {
+        let isTruncated = false;
+        const result = typePredicateToAutoImportableTypeNode(typeChecker, importAdder, typePredicate, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
             moduleResolverHost: program,
             trackSymbol() {
                 return true;
@@ -1082,13 +1127,6 @@ function withContext<T>(
             },
         });
         return isTruncated ? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword) : result;
-    }
-
-    function tryGetReturnType(node: SignatureDeclaration): Type | undefined {
-        const signature = typeChecker.getSignatureFromDeclaration(node);
-        if (signature) {
-            return typeChecker.getReturnTypeOfSignature(signature);
-        }
     }
 
     function addTypeToVariableLike(decl: ParameterDeclaration | VariableDeclaration | PropertyDeclaration): DiagnosticOrDiagnosticAndArguments | undefined {

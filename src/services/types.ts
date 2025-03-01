@@ -430,6 +430,7 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     /** @internal */ sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
     getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
     /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
+    /** @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean, newSourceFileByResolvedPath: SourceFile | undefined): void;
     /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
     /** @internal */ runWithTemporaryFileUpdate?(rootFile: string, updatedText: string, cb: (updatedProgram: Program, originalProgram: Program | undefined, updatedPastedText: SourceFile) => void): void;
     jsDocParsingMode?: JSDocParsingMode | undefined;
@@ -698,6 +699,7 @@ export interface LanguageService {
     /** @internal */ mapCode(fileName: string, contents: string[], focusLocations: TextSpan[][] | undefined, formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly FileTextChanges[];
 
     dispose(): void;
+    preparePasteEditsForFile(fileName: string, copiedTextRanges: TextRange[]): boolean;
     getPasteEdits(
         args: PasteEditsArgs,
         formatOptions: FormatCodeSettings,
@@ -1231,7 +1233,7 @@ export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatC
 }
 
 /** @internal */
-export const testFormatSettings = getDefaultFormatCodeSettings("\n");
+export const testFormatSettings: FormatCodeSettings = getDefaultFormatCodeSettings("\n");
 
 export interface DefinitionInfo extends DocumentSpan {
     kind: ScriptElementKind;
@@ -1438,6 +1440,10 @@ export interface CompletionInfo {
      */
     isIncomplete?: true;
     entries: CompletionEntry[];
+    /**
+     * Default commit characters for the completion entries.
+     */
+    defaultCommitCharacters?: string[];
 }
 
 export interface CompletionEntryDataAutoImport {
@@ -1550,6 +1556,10 @@ export interface CompletionEntry {
      * is an auto-import.
      */
     data?: CompletionEntryData;
+    /**
+     * If this completion entry is selected, typing a commit character will cause the entry to be accepted.
+     */
+    commitCharacters?: string[];
 }
 
 export interface CompletionEntryLabelDetails {

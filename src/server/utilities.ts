@@ -1,10 +1,4 @@
-import {
-    binarySearch,
-    Comparer,
-    getBaseFileName,
-    identity,
-    SortedArray,
-} from "./_namespaces/ts.js";
+import { getBaseFileName } from "./_namespaces/ts.js";
 import {
     Logger,
     LogLevel,
@@ -26,7 +20,7 @@ export class ThrottledOperations {
      * of the new one.  (Note that the amount of time the canceled operation had been
      * waiting does not affect the amount of time that the new operation waits.)
      */
-    public schedule(operationId: string, delay: number, cb: () => void) {
+    public schedule(operationId: string, delay: number, cb: () => void): void {
         const pendingTimeout = this.pendingTimeouts.get(operationId);
         if (pendingTimeout) {
             // another operation was already scheduled for this id - cancel it
@@ -39,7 +33,7 @@ export class ThrottledOperations {
         }
     }
 
-    public cancel(operationId: string) {
+    public cancel(operationId: string): boolean {
         const pendingTimeout = this.pendingTimeouts.get(operationId);
         if (!pendingTimeout) return false;
         this.host.clearTimeout(pendingTimeout);
@@ -61,7 +55,7 @@ export class GcTimer {
     constructor(private readonly host: ServerHost, private readonly delay: number, private readonly logger: Logger) {
     }
 
-    public scheduleCollect() {
+    public scheduleCollect(): void {
         if (!this.host.gc || this.timerId !== undefined) {
             // no global.gc or collection was already scheduled - skip this request
             return;
@@ -87,21 +81,4 @@ export class GcTimer {
 export function getBaseConfigFileName(configFilePath: NormalizedPath): "tsconfig.json" | "jsconfig.json" | undefined {
     const base = getBaseFileName(configFilePath);
     return base === "tsconfig.json" || base === "jsconfig.json" ? base : undefined;
-}
-
-/** @internal */
-export function removeSorted<T>(array: SortedArray<T>, remove: T, compare: Comparer<T>): void {
-    if (!array || array.length === 0) {
-        return;
-    }
-
-    if (array[0] === remove) {
-        array.splice(0, 1);
-        return;
-    }
-
-    const removeIndex = binarySearch(array, remove, identity, compare);
-    if (removeIndex >= 0) {
-        array.splice(removeIndex, 1);
-    }
 }

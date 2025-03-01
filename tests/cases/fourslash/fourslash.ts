@@ -458,6 +458,11 @@ declare namespace FourSlashInterface {
         toggleMultilineComment(newFileContent: string): void;
         commentSelection(newFileContent: string): void;
         uncommentSelection(newFileContent: string): void;
+        preparePasteEdits(options: {
+            copiedFromFile: string,
+            copiedTextRange: { pos: number, end: number }[],
+            providePasteEdits: boolean
+        }): void;
         pasteEdits(options: {
             newFileContents: { readonly [fileName: string]: string };
             args: {
@@ -686,6 +691,7 @@ declare namespace FourSlashInterface {
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: readonly string[];
+        readonly autoImportSpecifierExcludeRegexes?: readonly string[];
         readonly preferTypeOnlyAutoImports?: boolean;
         readonly organizeImportsIgnoreCase?: "auto" | boolean;
         readonly organizeImportsCollation?: "unicode" | "ordinal";
@@ -719,6 +725,7 @@ declare namespace FourSlashInterface {
         readonly excludes?: ArrayOrSingle<string>;
         readonly preferences?: UserPreferences;
         readonly triggerCharacter?: string;
+        readonly defaultCommitCharacters?: string[];
     }
     type ExpectedCompletionEntry = string | ExpectedCompletionEntryObject;
     interface ExpectedCompletionEntryObject {
@@ -735,6 +742,7 @@ declare namespace FourSlashInterface {
         readonly sortText?: completion.SortText;
         readonly isPackageJsonImport?: boolean;
         readonly isSnippet?: boolean;
+        readonly commitCharacters?: string[];
 
         // details
         readonly text?: string;

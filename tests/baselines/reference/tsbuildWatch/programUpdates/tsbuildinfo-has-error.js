@@ -1,15 +1,15 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/src/project/main.ts]
+//// [/user/username/projects/project/main.ts]
 export const x = 10;
 
-//// [/src/project/tsconfig.json]
+//// [/user/username/projects/project/tsconfig.json]
 {}
 
-//// [/src/project/tsconfig.tsbuildinfo]
+//// [/user/username/projects/project/tsconfig.tsbuildinfo]
 Some random string
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -21,9 +21,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --b src/project -i -w
+/home/src/tslibs/TS/Lib/tsc.js --b -i -w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -32,30 +34,30 @@ Output::
 
 
 
-//// [/src/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../a/lib/lib.d.ts","./main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"version":"FakeTSVersion"}
+//// [/user/username/projects/project/tsconfig.tsbuildinfo]
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"version":"FakeTSVersion"}
 
-//// [/src/project/main.js]
+//// [/user/username/projects/project/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
 
-//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/user/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../a/lib/lib.d.ts",
+    "../../../../home/src/tslibs/ts/lib/lib.d.ts",
     "./main.ts"
   ],
   "fileInfos": {
-    "../../a/lib/lib.d.ts": {
+    "../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "./main.ts": {
@@ -70,40 +72,40 @@ exports.x = 10;
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 536
+  "size": 639
 }
 
 
 FsWatches::
-/src/project/main.ts: *new*
+/user/username/projects/project/main.ts: *new*
   {}
-/src/project/tsconfig.json: *new*
+/user/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/src/project: *new*
+/user/username/projects/project: *new*
   {}
 
 Program root files: [
-  "/src/project/main.ts"
+  "/user/username/projects/project/main.ts"
 ]
 Program options: {
   "watch": true,
   "incremental": true,
   "tscBuild": true,
-  "configFilePath": "/src/project/tsconfig.json"
+  "configFilePath": "/user/username/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
-/src/project/main.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/project/main.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/src/project/main.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/project/main.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/src/project/main.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/projects/project/main.ts (used version)
 
 exitCode:: ExitStatus.undefined
