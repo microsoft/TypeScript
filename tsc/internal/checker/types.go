@@ -348,8 +348,9 @@ type SourceFileLinks struct {
 // Signature specific links
 
 type SignatureLinks struct {
-	resolvedSignature *Signature // Cached signature of signature node or call expression
-	effectsSignature  *Signature // Signature with possible control flow effects
+	resolvedSignature  *Signature // Cached signature of signature node or call expression
+	effectsSignature   *Signature // Signature with possible control flow effects
+	decoratorSignature *Signature // Signature for decorator as if invoked by the runtime
 }
 
 // jsxFlag: JsxOpeningElement | JsxClosingElement

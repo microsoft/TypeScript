@@ -38,13 +38,6 @@ func newTypeMapper(sources []*Type, targets []*Type) *TypeMapper {
 	return newArrayTypeMapper(sources, targets)
 }
 
-func newSingleTypeMapper(sources []*Type, target *Type) *TypeMapper {
-	if len(sources) == 1 {
-		return newSimpleTypeMapper(sources[0], target)
-	}
-	return newArrayToSingleTypeMapper(sources, target)
-}
-
 func (c *Checker) combineTypeMappers(m1 *TypeMapper, m2 *TypeMapper) *TypeMapper {
 	if m1 != nil {
 		return newCompositeTypeMapper(c, m1, m2)

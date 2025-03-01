@@ -287,6 +287,8 @@ func (n *Node) Expression() *Node {
 		return n.AsExternalModuleReference().Expression
 	case KindExportAssignment:
 		return n.AsExportAssignment().Expression
+	case KindDecorator:
+		return n.AsDecorator().Expression
 	}
 	panic("Unhandled case in Node.Expression")
 }
@@ -400,6 +402,14 @@ func (n *Node) ModifierFlags() ModifierFlags {
 		return modifiers.ModifierFlags
 	}
 	return ModifierFlagsNone
+}
+
+func (n *Node) ModifierNodes() []*Node {
+	modifiers := n.Modifiers()
+	if modifiers != nil {
+		return modifiers.Nodes
+	}
+	return nil
 }
 
 func (n *Node) Type() *Node {
@@ -555,54 +565,62 @@ func (n *Node) PropertyNameOrName() *Node {
 	return name
 }
 
-func (n *Node) Comments() []*Node {
+func (n *Node) CommentList() *NodeList {
 	switch n.Kind {
 	case KindJSDoc:
-		return n.AsJSDoc().Comment.Nodes
+		return n.AsJSDoc().Comment
 	case KindJSDocTag:
-		return n.AsJSDocUnknownTag().Comment.Nodes
+		return n.AsJSDocUnknownTag().Comment
 	case KindJSDocAugmentsTag:
-		return n.AsJSDocAugmentsTag().Comment.Nodes
+		return n.AsJSDocAugmentsTag().Comment
 	case KindJSDocImplementsTag:
-		return n.AsJSDocImplementsTag().Comment.Nodes
+		return n.AsJSDocImplementsTag().Comment
 	case KindJSDocDeprecatedTag:
-		return n.AsJSDocDeprecatedTag().Comment.Nodes
+		return n.AsJSDocDeprecatedTag().Comment
 	case KindJSDocPublicTag:
-		return n.AsJSDocPublicTag().Comment.Nodes
+		return n.AsJSDocPublicTag().Comment
 	case KindJSDocPrivateTag:
-		return n.AsJSDocPrivateTag().Comment.Nodes
+		return n.AsJSDocPrivateTag().Comment
 	case KindJSDocProtectedTag:
-		return n.AsJSDocProtectedTag().Comment.Nodes
+		return n.AsJSDocProtectedTag().Comment
 	case KindJSDocReadonlyTag:
-		return n.AsJSDocReadonlyTag().Comment.Nodes
+		return n.AsJSDocReadonlyTag().Comment
 	case KindJSDocOverrideTag:
-		return n.AsJSDocOverrideTag().Comment.Nodes
+		return n.AsJSDocOverrideTag().Comment
 	case KindJSDocCallbackTag:
-		return n.AsJSDocCallbackTag().Comment.Nodes
+		return n.AsJSDocCallbackTag().Comment
 	case KindJSDocOverloadTag:
-		return n.AsJSDocOverloadTag().Comment.Nodes
+		return n.AsJSDocOverloadTag().Comment
 	case KindJSDocParameterTag:
-		return n.AsJSDocParameterTag().Comment.Nodes
+		return n.AsJSDocParameterTag().Comment
 	case KindJSDocReturnTag:
-		return n.AsJSDocReturnTag().Comment.Nodes
+		return n.AsJSDocReturnTag().Comment
 	case KindJSDocThisTag:
-		return n.AsJSDocThisTag().Comment.Nodes
+		return n.AsJSDocThisTag().Comment
 	case KindJSDocTypeTag:
-		return n.AsJSDocTypeTag().Comment.Nodes
+		return n.AsJSDocTypeTag().Comment
 	case KindJSDocTemplateTag:
-		return n.AsJSDocTemplateTag().Comment.Nodes
+		return n.AsJSDocTemplateTag().Comment
 	case KindJSDocTypedefTag:
-		return n.AsJSDocTypedefTag().Comment.Nodes
+		return n.AsJSDocTypedefTag().Comment
 	case KindJSDocSeeTag:
-		return n.AsJSDocSeeTag().Comment.Nodes
+		return n.AsJSDocSeeTag().Comment
 	case KindJSDocPropertyTag:
-		return n.AsJSDocPropertyTag().Comment.Nodes
+		return n.AsJSDocPropertyTag().Comment
 	case KindJSDocSatisfiesTag:
-		return n.AsJSDocSatisfiesTag().Comment.Nodes
+		return n.AsJSDocSatisfiesTag().Comment
 	case KindJSDocImportTag:
-		return n.AsJSDocImportTag().Comment.Nodes
+		return n.AsJSDocImportTag().Comment
 	}
-	panic("Unhandled case in Node.Comments: " + n.Kind.String())
+	panic("Unhandled case in Node.CommentList: " + n.Kind.String())
+}
+
+func (n *Node) Comments() []*Node {
+	list := n.CommentList()
+	if list != nil {
+		return list.Nodes
+	}
+	return nil
 }
 
 func (n *Node) Label() *Node {
@@ -7870,6 +7888,10 @@ func (node *SourceFile) JSDocDiagnostics() []*Diagnostic {
 
 func (node *SourceFile) SetJSDocDiagnostics(diags []*Diagnostic) {
 	node.jsdocDiagnostics = diags
+}
+
+func (node *SourceFile) JSDocCache() map[*Node][]*Node {
+	return node.jsdocCache
 }
 
 func (node *SourceFile) SetJSDocCache(cache map[*Node][]*Node) {

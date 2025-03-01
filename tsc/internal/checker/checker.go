@@ -124,6 +124,10 @@ const (
 	CachedTypeKindPromisedTypeOfPromise
 	CachedTypeKindDefaultOnlyType
 	CachedTypeKindSyntheticType
+	CachedTypeKindDecoratorContext
+	CachedTypeKindDecoratorContextStatic
+	CachedTypeKindDecoratorContextPrivate
+	CachedTypeKindDecoratorContextPrivateStatic
 )
 
 // CachedTypeKey
@@ -775,6 +779,15 @@ type Checker struct {
 	getGlobalAsyncGeneratorType               func() *Type
 	getGlobalIteratorYieldResultType          func() *Type
 	getGlobalIteratorReturnResultType         func() *Type
+	getGlobalTypedPropertyDescriptorType      func() *Type
+	getGlobalClassDecoratorContextType        func() *Type
+	getGlobalClassMethodDecoratorContextType  func() *Type
+	getGlobalClassGetterDecoratorContextType  func() *Type
+	getGlobalClassSetterDecoratorContextType  func() *Type
+	getGlobalClassAccessorDecoratorContxtType func() *Type
+	getGlobalClassAccessorDecoratorTargetType func() *Type
+	getGlobalClassAccessorDecoratorResultType func() *Type
+	getGlobalClassFieldDecoratorContextType   func() *Type
 	syncIterationTypesResolver                *IterationTypesResolver
 	asyncIterationTypesResolver               *IterationTypesResolver
 	isPrimitiveOrObjectOrEmptyType            func(*Type) bool
@@ -970,6 +983,15 @@ func NewChecker(program Program) *Checker {
 	c.getGlobalAsyncGeneratorType = c.getGlobalTypeResolver("AsyncGenerator", 3 /*arity*/, false /*reportErrors*/)
 	c.getGlobalIteratorYieldResultType = c.getGlobalTypeResolver("IteratorYieldResult", 1 /*arity*/, false /*reportErrors*/)
 	c.getGlobalIteratorReturnResultType = c.getGlobalTypeResolver("IteratorReturnResult", 1 /*arity*/, false /*reportErrors*/)
+	c.getGlobalTypedPropertyDescriptorType = c.getGlobalTypeResolver("TypedPropertyDescriptor", 1 /*arity*/, true /*reportErrors*/)
+	c.getGlobalClassDecoratorContextType = c.getGlobalTypeResolver("ClassDecoratorContext", 1 /*arity*/, true /*reportErrors*/)
+	c.getGlobalClassMethodDecoratorContextType = c.getGlobalTypeResolver("ClassMethodDecoratorContext", 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalClassGetterDecoratorContextType = c.getGlobalTypeResolver("ClassGetterDecoratorContext", 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalClassSetterDecoratorContextType = c.getGlobalTypeResolver("ClassSetterDecoratorContext", 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalClassAccessorDecoratorContxtType = c.getGlobalTypeResolver("ClassAccessorDecoratorContext", 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalClassAccessorDecoratorTargetType = c.getGlobalTypeResolver("ClassAccessorDecoratorTarget", 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalClassAccessorDecoratorResultType = c.getGlobalTypeResolver("ClassAccessorDecoratorResult", 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalClassFieldDecoratorContextType = c.getGlobalTypeResolver("ClassFieldDecoratorContext", 2 /*arity*/, true /*reportErrors*/)
 	c.initializeClosures()
 	c.initializeIterationResolvers()
 	c.initializeChecker()
@@ -1985,6 +2007,17 @@ func (c *Checker) checkSourceFile(sourceFile *ast.SourceFile) {
 		// !!!
 		c.checkSourceElements(sourceFile.Statements.Nodes)
 		c.checkDeferredNodes(sourceFile)
+		c.checkJSDocNodes(sourceFile)
+		if ast.IsExternalOrCommonJsModule(sourceFile) {
+			c.registerForUnusedIdentifiersCheck(sourceFile.AsNode())
+		}
+		// This relies on the results of other lazy diagnostics, so must be computed after them
+		if !sourceFile.IsDeclarationFile && (c.compilerOptions.NoUnusedLocals.IsTrue() || c.compilerOptions.NoUnusedParameters.IsTrue()) {
+			c.checkUnusedIdentifiers(links.identifierCheckNodes)
+		}
+		// if !node.IsDeclarationFile {
+		// 	c.checkPotentialUncheckedRenamedBindingElementsInTypes()
+		// }
 		links.typeChecked = true
 	}
 }
@@ -2191,6 +2224,61 @@ func (c *Checker) checkDeferredNode(node *ast.Node) {
 		}
 	}
 	c.currentNode = saveCurrentNode
+}
+
+func (c *Checker) checkJSDocNodes(sourceFile *ast.SourceFile) {
+	// !!!
+	// This performs minimal checking of JSDoc nodes to ensure that @link references to entities are recorded
+	// for purposes of checking unused identifiers. We pass down a location node because the binder doesn't currently
+	// set parent references in JSDoc nodes.
+	for location, jsdocs := range sourceFile.JSDocCache() {
+		for _, jsdoc := range jsdocs {
+			c.checkJSDocComments(jsdoc, location)
+			tags := jsdoc.AsJSDoc().Tags
+			if tags != nil {
+				for _, tag := range tags.Nodes {
+					c.checkJSDocComments(tag, location)
+				}
+			}
+		}
+	}
+}
+
+func (c *Checker) checkJSDocComments(node *ast.Node, location *ast.Node) {
+	for _, comment := range node.Comments() {
+		c.checkJSDocComment(comment, location)
+	}
+}
+
+func (c *Checker) checkJSDocComment(node *ast.Node, location *ast.Node) {
+	switch node.Kind {
+	case ast.KindJSDocLink, ast.KindJSDocLinkCode, ast.KindJSDocLinkPlain:
+		c.resolveJSDocMemberName(node.Name(), location)
+	}
+}
+
+func (c *Checker) resolveJSDocMemberName(name *ast.Node, location *ast.Node) *ast.Symbol {
+	if name != nil && ast.IsEntityName(name) {
+		meaning := ast.SymbolFlagsType | ast.SymbolFlagsNamespace | ast.SymbolFlagsValue
+		symbol := c.resolveEntityName(name, meaning, true /*ignoreErrors*/, true /*dontResolveAlias*/, location)
+		if symbol == nil && ast.IsQualifiedName(name) {
+			symbol := c.resolveJSDocMemberName(name.AsQualifiedName().Left, location)
+			if symbol != nil {
+				var t *Type
+				if symbol.Flags&ast.SymbolFlagsValue != 0 {
+					proto := c.getPropertyOfType(c.getTypeOfSymbol(symbol), "prototype")
+					if proto != nil {
+						t = c.getTypeOfSymbol(proto)
+					}
+				}
+				if t == nil {
+					t = c.getDeclaredTypeOfSymbol(symbol)
+				}
+				return c.getPropertyOfType(t, name.AsQualifiedName().Right.Text())
+			}
+		}
+	}
+	return nil
 }
 
 func (c *Checker) checkTypeParameter(node *ast.Node) {
@@ -3798,10 +3886,7 @@ func (c *Checker) checkBindingElement(node *ast.Node) {
 }
 
 func (c *Checker) checkClassDeclaration(node *ast.Node) {
-	var firstDecorator *ast.Node
-	if modifiers := node.Modifiers(); modifiers != nil {
-		firstDecorator = core.Find(modifiers.NodeList.Nodes, ast.IsDecorator)
-	}
+	firstDecorator := core.Find(node.ModifierNodes(), ast.IsDecorator)
 	if c.legacyDecorators && firstDecorator != nil && core.Some(node.Members(), func(p *ast.Node) bool {
 		return ast.HasStaticModifier(p) && ast.IsPrivateIdentifierClassElementDeclaration(p)
 	}) {
@@ -4655,7 +4740,7 @@ func (c *Checker) checkModuleDeclaration(node *ast.Node) {
 			}
 		}
 		if c.compilerOptions.VerbatimModuleSyntax.IsTrue() && ast.IsSourceFile(node.Parent) && node.ModifierFlags()&ast.ModifierFlagsExport != 0 && c.program.GetEmitModuleFormatOfFile(node.Parent.AsSourceFile()) == core.ModuleKindCommonJS {
-			exportModifier := core.Find(node.Modifiers().Nodes, func(m *ast.Node) bool { return m.Kind == ast.KindExportKeyword })
+			exportModifier := core.Find(node.ModifierNodes(), func(m *ast.Node) bool { return m.Kind == ast.KindExportKeyword })
 			c.error(exportModifier, diagnostics.A_top_level_export_modifier_cannot_be_used_on_value_declarations_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled)
 		}
 	}
@@ -5439,9 +5524,55 @@ func (c *Checker) checkVarDeclaredNamesNotShadowed(node *ast.Node) {
 }
 
 func (c *Checker) checkDecorators(node *ast.Node) {
-	// !!!
+	// skip this check for nodes that cannot have decorators. These should have already had an error reported by
+	// checkGrammarModifiers.
+	if !ast.CanHaveDecorators(node) || !hasDecorators(node) || !nodeCanBeDecorated(c.legacyDecorators, node, node.Parent, node.Parent.Parent) {
+		return
+	}
+	firstDecorator := core.Find(node.ModifierNodes(), ast.IsDecorator)
+	if firstDecorator == nil {
+		return
+	}
+	c.markLinkedReferences(node, ReferenceHintDecorator, nil, nil)
+	for _, modifier := range node.ModifierNodes() {
+		if ast.IsDecorator(modifier) {
+			c.checkDecorator(modifier)
+		}
+	}
+}
 
-	c.markLinkedReferences(node, ReferenceHintDecorator, nil /*propSymbol*/, nil /*parentType*/)
+func (c *Checker) checkDecorator(node *ast.Node) {
+	c.checkGrammarDecorator(node.AsDecorator())
+	signature := c.getResolvedSignature(node, nil, CheckModeNormal)
+	c.checkDeprecatedSignature(signature, node)
+	returnType := c.getReturnTypeOfSignature(signature)
+	if returnType.flags&TypeFlagsAny != 0 {
+		return
+	}
+	// if we fail to get a signature and return type here, we will have already reported a grammar error in `checkDecorators`.
+	decoratorSignature := c.getDecoratorCallSignature(node)
+	if decoratorSignature == nil || decoratorSignature.resolvedReturnType == nil {
+		return
+	}
+	var headMessage *diagnostics.Message
+	expectedReturnType := decoratorSignature.resolvedReturnType
+	switch node.Parent.Kind {
+	case ast.KindClassDeclaration, ast.KindClassExpression:
+		headMessage = diagnostics.Decorator_function_return_type_0_is_not_assignable_to_type_1
+	case ast.KindPropertyDeclaration:
+		if !c.legacyDecorators {
+			headMessage = diagnostics.Decorator_function_return_type_0_is_not_assignable_to_type_1
+			break
+		}
+		fallthrough
+	case ast.KindParameter:
+		headMessage = diagnostics.Decorator_function_return_type_is_0_but_is_expected_to_be_void_or_any
+	case ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor:
+		headMessage = diagnostics.Decorator_function_return_type_0_is_not_assignable_to_type_1
+	default:
+		panic("Unhandled case in checkDecorator")
+	}
+	c.checkTypeAssignableTo(returnType, expectedReturnType, node.Expression(), headMessage)
 }
 
 func (c *Checker) checkIteratedTypeOrElementType(use IterationUse, inputType *Type, sentType *Type, errorNode *ast.Node) *Type {
@@ -6235,6 +6366,263 @@ func (c *Checker) registerForUnusedIdentifiersCheck(node *ast.Node) {
 	sourceFile := ast.GetSourceFileOfNode(node)
 	links := c.sourceFileLinks.Get(sourceFile)
 	links.identifierCheckNodes = append(links.identifierCheckNodes, node)
+}
+
+func (c *Checker) checkUnusedIdentifiers(potentiallyUnusedIdentifiers []*ast.Node) {
+	for _, node := range potentiallyUnusedIdentifiers {
+		switch node.Kind {
+		case ast.KindClassDeclaration, ast.KindClassExpression:
+			c.checkUnusedClassMembers(node)
+			c.checkUnusedTypeParameters(node)
+		case ast.KindSourceFile, ast.KindModuleDeclaration, ast.KindBlock, ast.KindCaseBlock, ast.KindForStatement, ast.KindForInStatement,
+			ast.KindForOfStatement:
+			c.checkUnusedLocalsAndParameters(node)
+		case ast.KindConstructor, ast.KindFunctionExpression, ast.KindFunctionDeclaration, ast.KindArrowFunction, ast.KindMethodDeclaration,
+			ast.KindGetAccessor, ast.KindSetAccessor:
+			// Only report unused parameters on the implementation, not overloads.
+			if node.Body() != nil {
+				c.checkUnusedLocalsAndParameters(node)
+			}
+			c.checkUnusedTypeParameters(node)
+		case ast.KindMethodSignature, ast.KindCallSignature, ast.KindConstructSignature, ast.KindFunctionType, ast.KindConstructorType,
+			ast.KindTypeAliasDeclaration, ast.KindInterfaceDeclaration:
+			c.checkUnusedTypeParameters(node)
+		case ast.KindInferType:
+			c.checkUnusedInferTypeParameter(node)
+		default:
+			panic("Unhandled case in checkUnusedIdentifiers")
+		}
+	}
+}
+
+func (c *Checker) isReferenced(symbol *ast.Symbol) bool {
+	return c.symbolReferenceLinks.Get(symbol).referenceKinds != 0
+}
+
+type UnusedKind int32
+
+const (
+	UnusedKindLocal UnusedKind = iota
+	UnusedKindParameter
+)
+
+func (c *Checker) reportUnusedVariable(location *ast.Node, diagnostic *ast.Diagnostic) {
+	for ast.IsBindingElement(location) || ast.IsBindingPattern(location) {
+		location = location.Parent
+	}
+	c.reportUnused(location, core.IfElse(ast.IsParameter(location), UnusedKindParameter, UnusedKindLocal), diagnostic)
+}
+
+func (c *Checker) reportUnused(location *ast.Node, kind UnusedKind, diagnostic *ast.Diagnostic) {
+	if location.Flags&ast.NodeFlagsAmbient == 0 &&
+		(kind == UnusedKindLocal && c.compilerOptions.NoUnusedLocals.IsTrue() ||
+			(kind == UnusedKindParameter && c.compilerOptions.NoUnusedParameters.IsTrue())) {
+		c.diagnostics.Add(diagnostic)
+	}
+}
+
+func (c *Checker) checkUnusedClassMembers(node *ast.Node) {
+	for _, member := range node.Members() {
+		switch member.Kind {
+		case ast.KindMethodDeclaration, ast.KindPropertyDeclaration, ast.KindGetAccessor, ast.KindSetAccessor:
+			if ast.IsSetAccessorDeclaration(member) && member.Symbol().Flags&ast.SymbolFlagsGetAccessor != 0 {
+				break // Already would have reported an error on the getter.
+			}
+			symbol := c.getSymbolOfDeclaration(member)
+			if !c.isReferenced(symbol) && (hasEffectiveModifier(member, ast.ModifierFlagsPrivate) || member.Name() != nil && ast.IsPrivateIdentifier(member.Name())) && member.Flags&ast.NodeFlagsAmbient == 0 {
+				c.reportUnused(member, UnusedKindLocal, NewDiagnosticForNode(member.Name(), diagnostics.X_0_is_declared_but_its_value_is_never_read, c.symbolToString(symbol)))
+			}
+		case ast.KindConstructor:
+			for _, parameter := range member.AsConstructorDeclaration().Parameters.Nodes {
+				if !c.isReferenced(parameter.Symbol()) && ast.HasSyntacticModifier(parameter, ast.ModifierFlagsPrivate) {
+					c.reportUnused(parameter, UnusedKindLocal, NewDiagnosticForNode(parameter.Name(), diagnostics.Property_0_is_declared_but_its_value_is_never_read, ast.SymbolName(parameter.Symbol())))
+				}
+			}
+		case ast.KindIndexSignature, ast.KindSemicolonClassElement, ast.KindClassStaticBlockDeclaration:
+			// Can't be private
+		default:
+			panic("Unhandled case in checkUnusedClassMembers")
+		}
+	}
+}
+
+func (c *Checker) checkUnusedLocalsAndParameters(node *ast.Node) {
+	var variableParents core.Set[*ast.Node]
+	var importClauses map[*ast.Node][]*ast.Node
+	for _, local := range node.Locals() {
+		referenceKinds := c.symbolReferenceLinks.Get(local).referenceKinds
+		if local.Flags&ast.SymbolFlagsTypeParameter != 0 && (local.Flags&ast.SymbolFlagsVariable == 0 || referenceKinds&ast.SymbolFlagsVariable != 0) ||
+			local.Flags&ast.SymbolFlagsTypeParameter == 0 && (referenceKinds != 0 || local.ExportSymbol != nil) {
+			continue
+		}
+		for _, declaration := range local.Declarations {
+			switch {
+			case ast.IsVariableDeclaration(declaration) || ast.IsParameter(declaration) || ast.IsBindingElement(declaration):
+				variableParents.Add(ast.GetRootDeclaration(declaration).Parent)
+			case ast.IsImportClause(declaration) || ast.IsImportSpecifier(declaration) || ast.IsNamespaceImport(declaration):
+				if !isIdentifierThatStartsWithUnderscore(declaration.Name()) {
+					if importClauses == nil {
+						importClauses = make(map[*ast.Node][]*ast.Node)
+					}
+					importClause := importClauseFromImported(declaration)
+					importClauses[importClause] = append(importClauses[importClause], declaration)
+				}
+			default:
+				if !ast.IsAmbientModule(declaration) {
+					c.reportUnusedLocal(declaration, ast.SymbolName(local))
+				}
+			}
+		}
+	}
+	for declaration := range variableParents.Keys() {
+		if ast.IsVariableDeclarationList(declaration) {
+			c.reportUnusedVariables(declaration)
+		} else {
+			c.reportUnusedParameters(declaration)
+		}
+	}
+	for declaration, unuseds := range importClauses {
+		c.reportUnusedImports(declaration, unuseds)
+	}
+}
+
+func (c *Checker) reportUnusedLocal(node *ast.Node, name string) {
+	message := core.IfElse(isTypeDeclaration(node), diagnostics.X_0_is_declared_but_never_used, diagnostics.X_0_is_declared_but_its_value_is_never_read)
+	c.reportUnused(node, UnusedKindLocal, NewDiagnosticForNode(node, message, name))
+}
+
+func (c *Checker) reportUnusedVariables(node *ast.Node) {
+	declarations := node.AsVariableDeclarationList().Declarations.Nodes
+	if core.Every(declarations, c.isUnreferencedVariableDeclaration) {
+		if len(declarations) == 1 && ast.IsIdentifier(declarations[0].Name()) {
+			c.reportUnusedVariable(node, NewDiagnosticForNode(node, diagnostics.X_0_is_declared_but_its_value_is_never_read, declarations[0].Name().Text()))
+		} else {
+			c.reportUnusedVariable(node, NewDiagnosticForNode(node, diagnostics.All_variables_are_unused))
+		}
+	} else {
+		c.reportUnusedVariableDeclarations(declarations)
+	}
+}
+
+func (c *Checker) reportUnusedParameters(node *ast.Node) {
+	c.reportUnusedVariableDeclarations(node.Parameters())
+}
+
+func (c *Checker) reportUnusedBindingElements(node *ast.Node) {
+	declarations := node.AsBindingPattern().Elements.Nodes
+	if core.Every(declarations, c.isUnreferencedVariableDeclaration) {
+		if len(declarations) == 1 && ast.IsIdentifier(declarations[0].Name()) {
+			c.reportUnusedVariable(node, NewDiagnosticForNode(node, diagnostics.X_0_is_declared_but_its_value_is_never_read, declarations[0].Name().Text()))
+		} else {
+			c.reportUnusedVariable(node, NewDiagnosticForNode(node, diagnostics.All_destructured_elements_are_unused))
+		}
+	} else {
+		c.reportUnusedVariableDeclarations(declarations)
+	}
+}
+
+func (c *Checker) reportUnusedVariableDeclarations(declarations []*ast.Node) {
+	for _, declaration := range declarations {
+		name := declaration.Name()
+		if name != nil {
+			if ast.IsBindingPattern(name) {
+				c.reportUnusedBindingElements(name)
+			} else if c.isUnreferencedVariableDeclaration(declaration) {
+				c.reportUnusedVariable(declaration, NewDiagnosticForNode(declaration, diagnostics.X_0_is_declared_but_its_value_is_never_read, name.Text()))
+			}
+		}
+	}
+}
+
+func (c *Checker) isUnreferencedVariableDeclaration(node *ast.Node) bool {
+	name := node.Name()
+	if name == nil {
+		return true
+	}
+	if ast.IsBindingPattern(name) {
+		return core.Every(node.Name().AsBindingPattern().Elements.Nodes, c.isUnreferencedVariableDeclaration)
+	}
+	if c.symbolReferenceLinks.Get(c.getSymbolOfDeclaration(node)).referenceKinds&ast.SymbolFlagsVariable != 0 {
+		return false
+	}
+	if (ast.IsParameter(node) ||
+		ast.IsVariableDeclaration(node) && (ast.IsForInOrOfStatement(node.Parent.Parent) || c.getCombinedNodeFlagsCached(node)&ast.NodeFlagsUsing != 0) ||
+		ast.IsBindingElement(node) && !(ast.IsObjectBindingPattern(node.Parent) && node.PropertyName() == nil)) &&
+		isIdentifierThatStartsWithUnderscore(name) {
+		return false
+	}
+	return true
+}
+
+func (c *Checker) reportUnusedImports(node *ast.Node, unuseds []*ast.Node) {
+	declarationCount := core.IfElse(node.Name() != nil, 1, 0)
+	namedBindings := node.AsImportClause().NamedBindings
+	if namedBindings != nil {
+		if ast.IsNamespaceImport(namedBindings) {
+			declarationCount++
+		} else {
+			declarationCount += len(namedBindings.AsNamedImports().Elements.Nodes)
+		}
+	}
+	if declarationCount == len(unuseds) {
+		if declarationCount == 1 {
+			c.reportUnused(node, UnusedKindLocal, NewDiagnosticForNode(node.Parent, diagnostics.X_0_is_declared_but_its_value_is_never_read, unuseds[0].Name().Text()))
+		} else {
+			c.reportUnused(node, UnusedKindLocal, NewDiagnosticForNode(node.Parent, diagnostics.All_imports_in_import_declaration_are_unused))
+		}
+	} else {
+		for _, unused := range unuseds {
+			c.reportUnusedLocal(unused, unused.Name().Text())
+		}
+	}
+}
+
+func isIdentifierThatStartsWithUnderscore(node *ast.Node) bool {
+	return ast.IsIdentifier(node) && node.Text() != "" && node.Text()[0] == '_'
+}
+
+func importClauseFromImported(node *ast.Node) *ast.Node {
+	switch node.Kind {
+	case ast.KindImportClause:
+		return node
+	case ast.KindNamespaceImport:
+		return node.Parent
+	default:
+		return node.Parent.Parent
+	}
+}
+
+func (c *Checker) checkUnusedInferTypeParameter(node *ast.Node) {
+	typeParameter := node.AsInferTypeNode().TypeParameter
+	if c.isUnreferencedTypeParameter(typeParameter) {
+		c.reportUnused(node, UnusedKindParameter, NewDiagnosticForNode(typeParameter, diagnostics.X_0_is_declared_but_never_used, typeParameter.Name().Text()))
+	}
+}
+
+func (c *Checker) checkUnusedTypeParameters(node *ast.Node) {
+	typeParameterList := node.TypeParameterList()
+	if typeParameterList == nil {
+		return
+	}
+	if core.Every(typeParameterList.Nodes, c.isUnreferencedTypeParameter) {
+		file := ast.GetSourceFileOfNode(node)
+		loc := rangeOfTypeParameters(file, typeParameterList)
+		if len(typeParameterList.Nodes) == 1 {
+			c.reportUnused(node, UnusedKindParameter, ast.NewDiagnostic(file, loc, diagnostics.X_0_is_declared_but_never_used, typeParameterList.Nodes[0].Name().Text()))
+		} else {
+			c.reportUnused(node, UnusedKindParameter, ast.NewDiagnostic(file, loc, diagnostics.All_type_parameters_are_unused))
+		}
+	} else {
+		for _, typeParameter := range typeParameterList.Nodes {
+			if c.isUnreferencedTypeParameter(typeParameter) {
+				c.reportUnused(node, UnusedKindParameter, NewDiagnosticForNode(typeParameter, diagnostics.X_0_is_declared_but_never_used, typeParameter.Name().Text()))
+			}
+		}
+	}
+}
+
+func (c *Checker) isUnreferencedTypeParameter(typeParameter *ast.Node) bool {
+	return c.symbolReferenceLinks.Get(c.getMergedSymbol(typeParameter.Symbol())).referenceKinds&ast.SymbolFlagsTypeParameter == 0 && !isIdentifierThatStartsWithUnderscore(typeParameter.Name())
 }
 
 func (c *Checker) checkExpressionStatement(node *ast.Node) {
@@ -7694,7 +8082,54 @@ func (c *Checker) resolveTaggedTemplateExpression(node *ast.Node, candidatesOutA
 }
 
 func (c *Checker) resolveDecorator(node *ast.Node, candidatesOutArray *[]*Signature, checkMode CheckMode) *Signature {
-	return c.unknownSignature // !!!
+	funcType := c.checkExpression(node.Expression())
+	apparentType := c.getApparentType(funcType)
+	if c.isErrorType(apparentType) {
+		return c.resolveErrorCall(node)
+	}
+	callSignatures := c.getSignaturesOfType(apparentType, SignatureKindCall)
+	numConstructSignatures := len(c.getSignaturesOfType(apparentType, SignatureKindConstruct))
+	if c.isUntypedFunctionCall(funcType, apparentType, len(callSignatures), numConstructSignatures) {
+		return c.resolveUntypedCall(node)
+	}
+	if c.isPotentiallyUncalledDecorator(node, callSignatures) && !ast.IsParenthesizedExpression(node.Expression()) {
+		nodeStr := scanner.GetTextOfNode(node.Expression())
+		c.error(node, diagnostics.X_0_accepts_too_few_arguments_to_be_used_as_a_decorator_here_Did_you_mean_to_call_it_first_and_write_0, nodeStr)
+		return c.resolveErrorCall(node)
+	}
+	headMessage := c.getDiagnosticHeadMessageForDecoratorResolution(node)
+	if len(callSignatures) == 0 {
+		diag := ast.NewDiagnosticChain(c.invocationErrorDetails(node.Expression(), apparentType, SignatureKindCall), headMessage)
+		c.diagnostics.Add(diag)
+		// !!!
+		// c.invocationErrorRecovery(apparentType, SignatureKindCall, diag)
+		return c.resolveErrorCall(node)
+	}
+	return c.resolveCall(node, callSignatures, candidatesOutArray, checkMode, SignatureFlagsNone, headMessage)
+}
+
+// Sometimes, we have a decorator that could accept zero arguments,
+// but is receiving too many arguments as part of the decorator invocation.
+// In those cases, a user may have meant to *call* the expression before using it as a decorator.
+func (c *Checker) isPotentiallyUncalledDecorator(decorator *ast.Node, signatures []*Signature) bool {
+	return len(signatures) != 0 && core.Every(signatures, func(sig *Signature) bool {
+		return sig.minArgumentCount == 0 && !signatureHasRestParameter(sig) && len(sig.parameters) < c.getDecoratorArgumentCount(decorator, sig)
+	})
+}
+
+// Gets the localized diagnostic head message to use for errors when resolving a decorator as a call expression.
+func (c *Checker) getDiagnosticHeadMessageForDecoratorResolution(node *ast.Node) *diagnostics.Message {
+	switch node.Parent.Kind {
+	case ast.KindClassDeclaration, ast.KindClassExpression:
+		return diagnostics.Unable_to_resolve_signature_of_class_decorator_when_called_as_an_expression
+	case ast.KindParameter:
+		return diagnostics.Unable_to_resolve_signature_of_parameter_decorator_when_called_as_an_expression
+	case ast.KindPropertyDeclaration:
+		return diagnostics.Unable_to_resolve_signature_of_property_decorator_when_called_as_an_expression
+	case ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor:
+		return diagnostics.Unable_to_resolve_signature_of_method_decorator_when_called_as_an_expression
+	}
+	panic("Unhandled case in getDiagnosticHeadMessageForDecoratorResolution")
 }
 
 func (c *Checker) resolveJsxOpeningLikeElement(node *ast.Node, candidatesOutArray *[]*Signature, checkMode CheckMode) *Signature {
@@ -8087,11 +8522,10 @@ func acceptsVoid(t *Type) bool {
 }
 
 func (c *Checker) getDecoratorArgumentCount(node *ast.Node, signature *Signature) int {
-	if c.compilerOptions.ExperimentalDecorators == core.TSTrue {
+	if c.compilerOptions.ExperimentalDecorators.IsTrue() {
 		return c.getLegacyDecoratorArgumentCount(node, signature)
-	} else {
-		return min(max(c.getParameterCount(signature), 1), 2)
 	}
+	return min(max(c.getParameterCount(signature), 1), 2)
 }
 
 /**
@@ -12432,6 +12866,18 @@ func (c *Checker) newSymbolEx(flags ast.SymbolFlags, name string, checkFlags ast
 	return result
 }
 
+func (c *Checker) newParameter(name string, t *Type) *ast.Symbol {
+	symbol := c.newSymbol(ast.SymbolFlagsFunctionScopedVariable, name)
+	c.valueSymbolLinks.Get(symbol).resolvedType = t
+	return symbol
+}
+
+func (c *Checker) newProperty(name string, t *Type) *ast.Symbol {
+	symbol := c.newSymbol(ast.SymbolFlagsProperty, name)
+	c.valueSymbolLinks.Get(symbol).resolvedType = t
+	return symbol
+}
+
 func (c *Checker) combineSymbolTables(first ast.SymbolTable, second ast.SymbolTable) ast.SymbolTable {
 	if len(first) == 0 {
 		return second
@@ -13696,7 +14142,7 @@ func (c *Checker) resolveEntityName(name *ast.Node, meaning ast.SymbolFlags, ign
 		panic("Unknown entity name kind")
 	}
 	if symbol != nil && symbol != c.unknownSymbol {
-		if !ast.NodeIsSynthesized(name) && ast.IsEntityName(name) && (symbol.Flags&ast.SymbolFlagsAlias != 0 || name.Parent.Kind == ast.KindExportAssignment) {
+		if !ast.NodeIsSynthesized(name) && ast.IsEntityName(name) && (symbol.Flags&ast.SymbolFlagsAlias != 0 || name.Parent != nil && name.Parent.Kind == ast.KindExportAssignment) {
 			c.markSymbolOfAliasDeclarationIfTypeOnly(getAliasDeclarationFromName(name), symbol, nil /*finalTarget*/, true /*overwriteEmpty*/, nil, "")
 		}
 		if symbol.Flags&meaning == 0 && !dontResolveAlias {
@@ -22475,6 +22921,13 @@ func (c *Checker) newAnonymousType(symbol *ast.Symbol, members ast.SymbolTable, 
 	return t
 }
 
+func (c *Checker) tryCreateTypeReference(target *Type, typeArguments []*Type) *Type {
+	if len(typeArguments) != 0 && target == c.emptyGenericType {
+		return c.unknownType
+	}
+	return c.createTypeReference(target, typeArguments)
+}
+
 func (c *Checker) createTypeReference(target *Type, typeArguments []*Type) *Type {
 	id := getTypeListKey(typeArguments)
 	intf := target.AsInterfaceType()
@@ -26584,7 +27037,11 @@ func (c *Checker) getContextualTypeForArgumentAtIndex(callTarget *ast.Node, argI
 }
 
 func (c *Checker) getContextualTypeForDecorator(decorator *ast.Node) *Type {
-	return nil // !!!
+	signature := c.getDecoratorCallSignature(decorator)
+	if signature != nil {
+		return c.getOrCreateTypeFromSignature(signature, nil)
+	}
+	return nil
 }
 
 func (c *Checker) getContextualTypeForBinaryOperand(node *ast.Node, contextFlags ContextFlags) *Type {
@@ -26745,9 +27202,7 @@ func (c *Checker) getContextualImportAttributeType(node *ast.Node) *Type {
 	return c.getTypeOfPropertyOfContextualType(c.getGlobalImportAttributesType(false), node.Name().Text())
 }
 
-/**
- * Returns the effective arguments for an expression that works like a function invocation.
- */
+// Returns the effective arguments for an expression that works like a function invocation.
 func (c *Checker) getEffectiveCallArguments(node *ast.Node) []*ast.Node {
 	switch {
 	case ast.IsTaggedTemplateExpression(node):
@@ -26764,9 +27219,7 @@ func (c *Checker) getEffectiveCallArguments(node *ast.Node) []*ast.Node {
 		}
 		return args
 	case ast.IsDecorator(node):
-		// !!!
-		// return c.getEffectiveDecoratorArguments(node)
-		return nil
+		return c.getEffectiveDecoratorArguments(node)
 	case isJsxOpeningLikeElement(node):
 		// !!!
 		// if node.Attributes.Properties.length > 0 || (isJsxOpeningElement(node) && node.Parent.Children.length > 0) {
@@ -26842,6 +27295,412 @@ func (c *Checker) getSpreadIndices(node *ast.Node) (int, int) {
 		links.indicesComputed = true
 	}
 	return links.firstSpreadIndex, links.lastSpreadIndex
+}
+
+// Returns the synthetic argument list for a decorator invocation.
+func (c *Checker) getEffectiveDecoratorArguments(node *ast.Node) []*ast.Node {
+	expr := node.Expression()
+	signature := c.getDecoratorCallSignature(node)
+	if signature != nil {
+		args := make([]*ast.Node, len(signature.parameters))
+		for i, param := range signature.parameters {
+			args[i] = c.createSyntheticExpression(expr, c.getTypeOfSymbol(param), false, nil)
+		}
+		return args
+	}
+	panic("Decorator signature not found")
+}
+
+func (c *Checker) getDecoratorCallSignature(decorator *ast.Node) *Signature {
+	if c.legacyDecorators {
+		return c.getLegacyDecoratorCallSignature(decorator)
+	}
+	return c.getESDecoratorCallSignature(decorator)
+}
+
+func (c *Checker) getLegacyDecoratorCallSignature(decorator *ast.Node) *Signature {
+	node := decorator.Parent
+	links := c.signatureLinks.Get(node)
+	if links.decoratorSignature == nil {
+		links.decoratorSignature = c.anySignature
+		switch node.Kind {
+		case ast.KindClassDeclaration, ast.KindClassExpression:
+			// For a class decorator, the `target` is the type of the class (e.g. the
+			// "static" or "constructor" side of the class).
+			targetType := c.getTypeOfSymbol(c.getSymbolOfDeclaration(node))
+			targetParam := c.newParameter("target", targetType)
+			links.decoratorSignature = c.newCallSignature(nil, nil, []*ast.Symbol{targetParam}, c.getUnionType([]*Type{targetType, c.voidType}))
+		case ast.KindParameter:
+			if !ast.IsConstructorDeclaration(node.Parent) && !(ast.IsMethodDeclaration(node.Parent) || ast.IsSetAccessorDeclaration(node.Parent) && ast.IsClassLike(node.Parent.Parent)) {
+				break
+			}
+			if getThisParameter(node.Parent) == node {
+				break
+			}
+			index := slices.Index(node.Parent.Parameters(), node) - core.IfElse(getThisParameter(node.Parent) != nil, 1, 0)
+			// Debug.assert(index >= 0)
+			// A parameter declaration decorator will have three arguments (see `ParameterDecorator` in
+			// core.d.ts).
+			var targetType *Type
+			var keyType *Type
+			if ast.IsConstructorDeclaration(node.Parent) {
+				targetType = c.getTypeOfSymbol(c.getSymbolOfDeclaration(node.Parent.Parent))
+				keyType = c.undefinedType
+			} else {
+				targetType = c.getParentTypeOfClassElement(node.Parent)
+				keyType = c.getClassElementPropertyKeyType(node.Parent)
+			}
+			indexType := c.getNumberLiteralType(jsnum.Number(index))
+			targetParam := c.newParameter("target", targetType)
+			keyParam := c.newParameter("propertyKey", keyType)
+			indexParam := c.newParameter("parameterIndex", indexType)
+			links.decoratorSignature = c.newCallSignature(nil, nil, []*ast.Symbol{targetParam, keyParam, indexParam}, c.voidType)
+		case ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindPropertyDeclaration:
+			if !ast.IsClassLike(node.Parent) {
+				break
+			}
+			// A method or accessor declaration decorator will have either two or three arguments (see
+			// `PropertyDecorator` and `MethodDecorator` in core.d.ts).
+			targetType := c.getParentTypeOfClassElement(node)
+			targetParam := c.newParameter("target", targetType)
+			keyType := c.getClassElementPropertyKeyType(node)
+			keyParam := c.newParameter("propertyKey", keyType)
+			returnType := c.voidType
+			if !ast.IsPropertyDeclaration(node) {
+				returnType = c.newTypedPropertyDescriptorType(c.getTypeOfNode(node))
+			}
+			hasPropDesc := !ast.IsPropertyDeclaration(node) || ast.HasAccessorModifier(node)
+			if hasPropDesc {
+				descriptorType := c.newTypedPropertyDescriptorType(c.getTypeOfNode(node))
+				descriptorParam := c.newParameter("descriptor", descriptorType)
+				links.decoratorSignature = c.newCallSignature(nil, nil, []*ast.Symbol{targetParam, keyParam, descriptorParam}, c.getUnionType([]*Type{returnType, c.voidType}))
+			} else {
+				links.decoratorSignature = c.newCallSignature(nil, nil, []*ast.Symbol{targetParam, keyParam}, c.getUnionType([]*Type{returnType, c.voidType}))
+			}
+		}
+	}
+	if links.decoratorSignature == c.anySignature {
+		return nil
+	}
+	return links.decoratorSignature
+}
+
+func (c *Checker) getESDecoratorCallSignature(decorator *ast.Node) *Signature {
+	// We are considering a future change that would allow the type of a decorator to affect the type of the
+	// class and its members, such as a `@Stringify` decorator changing the type of a `number` field to `string`, or
+	// a `@Callable` decorator adding a call signature to a `class`. The type arguments for the various context
+	// types may eventually change to reflect such mutations.
+	//
+	// In some cases we describe such potential mutations as coming from a "prior decorator application". It is
+	// important to note that, while decorators are *evaluated* left to right, they are *applied* right to left
+	// to preserve f ৹ g -> f(g(x)) application order. In these cases, a "prior" decorator usually means the
+	// next decorator following this one in document order.
+	//
+	// The "original type" of a class or member is the type it was declared as, or the type we infer from
+	// initializers, before _any_ decorators are applied.
+	//
+	// The type of a class or member that is a result of a prior decorator application represents the
+	// "current type", i.e., the type for the declaration at the time the decorator is _applied_.
+	//
+	// The type of a class or member that is the result of the application of *all* relevant decorators is the
+	// "final type".
+	//
+	// Any decorator that allows mutation or replacement will also refer to an "input type" and an
+	// "output type". The "input type" corresponds to the "current type" of the declaration, while the
+	// "output type" will become either the "input type/current type" for a subsequent decorator application,
+	// or the "final type" for the decorated declaration.
+	//
+	// It is important to understand decorator application order as it relates to how the "current", "input",
+	// "output", and "final" types will be determined:
+	//
+	//  @E2 @E1 class SomeClass {
+	//      @A2 @A1 static f() {}
+	//      @B2 @B1 g() {}
+	//      @C2 @C1 static x;
+	//      @D2 @D1 y;
+	//  }
+	//
+	// Per [the specification][1], decorators are applied in the following order:
+	//
+	// 1. For each static method (incl. get/set methods and `accessor` fields), in document order:
+	//    a. Apply each decorator for that method, in reverse order (`A1`, `A2`).
+	// 2. For each instance method (incl. get/set methods and `accessor` fields), in document order:
+	//    a. Apply each decorator for that method, in reverse order (`B1`, `B2`).
+	// 3. For each static field (excl. auto-accessors), in document order:
+	//    a. Apply each decorator for that field, in reverse order (`C1`, `C2`).
+	// 4. For each instance field (excl. auto-accessors), in document order:
+	//    a. Apply each decorator for that field, in reverse order (`D1`, `D2`).
+	// 5. Apply each decorator for the class, in reverse order (`E1`, `E2`).
+	//
+	// As a result, "current" types at each decorator application are as follows:
+	// - For `A1`, the "current" types of the class and method are their "original" types.
+	// - For `A2`, the "current type" of the method is the "output type" of `A1`, and the "current type" of the
+	//   class is the type of `SomeClass` where `f` is the "output type" of `A1`. This becomes the "final type"
+	//   of `f`.
+	// - For `B1`, the "current type" of the method is its "original type", and the "current type" of the class
+	//   is the type of `SomeClass` where `f` now has its "final type".
+	// - etc.
+	//
+	// [1]: https://arai-a.github.io/ecma262-compare/?pr=2417&id=sec-runtime-semantics-classdefinitionevaluation
+	//
+	// This seems complicated at first glance, but is not unlike our existing inference for functions:
+	//
+	//  declare function pipe<Original, A1, A2, B1, B2, C1, C2, D1, D2, E1, E2>(
+	//      original: Original,
+	//      a1: (input: Original, context: Context<E2>) => A1,
+	//      a2: (input: A1, context: Context<E2>) => A2,
+	//      b1: (input: A2, context: Context<E2>) => B1,
+	//      b2: (input: B1, context: Context<E2>) => B2,
+	//      c1: (input: B2, context: Context<E2>) => C1,
+	//      c2: (input: C1, context: Context<E2>) => C2,
+	//      d1: (input: C2, context: Context<E2>) => D1,
+	//      d2: (input: D1, context: Context<E2>) => D2,
+	//      e1: (input: D2, context: Context<E2>) => E1,
+	//      e2: (input: E1, context: Context<E2>) => E2,
+	//  ): E2;
+
+	// When a decorator is applied, it is passed two arguments: "target", which is a value representing the
+	// thing being decorated (constructors for classes, functions for methods/accessors, `undefined` for fields,
+	// and a `{ get, set }` object for auto-accessors), and "context", which is an object that provides
+	// reflection information about the decorated element, as well as the ability to add additional "extra"
+	// initializers. In most cases, the "target" argument corresponds to the "input type" in some way, and the
+	// return value similarly corresponds to the "output type" (though if the "output type" is `void` or
+	// `undefined` then the "output type" is the "input type").
+	node := decorator.Parent
+	links := c.signatureLinks.Get(node)
+	if links.decoratorSignature == nil {
+		links.decoratorSignature = c.anySignature
+		switch node.Kind {
+		case ast.KindClassDeclaration, ast.KindClassExpression:
+			// Class decorators have a `context` of `ClassDecoratorContext<Class>`, where the `Class` type
+			// argument will be the "final type" of the class after all decorators are applied.
+			targetType := c.getTypeOfSymbol(c.getSymbolOfDeclaration(node))
+			contextType := c.newClassDecoratorContextType(targetType)
+			links.decoratorSignature = c.newESDecoratorCallSignature(targetType, contextType, targetType)
+		case ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor:
+			if !ast.IsClassLike(node.Parent) {
+				break
+			}
+			// Method decorators have a `context` of `ClassMethodDecoratorContext<This, Value>`, where the
+			// `Value` type argument corresponds to the "final type" of the method.
+			//
+			// Getter decorators have a `context` of `ClassGetterDecoratorContext<This, Value>`, where the
+			// `Value` type argument corresponds to the "final type" of the value returned by the getter.
+			//
+			// Setter decorators have a `context` of `ClassSetterDecoratorContext<This, Value>`, where the
+			// `Value` type argument corresponds to the "final type" of the parameter of the setter.
+			//
+			// In all three cases, the `This` type argument is the "final type" of either the class or
+			// instance, depending on whether the member was `static`.
+			var valueType *Type
+			if ast.IsMethodDeclaration(node) {
+				valueType = c.getOrCreateTypeFromSignature(c.getSignatureFromDeclaration(node), nil)
+			} else {
+				valueType = c.getTypeOfNode(node)
+			}
+			var thisType *Type
+			if ast.HasStaticModifier(node) {
+				thisType = c.getTypeOfSymbol(c.getSymbolOfDeclaration(node.Parent))
+			} else {
+				thisType = c.getDeclaredTypeOfClassOrInterface(c.getSymbolOfDeclaration(node.Parent))
+			}
+			// We wrap the "input type", if necessary, to match the decoration target. For getters this is
+			// something like `() => inputType`, for setters it's `(value: inputType) => void` and for
+			// methods it is just the input type.
+			var targetType *Type
+			switch {
+			case ast.IsGetAccessorDeclaration(node):
+				targetType = c.newGetterFunctionType(valueType)
+			case ast.IsSetAccessorDeclaration(node):
+				targetType = c.newSetterFunctionType(valueType)
+			default:
+				targetType = valueType
+			}
+			contextType := c.newClassMemberDecoratorContextTypeForNode(node, thisType, valueType)
+			links.decoratorSignature = c.newESDecoratorCallSignature(targetType, contextType, targetType)
+		case ast.KindPropertyDeclaration:
+			if !ast.IsClassLike(node.Parent) {
+				break
+			}
+			// Field decorators have a `context` of `ClassFieldDecoratorContext<This, Value>` and
+			// auto-accessor decorators have a `context` of `ClassAccessorDecoratorContext<This, Value>. In
+			// both cases, the `This` type argument is the "final type" of either the class or instance,
+			// depending on whether the member was `static`, and the `Value` type argument corresponds to
+			// the "final type" of the value stored in the field.
+			valueType := c.getTypeOfNode(node)
+			var thisType *Type
+			if ast.HasStaticModifier(node) {
+				thisType = c.getTypeOfSymbol(c.getSymbolOfDeclaration(node.Parent))
+			} else {
+				thisType = c.getDeclaredTypeOfClassOrInterface(c.getSymbolOfDeclaration(node.Parent))
+			}
+			// The `target` of an auto-accessor decorator is a `{ get, set }` object, representing the
+			// runtime-generated getter and setter that are added to the class/prototype. The `target` of a
+			// regular field decorator is always `undefined` as it isn't installed until it is initialized.
+			var targetType *Type
+			// We wrap the "output type" depending on the declaration. For auto-accessors, we wrap the
+			// "output type" in a `ClassAccessorDecoratorResult<This, In, Out>` type, which allows for
+			// mutation of the runtime-generated getter and setter, as well as the injection of an
+			// initializer mutator. For regular fields, we wrap the "output type" in an initializer mutator.
+			var returnType *Type
+			if ast.HasAccessorModifier(node) {
+				targetType = c.newClassAccessorDecoratorTargetType(thisType, valueType)
+				returnType = targetType
+			} else {
+				targetType = c.undefinedType
+				returnType = c.newClassFieldDecoratorInitializerMutatorType(thisType, valueType)
+			}
+			contextType := c.newClassMemberDecoratorContextTypeForNode(node, thisType, valueType)
+			links.decoratorSignature = c.newESDecoratorCallSignature(targetType, contextType, returnType)
+		}
+	}
+	if links.decoratorSignature == c.anySignature {
+		return nil
+	}
+	return links.decoratorSignature
+}
+
+func (c *Checker) newClassDecoratorContextType(classType *Type) *Type {
+	return c.tryCreateTypeReference(c.getGlobalClassDecoratorContextType(), []*Type{classType})
+}
+
+func (c *Checker) newClassMethodDecoratorContextType(classType *Type, valueType *Type) *Type {
+	return c.tryCreateTypeReference(c.getGlobalClassMethodDecoratorContextType(), []*Type{classType, valueType})
+}
+
+func (c *Checker) newClassGetterDecoratorContextType(classType *Type, valueType *Type) *Type {
+	return c.tryCreateTypeReference(c.getGlobalClassGetterDecoratorContextType(), []*Type{classType, valueType})
+}
+
+func (c *Checker) newClassSetterDecoratorContextType(classType *Type, valueType *Type) *Type {
+	return c.tryCreateTypeReference(c.getGlobalClassSetterDecoratorContextType(), []*Type{classType, valueType})
+}
+
+func (c *Checker) newClassAccessorDecoratorContextType(thisType *Type, valueType *Type) *Type {
+	return c.tryCreateTypeReference(c.getGlobalClassAccessorDecoratorContxtType(), []*Type{thisType, valueType})
+}
+
+func (c *Checker) newClassFieldDecoratorContextType(thisType *Type, valueType *Type) *Type {
+	return c.tryCreateTypeReference(c.getGlobalClassFieldDecoratorContextType(), []*Type{thisType, valueType})
+}
+
+// Gets a type like `{ name: "foo", private: false, static: true }` that is used to provided member-specific
+// details that will be intersected with a decorator context type.
+func (c *Checker) getClassMemberDecoratorContextOverrideType(nameType *Type, isPrivate bool, isStatic bool) *Type {
+	kind := core.IfElse(isPrivate,
+		core.IfElse(isStatic, CachedTypeKindDecoratorContextPrivateStatic, CachedTypeKindDecoratorContextPrivate),
+		core.IfElse(isStatic, CachedTypeKindDecoratorContextStatic, CachedTypeKindDecoratorContext),
+	)
+	key := CachedTypeKey{kind: kind, typeId: nameType.id}
+	if overrideType := c.cachedTypes[key]; overrideType != nil {
+		return overrideType
+	}
+	members := make(ast.SymbolTable)
+	members["name"] = c.newProperty("name", nameType)
+	members["private"] = c.newProperty("private", core.IfElse(isPrivate, c.trueType, c.falseType))
+	members["static"] = c.newProperty("static", core.IfElse(isStatic, c.trueType, c.falseType))
+	overrideType := c.newAnonymousType(nil, members, nil, nil, nil)
+	c.cachedTypes[key] = overrideType
+	return overrideType
+}
+
+func (c *Checker) newClassMemberDecoratorContextTypeForNode(node *ast.Node, thisType *Type, valueType *Type) *Type {
+	isStatic := ast.HasStaticModifier(node)
+	isPrivate := ast.IsPrivateIdentifier(node.Name())
+	var nameType *Type
+	if isPrivate {
+		nameType = c.getStringLiteralType(node.Name().Text())
+	} else {
+		nameType = c.getLiteralTypeFromPropertyName(node.Name())
+	}
+	var contextType *Type
+	switch {
+	case ast.IsMethodDeclaration(node):
+		contextType = c.newClassMethodDecoratorContextType(thisType, valueType)
+	case ast.IsGetAccessorDeclaration(node):
+		contextType = c.newClassGetterDecoratorContextType(thisType, valueType)
+	case ast.IsSetAccessorDeclaration(node):
+		contextType = c.newClassSetterDecoratorContextType(thisType, valueType)
+	case ast.IsAutoAccessorPropertyDeclaration(node):
+		contextType = c.newClassAccessorDecoratorContextType(thisType, valueType)
+	case ast.IsPropertyDeclaration(node):
+		contextType = c.newClassFieldDecoratorContextType(thisType, valueType)
+	default:
+		panic("Unhandled case in createClassMemberDecoratorContextTypeForNode")
+	}
+	overrideType := c.getClassMemberDecoratorContextOverrideType(nameType, isPrivate, isStatic)
+	return c.getIntersectionType([]*Type{contextType, overrideType})
+}
+
+func (c *Checker) newClassAccessorDecoratorTargetType(thisType *Type, valueType *Type) *Type {
+	return c.tryCreateTypeReference(c.getGlobalClassAccessorDecoratorTargetType(), []*Type{thisType, valueType})
+}
+
+func (c *Checker) newClassAccessorDecoratorResultType(thisType *Type, valueType *Type) *Type {
+	return c.tryCreateTypeReference(c.getGlobalClassAccessorDecoratorResultType(), []*Type{thisType, valueType})
+}
+
+func (c *Checker) newClassFieldDecoratorInitializerMutatorType(thisType *Type, valueType *Type) *Type {
+	thisParam := c.newParameter("this", thisType)
+	valueParam := c.newParameter("value", valueType)
+	return c.newFunctionType(nil, thisParam, []*ast.Symbol{valueParam}, valueType)
+}
+
+// Creates a call signature for an ES Decorator. This method is used by the semantics of
+// `getESDecoratorCallSignature`, which you should probably be using instead.
+func (c *Checker) newESDecoratorCallSignature(targetType *Type, contextType *Type, nonOptionalReturnType *Type) *Signature {
+	targetParam := c.newParameter("target", targetType)
+	contextParam := c.newParameter("context", contextType)
+	returnType := c.getUnionType([]*Type{nonOptionalReturnType, c.voidType})
+	return c.newCallSignature(nil, nil /*thisParameter*/, []*ast.Symbol{targetParam, contextParam}, returnType)
+}
+
+// Creates a synthetic `FunctionType`
+func (c *Checker) newFunctionType(typeParameters []*Type, thisParameter *ast.Symbol, parameters []*ast.Symbol, returnType *Type) *Type {
+	signature := c.newCallSignature(typeParameters, thisParameter, parameters, returnType)
+	return c.getOrCreateTypeFromSignature(signature, nil)
+}
+
+func (c *Checker) newGetterFunctionType(t *Type) *Type {
+	return c.newFunctionType(nil, nil /*thisParameter*/, nil, t)
+}
+
+func (c *Checker) newSetterFunctionType(t *Type) *Type {
+	valueParam := c.newParameter("value", t)
+	return c.newFunctionType(nil, nil /*thisParameter*/, []*ast.Symbol{valueParam}, c.voidType)
+}
+
+// Creates a synthetic `Signature` corresponding to a call signature.
+func (c *Checker) newCallSignature(typeParameters []*Type, thisParameter *ast.Symbol, parameters []*ast.Symbol, returnType *Type) *Signature {
+	decl := c.factory.NewFunctionTypeNode(nil, nil, c.factory.NewKeywordTypeNode(ast.KindAnyKeyword))
+	return c.newSignature(SignatureFlagsNone, decl, typeParameters, thisParameter, parameters, returnType, nil, len(parameters))
+}
+
+func (c *Checker) newTypedPropertyDescriptorType(propertyType *Type) *Type {
+	return c.createTypeFromGenericGlobalType(c.getGlobalTypedPropertyDescriptorType(), []*Type{propertyType})
+}
+
+func (c *Checker) getParentTypeOfClassElement(node *ast.Node) *Type {
+	classSymbol := c.getSymbolOfNode(node.Parent)
+	if ast.IsStatic(node) {
+		return c.getTypeOfSymbol(classSymbol)
+	}
+	return c.getDeclaredTypeOfSymbol(classSymbol)
+}
+
+func (c *Checker) getClassElementPropertyKeyType(element *ast.Node) *Type {
+	name := element.Name()
+	switch name.Kind {
+	case ast.KindIdentifier, ast.KindNumericLiteral, ast.KindStringLiteral:
+		return c.getStringLiteralType(name.Text())
+	case ast.KindComputedPropertyName:
+		nameType := c.checkComputedPropertyName(name)
+		if c.isTypeAssignableToKind(nameType, TypeFlagsESSymbolLike) {
+			return nameType
+		}
+		return c.stringType
+	}
+	panic("Unhandled case in getClassElementPropertyKeyType")
 }
 
 func (c *Checker) getTypeOfPropertyOfContextualType(t *Type, name string) *Type {

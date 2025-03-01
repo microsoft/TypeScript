@@ -2246,3 +2246,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		},
 	}
 })
+
+func rangeOfTypeParameters(sourceFile *ast.SourceFile, typeParameters *ast.NodeList) core.TextRange {
+	return core.NewTextRange(typeParameters.Pos()-1, min(len(sourceFile.Text), scanner.SkipTrivia(sourceFile.Text, typeParameters.End())+1))
+}
