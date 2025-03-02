@@ -929,6 +929,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "PartialInference",
+            "kind": "type",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "Pick",
             "kind": "type",
             "kindModifiers": "declare",
