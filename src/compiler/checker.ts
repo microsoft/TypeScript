@@ -22095,7 +22095,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (source === target) return Ternary.True;
 
             if (relation === identityRelation) {
-                if (source.flags !== target.flags) return Ternary.False;
+                if (source.flags !== target.flags) {
+                    // Since normalization doesn't perform subtype reduction, unions and intersections might have duplicates, so
+                    // one of the types might be a union or intersection whose constituents are all identical to the other type.
+                    const eachSourceAndTarget: [UnionOrIntersectionType, Type] | undefined = source.flags & TypeFlags.Union ? [source as UnionOrIntersectionType, target]
+                        : target.flags & TypeFlags.Union ? [target as UnionOrIntersectionType, source]
+                        : source.flags & TypeFlags.Intersection ? [source as UnionOrIntersectionType, target]
+                        : target.flags & TypeFlags.Intersection ? [target as UnionOrIntersectionType, source]
+                        : undefined;
+                    if (eachSourceAndTarget) {
+                        traceUnionsOrIntersectionsTooLarge(...eachSourceAndTarget);
+                        return eachTypeRelatedToType(...eachSourceAndTarget, reportErrors, IntersectionState.None);
+                    }
+                    return Ternary.False;
+                }
+
                 if (source.flags & TypeFlags.Singleton) return Ternary.True;
                 traceUnionsOrIntersectionsTooLarge(source, target);
                 return recursiveTypeRelatedTo(source, target, /*reportErrors*/ false, IntersectionState.None, recursionFlags);
