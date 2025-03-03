@@ -24260,18 +24260,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * and no required properties, call/construct signatures or index signatures
      */
     function isWeakType(type: Type): boolean {
-        if (type.flags & TypeFlags.Object) {
-            const resolved = resolveStructuredTypeMembers(type as ObjectType);
-            return resolved.callSignatures.length === 0 && resolved.constructSignatures.length === 0 && resolved.indexInfos.length === 0 &&
-                resolved.properties.length > 0 && every(resolved.properties, p => !!(p.flags & SymbolFlags.Optional));
+        return isWeakTypeWorker(type) > 0;
+
+        function isWeakTypeWorker(type: Type): -1 | 0 | 1 {
+            if (type.flags & TypeFlags.Object) {
+                const resolved = resolveStructuredTypeMembers(type as ObjectType);
+                return resolved.callSignatures.length === 0 && resolved.constructSignatures.length === 0 && resolved.indexInfos.length === 0 &&
+                        resolved.properties.length > 0 ? (every(resolved.properties, p => !!(p.flags & SymbolFlags.Optional)) ? 1 : 0) : -1;
+            }
+            if (type.flags & TypeFlags.Substitution) {
+                return isWeakTypeWorker((type as SubstitutionType).baseType);
+            }
+            if (type.flags & TypeFlags.Intersection) {
+                let result: -1 | 0 | 1 = -1;
+                for (const t of (type as IntersectionType).types) {
+                    const v = isWeakTypeWorker(t);
+                    if (!v) {
+                        return 0;
+                    }
+                    result = result > v ? result : v;
+                }
+                return result;
+            }
+            return 0;
         }
-        if (type.flags & TypeFlags.Substitution) {
-            return isWeakType((type as SubstitutionType).baseType);
-        }
-        if (type.flags & TypeFlags.Intersection) {
-            return every((type as IntersectionType).types, isWeakType);
-        }
-        return false;
     }
 
     function hasCommonProperties(source: Type, target: Type, isComparingJsxAttributes: boolean) {
