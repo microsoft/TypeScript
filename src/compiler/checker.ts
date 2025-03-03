@@ -31949,6 +31949,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
+    function getDiscriminatedApparentType(node: Expression | MethodDeclaration, type: Type) {
+        const apparentType = mapType(
+            type,
+            // When obtaining apparent type of *contextual* type we don't want to get apparent type of mapped types.
+            // That would evaluate mapped types with array or tuple type constraints too eagerly
+            // and thus it would prevent `getTypeOfPropertyOfContextualType` from obtaining per-position contextual type for elements of array literal expressions.
+            // Apparent type of other mapped types is already the mapped type itself so we can just avoid calling `getApparentType` here for all mapped types.
+            t => getObjectFlags(t) & ObjectFlags.Mapped ? t : getApparentType(t),
+            /*noReductions*/ true,
+        );
+        return apparentType.flags & TypeFlags.Union && isObjectLiteralExpression(node) ? discriminateContextualTypeByObjectMembers(node, apparentType as UnionType) :
+            apparentType.flags & TypeFlags.Union && isJsxAttributes(node) ? discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType) :
+            apparentType;
+    }
+
     // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
     // be "pushed" onto a node using the contextualType property.
     function getApparentTypeOfContextualType(node: Expression | MethodDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
@@ -31957,18 +31972,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             getContextualType(node, contextFlags);
         const instantiatedType = instantiateContextualType(contextualType, node, contextFlags);
         if (instantiatedType && !(contextFlags && contextFlags & ContextFlags.NoConstraints && instantiatedType.flags & TypeFlags.TypeVariable)) {
-            const apparentType = mapType(
-                instantiatedType,
-                // When obtaining apparent type of *contextual* type we don't want to get apparent type of mapped types.
-                // That would evaluate mapped types with array or tuple type constraints too eagerly
-                // and thus it would prevent `getTypeOfPropertyOfContextualType` from obtaining per-position contextual type for elements of array literal expressions.
-                // Apparent type of other mapped types is already the mapped type itself so we can just avoid calling `getApparentType` here for all mapped types.
-                t => getObjectFlags(t) & ObjectFlags.Mapped ? t : getApparentType(t),
-                /*noReductions*/ true,
-            );
-            return apparentType.flags & TypeFlags.Union && isObjectLiteralExpression(node) ? discriminateContextualTypeByObjectMembers(node, apparentType as UnionType) :
-                apparentType.flags & TypeFlags.Union && isJsxAttributes(node) ? discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType) :
-                apparentType;
+            return getDiscriminatedApparentType(node, instantiatedType);
         }
     }
 
@@ -35102,7 +35106,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // outer call expression. Effectively we just want a snapshot of whatever has been
                         // inferred for any outer call expression so far.
                         const outerMapper = getMapperFromContext(cloneInferenceContext(outerContext, InferenceFlags.NoDefault));
-                        const instantiatedType = instantiateType(contextualType, outerMapper);
+                        const argumentApparentType = outerContext && isCallOrNewExpression(node.parent) && getDiscriminatedApparentType(node, contextualType);
+                        const instantiatedType = instantiateType(argumentApparentType && argumentApparentType !== unknownType ? argumentApparentType : contextualType, outerMapper);
                         // If the contextual type is a generic function type with a single call signature, we
                         // instantiate the type with its own type parameters and type arguments. This ensures that
                         // the type parameters are not erased to type any during type inference such that they can
