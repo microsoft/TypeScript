@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/better_subType_assignable_to_superType_error_messsage.ts] ////
+
+=== better_subType_assignable_to_superType_error_messsage.ts ===
+function parameterExtendsOtherParameter<SuperType, SubType extends SuperType, SubType2 extends SubType>(superType: SuperType, subType2: SubType2) {
+>parameterExtendsOtherParameter : <SuperType, SubType extends SuperType, SubType2 extends SubType>(superType: SuperType, subType2: SubType2) => void
+>                               : ^         ^^       ^^^^^^^^^         ^^        ^^^^^^^^^       ^^         ^^         ^^        ^^        ^^^^^^^^^
+>superType : SuperType
+>          : ^^^^^^^^^
+>subType2 : SubType2
+>         : ^^^^^^^^
+
+  subtype = superType;//error
+>subtype = superType : SuperType
+>                    : ^^^^^^^^^
+>subtype : any
+>        : ^^^
+>superType : SuperType
+>          : ^^^^^^^^^
+  
+  //ensures that supertypes are not assignable to 'grandchild' subtypes
+  subType2 = superType;//error
+>subType2 = superType : SuperType
+>                     : ^^^^^^^^^
+>subType2 : SubType2
+>         : ^^^^^^^^
+>superType : SuperType
+>          : ^^^^^^^^^
+
+  superType = subType2;//ok
+>superType = subType2 : SubType2
+>                     : ^^^^^^^^
+>superType : SuperType
+>          : ^^^^^^^^^
+>subType2 : SubType2
+>         : ^^^^^^^^
+}
+
