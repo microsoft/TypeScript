@@ -2,6 +2,7 @@ package ast
 
 import (
 	"slices"
+	"sync"
 	"sync/atomic"
 
 	"github.com/microsoft/typescript-go/internal/core"
@@ -842,17 +843,38 @@ func GetSourceFileOfNode(node *Node) *SourceFile {
 	return nil
 }
 
-func SetParentInChildren(parent *Node) {
-	var visit func(*Node) bool
-	visit = func(child *Node) bool {
-		child.Parent = parent
-		saveParent := parent
-		parent = child
-		parent.ForEachChild(visit)
-		parent = saveParent
+var setParentInChildrenPool = sync.Pool{
+	New: func() any {
+		return newParentInChildrenSetter()
+	},
+}
+
+func newParentInChildrenSetter() func(node *Node) bool {
+	// Consolidate state into one allocation.
+	// Similar to https://go.dev/cl/552375.
+	var state struct {
+		parent *Node
+		visit  func(*Node) bool
+	}
+
+	state.visit = func(node *Node) bool {
+		if state.parent != nil {
+			node.Parent = state.parent
+		}
+		saveParent := state.parent
+		state.parent = node
+		node.ForEachChild(state.visit)
+		state.parent = saveParent
 		return false
 	}
-	parent.ForEachChild(visit)
+
+	return state.visit
+}
+
+func SetParentInChildren(node *Node) {
+	fn := setParentInChildrenPool.Get().(func(node *Node) bool)
+	defer setParentInChildrenPool.Put(fn)
+	fn(node)
 }
 
 // Walks up the parents of a node to find the ancestor that matches the callback
