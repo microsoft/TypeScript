@@ -1,0 +1,83 @@
+//// [tests/cases/compiler/contextuallyTypedJsxAttribute3.tsx] ////
+
+=== contextuallyTypedJsxAttribute3.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from "react";
+>React : Symbol(React, Decl(contextuallyTypedJsxAttribute3.tsx, 2, 6))
+
+// https://github.com/microsoft/TypeScript/issues/61095
+
+type Props =
+>Props : Symbol(Props, Decl(contextuallyTypedJsxAttribute3.tsx, 2, 26))
+
+  | {
+      parentId: string[];
+>parentId : Symbol(parentId, Decl(contextuallyTypedJsxAttribute3.tsx, 7, 5))
+
+      onChange: (event: { id: string }) => void;
+>onChange : Symbol(onChange, Decl(contextuallyTypedJsxAttribute3.tsx, 8, 25))
+>event : Symbol(event, Decl(contextuallyTypedJsxAttribute3.tsx, 9, 17))
+>id : Symbol(id, Decl(contextuallyTypedJsxAttribute3.tsx, 9, 25))
+
+      onChange2: () => void;
+>onChange2 : Symbol(onChange2, Decl(contextuallyTypedJsxAttribute3.tsx, 9, 48))
+    }
+  | {
+      parentId?: never;
+>parentId : Symbol(parentId, Decl(contextuallyTypedJsxAttribute3.tsx, 12, 5))
+
+      onChange: (event: { id: number }) => void;
+>onChange : Symbol(onChange, Decl(contextuallyTypedJsxAttribute3.tsx, 13, 23))
+>event : Symbol(event, Decl(contextuallyTypedJsxAttribute3.tsx, 14, 17))
+>id : Symbol(id, Decl(contextuallyTypedJsxAttribute3.tsx, 14, 25))
+
+    };
+
+function NonGenericComponent(props: Props) {
+>NonGenericComponent : Symbol(NonGenericComponent, Decl(contextuallyTypedJsxAttribute3.tsx, 15, 6))
+>props : Symbol(props, Decl(contextuallyTypedJsxAttribute3.tsx, 17, 29))
+>Props : Symbol(Props, Decl(contextuallyTypedJsxAttribute3.tsx, 2, 26))
+
+  return null;
+}
+
+<NonGenericComponent onChange={(e) => {}} />;
+>NonGenericComponent : Symbol(NonGenericComponent, Decl(contextuallyTypedJsxAttribute3.tsx, 15, 6))
+>onChange : Symbol(onChange, Decl(contextuallyTypedJsxAttribute3.tsx, 21, 20))
+>e : Symbol(e, Decl(contextuallyTypedJsxAttribute3.tsx, 21, 32))
+
+const parentId: string[] = [];
+>parentId : Symbol(parentId, Decl(contextuallyTypedJsxAttribute3.tsx, 23, 5))
+
+<NonGenericComponent
+>NonGenericComponent : Symbol(NonGenericComponent, Decl(contextuallyTypedJsxAttribute3.tsx, 15, 6))
+
+  parentId={parentId}
+>parentId : Symbol(parentId, Decl(contextuallyTypedJsxAttribute3.tsx, 25, 20))
+>parentId : Symbol(parentId, Decl(contextuallyTypedJsxAttribute3.tsx, 23, 5))
+
+  onChange={(e) => {}}
+>onChange : Symbol(onChange, Decl(contextuallyTypedJsxAttribute3.tsx, 26, 21))
+>e : Symbol(e, Decl(contextuallyTypedJsxAttribute3.tsx, 27, 13))
+
+  onChange2={() => {}}
+>onChange2 : Symbol(onChange2, Decl(contextuallyTypedJsxAttribute3.tsx, 27, 22))
+
+/>;
+
+<NonGenericComponent
+>NonGenericComponent : Symbol(NonGenericComponent, Decl(contextuallyTypedJsxAttribute3.tsx, 15, 6))
+
+  parentId={[]}
+>parentId : Symbol(parentId, Decl(contextuallyTypedJsxAttribute3.tsx, 31, 20))
+
+  onChange={(e) => {}}
+>onChange : Symbol(onChange, Decl(contextuallyTypedJsxAttribute3.tsx, 32, 15))
+>e : Symbol(e, Decl(contextuallyTypedJsxAttribute3.tsx, 33, 13))
+
+  onChange2={() => {}}
+>onChange2 : Symbol(onChange2, Decl(contextuallyTypedJsxAttribute3.tsx, 33, 22))
+
+/>;
+
