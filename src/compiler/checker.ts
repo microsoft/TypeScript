@@ -37102,7 +37102,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Treat any call to the global 'Symbol' function that is part of a const variable or readonly property
         // as a fresh unique symbol literal type.
         if (returnType.flags & TypeFlags.ESSymbolLike && isSymbolOrSymbolForCall(node)) {
-            return getESSymbolLikeTypeForNode(walkUpParenthesizedExpressions(node.parent));
+            return getESSymbolLikeTypeForNode(walkUpOuterExpressions(node, OuterExpressionKinds.Parentheses | OuterExpressionKinds.Satisfies));
         }
         if (
             node.kind === SyntaxKind.CallExpression && !node.questionDotToken && node.parent.kind === SyntaxKind.ExpressionStatement &&
