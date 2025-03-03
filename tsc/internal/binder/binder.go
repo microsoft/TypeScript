@@ -3,6 +3,7 @@ package binder
 import (
 	"slices"
 	"strconv"
+	"sync"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
@@ -41,8 +42,8 @@ type Binder struct {
 	options                 *core.CompilerOptions
 	languageVersion         core.ScriptTarget
 	bindFunc                func(*ast.Node) bool
-	unreachableFlow         ast.FlowNode
-	reportedUnreachableFlow ast.FlowNode
+	unreachableFlow         *ast.FlowNode
+	reportedUnreachableFlow *ast.FlowNode
 
 	parent                 *ast.Node
 	container              *ast.Node
@@ -91,15 +92,32 @@ func BindSourceFile(file *ast.SourceFile, options *core.CompilerOptions) {
 	}
 }
 
+var binderPool = sync.Pool{
+	New: func() any {
+		b := &Binder{}
+		b.bindFunc = b.bind // Allocate closure once
+		return b
+	},
+}
+
+func getBinder() *Binder {
+	return binderPool.Get().(*Binder)
+}
+
+func putBinder(b *Binder) {
+	*b = Binder{bindFunc: b.bindFunc}
+	binderPool.Put(b)
+}
+
 func bindSourceFile(file *ast.SourceFile, options *core.CompilerOptions) {
 	file.BindOnce(func() {
-		b := Binder{}
+		b := getBinder()
+		defer putBinder(b)
 		b.file = file
 		b.options = options
 		b.languageVersion = options.GetEmitScriptTarget()
-		b.unreachableFlow.Flags = ast.FlowFlagsUnreachable
-		b.reportedUnreachableFlow.Flags = ast.FlowFlagsUnreachable
-		b.bindFunc = b.bind // Allocate closure once
+		b.unreachableFlow = b.newFlowNode(ast.FlowFlagsUnreachable)
+		b.reportedUnreachableFlow = b.newFlowNode(ast.FlowFlagsUnreachable)
 		b.bind(file.AsNode())
 		file.SymbolCount = b.symbolCount
 		file.ClassifiableNames = b.classifiableNames
@@ -461,10 +479,10 @@ func (b *Binder) createFlowCondition(flags ast.FlowFlags, antecedent *ast.FlowNo
 		if flags&ast.FlowFlagsTrueCondition != 0 {
 			return antecedent
 		}
-		return &b.unreachableFlow
+		return b.unreachableFlow
 	}
 	if (expression.Kind == ast.KindTrueKeyword && flags&ast.FlowFlagsFalseCondition != 0 || expression.Kind == ast.KindFalseKeyword && flags&ast.FlowFlagsTrueCondition != 0) && !ast.IsExpressionOfOptionalChainRoot(expression) && !ast.IsNullishCoalesce(expression.Parent) {
-		return &b.unreachableFlow
+		return b.unreachableFlow
 	}
 	if !isNarrowingExpression(expression) {
 		return antecedent
@@ -542,7 +560,7 @@ func (b *Binder) addAntecedent(label *ast.FlowLabel, antecedent *ast.FlowNode) {
 
 func (b *Binder) finishFlowLabel(label *ast.FlowLabel) *ast.FlowNode {
 	if label.Antecedents == nil {
-		return &b.unreachableFlow
+		return b.unreachableFlow
 	}
 	if label.Antecedents.Next == nil {
 		return label.Antecedents.Flow
@@ -1595,7 +1613,7 @@ func (b *Binder) checkUnreachable(node *ast.Node) bool {
 	if b.currentFlow.Flags&ast.FlowFlagsUnreachable == 0 {
 		return false
 	}
-	if b.currentFlow == &b.unreachableFlow {
+	if b.currentFlow == b.unreachableFlow {
 		// report errors on all statements except empty ones
 		// report errors on class declarations
 		// report errors on enums with preserved emit
@@ -1605,7 +1623,7 @@ func (b *Binder) checkUnreachable(node *ast.Node) bool {
 			isEnumDeclarationWithPreservedEmit(node, b.options) ||
 			ast.IsModuleDeclaration(node) && b.shouldReportErrorOnModuleDeclaration(node)
 		if reportError {
-			b.currentFlow = &b.reportedUnreachableFlow
+			b.currentFlow = b.reportedUnreachableFlow
 			if b.options.AllowUnreachableCode != core.TSTrue {
 				// unreachable code is reported if
 				// - user has explicitly asked about it AND
@@ -1845,14 +1863,14 @@ func (b *Binder) bindReturnStatement(node *ast.Node) {
 	if b.currentReturnTarget != nil {
 		b.addAntecedent(b.currentReturnTarget, b.currentFlow)
 	}
-	b.currentFlow = &b.unreachableFlow
+	b.currentFlow = b.unreachableFlow
 	b.hasExplicitReturn = true
 	b.hasFlowEffects = true
 }
 
 func (b *Binder) bindThrowStatement(node *ast.Node) {
 	b.bind(node.AsThrowStatement().Expression)
-	b.currentFlow = &b.unreachableFlow
+	b.currentFlow = b.unreachableFlow
 	b.hasFlowEffects = true
 }
 
@@ -1889,7 +1907,7 @@ func (b *Binder) findActiveLabel(name string) *ActiveLabel {
 func (b *Binder) bindBreakOrContinueFlow(flowLabel *ast.FlowLabel) {
 	if flowLabel != nil {
 		b.addAntecedent(flowLabel, b.currentFlow)
-		b.currentFlow = &b.unreachableFlow
+		b.currentFlow = b.unreachableFlow
 		b.hasFlowEffects = true
 	}
 }
@@ -1949,7 +1967,7 @@ func (b *Binder) bindTryStatement(node *ast.Node) {
 		b.bind(stmt.FinallyBlock)
 		if b.currentFlow.Flags&ast.FlowFlagsUnreachable != 0 {
 			// If the end of the finally block is unreachable, the end of the entire try statement is unreachable.
-			b.currentFlow = &b.unreachableFlow
+			b.currentFlow = b.unreachableFlow
 		} else {
 			// If we have an IIFE return target and return statements in the try or catch blocks, add a control
 			// flow that goes back through the finally block and back through only the return statements.
@@ -1967,7 +1985,7 @@ func (b *Binder) bindTryStatement(node *ast.Node) {
 			if normalExitLabel.Antecedents != nil {
 				b.currentFlow = b.createReduceLabel(finallyLabel, normalExitLabel.Antecedents, b.currentFlow)
 			} else {
-				b.currentFlow = &b.unreachableFlow
+				b.currentFlow = b.unreachableFlow
 			}
 		}
 	} else {
@@ -2000,11 +2018,11 @@ func (b *Binder) bindCaseBlock(node *ast.Node) {
 	switchStatement := node.Parent
 	clauses := node.AsCaseBlock().Clauses.Nodes
 	isNarrowingSwitch := switchStatement.Expression().Kind == ast.KindTrueKeyword || isNarrowingExpression(switchStatement.Expression())
-	var fallthroughFlow *ast.FlowNode = &b.unreachableFlow
+	var fallthroughFlow *ast.FlowNode = b.unreachableFlow
 	for i := 0; i < len(clauses); i++ {
 		clauseStart := i
 		for len(clauses[i].AsCaseOrDefaultClause().Statements.Nodes) == 0 && i+1 < len(clauses) {
-			if fallthroughFlow == &b.unreachableFlow {
+			if fallthroughFlow == b.unreachableFlow {
 				b.currentFlow = b.preSwitchCaseFlow
 			}
 			b.bind(clauses[i])
@@ -2377,7 +2395,7 @@ func (b *Binder) bindInitializer(node *ast.Node) {
 	}
 	entryFlow := b.currentFlow
 	b.bind(node)
-	if entryFlow == &b.unreachableFlow || entryFlow == b.currentFlow {
+	if entryFlow == b.unreachableFlow || entryFlow == b.currentFlow {
 		return
 	}
 	exitFlow := b.createBranchLabel()
