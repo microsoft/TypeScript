@@ -26779,8 +26779,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const targetSignatures = getSignaturesOfType(target, kind);
                 const targetLen = targetSignatures.length;
                 for (let i = 0; i < targetLen; i++) {
-                    const sourceIndex = Math.max(sourceLen - targetLen + i, 0);
-                    inferFromSignature(getBaseSignature(sourceSignatures[sourceIndex]), getErasedSignature(targetSignatures[i]));
+                    const sourceSignature = sourceSignatures[Math.max(sourceLen - targetLen + i, 0)];
+                    const targetSignature = targetSignatures[i];
+                    if (targetSignature.typeParameters && targetSignature.typeParameters.length === sourceSignature.typeParameters?.length) {
+                        for (let j = 0; j < targetSignature.typeParameters.length; j++) {
+                            const sourceTypeParameter = sourceSignature.typeParameters[j];
+                            const targetTypeParameter = targetSignature.typeParameters[j];
+                            if (sourceTypeParameter.constraint && targetTypeParameter.constraint) {
+                                inferFromTypes(sourceTypeParameter.constraint, targetTypeParameter.constraint);
+                            }
+                        }
+                    }
+                    inferFromSignature(getBaseSignature(sourceSignature), getErasedSignature(targetSignature));
                 }
             }
         }
