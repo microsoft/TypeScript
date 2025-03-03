@@ -47746,6 +47746,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkAliasSymbol(node);
         if (node.kind === SyntaxKind.ImportSpecifier) {
             checkModuleExportName(node.propertyName);
+
+            // Check for duplicate import names
+            const importSpecifier = node;
+            const namecheck = getTextOfIdentifierOrLiteral(importSpecifier.name);
+            const propertyNamecheck = importSpecifier.propertyName ? getTextOfIdentifierOrLiteral(importSpecifier.propertyName) : "";
+
+            if (namecheck === propertyNamecheck) {
+                errorOrSuggestion(/*isError*/ false, importSpecifier, Diagnostics.Redundant_named_import_0, namecheck);
+            }
+
             if (
                 moduleExportNameIsDefault(node.propertyName || node.name) &&
                 getESModuleInterop(compilerOptions) &&
