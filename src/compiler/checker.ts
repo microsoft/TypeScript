@@ -14191,6 +14191,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const stripOptional = strictNullChecks && !isOptional && modifiersProp && modifiersProp.flags & SymbolFlags.Optional;
                     const lateFlag: CheckFlags = modifiersProp ? getIsLateCheckFlag(modifiersProp) : 0;
                     const prop = createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName, lateFlag | CheckFlags.Mapped | (isReadonly ? CheckFlags.Readonly : 0) | (stripOptional ? CheckFlags.StripOptional : 0)) as MappedSymbol;
+                    prop.parent = mappedType.symbol;
                     prop.links.mappedType = type;
                     prop.links.nameType = propNameType;
                     prop.links.keyType = keyType;
