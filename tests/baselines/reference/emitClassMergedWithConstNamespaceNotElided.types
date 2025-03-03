@@ -2,6 +2,9 @@
 
 === enum.d.ts ===
 export namespace Clone {
+>Clone : typeof Clone
+>      : ^^^^^^^^^^^^
+
     const enum LOCAL {
 >LOCAL : LOCAL
 >      : ^^^^^

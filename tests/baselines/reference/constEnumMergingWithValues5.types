@@ -2,6 +2,9 @@
 
 === m1.ts ===
 module foo {
+>foo : typeof foo
+>    : ^^^^^^^^^^
+
     const enum E { X }
 >E : E
 >  : ^
