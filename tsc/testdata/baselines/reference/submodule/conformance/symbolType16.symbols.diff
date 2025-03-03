@@ -17,6 +17,8 @@
  
  sym.newSymbolProp;
 ->sym.newSymbolProp : Symbol(Symbol.newSymbolProp, Decl(symbolType16.ts, 0, 18))
++>sym.newSymbolProp : Symbol(newSymbolProp, Decl(symbolType16.ts, 0, 18))
  >sym : Symbol(sym, Decl(symbolType16.ts, 4, 3))
 ->newSymbolProp : Symbol(Symbol.newSymbolProp, Decl(symbolType16.ts, 0, 18))
++>newSymbolProp : Symbol(newSymbolProp, Decl(symbolType16.ts, 0, 18))
  

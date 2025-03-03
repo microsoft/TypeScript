@@ -700,11 +700,7 @@ type Checker struct {
 	anyArrayType                              *Type
 	autoArrayType                             *Type
 	anyReadonlyArrayType                      *Type
-	deferredGlobalESSymbolType                *Type
-	deferredGlobalBigIntType                  *Type
-	deferredGlobalImportMetaType              *Type
 	deferredGlobalImportMetaExpressionType    *Type
-	deferredGlobalImportAttributesType        *Type
 	contextualBindingPatterns                 []*ast.Node
 	emptyStringType                           *Type
 	zeroType                                  *Type
@@ -746,6 +742,11 @@ type Checker struct {
 	comparableRelation                        *Relation
 	identityRelation                          *Relation
 	enumRelation                              map[EnumRelationKey]RelationComparisonResult
+	getGlobalESSymbolType                     func() *Type
+	getGlobalBigIntType                       func() *Type
+	getGlobalImportMetaType                   func() *Type
+	getGlobalImportAttributesType             func() *Type
+	getGlobalImportAttributesTypeChecked      func() *Type
 	getGlobalNonNullableTypeAliasOrNil        func() *ast.Symbol
 	getGlobalExtractSymbol                    func() *ast.Symbol
 	getGlobalDisposableType                   func() *Type
@@ -950,6 +951,11 @@ func NewChecker(program Program) *Checker {
 	c.comparableRelation = &Relation{}
 	c.identityRelation = &Relation{}
 	c.enumRelation = make(map[EnumRelationKey]RelationComparisonResult)
+	c.getGlobalESSymbolType = c.getGlobalTypeResolver("Symbol", 0 /*arity*/, false /*reportErrors*/)
+	c.getGlobalBigIntType = c.getGlobalTypeResolver("BigInt", 0 /*arity*/, false /*reportErrors*/)
+	c.getGlobalImportMetaType = c.getGlobalTypeResolver("ImportMeta", 0 /*arity*/, true /*reportErrors*/)
+	c.getGlobalImportAttributesType = c.getGlobalTypeResolver("ImportAttributes", 0 /*arity*/, false /*reportErrors*/)
+	c.getGlobalImportAttributesTypeChecked = c.getGlobalTypeResolver("ImportAttributes", 0 /*arity*/, true /*reportErrors*/)
 	c.getGlobalNonNullableTypeAliasOrNil = c.getGlobalTypeAliasResolver("NonNullable", 1 /*arity*/, false /*reportErrors*/)
 	c.getGlobalExtractSymbol = c.getGlobalTypeAliasResolver("Extract", 2 /*arity*/, true /*reportErrors*/)
 	c.getGlobalDisposableType = c.getGlobalTypeResolver("Disposable", 0 /*arity*/, true /*reportErrors*/)
@@ -4944,7 +4950,7 @@ func (c *Checker) checkImportAttributes(declaration *ast.Node) {
 	if node == nil {
 		return
 	}
-	importAttributesType := c.getGlobalImportAttributesType(true)
+	importAttributesType := c.getGlobalImportAttributesTypeChecked()
 	if importAttributesType != c.emptyObjectType {
 		c.checkTypeAssignableTo(c.getTypeFromImportAttributes(node), c.getNullableType(importAttributesType, TypeFlagsUndefined), node, nil)
 	}
@@ -16688,7 +16694,7 @@ func (c *Checker) addOptionalityEx(t *Type, isProperty bool, isOptional bool) *T
 }
 
 func (c *Checker) getOptionalType(t *Type, isProperty bool) *Type {
-	// !!! Debug.assert(c.strictNullChecks)
+	// Debug.assert(c.strictNullChecks)
 	missingOrUndefined := core.IfElse(isProperty, c.undefinedOrMissingType, c.undefinedType)
 	if t == missingOrUndefined || t.flags&TypeFlagsUnion != 0 && t.Types()[0] == missingOrUndefined {
 		return t
@@ -16996,30 +17002,7 @@ func (c *Checker) getTypeOfPropertyOfType(t *Type, name string) *Type {
 }
 
 func (c *Checker) getSignaturesOfType(t *Type, kind SignatureKind) []*Signature {
-	result := c.getSignaturesOfStructuredType(c.getReducedApparentType(t), kind)
-	// !!!
-	// if kind == SignatureKindCall && len(result) == 0 && t.flags&TypeFlagsUnion != 0 {
-	// 	if t.AsUnionType().arrayFallbackSignatures != nil {
-	// 		return t.AsUnionType().arrayFallbackSignatures
-	// 	}
-	// 	// If the union is all different instantiations of a member of the global array type...
-	// 	var memberName string
-	// 	if c.everyType(t, func(t *Type) bool {
-	// 		return t.symbol. /* ? */ Parent != nil && c.isArrayOrTupleSymbol(t.symbol.Parent) && (ifElse(!memberName, ( /* TODO(TS-TO-GO) CommaToken BinaryExpression: memberName = t.symbol.escapedName, true */ TODO), memberName == t.symbol.EscapedName))
-	// 	}) {
-	// 		// Transform the type from `(A[] | B[])["member"]` to `(A | B)[]["member"]` (since we pretend array is covariant anyway)
-	// 		arrayArg := c.mapType(t, func(t *Type) *Type {
-	// 			return c.getMappedType((ifElse(c.isReadonlyArraySymbol(t.symbol.Parent), c.globalReadonlyArrayType, c.globalArrayType)).typeParameters[0], t.AsAnonymousType().mapper)
-	// 		})
-	// 		arrayType := c.createArrayType(arrayArg, c.someType(t, func(t *Type) bool {
-	// 			return c.isReadonlyArraySymbol(t.symbol.Parent)
-	// 		}))
-	// 		t.AsUnionType().arrayFallbackSignatures = c.getSignaturesOfType(c.getTypeOfPropertyOfType(arrayType, memberName), kind)
-	// 		return t.AsUnionType().arrayFallbackSignatures
-	// 	}
-	// 	t.AsUnionType().arrayFallbackSignatures = result
-	// }
-	return result
+	return c.getSignaturesOfStructuredType(c.getReducedApparentType(t), kind)
 }
 
 func (c *Checker) getSignaturesOfStructuredType(t *Type, kind SignatureKind) []*Signature {
@@ -19063,11 +19046,51 @@ func (c *Checker) resolveUnionTypeMembers(t *Type) {
 		}
 		return c.getSignaturesOfType(t, SignatureKindCall)
 	}))
+	if len(callSignatures) == 0 {
+		callSignatures = c.getArrayMemberCallSignatures(t)
+	}
 	constructSignatures := c.getUnionSignatures(core.Map(t.Types(), func(t *Type) []*Signature {
 		return c.getSignaturesOfType(t, SignatureKindConstruct)
 	}))
 	indexInfos := c.getUnionIndexInfos(t.Types())
 	c.setStructuredTypeMembers(t, nil, callSignatures, constructSignatures, indexInfos)
+}
+
+func (c *Checker) getArrayMemberCallSignatures(t *Type) []*Signature {
+	// Check if union is exclusively instantiations of a member of the global Array or ReadonlyArray type.
+	var memberName string
+	for i, t := range t.Types() {
+		if t.objectFlags&ObjectFlagsInstantiated == 0 || t.symbol == nil || t.symbol.Parent == nil || !c.isArrayOrTupleSymbol(t.symbol.Parent) {
+			return nil
+		}
+		if i == 0 {
+			memberName = t.symbol.Name
+		} else if memberName != t.symbol.Name {
+			return nil
+		}
+	}
+	// Transform the type from `(A[] | B[])["member"]` to `(A | B)[]["member"]` (since we pretend array is covariant anyway).
+	arrayArg := c.mapType(t, func(t *Type) *Type {
+		return t.Mapper().Map(core.IfElse(c.isReadonlyArraySymbol(t.symbol.Parent), c.globalReadonlyArrayType, c.globalArrayType).AsInterfaceType().TypeParameters()[0])
+	})
+	arrayType := c.createArrayTypeEx(arrayArg, someType(t, func(t *Type) bool {
+		return c.isReadonlyArraySymbol(t.symbol.Parent)
+	}))
+	return c.getSignaturesOfType(c.getTypeOfPropertyOfType(arrayType, memberName), SignatureKindCall)
+}
+
+func (c *Checker) isArrayOrTupleSymbol(symbol *ast.Symbol) bool {
+	if symbol == nil || c.globalArrayType.symbol == nil || c.globalReadonlyArrayType.symbol == nil {
+		return false
+	}
+	return c.getSymbolIfSameReference(symbol, c.globalArrayType.symbol) != nil || c.getSymbolIfSameReference(symbol, c.globalReadonlyArrayType.symbol) != nil
+}
+
+func (c *Checker) isReadonlyArraySymbol(symbol *ast.Symbol) bool {
+	if symbol == nil || c.globalReadonlyArrayType.symbol == nil {
+		return false
+	}
+	return c.getSymbolIfSameReference(symbol, c.globalReadonlyArrayType.symbol) != nil
 }
 
 // The signatures of a union type are those signatures that are present in each of the constituent types.
@@ -22466,63 +22489,19 @@ func (c *Checker) getGlobalStrictFunctionType(name string) *Type {
 	return c.globalFunctionType
 }
 
-func (c *Checker) getGlobalESSymbolType() *Type {
-	if c.deferredGlobalESSymbolType == nil {
-		c.deferredGlobalESSymbolType = c.getGlobalType("ast.Symbol", 0 /*arity*/, false /*reportErrors*/)
-		if c.deferredGlobalESSymbolType == nil {
-			c.deferredGlobalESSymbolType = c.emptyObjectType
-		}
-	}
-	return c.deferredGlobalESSymbolType
-}
-
-func (c *Checker) getGlobalBigIntType() *Type {
-	if c.deferredGlobalBigIntType == nil {
-		c.deferredGlobalBigIntType = c.getGlobalType("BigInt", 0 /*arity*/, false /*reportErrors*/)
-		if c.deferredGlobalBigIntType == nil {
-			c.deferredGlobalBigIntType = c.emptyObjectType
-		}
-	}
-	return c.deferredGlobalBigIntType
-}
-
 func (c *Checker) getGlobalImportMetaExpressionType() *Type {
 	if c.deferredGlobalImportMetaExpressionType == nil {
 		// Create a synthetic type `ImportMetaExpression { meta: MetaProperty }`
 		symbol := c.newSymbol(ast.SymbolFlagsNone, "ImportMetaExpression")
 		importMetaType := c.getGlobalImportMetaType()
-
 		metaPropertySymbol := c.newSymbolEx(ast.SymbolFlagsProperty, "meta", ast.CheckFlagsReadonly)
 		metaPropertySymbol.Parent = symbol
 		c.valueSymbolLinks.Get(metaPropertySymbol).resolvedType = importMetaType
-
 		members := createSymbolTable([]*ast.Symbol{metaPropertySymbol})
 		symbol.Members = members
-
 		c.deferredGlobalImportMetaExpressionType = c.newAnonymousType(symbol, members, nil, nil, nil)
 	}
 	return c.deferredGlobalImportMetaExpressionType
-}
-
-func (c *Checker) getGlobalImportMetaType() *Type {
-	// We always report an error, so store a result in the event we could not resolve the symbol to prevent reporting it multiple times
-	if c.deferredGlobalImportMetaType == nil {
-		c.deferredGlobalImportMetaType = c.getGlobalType("ImportMeta", 0 /*arity*/, true /*reportErrors*/)
-		if c.deferredGlobalImportMetaType == nil {
-			c.deferredGlobalImportMetaType = c.emptyObjectType
-		}
-	}
-	return c.deferredGlobalImportMetaType
-}
-
-func (c *Checker) getGlobalImportAttributesType(reportErrors bool) *Type {
-	if c.deferredGlobalImportAttributesType == nil {
-		c.deferredGlobalImportAttributesType = c.getGlobalType("ImportAttributes", 0 /*arity*/, reportErrors)
-		if c.deferredGlobalImportAttributesType == nil {
-			c.deferredGlobalImportAttributesType = c.emptyObjectType
-		}
-	}
-	return c.deferredGlobalImportAttributesType
 }
 
 func (c *Checker) createIterableType(iteratedType *Type) *Type {
@@ -24970,7 +24949,24 @@ func (c *Checker) getSuggestionForNonexistentProperty(name string, containingTyp
 }
 
 func (c *Checker) getSuggestionForNonexistentIndexSignature(objectType *Type, expr *ast.Node, keyedType *Type) string {
-	return "" // !!!
+	// check if object type has setter or getter
+	hasProp := func(name string) bool {
+		prop := c.getPropertyOfObjectType(objectType, name)
+		if prop != nil {
+			s := c.getSingleCallSignature(c.getTypeOfSymbol(prop))
+			return s != nil && c.getMinArgumentCount(s) >= 1 && c.isTypeAssignableTo(keyedType, c.getTypeAtPosition(s, 0))
+		}
+		return false
+	}
+	suggestedMethod := core.IfElse(ast.IsAssignmentTarget(expr), "set", "get")
+	if !hasProp(suggestedMethod) {
+		return ""
+	}
+	suggestion := tryGetPropertyAccessOrIdentifierToString(expr.Expression())
+	if suggestion == "" {
+		return suggestedMethod
+	}
+	return suggestion + "." + suggestedMethod
 }
 
 func getIndexNodeForAccessExpression(accessNode *ast.Node) *ast.Node {
@@ -27199,7 +27195,7 @@ func (c *Checker) getContextualJsxElementAttributesType(attribute *ast.Node, con
 }
 
 func (c *Checker) getContextualImportAttributeType(node *ast.Node) *Type {
-	return c.getTypeOfPropertyOfContextualType(c.getGlobalImportAttributesType(false), node.Name().Text())
+	return c.getTypeOfPropertyOfContextualType(c.getGlobalImportAttributesType(), node.Name().Text())
 }
 
 // Returns the effective arguments for an expression that works like a function invocation.
@@ -29141,7 +29137,7 @@ func (c *Checker) getTypeOfNode(node *ast.Node) *Type {
 	}
 
 	if ast.IsImportAttributes(node) {
-		return c.getGlobalImportAttributesType(false /*reportErrors*/)
+		return c.getGlobalImportAttributesType()
 	}
 
 	return c.errorType

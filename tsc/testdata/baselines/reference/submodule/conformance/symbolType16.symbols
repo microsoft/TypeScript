@@ -12,5 +12,7 @@ var sym: symbol;
 >sym : Symbol(sym, Decl(symbolType16.ts, 4, 3))
 
 sym.newSymbolProp;
+>sym.newSymbolProp : Symbol(newSymbolProp, Decl(symbolType16.ts, 0, 18))
 >sym : Symbol(sym, Decl(symbolType16.ts, 4, 3))
+>newSymbolProp : Symbol(newSymbolProp, Decl(symbolType16.ts, 0, 18))
 

@@ -48,13 +48,17 @@ f(ab, {
 >[A] : Symbol([A], Decl(contextuallyTypedSymbolNamedProperties.ts, 13, 7))
 >A : Symbol(A, Decl(contextuallyTypedSymbolNamedProperties.ts, 2, 5))
 >ap : Symbol(ap, Decl(contextuallyTypedSymbolNamedProperties.ts, 14, 8))
+>ap.description : Symbol(description, Decl(lib.es2019.symbol.d.ts, --, --))
 >ap : Symbol(ap, Decl(contextuallyTypedSymbolNamedProperties.ts, 14, 8))
+>description : Symbol(description, Decl(lib.es2019.symbol.d.ts, --, --))
 
     [B]: bp => { bp.description },
 >[B] : Symbol([B], Decl(contextuallyTypedSymbolNamedProperties.ts, 14, 34))
 >B : Symbol(B, Decl(contextuallyTypedSymbolNamedProperties.ts, 3, 5))
 >bp : Symbol(bp, Decl(contextuallyTypedSymbolNamedProperties.ts, 15, 8))
+>bp.description : Symbol(description, Decl(lib.es2019.symbol.d.ts, --, --))
 >bp : Symbol(bp, Decl(contextuallyTypedSymbolNamedProperties.ts, 15, 8))
+>description : Symbol(description, Decl(lib.es2019.symbol.d.ts, --, --))
 
 })
 

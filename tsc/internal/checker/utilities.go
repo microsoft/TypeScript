@@ -2250,3 +2250,23 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 func rangeOfTypeParameters(sourceFile *ast.SourceFile, typeParameters *ast.NodeList) core.TextRange {
 	return core.NewTextRange(typeParameters.Pos()-1, min(len(sourceFile.Text), scanner.SkipTrivia(sourceFile.Text, typeParameters.End())+1))
 }
+
+func tryGetPropertyAccessOrIdentifierToString(expr *ast.Node) string {
+	switch {
+	case ast.IsPropertyAccessExpression(expr):
+		baseStr := tryGetPropertyAccessOrIdentifierToString(expr.Expression())
+		if baseStr != "" {
+			return baseStr + "." + entityNameToString(expr.Name())
+		}
+	case ast.IsElementAccessExpression(expr):
+		baseStr := tryGetPropertyAccessOrIdentifierToString(expr.Expression())
+		if baseStr != "" && ast.IsPropertyName(expr.AsElementAccessExpression().ArgumentExpression) {
+			return baseStr + "." + getPropertyNameForPropertyNameNode(expr.AsElementAccessExpression().ArgumentExpression)
+		}
+	case ast.IsIdentifier(expr):
+		return expr.Text()
+	case ast.IsJsxNamespacedName(expr):
+		return entityNameToString(expr)
+	}
+	return ""
+}
