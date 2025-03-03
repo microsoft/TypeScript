@@ -24,12 +24,9 @@ class C {
 >3 : 3
 >  : ^
 
-        // not supported yet, could support in future:
-        const badForNow: C[#bar] = 3;   // Error
->badForNow : C[]
->          : ^^^
->#bar : any
->     : ^^^
+        const badForNow: C[#bar] = 3;
+>badForNow : number
+>          : ^^^^^^
 >3 : 3
 >  : ^
 

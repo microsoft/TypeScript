@@ -270,6 +270,7 @@ export const enum SyntaxKind {
     TemplateLiteralType,
     TemplateLiteralTypeSpan,
     ImportType,
+    PrivateNameType,
     // Binding patterns
     ObjectBindingPattern,
     ArrayBindingPattern,
@@ -721,6 +722,7 @@ export type TypeNodeSyntaxKind =
     | SyntaxKind.TemplateLiteralType
     | SyntaxKind.TemplateLiteralTypeSpan
     | SyntaxKind.ImportType
+    | SyntaxKind.PrivateNameType
     | SyntaxKind.ExpressionWithTypeArguments
     | SyntaxKind.JSDocTypeExpression
     | SyntaxKind.JSDocAllType
@@ -1096,6 +1098,7 @@ export type HasChildren =
     | LiteralTypeNode
     | TemplateLiteralTypeNode
     | TemplateLiteralTypeSpan
+    | PrivateNameTypeNode
     | ObjectBindingPattern
     | ArrayBindingPattern
     | BindingElement
@@ -2381,6 +2384,11 @@ export interface TemplateLiteralTypeSpan extends TypeNode {
     readonly parent: TemplateLiteralTypeNode;
     readonly type: TypeNode;
     readonly literal: TemplateMiddle | TemplateTail;
+}
+
+export interface PrivateNameTypeNode extends TypeNode {
+    readonly kind: SyntaxKind.PrivateNameType;
+    readonly name: PrivateIdentifier;
 }
 
 // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
@@ -6300,6 +6308,8 @@ export const enum TypeFlags {
     Reserved1       = 1 << 29,  // Used by union/intersection type construction
     /** @internal */
     Reserved2       = 1 << 30,  // Used by union/intersection type construction
+    /** @internal */
+    PrivateNameType = 1 << 31,
 
     /** @internal */
     AnyOrUnknown = Any | Unknown,
@@ -6437,6 +6447,9 @@ export interface NumberLiteralType extends LiteralType {
 
 export interface BigIntLiteralType extends LiteralType {
     value: PseudoBigInt;
+}
+export interface PrivateNameType extends StringLiteralType {
+    symbol: Symbol;
 }
 
 // Enum types (TypeFlags.Enum)
@@ -8853,6 +8866,8 @@ export interface NodeFactory {
     updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]): LiteralTypeNode;
     createTemplateLiteralType(head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]): TemplateLiteralTypeNode;
     updateTemplateLiteralType(node: TemplateLiteralTypeNode, head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]): TemplateLiteralTypeNode;
+    createPrivateNameTypeNode(name: PrivateIdentifier): PrivateNameTypeNode;
+    updatePrivateNameTypeNode(node: PrivateNameTypeNode, name: PrivateIdentifier): PrivateNameTypeNode;
 
     //
     // Binding Patterns

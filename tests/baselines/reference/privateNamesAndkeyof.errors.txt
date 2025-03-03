@@ -1,9 +1,9 @@
 privateNamesAndkeyof.ts(14,1): error TS2322: Type '"#fooField"' is not assignable to type 'keyof A'.
 privateNamesAndkeyof.ts(15,1): error TS2322: Type '"#fooMethod"' is not assignable to type 'keyof A'.
 privateNamesAndkeyof.ts(16,1): error TS2322: Type '"#fooProp"' is not assignable to type 'keyof A'.
-privateNamesAndkeyof.ts(18,1): error TS2322: Type '"fooField"' is not assignable to type 'keyof A'.
-privateNamesAndkeyof.ts(19,1): error TS2322: Type '"fooMethod"' is not assignable to type 'keyof A'.
-privateNamesAndkeyof.ts(20,1): error TS2322: Type '"fooProp"' is not assignable to type 'keyof A'.
+privateNamesAndkeyof.ts(18,1): error TS2820: Type '"fooField"' is not assignable to type 'keyof A'. Did you mean '#fooField'?
+privateNamesAndkeyof.ts(19,1): error TS2820: Type '"fooMethod"' is not assignable to type 'keyof A'. Did you mean '#fooMethod'?
+privateNamesAndkeyof.ts(20,1): error TS2820: Type '"fooProp"' is not assignable to type 'keyof A'. Did you mean '#fooProp'?
 
 
 ==== privateNamesAndkeyof.ts (6 errors) ====
@@ -32,11 +32,11 @@ privateNamesAndkeyof.ts(20,1): error TS2322: Type '"fooProp"' is not assignable 
     
     k = "fooField"; // Error
     ~
-!!! error TS2322: Type '"fooField"' is not assignable to type 'keyof A'.
+!!! error TS2820: Type '"fooField"' is not assignable to type 'keyof A'. Did you mean '#fooField'?
     k = "fooMethod"; // Error
     ~
-!!! error TS2322: Type '"fooMethod"' is not assignable to type 'keyof A'.
+!!! error TS2820: Type '"fooMethod"' is not assignable to type 'keyof A'. Did you mean '#fooMethod'?
     k = "fooProp"; // Error
     ~
-!!! error TS2322: Type '"fooProp"' is not assignable to type 'keyof A'.
+!!! error TS2820: Type '"fooProp"' is not assignable to type 'keyof A'. Did you mean '#fooProp'?
     

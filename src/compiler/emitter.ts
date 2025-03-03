@@ -341,6 +341,7 @@ import {
     PrinterOptions,
     PrintHandlers,
     PrivateIdentifier,
+    PrivateNameTypeNode,
     PropertyAccessExpression,
     PropertyAssignment,
     PropertyDeclaration,
@@ -1655,6 +1656,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitTemplateTypeSpan(node as TemplateLiteralTypeSpan);
                 case SyntaxKind.ImportType:
                     return emitImportTypeNode(node as ImportTypeNode);
+                case SyntaxKind.PrivateNameType:
+                    return emitPrivateNameType(node as PrivateNameTypeNode);
 
                 // Binding patterns
                 case SyntaxKind.ObjectBindingPattern:
@@ -2558,6 +2561,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             emit(node.qualifier);
         }
         emitTypeArguments(node, node.typeArguments);
+    }
+
+    function emitPrivateNameType(node: PrivateNameTypeNode) {
+        emitExpression(node.name);
     }
 
     //

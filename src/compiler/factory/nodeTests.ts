@@ -172,6 +172,7 @@ import {
     PostfixUnaryExpression,
     PrefixUnaryExpression,
     PrivateIdentifier,
+    PrivateNameTypeNode,
     PropertyAccessExpression,
     PropertyAssignment,
     PropertyDeclaration,
@@ -555,6 +556,10 @@ export function isTemplateLiteralTypeSpan(node: Node): node is TemplateLiteralTy
 
 export function isTemplateLiteralTypeNode(node: Node): node is TemplateLiteralTypeNode {
     return node.kind === SyntaxKind.TemplateLiteralType;
+}
+
+export function isPrivateNameTypeNode(node: Node): node is PrivateNameTypeNode {
+    return node.kind === SyntaxKind.PrivateNameType;
 }
 
 // Binding patterns

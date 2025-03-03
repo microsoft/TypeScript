@@ -67,6 +67,7 @@ import {
     isObjectLiteralElementLike,
     isOptionalChain,
     isParameter,
+    isPrivateIdentifier,
     isPropertyAccessChain,
     isPropertyName,
     isQuestionDotToken,
@@ -975,6 +976,13 @@ const visitEachChildTable: VisitEachChildTable = {
             node,
             Debug.checkDefined(nodeVisitor(node.type, visitor, isTypeNode)),
             Debug.checkDefined(nodeVisitor(node.literal, visitor, isTemplateMiddleOrTemplateTail)),
+        );
+    },
+
+    [SyntaxKind.PrivateNameType]: function visitEachChildOfPrivateIdentifier(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+        return context.factory.updatePrivateNameTypeNode(
+            node,
+            Debug.checkDefined(nodeVisitor(node.name, visitor, isPrivateIdentifier)),
         );
     },
 
