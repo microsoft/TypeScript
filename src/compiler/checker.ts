@@ -32841,6 +32841,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 member = prop;
                 allPropertiesTable?.set(prop.escapedName, prop);
 
+                if (contextualType) {
+                    forEach(getPropertyOfType(contextualType, member.escapedName)?.declarations, declaration => {
+                        const symbol = getSymbolOfDeclaration(declaration);
+                        if (
+                            isDeprecatedSymbol(symbol) && symbol.declarations &&
+                            isTypeAssignableTo(type, getTypeOfSymbol(symbol))
+                        ) {
+                            addDeprecatedSuggestion(memberDecl.name, symbol.declarations, member.escapedName as string);
+                        }
+                    });
+                }
+
                 if (
                     contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) &&
                     (memberDecl.kind === SyntaxKind.PropertyAssignment || memberDecl.kind === SyntaxKind.MethodDeclaration) && isContextSensitive(memberDecl)
