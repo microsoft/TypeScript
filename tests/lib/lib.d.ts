@@ -1079,9 +1079,22 @@ interface Array<T> {
     splice(start: number): T[];
 
     /**
+     * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
+     * @param start The zero-based location in the array from which to start removing elements.
+     * @param deleteCount The number of elements to remove. Omitting this argument will remove all elements from the start 
+     * paramater location to end of the array. If value of this argument is either a negative number, zero, undefined, or a type  
+     * that cannot be coverted to an integer, the function will evaluate the argument as zero and not remove any elements. 
+     */
+    splice(start: number, deleteCount?: number): T[];
+
+    /**
       * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
       * @param start The zero-based location in the array from which to start removing elements.
-      * @param deleteCount The number of elements to remove.
+      * @param deleteCount The number of elements to remove. If value of this argument is either a negative number, zero,
+     * undefined, or a type that cannot be coverted to an integer, the function will evaluate the argument as zero and 
+     * not remove any elements. 
+     * Note: If the deleteCount argument is left empty between the start and items arguments, it will not be evaluated as 
+     * an omission. Instead, it will be evaluated as undefined, which will be evaluated as zero. 
       * @param items Elements to insert into the array in place of the deleted elements.
       */
     splice(start: number, deleteCount: number, ...items: T[]): T[];
