@@ -1,0 +1,118 @@
+//// [tests/cases/compiler/inferFromReturnOfContextSensitiveFnJsDoc1.ts] ////
+
+=== index.js ===
+/**
+ * @template S
+ * @param {(arg0: { observer: EO }) => S} callback
+ * @param {Options} [options]
+ * @returns {VC<S>}
+ */
+/*
+ * @type { <S>(fn: (arg0: { observer: EO; }) => S, options?: Options) => VC<S> }
+ */
+function define(callback, options) {
+>define : <S>(callback: (arg0: { observer: EO; }) => S, options?: Options) => VC<S>
+>       : ^ ^^        ^^                              ^^       ^^^       ^^^^^     
+>callback : (arg0: { observer: EO; }) => S
+>         : ^    ^^                 ^^^^^ 
+>options : Options | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
+
+  const { name } = options ?? {};
+>name : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+>options ?? {} : Options
+>              : ^^^^^^^
+>options : Options | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+  const observer = new EO();
+>observer : EO
+>         : ^^
+>new EO() : EO
+>         : ^^
+>EO : typeof EO
+>   : ^^^^^^^^^
+
+  const state = callback({ observer });
+>state : S
+>      : ^
+>callback({ observer }) : S
+>                       : ^
+>callback : (arg0: { observer: EO; }) => S
+>         : ^    ^^                 ^^^^^ 
+>{ observer } : { observer: EO; }
+>             : ^^^^^^^^^^^^^^^^^
+>observer : EO
+>         : ^^
+
+  return new VC(state);
+>new VC(state) : VC<S>
+>              : ^^^^^
+>VC : typeof VC
+>   : ^^^^^^^^^
+>state : S
+>      : ^
+}
+
+/**
+ * @template S
+ */
+class VC {
+>VC : VC<S>
+>   : ^^^^^
+
+  /** @type {S} */
+  state;
+>state : S
+>      : ^
+
+  /**
+   * @param {S} state
+   */
+  constructor(state) {
+>state : S
+>      : ^
+
+    this.state = state;
+>this.state = state : S
+>                   : ^
+>this.state : S
+>           : ^
+>this : this
+>     : ^^^^
+>state : S
+>      : ^
+>state : S
+>      : ^
+  }
+}
+
+/** @typedef {{ name?: string }} Options */
+
+class EO {}
+>EO : EO
+>   : ^^
+
+const v1 = define((arg0) => true, { name: "default" });
+>v1 : VC<boolean>
+>   : ^^^^^^^^^^^
+>define((arg0) => true, { name: "default" }) : VC<boolean>
+>                                            : ^^^^^^^^^^^
+>define : <S>(callback: (arg0: { observer: EO; }) => S, options?: Options) => VC<S>
+>       : ^ ^^        ^^                              ^^       ^^^       ^^^^^     
+>(arg0) => true : (arg0: { observer: EO; }) => boolean
+>               : ^    ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+>arg0 : { observer: EO; }
+>     : ^^^^^^^^^^^^  ^^^
+>true : true
+>     : ^^^^
+>{ name: "default" } : { name: string; }
+>                    : ^^^^^^^^^^^^^^^^^
+>name : string
+>     : ^^^^^^
+>"default" : "default"
+>          : ^^^^^^^^^
+
