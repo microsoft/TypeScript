@@ -89,6 +89,7 @@ import {
     JSDocClassTag,
     JSDocDeprecatedTag,
     JSDocEnumTag,
+    JSDocExperimentalTag,
     JSDocFunctionType,
     JSDocImplementsTag,
     JSDocImportTag,
@@ -1136,6 +1137,11 @@ export function isJSDocOverloadTag(node: Node): node is JSDocOverloadTag {
 export function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag {
     return node.kind === SyntaxKind.JSDocDeprecatedTag;
 }
+
+export function isJsDOcExperimentalTag(node: Node): node is JSDocExperimentalTag{
+    return node.kind === SyntaxKind.JSDocExperimentalTag;
+}
+
 
 export function isJSDocSeeTag(node: Node): node is JSDocSeeTag {
     return node.kind === SyntaxKind.JSDocSeeTag;
