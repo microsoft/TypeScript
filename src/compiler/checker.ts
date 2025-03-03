@@ -9829,7 +9829,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 factory.createImportDeclaration(
                                     /*modifiers*/ undefined,
                                     factory.createImportClause(
-                                        /*isTypeOnly*/ false,
+                                        /*phaseModifier*/ undefined,
                                         /*name*/ undefined,
                                         factory.createNamedImports([factory.createImportSpecifier(
                                             /*isTypeOnly*/ false,
@@ -9922,7 +9922,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
-                                factory.createImportClause(isTypeOnly, factory.createIdentifier(localName), /*namedBindings*/ undefined),
+                                factory.createImportClause(
+                                    /* phaseModifier */ isTypeOnly ? SyntaxKind.TypeKeyword : undefined,
+                                    factory.createIdentifier(localName),
+                                    /*namedBindings*/ undefined,
+                                ),
                                 specifier,
                                 attributes,
                             ),
@@ -9937,7 +9941,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
-                                factory.createImportClause(isTypeOnly, /*name*/ undefined, factory.createNamespaceImport(factory.createIdentifier(localName))),
+                                factory.createImportClause(
+                                    /* phaseModifier */ isTypeOnly ? SyntaxKind.TypeKeyword : undefined,
+                                    /*name*/ undefined,
+                                    factory.createNamespaceImport(factory.createIdentifier(localName)),
+                                ),
                                 specifier,
                                 (node as ImportClause).parent.attributes,
                             ),
@@ -9964,7 +9972,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
                                 factory.createImportClause(
-                                    isTypeOnly,
+                                    /* phaseModifier */ isTypeOnly ? SyntaxKind.TypeKeyword : undefined,
                                     /*name*/ undefined,
                                     factory.createNamedImports([
                                         factory.createImportSpecifier(
@@ -37524,6 +37532,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (node.keywordToken === SyntaxKind.ImportKeyword) {
+            if (node.name.escapedText === "defer") {
+                Debug.assert(!isCallExpression(node.parent) || node.parent.expression !== node, "Trying to get the type of `import.defer` in `import.defer(...)`");
+                return errorType;
+            }
             return checkImportMetaProperty(node);
         }
 
@@ -40962,7 +40974,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // Optimize for the common case of a call to a function with a single non-generic call
         // signature where we can just fetch the return type without checking the arguments.
-        if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !isSymbolOrSymbolForCall(expr)) {
+        if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !isSymbolOrSymbolForCall(expr) && !isImportCall(expr)) {
             return isCallChain(expr) ? getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr) :
                 getReturnTypeOfSingleNonGenericCallSignature(checkNonNullExpression(expr.expression));
         }
@@ -41116,8 +41128,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ElementAccessExpression:
                 return checkIndexedAccess(node as ElementAccessExpression, checkMode);
             case SyntaxKind.CallExpression:
-                if ((node as CallExpression).expression.kind === SyntaxKind.ImportKeyword) {
-                    return checkImportCallExpression(node as ImportCall);
+                if (isImportCall(node)) {
+                    return checkImportCallExpression(node);
                 }
                 // falls through
             case SyntaxKind.NewExpression:
@@ -49384,6 +49396,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return isExportAssignment(node.parent) ? Debug.checkDefined(node.parent.symbol) : undefined;
 
             case SyntaxKind.ImportKeyword:
+                if (isMetaProperty(node.parent) && node.parent.name.escapedText === "defer") {
+                    return undefined;
+                }
+                // falls through
             case SyntaxKind.NewKeyword:
                 return isMetaProperty(node.parent) ? checkMetaPropertyKeyword(node.parent).symbol : undefined;
             case SyntaxKind.InstanceOfKeyword:
@@ -52355,7 +52371,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 break;
             case SyntaxKind.ImportKeyword:
                 if (escapedText !== "meta") {
-                    return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, unescapeLeadingUnderscores(node.name.escapedText), tokenToString(node.keywordToken), "meta");
+                    const isCallee = isCallExpression(node.parent) && node.parent.expression === node;
+                    if (escapedText === "defer") {
+                        if (!isCallee) {
+                            return grammarErrorAtPos(node, node.end, 0, Diagnostics._0_expected, "(");
+                        }
+                    }
+                    else {
+                        if (isCallee) {
+                            return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer, unescapeLeadingUnderscores(node.name.escapedText));
+                        }
+                        return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, unescapeLeadingUnderscores(node.name.escapedText), tokenToString(node.keywordToken), "meta");
+                    }
                 }
                 break;
         }
@@ -52614,11 +52641,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkGrammarImportClause(node: ImportClause): boolean {
-        if (node.isTypeOnly && node.name && node.namedBindings) {
-            return grammarErrorOnNode(node, Diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both);
+        if (node.phaseModifier === SyntaxKind.TypeKeyword) {
+            if (node.name && node.namedBindings) {
+                return grammarErrorOnNode(node, Diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both);
+            }
+            if (node.namedBindings?.kind === SyntaxKind.NamedImports) {
+                return checkGrammarNamedImportsOrExports(node.namedBindings);
+            }
         }
-        if (node.isTypeOnly && node.namedBindings?.kind === SyntaxKind.NamedImports) {
-            return checkGrammarNamedImportsOrExports(node.namedBindings);
+        else if (node.phaseModifier === SyntaxKind.DeferKeyword) {
+            if (node.name) {
+                return grammarErrorOnNode(node, Diagnostics.Default_imports_are_not_allowed_in_a_deferred_import);
+            }
+            if (node.namedBindings?.kind === SyntaxKind.NamedImports) {
+                return grammarErrorOnNode(node, Diagnostics.Named_imports_are_not_allowed_in_a_deferred_import);
+            }
+            if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.NodeNext) {
+                return grammarErrorOnNode(node, Diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_nodenext);
+            }
         }
         return false;
     }
@@ -52641,7 +52681,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return grammarErrorOnNode(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
         }
 
-        if (moduleKind === ModuleKind.ES2015) {
+        if (node.expression.kind === SyntaxKind.MetaProperty) {
+            if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.NodeNext) {
+                return grammarErrorOnNode(node, Diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_nodenext);
+            }
+        }
+        else if (moduleKind === ModuleKind.ES2015) {
             return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node16_node18_or_nodenext);
         }
 

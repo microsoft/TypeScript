@@ -1549,7 +1549,7 @@ const visitEachChildTable: VisitEachChildTable = {
     [SyntaxKind.ImportClause]: function visitEachChildOfImportClause(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateImportClause(
             node,
-            node.isTypeOnly,
+            node.phaseModifier,
             nodeVisitor(node.name, visitor, isIdentifier),
             nodeVisitor(node.namedBindings, visitor, isNamedImportBindings),
         );

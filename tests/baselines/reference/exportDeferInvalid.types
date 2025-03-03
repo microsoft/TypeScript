@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/importDefer/exportDeferInvalid.ts] ////
+
+=== a.ts ===
+export function foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+
+  console.log("foo from a");
+>console.log("foo from a") : void
+>                          : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"foo from a" : "foo from a"
+>             : ^^^^^^^^^^^^
+}
+
+=== b.ts ===
+export defer * as ns from "a";
+>defer * as : number
+>           : ^^^^^^
+>defer : any
+>      : ^^^
+>as : any
+>   : ^^^
+>ns : any
+>   : ^^^
+>from : any
+>     : ^^^
+>"a" : "a"
+>    : ^^^
+
