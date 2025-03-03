@@ -357,6 +357,7 @@ import {
     PrefixUnaryOperator,
     PrimaryExpression,
     PrivateIdentifier,
+    PrivateNameTypeNode,
     PrologueDirective,
     PropertyAccessChain,
     PropertyAccessExpression,
@@ -621,6 +622,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateLiteralTypeNode,
         createTemplateLiteralType,
         updateTemplateLiteralType,
+        createPrivateNameTypeNode,
+        updatePrivateNameTypeNode,
         createObjectBindingPattern,
         updateObjectBindingPattern,
         createArrayBindingPattern,
@@ -2766,6 +2769,21 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]) {
         return node.literal !== literal
             ? update(createLiteralTypeNode(literal), node)
+            : node;
+    }
+
+    // @api
+    function createPrivateNameTypeNode(name: PrivateIdentifier) {
+        const node = createBaseNode<PrivateNameTypeNode>(SyntaxKind.PrivateNameType);
+        node.name = name;
+        node.transformFlags = TransformFlags.ContainsTypeScript;
+        return node;
+    }
+
+    // @api
+    function updatePrivateNameTypeNode(node: PrivateNameTypeNode, name: PrivateIdentifier) {
+        return node.name !== name
+            ? update(createPrivateNameTypeNode(name), node)
             : node;
     }
 
