@@ -88,6 +88,7 @@ import {
     getLeadingCommentRanges,
     getLeadingCommentRangesOfNode,
     getSourceFileOfNode,
+    getTextOfNode,
     getTrailingCommentRanges,
     hasAccessorModifier,
     HasDecorators,
@@ -133,6 +134,7 @@ import {
     isFunctionTypeNode,
     isIdentifier,
     isImportSpecifier,
+    isImportTypeNode,
     isInJSFile,
     isJSDoc,
     isJSDocAugmentsTag,
@@ -1298,7 +1300,7 @@ function formatJSDocLink(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain) {
     const kind = link.kind === SyntaxKind.JSDocLink ? "link"
         : link.kind === SyntaxKind.JSDocLinkCode ? "linkcode"
         : "linkplain";
-    const name = link.name ? entityNameToString(link.name) : "";
+    const name = link.name ? isImportTypeNode(link.name) ? getTextOfNode(link.name) : entityNameToString(link.name) : "";
     const space = link.name && (link.text === "" || link.text.startsWith("://")) ? "" : " ";
     return `{@${kind} ${name}${space}${link.text}}`;
 }

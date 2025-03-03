@@ -43412,7 +43412,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkJSDocLinkLikeTag(node: JSDocLink | JSDocLinkCode | JSDocLinkPlain) {
         if (node.name) {
-            resolveJSDocMemberName(node.name, /*ignoreErrors*/ true);
+            if (isImportTypeNode(node.name)) {
+                checkImportType(node.name);
+            }
+            else {
+                resolveJSDocMemberName(node.name, /*ignoreErrors*/ true);
+            }
         }
     }
 
