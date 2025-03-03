@@ -5,8 +5,13 @@
 //  * @property {number} x
 //  |]*/
 // 
+// /** @typedef {{ name: string }} Foo */
 // /** @type {I} */
-// const /*GOTO TYPE*/i = { x: 0 };
+// const /*GOTO TYPE*/a = { x: 0 };
+// 
+// const b = /** @type {Foo} */({});
+// const c = /** @type {Foo} */({}).name;
+// const d = /** @type {Foo} */({})['name'];
 
   // === Details ===
   [
@@ -15,6 +20,96 @@
     "name": "__type",
     "containerName": "",
     "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /a.js ===
+// /**
+//  * @typedef {object} I
+//  * @property {number} x
+//  */
+// 
+// /** <|@typedef {{ name: string }} [|Foo|]|> */
+// /** @type {I} */
+// const a = { x: 0 };
+// 
+// const b = /** @type {/*GOTO TYPE*/Foo} */({});
+// const c = /** @type {Foo} */({}).name;
+// const d = /** @type {Foo} */({})['name'];
+
+  // === Details ===
+  [
+   {
+    "kind": "type",
+    "name": "Foo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /a.js ===
+// /**
+//  * @typedef {object} I
+//  * @property {number} x
+//  */
+// 
+// /** <|@typedef {{ name: string }} [|Foo|]|> */
+// /** @type {I} */
+// const a = { x: 0 };
+// 
+// const b = /** @type {Foo} */({});
+// const c = /** @type {/*GOTO TYPE*/Foo} */({}).name;
+// const d = /** @type {Foo} */({})['name'];
+
+  // === Details ===
+  [
+   {
+    "kind": "type",
+    "name": "Foo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /a.js ===
+// /**
+//  * @typedef {object} I
+//  * @property {number} x
+//  */
+// 
+// /** <|@typedef {{ name: string }} [|Foo|]|> */
+// /** @type {I} */
+// const a = { x: 0 };
+// 
+// const b = /** @type {Foo} */({});
+// const c = /** @type {Foo} */({}).name;
+// const d = /** @type {/*GOTO TYPE*/Foo} */({})['name'];
+
+  // === Details ===
+  [
+   {
+    "kind": "type",
+    "name": "Foo",
+    "containerName": "",
+    "isLocal": false,
     "isAmbient": false,
     "unverified": false,
     "failedAliasResolution": false
