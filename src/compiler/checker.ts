@@ -37875,21 +37875,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : fallbackType;
     }
 
-    function inferFromAnnotatedParametersAndReturn(signature: Signature, context: Signature, inferenceContext: InferenceContext) {
-        const len = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
-        for (let i = 0; i < len; i++) {
-            const declaration = signature.parameters[i].valueDeclaration as ParameterDeclaration;
-            const typeNode = getEffectiveTypeAnnotationNode(declaration);
-            if (typeNode) {
-                const source = addOptionality(getTypeFromTypeNode(typeNode), /*isProperty*/ false, isOptionalDeclaration(declaration));
-                const target = getTypeAtPosition(context, i);
-                inferTypes(inferenceContext.inferences, source, target);
+    function inferFromAnnotatedParametersAndReturn(node: FunctionExpression | ArrowFunction | MethodDeclaration, contextualSignature: Signature, inferenceContext: InferenceContext) {
+        if (node.parameters.length) {
+            const len = node.parameters.length - (last(node.parameters).dotDotDotToken ? 1 : 0);
+            const thisParameterOffset = first(node.parameters).symbol.escapedName === InternalSymbolName.This ? 1 : 0;
+            for (let i = thisParameterOffset; i < len; i++) {
+                const declaration = node.parameters[i];
+                const typeNode = getEffectiveTypeAnnotationNode(declaration);
+                if (typeNode) {
+                    const source = addOptionality(getTypeFromTypeNode(typeNode), /*isProperty*/ false, isOptionalDeclaration(declaration));
+                    const target = getTypeAtPosition(contextualSignature, i - thisParameterOffset);
+                    inferTypes(inferenceContext.inferences, source, target);
+                }
             }
         }
-        const typeNode = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
-        if (typeNode) {
-            const source = getTypeFromTypeNode(typeNode);
-            const target = getReturnTypeOfSignature(context);
+        const returnTypeNode = node.type;
+        if (returnTypeNode) {
+            const source = getTypeFromTypeNode(returnTypeNode);
+            const target = getReturnTypeOfSignature(contextualSignature);
             inferTypes(inferenceContext.inferences, source, target);
         }
     }
@@ -38856,6 +38859,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return links.contextFreeType = returnOnlyType;
                 }
             }
+            if (checkMode & CheckMode.Inferential) {
+                const contextualSignature = getContextualSignature(node);
+                if (contextualSignature) {
+                    inferFromAnnotatedParametersAndReturn(node, contextualSignature, getInferenceContext(node)!);
+                }
+            }
             return anyFunctionType;
         }
 
@@ -38889,7 +38898,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const inferenceContext = getInferenceContext(node);
                         let instantiatedContextualSignature: Signature | undefined;
                         if (checkMode && checkMode & CheckMode.Inferential) {
-                            inferFromAnnotatedParametersAndReturn(signature, contextualSignature, inferenceContext!);
+                            inferFromAnnotatedParametersAndReturn(node, contextualSignature, inferenceContext!);
                             const restType = getEffectiveRestType(contextualSignature);
                             if (restType && restType.flags & TypeFlags.TypeParameter) {
                                 instantiatedContextualSignature = instantiateSignature(contextualSignature, inferenceContext!.nonFixingMapper);
@@ -38907,7 +38916,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else if (contextualSignature && !node.typeParameters && contextualSignature.parameters.length > node.parameters.length) {
                     const inferenceContext = getInferenceContext(node);
                     if (checkMode && checkMode & CheckMode.Inferential) {
-                        inferFromAnnotatedParametersAndReturn(signature, contextualSignature, inferenceContext!);
+                        inferFromAnnotatedParametersAndReturn(node, contextualSignature, inferenceContext!);
                     }
                 }
                 if (contextualSignature && !getReturnTypeFromAnnotation(node) && !signature.resolvedReturnType) {
