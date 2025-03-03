@@ -14463,17 +14463,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getAugmentedPropertiesOfType(unionType);
         }
 
+        const props = getMembersOfUnionOrIntersection(unionType as UnionType);
+        return arrayFrom(props.values());
+    }
+
+    function getMembersOfUnionOrIntersection(type: UnionOrIntersectionType): SymbolTable {
         const props = createSymbolTable();
-        for (const memberType of types) {
+        for (const memberType of type.types) {
             for (const { escapedName } of getAugmentedPropertiesOfType(memberType)) {
                 if (!props.has(escapedName)) {
-                    const prop = createUnionOrIntersectionProperty(unionType as UnionType, escapedName);
+                    const prop = createUnionOrIntersectionProperty(type, escapedName);
                     // May be undefined if the property is private
                     if (prop) props.set(escapedName, prop);
                 }
             }
         }
-        return arrayFrom(props.values());
+        return props;
     }
 
     function getConstraintOfType(type: InstantiableType | UnionOrIntersectionType): Type | undefined {
@@ -21668,6 +21673,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             hasNullableOrEmpty ||= !!(t.flags & TypeFlags.Nullable) || isEmptyAnonymousObjectType(t);
             if (hasInstantiable && hasNullableOrEmpty) return true;
         }
+
+        return false;
+    }
+
+    function isTypeMergeableIntersectionConstituent(type: Type) {
+        if (
+            type.flags === TypeFlags.Object &&
+            !!((type as ObjectType).objectFlags & ObjectFlags.Anonymous) &&
+            !((type as ObjectType).objectFlags & ObjectFlags.Instantiated)
+        ) {
+            if ((type as ObjectType).objectFlags & ObjectFlags.ReverseMapped) {
+                return isTypeMergeableIntersectionConstituent((type as ReverseMappedType).source);
+            }
+
+            return !typeHasCallOrConstructSignatures(type) && getIndexInfosOfType(type).length === 0;
+        }
         return false;
     }
 
@@ -22089,12 +22110,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // turn deferred type references into regular type references, simplify indexed access and
             // conditional types, and resolve substitution types to either the substitution (on the source
             // side) or the type variable (on the target side).
-            const source = getNormalizedType(originalSource, /*writing*/ false);
+            let source = getNormalizedType(originalSource, /*writing*/ false);
             let target = getNormalizedType(originalTarget, /*writing*/ true);
 
             if (source === target) return Ternary.True;
 
             if (relation === identityRelation) {
+                if (source.flags & TypeFlags.Intersection) {
+                    source = mergeIntersectionTypeIfPossible(source as IntersectionType, /*writing*/ false);
+                }
+                if (target.flags & TypeFlags.Intersection) {
+                    target = mergeIntersectionTypeIfPossible(target as IntersectionType, /*writing*/ true);
+                }
+
                 if (source.flags !== target.flags) return Ternary.False;
                 if (source.flags & TypeFlags.Singleton) return Ternary.True;
                 traceUnionsOrIntersectionsTooLarge(source, target);
@@ -22180,6 +22208,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 reportErrorResults(originalSource, originalTarget, source, target, headMessage);
             }
             return Ternary.False;
+        }
+
+        function mergeIntersectionTypeIfPossible(type: IntersectionType, writing: boolean) {
+            if (every(type.types, isTypeMergeableIntersectionConstituent)) {
+                const reduced = getReducedType(type);
+                if (reduced.flags & TypeFlags.Intersection) {
+                    type = reduced as IntersectionType;
+                    const members = getMembersOfUnionOrIntersection(type);
+                    const intersection = createAnonymousType(/*symbol*/ undefined, members, emptyArray, emptyArray, emptyArray);
+                    intersection.aliasSymbol = type.aliasSymbol;
+                    intersection.aliasTypeArguments = type.aliasTypeArguments;
+                    return getNormalizedType(intersection, writing);
+                }
+            }
+            return type;
         }
 
         function reportErrorResults(originalSource: Type, originalTarget: Type, source: Type, target: Type, headMessage: DiagnosticMessage | undefined) {
