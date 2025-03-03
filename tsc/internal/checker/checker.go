@@ -13863,10 +13863,10 @@ func (c *Checker) markSymbolOfAliasDeclarationIfTypeOnlyWorker(aliasDeclarationL
 		if exportSymbol == nil {
 			exportSymbol = target
 		}
-		typeOnly := core.Some(exportSymbol.Declarations, isTypeOnlyImportOrExportDeclaration)
 		aliasDeclarationLinks.typeOnlyDeclarationResolved = true
-		aliasDeclarationLinks.typeOnlyDeclaration = nil
-		if typeOnly {
+		if typeOnly := core.Find(exportSymbol.Declarations, isTypeOnlyImportOrExportDeclaration); typeOnly != nil {
+			aliasDeclarationLinks.typeOnlyDeclaration = typeOnly
+		} else {
 			aliasDeclarationLinks.typeOnlyDeclaration = c.aliasSymbolLinks.Get(exportSymbol).typeOnlyDeclaration
 		}
 	}

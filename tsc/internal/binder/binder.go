@@ -724,10 +724,20 @@ func (b *Binder) bind(node *ast.Node) bool {
 		if node.Kind == ast.KindEndOfFile {
 			b.parent = node
 		}
+		b.bindJSDoc(node)
 		b.parent = saveParent
 	}
 	b.inStrictMode = saveInStrictMode
 	return false
+}
+
+func (b *Binder) bindJSDoc(node *ast.Node) {
+	// !!! if isInJSFile(node) {
+	// !!! else {
+	for _, jsdoc := range node.JSDoc(b.file) {
+		setParent(jsdoc, node)
+		ast.SetParentInChildren(jsdoc)
+	}
 }
 
 func (b *Binder) bindPropertyWorker(node *ast.Node) {
@@ -1484,6 +1494,7 @@ func (b *Binder) bindChildren(node *ast.Node) {
 	b.inAssignmentPattern = false
 	if b.checkUnreachable(node) {
 		b.bindEachChild(node)
+		b.bindJSDoc(node)
 		b.inAssignmentPattern = saveInAssignmentPattern
 		return
 	}
@@ -1571,6 +1582,7 @@ func (b *Binder) bindChildren(node *ast.Node) {
 	default:
 		b.bindEachChild(node)
 	}
+	b.bindJSDoc(node)
 	b.inAssignmentPattern = saveInAssignmentPattern
 }
 

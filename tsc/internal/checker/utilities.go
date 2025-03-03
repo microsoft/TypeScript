@@ -437,7 +437,7 @@ func isShorthandAmbientModule(node *ast.Node) bool {
 }
 
 func getAliasDeclarationFromName(node *ast.Node) *ast.Node {
-	switch node.Kind {
+	switch node.Parent.Kind {
 	case ast.KindImportClause, ast.KindImportSpecifier, ast.KindNamespaceImport, ast.KindExportSpecifier, ast.KindExportAssignment,
 		ast.KindImportEqualsDeclaration, ast.KindNamespaceExport:
 		return node.Parent
