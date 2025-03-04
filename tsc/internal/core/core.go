@@ -314,33 +314,42 @@ func Coalesce[T *U, U any](a T, b T) T {
 
 func ComputeLineStarts(text string) []TextPos {
 	result := make([]TextPos, 0, strings.Count(text, "\n")+1)
-	pos := 0
-	lineStart := 0
-	for pos < len(text) {
-		b := text[pos]
-		if b < 0x7F {
-			pos++
-			switch b {
-			case '\r':
-				if pos < len(text) && text[pos] == '\n' {
-					pos++
+	return slices.AppendSeq(result, ComputeLineStartsSeq(text))
+}
+
+func ComputeLineStartsSeq(text string) iter.Seq[TextPos] {
+	return func(yield func(TextPos) bool) {
+		pos := 0
+		lineStart := 0
+		for pos < len(text) {
+			b := text[pos]
+			if b < 0x7F {
+				pos++
+				switch b {
+				case '\r':
+					if pos < len(text) && text[pos] == '\n' {
+						pos++
+					}
+					fallthrough
+				case '\n':
+					if !yield(TextPos(lineStart)) {
+						return
+					}
+					lineStart = pos
 				}
-				fallthrough
-			case '\n':
-				result = append(result, TextPos(lineStart))
-				lineStart = pos
-			}
-		} else {
-			ch, size := utf8.DecodeRuneInString(text[pos:])
-			pos += size
-			if stringutil.IsLineBreak(ch) {
-				result = append(result, TextPos(lineStart))
-				lineStart = pos
+			} else {
+				ch, size := utf8.DecodeRuneInString(text[pos:])
+				pos += size
+				if stringutil.IsLineBreak(ch) {
+					if !yield(TextPos(lineStart)) {
+						return
+					}
+					lineStart = pos
+				}
 			}
 		}
+		yield(TextPos(lineStart))
 	}
-	result = append(result, TextPos(lineStart))
-	return result
 }
 
 func PositionToLineAndCharacter(position int, lineStarts []TextPos) (line int, character int) {

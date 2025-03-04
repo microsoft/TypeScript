@@ -86,11 +86,18 @@ func (w *textWriter) RawWrite(s string) {
 }
 
 func (w *textWriter) updateLineCountAndPosFor(s string) {
-	lineStartsOfS := core.ComputeLineStarts(s)
-	if len(lineStartsOfS) > 1 {
-		w.lineCount += len(lineStartsOfS) - 1
+	var count int
+	var lastLineStart core.TextPos
+
+	for lineStart := range core.ComputeLineStartsSeq(s) {
+		count++
+		lastLineStart = lineStart
+	}
+
+	if count > 1 {
+		w.lineCount += count - 1
 		curLen := w.builder.Len()
-		w.linePos = curLen - len(s) + int(lineStartsOfS[len(lineStartsOfS)-1])
+		w.linePos = curLen - len(s) + int(lastLineStart)
 		w.lineStart = (w.linePos - curLen) == 0
 		return
 	}
