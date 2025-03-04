@@ -14453,7 +14453,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const nameType = property.name && (isJsxNamespacedName(property.name) ? getStringLiteralType(getTextOfJsxAttributeName(property.name)) : getLiteralTypeFromPropertyName(property.name));
             const name = nameType && isTypeUsableAsPropertyName(nameType) ? getPropertyNameFromType(nameType) : undefined;
             const expected = name === undefined ? undefined : getTypeOfPropertyOfType(contextualType, name);
-            return !!expected && isLiteralType(expected) && !isTypeAssignableTo(getTypeOfNode(property), expected);
+            return !!expected && (isLiteralType(expected) || isPatternLiteralType(expected)) && !isTypeAssignableTo(getTypeOfNode(property), expected);
         });
     }
 
