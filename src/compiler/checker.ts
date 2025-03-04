@@ -1759,6 +1759,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getResolvedSignature: (node, candidatesOutArray, argumentCount) => getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.Normal),
         getCandidateSignaturesForStringLiteralCompletions,
         getResolvedSignatureForSignatureHelp: (node, candidatesOutArray, argumentCount) => runWithoutResolvedSignatureCaching(node, () => getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.IsForSignatureHelp)),
+        getContextualOriginTypeForStringDefinition: (node: StringLiteralLike) => {
+            const contextualType = getContextualType(node, /*contextFlags*/ undefined);
+            return contextualType && contextualType.flags & TypeFlags.Union ? (contextualType as UnionType).origin : undefined;
+        },
         getExpandedParameters,
         hasEffectiveRestParameter,
         containsArgumentsReference,
