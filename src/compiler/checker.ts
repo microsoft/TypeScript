@@ -45962,7 +45962,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const container = isJSDocTemplateTag(declaration.parent) ? getJSDocHost(declaration.parent) : declaration.parent;
                 if (!isFunctionLike(container)) continue;
                 let paramReference: ParameterDeclaration | undefined;
-                let referencePath: Name[] | undefined;
+                let referencePath: Member[] | undefined;
                 let hasInvalidReference = false;
                 for (const paramDecl of container.parameters) {
                     const typeNode = getEffectiveTypeAnnotationNode(paramDecl);
@@ -45981,7 +45981,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         paramReference = paramDecl;
                     }
                 }
-                if (!hasInvalidReference && referencePath) {
+                if (!hasInvalidReference && referencePath && validateOptionality(paramReference!, constraint, referencePath)) {
                     const symbolAndReference = constructNarrowableReference(paramReference!, referencePath);
                     if (symbolAndReference) {
                         if (symbolAndReference[0] && symbolAndReference[0] !== unknownSymbol) {
@@ -45993,15 +45993,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         return narrowableParams;
-        // // For a parameter of declared type `T` to be a valid reference for narrowing, it must satisfy:
-        // // - the parameter name is an identifier
-        // // - if the parameter is optional, then `T`'s constraint must allow for undefined
-        // function getValidParameterReference(paramDecl: ParameterDeclaration, constraint: Type): Identifier | undefined {
-        //     if (!isIdentifier(paramDecl.name)) return;
-        //     const isOptional = !!paramDecl.questionToken || isJSDocOptionalParameter(paramDecl);
-        //     if (isOptional && !containsUndefinedType(constraint)) return;
-        //     return paramDecl.name;
-        // }
 
         function isReferenceToTypeParameter(typeParam: TypeParameter, node: TypeReferenceNode) {
             return getTypeFromTypeReference(node) === typeParam;
@@ -46030,7 +46021,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // an array of names that corresponds to the valid reference to `T`, if exactly one valid reference was found.
         // `path` is initially is empty; it's an accumulator for the path through valid property accesses.
         type Name = Identifier | StringLiteral;
-        function getValidTypeParameterReference(typeNode: Node, typeParam: TypeParameter, path: Name[]): Name[] | boolean {
+        type Member = PropertySignature & { name: Name };
+        function getValidTypeParameterReference(typeNode: Node, typeParam: TypeParameter, path: Member[]): Member[] | boolean {
             switch (typeNode.kind) {
                 case SyntaxKind.TypeReference:
                     const type = getTypeFromTypeReference((typeNode as TypeReferenceNode));
@@ -46077,7 +46069,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.TypeLiteral:
                     return getValidTypeParameterReferenceFromTypeElements((typeNode as TypeLiteralNode).members, typeParam, path);
                 case SyntaxKind.IntersectionType:
-                    let validPath: Name[] | undefined;
+                    let validPath: Member[] | undefined;
                     for (const type of (typeNode as IntersectionTypeNode).types) {
                         const result = getValidTypeParameterReference(type, typeParam, path);
                         if (!result) {
@@ -46097,8 +46089,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        function getValidTypeParameterReferenceFromTypeElements(members: NodeArray<TypeElement>, typeParam: TypeParameter, path: Name[]): Name[] | boolean {
-            let validPath: Name[] | undefined;
+        function getValidTypeParameterReferenceFromTypeElements(members: NodeArray<TypeElement>, typeParam: TypeParameter, path: Member[]): Member[] | boolean {
+            let validPath: Member[] | undefined;
             for (const member of members) {
                 if (!isTypeParameterReferenced(typeParam, member)) {
                     continue;
@@ -46106,13 +46098,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!isPropertySignature(member)) {
                     return false; // Unsupported reference to `T`, e.g. `[s: string]: T`.
                 }
-                if (!isIdentifier(member.name) && !isStringLiteral(member.name)) { // >> TODO: support others e.g. computed property?
+                if (!isIdentifier(member.name) && !isStringLiteral(member.name)) {
                     return false; // Unsupported property name, e.g. `[c]: T`
                 }
-                if (member.questionToken) {
-                    // >> TODO: account for property optionality
-                }
-                const result = getValidTypeParameterReference(member.type!, typeParam, [...path, member.name])
+                const result = getValidTypeParameterReference(member.type!, typeParam, [...path, member as Member])
                 if (!result) {
                     return false;
                 }
@@ -46126,6 +46115,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return validPath ?? true;
         }
 
+        function validateOptionality(paramDecl: ParameterDeclaration, constraint: Type, path: Member[]): boolean {
+            // `function f<T extends ...>(obj: { prop?: { prop2: T }})` is not allowed.
+            for (let i = 0; i < path.length - 1; i++) {
+                if (path[i].questionToken) {
+                    return false;
+                }
+            }
+            const paramIsOptional = !!paramDecl.questionToken || isJSDocOptionalParameter(paramDecl);
+            // `function f<T extends ...>(obj?: { prop: T })` is not allowed.
+            if (paramIsOptional && path.length > 0) {
+                return false;
+            }
+            
+            const isOptional = paramIsOptional || path.length > 0 && path[path.length - 1].questionToken;
+            // `function f<T extends boolean>(obj?: T)` is not allowed under `strictNullChecks`.
+            if (isOptional && strictNullChecks && !containsUndefinedType(constraint)) {
+                return false;
+            }
+
+            return true;
+        }
+
         // Given a parameter declaration, and a name path to a reference of type parameter `T` in the type of the parameter,
         // construct a reference to the parameter property that corresponds to the `T` reference in the types.
         // Examples:
@@ -46135,7 +46146,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // `constructNarrowableReference(`{ b }: { b: T }`, [`b`])` ==> `b`
         // `constructNarrowableReference(`{ a }: { a: { b: T } }`, [`a`, `b`])` ==> `a.b`
         // `constructNarrowableReference(`{ a: { b }} : { a: { b: T }} }`, [`a`, `b`])` ==> `b`
-        function constructNarrowableReference(paramDecl: ParameterDeclaration, path: Name[]): [Symbol, NarrowableReference] | undefined {
+        function constructNarrowableReference(paramDecl: ParameterDeclaration, path: Member[]): [Symbol, NarrowableReference] | undefined {
             let currentName = paramDecl.name;
             let i = 0;
             for (; i < path.length; i++) {
@@ -46143,7 +46154,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     break;
                 }
                 else if (isObjectBindingPattern(currentName)) {
-                    const name = path[i];
+                    const name = path[i].name;
                     let nameText: __String | undefined;
                     if (isIdentifier(name)) nameText = name.escapedText
                     else {
@@ -46172,7 +46183,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let result: NarrowableReference = factory.cloneNode(currentName);
             const initialSymbol = getSymbolOfDeclaration(currentName.parent as ParameterDeclaration | BindingElement);
             for (let j = i; j < path.length; j++) {
-                result = addName(result, path[j]);
+                result = addName(result, path[j].name);
             }
             return [initialSymbol, result];
         }

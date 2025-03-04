@@ -829,3 +829,248 @@ function h5<T extends boolean>(param: T): Ret<T> {
 >  : ^
     }
 }
+
+// Tests for optionality of parameters and properties.
+
+type RetU<T> =
+>RetU : RetU<T>
+>     : ^^^^^^^
+
+    T extends true  ? 1 :
+>true : true
+>     : ^^^^
+
+    T extends false ? 2 :
+>false : false
+>      : ^^^^^
+
+    T extends undefined ? 3 :
+    never;
+
+function fn1<T extends boolean>(param?: T): RetU<T> { // Bad.
+>fn1 : <T extends boolean>(param?: T) => RetU<T>
+>    : ^ ^^^^^^^^^       ^^     ^^^ ^^^^^       
+>param : T | undefined
+>      : ^^^^^^^^^^^^^
+
+    if (param == undefined) {
+>param == undefined : boolean
+>                   : ^^^^^^^
+>param : T | undefined
+>      : ^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return 3;
+>3 : 3
+>  : ^
+    }
+    if (param) {
+>param : T
+>      : ^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
+
+function fn2<T extends boolean | undefined>(param?: T): RetU<T> {
+>fn2 : <T extends boolean | undefined>(param?: T) => RetU<T>
+>    : ^ ^^^^^^^^^                   ^^     ^^^ ^^^^^       
+>param : T | undefined
+>      : ^^^^^^^^^^^^^
+
+    if (param == undefined) {
+>param == undefined : boolean
+>                   : ^^^^^^^
+>param : T | undefined
+>      : ^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return 3;
+>3 : 3
+>  : ^
+    }
+    if (param) {
+>param : NonNullable<T>
+>      : ^^^^^^^^^^^^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
+
+function fn3<T extends boolean | undefined>(param: { prop?: T }): RetU<T> {
+>fn3 : <T extends boolean | undefined>(param: { prop?: T; }) => RetU<T>
+>    : ^ ^^^^^^^^^                   ^^     ^^             ^^^^^       
+>param : { prop?: T; }
+>      : ^^^^^^^^^ ^^^
+>prop : T | undefined
+>     : ^^^^^^^^^^^^^
+
+    if (param.prop == undefined) {
+>param.prop == undefined : boolean
+>                        : ^^^^^^^
+>param.prop : T | undefined
+>           : ^^^^^^^^^^^^^
+>param : { prop?: T; }
+>      : ^^^^^^^^^ ^^^
+>prop : T | undefined
+>     : ^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return 3;
+>3 : 3
+>  : ^
+    }
+    if (param.prop) {
+>param.prop : NonNullable<T>
+>           : ^^^^^^^^^^^^^^
+>param : { prop?: T; }
+>      : ^^^^^^^^^ ^^^
+>prop : NonNullable<T>
+>     : ^^^^^^^^^^^^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
+
+function fn4<T extends boolean | undefined>({ prop }: { prop?: T }): RetU<T> {
+>fn4 : <T extends boolean | undefined>({ prop }: { prop?: T; }) => RetU<T>
+>    : ^ ^^^^^^^^^                   ^^        ^^             ^^^^^       
+>prop : T | undefined
+>     : ^^^^^^^^^^^^^
+>prop : T | undefined
+>     : ^^^^^^^^^^^^^
+
+    if (prop == undefined) {
+>prop == undefined : boolean
+>                  : ^^^^^^^
+>prop : T | undefined
+>     : ^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return 3;
+>3 : 3
+>  : ^
+    }
+    if (prop) {
+>prop : NonNullable<T>
+>     : ^^^^^^^^^^^^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
+
+function fn5<T extends boolean | undefined>(param?: { prop: T }): RetU<T> { // Bad.
+>fn5 : <T extends boolean | undefined>(param?: { prop: T; }) => RetU<T>
+>    : ^ ^^^^^^^^^                   ^^     ^^^            ^^^^^       
+>param : { prop: T; } | undefined
+>      : ^^^^^^^^ ^^^^^^^^^^^^^^^
+>prop : T
+>     : ^
+
+    if (param.prop == undefined) {
+>param.prop == undefined : boolean
+>                        : ^^^^^^^
+>param.prop : T
+>           : ^
+>param : { prop: T; } | undefined
+>      : ^^^^^^^^ ^^^^^^^^^^^^^^^
+>prop : T
+>     : ^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return 3;
+>3 : 3
+>  : ^
+    }
+    if (param.prop) {
+>param.prop : NonNullable<T>
+>           : ^^^^^^^^^^^^^^
+>param : { prop: T; } | undefined
+>      : ^^^^^^^^ ^^^^^^^^^^^^^^^
+>prop : NonNullable<T>
+>     : ^^^^^^^^^^^^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
+
+function fn6<T extends boolean | undefined>(param: { prop1?: { prop?: T } }): RetU<T> { // Bad.
+>fn6 : <T extends boolean | undefined>(param: { prop1?: { prop?: T; }; }) => RetU<T>
+>    : ^ ^^^^^^^^^                   ^^     ^^                          ^^^^^       
+>param : { prop1?: { prop?: T; }; }
+>      : ^^^^^^^^^^             ^^^
+>prop1 : { prop?: T; } | undefined
+>      : ^^^^^^^^^ ^^^^^^^^^^^^^^^
+>prop : T | undefined
+>     : ^^^^^^^^^^^^^
+
+    if (param.prop1.prop == undefined) {
+>param.prop1.prop == undefined : boolean
+>                              : ^^^^^^^
+>param.prop1.prop : T | undefined
+>                 : ^^^^^^^^^^^^^
+>param.prop1 : { prop?: T; } | undefined
+>            : ^^^^^^^^^ ^^^^^^^^^^^^^^^
+>param : { prop1?: { prop?: T; }; }
+>      : ^^^^^^^^^^             ^^^
+>prop1 : { prop?: T; } | undefined
+>      : ^^^^^^^^^ ^^^^^^^^^^^^^^^
+>prop : T | undefined
+>     : ^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return 3;
+>3 : 3
+>  : ^
+    }
+    if (param.prop1.prop) {
+>param.prop1.prop : NonNullable<T>
+>                 : ^^^^^^^^^^^^^^
+>param.prop1 : { prop?: T; } | undefined
+>            : ^^^^^^^^^ ^^^^^^^^^^^^^^^
+>param : { prop1?: { prop?: T; }; }
+>      : ^^^^^^^^^^             ^^^
+>prop1 : { prop?: T; } | undefined
+>      : ^^^^^^^^^ ^^^^^^^^^^^^^^^
+>prop : NonNullable<T>
+>     : ^^^^^^^^^^^^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
