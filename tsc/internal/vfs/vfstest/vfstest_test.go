@@ -48,10 +48,14 @@ func TestInsensitive(t *testing.T) {
 	entries, err := fs.ReadDir(vfs, "foo")
 	assert.NilError(t, err)
 	assert.DeepEqual(t, dirEntriesToNames(entries), []string{"bar", "bar2", "bar3"})
+
 	_, err = vfs.Realpath("does/not/exist")
 	assert.ErrorContains(t, err, "file does not exist")
+	_, err = fs.Stat(vfs, "does/not/exist")
+	assert.ErrorContains(t, err, "file does not exist")
 
-	assert.NilError(t, fstest.TestFS(vfs, "foo/bar/baz"))
+	// TODO: reenable in Go 1.25 when TestFS understands symlinks.
+	// assert.NilError(t, fstest.TestFS(vfs, "foo/bar/baz"))
 
 	insensitive, err := fs.ReadFile(vfs, "Foo/Bar/Baz")
 	assert.NilError(t, err)
@@ -65,9 +69,13 @@ func TestInsensitive(t *testing.T) {
 	entries, err = fs.ReadDir(vfs, "Foo")
 	assert.NilError(t, err)
 	assert.DeepEqual(t, dirEntriesToNames(entries), []string{"bar", "bar2", "bar3"})
+
 	_, err = vfs.Realpath("Does/Not/Exist")
 	assert.ErrorContains(t, err, "file does not exist")
+	_, err = fs.Stat(vfs, "Does/Not/Exist")
+	assert.ErrorContains(t, err, "file does not exist")
 
+	// TODO: reenable in Go 1.25 when TestFS understands symlinks.
 	// assert.NilError(t, fstest.TestFS(vfs, "Foo/Bar/Baz"))
 }
 
@@ -101,6 +109,7 @@ func TestInsensitiveUpper(t *testing.T) {
 	assert.NilError(t, err)
 	assert.DeepEqual(t, dirEntriesToNames(entries), []string{"Bar", "Bar2", "Bar3"})
 
+	// TODO: reenable in Go 1.25 when TestFS understands symlinks.
 	// assert.NilError(t, fstest.TestFS(vfs, "foo/bar/baz"))
 
 	insensitive, err := fs.ReadFile(vfs, "Foo/Bar/Baz")
@@ -113,7 +122,8 @@ func TestInsensitiveUpper(t *testing.T) {
 	assert.NilError(t, err)
 	assert.DeepEqual(t, dirEntriesToNames(entries), []string{"Bar", "Bar2", "Bar3"})
 
-	assert.NilError(t, fstest.TestFS(vfs, "Foo/Bar/Baz"))
+	// TODO: reenable in Go 1.25 when TestFS understands symlinks.
+	// assert.NilError(t, fstest.TestFS(vfs, "Foo/Bar/Baz"))
 }
 
 func TestSensitive(t *testing.T) {
@@ -143,7 +153,8 @@ func TestSensitive(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, sensitiveInfo.Sys(), 1234)
 
-	assert.NilError(t, fstest.TestFS(vfs, "foo/bar/baz"))
+	// TODO: reenable in Go 1.25 when TestFS understands symlinks.
+	// assert.NilError(t, fstest.TestFS(vfs, "foo/bar/baz"))
 
 	_, err = fs.ReadFile(vfs, "Foo/Bar/Baz")
 	assert.ErrorContains(t, err, "file does not exist")
@@ -505,4 +516,149 @@ func TestBOM(t *testing.T) {
 		assert.Assert(t, ok)
 		assert.Equal(t, content, expected)
 	})
+}
+
+func TestSymlink(t *testing.T) {
+	t.Parallel()
+
+	fs := FromMap(map[string]any{
+		"/foo.ts":           "hello, world",
+		"/symlink.ts":       Symlink("/foo.ts"),
+		"/some/dir/file.ts": "hello, world",
+		"/some/dirlink":     Symlink("/some/dir"),
+		"/a":                Symlink("/b"),
+		"/b":                Symlink("/c"),
+		"/c":                Symlink("/d"),
+		"/d/existing.ts":    "this is existing.ts",
+	}, false)
+
+	t.Run("ReadFile", func(t *testing.T) {
+		t.Parallel()
+
+		content, ok := fs.ReadFile("/symlink.ts")
+		assert.Assert(t, ok)
+		assert.Equal(t, content, "hello, world")
+
+		content, ok = fs.ReadFile("/some/dirlink/file.ts")
+		assert.Assert(t, ok)
+		assert.Equal(t, content, "hello, world")
+
+		content, ok = fs.ReadFile("/a/existing.ts")
+		assert.Assert(t, ok)
+		assert.Equal(t, content, "this is existing.ts")
+	})
+
+	t.Run("Realpath", func(t *testing.T) {
+		t.Parallel()
+
+		realpath := fs.Realpath("/symlink.ts")
+		assert.Equal(t, realpath, "/foo.ts")
+
+		realpath = fs.Realpath("/some/dirlink")
+		assert.Equal(t, realpath, "/some/dir")
+
+		realpath = fs.Realpath("/some/dirlink/file.ts")
+		assert.Equal(t, realpath, "/some/dir/file.ts")
+	})
+}
+
+func TestWritableFSSymlink(t *testing.T) {
+	t.Parallel()
+
+	fs := FromMap(map[string]any{
+		"/some/dir/other.ts": "NOTHING",
+		"/other.ts":          Symlink("/some/dir/other.ts"),
+		"/some/dirlink":      Symlink("/some/dir"),
+		"/brokenlink":        Symlink("/does/not/exist"),
+		"/a":                 Symlink("/b"),
+		"/b":                 Symlink("/c"),
+		"/c":                 Symlink("/d"),
+		"/d/existing.ts":     "hello, world",
+	}, false)
+
+	err := fs.WriteFile("/some/dirlink/file.ts", "hello, world", false)
+	assert.NilError(t, err)
+
+	content, ok := fs.ReadFile("/some/dirlink/file.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, content, "hello, world")
+
+	content, ok = fs.ReadFile("/some/dir/file.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, content, "hello, world")
+
+	err = fs.WriteFile("/some/dirlink/file.ts", "goodbye, world", false)
+	assert.NilError(t, err)
+
+	content, ok = fs.ReadFile("/some/dirlink/file.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, content, "goodbye, world")
+
+	err = fs.WriteFile("/other.ts", "hello, world", false)
+	assert.NilError(t, err)
+
+	content, ok = fs.ReadFile("/other.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, content, "hello, world")
+
+	content, ok = fs.ReadFile("/some/dir/other.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, content, "hello, world")
+
+	err = fs.WriteFile("/some/dirlink", "hello, world", false)
+	assert.Error(t, err, `write "some/dirlink": path exists but is not a regular file`)
+
+	// Can't write inside a broken dir symlink
+	err = fs.WriteFile("/brokenlink/file.ts", "hello, world", false)
+	assert.Error(t, err, `broken symlink "brokenlink" -> "does/not/exist"`)
+
+	err = fs.WriteFile("/brokenlink/also/wrong/file.ts", "hello, world", false)
+	assert.Error(t, err, `broken symlink "brokenlink" -> "does/not/exist"`)
+
+	// But we can write to a broken file symlink
+	err = fs.WriteFile("/brokenlink", "hello, world", false)
+	assert.NilError(t, err)
+	content, ok = fs.ReadFile("/brokenlink")
+	assert.Assert(t, ok)
+	assert.Equal(t, content, "hello, world")
+	content, ok = fs.ReadFile("/does/not/exist")
+	assert.Assert(t, ok)
+	assert.Equal(t, content, "hello, world")
+}
+
+func TestWritableFSSymlinkChain(t *testing.T) {
+	t.Parallel()
+
+	fs := FromMap(map[string]any{
+		"/a":             Symlink("/b"),
+		"/b":             Symlink("/c"),
+		"/c":             Symlink("/d"),
+		"/d/existing.ts": "hello, world",
+	}, false)
+
+	err := fs.WriteFile("/a/foo/bar/new.ts", "this is new.ts", false)
+	assert.NilError(t, err)
+	content, ok := fs.ReadFile("/a/foo/bar/new.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, content, "this is new.ts")
+	content, ok = fs.ReadFile("/b/foo/bar/new.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, content, "this is new.ts")
+	content, ok = fs.ReadFile("/d/foo/bar/new.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, content, "this is new.ts")
+}
+
+func TestWritableFSSymlinkChainNotDir(t *testing.T) {
+	t.Parallel()
+
+	fs := FromMap(map[string]any{
+		"/a": Symlink("/b"),
+		"/b": Symlink("/c"),
+		"/c": Symlink("/d"),
+		"/d": "hello, world",
+	}, false)
+
+	err := fs.WriteFile("/a/foo/bar/new.ts", "this is new.ts", false)
+	assert.Error(t, err, `mkdir "d": path exists but is not a directory`)
 }
