@@ -1708,7 +1708,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind);
         },
         typeToString: (type, enclosingDeclaration, flags) => {
-            return typeToString(type, getParseTreeNode(enclosingDeclaration), flags);
+            return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, createTextWriter(flags && (flags & TypeFormatFlags.MultilineObjectLiterals) ? "\n" : ""));
         },
         symbolToString: (symbol, enclosingDeclaration, meaning, flags) => {
             return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags);
