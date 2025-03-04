@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/importDefer/importMetaPropertyInvalidInCall.ts] ////
+
+=== b.ts ===
+import.foo();
+>import.foo() : any
+>             : ^^^
+>import.foo : any
+>           : ^^^
+>foo : any
+>    : ^^^
+
+import.foo;
+>import.foo : any
+>           : ^^^
+>foo : any
+>    : ^^^
+
