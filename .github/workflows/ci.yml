@@ -90,12 +90,12 @@ jobs:
         run: npm test -- --no-lint --coverage
 
       - name: Upload coverage artifact
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: coverage
           path: coverage
 
-      - uses: codecov/codecov-action@13ce06bfc6bbe3ecf90edbbf1bc32fe5978ca1d3 # v5.3.1
+      - uses: codecov/codecov-action@0565863a31f2c772f9f0395002a31e3f06189574 # v5.4.0
         with:
           use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
           disable_search: true
@@ -137,7 +137,7 @@ jobs:
           node-version: 'lts/*'
       - run: npm ci
 
-      - uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+      - uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         with:
           path: ~/.cache/dprint
           key: ${{ runner.os }}-dprint-${{ hashFiles('package-lock.json', '.dprint.jsonc') }}
@@ -334,7 +334,7 @@ jobs:
 
       - name: Upload baseline diff artifact
         if: ${{ failure() && steps.check-baselines.conclusion == 'failure' }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: fix_baselines.patch
           path: fix_baselines.patch

@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/erasableSyntaxOnly.ts] ////
 
-=== erasableSyntaxOnly.ts ===
+=== index.ts ===
 class MyClassErr {
 >MyClassErr : MyClassErr
 >           : ^^^^^^^^^^
@@ -159,4 +159,170 @@ declare namespace AmbientStuff {
 >B : EnumInAmbientContext.B
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 }
+
+// Not erasable
+(()=><any>{})();
+>(()=><any>{})() : any
+>                : ^^^
+>(()=><any>{}) : () => any
+>              : ^^^^^^   
+>()=><any>{} : () => any
+>            : ^^^^^^   
+><any>{} : any
+>        : ^^^
+>{} : {}
+>   : ^^
+
+(()=>< any >{})();
+>(()=>< any >{})() : any
+>                  : ^^^
+>(()=>< any >{}) : () => any
+>                : ^^^^^^   
+>()=>< any >{} : () => any
+>              : ^^^^^^   
+>< any >{} : any
+>          : ^^^
+>{} : {}
+>   : ^^
+
+(()=> < any > {})();
+>(()=> < any > {})() : any
+>                    : ^^^
+>(()=> < any > {}) : () => any
+>                  : ^^^^^^   
+>()=> < any > {} : () => any
+>                : ^^^^^^   
+>< any > {} : any
+>           : ^^^
+>{} : {}
+>   : ^^
+
+// Erasable
+(()=><any>({}))();
+>(()=><any>({}))() : any
+>                  : ^^^
+>(()=><any>({})) : () => any
+>                : ^^^^^^   
+>()=><any>({}) : () => any
+>              : ^^^^^^   
+><any>({}) : any
+>          : ^^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+
+(()=>(<any>{}))();
+>(()=>(<any>{}))() : any
+>                  : ^^^
+>(()=>(<any>{})) : () => any
+>                : ^^^^^^^^^
+>()=>(<any>{}) : () => any
+>              : ^^^^^^^^^
+>(<any>{}) : any
+>          : ^^^
+><any>{} : any
+>        : ^^^
+>{} : {}
+>   : ^^
+
+<any>{};
+><any>{} : any
+>        : ^^^
+>{} : {}
+>   : ^^
+
+
+// return and yield ASI
+function *gen() {
+>gen : () => {}
+>    : ^^^^^^^^
+
+    yield <any>
+>yield <any>        1 : any
+>                     : ^^^
+><any>        1 : any
+>               : ^^^
+
+        1;
+>1 : 1
+>  : ^
+
+    return <any>
+><any>        1 : any
+>               : ^^^
+
+        1;
+>1 : 1
+>  : ^
+}
+
+// at the start of an ExpressionStatement if followed by an object literal; though I'm not sure why one would use it there
+<unknown>{foo() {}}.foo();
+><unknown>{foo() {}}.foo() : unknown
+>                          : ^^^^^^^
+>{foo() {}}.foo() : void
+>                 : ^^^^
+>{foo() {}}.foo : () => void
+>               : ^^^^^^^^^^
+>{foo() {}} : { foo(): void; }
+>           : ^^^^^^^^^^^^^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
+
+// at the start of an ExpressionStatement if followed by function keyword
+<unknown>function() {}();
+><unknown>function() {}() : unknown
+>                         : ^^^^^^^
+>function() {}() : void
+>                : ^^^^
+>function() {} : () => void
+>              : ^^^^^^^^^^
+
+<unknown>function() {};
+><unknown>function() {} : unknown
+>                       : ^^^^^^^
+>function() {} : () => void
+>              : ^^^^^^^^^^
+
+// at the start of an ExpressionStatement if followed by an anonymous class expression
+// note that this exact syntax currently emits invalid JS (no parenthesis added like for function above)
+<unknown>class {}
+><unknown>class {} : unknown
+>                  : ^^^^^^^
+>class {} : typeof (Anonymous class)
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+=== commonjs.cts ===
+import foo = require("./other.cjs");
+>foo : () => void
+>    : ^^^^^^    
+
+export = foo;
+>foo : () => void
+>    : ^^^^^^    
+
+
+=== other.d.cts ===
+declare function foo(): void;
+>foo : () => void
+>    : ^^^^^^    
+
+export = foo;
+>foo : () => void
+>    : ^^^^^^    
+
+
+=== esm.mts ===
+const foo = 1234;
+>foo : 1234
+>    : ^^^^
+>1234 : 1234
+>     : ^^^^
+
+export default foo;
+>foo : 1234
+>    : ^^^^
 
