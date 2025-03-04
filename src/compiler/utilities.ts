@@ -11315,6 +11315,11 @@ export function createEvaluator({ evaluateElementAccessExpression, evaluateEntit
                 break;
             case SyntaxKind.ElementAccessExpression:
                 return evaluateElementAccessExpression(expr as ElementAccessExpression, location);
+            case SyntaxKind.AsExpression:
+                if (isConstTypeReference((expr as AsExpression).type)) {
+                    return evaluate((expr as AsExpression).expression, location);
+                }
+                break;
         }
         return evaluatorResult(/*value*/ undefined, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
     }
