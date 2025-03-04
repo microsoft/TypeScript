@@ -79,6 +79,9 @@ module A4 {
 >     : ^^^^
 
     module A {
+>A : typeof A
+>  : ^^^^^^^^
+
         const enum E { X }
 >E : E
 >  : ^

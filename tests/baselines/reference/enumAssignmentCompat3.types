@@ -97,6 +97,9 @@ namespace Cd {
     }
 }
 namespace Const {
+>Const : typeof Const
+>      : ^^^^^^^^^^^^
+
     export const enum E {
 >E : E
 >  : ^
