@@ -659,7 +659,6 @@ func (b *Binder) bind(node *ast.Node) bool {
 	case ast.KindSetAccessor:
 		b.bindPropertyOrMethodOrAccessor(node, ast.SymbolFlagsSetAccessor, ast.SymbolFlagsSetAccessorExcludes)
 	case ast.KindFunctionType, ast.KindConstructorType:
-		// !!! KindJSDocFunctionType
 		// !!! KindJSDocSignature
 		b.bindFunctionOrConstructorType(node)
 	case ast.KindTypeLiteral, ast.KindMappedType:

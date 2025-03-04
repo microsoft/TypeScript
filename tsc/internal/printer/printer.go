@@ -1187,11 +1187,6 @@ func (p *Printer) emitTypeParameterNode(node *ast.TypeParameterDeclarationNode) 
 }
 
 func (p *Printer) emitParameterName(node *ast.BindingName) {
-	// A JSDocFunctionType may have a parameter with a Name that is nil
-	if node == nil {
-		return
-	}
-
 	savedWriteKind := p.writeKind
 	p.writeKind = WriteKindParameter
 	p.emitBindingName(node)
