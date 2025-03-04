@@ -42071,6 +42071,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkIndexedAccessIndexType(type: Type, accessNode: IndexedAccessTypeNode | ElementAccessExpression) {
         if (!(type.flags & TypeFlags.IndexedAccess)) {
+            if (isIndexedAccessTypeNode(accessNode)) {
+                const indexType = getTypeFromTypeNode(accessNode.indexType);
+                const objectType = getTypeFromTypeNode(accessNode.objectType);
+                const propertyName = getPropertyNameFromIndex(indexType, accessNode);
+                if (propertyName && getEmitDeclarations(compilerOptions)) {
+                    const propertySymbol = forEachType(getApparentType(objectType), t => getPropertyOfType(t, propertyName));
+                    if (propertySymbol && getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.Private) {
+                        error(accessNode, Diagnostics.Private_member_0_cannot_be_accessed_via_indexed_access, unescapeLeadingUnderscores(propertyName));
+                        return errorType;
+                    }
+                }
+            }
             return type;
         }
         // Check if the index type is assignable to 'keyof T' for the object type.
@@ -42090,14 +42102,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return type;
         }
-        if (isGenericObjectType(objectType)) {
-            const propertyName = getPropertyNameFromIndex(indexType, accessNode);
-            if (propertyName) {
-                const propertySymbol = forEachType(getApparentType(objectType), t => getPropertyOfType(t, propertyName));
-                if (propertySymbol && getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.NonPublicAccessibilityModifier) {
-                    error(accessNode, Diagnostics.Private_or_protected_member_0_cannot_be_accessed_on_a_type_parameter, unescapeLeadingUnderscores(propertyName));
-                    return errorType;
-                }
+        const propertyName = getPropertyNameFromIndex(indexType, accessNode);
+        if (propertyName) {
+            const propertySymbol = forEachType(getApparentType(objectType), t => getPropertyOfType(t, propertyName));
+            if (propertySymbol && getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.NonPublicAccessibilityModifier) {
+                error(accessNode, Diagnostics.Private_or_protected_member_0_cannot_be_accessed_on_a_type_parameter, unescapeLeadingUnderscores(propertyName));
+                return errorType;
             }
         }
         error(accessNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(objectType));

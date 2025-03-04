@@ -4436,6 +4436,10 @@
         "category": "Error",
         "code": 4128
     },
+    "Private member '{0}' cannot be accessed via indexed access.": {
+        "category": "Error",
+        "code": 4129
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
