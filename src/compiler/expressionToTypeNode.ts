@@ -1123,15 +1123,16 @@ export function createSyntacticTypeNodeBuilder(
         );
     }
     function reuseTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration> | undefined, context: SyntacticTypeNodeBuilderContext) {
-        return typeParameters?.map(tp =>
-            factory.updateTypeParameterDeclaration(
+        return typeParameters?.map(tp => {
+            const { node: tpName } = resolver.trackExistingEntityName(context, tp.name);
+            return factory.updateTypeParameterDeclaration(
                 tp,
                 tp.modifiers?.map(m => reuseNode(context, m)),
-                reuseNode(context, tp.name),
+                tpName,
                 serializeExistingTypeNodeWithFallback(tp.constraint, context),
                 serializeExistingTypeNodeWithFallback(tp.default, context),
-            )
-        );
+            );
+        });
     }
 
     function typeFromObjectLiteralMethod(method: MethodDeclaration, name: PropertyName, context: SyntacticTypeNodeBuilderContext, isConstContext: boolean) {
