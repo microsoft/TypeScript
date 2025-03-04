@@ -723,6 +723,7 @@ import {
     isRequireCall,
     isRestParameter,
     isRestTypeNode,
+    isReturnStatement,
     isRightSideOfAccessExpression,
     isRightSideOfInstanceofExpression,
     isRightSideOfQualifiedNameOrPropertyAccess,
@@ -22305,8 +22306,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 reducedTarget = findMatchingDiscriminantType(source, target as UnionType, isRelatedTo) || filterPrimitivesIfContainsNonPrimitive(target as UnionType);
                 checkTypes = reducedTarget.flags & TypeFlags.Union ? (reducedTarget as UnionType).types : [reducedTarget];
             }
+
+            const containerDecl = source.symbol.valueDeclaration;
+            if (containerDecl === undefined) return false;
+
+            // we accept extra EPC cases when #59277
+            const isValidParent = (n: Node) => {
+                return hasOnlyExpressionInitializer(n) || isSatisfiesExpression(n) || isReturnStatement(n);
+            };
+            const checkSpread = isObjectLiteralExpression(containerDecl) && isValidParent(containerDecl.parent) &&
+                findAncestor(containerDecl.parent, n => {
+                        if (isSourceFile(n)) return "quit";
+                        return isJsxOpeningLikeElement(n);
+                    }) === undefined;
+
             for (const prop of getPropertiesOfType(source)) {
-                if (shouldCheckAsExcessProperty(prop, source.symbol) && !isIgnoredJsxProperty(source, prop)) {
+                if (shouldCheckAsExcessProperty(prop) && !isIgnoredJsxProperty(source, prop)) {
                     if (!isKnownProperty(reducedTarget, prop.escapedName, isComparingJsxAttributes)) {
                         if (reportErrors) {
                             // Report error in terms of object types in the target as those are the only ones
@@ -22368,10 +22383,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             return false;
-        }
 
-        function shouldCheckAsExcessProperty(prop: Symbol, container: Symbol) {
-            return prop.valueDeclaration && container.valueDeclaration && prop.valueDeclaration.parent === container.valueDeclaration;
+            function shouldCheckAsExcessProperty(prop: Symbol) {
+                if (prop.valueDeclaration?.parent === containerDecl) return true;
+                if (!checkSpread) return false;
+                if (prop.declarations) return prop.declarations.some(isPropFromInlineSpread);
+                return false;
+
+                function isPropFromInlineSpread(d: Declaration) {
+                    return isObjectLiteralExpression(d.parent) && findAncestor(d.parent, n => {
+                        if (n === containerDecl || isSourceFile(n.parent.parent)) return "quit";
+                        if (
+                            isSpreadAssignment(n.parent)
+                            && isObjectLiteralExpression(n.parent.parent)
+                            && n.parent.parent === containerDecl
+                        ) {
+                            return true;
+                        }
+                        return false;
+                    });
+                }
+            }
         }
 
         function unionOrIntersectionRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
