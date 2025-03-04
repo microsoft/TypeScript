@@ -378,6 +378,54 @@ function foo() {
         baselineTsserverLogs("projectReferences", `referencing const enum from referenced project with preserveConstEnums`, session);
     });
 
+    it("referencing const enum as value from referenced project with preserveConstEnums", () => {
+        const projectLocation = `/user/username/projects/project`;
+        const utilsIndex: File = {
+            path: `${projectLocation}/src/utils/index.ts`,
+            content: "export const enum E { A = 1 }",
+        };
+        const utilsDeclaration: File = {
+            path: `${projectLocation}/src/utils/index.d.ts`,
+            content: "export declare const enum E { A = 1 }",
+        };
+        const utilsConfig: File = {
+            path: `${projectLocation}/src/utils/tsconfig.json`,
+            content: jsonToReadableText({ compilerOptions: { composite: true, declaration: true, preserveConstEnums: true } }),
+        };
+        const utilsNonPreservedIndex: File = {
+            path: `${projectLocation}/src/utilsNonPreserved/index.ts`,
+            content: "export const enum E2 { A = 1 }",
+        };
+        const utilsNonPreservedDeclaration: File = {
+            path: `${projectLocation}/src/utilsNonPreserved/index.d.ts`,
+            content: "export declare const enum E2 { A = 1 }",
+        };
+        const utilsNonPreservedConfig: File = {
+            path: `${projectLocation}/src/utilsNonPreserved/tsconfig.json`,
+            content: jsonToReadableText({ compilerOptions: { composite: true, declaration: true, preserveConstEnums: false } }),
+        };
+        const projectIndex: File = {
+            path: `${projectLocation}/src/project/index.ts`,
+            content: `
+            import { E } from "../utils";
+            import { E2 } from "../utilsNonPreserved";
+
+            E; declare const x: E; E[x];
+            
+            E2; declare const y: E2; E2[y];
+            `,
+        };
+        const projectConfig: File = {
+            path: `${projectLocation}/src/project/tsconfig.json`,
+            content: jsonToReadableText({ compilerOptions: { isolatedModules: true }, references: [{ path: "../utils" }, { path: "../utilsNoPreserved" }] }),
+        };
+        const host = createServerHost([libFile, utilsIndex, utilsDeclaration, utilsConfig, utilsNonPreservedIndex, utilsNonPreservedDeclaration, utilsNonPreservedConfig, projectIndex, projectConfig]);
+        const session = new TestSession(host);
+        openFilesForSession([projectIndex], session);
+        verifyGetErrRequest({ session, files: [projectIndex] });
+        baselineTsserverLogs("projectReferences", `referencing const enum as value from referenced project with preserveConstEnums`, session);
+    });
+
     describe("when references are monorepo like with symlinks", () => {
         interface Packages {
             bPackageJson: File;

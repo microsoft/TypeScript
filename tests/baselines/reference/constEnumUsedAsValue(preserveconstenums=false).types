@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/constEnumUsedAsValue.ts] ////
+
+=== constEnumUsedAsValue.ts ===
+const enum E {
+>E : E
+>  : ^
+
+    A,
+>A : E.A
+>  : ^^^
+
+    B,
+>B : E.B
+>  : ^^^
+
+    C,
+>C : E.C
+>  : ^^^
+}
+
+declare const x: E;
+>x : E
+>  : ^
+
+E;
+>E : typeof E
+>  : ^^^^^^^^
+
+E[x];
+>E[x] : any
+>     : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>x : E
+>  : ^
+
