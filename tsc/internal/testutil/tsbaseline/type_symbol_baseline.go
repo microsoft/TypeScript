@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"regexp"
 	"slices"
-	"strconv"
 	"strings"
 	"testing"
 
@@ -342,7 +341,9 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 	}
 
 	var symbolString strings.Builder
-	symbolString.WriteString("Symbol(" + fileChecker.SymbolToString(symbol))
+	symbolString.Grow(256)
+	symbolString.WriteString("Symbol(")
+	symbolString.WriteString(fileChecker.SymbolToString(symbol))
 	count := 0
 	for _, declaration := range symbol.Declarations {
 		if count >= 5 {
@@ -359,11 +360,14 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 		declSourceFile := ast.GetSourceFileOfNode(declaration)
 		declLine, declChar := scanner.GetLineAndCharacterOfPosition(declSourceFile, declaration.Pos())
 		fileName := tspath.GetBaseFileName(declSourceFile.FileName())
-		isLibFile := isDefaultLibraryFile(fileName)
-		lineStr := strconv.Itoa(declLine)
-		charStr := strconv.Itoa(declChar)
-		declText := fmt.Sprintf("Decl(%s, %s, %s)", fileName, core.IfElse(isLibFile, "--", lineStr), core.IfElse(isLibFile, "--", charStr))
-		symbolString.WriteString(declText)
+		symbolString.WriteString("Decl(")
+		symbolString.WriteString(fileName)
+		symbolString.WriteString(", ")
+		if isDefaultLibraryFile(fileName) {
+			symbolString.WriteString("--, --)")
+		} else {
+			fmt.Fprintf(&symbolString, "%d, %d)", declLine, declChar)
+		}
 	}
 	symbolString.WriteString(")")
 	return &typeWriterResult{

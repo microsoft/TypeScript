@@ -672,7 +672,7 @@ func getValueOfOptionString(t *testing.T, option string, value string) tsoptions
 
 func getCommandLineOption(option string) *tsoptions.CommandLineOption {
 	return core.Find(tsoptions.OptionsDeclarations, func(optionDecl *tsoptions.CommandLineOption) bool {
-		return strings.ToLower(optionDecl.Name) == strings.ToLower(option)
+		return strings.EqualFold(optionDecl.Name, option)
 	})
 }
 

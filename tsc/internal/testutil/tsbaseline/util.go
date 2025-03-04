@@ -11,7 +11,6 @@ var (
 	lineDelimiter      = regexp.MustCompile("\r?\n")
 	nonWhitespace      = regexp.MustCompile(`\S`)
 	tsExtension        = regexp.MustCompile(`\.tsx?$`)
-	testPathPrefix     = regexp.MustCompile(`(?:(file:\/{3})|\/)\.(?:ts|lib|src)\/`)
 	testPathCharacters = regexp.MustCompile(`[\^<>:"|?*%]`)
 	testPathDotDot     = regexp.MustCompile(`\.\.\/`)
 )
@@ -21,17 +20,30 @@ var (
 	builtFolder = "/.ts"
 )
 
+var (
+	testPathPrefixReplacer = strings.NewReplacer(
+		"/.ts/", "",
+		"/.lib/", "",
+		"/.src/", "",
+		"file:///./ts/", "file:///",
+		"file:///./lib/", "file:///",
+		"file:///./src/", "file:///",
+	)
+	testPathTrailingReplacerTrailingSeparator = strings.NewReplacer(
+		"/.ts/", "/",
+		"/.lib/", "/",
+		"/.src/", "/",
+		"file:///./ts/", "file:///",
+		"file:///./lib/", "file:///",
+		"file:///./src/", "file:///",
+	)
+)
+
 func removeTestPathPrefixes(text string, retainTrailingDirectorySeparator bool) string {
-	return testPathPrefix.ReplaceAllStringFunc(text, func(match string) string {
-		scheme := testPathPrefix.FindStringSubmatch(match)[1]
-		if scheme != "" {
-			return scheme
-		}
-		if retainTrailingDirectorySeparator {
-			return "/"
-		}
-		return ""
-	})
+	if retainTrailingDirectorySeparator {
+		return testPathTrailingReplacerTrailingSeparator.Replace(text)
+	}
+	return testPathPrefixReplacer.Replace(text)
 }
 
 func isDefaultLibraryFile(filePath string) bool {
