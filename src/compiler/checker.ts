@@ -945,6 +945,8 @@ import {
     PredicateSemantics,
     PrefixUnaryExpression,
     PrivateIdentifier,
+    PrivateNameType,
+    PrivateNameTypeNode,
     Program,
     PromiseOrAwaitableType,
     PropertyAccessChain,
@@ -2042,6 +2044,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var evolvingArrayTypes: EvolvingArrayType[] = [];
     var undefinedProperties: SymbolTable = new Map();
     var markerTypes = new Set<number>();
+    var privateNameTypes = new Map<string, PrivateNameType>();
 
     var unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as __String);
     var resolvingSymbol = createSymbol(0, InternalSymbolName.Resolving);
@@ -6495,6 +6498,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 return symbolToTypeNode(type.symbol, context, SymbolFlags.Type);
+            }
+            if (type.flags & TypeFlags.PrivateNameType) {
+                context.approximateLength += (type as PrivateNameType).value.length;
+                return factory.createPrivateNameTypeNode(factory.createPrivateIdentifier((type as PrivateNameType).value));
             }
             if (type.flags & TypeFlags.StringLiteral) {
                 context.approximateLength += (type as StringLiteralType).value.length + 2;
@@ -18277,7 +18284,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getLiteralTypeFromPropertyName(name: PropertyName | JsxAttributeName) {
         if (isPrivateIdentifier(name)) {
-            return neverType;
+            return getPrivateNameType(name);
         }
         if (isNumericLiteral(name)) {
             return getRegularTypeOfLiteralType(checkExpression(name));
@@ -19397,6 +19404,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.resolvedType;
     }
 
+    function getTypeFromPrivateNameTypeNode(node: PrivateNameTypeNode) {
+        const links = getNodeLinks(node);
+        if (!links.resolvedType) {
+            links.resolvedType = getPrivateNameType(node.name);
+        }
+        return links.resolvedType;
+    }
+
     function resolveImportSymbolType(node: ImportTypeNode, links: NodeLinks, symbol: Symbol, meaning: SymbolFlags) {
         const resolvedSymbol = resolveSymbol(symbol);
         links.resolvedSymbol = resolvedSymbol;
@@ -19705,6 +19720,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return esSymbolType;
     }
 
+    function getPrivateNameType(node: PrivateIdentifier) {
+        const name = unescapeLeadingUnderscores(node.escapedText);
+        const symbol = privateNameTypes.get(name) ? undefined : lookupSymbolForPrivateIdentifierDeclaration(node.escapedText, node);
+        if (
+            symbol?.valueDeclaration &&
+            isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)
+        ) {
+            privateNameTypes.set(name, createLiteralType(TypeFlags.StringLiteral | TypeFlags.PrivateNameType, name, symbol) as PrivateNameType);
+        }
+        return privateNameTypes.get(name) ?? neverType;
+    }
+
     function getThisType(node: Node): Type {
         const container = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
         const parent = container && container.parent;
@@ -19872,6 +19899,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.PropertyAccessExpression as TypeNodeSyntaxKind:
                 const symbol = getSymbolAtLocation(node);
                 return symbol ? getDeclaredTypeOfSymbol(symbol) : errorType;
+            case SyntaxKind.PrivateNameType:
+                return getTypeFromPrivateNameTypeNode(node as PrivateNameTypeNode);
             default:
                 return errorType;
         }
@@ -42192,6 +42221,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkTypeReferenceOrImport(node);
     }
 
+    function checkPrivateNameType(node: PrivateNameTypeNode) {
+        const containingClass = getContainingClass(node);
+        if (containingClass === undefined) {
+            grammarErrorOnNode(node.name, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
+        }
+    }
+
     function checkNamedTupleMember(node: NamedTupleMember) {
         if (node.dotDotDotToken && node.questionToken) {
             grammarErrorOnNode(node, Diagnostics.A_tuple_member_cannot_be_both_optional_and_rest);
@@ -48298,6 +48334,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkTemplateLiteralType(node as TemplateLiteralTypeNode);
             case SyntaxKind.ImportType:
                 return checkImportType(node as ImportTypeNode);
+            case SyntaxKind.PrivateNameType:
+                return checkPrivateNameType(node as PrivateNameTypeNode);
             case SyntaxKind.NamedTupleMember:
                 return checkNamedTupleMember(node as NamedTupleMember);
             case SyntaxKind.JSDocAugmentsTag:

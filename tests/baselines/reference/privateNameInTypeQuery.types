@@ -1,0 +1,78 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameInTypeQuery.ts] ////
+
+=== privateNameInTypeQuery.ts ===
+class C {
+>C : C
+>  : ^
+
+    a = 'a';
+>a : string
+>  : ^^^^^^
+>'a' : "a"
+>    : ^^^
+
+    #b = 'b';
+>#b : string
+>   : ^^^^^^
+>'b' : "b"
+>    : ^^^
+
+    constructor() {
+        const a: typeof this['a'] = 1;
+>a : this["a"]
+>  : ^^^^^^^^^
+>this : this
+>     : ^^^^
+>1 : 1
+>  : ^
+
+        const b: typeof this['a'] = ''; // ok
+>b : this["a"]
+>  : ^^^^^^^^^
+>this : this
+>     : ^^^^
+>'' : ""
+>   : ^^
+
+        const c: typeof this[#b]  = 1;
+>c : this[#b]
+>  : ^^^^^^^^
+>this : this
+>     : ^^^^
+>1 : 1
+>  : ^
+
+        const d: typeof this[#b] = '';  // ok
+>d : this[#b]
+>  : ^^^^^^^^
+>this : this
+>     : ^^^^
+>'' : ""
+>   : ^^
+    }
+}
+
+const c = new C();
+>c : C
+>  : ^
+>new C() : C
+>        : ^
+>C : typeof C
+>  : ^^^^^^^^
+
+const a: typeof c['a'] = '';
+>a : string
+>  : ^^^^^^
+>c : C
+>  : ^
+>'' : ""
+>   : ^^
+
+const b: typeof c[#b]  = '';
+>b : string
+>  : ^^^^^^
+>c : C
+>  : ^
+>'' : ""
+>   : ^^
+
