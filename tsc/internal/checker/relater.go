@@ -396,8 +396,14 @@ func (c *Checker) checkTypeRelatedToEx(
 		}
 		c.reportDiagnostic(createDiagnosticChainFromErrorChain(r.errorChain, r.errorNode, r.relatedInfo), diagnosticOutput)
 	}
-	c.relaters[relaterCount] = Relater{}
 	c.relaters = c.relaters[:relaterCount]
+	r.maybeKeysSet.Clear()
+	*r = Relater{
+		maybeKeys:    r.maybeKeys[:0],
+		maybeKeysSet: r.maybeKeysSet,
+		sourceStack:  r.sourceStack[:0],
+		targetStack:  r.targetStack[:0],
+	}
 	return result != TernaryFalse
 }
 

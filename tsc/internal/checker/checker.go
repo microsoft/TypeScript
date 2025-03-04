@@ -824,7 +824,7 @@ func NewChecker(program Program) *Checker {
 	c.exactOptionalPropertyTypes = c.compilerOptions.ExactOptionalPropertyTypes == core.TSTrue
 	c.canCollectSymbolAliasAccessabilityData = c.compilerOptions.VerbatimModuleSyntax.IsFalseOrUnknown()
 	c.arrayVariances = []VarianceFlags{VarianceFlagsCovariant}
-	c.globals = make(ast.SymbolTable)
+	c.globals = make(ast.SymbolTable, countGlobalSymbols(c.files))
 	c.evaluate = createEvaluator(c.evaluateEntity)
 	c.stringLiteralTypes = make(map[string]*Type)
 	c.numberLiteralTypes = make(map[jsnum.Number]*Type)
@@ -1010,6 +1010,16 @@ func createFileIndexMap(files []*ast.SourceFile) map[*ast.SourceFile]int {
 		result[file] = i
 	}
 	return result
+}
+
+func countGlobalSymbols(files []*ast.SourceFile) int {
+	count := 0
+	for _, file := range files {
+		if !ast.IsExternalOrCommonJsModule(file) {
+			count += len(file.Locals)
+		}
+	}
+	return count
 }
 
 func (c *Checker) reportUnreliableWorker(t *Type) *Type {
@@ -18734,7 +18744,7 @@ func (c *Checker) instantiateSymbolTable(symbols ast.SymbolTable, m *TypeMapper,
 	if len(symbols) == 0 {
 		return nil
 	}
-	result := make(ast.SymbolTable)
+	result := make(ast.SymbolTable, len(symbols))
 	for id, symbol := range symbols {
 		if c.isNamedMember(symbol, id) {
 			if mappingThisOnly && isThisless(symbol) {
@@ -23350,7 +23360,7 @@ func (c *Checker) mapTypeEx(t *Type, f func(*Type) *Type, noReductions bool) *Ty
 	if u.origin != nil && u.origin.flags&TypeFlagsUnion != 0 {
 		types = u.origin.Types()
 	}
-	var mappedTypes []*Type
+	mappedTypes := make([]*Type, 0, 16)
 	var changed bool
 	for _, s := range types {
 		var mapped *Type
@@ -23367,7 +23377,7 @@ func (c *Checker) mapTypeEx(t *Type, f func(*Type) *Type, noReductions bool) *Ty
 		}
 	}
 	if changed {
-		return c.getUnionTypeEx(mappedTypes, core.IfElse(noReductions, UnionReductionNone, UnionReductionLiteral), nil /*alias*/, nil /*origin*/)
+		return c.getUnionTypeEx(slices.Clone(mappedTypes), core.IfElse(noReductions, UnionReductionNone, UnionReductionLiteral), nil /*alias*/, nil /*origin*/)
 	}
 	return t
 }

@@ -28,6 +28,10 @@ func (s *Set[T]) Keys() map[T]struct{} {
 	return s.M
 }
 
+func (s *Set[T]) Clear() {
+	clear(s.M)
+}
+
 func NewSetFromItems[T comparable](items ...T) *Set[T] {
 	s := &Set[T]{}
 	for _, item := range items {
