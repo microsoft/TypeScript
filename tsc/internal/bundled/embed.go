@@ -4,7 +4,6 @@ package bundled
 
 import (
 	"io/fs"
-	"slices"
 	"strings"
 	"time"
 
@@ -79,19 +78,6 @@ func (vfs *wrappedFS) GetAccessibleEntries(path string) (result vfs.Entries) {
 
 var rootEntries = []fs.DirEntry{
 	fs.FileInfoToDirEntry(&fileInfo{name: "libs", mode: fs.ModeDir}),
-}
-
-func (vfs *wrappedFS) GetEntries(path string) []vfs.DirEntry {
-	if rest, ok := splitPath(path); ok {
-		if rest == "" {
-			return slices.Clone(rootEntries)
-		}
-		if rest == "libs" {
-			return slices.Clone(libsEntries)
-		}
-		return []fs.DirEntry{}
-	}
-	return vfs.fs.GetEntries(path)
 }
 
 func (vfs *wrappedFS) Stat(path string) vfs.FileInfo {

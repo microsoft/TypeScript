@@ -25,9 +25,6 @@ type FS interface {
 	// If any entry is a symlink, it will be followed.
 	GetAccessibleEntries(path string) Entries
 
-	// GetEntries returns the entries in the specified directory.
-	GetEntries(path string) []DirEntry
-
 	Stat(path string) FileInfo
 
 	// WalkDir walks the file tree rooted at root, calling walkFn for each file or directory in the tree.

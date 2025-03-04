@@ -77,7 +77,7 @@ func (vfs *Common) GetAccessibleEntries(path string) (result vfs.Entries) {
 		return false
 	}
 
-	for _, entry := range vfs.GetEntries(path) {
+	for _, entry := range vfs.getEntries(path) {
 		entryType := entry.Type()
 
 		if addToResult(entry.Name(), entryType) {
@@ -108,7 +108,7 @@ func (vfs *Common) GetAccessibleEntries(path string) (result vfs.Entries) {
 	return result
 }
 
-func (vfs *Common) GetEntries(path string) []vfs.DirEntry {
+func (vfs *Common) getEntries(path string) []vfs.DirEntry {
 	fsys, _, rest := vfs.RootAndPath(path)
 	if fsys == nil {
 		return nil
