@@ -39007,8 +39007,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Get accessors without matching set accessors
         // Enum members
         // Object.defineProperty assignments with writable false or no setter
-        // Unions and intersections of the above (unions and intersections eagerly set isReadonly on creation)
-        return !!(getCheckFlags(symbol) & CheckFlags.Readonly ||
+        // Unions and intersections of the above
+        const checkFlags = getCheckFlags(symbol);
+        if (checkFlags & CheckFlags.Synthetic) {
+            // unions and intersections eagerly compute Readonly flag on creation
+            return !!(checkFlags & CheckFlags.Readonly);
+        }
+        return !!(checkFlags & CheckFlags.Readonly ||
             symbol.flags & SymbolFlags.Property && getDeclarationModifierFlagsFromSymbol(symbol) & ModifierFlags.Readonly ||
             symbol.flags & SymbolFlags.Variable && getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Constant ||
             symbol.flags & SymbolFlags.Accessor && !(symbol.flags & SymbolFlags.SetAccessor) ||
