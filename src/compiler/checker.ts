@@ -46305,8 +46305,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (!checkTypeAssignableTo(typeWithThis, baseWithThis, /*errorNode*/ undefined)) {
                         issueMemberSpecificError(node, typeWithThis, baseWithThis, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     }
-                    else {
-                        // Report static side error only when instance type is assignable
+                    else if (staticBaseType !== nullWideningType) {
+                        // Report static side error only when instance type is assignable and base type is not null
                         checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node, Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
                     }
                     if (baseConstructorType.flags & TypeFlags.TypeVariable) {
