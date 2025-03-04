@@ -52085,6 +52085,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let current: Node = node;
         while (current) {
             if (isFunctionLikeOrClassStaticBlockDeclaration(current)) {
+                if (node.label) {
+                    const functionOrClassLike = current as FunctionLikeDeclaration | ClassStaticBlockDeclaration;
+                    if (functionOrClassLike.body) {
+                        const relatedInfo = forEachChild(functionOrClassLike.body, childNode => {
+                            const labeledStatement = childNode as LabeledStatement;
+                            if (labeledStatement.kind === SyntaxKind.LabeledStatement && labeledStatement.label.escapedText === node.label!.escapedText) {
+                                return createDiagnosticForNode(labeledStatement.label, Diagnostics.Label_defined_here, unescapeLeadingUnderscores(labeledStatement.label.escapedText));
+                            }
+                        });
+
+                        if (relatedInfo) {
+                            const diagnostic = createDiagnosticForNode(node, Diagnostics.Label_0_used_before_declaration, unescapeLeadingUnderscores(node.label.escapedText));
+                            diagnostic.relatedInformation = [relatedInfo];
+                            diagnostics.add(diagnostic);
+                            return true;
+                        }
+                    }
+                }
+
                 return grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
             }
 
