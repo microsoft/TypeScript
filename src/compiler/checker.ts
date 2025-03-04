@@ -2175,6 +2175,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     };
 
     var anyIterationTypes = createIterationTypes(anyType, anyType, anyType);
+    var silentNeverIterationTypes = createIterationTypes(silentNeverType, silentNeverType, silentNeverType);
 
     var asyncIterationTypesResolver: IterationTypesResolver = {
         iterableCacheKey: "iterationTypesOfAsyncIterable",
@@ -38576,6 +38577,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getYieldedTypeOfYieldExpression(node: YieldExpression, expressionType: Type, sentType: Type, isAsync: boolean): Type | undefined {
+        if (expressionType === silentNeverType) {
+            return silentNeverType;
+        }
         const errorNode = node.expression || node;
         // A `yield*` expression effectively yields everything that its operand yields
         const yieldedType = node.asteriskToken ? checkIteratedTypeOrElementType(isAsync ? IterationUse.AsyncYieldStar : IterationUse.YieldStar, expressionType, sentType, errorNode) : expressionType;
@@ -45077,6 +45081,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * the `[Symbol.asyncIterator]()` method first, and then the `[Symbol.iterator]()` method.
      */
     function getIterationTypesOfIterable(type: Type, use: IterationUse, errorNode: Node | undefined) {
+        if (type === silentNeverType) {
+            return silentNeverIterationTypes;
+        }
         if (isTypeAny(type)) {
             return anyIterationTypes;
         }
