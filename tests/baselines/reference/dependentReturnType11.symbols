@@ -625,3 +625,173 @@ function h5<T extends boolean>(param: T): Ret<T> {
         return 2;
     }
 }
+
+// Tests for optionality of parameters and properties.
+
+type RetU<T> =
+>RetU : Symbol(RetU, Decl(dependentReturnType11.ts, 208, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 212, 10))
+
+    T extends true  ? 1 :
+>T : Symbol(T, Decl(dependentReturnType11.ts, 212, 10))
+
+    T extends false ? 2 :
+>T : Symbol(T, Decl(dependentReturnType11.ts, 212, 10))
+
+    T extends undefined ? 3 :
+>T : Symbol(T, Decl(dependentReturnType11.ts, 212, 10))
+
+    never;
+
+function fn1<T extends boolean>(param?: T): RetU<T> { // Bad.
+>fn1 : Symbol(fn1, Decl(dependentReturnType11.ts, 216, 10))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 218, 13))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 218, 32))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 218, 13))
+>RetU : Symbol(RetU, Decl(dependentReturnType11.ts, 208, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 218, 13))
+
+    if (param == undefined) {
+>param : Symbol(param, Decl(dependentReturnType11.ts, 218, 32))
+>undefined : Symbol(undefined)
+
+        return 3;
+    }
+    if (param) {
+>param : Symbol(param, Decl(dependentReturnType11.ts, 218, 32))
+
+        return 1;
+    }
+    return 2;
+}
+
+function fn2<T extends boolean | undefined>(param?: T): RetU<T> {
+>fn2 : Symbol(fn2, Decl(dependentReturnType11.ts, 226, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 228, 13))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 228, 44))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 228, 13))
+>RetU : Symbol(RetU, Decl(dependentReturnType11.ts, 208, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 228, 13))
+
+    if (param == undefined) {
+>param : Symbol(param, Decl(dependentReturnType11.ts, 228, 44))
+>undefined : Symbol(undefined)
+
+        return 3;
+    }
+    if (param) {
+>param : Symbol(param, Decl(dependentReturnType11.ts, 228, 44))
+
+        return 1;
+    }
+    return 2;
+}
+
+function fn3<T extends boolean | undefined>(param: { prop?: T }): RetU<T> {
+>fn3 : Symbol(fn3, Decl(dependentReturnType11.ts, 236, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 238, 13))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 238, 44))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 238, 52))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 238, 13))
+>RetU : Symbol(RetU, Decl(dependentReturnType11.ts, 208, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 238, 13))
+
+    if (param.prop == undefined) {
+>param.prop : Symbol(prop, Decl(dependentReturnType11.ts, 238, 52))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 238, 44))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 238, 52))
+>undefined : Symbol(undefined)
+
+        return 3;
+    }
+    if (param.prop) {
+>param.prop : Symbol(prop, Decl(dependentReturnType11.ts, 238, 52))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 238, 44))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 238, 52))
+
+        return 1;
+    }
+    return 2;
+}
+
+function fn4<T extends boolean | undefined>({ prop }: { prop?: T }): RetU<T> {
+>fn4 : Symbol(fn4, Decl(dependentReturnType11.ts, 246, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 248, 13))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 248, 45))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 248, 55))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 248, 13))
+>RetU : Symbol(RetU, Decl(dependentReturnType11.ts, 208, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 248, 13))
+
+    if (prop == undefined) {
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 248, 45))
+>undefined : Symbol(undefined)
+
+        return 3;
+    }
+    if (prop) {
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 248, 45))
+
+        return 1;
+    }
+    return 2;
+}
+
+function fn5<T extends boolean | undefined>(param?: { prop: T }): RetU<T> { // Bad.
+>fn5 : Symbol(fn5, Decl(dependentReturnType11.ts, 256, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 258, 13))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 258, 44))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 258, 53))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 258, 13))
+>RetU : Symbol(RetU, Decl(dependentReturnType11.ts, 208, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 258, 13))
+
+    if (param.prop == undefined) {
+>param.prop : Symbol(prop, Decl(dependentReturnType11.ts, 258, 53))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 258, 44))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 258, 53))
+>undefined : Symbol(undefined)
+
+        return 3;
+    }
+    if (param.prop) {
+>param.prop : Symbol(prop, Decl(dependentReturnType11.ts, 258, 53))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 258, 44))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 258, 53))
+
+        return 1;
+    }
+    return 2;
+}
+
+function fn6<T extends boolean | undefined>(param: { prop1?: { prop?: T } }): RetU<T> { // Bad.
+>fn6 : Symbol(fn6, Decl(dependentReturnType11.ts, 266, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 268, 13))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 268, 44))
+>prop1 : Symbol(prop1, Decl(dependentReturnType11.ts, 268, 52))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 268, 62))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 268, 13))
+>RetU : Symbol(RetU, Decl(dependentReturnType11.ts, 208, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 268, 13))
+
+    if (param.prop1.prop == undefined) {
+>param.prop1.prop : Symbol(prop, Decl(dependentReturnType11.ts, 268, 62))
+>param.prop1 : Symbol(prop1, Decl(dependentReturnType11.ts, 268, 52))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 268, 44))
+>prop1 : Symbol(prop1, Decl(dependentReturnType11.ts, 268, 52))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 268, 62))
+>undefined : Symbol(undefined)
+
+        return 3;
+    }
+    if (param.prop1.prop) {
+>param.prop1.prop : Symbol(prop, Decl(dependentReturnType11.ts, 268, 62))
+>param.prop1 : Symbol(prop1, Decl(dependentReturnType11.ts, 268, 52))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 268, 44))
+>prop1 : Symbol(prop1, Decl(dependentReturnType11.ts, 268, 52))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 268, 62))
+
+        return 1;
+    }
+    return 2;
+}

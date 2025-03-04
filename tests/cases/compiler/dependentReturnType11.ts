@@ -210,3 +210,71 @@ function h5<T extends boolean>(param: T): Ret<T> {
         return 2;
     }
 }
+
+// Tests for optionality of parameters and properties.
+
+type RetU<T> =
+    T extends true  ? 1 :
+    T extends false ? 2 :
+    T extends undefined ? 3 :
+    never;
+
+function fn1<T extends boolean>(param?: T): RetU<T> { // Bad.
+    if (param == undefined) {
+        return 3;
+    }
+    if (param) {
+        return 1;
+    }
+    return 2;
+}
+
+function fn2<T extends boolean | undefined>(param?: T): RetU<T> {
+    if (param == undefined) {
+        return 3;
+    }
+    if (param) {
+        return 1;
+    }
+    return 2;
+}
+
+function fn3<T extends boolean | undefined>(param: { prop?: T }): RetU<T> {
+    if (param.prop == undefined) {
+        return 3;
+    }
+    if (param.prop) {
+        return 1;
+    }
+    return 2;
+}
+
+function fn4<T extends boolean | undefined>({ prop }: { prop?: T }): RetU<T> {
+    if (prop == undefined) {
+        return 3;
+    }
+    if (prop) {
+        return 1;
+    }
+    return 2;
+}
+
+function fn5<T extends boolean | undefined>(param?: { prop: T }): RetU<T> { // Bad.
+    if (param.prop == undefined) {
+        return 3;
+    }
+    if (param.prop) {
+        return 1;
+    }
+    return 2;
+}
+
+function fn6<T extends boolean | undefined>(param: { prop1?: { prop?: T } }): RetU<T> { // Bad.
+    if (param.prop1.prop == undefined) {
+        return 3;
+    }
+    if (param.prop1.prop) {
+        return 1;
+    }
+    return 2;
+}

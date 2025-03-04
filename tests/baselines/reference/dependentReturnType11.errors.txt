@@ -19,9 +19,22 @@ dependentReturnType11.ts(152,25): error TS2322: Type '1' is not assignable to ty
 dependentReturnType11.ts(152,29): error TS2322: Type '2' is not assignable to type 'Ret<T>'.
 dependentReturnType11.ts(205,13): error TS2322: Type '1' is not assignable to type 'Ret<T>'.
 dependentReturnType11.ts(207,9): error TS2322: Type '2' is not assignable to type 'Ret<T>'.
+dependentReturnType11.ts(221,9): error TS2322: Type '3' is not assignable to type 'RetU<T>'.
+dependentReturnType11.ts(224,9): error TS2322: Type '1' is not assignable to type 'RetU<T>'.
+dependentReturnType11.ts(226,5): error TS2322: Type '2' is not assignable to type 'RetU<T>'.
+dependentReturnType11.ts(260,9): error TS18048: 'param' is possibly 'undefined'.
+dependentReturnType11.ts(261,9): error TS2322: Type '3' is not assignable to type 'RetU<T>'.
+dependentReturnType11.ts(263,9): error TS18048: 'param' is possibly 'undefined'.
+dependentReturnType11.ts(264,9): error TS2322: Type '1' is not assignable to type 'RetU<T>'.
+dependentReturnType11.ts(266,5): error TS2322: Type '2' is not assignable to type 'RetU<T>'.
+dependentReturnType11.ts(270,9): error TS18048: 'param.prop1' is possibly 'undefined'.
+dependentReturnType11.ts(271,9): error TS2322: Type '3' is not assignable to type 'RetU<T>'.
+dependentReturnType11.ts(273,9): error TS18048: 'param.prop1' is possibly 'undefined'.
+dependentReturnType11.ts(274,9): error TS2322: Type '1' is not assignable to type 'RetU<T>'.
+dependentReturnType11.ts(276,5): error TS2322: Type '2' is not assignable to type 'RetU<T>'.
 
 
-==== dependentReturnType11.ts (21 errors) ====
+==== dependentReturnType11.ts (34 errors) ====
     type Ret<T extends boolean> =
         T extends true ? 1 :
         T extends false ? 2 :
@@ -272,4 +285,98 @@ dependentReturnType11.ts(207,9): error TS2322: Type '2' is not assignable to typ
             ~~~~~~
 !!! error TS2322: Type '2' is not assignable to type 'Ret<T>'.
         }
+    }
+    
+    // Tests for optionality of parameters and properties.
+    
+    type RetU<T> =
+        T extends true  ? 1 :
+        T extends false ? 2 :
+        T extends undefined ? 3 :
+        never;
+    
+    function fn1<T extends boolean>(param?: T): RetU<T> { // Bad.
+        if (param == undefined) {
+            return 3;
+            ~~~~~~
+!!! error TS2322: Type '3' is not assignable to type 'RetU<T>'.
+        }
+        if (param) {
+            return 1;
+            ~~~~~~
+!!! error TS2322: Type '1' is not assignable to type 'RetU<T>'.
+        }
+        return 2;
+        ~~~~~~
+!!! error TS2322: Type '2' is not assignable to type 'RetU<T>'.
+    }
+    
+    function fn2<T extends boolean | undefined>(param?: T): RetU<T> {
+        if (param == undefined) {
+            return 3;
+        }
+        if (param) {
+            return 1;
+        }
+        return 2;
+    }
+    
+    function fn3<T extends boolean | undefined>(param: { prop?: T }): RetU<T> {
+        if (param.prop == undefined) {
+            return 3;
+        }
+        if (param.prop) {
+            return 1;
+        }
+        return 2;
+    }
+    
+    function fn4<T extends boolean | undefined>({ prop }: { prop?: T }): RetU<T> {
+        if (prop == undefined) {
+            return 3;
+        }
+        if (prop) {
+            return 1;
+        }
+        return 2;
+    }
+    
+    function fn5<T extends boolean | undefined>(param?: { prop: T }): RetU<T> { // Bad.
+        if (param.prop == undefined) {
+            ~~~~~
+!!! error TS18048: 'param' is possibly 'undefined'.
+            return 3;
+            ~~~~~~
+!!! error TS2322: Type '3' is not assignable to type 'RetU<T>'.
+        }
+        if (param.prop) {
+            ~~~~~
+!!! error TS18048: 'param' is possibly 'undefined'.
+            return 1;
+            ~~~~~~
+!!! error TS2322: Type '1' is not assignable to type 'RetU<T>'.
+        }
+        return 2;
+        ~~~~~~
+!!! error TS2322: Type '2' is not assignable to type 'RetU<T>'.
+    }
+    
+    function fn6<T extends boolean | undefined>(param: { prop1?: { prop?: T } }): RetU<T> { // Bad.
+        if (param.prop1.prop == undefined) {
+            ~~~~~~~~~~~
+!!! error TS18048: 'param.prop1' is possibly 'undefined'.
+            return 3;
+            ~~~~~~
+!!! error TS2322: Type '3' is not assignable to type 'RetU<T>'.
+        }
+        if (param.prop1.prop) {
+            ~~~~~~~~~~~
+!!! error TS18048: 'param.prop1' is possibly 'undefined'.
+            return 1;
+            ~~~~~~
+!!! error TS2322: Type '1' is not assignable to type 'RetU<T>'.
+        }
+        return 2;
+        ~~~~~~
+!!! error TS2322: Type '2' is not assignable to type 'RetU<T>'.
     }
