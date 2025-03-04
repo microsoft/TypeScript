@@ -43468,7 +43468,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const name = getIdentifierFromEntityNameExpression(node.class.expression);
         const extend = getClassExtendsHeritageElement(classLike);
-        if (extend) {
+        if (name && extend) {
             const className = getIdentifierFromEntityNameExpression(extend.expression);
             if (className && name.escapedText !== className.escapedText) {
                 error(name, Diagnostics.JSDoc_0_1_does_not_match_the_extends_2_clause, idText(node.tagName), idText(name), idText(className));
