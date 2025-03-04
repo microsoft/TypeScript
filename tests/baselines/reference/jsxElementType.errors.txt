@@ -28,8 +28,8 @@ jsxElementType.tsx(72,20): error TS2769: No overload matches this call.
 jsxElementType.tsx(78,1): error TS2339: Property 'boop' does not exist on type 'JSX.IntrinsicElements'.
 jsxElementType.tsx(79,1): error TS2339: Property 'my-undeclared-custom-element' does not exist on type 'JSX.IntrinsicElements'.
 jsxElementType.tsx(91,2): error TS2786: 'ReactNativeFlatList' cannot be used as a JSX component.
-  Its type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not a valid JSX element type.
-    Type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not assignable to type '(props: any) => React18ReactNode'.
+  Its type '((props: {}, ref: ForwardedRef<(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null>) => null) & ((props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null)' is not a valid JSX element type.
+    Type '((props: {}, ref: ForwardedRef<(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null>) => null) & ((props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null)' is not assignable to type '(props: any) => React18ReactNode'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
 jsxElementType.tsx(95,11): error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<T, {}>'.
 jsxElementType.tsx(98,2): error TS2304: Cannot find name 'Unresolved'.
@@ -38,9 +38,14 @@ jsxElementType.tsx(110,6): error TS2322: Type '{ b: string; }' is not assignable
   Property 'b' does not exist on type '{ a: string; }'.
 jsxElementType.tsx(111,19): error TS2322: Type '{ a: string; b: string; }' is not assignable to type '{ a: string; }'.
   Property 'b' does not exist on type '{ a: string; }'.
+jsxElementType.tsx(125,22): error TS2786: 'A' cannot be used as a JSX component.
+  Its type '(({ a }: { a: number; }) => Error) & (<T extends unknown>({ a }: { a: T; }) => T extends string ? null : Error)' is not a valid JSX element type.
+    Type '(({ a }: { a: number; }) => Error) & (<T extends unknown>({ a }: { a: T; }) => T extends string ? null : Error)' is not assignable to type '(props: any) => React18ReactNode'.
+      Type 'Error' is not assignable to type 'React18ReactNode'.
+jsxElementType.tsx(125,32): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== jsxElementType.tsx (20 errors) ====
+==== jsxElementType.tsx (22 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     import * as React from "react";
     
@@ -184,8 +189,8 @@ jsxElementType.tsx(111,19): error TS2322: Type '{ a: string; b: string; }' is no
     <ReactNativeFlatList />;
      ~~~~~~~~~~~~~~~~~~~
 !!! error TS2786: 'ReactNativeFlatList' cannot be used as a JSX component.
-!!! error TS2786:   Its type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not a valid JSX element type.
-!!! error TS2786:     Type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not assignable to type '(props: any) => React18ReactNode'.
+!!! error TS2786:   Its type '((props: {}, ref: ForwardedRef<(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null>) => null) & ((props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null)' is not a valid JSX element type.
+!!! error TS2786:     Type '((props: {}, ref: ForwardedRef<(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null>) => null) & ((props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null)' is not assignable to type '(props: any) => React18ReactNode'.
 !!! error TS2786:       Target signature provides too few arguments. Expected 2 or more, but got 1.
     
     // testing higher-order component compat
@@ -219,4 +224,26 @@ jsxElementType.tsx(111,19): error TS2322: Type '{ a: string; b: string; }' is no
                       ~
 !!! error TS2322: Type '{ a: string; b: string; }' is not assignable to type '{ a: string; }'.
 !!! error TS2322:   Property 'b' does not exist on type '{ a: string; }'.
+    
+    // GH#54702
+    const A = <T extends unknown>({ a }: { a: T }) => (typeof a === "string" ? null : new Error("a must be a string")) as T extends string ? null : Error;
+    
+    // should ok
+    const jsxGeneric1 = <A<string> a="a" />;
+    
+    const B = A<string>;
+    
+    // should ok
+    const jsxGeneric2 = <B a="a" />;
+    
+    // should error
+    const jsxGeneric3 = <A<number> a="a" />;
+                         ~
+!!! error TS2786: 'A' cannot be used as a JSX component.
+!!! error TS2786:   Its type '(({ a }: { a: number; }) => Error) & (<T extends unknown>({ a }: { a: T; }) => T extends string ? null : Error)' is not a valid JSX element type.
+!!! error TS2786:     Type '(({ a }: { a: number; }) => Error) & (<T extends unknown>({ a }: { a: T; }) => T extends string ? null : Error)' is not assignable to type '(props: any) => React18ReactNode'.
+!!! error TS2786:       Type 'Error' is not assignable to type 'React18ReactNode'.
+                                   ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 jsxElementType.tsx:114:40: The expected type comes from property 'a' which is declared here on type 'IntrinsicAttributes & { a: number; }'
     
