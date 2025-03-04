@@ -43726,6 +43726,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
     }
+
     function isTypeParameterUnused(typeParameter: TypeParameterDeclaration): boolean {
         return !(getMergedSymbol(typeParameter.symbol).isReferenced! & SymbolFlags.TypeParameter) && !isIdentifierThatStartsWithUnderscore(typeParameter.name);
     }
@@ -43746,6 +43747,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isValidUnusedLocalDeclaration(declaration: Declaration): boolean {
+        if (isTypeAliasDeclaration(declaration)) {
+            /**
+             * ignore starts with underscore names _
+             * type _T = number;
+             */
+            return isIdentifierThatStartsWithUnderscore(declaration.name);
+        }
         if (isBindingElement(declaration)) {
             if (isObjectBindingPattern(declaration.parent)) {
                 /**
