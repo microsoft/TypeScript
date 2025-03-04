@@ -1,12 +1,21 @@
+mergedDeclarations2.ts(1,6): error TS2567: Enum declarations can only merge with namespace declarations.
+mergedDeclarations2.ts(4,6): error TS2567: Enum declarations can only merge with namespace declarations.
+mergedDeclarations2.ts(5,9): error TS2304: Cannot find name 'b'.
 mergedDeclarations2.ts(9,20): error TS2304: Cannot find name 'b'.
 
 
-==== mergedDeclarations2.ts (1 errors) ====
+==== mergedDeclarations2.ts (4 errors) ====
     enum Foo {
+         ~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
         b
     }
     enum Foo {
+         ~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
         a = b
+            ~
+!!! error TS2304: Cannot find name 'b'.
     }
     
     module Foo {

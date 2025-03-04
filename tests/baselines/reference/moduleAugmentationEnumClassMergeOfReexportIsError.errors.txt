@@ -1,11 +1,11 @@
-augment.ts(4,17): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-file.ts(1,14): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+augment.ts(4,17): error TS2567: Enum declarations can only merge with namespace declarations.
+file.ts(1,14): error TS2567: Enum declarations can only merge with namespace declarations.
 
 
 ==== file.ts (1 errors) ====
     export class Foo {
                  ~~~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
 !!! related TS6203 augment.ts:4:17: 'Foo' was also declared here.
         member: string;
     }
@@ -17,7 +17,7 @@ file.ts(1,14): error TS2567: Enum declarations can only merge with namespace or 
     declare module "./reexport" {
         export enum Foo {
                     ~~~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
 !!! related TS6203 file.ts:1:14: 'Foo' was also declared here.
             A, B, C
         }
