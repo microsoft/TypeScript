@@ -269,3 +269,9 @@ const ce0 = class {
 function funcInferredReturnType(obj: { method(p: typeof s): void }) {
     return obj;
 }
+
+// https://github.com/microsoft/TypeScript/issues/61070
+const bar = Symbol('bar') satisfies symbol;
+let bar2 = Symbol('bar2') satisfies symbol;
+
+const testErrorMessage1 = Symbol() as string;
