@@ -5,6 +5,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -54,7 +55,12 @@ func mklink(t *testing.T, target, link string, isDir bool) {
 		// Don't use os.Symlink on Windows, as it creates a "real" symlink, not a junction.
 		assert.NilError(t, exec.Command("cmd", "/c", "mklink", "/J", link, target).Run())
 	} else {
-		assert.NilError(t, os.Symlink(target, link))
+		err := os.Symlink(target, link)
+		if err != nil && !isDir && runtime.GOOS == "windows" && strings.Contains(err.Error(), "A required privilege is not held by the client") {
+			t.Log(err)
+			t.Skip("file symlink support is not enabled without elevation or developer mode")
+		}
+		assert.NilError(t, err)
 	}
 }
 
