@@ -1,11 +1,13 @@
 /// <reference path="fourslash.ts" />
 
-////type T = {
-////    "Prop 1": string;
+////declare const Att_1: "Att 2"/**/
+////
+////interface Case_1 {
+////  [Att_1]: string
 ////}
 ////
-////declare const fn: <K extends keyof T>(p: K) => void
+////declare const fnc_1: <K extends keyof Case_1>(p: K) => void
 ////
-////fn("Prop 1"/**/)
+////fnc_1("Att 2")
 
 verify.baselineRename("", {});

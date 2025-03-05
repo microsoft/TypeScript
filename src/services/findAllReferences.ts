@@ -1013,9 +1013,8 @@ export namespace Core {
         const checker = program.getTypeChecker();
         // constructors should use the class symbol, detected by name, if present
         const symbol = checker.getSymbolAtLocation(isConstructorDeclaration(node) && node.parent.name || node);
-
         // Could not find a symbol e.g. unknown identifier
-        if (!symbol) {
+        if (!symbol || (isStringLiteralLike(node) && isStringLiteralPropertyReference(node, checker))) {
             // String literal might be a property (and thus have a symbol), so do this here rather than in getReferencedSymbolsSpecial.
             if (!options.implementations && isStringLiteralLike(node)) {
                 if (isModuleSpecifierLike(node)) {
@@ -1389,7 +1388,8 @@ export namespace Core {
         /** Only set if `options.implementations` is true. These are the symbols checked to get the implementations of a property access. */
         readonly parents: readonly Symbol[] | undefined;
         readonly allSearchSymbols: readonly Symbol[];
-
+        /** The node that we are searching for. This is used for searching. */
+        readonly node: Node | undefined;
         /**
          * Whether a symbol is in the search set.
          * Do not compare directly to `symbol` because there may be related symbols to search for. See `populateSearchSymbolSet`.
@@ -1474,7 +1474,7 @@ export namespace Core {
             } = searchOptions;
             const escapedText = escapeLeadingUnderscores(text);
             const parents = this.options.implementations && location ? getParentSymbolsOfPropertyAccess(location, symbol, this.checker) : undefined;
-            return { symbol, comingFrom, text, escapedText, parents, allSearchSymbols, includes: sym => contains(allSearchSymbols, sym) };
+            return { symbol, comingFrom, text, escapedText, parents, allSearchSymbols, node: location, includes: sym => contains(allSearchSymbols, sym) };
         }
 
         private readonly symbolIdToReferences: Entry[][] = [];
@@ -1921,7 +1921,15 @@ export namespace Core {
                 // 'FindReferences' will just filter out these results.
                 state.addStringOrCommentReference(sourceFile.fileName, createTextSpan(position, search.text.length));
             }
-
+            // if ( search.node &&!state.checker.getSymbolAtLocation(referenceLocation) && !state.options.implementations && isStringLiteralLike(search.node) && isStringLiteralLike(referenceLocation) )
+            //     {
+            //         const type = getContextualTypeFromParentOrAncestorTypeNode(search.node, state.checker)
+            //         const refType = getContextualTypeFromParentOrAncestorTypeNode(referenceLocation, state.checker)
+            //         if (type !== state.checker.getStringType()  && type === refType)
+            //         {
+            //             addReference(referenceLocation, referenceLocation.symbol, state);
+            //         }
+            //     }
             return;
         }
 
