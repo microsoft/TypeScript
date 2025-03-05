@@ -24,11 +24,16 @@ function f2<T extends string | string[] | number[]>(param: T):
     return 1;
 }
 
+declare function isNumberArray(x: unknown): x is number[];
+
 function f3<T extends string | string[] | number[]>(param: T): // Bad.
     T extends string ? 1 :
     T extends string[] ? 2 :
     T extends number[] ? 3 :
     never {
+    if (isNumberArray(param)) {
+        return 3;
+    }
     if (Array.isArray(param)) {
         return 2;
     }
@@ -93,8 +98,6 @@ function f6<T extends string | number[] | string[], U extends boolean>(param: T,
     }
     return 5;
 }
-
-declare function isNumberArray(x: unknown): x is number[];
 
 function f7<T extends string | string[], U extends number | number[]>(param: T, other: U):
     U extends number ?

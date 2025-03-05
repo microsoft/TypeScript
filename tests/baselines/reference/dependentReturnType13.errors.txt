@@ -1,15 +1,16 @@
-dependentReturnType13.ts(29,9): error TS2322: Type '2' is not assignable to type 'T extends string ? 1 : T extends string[] ? 2 : T extends number[] ? 3 : never'.
-dependentReturnType13.ts(31,5): error TS2322: Type '1' is not assignable to type 'T extends string ? 1 : T extends string[] ? 2 : T extends number[] ? 3 : never'.
-dependentReturnType13.ts(49,9): error TS2322: Type '2' is not assignable to type 'T extends Cat ? 1 : T extends Dog ? 2 : never'.
-dependentReturnType13.ts(52,5): error TS2322: Type '1' is not assignable to type 'T extends Cat ? 1 : T extends Dog ? 2 : never'.
-dependentReturnType13.ts(79,9): error TS2322: Type '2' is not assignable to type 'T extends number[] ? 2 : U extends true ? T extends string[] ? 3 : T extends string ? 1 : never : U extends false ? T extends string[] ? 4 : T extends string ? 5 : never : never'.
-dependentReturnType13.ts(83,13): error TS2322: Type '3' is not assignable to type 'T extends number[] ? 2 : U extends true ? T extends string[] ? 3 : T extends string ? 1 : never : U extends false ? T extends string[] ? 4 : T extends string ? 5 : never : never'.
-dependentReturnType13.ts(85,9): error TS2322: Type '1' is not assignable to type 'T extends number[] ? 2 : U extends true ? T extends string[] ? 3 : T extends string ? 1 : never : U extends false ? T extends string[] ? 4 : T extends string ? 5 : never : never'.
-dependentReturnType13.ts(88,9): error TS2322: Type '4' is not assignable to type 'T extends number[] ? 2 : U extends true ? T extends string[] ? 3 : T extends string ? 1 : never : U extends false ? T extends string[] ? 4 : T extends string ? 5 : never : never'.
-dependentReturnType13.ts(90,5): error TS2322: Type '5' is not assignable to type 'T extends number[] ? 2 : U extends true ? T extends string[] ? 3 : T extends string ? 1 : never : U extends false ? T extends string[] ? 4 : T extends string ? 5 : never : never'.
+dependentReturnType13.ts(31,9): error TS2322: Type '3' is not assignable to type 'T extends string ? 1 : T extends string[] ? 2 : T extends number[] ? 3 : never'.
+dependentReturnType13.ts(34,9): error TS2322: Type '2' is not assignable to type 'T extends string ? 1 : T extends string[] ? 2 : T extends number[] ? 3 : never'.
+dependentReturnType13.ts(36,5): error TS2322: Type '1' is not assignable to type 'T extends string ? 1 : T extends string[] ? 2 : T extends number[] ? 3 : never'.
+dependentReturnType13.ts(54,9): error TS2322: Type '2' is not assignable to type 'T extends Cat ? 1 : T extends Dog ? 2 : never'.
+dependentReturnType13.ts(57,5): error TS2322: Type '1' is not assignable to type 'T extends Cat ? 1 : T extends Dog ? 2 : never'.
+dependentReturnType13.ts(84,9): error TS2322: Type '2' is not assignable to type 'T extends number[] ? 2 : U extends true ? T extends string[] ? 3 : T extends string ? 1 : never : U extends false ? T extends string[] ? 4 : T extends string ? 5 : never : never'.
+dependentReturnType13.ts(88,13): error TS2322: Type '3' is not assignable to type 'T extends number[] ? 2 : U extends true ? T extends string[] ? 3 : T extends string ? 1 : never : U extends false ? T extends string[] ? 4 : T extends string ? 5 : never : never'.
+dependentReturnType13.ts(90,9): error TS2322: Type '1' is not assignable to type 'T extends number[] ? 2 : U extends true ? T extends string[] ? 3 : T extends string ? 1 : never : U extends false ? T extends string[] ? 4 : T extends string ? 5 : never : never'.
+dependentReturnType13.ts(93,9): error TS2322: Type '4' is not assignable to type 'T extends number[] ? 2 : U extends true ? T extends string[] ? 3 : T extends string ? 1 : never : U extends false ? T extends string[] ? 4 : T extends string ? 5 : never : never'.
+dependentReturnType13.ts(95,5): error TS2322: Type '5' is not assignable to type 'T extends number[] ? 2 : U extends true ? T extends string[] ? 3 : T extends string ? 1 : never : U extends false ? T extends string[] ? 4 : T extends string ? 5 : never : never'.
 
 
-==== dependentReturnType13.ts (9 errors) ====
+==== dependentReturnType13.ts (10 errors) ====
     // Restrictions on what kind of union types can be narrowed.
     
     function f1<T extends string | string[]>(param: T):
@@ -32,11 +33,18 @@ dependentReturnType13.ts(90,5): error TS2322: Type '5' is not assignable to type
         return 1;
     }
     
+    declare function isNumberArray(x: unknown): x is number[];
+    
     function f3<T extends string | string[] | number[]>(param: T): // Bad.
         T extends string ? 1 :
         T extends string[] ? 2 :
         T extends number[] ? 3 :
         never {
+        if (isNumberArray(param)) {
+            return 3;
+            ~~~~~~
+!!! error TS2322: Type '3' is not assignable to type 'T extends string ? 1 : T extends string[] ? 2 : T extends number[] ? 3 : never'.
+        }
         if (Array.isArray(param)) {
             return 2;
             ~~~~~~
@@ -119,8 +127,6 @@ dependentReturnType13.ts(90,5): error TS2322: Type '5' is not assignable to type
         ~~~~~~
 !!! error TS2322: Type '5' is not assignable to type 'T extends number[] ? 2 : U extends true ? T extends string[] ? 3 : T extends string ? 1 : never : U extends false ? T extends string[] ? 4 : T extends string ? 5 : never : never'.
     }
-    
-    declare function isNumberArray(x: unknown): x is number[];
     
     function f7<T extends string | string[], U extends number | number[]>(param: T, other: U):
         U extends number ?
