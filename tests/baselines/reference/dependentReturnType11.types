@@ -1,0 +1,1076 @@
+//// [tests/cases/compiler/dependentReturnType11.ts] ////
+
+=== dependentReturnType11.ts ===
+type Ret<T extends boolean> =
+>Ret : Ret<T>
+>    : ^^^^^^
+
+    T extends true ? 1 :
+>true : true
+>     : ^^^^
+
+    T extends false ? 2 :
+>false : false
+>      : ^^^^^
+
+    never;
+
+// Tests for constructing narrowable reference.
+
+function f1<T extends boolean>(param: T): Ret<T> {
+>f1 : <T extends boolean>(param: T) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^     ^^ ^^^^^      
+>param : T
+>      : ^
+
+    return param ? 1 : 2;
+>param ? 1 : 2 : 1 | 2
+>              : ^^^^^
+>param : T
+>      : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+function f2<T extends boolean>(param: { prop: T }): Ret<T> {
+>f2 : <T extends boolean>(param: { prop: T; }) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^     ^^            ^^^^^      
+>param : { prop: T; }
+>      : ^^^^^^^^ ^^^
+>prop : T
+>     : ^
+
+    return param.prop ? 1 : 2;
+>param.prop ? 1 : 2 : 1 | 2
+>                   : ^^^^^
+>param.prop : T
+>           : ^
+>param : { prop: T; }
+>      : ^^^^^^^^ ^^^
+>prop : T
+>     : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+function f3<T extends boolean>({ prop }: { prop: T }): Ret<T> {
+>f3 : <T extends boolean>({ prop }: { prop: T; }) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^        ^^            ^^^^^      
+>prop : T
+>     : ^
+>prop : T
+>     : ^
+
+    return prop ? 1 : 2;
+>prop ? 1 : 2 : 1 | 2
+>             : ^^^^^
+>prop : T
+>     : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+function f4<T extends boolean>({ prop1 }: { prop1: { prop2: T } }): Ret<T> {
+>f4 : <T extends boolean>({ prop1 }: { prop1: { prop2: T; }; }) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^         ^^                         ^^^^^      
+>prop1 : { prop2: T; }
+>      : ^^^^^^^^^ ^^^
+>prop1 : { prop2: T; }
+>      : ^^^^^^^^^ ^^^
+>prop2 : T
+>      : ^
+
+    return prop1.prop2 ? 1 : 2;
+>prop1.prop2 ? 1 : 2 : 1 | 2
+>                    : ^^^^^
+>prop1.prop2 : T
+>            : ^
+>prop1 : { prop2: T; }
+>      : ^^^^^^^^^ ^^^
+>prop2 : T
+>      : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+function f5<T extends boolean>(param: { prop1: { prop2: T } }): Ret<T> {
+>f5 : <T extends boolean>(param: { prop1: { prop2: T; }; }) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^     ^^                         ^^^^^      
+>param : { prop1: { prop2: T; }; }
+>      : ^^^^^^^^^             ^^^
+>prop1 : { prop2: T; }
+>      : ^^^^^^^^^ ^^^
+>prop2 : T
+>      : ^
+
+    return param.prop1.prop2 ? 1 : 2;
+>param.prop1.prop2 ? 1 : 2 : 1 | 2
+>                          : ^^^^^
+>param.prop1.prop2 : T
+>                  : ^
+>param.prop1 : { prop2: T; }
+>            : ^^^^^^^^^ ^^^
+>param : { prop1: { prop2: T; }; }
+>      : ^^^^^^^^^             ^^^
+>prop1 : { prop2: T; }
+>      : ^^^^^^^^^ ^^^
+>prop2 : T
+>      : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+function f6<T extends boolean>({ prop1: { prop2: a } }: { prop1: { prop2: T } }): Ret<T> {
+>f6 : <T extends boolean>({ prop1: { prop2: a } }: { prop1: { prop2: T; }; }) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^                       ^^                         ^^^^^      
+>prop1 : any
+>      : ^^^
+>prop2 : any
+>      : ^^^
+>a : T
+>  : ^
+>prop1 : { prop2: T; }
+>      : ^^^^^^^^^ ^^^
+>prop2 : T
+>      : ^
+
+    return a ? 1 : 2;
+>a ? 1 : 2 : 1 | 2
+>          : ^^^^^
+>a : T
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+function f7<T extends boolean>({ prop1: { prop2 } }: { prop1: { prop2: T } }): Ret<T> {
+>f7 : <T extends boolean>({ prop1: { prop2 } }: { prop1: { prop2: T; }; }) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^                    ^^                         ^^^^^      
+>prop1 : any
+>      : ^^^
+>prop2 : T
+>      : ^
+>prop1 : { prop2: T; }
+>      : ^^^^^^^^^ ^^^
+>prop2 : T
+>      : ^
+
+    return prop2 ? 1 : 2;
+>prop2 ? 1 : 2 : 1 | 2
+>              : ^^^^^
+>prop2 : T
+>      : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+function f8<T extends boolean>({ prop1 }: T): Ret<T> { // Bad.
+>f8 : <T extends boolean>({ prop1 }: T) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^         ^^ ^^^^^      
+>prop1 : any
+>      : ^^^
+
+    return prop1 ? 1 : 2;
+>prop1 ? 1 : 2 : 1 | 2
+>              : ^^^^^
+>prop1 : any
+>      : ^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+function f9<T extends boolean>(param: { "some prop": T }): Ret<T> {
+>f9 : <T extends boolean>(param: { "some prop": T; }) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^     ^^                   ^^^^^      
+>param : { "some prop": T; }
+>      : ^^^^^^^^^^^^^^^ ^^^
+>"some prop" : T
+>            : ^
+
+    return param["some prop"] ? 1 : 2;
+>param["some prop"] ? 1 : 2 : 1 | 2
+>                           : ^^^^^
+>param["some prop"] : T
+>                   : ^
+>param : { "some prop": T; }
+>      : ^^^^^^^^^^^^^^^ ^^^
+>"some prop" : "some prop"
+>            : ^^^^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+// Tests for detection of valid narrowable type parameter references.
+
+function g1<T extends boolean>(param: T): Ret<T> {
+>g1 : <T extends boolean>(param: T) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^     ^^ ^^^^^      
+>param : T
+>      : ^
+
+    return param ? 1 : 2;
+>param ? 1 : 2 : 1 | 2
+>              : ^^^^^
+>param : T
+>      : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+function g2<T extends boolean>(param: { prop: T }): Ret<T> {
+>g2 : <T extends boolean>(param: { prop: T; }) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^     ^^            ^^^^^      
+>param : { prop: T; }
+>      : ^^^^^^^^ ^^^
+>prop : T
+>     : ^
+
+    return param.prop ? 1 : 2;
+>param.prop ? 1 : 2 : 1 | 2
+>                   : ^^^^^
+>param.prop : T
+>           : ^
+>param : { prop: T; }
+>      : ^^^^^^^^ ^^^
+>prop : T
+>     : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+class Dog {
+>Dog : Dog
+>    : ^^^
+
+    bark(): void {}
+>bark : () => void
+>     : ^^^^^^    
+}
+
+class Cat {
+>Cat : Cat
+>    : ^^^
+
+    meow(): void {}
+>meow : () => void
+>     : ^^^^^^    
+
+}
+
+type Type1<T> = { prop: T, prop2: Cat | Dog }
+>Type1 : Type1<T>
+>      : ^^^^^^^^
+>prop : T
+>     : ^
+>prop2 : Dog | Cat
+>      : ^^^^^^^^^
+
+function g3<T extends boolean>(param: Type1<T>): Ret<T> {
+>g3 : <T extends boolean>(param: Type1<T>) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^     ^^        ^^^^^      
+>param : Type1<T>
+>      : ^^^^^^^^
+
+    return param.prop ? 1 : 2;
+>param.prop ? 1 : 2 : 1 | 2
+>                   : ^^^^^
+>param.prop : T
+>           : ^
+>param : Type1<T>
+>      : ^^^^^^^^
+>prop : T
+>     : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+type TypeUnused<T> = string;
+>TypeUnused : string
+>           : ^^^^^^
+
+function g4<T extends boolean>(param: Type1<T>, other: TypeUnused<T>): Ret<T> { // Bad.
+>g4 : <T extends boolean>(param: Type1<T>, other: TypeUnused<T>) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^     ^^        ^^     ^^             ^^^^^      
+>param : Type1<T>
+>      : ^^^^^^^^
+>other : string
+>      : ^^^^^^
+
+    return param.prop ? 1 : 2;
+>param.prop ? 1 : 2 : 1 | 2
+>                   : ^^^^^
+>param.prop : T
+>           : ^
+>param : Type1<T>
+>      : ^^^^^^^^
+>prop : T
+>     : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+interface Type2<T extends boolean> {
+    prop: T,
+>prop : T
+>     : ^
+
+    [s: string]: boolean | undefined,
+>s : string
+>  : ^^^^^^
+}
+
+function g5<T extends boolean>(param: Type2<T>): Ret<T> {
+>g5 : <T extends boolean>(param: Type2<T>) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^     ^^        ^^^^^      
+>param : Type2<T>
+>      : ^^^^^^^^
+
+    return param.prop ? 1 : 2;
+>param.prop ? 1 : 2 : 1 | 2
+>                   : ^^^^^
+>param.prop : T
+>           : ^
+>param : Type2<T>
+>      : ^^^^^^^^
+>prop : T
+>     : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+interface Type3<T extends boolean> {
+    prop: T,
+>prop : T
+>     : ^
+}
+
+interface Type3<T extends boolean> {
+    prop2: Cat | Dog,
+>prop2 : Dog | Cat
+>      : ^^^^^^^^^
+}
+
+function g6<T extends boolean>(param: Type3<T>): Ret<T> { // Unsupported for now: interface merging.
+>g6 : <T extends boolean>(param: Type3<T>) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^     ^^        ^^^^^      
+>param : Type3<T>
+>      : ^^^^^^^^
+
+    return param.prop ? 1 : 2;
+>param.prop ? 1 : 2 : 1 | 2
+>                   : ^^^^^
+>param.prop : T
+>           : ^
+>param : Type3<T>
+>      : ^^^^^^^^
+>prop : T
+>     : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+type Type4<T, S> = {
+>Type4 : Type4<T, S>
+>      : ^^^^^^^^^^^
+
+    prop: T,
+>prop : T
+>     : ^
+
+    prop2: S[],
+>prop2 : S[]
+>      : ^^^
+}
+
+function g7<T extends boolean, S>(param: Type4<T, S>): Ret<T> {
+>g7 : <T extends boolean, S>(param: Type4<T, S>) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^ ^^     ^^           ^^^^^      
+>param : Type4<T, S>
+>      : ^^^^^^^^^^^
+
+    return param.prop ? 1 : 2;
+>param.prop ? 1 : 2 : 1 | 2
+>                   : ^^^^^
+>param.prop : T
+>           : ^
+>param : Type4<T, S>
+>      : ^^^^^^^^^^^
+>prop : T
+>     : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+function g8<T extends boolean>(param: Type1<T> & { prop2: Cat | Dog }): Ret<T> {
+>g8 : <T extends boolean>(param: Type1<T> & { prop2: Cat | Dog; }) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^     ^^                                ^^^^^      
+>param : Type1<T> & { prop2: Cat | Dog; }
+>      : ^^^^^^^^^^^^^^^^^^^^         ^^^
+>prop2 : Dog | Cat
+>      : ^^^^^^^^^
+
+    return param.prop ? 1 : 2;
+>param.prop ? 1 : 2 : 1 | 2
+>                   : ^^^^^
+>param.prop : T
+>           : ^
+>param : Type1<T> & { prop2: Cat | Dog; }
+>      : ^^^^^^^^^^^^^^^^^^^^         ^^^
+>prop : T
+>     : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+function g9<T extends boolean>([ prop ]: [T]): Ret<T> { // Unsupported.
+>g9 : <T extends boolean>([prop]: [T]) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^      ^^   ^^^^^      
+>prop : T
+>     : ^
+
+    return prop ? 1 : 2;
+>prop ? 1 : 2 : 1 | 2
+>             : ^^^^^
+>prop : T
+>     : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+function g10<T extends boolean>(param: [T]): Ret<T> { // Unsupported.
+>g10 : <T extends boolean>(param: [T]) => Ret<T>
+>    : ^ ^^^^^^^^^       ^^     ^^   ^^^^^      
+>param : [T]
+>      : ^^^
+
+    return param[0] ? 1 : 2;
+>param[0] ? 1 : 2 : 1 | 2
+>                 : ^^^^^
+>param[0] : T
+>         : ^
+>param : [T]
+>      : ^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+function g11<T extends boolean>(param: T[]): Ret<T> { // Bad.
+>g11 : <T extends boolean>(param: T[]) => Ret<T>
+>    : ^ ^^^^^^^^^       ^^     ^^   ^^^^^      
+>param : T[]
+>      : ^^^
+
+    return param[0] ? 1 : 2;
+>param[0] ? 1 : 2 : 1 | 2
+>                 : ^^^^^
+>param[0] : T
+>         : ^
+>param : T[]
+>      : ^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+type Type5<S> = {
+>Type5 : Type5<S>
+>      : ^^^^^^^^
+
+    prop: S,
+>prop : S
+>     : ^
+
+    prop2: string[],
+>prop2 : string[]
+>      : ^^^^^^^^
+}
+
+function g12<T extends boolean>(param: Type5<T>): Ret<T> {
+>g12 : <T extends boolean>(param: Type5<T>) => Ret<T>
+>    : ^ ^^^^^^^^^       ^^     ^^        ^^^^^      
+>param : Type5<T>
+>      : ^^^^^^^^
+
+    return param.prop ? 1 : 2;
+>param.prop ? 1 : 2 : 1 | 2
+>                   : ^^^^^
+>param.prop : T
+>           : ^
+>param : Type5<T>
+>      : ^^^^^^^^
+>prop : T
+>     : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+type Type6<S> = {
+>Type6 : Type6<S>
+>      : ^^^^^^^^
+
+    prop: S,
+>prop : S
+>     : ^
+
+    prop2: S[],
+>prop2 : S[]
+>      : ^^^
+}
+
+function g13<T extends boolean>(param: Type6<T>): Ret<T> { // Bad.
+>g13 : <T extends boolean>(param: Type6<T>) => Ret<T>
+>    : ^ ^^^^^^^^^       ^^     ^^        ^^^^^      
+>param : Type6<T>
+>      : ^^^^^^^^
+
+    return param.prop ? 1 : 2;
+>param.prop ? 1 : 2 : 1 | 2
+>                   : ^^^^^
+>param.prop : T
+>           : ^
+>param : Type6<T>
+>      : ^^^^^^^^
+>prop : T
+>     : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+type Type7<T> = {
+>Type7 : Type7<T>
+>      : ^^^^^^^^
+
+    [Key in "prop"]: T
+}
+
+function g14<T extends boolean>(param: Type7<T>): Ret<T> { // Unsupported.
+>g14 : <T extends boolean>(param: Type7<T>) => Ret<T>
+>    : ^ ^^^^^^^^^       ^^     ^^        ^^^^^      
+>param : Type7<T>
+>      : ^^^^^^^^
+
+    return param.prop ? 1 : 2;
+>param.prop ? 1 : 2 : 1 | 2
+>                   : ^^^^^
+>param.prop : T
+>           : ^
+>param : Type7<T>
+>      : ^^^^^^^^
+>prop : T
+>     : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+class Class1<T> {
+>Class1 : Class1<T>
+>       : ^^^^^^^^^
+
+    prop!: T;
+>prop : T
+>     : ^
+}
+
+function g15<T extends boolean>(param: Class1<T>): Ret<T> { // Unsupported.
+>g15 : <T extends boolean>(param: Class1<T>) => Ret<T>
+>    : ^ ^^^^^^^^^       ^^     ^^         ^^^^^      
+>param : Class1<T>
+>      : ^^^^^^^^^
+
+    return param.prop ? 1 : 2;
+>param.prop ? 1 : 2 : 1 | 2
+>                   : ^^^^^
+>param.prop : T
+>           : ^
+>param : Class1<T>
+>      : ^^^^^^^^^
+>prop : T
+>     : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+type Type8<T> = {
+>Type8 : Type8<T>
+>      : ^^^^^^^^
+
+    prop: T,
+>prop : T
+>     : ^
+}
+
+type Type9<T> = {
+>Type9 : Type9<T>
+>      : ^^^^^^^^
+
+    prop2: T,
+>prop2 : T
+>      : ^
+}
+
+function g16<T extends boolean>(param: Type8<Type9<T>["prop2"]>): Ret<T> { // Unsupported.
+>g16 : <T extends boolean>(param: Type8<Type9<T>["prop2"]>) => Ret<T>
+>    : ^ ^^^^^^^^^       ^^     ^^                        ^^^^^      
+>param : Type8<T>
+>      : ^^^^^^^^
+
+    return param.prop ? 1 : 2;
+>param.prop ? 1 : 2 : 1 | 2
+>                   : ^^^^^
+>param.prop : T
+>           : ^
+>param : Type8<T>
+>      : ^^^^^^^^
+>prop : T
+>     : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+// Tests for shadowing and resolving the constructed narrowable reference.
+
+function h1<T extends boolean>(param: T): Ret<T> {
+>h1 : <T extends boolean>(param: T) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^     ^^ ^^^^^      
+>param : T
+>      : ^
+
+    if (param) {
+>param : T
+>      : ^
+
+        const param = false;
+>param : false
+>      : ^^^^^
+>false : false
+>      : ^^^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
+
+function h2<T extends boolean>({ prop }: { prop: T}): Ret<T> {
+>h2 : <T extends boolean>({ prop }: { prop: T; }) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^        ^^            ^^^^^      
+>prop : T
+>     : ^
+>prop : T
+>     : ^
+
+    if (prop) {
+>prop : T
+>     : ^
+
+        const prop = false;
+>prop : false
+>     : ^^^^^
+>false : false
+>      : ^^^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
+
+function h3<T extends boolean>(param: { prop: T}): Ret<T> {
+>h3 : <T extends boolean>(param: { prop: T; }) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^     ^^            ^^^^^      
+>param : { prop: T; }
+>      : ^^^^^^^^ ^^^
+>prop : T
+>     : ^
+
+    if (param.prop) {
+>param.prop : T
+>           : ^
+>param : { prop: T; }
+>      : ^^^^^^^^ ^^^
+>prop : T
+>     : ^
+
+        const param = { prop: false };
+>param : { prop: boolean; }
+>      : ^^^^^^^^^^^^^^^^^^
+>{ prop: false } : { prop: boolean; }
+>                : ^^^^^^^^^^^^^^^^^^
+>prop : boolean
+>     : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
+
+function h4<T extends boolean>(param: { "some prop": T }): Ret<T> {
+>h4 : <T extends boolean>(param: { "some prop": T; }) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^     ^^                   ^^^^^      
+>param : { "some prop": T; }
+>      : ^^^^^^^^^^^^^^^ ^^^
+>"some prop" : T
+>            : ^
+
+    if (param["some prop"]) {
+>param["some prop"] : T
+>                   : ^
+>param : { "some prop": T; }
+>      : ^^^^^^^^^^^^^^^ ^^^
+>"some prop" : "some prop"
+>            : ^^^^^^^^^^^
+
+        const param = { "some prop": false };
+>param : { "some prop": boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ "some prop": false } : { "some prop": boolean; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>"some prop" : boolean
+>            : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
+
+function h5<T extends boolean>(param: T): Ret<T> {
+>h5 : <T extends boolean>(param: T) => Ret<T>
+>   : ^ ^^^^^^^^^       ^^     ^^ ^^^^^      
+>param : T
+>      : ^
+    {
+        const param = true;
+>param : true
+>      : ^^^^
+>true : true
+>     : ^^^^
+
+        if (param) {
+>param : true
+>      : ^^^^
+
+            return 1; // Bad.
+>1 : 1
+>  : ^
+        }
+        return 2;
+>2 : 2
+>  : ^
+    }
+}
+
+// Tests for optionality of parameters and properties.
+
+type RetU<T> =
+>RetU : RetU<T>
+>     : ^^^^^^^
+
+    T extends true  ? 1 :
+>true : true
+>     : ^^^^
+
+    T extends false ? 2 :
+>false : false
+>      : ^^^^^
+
+    T extends undefined ? 3 :
+    never;
+
+function fn1<T extends boolean>(param?: T): RetU<T> { // Bad.
+>fn1 : <T extends boolean>(param?: T) => RetU<T>
+>    : ^ ^^^^^^^^^       ^^     ^^^ ^^^^^       
+>param : T | undefined
+>      : ^^^^^^^^^^^^^
+
+    if (param == undefined) {
+>param == undefined : boolean
+>                   : ^^^^^^^
+>param : T | undefined
+>      : ^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return 3;
+>3 : 3
+>  : ^
+    }
+    if (param) {
+>param : T
+>      : ^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
+
+function fn2<T extends boolean | undefined>(param?: T): RetU<T> {
+>fn2 : <T extends boolean | undefined>(param?: T) => RetU<T>
+>    : ^ ^^^^^^^^^                   ^^     ^^^ ^^^^^       
+>param : T | undefined
+>      : ^^^^^^^^^^^^^
+
+    if (param == undefined) {
+>param == undefined : boolean
+>                   : ^^^^^^^
+>param : T | undefined
+>      : ^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return 3;
+>3 : 3
+>  : ^
+    }
+    if (param) {
+>param : NonNullable<T>
+>      : ^^^^^^^^^^^^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
+
+function fn3<T extends boolean | undefined>(param: { prop?: T }): RetU<T> {
+>fn3 : <T extends boolean | undefined>(param: { prop?: T; }) => RetU<T>
+>    : ^ ^^^^^^^^^                   ^^     ^^             ^^^^^       
+>param : { prop?: T; }
+>      : ^^^^^^^^^ ^^^
+>prop : T | undefined
+>     : ^^^^^^^^^^^^^
+
+    if (param.prop == undefined) {
+>param.prop == undefined : boolean
+>                        : ^^^^^^^
+>param.prop : T | undefined
+>           : ^^^^^^^^^^^^^
+>param : { prop?: T; }
+>      : ^^^^^^^^^ ^^^
+>prop : T | undefined
+>     : ^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return 3;
+>3 : 3
+>  : ^
+    }
+    if (param.prop) {
+>param.prop : NonNullable<T>
+>           : ^^^^^^^^^^^^^^
+>param : { prop?: T; }
+>      : ^^^^^^^^^ ^^^
+>prop : NonNullable<T>
+>     : ^^^^^^^^^^^^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
+
+function fn4<T extends boolean | undefined>({ prop }: { prop?: T }): RetU<T> {
+>fn4 : <T extends boolean | undefined>({ prop }: { prop?: T; }) => RetU<T>
+>    : ^ ^^^^^^^^^                   ^^        ^^             ^^^^^       
+>prop : T | undefined
+>     : ^^^^^^^^^^^^^
+>prop : T | undefined
+>     : ^^^^^^^^^^^^^
+
+    if (prop == undefined) {
+>prop == undefined : boolean
+>                  : ^^^^^^^
+>prop : T | undefined
+>     : ^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return 3;
+>3 : 3
+>  : ^
+    }
+    if (prop) {
+>prop : NonNullable<T>
+>     : ^^^^^^^^^^^^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
+
+function fn5<T extends boolean | undefined>(param?: { prop: T }): RetU<T> { // Bad.
+>fn5 : <T extends boolean | undefined>(param?: { prop: T; }) => RetU<T>
+>    : ^ ^^^^^^^^^                   ^^     ^^^            ^^^^^       
+>param : { prop: T; } | undefined
+>      : ^^^^^^^^ ^^^^^^^^^^^^^^^
+>prop : T
+>     : ^
+
+    if (param.prop == undefined) {
+>param.prop == undefined : boolean
+>                        : ^^^^^^^
+>param.prop : T
+>           : ^
+>param : { prop: T; } | undefined
+>      : ^^^^^^^^ ^^^^^^^^^^^^^^^
+>prop : T
+>     : ^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return 3;
+>3 : 3
+>  : ^
+    }
+    if (param.prop) {
+>param.prop : NonNullable<T>
+>           : ^^^^^^^^^^^^^^
+>param : { prop: T; } | undefined
+>      : ^^^^^^^^ ^^^^^^^^^^^^^^^
+>prop : NonNullable<T>
+>     : ^^^^^^^^^^^^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
+
+function fn6<T extends boolean | undefined>(param: { prop1?: { prop?: T } }): RetU<T> { // Bad.
+>fn6 : <T extends boolean | undefined>(param: { prop1?: { prop?: T; }; }) => RetU<T>
+>    : ^ ^^^^^^^^^                   ^^     ^^                          ^^^^^       
+>param : { prop1?: { prop?: T; }; }
+>      : ^^^^^^^^^^             ^^^
+>prop1 : { prop?: T; } | undefined
+>      : ^^^^^^^^^ ^^^^^^^^^^^^^^^
+>prop : T | undefined
+>     : ^^^^^^^^^^^^^
+
+    if (param.prop1.prop == undefined) {
+>param.prop1.prop == undefined : boolean
+>                              : ^^^^^^^
+>param.prop1.prop : T | undefined
+>                 : ^^^^^^^^^^^^^
+>param.prop1 : { prop?: T; } | undefined
+>            : ^^^^^^^^^ ^^^^^^^^^^^^^^^
+>param : { prop1?: { prop?: T; }; }
+>      : ^^^^^^^^^^             ^^^
+>prop1 : { prop?: T; } | undefined
+>      : ^^^^^^^^^ ^^^^^^^^^^^^^^^
+>prop : T | undefined
+>     : ^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return 3;
+>3 : 3
+>  : ^
+    }
+    if (param.prop1.prop) {
+>param.prop1.prop : NonNullable<T>
+>                 : ^^^^^^^^^^^^^^
+>param.prop1 : { prop?: T; } | undefined
+>            : ^^^^^^^^^ ^^^^^^^^^^^^^^^
+>param : { prop1?: { prop?: T; }; }
+>      : ^^^^^^^^^^             ^^^
+>prop1 : { prop?: T; } | undefined
+>      : ^^^^^^^^^ ^^^^^^^^^^^^^^^
+>prop : NonNullable<T>
+>     : ^^^^^^^^^^^^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
