@@ -1921,15 +1921,7 @@ export namespace Core {
                 // 'FindReferences' will just filter out these results.
                 state.addStringOrCommentReference(sourceFile.fileName, createTextSpan(position, search.text.length));
             }
-            // if ( search.node &&!state.checker.getSymbolAtLocation(referenceLocation) && !state.options.implementations && isStringLiteralLike(search.node) && isStringLiteralLike(referenceLocation) )
-            //     {
-            //         const type = getContextualTypeFromParentOrAncestorTypeNode(search.node, state.checker)
-            //         const refType = getContextualTypeFromParentOrAncestorTypeNode(referenceLocation, state.checker)
-            //         if (type !== state.checker.getStringType()  && type === refType)
-            //         {
-            //             addReference(referenceLocation, referenceLocation.symbol, state);
-            //         }
-            //     }
+
             return;
         }
 
