@@ -1,0 +1,331 @@
+//// [tests/cases/compiler/dependentReturnType5.ts] ////
+
+=== dependentReturnType5.ts ===
+// Indexed access return type
+interface A1 {
+    "prop": true;
+>"prop" : true
+>       : ^^^^
+>true : true
+>     : ^^^^
+
+    [s: string]: boolean;
+>s : string
+>  : ^^^^^^
+}
+
+// This was already allowed but is unsound.
+function foo1<T extends string>(x: T): A1[T] {
+>foo1 : <T extends string>(x: T) => A1[T]
+>     : ^ ^^^^^^^^^      ^^ ^^ ^^^^^     
+>x : T
+>  : ^
+
+    return false;
+>false : false
+>      : ^^^^^
+}
+const rfoo1 = foo1("prop"); // Type says true, but actually returns false.
+>rfoo1 : true
+>      : ^^^^
+>foo1("prop") : true
+>             : ^^^^
+>foo1 : <T extends string>(x: T) => A1[T]
+>     : ^ ^^^^^^^^^      ^^ ^^ ^^^^^     
+>"prop" : "prop"
+>       : ^^^^^^
+
+interface A2 {
+    "prop": true;
+>"prop" : true
+>       : ^^^^
+>true : true
+>     : ^^^^
+
+    [n: number]: string;
+>n : number
+>  : ^^^^^^
+}
+
+// We could soundly allow that, because `"prop"` and `[n: number]` are disjoint types.
+function foo2<T extends "prop" | number>(x: T): A2[T] {
+>foo2 : <T extends "prop" | number>(x: T) => A2[T]
+>     : ^ ^^^^^^^^^               ^^ ^^ ^^^^^     
+>x : T
+>  : ^
+
+    if (x === "prop") {
+>x === "prop" : boolean
+>             : ^^^^^^^
+>x : T
+>  : ^
+>"prop" : "prop"
+>       : ^^^^^^
+
+        return true;
+>true : true
+>     : ^^^^
+    }
+    return "some string";
+>"some string" : "some string"
+>              : ^^^^^^^^^^^^^
+}
+const rfoo2 = foo2("prop");
+>rfoo2 : true
+>      : ^^^^
+>foo2("prop") : true
+>             : ^^^^
+>foo2 : <T extends "prop" | number>(x: T) => A2[T]
+>     : ^ ^^^^^^^^^               ^^ ^^ ^^^^^     
+>"prop" : "prop"
+>       : ^^^^^^
+
+const rfoo22 = foo2(34);
+>rfoo22 : string
+>       : ^^^^^^
+>foo2(34) : string
+>         : ^^^^^^
+>foo2 : <T extends "prop" | number>(x: T) => A2[T]
+>     : ^ ^^^^^^^^^               ^^ ^^ ^^^^^     
+>34 : 34
+>   : ^^
+
+const rfoo222 = foo2(Math.random() ? "prop" : 34);
+>rfoo222 : string | true
+>        : ^^^^^^^^^^^^^
+>foo2(Math.random() ? "prop" : 34) : string | true
+>                                  : ^^^^^^^^^^^^^
+>foo2 : <T extends "prop" | number>(x: T) => A2[T]
+>     : ^ ^^^^^^^^^               ^^ ^^ ^^^^^     
+>Math.random() ? "prop" : 34 : "prop" | 34
+>                            : ^^^^^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>"prop" : "prop"
+>       : ^^^^^^
+>34 : 34
+>   : ^^
+
+interface A3 {
+    [s: string]: boolean;
+>s : string
+>  : ^^^^^^
+}
+
+// No need for return type narrowing.
+function foo3<T extends string>(x: T): A3[T] {
+>foo3 : <T extends string>(x: T) => A3[T]
+>     : ^ ^^^^^^^^^      ^^ ^^ ^^^^^     
+>x : T
+>  : ^
+
+    if (Math.random()) return true;
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>true : true
+>     : ^^^^
+
+    return false;
+>false : false
+>      : ^^^^^
+}
+
+interface Comp {
+    foo: 2;
+>foo : 2
+>    : ^
+
+    [n: number]: 3;
+>n : number
+>  : ^^^^^^
+
+    [s: string]: 2 | 3 | 4;
+>s : string
+>  : ^^^^^^
+}
+
+function indexedComp<T extends number | string>(x: T): Comp[T] {
+>indexedComp : <T extends number | string>(x: T) => Comp[T]
+>            : ^ ^^^^^^^^^               ^^ ^^ ^^^^^       
+>x : T
+>  : ^
+
+    if (x === "foo") {
+>x === "foo" : boolean
+>            : ^^^^^^^
+>x : T
+>  : ^
+>"foo" : "foo"
+>      : ^^^^^
+
+        if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+            return 3; // Error
+>3 : 3
+>  : ^
+        }
+        return 2; // Ok
+>2 : 2
+>  : ^
+    }
+    if (typeof x === "number") {
+>typeof x === "number" : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
+>"number" : "number"
+>         : ^^^^^^^^
+
+        if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+            return 2; // Error
+>2 : 2
+>  : ^
+        }
+        return 3; // Ok
+>3 : 3
+>  : ^
+    }
+    return 4; // Ok
+>4 : 4
+>  : ^
+}
+
+function indexedComp2<T extends number | string>(x: T): Comp[T] {
+>indexedComp2 : <T extends number | string>(x: T) => Comp[T]
+>             : ^ ^^^^^^^^^               ^^ ^^ ^^^^^       
+>x : T
+>  : ^
+
+    if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+        return 3; // Bad, unsound
+>3 : 3
+>  : ^
+    }
+    return 2; // Error
+>2 : 2
+>  : ^
+}
+
+
+// Most common case supported:
+interface F {
+    "t": number,
+>"t" : number
+>    : ^^^^^^
+
+    "f": boolean,
+>"f" : boolean
+>    : ^^^^^^^
+}
+
+// Ok
+function depLikeFun<T extends "t" | "f">(str: T): F[T] {
+>depLikeFun : <T extends "t" | "f">(str: T) => F[T]
+>           : ^ ^^^^^^^^^         ^^   ^^ ^^^^^    
+>str : T
+>    : ^
+
+    if (str === "t") {
+>str === "t" : boolean
+>            : ^^^^^^^
+>str : T
+>    : ^
+>"t" : "t"
+>    : ^^^
+
+        return 1;
+>1 : 1
+>  : ^
+
+    } else {
+        return true;
+>true : true
+>     : ^^^^
+    }
+}
+
+depLikeFun("t"); // has type number
+>depLikeFun("t") : number
+>                : ^^^^^^
+>depLikeFun : <T extends "t" | "f">(str: T) => F[T]
+>           : ^ ^^^^^^^^^         ^^   ^^ ^^^^^    
+>"t" : "t"
+>    : ^^^
+
+depLikeFun("f"); // has type boolean
+>depLikeFun("f") : boolean
+>                : ^^^^^^^
+>depLikeFun : <T extends "t" | "f">(str: T) => F[T]
+>           : ^ ^^^^^^^^^         ^^   ^^ ^^^^^    
+>"f" : "f"
+>    : ^^^
+
+type IndirectF<T extends keyof F> = F[T];
+>IndirectF : IndirectF<T>
+>          : ^^^^^^^^^^^^
+
+// Ok
+function depLikeFun2<T extends "t" | "f">(str: T): IndirectF<T> {
+>depLikeFun2 : <T extends "t" | "f">(str: T) => IndirectF<T>
+>            : ^ ^^^^^^^^^         ^^   ^^ ^^^^^            
+>str : T
+>    : ^
+
+    if (str === "t") {
+>str === "t" : boolean
+>            : ^^^^^^^
+>str : T
+>    : ^
+>"t" : "t"
+>    : ^^^
+
+        return 1;
+>1 : 1
+>  : ^
+
+    } else {
+        return true;
+>true : true
+>     : ^^^^
+    }
+}
