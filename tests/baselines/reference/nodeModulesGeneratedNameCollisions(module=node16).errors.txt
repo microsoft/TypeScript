@@ -1,6 +1,6 @@
 subfolder/index.ts(2,10): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
 subfolder/index.ts(3,7): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
-subfolder/index.ts(4,7): error TS2725: Class name cannot be 'Object' when targeting ES5 with module Node16.
+subfolder/index.ts(4,7): error TS2725: Class name cannot be 'Object' when targeting ES2022 with module Node16.
 subfolder/index.ts(5,14): error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
 
 
@@ -14,7 +14,7 @@ subfolder/index.ts(5,14): error TS1216: Identifier expected. '__esModule' is res
 !!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
     class Object {}
           ~~~~~~
-!!! error TS2725: Class name cannot be 'Object' when targeting ES5 with module Node16.
+!!! error TS2725: Class name cannot be 'Object' when targeting ES2022 with module Node16.
     export const __esModule = false;
                  ~~~~~~~~~~
 !!! error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
