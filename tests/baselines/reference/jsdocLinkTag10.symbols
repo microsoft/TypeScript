@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/jsdoc/jsdocLinkTag10.ts] ////
+
+=== /a.ts ===
+export interface A {}
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+=== /b.ts ===
+/**
+ * {@link import('./a').A}
+ */
+export function fn() { }
+>fn : Symbol(fn, Decl(b.ts, 0, 0))
+

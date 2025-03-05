@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/jsdoc/jsdocLinkTag11.ts] ////
+
+=== /a.js ===
+export class A {}
+>A : A
+>  : ^
+
+=== /b.js ===
+/**
+ * {@link import('./a').A}
+ */
+export function fn() { }
+>fn : () => void
+>   : ^^^^^^^^^^
+

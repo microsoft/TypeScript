@@ -12099,7 +12099,6 @@ export function forEachDynamicImportOrRequireCall<IncludeTypeSpaceImports extend
 
 /** Returns a token if position is in [start-of-leading-trivia, end), includes JSDoc only in JS files */
 function getNodeAtPosition(sourceFile: SourceFile, position: number, includeJSDoc: boolean): Node {
-    const isJavaScriptFile = isInJSFile(sourceFile);
     let current: Node = sourceFile;
     const getContainingChild = (child: Node) => {
         if (child.pos <= position && (position < child.end || (position === child.end && (child.kind === SyntaxKind.EndOfFileToken)))) {
@@ -12107,7 +12106,7 @@ function getNodeAtPosition(sourceFile: SourceFile, position: number, includeJSDo
         }
     };
     while (true) {
-        const child = isJavaScriptFile && includeJSDoc && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
+        const child = includeJSDoc && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
         if (!child) {
             return current;
         }

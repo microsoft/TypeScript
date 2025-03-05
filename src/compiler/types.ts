@@ -3951,19 +3951,19 @@ export interface JSDocTag extends Node {
 
 export interface JSDocLink extends Node {
     readonly kind: SyntaxKind.JSDocLink;
-    readonly name?: EntityName | JSDocMemberName;
+    readonly name?: EntityName | JSDocMemberName | ImportTypeNode;
     text: string;
 }
 
 export interface JSDocLinkCode extends Node {
     readonly kind: SyntaxKind.JSDocLinkCode;
-    readonly name?: EntityName | JSDocMemberName;
+    readonly name?: EntityName | JSDocMemberName | ImportTypeNode;
     text: string;
 }
 
 export interface JSDocLinkPlain extends Node {
     readonly kind: SyntaxKind.JSDocLinkPlain;
-    readonly name?: EntityName | JSDocMemberName;
+    readonly name?: EntityName | JSDocMemberName | ImportTypeNode;
     text: string;
 }
 
@@ -9083,12 +9083,12 @@ export interface NodeFactory {
     updateJSDocNameReference(node: JSDocNameReference, name: EntityName | JSDocMemberName): JSDocNameReference;
     createJSDocMemberName(left: EntityName | JSDocMemberName, right: Identifier): JSDocMemberName;
     updateJSDocMemberName(node: JSDocMemberName, left: EntityName | JSDocMemberName, right: Identifier): JSDocMemberName;
-    createJSDocLink(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLink;
-    updateJSDocLink(node: JSDocLink, name: EntityName | JSDocMemberName | undefined, text: string): JSDocLink;
-    createJSDocLinkCode(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkCode;
-    updateJSDocLinkCode(node: JSDocLinkCode, name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkCode;
-    createJSDocLinkPlain(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkPlain;
-    updateJSDocLinkPlain(node: JSDocLinkPlain, name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkPlain;
+    createJSDocLink(name: EntityName | JSDocMemberName | ImportTypeNode | undefined, text: string): JSDocLink;
+    updateJSDocLink(node: JSDocLink, name: EntityName | JSDocMemberName | ImportTypeNode | undefined, text: string): JSDocLink;
+    createJSDocLinkCode(name: EntityName | JSDocMemberName | ImportTypeNode | undefined, text: string): JSDocLinkCode;
+    updateJSDocLinkCode(node: JSDocLinkCode, name: EntityName | JSDocMemberName | ImportTypeNode | undefined, text: string): JSDocLinkCode;
+    createJSDocLinkPlain(name: EntityName | JSDocMemberName | ImportTypeNode | undefined, text: string): JSDocLinkPlain;
+    updateJSDocLinkPlain(node: JSDocLinkPlain, name: EntityName | JSDocMemberName | ImportTypeNode | undefined, text: string): JSDocLinkPlain;
     createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral;
     updateJSDocTypeLiteral(node: JSDocTypeLiteral, jsDocPropertyTags: readonly JSDocPropertyLikeTag[] | undefined, isArrayType: boolean | undefined): JSDocTypeLiteral;
     createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag): JSDocSignature;
