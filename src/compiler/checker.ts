@@ -20423,7 +20423,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const checkType = root.checkType;
                 let distributionType = root.isDistributive ? getReducedType(getMappedType(checkType, newMapper)) : undefined;
                 let narrowingBaseType: Type | undefined;
-                const forNarrowing = distributionType && isNarrowingSubstitutionType(distributionType) && isNarrowableConditionalType(type, mapper);
+                const forNarrowing = distributionType &&
+                    isNarrowingSubstitutionType(distributionType) &&
+                    isNarrowableConditionalType(type, /*hadNonPrimitiveExtendsType*/ [], mapper);
                 if (forNarrowing) {
                     narrowingBaseType = (distributionType as SubstitutionType).baseType;
                     distributionType = getReducedType((distributionType as SubstitutionType).constraint);
@@ -45985,14 +45987,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     type NarrowableReference = Identifier | ElementAccessExpression | PropertyAccessExpression;
     /**
      * Narrowable type parameters are type parameters that:
-     * (1) have a narrowable constraint;
+     * (1) have a union constraint;
      * (2) are syntactically used as the type of a single parameter in the function, and nothing else
      */
     function getNarrowableTypeParameters(candidates: TypeParameter[]): [TypeParameter, Symbol, NarrowableReference][] {
         const narrowableParams: [TypeParameter, Symbol, NarrowableReference][] = [];
         for (const typeParam of candidates) {
             const constraint = getConstraintOfTypeParameter(typeParam);
-            if (!constraint || !isNarrowableTypeParameterConstraint(constraint)) continue;
+            if (!constraint || !(constraint.flags & TypeFlags.Union)) continue;
             if (typeParam.symbol && typeParam.symbol.declarations && typeParam.symbol.declarations.length === 1) {
                 const declaration = typeParam.symbol.declarations[0];
                 const container = isJSDocTemplateTag(declaration.parent) ? getJSDocHost(declaration.parent) : declaration.parent;
@@ -46068,11 +46070,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const typeArgs = (typeNode as TypeReferenceNode).typeArguments;
                     // Type arguments that reference `T`
                     const typeArgsReferencingT = typeArgs?.filter(node => isTypeParameterReferenced(typeParam, node));
-                    if (!typeArgsReferencingT || typeArgsReferencingT.length == 0) return true; // Type reference unrelated to `T`
+                    if (!typeArgsReferencingT || typeArgsReferencingT.length === 0) return true; // Type reference unrelated to `T`
                     if (typeArgsReferencingT && typeArgsReferencingT.length > 1) return false; // e.g. `Foo<T, T, ...>`
                     const typeArg = typeArgsReferencingT[0];
                     if (!(typeArg.kind & SyntaxKind.TypeReference)) return false; // e.g. `Foo<Wrapper<T>, ...>`
-                    if (!type.symbol || !type.symbol.declarations || type.symbol.declarations.length != 1) return false;
+                    if (!type.symbol || !type.symbol.declarations || type.symbol.declarations.length !== 1) return false;
                     const typeDeclaration = type.symbol.declarations[0];
                     let aliasDeclaration;
                     if (isTypeLiteralNode(typeDeclaration)) {
@@ -46243,30 +46245,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    /**
-     * Determines if the type parameter constraint allows for narrowing of that type parameter.
-     * This is true if:
-     * (1) the constraint is a union type;
-     * (2) there's at most one non-primitive type in the union.
-     */
-    function isNarrowableTypeParameterConstraint(constraint: Type): boolean {
-        if (!(constraint.flags & TypeFlags.Union)) return false;
-        let nonPrimitives = 0;
-        for (const type of (constraint as UnionType).types) {
-            if (!(type.flags & TypeFlags.Primitive)) {
-                nonPrimitives += 1;
-            }
-        }
-        return nonPrimitives <= 1;
-    }
-
     function isNarrowableReturnType(returnType: IndexedAccessType | ConditionalType): boolean {
         return isConditionalType(returnType)
-            ? isNarrowableConditionalType(returnType)
+            ? isNarrowableConditionalType(returnType, /*hadNonPrimitiveExtendsType*/ [])
             : !!(returnType.indexType.flags & TypeFlags.TypeParameter);
     }
 
-    function isNarrowableConditionalType(type: ConditionalType, mapper?: TypeMapper): boolean {
+    function isNarrowableConditionalType(type: ConditionalType, hadNonPrimitiveExtendsType: TypeParameter[], mapper?: TypeMapper): boolean {
         const typeArguments = mapper && map(type.root.outerTypeParameters, t => {
             const mapped = getMappedType(t, mapper);
             if (isNarrowingSubstitutionType(mapped)) {
@@ -46274,14 +46259,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return mapped;
         });
-        const id = `${type.id}:${getTypeListId(typeArguments)}`;
+        const id = `${type.id}:${getTypeListId(typeArguments)}:${getTypeListId(hadNonPrimitiveExtendsType)}`;
         let result = narrowableReturnTypeCache.get(id);
         if (result === undefined) {
             const nonNarrowingMapper = type.root.outerTypeParameters
                 && typeArguments
                 && createTypeMapper(type.root.outerTypeParameters, typeArguments);
             const instantiatedType = instantiateType(type, nonNarrowingMapper);
-            result = isConditionalType(instantiatedType) && isNarrowableConditionalTypeWorker(instantiatedType);
+            result = isConditionalType(instantiatedType) &&
+                isNarrowableConditionalTypeWorker(instantiatedType, hadNonPrimitiveExtendsType);
             narrowableReturnTypeCache.set(id, result);
         }
         return result;
@@ -46293,9 +46279,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // (1) The conditional type has no `infer` type parameters;
     // (2) The conditional type's check type is a narrowable type parameter (i.e. a type parameter with a union constraint);
     // (3) The extends type `A` is a type or a union of types that are supertypes of the union constraint of the type parameter;
-    // (4) `TrueBranch<T>` and `FalseBranch<T>` must be valid, recursively.
+    // (4) At most one extends type has a non-primitive type.
+    // (5) `TrueBranch<T>` and `FalseBranch<T>` must be valid, recursively.
     //      In particular, the false-most branch of the conditional type must be `never`.
-    function isNarrowableConditionalTypeWorker(type: ConditionalType): boolean {
+    function isNarrowableConditionalTypeWorker(type: ConditionalType, hadNonPrimitiveExtendsType: TypeParameter[]): boolean {
         // (0)
         if (!type.root.isDistributive) {
             return false;
@@ -46328,14 +46315,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // (4)
+        const hasNonPrimitive = someType(type.extendsType, type => (type.flags & TypeFlags.Primitive) === 0);
+        if (hasNonPrimitive && hadNonPrimitiveExtendsType.includes(type.checkType)) {
+            return false;
+        }
+        if (hasNonPrimitive) {
+            hadNonPrimitiveExtendsType = hadNonPrimitiveExtendsType.slice();
+            hadNonPrimitiveExtendsType.push(type.checkType);
+        }
+
+        // (5)
         const trueType = getTrueTypeFromConditionalType(type);
         const isValidTrueType = isConditionalType(trueType)
-            ? isNarrowableConditionalType(trueType)
+            ? isNarrowableConditionalType(trueType, hadNonPrimitiveExtendsType)
             : true;
         if (!isValidTrueType) return false;
         const falseType = getFalseTypeFromConditionalType(type);
         const isValidFalseType = isConditionalType(falseType)
-            ? isNarrowableConditionalType(falseType)
+            ? isNarrowableConditionalType(falseType, hadNonPrimitiveExtendsType)
             : falseType === neverType;
         return isValidFalseType;
     }
