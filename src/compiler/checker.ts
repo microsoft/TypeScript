@@ -45945,7 +45945,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         node.id = undefined;
         forEachChildRecursively(node, resetNodeId);
     }
-    
+
     type NarrowableReference = Identifier | ElementAccessExpression | PropertyAccessExpression;
     /**
      * Narrowable type parameters are type parameters that:
@@ -46011,7 +46011,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !!forEachChild(node, isReferenced);
             }
         }
-    
+
         // Given a type node and a type parameter `T`, this function does two things:
         // (1) validates all syntactic occurrences of `T`
         // (2) collects a path to a valid (i.e. narrowable) occurrence to `T`
@@ -46021,17 +46021,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // an array of names that corresponds to the valid reference to `T`, if exactly one valid reference was found.
         // `path` is initially is empty; it's an accumulator for the path through valid property accesses.
         type Name = Identifier | StringLiteral;
-        type Member = PropertySignature & { name: Name };
+        type Member = PropertySignature & { name: Name; };
         function getValidTypeParameterReference(typeNode: Node, typeParam: TypeParameter, path: Member[]): Member[] | boolean {
             switch (typeNode.kind) {
                 case SyntaxKind.TypeReference:
-                    const type = getTypeFromTypeReference((typeNode as TypeReferenceNode));
+                    const type = getTypeFromTypeReference(typeNode as TypeReferenceNode);
                     if (type === typeParam) { // `T`
                         return path;
                     }
                     const typeArgs = (typeNode as TypeReferenceNode).typeArguments;
                     // Type arguments that reference `T`
-                    const typeArgsReferencingT = typeArgs?.filter(node => isTypeParameterReferenced(typeParam, node))
+                    const typeArgsReferencingT = typeArgs?.filter(node => isTypeParameterReferenced(typeParam, node));
                     if (!typeArgsReferencingT || typeArgsReferencingT.length == 0) return true; // Type reference unrelated to `T`
                     if (typeArgsReferencingT && typeArgsReferencingT.length > 1) return false; // e.g. `Foo<T, T, ...>`
                     const typeArg = typeArgsReferencingT[0];
@@ -46042,9 +46042,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (isTypeLiteralNode(typeDeclaration)) {
                         aliasDeclaration = walkUpParenthesizedTypes(typeDeclaration.parent); // `type Foo = { ... }`
                         if (!isTypeAliasDeclaration(aliasDeclaration)) return false;
-                    } else if (isInterfaceDeclaration(typeDeclaration)) { // `interface Foo { ... }`
+                    }
+                    else if (isInterfaceDeclaration(typeDeclaration)) { // `interface Foo { ... }`
                         aliasDeclaration = typeDeclaration;
-                    } else {
+                    }
+                    else {
                         return false; // Unsuported case, e.g. `class Foo<...> ...`, `type Foo<...> = { [P in Foo]: ... }`, etc.
                     }
                     const typeArgIndex = typeArgs!.findIndex(arg => arg === typeArg);
@@ -46063,7 +46065,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (result !== true) {
                             return false; // e.g. `interface Foo<T> extends Bar<T> { ... otherRef: T; ...}`
                         }
-                        return getValidTypeParameterReference(relevantExtendsTypes[0], typeParam, path)
+                        return getValidTypeParameterReference(relevantExtendsTypes[0], typeParam, path);
                     }
                     return result;
                 case SyntaxKind.TypeLiteral:
@@ -46101,7 +46103,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!isIdentifier(member.name) && !isStringLiteral(member.name)) {
                     return false; // Unsupported property name, e.g. `[c]: T`
                 }
-                const result = getValidTypeParameterReference(member.type!, typeParam, [...path, member as Member])
+                const result = getValidTypeParameterReference(member.type!, typeParam, [...path, member as Member]);
                 if (!result) {
                     return false;
                 }
@@ -46127,7 +46129,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (paramIsOptional && path.length > 0) {
                 return false;
             }
-            
+
             const isOptional = paramIsOptional || path.length > 0 && path[path.length - 1].questionToken;
             // `function f<T extends boolean>(obj?: T)` is not allowed under `strictNullChecks`.
             if (isOptional && strictNullChecks && !containsUndefinedType(constraint)) {
@@ -46156,7 +46158,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else if (isObjectBindingPattern(currentName)) {
                     const name = path[i].name;
                     let nameText: __String | undefined;
-                    if (isIdentifier(name)) nameText = name.escapedText
+                    if (isIdentifier(name)) nameText = name.escapedText;
                     else {
                         const rawText = getLiteralPropertyNameText(name);
                         if (rawText) nameText = escapeLeadingUnderscores(rawText);
