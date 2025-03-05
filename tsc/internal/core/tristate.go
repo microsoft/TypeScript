@@ -1,6 +1,6 @@
 package core
 
-//go:generate go run golang.org/x/tools/cmd/stringer -type=Tristate -output=tristate_stringer_generated.go
+//go:generate go tool golang.org/x/tools/cmd/stringer -type=Tristate -output=tristate_stringer_generated.go
 
 // Tristate
 

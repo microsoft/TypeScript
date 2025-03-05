@@ -828,9 +828,8 @@ func BenchmarkParseSrcCompiler(b *testing.B) {
 	parsed := parser.ParseJSONText(tsconfigFileName, tsconfigPath, jsonText)
 
 	b.ReportAllocs()
-	b.ResetTimer()
 
-	for range b.N {
+	for b.Loop() {
 		tsoptions.ParseJsonSourceFileConfigFileContent(
 			&tsoptions.TsConfigSourceFile{
 				SourceFile: parsed,

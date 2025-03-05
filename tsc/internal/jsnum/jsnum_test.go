@@ -91,8 +91,6 @@ func TestToInt32(t *testing.T) {
 	}
 }
 
-var sink int32
-
 func BenchmarkToInt32(b *testing.B) {
 	for _, test := range toInt32Tests {
 		if !test.bench {
@@ -100,8 +98,8 @@ func BenchmarkToInt32(b *testing.B) {
 		}
 
 		b.Run(fmt.Sprintf("%s (%v)", test.name, float64(test.input)), func(b *testing.B) {
-			for range b.N {
-				sink = test.input.toInt32()
+			for b.Loop() {
+				test.input.toInt32()
 			}
 		})
 	}

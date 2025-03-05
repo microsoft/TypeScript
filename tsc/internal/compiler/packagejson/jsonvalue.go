@@ -74,12 +74,17 @@ func (v JSONValue) AsArray() []JSONValue {
 	return v.Value.([]JSONValue)
 }
 
+var (
+	_ json.Unmarshaler      = (*JSONValue)(nil)
+	_ json2.UnmarshalerFrom = (*JSONValue)(nil)
+)
+
 func (v *JSONValue) UnmarshalJSON(data []byte) error {
 	return unmarshalJSONValue[JSONValue](v, data)
 }
 
-func (v *JSONValue) UnmarshalJSONV2(dec *jsontext.Decoder, opts json2.Options) error {
-	return unmarshalJSONValueV2[JSONValue](v, dec, opts)
+func (v *JSONValue) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+	return unmarshalJSONValueV2[JSONValue](v, dec)
 }
 
 func unmarshalJSONValue[T any](v *JSONValue, data []byte) error {
@@ -115,7 +120,7 @@ func unmarshalJSONValue[T any](v *JSONValue, data []byte) error {
 	return nil
 }
 
-func unmarshalJSONValueV2[T any](v *JSONValue, dec *jsontext.Decoder, opts json2.Options) error {
+func unmarshalJSONValueV2[T any](v *JSONValue, dec *jsontext.Decoder) error {
 	switch dec.PeekKind() {
 	case 'n': // jsontext.Null.Kind()
 		if _, err := dec.ReadToken(); err != nil {
@@ -126,7 +131,7 @@ func unmarshalJSONValueV2[T any](v *JSONValue, dec *jsontext.Decoder, opts json2
 		return nil
 	case '"':
 		v.Type = JSONValueTypeString
-		if err := json2.UnmarshalDecode(dec, &v.Value, opts); err != nil {
+		if err := json2.UnmarshalDecode(dec, &v.Value); err != nil {
 			return err
 		}
 	case '[':
@@ -134,9 +139,9 @@ func unmarshalJSONValueV2[T any](v *JSONValue, dec *jsontext.Decoder, opts json2
 			return err
 		}
 		var elements []T
-		for dec.PeekKind() != jsontext.ArrayEnd.Kind() {
+		for dec.PeekKind() != jsontext.EndArray.Kind() {
 			var element T
-			if err := json2.UnmarshalDecode(dec, &element, opts); err != nil {
+			if err := json2.UnmarshalDecode(dec, &element); err != nil {
 				return err
 			}
 			elements = append(elements, element)
@@ -148,19 +153,19 @@ func unmarshalJSONValueV2[T any](v *JSONValue, dec *jsontext.Decoder, opts json2
 		v.Value = elements
 	case '{':
 		var object collections.OrderedMap[string, T]
-		if err := json2.UnmarshalDecode(dec, &object, opts); err != nil {
+		if err := json2.UnmarshalDecode(dec, &object); err != nil {
 			return err
 		}
 		v.Type = JSONValueTypeObject
 		v.Value = &object
 	case 't', 'f': // jsontext.True.Kind(), jsontext.False.Kind()
 		v.Type = JSONValueTypeBoolean
-		if err := json2.UnmarshalDecode(dec, &v.Value, opts); err != nil {
+		if err := json2.UnmarshalDecode(dec, &v.Value); err != nil {
 			return err
 		}
 	default:
 		v.Type = JSONValueTypeNumber
-		if err := json2.UnmarshalDecode(dec, &v.Value, opts); err != nil {
+		if err := json2.UnmarshalDecode(dec, &v.Value); err != nil {
 			return err
 		}
 	}

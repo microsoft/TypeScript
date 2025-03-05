@@ -14,7 +14,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
-//go:generate go run golang.org/x/tools/cmd/stringer -type=Kind -output=project_stringer_generated.go
+//go:generate go tool golang.org/x/tools/cmd/stringer -type=Kind -output=project_stringer_generated.go
 
 var projectNamer = &namer{}
 

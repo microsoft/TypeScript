@@ -38,7 +38,7 @@ func BenchmarkParse(b *testing.B) {
 			for _, jsdoc := range jsdocModes {
 				b.Run(jsdoc.name, func(b *testing.B) {
 					jsdocMode := jsdoc.mode
-					for range b.N {
+					for b.Loop() {
 						ParseSourceFile(fileName, path, sourceText, core.ScriptTargetESNext, jsdocMode)
 					}
 				})

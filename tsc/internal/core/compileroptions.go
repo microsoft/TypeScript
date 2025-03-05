@@ -7,7 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-//go:generate go run golang.org/x/tools/cmd/stringer -type=ModuleKind,ScriptTarget -output=compileroptions_stringer_generated.go
+//go:generate go tool golang.org/x/tools/cmd/stringer -type=ModuleKind,ScriptTarget -output=compileroptions_stringer_generated.go
 
 type CompilerOptions struct {
 	AllowJs                                   Tristate                                  `json:"allowJs"`

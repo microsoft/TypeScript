@@ -4,7 +4,7 @@ package diagnostics
 import "github.com/microsoft/typescript-go/internal/stringutil"
 
 //go:generate go run generate.go -output ./diagnostics_generated.go
-//go:generate go run golang.org/x/tools/cmd/stringer -type=Category -output=stringer_generated.go
+//go:generate go tool golang.org/x/tools/cmd/stringer -type=Category -output=stringer_generated.go
 
 type Category int32
 

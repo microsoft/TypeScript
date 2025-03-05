@@ -256,7 +256,7 @@ func BenchmarkCombinePaths(b *testing.B) {
 		b.Run(name, func(b *testing.B) {
 			first, rest := test[0], test[1:]
 			b.ReportAllocs()
-			for range b.N {
+			for b.Loop() {
 				CombinePaths(first, rest...)
 			}
 		})
@@ -547,7 +547,7 @@ func BenchmarkToFileNameLowerCase(b *testing.B) {
 		name := shortenName(test)
 		b.Run(name, func(b *testing.B) {
 			b.ReportAllocs()
-			for range b.N {
+			for b.Loop() {
 				ToFileNameLowerCase(test)
 			}
 		})
@@ -600,7 +600,7 @@ func BenchmarkHasRelativePathSegment(b *testing.B) {
 		name := shortenName(tt.p)
 		b.Run(name, func(b *testing.B) {
 			b.ReportAllocs()
-			for range b.N {
+			for b.Loop() {
 				hasRelativePathSegment(tt.p)
 			}
 		})
@@ -666,7 +666,7 @@ func BenchmarkPathIsRelative(b *testing.B) {
 		name := shortenName(tt.p)
 		b.Run(name, func(b *testing.B) {
 			b.ReportAllocs()
-			for range b.N {
+			for b.Loop() {
 				PathIsRelative(tt.p)
 			}
 		})

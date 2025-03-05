@@ -8,7 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 )
 
-//go:generate go run golang.org/x/tools/cmd/stringer -type=SignatureKind -output=stringer_generated.go
+//go:generate go tool golang.org/x/tools/cmd/stringer -type=SignatureKind -output=stringer_generated.go
 
 // ParseFlags
 

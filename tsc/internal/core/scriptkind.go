@@ -1,6 +1,6 @@
 package core
 
-//go:generate go run golang.org/x/tools/cmd/stringer -type=ScriptKind -output=scriptkind_stringer_generated.go
+//go:generate go tool golang.org/x/tools/cmd/stringer -type=ScriptKind -output=scriptkind_stringer_generated.go
 
 type ScriptKind int32
 
