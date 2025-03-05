@@ -46574,7 +46574,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 name,
                 Diagnostics.Class_name_cannot_be_Object_when_targeting_0_with_module_1,
                 ScriptTarget[languageVersion],
-                ModuleKind[moduleKind]
+                ModuleKind[moduleKind],
             );
         }
     }
