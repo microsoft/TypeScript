@@ -1388,8 +1388,6 @@ export namespace Core {
         /** Only set if `options.implementations` is true. These are the symbols checked to get the implementations of a property access. */
         readonly parents: readonly Symbol[] | undefined;
         readonly allSearchSymbols: readonly Symbol[];
-        /** The node that we are searching for. This is used for searching. */
-        readonly node: Node | undefined;
         /**
          * Whether a symbol is in the search set.
          * Do not compare directly to `symbol` because there may be related symbols to search for. See `populateSearchSymbolSet`.
@@ -1474,7 +1472,7 @@ export namespace Core {
             } = searchOptions;
             const escapedText = escapeLeadingUnderscores(text);
             const parents = this.options.implementations && location ? getParentSymbolsOfPropertyAccess(location, symbol, this.checker) : undefined;
-            return { symbol, comingFrom, text, escapedText, parents, allSearchSymbols, node: location, includes: sym => contains(allSearchSymbols, sym) };
+            return { symbol, comingFrom, text, escapedText, parents, allSearchSymbols, includes: sym => contains(allSearchSymbols, sym) };
         }
 
         private readonly symbolIdToReferences: Entry[][] = [];
