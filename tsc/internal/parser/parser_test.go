@@ -126,3 +126,59 @@ func allParsableFiles(tb testing.TB, root string) iter.Seq[parsableFile] {
 		assert.NilError(tb, err)
 	}
 }
+
+func FuzzParser(f *testing.F) {
+	repo.SkipIfNoTypeScriptSubmodule(f)
+
+	tests := []string{
+		"src",
+		"scripts",
+		"Herebyfile.mjs",
+		// "tests/cases",
+	}
+
+	var extensions core.Set[string]
+	for _, es := range tspath.AllSupportedExtensionsWithJson {
+		for _, e := range es {
+			extensions.Add(e)
+		}
+	}
+
+	for _, test := range tests {
+		root := filepath.Join(repo.TypeScriptSubmodulePath, test)
+
+		for file := range allParsableFiles(f, root) {
+			sourceText, err := os.ReadFile(file.path)
+			assert.NilError(f, err)
+			extension := tspath.TryGetExtensionFromPath(file.path)
+			f.Add(extension, string(sourceText), int(core.ScriptTargetESNext), int(scanner.JSDocParsingModeParseAll))
+		}
+	}
+
+	f.Fuzz(func(t *testing.T, extension string, sourceText string, scriptTarget_ int, jsdocParsingMode_ int) {
+		scriptTarget := core.ScriptTarget(scriptTarget_)
+		jsdocParsingMode := scanner.JSDocParsingMode(jsdocParsingMode_)
+
+		if !extensions.Has(extension) {
+			t.Skip()
+		}
+
+		if scriptTarget < core.ScriptTargetNone || scriptTarget > core.ScriptTargetLatest {
+			t.Skip()
+		}
+
+		if jsdocParsingMode < scanner.JSDocParsingModeParseAll || jsdocParsingMode > scanner.JSDocParsingModeParseNone {
+			t.Skip()
+		}
+
+		fileName := "/index" + extension
+		path := tspath.Path(fileName)
+
+		if extension == ".json" {
+			ParseJSONText(fileName, path, sourceText)
+			return
+		}
+
+		ParseSourceFile(fileName, path, sourceText, scriptTarget, jsdocParsingMode)
+	})
+}

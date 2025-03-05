@@ -509,7 +509,7 @@ loop:
 			whitespace := p.scanner.TokenText()
 			// if the whitespace crosses the margin, take only the whitespace that passes the margin
 			if margin > -1 && indent+len(whitespace) > margin {
-				comments = append(comments, whitespace[margin-indent:])
+				comments = append(comments, whitespace[max(margin-indent, 0):])
 				state = jsdocStateSavingComments
 			}
 			indent += len(whitespace)

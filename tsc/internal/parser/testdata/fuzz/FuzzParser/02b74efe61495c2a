@@ -1,0 +1,5 @@
+go test fuzz v1
+string(".ts")
+string("/**@0\n     * */0")
+int(99)
+int(0)

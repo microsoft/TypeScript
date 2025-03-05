@@ -2300,7 +2300,7 @@ func iterateCommentRanges(f *ast.NodeFactory, text string, pos int, trailing boo
 			ch, size := utf8.DecodeRuneInString(text[pos:])
 			switch ch {
 			case '\r':
-				if text[pos+1] == '\n' {
+				if pos+1 < len(text) && text[pos+1] == '\n' {
 					pos++
 				}
 				fallthrough
@@ -2320,7 +2320,10 @@ func iterateCommentRanges(f *ast.NodeFactory, text string, pos int, trailing boo
 				pos++
 				continue
 			case '/':
-				nextChar := text[pos+1]
+				var nextChar byte
+				if pos+1 < len(text) {
+					nextChar = text[pos+1]
+				}
 				hasTrailingNewLine := false
 				if nextChar == '/' || nextChar == '*' {
 					var kind ast.Kind
@@ -2343,11 +2346,12 @@ func iterateCommentRanges(f *ast.NodeFactory, text string, pos int, trailing boo
 						}
 					} else {
 						for pos < len(text) {
-							if text[pos] == '*' && text[pos+1] == '/' {
+							c, s := utf8.DecodeRuneInString(text[pos:])
+							if c == '*' && pos+1 < len(text) && text[pos+1] == '/' {
 								pos += 2
 								break
 							}
-							pos++
+							pos += s
 						}
 					}
 
