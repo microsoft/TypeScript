@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/unionBinaryExpressionPreserveOrigin1.ts] ////
+
+=== unionBinaryExpressionPreserveOrigin1.ts ===
+// https://github.com/microsoft/TypeScript/issues/43031
+
+type Brand<K, T> = K & { __brand: T };
+>Brand : Symbol(Brand, Decl(unionBinaryExpressionPreserveOrigin1.ts, 0, 0))
+>K : Symbol(K, Decl(unionBinaryExpressionPreserveOrigin1.ts, 2, 11))
+>T : Symbol(T, Decl(unionBinaryExpressionPreserveOrigin1.ts, 2, 13))
+>K : Symbol(K, Decl(unionBinaryExpressionPreserveOrigin1.ts, 2, 11))
+>__brand : Symbol(__brand, Decl(unionBinaryExpressionPreserveOrigin1.ts, 2, 24))
+>T : Symbol(T, Decl(unionBinaryExpressionPreserveOrigin1.ts, 2, 13))
+
+type BrandedUnknown<T> = Brand<"unknown", T>;
+>BrandedUnknown : Symbol(BrandedUnknown, Decl(unionBinaryExpressionPreserveOrigin1.ts, 2, 38))
+>T : Symbol(T, Decl(unionBinaryExpressionPreserveOrigin1.ts, 3, 20))
+>Brand : Symbol(Brand, Decl(unionBinaryExpressionPreserveOrigin1.ts, 0, 0))
+>T : Symbol(T, Decl(unionBinaryExpressionPreserveOrigin1.ts, 3, 20))
+
+type Maybe<T> = T | BrandedUnknown<T>;
+>Maybe : Symbol(Maybe, Decl(unionBinaryExpressionPreserveOrigin1.ts, 3, 45))
+>T : Symbol(T, Decl(unionBinaryExpressionPreserveOrigin1.ts, 4, 11))
+>T : Symbol(T, Decl(unionBinaryExpressionPreserveOrigin1.ts, 4, 11))
+>BrandedUnknown : Symbol(BrandedUnknown, Decl(unionBinaryExpressionPreserveOrigin1.ts, 2, 38))
+>T : Symbol(T, Decl(unionBinaryExpressionPreserveOrigin1.ts, 4, 11))
+
+declare const m1: Maybe<boolean> | undefined;
+>m1 : Symbol(m1, Decl(unionBinaryExpressionPreserveOrigin1.ts, 6, 13))
+>Maybe : Symbol(Maybe, Decl(unionBinaryExpressionPreserveOrigin1.ts, 3, 45))
+
+const test1 = m1 || false;
+>test1 : Symbol(test1, Decl(unionBinaryExpressionPreserveOrigin1.ts, 7, 5))
+>m1 : Symbol(m1, Decl(unionBinaryExpressionPreserveOrigin1.ts, 6, 13))
+
+const test2 = m1 ?? false;
+>test2 : Symbol(test2, Decl(unionBinaryExpressionPreserveOrigin1.ts, 8, 5))
+>m1 : Symbol(m1, Decl(unionBinaryExpressionPreserveOrigin1.ts, 6, 13))
+
+declare const m2: Maybe<null> | undefined;
+>m2 : Symbol(m2, Decl(unionBinaryExpressionPreserveOrigin1.ts, 10, 13))
+>Maybe : Symbol(Maybe, Decl(unionBinaryExpressionPreserveOrigin1.ts, 3, 45))
+
+const test3 = m2 || null;
+>test3 : Symbol(test3, Decl(unionBinaryExpressionPreserveOrigin1.ts, 11, 5))
+>m2 : Symbol(m2, Decl(unionBinaryExpressionPreserveOrigin1.ts, 10, 13))
+
+const test4 = m2 ?? null;
+>test4 : Symbol(test4, Decl(unionBinaryExpressionPreserveOrigin1.ts, 12, 5))
+>m2 : Symbol(m2, Decl(unionBinaryExpressionPreserveOrigin1.ts, 10, 13))
+
+type StrOrNum = string | number
+>StrOrNum : Symbol(StrOrNum, Decl(unionBinaryExpressionPreserveOrigin1.ts, 12, 25))
+
+declare const numOrStr: StrOrNum;
+>numOrStr : Symbol(numOrStr, Decl(unionBinaryExpressionPreserveOrigin1.ts, 15, 13))
+>StrOrNum : Symbol(StrOrNum, Decl(unionBinaryExpressionPreserveOrigin1.ts, 12, 25))
+
+const test5 = numOrStr && numOrStr;
+>test5 : Symbol(test5, Decl(unionBinaryExpressionPreserveOrigin1.ts, 16, 5))
+>numOrStr : Symbol(numOrStr, Decl(unionBinaryExpressionPreserveOrigin1.ts, 15, 13))
+>numOrStr : Symbol(numOrStr, Decl(unionBinaryExpressionPreserveOrigin1.ts, 15, 13))
+
