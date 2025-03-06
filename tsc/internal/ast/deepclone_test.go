@@ -15,12 +15,10 @@ type NodeComparisonWorkItem struct {
 
 func getChildren(node *ast.Node) []*ast.Node {
 	children := []*ast.Node{}
-	node.VisitEachChild(&ast.NodeVisitor{
-		Visit: func(node *ast.Node) *ast.Node {
-			children = append(children, node)
-			return node
-		},
-	})
+	node.VisitEachChild(ast.NewNodeVisitor(func(node *ast.Node) *ast.Node {
+		children = append(children, node)
+		return node
+	}, nil, ast.NodeVisitorHooks{}))
 	return children
 }
 

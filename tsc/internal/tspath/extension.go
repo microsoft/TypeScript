@@ -28,6 +28,9 @@ var (
 	supportedTSExtensionsForExtractExtension = []string{ExtensionDts, ExtensionDcts, ExtensionDmts, ExtensionTs, ExtensionTsx, ExtensionMts, ExtensionCts}
 	AllSupportedExtensions                   = [][]string{{ExtensionTs, ExtensionTsx, ExtensionDts, ExtensionJs, ExtensionJsx}, {ExtensionCts, ExtensionDcts, ExtensionCjs}, {ExtensionMts, ExtensionDmts, ExtensionMjs}}
 	SupportedTSExtensions                    = [][]string{{ExtensionTs, ExtensionTsx, ExtensionDts}, {ExtensionCts, ExtensionDcts}, {ExtensionMts, ExtensionDmts}}
+	SupportedTSExtensionsFlat                = []string{ExtensionTs, ExtensionTsx, ExtensionDts, ExtensionCts, ExtensionDcts, ExtensionMts, ExtensionDmts}
+	SupportedJSExtensions                    = [][]string{{ExtensionJs, ExtensionJsx}, {ExtensionMjs}, {ExtensionCjs}}
+	SupportedJSExtensionsFlat                = []string{ExtensionJs, ExtensionJsx, ExtensionMjs, ExtensionCjs}
 	AllSupportedExtensionsWithJson           = slices.Concat(AllSupportedExtensions, [][]string{{ExtensionJson}})
 	SupportedTSExtensionsWithJson            = slices.Concat(SupportedTSExtensions, [][]string{{ExtensionJson}})
 )
@@ -78,6 +81,10 @@ func TryExtractTSExtension(fileName string) string {
 		}
 	}
 	return ""
+}
+
+func HasTSFileExtension(path string) bool {
+	return FileExtensionIsOneOf(path, SupportedTSExtensionsFlat)
 }
 
 func HasImplementationTSFileExtension(path string) bool {

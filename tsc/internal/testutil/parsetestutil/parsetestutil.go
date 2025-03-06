@@ -45,9 +45,13 @@ func CheckDiagnosticsMessage(t *testing.T, file *ast.SourceFile, message string)
 }
 
 func newSyntheticRecursiveVisitor() *ast.NodeVisitor {
-	v := ast.NodeVisitor{
-		Factory: &ast.NodeFactory{},
-		Hooks: ast.NodeVisitorHooks{
+	var v *ast.NodeVisitor
+	v = ast.NewNodeVisitor(
+		func(node *ast.Node) *ast.Node {
+			return v.VisitEachChild(node)
+		},
+		&ast.NodeFactory{},
+		ast.NodeVisitorHooks{
 			VisitNode: func(node *ast.Node, v *ast.NodeVisitor) *ast.Node {
 				if node != nil {
 					node.Loc = core.UndefinedTextRange()
@@ -73,11 +77,8 @@ func newSyntheticRecursiveVisitor() *ast.NodeVisitor {
 				return v.VisitModifiers(nodes)
 			},
 		},
-	}
-	v.Visit = func(node *ast.Node) *ast.Node {
-		return v.VisitEachChild(node)
-	}
-	return &v
+	)
+	return v
 }
 
 // Sets the Loc of the given node and every Node in its subtree to an undefined TextRange (-1,-1).

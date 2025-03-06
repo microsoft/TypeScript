@@ -1444,6 +1444,15 @@ func IsExternalOrCommonJsModule(file *SourceFile) bool {
 	return file.ExternalModuleIndicator != nil || file.CommonJsModuleIndicator != nil
 }
 
+// TODO: Should we deprecate `IsExternalOrCommonJsModule` in favor of this function?
+func IsEffectiveExternalModule(node *SourceFile, compilerOptions *core.CompilerOptions) bool {
+	return IsExternalModule(node) || (isCommonJSContainingModuleKind(compilerOptions.GetEmitModuleKind()) && node.CommonJsModuleIndicator != nil)
+}
+
+func isCommonJSContainingModuleKind(kind core.ModuleKind) bool {
+	return kind == core.ModuleKindCommonJS || kind == core.ModuleKindNode16 || kind == core.ModuleKindNodeNext
+}
+
 func IsGlobalScopeAugmentation(node *Node) bool {
 	return node.Flags&NodeFlagsGlobalAugmentation != 0
 }
@@ -2238,4 +2247,105 @@ func GetFirstIdentifier(node *Node) *Node {
 		return GetFirstIdentifier(node.AsPropertyAccessExpression().Expression)
 	}
 	panic("Unhandled case in GetFirstIdentifier")
+}
+
+func GetNamespaceDeclarationNode(node *Node) *Node {
+	switch node.Kind {
+	case KindImportDeclaration:
+		importClause := node.AsImportDeclaration().ImportClause
+		if importClause != nil && importClause.AsImportClause().NamedBindings != nil && IsNamespaceImport(importClause.AsImportClause().NamedBindings) {
+			return importClause.AsImportClause().NamedBindings
+		}
+	case KindImportEqualsDeclaration:
+		return node
+	case KindExportDeclaration:
+		exportClause := node.AsExportDeclaration().ExportClause
+		if exportClause != nil && IsNamespaceExport(exportClause) {
+			return exportClause
+		}
+	default:
+		panic("Unhandled case in getNamespaceDeclarationNode")
+	}
+	return nil
+}
+
+func ModuleExportNameIsDefault(node *Node) bool {
+	return node.Text() == InternalSymbolNameDefault
+}
+
+func IsDefaultImport(node *Node /*ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration | JSDocImportTag*/) bool {
+	var importClause *Node
+	switch node.Kind {
+	case KindImportDeclaration:
+		importClause = node.AsImportDeclaration().ImportClause
+	case KindJSDocImportTag:
+		importClause = node.AsJSDocImportTag().ImportClause
+	}
+	return importClause != nil && importClause.AsImportClause().name != nil
+}
+
+func GetEmitModuleFormatOfFileWorker(sourceFile *SourceFile, options *core.CompilerOptions) core.ModuleKind {
+	result := GetImpliedNodeFormatForEmitWorker(sourceFile, options)
+	if result != core.ModuleKindNone {
+		return result
+	}
+	return options.GetEmitModuleKind()
+}
+
+func GetImpliedNodeFormatForEmitWorker(sourceFile *SourceFile, options *core.CompilerOptions) core.ResolutionMode {
+	// !!!
+	return core.ModuleKindNone
+}
+
+func GetDeclarationContainer(node *Node) *Node {
+	return FindAncestor(GetRootDeclaration(node), func(node *Node) bool {
+		switch node.Kind {
+		case KindVariableDeclaration,
+			KindVariableDeclarationList,
+			KindImportSpecifier,
+			KindNamedImports,
+			KindNamespaceImport,
+			KindImportClause:
+			return false
+		default:
+			return true
+		}
+	}).Parent
+}
+
+// Indicates that a symbol is an alias that does not merge with a local declaration.
+// OR Is a JSContainer which may merge an alias with a local declaration
+func IsNonLocalAlias(symbol *Symbol, excludes SymbolFlags) bool {
+	if symbol == nil {
+		return false
+	}
+	return symbol.Flags&(SymbolFlagsAlias|excludes) == SymbolFlagsAlias ||
+		symbol.Flags&SymbolFlagsAlias != 0 && symbol.Flags&SymbolFlagsAssignment != 0
+}
+
+// An alias symbol is created by one of the following declarations:
+//
+//	import <symbol> = ...
+//	import <symbol> from ...
+//	import * as <symbol> from ...
+//	import { x as <symbol> } from ...
+//	export { x as <symbol> } from ...
+//	export * as ns <symbol> from ...
+//	export = <EntityNameExpression>
+//	export default <EntityNameExpression>
+func IsAliasSymbolDeclaration(node *Node) bool {
+	switch node.Kind {
+	case KindImportEqualsDeclaration, KindNamespaceExportDeclaration, KindNamespaceImport, KindNamespaceExport,
+		KindImportSpecifier, KindExportSpecifier:
+		return true
+	case KindImportClause:
+		return node.AsImportClause().Name() != nil
+	case KindExportAssignment:
+		return ExportAssignmentIsAlias(node)
+	}
+	return false
+}
+
+func IsParseTreeNode(node *Node) bool {
+	return node.Flags&NodeFlagsSynthesized == 0
 }

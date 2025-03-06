@@ -12,14 +12,24 @@ type NodeVisitor struct {
 	Hooks   NodeVisitorHooks       // Hooks to be invoked when visiting a node
 }
 
-// These hooks are used to intercept the default behavior of the visitor in certain situations such as
-// in tests or in the language service.
+// These hooks are used to intercept the default behavior of the visitor
 type NodeVisitorHooks struct {
-	VisitNode      func(node *Node, v *NodeVisitor) *Node                  // Overrides visiting a Node. Only invoked by the Update* methods on NodeFactory.
-	VisitToken     func(node *TokenNode, v *NodeVisitor) *Node             // Overrides visiting a TokenNode. Only invoked by the Update* methods on NodeFactory.
-	VisitNodes     func(nodes *NodeList, v *NodeVisitor) *NodeList         // Overrides visiting a NodeList. Only invoked by the Update* methods on NodeFactory.
-	VisitModifiers func(nodes *ModifierList, v *NodeVisitor) *ModifierList // Overrides visiting a ModifierList. Only invoked by the Update* methods on NodeFactory.
-	SetOriginal    func(node *Node, original *Node)                        // Overrides setting the original node. Only invoked by VisitEachChild on NodeVisitor.
+	VisitNode               func(node *Node, v *NodeVisitor) *Node                           // Overrides visiting a Node. Only invoked by the VisitEachChild method on a given Node subtype.
+	VisitToken              func(node *TokenNode, v *NodeVisitor) *Node                      // Overrides visiting a TokenNode. Only invoked by the VisitEachChild method on a given Node subtype.
+	VisitNodes              func(nodes *NodeList, v *NodeVisitor) *NodeList                  // Overrides visiting a NodeList. Only invoked by the VisitEachChild method on a given Node subtype.
+	VisitModifiers          func(nodes *ModifierList, v *NodeVisitor) *ModifierList          // Overrides visiting a ModifierList. Only invoked by the VisitEachChild method on a given Node subtype.
+	VisitEmbeddedStatement  func(node *Statement, v *NodeVisitor) *Statement                 // Overrides visiting a Node when it is the embedded statement body of an iteration statement, `if` statement, or `with` statement. Only invoked by the VisitEachChild method on a given Node subtype.
+	VisitIterationBody      func(node *Statement, v *NodeVisitor) *Statement                 // Overrides visiting a Node when it is the embedded statement body body of an iteration statement. Only invoked by the VisitEachChild method on a given Node subtype.
+	VisitParameters         func(nodes *ParameterList, v *NodeVisitor) *ParameterList        // Overrides visiting a ParameterList. Only invoked by the VisitEachChild method on a given Node subtype.
+	VisitFunctionBody       func(node *BlockOrExpression, v *NodeVisitor) *BlockOrExpression // Overrides visiting a function body. Only invoked by the VisitEachChild method on a given Node subtype.
+	VisitTopLevelStatements func(nodes *StatementList, v *NodeVisitor) *StatementList        // Overrides visiting a variable environment. Only invoked by the VisitEachChild method on a given Node subtype.
+}
+
+func NewNodeVisitor(visit func(node *Node) *Node, factory *NodeFactory, hooks NodeVisitorHooks) *NodeVisitor {
+	if factory == nil {
+		factory = &NodeFactory{}
+	}
+	return &NodeVisitor{Visit: visit, Factory: factory, Hooks: hooks}
 }
 
 func (v *NodeVisitor) VisitSourceFile(node *SourceFile) *SourceFile {
@@ -50,6 +60,24 @@ func (v *NodeVisitor) VisitNode(node *Node) *Node {
 			}
 		}
 		return visited
+	}
+
+	return node
+}
+
+// Visits an embedded Statement (i.e., the single statement body of a loop, `if..else` branch, etc.), possibly returning a new Statement in its place.
+//
+//   - If the input node is nil, then the output is nil.
+//   - If v.Visit is nil, then the output is the input.
+//   - If v.Visit returns nil, then the output is nil.
+//   - If v.Visit returns a SyntaxList Node, then the output is either the only child of the SyntaxList Node, or a Block containing the nodes in the list.
+func (v *NodeVisitor) VisitEmbeddedStatement(node *Statement) *Statement {
+	if node == nil || v.Visit == nil {
+		return node
+	}
+
+	if v.Visit != nil {
+		return v.liftToBlock(v.Visit(node))
 	}
 
 	return node
@@ -160,14 +188,9 @@ func (v *NodeVisitor) VisitEachChild(node *Node) *Node {
 		return node
 	}
 
-	updated := node.VisitEachChild(v)
-	if updated != node && v.Hooks.SetOriginal != nil {
-		v.Hooks.SetOriginal(updated, node)
-	}
-	return updated
+	return node.VisitEachChild(v)
 }
 
-// Invokes v.Hooks.VisitNode if provided, otherwise invokes v.VisitNode.
 func (v *NodeVisitor) visitNode(node *Node) *Node {
 	if v.Hooks.VisitNode != nil {
 		return v.Hooks.VisitNode(node, v)
@@ -175,7 +198,30 @@ func (v *NodeVisitor) visitNode(node *Node) *Node {
 	return v.VisitNode(node)
 }
 
-// Invokes v.Hooks.VisitToken if provided, otherwise invokes v.VisitNode.
+func (v *NodeVisitor) visitEmbeddedStatement(node *Node) *Node {
+	if v.Hooks.VisitEmbeddedStatement != nil {
+		return v.Hooks.VisitEmbeddedStatement(node, v)
+	}
+	if v.Hooks.VisitNode != nil {
+		return v.liftToBlock(v.Hooks.VisitNode(node, v))
+	}
+	return v.VisitEmbeddedStatement(node)
+}
+
+func (v *NodeVisitor) visitIterationBody(node *Statement) *Statement {
+	if v.Hooks.VisitIterationBody != nil {
+		return v.Hooks.VisitIterationBody(node, v)
+	}
+	return v.visitEmbeddedStatement(node)
+}
+
+func (v *NodeVisitor) visitFunctionBody(node *BlockOrExpression) *BlockOrExpression {
+	if v.Hooks.VisitFunctionBody != nil {
+		return v.Hooks.VisitFunctionBody(node, v)
+	}
+	return v.visitNode(node)
+}
+
 func (v *NodeVisitor) visitToken(node *Node) *Node {
 	if v.Hooks.VisitToken != nil {
 		return v.Hooks.VisitToken(node, v)
@@ -183,7 +229,6 @@ func (v *NodeVisitor) visitToken(node *Node) *Node {
 	return v.VisitNode(node)
 }
 
-// Invokes v.Hooks.VisitNodes if provided, otherwise invokes v.VisitNodes.
 func (v *NodeVisitor) visitNodes(nodes *NodeList) *NodeList {
 	if v.Hooks.VisitNodes != nil {
 		return v.Hooks.VisitNodes(nodes, v)
@@ -191,10 +236,40 @@ func (v *NodeVisitor) visitNodes(nodes *NodeList) *NodeList {
 	return v.VisitNodes(nodes)
 }
 
-// Invokes v.Hooks.VisitModifiers if provided, otherwise invokes v.VisitModifiers.
 func (v *NodeVisitor) visitModifiers(nodes *ModifierList) *ModifierList {
 	if v.Hooks.VisitModifiers != nil {
 		return v.Hooks.VisitModifiers(nodes, v)
 	}
 	return v.VisitModifiers(nodes)
+}
+
+func (v *NodeVisitor) visitParameters(nodes *ParameterList) *ParameterList {
+	if v.Hooks.VisitParameters != nil {
+		return v.Hooks.VisitParameters(nodes, v)
+	}
+	return v.visitNodes(nodes)
+}
+
+func (v *NodeVisitor) visitTopLevelStatements(nodes *StatementList) *StatementList {
+	if v.Hooks.VisitTopLevelStatements != nil {
+		return v.Hooks.VisitTopLevelStatements(nodes, v)
+	}
+	return v.visitNodes(nodes)
+}
+
+func (v *NodeVisitor) liftToBlock(node *Statement) *Statement {
+	if node != nil && node.Kind == KindSyntaxList {
+		nodes := node.AsSyntaxList().Children
+		if len(nodes) == 0 {
+			node = nil
+		} else if len(nodes) == 1 {
+			node = nodes[0]
+		} else {
+			node = v.Factory.NewBlock(v.Factory.NewNodeList(nodes), true /*multiLine*/)
+		}
+		if node != nil && node.Kind == KindSyntaxList {
+			panic("The result of visiting and lifting a Node may not be SyntaxList")
+		}
+	}
+	return node
 }

@@ -2,7 +2,7 @@ package compiler
 
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/checker"
+	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/printer"
@@ -44,6 +44,7 @@ func (e *emitter) emitJsFile(sourceFile *ast.SourceFile, jsFilePath string, sour
 	if sourceFile == nil || e.emitOnly != emitAll && e.emitOnly != emitOnlyJs || len(jsFilePath) == 0 {
 		return
 	}
+
 	if options.NoEmit == core.TSTrue || e.host.IsEmitBlocked(jsFilePath) {
 		return
 	}
@@ -51,19 +52,34 @@ func (e *emitter) emitJsFile(sourceFile *ast.SourceFile, jsFilePath string, sour
 	// JS files don't use reference calculations as they don't do import ellision, no need to calculate it
 	importElisionEnabled := !options.VerbatimModuleSyntax.IsTrue() && !ast.IsInJSFile(sourceFile.AsNode())
 
-	var emitResolver checker.EmitResolver
+	var emitResolver printer.EmitResolver
+	var referenceResolver binder.ReferenceResolver
 	if importElisionEnabled {
 		emitResolver = e.host.GetEmitResolver(sourceFile, false /*skipDiagnostics*/) // !!! conditionally skip diagnostics
 		emitResolver.MarkLinkedReferencesRecursively(sourceFile)
+		referenceResolver = emitResolver
+	} else {
+		referenceResolver = binder.NewReferenceResolver(binder.ReferenceResolverHooks{})
 	}
 
-	// !!! transform the source files?
 	emitContext := printer.NewEmitContext()
+
+	// erase types
 	sourceFile = transformers.NewTypeEraserTransformer(emitContext, options).TransformSourceFile(sourceFile)
+
+	// elide impors
 	if importElisionEnabled {
 		sourceFile = transformers.NewImportElisionTransformer(emitContext, options, emitResolver).TransformSourceFile(sourceFile)
 	}
-	sourceFile = transformers.NewRuntimeSyntaxTransformer(emitContext, options).TransformSourceFile(sourceFile)
+
+	// transform `enum`, `namespace`, and parameter properties
+	sourceFile = transformers.NewRuntimeSyntaxTransformer(emitContext, options, referenceResolver).TransformSourceFile(sourceFile)
+
+	// transform module syntax
+	switch options.ModuleKind {
+	case core.ModuleKindCommonJS:
+		sourceFile = transformers.NewCommonJsTransformer(emitContext, options, referenceResolver).TransformSourceFile(sourceFile)
+	}
 
 	printerOptions := printer.PrinterOptions{
 		NewLine: options.NewLine,
@@ -118,21 +134,6 @@ func (e *emitter) printSourceFile(jsFilePath string, sourceMapFilePath string, s
 	return !data.SkippedDtsWrite
 }
 
-func getOutputExtension(fileName string, jsx core.JsxEmit) string {
-	switch {
-	case tspath.FileExtensionIs(fileName, tspath.ExtensionJson):
-		return tspath.ExtensionJson
-	case jsx == core.JsxEmitPreserve && tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionJsx, tspath.ExtensionTsx}):
-		return tspath.ExtensionJsx
-	case tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionMts, tspath.ExtensionMjs}):
-		return tspath.ExtensionMjs
-	case tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionCts, tspath.ExtensionCjs}):
-		return tspath.ExtensionCjs
-	default:
-		return tspath.ExtensionJs
-	}
-}
-
 func getSourceFilePathInNewDir(fileName string, newDirPath string, currentDirectory string, commonSourceDirectory string, useCaseSensitiveFileNames bool) string {
 	sourceFilePath := tspath.GetNormalizedAbsolutePath(fileName, currentDirectory)
 	commonSourceDirectory = tspath.EnsureTrailingDirectorySeparator(commonSourceDirectory)
@@ -185,7 +186,7 @@ type outputPaths struct {
 func getOutputPathsFor(sourceFile *ast.SourceFile, host EmitHost, forceDtsEmit bool) *outputPaths {
 	options := host.Options()
 	// !!! bundle not implemented, may be deprecated
-	ownOutputFilePath := getOwnEmitOutputFilePath(sourceFile.FileName(), host, getOutputExtension(sourceFile.FileName(), options.Jsx))
+	ownOutputFilePath := getOwnEmitOutputFilePath(sourceFile.FileName(), host, core.GetOutputExtension(sourceFile.FileName(), options.Jsx))
 	isJsonFile := ast.IsJsonSourceFile(sourceFile)
 	// If json file emits to the same location skip writing it, if emitDeclarationOnly skip writing it
 	isJsonEmittedToSameLocation := isJsonFile &&

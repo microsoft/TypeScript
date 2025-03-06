@@ -69,15 +69,6 @@ func tokenIsIdentifierOrKeywordOrGreaterThan(token ast.Kind) bool {
 	return token == ast.KindGreaterThanToken || tokenIsIdentifierOrKeyword(token)
 }
 
-func isCommonJSContainingModuleKind(kind core.ModuleKind) bool {
-	return kind == core.ModuleKindCommonJS || kind == core.ModuleKindNode16 || kind == core.ModuleKindNodeNext
-}
-
-/** @internal */
-func isEffectiveExternalModule(node *ast.SourceFile, compilerOptions *core.CompilerOptions) bool {
-	return ast.IsExternalModule(node) || (isCommonJSContainingModuleKind(compilerOptions.GetEmitModuleKind()) && node.CommonJsModuleIndicator != nil)
-}
-
 func hasOverrideModifier(node *ast.Node) bool {
 	return ast.HasSyntacticModifier(node, ast.ModifierFlagsOverride)
 }
@@ -498,26 +489,6 @@ func isRightSideOfQualifiedNameOrPropertyAccess(node *ast.Node) bool {
 		return parent.AsMetaProperty().Name() == node
 	}
 	return false
-}
-
-func getNamespaceDeclarationNode(node *ast.Node) *ast.Node {
-	switch node.Kind {
-	case ast.KindImportDeclaration:
-		importClause := node.AsImportDeclaration().ImportClause
-		if importClause != nil && ast.IsNamespaceImport(importClause.AsImportClause().NamedBindings) {
-			return importClause.AsImportClause().NamedBindings
-		}
-	case ast.KindImportEqualsDeclaration:
-		return node
-	case ast.KindExportDeclaration:
-		exportClause := node.AsExportDeclaration().ExportClause
-		if exportClause != nil && ast.IsNamespaceExport(exportClause) {
-			return exportClause
-		}
-	default:
-		panic("Unhandled case in getNamespaceDeclarationNode")
-	}
-	return nil
 }
 
 func getSourceFileOfModule(module *ast.Symbol) *ast.SourceFile {

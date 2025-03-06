@@ -2,7 +2,6 @@ package transformers
 
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/checker"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/printer"
 )
@@ -11,10 +10,10 @@ type ImportElisionTransformer struct {
 	Transformer
 	compilerOptions   *core.CompilerOptions
 	currentSourceFile *ast.SourceFile
-	emitResolver      checker.EmitResolver
+	emitResolver      printer.EmitResolver
 }
 
-func NewImportElisionTransformer(emitContext *printer.EmitContext, compilerOptions *core.CompilerOptions, resolver checker.EmitResolver) *Transformer {
+func NewImportElisionTransformer(emitContext *printer.EmitContext, compilerOptions *core.CompilerOptions, resolver printer.EmitResolver) *Transformer {
 	if compilerOptions.VerbatimModuleSyntax.IsTrue() {
 		panic("ImportElisionTransformer should not be used with VerbatimModuleSyntax")
 	}

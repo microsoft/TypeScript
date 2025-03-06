@@ -669,7 +669,7 @@ func isImmediatelyInvokedFunctionExpressionOrArrowFunction(node *ast.Expression)
 	return ast.IsFunctionExpression(node) || ast.IsArrowFunction(node)
 }
 
-func isFileLevelUniqueName(sourceFile *ast.SourceFile, name string, hasGlobalName func(string) bool) bool {
+func IsFileLevelUniqueName(sourceFile *ast.SourceFile, name string, hasGlobalName func(string) bool) bool {
 	if hasGlobalName != nil && hasGlobalName(name) {
 		return false
 	}
@@ -697,7 +697,7 @@ func ensureLeadingHash(text string) string {
 	}
 }
 
-func formatGeneratedName(privateName bool, prefix string, base string, suffix string) string {
+func FormatGeneratedName(privateName bool, prefix string, base string, suffix string) string {
 	name := removeLeadingHash(prefix) + removeLeadingHash(base) + removeLeadingHash(suffix)
 	if privateName {
 		return ensureLeadingHash(name)
@@ -731,4 +731,12 @@ func makeIdentifierFromModuleName(moduleName string) string {
 		builder.WriteString(moduleName[start:pos])
 	}
 	return builder.String()
+}
+
+func findSpanEnd[T any](array []T, test func(value T) bool, start int) int {
+	i := start
+	for i < len(array) && test(array[i]) {
+		i++
+	}
+	return i
 }

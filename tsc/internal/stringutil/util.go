@@ -1,6 +1,8 @@
 // Package stringutil Exports common rune utilities for parsing and emitting javascript
 package stringutil
 
+import "unicode/utf8"
+
 func IsWhiteSpaceLike(ch rune) bool {
 	return IsWhiteSpaceSingleLine(ch) || IsLineBreak(ch)
 }
@@ -74,4 +76,60 @@ func IsHexDigit(ch rune) bool {
 
 func IsASCIILetter(ch rune) bool {
 	return ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z'
+}
+
+func SplitLines(text string) []string {
+	var lines []string
+	start := 0
+	pos := 0
+	for pos < len(text) {
+		switch text[pos] {
+		case '\r':
+			if pos+1 < len(text) && text[pos+1] == '\n' {
+				lines = append(lines, text[start:pos])
+				pos += 2
+				start = pos
+				continue
+			}
+			fallthrough
+		case '\n':
+			lines = append(lines, text[start:pos])
+			pos++
+			start = pos
+			continue
+		}
+		pos++
+	}
+	if start < len(text) {
+		lines = append(lines, text[start:])
+	}
+	return lines
+}
+
+func GuessIndentation(lines []string) int {
+	const MAX_SMI_X86 int = 0x3fff_ffff
+	indentation := MAX_SMI_X86
+	for _, line := range lines {
+		if len(line) == 0 {
+			continue
+		}
+		i := 0
+		for i < len(line) && i < indentation {
+			ch, size := utf8.DecodeRuneInString(line[i:])
+			if !IsWhiteSpaceLike(ch) {
+				break
+			}
+			i += size
+		}
+		if i < indentation {
+			indentation = i
+		}
+		if indentation == 0 {
+			return 0
+		}
+	}
+	if indentation == MAX_SMI_X86 {
+		return 0
+	}
+	return indentation
 }

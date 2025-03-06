@@ -397,20 +397,11 @@ func (p *Program) GetEmitModuleFormatOfFile(sourceFile *ast.SourceFile) core.Mod
 }
 
 func (p *Program) GetEmitModuleFormatOfFileWorker(sourceFile *ast.SourceFile, options *core.CompilerOptions) core.ModuleKind {
-	result := p.GetImpliedNodeFormatForEmitWorker(sourceFile, options)
-	if result != core.ModuleKindNone {
-		return result
-	}
-	return options.GetEmitModuleKind()
+	return ast.GetEmitModuleFormatOfFileWorker(sourceFile, options)
 }
 
 func (p *Program) GetImpliedNodeFormatForEmit(sourceFile *ast.SourceFile) core.ResolutionMode {
-	return p.GetImpliedNodeFormatForEmitWorker(sourceFile, p.compilerOptions)
-}
-
-func (p *Program) GetImpliedNodeFormatForEmitWorker(sourceFile *ast.SourceFile, options *core.CompilerOptions) core.ResolutionMode {
-	// !!!
-	return core.ModuleKindNone
+	return ast.GetImpliedNodeFormatForEmitWorker(sourceFile, p.compilerOptions)
 }
 
 func (p *Program) CommonSourceDirectory() string {

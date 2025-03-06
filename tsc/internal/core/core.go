@@ -410,6 +410,21 @@ func GetScriptKindFromFileName(fileName string) ScriptKind {
 	return ScriptKindUnknown
 }
 
+func GetOutputExtension(fileName string, jsx JsxEmit) string {
+	switch {
+	case tspath.FileExtensionIs(fileName, tspath.ExtensionJson):
+		return tspath.ExtensionJson
+	case jsx == JsxEmitPreserve && tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionJsx, tspath.ExtensionTsx}):
+		return tspath.ExtensionJsx
+	case tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionMts, tspath.ExtensionMjs}):
+		return tspath.ExtensionMjs
+	case tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionCts, tspath.ExtensionCjs}):
+		return tspath.ExtensionCjs
+	default:
+		return tspath.ExtensionJs
+	}
+}
+
 // Given a name and a list of names that are *not* equal to the name, return a spelling suggestion if there is one that is close enough.
 // Names less than length 3 only check for case-insensitive equality.
 //

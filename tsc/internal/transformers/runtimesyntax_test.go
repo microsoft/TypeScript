@@ -180,7 +180,8 @@ func TestEnumTransformer(t *testing.T) {
     if (typeof E["B "] !== "string") E[E["B "]] = "B ";
 })(E || (E = {}));`},
 
-		{title: "export enum", input: "export enum E {A, B}", output: `export var E;
+		{title: "export enum", input: "export enum E {A, B}", output: `export { E };
+var E;
 (function (E) {
     E[E["A"] = 0] = "A";
     E[E["B"] = 1] = "B";
@@ -210,7 +211,8 @@ func TestEnumTransformer(t *testing.T) {
 			parsetestutil.CheckDiagnostics(t, file)
 			binder.BindSourceFile(file, options)
 			emitContext := printer.NewEmitContext()
-			emittestutil.CheckEmit(t, emitContext, NewRuntimeSyntaxTransformer(emitContext, options).TransformSourceFile(file), rec.output)
+			resolver := binder.NewReferenceResolver(binder.ReferenceResolverHooks{})
+			emittestutil.CheckEmit(t, emitContext, NewRuntimeSyntaxTransformer(emitContext, options, resolver).TransformSourceFile(file), rec.output)
 		})
 	}
 }
@@ -378,7 +380,8 @@ func TestNamespaceTransformer(t *testing.T) {
 			parsetestutil.CheckDiagnostics(t, file)
 			binder.BindSourceFile(file, options)
 			emitContext := printer.NewEmitContext()
-			emittestutil.CheckEmit(t, emitContext, NewRuntimeSyntaxTransformer(emitContext, options).TransformSourceFile(file), rec.output)
+			resolver := binder.NewReferenceResolver(binder.ReferenceResolverHooks{})
+			emittestutil.CheckEmit(t, emitContext, NewRuntimeSyntaxTransformer(emitContext, options, resolver).TransformSourceFile(file), rec.output)
 		})
 	}
 }

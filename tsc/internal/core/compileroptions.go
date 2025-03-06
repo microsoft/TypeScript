@@ -252,6 +252,14 @@ func (options *CompilerOptions) GetAreDeclarationMapsEnabled() bool {
 	return false
 }
 
+func (options *CompilerOptions) HasJsonModuleEmitEnabled() bool {
+	switch options.GetEmitModuleKind() {
+	case ModuleKindNone, ModuleKindSystem, ModuleKindUMD:
+		return false
+	}
+	return true
+}
+
 // SourceFileAffectingCompilerOptions are the CompilerOptions values that when
 // changed require a new SourceFile be created.
 type SourceFileAffectingCompilerOptions struct {

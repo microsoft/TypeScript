@@ -28,6 +28,13 @@ func (t Tristate) IsFalseOrUnknown() bool {
 	return t == TSFalse || t == TSUnknown
 }
 
+func (t Tristate) DefaultIfUnknown(value Tristate) Tristate {
+	if t == TSUnknown {
+		return value
+	}
+	return t
+}
+
 func (t *Tristate) UnmarshalJSON(data []byte) error {
 	switch string(data) {
 	case "true":

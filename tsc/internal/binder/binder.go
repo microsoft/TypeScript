@@ -146,7 +146,7 @@ func (b *Binder) declareSymbol(symbolTable ast.SymbolTable, parent *ast.Symbol, 
 
 func (b *Binder) declareSymbolEx(symbolTable ast.SymbolTable, parent *ast.Symbol, node *ast.Node, includes ast.SymbolFlags, excludes ast.SymbolFlags, isReplaceableByMethod bool, isComputedName bool) *ast.Symbol {
 	// Debug.assert(isComputedName || !ast.HasDynamicName(node))
-	isDefaultExport := ast.HasSyntacticModifier(node, ast.ModifierFlagsDefault) || ast.IsExportSpecifier(node) && ModuleExportNameIsDefault(node.AsExportSpecifier().Name())
+	isDefaultExport := ast.HasSyntacticModifier(node, ast.ModifierFlagsDefault) || ast.IsExportSpecifier(node) && ast.ModuleExportNameIsDefault(node.AsExportSpecifier().Name())
 	// The exported symbol for an export default function/class node is always named "default"
 	var name string
 	switch {
@@ -361,10 +361,6 @@ func (b *Binder) getDisplayName(node *ast.Node) string {
 		return name
 	}
 	return "(Missing)"
-}
-
-func ModuleExportNameIsDefault(node *ast.Node) bool {
-	return node.Text() == ast.InternalSymbolNameDefault
 }
 
 func GetSymbolNameForPrivateIdentifier(containingClassSymbol *ast.Symbol, description string) string {

@@ -4,22 +4,18 @@ import (
 	"sync"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/printer"
 )
 
-type EmitResolver interface {
-	IsReferencedAliasDeclaration(node *ast.Node) bool
-	IsValueAliasDeclaration(node *ast.Node) bool
-	IsTopLevelValueImportEqualsWithEntityName(node *ast.Node) bool
-	MarkLinkedReferencesRecursively(file *ast.SourceFile)
-}
-
-var _ EmitResolver = &emitResolver{}
+var _ printer.EmitResolver = &emitResolver{}
 
 type emitResolver struct {
 	checker                 *Checker
 	checkerMu               sync.Mutex
 	isValueAliasDeclaration func(node *ast.Node) bool
+	referenceResolver       binder.ReferenceResolver
 }
 
 func isConstEnumOrConstEnumOnlyModule(s *ast.Symbol) bool {
@@ -28,14 +24,14 @@ func isConstEnumOrConstEnumOnlyModule(s *ast.Symbol) bool {
 
 func (r *emitResolver) IsReferencedAliasDeclaration(node *ast.Node) bool {
 	c := r.checker
-	if !c.canCollectSymbolAliasAccessabilityData || !r.isBoundNode(node) {
+	if !c.canCollectSymbolAliasAccessabilityData || !ast.IsParseTreeNode(node) {
 		return true
 	}
 
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 
-	if c.isAliasSymbolDeclaration(node) {
+	if ast.IsAliasSymbolDeclaration(node) {
 		if symbol := c.getSymbolOfDeclaration(node); symbol != nil {
 			aliasLinks := c.aliasSymbolLinks.Get(symbol)
 			if aliasLinks.referenced {
@@ -54,7 +50,7 @@ func (r *emitResolver) IsReferencedAliasDeclaration(node *ast.Node) bool {
 
 func (r *emitResolver) IsValueAliasDeclaration(node *ast.Node) bool {
 	c := r.checker
-	if !c.canCollectSymbolAliasAccessabilityData || !r.isBoundNode(node) {
+	if !c.canCollectSymbolAliasAccessabilityData || !ast.IsParseTreeNode(node) {
 		return true
 	}
 
@@ -122,7 +118,7 @@ func (r *emitResolver) IsTopLevelValueImportEqualsWithEntityName(node *ast.Node)
 	if !c.canCollectSymbolAliasAccessabilityData {
 		return true
 	}
-	if !r.isBoundNode(node) || node.Kind != ast.KindImportEqualsDeclaration || node.Parent.Kind != ast.KindSourceFile {
+	if !ast.IsParseTreeNode(node) || node.Kind != ast.KindImportEqualsDeclaration || node.Parent.Kind != ast.KindSourceFile {
 		return false
 	}
 	n := node.AsImportEqualsDeclaration()
@@ -134,14 +130,6 @@ func (r *emitResolver) IsTopLevelValueImportEqualsWithEntityName(node *ast.Node)
 	defer r.checkerMu.Unlock()
 
 	return r.isAliasResolvedToValue(c.getSymbolOfDeclaration(node), false /*excludeTypeOnlyValues*/)
-}
-
-func (r *emitResolver) isBoundNode(node *ast.Node) bool {
-	if node == nil {
-		return false
-	}
-	file := ast.GetSourceFileOfNode(node)
-	return file != nil && file.IsBound()
 }
 
 func (r *emitResolver) MarkLinkedReferencesRecursively(file *ast.SourceFile) {
@@ -163,4 +151,74 @@ func (r *emitResolver) MarkLinkedReferencesRecursively(file *ast.SourceFile) {
 		}
 		file.ForEachChild(visit)
 	}
+}
+
+func (r *emitResolver) GetExternalModuleFileFromDeclaration(node *ast.Node) *ast.SourceFile {
+	r.checkerMu.Lock()
+	defer r.checkerMu.Unlock()
+
+	if ast.IsParseTreeNode(node) {
+		// !!!
+		// return r.checker.getExternalModuleFileFromDeclaration(node)
+	}
+	return nil
+}
+
+func (r *emitResolver) getReferenceResolver() binder.ReferenceResolver {
+	if r.referenceResolver == nil {
+		r.referenceResolver = binder.NewReferenceResolver(binder.ReferenceResolverHooks{
+			ResolveName:                            r.checker.resolveName,
+			GetResolvedSymbol:                      r.checker.getResolvedSymbol,
+			GetMergedSymbol:                        r.checker.getMergedSymbol,
+			GetParentOfSymbol:                      r.checker.getParentOfSymbol,
+			GetSymbolOfDeclaration:                 r.checker.getSymbolOfDeclaration,
+			GetTypeOnlyAliasDeclaration:            r.checker.getTypeOnlyAliasDeclarationEx,
+			GetExportSymbolOfValueSymbolIfExported: r.checker.getExportSymbolOfValueSymbolIfExported,
+		})
+	}
+	return r.referenceResolver
+}
+
+func (r *emitResolver) GetReferencedExportContainer(node *ast.IdentifierNode, prefixLocals bool) *ast.Node /*SourceFile|ModuleDeclaration|EnumDeclaration*/ {
+	if !ast.IsParseTreeNode(node) {
+		return nil
+	}
+
+	r.checkerMu.Lock()
+	defer r.checkerMu.Unlock()
+
+	return r.getReferenceResolver().GetReferencedExportContainer(node, prefixLocals)
+}
+
+func (r *emitResolver) GetReferencedImportDeclaration(node *ast.IdentifierNode) *ast.Declaration {
+	if !ast.IsParseTreeNode(node) {
+		return nil
+	}
+
+	r.checkerMu.Lock()
+	defer r.checkerMu.Unlock()
+
+	return r.getReferenceResolver().GetReferencedImportDeclaration(node)
+}
+
+func (r *emitResolver) GetReferencedValueDeclaration(node *ast.IdentifierNode) *ast.Declaration {
+	if !ast.IsParseTreeNode(node) {
+		return nil
+	}
+
+	r.checkerMu.Lock()
+	defer r.checkerMu.Unlock()
+
+	return r.getReferenceResolver().GetReferencedValueDeclaration(node)
+}
+
+func (r *emitResolver) GetReferencedValueDeclarations(node *ast.IdentifierNode) []*ast.Declaration {
+	if !ast.IsParseTreeNode(node) {
+		return nil
+	}
+
+	r.checkerMu.Lock()
+	defer r.checkerMu.Unlock()
+
+	return r.getReferenceResolver().GetReferencedValueDeclarations(node)
 }

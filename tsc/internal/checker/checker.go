@@ -16,6 +16,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/jsnum"
+	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -5112,24 +5113,12 @@ func (c *Checker) checkExportSpecifier(node *ast.Node) {
 		}
 		// find immediate value referenced by exported name (SymbolFlags.Alias is set so we don't chase down aliases)
 		symbol := c.resolveName(exportedName, exportedName.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias, nil /*nameNotFoundMessage*/, true /*isUse*/, false)
-		if symbol != nil && (symbol == c.undefinedSymbol || symbol == c.globalThisSymbol || symbol.Declarations != nil && ast.IsGlobalSourceFile(getDeclarationContainer(symbol.Declarations[0]))) {
+		if symbol != nil && (symbol == c.undefinedSymbol || symbol == c.globalThisSymbol || symbol.Declarations != nil && ast.IsGlobalSourceFile(ast.GetDeclarationContainer(symbol.Declarations[0]))) {
 			c.error(exportedName, diagnostics.Cannot_export_0_Only_local_declarations_can_be_exported_from_a_module, exportedName.Text())
 		} else {
 			c.markLinkedReferences(node, ReferenceHintExportSpecifier, nil /*propSymbol*/, nil /*parentType*/)
 		}
 	}
-}
-
-func getDeclarationContainer(node *ast.Node) *ast.Node {
-	return ast.FindAncestor(ast.GetRootDeclaration(node), func(node *ast.Node) bool {
-		switch node.Kind {
-		case ast.KindVariableDeclaration, ast.KindVariableDeclarationList, ast.KindImportSpecifier,
-			ast.KindNamedImports, ast.KindNamespaceImport, ast.KindImportClause:
-			return false
-		default:
-			return true
-		}
-	}).Parent
 }
 
 func (c *Checker) checkExportAssignment(node *ast.Node) {
@@ -13299,7 +13288,7 @@ func (c *Checker) resolveSymbol(symbol *ast.Symbol) *ast.Symbol {
 }
 
 func (c *Checker) resolveSymbolEx(symbol *ast.Symbol, dontResolveAlias bool) *ast.Symbol {
-	if !dontResolveAlias && isNonLocalAlias(symbol, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace) {
+	if !dontResolveAlias && ast.IsNonLocalAlias(symbol, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace) {
 		return c.resolveAlias(symbol)
 	}
 	return symbol
@@ -13486,7 +13475,7 @@ func (c *Checker) getTargetOfNamespaceExport(node *ast.Node, dontResolveAlias bo
 
 func (c *Checker) getTargetOfImportSpecifier(node *ast.Node, dontResolveAlias bool) *ast.Symbol {
 	name := node.PropertyNameOrName()
-	if binder.ModuleExportNameIsDefault(name) {
+	if ast.ModuleExportNameIsDefault(name) {
 		specifier := c.getModuleSpecifierForImportOrExport(node)
 		if specifier != nil {
 			moduleSymbol := c.resolveExternalModuleName(node, specifier, false /*ignoreErrors*/)
@@ -13768,7 +13757,7 @@ func (c *Checker) reportInvalidImportEqualsExportMember(node *ast.Node, name *as
 
 func (c *Checker) getTargetOfExportSpecifier(node *ast.Node, meaning ast.SymbolFlags, dontResolveAlias bool) *ast.Symbol {
 	name := node.PropertyNameOrName()
-	if binder.ModuleExportNameIsDefault(name) {
+	if ast.ModuleExportNameIsDefault(name) {
 		specifier := c.getModuleSpecifierForImportOrExport(node)
 		if specifier != nil {
 			moduleSymbol := c.resolveExternalModuleName(node, specifier, false /*ignoreErrors*/)
@@ -14038,7 +14027,7 @@ func (c *Checker) resolveESModuleSymbol(moduleSymbol *ast.Symbol, referencingLoc
 			return symbol
 		}
 		referenceParent := referencingLocation.Parent
-		if ast.IsImportDeclaration(referenceParent) && getNamespaceDeclarationNode(referenceParent) != nil || ast.IsImportCall(referenceParent) {
+		if ast.IsImportDeclaration(referenceParent) && ast.GetNamespaceDeclarationNode(referenceParent) != nil || ast.IsImportCall(referenceParent) {
 			var reference *ast.Node
 			if ast.IsImportCall(referenceParent) {
 				reference = referenceParent.AsCallExpression().Arguments.Nodes[0]
@@ -14590,18 +14579,6 @@ func (c *Checker) extendExportSymbols(target ast.SymbolTable, source ast.SymbolT
 	}
 }
 
-/**
- * Indicates that a symbol is an alias that does not merge with a local declaration.
- * OR Is a JSContainer which may merge an alias with a local declaration
- */
-func isNonLocalAlias(symbol *ast.Symbol, excludes ast.SymbolFlags) bool {
-	if symbol == nil {
-		return false
-	}
-	return symbol.Flags&(ast.SymbolFlagsAlias|excludes) == ast.SymbolFlagsAlias ||
-		symbol.Flags&ast.SymbolFlagsAlias != 0 && symbol.Flags&ast.SymbolFlagsAssignment != 0
-}
-
 func (c *Checker) ResolveAlias(symbol *ast.Symbol) (*ast.Symbol, bool) {
 	if symbol == nil {
 		return nil, false
@@ -14750,31 +14727,7 @@ func (c *Checker) getSymbolFlagsEx(symbol *ast.Symbol, excludeTypeOnlyMeanings b
 }
 
 func (c *Checker) getDeclarationOfAliasSymbol(symbol *ast.Symbol) *ast.Node {
-	return core.FindLast(symbol.Declarations, c.isAliasSymbolDeclaration)
-}
-
-/**
- * An alias symbol is created by one of the following declarations:
- * import <symbol> = ...
- * import <symbol> from ...
- * import * as <symbol> from ...
- * import { x as <symbol> } from ...
- * export { x as <symbol> } from ...
- * export * as ns <symbol> from ...
- * export = <EntityNameExpression>
- * export default <EntityNameExpression>
- */
-func (c *Checker) isAliasSymbolDeclaration(node *ast.Node) bool {
-	switch node.Kind {
-	case ast.KindImportEqualsDeclaration, ast.KindNamespaceExportDeclaration, ast.KindNamespaceImport, ast.KindNamespaceExport,
-		ast.KindImportSpecifier, ast.KindExportSpecifier:
-		return true
-	case ast.KindImportClause:
-		return node.AsImportClause().Name() != nil
-	case ast.KindExportAssignment:
-		return ast.ExportAssignmentIsAlias(node)
-	}
-	return false
+	return core.FindLast(symbol.Declarations, ast.IsAliasSymbolDeclaration)
 }
 
 func (c *Checker) getTypeOfSymbolWithDeferredType(symbol *ast.Symbol) *Type {
@@ -26074,7 +26027,7 @@ func (c *Checker) markExportSpecifierAliasReferenced(location *ast.ExportSpecifi
 			return // Skip for invalid syntax like this: export { "x" }
 		}
 		symbol := c.resolveName(exportedName, exportedName.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias, nil /*nameNotFoundMessage*/, true /*isUse*/, false /*excludeGlobals*/)
-		if symbol != nil && (symbol == c.undefinedSymbol || symbol == c.globalThisSymbol || symbol.Declarations != nil && ast.IsGlobalSourceFile(getDeclarationContainer(symbol.Declarations[0]))) {
+		if symbol != nil && (symbol == c.undefinedSymbol || symbol == c.globalThisSymbol || symbol.Declarations != nil && ast.IsGlobalSourceFile(ast.GetDeclarationContainer(symbol.Declarations[0]))) {
 			// Do nothing, non-local symbol
 		} else {
 			target := symbol
@@ -26097,7 +26050,7 @@ func (c *Checker) markAliasReferenced(symbol *ast.Symbol, location *ast.Node) {
 	if !c.canCollectSymbolAliasAccessabilityData {
 		return
 	}
-	if isNonLocalAlias(symbol, ast.SymbolFlagsValue /*excludes*/) && !isInTypeQuery(location) {
+	if ast.IsNonLocalAlias(symbol, ast.SymbolFlagsValue /*excludes*/) && !isInTypeQuery(location) {
 		target := c.resolveAlias(symbol)
 		if c.getSymbolFlagsEx(symbol, true /*excludeTypeOnlyMeanings*/, false /*excludeLocalMeanings*/)&(ast.SymbolFlagsValue|ast.SymbolFlagsExportValue) != 0 {
 			// An alias resolving to a const enum cannot be elided if (1) 'isolatedModules' is enabled
@@ -26171,7 +26124,7 @@ func (c *Checker) markEntityNameOrEntityExpressionAsReference(typeName *ast.Node
 			diag := c.error(typeName, diagnostics.A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled)
 			var aliasDeclaration *ast.Node
 			for _, decl := range rootSymbol.Declarations {
-				if c.isAliasSymbolDeclaration(decl) {
+				if ast.IsAliasSymbolDeclaration(decl) {
 					aliasDeclaration = decl
 					break
 				}
@@ -29317,7 +29270,7 @@ func (c *Checker) GetTypeAtLocation(node *ast.Node) *Type {
 	return c.getTypeOfNode(node)
 }
 
-func (c *Checker) GetEmitResolver(file *ast.SourceFile, skipDiagnostics bool) EmitResolver {
+func (c *Checker) GetEmitResolver(file *ast.SourceFile, skipDiagnostics bool) printer.EmitResolver {
 	c.emitResolverOnce.Do(func() {
 		c.emitResolver = &emitResolver{checker: c}
 	})
