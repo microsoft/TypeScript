@@ -54,8 +54,7 @@ func TestInsensitive(t *testing.T) {
 	_, err = fs.Stat(vfs, "does/not/exist")
 	assert.ErrorContains(t, err, "file does not exist")
 
-	// TODO: reenable in Go 1.25 when TestFS understands symlinks.
-	// assert.NilError(t, fstest.TestFS(vfs, "foo/bar/baz"))
+	assert.NilError(t, fstest.TestFS(vfs, "foo/bar/baz"))
 
 	insensitive, err := fs.ReadFile(vfs, "Foo/Bar/Baz")
 	assert.NilError(t, err)
@@ -75,7 +74,8 @@ func TestInsensitive(t *testing.T) {
 	_, err = fs.Stat(vfs, "Does/Not/Exist")
 	assert.ErrorContains(t, err, "file does not exist")
 
-	// TODO: reenable in Go 1.25 when TestFS understands symlinks.
+	// TODO: TestFS doesn't understand case-insensitive file systems.
+	// This same thing would happen with an os.Dir on Windows.
 	// assert.NilError(t, fstest.TestFS(vfs, "Foo/Bar/Baz"))
 }
 
@@ -109,7 +109,6 @@ func TestInsensitiveUpper(t *testing.T) {
 	assert.NilError(t, err)
 	assert.DeepEqual(t, dirEntriesToNames(entries), []string{"Bar", "Bar2", "Bar3"})
 
-	// TODO: reenable in Go 1.25 when TestFS understands symlinks.
 	// assert.NilError(t, fstest.TestFS(vfs, "foo/bar/baz"))
 
 	insensitive, err := fs.ReadFile(vfs, "Foo/Bar/Baz")
@@ -122,8 +121,7 @@ func TestInsensitiveUpper(t *testing.T) {
 	assert.NilError(t, err)
 	assert.DeepEqual(t, dirEntriesToNames(entries), []string{"Bar", "Bar2", "Bar3"})
 
-	// TODO: reenable in Go 1.25 when TestFS understands symlinks.
-	// assert.NilError(t, fstest.TestFS(vfs, "Foo/Bar/Baz"))
+	assert.NilError(t, fstest.TestFS(vfs, "Foo/Bar/Baz"))
 }
 
 func TestSensitive(t *testing.T) {
@@ -153,8 +151,7 @@ func TestSensitive(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, sensitiveInfo.Sys(), 1234)
 
-	// TODO: reenable in Go 1.25 when TestFS understands symlinks.
-	// assert.NilError(t, fstest.TestFS(vfs, "foo/bar/baz"))
+	assert.NilError(t, fstest.TestFS(vfs, "foo/bar/baz"))
 
 	_, err = fs.ReadFile(vfs, "Foo/Bar/Baz")
 	assert.ErrorContains(t, err, "file does not exist")
@@ -559,6 +556,24 @@ func TestSymlink(t *testing.T) {
 
 		realpath = fs.Realpath("/some/dirlink/file.ts")
 		assert.Equal(t, realpath, "/some/dir/file.ts")
+	})
+
+	t.Run("FileExists", func(t *testing.T) {
+		t.Parallel()
+
+		assert.Assert(t, fs.FileExists("/symlink.ts"))
+		assert.Assert(t, fs.FileExists("/some/dirlink/file.ts"))
+		assert.Assert(t, fs.FileExists("/a/existing.ts"))
+	})
+
+	t.Run("DirectoryExists", func(t *testing.T) {
+		t.Parallel()
+
+		assert.Assert(t, fs.DirectoryExists("/some/dirlink"))
+		assert.Assert(t, fs.DirectoryExists("/d"))
+		assert.Assert(t, fs.DirectoryExists("/c"))
+		assert.Assert(t, fs.DirectoryExists("/b"))
+		assert.Assert(t, fs.DirectoryExists("/a"))
 	})
 }
 

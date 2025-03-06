@@ -31,7 +31,6 @@ type mapFS struct {
 var (
 	_ iovfs.RealpathFS = (*mapFS)(nil)
 	_ iovfs.WritableFS = (*mapFS)(nil)
-	_ fs.ReadFileFS    = (*mapFS)(nil)
 )
 
 type sys struct {
@@ -358,7 +357,8 @@ func (m *mapFS) Open(name string) (fs.File, error) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
-	f, err := m.open(m.getCanonicalPath(name))
+	_, cp, _ := m.getFollowingSymlinks(m.getCanonicalPath(name))
+	f, err := m.open(cp)
 	if err != nil {
 		return nil, err
 	}
@@ -393,17 +393,6 @@ func (m *mapFS) Open(name string) (fs.File, error) {
 		File:     f,
 		fileInfo: newInfo,
 	}, nil
-}
-
-func (m *mapFS) ReadFile(name string) ([]byte, error) {
-	m.mu.RLock()
-	defer m.mu.RUnlock()
-
-	file, _, err := m.getFollowingSymlinks(m.getCanonicalPath(name))
-	if err != nil {
-		return nil, err
-	}
-	return file.Data, nil
 }
 
 func (m *mapFS) Realpath(name string) (string, error) {
