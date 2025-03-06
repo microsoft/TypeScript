@@ -66,36 +66,6 @@ declare namespace AmbientStuff {
     import FineAlias = EnumInAmbientContext.B;
 }
 
-// Not erasable
-(()=><any>{})();
-(()=>< any >{})();
-(()=> < any > {})();
-
-// Erasable
-(()=><any>({}))();
-(()=>(<any>{}))();
-<any>{};
-
-
-// return and yield ASI
-function *gen() {
-    yield <any>
-        1;
-    return <any>
-        1;
-}
-
-// at the start of an ExpressionStatement if followed by an object literal; though I'm not sure why one would use it there
-<unknown>{foo() {}}.foo();
-
-// at the start of an ExpressionStatement if followed by function keyword
-<unknown>function() {}();
-<unknown>function() {};
-
-// at the start of an ExpressionStatement if followed by an anonymous class expression
-// note that this exact syntax currently emits invalid JS (no parenthesis added like for function above)
-<unknown>class {}
-
 // @filename: commonjs.cts
 import foo = require("./other.cjs");
 export = foo;

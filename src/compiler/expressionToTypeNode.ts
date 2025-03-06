@@ -435,11 +435,9 @@ export function createSyntacticTypeNodeBuilder(
                 if (!resolver.canReuseTypeNode(context, node)) {
                     return resolver.serializeExistingTypeNode(context, node);
                 }
-                const specifier = rewriteModuleSpecifier(node, node.argument.literal);
-                const literal = specifier === node.argument.literal ? reuseNode(context, node.argument.literal) : specifier;
                 return factory.updateImportTypeNode(
                     node,
-                    literal === node.argument.literal ? reuseNode(context, node.argument) : factory.createLiteralTypeNode(literal),
+                    factory.updateLiteralTypeNode(node.argument, rewriteModuleSpecifier(node, node.argument.literal)),
                     visitNode(node.attributes, visitExistingNodeTreeSymbols, isImportAttributes),
                     visitNode(node.qualifier, visitExistingNodeTreeSymbols, isEntityName),
                     visitNodes(node.typeArguments, visitExistingNodeTreeSymbols, isTypeNode),
@@ -614,7 +612,10 @@ export function createSyntacticTypeNodeBuilder(
 
             function rewriteModuleSpecifier(parent: ImportTypeNode, lit: StringLiteral) {
                 const newName = resolver.getModuleSpecifierOverride(context, parent, lit);
-                return newName ? setOriginalNode(factory.createStringLiteral(newName), lit) : lit;
+                if (newName) {
+                    return setOriginalNode(factory.createStringLiteral(newName), lit);
+                }
+                return visitNode(lit, visitExistingNodeTreeSymbols, isStringLiteral)!;
             }
         }
     }
@@ -1122,16 +1123,15 @@ export function createSyntacticTypeNodeBuilder(
         );
     }
     function reuseTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration> | undefined, context: SyntacticTypeNodeBuilderContext) {
-        return typeParameters?.map(tp => {
-            const { node: tpName } = resolver.trackExistingEntityName(context, tp.name);
-            return factory.updateTypeParameterDeclaration(
+        return typeParameters?.map(tp =>
+            factory.updateTypeParameterDeclaration(
                 tp,
                 tp.modifiers?.map(m => reuseNode(context, m)),
-                tpName,
+                reuseNode(context, tp.name),
                 serializeExistingTypeNodeWithFallback(tp.constraint, context),
                 serializeExistingTypeNodeWithFallback(tp.default, context),
-            );
-        });
+            )
+        );
     }
 
     function typeFromObjectLiteralMethod(method: MethodDeclaration, name: PropertyName, context: SyntacticTypeNodeBuilderContext, isConstContext: boolean) {

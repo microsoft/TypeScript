@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/better_subType_assignable_to_superType_error_messsage.ts] ////
+
+=== better_subType_assignable_to_superType_error_messsage.ts ===
+function parameterExtendsOtherParameter<SuperType, SubType extends SuperType, SubType2 extends SubType>(superType: SuperType, subType2: SubType2) {
+>parameterExtendsOtherParameter : Symbol(parameterExtendsOtherParameter, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 0))
+>SuperType : Symbol(SuperType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 40))
+>SubType : Symbol(SubType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 50))
+>SuperType : Symbol(SuperType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 40))
+>SubType2 : Symbol(SubType2, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 77))
+>SubType : Symbol(SubType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 50))
+>superType : Symbol(superType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 104))
+>SuperType : Symbol(SuperType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 40))
+>subType2 : Symbol(subType2, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 125))
+>SubType2 : Symbol(SubType2, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 77))
+
+  subtype = superType;//error
+>superType : Symbol(superType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 104))
+  
+  //ensures that supertypes are not assignable to 'grandchild' subtypes
+  subType2 = superType;//error
+>subType2 : Symbol(subType2, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 125))
+>superType : Symbol(superType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 104))
+
+  superType = subType2;//ok
+>superType : Symbol(superType, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 104))
+>subType2 : Symbol(subType2, Decl(better_subType_assignable_to_superType_error_messsage.ts, 0, 125))
+}
+
