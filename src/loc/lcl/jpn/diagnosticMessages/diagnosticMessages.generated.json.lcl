@@ -11391,12 +11391,18 @@
       <Item ItemId=";Project_0_can_t_be_built_because_its_dependency_1_has_errors_6363" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' can't be built because its dependency '{1}' has errors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[プロジェクト '{0}' はその依存関係 '{1}' にエラーがあるためビルドできません]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Project_0_can_t_be_built_because_its_dependency_1_was_not_built_6383" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' can't be built because its dependency '{1}' was not built]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[依存関係 '{1}' がビルドされていないため、プロジェクト '{0}' はビルドできません]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -13350,12 +13356,18 @@
       <Item ItemId=";Skipping_build_of_project_0_because_its_dependency_1_has_errors_6362" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Skipping build of project '{0}' because its dependency '{1}' has errors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[プロジェクト '{0}' のビルドは、その依存関係 '{1}' にエラーがあるため、スキップしています]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Skipping_build_of_project_0_because_its_dependency_1_was_not_built_6382" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Skipping build of project '{0}' because its dependency '{1}' was not built]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[依存関係 '{1}' がビルドされていないため、プロジェクト '{0}' のビルドをスキップしています]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
