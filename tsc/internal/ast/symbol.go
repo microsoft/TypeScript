@@ -1,6 +1,10 @@
 package ast
 
-import "sync/atomic"
+import (
+	"sync/atomic"
+
+	"github.com/microsoft/typescript-go/internal/core"
+)
 
 // Symbol
 
@@ -15,8 +19,8 @@ type Symbol struct {
 	id                           atomic.Uint32
 	Parent                       *Symbol
 	ExportSymbol                 *Symbol
-	AssignmentDeclarationMembers map[NodeId]*Node // Set of detected assignment declarations
-	GlobalExports                SymbolTable      // Conditional global UMD exports
+	AssignmentDeclarationMembers core.Set[*Node] // Set of detected assignment declarations
+	GlobalExports                SymbolTable     // Conditional global UMD exports
 }
 
 // SymbolTable

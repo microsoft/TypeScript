@@ -14337,8 +14337,7 @@ func (c *Checker) getResolvedMembersOrExportsOfSymbol(symbol *ast.Symbol, resolu
 			}
 		}
 		if isStatic {
-			assignments := symbol.AssignmentDeclarationMembers
-			for _, member := range assignments {
+			for member := range symbol.AssignmentDeclarationMembers.Keys() {
 				if c.hasLateBindableName(member) {
 					if lateSymbols == nil {
 						lateSymbols = make(ast.SymbolTable)

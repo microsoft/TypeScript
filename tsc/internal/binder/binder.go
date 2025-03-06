@@ -970,10 +970,7 @@ func (b *Binder) bindFunctionOrConstructorType(node *ast.Node) {
 }
 
 func addLateBoundAssignmentDeclarationToSymbol(node *ast.Node, symbol *ast.Symbol) {
-	if symbol.AssignmentDeclarationMembers == nil {
-		symbol.AssignmentDeclarationMembers = make(map[ast.NodeId]*ast.Node)
-	}
-	symbol.AssignmentDeclarationMembers[ast.GetNodeId(node)] = node
+	symbol.AssignmentDeclarationMembers.Add(node)
 }
 
 func (b *Binder) bindFunctionPropertyAssignment(node *ast.Node) {
