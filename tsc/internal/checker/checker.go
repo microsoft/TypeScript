@@ -5462,7 +5462,7 @@ func (c *Checker) checkVariableLikeDeclaration(node *ast.Node) {
 		if ast.IsVariableDeclaration(node) || ast.IsBindingElement(node) {
 			c.checkVarDeclaredNamesNotShadowed(node)
 		}
-		// !!! c.checkCollisionsForDeclarationName(node, node.Name)
+		c.checkCollisionsForDeclarationName(node, node.Name())
 	}
 }
 
@@ -6540,7 +6540,7 @@ func (c *Checker) reportUnusedBindingElements(node *ast.Node) {
 func (c *Checker) reportUnusedVariableDeclarations(declarations []*ast.Node) {
 	for _, declaration := range declarations {
 		name := declaration.Name()
-		if name != nil {
+		if name != nil && !ast.IsParameterPropertyDeclaration(declaration, declaration.Parent) && !ast.IsThisParameter(declaration) {
 			if ast.IsBindingPattern(name) {
 				c.reportUnusedBindingElements(name)
 			} else if c.isUnreferencedVariableDeclaration(declaration) {
@@ -9686,7 +9686,14 @@ func (c *Checker) assignBindingElementTypes(pattern *ast.Node, parentType *Type)
 }
 
 func (c *Checker) checkCollisionsForDeclarationName(node *ast.Node, name *ast.Node) {
-	// !!!
+	switch {
+	case name == nil:
+		return
+	case ast.IsClassLike(node):
+		c.checkTypeNameIsReserved(name, diagnostics.Class_name_cannot_be_0)
+	case ast.IsEnumDeclaration(node):
+		c.checkTypeNameIsReserved(name, diagnostics.Enum_name_cannot_be_0)
+	}
 }
 
 func (c *Checker) checkTypeOfExpression(node *ast.Node) *Type {
@@ -10739,7 +10746,47 @@ func (c *Checker) isUncalledFunctionReference(node *ast.Node, symbol *ast.Symbol
 }
 
 func (c *Checker) checkPropertyNotUsedBeforeDeclaration(prop *ast.Symbol, node *ast.Node, right *ast.Node) {
-	// !!!
+	valueDeclaration := prop.ValueDeclaration
+	if valueDeclaration == nil || ast.GetSourceFileOfNode(node).IsDeclarationFile {
+		return
+	}
+	var diagnostic *ast.Diagnostic
+	declarationName := right.Text()
+	if c.isInPropertyInitializerOrClassStaticBlock(node) &&
+		!c.isOptionalPropertyDeclaration(valueDeclaration) &&
+		!(ast.IsAccessExpression(node) && ast.IsAccessExpression(node.Expression())) &&
+		!c.isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right) &&
+		!(ast.IsMethodDeclaration(valueDeclaration) && c.getCombinedModifierFlagsCached(valueDeclaration)&ast.ModifierFlagsStatic != 0) &&
+		(c.compilerOptions.UseDefineForClassFields.IsTrue() || !c.isPropertyDeclaredInAncestorClass(prop)) {
+		diagnostic = c.error(right, diagnostics.Property_0_is_used_before_its_initialization, declarationName)
+	} else if ast.IsClassDeclaration(valueDeclaration) && ast.IsTypeReferenceNode(node.Parent) && valueDeclaration.Flags&ast.NodeFlagsAmbient == 0 && !c.isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right) {
+		diagnostic = c.error(right, diagnostics.Class_0_used_before_its_declaration, declarationName)
+	}
+	if diagnostic != nil {
+		diagnostic.AddRelatedInfo(NewDiagnosticForNode(valueDeclaration, diagnostics.X_0_is_declared_here, declarationName))
+	}
+}
+
+func (c *Checker) isOptionalPropertyDeclaration(node *ast.Node) bool {
+	return ast.IsPropertyDeclaration(node) && !ast.HasAccessorModifier(node) && ast.IsQuestionToken(node.AsPropertyDeclaration().PostfixToken)
+}
+
+func (c *Checker) isPropertyDeclaredInAncestorClass(prop *ast.Symbol) bool {
+	if prop.Parent.Flags&ast.SymbolFlagsClass == 0 {
+		return false
+	}
+	classType := c.getDeclaredTypeOfSymbol(prop.Parent)
+	for {
+		baseTypes := c.getBaseTypes(classType)
+		if len(baseTypes) == 0 {
+			return false
+		}
+		classType = baseTypes[0]
+		superProperty := c.getPropertyOfType(classType, prop.Name)
+		if superProperty != nil && superProperty.ValueDeclaration != nil {
+			return true
+		}
+	}
 }
 
 /**
@@ -26834,7 +26881,7 @@ func (c *Checker) getContextualTypeForBindingElement(declaration *ast.Node, cont
 	parent := declaration.Parent.Parent
 	parentType := c.getContextualTypeForVariableLikeDeclaration(parent, contextFlags)
 	if parentType == nil {
-		if ast.IsBindingElement(parent) && parent.Initializer() != nil {
+		if !ast.IsBindingElement(parent) && parent.Initializer() != nil {
 			parentType = c.checkDeclarationInitializer(parent, core.IfElse(hasDotDotDotToken(declaration), CheckModeRestBindingElement, CheckModeNormal), nil)
 		}
 	}
@@ -27057,7 +27104,7 @@ func (c *Checker) getContextualTypeForBinaryOperand(node *ast.Node, contextFlags
 		// In an assignment expression, the right operand is contextually typed by the type of the left operand.
 		// If the binary operator has a symbol, this is an assignment declaration and there is no contextual type.
 		if node == binary.Right && binary.Symbol == nil {
-			return c.getTypeOfExpression(binary.Left)
+			return c.getContextualTypeFromAssignmentTarget(binary.Left)
 		}
 	case ast.KindBarBarToken, ast.KindQuestionQuestionToken:
 		// When an || expression has a contextual type, the operands are contextually typed by that type, except
@@ -27076,6 +27123,33 @@ func (c *Checker) getContextualTypeForBinaryOperand(node *ast.Node, contextFlags
 		}
 	}
 	return nil
+}
+
+func (c *Checker) getContextualTypeFromAssignmentTarget(node *ast.Node) *Type {
+	if ast.IsAccessExpression(node) && node.Expression().Kind == ast.KindThisKeyword {
+		var symbol *ast.Symbol
+		if ast.IsPropertyAccessExpression(node) {
+			name := node.Name()
+			thisType := c.getTypeOfExpression(node.Expression())
+			if ast.IsPrivateIdentifier(name) {
+				symbol = c.getPropertyOfType(thisType, binder.GetSymbolNameForPrivateIdentifier(thisType.symbol, name.Text()))
+			} else {
+				symbol = c.getPropertyOfType(thisType, name.Text())
+			}
+		} else {
+			propType := c.checkExpressionCached(node.AsElementAccessExpression().ArgumentExpression)
+			if isTypeUsableAsPropertyName(propType) {
+				symbol = c.getPropertyOfType(c.getTypeOfExpression(node.Expression()), getPropertyNameFromType(propType))
+			}
+		}
+		if symbol != nil {
+			d := symbol.ValueDeclaration
+			if d != nil && (ast.IsPropertyDeclaration(d) || ast.IsPropertySignatureDeclaration(d)) && d.Type() == nil && d.Initializer() == nil {
+				return nil
+			}
+		}
+	}
+	return c.getTypeOfExpression(node)
 }
 
 func (c *Checker) getContextualTypeForObjectLiteralElement(element *ast.Node, contextFlags ContextFlags) *Type {
@@ -27544,16 +27618,19 @@ func (c *Checker) getESDecoratorCallSignature(decorator *ast.Node) *Signature {
 			// runtime-generated getter and setter that are added to the class/prototype. The `target` of a
 			// regular field decorator is always `undefined` as it isn't installed until it is initialized.
 			var targetType *Type
+			if ast.HasAccessorModifier(node) {
+				targetType = c.newClassAccessorDecoratorTargetType(thisType, valueType)
+			} else {
+				targetType = c.undefinedType
+			}
 			// We wrap the "output type" depending on the declaration. For auto-accessors, we wrap the
 			// "output type" in a `ClassAccessorDecoratorResult<This, In, Out>` type, which allows for
 			// mutation of the runtime-generated getter and setter, as well as the injection of an
 			// initializer mutator. For regular fields, we wrap the "output type" in an initializer mutator.
 			var returnType *Type
 			if ast.HasAccessorModifier(node) {
-				targetType = c.newClassAccessorDecoratorTargetType(thisType, valueType)
-				returnType = targetType
+				returnType = c.newClassAccessorDecoratorResultType(thisType, valueType)
 			} else {
-				targetType = c.undefinedType
 				returnType = c.newClassFieldDecoratorInitializerMutatorType(thisType, valueType)
 			}
 			contextType := c.newClassMemberDecoratorContextTypeForNode(node, thisType, valueType)
