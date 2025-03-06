@@ -4,6 +4,13 @@ type Set[T comparable] struct {
 	M map[T]struct{}
 }
 
+// NewSetWithSizeHint creates a new Set with a hint for the number of elements it will contain.
+func NewSetWithSizeHint[T comparable](hint int) *Set[T] {
+	return &Set[T]{
+		M: make(map[T]struct{}, hint),
+	}
+}
+
 func (s *Set[T]) Has(key T) bool {
 	_, ok := s.M[key]
 	return ok

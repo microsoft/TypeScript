@@ -18,6 +18,11 @@ type caches struct {
 	typeReferenceDirectiveCache                   *resolutionCache[*ResolvedTypeReferenceDirective]
 	packageJsonInfoCache                          *packagejson.InfoCache
 	resolvedTypeReferenceDirectiveLookupLocations map[*ResolvedTypeReferenceDirective]*LookupLocations
+
+	// Cached representation for `core.CompilerOptions.paths`.
+	// Doesn't handle other path patterns like in `typesVersions`.
+	parsedPatternsForPathsOnce sync.Once
+	parsedPatternsForPaths     *parsedPatterns
 }
 
 func newCaches(
