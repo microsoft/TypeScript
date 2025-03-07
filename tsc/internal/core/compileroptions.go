@@ -264,22 +264,30 @@ func (options *CompilerOptions) HasJsonModuleEmitEnabled() bool {
 // changed require a new SourceFile be created.
 type SourceFileAffectingCompilerOptions struct {
 	// !!! generate this
-	Target          ScriptTarget
-	Jsx             JsxEmit
-	JsxImportSource string
-	ImportHelpers   Tristate
-	AlwaysStrict    Tristate
-	ModuleDetection ModuleDetectionKind
+	Target               ScriptTarget
+	Jsx                  JsxEmit
+	JsxImportSource      string
+	ImportHelpers        Tristate
+	AlwaysStrict         Tristate
+	ModuleDetection      ModuleDetectionKind
+	AllowUnreachableCode Tristate
+	AllowUnusedLabels    Tristate
+	PreserveConstEnums   Tristate
+	IsolatedModules      Tristate
 }
 
 func (options *CompilerOptions) SourceFileAffecting() SourceFileAffectingCompilerOptions {
 	return SourceFileAffectingCompilerOptions{
-		Target:          options.Target,
-		Jsx:             options.Jsx,
-		JsxImportSource: options.JsxImportSource,
-		ImportHelpers:   options.ImportHelpers,
-		AlwaysStrict:    options.AlwaysStrict,
-		ModuleDetection: options.ModuleDetection,
+		Target:               options.Target,
+		Jsx:                  options.Jsx,
+		JsxImportSource:      options.JsxImportSource,
+		ImportHelpers:        options.ImportHelpers,
+		AlwaysStrict:         options.AlwaysStrict,
+		ModuleDetection:      options.ModuleDetection,
+		AllowUnreachableCode: options.AllowUnreachableCode,
+		AllowUnusedLabels:    options.AllowUnusedLabels,
+		PreserveConstEnums:   options.PreserveConstEnums,
+		IsolatedModules:      options.IsolatedModules,
 	}
 }
 
