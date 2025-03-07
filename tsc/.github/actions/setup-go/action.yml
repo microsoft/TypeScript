@@ -25,7 +25,9 @@ runs:
         # There is more code downloaded and built than is covered by '**/go.sum',
         # so give each job its own cache to try and not end up sharing the wrong
         # cache between jobs.
-        key: ts-setup-go-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ github.workflow }}-${{ inputs.cache-name }}-${{ hashFiles('**/go.sum', '**/Herebyfile.mjs', '**/.custom-gcl.yml') }}
+        key: ts-setup-go-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ hashFiles('**/go.sum', '**/Herebyfile.mjs', '**/.custom-gcl.yml') }}-${{ github.workflow }}-${{ inputs.cache-name }}
+        restore-keys: |
+          ts-setup-go-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ hashFiles('**/go.sum', '**/Herebyfile.mjs', '**/.custom-gcl.yml') }}
         path: |
           ~/go/pkg/mod
           ~/.cache/go-build
