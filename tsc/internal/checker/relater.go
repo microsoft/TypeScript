@@ -4266,7 +4266,7 @@ func (r *Relater) reportUnmatchedProperty(source *Type, target *Type, unmatchedP
 	props := r.c.getUnmatchedProperties(source, target, requireOptionalProperties, false /*matchDiscriminantProperties*/)
 	if len(props) == 1 {
 		propName := r.c.symbolToString(unmatchedProperty)
-		r.reportError(diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, unmatchedProperty.Name, r.c.TypeToString(source), r.c.TypeToString(target))
+		r.reportError(diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, propName, r.c.TypeToString(source), r.c.TypeToString(target))
 		if len(unmatchedProperty.Declarations) != 0 {
 			r.relatedInfo = append(r.relatedInfo, createDiagnosticForNode(unmatchedProperty.Declarations[0], diagnostics.X_0_is_declared_here, propName))
 		}

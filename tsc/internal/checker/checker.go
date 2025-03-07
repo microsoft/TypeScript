@@ -1586,6 +1586,7 @@ func (c *Checker) getSuggestionForSymbolNameLookup(symbols ast.SymbolTable, name
 		return symbol
 	}
 	allSymbols := slices.Collect(maps.Values(symbols))
+	c.sortSymbols(allSymbols)
 	if meaning&ast.SymbolFlagsGlobalLookup != 0 {
 		allSymbols = slices.Concat([]*ast.Symbol{
 			c.newSymbol(ast.SymbolFlagsTypeAlias, "string"),
