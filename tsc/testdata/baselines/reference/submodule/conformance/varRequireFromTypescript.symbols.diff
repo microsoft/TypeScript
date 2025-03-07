@@ -35,21 +35,17 @@
 ->n : Symbol(ex.Crunch.n, Decl(ex.d.ts, 1, 21))
  }
  
--=== ex.d.ts ===
--export type Greatest = { day: 1 }
-->Greatest : Symbol(Greatest, Decl(ex.d.ts, 0, 0))
-->day : Symbol(day, Decl(ex.d.ts, 0, 24))
--
--export class Crunch {
-->Crunch : Symbol(Crunch, Decl(ex.d.ts, 0, 33))
--
--    n: number
+ === ex.d.ts ===
+@@= skipped -19, +15 lines =@@
+ >Crunch : Symbol(Crunch, Decl(ex.d.ts, 0, 33))
+ 
+     n: number
 ->n : Symbol(Crunch.n, Decl(ex.d.ts, 1, 21))
--
--    m(): number
++>n : Symbol(n, Decl(ex.d.ts, 1, 21))
+ 
+     m(): number
 ->m : Symbol(Crunch.m, Decl(ex.d.ts, 2, 13))
--
--    constructor(n: number)
-->n : Symbol(n, Decl(ex.d.ts, 4, 16))
--}
--
++>m : Symbol(m, Decl(ex.d.ts, 2, 13))
+ 
+     constructor(n: number)
+ >n : Symbol(n, Decl(ex.d.ts, 4, 16))

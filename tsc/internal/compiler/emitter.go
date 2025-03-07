@@ -38,16 +38,31 @@ func (e *emitter) emit() {
 	e.emitBuildInfo(e.paths.buildInfoPath)
 }
 
-func (e *emitter) emitJsFile(sourceFile *ast.SourceFile, jsFilePath string, sourceMapFilePath string) {
+func (e *emitter) getModuleTransformer(emitContext *printer.EmitContext, resolver binder.ReferenceResolver) *transformers.Transformer {
 	options := e.host.Options()
 
-	if sourceFile == nil || e.emitOnly != emitAll && e.emitOnly != emitOnlyJs || len(jsFilePath) == 0 {
-		return
-	}
+	switch options.GetEmitModuleKind() {
+	case core.ModuleKindPreserve:
+		// `ESModuleTransformer` contains logic for preserving CJS input syntax in `--module preserve`
+		return transformers.NewESModuleTransformer(emitContext, options, resolver)
 
-	if options.NoEmit == core.TSTrue || e.host.IsEmitBlocked(jsFilePath) {
-		return
+	case core.ModuleKindESNext,
+		core.ModuleKindES2022,
+		core.ModuleKindES2020,
+		core.ModuleKindES2015,
+		core.ModuleKindNode16,
+		core.ModuleKindNodeNext,
+		core.ModuleKindCommonJS:
+		return transformers.NewImpliedModuleTransformer(emitContext, options, resolver)
+
+	default:
+		return transformers.NewCommonJSModuleTransformer(emitContext, options, resolver)
 	}
+}
+
+func (e *emitter) getScriptTransformers(emitContext *printer.EmitContext, sourceFile *ast.SourceFile) []*transformers.Transformer {
+	var tx []*transformers.Transformer
+	options := e.host.Options()
 
 	// JS files don't use reference calculations as they don't do import ellision, no need to calculate it
 	importElisionEnabled := !options.VerbatimModuleSyntax.IsTrue() && !ast.IsInJSFile(sourceFile.AsNode())
@@ -62,27 +77,41 @@ func (e *emitter) emitJsFile(sourceFile *ast.SourceFile, jsFilePath string, sour
 		referenceResolver = binder.NewReferenceResolver(binder.ReferenceResolverHooks{})
 	}
 
-	emitContext := printer.NewEmitContext()
-
 	// erase types
-	sourceFile = transformers.NewTypeEraserTransformer(emitContext, options).TransformSourceFile(sourceFile)
+	tx = append(tx, transformers.NewTypeEraserTransformer(emitContext, options))
 
 	// elide impors
 	if importElisionEnabled {
-		sourceFile = transformers.NewImportElisionTransformer(emitContext, options, emitResolver).TransformSourceFile(sourceFile)
+		tx = append(tx, transformers.NewImportElisionTransformer(emitContext, options, emitResolver))
 	}
 
 	// transform `enum`, `namespace`, and parameter properties
-	sourceFile = transformers.NewRuntimeSyntaxTransformer(emitContext, options, referenceResolver).TransformSourceFile(sourceFile)
+	tx = append(tx, transformers.NewRuntimeSyntaxTransformer(emitContext, options, referenceResolver))
 
 	// transform module syntax
-	switch options.ModuleKind {
-	case core.ModuleKindCommonJS:
-		sourceFile = transformers.NewCommonJsTransformer(emitContext, options, referenceResolver).TransformSourceFile(sourceFile)
+	tx = append(tx, e.getModuleTransformer(emitContext, referenceResolver))
+	return tx
+}
+
+func (e *emitter) emitJsFile(sourceFile *ast.SourceFile, jsFilePath string, sourceMapFilePath string) {
+	options := e.host.Options()
+
+	if sourceFile == nil || e.emitOnly != emitAll && e.emitOnly != emitOnlyJs || len(jsFilePath) == 0 {
+		return
+	}
+
+	if options.NoEmit == core.TSTrue || e.host.IsEmitBlocked(jsFilePath) {
+		return
+	}
+
+	emitContext := printer.NewEmitContext()
+	for _, transformer := range e.getScriptTransformers(emitContext, sourceFile) {
+		sourceFile = transformer.TransformSourceFile(sourceFile)
 	}
 
 	printerOptions := printer.PrinterOptions{
-		NewLine: options.NewLine,
+		NewLine:       options.NewLine,
+		NoEmitHelpers: options.NoEmitHelpers.IsTrue(),
 		// !!!
 	}
 

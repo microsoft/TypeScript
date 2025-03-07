@@ -11,14 +11,13 @@ import (
 )
 
 type externalModuleInfo struct {
-	externalImports                  []*ast.Declaration                                     // ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration. imports and reexports of other external modules
-	exportSpecifiers                 core.MultiMap[string, *ast.ExportSpecifier]            // Maps local names to their associated export specifiers (excludes reexports)
-	exportedBindings                 core.MultiMap[*ast.Declaration, *ast.ModuleExportName] // Maps local declarations to their associated export aliases
-	exportedNames                    []*ast.ModuleExportName                                // all exported names in the module, both local and re-exported, excluding the names of locally exported function declarations
-	exportedFunctions                core.Set[*ast.FunctionDeclarationNode]                 // all of the top-level exported function declarations
-	exportEquals                     *ast.ExportAssignment                                  // an export= declaration if one was present
-	hasExportStarsToExportValues     bool                                                   // whether this module contains export*
-	externalHelpersImportDeclaration *ast.Node                                              // ImportDeclaration | ImportEqualsDeclaration. import of external helpers
+	externalImports              []*ast.Declaration                                     // ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration. imports and reexports of other external modules
+	exportSpecifiers             core.MultiMap[string, *ast.ExportSpecifier]            // Maps local names to their associated export specifiers (excludes reexports)
+	exportedBindings             core.MultiMap[*ast.Declaration, *ast.ModuleExportName] // Maps local declarations to their associated export aliases
+	exportedNames                []*ast.ModuleExportName                                // all exported names in the module, both local and re-exported, excluding the names of locally exported function declarations
+	exportedFunctions            core.Set[*ast.FunctionDeclarationNode]                 // all of the top-level exported function declarations
+	exportEquals                 *ast.ExportAssignment                                  // an export= declaration if one was present
+	hasExportStarsToExportValues bool                                                   // whether this module contains export*
 }
 
 type externalModuleInfoCollector struct {
@@ -148,11 +147,6 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 		}
 	}
 
-	externalHelpersImportDeclaration := createExternalHelpersImportDeclarationIfNeeded(c.emitContext, c.sourceFile, c.compilerOptions, c.output.hasExportStarsToExportValues, hasImportStar, hasImportDefault)
-	if externalHelpersImportDeclaration != nil {
-		c.output.externalImports = append([]*ast.Node{externalHelpersImportDeclaration}, c.output.externalImports...)
-		c.output.externalHelpersImportDeclaration = externalHelpersImportDeclaration
-	}
 	return c.output
 }
 
@@ -261,40 +255,38 @@ func createExternalHelpersImportDeclarationIfNeeded(emitContext *printer.EmitCon
 			impliedModuleKind == core.ModuleKindNone && moduleKind == core.ModuleKindPreserve {
 			// When we emit as an ES module, generate an `import` declaration that uses named imports for helpers.
 			// If we cannot determine the implied module kind under `module: preserve` we assume ESM.
-			if len(helpers) > 0 {
-				var helperNames []string
-				for _, helper := range helpers {
-					importName := helper.ImportName
-					if len(importName) > 0 {
-						helperNames = core.AppendIfUnique(helperNames, importName)
+			var helperNames []string
+			for _, helper := range helpers {
+				importName := helper.ImportName
+				if len(importName) > 0 {
+					helperNames = core.AppendIfUnique(helperNames, importName)
+				}
+			}
+			if len(helperNames) > 0 {
+				slices.SortFunc(helperNames, stringutil.CompareStringsCaseSensitive)
+				// Alias the imports if the names are used somewhere in the file.
+				// NOTE: We don't need to care about global import collisions as this is a module.
+
+				importSpecifiers := core.Map(helperNames, func(name string) *ast.ImportSpecifierNode {
+					if printer.IsFileLevelUniqueName(sourceFile, name, nil /*hasGlobalName*/) {
+						return emitContext.Factory.NewImportSpecifier(false /*isTypeOnly*/, nil /*propertyName*/, emitContext.Factory.NewIdentifier(name))
+					} else {
+						return emitContext.Factory.NewImportSpecifier(false /*isTypeOnly*/, emitContext.Factory.NewIdentifier(name), emitContext.NewUnscopedHelperName(name))
 					}
-				}
-				if len(helperNames) > 0 {
-					slices.SortFunc(helperNames, stringutil.CompareStringsCaseSensitive)
-					// Alias the imports if the names are used somewhere in the file.
-					// NOTE: We don't need to care about global import collisions as this is a module.
+				})
+				namedBindings := emitContext.Factory.NewNamedImports(emitContext.Factory.NewNodeList(importSpecifiers))
+				parseNode := emitContext.MostOriginal(sourceFile.AsNode())
+				emitContext.AddEmitFlags(parseNode, printer.EFExternalHelpers)
 
-					importSpecifiers := core.Map(helperNames, func(name string) *ast.ImportSpecifierNode {
-						if printer.IsFileLevelUniqueName(sourceFile, name, nil /*hasGlobalName*/) {
-							return emitContext.Factory.NewImportSpecifier(false /*isTypeOnly*/, nil /*propertyName*/, emitContext.Factory.NewIdentifier(name))
-						} else {
-							return emitContext.Factory.NewImportSpecifier(false /*isTypeOnly*/, emitContext.Factory.NewIdentifier(name), emitContext.NewUnscopedHelperName(name))
-						}
-					})
-					namedBindings := emitContext.Factory.NewNamedImports(emitContext.Factory.NewNodeList(importSpecifiers))
-					parseNode := emitContext.MostOriginal(sourceFile.AsNode())
-					emitContext.AddEmitFlags(parseNode, printer.EFExternalHelpers)
+				externalHelpersImportDeclaration := emitContext.Factory.NewImportDeclaration(
+					nil, /*modifiers*/
+					emitContext.Factory.NewImportClause(false /*isTypeOnly*/, nil /*name*/, namedBindings),
+					emitContext.Factory.NewStringLiteral(externalHelpersModuleNameText),
+					nil, /*attributes*/
+				)
 
-					externalHelpersImportDeclaration := emitContext.Factory.NewImportDeclaration(
-						nil, /*modifiers*/
-						emitContext.Factory.NewImportClause(false /*isTypeOnly*/, nil /*name*/, namedBindings),
-						emitContext.Factory.NewStringLiteral(externalHelpersModuleNameText),
-						nil, /*attributes*/
-					)
-
-					emitContext.AddEmitFlags(externalHelpersImportDeclaration, printer.EFNeverApplyImportHelper)
-					return externalHelpersImportDeclaration
-				}
+				emitContext.AddEmitFlags(externalHelpersImportDeclaration, printer.EFNeverApplyImportHelper|printer.EFCustomPrologue)
+				return externalHelpersImportDeclaration
 			}
 		} else {
 			// When we emit to a non-ES module, generate a synthetic `import tslib = require("tslib")` to be further transformed.
@@ -306,7 +298,7 @@ func createExternalHelpersImportDeclarationIfNeeded(emitContext *printer.EmitCon
 					externalHelpersModuleName,
 					emitContext.Factory.NewExternalModuleReference(emitContext.Factory.NewStringLiteral(externalHelpersModuleNameText)),
 				)
-				emitContext.AddEmitFlags(externalHelpersImportDeclaration, printer.EFNeverApplyImportHelper)
+				emitContext.AddEmitFlags(externalHelpersImportDeclaration, printer.EFNeverApplyImportHelper|printer.EFCustomPrologue)
 				return externalHelpersImportDeclaration
 			}
 		}

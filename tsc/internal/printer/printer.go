@@ -113,6 +113,8 @@ type Printer struct {
 	Options                           PrinterOptions
 	emitContext                       *EmitContext
 	currentSourceFile                 *ast.SourceFile
+	uniqueHelperNames                 map[string]*ast.IdentifierNode
+	externalHelpersModuleName         *ast.IdentifierNode
 	nextListElementPos                int
 	writer                            EmitTextWriter
 	ownWriter                         EmitTextWriter
@@ -925,13 +927,54 @@ func (p *Printer) emitIdentifierNameNode(node *ast.IdentifierNode) {
 	p.emitIdentifierName(node.AsIdentifier())
 }
 
+func (p *Printer) getUniqueHelperName(name string) *ast.IdentifierNode {
+	helperName := p.uniqueHelperNames[name]
+	if helperName == nil {
+		helperName := p.emitContext.NewUniqueName(name, AutoGenerateOptions{Flags: GeneratedIdentifierFlagsFileLevel | GeneratedIdentifierFlagsOptimistic})
+		p.generateName(helperName)
+		p.uniqueHelperNames[name] = helperName
+		return helperName
+	}
+	return helperName.Clone(p.emitContext.Factory)
+}
+
 func (p *Printer) emitIdentifierReference(node *ast.Identifier) {
+	if (p.externalHelpersModuleName != nil || p.uniqueHelperNames != nil) &&
+		p.emitContext.EmitFlags(node.AsNode())&EFHelperName != 0 {
+		if p.externalHelpersModuleName != nil {
+			// Substitute `__helper` with `tslib_1.__helper`
+			helper := p.emitContext.Factory.NewPropertyAccessExpression(
+				p.externalHelpersModuleName.Clone(p.emitContext.Factory),
+				nil, /*questionDotToken*/
+				node.Clone(p.emitContext.Factory),
+				ast.NodeFlagsNone,
+			)
+			p.emitContext.AssignCommentAndSourceMapRanges(helper, node.AsNode())
+			p.emitPropertyAccessExpression(helper.AsPropertyAccessExpression())
+			return
+		}
+		if p.uniqueHelperNames != nil {
+			// Substitute `__helper` with `__helper_1` if there is a conflict in an ES module.
+			helperName := p.getUniqueHelperName(node.Text)
+			p.emitContext.AssignCommentAndSourceMapRanges(helperName, node.AsNode())
+			node = helperName.AsIdentifier()
+		}
+	}
+
 	p.enterNode(node.AsNode())
 	p.emitIdentifierText(node)
 	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitBindingIdentifier(node *ast.Identifier) {
+	if p.uniqueHelperNames != nil &&
+		p.emitContext.EmitFlags(node.AsNode())&EFHelperName != 0 {
+		// Substitute `__helper` with `__helper_1` if there is a conflict in an ES module.
+		helperName := p.getUniqueHelperName(node.Text)
+		p.emitContext.AssignCommentAndSourceMapRanges(helperName, node.AsNode())
+		node = helperName.AsIdentifier()
+	}
+
 	p.enterNode(node.AsNode())
 	p.emitIdentifierText(node)
 	p.exitNode(node.AsNode())
@@ -4365,12 +4408,22 @@ func (p *Printer) EmitSourceFile(sourceFile *ast.SourceFile) string {
 
 func (p *Printer) setSourceFile(sourceFile *ast.SourceFile) {
 	p.currentSourceFile = sourceFile
+	p.uniqueHelperNames = nil
+	p.externalHelpersModuleName = nil
+	if sourceFile != nil {
+		if p.emitContext.EmitFlags(p.emitContext.MostOriginal(sourceFile.AsNode()))&EFExternalHelpers != 0 {
+			p.uniqueHelperNames = make(map[string]*ast.IdentifierNode)
+		}
+		p.externalHelpersModuleName = p.emitContext.GetExternalHelpersModuleName(sourceFile)
+	}
+
 	// !!!
 }
 
 func (p *Printer) Write(node *ast.Node, sourceFile *ast.SourceFile, writer EmitTextWriter) {
 	savedCurrentSourceFile := p.currentSourceFile
 	savedWriter := p.writer
+	savedUniqueHelperNames := p.uniqueHelperNames
 
 	p.setSourceFile(sourceFile)
 	p.writer = writer
@@ -4555,6 +4608,7 @@ func (p *Printer) Write(node *ast.Node, sourceFile *ast.SourceFile, writer EmitT
 
 	p.writer = savedWriter
 	p.currentSourceFile = savedCurrentSourceFile
+	p.uniqueHelperNames = savedUniqueHelperNames
 }
 
 //

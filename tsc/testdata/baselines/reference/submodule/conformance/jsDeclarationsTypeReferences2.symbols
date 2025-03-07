@@ -16,3 +16,14 @@ module.exports = {
 
 };
 
+=== something.ts ===
+export const o = {
+>o : Symbol(o, Decl(something.ts, 0, 12))
+
+    a: 1,
+>a : Symbol(a, Decl(something.ts, 0, 18))
+
+    m: 1
+>m : Symbol(m, Decl(something.ts, 1, 9))
+}
+

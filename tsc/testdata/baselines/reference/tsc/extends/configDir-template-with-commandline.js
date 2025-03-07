@@ -165,13 +165,22 @@ src/secondary.ts(4,20): error TS2307: Cannot find module 'other/sometype2' or it
 Found 1 error in src/secondary.ts[90m:4[0m
 
 //// [/home/src/projects/myproject/${configDir}/outDir/main.js] new file
-export const y = 10;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.y = void 0;
+exports.y = 10;
 
 //// [/home/src/projects/myproject/${configDir}/outDir/src/secondary.js] new file
-export const z = 10;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.z = void 0;
+exports.z = 10;
 
 //// [/home/src/projects/myproject/${configDir}/outDir/types/sometype.js] new file
-export const x = 10;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 10;
 
 //// [/home/src/projects/myproject/main.ts] no change
 //// [/home/src/projects/myproject/root2/other/sometype2/index.d.ts] no change

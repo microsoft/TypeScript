@@ -481,13 +481,12 @@ func tryRenameExternalModule(factory *ast.NodeFactory, moduleName *ast.LiteralEx
 }
 
 func rewriteModuleSpecifier(emitContext *printer.EmitContext, node *ast.Expression, compilerOptions *core.CompilerOptions) *ast.Expression {
-	factory := emitContext.Factory
 	if node == nil || !ast.IsStringLiteral(node) || !shouldRewriteModuleSpecifier(node.Text(), compilerOptions) {
 		return node
 	}
 	updatedText := tspath.ChangeExtension(node.Text(), core.GetOutputExtension(node.Text(), compilerOptions.Jsx))
 	if updatedText != node.Text() {
-		updated := factory.NewStringLiteral(updatedText)
+		updated := emitContext.Factory.NewStringLiteral(updatedText)
 		// !!! set quote style
 		emitContext.SetOriginal(updated, node)
 		emitContext.AssignCommentAndSourceMapRanges(updated, node)
@@ -521,11 +520,37 @@ func containsDynamicImport(emitContext *printer.EmitContext, node *ast.SourceFil
 		node = original.AsSourceFile()
 	}
 	if node.Flags&ast.NodeFlagsPossiblyContainsDynamicImport != 0 {
-		for _, node := range node.Imports {
-			if ast.IsImportCall(node) {
-				return true
-			}
-		}
+		return ast.ForEachDynamicImportOrRequireCall(node, false, false, func(node *ast.Node, _ *ast.Node) bool {
+			return ast.IsImportCall(node)
+		})
 	}
 	return false
+}
+
+func createEmptyImports(factory *ast.NodeFactory) *ast.Statement {
+	return factory.NewExportDeclaration(
+		nil,   /*modifiers*/
+		false, /*isTypeOnly*/
+		factory.NewNamedExports(factory.NewNodeList(nil)),
+		nil, /*moduleSpecifier*/
+		nil, /*attributes*/
+	)
+}
+
+// Used in the module transformer to check if an expression is reasonably without sideeffect,
+//
+//	and thus better to copy into multiple places rather than to cache in a temporary variable
+//	- this is mostly subjective beyond the requirement that the expression not be sideeffecting
+func isSimpleCopiableExpression(expression *ast.Expression) bool {
+	return ast.IsStringLiteralLike(expression) ||
+		ast.IsNumericLiteral(expression) ||
+		ast.IsKeywordKind(expression.Kind) ||
+		ast.IsIdentifier(expression)
+}
+
+// A simple inlinable expression is an expression which can be copied into multiple locations
+// without risk of repeating any sideeffects and whose value could not possibly change between
+// any such locations
+func isSimpleInlineableExpression(expression *ast.Expression) bool {
+	return !ast.IsIdentifier(expression) && isSimpleCopiableExpression(expression)
 }

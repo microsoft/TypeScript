@@ -11,3 +11,7 @@ if (a) {
 >x : Symbol(x, Decl(bar.js, 2, 5))
 >a : Symbol(a, Decl(bar.js, 0, 7))
 }
+=== /foo.d.ts ===
+export const a: number | null;
+>a : Symbol(a, Decl(foo.d.ts, 0, 12))
+

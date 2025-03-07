@@ -1,7 +1,9 @@
 // Package stringutil Exports common rune utilities for parsing and emitting javascript
 package stringutil
 
-import "unicode/utf8"
+import (
+	"unicode/utf8"
+)
 
 func IsWhiteSpaceLike(ch rune) bool {
 	return IsWhiteSpaceSingleLine(ch) || IsLineBreak(ch)

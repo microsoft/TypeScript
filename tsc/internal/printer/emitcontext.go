@@ -603,6 +603,24 @@ func (c *EmitContext) NewExportStarHelper(moduleExpression *ast.Expression, expo
 	)
 }
 
+// Allocates a new Call expression to the `__rewriteRelativeImportExtension` helper.
+func (c *EmitContext) NewRewriteRelativeImportExtensionsHelper(firstArgument *ast.Node, preserveJsx bool) *ast.Expression {
+	c.RequestEmitHelper(rewriteRelativeImportExtensionsHelper)
+	var arguments []*ast.Expression
+	if preserveJsx {
+		arguments = []*ast.Expression{firstArgument, c.Factory.NewToken(ast.KindTrueKeyword)}
+	} else {
+		arguments = []*ast.Expression{firstArgument}
+	}
+	return c.Factory.NewCallExpression(
+		c.NewUnscopedHelperName("__rewriteRelativeImportExtension"),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		c.Factory.NewNodeList(arguments),
+		ast.NodeFlagsNone,
+	)
+}
+
 //
 // Original Node Tracking
 //
@@ -622,7 +640,7 @@ func (c *EmitContext) SetOriginal(node *ast.Node, original *ast.Node) {
 	existing, ok := c.original[node]
 	if !ok {
 		c.original[node] = original
-		if emitNode := c.emitNodes.TryGet(node); emitNode != nil {
+		if emitNode := c.emitNodes.TryGet(original); emitNode != nil {
 			c.emitNodes.Get(node).copyFrom(emitNode)
 		}
 	} else if existing != original {

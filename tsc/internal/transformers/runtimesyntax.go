@@ -732,7 +732,7 @@ func (tx *RuntimeSyntaxTransformer) visitExpressionIdentifier(node *ast.Identifi
 	if (tx.currentEnum != nil || tx.currentNamespace != nil) && !isGeneratedIdentifier(tx.emitContext, node) && !isLocalName(tx.emitContext, node) {
 		location := tx.emitContext.MostOriginal(node.AsNode())
 		container := tx.resolver.GetReferencedExportContainer(location, false /*prefixLocals*/)
-		if container != nil && (ast.IsEnumDeclaration(container) || ast.IsModuleDeclaration(container)) && contains(location, container) {
+		if container != nil && (ast.IsEnumDeclaration(container) || ast.IsModuleDeclaration(container)) && container.Contains(location) {
 			containerName := tx.getNamespaceContainerName(container)
 
 			memberName := node.Clone(tx.factory)
@@ -781,14 +781,4 @@ func getInnermostModuleDeclarationFromDottedModule(moduleDeclaration *ast.Module
 		moduleDeclaration = moduleDeclaration.Body.AsModuleDeclaration()
 	}
 	return moduleDeclaration
-}
-
-func contains(descendant *ast.Node, ancestor *ast.Node) bool {
-	for descendant != nil {
-		if descendant == ancestor {
-			return true
-		}
-		descendant = descendant.Parent
-	}
-	return false
 }

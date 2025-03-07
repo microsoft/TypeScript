@@ -135,7 +135,10 @@ CompilerOptions::{
 }
 Output::
 //// [/home/src/workspaces/project/first.js] new file
-export const Key = Symbol();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Key = void 0;
+exports.Key = Symbol();
 
 //// [/home/src/workspaces/project/first.ts] no change
 

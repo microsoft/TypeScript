@@ -7,3 +7,17 @@ const items = require("./some-mod")();
 module.exports = items;
 >items : Symbol(items, Decl(index.js, 0, 5))
 
+=== some-mod.d.ts ===
+interface Item {
+>Item : Symbol(Item, Decl(some-mod.d.ts, 0, 0))
+
+    x: string;
+>x : Symbol(x, Decl(some-mod.d.ts, 0, 16))
+}
+declare function getItems(): Item[];
+>getItems : Symbol(getItems, Decl(some-mod.d.ts, 2, 1))
+>Item : Symbol(Item, Decl(some-mod.d.ts, 0, 0))
+
+export = getItems;
+>getItems : Symbol(getItems, Decl(some-mod.d.ts, 2, 1))
+

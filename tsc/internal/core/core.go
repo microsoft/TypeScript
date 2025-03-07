@@ -377,6 +377,11 @@ func Must[T any](v T, err error) T {
 	return v
 }
 
+// Extracts the first value of a multi-value return.
+func FirstResult[T1 any](t1 T1, _ ...any) T1 {
+	return t1
+}
+
 func StringifyJson(input any, prefix string, indent string) (string, error) {
 	var buf bytes.Buffer
 	encoder := json.NewEncoder(&buf)

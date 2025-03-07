@@ -30,40 +30,12 @@ func collectExternalModuleReferences(file *ast.SourceFile) {
 		collectModuleReferences(file, node, false /*inAmbientModule*/)
 	}
 
-	if file.Flags&ast.NodeFlagsPossiblyContainsDynamicImport != 0 {
-		collectDynamicImportOrRequireOrJsDocImportCalls(file)
-	}
-}
-
-func collectDynamicImportOrRequireOrJsDocImportCalls(file *ast.SourceFile) {
-	lastIndex := 0
-	for {
-		index := strings.Index(file.Text[lastIndex:], "import")
-		if index == -1 {
-			break
-		}
-		index += lastIndex
-		node := getNodeAtPosition(file, index, false /* !!! isJavaScriptFile */)
-		// if isJavaScriptFile && isRequireCall(node /*requireStringLiteralLikeArgument*/, true) {
-		// 	setParentRecursive(node /*incremental*/, false) // we need parent data on imports before the program is fully bound, so we ensure it's set here
-		// 	imports = append(imports, node.arguments[0])
-		// } else
-		if ast.IsImportCall(node) && len(node.Arguments()) >= 1 && ast.IsStringLiteralLike(node.Arguments()[0]) {
-			// we have to check the argument list has length of at least 1. We will still have to process these even though we have parsing error.
+	if file.Flags&ast.NodeFlagsPossiblyContainsDynamicImport != 0 || ast.IsInJSFile(file.AsNode()) {
+		ast.ForEachDynamicImportOrRequireCall(file /*includeTypeSpaceImports*/, true /*requireStringLiteralLikeArgument*/, true, func(node *ast.Node, moduleSpecifier *ast.Expression) bool {
 			ast.SetParentInChildren(node) // we need parent data on imports before the program is fully bound, so we ensure it's set here
-			file.Imports = append(file.Imports, node.Arguments()[0])
-		} else if ast.IsLiteralImportTypeNode(node) {
-			ast.SetParentInChildren(node) // we need parent data on imports before the program is fully bound, so we ensure it's set here
-			file.Imports = append(file.Imports, node.AsImportTypeNode().Argument.AsLiteralTypeNode().Literal)
-		}
-		// else if isJavaScriptFile && isJSDocImportTag(node) {
-		// 	const moduleNameExpr = getExternalModuleName(node)
-		// 	if moduleNameExpr && isStringLiteral(moduleNameExpr) && moduleNameExpr.text {
-		// 		setParentRecursive(node /*incremental*/, false)
-		// 		imports = append(imports, moduleNameExpr)
-		// 	}
-		// }
-		lastIndex = min(index+len("import"), len(file.Text))
+			file.Imports = append(file.Imports, moduleSpecifier)
+			return false
+		})
 	}
 }
 
@@ -119,39 +91,6 @@ func collectModuleReferences(file *ast.SourceFile, node *ast.Statement, inAmbien
 			}
 		}
 	}
-}
-
-// Returns a token if position is in [start-of-leading-trivia, end), includes JSDoc only in JS files
-func getNodeAtPosition(file *ast.SourceFile, position int, isJavaScriptFile bool) *ast.Node {
-	current := file.AsNode()
-	for {
-		var child *ast.Node
-		if isJavaScriptFile /* && hasJSDocNodes(current) */ {
-			for _, jsDoc := range current.JSDoc(file) {
-				if nodeContainsPosition(jsDoc, position) {
-					child = jsDoc
-					break
-				}
-			}
-		}
-		if child == nil {
-			current.ForEachChild(func(node *ast.Node) bool {
-				if nodeContainsPosition(node, position) {
-					child = node
-					return true
-				}
-				return false
-			})
-		}
-		if child == nil {
-			return current
-		}
-		current = child
-	}
-}
-
-func nodeContainsPosition(node *ast.Node, position int) bool {
-	return node.Kind >= ast.KindFirstNode && node.Pos() <= position && (position < node.End() || position == node.End() && node.Kind == ast.KindEndOfFile)
 }
 
 var unprefixedNodeCoreModules = map[string]bool{

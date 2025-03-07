@@ -691,6 +691,22 @@ func (n *Node) Label() *Node {
 	panic("Unhandled case in Node.Label: " + n.Kind.String())
 }
 
+// Determines if `n` contains `descendant` by walking up the `Parent` pointers from `descendant`. This method panics if
+// `descendant` or one of its ancestors is not parented except when that node is a `SourceFile`.
+func (n *Node) Contains(descendant *Node) bool {
+	for descendant != nil {
+		if descendant == n {
+			return true
+		}
+		parent := descendant.Parent
+		if parent == nil && !IsSourceFile(descendant) {
+			panic("descendant is not parented")
+		}
+		descendant = parent
+	}
+	return false
+}
+
 // Node casts
 
 func (n *Node) AsIdentifier() *Identifier {
@@ -1589,6 +1605,7 @@ type (
 	JsxClosingElementNode           = Node
 	JsxOpeningFragmentNode          = Node
 	JsxClosingFragmentNode          = Node
+	SourceFileNode                  = Node
 )
 
 type (
@@ -8725,28 +8742,41 @@ func (node *SourceFile) VisitEachChild(v *NodeVisitor) *Node {
 	return v.Factory.UpdateSourceFile(node, v.visitTopLevelStatements(node.Statements))
 }
 
+func (node *SourceFile) copyFrom(other *SourceFile) {
+	// Do not copy fields set by NewSourceFile (Text, FileName, Path, or Statements)
+	node.LanguageVersion = other.LanguageVersion
+	node.LanguageVariant = other.LanguageVariant
+	node.ScriptKind = other.ScriptKind
+	node.IsDeclarationFile = other.IsDeclarationFile
+	node.HasNoDefaultLib = other.HasNoDefaultLib
+	node.UsesUriStyleNodeCoreModules = other.UsesUriStyleNodeCoreModules
+	node.Identifiers = other.Identifiers
+	node.Imports = other.Imports
+	node.ModuleAugmentations = other.ModuleAugmentations
+	node.AmbientModuleNames = other.AmbientModuleNames
+	node.CommentDirectives = other.CommentDirectives
+	node.Pragmas = other.Pragmas
+	node.ReferencedFiles = other.ReferencedFiles
+	node.TypeReferenceDirectives = other.TypeReferenceDirectives
+	node.LibReferenceDirectives = other.LibReferenceDirectives
+	node.ImpliedNodeFormat = other.ImpliedNodeFormat
+	node.CommonJsModuleIndicator = other.CommonJsModuleIndicator
+	node.ExternalModuleIndicator = other.ExternalModuleIndicator
+	node.JsGlobalAugmentations = other.JsGlobalAugmentations
+	node.Flags |= other.Flags
+}
+
 func (node *SourceFile) Clone(f *NodeFactory) *Node {
 	updated := f.NewSourceFile(node.Text, node.FileName(), node.Path(), node.Statements)
 	newFile := updated.AsSourceFile()
-	newFile.LanguageVersion = node.LanguageVersion
-	newFile.LanguageVariant = node.LanguageVariant
-	newFile.ScriptKind = node.ScriptKind
-	newFile.IsDeclarationFile = node.IsDeclarationFile
-	newFile.CommonJsModuleIndicator = node.CommonJsModuleIndicator
-	newFile.ExternalModuleIndicator = node.ExternalModuleIndicator
+	newFile.copyFrom(node)
 	return cloneNode(updated, node.AsNode(), f.hooks)
 }
 
 func (f *NodeFactory) UpdateSourceFile(node *SourceFile, statements *StatementList) *Node {
 	if statements != node.Statements {
 		updated := f.NewSourceFile(node.Text, node.fileName, node.path, statements).AsSourceFile()
-		updated.LanguageVersion = node.LanguageVersion
-		updated.LanguageVariant = node.LanguageVariant
-		updated.ScriptKind = node.ScriptKind
-		updated.IsDeclarationFile = node.IsDeclarationFile
-		updated.CommonJsModuleIndicator = node.CommonJsModuleIndicator
-		updated.ExternalModuleIndicator = node.ExternalModuleIndicator
-		// TODO: Include other fields or use .original to get to original source file
+		updated.copyFrom(node)
 		return updateNode(updated.AsNode(), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()

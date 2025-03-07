@@ -11,7 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil/parsetestutil"
 )
 
-func TestCommonJSTransformer(t *testing.T) {
+func TestCommonJSModuleTransformer(t *testing.T) {
 	t.Parallel()
 	data := []struct {
 		title   string
@@ -841,6 +841,59 @@ exports.a = void 0;
 exports.a = (0, function () { });
 (0, exports.a)();`,
 		},
+		{
+			title: "CallExpression#3",
+			input: `export{};
+import("./other.ts");`,
+			output: `"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+Promise.resolve().then(() => require("./other.js"));`,
+			options: core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue},
+		},
+		{
+			title: "CallExpression#4",
+			input: `export{};
+import(x);`,
+			output: `"use strict";
+var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExtension) || function (path, preserveJsx) {
+    if (typeof path === "string" && /^\.\.?\//.test(path)) {
+        return path.replace(/\.(tsx)$|((?:\.d)?)((?:\.[^./]+?)?)\.([cm]?)ts$/i, function (m, tsx, d, ext, cm) {
+            return tsx ? preserveJsx ? ".jsx" : ".js" : d && (!ext || !cm) ? m : (d + ext + "." + cm.toLowerCase() + "js");
+        });
+    }
+    return path;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+Promise.resolve(` + "`" + `${__rewriteRelativeImportExtension(x)}` + "`" + `).then(s => require(s));`,
+			options: core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue},
+		},
+		{
+			title: "CallExpression#5",
+			input: `export{};
+import(x);`,
+			output: `"use strict";
+var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExtension) || function (path, preserveJsx) {
+    if (typeof path === "string" && /^\.\.?\//.test(path)) {
+        return path.replace(/\.(tsx)$|((?:\.d)?)((?:\.[^./]+?)?)\.([cm]?)ts$/i, function (m, tsx, d, ext, cm) {
+            return tsx ? preserveJsx ? ".jsx" : ".js" : d && (!ext || !cm) ? m : (d + ext + "." + cm.toLowerCase() + "js");
+        });
+    }
+    return path;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+Promise.resolve(` + "`" + `${__rewriteRelativeImportExtension(x, true)}` + "`" + `).then(s => require(s));`,
+			options: core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue, Jsx: core.JsxEmitPreserve},
+		},
+		{
+			title: "CallExpression#6",
+			input: `export{};
+import(x);`,
+			output: `"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = require("tslib");
+Promise.resolve(` + "`" + `${tslib_1.__rewriteRelativeImportExtension(x)}` + "`" + `).then(s => require(s));`,
+			options: core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue, ImportHelpers: core.TSTrue},
+		},
 
 		// TaggedTemplateExpression
 		{
@@ -883,6 +936,20 @@ exports.a = void 0;
 exports.a = 0;
 exports.a;`,
 		},
+
+		{
+			title: "Other",
+			input: `export const a = class {
+    p = 10;
+};`,
+			output: `"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = void 0;
+const a = class {
+    p = 10;
+};
+exports.a = a;`,
+		},
 	}
 	for _, rec := range data {
 		t.Run(rec.title, func(t *testing.T) {
@@ -905,7 +972,7 @@ exports.a;`,
 			emitContext := printer.NewEmitContext()
 			resolver := binder.NewReferenceResolver(binder.ReferenceResolverHooks{})
 			file = NewRuntimeSyntaxTransformer(emitContext, &compilerOptions, resolver).TransformSourceFile(file)
-			file = NewCommonJsTransformer(emitContext, &compilerOptions, resolver).TransformSourceFile(file)
+			file = NewCommonJSModuleTransformer(emitContext, &compilerOptions, resolver).TransformSourceFile(file)
 			emittestutil.CheckEmit(t, emitContext, file, rec.output)
 		})
 	}

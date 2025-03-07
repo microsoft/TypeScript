@@ -2,10 +2,12 @@ package ast
 
 import (
 	"slices"
+	"strings"
 	"sync"
 	"sync/atomic"
 
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 // Atomic ids
@@ -1449,8 +1451,26 @@ func IsEffectiveExternalModule(node *SourceFile, compilerOptions *core.CompilerO
 	return IsExternalModule(node) || (isCommonJSContainingModuleKind(compilerOptions.GetEmitModuleKind()) && node.CommonJsModuleIndicator != nil)
 }
 
+func IsEffectiveExternalModuleWorker(node *SourceFile, moduleKind core.ModuleKind) bool {
+	return IsExternalModule(node) || (isCommonJSContainingModuleKind(moduleKind) && node.CommonJsModuleIndicator != nil)
+}
+
 func isCommonJSContainingModuleKind(kind core.ModuleKind) bool {
 	return kind == core.ModuleKindCommonJS || kind == core.ModuleKindNode16 || kind == core.ModuleKindNodeNext
+}
+
+func IsExternalModuleIndicator(node *Statement) bool {
+	return HasSyntacticModifier(node, ModifierFlagsExport) ||
+		IsImportEqualsDeclaration(node) && IsExternalModuleReference(node.AsImportEqualsDeclaration().ModuleReference) ||
+		IsImportDeclaration(node) || IsExportAssignment(node) || IsExportDeclaration(node)
+}
+
+func IsExportNamespaceAsDefaultDeclaration(node *Node) bool {
+	if IsExportDeclaration(node) {
+		decl := node.AsExportDeclaration()
+		return IsNamespaceExport(decl.ExportClause) && ModuleExportNameIsDefault(decl.ExportClause.Name())
+	}
+	return false
 }
 
 func IsGlobalScopeAugmentation(node *Node) bool {
@@ -2293,7 +2313,20 @@ func GetEmitModuleFormatOfFileWorker(sourceFile *SourceFile, options *core.Compi
 }
 
 func GetImpliedNodeFormatForEmitWorker(sourceFile *SourceFile, options *core.CompilerOptions) core.ResolutionMode {
-	// !!!
+	moduleKind := options.GetEmitModuleKind()
+	if core.ModuleKindNode16 <= moduleKind && moduleKind <= core.ModuleKindNodeNext {
+		return sourceFile.ImpliedNodeFormat
+	}
+	if sourceFile.ImpliedNodeFormat == core.ModuleKindCommonJS &&
+		( /*sourceFile.packageJsonScope.contents.packageJsonContent.type == "commonjs" ||*/ // !!!
+		tspath.FileExtensionIsOneOf(sourceFile.FileName(), []string{tspath.ExtensionCjs, tspath.ExtensionCts})) {
+		return core.ModuleKindCommonJS
+	}
+	if sourceFile.ImpliedNodeFormat == core.ModuleKindESNext &&
+		( /*sourceFile.packageJsonScope?.contents.packageJsonContent.type === "module" ||*/ // !!!
+		tspath.FileExtensionIsOneOf(sourceFile.fileName, []string{tspath.ExtensionMjs, tspath.ExtensionMts})) {
+		return core.ModuleKindESNext
+	}
 	return core.ModuleKindNone
 }
 
@@ -2348,4 +2381,115 @@ func IsAliasSymbolDeclaration(node *Node) bool {
 
 func IsParseTreeNode(node *Node) bool {
 	return node.Flags&NodeFlagsSynthesized == 0
+}
+
+// Returns a token if position is in [start-of-leading-trivia, end), includes JSDoc only in JS files
+func GetNodeAtPosition(file *SourceFile, position int, isJavaScriptFile bool) *Node {
+	current := file.AsNode()
+	for {
+		var child *Node
+		if isJavaScriptFile {
+			for _, jsDoc := range current.JSDoc(file) {
+				if nodeContainsPosition(jsDoc, position) {
+					child = jsDoc
+					break
+				}
+			}
+		}
+		if child == nil {
+			current.ForEachChild(func(node *Node) bool {
+				if nodeContainsPosition(node, position) {
+					child = node
+					return true
+				}
+				return false
+			})
+		}
+		if child == nil {
+			return current
+		}
+		current = child
+	}
+}
+
+func nodeContainsPosition(node *Node, position int) bool {
+	return node.Kind >= KindFirstNode && node.Pos() <= position && (position < node.End() || position == node.End() && node.Kind == KindEndOfFile)
+}
+
+func findImportOrRequire(text string, start int) (index int, size int) {
+	index = max(start, 0)
+	n := len(text)
+	for index < n {
+		next := strings.IndexAny(text[index:], "ir")
+		if next < 0 {
+			break
+		}
+		index += next
+
+		var expected string
+		if text[index] == 'i' {
+			size = 6
+			expected = "import"
+		} else {
+			size = 7
+			expected = "require"
+		}
+		if index+size <= n && text[index:index+size] == expected {
+			return
+		}
+		index++
+	}
+
+	return -1, 0
+}
+
+func ForEachDynamicImportOrRequireCall(
+	file *SourceFile,
+	includeTypeSpaceImports bool,
+	requireStringLiteralLikeArgument bool,
+	cb func(node *Node, argument *Expression) bool,
+) bool {
+	isJavaScriptFile := IsInJSFile(file.AsNode())
+	lastIndex, size := findImportOrRequire(file.Text, 0)
+	for lastIndex >= 0 {
+		node := GetNodeAtPosition(file, lastIndex, isJavaScriptFile && includeTypeSpaceImports)
+		if isJavaScriptFile && IsRequireCall(node, requireStringLiteralLikeArgument) {
+			if cb(node, node.Arguments()[0]) {
+				return true
+			}
+		} else if IsImportCall(node) && len(node.Arguments()) > 0 && (!requireStringLiteralLikeArgument || IsStringLiteralLike(node.Arguments()[0])) {
+			if cb(node, node.Arguments()[0]) {
+				return true
+			}
+		} else if includeTypeSpaceImports && IsLiteralImportTypeNode(node) {
+			if cb(node, node.AsImportTypeNode().Argument.AsLiteralTypeNode().Literal) {
+				return true
+			}
+		} else if includeTypeSpaceImports && node.Kind == KindJSDocImportTag {
+			moduleNameExpr := GetExternalModuleName(node)
+			if moduleNameExpr != nil && IsStringLiteral(moduleNameExpr) && moduleNameExpr.Text() != "" {
+				if cb(node, moduleNameExpr) {
+					return true
+				}
+			}
+		}
+		// skip past import/require
+		lastIndex += size
+		lastIndex, size = findImportOrRequire(file.Text, lastIndex)
+	}
+	return false
+}
+
+func IsRequireCall(node *Node, requireStringLiteralLikeArgument bool) bool {
+	if !IsCallExpression(node) {
+		return false
+	}
+	call := node.AsCallExpression()
+	if !IsIdentifier(call.Expression) || call.Expression.Text() != "require" {
+		return false
+	}
+	if len(call.Arguments.Nodes) != 1 {
+		return false
+	}
+	return !requireStringLiteralLikeArgument || IsStringLiteralLike(call.Arguments.Nodes[0])
 }
