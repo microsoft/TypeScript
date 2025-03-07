@@ -5,12 +5,14 @@
  export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(null as any); // line in question
  >CONTROLLER_CLASS : Symbol(CONTROLLER_CLASS, Decl(usage.ts, 3, 12))
 ->BindingKey.create : Symbol(BindingKey.create, Decl(bindingkey.ts, 2, 21))
++>BindingKey.create : Symbol(create, Decl(bindingkey.ts, 2, 21))
  >BindingKey : Symbol(BindingKey, Decl(usage.ts, 1, 8))
 ->create : Symbol(BindingKey.create, Decl(bindingkey.ts, 2, 21))
++>create : Symbol(create, Decl(bindingkey.ts, 2, 21))
  >ControllerClass : Symbol(ControllerClass, Decl(usage.ts, 0, 8))
  
  === monorepo/context/src/value-promise.ts ===
-@@= skipped -21, +19 lines =@@
+@@= skipped -21, +21 lines =@@
  >T : Symbol(T, Decl(bindingkey.ts, 1, 24))
  
    readonly __type: T;

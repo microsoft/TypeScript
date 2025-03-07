@@ -9,10 +9,3 @@
  }
  === /cache/typescript-fsa/index.d.ts ===
  
-@@= skipped -19, +19 lines =@@
- === /p2/index.d.ts ===
- export const a: import("typescript-fsa").A;
- >a : Symbol(a, Decl(index.d.ts, 0, 12))
-->A : Symbol(A, Decl(impl.d.ts, 0, 26))
- 
- 

@@ -33,7 +33,7 @@ function bar() { return "b"; }`,
 		testUnitData:         []*testUnit{testUnit1, testUnit2},
 		tsConfig:             nil,
 		tsConfigFileUnitData: nil,
-		symlinks:             nil,
+		symlinks:             make(map[string]string),
 	}
 	assert.DeepEqual(
 		t,

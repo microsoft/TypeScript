@@ -30,5 +30,7 @@ import * as pkg from "package-b";
 
 export const a = pkg.invoke();
 >a : Symbol(a, Decl(index.ts, 2, 12))
+>pkg.invoke : Symbol(invoke, Decl(index.d.ts, 0, 35))
 >pkg : Symbol(pkg, Decl(index.ts, 0, 6))
+>invoke : Symbol(invoke, Decl(index.d.ts, 0, 35))
 

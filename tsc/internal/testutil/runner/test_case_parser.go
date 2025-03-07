@@ -33,11 +33,14 @@ type testCaseContent struct {
 	testUnitData         []*testUnit
 	tsConfig             *tsoptions.ParsedCommandLine
 	tsConfigFileUnitData *testUnit
-	symlinks             any // !!!
+	symlinks             map[string]string
 }
 
 // Regex for parsing options in the format "@Alpha: Value of any sort"
-var optionRegex = regexp.MustCompile(`(?m)^\/{2}\s*@(\w+)\s*:\s*([^\r\n]*)`) // multiple matches on multiple lines
+var optionRegex = regexp.MustCompile(`(?m)^\/{2}\s*@(\w+)\s*:\s*([^\r\n]*)`)
+
+// Regex for parsing @link option
+var linkRegex = regexp.MustCompile(`(?m)^\/{2}\s*@link\s*:\s*([^\r\n]*)\s*->\s*([^\r\n]*)`)
 
 // Given a test file containing // @FileName directives,
 // return an array of named units of code to be added to an existing compiler instance.
@@ -51,15 +54,13 @@ func makeUnitsFromTest(code string, fileName string) testCaseContent {
 	var currentFileContent strings.Builder
 	var currentFileName string
 	currentDirectory := srcFolder
-	// var symlinks any
+	symlinks := make(map[string]string)
 
 	for _, line := range lines {
-		// !!!
-		// const possiblySymlinks = parseSymlinkFromTest(line, symlinks, vfs.srcFolder);
-		// if (possiblySymlinks) {
-		// 	symlinks = possiblySymlinks;
-		// }
-		// !!! should be else if
+		ok := parseSymlinkFromTest(line, symlinks)
+		if ok {
+			continue
+		}
 		if testMetaData := optionRegex.FindStringSubmatch(line); testMetaData != nil {
 			// Comment line, check for global/file @options and record them
 			metaDataName := strings.ToLower(testMetaData[1])
@@ -156,6 +157,7 @@ func makeUnitsFromTest(code string, fileName string) testCaseContent {
 		testUnitData:         testUnits,
 		tsConfig:             tsConfig,
 		tsConfigFileUnitData: tsConfigFileUnitData,
+		symlinks:             symlinks,
 	}
 }
 
@@ -167,4 +169,14 @@ func extractCompilerSettings(content string) rawCompilerSettings {
 	}
 
 	return opts
+}
+
+func parseSymlinkFromTest(line string, symlinks map[string]string) bool {
+	linkMetaData := linkRegex.FindStringSubmatch(line)
+	if len(linkMetaData) == 0 {
+		return false
+	}
+
+	symlinks[strings.TrimSpace(linkMetaData[2])] = strings.TrimSpace(linkMetaData[1])
+	return true
 }
