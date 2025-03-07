@@ -85,10 +85,9 @@ func (vfs *wrappedFS) Stat(path string) vfs.FileInfo {
 		if rest == "" || rest == "libs" {
 			return &fileInfo{name: rest, mode: fs.ModeDir}
 		}
-		if libName, ok := strings.CutPrefix(rest, "libs/"); ok {
-			if lib, ok := embeddedContents[libName]; ok {
-				return &fileInfo{name: libName, size: int64(len(lib))}
-			}
+		if lib, ok := embeddedContents[rest]; ok {
+			libName, _ := strings.CutPrefix(rest, "libs/")
+			return &fileInfo{name: libName, size: int64(len(lib))}
 		}
 		return nil
 	}

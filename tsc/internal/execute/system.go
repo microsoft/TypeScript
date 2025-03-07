@@ -2,6 +2,7 @@ package execute
 
 import (
 	"io"
+	"time"
 
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
@@ -9,6 +10,7 @@ import (
 type System interface {
 	Writer() io.Writer
 	EndWrite() // needed for testing
+	Now() time.Time
 	FS() vfs.FS
 	DefaultLibraryPath() string
 	GetCurrentDirectory() string

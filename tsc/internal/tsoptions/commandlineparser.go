@@ -46,8 +46,8 @@ func ParseCommandLine(
 	}
 	parser := parseCommandLineWorker(CompilerOptionsDidYouMeanDiagnostics, commandLine, host.FS())
 	optionsWithAbsolutePaths := convertToOptionsWithAbsolutePaths(parser.options, commandLineCompilerOptionsMap, host.GetCurrentDirectory())
-	compilerOptions := convertMapToOptions(commandLineCompilerOptionsMap, optionsWithAbsolutePaths, host.GetCurrentDirectory(), &compilerOptionsParser{&core.CompilerOptions{}}).CompilerOptions
-	watchOptions := convertMapToOptions(commandLineCompilerOptionsMap, optionsWithAbsolutePaths, host.GetCurrentDirectory(), &watchOptionsParser{&core.WatchOptions{}}).WatchOptions
+	compilerOptions := convertMapToOptions(commandLineCompilerOptionsMap, optionsWithAbsolutePaths, &compilerOptionsParser{&core.CompilerOptions{}}).CompilerOptions
+	watchOptions := convertMapToOptions(commandLineCompilerOptionsMap, optionsWithAbsolutePaths, &watchOptionsParser{&core.WatchOptions{}}).WatchOptions
 	return &ParsedCommandLine{
 		ParsedConfig: &core.ParsedOptions{
 			CompilerOptions: compilerOptions,

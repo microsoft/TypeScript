@@ -496,7 +496,7 @@ func commandLineOptionsToMap(options []*CommandLineOption) map[string]*CommandLi
 
 var commandLineCompilerOptionsMap map[string]*CommandLineOption = commandLineOptionsToMap(OptionsDeclarations)
 
-func convertMapToOptions[O optionParser](optionsNameMap map[string]*CommandLineOption, options *collections.OrderedMap[string, any], basePath string, result O) O {
+func convertMapToOptions[O optionParser](optionsNameMap map[string]*CommandLineOption, options *collections.OrderedMap[string, any], result O) O {
 	// this assumes any `key`, `value` pair in `options` will have `value` already be the correct type. this function should no error handling
 	for key, value := range options.Entries() {
 		result.ParseOption(key, value)
@@ -1179,8 +1179,9 @@ func parseJsonConfigFileContentWorker(
 			FileNames:         getFileNames(basePathForFileNames),
 			ProjectReferences: getProjectReferences(basePathForFileNames),
 		},
-		Raw:    parsedConfig.raw,
-		Errors: errors,
+		ConfigFile: sourceFile,
+		Raw:        parsedConfig.raw,
+		Errors:     errors,
 	}
 }
 

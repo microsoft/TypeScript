@@ -11,37 +11,24 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil/baseline"
 )
 
-type testTscCompile struct {
-	commandLineArgs       []string
-	sys                   execute.System
-	modifySystem          func(fs execute.System)
-	computeDtsSignatures  bool
-	getWrittenFiles       bool
-	baselineSourceMap     bool
-	baselineReadFileCalls bool
-	baselinePrograms      bool
-	baselineDependencies  bool
-	compile               func(sys execute.System) // CommandLineCallbacks["getPrograms"] tscWatchSystem
-}
-
 type testTscEdit struct {
-	edit            func(execute.System)
 	caption         string
 	commandLineArgs []string
-	// todo explaination func
+	edit            func(execute.System)
 }
 
 type tscInput struct {
-	scenario        string
 	subScenario     string
 	commandLineArgs []string
 	sys             *testSys
-	// edits       []*testTscEdit
+
+	// for watch tests
+	data map[string]string
 }
 
-func (test *tscInput) verify(t *testing.T) {
+func (test *tscInput) verify(t *testing.T, scenario string) {
 	t.Helper()
-	t.Run(test.getTestName(), func(t *testing.T) {
+	t.Run(test.getTestName(scenario), func(t *testing.T) {
 		t.Parallel()
 		t.Run("baseline for the tsc compiles", func(t *testing.T) {
 			t.Parallel()
@@ -56,38 +43,28 @@ func (test *tscInput) verify(t *testing.T) {
 			baselineBuilder.Write(compilerOptionsString)
 
 			test.sys.serializeState(baselineBuilder)
-			options, name := test.getBaselineName("")
+			options, name := test.getBaselineName(scenario, false, "")
 			baseline.Run(t, name, baselineBuilder.String(), options)
 		})
 	})
-	// skip edits for now
-	// todo: refactor edits into a different function
-	// if input.edits != nil && len(input.edits) > 0 {
-	// t.Run("tsc invocation after edit and clean build correctness", func(t *testing.T) {
-	// 	for i, edit := range input.edits {
-	// 		t.Run(edit.caption, func(t *testing.T) {
-	// 			// todo
-	// 		})
-	// 	}
-	// })
-	// }
 }
 
-func (test *tscInput) getTestName() string {
-	return "tsc " + strings.Join(test.commandLineArgs, " ") + " " + test.scenario + ":: " + test.subScenario
+func (test *tscInput) getTestName(scenario string) string {
+	return "tsc " + strings.Join(test.commandLineArgs, " ") + " " + scenario + ":: " + test.subScenario
 }
 
-func (test *tscInput) getBaselineName(suffix string) (baseline.Options, string) {
+func (test *tscInput) getBaselineName(scenario string, watch bool, suffix string) (baseline.Options, string) {
 	commandName := "tsc"
 	// todo build
 	// if isBuildCommand(v.data.commandLineArgs) {
 	// 	commandName = "tsbuild"
 	// }
-	watch := ""
-	// todo watch
-	// if isWatch(v.data.commandLineArgs) { watch = "Watch" }
+	w := ""
+	if watch {
+		w = "Watch"
+	}
 
-	return baseline.Options{Subfolder: filepath.Join(commandName+watch, test.scenario)},
+	return baseline.Options{Subfolder: filepath.Join(commandName+w, scenario)},
 		strings.ReplaceAll(test.subScenario, " ", "-") + suffix + ".js"
 }
 

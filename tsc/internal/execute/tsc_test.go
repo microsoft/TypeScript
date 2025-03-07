@@ -16,7 +16,6 @@ func TestTsc(t *testing.T) {
 
 	testCases := []*tscInput{
 		{
-			scenario:    "commandLine",
 			subScenario: "show help with ExitStatus.DiagnosticsPresent_OutputsSkipped",
 			sys:         newTestSys(nil, ""),
 			// , {
@@ -25,13 +24,11 @@ func TestTsc(t *testing.T) {
 			commandLineArgs: nil,
 		},
 		{
-			scenario:        "commandLine",
 			subScenario:     "show help with ExitStatus.DiagnosticsPresent_OutputsSkipped when host can't provide terminal width",
 			sys:             newTestSys(nil, ""),
 			commandLineArgs: nil,
 		},
 		{
-			scenario:    "commandLine",
 			subScenario: "does not add color when NO_COLOR is set",
 			sys:         newTestSys(nil, ""),
 			// , {
@@ -40,7 +37,6 @@ func TestTsc(t *testing.T) {
 			commandLineArgs: nil,
 		},
 		{
-			scenario:    "commandLine",
 			subScenario: "does not add color when NO_COLOR is set",
 			sys:         newTestSys(nil, ""),
 			// , {
@@ -50,19 +46,16 @@ func TestTsc(t *testing.T) {
 			commandLineArgs: nil,
 		},
 		{
-			scenario:        "commandLine",
 			subScenario:     "when build not first argument",
 			sys:             newTestSys(nil, ""),
 			commandLineArgs: []string{"--verbose", "--build"},
 		},
 		{
-			scenario:        "commandLine",
 			subScenario:     "help",
 			sys:             newTestSys(nil, ""),
 			commandLineArgs: []string{"--help"},
 		},
 		{
-			scenario:        "commandLine",
 			subScenario:     "help all",
 			sys:             newTestSys(nil, ""),
 			commandLineArgs: []string{"--help", "--all"},
@@ -70,22 +63,20 @@ func TestTsc(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		testCase.verify(t)
+		testCase.verify(t, "commandLine")
 	}
 
 	(&tscInput{
-		scenario:        "commandLine",
 		subScenario:     "Parse --lib option with file name",
 		sys:             newTestSys(FileMap{"/home/src/workspaces/project/first.ts": `export const Key = Symbol()`}, ""),
 		commandLineArgs: []string{"--lib", "es6 ", "first.ts"},
-	}).verify(t)
+	}).verify(t, "commandLine")
 
 	(&tscInput{
-		scenario:        "commandLine",
 		subScenario:     "Parse enum type options",
 		sys:             newTestSys(nil, ""),
 		commandLineArgs: []string{"--moduleResolution", "nodenext ", "first.ts", "--module", "nodenext", "--target", "esnext", "--moduleDetection", "auto", "--jsx", "react", "--newLine", "crlf"},
-	}).verify(t)
+	}).verify(t, "commandLine")
 }
 
 func TestNoEmit(t *testing.T) {
@@ -97,7 +88,6 @@ func TestNoEmit(t *testing.T) {
 	}
 
 	(&tscInput{
-		scenario:    "noEmit",
 		subScenario: "when project has strict true",
 		sys: newTestSys(FileMap{
 			"/home/src/workspaces/project/tsconfig.json": `{
@@ -109,7 +99,7 @@ func TestNoEmit(t *testing.T) {
 			"/home/src/workspaces/project/class1.ts": `export class class1 {}`,
 		}, ""),
 		commandLineArgs: []string{"--noEmit"},
-	}).verify(t)
+	}).verify(t, "noEmit")
 }
 
 func TestProjectReferences(t *testing.T) {
@@ -121,7 +111,6 @@ func TestProjectReferences(t *testing.T) {
 	}
 
 	(&tscInput{
-		scenario:    "projectReferences",
 		subScenario: "when project references composite project with noEmit",
 		sys: newTestSys(FileMap{
 			"/home/src/workspaces/solution/src/utils/index.ts": "export const x = 10;",
@@ -130,19 +119,18 @@ func TestProjectReferences(t *testing.T) {
 		"composite": true,
 		"noEmit": true,
 	},
-})`,
+}`,
 			"/home/src/workspaces/solution/project/index.ts": `import { x } from "../utils";`,
 			"/home/src/workspaces/solution/project/tsconfig.json": `{
-		"references": [
-			{ "path": "../utils" },
-		],
-	}),
-},`,
+	"references": [
+		{ "path": "../utils" },
+	],
+}`,
 		},
 			"/home/src/workspaces/solution",
 		),
 		commandLineArgs: []string{"--p", "project"},
-	}).verify(t)
+	}).verify(t, "projectReferences")
 }
 
 func TestExtends(t *testing.T) {
@@ -204,23 +192,20 @@ func TestExtends(t *testing.T) {
 	}
 
 	cases := []tscInput{{
-		scenario:        "extends",
 		subScenario:     "configDir template",
 		sys:             newTestSys(extendsSysFiles, "/home/src/projects/myproject"),
 		commandLineArgs: []string{"--explainFiles"},
 	}, {
-		scenario:        "extends",
 		subScenario:     "configDir template showConfig",
 		sys:             newTestSys(extendsSysFiles, "/home/src/projects/myproject"),
 		commandLineArgs: []string{"--showConfig"},
 	}, {
-		scenario:        "extends",
 		subScenario:     "configDir template with commandline",
 		sys:             newTestSys(extendsSysFiles, "/home/src/projects/myproject"),
 		commandLineArgs: []string{"--explainFiles", "--outDir", "${configDir}/outDir"},
 	}}
 
 	for _, c := range cases {
-		c.verify(t)
+		c.verify(t, "extends")
 	}
 }

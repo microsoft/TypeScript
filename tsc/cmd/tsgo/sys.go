@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"runtime"
+	"time"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/core"
@@ -20,6 +21,10 @@ type osSys struct {
 	defaultLibraryPath string
 	newLine            string
 	cwd                string
+}
+
+func (s *osSys) Now() time.Time {
+	return time.Now()
 }
 
 func (s *osSys) FS() vfs.FS {

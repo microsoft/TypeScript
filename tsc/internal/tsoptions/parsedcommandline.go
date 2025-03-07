@@ -10,7 +10,7 @@ import (
 type ParsedCommandLine struct {
 	ParsedConfig *core.ParsedOptions
 
-	ConfigFile *ast.SourceFile // TsConfigSourceFile, used in Program and ExecuteCommandLine
+	ConfigFile *TsConfigSourceFile // TsConfigSourceFile, used in Program and ExecuteCommandLine
 	Errors     []*ast.Diagnostic
 	Raw        any
 	// WildcardDirectories map[string]watchDirectoryFlags
@@ -41,7 +41,7 @@ func (p *ParsedCommandLine) ProjectReferences() []core.ProjectReference {
 func (p *ParsedCommandLine) GetConfigFileParsingDiagnostics() []*ast.Diagnostic {
 	if p.ConfigFile != nil {
 		// todo: !!! should be ConfigFile.ParseDiagnostics, check if they are the same
-		return slices.Concat(p.ConfigFile.Diagnostics(), p.Errors)
+		return slices.Concat(p.ConfigFile.SourceFile.Diagnostics(), p.Errors)
 	}
 	return p.Errors
 }

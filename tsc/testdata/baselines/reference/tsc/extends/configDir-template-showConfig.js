@@ -2,6 +2,30 @@
 currentDirectory::/home/src/projects/myproject
 useCaseSensitiveFileNames::true
 Input::--showConfig
+//// [/home/src/projects/configs/first/tsconfig.json] new file
+{
+	"extends": "../second/tsconfig.json",
+	"include": ["${configDir}/src"],
+	"compilerOptions": {
+		"typeRoots": ["root1", "${configDir}/root2", "root3"],
+		"types": [],
+	},
+}
+//// [/home/src/projects/configs/second/tsconfig.json] new file
+{
+	"files": ["${configDir}/main.ts"],
+	"compilerOptions": {
+		"declarationDir": "${configDir}/decls",
+		"paths": {
+			"@myscope/*": ["${configDir}/types/*"],
+			"other/*": ["other/*"],
+		},
+		"baseUrl": "${configDir}",
+	},
+	"watchOptions": {
+		"excludeFiles": ["${configDir}/main.ts"],
+	},
+}
 //// [/home/src/projects/myproject/main.ts] new file
 
 	// some comment
@@ -160,6 +184,8 @@ CompilerOptions::{
 }
 Output::
 No output
+//// [/home/src/projects/configs/first/tsconfig.json] no change
+//// [/home/src/projects/configs/second/tsconfig.json] no change
 //// [/home/src/projects/myproject/main.ts] no change
 //// [/home/src/projects/myproject/root2/other/sometype2/index.d.ts] no change
 //// [/home/src/projects/myproject/src/secondary.ts] no change
