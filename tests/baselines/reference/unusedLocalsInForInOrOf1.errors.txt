@@ -1,0 +1,84 @@
+unusedLocalsInForInOrOf1.ts(2,12): error TS6133: 'f' is declared but its value is never read.
+unusedLocalsInForInOrOf1.ts(8,7): error TS6133: 'f' is declared but its value is never read.
+unusedLocalsInForInOrOf1.ts(14,12): error TS6133: 'g' is declared but its value is never read.
+unusedLocalsInForInOrOf1.ts(20,12): error TS6133: 'f2' is declared but its value is never read.
+unusedLocalsInForInOrOf1.ts(26,7): error TS6133: 'f2' is declared but its value is never read.
+unusedLocalsInForInOrOf1.ts(32,12): error TS6133: 'g2' is declared but its value is never read.
+unusedLocalsInForInOrOf1.ts(38,12): error TS6133: 'f3' is declared but its value is never read.
+unusedLocalsInForInOrOf1.ts(44,7): error TS6133: 'f3' is declared but its value is never read.
+unusedLocalsInForInOrOf1.ts(50,12): error TS6133: 'g3' is declared but its value is never read.
+
+
+==== unusedLocalsInForInOrOf1.ts (9 errors) ====
+    for (let x of [1, 2]) {
+      function f() {
+               ~
+!!! error TS6133: 'f' is declared but its value is never read.
+        x;
+      }
+    }
+    
+    for (let x of [1, 2]) {
+      let f = () => {
+          ~
+!!! error TS6133: 'f' is declared but its value is never read.
+        x;
+      };
+    }
+    
+    for (const x of [1, 2]) {
+      function g() {
+               ~
+!!! error TS6133: 'g' is declared but its value is never read.
+        x;
+      }
+    }
+    
+    for (let x in { a: 1, b: 2 }) {
+      function f2() {
+               ~~
+!!! error TS6133: 'f2' is declared but its value is never read.
+        x;
+      }
+    }
+    
+    for (let x in { a: 1, b: 2 }) {
+      let f2 = () => {
+          ~~
+!!! error TS6133: 'f2' is declared but its value is never read.
+        x;
+      };
+    }
+    
+    for (const x in { a: 1, b: 2 }) {
+      function g2() {
+               ~~
+!!! error TS6133: 'g2' is declared but its value is never read.
+        x;
+      }
+    }
+    
+    for (let { x } of [{ x: 1 }, { x: 2 }]) {
+      function f3() {
+               ~~
+!!! error TS6133: 'f3' is declared but its value is never read.
+        x;
+      }
+    }
+    
+    for (let { x } of [{ x: 1 }, { x: 2 }]) {
+      let f3 = () => {
+          ~~
+!!! error TS6133: 'f3' is declared but its value is never read.
+        x;
+      };
+    }
+    
+    for (const { x } of [{ x: 1 }, { x: 2 }]) {
+      function g3() {
+               ~~
+!!! error TS6133: 'g3' is declared but its value is never read.
+        x;
+      }
+    }
+    

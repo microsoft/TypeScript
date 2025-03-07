@@ -30452,7 +30452,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
         // the entire control flow graph from the variable's declaration (i.e. when the flow container and
         // declaration container are the same).
-        const isNeverInitialized = immediateDeclaration && isVariableDeclaration(immediateDeclaration) && !immediateDeclaration.initializer && !immediateDeclaration.exclamationToken && isMutableLocalVariableDeclaration(immediateDeclaration) && !isSymbolAssignedDefinitely(symbol);
+        const isNeverInitialized = immediateDeclaration && isVariableDeclaration(immediateDeclaration) && !isForInOrOfStatement(immediateDeclaration.parent.parent) && !immediateDeclaration.initializer && !immediateDeclaration.exclamationToken && isMutableLocalVariableDeclaration(immediateDeclaration) && !isSymbolAssignedDefinitely(symbol);
         const assumeInitialized = isParameter || isAlias ||
             (isOuterVariable && !isNeverInitialized) ||
             isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
