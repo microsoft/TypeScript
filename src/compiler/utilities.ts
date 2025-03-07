@@ -5658,17 +5658,17 @@ export const enum OperatorPrecedence {
     //     CoalesceExpression
     Conditional,
 
+    // LogicalORExpression:
+    //     LogicalANDExpression
+    //     LogicalORExpression `||` LogicalANDExpression
+    LogicalOR,
+
     // CoalesceExpression:
     //     CoalesceExpressionHead `??` BitwiseORExpression
     // CoalesceExpressionHead:
     //     CoalesceExpression
     //     BitwiseORExpression
-    Coalesce = Conditional, // NOTE: This is wrong
-
-    // LogicalORExpression:
-    //     LogicalANDExpression
-    //     LogicalORExpression `||` LogicalANDExpression
-    LogicalOR,
+    Coalesce = LogicalOR,
 
     // LogicalANDExpression:
     //     BitwiseORExpression

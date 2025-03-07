@@ -1,18 +1,17 @@
-nullishCoalescingOperator5.ts(6,6): error TS5076: '||' and '??' operations cannot be mixed without parentheses.
+nullishCoalescingOperator5.ts(6,1): error TS5076: '??' and '||' operations cannot be mixed without parentheses.
 nullishCoalescingOperator5.ts(9,1): error TS5076: '||' and '??' operations cannot be mixed without parentheses.
-nullishCoalescingOperator5.ts(12,6): error TS5076: '&&' and '??' operations cannot be mixed without parentheses.
-nullishCoalescingOperator5.ts(15,1): error TS5076: '&&' and '??' operations cannot be mixed without parentheses.
+nullishCoalescingOperator5.ts(12,6): error TS5076: '??' and '&&' operations cannot be mixed without parentheses.
 
 
-==== nullishCoalescingOperator5.ts (4 errors) ====
+==== nullishCoalescingOperator5.ts (3 errors) ====
     declare const a: string | undefined
     declare const b: string | undefined
     declare const c: string | undefined
     
     // should be a syntax error
     a ?? b || c;
-         ~~~~~~
-!!! error TS5076: '||' and '??' operations cannot be mixed without parentheses.
+    ~~~~~~
+!!! error TS5076: '??' and '||' operations cannot be mixed without parentheses.
     
     // should be a syntax error
     a || b ?? c;
@@ -22,12 +21,10 @@ nullishCoalescingOperator5.ts(15,1): error TS5076: '&&' and '??' operations cann
     // should be a syntax error
     a ?? b && c;
          ~~~~~~
-!!! error TS5076: '&&' and '??' operations cannot be mixed without parentheses.
+!!! error TS5076: '??' and '&&' operations cannot be mixed without parentheses.
     
     // should be a syntax error
     a && b ?? c;
-    ~~~~~~
-!!! error TS5076: '&&' and '??' operations cannot be mixed without parentheses.
     
     // Valid according to spec
     a ?? (b || c);
