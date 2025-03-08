@@ -35,13 +35,13 @@ verify.completions(
         isNewIdentifierLocation: false,
         includes: [
             {
-                name: "case E.A: ...",
+                name: "case 1: ...",
                 source: completion.CompletionSource.SwitchCases,
                 sortText: completion.SortText.GlobalsOrKeywords,
                 insertText:
-`case E.A:
+`case 1:
 case E.B:
-case 1:`,
+case E.A:`,
             },
         ],
         preferences: {
@@ -53,13 +53,13 @@ case 1:`,
         isNewIdentifierLocation: false,
         includes: [
             {
-                name: "case E.A: ...",
+                name: "case E.B: ...",
                 source: completion.CompletionSource.SwitchCases,
                 sortText: completion.SortText.GlobalsOrKeywords,
                 insertText:
-`case E.A:
-case E.B:
-case E.C:`,
+`case E.B:
+case E.C:
+case E.A:`,
             },
         ],
         preferences: {

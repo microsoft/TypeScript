@@ -35,13 +35,13 @@
 //// }
 
 const exhaustiveCaseCompletion = {
-    name: "case E.A: ...",
+    name: "case E.B: ...",
     source: completion.CompletionSource.SwitchCases,
     sortText: completion.SortText.GlobalsOrKeywords,
     insertText:
-`case E.A:
-case E.B:
-case E.C:`,
+`case E.B:
+case E.C:
+case E.A:`,
 };
 
 verify.completions(
