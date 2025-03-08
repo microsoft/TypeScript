@@ -1,7 +1,7 @@
-simpleTestSingleFile.ts(1,7): error TS2322: Type '""' is not assignable to type 'number'.
+simpleTestSingleFile.ts(1,7): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== simpleTestSingleFile.ts (1 errors) ====
     const x: number = "";
           ~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.

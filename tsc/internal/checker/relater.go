@@ -4699,24 +4699,24 @@ func (r *Relater) reportRelationError(message *diagnostics.Message, source *Type
 	case diagnostics.Excessive_complexity_comparing_types_0_and_1,
 		diagnostics.Excessive_stack_depth_comparing_types_0_and_1,
 		diagnostics.The_type_0_is_readonly_and_cannot_be_assigned_to_the_mutable_type_1:
-		if r.chainArgsMatch(sourceType, targetType) {
+		if r.chainArgsMatch(generalizedSourceType, targetType) {
 			return
 		}
 	// Suppress if next message is a missing property message for source and target and we're not
 	// reporting on interface implementation
 	case diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2:
-		if !isInterfaceImplementationMessage(message) && r.chainArgsMatch(nil, sourceType, targetType) {
+		if !isInterfaceImplementationMessage(message) && r.chainArgsMatch(nil, generalizedSourceType, targetType) {
 			return
 		}
 	// Suppress if next message is a missing property message for source and target and we're not
 	// reporting on interface implementation
 	case diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more,
 		diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2:
-		if !isInterfaceImplementationMessage(message) && r.chainArgsMatch(sourceType, targetType) {
+		if !isInterfaceImplementationMessage(message) && r.chainArgsMatch(generalizedSourceType, targetType) {
 			return
 		}
 	}
-	r.reportError(message, sourceType, targetType)
+	r.reportError(message, generalizedSourceType, targetType)
 }
 
 func (r *Relater) reportError(message *diagnostics.Message, args ...any) {

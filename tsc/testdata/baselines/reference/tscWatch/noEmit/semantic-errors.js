@@ -141,7 +141,7 @@ CompilerOptions::{
 
 
 Output::
-a.ts(1,7): error TS2322: Type '"hello"' is not assignable to type 'number'.
+a.ts(1,7): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 Found 1 error in a.ts[90m:1[0m
@@ -194,7 +194,7 @@ Output::
 Edit:: introduce error
 
 Output::
-a.ts(1,7): error TS2322: Type '"hello"' is not assignable to type 'number'.
+a.ts(1,7): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 Found 1 error in a.ts[90m:1[0m
@@ -209,7 +209,7 @@ const a: number = "hello"
 Edit:: emit when error
 
 Output::
-a.ts(1,7): error TS2322: Type '"hello"' is not assignable to type 'number'.
+a.ts(1,7): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 Found 1 error in a.ts[90m:1[0m
@@ -228,7 +228,7 @@ Found 1 error in a.ts[90m:1[0m
 Edit:: no emit run when error
 
 Output::
-a.ts(1,7): error TS2322: Type '"hello"' is not assignable to type 'number'.
+a.ts(1,7): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 Found 1 error in a.ts[90m:1[0m
