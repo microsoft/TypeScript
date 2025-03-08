@@ -6257,21 +6257,21 @@ export interface SerializedTypeEntry {
 export const enum TypeFlags {
     Any             = 1 << 0,
     Unknown         = 1 << 1,
-    String          = 1 << 2,
-    Number          = 1 << 3,
-    Boolean         = 1 << 4,
-    Enum            = 1 << 5,   // Numeric computed enum member value
-    BigInt          = 1 << 6,
-    StringLiteral   = 1 << 7,
-    NumberLiteral   = 1 << 8,
-    BooleanLiteral  = 1 << 9,
-    EnumLiteral     = 1 << 10,  // Always combined with StringLiteral, NumberLiteral, or Union
-    BigIntLiteral   = 1 << 11,
-    ESSymbol        = 1 << 12,  // Type of symbol primitive introduced in ES6
-    UniqueESSymbol  = 1 << 13,  // unique symbol
-    Void            = 1 << 14,
-    Undefined       = 1 << 15,
-    Null            = 1 << 16,
+    Undefined       = 1 << 2,
+    Null            = 1 << 3,
+    Void            = 1 << 4,
+    String          = 1 << 5,
+    Number          = 1 << 6,
+    BigInt          = 1 << 7,
+    Boolean         = 1 << 8,
+    ESSymbol        = 1 << 9,  // Type of symbol primitive introduced in ES6
+    StringLiteral   = 1 << 10,
+    NumberLiteral   = 1 << 11,
+    BooleanLiteral  = 1 << 12,
+    BigIntLiteral   = 1 << 13,
+    UniqueESSymbol  = 1 << 14,  // unique symbol
+    EnumLiteral     = 1 << 15,  // Always combined with StringLiteral, NumberLiteral, or Union
+    Enum            = 1 << 16,   // Numeric computed enum member value
     Never           = 1 << 17,  // Never type
     TypeParameter   = 1 << 18,  // Type parameter
     Object          = 1 << 19,  // Object type
@@ -6472,15 +6472,17 @@ export const enum ObjectFlags {
     PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType,
     /** @internal */
     InstantiatedMapped = Mapped | Instantiated,
-    // Object flags that uniquely identify the kind of ObjectType
-    /** @internal */
-    ObjectTypeKindMask = ClassOrInterface | Reference | Tuple | Anonymous | Mapped | ReverseMapped | EvolvingArray,
-
+    
     // Flags that require TypeFlags.Object
     ContainsSpread   = 1 << 21,  // Object literal contains spread operation
     ObjectRestType   = 1 << 22,  // Originates in object rest declaration
     InstantiationExpressionType = 1 << 23,  // Originates in instantiation expression
     SingleSignatureType = 1 << 27,  // A single signature type extracted from a potentially broader type
+
+    // Object flags that uniquely identify the kind of ObjectType
+    /** @internal */
+    ObjectTypeKindMask = ClassOrInterface | Reference | Tuple | Anonymous | Mapped | ReverseMapped | EvolvingArray | InstantiationExpressionType | SingleSignatureType,
+
     /** @internal */
     IsClassInstanceClone = 1 << 24, // Type is a clone of a class instance type
     // Flags that require TypeFlags.Object and ObjectFlags.Reference
