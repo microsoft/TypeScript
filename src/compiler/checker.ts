@@ -21238,6 +21238,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return Ternary.True;
         }
 
+        const sourceIsAbstract = !!(source.flags & SignatureFlags.Abstract);
+        const targetIsAbstract = !!(target.flags & SignatureFlags.Abstract);
+
+        // An abstract constructor type is not assignable to a non-abstract constructor type
+        // as it would otherwise be possible to new an abstract class. Note that the assignability
+        // check we perform for an extends clause excludes construct signatures from the target,
+        // so this check never proceeds.
+        if (sourceIsAbstract && !targetIsAbstract) {
+            if (reportErrors) {
+                errorReporter!(Diagnostics.Cannot_assign_an_abstract_constructor_type_to_a_non_abstract_constructor_type);
+            }
+            return Ternary.False;
+        }
+
         if (!(checkMode & SignatureCheckMode.StrictTopSignature && isTopSignature(source)) && isTopSignature(target)) {
             return Ternary.True;
         }
@@ -23908,18 +23922,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             );
 
             if (kind === SignatureKind.Construct && sourceSignatures.length && targetSignatures.length) {
-                const sourceIsAbstract = !!(sourceSignatures[0].flags & SignatureFlags.Abstract);
-                const targetIsAbstract = !!(targetSignatures[0].flags & SignatureFlags.Abstract);
-                if (sourceIsAbstract && !targetIsAbstract) {
-                    // An abstract constructor type is not assignable to a non-abstract constructor type
-                    // as it would otherwise be possible to new an abstract class. Note that the assignability
-                    // check we perform for an extends clause excludes construct signatures from the target,
-                    // so this check never proceeds.
-                    if (reportErrors) {
-                        reportError(Diagnostics.Cannot_assign_an_abstract_constructor_type_to_a_non_abstract_constructor_type);
-                    }
-                    return Ternary.False;
-                }
                 if (!constructorVisibilitiesAreCompatible(sourceSignatures[0], targetSignatures[0], reportErrors)) {
                     return Ternary.False;
                 }
@@ -36418,17 +36420,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // then it cannot be instantiated.
             // In the case of a merged class-module or class-interface declaration,
             // only the class declaration node will have the Abstract flag set.
-            if (someSignature(constructSignatures, signature => !!(signature.flags & SignatureFlags.Abstract))) {
-                error(node, Diagnostics.Cannot_create_an_instance_of_an_abstract_class);
-                return resolveErrorCall(node);
-            }
             const valueDecl = expressionType.symbol && getClassLikeDeclarationOfSymbol(expressionType.symbol);
             if (valueDecl && hasSyntacticModifier(valueDecl, ModifierFlags.Abstract)) {
                 error(node, Diagnostics.Cannot_create_an_instance_of_an_abstract_class);
                 return resolveErrorCall(node);
             }
 
-            return resolveCall(node, constructSignatures, candidatesOutArray, checkMode, SignatureFlags.None);
+            const resolvedSignature = resolveCall(node, constructSignatures, candidatesOutArray, checkMode, SignatureFlags.None);
+
+            // Composite signature check is done to prevent instantiating unions of mixed concrete/asbtract signatures.
+            if (
+                (resolvedSignature.flags & SignatureFlags.Abstract)
+                || (resolvedSignature.compositeSignatures?.some(signature => signature.flags & SignatureFlags.Abstract))
+            ) {
+                error(node, Diagnostics.Cannot_create_an_instance_of_an_abstract_class);
+                return resolveErrorCall(node);
+            }
+
+            return resolvedSignature;
         }
 
         // If expressionType's apparent type is an object type with no construct signatures but
@@ -36451,13 +36460,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         invocationError(node.expression, expressionType, SignatureKind.Construct);
         return resolveErrorCall(node);
-    }
-
-    function someSignature(signatures: Signature | readonly Signature[], f: (s: Signature) => boolean): boolean {
-        if (isArray(signatures)) {
-            return some(signatures, signature => someSignature(signature, f));
-        }
-        return signatures.compositeKind === TypeFlags.Union ? some(signatures.compositeSignatures, f) : f(signatures);
     }
 
     function typeHasProtectedAccessibleBase(target: Symbol, type: InterfaceType): boolean {
