@@ -30464,8 +30464,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const initialType = isAutomaticTypeInNonNull ? undefinedType :
             assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, declaration as VariableLikeDeclaration) : type) :
             typeIsAutomatic ? undefinedType : getOptionalType(type);
-        const flowType = isAutomaticTypeInNonNull ? getNonNullableType(getFlowTypeOfReference(node, type, initialType, flowContainer)) :
-            getFlowTypeOfReference(node, type, initialType, flowContainer);
+        const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer);
         // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
         // from declaration to use, and when the variable's declared type doesn't include undefined but the
         // control flow based type does include undefined.
