@@ -2802,16 +2802,6 @@ func GetErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 		ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindTypeAliasDeclaration, ast.KindPropertyDeclaration,
 		ast.KindPropertySignature, ast.KindNamespaceImport:
 		errorNode = ast.GetNameOfDeclaration(node)
-	case ast.KindCallExpression, ast.KindNewExpression:
-		errorNode = node.Expression()
-		if ast.IsPropertyAccessExpression(errorNode) {
-			errorNode = errorNode.Name()
-		}
-	case ast.KindTaggedTemplateExpression:
-		errorNode = node.AsTaggedTemplateExpression().Tag
-		if ast.IsPropertyAccessExpression(errorNode) {
-			errorNode = errorNode.Name()
-		}
 	case ast.KindArrowFunction:
 		return getErrorRangeForArrowFunction(sourceFile, node)
 	case ast.KindCaseClause, ast.KindDefaultClause:
