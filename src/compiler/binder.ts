@@ -176,6 +176,7 @@ import {
     isInTopLevelContext,
     isJSDocConstructSignature,
     isJSDocEnumTag,
+    isJSDocImportTag,
     isJSDocTemplateTag,
     isJSDocTypeAlias,
     isJSDocTypeAssertion,
@@ -1108,8 +1109,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             if (canHaveFlowNode(node) && node.flowNode) {
                 node.flowNode = undefined;
             }
-            bindEachChild(node);
-            bindJSDoc(node);
+            if (isJSDocImportTag(node)) {
+                bindJSDocImportTag(node);
+            }
+            else {
+                bindEachChild(node);
+                bindJSDoc(node);
+            }
             inAssignmentPattern = saveInAssignmentPattern;
             return;
         }
