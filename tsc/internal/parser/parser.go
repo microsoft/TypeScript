@@ -1350,17 +1350,17 @@ func (p *Parser) parseExpressionOrLabeledStatement() *ast.Statement {
 	hasJSDoc := p.hasPrecedingJSDocComment()
 	hasParen := p.token == ast.KindOpenParenToken
 	expression := p.parseExpression()
+
 	if expression.Kind == ast.KindIdentifier && p.parseOptional(ast.KindColonToken) {
 		result := p.factory.NewLabeledStatement(expression, p.parseStatement())
 		p.finishNode(result, pos)
 		p.withJSDoc(result, hasJSDoc)
 		return result
 	}
-	// !!!
-	// if !p.tryParseSemicolon() {
-	// 	p.parseErrorForMissingSemicolonAfter(expression)
-	// }
-	p.parseSemicolon()
+
+	if !p.tryParseSemicolon() {
+		p.parseErrorForMissingSemicolonAfter(expression)
+	}
 	result := p.factory.NewExpressionStatement(expression)
 	p.finishNode(result, pos)
 	p.withJSDoc(result, hasJSDoc && !hasParen)
