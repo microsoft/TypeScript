@@ -1209,7 +1209,7 @@ export function binarySearchKey<T, U>(array: readonly T[], key: U, keySelector: 
     while (low <= high) {
         const middle = low + ((high - low) >> 1);
         const midKey = keySelector(array[middle], middle);
-        switch (keyComparer(midKey, key)) {
+        switch (Math.sign(keyComparer(midKey, key))) {
             case Comparison.LessThan:
                 low = middle + 1;
                 break;
@@ -1967,9 +1967,11 @@ export function equateStringsCaseSensitive(a: string, b: string): boolean {
     return equateValues(a, b);
 }
 
-function compareComparableValues(a: string | undefined, b: string | undefined): Comparison;
-function compareComparableValues(a: number | undefined, b: number | undefined): Comparison;
-function compareComparableValues(a: string | number | undefined, b: string | number | undefined) {
+/** @internal */
+export function compareComparableValues(a: string | undefined, b: string | undefined): Comparison;
+/** @internal */
+export function compareComparableValues(a: number | undefined, b: number | undefined): Comparison;
+export function compareComparableValues(a: string | number | undefined, b: string | number | undefined) {
     return a === b ? Comparison.EqualTo :
         a === undefined ? Comparison.LessThan :
         b === undefined ? Comparison.GreaterThan :
