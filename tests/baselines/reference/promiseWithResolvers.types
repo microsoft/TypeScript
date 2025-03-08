@@ -8,7 +8,7 @@ type T = {};
 const { promise, resolve, reject } = Promise.withResolvers<T>();
 >promise : Promise<T>
 >        : ^^^^^^^^^^
->resolve : (value: T | PromiseLike<T>) => void
+>resolve : (value: PromiseLike<T> | T) => void
 >        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^    
 >reject : (reason?: any) => void
 >       : ^      ^^^   ^^^^^    

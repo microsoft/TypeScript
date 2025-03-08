@@ -15,7 +15,7 @@ interface Prop {
 >  : ^^^^^^
 
     children: JSX.Element | JSX.Element[];
->children : JSX.Element | JSX.Element[]
+>children : JSX.Element[] | JSX.Element
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >JSX : any
 >    : ^^^

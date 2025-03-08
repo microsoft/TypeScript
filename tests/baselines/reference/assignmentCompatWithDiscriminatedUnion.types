@@ -73,7 +73,7 @@ namespace Example2 {
 >  : ^
 >a : 0
 >  : ^
->b : 4 | 1
+>b : 1 | 4
 >  : ^^^^^
 
            | { a: 1,     b: 2 }         // T1
@@ -85,7 +85,7 @@ namespace Example2 {
            | { a: 2,     b: 3 | 4 };    // T2
 >a : 2
 >  : ^
->b : 4 | 3
+>b : 3 | 4
 >  : ^^^^^
 
     declare let s: S;
@@ -125,7 +125,7 @@ namespace Example3 {
 >  : ^
 >a : 0
 >  : ^
->b : 4 | 1
+>b : 1 | 4
 >  : ^^^^^
 
            | { a: 1,     b: 2 | 4 }     // T1
@@ -178,7 +178,7 @@ namespace Example4 {
 >  : ^
 >a : 0
 >  : ^
->b : 4 | 1
+>b : 1 | 4
 >  : ^^^^^
 
            | { a: 1,     b: 2 }                 // T1
@@ -190,7 +190,7 @@ namespace Example4 {
            | { a: 2,     b: 3 | 4, c: string }; // T2
 >a : 2
 >  : ^
->b : 4 | 3
+>b : 3 | 4
 >  : ^^^^^
 >c : string
 >  : ^^^^^^
@@ -523,11 +523,11 @@ namespace GH12052 {
     good.type = getAxisType();
 >good.type = getAxisType() : IAxisType
 >                          : ^^^^^^^^^
->good.type : "linear" | "categorical"
+>good.type : "categorical" | "linear"
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >good : IAxis
 >     : ^^^^^
->type : "linear" | "categorical"
+>type : "categorical" | "linear"
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >getAxisType() : IAxisType
 >              : ^^^^^^^^^
@@ -693,7 +693,7 @@ namespace GH39357 {
     const a: A = b === "a" || b === "b" ? [b, 1] : ["c", ""];
 >a : A
 >  : ^
->b === "a" || b === "b" ? [b, 1] : ["c", ""] : ["a" | "b", number] | ["c", string]
+>b === "a" || b === "b" ? [b, 1] : ["c", ""] : ["c", string] | ["a" | "b", number]
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b === "a" || b === "b" : boolean
 >                       : ^^^^^^^

@@ -22,7 +22,7 @@ function compare<T extends Comparable<T>>(x: T, y: T): number {
 >          : ^^^^^^^
 >x : T
 >  : ^
->y == null ? 0 : -1 : 0 | -1
+>y == null ? 0 : -1 : -1 | 0
 >                   : ^^^^^^
 >y == null : boolean
 >          : ^^^^^^^

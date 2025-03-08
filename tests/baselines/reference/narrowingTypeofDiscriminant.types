@@ -18,7 +18,7 @@ function f1(obj: { kind: 'a', data: string } | { kind: 1, data: number }) {
     if (typeof obj.kind === "string") {
 >typeof obj.kind === "string" : boolean
 >                             : ^^^^^^^
->typeof obj.kind : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof obj.kind : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj.kind : "a" | 1
 >         : ^^^^^^^
@@ -57,7 +57,7 @@ function f2(obj: { kind: 'a', data: string } | { kind: 1, data: number } | undef
     if (typeof obj?.kind === "string") {
 >typeof obj?.kind === "string" : boolean
 >                              : ^^^^^^^
->typeof obj?.kind : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof obj?.kind : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj?.kind : "a" | 1 | undefined
 >          : ^^^^^^^^^^^^^^^^^^^
@@ -98,7 +98,7 @@ function numberOk(wrapped: WrappedStringOr<number> | null) {
     if (typeof wrapped?.value !== 'string') {
 >typeof wrapped?.value !== 'string' : boolean
 >                                   : ^^^^^^^
->typeof wrapped?.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof wrapped?.value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >wrapped?.value : string | number | undefined
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -129,7 +129,7 @@ function booleanBad(wrapped: WrappedStringOr<boolean> | null) {
     if (typeof wrapped?.value !== 'string') {
 >typeof wrapped?.value !== 'string' : boolean
 >                                   : ^^^^^^^
->typeof wrapped?.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof wrapped?.value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >wrapped?.value : string | boolean | undefined
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -160,7 +160,7 @@ function booleanFixed(wrapped: WrappedStringOr<boolean> | null) {
     if (typeof (wrapped?.value) !== 'string') {
 >typeof (wrapped?.value) !== 'string' : boolean
 >                                     : ^^^^^^^
->typeof (wrapped?.value) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof (wrapped?.value) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(wrapped?.value) : string | boolean | undefined
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^

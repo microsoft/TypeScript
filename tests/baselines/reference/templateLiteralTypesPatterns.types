@@ -26,7 +26,7 @@ type Protocol<T extends string, U extends string> = `${T}://${U}`;
 function download(hostSpec: Protocol<"http" | "https" | "ftp", string>) { }
 >download : (hostSpec: Protocol<"http" | "https" | "ftp", string>) => void
 >         : ^        ^^                                          ^^^^^^^^^
->hostSpec : `http://${string}` | `https://${string}` | `ftp://${string}`
+>hostSpec : `ftp://${string}` | `http://${string}` | `https://${string}`
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // ok, has protocol
@@ -105,7 +105,7 @@ type Pat<T extends string | null | undefined> = `${T}`
 declare function nullishes(x: Pat<null | undefined>): void;
 >nullishes : (x: Pat<null | undefined>) => void
 >          : ^ ^^                     ^^^^^    
->x : "undefined" | "null"
+>x : "null" | "undefined"
 >  : ^^^^^^^^^^^^^^^^^^^^
 
 // ok
@@ -865,15 +865,15 @@ var aa: '0' & `${number}`;
 // Remove string literals from unions with matching template literals
 
 let t1: `foo${string}` | 'foo1' | '1foo';  // `foo${string}` | '1foo'
->t1 : `foo${string}` | "1foo"
+>t1 : "1foo" | `foo${string}`
 >   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 let t2: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo';  // `foo${string}` | '1foo' | 'xfoo'
->t2 : `foo${string}` | "1foo" | "xfoo"
+>t2 : "1foo" | "xfoo" | `foo${string}`
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let t3: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo' | `${number}foo`;  // `foo${string}` | xfoo' | `${number}foo`
->t3 : `foo${string}` | "xfoo" | `${number}foo`
+>t3 : "xfoo" | `${number}foo` | `foo${string}`
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var bb: `${number}`;
@@ -975,7 +975,7 @@ export abstract class BB {
 function conversionTest(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string}Downcast` & {}) {}
 >conversionTest : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | (`${string}Downcast` & {})) => void
 >               : ^         ^^                                                  ^                        ^^^^^^^^^^
->groupName : (`${string}Downcast` & {}) | "downcast" | "dataDowncast" | "editingDowncast"
+>groupName : "dataDowncast" | "downcast" | "editingDowncast" | (`${string}Downcast` & {})
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 conversionTest("testDowncast");
@@ -989,7 +989,7 @@ conversionTest("testDowncast");
 function conversionTest2(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | {} & `${string}Downcast`) {}
 >conversionTest2 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | ({} & `${string}Downcast`)) => void
 >                : ^         ^^                                                  ^                        ^^^^^^^^^^
->groupName : "downcast" | "dataDowncast" | "editingDowncast" | ({} & `${string}Downcast`)
+>groupName : "dataDowncast" | "downcast" | "editingDowncast" | ({} & `${string}Downcast`)
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 conversionTest2("testDowncast");

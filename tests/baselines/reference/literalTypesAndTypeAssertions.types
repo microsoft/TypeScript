@@ -58,7 +58,7 @@ let { a = "foo" } = { a: "foo" };
 >      : ^^^^^
 
 let { b = "foo" as "foo" } = { b: "bar" };
->b : "foo" | "bar"
+>b : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 >"foo" as "foo" : "foo"
 >               : ^^^^^
@@ -86,7 +86,7 @@ let { c = "foo" } = { c: "bar" as "bar" };
 >      : ^^^^^
 
 let { d = "foo" as "foo" } = { d: "bar" as "bar" };
->d : "foo" | "bar"
+>d : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 >"foo" as "foo" : "foo"
 >               : ^^^^^

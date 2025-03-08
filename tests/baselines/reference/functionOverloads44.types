@@ -102,9 +102,9 @@ var y1 = foo1([{a: 100}]);
 >    : ^^^
 
 var x2 = foo2([{a: "str"}]);
->x2 : Dog | Cat
+>x2 : Cat | Dog
 >   : ^^^^^^^^^
->foo2([{a: "str"}]) : Dog | Cat
+>foo2([{a: "str"}]) : Cat | Dog
 >                   : ^^^^^^^^^
 >foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Cat | Dog; }
 >     : ^^^   ^^                ^^^   ^^^   ^^                ^^^         ^^^

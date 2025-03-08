@@ -69,7 +69,7 @@ function f4() {
 }
 
 function f5() {
->f5 : () => Object | 1
+>f5 : () => 1 | Object
 >   : ^^^^^^^^^^^^^^^^
 
     return 1;

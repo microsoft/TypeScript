@@ -50,7 +50,7 @@ const C = class {
 >                                : ^^^^^^
 >this.#baz().next().value || 0 : number
 >                              : ^^^^^^
->this.#baz().next().value : number | void
+>this.#baz().next().value : void | number
 >                         : ^^^^^^^^^^^^^
 >this.#baz().next() : IteratorResult<number, void>
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -64,7 +64,7 @@ const C = class {
 >     : ^^^^^^^^
 >next : (...[value]: [] | [unknown]) => IteratorResult<number, void>
 >     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->value : number | void
+>value : void | number
 >      : ^^^^^^^^^^^^^
 >0 : 0
 >  : ^
@@ -72,7 +72,7 @@ const C = class {
 >                                        : ^^^^^^
 >(await this.#qux().next()).value || 0 : number
 >                                      : ^^^^^^
->(await this.#qux().next()).value : number | void
+>(await this.#qux().next()).value : void | number
 >                                 : ^^^^^^^^^^^^^
 >(await this.#qux().next()) : IteratorResult<number, void>
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -90,7 +90,7 @@ const C = class {
 >     : ^^^^^^^^
 >next : (...[value]: [] | [unknown]) => Promise<IteratorResult<number, void>>
 >     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->value : number | void
+>value : void | number
 >      : ^^^^^^^^^^^^^
 >0 : 0
 >  : ^

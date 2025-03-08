@@ -70,7 +70,7 @@ function bar<T extends string[], K extends number>() {
 >    : ^^^
 
     type T02 = string[][K | "0"];
->T02 : string[][K | "0"]
+>T02 : string[]["0" | K]
 >    : ^^^^^^^^^^^^^^^^^
 
     type T10 = T["0"];
@@ -82,7 +82,7 @@ function bar<T extends string[], K extends number>() {
 >    : ^^^^^^^^
 
     type T12 = T[K | "0"];
->T12 : T[K | "0"]
+>T12 : T["0" | K]
 >    : ^^^^^^^^^^
 }
 

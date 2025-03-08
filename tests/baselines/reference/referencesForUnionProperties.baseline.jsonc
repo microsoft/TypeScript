@@ -16,11 +16,20 @@
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForUnionProperties.ts ===
   // interface One {
-  //     common: { /*FIND ALL REFS*/<|[|{| defId: 0 |}<|[|{| defId: 1 |}a|]|]: number;|>|> };
+  //     common: { /*FIND ALL REFS*/<|[|{| defId: 0 |}a|]: number;|> };
   // }
   // 
   // interface Base {
-  // --- (line: 6) skipped ---
+  //     a: string;
+  //     b: string;
+  // }
+  // 
+  // interface HasAOrB extends Base {
+  //     <|[|{| defId: 1 |}a|]: string;|>
+  //     b: string;
+  // }
+  // 
+  // --- (line: 15) skipped ---
 
   // === Details ===
   [
@@ -153,7 +162,7 @@
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForUnionProperties.ts ===
   // interface One {
-  //     common: { <|[|{| defId: 2 |}a|]: number;|> };
+  //     common: { a: number; };
   // }
   // 
   // interface Base {
@@ -162,7 +171,7 @@
   // }
   // 
   // interface HasAOrB extends Base {
-  //     <|[|{| defId: 1 |}a|]: string;|>
+  //     <|[|{| defId: 1 |}<|[|{| defId: 2 |}a|]|]: string;|>|>
   //     b: string;
   // }
   // 
@@ -356,7 +365,7 @@
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForUnionProperties.ts ===
   // interface One {
-  //     common: { <|[|{| defId: 0 |}<|[|{| defId: 3 |}a|]|]: number;|>|> };
+  //     common: { <|[|{| defId: 0 |}a|]: number;|> };
   // }
   // 
   // interface Base {
@@ -365,7 +374,7 @@
   // }
   // 
   // interface HasAOrB extends Base {
-  //     <|[|{| defId: 2 |}a|]: string;|>
+  //     <|[|{| defId: 2 |}<|[|{| defId: 3 |}a|]|]: string;|>|>
   //     b: string;
   // }
   // 
