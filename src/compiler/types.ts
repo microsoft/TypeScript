@@ -7039,19 +7039,20 @@ export type TypeMapper =
 export const enum InferencePriority {
     None                         = 0,
     NakedTypeVariable            = 1 << 0,  // Naked type variable in union or intersection type
-    SpeculativeTuple             = 1 << 1,  // Speculative tuple inference
-    SubstituteSource             = 1 << 2,  // Source of inference originated within a substitution type's substitute
-    HomomorphicMappedType        = 1 << 3,  // Reverse inference for homomorphic mapped type
-    PartialHomomorphicMappedType = 1 << 4,  // Partial reverse inference for homomorphic mapped type
-    MappedTypeConstraint         = 1 << 5,  // Reverse inference for mapped type
-    ContravariantConditional     = 1 << 6,  // Conditional type in contravariant position
-    ReturnType                   = 1 << 7,  // Inference made from return type of generic function
-    LiteralKeyof                 = 1 << 8,  // Inference made from a string literal to a keyof T
-    NoConstraints                = 1 << 9,  // Don't infer from constraints of instantiable types
-    AlwaysStrict                 = 1 << 10, // Always use strict rules for contravariant inferences
-    MaxValue                     = 1 << 11, // Seed for inference priority tracking
+    AwaitedLikeType              = 1 << 1,  // A type that is essentially awaited
+    SpeculativeTuple             = 1 << 2,  // Speculative tuple inference
+    SubstituteSource             = 1 << 3,  // Source of inference originated within a substitution type's substitute
+    HomomorphicMappedType        = 1 << 4,  // Reverse inference for homomorphic mapped type
+    PartialHomomorphicMappedType = 1 << 5,  // Partial reverse inference for homomorphic mapped type
+    MappedTypeConstraint         = 1 << 6,  // Reverse inference for mapped type
+    ContravariantConditional     = 1 << 7,  // Conditional type in contravariant position
+    ReturnType                   = 1 << 8,  // Inference made from return type of generic function
+    LiteralKeyof                 = 1 << 9,  // Inference made from a string literal to a keyof T
+    NoConstraints                = 1 << 10, // Don't infer from constraints of instantiable types
+    AlwaysStrict                 = 1 << 11, // Always use strict rules for contravariant inferences
+    MaxValue                     = 1 << 12, // Seed for inference priority tracking
 
-    PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof, // These priorities imply that the resulting type should be a combination of all candidates
+    PriorityImpliesCombination = ReturnType | AwaitedLikeType | MappedTypeConstraint | LiteralKeyof, // These priorities imply that the resulting type should be a combination of all candidates
     Circularity = -1,  // Inference circularity (value less than all other priorities)
 }
 
