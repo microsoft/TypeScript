@@ -1540,7 +1540,12 @@ export namespace Core {
                     break;
                 case ExportKind.Default:
                     // Search for a property access to '.default'. This can't be renamed.
-                    indirectSearch = state.options.use === FindReferencesUse.Rename ? undefined : state.createSearch(exportLocation, exportSymbol, ImportExport.Export, { text: "default" });
+                    if (state.options.use !== FindReferencesUse.Rename) {
+                        const allSearchSymbols = [exportSymbol];
+                        const defaultExportSymbol = exportInfo.exportingModuleSymbol.exports?.get(InternalSymbolName.Default);
+                        if (defaultExportSymbol && exportSymbol !== defaultExportSymbol) allSearchSymbols.push(defaultExportSymbol);
+                        indirectSearch = state.createSearch(exportLocation, exportSymbol, ImportExport.Export, { text: "default", allSearchSymbols });
+                    }
                     break;
                 case ExportKind.ExportEquals:
                     break;

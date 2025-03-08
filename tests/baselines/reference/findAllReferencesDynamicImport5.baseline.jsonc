@@ -1,0 +1,1021 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/definition.ts ===
+// <|function [|{| defId: 0, isWriteAccess: true, isDefinition: true |}X|]/*FIND ALL REFS*/() {}|>
+// <|export default [|{| defId: 0 |}X|];|>
+
+// === /tests/cases/fourslash/usage.ts ===
+// <|import [|{| defId: 1, isWriteAccess: true |}Y|] from "./definition";|>
+// [|{| defId: 1 |}Y|];
+// async function asd() {
+//   const a = await import("./definition");
+//   a.[|{| defId: 2 |}default|];
+//   await import("./definition").then((m) => m.[|{| defId: 2 |}default|]);
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/definition.ts ===
+  // <|function [|{| defId: 0 |}X|]/*FIND ALL REFS*/() {}|>
+  // <|export default [|{| defId: 2 |}X|];|>
+
+  // === /tests/cases/fourslash/usage.ts ===
+  // <|import [|{| defId: 1 |}Y|] from "./definition";|>
+  // Y;
+  // async function asd() {
+  //   const a = await import("./definition");
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function X(): void",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function Y(): void\nimport Y",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Y",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Y",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function X(): void\nexport default X",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "default",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/definition.ts ===
+// <|function [|{| defId: 0, isWriteAccess: true |}X|]() {}|>
+// <|export default [|{| defId: 0 |}X|]/*FIND ALL REFS*/;|>
+
+// === /tests/cases/fourslash/usage.ts ===
+// <|import [|{| defId: 1, isWriteAccess: true |}Y|] from "./definition";|>
+// [|{| defId: 1 |}Y|];
+// async function asd() {
+//   const a = await import("./definition");
+//   a.[|{| defId: 2 |}default|];
+//   await import("./definition").then((m) => m.[|{| defId: 2 |}default|]);
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/definition.ts ===
+  // <|function [|{| defId: 0 |}X|]() {}|>
+  // <|export default [|{| defId: 2 |}X|]/*FIND ALL REFS*/;|>
+
+  // === /tests/cases/fourslash/usage.ts ===
+  // <|import [|{| defId: 1 |}Y|] from "./definition";|>
+  // Y;
+  // async function asd() {
+  //   const a = await import("./definition");
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function X(): void",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function Y(): void\nimport Y",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Y",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Y",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function X(): void\nexport default X",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "default",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/usage.ts ===
+// <|import [|{| isWriteAccess: true, isDefinition: true |}Y|]/*FIND ALL REFS*/ from "./definition";|>
+// [|Y|];
+// async function asd() {
+//   const a = await import("./definition");
+//   a.default;
+//   await import("./definition").then((m) => m.default);
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/usage.ts ===
+  // <|import [|Y|]/*FIND ALL REFS*/ from "./definition";|>
+  // Y;
+  // async function asd() {
+  //   const a = await import("./definition");
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function Y(): void\nimport Y",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Y",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Y",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/usage.ts ===
+// <|import [|{| isWriteAccess: true |}Y|] from "./definition";|>
+// [|Y|]/*FIND ALL REFS*/;
+// async function asd() {
+//   const a = await import("./definition");
+//   a.default;
+//   await import("./definition").then((m) => m.default);
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/usage.ts ===
+  // <|import [|Y|] from "./definition";|>
+  // Y/*FIND ALL REFS*/;
+  // async function asd() {
+  //   const a = await import("./definition");
+  //   a.default;
+  //   await import("./definition").then((m) => m.default);
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function Y(): void\nimport Y",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Y",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Y",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/definition.ts ===
+// function X() {}
+// <|export [|{| defId: 0, isWriteAccess: true |}default|] X;|>
+
+// === /tests/cases/fourslash/usage.ts ===
+// <|import [|{| defId: 1, isWriteAccess: true |}Y|] from "./definition";|>
+// [|{| defId: 1 |}Y|];
+// async function asd() {
+//   const a = await import("./definition");
+//   a.[|{| defId: 0 |}default|]/*FIND ALL REFS*/;
+//   await import("./definition").then((m) => m.[|{| defId: 0 |}default|]);
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/definition.ts ===
+  // function X() {}
+  // <|export default [|{| defId: 0 |}X|];|>
+
+  // === /tests/cases/fourslash/usage.ts ===
+  // <|import [|{| defId: 1 |}Y|] from "./definition";|>
+  // Y;
+  // async function asd() {
+  //   const a = await import("./definition");
+  //   a.default/*FIND ALL REFS*/;
+  //   await import("./definition").then((m) => m.default);
+  // }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function X(): void\nexport default X",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "default",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function Y(): void\nimport Y",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Y",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Y",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/definition.ts ===
+// function X() {}
+// <|export [|{| defId: 0, isWriteAccess: true |}default|] X;|>
+
+// === /tests/cases/fourslash/usage.ts ===
+// <|import [|{| defId: 1, isWriteAccess: true |}Y|] from "./definition";|>
+// [|{| defId: 1 |}Y|];
+// async function asd() {
+//   const a = await import("./definition");
+//   a.[|{| defId: 0 |}default|];
+//   await import("./definition").then((m) => m.[|{| defId: 0 |}default|]/*FIND ALL REFS*/);
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/definition.ts ===
+  // function X() {}
+  // <|export default [|{| defId: 0 |}X|];|>
+
+  // === /tests/cases/fourslash/usage.ts ===
+  // <|import [|{| defId: 1 |}Y|] from "./definition";|>
+  // Y;
+  // async function asd() {
+  //   const a = await import("./definition");
+  //   a.default;
+  //   await import("./definition").then((m) => m.default/*FIND ALL REFS*/);
+  // }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function X(): void\nexport default X",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "default",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function Y(): void\nimport Y",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Y",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Y",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
