@@ -77,18 +77,16 @@ declare const p: <T>(fn: () => T) => T;
 declare const Base: <T>(val: T) => {
     new (): T;
 };
-declare const C_base: new () => {
+declare class C extends ({} as new () => {
     x: C[];
-};
-declare class C extends C_base {
+}) {
 }
 declare abstract class Base1 {
     abstract root(): Derived1;
 }
-declare const Derived1_base: {
+declare class Derived1 extends ({} as {
     new (): {
         root(): any;
     };
-};
-declare class Derived1 extends Derived1_base {
+}) {
 }
