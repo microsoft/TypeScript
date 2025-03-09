@@ -23,9 +23,9 @@ declare let foo2: Foo;
 
 foo1 = [...Array.isArray(foo2) ? foo2 : [foo2]];
 >foo1 : Symbol(foo1, Decl(spreadBooleanRespectsFreshness.ts, 4, 11))
->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >foo2 : Symbol(foo2, Decl(spreadBooleanRespectsFreshness.ts, 5, 11))
 >foo2 : Symbol(foo2, Decl(spreadBooleanRespectsFreshness.ts, 5, 11))
 >foo2 : Symbol(foo2, Decl(spreadBooleanRespectsFreshness.ts, 5, 11))
