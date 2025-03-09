@@ -39321,7 +39321,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (type.flags & TypeFlags.UnionOrIntersection) {
             const types = (type as UnionOrIntersectionType).types;
             for (const t of types) {
-                if (maybeTypeOfKind(t, kind)) {
+                if (maybeTypeOfKind(isNoInferType(t) ? (t as SubstitutionType).baseType : t, kind)) {
                     return true;
                 }
             }
