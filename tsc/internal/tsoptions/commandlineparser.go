@@ -46,8 +46,8 @@ func ParseCommandLine(
 	}
 	parser := parseCommandLineWorker(CompilerOptionsDidYouMeanDiagnostics, commandLine, host.FS())
 	optionsWithAbsolutePaths := convertToOptionsWithAbsolutePaths(parser.options, commandLineCompilerOptionsMap, host.GetCurrentDirectory())
-	compilerOptions := convertMapToOptions(commandLineCompilerOptionsMap, optionsWithAbsolutePaths, &compilerOptionsParser{&core.CompilerOptions{}}).CompilerOptions
-	watchOptions := convertMapToOptions(commandLineCompilerOptionsMap, optionsWithAbsolutePaths, &watchOptionsParser{&core.WatchOptions{}}).WatchOptions
+	compilerOptions := convertMapToOptions(optionsWithAbsolutePaths, &compilerOptionsParser{&core.CompilerOptions{}}).CompilerOptions
+	watchOptions := convertMapToOptions(optionsWithAbsolutePaths, &watchOptionsParser{&core.WatchOptions{}}).WatchOptions
 	return &ParsedCommandLine{
 		ParsedConfig: &core.ParsedOptions{
 			CompilerOptions: compilerOptions,
@@ -224,8 +224,8 @@ func (p *commandLineParser) parseOptionValue(
 		if args[i] != "null" {
 			switch opt.Kind {
 			case "number":
-				// todo: Make sure this parseInt matches JS parseInt
-				num, e := strconv.ParseInt(args[i], 10, 0)
+				// !!! Make sure this parseInt matches JS parseInt
+				num, e := strconv.Atoi(args[i])
 				if e == nil {
 					p.options.Set(opt.Name, num)
 				}

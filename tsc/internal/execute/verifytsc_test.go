@@ -82,3 +82,26 @@ func (test *tscInput) startBaseline() *strings.Builder {
 	test.sys.baselineFSwithDiff(s)
 	return s
 }
+
+func (test *tscInput) verifyCommandLineParsing(t *testing.T, scenario string) {
+	t.Helper()
+	t.Run(test.getTestName(scenario), func(t *testing.T) {
+		t.Parallel()
+		t.Run("baseline for the tsc compiles", func(t *testing.T) {
+			t.Parallel()
+			// initial test tsc compile
+			baselineBuilder := test.startBaseline()
+
+			parsedCommandLine, exit := execute.CommandLineTest(test.sys, nil, test.commandLineArgs)
+			baselineBuilder.WriteString("ExitStatus:: " + fmt.Sprint(exit))
+			//nolint:musttag
+			parsedCommandLineString, _ := json.MarshalIndent(parsedCommandLine, "", "    ")
+			baselineBuilder.WriteString("\n\nParsedCommandLine::")
+			baselineBuilder.Write(parsedCommandLineString)
+
+			test.sys.serializeState(baselineBuilder)
+			options, name := test.getBaselineName(scenario, false, "")
+			baseline.Run(t, name, baselineBuilder.String(), options)
+		})
+	})
+}

@@ -12,6 +12,9 @@ func start(w *watcher) ExitStatus {
 		w.host = compiler.NewCompilerHost(w.options.CompilerOptions(), w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath())
 	}
 	watchInterval := 1000 * time.Millisecond
+	if w.options.ParsedConfig.WatchOptions != nil {
+		watchInterval = time.Duration(*w.options.ParsedConfig.WatchOptions.Interval) * time.Millisecond
+	}
 	for {
 		w.doCycle()
 		time.Sleep(watchInterval)

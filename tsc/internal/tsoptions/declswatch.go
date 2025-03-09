@@ -7,6 +7,11 @@ import (
 
 var optionsForWatch = []*CommandLineOption{
 	{
+		Name:     "watchInterval",
+		Kind:     CommandLineOptionTypeNumber,
+		Category: diagnostics.Watch_and_Build_Modes,
+	},
+	{
 		Name: "watchFile",
 		Kind: CommandLineOptionTypeEnum,
 		// new Map(Object.entries({

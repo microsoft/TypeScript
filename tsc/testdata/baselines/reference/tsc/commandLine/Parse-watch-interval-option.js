@@ -1,11 +1,9 @@
 
 currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
-Input::--lib es6  first.ts
-//// [/home/src/workspaces/project/first.ts] new file
-export const Key = Symbol()
+Input::-w --watchInterval 1000
 
-ExitStatus:: 0
+ExitStatus:: 1
 
 ParsedCommandLine::{
     "parsedConfig": {
@@ -53,9 +51,7 @@ ParsedCommandLine::{
             "jsxFragmentFactory": "",
             "jsxImportSource": "",
             "keyofStringsOnly": null,
-            "lib": [
-                "lib.es2015.d.ts"
-            ],
+            "lib": null,
             "locale": "",
             "mapRoot": "",
             "module": 0,
@@ -131,12 +127,12 @@ ParsedCommandLine::{
             "preserveWatchOutput": null,
             "pretty": null,
             "version": null,
-            "watch": null,
+            "watch": true,
             "showConfig": null,
             "tscBuild": null
         },
         "watchOptions": {
-            "watchInterval": null,
+            "watchInterval": 1000,
             "watchFile": 0,
             "watchDirectory": 0,
             "fallbackPolling": 0,
@@ -144,26 +140,17 @@ ParsedCommandLine::{
             "excludeDirectories": null,
             "excludeFiles": null
         },
-        "fileNames": [
-            "first.ts"
-        ],
+        "fileNames": [],
         "projectReferences": null
     },
     "configFile": null,
     "errors": [],
     "raw": {
-        "lib": [
-            "lib.es2015.d.ts"
-        ]
+        "watch": true,
+        "watchInterval": 1000
     },
     "compileOnSave": null
 }
 Output::
-//// [/home/src/workspaces/project/first.js] new file
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Key = void 0;
-exports.Key = Symbol();
-
-//// [/home/src/workspaces/project/first.ts] no change
+No output
 

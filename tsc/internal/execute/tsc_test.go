@@ -60,23 +60,26 @@ func TestTsc(t *testing.T) {
 			sys:             newTestSys(nil, ""),
 			commandLineArgs: []string{"--help", "--all"},
 		},
+		{
+			subScenario:     "Parse --lib option with file name",
+			sys:             newTestSys(FileMap{"/home/src/workspaces/project/first.ts": `export const Key = Symbol()`}, ""),
+			commandLineArgs: []string{"--lib", "es6 ", "first.ts"},
+		},
+		{
+			subScenario:     "Parse enum type options",
+			sys:             newTestSys(nil, ""),
+			commandLineArgs: []string{"--moduleResolution", "nodenext ", "first.ts", "--module", "nodenext", "--target", "esnext", "--moduleDetection", "auto", "--jsx", "react", "--newLine", "crlf"},
+		},
+		{
+			subScenario:     "Parse watch interval option",
+			sys:             newTestSys(nil, ""),
+			commandLineArgs: []string{"-w", "--watchInterval", "1000"},
+		},
 	}
 
 	for _, testCase := range testCases {
-		testCase.verify(t, "commandLine")
+		testCase.verifyCommandLineParsing(t, "commandLine")
 	}
-
-	(&tscInput{
-		subScenario:     "Parse --lib option with file name",
-		sys:             newTestSys(FileMap{"/home/src/workspaces/project/first.ts": `export const Key = Symbol()`}, ""),
-		commandLineArgs: []string{"--lib", "es6 ", "first.ts"},
-	}).verify(t, "commandLine")
-
-	(&tscInput{
-		subScenario:     "Parse enum type options",
-		sys:             newTestSys(nil, ""),
-		commandLineArgs: []string{"--moduleResolution", "nodenext ", "first.ts", "--module", "nodenext", "--target", "esnext", "--moduleDetection", "auto", "--jsx", "react", "--newLine", "crlf"},
-	}).verify(t, "commandLine")
 }
 
 func TestNoEmit(t *testing.T) {

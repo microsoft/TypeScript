@@ -400,6 +400,8 @@ func ParseWatchOptions(key string, value any, allOptions *core.WatchOptions) []*
 		return nil
 	}
 	switch key {
+	case "watchInterval":
+		allOptions.Interval = parseNumber(value)
 	case "watchFile":
 		if value != nil {
 			allOptions.FileKind = value.(core.WatchFileKind)

@@ -1,6 +1,7 @@
 package core
 
 type WatchOptions struct {
+	Interval        *int               `json:"watchInterval"`
 	FileKind        WatchFileKind      `json:"watchFile"`
 	DirectoryKind   WatchDirectoryKind `json:"watchDirectory"`
 	FallbackPolling PollingKind        `json:"fallbackPolling"`
