@@ -1,4 +1,6 @@
 unknownControlFlow.ts(18,9): error TS2322: Type 'unknown' is not assignable to type '{}'.
+unknownControlFlow.ts(136,9): error TS2367: This comparison appears to be unintentional because the types 'T' and 'null' have no overlap.
+unknownControlFlow.ts(142,28): error TS2367: This comparison appears to be unintentional because the types 'T & {}' and 'null' have no overlap.
 unknownControlFlow.ts(283,5): error TS2536: Type 'keyof (T & {})' cannot be used to index type 'T'.
 unknownControlFlow.ts(290,11): error TS2345: Argument of type '"foo"' is not assignable to parameter of type 'never'.
 unknownControlFlow.ts(291,5): error TS2345: Argument of type 'null' is not assignable to parameter of type 'never'.
@@ -7,7 +9,7 @@ unknownControlFlow.ts(323,9): error TS2367: This comparison appears to be uninte
 unknownControlFlow.ts(341,9): error TS2367: This comparison appears to be unintentional because the types 'T' and 'number' have no overlap.
 
 
-==== unknownControlFlow.ts (7 errors) ====
+==== unknownControlFlow.ts (9 errors) ====
     type T01 = {} & string;  // {} & string
     type T02 = {} & 'a';  // 'a'
     type T03 = {} & object;  // object
@@ -146,12 +148,16 @@ unknownControlFlow.ts(341,9): error TS2367: This comparison appears to be uninte
             x;  // T
         }
         if (x !== null) {
+            ~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'T' and 'null' have no overlap.
             x;  // T
         }
         else {
             x;  // T
         }
         if (x !== undefined && x !== null) {
+                               ~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'T & {}' and 'null' have no overlap.
             x;  // T & {}
         }
         else {

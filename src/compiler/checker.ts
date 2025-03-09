@@ -39694,8 +39694,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function isTypeEqualityComparableTo(source: Type, target: Type) {
-        return (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
+    function isTypeEqualityComparableTo(source: Type, target: Type, strictEq: boolean) {
+        return !strictEq && (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
     }
 
     function createCheckBinaryExpression() {
@@ -40141,16 +40141,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // control flow analysis it is possible for operands to temporarily have narrower types, and those narrower
                 // types may cause the operands to not be comparable. We don't want such errors reported (see #46475).
                 if (!(checkMode && checkMode & CheckMode.TypeOnly)) {
+                    const strictEq = operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken;
                     if (
                         (isLiteralExpressionOfObject(left) || isLiteralExpressionOfObject(right)) &&
                         // only report for === and !== in JS, not == or !=
-                        (!isInJSFile(left) || (operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken))
+                        (!isInJSFile(left) || strictEq)
                     ) {
                         const eqType = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken;
                         error(errorNode, Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value, eqType ? "false" : "true");
                     }
                     checkNaNEquality(errorNode, operator, left, right);
-                    reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
+                    reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right, strictEq) || isTypeEqualityComparableTo(right, left, strictEq));
                 }
                 return booleanType;
             case SyntaxKind.InstanceOfKeyword:
@@ -45813,7 +45814,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // to or from the type of the 'switch' expression.
                     const caseType = checkExpression(clause.expression);
 
-                    if (!isTypeEqualityComparableTo(expressionType, caseType)) {
+                    if (!isTypeEqualityComparableTo(expressionType, caseType, /*strictEq*/ true)) {
                         // expressionType is not comparable to caseType, try the reversed check and report errors if it fails
                         checkTypeComparableTo(caseType, expressionType, clause.expression, /*headMessage*/ undefined);
                     }
