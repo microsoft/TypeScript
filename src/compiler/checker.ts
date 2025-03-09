@@ -40789,7 +40789,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // potentially add inferred type parameters to the outer function return type.
                         const returnType = context.signature && getReturnTypeOfSignature(context.signature);
                         const returnSignature = returnType && getSingleCallOrConstructSignature(returnType);
-                        if (returnSignature && !returnSignature.typeParameters && !every(context.inferences, hasInferenceCandidates)) {
+                        if (returnSignature && !returnSignature.typeParameters && !every(context.inferences, info => hasInferenceCandidates(info) && info.priority === InferencePriority.None)) {
                             // Instantiate the signature with its own type parameters as type arguments, possibly
                             // renaming the type parameters to ensure they have unique names.
                             const uniqueTypeParameters = getUniqueTypeParameters(context, signature.typeParameters);
@@ -40809,8 +40809,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 // If the type parameters for which we produced candidates do not have any inferences yet,
                                 // we adopt the new inference candidates and add the type parameters of the expression type
                                 // to the set of inferred type parameters for the outer function return type.
-                                if (!hasOverlappingInferences(context.inferences, inferences)) {
-                                    mergeInferences(context.inferences, inferences);
+                                const merged = tryInferencesMerge(context.inferences, inferences);
+                                if (merged) {
                                     context.inferredTypeParameters = concatenate(context.inferredTypeParameters, uniqueTypeParameters);
                                     return getOrCreateTypeFromSignature(instantiatedSignature);
                                 }
@@ -40853,12 +40853,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function mergeInferences(target: InferenceInfo[], source: InferenceInfo[]) {
+    function tryInferencesMerge(target: InferenceInfo[], source: InferenceInfo[]) {
+        let merged = false;
+
+        const areOverlapping = hasOverlappingInferences(target, source);
+
         for (let i = 0; i < target.length; i++) {
-            if (!hasInferenceCandidates(target[i]) && hasInferenceCandidates(source[i])) {
-                target[i] = source[i];
+            if (areOverlapping ? hasInferenceCandidates(source[i]) && hasInferenceCandidates(target[i]) && source[i].priority! < (target[i].priority! & ~InferencePriority.ReturnType) : hasInferenceCandidates(source[i])) {
+                const clonedInferenceInfo = cloneInferenceInfo(source[i]);
+                clonedInferenceInfo.priority = InferencePriority.None;
+                target[i] = clonedInferenceInfo;
+                merged = true;
             }
         }
+        return merged;
     }
 
     function getUniqueTypeParameters(context: InferenceContext, typeParameters: readonly TypeParameter[]): readonly TypeParameter[] {
