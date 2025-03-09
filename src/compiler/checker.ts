@@ -28855,7 +28855,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 !!getApplicableIndexInfoForName(type, propName) || !assumeTrue;
         }
 
-        function narrowTypeByInKeyword(type: Type, nameType: StringLiteralType | NumberLiteralType | UniqueESSymbolType, assumeTrue: boolean) {
+        function narrowTypeByInKeyword(type: Type, nameType: StringLiteralType | NumberLiteralType | UniqueESSymbolType | IntersectionType, assumeTrue: boolean) {
             const name = getPropertyNameFromType(nameType);
             const isKnownProperty = someType(type, t => isTypePresencePossible(t, name, /*assumeTrue*/ true));
             if (isKnownProperty) {
@@ -32891,7 +32891,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 checkNodeDeferred(memberDecl);
             }
 
-            if (computedNameType && !(computedNameType.flags & TypeFlags.StringOrNumberLiteralOrUnique)) {
+            if (computedNameType && !isTypeUsableAsPropertyName(computedNameType)) {
                 if (isTypeAssignableTo(computedNameType, stringNumberSymbolType)) {
                     if (isTypeAssignableTo(computedNameType, numberType)) {
                         hasComputedNumberProperty = true;
