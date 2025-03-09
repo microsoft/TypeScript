@@ -12314,7 +12314,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getNonMissingTypeOfSymbol(symbol: Symbol) {
-        return removeMissingType(getTypeOfSymbol(symbol), !!(symbol.flags & SymbolFlags.Optional));
+        let type = getTypeOfSymbol(symbol);
+        if (exactOptionalPropertyTypes) {
+            const checkFlags = getCheckFlags(symbol);
+            if (checkFlags & CheckFlags.Mapped) {
+                const mappedType = (symbol as MappedSymbol).links.mappedType;
+                const keyType = (symbol as MappedSymbol).links.keyType;
+                const modifiersType = getModifiersTypeFromMappedType(mappedType);
+                if (modifiersType !== unknownType) {
+                    type = mapType(type, t => {
+                        if (!(t.flags & TypeFlags.IndexedAccess) || (t as IndexedAccessType).objectType !== modifiersType || (t as IndexedAccessType).indexType !== keyType) {
+                            return t;
+                        }
+                        return getIndexedAccessType(modifiersType, keyType, AccessFlags.NonMissing, /*accessNode*/ undefined, t.aliasSymbol, t.aliasTypeArguments);
+                    });
+                }
+            }
+        }
+        return removeMissingType(type, !!(symbol.flags & SymbolFlags.Optional));
     }
 
     function isReferenceToSomeType(type: Type, targets: readonly Type[]) {
@@ -18604,7 +18621,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return autoType;
                     }
                 }
-                const propType = accessFlags & AccessFlags.Writing ? getWriteTypeOfSymbol(prop) : getTypeOfSymbol(prop);
+                const propType = accessFlags & AccessFlags.Writing ?
+                    getWriteTypeOfSymbol(prop) :
+                    removeMissingType(getTypeOfSymbol(prop), !!(prop.flags & SymbolFlags.Optional && accessFlags & AccessFlags.NonMissing));
                 return accessExpression && getAssignmentTargetKind(accessExpression) !== AssignmentKind.Definite ? getFlowTypeOfReference(accessExpression, propType) :
                     accessNode && isIndexedAccessTypeNode(accessNode) && containsMissingType(propType) ? getUnionType([propType, undefinedType]) :
                     propType;
