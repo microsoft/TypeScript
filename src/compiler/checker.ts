@@ -2305,6 +2305,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var lastFlowNode: FlowNode | undefined;
     var lastFlowNodeReachable: boolean;
     var flowTypeCache: Type[] | undefined;
+    var flowCacheReference: Node;
+    var flowCacheInitialType: Type;
+    var flowCacheFlowNode: FlowNode | undefined;
+    var flowCacheResult: Type;
 
     var contextualTypeNodes: Node[] = [];
     var contextualTypes: (Type | undefined)[] = [];
@@ -28260,15 +28264,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, flowNode = tryCast(reference, canHaveFlowNode)?.flowNode) {
-        let key: string | undefined;
-        let isKeySet = false;
-        let flowDepth = 0;
         if (flowAnalysisDisabled) {
             return errorType;
         }
         if (!flowNode) {
             return declaredType;
         }
+        if ((reference.kind === SyntaxKind.Identifier || reference.kind === SyntaxKind.ThisKeyword) && declaredType !== autoType && declaredType !== autoArrayType) {
+            if (flowNode === flowCacheFlowNode && initialType === flowCacheInitialType && isMatchingReference(reference, flowCacheReference)) {
+                return flowCacheResult;
+            }
+            const resultType = getFlowTypeOfReferenceWorker(reference, declaredType, initialType, flowContainer, flowNode);
+            flowCacheReference = reference;
+            flowCacheInitialType = initialType;
+            flowCacheFlowNode = flowNode;
+            flowCacheResult = resultType;
+            return resultType;
+        }
+        return getFlowTypeOfReferenceWorker(reference, declaredType, initialType, flowContainer, flowNode);
+    }
+
+    function getFlowTypeOfReferenceWorker(reference: Node, declaredType: Type, initialType: Type, flowContainer: Node | undefined, flowNode: FlowNode) {
+        let key: string | undefined;
+        let isKeySet = false;
+        let flowDepth = 0;
         flowInvocationCount++;
         const sharedFlowStart = sharedFlowCount;
         const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(flowNode));
