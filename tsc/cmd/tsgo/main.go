@@ -112,6 +112,11 @@ func parseArgs() *cliOptions {
 	flag.StringVar(&opts.devel.pprofDir, "pprofDir", "", "Generate pprof CPU/memory profiles to the given directory.")
 	flag.Parse()
 
+	if len(flag.Args()) > 0 {
+		fmt.Fprintf(os.Stderr, "Unknown positional arguments %v. Current compiler is not identical to tsc but can be partially emulated by running:\n\ntsgo tsc <args>\n", flag.Args())
+		os.Exit(1)
+	}
+
 	return opts
 }
 
