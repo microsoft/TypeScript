@@ -128,7 +128,7 @@ func generateBaseline(
 	if result.Len() > 0 {
 		return fmt.Sprintf("//// [%s] ////\r\n\r\n%s%s", header, strings.Join(perfLines, "\n"), result.String())
 	}
-	return result.String()
+	return baseline.NoContent
 }
 
 func iterateBaseline(allFiles []*harnessutil.TestFile, fullWalker *typeWriterWalker, isSymbolBaseline bool) []string {

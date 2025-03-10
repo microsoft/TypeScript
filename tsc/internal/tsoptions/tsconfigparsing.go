@@ -1451,8 +1451,8 @@ func getFileNamesFromConfigSpecs(
 	validatedExcludeSpecs := configFileSpecs.validatedExcludeSpecs
 	// Rather than re-query this for each file and filespec, we query the supported extensions
 	// once and store it on the expansion context.
-	supportedExtensions := getSupportedExtensions(options, extraFileExtensions)
-	supportedExtensionsWithJsonIfResolveJsonModule := getSupportedExtensionsWithJsonIfResolveJsonModule(options, supportedExtensions)
+	supportedExtensions := GetSupportedExtensions(options, extraFileExtensions)
+	supportedExtensionsWithJsonIfResolveJsonModule := GetSupportedExtensionsWithJsonIfResolveJsonModule(options, supportedExtensions)
 	// Literal files are always included verbatim. An "include" or "exclude" specification cannot
 	// remove a literal file.
 	for _, fileName := range validatedFilesSpec {
@@ -1518,7 +1518,7 @@ func getFileNamesFromConfigSpecs(
 	return files
 }
 
-func getSupportedExtensions(options *core.CompilerOptions, extraFileExtensions []fileExtensionInfo) [][]string {
+func GetSupportedExtensions(options *core.CompilerOptions, extraFileExtensions []fileExtensionInfo) [][]string {
 	needJsExtensions := options.GetAllowJs()
 	if len(extraFileExtensions) == 0 {
 		if needJsExtensions {
@@ -1544,7 +1544,7 @@ func getSupportedExtensions(options *core.CompilerOptions, extraFileExtensions [
 	return extensions
 }
 
-func getSupportedExtensionsWithJsonIfResolveJsonModule(options *core.CompilerOptions, supportedExtensions [][]string) [][]string {
+func GetSupportedExtensionsWithJsonIfResolveJsonModule(options *core.CompilerOptions, supportedExtensions [][]string) [][]string {
 	if options == nil || !options.GetResolveJsonModule() {
 		return supportedExtensions
 	}

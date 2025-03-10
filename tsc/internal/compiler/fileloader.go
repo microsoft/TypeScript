@@ -30,6 +30,7 @@ type fileLoader struct {
 	defaultLibraryPath      string
 	comparePathsOptions     tspath.ComparePathsOptions
 	rootTasks               []*parseTask
+	supportedExtensions     []string
 }
 
 func processAllProgramFiles(
@@ -40,6 +41,7 @@ func processAllProgramFiles(
 	rootFiles []string,
 	libs []string,
 ) (files []*ast.SourceFile, resolvedModules map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule]) {
+	supportedExtensions := tsoptions.GetSupportedExtensions(compilerOptions, nil /*extraFileExtensions*/)
 	loader := fileLoader{
 		host:               host,
 		programOptions:     programOptions,
@@ -51,8 +53,9 @@ func processAllProgramFiles(
 			UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
 			CurrentDirectory:          host.GetCurrentDirectory(),
 		},
-		wg:        core.NewWorkGroup(programOptions.SingleThreaded),
-		rootTasks: make([]*parseTask, 0, len(rootFiles)+len(libs)),
+		wg:                  core.NewWorkGroup(programOptions.SingleThreaded),
+		rootTasks:           make([]*parseTask, 0, len(rootFiles)+len(libs)),
+		supportedExtensions: core.Flatten(tsoptions.GetSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions, supportedExtensions)),
 	}
 
 	loader.addRootTasks(rootFiles, false)
@@ -79,7 +82,9 @@ func processAllProgramFiles(
 func (p *fileLoader) addRootTasks(files []string, isLib bool) {
 	for _, fileName := range files {
 		absPath := tspath.GetNormalizedAbsolutePath(fileName, p.host.GetCurrentDirectory())
-		p.rootTasks = append(p.rootTasks, &parseTask{normalizedFilePath: absPath, isLib: isLib})
+		if core.Tristate.IsTrue(p.compilerOptions.AllowNonTsExtensions) || slices.Contains(p.supportedExtensions, tspath.TryGetExtensionFromPath(absPath)) {
+			p.rootTasks = append(p.rootTasks, &parseTask{normalizedFilePath: absPath, isLib: isLib})
+		}
 	}
 }
 

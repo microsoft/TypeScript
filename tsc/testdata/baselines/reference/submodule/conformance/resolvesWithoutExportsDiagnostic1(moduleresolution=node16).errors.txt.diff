@@ -1,6 +1,6 @@
 --- old.resolvesWithoutExportsDiagnostic1(moduleresolution=node16).errors.txt
 +++ new.resolvesWithoutExportsDiagnostic1(moduleresolution=node16).errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 -error TS6504: File '/node_modules/bar/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
 -  The file is in the program because:
@@ -18,10 +18,8 @@
 -  There are types at '/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json "exports". The 'foo' library may need to update its package.json or typings.
 -/index.mts(2,21): error TS7016: Could not find a declaration file for module 'bar'. '/node_modules/bar/index.mjs' implicitly has an 'any' type.
 -  There are types at '/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json "exports". The '@types/bar' library may need to update its package.json or typings.
-+/node_modules/bar/index.js(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-+/node_modules/foo/index.js(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
- 
- 
+-
+-
 -!!! error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 -!!! error TS6504: File '/node_modules/bar/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
 -!!! error TS6504:   The file is in the program because:
@@ -35,41 +33,71 @@
 -!!! error TS6504: File '/node_modules/foo/index.mjs' is a JavaScript file. Did you mean to enable the 'allowJs' option?
 -!!! error TS6504:   The file is in the program because:
 -!!! error TS6504:     Root file specified for compilation
- ==== /node_modules/foo/package.json (0 errors) ====
-     {
-         "name": "foo",
-@@= skipped -43, +15 lines =@@
-         }
-     }
-     
+-==== /node_modules/foo/package.json (0 errors) ====
+-    {
+-        "name": "foo",
+-        "version": "1.0.0",
+-        "main": "index.js",
+-        "types": "index.d.ts",
+-        "exports": {
+-            ".": {
+-                "import": "./index.mjs",
+-                "require": "./index.js"
+-            }
+-        }
+-    }
+-    
 -==== /node_modules/foo/index.js (0 errors) ====
-+==== /node_modules/foo/index.js (1 errors) ====
-     module.exports = { foo: 1 };
-+    ~~~~~~
-+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-     
- ==== /node_modules/foo/index.mjs (0 errors) ====
-     export const foo = 1;
-@@= skipped -37, +39 lines =@@
-         }
-     }
-     
+-    module.exports = { foo: 1 };
+-    
+-==== /node_modules/foo/index.mjs (0 errors) ====
+-    export const foo = 1;
+-    
+-==== /node_modules/foo/index.d.ts (0 errors) ====
+-    export declare const foo: number;
+-    
+-==== /node_modules/@types/bar/package.json (0 errors) ====
+-    {
+-        "name": "@types/bar",
+-        "version": "1.0.0",
+-        "types": "index.d.ts",
+-        "exports": {
+-            ".": {
+-                "require": "./index.d.ts"
+-            }
+-        }
+-    }
+-    
+-==== /node_modules/@types/bar/index.d.ts (0 errors) ====
+-    export declare const bar: number;
+-    
+-==== /node_modules/bar/package.json (0 errors) ====
+-    {
+-        "name": "bar",
+-        "version": "1.0.0",
+-        "main": "index.js",
+-        "exports": {
+-            ".": {
+-                "import": "./index.mjs",
+-                "require": "./index.js"
+-            }
+-        }
+-    }
+-    
 -==== /node_modules/bar/index.js (0 errors) ====
-+==== /node_modules/bar/index.js (1 errors) ====
-     module.exports = { bar: 1 };
-+    ~~~~~~
-+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-     
- ==== /node_modules/bar/index.mjs (0 errors) ====
-     export const bar = 1;
-     
+-    module.exports = { bar: 1 };
+-    
+-==== /node_modules/bar/index.mjs (0 errors) ====
+-    export const bar = 1;
+-    
 -==== /index.mts (2 errors) ====
-+==== /index.mts (0 errors) ====
-     import { foo } from "foo";
+-    import { foo } from "foo";
 -                        ~~~~~
 -!!! error TS7016: Could not find a declaration file for module 'foo'. '/node_modules/foo/index.mjs' implicitly has an 'any' type.
 -!!! error TS7016:   There are types at '/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json "exports". The 'foo' library may need to update its package.json or typings.
-     import { bar } from "bar";
+-    import { bar } from "bar";
 -                        ~~~~~
 -!!! error TS7016: Could not find a declaration file for module 'bar'. '/node_modules/bar/index.mjs' implicitly has an 'any' type.
 -!!! error TS7016:   There are types at '/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json "exports". The '@types/bar' library may need to update its package.json or typings.
+@@= skipped --1, +1 lines =@@
++<no content>

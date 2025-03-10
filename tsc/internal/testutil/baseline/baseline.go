@@ -43,9 +43,8 @@ func Run(t *testing.T, fileName string, actual string, opts Options) {
 			}
 		}
 		writeComparison(t, diff, diffFileName, false /*useSubmodule*/, opts)
-	} else {
-		writeComparison(t, actual, fileName, false /*useSubmodule*/, opts)
 	}
+	writeComparison(t, actual, fileName, false /*useSubmodule*/, opts)
 }
 
 func getBaselineDiff(t *testing.T, actual string, fileName string) string {
@@ -116,19 +115,23 @@ func writeComparison(t *testing.T, actual string, relativeFileName string, useSu
 
 	if _, err := os.Stat(localFileName); err == nil {
 		if err := os.Remove(localFileName); err != nil {
-			t.Fatal(fmt.Errorf("failed to remove the local baseline file %s: %w", localFileName, err))
+			t.Error(fmt.Errorf("failed to remove the local baseline file %s: %w", localFileName, err))
+			return
 		}
 	}
 	if actual != expected {
 		if err := os.MkdirAll(filepath.Dir(localFileName), 0o755); err != nil {
-			t.Fatal(fmt.Errorf("failed to create directories for the local baseline file %s: %w", localFileName, err))
+			t.Error(fmt.Errorf("failed to create directories for the local baseline file %s: %w", localFileName, err))
+			return
 		}
 		if actual == NoContent {
 			if err := os.WriteFile(localFileName+".delete", []byte{}, 0o644); err != nil {
-				t.Fatal(fmt.Errorf("failed to write the local baseline file %s: %w", localFileName+".delete", err))
+				t.Error(fmt.Errorf("failed to write the local baseline file %s: %w", localFileName+".delete", err))
+				return
 			}
 		} else if err := os.WriteFile(localFileName, []byte(actual), 0o644); err != nil {
-			t.Fatal(fmt.Errorf("failed to write the local baseline file %s: %w", localFileName, err))
+			t.Error(fmt.Errorf("failed to write the local baseline file %s: %w", localFileName, err))
+			return
 		}
 
 		if _, err := os.Stat(referenceFileName); err != nil {

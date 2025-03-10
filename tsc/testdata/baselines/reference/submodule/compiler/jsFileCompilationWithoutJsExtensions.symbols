@@ -1,6 +1,0 @@
-//// [tests/cases/compiler/jsFileCompilationWithoutJsExtensions.ts] ////
-
-=== a.js ===
-declare var v;
->v : Symbol(v, Decl(a.js, 0, 11))
-

@@ -11,17 +11,9 @@ export = React;
 export declare function createStore(): void;
 >createStore : Symbol(createStore, Decl(index.d.ts, 0, 0))
 
-=== /packages/a/node_modules/react/index.js ===
-
-module.exports = {};
-
 === /packages/a/node_modules/redux/index.d.ts ===
 export declare function createStore(): void;
 >createStore : Symbol(createStore, Decl(index.d.ts, 0, 0))
-
-=== /packages/a/node_modules/redux/index.js ===
-
-module.exports = {};
 
 === /packages/a/index.ts ===
 import React from "react";
