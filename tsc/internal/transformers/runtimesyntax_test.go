@@ -201,6 +201,19 @@ var E;
     E["B"] = A;
     if (typeof E.B !== "string") E[E.B] = "B";
 })(E || (E = {}));`},
+
+		{title: "reverse map enum", input: `enum E {
+    A = 0,
+    B = 1 << 0,
+    C = 1 << 1,
+    D,
+}`, output: `var E;
+(function (E) {
+    E[E["A"] = 0] = "A";
+    E[E["B"] = 1 << 0] = "B";
+    E[E["C"] = 1 << 1] = "C";
+    E[E["D"] = 3] = "D";
+})(E || (E = {}));`},
 	}
 
 	for _, rec := range data {
