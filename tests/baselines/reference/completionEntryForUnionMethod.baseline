@@ -4404,7 +4404,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The number of elements to remove.",
+                  "text": "The number of elements to remove. Omitting this argument will remove all elements from the start\nparamater location to end of the array. If value of this argument is either a negative number, zero, undefined, or a type\nthat cannot be converted to an integer, the function will evaluate the argument as zero and not remove any elements.",
                   "kind": "text"
                 }
               ]
