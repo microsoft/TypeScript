@@ -1,9 +1,7 @@
 // === findRenameLocations ===
-// === /tests/cases/fourslash/renameStringLiteralTypes5.ts ===
-// declare const Att_1: "[|Att 2RENAME|]"/*RENAME*/
-// 
+// === /tests/cases/fourslash/renameStringLiteralTypes6.ts ===
 // interface Case_1 {
-//   [Att_1]: string
+//   <|"[|Att 2RENAME|]"/*RENAME*/: string|>
 // }
 // 
 // declare const fnc_1: <K extends keyof Case_1>(p: K) => void

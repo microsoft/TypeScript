@@ -1013,9 +1013,8 @@ export namespace Core {
         const checker = program.getTypeChecker();
         // constructors should use the class symbol, detected by name, if present
         const symbol = checker.getSymbolAtLocation(isConstructorDeclaration(node) && node.parent.name || node);
-
         // Could not find a symbol e.g. unknown identifier
-        if (!symbol) {
+        if (!symbol || (isStringLiteralLike(node) && isStringLiteralPropertyReference(node, checker))) {
             // String literal might be a property (and thus have a symbol), so do this here rather than in getReferencedSymbolsSpecial.
             if (!options.implementations && isStringLiteralLike(node)) {
                 if (isModuleSpecifierLike(node)) {
@@ -1389,7 +1388,6 @@ export namespace Core {
         /** Only set if `options.implementations` is true. These are the symbols checked to get the implementations of a property access. */
         readonly parents: readonly Symbol[] | undefined;
         readonly allSearchSymbols: readonly Symbol[];
-
         /**
          * Whether a symbol is in the search set.
          * Do not compare directly to `symbol` because there may be related symbols to search for. See `populateSearchSymbolSet`.
