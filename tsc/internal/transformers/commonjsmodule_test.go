@@ -936,6 +936,19 @@ exports.a = void 0;
 exports.a = 0;
 exports.a;`,
 		},
+		{
+			title: "Identifier#3 (from enum)",
+			input: `export enum E { A }
+E.A`,
+			output: `"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.E = void 0;
+var E;
+(function (E) {
+    E[E["A"] = 0] = "A";
+})(E || (exports.E = E = {}));
+E.A;`,
+		},
 
 		{
 			title: "Other",

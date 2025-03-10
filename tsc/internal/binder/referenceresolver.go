@@ -153,7 +153,7 @@ func (r *referenceResolver) GetReferencedExportContainer(node *ast.IdentifierNod
 			// we prefix depends on the kind of entity. SymbolFlags.ExportHasLocal encompasses all the
 			// kinds that we do NOT prefix.
 			exportSymbol := r.getMergedSymbol(symbol.ExportSymbol)
-			if !prefixLocals && exportSymbol.Flags&(ast.SymbolFlagsExportHasLocal|ast.SymbolFlagsVariable) == 0 {
+			if !prefixLocals && exportSymbol.Flags&ast.SymbolFlagsExportHasLocal != 0 && exportSymbol.Flags&ast.SymbolFlagsVariable == 0 {
 				return nil
 			}
 			symbol = exportSymbol

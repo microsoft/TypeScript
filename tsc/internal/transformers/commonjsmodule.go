@@ -1897,7 +1897,7 @@ func (tx *CommonJSModuleTransformer) visitIdentifier(node *ast.IdentifierNode) *
 
 // Visits an identifier in an expression position that might reference an imported or exported symbol.
 func (tx *CommonJSModuleTransformer) visitExpressionIdentifier(node *ast.IdentifierNode) *ast.Node {
-	if info := tx.emitContext.GetAutoGenerateInfo(node); !(info != nil && info.Flags.HasAllowNameSubstitution()) &&
+	if info := tx.emitContext.GetAutoGenerateInfo(node); !(info != nil && !info.Flags.HasAllowNameSubstitution()) &&
 		!isHelperName(tx.emitContext, node) &&
 		!isLocalName(tx.emitContext, node) &&
 		!isDeclarationNameOfEnumOrNamespace(tx.emitContext, node) {
