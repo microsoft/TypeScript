@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/dependentReturnType8.ts] ////
+
+=== dependentReturnType8.ts ===
+export {};
+
+declare const record: Record<string, string[]>;
+>record : Record<string, string[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const array: string[];
+>array : string[]
+>      : ^^^^^^^^
+
+// Arrow function with expression body
+const getObject =
+>getObject : <T extends string | undefined>(group: T) => T extends string ? string[] : T extends undefined ? Record<string, string[]> : never
+>          : ^ ^^^^^^^^^                  ^^     ^^ ^^^^^                                                                                    
+
+    <T extends string | undefined>(group: T): T extends string ? string[] : T extends undefined ? Record<string, string[]> : never =>
+><T extends string | undefined>(group: T): T extends string ? string[] : T extends undefined ? Record<string, string[]> : never =>        group === undefined ? record : array : <T extends string | undefined>(group: T) => T extends string ? string[] : T extends undefined ? Record<string, string[]> : never
+>                                                                                                                                                                              : ^ ^^^^^^^^^                  ^^     ^^ ^^^^^                                                                                    
+>group : T
+>      : ^
+
+        group === undefined ? record : array;
+>group === undefined ? record : array : string[] | Record<string, string[]>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>group === undefined : boolean
+>                    : ^^^^^^^
+>group : T
+>      : ^
+>undefined : undefined
+>          : ^^^^^^^^^
+>record : Record<string, string[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>array : string[]
+>      : ^^^^^^^^
+
