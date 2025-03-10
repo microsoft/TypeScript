@@ -199,6 +199,15 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 		// !!! Use PartiallyEmittedExpression to preserve comments
 		return tx.visitor.VisitNode(node.AsSatisfiesExpression().Expression)
 
+	case ast.KindParenthesizedExpression:
+		n := node.AsParenthesizedExpression()
+		expression := ast.SkipOuterExpressions(n.Expression, ^(ast.OEKTypeAssertions | ast.OEKExpressionsWithTypeArguments))
+		if ast.IsAssertionExpression(expression) || ast.IsSatisfiesExpression(expression) {
+			// !!! Use PartiallyEmittedExpression to preserve comments
+			return tx.visitor.VisitNode(n.Expression)
+		}
+		return tx.visitor.VisitEachChild(node)
+
 	case ast.KindJsxSelfClosingElement:
 		n := node.AsJsxSelfClosingElement()
 		return tx.factory.UpdateJsxSelfClosingElement(n, tx.visitor.VisitNode(n.TagName), nil, tx.visitor.VisitNode(n.Attributes))
