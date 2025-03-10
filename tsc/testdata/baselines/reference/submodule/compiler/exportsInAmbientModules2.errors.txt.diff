@@ -1,0 +1,17 @@
+--- old.exportsInAmbientModules2.errors.txt
++++ new.exportsInAmbientModules2.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++main.ts(2,19): error TS2307: Cannot find module 'external' or its corresponding type declarations.
++
++
++==== external.d.ts (0 errors) ====
++    export default class C {}
++    
++==== main.ts (1 errors) ====
++    declare module "M" {
++        export * from "external"
++                      ~~~~~~~~~~
++!!! error TS2307: Cannot find module 'external' or its corresponding type declarations.
++    }

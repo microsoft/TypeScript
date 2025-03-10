@@ -1,0 +1,297 @@
+1.tsx(3,1): error TS1128: Declaration or statement expected.
+1.tsx(3,3): error TS1109: Expression expected.
+1.tsx(3,4): error TS1109: Expression expected.
+10.tsx(1,5): error TS1003: Identifier expected.
+10.tsx(1,13): error TS1005: '>' expected.
+10.tsx(1,14): error TS2304: Cannot find name 'c'.
+10.tsx(1,16): error TS1109: Expression expected.
+11.tsx(1,10): error TS17002: Expected corresponding JSX closing tag for 'a.b.c'.
+12.tsx(1,1): error TS1109: Expression expected.
+12.tsx(1,2): error TS1109: Expression expected.
+12.tsx(1,5): error TS1109: Expression expected.
+12.tsx(1,7): error TS1128: Declaration or statement expected.
+12.tsx(1,8): error TS2304: Cannot find name 'a'.
+12.tsx(1,10): error TS1109: Expression expected.
+13.tsx(1,4): error TS1003: Identifier expected.
+13.tsx(1,9): error TS1003: Identifier expected.
+14.tsx(1,3): error TS1003: Identifier expected.
+14.tsx(1,4): error TS2304: Cannot find name 'foo'.
+14.tsx(1,9): error TS1109: Expression expected.
+14.tsx(1,11): error TS2304: Cannot find name 'a'.
+14.tsx(1,13): error TS2304: Cannot find name 'foo'.
+14.tsx(1,18): error TS1109: Expression expected.
+15.tsx(1,3): error TS1003: Identifier expected.
+15.tsx(1,11): error TS1109: Expression expected.
+15.tsx(1,13): error TS2304: Cannot find name 'a'.
+15.tsx(1,22): error TS1109: Expression expected.
+16.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
+16.tsx(1,10): error TS1005: '</' expected.
+17.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
+17.tsx(1,10): error TS1005: '</' expected.
+18.tsx(1,30): error TS2657: JSX expressions must have one parent element.
+19.tsx(1,9): error TS2657: JSX expressions must have one parent element.
+2.tsx(1,5): error TS1003: Identifier expected.
+20.tsx(1,10): error TS1005: '}' expected.
+20.tsx(1,11): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+21.tsx(1,20): error TS1003: Identifier expected.
+22.tsx(1,15): error TS1003: Identifier expected.
+22.tsx(1,21): error TS1109: Expression expected.
+23.tsx(1,7): error TS1005: '...' expected.
+24.tsx(1,17): error TS1005: '>' expected.
+24.tsx(1,18): error TS1128: Declaration or statement expected.
+24.tsx(1,21): error TS2304: Cannot find name 'props'.
+24.tsx(1,27): error TS1109: Expression expected.
+24.tsx(1,28): error TS1109: Expression expected.
+25.tsx(1,28): error TS1005: '>' expected.
+25.tsx(1,29): error TS1128: Declaration or statement expected.
+25.tsx(1,32): error TS2304: Cannot find name 'props'.
+25.tsx(1,38): error TS1109: Expression expected.
+25.tsx(1,39): error TS1109: Expression expected.
+26.tsx(1,4): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+27.tsx(1,5): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+28.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
+28.tsx(1,6): error TS1145: '{' or JSX element expected.
+28.tsx(2,1): error TS1005: '</' expected.
+29.tsx(1,7): error TS17008: JSX element '' has no corresponding closing tag.
+29.tsx(1,7): error TS1003: Identifier expected.
+29.tsx(2,1): error TS1005: '</' expected.
+3.tsx(1,1): error TS1109: Expression expected.
+3.tsx(1,2): error TS1109: Expression expected.
+3.tsx(1,3): error TS2304: Cannot find name 'a'.
+3.tsx(1,6): error TS1109: Expression expected.
+3.tsx(1,7): error TS1109: Expression expected.
+30.tsx(1,4): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+31.tsx(1,4): error TS1003: Identifier expected.
+4.tsx(1,6): error TS1145: '{' or JSX element expected.
+5.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
+5.tsx(1,5): error TS1005: '</' expected.
+6.tsx(1,6): error TS17002: Expected corresponding JSX closing tag for 'a'.
+7.tsx(1,13): error TS1002: Unterminated string literal.
+8.tsx(1,8): error TS17002: Expected corresponding JSX closing tag for 'a:b'.
+9.tsx(1,5): error TS1003: Identifier expected.
+9.tsx(1,13): error TS1005: '>' expected.
+9.tsx(1,14): error TS2304: Cannot find name 'c'.
+9.tsx(1,16): error TS1109: Expression expected.
+
+
+==== 1.tsx (3 errors) ====
+    declare var React: any;
+    
+    </>;
+    ~~
+!!! error TS1128: Declaration or statement expected.
+      ~
+!!! error TS1109: Expression expected.
+       ~
+!!! error TS1109: Expression expected.
+==== 2.tsx (1 errors) ====
+    <a: />;
+        ~
+!!! error TS1003: Identifier expected.
+==== 3.tsx (5 errors) ====
+    <:a />;
+    ~
+!!! error TS1109: Expression expected.
+     ~
+!!! error TS1109: Expression expected.
+      ~
+!!! error TS2304: Cannot find name 'a'.
+         ~
+!!! error TS1109: Expression expected.
+          ~
+!!! error TS1109: Expression expected.
+==== 4.tsx (1 errors) ====
+    <a b=d />;
+         ~
+!!! error TS1145: '{' or JSX element expected.
+==== 5.tsx (2 errors) ====
+    <a>;
+     ~
+!!! error TS17008: JSX element 'a' has no corresponding closing tag.
+        
+!!! error TS1005: '</' expected.
+==== 6.tsx (1 errors) ====
+    <a></b>;
+         ~
+!!! error TS17002: Expected corresponding JSX closing tag for 'a'.
+==== 7.tsx (1 errors) ====
+    <a foo="bar;
+                
+!!! error TS1002: Unterminated string literal.
+==== 8.tsx (1 errors) ====
+    <a:b></b>;
+           ~
+!!! error TS17002: Expected corresponding JSX closing tag for 'a:b'.
+==== 9.tsx (4 errors) ====
+    <a:b.c></a:b.c>;
+        ~
+!!! error TS1003: Identifier expected.
+                ~
+!!! error TS1005: '>' expected.
+                 ~
+!!! error TS2304: Cannot find name 'c'.
+                   ~
+!!! error TS1109: Expression expected.
+==== 10.tsx (4 errors) ====
+    <a.b:c></a.b:c>;
+        ~
+!!! error TS1003: Identifier expected.
+                ~
+!!! error TS1005: '>' expected.
+                 ~
+!!! error TS2304: Cannot find name 'c'.
+                   ~
+!!! error TS1109: Expression expected.
+==== 11.tsx (1 errors) ====
+    <a.b.c></a>;
+             ~
+!!! error TS17002: Expected corresponding JSX closing tag for 'a.b.c'.
+==== 12.tsx (6 errors) ====
+    <.a></.a>;
+    ~
+!!! error TS1109: Expression expected.
+     ~
+!!! error TS1109: Expression expected.
+        ~~
+!!! error TS1109: Expression expected.
+          ~
+!!! error TS1128: Declaration or statement expected.
+           ~
+!!! error TS2304: Cannot find name 'a'.
+             ~
+!!! error TS1109: Expression expected.
+==== 13.tsx (2 errors) ====
+    <a.></a.>;
+       ~
+!!! error TS1003: Identifier expected.
+            ~
+!!! error TS1003: Identifier expected.
+==== 14.tsx (6 errors) ====
+    <a[foo]></a[foo]>;
+      ~
+!!! error TS1003: Identifier expected.
+       ~~~
+!!! error TS2304: Cannot find name 'foo'.
+            ~~
+!!! error TS1109: Expression expected.
+              ~
+!!! error TS2304: Cannot find name 'a'.
+                ~~~
+!!! error TS2304: Cannot find name 'foo'.
+                     ~
+!!! error TS1109: Expression expected.
+==== 15.tsx (4 errors) ====
+    <a['foo']></a['foo']>;
+      ~
+!!! error TS1003: Identifier expected.
+              ~~
+!!! error TS1109: Expression expected.
+                ~
+!!! error TS2304: Cannot find name 'a'.
+                         ~
+!!! error TS1109: Expression expected.
+==== 16.tsx (2 errors) ====
+    <a><a />;
+     ~
+!!! error TS17008: JSX element 'a' has no corresponding closing tag.
+             
+!!! error TS1005: '</' expected.
+==== 17.tsx (2 errors) ====
+    <a b={}>;
+     ~
+!!! error TS17008: JSX element 'a' has no corresponding closing tag.
+             
+!!! error TS1005: '</' expected.
+==== 18.tsx (1 errors) ====
+    var x = /* Leading trivia */ <div>one</div><div>two</div>;;
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2657: JSX expressions must have one parent element.
+==== 19.tsx (1 errors) ====
+    var x = <div>one</div> /* intervening comment */ <div>two</div>;;
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2657: JSX expressions must have one parent element.
+==== 20.tsx (2 errors) ====
+    <a>{"str";}</a>;
+             ~
+!!! error TS1005: '}' expected.
+              ~
+!!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+==== 21.tsx (1 errors) ====
+    <span className="a", id="b" />;
+                       ~
+!!! error TS1003: Identifier expected.
+==== 22.tsx (2 errors) ====
+    <div className"app">;
+                  ~~~~~
+!!! error TS1003: Identifier expected.
+                        ~
+!!! error TS1109: Expression expected.
+==== 23.tsx (1 errors) ====
+    <div {props} />;
+          ~~~~~
+!!! error TS1005: '...' expected.
+    
+==== 24.tsx (5 errors) ====
+    <div>stuff</div {...props}>;
+                    ~
+!!! error TS1005: '>' expected.
+                     ~~~
+!!! error TS1128: Declaration or statement expected.
+                        ~~~~~
+!!! error TS2304: Cannot find name 'props'.
+                              ~
+!!! error TS1109: Expression expected.
+                               ~
+!!! error TS1109: Expression expected.
+    
+==== 25.tsx (5 errors) ====
+    <div {...props}>stuff</div {...props}>;
+                               ~
+!!! error TS1005: '>' expected.
+                                ~~~
+!!! error TS1128: Declaration or statement expected.
+                                   ~~~~~
+!!! error TS2304: Cannot find name 'props'.
+                                         ~
+!!! error TS1109: Expression expected.
+                                          ~
+!!! error TS1109: Expression expected.
+    
+    
+==== 26.tsx (1 errors) ====
+    <a>></a>;
+       ~
+!!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+    
+==== 27.tsx (1 errors) ====
+    <a> ></a>;
+        ~
+!!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+    
+==== 28.tsx (3 errors) ====
+    <a b=}>;
+     ~
+!!! error TS17008: JSX element 'a' has no corresponding closing tag.
+         ~
+!!! error TS1145: '{' or JSX element expected.
+    
+    
+!!! error TS1005: '</' expected.
+==== 29.tsx (3 errors) ====
+    <a b=<}>;
+          
+!!! error TS17008: JSX element '' has no corresponding closing tag.
+          ~
+!!! error TS1003: Identifier expected.
+    
+    
+!!! error TS1005: '</' expected.
+==== 30.tsx (1 errors) ====
+    <a>}</a>;
+       ~
+!!! error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    
+==== 31.tsx (1 errors) ====
+    <a .../*hai*/asdf/>;
+       ~~~
+!!! error TS1003: Identifier expected.

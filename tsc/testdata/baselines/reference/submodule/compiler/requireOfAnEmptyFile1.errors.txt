@@ -1,0 +1,8 @@
+requireOfAnEmptyFile1_a.ts(1,21): error TS2306: File 'requireOfAnEmptyFile1_b.ts' is not a module.
+
+
+==== requireOfAnEmptyFile1_a.ts (1 errors) ====
+    import fs = require('./requireOfAnEmptyFile1_b');
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2306: File 'requireOfAnEmptyFile1_b.ts' is not a module.
+    

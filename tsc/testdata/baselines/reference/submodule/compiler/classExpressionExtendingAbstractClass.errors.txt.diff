@@ -1,0 +1,19 @@
+--- old.classExpressionExtendingAbstractClass.errors.txt
++++ new.classExpressionExtendingAbstractClass.errors.txt
+@@= skipped -0, +0 lines =@@
+-classExpressionExtendingAbstractClass.ts(5,9): error TS2653: Non-abstract class expression does not implement inherited abstract member 'foo' from class 'A'.
++classExpressionExtendingAbstractClass.ts(5,5): error TS2653: Non-abstract class expression does not implement inherited abstract member ''foo'' from class 'A'.
+ 
+ 
+ ==== classExpressionExtendingAbstractClass.ts (1 errors) ====
+@@= skipped -6, +6 lines =@@
+     }
+     
+     var C = class extends A {     // no error reported!
+-            ~~~~~
+-!!! error TS2653: Non-abstract class expression does not implement inherited abstract member 'foo' from class 'A'.
++        ~
++!!! error TS2653: Non-abstract class expression does not implement inherited abstract member ''foo'' from class 'A'.
+     };
+     
+     

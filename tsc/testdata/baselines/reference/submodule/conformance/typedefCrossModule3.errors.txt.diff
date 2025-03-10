@@ -1,0 +1,25 @@
+--- old.typedefCrossModule3.errors.txt
++++ new.typedefCrossModule3.errors.txt
+@@= skipped -0, +0 lines =@@
+-mod2.js(1,23): error TS2300: Duplicate identifier 'Foo'.
+-mod2.js(3,4): error TS2300: Duplicate identifier 'Foo'.
++mod2.js(3,4): error TS2339: Property 'Foo' does not exist on type '{}'.
++mod2.js(4,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ 
+ 
+ ==== mod2.js (2 errors) ====
+     /** @typedef {number} Foo */
+-                          ~~~
+-!!! error TS2300: Duplicate identifier 'Foo'.
+-!!! related TS6203 mod2.js:3:4: 'Foo' was also declared here.
+     const ns = {};
+     ns.Foo = class {}
+        ~~~
+-!!! error TS2300: Duplicate identifier 'Foo'.
+-!!! related TS6203 mod2.js:1:23: 'Foo' was also declared here.
++!!! error TS2339: Property 'Foo' does not exist on type '{}'.
+     module.exports = ns;
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+     
+     

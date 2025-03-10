@@ -1,0 +1,17 @@
+/app.ts(4,15): error TS2693: '$' only refers to a type, but is being used as a value here.
+
+
+==== /app.ts (1 errors) ====
+    /// <reference types="lib"/>
+    import {$} from "./ref";
+    export interface A {
+        x: typeof $;
+                  ~
+!!! error TS2693: '$' only refers to a type, but is being used as a value here.
+    }
+==== /ref.d.ts (0 errors) ====
+    export interface $ { x }
+    
+==== /types/lib/index.d.ts (0 errors) ====
+    declare let $: { x: number }
+    

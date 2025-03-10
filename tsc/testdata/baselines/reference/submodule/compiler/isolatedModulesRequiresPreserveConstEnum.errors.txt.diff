@@ -1,0 +1,13 @@
+--- old.isolatedModulesRequiresPreserveConstEnum.errors.txt
++++ new.isolatedModulesRequiresPreserveConstEnum.errors.txt
+@@= skipped -0, +-1 lines =@@
+-error TS5091: Option 'preserveConstEnums' cannot be disabled when 'isolatedModules' is enabled.
+-
+-
+-!!! error TS5091: Option 'preserveConstEnums' cannot be disabled when 'isolatedModules' is enabled.
+-==== file1.ts (0 errors) ====
+-    export {};
+-    
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

@@ -1,0 +1,12 @@
+undeclaredBase.ts(1,25): error TS2506: 'C' is referenced directly or indirectly in its own base expression.
+undeclaredBase.ts(1,37): error TS2339: Property 'I' does not exist on type '{ C: { new(): C; prototype: C; }; }'.
+
+
+==== undeclaredBase.ts (2 errors) ====
+    module M { export class C extends M.I { } }
+                            ~
+!!! error TS2506: 'C' is referenced directly or indirectly in its own base expression.
+                                        ~
+!!! error TS2339: Property 'I' does not exist on type '{ C: { new(): C; prototype: C; }; }'.
+    
+    

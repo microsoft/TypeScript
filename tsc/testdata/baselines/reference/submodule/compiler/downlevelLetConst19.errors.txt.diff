@@ -1,0 +1,21 @@
+--- old.downlevelLetConst19.errors.txt
++++ new.downlevelLetConst19.errors.txt
+@@= skipped -0, +0 lines =@@
+ downlevelLetConst19.ts(9,14): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
++downlevelLetConst19.ts(9,14): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
+ 
+ 
+-==== downlevelLetConst19.ts (1 errors) ====
++==== downlevelLetConst19.ts (2 errors) ====
+     'use strict'
+     declare function use(a: any);
+     var x;
+@@= skipped -12, +13 lines =@@
+         function b() {
+                  ~
+ !!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
++                 ~
++!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
+             {
+                 let x;
+                 use(x);

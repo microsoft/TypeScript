@@ -1,0 +1,25 @@
+--- old.conditionalTypesExcessProperties.errors.txt
++++ new.conditionalTypesExcessProperties.errors.txt
+@@= skipped -0, +0 lines =@@
+ conditionalTypesExcessProperties.ts(8,5): error TS2322: Type '{ test: string; arg: A; }' is not assignable to type 'Something<A>'.
+-  Type '{ test: string; arg: A; }' is not assignable to type 'A extends object ? { arg: A; } : { arg?: undefined; }'.
++  Type '{ test: string; arg: A; }' is not assignable to type ''.
+ conditionalTypesExcessProperties.ts(9,5): error TS2322: Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'Something<A>'.
+-  Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'A extends object ? { arg: A; } : { arg?: undefined; }'.
++  Type '{ test: string; arg: A; arr: A; }' is not assignable to type ''.
+ 
+ 
+ ==== conditionalTypesExcessProperties.ts (2 errors) ====
+@@= skipped -14, +14 lines =@@
+         sa = { test: 'hi', arg: a }; // not excess (but currently still not assignable)
+         ~~
+ !!! error TS2322: Type '{ test: string; arg: A; }' is not assignable to type 'Something<A>'.
+-!!! error TS2322:   Type '{ test: string; arg: A; }' is not assignable to type 'A extends object ? { arg: A; } : { arg?: undefined; }'.
++!!! error TS2322:   Type '{ test: string; arg: A; }' is not assignable to type ''.
+         sa = { test: 'bye', arg: a, arr: a } // excess
+         ~~
+ !!! error TS2322: Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'Something<A>'.
+-!!! error TS2322:   Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'A extends object ? { arg: A; } : { arg?: undefined; }'.
++!!! error TS2322:   Type '{ test: string; arg: A; arr: A; }' is not assignable to type ''.
+     }
+     

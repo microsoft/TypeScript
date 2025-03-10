@@ -1,0 +1,16 @@
+--- old.typeReferenceDirectiveWithTypeAsFile.errors.txt
++++ new.typeReferenceDirectiveWithTypeAsFile.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/a.ts(1,1): error TS2304: Cannot find name 'a'.
++
++
++==== /a.ts (1 errors) ====
++    a;
++    ~
++!!! error TS2304: Cannot find name 'a'.
++    
++==== /node_modules/phaser/types/phaser.d.ts (0 errors) ====
++    declare const a: number;
++    

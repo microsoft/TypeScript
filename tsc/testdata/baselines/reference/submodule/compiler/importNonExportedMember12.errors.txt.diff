@@ -1,0 +1,25 @@
+--- old.importNonExportedMember12.errors.txt
++++ new.importNonExportedMember12.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/a.js(1,18): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++/node_modules/foo/src/index.js(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
++==== /node_modules/foo/package.json (0 errors) ====
++    { "name": "foo", "version": "1.2.3", "main": "src/index.js" }
++    
++==== /node_modules/foo/src/index.js (1 errors) ====
++    module.exports = 1;
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++==== /a.js (1 errors) ====
++    export const A = require("foo");
++                     ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++==== /b.ts (0 errors) ====
++    import { A } from "./a";
++    

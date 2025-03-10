@@ -1,0 +1,66 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+constDeclarations_access_2.ts(2,20): error TS2307: Cannot find module 'constDeclarations_access_1' or its corresponding type declarations.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== constDeclarations_access_2.ts (1 errors) ====
+    ///<reference path='constDeclarations_access_1.ts'/>
+    import m = require('constDeclarations_access_1');
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'constDeclarations_access_1' or its corresponding type declarations.
+    // Errors
+    m.x = 1;
+    m.x += 2;
+    m.x -= 3;
+    m.x *= 4;
+    m.x /= 5;
+    m.x %= 6;
+    m.x <<= 7;
+    m.x >>= 8;
+    m.x >>>= 9;
+    m.x &= 10;
+    m.x |= 11;
+    m.x ^= 12;
+    m
+    m.x++;
+    m.x--;
+    ++m.x;
+    --m.x;
+    
+    ++((m.x));
+    
+    m["x"] = 0;
+    
+    // OK
+    var a = m.x + 1;
+    
+    function f(v: number) { }
+    f(m.x);
+    
+    if (m.x) { }
+    
+    m.x;
+    (m.x);
+    
+    -m.x;
+    +m.x;
+    
+    m.x.toString();
+    
+==== constDeclarations_access_1.ts (0 errors) ====
+    export const x = 0;
+    

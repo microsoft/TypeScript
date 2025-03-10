@@ -1,0 +1,33 @@
+exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(2,10): error TS18050: The value 'null' cannot be used here.
+exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(2,18): error TS18050: The value 'null' cannot be used here.
+exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(3,10): error TS18050: The value 'null' cannot be used here.
+exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(3,18): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(4,10): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(4,23): error TS18050: The value 'null' cannot be used here.
+exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(5,10): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(5,23): error TS18050: The value 'undefined' cannot be used here.
+
+
+==== exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts (8 errors) ====
+    // operator **
+    var r1 = null ** null;
+             ~~~~
+!!! error TS18050: The value 'null' cannot be used here.
+                     ~~~~
+!!! error TS18050: The value 'null' cannot be used here.
+    var r2 = null ** undefined;
+             ~~~~
+!!! error TS18050: The value 'null' cannot be used here.
+                     ~~~~~~~~~
+!!! error TS18050: The value 'undefined' cannot be used here.
+    var r3 = undefined ** null;
+             ~~~~~~~~~
+!!! error TS18050: The value 'undefined' cannot be used here.
+                          ~~~~
+!!! error TS18050: The value 'null' cannot be used here.
+    var r4 = undefined ** undefined;
+             ~~~~~~~~~
+!!! error TS18050: The value 'undefined' cannot be used here.
+                          ~~~~~~~~~
+!!! error TS18050: The value 'undefined' cannot be used here.
+    

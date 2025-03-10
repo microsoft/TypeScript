@@ -1,0 +1,14 @@
+moduleExportAliasElementAccessExpression.js(2,1): error TS2304: Cannot find name 'exports'.
+moduleExportAliasElementAccessExpression.js(4,1): error TS2304: Cannot find name 'exports'.
+
+
+==== moduleExportAliasElementAccessExpression.js (2 errors) ====
+    function D () { }
+    exports["D"] = D;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+     // (the only package I could find that uses spaces in identifiers is webidl-conversions)
+    exports["Does not work yet"] = D;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    

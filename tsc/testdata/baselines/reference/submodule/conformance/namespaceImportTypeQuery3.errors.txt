@@ -1,0 +1,18 @@
+/a.ts(1,24): error TS2307: Cannot find module './z' or its corresponding type declarations.
+
+
+==== /a.ts (1 errors) ====
+    import type { A } from './z'; // unresolved
+                           ~~~~~
+!!! error TS2307: Cannot find module './z' or its corresponding type declarations.
+    const A = 0;
+    export { A };
+    export class B {};
+    
+==== /b.ts (0 errors) ====
+    import * as types from './a';
+    let t: typeof types = {
+      A: undefined as any, // ok
+      B: undefined as any,
+    }
+    

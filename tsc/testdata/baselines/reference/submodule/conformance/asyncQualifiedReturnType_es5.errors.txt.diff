@@ -1,0 +1,18 @@
+--- old.asyncQualifiedReturnType_es5.errors.txt
++++ new.asyncQualifiedReturnType_es5.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++asyncQualifiedReturnType_es5.ts(6,21): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<void>'?
++
++
++==== asyncQualifiedReturnType_es5.ts (1 errors) ====
++    namespace X {
++        export class MyPromise<T> extends Promise<T> {
++        }
++    }
++    
++    async function f(): X.MyPromise<void> {
++                        ~~~~~~~~~~~~~~~~~
++!!! error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<void>'?
++    }

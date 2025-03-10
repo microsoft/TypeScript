@@ -1,0 +1,18 @@
+--- old.unusedSingleParameterInFunctionExpression.errors.txt
++++ new.unusedSingleParameterInFunctionExpression.errors.txt
+@@= skipped -0, +0 lines =@@
+ unusedSingleParameterInFunctionExpression.ts(1,21): error TS6133: 'person' is declared but its value is never read.
+-unusedSingleParameterInFunctionExpression.ts(2,9): error TS6133: 'unused' is declared but its value is never read.
++unusedSingleParameterInFunctionExpression.ts(2,5): error TS6133: 'unused' is declared but its value is never read.
+ 
+ 
+ ==== unusedSingleParameterInFunctionExpression.ts (2 errors) ====
+     var func = function(person: string) {
+-                        ~~~~~~
++                        ~~~~~~~~~~~~~~
+ !!! error TS6133: 'person' is declared but its value is never read.
+         var unused = 20;
+-            ~~~~~~
++        ~~~~~~~~~~~~~~~
+ !!! error TS6133: 'unused' is declared but its value is never read.
+     }

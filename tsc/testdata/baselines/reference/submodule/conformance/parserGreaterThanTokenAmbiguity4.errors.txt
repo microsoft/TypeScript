@@ -1,0 +1,12 @@
+parserGreaterThanTokenAmbiguity4.ts(1,1): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+parserGreaterThanTokenAmbiguity4.ts(2,1): error TS1109: Expression expected.
+
+
+==== parserGreaterThanTokenAmbiguity4.ts (2 errors) ====
+    1 >
+    ~~~
+    > 2;
+    ~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+    ~
+!!! error TS1109: Expression expected.

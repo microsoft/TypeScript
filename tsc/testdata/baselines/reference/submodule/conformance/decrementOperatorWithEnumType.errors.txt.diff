@@ -1,0 +1,20 @@
+--- old.decrementOperatorWithEnumType.errors.txt
++++ new.decrementOperatorWithEnumType.errors.txt
+@@= skipped -1, +1 lines =@@
+ decrementOperatorWithEnumType.ts(7,29): error TS2540: Cannot assign to 'A' because it is a read-only property.
+ decrementOperatorWithEnumType.ts(10,9): error TS2540: Cannot assign to 'A' because it is a read-only property.
+ decrementOperatorWithEnumType.ts(12,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+-decrementOperatorWithEnumType.ts(12,1): error TS2542: Index signature in type 'typeof ENUM1' only permits reading.
++decrementOperatorWithEnumType.ts(12,1): error TS2542: Index signature in type '{ readonly [x: number]: string; readonly A: ENUM1.A; readonly B: ENUM1.B; readonly "": ENUM1.""; }' only permits reading.
+ decrementOperatorWithEnumType.ts(12,7): error TS2304: Cannot find name 'A'.
+ 
+ 
+@@= skipped -26, +26 lines =@@
+     ~~~~~~~~
+ !!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+     ~~~~~~~~
+-!!! error TS2542: Index signature in type 'typeof ENUM1' only permits reading.
++!!! error TS2542: Index signature in type '{ readonly [x: number]: string; readonly A: ENUM1.A; readonly B: ENUM1.B; readonly "": ENUM1.""; }' only permits reading.
+           ~
+ !!! error TS2304: Cannot find name 'A'.
+     

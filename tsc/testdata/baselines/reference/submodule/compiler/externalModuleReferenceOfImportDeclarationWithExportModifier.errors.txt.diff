@@ -1,0 +1,17 @@
+--- old.externalModuleReferenceOfImportDeclarationWithExportModifier.errors.txt
++++ new.externalModuleReferenceOfImportDeclarationWithExportModifier.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++externalModuleReferenceOfImportDeclarationWithExportModifier_1.ts(1,31): error TS2307: Cannot find module 'externalModuleReferenceOfImportDeclarationWithExportModifier_0' or its corresponding type declarations.
++
++
++==== externalModuleReferenceOfImportDeclarationWithExportModifier_1.ts (1 errors) ====
++    export import file1 = require('externalModuleReferenceOfImportDeclarationWithExportModifier_0');
++                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'externalModuleReferenceOfImportDeclarationWithExportModifier_0' or its corresponding type declarations.
++    file1.foo();
++    
++==== externalModuleReferenceOfImportDeclarationWithExportModifier_0.ts (0 errors) ====
++    export function foo() { };
++    

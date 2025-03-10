@@ -1,0 +1,23 @@
+index.js(7,27): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== index.js (1 errors) ====
+    /// <reference types="node" />
+    export const Something = 2; // to show conflict that can occur
+    // @ts-ignore
+    export namespace A {
+        // @ts-ignore
+        export namespace B {
+            const Something = require("fs").Something;
+                              ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+            const thing = new Something();
+            // @ts-ignore
+            export { thing };
+        }
+    }
+    
+==== node_modules/@types/node/index.d.ts (0 errors) ====
+    declare module "fs" {
+        export class Something {}
+    }

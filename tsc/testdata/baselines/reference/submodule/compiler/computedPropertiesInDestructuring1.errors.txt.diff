@@ -1,0 +1,44 @@
+--- old.computedPropertiesInDestructuring1.errors.txt
++++ new.computedPropertiesInDestructuring1.errors.txt
+@@= skipped -7, +7 lines =@@
+ computedPropertiesInDestructuring1.ts(17,16): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
+ computedPropertiesInDestructuring1.ts(20,8): error TS2349: This expression is not callable.
+   Type 'String' has no call signatures.
+-computedPropertiesInDestructuring1.ts(20,8): error TS2538: Type 'any' cannot be used as an index type.
+-computedPropertiesInDestructuring1.ts(21,8): error TS2538: Type 'any' cannot be used as an index type.
++computedPropertiesInDestructuring1.ts(20,8): error TS2538: Type 'error' cannot be used as an index type.
++computedPropertiesInDestructuring1.ts(21,8): error TS2538: Type 'error' cannot be used as an index type.
+ computedPropertiesInDestructuring1.ts(21,12): error TS2339: Property 'toExponential' does not exist on type 'string'.
+ computedPropertiesInDestructuring1.ts(24,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+ computedPropertiesInDestructuring1.ts(28,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+@@= skipped -9, +9 lines =@@
+ computedPropertiesInDestructuring1.ts(31,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+ computedPropertiesInDestructuring1.ts(33,4): error TS2349: This expression is not callable.
+   Type 'String' has no call signatures.
+-computedPropertiesInDestructuring1.ts(33,4): error TS2538: Type 'any' cannot be used as an index type.
++computedPropertiesInDestructuring1.ts(33,4): error TS2538: Type 'error' cannot be used as an index type.
+ computedPropertiesInDestructuring1.ts(34,4): error TS2538: Type 'any' cannot be used as an index type.
+ computedPropertiesInDestructuring1.ts(34,5): error TS2365: Operator '+' cannot be applied to types 'number' and '{}'.
+ 
+@@= skipped -46, +46 lines =@@
+ !!! error TS2349: This expression is not callable.
+ !!! error TS2349:   Type 'String' has no call signatures.
+            ~~~~~
+-!!! error TS2538: Type 'any' cannot be used as an index type.
++!!! error TS2538: Type 'error' cannot be used as an index type.
+     let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
+            ~~~~~~~~~~~~~~~~~~~
+-!!! error TS2538: Type 'any' cannot be used as an index type.
++!!! error TS2538: Type 'error' cannot be used as an index type.
+                ~~~~~~~~~~~~~
+ !!! error TS2339: Property 'toExponential' does not exist on type 'string'.
+     
+@@= skipped -30, +30 lines =@@
+ !!! error TS2349: This expression is not callable.
+ !!! error TS2349:   Type 'String' has no call signatures.
+        ~~~~~
+-!!! error TS2538: Type 'any' cannot be used as an index type.
++!!! error TS2538: Type 'error' cannot be used as an index type.
+     [{[(1 + {})]: bar4}] = [{bar: "bar"}];
+        ~~~~~~~~
+ !!! error TS2538: Type 'any' cannot be used as an index type.

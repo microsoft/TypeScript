@@ -1,0 +1,23 @@
+--- old.jsExportMemberMergedWithModuleAugmentation3.errors.txt
++++ new.jsExportMemberMergedWithModuleAugmentation3.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/x.js(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++/x.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++/x.js(2,18): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
++==== /x.js (3 errors) ====
++    module.exports.x = 1;
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    module.exports = require("./y.js");
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++                     ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++==== /y.d.ts (0 errors) ====
++    export declare type x = 1;
++    

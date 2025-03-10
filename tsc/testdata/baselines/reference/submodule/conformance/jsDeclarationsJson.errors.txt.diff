@@ -1,0 +1,24 @@
+--- old.jsDeclarationsJson.errors.txt
++++ new.jsDeclarationsJson.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++index.js(1,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
++==== index.js (2 errors) ====
++    const j = require("./obj.json");
++              ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    module.exports = j;
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++==== obj.json (0 errors) ====
++    {
++        "x": 12,
++        "y": 12,
++        "obj": {
++            "items": [{"x": 12}, {"x": 12, "y": 12}, {"x": 0}, {"x": -1, "err": true}]
++        }
++    }

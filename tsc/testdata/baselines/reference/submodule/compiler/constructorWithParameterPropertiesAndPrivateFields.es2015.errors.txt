@@ -1,0 +1,60 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+constructorWithParameterPropertiesAndPrivateFields.es2015.ts(11,5): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+constructorWithParameterPropertiesAndPrivateFields.es2015.ts(12,5): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+constructorWithParameterPropertiesAndPrivateFields.es2015.ts(25,5): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+constructorWithParameterPropertiesAndPrivateFields.es2015.ts(26,5): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== constructorWithParameterPropertiesAndPrivateFields.es2015.ts (4 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/48771
+    
+    class A {
+      readonly #privateField: string;
+    
+      constructor(arg: { key: string }, public exposedField: number) {
+        ({ key: this.#privateField } = arg);
+      }
+    
+      log() {
+        console.log(this.#privateField);
+        ~~~~~~~
+!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+        console.log(this.exposedField);
+        ~~~~~~~
+!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+      }
+    }
+    
+    class B {
+      readonly #privateField: string;
+    
+      constructor(arg: { key: string }, public exposedField: number) {
+        "prologue";
+        ({ key: this.#privateField } = arg);
+      }
+    
+      log() {
+        console.log(this.#privateField);
+        ~~~~~~~
+!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+        console.log(this.exposedField);
+        ~~~~~~~
+!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+      }
+    }
+    

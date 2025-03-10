@@ -1,0 +1,17 @@
+--- old.classAbstractExtends.errors.txt
++++ new.classAbstractExtends.errors.txt
+@@= skipped -0, +0 lines =@@
+-classAbstractExtends.ts(9,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member bar from class 'B'.
++classAbstractExtends.ts(9,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'bar' from class 'B'.
+ 
+ 
+ ==== classAbstractExtends.ts (1 errors) ====
+@@= skipped -11, +11 lines =@@
+     
+     class C extends B { }
+           ~
+-!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member bar from class 'B'.
++!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'bar' from class 'B'.
+     
+     abstract class D extends B {}
+     

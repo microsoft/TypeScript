@@ -1,0 +1,18 @@
+parserStrictMode14.ts(2,1): error TS1101: 'with' statements are not allowed in strict mode.
+parserStrictMode14.ts(2,1): error TS1101: 'with' statements are not allowed in strict mode.
+parserStrictMode14.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+parserStrictMode14.ts(2,7): error TS2304: Cannot find name 'a'.
+
+
+==== parserStrictMode14.ts (4 errors) ====
+    "use strict";
+    with (a) {
+    ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
+    ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
+    ~~~~~~~~
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+          ~
+!!! error TS2304: Cannot find name 'a'.
+    }

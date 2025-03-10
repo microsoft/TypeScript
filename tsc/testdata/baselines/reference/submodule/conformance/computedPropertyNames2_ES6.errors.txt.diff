@@ -1,0 +1,26 @@
+--- old.computedPropertyNames2_ES6.errors.txt
++++ new.computedPropertyNames2_ES6.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ computedPropertyNames2_ES6.ts(6,9): error TS2378: A 'get' accessor must return a value.
+ computedPropertyNames2_ES6.ts(8,16): error TS2378: A 'get' accessor must return a value.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== computedPropertyNames2_ES6.ts (2 errors) ====
+     var methodName = "method";
+     var accessorName = "accessor";

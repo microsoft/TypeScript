@@ -1,0 +1,19 @@
+--- old.assignmentCompatFunctionsWithOptionalArgs.errors.txt
++++ new.assignmentCompatFunctionsWithOptionalArgs.errors.txt
+@@= skipped -0, +0 lines =@@
+ assignmentCompatFunctionsWithOptionalArgs.ts(1,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+ assignmentCompatFunctionsWithOptionalArgs.ts(4,17): error TS2322: Type 'boolean' is not assignable to type 'string'.
+-assignmentCompatFunctionsWithOptionalArgs.ts(5,5): error TS2345: Argument of type '{ name: string; }' is not assignable to parameter of type '{ id: number; name?: string; }'.
+-  Property 'id' is missing in type '{ name: string; }' but required in type '{ id: number; name?: string; }'.
++assignmentCompatFunctionsWithOptionalArgs.ts(5,5): error TS2741: Property 'id' is missing in type '{ name: string; }' but required in type '{ id: number; name?: string; }'.
+ 
+ 
+ ==== assignmentCompatFunctionsWithOptionalArgs.ts (3 errors) ====
+@@= skipped -15, +14 lines =@@
+ !!! related TS6500 assignmentCompatFunctionsWithOptionalArgs.ts:1:31: The expected type comes from property 'name' which is declared here on type '{ id: number; name?: string; }'
+     foo({ name: "hello" });            // Error, id required but missing
+         ~~~~~~~~~~~~~~~~~
+-!!! error TS2345: Argument of type '{ name: string; }' is not assignable to parameter of type '{ id: number; name?: string; }'.
+-!!! error TS2345:   Property 'id' is missing in type '{ name: string; }' but required in type '{ id: number; name?: string; }'.
++!!! error TS2741: Property 'id' is missing in type '{ name: string; }' but required in type '{ id: number; name?: string; }'.
+ !!! related TS2728 assignmentCompatFunctionsWithOptionalArgs.ts:1:19: 'id' is declared here.

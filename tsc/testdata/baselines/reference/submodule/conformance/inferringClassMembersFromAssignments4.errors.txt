@@ -1,0 +1,21 @@
+a.js(3,14): error TS2339: Property 'p' does not exist on type 'Base'.
+a.js(9,14): error TS2339: Property 'p' does not exist on type 'Derived'.
+
+
+==== a.js (2 errors) ====
+    class Base {
+        m() {
+            this.p = 1
+                 ~
+!!! error TS2339: Property 'p' does not exist on type 'Base'.
+        }
+    }
+    class Derived extends Base {
+        m() {
+            // should be OK, and p should have type number | undefined from its base
+            this.p = 1
+                 ~
+!!! error TS2339: Property 'p' does not exist on type 'Derived'.
+        }
+    }
+    

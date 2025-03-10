@@ -1,0 +1,14 @@
+--- old.jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.errors.txt
++++ new.jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.errors.txt
+@@= skipped -0, +-1 lines =@@
+-error TS18035: Invalid value for 'jsxFragmentFactory'. '234' is not a valid identifier or qualified-name.
+-
+-
+-!!! error TS18035: Invalid value for 'jsxFragmentFactory'. '234' is not a valid identifier or qualified-name.
+-==== jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx (0 errors) ====
+-    declare var h: any;
+-    
+-    <></>;
+-    <><span>1</span><><span>2.1</span><span>2.2</span></></>;
+@@= skipped --1, +1 lines =@@
++<no content>

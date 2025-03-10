@@ -1,0 +1,13 @@
+/src/consumer.ts(2,1): error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.
+
+
+==== /src/consumer.ts (1 errors) ====
+    /// <reference types="jquery" />
+    $.foo();
+    ~
+!!! error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.
+    
+==== /src/types/jquery/index.d.ts (0 errors) ====
+    declare var $: { foo(): void };
+    
+    

@@ -1,0 +1,70 @@
+--- old.importCallExpressionES6System.errors.txt
++++ new.importCallExpressionES6System.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'Promise'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++1.ts(1,1): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
++1.ts(2,10): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
++1.ts(7,17): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
++1.ts(10,16): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
++1.ts(15,27): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
++1.ts(21,27): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'Promise'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== 0.ts (0 errors) ====
++    export function foo() { return "foo"; }
++    
++==== 1.ts (6 errors) ====
++    import("./0");
++    ~~~~~~~~~~~~~
++!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
++    var p1 = import("./0");
++             ~~~~~~~~~~~~~
++!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
++    p1.then(zero => {
++        return zero.foo();
++    });
++    
++    export var p2 = import("./0");
++                    ~~~~~~~~~~~~~
++!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
++    
++    function foo() {
++        const p2 = import("./0");
++                   ~~~~~~~~~~~~~
++!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
++    }
++    
++    class C {
++        method() {
++            const loadAsync = import ("./0");
++                              ~~~~~~~~~~~~~~
++!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
++        }
++    }
++    
++    export class D {
++        method() {
++            const loadAsync = import ("./0");
++                              ~~~~~~~~~~~~~~
++!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
++        }
++    }

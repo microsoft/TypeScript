@@ -1,0 +1,51 @@
+--- old.typeFromPropertyAssignment23.errors.txt
++++ new.typeFromPropertyAssignment23.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++a.js(3,14): error TS2339: Property 'n' does not exist on type 'B'.
++a.js(23,18): error TS2339: Property 'identifier' does not exist on type 'Module'.
++a.js(24,18): error TS2339: Property 'size' does not exist on type 'Module'.
++
++
++==== a.js (3 errors) ====
++    class B {
++        constructor () {
++            this.n = 1
++                 ~
++!!! error TS2339: Property 'n' does not exist on type 'B'.
++        }
++        foo() {
++        }
++    }
++    
++    class C extends B { }
++    
++    // this override should be fine (even if it's a little odd)
++    C.prototype.foo = function() {
++    }
++    
++    class D extends B { }
++    D.prototype.foo = () =>  {
++        this.n = 'not checked, so no error'
++    }
++    
++    // post-class prototype assignments are trying to show that these properties are abstract
++    class Module {
++    }
++    Module.prototype.identifier = undefined
++                     ~~~~~~~~~~
++!!! error TS2339: Property 'identifier' does not exist on type 'Module'.
++    Module.prototype.size = null
++                     ~~~~
++!!! error TS2339: Property 'size' does not exist on type 'Module'.
++    
++    class NormalModule extends Module {
++        identifier() {
++            return 'normal'
++        }
++        size() {
++            return 0
++        }
++    }
++    

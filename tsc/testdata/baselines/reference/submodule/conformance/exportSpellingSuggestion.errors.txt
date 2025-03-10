@@ -1,0 +1,14 @@
+b.ts(1,10): error TS2724: '""a.ts""' has no exported member named 'assertNevar'. Did you mean 'assertNever'?
+
+
+==== a.ts (0 errors) ====
+    export function assertNever(x: never, msg: string) {
+        throw new Error("Unexpected " + msg);
+    }
+    
+==== b.ts (1 errors) ====
+    import { assertNevar } from "./a";
+             ~~~~~~~~~~~
+!!! error TS2724: '""a.ts""' has no exported member named 'assertNevar'. Did you mean 'assertNever'?
+!!! related TS2728 a.ts:1:17: 'assertNever' is declared here.
+    

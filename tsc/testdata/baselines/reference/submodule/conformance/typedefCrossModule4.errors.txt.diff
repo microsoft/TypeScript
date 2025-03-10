@@ -1,0 +1,23 @@
+--- old.typedefCrossModule4.errors.txt
++++ new.typedefCrossModule4.errors.txt
+@@= skipped -0, +0 lines =@@
+-mod3.js(1,23): error TS2300: Duplicate identifier 'Foo'.
+-mod3.js(3,20): error TS2300: Duplicate identifier 'Foo'.
++mod3.js(3,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ 
+ 
+-==== mod3.js (2 errors) ====
++==== mod3.js (1 errors) ====
+     /** @typedef {number} Foo */
+-                          ~~~
+-!!! error TS2300: Duplicate identifier 'Foo'.
+-!!! related TS6203 mod3.js:3:20: 'Foo' was also declared here.
+     class Bar { }
+     module.exports = { Foo: Bar };
+-                       ~~~
+-!!! error TS2300: Duplicate identifier 'Foo'.
+-!!! related TS6203 mod3.js:1:23: 'Foo' was also declared here.
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+     
+     

@@ -1,0 +1,41 @@
+--- old.duplicatePropertyNames.errors.txt
++++ new.duplicatePropertyNames.errors.txt
+@@= skipped -1, +1 lines =@@
+ duplicatePropertyNames.ts(5,5): error TS2300: Duplicate identifier 'foo'.
+ duplicatePropertyNames.ts(14,5): error TS2300: Duplicate identifier 'foo'.
+ duplicatePropertyNames.ts(15,5): error TS2300: Duplicate identifier 'foo'.
++duplicatePropertyNames.ts(19,5): error TS2300: Duplicate identifier 'foo'.
+ duplicatePropertyNames.ts(20,5): error TS2300: Duplicate identifier 'foo'.
+ duplicatePropertyNames.ts(22,5): error TS2393: Duplicate function implementation.
+ duplicatePropertyNames.ts(23,5): error TS2393: Duplicate function implementation.
++duplicatePropertyNames.ts(25,5): error TS2300: Duplicate identifier 'baz'.
+ duplicatePropertyNames.ts(26,5): error TS2300: Duplicate identifier 'baz'.
+ duplicatePropertyNames.ts(30,5): error TS2300: Duplicate identifier 'foo'.
+ duplicatePropertyNames.ts(31,5): error TS2300: Duplicate identifier 'foo'.
+@@= skipped -14, +16 lines =@@
+ duplicatePropertyNames.ts(46,5): error TS1117: An object literal cannot have multiple properties with the same name.
+ 
+ 
+-==== duplicatePropertyNames.ts (16 errors) ====
++==== duplicatePropertyNames.ts (18 errors) ====
+     // duplicate property names are an error in all types
+     
+     interface Number {
+@@= skipped -28, +28 lines =@@
+     
+     class C {
+         foo: string;
++        ~~~
++!!! error TS2300: Duplicate identifier 'foo'.
+         foo: string;
+         ~~~
+ !!! error TS2300: Duplicate identifier 'foo'.
+@@= skipped -12, +14 lines =@@
+ !!! error TS2393: Duplicate function implementation.
+     
+         baz = () => { }
++        ~~~
++!!! error TS2300: Duplicate identifier 'baz'.
+         baz = () => { }
+         ~~~
+ !!! error TS2300: Duplicate identifier 'baz'.

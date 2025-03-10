@@ -1,0 +1,24 @@
+--- old.checkJsFiles7.errors.txt
++++ new.checkJsFiles7.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++a.js(4,8): error TS2339: Property 'a' does not exist on type 'C'.
++a.js(5,8): error TS2339: Property 'a' does not exist on type 'C'.
++a.js(5,19): error TS2339: Property 'a' does not exist on type 'C'.
++
++
++==== a.js (3 errors) ====
++    class C {
++    	constructor() {
++    		/** @type {boolean} */
++    		this.a = true;
++    		     ~
++!!! error TS2339: Property 'a' does not exist on type 'C'.
++    		this.a = !!this.a;
++    		     ~
++!!! error TS2339: Property 'a' does not exist on type 'C'.
++    		                ~
++!!! error TS2339: Property 'a' does not exist on type 'C'.
++    	}
++    }

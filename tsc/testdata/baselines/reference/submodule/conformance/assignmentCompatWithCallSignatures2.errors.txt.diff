@@ -1,0 +1,90 @@
+--- old.assignmentCompatWithCallSignatures2.errors.txt
++++ new.assignmentCompatWithCallSignatures2.errors.txt
+@@= skipped -0, +0 lines =@@
+ assignmentCompatWithCallSignatures2.ts(31,1): error TS2322: Type '() => number' is not assignable to type 'T'.
+ assignmentCompatWithCallSignatures2.ts(32,1): error TS2322: Type '(x: number) => string' is not assignable to type 'T'.
+-assignmentCompatWithCallSignatures2.ts(33,1): error TS2322: Type '() => number' is not assignable to type '{ f(x: number): void; }'.
+-assignmentCompatWithCallSignatures2.ts(34,1): error TS2322: Type '(x: number) => string' is not assignable to type '{ f(x: number): void; }'.
++assignmentCompatWithCallSignatures2.ts(33,1): error TS2322: Type '() => number' is not assignable to type '{ f: (x: number) => void; }'.
++assignmentCompatWithCallSignatures2.ts(34,1): error TS2322: Type '(x: number) => string' is not assignable to type '{ f: (x: number) => void; }'.
+ assignmentCompatWithCallSignatures2.ts(42,1): error TS2322: Type 'S2' is not assignable to type 'T'.
+   Types of property 'f' are incompatible.
+     Type '(x: string) => void' is not assignable to type '(x: number) => void'.
+       Types of parameters 'x' and 'x' are incompatible.
+         Type 'number' is not assignable to type 'string'.
+-assignmentCompatWithCallSignatures2.ts(43,1): error TS2322: Type '{ f(x: string): void; }' is not assignable to type 'T'.
++assignmentCompatWithCallSignatures2.ts(43,1): error TS2322: Type '{ f: (x: string) => void; }' is not assignable to type 'T'.
+   Types of property 'f' are incompatible.
+     Type '(x: string) => void' is not assignable to type '(x: number) => void'.
+       Types of parameters 'x' and 'x' are incompatible.
+         Type 'number' is not assignable to type 'string'.
+ assignmentCompatWithCallSignatures2.ts(44,1): error TS2322: Type '(x: string) => number' is not assignable to type 'T'.
+ assignmentCompatWithCallSignatures2.ts(45,1): error TS2322: Type '(x: string) => string' is not assignable to type 'T'.
+-assignmentCompatWithCallSignatures2.ts(46,1): error TS2322: Type 'S2' is not assignable to type '{ f(x: number): void; }'.
++assignmentCompatWithCallSignatures2.ts(46,1): error TS2322: Type 'S2' is not assignable to type '{ f: (x: number) => void; }'.
+   Types of property 'f' are incompatible.
+     Type '(x: string) => void' is not assignable to type '(x: number) => void'.
+       Types of parameters 'x' and 'x' are incompatible.
+         Type 'number' is not assignable to type 'string'.
+-assignmentCompatWithCallSignatures2.ts(47,1): error TS2322: Type '{ f(x: string): void; }' is not assignable to type '{ f(x: number): void; }'.
++assignmentCompatWithCallSignatures2.ts(47,1): error TS2322: Type '{ f: (x: string) => void; }' is not assignable to type '{ f: (x: number) => void; }'.
+   Types of property 'f' are incompatible.
+     Type '(x: string) => void' is not assignable to type '(x: number) => void'.
+       Types of parameters 'x' and 'x' are incompatible.
+         Type 'number' is not assignable to type 'string'.
+-assignmentCompatWithCallSignatures2.ts(48,1): error TS2322: Type '(x: string) => number' is not assignable to type '{ f(x: number): void; }'.
+-assignmentCompatWithCallSignatures2.ts(49,1): error TS2322: Type '(x: string) => string' is not assignable to type '{ f(x: number): void; }'.
++assignmentCompatWithCallSignatures2.ts(48,1): error TS2322: Type '(x: string) => number' is not assignable to type '{ f: (x: number) => void; }'.
++assignmentCompatWithCallSignatures2.ts(49,1): error TS2322: Type '(x: string) => string' is not assignable to type '{ f: (x: number) => void; }'.
+ 
+ 
+ ==== assignmentCompatWithCallSignatures2.ts (12 errors) ====
+@@= skipped -66, +66 lines =@@
+ !!! error TS2322: Type '(x: number) => string' is not assignable to type 'T'.
+     a = () => 1;
+     ~
+-!!! error TS2322: Type '() => number' is not assignable to type '{ f(x: number): void; }'.
++!!! error TS2322: Type '() => number' is not assignable to type '{ f: (x: number) => void; }'.
+     a = function (x: number) { return ''; }
+     ~
+-!!! error TS2322: Type '(x: number) => string' is not assignable to type '{ f(x: number): void; }'.
++!!! error TS2322: Type '(x: number) => string' is not assignable to type '{ f: (x: number) => void; }'.
+     
+     interface S2 {
+         f(x: string): void;
+@@= skipped -20, +20 lines =@@
+ !!! error TS2322:         Type 'number' is not assignable to type 'string'.
+     t = a3;
+     ~
+-!!! error TS2322: Type '{ f(x: string): void; }' is not assignable to type 'T'.
++!!! error TS2322: Type '{ f: (x: string) => void; }' is not assignable to type 'T'.
+ !!! error TS2322:   Types of property 'f' are incompatible.
+ !!! error TS2322:     Type '(x: string) => void' is not assignable to type '(x: number) => void'.
+ !!! error TS2322:       Types of parameters 'x' and 'x' are incompatible.
+@@= skipped -13, +13 lines =@@
+ !!! error TS2322: Type '(x: string) => string' is not assignable to type 'T'.
+     a = s2;
+     ~
+-!!! error TS2322: Type 'S2' is not assignable to type '{ f(x: number): void; }'.
++!!! error TS2322: Type 'S2' is not assignable to type '{ f: (x: number) => void; }'.
+ !!! error TS2322:   Types of property 'f' are incompatible.
+ !!! error TS2322:     Type '(x: string) => void' is not assignable to type '(x: number) => void'.
+ !!! error TS2322:       Types of parameters 'x' and 'x' are incompatible.
+ !!! error TS2322:         Type 'number' is not assignable to type 'string'.
+     a = a3;
+     ~
+-!!! error TS2322: Type '{ f(x: string): void; }' is not assignable to type '{ f(x: number): void; }'.
++!!! error TS2322: Type '{ f: (x: string) => void; }' is not assignable to type '{ f: (x: number) => void; }'.
+ !!! error TS2322:   Types of property 'f' are incompatible.
+ !!! error TS2322:     Type '(x: string) => void' is not assignable to type '(x: number) => void'.
+ !!! error TS2322:       Types of parameters 'x' and 'x' are incompatible.
+ !!! error TS2322:         Type 'number' is not assignable to type 'string'.
+     a = (x: string) => 1;
+     ~
+-!!! error TS2322: Type '(x: string) => number' is not assignable to type '{ f(x: number): void; }'.
++!!! error TS2322: Type '(x: string) => number' is not assignable to type '{ f: (x: number) => void; }'.
+     a = function (x: string) { return ''; }
+     ~
+-!!! error TS2322: Type '(x: string) => string' is not assignable to type '{ f(x: number): void; }'.
++!!! error TS2322: Type '(x: string) => string' is not assignable to type '{ f: (x: number) => void; }'.
+     

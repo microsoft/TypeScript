@@ -1,0 +1,40 @@
+--- old.generatorTypeCheck20.errors.txt
++++ new.generatorTypeCheck20.errors.txt
+@@= skipped -0, +0 lines =@@
+-generatorTypeCheck20.ts(5,13): error TS2741: Property 'x' is missing in type 'Baz' but required in type 'Foo'.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'IterableIterator'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++generatorTypeCheck20.ts(3,16): error TS2304: Cannot find name 'IterableIterator'.
++generatorTypeCheck20.ts(5,13): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+ 
+ 
+-==== generatorTypeCheck20.ts (1 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'IterableIterator'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== generatorTypeCheck20.ts (2 errors) ====
+     class Foo { x: number }
+     class Baz { z: number }
+     function* g(): IterableIterator<Foo> {
++                   ~~~~~~~~~~~~~~~~
++!!! error TS2304: Cannot find name 'IterableIterator'.
+         yield;
+         yield * [new Baz];
+                 ~~~~~~~~~
+-!!! error TS2741: Property 'x' is missing in type 'Baz' but required in type 'Foo'.
+-!!! related TS2728 generatorTypeCheck20.ts:1:13: 'x' is declared here.
++!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+     }

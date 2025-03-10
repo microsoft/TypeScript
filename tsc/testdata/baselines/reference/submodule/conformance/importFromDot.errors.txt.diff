@@ -1,0 +1,15 @@
+--- old.importFromDot.errors.txt
++++ new.importFromDot.errors.txt
+@@= skipped -0, +0 lines =@@
+-a/b.ts(1,20): error TS2305: Module '"."' has no exported member 'rootA'.
++a/b.ts(1,20): error TS2305: Module '""a/index.ts""' has no exported member 'rootA'.
+ 
+ 
+ ==== a.ts (0 errors) ====
+@@= skipped -9, +9 lines =@@
+ ==== a/b.ts (1 errors) ====
+     import { indexInA, rootA } from ".";
+                        ~~~~~
+-!!! error TS2305: Module '"."' has no exported member 'rootA'.
++!!! error TS2305: Module '""a/index.ts""' has no exported member 'rootA'.
+     

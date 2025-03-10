@@ -1,0 +1,58 @@
+enumDef.js(2,6): error TS2339: Property 'UserMetrics' does not exist on type '{}'.
+enumDef.js(4,6): error TS2339: Property 'UserMetrics' does not exist on type '{}'.
+enumDef.js(16,6): error TS2339: Property 'UserMetrics' does not exist on type '{}'.
+index.js(2,7): error TS2339: Property 'Cls' does not exist on type '{}'.
+index.js(8,26): error TS2339: Property 'UserMetrics' does not exist on type '{}'.
+
+
+==== enumDef.js (3 errors) ====
+    var Host = {};
+    Host.UserMetrics = {};
+         ~~~~~~~~~~~
+!!! error TS2339: Property 'UserMetrics' does not exist on type '{}'.
+    /** @enum {number} */
+    Host.UserMetrics.Action = {
+         ~~~~~~~~~~~
+!!! error TS2339: Property 'UserMetrics' does not exist on type '{}'.
+        WindowDocked: 1,
+        WindowUndocked: 2,
+        ScriptsBreakpointSet: 3,
+        TimelineStarted: 4,
+    };
+    /**
+     * @typedef {string} Host.UserMetrics.Bargh
+     */
+    /**
+     * @typedef {string}
+     */
+    Host.UserMetrics.Blah = {
+         ~~~~~~~~~~~
+!!! error TS2339: Property 'UserMetrics' does not exist on type '{}'.
+        x: 12
+    }
+==== index.js (2 errors) ====
+    var Other = {};
+    Other.Cls = class {
+          ~~~
+!!! error TS2339: Property 'Cls' does not exist on type '{}'.
+        /**
+         * @param {!Host.UserMetrics.Action} p
+         */
+        method(p) {}
+        usage() {
+            this.method(Host.UserMetrics.Action.WindowDocked);
+                             ~~~~~~~~~~~
+!!! error TS2339: Property 'UserMetrics' does not exist on type '{}'.
+        }
+    }
+    
+    /**
+     * @type {Host.UserMetrics.Bargh}
+     */
+    var x = "ok";
+    
+    /**
+     * @type {Host.UserMetrics.Blah}
+     */
+    var y = "ok";
+    

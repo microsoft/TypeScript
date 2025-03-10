@@ -1,0 +1,22 @@
+--- old.untypedModuleImport_withAugmentation.errors.txt
++++ new.untypedModuleImport_withAugmentation.errors.txt
+@@= skipped -0, +0 lines =@@
+-/a.ts(1,16): error TS2665: Invalid module name in augmentation. Module 'foo' resolves to an untyped module at '/node_modules/foo/index.js', which cannot be augmented.
++/a.ts(1,16): error TS2664: Invalid module name in augmentation, module 'foo' cannot be found.
++/a.ts(4,19): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+ 
+ 
+-==== /a.ts (1 errors) ====
++==== /a.ts (2 errors) ====
+     declare module "foo" {
+                    ~~~~~
+-!!! error TS2665: Invalid module name in augmentation. Module 'foo' resolves to an untyped module at '/node_modules/foo/index.js', which cannot be augmented.
++!!! error TS2664: Invalid module name in augmentation, module 'foo' cannot be found.
+         export const x: number;
+     }
+     import { x } from "foo";
++                      ~~~~~
++!!! error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+     x;
+     
+ ==== /node_modules/foo/index.js (0 errors) ====

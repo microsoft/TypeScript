@@ -1,0 +1,12 @@
+a.js(1,2): error TS2304: Cannot find name 'SomeDecorator'.
+
+
+==== a.js (1 errors) ====
+    @SomeDecorator
+     ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SomeDecorator'.
+    class SomeClass {
+        foo(x: number) {
+    
+        }
+    }

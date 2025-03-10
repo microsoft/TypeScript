@@ -1,0 +1,22 @@
+enums.js(1,1): error TS2739: Type '{}' is missing the following properties from type '{ readonly [x: number]: string; readonly ASC: Order.ASC; readonly DESC: Order.DESC; }': ASC, DESC
+enums.js(2,10): error TS2540: Cannot assign to 'DESC' because it is a read-only property.
+enums.js(3,10): error TS2540: Cannot assign to 'ASC' because it is a read-only property.
+
+
+==== lovefield-ts.d.ts (0 errors) ====
+    // bug #27352, crashes from github.com/google/lovefield
+    declare namespace lf {
+        export enum Order { ASC, DESC }
+    }
+    
+==== enums.js (3 errors) ====
+    lf.Order = {}
+    ~~~~~~~~
+!!! error TS2739: Type '{}' is missing the following properties from type '{ readonly [x: number]: string; readonly ASC: Order.ASC; readonly DESC: Order.DESC; }': ASC, DESC
+    lf.Order.DESC = 0;
+             ~~~~
+!!! error TS2540: Cannot assign to 'DESC' because it is a read-only property.
+    lf.Order.ASC = 1;
+             ~~~
+!!! error TS2540: Cannot assign to 'ASC' because it is a read-only property.
+    

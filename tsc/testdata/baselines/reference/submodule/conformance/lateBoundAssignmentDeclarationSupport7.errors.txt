@@ -1,0 +1,40 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'CallableFunction'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'NewableFunction'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+usage.js(1,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'CallableFunction'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'NewableFunction'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== usage.js (1 errors) ====
+    const x = require("./lateBoundAssignmentDeclarationSupport7.js");
+              ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    const y = x.F["my-fake-sym"];
+    const z = x.F[x.S];
+    
+==== lateBoundAssignmentDeclarationSupport7.js (0 errors) ====
+    const _sym = Symbol();
+    const _str = "my-fake-sym";
+    
+    function F() {
+    }
+    F[_sym] = "ok";
+    F[_str] = "ok";
+    module.exports.F = F;
+    module.exports.S = _sym;

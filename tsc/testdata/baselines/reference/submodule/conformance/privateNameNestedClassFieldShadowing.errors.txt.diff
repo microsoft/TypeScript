@@ -1,0 +1,47 @@
+--- old.privateNameNestedClassFieldShadowing.errors.txt
++++ new.privateNameNestedClassFieldShadowing.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++privateNameNestedClassFieldShadowing.ts(7,17): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+ privateNameNestedClassFieldShadowing.ts(7,31): error TS18014: The property '#x' cannot be accessed on type 'Base' within this class because it is shadowed by another private identifier with the same spelling.
++privateNameNestedClassFieldShadowing.ts(10,17): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+ 
+ 
+-==== privateNameNestedClassFieldShadowing.ts (1 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== privateNameNestedClassFieldShadowing.ts (3 errors) ====
+     class Base {
+         #x;
+         constructor() {
+@@= skipped -8, +26 lines =@@
+                 #x;
+                 testBase(x: Base) {
+                     console.log(x.#x);
++                    ~~~~~~~
++!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+                                   ~~
+ !!! error TS18014: The property '#x' cannot be accessed on type 'Base' within this class because it is shadowed by another private identifier with the same spelling.
+ !!! related TS18017 privateNameNestedClassFieldShadowing.ts:5:13: The shadowing declaration of '#x' is defined here
+@@= skipped -7, +9 lines =@@
+                 }
+                 testDerived(x: Derived) {
+                     console.log(x.#x);
++                    ~~~~~~~
++!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+                 }
+             }
+         }

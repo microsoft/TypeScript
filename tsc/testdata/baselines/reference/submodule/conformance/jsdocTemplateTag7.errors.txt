@@ -1,0 +1,25 @@
+a.js(16,12): error TS7006: Parameter 'x' implicitly has an 'any' type.
+
+
+==== a.js (1 errors) ====
+    /**
+     * @template const T
+     * @typedef {[T]} X
+     */
+    
+    /**
+     * @template const T
+     */
+    class C { }
+    
+    /**
+     * @template private T
+     * @param {T} x
+     * @returns {T}
+     */
+    function f(x) {
+               ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+        return x;
+    }
+    

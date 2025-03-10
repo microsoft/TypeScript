@@ -1,0 +1,182 @@
+--- old.capturedLetConstInLoop9_ES6.errors.txt
++++ new.capturedLetConstInLoop9_ES6.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++capturedLetConstInLoop9_ES6.ts(38,19): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
++capturedLetConstInLoop9_ES6.ts(49,17): error TS2488: Type '[{ x: number; y: number; }]' must have a '[Symbol.iterator]()' method that returns an iterator.
++capturedLetConstInLoop9_ES6.ts(68,17): error TS2488: Type '[{ x1: number; y: error; }]' must have a '[Symbol.iterator]()' method that returns an iterator.
++capturedLetConstInLoop9_ES6.ts(68,52): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop9_ES6.ts(132,23): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop9_ES6.ts(134,27): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop9_ES6.ts(135,48): error TS2339: Property 'length' does not exist on type '{}'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== capturedLetConstInLoop9_ES6.ts (7 errors) ====
++    for (let x = 0; x < 1; ++x) {
++        let x;
++        (function() { return x });
++        {
++            let x;
++            (function() { return x });
++        }
++    
++        try { }
++        catch (e) {
++            let x;
++            (function() { return x });
++        }
++    
++        switch (x) {
++            case 1:
++                let x;
++                (function() { return x });
++               break;
++        }
++        
++        while (1 == 1) {
++            let x;
++            (function() { return x });
++        }
++        
++        class A {
++            m() {
++                return x + 1;
++            }
++        }
++    }
++    
++    declare function use(a: any);
++    
++    function foo() {
++        l0:
++        for (let a of []) {
++                      ~~
++!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
++            
++            if (a === 1) {
++                break;
++            }
++            
++            if (a === 2) {
++                break l0;
++            }
++            
++            for (let b of []) {
++                var [{x, y:z}] = [{x:1, y:2}];
++                    ~~~~~~~~~~
++!!! error TS2488: Type '[{ x: number; y: number; }]' must have a '[Symbol.iterator]()' method that returns an iterator.
++                if (b === 1) {
++                    break;
++                }
++                
++                
++                if (b === 2) {
++                    break l0;
++                }
++                
++                l1:
++                if (b === 3) {
++                    break l1;
++                }
++                
++                return 50;
++            }
++    
++            for (let b of []) {
++                var [{x1, y:z1}] = [{x1:1, y:arguments.length}];
++                    ~~~~~~~~~~~~
++!!! error TS2488: Type '[{ x1: number; y: error; }]' must have a '[Symbol.iterator]()' method that returns an iterator.
++                                                       ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++                if (b === 1) {
++                    break;
++                }
++                
++                if (b === 2) {
++                    break l0;
++                }
++                () => b
++                return 100;
++            }
++    
++            
++            () => a;
++        }
++        
++        use(x);
++        use(z);
++        use(x1);
++        use(z1);
++    }
++    
++    function foo2() {
++        for (let x of []) {
++            if (x === 1) {
++                break;
++            }
++            else if (x === 2) {
++                continue;
++            }
++            
++            while (1 === 1) {
++                if (x) {
++                    break;
++                }
++                else {
++                    continue;
++                }
++            }
++            
++            switch(x) {
++                case 1: break;
++                case 2: continue;
++            }
++            
++            for (let y of []) {
++                switch(y) {
++                    case 1: break;
++                    case 2: continue;
++                }
++            }
++        }
++    }
++    
++    class C {
++        constructor(private N: number) { }
++        foo() {
++            for (let i = 0; i < 100; i++) {
++                let f = () => this.N * i;
++            }
++        }
++    }
++    
++    function foo3 () {
++        let x = arguments.length;
++                          ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++        for (let y of []) {
++            let z = arguments.length;
++                              ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return y + z + arguments.length; });
++                                                   ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++        }
++    }

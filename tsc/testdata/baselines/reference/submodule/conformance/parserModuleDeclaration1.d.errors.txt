@@ -1,0 +1,8 @@
+parserModuleDeclaration1.d.ts(1,1): error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
+
+
+==== parserModuleDeclaration1.d.ts (1 errors) ====
+    module "Foo" {
+    ~~~~~~
+!!! error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
+    }

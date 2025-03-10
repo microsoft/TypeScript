@@ -1,0 +1,56 @@
+--- old.genericClassesRedeclaration.errors.txt
++++ new.genericClassesRedeclaration.errors.txt
+@@= skipped -0, +0 lines =@@
+ genericClassesRedeclaration.ts(3,9): error TS2374: Duplicate index signature for type 'string'.
+ genericClassesRedeclaration.ts(16,11): error TS2300: Duplicate identifier 'StringHashTable'.
++genericClassesRedeclaration.ts(16,11): error TS2300: Duplicate identifier 'StringHashTable'.
+ genericClassesRedeclaration.ts(29,11): error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
++genericClassesRedeclaration.ts(29,11): error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
+ genericClassesRedeclaration.ts(42,9): error TS2374: Duplicate index signature for type 'string'.
+ genericClassesRedeclaration.ts(55,11): error TS2300: Duplicate identifier 'StringHashTable'.
++genericClassesRedeclaration.ts(55,11): error TS2300: Duplicate identifier 'StringHashTable'.
+ genericClassesRedeclaration.ts(68,11): error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
++genericClassesRedeclaration.ts(68,11): error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
+ 
+ 
+-==== genericClassesRedeclaration.ts (6 errors) ====
++==== genericClassesRedeclaration.ts (10 errors) ====
+     declare module TypeScript {
+         interface IIndexable<T> {
+             [s: string]: T;
+@@= skipped -26, +30 lines =@@
+         class StringHashTable<T> implements IHashTable<T> {
+               ~~~~~~~~~~~~~~~
+ !!! error TS2300: Duplicate identifier 'StringHashTable'.
++              ~~~~~~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'StringHashTable'.
+             private itemCount;
+             private table;
+             public getAllKeys(): string[];
+@@= skipped -15, +17 lines =@@
+         class IdentifierNameHashTable<T> extends StringHashTable<T> {
+               ~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
++              ~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
+             public getAllKeys(): string[];
+             public add(key: string, data: T): boolean;
+             public addOrUpdate(key: string, data: T): boolean;
+@@= skipped -30, +32 lines =@@
+         class StringHashTable<T> implements IHashTable<T> {
+               ~~~~~~~~~~~~~~~
+ !!! error TS2300: Duplicate identifier 'StringHashTable'.
++              ~~~~~~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'StringHashTable'.
+             private itemCount;
+             private table;
+             public getAllKeys(): string[];
+@@= skipped -15, +17 lines =@@
+         class IdentifierNameHashTable<T> extends StringHashTable<T> {
+               ~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
++              ~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
+             public getAllKeys(): string[];
+             public add(key: string, data: T): boolean;
+             public addOrUpdate(key: string, data: T): boolean;

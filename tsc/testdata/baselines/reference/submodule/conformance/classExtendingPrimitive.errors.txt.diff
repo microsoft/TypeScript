@@ -1,0 +1,17 @@
+--- old.classExtendingPrimitive.errors.txt
++++ new.classExtendingPrimitive.errors.txt
+@@= skipped -5, +5 lines =@@
+ classExtendingPrimitive.ts(8,18): error TS2304: Cannot find name 'Null'.
+ classExtendingPrimitive.ts(10,18): error TS2507: Type 'undefined' is not a constructor function type.
+ classExtendingPrimitive.ts(11,18): error TS2552: Cannot find name 'Undefined'. Did you mean 'undefined'?
+-classExtendingPrimitive.ts(14,18): error TS2507: Type 'typeof E' is not a constructor function type.
++classExtendingPrimitive.ts(14,18): error TS2507: Type '{ readonly [x: number]: string; readonly A: E.A; }' is not a constructor function type.
+ 
+ 
+ ==== classExtendingPrimitive.ts (9 errors) ====
+@@= skipped -35, +35 lines =@@
+     enum E { A }
+     class C8 extends E { }
+                      ~
+-!!! error TS2507: Type 'typeof E' is not a constructor function type.
++!!! error TS2507: Type '{ readonly [x: number]: string; readonly A: E.A; }' is not a constructor function type.

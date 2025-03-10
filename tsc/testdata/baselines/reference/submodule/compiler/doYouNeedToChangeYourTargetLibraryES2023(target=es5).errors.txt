@@ -1,0 +1,64 @@
+doYouNeedToChangeYourTargetLibraryES2023.ts(7,31): error TS2550: Property 'findLastIndex' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryES2023.ts(7,45): error TS7006: Parameter 'v' implicitly has an 'any' type.
+doYouNeedToChangeYourTargetLibraryES2023.ts(8,31): error TS2550: Property 'findLastIndex' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryES2023.ts(10,26): error TS2550: Property 'findLast' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryES2023.ts(11,26): error TS2550: Property 'findLast' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryES2023.ts(13,27): error TS2550: Property 'toSorted' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryES2023.ts(15,29): error TS2550: Property 'toSpliced' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryES2023.ts(16,29): error TS2550: Property 'toSpliced' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryES2023.ts(17,29): error TS2550: Property 'toSpliced' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryES2023.ts(18,29): error TS2550: Property 'toSpliced' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryES2023.ts(19,29): error TS2550: Property 'toSpliced' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryES2023.ts(21,34): error TS2550: Property 'with' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+doYouNeedToChangeYourTargetLibraryES2023.ts(22,29): error TS2550: Property 'with' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+
+
+==== doYouNeedToChangeYourTargetLibraryES2023.ts (13 errors) ====
+    export let array = [0, 2, 3, 4];
+    
+    function somePredicate(x: any): boolean {
+        return x === 4;
+    }
+    
+    export let lastIndex1 = array.findLastIndex(v => v === 4);
+                                  ~~~~~~~~~~~~~
+!!! error TS2550: Property 'findLastIndex' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+                                                ~
+!!! error TS7006: Parameter 'v' implicitly has an 'any' type.
+    export let lastIndex2 = array.findLastIndex(somePredicate);
+                                  ~~~~~~~~~~~~~
+!!! error TS2550: Property 'findLastIndex' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    
+    export let last1 = array.findLast(somePredicate);
+                             ~~~~~~~~
+!!! error TS2550: Property 'findLast' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    export let last2 = array.findLast(somePredicate);
+                             ~~~~~~~~
+!!! error TS2550: Property 'findLast' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    
+    export let sorted = array.toSorted();
+                              ~~~~~~~~
+!!! error TS2550: Property 'toSorted' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    
+    export let spliced1 = array.toSpliced(2);
+                                ~~~~~~~~~
+!!! error TS2550: Property 'toSpliced' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    export let spliced2 = array.toSpliced(2, 1);
+                                ~~~~~~~~~
+!!! error TS2550: Property 'toSpliced' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    export let spliced3 = array.toSpliced(2, 1, 4, 5, 6, 7);
+                                ~~~~~~~~~
+!!! error TS2550: Property 'toSpliced' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    export let spliced4 = array.toSpliced(2, undefined);
+                                ~~~~~~~~~
+!!! error TS2550: Property 'toSpliced' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    export let spliced5 = array.toSpliced(2, undefined, 4, 5, 6, 7);
+                                ~~~~~~~~~
+!!! error TS2550: Property 'toSpliced' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    
+    export let startsWithOne = array.with(0, 1);
+                                     ~~~~
+!!! error TS2550: Property 'with' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+    export let inTheEnd = array.with(-1, 1);
+                                ~~~~
+!!! error TS2550: Property 'with' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.

@@ -1,0 +1,22 @@
+spellingSuggestionJSXAttribute.tsx(2,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
+
+
+==== spellingSuggestionJSXAttribute.tsx (1 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import * as React from "react";
+                           ~~~~~~~
+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
+    
+    function MyComp2(props: { className?: string, htmlFor?: string }) {
+        return null!;
+    }
+    class MyComp extends React.Component<{ className?: string, htmlFor?: string }> { }
+    <a class="" />;
+    <a for="" />; // should have no fix
+    <label for="" />;
+    <label for="" class="" />;
+    <MyComp class="" />;
+    <MyComp2 class="" />;
+    <MyComp for="" />;
+    <MyComp2 for="" />;
+    

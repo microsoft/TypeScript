@@ -1,0 +1,18 @@
+--- old.topLevelAwaitErrors.7(module=esnext).errors.txt
++++ new.topLevelAwaitErrors.7(module=esnext).errors.txt
+@@= skipped -0, +0 lines =@@
+ index.ts(2,13): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
++index.ts(2,13): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+ 
+ 
+-==== index.ts (1 errors) ====
++==== index.ts (2 errors) ====
+     // await disallowed in namespace import
+     import * as await from "./other";
+                 ~~~~~
+ !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
++                ~~~~~
++!!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+     
+ ==== other.ts (0 errors) ====
+     declare const _await: any;

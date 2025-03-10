@@ -1,0 +1,44 @@
+--- old.reuseTypeAnnotationImportTypeInGlobalThisTypeArgument.errors.txt
++++ new.reuseTypeAnnotationImportTypeInGlobalThisTypeArgument.errors.txt
+@@= skipped -0, +0 lines =@@
+-/types.js(3,21): error TS2304: Cannot find name 'Keyword'.
+-/types.js(3,30): error TS2304: Cannot find name 'ParamValueTyped'.
++/contractHelper.d.ts(3,67): error TS2694: Namespace '""/types.js""' has no exported member 'ParamStateRecord'.
++/exported.d.ts(2,10): error TS2305: Module '""/types.js""' has no exported member 'ParamStateRecord'.
+ 
+ 
+-==== /contractHelper.d.ts (0 errors) ====
++==== /contractHelper.d.ts (1 errors) ====
+     export function handleParamGovernance(zcf: any): {
+       publicMixin: {
+         getGovernedParams: () => globalThis.ERef<import("./types.js").ParamStateRecord>;
++                                                                      ~~~~~~~~~~~~~~~~
++!!! error TS2694: Namespace '""/types.js""' has no exported member 'ParamStateRecord'.
+       };
+     };
+     
+-==== /exported.d.ts (0 errors) ====
++==== /exported.d.ts (1 errors) ====
+     type _ERef<T> = T | Promise<T>;
+     import { ParamStateRecord as _ParamStateRecord } from './types.js';
++             ~~~~~~~~~~~~~~~~
++!!! error TS2305: Module '""/types.js""' has no exported member 'ParamStateRecord'.
+     declare global {
+       // @ts-ignore TS2666
+       export {
+@@= skipped -19, +23 lines =@@
+       };
+     }
+     
+-==== /types.js (2 errors) ====
++==== /types.js (0 errors) ====
+     export {};
+     /**
+      * @typedef {Record<Keyword, ParamValueTyped>} ParamStateRecord a Record containing
+-                        ~~~~~~~
+-!!! error TS2304: Cannot find name 'Keyword'.
+-                                 ~~~~~~~~~~~~~~~
+-!!! error TS2304: Cannot find name 'ParamValueTyped'.
+      *   keyword pairs with descriptions of parameters under governance.
+      */
+     

@@ -1,0 +1,53 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+awaitUnionPromise.ts(6,14): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+awaitUnionPromise.ts(7,14): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+awaitUnionPromise.ts(7,27): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+awaitUnionPromise.ts(8,14): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+awaitUnionPromise.ts(9,14): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== awaitUnionPromise.ts (5 errors) ====
+    // https://github.com/Microsoft/TypeScript/issues/18186
+    
+    class AsyncEnumeratorDone { };
+    
+    interface IAsyncEnumerator<T> {
+        next1(): Promise<T | AsyncEnumeratorDone>;
+                 ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+        next2(): Promise<T> | Promise<AsyncEnumeratorDone>;
+                 ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+                              ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+        next3(): Promise<T | {}>;
+                 ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+        next4(): Promise<T | { x: string }>;
+                 ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    }
+    
+    async function main() {
+        const x: IAsyncEnumerator<number> = null;
+        let a = await x.next1();
+        let b = await x.next2();
+        let c = await x.next3();
+        let d = await x.next4();
+    }
+    

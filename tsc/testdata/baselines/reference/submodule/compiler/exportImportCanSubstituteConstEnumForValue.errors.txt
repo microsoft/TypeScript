@@ -1,0 +1,79 @@
+exportImportCanSubstituteConstEnumForValue.ts(14,29): error TS2694: Namespace 'MsPortalFx' has no exported member 'ViewModels'.
+exportImportCanSubstituteConstEnumForValue.ts(36,36): error TS2304: Cannot find name 'Dialogs'.
+exportImportCanSubstituteConstEnumForValue.ts(36,36): error TS2503: Cannot find namespace 'Dialogs'.
+exportImportCanSubstituteConstEnumForValue.ts(41,28): error TS2503: Cannot find namespace 'Dialogs'.
+exportImportCanSubstituteConstEnumForValue.ts(46,30): error TS2304: Cannot find name 'Dialogs'.
+exportImportCanSubstituteConstEnumForValue.ts(46,30): error TS2503: Cannot find namespace 'Dialogs'.
+
+
+==== exportImportCanSubstituteConstEnumForValue.ts (6 errors) ====
+    module MsPortalFx.ViewModels.Dialogs {
+    
+        export const enum DialogResult {
+            Abort,
+            Cancel,
+            Ignore,
+            No,
+            Ok,
+            Retry,
+            Yes,
+        }
+    
+        export interface DialogResultCallback {
+            (result: MsPortalFx.ViewModels.Dialogs.DialogResult): void;
+                                ~~~~~~~~~~
+!!! error TS2694: Namespace 'MsPortalFx' has no exported member 'ViewModels'.
+        }
+    
+        export function someExportedFunction() {
+        }
+    
+        export const enum MessageBoxButtons {
+            AbortRetryIgnore,
+            OK,
+            OKCancel,
+            RetryCancel,
+            YesNo,
+            YesNoCancel,
+        }
+    }
+    
+    
+    module MsPortalFx.ViewModels {
+    
+        /**
+         * For some reason javascript code is emitted for this re-exported const enum.
+         */
+        export import ReExportedEnum = Dialogs.DialogResult;
+                                       ~~~~~~~
+!!! error TS2304: Cannot find name 'Dialogs'.
+                                       ~~~~~~~
+!!! error TS2503: Cannot find namespace 'Dialogs'.
+    
+        /**
+         * Not exported to show difference. No javascript is emmitted (as expected)
+         */
+        import DialogButtons = Dialogs.MessageBoxButtons;
+                               ~~~~~~~
+!!! error TS2503: Cannot find namespace 'Dialogs'.
+    
+        /**
+         * Re-exporting a function type to show difference. No javascript is emmitted (as expected)
+         */
+        export import Callback = Dialogs.DialogResultCallback;
+                                 ~~~~~~~
+!!! error TS2304: Cannot find name 'Dialogs'.
+                                 ~~~~~~~
+!!! error TS2503: Cannot find namespace 'Dialogs'.
+    
+        export class SomeUsagesOfTheseConsts {
+            constructor() {
+                // these do get replaced by the const value
+                const value1 = ReExportedEnum.Cancel;
+                console.log(value1);
+                const value2 = DialogButtons.OKCancel;
+                console.log(value2);
+            }
+        }
+    }
+    

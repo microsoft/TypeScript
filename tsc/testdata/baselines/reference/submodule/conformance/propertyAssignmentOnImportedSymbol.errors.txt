@@ -1,0 +1,11 @@
+bug24658.js(2,6): error TS2339: Property 'expando' does not exist on type '{}'.
+
+
+==== mod1.js (0 errors) ====
+    export var hurk = {}
+==== bug24658.js (1 errors) ====
+    import { hurk } from './mod1'
+    hurk.expando = 4
+         ~~~~~~~
+!!! error TS2339: Property 'expando' does not exist on type '{}'.
+    

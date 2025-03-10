@@ -1,0 +1,9 @@
+restElementWithInitializer1.ts(2,11): error TS1186: A rest element cannot have an initializer.
+
+
+==== restElementWithInitializer1.ts (1 errors) ====
+    var a: number[];
+    var [...x = a] = a;  // Error, rest element cannot have initializer
+              ~
+!!! error TS1186: A rest element cannot have an initializer.
+    

@@ -1,0 +1,27 @@
+d.ts(2,1): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+e.ts(2,1): error TS1362: 'ns' cannot be used as a value because it was exported using 'export type'.
+
+
+==== a.ts (0 errors) ====
+    export class A {}
+    
+==== b.ts (0 errors) ====
+    export type * from './a';
+    
+==== c.ts (0 errors) ====
+    export type * as ns from './a';
+    
+==== d.ts (1 errors) ====
+    import { A } from './b';
+    A;
+    ~
+!!! error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 b.ts:1:1: 'A' was exported here.
+    
+==== e.ts (1 errors) ====
+    import { ns } from './c';
+    ns.A;
+    ~~
+!!! error TS1362: 'ns' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 c.ts:1:13: 'ns' was exported here.
+    

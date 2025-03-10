@@ -1,0 +1,29 @@
+--- old.capturedLetConstInLoop8_ES6.errors.txt
++++ new.capturedLetConstInLoop8_ES6.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ capturedLetConstInLoop8_ES6.ts(73,21): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+ capturedLetConstInLoop8_ES6.ts(76,21): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+ capturedLetConstInLoop8_ES6.ts(79,21): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+@@= skipped -15, +23 lines =@@
+ capturedLetConstInLoop8_ES6.ts(120,17): error TS2367: This comparison appears to be unintentional because the types '0' and '3' have no overlap.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== capturedLetConstInLoop8_ES6.ts (16 errors) ====
+     function foo() {
+         l0:

@@ -1,0 +1,87 @@
+unionTypePropertyAccessibility.ts(35,4): error TS2445: Property 'member' is protected and only accessible within class 'Protected' and its subclasses.
+unionTypePropertyAccessibility.ts(36,4): error TS2341: Property 'member' is private and only accessible within class 'Private'.
+unionTypePropertyAccessibility.ts(38,4): error TS2339: Property 'member' does not exist on type 'Default | Protected'.
+unionTypePropertyAccessibility.ts(39,4): error TS2339: Property 'member' does not exist on type 'Default | Private'.
+unionTypePropertyAccessibility.ts(40,4): error TS2339: Property 'member' does not exist on type 'Protected | Public'.
+unionTypePropertyAccessibility.ts(41,4): error TS2339: Property 'member' does not exist on type 'Private | Public'.
+unionTypePropertyAccessibility.ts(42,5): error TS2339: Property 'member' does not exist on type 'Private | Protected'.
+unionTypePropertyAccessibility.ts(43,5): error TS2339: Property 'member' does not exist on type 'Default | Protected | Public'.
+unionTypePropertyAccessibility.ts(44,5): error TS2339: Property 'member' does not exist on type 'Default | Private | Public'.
+unionTypePropertyAccessibility.ts(45,5): error TS2339: Property 'member' does not exist on type 'Default | Private | Protected'.
+unionTypePropertyAccessibility.ts(46,5): error TS2339: Property 'member' does not exist on type 'Private | Protected | Public'.
+unionTypePropertyAccessibility.ts(47,5): error TS2339: Property 'member' does not exist on type 'Default | Private | Protected | Public'.
+
+
+==== unionTypePropertyAccessibility.ts (12 errors) ====
+    class Default {
+        member: string;
+    }
+    
+    class Public {
+        public member: string;
+    }
+    
+    class Protected {
+        protected member: string;
+    }
+    
+    class Private {
+        private member: number;
+    }
+    
+    var v1: Default;
+    var v2: Public;
+    var v3: Protected;
+    var v4: Private;
+    var v5: Default | Public;
+    var v6: Default | Protected;
+    var v7: Default | Private;
+    var v8: Public | Protected;
+    var v9: Public | Private;
+    var v10: Protected | Private;
+    var v11: Default | Public | Protected;
+    var v12: Default | Public | Private;
+    var v13: Default | Protected | Private;
+    var v14: Public | Private | Protected;
+    var v15: Default | Public | Private | Protected;
+    
+    v1.member;
+    v2.member;
+    v3.member;
+       ~~~~~~
+!!! error TS2445: Property 'member' is protected and only accessible within class 'Protected' and its subclasses.
+    v4.member;
+       ~~~~~~
+!!! error TS2341: Property 'member' is private and only accessible within class 'Private'.
+    v5.member;
+    v6.member;
+       ~~~~~~
+!!! error TS2339: Property 'member' does not exist on type 'Default | Protected'.
+    v7.member;
+       ~~~~~~
+!!! error TS2339: Property 'member' does not exist on type 'Default | Private'.
+    v8.member;
+       ~~~~~~
+!!! error TS2339: Property 'member' does not exist on type 'Protected | Public'.
+    v9.member;
+       ~~~~~~
+!!! error TS2339: Property 'member' does not exist on type 'Private | Public'.
+    v10.member;
+        ~~~~~~
+!!! error TS2339: Property 'member' does not exist on type 'Private | Protected'.
+    v11.member;
+        ~~~~~~
+!!! error TS2339: Property 'member' does not exist on type 'Default | Protected | Public'.
+    v12.member;
+        ~~~~~~
+!!! error TS2339: Property 'member' does not exist on type 'Default | Private | Public'.
+    v13.member;
+        ~~~~~~
+!!! error TS2339: Property 'member' does not exist on type 'Default | Private | Protected'.
+    v14.member;
+        ~~~~~~
+!!! error TS2339: Property 'member' does not exist on type 'Private | Protected | Public'.
+    v15.member;
+        ~~~~~~
+!!! error TS2339: Property 'member' does not exist on type 'Default | Private | Protected | Public'.
+    

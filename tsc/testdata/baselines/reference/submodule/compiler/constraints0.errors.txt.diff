@@ -1,0 +1,19 @@
+--- old.constraints0.errors.txt
++++ new.constraints0.errors.txt
+@@= skipped -0, +0 lines =@@
+-constraints0.ts(14,11): error TS2344: Type 'B' does not satisfy the constraint 'A'.
+-  Property 'a' is missing in type 'B' but required in type 'A'.
++constraints0.ts(14,11): error TS2741: Property 'a' is missing in type 'B' but required in type 'A'.
+ 
+ 
+ ==== constraints0.ts (1 errors) ====
+@@= skipped -17, +16 lines =@@
+     var v1: C<A>; // should work
+     var v2: C<B>; // should not work
+               ~
+-!!! error TS2344: Type 'B' does not satisfy the constraint 'A'.
+-!!! error TS2344:   Property 'a' is missing in type 'B' but required in type 'A'.
++!!! error TS2741: Property 'a' is missing in type 'B' but required in type 'A'.
+ !!! related TS2728 constraints0.ts:2:2: 'a' is declared here.
+     
+     var y = v1.x.a; // 'a' should be of type 'number'

@@ -1,0 +1,13 @@
+--- old.declarationEmitInvalidReference2.errors.txt
++++ new.declarationEmitInvalidReference2.errors.txt
+@@= skipped -0, +-1 lines =@@
+-declarationEmitInvalidReference2.ts(1,22): error TS6053: File 'invalid.ts' not found.
+-
+-
+-==== declarationEmitInvalidReference2.ts (1 errors) ====
+-    /// <reference path="invalid.ts" />
+-                         ~~~~~~~~~~
+-!!! error TS6053: File 'invalid.ts' not found.
+-    var x = 0;
+@@= skipped --1, +1 lines =@@
++<no content>

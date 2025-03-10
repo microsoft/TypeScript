@@ -1,0 +1,9 @@
+templateStringInCallExpression.ts(1,1): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+
+
+==== templateStringInCallExpression.ts (1 errors) ====
+    `abc${0}abc`(`hello ${0} world`, `   `, `1${2}3`);
+    ~~~~~~~~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'String' has no call signatures.

@@ -1,0 +1,23 @@
+--- old.jsFileCompilationOptionalClassElementSyntaxOfClass.errors.txt
++++ new.jsFileCompilationOptionalClassElementSyntaxOfClass.errors.txt
+@@= skipped -0, +-1 lines =@@
+-error TS5055: Cannot write file 'a.js' because it would overwrite input file.
+-  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+-a.js(2,8): error TS8009: The '?' modifier can only be used in TypeScript files.
+-a.js(4,8): error TS8009: The '?' modifier can only be used in TypeScript files.
+-
+-
+-!!! error TS5055: Cannot write file 'a.js' because it would overwrite input file.
+-!!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+-==== a.js (2 errors) ====
+-    class C {
+-        foo?() {
+-           ~
+-!!! error TS8009: The '?' modifier can only be used in TypeScript files.
+-        }
+-        bar? = 1; 
+-           ~
+-!!! error TS8009: The '?' modifier can only be used in TypeScript files.
+-    }
+@@= skipped --1, +1 lines =@@
++<no content>

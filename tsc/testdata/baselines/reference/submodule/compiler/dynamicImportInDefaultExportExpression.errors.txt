@@ -1,0 +1,11 @@
+dynamicImportInDefaultExportExpression.ts(3,23): error TS2307: Cannot find module './foo2' or its corresponding type declarations.
+
+
+==== dynamicImportInDefaultExportExpression.ts (1 errors) ====
+    export default {
+        getInstance: function () {
+            return import('./foo2');
+                          ~~~~~~~~
+!!! error TS2307: Cannot find module './foo2' or its corresponding type declarations.
+        }
+    }

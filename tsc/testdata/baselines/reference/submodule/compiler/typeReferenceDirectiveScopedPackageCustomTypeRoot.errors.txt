@@ -1,0 +1,39 @@
+/a.ts(1,1): error TS2304: Cannot find name 'typesCache'.
+/a.ts(3,1): error TS2304: Cannot find name 'nodeModulesCache'.
+/a.ts(4,1): error TS2304: Cannot find name 'mangledNodeModules'.
+/a.ts(5,1): error TS2304: Cannot find name 'atTypesCache'.
+
+
+==== /a.ts (4 errors) ====
+    typesCache;
+    ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'typesCache'.
+    mangledAtTypesCache;
+    nodeModulesCache;
+    ~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'nodeModulesCache'.
+    mangledNodeModules;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'mangledNodeModules'.
+    atTypesCache;
+    ~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'atTypesCache'.
+    mangledAtTypesCache;
+==== /types/@scoped/typescache/index.d.ts (0 errors) ====
+    declare const typesCache: number;
+    
+==== /types/mangled__typescache/index.d.ts (0 errors) ====
+    declare const mangledTypes: number;
+    
+==== /node_modules/@scoped/nodemodulescache/index.d.ts (0 errors) ====
+    declare const nodeModulesCache: number;
+    
+==== /node_modules/mangled__nodemodulescache/index.d.ts (0 errors) ====
+    declare const mangledNodeModules: number;
+    
+==== /node_modules/@types/@scoped/attypescache/index.d.ts (0 errors) ====
+    declare const atTypesCache: number;
+    
+==== /node_modules/@types/mangled__attypescache/index.d.ts (0 errors) ====
+    declare const mangledAtTypesCache: number;
+    

@@ -1,0 +1,49 @@
+packages/lab/src/index.ts(1,31): error TS2307: Cannot find module '@ts-bug/core/utils' or its corresponding type declarations.
+
+
+==== packages/lab/tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "outDir": "dist",
+            "declaration": true,
+            "baseUrl": "../",
+            "paths": {
+                "@ts-bug/core": ["./core/src"],
+                "@ts-bug/core/*": ["./core/src/*"],
+                "@ts-bug/lab": ["./lab/src"],
+                "@ts-bug/lab/*": ["./lab/src/*"],
+                "@ts-bug/styles": ["./styles/src"],
+                "@ts-bug/styles/*": ["./styles/src/*"]
+            }
+        }
+    }
+==== packages/lab/src/index.ts (1 errors) ====
+    import { createSvgIcon } from "@ts-bug/core/utils";
+                                  ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module '@ts-bug/core/utils' or its corresponding type declarations.
+    export default createSvgIcon("Hello", "ArrowLeft");
+    
+==== packages/core/src/index.d.ts (0 errors) ====
+    export * from "./utils";
+    export { default as SvgIcon } from "./SvgIcon";
+    
+==== packages/core/src/SvgIcon.d.ts (0 errors) ====
+    import { StyledComponentProps } from "@ts-bug/styles";
+    export interface SvgIconProps extends StyledComponentProps<"root"> {
+        children?: string[];
+    }
+    export interface SomeInterface {
+        myProp: string;
+    }
+    declare const SvgIcon: SomeInterface;
+    export default SvgIcon;
+    
+==== packages/core/src/utils.d.ts (0 errors) ====
+    import SvgIcon from "./SvgIcon";
+    export function createSvgIcon(path: string, displayName: string): typeof SvgIcon;
+    
+==== packages/styles/src/index.d.ts (0 errors) ====
+    export interface StyledComponentProps<ClassKey extends string> {
+        classes?: Record<ClassKey, string>;
+    }
+    

@@ -1,0 +1,9 @@
+parserMemberVariableDeclaration2.ts(2,10): error TS1434: Unexpected keyword or identifier.
+
+
+==== parserMemberVariableDeclaration2.ts (1 errors) ====
+    class C {
+      static static Foo;
+             ~~~~~~
+!!! error TS1434: Unexpected keyword or identifier.
+    }

@@ -1,0 +1,46 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+symbolProperty25.ts(2,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+symbolProperty25.ts(2,6): error TS2304: Cannot find name 'Symbol'.
+symbolProperty25.ts(5,7): error TS2420: Class 'C' incorrectly implements interface 'I'.
+  'number' index signatures are incompatible.
+    Type '() => string' is not assignable to type '() => boolean'.
+      Type 'string' is not assignable to type 'boolean'.
+symbolProperty25.ts(6,6): error TS2304: Cannot find name 'Symbol'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== symbolProperty25.ts (4 errors) ====
+    interface I {
+        [Symbol.toPrimitive]: () => boolean;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+    }
+    
+    class C implements I {
+          ~
+!!! error TS2420: Class 'C' incorrectly implements interface 'I'.
+!!! error TS2420:   'number' index signatures are incompatible.
+!!! error TS2420:     Type '() => string' is not assignable to type '() => boolean'.
+!!! error TS2420:       Type 'string' is not assignable to type 'boolean'.
+        [Symbol.toStringTag]() {
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+            return "";
+        }
+    }

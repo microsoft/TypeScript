@@ -1,0 +1,20 @@
+bug24754.js(4,1): error TS2304: Cannot find name 'exports'.
+bug24754.js(4,11): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+bug24754.js(5,1): error TS2304: Cannot find name 'exports'.
+
+
+==== bug24754.js (3 errors) ====
+    // #24754
+    const webpack = function (){
+    }
+    exports = module.exports = webpack;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+              ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    exports.version = 1001;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    
+    webpack.WebpackOptionsDefaulter = 1111;
+    

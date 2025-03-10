@@ -1,0 +1,23 @@
+--- old.jsDeclarationsCommonjsRelativePath.errors.txt
++++ new.jsDeclarationsCommonjsRelativePath.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++reexport.js(2,15): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++reexport.js(3,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
++==== reexport.js (2 errors) ====
++    'use strict';
++    const Thing = require('./thing').Thing
++                  ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    module.exports = { Thing }
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++==== thing.js (0 errors) ====
++    'use strict';
++    class Thing {}
++    module.exports = { Thing }
++    

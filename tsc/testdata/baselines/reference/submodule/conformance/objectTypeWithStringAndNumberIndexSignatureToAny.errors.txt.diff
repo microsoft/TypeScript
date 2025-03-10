@@ -1,0 +1,21 @@
+--- old.objectTypeWithStringAndNumberIndexSignatureToAny.errors.txt
++++ new.objectTypeWithStringAndNumberIndexSignatureToAny.errors.txt
+@@= skipped -15, +15 lines =@@
+ objectTypeWithStringAndNumberIndexSignatureToAny.ts(88,5): error TS2322: Type 'Obj' is not assignable to type 'StringToAnyNumberToNumber'.
+   Index signature for type 'number' is missing in type 'Obj'.
+ objectTypeWithStringAndNumberIndexSignatureToAny.ts(90,5): error TS2739: Type 'StringTo<any>' is missing the following properties from type 'Obj': hello, world
+-objectTypeWithStringAndNumberIndexSignatureToAny.ts(91,5): error TS2739: Type 'NumberTo<number>' is missing the following properties from type 'Obj': hello, world
++objectTypeWithStringAndNumberIndexSignatureToAny.ts(91,5): error TS2322: Type 'NumberToNumber' is not assignable to type 'Obj'.
++  Type 'NumberTo<number>' is missing the following properties from type 'Obj': hello, world
+ 
+ 
+ ==== objectTypeWithStringAndNumberIndexSignatureToAny.ts (13 errors) ====
+@@= skipped -126, +127 lines =@@
+ !!! error TS2739: Type 'StringTo<any>' is missing the following properties from type 'Obj': hello, world
+         someObj = nToNumber;
+         ~~~~~~~
+-!!! error TS2739: Type 'NumberTo<number>' is missing the following properties from type 'Obj': hello, world
++!!! error TS2322: Type 'NumberToNumber' is not assignable to type 'Obj'.
++!!! error TS2322:   Type 'NumberTo<number>' is missing the following properties from type 'Obj': hello, world
+         someObj = someObj;
+     }

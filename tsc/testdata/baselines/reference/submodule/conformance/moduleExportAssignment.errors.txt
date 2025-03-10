@@ -1,0 +1,25 @@
+use.js(1,14): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== use.js (1 errors) ====
+    var npmlog = require('./npmlog')
+                 ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    npmlog.x
+    npmlog.on
+    
+==== npmlog.js (0 errors) ====
+    class EE {
+        /** @param {string} s */
+        on(s) { }
+    }
+    var npmlog = module.exports = new EE()
+    
+    npmlog.on('hi') // both references should see EE.on
+    module.exports.on('hi') // here too
+    
+    npmlog.x = 1
+    module.exports.y = 2
+    npmlog.y
+    module.exports.x
+    

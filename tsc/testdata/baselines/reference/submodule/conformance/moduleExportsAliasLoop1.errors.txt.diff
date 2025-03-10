@@ -1,0 +1,19 @@
+--- old.moduleExportsAliasLoop1.errors.txt
++++ new.moduleExportsAliasLoop1.errors.txt
+@@= skipped -0, +0 lines =@@
+-x.js(1,9): error TS2339: Property 'fn1' does not exist on type 'typeof import("x")'.
++x.js(1,1): error TS2304: Cannot find name 'exports'.
++x.js(2,1): error TS2304: Cannot find name 'exports'.
+ 
+ 
+-==== x.js (1 errors) ====
++==== x.js (2 errors) ====
+     exports.fn1();
+-            ~~~
+-!!! error TS2339: Property 'fn1' does not exist on type 'typeof import("x")'.
++    ~~~~~~~
++!!! error TS2304: Cannot find name 'exports'.
+     exports.fn2 = Math.min;
++    ~~~~~~~
++!!! error TS2304: Cannot find name 'exports'.
+     

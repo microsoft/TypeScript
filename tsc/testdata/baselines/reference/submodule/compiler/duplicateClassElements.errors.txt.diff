@@ -1,0 +1,127 @@
+--- old.duplicateClassElements.errors.txt
++++ new.duplicateClassElements.errors.txt
+@@= skipped -0, +0 lines =@@
++duplicateClassElements.ts(2,12): error TS2300: Duplicate identifier 'a'.
+ duplicateClassElements.ts(3,12): error TS2300: Duplicate identifier 'a'.
+ duplicateClassElements.ts(4,12): error TS2393: Duplicate function implementation.
+ duplicateClassElements.ts(6,12): error TS2393: Duplicate function implementation.
+ duplicateClassElements.ts(8,12): error TS2300: Duplicate identifier 'x'.
++duplicateClassElements.ts(8,12): error TS2300: Duplicate identifier 'x'.
+ duplicateClassElements.ts(9,9): error TS2300: Duplicate identifier 'x'.
++duplicateClassElements.ts(9,9): error TS2300: Duplicate identifier 'x'.
+ duplicateClassElements.ts(12,9): error TS2300: Duplicate identifier 'x'.
++duplicateClassElements.ts(12,9): error TS2300: Duplicate identifier 'x'.
+ duplicateClassElements.ts(21,12): error TS2300: Duplicate identifier 'z'.
++duplicateClassElements.ts(21,12): error TS2300: Duplicate identifier 'z'.
+ duplicateClassElements.ts(23,9): error TS2300: Duplicate identifier 'z'.
++duplicateClassElements.ts(23,9): error TS2300: Duplicate identifier 'z'.
+ duplicateClassElements.ts(26,9): error TS2300: Duplicate identifier 'z'.
++duplicateClassElements.ts(26,9): error TS2300: Duplicate identifier 'z'.
++duplicateClassElements.ts(29,9): error TS2300: Duplicate identifier 'x2'.
++duplicateClassElements.ts(29,9): error TS2300: Duplicate identifier 'x2'.
++duplicateClassElements.ts(32,9): error TS2300: Duplicate identifier 'x2'.
++duplicateClassElements.ts(32,9): error TS2300: Duplicate identifier 'x2'.
+ duplicateClassElements.ts(34,12): error TS2300: Duplicate identifier 'x2'.
+-duplicateClassElements.ts(34,12): error TS2717: Subsequent property declarations must have the same type.  Property 'x2' must be of type 'number', but here has type 'any'.
++duplicateClassElements.ts(34,12): error TS2300: Duplicate identifier 'x2'.
+ duplicateClassElements.ts(36,9): error TS2300: Duplicate identifier 'z2'.
++duplicateClassElements.ts(36,9): error TS2300: Duplicate identifier 'z2'.
+ duplicateClassElements.ts(39,9): error TS2300: Duplicate identifier 'z2'.
++duplicateClassElements.ts(39,9): error TS2300: Duplicate identifier 'z2'.
+ duplicateClassElements.ts(41,12): error TS2300: Duplicate identifier 'z2'.
++duplicateClassElements.ts(41,12): error TS2300: Duplicate identifier 'z2'.
+ 
+ 
+-==== duplicateClassElements.ts (14 errors) ====
++==== duplicateClassElements.ts (28 errors) ====
+     class a {
+         public a;
++               ~
++!!! error TS2300: Duplicate identifier 'a'.
+         public a;
+                ~
+ !!! error TS2300: Duplicate identifier 'a'.
+@@= skipped -30, +46 lines =@@
+         public x;
+                ~
+ !!! error TS2300: Duplicate identifier 'x'.
++               ~
++!!! error TS2300: Duplicate identifier 'x'.
+         get x() {
+             ~
+ !!! error TS2300: Duplicate identifier 'x'.
++            ~
++!!! error TS2300: Duplicate identifier 'x'.
+             return 10;
+         }
+         set x(_x: number) {
+             ~
+ !!! error TS2300: Duplicate identifier 'x'.
++            ~
++!!! error TS2300: Duplicate identifier 'x'.
+         }
+     
+         get y() {
+@@= skipped -19, +25 lines =@@
+         public z() {
+                ~
+ !!! error TS2300: Duplicate identifier 'z'.
++               ~
++!!! error TS2300: Duplicate identifier 'z'.
+         }
+         get z() {
+             ~
+ !!! error TS2300: Duplicate identifier 'z'.
++            ~
++!!! error TS2300: Duplicate identifier 'z'.
+             return "Hello";
+         }
+         set z(_y: string) {
+             ~
+ !!! error TS2300: Duplicate identifier 'z'.
++            ~
++!!! error TS2300: Duplicate identifier 'z'.
+         }
+     
+         get x2() {
++            ~~
++!!! error TS2300: Duplicate identifier 'x2'.
++            ~~
++!!! error TS2300: Duplicate identifier 'x2'.
+             return 10;
+         }
+         set x2(_x: number) {
++            ~~
++!!! error TS2300: Duplicate identifier 'x2'.
++            ~~
++!!! error TS2300: Duplicate identifier 'x2'.
+         }
+         public x2;
+                ~~
+ !!! error TS2300: Duplicate identifier 'x2'.
+                ~~
+-!!! error TS2717: Subsequent property declarations must have the same type.  Property 'x2' must be of type 'number', but here has type 'any'.
+-!!! related TS6203 duplicateClassElements.ts:29:9: 'x2' was also declared here.
++!!! error TS2300: Duplicate identifier 'x2'.
+     
+         get z2() {
+             ~~
+ !!! error TS2300: Duplicate identifier 'z2'.
++            ~~
++!!! error TS2300: Duplicate identifier 'z2'.
+             return "Hello";
+         }
+         set z2(_y: string) {
+             ~~
+ !!! error TS2300: Duplicate identifier 'z2'.
++            ~~
++!!! error TS2300: Duplicate identifier 'z2'.
+         }
+         public z2() {
+                ~~
+ !!! error TS2300: Duplicate identifier 'z2'.
++               ~~
++!!! error TS2300: Duplicate identifier 'z2'.
+         }
+     
+     }

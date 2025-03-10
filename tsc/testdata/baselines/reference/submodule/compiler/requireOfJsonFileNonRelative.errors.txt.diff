@@ -1,0 +1,34 @@
+--- old.requireOfJsonFileNonRelative.errors.txt
++++ new.requireOfJsonFileNonRelative.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/src/projects/file1.ts(1,21): error TS2307: Cannot find module 'b.json' or its corresponding type declarations.
++/src/projects/file1.ts(3,21): error TS2307: Cannot find module 'c.json' or its corresponding type declarations.
++
++
++==== /src/projects/file1.ts (2 errors) ====
++    import b1 = require('b.json');
++                        ~~~~~~~~
++!!! error TS2307: Cannot find module 'b.json' or its corresponding type declarations.
++    let x = b1.a;
++    import b2 = require('c.json');
++                        ~~~~~~~~
++!!! error TS2307: Cannot find module 'c.json' or its corresponding type declarations.
++    if (x) {
++        let b = b2.b;
++        x = (b1.b === b);
++    }
++    
++==== /src/projects/node_modules/b.json (0 errors) ====
++    {
++        "a": true,
++        "b": "hello"
++    }
++    
++==== /src/node_modules/c.json (0 errors) ====
++    {
++        "a": true,
++        "b": "hello"
++    }
++    

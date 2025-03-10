@@ -1,0 +1,114 @@
+jsdocDisallowedInTypescript.ts(7,20): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+jsdocDisallowedInTypescript.ts(7,28): error TS1005: ',' expected.
+jsdocDisallowedInTypescript.ts(7,32): error TS1109: Expression expected.
+jsdocDisallowedInTypescript.ts(7,34): error TS2693: 'number' only refers to a type, but is being used as a value here.
+jsdocDisallowedInTypescript.ts(7,34): error TS2695: Left side of comma operator is unused and has no side effects.
+jsdocDisallowedInTypescript.ts(7,42): error TS2693: 'string' only refers to a type, but is being used as a value here.
+jsdocDisallowedInTypescript.ts(7,48): error TS1005: ';' expected.
+jsdocDisallowedInTypescript.ts(7,49): error TS1128: Declaration or statement expected.
+jsdocDisallowedInTypescript.ts(10,18): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+jsdocDisallowedInTypescript.ts(10,26): error TS1005: ',' expected.
+jsdocDisallowedInTypescript.ts(10,27): error TS2730: An arrow function cannot have a 'this' parameter.
+jsdocDisallowedInTypescript.ts(10,41): error TS7006: Parameter 'string' implicitly has an 'any' type.
+jsdocDisallowedInTypescript.ts(10,56): error TS1005: '=>' expected.
+jsdocDisallowedInTypescript.ts(14,13): error TS1110: Type expected.
+jsdocDisallowedInTypescript.ts(15,8): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+jsdocDisallowedInTypescript.ts(15,16): error TS1005: ',' expected.
+jsdocDisallowedInTypescript.ts(15,17): error TS2693: 'number' only refers to a type, but is being used as a value here.
+jsdocDisallowedInTypescript.ts(15,17): error TS2695: Left side of comma operator is unused and has no side effects.
+jsdocDisallowedInTypescript.ts(15,25): error TS2693: 'number' only refers to a type, but is being used as a value here.
+jsdocDisallowedInTypescript.ts(15,32): error TS1005: ';' expected.
+jsdocDisallowedInTypescript.ts(15,34): error TS2693: 'number' only refers to a type, but is being used as a value here.
+jsdocDisallowedInTypescript.ts(15,44): error TS7006: Parameter 'n' implicitly has an 'any' type.
+jsdocDisallowedInTypescript.ts(15,46): error TS7006: Parameter 'm' implicitly has an 'any' type.
+jsdocDisallowedInTypescript.ts(17,23): error TS1005: ',' expected.
+jsdocDisallowedInTypescript.ts(17,25): error TS1109: Expression expected.
+jsdocDisallowedInTypescript.ts(18,23): error TS1005: ',' expected.
+jsdocDisallowedInTypescript.ts(18,25): error TS1134: Variable declaration expected.
+jsdocDisallowedInTypescript.ts(18,27): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+
+
+==== jsdocDisallowedInTypescript.ts (28 errors) ====
+    // grammar error from checker
+    var ara: Array.<number> = [1,2,3];
+    
+    function f(x: ?number, y: Array.<number>) {
+        return x ? x + y[1] : y[0];
+    }
+    function hof(ctor: function(new: number, string)) {
+                       ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+                               ~
+!!! error TS1005: ',' expected.
+                                   ~
+!!! error TS1109: Expression expected.
+                                     ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+                                     ~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+                                             ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+                                                   ~
+!!! error TS1005: ';' expected.
+                                                    ~
+!!! error TS1128: Declaration or statement expected.
+        return new ctor('hi');
+    }
+    function hof2(f: function(this: number, string): string) {
+                     ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+                             ~
+!!! error TS1005: ',' expected.
+                              ~~~~~~~~~~~~
+!!! error TS2730: An arrow function cannot have a 'this' parameter.
+                                            ~~~~~~
+!!! error TS7006: Parameter 'string' implicitly has an 'any' type.
+                                                           ~
+!!! error TS1005: '=>' expected.
+        return f(12, 'hullo');
+    }
+    var whatevs: * = 1001;
+    var ques: ? = 'what';
+                ~
+!!! error TS1110: Type expected.
+    var g: function(number, number): number = (n,m) => n + m;
+           ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
+                   ~
+!!! error TS1005: ',' expected.
+                    ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+                    ~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+                            ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+                                   ~
+!!! error TS1005: ';' expected.
+                                     ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+                                               ~
+!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
+                                                 ~
+!!! error TS7006: Parameter 'm' implicitly has an 'any' type.
+    var most: !string = 'definite';
+    var postfixdef: number! = 101;
+                          ~
+!!! error TS1005: ',' expected.
+                            ~
+!!! error TS1109: Expression expected.
+    var postfixopt: number? = undefined;
+                          ~
+!!! error TS1005: ',' expected.
+                            ~
+!!! error TS1134: Variable declaration expected.
+                              ~~~~~~~~~
+!!! error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+    
+    var nns: Array<?number>;
+    var dns: Array<!number>;
+    var anys: Array<*>;
+    
+    

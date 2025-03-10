@@ -1,0 +1,30 @@
+--- old.parserArrowFunctionExpression15.errors.txt
++++ new.parserArrowFunctionExpression15.errors.txt
+@@= skipped -0, +0 lines =@@
+-fileJs.js(1,18): error TS8010: Type annotations can only be used in TypeScript files.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ 
+ 
+-==== fileJs.js (1 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== fileJs.js (0 errors) ====
+     false ? (param): string => param : null // Not legal JS; "Unexpected token ':'" at last colon
+-                     ~~~~~~
+-!!! error TS8010: Type annotations can only be used in TypeScript files.
+     
+ ==== fileTs.ts (0 errors) ====
+     false ? (param): string => param : null

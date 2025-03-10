@@ -1,0 +1,70 @@
+--- old.privateNameComputedPropertyName1(target=es2015).errors.txt
++++ new.privateNameComputedPropertyName1(target=es2015).errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++privateNameComputedPropertyName1.ts(16,21): error TS2304: Cannot find name 'Record'.
++privateNameComputedPropertyName1.ts(24,9): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
++privateNameComputedPropertyName1.ts(31,9): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== privateNameComputedPropertyName1.ts (3 errors) ====
++    class A {
++        #a = 'a';
++        #b: string;
++    
++        readonly #c = 'c';
++        readonly #d: string;
++    
++        #e = '';
++    
++        constructor() {
++            this.#b = 'b';
++            this.#d = 'd';
++        }
++    
++        test() {
++            const data: Record<string, string> = { a: 'a', b: 'b', c: 'c', d: 'd', e: 'e' };
++                        ~~~~~~
++!!! error TS2304: Cannot find name 'Record'.
++            const {
++                [this.#a]: a,
++                [this.#b]: b,
++                [this.#c]: c,
++                [this.#d]: d,
++                [this.#e = 'e']: e,
++            } = data;
++            console.log(a, b, c, d, e);
++            ~~~~~~~
++!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
++    
++            const a1 = data[this.#a];
++            const b1 = data[this.#b];
++            const c1 = data[this.#c];
++            const d1 = data[this.#d];
++            const e1 = data[this.#e];
++            console.log(a1, b1, c1, d1);
++            ~~~~~~~
++!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
++        }
++    }
++    
++    new A().test();
++    
++    

@@ -1,0 +1,14 @@
+--- old.unterminatedRegexAtEndOfSource1.errors.txt
++++ new.unterminatedRegexAtEndOfSource1.errors.txt
+@@= skipped -0, +0 lines =@@
+ unterminatedRegexAtEndOfSource1.ts(1,9): error TS1161: Unterminated regular expression literal.
++unterminatedRegexAtEndOfSource1.ts(1,10): error TS1161: Unterminated regular expression literal.
+ 
+ 
+-==== unterminatedRegexAtEndOfSource1.ts (1 errors) ====
++==== unterminatedRegexAtEndOfSource1.ts (2 errors) ====
+     var a = /
+             ~
+ !!! error TS1161: Unterminated regular expression literal.
++             
++!!! error TS1161: Unterminated regular expression literal.

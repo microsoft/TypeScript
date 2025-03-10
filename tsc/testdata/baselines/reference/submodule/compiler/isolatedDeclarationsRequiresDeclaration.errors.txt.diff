@@ -1,0 +1,13 @@
+--- old.isolatedDeclarationsRequiresDeclaration.errors.txt
++++ new.isolatedDeclarationsRequiresDeclaration.errors.txt
+@@= skipped -0, +-1 lines =@@
+-error TS5069: Option 'isolatedDeclarations' cannot be specified without specifying option 'declaration' or option 'composite'.
+-
+-
+-!!! error TS5069: Option 'isolatedDeclarations' cannot be specified without specifying option 'declaration' or option 'composite'.
+-==== file1.ts (0 errors) ====
+-    export var x = 1;
+-==== file2.ts (0 errors) ====
+-    export var y = 1;
+@@= skipped --1, +1 lines =@@
++<no content>

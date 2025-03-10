@@ -1,0 +1,12 @@
+b.js(1,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'number', but here has type 'string'.
+
+
+==== a.ts (0 errors) ====
+    var x = 10;
+    
+==== b.js (1 errors) ====
+    var x = "hello"; // Error is recorded here, but suppressed because the js file isn't checked
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'number', but here has type 'string'.
+!!! related TS6203 a.ts:1:5: 'x' was also declared here.
+    

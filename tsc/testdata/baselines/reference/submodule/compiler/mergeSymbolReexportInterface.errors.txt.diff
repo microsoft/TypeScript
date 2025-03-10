@@ -1,0 +1,25 @@
+--- old.mergeSymbolReexportInterface.errors.txt
++++ new.mergeSymbolReexportInterface.errors.txt
+@@= skipped -11, +11 lines =@@
+     const y : C = { s: '' }
+     
+      
+-==== ./a.d.ts (1 errors) ====
++==== a.d.ts (1 errors) ====
+     import '.'
+     declare module '.' {
+       type Row2 = { a: string }
+@@= skipped -10, +10 lines =@@
+       type C = { s : string }
+     }
+      
+-==== ./index.d.ts (1 errors) ====
++==== index.d.ts (1 errors) ====
+     export type {Row2} from './common';
+                  ~~~~
+ !!! error TS2300: Duplicate identifier 'Row2'.
+ !!! related TS6203 a.d.ts:3:8: 'Row2' was also declared here.
+      
+-==== ./common.d.ts (0 errors) ====
++==== common.d.ts (0 errors) ====
+     export interface Row2 { b: string }

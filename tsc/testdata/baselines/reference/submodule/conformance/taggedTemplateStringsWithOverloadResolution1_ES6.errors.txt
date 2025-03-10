@@ -1,0 +1,77 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2318: Cannot find global type 'TemplateStringsArray'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+taggedTemplateStringsWithOverloadResolution1_ES6.ts(1,20): error TS2304: Cannot find name 'TemplateStringsArray'.
+taggedTemplateStringsWithOverloadResolution1_ES6.ts(2,20): error TS2304: Cannot find name 'TemplateStringsArray'.
+taggedTemplateStringsWithOverloadResolution1_ES6.ts(3,20): error TS2304: Cannot find name 'TemplateStringsArray'.
+taggedTemplateStringsWithOverloadResolution1_ES6.ts(4,20): error TS2304: Cannot find name 'TemplateStringsArray'.
+taggedTemplateStringsWithOverloadResolution1_ES6.ts(12,20): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'boolean' is not assignable to parameter of type 'string'.
+taggedTemplateStringsWithOverloadResolution1_ES6.ts(14,23): error TS2554: Expected 1-3 arguments, but got 4.
+taggedTemplateStringsWithOverloadResolution1_ES6.ts(19,20): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'boolean' is not assignable to parameter of type 'string'.
+taggedTemplateStringsWithOverloadResolution1_ES6.ts(21,24): error TS2554: Expected 1-3 arguments, but got 4.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2318: Cannot find global type 'TemplateStringsArray'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== taggedTemplateStringsWithOverloadResolution1_ES6.ts (8 errors) ====
+    function foo(strs: TemplateStringsArray): number;
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
+    function foo(strs: TemplateStringsArray, x: number): string;
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
+    function foo(strs: TemplateStringsArray, x: number, y: number): boolean;
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
+    function foo(strs: TemplateStringsArray, x: number, y: string): {};
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
+    function foo(...stuff: any[]): any {
+        return undefined;
+    }
+    
+    var a = foo([]);             // number
+    var b = foo([], 1);          // string
+    var c = foo([], 1, 2);       // boolean
+    var d = foo([], 1, true);    // boolean (with error)
+                       ~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'string'.
+!!! related TS2771 taggedTemplateStringsWithOverloadResolution1_ES6.ts:4:10: The last overload is declared here.
+    var e = foo([], 1, "2");     // {}
+    var f = foo([], 1, 2, 3);    // any (with error)
+                          ~
+!!! error TS2554: Expected 1-3 arguments, but got 4.
+    
+    var u = foo ``;              // number
+    var v = foo `${1}`;          // string
+    var w = foo `${1}${2}`;      // boolean
+    var x = foo `${1}${true}`;   // boolean (with error)
+                       ~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'string'.
+!!! related TS2771 taggedTemplateStringsWithOverloadResolution1_ES6.ts:4:10: The last overload is declared here.
+    var y = foo `${1}${"2"}`;    // {}
+    var z = foo `${1}${2}${3}`;  // any (with error)
+                           ~
+!!! error TS2554: Expected 1-3 arguments, but got 4.
+    

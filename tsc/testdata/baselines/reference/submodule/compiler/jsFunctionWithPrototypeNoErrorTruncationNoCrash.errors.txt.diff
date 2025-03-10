@@ -1,0 +1,21 @@
+--- old.jsFunctionWithPrototypeNoErrorTruncationNoCrash.errors.txt
++++ new.jsFunctionWithPrototypeNoErrorTruncationNoCrash.errors.txt
+@@= skipped -5, +5 lines =@@
+ index.js(10,20): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+ index.js(11,21): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+ index.js(13,21): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+-index.js(14,35): error TS2339: Property 'rgb' does not exist on type 'Color'.
+ 
+ 
+-==== index.js (9 errors) ====
++==== index.js (8 errors) ====
+     function Color(obj) {
+                    ~~~
+ !!! error TS7006: Parameter 'obj' implicitly has an 'any' type.
+@@= skipped -34, +33 lines =@@
+     	                   ~~~~~
+ !!! error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+     	toJSON: function () {return this.rgb();},
+-    	                                 ~~~
+-!!! error TS2339: Property 'rgb' does not exist on type 'Color'.
+     };

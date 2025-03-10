@@ -1,0 +1,17 @@
+--- old.genericConstructorFunction1.errors.txt
++++ new.genericConstructorFunction1.errors.txt
+@@= skipped -0, +0 lines =@@
+-genericConstructorFunction1.ts(4,5): error TS2348: Value of type 'new (arg: T) => Date' is not callable. Did you mean to include 'new'?
++genericConstructorFunction1.ts(4,5): error TS2348: Value of type 'new(arg: T) => Date' is not callable. Did you mean to include 'new'?
+ genericConstructorFunction1.ts(13,13): error TS2348: Value of type 'I1<T>' is not callable. Did you mean to include 'new'?
+ 
+ 
+@@= skipped -7, +7 lines =@@
+         var v2 = v1['test'];
+         v2(args); 
+         ~~~~~~~~
+-!!! error TS2348: Value of type 'new (arg: T) => Date' is not callable. Did you mean to include 'new'?
++!!! error TS2348: Value of type 'new(arg: T) => Date' is not callable. Did you mean to include 'new'?
+         return new v2(args); // used to give error
+     }
+     

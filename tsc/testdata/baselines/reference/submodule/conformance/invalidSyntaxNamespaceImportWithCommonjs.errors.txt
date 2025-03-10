@@ -1,0 +1,19 @@
+1.ts(1,10): error TS1005: 'as' expected.
+1.ts(1,15): error TS1005: 'from' expected.
+1.ts(1,15): error TS1141: String literal expected.
+1.ts(1,20): error TS1005: ';' expected.
+
+
+==== 0.ts (0 errors) ====
+    export class C { }
+    
+==== 1.ts (4 errors) ====
+    import * from Zero from "./0"
+             ~~~~
+!!! error TS1005: 'as' expected.
+                  ~~~~
+!!! error TS1005: 'from' expected.
+                  ~~~~
+!!! error TS1141: String literal expected.
+                       ~~~~
+!!! error TS1005: ';' expected.

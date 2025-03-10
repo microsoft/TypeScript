@@ -1,0 +1,21 @@
+--- old.amdModuleName2.errors.txt
++++ new.amdModuleName2.errors.txt
+@@= skipped -0, +-1 lines =@@
+-amdModuleName2.ts(2,1): error TS2458: An AMD module cannot have multiple name assignments.
+-
+-
+-==== amdModuleName2.ts (1 errors) ====
+-    ///<amd-module name='FirstModuleName'/>
+-    ///<amd-module name='SecondModuleName'/>
+-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2458: An AMD module cannot have multiple name assignments.
+-    class Foo {
+-        x: number;
+-        constructor() {
+-            this.x = 5;
+-        }
+-    }
+-    export = Foo;
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

@@ -1,0 +1,17 @@
+--- old.classAbstractOverrideWithAbstract.errors.txt
++++ new.classAbstractOverrideWithAbstract.errors.txt
+@@= skipped -0, +0 lines =@@
+-classAbstractOverrideWithAbstract.ts(19,7): error TS2515: Non-abstract class 'CC' does not implement inherited abstract member foo from class 'BB'.
++classAbstractOverrideWithAbstract.ts(19,7): error TS2515: Non-abstract class 'CC' does not implement inherited abstract member 'foo' from class 'BB'.
+ 
+ 
+ ==== classAbstractOverrideWithAbstract.ts (1 errors) ====
+@@= skipped -21, +21 lines =@@
+     
+     class CC extends BB {} // error
+           ~~
+-!!! error TS2515: Non-abstract class 'CC' does not implement inherited abstract member foo from class 'BB'.
++!!! error TS2515: Non-abstract class 'CC' does not implement inherited abstract member 'foo' from class 'BB'.
+     
+     class DD extends BB {
+         foo() {}

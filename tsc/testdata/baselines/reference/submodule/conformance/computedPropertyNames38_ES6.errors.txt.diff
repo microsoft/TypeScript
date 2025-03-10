@@ -1,0 +1,25 @@
+--- old.computedPropertyNames38_ES6.errors.txt
++++ new.computedPropertyNames38_ES6.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ computedPropertyNames38_ES6.ts(8,9): error TS2411: Property '[1 << 6]' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== computedPropertyNames38_ES6.ts (1 errors) ====
+     class Foo { x }
+     class Foo2 { x; y }

@@ -1,0 +1,15 @@
+--- old.callOnClass.errors.txt
++++ new.callOnClass.errors.txt
+@@= skipped -0, +0 lines =@@
+-callOnClass.ts(2,9): error TS2348: Value of type 'typeof C' is not callable. Did you mean to include 'new'?
++callOnClass.ts(2,9): error TS2348: Value of type '{ new(): C; prototype: C; }' is not callable. Did you mean to include 'new'?
+ 
+ 
+ ==== callOnClass.ts (1 errors) ====
+     class C { }
+     var c = C();
+             ~~~
+-!!! error TS2348: Value of type 'typeof C' is not callable. Did you mean to include 'new'?
++!!! error TS2348: Value of type '{ new(): C; prototype: C; }' is not callable. Did you mean to include 'new'?
+      
+     

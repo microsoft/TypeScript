@@ -1,0 +1,61 @@
+index.js(1,39): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+index.js(21,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== index.js (2 errors) ====
+    const {taskGroups, taskNameToGroup} = require('./module.js');
+                                          ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+    /** @typedef {import('./module.js').TaskGroup} TaskGroup */
+    
+    /**
+     * @typedef TaskNode
+     * @prop {TaskNode[]} children
+     * @prop {TaskNode|undefined} parent
+     * @prop {TaskGroup} group
+     */
+    
+    /** @typedef {{timers: Map<string, TaskNode>}} PriorTaskData */
+    class MainThreadTasks {
+        /**
+         * @param {TaskGroup} x
+         * @param {TaskNode} y
+         */
+        constructor(x, y){}
+    }
+    
+    module.exports = MainThreadTasks;
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+==== module.js (0 errors) ====
+    /** @typedef {'parseHTML'|'styleLayout'} TaskGroupIds */
+    
+    /**
+     * @typedef TaskGroup
+     * @property {TaskGroupIds} id
+     * @property {string} label
+     * @property {string[]} traceEventNames
+     */
+    
+    /**
+     * @type {{[P in TaskGroupIds]: {id: P, label: string}}}
+     */
+    const taskGroups = {
+        parseHTML: {
+            id: 'parseHTML',
+            label: 'Parse HTML & CSS'
+        },
+        styleLayout: {
+            id: 'styleLayout',
+            label: 'Style & Layout'
+        },
+    }
+    
+    /** @type {Object<string, TaskGroup>} */
+    const taskNameToGroup = {};
+    
+    module.exports = {
+        taskGroups,
+        taskNameToGroup,
+    };

@@ -1,0 +1,62 @@
+logicalNotOperatorWithStringType.ts(22,25): error TS2873: This kind of expression is always falsy.
+logicalNotOperatorWithStringType.ts(23,25): error TS2872: This kind of expression is always truthy.
+logicalNotOperatorWithStringType.ts(24,25): error TS2872: This kind of expression is always truthy.
+logicalNotOperatorWithStringType.ts(40,2): error TS2873: This kind of expression is always falsy.
+logicalNotOperatorWithStringType.ts(44,1): error TS2695: Left side of comma operator is unused and has no side effects.
+
+
+==== logicalNotOperatorWithStringType.ts (5 errors) ====
+    // ! operator on string type
+    var STRING: string;
+    var STRING1: string[] = ["", "abc"];
+    
+    function foo(): string { return "abc"; }
+    
+    class A {
+        public a: string;
+        static foo() { return ""; }
+    }
+    module M {
+        export var n: string;
+    }
+    
+    var objA = new A();
+    
+    // string type var
+    var ResultIsBoolean1 = !STRING;
+    var ResultIsBoolean2 = !STRING1;
+    
+    // string type literal
+    var ResultIsBoolean3 = !"";
+                            ~~
+!!! error TS2873: This kind of expression is always falsy.
+    var ResultIsBoolean4 = !{ x: "", y: "" };
+                            ~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    var ResultIsBoolean5 = !{ x: "", y: (s: string) => { return s; } };
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    
+    // string type expressions
+    var ResultIsBoolean6 = !objA.a;
+    var ResultIsBoolean7 = !M.n;
+    var ResultIsBoolean8 = !STRING1[0];
+    var ResultIsBoolean9 = !foo();
+    var ResultIsBoolean10 = !A.foo();
+    var ResultIsBoolean11 = !(STRING + STRING);
+    var ResultIsBoolean12 = !STRING.charAt(0);
+    
+    // multiple ! operator
+    var ResultIsBoolean13 = !!STRING;
+    var ResultIsBoolean14 = !!!(STRING + STRING);
+    
+    // miss assignment operators
+    !"";
+     ~~
+!!! error TS2873: This kind of expression is always falsy.
+    !STRING;
+    !STRING1;
+    !foo();
+    !objA.a,M.n;
+    ~~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.

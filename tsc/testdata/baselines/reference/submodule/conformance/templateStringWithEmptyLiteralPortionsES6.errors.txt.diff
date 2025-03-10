@@ -1,0 +1,50 @@
+--- old.templateStringWithEmptyLiteralPortionsES6.errors.txt
++++ new.templateStringWithEmptyLiteralPortionsES6.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== templateStringWithEmptyLiteralPortionsES6.ts (0 errors) ====
++    var a = ``;
++    
++    var b = `${ 0 }`;
++    
++    var c = `1${ 0 }`;
++    
++    var d = `${ 0 }2`;
++    
++    var e = `1${ 0 }2`;
++    
++    var f = `${ 0 }${ 0 }`;
++    
++    var g = `1${ 0 }${ 0 }`;
++    
++    var h = `${ 0 }2${ 0 }`;
++    
++    var i = `1${ 0 }2${ 0 }`;
++    
++    var j = `${ 0 }${ 0 }3`;
++    
++    var k = `1${ 0 }${ 0 }3`;
++    
++    var l = `${ 0 }2${ 0 }3`;
++    
++    var m = `1${ 0 }2${ 0 }3`;
++    

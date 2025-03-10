@@ -1,0 +1,42 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+symbolProperty46.ts(2,10): error TS2304: Cannot find name 'Symbol'.
+symbolProperty46.ts(6,10): error TS2304: Cannot find name 'Symbol'.
+symbolProperty46.ts(10,9): error TS2304: Cannot find name 'Symbol'.
+symbolProperty46.ts(11,9): error TS2304: Cannot find name 'Symbol'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== symbolProperty46.ts (4 errors) ====
+    class C {
+        get [Symbol.hasInstance]() {
+             ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+            return "";
+        }
+        // Should take a string
+        set [Symbol.hasInstance](x) {
+             ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        }
+    }
+    
+    (new C)[Symbol.hasInstance] = 0;
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+    (new C)[Symbol.hasInstance] = "";
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.

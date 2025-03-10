@@ -1,0 +1,20 @@
+assignmentToVoidZero1.js(2,1): error TS2304: Cannot find name 'exports'.
+assignmentToVoidZero1.js(2,13): error TS2304: Cannot find name 'exports'.
+assignmentToVoidZero1.js(3,1): error TS2304: Cannot find name 'exports'.
+assignmentToVoidZero1.js(4,1): error TS2304: Cannot find name 'exports'.
+
+
+==== assignmentToVoidZero1.js (4 errors) ====
+    // #38552
+    exports.y = exports.x = void 0;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+                ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    exports.x = 1;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    exports.y = 2;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    

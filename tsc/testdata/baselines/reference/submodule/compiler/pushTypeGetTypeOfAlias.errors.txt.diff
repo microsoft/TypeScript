@@ -1,0 +1,24 @@
+--- old.pushTypeGetTypeOfAlias.errors.txt
++++ new.pushTypeGetTypeOfAlias.errors.txt
+@@= skipped -0, +0 lines =@@
+-bar.js(2,1): error TS2303: Circular definition of import alias 'blah'.
+-bar.js(2,24): error TS2339: Property 'someProp' does not exist on type '{ (): void; blah: any; }'.
++bar.js(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++bar.js(2,1): error TS2304: Cannot find name 'exports'.
++bar.js(2,16): error TS2304: Cannot find name 'exports'.
+ 
+ 
+-==== bar.js (2 errors) ====
++==== bar.js (3 errors) ====
+     module.exports = function () {};
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+     exports.blah = exports.someProp;
+-    ~~~~~~~~~~~~
+-!!! error TS2303: Circular definition of import alias 'blah'.
+-                           ~~~~~~~~
+-!!! error TS2339: Property 'someProp' does not exist on type '{ (): void; blah: any; }'.
++    ~~~~~~~
++!!! error TS2304: Cannot find name 'exports'.
++                   ~~~~~~~
++!!! error TS2304: Cannot find name 'exports'.

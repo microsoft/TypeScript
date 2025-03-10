@@ -1,0 +1,23 @@
+functionWithSameNameAsField.ts(2,12): error TS2300: Duplicate identifier 'total'.
+functionWithSameNameAsField.ts(2,12): error TS2300: Duplicate identifier 'total'.
+functionWithSameNameAsField.ts(3,12): error TS2300: Duplicate identifier 'total'.
+functionWithSameNameAsField.ts(3,12): error TS2300: Duplicate identifier 'total'.
+
+
+==== functionWithSameNameAsField.ts (4 errors) ====
+    class TestProgressBar {
+        public total: number;
+               ~~~~~
+!!! error TS2300: Duplicate identifier 'total'.
+               ~~~~~
+!!! error TS2300: Duplicate identifier 'total'.
+        public total(total: number) {
+               ~~~~~
+!!! error TS2300: Duplicate identifier 'total'.
+               ~~~~~
+!!! error TS2300: Duplicate identifier 'total'.
+            this.total = total;
+            return this;
+        }
+    }
+    

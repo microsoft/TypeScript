@@ -1,0 +1,24 @@
+plainJSReservedStrict.js(2,7): error TS1100: Invalid use of 'eval' in strict mode.
+plainJSReservedStrict.js(2,7): error TS1100: Invalid use of 'eval' in strict mode.
+plainJSReservedStrict.js(2,7): error TS2451: Cannot redeclare block-scoped variable 'eval'.
+plainJSReservedStrict.js(3,7): error TS1100: Invalid use of 'arguments' in strict mode.
+plainJSReservedStrict.js(3,7): error TS1100: Invalid use of 'arguments' in strict mode.
+lib.es5.d.ts(--,--): error TS2451: Cannot redeclare block-scoped variable 'eval'.
+
+
+==== plainJSReservedStrict.js (5 errors) ====
+    "use strict"
+    const eval = 1
+          ~~~~
+!!! error TS1100: Invalid use of 'eval' in strict mode.
+          ~~~~
+!!! error TS1100: Invalid use of 'eval' in strict mode.
+          ~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'eval'.
+!!! related TS6203 lib.es5.d.ts:--:--: 'eval' was also declared here.
+    const arguments = 2
+          ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+          ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    

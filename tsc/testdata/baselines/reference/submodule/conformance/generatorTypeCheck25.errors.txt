@@ -1,0 +1,37 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'IterableIterator'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+generatorTypeCheck25.ts(4,15): error TS2304: Cannot find name 'Iterable'.
+generatorTypeCheck25.ts(8,12): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'IterableIterator'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== generatorTypeCheck25.ts (2 errors) ====
+    class Foo { x: number }
+    class Bar extends Foo { y: string }
+    class Baz { z: number }
+    var g3: () => Iterable<Foo> = function* () {
+                  ~~~~~~~~
+!!! error TS2304: Cannot find name 'Iterable'.
+        yield;
+        yield new Bar;
+        yield new Baz;
+        yield *[new Bar];
+               ~~~~~~~~~
+!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+        yield *[new Baz];
+    }

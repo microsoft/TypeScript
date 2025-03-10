@@ -1,0 +1,51 @@
+--- old.typeVariableConstraintedToAliasNotAssignableToUnion.errors.txt
++++ new.typeVariableConstraintedToAliasNotAssignableToUnion.errors.txt
+@@= skipped -3, +3 lines =@@
+   Type 'TableClass<any>' is not assignable to type 'string | number'.
+ typeVariableConstraintedToAliasNotAssignableToUnion.ts(23,5): error TS2322: Type 'T' is not assignable to type 'string | Something'.
+   Type 'TableClass<any>' is not assignable to type 'string | Something'.
++    Property 'prop' is missing in type 'TableClass<any>' but required in type 'Something'.
+ typeVariableConstraintedToAliasNotAssignableToUnion.ts(24,5): error TS2322: Type 'T' is not assignable to type 'Something | SomethingElse'.
+   Type 'TableClass<any>' is not assignable to type 'Something | SomethingElse'.
+ typeVariableConstraintedToAliasNotAssignableToUnion.ts(28,5): error TS2322: Type 'T' is not assignable to type 'boolean'.
+@@= skipped -8, +9 lines =@@
+   Type 'TableClass<any>' is not assignable to type 'string | number'.
+ typeVariableConstraintedToAliasNotAssignableToUnion.ts(30,5): error TS2322: Type 'T' is not assignable to type 'string | Something'.
+   Type 'TableClass<any>' is not assignable to type 'string | Something'.
++    Property 'prop' is missing in type 'TableClass<any>' but required in type 'Something'.
+ typeVariableConstraintedToAliasNotAssignableToUnion.ts(31,5): error TS2322: Type 'T' is not assignable to type 'Something | SomethingElse'.
+   Type 'TableClass<any>' is not assignable to type 'Something | SomethingElse'.
+ typeVariableConstraintedToAliasNotAssignableToUnion.ts(35,1): error TS2322: Type 'Table' is not assignable to type 'boolean'.
+ typeVariableConstraintedToAliasNotAssignableToUnion.ts(36,1): error TS2322: Type 'Table' is not assignable to type 'string | number'.
+ typeVariableConstraintedToAliasNotAssignableToUnion.ts(37,1): error TS2322: Type 'Table' is not assignable to type 'string | Something'.
++  Property 'prop' is missing in type 'TableClass<any>' but required in type 'Something'.
+ typeVariableConstraintedToAliasNotAssignableToUnion.ts(38,1): error TS2322: Type 'Table' is not assignable to type 'Something | SomethingElse'.
+ 
+ 
+@@= skipped -41, +43 lines =@@
+         ~~~~~~~~~~~~~~~~~~
+ !!! error TS2322: Type 'T' is not assignable to type 'string | Something'.
+ !!! error TS2322:   Type 'TableClass<any>' is not assignable to type 'string | Something'.
++!!! error TS2322:     Property 'prop' is missing in type 'TableClass<any>' but required in type 'Something'.
++!!! related TS2728 typeVariableConstraintedToAliasNotAssignableToUnion.ts:8:5: 'prop' is declared here.
+         someUnion = o;
+         ~~~~~~~~~
+ !!! error TS2322: Type 'T' is not assignable to type 'Something | SomethingElse'.
+@@= skipped -19, +21 lines =@@
+         ~~~~~~~~~~~~~~~~~~
+ !!! error TS2322: Type 'T' is not assignable to type 'string | Something'.
+ !!! error TS2322:   Type 'TableClass<any>' is not assignable to type 'string | Something'.
++!!! error TS2322:     Property 'prop' is missing in type 'TableClass<any>' but required in type 'Something'.
++!!! related TS2728 typeVariableConstraintedToAliasNotAssignableToUnion.ts:8:5: 'prop' is declared here.
+         someUnion = o;
+         ~~~~~~~~~
+ !!! error TS2322: Type 'T' is not assignable to type 'Something | SomethingElse'.
+@@= skipped -16, +18 lines =@@
+     aStringOrSomething = o;
+     ~~~~~~~~~~~~~~~~~~
+ !!! error TS2322: Type 'Table' is not assignable to type 'string | Something'.
++!!! error TS2322:   Property 'prop' is missing in type 'TableClass<any>' but required in type 'Something'.
++!!! related TS2728 typeVariableConstraintedToAliasNotAssignableToUnion.ts:8:5: 'prop' is declared here.
+     someUnion = o;
+     ~~~~~~~~~
+ !!! error TS2322: Type 'Table' is not assignable to type 'Something | SomethingElse'.

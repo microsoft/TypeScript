@@ -1,0 +1,11 @@
+awaitUsingDeclarationsInForIn.ts(2,10): error TS1494: The left-hand side of a 'for...in' statement cannot be an 'await using' declaration.
+
+
+==== awaitUsingDeclarationsInForIn.ts (1 errors) ====
+    async function main() {
+        for (await using x in {}) {
+             ~~~~~~~~~~~~~
+!!! error TS1494: The left-hand side of a 'for...in' statement cannot be an 'await using' declaration.
+        }
+    }
+    

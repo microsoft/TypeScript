@@ -1,0 +1,13 @@
+--- old.exportClassNameWithObjectUMD.errors.txt
++++ new.exportClassNameWithObjectUMD.errors.txt
+@@= skipped -0, +-1 lines =@@
+-exportClassNameWithObjectUMD.ts(1,14): error TS2725: Class name cannot be 'Object' when targeting ES5 with module UMD.
+-
+-
+-==== exportClassNameWithObjectUMD.ts (1 errors) ====
+-    export class Object {}
+-                 ~~~~~~
+-!!! error TS2725: Class name cannot be 'Object' when targeting ES5 with module UMD.
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

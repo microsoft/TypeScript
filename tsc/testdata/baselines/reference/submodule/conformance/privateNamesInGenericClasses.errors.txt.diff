@@ -1,0 +1,33 @@
+--- old.privateNamesInGenericClasses.errors.txt
++++ new.privateNamesInGenericClasses.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'CallableFunction'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'NewableFunction'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ privateNamesInGenericClasses.ts(22,3): error TS18013: Property '#foo' is not accessible outside class 'C' because it has a private identifier.
+ privateNamesInGenericClasses.ts(23,3): error TS18013: Property '#method' is not accessible outside class 'C' because it has a private identifier.
+ privateNamesInGenericClasses.ts(24,3): error TS18013: Property '#prop' is not accessible outside class 'C' because it has a private identifier.
+@@= skipped -6, +16 lines =@@
+   Type 'number' is not assignable to type 'string'.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'CallableFunction'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'NewableFunction'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== privateNamesInGenericClasses.ts (5 errors) ====
+     class C<T> {
+         #foo: T;

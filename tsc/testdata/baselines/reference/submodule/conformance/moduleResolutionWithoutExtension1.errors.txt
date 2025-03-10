@@ -1,0 +1,18 @@
+/src/bar.mts(2,21): error TS2307: Cannot find module './foo' or its corresponding type declarations.
+/src/bar.mts(3,21): error TS2307: Cannot find module './baz' or its corresponding type declarations.
+
+
+==== /src/foo.mts (0 errors) ====
+    export function foo() {
+        return "";
+    }
+    
+==== /src/bar.mts (2 errors) ====
+    // Extensionless relative path ES import in an ES module
+    import { foo } from "./foo"; // should error, suggest adding ".mjs"
+                        ~~~~~~~
+!!! error TS2307: Cannot find module './foo' or its corresponding type declarations.
+    import { baz } from "./baz"; // should error, ask for extension, no extension suggestion
+                        ~~~~~~~
+!!! error TS2307: Cannot find module './baz' or its corresponding type declarations.
+    

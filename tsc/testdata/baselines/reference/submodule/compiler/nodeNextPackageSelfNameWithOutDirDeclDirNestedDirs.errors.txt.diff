@@ -1,0 +1,29 @@
+--- old.nodeNextPackageSelfNameWithOutDirDeclDirNestedDirs.errors.txt
++++ new.nodeNextPackageSelfNameWithOutDirDeclDirNestedDirs.errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
++src/thing.ts(8,21): error TS2307: Cannot find module '@this/package' or its corresponding type declarations.
+ 
+ 
+-!!! error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
+ ==== tsconfig.json (0 errors) ====
+     {
+       "compilerOptions": {
+@@= skipped -12, +11 lines =@@
+     }
+ ==== index.ts (0 errors) ====
+     export {srcthing as thing} from "./src/thing.js";
+-==== src/thing.ts (0 errors) ====
++==== src/thing.ts (1 errors) ====
+     // The following import should cause `index.ts`
+     // to be included in the build, which will,
+     // in turn, cause the common src directory to not be `src`
+@@= skipped -9, +9 lines =@@
+     // real command-line we'll crawl the imports for that set - a limitation
+     // of the harness, I suppose)
+     import * as me from "@this/package";
++                        ~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module '@this/package' or its corresponding type declarations.
+     
+     me.thing();
+     

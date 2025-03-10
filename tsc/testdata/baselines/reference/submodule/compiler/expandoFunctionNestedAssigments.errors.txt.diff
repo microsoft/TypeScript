@@ -1,0 +1,17 @@
+--- old.expandoFunctionNestedAssigments.errors.txt
++++ new.expandoFunctionNestedAssigments.errors.txt
+@@= skipped -0, +0 lines =@@
+-expandoFunctionNestedAssigments.ts(7,23): error TS2339: Property 'inNestedFunction' does not exist on type 'typeof Foo'.
++expandoFunctionNestedAssigments.ts(7,23): error TS2339: Property 'inNestedFunction' does not exist on type '{ (): void; inVariableInit: number; bla: { foo: number; }; baz: number; bar: number; fromIf: number; inIf: number; fromWhileCondition: number; fromWhileBody: number; fromWhileBodyNested: number; fromDoBody: number; fromDoBodyNested: number; fromDoCondition: number; forInit: number; forCond: number; forIncr: number; fromForBody: number; fromForBodyNested: number; forOf: any[]; fromForOfBody: number; fromForOfBodyNested: number; forIn: any[]; fromForInBody: number; fromForInBodyNested: number; }'.
+ 
+ 
+ ==== expandoFunctionNestedAssigments.ts (1 errors) ====
+@@= skipped -9, +9 lines =@@
+     
+     function bar(p = (Foo.inNestedFunction = 1)) {
+                           ~~~~~~~~~~~~~~~~
+-!!! error TS2339: Property 'inNestedFunction' does not exist on type 'typeof Foo'.
++!!! error TS2339: Property 'inNestedFunction' does not exist on type '{ (): void; inVariableInit: number; bla: { foo: number; }; baz: number; bar: number; fromIf: number; inIf: number; fromWhileCondition: number; fromWhileBody: number; fromWhileBodyNested: number; fromDoBody: number; fromDoBodyNested: number; fromDoCondition: number; forInit: number; forCond: number; forIncr: number; fromForBody: number; fromForBodyNested: number; forOf: any[]; fromForOfBody: number; fromForOfBodyNested: number; forIn: any[]; fromForInBody: number; fromForInBodyNested: number; }'.
+     
+     }
+     

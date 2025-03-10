@@ -1,0 +1,34 @@
+MC.js(1,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+MC.js(6,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== MC.js (2 errors) ====
+    const MW = require("./MW");
+               ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+    /** @typedef {number} Meyerhauser */
+    
+    /** @class */
+    module.exports = function MC() {
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+        /** @type {any} */
+        var x = {}
+        return new MW(x);
+    };
+    
+==== MW.js (0 errors) ====
+    /** @typedef {import("./MC")} MC */
+    
+    class MW {
+      /**
+       * @param {MC} compiler the compiler
+       */
+      constructor(compiler) {
+        this.compiler = compiler;
+      }
+    }
+    
+    module.exports = MW;
+    

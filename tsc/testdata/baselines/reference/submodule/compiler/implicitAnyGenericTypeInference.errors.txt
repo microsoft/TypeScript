@@ -1,0 +1,56 @@
+implicitAnyGenericTypeInference.ts(10,4): error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
+implicitAnyGenericTypeInference.ts(13,4): error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
+implicitAnyGenericTypeInference.ts(16,4): error TS7025: Generator implicitly has yield type 'any'. Consider supplying a return type annotation.
+implicitAnyGenericTypeInference.ts(19,4): error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
+implicitAnyGenericTypeInference.ts(22,4): error TS7025: Generator implicitly has yield type 'any'. Consider supplying a return type annotation.
+implicitAnyGenericTypeInference.ts(25,4): error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
+implicitAnyGenericTypeInference.ts(28,25): error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
+implicitAnyGenericTypeInference.ts(29,24): error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
+
+
+==== implicitAnyGenericTypeInference.ts (8 errors) ====
+    interface Comparer<T> {
+        compareTo<U>(x: T, y: U): U;
+    }
+    
+    var c: Comparer<any>;
+    c = { compareTo: (x, y) => { return y; } };
+    var r = c.compareTo(1, '');
+    
+    declare function f1<T>(cb: () => T): void;
+    f1(() => null);
+       ~~~~~~~~~~
+!!! error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
+    
+    declare function f2<T>(cb: () => PromiseLike<T>): void;
+    f2(async () => null);
+       ~~~~~~~~~~~~~~~~
+!!! error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
+    
+    declare function f3<T>(cb: () => Generator<T>): void;
+    f3(function* () { yield null; });
+       ~~~~~~~~
+!!! error TS7025: Generator implicitly has yield type 'any'. Consider supplying a return type annotation.
+    
+    declare function f4<T>(cb: () => Generator<unknown, T>): void;
+    f4(function* () { return null; });
+       ~~~~~~~~
+!!! error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
+    
+    declare function f5<T>(cb: () => AsyncGenerator<T>): void;
+    f5(async function* () { yield null; });
+       ~~~~~
+!!! error TS7025: Generator implicitly has yield type 'any'. Consider supplying a return type annotation.
+    
+    declare function f6<T>(cb: () => AsyncGenerator<unknown, T>): void;
+    f6(async function* () { return null; });
+       ~~~~~
+!!! error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
+    
+    // https://github.com/microsoft/TypeScript/issues/44913
+    Promise.resolve().catch(e => null);
+                            ~~~~~~~~~
+!!! error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
+    Promise.resolve().then(v => null);
+                           ~~~~~~~~~
+!!! error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.

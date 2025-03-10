@@ -1,0 +1,59 @@
+logicalAssignment5.ts(13,5): error TS2349: This expression is not callable.
+  Not all constituents of type '(a: number) => void | undefined' are callable.
+    Type 'undefined' has no call signatures.
+logicalAssignment5.ts(13,5): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+logicalAssignment5.ts(17,12): error TS18048: 'f' is possibly 'undefined'.
+logicalAssignment5.ts(22,12): error TS18048: 'f' is possibly 'undefined'.
+logicalAssignment5.ts(28,5): error TS2349: This expression is not callable.
+  Not all constituents of type '(a: number) => void | undefined' are callable.
+    Type 'undefined' has no call signatures.
+logicalAssignment5.ts(28,5): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+
+
+==== logicalAssignment5.ts (6 errors) ====
+    function foo1 (f?: (a: number) => void) {
+        f ??= (a => a)
+        f(42)
+    }
+    
+    function foo2 (f?: (a: number) => void) {
+        f ||= (a => a)
+        f(42)
+    }
+    
+    function foo3 (f?: (a: number) => void) {
+        f &&= (a => a)
+        f(42)
+        ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Not all constituents of type '(a: number) => void | undefined' are callable.
+!!! error TS2349:     Type 'undefined' has no call signatures.
+        ~
+!!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
+    }
+    
+    function bar1 (f?: (a: number) => void) {
+        f ??= (f.toString(), (a => a))
+               ~
+!!! error TS18048: 'f' is possibly 'undefined'.
+        f(42)
+    }
+    
+    function bar2 (f?: (a: number) => void) {
+        f ||= (f.toString(), (a => a))
+               ~
+!!! error TS18048: 'f' is possibly 'undefined'.
+        f(42)
+    }
+    
+    function bar3 (f?: (a: number) => void) {
+        f &&= (f.toString(), (a => a))
+        f(42)
+        ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Not all constituents of type '(a: number) => void | undefined' are callable.
+!!! error TS2349:     Type 'undefined' has no call signatures.
+        ~
+!!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
+    }
+    

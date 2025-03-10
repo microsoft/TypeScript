@@ -1,0 +1,35 @@
+/a.js(15,8): error TS2339: Property 'x' does not exist on type 'B'.
+/a.js(20,8): error TS2339: Property 'y' does not exist on type 'B'.
+/a.js(20,18): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+
+
+==== /a.js (3 errors) ====
+    class A {
+    	get arguments() {
+    		return { bar: {} };
+    	}
+    }
+    
+    class B extends A {
+    	/**
+    	 * @param {object} [foo={}]
+    	 */
+    	m(foo = {}) {
+    		/**
+    		 * @type object
+    		 */
+    		this.x = foo;
+    		     ~
+!!! error TS2339: Property 'x' does not exist on type 'B'.
+    
+    		/**
+    		 * @type object
+    		 */
+    		this.y = super.arguments.bar;
+    		     ~
+!!! error TS2339: Property 'y' does not exist on type 'B'.
+    		               ~~~~~~~~~
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+    	}
+    }
+    

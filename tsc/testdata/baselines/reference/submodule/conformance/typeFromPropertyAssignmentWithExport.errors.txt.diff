@@ -1,0 +1,22 @@
+--- old.typeFromPropertyAssignmentWithExport.errors.txt
++++ new.typeFromPropertyAssignmentWithExport.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++a.js(5,9): error TS2339: Property 'prop' does not exist on type '{}'.
++a.js(8,9): error TS2339: Property 'asyncMethod' does not exist on type '{}'.
++
++
++==== a.js (2 errors) ====
++    // this is a javascript file...
++    
++    export const Adapter = {};
++    
++    Adapter.prop = {};
++            ~~~~
++!!! error TS2339: Property 'prop' does not exist on type '{}'.
++    
++    // comment this out, and it works
++    Adapter.asyncMethod = function() {}
++            ~~~~~~~~~~~
++!!! error TS2339: Property 'asyncMethod' does not exist on type '{}'.

@@ -1,0 +1,9 @@
+esModuleInteropUsesExportStarWhenDefaultPlusNames.ts(1,28): error TS2307: Cannot find module './dep' or its corresponding type declarations.
+
+
+==== esModuleInteropUsesExportStarWhenDefaultPlusNames.ts (1 errors) ====
+    import Deps, { var2 } from './dep';
+                               ~~~~~~~
+!!! error TS2307: Cannot find module './dep' or its corresponding type declarations.
+    void Deps;
+    void var2;

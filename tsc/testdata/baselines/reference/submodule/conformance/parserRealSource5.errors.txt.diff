@@ -1,0 +1,22 @@
+--- old.parserRealSource5.errors.txt
++++ new.parserRealSource5.errors.txt
+@@= skipped -0, +0 lines =@@
+-parserRealSource5.ts(4,21): error TS6053: File 'typescript.ts' not found.
+ parserRealSource5.ts(14,66): error TS2304: Cannot find name 'Parser'.
+ parserRealSource5.ts(27,17): error TS2304: Cannot find name 'CompilerDiagnostics'.
+ parserRealSource5.ts(52,38): error TS2304: Cannot find name 'AST'.
+@@= skipped -8, +7 lines =@@
+ parserRealSource5.ts(61,65): error TS2304: Cannot find name 'IAstWalker'.
+ 
+ 
+-==== parserRealSource5.ts (9 errors) ====
++==== parserRealSource5.ts (8 errors) ====
+     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+     // See LICENSE.txt in the project root for complete license information.
+     
+     ///<reference path='typescript.ts' />
+-                        ~~~~~~~~~~~~~
+-!!! error TS6053: File 'typescript.ts' not found.
+     
+     module TypeScript {
+         // TODO: refactor indent logic for use in emit

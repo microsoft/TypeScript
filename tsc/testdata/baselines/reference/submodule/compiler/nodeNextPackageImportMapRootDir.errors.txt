@@ -1,0 +1,23 @@
+index.ts(1,21): error TS2307: Cannot find module '#dep' or its corresponding type declarations.
+
+
+==== package.json (0 errors) ====
+    {
+      "name": "@this/package",
+      "type": "module",
+      "exports": {
+        ".": "./dist/index.js"
+      },
+      "imports": {
+        "#dep": "./dist/index.js"
+      }
+    }
+==== index.ts (1 errors) ====
+    import * as me from "#dep";
+                        ~~~~~~
+!!! error TS2307: Cannot find module '#dep' or its corresponding type declarations.
+    
+    me.thing();
+    
+    export function thing(): void {}
+    

@@ -1,0 +1,22 @@
+autoAccessor3.ts(2,14): error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
+autoAccessor3.ts(3,14): error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
+autoAccessor3.ts(4,21): error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
+autoAccessor3.ts(5,21): error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
+
+
+==== autoAccessor3.ts (4 errors) ====
+    class C1 {
+        accessor "w": any;
+                 ~~~
+!!! error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
+        accessor "x" = 1;
+                 ~~~
+!!! error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
+        static accessor "y": any;
+                        ~~~
+!!! error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
+        static accessor "z" = 2;
+                        ~~~
+!!! error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
+    }
+    

@@ -1,0 +1,15 @@
+spreadNonObject1.ts(6,17): error TS2698: Spread types may only be created from object types.
+
+
+==== spreadNonObject1.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/45493
+    
+    type S = `${number}`;
+    const b = {
+      c: (["4"] as S[]).map(function (s) {
+        const a = { ...s, y: 6 };
+                    ~~~~
+!!! error TS2698: Spread types may only be created from object types.
+      }),
+    };
+    

@@ -1,0 +1,15 @@
+mod2.js(3,4): error TS2339: Property 'Foo' does not exist on type '{}'.
+mod2.js(4,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== mod2.js (2 errors) ====
+    /** @typedef {number} Foo */
+    const ns = {};
+    ns.Foo = class {}
+       ~~~
+!!! error TS2339: Property 'Foo' does not exist on type '{}'.
+    module.exports = ns;
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+    

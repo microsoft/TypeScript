@@ -1,0 +1,37 @@
+--- old.typeFromPropertyAssignment14.errors.txt
++++ new.typeFromPropertyAssignment14.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++use.js(5,22): error TS2339: Property 'Inner' does not exist on type '{}'.
++work.js(1,7): error TS2339: Property 'Inner' does not exist on type '{}'.
++work.js(2,7): error TS2339: Property 'Inner' does not exist on type '{}'.
++
++
++==== def.js (0 errors) ====
++    var Outer = {};
++    
++==== work.js (2 errors) ====
++    Outer.Inner = function () {}
++          ~~~~~
++!!! error TS2339: Property 'Inner' does not exist on type '{}'.
++    Outer.Inner.prototype = {
++          ~~~~~
++!!! error TS2339: Property 'Inner' does not exist on type '{}'.
++        x: 1,
++        m() { }
++    }
++    
++==== use.js (1 errors) ====
++    /** @type {Outer.Inner} */
++    var inner
++    inner.x
++    inner.m()
++    var inno = new Outer.Inner()
++                         ~~~~~
++!!! error TS2339: Property 'Inner' does not exist on type '{}'.
++    inno.x
++    inno.m()
++    
++    
++    

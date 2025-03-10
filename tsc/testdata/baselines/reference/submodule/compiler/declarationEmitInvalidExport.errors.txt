@@ -1,0 +1,12 @@
+declarationEmitInvalidExport.ts(5,1): error TS1128: Declaration or statement expected.
+
+
+==== declarationEmitInvalidExport.ts (1 errors) ====
+    if (false) {
+      export var myClass = 0;
+    }
+    export type MyClass = typeof myClass;
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    

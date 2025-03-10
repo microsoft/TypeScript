@@ -1,0 +1,12 @@
+usingDeclarations.13.ts(1,1): error TS1491: 'export' modifier cannot appear on a 'using' declaration.
+usingDeclarations.13.ts(2,1): error TS1491: 'declare' modifier cannot appear on a 'using' declaration.
+
+
+==== usingDeclarations.13.ts (2 errors) ====
+    export using x = null;
+    ~~~~~~
+!!! error TS1491: 'export' modifier cannot appear on a 'using' declaration.
+    declare using y: null;
+    ~~~~~~~
+!!! error TS1491: 'declare' modifier cannot appear on a 'using' declaration.
+    

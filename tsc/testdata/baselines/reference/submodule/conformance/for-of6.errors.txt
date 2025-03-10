@@ -1,0 +1,28 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+for-of6.ts(1,6): error TS2304: Cannot find name 'v'.
+for-of6.ts(1,11): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== for-of6.ts (2 errors) ====
+    for (v of [0]) {
+         ~
+!!! error TS2304: Cannot find name 'v'.
+              ~~~
+!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+        let v;
+    }

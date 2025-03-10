@@ -1,0 +1,32 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== esDecorators-classDeclaration-accessors-nonStaticAbstract.ts (0 errors) ====
+    declare let dec: any;
+    
+    const method3 = "method3";
+    
+    abstract class C {
+        @dec(11) abstract get method1(): number;
+        @dec(12) abstract set method1(value);
+        @dec(21) abstract get ["method2"](): number;
+        @dec(22) abstract set ["method2"](value);
+        @dec(31) abstract get [method3](): number;
+        @dec(32) abstract set [method3](value);
+    }
+    

@@ -1,0 +1,66 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'IterableIterator'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+generatorTypeCheck62.ts(5,86): error TS2304: Cannot find name 'IterableIterator'.
+generatorTypeCheck62.ts(5,136): error TS2304: Cannot find name 'IterableIterator'.
+generatorTypeCheck62.ts(17,13): error TS2304: Cannot find name 'IterableIterator'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'IterableIterator'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== generatorTypeCheck62.ts (3 errors) ====
+    export interface StrategicState {
+        lastStrategyApplied?: string;
+    }
+    
+    export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>): (a: T) => IterableIterator<T | undefined, void> {
+                                                                                         ~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'IterableIterator'.
+                                                                                                                                           ~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'IterableIterator'.
+        return function*(state) {
+            for (const next of gen(state)) {
+                if (next) {
+                    next.lastStrategyApplied = stratName;
+                }
+                yield next;
+            }
+        }
+    }
+    
+    export interface Strategy<T> {
+        (a: T): IterableIterator<T | undefined, void>;
+                ~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'IterableIterator'.
+    }
+    
+    export interface State extends StrategicState {
+        foo: number;
+    }
+    
+    export const Nothing1: Strategy<State> = strategy("Nothing", function*(state: State) {
+        return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
+    });
+    
+    export const Nothing2: Strategy<State> = strategy("Nothing", function*(state: State) {
+        yield state;
+    });
+    
+    export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: State) {
+        yield ;
+        return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
+    });
+     

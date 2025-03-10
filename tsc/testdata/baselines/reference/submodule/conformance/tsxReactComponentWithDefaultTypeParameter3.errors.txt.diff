@@ -1,0 +1,47 @@
+--- old.tsxReactComponentWithDefaultTypeParameter3.errors.txt
++++ new.tsxReactComponentWithDefaultTypeParameter3.errors.txt
+@@= skipped -0, +0 lines =@@
+-file.tsx(13,11): error TS2739: Type '{}' is missing the following properties from type 'Prop': a, b
+-file.tsx(19,18): error TS2322: Type 'string' is not assignable to type 'number'.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
+ 
+ 
+-==== file.tsx (2 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== file.tsx (1 errors) ====
+     import React = require('react');
++                           ~~~~~~~
++!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
+     
+     interface Prop {
+         a: number,
+@@= skipped -15, +32 lines =@@
+     
+     // Error
+     let x1 = <MyComp />
+-              ~~~~~~
+-!!! error TS2739: Type '{}' is missing the following properties from type 'Prop': a, b
+     
+     // OK
+     let x = <MyComp a={10} b="hi" />
+     
+     // Error
+     let x2 = <MyComp a="hi"/>
+-                     ~
+-!!! error TS2322: Type 'string' is not assignable to type 'number'.
+-!!! related TS6500 file.tsx:4:5: The expected type comes from property 'a' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'

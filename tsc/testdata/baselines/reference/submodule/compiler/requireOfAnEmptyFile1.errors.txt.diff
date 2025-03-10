@@ -1,0 +1,8 @@
+--- old.requireOfAnEmptyFile1.errors.txt
++++ new.requireOfAnEmptyFile1.errors.txt
+@@= skipped -5, +5 lines =@@
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2306: File 'requireOfAnEmptyFile1_b.ts' is not a module.
+     
+-==== requireOfAnEmptyFile1_b.ts (0 errors) ====
+-    

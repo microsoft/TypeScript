@@ -1,0 +1,181 @@
+--- old.jsDeclarationsGetterSetter.errors.txt
++++ new.jsDeclarationsGetterSetter.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++index.js(24,1): error TS2304: Cannot find name 'Object'.
++index.js(31,1): error TS2304: Cannot find name 'Object'.
++index.js(39,1): error TS2304: Cannot find name 'Object'.
++index.js(50,1): error TS2304: Cannot find name 'Object'.
++index.js(58,1): error TS2304: Cannot find name 'Object'.
++index.js(64,1): error TS2304: Cannot find name 'Object'.
++index.js(76,1): error TS2304: Cannot find name 'Object'.
++index.js(89,1): error TS2304: Cannot find name 'Object'.
++index.js(90,10): error TS2304: Cannot find name 'Math'.
++index.js(102,1): error TS2304: Cannot find name 'Object'.
++index.js(103,10): error TS2304: Cannot find name 'Math'.
++index.js(115,1): error TS2304: Cannot find name 'Object'.
++index.js(116,10): error TS2304: Cannot find name 'Math'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== index.js (13 errors) ====
++    export class A {
++        get x() {
++            return 12;
++        }
++    }
++    
++    export class B {
++        /**
++         * @param {number} _arg
++         */
++        set x(_arg) {
++        }
++    }
++    
++    export class C {
++        get x() {
++            return 12;
++        }
++        set x(_arg) {
++        }
++    }
++    
++    export class D {}
++    Object.defineProperty(D.prototype, "x", {
++    ~~~~~~
++!!! error TS2304: Cannot find name 'Object'.
++        get() {
++            return 12;
++        }
++    });
++    
++    export class E {}
++    Object.defineProperty(E.prototype, "x", {
++    ~~~~~~
++!!! error TS2304: Cannot find name 'Object'.
++        /**
++         * @param {number} _arg
++         */
++        set(_arg) {}
++    });
++    
++    export class F {}
++    Object.defineProperty(F.prototype, "x", {
++    ~~~~~~
++!!! error TS2304: Cannot find name 'Object'.
++        get() {
++            return 12;
++        },
++        /**
++         * @param {number} _arg
++         */
++        set(_arg) {}
++    });
++    
++    export class G {}
++    Object.defineProperty(G.prototype, "x", {
++    ~~~~~~
++!!! error TS2304: Cannot find name 'Object'.
++        /**
++         * @param {number[]} args
++         */
++        set(...args) {}
++    });
++    
++    export class H {}
++    Object.defineProperty(H.prototype, "x", {
++    ~~~~~~
++!!! error TS2304: Cannot find name 'Object'.
++        set() {}
++    });
++    
++    
++    export class I {}
++    Object.defineProperty(I.prototype, "x", {
++    ~~~~~~
++!!! error TS2304: Cannot find name 'Object'.
++        /**
++         * @param {number} v
++         */
++        set: (v) => {}
++    });
++    
++    /**
++     * @param {number} v
++     */
++    const jSetter = (v) => {}
++    export class J {}
++    Object.defineProperty(J.prototype, "x", {
++    ~~~~~~
++!!! error TS2304: Cannot find name 'Object'.
++        set: jSetter
++    });
++    
++    /**
++     * @param {number} v
++     */
++    const kSetter1 = (v) => {}
++    /**
++     * @param {number} v
++     */
++    const kSetter2 = (v) => {}
++    export class K {}
++    Object.defineProperty(K.prototype, "x", {
++    ~~~~~~
++!!! error TS2304: Cannot find name 'Object'.
++        set: Math.random() ? kSetter1 : kSetter2
++             ~~~~
++!!! error TS2304: Cannot find name 'Math'.
++    });
++    
++    /**
++     * @param {number} v
++     */
++    const lSetter1 = (v) => {}
++    /**
++     * @param {string} v
++     */
++    const lSetter2 = (v) => {}
++    export class L {}
++    Object.defineProperty(L.prototype, "x", {
++    ~~~~~~
++!!! error TS2304: Cannot find name 'Object'.
++        set: Math.random() ? lSetter1 : lSetter2
++             ~~~~
++!!! error TS2304: Cannot find name 'Math'.
++    });
++    
++    /**
++     * @param {number | boolean} v
++     */
++    const mSetter1 = (v) => {}
++    /**
++     * @param {string | boolean} v
++     */
++    const mSetter2 = (v) => {}
++    export class M {}
++    Object.defineProperty(M.prototype, "x", {
++    ~~~~~~
++!!! error TS2304: Cannot find name 'Object'.
++        set: Math.random() ? mSetter1 : mSetter2
++             ~~~~
++!!! error TS2304: Cannot find name 'Math'.
++    });
++    

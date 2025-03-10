@@ -1,0 +1,58 @@
+--- old.esModuleInteropDefaultImports.errors.txt
++++ new.esModuleInteropDefaultImports.errors.txt
+@@= skipped -0, +0 lines =@@
+ b.ts(15,1): error TS2349: This expression is not callable.
+-  Type 'typeof import("mod")' has no call signatures.
++  Type '{ default: () => void; }' has no call signatures.
+ b.ts(16,1): error TS2349: This expression is not callable.
+-  Type 'typeof import("mod")' has no call signatures.
++  Type '{ default: () => void; }' has no call signatures.
+ b.ts(17,1): error TS2349: This expression is not callable.
+-  Type 'typeof import("mod")' has no call signatures.
++  Type '{ default: () => void; }' has no call signatures.
+ b.ts(18,1): error TS2349: This expression is not callable.
+-  Type 'typeof import("mod")' has no call signatures.
++  Type '{ default: () => void; }' has no call signatures.
+ b.ts(19,6): error TS2349: This expression is not callable.
+-  Type 'typeof import("mod")' has no call signatures.
++  Type '{ default: () => void; }' has no call signatures.
+ b.ts(20,6): error TS2349: This expression is not callable.
+-  Type 'typeof import("mod")' has no call signatures.
++  Type '{ default: () => void; }' has no call signatures.
+ 
+ 
+ ==== mod.ts (0 errors) ====
+@@= skipped -35, +35 lines =@@
+     a();
+     ~
+ !!! error TS2349: This expression is not callable.
+-!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
++!!! error TS2349:   Type '{ default: () => void; }' has no call signatures.
+     b();
+     ~
+ !!! error TS2349: This expression is not callable.
+-!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
++!!! error TS2349:   Type '{ default: () => void; }' has no call signatures.
+     c();
+     ~
+ !!! error TS2349: This expression is not callable.
+-!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
++!!! error TS2349:   Type '{ default: () => void; }' has no call signatures.
+     d();
+     ~
+ !!! error TS2349: This expression is not callable.
+-!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
++!!! error TS2349:   Type '{ default: () => void; }' has no call signatures.
+     self.default();
+          ~~~~~~~
+ !!! error TS2349: This expression is not callable.
+-!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
++!!! error TS2349:   Type '{ default: () => void; }' has no call signatures.
+     self.def();
+          ~~~
+ !!! error TS2349: This expression is not callable.
+-!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
++!!! error TS2349:   Type '{ default: () => void; }' has no call signatures.
+     
+     // should all work
+     a.default();

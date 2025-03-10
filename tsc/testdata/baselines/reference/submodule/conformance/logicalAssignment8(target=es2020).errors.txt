@@ -1,0 +1,25 @@
+logicalAssignment8.ts(12,5): error TS2532: Object is possibly 'undefined'.
+logicalAssignment8.ts(12,36): error TS2339: Property 'push' does not exist on type 'number[] | undefined'.
+  Property 'push' does not exist on type 'undefined'.
+
+
+==== logicalAssignment8.ts (2 errors) ====
+    declare const bar: { value?: number[] } | undefined
+    
+    function foo1(results: number[] | undefined) {
+        (results ||= bar?.value ?? []).push(100);
+    }
+    
+    function foo2(results: number[] | undefined) {
+        (results ??= bar?.value ?? []).push(100);
+    }
+    
+    function foo3(results: number[] | undefined) {
+        (results &&= bar?.value ?? []).push(100);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+                                       ~~~~
+!!! error TS2339: Property 'push' does not exist on type 'number[] | undefined'.
+!!! error TS2339:   Property 'push' does not exist on type 'undefined'.
+    }
+    

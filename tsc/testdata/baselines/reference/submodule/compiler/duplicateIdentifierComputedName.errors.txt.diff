@@ -1,0 +1,20 @@
+--- old.duplicateIdentifierComputedName.errors.txt
++++ new.duplicateIdentifierComputedName.errors.txt
+@@= skipped -0, +0 lines =@@
+-duplicateIdentifierComputedName.ts(3,5): error TS2300: Duplicate identifier '["a"]'.
++duplicateIdentifierComputedName.ts(2,5): error TS2300: Duplicate identifier 'a'.
++duplicateIdentifierComputedName.ts(3,5): error TS2300: Duplicate identifier 'a'.
+ 
+ 
+-==== duplicateIdentifierComputedName.ts (1 errors) ====
++==== duplicateIdentifierComputedName.ts (2 errors) ====
+     class C {
+         ["a"]: string;
++        ~~~~~
++!!! error TS2300: Duplicate identifier 'a'.
+         ["a"]: string;
+         ~~~~~
+-!!! error TS2300: Duplicate identifier '["a"]'.
++!!! error TS2300: Duplicate identifier 'a'.
+     }
+     

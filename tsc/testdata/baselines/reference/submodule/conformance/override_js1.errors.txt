@@ -1,0 +1,29 @@
+a.js(7,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+a.js(9,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+
+
+==== a.js (2 errors) ====
+    class B {
+        foo (v) {}
+        fooo (v) {}
+    }
+    
+    class D extends B {
+        foo (v) {}
+        ~~~
+!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+        /** @override */
+        fooo (v) {}
+        ~~~~
+!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+        /** @override */
+        bar(v) {}
+    }
+    
+    class C {
+        foo () {}
+        /** @override */
+        fooo (v) {}
+        /** @override */
+        bar(v) {}
+    }

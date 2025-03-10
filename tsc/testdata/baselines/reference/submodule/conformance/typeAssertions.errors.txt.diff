@@ -1,0 +1,87 @@
+--- old.typeAssertions.errors.txt
++++ new.typeAssertions.errors.txt
+@@= skipped -0, +0 lines =@@
+ typeAssertions.ts(5,9): error TS2558: Expected 0 type arguments, but got 1.
+-typeAssertions.ts(31,12): error TS2352: Conversion of type 'SomeOther' to type 'SomeBase' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+-  Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
+-typeAssertions.ts(35,15): error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+-  Type 'SomeOther' is missing the following properties from type 'SomeDerived': x, p
+-typeAssertions.ts(37,13): error TS2352: Conversion of type 'SomeDerived' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+-  Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
+-typeAssertions.ts(38,13): error TS2352: Conversion of type 'SomeBase' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+-  Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
++typeAssertions.ts(31,12): error TS2741: Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
++typeAssertions.ts(35,15): error TS2739: Type 'SomeOther' is missing the following properties from type 'SomeDerived': p, x
++typeAssertions.ts(37,13): error TS2741: Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
++typeAssertions.ts(38,13): error TS2741: Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
+ typeAssertions.ts(44,5): error TS2749: 'numOrStr' refers to a value, but is being used as a type here. Did you mean 'typeof numOrStr'?
+ typeAssertions.ts(44,14): error TS1005: '>' expected.
+ typeAssertions.ts(44,14): error TS2304: Cannot find name 'is'.
+@@= skipped -17, +13 lines =@@
+ typeAssertions.ts(48,32): error TS2749: 'numOrStr' refers to a value, but is being used as a type here. Did you mean 'typeof numOrStr'?
+ typeAssertions.ts(48,41): error TS1005: ')' expected.
+ typeAssertions.ts(48,41): error TS2304: Cannot find name 'is'.
++typeAssertions.ts(48,41): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+ typeAssertions.ts(48,44): error TS1434: Unexpected keyword or identifier.
+ typeAssertions.ts(48,44): error TS2693: 'string' only refers to a type, but is being used as a value here.
+ typeAssertions.ts(48,50): error TS1128: Declaration or statement expected.
+ 
+ 
+-==== typeAssertions.ts (18 errors) ====
++==== typeAssertions.ts (19 errors) ====
+     // Function call whose argument is a 1 arg generic function call with explicit type arguments
+     function fn1<T>(t: T) { }
+     function fn2(t: any) { }
+@@= skipped -40, +41 lines =@@
+     someBase = <SomeBase>someBase;
+     someBase = <SomeBase>someOther; // Error
+                ~~~~~~~~~~~~~~~~~~~
+-!!! error TS2352: Conversion of type 'SomeOther' to type 'SomeBase' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+-!!! error TS2352:   Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
++!!! error TS2741: Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
+ !!! related TS2728 typeAssertions.ts:15:13: 'p' is declared here.
+     
+     someDerived = <SomeDerived>someDerived;
+     someDerived = <SomeDerived>someBase;
+     someDerived = <SomeDerived>someOther; // Error
+                   ~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+-!!! error TS2352:   Type 'SomeOther' is missing the following properties from type 'SomeDerived': x, p
++!!! error TS2739: Type 'SomeOther' is missing the following properties from type 'SomeDerived': p, x
+     
+     someOther = <SomeOther>someDerived; // Error
+                 ~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2352: Conversion of type 'SomeDerived' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+-!!! error TS2352:   Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
++!!! error TS2741: Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
+ !!! related TS2728 typeAssertions.ts:21:13: 'q' is declared here.
+     someOther = <SomeOther>someBase; // Error
+                 ~~~~~~~~~~~~~~~~~~~
+-!!! error TS2352: Conversion of type 'SomeBase' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+-!!! error TS2352:   Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
++!!! error TS2741: Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
+ !!! related TS2728 typeAssertions.ts:21:13: 'q' is declared here.
+     someOther = <SomeOther>someOther;
+     
+@@= skipped -35, +31 lines =@@
+ !!! error TS2304: Cannot find name 'is'.
+                     ~~~~~~
+ !!! error TS1005: ')' expected.
+-!!! related TS1007 typeAssertions.ts:44:3: The parser expected to find a ')' to match the '(' token here.
++!!! related TS1007: The parser expected to find a ')' to match the '(' token here.
+                     ~~~~~~
+ !!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+                                                    ~
+@@= skipped -16, +16 lines =@@
+ !!! error TS2749: 'numOrStr' refers to a value, but is being used as a type here. Did you mean 'typeof numOrStr'?
+                                             ~~
+ !!! error TS1005: ')' expected.
+-!!! related TS1007 typeAssertions.ts:48:3: The parser expected to find a ')' to match the '(' token here.
++!!! related TS1007: The parser expected to find a ')' to match the '(' token here.
+                                             ~~
+ !!! error TS2304: Cannot find name 'is'.
++                                            ~~~
++!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+                                                ~~~~~~
+ !!! error TS1434: Unexpected keyword or identifier.
+                                                ~~~~~~

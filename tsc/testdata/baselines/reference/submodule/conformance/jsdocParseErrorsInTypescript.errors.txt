@@ -1,0 +1,9 @@
+jsdocParseErrorsInTypescript.ts(2,27): error TS1109: Expression expected.
+
+
+==== jsdocParseErrorsInTypescript.ts (1 errors) ====
+    // parse error (blocks grammar errors from checker)
+    function parse1(n: number=) { }
+                              ~
+!!! error TS1109: Expression expected.
+    

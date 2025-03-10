@@ -1,0 +1,28 @@
+--- old.jsNoImplicitAnyNoCascadingReferenceErrors.errors.txt
++++ new.jsNoImplicitAnyNoCascadingReferenceErrors.errors.txt
+@@= skipped -0, +0 lines =@@
+-index.js(3,21): error TS8026: Expected Foo<T> type arguments; provide these with an '@extends' tag.
++index.js(3,21): error TS2314: Generic type 'Foo<T>' requires 1 type argument(s).
++index.js(6,14): error TS2339: Property 'prop' does not exist on type 'MyFoo'.
+ 
+ 
+ ==== somelib.d.ts (0 errors) ====
+     export declare class Foo<T> {
+         prop: T;
+     }
+-==== index.js (1 errors) ====
++==== index.js (2 errors) ====
+     import {Foo} from "./somelib";
+     
+     class MyFoo extends Foo {
+                         ~~~
+-!!! error TS8026: Expected Foo<T> type arguments; provide these with an '@extends' tag.
++!!! error TS2314: Generic type 'Foo<T>' requires 1 type argument(s).
+         constructor() {
+             super();
+             this.prop.alpha = 12;
++                 ~~~~
++!!! error TS2339: Property 'prop' does not exist on type 'MyFoo'.
+         }
+     }
+     

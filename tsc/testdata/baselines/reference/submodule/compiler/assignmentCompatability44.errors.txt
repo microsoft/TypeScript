@@ -1,0 +1,14 @@
+assignmentCompatability44.ts(5,7): error TS2322: Type '{ new(x: number): Foo; prototype: Foo; }' is not assignable to type 'new() => Foo'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+
+
+==== assignmentCompatability44.ts (1 errors) ====
+    class Foo {
+        constructor(x: number) {}
+    }
+    
+    const foo: { new(): Foo } = Foo;
+          ~~~
+!!! error TS2322: Type '{ new(x: number): Foo; prototype: Foo; }' is not assignable to type 'new() => Foo'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 1 or more, but got 0.
+    

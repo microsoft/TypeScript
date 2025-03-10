@@ -159,19 +159,19 @@ func (r *CompilerBaselineRunner) runTest(t *testing.T, filename string) {
 			if config.Name != "" {
 				testName += " " + config.Name
 			}
-			t.Run(testName, func(t *testing.T) { r.runSingleConfigTest(t, test, config) })
+			t.Run(testName, func(t *testing.T) { r.runSingleConfigTest(t, testName, test, config) })
 		}
 	} else {
-		t.Run(basename, func(t *testing.T) { r.runSingleConfigTest(t, test, nil) })
+		t.Run(basename, func(t *testing.T) { r.runSingleConfigTest(t, basename, test, nil) })
 	}
 }
 
-func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, test *compilerFileBasedTest, config *harnessutil.NamedTestConfiguration) {
+func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName string, test *compilerFileBasedTest, config *harnessutil.NamedTestConfiguration) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on compiling test "+test.filename)
 
 	payload := makeUnitsFromTest(test.content, test.filename)
-	compilerTest := newCompilerTest(t, test.filename, &payload, config)
+	compilerTest := newCompilerTest(t, testName, test.filename, &payload, config)
 
 	compilerTest.verifyDiagnostics(t, r.testSuitName, r.isSubmodule)
 	compilerTest.verifyTypesAndSymbols(t, r.testSuitName, r.isSubmodule)
@@ -199,6 +199,7 @@ func getCompilerFileBasedTest(t *testing.T, filename string) *compilerFileBasedT
 }
 
 type compilerTest struct {
+	testName       string
 	filename       string
 	basename       string
 	configuredName string // name with configuration description, e.g. `file`
@@ -218,6 +219,7 @@ type testCaseContentWithConfig struct {
 
 func newCompilerTest(
 	t *testing.T,
+	testName string,
 	filename string,
 	testContent *testCaseContent,
 	namedConfiguration *harnessutil.NamedTestConfiguration,
@@ -302,6 +304,7 @@ func newCompilerTest(
 	)
 
 	return &compilerTest{
+		testName:       testName,
 		filename:       filename,
 		basename:       basename,
 		configuredName: configuredName,
@@ -315,13 +318,23 @@ func newCompilerTest(
 	}
 }
 
-func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string, isSubmodule bool) {
-	if isSubmodule {
-		// !!! Enable this when we're ready to diff test diagnostics
-		return
-	}
+var concurrentSkippedErrorBaselines = core.NewSetFromItems(
+	"circular1.ts",
+	"circular3.ts",
+	"recursiveExportAssignmentAndFindAliasedType1.ts",
+	"recursiveExportAssignmentAndFindAliasedType2.ts",
+	"recursiveExportAssignmentAndFindAliasedType3.ts",
+	"superInStaticMembers1.ts target=es2015",
+	"typeOnlyMerge2.ts",
+	"typeOnlyMerge3.ts",
+)
 
+func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string, isSubmodule bool) {
 	t.Run("error", func(t *testing.T) {
+		if !testutil.TestProgramIsSingleThreaded() && concurrentSkippedErrorBaselines.Has(c.testName) {
+			t.Skip("Skipping error baseline in concurrent mode")
+		}
+
 		defer testutil.RecoverAndFail(t, "Panic on creating error baseline for test "+c.filename)
 		files := core.Concatenate(c.tsConfigFiles, core.Concatenate(c.toBeCompiled, c.otherFiles))
 		tsbaseline.DoErrorBaseline(t, c.configuredName, files, c.result.Diagnostics, c.result.Options.Pretty.IsTrue(), baseline.Options{Subfolder: suiteName, IsSubmodule: isSubmodule})

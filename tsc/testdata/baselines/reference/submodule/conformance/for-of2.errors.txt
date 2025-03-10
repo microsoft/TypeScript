@@ -1,0 +1,30 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+for-of2.ts(1,7): error TS1155: 'const' declarations must be initialized.
+for-of2.ts(2,6): error TS2588: Cannot assign to 'v' because it is a constant.
+for-of2.ts(2,11): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== for-of2.ts (3 errors) ====
+    const v;
+          ~
+!!! error TS1155: 'const' declarations must be initialized.
+    for (v of []) { }
+         ~
+!!! error TS2588: Cannot assign to 'v' because it is a constant.
+              ~~
+!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.

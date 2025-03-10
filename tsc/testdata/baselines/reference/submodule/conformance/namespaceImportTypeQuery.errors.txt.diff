@@ -1,0 +1,17 @@
+--- old.namespaceImportTypeQuery.errors.txt
++++ new.namespaceImportTypeQuery.errors.txt
+@@= skipped -0, +0 lines =@@
+-/b.ts(8,3): error TS2353: Object literal may only specify known properties, and 'A' does not exist in type 'typeof import("/a")'.
++/b.ts(8,3): error TS2353: Object literal may only specify known properties, and 'A' does not exist in type '{ B: { new(): B; prototype: B; }; }'.
+ 
+ 
+ ==== /a.ts (0 errors) ====
+@@= skipped -15, +15 lines =@@
+       // `typeof types` does not include `A`
+       A: undefined as any,
+       ~
+-!!! error TS2353: Object literal may only specify known properties, and 'A' does not exist in type 'typeof import("/a")'.
++!!! error TS2353: Object literal may only specify known properties, and 'A' does not exist in type '{ B: { new(): B; prototype: B; }; }'.
+       B: undefined as any,
+     }
+     

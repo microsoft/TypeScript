@@ -1,0 +1,46 @@
+--- old.jsDeclarationsFunctionJSDoc.errors.txt
++++ new.jsDeclarationsFunctionJSDoc.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++source.js(21,14): error TS2339: Property 'field' does not exist on type 'Aleph'.
++
++
++==== source.js (1 errors) ====
++    /**
++     * Foos a bar together using an `a` and a `b`
++     * @param {number} a
++     * @param {string} b
++     */
++    export function foo(a, b) {}
++    
++    /**
++     * Legacy - DO NOT USE
++     */
++    export class Aleph {
++        /**
++         * Impossible to construct.
++         * @param {Aleph} a
++         * @param {null} b
++         */
++        constructor(a, b) {
++            /**
++             * Field is always null
++             */
++            this.field = b;
++                 ~~~~~
++!!! error TS2339: Property 'field' does not exist on type 'Aleph'.
++        }
++    
++        /**
++         * Doesn't actually do anything
++         * @returns {void}
++         */
++        doIt() {}
++    }
++    
++    /**
++     * Not the speed of light
++     */
++    export const c = 12;
++    

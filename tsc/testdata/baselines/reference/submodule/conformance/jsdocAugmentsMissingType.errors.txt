@@ -1,0 +1,17 @@
+/a.js(1,32): error TS2339: Property 'x' does not exist on type 'A'.
+/a.js(5,14): error TS2339: Property 'x' does not exist on type 'B'.
+
+
+==== /a.js (2 errors) ====
+    class A { constructor() { this.x = 0; } }
+                                   ~
+!!! error TS2339: Property 'x' does not exist on type 'A'.
+    /** @augments */
+    class B extends A {
+        m() {
+            this.x
+                 ~
+!!! error TS2339: Property 'x' does not exist on type 'B'.
+        }
+    }
+    

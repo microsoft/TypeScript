@@ -1,0 +1,63 @@
+a.ts(5,12): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+a.ts(9,12): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+b.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
+
+
+==== a.ts (2 errors) ====
+    export const texts: string[] = [];
+    
+    /**
+     @ts-ignore */
+    texts.push(100);
+               ~~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    
+    /**
+     @ts-expect-error */
+    texts.push(100);
+               ~~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    
+    /**
+     @ts-expect-error */
+    texts.push("100");
+    
+==== b.tsx (1 errors) ====
+    import * as React from "react";
+                           ~~~~~~~
+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
+    
+    export function MyComponent(props: { foo: string }) {
+      return <div />;
+    }
+    
+    let x = (
+      <div>
+        {/*
+       @ts-ignore */}
+        <MyComponent foo={100} />
+    
+        {/*@ts-ignore*/}
+        <MyComponent foo={100} />
+    
+        {/*
+       @ts-expect-error */}
+        <MyComponent foo={100} />
+    
+        {/*
+       // @ts-expect-error */}
+        <MyComponent foo={100} />
+    
+        {/*
+       * @ts-expect-error */}
+        <MyComponent foo={100} />
+    
+        {/*@ts-expect-error*/}
+        <MyComponent foo={100} />
+    
+        {/*
+       @ts-expect-error */}
+        <MyComponent foo={"hooray"} />
+      </div>
+    );
+    

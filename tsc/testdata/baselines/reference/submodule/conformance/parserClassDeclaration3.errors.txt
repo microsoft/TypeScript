@@ -1,0 +1,14 @@
+parserClassDeclaration3.ts(1,20): error TS2304: Cannot find name 'A'.
+parserClassDeclaration3.ts(1,22): error TS1173: 'extends' clause must precede 'implements' clause.
+parserClassDeclaration3.ts(1,30): error TS2304: Cannot find name 'B'.
+
+
+==== parserClassDeclaration3.ts (3 errors) ====
+    class C implements A extends B {
+                       ~
+!!! error TS2304: Cannot find name 'A'.
+                         ~~~~~~~
+!!! error TS1173: 'extends' clause must precede 'implements' clause.
+                                 ~
+!!! error TS2304: Cannot find name 'B'.
+    }

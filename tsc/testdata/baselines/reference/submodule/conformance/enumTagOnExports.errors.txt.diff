@@ -1,0 +1,20 @@
+--- old.enumTagOnExports.errors.txt
++++ new.enumTagOnExports.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++enumTagOnExports.js(2,1): error TS2304: Cannot find name 'exports'.
++enumTagOnExports.js(5,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
++==== enumTagOnExports.js (2 errors) ====
++    /** @enum {number} */
++    exports.a = {};
++    ~~~~~~~
++!!! error TS2304: Cannot find name 'exports'.
++    
++    /** @enum {string} */
++    module.exports.b = {};
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    

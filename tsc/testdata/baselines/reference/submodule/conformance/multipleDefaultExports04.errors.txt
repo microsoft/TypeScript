@@ -1,0 +1,14 @@
+multipleDefaultExports04.ts(1,25): error TS2393: Duplicate function implementation.
+multipleDefaultExports04.ts(4,25): error TS2393: Duplicate function implementation.
+
+
+==== multipleDefaultExports04.ts (2 errors) ====
+    export default function f() {
+                            ~
+!!! error TS2393: Duplicate function implementation.
+    }
+    
+    export default function f() {
+                            ~
+!!! error TS2393: Duplicate function implementation.
+    }

@@ -1,0 +1,18 @@
+--- old.typeOnlyMerge3.errors.txt
++++ new.typeOnlyMerge3.errors.txt
+@@= skipped -2, +2 lines =@@
+ c.ts(3,1): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+ c.ts(4,1): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+ c.ts(4,1): error TS2349: This expression is not callable.
+-  Type 'typeof A' has no call signatures.
++  Type '{ readonly displayName: "A"; }' has no call signatures.
+ 
+ 
+ ==== a.ts (0 errors) ====
+@@= skipped -32, +32 lines =@@
+ !!! related TS1377 a.ts:2:15: 'A' was exported here.
+     ~
+ !!! error TS2349: This expression is not callable.
+-!!! error TS2349:   Type 'typeof A' has no call signatures.
++!!! error TS2349:   Type '{ readonly displayName: "A"; }' has no call signatures.
+     

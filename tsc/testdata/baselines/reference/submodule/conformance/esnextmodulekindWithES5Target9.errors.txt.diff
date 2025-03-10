@@ -1,0 +1,47 @@
+--- old.esnextmodulekindWithES5Target9.errors.txt
++++ new.esnextmodulekindWithES5Target9.errors.txt
+@@= skipped -0, +0 lines =@@
+-esnextmodulekindWithES5Target9.ts(1,15): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+-esnextmodulekindWithES5Target9.ts(3,17): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+-esnextmodulekindWithES5Target9.ts(5,20): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+-esnextmodulekindWithES5Target9.ts(13,15): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+-esnextmodulekindWithES5Target9.ts(15,17): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++esnextmodulekindWithES5Target9.ts(1,15): error TS2307: Cannot find module 'mod' or its corresponding type declarations.
++esnextmodulekindWithES5Target9.ts(3,17): error TS2307: Cannot find module 'mod' or its corresponding type declarations.
++esnextmodulekindWithES5Target9.ts(5,20): error TS2307: Cannot find module 'mod' or its corresponding type declarations.
++esnextmodulekindWithES5Target9.ts(13,15): error TS2307: Cannot find module 'mod' or its corresponding type declarations.
++esnextmodulekindWithES5Target9.ts(15,17): error TS2307: Cannot find module 'mod' or its corresponding type declarations.
+ 
+ 
+ ==== esnextmodulekindWithES5Target9.ts (5 errors) ====
+     import d from "mod";
+                   ~~~~~
+-!!! error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'mod' or its corresponding type declarations.
+     
+     import {a} from "mod";
+                     ~~~~~
+-!!! error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'mod' or its corresponding type declarations.
+     
+     import * as M from "mod";
+                        ~~~~~
+-!!! error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'mod' or its corresponding type declarations.
+     
+     export {a};
+     
+@@= skipped -25, +25 lines =@@
+     
+     export * from "mod";
+                   ~~~~~
+-!!! error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'mod' or its corresponding type declarations.
+     
+     export {b} from "mod"
+                     ~~~~~
+-!!! error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'mod' or its corresponding type declarations.
+     
+     export default d;
+     

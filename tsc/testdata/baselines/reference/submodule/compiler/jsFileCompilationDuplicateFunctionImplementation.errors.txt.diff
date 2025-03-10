@@ -1,0 +1,15 @@
+--- old.jsFileCompilationDuplicateFunctionImplementation.errors.txt
++++ new.jsFileCompilationDuplicateFunctionImplementation.errors.txt
+@@= skipped -0, +0 lines =@@
+ a.ts(1,10): error TS2393: Duplicate function implementation.
++b.js(1,10): error TS2393: Duplicate function implementation.
+ 
+ 
+-==== b.js (0 errors) ====
++==== b.js (1 errors) ====
+     function foo() {
++             ~~~
++!!! error TS2393: Duplicate function implementation.
+         return 10;
+     }
+ ==== a.ts (1 errors) ====

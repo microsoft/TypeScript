@@ -1,0 +1,49 @@
+--- old.jsDeclarationsPackageJson.errors.txt
++++ new.jsDeclarationsPackageJson.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++index.js(1,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
++==== index.js (2 errors) ====
++    const j = require("./package.json");
++              ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    module.exports = j;
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++==== package.json (0 errors) ====
++    {
++        "name": "pkg",
++        "version": "0.1.0",
++        "description": "A package",
++        "main": "./dist/index.js",
++        "bin": {
++          "cli": "./bin/cli.js",
++        },
++        "engines": {
++          "node": ">=0"
++        },
++        "scripts": {
++          "scriptname": "run && run again",
++        },
++        "devDependencies": {
++          "@ns/dep": "0.1.2",
++        },
++        "dependencies": {
++          "dep": "1.2.3",
++        },
++        "repository": "microsoft/TypeScript",
++        "keywords": [
++          "kw"
++        ],
++        "author": "Auth",
++        "license": "See Licensce",
++        "homepage": "https://site",
++        "config": {
++          "o": ["a"]
++        }
++    }
++      

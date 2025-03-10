@@ -1,0 +1,55 @@
+--- old.computedPropertyNames3_ES6.errors.txt
++++ new.computedPropertyNames3_ES6.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ computedPropertyNames3_ES6.ts(4,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+ computedPropertyNames3_ES6.ts(5,9): error TS2378: A 'get' accessor must return a value.
+ computedPropertyNames3_ES6.ts(5,9): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+ computedPropertyNames3_ES6.ts(5,17): error TS1102: 'delete' cannot be called on an identifier in strict mode.
++computedPropertyNames3_ES6.ts(5,17): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+ computedPropertyNames3_ES6.ts(5,17): error TS2703: The operand of a 'delete' operator must be a property reference.
+ computedPropertyNames3_ES6.ts(6,9): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+ computedPropertyNames3_ES6.ts(7,16): error TS2378: A 'get' accessor must return a value.
+-computedPropertyNames3_ES6.ts(7,16): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
++computedPropertyNames3_ES6.ts(7,18): error TS2304: Cannot find name 'String'.
+ 
+ 
+-==== computedPropertyNames3_ES6.ts (8 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== computedPropertyNames3_ES6.ts (9 errors) ====
+     var id;
+     class C {
+         [0 + 1]() { }
+@@= skipped -22, +39 lines =@@
+                     ~~
+ !!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
+                     ~~
++!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
++                    ~~
+ !!! error TS2703: The operand of a 'delete' operator must be a property reference.
+         set [[0, 1]](v) { }
+             ~~~~~~~~
+@@= skipped -7, +9 lines =@@
+         static get [<String>""]() { }
+                    ~~~~~~~~~~~~
+ !!! error TS2378: A 'get' accessor must return a value.
+-                   ~~~~~~~~~~~~
+-!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
++                     ~~~~~~
++!!! error TS2304: Cannot find name 'String'.
+         static set [id.toString()](v) { }
+     }

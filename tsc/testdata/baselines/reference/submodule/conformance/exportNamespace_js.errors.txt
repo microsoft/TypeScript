@@ -1,0 +1,16 @@
+c.js(2,1): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+
+
+==== a.js (0 errors) ====
+    export class A {}
+    
+==== b.js (0 errors) ====
+    export type * from './a';
+    
+==== c.js (1 errors) ====
+    import { A } from './b';
+    A;
+    ~
+!!! error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 b.js:1:1: 'A' was exported here.
+    

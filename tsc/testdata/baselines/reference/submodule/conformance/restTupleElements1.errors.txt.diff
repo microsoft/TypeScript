@@ -1,0 +1,37 @@
+--- old.restTupleElements1.errors.txt
++++ new.restTupleElements1.errors.txt
+@@= skipped -0, +0 lines =@@
+-restTupleElements1.ts(3,22): error TS1257: A required element cannot follow an optional element.
+ restTupleElements1.ts(9,13): error TS2574: A rest element type must be an array type.
+ restTupleElements1.ts(10,13): error TS2574: A rest element type must be an array type.
+-restTupleElements1.ts(10,16): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
++restTupleElements1.ts(10,22): error TS1005: ',' expected.
++restTupleElements1.ts(10,23): error TS1110: Type expected.
+ restTupleElements1.ts(23,31): error TS2344: Type 'number[]' does not satisfy the constraint '[number, ...number[]]'.
+   Source provides no match for required element at position 0 in target.
+ restTupleElements1.ts(24,31): error TS2344: Type '[]' does not satisfy the constraint '[number, ...number[]]'.
+@@= skipped -29, +29 lines =@@
+     type T00 = [string?];
+     type T01 = [string, string?];
+     type T02 = [string?, string];  // Error
+-                         ~~~~~~
+-!!! error TS1257: A required element cannot follow an optional element.
+     type T03 = [...string[]];
+     type T04 = [...[...string[]]];
+     type T05 = [...[...[...string[]]]];
+@@= skipped -11, +9 lines =@@
+                 ~~~~~~~~~
+ !!! error TS2574: A rest element type must be an array type.
+     type T09 = [...string?];  // Error
+-                ~~~~~~~~~~
++                ~~~~~~~~~
+ !!! error TS2574: A rest element type must be an array type.
+-                   ~~~~~~~
+-!!! error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
++                         ~
++!!! error TS1005: ',' expected.
++                          ~
++!!! error TS1110: Type expected.
+     type T10 = [string, ...[...string[]]];
+     type T11 = [string, ...[...[...string[]]]];
+     

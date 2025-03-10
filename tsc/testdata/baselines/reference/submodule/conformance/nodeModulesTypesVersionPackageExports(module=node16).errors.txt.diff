@@ -1,0 +1,66 @@
+--- old.nodeModulesTypesVersionPackageExports(module=node16).errors.txt
++++ new.nodeModulesTypesVersionPackageExports(module=node16).errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++index.cts(3,5): error TS2339: Property 'correctVersionApplied' does not exist on type '{ readonly noConditionsApplied: true; }'.
++index.mts(3,5): error TS2339: Property 'correctVersionApplied' does not exist on type '{ readonly noConditionsApplied: true; }'.
++index.ts(3,5): error TS2339: Property 'correctVersionApplied' does not exist on type '{ readonly noConditionsApplied: true; }'.
++
++
++==== index.ts (1 errors) ====
++    // esm format file
++    import * as mod from "inner";
++    mod.correctVersionApplied;
++        ~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2339: Property 'correctVersionApplied' does not exist on type '{ readonly noConditionsApplied: true; }'.
++    
++==== index.mts (1 errors) ====
++    // esm format file
++    import * as mod from "inner";
++    mod.correctVersionApplied;
++        ~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2339: Property 'correctVersionApplied' does not exist on type '{ readonly noConditionsApplied: true; }'.
++    
++==== index.cts (1 errors) ====
++    // cjs format file
++    import * as mod from "inner";
++    mod.correctVersionApplied;
++        ~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2339: Property 'correctVersionApplied' does not exist on type '{ readonly noConditionsApplied: true; }'.
++    
++==== node_modules/inner/index.d.ts (0 errors) ====
++    // cjs format file
++    export const noConditionsApplied = true;
++==== node_modules/inner/index.d.mts (0 errors) ====
++    // esm format file
++    export const importConditionApplied = true;
++==== node_modules/inner/index.d.cts (0 errors) ====
++    // cjs format file
++    export const wrongConditionApplied = true;
++==== node_modules/inner/old-types.d.ts (0 errors) ====
++    export const noVersionApplied = true;
++==== node_modules/inner/new-types.d.ts (0 errors) ====
++    export const correctVersionApplied = true;
++==== node_modules/inner/future-types.d.ts (0 errors) ====
++    export const futureVersionApplied = true;
++==== package.json (0 errors) ====
++    {
++        "name": "package",
++        "private": true,
++        "type": "module",
++    }
++==== node_modules/inner/package.json (0 errors) ====
++    {
++        "name": "inner",
++        "private": true,
++        "exports": {
++            ".": {
++                "types@>=10000": "./future-types.d.ts",
++                "types@>=1": "./new-types.d.ts",
++                "types": "./old-types.d.ts",
++                "import": "./index.mjs",
++                "node": "./index.js"
++            },
++        }
++    }

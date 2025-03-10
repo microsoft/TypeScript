@@ -1,0 +1,69 @@
+--- old.requireOfJsonFileTypes.errors.txt
++++ new.requireOfJsonFileTypes.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++file1.ts(1,20): error TS2307: Cannot find module './b.json' or its corresponding type declarations.
++file1.ts(2,20): error TS2307: Cannot find module './c.json' or its corresponding type declarations.
++file1.ts(3,20): error TS2307: Cannot find module './d.json' or its corresponding type declarations.
++file1.ts(4,20): error TS2307: Cannot find module './e.json' or its corresponding type declarations.
++file1.ts(5,20): error TS2307: Cannot find module './f.json' or its corresponding type declarations.
++file1.ts(6,20): error TS2307: Cannot find module './g.json' or its corresponding type declarations.
++
++
++==== file1.ts (6 errors) ====
++    import b = require('./b.json');
++                       ~~~~~~~~~~
++!!! error TS2307: Cannot find module './b.json' or its corresponding type declarations.
++    import c = require('./c.json');
++                       ~~~~~~~~~~
++!!! error TS2307: Cannot find module './c.json' or its corresponding type declarations.
++    import d = require('./d.json');
++                       ~~~~~~~~~~
++!!! error TS2307: Cannot find module './d.json' or its corresponding type declarations.
++    import e = require('./e.json');
++                       ~~~~~~~~~~
++!!! error TS2307: Cannot find module './e.json' or its corresponding type declarations.
++    import f = require('./f.json');
++                       ~~~~~~~~~~
++!!! error TS2307: Cannot find module './f.json' or its corresponding type declarations.
++    import g = require('./g.json');
++                       ~~~~~~~~~~
++!!! error TS2307: Cannot find module './g.json' or its corresponding type declarations.
++    
++    let booleanLiteral: boolean, nullLiteral: null;
++    let stringLiteral: string;
++    let numberLiteral: number;
++    
++    booleanLiteral = b.a;
++    stringLiteral = b.b;
++    nullLiteral = b.c;
++    booleanLiteral = b.d;
++    const stringOrNumberOrNull: string | number | null = c[0];
++    stringLiteral = d;
++    numberLiteral = e;
++    numberLiteral = f[0];
++    booleanLiteral = g[0];
++    
++==== b.json (0 errors) ====
++    {
++        "a": true,
++        "b": "hello",
++        "c": null,
++        "d": false
++    }
++    
++==== c.json (0 errors) ====
++    ["a", null, "string"]
++    
++==== d.json (0 errors) ====
++    "dConfig"
++    
++==== e.json (0 errors) ====
++    -10
++    
++==== f.json (0 errors) ====
++    [-10, 30]
++    
++==== g.json (0 errors) ====
++    [true, false]

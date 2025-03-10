@@ -1,0 +1,16 @@
+--- old.crashInEmitTokenWithComment.errors.txt
++++ new.crashInEmitTokenWithComment.errors.txt
+@@= skipped -0, +0 lines =@@
+-crashInEmitTokenWithComment.ts(5,4): error TS2345: Argument of type '({ [foo.bar]: c }: {}) => any' is not assignable to parameter of type 'string'.
++crashInEmitTokenWithComment.ts(5,4): error TS2345: Argument of type '(__0: {}) => any' is not assignable to parameter of type 'string'.
+ crashInEmitTokenWithComment.ts(5,7): error TS2537: Type '{}' has no matching index signature for type 'string'.
+ 
+ 
+@@= skipped -8, +8 lines =@@
+     const foo = {bar: 'a'};
+     fn(({[foo.bar]: c}) => undefined);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2345: Argument of type '({ [foo.bar]: c }: {}) => any' is not assignable to parameter of type 'string'.
++!!! error TS2345: Argument of type '(__0: {}) => any' is not assignable to parameter of type 'string'.
+           ~~~~~~~
+ !!! error TS2537: Type '{}' has no matching index signature for type 'string'.

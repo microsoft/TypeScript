@@ -1,0 +1,30 @@
+--- old.numericNamedPropertyDuplicates.errors.txt
++++ new.numericNamedPropertyDuplicates.errors.txt
+@@= skipped -0, +0 lines =@@
+-numericNamedPropertyDuplicates.ts(3,5): error TS2300: Duplicate identifier '1.0'.
++numericNamedPropertyDuplicates.ts(2,5): error TS2300: Duplicate identifier '1'.
++numericNamedPropertyDuplicates.ts(3,5): error TS2300: Duplicate identifier '1'.
++numericNamedPropertyDuplicates.ts(4,12): error TS2300: Duplicate identifier '2'.
+ numericNamedPropertyDuplicates.ts(5,12): error TS2300: Duplicate identifier '2'.
+ numericNamedPropertyDuplicates.ts(9,5): error TS2300: Duplicate identifier '2'.
+ numericNamedPropertyDuplicates.ts(10,5): error TS2300: Duplicate identifier '2'.
+@@= skipped -6, +8 lines =@@
+ numericNamedPropertyDuplicates.ts(20,5): error TS1005: ',' expected.
+ 
+ 
+-==== numericNamedPropertyDuplicates.ts (7 errors) ====
++==== numericNamedPropertyDuplicates.ts (9 errors) ====
+     class C {
+         1: number;
++        ~
++!!! error TS2300: Duplicate identifier '1'.
+         1.0: number;
+         ~~~
+-!!! error TS2300: Duplicate identifier '1.0'.
++!!! error TS2300: Duplicate identifier '1'.
+         static 2: number;
++               ~
++!!! error TS2300: Duplicate identifier '2'.
+         static 2: number;
+                ~
+ !!! error TS2300: Duplicate identifier '2'.

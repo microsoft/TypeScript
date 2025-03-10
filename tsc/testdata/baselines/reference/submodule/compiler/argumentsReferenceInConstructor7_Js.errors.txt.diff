@@ -1,0 +1,20 @@
+--- old.argumentsReferenceInConstructor7_Js.errors.txt
++++ new.argumentsReferenceInConstructor7_Js.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/a.js(6,8): error TS2339: Property 'callee' does not exist on type 'A'.
++
++
++==== /a.js (1 errors) ====
++    class A {
++    	constructor() {
++    		/**
++    		 * @type Function
++    		 */
++    		this.callee = arguments.callee;
++    		     ~~~~~~
++!!! error TS2339: Property 'callee' does not exist on type 'A'.
++    	}
++    }
++    

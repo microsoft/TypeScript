@@ -1,0 +1,22 @@
+--- old.parserRealSource10.errors.txt
++++ new.parserRealSource10.errors.txt
+@@= skipped -0, +0 lines =@@
+-parserRealSource10.ts(4,21): error TS6053: File 'typescript.ts' not found.
+ parserRealSource10.ts(127,33): error TS2449: Class 'TokenInfo' used before its declaration.
+ parserRealSource10.ts(127,43): error TS1011: An element access expression should take an argument.
+ parserRealSource10.ts(128,36): error TS2693: 'string' only refers to a type, but is being used as a value here.
+@@= skipped -342, +341 lines =@@
+ parserRealSource10.ts(449,41): error TS1011: An element access expression should take an argument.
+ 
+ 
+-==== parserRealSource10.ts (343 errors) ====
++==== parserRealSource10.ts (342 errors) ====
+     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+     // See LICENSE.txt in the project root for complete license information.
+     
+     ///<reference path='typescript.ts' />
+-                        ~~~~~~~~~~~~~
+-!!! error TS6053: File 'typescript.ts' not found.
+     
+     module TypeScript {
+         export enum TokenID {

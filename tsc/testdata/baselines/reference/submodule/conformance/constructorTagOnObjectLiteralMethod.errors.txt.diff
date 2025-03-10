@@ -1,0 +1,17 @@
+--- old.constructorTagOnObjectLiteralMethod.errors.txt
++++ new.constructorTagOnObjectLiteralMethod.errors.txt
+@@= skipped -0, +0 lines =@@
+-example.js(3,16): error TS2339: Property 'bar' does not exist on type '{ Foo(): void; }'.
+ example.js(5,2): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+ 
+ 
+-==== example.js (2 errors) ====
++==== example.js (1 errors) ====
+     const obj = {
+       /** @constructor */
+       Foo() { this.bar = "bar" }
+-                   ~~~
+-!!! error TS2339: Property 'bar' does not exist on type '{ Foo(): void; }'.
+     };
+     (new obj.Foo()).bar
+      ~~~~~~~~~~~~~

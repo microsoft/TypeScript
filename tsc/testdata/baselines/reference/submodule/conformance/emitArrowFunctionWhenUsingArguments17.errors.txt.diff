@@ -1,0 +1,18 @@
+--- old.emitArrowFunctionWhenUsingArguments17.errors.txt
++++ new.emitArrowFunctionWhenUsingArguments17.errors.txt
+@@= skipped -0, +-1 lines =@@
+-emitArrowFunctionWhenUsingArguments17.ts(4,22): error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.
+-
+-
+-==== emitArrowFunctionWhenUsingArguments17.ts (1 errors) ====
+-    function f() {
+-        var { arguments } = { arguments: "hello" };
+-        if (Math.random()) {
+-            return () => arguments[0];
+-                         ~~~~~~~~~
+-!!! error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.
+-        }
+-        var arguments = "world";
+-    }
+@@= skipped --1, +1 lines =@@
++<no content>

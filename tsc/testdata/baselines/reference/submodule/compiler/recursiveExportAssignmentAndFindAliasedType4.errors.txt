@@ -1,0 +1,20 @@
+recursiveExportAssignmentAndFindAliasedType4_moduleA.ts(1,26): error TS2307: Cannot find module 'recursiveExportAssignmentAndFindAliasedType4_moduleC' or its corresponding type declarations.
+recursiveExportAssignmentAndFindAliasedType4_moduleA.ts(2,25): error TS2307: Cannot find module 'recursiveExportAssignmentAndFindAliasedType4_moduleB' or its corresponding type declarations.
+
+
+==== recursiveExportAssignmentAndFindAliasedType4_moduleA.ts (2 errors) ====
+    import moduleC = require("recursiveExportAssignmentAndFindAliasedType4_moduleC");
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'recursiveExportAssignmentAndFindAliasedType4_moduleC' or its corresponding type declarations.
+    import ClassB = require("recursiveExportAssignmentAndFindAliasedType4_moduleB");
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'recursiveExportAssignmentAndFindAliasedType4_moduleB' or its corresponding type declarations.
+    export var b: ClassB; // This should result in type ClassB
+==== recursiveExportAssignmentAndFindAliasedType4_moduleC.ts (0 errors) ====
+    import self = require("recursiveExportAssignmentAndFindAliasedType4_moduleC");
+    export = self;
+    
+==== recursiveExportAssignmentAndFindAliasedType4_moduleB.ts (0 errors) ====
+    class ClassB { }
+    export = ClassB;
+    

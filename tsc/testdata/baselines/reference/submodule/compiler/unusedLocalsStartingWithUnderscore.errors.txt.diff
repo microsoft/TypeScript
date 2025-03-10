@@ -1,0 +1,18 @@
+--- old.unusedLocalsStartingWithUnderscore.errors.txt
++++ new.unusedLocalsStartingWithUnderscore.errors.txt
+@@= skipped -0, +0 lines =@@
+ /a.ts(7,11): error TS6133: '_ns' is declared but its value is never read.
+-/a.ts(8,9): error TS6133: '_' is declared but its value is never read.
++/a.ts(8,5): error TS6133: '_' is declared but its value is never read.
+ 
+ 
+ ==== /a.ts (2 errors) ====
+@@= skipped -12, +12 lines =@@
+               ~~~
+ !!! error TS6133: '_ns' is declared but its value is never read.
+         let _;
+-            ~
++        ~~~~~
+ !!! error TS6133: '_' is declared but its value is never read.
+         for (const _ of []) { }
+     

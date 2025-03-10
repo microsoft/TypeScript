@@ -1,0 +1,38 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'CallableFunction'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'IterableIterator'.
+error TS2318: Cannot find global type 'NewableFunction'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+contextualTypeOnYield2.ts(1,30): error TS2304: Cannot find name 'Generator'.
+contextualTypeOnYield2.ts(3,13): error TS7006: Parameter 'num' implicitly has an 'any' type.
+contextualTypeOnYield2.ts(3,21): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'CallableFunction'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'IterableIterator'.
+!!! error TS2318: Cannot find global type 'NewableFunction'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== contextualTypeOnYield2.ts (3 errors) ====
+    type OrGen = () => (number | Generator<string, (arg: number) => void, undefined>);
+                                 ~~~~~~~~~
+!!! error TS2304: Cannot find name 'Generator'.
+    const g: OrGen = function* () {
+        return (num) => console.log(num);
+                ~~~
+!!! error TS7006: Parameter 'num' implicitly has an 'any' type.
+                        ~~~~~~~
+!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+    }

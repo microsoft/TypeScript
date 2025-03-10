@@ -1,0 +1,33 @@
+blockScopedEnumVariablesUseBeforeDef_verbatimModuleSyntax.ts(2,12): error TS2450: Enum 'E' used before its declaration.
+blockScopedEnumVariablesUseBeforeDef_verbatimModuleSyntax.ts(7,12): error TS2450: Enum 'E' used before its declaration.
+blockScopedEnumVariablesUseBeforeDef_verbatimModuleSyntax.ts(12,8): error TS2450: Enum 'AfterObject' used before its declaration.
+
+
+==== blockScopedEnumVariablesUseBeforeDef_verbatimModuleSyntax.ts (3 errors) ====
+    function foo1() {
+        return E.A
+               ~
+!!! error TS2450: Enum 'E' used before its declaration.
+!!! related TS2728 blockScopedEnumVariablesUseBeforeDef_verbatimModuleSyntax.ts:3:10: 'E' is declared here.
+        enum E { A }
+    }
+    
+    function foo2() {
+        return E.A
+               ~
+!!! error TS2450: Enum 'E' used before its declaration.
+!!! related TS2728 blockScopedEnumVariablesUseBeforeDef_verbatimModuleSyntax.ts:8:16: 'E' is declared here.
+        const enum E { A }
+    }
+    
+    const config = {
+        a: AfterObject.A,
+           ~~~~~~~~~~~
+!!! error TS2450: Enum 'AfterObject' used before its declaration.
+!!! related TS2728 blockScopedEnumVariablesUseBeforeDef_verbatimModuleSyntax.ts:15:12: 'AfterObject' is declared here.
+    };
+    
+    const enum AfterObject {
+        A = 2,
+    }
+    

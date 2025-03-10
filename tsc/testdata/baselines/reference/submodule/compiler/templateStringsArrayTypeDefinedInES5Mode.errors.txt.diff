@@ -1,0 +1,18 @@
+--- old.templateStringsArrayTypeDefinedInES5Mode.errors.txt
++++ new.templateStringsArrayTypeDefinedInES5Mode.errors.txt
+@@= skipped -0, +0 lines =@@
+-templateStringsArrayTypeDefinedInES5Mode.ts(7,3): error TS2345: Argument of type '{}' is not assignable to parameter of type 'TemplateStringsArray'.
+-  Type '{}' is missing the following properties from type 'TemplateStringsArray': raw, length, concat, join, and 10 more.
++templateStringsArrayTypeDefinedInES5Mode.ts(7,3): error TS2740: Type '{}' is missing the following properties from type 'TemplateStringsArray': raw, length, concat, join, and 10 more.
+ 
+ 
+ ==== templateStringsArrayTypeDefinedInES5Mode.ts (1 errors) ====
+@@= skipped -10, +9 lines =@@
+     
+     f({}, 10, 10);
+       ~~
+-!!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'TemplateStringsArray'.
+-!!! error TS2345:   Type '{}' is missing the following properties from type 'TemplateStringsArray': raw, length, concat, join, and 10 more.
++!!! error TS2740: Type '{}' is missing the following properties from type 'TemplateStringsArray': raw, length, concat, join, and 10 more.
+     
+     f `abcdef${ 1234 }${ 5678 }ghijkl`;

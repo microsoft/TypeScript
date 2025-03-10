@@ -1,0 +1,43 @@
+TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts(13,11): error TS2339: Property 'B' does not exist on type '{}'.
+TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts(33,12): error TS2694: Namespace 'X.Y' has no exported member 'Z'.
+
+
+==== TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts (2 errors) ====
+    module A.B {
+        export var x: number;
+    }
+    
+    module A{ 
+        module B {
+            export var x: string;
+        }
+    }
+    
+    // ensure the right var decl is exported
+    var x: number;
+    var x = A.B.x;
+              ~
+!!! error TS2339: Property 'B' does not exist on type '{}'.
+    
+    module X.Y.Z {
+        export class Line {
+            length: number;
+        }
+    }
+    
+    module X {
+        export module Y {
+            module Z {
+                export class Line {
+                    name: string;
+                }
+            }
+        }
+    }
+    
+    // make sure merging works as expected
+    var l: { length: number };
+    var l: X.Y.Z.Line;
+               ~
+!!! error TS2694: Namespace 'X.Y' has no exported member 'Z'.
+    

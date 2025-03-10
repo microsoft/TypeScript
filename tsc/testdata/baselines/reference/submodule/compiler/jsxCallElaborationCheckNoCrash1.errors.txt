@@ -1,0 +1,19 @@
+jsxCallElaborationCheckNoCrash1.tsx(3,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
+
+
+==== jsxCallElaborationCheckNoCrash1.tsx (1 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    
+    import * as React from "react";
+                           ~~~~~~~
+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
+    
+    type Tags = "span" | "div";
+    
+    export const Hoc = <Tag extends Tags>(
+       TagElement: Tag,
+    ): React.SFC => {
+       const Component = () => <TagElement />;
+       return Component;
+    };
+    

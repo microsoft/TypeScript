@@ -1,0 +1,16 @@
+crashInsourcePropertyIsRelatableToTargetProperty.ts(9,5): error TS2322: Type '(x: "hi", items: string[]) => ???' is not assignable to type 'D'.
+
+
+==== crashInsourcePropertyIsRelatableToTargetProperty.ts (1 errors) ====
+    class C {
+        private x = 1;
+    }
+    class D extends C { }
+    function foo(x: "hi", items: string[]): typeof foo;
+    function foo(x: string, items: string[]): typeof foo {
+        return null;
+    }
+    var a: D = foo("hi", []);
+        ~
+!!! error TS2322: Type '(x: "hi", items: string[]) => ???' is not assignable to type 'D'.
+    

@@ -1,0 +1,17 @@
+--- old.topLevelModuleDeclarationAndFile.errors.txt
++++ new.topLevelModuleDeclarationAndFile.errors.txt
+@@= skipped -0, +0 lines =@@
+-foo_2.ts(3,14): error TS2339: Property 'x' does not exist on type 'typeof import("vs/foo_0")'.
++foo_2.ts(3,14): error TS2339: Property 'x' does not exist on type '{ y: () => number; }'.
+ 
+ 
+ ==== foo_2.ts (1 errors) ====
+@@= skipped -5, +5 lines =@@
+     import foo = require("vs/foo_0");
+     var z1 = foo.x + 10;   // Should error, as declaration should win
+                  ~
+-!!! error TS2339: Property 'x' does not exist on type 'typeof import("vs/foo_0")'.
++!!! error TS2339: Property 'x' does not exist on type '{ y: () => number; }'.
+     var z2 = foo.y() + 10; // Should resolve
+     
+ ==== vs/foo_0/index.ts (0 errors) ====

@@ -1,0 +1,15 @@
+jsElementAccessNoContextualTypeCrash.js(7,8): error TS2339: Property 'localize' does not exist on type '{}'.
+
+
+==== jsElementAccessNoContextualTypeCrash.js (1 errors) ====
+    var Common = {};
+    self['Common'] = self['Common'] || {};
+    /**
+     * @param {string} string
+     * @return {string}
+     */
+    Common.localize = function (string) {
+           ~~~~~~~~
+!!! error TS2339: Property 'localize' does not exist on type '{}'.
+        return string;
+    };

@@ -1,0 +1,22 @@
+--- old.jsdocParameterParsingInfiniteLoop.errors.txt
++++ new.jsdocParameterParsingInfiniteLoop.errors.txt
+@@= skipped -0, +-1 lines =@@
+-example.js(3,11): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+-example.js(3,20): error TS1110: Type expected.
+-example.js(3,21): error TS2304: Cannot find name 'foo'.
+-
+-
+-==== example.js (3 errors) ====
+-    // @ts-check
+-    /**
+-     * @type {function(@foo)}
+-              ~~~~~~~~~~~~~~
+-!!! error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+-                       ~
+-!!! error TS1110: Type expected.
+-                        ~~~
+-!!! error TS2304: Cannot find name 'foo'.
+-     */
+-    let x;
+@@= skipped --1, +1 lines =@@
++<no content>

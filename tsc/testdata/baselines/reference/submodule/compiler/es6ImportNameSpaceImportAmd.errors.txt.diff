@@ -1,0 +1,21 @@
+--- old.es6ImportNameSpaceImportAmd.errors.txt
++++ new.es6ImportNameSpaceImportAmd.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++es6ImportNameSpaceImportAmd_1.ts(1,35): error TS2307: Cannot find module 'es6ImportNameSpaceImportAmd_0' or its corresponding type declarations.
++es6ImportNameSpaceImportAmd_1.ts(3,36): error TS2307: Cannot find module 'es6ImportNameSpaceImportAmd_0' or its corresponding type declarations.
++
++
++==== es6ImportNameSpaceImportAmd_0.ts (0 errors) ====
++    export var a = 10;
++    
++==== es6ImportNameSpaceImportAmd_1.ts (2 errors) ====
++    import * as nameSpaceBinding from "es6ImportNameSpaceImportAmd_0";
++                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'es6ImportNameSpaceImportAmd_0' or its corresponding type declarations.
++    var x = nameSpaceBinding.a;
++    import * as nameSpaceBinding2 from "es6ImportNameSpaceImportAmd_0"; // elide this
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'es6ImportNameSpaceImportAmd_0' or its corresponding type declarations.
++    

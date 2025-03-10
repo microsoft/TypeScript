@@ -1,0 +1,11 @@
+--- old.noUnusedLocals_potentialPredicateUnusedParam.errors.txt
++++ new.noUnusedLocals_potentialPredicateUnusedParam.errors.txt
+@@= skipped -2, +2 lines =@@
+ 
+ ==== noUnusedLocals_potentialPredicateUnusedParam.ts (1 errors) ====
+     function potentialPredicateUnusedParam(a: unknown) {
+-                                           ~
++                                           ~~~~~~~~~~
+ !!! error TS6133: 'a' is declared but its value is never read.
+       return !!Math.random();
+     }

@@ -1,0 +1,38 @@
+implicitAnyAmbients.ts(2,9): error TS7005: Variable 'x' implicitly has an 'any' type.
+implicitAnyAmbients.ts(5,16): error TS7006: Parameter 'x' implicitly has an 'any' type.
+implicitAnyAmbients.ts(22,13): error TS7005: Variable 'y' implicitly has an 'any' type.
+
+
+==== implicitAnyAmbients.ts (3 errors) ====
+    declare module m {
+        var x; // error
+            ~
+!!! error TS7005: Variable 'x' implicitly has an 'any' type.
+        var y: any;
+    
+        function f(x); // error 
+                   ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+        function f2(x: any); // error
+        function f3(x: any): any;
+    
+        interface I {
+            foo(); // error
+            foo2(x: any); // error
+            foo3(x: any): any;
+        }
+    
+        class C {
+            foo(); // error
+            foo2(x: any); // error
+            foo3(x: any): any;
+        }
+    
+        module n {
+            var y; // error
+                ~
+!!! error TS7005: Variable 'y' implicitly has an 'any' type.
+        }
+    
+        import m2 = n;
+    }

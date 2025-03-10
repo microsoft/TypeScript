@@ -1,0 +1,132 @@
+genericCallToOverloadedMethodWithOverloadedArguments.ts(23,38): error TS2345: Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
+  Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+    Type 'number' is not assignable to type 'string'.
+genericCallToOverloadedMethodWithOverloadedArguments.ts(52,38): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
+      Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+        Type 'number' is not assignable to type 'string'.
+genericCallToOverloadedMethodWithOverloadedArguments.ts(68,38): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
+      Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+        Type 'number' is not assignable to type 'string'.
+genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }' is not assignable to parameter of type '(x: number) => Promise<boolean>'.
+      Type 'Promise<number>' is not assignable to type 'Promise<boolean>'.
+        Type 'number' is not assignable to type 'boolean'.
+
+
+==== genericCallToOverloadedMethodWithOverloadedArguments.ts (4 errors) ====
+    module m1 {
+        interface Promise<T> {
+            then<U>(cb: (x: T) => Promise<U>): Promise<U>;
+        }
+    
+        declare function testFunction(n: number): Promise<number>;
+    
+        var numPromise: Promise<number>;
+        var newPromise = numPromise.then(testFunction);
+    }
+    
+    //////////////////////////////////////
+    
+    module m2 {
+        interface Promise<T> {
+            then<U>(cb: (x: T) => Promise<U>): Promise<U>;
+        }
+    
+        declare function testFunction(n: number): Promise<number>;
+        declare function testFunction(s: string): Promise<string>;
+    
+        var numPromise: Promise<number>;
+        var newPromise = numPromise.then(testFunction);
+                                         ~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
+!!! error TS2345:   Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+!!! error TS2345:     Type 'number' is not assignable to type 'string'.
+    }
+    
+    //////////////////////////////////////
+    
+    module m3 {
+        interface Promise<T> {
+            then<U>(cb: (x: T) => Promise<U>): Promise<U>;
+            then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
+        }
+    
+        declare function testFunction(n: number): Promise<number>;
+    
+        var numPromise: Promise<number>;
+        var newPromise = numPromise.then(testFunction);
+    }
+    
+    //////////////////////////////////////
+    
+    module m4 {
+        interface Promise<T> {
+            then<U>(cb: (x: T) => Promise<U>): Promise<U>;
+            then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
+        }
+    
+        declare function testFunction(n: number): Promise<number>;
+        declare function testFunction(s: string): Promise<string>;
+    
+        var numPromise: Promise<number>;
+        var newPromise = numPromise.then(testFunction);
+                                         ~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
+!!! error TS2769:       Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+!!! error TS2769:         Type 'number' is not assignable to type 'string'.
+!!! related TS2771 genericCallToOverloadedMethodWithOverloadedArguments.ts:45:9: The last overload is declared here.
+    }
+    
+    //////////////////////////////////////
+    
+    module m5 {
+        interface Promise<T> {
+            then<U>(cb: (x: T) => Promise<U>): Promise<U>;
+            then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
+            then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>;
+        }
+    
+        declare function testFunction(n: number): Promise<number>;
+        declare function testFunction(s: string): Promise<string>;
+    
+        var numPromise: Promise<number>;
+        var newPromise = numPromise.then(testFunction);
+                                         ~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
+!!! error TS2769:       Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+!!! error TS2769:         Type 'number' is not assignable to type 'string'.
+!!! related TS2771 genericCallToOverloadedMethodWithOverloadedArguments.ts:61:9: The last overload is declared here.
+    }
+    
+    //////////////////////////////////////
+    
+    module m6 {
+        interface Promise<T> {
+            then<U>(cb: (x: T) => Promise<U>): Promise<U>;
+            then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
+        }
+    
+        declare function testFunction(n: number): Promise<number>;
+        declare function testFunction(s: string): Promise<string>;
+        declare function testFunction(b: boolean): Promise<boolean>;
+    
+        var numPromise: Promise<number>;
+        var newPromise = numPromise.then(testFunction);
+                                         ~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }' is not assignable to parameter of type '(x: number) => Promise<boolean>'.
+!!! error TS2769:       Type 'Promise<number>' is not assignable to type 'Promise<boolean>'.
+!!! error TS2769:         Type 'number' is not assignable to type 'boolean'.
+!!! related TS2771 genericCallToOverloadedMethodWithOverloadedArguments.ts:76:9: The last overload is declared here.
+    }
+    

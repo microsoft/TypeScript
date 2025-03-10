@@ -1,0 +1,17 @@
+--- old.logicalOrExpressionIsContextuallyTyped.errors.txt
++++ new.logicalOrExpressionIsContextuallyTyped.errors.txt
+@@= skipped -0, +0 lines =@@
+ logicalOrExpressionIsContextuallyTyped.ts(6,24): error TS2872: This kind of expression is always truthy.
+-logicalOrExpressionIsContextuallyTyped.ts(6,33): error TS2322: Type '{ a: string; b: number; } | { a: string; b: boolean; }' is not assignable to type '{ a: string; }'.
+-  Object literal may only specify known properties, and 'b' does not exist in type '{ a: string; }'.
++logicalOrExpressionIsContextuallyTyped.ts(6,33): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type '{ a: string; }'.
+ 
+ 
+ ==== logicalOrExpressionIsContextuallyTyped.ts (2 errors) ====
+@@= skipped -12, +11 lines =@@
+                            ~~~~~~~~~~~~~~~~~
+ !!! error TS2872: This kind of expression is always truthy.
+                                     ~
+-!!! error TS2322: Type '{ a: string; b: number; } | { a: string; b: boolean; }' is not assignable to type '{ a: string; }'.
+-!!! error TS2322:   Object literal may only specify known properties, and 'b' does not exist in type '{ a: string; }'.
++!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type '{ a: string; }'.

@@ -1,0 +1,38 @@
+--- old.jsFileCompilationExternalPackageError.errors.txt
++++ new.jsFileCompilationExternalPackageError.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++moduleA/a.js(1,17): error TS2306: File 'node_modules/b.ts' is not a module.
++moduleA/a.js(2,1): error TS2632: Cannot assign to 'a' because it is an import.
++moduleA/a.js(3,17): error TS2306: File 'node_modules/c.js' is not a module.
++moduleA/a.js(4,1): error TS2632: Cannot assign to 'c' because it is an import.
++node_modules/c.js(1,1): error TS2304: Cannot find name 'exports'.
++node_modules/c.js(2,1): error TS2304: Cannot find name 'c'.
++
++
++==== moduleA/a.js (4 errors) ====
++    import {a} from "b";
++                    ~~~
++!!! error TS2306: File 'node_modules/b.ts' is not a module.
++    a++;
++    ~
++!!! error TS2632: Cannot assign to 'a' because it is an import.
++    import {c} from "c";
++                    ~~~
++!!! error TS2306: File 'node_modules/c.js' is not a module.
++    c++;
++    ~
++!!! error TS2632: Cannot assign to 'c' because it is an import.
++    
++==== node_modules/b.ts (0 errors) ====
++    var a = 10;
++    
++==== node_modules/c.js (2 errors) ====
++    exports.a = 10;
++    ~~~~~~~
++!!! error TS2304: Cannot find name 'exports'.
++    c = 10;
++    ~
++!!! error TS2304: Cannot find name 'c'.
++    

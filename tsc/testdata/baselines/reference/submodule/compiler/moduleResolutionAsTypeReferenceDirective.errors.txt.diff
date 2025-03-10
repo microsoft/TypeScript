@@ -1,0 +1,19 @@
+--- old.moduleResolutionAsTypeReferenceDirective.errors.txt
++++ new.moduleResolutionAsTypeReferenceDirective.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/a.ts(1,20): error TS2307: Cannot find module 'phaser' or its corresponding type declarations.
++
++
++==== /a.ts (1 errors) ====
++    import { a2 } from "phaser";
++                       ~~~~~~~~
++!!! error TS2307: Cannot find module 'phaser' or its corresponding type declarations.
++==== /typings/phaser/types/phaser.d.ts (0 errors) ====
++    export const a2: number;
++    
++==== /typings/phaser/package.json (0 errors) ====
++    { "name": "phaser", "version": "1.2.3", "types": "types/phaser.d.ts" }
++    
++    

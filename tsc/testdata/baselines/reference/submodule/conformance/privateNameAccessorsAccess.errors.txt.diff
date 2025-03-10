@@ -1,0 +1,38 @@
+--- old.privateNameAccessorsAccess.errors.txt
++++ new.privateNameAccessorsAccess.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++privateNameAccessorsAccess.ts(6,9): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+ privateNameAccessorsAccess.ts(14,10): error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.
+ privateNameAccessorsAccess.ts(17,14): error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.
+ privateNameAccessorsAccess.ts(22,18): error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.
+ 
+ 
+-==== privateNameAccessorsAccess.ts (3 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== privateNameAccessorsAccess.ts (4 errors) ====
+     class A2 {
+         get #prop() { return ""; }
+         set #prop(param: string) { }
+     
+         constructor() {
+             console.log(this.#prop);
++            ~~~~~~~
++!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+             let a: A2 = this;
+             a.#prop;
+             function  foo (){

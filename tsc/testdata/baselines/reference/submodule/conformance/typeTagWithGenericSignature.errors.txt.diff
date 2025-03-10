@@ -1,0 +1,19 @@
+--- old.typeTagWithGenericSignature.errors.txt
++++ new.typeTagWithGenericSignature.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++bug25618.js(2,16): error TS7006: Parameter 'param' implicitly has an 'any' type.
++
++
++==== bug25618.js (1 errors) ====
++    /** @type {<T>(param?: T) => T | undefined} */
++    function typed(param) {
++                   ~~~~~
++!!! error TS7006: Parameter 'param' implicitly has an 'any' type.
++        return param;
++    }
++    
++    var n = typed(1);
++    
++    

@@ -1,0 +1,25 @@
+--- old.pathMappingBasedModuleResolution2_classic.errors.txt
++++ new.pathMappingBasedModuleResolution2_classic.errors.txt
+@@= skipped -0, +-1 lines =@@
+-root/tsconfig.json(5,13): error TS5061: Pattern '*1*' can have at most one '*' character.
+-root/tsconfig.json(5,22): error TS5062: Substitution '*2*' in pattern '*1*' can have at most one '*' character.
+-
+-
+-==== root/tsconfig.json (2 errors) ====
+-    {
+-        "compilerOptions": {
+-            "baseUrl": "./src",
+-            "paths": {
+-                "*1*": [ "*2*" ]
+-                ~~~~~
+-!!! error TS5061: Pattern '*1*' can have at most one '*' character.
+-                         ~~~~~
+-!!! error TS5062: Substitution '*2*' in pattern '*1*' can have at most one '*' character.
+-            }
+-        }
+-    }
+-    
+-==== root/src/folder1/file1.ts (0 errors) ====
+-    export var x = 1;
+@@= skipped --1, +1 lines =@@
++<no content>

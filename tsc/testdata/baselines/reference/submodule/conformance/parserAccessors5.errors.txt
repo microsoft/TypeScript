@@ -1,0 +1,9 @@
+parserAccessors5.ts(2,13): error TS1183: An implementation cannot be declared in ambient contexts.
+
+
+==== parserAccessors5.ts (1 errors) ====
+    declare class C {
+      get foo() { return 0; }
+                ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+    }

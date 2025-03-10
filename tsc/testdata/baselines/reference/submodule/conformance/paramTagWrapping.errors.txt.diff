@@ -1,0 +1,57 @@
+--- old.paramTagWrapping.errors.txt
++++ new.paramTagWrapping.errors.txt
+@@= skipped -0, +0 lines =@@
+-bad.js(2,11): error TS1003: Identifier expected.
+-bad.js(5,4): error TS1003: Identifier expected.
+-bad.js(5,4): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+-bad.js(6,20): error TS1003: Identifier expected.
+-bad.js(6,20): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+ bad.js(9,14): error TS7006: Parameter 'x' implicitly has an 'any' type.
+ bad.js(9,17): error TS7006: Parameter 'y' implicitly has an 'any' type.
+ bad.js(9,20): error TS7006: Parameter 'z' implicitly has an 'any' type.
++good.js(9,15): error TS7006: Parameter 'x' implicitly has an 'any' type.
++good.js(9,18): error TS7006: Parameter 'y' implicitly has an 'any' type.
++good.js(9,21): error TS7006: Parameter 'z' implicitly has an 'any' type.
+ 
+ 
+-==== good.js (0 errors) ====
++==== good.js (3 errors) ====
+     /**
+      * @param
+      * {number} x Arg x.
+@@= skipped -17, +15 lines =@@
+      * Arg z.
+      */
+     function good(x, y, z) {
++                  ~
++!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
++                     ~
++!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
++                        ~
++!!! error TS7006: Parameter 'z' implicitly has an 'any' type.
+     }
+     
+     good(1, 2, 3)
+     
+     
+-==== bad.js (8 errors) ====
++==== bad.js (3 errors) ====
+     /**
+      * @param *
+-              
+-!!! error TS1003: Identifier expected.
+      * {number} x Arg x.
+      * @param {number}
+      * * y Arg y.
+-       
+-!!! error TS1003: Identifier expected.
+-       
+-!!! error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+      * @param {number} * z
+-                       
+-!!! error TS1003: Identifier expected.
+-                       
+-!!! error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+      * Arg z.
+      */
+     function bad(x, y, z) {

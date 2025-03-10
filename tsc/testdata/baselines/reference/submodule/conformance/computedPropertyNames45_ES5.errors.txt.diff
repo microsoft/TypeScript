@@ -1,0 +1,23 @@
+--- old.computedPropertyNames45_ES5.errors.txt
++++ new.computedPropertyNames45_ES5.errors.txt
+@@= skipped -0, +0 lines =@@
+-computedPropertyNames45_ES5.ts(10,5): error TS2411: Property '["get1"]' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
+-computedPropertyNames45_ES5.ts(11,9): error TS2411: Property '["set1"]' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
++computedPropertyNames45_ES5.ts(10,5): error TS2411: Property 'get1' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
++computedPropertyNames45_ES5.ts(11,9): error TS2411: Property 'set1' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
+ 
+ 
+ ==== computedPropertyNames45_ES5.ts (2 errors) ====
+@@= skipped -13, +13 lines =@@
+         // No error when the indexer is in a class more derived than the computed property
+         [s: string]: Foo2;
+         ~~~~~~~~~~~~~~~~~~
+-!!! error TS2411: Property '["get1"]' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
+-!!! related TS2728 computedPropertyNames45_ES5.ts:5:9: '["get1"]' is declared here.
++!!! error TS2411: Property 'get1' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
++!!! related TS2728 computedPropertyNames45_ES5.ts:5:9: 'get1' is declared here.
+         set ["set1"](p: Foo) { }
+             ~~~~~~~~
+-!!! error TS2411: Property '["set1"]' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
++!!! error TS2411: Property 'set1' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
+     }

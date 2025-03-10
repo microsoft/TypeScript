@@ -1,0 +1,31 @@
+--- old.conditionalTypeAssignabilityWhenDeferred.errors.txt
++++ new.conditionalTypeAssignabilityWhenDeferred.errors.txt
+@@= skipped -0, +0 lines =@@
+ conditionalTypeAssignabilityWhenDeferred.ts(28,20): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+ conditionalTypeAssignabilityWhenDeferred.ts(29,21): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+-conditionalTypeAssignabilityWhenDeferred.ts(39,3): error TS2322: Type '{ x: T; y: T; }' is not assignable to type 'T extends T ? { x: T; y: T; } : never'.
++conditionalTypeAssignabilityWhenDeferred.ts(39,3): error TS2322: Type '{ x: T; y: T; }' is not assignable to type ''.
+ conditionalTypeAssignabilityWhenDeferred.ts(46,3): error TS2322: Type 'string' is not assignable to type 'Foo<T>'.
+-conditionalTypeAssignabilityWhenDeferred.ts(63,9): error TS2322: Type '{ a: number; b: number; }' is not assignable to type '[T] extends [[infer U]] ? U : { b: number; }'.
++conditionalTypeAssignabilityWhenDeferred.ts(63,9): error TS2322: Type '{ a: number; b: number; }' is not assignable to type ''.
+ conditionalTypeAssignabilityWhenDeferred.ts(95,23): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Unwrap<this["prop"]>'.
+ conditionalTypeAssignabilityWhenDeferred.ts(106,3): error TS2322: Type 'Q' is not assignable to type 'InferBecauseWhyNot<Q>'.
+   Type '(arg: any) => any' is not assignable to type 'InferBecauseWhyNot<Q>'.
+@@= skipped -54, +54 lines =@@
+       t1 = t2; // OK
+       t2 = t1; // should fail
+       ~~
+-!!! error TS2322: Type '{ x: T; y: T; }' is not assignable to type 'T extends T ? { x: T; y: T; } : never'.
++!!! error TS2322: Type '{ x: T; y: T; }' is not assignable to type ''.
+     }
+     
+     type Foo<T> = T extends true ? string : "a";
+@@= skipped -28, +28 lines =@@
+       // Infer type parameters: no good
+       const o2: [T] extends [[infer U]] ? U : { b: number } = o;
+             ~~
+-!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type '[T] extends [[infer U]] ? U : { b: number; }'.
++!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type ''.
+     
+       // The next 4 are arguable - if you choose to ignore the `never` distribution case,
+       // then they're all good. The `never` case _is_ a bit of an outlier - we say distributive types

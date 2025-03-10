@@ -1,0 +1,47 @@
+conn.js(11,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+usage.js(10,14): error TS2339: Property 'connItem' does not exist on type 'Wrap'.
+usage.js(12,14): error TS2339: Property 'another' does not exist on type 'Wrap'.
+usage.js(16,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== conn.js (1 errors) ====
+    /**
+     * @typedef {string | number} Whatever
+     */
+    
+    class Conn {
+        constructor() {}
+        item = 3;
+        method() {}
+    }
+    
+    module.exports = Conn;
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+==== usage.js (3 errors) ====
+    /**
+     * @typedef {import("./conn")} Conn
+     */
+    
+    class Wrap {
+        /**
+         * @param {Conn} c
+         */
+        constructor(c) {
+            this.connItem = c.item;
+                 ~~~~~~~~
+!!! error TS2339: Property 'connItem' does not exist on type 'Wrap'.
+            /** @type {import("./conn").Whatever} */
+            this.another = "";
+                 ~~~~~~~
+!!! error TS2339: Property 'another' does not exist on type 'Wrap'.
+        }
+    }
+    
+    module.exports = {
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+        Wrap
+    };
+    

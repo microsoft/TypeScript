@@ -1,0 +1,43 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== externs.d.ts (0 errors) ====
+    declare namespace MyClass {
+        export interface Bar {
+            doer: (x: string) => void;
+        }
+    }
+    declare class MyClass {
+        field: string;
+        static Bar: (x: string, y?: number) => void;
+        constructor(x: MyClass.Bar);
+    }
+    declare global {
+        const Foo: typeof MyClass;
+    }
+    export = MyClass;
+==== index.js (0 errors) ====
+    /**
+     * @typedef {import("./externs")} Foo
+     */
+    
+    let a = /** @type {Foo} */(/** @type {*} */(undefined)); 
+    a = new Foo({doer: Foo.Bar});
+    const q = /** @type {import("./externs").Bar} */({ doer: q => q });
+    const r = /** @type {typeof import("./externs").Bar} */(r => r);
+    

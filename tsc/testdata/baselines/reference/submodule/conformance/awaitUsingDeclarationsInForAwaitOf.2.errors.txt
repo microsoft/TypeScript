@@ -1,0 +1,13 @@
+awaitUsingDeclarationsInForAwaitOf.2.ts(4,32): error TS2448: Block-scoped variable 'of' used before its declaration.
+
+
+==== awaitUsingDeclarationsInForAwaitOf.2.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/55555
+    
+    async function test() {
+      for await (await using of of of) {};
+                                   ~~
+!!! error TS2448: Block-scoped variable 'of' used before its declaration.
+!!! related TS2728 awaitUsingDeclarationsInForAwaitOf.2.ts:4:26: 'of' is declared here.
+    }
+    

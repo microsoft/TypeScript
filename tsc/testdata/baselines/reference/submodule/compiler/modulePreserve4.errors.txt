@@ -1,0 +1,177 @@
+/a.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/g.js(1,1): error TS2304: Cannot find name 'exports'.
+/main1.ts(1,13): error TS2305: Module '""/a.js""' has no exported member 'y'.
+/main1.ts(3,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/main1.ts(19,4): error TS2339: Property 'default' does not exist on type '() => void'.
+/main1.ts(29,16): error TS2306: File '/g.js' is not a module.
+/main1.ts(31,21): error TS2306: File '/g.js' is not a module.
+/main2.mts(1,13): error TS2305: Module '""/a.js""' has no exported member 'y'.
+/main2.mts(4,4): error TS2339: Property 'default' does not exist on type '{ readonly x: 0; }'.
+/main2.mts(5,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/main2.mts(19,16): error TS2306: File '/g.js' is not a module.
+/main2.mts(20,21): error TS2306: File '/g.js' is not a module.
+/main3.cjs(1,13): error TS2305: Module '""/a.js""' has no exported member 'y'.
+/main3.cjs(3,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/main3.cjs(6,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/main3.cjs(9,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/main3.cjs(11,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/main3.cjs(13,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/main3.cjs(15,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/main3.cjs(17,16): error TS2306: File '/g.js' is not a module.
+/main3.cjs(18,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/main4.cjs(1,1): error TS2304: Cannot find name 'exports'.
+/main4.cjs(1,13): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== /a.js (1 errors) ====
+    export const x = 0;
+    module.exports.y = 0; // Error
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+==== /b.ts (0 errors) ====
+    export default 0;
+    
+==== /c.ts (0 errors) ====
+    export = {
+      default: function() {}
+    };
+    
+==== /d.ts (0 errors) ====
+    export = function() {};
+    
+==== /e.mts (0 errors) ====
+    export = 0;
+    
+==== /f.cts (0 errors) ====
+    export default 0;
+    
+==== /g.js (1 errors) ====
+    exports.default = 0;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    
+==== /main1.ts (5 errors) ====
+    import { x, y } from "./a"; // No y
+                ~
+!!! error TS2305: Module '""/a.js""' has no exported member 'y'.
+    import a1 = require("./a"); // { x: 0 }
+    const a2 = require("./a"); // Error in TS
+               ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    const a3 = await import("./a"); // { x: 0 }
+    a3.x;
+    
+    import b1 from "./b"; // 0
+    import b2 = require("./b"); // { default: 0 }
+    b2.default;
+    const b3 = await import("./b"); // { default: 0 }
+    b3.default;
+    
+    import c1 from "./c"; // { default: [Function: default] }
+    import c2 = require("./c"); // { default: [Function: default] }
+    c2.default;
+    import d1 from "./d"; // [Function: default]
+    import d2 = require("./d"); // [Function: default]
+    d2();
+    d2.default(); // Error
+       ~~~~~~~
+!!! error TS2339: Property 'default' does not exist on type '() => void'.
+    const d3 = await import("./d"); // { default: [Function: default] }
+    d3.default();
+    
+    import e1 from "./e.mjs"; // 0
+    import e2 = require("./e.mjs"); // 0
+    import f1 from "./f.cjs"; // 0
+    import f2 = require("./f.cjs"); // { default: 0 }
+    f2.default;
+    
+    import g1 from "./g"; // { default: 0 }
+                   ~~~~~
+!!! error TS2306: File '/g.js' is not a module.
+    g1.default;
+    import g2 = require("./g"); // { default: 0 }
+                        ~~~~~
+!!! error TS2306: File '/g.js' is not a module.
+    g2.default;
+    
+==== /main2.mts (5 errors) ====
+    import { x, y } from "./a"; // No y
+                ~
+!!! error TS2305: Module '""/a.js""' has no exported member 'y'.
+    import a1 = require("./a"); // { x: 0 }
+    a1.x;
+    a1.default.x; // Arguably should exist but doesn't
+       ~~~~~~~
+!!! error TS2339: Property 'default' does not exist on type '{ readonly x: 0; }'.
+    const a2 = require("./a"); // Error in TS
+               ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+    import b1 from "./b"; // 0
+    import b2 = require("./b"); // { default: 0 }
+    
+    import c1 from "./c"; // { default: [Function: default] }
+    import c2 = require("./c"); // { default: [Function: default] }
+    import d1 from "./d"; // [Function: default]
+    import d2 = require("./d"); // [Function: default]
+    import e1 from "./e.mjs"; // 0
+    import e2 = require("./e.mjs"); // 0
+    import f1 from "./f.cjs"; // 0
+    import f2 = require("./f.cjs"); // { default: 0 }
+    
+    import g1 from "./g"; // { default: 0 }
+                   ~~~~~
+!!! error TS2306: File '/g.js' is not a module.
+    import g2 = require("./g"); // { default: 0 }
+                        ~~~~~
+!!! error TS2306: File '/g.js' is not a module.
+    
+==== /main3.cjs (9 errors) ====
+    import { x, y } from "./a"; // No y
+                ~
+!!! error TS2305: Module '""/a.js""' has no exported member 'y'.
+    import a1 = require("./a"); // Error in JS
+    const a2 = require("./a"); // { x: 0 }
+               ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+    import b1 from "./b"; // 0
+    const b2 = require("./b"); // { default: 0 }
+               ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+    import c1 from "./c"; // { default: [Function: default] }
+    const c2 = require("./c"); // { default: [Function: default] }
+               ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    import d1 from "./d"; // [Function: default]
+    const d2 = require("./d"); // [Function: default]
+               ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    import e1 from "./e.mjs"; // 0
+    const e2 = require("./e.mjs"); // 0
+               ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    import f1 from "./f.cjs"; // 0
+    const f2 = require("./f.cjs"); // { default: 0 }
+               ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+    import g1 from "./g"; // { default: 0 }
+                   ~~~~~
+!!! error TS2306: File '/g.js' is not a module.
+    const g2 = require("./g"); // { default: 0 }
+               ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+==== /main4.cjs (2 errors) ====
+    exports.x = require("./g");
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+                ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+==== /dummy.ts (0 errors) ====
+    export {}; // Silly test harness
+    

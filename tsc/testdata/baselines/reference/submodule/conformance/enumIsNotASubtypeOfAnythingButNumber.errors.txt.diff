@@ -1,0 +1,182 @@
+--- old.enumIsNotASubtypeOfAnythingButNumber.errors.txt
++++ new.enumIsNotASubtypeOfAnythingButNumber.errors.txt
+@@= skipped -0, +0 lines =@@
+-enumIsNotASubtypeOfAnythingButNumber.ts(18,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'string'.
+-enumIsNotASubtypeOfAnythingButNumber.ts(24,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'boolean'.
+-enumIsNotASubtypeOfAnythingButNumber.ts(30,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'Date'.
+-enumIsNotASubtypeOfAnythingButNumber.ts(36,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'RegExp'.
+-enumIsNotASubtypeOfAnythingButNumber.ts(42,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type '{ bar: number; }'.
+-enumIsNotASubtypeOfAnythingButNumber.ts(48,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'number[]'.
+-enumIsNotASubtypeOfAnythingButNumber.ts(54,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'I8'.
+-enumIsNotASubtypeOfAnythingButNumber.ts(60,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'A'.
+-enumIsNotASubtypeOfAnythingButNumber.ts(66,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'A2<number>'.
+-enumIsNotASubtypeOfAnythingButNumber.ts(72,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type '(x: any) => number'.
+-enumIsNotASubtypeOfAnythingButNumber.ts(78,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type '<T>(x: T) => T'.
+-enumIsNotASubtypeOfAnythingButNumber.ts(85,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'E2'.
+-enumIsNotASubtypeOfAnythingButNumber.ts(95,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'typeof f'.
+-enumIsNotASubtypeOfAnythingButNumber.ts(105,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'typeof c'.
+-enumIsNotASubtypeOfAnythingButNumber.ts(111,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'T'.
+-enumIsNotASubtypeOfAnythingButNumber.ts(117,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'U'.
++enumIsNotASubtypeOfAnythingButNumber.ts(18,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'string'.
++enumIsNotASubtypeOfAnythingButNumber.ts(24,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'boolean'.
++enumIsNotASubtypeOfAnythingButNumber.ts(30,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'Date'.
++enumIsNotASubtypeOfAnythingButNumber.ts(36,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'RegExp'.
++enumIsNotASubtypeOfAnythingButNumber.ts(42,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type '{ bar: number; }'.
++enumIsNotASubtypeOfAnythingButNumber.ts(48,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'number[]'.
++enumIsNotASubtypeOfAnythingButNumber.ts(54,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'I8'.
++enumIsNotASubtypeOfAnythingButNumber.ts(60,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'A'.
++enumIsNotASubtypeOfAnythingButNumber.ts(66,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'A2<number>'.
++enumIsNotASubtypeOfAnythingButNumber.ts(72,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type '(x: any) => number'.
++enumIsNotASubtypeOfAnythingButNumber.ts(78,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type '<T>(x: T) => T'.
++enumIsNotASubtypeOfAnythingButNumber.ts(85,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'E2.A'.
++enumIsNotASubtypeOfAnythingButNumber.ts(95,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type '{ (): void; bar: number; }'.
++enumIsNotASubtypeOfAnythingButNumber.ts(105,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type '{ new(): c; bar: number; prototype: c; }'.
++enumIsNotASubtypeOfAnythingButNumber.ts(111,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'T'.
++enumIsNotASubtypeOfAnythingButNumber.ts(117,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'U'.
+ 
+ 
+ ==== enumIsNotASubtypeOfAnythingButNumber.ts (16 errors) ====
+@@= skipped -35, +35 lines =@@
+         [x: string]: string;
+         foo: E;
+         ~~~
+-!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'string'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'string'.
+     }
+     
+     
+@@= skipped -8, +8 lines =@@
+         [x: string]: boolean;
+         foo: E;
+         ~~~
+-!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'boolean'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'boolean'.
+     }
+     
+     
+@@= skipped -8, +8 lines =@@
+         [x: string]: Date;
+         foo: E;
+         ~~~
+-!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'Date'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'Date'.
+     }
+     
+     
+@@= skipped -8, +8 lines =@@
+         [x: string]: RegExp;
+         foo: E;
+         ~~~
+-!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'RegExp'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'RegExp'.
+     }
+     
+     
+@@= skipped -8, +8 lines =@@
+         [x: string]: { bar: number };
+         foo: E;
+         ~~~
+-!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type '{ bar: number; }'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type '{ bar: number; }'.
+     }
+     
+     
+@@= skipped -8, +8 lines =@@
+         [x: string]: number[];
+         foo: E;
+         ~~~
+-!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'number[]'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'number[]'.
+     }
+     
+     
+@@= skipped -8, +8 lines =@@
+         [x: string]: I8;
+         foo: E;
+         ~~~
+-!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'I8'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'I8'.
+     }
+     
+     class A { foo: number; }
+@@= skipped -8, +8 lines =@@
+         [x: string]: A;
+         foo: E;
+         ~~~
+-!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'A'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'A'.
+     }
+     
+     class A2<T> { foo: T; }
+@@= skipped -8, +8 lines =@@
+         [x: string]: A2<number>;
+         foo: E;
+         ~~~
+-!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'A2<number>'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'A2<number>'.
+     }
+     
+     
+@@= skipped -8, +8 lines =@@
+         [x: string]: (x) => number;
+         foo: E;
+         ~~~
+-!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type '(x: any) => number'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type '(x: any) => number'.
+     }
+     
+     
+@@= skipped -8, +8 lines =@@
+         [x: string]: <T>(x: T) => T;
+         foo: E;
+         ~~~
+-!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type '<T>(x: T) => T'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type '<T>(x: T) => T'.
+     }
+     
+     
+@@= skipped -9, +9 lines =@@
+         [x: string]: E2;
+         foo: E;
+         ~~~
+-!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'E2'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'E2.A'.
+     }
+     
+     
+@@= skipped -12, +12 lines =@@
+         [x: string]: typeof f;
+         foo: E;
+         ~~~
+-!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'typeof f'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type '{ (): void; bar: number; }'.
+     }
+     
+     
+@@= skipped -12, +12 lines =@@
+         [x: string]: typeof c;
+         foo: E;
+         ~~~
+-!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'typeof c'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type '{ new(): c; bar: number; prototype: c; }'.
+     }
+     
+     
+@@= skipped -8, +8 lines =@@
+         [x: string]: T;
+         foo: E;
+         ~~~
+-!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'T'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'T'.
+     }
+     
+     
+@@= skipped -8, +8 lines =@@
+         [x: string]: U;
+         foo: E;
+         ~~~
+-!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'U'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'U'.
+     }
+     
+     

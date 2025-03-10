@@ -1,0 +1,22 @@
+assignmentStricterConstraints.ts(7,1): error TS2719: Type '<T, S>(x: T, y: S) => void' is not assignable to type '<T, S>(x: T, y: S) => void'. Two different types with this name exist, but they are unrelated.
+  Types of parameters 'y' and 'y' are incompatible.
+    Type 'S' is not assignable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'S'.
+
+
+==== assignmentStricterConstraints.ts (1 errors) ====
+    var f = function <T, S extends T>(x: T, y: S): void {
+        x = y
+    }
+    
+    var g = function <T, S>(x: T, y: S): void { }
+    
+    g = f
+    ~
+!!! error TS2719: Type '<T, S>(x: T, y: S) => void' is not assignable to type '<T, S>(x: T, y: S) => void'. Two different types with this name exist, but they are unrelated.
+!!! error TS2719:   Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2719:     Type 'S' is not assignable to type 'T'.
+!!! error TS2719:       'T' could be instantiated with an arbitrary type which could be unrelated to 'S'.
+!!! related TS2208 assignmentStricterConstraints.ts:5:22: This type parameter might need an `extends T` constraint.
+    g(1, "")
+    

@@ -1,0 +1,29 @@
+--- old.templateStringInModuleNameES6.errors.txt
++++ new.templateStringInModuleNameES6.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ templateStringInModuleNameES6.ts(1,1): error TS2304: Cannot find name 'declare'.
+ templateStringInModuleNameES6.ts(1,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ templateStringInModuleNameES6.ts(1,16): error TS1443: Module declaration names may only use ' or " quoted strings.
+@@= skipped -5, +13 lines =@@
+ templateStringInModuleNameES6.ts(4,16): error TS1443: Module declaration names may only use ' or " quoted strings.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== templateStringInModuleNameES6.ts (6 errors) ====
+     declare module `M1` {
+     ~~~~~~~

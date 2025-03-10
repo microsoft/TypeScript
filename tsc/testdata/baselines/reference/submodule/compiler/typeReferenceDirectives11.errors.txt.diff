@@ -1,0 +1,17 @@
+--- old.typeReferenceDirectives11.errors.txt
++++ new.typeReferenceDirectives11.errors.txt
+@@= skipped -0, +0 lines =@@
+-/mod1.ts(1,17): error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
++/mod1.ts(1,24): error TS2304: Cannot find name 'Lib'.
+ 
+ 
+ ==== /mod2.ts (0 errors) ====
+@@= skipped -9, +9 lines =@@
+     
+ ==== /mod1.ts (1 errors) ====
+     export function foo(): Lib { return {x: 1} }
+-                    ~~~
+-!!! error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
++                           ~~~
++!!! error TS2304: Cannot find name 'Lib'.
+     

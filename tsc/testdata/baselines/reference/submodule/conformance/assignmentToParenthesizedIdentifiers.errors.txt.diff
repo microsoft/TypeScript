@@ -1,0 +1,21 @@
+--- old.assignmentToParenthesizedIdentifiers.errors.txt
++++ new.assignmentToParenthesizedIdentifiers.errors.txt
+@@= skipped -73, +73 lines =@@
+     M2.M3 = { x: '' }; // Error
+               ~
+ !!! error TS2322: Type 'string' is not assignable to type 'number'.
+-!!! related TS6500 assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type 'typeof M3'
++!!! related TS6500 assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type '{ x: number; }'
+     (M2).M3 = { x: '' }; // Error
+                 ~
+ !!! error TS2322: Type 'string' is not assignable to type 'number'.
+-!!! related TS6500 assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type 'typeof M3'
++!!! related TS6500 assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type '{ x: number; }'
+     (M2.M3) = { x: '' }; // Error
+                 ~
+ !!! error TS2322: Type 'string' is not assignable to type 'number'.
+-!!! related TS6500 assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type 'typeof M3'
++!!! related TS6500 assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type '{ x: number; }'
+     
+     
+     function fn() { }

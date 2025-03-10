@@ -1,0 +1,13 @@
+/a.js(4,16): error TS2339: Property 'cause' does not exist on type '{}'.
+
+
+==== /a.js (1 errors) ====
+    /** 
+    * @param {{ cause?: string }} [options] 
+    */ 
+    function foo({ cause } = {}) {
+                   ~~~~~
+!!! error TS2339: Property 'cause' does not exist on type '{}'.
+        return cause;
+    }
+    

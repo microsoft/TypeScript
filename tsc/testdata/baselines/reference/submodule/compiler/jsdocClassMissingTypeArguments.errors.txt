@@ -1,0 +1,12 @@
+/a.js(5,12): error TS7006: Parameter 'p' implicitly has an 'any' type.
+
+
+==== /a.js (1 errors) ====
+    /** @template T */
+    class C {}
+    
+    /** @param {C} p */
+    function f(p) {}
+               ~
+!!! error TS7006: Parameter 'p' implicitly has an 'any' type.
+    

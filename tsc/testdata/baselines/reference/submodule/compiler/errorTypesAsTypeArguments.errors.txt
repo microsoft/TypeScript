@@ -1,0 +1,12 @@
+errorTypesAsTypeArguments.ts(2,16): error TS2304: Cannot find name 'B'.
+errorTypesAsTypeArguments.ts(2,25): error TS2304: Cannot find name 'C'.
+
+
+==== errorTypesAsTypeArguments.ts (2 errors) ====
+    interface Foo<A> {
+      bar(baz: Foo<B>): Foo<C>;
+                   ~
+!!! error TS2304: Cannot find name 'B'.
+                            ~
+!!! error TS2304: Cannot find name 'C'.
+    }

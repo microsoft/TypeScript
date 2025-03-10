@@ -1,0 +1,31 @@
+testA.ts(1,50): error TS2307: Cannot find module 'a.foo' or its corresponding type declarations.
+testA.ts(2,16): error TS2664: Invalid module name in augmentation, module 'a.foo' cannot be found.
+testB.ts(1,50): error TS2307: Cannot find module 'b.foo' or its corresponding type declarations.
+testB.ts(2,16): error TS2664: Invalid module name in augmentation, module 'a.foo' cannot be found.
+
+
+==== types.ts (0 errors) ====
+    declare module "*.foo" {
+      let everywhere: string;
+    }
+    
+    
+==== testA.ts (2 errors) ====
+    import { everywhere, onlyInA, alsoOnlyInA } from "a.foo";
+                                                     ~~~~~~~
+!!! error TS2307: Cannot find module 'a.foo' or its corresponding type declarations.
+    declare module "a.foo" {
+                   ~~~~~~~
+!!! error TS2664: Invalid module name in augmentation, module 'a.foo' cannot be found.
+      let onlyInA: number;
+    }
+    
+==== testB.ts (2 errors) ====
+    import { everywhere, onlyInA, alsoOnlyInA } from "b.foo"; // Error
+                                                     ~~~~~~~
+!!! error TS2307: Cannot find module 'b.foo' or its corresponding type declarations.
+    declare module "a.foo" {
+                   ~~~~~~~
+!!! error TS2664: Invalid module name in augmentation, module 'a.foo' cannot be found.
+      let alsoOnlyInA: number;
+    }

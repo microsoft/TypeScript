@@ -1,0 +1,15 @@
+--- old.asyncArrowFunction5_es2017.errors.txt
++++ new.asyncArrowFunction5_es2017.errors.txt
+@@= skipped -0, +0 lines =@@
+ asyncArrowFunction5_es2017.ts(1,18): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
++asyncArrowFunction5_es2017.ts(1,18): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+ 
+ 
+-==== asyncArrowFunction5_es2017.ts (1 errors) ====
++==== asyncArrowFunction5_es2017.ts (2 errors) ====
+     var foo = async (await): Promise<void> => {
+                      ~~~~~
+ !!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
++                     ~~~~~
++!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+     }

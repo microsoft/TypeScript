@@ -1,0 +1,73 @@
+typeAssignabilityErrorMessage.ts(14,5): error TS2739: Type 'ThroughStream' is missing the following properties from type 'ReadStream': f, g, h, i, j
+typeAssignabilityErrorMessage.ts(17,5): error TS2739: Type 'ThroughStream' is missing the following properties from type 'ReadStream': f, g, h, i, j
+typeAssignabilityErrorMessage.ts(40,5): error TS2322: Type 'Foo<string>' is not assignable to type 'Bar<number>'.
+  Type 'Foo<string>' is not assignable to type '{ foo: { what: number; }; }'.
+    The types of 'foo.what' are incompatible between these types.
+      Type 'string' is not assignable to type 'number'.
+typeAssignabilityErrorMessage.ts(42,5): error TS2345: Argument of type 'OtherWrap' is not assignable to parameter of type 'Wrap'.
+  Types of property 'someProp' are incompatible.
+    Type 'Foo<string>' is not assignable to type 'Bar<number>'.
+      Type 'Foo<string>' is not assignable to type '{ foo: { what: number; }; }'.
+        The types of 'foo.what' are incompatible between these types.
+          Type 'string' is not assignable to type 'number'.
+
+
+==== typeAssignabilityErrorMessage.ts (4 errors) ====
+    // Example: different error code altogether
+    
+    interface ThroughStream {
+        a: string;
+    }
+    interface ReadStream {
+        f: string;
+        g: number;
+        h: boolean;
+        i: BigInt;
+        j: symbol;
+    }
+    function foo(): ReadStream {
+        return undefined as any as ThroughStream;
+        ~~~~~~
+!!! error TS2739: Type 'ThroughStream' is missing the following properties from type 'ReadStream': f, g, h, i, j
+    }
+    function bar(): ReadStream {
+        return undefined as any as ThroughStream;
+        ~~~~~~
+!!! error TS2739: Type 'ThroughStream' is missing the following properties from type 'ReadStream': f, g, h, i, j
+    }
+    
+    // Example: different elaboration
+    
+    type Wrap = {
+        someProp: Bar<number>;
+    }
+    type OtherWrap = {
+        someProp: Foo<string>;
+    }
+    type Foo<T> = {
+        foo: { what: T };
+    }
+    type Bar<T> = {
+        foo: { what: T };
+    } | boolean;
+    
+    function fun(param: Wrap): void {}
+    
+    declare let fooStr: Foo<string>;
+    declare let otherWrap: OtherWrap;
+    
+    let a: Bar<number> = fooStr;
+        ~
+!!! error TS2322: Type 'Foo<string>' is not assignable to type 'Bar<number>'.
+!!! error TS2322:   Type 'Foo<string>' is not assignable to type '{ foo: { what: number; }; }'.
+!!! error TS2322:     The types of 'foo.what' are incompatible between these types.
+!!! error TS2322:       Type 'string' is not assignable to type 'number'.
+    
+    fun(otherWrap);
+        ~~~~~~~~~
+!!! error TS2345: Argument of type 'OtherWrap' is not assignable to parameter of type 'Wrap'.
+!!! error TS2345:   Types of property 'someProp' are incompatible.
+!!! error TS2345:     Type 'Foo<string>' is not assignable to type 'Bar<number>'.
+!!! error TS2345:       Type 'Foo<string>' is not assignable to type '{ foo: { what: number; }; }'.
+!!! error TS2345:         The types of 'foo.what' are incompatible between these types.
+!!! error TS2345:           Type 'string' is not assignable to type 'number'.

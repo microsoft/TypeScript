@@ -1,0 +1,130 @@
+main.js(19,21): error TS2314: Generic type 'C0<T>' requires 1 type argument(s).
+main.js(20,21): error TS2314: Generic type 'C0<T>' requires 1 type argument(s).
+main.js(25,21): error TS2314: Generic type 'C0<T>' requires 1 type argument(s).
+main.js(31,22): error TS2351: This expression is not constructable.
+  Type '{ prototype: C0_B0; }' has no construct signatures.
+main.js(34,22): error TS2351: This expression is not constructable.
+  Type '{ prototype: C0_B0; }' has no construct signatures.
+main.js(38,29): error TS2339: Property 'y' does not exist on type 'C0_B1'.
+main.js(41,29): error TS2339: Property 'y' does not exist on type 'C0_B2'.
+main.js(43,21): error TS2707: Generic type 'C1<T, U>' requires between 1 and 2 type arguments.
+main.js(44,21): error TS2707: Generic type 'C1<T, U>' requires between 1 and 2 type arguments.
+main.js(49,21): error TS2707: Generic type 'C1<T, U>' requires between 1 and 2 type arguments.
+main.js(55,22): error TS2351: This expression is not constructable.
+  Type '{ prototype: C1_B0; }' has no construct signatures.
+main.js(58,22): error TS2351: This expression is not constructable.
+  Type '{ prototype: C1_B0; }' has no construct signatures.
+main.js(62,29): error TS2339: Property 'y' does not exist on type 'C1_B1'.
+main.js(65,29): error TS2339: Property 'y' does not exist on type 'C1_B2'.
+
+
+==== decls.d.ts (0 errors) ====
+    declare function f0<T>(x?: T): T;
+    declare function f1<T, U = number>(x?: T): [T, U];
+    declare class C0<T> {
+        y: T;
+        constructor(x?: T);
+    }
+    declare class C1<T, U = number> {
+        y: [T, U];
+        constructor(x?: T);
+    }
+==== main.js (14 errors) ====
+    const f0_v0 = f0();
+    const f0_v1 = f0(1);
+    
+    const f1_c0 = f1();
+    const f1_c1 = f1(1);
+    
+    const C0_v0 = new C0();
+    const C0_v0_y = C0_v0.y;
+    
+    const C0_v1 = new C0(1);
+    const C0_v1_y = C0_v1.y;
+    
+    const C1_v0 = new C1();
+    const C1_v0_y = C1_v0.y;
+    
+    const C1_v1 = new C1(1);
+    const C1_v1_y = C1_v1.y;
+    
+    class C0_B0 extends C0 {}
+                        ~~
+!!! error TS2314: Generic type 'C0<T>' requires 1 type argument(s).
+    class C0_B1 extends C0 {
+                        ~~
+!!! error TS2314: Generic type 'C0<T>' requires 1 type argument(s).
+        constructor() {
+            super();
+        }
+    }
+    class C0_B2 extends C0 {
+                        ~~
+!!! error TS2314: Generic type 'C0<T>' requires 1 type argument(s).
+        constructor() {
+            super(1);
+        }
+    }
+    
+    const C0_B0_v0 = new C0_B0();
+                         ~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type '{ prototype: C0_B0; }' has no construct signatures.
+    const C0_B0_v0_y = C0_B0_v0.y;
+    
+    const C0_B0_v1 = new C0_B0(1);
+                         ~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type '{ prototype: C0_B0; }' has no construct signatures.
+    const C0_B0_v1_y = C0_B0_v1.y;
+    
+    const C0_B1_v0 = new C0_B1();
+    const C0_B1_v0_y = C0_B1_v0.y;
+                                ~
+!!! error TS2339: Property 'y' does not exist on type 'C0_B1'.
+    
+    const C0_B2_v0 = new C0_B2();
+    const C0_B2_v0_y = C0_B2_v0.y;
+                                ~
+!!! error TS2339: Property 'y' does not exist on type 'C0_B2'.
+    
+    class C1_B0 extends C1 {}
+                        ~~
+!!! error TS2707: Generic type 'C1<T, U>' requires between 1 and 2 type arguments.
+    class C1_B1 extends C1 {
+                        ~~
+!!! error TS2707: Generic type 'C1<T, U>' requires between 1 and 2 type arguments.
+        constructor() {
+            super();
+        }
+    }
+    class C1_B2 extends C1 {
+                        ~~
+!!! error TS2707: Generic type 'C1<T, U>' requires between 1 and 2 type arguments.
+        constructor() {
+            super(1);
+        }
+    }
+    
+    const C1_B0_v0 = new C1_B0();
+                         ~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type '{ prototype: C1_B0; }' has no construct signatures.
+    const C1_B0_v0_y = C1_B0_v0.y;
+    
+    const C1_B0_v1 = new C1_B0(1);
+                         ~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type '{ prototype: C1_B0; }' has no construct signatures.
+    const C1_B0_v1_y = C1_B0_v1.y;
+    
+    const C1_B1_v0 = new C1_B1();
+    const C1_B1_v0_y = C1_B1_v0.y;
+                                ~
+!!! error TS2339: Property 'y' does not exist on type 'C1_B1'.
+    
+    const C1_B2_v0 = new C1_B2();
+    const C1_B2_v0_y = C1_B2_v0.y;
+                                ~
+!!! error TS2339: Property 'y' does not exist on type 'C1_B2'.
+    

@@ -1,0 +1,23 @@
+--- old.jsdocPropertyTagInvalid.errors.txt
++++ new.jsdocPropertyTagInvalid.errors.txt
+@@= skipped -0, +-1 lines =@@
+-/a.js(3,15): error TS2552: Cannot find name 'sting'. Did you mean 'string'?
+-
+-
+-==== /a.js (1 errors) ====
+-    /**
+-     * @typedef MyType
+-     * @property {sting} [x]
+-                  ~~~~~
+-!!! error TS2552: Cannot find name 'sting'. Did you mean 'string'?
+-     */
+-    
+-    /** @param {MyType} p  */
+-    export function f(p) { }
+-    
+-==== /b.js (0 errors) ====
+-    import { f } from "./a.js"
+-    f({ x: 42 })
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

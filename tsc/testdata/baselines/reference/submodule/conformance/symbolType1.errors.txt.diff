@@ -1,0 +1,60 @@
+--- old.symbolType1.errors.txt
++++ new.symbolType1.errors.txt
+@@= skipped -0, +0 lines =@@
+-symbolType1.ts(1,1): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+-symbolType1.ts(2,19): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
+-symbolType1.ts(4,19): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++symbolType1.ts(1,1): error TS2304: Cannot find name 'Symbol'.
++symbolType1.ts(1,21): error TS2304: Cannot find name 'Symbol'.
++symbolType1.ts(2,1): error TS2304: Cannot find name 'Symbol'.
++symbolType1.ts(2,19): error TS2304: Cannot find name 'Symbol'.
++symbolType1.ts(3,2): error TS2304: Cannot find name 'Symbol'.
++symbolType1.ts(3,29): error TS2304: Cannot find name 'Object'.
++symbolType1.ts(4,1): error TS2304: Cannot find name 'Symbol'.
++symbolType1.ts(4,20): error TS2304: Cannot find name 'Symbol'.
+ 
+ 
+-==== symbolType1.ts (3 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== symbolType1.ts (8 errors) ====
+     Symbol() instanceof Symbol;
+-    ~~~~~~~~
+-!!! error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
++    ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
++                        ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
+     Symbol instanceof Symbol();
+-                      ~~~~~~~~
+-!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
++    ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
++                      ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
+     (Symbol() || {}) instanceof Object; // This one should be okay, it's a valid way of distinguishing types
++     ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
++                                ~~~~~~
++!!! error TS2304: Cannot find name 'Object'.
+     Symbol instanceof (Symbol() || {});
+-                      ~~~~~~~~~~~~~~~~
+-!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
++    ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
++                       ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.

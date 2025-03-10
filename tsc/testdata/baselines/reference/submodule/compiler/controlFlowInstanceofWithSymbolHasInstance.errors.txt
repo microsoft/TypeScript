@@ -1,0 +1,204 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+controlFlowInstanceofWithSymbolHasInstance.ts(2,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+controlFlowInstanceofWithSymbolHasInstance.ts(2,6): error TS2304: Cannot find name 'Symbol'.
+controlFlowInstanceofWithSymbolHasInstance.ts(2,48): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+controlFlowInstanceofWithSymbolHasInstance.ts(6,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+controlFlowInstanceofWithSymbolHasInstance.ts(6,6): error TS2304: Cannot find name 'Symbol'.
+controlFlowInstanceofWithSymbolHasInstance.ts(6,48): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+controlFlowInstanceofWithSymbolHasInstance.ts(9,16): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+controlFlowInstanceofWithSymbolHasInstance.ts(9,30): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+controlFlowInstanceofWithSymbolHasInstance.ts(10,13): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+controlFlowInstanceofWithSymbolHasInstance.ts(12,22): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+controlFlowInstanceofWithSymbolHasInstance.ts(19,16): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+controlFlowInstanceofWithSymbolHasInstance.ts(19,30): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+controlFlowInstanceofWithSymbolHasInstance.ts(20,13): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+controlFlowInstanceofWithSymbolHasInstance.ts(22,22): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+controlFlowInstanceofWithSymbolHasInstance.ts(29,16): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+controlFlowInstanceofWithSymbolHasInstance.ts(29,30): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+controlFlowInstanceofWithSymbolHasInstance.ts(31,22): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+controlFlowInstanceofWithSymbolHasInstance.ts(39,16): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+controlFlowInstanceofWithSymbolHasInstance.ts(39,30): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+controlFlowInstanceofWithSymbolHasInstance.ts(40,13): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+controlFlowInstanceofWithSymbolHasInstance.ts(42,22): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+controlFlowInstanceofWithSymbolHasInstance.ts(54,13): error TS2304: Cannot find name 'Symbol'.
+controlFlowInstanceofWithSymbolHasInstance.ts(58,16): error TS2304: Cannot find name 'Function'.
+controlFlowInstanceofWithSymbolHasInstance.ts(58,35): error TS2304: Cannot find name 'Symbol'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== controlFlowInstanceofWithSymbolHasInstance.ts (24 errors) ====
+    interface PromiseConstructor {
+        [Symbol.hasInstance](value: any): value is Promise<any>;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+                                                   ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    }
+    
+    interface SetConstructor {
+        [Symbol.hasInstance](value: any): value is Set<any>;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+                                                   ~~~
+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    }
+    
+    function f1(s: Set<string> | Set<number>) {
+                   ~~~
+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+                                 ~~~
+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+        s = new Set<number>();
+                ~~~
+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+        s;  // Set<number>
+        if (s instanceof Set) {
+                         ~~~
+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+            s;  // Set<number>
+        }
+        s;  // Set<number>
+        s.add(42);
+    }
+    
+    function f2(s: Set<string> | Set<number>) {
+                   ~~~
+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+                                 ~~~
+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+        s = new Set<number>();
+                ~~~
+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+        s;  // Set<number>
+        if (s instanceof Promise) {
+                         ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+            s;  // Set<number> & Promise<any>
+        }
+        s;  // Set<number>
+        s.add(42);
+    }
+    
+    function f3(s: Set<string> | Set<number>) {
+                   ~~~
+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+                                 ~~~
+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+        s;  // Set<string> | Set<number>
+        if (s instanceof Set) {
+                         ~~~
+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+            s;  // Set<string> | Set<number>
+        }
+        else {
+            s;  // never
+        }
+    }
+    
+    function f4(s: Set<string> | Set<number>) {
+                   ~~~
+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+                                 ~~~
+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+        s = new Set<number>();
+                ~~~
+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+        s;  // Set<number>
+        if (s instanceof Set) {
+                         ~~~
+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+            s;  // Set<number>
+        }
+        else {
+            s;  // never
+        }
+    }
+    
+    // More tests
+    
+    class A {
+        a: string;
+        static [Symbol.hasInstance]<T>(this: T, value: unknown): value is (
+                ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+            T extends (abstract new (...args: any) => infer U) ? U :
+            never
+        ) {
+            return Function.prototype[Symbol.hasInstance].call(this, value);
+                   ~~~~~~~~
+!!! error TS2304: Cannot find name 'Function'.
+                                      ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        }
+    }
+    class B extends A { b: string }
+    class C extends A { c: string }
+    
+    function foo(x: A | undefined) {
+        x;  // A | undefined
+        if (x instanceof B || x instanceof C) {
+            x;  // B | C
+        }
+        x;  // A | undefined
+        if (x instanceof B && x instanceof C) {
+            x;  // B & C
+        }
+        x;  // A | undefined
+        if (!x) {
+            return;
+        }
+        x;  // A
+        if (x instanceof B) {
+            x;  // B
+            if (x instanceof C) {
+                x;  // B & C
+            }
+            else {
+                x;  // B
+            }
+            x;  // B
+        }
+        else {
+            x;  // A
+        }
+        x;  // A
+    }
+    
+    // X is neither assignable to Y nor a subtype of Y
+    // Y is assignable to X, but not a subtype of X
+    
+    interface X {
+        x?: string;
+    }
+    
+    class Y {
+        y: string;
+    }
+    
+    function goo(x: X) {
+        x;
+        if (x instanceof Y) {
+            x.y;
+        }
+        x;
+    }
+    
+    

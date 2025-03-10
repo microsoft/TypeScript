@@ -1,0 +1,21 @@
+/test.js(3,9): error TS2322: Type '{}' is not assignable to type 'string'.
+/test.js(9,19): error TS2339: Property 'foo' does not exist on type 'string'.
+
+
+==== /test.js (2 errors) ====
+    class Foo {
+        constructor() {
+            this.prop = {};
+            ~~~~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'string'.
+        }
+    
+        declare prop: string;
+    
+        method() {
+            this.prop.foo
+                      ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'string'.
+        }
+    }
+    

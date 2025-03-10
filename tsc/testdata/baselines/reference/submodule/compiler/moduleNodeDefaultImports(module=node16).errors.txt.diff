@@ -1,0 +1,71 @@
+--- old.moduleNodeDefaultImports(module=node16).errors.txt
++++ new.moduleNodeDefaultImports(module=node16).errors.txt
+@@= skipped -0, +0 lines =@@
+-b.mts(15,1): error TS2349: This expression is not callable.
+-  Type 'typeof import("mod")' has no call signatures.
+-b.mts(16,1): error TS2349: This expression is not callable.
+-  Type 'typeof import("mod")' has no call signatures.
+-b.mts(17,1): error TS2349: This expression is not callable.
+-  Type 'typeof import("mod")' has no call signatures.
+-b.mts(18,1): error TS2349: This expression is not callable.
+-  Type 'typeof import("mod")' has no call signatures.
+-b.mts(19,6): error TS2349: This expression is not callable.
+-  Type 'typeof import("mod")' has no call signatures.
+-b.mts(20,6): error TS2349: This expression is not callable.
+-  Type 'typeof import("mod")' has no call signatures.
++b.mts(23,3): error TS2339: Property 'default' does not exist on type '() => void'.
++b.mts(24,3): error TS2339: Property 'default' does not exist on type '() => void'.
++b.mts(25,3): error TS2339: Property 'default' does not exist on type '() => void'.
++b.mts(26,3): error TS2339: Property 'default' does not exist on type '() => void'.
++b.mts(27,14): error TS2339: Property 'default' does not exist on type '() => void'.
++b.mts(28,10): error TS2339: Property 'default' does not exist on type '() => void'.
+ 
+ 
+ ==== mod.cts (0 errors) ====
+@@= skipped -30, +24 lines =@@
+     
+     // should all fail
+     a();
+-    ~
+-!!! error TS2349: This expression is not callable.
+-!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
+     b();
+-    ~
+-!!! error TS2349: This expression is not callable.
+-!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
+     c();
+-    ~
+-!!! error TS2349: This expression is not callable.
+-!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
+     d();
+-    ~
+-!!! error TS2349: This expression is not callable.
+-!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
+     self.default();
+-         ~~~~~~~
+-!!! error TS2349: This expression is not callable.
+-!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
+     self.def();
+-         ~~~
+-!!! error TS2349: This expression is not callable.
+-!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
+     
+     // should all work
+     a.default();
++      ~~~~~~~
++!!! error TS2339: Property 'default' does not exist on type '() => void'.
+     b.default();
++      ~~~~~~~
++!!! error TS2339: Property 'default' does not exist on type '() => void'.
+     c.default();
++      ~~~~~~~
++!!! error TS2339: Property 'default' does not exist on type '() => void'.
+     d.default();
++      ~~~~~~~
++!!! error TS2339: Property 'default' does not exist on type '() => void'.
+     self.default.default();
++                 ~~~~~~~
++!!! error TS2339: Property 'default' does not exist on type '() => void'.
+     self.def.default();
++             ~~~~~~~
++!!! error TS2339: Property 'default' does not exist on type '() => void'.

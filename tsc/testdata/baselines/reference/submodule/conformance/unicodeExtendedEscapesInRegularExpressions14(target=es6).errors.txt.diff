@@ -1,0 +1,32 @@
+--- old.unicodeExtendedEscapesInRegularExpressions14(target=es6).errors.txt
++++ new.unicodeExtendedEscapesInRegularExpressions14(target=es6).errors.txt
+@@= skipped -0, +0 lines =@@
+-unicodeExtendedEscapesInRegularExpressions14.ts(2,13): error TS1125: Hexadecimal digit expected.
+-unicodeExtendedEscapesInRegularExpressions14.ts(2,18): error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ 
+ 
+-==== unicodeExtendedEscapesInRegularExpressions14.ts (2 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== unicodeExtendedEscapesInRegularExpressions14.ts (0 errors) ====
+     // Shouldn't work, negatives are not allowed.
+     var x = /\u{-DDDD}/gu;
+-                
+-!!! error TS1125: Hexadecimal digit expected.
+-                     ~
+-!!! error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
+     

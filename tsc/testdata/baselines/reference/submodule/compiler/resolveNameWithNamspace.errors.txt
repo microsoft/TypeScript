@@ -1,0 +1,25 @@
+app.js(1,1): error TS2304: Cannot find name 'exports'.
+app.js(2,1): error TS2304: Cannot find name 'exports'.
+
+
+==== node.d.ts (0 errors) ====
+    declare function require(moduleName: string): any;
+    
+    declare module "assert" {
+        export function equal(actual: any, expected: any, message?: string | Error): void;
+    }
+    
+==== ns.ts (0 errors) ====
+    /// <reference path="node.d.ts"/>
+    namespace myAssert {
+        export type cool = 'cool'
+    }
+    var myAssert = require('assert')
+    
+==== app.js (2 errors) ====
+    exports.equal = myAssert.equal
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    exports.equal()
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.

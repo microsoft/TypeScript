@@ -1,0 +1,165 @@
+objectSpreadNegative.ts(13,21): error TS2339: Property 'x' does not exist on type '{}'.
+objectSpreadNegative.ts(16,5): error TS2322: Type '{ sn?: string | number | undefined; }' is not assignable to type '{ sn: string | number; }'.
+  Types of property 'sn' are incompatible.
+    Type 'string | number | undefined' is not assignable to type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+objectSpreadNegative.ts(23,1): error TS2741: Property 'b' is missing in type '{ s: string; }' but required in type '{ b: boolean; s: string; }'.
+objectSpreadNegative.ts(25,1): error TS2741: Property 's' is missing in type '{ b: boolean; }' but required in type '{ b: boolean; s: string; }'.
+objectSpreadNegative.ts(28,20): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+objectSpreadNegative.ts(28,36): error TS1117: An object literal cannot have multiple properties with the same name.
+objectSpreadNegative.ts(28,53): error TS1117: An object literal cannot have multiple properties with the same name.
+objectSpreadNegative.ts(32,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+objectSpreadNegative.ts(37,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+objectSpreadNegative.ts(37,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+objectSpreadNegative.ts(39,14): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+objectSpreadNegative.ts(41,53): error TS2783: 'd' is specified more than once, so this usage will be overwritten.
+objectSpreadNegative.ts(43,7): error TS2783: 'a' is specified more than once, so this usage will be overwritten.
+objectSpreadNegative.ts(45,37): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+objectSpreadNegative.ts(48,19): error TS2698: Spread types may only be created from object types.
+objectSpreadNegative.ts(49,19): error TS2698: Spread types may only be created from object types.
+objectSpreadNegative.ts(50,20): error TS2698: Spread types may only be created from object types.
+objectSpreadNegative.ts(52,20): error TS2698: Spread types may only be created from object types.
+objectSpreadNegative.ts(54,19): error TS2698: Spread types may only be created from object types.
+objectSpreadNegative.ts(59,1): error TS2349: This expression is not callable.
+  Type '{}' has no call signatures.
+objectSpreadNegative.ts(63,1): error TS2322: Type '12' is not assignable to type 'undefined'.
+objectSpreadNegative.ts(69,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
+objectSpreadNegative.ts(74,11): error TS2339: Property 'a' does not exist on type '{}'.
+
+
+==== objectSpreadNegative.ts (23 errors) ====
+    let o = { a: 1, b: 'no' }
+    
+    /// private propagates
+    class PrivateOptionalX {
+        private x?: number;
+    }
+    class PublicX {
+        public x: number;
+    }
+    declare let publicX: PublicX;
+    declare let privateOptionalX: PrivateOptionalX;
+    let o2 = { ...publicX, ...privateOptionalX };
+    let sn: number = o2.x; // error, x is private
+                        ~
+!!! error TS2339: Property 'x' does not exist on type '{}'.
+    declare let optionalString: { sn?: string };
+    declare let optionalNumber: { sn?: number };
+    let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumber };
+        ~~~~~~~~~~~
+!!! error TS2322: Type '{ sn?: string | number | undefined; }' is not assignable to type '{ sn: string | number; }'.
+!!! error TS2322:   Types of property 'sn' are incompatible.
+!!! error TS2322:     Type 'string | number | undefined' is not assignable to type 'string | number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'string | number'.
+    // error, 'sn' is optional in source, required in target
+    
+    // assignability as target
+    interface Bool { b: boolean };
+    interface Str { s: string };
+    let spread = { ...{ b: true }, ...{s: "foo" } };
+    spread = { s: "foo" };  // error, missing 'b'
+    ~~~~~~
+!!! error TS2741: Property 'b' is missing in type '{ s: string; }' but required in type '{ b: boolean; s: string; }'.
+!!! related TS2728 objectSpreadNegative.ts:22:21: 'b' is declared here.
+    let b = { b: false };
+    spread = b; // error, missing 's'
+    ~~~~~~
+!!! error TS2741: Property 's' is missing in type '{ b: boolean; }' but required in type '{ b: boolean; s: string; }'.
+!!! related TS2728 objectSpreadNegative.ts:22:36: 's' is declared here.
+    
+    // literal repeats are not allowed, but spread repeats are fine
+    let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
+                       ~~~~~~~~
+!!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 objectSpreadNegative.ts:28:30: This spread always overwrites this property.
+                                       ~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+                                                        ~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+    let duplicatedSpread = { ...o, ...o }
+    // Note: ignore changes the order that properties are printed
+    let ignore: { a: number, b: string } =
+        { b: 'ignored', ...o }
+          ~~~~~~~~~~~~
+!!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 objectSpreadNegative.ts:32:21: This spread always overwrites this property.
+    
+    let o3 = { a: 1, b: 'no' }
+    let o4 = { b: 'yes', c: true }
+    let combinedBefore: { a: number, b: string, c: boolean } =
+        { b: 'ok', ...o3, ...o4 }
+          ~~~~~~~
+!!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 objectSpreadNegative.ts:37:16: This spread always overwrites this property.
+          ~~~~~~~
+!!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 objectSpreadNegative.ts:37:23: This spread always overwrites this property.
+    let combinedMid: { a: number, b: string, c: boolean } =
+        { ...o3, b: 'ok', ...o4 }
+                 ~~~~~~~
+!!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 objectSpreadNegative.ts:39:23: This spread always overwrites this property.
+    let combinedNested: { a: number, b: boolean, c: string, d: string } =
+        { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
+                                                        ~~~~~~~~~~~~~~~~~
+!!! error TS2783: 'd' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 objectSpreadNegative.ts:41:72: This spread always overwrites this property.
+    let changeTypeBefore: { a: number, b: string } =
+        { a: 'wrong type?', ...o3 };
+          ~~~~~~~~~~~~~~~~
+!!! error TS2783: 'a' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 objectSpreadNegative.ts:43:25: This spread always overwrites this property.
+    let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
+        { ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 }
+                                        ~~~~~~~~~~~
+!!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 objectSpreadNegative.ts:45:50: This spread always overwrites this property.
+    
+    // primitives are not allowed, except for falsy ones
+    let spreadNum = { ...12 };
+                      ~~~~~
+!!! error TS2698: Spread types may only be created from object types.
+    let spreadSum = { ...1 + 1 };
+                      ~~~~~~~~
+!!! error TS2698: Spread types may only be created from object types.
+    let spreadZero = { ...0 };
+                       ~~~~
+!!! error TS2698: Spread types may only be created from object types.
+    spreadZero.toFixed(); // error, no methods even from a falsy number
+    let spreadBool = { ...true };
+                       ~~~~~~~
+!!! error TS2698: Spread types may only be created from object types.
+    spreadBool.valueOf();
+    let spreadStr = { ...'foo' };
+                      ~~~~~~~~
+!!! error TS2698: Spread types may only be created from object types.
+    spreadStr.length; // error, no 'length'
+    spreadStr.charAt(1); // error, no methods either
+    // functions are skipped
+    let spreadFunc = { ...function () { } }
+    spreadFunc(); // error, no call signature
+    ~~~~~~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type '{}' has no call signatures.
+    
+    // write-only properties get skipped
+    let setterOnly = { ...{ set b (bad: number) { } } };
+    setterOnly.b = 12; // error, 'b' does not exist
+    ~~~~~~~~~~~~
+!!! error TS2322: Type '12' is not assignable to type 'undefined'.
+    
+    // methods are skipped because they aren't enumerable
+    class C { p = 1; m() { } }
+    let c: C = new C()
+    let spreadC = { ...c }
+    spreadC.m(); // error 'm' is not in '{ ... c }'
+            ~
+!!! error TS2339: Property 'm' does not exist on type '{ p: number; }'.
+    
+    // non primitive
+    let obj: object = { a: 123 };
+    let spreadObj = { ...obj };
+    spreadObj.a; // error 'a' is not in {}
+              ~
+!!! error TS2339: Property 'a' does not exist on type '{}'.
+    

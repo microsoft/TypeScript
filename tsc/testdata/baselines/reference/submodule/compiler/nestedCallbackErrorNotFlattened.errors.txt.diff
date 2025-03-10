@@ -1,0 +1,24 @@
+--- old.nestedCallbackErrorNotFlattened.errors.txt
++++ new.nestedCallbackErrorNotFlattened.errors.txt
+@@= skipped -0, +0 lines =@@
+ nestedCallbackErrorNotFlattened.ts(6,1): error TS2322: Type '() => () => () => () => number' is not assignable to type '() => () => () => () => string'.
+-  Call signature return types '() => () => () => number' and '() => () => () => string' are incompatible.
+-    Call signature return types '() => () => number' and '() => () => string' are incompatible.
+-      Call signature return types '() => number' and '() => string' are incompatible.
++  Type '() => () => () => number' is not assignable to type '() => () => () => string'.
++    Type '() => () => number' is not assignable to type '() => () => string'.
++      Type '() => number' is not assignable to type '() => string'.
+         Type 'number' is not assignable to type 'string'.
+ 
+ 
+@@= skipped -13, +13 lines =@@
+     y = x;
+     ~
+ !!! error TS2322: Type '() => () => () => () => number' is not assignable to type '() => () => () => () => string'.
+-!!! error TS2322:   Call signature return types '() => () => () => number' and '() => () => () => string' are incompatible.
+-!!! error TS2322:     Call signature return types '() => () => number' and '() => () => string' are incompatible.
+-!!! error TS2322:       Call signature return types '() => number' and '() => string' are incompatible.
++!!! error TS2322:   Type '() => () => () => number' is not assignable to type '() => () => () => string'.
++!!! error TS2322:     Type '() => () => number' is not assignable to type '() => () => string'.
++!!! error TS2322:       Type '() => number' is not assignable to type '() => string'.
+ !!! error TS2322:         Type 'number' is not assignable to type 'string'.

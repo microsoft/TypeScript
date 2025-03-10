@@ -1,0 +1,17 @@
+--- old.reexportMissingDefault4.errors.txt
++++ new.reexportMissingDefault4.errors.txt
+@@= skipped -0, +-1 lines =@@
+-a.ts(2,10): error TS2305: Module '"./b"' has no exported member 'default'.
+-
+-
+-==== b.d.ts (0 errors) ====
+-    declare var b: number;
+-    export { b };
+-    
+-==== a.ts (1 errors) ====
+-    export { b } from "./b";
+-    export { default } from "./b";
+-             ~~~~~~~
+-!!! error TS2305: Module '"./b"' has no exported member 'default'.
+@@= skipped --1, +1 lines =@@
++<no content>

@@ -1,0 +1,79 @@
+--- old.importAssertionNonstring.errors.txt
++++ new.importAssertionNonstring.errors.txt
+@@= skipped -0, +0 lines =@@
+ mod.mts(1,37): error TS2322: Type '{ field: 0; }' is not assignable to type 'ImportAttributes'.
+   Property 'field' is incompatible with index signature.
+     Type 'number' is not assignable to type 'string'.
++mod.mts(1,37): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+ mod.mts(1,52): error TS2837: Import assertion values must be string literal expressions.
++mod.mts(3,37): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+ mod.mts(3,52): error TS2837: Import assertion values must be string literal expressions.
+ mod.mts(5,37): error TS2322: Type '{ field: RegExp; }' is not assignable to type 'ImportAttributes'.
+   Property 'field' is incompatible with index signature.
+     Type 'RegExp' is not assignable to type 'string'.
++mod.mts(5,37): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+ mod.mts(5,52): error TS2837: Import assertion values must be string literal expressions.
+ mod.mts(7,37): error TS2322: Type '{ field: string[]; }' is not assignable to type 'ImportAttributes'.
+   Property 'field' is incompatible with index signature.
+     Type 'string[]' is not assignable to type 'string'.
++mod.mts(7,37): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+ mod.mts(7,52): error TS2837: Import assertion values must be string literal expressions.
+ mod.mts(9,37): error TS2322: Type '{ field: { a: number; }; }' is not assignable to type 'ImportAttributes'.
+   Property 'field' is incompatible with index signature.
+     Type '{ a: number; }' is not assignable to type 'string'.
++mod.mts(9,37): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+ mod.mts(9,52): error TS2837: Import assertion values must be string literal expressions.
++mod.mts(11,37): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+ mod.mts(11,66): error TS2837: Import assertion values must be string literal expressions.
+ 
+ 
+-==== mod.mts (10 errors) ====
++==== mod.mts (16 errors) ====
+     import * as thing1 from "./mod.mjs" assert {field: 0};
+                                         ~~~~~~~~~~~~~~~~~
+ !!! error TS2322: Type '{ field: 0; }' is not assignable to type 'ImportAttributes'.
+ !!! error TS2322:   Property 'field' is incompatible with index signature.
+ !!! error TS2322:     Type 'number' is not assignable to type 'string'.
++                                        ~~~~~~~~~~~~~~~~~
++!!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+                                                        ~
+ !!! error TS2837: Import assertion values must be string literal expressions.
+     
+     import * as thing2 from "./mod.mjs" assert {field: `a`};
++                                        ~~~~~~~~~~~~~~~~~~~
++!!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+                                                        ~~~
+ !!! error TS2837: Import assertion values must be string literal expressions.
+     
+@@= skipped -35, +45 lines =@@
+ !!! error TS2322: Type '{ field: RegExp; }' is not assignable to type 'ImportAttributes'.
+ !!! error TS2322:   Property 'field' is incompatible with index signature.
+ !!! error TS2322:     Type 'RegExp' is not assignable to type 'string'.
++                                        ~~~~~~~~~~~~~~~~~~~~
++!!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+                                                        ~~~~
+ !!! error TS2837: Import assertion values must be string literal expressions.
+     
+@@= skipped -8, +10 lines =@@
+ !!! error TS2322: Type '{ field: string[]; }' is not assignable to type 'ImportAttributes'.
+ !!! error TS2322:   Property 'field' is incompatible with index signature.
+ !!! error TS2322:     Type 'string[]' is not assignable to type 'string'.
++                                        ~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+                                                        ~~~~~
+ !!! error TS2837: Import assertion values must be string literal expressions.
+     
+@@= skipped -8, +10 lines =@@
+ !!! error TS2322: Type '{ field: { a: number; }; }' is not assignable to type 'ImportAttributes'.
+ !!! error TS2322:   Property 'field' is incompatible with index signature.
+ !!! error TS2322:     Type '{ a: number; }' is not assignable to type 'string'.
++                                        ~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+                                                        ~~~~~~~~
+ !!! error TS2837: Import assertion values must be string literal expressions.
+     
+     import * as thing6 from "./mod.mjs" assert {type: "json", field: 0..toString()}
++                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+                                                                      ~~~~~~~~~~~~~
+ !!! error TS2837: Import assertion values must be string literal expressions.

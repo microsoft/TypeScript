@@ -1,0 +1,37 @@
+--- old.expandoFunctionExpressionsWithDynamicNames2.errors.txt
++++ new.expandoFunctionExpressionsWithDynamicNames2.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++expandoFunctionExpressionsWithDynamicNames2.ts(6,7): error TS2322: Type '{ (): void; foo[mySymbol]: boolean; }' is not assignable to type 'Foo'.
++  Types of property '[mySymbol]' are incompatible.
++    Type 'boolean' is not assignable to type 'true'.
++expandoFunctionExpressionsWithDynamicNames2.ts(14,7): error TS2322: Type '{ (): void; test: boolean; }' is not assignable to type 'Bar'.
++  Types of property 'test' are incompatible.
++    Type 'boolean' is not assignable to type 'true'.
++
++
++==== expandoFunctionExpressionsWithDynamicNames2.ts (2 errors) ====
++    const mySymbol = Symbol();
++    interface Foo {
++      (): void;
++      [mySymbol]: true;
++    }
++    const foo: Foo = () => {};
++          ~~~
++!!! error TS2322: Type '{ (): void; foo[mySymbol]: boolean; }' is not assignable to type 'Foo'.
++!!! error TS2322:   Types of property '[mySymbol]' are incompatible.
++!!! error TS2322:     Type 'boolean' is not assignable to type 'true'.
++    foo[mySymbol] = true;
++    
++    interface Bar {
++      (): void;
++      test: true;
++    }
++    const t = "test" as const;
++    const bar: Bar = () => {};
++          ~~~
++!!! error TS2322: Type '{ (): void; test: boolean; }' is not assignable to type 'Bar'.
++!!! error TS2322:   Types of property 'test' are incompatible.
++!!! error TS2322:     Type 'boolean' is not assignable to type 'true'.
++    bar[t] = true;

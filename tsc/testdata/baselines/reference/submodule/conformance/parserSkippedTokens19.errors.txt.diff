@@ -1,0 +1,9 @@
+--- old.parserSkippedTokens19.errors.txt
++++ new.parserSkippedTokens19.errors.txt
+@@= skipped -2, +2 lines =@@
+ 
+ ==== parserSkippedTokens19.ts (1 errors) ====
+     \ declare var v;
+-    
++    ~
+ !!! error TS1127: Invalid character.

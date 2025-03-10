@@ -1,0 +1,27 @@
+--- old.commonSourceDir6.errors.txt
++++ new.commonSourceDir6.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++baz.ts(1,17): error TS2307: Cannot find module 'a/bar' or its corresponding type declarations.
++baz.ts(2,17): error TS2307: Cannot find module 'a/foo' or its corresponding type declarations.
++
++
++==== a/bar.ts (0 errors) ====
++    import {z} from "./foo";
++    export var x = z + z;
++    
++==== a/foo.ts (0 errors) ====
++    import {pi} from "../baz";
++    export var i = Math.sqrt(-1);
++    export var z = pi * pi;
++    
++==== baz.ts (2 errors) ====
++    import {x} from "a/bar";
++                    ~~~~~~~
++!!! error TS2307: Cannot find module 'a/bar' or its corresponding type declarations.
++    import {i} from "a/foo";
++                    ~~~~~~~
++!!! error TS2307: Cannot find module 'a/foo' or its corresponding type declarations.
++    export var pi = Math.PI;
++    export var y = x * i;

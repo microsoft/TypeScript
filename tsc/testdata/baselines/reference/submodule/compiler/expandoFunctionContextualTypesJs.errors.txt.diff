@@ -1,0 +1,67 @@
+--- old.expandoFunctionContextualTypesJs.errors.txt
++++ new.expandoFunctionContextualTypesJs.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++input.js(48,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++input.js(52,24): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
++==== input.js (2 errors) ====
++    /** @typedef {{ color: "red" | "blue" }} MyComponentProps */
++    
++    /**
++     * @template P 
++     * @typedef {{ (): any; defaultProps?: Partial<P> }} StatelessComponent */
++    
++     /**
++      * @type {StatelessComponent<MyComponentProps>}
++      */
++    const MyComponent = () => /* @type {any} */(null);
++    
++    MyComponent.defaultProps = {
++        color: "red"
++    };
++    
++    const MyComponent2 = () => null;
++    
++    /**
++     * @type {MyComponentProps}
++     */
++    MyComponent2.defaultProps = {
++        color: "red"
++    }
++    
++    /**
++      * @type {StatelessComponent<MyComponentProps>}
++     */
++    const check = MyComponent2;
++    
++    /**
++     * 
++     * @param {{ props: MyComponentProps }} p 
++     */
++    function expectLiteral(p) {}
++    
++    function foo() {
++        /**
++         * @type {MyComponentProps}
++         */
++        this.props = { color: "red" };
++    
++        expectLiteral(this);
++    }
++    
++    /**
++     * @type {MyComponentProps}
++     */
++    module.exports = {
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++        color: "red"
++    }
++    
++    expectLiteral({ props: module.exports });
++                           ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    

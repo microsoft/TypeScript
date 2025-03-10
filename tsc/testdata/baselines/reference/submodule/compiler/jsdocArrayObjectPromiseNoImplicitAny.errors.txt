@@ -1,0 +1,54 @@
+jsdocArrayObjectPromiseNoImplicitAny.js(11,28): error TS7006: Parameter 'arr' implicitly has an 'any' type.
+jsdocArrayObjectPromiseNoImplicitAny.js(25,30): error TS7006: Parameter 'pr' implicitly has an 'any' type.
+jsdocArrayObjectPromiseNoImplicitAny.js(39,29): error TS7006: Parameter 'obj' implicitly has an 'any' type.
+
+
+==== jsdocArrayObjectPromiseNoImplicitAny.js (3 errors) ====
+    /** @type {Array} */
+    var notAnyArray = [5];
+    
+    /** @type {Array<number>} */
+    var numberArray = [5];
+    
+    /**
+     * @param {Array} arr
+     * @return {Array}
+     */
+    function returnNotAnyArray(arr) {
+                               ~~~
+!!! error TS7006: Parameter 'arr' implicitly has an 'any' type.
+      return arr;
+    }
+    
+    /** @type {Promise} */
+    var notAnyPromise = Promise.resolve(5);
+    
+    /** @type {Promise<number>} */
+    var numberPromise = Promise.resolve(5);
+    
+    /**
+     * @param {Promise} pr
+     * @return {Promise}
+     */
+    function returnNotAnyPromise(pr) {
+                                 ~~
+!!! error TS7006: Parameter 'pr' implicitly has an 'any' type.
+      return pr;
+    }
+    
+    /** @type {Object} */
+    var notAnyObject = {valueOf: 1}; // error since assigning to Object, not any.
+    
+    /** @type {Object<string, number>} */
+    var paramedObject = {valueOf: 1};
+    
+    /**
+     * @param {Object} obj
+     * @return {Object}
+     */
+    function returnNotAnyObject(obj) {
+                                ~~~
+!!! error TS7006: Parameter 'obj' implicitly has an 'any' type.
+      return obj;
+    }
+    

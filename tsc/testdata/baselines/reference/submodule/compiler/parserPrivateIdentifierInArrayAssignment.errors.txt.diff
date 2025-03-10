@@ -1,0 +1,17 @@
+--- old.parserPrivateIdentifierInArrayAssignment.errors.txt
++++ new.parserPrivateIdentifierInArrayAssignment.errors.txt
+@@= skipped -0, +0 lines =@@
+ parserPrivateIdentifierInArrayAssignment.ts(1,2): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+-parserPrivateIdentifierInArrayAssignment.ts(1,8): error TS1109: Expression expected.
++parserPrivateIdentifierInArrayAssignment.ts(2,1): error TS1109: Expression expected.
+ 
+ 
+ ==== parserPrivateIdentifierInArrayAssignment.ts (2 errors) ====
+     [#abc]=
+      ~~~~
+ !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+-           
+-!!! error TS1109: Expression expected.
+     
++    
++!!! error TS1109: Expression expected.

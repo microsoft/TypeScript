@@ -1,0 +1,28 @@
+--- old.nodeNextPackageSelfNameWithOutDirDeclDirRootDir.errors.txt
++++ new.nodeNextPackageSelfNameWithOutDirDeclDirRootDir.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/pkg/src/index.ts(1,21): error TS2307: Cannot find module '@this/package' or its corresponding type declarations.
++
++
++==== /pkg/package.json (0 errors) ====
++    {
++      "name": "@this/package",
++      "type": "module",
++      "exports": {
++        ".": {
++          "default": "./dist/index.js",
++          "types": "./types/index.d.ts"
++        }
++      }
++    }
++==== /pkg/src/index.ts (1 errors) ====
++    import * as me from "@this/package";
++                        ~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module '@this/package' or its corresponding type declarations.
++    
++    me.thing();
++    
++    export function thing(): void {}
++    

@@ -1,0 +1,22 @@
+--- old.pathsValidation3.errors.txt
++++ new.pathsValidation3.errors.txt
+@@= skipped -0, +-1 lines =@@
+-tsconfig.json(5,20): error TS5066: Substitutions for pattern 'foo' shouldn't be an empty array.
+-
+-
+-==== tsconfig.json (1 errors) ====
+-    {
+-        "compilerOptions": {
+-            "baseUrl": ".",
+-            "paths": {
+-                "foo": []
+-                       ~~
+-!!! error TS5066: Substitutions for pattern 'foo' shouldn't be an empty array.
+-            }
+-        }
+-    }
+-    
+-==== a.ts (0 errors) ====
+-    let x = 1;
+@@= skipped --1, +1 lines =@@
++<no content>

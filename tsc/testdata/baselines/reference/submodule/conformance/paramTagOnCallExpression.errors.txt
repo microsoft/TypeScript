@@ -1,0 +1,12 @@
+a.js(3,1): error TS2304: Cannot find name 'exports'.
+
+
+==== decls.d.ts (0 errors) ====
+    declare function factory(type: string): {};
+==== a.js (1 errors) ====
+    // from util
+    /** @param {function} ctor - A big long explanation follows */
+    exports.inherits = factory('inherits')
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    

@@ -1,0 +1,29 @@
+--- old.constructorFunctionMergeWithClass.errors.txt
++++ new.constructorFunctionMergeWithClass.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++file1.js(1,5): error TS2300: Duplicate identifier 'SomeClass'.
++file2.js(1,7): error TS2300: Duplicate identifier 'SomeClass'.
++file2.js(2,11): error TS2339: Property 'prop' does not exist on type '() => void'.
++
++
++==== file1.js (1 errors) ====
++    var SomeClass = function () {
++        ~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'SomeClass'.
++!!! related TS6203 file2.js:1:7: 'SomeClass' was also declared here.
++        this.otherProp = 0;
++    };
++    
++    new SomeClass();
++    
++==== file2.js (2 errors) ====
++    class SomeClass { }
++          ~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'SomeClass'.
++!!! related TS6203 file1.js:1:5: 'SomeClass' was also declared here.
++    SomeClass.prop = 0
++              ~~~~
++!!! error TS2339: Property 'prop' does not exist on type '() => void'.
++    

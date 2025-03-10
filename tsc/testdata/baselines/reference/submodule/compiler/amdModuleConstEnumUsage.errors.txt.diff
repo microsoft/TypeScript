@@ -1,0 +1,23 @@
+--- old.amdModuleConstEnumUsage.errors.txt
++++ new.amdModuleConstEnumUsage.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/proj/component/file.ts(1,26): error TS2307: Cannot find module 'defs/cc' or its corresponding type declarations.
++
++
++==== /proj/defs/cc.ts (0 errors) ====
++    export const enum CharCode {
++        A,
++        B
++    }
++==== /proj/component/file.ts (1 errors) ====
++    import { CharCode } from 'defs/cc';
++                             ~~~~~~~~~
++!!! error TS2307: Cannot find module 'defs/cc' or its corresponding type declarations.
++    export class User {
++        method(input: number) {
++            if (CharCode.A === input) {}
++        }
++    }
++    

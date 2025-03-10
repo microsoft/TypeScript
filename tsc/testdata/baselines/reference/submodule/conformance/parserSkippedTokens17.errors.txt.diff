@@ -1,0 +1,11 @@
+--- old.parserSkippedTokens17.errors.txt
++++ new.parserSkippedTokens17.errors.txt
+@@= skipped -9, +9 lines =@@
+ !!! error TS2304: Cannot find name 'foo'.
+         ~
+ !!! error TS2304: Cannot find name 'a'.
+-           
++           ~
+ !!! error TS1127: Invalid character.
+             
+ !!! error TS1005: ')' expected.

@@ -1,0 +1,51 @@
+usingDeclarationsWithObjectLiterals1.ts(15,62): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type 'MyDisposable'.
+usingDeclarationsWithObjectLiterals1.ts(36,7): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type 'MyAsyncDisposable'.
+
+
+==== usingDeclarationsWithObjectLiterals1.ts (2 errors) ====
+    interface MyDisposable {
+      value: number;
+      [Symbol.dispose](): void;
+    }
+    
+    {
+      using _ = { [Symbol.dispose]() {} };
+    }
+    
+    {
+      using _ = { [Symbol.dispose]() {}, value: 1 };
+    }
+    
+    {
+      using _: MyDisposable = { [Symbol.dispose]() {}, value: 1, extra: "foo" };
+                                                                 ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type 'MyDisposable'.
+    }
+    
+    interface MyAsyncDisposable {
+      value: number;
+      [Symbol.asyncDispose](): Promise<void>;
+    }
+    
+    async function f() {
+      {
+        await using _ = { async [Symbol.asyncDispose]() {} };
+      }
+    
+      {
+        await using _ = { async [Symbol.asyncDispose]() {}, value: 1 };
+      }
+    
+      {
+        await using _: MyAsyncDisposable = {
+          async [Symbol.asyncDispose]() {},
+          value: 1,
+          extra: "foo",
+          ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type 'MyAsyncDisposable'.
+        };
+      }
+    }
+    
+    export {};
+    

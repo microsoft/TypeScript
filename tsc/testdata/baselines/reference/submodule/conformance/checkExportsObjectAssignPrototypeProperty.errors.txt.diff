@@ -1,0 +1,42 @@
+--- old.checkExportsObjectAssignPrototypeProperty.errors.txt
++++ new.checkExportsObjectAssignPrototypeProperty.errors.txt
+@@= skipped -0, +0 lines =@@
+-validator.ts(19,4): error TS2540: Cannot assign to 'readonlyProp' because it is a read-only property.
+-validator.ts(20,4): error TS2540: Cannot assign to 'readonlyAccessor' because it is a read-only property.
+-validator.ts(21,1): error TS2322: Type 'string' is not assignable to type 'number'.
+-validator.ts(22,1): error TS2322: Type 'string' is not assignable to type 'number'.
+-validator.ts(23,1): error TS2322: Type 'number' is not assignable to type 'string'.
++validator.ts(3,25): error TS2307: Cannot find module './mod1' or its corresponding type declarations.
+ 
+ 
+-==== validator.ts (5 errors) ====
++==== validator.ts (1 errors) ====
+     import "./";
+     
+     import Person = require("./mod1");
++                            ~~~~~~~~
++!!! error TS2307: Cannot find module './mod1' or its corresponding type declarations.
+     
+     const m1 = new Person("Name")
+     
+@@= skipped -24, +22 lines =@@
+     
+     // disallowed assignments
+     m1.readonlyProp = "name";
+-       ~~~~~~~~~~~~
+-!!! error TS2540: Cannot assign to 'readonlyProp' because it is a read-only property.
+     m1.readonlyAccessor = 12;
+-       ~~~~~~~~~~~~~~~~
+-!!! error TS2540: Cannot assign to 'readonlyAccessor' because it is a read-only property.
+     m1.thing = "no";
+-    ~~~~~~~~
+-!!! error TS2322: Type 'string' is not assignable to type 'number'.
+     m1.rwAccessors = "no";
+-    ~~~~~~~~~~~~~~
+-!!! error TS2322: Type 'string' is not assignable to type 'number'.
+     m1.setonlyAccessor = 0;
+-    ~~~~~~~~~~~~~~~~~~
+-!!! error TS2322: Type 'number' is not assignable to type 'string'.
+     
+     
+ ==== mod1.js (0 errors) ====

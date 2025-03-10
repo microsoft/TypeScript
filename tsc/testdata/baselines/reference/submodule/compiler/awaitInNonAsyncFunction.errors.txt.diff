@@ -1,0 +1,54 @@
+--- old.awaitInNonAsyncFunction.errors.txt
++++ new.awaitInNonAsyncFunction.errors.txt
+@@= skipped -26, +26 lines =@@
+       return await p;
+              ~~~~~
+ !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+-!!! related TS1356 awaitInNonAsyncFunction.ts:3:10: Did you mean to mark this function as 'async'?
+     }
+     
+     export function exportedFunc(p: Promise<number>) {
+@@= skipped -11, +10 lines =@@
+       return await p;
+              ~~~~~
+ !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+-!!! related TS1356 awaitInNonAsyncFunction.ts:8:17: Did you mean to mark this function as 'async'?
+     }
+     
+     const functionExpression = function(p: Promise<number>) {
+       for await (const _ of []);
+           ~~~~~
+ !!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
+-!!! related TS1356 awaitInNonAsyncFunction.ts:13:28: Did you mean to mark this function as 'async'?
++!!! related TS1356 awaitInNonAsyncFunction.ts:13:7: Did you mean to mark this function as 'async'?
+       await p;
+       ~~~~~
+ !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+-!!! related TS1356 awaitInNonAsyncFunction.ts:13:28: Did you mean to mark this function as 'async'?
+     }
+     
+     const arrowFunc = (p: Promise<number>) => {
+@@= skipped -22, +20 lines =@@
+       return await p;
+              ~~~~~
+ !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+-!!! related TS1356 awaitInNonAsyncFunction.ts:18:19: Did you mean to mark this function as 'async'?
+     };
+     
+     function* generatorFunc(p: Promise<number>) {
+@@= skipped -11, +10 lines =@@
+       yield await p;
+             ~~~~~
+ !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+-!!! related TS1356 awaitInNonAsyncFunction.ts:23:11: Did you mean to mark this function as 'async'?
+     }
+     
+     class clazz {
+@@= skipped -20, +19 lines =@@
+         await p;
+         ~~~~~
+ !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+-!!! related TS1356 awaitInNonAsyncFunction.ts:33:3: Did you mean to mark this function as 'async'?
+       }
+     }
+     

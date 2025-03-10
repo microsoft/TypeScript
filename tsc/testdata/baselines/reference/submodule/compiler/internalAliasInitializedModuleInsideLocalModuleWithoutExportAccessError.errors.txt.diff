@@ -1,0 +1,14 @@
+--- old.internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.errors.txt
++++ new.internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.errors.txt
+@@= skipped -0, +0 lines =@@
+-internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.ts(13,22): error TS2339: Property 'b' does not exist on type 'typeof c'.
++internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.ts(13,22): error TS2339: Property 'b' does not exist on type '{ x: c; }'.
+ 
+ 
+ ==== internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
+@@= skipped -15, +15 lines =@@
+     
+     export var d = new c.b.c();
+                          ~
+-!!! error TS2339: Property 'b' does not exist on type 'typeof c'.
++!!! error TS2339: Property 'b' does not exist on type '{ x: c; }'.

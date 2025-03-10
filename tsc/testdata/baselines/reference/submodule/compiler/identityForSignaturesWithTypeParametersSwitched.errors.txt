@@ -1,0 +1,9 @@
+identityForSignaturesWithTypeParametersSwitched.ts(2,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'f' must be of type '<T, U>(x: T, y: U) => T', but here has type '<T, U>(x: U, y: T) => U'.
+
+
+==== identityForSignaturesWithTypeParametersSwitched.ts (1 errors) ====
+    var f: <T, U>(x: T, y: U) => T;
+    var f: <T, U>(x: U, y: T) => U;
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'f' must be of type '<T, U>(x: T, y: U) => T', but here has type '<T, U>(x: U, y: T) => U'.
+!!! related TS6203 identityForSignaturesWithTypeParametersSwitched.ts:1:5: 'f' was also declared here.

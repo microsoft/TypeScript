@@ -1,0 +1,25 @@
+--- old.mergeSymbolReexportedTypeAliasInstantiation.errors.txt
++++ new.mergeSymbolReexportedTypeAliasInstantiation.errors.txt
+@@= skipped -6, +6 lines =@@
+     const x: ((rowData: Row2<string>) => unknown) = (rowData: Row2<any>) => (null)
+     const y : C = { s: '' }
+     
+-==== ./a.d.ts (1 errors) ====
++==== a.d.ts (1 errors) ====
+     import '.'
+     declare module '.' {
+       type Row2<T> = {}
+@@= skipped -10, +10 lines =@@
+       type C = { s : string }
+     }
+     
+-==== ./index.d.ts (1 errors) ====
++==== index.d.ts (1 errors) ====
+     export type {Row2} from './common';
+                  ~~~~
+ !!! error TS2300: Duplicate identifier 'Row2'.
+ !!! related TS6203 a.d.ts:3:8: 'Row2' was also declared here.
+     
+-==== ./common.d.ts (0 errors) ====
++==== common.d.ts (0 errors) ====
+     export interface Row2 {}

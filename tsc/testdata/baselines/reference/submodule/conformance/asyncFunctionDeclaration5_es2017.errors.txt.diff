@@ -1,0 +1,15 @@
+--- old.asyncFunctionDeclaration5_es2017.errors.txt
++++ new.asyncFunctionDeclaration5_es2017.errors.txt
+@@= skipped -0, +0 lines =@@
+ asyncFunctionDeclaration5_es2017.ts(1,20): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
++asyncFunctionDeclaration5_es2017.ts(1,20): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+ 
+ 
+-==== asyncFunctionDeclaration5_es2017.ts (1 errors) ====
++==== asyncFunctionDeclaration5_es2017.ts (2 errors) ====
+     async function foo(await): Promise<void> {
+                        ~~~~~
+ !!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
++                       ~~~~~
++!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+     }

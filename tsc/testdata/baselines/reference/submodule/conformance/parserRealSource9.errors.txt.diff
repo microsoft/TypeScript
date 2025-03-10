@@ -1,0 +1,22 @@
+--- old.parserRealSource9.errors.txt
++++ new.parserRealSource9.errors.txt
+@@= skipped -0, +0 lines =@@
+-parserRealSource9.ts(4,21): error TS6053: File 'typescript.ts' not found.
+ parserRealSource9.ts(8,38): error TS2304: Cannot find name 'TypeChecker'.
+ parserRealSource9.ts(9,48): error TS2304: Cannot find name 'TypeLink'.
+ parserRealSource9.ts(9,67): error TS2304: Cannot find name 'SymbolScope'.
+@@= skipped -38, +37 lines =@@
+ parserRealSource9.ts(200,48): error TS2304: Cannot find name 'IHashTable'.
+ 
+ 
+-==== parserRealSource9.ts (39 errors) ====
++==== parserRealSource9.ts (38 errors) ====
+     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+     // See LICENSE.txt in the project root for complete license information.
+     
+     ///<reference path='typescript.ts' />
+-                        ~~~~~~~~~~~~~
+-!!! error TS6053: File 'typescript.ts' not found.
+     
+     module TypeScript {
+         export class Binder {

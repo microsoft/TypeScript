@@ -1,0 +1,44 @@
+module.ts(3,33): error TS2351: This expression is not constructable.
+  Type '{ Origin: any; }' has no construct signatures.
+simple.ts(1,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+simple.ts(2,31): error TS2449: Class 'A' used before its declaration.
+
+
+==== module.ts (1 errors) ====
+    module X.Y {
+        export module Point {
+            export var Origin = new Point(0, 0);
+                                    ~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type '{ Origin: any; }' has no construct signatures.
+        }
+    }
+    
+==== classPoint.ts (0 errors) ====
+    module X.Y {
+        // duplicate identifier
+        export class Point {
+            constructor(x: number, y: number) {
+                this.x = x;
+                this.y = y;
+            }
+            x: number;
+            y: number;
+        }
+    }
+    
+==== simple.ts (2 errors) ====
+    module A {
+           ~
+!!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+        export var Instance = new A();
+                                  ~
+!!! error TS2449: Class 'A' used before its declaration.
+!!! related TS2728 simple.ts:6:7: 'A' is declared here.
+    }
+    
+    // duplicate identifier
+    class A {
+        id: string;
+    }
+    

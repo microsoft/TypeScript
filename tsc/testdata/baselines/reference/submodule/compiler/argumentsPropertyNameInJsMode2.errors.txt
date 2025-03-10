@@ -1,0 +1,12 @@
+a.js(5,6): error TS2554: Expected 1 arguments, but got 3.
+
+
+==== a.js (1 errors) ====
+    function f(x) {
+      arguments;
+    }
+    
+    f(1, 2, 3);
+         ~~~~
+!!! error TS2554: Expected 1 arguments, but got 3.
+    

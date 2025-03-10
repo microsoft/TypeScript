@@ -1,0 +1,38 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'CallableFunction'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'NewableFunction'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+logicalAssignment11.ts(5,3): error TS2339: Property 'length' does not exist on type 'string'.
+logicalAssignment11.ts(9,3): error TS2339: Property 'length' does not exist on type 'string'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'CallableFunction'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'NewableFunction'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== logicalAssignment11.ts (2 errors) ====
+    let x: string | undefined;
+    
+    let d: string | undefined;
+    d ?? (d = x ?? "x")
+    d.length;
+      ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type 'string'.
+    
+    let e: string | undefined;
+    e ??= x ?? "x"
+    e.length
+      ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type 'string'.

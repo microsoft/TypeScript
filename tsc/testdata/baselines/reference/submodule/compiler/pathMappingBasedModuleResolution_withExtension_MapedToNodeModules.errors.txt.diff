@@ -1,0 +1,28 @@
+--- old.pathMappingBasedModuleResolution_withExtension_MapedToNodeModules.errors.txt
++++ new.pathMappingBasedModuleResolution_withExtension_MapedToNodeModules.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/a.ts(1,20): error TS2307: Cannot find module 'foo/bar/foobar.js' or its corresponding type declarations.
++
++
++==== /tsconfig.json (0 errors) ====
++    {
++        "compilerOptions": {
++            "baseUrl": ".",
++            "paths": {
++                "*": ["node_modules/*", "src/types"]
++            },
++            "allowJs": true,
++            "outDir": "bin"
++        }
++    }
++    
++==== /a.ts (1 errors) ====
++    import foobar from "foo/bar/foobar.js";
++                       ~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'foo/bar/foobar.js' or its corresponding type declarations.
++    
++==== /node_modules/foo/bar/foobar.js (0 errors) ====
++    module.exports = { a: 10 };
++    

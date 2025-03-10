@@ -1,0 +1,34 @@
+--- old.expandoFunctionContextualTypes.errors.txt
++++ new.expandoFunctionContextualTypes.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++expandoFunctionContextualTypes.ts(10,7): error TS2322: Type '{ (): any; defaultProps: { color: string; }; }' is not assignable to type 'StatelessComponent<MyComponentProps>'.
++  The types of 'defaultProps.color' are incompatible between these types.
++    Type 'string' is not assignable to type '"blue" | "red"'.
++expandoFunctionContextualTypes.ts(13,5): error TS2322: Type 'string' is not assignable to type '"blue" | "red"'.
++
++
++==== expandoFunctionContextualTypes.ts (2 errors) ====
++    interface MyComponentProps {
++        color: "red" | "blue"
++    }
++    
++    interface StatelessComponent<P> {
++        (): any;
++        defaultProps?: Partial<P>;
++    }
++    
++    const MyComponent: StatelessComponent<MyComponentProps> = () => null as any;
++          ~~~~~~~~~~~
++!!! error TS2322: Type '{ (): any; defaultProps: { color: string; }; }' is not assignable to type 'StatelessComponent<MyComponentProps>'.
++!!! error TS2322:   The types of 'defaultProps.color' are incompatible between these types.
++!!! error TS2322:     Type 'string' is not assignable to type '"blue" | "red"'.
++    
++    MyComponent.defaultProps = {
++        color: "red"
++        ~~~~~
++!!! error TS2322: Type 'string' is not assignable to type '"blue" | "red"'.
++!!! related TS6500 expandoFunctionContextualTypes.ts:2:5: The expected type comes from property 'color' which is declared here on type 'Partial<MyComponentProps>'
++    };
++    

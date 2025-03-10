@@ -1,0 +1,42 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+a.ts(4,15): error TS18013: Property '#x' is not accessible outside class 'Foo' because it has a private identifier.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== a.ts (1 errors) ====
+    export class Foo {
+        #x;
+        copy(other: import("./b").Foo) {
+            other.#x; // error
+                  ~~
+!!! error TS18013: Property '#x' is not accessible outside class 'Foo' because it has a private identifier.
+        }
+    }
+        
+==== b.ts (0 errors) ====
+    export class Foo {
+        #x;
+    }
+    
+==== main.ts (0 errors) ====
+    import { Foo as A } from "./a";
+    import { Foo as B } from "./b";
+    
+    const a = new A();
+    const b = new B();
+    a.copy(b); // error
+    

@@ -1,0 +1,19 @@
+--- old.narrowingGenericTypeFromInstanceof01.errors.txt
++++ new.narrowingGenericTypeFromInstanceof01.errors.txt
+@@= skipped -0, +0 lines =@@
+-narrowingGenericTypeFromInstanceof01.ts(13,17): error TS2345: Argument of type 'B<T>' is not assignable to parameter of type 'A<unknown>'.
+-  Property 'a' is missing in type 'B<T>' but required in type 'A<unknown>'.
++narrowingGenericTypeFromInstanceof01.ts(13,17): error TS2741: Property 'a' is missing in type 'B<T>' but required in type 'A<unknown>'.
+ 
+ 
+ ==== narrowingGenericTypeFromInstanceof01.ts (1 errors) ====
+@@= skipped -16, +15 lines =@@
+         if (x instanceof B) {
+             acceptA(x);
+                     ~
+-!!! error TS2345: Argument of type 'B<T>' is not assignable to parameter of type 'A<unknown>'.
+-!!! error TS2345:   Property 'a' is missing in type 'B<T>' but required in type 'A<unknown>'.
++!!! error TS2741: Property 'a' is missing in type 'B<T>' but required in type 'A<unknown>'.
+ !!! related TS2728 narrowingGenericTypeFromInstanceof01.ts:2:17: 'a' is declared here.
+         }
+     

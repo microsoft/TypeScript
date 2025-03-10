@@ -1,0 +1,27 @@
+--- old.mergedModuleDeclarationCodeGen4.errors.txt
++++ new.mergedModuleDeclarationCodeGen4.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++mergedModuleDeclarationCodeGen4.ts(11,21): error TS2304: Cannot find name 'foo'.
++
++
++==== mergedModuleDeclarationCodeGen4.ts (1 errors) ====
++    module superContain {
++        export module contain {
++            export module my.buz {
++                export module data {
++                    export function foo() { }
++                }
++            }
++            export module my.buz {
++                export module data {
++                    export function bar(contain, my, buz, data) {
++                        foo();
++                        ~~~
++!!! error TS2304: Cannot find name 'foo'.
++                    }
++                }
++            }
++        }
++    }

@@ -1,0 +1,11 @@
+unusedLocalsInMethod2.ts(3,9): error TS6199: All variables are unused.
+
+
+==== unusedLocalsInMethod2.ts (1 errors) ====
+    class greeter {
+        public function1() {
+            var x, y = 10;
+            ~~~~~~~~~~~~~
+!!! error TS6199: All variables are unused.
+        }
+    }

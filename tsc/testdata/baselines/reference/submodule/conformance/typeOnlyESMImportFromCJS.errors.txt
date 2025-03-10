@@ -1,0 +1,25 @@
+common.cts(2,36): error TS1454: `resolution-mode` can only be set for type-only imports.
+common.cts(2,36): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
+common.cts(3,36): error TS1454: `resolution-mode` can only be set for type-only imports.
+common.cts(3,36): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
+
+
+==== module.mts (0 errors) ====
+    export {};
+    
+==== common.cts (4 errors) ====
+    import type {} from "./module.mts";
+    import type {} from "./module.mts" with { "resolution-mode": "import" };
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1454: `resolution-mode` can only be set for type-only imports.
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
+    import type {} from "./module.mts" with { "resolution-mode": "require" };
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1454: `resolution-mode` can only be set for type-only imports.
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
+    type _1 = typeof import("./module.mts");
+    type _2 = typeof import("./module.mts", { with: { "resolution-mode": "import" } });
+    type _3 = typeof import("./module.mts", { with: { "resolution-mode": "require" } });
+    

@@ -1,0 +1,15 @@
+--- old.destructuringArrayBindingPatternAndAssignment4.errors.txt
++++ new.destructuringArrayBindingPatternAndAssignment4.errors.txt
+@@= skipped -0, +0 lines =@@
+-destructuringArrayBindingPatternAndAssignment4.ts(5,7): error TS2548: Type 'number[] | null' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator.
++destructuringArrayBindingPatternAndAssignment4.ts(5,7): error TS2802: Type 'number[] | null' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+ 
+ 
+ ==== destructuringArrayBindingPatternAndAssignment4.ts (1 errors) ====
+@@= skipped -7, +7 lines =@@
+     declare const data: number[] | null;
+     const [value] = data; // Error
+           ~~~~~~~
+-!!! error TS2548: Type 'number[] | null' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator.
++!!! error TS2802: Type 'number[] | null' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+     

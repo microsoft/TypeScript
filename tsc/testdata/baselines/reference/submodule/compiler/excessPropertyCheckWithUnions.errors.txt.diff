@@ -1,0 +1,24 @@
+--- old.excessPropertyCheckWithUnions.errors.txt
++++ new.excessPropertyCheckWithUnions.errors.txt
+@@= skipped -9, +9 lines =@@
+ excessPropertyCheckWithUnions.ts(38,19): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ tag: "A"; x: string; } | { tag: "A"; y: number; }'.
+ excessPropertyCheckWithUnions.ts(47,35): error TS2353: Object literal may only specify known properties, and 'second' does not exist in type '{ a: 1; b: 1; first: string; }'.
+ excessPropertyCheckWithUnions.ts(48,35): error TS2353: Object literal may only specify known properties, and 'third' does not exist in type '{ a: 1; b: 1; first: string; }'.
+-excessPropertyCheckWithUnions.ts(64,9): error TS2322: Type '{ kind: "A"; n: { a: string; b: string; }; }' is not assignable to type 'AB'.
+-  Types of property 'n' are incompatible.
+-    Object literal may only specify known properties, and 'b' does not exist in type 'AN'.
++excessPropertyCheckWithUnions.ts(64,9): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'AN'.
+ excessPropertyCheckWithUnions.ts(85,5): error TS2353: Object literal may only specify known properties, and 'href' does not exist in type 'Button'.
+ excessPropertyCheckWithUnions.ts(106,5): error TS2322: Type 'string' is not assignable to type 'IValue'.
+ excessPropertyCheckWithUnions.ts(111,67): error TS2322: Type 'string' is not assignable to type 'number'.
+@@= skipped -98, +96 lines =@@
+             a: "a",
+             b: "b", // excess -- kind: "A"
+             ~
+-!!! error TS2322: Type '{ kind: "A"; n: { a: string; b: string; }; }' is not assignable to type 'AB'.
+-!!! error TS2322:   Types of property 'n' are incompatible.
+-!!! error TS2322:     Object literal may only specify known properties, and 'b' does not exist in type 'AN'.
++!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'AN'.
+         }
+     }
+     const abac: AB = {

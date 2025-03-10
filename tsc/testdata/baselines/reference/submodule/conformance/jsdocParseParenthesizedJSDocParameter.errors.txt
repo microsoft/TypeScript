@@ -1,0 +1,9 @@
+paren.js(2,9): error TS7006: Parameter 's' implicitly has an 'any' type.
+
+
+==== paren.js (1 errors) ====
+    /** @type {function((string)): string} */
+    var x = s => s.toString()
+            ~
+!!! error TS7006: Parameter 's' implicitly has an 'any' type.
+    

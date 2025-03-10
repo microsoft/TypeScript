@@ -1,0 +1,25 @@
+noSuperInJSDocExtends.js(6,14): error TS2339: Property 'x' does not exist on type 'Derived'.
+noSuperInJSDocExtends.js(14,9): error TS2335: 'super' can only be referenced in a derived class.
+
+
+==== noSuperInJSDocExtends.js (2 errors) ====
+    class Based { }
+    /** @extends {Based} */
+    class Derived {
+        constructor() {
+            this;
+            this.x = 10;
+                 ~
+!!! error TS2339: Property 'x' does not exist on type 'Derived'.
+            var that = this;
+        }
+    }
+    
+    /** @extends {Based} */
+    class Derived2 {
+        constructor() {
+            super();
+            ~~~~~
+!!! error TS2335: 'super' can only be referenced in a derived class.
+        }
+    }

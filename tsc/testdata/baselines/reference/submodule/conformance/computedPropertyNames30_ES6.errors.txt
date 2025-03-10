@@ -1,0 +1,37 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+computedPropertyNames30_ES6.ts(11,19): error TS2466: 'super' cannot be referenced in a computed property name.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== computedPropertyNames30_ES6.ts (1 errors) ====
+    class Base {
+    }
+    class C extends Base {
+        constructor() {
+            super();
+            () => {
+                var obj = {
+                    // Ideally, we would capture this. But the reference is
+                    // illegal, and not capturing this is consistent with
+                    //treatment of other similar violations.
+                    [(super(), "prop")]() { }
+                      ~~~~~
+!!! error TS2466: 'super' cannot be referenced in a computed property name.
+                };
+            }
+        }
+    }

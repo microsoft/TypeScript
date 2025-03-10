@@ -1,0 +1,19 @@
+main.ts(8,17): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+
+
+==== main.ts (1 errors) ====
+    export {}
+    
+    declare var dec: any;
+    declare var x: any;
+    
+    // needs: __esDecorate, __runInitializers, __propKey
+    class C {
+        @dec static [x]: any;
+                    ~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+    }
+    
+==== tslib.d.ts (0 errors) ====
+    export {}
+    

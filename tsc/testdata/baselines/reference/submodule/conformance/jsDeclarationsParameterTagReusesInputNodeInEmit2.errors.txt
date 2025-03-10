@@ -1,0 +1,46 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+base.js(11,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== base.js (1 errors) ====
+    class Base {
+        constructor() {}
+    }
+    
+    const BaseFactory = () => {
+        return new Base();
+    };
+    
+    BaseFactory.Base = Base;
+    
+    module.exports = BaseFactory;
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+==== file.js (0 errors) ====
+    /** @typedef {typeof import('./base')} BaseFactory */
+    
+    /**
+     *
+     * @param {InstanceType<BaseFactory["Base"]>} base
+     * @returns {InstanceType<BaseFactory["Base"]>}
+     */
+    const test = (base) => {
+        return base;
+    };
+    

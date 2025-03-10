@@ -1,0 +1,53 @@
+--- old.stringIndexerConstrainsPropertyDeclarations.errors.txt
++++ new.stringIndexerConstrainsPropertyDeclarations.errors.txt
+@@= skipped -0, +0 lines =@@
+ stringIndexerConstrainsPropertyDeclarations.ts(13,5): error TS2411: Property 'b' of type 'number' is not assignable to 'string' index type 'string'.
+ stringIndexerConstrainsPropertyDeclarations.ts(14,5): error TS2411: Property 'c' of type '() => {}' is not assignable to 'string' index type 'string'.
+-stringIndexerConstrainsPropertyDeclarations.ts(16,5): error TS2411: Property '"e"' of type 'number' is not assignable to 'string' index type 'string'.
++stringIndexerConstrainsPropertyDeclarations.ts(16,5): error TS2411: Property 'e' of type 'number' is not assignable to 'string' index type 'string'.
+ stringIndexerConstrainsPropertyDeclarations.ts(18,5): error TS2411: Property '2.0' of type 'number' is not assignable to 'string' index type 'string'.
+ stringIndexerConstrainsPropertyDeclarations.ts(20,5): error TS2411: Property '"4.0"' of type 'number' is not assignable to 'string' index type 'string'.
+ stringIndexerConstrainsPropertyDeclarations.ts(21,5): error TS2411: Property 'f' of type 'MyString' is not assignable to 'string' index type 'string'.
+ stringIndexerConstrainsPropertyDeclarations.ts(28,5): error TS2411: Property 'foo' of type '() => string' is not assignable to 'string' index type 'string'.
+ stringIndexerConstrainsPropertyDeclarations.ts(45,5): error TS2411: Property 'b' of type 'number' is not assignable to 'string' index type 'string'.
+ stringIndexerConstrainsPropertyDeclarations.ts(46,5): error TS2411: Property 'c' of type '() => {}' is not assignable to 'string' index type 'string'.
+-stringIndexerConstrainsPropertyDeclarations.ts(48,5): error TS2411: Property '"e"' of type 'number' is not assignable to 'string' index type 'string'.
++stringIndexerConstrainsPropertyDeclarations.ts(48,5): error TS2411: Property 'e' of type 'number' is not assignable to 'string' index type 'string'.
+ stringIndexerConstrainsPropertyDeclarations.ts(50,5): error TS2411: Property '2.0' of type 'number' is not assignable to 'string' index type 'string'.
+ stringIndexerConstrainsPropertyDeclarations.ts(53,5): error TS2411: Property 'foo' of type '() => string' is not assignable to 'string' index type 'string'.
+ stringIndexerConstrainsPropertyDeclarations.ts(55,5): error TS2411: Property '"4.0"' of type 'number' is not assignable to 'string' index type 'string'.
+ stringIndexerConstrainsPropertyDeclarations.ts(56,5): error TS2411: Property 'f' of type 'MyString' is not assignable to 'string' index type 'string'.
+ stringIndexerConstrainsPropertyDeclarations.ts(63,5): error TS2411: Property 'b' of type 'number' is not assignable to 'string' index type 'string'.
+ stringIndexerConstrainsPropertyDeclarations.ts(64,5): error TS2411: Property 'c' of type '() => {}' is not assignable to 'string' index type 'string'.
+-stringIndexerConstrainsPropertyDeclarations.ts(66,5): error TS2411: Property '"e"' of type 'number' is not assignable to 'string' index type 'string'.
++stringIndexerConstrainsPropertyDeclarations.ts(66,5): error TS2411: Property 'e' of type 'number' is not assignable to 'string' index type 'string'.
+ stringIndexerConstrainsPropertyDeclarations.ts(68,5): error TS2411: Property '2.0' of type 'number' is not assignable to 'string' index type 'string'.
+ stringIndexerConstrainsPropertyDeclarations.ts(71,5): error TS2411: Property 'foo' of type '() => string' is not assignable to 'string' index type 'string'.
+ stringIndexerConstrainsPropertyDeclarations.ts(73,5): error TS2411: Property '"4.0"' of type 'number' is not assignable to 'string' index type 'string'.
+@@= skipped -49, +49 lines =@@
+         "d": string; // ok
+         "e": number; // error
+         ~~~
+-!!! error TS2411: Property '"e"' of type 'number' is not assignable to 'string' index type 'string'.
++!!! error TS2411: Property 'e' of type 'number' is not assignable to 'string' index type 'string'.
+         1.0: string; // ok
+         2.0: number; // error
+         ~~~
+@@= skipped -46, +46 lines =@@
+         "d": string; // ok
+         "e": number; // error
+         ~~~
+-!!! error TS2411: Property '"e"' of type 'number' is not assignable to 'string' index type 'string'.
++!!! error TS2411: Property 'e' of type 'number' is not assignable to 'string' index type 'string'.
+         1.0: string; // ok
+         2.0: number; // error
+         ~~~
+@@= skipped -32, +32 lines =@@
+         "d": string; // ok
+         "e": number; // error
+         ~~~
+-!!! error TS2411: Property '"e"' of type 'number' is not assignable to 'string' index type 'string'.
++!!! error TS2411: Property 'e' of type 'number' is not assignable to 'string' index type 'string'.
+         1.0: string; // ok
+         2.0: number; // error
+         ~~~

@@ -1,0 +1,63 @@
+--- old.destructuringEvaluationOrder(target=es2015).errors.txt
++++ new.destructuringEvaluationOrder(target=es2015).errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++destructuringEvaluationOrder.ts(3,36): error TS2339: Property 'push' does not exist on type '{}'.
++destructuringEvaluationOrder.ts(6,5): error TS2488: Type '[]' must have a '[Symbol.iterator]()' method that returns an iterator.
++destructuringEvaluationOrder.ts(9,5): error TS2488: Type '[{}]' must have a '[Symbol.iterator]()' method that returns an iterator.
++destructuringEvaluationOrder.ts(20,5): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
++destructuringEvaluationOrder.ts(20,6): error TS2339: Property '0' does not exist on type '{}'.
++destructuringEvaluationOrder.ts(20,16): error TS2339: Property '1' does not exist on type '{}'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== destructuringEvaluationOrder.ts (6 errors) ====
++    // https://github.com/microsoft/TypeScript/issues/39205
++    let trace: any[] = [];
++    let order = (n: any): any => trace.push(n);
++                                       ~~~~
++!!! error TS2339: Property 'push' does not exist on type '{}'.
++    
++    // order(0) should evaluate before order(1) because the first element is undefined
++    let [{ [order(1)]: x } = order(0)] = [];
++        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type '[]' must have a '[Symbol.iterator]()' method that returns an iterator.
++    
++    // order(0) should not evaluate because the first element is defined
++    let [{ [order(1)]: y } = order(0)] = [{}];
++        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type '[{}]' must have a '[Symbol.iterator]()' method that returns an iterator.
++    
++    // order(0) should evaluate first (destructuring of object literal {})
++    // order(1) should evaluate next (initializer because property is undefined)
++    // order(2) should evaluate last (evaluate object binding pattern from initializer)
++    let { [order(0)]: { [order(2)]: z } = order(1), ...w } = {} as any;
++    
++    
++    // https://github.com/microsoft/TypeScript/issues/39181
++    
++    // b = a must occur *after* 'a' has been assigned
++    let [{ ...a }, b = a]: any[] = [{ x: 1 }]
++        ~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
++         ~~~~~~~~
++!!! error TS2339: Property '0' does not exist on type '{}'.
++                   ~
++!!! error TS2339: Property '1' does not exist on type '{}'.
++    

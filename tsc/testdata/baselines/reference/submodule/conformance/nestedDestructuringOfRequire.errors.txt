@@ -1,0 +1,21 @@
+main.js(3,5): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+main.js(5,1): error TS2304: Cannot find name 'chalk'.
+
+
+==== main.js (2 errors) ====
+    const {
+        chalk: { grey }
+    } = require('./mod1');
+        ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    grey
+    chalk
+    ~~~~~
+!!! error TS2304: Cannot find name 'chalk'.
+    
+==== mod1.js (0 errors) ====
+    const chalk = {
+        grey: {}
+    };
+    module.exports.chalk = chalk
+    

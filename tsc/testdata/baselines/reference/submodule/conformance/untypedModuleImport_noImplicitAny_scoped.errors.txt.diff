@@ -1,0 +1,17 @@
+--- old.untypedModuleImport_noImplicitAny_scoped.errors.txt
++++ new.untypedModuleImport_noImplicitAny_scoped.errors.txt
+@@= skipped -0, +0 lines =@@
+-/a.ts(1,22): error TS7016: Could not find a declaration file for module '@foo/bar'. '/node_modules/@foo/bar/index.js' implicitly has an 'any' type.
+-  Try `npm i --save-dev @types/foo__bar` if it exists or add a new declaration (.d.ts) file containing `declare module '@foo/bar';`
++/a.ts(1,22): error TS2307: Cannot find module '@foo/bar' or its corresponding type declarations.
+ 
+ 
+ ==== /a.ts (1 errors) ====
+     import * as foo from "@foo/bar";
+                          ~~~~~~~~~~
+-!!! error TS7016: Could not find a declaration file for module '@foo/bar'. '/node_modules/@foo/bar/index.js' implicitly has an 'any' type.
+-!!! error TS7016:   Try `npm i --save-dev @types/foo__bar` if it exists or add a new declaration (.d.ts) file containing `declare module '@foo/bar';`
++!!! error TS2307: Cannot find module '@foo/bar' or its corresponding type declarations.
+     
+ ==== /node_modules/@foo/bar/package.json (0 errors) ====
+     { "name": "@foo/bar", "version": "1.2.3" }

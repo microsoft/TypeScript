@@ -1,0 +1,36 @@
+--- old.nodeModulesCJSEmit1.errors.txt
++++ new.nodeModulesCJSEmit1.errors.txt
+@@= skipped -0, +0 lines =@@
++/1.cjs(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++/2.cjs(1,1): error TS2304: Cannot find name 'exports'.
+ /3.cjs(2,1): error TS2304: Cannot find name 'exports'.
+-/5.cjs(2,8): error TS1192: Module '"/3"' has no default export.
++/5.cjs(1,17): error TS2306: File '/2.cjs' is not a module.
+ 
+ 
+-==== /1.cjs (0 errors) ====
++==== /1.cjs (1 errors) ====
+     module.exports = {};
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+     
+-==== /2.cjs (0 errors) ====
++==== /2.cjs (1 errors) ====
+     exports.foo = 0;
++    ~~~~~~~
++!!! error TS2304: Cannot find name 'exports'.
+     
+ ==== /3.cjs (1 errors) ====
+     import "foo";
+@@= skipped -18, +24 lines =@@
+     
+ ==== /5.cjs (1 errors) ====
+     import two from "./2.cjs";   // ok
++                    ~~~~~~~~~
++!!! error TS2306: File '/2.cjs' is not a module.
+     import three from "./3.cjs"; // error
+-           ~~~~~
+-!!! error TS1192: Module '"/3"' has no default export.
+     two.foo;
+     three.foo;
+     

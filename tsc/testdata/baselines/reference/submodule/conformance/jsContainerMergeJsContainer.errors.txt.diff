@@ -1,0 +1,19 @@
+--- old.jsContainerMergeJsContainer.errors.txt
++++ new.jsContainerMergeJsContainer.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++a.js(2,3): error TS2339: Property 'd' does not exist on type '{}'.
++b.js(1,3): error TS2339: Property 'd' does not exist on type '{}'.
++
++
++==== a.js (1 errors) ====
++    const a = {};
++    a.d = function() {};
++      ~
++!!! error TS2339: Property 'd' does not exist on type '{}'.
++==== b.js (1 errors) ====
++    a.d.prototype = {};
++      ~
++!!! error TS2339: Property 'd' does not exist on type '{}'.
++    

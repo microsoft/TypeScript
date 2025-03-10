@@ -1,0 +1,58 @@
+client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(1,41): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+client.ts(2,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(2,43): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+client.ts(4,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(4,48): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+client.ts(6,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(6,51): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+client.ts(9,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(9,50): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+client.ts(11,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(11,45): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+
+
+==== server.ts (0 errors) ====
+    export var a = 10;
+    export var x = a;
+    export var m = a;
+    export default {};
+    
+==== client.ts (12 errors) ====
+    export import defaultBinding1, { } from "server";
+    ~~~~~~
+!!! error TS1191: An import declaration cannot have modifiers.
+                                            ~~~~~~~~
+!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
+    export import defaultBinding2, { a } from "server";
+    ~~~~~~
+!!! error TS1191: An import declaration cannot have modifiers.
+                                              ~~~~~~~~
+!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
+    export var x1: number = a;
+    export import defaultBinding3, { a as b } from "server";
+    ~~~~~~
+!!! error TS1191: An import declaration cannot have modifiers.
+                                                   ~~~~~~~~
+!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
+    export var x1: number = b;
+    export import defaultBinding4, { x, a as y } from "server";
+    ~~~~~~
+!!! error TS1191: An import declaration cannot have modifiers.
+                                                      ~~~~~~~~
+!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
+    export var x1: number = x;
+    export var x1: number = y;
+    export import defaultBinding5, { x as z,  } from "server";
+    ~~~~~~
+!!! error TS1191: An import declaration cannot have modifiers.
+                                                     ~~~~~~~~
+!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
+    export var x1: number = z;
+    export import defaultBinding6, { m,  } from "server";
+    ~~~~~~
+!!! error TS1191: An import declaration cannot have modifiers.
+                                                ~~~~~~~~
+!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
+    export var x1: number = m;
+    

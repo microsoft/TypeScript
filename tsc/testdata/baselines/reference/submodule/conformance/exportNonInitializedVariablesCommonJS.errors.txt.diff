@@ -1,0 +1,21 @@
+--- old.exportNonInitializedVariablesCommonJS.errors.txt
++++ new.exportNonInitializedVariablesCommonJS.errors.txt
+@@= skipped -0, +0 lines =@@
+ exportNonInitializedVariablesCommonJS.ts(1,4): error TS1123: Variable declaration list cannot be empty.
+-exportNonInitializedVariablesCommonJS.ts(2,1): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
+ exportNonInitializedVariablesCommonJS.ts(2,1): error TS2304: Cannot find name 'let'.
+ exportNonInitializedVariablesCommonJS.ts(3,6): error TS1123: Variable declaration list cannot be empty.
+ 
+ 
+-==== exportNonInitializedVariablesCommonJS.ts (4 errors) ====
++==== exportNonInitializedVariablesCommonJS.ts (3 errors) ====
+     var;
+        
+ !!! error TS1123: Variable declaration list cannot be empty.
+     let;
+     ~~~
+-!!! error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
+-    ~~~
+ !!! error TS2304: Cannot find name 'let'.
+     const;
+          

@@ -1,0 +1,17 @@
+--- old.plainJSGrammarErrors4.errors.txt
++++ new.plainJSGrammarErrors4.errors.txt
+@@= skipped -0, +0 lines =@@
+-plainJSGrammarErrors4.js(5,14): error TS1111: Private field '#b' must be declared in an enclosing class.
++plainJSGrammarErrors4.js(5,14): error TS2339: Property '#b' does not exist on type 'A'.
+ 
+ 
+ ==== plainJSGrammarErrors4.js (1 errors) ====
+@@= skipped -7, +7 lines =@@
+             this.#a; // ok
+             this.#b; // error
+                  ~~
+-!!! error TS1111: Private field '#b' must be declared in an enclosing class.
++!!! error TS2339: Property '#b' does not exist on type 'A'.
+         }
+     }
+     

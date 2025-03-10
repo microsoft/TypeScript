@@ -1,0 +1,14 @@
+--- old.preserveValueImports_module(module=amd).errors.txt
++++ new.preserveValueImports_module(module=amd).errors.txt
+@@= skipped -0, +-1 lines =@@
+-error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+-  Use 'verbatimModuleSyntax' instead.
+-
+-
+-!!! error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+-!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
+-==== preserveValueImports_module.ts (0 errors) ====
+-    export {};
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

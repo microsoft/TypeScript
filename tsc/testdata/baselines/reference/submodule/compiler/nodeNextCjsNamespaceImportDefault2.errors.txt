@@ -1,0 +1,18 @@
+src/foo.mts(5,3): error TS2339: Property 'a' does not exist on type '"string"'.
+src/foo.mts(6,12): error TS2339: Property 'a' does not exist on type '"string"'.
+
+
+==== src/a.cts (0 errors) ====
+    export const a: number = 1;
+    export default 'string';
+==== src/foo.mts (2 errors) ====
+    import d, {a} from './a.cjs';
+    import * as ns from './a.cjs';
+    export {d, a, ns};
+    
+    d.a;
+      ~
+!!! error TS2339: Property 'a' does not exist on type '"string"'.
+    ns.default.a;
+               ~
+!!! error TS2339: Property 'a' does not exist on type '"string"'.

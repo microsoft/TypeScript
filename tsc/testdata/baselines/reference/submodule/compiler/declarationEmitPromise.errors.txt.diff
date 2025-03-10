@@ -1,0 +1,62 @@
+--- old.declarationEmitPromise.errors.txt
++++ new.declarationEmitPromise.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'Promise'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++declarationEmitPromise.ts(2,17): error TS2304: Cannot find name 'Array'.
++declarationEmitPromise.ts(7,62): error TS2339: Property 'filter' does not exist on type '{}'.
++declarationEmitPromise.ts(9,11): error TS2339: Property 'apply' does not exist on type '(a: A, b?: B, c?: C, d?: D, e?: E) => T'.
++declarationEmitPromise.ts(16,62): error TS2339: Property 'filter' does not exist on type '{}'.
++declarationEmitPromise.ts(18,11): error TS2339: Property 'apply' does not exist on type '(a: A, b?: B, c?: C, d?: D, e?: E) => T'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'Promise'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== declarationEmitPromise.ts (5 errors) ====
++    export class bluebird<T> {
++        static all: Array<bluebird<any>>;
++                    ~~~~~
++!!! error TS2304: Cannot find name 'Array'.
++    }
++    
++    export async function runSampleWorks<A, B, C, D, E>(
++        a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
++        let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => !!el));
++                                                                 ~~~~~~
++!!! error TS2339: Property 'filter' does not exist on type '{}'.
++        let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
++            f.apply(this, result);
++              ~~~~~
++!!! error TS2339: Property 'apply' does not exist on type '(a: A, b?: B, c?: C, d?: D, e?: E) => T'.
++        let rfunc: typeof func & {} = func as any; // <- This is the only difference
++        return rfunc
++    }
++    
++    export async function runSampleBreaks<A, B, C, D, E>(
++        a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
++        let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => !!el));
++                                                                 ~~~~~~
++!!! error TS2339: Property 'filter' does not exist on type '{}'.
++        let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
++            f.apply(this, result);
++              ~~~~~
++!!! error TS2339: Property 'apply' does not exist on type '(a: A, b?: B, c?: C, d?: D, e?: E) => T'.
++        let rfunc: typeof func = func as any; // <- This is the only difference
++        return rfunc
++    }

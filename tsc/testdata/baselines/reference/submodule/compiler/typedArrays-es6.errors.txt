@@ -1,0 +1,79 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+typedArrays-es6.ts(1,26): error TS2304: Cannot find name 'Float32Array'.
+typedArrays-es6.ts(4,26): error TS2304: Cannot find name 'Float64Array'.
+typedArrays-es6.ts(7,24): error TS2304: Cannot find name 'Int16Array'.
+typedArrays-es6.ts(10,24): error TS2304: Cannot find name 'Int32Array'.
+typedArrays-es6.ts(13,23): error TS2304: Cannot find name 'Int8Array'.
+typedArrays-es6.ts(16,22): error TS2304: Cannot find name 'NodeList'.
+typedArrays-es6.ts(19,25): error TS2304: Cannot find name 'Uint16Array'.
+typedArrays-es6.ts(22,25): error TS2304: Cannot find name 'Uint32Array'.
+typedArrays-es6.ts(25,24): error TS2304: Cannot find name 'Uint8Array'.
+typedArrays-es6.ts(28,31): error TS2304: Cannot find name 'Uint8ClampedArray'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== typedArrays-es6.ts (10 errors) ====
+    const float32Array = new Float32Array(1);
+                             ~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Float32Array'.
+    [...float32Array];
+    
+    const float64Array = new Float64Array(1);
+                             ~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Float64Array'.
+    [...float64Array];
+    
+    const int16Array = new Int16Array(1);
+                           ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Int16Array'.
+    [...int16Array];
+    
+    const int32Array = new Int32Array(1);
+                           ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Int32Array'.
+    [...int32Array];
+    
+    const int8Array = new Int8Array(1);
+                          ~~~~~~~~~
+!!! error TS2304: Cannot find name 'Int8Array'.
+    [...int8Array];
+    
+    const nodeList = new NodeList();
+                         ~~~~~~~~
+!!! error TS2304: Cannot find name 'NodeList'.
+    [...nodeList];
+    
+    const uint16Array = new Uint16Array(1);
+                            ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Uint16Array'.
+    [...uint16Array];
+    
+    const uint32Array = new Uint32Array(1);
+                            ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Uint32Array'.
+    [...uint32Array];
+    
+    const uint8Array = new Uint8Array(1);
+                           ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Uint8Array'.
+    [...uint8Array];
+    
+    const uint8ClampedArray = new Uint8ClampedArray(1);
+                                  ~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Uint8ClampedArray'.
+    [...uint8ClampedArray];
+    

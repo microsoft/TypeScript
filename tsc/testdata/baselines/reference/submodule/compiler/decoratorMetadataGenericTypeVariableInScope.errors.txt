@@ -1,0 +1,14 @@
+decoratorMetadataGenericTypeVariableInScope.ts(5,4): error TS2304: Cannot find name 'Decorate'.
+
+
+==== decoratorMetadataGenericTypeVariableInScope.ts (1 errors) ====
+    // Unused, but could collide with the named type argument below.
+    class TypeVariable {}
+    
+    export class C<TypeVariable> {
+      @Decorate
+       ~~~~~~~~
+!!! error TS2304: Cannot find name 'Decorate'.
+      member: TypeVariable;
+    }
+    

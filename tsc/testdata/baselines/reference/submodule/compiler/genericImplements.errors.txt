@@ -1,0 +1,32 @@
+genericImplements.ts(9,5): error TS2416: Property 'f' in type 'X' is not assignable to the same property in base type 'I'.
+  Type '<T>() => T' is not assignable to type '<T>() => T'. Two different types with this name exist, but they are unrelated.
+    Type 'B' is not assignable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'B'.
+
+
+==== genericImplements.ts (1 errors) ====
+    class A { a; };
+    class B { b; };
+    interface I {
+        f<T extends A>(): T;
+    } // { f: () => { a; } }
+    
+    // OK
+    class X implements I {  
+        f<T extends B>(): T { return undefined; }
+        ~
+!!! error TS2416: Property 'f' in type 'X' is not assignable to the same property in base type 'I'.
+!!! error TS2416:   Type '<T>() => T' is not assignable to type '<T>() => T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     Type 'B' is not assignable to type 'T'.
+!!! error TS2416:       'T' could be instantiated with an arbitrary type which could be unrelated to 'B'.
+    } // { f: () => { b; } }
+    
+    // OK
+    class Y implements I {
+        f<T extends A>(): T { return undefined; }
+    } // { f: () => { a; } }
+    
+    // OK
+    class Z implements I {
+        f<T>(): T { return undefined; }
+    } // { f: <T>() => T } 

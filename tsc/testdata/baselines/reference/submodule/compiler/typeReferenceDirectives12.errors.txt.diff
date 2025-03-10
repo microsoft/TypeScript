@@ -1,0 +1,40 @@
+--- old.typeReferenceDirectives12.errors.txt
++++ new.typeReferenceDirectives12.errors.txt
+@@= skipped -0, +0 lines =@@
+-/main.ts(1,14): error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
++/mod1.ts(8,16): error TS2304: Cannot find name 'Lib'.
++/mod1.ts(11,25): error TS2304: Cannot find name 'Lib'.
+ 
+ 
+ ==== /mod2.ts (0 errors) ====
+@@= skipped -11, +12 lines =@@
+ ==== /types/lib/index.d.ts (0 errors) ====
+     interface Lib { x }
+     
+-==== /main.ts (1 errors) ====
++==== /main.ts (0 errors) ====
+     export class Cls {
+-                 ~~~
+-!!! error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
+         x
+     }
+     
+-==== /mod1.ts (0 errors) ====
++==== /mod1.ts (2 errors) ====
+     /// <reference types="lib" />
+     
+     import {Cls} from "./main";
+@@= skipped -16, +14 lines =@@
+     declare module "./main" {
+         interface Cls {
+             foo(): Lib;
++                   ~~~
++!!! error TS2304: Cannot find name 'Lib'.
+         }
+         namespace Cls {
+             function bar(): Lib;
++                            ~~~
++!!! error TS2304: Cannot find name 'Lib'.
+         }
+     }
+     

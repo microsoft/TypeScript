@@ -1,0 +1,42 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+generatorOverloads2.ts(2,13): error TS1221: Generators are not allowed in an ambient context.
+generatorOverloads2.ts(2,29): error TS2304: Cannot find name 'Iterable'.
+generatorOverloads2.ts(3,13): error TS1221: Generators are not allowed in an ambient context.
+generatorOverloads2.ts(3,29): error TS2304: Cannot find name 'Iterable'.
+generatorOverloads2.ts(4,13): error TS1221: Generators are not allowed in an ambient context.
+generatorOverloads2.ts(4,26): error TS2304: Cannot find name 'Iterable'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== generatorOverloads2.ts (6 errors) ====
+    declare module M {
+        function* f(s: string): Iterable<any>;
+                ~
+!!! error TS1221: Generators are not allowed in an ambient context.
+                                ~~~~~~~~
+!!! error TS2304: Cannot find name 'Iterable'.
+        function* f(s: number): Iterable<any>;
+                ~
+!!! error TS1221: Generators are not allowed in an ambient context.
+                                ~~~~~~~~
+!!! error TS2304: Cannot find name 'Iterable'.
+        function* f(s: any): Iterable<any>;
+                ~
+!!! error TS1221: Generators are not allowed in an ambient context.
+                             ~~~~~~~~
+!!! error TS2304: Cannot find name 'Iterable'.
+    }

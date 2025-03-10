@@ -1,0 +1,11 @@
+--- old.allowImportingTsExtensions(moduleresolution=bundler).errors.txt
++++ new.allowImportingTsExtensions(moduleresolution=bundler).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
+ /c.ts(1,16): error TS2307: Cannot find module './thisfiledoesnotexist.ts' or its corresponding type declarations.
+ 
+ 
+-!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
+ ==== /ts.ts (0 errors) ====
+     export {};
+     

@@ -1,0 +1,34 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+computedPropertyNames43_ES6.ts(10,9): error TS2411: Property 'get1' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== computedPropertyNames43_ES6.ts (1 errors) ====
+    class Foo { x }
+    class Foo2 { x; y }
+    
+    class C {
+        [s: string]: Foo2;
+    }
+    
+    class D extends C {
+        // Computed properties
+        get ["get1"]() { return new Foo }
+            ~~~~~~~~
+!!! error TS2411: Property 'get1' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
+        set ["set1"](p: Foo2) { }
+    }

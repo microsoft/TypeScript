@@ -1,0 +1,27 @@
+recursiveExportAssignmentAndFindAliasedType2_moduleA.ts(3,25): error TS2307: Cannot find module 'recursiveExportAssignmentAndFindAliasedType2_moduleB' or its corresponding type declarations.
+recursiveExportAssignmentAndFindAliasedType2_moduleDef.d.ts(2,5): error TS2303: Circular definition of import alias 'self'.
+
+
+==== recursiveExportAssignmentAndFindAliasedType2_moduleA.ts (1 errors) ====
+    /// <reference path="recursiveExportAssignmentAndFindAliasedType2_moduleDef.d.ts"/>
+    import moduleC = require("moduleC");
+    import ClassB = require("recursiveExportAssignmentAndFindAliasedType2_moduleB");
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'recursiveExportAssignmentAndFindAliasedType2_moduleB' or its corresponding type declarations.
+    export var b: ClassB; // This should result in type ClassB
+==== recursiveExportAssignmentAndFindAliasedType2_moduleDef.d.ts (1 errors) ====
+    declare module "moduleC" {
+        import self = require("moduleD");
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2303: Circular definition of import alias 'self'.
+        export = self;
+    }
+    declare module "moduleD" {
+        import self = require("moduleC");
+        export = self;
+    }
+    
+==== recursiveExportAssignmentAndFindAliasedType2_moduleB.ts (0 errors) ====
+    class ClassB { }
+    export = ClassB;
+    

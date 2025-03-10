@@ -1,0 +1,17 @@
+--- old.recursiveBaseConstructorCreation3.errors.txt
++++ new.recursiveBaseConstructorCreation3.errors.txt
+@@= skipped -0, +0 lines =@@
+ recursiveBaseConstructorCreation3.ts(6,27): error TS2314: Generic type 'abc<T>' requires 1 type argument(s).
+ recursiveBaseConstructorCreation3.ts(9,15): error TS2351: This expression is not constructable.
+-  Type 'typeof xyz' has no construct signatures.
++  Type '{ prototype: xyz; }' has no construct signatures.
+ 
+ 
+ ==== recursiveBaseConstructorCreation3.ts (2 errors) ====
+@@= skipped -16, +16 lines =@@
+     var bar = new xyz(); // Error: Invalid 'new' expression.
+                   ~~~
+ !!! error TS2351: This expression is not constructable.
+-!!! error TS2351:   Type 'typeof xyz' has no construct signatures.
++!!! error TS2351:   Type '{ prototype: xyz; }' has no construct signatures.
+     var r: xyz = bar.foo;

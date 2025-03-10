@@ -1,0 +1,21 @@
+m1.ts(1,25): error TS2393: Duplicate function implementation.
+m1.ts(5,25): error TS2393: Duplicate function implementation.
+
+
+==== m1.ts (2 errors) ====
+    export default function foo() {
+                            ~~~
+!!! error TS2393: Duplicate function implementation.
+    
+    }
+    
+    export default function bar() {
+                            ~~~
+!!! error TS2393: Duplicate function implementation.
+    
+    }
+    
+==== m2.ts (0 errors) ====
+    import Entity from "./m1"
+    
+    Entity();

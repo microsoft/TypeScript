@@ -1,0 +1,16 @@
+--- old.selfReferencingFile3.errors.txt
++++ new.selfReferencingFile3.errors.txt
+@@= skipped -0, +-1 lines =@@
+-selfReferencingFile3.ts(1,21): error TS1006: A file cannot have a reference to itself.
+-
+-
+-==== selfReferencingFile3.ts (1 errors) ====
+-    ///<reference path='./selfReferencingFile3.ts'/>
+-                        ~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS1006: A file cannot have a reference to itself.
+-    
+-    class selfReferencingFile3 {
+-    
+-    }
+@@= skipped --1, +1 lines =@@
++<no content>

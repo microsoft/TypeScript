@@ -1,0 +1,11 @@
+--- old.optionsInlineSourceMapSourcemap.errors.txt
++++ new.optionsInlineSourceMapSourcemap.errors.txt
+@@= skipped -0, +-1 lines =@@
+-error TS5053: Option 'sourceMap' cannot be specified with option 'inlineSourceMap'.
+-
+-
+-!!! error TS5053: Option 'sourceMap' cannot be specified with option 'inlineSourceMap'.
+-==== optionsInlineSourceMapSourcemap.ts (0 errors) ====
+-    var a = 10;
+@@= skipped --1, +1 lines =@@
++<no content>

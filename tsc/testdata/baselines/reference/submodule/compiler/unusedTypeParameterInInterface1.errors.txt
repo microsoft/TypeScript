@@ -1,0 +1,9 @@
+unusedTypeParameterInInterface1.ts(1,14): error TS6196: 'T' is declared but never used.
+
+
+==== unusedTypeParameterInInterface1.ts (1 errors) ====
+    interface int<T> {
+                 ~~~
+!!! error TS6196: 'T' is declared but never used.
+    
+    }

@@ -1,0 +1,34 @@
+--- old.reachabilityChecks2.errors.txt
++++ new.reachabilityChecks2.errors.txt
+@@= skipped -0, +0 lines =@@
+ reachabilityChecks2.ts(4,1): error TS7027: Unreachable code detected.
++reachabilityChecks2.ts(4,1): error TS7027: Unreachable code detected.
+ 
+ 
+-==== reachabilityChecks2.ts (1 errors) ====
++==== reachabilityChecks2.ts (2 errors) ====
+     while (true) { }
+     const enum E { X }
+     
+     module A4 {
+     ~~~~~~~~~~~
++    ~~~~~~~~~~~
+         while (true);
+     ~~~~~~~~~~~~~~~~~
++    ~~~~~~~~~~~~~~~~~
+         module A {
+     ~~~~~~~~~~~~~~
++    ~~~~~~~~~~~~~~
+             const enum E { X }
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+         }
+     ~~~~~
++    ~~~~~
+     }
+     ~
+ !!! error TS7027: Unreachable code detected.
++    ~
++!!! error TS7027: Unreachable code detected.
+     
+     

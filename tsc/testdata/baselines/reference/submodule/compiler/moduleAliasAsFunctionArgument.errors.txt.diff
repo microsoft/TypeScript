@@ -1,0 +1,23 @@
+--- old.moduleAliasAsFunctionArgument.errors.txt
++++ new.moduleAliasAsFunctionArgument.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++moduleAliasAsFunctionArgument_1.ts(2,20): error TS2307: Cannot find module 'moduleAliasAsFunctionArgument_0' or its corresponding type declarations.
++
++
++==== moduleAliasAsFunctionArgument_1.ts (1 errors) ====
++    ///<reference path='moduleAliasAsFunctionArgument_0.ts'/>
++    import a = require('moduleAliasAsFunctionArgument_0');
++                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'moduleAliasAsFunctionArgument_0' or its corresponding type declarations.
++    
++    function fn(arg: { x: number }) {
++    }
++    
++    a.x; // OK
++    fn(a); // Error: property 'x' is missing from 'a'
++    
++==== moduleAliasAsFunctionArgument_0.ts (0 errors) ====
++    export var x: number;
++    

@@ -1,0 +1,34 @@
+--- old.jsdocTemplateClass.errors.txt
++++ new.jsdocTemplateClass.errors.txt
+@@= skipped -0, +0 lines =@@
+-templateTagOnClasses.js(25,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
++templateTagOnClasses.js(10,14): error TS2339: Property 'a' does not exist on type 'Foo'.
++templateTagOnClasses.js(25,3): error TS2339: Property 'a' does not exist on type 'Foo'.
++templateTagOnClasses.js(25,9): error TS2339: Property 'a' does not exist on type 'Foo'.
+ 
+ 
+-==== templateTagOnClasses.js (1 errors) ====
++==== templateTagOnClasses.js (3 errors) ====
+     /**
+      * @template T
+      * @typedef {(t: T) => T} Id
+@@= skipped -11, +13 lines =@@
+         /** @param {T} x */
+         constructor (x) {
+             this.a = x
++                 ~
++!!! error TS2339: Property 'a' does not exist on type 'Foo'.
+         }
+         /**
+          * 
+@@= skipped -15, +17 lines =@@
+     var f = new Foo(1)
+     var g = new Foo(false)
+     f.a = g.a
+-    ~~~
+-!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
++      ~
++!!! error TS2339: Property 'a' does not exist on type 'Foo'.
++            ~
++!!! error TS2339: Property 'a' does not exist on type 'Foo'.
+     

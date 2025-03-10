@@ -1,0 +1,19 @@
+--- old.plainJSTypeErrors.errors.txt
++++ new.plainJSTypeErrors.errors.txt
+@@= skipped -0, +0 lines =@@
+ plainJSTypeErrors.js(2,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
++plainJSTypeErrors.js(5,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+ 
+ 
+-==== plainJSTypeErrors.js (1 errors) ====
++==== plainJSTypeErrors.js (2 errors) ====
+     // should error
+     if ({} === {}) {}
+         ~~~~~~~~~
+@@= skipped -8, +9 lines =@@
+     
+     // should not error
+     if ({} == {}) {}
++        ~~~~~~~~
++!!! error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+     

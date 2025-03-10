@@ -1,0 +1,23 @@
+--- old.augmentedTypesClass4.errors.txt
++++ new.augmentedTypesClass4.errors.txt
+@@= skipped -0, +0 lines =@@
+ augmentedTypesClass4.ts(2,7): error TS2300: Duplicate identifier 'c3'.
++augmentedTypesClass4.ts(2,7): error TS2300: Duplicate identifier 'c3'.
+ augmentedTypesClass4.ts(3,7): error TS2300: Duplicate identifier 'c3'.
++augmentedTypesClass4.ts(3,7): error TS2300: Duplicate identifier 'c3'.
+ 
+ 
+-==== augmentedTypesClass4.ts (2 errors) ====
++==== augmentedTypesClass4.ts (4 errors) ====
+     //// class then class
+     class c3 { public foo() { } } // error
+           ~~
+ !!! error TS2300: Duplicate identifier 'c3'.
++          ~~
++!!! error TS2300: Duplicate identifier 'c3'.
+     class c3 { public bar() { } } // error
+           ~~
+ !!! error TS2300: Duplicate identifier 'c3'.
++          ~~
++!!! error TS2300: Duplicate identifier 'c3'.
+     

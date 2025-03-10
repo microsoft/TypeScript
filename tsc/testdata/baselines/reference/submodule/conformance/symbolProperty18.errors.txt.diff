@@ -1,0 +1,58 @@
+--- old.symbolProperty18.errors.txt
++++ new.symbolProperty18.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++symbolProperty18.ts(2,6): error TS2304: Cannot find name 'Symbol'.
++symbolProperty18.ts(3,6): error TS2304: Cannot find name 'Symbol'.
++symbolProperty18.ts(4,10): error TS2304: Cannot find name 'Symbol'.
++symbolProperty18.ts(7,12): error TS2304: Cannot find name 'Symbol'.
++symbolProperty18.ts(8,11): error TS2349: This expression is not callable.
++  Not all constituents of type 'number | boolean | () => string' are callable.
++    Type 'number' has no call signatures.
++symbolProperty18.ts(8,13): error TS2304: Cannot find name 'Symbol'.
++symbolProperty18.ts(9,3): error TS2304: Cannot find name 'Symbol'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== symbolProperty18.ts (7 errors) ====
++    var i = {
++        [Symbol.iterator]: 0,
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
++        [Symbol.toStringTag]() { return "" },
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
++        set [Symbol.toPrimitive](p: boolean) { }
++             ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
++    }
++    
++    var it = i[Symbol.iterator];
++               ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
++    var str = i[Symbol.toStringTag]();
++              ~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2349: This expression is not callable.
++!!! error TS2349:   Not all constituents of type 'number | boolean | () => string' are callable.
++!!! error TS2349:     Type 'number' has no call signatures.
++                ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
++    i[Symbol.toPrimitive] = false;
++      ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.

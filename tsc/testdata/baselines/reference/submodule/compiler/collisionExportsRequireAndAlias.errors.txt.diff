@@ -1,0 +1,24 @@
+--- old.collisionExportsRequireAndAlias.errors.txt
++++ new.collisionExportsRequireAndAlias.errors.txt
+@@= skipped -0, +0 lines =@@
+ collisionExportsRequireAndAlias_file2.ts(1,8): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
++collisionExportsRequireAndAlias_file2.ts(1,26): error TS2307: Cannot find module 'collisionExportsRequireAndAlias_file1' or its corresponding type declarations.
+ collisionExportsRequireAndAlias_file2.ts(2,8): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
++collisionExportsRequireAndAlias_file2.ts(2,26): error TS2307: Cannot find module 'collisionExportsRequireAndAlias_file3333' or its corresponding type declarations.
+ 
+ 
+-==== collisionExportsRequireAndAlias_file2.ts (2 errors) ====
++==== collisionExportsRequireAndAlias_file2.ts (4 errors) ====
+     import require = require('collisionExportsRequireAndAlias_file1'); // Error
+            ~~~~~~~
+ !!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
++                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'collisionExportsRequireAndAlias_file1' or its corresponding type declarations.
+     import exports = require('collisionExportsRequireAndAlias_file3333'); // Error
+            ~~~~~~~
+ !!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
++                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'collisionExportsRequireAndAlias_file3333' or its corresponding type declarations.
+     export function foo() {
+         require.bar();
+     }

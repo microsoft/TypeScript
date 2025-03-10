@@ -1,0 +1,31 @@
+--- old.shorthand-property-es6-amd.errors.txt
++++ new.shorthand-property-es6-amd.errors.txt
+@@= skipped -0, +0 lines =@@
+-test.ts(1,19): error TS2792: Cannot find module './foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++test.ts(1,19): error TS2307: Cannot find module './foo' or its corresponding type declarations.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== test.ts (1 errors) ====
+     import {foo} from './foo';
+                       ~~~~~~~
+-!!! error TS2792: Cannot find module './foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module './foo' or its corresponding type declarations.
+     const baz = 42;
+     const bar = { foo, baz };
+     

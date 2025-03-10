@@ -1,0 +1,22 @@
+--- old.subtypingWithNumericIndexer4.errors.txt
++++ new.subtypingWithNumericIndexer4.errors.txt
+@@= skipped -3, +3 lines =@@
+ subtypingWithNumericIndexer4.ts(20,11): error TS2415: Class 'B' incorrectly extends base class 'A<Base>'.
+   'number' index signatures are incompatible.
+     Type 'string' is not assignable to type 'Base'.
+-subtypingWithNumericIndexer4.ts(20,23): error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
+-  Property 'bar' is missing in type 'Base' but required in type 'Derived'.
++subtypingWithNumericIndexer4.ts(20,23): error TS2741: Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+ subtypingWithNumericIndexer4.ts(24,11): error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
+   'number' index signatures are incompatible.
+     Type 'string' is not assignable to type 'T'.
+@@= skipped -38, +37 lines =@@
+ !!! error TS2415:   'number' index signatures are incompatible.
+ !!! error TS2415:     Type 'string' is not assignable to type 'Base'.
+                           ~~~~
+-!!! error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
+-!!! error TS2344:   Property 'bar' is missing in type 'Base' but required in type 'Derived'.
++!!! error TS2741: Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+ !!! related TS2728 subtypingWithNumericIndexer4.ts:4:34: 'bar' is declared here.
+             [x: number]: string; // error
+         }

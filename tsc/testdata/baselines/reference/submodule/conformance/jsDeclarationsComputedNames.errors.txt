@@ -1,0 +1,32 @@
+index.js(3,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== index.js (1 errors) ====
+    const TopLevelSym = Symbol();
+    const InnerSym = Symbol();
+    module.exports = {
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+        [TopLevelSym](x = 12) {
+            return x;
+        },
+        items: {
+            [InnerSym]: (arg = {x: 12}) => arg.x
+        }
+    }
+    
+==== index2.js (0 errors) ====
+    const TopLevelSym = Symbol();
+    const InnerSym = Symbol();
+    
+    export class MyClass {
+        static [TopLevelSym] = 12;
+        [InnerSym] = "ok";
+        /**
+         * @param {typeof TopLevelSym | typeof InnerSym} _p
+         */
+        constructor(_p = InnerSym) {
+            // switch on _p
+        }
+    }
+    

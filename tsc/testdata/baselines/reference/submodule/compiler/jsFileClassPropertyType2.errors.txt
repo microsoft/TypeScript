@@ -1,0 +1,19 @@
+bar.ts(1,11): error TS2339: Property 'p' does not exist on type 'C'.
+foo.js(4,12): error TS2339: Property 'p' does not exist on type 'C'.
+
+
+==== foo.js (1 errors) ====
+    class C {
+        constructor() {
+          /** @type {number[]}*/
+          this.p = [];
+               ~
+!!! error TS2339: Property 'p' does not exist on type 'C'.
+      }
+    }
+    
+==== bar.ts (1 errors) ====
+    (new C()).p.push("string");
+              ~
+!!! error TS2339: Property 'p' does not exist on type 'C'.
+    

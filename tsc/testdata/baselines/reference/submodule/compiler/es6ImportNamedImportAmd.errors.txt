@@ -1,0 +1,77 @@
+es6ImportNamedImportAmd_1.ts(1,17): error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+es6ImportNamedImportAmd_1.ts(2,19): error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+es6ImportNamedImportAmd_1.ts(4,24): error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+es6ImportNamedImportAmd_1.ts(6,27): error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+es6ImportNamedImportAmd_1.ts(9,26): error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+es6ImportNamedImportAmd_1.ts(11,21): error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+es6ImportNamedImportAmd_1.ts(13,24): error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+es6ImportNamedImportAmd_1.ts(16,38): error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+es6ImportNamedImportAmd_1.ts(19,20): error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+es6ImportNamedImportAmd_1.ts(21,26): error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+es6ImportNamedImportAmd_1.ts(25,22): error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+es6ImportNamedImportAmd_1.ts(27,30): error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+
+
+==== es6ImportNamedImportAmd_0.ts (0 errors) ====
+    export var a = 10;
+    export var x = a;
+    export var m = a;
+    export var a1 = 10;
+    export var x1 = 10;
+    export var z1 = 10;
+    export var z2 = 10;
+    export var aaaa = 10;
+    
+==== es6ImportNamedImportAmd_1.ts (12 errors) ====
+    import { } from "es6ImportNamedImportAmd_0";
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+    import { a } from "es6ImportNamedImportAmd_0";
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+    var xxxx = a;
+    import { a as b } from "es6ImportNamedImportAmd_0";
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+    var xxxx = b;
+    import { x, a as y } from "es6ImportNamedImportAmd_0";
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+    var xxxx = x;
+    var xxxx = y;
+    import { x as z,  } from "es6ImportNamedImportAmd_0";
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+    var xxxx = z;
+    import { m,  } from "es6ImportNamedImportAmd_0";
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+    var xxxx = m;
+    import { a1, x1 } from "es6ImportNamedImportAmd_0";
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+    var xxxx = a1;
+    var xxxx = x1;
+    import { a1 as a11, x1 as x11 } from "es6ImportNamedImportAmd_0";
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+    var xxxx = a11;
+    var xxxx = x11;
+    import { z1 } from "es6ImportNamedImportAmd_0";
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+    var z111 = z1;
+    import { z2 as z3 } from "es6ImportNamedImportAmd_0";
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+    var z2 = z3; // z2 shouldn't give redeclare error
+    
+    // These are elided
+    import { aaaa } from "es6ImportNamedImportAmd_0";
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+    // These are elided
+    import { aaaa as bbbb } from "es6ImportNamedImportAmd_0";
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'es6ImportNamedImportAmd_0' or its corresponding type declarations.
+    

@@ -1,0 +1,17 @@
+alias.ts(3,1): error TS2440: Import declaration conflicts with local declaration of 'EnumA'.
+
+
+==== enum.ts (0 errors) ====
+    export enum Enum {
+        A,
+        B
+    }
+==== alias.ts (1 errors) ====
+    import {Enum} from "./enum";
+    
+    import EnumA = Enum.A;
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2440: Import declaration conflicts with local declaration of 'EnumA'.
+    
+    export type EnumA = [string] | [string, number];
+    

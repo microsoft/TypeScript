@@ -1,0 +1,47 @@
+--- old.objectRestAssignment.errors.txt
++++ new.objectRestAssignment.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++objectRestAssignment.ts(12,10): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
++objectRestAssignment.ts(12,11): error TS2339: Property '0' does not exist on type '{}'.
++objectRestAssignment.ts(13,8): error TS2339: Property '0' does not exist on type '{}'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== objectRestAssignment.ts (3 errors) ====
++    let ka: any;
++    let nested: { ki };
++    let other: number;
++    let rest: { };
++    let complex: { x: { ka, ki }, y: number };
++    ({x: { ka, ...nested }, y: other, ...rest} = complex);
++    
++    // should be:
++    let overEmit: { a: { ka: string, x: string }[], b: { z: string, ki: string, ku: string }, ke: string, ko: string };
++    
++    // var _g = overEmit.a, [_h, ...y] = _g, nested2 = __rest(_h, []), _j = overEmit.b, { z } = _j, c = __rest(_j, ["z"]), rest2 = __rest(overEmit, ["a", "b"]);
++    var { a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit;
++             ~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
++              ~~~~~~~~~~~~~~
++!!! error TS2339: Property '0' does not exist on type '{}'.
++    ({ a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit);
++           ~~~~~~~~~~~~~~
++!!! error TS2339: Property '0' does not exist on type '{}'.
++    

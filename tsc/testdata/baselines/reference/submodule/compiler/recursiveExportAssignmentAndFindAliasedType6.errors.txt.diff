@@ -1,0 +1,31 @@
+--- old.recursiveExportAssignmentAndFindAliasedType6.errors.txt
++++ new.recursiveExportAssignmentAndFindAliasedType6.errors.txt
+@@= skipped -0, +0 lines =@@
+-recursiveExportAssignmentAndFindAliasedType6_moduleE.ts(1,1): error TS2303: Circular definition of import alias 'self'.
++recursiveExportAssignmentAndFindAliasedType6_moduleA.ts(1,26): error TS2307: Cannot find module 'recursiveExportAssignmentAndFindAliasedType6_moduleC' or its corresponding type declarations.
++recursiveExportAssignmentAndFindAliasedType6_moduleA.ts(2,25): error TS2307: Cannot find module 'recursiveExportAssignmentAndFindAliasedType6_moduleB' or its corresponding type declarations.
+ 
+ 
+-==== recursiveExportAssignmentAndFindAliasedType6_moduleA.ts (0 errors) ====
++==== recursiveExportAssignmentAndFindAliasedType6_moduleA.ts (2 errors) ====
+     import moduleC = require("recursiveExportAssignmentAndFindAliasedType6_moduleC");
++                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'recursiveExportAssignmentAndFindAliasedType6_moduleC' or its corresponding type declarations.
+     import ClassB = require("recursiveExportAssignmentAndFindAliasedType6_moduleB");
++                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'recursiveExportAssignmentAndFindAliasedType6_moduleB' or its corresponding type declarations.
+     export var b: ClassB; // This should result in type ClassB
+ ==== recursiveExportAssignmentAndFindAliasedType6_moduleC.ts (0 errors) ====
+     import self = require("recursiveExportAssignmentAndFindAliasedType6_moduleD");
+@@= skipped -12, +17 lines =@@
+     import self = require("recursiveExportAssignmentAndFindAliasedType6_moduleE");
+     export = self;
+     
+-==== recursiveExportAssignmentAndFindAliasedType6_moduleE.ts (1 errors) ====
++==== recursiveExportAssignmentAndFindAliasedType6_moduleE.ts (0 errors) ====
+     import self = require("recursiveExportAssignmentAndFindAliasedType6_moduleC");
+-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2303: Circular definition of import alias 'self'.
+     export = self;
+     
+ ==== recursiveExportAssignmentAndFindAliasedType6_moduleB.ts (0 errors) ====

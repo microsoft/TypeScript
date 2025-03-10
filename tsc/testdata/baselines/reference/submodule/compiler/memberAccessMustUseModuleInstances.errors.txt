@@ -1,0 +1,18 @@
+memberAccessMustUseModuleInstances_1.ts(2,24): error TS2307: Cannot find module 'memberAccessMustUseModuleInstances_0' or its corresponding type declarations.
+
+
+==== memberAccessMustUseModuleInstances_1.ts (1 errors) ====
+    ///<reference path='memberAccessMustUseModuleInstances_0.ts'/>
+    import WinJS = require('memberAccessMustUseModuleInstances_0');
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'memberAccessMustUseModuleInstances_0' or its corresponding type declarations.
+    
+    WinJS.Promise.timeout(10);
+    
+==== memberAccessMustUseModuleInstances_0.ts (0 errors) ====
+    export class Promise {
+        static timeout(delay: number): Promise {
+            return null;
+        }
+    }
+    

@@ -1,0 +1,32 @@
+c.ts(7,5): error TS2367: This comparison appears to be unintentional because the types 'F' and 'F' have no overlap.
+c.ts(11,1): error TS2741: Property 'foo1' is missing in type 'F' but required in type 'F'.
+
+
+==== a.ts (0 errors) ====
+    export interface F {
+        foo1: number
+    }
+    
+==== b.ts (0 errors) ====
+    export interface F {
+        foo2: number
+    }
+    
+==== c.ts (2 errors) ====
+    import * as A from './a'
+    import * as B from './b'
+    
+    let a: A.F
+    let b: B.F
+    
+    if (a === b) {
+        ~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'F' and 'F' have no overlap.
+    
+    }
+    
+    a = b
+    ~
+!!! error TS2741: Property 'foo1' is missing in type 'F' but required in type 'F'.
+!!! related TS2728 a.ts:2:5: 'foo1' is declared here.
+    

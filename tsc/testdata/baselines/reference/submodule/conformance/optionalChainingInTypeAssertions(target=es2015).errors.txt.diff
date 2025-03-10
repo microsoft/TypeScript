@@ -1,0 +1,41 @@
+--- old.optionalChainingInTypeAssertions(target=es2015).errors.txt
++++ new.optionalChainingInTypeAssertions(target=es2015).errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== optionalChainingInTypeAssertions.ts (0 errors) ====
++    class Foo {
++        m() {}
++    }
++    
++    const foo = new Foo();
++    
++    (foo.m as any)?.();
++    (<any>foo.m)?.();
++    
++    /*a1*/(/*a2*/foo.m as any/*a3*/)/*a4*/?.();
++    /*b1*/(/*b2*/<any>foo.m/*b3*/)/*b4*/?.();
++    
++    // https://github.com/microsoft/TypeScript/issues/50148
++    (foo?.m as any).length;
++    (<any>foo?.m).length;
++    (foo?.["m"] as any).length;
++    (<any>foo?.["m"]).length;

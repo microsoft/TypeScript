@@ -1,0 +1,50 @@
+classPropertyAsProtected.ts(15,3): error TS2445: Property 'x' is protected and only accessible within class 'C' and its subclasses.
+classPropertyAsProtected.ts(16,3): error TS2445: Property 'y' is protected and only accessible within class 'C' and its subclasses.
+classPropertyAsProtected.ts(17,3): error TS2445: Property 'y' is protected and only accessible within class 'C' and its subclasses.
+classPropertyAsProtected.ts(18,3): error TS2445: Property 'foo' is protected and only accessible within class 'C' and its subclasses.
+classPropertyAsProtected.ts(20,3): error TS2445: Property 'a' is protected and only accessible within class 'C' and its subclasses.
+classPropertyAsProtected.ts(21,3): error TS2445: Property 'b' is protected and only accessible within class 'C' and its subclasses.
+classPropertyAsProtected.ts(22,3): error TS2445: Property 'b' is protected and only accessible within class 'C' and its subclasses.
+classPropertyAsProtected.ts(23,3): error TS2445: Property 'foo' is protected and only accessible within class 'C' and its subclasses.
+
+
+==== classPropertyAsProtected.ts (8 errors) ====
+    class C {
+        protected x: string;
+        protected get y() { return null; }
+        protected set y(x) { }
+        protected foo() { }
+    
+        protected static a: string;
+        protected static get b() { return null; }
+        protected static set b(x) { }
+        protected static foo() { }
+    }
+    
+    var c: C;
+    // all errors
+    c.x;
+      ~
+!!! error TS2445: Property 'x' is protected and only accessible within class 'C' and its subclasses.
+    c.y;
+      ~
+!!! error TS2445: Property 'y' is protected and only accessible within class 'C' and its subclasses.
+    c.y = 1;
+      ~
+!!! error TS2445: Property 'y' is protected and only accessible within class 'C' and its subclasses.
+    c.foo();
+      ~~~
+!!! error TS2445: Property 'foo' is protected and only accessible within class 'C' and its subclasses.
+    
+    C.a;
+      ~
+!!! error TS2445: Property 'a' is protected and only accessible within class 'C' and its subclasses.
+    C.b();
+      ~
+!!! error TS2445: Property 'b' is protected and only accessible within class 'C' and its subclasses.
+    C.b = 1;
+      ~
+!!! error TS2445: Property 'b' is protected and only accessible within class 'C' and its subclasses.
+    C.foo();
+      ~~~
+!!! error TS2445: Property 'foo' is protected and only accessible within class 'C' and its subclasses.

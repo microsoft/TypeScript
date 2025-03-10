@@ -1,0 +1,25 @@
+constructorDefaultValuesReferencingThis.ts(15,21): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+
+
+==== constructorDefaultValuesReferencingThis.ts (1 errors) ====
+    class C {
+        public baseProp = 1;
+        constructor(x = this) { }
+    }
+    
+    class D<T> {
+        constructor(x = this) { }
+    }
+    
+    class E<T> {
+        constructor(public x = this) { }
+    }
+    
+    class F extends C {
+        constructor(y = this.baseProp) {
+                        ~~~~
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+            super();
+        }
+    }
+    

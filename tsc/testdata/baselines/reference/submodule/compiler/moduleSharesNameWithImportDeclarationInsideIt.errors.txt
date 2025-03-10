@@ -1,0 +1,17 @@
+moduleSharesNameWithImportDeclarationInsideIt.ts(7,18): error TS2694: Namespace 'Z' has no exported member 'M'.
+
+
+==== moduleSharesNameWithImportDeclarationInsideIt.ts (1 errors) ====
+    module Z.M {
+        export function bar() {
+            return "";
+        }
+    }
+    module A.M {
+        import M = Z.M;
+                     ~
+!!! error TS2694: Namespace 'Z' has no exported member 'M'.
+        export function bar() {
+        }
+        M.bar(); // Should call Z.M.bar
+    }

@@ -1,0 +1,21 @@
+--- old.exportImportMultipleFiles.errors.txt
++++ new.exportImportMultipleFiles.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++exportImportMultipleFiles_library.ts(1,30): error TS2307: Cannot find module 'exportImportMultipleFiles_math' or its corresponding type declarations.
++
++
++==== exportImportMultipleFiles_userCode.ts (0 errors) ====
++    import lib = require('./exportImportMultipleFiles_library');
++    lib.math.add(3, 4); // Shouldnt be error
++    
++==== exportImportMultipleFiles_math.ts (0 errors) ====
++    export function add(a, b) { return a + b; }
++    
++==== exportImportMultipleFiles_library.ts (1 errors) ====
++    export import math = require("exportImportMultipleFiles_math");
++                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'exportImportMultipleFiles_math' or its corresponding type declarations.
++    math.add(3, 4); // OK
++    

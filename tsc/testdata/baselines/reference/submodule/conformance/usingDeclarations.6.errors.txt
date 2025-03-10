@@ -1,0 +1,13 @@
+usingDeclarations.6.ts(2,11): error TS1492: 'using' declarations may not have binding patterns.
+usingDeclarations.6.ts(2,12): error TS2339: Property 'a' does not exist on type 'null'.
+
+
+==== usingDeclarations.6.ts (2 errors) ====
+    {
+        using {a} = null;
+              ~~~
+!!! error TS1492: 'using' declarations may not have binding patterns.
+               ~
+!!! error TS2339: Property 'a' does not exist on type 'null'.
+    }
+    

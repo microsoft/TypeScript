@@ -1,0 +1,30 @@
+/index.ts(1,21): error TS2306: File '/foo.ios.js' is not a module.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+    	"compilerOptions": {
+    		"allowJs": true,
+    		"checkJs": false,
+    		"outDir": "bin",
+    		"moduleResolution": "node",
+    		"traceResolution": true,
+    		"moduleSuffixes": [".ios"]
+    	}
+    }
+    
+==== /index.ts (1 errors) ====
+    import { ios } from "./foo.js";
+                        ~~~~~~~~~~
+!!! error TS2306: File '/foo.ios.js' is not a module.
+==== /foo.ios.js (0 errors) ====
+    "use strict";
+    exports.__esModule = true;
+    function ios() {}
+    exports.ios = ios;
+==== /foo.js (0 errors) ====
+    "use strict";
+    exports.__esModule = true;
+    function base() {}
+    exports.base = base;
+    

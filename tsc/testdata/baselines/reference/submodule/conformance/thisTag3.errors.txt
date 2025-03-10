@@ -1,0 +1,18 @@
+/a.js(10,21): error TS2339: Property 'fn' does not exist on type 'C'.
+
+
+==== /a.js (1 errors) ====
+    /**
+     * @typedef {{fn(a: string): void}} T
+     */
+    
+    class C {
+        /**
+         * @this {T}
+         * @param {string} a
+         */
+        p = (a) => this.fn("" + a);
+                        ~~
+!!! error TS2339: Property 'fn' does not exist on type 'C'.
+    }
+    

@@ -1,0 +1,115 @@
+--- old.jsDeclarationsExportDefinePropertyEmit.errors.txt
++++ new.jsDeclarationsExportDefinePropertyEmit.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++index.js(1,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(3,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(4,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(12,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(22,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(31,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(32,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(32,58): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(41,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(51,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(53,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(54,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(54,54): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(57,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(57,54): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(58,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
++==== index.js (16 errors) ====
++    Object.defineProperty(module.exports, "a", { value: function a() {} });
++                          ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++    Object.defineProperty(module.exports, "b", { value: function b() {} });
++                          ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    Object.defineProperty(module.exports.b, "cat", { value: "cat" });
++                          ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++    /**
++     * @param {number} a
++     * @param {number} b
++     * @return {string} 
++     */
++    function d(a, b) { return /** @type {*} */(null); }
++    Object.defineProperty(module.exports, "d", { value: d });
++                          ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++    
++    /**
++     * @template T,U
++     * @param {T} a
++     * @param {U} b
++     * @return {T & U} 
++     */
++    function e(a, b) { return /** @type {*} */(null); }
++    Object.defineProperty(module.exports, "e", { value: e });
++                          ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++    /**
++     * @template T
++     * @param {T} a
++     */
++    function f(a) {
++        return a;
++    }
++    Object.defineProperty(module.exports, "f", { value: f });
++                          ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    Object.defineProperty(module.exports.f, "self", { value: module.exports.f });
++                          ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++                                                             ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++    /**
++     * @param {{x: string}} a
++     * @param {{y: typeof module.exports.b}} b
++     */
++    function g(a, b) {
++        return a.x && b.y();
++    }
++    Object.defineProperty(module.exports, "g", { value: g });
++                          ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++    
++    /**
++     * @param {{x: string}} a
++     * @param {{y: typeof module.exports.b}} b
++     */
++    function hh(a, b) {
++        return a.x && b.y();
++    }
++    Object.defineProperty(module.exports, "h", { value: hh });
++                          ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++    Object.defineProperty(module.exports, "i", { value: function i(){} });
++                          ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    Object.defineProperty(module.exports, "ii", { value: module.exports.i });
++                          ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++                                                         ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++    // note that this last one doesn't make much sense in cjs, since exports aren't hoisted bindings
++    Object.defineProperty(module.exports, "jj", { value: module.exports.j });
++                          ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++                                                         ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    Object.defineProperty(module.exports, "j", { value: function j() {} });
++                          ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    

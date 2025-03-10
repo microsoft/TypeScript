@@ -1,0 +1,20 @@
+--- old.override_js4.errors.txt
++++ new.override_js4.errors.txt
+@@= skipped -0, +-1 lines =@@
+-a.js(7,5): error TS4123: This member cannot have a JSDoc comment with an 'override' tag because it is not declared in the base class 'A'. Did you mean 'doSomething'?
+-
+-
+-==== a.js (1 errors) ====
+-    class A {
+-        doSomething() {}
+-    }
+-    
+-    class B extends A {
+-        /** @override  */
+-        doSomethang() {}
+-        ~~~~~~~~~~~
+-!!! error TS4123: This member cannot have a JSDoc comment with an 'override' tag because it is not declared in the base class 'A'. Did you mean 'doSomething'?
+-    }
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

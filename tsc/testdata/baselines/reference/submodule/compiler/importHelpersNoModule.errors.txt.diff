@@ -1,0 +1,34 @@
+--- old.importHelpersNoModule.errors.txt
++++ new.importHelpersNoModule.errors.txt
+@@= skipped -0, +-1 lines =@@
+-external.ts(2,16): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+-
+-
+-==== external.ts (1 errors) ====
+-    export class A { }
+-    export class B extends A { }
+-                   ~~~~~~~~~
+-!!! error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+-    
+-    declare var dec: any;
+-    
+-    @dec
+-    class C {
+-        method(@dec x: number) {
+-        }
+-    }
+-    
+-==== script.ts (0 errors) ====
+-    class A { }
+-    class B extends A { }
+-    
+-    declare var dec: any;
+-    
+-    @dec
+-    class C {
+-        method(@dec x: number) {
+-        }
+-    }
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

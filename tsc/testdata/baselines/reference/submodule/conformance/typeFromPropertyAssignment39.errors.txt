@@ -1,0 +1,17 @@
+a.js(2,1): error TS7053: Element implicitly has an 'any' type because expression of type '"baz"' can't be used to index type '{}'.
+  Property 'baz' does not exist on type '{}'.
+a.js(3,1): error TS7053: Element implicitly has an 'any' type because expression of type '"baz"' can't be used to index type '{}'.
+  Property 'baz' does not exist on type '{}'.
+
+
+==== a.js (2 errors) ====
+    const foo = {};
+    foo["baz"] = {};
+    ~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"baz"' can't be used to index type '{}'.
+!!! error TS7053:   Property 'baz' does not exist on type '{}'.
+    foo["baz"]["blah"] = 3;
+    ~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"baz"' can't be used to index type '{}'.
+!!! error TS7053:   Property 'baz' does not exist on type '{}'.
+    

@@ -1,0 +1,19 @@
+--- old.declarationEmitExpandoPropertyPrivateName.errors.txt
++++ new.declarationEmitExpandoPropertyPrivateName.errors.txt
+@@= skipped -0, +-1 lines =@@
+-b.ts(4,1): error TS4032: Property 'val' of exported interface has or is using name 'I' from private module '"a"'.
+-
+-
+-==== a.ts (0 errors) ====
+-    interface I {}
+-    export function f(): I { return null as I; }
+-==== b.ts (1 errors) ====
+-    import {f} from "./a";
+-    
+-    export function q() {}
+-    q.val = f();
+-    ~~~~~
+-!!! error TS4032: Property 'val' of exported interface has or is using name 'I' from private module '"a"'.
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

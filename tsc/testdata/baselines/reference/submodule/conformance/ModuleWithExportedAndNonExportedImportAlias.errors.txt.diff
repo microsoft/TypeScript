@@ -1,0 +1,16 @@
+--- old.ModuleWithExportedAndNonExportedImportAlias.errors.txt
++++ new.ModuleWithExportedAndNonExportedImportAlias.errors.txt
+@@= skipped -0, +0 lines =@@
+-ModuleWithExportedAndNonExportedImportAlias.ts(37,21): error TS2339: Property 'Lines' does not exist on type 'typeof Geometry'.
++ModuleWithExportedAndNonExportedImportAlias.ts(37,21): error TS2339: Property 'Lines' does not exist on type '{ Origin: Point; Unit: Line; }'.
+ 
+ 
+ ==== ModuleWithExportedAndNonExportedImportAlias.ts (1 errors) ====
+@@= skipped -39, +39 lines =@@
+     // not expected to work since non are exported
+     var line = Geometry.Lines.Line;
+                         ~~~~~
+-!!! error TS2339: Property 'Lines' does not exist on type 'typeof Geometry'.
++!!! error TS2339: Property 'Lines' does not exist on type '{ Origin: Point; Unit: Line; }'.
+     
+     

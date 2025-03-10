@@ -1,0 +1,22 @@
+--- old.recursiveClassReferenceTest.errors.txt
++++ new.recursiveClassReferenceTest.errors.txt
+@@= skipped -0, +0 lines =@@
+ recursiveClassReferenceTest.ts(16,19): error TS2304: Cannot find name 'Element'.
+ recursiveClassReferenceTest.ts(56,11): error TS2663: Cannot find name 'domNode'. Did you mean the instance member 'this.domNode'?
+ recursiveClassReferenceTest.ts(88,36): error TS2663: Cannot find name 'mode'. Did you mean the instance member 'this.mode'?
+-recursiveClassReferenceTest.ts(95,21): error TS2345: Argument of type 'Window' is not assignable to parameter of type 'IMode'.
+-  Property 'getInitialState' is missing in type 'Window' but required in type 'IMode'.
++recursiveClassReferenceTest.ts(95,21): error TS2741: Property 'getInitialState' is missing in type 'Window' but required in type 'IMode'.
+ 
+ 
+ ==== recursiveClassReferenceTest.ts (4 errors) ====
+@@= skipped -107, +106 lines =@@
+     		public getInitialState(): IState {
+     			return new State(self);
+     			                 ~~~~
+-!!! error TS2345: Argument of type 'Window' is not assignable to parameter of type 'IMode'.
+-!!! error TS2345:   Property 'getInitialState' is missing in type 'Window' but required in type 'IMode'.
++!!! error TS2741: Property 'getInitialState' is missing in type 'Window' but required in type 'IMode'.
+ !!! related TS2728 recursiveClassReferenceTest.ts:66:19: 'getInitialState' is declared here.
+     		}
+     

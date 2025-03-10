@@ -1,0 +1,36 @@
+--- old.capturedLetConstInLoop5_ES6.errors.txt
++++ new.capturedLetConstInLoop5_ES6.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++capturedLetConstInLoop5_ES6.ts(5,19): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+ capturedLetConstInLoop5_ES6.ts(174,13): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+ capturedLetConstInLoop5_ES6.ts(229,13): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+ 
+ 
+-==== capturedLetConstInLoop5_ES6.ts (2 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== capturedLetConstInLoop5_ES6.ts (3 errors) ====
+     declare function use(a: any);
+     
+     //====let
+     function foo0(x) {
+         for (let x of []) {
++                      ~~
++!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+             var v = x;
+             (function() { return x + v });
+             (() => x + v);

@@ -1,0 +1,32 @@
+global.d.ts(2,11): error TS2451: Cannot redeclare block-scoped variable 'React'.
+module.d.ts(2,21): error TS2451: Cannot redeclare block-scoped variable 'React'.
+
+
+==== global.d.ts (1 errors) ====
+    declare global {
+        const React: typeof import("./module");
+              ~~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'React'.
+!!! related TS6203 module.d.ts:2:21: 'React' was also declared here.
+    }
+    
+    export { };
+    
+==== module.d.ts (1 errors) ====
+    export = React;
+    export as namespace React;
+                        ~~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'React'.
+!!! related TS6203 global.d.ts:2:11: 'React' was also declared here.
+    
+    declare namespace React {
+        function createRef(): any;
+    }
+    
+==== some_module.ts (0 errors) ====
+    export { };
+    React.createRef;
+    
+==== emits.ts (0 errors) ====
+    console.log("hello");
+    React.createRef;

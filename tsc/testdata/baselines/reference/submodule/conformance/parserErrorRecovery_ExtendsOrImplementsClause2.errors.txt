@@ -1,0 +1,11 @@
+parserErrorRecovery_ExtendsOrImplementsClause2.ts(1,17): error TS2304: Cannot find name 'A'.
+parserErrorRecovery_ExtendsOrImplementsClause2.ts(1,18): error TS1009: Trailing comma not allowed.
+
+
+==== parserErrorRecovery_ExtendsOrImplementsClause2.ts (2 errors) ====
+    class C extends A, {
+                    ~
+!!! error TS2304: Cannot find name 'A'.
+                     ~
+!!! error TS1009: Trailing comma not allowed.
+    }

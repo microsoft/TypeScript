@@ -1,0 +1,19 @@
+--- old.objectLiteralThisWidenedOnUse.errors.txt
++++ new.objectLiteralThisWidenedOnUse.errors.txt
+@@= skipped -0, +0 lines =@@
+-objectLiteralThisWidenedOnUse.ts(8,21): error TS2345: Argument of type '{ prop1: number; prop2: number; prop3: number; test(): void; accept_foo(foo: Foo): boolean; }' is not assignable to parameter of type 'Foo'.
+-  Property 'bar' is missing in type '{ prop1: number; prop2: number; prop3: number; test(): void; accept_foo(foo: Foo): boolean; }' but required in type 'Foo'.
++objectLiteralThisWidenedOnUse.ts(8,21): error TS2741: Property 'bar' is missing in type '{ prop1: number; prop2: number; prop3: number; test: () => void; accept_foo: (foo: Foo) => boolean; }' but required in type 'Foo'.
+ 
+ 
+ ==== objectLiteralThisWidenedOnUse.ts (1 errors) ====
+@@= skipped -11, +10 lines =@@
+       test () {
+         this.accept_foo(this);
+                         ~~~~
+-!!! error TS2345: Argument of type '{ prop1: number; prop2: number; prop3: number; test(): void; accept_foo(foo: Foo): boolean; }' is not assignable to parameter of type 'Foo'.
+-!!! error TS2345:   Property 'bar' is missing in type '{ prop1: number; prop2: number; prop3: number; test(): void; accept_foo(foo: Foo): boolean; }' but required in type 'Foo'.
++!!! error TS2741: Property 'bar' is missing in type '{ prop1: number; prop2: number; prop3: number; test: () => void; accept_foo: (foo: Foo) => boolean; }' but required in type 'Foo'.
+ !!! related TS2728 objectLiteralThisWidenedOnUse.ts:1:17: 'bar' is declared here.
+       },
+       accept_foo (foo: Foo): boolean {

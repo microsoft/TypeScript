@@ -1,0 +1,11 @@
+--- old.keyofDoesntContainSymbols.errors.txt
++++ new.keyofDoesntContainSymbols.errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5102: Option 'keyofStringsOnly' has been removed. Please remove it from your configuration.
+ keyofDoesntContainSymbols.ts(11,30): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+ 
+ 
+-!!! error TS5102: Option 'keyofStringsOnly' has been removed. Please remove it from your configuration.
+ ==== keyofDoesntContainSymbols.ts (1 errors) ====
+     const sym = Symbol();
+     const num = 0;

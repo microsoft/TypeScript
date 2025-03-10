@@ -1,0 +1,10 @@
+parserTypeQuery8.ts(1,15): error TS2304: Cannot find name 'A'.
+parserTypeQuery8.ts(1,17): error TS2304: Cannot find name 'B'.
+
+
+==== parserTypeQuery8.ts (2 errors) ====
+    var v: typeof A<B>
+                  ~
+!!! error TS2304: Cannot find name 'A'.
+                    ~
+!!! error TS2304: Cannot find name 'B'.

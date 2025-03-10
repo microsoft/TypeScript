@@ -1,0 +1,40 @@
+--- old.checkJsFiles_skipDiagnostics.errors.txt
++++ new.checkJsFiles_skipDiagnostics.errors.txt
+@@= skipped -0, +0 lines =@@
++a.js(5,1): error TS2349: This expression is not callable.
++  Type 'Number' has no call signatures.
++a.js(8,1): error TS2349: This expression is not callable.
++  Type 'Number' has no call signatures.
++a.js(11,1): error TS2349: This expression is not callable.
++  Type 'Number' has no call signatures.
+ a.js(29,1): error TS2349: This expression is not callable.
+   Type 'Number' has no call signatures.
+ a.js(35,1): error TS2349: This expression is not callable.
+   Type 'Number' has no call signatures.
+ 
+ 
+-==== a.js (2 errors) ====
++==== a.js (5 errors) ====
+     var x = 0;
+     
+     
+     /// @ts-ignore
+     x();
++    ~
++!!! error TS2349: This expression is not callable.
++!!! error TS2349:   Type 'Number' has no call signatures.
+     
+     /// @ts-ignore
+     x();
++    ~
++!!! error TS2349: This expression is not callable.
++!!! error TS2349:   Type 'Number' has no call signatures.
+     
+     /// @ts-ignore
+     x(
++    ~
++!!! error TS2349: This expression is not callable.
++!!! error TS2349:   Type 'Number' has no call signatures.
+         2,
+         3);
+     

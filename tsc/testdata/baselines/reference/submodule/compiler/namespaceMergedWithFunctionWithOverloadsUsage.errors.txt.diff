@@ -1,0 +1,24 @@
+--- old.namespaceMergedWithFunctionWithOverloadsUsage.errors.txt
++++ new.namespaceMergedWithFunctionWithOverloadsUsage.errors.txt
+@@= skipped -0, +0 lines =@@
+ index.ts(3,3): error TS2769: No overload matches this call.
+-  Overload 1 of 2, '(opts?: Whatever): void', gave the following error.
+-    Argument of type 'number' is not assignable to parameter of type 'Whatever'.
+-  Overload 2 of 2, '(cb: Function, opts?: Whatever): void', gave the following error.
++  The last overload gave the following error.
+     Argument of type 'number' is not assignable to parameter of type 'Function'.
+ 
+ 
+@@= skipped -10, +8 lines =@@
+     X(0); // shouldn't cause a crash
+       ~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 2, '(opts?: Whatever): void', gave the following error.
+-!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'Whatever'.
+-!!! error TS2769:   Overload 2 of 2, '(cb: Function, opts?: Whatever): void', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'Function'.
++!!! related TS2771 file.d.ts:8:18: The last overload is declared here.
+ ==== file.d.ts (0 errors) ====
+     declare namespace Foo {
+         interface Whatever {

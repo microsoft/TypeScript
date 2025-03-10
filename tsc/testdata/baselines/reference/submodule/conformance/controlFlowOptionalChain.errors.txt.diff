@@ -1,0 +1,678 @@
+--- old.controlFlowOptionalChain.errors.txt
++++ new.controlFlowOptionalChain.errors.txt
+@@= skipped -1, +1 lines =@@
+ controlFlowOptionalChain.ts(14,1): error TS2454: Variable 'b' is used before being assigned.
+ controlFlowOptionalChain.ts(18,1): error TS2454: Variable 'c' is used before being assigned.
+ controlFlowOptionalChain.ts(22,1): error TS2454: Variable 'd' is used before being assigned.
++controlFlowOptionalChain.ts(35,5): error TS2349: This expression is not callable.
++  Not all constituents of type '(x: any) => x is number | undefined' are callable.
++    Type 'undefined' has no call signatures.
+ controlFlowOptionalChain.ts(35,5): error TS2722: Cannot invoke an object which is possibly 'undefined'.
++controlFlowOptionalChain.ts(39,1): error TS2349: This expression is not callable.
++  Not all constituents of type '(x: any) => x is number | undefined' are callable.
++    Type 'undefined' has no call signatures.
+ controlFlowOptionalChain.ts(39,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+ controlFlowOptionalChain.ts(52,5): error TS18048: 'o2' is possibly 'undefined'.
++controlFlowOptionalChain.ts(52,8): error TS2339: Property 'f' does not exist on type '{ f: (x: any) => x is number; } | undefined'.
++  Property 'f' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(57,1): error TS18048: 'o2' is possibly 'undefined'.
++controlFlowOptionalChain.ts(57,4): error TS2339: Property 'f' does not exist on type '{ f: (x: any) => x is number; } | undefined'.
++  Property 'f' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(68,5): error TS18048: 'o3' is possibly 'undefined'.
++controlFlowOptionalChain.ts(68,8): error TS2339: Property 'x' does not exist on type '{ x: 2; y: number; } | undefined'.
++  Property 'x' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(72,1): error TS18048: 'o3' is possibly 'undefined'.
++controlFlowOptionalChain.ts(72,4): error TS2339: Property 'x' does not exist on type '{ x: 1; y: string; } | { x: 2; y: number; } | undefined'.
++  Property 'x' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(83,5): error TS18048: 'o4.x' is possibly 'undefined'.
++controlFlowOptionalChain.ts(83,10): error TS2339: Property 'y' does not exist on type '{ y: boolean; } | undefined'.
++  Property 'y' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(87,1): error TS18048: 'o4.x' is possibly 'undefined'.
++controlFlowOptionalChain.ts(87,6): error TS2339: Property 'y' does not exist on type '{ y: boolean; } | undefined'.
++  Property 'y' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(104,5): error TS18048: 'o5.x' is possibly 'undefined'.
++controlFlowOptionalChain.ts(104,10): error TS2339: Property 'y' does not exist on type '{ y: { z?: { w: boolean; } | undefined; }; } | undefined'.
++  Property 'y' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(105,5): error TS18048: 'o5.x' is possibly 'undefined'.
+-controlFlowOptionalChain.ts(105,5): error TS18048: 'o5.x.y.z' is possibly 'undefined'.
++controlFlowOptionalChain.ts(105,10): error TS2339: Property 'y' does not exist on type '{ y: { z?: { w: boolean; } | undefined; }; } | undefined'.
++  Property 'y' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(111,1): error TS18048: 'o5.x' is possibly 'undefined'.
++controlFlowOptionalChain.ts(111,6): error TS2339: Property 'y' does not exist on type '{ y: { z?: { w: boolean; } | undefined; }; } | undefined'.
++  Property 'y' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(112,1): error TS18048: 'o5.x' is possibly 'undefined'.
+-controlFlowOptionalChain.ts(112,1): error TS18048: 'o5.x.y.z' is possibly 'undefined'.
++controlFlowOptionalChain.ts(112,6): error TS2339: Property 'y' does not exist on type '{ y: { z?: { w: boolean; } | undefined; }; } | undefined'.
++  Property 'y' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(130,5): error TS18048: 'o6' is possibly 'undefined'.
++controlFlowOptionalChain.ts(130,8): error TS2339: Property 'f' does not exist on type 'Base | undefined'.
++  Property 'f' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(134,1): error TS18048: 'o6' is possibly 'undefined'.
++controlFlowOptionalChain.ts(134,4): error TS2339: Property 'f' does not exist on type 'Base | undefined'.
++  Property 'f' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(208,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(208,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(211,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(211,9): error TS7053: Element implicitly has an 'any' type because expression of type '"foo"' can't be used to index type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'Thing | undefined'.
+ controlFlowOptionalChain.ts(214,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(214,11): error TS2339: Property 'bar' does not exist on type 'Thing | undefined'.
++  Property 'bar' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(217,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(217,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(220,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(220,9): error TS7053: Element implicitly has an 'any' type because expression of type '"foo"' can't be used to index type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'Thing | undefined'.
+ controlFlowOptionalChain.ts(223,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(223,11): error TS2339: Property 'bar' does not exist on type 'Thing | undefined'.
++  Property 'bar' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(238,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(238,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(241,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(241,9): error TS7053: Element implicitly has an 'any' type because expression of type '"foo"' can't be used to index type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'Thing | undefined'.
+ controlFlowOptionalChain.ts(244,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(244,11): error TS2339: Property 'bar' does not exist on type 'Thing | undefined'.
++  Property 'bar' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(271,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(271,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(274,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(274,9): error TS7053: Element implicitly has an 'any' type because expression of type '"foo"' can't be used to index type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'Thing | undefined'.
+ controlFlowOptionalChain.ts(277,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(277,11): error TS2339: Property 'bar' does not exist on type 'Thing | undefined'.
++  Property 'bar' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(307,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(307,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(310,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(310,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(319,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(319,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(322,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(322,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(331,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(331,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(334,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(334,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(337,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(337,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(340,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(340,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(343,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(343,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(346,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(346,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(349,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(349,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(352,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(352,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(358,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(358,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(367,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(367,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(370,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(370,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(379,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(379,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(418,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(418,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(421,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(421,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(430,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(430,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(433,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(433,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(442,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(442,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(451,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(451,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(454,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(454,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(463,9): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(463,11): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(498,13): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(498,15): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(501,13): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(501,15): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(515,13): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(515,15): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(518,13): error TS18048: 'o' is possibly 'undefined'.
++controlFlowOptionalChain.ts(518,15): error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++  Property 'foo' does not exist on type 'undefined'.
+ controlFlowOptionalChain.ts(567,21): error TS18048: 'someOptionalObject' is possibly 'undefined'.
++controlFlowOptionalChain.ts(567,40): error TS2339: Property 'someProperty' does not exist on type 'SomeObject | undefined'.
++  Property 'someProperty' does not exist on type 'undefined'.
+ 
+ 
+-==== controlFlowOptionalChain.ts (61 errors) ====
++==== controlFlowOptionalChain.ts (114 errors) ====
+     // assignments in shortcutting chain
+     declare const o: undefined | {
+         [key: string]: any;
+@@= skipped -104, +214 lines =@@
+         f;
+         f(x);
+         ~
++!!! error TS2349: This expression is not callable.
++!!! error TS2349:   Not all constituents of type '(x: any) => x is number | undefined' are callable.
++!!! error TS2349:     Type 'undefined' has no call signatures.
++        ~
+ !!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
+     }
+     x;
+     f;
+     f(x);
+     ~
++!!! error TS2349: This expression is not callable.
++!!! error TS2349:   Not all constituents of type '(x: any) => x is number | undefined' are callable.
++!!! error TS2349:     Type 'undefined' has no call signatures.
++    ~
+ !!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
+     
+     declare const o2: { f(x: any): x is number; } | undefined;
+@@= skipped -22, +30 lines =@@
+         o2.f;
+         ~~
+ !!! error TS18048: 'o2' is possibly 'undefined'.
++           ~
++!!! error TS2339: Property 'f' does not exist on type '{ f: (x: any) => x is number; } | undefined'.
++!!! error TS2339:   Property 'f' does not exist on type 'undefined'.
+     }
+     x;
+     o2;
+@@= skipped -7, +10 lines =@@
+     o2.f;
+     ~~
+ !!! error TS18048: 'o2' is possibly 'undefined'.
++       ~
++!!! error TS2339: Property 'f' does not exist on type '{ f: (x: any) => x is number; } | undefined'.
++!!! error TS2339:   Property 'f' does not exist on type 'undefined'.
+     
+     declare const o3: { x: 1, y: string } | { x: 2, y: number } | undefined;
+     if (o3?.x === 1) {
+@@= skipped -13, +16 lines =@@
+         o3.x;
+         ~~
+ !!! error TS18048: 'o3' is possibly 'undefined'.
++           ~
++!!! error TS2339: Property 'x' does not exist on type '{ x: 2; y: number; } | undefined'.
++!!! error TS2339:   Property 'x' does not exist on type 'undefined'.
+     }
+     o3;
+     o3?.x;
+     o3.x;
+     ~~
+ !!! error TS18048: 'o3' is possibly 'undefined'.
++       ~
++!!! error TS2339: Property 'x' does not exist on type '{ x: 1; y: string; } | { x: 2; y: number; } | undefined'.
++!!! error TS2339:   Property 'x' does not exist on type 'undefined'.
+     
+     declare const o4: { x?: { y: boolean } };
+     if (o4.x?.y) {
+@@= skipped -19, +25 lines =@@
+         o4.x.y;
+         ~~~~
+ !!! error TS18048: 'o4.x' is possibly 'undefined'.
++             ~
++!!! error TS2339: Property 'y' does not exist on type '{ y: boolean; } | undefined'.
++!!! error TS2339:   Property 'y' does not exist on type 'undefined'.
+     }
+     o4.x;
+     o4.x?.y;
+     o4.x.y;
+     ~~~~
+ !!! error TS18048: 'o4.x' is possibly 'undefined'.
++         ~
++!!! error TS2339: Property 'y' does not exist on type '{ y: boolean; } | undefined'.
++!!! error TS2339:   Property 'y' does not exist on type 'undefined'.
+     
+     declare const o5: { x?: { y: { z?: { w: boolean } } } };
+     if (o5.x?.y.z?.w) {
+@@= skipped -25, +31 lines =@@
+         o5.x.y;
+         ~~~~
+ !!! error TS18048: 'o5.x' is possibly 'undefined'.
++             ~
++!!! error TS2339: Property 'y' does not exist on type '{ y: { z?: { w: boolean; } | undefined; }; } | undefined'.
++!!! error TS2339:   Property 'y' does not exist on type 'undefined'.
+         o5.x.y.z.w;
+         ~~~~
+ !!! error TS18048: 'o5.x' is possibly 'undefined'.
+-        ~~~~~~~~
+-!!! error TS18048: 'o5.x.y.z' is possibly 'undefined'.
++             ~
++!!! error TS2339: Property 'y' does not exist on type '{ y: { z?: { w: boolean; } | undefined; }; } | undefined'.
++!!! error TS2339:   Property 'y' does not exist on type 'undefined'.
+     }
+     o5.x;
+     o5.x?.y;
+@@= skipped -13, +17 lines =@@
+     o5.x.y;
+     ~~~~
+ !!! error TS18048: 'o5.x' is possibly 'undefined'.
++         ~
++!!! error TS2339: Property 'y' does not exist on type '{ y: { z?: { w: boolean; } | undefined; }; } | undefined'.
++!!! error TS2339:   Property 'y' does not exist on type 'undefined'.
+     o5.x.y.z.w;
+     ~~~~
+ !!! error TS18048: 'o5.x' is possibly 'undefined'.
+-    ~~~~~~~~
+-!!! error TS18048: 'o5.x.y.z' is possibly 'undefined'.
++         ~
++!!! error TS2339: Property 'y' does not exist on type '{ y: { z?: { w: boolean; } | undefined; }; } | undefined'.
++!!! error TS2339:   Property 'y' does not exist on type 'undefined'.
+     
+     interface Base {
+         f(): this is Derived;
+@@= skipped -25, +29 lines =@@
+         o6.f;
+         ~~
+ !!! error TS18048: 'o6' is possibly 'undefined'.
++           ~
++!!! error TS2339: Property 'f' does not exist on type 'Base | undefined'.
++!!! error TS2339:   Property 'f' does not exist on type 'undefined'.
+     }
+     o6;
+     o6?.f;
+     o6.f;
+     ~~
+ !!! error TS18048: 'o6' is possibly 'undefined'.
++       ~
++!!! error TS2339: Property 'f' does not exist on type 'Base | undefined'.
++!!! error TS2339:   Property 'f' does not exist on type 'undefined'.
+     
+     // asserts
+     declare const isDefined: <T>(value: T) => asserts value is NonNullable<T>;
+@@= skipped -82, +88 lines =@@
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         if (o?.["foo"] === value) {
+             o["foo"];  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++            ~~~~~~~~
++!!! error TS7053: Element implicitly has an 'any' type because expression of type '"foo"' can't be used to index type 'Thing | undefined'.
++!!! error TS7053:   Property 'foo' does not exist on type 'Thing | undefined'.
+         }
+         if (o?.bar() === value) {
+             o.bar;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'bar' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'bar' does not exist on type 'undefined'.
+         }
+         if (o?.foo == value) {
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         if (o?.["foo"] == value) {
+             o["foo"];  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++            ~~~~~~~~
++!!! error TS7053: Element implicitly has an 'any' type because expression of type '"foo"' can't be used to index type 'Thing | undefined'.
++!!! error TS7053:   Property 'foo' does not exist on type 'Thing | undefined'.
+         }
+         if (o?.bar() == value) {
+             o.bar;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'bar' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'bar' does not exist on type 'undefined'.
+         }
+     }
+     
+@@= skipped -42, +60 lines =@@
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         if (o?.["foo"] == value) {
+             o["foo"];  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++            ~~~~~~~~
++!!! error TS7053: Element implicitly has an 'any' type because expression of type '"foo"' can't be used to index type 'Thing | undefined'.
++!!! error TS7053:   Property 'foo' does not exist on type 'Thing | undefined'.
+         }
+         if (o?.bar() == value) {
+             o.bar;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'bar' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'bar' does not exist on type 'undefined'.
+         }
+     }
+     
+@@= skipped -39, +48 lines =@@
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         if (o?.["foo"] !== null) {
+             o["foo"];  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++            ~~~~~~~~
++!!! error TS7053: Element implicitly has an 'any' type because expression of type '"foo"' can't be used to index type 'Thing | undefined'.
++!!! error TS7053:   Property 'foo' does not exist on type 'Thing | undefined'.
+         }
+         if (o?.bar() !== null) {
+             o.bar;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'bar' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'bar' does not exist on type 'undefined'.
+         }
+         if (o?.foo != null) {
+             o.foo;
+@@= skipped -42, +51 lines =@@
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         if (o?.foo !== value) {
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         else {
+             o.foo;
+@@= skipped -16, +22 lines =@@
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         if (o?.foo != value) {
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         else {
+             o.foo;
+@@= skipped -16, +22 lines =@@
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         else {
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         if (o?.foo !== value) {
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         else {
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         if (o?.foo == value) {
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         else {
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         if (o?.foo != value) {
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         else {
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+     }
+     
+@@= skipped -43, +67 lines =@@
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         else {
+             o.foo;
+@@= skipped -11, +14 lines =@@
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         if (o?.foo == undefined) {
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         else {
+             o.foo;
+@@= skipped -16, +22 lines =@@
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+     }
+     
+@@= skipped -41, +44 lines =@@
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         if (typeof o?.foo !== "number") {
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         else {
+             o.foo;
+@@= skipped -16, +22 lines =@@
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         if (typeof o?.foo != "number") {
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         else {
+             o.foo;
+@@= skipped -16, +22 lines =@@
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         else {
+             o.foo;
+@@= skipped -11, +14 lines =@@
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         if (typeof o?.foo == "undefined") {
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+         else {
+             o.foo;
+@@= skipped -16, +22 lines =@@
+             o.foo;  // Error
+             ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++              ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+         }
+     }
+     
+@@= skipped -37, +40 lines =@@
+                 o.foo;  // Error
+                 ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++                  ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+                 break;
+             default:
+                 o.foo;  // Error
+                 ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++                  ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+                 break;
+         }
+     }
+@@= skipped -21, +27 lines =@@
+                 o.foo;  // Error
+                 ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++                  ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+                 break;
+             default:
+                 o.foo;  // Error
+                 ~
+ !!! error TS18048: 'o' is possibly 'undefined'.
++                  ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'Thing | undefined'.
++!!! error TS2339:   Property 'foo' does not exist on type 'undefined'.
+                 break;
+         }
+     }
+@@= skipped -56, +62 lines =@@
+             console.log(someOptionalObject.someProperty);  // Error
+                         ~~~~~~~~~~~~~~~~~~
+ !!! error TS18048: 'someOptionalObject' is possibly 'undefined'.
++                                           ~~~~~~~~~~~~
++!!! error TS2339: Property 'someProperty' does not exist on type 'SomeObject | undefined'.
++!!! error TS2339:   Property 'someProperty' does not exist on type 'undefined'.
+             lastSomeProperty = someOptionalObject?.someProperty;
+         }
+     }

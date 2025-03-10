@@ -1,0 +1,17 @@
+--- old.jsdocParseHigherOrderFunction.errors.txt
++++ new.jsdocParseHigherOrderFunction.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++paren.js(2,10): error TS7006: Parameter 's' implicitly has an 'any' type.
++paren.js(2,13): error TS7006: Parameter 'id' implicitly has an 'any' type.
++
++
++==== paren.js (2 errors) ====
++    /** @type {function((string), function((string)): string): string} */
++    var x = (s, id) => id(s)
++             ~
++!!! error TS7006: Parameter 's' implicitly has an 'any' type.
++                ~~
++!!! error TS7006: Parameter 'id' implicitly has an 'any' type.
++    

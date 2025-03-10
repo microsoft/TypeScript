@@ -1,0 +1,25 @@
+--- old.bestCommonTypeOfTuple.errors.txt
++++ new.bestCommonTypeOfTuple.errors.txt
+@@= skipped -0, +0 lines =@@
+ bestCommonTypeOfTuple.ts(22,13): error TS2493: Tuple type '[(x: number) => string, (x: number) => number]' of length '2' has no element at index '2'.
+-bestCommonTypeOfTuple.ts(23,13): error TS2493: Tuple type '[E1, E2]' of length '2' has no element at index '2'.
++bestCommonTypeOfTuple.ts(23,13): error TS2493: Tuple type '[E1.one, E2.two]' of length '2' has no element at index '2'.
+ bestCommonTypeOfTuple.ts(24,13): error TS2493: Tuple type '[number, any]' of length '2' has no element at index '2'.
+-bestCommonTypeOfTuple.ts(25,13): error TS2493: Tuple type '[E1, E2, number]' of length '3' has no element at index '3'.
++bestCommonTypeOfTuple.ts(25,13): error TS2493: Tuple type '[E1.one, E2.two, number]' of length '3' has no element at index '3'.
+ 
+ 
+ ==== bestCommonTypeOfTuple.ts (4 errors) ====
+@@= skipped -30, +30 lines =@@
+ !!! error TS2493: Tuple type '[(x: number) => string, (x: number) => number]' of length '2' has no element at index '2'.
+     var e2 = t2[2];  // {}
+                 ~
+-!!! error TS2493: Tuple type '[E1, E2]' of length '2' has no element at index '2'.
++!!! error TS2493: Tuple type '[E1.one, E2.two]' of length '2' has no element at index '2'.
+     var e3 = t3[2];  // any
+                 ~
+ !!! error TS2493: Tuple type '[number, any]' of length '2' has no element at index '2'.
+     var e4 = t4[3];  // number
+                 ~
+-!!! error TS2493: Tuple type '[E1, E2, number]' of length '3' has no element at index '3'.
++!!! error TS2493: Tuple type '[E1.one, E2.two, number]' of length '3' has no element at index '3'.

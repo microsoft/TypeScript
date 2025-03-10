@@ -1,0 +1,8 @@
+parser512084.ts(2,1): error TS1005: '}' expected.
+
+
+==== parser512084.ts (1 errors) ====
+    class foo {
+    
+    
+!!! error TS1005: '}' expected.

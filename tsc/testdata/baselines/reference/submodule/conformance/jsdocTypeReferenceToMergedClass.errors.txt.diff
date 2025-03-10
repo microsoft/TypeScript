@@ -1,0 +1,24 @@
+--- old.jsdocTypeReferenceToMergedClass.errors.txt
++++ new.jsdocTypeReferenceToMergedClass.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++jsdocTypeReferenceToMergedClass.js(6,11): error TS2339: Property 'Project' does not exist on type '{}'.
++jsdocTypeReferenceToMergedClass.js(7,11): error TS2339: Property 'Project' does not exist on type '{}'.
++
++
++==== jsdocTypeReferenceToMergedClass.js (2 errors) ====
++    var Workspace = {}
++    /** @type {Workspace.Project} */
++    var p;
++    p.isServiceProject()
++    
++    Workspace.Project = function wp() { }
++              ~~~~~~~
++!!! error TS2339: Property 'Project' does not exist on type '{}'.
++    Workspace.Project.prototype = {
++              ~~~~~~~
++!!! error TS2339: Property 'Project' does not exist on type '{}'.
++      isServiceProject() {}
++    }
++    

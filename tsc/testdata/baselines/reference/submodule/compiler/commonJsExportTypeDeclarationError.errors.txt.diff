@@ -1,0 +1,53 @@
+--- old.commonJsExportTypeDeclarationError.errors.txt
++++ new.commonJsExportTypeDeclarationError.errors.txt
+@@= skipped -0, +0 lines =@@
+-types1.ts(2,17): error TS1110: Type expected.
++test.js(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++types1.ts(1,18): error TS2306: File 'test.js' is not a module.
+ types1.ts(3,1): error TS1005: '=' expected.
+-types2.ts(2,19): error TS1110: Type expected.
+-types3.ts(2,13): error TS2456: Type alias 'test' circularly references itself.
++types2.ts(1,18): error TS2306: File 'test.js' is not a module.
++types2.ts(3,1): error TS1110: Type expected.
++types3.ts(1,18): error TS2306: File 'test.js' is not a module.
+ 
+ 
+-==== ./test.js (0 errors) ====
++==== test.js (1 errors) ====
+     module.exports = {
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+        message: ""
+     }
+     
+-==== ./types1.ts (2 errors) ====
++==== types1.ts (2 errors) ====
+     import test from "./test";
++                     ~~~~~~~~
++!!! error TS2306: File 'test.js' is not a module.
+     export type test
+-                    
+-!!! error TS1110: Type expected.
+     
+     
+ !!! error TS1005: '=' expected.
+-==== ./types2.ts (1 errors) ====
++==== types2.ts (2 errors) ====
+     import test from "./test";
++                     ~~~~~~~~
++!!! error TS2306: File 'test.js' is not a module.
+     export type test = 
+-                      
+-!!! error TS1110: Type expected.
+     
+-==== ./types3.ts (1 errors) ====
++    
++!!! error TS1110: Type expected.
++==== types3.ts (1 errors) ====
+     import test from "./test";
++                     ~~~~~~~~
++!!! error TS2306: File 'test.js' is not a module.
+     export type test = test;
+-                ~~~~
+-!!! error TS2456: Type alias 'test' circularly references itself.
+     

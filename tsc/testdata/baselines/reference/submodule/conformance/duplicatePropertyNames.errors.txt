@@ -1,0 +1,105 @@
+duplicatePropertyNames.ts(4,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(5,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(14,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(15,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(19,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(20,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(22,5): error TS2393: Duplicate function implementation.
+duplicatePropertyNames.ts(23,5): error TS2393: Duplicate function implementation.
+duplicatePropertyNames.ts(25,5): error TS2300: Duplicate identifier 'baz'.
+duplicatePropertyNames.ts(26,5): error TS2300: Duplicate identifier 'baz'.
+duplicatePropertyNames.ts(30,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(31,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(35,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(36,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(38,5): error TS2300: Duplicate identifier 'bar'.
+duplicatePropertyNames.ts(39,5): error TS2300: Duplicate identifier 'bar'.
+duplicatePropertyNames.ts(44,5): error TS1117: An object literal cannot have multiple properties with the same name.
+duplicatePropertyNames.ts(46,5): error TS1117: An object literal cannot have multiple properties with the same name.
+
+
+==== duplicatePropertyNames.ts (18 errors) ====
+    // duplicate property names are an error in all types
+    
+    interface Number {
+        foo: string;
+        ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        foo: string;
+        ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+    }
+    
+    interface String {
+        foo(): string;
+        foo(): string;
+    }
+    
+    interface Array<T> {
+        foo: T;
+        ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        foo: T;
+        ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+    }
+    
+    class C {
+        foo: string;
+        ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        foo: string;
+        ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+    
+        bar(x) { }
+        ~~~
+!!! error TS2393: Duplicate function implementation.
+        bar(x) { }
+        ~~~
+!!! error TS2393: Duplicate function implementation.
+    
+        baz = () => { }
+        ~~~
+!!! error TS2300: Duplicate identifier 'baz'.
+        baz = () => { }
+        ~~~
+!!! error TS2300: Duplicate identifier 'baz'.
+    }
+    
+    interface I {
+        foo: string;
+        ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        foo: string;
+        ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+    }
+    
+    var a: {
+        foo: string;
+        ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        foo: string;
+        ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+    
+        bar: () => {};
+        ~~~
+!!! error TS2300: Duplicate identifier 'bar'.
+        bar: () => {};
+        ~~~
+!!! error TS2300: Duplicate identifier 'bar'.
+    }
+    
+    var b = {
+        foo: '',
+        foo: '',
+        ~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+        bar: () => { },
+        bar: () => { }
+        ~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+    }
+    

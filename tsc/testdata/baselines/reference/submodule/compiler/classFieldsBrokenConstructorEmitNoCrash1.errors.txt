@@ -1,0 +1,14 @@
+classFieldsBrokenConstructorEmitNoCrash1.ts(3,3): error TS2390: Constructor implementation is missing.
+classFieldsBrokenConstructorEmitNoCrash1.ts(4,1): error TS1005: '(' expected.
+
+
+==== classFieldsBrokenConstructorEmitNoCrash1.ts (2 errors) ====
+    class Test {
+      prop = 42;
+      constructor
+      ~~~~~~~~~~~
+!!! error TS2390: Constructor implementation is missing.
+    }
+    ~
+!!! error TS1005: '(' expected.
+    

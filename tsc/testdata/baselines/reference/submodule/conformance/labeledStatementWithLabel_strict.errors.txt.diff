@@ -1,0 +1,118 @@
+--- old.labeledStatementWithLabel_strict.errors.txt
++++ new.labeledStatementWithLabel_strict.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'IterableIterator'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ labeledStatementWithLabel_strict.ts(2,1): error TS1344: 'A label is not allowed here.
++labeledStatementWithLabel_strict.ts(2,1): error TS1344: 'A label is not allowed here.
+ labeledStatementWithLabel_strict.ts(3,1): error TS1344: 'A label is not allowed here.
++labeledStatementWithLabel_strict.ts(3,1): error TS1344: 'A label is not allowed here.
+ labeledStatementWithLabel_strict.ts(4,1): error TS1344: 'A label is not allowed here.
++labeledStatementWithLabel_strict.ts(4,1): error TS1344: 'A label is not allowed here.
+ labeledStatementWithLabel_strict.ts(5,1): error TS1344: 'A label is not allowed here.
++labeledStatementWithLabel_strict.ts(5,1): error TS1344: 'A label is not allowed here.
+ labeledStatementWithLabel_strict.ts(6,1): error TS1344: 'A label is not allowed here.
++labeledStatementWithLabel_strict.ts(6,1): error TS1344: 'A label is not allowed here.
+ labeledStatementWithLabel_strict.ts(7,1): error TS1344: 'A label is not allowed here.
++labeledStatementWithLabel_strict.ts(7,1): error TS1344: 'A label is not allowed here.
+ labeledStatementWithLabel_strict.ts(8,1): error TS1344: 'A label is not allowed here.
++labeledStatementWithLabel_strict.ts(8,1): error TS1344: 'A label is not allowed here.
+ labeledStatementWithLabel_strict.ts(9,1): error TS1344: 'A label is not allowed here.
++labeledStatementWithLabel_strict.ts(9,1): error TS1344: 'A label is not allowed here.
+ labeledStatementWithLabel_strict.ts(10,1): error TS1344: 'A label is not allowed here.
++labeledStatementWithLabel_strict.ts(10,1): error TS1344: 'A label is not allowed here.
+ labeledStatementWithLabel_strict.ts(12,1): error TS1344: 'A label is not allowed here.
++labeledStatementWithLabel_strict.ts(12,1): error TS1344: 'A label is not allowed here.
+ labeledStatementWithLabel_strict.ts(12,8): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
+ labeledStatementWithLabel_strict.ts(13,1): error TS1344: 'A label is not allowed here.
++labeledStatementWithLabel_strict.ts(13,1): error TS1344: 'A label is not allowed here.
+ labeledStatementWithLabel_strict.ts(13,8): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
+ labeledStatementWithLabel_strict.ts(14,1): error TS1344: 'A label is not allowed here.
++labeledStatementWithLabel_strict.ts(14,1): error TS1344: 'A label is not allowed here.
+ 
+ 
+-==== labeledStatementWithLabel_strict.ts (14 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'IterableIterator'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== labeledStatementWithLabel_strict.ts (26 errors) ====
+     "use strict"
+     label: function fn() { }
+     ~~~~~
+ !!! error TS1344: 'A label is not allowed here.
++    ~~~~~
++!!! error TS1344: 'A label is not allowed here.
+     label: function* gen() { }
+     ~~~~~
+ !!! error TS1344: 'A label is not allowed here.
++    ~~~~~
++!!! error TS1344: 'A label is not allowed here.
+     label: async function gen1() { }
+     ~~~~~
+ !!! error TS1344: 'A label is not allowed here.
++    ~~~~~
++!!! error TS1344: 'A label is not allowed here.
+     label: enum E {}
+     ~~~~~
+ !!! error TS1344: 'A label is not allowed here.
++    ~~~~~
++!!! error TS1344: 'A label is not allowed here.
+     label: interface I {}
+     ~~~~~
+ !!! error TS1344: 'A label is not allowed here.
++    ~~~~~
++!!! error TS1344: 'A label is not allowed here.
+     label: class C { }
+     ~~~~~
+ !!! error TS1344: 'A label is not allowed here.
++    ~~~~~
++!!! error TS1344: 'A label is not allowed here.
+     label: var a = 1;
+     ~~~~~
+ !!! error TS1344: 'A label is not allowed here.
++    ~~~~~
++!!! error TS1344: 'A label is not allowed here.
+     label: let b = 1;
+     ~~~~~
+ !!! error TS1344: 'A label is not allowed here.
++    ~~~~~
++!!! error TS1344: 'A label is not allowed here.
+     label: const c = 1;
+     ~~~~~
+ !!! error TS1344: 'A label is not allowed here.
++    ~~~~~
++!!! error TS1344: 'A label is not allowed here.
+     
+     label: module M { }
+     ~~~~~
+ !!! error TS1344: 'A label is not allowed here.
++    ~~~~~
++!!! error TS1344: 'A label is not allowed here.
+            ~~~~~~
+ !!! error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
+     label: namespace N {}
+     ~~~~~
+ !!! error TS1344: 'A label is not allowed here.
++    ~~~~~
++!!! error TS1344: 'A label is not allowed here.
+            ~~~~~~~~~
+ !!! error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
+     label: type T = {}
+     ~~~~~
+ !!! error TS1344: 'A label is not allowed here.
++    ~~~~~
++!!! error TS1344: 'A label is not allowed here.
+     

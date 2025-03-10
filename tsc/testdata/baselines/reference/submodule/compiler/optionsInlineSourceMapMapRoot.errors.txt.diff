@@ -1,0 +1,13 @@
+--- old.optionsInlineSourceMapMapRoot.errors.txt
++++ new.optionsInlineSourceMapMapRoot.errors.txt
+@@= skipped -0, +-1 lines =@@
+-error TS5053: Option 'mapRoot' cannot be specified with option 'inlineSourceMap'.
+-error TS5069: Option 'mapRoot' cannot be specified without specifying option 'sourceMap' or option 'declarationMap'.
+-
+-
+-!!! error TS5053: Option 'mapRoot' cannot be specified with option 'inlineSourceMap'.
+-!!! error TS5069: Option 'mapRoot' cannot be specified without specifying option 'sourceMap' or option 'declarationMap'.
+-==== optionsInlineSourceMapMapRoot.ts (0 errors) ====
+-    var a = 10;
+@@= skipped --1, +1 lines =@@
++<no content>

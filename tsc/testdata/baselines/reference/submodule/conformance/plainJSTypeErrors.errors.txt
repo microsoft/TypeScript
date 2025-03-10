@@ -1,0 +1,15 @@
+plainJSTypeErrors.js(2,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+plainJSTypeErrors.js(5,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+
+
+==== plainJSTypeErrors.js (2 errors) ====
+    // should error
+    if ({} === {}) {}
+        ~~~~~~~~~
+!!! error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+    
+    // should not error
+    if ({} == {}) {}
+        ~~~~~~~~
+!!! error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+    

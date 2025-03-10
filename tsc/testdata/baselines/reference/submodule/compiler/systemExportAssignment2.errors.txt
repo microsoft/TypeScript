@@ -1,0 +1,15 @@
+a.ts(2,1): error TS1218: Export assignment is not supported when '--module' flag is 'system'.
+b.ts(1,20): error TS2307: Cannot find module 'a' or its corresponding type declarations.
+
+
+==== a.ts (1 errors) ====
+    var a = 10;
+    export = a;  // Error: export = not allowed in ES6
+    ~~~~~~~~~~~
+!!! error TS1218: Export assignment is not supported when '--module' flag is 'system'.
+    
+==== b.ts (1 errors) ====
+    import * as a from "a";
+                       ~~~
+!!! error TS2307: Cannot find module 'a' or its corresponding type declarations.
+    

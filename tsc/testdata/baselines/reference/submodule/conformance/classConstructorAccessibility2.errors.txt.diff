@@ -1,0 +1,36 @@
+--- old.classConstructorAccessibility2.errors.txt
++++ new.classConstructorAccessibility2.errors.txt
+@@= skipped -0, +0 lines =@@
+ classConstructorAccessibility2.ts(31,24): error TS2675: Cannot extend a class 'BaseC'. Class constructor is marked as private.
+-classConstructorAccessibility2.ts(34,28): error TS2673: Constructor of class 'BaseC' is private and only accessible within the class declaration.
+-classConstructorAccessibility2.ts(35,35): error TS2673: Constructor of class 'BaseC' is private and only accessible within the class declaration.
+-classConstructorAccessibility2.ts(39,10): error TS2674: Constructor of class 'BaseB' is protected and only accessible within the class declaration.
+-classConstructorAccessibility2.ts(40,10): error TS2673: Constructor of class 'BaseC' is private and only accessible within the class declaration.
+ 
+ 
+-==== classConstructorAccessibility2.ts (5 errors) ====
++==== classConstructorAccessibility2.ts (1 errors) ====
+     class BaseA {
+         public constructor(public x: number) { }
+         createInstance() { new BaseA(1); }
+@@= skipped -41, +37 lines =@@
+         constructor(public x: number) { super(x); }
+         createInstance() { new DerivedC(9); }
+         createBaseInstance() { new BaseC(10); } // error
+-                               ~~~~~~~~~~~~~
+-!!! error TS2673: Constructor of class 'BaseC' is private and only accessible within the class declaration.
+         static staticBaseInstance() { new BaseC(11); } // error
+-                                      ~~~~~~~~~~~~~
+-!!! error TS2673: Constructor of class 'BaseC' is private and only accessible within the class declaration.
+     }
+     
+     var ba = new BaseA(1);
+     var bb = new BaseB(1); // error
+-             ~~~~~~~~~~~~
+-!!! error TS2674: Constructor of class 'BaseB' is protected and only accessible within the class declaration.
+     var bc = new BaseC(1); // error
+-             ~~~~~~~~~~~~
+-!!! error TS2673: Constructor of class 'BaseC' is private and only accessible within the class declaration.
+     
+     var da = new DerivedA(1);
+     var db = new DerivedB(1);

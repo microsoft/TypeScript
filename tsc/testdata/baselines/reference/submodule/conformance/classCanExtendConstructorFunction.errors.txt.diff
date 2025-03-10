@@ -1,0 +1,140 @@
+--- old.classCanExtendConstructorFunction.errors.txt
++++ new.classCanExtendConstructorFunction.errors.txt
+@@= skipped -0, +0 lines =@@
+-first.js(23,9): error TS2554: Expected 1 arguments, but got 0.
+-first.js(31,5): error TS2416: Property 'load' in type 'Sql' is not assignable to the same property in base type 'Wagon'.
+-  Type '(files: string[], format: "csv" | "json" | "xmlolololol") => void' is not assignable to type '(supplies?: any[]) => void'.
+-    Target signature provides too few arguments. Expected 2 or more, but got 1.
++first.js(21,19): error TS2507: Type '{ (numberOxen: any): void; circle: (wagons: any) => any; }' is not a constructor function type.
++first.js(24,14): error TS2339: Property 'foonly' does not exist on type 'Sql'.
++first.js(44,4): error TS2339: Property 'numberOxen' does not exist on type 'Sql'.
++first.js(44,20): error TS2339: Property 'foonly' does not exist on type 'Sql'.
+ first.js(47,24): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
+-generic.js(19,19): error TS2554: Expected 1 arguments, but got 0.
+-generic.js(20,32): error TS2345: Argument of type 'number' is not assignable to parameter of type '{ claim: "ignorant" | "malicious"; }'.
++generic.js(9,23): error TS2507: Type '(flavour: any) => void' is not a constructor function type.
++generic.js(11,21): error TS2339: Property 'flavour' does not exist on type 'Chowder'.
++generic.js(17,27): error TS2554: Expected 0 arguments, but got 1.
++generic.js(18,9): error TS2339: Property 'flavour' does not exist on type 'Chowder'.
++generic.js(20,32): error TS2554: Expected 0 arguments, but got 1.
+ second.ts(8,25): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
+-second.ts(14,7): error TS2417: Class static side 'typeof Conestoga' incorrectly extends base class static side 'typeof Wagon'.
+-  Types of property 'circle' are incompatible.
+-    Type '(others: (typeof Wagon)[]) => number' is not assignable to type '(wagons?: Wagon[]) => number'.
+-      Types of parameters 'others' and 'wagons' are incompatible.
+-        Type 'Wagon[]' is not assignable to type '(typeof Wagon)[]'.
+-          Property 'circle' is missing in type 'Wagon' but required in type 'typeof Wagon'.
+-second.ts(17,15): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
++second.ts(14,25): error TS2507: Type '{ (numberOxen: any): void; circle: (wagons: any) => any; }' is not a constructor function type.
++second.ts(26,3): error TS2339: Property 'numberOxen' does not exist on type 'Conestoga'.
+ 
+ 
+-==== first.js (3 errors) ====
++==== first.js (5 errors) ====
+     /**
+      * @constructor
+      * @param {number} numberOxen
+@@= skipped -36, +34 lines =@@
+     }
+     // ok
+     class Sql extends Wagon {
++                      ~~~~~
++!!! error TS2507: Type '{ (numberOxen: any): void; circle: (wagons: any) => any; }' is not a constructor function type.
+         constructor() {
+             super(); // error: not enough arguments
+-            ~~~~~
+-!!! error TS2554: Expected 1 arguments, but got 0.
+-!!! related TS6210 first.js:5:16: An argument for 'numberOxen' was not provided.
+             this.foonly = 12
++                 ~~~~~~
++!!! error TS2339: Property 'foonly' does not exist on type 'Sql'.
+         }
+         /**
+          * @param {Array.<string>} files
+@@= skipped -13, +14 lines =@@
+          * This is not assignable, so should have a type error
+          */
+         load(files, format) {
+-        ~~~~
+-!!! error TS2416: Property 'load' in type 'Sql' is not assignable to the same property in base type 'Wagon'.
+-!!! error TS2416:   Type '(files: string[], format: "csv" | "json" | "xmlolololol") => void' is not assignable to type '(supplies?: any[]) => void'.
+-!!! error TS2416:     Target signature provides too few arguments. Expected 2 or more, but got 1.
+             if (format === "xmlolololol") {
+                 throw new Error("please do not use XML. It was a joke.");
+             }
+@@= skipped -17, +13 lines =@@
+     }
+     var db = new Sql();
+     db.numberOxen = db.foonly
++       ~~~~~~~~~~
++!!! error TS2339: Property 'numberOxen' does not exist on type 'Sql'.
++                       ~~~~~~
++!!! error TS2339: Property 'foonly' does not exist on type 'Sql'.
+     
+     // error, can't extend a TS constructor function
+     class Drakkhen extends Dragon {
+@@= skipped -25, +29 lines =@@
+     }
+     // ok
+     class Conestoga extends Wagon {
+-          ~~~~~~~~~
+-!!! error TS2417: Class static side 'typeof Conestoga' incorrectly extends base class static side 'typeof Wagon'.
+-!!! error TS2417:   Types of property 'circle' are incompatible.
+-!!! error TS2417:     Type '(others: (typeof Wagon)[]) => number' is not assignable to type '(wagons?: Wagon[]) => number'.
+-!!! error TS2417:       Types of parameters 'others' and 'wagons' are incompatible.
+-!!! error TS2417:         Type 'Wagon[]' is not assignable to type '(typeof Wagon)[]'.
+-!!! error TS2417:           Property 'circle' is missing in type 'Wagon' but required in type 'typeof Wagon'.
+-!!! related TS2728 first.js:9:1: 'circle' is declared here.
++                            ~~~~~
++!!! error TS2507: Type '{ (numberOxen: any): void; circle: (wagons: any) => any; }' is not a constructor function type.
+         constructor(public drunkOO: true) {
+             // error: wrong type
+             super('nope');
+-                  ~~~~~~
+-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+         }
+         // should error since others is not optional
+         static circle(others: (typeof Wagon)[]) {
+@@= skipped -22, +14 lines =@@
+     var c = new Conestoga(true);
+     c.drunkOO
+     c.numberOxen
++      ~~~~~~~~~~
++!!! error TS2339: Property 'numberOxen' does not exist on type 'Conestoga'.
+     
+-==== generic.js (2 errors) ====
++==== generic.js (5 errors) ====
+     /**
+      * @template T
+      * @param {T} flavour
+@@= skipped -11, +13 lines =@@
+     }
+     /** @extends {Soup<{ claim: "ignorant" | "malicious" }>} */
+     class Chowder extends Soup {
++                          ~~~~
++!!! error TS2507: Type '(flavour: any) => void' is not a constructor function type.
+         log() {
+             return this.flavour
++                        ~~~~~~~
++!!! error TS2339: Property 'flavour' does not exist on type 'Chowder'.
+         }
+     }
+     
+     var soup = new Soup(1);
+     soup.flavour
+     var chowder = new Chowder({ claim: "ignorant" });
++                              ~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2554: Expected 0 arguments, but got 1.
+     chowder.flavour.claim
++            ~~~~~~~
++!!! error TS2339: Property 'flavour' does not exist on type 'Chowder'.
+     var errorNoArgs = new Chowder();
+-                      ~~~~~~~~~~~~~
+-!!! error TS2554: Expected 1 arguments, but got 0.
+-!!! related TS6210 generic.js:5:15: An argument for 'flavour' was not provided.
+     var errorArgType = new Chowder(0);
+                                    ~
+-!!! error TS2345: Argument of type 'number' is not assignable to parameter of type '{ claim: "ignorant" | "malicious"; }'.
++!!! error TS2554: Expected 0 arguments, but got 1.
+     
+     

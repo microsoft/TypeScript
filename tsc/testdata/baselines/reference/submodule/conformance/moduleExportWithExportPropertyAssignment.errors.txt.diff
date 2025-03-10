@@ -1,0 +1,26 @@
+--- old.moduleExportWithExportPropertyAssignment.errors.txt
++++ new.moduleExportWithExportPropertyAssignment.errors.txt
+@@= skipped -0, +-1 lines =@@
+-a.js(4,6): error TS2554: Expected 1 arguments, but got 0.
+-
+-
+-==== a.js (1 errors) ====
+-    /// <reference path='./requires.d.ts' />
+-    var mod1 = require('./mod1')
+-    mod1()
+-    mod1.f() // error, not enough arguments
+-         ~
+-!!! error TS2554: Expected 1 arguments, but got 0.
+-!!! related TS6210 mod1.js:4:30: An argument for 'a' was not provided.
+-    
+-==== requires.d.ts (0 errors) ====
+-    declare var module: { exports: any };
+-    declare function require(name: string): any;
+-==== mod1.js (0 errors) ====
+-    /// <reference path='./requires.d.ts' />
+-    module.exports = function () { }
+-    /** @param {number} a */
+-    module.exports.f = function (a) { }
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

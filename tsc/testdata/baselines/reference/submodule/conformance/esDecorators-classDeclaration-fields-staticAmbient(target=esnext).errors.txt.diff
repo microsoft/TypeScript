@@ -1,0 +1,32 @@
+--- old.esDecorators-classDeclaration-fields-staticAmbient(target=esnext).errors.txt
++++ new.esDecorators-classDeclaration-fields-staticAmbient(target=esnext).errors.txt
+@@= skipped -0, +0 lines =@@
+-esDecorators-classDeclaration-fields-staticAmbient.ts(6,5): error TS1206: Decorators are not valid here.
+-esDecorators-classDeclaration-fields-staticAmbient.ts(7,5): error TS1206: Decorators are not valid here.
+-esDecorators-classDeclaration-fields-staticAmbient.ts(8,5): error TS1206: Decorators are not valid here.
++esDecorators-classDeclaration-fields-staticAmbient.ts(6,37): error TS1039: Initializers are not allowed in ambient contexts.
++esDecorators-classDeclaration-fields-staticAmbient.ts(7,41): error TS1039: Initializers are not allowed in ambient contexts.
++esDecorators-classDeclaration-fields-staticAmbient.ts(8,39): error TS1039: Initializers are not allowed in ambient contexts.
+ 
+ 
+ ==== esDecorators-classDeclaration-fields-staticAmbient.ts (3 errors) ====
+@@= skipped -9, +9 lines =@@
+     
+     class C {
+         @dec(1) static declare field1 = 1;
+-        ~
+-!!! error TS1206: Decorators are not valid here.
++                                        ~
++!!! error TS1039: Initializers are not allowed in ambient contexts.
+         @dec(2) static declare ["field2"] = 2;
+-        ~
+-!!! error TS1206: Decorators are not valid here.
++                                            ~
++!!! error TS1039: Initializers are not allowed in ambient contexts.
+         @dec(3) static declare [field3] = 3;
+-        ~
+-!!! error TS1206: Decorators are not valid here.
++                                          ~
++!!! error TS1039: Initializers are not allowed in ambient contexts.
+     }
+     

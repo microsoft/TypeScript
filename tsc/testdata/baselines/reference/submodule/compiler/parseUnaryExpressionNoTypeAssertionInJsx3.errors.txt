@@ -1,0 +1,9 @@
+index.js(2,13): error TS2352: Conversion of type 'string' to type '1234' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+
+
+==== index.js (1 errors) ====
+    const x = "oops";
+    const y = + <1234> x;
+                ~~~~~~~~
+!!! error TS2352: Conversion of type 'string' to type '1234' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    

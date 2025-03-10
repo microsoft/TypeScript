@@ -1,0 +1,64 @@
+parseInvalidNullableTypes.ts(5,22): error TS1005: ',' expected.
+parseInvalidNullableTypes.ts(5,22): error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
+parseInvalidNullableTypes.ts(6,22): error TS1005: ',' expected.
+parseInvalidNullableTypes.ts(6,22): error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
+parseInvalidNullableTypes.ts(15,20): error TS1109: Expression expected.
+parseInvalidNullableTypes.ts(16,16): error TS1005: ',' expected.
+parseInvalidNullableTypes.ts(16,18): error TS1134: Variable declaration expected.
+parseInvalidNullableTypes.ts(16,20): error TS1134: Variable declaration expected.
+parseInvalidNullableTypes.ts(21,15): error TS1005: ',' expected.
+parseInvalidNullableTypes.ts(22,13): error TS1005: ',' expected.
+parseInvalidNullableTypes.ts(23,12): error TS1005: ',' expected.
+parseInvalidNullableTypes.ts(24,17): error TS1005: ',' expected.
+
+
+==== parseInvalidNullableTypes.ts (12 errors) ====
+    function f1(a: string): a is ?string {
+        return true;
+    }
+    
+    function f2(a: string?) {}
+                         ~
+!!! error TS1005: ',' expected.
+                         ~
+!!! error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
+    function f3(a: number?) {}
+                         ~
+!!! error TS1005: ',' expected.
+                         ~
+!!! error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
+    
+    function f4(a: ?string) {}
+    function f5(a: ?number) {}
+    
+    function f6(a: string): ?string {
+        return true;
+    }
+    
+    const a = 1 as any?;
+                       ~
+!!! error TS1109: Expression expected.
+    const b: number? = 1;
+                   ~
+!!! error TS1005: ',' expected.
+                     ~
+!!! error TS1134: Variable declaration expected.
+                       ~
+!!! error TS1134: Variable declaration expected.
+    
+    const c = 1 as ?any;
+    const d: ?number = 1;
+    
+    let e: unknown?;
+                  ~
+!!! error TS1005: ',' expected.
+    let f: never?;
+                ~
+!!! error TS1005: ',' expected.
+    let g: void?;
+               ~
+!!! error TS1005: ',' expected.
+    let h: undefined?;
+                    ~
+!!! error TS1005: ',' expected.
+    

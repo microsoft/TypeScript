@@ -1,0 +1,19 @@
+--- old.genericArrayAssignmentCompatErrors.errors.txt
++++ new.genericArrayAssignmentCompatErrors.errors.txt
+@@= skipped -0, +0 lines =@@
+ genericArrayAssignmentCompatErrors.ts(2,19): error TS2351: This expression is not constructable.
+   Type 'undefined[]' has no construct signatures.
+-genericArrayAssignmentCompatErrors.ts(4,14): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
++genericArrayAssignmentCompatErrors.ts(4,14): error TS2314: Generic type 'T[]' requires 1 type argument(s).
+ 
+ 
+ ==== genericArrayAssignmentCompatErrors.ts (2 errors) ====
+@@= skipped -11, +11 lines =@@
+     var myCars3 = new Array({});
+     var myCars4: Array; // error
+                  ~~~~~
+-!!! error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
++!!! error TS2314: Generic type 'T[]' requires 1 type argument(s).
+     var myCars5: Array<any>[];
+      
+     myCars = myCars2;

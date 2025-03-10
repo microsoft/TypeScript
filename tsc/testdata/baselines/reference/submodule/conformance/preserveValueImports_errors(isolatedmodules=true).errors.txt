@@ -1,0 +1,53 @@
+d.ts(1,10): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+d.ts(2,10): error TS1448: 'B' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.
+
+
+==== a.ts (0 errors) ====
+    export type A = {};
+    export type { A as default };
+    
+==== b.ts (0 errors) ====
+    class B {};
+    export type { B, B as default };
+    
+==== c.ts (0 errors) ====
+    import DefaultA from "./a";
+    import { A } from "./a";
+    import DefaultB from "./b";
+    import { B } from "./b";
+    
+==== c.fixed.ts (0 errors) ====
+    import type DefaultA from "./a";
+    import type { A } from "./a";
+    import type DefaultB from "./b";
+    import type { B } from "./b";
+    
+==== d.ts (2 errors) ====
+    export { A as AA } from "./a";
+             ~~~~~~~
+!!! error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+    export { B as BB } from "./b";
+             ~~~~~~~
+!!! error TS1448: 'B' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.
+!!! related TS1377 b.ts:2:15: 'B' was exported here.
+    
+==== d.fixed.ts (0 errors) ====
+    export type { A as AA } from "./a";
+    export type { B as BB } from "./b";
+    
+==== e.ts (0 errors) ====
+    import { AA, BB } from "./d";
+    
+==== e.fixed.ts (0 errors) ====
+    import type { AA, BB } from "./d";
+    
+==== f.ts (0 errors) ====
+    import type { A } from "./a";
+    import type { B } from "./b";
+    export { A, B as BB };
+    
+==== f.fixed.ts (0 errors) ====
+    import type { A } from "./a";
+    import type { B } from "./b";
+    export type { A, B as BB };
+    

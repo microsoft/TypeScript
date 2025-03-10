@@ -1,0 +1,55 @@
+--- old.symbolProperty9.errors.txt
++++ new.symbolProperty9.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++symbolProperty9.ts(2,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
++symbolProperty9.ts(2,6): error TS2304: Cannot find name 'Symbol'.
++symbolProperty9.ts(5,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
++symbolProperty9.ts(5,6): error TS2304: Cannot find name 'Symbol'.
+ symbolProperty9.ts(10,5): error TS2322: Type 'I' is not assignable to type 'C'.
+-  Types of property '[Symbol.iterator]' are incompatible.
++  'number' index signatures are incompatible.
+     Property 'y' is missing in type '{ x: any; }' but required in type '{ x: any; y: any; }'.
+ 
+ 
+-==== symbolProperty9.ts (1 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== symbolProperty9.ts (5 errors) ====
+     class C {
+         [Symbol.iterator]: { x; y };
++        ~~~~~~~~~~~~~~~~~
++!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
+     }
+     interface I {
+         [Symbol.iterator]: { x };
++        ~~~~~~~~~~~~~~~~~
++!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
+     }
+     
+     var i: I;
+@@= skipped -15, +43 lines =@@
+     var c: C = i;
+         ~
+ !!! error TS2322: Type 'I' is not assignable to type 'C'.
+-!!! error TS2322:   Types of property '[Symbol.iterator]' are incompatible.
++!!! error TS2322:   'number' index signatures are incompatible.
+ !!! error TS2322:     Property 'y' is missing in type '{ x: any; }' but required in type '{ x: any; y: any; }'.
+ !!! related TS2728 symbolProperty9.ts:2:29: 'y' is declared here.

@@ -1,0 +1,12 @@
+client.ts(1,51): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+
+
+==== server.ts (0 errors) ====
+    class a { }
+    export default a;
+    
+==== client.ts (1 errors) ====
+    import defaultBinding, * as nameSpaceBinding from "server";
+                                                      ~~~~~~~~
+!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
+    export var x = new defaultBinding();

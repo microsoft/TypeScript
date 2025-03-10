@@ -1,0 +1,14 @@
+--- old.arrayTypeOfFunctionTypes2.errors.txt
++++ new.arrayTypeOfFunctionTypes2.errors.txt
+@@= skipped -0, +0 lines =@@
+-arrayTypeOfFunctionTypes2.ts(16,11): error TS2348: Value of type 'new () => string' is not callable. Did you mean to include 'new'?
++arrayTypeOfFunctionTypes2.ts(16,11): error TS2348: Value of type 'new() => string' is not callable. Did you mean to include 'new'?
+ 
+ 
+ ==== arrayTypeOfFunctionTypes2.ts (1 errors) ====
+@@= skipped -18, +18 lines =@@
+     var r6 = new r5();
+     var r6b = r5();
+               ~~~~
+-!!! error TS2348: Value of type 'new () => string' is not callable. Did you mean to include 'new'?
++!!! error TS2348: Value of type 'new() => string' is not callable. Did you mean to include 'new'?

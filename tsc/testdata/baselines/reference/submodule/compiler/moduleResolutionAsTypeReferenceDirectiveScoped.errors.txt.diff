@@ -1,0 +1,34 @@
+--- old.moduleResolutionAsTypeReferenceDirectiveScoped.errors.txt
++++ new.moduleResolutionAsTypeReferenceDirectiveScoped.errors.txt
+@@= skipped -0, +0 lines =@@
++/a.ts(1,28): error TS2307: Cannot find module '@scoped/typescache' or its corresponding type declarations.
+ /a.ts(2,30): error TS2307: Cannot find module '@mangled/typescache' or its corresponding type declarations.
++/a.ts(3,34): error TS2307: Cannot find module '@scoped/nodemodulescache' or its corresponding type declarations.
+ /a.ts(4,36): error TS2307: Cannot find module '@mangled/nodemodulescache' or its corresponding type declarations.
+ /a.ts(5,30): error TS2307: Cannot find module '@scoped/attypescache' or its corresponding type declarations.
++/a.ts(6,37): error TS2307: Cannot find module '@mangled/attypescache' or its corresponding type declarations.
+ 
+ 
+-==== /a.ts (3 errors) ====
++==== /a.ts (6 errors) ====
+     import { typesCache } from "@scoped/typescache";
++                               ~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module '@scoped/typescache' or its corresponding type declarations.
+     import { mangledTypes } from "@mangled/typescache";
+                                  ~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2307: Cannot find module '@mangled/typescache' or its corresponding type declarations.
+     import { nodeModulesCache } from "@scoped/nodemodulescache";
++                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module '@scoped/nodemodulescache' or its corresponding type declarations.
+     import { mangledNodeModules } from "@mangled/nodemodulescache";
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2307: Cannot find module '@mangled/nodemodulescache' or its corresponding type declarations.
+@@= skipped -15, +22 lines =@@
+                                  ~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2307: Cannot find module '@scoped/attypescache' or its corresponding type declarations.
+     import { mangledAtTypesCache } from "@mangled/attypescache";
++                                        ~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module '@mangled/attypescache' or its corresponding type declarations.
+     
+ ==== /a/types/dummy/index.d.ts (0 errors) ====
+     export const dummy: number;

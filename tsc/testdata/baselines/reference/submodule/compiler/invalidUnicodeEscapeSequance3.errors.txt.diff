@@ -1,0 +1,11 @@
+--- old.invalidUnicodeEscapeSequance3.errors.txt
++++ new.invalidUnicodeEscapeSequance3.errors.txt
+@@= skipped -6, +6 lines =@@
+     a\u
+     ~
+ !!! error TS2304: Cannot find name 'a'.
+-     
++     ~
+ !!! error TS1127: Invalid character.
+       ~
+ !!! error TS2304: Cannot find name 'u'.

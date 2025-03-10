@@ -1,0 +1,42 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'CallableFunction'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'NewableFunction'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+privateNameStaticMethod.ts(7,20): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+privateNameStaticMethod.ts(8,12): error TS2554: Expected 1 arguments, but got 0.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'CallableFunction'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'NewableFunction'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== privateNameStaticMethod.ts (2 errors) ====
+    class A1 {
+        static #method(param: string): string {
+            return "";
+        }
+        constructor() {
+            A1.#method("")
+            A1.#method(1) // Error
+                       ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+            A1.#method()  // Error 
+               ~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 privateNameStaticMethod.ts:2:20: An argument for 'param' was not provided.
+    
+        }
+    }
+    

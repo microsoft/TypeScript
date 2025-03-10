@@ -1,0 +1,14 @@
+--- old.unusedTypeParameters10.errors.txt
++++ new.unusedTypeParameters10.errors.txt
+@@= skipped -0, +0 lines =@@
+-unusedTypeParameters10.ts(1,11): error TS6133: 'T' is declared but its value is never read.
++unusedTypeParameters10.ts(1,11): error TS6196: 'T' is declared but never used.
+ 
+ 
+ ==== unusedTypeParameters10.ts (1 errors) ====
+     type Alias<T> = { };
+               ~~~
+-!!! error TS6133: 'T' is declared but its value is never read.
++!!! error TS6196: 'T' is declared but never used.
+     type Alias2<T> = { x: T };
+     

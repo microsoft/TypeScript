@@ -1,0 +1,18 @@
+--- old.import_var-referencing-an-imported-module-alias.errors.txt
++++ new.import_var-referencing-an-imported-module-alias.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++consumer.ts(1,23): error TS2307: Cannot find module 'host' or its corresponding type declarations.
++
++
++==== consumer.ts (1 errors) ====
++    import host = require("host");
++                          ~~~~~~
++!!! error TS2307: Cannot find module 'host' or its corresponding type declarations.
++    var hostVar = host;
++    var v = new hostVar.Host();
++     
++==== host.ts (0 errors) ====
++    export class Host { }
++    

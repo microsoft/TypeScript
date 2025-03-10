@@ -1,0 +1,9 @@
+index.js(2,14): error TS1110: Type expected.
+
+
+==== index.js (1 errors) ====
+    const x = "oops";
+    const y = + <> x;
+                 ~
+!!! error TS1110: Type expected.
+    

@@ -1,0 +1,27 @@
+--- old.exportDefault.errors.txt
++++ new.exportDefault.errors.txt
+@@= skipped -0, +0 lines =@@
+ /d.ts(2,5): error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
+-/e.ts(2,11): error TS2339: Property 'A' does not exist on type 'typeof import("/b")'.
+-/f.ts(2,11): error TS2339: Property 'default' does not exist on type 'typeof import("/b")'.
++/e.ts(2,11): error TS2339: Property 'A' does not exist on type '{}'.
++/f.ts(2,11): error TS2339: Property 'default' does not exist on type '{}'.
+ /g.ts(2,5): error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
+ 
+ 
+@@= skipped -25, +25 lines =@@
+     import types = require('./b');
+     new types.A(); // Error
+               ~
+-!!! error TS2339: Property 'A' does not exist on type 'typeof import("/b")'.
++!!! error TS2339: Property 'A' does not exist on type '{}'.
+     
+ ==== /f.ts (1 errors) ====
+     import * as types from './b';
+     new types.default.A(); // Error
+               ~~~~~~~
+-!!! error TS2339: Property 'default' does not exist on type 'typeof import("/b")'.
++!!! error TS2339: Property 'default' does not exist on type '{}'.
+     
+ ==== /g.ts (1 errors) ====
+     import type types from './c'

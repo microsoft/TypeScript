@@ -1,0 +1,22 @@
+--- old.parseUnaryExpressionNoTypeAssertionInJsx3.errors.txt
++++ new.parseUnaryExpressionNoTypeAssertionInJsx3.errors.txt
+@@= skipped -0, +0 lines =@@
+-index.js(2,13): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+-index.js(2,14): error TS1003: Identifier expected.
+-index.js(2,14): error TS2365: Operator '>' cannot be applied to types 'number' and 'string'.
++index.js(2,13): error TS2352: Conversion of type 'string' to type '1234' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+ 
+ 
+-==== index.js (3 errors) ====
++==== index.js (1 errors) ====
+     const x = "oops";
+     const y = + <1234> x;
+-                ~
+-!!! error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+-                 ~~~~
+-!!! error TS1003: Identifier expected.
+-                 ~~~~~~~
+-!!! error TS2365: Operator '>' cannot be applied to types 'number' and 'string'.
++                ~~~~~~~~
++!!! error TS2352: Conversion of type 'string' to type '1234' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+     

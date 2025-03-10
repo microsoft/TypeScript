@@ -1,0 +1,28 @@
+conflictMarkerTrivia2.ts(3,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerTrivia2.ts(4,6): error TS2304: Cannot find name 'a'.
+conflictMarkerTrivia2.ts(6,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerTrivia2.ts(9,1): error TS1185: Merge conflict marker encountered.
+
+
+==== conflictMarkerTrivia2.ts (4 errors) ====
+    class C {
+      foo() {
+    <<<<<<< B
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+         a();
+         ~
+!!! error TS2304: Cannot find name 'a'.
+      }
+    =======
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+         b();
+      }
+    >>>>>>> A
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    
+      public bar() { }
+    }
+    

@@ -1,0 +1,21 @@
+--- old.asyncFunctionReturnExpressionErrorSpans.errors.txt
++++ new.asyncFunctionReturnExpressionErrorSpans.errors.txt
+@@= skipped -0, +0 lines =@@
+-asyncFunctionReturnExpressionErrorSpans.ts(11,28): error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+ asyncFunctionReturnExpressionErrorSpans.ts(16,21): error TS2322: Type 'number' is not assignable to type 'string'.
+ 
+ 
+-==== asyncFunctionReturnExpressionErrorSpans.ts (2 errors) ====
++==== asyncFunctionReturnExpressionErrorSpans.ts (1 errors) ====
+     interface Foo {
+         bar: {
+             baz: {
+@@= skipped -13, +12 lines =@@
+     }
+     
+     async function asyncFoo(): Promise<Foo> {
+-                               ~~~~~~~~~~~~
+-!!! error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+         return {
+             bar: {
+                 baz: {

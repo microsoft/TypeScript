@@ -1,0 +1,9 @@
+parserParameterList9.ts(2,14): error TS1047: A rest parameter cannot be optional.
+
+
+==== parserParameterList9.ts (1 errors) ====
+    class C {
+       foo(...bar?) { }
+                 ~
+!!! error TS1047: A rest parameter cannot be optional.
+    }

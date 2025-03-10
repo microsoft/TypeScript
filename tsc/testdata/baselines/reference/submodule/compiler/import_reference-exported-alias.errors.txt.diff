@@ -1,0 +1,30 @@
+--- old.import_reference-exported-alias.errors.txt
++++ new.import_reference-exported-alias.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++file2.ts(1,24): error TS2307: Cannot find module 'file1' or its corresponding type declarations.
++
++
++==== file2.ts (1 errors) ====
++    import appJs = require("file1");
++                           ~~~~~~~
++!!! error TS2307: Cannot find module 'file1' or its corresponding type declarations.
++    import Services = appJs.Services;
++    import UserServices = Services.UserServices;
++    var x = new UserServices().getUserName();
++    
++==== file1.ts (0 errors) ====
++    module App {
++        export module Services {
++            export class UserServices {
++                public getUserName(): string {
++                    return "Bill Gates";
++                }
++            }
++        }
++    }
++    
++    import Mod = App;
++    export = Mod;
++    

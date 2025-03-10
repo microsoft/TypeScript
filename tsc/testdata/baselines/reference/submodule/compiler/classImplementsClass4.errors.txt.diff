@@ -1,0 +1,19 @@
+--- old.classImplementsClass4.errors.txt
++++ new.classImplementsClass4.errors.txt
+@@= skipped -0, +0 lines =@@
+ classImplementsClass4.ts(5,7): error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
+   Property 'x' is missing in type 'C' but required in type 'A'.
+-classImplementsClass4.ts(16,1): error TS2741: Property 'x' is missing in type 'C' but required in type 'A'.
++classImplementsClass4.ts(16,1): error TS2322: Type 'C' is not assignable to type 'C2'.
++  Property 'x' is missing in type 'C' but required in type 'A'.
+ 
+ 
+ ==== classImplementsClass4.ts (2 errors) ====
+@@= skipped -24, +25 lines =@@
+     c = c2;
+     c2 = c;
+     ~~
+-!!! error TS2741: Property 'x' is missing in type 'C' but required in type 'A'.
++!!! error TS2322: Type 'C' is not assignable to type 'C2'.
++!!! error TS2322:   Property 'x' is missing in type 'C' but required in type 'A'.
+ !!! related TS2728 classImplementsClass4.ts:2:13: 'x' is declared here.

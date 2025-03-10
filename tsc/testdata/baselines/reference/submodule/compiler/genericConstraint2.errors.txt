@@ -1,0 +1,34 @@
+genericConstraint2.ts(11,7): error TS2420: Class 'ComparableString' incorrectly implements interface 'Comparable<string>'.
+  Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<string>'.
+genericConstraint2.ts(21,17): error TS2741: Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<ComparableString>'.
+
+
+==== genericConstraint2.ts (2 errors) ====
+    interface Comparable<T> {
+        comparer(other: T): number;
+    }
+    
+    function compare<T extends Comparable<T>>(x: T, y: T): number {
+        if (x == null) return y == null ? 0 : -1;
+        if (y == null) return 1;
+        return x.comparer(y);
+    }
+    
+    class ComparableString implements Comparable<string>{
+          ~~~~~~~~~~~~~~~~
+!!! error TS2420: Class 'ComparableString' incorrectly implements interface 'Comparable<string>'.
+!!! error TS2420:   Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<string>'.
+!!! related TS2728 genericConstraint2.ts:2:5: 'comparer' is declared here.
+        constructor(public currentValue: string) { }
+    
+        localeCompare(other) {
+            return 0;
+        }
+    }
+    
+    var a = new ComparableString("a");
+    var b = new ComparableString("b");
+    var c = compare<ComparableString>(a, b);
+                    ~~~~~~~~~~~~~~~~
+!!! error TS2741: Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<ComparableString>'.
+!!! related TS2728 genericConstraint2.ts:2:5: 'comparer' is declared here.

@@ -1,0 +1,20 @@
+--- old.override_js3.errors.txt
++++ new.override_js3.errors.txt
+@@= skipped -0, +0 lines =@@
+-a.js(7,5): error TS8009: The 'override' modifier can only be used in TypeScript files.
++a.js(9,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+ 
+ 
+ ==== a.js (1 errors) ====
+@@= skipped -8, +8 lines =@@
+     
+     class D extends B {
+         override foo (v) {}
+-        ~~~~~~~~
+-!!! error TS8009: The 'override' modifier can only be used in TypeScript files.
+         /** @override */
+         fooo (v) {}
++        ~~~~
++!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+     }
+     

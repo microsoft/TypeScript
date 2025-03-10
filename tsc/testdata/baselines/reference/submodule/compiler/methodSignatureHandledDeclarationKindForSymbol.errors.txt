@@ -1,0 +1,24 @@
+methodSignatureHandledDeclarationKindForSymbol.ts(2,5): error TS2300: Duplicate identifier 'bold'.
+methodSignatureHandledDeclarationKindForSymbol.ts(2,5): error TS2300: Duplicate identifier 'bold'.
+methodSignatureHandledDeclarationKindForSymbol.ts(6,5): error TS2300: Duplicate identifier 'bold'.
+methodSignatureHandledDeclarationKindForSymbol.ts(6,5): error TS2300: Duplicate identifier 'bold'.
+
+
+==== methodSignatureHandledDeclarationKindForSymbol.ts (4 errors) ====
+    interface Foo {
+        bold(): string;
+        ~~~~
+!!! error TS2300: Duplicate identifier 'bold'.
+        ~~~~
+!!! error TS2300: Duplicate identifier 'bold'.
+    }
+    
+    interface Foo {
+        bold: string;
+        ~~~~
+!!! error TS2300: Duplicate identifier 'bold'.
+        ~~~~
+!!! error TS2300: Duplicate identifier 'bold'.
+    }
+    
+    

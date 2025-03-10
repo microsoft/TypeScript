@@ -1,0 +1,26 @@
+index.js(1,15): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+index.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+index.js(3,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== index.js (3 errors) ====
+    const _item = require("./namespacer");
+                  ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    module.exports = 12;
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    Object.defineProperty(module, "exports", { value: "oh no" });
+                          ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+==== namespacey.js (0 errors) ====
+    const A = {}
+    A.bar = class Q {}
+    module.exports = A;
+==== namespacer.js (0 errors) ====
+    const B = {}
+    B.NS = require("./namespacey");
+    Object.defineProperty(B, "NS", { value: "why though", writable: true });
+    module.exports = B;
+    

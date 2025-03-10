@@ -1,0 +1,15 @@
+--- old.typeReferenceDirectiveWithFailedFromTypeRoot.errors.txt
++++ new.typeReferenceDirectiveWithFailedFromTypeRoot.errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS2688: Cannot find type definition file for 'phaser'.
+-  The file is in the program because:
+-    Entry point of type library 'phaser' specified in compilerOptions
+ /a.ts(1,1): error TS2304: Cannot find name 'a'.
+ 
+ 
+-!!! error TS2688: Cannot find type definition file for 'phaser'.
+-!!! error TS2688:   The file is in the program because:
+-!!! error TS2688:     Entry point of type library 'phaser' specified in compilerOptions
+ ==== /a.ts (1 errors) ====
+     a;
+     ~

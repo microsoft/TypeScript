@@ -1,0 +1,16 @@
+--- old.importNonExportedMember.errors.txt
++++ new.importNonExportedMember.errors.txt
+@@= skipped -0, +0 lines =@@
+-b.ts(1,15): error TS2460: Module '"./a"' declares 'bar' locally, but it is exported as 'baz'.
++b.ts(1,15): error TS2460: Module '""a.ts""' declares 'bar' locally, but it is exported as 'baz'.
+ 
+ 
+ ==== a.ts (0 errors) ====
+@@= skipped -8, +8 lines =@@
+ ==== b.ts (1 errors) ====
+     import { foo, bar } from "./a";
+                   ~~~
+-!!! error TS2460: Module '"./a"' declares 'bar' locally, but it is exported as 'baz'.
++!!! error TS2460: Module '""a.ts""' declares 'bar' locally, but it is exported as 'baz'.
+ !!! related TS2728 a.ts:2:18: 'bar' is declared here.
+     

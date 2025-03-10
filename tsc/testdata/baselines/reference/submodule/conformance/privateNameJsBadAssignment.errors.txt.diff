@@ -1,0 +1,50 @@
+--- old.privateNameJsBadAssignment.errors.txt
++++ new.privateNameJsBadAssignment.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ privateNameJsBadAssignment.js(1,1): error TS2304: Cannot find name 'exports'.
+ privateNameJsBadAssignment.js(1,9): error TS18016: Private identifiers are not allowed outside class bodies.
++privateNameJsBadAssignment.js(3,3): error TS2339: Property 'prototype' does not exist on type '() => void'.
+ privateNameJsBadAssignment.js(3,13): error TS18016: Private identifiers are not allowed outside class bodies.
+-privateNameJsBadAssignment.js(6,3): error TS2339: Property '#foo' does not exist on type 'typeof B'.
++privateNameJsBadAssignment.js(6,3): error TS2339: Property '#foo' does not exist on type '{ new(): B; prototype: B; }'.
+ privateNameJsBadAssignment.js(11,14): error TS2339: Property '#foo' does not exist on type 'C'.
+ 
+ 
+-==== privateNameJsBadAssignment.js (5 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== privateNameJsBadAssignment.js (6 errors) ====
+     exports.#nope = 1;           // Error (outside class body)
+     ~~~~~~~
+ !!! error TS2304: Cannot find name 'exports'.
+@@= skipped -12, +29 lines =@@
+ !!! error TS18016: Private identifiers are not allowed outside class bodies.
+     function A() { }
+     A.prototype.#no = 2;         // Error (outside class body)
++      ~~~~~~~~~
++!!! error TS2339: Property 'prototype' does not exist on type '() => void'.
+                 ~~~
+ !!! error TS18016: Private identifiers are not allowed outside class bodies.
+     
+     class B {}
+     B.#foo = 3;                  // Error (outside class body)
+       ~~~~
+-!!! error TS2339: Property '#foo' does not exist on type 'typeof B'.
++!!! error TS2339: Property '#foo' does not exist on type '{ new(): B; prototype: B; }'.
+     
+     class C {
+         #bar = 6;

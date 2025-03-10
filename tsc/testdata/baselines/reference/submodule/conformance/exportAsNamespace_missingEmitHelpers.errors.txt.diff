@@ -1,0 +1,16 @@
+--- old.exportAsNamespace_missingEmitHelpers.errors.txt
++++ new.exportAsNamespace_missingEmitHelpers.errors.txt
+@@= skipped -0, +-1 lines =@@
+-b.ts(1,1): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+-
+-
+-==== a.ts (0 errors) ====
+-    export {}
+-    
+-==== b.ts (1 errors) ====
+-    export * as ns from './a'; // Error
+-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

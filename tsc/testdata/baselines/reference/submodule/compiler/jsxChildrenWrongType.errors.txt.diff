@@ -1,0 +1,29 @@
+--- old.jsxChildrenWrongType.errors.txt
++++ new.jsxChildrenWrongType.errors.txt
+@@= skipped -0, +0 lines =@@
+-other.tsx(10,6): error TS2769: No overload matches this call.
+-  Overload 2 of 2, '(props: PropsType, context: any): Foo', gave the following error.
+-    Type 'unknown' is not assignable to type 'string | boolean'.
+-  Overload 2 of 2, '(props: PropsType, context: any): Foo', gave the following error.
+-    Type 'string' is not assignable to type 'number | boolean'.
++other.tsx(8,27): error TS2304: Cannot find name 'React'.
+ 
+ 
+ ==== other.tsx (1 errors) ====
+@@= skipped -13, +9 lines =@@
+         children: [string, number?] | Iterable<boolean>;
+     }
+     declare class Foo extends React.Component<PropsType, {}> {}
++                              ~~~~~
++!!! error TS2304: Cannot find name 'React'.
+     const b = (
+         <Foo>
+-         ~~~
+-!!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 2 of 2, '(props: PropsType, context: any): Foo', gave the following error.
+-!!! error TS2769:     Type 'unknown' is not assignable to type 'string | boolean'.
+-!!! error TS2769:   Overload 2 of 2, '(props: PropsType, context: any): Foo', gave the following error.
+-!!! error TS2769:     Type 'string' is not assignable to type 'number | boolean'.
+             {<div/> as unknown}
+             {"aa"}
+         </Foo>

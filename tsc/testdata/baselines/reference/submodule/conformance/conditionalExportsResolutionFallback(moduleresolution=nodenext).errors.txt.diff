@@ -1,0 +1,23 @@
+--- old.conditionalExportsResolutionFallback(moduleresolution=nodenext).errors.txt
++++ new.conditionalExportsResolutionFallback(moduleresolution=nodenext).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
++/index.mts(1,16): error TS2307: Cannot find module 'dep' or its corresponding type declarations.
+ 
+ 
+-!!! error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+ ==== /node_modules/dep/package.json (0 errors) ====
+     {
+       "name": "dep",
+@@= skipped -20, +19 lines =@@
+ ==== /node_modules/dep/dist/index.mjs (0 errors) ====
+     export {};
+     
+-==== /index.mts (0 errors) ====
++==== /index.mts (1 errors) ====
+     import {} from "dep";
++                   ~~~~~
++!!! error TS2307: Cannot find module 'dep' or its corresponding type declarations.
+     // Should be an untyped resolution to dep/dist/index.mjs,
+     // but the first search is only for TS files, and when
+     // there's no dist/index.d.mts, it continues looking for

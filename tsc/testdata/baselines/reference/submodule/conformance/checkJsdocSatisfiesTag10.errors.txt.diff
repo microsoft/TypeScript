@@ -1,0 +1,20 @@
+--- old.checkJsdocSatisfiesTag10.errors.txt
++++ new.checkJsdocSatisfiesTag10.errors.txt
+@@= skipped -0, +0 lines =@@
+-/a.js(6,5): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type 'Partial<Record<Keys, unknown>>'.
+ /a.js(14,11): error TS2339: Property 'd' does not exist on type '{ a: number; b: string; x: number; }'.
+ 
+ 
+-==== /a.js (2 errors) ====
++==== /a.js (1 errors) ====
+     /** @typedef {"a" | "b" | "c" | "d"} Keys */
+     
+     const p = /** @satisfies {Partial<Record<Keys, unknown>>} */ ({
+         a: 0,
+         b: "hello",
+         x: 8 // Should error, 'x' isn't in 'Keys'
+-        ~
+-!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type 'Partial<Record<Keys, unknown>>'.
+     });
+     
+     // Should be OK -- retain info that a is number and b is string

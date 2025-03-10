@@ -1,0 +1,88 @@
+--- old.parser.asyncGenerators.functionDeclarations.es2018.errors.txt
++++ new.parser.asyncGenerators.functionDeclarations.es2018.errors.txt
+@@= skipped -0, +0 lines =@@
+ awaitInParameterInitializerIsError.ts(1,25): error TS2524: 'await' expressions cannot be used in a parameter initializer.
+ awaitMissingValueIsError.ts(2,10): error TS1109: Expression expected.
+ awaitParameterIsError.ts(1,21): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
++awaitParameterIsError.ts(1,21): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+ nestedFunctionDeclarationNamedAwaitIsError.ts(2,14): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
++nestedFunctionDeclarationNamedAwaitIsError.ts(2,14): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+ nestedFunctionDeclarationNamedYieldIsError.ts(2,14): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
++nestedFunctionDeclarationNamedYieldIsError.ts(2,14): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+ nestedFunctionExpressionNamedAwaitIsError.ts(2,24): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
++nestedFunctionExpressionNamedAwaitIsError.ts(2,24): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+ nestedFunctionExpressionNamedYieldIsError.ts(2,24): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
++nestedFunctionExpressionNamedYieldIsError.ts(2,24): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+ yieldInParameterInitializerIsError.ts(1,25): error TS2523: 'yield' expressions cannot be used in a parameter initializer.
+ yieldParameterIsError.ts(1,21): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
++yieldParameterIsError.ts(1,21): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+ yieldStarMissingValueIsError.ts(2,12): error TS1109: Expression expected.
+ 
+ 
+@@= skipped -18, +24 lines =@@
+ ==== yieldNameIsOk.ts (0 errors) ====
+     async function * yield() {
+     }
+-==== awaitParameterIsError.ts (1 errors) ====
++==== awaitParameterIsError.ts (2 errors) ====
+     async function * f4(await) {
+                         ~~~~~
+ !!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
++                        ~~~~~
++!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+     }
+-==== yieldParameterIsError.ts (1 errors) ====
++==== yieldParameterIsError.ts (2 errors) ====
+     async function * f5(yield) {
+                         ~~~~~
+ !!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
++                        ~~~~~
++!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+     }
+ ==== awaitInParameterInitializerIsError.ts (1 errors) ====
+     async function * f6(a = await 1) {
+@@= skipped -25, +29 lines =@@
+         async function * g() {
+         }
+     }
+-==== nestedFunctionDeclarationNamedYieldIsError.ts (1 errors) ====
++==== nestedFunctionDeclarationNamedYieldIsError.ts (2 errors) ====
+     async function * f9() {
+         function yield() {
+                  ~~~~~
+ !!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
++                 ~~~~~
++!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+         }
+     }
+-==== nestedFunctionExpressionNamedYieldIsError.ts (1 errors) ====
++==== nestedFunctionExpressionNamedYieldIsError.ts (2 errors) ====
+     async function * f10() {
+         const x = function yield() {
+                            ~~~~~
+ !!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
++                           ~~~~~
++!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+         };
+     }
+-==== nestedFunctionDeclarationNamedAwaitIsError.ts (1 errors) ====
++==== nestedFunctionDeclarationNamedAwaitIsError.ts (2 errors) ====
+     async function * f11() {
+         function await() {
+                  ~~~~~
+ !!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
++                 ~~~~~
++!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+         }
+     }
+-==== nestedFunctionExpressionNamedAwaitIsError.ts (1 errors) ====
++==== nestedFunctionExpressionNamedAwaitIsError.ts (2 errors) ====
+     async function * f12() {
+         const x = function yield() {
+                            ~~~~~
+ !!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
++                           ~~~~~
++!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+         };
+     }
+ ==== yieldIsOk.ts (0 errors) ====

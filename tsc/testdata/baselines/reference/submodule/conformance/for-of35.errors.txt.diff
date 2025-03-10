@@ -1,0 +1,48 @@
+--- old.for-of35.errors.txt
++++ new.for-of35.errors.txt
+@@= skipped -0, +0 lines =@@
+-for-of35.ts(2,5): error TS7023: 'next' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+-for-of35.ts(14,10): error TS7022: 'v' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++for-of35.ts(9,6): error TS2304: Cannot find name 'Symbol'.
++for-of35.ts(14,15): error TS2488: Type 'MyStringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== for-of35.ts (2 errors) ====
+     class MyStringIterator {
+         next() {
+-        ~~~~
+-!!! error TS7023: 'next' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+             return {
+                 done: true,
+                 value: v
+@@= skipped -13, +27 lines =@@
+         }
+     
+         [Symbol.iterator]() {
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
+             return this;
+         }
+     }
+     
+     for (var v of new MyStringIterator) { }
+-             ~
+-!!! error TS7022: 'v' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
++                  ~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type 'MyStringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.

@@ -1,0 +1,45 @@
+--- old.amdLikeInputDeclarationEmit.errors.txt
++++ new.amdLikeInputDeclarationEmit.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++ExtendedClass.js(9,37): error TS2339: Property 'extends' does not exist on type 'unknown'.
++ExtendedClass.js(17,12): error TS2339: Property 'exports' does not exist on type '{}'.
++ExtendedClass.js(18,19): error TS2339: Property 'exports' does not exist on type '{}'.
++
++
++==== typing.d.ts (0 errors) ====
++    declare function define<T=unknown>(name: string, modules: string[], ready: (...modules: unknown[]) => T);
++==== deps/BaseClass.d.ts (0 errors) ====
++    declare module "deps/BaseClass" {
++        class BaseClass {
++            static extends<A>(a: A): new () => A & BaseClass;
++        }
++        export = BaseClass;
++    }
++==== ExtendedClass.js (3 errors) ====
++    define("lib/ExtendedClass", ["deps/BaseClass"], 
++    /**
++     * {typeof import("deps/BaseClass")}
++     * @param  {typeof import("deps/BaseClass")} BaseClass 
++     * @returns 
++     */
++    (BaseClass) => {    
++        
++        const ExtendedClass = BaseClass.extends({
++                                        ~~~~~~~
++!!! error TS2339: Property 'extends' does not exist on type 'unknown'.
++            f: function() {
++                return "something";
++            }
++        });
++    
++        // Exports the module in a way tsc recognize class export 
++        const module = {};
++        module.exports = ExtendedClass
++               ~~~~~~~
++!!! error TS2339: Property 'exports' does not exist on type '{}'.
++        return module.exports;
++                      ~~~~~~~
++!!! error TS2339: Property 'exports' does not exist on type '{}'.
++    });

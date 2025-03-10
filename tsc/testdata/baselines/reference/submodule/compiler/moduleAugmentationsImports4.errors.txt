@@ -1,0 +1,63 @@
+d.d.ts(2,21): error TS2307: Cannot find module 'a' or its corresponding type declarations.
+d.d.ts(3,21): error TS2307: Cannot find module 'b' or its corresponding type declarations.
+e.d.ts(3,21): error TS2307: Cannot find module 'a' or its corresponding type declarations.
+main.ts(8,11): error TS2339: Property 'getB' does not exist on type 'A'.
+main.ts(9,11): error TS2339: Property 'getCls' does not exist on type 'A'.
+
+
+==== main.ts (2 errors) ====
+    /// <reference path="d.d.ts"/>
+    /// <reference path="e.d.ts"/>
+    import {A} from "./a";
+    import "D";
+    import "E";
+    
+    let a: A;
+    let b = a.getB().x.toFixed();
+              ~~~~
+!!! error TS2339: Property 'getB' does not exist on type 'A'.
+    let c = a.getCls().y.toLowerCase();
+              ~~~~~~
+!!! error TS2339: Property 'getCls' does not exist on type 'A'.
+    
+==== a.ts (0 errors) ====
+    export class A {}
+    
+==== b.ts (0 errors) ====
+    export class B {x: number;}
+    
+==== c.d.ts (0 errors) ====
+    declare module "C" {
+        class Cls {y: string; }
+    }
+    
+==== d.d.ts (2 errors) ====
+    declare module "D" {
+        import {A} from "a";
+                        ~~~
+!!! error TS2307: Cannot find module 'a' or its corresponding type declarations.
+        import {B} from "b";
+                        ~~~
+!!! error TS2307: Cannot find module 'b' or its corresponding type declarations.
+        module "a" {
+            interface A {
+                getB(): B;
+            }
+        }
+    }
+    
+==== e.d.ts (1 errors) ====
+    /// <reference path="c.d.ts"/>
+    declare module "E" {
+        import {A} from "a";
+                        ~~~
+!!! error TS2307: Cannot find module 'a' or its corresponding type declarations.
+        import {Cls} from "C";
+    
+        module "a" {
+            interface A {
+                getCls(): Cls;
+            }
+        }
+    }
+    

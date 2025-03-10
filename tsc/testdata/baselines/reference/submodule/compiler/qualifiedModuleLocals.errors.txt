@@ -1,0 +1,16 @@
+qualifiedModuleLocals.ts(5,27): error TS2339: Property 'b' does not exist on type '{ a: () => void; }'.
+
+
+==== qualifiedModuleLocals.ts (1 errors) ====
+    module A {
+    
+      function b() {}
+    
+      export function a(){  A.b();  } // A.b should be an unresolved symbol error
+                              ~
+!!! error TS2339: Property 'b' does not exist on type '{ a: () => void; }'.
+    
+    }
+    
+    A.a();
+    

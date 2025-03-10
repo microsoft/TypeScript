@@ -1,0 +1,42 @@
+--- old.for-of16.errors.txt
++++ new.for-of16.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++for-of16.ts(2,6): error TS2304: Cannot find name 'Symbol'.
+ for-of16.ts(8,11): error TS2488: Type 'MyStringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
+-for-of16.ts(10,11): error TS2488: Type 'MyStringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== for-of16.ts (2 errors) ====
+     class MyStringIterator {
+         [Symbol.iterator]() {
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
+             return this;
+         }
+     }
+@@= skipped -12, +30 lines =@@
+     for (v of new MyStringIterator) { } // Should fail
+               ~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2488: Type 'MyStringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
+-!!! related TS2489 for-of16.ts:8:11: An iterator must have a 'next()' method.
+     
+     for (v of new MyStringIterator) { } // Should still fail (related errors should still be shown even though type is cached).
+-              ~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2488: Type 'MyStringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
+-!!! related TS2489 for-of16.ts:10:11: An iterator must have a 'next()' method.

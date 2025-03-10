@@ -1,0 +1,33 @@
+--- old.privateNamesAndIndexedAccess.errors.txt
++++ new.privateNamesAndIndexedAccess.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'CallableFunction'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'NewableFunction'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ privateNamesAndIndexedAccess.ts(7,28): error TS1005: ']' expected.
+ privateNamesAndIndexedAccess.ts(7,28): error TS7005: Variable '#bar' implicitly has an 'any' type.
+ privateNamesAndIndexedAccess.ts(7,32): error TS1005: ',' expected.
+@@= skipped -5, +15 lines =@@
+ privateNamesAndIndexedAccess.ts(9,28): error TS2339: Property '#bar' does not exist on type 'C'.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'CallableFunction'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'NewableFunction'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== privateNamesAndIndexedAccess.ts (6 errors) ====
+     class C {
+         foo = 3;

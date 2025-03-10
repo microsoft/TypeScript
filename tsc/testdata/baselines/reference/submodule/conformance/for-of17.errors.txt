@@ -1,0 +1,39 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+for-of17.ts(8,6): error TS2304: Cannot find name 'Symbol'.
+for-of17.ts(14,11): error TS2488: Type 'NumberIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== for-of17.ts (2 errors) ====
+    class NumberIterator {
+        next() {
+            return {
+                value: 0,
+                done: false
+            };
+        }
+        [Symbol.iterator]() {
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+            return this;
+        }
+    }
+    
+    var v: string;
+    for (v of new NumberIterator) { } // Should succeed
+              ~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type 'NumberIterator' must have a '[Symbol.iterator]()' method that returns an iterator.

@@ -1,0 +1,24 @@
+file2.ts(1,41): error TS6133: 't2' is declared but its value is never read.
+
+
+==== file1.ts (0 errors) ====
+    export class Calculator {
+        handleChar() {}
+    }
+    
+    export function test() {
+    
+    }
+    
+    export function test2() {
+    
+    }
+    
+==== file2.ts (1 errors) ====
+    import {Calculator as calc, test as t1, test2 as t2} from "./file1"
+                                            ~~~~~~~~~~~
+!!! error TS6133: 't2' is declared but its value is never read.
+    
+    var x = new calc();
+    x.handleChar();
+    t1();

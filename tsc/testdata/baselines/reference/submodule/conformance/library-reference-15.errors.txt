@@ -1,0 +1,17 @@
+/a/b/consumer.ts(1,1): error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.
+/a/b/consumer.ts(2,1): error TS2304: Cannot find name '$2'.
+
+
+==== /a/b/consumer.ts (2 errors) ====
+    $.foo(); // should OK
+    ~
+!!! error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.
+    $2.foo(); // should error
+    ~~
+!!! error TS2304: Cannot find name '$2'.
+==== /a/types/jquery/index.d.ts (0 errors) ====
+    declare var $: { foo(): void };
+    
+==== /a/types/jquery2/index.d.ts (0 errors) ====
+    declare var $2: { foo(): void };
+    

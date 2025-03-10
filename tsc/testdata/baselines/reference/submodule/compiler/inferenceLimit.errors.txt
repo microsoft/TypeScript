@@ -1,0 +1,80 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'Promise'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+file1.ts(9,14): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+file1.ts(9,22): error TS2304: Cannot find name 'Array'.
+file1.ts(11,17): error TS2304: Cannot find name 'Array'.
+file1.ts(14,18): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+file1.ts(23,12): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+file1.ts(24,22): error TS2304: Cannot find name 'Array'.
+file1.ts(30,16): error TS2697: An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'Promise'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== file1.ts (7 errors) ====
+    "use strict";
+    import * as MyModule from "./mymodule";
+    
+    export class BrokenClass {
+    
+      constructor() {}
+    
+      public brokenMethod(field: string, value: string) {
+      return new Promise<Array<MyModule.MyModel>>((resolve, reject) => {
+                 ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+                         ~~~~~
+!!! error TS2304: Cannot find name 'Array'.
+    
+        let result: Array<MyModule.MyModel> = [];
+                    ~~~~~
+!!! error TS2304: Cannot find name 'Array'.
+    
+        let populateItems = (order) => {
+          return new Promise((resolve, reject) => {
+                     ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+            this.doStuff(order.id)
+              .then((items) => {
+                order.items = items;
+                resolve(order);
+              });
+          });
+        };
+    
+        return Promise.all(result.map(populateItems))
+               ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+          .then((orders: Array<MyModule.MyModel>) => {
+                         ~~~~~
+!!! error TS2304: Cannot find name 'Array'.
+            resolve(orders);
+          });
+        });
+      }
+    
+      public async doStuff(id: number) {
+                   ~~~~~~~
+!!! error TS2697: An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+        return;
+      }
+    }
+    
+==== mymodule.ts (0 errors) ====
+    export interface MyModel {
+        id: number;
+    }

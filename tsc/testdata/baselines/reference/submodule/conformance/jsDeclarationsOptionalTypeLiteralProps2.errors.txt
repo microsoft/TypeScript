@@ -1,0 +1,26 @@
+foo.js(11,16): error TS7031: Binding element 'a' implicitly has an 'any' type.
+foo.js(11,19): error TS7031: Binding element 'b' implicitly has an 'any' type.
+foo.js(11,22): error TS7031: Binding element 'c' implicitly has an 'any' type.
+
+
+==== foo.js (3 errors) ====
+    /**
+     * foo
+     *
+     * @public
+     * @param {object} opts
+     * @param {number} opts.a
+     * @param {number} [opts.b]
+     * @param {number} [opts.c]
+     * @returns {number}
+     */
+    function foo({ a, b, c }) {
+                   ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                      ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+                         ~
+!!! error TS7031: Binding element 'c' implicitly has an 'any' type.
+        return a + (b ?? 0) + (c ?? 0);
+    }
+    

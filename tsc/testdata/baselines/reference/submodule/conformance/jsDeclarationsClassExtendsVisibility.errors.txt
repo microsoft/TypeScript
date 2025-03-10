@@ -1,0 +1,23 @@
+cls.js(1,13): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+cls.js(7,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+cls.js(8,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== cls.js (3 errors) ====
+    const Bar = require("./bar");
+                ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    const Strings = {
+        a: "A",
+        b: "B"
+    };
+    class Foo extends Bar {}
+    module.exports = Foo;
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    module.exports.Strings = Strings;
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+==== bar.js (0 errors) ====
+    class Bar {}
+    module.exports = Bar;

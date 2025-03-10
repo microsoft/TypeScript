@@ -1,0 +1,20 @@
+parser553699.ts(3,21): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+parser553699.ts(3,21): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+parser553699.ts(3,21): error TS2304: Cannot find name 'public'.
+
+
+==== parser553699.ts (3 errors) ====
+    class Foo {
+      constructor() { }
+      public banana (x: public) { }
+                        ~~~~~~
+!!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+                        ~~~~~~
+!!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+                        ~~~~~~
+!!! error TS2304: Cannot find name 'public'.
+    }
+    
+    class Bar {
+      constructor(c: Bar) { }
+    }

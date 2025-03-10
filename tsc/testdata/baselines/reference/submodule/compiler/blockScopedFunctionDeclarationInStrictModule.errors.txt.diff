@@ -1,0 +1,20 @@
+--- old.blockScopedFunctionDeclarationInStrictModule.errors.txt
++++ new.blockScopedFunctionDeclarationInStrictModule.errors.txt
+@@= skipped -0, +-1 lines =@@
+-blockScopedFunctionDeclarationInStrictModule.ts(2,14): error TS1252: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Modules are automatically in strict mode.
+-blockScopedFunctionDeclarationInStrictModule.ts(6,10): error TS2304: Cannot find name 'foo'.
+-
+-
+-==== blockScopedFunctionDeclarationInStrictModule.ts (2 errors) ====
+-    if (true) {
+-        function foo() { }
+-                 ~~~
+-!!! error TS1252: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Modules are automatically in strict mode.
+-        foo(); // ok
+-    }
+-    
+-    export = foo; // not ok
+-             ~~~
+-!!! error TS2304: Cannot find name 'foo'.
+@@= skipped --1, +1 lines =@@
++<no content>

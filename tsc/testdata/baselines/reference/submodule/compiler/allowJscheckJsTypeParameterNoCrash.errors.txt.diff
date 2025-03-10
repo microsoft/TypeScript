@@ -1,0 +1,28 @@
+--- old.allowJscheckJsTypeParameterNoCrash.errors.txt
++++ new.allowJscheckJsTypeParameterNoCrash.errors.txt
+@@= skipped -0, +-1 lines =@@
+-app.js(6,7): error TS2322: Type 'number' is not assignable to type 'WatchHandler<any>'.
+-
+-
+-==== func.ts (0 errors) ====
+-    interface ComponentOptions<V> {
+-        watch: Record<string, WatchHandler<any>>;
+-    }
+-    type WatchHandler<T> = (val: T) => void;
+-    declare function extend(options: ComponentOptions<{}>): void;
+-    export var vextend = extend;
+-==== app.js (1 errors) ====
+-    import {vextend} from './func';
+-    // hover on vextend
+-    export var a = vextend({
+-      watch: {
+-        data1(val) {
+-          this.data2 = 1;
+-          ~~~~~~~~~~
+-!!! error TS2322: Type 'number' is not assignable to type 'WatchHandler<any>'.
+-        },
+-        data2(val) { },
+-      }
+-    });
+@@= skipped --1, +1 lines =@@
++<no content>

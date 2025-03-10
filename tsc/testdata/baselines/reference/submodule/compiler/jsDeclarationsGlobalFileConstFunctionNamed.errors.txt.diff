@@ -1,0 +1,30 @@
+--- old.jsDeclarationsGlobalFileConstFunctionNamed.errors.txt
++++ new.jsDeclarationsGlobalFileConstFunctionNamed.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++file.js(15,42): error TS2350: Only a void function can be called with the 'new' keyword.
++
++
++==== file.js (1 errors) ====
++    const SomeConstructor = function Named() {
++    	this.x = 1;
++    };
++    
++    const SomeConstructor2 = function Named() {
++    };
++    SomeConstructor2.staticMember = "str";
++    
++    const SomeConstructor3 = function Named() {
++    	this.x = 1;
++    };
++    SomeConstructor3.staticMember = "str";
++    
++    const SelfReference = function Named() {
++        if (!(this instanceof Named)) return new Named();
++                                             ~~~~~~~~~~~
++!!! error TS2350: Only a void function can be called with the 'new' keyword.
++        this.x = 1;
++    }
++    SelfReference.staticMember = "str";
++    

@@ -1,0 +1,58 @@
+--- old.nonPrimitiveStrictNull.errors.txt
++++ new.nonPrimitiveStrictNull.errors.txt
+@@= skipped -10, +10 lines =@@
+ nonPrimitiveStrictNull.ts(21,5): error TS2322: Type 'object | null' is not assignable to type 'object'.
+   Type 'null' is not assignable to type 'object'.
+ nonPrimitiveStrictNull.ts(26,5): error TS18047: 'd' is possibly 'null'.
++nonPrimitiveStrictNull.ts(26,7): error TS2339: Property 'toString' does not exist on type 'object | null'.
++  Property 'toString' does not exist on type 'null'.
+ nonPrimitiveStrictNull.ts(28,5): error TS18048: 'd' is possibly 'undefined'.
+ nonPrimitiveStrictNull.ts(32,5): error TS18049: 'd' is possibly 'null' or 'undefined'.
+ nonPrimitiveStrictNull.ts(38,5): error TS18047: 'd' is possibly 'null'.
+ nonPrimitiveStrictNull.ts(40,5): error TS18048: 'd' is possibly 'undefined'.
++nonPrimitiveStrictNull.ts(40,7): error TS2339: Property 'toString' does not exist on type 'object | undefined'.
++  Property 'toString' does not exist on type 'undefined'.
+ nonPrimitiveStrictNull.ts(44,5): error TS18048: 'd' is possibly 'undefined'.
+ nonPrimitiveStrictNull.ts(46,5): error TS18047: 'd' is possibly 'null'.
++nonPrimitiveStrictNull.ts(46,7): error TS2339: Property 'toString' does not exist on type 'object | null'.
++  Property 'toString' does not exist on type 'null'.
+ nonPrimitiveStrictNull.ts(51,14): error TS2344: Type 'number' does not satisfy the constraint 'object'.
+ nonPrimitiveStrictNull.ts(52,14): error TS2344: Type 'null' does not satisfy the constraint 'object'.
+ nonPrimitiveStrictNull.ts(53,14): error TS2344: Type 'undefined' does not satisfy the constraint 'object'.
+ 
+ 
+-==== nonPrimitiveStrictNull.ts (18 errors) ====
++==== nonPrimitiveStrictNull.ts (21 errors) ====
+     var a: object
+     declare var b: object | null
+     declare var c: object | undefined
+@@= skipped -60, +66 lines =@@
+         d.toString(); // error, object | null
+         ~
+ !!! error TS18047: 'd' is possibly 'null'.
++          ~~~~~~~~
++!!! error TS2339: Property 'toString' does not exist on type 'object | null'.
++!!! error TS2339:   Property 'toString' does not exist on type 'null'.
+     } else {
+         d.toString(); // error, undefined
+         ~
+@@= skipped -22, +25 lines =@@
+         d.toString(); // error, object | undefined
+         ~
+ !!! error TS18048: 'd' is possibly 'undefined'.
++          ~~~~~~~~
++!!! error TS2339: Property 'toString' does not exist on type 'object | undefined'.
++!!! error TS2339:   Property 'toString' does not exist on type 'undefined'.
+     }
+     
+     if (typeof d === 'undefined') {
+@@= skipped -10, +13 lines =@@
+         d.toString(); // error, object | null
+         ~
+ !!! error TS18047: 'd' is possibly 'null'.
++          ~~~~~~~~
++!!! error TS2339: Property 'toString' does not exist on type 'object | null'.
++!!! error TS2339:   Property 'toString' does not exist on type 'null'.
+     }
+     
+     interface Proxy<T extends object> {}

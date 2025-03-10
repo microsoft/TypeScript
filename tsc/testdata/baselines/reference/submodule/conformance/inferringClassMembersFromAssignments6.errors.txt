@@ -1,0 +1,22 @@
+inferringClassMembersFromAssignments6.js(12,13): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+
+
+==== inferringClassMembersFromAssignments6.js (1 errors) ====
+    function Foonly() {
+        var self = this
+        self.x = 1
+        self.m = function() {
+            console.log(self.x)
+        }
+    }
+    Foonly.prototype.mreal = function() {
+        var self = this
+        self.y = 2
+    }
+    const foo = new Foonly()
+                ~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    foo.x
+    foo.y
+    foo.m()
+    

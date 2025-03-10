@@ -1,0 +1,41 @@
+--- old.useObjectValuesAndEntries3.errors.txt
++++ new.useObjectValuesAndEntries3.errors.txt
+@@= skipped -0, +0 lines =@@
+-useObjectValuesAndEntries3.ts(3,22): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+-useObjectValuesAndEntries3.ts(7,22): error TS2550: Property 'entries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++useObjectValuesAndEntries3.ts(3,15): error TS2304: Cannot find name 'Object'.
++useObjectValuesAndEntries3.ts(7,15): error TS2304: Cannot find name 'Object'.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== useObjectValuesAndEntries3.ts (2 errors) ====
+     var o = { a: 1, b: 2 };
+     
+     for (var x of Object.values(o)) {
+-                         ~~~~~~
+-!!! error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
++                  ~~~~~~
++!!! error TS2304: Cannot find name 'Object'.
+         let y = x;
+     }
+     
+     var entries = Object.entries(o);
+-                         ~~~~~~~
+-!!! error TS2550: Property 'entries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
++                  ~~~~~~
++!!! error TS2304: Cannot find name 'Object'.

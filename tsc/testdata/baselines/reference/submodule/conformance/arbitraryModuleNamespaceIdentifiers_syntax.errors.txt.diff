@@ -1,0 +1,50 @@
+--- old.arbitraryModuleNamespaceIdentifiers_syntax.errors.txt
++++ new.arbitraryModuleNamespaceIdentifiers_syntax.errors.txt
+@@= skipped -0, +0 lines =@@
+ type-clause-bad-export.ts(1,15): error TS1003: Identifier expected.
+ type-clause-bad-import.ts(1,22): error TS1003: Identifier expected.
+ type-clause-no-as.ts(1,15): error TS1003: Identifier expected.
+-type-clause-type-as-as.ts(1,15): error TS2305: Module '"./type-clause-valid"' has no exported member 'as'.
++type-clause-type-as-as.ts(1,15): error TS2305: Module '""type-clause-valid.ts""' has no exported member 'as'.
+ type-clause-type-as-as.ts(1,21): error TS1003: Identifier expected.
+ type-decls-bad-export.ts(1,15): error TS1003: Identifier expected.
+ type-decls-bad-import.ts(1,22): error TS1003: Identifier expected.
+ type-decls-no-as.ts(1,15): error TS1003: Identifier expected.
+-type-decls-type-as.ts(1,15): error TS2305: Module '"./type-decls-valid"' has no exported member 'type'.
++type-decls-type-as.ts(1,15): error TS2305: Module '""type-decls-valid.ts""' has no exported member 'type'.
+ type-decls-type-as.ts(1,23): error TS1003: Identifier expected.
+ values-bad-export.ts(1,10): error TS1003: Identifier expected.
+ values-bad-import.ts(1,17): error TS1003: Identifier expected.
+ values-no-as.ts(1,10): error TS1003: Identifier expected.
+-values-type-as.ts(1,10): error TS2305: Module '"./values-valid"' has no exported member 'type'.
++values-type-as.ts(1,10): error TS2305: Module '""values-valid.ts""' has no exported member 'type'.
+ values-type-as.ts(1,18): error TS1003: Identifier expected.
+ 
+ 
+@@= skipped -40, +40 lines =@@
+ ==== values-type-as.ts (2 errors) ====
+     import { type as "invalid 4" } from "./values-valid";
+              ~~~~
+-!!! error TS2305: Module '"./values-valid"' has no exported member 'type'.
++!!! error TS2305: Module '""values-valid.ts""' has no exported member 'type'.
+                      ~~~~~~~~~~~
+ !!! error TS1003: Identifier expected.
+     
+@@= skipped -31, +31 lines =@@
+ ==== type-decls-type-as.ts (2 errors) ====
+     import type { type as "invalid 4" } from "./type-decls-valid";
+                   ~~~~
+-!!! error TS2305: Module '"./type-decls-valid"' has no exported member 'type'.
++!!! error TS2305: Module '""type-decls-valid.ts""' has no exported member 'type'.
+                           ~~~~~~~~~~~
+ !!! error TS1003: Identifier expected.
+     
+@@= skipped -29, +29 lines =@@
+ ==== type-clause-type-as-as.ts (2 errors) ====
+     import { type as as "invalid 4" } from "./type-clause-valid";
+                   ~~
+-!!! error TS2305: Module '"./type-clause-valid"' has no exported member 'as'.
++!!! error TS2305: Module '""type-clause-valid.ts""' has no exported member 'as'.
+                         ~~~~~~~~~~~
+ !!! error TS1003: Identifier expected.
+     

@@ -1,0 +1,60 @@
+a.js(5,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+a.js(6,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+a.js(7,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+a.js(8,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+a.js(9,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+a.js(34,10): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+
+
+==== a.js (6 errors) ====
+    // all references to _map, set, get, addon should be ok
+    
+    /** @constructor */
+    var Multimap = function() {
+        this._map = {};
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+        this._map
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+        this.set
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+        this.get
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+        this.addon
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    };
+    
+    Multimap.prototype = {
+        set: function() {
+            this._map
+            this.set
+            this.get
+            this.addon
+        },
+        get() {
+            this._map
+            this.set
+            this.get
+            this.addon
+        }
+    }
+    
+    Multimap.prototype.addon = function () {
+        this._map
+        this.set
+        this.get
+        this.addon
+    }
+    
+    var mm = new Multimap();
+             ~~~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    mm._map
+    mm.set
+    mm.get
+    mm.addon
+    

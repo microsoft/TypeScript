@@ -1,0 +1,17 @@
+--- old.contextualSignatureInstatiationContravariance.errors.txt
++++ new.contextualSignatureInstatiationContravariance.errors.txt
+@@= skipped -0, +0 lines =@@
+-contextualSignatureInstatiationContravariance.ts(8,1): error TS2322: Type '<T extends Animal>(x: T, y: T) => void' is not assignable to type '(g: Giraffe, e: Elephant) => void'.
++contextualSignatureInstatiationContravariance.ts(8,1): error TS2322: Type '<T>(x: T, y: T) => void' is not assignable to type '(g: Giraffe, e: Elephant) => void'.
+   Types of parameters 'y' and 'e' are incompatible.
+     Property 'y' is missing in type 'Elephant' but required in type 'Giraffe'.
+ 
+@@= skipped -12, +12 lines =@@
+     var g2: (g: Giraffe, e: Elephant) => void;
+     g2 = f2; // error because Giraffe and Elephant are disjoint types
+     ~~
+-!!! error TS2322: Type '<T extends Animal>(x: T, y: T) => void' is not assignable to type '(g: Giraffe, e: Elephant) => void'.
++!!! error TS2322: Type '<T>(x: T, y: T) => void' is not assignable to type '(g: Giraffe, e: Elephant) => void'.
+ !!! error TS2322:   Types of parameters 'y' and 'e' are incompatible.
+ !!! error TS2322:     Property 'y' is missing in type 'Elephant' but required in type 'Giraffe'.
+ !!! related TS2728 contextualSignatureInstatiationContravariance.ts:2:36: 'y' is declared here.

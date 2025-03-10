@@ -1,0 +1,13 @@
+es5-oldStyleOctalLiteralInEnums.ts(2,8): error TS1121: Octal literals are not allowed. Use the syntax '1'.
+es5-oldStyleOctalLiteralInEnums.ts(3,7): error TS1121: Octal literals are not allowed. Use the syntax '2'.
+
+
+==== es5-oldStyleOctalLiteralInEnums.ts (2 errors) ====
+    enum E {
+      x = -01,
+           ~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '1'.
+      y = 02,
+          ~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '2'.
+    }

@@ -1,0 +1,30 @@
+--- old.jsDeclarationsExportAssignedClassExpressionShadowing.errors.txt
++++ new.jsDeclarationsExportAssignedClassExpressionShadowing.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++index.js(7,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(9,14): error TS2339: Property 'x' does not exist on type 'Q'.
++index.js(12,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
++==== index.js (3 errors) ====
++    class A {
++        member = new Q();
++    }
++    class Q {
++        x = 42;
++    }
++    module.exports = class Q {
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++        constructor() {
++            this.x = new A();
++                 ~
++!!! error TS2339: Property 'x' does not exist on type 'Q'.
++        }
++    }
++    module.exports.Another = Q;
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    

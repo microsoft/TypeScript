@@ -1,0 +1,13 @@
+internalAliasWithDottedNameEmit.ts(5,18): error TS2503: Cannot find namespace 'b'.
+
+
+==== internalAliasWithDottedNameEmit.ts (1 errors) ====
+    module a.b.c {
+          export var d;
+    }
+    module a.e.f {
+          import g = b.c;
+                     ~
+!!! error TS2503: Cannot find namespace 'b'.
+    }
+    

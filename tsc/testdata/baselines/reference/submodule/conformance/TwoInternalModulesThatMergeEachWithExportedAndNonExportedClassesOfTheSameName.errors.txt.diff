@@ -1,0 +1,51 @@
+--- old.TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.errors.txt
++++ new.TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts(38,14): error TS2694: Namespace 'X.Y.Z' has no exported member 'Line'.
++
++
++==== TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts (1 errors) ====
++    module A {
++        export class Point {
++            x: number;
++            y: number;
++        }
++    }
++    
++    module A {
++        class Point {
++            fromCarthesian(p: A.Point) {
++                return { x: p.x, y: p.y };
++            }
++        }
++    }
++    
++    // ensure merges as expected
++    var p: { x: number; y: number; };
++    var p: A.Point;
++    
++    module X.Y.Z {
++        export class Line {
++            length: number;
++        }
++    }
++    
++    module X {
++        export module Y {
++            export module Z {
++                class Line {
++                    name: string;
++                }
++            }
++        }
++    }
++    
++    // ensure merges as expected
++    var l: { length: number; }
++    var l: X.Y.Z.Line;
++                 ~~~~
++!!! error TS2694: Namespace 'X.Y.Z' has no exported member 'Line'.
++    
++    

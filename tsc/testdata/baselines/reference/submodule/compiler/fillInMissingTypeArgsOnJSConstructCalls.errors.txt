@@ -1,0 +1,38 @@
+BaseB.js(2,25): error TS1005: ',' expected.
+BaseB.js(3,14): error TS2304: Cannot find name 'Class'.
+BaseB.js(4,25): error TS2304: Cannot find name 'Class'.
+SubB.js(3,35): error TS2314: Generic type 'default<T, BaseA>' requires 2 type argument(s).
+
+
+==== BaseA.js (0 errors) ====
+    export default class BaseA {
+    }
+==== SubA.js (0 errors) ====
+    import BaseA from './BaseA';
+    export default class SubA extends BaseA {
+    }
+==== BaseB.js (3 errors) ====
+    import BaseA from './BaseA';
+    export default class B<T: BaseA> {
+                            ~
+!!! error TS1005: ',' expected.
+        _AClass: Class<T>;
+                 ~~~~~
+!!! error TS2304: Cannot find name 'Class'.
+        constructor(AClass: Class<T>) {
+                            ~~~~~
+!!! error TS2304: Cannot find name 'Class'.
+            this._AClass = AClass;
+        }
+    }
+==== SubB.js (1 errors) ====
+    import SubA from './SubA';
+    import BaseB from './BaseB';
+    export default class SubB extends BaseB<SubA> {
+                                      ~~~~~~~~~~~
+!!! error TS2314: Generic type 'default<T, BaseA>' requires 2 type argument(s).
+        constructor() {
+            super(SubA);
+        }
+    }
+    

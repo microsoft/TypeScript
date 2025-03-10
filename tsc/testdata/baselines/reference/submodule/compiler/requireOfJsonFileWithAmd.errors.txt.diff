@@ -1,0 +1,23 @@
+--- old.requireOfJsonFileWithAmd.errors.txt
++++ new.requireOfJsonFileWithAmd.errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5070: Option '--resolveJsonModule' cannot be specified when 'moduleResolution' is set to 'classic'.
+-file1.ts(1,21): error TS2792: Cannot find module './b'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++file1.ts(1,21): error TS2307: Cannot find module './b' or its corresponding type declarations.
++file1.ts(3,21): error TS2307: Cannot find module './b.json' or its corresponding type declarations.
+ 
+ 
+-!!! error TS5070: Option '--resolveJsonModule' cannot be specified when 'moduleResolution' is set to 'classic'.
+-==== file1.ts (1 errors) ====
++==== file1.ts (2 errors) ====
+     import b1 = require('./b');
+                         ~~~~~
+-!!! error TS2792: Cannot find module './b'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module './b' or its corresponding type declarations.
+     let x = b1.a;
+     import b2 = require('./b.json');
++                        ~~~~~~~~~~
++!!! error TS2307: Cannot find module './b.json' or its corresponding type declarations.
+     if (x) {
+         let b = b2.b;
+         x = (b1.b === b);

@@ -1,0 +1,20 @@
+--- old.elidedJSImport1.errors.txt
++++ new.elidedJSImport1.errors.txt
+@@= skipped -0, +0 lines =@@
+ caller.js(1,21): error TS2307: Cannot find module 'fs' or its corresponding type declarations.
+-caller.js(2,8): error TS18042: 'TruffleContract' is a type and cannot be imported in JavaScript files. Use 'import("@truffle/contract").TruffleContract' in a JSDoc type annotation.
+ caller.js(4,43): error TS2708: Cannot use namespace 'TruffleContract' as a value.
+ caller.js(4,60): error TS2708: Cannot use namespace 'TruffleContract' as a value.
+ 
+ 
+-==== caller.js (4 errors) ====
++==== caller.js (3 errors) ====
+     import * as fs from 'fs';
+                         ~~~~
+ !!! error TS2307: Cannot find module 'fs' or its corresponding type declarations.
+     import TruffleContract from '@truffle/contract'; // Runtime err: this import is elided in transform
+-           ~~~~~~~~~~~~~~~
+-!!! error TS18042: 'TruffleContract' is a type and cannot be imported in JavaScript files. Use 'import("@truffle/contract").TruffleContract' in a JSDoc type annotation.
+     console.log(fs);
+     console.log('TruffleContract is ', typeof TruffleContract, TruffleContract); // `TruffleContract` is considered 'unused'
+                                               ~~~~~~~~~~~~~~~

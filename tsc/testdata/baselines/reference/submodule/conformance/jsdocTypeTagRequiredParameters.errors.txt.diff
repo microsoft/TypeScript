@@ -1,0 +1,45 @@
+--- old.jsdocTypeTagRequiredParameters.errors.txt
++++ new.jsdocTypeTagRequiredParameters.errors.txt
+@@= skipped -0, +0 lines =@@
++a.js(2,12): error TS7006: Parameter 'value' implicitly has an 'any' type.
++a.js(5,12): error TS7006: Parameter 's' implicitly has an 'any' type.
++a.js(8,12): error TS7006: Parameter 's' implicitly has an 'any' type.
+ a.js(11,1): error TS2554: Expected 1 arguments, but got 0.
+ a.js(12,1): error TS2554: Expected 1 arguments, but got 0.
+ a.js(13,1): error TS2554: Expected 1 arguments, but got 0.
+ 
+ 
+-==== a.js (3 errors) ====
++==== a.js (6 errors) ====
+     /** @type {function(string): void} */
+     const f = (value) => {
++               ~~~~~
++!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
+     };
+     /** @type {(s: string) => void} */
+     function g(s) {
++               ~
++!!! error TS7006: Parameter 's' implicitly has an 'any' type.
+     }
+     /** @type {{(s: string): void}} */
+     function h(s) {
++               ~
++!!! error TS7006: Parameter 's' implicitly has an 'any' type.
+     }
+     
+     f() // should error
+     ~
+ !!! error TS2554: Expected 1 arguments, but got 0.
+-!!! related TS6210 a.js:1:21: An argument for '0' was not provided.
++!!! related TS6210 a.js:2:12: An argument for 'value' was not provided.
+     g() // should error
+     ~
+ !!! error TS2554: Expected 1 arguments, but got 0.
+-!!! related TS6210 a.js:4:13: An argument for 's' was not provided.
++!!! related TS6210 a.js:5:12: An argument for 's' was not provided.
+     h()
+     ~
+ !!! error TS2554: Expected 1 arguments, but got 0.
+-!!! related TS6210 a.js:7:14: An argument for 's' was not provided.
++!!! related TS6210 a.js:8:12: An argument for 's' was not provided.
+     

@@ -1,0 +1,27 @@
+jsdocTypeReferenceToImport.js(1,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+jsdocTypeReferenceToImport.js(2,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== jsdocTypeReferenceToImport.js (2 errors) ====
+    const C = require('./ex').C;
+              ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    const D = require('./ex')?.C;
+              ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    /** @type {C} c */
+    var c = new C()
+    c.start
+    c.end
+    
+    /** @type {D} c */
+    var d = new D()
+    d.start
+    d.end
+    
+==== ex.d.ts (0 errors) ====
+    export class C {
+        start: number
+        end: number
+    }
+    

@@ -1,0 +1,28 @@
+/a.js(1,1): error TS2304: Cannot find name 'exports'.
+/a.js(2,1): error TS2304: Cannot find name 'exports'.
+/a.js(7,5): error TS2304: Cannot find name 'exports'.
+/a.js(12,22): error TS2304: Cannot find name 'exports'.
+
+
+==== /a.js (4 errors) ====
+    exports.x = 0;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    exports.x;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    
+    // Works nested
+    {
+        // 'exports' does not provide a contextual type to a function-class
+        exports.Cls = function() {
+        ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+            this.x = 0;
+        }
+    }
+    
+    const instance = new exports.Cls();
+                         ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    

@@ -1,0 +1,26 @@
+--- old.jsFileCompilationEmitBlockedCorrectly.errors.txt
++++ new.jsFileCompilationEmitBlockedCorrectly.errors.txt
+@@= skipped -0, +-1 lines =@@
+-error TS5055: Cannot write file 'a.js' because it would overwrite input file.
+-  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+-error TS5056: Cannot write file 'a.js' because it would be overwritten by multiple input files.
+-
+-
+-!!! error TS5055: Cannot write file 'a.js' because it would overwrite input file.
+-!!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+-!!! error TS5056: Cannot write file 'a.js' because it would be overwritten by multiple input files.
+-==== a.ts (0 errors) ====
+-    class c {
+-    }
+-    
+-==== b.ts (0 errors) ====
+-    // this should be emitted
+-    class d {
+-    }
+-    
+-==== a.js (0 errors) ====
+-    function foo() {
+-    }
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

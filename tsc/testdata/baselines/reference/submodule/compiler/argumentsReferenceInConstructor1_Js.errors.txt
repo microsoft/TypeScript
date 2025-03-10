@@ -1,0 +1,20 @@
+/a.js(11,8): error TS2339: Property 'arguments' does not exist on type 'A'.
+
+
+==== /a.js (1 errors) ====
+    class A {
+    	/**
+    	 * Constructor
+    	 *
+    	 * @param {object} [foo={}]
+    	 */
+    	constructor(foo = {}) {
+    		/**
+    		 * @type object
+    		 */
+    		this.arguments = foo;
+    		     ~~~~~~~~~
+!!! error TS2339: Property 'arguments' does not exist on type 'A'.
+    	}
+    }
+    

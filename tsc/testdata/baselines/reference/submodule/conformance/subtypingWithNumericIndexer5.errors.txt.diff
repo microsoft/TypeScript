@@ -1,0 +1,21 @@
+--- old.subtypingWithNumericIndexer5.errors.txt
++++ new.subtypingWithNumericIndexer5.errors.txt
+@@= skipped -0, +0 lines =@@
+ subtypingWithNumericIndexer5.ts(11,7): error TS2420: Class 'B' incorrectly implements interface 'A'.
+   'string' and 'number' index signatures are incompatible.
+-    Type 'Base' is not assignable to type 'Derived'.
+-      Property 'bar' is missing in type 'Base' but required in type 'Derived'.
++    Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+ subtypingWithNumericIndexer5.ts(32,11): error TS2420: Class 'B3<T>' incorrectly implements interface 'A<T>'.
+   'string' and 'number' index signatures are incompatible.
+     Type 'Base' is not assignable to type 'T'.
+@@= skipped -30, +29 lines =@@
+           ~
+ !!! error TS2420: Class 'B' incorrectly implements interface 'A'.
+ !!! error TS2420:   'string' and 'number' index signatures are incompatible.
+-!!! error TS2420:     Type 'Base' is not assignable to type 'Derived'.
+-!!! error TS2420:       Property 'bar' is missing in type 'Base' but required in type 'Derived'.
++!!! error TS2420:     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+ !!! related TS2728 subtypingWithNumericIndexer5.ts:4:34: 'bar' is declared here.
+         [x: string]: Base; // error
+     }

@@ -1,0 +1,12 @@
+parserErrorRecovery_ObjectLiteral5.ts(2,7): error TS1005: ':' expected.
+parserErrorRecovery_ObjectLiteral5.ts(2,8): error TS1005: '}' expected.
+
+
+==== parserErrorRecovery_ObjectLiteral5.ts (2 errors) ====
+    var v = { a: 1,
+    return;
+          ~
+!!! error TS1005: ':' expected.
+           
+!!! error TS1005: '}' expected.
+!!! related TS1007: The parser expected to find a '}' to match the '{' token here.

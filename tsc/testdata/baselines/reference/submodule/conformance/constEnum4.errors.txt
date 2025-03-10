@@ -1,0 +1,13 @@
+constEnum4.ts(3,10): error TS2872: This kind of expression is always truthy.
+
+
+==== constEnum4.ts (1 errors) ====
+    if (1)
+        const enum A { }
+    else if (2)
+             ~
+!!! error TS2872: This kind of expression is always truthy.
+        const enum B { }
+    else
+        const enum C { }
+    

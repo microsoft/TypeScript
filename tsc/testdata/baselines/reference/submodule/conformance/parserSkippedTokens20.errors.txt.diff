@@ -1,0 +1,9 @@
+--- old.parserSkippedTokens20.errors.txt
++++ new.parserSkippedTokens20.errors.txt
+@@= skipped -8, +8 lines =@@
+ !!! error TS2304: Cannot find name 'X'.
+              ~
+ !!! error TS2304: Cannot find name 'T'.
+-               
++               ~
+ !!! error TS1127: Invalid character.

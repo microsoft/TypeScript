@@ -1,0 +1,11 @@
+/bar.ts(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+
+
+==== /bar.ts (1 errors) ====
+    export = bar;
+    ~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    function bar() {}
+    
+==== /foo.ts (0 errors) ====
+    import bar from './bar';

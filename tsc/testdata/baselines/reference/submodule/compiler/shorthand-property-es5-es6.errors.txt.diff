@@ -1,0 +1,15 @@
+--- old.shorthand-property-es5-es6.errors.txt
++++ new.shorthand-property-es5-es6.errors.txt
+@@= skipped -0, +0 lines =@@
+-test.ts(1,19): error TS2792: Cannot find module './foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++test.ts(1,19): error TS2307: Cannot find module './foo' or its corresponding type declarations.
+ 
+ 
+ ==== test.ts (1 errors) ====
+     import {foo} from './foo';
+                       ~~~~~~~
+-!!! error TS2792: Cannot find module './foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module './foo' or its corresponding type declarations.
+     const baz = 42;
+     const bar = { foo, baz };
+     

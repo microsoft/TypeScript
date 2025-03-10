@@ -1,0 +1,9 @@
+--- old.parserSkippedTokens9.errors.txt
++++ new.parserSkippedTokens9.errors.txt
+@@= skipped -3, +3 lines =@@
+ ==== parserSkippedTokens9.ts (1 errors) ====
+     ; // existing trivia
+     /*foo*/ \ /*bar*/
+-            
++            ~
+ !!! error TS1127: Invalid character.

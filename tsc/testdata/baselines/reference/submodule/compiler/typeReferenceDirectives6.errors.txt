@@ -1,0 +1,20 @@
+/app.ts(4,8): error TS2749: '$' refers to a value, but is being used as a type here. Did you mean 'typeof $'?
+
+
+==== /app.ts (1 errors) ====
+    /// <reference path="./ref.d.ts"/>
+    /// <reference types="lib"/>
+    
+    let x: $;
+           ~
+!!! error TS2749: '$' refers to a value, but is being used as a type here. Did you mean 'typeof $'?
+    let y = () => x
+    
+    
+==== /ref.d.ts (0 errors) ====
+    declare let $: { x: number }
+        
+==== /types/lib/index.d.ts (0 errors) ====
+    interface $ { x }
+    
+    

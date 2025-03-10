@@ -1,0 +1,40 @@
+--- old.yieldExpression1.errors.txt
++++ new.yieldExpression1.errors.txt
+@@= skipped -0, +0 lines =@@
+-yieldExpression1.ts(7,5): error TS2322: Type 'undefined' is not assignable to type 'number'.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'IterableIterator'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++yieldExpression1.ts(6,16): error TS2304: Cannot find name 'IterableIterator'.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'IterableIterator'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== yieldExpression1.ts (1 errors) ====
+     function* a() {
+         yield;
+@@= skipped -7, +25 lines =@@
+     }
+     
+     function* b(): IterableIterator<number> {
++                   ~~~~~~~~~~~~~~~~
++!!! error TS2304: Cannot find name 'IterableIterator'.
+         yield;
+-        ~~~~~
+-!!! error TS2322: Type 'undefined' is not assignable to type 'number'.
+         yield 0;
+     }
+     

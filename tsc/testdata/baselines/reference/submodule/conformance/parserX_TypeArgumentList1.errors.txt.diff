@@ -1,0 +1,11 @@
+--- old.parserX_TypeArgumentList1.errors.txt
++++ new.parserX_TypeArgumentList1.errors.txt
+@@= skipped -20, +20 lines =@@
+ !!! error TS2304: Cannot find name 'A'.
+           ~
+ !!! error TS2304: Cannot find name 'B'.
+-            
++            ~
+ !!! error TS1127: Invalid character.
+               ~
+ !!! error TS2304: Cannot find name 'C'.

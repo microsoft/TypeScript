@@ -1,0 +1,25 @@
+derivedClassFunctionOverridesBaseClassAccessor.ts(11,5): error TS2416: Property 'x' in type 'Derived' is not assignable to the same property in base type 'Base'.
+  Type '() => number' is not assignable to type 'number'.
+derivedClassFunctionOverridesBaseClassAccessor.ts(11,5): error TS2426: Class 'Base' defines instance member accessor 'x', but extended class 'Derived' defines it as instance member function.
+
+
+==== derivedClassFunctionOverridesBaseClassAccessor.ts (2 errors) ====
+    class Base {
+        get x() {
+            return 1;
+        }
+        set x(v) {
+        }
+    }
+    
+    // error
+    class Derived extends Base {
+        x() {
+        ~
+!!! error TS2416: Property 'x' in type 'Derived' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type '() => number' is not assignable to type 'number'.
+        ~
+!!! error TS2426: Class 'Base' defines instance member accessor 'x', but extended class 'Derived' defines it as instance member function.
+            return 1;
+        }
+    }

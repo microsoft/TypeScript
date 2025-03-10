@@ -1,0 +1,54 @@
+--- old.unusedTypeParameters_templateTag2.errors.txt
++++ new.unusedTypeParameters_templateTag2.errors.txt
+@@= skipped -0, +0 lines =@@
+-/a.js(3,4): error TS6133: 'V' is declared but its value is never read.
+-/a.js(13,4): error TS6205: All type parameters are unused.
+-/a.js(20,16): error TS6133: 'V' is declared but its value is never read.
+-/a.js(20,18): error TS6133: 'X' is declared but its value is never read.
++/a.js(8,14): error TS2339: Property 'p' does not exist on type 'C1'.
++/a.js(25,14): error TS2339: Property 'p' does not exist on type 'C3'.
+ 
+ 
+-==== /a.js (4 errors) ====
++==== /a.js (2 errors) ====
+     /**
+      * @template T
+      * @template V
+-       ~~~~~~~~~~~
+      */
+-    ~
+-!!! error TS6133: 'V' is declared but its value is never read.
+     class C1 {
+         constructor() {
+             /** @type {T} */
+             this.p;
++                 ~
++!!! error TS2339: Property 'p' does not exist on type 'C1'.
+         }
+     }
+     
+     /**
+      * @template T,V
+-       ~~~~~~~~~~~~~
+      */
+-    ~
+-!!! error TS6205: All type parameters are unused.
+     class C2 {
+         constructor() { }
+     }
+     
+     /**
+      * @template T,V,X
+-                   ~
+-!!! error TS6133: 'V' is declared but its value is never read.
+-                     ~
+-!!! error TS6133: 'X' is declared but its value is never read.
+      */
+     class C3 {
+         constructor() {
+             /** @type {T} */
+             this.p;
++                 ~
++!!! error TS2339: Property 'p' does not exist on type 'C3'.
+         }
+     }

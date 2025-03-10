@@ -1,0 +1,23 @@
+--- old.exportStarForValues2.errors.txt
++++ new.exportStarForValues2.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++file2.ts(1,15): error TS2307: Cannot find module 'file1' or its corresponding type declarations.
++file3.ts(1,15): error TS2307: Cannot find module 'file2' or its corresponding type declarations.
++
++
++==== file1.ts (0 errors) ====
++    export interface Foo { x }
++    
++==== file2.ts (1 errors) ====
++    export * from "file1"
++                  ~~~~~~~
++!!! error TS2307: Cannot find module 'file1' or its corresponding type declarations.
++    var x = 1;
++    
++==== file3.ts (1 errors) ====
++    export * from "file2"
++                  ~~~~~~~
++!!! error TS2307: Cannot find module 'file2' or its corresponding type declarations.
++    var x = 1;

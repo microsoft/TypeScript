@@ -1,0 +1,37 @@
+--- old.genericSignatureIdentity.errors.txt
++++ new.genericSignatureIdentity.errors.txt
+@@= skipped -0, +0 lines =@@
+-genericSignatureIdentity.ts(10,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T extends Date>(x: T) => T', but here has type '<T extends number>(x: T) => T'.
+-genericSignatureIdentity.ts(14,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T extends Date>(x: T) => T', but here has type '<T>(x: T) => T'.
+-genericSignatureIdentity.ts(18,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T extends Date>(x: T) => T', but here has type '<T>(x: any) => any'.
++genericSignatureIdentity.ts(10,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T>(x: T) => T', but here has type '<T>(x: T) => T'.
++genericSignatureIdentity.ts(14,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T>(x: T) => T', but here has type '<T>(x: T) => T'.
++genericSignatureIdentity.ts(18,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T>(x: T) => T', but here has type '<T>(x: any) => any'.
+ 
+ 
+ ==== genericSignatureIdentity.ts (3 errors) ====
+@@= skipped -14, +14 lines =@@
+     
+     var x: {
+         ~
+-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T extends Date>(x: T) => T', but here has type '<T extends number>(x: T) => T'.
++!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T>(x: T) => T', but here has type '<T>(x: T) => T'.
+ !!! related TS6203 genericSignatureIdentity.ts:6:5: 'x' was also declared here.
+         <T extends number>(x: T): T;
+     };
+     
+     var x: {
+         ~
+-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T extends Date>(x: T) => T', but here has type '<T>(x: T) => T'.
++!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T>(x: T) => T', but here has type '<T>(x: T) => T'.
+ !!! related TS6203 genericSignatureIdentity.ts:6:5: 'x' was also declared here.
+         <T>(x: T): T;
+     };
+     
+     var x: {
+         ~
+-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T extends Date>(x: T) => T', but here has type '<T>(x: any) => any'.
++!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T>(x: T) => T', but here has type '<T>(x: any) => any'.
+ !!! related TS6203 genericSignatureIdentity.ts:6:5: 'x' was also declared here.
+         <T>(x: any): any;
+     };

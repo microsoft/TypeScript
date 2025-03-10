@@ -1,0 +1,44 @@
+--- old.commentsMultiModuleMultiFile.errors.txt
++++ new.commentsMultiModuleMultiFile.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++commentsMultiModuleMultiFile_1.ts(1,20): error TS2307: Cannot find module 'commentsMultiModuleMultiFile_0' or its corresponding type declarations.
++
++
++==== commentsMultiModuleMultiFile_1.ts (1 errors) ====
++    import m = require('commentsMultiModuleMultiFile_0');
++                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'commentsMultiModuleMultiFile_0' or its corresponding type declarations.
++    /** this is multi module 3 comment*/
++    export module multiM {
++        /** class d comment*/
++        export class d {
++        }
++    
++        /// class f comment
++        export class f {
++        }
++    }
++    new multiM.d();
++==== commentsMultiModuleMultiFile_0.ts (0 errors) ====
++    /** this is multi declare module*/
++    export module multiM {
++        /// class b comment
++        export class b {
++        }
++    }
++    /** thi is multi module 2*/
++    export module multiM {
++        /** class c comment*/
++        export class c {
++        }
++    
++        // class e comment
++        export class e {
++        }
++    }
++    
++    new multiM.b();
++    new multiM.c();
++    

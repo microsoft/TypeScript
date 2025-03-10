@@ -1,0 +1,15 @@
+a.js(1,5): error TS1131: Property or signature expected.
+a.js(1,6): error TS1131: Property or signature expected.
+a.js(3,1): error TS1109: Expression expected.
+
+
+==== a.js (3 errors) ====
+    !< {:>
+        ~
+!!! error TS1131: Property or signature expected.
+         ~
+!!! error TS1131: Property or signature expected.
+    
+    
+    
+!!! error TS1109: Expression expected.

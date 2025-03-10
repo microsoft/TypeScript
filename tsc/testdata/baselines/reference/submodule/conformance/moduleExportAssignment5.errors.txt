@@ -1,0 +1,20 @@
+axios.js(9,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+axios.js(10,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== axios.js (2 errors) ====
+    class Axios {
+        constructor() {
+        }
+        m() { }
+    }
+    var axios = new Axios();
+    // none of the 3 references should have a use-before-def error
+    axios.m()
+    module.exports = axios;
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    module.exports.default = axios;
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    

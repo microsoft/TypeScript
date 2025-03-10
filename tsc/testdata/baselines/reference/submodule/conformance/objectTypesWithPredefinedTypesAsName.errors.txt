@@ -1,0 +1,28 @@
+objectTypesWithPredefinedTypesAsName.ts(3,7): error TS2414: Class name cannot be 'any'.
+objectTypesWithPredefinedTypesAsName.ts(5,7): error TS2414: Class name cannot be 'number'.
+objectTypesWithPredefinedTypesAsName.ts(7,7): error TS2414: Class name cannot be 'boolean'.
+objectTypesWithPredefinedTypesAsName.ts(10,7): error TS2414: Class name cannot be 'string'.
+
+
+==== objectTypesWithPredefinedTypesAsName.ts (4 errors) ====
+    // it is an error to use a predefined type as a type name
+    
+    class any { }
+          ~~~
+!!! error TS2414: Class name cannot be 'any'.
+    
+    class number { }
+          ~~~~~~
+!!! error TS2414: Class name cannot be 'number'.
+    
+    class boolean { }
+          ~~~~~~~
+!!! error TS2414: Class name cannot be 'boolean'.
+    class bool { } // not a predefined type anymore
+    
+    class string { }
+          ~~~~~~
+!!! error TS2414: Class name cannot be 'string'.
+    
+    
+    

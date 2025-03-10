@@ -1,0 +1,21 @@
+--- old.pathsValidation1.errors.txt
++++ new.pathsValidation1.errors.txt
+@@= skipped -0, +-1 lines =@@
+-tsconfig.json(5,18): error TS5063: Substitutions for pattern '*' should be an array.
+-
+-
+-==== tsconfig.json (1 errors) ====
+-    {
+-        "compilerOptions": {
+-            "baseUrl": ".",
+-            "paths": {
+-                "*": "*"
+-                     ~~~
+-!!! error TS5063: Substitutions for pattern '*' should be an array.
+-            }
+-        }
+-    }
+-==== a.ts (0 errors) ====
+-    let x = 1;
+@@= skipped --1, +1 lines =@@
++<no content>

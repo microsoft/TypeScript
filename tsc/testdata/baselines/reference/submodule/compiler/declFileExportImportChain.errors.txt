@@ -1,0 +1,27 @@
+declFileExportImportChain_d.ts(1,20): error TS2307: Cannot find module 'declFileExportImportChain_c' or its corresponding type declarations.
+
+
+==== declFileExportImportChain_d.ts (1 errors) ====
+    import c = require("declFileExportImportChain_c");
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'declFileExportImportChain_c' or its corresponding type declarations.
+    export var x: c.b1.a.m2.c1;
+==== declFileExportImportChain_a.ts (0 errors) ====
+    module m1 {
+        export module m2 {
+            export class c1 {
+            }
+        }
+    }
+    export = m1;
+    
+==== declFileExportImportChain_b.ts (0 errors) ====
+    export import a = require("declFileExportImportChain_a");
+    
+==== declFileExportImportChain_b1.ts (0 errors) ====
+    import b = require("declFileExportImportChain_b");
+    export = b;
+    
+==== declFileExportImportChain_c.ts (0 errors) ====
+    export import b1 = require("declFileExportImportChain_b1");
+    

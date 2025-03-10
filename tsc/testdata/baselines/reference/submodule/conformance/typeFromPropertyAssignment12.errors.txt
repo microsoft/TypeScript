@@ -1,0 +1,38 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+usage.js(2,7): error TS2339: Property 'Pos' does not exist on type '(element: any, config: any) => void'.
+usage.js(4,7): error TS2339: Property 'Pos' does not exist on type '(element: any, config: any) => void'.
+usage.js(5,21): error TS2339: Property 'Pos' does not exist on type '(element: any, config: any) => void'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== module.js (0 errors) ====
+    var Outer = function(element, config) {};
+==== usage.js (3 errors) ====
+    /** @constructor */
+    Outer.Pos = function (line, ch) {};
+          ~~~
+!!! error TS2339: Property 'Pos' does not exist on type '(element: any, config: any) => void'.
+    /** @type {number} */
+    Outer.Pos.prototype.line;
+          ~~~
+!!! error TS2339: Property 'Pos' does not exist on type '(element: any, config: any) => void'.
+    var pos = new Outer.Pos(1, 'x');
+                        ~~~
+!!! error TS2339: Property 'Pos' does not exist on type '(element: any, config: any) => void'.
+    pos.line;
+    
+    

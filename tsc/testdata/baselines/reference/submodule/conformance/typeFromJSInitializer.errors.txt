@@ -1,0 +1,97 @@
+a.js(7,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+a.js(22,5): error TS7034: Variable 'n' implicitly has type 'any' in some locations where its type cannot be determined.
+a.js(25,26): error TS7005: Variable 'n' implicitly has an 'any' type.
+a.js(27,5): error TS2322: Type 'undefined' is not assignable to type 'null'.
+a.js(29,5): error TS2322: Type '1' is not assignable to type 'null'.
+a.js(30,5): error TS2322: Type 'true' is not assignable to type 'null'.
+a.js(31,5): error TS2322: Type '{}' is not assignable to type 'null'.
+a.js(32,5): error TS2322: Type '"ok"' is not assignable to type 'null'.
+a.js(40,12): error TS2345: Argument of type '1' is not assignable to parameter of type 'never'.
+a.js(41,12): error TS2345: Argument of type '"ok"' is not assignable to parameter of type 'never'.
+a.js(56,17): error TS7006: Parameter 'v' implicitly has an 'any' type.
+
+
+==== a.js (11 errors) ====
+    function A () {
+        // should get any on this-assignments in constructor
+        this.unknown = null
+        this.unknowable = undefined
+        this.empty = []
+    }
+    var a = new A()
+            ~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    a.unknown = 1
+    a.unknown = true
+    a.unknown = {}
+    a.unknown = 'hi'
+    a.unknowable = 1
+    a.unknowable = true
+    a.unknowable = {}
+    a.unknowable = 'hi'
+    a.empty.push(1)
+    a.empty.push(true)
+    a.empty.push({})
+    a.empty.push('hi')
+    
+    /** @type {number | undefined} */
+    var n;
+        ~
+!!! error TS7034: Variable 'n' implicitly has type 'any' in some locations where its type cannot be determined.
+    
+    // should get any on parameter initialisers
+    function f(a = null, b = n, l = []) {
+                             ~
+!!! error TS7005: Variable 'n' implicitly has an 'any' type.
+        // a should be null in strict mode
+        a = undefined
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'null'.
+        a = null
+        a = 1
+        ~
+!!! error TS2322: Type '1' is not assignable to type 'null'.
+        a = true
+        ~
+!!! error TS2322: Type 'true' is not assignable to type 'null'.
+        a = {}
+        ~
+!!! error TS2322: Type '{}' is not assignable to type 'null'.
+        a = 'ok'
+        ~
+!!! error TS2322: Type '"ok"' is not assignable to type 'null'.
+    
+        // b should be number | undefined, not any
+        b = 1
+        b = undefined
+        b = 'error'
+    
+        // l should be any[]
+        l.push(1)
+               ~
+!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'never'.
+        l.push('ok')
+               ~~~~
+!!! error TS2345: Argument of type '"ok"' is not assignable to parameter of type 'never'.
+    }
+    
+    // should get any on variable initialisers
+    var u = undefined;
+    var l = [];
+    u = undefined
+    u = 1
+    u = true
+    u = {}
+    u = 'ok'
+    
+    l.push('ok')
+    
+    /** @type {(v: unknown) => v is undefined} */
+    const isUndef = v => v === undefined;
+                    ~
+!!! error TS7006: Parameter 'v' implicitly has an 'any' type.
+    const e = [1, undefined];
+    
+    // should be undefined[]
+    const g = e.filter(isUndef);
+    

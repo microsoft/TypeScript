@@ -1,0 +1,37 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+symbolType6.ts(1,9): error TS2304: Cannot find name 'Symbol'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== symbolType6.ts (1 errors) ====
+    var s = Symbol.for("add");
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+    var a: any;
+    s + s;
+    s - s;
+    s + "";
+    s + a;
+    s + 0;
+    "" + s;
+    a + s;
+    0 + s;
+    s - 0;
+    0 - s;
+    
+    (s || "") + "";
+    "" + (s || "");

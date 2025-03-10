@@ -1,0 +1,20 @@
+exportAssignmentOfGenericType1_1.ts(2,20): error TS2307: Cannot find module 'exportAssignmentOfGenericType1_0' or its corresponding type declarations.
+exportAssignmentOfGenericType1_1.ts(6,19): error TS2339: Property 'foo' does not exist on type 'M'.
+
+
+==== exportAssignmentOfGenericType1_1.ts (2 errors) ====
+    ///<reference path='exportAssignmentOfGenericType1_0.ts'/>
+    import q = require("exportAssignmentOfGenericType1_0");
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'exportAssignmentOfGenericType1_0' or its corresponding type declarations.
+    
+    class M extends q<string> { }
+    var m: M;
+    var r: string = m.foo;
+                      ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'M'.
+    
+==== exportAssignmentOfGenericType1_0.ts (0 errors) ====
+    export = T;
+    class T<X> { foo: X; }
+    

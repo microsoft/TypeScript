@@ -1,0 +1,115 @@
+--- old.reachabilityChecks1.errors.txt
++++ new.reachabilityChecks1.errors.txt
+@@= skipped -0, +0 lines =@@
+ reachabilityChecks1.ts(2,1): error TS7027: Unreachable code detected.
++reachabilityChecks1.ts(2,1): error TS7027: Unreachable code detected.
+ reachabilityChecks1.ts(6,5): error TS7027: Unreachable code detected.
++reachabilityChecks1.ts(6,5): error TS7027: Unreachable code detected.
+ reachabilityChecks1.ts(18,5): error TS7027: Unreachable code detected.
++reachabilityChecks1.ts(18,5): error TS7027: Unreachable code detected.
+ reachabilityChecks1.ts(30,5): error TS7027: Unreachable code detected.
++reachabilityChecks1.ts(30,5): error TS7027: Unreachable code detected.
+ reachabilityChecks1.ts(47,5): error TS7027: Unreachable code detected.
++reachabilityChecks1.ts(47,5): error TS7027: Unreachable code detected.
+ reachabilityChecks1.ts(60,5): error TS7027: Unreachable code detected.
++reachabilityChecks1.ts(60,5): error TS7027: Unreachable code detected.
+ reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
++reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
+ 
+ 
+-==== reachabilityChecks1.ts (7 errors) ====
++==== reachabilityChecks1.ts (14 errors) ====
+     while (true);
+     var x = 1;
+     ~~~~~~~~~~
+ !!! error TS7027: Unreachable code detected.
++    ~~~~~~~~~~
++!!! error TS7027: Unreachable code detected.
+     
+     module A {
+         while (true);
+         let x;
+         ~~~~~~
+ !!! error TS7027: Unreachable code detected.
++        ~~~~~~
++!!! error TS7027: Unreachable code detected.
+     }
+     
+     module A1 {
+@@= skipped -30, +41 lines =@@
+         while (true);
+         module A {
+         ~~~~~~~~~~
++        ~~~~~~~~~~
+             var x = 1;
+     ~~~~~~~~~~~~~~~~~~
++    ~~~~~~~~~~~~~~~~~~
+         }
+     ~~~~~
+ !!! error TS7027: Unreachable code detected.
++    ~~~~~
++!!! error TS7027: Unreachable code detected.
+     }
+     
+     module A3 {
+@@= skipped -16, +20 lines =@@
+         while (true);
+         module A {
+         ~~~~~~~~~~
++        ~~~~~~~~~~
+             const enum E { X }
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+         }
+     ~~~~~
+ !!! error TS7027: Unreachable code detected.
++    ~~~~~
++!!! error TS7027: Unreachable code detected.
+     }
+     
+     function f1(x) {
+@@= skipped -21, +25 lines =@@
+         return;
+         class A {
+         ~~~~~~~~~
++        ~~~~~~~~~
+         }
+     ~~~~~
+ !!! error TS7027: Unreachable code detected.
++    ~~~~~
++!!! error TS7027: Unreachable code detected.
+     }
+     
+     module B {
+@@= skipped -16, +19 lines =@@
+         } while (true);
+         enum E {
+         ~~~~~~~~
++        ~~~~~~~~
+             X = 1
+     ~~~~~~~~~~~~~
++    ~~~~~~~~~~~~~
+         }
+     ~~~~~
+ !!! error TS7027: Unreachable code detected.
++    ~~~~~
++!!! error TS7027: Unreachable code detected.
+     }
+     
+     function f4() {
+@@= skipped -13, +17 lines =@@
+         }
+         const enum E {
+         ~~~~~~~~~~~~~~
++        ~~~~~~~~~~~~~~
+             X = 1
+     ~~~~~~~~~~~~~
++    ~~~~~~~~~~~~~
+         }
+     ~~~~~
+ !!! error TS7027: Unreachable code detected.
++    ~~~~~
++!!! error TS7027: Unreachable code detected.
+     }
+     
+     

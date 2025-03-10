@@ -1,0 +1,39 @@
+/mod1.ts(8,16): error TS2304: Cannot find name 'Lib'.
+/mod1.ts(11,25): error TS2304: Cannot find name 'Lib'.
+
+
+==== /mod2.ts (0 errors) ====
+    import { Cls } from "./main";
+    import "./mod1";
+    
+    export const cls = Cls;
+    export const foo = new Cls().foo();
+    export const bar = Cls.bar();
+    
+==== /types/lib/index.d.ts (0 errors) ====
+    interface Lib { x }
+    
+==== /main.ts (0 errors) ====
+    export class Cls {
+        x
+    }
+    
+==== /mod1.ts (2 errors) ====
+    /// <reference types="lib" />
+    
+    import {Cls} from "./main";
+    Cls.prototype.foo = function() { return undefined; }
+    
+    declare module "./main" {
+        interface Cls {
+            foo(): Lib;
+                   ~~~
+!!! error TS2304: Cannot find name 'Lib'.
+        }
+        namespace Cls {
+            function bar(): Lib;
+                            ~~~
+!!! error TS2304: Cannot find name 'Lib'.
+        }
+    }
+    

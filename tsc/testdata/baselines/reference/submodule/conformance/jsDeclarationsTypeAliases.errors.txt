@@ -1,0 +1,55 @@
+mixed.js(14,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== index.js (0 errors) ====
+    export {}; // flag file as module
+    /**
+     * @typedef {string | number | symbol} PropName 
+     */
+    
+    /**
+     * Callback
+     *
+     * @callback NumberToStringCb
+     * @param {number} a
+     * @returns {string}
+     */
+    
+    /**
+     * @template T
+     * @typedef {T & {name: string}} MixinName 
+     */
+    
+    /**
+     * Identity function
+     *
+     * @template T
+     * @callback Identity
+     * @param {T} x
+     * @returns {T}
+     */
+    
+==== mixed.js (1 errors) ====
+    /**
+     * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
+     */
+    /**
+     * @param {number} x
+     * @returns {SomeType}
+     */
+    function doTheThing(x) {
+        return {x: ""+x};
+    }
+    class ExportedThing {
+        z = "ok"
+    }
+    module.exports = {
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+        doTheThing,
+        ExportedThing,
+    };
+    class LocalThing {
+        y = "ok"
+    }
+    

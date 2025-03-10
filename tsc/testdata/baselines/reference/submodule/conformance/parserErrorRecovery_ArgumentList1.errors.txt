@@ -1,0 +1,16 @@
+parserErrorRecovery_ArgumentList1.ts(2,4): error TS2304: Cannot find name 'bar'.
+parserErrorRecovery_ArgumentList1.ts(3,4): error TS1135: Argument expression expected.
+parserErrorRecovery_ArgumentList1.ts(3,11): error TS2304: Cannot find name 'x'.
+
+
+==== parserErrorRecovery_ArgumentList1.ts (3 errors) ====
+    function foo() {
+       bar(
+       ~~~
+!!! error TS2304: Cannot find name 'bar'.
+       return x;
+       ~~~~~~
+!!! error TS1135: Argument expression expected.
+              ~
+!!! error TS2304: Cannot find name 'x'.
+    }

@@ -1,0 +1,57 @@
+--- old.numericStringNamedPropertyEquivalence.errors.txt
++++ new.numericStringNamedPropertyEquivalence.errors.txt
+@@= skipped -0, +0 lines =@@
+-numericStringNamedPropertyEquivalence.ts(6,5): error TS2300: Duplicate identifier '1.0'.
+-numericStringNamedPropertyEquivalence.ts(10,5): error TS2300: Duplicate identifier '1'.
+-numericStringNamedPropertyEquivalence.ts(12,5): error TS2300: Duplicate identifier '1'.
+-numericStringNamedPropertyEquivalence.ts(16,5): error TS2300: Duplicate identifier '1'.
+-numericStringNamedPropertyEquivalence.ts(17,5): error TS2300: Duplicate identifier '1'.
++numericStringNamedPropertyEquivalence.ts(4,5): error TS2300: Duplicate identifier '"1"'.
++numericStringNamedPropertyEquivalence.ts(6,5): error TS2300: Duplicate identifier '"1"'.
++numericStringNamedPropertyEquivalence.ts(10,5): error TS2300: Duplicate identifier '"1"'.
++numericStringNamedPropertyEquivalence.ts(12,5): error TS2300: Duplicate identifier '"1"'.
++numericStringNamedPropertyEquivalence.ts(16,5): error TS2300: Duplicate identifier '"1"'.
++numericStringNamedPropertyEquivalence.ts(17,5): error TS2300: Duplicate identifier '"1"'.
+ numericStringNamedPropertyEquivalence.ts(17,5): error TS2717: Subsequent property declarations must have the same type.  Property '1.0' must be of type 'number', but here has type 'string'.
+ numericStringNamedPropertyEquivalence.ts(22,5): error TS1117: An object literal cannot have multiple properties with the same name.
+ 
+ 
+-==== numericStringNamedPropertyEquivalence.ts (7 errors) ====
++==== numericStringNamedPropertyEquivalence.ts (8 errors) ====
+     // Each of these types has an error in it. 
+     // String named and numeric named properties conflict if they would be equivalent after ToNumber on the property name.
+     class C {
+         "1": number;
++        ~~~
++!!! error TS2300: Duplicate identifier '"1"'.
+         "1.0": number; // not a duplicate
+         1.0: number;
+         ~~~
+-!!! error TS2300: Duplicate identifier '1.0'.
++!!! error TS2300: Duplicate identifier '"1"'.
+     }
+     
+     interface I {
+         "1": number;
+         ~~~
+-!!! error TS2300: Duplicate identifier '1'.
++!!! error TS2300: Duplicate identifier '"1"'.
+         "1.": number; // not a duplicate
+         1: number;
+         ~
+-!!! error TS2300: Duplicate identifier '1'.
++!!! error TS2300: Duplicate identifier '"1"'.
+     }
+     
+     var a: {
+         "1": number;
+         ~~~
+-!!! error TS2300: Duplicate identifier '1'.
++!!! error TS2300: Duplicate identifier '"1"'.
+         1.0: string;
+         ~~~
+-!!! error TS2300: Duplicate identifier '1'.
++!!! error TS2300: Duplicate identifier '"1"'.
+         ~~~
+ !!! error TS2717: Subsequent property declarations must have the same type.  Property '1.0' must be of type 'number', but here has type 'string'.
+ !!! related TS6203 numericStringNamedPropertyEquivalence.ts:16:5: '1.0' was also declared here.

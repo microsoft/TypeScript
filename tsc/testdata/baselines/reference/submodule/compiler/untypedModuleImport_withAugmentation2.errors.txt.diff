@@ -1,0 +1,22 @@
+--- old.untypedModuleImport_withAugmentation2.errors.txt
++++ new.untypedModuleImport_withAugmentation2.errors.txt
+@@= skipped -0, +-1 lines =@@
+-/node_modules/augmenter/index.d.ts(1,16): error TS2665: Invalid module name in augmentation. Module 'js' resolves to an untyped module at '/node_modules/js/index.js', which cannot be augmented.
+-
+-
+-==== /a.ts (0 errors) ====
+-    import { } from "augmenter";
+-    
+-==== /node_modules/augmenter/index.d.ts (1 errors) ====
+-    declare module "js" {
+-                   ~~~~
+-!!! error TS2665: Invalid module name in augmentation. Module 'js' resolves to an untyped module at '/node_modules/js/index.js', which cannot be augmented.
+-        export const j: number;
+-    }
+-    export {};
+-    
+-==== /node_modules/js/index.js (0 errors) ====
+-    This file is not processed.
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

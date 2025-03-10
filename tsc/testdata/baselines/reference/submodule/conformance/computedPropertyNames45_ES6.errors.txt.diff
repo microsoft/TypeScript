@@ -1,0 +1,41 @@
+--- old.computedPropertyNames45_ES6.errors.txt
++++ new.computedPropertyNames45_ES6.errors.txt
+@@= skipped -0, +0 lines =@@
+-computedPropertyNames45_ES6.ts(10,5): error TS2411: Property '["get1"]' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
+-computedPropertyNames45_ES6.ts(11,9): error TS2411: Property '["set1"]' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++computedPropertyNames45_ES6.ts(10,5): error TS2411: Property 'get1' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
++computedPropertyNames45_ES6.ts(11,9): error TS2411: Property 'set1' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== computedPropertyNames45_ES6.ts (2 errors) ====
+     class Foo { x }
+     class Foo2 { x; y }
+@@= skipped -13, +29 lines =@@
+         // No error when the indexer is in a class more derived than the computed property
+         [s: string]: Foo2;
+         ~~~~~~~~~~~~~~~~~~
+-!!! error TS2411: Property '["get1"]' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
+-!!! related TS2728 computedPropertyNames45_ES6.ts:5:9: '["get1"]' is declared here.
++!!! error TS2411: Property 'get1' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
++!!! related TS2728 computedPropertyNames45_ES6.ts:5:9: 'get1' is declared here.
+         set ["set1"](p: Foo) { }
+             ~~~~~~~~
+-!!! error TS2411: Property '["set1"]' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
++!!! error TS2411: Property 'set1' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
+     }

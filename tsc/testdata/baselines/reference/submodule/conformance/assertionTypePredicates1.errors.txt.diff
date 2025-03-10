@@ -1,0 +1,46 @@
+--- old.assertionTypePredicates1.errors.txt
++++ new.assertionTypePredicates1.errors.txt
+@@= skipped -10, +10 lines =@@
+ assertionTypePredicates1.ts(164,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+ assertionTypePredicates1.ts(165,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+ assertionTypePredicates1.ts(170,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
++assertionTypePredicates1.ts(170,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+ assertionTypePredicates1.ts(172,5): error TS2776: Assertions require the call target to be an identifier or qualified name.
+ assertionTypePredicates1.ts(174,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
++assertionTypePredicates1.ts(174,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+ assertionTypePredicates1.ts(200,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
++assertionTypePredicates1.ts(200,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+ 
+ 
+-==== assertionTypePredicates1.ts (16 errors) ====
++==== assertionTypePredicates1.ts (19 errors) ====
+     declare function isString(value: unknown): value is string;
+     declare function isArrayOfStrings(value: unknown): value is string[];
+     
+@@= skipped -203, +206 lines =@@
+         ~~~~~~
+ !!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+ !!! related TS2782 assertionTypePredicates1.ts:169:11: 'assert' needs an explicit type annotation.
++        ~~~~~~
++!!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+         const a = [assert];
+         a[0](typeof x === "string");  // Error
+         ~~~~
+@@= skipped -9, +11 lines =@@
+         ~~~~~~~~~
+ !!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+ !!! related TS2782 assertionTypePredicates1.ts:173:11: 't1' needs an explicit type annotation.
++        ~~~~~~~~~
++!!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+         const t2: Test = new Test();
+         t2.assert(typeof x === "string");
+     }
+@@= skipped -29, +31 lines =@@
+         ~~~~~~~~~~~
+ !!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+ !!! related TS2782 assertionTypePredicates1.ts:198:3: 'assert' needs an explicit type annotation.
++        ~~~~~~~~~~~
++!!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+         x;
+       }
+     }

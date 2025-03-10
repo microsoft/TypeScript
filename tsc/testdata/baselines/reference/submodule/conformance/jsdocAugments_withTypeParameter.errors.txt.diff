@@ -1,0 +1,24 @@
+--- old.jsdocAugments_withTypeParameter.errors.txt
++++ new.jsdocAugments_withTypeParameter.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/b.js(2,17): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
++/b.js(4,21): error TS2339: Property 'x' does not exist on type 'B'.
++
++
++==== /a.d.ts (0 errors) ====
++    declare class A<T> { x: T }
++    
++==== /b.js (2 errors) ====
++    /** @augments A<number> */
++    class B extends A {
++                    ~
++!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
++        m() {
++            return this.x;
++                        ~
++!!! error TS2339: Property 'x' does not exist on type 'B'.
++        }
++    }
++    

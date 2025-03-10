@@ -1,0 +1,36 @@
+--- old.templateStringInPropertyNameES6_1.errors.txt
++++ new.templateStringInPropertyNameES6_1.errors.txt
+@@= skipped -0, +0 lines =@@
+-templateStringInPropertyNameES6_1.ts(1,9): error TS2349: This expression is not callable.
+-  Type '{}' has no call signatures.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ templateStringInPropertyNameES6_1.ts(2,5): error TS1136: Property assignment expected.
+ templateStringInPropertyNameES6_1.ts(2,8): error TS1005: ',' expected.
+ templateStringInPropertyNameES6_1.ts(2,10): error TS1134: Variable declaration expected.
+ templateStringInPropertyNameES6_1.ts(3,1): error TS1128: Declaration or statement expected.
+ 
+ 
+-==== templateStringInPropertyNameES6_1.ts (5 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== templateStringInPropertyNameES6_1.ts (4 errors) ====
+     var x = {
+-            ~
+-!!! error TS2349: This expression is not callable.
+-!!! error TS2349:   Type '{}' has no call signatures.
+         `a`: 321
+         ~~~
+ !!! error TS1136: Property assignment expected.

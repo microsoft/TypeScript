@@ -1,0 +1,15 @@
+--- old.unusedTypeParameterInInterface2.errors.txt
++++ new.unusedTypeParameterInInterface2.errors.txt
+@@= skipped -0, +0 lines =@@
+-unusedTypeParameterInInterface2.ts(1,18): error TS6133: 'U' is declared but its value is never read.
++unusedTypeParameterInInterface2.ts(1,18): error TS6196: 'U' is declared but never used.
+ 
+ 
+ ==== unusedTypeParameterInInterface2.ts (1 errors) ====
+     interface int<T, U, V> {
+                      ~
+-!!! error TS6133: 'U' is declared but its value is never read.
++!!! error TS6196: 'U' is declared but never used.
+         f1(a: T): string;
+         c: V;
+     }

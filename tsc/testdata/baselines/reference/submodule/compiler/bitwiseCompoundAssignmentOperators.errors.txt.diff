@@ -1,0 +1,43 @@
+--- old.bitwiseCompoundAssignmentOperators.errors.txt
++++ new.bitwiseCompoundAssignmentOperators.errors.txt
+@@= skipped -0, +0 lines =@@
+-bitwiseCompoundAssignmentOperators.ts(3,1): error TS2447: The '^=' operator is not allowed for boolean types. Consider using '!==' instead.
++bitwiseCompoundAssignmentOperators.ts(3,3): error TS2447: The '^=' operator is not allowed for boolean types. Consider using '!==' instead.
+ bitwiseCompoundAssignmentOperators.ts(7,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+ bitwiseCompoundAssignmentOperators.ts(9,6): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+-bitwiseCompoundAssignmentOperators.ts(14,1): error TS2447: The '&=' operator is not allowed for boolean types. Consider using '&&' instead.
++bitwiseCompoundAssignmentOperators.ts(14,3): error TS2447: The '&=' operator is not allowed for boolean types. Consider using '&&' instead.
+ bitwiseCompoundAssignmentOperators.ts(18,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+ bitwiseCompoundAssignmentOperators.ts(20,6): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+-bitwiseCompoundAssignmentOperators.ts(24,1): error TS2447: The '|=' operator is not allowed for boolean types. Consider using '||' instead.
++bitwiseCompoundAssignmentOperators.ts(24,3): error TS2447: The '|=' operator is not allowed for boolean types. Consider using '||' instead.
+ bitwiseCompoundAssignmentOperators.ts(28,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+ 
+ 
+@@= skipped -11, +11 lines =@@
+     var a = true;
+     var b = 1;
+     a ^= a;
+-    ~~~~~~
++      ~~
+ !!! error TS2447: The '^=' operator is not allowed for boolean types. Consider using '!==' instead.
+     a = true;
+     b ^= b;
+@@= skipped -17, +17 lines =@@
+     var c = false;
+     var d = 2;
+     c &= c;
+-    ~~~~~~
++      ~~
+ !!! error TS2447: The '&=' operator is not allowed for boolean types. Consider using '&&' instead.
+     c = false;
+     d &= d;
+@@= skipped -16, +16 lines =@@
+     var e = true;
+     var f = 0;
+     e |= e;
+-    ~~~~~~
++      ~~
+ !!! error TS2447: The '|=' operator is not allowed for boolean types. Consider using '||' instead.
+     e = true;
+     f |= f;

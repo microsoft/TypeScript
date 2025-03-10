@@ -1,0 +1,250 @@
+--- old.duplicateIdentifierRelatedSpans4.errors.txt
++++ new.duplicateIdentifierRelatedSpans4.errors.txt
+@@= skipped -0, +0 lines =@@
+-[96mfile1.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS6200: [0mDefinitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8
++[96mfile1.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate1'.
+ 
+-[7m1[0m interface TopLevel {
+-[7m [0m [91m~~~~~~~~~[0m
++[7m 2[0m     duplicate1: () => string;
++[7m  [0m [91m    ~~~~~~~~~~[0m
+ 
+-  [96mfile2.ts[0m:[93m1[0m:[93m1[0m
+-    [7m1[0m interface TopLevel {
+-    [7m [0m [96m~~~~~~~~~[0m
+-    Conflicts are in this file.
+-[96mfile2.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS6200: [0mDefinitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8
++  [96mfile2.ts[0m:[93m2[0m:[93m5[0m - 'duplicate1' was also declared here.
++    [7m 2[0m     duplicate1(): number;
++    [7m  [0m [96m    ~~~~~~~~~~[0m
+ 
+-[7m1[0m interface TopLevel {
+-[7m [0m [91m~~~~~~~~~[0m
++[96mfile1.ts[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate2'.
+ 
+-  [96mfile1.ts[0m:[93m1[0m:[93m1[0m
+-    [7m1[0m interface TopLevel {
+-    [7m [0m [96m~~~~~~~~~[0m
+-    Conflicts are in this file.
++[7m 3[0m     duplicate2: () => string;
++[7m  [0m [91m    ~~~~~~~~~~[0m
+ 
++  [96mfile2.ts[0m:[93m3[0m:[93m5[0m - 'duplicate2' was also declared here.
++    [7m 3[0m     duplicate2(): number;
++    [7m  [0m [96m    ~~~~~~~~~~[0m
+ 
+-==== file1.ts (1 errors) ====
++[96mfile1.ts[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate3'.
++
++[7m 4[0m     duplicate3: () => string;
++[7m  [0m [91m    ~~~~~~~~~~[0m
++
++  [96mfile2.ts[0m:[93m4[0m:[93m5[0m - 'duplicate3' was also declared here.
++    [7m 4[0m     duplicate3(): number;
++    [7m  [0m [96m    ~~~~~~~~~~[0m
++
++[96mfile1.ts[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate4'.
++
++[7m 5[0m     duplicate4: () => string;
++[7m  [0m [91m    ~~~~~~~~~~[0m
++
++  [96mfile2.ts[0m:[93m5[0m:[93m5[0m - 'duplicate4' was also declared here.
++    [7m 5[0m     duplicate4(): number;
++    [7m  [0m [96m    ~~~~~~~~~~[0m
++
++[96mfile1.ts[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate5'.
++
++[7m 6[0m     duplicate5: () => string;
++[7m  [0m [91m    ~~~~~~~~~~[0m
++
++  [96mfile2.ts[0m:[93m6[0m:[93m5[0m - 'duplicate5' was also declared here.
++    [7m 6[0m     duplicate5(): number;
++    [7m  [0m [96m    ~~~~~~~~~~[0m
++
++[96mfile1.ts[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate6'.
++
++[7m 7[0m     duplicate6: () => string;
++[7m  [0m [91m    ~~~~~~~~~~[0m
++
++  [96mfile2.ts[0m:[93m7[0m:[93m5[0m - 'duplicate6' was also declared here.
++    [7m 7[0m     duplicate6(): number;
++    [7m  [0m [96m    ~~~~~~~~~~[0m
++
++[96mfile1.ts[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate7'.
++
++[7m 8[0m     duplicate7: () => string;
++[7m  [0m [91m    ~~~~~~~~~~[0m
++
++  [96mfile2.ts[0m:[93m8[0m:[93m5[0m - 'duplicate7' was also declared here.
++    [7m 8[0m     duplicate7(): number;
++    [7m  [0m [96m    ~~~~~~~~~~[0m
++
++[96mfile1.ts[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate8'.
++
++[7m 9[0m     duplicate8: () => string;
++[7m  [0m [91m    ~~~~~~~~~~[0m
++
++  [96mfile2.ts[0m:[93m9[0m:[93m5[0m - 'duplicate8' was also declared here.
++    [7m 9[0m     duplicate8(): number;
++    [7m  [0m [96m    ~~~~~~~~~~[0m
++
++[96mfile2.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate1'.
++
++[7m 2[0m     duplicate1(): number;
++[7m  [0m [91m    ~~~~~~~~~~[0m
++
++  [96mfile1.ts[0m:[93m2[0m:[93m5[0m - 'duplicate1' was also declared here.
++    [7m 2[0m     duplicate1: () => string;
++    [7m  [0m [96m    ~~~~~~~~~~[0m
++
++[96mfile2.ts[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate2'.
++
++[7m 3[0m     duplicate2(): number;
++[7m  [0m [91m    ~~~~~~~~~~[0m
++
++  [96mfile1.ts[0m:[93m3[0m:[93m5[0m - 'duplicate2' was also declared here.
++    [7m 3[0m     duplicate2: () => string;
++    [7m  [0m [96m    ~~~~~~~~~~[0m
++
++[96mfile2.ts[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate3'.
++
++[7m 4[0m     duplicate3(): number;
++[7m  [0m [91m    ~~~~~~~~~~[0m
++
++  [96mfile1.ts[0m:[93m4[0m:[93m5[0m - 'duplicate3' was also declared here.
++    [7m 4[0m     duplicate3: () => string;
++    [7m  [0m [96m    ~~~~~~~~~~[0m
++
++[96mfile2.ts[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate4'.
++
++[7m 5[0m     duplicate4(): number;
++[7m  [0m [91m    ~~~~~~~~~~[0m
++
++  [96mfile1.ts[0m:[93m5[0m:[93m5[0m - 'duplicate4' was also declared here.
++    [7m 5[0m     duplicate4: () => string;
++    [7m  [0m [96m    ~~~~~~~~~~[0m
++
++[96mfile2.ts[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate5'.
++
++[7m 6[0m     duplicate5(): number;
++[7m  [0m [91m    ~~~~~~~~~~[0m
++
++  [96mfile1.ts[0m:[93m6[0m:[93m5[0m - 'duplicate5' was also declared here.
++    [7m 6[0m     duplicate5: () => string;
++    [7m  [0m [96m    ~~~~~~~~~~[0m
++
++[96mfile2.ts[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate6'.
++
++[7m 7[0m     duplicate6(): number;
++[7m  [0m [91m    ~~~~~~~~~~[0m
++
++  [96mfile1.ts[0m:[93m7[0m:[93m5[0m - 'duplicate6' was also declared here.
++    [7m 7[0m     duplicate6: () => string;
++    [7m  [0m [96m    ~~~~~~~~~~[0m
++
++[96mfile2.ts[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate7'.
++
++[7m 8[0m     duplicate7(): number;
++[7m  [0m [91m    ~~~~~~~~~~[0m
++
++  [96mfile1.ts[0m:[93m8[0m:[93m5[0m - 'duplicate7' was also declared here.
++    [7m 8[0m     duplicate7: () => string;
++    [7m  [0m [96m    ~~~~~~~~~~[0m
++
++[96mfile2.ts[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate8'.
++
++[7m 9[0m     duplicate8(): number;
++[7m  [0m [91m    ~~~~~~~~~~[0m
++
++  [96mfile1.ts[0m:[93m9[0m:[93m5[0m - 'duplicate8' was also declared here.
++    [7m 9[0m     duplicate8: () => string;
++    [7m  [0m [96m    ~~~~~~~~~~[0m
++
++
++==== file1.ts (8 errors) ====
+     interface TopLevel {
+-    ~~~~~~~~~
+-!!! error TS6200: Definitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8
+-!!! related TS6201 file2.ts:1:1: Conflicts are in this file.
+         duplicate1: () => string;
++        ~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'duplicate1'.
++!!! related TS6203 file2.ts:2:5: 'duplicate1' was also declared here.
+         duplicate2: () => string;
++        ~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'duplicate2'.
++!!! related TS6203 file2.ts:3:5: 'duplicate2' was also declared here.
+         duplicate3: () => string;
++        ~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'duplicate3'.
++!!! related TS6203 file2.ts:4:5: 'duplicate3' was also declared here.
+         duplicate4: () => string;
++        ~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'duplicate4'.
++!!! related TS6203 file2.ts:5:5: 'duplicate4' was also declared here.
+         duplicate5: () => string;
++        ~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'duplicate5'.
++!!! related TS6203 file2.ts:6:5: 'duplicate5' was also declared here.
+         duplicate6: () => string;
++        ~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'duplicate6'.
++!!! related TS6203 file2.ts:7:5: 'duplicate6' was also declared here.
+         duplicate7: () => string;
++        ~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'duplicate7'.
++!!! related TS6203 file2.ts:8:5: 'duplicate7' was also declared here.
+         duplicate8: () => string;
++        ~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'duplicate8'.
++!!! related TS6203 file2.ts:9:5: 'duplicate8' was also declared here.
+     }
+-==== file2.ts (1 errors) ====
++==== file2.ts (8 errors) ====
+     interface TopLevel {
+-    ~~~~~~~~~
+-!!! error TS6200: Definitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8
+-!!! related TS6201 file1.ts:1:1: Conflicts are in this file.
+         duplicate1(): number;
++        ~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'duplicate1'.
++!!! related TS6203 file1.ts:2:5: 'duplicate1' was also declared here.
+         duplicate2(): number;
++        ~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'duplicate2'.
++!!! related TS6203 file1.ts:3:5: 'duplicate2' was also declared here.
+         duplicate3(): number;
++        ~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'duplicate3'.
++!!! related TS6203 file1.ts:4:5: 'duplicate3' was also declared here.
+         duplicate4(): number;
++        ~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'duplicate4'.
++!!! related TS6203 file1.ts:5:5: 'duplicate4' was also declared here.
+         duplicate5(): number;
++        ~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'duplicate5'.
++!!! related TS6203 file1.ts:6:5: 'duplicate5' was also declared here.
+         duplicate6(): number;
++        ~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'duplicate6'.
++!!! related TS6203 file1.ts:7:5: 'duplicate6' was also declared here.
+         duplicate7(): number;
++        ~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'duplicate7'.
++!!! related TS6203 file1.ts:8:5: 'duplicate7' was also declared here.
+         duplicate8(): number;
++        ~~~~~~~~~~
++!!! error TS2300: Duplicate identifier 'duplicate8'.
++!!! related TS6203 file1.ts:9:5: 'duplicate8' was also declared here.
+     }
+     
+-Found 2 errors in 2 files.
++Found 16 errors in 2 files.
+ 
+ Errors  Files
+-     1  file1.ts[90m:1[0m
+-     1  file2.ts[90m:1[0m
++     8  file1.ts[90m:2[0m
++     8  file2.ts[90m:2[0m
++

@@ -1,0 +1,18 @@
+contextualSignatureInArrayElementLibEs5.ts(8,4): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+
+
+==== contextualSignatureInArrayElementLibEs5.ts (1 errors) ====
+    // See: https://github.com/microsoft/TypeScript/pull/53280#discussion_r1138684984
+    
+    declare function test(
+      arg: Record<string, (arg: string) => void> | Array<(arg: number) => void>
+    ): void;
+    
+    test([
+      (arg) => {
+       ~~~
+!!! error TS7006: Parameter 'arg' implicitly has an 'any' type.
+        arg; // number
+      },
+    ]);
+    

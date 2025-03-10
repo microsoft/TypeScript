@@ -1,0 +1,66 @@
+--- old.tsxNotUsingApparentTypeOfSFC.errors.txt
++++ new.tsxNotUsingApparentTypeOfSFC.errors.txt
+@@= skipped -0, +0 lines =@@
+-tsxNotUsingApparentTypeOfSFC.tsx(14,14): error TS2322: Type '{}' is not assignable to type 'P'.
+-  'P' could be instantiated with an arbitrary type which could be unrelated to '{}'.
+-tsxNotUsingApparentTypeOfSFC.tsx(15,14): error TS2769: No overload matches this call.
+-  Overload 1 of 2, '(props: Readonly<P>): MyComponent', gave the following error.
+-    Type '{}' is not assignable to type 'Readonly<P>'.
+-  Overload 2 of 2, '(props: P, context?: any): MyComponent', gave the following error.
+-    Type '{}' is not assignable to type 'Readonly<P>'.
+-tsxNotUsingApparentTypeOfSFC.tsx(17,14): error TS2322: Type 'P' is not assignable to type 'IntrinsicAttributes & P'.
+-  Type 'P' is not assignable to type 'IntrinsicAttributes'.
+-tsxNotUsingApparentTypeOfSFC.tsx(18,14): error TS2769: No overload matches this call.
+-  Overload 1 of 2, '(props: Readonly<P>): MyComponent', gave the following error.
+-    Type 'P' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComponent> & Readonly<{ children?: ReactNode; }> & Readonly<P>'.
+-      Type 'P' is not assignable to type 'IntrinsicAttributes'.
+-  Overload 2 of 2, '(props: P, context?: any): MyComponent', gave the following error.
+-    Type 'P' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComponent> & Readonly<{ children?: ReactNode; }> & Readonly<P>'.
+-      Type 'P' is not assignable to type 'IntrinsicAttributes'.
++tsxNotUsingApparentTypeOfSFC.tsx(3,19): error TS2307: Cannot find module 'react' or its corresponding type declarations.
+ 
+ 
+-==== tsxNotUsingApparentTypeOfSFC.tsx (4 errors) ====
++==== tsxNotUsingApparentTypeOfSFC.tsx (1 errors) ====
+     /// <reference path="/.lib/react16.d.ts" />
+     
+     import React from 'react';
++                      ~~~~~~~
++!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
+     
+     function test<P>(wrappedProps: P) {
+         let MySFC = function(props: P) {
+@@= skipped -30, +17 lines =@@
+             }
+         }
+         let x = <MySFC />;  // should error
+-                 ~~~~~
+-!!! error TS2322: Type '{}' is not assignable to type 'P'.
+-!!! error TS2322:   'P' could be instantiated with an arbitrary type which could be unrelated to '{}'.
+         let y = <MyComponent />;  // should error
+-                 ~~~~~~~~~~~
+-!!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 2, '(props: Readonly<P>): MyComponent', gave the following error.
+-!!! error TS2769:     Type '{}' is not assignable to type 'Readonly<P>'.
+-!!! error TS2769:   Overload 2 of 2, '(props: P, context?: any): MyComponent', gave the following error.
+-!!! error TS2769:     Type '{}' is not assignable to type 'Readonly<P>'.
+     
+         let z = <MySFC {...wrappedProps} /> // should work
+-                 ~~~~~
+-!!! error TS2322: Type 'P' is not assignable to type 'IntrinsicAttributes & P'.
+-!!! error TS2322:   Type 'P' is not assignable to type 'IntrinsicAttributes'.
+-!!! related TS2208 tsxNotUsingApparentTypeOfSFC.tsx:5:15: This type parameter might need an `extends JSX.IntrinsicAttributes` constraint.
+         let q = <MyComponent {...wrappedProps} /> // should work
+-                 ~~~~~~~~~~~
+-!!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 2, '(props: Readonly<P>): MyComponent', gave the following error.
+-!!! error TS2769:     Type 'P' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComponent> & Readonly<{ children?: ReactNode; }> & Readonly<P>'.
+-!!! error TS2769:       Type 'P' is not assignable to type 'IntrinsicAttributes'.
+-!!! error TS2769:   Overload 2 of 2, '(props: P, context?: any): MyComponent', gave the following error.
+-!!! error TS2769:     Type 'P' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComponent> & Readonly<{ children?: ReactNode; }> & Readonly<P>'.
+-!!! error TS2769:       Type 'P' is not assignable to type 'IntrinsicAttributes'.
+-!!! related TS2208 tsxNotUsingApparentTypeOfSFC.tsx:5:15: This type parameter might need an `extends JSX.IntrinsicAttributes` constraint.
+-!!! related TS2208 tsxNotUsingApparentTypeOfSFC.tsx:5:15: This type parameter might need an `extends JSX.IntrinsicAttributes & JSX.IntrinsicClassAttributes<MyComponent> & Readonly<{ children?: React.ReactNode; }> & Readonly<P>` constraint.
+-!!! related TS2208 tsxNotUsingApparentTypeOfSFC.tsx:5:15: This type parameter might need an `extends JSX.IntrinsicAttributes` constraint.
+-!!! related TS2208 tsxNotUsingApparentTypeOfSFC.tsx:5:15: This type parameter might need an `extends JSX.IntrinsicAttributes & JSX.IntrinsicClassAttributes<MyComponent> & Readonly<{ children?: React.ReactNode; }> & Readonly<P>` constraint.
+     }

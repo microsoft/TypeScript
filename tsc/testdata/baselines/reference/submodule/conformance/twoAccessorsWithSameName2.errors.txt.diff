@@ -1,0 +1,42 @@
+--- old.twoAccessorsWithSameName2.errors.txt
++++ new.twoAccessorsWithSameName2.errors.txt
+@@= skipped -0, +0 lines =@@
+ twoAccessorsWithSameName2.ts(2,16): error TS2300: Duplicate identifier 'x'.
++twoAccessorsWithSameName2.ts(2,16): error TS2300: Duplicate identifier 'x'.
+ twoAccessorsWithSameName2.ts(3,16): error TS2300: Duplicate identifier 'x'.
++twoAccessorsWithSameName2.ts(3,16): error TS2300: Duplicate identifier 'x'.
+ twoAccessorsWithSameName2.ts(7,16): error TS2300: Duplicate identifier 'x'.
++twoAccessorsWithSameName2.ts(7,16): error TS2300: Duplicate identifier 'x'.
+ twoAccessorsWithSameName2.ts(8,16): error TS2300: Duplicate identifier 'x'.
++twoAccessorsWithSameName2.ts(8,16): error TS2300: Duplicate identifier 'x'.
+ 
+ 
+-==== twoAccessorsWithSameName2.ts (4 errors) ====
++==== twoAccessorsWithSameName2.ts (8 errors) ====
+     class C {
+         static get x() { return 1; }
+                    ~
+ !!! error TS2300: Duplicate identifier 'x'.
++                   ~
++!!! error TS2300: Duplicate identifier 'x'.
+         static get x() { return 1; } // error
+                    ~
+ !!! error TS2300: Duplicate identifier 'x'.
++                   ~
++!!! error TS2300: Duplicate identifier 'x'.
+     }
+     
+     class D {
+         static set x(v) {  }
+                    ~
+ !!! error TS2300: Duplicate identifier 'x'.
++                   ~
++!!! error TS2300: Duplicate identifier 'x'.
+         static set x(v) {  } // error
+                    ~
+ !!! error TS2300: Duplicate identifier 'x'.
++                   ~
++!!! error TS2300: Duplicate identifier 'x'.
+     }
+     
+     class E {

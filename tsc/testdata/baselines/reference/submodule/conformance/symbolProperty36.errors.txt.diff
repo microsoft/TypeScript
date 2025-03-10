@@ -1,0 +1,36 @@
+--- old.symbolProperty36.errors.txt
++++ new.symbolProperty36.errors.txt
+@@= skipped -0, +0 lines =@@
+-symbolProperty36.ts(3,5): error TS1117: An object literal cannot have multiple properties with the same name.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++symbolProperty36.ts(2,6): error TS2304: Cannot find name 'Symbol'.
++symbolProperty36.ts(3,6): error TS2304: Cannot find name 'Symbol'.
+ 
+ 
+-==== symbolProperty36.ts (1 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== symbolProperty36.ts (2 errors) ====
+     var x = {
+         [Symbol.isConcatSpreadable]: 0,
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
+         [Symbol.isConcatSpreadable]: 1
+-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS1117: An object literal cannot have multiple properties with the same name.
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
+     }

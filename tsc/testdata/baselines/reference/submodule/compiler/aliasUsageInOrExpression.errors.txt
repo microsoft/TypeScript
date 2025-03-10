@@ -1,0 +1,31 @@
+aliasUsageInOrExpression_main.ts(10,40): error TS2873: This kind of expression is always falsy.
+aliasUsageInOrExpression_main.ts(11,40): error TS2873: This kind of expression is always falsy.
+
+
+==== aliasUsageInOrExpression_main.ts (2 errors) ====
+    import Backbone = require("./aliasUsageInOrExpression_backbone");
+    import moduleA = require("./aliasUsageInOrExpression_moduleA");
+    interface IHasVisualizationModel {
+        VisualizationModel: typeof Backbone.Model;
+    }
+    var i: IHasVisualizationModel;
+    var d1 = i || moduleA;
+    var d2: IHasVisualizationModel = i || moduleA;
+    var d2: IHasVisualizationModel = moduleA || i;
+    var e: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null || { x: moduleA };
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
+    var f: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null ? { x: moduleA } : null;
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
+==== aliasUsageInOrExpression_backbone.ts (0 errors) ====
+    export class Model {
+        public someData: string;
+    }
+    
+==== aliasUsageInOrExpression_moduleA.ts (0 errors) ====
+    import Backbone = require("./aliasUsageInOrExpression_backbone");
+    export class VisualizationModel extends Backbone.Model {
+        // interesting stuff here
+    }
+    

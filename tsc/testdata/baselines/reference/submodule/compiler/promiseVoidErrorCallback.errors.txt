@@ -1,0 +1,55 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+promiseVoidErrorCallback.ts(13,16): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+promiseVoidErrorCallback.ts(14,12): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+promiseVoidErrorCallback.ts(22,19): error TS2304: Cannot find name 'Error'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== promiseVoidErrorCallback.ts (3 errors) ====
+    interface T1 {
+        __t1: string;
+    }
+    
+    interface T2 {
+        __t2: string;
+    }
+    
+    interface T3 {
+        __t3: string;
+    }
+    
+    function f1(): Promise<T1> {
+                   ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+        return Promise.resolve({ __t1: "foo_t1" });
+               ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    }
+    
+    function f2(x: T1): T2 {
+        return { __t2: x.__t1 + ":foo_21" };
+    }
+    
+    var x3 = f1()
+        .then(f2, (e: Error) => {
+                      ~~~~~
+!!! error TS2304: Cannot find name 'Error'.
+        throw e;
+    })
+        .then((x: T2) => {
+        return { __t3: x.__t2 + "bar" };
+    });

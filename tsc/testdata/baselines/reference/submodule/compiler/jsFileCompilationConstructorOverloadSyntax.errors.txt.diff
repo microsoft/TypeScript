@@ -1,0 +1,15 @@
+--- old.jsFileCompilationConstructorOverloadSyntax.errors.txt
++++ new.jsFileCompilationConstructorOverloadSyntax.errors.txt
+@@= skipped -0, +0 lines =@@
+-a.js(2,3): error TS8017: Signature declarations can only be used in TypeScript files.
++a.js(2,3): error TS2390: Constructor implementation is missing.
+ 
+ 
+ ==== a.js (1 errors) ====
+     class A {
+       constructor();
+       ~~~~~~~~~~~
+-!!! error TS8017: Signature declarations can only be used in TypeScript files.
++!!! error TS2390: Constructor implementation is missing.
+     }
+     

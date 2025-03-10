@@ -1,0 +1,55 @@
+stringLiteralsWithSwitchStatements04.ts(7,10): error TS2695: Left side of comma operator is unused and has no side effects.
+stringLiteralsWithSwitchStatements04.ts(9,10): error TS2695: Left side of comma operator is unused and has no side effects.
+stringLiteralsWithSwitchStatements04.ts(11,10): error TS2695: Left side of comma operator is unused and has no side effects.
+stringLiteralsWithSwitchStatements04.ts(11,10): error TS2678: Type '"baz"' is not comparable to type '"bar" | "foo"'.
+stringLiteralsWithSwitchStatements04.ts(13,10): error TS2695: Left side of comma operator is unused and has no side effects.
+stringLiteralsWithSwitchStatements04.ts(15,10): error TS2872: This kind of expression is always truthy.
+stringLiteralsWithSwitchStatements04.ts(17,10): error TS2872: This kind of expression is always truthy.
+stringLiteralsWithSwitchStatements04.ts(17,20): error TS2872: This kind of expression is always truthy.
+stringLiteralsWithSwitchStatements04.ts(19,10): error TS2872: This kind of expression is always truthy.
+stringLiteralsWithSwitchStatements04.ts(19,20): error TS2872: This kind of expression is always truthy.
+
+
+==== stringLiteralsWithSwitchStatements04.ts (10 errors) ====
+    let x: "foo";
+    let y: "foo" | "bar"; 
+    
+    declare function randBool(): boolean;
+    
+    switch (y) {
+        case "foo", x:
+             ~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+            break;
+        case x, "foo":
+             ~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+            break;
+        case x, "baz":
+             ~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+             ~~~~~~~~
+!!! error TS2678: Type '"baz"' is not comparable to type '"bar" | "foo"'.
+            break;
+        case "baz", x:
+             ~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+            break;
+        case "baz" && "bar":
+             ~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+            break;
+        case "baz" && ("foo" || "bar"):
+             ~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+                       ~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+            break;
+        case "bar" && ("baz" || "bar"):
+             ~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+                       ~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+            break;
+    }
+    

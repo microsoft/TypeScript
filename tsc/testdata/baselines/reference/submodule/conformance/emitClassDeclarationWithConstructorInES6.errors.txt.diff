@@ -1,0 +1,48 @@
+--- old.emitClassDeclarationWithConstructorInES6.errors.txt
++++ new.emitClassDeclarationWithConstructorInES6.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== emitClassDeclarationWithConstructorInES6.ts (0 errors) ====
++    class A {
++        y: number;
++        constructor(x: number) {
++        }
++        foo(a: any);
++        foo() { }
++    }
++    
++    class B {
++        y: number;
++        x: string = "hello";
++        _bar: string;
++    
++        constructor(x: number, z = "hello", ...args) {
++            this.y = 10;
++        }
++        baz(...args): string;
++        baz(z: string, v: number): string {
++            return this._bar;
++        } 
++    }
++    
++    
++    

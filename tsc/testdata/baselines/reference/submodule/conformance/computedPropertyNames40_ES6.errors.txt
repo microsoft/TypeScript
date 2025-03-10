@@ -1,0 +1,38 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+computedPropertyNames40_ES6.ts(8,5): error TS2393: Duplicate function implementation.
+computedPropertyNames40_ES6.ts(8,5): error TS2411: Property '[""]' of type '() => Foo' is not assignable to 'string' index type '() => Foo2'.
+computedPropertyNames40_ES6.ts(9,5): error TS2393: Duplicate function implementation.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== computedPropertyNames40_ES6.ts (3 errors) ====
+    class Foo { x }
+    class Foo2 { x; y }
+    
+    class C {
+        [s: string]: () => Foo2;
+    
+        // Computed properties
+        [""]() { return new Foo }
+        ~~~~
+!!! error TS2393: Duplicate function implementation.
+        ~~~~
+!!! error TS2411: Property '[""]' of type '() => Foo' is not assignable to 'string' index type '() => Foo2'.
+        [""]() { return new Foo2 }
+        ~~~~
+!!! error TS2393: Duplicate function implementation.
+    }

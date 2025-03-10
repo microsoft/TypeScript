@@ -1,0 +1,40 @@
+lovefield-ts.d.ts(4,19): error TS2503: Cannot find namespace 'query'.
+lovefield-ts.d.ts(5,24): error TS2503: Cannot find namespace 'schema'.
+lovefield-ts.d.ts(7,25): error TS2503: Cannot find namespace 'query'.
+lovefield-ts.d.ts(9,14): error TS2552: Cannot find name 'TransactionStats'. Did you mean 'Transaction'?
+lovefield.js(1,1): error TS2708: Cannot use namespace 'lf' as a value.
+lovefield.js(6,1): error TS2708: Cannot use namespace 'lf' as a value.
+
+
+==== lovefield-ts.d.ts (4 errors) ====
+    // bug #27352, crashes from github.com/google/lovefield
+    declare namespace lf {
+      export interface Transaction {
+        attach(query: query.Builder): Promise<Array<Object>>
+                      ~~~~~
+!!! error TS2503: Cannot find namespace 'query'.
+        begin(scope: Array<schema.Table>): Promise<void>
+                           ~~~~~~
+!!! error TS2503: Cannot find namespace 'schema'.
+        commit(): Promise<void>
+        exec(queries: Array<query.Builder>): Promise<Array<Array<Object>>>
+                            ~~~~~
+!!! error TS2503: Cannot find namespace 'query'.
+        rollback(): Promise<void>
+        stats(): TransactionStats
+                 ~~~~~~~~~~~~~~~~
+!!! error TS2552: Cannot find name 'TransactionStats'. Did you mean 'Transaction'?
+      }
+    }
+==== lovefield.js (2 errors) ====
+    lf.Transaction = function() {};
+    ~~
+!!! error TS2708: Cannot use namespace 'lf' as a value.
+    /**
+     * @param {!Array<!lf.schema.Table>} scope
+     * @return {!IThenable}
+     */
+    lf.Transaction.prototype.begin = function(scope) {};
+    ~~
+!!! error TS2708: Cannot use namespace 'lf' as a value.
+    

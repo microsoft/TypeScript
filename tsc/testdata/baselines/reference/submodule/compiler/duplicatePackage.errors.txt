@@ -1,0 +1,66 @@
+/node_modules/b/index.d.ts(1,15): error TS2306: File '/node_modules/b/node_modules/x/index.d.ts' is not a module.
+/node_modules/b/node_modules/x/index.d.ts(1,1): error TS1434: Unexpected keyword or identifier.
+/node_modules/b/node_modules/x/index.d.ts(1,1): error TS2304: Cannot find name 'content'.
+/node_modules/b/node_modules/x/index.d.ts(1,9): error TS1434: Unexpected keyword or identifier.
+/node_modules/b/node_modules/x/index.d.ts(1,9): error TS2304: Cannot find name 'not'.
+/node_modules/b/node_modules/x/index.d.ts(1,13): error TS2304: Cannot find name 'parsed'.
+/src/a.ts(5,3): error TS2345: Argument of type 'default' is not assignable to parameter of type 'default'.
+  Types have separate declarations of a private property 'x'.
+
+
+==== /src/a.ts (1 errors) ====
+    import { a } from "a";
+    import { b } from "b";
+    import { c } from "c";
+    a(b); // Works
+    a(c); // Error, these are from different versions of the library.
+      ~
+!!! error TS2345: Argument of type 'default' is not assignable to parameter of type 'default'.
+!!! error TS2345:   Types have separate declarations of a private property 'x'.
+    
+==== /node_modules/a/index.d.ts (0 errors) ====
+    import X from "x";
+    export function a(x: X): void;
+    
+==== /node_modules/a/node_modules/x/index.d.ts (0 errors) ====
+    export default class X {
+        private x: number;
+    }
+    
+==== /node_modules/a/node_modules/x/package.json (0 errors) ====
+    { "name": "x", "version": "1.2.3" }
+    
+==== /node_modules/b/index.d.ts (1 errors) ====
+    import X from "x";
+                  ~~~
+!!! error TS2306: File '/node_modules/b/node_modules/x/index.d.ts' is not a module.
+    export const b: X;
+    
+==== /node_modules/b/node_modules/x/index.d.ts (5 errors) ====
+    content not parsed
+    ~~~~~~~
+!!! error TS1434: Unexpected keyword or identifier.
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'content'.
+            ~~~
+!!! error TS1434: Unexpected keyword or identifier.
+            ~~~
+!!! error TS2304: Cannot find name 'not'.
+                ~~~~~~
+!!! error TS2304: Cannot find name 'parsed'.
+    
+==== /node_modules/b/node_modules/x/package.json (0 errors) ====
+    { "name": "x", "version": "1.2.3" }
+    
+==== /node_modules/c/index.d.ts (0 errors) ====
+    import X from "x";
+    export const c: X;
+    
+==== /node_modules/c/node_modules/x/index.d.ts (0 errors) ====
+    export default class X {
+        private x: number;
+    }
+    
+==== /node_modules/c/node_modules/x/package.json (0 errors) ====
+    { "name": "x", "version": "1.2.4" }
+    

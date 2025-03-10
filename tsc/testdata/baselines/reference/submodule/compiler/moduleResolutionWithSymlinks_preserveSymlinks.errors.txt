@@ -1,0 +1,26 @@
+/app/app.ts(4,25): error TS2307: Cannot find module 'linked' or its corresponding type declarations.
+/app/app.ts(5,25): error TS2307: Cannot find module 'linked2' or its corresponding type declarations.
+
+
+==== /app/app.ts (2 errors) ====
+    // We shouldn't resolve symlinks for references either. See the trace.
+    /// <reference types="linked" />
+    
+    import { C as C1 } from "linked";
+                            ~~~~~~~~
+!!! error TS2307: Cannot find module 'linked' or its corresponding type declarations.
+    import { C as C2 } from "linked2";
+                            ~~~~~~~~~
+!!! error TS2307: Cannot find module 'linked2' or its corresponding type declarations.
+    
+    let x = new C1();
+    // Should fail. We no longer resolve any symlinks.
+    x = new C2();
+    
+==== /linked/index.d.ts (0 errors) ====
+    export { real } from "real";
+    export class C { private x; }
+    
+==== /app/node_modules/real/index.d.ts (0 errors) ====
+    export const real: string;
+    

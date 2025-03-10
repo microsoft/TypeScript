@@ -1,0 +1,29 @@
+--- old.privateNameMethodAssignment.errors.txt
++++ new.privateNameMethodAssignment.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ privateNameMethodAssignment.ts(4,14): error TS2803: Cannot assign to private method '#method'. Private methods are not writable.
+ privateNameMethodAssignment.ts(5,11): error TS2803: Cannot assign to private method '#method'. Private methods are not writable.
+ privateNameMethodAssignment.ts(6,11): error TS2803: Cannot assign to private method '#method'. Private methods are not writable.
+@@= skipped -4, +12 lines =@@
+ privateNameMethodAssignment.ts(9,11): error TS2803: Cannot assign to private method '#method'. Private methods are not writable.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== privateNameMethodAssignment.ts (5 errors) ====
+     class A3 {
+         #method() { };

@@ -1,0 +1,43 @@
+--- old.es6ImportDefaultBindingFollowedWithNamedImport.errors.txt
++++ new.es6ImportDefaultBindingFollowedWithNamedImport.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== es6ImportDefaultBindingFollowedWithNamedImport_0.ts (0 errors) ====
++    export var a = 10;
++    export var x = a;
++    export var m = a;
++    export default {};
++    
++==== es6ImportDefaultBindingFollowedWithNamedImport_1.ts (0 errors) ====
++    import defaultBinding1, { } from "./es6ImportDefaultBindingFollowedWithNamedImport_0";
++    import defaultBinding2, { a } from "./es6ImportDefaultBindingFollowedWithNamedImport_0";
++    var x1: number = a;
++    import defaultBinding3, { a as b } from "./es6ImportDefaultBindingFollowedWithNamedImport_0";
++    var x1: number = b;
++    import defaultBinding4, { x, a as y } from "./es6ImportDefaultBindingFollowedWithNamedImport_0";
++    var x1: number = x;
++    var x1: number = y;
++    import defaultBinding5, { x as z,  } from "./es6ImportDefaultBindingFollowedWithNamedImport_0";
++    var x1: number = z;
++    import defaultBinding6, { m,  } from "./es6ImportDefaultBindingFollowedWithNamedImport_0";
++    var x1: number = m;
++    

@@ -1,0 +1,21 @@
+capturedLetConstInLoop14.ts(7,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type 'number', but here has type 'any'.
+
+
+==== capturedLetConstInLoop14.ts (1 errors) ====
+    function use(v: number) {}
+    
+    function foo(x: number) {
+      var v = 1;
+      do {
+        let x = v;
+        var v;
+            ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type 'number', but here has type 'any'.
+!!! related TS6203 capturedLetConstInLoop14.ts:4:7: 'v' was also declared here.
+        var v = 2;
+        () => x + v;
+      } while (false);
+    
+      use(v);
+    }
+    

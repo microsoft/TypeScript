@@ -1,0 +1,18 @@
+a.ts(4,19): error TS2741: Property 'a' is missing in type '{}' but required in type 'Foo'.
+
+
+==== a.ts (1 errors) ====
+    interface Foo {
+        a: number;
+    }
+    export default {} satisfies Foo;
+                      ~~~~~~~~~
+!!! error TS2741: Property 'a' is missing in type '{}' but required in type 'Foo'.
+!!! related TS2728 a.ts:2:5: 'a' is declared here.
+    
+==== b.ts (0 errors) ====
+    interface Foo {
+        a: number;
+    }
+    export default { a: 1 } satisfies Foo;
+    

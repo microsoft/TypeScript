@@ -1,0 +1,11 @@
+--- old.packageJsonImportsExportsOptionCompat(moduleresolution=bundler).errors.txt
++++ new.packageJsonImportsExportsOptionCompat(moduleresolution=bundler).errors.txt
+@@= skipped -0, +-1 lines =@@
+-error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
+-
+-
+-!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
+-==== index.ts (0 errors) ====
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

@@ -1,0 +1,16 @@
+exportAssignmentInternalModule_B.ts(1,23): error TS2307: Cannot find module 'exportAssignmentInternalModule_A' or its corresponding type declarations.
+
+
+==== exportAssignmentInternalModule_B.ts (1 errors) ====
+    import modM = require("exportAssignmentInternalModule_A");
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'exportAssignmentInternalModule_A' or its corresponding type declarations.
+    
+    var n: number = modM.x;
+==== exportAssignmentInternalModule_A.ts (0 errors) ====
+    module M {
+    	export var x;
+    }
+    
+    export = M;
+    

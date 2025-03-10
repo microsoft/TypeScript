@@ -1,0 +1,90 @@
+--- old.regexpExecAndMatchTypeUsages(strict=true).errors.txt
++++ new.regexpExecAndMatchTypeUsages(strict=true).errors.txt
+@@= skipped -0, +0 lines =@@
+ regexpExecAndMatchTypeUsages.ts(3,5): error TS2532: Object is possibly 'undefined'.
++regexpExecAndMatchTypeUsages.ts(3,22): error TS2339: Property 'length' does not exist on type 'string | undefined'.
++  Property 'length' does not exist on type 'undefined'.
+ regexpExecAndMatchTypeUsages.ts(4,5): error TS18048: 'matchResult.index' is possibly 'undefined'.
++regexpExecAndMatchTypeUsages.ts(4,5): error TS2365: Operator '+' cannot be applied to types 'number | undefined' and 'number'.
+ regexpExecAndMatchTypeUsages.ts(5,5): error TS18048: 'matchResult.input' is possibly 'undefined'.
++regexpExecAndMatchTypeUsages.ts(5,23): error TS2339: Property 'length' does not exist on type 'string | undefined'.
++  Property 'length' does not exist on type 'undefined'.
+ regexpExecAndMatchTypeUsages.ts(6,5): error TS18048: 'matchResult.groups' is possibly 'undefined'.
+-regexpExecAndMatchTypeUsages.ts(6,5): error TS2532: Object is possibly 'undefined'.
++regexpExecAndMatchTypeUsages.ts(6,5): error TS7053: Element implicitly has an 'any' type because expression of type '"someVariable"' can't be used to index type '{ [key: string]: string; } | undefined'.
++  Property 'someVariable' does not exist on type '{ [key: string]: string; } | undefined'.
+ regexpExecAndMatchTypeUsages.ts(7,5): error TS2412: Type 'undefined' is not assignable to type '{ [key: string]: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+ regexpExecAndMatchTypeUsages.ts(10,5): error TS2532: Object is possibly 'undefined'.
++regexpExecAndMatchTypeUsages.ts(10,21): error TS2339: Property 'length' does not exist on type 'string | undefined'.
++  Property 'length' does not exist on type 'undefined'.
+ regexpExecAndMatchTypeUsages.ts(13,5): error TS18048: 'execResult.groups' is possibly 'undefined'.
+-regexpExecAndMatchTypeUsages.ts(13,5): error TS2532: Object is possibly 'undefined'.
++regexpExecAndMatchTypeUsages.ts(13,5): error TS7053: Element implicitly has an 'any' type because expression of type '"someVariable"' can't be used to index type '{ [key: string]: string; } | undefined'.
++  Property 'someVariable' does not exist on type '{ [key: string]: string; } | undefined'.
+ regexpExecAndMatchTypeUsages.ts(14,5): error TS2412: Type 'undefined' is not assignable to type '{ [key: string]: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+-regexpExecAndMatchTypeUsages.ts(20,9): error TS2375: Type 'RegExpMatchArray' is not assignable to type 'RegExpExecArray' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
++regexpExecAndMatchTypeUsages.ts(20,9): error TS2322: Type 'RegExpMatchArray' is not assignable to type 'RegExpExecArray'.
+   Property 'index' is optional in type 'RegExpMatchArray' but required in type 'RegExpExecArray'.
+ 
+ 
+-==== regexpExecAndMatchTypeUsages.ts (11 errors) ====
++==== regexpExecAndMatchTypeUsages.ts (15 errors) ====
+     export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) {
+         matchResult[0].length;
+         matchResult[999].length;
+         ~~~~~~~~~~~~~~~~
+ !!! error TS2532: Object is possibly 'undefined'.
++                         ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type 'string | undefined'.
++!!! error TS2339:   Property 'length' does not exist on type 'undefined'.
+         matchResult.index + 0;
+         ~~~~~~~~~~~~~~~~~
+ !!! error TS18048: 'matchResult.index' is possibly 'undefined'.
++        ~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2365: Operator '+' cannot be applied to types 'number | undefined' and 'number'.
+         matchResult.input.length;
+         ~~~~~~~~~~~~~~~~~
+ !!! error TS18048: 'matchResult.input' is possibly 'undefined'.
++                          ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type 'string | undefined'.
++!!! error TS2339:   Property 'length' does not exist on type 'undefined'.
+         matchResult.groups["someVariable"].length;
+         ~~~~~~~~~~~~~~~~~~
+ !!! error TS18048: 'matchResult.groups' is possibly 'undefined'.
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2532: Object is possibly 'undefined'.
++!!! error TS7053: Element implicitly has an 'any' type because expression of type '"someVariable"' can't be used to index type '{ [key: string]: string; } | undefined'.
++!!! error TS7053:   Property 'someVariable' does not exist on type '{ [key: string]: string; } | undefined'.
+         matchResult.groups = undefined;
+         ~~~~~~~~~~~~~~~~~~
+ !!! error TS2412: Type 'undefined' is not assignable to type '{ [key: string]: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+@@= skipped -36, +54 lines =@@
+         execResult[999].length;
+         ~~~~~~~~~~~~~~~
+ !!! error TS2532: Object is possibly 'undefined'.
++                        ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type 'string | undefined'.
++!!! error TS2339:   Property 'length' does not exist on type 'undefined'.
+         execResult.index + 0;
+         execResult.input.length;
+         execResult.groups["someVariable"].length;
+         ~~~~~~~~~~~~~~~~~
+ !!! error TS18048: 'execResult.groups' is possibly 'undefined'.
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2532: Object is possibly 'undefined'.
++!!! error TS7053: Element implicitly has an 'any' type because expression of type '"someVariable"' can't be used to index type '{ [key: string]: string; } | undefined'.
++!!! error TS7053:   Property 'someVariable' does not exist on type '{ [key: string]: string; } | undefined'.
+         execResult.groups = undefined;
+         ~~~~~~~~~~~~~~~~~
+ !!! error TS2412: Type 'undefined' is not assignable to type '{ [key: string]: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+@@= skipped -17, +21 lines =@@
+         else {
+             execResult = matchResult
+             ~~~~~~~~~~
+-!!! error TS2375: Type 'RegExpMatchArray' is not assignable to type 'RegExpExecArray' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+-!!! error TS2375:   Property 'index' is optional in type 'RegExpMatchArray' but required in type 'RegExpExecArray'.
++!!! error TS2322: Type 'RegExpMatchArray' is not assignable to type 'RegExpExecArray'.
++!!! error TS2322:   Property 'index' is optional in type 'RegExpMatchArray' but required in type 'RegExpExecArray'.
+         }
+     }
+     

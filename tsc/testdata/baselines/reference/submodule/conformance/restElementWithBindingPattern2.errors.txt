@@ -1,0 +1,7 @@
+restElementWithBindingPattern2.ts(1,16): error TS2339: Property 'b' does not exist on type 'number[]'.
+
+
+==== restElementWithBindingPattern2.ts (1 errors) ====
+    var [...{0: a, b }] = [0, 1];
+                   ~
+!!! error TS2339: Property 'b' does not exist on type 'number[]'.

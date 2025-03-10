@@ -1,0 +1,11 @@
+--- old.noImplicitUseStrict_amd.errors.txt
++++ new.noImplicitUseStrict_amd.errors.txt
+@@= skipped -0, +-1 lines =@@
+-error TS5102: Option 'noImplicitUseStrict' has been removed. Please remove it from your configuration.
+-
+-
+-!!! error TS5102: Option 'noImplicitUseStrict' has been removed. Please remove it from your configuration.
+-==== noImplicitUseStrict_amd.ts (0 errors) ====
+-    export var x = 0;
+@@= skipped --1, +1 lines =@@
++<no content>

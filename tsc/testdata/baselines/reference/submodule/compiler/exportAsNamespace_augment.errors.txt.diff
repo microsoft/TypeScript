@@ -1,0 +1,24 @@
+--- old.exportAsNamespace_augment.errors.txt
++++ new.exportAsNamespace_augment.errors.txt
+@@= skipped -0, +0 lines =@@
+ /a.d.ts(3,14): error TS2451: Cannot redeclare block-scoped variable 'conflict'.
++/a.d.ts(3,14): error TS2451: Cannot redeclare block-scoped variable 'conflict'.
+ /b.ts(6,22): error TS2451: Cannot redeclare block-scoped variable 'conflict'.
+ /b.ts(12,18): error TS2451: Cannot redeclare block-scoped variable 'conflict'.
+ 
+ 
+-==== /a.d.ts (1 errors) ====
++==== /a.d.ts (2 errors) ====
+     export as namespace a;
+     export const x = 0;
+     export const conflict = 0;
+                  ~~~~~~~~
+ !!! error TS2451: Cannot redeclare block-scoped variable 'conflict'.
+ !!! related TS6203 /b.ts:6:22: 'conflict' was also declared here.
+-!!! related TS6204 /b.ts:12:18: and here.
++                 ~~~~~~~~
++!!! error TS2451: Cannot redeclare block-scoped variable 'conflict'.
++!!! related TS6203 /b.ts:12:18: 'conflict' was also declared here.
+     
+ ==== /b.ts (2 errors) ====
+     import * as a2 from "./a";

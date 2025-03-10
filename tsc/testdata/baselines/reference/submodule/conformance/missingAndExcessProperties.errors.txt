@@ -1,0 +1,79 @@
+missingAndExcessProperties.ts(3,11): error TS2339: Property 'x' does not exist on type '{}'.
+missingAndExcessProperties.ts(3,14): error TS2339: Property 'y' does not exist on type '{}'.
+missingAndExcessProperties.ts(4,18): error TS2339: Property 'y' does not exist on type '{}'.
+missingAndExcessProperties.ts(5,11): error TS2339: Property 'x' does not exist on type '{}'.
+missingAndExcessProperties.ts(12,8): error TS2339: Property 'x' does not exist on type '{}'.
+missingAndExcessProperties.ts(12,11): error TS2339: Property 'y' does not exist on type '{}'.
+missingAndExcessProperties.ts(13,18): error TS2339: Property 'y' does not exist on type '{}'.
+missingAndExcessProperties.ts(14,8): error TS2339: Property 'x' does not exist on type '{}'.
+missingAndExcessProperties.ts(21,25): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
+missingAndExcessProperties.ts(22,19): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
+missingAndExcessProperties.ts(29,14): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
+missingAndExcessProperties.ts(29,20): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
+missingAndExcessProperties.ts(30,22): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
+missingAndExcessProperties.ts(31,16): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: number; }'.
+
+
+==== missingAndExcessProperties.ts (14 errors) ====
+    // Missing properties
+    function f1() {
+        var { x, y } = {};
+              ~
+!!! error TS2339: Property 'x' does not exist on type '{}'.
+                 ~
+!!! error TS2339: Property 'y' does not exist on type '{}'.
+        var { x = 1, y } = {};
+                     ~
+!!! error TS2339: Property 'y' does not exist on type '{}'.
+        var { x, y = 1 } = {};
+              ~
+!!! error TS2339: Property 'x' does not exist on type '{}'.
+        var { x = 1, y = 1 } = {};
+    }
+    
+    // Missing properties
+    function f2() {
+        var x: number, y: number;
+        ({ x, y } = {});
+           ~
+!!! error TS2339: Property 'x' does not exist on type '{}'.
+              ~
+!!! error TS2339: Property 'y' does not exist on type '{}'.
+        ({ x: x = 1, y } = {});
+                     ~
+!!! error TS2339: Property 'y' does not exist on type '{}'.
+        ({ x, y: y = 1 } = {});
+           ~
+!!! error TS2339: Property 'x' does not exist on type '{}'.
+        ({ x: x = 1, y: y = 1 } = {});
+    }
+    
+    // Excess properties
+    function f3() {
+        var { } = { x: 0, y: 0 };
+        var { x } = { x: 0, y: 0 };
+                            ~
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
+        var { y } = { x: 0, y: 0 };
+                      ~
+!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
+        var { x, y } = { x: 0, y: 0 };
+    }
+    
+    // Excess properties
+    function f4() {
+        var x: number, y: number;
+        ({ } = { x: 0, y: 0 });
+                 ~
+!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
+                       ~
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
+        ({ x } = { x: 0, y: 0 });
+                         ~
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
+        ({ y } = { x: 0, y: 0 });
+                   ~
+!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: number; }'.
+        ({ x, y } = { x: 0, y: 0 });
+    }
+    

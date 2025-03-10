@@ -1,0 +1,39 @@
+--- old.jsExportMemberMergedWithModuleAugmentation2.errors.txt
++++ new.jsExportMemberMergedWithModuleAugmentation2.errors.txt
+@@= skipped -0, +0 lines =@@
+-/index.ts(4,16): error TS2300: Duplicate identifier 'a'.
+-/index.ts(7,3): error TS2339: Property 'toFixed' does not exist on type 'string'.
+-/test.js(2,3): error TS2300: Duplicate identifier 'a'.
++/index.ts(1,19): error TS2306: File '/test.js' is not a module.
++/index.ts(3,16): error TS2306: File '/test.js' is not a module.
++/test.js(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ 
+ 
+ ==== /test.js (1 errors) ====
+     module.exports = {
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+       a: "ok"
+-      ~
+-!!! error TS2300: Duplicate identifier 'a'.
+-!!! related TS6203 /index.ts:4:16: 'a' was also declared here.
+     };
+     
+ ==== /index.ts (2 errors) ====
+     import { a } from "./test";
++                      ~~~~~~~~
++!!! error TS2306: File '/test.js' is not a module.
+     
+     declare module "./test" {
++                   ~~~~~~~~
++!!! error TS2306: File '/test.js' is not a module.
+       export const a: number;
+-                   ~
+-!!! error TS2300: Duplicate identifier 'a'.
+-!!! related TS6203 /test.js:2:3: 'a' was also declared here.
+     }
+     
+     a.toFixed();
+-      ~~~~~~~
+-!!! error TS2339: Property 'toFixed' does not exist on type 'string'.
+     

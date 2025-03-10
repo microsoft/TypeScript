@@ -1,0 +1,37 @@
+--- old.modulePreserve2.errors.txt
++++ new.modulePreserve2.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/main.js(1,10): error TS2305: Module '""/node_modules/dep/require.d.ts""' has no exported member 'esm'.
++/main.js(2,13): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
++==== /main.js (2 errors) ====
++    import { esm } from "dep";
++             ~~~
++!!! error TS2305: Module '""/node_modules/dep/require.d.ts""' has no exported member 'esm'.
++    const cjs = require("dep");
++                ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++==== /node_modules/dep/package.json (0 errors) ====
++    {
++      "name": "dep",
++      "exports": {
++        "import": "./import.mjs",
++        "require": "./require.js"
++      }
++    }
++    
++==== /node_modules/dep/import.d.mts (0 errors) ====
++    export const esm: "esm";
++    
++==== /node_modules/dep/require.d.ts (0 errors) ====
++    declare const cjs: "cjs";
++    export = cjs;
++    
++==== /index.ts (0 errors) ====
++    import { esm } from "dep";
++    import cjs = require("dep");
++    

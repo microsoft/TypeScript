@@ -1,0 +1,14 @@
+--- old.preserveValueImports_errors(isolatedmodules=true).errors.txt
++++ new.preserveValueImports_errors(isolatedmodules=true).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+-  Use 'verbatimModuleSyntax' instead.
+ d.ts(1,10): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+ d.ts(2,10): error TS1448: 'B' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.
+ 
+ 
+-!!! error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+-!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
+ ==== a.ts (0 errors) ====
+     export type A = {};
+     export type { A as default };

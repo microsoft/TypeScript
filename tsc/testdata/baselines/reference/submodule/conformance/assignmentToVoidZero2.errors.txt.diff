@@ -1,0 +1,65 @@
+--- old.assignmentToVoidZero2.errors.txt
++++ new.assignmentToVoidZero2.errors.txt
+@@= skipped -0, +0 lines =@@
+-assignmentToVoidZero2.js(2,9): error TS2339: Property 'k' does not exist on type 'typeof import("assignmentToVoidZero2")'.
+-assignmentToVoidZero2.js(5,3): error TS2339: Property 'y' does not exist on type 'typeof o'.
+-assignmentToVoidZero2.js(6,9): error TS2339: Property 'y' does not exist on type 'typeof o'.
+-assignmentToVoidZero2.js(10,10): error TS2339: Property 'q' does not exist on type 'C'.
+-assignmentToVoidZero2.js(13,9): error TS2339: Property 'q' does not exist on type 'C'.
+-importer.js(1,13): error TS2305: Module '"./assignmentToVoidZero2"' has no exported member 'k'.
++assignmentToVoidZero2.js(1,1): error TS2304: Cannot find name 'exports'.
++assignmentToVoidZero2.js(2,1): error TS2304: Cannot find name 'exports'.
++assignmentToVoidZero2.js(4,3): error TS2339: Property 'x' does not exist on type '{}'.
++assignmentToVoidZero2.js(5,3): error TS2339: Property 'y' does not exist on type '{}'.
++assignmentToVoidZero2.js(6,3): error TS2339: Property 'x' does not exist on type '{}'.
++assignmentToVoidZero2.js(6,9): error TS2339: Property 'y' does not exist on type '{}'.
++assignmentToVoidZero2.js(12,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
++importer.js(1,22): error TS2306: File 'assignmentToVoidZero2.js' is not a module.
+ 
+ 
+-==== assignmentToVoidZero2.js (5 errors) ====
++==== assignmentToVoidZero2.js (7 errors) ====
+     exports.j = 1;
++    ~~~~~~~
++!!! error TS2304: Cannot find name 'exports'.
+     exports.k = void 0;
+-            ~
+-!!! error TS2339: Property 'k' does not exist on type 'typeof import("assignmentToVoidZero2")'.
++    ~~~~~~~
++!!! error TS2304: Cannot find name 'exports'.
+     var o = {}
+     o.x = 1
++      ~
++!!! error TS2339: Property 'x' does not exist on type '{}'.
+     o.y = void 0
+       ~
+-!!! error TS2339: Property 'y' does not exist on type 'typeof o'.
++!!! error TS2339: Property 'y' does not exist on type '{}'.
+     o.x + o.y
++      ~
++!!! error TS2339: Property 'x' does not exist on type '{}'.
+             ~
+-!!! error TS2339: Property 'y' does not exist on type 'typeof o'.
++!!! error TS2339: Property 'y' does not exist on type '{}'.
+     
+     function C() {
+         this.p = 1
+         this.q = void 0
+-             ~
+-!!! error TS2339: Property 'q' does not exist on type 'C'.
+     }
+     var c = new C()
++            ~~~~~~~
++!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+     c.p + c.q
+-            ~
+-!!! error TS2339: Property 'q' does not exist on type 'C'.
+     
+ ==== importer.js (1 errors) ====
+     import { j, k } from './assignmentToVoidZero2'
+-                ~
+-!!! error TS2305: Module '"./assignmentToVoidZero2"' has no exported member 'k'.
++                         ~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2306: File 'assignmentToVoidZero2.js' is not a module.
+     j + k
+     

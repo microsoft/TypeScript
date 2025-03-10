@@ -1,0 +1,41 @@
+typeUsedAsTypeLiteralIndex.ts(3,6): error TS2693: 'K' only refers to a type, but is being used as a value here.
+typeUsedAsTypeLiteralIndex.ts(13,6): error TS2693: 'K2' only refers to a type, but is being used as a value here.
+typeUsedAsTypeLiteralIndex.ts(18,6): error TS2693: 'K3' only refers to a type, but is being used as a value here.
+typeUsedAsTypeLiteralIndex.ts(23,6): error TS2693: 'K4' only refers to a type, but is being used as a value here.
+
+
+==== typeUsedAsTypeLiteralIndex.ts (4 errors) ====
+    type K = number | string;
+    type T = {
+        [K]: number;  // Did you mean to use 'P in K'?
+         ~
+!!! error TS2693: 'K' only refers to a type, but is being used as a value here.
+    }
+    
+    const K1 = Symbol();
+    type T1 = {
+        [K1]: number;
+    }
+    
+    type K2 = "x" | "y";
+    type T2 = {
+        [K2]: number;  // Did you mean to use 'K in K2'?
+         ~~
+!!! error TS2693: 'K2' only refers to a type, but is being used as a value here.
+    }
+    
+    type K3 = number | string;
+    type T3 = {
+        [K3]: number; // Did you mean to use 'K in K3'?
+         ~~
+!!! error TS2693: 'K3' only refers to a type, but is being used as a value here.
+    }
+    
+    type K4 = number | string;
+    type T4 = {
+        [K4]: number;
+         ~~
+!!! error TS2693: 'K4' only refers to a type, but is being used as a value here.
+        k4: string;
+    }
+    

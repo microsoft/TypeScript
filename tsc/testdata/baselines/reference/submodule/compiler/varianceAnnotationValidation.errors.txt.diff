@@ -1,0 +1,29 @@
+--- old.varianceAnnotationValidation.errors.txt
++++ new.varianceAnnotationValidation.errors.txt
+@@= skipped -0, +0 lines =@@
+-varianceAnnotationValidation.ts(5,22): error TS2636: Type 'Controller<sub-T>' is not assignable to type 'Controller<super-T>' as implied by variance annotation.
++varianceAnnotationValidation.ts(5,22): error TS2636: Type 'Controller<???>' is not assignable to type 'Controller<???>' as implied by variance annotation.
+   Types of property 'run' are incompatible.
+-    Type '(animal: sub-T) => void' is not assignable to type '(animal: super-T) => void'.
++    Type '(animal: ???) => void' is not assignable to type '(animal: ???) => void'. Two different types with this name exist, but they are unrelated.
+       Types of parameters 'animal' and 'animal' are incompatible.
+-        Type 'super-T' is not assignable to type 'sub-T'.
++        Type '???' is not assignable to type '???'. Two different types with this name exist, but they are unrelated.
+ varianceAnnotationValidation.ts(27,1): error TS2322: Type 'AnimalContainer<Animal>' is not assignable to type 'AnimalContainer<Dog>'.
+   Property 'bark' is missing in type 'Animal' but required in type 'Dog'.
+ 
+@@= skipped -13, +13 lines =@@
+     
+     interface Controller<out T> {
+                          ~~~~~
+-!!! error TS2636: Type 'Controller<sub-T>' is not assignable to type 'Controller<super-T>' as implied by variance annotation.
++!!! error TS2636: Type 'Controller<???>' is not assignable to type 'Controller<???>' as implied by variance annotation.
+ !!! error TS2636:   Types of property 'run' are incompatible.
+-!!! error TS2636:     Type '(animal: sub-T) => void' is not assignable to type '(animal: super-T) => void'.
++!!! error TS2636:     Type '(animal: ???) => void' is not assignable to type '(animal: ???) => void'. Two different types with this name exist, but they are unrelated.
+ !!! error TS2636:       Types of parameters 'animal' and 'animal' are incompatible.
+-!!! error TS2636:         Type 'super-T' is not assignable to type 'sub-T'.
++!!! error TS2636:         Type '???' is not assignable to type '???'. Two different types with this name exist, but they are unrelated.
+     	createAnimal: () => T;
+     	run: (animal: T) => void;
+     }

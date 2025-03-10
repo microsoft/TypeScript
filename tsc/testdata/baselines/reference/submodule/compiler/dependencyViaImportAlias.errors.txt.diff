@@ -1,0 +1,19 @@
+--- old.dependencyViaImportAlias.errors.txt
++++ new.dependencyViaImportAlias.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++B.ts(1,20): error TS2307: Cannot find module 'A' or its corresponding type declarations.
++
++
++==== B.ts (1 errors) ====
++    import a = require('A');
++                       ~~~
++!!! error TS2307: Cannot find module 'A' or its corresponding type declarations.
++    
++    import A = a.A;
++    
++    export = A;
++==== A.ts (0 errors) ====
++    export class A {
++    }

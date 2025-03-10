@@ -1,0 +1,49 @@
+--- old.APILibCheck.errors.txt
++++ new.APILibCheck.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++index.ts(1,21): error TS2307: Cannot find module 'typescript' or its corresponding type declarations.
++index.ts(2,29): error TS2307: Cannot find module 'typescript-internal' or its corresponding type declarations.
++index.ts(3,34): error TS2307: Cannot find module 'tsserverlibrary' or its corresponding type declarations.
++index.ts(4,42): error TS2307: Cannot find module 'tsserverlibrary-internal' or its corresponding type declarations.
++
++
++==== index.ts (4 errors) ====
++    import ts = require("typescript");
++                        ~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'typescript' or its corresponding type declarations.
++    import tsInternal = require("typescript-internal");
++                                ~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'typescript-internal' or its corresponding type declarations.
++    import tsserverlibrary = require("tsserverlibrary");
++                                     ~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'tsserverlibrary' or its corresponding type declarations.
++    import tsserverlibraryInternal = require("tsserverlibrary-internal");
++                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'tsserverlibrary-internal' or its corresponding type declarations.
++    
++==== node_modules/typescript/package.json (0 errors) ====
++    {
++        "name": "typescript",
++        "types": "/.ts/typescript.d.ts"
++    }
++    
++==== node_modules/typescript-internal/package.json (0 errors) ====
++    {
++        "name": "typescript-internal",
++        "types": "/.ts/typescript.internal.d.ts"
++    }
++    
++==== node_modules/tsserverlibrary/package.json (0 errors) ====
++    {
++        "name": "tsserverlibrary",
++        "types": "/.ts/tsserverlibrary.d.ts"
++    }
++    
++==== node_modules/tsserverlibrary-internal/package.json (0 errors) ====
++    {
++        "name": "tsserverlibrary-internal",
++        "types": "/.ts/tsserverlibrary.internal.d.ts"
++    }
++    

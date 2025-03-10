@@ -1,0 +1,17 @@
+--- old.propertyAccess.errors.txt
++++ new.propertyAccess.errors.txt
+@@= skipped -0, +0 lines =@@
+-propertyAccess.ts(11,55): error TS2353: Object literal may only specify known properties, and ''three'' does not exist in type '{ [n: number]: string; }'.
++propertyAccess.ts(11,55): error TS2353: Object literal may only specify known properties, and 'three' does not exist in type '{ [n: number]: string; }'.
+ propertyAccess.ts(45,14): error TS2339: Property 'qqq' does not exist on type '{ 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }'.
+ propertyAccess.ts(80,19): error TS2538: Type '{ name: string; }' cannot be used as an index type.
+ propertyAccess.ts(117,18): error TS2538: Type '{ name: string; }' cannot be used as an index type.
+@@= skipped -18, +18 lines =@@
+     
+     var numIndex: { [n: number]: string } = { 3: 'three', 'three': 'three' };
+                                                           ~~~~~~~
+-!!! error TS2353: Object literal may only specify known properties, and ''three'' does not exist in type '{ [n: number]: string; }'.
++!!! error TS2353: Object literal may only specify known properties, and 'three' does not exist in type '{ [n: number]: string; }'.
+     var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East };
+     var bothIndex:
+         {

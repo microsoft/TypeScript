@@ -1,0 +1,50 @@
+--- old.computedPropertyNames49_ES6.errors.txt
++++ new.computedPropertyNames49_ES6.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ computedPropertyNames49_ES6.ts(9,9): error TS1049: A 'set' accessor must have exactly one parameter.
+ computedPropertyNames49_ES6.ts(13,9): error TS2300: Duplicate identifier 'foo'.
++computedPropertyNames49_ES6.ts(13,9): error TS2300: Duplicate identifier 'foo'.
+ computedPropertyNames49_ES6.ts(18,9): error TS1118: An object literal cannot have multiple get/set accessors with the same name.
+ computedPropertyNames49_ES6.ts(18,9): error TS2300: Duplicate identifier 'foo'.
++computedPropertyNames49_ES6.ts(18,9): error TS2300: Duplicate identifier 'foo'.
+ 
+ 
+-==== computedPropertyNames49_ES6.ts (4 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== computedPropertyNames49_ES6.ts (6 errors) ====
+     var x = {
+         p1: 10,
+         get [1 + 1]() {
+@@= skipped -21, +39 lines =@@
+         get foo() {
+             ~~~
+ !!! error TS2300: Duplicate identifier 'foo'.
++            ~~~
++!!! error TS2300: Duplicate identifier 'foo'.
+             if (1 == 1) {
+                 return 10;
+             }
+@@= skipped -9, +11 lines =@@
+ !!! error TS1118: An object literal cannot have multiple get/set accessors with the same name.
+             ~~~
+ !!! error TS2300: Duplicate identifier 'foo'.
++            ~~~
++!!! error TS2300: Duplicate identifier 'foo'.
+             if (2 == 2) {
+                 return 20;
+             }

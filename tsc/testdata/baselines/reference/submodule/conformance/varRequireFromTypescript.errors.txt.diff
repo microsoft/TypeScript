@@ -1,0 +1,42 @@
+--- old.varRequireFromTypescript.errors.txt
++++ new.varRequireFromTypescript.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++use.js(1,10): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++use.js(13,12): error TS7006: Parameter 'greatest' implicitly has an 'any' type.
++use.js(13,22): error TS7006: Parameter 'wrap' implicitly has an 'any' type.
++
++
++==== use.js (3 errors) ====
++    var ex = require('./ex')
++             ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++    // values work
++    var crunch = new ex.Crunch(1);
++    crunch.n
++    
++    
++    // types work
++    /**
++     * @param {ex.Greatest} greatest
++     * @param {ex.Crunch} wrap
++     */
++    function f(greatest, wrap) {
++               ~~~~~~~~
++!!! error TS7006: Parameter 'greatest' implicitly has an 'any' type.
++                         ~~~~
++!!! error TS7006: Parameter 'wrap' implicitly has an 'any' type.
++        greatest.day
++        wrap.n
++    }
++    
++==== ex.d.ts (0 errors) ====
++    export type Greatest = { day: 1 }
++    export class Crunch {
++        n: number
++        m(): number
++        constructor(n: number)
++    }
++    

@@ -1,0 +1,16 @@
+--- old.isolatedModules_resolveJsonModule.errors.txt
++++ new.isolatedModules_resolveJsonModule.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/a.ts(1,20): error TS2307: Cannot find module './j.json' or its corresponding type declarations.
++
++
++==== /a.ts (1 errors) ====
++    import j = require("./j.json");
++                       ~~~~~~~~~~
++!!! error TS2307: Cannot find module './j.json' or its corresponding type declarations.
++    
++==== /j.json (0 errors) ====
++    {}
++    

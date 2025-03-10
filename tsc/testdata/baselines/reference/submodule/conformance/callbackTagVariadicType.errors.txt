@@ -1,0 +1,16 @@
+callbackTagVariadicType.js(9,13): error TS2554: Expected 0 arguments, but got 2.
+
+
+==== callbackTagVariadicType.js (1 errors) ====
+    /**
+     * @callback Foo
+     * @param {...string} args
+     * @returns {number}
+     */
+    
+    /** @type {Foo} */
+    export const x = () => 1
+    var res = x('a', 'b')
+                ~~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 2.
+    

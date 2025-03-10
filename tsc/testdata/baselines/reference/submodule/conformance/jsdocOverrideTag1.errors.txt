@@ -1,0 +1,52 @@
+0.js(23,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'A'.
+0.js(27,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'A'.
+
+
+==== 0.js (2 errors) ====
+    class A {
+    
+        /**
+         * @method
+         * @param {string | number} a
+         * @returns {boolean}
+         */
+        foo (a) {
+            return typeof a === 'string'
+        }
+        bar () {
+    
+        }
+    }
+    
+    class B extends A {
+        /**
+         * @override
+         * @method
+         * @param {string | number} a
+         * @returns {boolean}
+         */
+        foo (a) {
+        ~~~
+!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'A'.
+            return super.foo(a)
+        }
+    
+        bar () {
+        ~~~
+!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'A'.
+    
+        }
+    
+        /** @override */
+        baz () {
+    
+        }
+    }
+    
+    
+    class C {
+        /** @override */
+        foo () {
+    
+        }
+    }

@@ -1,0 +1,61 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+symbolProperty61.ts(7,26): error TS2304: Cannot find name 'Symbol'.
+symbolProperty61.ts(7,39): error TS2304: Cannot find name 'Symbol'.
+symbolProperty61.ts(22,6): error TS2304: Cannot find name 'Symbol'.
+symbolProperty61.ts(26,16): error TS2304: Cannot find name 'Symbol'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== symbolProperty61.ts (4 errors) ====
+    declare global {
+      interface SymbolConstructor {
+        readonly obs: symbol
+      }
+    }
+    
+    const observable: typeof Symbol.obs = Symbol.obs
+                             ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+                                          ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+    
+    export class MyObservable<T> {
+        constructor(private _val: T) {}
+    
+        subscribe(next: (val: T) => void) {
+            next(this._val)
+        }
+    
+        [observable]() {
+            return this
+        }
+    }
+    
+    type InteropObservable<T> = {
+        [Symbol.obs]: () => { subscribe(next: (val: T) => void): void }
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+    }
+    
+    function from<T>(obs: InteropObservable<T>) {
+        return obs[Symbol.obs]()
+                   ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+    }
+    
+    from(new MyObservable(42))
+    

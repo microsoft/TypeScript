@@ -1,0 +1,82 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'CallableFunction'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'NewableFunction'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+logicalAssignment5.ts(13,5): error TS2349: This expression is not callable.
+  Not all constituents of type '(a: number) => void | undefined' are callable.
+    Type 'undefined' has no call signatures.
+logicalAssignment5.ts(13,5): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+logicalAssignment5.ts(17,12): error TS18048: 'f' is possibly 'undefined'.
+logicalAssignment5.ts(22,12): error TS18048: 'f' is possibly 'undefined'.
+logicalAssignment5.ts(27,14): error TS2339: Property 'toString' does not exist on type '(a: number) => void'.
+logicalAssignment5.ts(28,5): error TS2349: This expression is not callable.
+  Not all constituents of type '(a: number) => void | undefined' are callable.
+    Type 'undefined' has no call signatures.
+logicalAssignment5.ts(28,5): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'CallableFunction'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'NewableFunction'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== logicalAssignment5.ts (7 errors) ====
+    function foo1 (f?: (a: number) => void) {
+        f ??= (a => a)
+        f(42)
+    }
+    
+    function foo2 (f?: (a: number) => void) {
+        f ||= (a => a)
+        f(42)
+    }
+    
+    function foo3 (f?: (a: number) => void) {
+        f &&= (a => a)
+        f(42)
+        ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Not all constituents of type '(a: number) => void | undefined' are callable.
+!!! error TS2349:     Type 'undefined' has no call signatures.
+        ~
+!!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
+    }
+    
+    function bar1 (f?: (a: number) => void) {
+        f ??= (f.toString(), (a => a))
+               ~
+!!! error TS18048: 'f' is possibly 'undefined'.
+        f(42)
+    }
+    
+    function bar2 (f?: (a: number) => void) {
+        f ||= (f.toString(), (a => a))
+               ~
+!!! error TS18048: 'f' is possibly 'undefined'.
+        f(42)
+    }
+    
+    function bar3 (f?: (a: number) => void) {
+        f &&= (f.toString(), (a => a))
+                 ~~~~~~~~
+!!! error TS2339: Property 'toString' does not exist on type '(a: number) => void'.
+        f(42)
+        ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Not all constituents of type '(a: number) => void | undefined' are callable.
+!!! error TS2349:     Type 'undefined' has no call signatures.
+        ~
+!!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
+    }
+    

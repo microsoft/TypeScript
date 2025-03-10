@@ -1,0 +1,8 @@
+parserErrorRecovery_ExtendsOrImplementsClause1.ts(1,16): error TS1097: 'extends' list cannot be empty.
+
+
+==== parserErrorRecovery_ExtendsOrImplementsClause1.ts (1 errors) ====
+    class C extends {
+                   
+!!! error TS1097: 'extends' list cannot be empty.
+    }

@@ -1,0 +1,33 @@
+--- old.emitArrowFunctionWhenUsingArguments14_ES6.errors.txt
++++ new.emitArrowFunctionWhenUsingArguments14_ES6.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++emitArrowFunctionWhenUsingArguments14_ES6.ts(2,9): error TS2304: Cannot find name 'Math'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== emitArrowFunctionWhenUsingArguments14_ES6.ts (1 errors) ====
++    function f() {
++        if (Math.random()) {
++            ~~~~
++!!! error TS2304: Cannot find name 'Math'.
++            let arguments = 100;
++            return () => arguments;
++        }
++    }

@@ -1,0 +1,11 @@
+b.ts(1,21): error TS2498: Module '""a.ts""' uses 'export =' and cannot be used with 'export *'.
+
+
+==== a.ts (0 errors) ====
+    export = {}
+    
+==== b.ts (1 errors) ====
+    export * as ns from './a';
+                        ~~~~~
+!!! error TS2498: Module '""a.ts""' uses 'export =' and cannot be used with 'export *'.
+    

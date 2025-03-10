@@ -1,0 +1,26 @@
+cloduleWithDuplicateMember2.ts(7,16): error TS2300: Duplicate identifier 'x'.
+cloduleWithDuplicateMember2.ts(7,16): error TS2300: Duplicate identifier 'x'.
+cloduleWithDuplicateMember2.ts(10,21): error TS2300: Duplicate identifier 'x'.
+cloduleWithDuplicateMember2.ts(10,21): error TS2300: Duplicate identifier 'x'.
+
+
+==== cloduleWithDuplicateMember2.ts (4 errors) ====
+    class C {
+        set x(y) { }
+        static set y(z) { }
+    }
+    
+    module C {
+        export var x = 1;
+                   ~
+!!! error TS2300: Duplicate identifier 'x'.
+                   ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    module C {
+        export function x() { }
+                        ~
+!!! error TS2300: Duplicate identifier 'x'.
+                        ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }

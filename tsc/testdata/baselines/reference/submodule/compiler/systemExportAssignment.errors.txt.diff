@@ -1,0 +1,17 @@
+--- old.systemExportAssignment.errors.txt
++++ new.systemExportAssignment.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++b.ts(1,20): error TS2307: Cannot find module 'a' or its corresponding type declarations.
++
++
++==== a.d.ts (0 errors) ====
++    declare var a: number;
++    export = a;  // OK, in ambient context
++    
++==== b.ts (1 errors) ====
++    import * as a from "a";
++                       ~~~
++!!! error TS2307: Cannot find module 'a' or its corresponding type declarations.
++    

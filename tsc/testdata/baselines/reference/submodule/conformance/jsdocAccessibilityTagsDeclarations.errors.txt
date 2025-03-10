@@ -1,0 +1,65 @@
+jsdocAccessibilityTagDeclarations.js(5,14): error TS2339: Property 'c' does not exist on type 'Protected'.
+jsdocAccessibilityTagDeclarations.js(9,21): error TS2339: Property 'c' does not exist on type 'Protected'.
+jsdocAccessibilityTagDeclarations.js(12,27): error TS2339: Property 'c' does not exist on type 'Protected'.
+jsdocAccessibilityTagDeclarations.js(14,25): error TS2339: Property 'c' does not exist on type 'Protected'.
+jsdocAccessibilityTagDeclarations.js(21,14): error TS2339: Property 'c' does not exist on type 'Private'.
+jsdocAccessibilityTagDeclarations.js(25,21): error TS2339: Property 'c' does not exist on type 'Private'.
+jsdocAccessibilityTagDeclarations.js(28,27): error TS2339: Property 'c' does not exist on type 'Private'.
+jsdocAccessibilityTagDeclarations.js(30,25): error TS2339: Property 'c' does not exist on type 'Private'.
+
+
+==== jsdocAccessibilityTagDeclarations.js (8 errors) ====
+    class Protected {
+        /** @protected */
+        constructor(c) {
+            /** @protected */
+            this.c = c
+                 ~
+!!! error TS2339: Property 'c' does not exist on type 'Protected'.
+        }
+        /** @protected */
+        m() {
+            return this.c
+                        ~
+!!! error TS2339: Property 'c' does not exist on type 'Protected'.
+        }
+        /** @protected */
+        get p() { return this.c }
+                              ~
+!!! error TS2339: Property 'c' does not exist on type 'Protected'.
+        /** @protected */
+        set p(value) { this.c = value }
+                            ~
+!!! error TS2339: Property 'c' does not exist on type 'Protected'.
+    }
+    
+    class Private {
+        /** @private */
+        constructor(c) {
+            /** @private */
+            this.c = c
+                 ~
+!!! error TS2339: Property 'c' does not exist on type 'Private'.
+        }
+        /** @private */
+        m() {
+            return this.c
+                        ~
+!!! error TS2339: Property 'c' does not exist on type 'Private'.
+        }
+        /** @private */
+        get p() { return this.c }
+                              ~
+!!! error TS2339: Property 'c' does not exist on type 'Private'.
+        /** @private */
+        set p(value) { this.c = value }
+                            ~
+!!! error TS2339: Property 'c' does not exist on type 'Private'.
+    }
+    
+    // https://github.com/microsoft/TypeScript/issues/38401
+    class C {
+        constructor(/** @public */ x, /** @protected */ y, /** @private */ z) {
+        }
+    }
+    

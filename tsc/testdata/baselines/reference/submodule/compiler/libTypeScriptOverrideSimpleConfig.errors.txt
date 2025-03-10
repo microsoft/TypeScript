@@ -1,0 +1,16 @@
+/somepath/index.ts(2,10): error TS2304: Cannot find name 'ABC'.
+
+
+==== /somepath/tsconfig.json (0 errors) ====
+    { }
+==== /somepath/index.ts (1 errors) ====
+    /// <reference lib="dom" />
+    const a: ABC = { abc: "Hello" }
+             ~~~
+!!! error TS2304: Cannot find name 'ABC'.
+    
+    // This should fail because libdom has been replaced
+    // by the module above ^
+    window.localStorage
+==== /somepath/node_modules/@typescript/lib-dom/index.d.ts (0 errors) ====
+    interface ABC { abc: string }

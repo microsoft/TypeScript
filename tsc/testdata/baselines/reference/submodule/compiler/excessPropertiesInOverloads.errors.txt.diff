@@ -1,0 +1,22 @@
+--- old.excessPropertiesInOverloads.errors.txt
++++ new.excessPropertiesInOverloads.errors.txt
+@@= skipped -0, +0 lines =@@
+ excessPropertiesInOverloads.ts(3,6): error TS2769: No overload matches this call.
+-  Overload 1 of 2, '(a: { x: string; }): void', gave the following error.
+-    Object literal may only specify known properties, and 'z' does not exist in type '{ x: string; }'.
+-  Overload 2 of 2, '(a: { y: string; }): void', gave the following error.
++  The last overload gave the following error.
+     Object literal may only specify known properties, and 'z' does not exist in type '{ y: string; }'.
+ 
+ 
+@@= skipped -10, +8 lines =@@
+     fn({ z: 3, a: 3 });
+          ~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 2, '(a: { x: string; }): void', gave the following error.
+-!!! error TS2769:     Object literal may only specify known properties, and 'z' does not exist in type '{ x: string; }'.
+-!!! error TS2769:   Overload 2 of 2, '(a: { y: string; }): void', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Object literal may only specify known properties, and 'z' does not exist in type '{ y: string; }'.
++!!! related TS2771 excessPropertiesInOverloads.ts:2:18: The last overload is declared here.
+     

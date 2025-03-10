@@ -1,0 +1,70 @@
+parseInvalidNonNullableTypes.ts(1,36): error TS1144: '{' or ';' expected.
+parseInvalidNonNullableTypes.ts(1,38): error TS2872: This kind of expression is always truthy.
+parseInvalidNonNullableTypes.ts(2,12): error TS1005: ':' expected.
+parseInvalidNonNullableTypes.ts(2,16): error TS1005: ',' expected.
+parseInvalidNonNullableTypes.ts(9,22): error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
+parseInvalidNonNullableTypes.ts(9,22): error TS1005: ',' expected.
+parseInvalidNonNullableTypes.ts(10,22): error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
+parseInvalidNonNullableTypes.ts(10,22): error TS1005: ',' expected.
+parseInvalidNonNullableTypes.ts(15,22): error TS1144: '{' or ';' expected.
+parseInvalidNonNullableTypes.ts(15,24): error TS2872: This kind of expression is always truthy.
+parseInvalidNonNullableTypes.ts(18,19): error TS1005: ',' expected.
+parseInvalidNonNullableTypes.ts(18,20): error TS1109: Expression expected.
+parseInvalidNonNullableTypes.ts(19,16): error TS1005: ',' expected.
+parseInvalidNonNullableTypes.ts(19,18): error TS1109: Expression expected.
+
+
+==== parseInvalidNonNullableTypes.ts (14 errors) ====
+    function f1(a: string): a is string! {
+                                       ~
+!!! error TS1144: '{' or ';' expected.
+                                         ~
+        return true;
+    ~~~~~~~~~~~~~~~~
+               ~~~~
+!!! error TS1005: ':' expected.
+                   ~
+!!! error TS1005: ',' expected.
+    }
+    ~
+!!! error TS2872: This kind of expression is always truthy.
+    
+    function f2(a: string): a is !string {
+        return true;
+    }
+    
+    function f3(a: string!) {}
+                         
+!!! error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
+                         ~
+!!! error TS1005: ',' expected.
+    function f4(a: number!) {}
+                         
+!!! error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
+                         ~
+!!! error TS1005: ',' expected.
+    
+    function f5(a: !string) {}
+    function f6(a: !number) {}
+    
+    function f7(): string! {}
+                         ~
+!!! error TS1144: '{' or ';' expected.
+                           ~~
+!!! error TS2872: This kind of expression is always truthy.
+    function f8(): !string {}
+    
+    const a = 1 as any!;
+                      ~
+!!! error TS1005: ',' expected.
+                       ~
+!!! error TS1109: Expression expected.
+    const b: number! = 1;
+                   ~
+!!! error TS1005: ',' expected.
+                     ~
+!!! error TS1109: Expression expected.
+    
+    const c = 1 as !any;
+    const d: !number = 1;
+    

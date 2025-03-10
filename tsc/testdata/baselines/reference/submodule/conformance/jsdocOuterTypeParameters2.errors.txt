@@ -1,0 +1,17 @@
+jsdocOuterTypeParameters1.js(7,35): error TS2339: Property 'foo' does not exist on type 'Bar'.
+
+
+==== jsdocOuterTypeParameters1.js (1 errors) ====
+    /** @return {T} */
+    const dedupingMixin = function(mixin) {};
+    
+     /** @template T */
+    const PropertyAccessors = dedupingMixin(() => {
+      class Bar {
+        static bar() { this.prototype.foo(); }
+                                      ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'Bar'.
+      }
+    });
+    
+    

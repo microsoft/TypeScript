@@ -1,0 +1,11 @@
+--- old.duplicatePackage_globalMerge.errors.txt
++++ new.duplicatePackage_globalMerge.errors.txt
+@@= skipped -19, +19 lines =@@
+     
+ ==== /tests/node_modules/@types/react/package.json (0 errors) ====
+     { "name": "@types/react", "version": "16.4.6" }
+-==== /tests/node_modules/@types/react/index.d.ts (0 errors) ====
+-    
+ ==== /node_modules/@types/react/package.json (0 errors) ====
+     { "name": "@types/react", "version": "16.4.6" }
+ ==== /node_modules/@types/react/index.d.ts (1 errors) ====

@@ -1,0 +1,25 @@
+mod1.js(5,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== mod1.js (1 errors) ====
+    /** @callback Con - some kind of continuation
+     * @param {object | undefined} error
+     * @return {any} I don't even know what this should return
+     */
+    module.exports = C
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    function C() {
+        this.p = 1
+    }
+    
+==== use.js (0 errors) ====
+    /** @param {import('./mod1').Con} k */
+    function f(k) {
+        if (1 === 2 - 1) {
+            // I guess basic math works!
+        }
+        return k({ ok: true})
+    }
+    
+    

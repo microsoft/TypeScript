@@ -1,0 +1,29 @@
+--- old.useBeforeDeclaration_propertyAssignment.errors.txt
++++ new.useBeforeDeclaration_propertyAssignment.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ useBeforeDeclaration_propertyAssignment.ts(2,27): error TS2729: Property 'b' is used before its initialization.
+ useBeforeDeclaration_propertyAssignment.ts(2,38): error TS2729: Property 'c' is used before its initialization.
+ useBeforeDeclaration_propertyAssignment.ts(2,47): error TS2729: Property 'b' is used before its initialization.
+@@= skipped -5, +13 lines =@@
+ useBeforeDeclaration_propertyAssignment.ts(13,12): error TS2729: Property 'D' is used before its initialization.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== useBeforeDeclaration_propertyAssignment.ts (6 errors) ====
+     export class C {
+         public a =  { b: this.b, ...this.c, [this.b]: `${this.c}`};

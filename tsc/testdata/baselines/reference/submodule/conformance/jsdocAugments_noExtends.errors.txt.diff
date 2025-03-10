@@ -1,0 +1,15 @@
+--- old.jsdocAugments_noExtends.errors.txt
++++ new.jsdocAugments_noExtends.errors.txt
+@@= skipped -0, +0 lines =@@
++/b.js(1,32): error TS2339: Property 'x' does not exist on type 'A'.
+ /b.js(6,21): error TS2339: Property 'x' does not exist on type 'B'.
+ 
+ 
+-==== /b.js (1 errors) ====
++==== /b.js (2 errors) ====
+     class A { constructor() { this.x = 0; } }
++                                   ~
++!!! error TS2339: Property 'x' does not exist on type 'A'.
+     
+     /** @augments A */
+     class B {

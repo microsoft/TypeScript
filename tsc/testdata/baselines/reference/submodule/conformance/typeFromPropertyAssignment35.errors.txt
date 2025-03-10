@@ -1,0 +1,36 @@
+bug26877.js(4,23): error TS2339: Property 'D' does not exist on type '{}'.
+bug26877.js(5,19): error TS2339: Property 'D' does not exist on type '{}'.
+bug26877.js(7,5): error TS2339: Property 'D' does not exist on type '{}'.
+bug26877.js(9,14): error TS2339: Property '_model' does not exist on type 'D'.
+second.js(3,5): error TS2339: Property 'D' does not exist on type '{}'.
+
+
+==== bug26877.js (4 errors) ====
+    /** @param {Emu.D} x */
+    function ollKorrect(x) {
+        x._model
+        const y = new Emu.D()
+                          ~
+!!! error TS2339: Property 'D' does not exist on type '{}'.
+        const z = Emu.D._wrapperInstance;
+                      ~
+!!! error TS2339: Property 'D' does not exist on type '{}'.
+    }
+    Emu.D = class {
+        ~
+!!! error TS2339: Property 'D' does not exist on type '{}'.
+        constructor() {
+            this._model = 1
+                 ~~~~~~
+!!! error TS2339: Property '_model' does not exist on type 'D'.
+        }
+    }
+    
+==== second.js (1 errors) ====
+    var Emu = {}
+    /** @type {string} */
+    Emu.D._wrapperInstance;
+        ~
+!!! error TS2339: Property 'D' does not exist on type '{}'.
+    
+    

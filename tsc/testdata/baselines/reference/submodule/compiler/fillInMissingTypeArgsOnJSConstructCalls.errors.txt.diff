@@ -1,0 +1,50 @@
+--- old.fillInMissingTypeArgsOnJSConstructCalls.errors.txt
++++ new.fillInMissingTypeArgsOnJSConstructCalls.errors.txt
+@@= skipped -0, +0 lines =@@
+-BaseB.js(2,24): error TS8004: Type parameter declarations can only be used in TypeScript files.
+ BaseB.js(2,25): error TS1005: ',' expected.
+ BaseB.js(3,14): error TS2304: Cannot find name 'Class'.
+-BaseB.js(3,14): error TS8010: Type annotations can only be used in TypeScript files.
+ BaseB.js(4,25): error TS2304: Cannot find name 'Class'.
+-BaseB.js(4,25): error TS8010: Type annotations can only be used in TypeScript files.
+-SubB.js(3,41): error TS8011: Type arguments can only be used in TypeScript files.
++SubB.js(3,35): error TS2314: Generic type 'default<T, BaseA>' requires 2 type argument(s).
+ 
+ 
+ ==== BaseA.js (0 errors) ====
+@@= skipped -13, +10 lines =@@
+     import BaseA from './BaseA';
+     export default class SubA extends BaseA {
+     }
+-==== BaseB.js (6 errors) ====
++==== BaseB.js (3 errors) ====
+     import BaseA from './BaseA';
+     export default class B<T: BaseA> {
+-                           ~~~~~~~~
+-!!! error TS8004: Type parameter declarations can only be used in TypeScript files.
+                             ~
+ !!! error TS1005: ',' expected.
+         _AClass: Class<T>;
+                  ~~~~~
+ !!! error TS2304: Cannot find name 'Class'.
+-                 ~~~~~~~~
+-!!! error TS8010: Type annotations can only be used in TypeScript files.
+         constructor(AClass: Class<T>) {
+                             ~~~~~
+ !!! error TS2304: Cannot find name 'Class'.
+-                            ~~~~~~~~
+-!!! error TS8010: Type annotations can only be used in TypeScript files.
+             this._AClass = AClass;
+         }
+     }
+@@= skipped -24, +18 lines =@@
+     import SubA from './SubA';
+     import BaseB from './BaseB';
+     export default class SubB extends BaseB<SubA> {
+-                                            ~~~~
+-!!! error TS8011: Type arguments can only be used in TypeScript files.
++                                      ~~~~~~~~~~~
++!!! error TS2314: Generic type 'default<T, BaseA>' requires 2 type argument(s).
+         constructor() {
+             super(SubA);
+         }

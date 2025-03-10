@@ -1,0 +1,52 @@
+--- old.withImportDecl.errors.txt
++++ new.withImportDecl.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++withImportDecl_1.ts(35,21): error TS2307: Cannot find module 'withImportDecl_0' or its corresponding type declarations.
++
++
++==== withImportDecl_1.ts (1 errors) ====
++    ///<reference path='withImportDecl_0.ts'/>
++    var simpleVar;
++    
++    var anotherVar: any;
++    var varWithSimpleType: number;
++    var varWithArrayType: number[];
++    
++    var varWithInitialValue = 30;
++    
++    var withComplicatedValue = { x: 30, y: 70, desc: "position" };
++    
++    declare var declaredVar;
++    declare var declareVar2
++    
++    declare var declaredVar;
++    declare var deckareVarWithType: number;
++    
++    var arrayVar: string[] = ['a', 'b'];
++    
++    
++    function simpleFunction() {
++        return {
++            x: "Hello",
++            y: "word",
++            n: 2
++        };
++    }
++    
++    module m1 {
++        export function foo() {
++            return "Hello";
++        }
++    }
++    
++    import m3 = require("withImportDecl_0");
++                        ~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'withImportDecl_0' or its corresponding type declarations.
++    
++    var b = new m3.A();
++    b.foo;
++==== withImportDecl_0.ts (0 errors) ====
++    export class A { foo: string; }
++    

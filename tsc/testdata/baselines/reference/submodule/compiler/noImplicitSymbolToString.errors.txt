@@ -1,0 +1,95 @@
+noImplicitSymbolToString.ts(6,30): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+noImplicitSymbolToString.ts(7,30): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+noImplicitSymbolToString.ts(8,8): error TS2469: The '+=' operator cannot be applied to type 'symbol'.
+noImplicitSymbolToString.ts(13,47): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+noImplicitSymbolToString.ts(13,90): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+noImplicitSymbolToString.ts(21,15): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+noImplicitSymbolToString.ts(26,8): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+noImplicitSymbolToString.ts(27,5): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+noImplicitSymbolToString.ts(28,6): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+noImplicitSymbolToString.ts(31,8): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+noImplicitSymbolToString.ts(32,5): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+noImplicitSymbolToString.ts(33,6): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+noImplicitSymbolToString.ts(43,8): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+noImplicitSymbolToString.ts(44,5): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+noImplicitSymbolToString.ts(45,6): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+
+
+==== noImplicitSymbolToString.ts (15 errors) ====
+    // Fix #19666
+    
+    let symbol!: symbol;
+    let str = "hello ";
+    
+    const templateStr = `hello ${symbol}`;
+                                 ~~~~~~
+!!! error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+    const appendStr = "hello " + symbol;
+                                 ~~~~~~
+!!! error TS2469: The '+' operator cannot be applied to type 'symbol'.
+    str += symbol;
+           ~~~~~~
+!!! error TS2469: The '+=' operator cannot be applied to type 'symbol'.
+    
+    let symbolUnionNumber!: symbol | number;
+    let symbolUnionString!: symbol | string;
+    
+    const templateStrUnion = `union with number ${symbolUnionNumber} and union with string ${symbolUnionString}`;
+                                                  ~~~~~~~~~~~~~~~~~
+!!! error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+                                                                                             ~~~~~~~~~~~~~~~~~
+!!! error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+    
+    
+    // Fix #44462
+    
+    type StringOrSymbol = string | symbol;
+    
+    function getKey<S extends StringOrSymbol>(key: S) {
+        return `${key} is the key`;
+                  ~~~
+!!! error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+    }
+    
+    function getKey1<S extends symbol>(key: S) {
+        let s1!: S;
+        `${s1}`;
+           ~~
+!!! error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+        s1 + '';
+        ~~
+!!! error TS2469: The '+' operator cannot be applied to type 'symbol'.
+        +s1;
+         ~~
+!!! error TS2469: The '+' operator cannot be applied to type 'symbol'.
+    
+        let s2!: S | string;
+        `${s2}`;
+           ~~
+!!! error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+        s2 + '';
+        ~~
+!!! error TS2469: The '+' operator cannot be applied to type 'symbol'.
+        +s2;
+         ~~
+!!! error TS2469: The '+' operator cannot be applied to type 'symbol'.
+    }
+    
+    function getKey2<S extends string>(key: S) {
+        let s1!: S;
+        `${s1}`;
+        s1 + '';
+        +s1;
+    
+        let s2!: S | symbol;
+        `${s2}`;
+           ~~
+!!! error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+        s2 + '';
+        ~~
+!!! error TS2469: The '+' operator cannot be applied to type 'symbol'.
+        +s2;
+         ~~
+!!! error TS2469: The '+' operator cannot be applied to type 'symbol'.
+    }
+    

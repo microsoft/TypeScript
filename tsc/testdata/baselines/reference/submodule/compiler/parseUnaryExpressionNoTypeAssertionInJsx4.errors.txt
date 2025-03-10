@@ -1,0 +1,18 @@
+index.tsx(3,13): error TS2352: Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+index.tsx(4,14): error TS1110: Type expected.
+index.tsx(5,13): error TS2352: Conversion of type 'string' to type '1234' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+
+
+==== index.tsx (3 errors) ====
+    const x = "oops";
+    
+    const a = + <number> x;
+                ~~~~~~~~~~
+!!! error TS2352: Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    const b = + <> x;
+                 ~
+!!! error TS1110: Type expected.
+    const c = + <1234> x;
+                ~~~~~~~~
+!!! error TS2352: Conversion of type 'string' to type '1234' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    

@@ -1,0 +1,51 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'CallableFunction'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'NewableFunction'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+privateNamesAndStaticFields.ts(6,11): error TS18013: Property '#foo' is not accessible outside class 'B' because it has a private identifier.
+privateNamesAndStaticFields.ts(7,11): error TS2339: Property '#bar' does not exist on type '{ new(): B; #foo: string; prototype: B; }'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'CallableFunction'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'NewableFunction'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== privateNamesAndStaticFields.ts (2 errors) ====
+    class A {
+        static #foo: number;
+        static #bar: number;
+        constructor () {
+            A.#foo = 3;
+            B.#foo; // Error
+              ~~~~
+!!! error TS18013: Property '#foo' is not accessible outside class 'B' because it has a private identifier.
+            B.#bar; // Error
+              ~~~~
+!!! error TS2339: Property '#bar' does not exist on type '{ new(): B; #foo: string; prototype: B; }'.
+        }
+    }
+    
+    class B extends A {
+        static #foo: string;
+        constructor () {
+            super();
+            B.#foo = "some string";
+        }
+    }
+    
+    // We currently filter out static private identifier fields in `getUnmatchedProperties`.
+    // We will need a more robust solution when we support static fields
+    const willErrorSomeDay: typeof A = class {}; // OK for now
+    

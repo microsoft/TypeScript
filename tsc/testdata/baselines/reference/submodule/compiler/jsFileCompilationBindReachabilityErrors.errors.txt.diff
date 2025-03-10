@@ -1,0 +1,28 @@
+--- old.jsFileCompilationBindReachabilityErrors.errors.txt
++++ new.jsFileCompilationBindReachabilityErrors.errors.txt
+@@= skipped -0, +0 lines =@@
+ a.js(3,9): error TS7029: Fallthrough case in switch.
+ a.js(16,5): error TS7027: Unreachable code detected.
++a.js(16,5): error TS7027: Unreachable code detected.
+ a.js(19,1): error TS7028: Unused label.
++a.js(19,1): error TS7028: Unused label.
+ 
+ 
+-==== a.js (3 errors) ====
++==== a.js (5 errors) ====
+     function foo(a, b) {
+         switch (a) {
+             case 10:
+@@= skipped -23, +25 lines =@@
+         var x = 10; // error
+         ~~~~~~~~~~~
+ !!! error TS7027: Unreachable code detected.
++        ~~~~~~~~~~~
++!!! error TS7027: Unreachable code detected.
+     }
+     
+     label1:  var x2 = 10;
+     ~~~~~~
+ !!! error TS7028: Unused label.
++    ~~~~~~
++!!! error TS7028: Unused label.

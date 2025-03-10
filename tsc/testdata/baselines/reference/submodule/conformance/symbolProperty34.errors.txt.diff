@@ -1,0 +1,38 @@
+--- old.symbolProperty34.errors.txt
++++ new.symbolProperty34.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ symbolProperty34.ts(1,18): error TS2449: Class 'C2' used before its declaration.
+ symbolProperty34.ts(2,5): error TS2411: Property '[Symbol.toStringTag]' of type '() => { x: string; }' is not assignable to 'symbol' index type '() => { x: number; }'.
++symbolProperty34.ts(2,6): error TS2304: Cannot find name 'Symbol'.
+ 
+ 
+-==== symbolProperty34.ts (2 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== symbolProperty34.ts (3 errors) ====
+     class C1 extends C2 {
+                      ~~
+ !!! error TS2449: Class 'C2' used before its declaration.
+@@= skipped -9, +26 lines =@@
+         [Symbol.toStringTag]() {
+         ~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2411: Property '[Symbol.toStringTag]' of type '() => { x: string; }' is not assignable to 'symbol' index type '() => { x: number; }'.
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
+             return { x: "" };
+         }
+     }

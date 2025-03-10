@@ -1,0 +1,25 @@
+--- old.ambientPropertyDeclarationInJs.errors.txt
++++ new.ambientPropertyDeclarationInJs.errors.txt
+@@= skipped -0, +0 lines =@@
+ /test.js(3,9): error TS2322: Type '{}' is not assignable to type 'string'.
+-/test.js(6,5): error TS8009: The 'declare' modifier can only be used in TypeScript files.
+-/test.js(6,19): error TS8010: Type annotations can only be used in TypeScript files.
+ /test.js(9,19): error TS2339: Property 'foo' does not exist on type 'string'.
+ 
+ 
+-==== /test.js (4 errors) ====
++==== /test.js (2 errors) ====
+     class Foo {
+         constructor() {
+             this.prop = {};
+@@= skipped -12, +10 lines =@@
+         }
+     
+         declare prop: string;
+-        ~~~~~~~
+-!!! error TS8009: The 'declare' modifier can only be used in TypeScript files.
+-                      ~~~~~~
+-!!! error TS8010: Type annotations can only be used in TypeScript files.
+     
+         method() {
+             this.prop.foo

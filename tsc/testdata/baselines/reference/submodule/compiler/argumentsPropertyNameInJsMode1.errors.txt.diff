@@ -1,0 +1,15 @@
+--- old.argumentsPropertyNameInJsMode1.errors.txt
++++ new.argumentsPropertyNameInJsMode1.errors.txt
+@@= skipped -0, +0 lines =@@
+-a.js(9,7): error TS2554: Expected 0-1 arguments, but got 3.
++a.js(9,7): error TS2554: Expected 1 arguments, but got 3.
+ 
+ 
+ ==== a.js (1 errors) ====
+@@= skipped -11, +11 lines =@@
+     
+     f2(1, 2, 3);
+           ~~~~
+-!!! error TS2554: Expected 0-1 arguments, but got 3.
++!!! error TS2554: Expected 1 arguments, but got 3.
+     

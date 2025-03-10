@@ -1,0 +1,71 @@
+--- old.jsdocParamTagTypeLiteral.errors.txt
++++ new.jsdocParamTagTypeLiteral.errors.txt
+@@= skipped -0, +0 lines =@@
+-0.js(3,20): error TS8024: JSDoc '@param' tag has name 'unrelated', but there is no parameter with that name.
++0.js(5,17): error TS7006: Parameter 'notSpecial' implicitly has an 'any' type.
++0.js(17,15): error TS7006: Parameter 'opts1' implicitly has an 'any' type.
++0.js(28,52): error TS7006: Parameter 'opts2' implicitly has an 'any' type.
++0.js(38,15): error TS7006: Parameter 'opts3' implicitly has an 'any' type.
++0.js(50,15): error TS7006: Parameter 'opts4' implicitly has an 'any' type.
++0.js(66,15): error TS7006: Parameter 'opts5' implicitly has an 'any' type.
+ 
+ 
+-==== 0.js (1 errors) ====
++==== 0.js (6 errors) ====
+     /**
+      * @param {Object} notSpecial
+      * @param {string} unrelated - not actually related because it's not notSpecial.unrelated
+-                       ~~~~~~~~~
+-!!! error TS8024: JSDoc '@param' tag has name 'unrelated', but there is no parameter with that name.
+      */
+     function normal(notSpecial) {
++                    ~~~~~~~~~~
++!!! error TS7006: Parameter 'notSpecial' implicitly has an 'any' type.
+         notSpecial; // should just be 'Object'
+     }
+     normal(12);
+@@= skipped -20, +25 lines =@@
+      * @param {string} [opts1.w="hi"] doc5
+      */
+     function foo1(opts1) {
++                  ~~~~~
++!!! error TS7006: Parameter 'opts1' implicitly has an 'any' type.
+         opts1.x;
+     }
+     
+@@= skipped -11, +13 lines =@@
+      * @param {string=} opts2[].anotherY
+      */
+     function foo2(/** @param opts2 bad idea theatre! */opts2) {
++                                                       ~~~~~
++!!! error TS7006: Parameter 'opts2' implicitly has an 'any' type.
+         opts2[0].anotherX;
+     }
+     
+@@= skipped -10, +12 lines =@@
+      * @param {string} opts3.x
+      */
+     function foo3(opts3) {
++                  ~~~~~
++!!! error TS7006: Parameter 'opts3' implicitly has an 'any' type.
+         opts3.x;
+     }
+     foo3({x: 'abc'});
+@@= skipped -12, +14 lines =@@
+      * @param {string} [opts4[].w="hi"]
+      */
+     function foo4(opts4) {
++                  ~~~~~
++!!! error TS7006: Parameter 'opts4' implicitly has an 'any' type.
+         opts4[0].x;
+     }
+     
+@@= skipped -16, +18 lines =@@
+      * @param {number} opts5[].unnest - Here we are almost all the way back at the beginning.
+      */
+     function foo5(opts5) {
++                  ~~~~~
++!!! error TS7006: Parameter 'opts5' implicitly has an 'any' type.
+         opts5[0].what.bad[0].idea;
+         opts5[0].unnest;
+     }

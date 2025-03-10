@@ -1,0 +1,18 @@
+/a.ts(1,16): error TS2664: Invalid module name in augmentation, module 'foo' cannot be found.
+/a.ts(4,19): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+
+
+==== /a.ts (2 errors) ====
+    declare module "foo" {
+                   ~~~~~
+!!! error TS2664: Invalid module name in augmentation, module 'foo' cannot be found.
+        export const x: number;
+    }
+    import { x } from "foo";
+                      ~~~~~
+!!! error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+    x;
+    
+==== /node_modules/foo/index.js (0 errors) ====
+    This file is not processed.
+    

@@ -1,0 +1,21 @@
+blockScopedFunctionDeclarationInStrictClass.ts(4,22): error TS1251: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Class definitions are automatically in strict mode.
+blockScopedFunctionDeclarationInStrictClass.ts(4,22): error TS1251: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Class definitions are automatically in strict mode.
+blockScopedFunctionDeclarationInStrictClass.ts(7,9): error TS2304: Cannot find name 'foo'.
+
+
+==== blockScopedFunctionDeclarationInStrictClass.ts (3 errors) ====
+    class c {
+        method() {
+            if (true) {
+                function foo() { }
+                         ~~~
+!!! error TS1251: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Class definitions are automatically in strict mode.
+                         ~~~
+!!! error TS1251: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Class definitions are automatically in strict mode.
+                foo(); // ok
+            }
+            foo(); // not ok
+            ~~~
+!!! error TS2304: Cannot find name 'foo'.
+        }
+    }

@@ -1,0 +1,9 @@
+index.js(3,8): error TS2339: Property 'devtools' does not exist on type '{}'.
+
+
+==== index.js (1 errors) ====
+    var chrome = {}
+    Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true })
+    chrome.devtools.inspectedWindow = {}
+           ~~~~~~~~
+!!! error TS2339: Property 'devtools' does not exist on type '{}'.

@@ -1,0 +1,40 @@
+--- old.computedPropertyNames11_ES6.errors.txt
++++ new.computedPropertyNames11_ES6.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== computedPropertyNames11_ES6.ts (0 errors) ====
++    var s: string;
++    var n: number;
++    var a: any;
++    var v = {
++        get [s]() { return 0; },
++        set [n](v) { },
++        get [s + s]() { return 0; },
++        set [s + n](v) { },
++        get [+s]() { return 0; },
++        set [""](v) { },
++        get [0]() { return 0; },
++        set [a](v) { },
++        get [<any>true]() { return 0; },
++        set [`hello bye`](v) { },
++        get [`hello ${a} bye`]() { return 0; }
++    }

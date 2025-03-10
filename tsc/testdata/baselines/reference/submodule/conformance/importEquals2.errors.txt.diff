@@ -1,0 +1,16 @@
+--- old.importEquals2.errors.txt
++++ new.importEquals2.errors.txt
+@@= skipped -0, +0 lines =@@
+-/c.ts(2,7): error TS2339: Property 'A' does not exist on type 'typeof import("/a")'.
++/c.ts(2,7): error TS2339: Property 'A' does not exist on type '{}'.
+ 
+ 
+ ==== /c.ts (1 errors) ====
+     import a = require('./b');
+     new a.A(); // Error
+           ~
+-!!! error TS2339: Property 'A' does not exist on type 'typeof import("/a")'.
++!!! error TS2339: Property 'A' does not exist on type '{}'.
+     
+ ==== /a.ts (0 errors) ====
+     class A {}

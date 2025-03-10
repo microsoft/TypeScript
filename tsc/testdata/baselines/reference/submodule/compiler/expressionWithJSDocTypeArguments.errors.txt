@@ -1,0 +1,121 @@
+expressionWithJSDocTypeArguments.ts(9,22): error TS1110: Type expected.
+expressionWithJSDocTypeArguments.ts(10,20): error TS2693: 'string' only refers to a type, but is being used as a value here.
+expressionWithJSDocTypeArguments.ts(10,27): error TS1109: Expression expected.
+expressionWithJSDocTypeArguments.ts(10,28): error TS1109: Expression expected.
+expressionWithJSDocTypeArguments.ts(12,23): error TS1109: Expression expected.
+expressionWithJSDocTypeArguments.ts(12,24): error TS2693: 'string' only refers to a type, but is being used as a value here.
+expressionWithJSDocTypeArguments.ts(12,31): error TS1109: Expression expected.
+expressionWithJSDocTypeArguments.ts(12,32): error TS1109: Expression expected.
+expressionWithJSDocTypeArguments.ts(14,29): error TS1110: Type expected.
+expressionWithJSDocTypeArguments.ts(15,33): error TS1005: '>' expected.
+expressionWithJSDocTypeArguments.ts(15,34): error TS1109: Expression expected.
+expressionWithJSDocTypeArguments.ts(15,35): error TS1109: Expression expected.
+expressionWithJSDocTypeArguments.ts(17,37): error TS1005: '>' expected.
+expressionWithJSDocTypeArguments.ts(17,38): error TS1109: Expression expected.
+expressionWithJSDocTypeArguments.ts(17,39): error TS1109: Expression expected.
+expressionWithJSDocTypeArguments.ts(19,22): error TS1110: Type expected.
+expressionWithJSDocTypeArguments.ts(20,20): error TS2693: 'string' only refers to a type, but is being used as a value here.
+expressionWithJSDocTypeArguments.ts(20,27): error TS1109: Expression expected.
+expressionWithJSDocTypeArguments.ts(20,28): error TS1109: Expression expected.
+expressionWithJSDocTypeArguments.ts(22,23): error TS1109: Expression expected.
+expressionWithJSDocTypeArguments.ts(22,24): error TS2693: 'string' only refers to a type, but is being used as a value here.
+expressionWithJSDocTypeArguments.ts(22,31): error TS1109: Expression expected.
+expressionWithJSDocTypeArguments.ts(22,32): error TS1109: Expression expected.
+expressionWithJSDocTypeArguments.ts(24,29): error TS1110: Type expected.
+expressionWithJSDocTypeArguments.ts(25,33): error TS1005: '>' expected.
+expressionWithJSDocTypeArguments.ts(25,34): error TS1109: Expression expected.
+expressionWithJSDocTypeArguments.ts(25,35): error TS1109: Expression expected.
+expressionWithJSDocTypeArguments.ts(27,37): error TS1005: '>' expected.
+expressionWithJSDocTypeArguments.ts(27,38): error TS1109: Expression expected.
+expressionWithJSDocTypeArguments.ts(27,39): error TS1109: Expression expected.
+
+
+==== expressionWithJSDocTypeArguments.ts (30 errors) ====
+    // Repro from #51802
+    
+    function foo<T>(x: T): T { return x }
+    
+    class Bar<T> { constructor(public x: T) { } }
+    
+    // Errors expected on all of the following
+    
+    const WhatFoo = foo<?>;
+                         ~
+!!! error TS1110: Type expected.
+    const HuhFoo = foo<string?>;
+                       ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+                              ~
+!!! error TS1109: Expression expected.
+                               ~
+!!! error TS1109: Expression expected.
+    const NopeFoo = foo<?string>;
+    const ComeOnFoo = foo<?string?>;
+                          ~
+!!! error TS1109: Expression expected.
+                           ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+                                  ~
+!!! error TS1109: Expression expected.
+                                   ~
+!!! error TS1109: Expression expected.
+    
+    type TWhatFoo = typeof foo<?>;
+                                ~
+!!! error TS1110: Type expected.
+    type THuhFoo = typeof foo<string?>;
+                                    ~
+!!! error TS1005: '>' expected.
+                                     ~
+!!! error TS1109: Expression expected.
+                                      ~
+!!! error TS1109: Expression expected.
+    type TNopeFoo = typeof foo<?string>;
+    type TComeOnFoo = typeof foo<?string?>;
+                                        ~
+!!! error TS1005: '>' expected.
+                                         ~
+!!! error TS1109: Expression expected.
+                                          ~
+!!! error TS1109: Expression expected.
+    
+    const WhatBar = Bar<?>;
+                         ~
+!!! error TS1110: Type expected.
+    const HuhBar = Bar<string?>;
+                       ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+                              ~
+!!! error TS1109: Expression expected.
+                               ~
+!!! error TS1109: Expression expected.
+    const NopeBar = Bar<?string>;
+    const ComeOnBar = Bar<?string?>;
+                          ~
+!!! error TS1109: Expression expected.
+                           ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+                                  ~
+!!! error TS1109: Expression expected.
+                                   ~
+!!! error TS1109: Expression expected.
+    
+    type TWhatBar = typeof Bar<?>;
+                                ~
+!!! error TS1110: Type expected.
+    type THuhBar = typeof Bar<string?>;
+                                    ~
+!!! error TS1005: '>' expected.
+                                     ~
+!!! error TS1109: Expression expected.
+                                      ~
+!!! error TS1109: Expression expected.
+    type TNopeBar = typeof Bar<?string>;
+    type TComeOnBar = typeof Bar<?string?>;
+                                        ~
+!!! error TS1005: '>' expected.
+                                         ~
+!!! error TS1109: Expression expected.
+                                          ~
+!!! error TS1109: Expression expected.
+    

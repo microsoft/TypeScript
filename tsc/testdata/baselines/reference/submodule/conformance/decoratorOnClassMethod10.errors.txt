@@ -1,0 +1,13 @@
+decoratorOnClassMethod10.ts(4,6): error TS1241: Unable to resolve signature of method decorator when called as an expression.
+  Type 'C' is missing the following properties from type 'Function': apply, call, bind, prototype, and 3 more.
+
+
+==== decoratorOnClassMethod10.ts (1 errors) ====
+    declare function dec(target: Function, paramIndex: number): void;
+    
+    class C {
+        @dec method() {}
+         ~~~
+!!! error TS1241: Unable to resolve signature of method decorator when called as an expression.
+!!! error TS1241:   Type 'C' is missing the following properties from type 'Function': apply, call, bind, prototype, and 3 more.
+    }

@@ -1,0 +1,21 @@
+returns.js(13,12): error TS2872: This kind of expression is always truthy.
+
+
+==== returns.js (1 errors) ====
+    // @ts-check
+    /**
+     * @returns {string} This comment is not currently exposed
+     */
+    function f() {
+        return 5;
+    }
+    
+    /**
+     * @returns {string | number} This comment is not currently exposed
+     */
+    function f1() {
+        return 5 || true;
+               ~
+!!! error TS2872: This kind of expression is always truthy.
+    }
+    

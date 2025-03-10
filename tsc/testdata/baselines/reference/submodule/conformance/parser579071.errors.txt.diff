@@ -1,0 +1,12 @@
+--- old.parser579071.errors.txt
++++ new.parser579071.errors.txt
+@@= skipped -0, +-1 lines =@@
+-parser579071.ts(1,14): error TS1005: ')' expected.
+-
+-
+-==== parser579071.ts (1 errors) ====
+-    var x = /fo(o/;
+-                 
+-!!! error TS1005: ')' expected.
+@@= skipped --1, +1 lines =@@
++<no content>

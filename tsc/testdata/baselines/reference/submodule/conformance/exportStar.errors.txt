@@ -1,0 +1,35 @@
+t4.ts(3,1): error TS2308: Module "./t1" has already exported a member named 'x'. Consider explicitly re-exporting to resolve the ambiguity.
+t4.ts(3,1): error TS2308: Module "./t1" has already exported a member named 'y'. Consider explicitly re-exporting to resolve the ambiguity.
+
+
+==== t1.ts (0 errors) ====
+    export var x = 1;
+    export var y = 2;
+    
+==== t2.ts (0 errors) ====
+    export default "hello";
+    export function foo() { }
+    
+==== t3.ts (0 errors) ====
+    var x = "x";
+    var y = "y";
+    var z = "z";
+    export { x, y, z };
+    
+==== t4.ts (2 errors) ====
+    export * from "./t1";
+    export * from "./t2";
+    export * from "./t3";
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./t1" has already exported a member named 'x'. Consider explicitly re-exporting to resolve the ambiguity.
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./t1" has already exported a member named 'y'. Consider explicitly re-exporting to resolve the ambiguity.
+    
+==== main.ts (0 errors) ====
+    import hello, { x, y, z, foo } from "./t4";
+    hello;
+    x;
+    y;
+    z;
+    foo;
+    

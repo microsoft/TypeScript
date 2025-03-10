@@ -1,0 +1,30 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== main.ts (0 errors) ====
+    export class S {
+        static #a = 1;
+        static #b() { this.#a = 42; }
+        static get #c() { return S.#b(); }
+    }
+    
+==== tslib.d.ts (0 errors) ====
+    // these are pre-TS4.3 versions of emit helpers, which only supported private instance fields
+    export declare function __classPrivateFieldGet<T extends object, V>(receiver: T, state: any): V;
+    export declare function __classPrivateFieldSet<T extends object, V>(receiver: T, state: any, value: V): V;
+    

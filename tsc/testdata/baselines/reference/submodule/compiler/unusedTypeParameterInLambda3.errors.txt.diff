@@ -1,0 +1,15 @@
+--- old.unusedTypeParameterInLambda3.errors.txt
++++ new.unusedTypeParameterInLambda3.errors.txt
+@@= skipped -0, +0 lines =@@
+-unusedTypeParameterInLambda3.ts(5,15): error TS6133: 'U' is declared but its value is never read.
++unusedTypeParameterInLambda3.ts(5,15): error TS6196: 'U' is declared but never used.
+ 
+ 
+ ==== unusedTypeParameterInLambda3.ts (1 errors) ====
+@@= skipped -7, +7 lines =@@
+     
+     var y: new <T,U>(a:T)=>void;
+                   ~
+-!!! error TS6133: 'U' is declared but its value is never read.
++!!! error TS6196: 'U' is declared but never used.
+     

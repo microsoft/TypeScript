@@ -1,0 +1,9 @@
+--- old.invalidUnicodeEscapeSequance.errors.txt
++++ new.invalidUnicodeEscapeSequance.errors.txt
+@@= skipped -2, +2 lines =@@
+ 
+ ==== invalidUnicodeEscapeSequance.ts (1 errors) ====
+     var arg\u003
+-           
++           ~
+ !!! error TS1127: Invalid character.

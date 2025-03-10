@@ -1,0 +1,17 @@
+--- old.overridingPrivateStaticMembers.errors.txt
++++ new.overridingPrivateStaticMembers.errors.txt
+@@= skipped -0, +0 lines =@@
+-overridingPrivateStaticMembers.ts(5,7): error TS2417: Class static side 'typeof Derived2' incorrectly extends base class static side 'typeof Base2'.
++overridingPrivateStaticMembers.ts(5,7): error TS2417: Class static side '{ new(): Derived2; y: { foo: string; bar: string; }; prototype: Derived2; }' incorrectly extends base class static side '{ y: { foo: string; }; prototype: Base2; }'.
+   Types have separate declarations of a private property 'y'.
+ 
+ 
+@@= skipped -8, +8 lines =@@
+      
+     class Derived2 extends Base2 {
+           ~~~~~~~~
+-!!! error TS2417: Class static side 'typeof Derived2' incorrectly extends base class static side 'typeof Base2'.
++!!! error TS2417: Class static side '{ new(): Derived2; y: { foo: string; bar: string; }; prototype: Derived2; }' incorrectly extends base class static side '{ y: { foo: string; }; prototype: Base2; }'.
+ !!! error TS2417:   Types have separate declarations of a private property 'y'.
+         private static y: { foo: string; bar: string; };
+     }

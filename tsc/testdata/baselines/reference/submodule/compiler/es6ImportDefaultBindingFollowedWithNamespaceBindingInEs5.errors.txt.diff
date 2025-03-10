@@ -1,0 +1,16 @@
+--- old.es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5.errors.txt
++++ new.es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5.errors.txt
+@@= skipped -0, +-1 lines =@@
+-es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.ts(1,8): error TS1192: Module '"es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0"' has no default export.
+-
+-
+-==== es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0.ts (0 errors) ====
+-    export var a = 10;
+-    
+-==== es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.ts (1 errors) ====
+-    import defaultBinding, * as nameSpaceBinding  from "./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0";
+-           ~~~~~~~~~~~~~~
+-!!! error TS1192: Module '"es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0"' has no default export.
+-    var x: number = nameSpaceBinding.a;
+@@= skipped --1, +1 lines =@@
++<no content>

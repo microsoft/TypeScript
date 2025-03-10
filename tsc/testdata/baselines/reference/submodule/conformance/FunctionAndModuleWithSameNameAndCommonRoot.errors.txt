@@ -1,0 +1,55 @@
+module.ts(2,19): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+simple.ts(13,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type '{ (): { x: number; y: number; }; Origin: { x: number; y: number; }; }'.
+test.ts(2,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type '{ (): { x: number; y: number; }; Origin: { x: number; y: number; }; }'.
+
+
+==== function.ts (0 errors) ====
+    module A {
+        export function Point() {
+            return { x: 0, y: 0 };
+        }
+    }
+    
+==== module.ts (1 errors) ====
+    module A {
+        export module Point {
+                      ~~~~~
+!!! error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+            export var Origin = { x: 0, y: 0 };
+        }
+    }
+    
+==== test.ts (1 errors) ====
+    var fn: () => { x: number; y: number };
+    var fn = A.Point;
+        ~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type '{ (): { x: number; y: number; }; Origin: { x: number; y: number; }; }'.
+!!! related TS6203 test.ts:1:5: 'fn' was also declared here.
+    
+    var cl: { x: number; y: number; }
+    var cl = A.Point();
+    var cl = A.Point.Origin; // not expected to be an error.
+    
+    
+==== simple.ts (1 errors) ====
+    module B {
+    
+        export function Point() {
+            return { x: 0, y: 0 };
+        }
+    
+        export module Point {
+            export var Origin = { x: 0, y: 0 };
+        }
+    }
+    
+    var fn: () => { x: number; y: number };
+    var fn = B.Point;  // not expected to be an error. bug 840000: [corelang] Function of fundule not assignalbe as expected
+        ~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type '{ (): { x: number; y: number; }; Origin: { x: number; y: number; }; }'.
+!!! related TS6203 test.ts:1:5: 'fn' was also declared here.
+    
+    var cl: { x: number; y: number; }
+    var cl = B.Point();
+    var cl = B.Point.Origin;
+    

@@ -1,0 +1,42 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'CallableFunction'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'NewableFunction'.
+error TS2318: Cannot find global type 'Promise'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+lateBoundMethodNameAssigmentJS.js(1,17): error TS2304: Cannot find name 'Symbol'.
+lateBoundMethodNameAssigmentJS.js(4,39): error TS2339: Property 'bind' does not exist on type '() => error'.
+lateBoundMethodNameAssigmentJS.js(7,11): error TS2697: An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'CallableFunction'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'NewableFunction'.
+!!! error TS2318: Cannot find global type 'Promise'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== lateBoundMethodNameAssigmentJS.js (3 errors) ====
+    const _symbol = Symbol("_sym");
+                    ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+    export class MyClass {
+        constructor() {
+            this[_symbol] = this[_symbol].bind(this);
+                                          ~~~~
+!!! error TS2339: Property 'bind' does not exist on type '() => error'.
+        }
+    
+        async [_symbol]() { }
+              ~~~~~~~~~
+!!! error TS2697: An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+    }

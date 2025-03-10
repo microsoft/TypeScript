@@ -1,0 +1,37 @@
+/contractHelper.d.ts(3,67): error TS2694: Namespace '""/types.js""' has no exported member 'ParamStateRecord'.
+/exported.d.ts(2,10): error TS2305: Module '""/types.js""' has no exported member 'ParamStateRecord'.
+
+
+==== /contractHelper.d.ts (1 errors) ====
+    export function handleParamGovernance(zcf: any): {
+      publicMixin: {
+        getGovernedParams: () => globalThis.ERef<import("./types.js").ParamStateRecord>;
+                                                                      ~~~~~~~~~~~~~~~~
+!!! error TS2694: Namespace '""/types.js""' has no exported member 'ParamStateRecord'.
+      };
+    };
+    
+==== /exported.d.ts (1 errors) ====
+    type _ERef<T> = T | Promise<T>;
+    import { ParamStateRecord as _ParamStateRecord } from './types.js';
+             ~~~~~~~~~~~~~~~~
+!!! error TS2305: Module '""/types.js""' has no exported member 'ParamStateRecord'.
+    declare global {
+      // @ts-ignore TS2666
+      export {
+        _ERef as ERef,
+        _ParamStateRecord as ParamStateRecord,
+      };
+    }
+    
+==== /types.js (0 errors) ====
+    export {};
+    /**
+     * @typedef {Record<Keyword, ParamValueTyped>} ParamStateRecord a Record containing
+     *   keyword pairs with descriptions of parameters under governance.
+     */
+    
+==== /index.js (0 errors) ====
+    import { handleParamGovernance } from './contractHelper.js';
+    export const blah = handleParamGovernance({});
+    

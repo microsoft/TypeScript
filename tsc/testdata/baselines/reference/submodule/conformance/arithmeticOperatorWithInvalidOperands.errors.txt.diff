@@ -1,0 +1,56 @@
+--- old.arithmeticOperatorWithInvalidOperands.errors.txt
++++ new.arithmeticOperatorWithInvalidOperands.errors.txt
+@@= skipped -394, +394 lines =@@
+ arithmeticOperatorWithInvalidOperands.ts(417,16): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+ arithmeticOperatorWithInvalidOperands.ts(418,16): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+ arithmeticOperatorWithInvalidOperands.ts(420,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+-arithmeticOperatorWithInvalidOperands.ts(421,12): error TS2447: The '&' operator is not allowed for boolean types. Consider using '&&' instead.
++arithmeticOperatorWithInvalidOperands.ts(421,14): error TS2447: The '&' operator is not allowed for boolean types. Consider using '&&' instead.
+ arithmeticOperatorWithInvalidOperands.ts(422,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+ arithmeticOperatorWithInvalidOperands.ts(423,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+ arithmeticOperatorWithInvalidOperands.ts(423,16): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+@@= skipped -55, +55 lines =@@
+ arithmeticOperatorWithInvalidOperands.ts(474,16): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+ arithmeticOperatorWithInvalidOperands.ts(475,16): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+ arithmeticOperatorWithInvalidOperands.ts(477,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+-arithmeticOperatorWithInvalidOperands.ts(478,12): error TS2447: The '^' operator is not allowed for boolean types. Consider using '!==' instead.
++arithmeticOperatorWithInvalidOperands.ts(478,14): error TS2447: The '^' operator is not allowed for boolean types. Consider using '!==' instead.
+ arithmeticOperatorWithInvalidOperands.ts(479,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+ arithmeticOperatorWithInvalidOperands.ts(480,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+ arithmeticOperatorWithInvalidOperands.ts(480,16): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+@@= skipped -55, +55 lines =@@
+ arithmeticOperatorWithInvalidOperands.ts(531,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+ arithmeticOperatorWithInvalidOperands.ts(532,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+ arithmeticOperatorWithInvalidOperands.ts(534,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+-arithmeticOperatorWithInvalidOperands.ts(535,13): error TS2447: The '|' operator is not allowed for boolean types. Consider using '||' instead.
++arithmeticOperatorWithInvalidOperands.ts(535,15): error TS2447: The '|' operator is not allowed for boolean types. Consider using '||' instead.
+ arithmeticOperatorWithInvalidOperands.ts(536,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+ arithmeticOperatorWithInvalidOperands.ts(537,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+ arithmeticOperatorWithInvalidOperands.ts(537,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+@@= skipped -1268, +1268 lines =@@
+                ~
+ !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+     var r8b2 = b & b;
+-               ~~~~~
++                 ~
+ !!! error TS2447: The '&' operator is not allowed for boolean types. Consider using '&&' instead.
+     var r8b3 = b & c;
+                ~
+@@= skipped -167, +167 lines =@@
+                ~
+ !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+     var r9b2 = b ^ b;
+-               ~~~~~
++                 ~
+ !!! error TS2447: The '^' operator is not allowed for boolean types. Consider using '!==' instead.
+     var r9b3 = b ^ c;
+                ~
+@@= skipped -167, +167 lines =@@
+                 ~
+ !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+     var r10b2 = b | b;
+-                ~~~~~
++                  ~
+ !!! error TS2447: The '|' operator is not allowed for boolean types. Consider using '||' instead.
+     var r10b3 = b | c;
+                 ~

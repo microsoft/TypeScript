@@ -1,0 +1,33 @@
+main.js(1,43): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+main.js(3,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== main.js (2 errors) ====
+    const { SomeClass, SomeClass: Another } = require('./lib');
+                                              ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+    module.exports = {
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+        SomeClass,
+        Another
+    }
+==== lib.js (0 errors) ====
+    /**
+     * @param {string} a
+     */
+    function bar(a) {
+        return a + a;
+    }
+    
+    class SomeClass {
+        a() {
+            return 1;
+        }
+    }
+    
+    module.exports = {
+        bar,
+        SomeClass
+    }

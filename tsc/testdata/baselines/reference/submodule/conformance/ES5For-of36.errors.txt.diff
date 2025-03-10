@@ -1,0 +1,15 @@
+--- old.ES5For-of36.errors.txt
++++ new.ES5For-of36.errors.txt
+@@= skipped -0, +0 lines =@@
+-ES5For-of36.ts(1,10): error TS2548: Type 'number' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator.
++ES5For-of36.ts(1,10): error TS2461: Type 'number' is not an array type.
+ 
+ 
+ ==== ES5For-of36.ts (1 errors) ====
+     for (let [a = 0, b = 1] of [2, 3]) {
+              ~~~~~~~~~~~~~~
+-!!! error TS2548: Type 'number' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator.
++!!! error TS2461: Type 'number' is not an array type.
+         a;
+         b;
+     }

@@ -1,0 +1,25 @@
+--- old.functionMergedWithModule.errors.txt
++++ new.functionMergedWithModule.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++functionMergedWithModule.ts(12,9): error TS2304: Cannot find name 'Bar'.
++
++
++==== functionMergedWithModule.ts (1 errors) ====
++    function foo(title: string) {
++        var x = 10;
++    }
++    
++    module foo.Bar {
++        export function f() {
++        }
++    }
++    
++    module foo.Baz {
++        export function g() {
++            Bar.f();
++            ~~~
++!!! error TS2304: Cannot find name 'Bar'.
++        }
++    }

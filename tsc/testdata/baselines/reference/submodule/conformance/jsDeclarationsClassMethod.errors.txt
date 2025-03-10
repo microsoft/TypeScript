@@ -1,0 +1,110 @@
+jsDeclarationsClassMethod.js(8,27): error TS7006: Parameter 'x' implicitly has an 'any' type.
+jsDeclarationsClassMethod.js(8,30): error TS7006: Parameter 'y' implicitly has an 'any' type.
+jsDeclarationsClassMethod.js(19,33): error TS7006: Parameter 'x' implicitly has an 'any' type.
+jsDeclarationsClassMethod.js(19,36): error TS7006: Parameter 'y' implicitly has an 'any' type.
+jsDeclarationsClassMethod.js(29,27): error TS7006: Parameter 'x' implicitly has an 'any' type.
+jsDeclarationsClassMethod.js(29,30): error TS7006: Parameter 'y' implicitly has an 'any' type.
+jsDeclarationsClassMethod.js(40,13): error TS7006: Parameter 'x' implicitly has an 'any' type.
+jsDeclarationsClassMethod.js(40,16): error TS7006: Parameter 'y' implicitly has an 'any' type.
+jsDeclarationsClassMethod.js(51,14): error TS2551: Property 'method2' does not exist on type 'C2'. Did you mean 'method1'?
+jsDeclarationsClassMethod.js(51,34): error TS7006: Parameter 'x' implicitly has an 'any' type.
+jsDeclarationsClassMethod.js(51,37): error TS7006: Parameter 'y' implicitly has an 'any' type.
+jsDeclarationsClassMethod.js(61,4): error TS2339: Property 'staticProp' does not exist on type '{ new(): C2; prototype: C2; }'.
+jsDeclarationsClassMethod.js(61,27): error TS7006: Parameter 'x' implicitly has an 'any' type.
+jsDeclarationsClassMethod.js(61,30): error TS7006: Parameter 'y' implicitly has an 'any' type.
+
+
+==== jsDeclarationsClassMethod.js (14 errors) ====
+    function C1() {
+        /**
+         * A comment prop
+         * @param {number} x
+         * @param {number} y
+         * @returns {number}
+         */
+        this.prop = function (x, y) {
+                              ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                                 ~
+!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
+            return x + y;
+        }
+    }
+    
+    /**
+     * A comment method
+     * @param {number} x
+     * @param {number} y
+     * @returns {number}
+     */
+    C1.prototype.method = function (x, y) {
+                                    ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                                       ~
+!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
+        return x + y;
+    }
+    
+    /**
+     * A comment staticProp
+     * @param {number} x
+     * @param {number} y
+     * @returns {number}
+     */
+    C1.staticProp = function (x, y) {
+                              ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                                 ~
+!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
+        return x + y;
+    }
+    
+    class C2 {
+        /**
+         * A comment method1
+         * @param {number} x
+         * @param {number} y
+         * @returns {number}
+         */
+        method1(x, y) {
+                ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                   ~
+!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
+            return x + y;
+        }
+    }
+    
+    /**
+     * A comment method2
+     * @param {number} x
+     * @param {number} y
+     * @returns {number}
+     */
+    C2.prototype.method2 = function (x, y) {
+                 ~~~~~~~
+!!! error TS2551: Property 'method2' does not exist on type 'C2'. Did you mean 'method1'?
+!!! related TS2728 jsDeclarationsClassMethod.js:40:5: 'method1' is declared here.
+                                     ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                                        ~
+!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
+        return x + y;
+    }
+    
+    /**
+     * A comment staticProp
+     * @param {number} x
+     * @param {number} y
+     * @returns {number}
+     */
+    C2.staticProp = function (x, y) {
+       ~~~~~~~~~~
+!!! error TS2339: Property 'staticProp' does not exist on type '{ new(): C2; prototype: C2; }'.
+                              ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                                 ~
+!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
+        return x + y;
+    }
+    

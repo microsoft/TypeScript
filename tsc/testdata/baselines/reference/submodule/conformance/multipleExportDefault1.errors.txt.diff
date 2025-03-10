@@ -1,0 +1,35 @@
+--- old.multipleExportDefault1.errors.txt
++++ new.multipleExportDefault1.errors.txt
+@@= skipped -0, +0 lines =@@
+ multipleExportDefault1.ts(1,25): error TS2528: A module cannot have multiple default exports.
++multipleExportDefault1.ts(1,25): error TS2528: A module cannot have multiple default exports.
+ multipleExportDefault1.ts(5,1): error TS2528: A module cannot have multiple default exports.
++multipleExportDefault1.ts(5,1): error TS2528: A module cannot have multiple default exports.
+ 
+ 
+-==== multipleExportDefault1.ts (2 errors) ====
++==== multipleExportDefault1.ts (4 errors) ====
+     export default function Foo (){
+                             ~~~
+ !!! error TS2528: A module cannot have multiple default exports.
+ !!! related TS2753 multipleExportDefault1.ts:5:1: Another export default is here.
++                            ~~~
++!!! error TS2528: A module cannot have multiple default exports.
++!!! related TS2753 multipleExportDefault1.ts:5:1: Another export default is here.
+         
+     }
+     
+     export default {
+     ~~~~~~~~~~~~~~~~
++    ~~~~~~~~~~~~~~~~
+         uhoh: "another default",
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     };
+     ~~
+ !!! error TS2528: A module cannot have multiple default exports.
+ !!! related TS2752 multipleExportDefault1.ts:1:25: The first export default is here.
++    ~~
++!!! error TS2528: A module cannot have multiple default exports.
++!!! related TS2752 multipleExportDefault1.ts:1:25: The first export default is here.
+     

@@ -1,0 +1,8 @@
+dynamicImportTrailingComma.ts(2,12): error TS1009: Trailing comma not allowed.
+
+
+==== dynamicImportTrailingComma.ts (1 errors) ====
+    const path = './foo';
+    import(path,);
+               ~
+!!! error TS1009: Trailing comma not allowed.

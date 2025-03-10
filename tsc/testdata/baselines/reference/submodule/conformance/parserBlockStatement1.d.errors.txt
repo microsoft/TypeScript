@@ -1,0 +1,7 @@
+parserBlockStatement1.d.ts(1,1): error TS1036: Statements are not allowed in ambient contexts.
+
+
+==== parserBlockStatement1.d.ts (1 errors) ====
+    {}
+    ~
+!!! error TS1036: Statements are not allowed in ambient contexts.

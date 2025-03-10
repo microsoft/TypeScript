@@ -1,0 +1,14 @@
+--- old.jsdocFunction_missingReturn.errors.txt
++++ new.jsdocFunction_missingReturn.errors.txt
+@@= skipped -0, +-1 lines =@@
+-/a.js(1,24): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+-
+-
+-==== /a.js (1 errors) ====
+-    /** @type {function(): number} */
+-                           ~~~~~~
+-!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+-    function f() {}
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

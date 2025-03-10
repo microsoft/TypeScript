@@ -1,0 +1,34 @@
+extendArray.ts(7,19): error TS2552: Cannot find name '_element'. Did you mean 'Element'?
+extendArray.ts(7,32): error TS2552: Cannot find name '_element'. Did you mean 'Element'?
+
+
+==== extendArray.ts (2 errors) ====
+    var a = [1,2];
+    a.forEach(function (v,i,a) {});
+    
+    
+    declare module _Core {
+      interface Array {
+        collect(fn:(e:_element) => _element[]) : any[];
+                      ~~~~~~~~
+!!! error TS2552: Cannot find name '_element'. Did you mean 'Element'?
+!!! related TS2728 lib.dom.d.ts:--:--: 'Element' is declared here.
+                                   ~~~~~~~~
+!!! error TS2552: Cannot find name '_element'. Did you mean 'Element'?
+!!! related TS2728 lib.dom.d.ts:--:--: 'Element' is declared here.
+      }
+    }
+    
+    
+    var arr = (<any>Array).prototype;
+    arr.collect = function (fn) {
+        var res = [];
+        for (var i = 0; i < this.length; ++i) {
+            var tmp = fn(this[i]);
+            for (var j = 0; j < tmp.length; ++j) {
+                res.push(tmp[j]);
+            }
+        }
+        return res;
+    };
+    

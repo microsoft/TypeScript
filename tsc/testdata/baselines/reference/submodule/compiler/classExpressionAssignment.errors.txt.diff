@@ -1,0 +1,17 @@
+--- old.classExpressionAssignment.errors.txt
++++ new.classExpressionAssignment.errors.txt
+@@= skipped -0, +0 lines =@@
+-classExpressionAssignment.ts(6,7): error TS2322: Type 'typeof A' is not assignable to type 'new () => A'.
++classExpressionAssignment.ts(6,7): error TS2322: Type '{ new(): A; prototype: A; }' is not assignable to type 'new() => A'.
+   Property 'prop' is missing in type 'A' but required in type 'A'.
+ 
+ 
+@@= skipped -9, +9 lines =@@
+     // This is invalid
+     const A: {new(): A} = class {}
+           ~
+-!!! error TS2322: Type 'typeof A' is not assignable to type 'new () => A'.
++!!! error TS2322: Type '{ new(): A; prototype: A; }' is not assignable to type 'new() => A'.
+ !!! error TS2322:   Property 'prop' is missing in type 'A' but required in type 'A'.
+ !!! related TS2728 classExpressionAssignment.ts:2:3: 'prop' is declared here.
+     

@@ -1,0 +1,21 @@
+mod2.js(1,14): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== mod2.js (1 errors) ====
+    const mod1 = require("./mod1");
+                 ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    mod1.a;
+    mod1.b;
+    mod1.c;
+    mod1.d;
+    mod1.d.e;
+    mod1.default;
+==== mod1.js (0 errors) ====
+    exports.a = { x: "x" };
+    exports["b"] = { x: "x" };
+    exports["default"] = { x: "x" };
+    module.exports["c"] = { x: "x" };
+    module["exports"]["d"] = {};
+    module["exports"]["d"].e = 0;
+    

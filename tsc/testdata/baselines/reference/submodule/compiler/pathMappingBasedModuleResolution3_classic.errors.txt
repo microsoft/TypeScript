@@ -1,0 +1,23 @@
+c:/root/folder1/file1.ts(1,17): error TS2307: Cannot find module 'folder2/file2' or its corresponding type declarations.
+c:/root/folder2/file2.ts(2,22): error TS2307: Cannot find module 'file4' or its corresponding type declarations.
+
+
+==== c:/root/folder1/file1.ts (1 errors) ====
+    import {x} from "folder2/file2"
+                    ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'folder2/file2' or its corresponding type declarations.
+    declare function use(a: any): void;
+    use(x.toExponential());
+    
+==== c:/root/folder2/file2.ts (1 errors) ====
+    import {x as a} from "./file3"  // found with baseurl
+    import {y as b} from "file4"    // found with fallback
+                         ~~~~~~~
+!!! error TS2307: Cannot find module 'file4' or its corresponding type declarations.
+    export var x = a + b;
+    
+==== c:/root/folder2/file3.ts (0 errors) ====
+    export var x = 1;
+    
+==== c:/file4.ts (0 errors) ====
+    export var y = 100;

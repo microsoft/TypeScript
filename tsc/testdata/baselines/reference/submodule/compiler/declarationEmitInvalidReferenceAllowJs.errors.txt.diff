@@ -1,0 +1,14 @@
+--- old.declarationEmitInvalidReferenceAllowJs.errors.txt
++++ new.declarationEmitInvalidReferenceAllowJs.errors.txt
+@@= skipped -0, +-1 lines =@@
+-declarationEmitInvalidReferenceAllowJs.ts(1,22): error TS6231: Could not resolve the path 'invalid' with the extensions: '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.
+-
+-
+-==== declarationEmitInvalidReferenceAllowJs.ts (1 errors) ====
+-    /// <reference path="invalid" />
+-                         ~~~~~~~
+-!!! error TS6231: Could not resolve the path 'invalid' with the extensions: '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.
+-    var x = 0; 
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

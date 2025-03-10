@@ -1,0 +1,21 @@
+index1.js(15,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== index1.js (1 errors) ====
+    /**
+     * const doc comment
+     */
+    const x = (a) => {
+        return '';
+    };
+    
+    /**
+     * function doc comment
+     */
+    function b() {
+        return 0;
+    }
+    
+    module.exports = {x, b}
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.

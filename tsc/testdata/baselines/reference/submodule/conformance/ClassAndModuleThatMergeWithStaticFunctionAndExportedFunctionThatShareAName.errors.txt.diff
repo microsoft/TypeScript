@@ -1,0 +1,50 @@
+--- old.ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.errors.txt
++++ new.ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.errors.txt
+@@= skipped -0, +0 lines =@@
+ ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(4,12): error TS2300: Duplicate identifier 'Origin'.
++ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(4,12): error TS2300: Duplicate identifier 'Origin'.
+ ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(8,21): error TS2300: Duplicate identifier 'Origin'.
++ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(8,21): error TS2300: Duplicate identifier 'Origin'.
+ ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(16,16): error TS2300: Duplicate identifier 'Origin'.
++ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(16,16): error TS2300: Duplicate identifier 'Origin'.
+ ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(20,25): error TS2300: Duplicate identifier 'Origin'.
++ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(20,25): error TS2300: Duplicate identifier 'Origin'.
+ 
+ 
+-==== ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts (4 errors) ====
++==== ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts (8 errors) ====
+     class Point {
+         constructor(public x: number, public y: number) { }
+     
+         static Origin(): Point { return { x: 0, y: 0 }; } // unexpected error here bug 840246
+                ~~~~~~
+ !!! error TS2300: Duplicate identifier 'Origin'.
++               ~~~~~~
++!!! error TS2300: Duplicate identifier 'Origin'.
+     }
+     
+     module Point {
+         export function Origin() { return null; } //expected duplicate identifier error
+                         ~~~~~~
+ !!! error TS2300: Duplicate identifier 'Origin'.
++                        ~~~~~~
++!!! error TS2300: Duplicate identifier 'Origin'.
+     }
+     
+     
+@@= skipped -26, +34 lines =@@
+             static Origin(): Point { return { x: 0, y: 0 }; } // unexpected error here bug 840246
+                    ~~~~~~
+ !!! error TS2300: Duplicate identifier 'Origin'.
++                   ~~~~~~
++!!! error TS2300: Duplicate identifier 'Origin'.
+         }
+     
+         export module Point {
+             export function Origin() { return ""; }//expected duplicate identifier error
+                             ~~~~~~
+ !!! error TS2300: Duplicate identifier 'Origin'.
++                            ~~~~~~
++!!! error TS2300: Duplicate identifier 'Origin'.
+         }
+     }

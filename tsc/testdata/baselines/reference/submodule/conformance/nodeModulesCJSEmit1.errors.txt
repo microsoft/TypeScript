@@ -1,0 +1,33 @@
+/1.cjs(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/2.cjs(1,1): error TS2304: Cannot find name 'exports'.
+/3.cjs(2,1): error TS2304: Cannot find name 'exports'.
+/5.cjs(1,17): error TS2306: File '/2.cjs' is not a module.
+
+
+==== /1.cjs (1 errors) ====
+    module.exports = {};
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+==== /2.cjs (1 errors) ====
+    exports.foo = 0;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    
+==== /3.cjs (1 errors) ====
+    import "foo";
+    exports.foo = {};
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    
+==== /4.cjs (0 errors) ====
+    ;
+    
+==== /5.cjs (1 errors) ====
+    import two from "./2.cjs";   // ok
+                    ~~~~~~~~~
+!!! error TS2306: File '/2.cjs' is not a module.
+    import three from "./3.cjs"; // error
+    two.foo;
+    three.foo;
+    

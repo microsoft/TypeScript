@@ -1,0 +1,11 @@
+--- old.packageJsonImportsExportsOptionCompat(moduleresolution=node16).errors.txt
++++ new.packageJsonImportsExportsOptionCompat(moduleresolution=node16).errors.txt
+@@= skipped -0, +-1 lines =@@
+-error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+-
+-
+-!!! error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+-==== index.ts (0 errors) ====
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

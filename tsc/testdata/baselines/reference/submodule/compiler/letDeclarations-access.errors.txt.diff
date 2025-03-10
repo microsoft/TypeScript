@@ -1,0 +1,64 @@
+--- old.letDeclarations-access.errors.txt
++++ new.letDeclarations-access.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++letDeclarations-access.ts(36,3): error TS2339: Property 'toString' does not exist on type 'number'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== letDeclarations-access.ts (1 errors) ====
++    let x = 0
++    
++    // No errors
++    
++    x = 1;
++    x += 2;
++    x -= 3;
++    x *= 4;
++    x /= 5;
++    x %= 6;
++    x <<= 7;
++    x >>= 8;
++    x >>>= 9;
++    x &= 10;
++    x |= 11;
++    x ^= 12;
++    
++    x++;
++    x--;
++    ++x;
++    --x;
++    
++    var a = x + 1;
++    
++    function f(v: number) { }
++    f(x);
++    
++    if (x) { }
++    
++    x;
++    (x);
++    
++    -x;
++    +x;
++    
++    x.toString();
++      ~~~~~~~~
++!!! error TS2339: Property 'toString' does not exist on type 'number'.
++    

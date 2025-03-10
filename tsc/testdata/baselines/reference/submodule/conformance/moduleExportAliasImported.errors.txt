@@ -1,0 +1,19 @@
+bug28014.js(1,1): error TS2304: Cannot find name 'exports'.
+bug28014.js(3,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+importer.js(1,8): error TS2306: File 'bug28014.js' is not a module.
+
+
+==== bug28014.js (2 errors) ====
+    exports.version = 1
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    function alias() { }
+    module.exports = alias
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+==== importer.js (1 errors) ====
+    import('./bug28014')
+           ~~~~~~~~~~~~
+!!! error TS2306: File 'bug28014.js' is not a module.
+    

@@ -1,0 +1,19 @@
+type.ts(7,28): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+
+
+==== type.ts (1 errors) ====
+    export namespace Foo {
+      export enum Enum {
+        A = "a",
+        B = "b",
+      }
+    }
+    export type Type = { x?: { [Foo.Enum]: 0 } };
+                               ~~~~~~~~~~
+!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+    
+==== index.ts (0 errors) ====
+    import { type Type } from "./type";
+    
+    export const foo = { ...({} as Type) };
+    

@@ -1,0 +1,9 @@
+--- old.parserSkippedTokens13.errors.txt
++++ new.parserSkippedTokens13.errors.txt
+@@= skipped -2, +2 lines =@@
+ 
+ ==== parserSkippedTokens13.ts (1 errors) ====
+     /regexp/ \ ;
+-             
++             ~
+ !!! error TS1127: Invalid character.

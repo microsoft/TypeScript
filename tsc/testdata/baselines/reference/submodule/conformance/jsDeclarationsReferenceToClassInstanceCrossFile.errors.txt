@@ -1,0 +1,43 @@
+test.js(1,18): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== test.js (1 errors) ====
+    const {Render} = require("./index");
+                     ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    let render = new Render();
+    
+    render.addRectangle();
+    console.log("Objects", render.objects);
+==== rectangle.js (0 errors) ====
+    class Rectangle {
+        constructor() {
+            console.log("I'm a rectangle!");
+        }
+    }
+    
+    module.exports = { Rectangle };
+==== index.js (0 errors) ====
+    const {Rectangle} = require('./rectangle');
+    
+    class Render {
+        constructor() {
+            /**
+             * Object list
+             * @type {Rectangle[]}
+             */
+            this.objects = [];
+        }
+        /**
+         * Adds a rectangle
+         * 
+         * @returns {Rectangle} the rect
+         */
+        addRectangle() {
+            const obj = new Rectangle();
+            this.objects.push(obj);
+            return obj;
+        }
+    }
+    
+    module.exports = { Render };

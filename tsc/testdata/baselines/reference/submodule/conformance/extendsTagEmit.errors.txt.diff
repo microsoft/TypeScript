@@ -1,0 +1,22 @@
+--- old.extendsTagEmit.errors.txt
++++ new.extendsTagEmit.errors.txt
+@@= skipped -0, +-1 lines =@@
+-main.js(2,15): error TS2304: Cannot find name 'Mismatch'.
+-main.js(2,15): error TS8023: JSDoc '@extends Mismatch' does not match the 'extends B' clause.
+-
+-
+-==== super.js (0 errors) ====
+-    export class B { }
+-    
+-==== main.js (2 errors) ====
+-    import { B } from './super'
+-    /** @extends {Mismatch} */
+-                  ~~~~~~~~
+-!!! error TS2304: Cannot find name 'Mismatch'.
+-                  ~~~~~~~~
+-!!! error TS8023: JSDoc '@extends Mismatch' does not match the 'extends B' clause.
+-    class C extends B { }
+-    
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

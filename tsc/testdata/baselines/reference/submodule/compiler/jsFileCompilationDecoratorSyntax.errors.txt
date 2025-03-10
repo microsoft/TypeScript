@@ -1,0 +1,8 @@
+a.js(1,2): error TS2304: Cannot find name 'internal'.
+
+
+==== a.js (1 errors) ====
+    @internal class C { }
+     ~~~~~~~~
+!!! error TS2304: Cannot find name 'internal'.
+    

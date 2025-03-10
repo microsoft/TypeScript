@@ -1,0 +1,20 @@
+--- old.taggedTemplateWithoutDeclaredHelper.errors.txt
++++ new.taggedTemplateWithoutDeclaredHelper.errors.txt
+@@= skipped -0, +-1 lines =@@
+-foo.ts(5,23): error TS2343: This syntax requires an imported helper named '__makeTemplateObject' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+-
+-
+-==== foo.ts (1 errors) ====
+-    function id<T>(x: T) {
+-      return x;
+-    }
+-    
+-    export const result = id `hello world`;
+-                          ~~~~~~~~~~~~~~~~
+-!!! error TS2343: This syntax requires an imported helper named '__makeTemplateObject' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+-    
+-==== ./node_modules/tslib/index.d.ts (0 errors) ====
+-    export { };
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

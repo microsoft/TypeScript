@@ -1,0 +1,25 @@
+index.ts(2,24): error TS2307: Cannot find module 'foo/other' or its corresponding type declarations.
+
+
+==== index.ts (1 errors) ====
+    import * as Foo from "foo";
+    import * as Other from "foo/other"/*1*/;
+                           ~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'foo/other' or its corresponding type declarations.
+==== node_modules/foo/package.json (0 errors) ====
+    {   
+        "name": "foo",
+        "version": "1.0.0"
+    }
+    
+==== node_modules/foo/index.js (0 errors) ====
+    var foo = 0;
+    module.exports = foo;
+    
+==== node_modules/foo/index.d.ts (0 errors) ====
+    declare const foo: any;
+    export = foo;
+    
+==== node_modules/foo/other.js (0 errors) ====
+    module.exports = {};
+    

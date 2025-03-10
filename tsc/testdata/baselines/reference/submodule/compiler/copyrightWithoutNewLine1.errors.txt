@@ -1,0 +1,14 @@
+copyrightWithoutNewLine1.ts(4,24): error TS2307: Cannot find module './greeter' or its corresponding type declarations.
+
+
+==== copyrightWithoutNewLine1.ts (1 errors) ====
+    /*****************************
+    * (c) Copyright - Important
+    ****************************/
+    import model = require("./greeter")
+                           ~~~~~~~~~~~
+!!! error TS2307: Cannot find module './greeter' or its corresponding type declarations.
+    var el = document.getElementById('content');
+    var greeter = new model.Greeter(el);
+    /** things */
+    greeter.start();

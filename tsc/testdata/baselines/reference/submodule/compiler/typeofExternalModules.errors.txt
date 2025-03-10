@@ -1,0 +1,24 @@
+typeofExternalModules_core.ts(5,1): error TS2741: Property 'C' is missing in type '{ new(): D; prototype: D; }' but required in type '{ C: { new(): C; prototype: C; }; }'.
+typeofExternalModules_core.ts(7,1): error TS2741: Property 'prototype' is missing in type '{ C: { new(): C; prototype: C; }; }' but required in type '{ new(): D; prototype: D; }'.
+
+
+==== typeofExternalModules_core.ts (2 errors) ====
+    import ext = require('./typeofExternalModules_external');
+    import exp = require('./typeofExternalModules_exportAssign');
+    
+    var y1: typeof ext = ext;
+    y1 = exp;
+    ~~
+!!! error TS2741: Property 'C' is missing in type '{ new(): D; prototype: D; }' but required in type '{ C: { new(): C; prototype: C; }; }'.
+!!! related TS2728 typeofExternalModules_external.ts:1:14: 'C' is declared here.
+    var y2: typeof exp = exp;
+    y2 = ext;
+    ~~
+!!! error TS2741: Property 'prototype' is missing in type '{ C: { new(): C; prototype: C; }; }' but required in type '{ new(): D; prototype: D; }'.
+==== typeofExternalModules_external.ts (0 errors) ====
+    export class C { }
+    
+==== typeofExternalModules_exportAssign.ts (0 errors) ====
+    class D { }
+    export = D;
+    

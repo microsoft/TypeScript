@@ -1,0 +1,39 @@
+--- old.destructuringParameterProperties4.errors.txt
++++ new.destructuringParameterProperties4.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ destructuringParameterProperties4.ts(2,31): error TS1187: A parameter property may not be declared using a binding pattern.
++destructuringParameterProperties4.ts(2,41): error TS2488: Type '[T, U, V]' must have a '[Symbol.iterator]()' method that returns an iterator.
+ destructuringParameterProperties4.ts(3,59): error TS2339: Property 'b' does not exist on type 'C1<T, U, V>'.
+ destructuringParameterProperties4.ts(3,83): error TS2339: Property 'c' does not exist on type 'C1<T, U, V>'.
+ destructuringParameterProperties4.ts(4,18): error TS2339: Property 'a' does not exist on type 'C1<T, U, V>'.
+@@= skipped -9, +18 lines =@@
+ destructuringParameterProperties4.ts(23,44): error TS2339: Property 'c' does not exist on type 'C2'.
+ 
+ 
+-==== destructuringParameterProperties4.ts (10 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== destructuringParameterProperties4.ts (11 errors) ====
+     class C1<T, U, V> {
+         constructor(private k: T, protected [a, b, c]: [T,U,V]) {
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS1187: A parameter property may not be declared using a binding pattern.
++                                            ~~~~~~~~~
++!!! error TS2488: Type '[T, U, V]' must have a '[Symbol.iterator]()' method that returns an iterator.
+             if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
+                                                               ~
+ !!! error TS2339: Property 'b' does not exist on type 'C1<T, U, V>'.

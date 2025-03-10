@@ -1,0 +1,19 @@
+declFileWithInternalModuleNameConflictsInExtendsClause3.ts(6,33): error TS2694: Namespace 'X' has no exported member 'A'.
+
+
+==== declFileWithInternalModuleNameConflictsInExtendsClause3.ts (1 errors) ====
+    module X.A.C {
+        export interface Z {
+        }
+    }
+    module X.A.B.C {
+        export class W implements X.A.C.Z { // This needs to be referred as X.A.C.Z as A has conflict
+                                    ~
+!!! error TS2694: Namespace 'X' has no exported member 'A'.
+        }
+    }
+    
+    module X.A.B.C {
+        export module A {
+        }
+    }

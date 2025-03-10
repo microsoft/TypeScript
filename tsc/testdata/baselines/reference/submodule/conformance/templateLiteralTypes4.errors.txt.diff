@@ -1,0 +1,22 @@
+--- old.templateLiteralTypes4.errors.txt
++++ new.templateLiteralTypes4.errors.txt
+@@= skipped -0, +0 lines =@@
+ templateLiteralTypes4.ts(285,12): error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
+ templateLiteralTypes4.ts(289,12): error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
++templateLiteralTypes4.ts(299,4): error TS2345: Argument of type '"**123**"' is not assignable to parameter of type '`**${bigint}**`'.
+ 
+ 
+-==== templateLiteralTypes4.ts (2 errors) ====
++==== templateLiteralTypes4.ts (3 errors) ====
+     // infer from number
+     type TNumber0 = "100" extends `${infer N extends number}` ? N : never; // 100
+     type TNumber1 = "-100" extends `${infer N extends number}` ? N : never; // -100
+@@= skipped -305, +306 lines =@@
+     
+     declare function f3<T extends bigint>(s: `**${T}**`): T;
+     f3("**123**"); // 123n
++       ~~~~~~~~~
++!!! error TS2345: Argument of type '"**123**"' is not assignable to parameter of type '`**${bigint}**`'.
+     
+     declare function f4<T extends boolean>(s: `**${T}**`): T;
+     f4("**true**"); // true | "true"

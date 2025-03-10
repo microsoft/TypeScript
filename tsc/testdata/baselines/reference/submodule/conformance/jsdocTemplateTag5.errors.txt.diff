@@ -1,0 +1,103 @@
+--- old.jsdocTemplateTag5.errors.txt
++++ new.jsdocTemplateTag5.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++a.js(9,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++a.js(17,5): error TS7023: 'get' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
++a.js(17,9): error TS7006: Parameter 'key' implicitly has an 'any' type.
++a.js(18,21): error TS2339: Property '_map' does not exist on type '{ get: (key: any) => error; }'.
++a.js(30,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++a.js(38,19): error TS7006: Parameter 'key' implicitly has an 'any' type.
++a.js(50,4): error TS2339: Property 'Multimap3' does not exist on type '{}'.
++a.js(52,10): error TS2339: Property '_map' does not exist on type '{}'.
++a.js(55,4): error TS2339: Property 'Multimap3' does not exist on type '{}'.
++a.js(60,9): error TS7006: Parameter 'key' implicitly has an 'any' type.
++
++
++==== a.js (10 errors) ====
++    /**
++     * Should work for function declarations
++     * @constructor
++     * @template {string} K
++     * @template V
++     */
++    function Multimap() {
++        /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
++        this._map = {};
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++    };
++    
++    Multimap.prototype = {
++        /**
++         * @param {K} key the key ok
++         * @returns {V} the value ok
++         */
++        get(key) {
++        ~~~
++!!! error TS7023: 'get' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
++            ~~~
++!!! error TS7006: Parameter 'key' implicitly has an 'any' type.
++            return this._map[key + ''];
++                        ~~~~
++!!! error TS2339: Property '_map' does not exist on type '{ get: (key: any) => error; }'.
++        }
++    }
++    
++    /**
++     * Should work for initialisers too
++     * @constructor
++     * @template {string} K
++     * @template V
++     */
++    var Multimap2 = function() {
++        /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
++        this._map = {};
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++    };
++    
++    Multimap2.prototype = {
++        /**
++         * @param {K} key the key ok
++         * @returns {V} the value ok
++         */
++        get: function(key) {
++                      ~~~
++!!! error TS7006: Parameter 'key' implicitly has an 'any' type.
++            return this._map[key + ''];
++        }
++    }
++    
++    var Ns = {};
++    /**
++     * Should work for expando-namespaced initialisers too
++     * @constructor
++     * @template {string} K
++     * @template V
++     */
++    Ns.Multimap3 = function() {
++       ~~~~~~~~~
++!!! error TS2339: Property 'Multimap3' does not exist on type '{}'.
++        /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
++        this._map = {};
++             ~~~~
++!!! error TS2339: Property '_map' does not exist on type '{}'.
++    };
++    
++    Ns.Multimap3.prototype = {
++       ~~~~~~~~~
++!!! error TS2339: Property 'Multimap3' does not exist on type '{}'.
++        /**
++         * @param {K} key the key ok
++         * @returns {V} the value ok
++         */
++        get(key) {
++            ~~~
++!!! error TS7006: Parameter 'key' implicitly has an 'any' type.
++            return this._map[key + ''];
++        }
++    }
++    
++    

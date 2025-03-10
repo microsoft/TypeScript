@@ -1,0 +1,14 @@
+exponentiationOperatorWithNew.ts(6,5): error TS2351: This expression is not constructable.
+  Type 'Number' has no construct signatures.
+
+
+==== exponentiationOperatorWithNew.ts (1 errors) ====
+    var a: any;
+    var b: any;
+    var c: any;
+    new a ** b ** c;
+    new a ** new b ** c;
+    new (a ** b ** c);
+        ~~~~~~~~~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'Number' has no construct signatures.

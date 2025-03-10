@@ -1,0 +1,9 @@
+usingDeclarations.8.ts(2,11): error TS1155: 'using' declarations must be initialized.
+
+
+==== usingDeclarations.8.ts (1 errors) ====
+    {
+        using a;
+              ~
+!!! error TS1155: 'using' declarations must be initialized.
+    }

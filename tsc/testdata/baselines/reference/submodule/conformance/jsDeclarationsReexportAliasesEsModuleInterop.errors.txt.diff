@@ -1,0 +1,27 @@
+--- old.jsDeclarationsReexportAliasesEsModuleInterop.errors.txt
++++ new.jsDeclarationsReexportAliasesEsModuleInterop.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++cls.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++usage.js(1,31): error TS2306: File 'cls.js' is not a module.
++usage.js(5,31): error TS2306: File 'cls.js' is not a module.
++
++
++==== cls.js (1 errors) ====
++    class Foo {}
++    module.exports = Foo;
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++==== usage.js (2 errors) ====
++    import {default as Fooa} from "./cls";
++                                  ~~~~~~~
++!!! error TS2306: File 'cls.js' is not a module.
++    
++    export const x = new Fooa();
++    
++    export {default as Foob} from "./cls";
++                                  ~~~~~~~
++!!! error TS2306: File 'cls.js' is not a module.
++    

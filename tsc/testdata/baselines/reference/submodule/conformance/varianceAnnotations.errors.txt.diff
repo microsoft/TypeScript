@@ -1,0 +1,124 @@
+--- old.varianceAnnotations.errors.txt
++++ new.varianceAnnotations.errors.txt
+@@= skipped -14, +14 lines =@@
+ varianceAnnotations.ts(35,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+ varianceAnnotations.ts(35,17): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+ varianceAnnotations.ts(36,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+-varianceAnnotations.ts(40,17): error TS2636: Type 'Covariant1<super-T>' is not assignable to type 'Covariant1<sub-T>' as implied by variance annotation.
++varianceAnnotations.ts(40,17): error TS2636: Type 'Covariant1<???>' is not assignable to type 'Covariant1<???>' as implied by variance annotation.
+   Types of property 'x' are incompatible.
+-    Type 'super-T' is not assignable to type 'sub-T'.
++    Type '???' is not assignable to type '???'. Two different types with this name exist, but they are unrelated.
+ varianceAnnotations.ts(44,21): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+-varianceAnnotations.ts(46,21): error TS2636: Type 'Contravariant2<sub-T>' is not assignable to type 'Contravariant2<super-T>' as implied by variance annotation.
++varianceAnnotations.ts(46,21): error TS2636: Type 'Contravariant2<???>' is not assignable to type 'Contravariant2<???>' as implied by variance annotation.
+   Types of property 'f' are incompatible.
+-    Type '(x: sub-T) => void' is not assignable to type '(x: super-T) => void'.
++    Type '(x: ???) => void' is not assignable to type '(x: ???) => void'. Two different types with this name exist, but they are unrelated.
+       Types of parameters 'x' and 'x' are incompatible.
+-        Type 'super-T' is not assignable to type 'sub-T'.
+-varianceAnnotations.ts(50,17): error TS2636: Type 'Invariant1<super-T>' is not assignable to type 'Invariant1<sub-T>' as implied by variance annotation.
++        Type '???' is not assignable to type '???'. Two different types with this name exist, but they are unrelated.
++varianceAnnotations.ts(50,17): error TS2636: Type 'Invariant1<???>' is not assignable to type 'Invariant1<???>' as implied by variance annotation.
+   The types returned by 'f(...)' are incompatible between these types.
+-    Type 'super-T' is not assignable to type 'sub-T'.
+-varianceAnnotations.ts(54,17): error TS2636: Type 'Invariant2<sub-T>' is not assignable to type 'Invariant2<super-T>' as implied by variance annotation.
++    Type '???' is not assignable to type '???'. Two different types with this name exist, but they are unrelated.
++varianceAnnotations.ts(54,17): error TS2636: Type 'Invariant2<???>' is not assignable to type 'Invariant2<???>' as implied by variance annotation.
+   Types of property 'f' are incompatible.
+-    Type '(x: sub-T) => sub-T' is not assignable to type '(x: super-T) => super-T'.
++    Type '(x: ???) => ???' is not assignable to type '(x: ???) => ???'. Two different types with this name exist, but they are unrelated.
+       Types of parameters 'x' and 'x' are incompatible.
+-        Type 'super-T' is not assignable to type 'sub-T'.
+-varianceAnnotations.ts(60,11): error TS2636: Type 'Foo1<super-T>' is not assignable to type 'Foo1<sub-T>' as implied by variance annotation.
++        Type '???' is not assignable to type '???'. Two different types with this name exist, but they are unrelated.
++varianceAnnotations.ts(60,11): error TS2636: Type 'Foo1<???>' is not assignable to type 'Foo1<???>' as implied by variance annotation.
+   Types of property 'x' are incompatible.
+-    Type 'super-T' is not assignable to type 'sub-T'.
+-varianceAnnotations.ts(71,11): error TS2636: Type 'Foo2<sub-T>' is not assignable to type 'Foo2<super-T>' as implied by variance annotation.
++    Type '???' is not assignable to type '???'. Two different types with this name exist, but they are unrelated.
++varianceAnnotations.ts(71,11): error TS2636: Type 'Foo2<???>' is not assignable to type 'Foo2<???>' as implied by variance annotation.
+   Types of property 'f' are incompatible.
+-    Type 'FooFn2<sub-T>' is not assignable to type 'FooFn2<super-T>'.
+-      Type 'super-T' is not assignable to type 'sub-T'.
++    Type 'FooFn2<???>' is not assignable to type 'FooFn2<???>'. Two different types with this name exist, but they are unrelated.
++      Type '???' is not assignable to type '???'. Two different types with this name exist, but they are unrelated.
+ varianceAnnotations.ts(95,10): error TS1273: 'public' modifier cannot appear on a type parameter
+ varianceAnnotations.ts(96,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+ varianceAnnotations.ts(96,17): error TS1030: 'in' modifier already seen.
+@@= skipped -119, +119 lines =@@
+     
+     type Covariant1<in T> = {  // Error
+                     ~~~~
+-!!! error TS2636: Type 'Covariant1<super-T>' is not assignable to type 'Covariant1<sub-T>' as implied by variance annotation.
++!!! error TS2636: Type 'Covariant1<???>' is not assignable to type 'Covariant1<???>' as implied by variance annotation.
+ !!! error TS2636:   Types of property 'x' are incompatible.
+-!!! error TS2636:     Type 'super-T' is not assignable to type 'sub-T'.
++!!! error TS2636:     Type '???' is not assignable to type '???'. Two different types with this name exist, but they are unrelated.
+         x: T;
+     }
+     
+@@= skipped -12, +12 lines =@@
+     
+     type Contravariant2<out T> = {  // Error
+                         ~~~~~
+-!!! error TS2636: Type 'Contravariant2<sub-T>' is not assignable to type 'Contravariant2<super-T>' as implied by variance annotation.
++!!! error TS2636: Type 'Contravariant2<???>' is not assignable to type 'Contravariant2<???>' as implied by variance annotation.
+ !!! error TS2636:   Types of property 'f' are incompatible.
+-!!! error TS2636:     Type '(x: sub-T) => void' is not assignable to type '(x: super-T) => void'.
++!!! error TS2636:     Type '(x: ???) => void' is not assignable to type '(x: ???) => void'. Two different types with this name exist, but they are unrelated.
+ !!! error TS2636:       Types of parameters 'x' and 'x' are incompatible.
+-!!! error TS2636:         Type 'super-T' is not assignable to type 'sub-T'.
++!!! error TS2636:         Type '???' is not assignable to type '???'. Two different types with this name exist, but they are unrelated.
+         f: (x: T) => void;
+     }
+     
+     type Invariant1<in T> = {  // Error
+                     ~~~~
+-!!! error TS2636: Type 'Invariant1<super-T>' is not assignable to type 'Invariant1<sub-T>' as implied by variance annotation.
++!!! error TS2636: Type 'Invariant1<???>' is not assignable to type 'Invariant1<???>' as implied by variance annotation.
+ !!! error TS2636:   The types returned by 'f(...)' are incompatible between these types.
+-!!! error TS2636:     Type 'super-T' is not assignable to type 'sub-T'.
++!!! error TS2636:     Type '???' is not assignable to type '???'. Two different types with this name exist, but they are unrelated.
+         f: (x: T) => T;
+     }
+     
+     type Invariant2<out T> = {  // Error
+                     ~~~~~
+-!!! error TS2636: Type 'Invariant2<sub-T>' is not assignable to type 'Invariant2<super-T>' as implied by variance annotation.
++!!! error TS2636: Type 'Invariant2<???>' is not assignable to type 'Invariant2<???>' as implied by variance annotation.
+ !!! error TS2636:   Types of property 'f' are incompatible.
+-!!! error TS2636:     Type '(x: sub-T) => sub-T' is not assignable to type '(x: super-T) => super-T'.
++!!! error TS2636:     Type '(x: ???) => ???' is not assignable to type '(x: ???) => ???'. Two different types with this name exist, but they are unrelated.
+ !!! error TS2636:       Types of parameters 'x' and 'x' are incompatible.
+-!!! error TS2636:         Type 'super-T' is not assignable to type 'sub-T'.
++!!! error TS2636:         Type '???' is not assignable to type '???'. Two different types with this name exist, but they are unrelated.
+         f: (x: T) => T;
+     }
+     
+@@= skipped -30, +30 lines =@@
+     
+     type Foo1<in T> = {  // Error
+               ~~~~
+-!!! error TS2636: Type 'Foo1<super-T>' is not assignable to type 'Foo1<sub-T>' as implied by variance annotation.
++!!! error TS2636: Type 'Foo1<???>' is not assignable to type 'Foo1<???>' as implied by variance annotation.
+ !!! error TS2636:   Types of property 'x' are incompatible.
+-!!! error TS2636:     Type 'super-T' is not assignable to type 'sub-T'.
++!!! error TS2636:     Type '???' is not assignable to type '???'. Two different types with this name exist, but they are unrelated.
+         x: T;
+         f: FooFn1<T>;
+     }
+@@= skipped -15, +15 lines =@@
+     
+     type Foo2<out T> = {  // Error
+               ~~~~~
+-!!! error TS2636: Type 'Foo2<sub-T>' is not assignable to type 'Foo2<super-T>' as implied by variance annotation.
++!!! error TS2636: Type 'Foo2<???>' is not assignable to type 'Foo2<???>' as implied by variance annotation.
+ !!! error TS2636:   Types of property 'f' are incompatible.
+-!!! error TS2636:     Type 'FooFn2<sub-T>' is not assignable to type 'FooFn2<super-T>'.
+-!!! error TS2636:       Type 'super-T' is not assignable to type 'sub-T'.
++!!! error TS2636:     Type 'FooFn2<???>' is not assignable to type 'FooFn2<???>'. Two different types with this name exist, but they are unrelated.
++!!! error TS2636:       Type '???' is not assignable to type '???'. Two different types with this name exist, but they are unrelated.
+         x: T;
+         f: FooFn2<T>;
+     }

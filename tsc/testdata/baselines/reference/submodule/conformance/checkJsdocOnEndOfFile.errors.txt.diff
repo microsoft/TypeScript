@@ -1,0 +1,15 @@
+--- old.checkJsdocOnEndOfFile.errors.txt
++++ new.checkJsdocOnEndOfFile.errors.txt
+@@= skipped -0, +-1 lines =@@
+-eof.js(2,20): error TS2304: Cannot find name 'bad'.
+-
+-
+-==== eof.js (1 errors) ====
+-    /**
+-     * @typedef {Array<bad>} Should have error here
+-                       ~~~
+-!!! error TS2304: Cannot find name 'bad'.
+-     */
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

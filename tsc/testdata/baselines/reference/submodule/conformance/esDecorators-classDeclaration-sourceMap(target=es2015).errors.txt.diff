@@ -1,0 +1,70 @@
+--- old.esDecorators-classDeclaration-sourceMap(target=es2015).errors.txt
++++ new.esDecorators-classDeclaration-sourceMap(target=es2015).errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== esDecorators-classDeclaration-sourceMap.ts (0 errors) ====
++    declare var dec: any;
++    
++    @dec
++    @dec
++    class C {
++        @dec
++        @dec
++        method() {}
++    
++        @dec
++        @dec
++        get x() { return 1; }
++    
++        @dec
++        @dec
++        set x(value: number) { }
++    
++        @dec
++        @dec
++        y = 1;
++    
++        @dec
++        @dec
++        accessor z = 1;
++    
++        @dec
++        @dec
++        static #method() {}
++    
++        @dec
++        @dec
++        static get #x() { return 1; }
++    
++        @dec
++        @dec
++        static set #x(value: number) { }
++    
++        @dec
++        @dec
++        static #y = 1;
++    
++        @dec
++        @dec
++        static accessor #z = 1;
++    }
++    

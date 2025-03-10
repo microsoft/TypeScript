@@ -1,0 +1,19 @@
+--- old.constEnumExternalModule.errors.txt
++++ new.constEnumExternalModule.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++m2.ts(1,20): error TS2307: Cannot find module 'm1' or its corresponding type declarations.
++
++
++==== m2.ts (1 errors) ====
++    import A = require('m1')
++                       ~~~~
++!!! error TS2307: Cannot find module 'm1' or its corresponding type declarations.
++    var v = A.V;
++==== m1.ts (0 errors) ====
++    const enum E {
++        V = 100
++    }
++    
++    export = E

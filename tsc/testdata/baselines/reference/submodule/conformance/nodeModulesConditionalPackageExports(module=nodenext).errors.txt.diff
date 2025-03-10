@@ -1,0 +1,162 @@
+--- old.nodeModulesConditionalPackageExports(module=nodenext).errors.txt
++++ new.nodeModulesConditionalPackageExports(module=nodenext).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
+-index.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package/mjs")' call instead.
+-index.cts(4,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
+-node_modules/inner/index.d.mts(2,13): error TS2303: Circular definition of import alias 'cjs'.
+-node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import alias 'cjs'.
++index.cts(8,23): error TS2307: Cannot find module 'inner/a' or its corresponding type declarations.
++index.cts(9,23): error TS2307: Cannot find module 'inner/b' or its corresponding type declarations.
++index.cts(11,21): error TS2307: Cannot find module 'inner/types' or its corresponding type declarations.
++index.mts(8,23): error TS2307: Cannot find module 'inner/a' or its corresponding type declarations.
++index.mts(9,23): error TS2307: Cannot find module 'inner/b' or its corresponding type declarations.
++index.mts(11,21): error TS2307: Cannot find module 'inner/types' or its corresponding type declarations.
++index.mts(14,7): error TS2339: Property 'mjsSource' does not exist on type '{ cjs: error; mjs: error; type: ???; ts: error; readonly implicitCjsSource: true; }'.
++index.ts(8,23): error TS2307: Cannot find module 'inner/a' or its corresponding type declarations.
++index.ts(9,23): error TS2307: Cannot find module 'inner/b' or its corresponding type declarations.
++index.ts(11,21): error TS2307: Cannot find module 'inner/types' or its corresponding type declarations.
++index.ts(14,7): error TS2339: Property 'mjsSource' does not exist on type '{ cjs: error; mjs: error; type: ???; ts: error; readonly implicitCjsSource: true; }'.
++node_modules/inner/index.d.cts(2,22): error TS2307: Cannot find module 'inner/a' or its corresponding type declarations.
++node_modules/inner/index.d.cts(3,22): error TS2307: Cannot find module 'inner/b' or its corresponding type declarations.
++node_modules/inner/index.d.cts(5,21): error TS2307: Cannot find module 'inner/types' or its corresponding type declarations.
++node_modules/inner/index.d.mts(2,22): error TS2307: Cannot find module 'inner/a' or its corresponding type declarations.
++node_modules/inner/index.d.mts(3,22): error TS2307: Cannot find module 'inner/b' or its corresponding type declarations.
++node_modules/inner/index.d.mts(5,21): error TS2307: Cannot find module 'inner/types' or its corresponding type declarations.
++node_modules/inner/index.d.ts(2,22): error TS2307: Cannot find module 'inner/a' or its corresponding type declarations.
++node_modules/inner/index.d.ts(3,22): error TS2307: Cannot find module 'inner/b' or its corresponding type declarations.
++node_modules/inner/index.d.ts(5,21): error TS2307: Cannot find module 'inner/types' or its corresponding type declarations.
+ 
+ 
+-!!! error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
+-==== index.ts (0 errors) ====
++==== index.ts (4 errors) ====
+     // esm format file
+     import * as cjs from "package/cjs";
+     import * as mjs from "package/mjs";
+@@= skipped -14, +28 lines =@@
+     mjs;
+     type;
+     import * as cjsi from "inner/a";
++                          ~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/a' or its corresponding type declarations.
+     import * as mjsi from "inner/b";
++                          ~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/b' or its corresponding type declarations.
+     import * as typei from "inner";
+     import * as ts from "inner/types";
++                        ~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/types' or its corresponding type declarations.
+     cjsi.mjsSource;
+     mjsi.mjsSource;
+     typei.mjsSource;
++          ~~~~~~~~~
++!!! error TS2339: Property 'mjsSource' does not exist on type '{ cjs: error; mjs: error; type: ???; ts: error; readonly implicitCjsSource: true; }'.
+     ts.mjsSource;
+-==== index.mts (0 errors) ====
++==== index.mts (4 errors) ====
+     // esm format file
+     import * as cjs from "package/cjs";
+     import * as mjs from "package/mjs";
+@@= skipped -16, +24 lines =@@
+     mjs;
+     type;
+     import * as cjsi from "inner/a";
++                          ~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/a' or its corresponding type declarations.
+     import * as mjsi from "inner/b";
++                          ~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/b' or its corresponding type declarations.
+     import * as typei from "inner";
+     import * as ts from "inner/types";
++                        ~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/types' or its corresponding type declarations.
+     cjsi.mjsSource;
+     mjsi.mjsSource;
+     typei.mjsSource;
++          ~~~~~~~~~
++!!! error TS2339: Property 'mjsSource' does not exist on type '{ cjs: error; mjs: error; type: ???; ts: error; readonly implicitCjsSource: true; }'.
+     ts.mjsSource;
+-==== index.cts (2 errors) ====
++==== index.cts (3 errors) ====
+     // cjs format file
+     import * as cjs from "package/cjs";
+     import * as mjs from "package/mjs";
+-                         ~~~~~~~~~~~~~
+-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package/mjs")' call instead.
+     import * as type from "package";
+-                          ~~~~~~~~~
+-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
+     cjs;
+     mjs;
+     type;
+     import * as cjsi from "inner/a";
++                          ~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/a' or its corresponding type declarations.
+     import * as mjsi from "inner/b";
++                          ~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/b' or its corresponding type declarations.
+     import * as typei from "inner";
+     import * as ts from "inner/types";
++                        ~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/types' or its corresponding type declarations.
+     cjsi.cjsSource;
+     mjsi.cjsSource;
+     typei.implicitCjsSource;
+     ts.cjsSource;
+-==== node_modules/inner/index.d.ts (1 errors) ====
++==== node_modules/inner/index.d.ts (3 errors) ====
+     // cjs format file
+     import * as cjs from "inner/a";
+-                ~~~
+-!!! error TS2303: Circular definition of import alias 'cjs'.
++                         ~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/a' or its corresponding type declarations.
+     import * as mjs from "inner/b";
++                         ~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/b' or its corresponding type declarations.
+     import * as type from "inner";
+     import * as ts from "inner/types";
++                        ~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/types' or its corresponding type declarations.
+     export { cjs };
+     export { mjs };
+     export { type };
+     export { ts };
+     export const implicitCjsSource = true;
+-==== node_modules/inner/index.d.mts (1 errors) ====
++==== node_modules/inner/index.d.mts (3 errors) ====
+     // esm format file
+     import * as cjs from "inner/a";
+-                ~~~
+-!!! error TS2303: Circular definition of import alias 'cjs'.
++                         ~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/a' or its corresponding type declarations.
+     import * as mjs from "inner/b";
++                         ~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/b' or its corresponding type declarations.
+     import * as type from "inner";
+     import * as ts from "inner/types";
++                        ~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/types' or its corresponding type declarations.
+     export { cjs };
+     export { mjs };
+     export { type };
+     export { ts };
+     export const mjsSource = true;
+-==== node_modules/inner/index.d.cts (0 errors) ====
++==== node_modules/inner/index.d.cts (3 errors) ====
+     // cjs format file
+     import * as cjs from "inner/a";
++                         ~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/a' or its corresponding type declarations.
+     import * as mjs from "inner/b";
++                         ~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/b' or its corresponding type declarations.
+     import * as type from "inner";
+     import * as ts from "inner/types";
++                        ~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'inner/types' or its corresponding type declarations.
+     export { cjs };
+     export { mjs };
+     export { type };

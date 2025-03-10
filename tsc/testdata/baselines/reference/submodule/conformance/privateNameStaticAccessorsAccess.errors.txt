@@ -1,0 +1,58 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+privateNameStaticAccessorsAccess.ts(7,9): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+privateNameStaticAccessorsAccess.ts(16,4): error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.
+privateNameStaticAccessorsAccess.ts(19,8): error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.
+privateNameStaticAccessorsAccess.ts(24,12): error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== privateNameStaticAccessorsAccess.ts (4 errors) ====
+    export {}
+    class A2 {
+        static get #prop() { return ""; }
+        static set #prop(param: string) { }
+    
+        constructor() {
+            console.log(A2.#prop);
+            ~~~~~~~
+!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+            let a: typeof A2 = A2;
+            a.#prop;
+            function  foo (){
+                a.#prop;
+            }
+        }
+    }
+    
+    A2.#prop; // Error
+       ~~~~~
+!!! error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.
+    
+    function  foo (){
+        A2.#prop; // Error
+           ~~~~~
+!!! error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.
+    }
+    
+    class B2 {
+        m() {
+            A2.#prop;
+               ~~~~~
+!!! error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.
+        }
+    }
+    

@@ -1,0 +1,34 @@
+--- old.esModuleInteropTslibHelpers.errors.txt
++++ new.esModuleInteropTslibHelpers.errors.txt
+@@= skipped -0, +-1 lines =@@
+-file2.ts(1,1): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+-file3.ts(1,9): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+-file4.ts(1,14): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+-
+-
+-==== refs.d.ts (0 errors) ====
+-    declare module "path";
+-==== file.ts (0 errors) ====
+-    import path from "path";
+-    path.resolve("", "../");
+-    export class Foo { }
+-==== file2.ts (1 errors) ====
+-    import * as path from "path";
+-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+-    path.resolve("", "../");
+-    export class Foo2 { }
+-==== file3.ts (1 errors) ====
+-    import {default as resolve} from "path";
+-            ~~~~~~~~~~~~~~~~~~
+-!!! error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+-    resolve("", "../");
+-    export class Foo3 { }
+-==== file4.ts (1 errors) ====
+-    import {Bar, default as resolve} from "path";
+-                 ~~~~~~~~~~~~~~~~~~
+-!!! error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+-    resolve("", "../");
+-    export { Bar }
+@@= skipped --1, +1 lines =@@
++<no content>

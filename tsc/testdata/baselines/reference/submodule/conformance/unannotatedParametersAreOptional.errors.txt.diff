@@ -1,0 +1,53 @@
+--- old.unannotatedParametersAreOptional.errors.txt
++++ new.unannotatedParametersAreOptional.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++test.js(2,1): error TS2554: Expected 1 arguments, but got 0.
++test.js(10,3): error TS2554: Expected 1 arguments, but got 0.
++test.js(11,9): error TS2554: Expected 1 arguments, but got 0.
++test.js(12,9): error TS2554: Expected 1 arguments, but got 0.
++test.js(19,5): error TS2554: Expected 1 arguments, but got 0.
++test.js(20,5): error TS2554: Expected 1 arguments, but got 0.
++
++
++==== test.js (6 errors) ====
++    function f(x) {}
++    f(); // Always been ok
++    ~
++!!! error TS2554: Expected 1 arguments, but got 0.
++!!! related TS6210 test.js:1:12: An argument for 'x' was not provided.
++    
++    class C {
++      static m(x) {}
++      p = x => {}
++      m(x) {}
++    }
++    
++    C.m();       // Always been ok
++      ~
++!!! error TS2554: Expected 1 arguments, but got 0.
++!!! related TS6210 test.js:5:12: An argument for 'x' was not provided.
++    new C().m(); // Regression #39261
++            ~
++!!! error TS2554: Expected 1 arguments, but got 0.
++!!! related TS6210 test.js:7:5: An argument for 'x' was not provided.
++    new C().p(); // Regression #39261
++            ~
++!!! error TS2554: Expected 1 arguments, but got 0.
++!!! related TS6210 test.js:6:7: An argument for 'x' was not provided.
++    
++    const obj = {
++      m(x) {},
++      p: x => {}
++    };
++    
++    obj.m(); // Always been ok
++        ~
++!!! error TS2554: Expected 1 arguments, but got 0.
++!!! related TS6210 test.js:15:5: An argument for 'x' was not provided.
++    obj.p(); // Always been ok
++        ~
++!!! error TS2554: Expected 1 arguments, but got 0.
++!!! related TS6210 test.js:16:6: An argument for 'x' was not provided.
++    

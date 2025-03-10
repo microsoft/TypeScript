@@ -1,0 +1,72 @@
+scannertest1.ts(5,21): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(5,47): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(9,16): error TS2662: Cannot find name 'isDecimalDigit'. Did you mean the static member 'CharacterInfo.isDecimalDigit'?
+scannertest1.ts(10,22): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(10,47): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(11,22): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(11,47): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(15,9): error TS2304: Cannot find name 'Debug'.
+scannertest1.ts(15,22): error TS2662: Cannot find name 'isHexDigit'. Did you mean the static member 'CharacterInfo.isHexDigit'?
+scannertest1.ts(16,16): error TS2662: Cannot find name 'isDecimalDigit'. Did you mean the static member 'CharacterInfo.isDecimalDigit'?
+scannertest1.ts(17,20): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(18,21): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(18,46): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(19,23): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(20,23): error TS2304: Cannot find name 'CharacterCodes'.
+
+
+==== scannertest1.ts (15 errors) ====
+    ///<reference path='References.ts' />
+    
+    class CharacterInfo {
+        public static isDecimalDigit(c: number): boolean {
+            return c >= CharacterCodes._0 && c <= CharacterCodes._9;
+                        ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'CharacterCodes'.
+                                                  ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'CharacterCodes'.
+        }
+    
+        public static isHexDigit(c: number): boolean {
+            return isDecimalDigit(c) ||
+                   ~~~~~~~~~~~~~~
+!!! error TS2662: Cannot find name 'isDecimalDigit'. Did you mean the static member 'CharacterInfo.isDecimalDigit'?
+                   (c >= CharacterCodes.A && c <= CharacterCodes.F) ||
+                         ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'CharacterCodes'.
+                                                  ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'CharacterCodes'.
+                   (c >= CharacterCodes.a && c <= CharacterCodes.f);
+                         ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'CharacterCodes'.
+                                                  ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'CharacterCodes'.
+        }
+    
+        public static hexValue(c: number): number {
+            Debug.assert(isHexDigit(c));
+            ~~~~~
+!!! error TS2304: Cannot find name 'Debug'.
+                         ~~~~~~~~~~
+!!! error TS2662: Cannot find name 'isHexDigit'. Did you mean the static member 'CharacterInfo.isHexDigit'?
+            return isDecimalDigit(c)
+                   ~~~~~~~~~~~~~~
+!!! error TS2662: Cannot find name 'isDecimalDigit'. Did you mean the static member 'CharacterInfo.isDecimalDigit'?
+                ? (c - CharacterCodes._0)
+                       ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'CharacterCodes'.
+                : (c >= CharacterCodes.A && c <= CharacterCodes.F)
+                        ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'CharacterCodes'.
+                                                 ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'CharacterCodes'.
+                    ? c - CharacterCodes.A + 10
+                          ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'CharacterCodes'.
+                    : c - CharacterCodes.a + 10;
+                          ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'CharacterCodes'.
+        }
+    }
+    
+    

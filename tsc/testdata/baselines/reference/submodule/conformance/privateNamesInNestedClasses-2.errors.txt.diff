@@ -1,0 +1,39 @@
+--- old.privateNamesInNestedClasses-2.errors.txt
++++ new.privateNamesInNestedClasses-2.errors.txt
+@@= skipped -0, +0 lines =@@
+-privateNamesInNestedClasses-2.ts(9,27): error TS18014: The property '#x' cannot be accessed on type 'typeof A' within this class because it is shadowed by another private identifier with the same spelling.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'CallableFunction'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'NewableFunction'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++privateNamesInNestedClasses-2.ts(9,27): error TS18014: The property '#x' cannot be accessed on type '{ new(): A; #x: number; prototype: A; }' within this class because it is shadowed by another private identifier with the same spelling.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'CallableFunction'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'NewableFunction'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== privateNamesInNestedClasses-2.ts (1 errors) ====
+     class A {
+         static #x = 5;
+@@= skipped -11, +31 lines =@@
+                         constructor() {
+                             A.#x // error
+                               ~~
+-!!! error TS18014: The property '#x' cannot be accessed on type 'typeof A' within this class because it is shadowed by another private identifier with the same spelling.
++!!! error TS18014: The property '#x' cannot be accessed on type '{ new(): A; #x: number; prototype: A; }' within this class because it is shadowed by another private identifier with the same spelling.
+ !!! related TS18017 privateNamesInNestedClasses-2.ts:5:13: The shadowing declaration of '#x' is defined here
+ !!! related TS18018 privateNamesInNestedClasses-2.ts:2:12: The declaration of '#x' that you probably intended to use is defined here
+                         }

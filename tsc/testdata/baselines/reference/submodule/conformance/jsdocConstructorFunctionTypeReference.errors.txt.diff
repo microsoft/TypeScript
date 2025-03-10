@@ -1,0 +1,25 @@
+--- old.jsdocConstructorFunctionTypeReference.errors.txt
++++ new.jsdocConstructorFunctionTypeReference.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++jsdocConstructorFunctionTypeReference.js(10,36): error TS7006: Parameter 'state' implicitly has an 'any' type.
++
++
++==== jsdocConstructorFunctionTypeReference.js (1 errors) ====
++    var Validator = function VFunc() {
++        this.flags = "gim"
++    };
++    
++    Validator.prototype.num = 12
++    
++    /**
++     * @param {Validator} state
++     */
++    var validateRegExpFlags = function(state) {
++                                       ~~~~~
++!!! error TS7006: Parameter 'state' implicitly has an 'any' type.
++        return state.flags
++    };
++    
++    

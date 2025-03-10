@@ -1,0 +1,34 @@
+/index.ts(1,23): error TS2306: File '/test.js' is not a module.
+/index.ts(3,16): error TS2306: File '/test.js' is not a module.
+/test.js(6,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== /test.js (1 errors) ====
+    class Abcde {
+      /** @type {string} */
+      x;
+    }
+    
+    module.exports = {
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+      Abcde
+    };
+    
+==== /index.ts (2 errors) ====
+    import { Abcde } from "./test";
+                          ~~~~~~~~
+!!! error TS2306: File '/test.js' is not a module.
+    
+    declare module "./test" {
+                   ~~~~~~~~
+!!! error TS2306: File '/test.js' is not a module.
+      interface Abcde { b: string }
+    }
+    
+    new Abcde().x;
+    
+    // Bug: the type meaning from /test.js does not
+    // propagate through the object literal export.
+    const x: Abcde = { b: "" };
+    

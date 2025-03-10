@@ -1,0 +1,15 @@
+--- old.noCrashOnParameterNamedRequire.errors.txt
++++ new.noCrashOnParameterNamedRequire.errors.txt
+@@= skipped -0, +-1 lines =@@
+-index.js(2,25): error TS2307: Cannot find module './mod' or its corresponding type declarations.
+-
+-
+-==== index.js (1 errors) ====
+-    (function(require, module, exports){
+-        const mod = require("./mod");
+-                            ~~~~~~~
+-!!! error TS2307: Cannot find module './mod' or its corresponding type declarations.
+-        mod.foo;
+-    })(null, null, null);
+@@= skipped --1, +1 lines =@@
++<no content>

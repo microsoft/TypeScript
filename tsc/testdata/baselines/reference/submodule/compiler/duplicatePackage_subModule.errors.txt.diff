@@ -1,0 +1,38 @@
+--- old.duplicatePackage_subModule.errors.txt
++++ new.duplicatePackage_subModule.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/index.ts(4,7): error TS2719: Type 'default' is not assignable to type 'default'. Two different types with this name exist, but they are unrelated.
++  Property 'source' is protected but type 'default' is not a class derived from 'default'.
++
++
++==== /index.ts (1 errors) ====
++    import Foo from "foo/Foo";
++    import * as a from "a";
++    
++    const o: Foo = a.o;
++          ~
++!!! error TS2719: Type 'default' is not assignable to type 'default'. Two different types with this name exist, but they are unrelated.
++!!! error TS2719:   Property 'source' is protected but type 'default' is not a class derived from 'default'.
++    
++==== /node_modules/a/index.d.ts (0 errors) ====
++    import Foo from "foo/Foo";
++    export const o: Foo;
++    
++==== /node_modules/a/node_modules/foo/Foo.d.ts (0 errors) ====
++    export default class Foo {
++        protected source: boolean;
++    }
++    
++==== /node_modules/a/node_modules/foo/package.json (0 errors) ====
++    { "name": "foo", "version": "1.2.3" }
++    
++==== /node_modules/foo/Foo.d.ts (0 errors) ====
++    export default class Foo {
++        protected source: boolean;
++    }
++    
++==== /node_modules/foo/package.json (0 errors) ====
++    { "name": "foo", "version": "1.2.3" }
++    

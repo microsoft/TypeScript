@@ -1,0 +1,24 @@
+--- old.emitArrowFunctionWhenUsingArguments19.errors.txt
++++ new.emitArrowFunctionWhenUsingArguments19.errors.txt
+@@= skipped -0, +-1 lines =@@
+-emitArrowFunctionWhenUsingArguments19.ts(5,33): error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.
+-
+-
+-==== emitArrowFunctionWhenUsingArguments19.ts (1 errors) ====
+-    function f() {
+-        function g() {
+-            var _arguments = 10;                // No capture in 'g', so no conflict.
+-            function h() {
+-                var capture = () => arguments;  // Should trigger an '_arguments' capture into function 'h'
+-                                    ~~~~~~~~~
+-!!! error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.
+-                foo(_arguments);                // Error as this does not resolve to the user defined '_arguments'
+-            }
+-        }
+-    
+-        function foo(x: any) {
+-            return 100;
+-        }
+-    }
+@@= skipped --1, +1 lines =@@
++<no content>

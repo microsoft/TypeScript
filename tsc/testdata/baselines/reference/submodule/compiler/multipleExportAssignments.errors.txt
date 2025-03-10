@@ -1,0 +1,31 @@
+multipleExportAssignments.ts(13,10): error TS2300: Duplicate identifier 'export='.
+multipleExportAssignments.ts(13,10): error TS2300: Duplicate identifier 'export='.
+multipleExportAssignments.ts(14,10): error TS2300: Duplicate identifier 'export='.
+multipleExportAssignments.ts(14,10): error TS2300: Duplicate identifier 'export='.
+
+
+==== multipleExportAssignments.ts (4 errors) ====
+    interface connectModule {
+        (res, req, next): void;
+    }
+    interface connectExport {
+        use: (mod: connectModule) => connectExport;
+        listen: (port: number) => void;
+    }
+    var server: {
+        (): connectExport;
+        test1: connectModule;
+        test2(): connectModule;
+    };
+    export = server;
+             ~~~~~~
+!!! error TS2300: Duplicate identifier 'export='.
+             ~~~~~~
+!!! error TS2300: Duplicate identifier 'export='.
+    export = connectExport;
+             ~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'export='.
+             ~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'export='.
+     
+    

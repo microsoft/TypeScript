@@ -1,0 +1,18 @@
+--- old.intersectionAsWeakTypeSource.errors.txt
++++ new.intersectionAsWeakTypeSource.errors.txt
+@@= skipped -0, +0 lines =@@
+ intersectionAsWeakTypeSource.ts(8,7): error TS2559: Type 'XY' has no properties in common with type 'Z'.
+-intersectionAsWeakTypeSource.ts(18,7): error TS2739: Type 'Number & { __brand: { view: number; styleMedia: string; }; }' is missing the following properties from type 'ViewStyle': view, styleMedia
++intersectionAsWeakTypeSource.ts(18,7): error TS2322: Type 'Brand<{ view: number; styleMedia: string; }>' is not assignable to type 'ViewStyle'.
++  Type 'Number & { __brand: { view: number; styleMedia: string; }; }' is missing the following properties from type 'ViewStyle': view, styleMedia
+ 
+ 
+ ==== intersectionAsWeakTypeSource.ts (2 errors) ====
+@@= skipped -23, +24 lines =@@
+     const wrapped = create({ first: { view: 0, styleMedia: "???" } });
+     const vs: ViewStyle = wrapped.first // error, first is a branded number
+           ~~
+-!!! error TS2739: Type 'Number & { __brand: { view: number; styleMedia: string; }; }' is missing the following properties from type 'ViewStyle': view, styleMedia
++!!! error TS2322: Type 'Brand<{ view: number; styleMedia: string; }>' is not assignable to type 'ViewStyle'.
++!!! error TS2322:   Type 'Number & { __brand: { view: number; styleMedia: string; }; }' is missing the following properties from type 'ViewStyle': view, styleMedia
+     

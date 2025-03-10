@@ -1,0 +1,26 @@
+--- old.checkJsdocTypeTag4.errors.txt
++++ new.checkJsdocTypeTag4.errors.txt
+@@= skipped -0, +-1 lines =@@
+-test.js(5,14): error TS2344: Type 'number' does not satisfy the constraint 'string'.
+-test.js(7,14): error TS2344: Type 'number' does not satisfy the constraint 'string'.
+-
+-
+-==== t.d.ts (0 errors) ====
+-    type A<T extends string> = { a: T }
+-    
+-==== test.js (2 errors) ====
+-    /** Also should error for jsdoc typedefs
+-     * @template {string} U
+-     * @typedef {{ b: U }} B
+-     */
+-    /** @type {A<number>} */
+-                 ~~~~~~
+-!!! error TS2344: Type 'number' does not satisfy the constraint 'string'.
+-    var a;
+-    /** @type {B<number>} */
+-                 ~~~~~~
+-!!! error TS2344: Type 'number' does not satisfy the constraint 'string'.
+-    var b;
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

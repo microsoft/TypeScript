@@ -1,0 +1,139 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+typedArraysCrossAssignability01.ts(2,39): error TS2304: Cannot find name 'Int8Array'.
+typedArraysCrossAssignability01.ts(3,39): error TS2304: Cannot find name 'Uint8Array'.
+typedArraysCrossAssignability01.ts(4,39): error TS2304: Cannot find name 'Int16Array'.
+typedArraysCrossAssignability01.ts(5,39): error TS2304: Cannot find name 'Uint16Array'.
+typedArraysCrossAssignability01.ts(6,39): error TS2304: Cannot find name 'Int32Array'.
+typedArraysCrossAssignability01.ts(7,39): error TS2304: Cannot find name 'Uint32Array'.
+typedArraysCrossAssignability01.ts(8,39): error TS2304: Cannot find name 'Float32Array'.
+typedArraysCrossAssignability01.ts(9,39): error TS2304: Cannot find name 'Float64Array'.
+typedArraysCrossAssignability01.ts(10,39): error TS2304: Cannot find name 'Uint8ClampedArray'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== typedArraysCrossAssignability01.ts (9 errors) ====
+    function CheckAssignability() {
+        let arr_Int8Array           = new Int8Array(1);
+                                          ~~~~~~~~~
+!!! error TS2304: Cannot find name 'Int8Array'.
+        let arr_Uint8Array          = new Uint8Array(1);
+                                          ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Uint8Array'.
+        let arr_Int16Array          = new Int16Array(1);
+                                          ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Int16Array'.
+        let arr_Uint16Array         = new Uint16Array(1);
+                                          ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Uint16Array'.
+        let arr_Int32Array          = new Int32Array(1);
+                                          ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Int32Array'.
+        let arr_Uint32Array         = new Uint32Array(1);
+                                          ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Uint32Array'.
+        let arr_Float32Array        = new Float32Array(1);
+                                          ~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Float32Array'.
+        let arr_Float64Array        = new Float64Array(1);
+                                          ~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Float64Array'.
+        let arr_Uint8ClampedArray   = new Uint8ClampedArray(1);
+                                          ~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Uint8ClampedArray'.
+    
+        arr_Int8Array = arr_Int8Array;
+        arr_Int8Array = arr_Uint8Array;
+        arr_Int8Array = arr_Int16Array;
+        arr_Int8Array = arr_Uint16Array;
+        arr_Int8Array = arr_Int32Array;
+        arr_Int8Array = arr_Uint32Array;
+        arr_Int8Array = arr_Float32Array;
+        arr_Int8Array = arr_Float64Array;
+        arr_Int8Array = arr_Uint8ClampedArray;
+    
+        arr_Uint8Array = arr_Int8Array;
+        arr_Uint8Array = arr_Uint8Array;
+        arr_Uint8Array = arr_Int16Array;
+        arr_Uint8Array = arr_Uint16Array;
+        arr_Uint8Array = arr_Int32Array;
+        arr_Uint8Array = arr_Uint32Array;
+        arr_Uint8Array = arr_Float32Array;
+        arr_Uint8Array = arr_Float64Array;
+        arr_Uint8Array = arr_Uint8ClampedArray;
+    
+        arr_Int16Array = arr_Int8Array;
+        arr_Int16Array = arr_Uint8Array;
+        arr_Int16Array = arr_Int16Array;
+        arr_Int16Array = arr_Uint16Array;
+        arr_Int16Array = arr_Int32Array;
+        arr_Int16Array = arr_Uint32Array;
+        arr_Int16Array = arr_Float32Array;
+        arr_Int16Array = arr_Float64Array;
+        arr_Int16Array = arr_Uint8ClampedArray;
+    
+        arr_Uint16Array = arr_Int8Array;
+        arr_Uint16Array = arr_Uint8Array;
+        arr_Uint16Array = arr_Int16Array;
+        arr_Uint16Array = arr_Uint16Array;
+        arr_Uint16Array = arr_Int32Array;
+        arr_Uint16Array = arr_Uint32Array;
+        arr_Uint16Array = arr_Float32Array;
+        arr_Uint16Array = arr_Float64Array;
+        arr_Uint16Array = arr_Uint8ClampedArray;
+    
+        arr_Int32Array = arr_Int8Array;
+        arr_Int32Array = arr_Uint8Array;
+        arr_Int32Array = arr_Int16Array;
+        arr_Int32Array = arr_Uint16Array;
+        arr_Int32Array = arr_Int32Array;
+        arr_Int32Array = arr_Uint32Array;
+        arr_Int32Array = arr_Float32Array;
+        arr_Int32Array = arr_Float64Array;
+        arr_Int32Array = arr_Uint8ClampedArray;
+    
+        arr_Float32Array = arr_Int8Array;
+        arr_Float32Array = arr_Uint8Array;
+        arr_Float32Array = arr_Int16Array;
+        arr_Float32Array = arr_Uint16Array;
+        arr_Float32Array = arr_Int32Array;
+        arr_Float32Array = arr_Uint32Array;
+        arr_Float32Array = arr_Float32Array;
+        arr_Float32Array = arr_Float64Array;
+        arr_Float32Array = arr_Uint8ClampedArray;
+    
+        arr_Float64Array = arr_Int8Array;
+        arr_Float64Array = arr_Uint8Array;
+        arr_Float64Array = arr_Int16Array;
+        arr_Float64Array = arr_Uint16Array;
+        arr_Float64Array = arr_Int32Array;
+        arr_Float64Array = arr_Uint32Array;
+        arr_Float64Array = arr_Float32Array;
+        arr_Float64Array = arr_Float64Array;
+        arr_Float64Array = arr_Uint8ClampedArray;
+    
+        arr_Uint8ClampedArray = arr_Int8Array;
+        arr_Uint8ClampedArray = arr_Uint8Array;
+        arr_Uint8ClampedArray = arr_Int16Array;
+        arr_Uint8ClampedArray = arr_Uint16Array;
+        arr_Uint8ClampedArray = arr_Int32Array;
+        arr_Uint8ClampedArray = arr_Uint32Array;
+        arr_Uint8ClampedArray = arr_Float32Array;
+        arr_Uint8ClampedArray = arr_Float64Array;
+        arr_Uint8ClampedArray = arr_Uint8ClampedArray;
+        
+    }
+    

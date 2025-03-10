@@ -1,0 +1,21 @@
+/main.mts(1,16): error TS2307: Cannot find module 'double-asterisk/a/*/b/*/c/*' or its corresponding type declarations.
+
+
+==== /node_modules/double-asterisk/package.json (0 errors) ====
+    {
+        "name": "double-asterisk",
+        "version": "1.0.0",
+        "type": "module",
+        "exports": {
+          "./a/*/b/*/c/*": "./example.js"
+        }
+    }
+    
+==== /node_modules/double-asterisk/example.d.ts (0 errors) ====
+    export {};
+    
+==== /main.mts (1 errors) ====
+    import {} from "double-asterisk/a/*/b/*/c/*";
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'double-asterisk/a/*/b/*/c/*' or its corresponding type declarations.
+    

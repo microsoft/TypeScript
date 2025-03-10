@@ -1,0 +1,11 @@
+loop.js(4,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== loop.js (1 errors) ====
+    var loop1 = loop2;
+    var loop2 = loop1;
+    
+    module.exports = loop2;
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    

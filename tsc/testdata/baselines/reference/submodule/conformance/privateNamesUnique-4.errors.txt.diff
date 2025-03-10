@@ -1,0 +1,36 @@
+--- old.privateNamesUnique-4.errors.txt
++++ new.privateNamesUnique-4.errors.txt
+@@= skipped -0, +0 lines =@@
+-privateNamesUnique-4.ts(6,7): error TS2741: Property '#something' is missing in type 'A1' but required in type 'C'.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++privateNamesUnique-4.ts(6,7): error TS2322: Type 'A2' is not assignable to type 'C'.
++  Property '#something' is missing in type 'A1' but required in type 'C'.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== privateNamesUnique-4.ts (1 errors) ====
+     class A1 { }
+     interface A2 extends A1 { }
+@@= skipped -8, +25 lines =@@
+     class C { #something: number }
+     const c: C = a;
+           ~
+-!!! error TS2741: Property '#something' is missing in type 'A1' but required in type 'C'.
++!!! error TS2322: Type 'A2' is not assignable to type 'C'.
++!!! error TS2322:   Property '#something' is missing in type 'A1' but required in type 'C'.
+ !!! related TS2728 privateNamesUnique-4.ts:5:11: '#something' is declared here.
+     

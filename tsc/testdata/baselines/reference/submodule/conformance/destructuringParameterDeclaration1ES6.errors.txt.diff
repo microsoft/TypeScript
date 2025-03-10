@@ -1,0 +1,150 @@
+--- old.destructuringParameterDeclaration1ES6.errors.txt
++++ new.destructuringParameterDeclaration1ES6.errors.txt
+@@= skipped -0, +0 lines =@@
+-destructuringParameterDeclaration1ES6.ts(14,4): error TS2345: Argument of type '[number, number, string[][], number]' is not assignable to parameter of type '[number, number, string[][]]'.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++destructuringParameterDeclaration1ES6.ts(8,13): error TS2488: Type '[number, number, {}]' must have a '[Symbol.iterator]()' method that returns an iterator.
++destructuringParameterDeclaration1ES6.ts(8,20): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
++destructuringParameterDeclaration1ES6.ts(8,21): error TS2339: Property '0' does not exist on type '{}'.
++destructuringParameterDeclaration1ES6.ts(10,35): error TS2339: Property '0' does not exist on type '{}'.
++destructuringParameterDeclaration1ES6.ts(10,38): error TS2339: Property '1' does not exist on type '{}'.
++destructuringParameterDeclaration1ES6.ts(10,41): error TS2339: Property '2' does not exist on type '{}'.
++destructuringParameterDeclaration1ES6.ts(14,4): error TS2345: Argument of type '[number, number, {}, number]' is not assignable to parameter of type '[number, number, {}]'.
+   Source has 4 element(s) but target allows only 3.
++destructuringParameterDeclaration1ES6.ts(26,14): error TS2488: Type '[any, any, any]' must have a '[Symbol.iterator]()' method that returns an iterator.
++destructuringParameterDeclaration1ES6.ts(29,13): error TS2488: Type '[undefined, null, undefined]' must have a '[Symbol.iterator]()' method that returns an iterator.
++destructuringParameterDeclaration1ES6.ts(30,13): error TS2488: Type '[[undefined], undefined, [[undefined, undefined]]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++destructuringParameterDeclaration1ES6.ts(30,14): error TS2488: Type '[undefined]' must have a '[Symbol.iterator]()' method that returns an iterator.
++destructuringParameterDeclaration1ES6.ts(30,22): error TS2488: Type '[[undefined, undefined]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++destructuringParameterDeclaration1ES6.ts(30,23): error TS2488: Type '[undefined, undefined]' must have a '[Symbol.iterator]()' method that returns an iterator.
++destructuringParameterDeclaration1ES6.ts(43,13): error TS2488: Type '[any, any, [[any]]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++destructuringParameterDeclaration1ES6.ts(43,20): error TS2488: Type '[[any]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++destructuringParameterDeclaration1ES6.ts(43,21): error TS2488: Type '[any]' must have a '[Symbol.iterator]()' method that returns an iterator.
++destructuringParameterDeclaration1ES6.ts(44,13): error TS2488: Type '[any, any, [[number?]]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++destructuringParameterDeclaration1ES6.ts(44,20): error TS2488: Type '[[number?]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++destructuringParameterDeclaration1ES6.ts(44,21): error TS2488: Type '[number?]' must have a '[Symbol.iterator]()' method that returns an iterator.
+ destructuringParameterDeclaration1ES6.ts(58,4): error TS2345: Argument of type '[number, number, [[string]], boolean, boolean]' is not assignable to parameter of type '[any, any, [[any]]]'.
+   Source has 5 element(s) but target allows only 3.
++destructuringParameterDeclaration1ES6.ts(94,17): error TS2488: Type '[number, number, number]' must have a '[Symbol.iterator]()' method that returns an iterator.
+ destructuringParameterDeclaration1ES6.ts(96,18): error TS2300: Duplicate identifier 'number'.
++destructuringParameterDeclaration1ES6.ts(96,18): error TS2300: Duplicate identifier 'number'.
+ destructuringParameterDeclaration1ES6.ts(96,26): error TS2300: Duplicate identifier 'number'.
++destructuringParameterDeclaration1ES6.ts(96,26): error TS2300: Duplicate identifier 'number'.
+ destructuringParameterDeclaration1ES6.ts(96,34): error TS2300: Duplicate identifier 'number'.
++destructuringParameterDeclaration1ES6.ts(96,34): error TS2300: Duplicate identifier 'number'.
+ 
+ 
+-==== destructuringParameterDeclaration1ES6.ts (5 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== destructuringParameterDeclaration1ES6.ts (27 errors) ====
+     // Conformance for emitting ES6
+     
+     // A parameter declaration may specify either an identifier or a binding pattern.
+@@= skipped -15, +53 lines =@@
+     
+     // If the declaration includes a type annotation, the parameter is of that type
+     function a1([a, b, [[c]]]: [number, number, string[][]]) { }
++                ~~~~~~~~~~~~~
++!!! error TS2488: Type '[number, number, {}]' must have a '[Symbol.iterator]()' method that returns an iterator.
++                       ~~~~~
++!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
++                        ~~~
++!!! error TS2339: Property '0' does not exist on type '{}'.
+     function a2(o: { x: number, a: number }) { }
+     function a3({j, k, l: {m, n}, q: [a, b, c]}: { j: number, k: string, l: { m: boolean, n: number }, q: (number|string)[] }) { };
++                                      ~
++!!! error TS2339: Property '0' does not exist on type '{}'.
++                                         ~
++!!! error TS2339: Property '1' does not exist on type '{}'.
++                                            ~
++!!! error TS2339: Property '2' does not exist on type '{}'.
+     function a4({x, a}: { x: number, a: number }) { }
+     
+     a1([1, 2, [["world"]]]);
+     a1([1, 2, [["world"]], 3]);
+        ~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2345: Argument of type '[number, number, string[][], number]' is not assignable to parameter of type '[number, number, string[][]]'.
++!!! error TS2345: Argument of type '[number, number, {}, number]' is not assignable to parameter of type '[number, number, {}]'.
+ !!! error TS2345:   Source has 4 element(s) but target allows only 3.
+     
+     
+@@= skipped -21, +33 lines =@@
+     
+     interface F1 {
+         b5(z, y, [, a, b], {p, m: { q, r}});
++                 ~~~~~~~~
++!!! error TS2488: Type '[any, any, any]' must have a '[Symbol.iterator]()' method that returns an iterator.
+     }
+     
+     function b6([a, z, y] = [undefined, null, undefined]) { }
++                ~~~~~~~~~
++!!! error TS2488: Type '[undefined, null, undefined]' must have a '[Symbol.iterator]()' method that returns an iterator.
+     function b7([[a], b, [[c, d]]] = [[undefined], undefined, [[undefined, undefined]]]) { }
++                ~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type '[[undefined], undefined, [[undefined, undefined]]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++                 ~~~
++!!! error TS2488: Type '[undefined]' must have a '[Symbol.iterator]()' method that returns an iterator.
++                         ~~~~~~~~
++!!! error TS2488: Type '[[undefined, undefined]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++                          ~~~~~~
++!!! error TS2488: Type '[undefined, undefined]' must have a '[Symbol.iterator]()' method that returns an iterator.
+     
+     b1([1, 2, 3]);  // z is widen to the type any[]
+     b2("string", { x: 200, y: "string" });
+@@= skipped -17, +29 lines =@@
+     function c2({z = 10}) { }
+     function c3({b}: { b: number|string} = { b: "hello" }) { }
+     function c5([a, b, [[c]]]) { }
++                ~~~~~~~~~~~~~
++!!! error TS2488: Type '[any, any, [[any]]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++                       ~~~~~
++!!! error TS2488: Type '[[any]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++                        ~~~
++!!! error TS2488: Type '[any]' must have a '[Symbol.iterator]()' method that returns an iterator.
+     function c6([a, b, [[c=1]]]) { }
++                ~~~~~~~~~~~~~~~
++!!! error TS2488: Type '[any, any, [[number?]]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++                       ~~~~~~~
++!!! error TS2488: Type '[[number?]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++                        ~~~~~
++!!! error TS2488: Type '[number?]' must have a '[Symbol.iterator]()' method that returns an iterator.
+     
+     c0({z : { x: 1, y: { j: "world" } }});      // Implied type is { z: {x: any, y: {j: any}} }
+     c0({z : { x: "string", y: { j: true } }});  // Implied type is { z: {x: any, y: {j: any}} }
+@@= skipped -54, +66 lines =@@
+     function e3({x}: { x?: number }) { }  // x is an optional with type number
+     function e4({x: [number,string,any] }) { }  // x has type [any, any, any]
+     function e5({x: [a, b, c]}: { x: [number, number, number] }) { }  // x has type [any, any, any]
++                    ~~~~~~~~~
++!!! error TS2488: Type '[number, number, number]' must have a '[Symbol.iterator]()' method that returns an iterator.
+     
+     function e6({x: [number, number, number]}) { }  // error, duplicate identifier;
+                      ~~~~~~
+ !!! error TS2300: Duplicate identifier 'number'.
++                     ~~~~~~
++!!! error TS2300: Duplicate identifier 'number'.
+                              ~~~~~~
+ !!! error TS2300: Duplicate identifier 'number'.
++                             ~~~~~~
++!!! error TS2300: Duplicate identifier 'number'.
+                                      ~~~~~~
+ !!! error TS2300: Duplicate identifier 'number'.
++                                     ~~~~~~
++!!! error TS2300: Duplicate identifier 'number'.
+     
+     
+     

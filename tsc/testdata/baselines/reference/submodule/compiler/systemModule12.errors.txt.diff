@@ -1,0 +1,14 @@
+--- old.systemModule12.errors.txt
++++ new.systemModule12.errors.txt
+@@= skipped -0, +0 lines =@@
+-systemModule12.ts(2,15): error TS2792: Cannot find module 'file1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++systemModule12.ts(2,15): error TS2307: Cannot find module 'file1' or its corresponding type declarations.
+ 
+ 
+ ==== systemModule12.ts (1 errors) ====
+     ///<amd-module name='NamedModule'/>
+     import n from 'file1'
+                   ~~~~~~~
+-!!! error TS2792: Cannot find module 'file1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'file1' or its corresponding type declarations.
+     

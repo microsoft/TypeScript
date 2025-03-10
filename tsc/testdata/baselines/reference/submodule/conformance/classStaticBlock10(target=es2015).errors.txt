@@ -1,0 +1,47 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== classStaticBlock10.ts (0 errors) ====
+    var a1 = 1;
+    var a2 = 1;
+    const b1 = 2;
+    const b2 = 2;
+    
+    function f () {
+        var a1 = 11;
+        const b1 = 22;
+    
+        class C1 {
+            static {
+                var a1 = 111;
+                var a2 = 111;
+                const b1 = 222;
+                const b2 = 222;
+            }
+        }
+    }
+    
+    class C2 {
+        static {
+            var a1 = 111;
+            var a2 = 111;
+            const b1 = 222;
+            const b2 = 222;
+        }
+    }
+    

@@ -1,0 +1,17 @@
+--- old.jsdocImplements_missingType.errors.txt
++++ new.jsdocImplements_missingType.errors.txt
+@@= skipped -0, +0 lines =@@
+-/a.js(2,16): error TS1003: Identifier expected.
++/a.js(1,32): error TS2339: Property 'x' does not exist on type 'A'.
+ 
+ 
+ ==== /a.js (1 errors) ====
+     class A { constructor() { this.x = 0; } }
++                                   ~
++!!! error TS2339: Property 'x' does not exist on type 'A'.
+     /** @implements */
+-                   
+-!!! error TS1003: Identifier expected.
+     class B  {
+     }
+     

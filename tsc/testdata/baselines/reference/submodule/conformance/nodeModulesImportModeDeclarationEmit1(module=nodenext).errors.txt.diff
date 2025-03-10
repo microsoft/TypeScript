@@ -1,0 +1,68 @@
+--- old.nodeModulesImportModeDeclarationEmit1(module=nodenext).errors.txt
++++ new.nodeModulesImportModeDeclarationEmit1(module=nodenext).errors.txt
+@@= skipped -0, +0 lines =@@
++/index.ts(1,45): error TS1454: `resolution-mode` can only be set for type-only imports.
++/index.ts(1,45): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
++/index.ts(2,15): error TS2305: Module '""/node_modules/pkg/require.d.ts""' has no exported member 'ImportInterface'.
++/index.ts(2,44): error TS1454: `resolution-mode` can only be set for type-only imports.
++/index.ts(2,44): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
++/index.ts(6,50): error TS1454: `resolution-mode` can only be set for type-only imports.
+ /index.ts(6,50): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+-/index.ts(7,14): error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
++/index.ts(7,14): error TS2305: Module '""/node_modules/pkg/require.d.ts""' has no exported member 'ImportInterface'.
++/index.ts(7,49): error TS1454: `resolution-mode` can only be set for type-only imports.
+ /index.ts(7,49): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
++/index.ts(10,45): error TS1454: `resolution-mode` can only be set for type-only imports.
++/index.ts(10,45): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
++/index.ts(11,15): error TS2305: Module '""/node_modules/pkg/require.d.ts""' has no exported member 'ImportInterface'.
++/index.ts(11,44): error TS1454: `resolution-mode` can only be set for type-only imports.
++/index.ts(11,44): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+ 
+ 
+-==== /index.ts (3 errors) ====
++==== /index.ts (15 errors) ====
+     import type { RequireInterface } from "pkg" assert { "resolution-mode": "require" };
++                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1454: `resolution-mode` can only be set for type-only imports.
++                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+     import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
++                  ~~~~~~~~~~~~~~~
++!!! error TS2305: Module '""/node_modules/pkg/require.d.ts""' has no exported member 'ImportInterface'.
++                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1454: `resolution-mode` can only be set for type-only imports.
++                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+     
+     export interface LocalInterface extends RequireInterface, ImportInterface {}
+     
+     import {type RequireInterface as Req} from "pkg" assert { "resolution-mode": "require" };
+                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1454: `resolution-mode` can only be set for type-only imports.
++                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+     import {type ImportInterface as Imp} from "pkg" assert { "resolution-mode": "import" };
+                  ~~~~~~~~~~~~~~~
+-!!! error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
++!!! error TS2305: Module '""/node_modules/pkg/require.d.ts""' has no exported member 'ImportInterface'.
+                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1454: `resolution-mode` can only be set for type-only imports.
++                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+     export interface Loc extends Req, Imp {}
+     
+     export type { RequireInterface } from "pkg" assert { "resolution-mode": "require" };
++                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1454: `resolution-mode` can only be set for type-only imports.
++                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+     export type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
++                  ~~~~~~~~~~~~~~~
++!!! error TS2305: Module '""/node_modules/pkg/require.d.ts""' has no exported member 'ImportInterface'.
++                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1454: `resolution-mode` can only be set for type-only imports.
++                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
+     
+ ==== /node_modules/pkg/package.json (0 errors) ====
+     {

@@ -1,0 +1,58 @@
+--- old.controlFlowAliasedDiscriminants.errors.txt
++++ new.controlFlowAliasedDiscriminants.errors.txt
+@@= skipped -0, +0 lines =@@
+ controlFlowAliasedDiscriminants.ts(39,9): error TS18048: 'data1' is possibly 'undefined'.
++controlFlowAliasedDiscriminants.ts(39,15): error TS2339: Property 'toExponential' does not exist on type 'number | undefined'.
++  Property 'toExponential' does not exist on type 'undefined'.
+ controlFlowAliasedDiscriminants.ts(40,9): error TS18048: 'data2' is possibly 'undefined'.
++controlFlowAliasedDiscriminants.ts(40,15): error TS2339: Property 'toExponential' does not exist on type 'number | undefined'.
++  Property 'toExponential' does not exist on type 'undefined'.
+ controlFlowAliasedDiscriminants.ts(65,9): error TS18048: 'bar2' is possibly 'undefined'.
++controlFlowAliasedDiscriminants.ts(65,14): error TS2339: Property 'toExponential' does not exist on type 'number | undefined'.
++  Property 'toExponential' does not exist on type 'undefined'.
+ controlFlowAliasedDiscriminants.ts(66,9): error TS18048: 'bar3' is possibly 'undefined'.
++controlFlowAliasedDiscriminants.ts(66,14): error TS2339: Property 'toExponential' does not exist on type 'number | undefined'.
++  Property 'toExponential' does not exist on type 'undefined'.
+ controlFlowAliasedDiscriminants.ts(86,14): error TS1360: Type 'string | number' does not satisfy the expected type 'string'.
+   Type 'number' is not assignable to type 'string'.
+ controlFlowAliasedDiscriminants.ts(98,19): error TS1360: Type 'string | number' does not satisfy the expected type 'string'.
+   Type 'number' is not assignable to type 'string'.
+ 
+ 
+-==== controlFlowAliasedDiscriminants.ts (6 errors) ====
++==== controlFlowAliasedDiscriminants.ts (10 errors) ====
+     type UseQueryResult<T> = {
+         isSuccess: false;
+         data: undefined;
+@@= skipped -49, +57 lines =@@
+             data1.toExponential();  // should error
+             ~~~~~
+ !!! error TS18048: 'data1' is possibly 'undefined'.
++                  ~~~~~~~~~~~~~
++!!! error TS2339: Property 'toExponential' does not exist on type 'number | undefined'.
++!!! error TS2339:   Property 'toExponential' does not exist on type 'undefined'.
+             data2.toExponential();  // should error
+             ~~~~~
+ !!! error TS18048: 'data2' is possibly 'undefined'.
++                  ~~~~~~~~~~~~~
++!!! error TS2339: Property 'toExponential' does not exist on type 'number | undefined'.
++!!! error TS2339:   Property 'toExponential' does not exist on type 'undefined'.
+             data3.toExponential();  // should ok
+         }
+     }
+@@= skipped -30, +36 lines =@@
+             bar2.toExponential();   // should error
+             ~~~~
+ !!! error TS18048: 'bar2' is possibly 'undefined'.
++                 ~~~~~~~~~~~~~
++!!! error TS2339: Property 'toExponential' does not exist on type 'number | undefined'.
++!!! error TS2339:   Property 'toExponential' does not exist on type 'undefined'.
+             bar3.toExponential();   // should error
+             ~~~~
+ !!! error TS18048: 'bar3' is possibly 'undefined'.
++                 ~~~~~~~~~~~~~
++!!! error TS2339: Property 'toExponential' does not exist on type 'number | undefined'.
++!!! error TS2339:   Property 'toExponential' does not exist on type 'undefined'.
+         }
+     }
+     

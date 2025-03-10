@@ -1,0 +1,18 @@
+inheritanceMemberAccessorOverridingProperty.ts(6,9): error TS2611: 'x' is defined as a property in class 'a', but is overridden here in 'b' as an accessor.
+
+
+==== inheritanceMemberAccessorOverridingProperty.ts (1 errors) ====
+    class a {
+        x: string;
+    }
+    
+    class b extends a {
+        get x() {
+            ~
+!!! error TS2611: 'x' is defined as a property in class 'a', but is overridden here in 'b' as an accessor.
+            return "20";
+        }
+        set x(aValue: string) {
+    
+        }
+    }

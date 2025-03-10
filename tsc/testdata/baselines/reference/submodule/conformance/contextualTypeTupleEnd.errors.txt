@@ -1,0 +1,102 @@
+contextualTypeTupleEnd.ts(8,1): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...(arg: number) => void[], (arg: string) => void]'.
+  Source has 0 element(s) but target requires 1.
+contextualTypeTupleEnd.ts(9,4): error TS7006: Parameter 'x' implicitly has an 'any' type.
+contextualTypeTupleEnd.ts(10,4): error TS7006: Parameter 'x' implicitly has an 'any' type.
+contextualTypeTupleEnd.ts(10,17): error TS7006: Parameter 'x' implicitly has an 'any' type.
+contextualTypeTupleEnd.ts(11,4): error TS7006: Parameter 'x' implicitly has an 'any' type.
+contextualTypeTupleEnd.ts(11,17): error TS7006: Parameter 'x' implicitly has an 'any' type.
+contextualTypeTupleEnd.ts(11,30): error TS7006: Parameter 'x' implicitly has an 'any' type.
+contextualTypeTupleEnd.ts(13,7): error TS2322: Type '[]' is not assignable to type 'Funcs'.
+  Source has 0 element(s) but target requires 1.
+contextualTypeTupleEnd.ts(43,5): error TS7006: Parameter 'x' implicitly has an 'any' type.
+contextualTypeTupleEnd.ts(44,5): error TS7006: Parameter 'x' implicitly has an 'any' type.
+contextualTypeTupleEnd.ts(45,5): error TS7006: Parameter 'x' implicitly has an 'any' type.
+contextualTypeTupleEnd.ts(52,6): error TS7006: Parameter 'a' implicitly has an 'any' type.
+contextualTypeTupleEnd.ts(52,14): error TS7006: Parameter 'b' implicitly has an 'any' type.
+contextualTypeTupleEnd.ts(52,22): error TS7006: Parameter 'c' implicitly has an 'any' type.
+
+
+==== contextualTypeTupleEnd.ts (14 errors) ====
+    type Funcs = [...((arg: number) => void)[], (arg: string) => void];
+    
+    declare function num(x: number): void;
+    declare function str(x: string): void;
+    
+    declare function f1(...args: Funcs): void;
+    
+    f1();  // Error
+    ~~~~
+!!! error TS2345: Argument of type '[]' is not assignable to parameter of type '[...(arg: number) => void[], (arg: string) => void]'.
+!!! error TS2345:   Source has 0 element(s) but target requires 1.
+    f1(x => str(x));
+       ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    f1(x => num(x), x => str(x));
+       ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                    ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    f1(x => num(x), x => num(x), x => str(x));
+       ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                    ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                                 ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    
+    const a0: Funcs = [];  // Error
+          ~~
+!!! error TS2322: Type '[]' is not assignable to type 'Funcs'.
+!!! error TS2322:   Source has 0 element(s) but target requires 1.
+    const a1: Funcs = [x => str(x)];
+    const a2: Funcs = [x => num(x), x => str(x)];
+    const a3: Funcs = [x => num(x), x => num(x), x => str(x)];
+    
+    // Repro from #43122
+    
+    export type Selector<State> = (state: State) => unknown;
+    export type SelectorTuple<State> = Selector<State>[];
+    
+    export type ExampleState = {
+        foo: "foo";
+        bar: 42;
+    };
+    
+    export function createSelector<S extends SelectorTuple<ExampleState>>(...selectors: [...selectors: S, f: (x: any) => any]) {
+        console.log(selectors);
+    }
+    
+    createSelector(
+        x => x.foo,
+        x => x.bar,
+        () => 42
+    );
+    
+    // Repro from #43122
+    
+    declare function example(...args: [...((n: number) => void)[], (x: any) => void]): void
+    
+    example(
+        x => x.foo,  // Error
+        ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+        x => x.bar,  // Error
+        ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+        x => x.baz,
+        ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    );
+    
+    // Repro from #52846
+    
+    declare function test(...args: [...((arg: number) => void)[], (arg: string) => void]): void;
+      
+    test(a => a, b => b, c => c);
+         ~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
+                 ~
+!!! error TS7006: Parameter 'b' implicitly has an 'any' type.
+                         ~
+!!! error TS7006: Parameter 'c' implicitly has an 'any' type.
+    

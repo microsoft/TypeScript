@@ -1,0 +1,75 @@
+--- old.unionOfArraysFilterCall.errors.txt
++++ new.unionOfArraysFilterCall.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++unionOfArraysFilterCall.ts(11,25): error TS2339: Property 'filter' does not exist on type '{}'.
++unionOfArraysFilterCall.ts(12,34): error TS2339: Property 'filter' does not exist on type '{}'.
++unionOfArraysFilterCall.ts(14,25): error TS2339: Property 'find' does not exist on type '{}'.
++unionOfArraysFilterCall.ts(16,25): error TS2339: Property 'find' does not exist on type '{}'.
++unionOfArraysFilterCall.ts(18,25): error TS2339: Property 'find' does not exist on type '{}'.
++unionOfArraysFilterCall.ts(20,25): error TS2339: Property 'every' does not exist on type '{}'.
++unionOfArraysFilterCall.ts(22,25): error TS2339: Property 'reduce' does not exist on type '{}'.
++unionOfArraysFilterCall.ts(25,35): error TS2339: Property 'filter' does not exist on type '[Fizz] | [Buzz?]'.
++  Property 'filter' does not exist on type '[Fizz]'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== unionOfArraysFilterCall.ts (8 errors) ====
++    interface Fizz {
++        id: number;
++        fizz: string;
++    }
++    
++    interface Buzz {
++        id: number;
++        buzz: string;
++    }
++    
++    ([] as Fizz[] | Buzz[]).filter(item => item.id < 5);
++                            ~~~~~~
++!!! error TS2339: Property 'filter' does not exist on type '{}'.
++    ([] as Fizz[] | readonly Buzz[]).filter(item => item.id < 5); 
++                                     ~~~~~~
++!!! error TS2339: Property 'filter' does not exist on type '{}'.
++    
++    ([] as Fizz[] | Buzz[]).find(item => item);
++                            ~~~~
++!!! error TS2339: Property 'find' does not exist on type '{}'.
++    declare function isFizz(x: unknown): x is Fizz;
++    ([] as Fizz[] | Buzz[]).find(isFizz);
++                            ~~~~
++!!! error TS2339: Property 'find' does not exist on type '{}'.
++    declare function isBuzz(x: unknown): x is Buzz;
++    ([] as Fizz[] | Buzz[]).find(isBuzz);
++                            ~~~~
++!!! error TS2339: Property 'find' does not exist on type '{}'.
++    
++    ([] as Fizz[] | Buzz[]).every(item => item.id < 5);
++                            ~~~~~
++!!! error TS2339: Property 'every' does not exist on type '{}'.
++    
++    ([] as Fizz[] | Buzz[]).reduce(item => item);
++                            ~~~~~~
++!!! error TS2339: Property 'reduce' does not exist on type '{}'.
++    
++    
++    ([] as [Fizz] | readonly [Buzz?]).filter(item => item?.id < 5);
++                                      ~~~~~~
++!!! error TS2339: Property 'filter' does not exist on type '[Fizz] | [Buzz?]'.
++!!! error TS2339:   Property 'filter' does not exist on type '[Fizz]'.

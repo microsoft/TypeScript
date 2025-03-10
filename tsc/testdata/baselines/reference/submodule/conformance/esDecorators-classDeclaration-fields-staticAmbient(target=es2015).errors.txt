@@ -1,0 +1,38 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+esDecorators-classDeclaration-fields-staticAmbient.ts(6,37): error TS1039: Initializers are not allowed in ambient contexts.
+esDecorators-classDeclaration-fields-staticAmbient.ts(7,41): error TS1039: Initializers are not allowed in ambient contexts.
+esDecorators-classDeclaration-fields-staticAmbient.ts(8,39): error TS1039: Initializers are not allowed in ambient contexts.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== esDecorators-classDeclaration-fields-staticAmbient.ts (3 errors) ====
+    declare let dec: any;
+    
+    const field3 = "field3";
+    
+    class C {
+        @dec(1) static declare field1 = 1;
+                                        ~
+!!! error TS1039: Initializers are not allowed in ambient contexts.
+        @dec(2) static declare ["field2"] = 2;
+                                            ~
+!!! error TS1039: Initializers are not allowed in ambient contexts.
+        @dec(3) static declare [field3] = 3;
+                                          ~
+!!! error TS1039: Initializers are not allowed in ambient contexts.
+    }
+    

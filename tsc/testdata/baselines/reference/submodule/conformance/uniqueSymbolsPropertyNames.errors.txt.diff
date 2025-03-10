@@ -1,0 +1,64 @@
+--- old.uniqueSymbolsPropertyNames.errors.txt
++++ new.uniqueSymbolsPropertyNames.errors.txt
+@@= skipped -3, +3 lines =@@
+ uniqueSymbolsPropertyNames.ts(38,3): error TS1117: An object literal cannot have multiple properties with the same name.
+ uniqueSymbolsPropertyNames.ts(43,3): error TS1117: An object literal cannot have multiple properties with the same name.
+ uniqueSymbolsPropertyNames.ts(45,3): error TS1117: An object literal cannot have multiple properties with the same name.
++uniqueSymbolsPropertyNames.ts(49,3): error TS2300: Duplicate identifier '[uniqueSymbol0]'.
+ uniqueSymbolsPropertyNames.ts(50,3): error TS2300: Duplicate identifier '[uniqueSymbol0]'.
++uniqueSymbolsPropertyNames.ts(51,3): error TS2300: Duplicate identifier '[uniqueSymbol1]'.
+ uniqueSymbolsPropertyNames.ts(52,3): error TS2300: Duplicate identifier '[uniqueSymbol1]'.
++uniqueSymbolsPropertyNames.ts(56,3): error TS2300: Duplicate identifier '[OpNamespace.equal]'.
+ uniqueSymbolsPropertyNames.ts(57,3): error TS2300: Duplicate identifier '[OpNamespace.equal]'.
+ uniqueSymbolsPropertyNames.ts(61,3): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+ uniqueSymbolsPropertyNames.ts(62,3): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+-uniqueSymbolsPropertyNames.ts(62,3): error TS2300: Duplicate identifier '[getUniqueSymbol0()]'.
+ uniqueSymbolsPropertyNames.ts(63,3): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+ uniqueSymbolsPropertyNames.ts(64,3): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+-uniqueSymbolsPropertyNames.ts(64,3): error TS2300: Duplicate identifier '[getUniqueSymbol1()]'.
+ 
+ 
+-==== uniqueSymbolsPropertyNames.ts (15 errors) ====
++==== uniqueSymbolsPropertyNames.ts (16 errors) ====
+     interface OpTypes {
+       readonly equal: unique symbol;
+     }
+@@= skipped -73, +74 lines =@@
+     
+     class Cls1 {
+       [uniqueSymbol0] = "first";
++      ~~~~~~~~~~~~~~~
++!!! error TS2300: Duplicate identifier '[uniqueSymbol0]'.
+       [uniqueSymbol0] = "last";
+       ~~~~~~~~~~~~~~~
+ !!! error TS2300: Duplicate identifier '[uniqueSymbol0]'.
+       [uniqueSymbol1] = "first";
++      ~~~~~~~~~~~~~~~
++!!! error TS2300: Duplicate identifier '[uniqueSymbol1]'.
+       [uniqueSymbol1] = "last";
+       ~~~~~~~~~~~~~~~
+ !!! error TS2300: Duplicate identifier '[uniqueSymbol1]'.
+@@= skipped -11, +15 lines =@@
+     
+     class Cls2 {
+       [OpNamespace.equal] = "first";
++      ~~~~~~~~~~~~~~~~~~~
++!!! error TS2300: Duplicate identifier '[OpNamespace.equal]'.
+       [OpNamespace.equal] = "last";
+       ~~~~~~~~~~~~~~~~~~~
+ !!! error TS2300: Duplicate identifier '[OpNamespace.equal]'.
+@@= skipped -12, +14 lines =@@
+       [getUniqueSymbol0()] = "last";
+       ~~~~~~~~~~~~~~~~~~~~
+ !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+-      ~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2300: Duplicate identifier '[getUniqueSymbol0()]'.
+       [getUniqueSymbol1()] = "first";
+       ~~~~~~~~~~~~~~~~~~~~
+ !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+       [getUniqueSymbol1()] = "last";
+       ~~~~~~~~~~~~~~~~~~~~
+ !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+-      ~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2300: Duplicate identifier '[getUniqueSymbol1()]'.
+     }

@@ -1,0 +1,56 @@
+--- old.jsxFactoryNotIdentifierOrQualifiedName2.errors.txt
++++ new.jsxFactoryNotIdentifierOrQualifiedName2.errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5067: Invalid value for 'jsxFactory'. 'id1 id2' is not a valid identifier or qualified-name.
+-test.tsx(12,5): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+-test.tsx(13,5): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++Element.ts(28,41): error TS2339: Property 'substring' does not exist on type 'string'.
+ 
+ 
+-!!! error TS5067: Invalid value for 'jsxFactory'. 'id1 id2' is not a valid identifier or qualified-name.
+-==== Element.ts (0 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== Element.ts (1 errors) ====
+     declare namespace JSX {
+         interface Element {
+             name: string;
+@@= skipped -32, +45 lines =@@
+     
+     function toCamelCase(text: string): string {
+         return text[0].toLowerCase() + text.substring(1);
++                                            ~~~~~~~~~
++!!! error TS2339: Property 'substring' does not exist on type 'string'.
+     }
+     
+-==== test.tsx (2 errors) ====
++==== test.tsx (0 errors) ====
+     import { Element} from './Element';
+     
+     let c: {
+@@= skipped -15, +17 lines =@@
+     	view() {
+     		return [
+     			<meta content="helloworld"></meta>,
+-    			 ~~~~
+-!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+     			<meta content={c.a!.b}></meta>
+-    			 ~~~~
+-!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+     		];
+     	}
+     }

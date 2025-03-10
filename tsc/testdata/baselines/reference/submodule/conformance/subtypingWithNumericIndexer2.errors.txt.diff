@@ -1,0 +1,22 @@
+--- old.subtypingWithNumericIndexer2.errors.txt
++++ new.subtypingWithNumericIndexer2.errors.txt
+@@= skipped -0, +0 lines =@@
+ subtypingWithNumericIndexer2.ts(11,11): error TS2430: Interface 'B' incorrectly extends interface 'A'.
+   'number' index signatures are incompatible.
+     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+-subtypingWithNumericIndexer2.ts(24,27): error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
+-  Property 'bar' is missing in type 'Base' but required in type 'Derived'.
++subtypingWithNumericIndexer2.ts(24,27): error TS2741: Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+ subtypingWithNumericIndexer2.ts(32,15): error TS2430: Interface 'B3<T>' incorrectly extends interface 'A<T>'.
+   'number' index signatures are incompatible.
+     Type 'Base' is not assignable to type 'T'.
+@@= skipped -47, +46 lines =@@
+     
+         interface B extends A<Base> {
+                               ~~~~
+-!!! error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
+-!!! error TS2344:   Property 'bar' is missing in type 'Base' but required in type 'Derived'.
++!!! error TS2741: Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+ !!! related TS2728 subtypingWithNumericIndexer2.ts:4:34: 'bar' is declared here.
+             [x: number]: Derived; // error
+         }

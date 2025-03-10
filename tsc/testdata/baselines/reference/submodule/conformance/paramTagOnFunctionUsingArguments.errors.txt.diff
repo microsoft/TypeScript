@@ -1,0 +1,28 @@
+--- old.paramTagOnFunctionUsingArguments.errors.txt
++++ new.paramTagOnFunctionUsingArguments.errors.txt
+@@= skipped -0, +0 lines =@@
+-a.js(2,20): error TS8029: JSDoc '@param' tag has name 'first', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+-a.js(19,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
++a.js(19,9): error TS2554: Expected 0 arguments, but got 3.
+ 
+ 
+ ==== decls.d.ts (0 errors) ====
+     declare function factory(type: string): {};
+-==== a.js (2 errors) ====
++==== a.js (1 errors) ====
+     /**
+      * @param {string} first
+-                       ~~~~~
+-!!! error TS8029: JSDoc '@param' tag has name 'first', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+      */
+     function concat(/* first, second, ... */) {
+       var s = ''
+@@= skipped -25, +22 lines =@@
+     }
+     
+     correct(1,2,3) // oh no
+-            ~
+-!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
++            ~~~~~
++!!! error TS2554: Expected 0 arguments, but got 3.
+     

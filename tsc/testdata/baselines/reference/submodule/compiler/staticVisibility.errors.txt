@@ -1,0 +1,54 @@
+staticVisibility.ts(9,9): error TS2662: Cannot find name 's'. Did you mean the static member 'C1.s'?
+staticVisibility.ts(12,9): error TS2662: Cannot find name 'b'. Did you mean the static member 'C1.b'?
+staticVisibility.ts(17,9): error TS2304: Cannot find name 'v'.
+staticVisibility.ts(18,14): error TS2339: Property 'p' does not exist on type '{ new(): C1; s: any; b: () => void; prototype: C1; }'.
+staticVisibility.ts(32,29): error TS2304: Cannot find name 'barback'.
+
+
+==== staticVisibility.ts (5 errors) ====
+    class C1 {
+        
+        p: any;
+        static s: any;
+    
+        constructor() {
+            var v = 0;
+    
+            s = 1; // should be error
+            ~
+!!! error TS2662: Cannot find name 's'. Did you mean the static member 'C1.s'?
+            C1.s = 1; // should be ok
+    
+            b(); // should be error
+            ~
+!!! error TS2662: Cannot find name 'b'. Did you mean the static member 'C1.b'?
+            C1.b(); // should be ok
+        }
+    
+        static b() {
+            v = 1; // should be error
+            ~
+!!! error TS2304: Cannot find name 'v'.
+            this.p = 0; // should be error
+                 ~
+!!! error TS2339: Property 'p' does not exist on type '{ new(): C1; s: any; b: () => void; prototype: C1; }'.
+            C1.s = 1; // should be ok
+        }
+    }
+    
+    class C2 {
+     
+    barback:string = "";
+     
+    
+    
+    
+    static get Bar() {return "bar";} // ok
+     
+    static set Bar(bar:string) {barback = bar;} // not ok
+                                ~~~~~~~
+!!! error TS2304: Cannot find name 'barback'.
+    
+    }
+    
+    

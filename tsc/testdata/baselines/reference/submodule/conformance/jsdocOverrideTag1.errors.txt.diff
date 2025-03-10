@@ -1,0 +1,47 @@
+--- old.jsdocOverrideTag1.errors.txt
++++ new.jsdocOverrideTag1.errors.txt
+@@= skipped -0, +0 lines =@@
+-0.js(27,5): error TS4119: This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class 'A'.
+-0.js(32,5): error TS4122: This member cannot have a JSDoc comment with an '@override' tag because it is not declared in the base class 'A'.
+-0.js(40,5): error TS4121: This member cannot have a JSDoc comment with an '@override' tag because its containing class 'C' does not extend another class.
++0.js(23,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'A'.
++0.js(27,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'A'.
+ 
+ 
+-==== 0.js (3 errors) ====
++==== 0.js (2 errors) ====
+     class A {
+     
+         /**
+@@= skipped -26, +25 lines =@@
+          * @returns {boolean}
+          */
+         foo (a) {
++        ~~~
++!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'A'.
+             return super.foo(a)
+         }
+     
+         bar () {
+         ~~~
+-!!! error TS4119: This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class 'A'.
++!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'A'.
+     
+         }
+     
+         /** @override */
+         baz () {
+-        ~~~
+-!!! error TS4122: This member cannot have a JSDoc comment with an '@override' tag because it is not declared in the base class 'A'.
+     
+         }
+     }
+@@= skipped -21, +21 lines =@@
+     class C {
+         /** @override */
+         foo () {
+-        ~~~
+-!!! error TS4121: This member cannot have a JSDoc comment with an '@override' tag because its containing class 'C' does not extend another class.
+     
+         }
+     }

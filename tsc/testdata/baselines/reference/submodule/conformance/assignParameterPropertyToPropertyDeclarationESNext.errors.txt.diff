@@ -1,0 +1,34 @@
+--- old.assignParameterPropertyToPropertyDeclarationESNext.errors.txt
++++ new.assignParameterPropertyToPropertyDeclarationESNext.errors.txt
+@@= skipped -2, +2 lines =@@
+ assignParameterPropertyToPropertyDeclarationESNext.ts(6,19): error TS2729: Property 'm3' is used before its initialization.
+ assignParameterPropertyToPropertyDeclarationESNext.ts(12,17): error TS2729: Property 'baz' is used before its initialization.
+ assignParameterPropertyToPropertyDeclarationESNext.ts(13,16): error TS2729: Property 'foo' is used before its initialization.
++assignParameterPropertyToPropertyDeclarationESNext.ts(32,19): error TS2729: Property 'p1' is used before its initialization.
++assignParameterPropertyToPropertyDeclarationESNext.ts(38,19): error TS2729: Property 'p1' is used before its initialization.
+ 
+ 
+-==== assignParameterPropertyToPropertyDeclarationESNext.ts (5 errors) ====
++==== assignParameterPropertyToPropertyDeclarationESNext.ts (7 errors) ====
+     class C {
+         qux = this.bar // should error
+                    ~~~
+@@= skipped -50, +52 lines =@@
+     class F {
+         Inner = class extends F {
+             p2 = this.p1
++                      ~~
++!!! error TS2729: Property 'p1' is used before its initialization.
++!!! related TS2728 assignParameterPropertyToPropertyDeclarationESNext.ts:34:5: 'p1' is declared here.
+         }
+         p1 = 0
+     }
+     class G {
+         Inner = class extends G {
+             p2 = this.p1
++                      ~~
++!!! error TS2729: Property 'p1' is used before its initialization.
++!!! related TS2728 assignParameterPropertyToPropertyDeclarationESNext.ts:40:17: 'p1' is declared here.
+         }
+         constructor(public p1: number) {}
+     }

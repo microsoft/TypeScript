@@ -1,0 +1,48 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+iterableArrayPattern3.ts(11,6): error TS2304: Cannot find name 'Symbol'.
+iterableArrayPattern3.ts(17,1): error TS2488: Type 'FooIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
+iterableArrayPattern3.ts(17,2): error TS2322: Type '() => FooIterator' is not assignable to type 'Bar'.
+iterableArrayPattern3.ts(17,5): error TS2322: Type '() => FooIterator' is not assignable to type 'Bar'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== iterableArrayPattern3.ts (4 errors) ====
+    class Bar { x }
+    class Foo extends Bar { y }
+    class FooIterator {
+        next() {
+            return {
+                value: new Foo,
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+            return this;
+        }
+    }
+    
+    var a: Bar, b: Bar;
+    [a, b] = new FooIterator;
+    ~~~~~~
+!!! error TS2488: Type 'FooIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
+     ~
+!!! error TS2322: Type '() => FooIterator' is not assignable to type 'Bar'.
+        ~
+!!! error TS2322: Type '() => FooIterator' is not assignable to type 'Bar'.

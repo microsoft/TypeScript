@@ -1,0 +1,36 @@
+/a.js(8,14): error TS2339: Property 'p' does not exist on type 'C1'.
+/a.js(25,14): error TS2339: Property 'p' does not exist on type 'C3'.
+
+
+==== /a.js (2 errors) ====
+    /**
+     * @template T
+     * @template V
+     */
+    class C1 {
+        constructor() {
+            /** @type {T} */
+            this.p;
+                 ~
+!!! error TS2339: Property 'p' does not exist on type 'C1'.
+        }
+    }
+    
+    /**
+     * @template T,V
+     */
+    class C2 {
+        constructor() { }
+    }
+    
+    /**
+     * @template T,V,X
+     */
+    class C3 {
+        constructor() {
+            /** @type {T} */
+            this.p;
+                 ~
+!!! error TS2339: Property 'p' does not exist on type 'C3'.
+        }
+    }

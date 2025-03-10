@@ -1,0 +1,18 @@
+--- old.systemExportAssignment2.errors.txt
++++ new.systemExportAssignment2.errors.txt
+@@= skipped -0, +0 lines =@@
+ a.ts(2,1): error TS1218: Export assignment is not supported when '--module' flag is 'system'.
++b.ts(1,20): error TS2307: Cannot find module 'a' or its corresponding type declarations.
+ 
+ 
+ ==== a.ts (1 errors) ====
+@@= skipped -6, +7 lines =@@
+     ~~~~~~~~~~~
+ !!! error TS1218: Export assignment is not supported when '--module' flag is 'system'.
+     
+-==== b.ts (0 errors) ====
++==== b.ts (1 errors) ====
+     import * as a from "a";
++                       ~~~
++!!! error TS2307: Cannot find module 'a' or its corresponding type declarations.
+     

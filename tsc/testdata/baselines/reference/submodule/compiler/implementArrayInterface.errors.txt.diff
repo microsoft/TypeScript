@@ -1,0 +1,18 @@
+--- old.implementArrayInterface.errors.txt
++++ new.implementArrayInterface.errors.txt
+@@= skipped -0, +0 lines =@@
+ implementArrayInterface.ts(19,5): error TS2416: Property 'every' in type 'MyArray<T>' is not assignable to the same property in base type 'T[]'.
+-  Type '(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => boolean' is not assignable to type '{ <S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean; }'.
++  Type '(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => boolean' is not assignable to type '{ <S>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean; }'.
+     Signature '(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean' must be a type predicate.
+ 
+ 
+@@= skipped -24, +24 lines =@@
+         every(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
+         ~~~~~
+ !!! error TS2416: Property 'every' in type 'MyArray<T>' is not assignable to the same property in base type 'T[]'.
+-!!! error TS2416:   Type '(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => boolean' is not assignable to type '{ <S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean; }'.
++!!! error TS2416:   Type '(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => boolean' is not assignable to type '{ <S>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean; }'.
+ !!! error TS2416:     Signature '(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean' must be a type predicate.
+         some(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
+         forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;

@@ -1,0 +1,14 @@
+indexedAccessImplicitlyAny.ts(3,3): error TS2551: Property 'foo' does not exist on type 'I'. Did you mean 'foof'?
+indexedAccessImplicitlyAny.ts(4,3): error TS2551: Property 'foo' does not exist on type 'I'. Did you mean 'foof'?
+
+
+==== indexedAccessImplicitlyAny.ts (2 errors) ====
+    interface I { foof: number };
+    declare const i: I;
+    i.foo;
+      ~~~
+!!! error TS2551: Property 'foo' does not exist on type 'I'. Did you mean 'foof'?
+!!! related TS2728 indexedAccessImplicitlyAny.ts:1:15: 'foof' is declared here.
+    i["foo"];
+      ~~~~~
+!!! error TS2551: Property 'foo' does not exist on type 'I'. Did you mean 'foof'?

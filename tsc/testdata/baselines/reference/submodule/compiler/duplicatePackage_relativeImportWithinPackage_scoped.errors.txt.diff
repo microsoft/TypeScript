@@ -1,0 +1,48 @@
+--- old.duplicatePackage_relativeImportWithinPackage_scoped.errors.txt
++++ new.duplicatePackage_relativeImportWithinPackage_scoped.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/index.ts(4,5): error TS2345: Argument of type 'C' is not assignable to parameter of type 'C'.
++  Types have separate declarations of a private property 'x'.
++
++
++==== /index.ts (1 errors) ====
++    import { use } from "@foo/bar/use";
++    import { o } from "a";
++    
++    use(o);
++        ~
++!!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'C'.
++!!! error TS2345:   Types have separate declarations of a private property 'x'.
++    
++==== /node_modules/a/node_modules/@foo/bar/package.json (0 errors) ====
++    {
++        "name": "@foo/bar",
++        "version": "1.2.3"
++    }
++    
++==== /node_modules/a/node_modules/@foo/bar/index.d.ts (0 errors) ====
++    export class C {
++        private x: number;
++    }
++    
++==== /node_modules/a/index.d.ts (0 errors) ====
++    import { C } from "@foo/bar";
++    export const o: C;
++    
++==== /node_modules/@foo/bar/use.d.ts (0 errors) ====
++    import { C } from "./index";
++    export function use(o: C): void;
++    
++==== /node_modules/@foo/bar/index.d.ts (0 errors) ====
++    export class C {
++        private x: number;
++    }
++    
++==== /node_modules/@foo/bar/package.json (0 errors) ====
++    {
++        "name": "@foo/bar",
++        "version": "1.2.3"
++    }
++    

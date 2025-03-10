@@ -1,0 +1,13 @@
+--- old.jsFileCompilationFunctionOverloadSyntax.errors.txt
++++ new.jsFileCompilationFunctionOverloadSyntax.errors.txt
+@@= skipped -0, +-1 lines =@@
+-a.js(1,10): error TS8017: Signature declarations can only be used in TypeScript files.
+-
+-
+-==== a.js (1 errors) ====
+-    function foo();
+-             ~~~
+-!!! error TS8017: Signature declarations can only be used in TypeScript files.
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

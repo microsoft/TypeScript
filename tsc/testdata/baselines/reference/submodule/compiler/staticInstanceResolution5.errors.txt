@@ -1,0 +1,20 @@
+staticInstanceResolution5_1.ts(1,24): error TS2307: Cannot find module 'staticInstanceResolution5_0' or its corresponding type declarations.
+
+
+==== staticInstanceResolution5_1.ts (1 errors) ====
+    import WinJS = require('staticInstanceResolution5_0');
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'staticInstanceResolution5_0' or its corresponding type declarations.
+    
+    // these 3 should be errors
+    var x = (w1: WinJS) => { };
+    var y = function (w2: WinJS) { }
+    function z(w3: WinJS) { }
+    
+==== staticInstanceResolution5_0.ts (0 errors) ====
+    export class Promise {
+        static timeout(delay: number): Promise {
+            return null;
+        }
+    }
+    

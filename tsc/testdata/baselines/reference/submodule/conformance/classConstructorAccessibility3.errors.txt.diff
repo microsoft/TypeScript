@@ -1,0 +1,37 @@
+--- old.classConstructorAccessibility3.errors.txt
++++ new.classConstructorAccessibility3.errors.txt
+@@= skipped -0, +0 lines =@@
+-classConstructorAccessibility3.ts(20,1): error TS2322: Type 'typeof Baz' is not assignable to type 'typeof Foo'.
++classConstructorAccessibility3.ts(20,1): error TS2322: Type '{ new(x: number): Baz; prototype: Baz; }' is not assignable to type '{ new(x: number): Foo; prototype: Foo; }'.
+   Cannot assign a 'protected' constructor type to a 'public' constructor type.
+-classConstructorAccessibility3.ts(21,1): error TS2322: Type 'typeof Qux' is not assignable to type 'typeof Foo'.
++classConstructorAccessibility3.ts(21,1): error TS2322: Type '{ new(x: number): Qux; prototype: Qux; }' is not assignable to type '{ new(x: number): Foo; prototype: Foo; }'.
+   Cannot assign a 'private' constructor type to a 'public' constructor type.
+-classConstructorAccessibility3.ts(27,1): error TS2322: Type 'typeof Qux' is not assignable to type 'typeof Baz'.
++classConstructorAccessibility3.ts(27,1): error TS2322: Type '{ new(x: number): Qux; prototype: Qux; }' is not assignable to type '{ new(x: number): Baz; prototype: Baz; }'.
+   Cannot assign a 'private' constructor type to a 'protected' constructor type.
+ 
+ 
+@@= skipped -27, +27 lines =@@
+     a = Bar;
+     a = Baz; // error Baz is protected
+     ~
+-!!! error TS2322: Type 'typeof Baz' is not assignable to type 'typeof Foo'.
++!!! error TS2322: Type '{ new(x: number): Baz; prototype: Baz; }' is not assignable to type '{ new(x: number): Foo; prototype: Foo; }'.
+ !!! error TS2322:   Cannot assign a 'protected' constructor type to a 'public' constructor type.
+     a = Qux; // error Qux is private
+     ~
+-!!! error TS2322: Type 'typeof Qux' is not assignable to type 'typeof Foo'.
++!!! error TS2322: Type '{ new(x: number): Qux; prototype: Qux; }' is not assignable to type '{ new(x: number): Foo; prototype: Foo; }'.
+ !!! error TS2322:   Cannot assign a 'private' constructor type to a 'public' constructor type.
+     
+     // b is protected
+@@= skipped -13, +13 lines =@@
+     b = Bar;
+     b = Qux; // error Qux is private
+     ~
+-!!! error TS2322: Type 'typeof Qux' is not assignable to type 'typeof Baz'.
++!!! error TS2322: Type '{ new(x: number): Qux; prototype: Qux; }' is not assignable to type '{ new(x: number): Baz; prototype: Baz; }'.
+ !!! error TS2322:   Cannot assign a 'private' constructor type to a 'protected' constructor type.
+     
+     // c is private

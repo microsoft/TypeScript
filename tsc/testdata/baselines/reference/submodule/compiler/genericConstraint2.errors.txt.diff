@@ -1,0 +1,19 @@
+--- old.genericConstraint2.errors.txt
++++ new.genericConstraint2.errors.txt
+@@= skipped -0, +0 lines =@@
+ genericConstraint2.ts(11,7): error TS2420: Class 'ComparableString' incorrectly implements interface 'Comparable<string>'.
+   Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<string>'.
+-genericConstraint2.ts(21,17): error TS2344: Type 'ComparableString' does not satisfy the constraint 'Comparable<ComparableString>'.
+-  Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<ComparableString>'.
++genericConstraint2.ts(21,17): error TS2741: Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<ComparableString>'.
+ 
+ 
+ ==== genericConstraint2.ts (2 errors) ====
+@@= skipped -30, +29 lines =@@
+     var b = new ComparableString("b");
+     var c = compare<ComparableString>(a, b);
+                     ~~~~~~~~~~~~~~~~
+-!!! error TS2344: Type 'ComparableString' does not satisfy the constraint 'Comparable<ComparableString>'.
+-!!! error TS2344:   Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<ComparableString>'.
++!!! error TS2741: Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<ComparableString>'.
+ !!! related TS2728 genericConstraint2.ts:2:5: 'comparer' is declared here.

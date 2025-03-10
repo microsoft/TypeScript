@@ -1,0 +1,73 @@
+--- old.classFieldSuperNotAccessibleJs.errors.txt
++++ new.classFieldSuperNotAccessibleJs.errors.txt
+@@= skipped -0, +0 lines =@@
+-index.js(20,22): error TS2855: Class field 'roots' defined by the parent class is not accessible in the child class via super.
+-index.js(23,22): error TS2855: Class field 'foo' defined by the parent class is not accessible in the child class via super.
+-index.js(26,22): error TS2855: Class field 'justProp' defined by the parent class is not accessible in the child class via super.
+-index.js(29,22): error TS2855: Class field ''literalElementAccess'' defined by the parent class is not accessible in the child class via super.
++index.js(5,14): error TS2339: Property 'roots' does not exist on type 'YaddaBase'.
++index.js(7,14): error TS2339: Property 'justProp' does not exist on type 'YaddaBase'.
++index.js(9,9): error TS7053: Element implicitly has an 'any' type because expression of type '"literalElementAccess"' can't be used to index type 'YaddaBase'.
++  Property 'literalElementAccess' does not exist on type 'YaddaBase'.
++index.js(14,14): error TS2339: Property 'foo' does not exist on type 'YaddaBase'.
++index.js(20,22): error TS2339: Property 'roots' does not exist on type 'YaddaBase'.
++index.js(23,22): error TS2339: Property 'foo' does not exist on type 'YaddaBase'.
++index.js(26,22): error TS2339: Property 'justProp' does not exist on type 'YaddaBase'.
++index.js(29,22): error TS2339: Property 'literalElementAccess' does not exist on type 'YaddaBase'.
+ 
+ 
+-==== index.js (4 errors) ====
++==== index.js (8 errors) ====
+     // https://github.com/microsoft/TypeScript/issues/55884
+     
+     class YaddaBase {
+         constructor() {
+             this.roots = "hi";
++                 ~~~~~
++!!! error TS2339: Property 'roots' does not exist on type 'YaddaBase'.
+             /** @type number */
+             this.justProp;
++                 ~~~~~~~~
++!!! error TS2339: Property 'justProp' does not exist on type 'YaddaBase'.
+             /** @type string */
+             this['literalElementAccess'];
++            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS7053: Element implicitly has an 'any' type because expression of type '"literalElementAccess"' can't be used to index type 'YaddaBase'.
++!!! error TS7053:   Property 'literalElementAccess' does not exist on type 'YaddaBase'.
+     
+             this.b()
+         }
+         accessor b = () => {
+             this.foo = 10
++                 ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'YaddaBase'.
+         }
+     }
+     
+@@= skipped -25, +39 lines =@@
+         get rootTests() {
+             return super.roots;
+                          ~~~~~
+-!!! error TS2855: Class field 'roots' defined by the parent class is not accessible in the child class via super.
++!!! error TS2339: Property 'roots' does not exist on type 'YaddaBase'.
+         }
+         get fooTests() {
+             return super.foo;
+                          ~~~
+-!!! error TS2855: Class field 'foo' defined by the parent class is not accessible in the child class via super.
++!!! error TS2339: Property 'foo' does not exist on type 'YaddaBase'.
+         }
+         get justPropTests() {
+             return super.justProp;
+                          ~~~~~~~~
+-!!! error TS2855: Class field 'justProp' defined by the parent class is not accessible in the child class via super.
++!!! error TS2339: Property 'justProp' does not exist on type 'YaddaBase'.
+         }
+         get literalElementAccessTests() {
+             return super.literalElementAccess;
+                          ~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2855: Class field ''literalElementAccess'' defined by the parent class is not accessible in the child class via super.
++!!! error TS2339: Property 'literalElementAccess' does not exist on type 'YaddaBase'.
+         }
+     }
+     

@@ -1,0 +1,25 @@
+--- old.contextualReturnTypeOfIIFE2.errors.txt
++++ new.contextualReturnTypeOfIIFE2.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++contextualReturnTypeOfIIFE2.ts(5,9): error TS2339: Property 'bar' does not exist on type '() => void'.
++contextualReturnTypeOfIIFE2.ts(10,9): error TS2339: Property 'bar' does not exist on type '() => void'.
++
++
++==== contextualReturnTypeOfIIFE2.ts (2 errors) ====
++    declare namespace app {
++      function foo(): void;
++    }
++    
++    app.foo.bar = (function () {
++            ~~~
++!!! error TS2339: Property 'bar' does not exist on type '() => void'.
++      const someFun = (arg: number) => {};
++      return { someFun };
++    })();
++    
++    app.foo.bar.someFun(1);
++            ~~~
++!!! error TS2339: Property 'bar' does not exist on type '() => void'.
++    

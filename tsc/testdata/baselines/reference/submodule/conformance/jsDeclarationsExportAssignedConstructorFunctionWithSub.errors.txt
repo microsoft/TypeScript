@@ -1,0 +1,26 @@
+jsDeclarationsExportAssignedConstructorFunctionWithSub.js(4,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+jsDeclarationsExportAssignedConstructorFunctionWithSub.js(7,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+jsDeclarationsExportAssignedConstructorFunctionWithSub.js(8,25): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+jsDeclarationsExportAssignedConstructorFunctionWithSub.js(10,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== jsDeclarationsExportAssignedConstructorFunctionWithSub.js (4 errors) ====
+    /**
+     * @param {number} p
+     */
+    module.exports = function (p) {
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+        this.t = 12 + p;
+    }
+    module.exports.Sub = function() {
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+        this.instance = new module.exports(10);
+                            ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    }
+    module.exports.Sub.prototype = { }
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    

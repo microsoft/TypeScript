@@ -1,0 +1,19 @@
+a.ts(1,10): error TS2393: Duplicate function implementation.
+b.js(1,10): error TS2393: Duplicate function implementation.
+
+
+==== a.ts (1 errors) ====
+    function foo() {
+             ~~~
+!!! error TS2393: Duplicate function implementation.
+        return 30;
+    }
+    
+==== b.js (1 errors) ====
+    function foo() {
+             ~~~
+!!! error TS2393: Duplicate function implementation.
+        return 10;
+    }
+    
+    

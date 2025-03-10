@@ -1,0 +1,15 @@
+--- old.outModuleConcatUnspecifiedModuleKind.errors.txt
++++ new.outModuleConcatUnspecifiedModuleKind.errors.txt
+@@= skipped -0, +-1 lines =@@
+-a.ts(1,14): error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
+-
+-
+-==== a.ts (1 errors) ====
+-    export class A { } // module
+-                 ~
+-!!! error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
+-    
+-==== b.ts (0 errors) ====
+-    var x = 0; // global
+@@= skipped --1, +1 lines =@@
++<no content>

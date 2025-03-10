@@ -1,0 +1,58 @@
+--- old.declarationEmitMixinPrivateProtected.errors.txt
++++ new.declarationEmitMixinPrivateProtected.errors.txt
+@@= skipped -0, +-1 lines =@@
+-another.ts(11,1): error TS4094: Property '_assertIsStripped' of exported anonymous class type may not be private or protected.
+-another.ts(11,1): error TS4094: Property '_onDispose' of exported anonymous class type may not be private or protected.
+-first.ts(12,1): error TS4094: Property '_assertIsStripped' of exported anonymous class type may not be private or protected.
+-first.ts(12,1): error TS4094: Property '_onDispose' of exported anonymous class type may not be private or protected.
+-first.ts(13,14): error TS4094: Property '_assertIsStripped' of exported anonymous class type may not be private or protected.
+-first.ts(13,14): error TS4094: Property '_onDispose' of exported anonymous class type may not be private or protected.
+-
+-
+-==== first.ts (4 errors) ====
+-    declare function mix<TMix>(mixin: TMix): TMix;
+-    
+-    const DisposableMixin = class {
+-        protected _onDispose() {
+-            this._assertIsStripped()
+-        }
+-        private _assertIsStripped() {
+-        }
+-    };
+-    
+-    // No error, but definition is wrong. 
+-    export default mix(DisposableMixin);
+-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS4094: Property '_assertIsStripped' of exported anonymous class type may not be private or protected.
+-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS4094: Property '_onDispose' of exported anonymous class type may not be private or protected.
+-    export class Monitor extends mix(DisposableMixin) {
+-                 ~~~~~~~
+-!!! error TS4094: Property '_assertIsStripped' of exported anonymous class type may not be private or protected.
+-                 ~~~~~~~
+-!!! error TS4094: Property '_onDispose' of exported anonymous class type may not be private or protected.
+-        protected _onDispose() {
+-        }
+-    }
+-    
+-==== another.ts (2 errors) ====
+-    declare function mix<TMix>(mixin: TMix): TMix;
+-    
+-    const DisposableMixin = class {
+-        protected _onDispose() {
+-            this._assertIsStripped()
+-        }
+-        private _assertIsStripped() {
+-        }
+-    };
+-    
+-    export default class extends mix(DisposableMixin) {
+-    ~~~~~~
+-!!! error TS4094: Property '_assertIsStripped' of exported anonymous class type may not be private or protected.
+-    ~~~~~~
+-!!! error TS4094: Property '_onDispose' of exported anonymous class type may not be private or protected.
+-        protected _onDispose() {
+-        }
+-    }
+@@= skipped --1, +1 lines =@@
++<no content>

@@ -1,0 +1,84 @@
+context.js(34,14): error TS2350: Only a void function can be called with the 'new' keyword.
+context.js(48,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+hook.js(10,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+timer.js(7,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== timer.js (1 errors) ====
+    /**
+     * @param {number} timeout
+     */
+    function Timer(timeout) {
+        this.timeout = timeout;
+    }
+    module.exports = Timer;
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+==== hook.js (1 errors) ====
+    /**
+     * @typedef {(arg: import("./context")) => void} HookHandler
+     */
+    /**
+     * @param {HookHandler} handle
+     */
+    function Hook(handle) {
+        this.handle = handle;
+    }
+    module.exports = Hook;
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+==== context.js (2 errors) ====
+    /**
+     * Imports
+     *
+     * @typedef {import("./timer")} Timer
+     * @typedef {import("./hook")} Hook
+     * @typedef {import("./hook").HookHandler} HookHandler
+     */
+    
+    /**
+     * Input type definition
+     *
+     * @typedef {Object} Input
+     * @prop {Timer} timer
+     * @prop {Hook} hook
+     */
+     
+    /**
+     * State type definition
+     *
+     * @typedef {Object} State
+     * @prop {Timer} timer
+     * @prop {Hook} hook
+     */
+    
+    /**
+     * New `Context`
+     *
+     * @class
+     * @param {Input} input
+     */
+    
+    function Context(input) {
+        if (!(this instanceof Context)) {
+          return new Context(input)
+                 ~~~~~~~~~~~~~~~~~~
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
+        }
+        this.state = this.construct(input);
+    }
+    Context.prototype = {
+        /**
+         * @param {Input} input
+         * @param {HookHandler=} handle
+         * @returns {State}
+         */
+        construct(input, handle = () => void 0) {
+            return input;
+        }
+    }
+    module.exports = Context;
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    

@@ -1,0 +1,11 @@
+/a.ts(1,13): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
+
+
+==== /a.ts (1 errors) ====
+    const foo = import("./b");
+                ~~~~~~~~~~~~~
+!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.
+    
+==== /b.js (0 errors) ====
+    export default 1;
+    

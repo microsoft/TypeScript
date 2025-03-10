@@ -1,0 +1,19 @@
+conditionalTypeVarianceBigArrayConstraintsPerformance.ts(4,21): error TS2503: Cannot find namespace 'JSX'.
+conditionalTypeVarianceBigArrayConstraintsPerformance.ts(5,11): error TS2503: Cannot find namespace 'JSX'.
+
+
+==== conditionalTypeVarianceBigArrayConstraintsPerformance.ts (2 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    
+    type Stuff<T> =
+        T extends keyof JSX.IntrinsicElements
+                        ~~~
+!!! error TS2503: Cannot find namespace 'JSX'.
+            ? JSX.IntrinsicElements[T]
+              ~~~
+!!! error TS2503: Cannot find namespace 'JSX'.
+            : any;
+    
+    function F<T, U>(p1: Stuff<T>, p2: Stuff<U>) {
+        p1 = p2; // Error
+    }

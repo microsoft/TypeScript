@@ -1,0 +1,66 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+esDecorators-classDeclaration-parameterDecorators.ts(4,17): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(5,12): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(6,11): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(7,19): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(8,18): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(12,17): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(13,12): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(14,11): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(15,19): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(16,18): error TS1206: Decorators are not valid here.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== esDecorators-classDeclaration-parameterDecorators.ts (10 errors) ====
+    declare let dec: any;
+    
+    class C {
+        constructor(@dec x: any) {}
+                    ~
+!!! error TS1206: Decorators are not valid here.
+        method(@dec x: any) {}
+               ~
+!!! error TS1206: Decorators are not valid here.
+        set x(@dec x: any) {}
+              ~
+!!! error TS1206: Decorators are not valid here.
+        static method(@dec x: any) {}
+                      ~
+!!! error TS1206: Decorators are not valid here.
+        static set x(@dec x: any) {}
+                     ~
+!!! error TS1206: Decorators are not valid here.
+    }
+    
+    (class C {
+        constructor(@dec x: any) {}
+                    ~
+!!! error TS1206: Decorators are not valid here.
+        method(@dec x: any) {}
+               ~
+!!! error TS1206: Decorators are not valid here.
+        set x(@dec x: any) {}
+              ~
+!!! error TS1206: Decorators are not valid here.
+        static method(@dec x: any) {}
+                      ~
+!!! error TS1206: Decorators are not valid here.
+        static set x(@dec x: any) {}
+                     ~
+!!! error TS1206: Decorators are not valid here.
+    });

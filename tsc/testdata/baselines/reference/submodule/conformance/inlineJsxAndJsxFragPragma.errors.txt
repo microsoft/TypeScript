@@ -1,0 +1,105 @@
+preacty-no-fragment.tsx(5,1): error TS6192: All imports in import declaration are unused.
+preacty-only-component.tsx(4,1): error TS6133: 'h' is declared but its value is never read.
+preacty-only-component.tsx(5,10): error TS6133: 'Component' is declared but its value is never read.
+preacty-only-fragment-no-jsx.tsx(5,1): error TS6133: 'Fragment' is declared but its value is never read.
+preacty-only-fragment.tsx(5,1): error TS6192: All imports in import declaration are unused.
+preacty.tsx(5,1): error TS6192: All imports in import declaration are unused.
+snabbdomy-no-fragment.tsx(3,1): error TS6133: 'jsx' is declared but its value is never read.
+snabbdomy-only-fragment.tsx(3,1): error TS6133: 'jsx' is declared but its value is never read.
+snabbdomy.tsx(3,1): error TS6133: 'jsx' is declared but its value is never read.
+
+
+==== renderer.d.ts (0 errors) ====
+    declare global {
+        namespace JSX {
+            interface IntrinsicElements {
+                [e: string]: any;
+            }
+        }
+    }
+    export function h(): void;
+    export function jsx(): void;
+    export function Fragment(): void;
+    
+==== preacty.tsx (1 errors) ====
+    /**
+     * @jsx h
+     * @jsxFrag Fragment
+     */
+    import {h, Fragment} from "./renderer";
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6192: All imports in import declaration are unused.
+    <><div></div></>
+    
+==== snabbdomy.tsx (1 errors) ====
+    /* @jsx jsx */
+    /* @jsxfrag null */
+    import {jsx} from "./renderer";
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6133: 'jsx' is declared but its value is never read.
+    <><span></span></>
+    
+==== preacty-only-fragment.tsx (1 errors) ====
+    /**
+     * @jsx h
+     * @jsxFrag Fragment
+     */
+    import {h, Fragment} from "./renderer";
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6192: All imports in import declaration are unused.
+    <></>
+    
+==== snabbdomy-only-fragment.tsx (1 errors) ====
+    /* @jsx jsx */
+    /* @jsxfrag null */
+    import {jsx} from "./renderer";
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6133: 'jsx' is declared but its value is never read.
+    <></>
+    
+==== preacty-only-fragment-no-jsx.tsx (1 errors) ====
+    /**
+     * @jsx h
+     * @jsxFrag Fragment
+     */
+    import {Fragment} from "./renderer";
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6133: 'Fragment' is declared but its value is never read.
+    <></>
+    
+==== snabbdomy-only-fragment-no-jsx.tsx (0 errors) ====
+    /* @jsx jsx */
+    /* @jsxfrag null */
+    import {} from "./renderer";
+    <></>
+    
+==== preacty-no-fragment.tsx (1 errors) ====
+    /**
+     * @jsx h
+     * @jsxFrag Fragment
+     */
+    import {h, Fragment} from "./renderer";
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6192: All imports in import declaration are unused.
+    <div></div>
+    
+==== snabbdomy-no-fragment.tsx (1 errors) ====
+    /* @jsx jsx */
+    /* @jsxfrag null */
+    import {jsx} from "./renderer";
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6133: 'jsx' is declared but its value is never read.
+    <div></div>
+    
+==== preacty-only-component.tsx (2 errors) ====
+    /**
+     * @jsx h
+     */
+    import {h} from "./renderer";
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6133: 'h' is declared but its value is never read.
+    function Component() { return null; }
+             ~~~~~~~~~
+!!! error TS6133: 'Component' is declared but its value is never read.
+    <Component />
+    

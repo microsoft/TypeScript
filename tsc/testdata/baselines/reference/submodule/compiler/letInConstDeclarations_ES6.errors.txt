@@ -1,0 +1,31 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+letInConstDeclarations_ES6.ts(2,15): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+letInConstDeclarations_ES6.ts(5,19): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== letInConstDeclarations_ES6.ts (2 errors) ====
+    // All use of let in const declaration should be an error
+    const x = 50, let = 5;
+                  ~~~
+!!! error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+    
+    {
+        const x = 10, let = 20;
+                      ~~~
+!!! error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+    }

@@ -1,0 +1,16 @@
+--- old.importSpecifiers_js.errors.txt
++++ new.importSpecifiers_js.errors.txt
+@@= skipped -0, +-1 lines =@@
+-a.js(1,10): error TS8006: 'import...type' declarations can only be used in TypeScript files.
+-
+-
+-==== ./a.ts (0 errors) ====
+-    export interface A {}
+-    
+-==== ./a.js (1 errors) ====
+-    import { type A } from "./a";
+-             ~~~~~~
+-!!! error TS8006: 'import...type' declarations can only be used in TypeScript files.
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

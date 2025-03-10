@@ -1,0 +1,18 @@
+--- old.templateLiteralsInTypes.errors.txt
++++ new.templateLiteralsInTypes.errors.txt
+@@= skipped -0, +0 lines =@@
+ templateLiteralsInTypes.ts(3,1): error TS2554: Expected 2 arguments, but got 1.
+-templateLiteralsInTypes.ts(3,8): error TS2339: Property 'foo' does not exist on type '`${string}:\t${number}\r\n`'.
++templateLiteralsInTypes.ts(3,8): error TS2339: Property 'foo' does not exist on type '`${string}:	${number}
++`'.
+ 
+ 
+ ==== templateLiteralsInTypes.ts (2 errors) ====
+@@= skipped -9, +10 lines =@@
+ !!! error TS2554: Expected 2 arguments, but got 1.
+ !!! related TS6210 templateLiteralsInTypes.ts:1:25: An argument for 'val' was not provided.
+            ~~~
+-!!! error TS2339: Property 'foo' does not exist on type '`${string}:\t${number}\r\n`'.
++!!! error TS2339: Property 'foo' does not exist on type '`${string}:	${number}
++!!! error TS2339: `'.
+     

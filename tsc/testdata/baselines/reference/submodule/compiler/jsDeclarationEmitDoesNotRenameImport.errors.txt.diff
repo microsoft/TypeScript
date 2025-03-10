@@ -1,0 +1,40 @@
+--- old.jsDeclarationEmitDoesNotRenameImport.errors.txt
++++ new.jsDeclarationEmitDoesNotRenameImport.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++index.js(15,18): error TS2339: Property 'test' does not exist on type 'X'.
++
++
++==== test/Test.js (0 errors) ====
++    /** @module test/Test */
++    class Test {}
++    export default Test;
++==== Test.js (0 errors) ====
++    /** @module Test */
++    class Test {}
++    export default Test;
++==== index.js (1 errors) ====
++    import Test from './test/Test.js'
++    
++    /**
++     * @typedef {Object} Options
++     * @property {typeof import("./Test.js").default} [test]
++     */
++    
++    class X extends Test {
++        /**
++         * @param {Options} options
++         */
++        constructor(options) {
++            super();
++            if (options.test) {
++                this.test = new options.test();
++                     ~~~~
++!!! error TS2339: Property 'test' does not exist on type 'X'.
++            }
++        }
++    }
++    
++    export default X;
++    

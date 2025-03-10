@@ -1,0 +1,16 @@
+--- old.errorForBareSpecifierWithImplicitModuleResolutionNone.errors.txt
++++ new.errorForBareSpecifierWithImplicitModuleResolutionNone.errors.txt
+@@= skipped -0, +0 lines =@@
+-errorForBareSpecifierWithImplicitModuleResolutionNone.ts(3,23): error TS2792: Cannot find module 'non-existent-module'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++errorForBareSpecifierWithImplicitModuleResolutionNone.ts(3,23): error TS2307: Cannot find module 'non-existent-module' or its corresponding type declarations.
+ 
+ 
+ ==== errorForBareSpecifierWithImplicitModuleResolutionNone.ts (1 errors) ====
+@@= skipped -5, +5 lines =@@
+     
+     import { thing } from "non-existent-module";
+                           ~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2792: Cannot find module 'non-existent-module'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'non-existent-module' or its corresponding type declarations.
+     thing()
+     

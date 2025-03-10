@@ -1,0 +1,17 @@
+bug24252.js(2,3): error TS2339: Property 'B' does not exist on type '{}'.
+
+
+==== bug24252.js (1 errors) ====
+    var A = {};
+    A.B = class {
+      ~
+!!! error TS2339: Property 'B' does not exist on type '{}'.
+        m() {
+            /** @type {string[]} */
+            var x = [];
+            /** @type {number[]} */
+            var y;
+            y = x;
+        }
+    };
+    

@@ -1,0 +1,18 @@
+--- old.asyncImportedPromise_es5.errors.txt
++++ new.asyncImportedPromise_es5.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++test.ts(3,25): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<T>'?
++
++
++==== task.ts (0 errors) ====
++    export class Task<T> extends Promise<T> { }
++    
++==== test.ts (1 errors) ====
++    import { Task } from "./task";
++    class Test {
++        async example<T>(): Task<T> { return; }
++                            ~~~~~~~
++!!! error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<T>'?
++    }

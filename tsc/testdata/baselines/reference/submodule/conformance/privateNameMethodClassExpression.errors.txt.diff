@@ -1,0 +1,47 @@
+--- old.privateNameMethodClassExpression.errors.txt
++++ new.privateNameMethodClassExpression.errors.txt
+@@= skipped -0, +0 lines =@@
+-privateNameMethodClassExpression.ts(9,17): error TS18013: Property '#method' is not accessible outside class '(anonymous)' because it has a private identifier.
+-privateNameMethodClassExpression.ts(10,17): error TS18013: Property '#field' is not accessible outside class '(anonymous)' because it has a private identifier.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++privateNameMethodClassExpression.ts(8,1): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
++privateNameMethodClassExpression.ts(9,17): error TS18013: Property '#method' is not accessible outside class '(Missing)' because it has a private identifier.
++privateNameMethodClassExpression.ts(10,17): error TS18013: Property '#field' is not accessible outside class '(Missing)' because it has a private identifier.
+ 
+ 
+-==== privateNameMethodClassExpression.ts (2 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== privateNameMethodClassExpression.ts (3 errors) ====
+     const C = class {
+         #field = this.#method();
+         #method() { return 42; }
+@@= skipped -10, +27 lines =@@
+     }
+     
+     console.log(C.getInstance().getField());
++    ~~~~~~~
++!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+     C.getInstance().#method; // Error
+                     ~~~~~~~
+-!!! error TS18013: Property '#method' is not accessible outside class '(anonymous)' because it has a private identifier.
++!!! error TS18013: Property '#method' is not accessible outside class '(Missing)' because it has a private identifier.
+     C.getInstance().#field; // Error
+                     ~~~~~~
+-!!! error TS18013: Property '#field' is not accessible outside class '(anonymous)' because it has a private identifier.
++!!! error TS18013: Property '#field' is not accessible outside class '(Missing)' because it has a private identifier.
+     
+     

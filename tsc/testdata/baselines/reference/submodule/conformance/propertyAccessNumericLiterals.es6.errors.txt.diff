@@ -1,0 +1,45 @@
+--- old.propertyAccessNumericLiterals.es6.errors.txt
++++ new.propertyAccessNumericLiterals.es6.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++propertyAccessNumericLiterals.es6.ts(1,12): error TS2339: Property 'toString' does not exist on type '4294967295'.
++propertyAccessNumericLiterals.es6.ts(2,9): error TS2339: Property 'toString' does not exist on type '668'.
++propertyAccessNumericLiterals.es6.ts(3,12): error TS2339: Property 'toString' does not exist on type '109'.
++propertyAccessNumericLiterals.es6.ts(4,7): error TS2339: Property 'toString' does not exist on type '1234'.
++propertyAccessNumericLiterals.es6.ts(5,5): error TS2339: Property 'toString' does not exist on type '1'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== propertyAccessNumericLiterals.es6.ts (5 errors) ====
++    0xffffffff.toString();
++               ~~~~~~~~
++!!! error TS2339: Property 'toString' does not exist on type '4294967295'.
++    0o01234.toString();
++            ~~~~~~~~
++!!! error TS2339: Property 'toString' does not exist on type '668'.
++    0b01101101.toString();
++               ~~~~~~~~
++!!! error TS2339: Property 'toString' does not exist on type '109'.
++    1234..toString();
++          ~~~~~~~~
++!!! error TS2339: Property 'toString' does not exist on type '1234'.
++    1e0.toString();
++        ~~~~~~~~
++!!! error TS2339: Property 'toString' does not exist on type '1'.
++    

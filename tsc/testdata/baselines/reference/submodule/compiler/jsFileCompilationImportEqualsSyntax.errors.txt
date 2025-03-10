@@ -1,0 +1,7 @@
+a.js(1,12): error TS2503: Cannot find namespace 'b'.
+
+
+==== a.js (1 errors) ====
+    import a = b;
+               ~
+!!! error TS2503: Cannot find namespace 'b'.

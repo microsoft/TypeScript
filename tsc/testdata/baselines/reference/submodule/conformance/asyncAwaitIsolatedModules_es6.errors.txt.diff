@@ -1,0 +1,99 @@
+--- old.asyncAwaitIsolatedModules_es6.errors.txt
++++ new.asyncAwaitIsolatedModules_es6.errors.txt
+@@= skipped -0, +0 lines =@@
+-asyncAwaitIsolatedModules_es6.ts(1,27): error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'Promise'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++asyncAwaitIsolatedModules_es6.ts(1,27): error TS2307: Cannot find module 'missing' or its corresponding type declarations.
++asyncAwaitIsolatedModules_es6.ts(3,16): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++asyncAwaitIsolatedModules_es6.ts(7,22): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++asyncAwaitIsolatedModules_es6.ts(10,5): error TS2697: An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
++asyncAwaitIsolatedModules_es6.ts(11,28): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++asyncAwaitIsolatedModules_es6.ts(14,10): error TS2697: An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
++asyncAwaitIsolatedModules_es6.ts(15,20): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++asyncAwaitIsolatedModules_es6.ts(19,21): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++asyncAwaitIsolatedModules_es6.ts(23,8): error TS2697: An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
++asyncAwaitIsolatedModules_es6.ts(24,14): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++asyncAwaitIsolatedModules_es6.ts(30,14): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++asyncAwaitIsolatedModules_es6.ts(33,21): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+ 
+ 
+-==== asyncAwaitIsolatedModules_es6.ts (1 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'Promise'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== asyncAwaitIsolatedModules_es6.ts (12 errors) ====
+     import { MyPromise } from "missing";
+                               ~~~~~~~~~
+-!!! error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'missing' or its corresponding type declarations.
+     
+     declare var p: Promise<number>;
++                   ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+     declare var mp: MyPromise<number>;
+     
+     async function f0() { }
+     async function f1(): Promise<void> { }
++                         ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+     async function f3(): MyPromise<void> { }
+     
+     let f4 = async function() { }
++        ~~
++!!! error TS2697: An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+     let f5 = async function(): Promise<void> { }
++                               ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+     let f6 = async function(): MyPromise<void> { }
+     
+     let f7 = async () => { };
++             ~~~~~~~~~~~~~~~
++!!! error TS2697: An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+     let f8 = async (): Promise<void> => { };
++                       ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+     let f9 = async (): MyPromise<void> => { }; 
+     let f10 = async () => p;
+     let f11 = async () => mp;
+     let f12 = async (): Promise<number> => mp;
++                        ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+     let f13 = async (): MyPromise<number> => p;
+     
+     let o = {
+     	async m1() { },
++    	      ~~
++!!! error TS2697: An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+     	async m2(): Promise<void> { },
++    	            ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+     	async m3(): MyPromise<void> { }
+     };
+     
+     class C {
+     	async m1() { }
+     	async m2(): Promise<void> { }
++    	            ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+     	async m3(): MyPromise<void> { }
+     	static async m4() { }
+     	static async m5(): Promise<void> { }
++    	                   ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+     	static async m6(): MyPromise<void> { }
+     }
+     

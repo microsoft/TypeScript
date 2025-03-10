@@ -1,0 +1,44 @@
+--- old.typesVersions.multiFile.errors.txt
++++ new.typesVersions.multiFile.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++main.ts(4,7): error TS2322: Type '"default a"' is not assignable to type '"ts3.1 a"'.
++main.ts(5,7): error TS2322: Type '"default b"' is not assignable to type '"ts3.1 b"'.
++
++
++==== tsconfig.json (0 errors) ====
++    {}
++==== main.ts (2 errors) ====
++    import { a } from "ext";
++    import { b } from "ext/other";
++    
++    const aa: "ts3.1 a" = a;
++          ~~
++!!! error TS2322: Type '"default a"' is not assignable to type '"ts3.1 a"'.
++    const bb: "ts3.1 b" = b;
++          ~~
++!!! error TS2322: Type '"default b"' is not assignable to type '"ts3.1 b"'.
++    
++==== node_modules/ext/package.json (0 errors) ====
++    {
++        "name": "ext",
++        "version": "1.0.0",
++        "types": "index",
++        "typesVersions": {
++            ">=3.1.0-0": { "*" : ["ts3.1/*"] }
++        }
++    }
++    
++==== node_modules/ext/index.d.ts (0 errors) ====
++    export const a = "default a";
++    
++==== node_modules/ext/other.d.ts (0 errors) ====
++    export const b = "default b";
++    
++==== node_modules/ext/ts3.1/index.d.ts (0 errors) ====
++    export const a = "ts3.1 a";
++    
++==== node_modules/ext/ts3.1/other.d.ts (0 errors) ====
++    export const b = "ts3.1 b";
++    

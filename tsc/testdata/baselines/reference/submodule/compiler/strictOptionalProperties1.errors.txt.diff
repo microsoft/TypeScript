@@ -1,0 +1,170 @@
+--- old.strictOptionalProperties1.errors.txt
++++ new.strictOptionalProperties1.errors.txt
+@@= skipped -4, +4 lines =@@
+ strictOptionalProperties1.ts(28,9): error TS2412: Type 'undefined' is not assignable to type 'string' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+ strictOptionalProperties1.ts(53,5): error TS2412: Type 'undefined' is not assignable to type 'string' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+ strictOptionalProperties1.ts(60,5): error TS2322: Type 'undefined' is not assignable to type 'string'.
+-strictOptionalProperties1.ts(64,5): error TS2322: Type '[number, string?, string?]' is not assignable to type '[number, string?]'.
++strictOptionalProperties1.ts(64,5): error TS2322: Type '[number, (string | undefined)?, (string | undefined)?]' is not assignable to type '[number, (string | undefined)?]'.
+   Target allows only 2 element(s) but source may have more.
+-strictOptionalProperties1.ts(73,5): error TS2322: Type '[number, never?, never?, never?]' is not assignable to type '[number, string?, boolean?]'.
++strictOptionalProperties1.ts(73,5): error TS2322: Type '[number, undefined?, undefined?, undefined?]' is not assignable to type '[number, (string | undefined)?, (boolean | undefined)?]'.
+   Target allows only 3 element(s) but source may have more.
+-strictOptionalProperties1.ts(74,5): error TS2322: Type '[never?, never?, true?]' is not assignable to type '[number, string?, boolean?]'.
++strictOptionalProperties1.ts(74,5): error TS2322: Type '[undefined?, undefined?, (true | undefined)?]' is not assignable to type '[number, (string | undefined)?, (boolean | undefined)?]'.
+   Source provides no match for required element at position 0 in target.
+-strictOptionalProperties1.ts(75,5): error TS2322: Type '[number, undefined, true]' is not assignable to type '[number, string?, boolean?]'.
++strictOptionalProperties1.ts(75,5): error TS2322: Type '[number, undefined, true]' is not assignable to type '[number, (string | undefined)?, (boolean | undefined)?]'.
+   Type at position 1 in source is not compatible with type at position 1 in target.
+     Type 'undefined' is not assignable to type 'string'.
+-strictOptionalProperties1.ts(99,7): error TS2375: Type '{ foo: undefined; bar: string; }' is not assignable to type 'InputProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
++strictOptionalProperties1.ts(99,7): error TS2322: Type '{ foo: undefined; bar: string; }' is not assignable to type 'InputProps'.
+   Types of property 'foo' are incompatible.
+     Type 'undefined' is not assignable to type 'string'.
+-strictOptionalProperties1.ts(105,7): error TS2322: Type '[number, undefined]' is not assignable to type '[number, string?, boolean?]'.
++strictOptionalProperties1.ts(105,7): error TS2322: Type '[number, undefined]' is not assignable to type '[number, (string | undefined)?, (boolean | undefined)?]'.
+   Type at position 1 in source is not compatible with type at position 1 in target.
+     Type 'undefined' is not assignable to type 'string'.
+-strictOptionalProperties1.ts(106,7): error TS2322: Type '[number, string, undefined]' is not assignable to type '[number, string?, boolean?]'.
++strictOptionalProperties1.ts(106,7): error TS2322: Type '[number, string, undefined]' is not assignable to type '[number, (string | undefined)?, (boolean | undefined)?]'.
+   Type at position 2 in source is not compatible with type at position 2 in target.
+     Type 'undefined' is not assignable to type 'boolean'.
+-strictOptionalProperties1.ts(107,7): error TS2322: Type '[number, undefined, undefined]' is not assignable to type '[number, string?, boolean?]'.
++strictOptionalProperties1.ts(107,7): error TS2322: Type '[number, undefined, undefined]' is not assignable to type '[number, (string | undefined)?, (boolean | undefined)?]'.
+   Type at position 1 in source is not compatible with type at position 1 in target.
+     Type 'undefined' is not assignable to type 'string'.
+-strictOptionalProperties1.ts(111,7): error TS2375: Type '{ foo: undefined; }' is not assignable to type '{ foo?: number; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
++strictOptionalProperties1.ts(111,7): error TS2322: Type '{ foo: undefined; }' is not assignable to type '{ foo?: number | undefined; }'.
+   Types of property 'foo' are incompatible.
+     Type 'undefined' is not assignable to type 'number'.
+ strictOptionalProperties1.ts(119,5): error TS2411: Property 'bar' of type 'string | undefined' is not assignable to 'string' index type 'string'.
+ strictOptionalProperties1.ts(190,15): error TS2451: Cannot redeclare block-scoped variable 'e'.
++strictOptionalProperties1.ts(190,15): error TS2451: Cannot redeclare block-scoped variable 'e'.
+ strictOptionalProperties1.ts(193,1): error TS2322: Type 'string | boolean | undefined' is not assignable to type 'string | number | undefined'.
+   Type 'false' is not assignable to type 'string | number | undefined'.
+ strictOptionalProperties1.ts(194,1): error TS2412: Type 'string | boolean | undefined' is not assignable to type 'string | number' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+   Type 'undefined' is not assignable to type 'string | number'.
+-strictOptionalProperties1.ts(195,1): error TS2375: Type '{ name: string; email: undefined; }' is not assignable to type 'U2' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
++strictOptionalProperties1.ts(195,1): error TS2322: Type '{ name: string; email: undefined; }' is not assignable to type 'U2'.
+   Types of property 'email' are incompatible.
+     Type 'undefined' is not assignable to type 'string | number'.
+ strictOptionalProperties1.ts(206,13): error TS2451: Cannot redeclare block-scoped variable 'e'.
++strictOptionalProperties1.ts(206,13): error TS2451: Cannot redeclare block-scoped variable 'e'.
+ strictOptionalProperties1.ts(210,1): error TS2322: Type '{ a: number; b: string | undefined; }' is not assignable to type '{ [x: string]: string | number; }'.
+   Property 'b' is incompatible with index signature.
+     Type 'string | undefined' is not assignable to type 'string | number'.
+@@= skipped -42, +44 lines =@@
+   Type 'undefined' is not assignable to type '{ [x: string]: string | number; }'.
+ 
+ 
+-==== strictOptionalProperties1.ts (23 errors) ====
++==== strictOptionalProperties1.ts (25 errors) ====
+     function f1(obj: { a?: string, b?: string | undefined }) {
+         let a = obj.a;  // string | undefined
+         let b = obj.b;  // string | undefined
+@@= skipped -79, +79 lines =@@
+     function f4a(t1: [number, string?], t2: [number, string?, string?]) {
+         t1 = t2;  // Wasn't an error, but should be
+         ~~
+-!!! error TS2322: Type '[number, string?, string?]' is not assignable to type '[number, string?]'.
++!!! error TS2322: Type '[number, (string | undefined)?, (string | undefined)?]' is not assignable to type '[number, (string | undefined)?]'.
+ !!! error TS2322:   Target allows only 2 element(s) but source may have more.
+     }
+     
+@@= skipped -12, +12 lines =@@
+         t = [42, , ,];
+         t = [42, , , ,];  // Error
+         ~
+-!!! error TS2322: Type '[number, never?, never?, never?]' is not assignable to type '[number, string?, boolean?]'.
++!!! error TS2322: Type '[number, undefined?, undefined?, undefined?]' is not assignable to type '[number, (string | undefined)?, (boolean | undefined)?]'.
+ !!! error TS2322:   Target allows only 3 element(s) but source may have more.
+         t = [, , true];  // Error
+         ~
+-!!! error TS2322: Type '[never?, never?, true?]' is not assignable to type '[number, string?, boolean?]'.
++!!! error TS2322: Type '[undefined?, undefined?, (true | undefined)?]' is not assignable to type '[number, (string | undefined)?, (boolean | undefined)?]'.
+ !!! error TS2322:   Source provides no match for required element at position 0 in target.
+         t = [42, undefined, true];  // Error
+         ~
+-!!! error TS2322: Type '[number, undefined, true]' is not assignable to type '[number, string?, boolean?]'.
++!!! error TS2322: Type '[number, undefined, true]' is not assignable to type '[number, (string | undefined)?, (boolean | undefined)?]'.
+ !!! error TS2322:   Type at position 1 in source is not compatible with type at position 1 in target.
+ !!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
+     }
+@@= skipped -36, +36 lines =@@
+     const defaultProps: Pick<Props, 'foo'> = { foo: 'foo' };
+     const inputProps: InputProps = { foo: undefined, bar: 'bar' };
+           ~~~~~~~~~~
+-!!! error TS2375: Type '{ foo: undefined; bar: string; }' is not assignable to type 'InputProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+-!!! error TS2375:   Types of property 'foo' are incompatible.
+-!!! error TS2375:     Type 'undefined' is not assignable to type 'string'.
++!!! error TS2322: Type '{ foo: undefined; bar: string; }' is not assignable to type 'InputProps'.
++!!! error TS2322:   Types of property 'foo' are incompatible.
++!!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
+     const completeProps: Props = { ...defaultProps, ...inputProps };
+     
+     // Example from #13195
+@@= skipped -10, +10 lines =@@
+     const t1: [number, string?, boolean?] = [1];
+     const t2: [number, string?, boolean?] = [1, undefined];
+           ~~
+-!!! error TS2322: Type '[number, undefined]' is not assignable to type '[number, string?, boolean?]'.
++!!! error TS2322: Type '[number, undefined]' is not assignable to type '[number, (string | undefined)?, (boolean | undefined)?]'.
+ !!! error TS2322:   Type at position 1 in source is not compatible with type at position 1 in target.
+ !!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
+     const t3: [number, string?, boolean?] = [1, "string", undefined];
+           ~~
+-!!! error TS2322: Type '[number, string, undefined]' is not assignable to type '[number, string?, boolean?]'.
++!!! error TS2322: Type '[number, string, undefined]' is not assignable to type '[number, (string | undefined)?, (boolean | undefined)?]'.
+ !!! error TS2322:   Type at position 2 in source is not compatible with type at position 2 in target.
+ !!! error TS2322:     Type 'undefined' is not assignable to type 'boolean'.
+     const t4: [number, string?, boolean?] = [1, undefined, undefined];
+           ~~
+-!!! error TS2322: Type '[number, undefined, undefined]' is not assignable to type '[number, string?, boolean?]'.
++!!! error TS2322: Type '[number, undefined, undefined]' is not assignable to type '[number, (string | undefined)?, (boolean | undefined)?]'.
+ !!! error TS2322:   Type at position 1 in source is not compatible with type at position 1 in target.
+ !!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
+     
+@@= skipped -18, +18 lines =@@
+     
+     const x: { foo?: number } = { foo: undefined };
+           ~
+-!!! error TS2375: Type '{ foo: undefined; }' is not assignable to type '{ foo?: number; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+-!!! error TS2375:   Types of property 'foo' are incompatible.
+-!!! error TS2375:     Type 'undefined' is not assignable to type 'number'.
++!!! error TS2322: Type '{ foo: undefined; }' is not assignable to type '{ foo?: number | undefined; }'.
++!!! error TS2322:   Types of property 'foo' are incompatible.
++!!! error TS2322:     Type 'undefined' is not assignable to type 'number'.
+     const y: { foo: number } = { foo: 123, ...x };
+     
+     // Index signatures and strict optional properties
+@@= skipped -86, +86 lines =@@
+     declare const e: string | boolean | undefined
+                   ~
+ !!! error TS2451: Cannot redeclare block-scoped variable 'e'.
++                  ~
++!!! error TS2451: Cannot redeclare block-scoped variable 'e'.
+     declare const u1: U1
+     declare let u2: U2
+     u1.email = e // error, but only because boolean isn't in email's type
+@@= skipped -12, +14 lines =@@
+ !!! error TS2412:   Type 'undefined' is not assignable to type 'string | number'.
+     u2 = {
+     ~~
+-!!! error TS2375: Type '{ name: string; email: undefined; }' is not assignable to type 'U2' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+-!!! error TS2375:   Types of property 'email' are incompatible.
+-!!! error TS2375:     Type 'undefined' is not assignable to type 'string | number'.
++!!! error TS2322: Type '{ name: string; email: undefined; }' is not assignable to type 'U2'.
++!!! error TS2322:   Types of property 'email' are incompatible.
++!!! error TS2322:     Type 'undefined' is not assignable to type 'string | number'.
+         name: 'hi',
+         email: undefined
+     }
+@@= skipped -16, +16 lines =@@
+     declare var e: {a: number, b?: string | undefined }
+                 ~
+ !!! error TS2451: Cannot redeclare block-scoped variable 'e'.
++                ~
++!!! error TS2451: Cannot redeclare block-scoped variable 'e'.
+     
+     a = b;
+     a = c;

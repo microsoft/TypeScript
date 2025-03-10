@@ -1,0 +1,16 @@
+--- old.decoratorOnClassMethod8.errors.txt
++++ new.decoratorOnClassMethod8.errors.txt
+@@= skipped -0, +0 lines =@@
+ decoratorOnClassMethod8.ts(4,6): error TS1241: Unable to resolve signature of method decorator when called as an expression.
+   The runtime will invoke the decorator with 3 arguments, but the decorator expects 1.
+ decoratorOnClassMethod8.ts(4,6): error TS1270: Decorator function return type 'C' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
++  Type 'C' has no properties in common with type 'TypedPropertyDescriptor<() => void>'.
+ 
+ 
+ ==== decoratorOnClassMethod8.ts (2 errors) ====
+@@= skipped -12, +13 lines =@@
+ !!! error TS1241:   The runtime will invoke the decorator with 3 arguments, but the decorator expects 1.
+          ~~~
+ !!! error TS1270: Decorator function return type 'C' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
++!!! error TS1270:   Type 'C' has no properties in common with type 'TypedPropertyDescriptor<() => void>'.
+     }

@@ -1,0 +1,39 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2318: Cannot find global type 'TemplateStringsArray'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+taggedTemplateStringsWithManyCallAndMemberExpressionsES6.ts(2,12): error TS2304: Cannot find name 'TemplateStringsArray'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2318: Cannot find global type 'TemplateStringsArray'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== taggedTemplateStringsWithManyCallAndMemberExpressionsES6.ts (1 errors) ====
+    interface I {
+        (strs: TemplateStringsArray, ...subs: number[]): I;
+               ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
+        member: {
+            new (s: string): {
+                new (n: number): {
+                    new (): boolean;
+                }
+            }
+        };
+    }
+    var f: I;
+    
+    var x = new new new f `abc${ 0 }def`.member("hello")(42) === true;
+    
+    

@@ -1,0 +1,46 @@
+--- old.for-of19.errors.txt
++++ new.for-of19.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++for-of19.ts(9,6): error TS2304: Cannot find name 'Symbol'.
++for-of19.ts(14,15): error TS2488: Type 'FooIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== for-of19.ts (2 errors) ====
++    class Foo { }
++    class FooIterator {
++        next() {
++            return {
++                value: new Foo,
++                done: false
++            };
++        }
++        [Symbol.iterator]() {
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
++            return this;
++        }
++    }
++    
++    for (var v of new FooIterator) {
++                  ~~~~~~~~~~~~~~~
++!!! error TS2488: Type 'FooIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
++        v;
++    }

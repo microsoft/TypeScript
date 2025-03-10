@@ -1,0 +1,16 @@
+--- old.usingDeclarationsWithImportHelpers.errors.txt
++++ new.usingDeclarationsWithImportHelpers.errors.txt
+@@= skipped -0, +-1 lines =@@
+-usingDeclarationsWithImportHelpers.ts(4,5): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+-
+-
+-==== usingDeclarationsWithImportHelpers.ts (1 errors) ====
+-    export {};
+-    
+-    {
+-        using a = null;
+-        ~~~~~~~~~~~~~~
+-!!! error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+-    }
+@@= skipped --1, +1 lines =@@
++<no content>

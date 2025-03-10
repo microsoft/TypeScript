@@ -1,0 +1,30 @@
+--- old.extendsTag2.errors.txt
++++ new.extendsTag2.errors.txt
+@@= skipped -0, +-1 lines =@@
+-error TS8022: JSDoc '@extends' is not attached to a class.
+-
+-
+-!!! error TS8022: JSDoc '@extends' is not attached to a class.
+-==== foo.js (0 errors) ====
+-    /**
+-     * @constructor
+-     */
+-    class A {
+-        constructor() {}
+-    }
+-    
+-    /**
+-     * @extends {A}
+-     */
+-    
+-    /**
+-     * @constructor
+-     */
+-    class B extends A {
+-        constructor() {
+-            super();
+-        }
+-    }
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

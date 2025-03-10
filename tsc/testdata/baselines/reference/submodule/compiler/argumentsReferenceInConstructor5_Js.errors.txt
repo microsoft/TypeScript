@@ -1,0 +1,32 @@
+/a.js(15,8): error TS2339: Property 'foo' does not exist on type 'A'.
+/a.js(20,8): error TS2339: Property 'bar' does not exist on type 'A'.
+
+
+==== /a.js (2 errors) ====
+    const bar = {
+    	arguments: {}
+    }
+    
+    class A {
+    	/**
+    	 * Constructor
+    	 *
+    	 * @param {object} [foo={}]
+    	 */
+    	constructor(foo = {}) {
+    		/**
+    		 * @type object
+    		 */
+    		this.foo = foo;
+    		     ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'A'.
+    
+    		/**
+    		 * @type object
+    		 */
+    		this.bar = bar.arguments;
+    		     ~~~
+!!! error TS2339: Property 'bar' does not exist on type 'A'.
+    	}
+    }
+    

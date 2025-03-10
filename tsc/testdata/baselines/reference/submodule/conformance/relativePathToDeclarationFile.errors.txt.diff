@@ -1,0 +1,35 @@
+--- old.relativePathToDeclarationFile.errors.txt
++++ new.relativePathToDeclarationFile.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++test/file1.ts(1,22): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
++
++
++==== test/file1.ts (1 errors) ====
++    import foo = require('foo');
++                         ~~~~~
++!!! error TS2307: Cannot find module 'foo' or its corresponding type declarations.
++    import other = require('./other');
++    import relMod = require('./sub/relMod');
++    
++    if(foo.M2.x){
++    	var x = new relMod(other.M2.x.charCodeAt(0));
++    }
++    
++==== test/foo.d.ts (0 errors) ====
++    export declare module M2 {
++    	export var x: boolean;
++    }
++    
++==== test/other.d.ts (0 errors) ====
++    export declare module M2 {
++    	export var x: string;
++    }
++    
++==== test/sub/relMod.d.ts (0 errors) ====
++    declare class Test {
++    	constructor(x: number);
++    }
++    export = Test;
++    

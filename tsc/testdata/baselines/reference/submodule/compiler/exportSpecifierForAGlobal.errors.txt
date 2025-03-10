@@ -1,0 +1,15 @@
+b.ts(1,9): error TS2661: Cannot export 'X'. Only local declarations can be exported from a module.
+
+
+==== a.d.ts (0 errors) ====
+    declare class X { }
+    
+==== b.ts (1 errors) ====
+    export {X};
+            ~
+!!! error TS2661: Cannot export 'X'. Only local declarations can be exported from a module.
+    export function f() {
+        var x: X;
+        return x;
+    } 
+    

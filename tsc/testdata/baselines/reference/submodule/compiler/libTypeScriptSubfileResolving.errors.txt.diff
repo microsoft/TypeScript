@@ -1,0 +1,21 @@
+--- old.libTypeScriptSubfileResolving.errors.txt
++++ new.libTypeScriptSubfileResolving.errors.txt
+@@= skipped -0, +-1 lines =@@
+-index.ts(6,1): error TS2304: Cannot find name 'window'.
+-
+-
+-==== /node_modules/@typescript/lib-dom/index.d.ts (0 errors) ====
+-    // NOOP
+-==== /node_modules/@typescript/lib-dom/iterable.d.ts (0 errors) ====
+-    interface DOMIterable { abc: string }
+-==== index.ts (1 errors) ====
+-    /// <reference lib="dom.iterable" />
+-    const a: DOMIterable = { abc: "Hello" }
+-    
+-    // This should fail because libdom has been replaced
+-    // by the module above ^
+-    window.localStorage
+-    ~~~~~~
+-!!! error TS2304: Cannot find name 'window'.
+@@= skipped --1, +1 lines =@@
++<no content>

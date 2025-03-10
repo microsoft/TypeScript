@@ -1,0 +1,29 @@
+--- old.declFileExportImportChain2.errors.txt
++++ new.declFileExportImportChain2.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++declFileExportImportChain2_d.ts(1,20): error TS2307: Cannot find module 'declFileExportImportChain2_c' or its corresponding type declarations.
++
++
++==== declFileExportImportChain2_d.ts (1 errors) ====
++    import c = require("declFileExportImportChain2_c");
++                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'declFileExportImportChain2_c' or its corresponding type declarations.
++    export var x: c.b.m2.c1;
++==== declFileExportImportChain2_a.ts (0 errors) ====
++    module m1 {
++        export module m2 {
++            export class c1 {
++            }
++        }
++    }
++    export = m1;
++    
++==== declFileExportImportChain2_b.ts (0 errors) ====
++    import a = require("declFileExportImportChain2_a");
++    export = a;
++    
++==== declFileExportImportChain2_c.ts (0 errors) ====
++    export import b = require("declFileExportImportChain2_b");
++    

@@ -1,0 +1,15 @@
+asiPreventsParsingAsNamespace05.ts(7,3): error TS2339: Property 'b' does not exist on type '{}'.
+
+
+==== asiPreventsParsingAsNamespace05.ts (1 errors) ====
+    let namespace = 10;
+    namespace a.b {
+        export let c = 20;
+    }
+    
+    namespace
+    a.b.c
+      ~
+!!! error TS2339: Property 'b' does not exist on type '{}'.
+    {
+    }

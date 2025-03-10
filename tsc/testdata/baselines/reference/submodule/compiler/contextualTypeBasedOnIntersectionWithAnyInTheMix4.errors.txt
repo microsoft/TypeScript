@@ -1,0 +1,61 @@
+contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts(33,12): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts(48,15): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+
+
+==== contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts (2 errors) ====
+    declare function test1(
+      arg: { a: (arg: number) => void } & { [k: string]: (arg: any) => void },
+    ): unknown;
+    
+    test1({
+      a: (arg) => {},
+      b: (arg) => {},
+    });
+    
+    declare function test2(
+      arg: { a: (arg: { foo: string }) => void } & {
+        [k: string]: (arg: { foo: any }) => void;
+      },
+    ): unknown;
+    
+    test2({
+      a: (arg) => {},
+      b: (arg) => {},
+    });
+    
+    declare function test3(
+      arg: { a: () => "foo" } & {
+        [k: string]: () => any;
+      },
+    ): unknown;
+    
+    test3({
+      a: () => "foo",
+      b: () => "bar",
+    });
+    
+    test3({
+      a: () => "bar",
+               ~~~~~
+!!! error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+!!! related TS6502 contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts:22:13: The expected type comes from the return type of this signature.
+    });
+    
+    declare function test4(
+      arg: { a: () => { prop: "foo" } } & {
+        [k: string]: () => { prop: any };
+      },
+    ): unknown;
+    
+    test4({
+      a: () => ({ prop: "foo" }),
+      b: () => ({ prop: "bar" }),
+    });
+    
+    test4({
+      a: () => ({ prop: "bar" }),
+                  ~~~~
+!!! error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+!!! related TS6500 contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts:37:21: The expected type comes from property 'prop' which is declared here on type '{ prop: "foo"; }'
+    });
+    

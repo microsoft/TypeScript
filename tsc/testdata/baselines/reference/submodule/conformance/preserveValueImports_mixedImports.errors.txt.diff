@@ -1,0 +1,21 @@
+--- old.preserveValueImports_mixedImports.errors.txt
++++ new.preserveValueImports_mixedImports.errors.txt
+@@= skipped -0, +-1 lines =@@
+-error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+-  Use 'verbatimModuleSyntax' instead.
+-
+-
+-!!! error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+-!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
+-==== /exports.ts (0 errors) ====
+-    export function Component() {}
+-    export interface ComponentProps {}
+-    
+-==== /index.ts (0 errors) ====
+-    import { Component, ComponentProps } from "./exports.js";
+-    
+-==== /index.fixed.ts (0 errors) ====
+-    import { Component, type ComponentProps } from "./exports.js";
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

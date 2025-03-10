@@ -1,0 +1,22 @@
+38379.js(1,17): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+38379.js(2,15): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== 38379.js (2 errors) ====
+    const { art } = require('./ex')
+                    ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    const artoo = require('./ex2')
+                  ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    let x = 1
+    art(x)
+    let y = 1
+    artoo(y)
+    
+==== ex.d.ts (0 errors) ====
+    // based on assert in @types/node
+    export function art(value: any, message?: string | Error): asserts value;
+==== ex2.d.ts (0 errors) ====
+    declare function art(value: any, message?: string | Error): asserts value;
+    export = art;

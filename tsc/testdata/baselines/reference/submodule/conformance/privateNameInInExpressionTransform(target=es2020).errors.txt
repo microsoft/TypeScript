@@ -1,0 +1,61 @@
+privateNameInInExpressionTransform.ts(20,24): error TS2322: Type 'number' is not assignable to type 'object'.
+privateNameInInExpressionTransform.ts(24,14): error TS2322: Type 'boolean' is not assignable to type 'string | number | symbol'.
+privateNameInInExpressionTransform.ts(29,21): error TS1005: ';' expected.
+privateNameInInExpressionTransform.ts(30,21): error TS1005: ';' expected.
+
+
+==== privateNameInInExpressionTransform.ts (4 errors) ====
+    class Foo {
+        #field = 1;
+        #method() {}
+        static #staticField= 2;
+        static #staticMethod() {}
+    
+        check(v: any) {
+            #field in v; // expect Foo's 'field' WeakMap
+            #method in v; // expect Foo's 'instances' WeakSet
+            #staticField in v; // expect Foo's constructor
+            #staticMethod in v; // expect Foo's constructor
+        }
+        precedence(v: any) {
+            // '==' and '||' have lower precedence than 'in'
+            // 'in'  naturally has same precedence as 'in'
+            // '<<' has higher precedence than 'in'
+    
+            v == #field in v || v; // Good precedence: (v == (#field in v)) || v
+    
+            v << #field in v << v; // Good precedence (SyntaxError): (v << #field) in (v << v)
+                           ~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'object'.
+    
+            v << #field in v == v; // Good precedence (SyntaxError): ((v << #field) in v) == v
+    
+            v == #field in v in v; // Good precedence: v == ((#field in v) in v)
+                 ~~~~~~~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'string | number | symbol'.
+    
+            #field in v && #field in v; // Good precedence: (#field in v) && (#field in v)
+        }
+        invalidLHS(v: any) {
+            'prop' in v = 10;
+                        ~
+!!! error TS1005: ';' expected.
+            #field in v = 10;
+                        ~
+!!! error TS1005: ';' expected.
+        }
+    }
+    
+    class Bar {
+        #field = 1;
+        check(v: any) {
+            #field in v; // expect Bar's 'field' WeakMap
+        }
+    }
+    
+    function syntaxError(v: Foo) {
+        return #field in v; // expect `return in v` so runtime will have a syntax error
+    }
+    
+    export { }
+    

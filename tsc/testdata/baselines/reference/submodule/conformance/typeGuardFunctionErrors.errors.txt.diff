@@ -1,0 +1,139 @@
+--- old.typeGuardFunctionErrors.errors.txt
++++ new.typeGuardFunctionErrors.errors.txt
+@@= skipped -0, +0 lines =@@
+ typeGuardFunctionErrors.ts(1,7): error TS2300: Duplicate identifier 'A'.
++typeGuardFunctionErrors.ts(1,7): error TS2300: Duplicate identifier 'A'.
+ typeGuardFunctionErrors.ts(14,5): error TS2322: Type 'string' is not assignable to type 'boolean'.
+ typeGuardFunctionErrors.ts(17,55): error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
+ typeGuardFunctionErrors.ts(17,57): error TS1144: '{' or ';' expected.
++typeGuardFunctionErrors.ts(17,57): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+ typeGuardFunctionErrors.ts(17,60): error TS1434: Unexpected keyword or identifier.
+ typeGuardFunctionErrors.ts(21,33): error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
+ typeGuardFunctionErrors.ts(25,33): error TS1225: Cannot find parameter 'x'.
+@@= skipped -31, +33 lines =@@
+ typeGuardFunctionErrors.ts(95,11): error TS1005: ',' expected.
+ typeGuardFunctionErrors.ts(95,14): error TS1005: ',' expected.
+ typeGuardFunctionErrors.ts(95,14): error TS2300: Duplicate identifier 'A'.
++typeGuardFunctionErrors.ts(95,14): error TS2300: Duplicate identifier 'A'.
+ typeGuardFunctionErrors.ts(96,16): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
+ typeGuardFunctionErrors.ts(96,18): error TS1005: ',' expected.
+ typeGuardFunctionErrors.ts(96,21): error TS1005: ',' expected.
+ typeGuardFunctionErrors.ts(97,20): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
+ typeGuardFunctionErrors.ts(97,22): error TS1144: '{' or ';' expected.
++typeGuardFunctionErrors.ts(97,22): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+ typeGuardFunctionErrors.ts(97,25): error TS1434: Unexpected keyword or identifier.
+ typeGuardFunctionErrors.ts(103,25): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+ typeGuardFunctionErrors.ts(104,9): error TS2322: Type 'boolean' is not assignable to type 'D'.
+@@= skipped -15, +17 lines =@@
+ typeGuardFunctionErrors.ts(115,18): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+ typeGuardFunctionErrors.ts(119,22): error TS2304: Cannot find name 'p1'.
+ typeGuardFunctionErrors.ts(119,25): error TS1005: ';' expected.
++typeGuardFunctionErrors.ts(119,25): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+ typeGuardFunctionErrors.ts(120,1): error TS1128: Declaration or statement expected.
+ typeGuardFunctionErrors.ts(123,20): error TS1229: A type predicate cannot reference a rest parameter.
+ typeGuardFunctionErrors.ts(128,34): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
+ typeGuardFunctionErrors.ts(132,34): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
+ typeGuardFunctionErrors.ts(136,39): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
+-typeGuardFunctionErrors.ts(152,68): error TS2344: Type 'T | "d"' does not satisfy the constraint 'Keys'.
++typeGuardFunctionErrors.ts(152,68): error TS2344: Type '"d" | T' does not satisfy the constraint 'Keys'.
+   Type '"d"' is not assignable to type 'Keys'.
+ typeGuardFunctionErrors.ts(159,31): error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+-  Types of property ''a'' are incompatible.
++  Types of property 'a' are incompatible.
+     Type 'number' is not assignable to type 'string'.
+ typeGuardFunctionErrors.ts(162,31): error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+-  Types of property ''a'' are incompatible.
++  Types of property 'a' are incompatible.
+     Type 'number' is not assignable to type 'string'.
+ typeGuardFunctionErrors.ts(163,35): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
+ typeGuardFunctionErrors.ts(164,51): error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+-  Types of property ''a'' are incompatible.
++  Types of property 'a' are incompatible.
+     Type 'number' is not assignable to type 'string'.
+ typeGuardFunctionErrors.ts(165,51): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
+ typeGuardFunctionErrors.ts(166,45): error TS2677: A type predicate's type must be assignable to its parameter's type.
+@@= skipped -23, +24 lines =@@
+ typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
+ 
+ 
+-==== typeGuardFunctionErrors.ts (53 errors) ====
++==== typeGuardFunctionErrors.ts (58 errors) ====
+     class A {
+           ~
+ !!! error TS2300: Duplicate identifier 'A'.
++          ~
++!!! error TS2300: Duplicate identifier 'A'.
+         propA: number;
+     }
+     
+@@= skipped -26, +28 lines =@@
+ !!! error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
+                                                             ~~
+ !!! error TS1144: '{' or ';' expected.
++                                                            ~~~
++!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+                                                                ~
+ !!! error TS1434: Unexpected keyword or identifier.
+         return true;
+@@= skipped -134, +136 lines =@@
+ !!! error TS1005: ',' expected.
+                  ~
+ !!! error TS2300: Duplicate identifier 'A'.
++                 ~
++!!! error TS2300: Duplicate identifier 'A'.
+     function b2(a: b is A) {};
+                    ~
+ !!! error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
+@@= skipped -12, +14 lines =@@
+ !!! error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
+                          ~~
+ !!! error TS1144: '{' or ';' expected.
++                         ~~~
++!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+                             ~
+ !!! error TS1434: Unexpected keyword or identifier.
+         return true;
+@@= skipped -42, +44 lines =@@
+ !!! error TS2304: Cannot find name 'p1'.
+                             ~~
+ !!! error TS1005: ';' expected.
++                            ~~~
++!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+     }
+     ~
+ !!! error TS1128: Declaration or statement expected.
+@@= skipped -44, +46 lines =@@
+     // expected an error, since Keys doesn't have a 'd'
+     declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
+                                                                        ~~~~~
+-!!! error TS2344: Type 'T | "d"' does not satisfy the constraint 'Keys'.
++!!! error TS2344: Type '"d" | T' does not satisfy the constraint 'Keys'.
+ !!! error TS2344:   Type '"d"' is not assignable to type 'Keys'.
+     
+     type Foo = { 'a': string; }
+@@= skipped -11, +11 lines =@@
+         isFoo(): this is NeedsFoo<Bar>; // should error
+                                   ~~~
+ !!! error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+-!!! error TS2344:   Types of property ''a'' are incompatible.
++!!! error TS2344:   Types of property 'a' are incompatible.
+ !!! error TS2344:     Type 'number' is not assignable to type 'string'.
+     };
+     
+     declare var anError: NeedsFoo<Bar>; // error, as expected
+                                   ~~~
+ !!! error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+-!!! error TS2344:   Types of property ''a'' are incompatible.
++!!! error TS2344:   Types of property 'a' are incompatible.
+ !!! error TS2344:     Type 'number' is not assignable to type 'string'.
+     declare var alsoAnError: NeedsFoo<number>; // also error, as expected
+                                       ~~~~~~
+@@= skipped -15, +15 lines =@@
+     declare function newError1(x: any): x is NeedsFoo<Bar>; // should error
+                                                       ~~~
+ !!! error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+-!!! error TS2344:   Types of property ''a'' are incompatible.
++!!! error TS2344:   Types of property 'a' are incompatible.
+ !!! error TS2344:     Type 'number' is not assignable to type 'string'.
+     declare function newError2(x: any): x is NeedsFoo<number>; // should error
+                                                       ~~~~~~

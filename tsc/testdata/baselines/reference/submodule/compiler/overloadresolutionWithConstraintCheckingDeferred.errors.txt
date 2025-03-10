@@ -1,0 +1,76 @@
+overloadresolutionWithConstraintCheckingDeferred.ts(14,26): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(x: D) => G<A>' is not assignable to parameter of type '(x: B) => any'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Property 'q' is missing in type 'B' but required in type 'D'.
+overloadresolutionWithConstraintCheckingDeferred.ts(14,37): error TS2741: Property 'x' is missing in type 'D' but required in type 'A'.
+overloadresolutionWithConstraintCheckingDeferred.ts(16,27): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Property 'q' is missing in type 'B' but required in type 'D'.
+overloadresolutionWithConstraintCheckingDeferred.ts(16,38): error TS2741: Property 'x' is missing in type 'D' but required in type 'A'.
+overloadresolutionWithConstraintCheckingDeferred.ts(18,27): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Property 'q' is missing in type 'B' but required in type 'D'.
+overloadresolutionWithConstraintCheckingDeferred.ts(19,14): error TS2741: Property 'x' is missing in type 'D' but required in type 'A'.
+
+
+==== overloadresolutionWithConstraintCheckingDeferred.ts (6 errors) ====
+    interface A { x }
+    interface B { x; y }
+    interface C { z }
+    interface D { q }
+    
+    class G<T extends A> {
+        constructor(x: T) { }
+    }
+    
+    declare function foo(arg: (x: D) => number): string;
+    declare function foo(arg: (x: C) => any): string;
+    declare function foo(arg: (x: B) => any): number;
+    
+    var result: number = foo(x => new G(x)); // x has type D, new G(x) fails, so first overload is picked.
+                             ~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '(x: D) => G<A>' is not assignable to parameter of type '(x: B) => any'.
+!!! error TS2769:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2769:         Property 'q' is missing in type 'B' but required in type 'D'.
+!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
+!!! related TS2771 overloadresolutionWithConstraintCheckingDeferred.ts:12:18: The last overload is declared here.
+                                        ~
+!!! error TS2741: Property 'x' is missing in type 'D' but required in type 'A'.
+!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:1:15: 'x' is declared here.
+    
+    var result2: number = foo(x => new G<typeof x>(x)); // x has type D, new G(x) fails, so first overload is picked.
+                              ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
+!!! error TS2769:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2769:         Property 'q' is missing in type 'B' but required in type 'D'.
+!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
+!!! related TS2771 overloadresolutionWithConstraintCheckingDeferred.ts:12:18: The last overload is declared here.
+                                         ~~~~~~~~
+!!! error TS2741: Property 'x' is missing in type 'D' but required in type 'A'.
+!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:1:15: 'x' is declared here.
+    
+    var result3: string = foo(x => { // x has type D
+                              ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
+!!! error TS2769:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2769:         Property 'q' is missing in type 'B' but required in type 'D'.
+!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
+!!! related TS2771 overloadresolutionWithConstraintCheckingDeferred.ts:12:18: The last overload is declared here.
+        var y: G<typeof x>; // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error
+                 ~~~~~~~~
+!!! error TS2741: Property 'x' is missing in type 'D' but required in type 'A'.
+!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:1:15: 'x' is declared here.
+        return y;
+    });
+    

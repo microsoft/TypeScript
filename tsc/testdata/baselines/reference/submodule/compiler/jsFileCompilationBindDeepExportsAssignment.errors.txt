@@ -1,0 +1,8 @@
+a.js(1,1): error TS2304: Cannot find name 'exports'.
+
+
+==== a.js (1 errors) ====
+    exports.a.b.c = 0;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    

@@ -1,0 +1,17 @@
+index.js(1,15): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+index.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== index.js (2 errors) ====
+    const items = require("./some-mod")();
+                  ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    module.exports = items;
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+==== some-mod.d.ts (0 errors) ====
+    interface Item {
+        x: string;
+    }
+    declare function getItems(): Item[];
+    export = getItems;

@@ -1,0 +1,64 @@
+--- old.emitArrowFunctionES6.errors.txt
++++ new.emitArrowFunctionES6.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'Iterable'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++emitArrowFunctionES6.ts(10,11): error TS2488: Type '[any]' must have a '[Symbol.iterator]()' method that returns an iterator.
++emitArrowFunctionES6.ts(11,11): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
++emitArrowFunctionES6.ts(12,11): error TS2488: Type '[any, any]' must have a '[Symbol.iterator]()' method that returns an iterator.
++emitArrowFunctionES6.ts(13,11): error TS2488: Type '[any?, ...any[]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++emitArrowFunctionES6.ts(14,11): error TS2488: Type '[number?]' must have a '[Symbol.iterator]()' method that returns an iterator.
++emitArrowFunctionES6.ts(19,12): error TS2488: Type '[{ done: any; value: any; }]' must have a '[Symbol.iterator]()' method that returns an iterator.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'Iterable'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== emitArrowFunctionES6.ts (6 errors) ====
++    var f1 = () => { }
++    var f2 = (x: string, y: string) => { }
++    var f3 = (x: string, y: number, ...rest) => { }
++    var f4 = (x: string, y: number, z=10) => { }
++    function foo(func: () => boolean) { }
++    foo(() => true);
++    foo(() => { return false; });
++    
++    // Binding patterns in arrow functions
++    var p1 = ([a]) => { };
++              ~~~
++!!! error TS2488: Type '[any]' must have a '[Symbol.iterator]()' method that returns an iterator.
++    var p2 = ([...a]) => { };
++              ~~~~~~
++!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
++    var p3 = ([, a]) => { };
++              ~~~~~
++!!! error TS2488: Type '[any, any]' must have a '[Symbol.iterator]()' method that returns an iterator.
++    var p4 = ([, ...a]) => { };
++              ~~~~~~~~
++!!! error TS2488: Type '[any?, ...any[]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++    var p5 = ([a = 1]) => { };
++              ~~~~~~~
++!!! error TS2488: Type '[number?]' must have a '[Symbol.iterator]()' method that returns an iterator.
++    var p6 = ({ a }) => { };
++    var p7 = ({ a: { b } }) => { };
++    var p8 = ({ a = 1 }) => { };
++    var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
++    var p10 = ([{ value, done }]) => { };
++               ~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type '[{ done: any; value: any; }]' must have a '[Symbol.iterator]()' method that returns an iterator.
++    

@@ -1,0 +1,15 @@
+--- old.moduleResolution_relativeImportJsFile_noImplicitAny.errors.txt
++++ new.moduleResolution_relativeImportJsFile_noImplicitAny.errors.txt
+@@= skipped -0, +0 lines =@@
+-/src/a.ts(1,20): error TS7016: Could not find a declaration file for module './b'. '/src/b.js' implicitly has an 'any' type.
++/src/a.ts(1,20): error TS2307: Cannot find module './b' or its corresponding type declarations.
+ 
+ 
+ ==== /src/a.ts (1 errors) ====
+     import * as b from "./b";
+                        ~~~~~
+-!!! error TS7016: Could not find a declaration file for module './b'. '/src/b.js' implicitly has an 'any' type.
++!!! error TS2307: Cannot find module './b' or its corresponding type declarations.
+     
+ ==== /src/b.js (0 errors) ====
+     export const x = 0;

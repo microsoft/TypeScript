@@ -1,0 +1,86 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'CallableFunction'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'NewableFunction'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+privateNameAndAny.ts(9,15): error TS2339: Property '#bar' does not exist on type 'any'.
+privateNameAndAny.ts(13,9): error TS18046: 'thing' is of type 'unknown'.
+privateNameAndAny.ts(14,9): error TS18046: 'thing' is of type 'unknown'.
+privateNameAndAny.ts(15,9): error TS18046: 'thing' is of type 'unknown'.
+privateNameAndAny.ts(16,9): error TS18046: 'thing' is of type 'unknown'.
+privateNameAndAny.ts(16,15): error TS2339: Property '#bar' does not exist on type 'error'.
+privateNameAndAny.ts(17,9): error TS18046: 'thing' is of type 'unknown'.
+privateNameAndAny.ts(20,15): error TS2339: Property '#foo' does not exist on type 'never'.
+privateNameAndAny.ts(21,15): error TS2339: Property '#m' does not exist on type 'never'.
+privateNameAndAny.ts(22,15): error TS2339: Property '#baz' does not exist on type 'never'.
+privateNameAndAny.ts(23,15): error TS2339: Property '#bar' does not exist on type 'never'.
+privateNameAndAny.ts(24,15): error TS2339: Property '#foo' does not exist on type 'never'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'CallableFunction'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'NewableFunction'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== privateNameAndAny.ts (12 errors) ====
+    class A {
+        #foo = true;
+        static #baz = 10;
+        static #m() {}
+        method(thing: any) {
+            thing.#foo; // OK
+            thing.#m();
+            thing.#baz;
+            thing.#bar; // Error
+                  ~~~~
+!!! error TS2339: Property '#bar' does not exist on type 'any'.
+            thing.#foo();
+        }
+        methodU(thing: unknown) {
+            thing.#foo;
+            ~~~~~
+!!! error TS18046: 'thing' is of type 'unknown'.
+            thing.#m();
+            ~~~~~
+!!! error TS18046: 'thing' is of type 'unknown'.
+            thing.#baz;
+            ~~~~~
+!!! error TS18046: 'thing' is of type 'unknown'.
+            thing.#bar;
+            ~~~~~
+!!! error TS18046: 'thing' is of type 'unknown'.
+                  ~~~~
+!!! error TS2339: Property '#bar' does not exist on type 'error'.
+            thing.#foo();
+            ~~~~~
+!!! error TS18046: 'thing' is of type 'unknown'.
+        }
+        methodN(thing: never) {
+            thing.#foo;
+                  ~~~~
+!!! error TS2339: Property '#foo' does not exist on type 'never'.
+            thing.#m();
+                  ~~
+!!! error TS2339: Property '#m' does not exist on type 'never'.
+            thing.#baz;
+                  ~~~~
+!!! error TS2339: Property '#baz' does not exist on type 'never'.
+            thing.#bar;
+                  ~~~~
+!!! error TS2339: Property '#bar' does not exist on type 'never'.
+            thing.#foo();
+                  ~~~~
+!!! error TS2339: Property '#foo' does not exist on type 'never'.
+        }
+    };
+    

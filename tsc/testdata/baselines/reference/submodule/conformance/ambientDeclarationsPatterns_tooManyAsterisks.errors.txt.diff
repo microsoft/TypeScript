@@ -1,0 +1,15 @@
+--- old.ambientDeclarationsPatterns_tooManyAsterisks.errors.txt
++++ new.ambientDeclarationsPatterns_tooManyAsterisks.errors.txt
+@@= skipped -0, +0 lines =@@
+ ambientDeclarationsPatterns_tooManyAsterisks.ts(1,16): error TS5061: Pattern 'too*many*asterisks' can have at most one '*' character.
++ambientDeclarationsPatterns_tooManyAsterisks.ts(1,16): error TS5061: Pattern 'too*many*asterisks' can have at most one '*' character.
+ 
+ 
+-==== ambientDeclarationsPatterns_tooManyAsterisks.ts (1 errors) ====
++==== ambientDeclarationsPatterns_tooManyAsterisks.ts (2 errors) ====
+     declare module "too*many*asterisks" { }
+                    ~~~~~~~~~~~~~~~~~~~~
+ !!! error TS5061: Pattern 'too*many*asterisks' can have at most one '*' character.
++                   ~~~~~~~~~~~~~~~~~~~~
++!!! error TS5061: Pattern 'too*many*asterisks' can have at most one '*' character.
+     

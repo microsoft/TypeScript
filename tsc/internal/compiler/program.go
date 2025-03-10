@@ -299,7 +299,21 @@ func (p *Program) getBindDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.D
 }
 
 func (p *Program) getSemanticDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	diags := core.Concatenate(sourceFile.BindDiagnostics(), p.GetTypeCheckerForFile(sourceFile).GetDiagnostics(sourceFile))
+	var fileChecker *checker.Checker
+	if sourceFile != nil {
+		fileChecker = p.GetTypeCheckerForFile(sourceFile)
+	}
+
+	diags := slices.Clip(sourceFile.BindDiagnostics())
+	// Ask for diags from all checkers; checking one file may add diagnostics to other files.
+	// These are deduplicated later.
+	for _, checker := range p.checkers {
+		if sourceFile == nil || checker == fileChecker {
+			diags = append(diags, checker.GetDiagnostics(sourceFile)...)
+		} else {
+			diags = append(diags, checker.GetDiagnosticsWithoutCheck(sourceFile)...)
+		}
+	}
 	if len(sourceFile.CommentDirectives) == 0 {
 		return diags
 	}

@@ -1,0 +1,32 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== emitArrowFunctionWhenUsingArguments19_ES6.ts (0 errors) ====
+    function f() {
+        function g() {
+            var _arguments = 10;                // No capture in 'g', so no conflict.
+            function h() {
+                var capture = () => arguments;  // Should trigger an '_arguments' capture into function 'h'
+                foo(_arguments);                // Error as this does not resolve to the user defined '_arguments'
+            }
+        }
+    
+        function foo(x: any) {
+            return 100;
+        }
+    }

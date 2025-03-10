@@ -1,0 +1,39 @@
+--- old.importAttributes2(module=esnext).errors.txt
++++ new.importAttributes2(module=esnext).errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'ImportAttributes'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'ImportAttributes'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== 0.ts (0 errors) ====
++    export const a = 1;
++    export const b = 2;
++    
++==== 1.ts (0 errors) ====
++    export {} from './0' with { type: "json" }
++    export { a, b } from './0' with { type: "json" }
++    export * from './0' with { type: "json" }
++    export * as ns from './0' with { type: "json" }
++    
++==== 2.ts (0 errors) ====
++    export { a, b } from './0' with {}
++    export { a as c, b as d } from './0' with { a: "a", b: "b", c: "c" }
++    

@@ -1,0 +1,30 @@
+main.js(3,9): error TS2554: Expected 0 arguments, but got 3.
+main.js(5,1): error TS2554: Expected 2 arguments, but got 0.
+main.js(6,16): error TS2554: Expected 2 arguments, but got 3.
+
+
+==== main.js (3 errors) ====
+    function allRest() { arguments; }
+    allRest();
+    allRest(1, 2, 3);
+            ~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 3.
+    function someRest(x, y) { arguments; }
+    someRest(); // x and y are still optional because they are in a JS file
+    ~~~~~~~~
+!!! error TS2554: Expected 2 arguments, but got 0.
+!!! related TS6210 main.js:4:19: An argument for 'x' was not provided.
+    someRest(1, 2, 3);
+                   ~
+!!! error TS2554: Expected 2 arguments, but got 3.
+    
+    /**
+     * @param {number} x - a thing
+     */
+    function jsdocced(x) { arguments; }
+    jsdocced(1);
+    
+    function dontDoubleRest(x, ...y) { arguments; }
+    dontDoubleRest(1, 2, 3);
+    
+    

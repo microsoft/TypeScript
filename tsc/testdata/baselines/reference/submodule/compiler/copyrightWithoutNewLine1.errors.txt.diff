@@ -1,0 +1,17 @@
+--- old.copyrightWithoutNewLine1.errors.txt
++++ new.copyrightWithoutNewLine1.errors.txt
+@@= skipped -0, +0 lines =@@
+-copyrightWithoutNewLine1.ts(4,24): error TS2792: Cannot find module './greeter'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++copyrightWithoutNewLine1.ts(4,24): error TS2307: Cannot find module './greeter' or its corresponding type declarations.
+ 
+ 
+ ==== copyrightWithoutNewLine1.ts (1 errors) ====
+@@= skipped -6, +6 lines =@@
+     ****************************/
+     import model = require("./greeter")
+                            ~~~~~~~~~~~
+-!!! error TS2792: Cannot find module './greeter'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module './greeter' or its corresponding type declarations.
+     var el = document.getElementById('content');
+     var greeter = new model.Greeter(el);
+     /** things */

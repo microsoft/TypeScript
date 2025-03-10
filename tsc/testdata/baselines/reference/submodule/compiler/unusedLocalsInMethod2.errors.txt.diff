@@ -1,0 +1,11 @@
+--- old.unusedLocalsInMethod2.errors.txt
++++ new.unusedLocalsInMethod2.errors.txt
+@@= skipped -4, +4 lines =@@
+     class greeter {
+         public function1() {
+             var x, y = 10;
+-            ~~~~~~~~~~~~~~
++            ~~~~~~~~~~~~~
+ !!! error TS6199: All variables are unused.
+         }
+     }

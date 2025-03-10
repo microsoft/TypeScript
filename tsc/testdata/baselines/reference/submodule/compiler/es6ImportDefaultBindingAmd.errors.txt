@@ -1,0 +1,17 @@
+es6ImportDefaultBindingAmd_1.ts(1,28): error TS2307: Cannot find module 'es6ImportDefaultBindingAmd_0' or its corresponding type declarations.
+es6ImportDefaultBindingAmd_1.ts(3,29): error TS2307: Cannot find module 'es6ImportDefaultBindingAmd_0' or its corresponding type declarations.
+
+
+==== es6ImportDefaultBindingAmd_0.ts (0 errors) ====
+    var a = 10;
+    export default a;
+    
+==== es6ImportDefaultBindingAmd_1.ts (2 errors) ====
+    import defaultBinding from "es6ImportDefaultBindingAmd_0";
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'es6ImportDefaultBindingAmd_0' or its corresponding type declarations.
+    var x = defaultBinding;
+    import defaultBinding2 from "es6ImportDefaultBindingAmd_0"; // elide this import since defaultBinding2 is not used
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'es6ImportDefaultBindingAmd_0' or its corresponding type declarations.
+    

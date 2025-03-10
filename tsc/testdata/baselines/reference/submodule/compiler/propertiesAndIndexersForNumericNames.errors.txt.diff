@@ -1,0 +1,30 @@
+--- old.propertiesAndIndexersForNumericNames.errors.txt
++++ new.propertiesAndIndexersForNumericNames.errors.txt
+@@= skipped -2, +2 lines =@@
+ propertiesAndIndexersForNumericNames.ts(8,12): error TS2411: Property '"-2.5"' of type 'string' is not assignable to 'number' index type 'number'.
+ propertiesAndIndexersForNumericNames.ts(9,12): error TS2411: Property '"3.141592"' of type 'string' is not assignable to 'number' index type 'number'.
+ propertiesAndIndexersForNumericNames.ts(10,12): error TS2411: Property '"1.2e-20"' of type 'string' is not assignable to 'number' index type 'number'.
+-propertiesAndIndexersForNumericNames.ts(11,12): error TS2411: Property '"Infinity"' of type 'string' is not assignable to 'number' index type 'number'.
++propertiesAndIndexersForNumericNames.ts(11,12): error TS2411: Property 'Infinity' of type 'string' is not assignable to 'number' index type 'number'.
+ propertiesAndIndexersForNumericNames.ts(12,12): error TS2411: Property '"-Infinity"' of type 'string' is not assignable to 'number' index type 'number'.
+-propertiesAndIndexersForNumericNames.ts(13,12): error TS2411: Property '"NaN"' of type 'string' is not assignable to 'number' index type 'number'.
++propertiesAndIndexersForNumericNames.ts(13,12): error TS2411: Property 'NaN' of type 'string' is not assignable to 'number' index type 'number'.
+ 
+ 
+ ==== propertiesAndIndexersForNumericNames.ts (8 errors) ====
+@@= skipped -28, +28 lines =@@
+ !!! error TS2411: Property '"1.2e-20"' of type 'string' is not assignable to 'number' index type 'number'.
+         public "Infinity": string = "A gillion"; // Error
+                ~~~~~~~~~~
+-!!! error TS2411: Property '"Infinity"' of type 'string' is not assignable to 'number' index type 'number'.
++!!! error TS2411: Property 'Infinity' of type 'string' is not assignable to 'number' index type 'number'.
+         public "-Infinity": string = "Negative-a-gillion"; // Error
+                ~~~~~~~~~~~
+ !!! error TS2411: Property '"-Infinity"' of type 'string' is not assignable to 'number' index type 'number'.
+         public "NaN": string = "not a number"; // Error
+                ~~~~~
+-!!! error TS2411: Property '"NaN"' of type 'string' is not assignable to 'number' index type 'number'.
++!!! error TS2411: Property 'NaN' of type 'string' is not assignable to 'number' index type 'number'.
+         
+         // These all have *partially* numeric names,
+         // but should really be treated as plain string literals.

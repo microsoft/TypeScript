@@ -1,0 +1,32 @@
+--- old.overload1.errors.txt
++++ new.overload1.errors.txt
+@@= skipped -2, +2 lines =@@
+ overload1.ts(31,11): error TS2554: Expected 1-2 arguments, but got 3.
+ overload1.ts(32,5): error TS2554: Expected 1-2 arguments, but got 0.
+ overload1.ts(33,1): error TS2322: Type 'C' is not assignable to type 'string'.
+-overload1.ts(34,5): error TS2769: No overload matches this call.
+-  Overload 1 of 2, '(s1: string, s2: number): string', gave the following error.
++overload1.ts(34,9): error TS2769: No overload matches this call.
++  The last overload gave the following error.
+     Argument of type 'number' is not assignable to parameter of type 'string'.
+-  Overload 2 of 2, '(s1: number, s2: string): number', gave the following error.
+-    Argument of type 'number' is not assignable to parameter of type 'string'.
+ 
+ 
+ ==== overload1.ts (6 errors) ====
+@@= skipped -53, +51 lines =@@
+     ~
+ !!! error TS2322: Type 'C' is not assignable to type 'string'.
+     z=x.h(2,2); // no match
+-        ~
++            ~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 2, '(s1: string, s2: number): string', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'string'.
+-!!! error TS2769:   Overload 2 of 2, '(s1: number, s2: string): number', gave the following error.
+-!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'string'.
++!!! related TS2771 overload1.ts:21:9: The last overload is declared here.
+     z=x.h("hello",0); // good
+     
+     var v=x.g;

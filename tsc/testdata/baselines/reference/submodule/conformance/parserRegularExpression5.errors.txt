@@ -1,0 +1,10 @@
+parserRegularExpression5.ts(1,5): error TS2304: Cannot find name 'a'.
+parserRegularExpression5.ts(1,38): error TS2304: Cannot find name 'c'.
+
+
+==== parserRegularExpression5.ts (2 errors) ====
+    if (a) / (\\ ? | & ) rct = j / .test(c.href);
+        ~
+!!! error TS2304: Cannot find name 'a'.
+                                         ~
+!!! error TS2304: Cannot find name 'c'.

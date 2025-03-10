@@ -1,0 +1,58 @@
+--- old.interfaceExtendsObjectIntersectionErrors.errors.txt
++++ new.interfaceExtendsObjectIntersectionErrors.errors.txt
+@@= skipped -8, +8 lines =@@
+   Types of property 'length' are incompatible.
+     Type 'string' is not assignable to type 'number'.
+ interfaceExtendsObjectIntersectionErrors.ts(10,11): error TS2430: Interface 'I4' incorrectly extends interface '[string, number]'.
+-  Types of property '0' are incompatible.
++  Types of property '"0"' are incompatible.
+     Type 'number' is not assignable to type 'string'.
+ interfaceExtendsObjectIntersectionErrors.ts(11,11): error TS2430: Interface 'I5' incorrectly extends interface 'T5'.
+   Types of property 'c' are incompatible.
+@@= skipped -15, +15 lines =@@
+   Type 'number' is not assignable to type 'string'.
+ interfaceExtendsObjectIntersectionErrors.ts(20,38): error TS2416: Property 'c' in type 'C5' is not assignable to the same property in base type 'T5'.
+   Type 'number' is not assignable to type 'string'.
+-interfaceExtendsObjectIntersectionErrors.ts(30,11): error TS2430: Interface 'I10' incorrectly extends interface 'typeof CX'.
++interfaceExtendsObjectIntersectionErrors.ts(30,11): error TS2430: Interface 'I10' incorrectly extends interface '{ new(): CX; a: string; prototype: CX; }'.
+   Types of property 'a' are incompatible.
+     Type 'number' is not assignable to type 'string'.
+-interfaceExtendsObjectIntersectionErrors.ts(31,11): error TS2430: Interface 'I11' incorrectly extends interface 'typeof EX'.
++interfaceExtendsObjectIntersectionErrors.ts(31,11): error TS2430: Interface 'I11' incorrectly extends interface '{ readonly [x: number]: string; readonly A: EX.A; readonly B: EX.B; readonly C: EX.C; }'.
+   Types of property 'C' are incompatible.
+     Type 'string' is not assignable to type 'EX.C'.
+-interfaceExtendsObjectIntersectionErrors.ts(32,11): error TS2430: Interface 'I12' incorrectly extends interface 'typeof NX'.
++interfaceExtendsObjectIntersectionErrors.ts(32,11): error TS2430: Interface 'I12' incorrectly extends interface '{ readonly a: "hello"; }'.
+   Types of property 'a' are incompatible.
+     Type 'number' is not assignable to type '"hello"'.
+ interfaceExtendsObjectIntersectionErrors.ts(33,29): error TS2411: Property 'a' of type 'string' is not assignable to 'string' index type 'number'.
+@@= skipped -57, +57 lines =@@
+     interface I4 extends T4 { 0: number }
+               ~~
+ !!! error TS2430: Interface 'I4' incorrectly extends interface '[string, number]'.
+-!!! error TS2430:   Types of property '0' are incompatible.
++!!! error TS2430:   Types of property '"0"' are incompatible.
+ !!! error TS2430:     Type 'number' is not assignable to type 'string'.
+     interface I5 extends T5 { c: number }
+               ~~
+@@= skipped -42, +42 lines =@@
+     
+     interface I10 extends TCX { a: number }
+               ~~~
+-!!! error TS2430: Interface 'I10' incorrectly extends interface 'typeof CX'.
++!!! error TS2430: Interface 'I10' incorrectly extends interface '{ new(): CX; a: string; prototype: CX; }'.
+ !!! error TS2430:   Types of property 'a' are incompatible.
+ !!! error TS2430:     Type 'number' is not assignable to type 'string'.
+     interface I11 extends TEX { C: string }
+               ~~~
+-!!! error TS2430: Interface 'I11' incorrectly extends interface 'typeof EX'.
++!!! error TS2430: Interface 'I11' incorrectly extends interface '{ readonly [x: number]: string; readonly A: EX.A; readonly B: EX.B; readonly C: EX.C; }'.
+ !!! error TS2430:   Types of property 'C' are incompatible.
+ !!! error TS2430:     Type 'string' is not assignable to type 'EX.C'.
+     interface I12 extends TNX { a: number }
+               ~~~
+-!!! error TS2430: Interface 'I12' incorrectly extends interface 'typeof NX'.
++!!! error TS2430: Interface 'I12' incorrectly extends interface '{ readonly a: "hello"; }'.
+ !!! error TS2430:   Types of property 'a' are incompatible.
+ !!! error TS2430:     Type 'number' is not assignable to type '"hello"'.
+     interface I14 extends TCX { [x: string]: number }

@@ -1,0 +1,7 @@
+parserExportAssignment3.ts(1,9): error TS1109: Expression expected.
+
+
+==== parserExportAssignment3.ts (1 errors) ====
+    export =
+            
+!!! error TS1109: Expression expected.

@@ -1,0 +1,62 @@
+--- old.resolutionModeTypeOnlyImport1(moduleresolution=bundler).errors.txt
++++ new.resolutionModeTypeOnlyImport1(moduleresolution=bundler).errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/app.ts(2,40): error TS1454: `resolution-mode` can only be set for type-only imports.
++/app.ts(3,41): error TS1454: `resolution-mode` can only be set for type-only imports.
++/app.ts(9,52): error TS1454: `resolution-mode` can only be set for type-only imports.
++/app.ts(10,53): error TS1454: `resolution-mode` can only be set for type-only imports.
++
++
++==== /node_modules/@types/foo/package.json (0 errors) ====
++    {
++      "name": "@types/foo",
++      "version": "1.0.0",
++      "exports": {
++        ".": {
++          "import": "./index.d.mts",
++          "require": "./index.d.cts"
++        }
++      }
++    }
++    
++==== /node_modules/@types/foo/index.d.mts (0 errors) ====
++    export declare const x: "module";
++    
++==== /node_modules/@types/foo/index.d.cts (0 errors) ====
++    export declare const x: "script";
++    
++==== /app.ts (4 errors) ====
++    import type { x as Default } from "foo";
++    import type { x as Import } from "foo" assert { "resolution-mode": "import" };
++                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1454: `resolution-mode` can only be set for type-only imports.
++    import type { x as Require } from "foo" assert { "resolution-mode": "require" };
++                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1454: `resolution-mode` can only be set for type-only imports.
++    type _Default = typeof Default;
++    type _Import = typeof Import;
++    type _Require = typeof Require;
++    
++    // resolution-mode does not enforce file extension in `bundler`, just sets conditions
++    import type { x as ImportRelative } from "./other" assert { "resolution-mode": "import" };
++                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1454: `resolution-mode` can only be set for type-only imports.
++    import type { x as RequireRelative } from "./other" assert { "resolution-mode": "require" };
++                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1454: `resolution-mode` can only be set for type-only imports.
++    type _ImportRelative = typeof ImportRelative;
++    type _RequireRelative = typeof RequireRelative;
++    
++    export {
++      _Default,
++      _Import,
++      _Require,
++      _ImportRelative,
++      _RequireRelative
++    }
++    
++==== /other.ts (0 errors) ====
++    export const x = "other";
++    

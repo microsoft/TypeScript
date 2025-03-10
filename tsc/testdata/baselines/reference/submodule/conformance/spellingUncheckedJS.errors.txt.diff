@@ -1,0 +1,112 @@
+--- old.spellingUncheckedJS.errors.txt
++++ new.spellingUncheckedJS.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++other.js(3,1): error TS2552: Cannot find name 'Jon'. Did you mean 'John'?
++spellingUncheckedJS.js(2,1): error TS2552: Cannot find name 'inmodule'. Did you mean 'inModule'?
++spellingUncheckedJS.js(5,18): error TS2365: Operator '+' cannot be applied to types 'number' and 'boolean'.
++spellingUncheckedJS.js(6,5): error TS2552: Cannot find name 'locale'. Did you mean 'locals'?
++spellingUncheckedJS.js(9,5): error TS2578: Unused '@ts-expect-error' directive.
++spellingUncheckedJS.js(16,21): error TS2551: Property 'none' does not exist on type 'Classe'. Did you mean 'non'?
++spellingUncheckedJS.js(22,22): error TS2339: Property 'none' does not exist on type 'Classe'.
++spellingUncheckedJS.js(30,8): error TS2551: Property 'spaaaace' does not exist on type '{ spaaace: number; }'. Did you mean 'spaaace'?
++spellingUncheckedJS.js(31,8): error TS2551: Property 'spaace' does not exist on type '{ spaaace: number; }'. Did you mean 'spaaace'?
++spellingUncheckedJS.js(32,8): error TS2339: Property 'fresh' does not exist on type '{ spaaace: number; }'.
++spellingUncheckedJS.js(33,7): error TS2551: Property 'puuuce' does not exist on type '{ puuce: number; }'. Did you mean 'puuce'?
++spellingUncheckedJS.js(34,12): error TS2551: Property 'getGMTDate' does not exist on type 'Date'. Did you mean 'getDate'?
++spellingUncheckedJS.js(37,14): error TS2552: Cannot find name 'setIntegral'. Did you mean 'setInterval'?
++spellingUncheckedJS.js(38,1): error TS2552: Cannot find name 'AudioBuffin'. Did you mean 'AudioBuffer'?
++spellingUncheckedJS.js(40,1): error TS2552: Cannot find name 'Jon'. Did you mean 'John'?
++
++
++==== spellingUncheckedJS.js (14 errors) ====
++    export var inModule = 1
++    inmodule.toFixed()
++    ~~~~~~~~
++!!! error TS2552: Cannot find name 'inmodule'. Did you mean 'inModule'?
++    
++    function f() {
++        var locals = 2 + true
++                     ~~~~~~~~
++!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'boolean'.
++        locale.toFixed()
++        ~~~~~~
++!!! error TS2552: Cannot find name 'locale'. Did you mean 'locals'?
++!!! related TS2728 spellingUncheckedJS.js:5:9: 'locals' is declared here.
++        // @ts-expect-error
++        localf.toExponential()
++        // @ts-expect-error
++        ~~~~~~~~~~~~~~~~~~~
++!!! error TS2578: Unused '@ts-expect-error' directive.
++        "this is fine"
++    }
++    class Classe {
++        non = 'oui'
++        methode() {
++            // no error on 'this' references
++            return this.none
++                        ~~~~
++!!! error TS2551: Property 'none' does not exist on type 'Classe'. Did you mean 'non'?
++!!! related TS2728 spellingUncheckedJS.js:13:5: 'non' is declared here.
++        }
++    }
++    class Derivee extends Classe {
++        methode() {
++            // no error on 'super' references
++            return super.none
++                         ~~~~
++!!! error TS2339: Property 'none' does not exist on type 'Classe'.
++        }
++    }
++    
++    
++    var object = {
++        spaaace: 3
++    }
++    object.spaaaace // error on read
++           ~~~~~~~~
++!!! error TS2551: Property 'spaaaace' does not exist on type '{ spaaace: number; }'. Did you mean 'spaaace'?
++!!! related TS2728 spellingUncheckedJS.js:28:5: 'spaaace' is declared here.
++    object.spaace = 12 // error on write
++           ~~~~~~
++!!! error TS2551: Property 'spaace' does not exist on type '{ spaaace: number; }'. Did you mean 'spaaace'?
++!!! related TS2728 spellingUncheckedJS.js:28:5: 'spaaace' is declared here.
++    object.fresh = 12 // OK
++           ~~~~~
++!!! error TS2339: Property 'fresh' does not exist on type '{ spaaace: number; }'.
++    other.puuuce // OK, from another file
++          ~~~~~~
++!!! error TS2551: Property 'puuuce' does not exist on type '{ puuce: number; }'. Did you mean 'puuce'?
++!!! related TS2728 other.js:5:5: 'puuce' is declared here.
++    new Date().getGMTDate() // OK, from another file
++               ~~~~~~~~~~
++!!! error TS2551: Property 'getGMTDate' does not exist on type 'Date'. Did you mean 'getDate'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'getDate' is declared here.
++    
++    // No suggestions for globals from other files
++    const atoc = setIntegral(() => console.log('ok'), 500)
++                 ~~~~~~~~~~~
++!!! error TS2552: Cannot find name 'setIntegral'. Did you mean 'setInterval'?
++!!! related TS2728 lib.dom.d.ts:--:--: 'setInterval' is declared here.
++    AudioBuffin // etc
++    ~~~~~~~~~~~
++!!! error TS2552: Cannot find name 'AudioBuffin'. Did you mean 'AudioBuffer'?
++!!! related TS2728 lib.dom.d.ts:--:--: 'AudioBuffer' is declared here.
++    Jimmy
++    Jon
++    ~~~
++!!! error TS2552: Cannot find name 'Jon'. Did you mean 'John'?
++!!! related TS2728 other.js:2:5: 'John' is declared here.
++    
++==== other.js (1 errors) ====
++    var Jimmy = 1
++    var John = 2
++    Jon // error, it's from the same file
++    ~~~
++!!! error TS2552: Cannot find name 'Jon'. Did you mean 'John'?
++!!! related TS2728 other.js:2:5: 'John' is declared here.
++    var other = {
++        puuce: 4
++    }
++    

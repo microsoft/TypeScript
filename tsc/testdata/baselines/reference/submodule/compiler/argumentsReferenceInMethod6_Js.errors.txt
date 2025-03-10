@@ -1,0 +1,15 @@
+/a.js(6,8): error TS2339: Property 'foo' does not exist on type 'A'.
+
+
+==== /a.js (1 errors) ====
+    class A {
+    	m() {
+    		/**
+    		 * @type object
+    		 */
+    		this.foo = arguments;
+    		     ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'A'.
+    	}
+    }
+    

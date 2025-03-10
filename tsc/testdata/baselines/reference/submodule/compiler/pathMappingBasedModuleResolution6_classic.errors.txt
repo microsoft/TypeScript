@@ -1,0 +1,25 @@
+c:/root/src/file1.ts(1,17): error TS2307: Cannot find module './project/file3' or its corresponding type declarations.
+
+
+==== c:/root/src/tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "rootDirs": [
+                ".",
+                "../generated/src"
+            ]
+        }
+    }
+    
+==== c:/root/src/file1.ts (1 errors) ====
+    import {x} from "./project/file3";
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './project/file3' or its corresponding type declarations.
+    declare function use(x: string);
+    use(x.toExponential());
+    
+==== c:/root/src/file2.d.ts (0 errors) ====
+    export let x: number;
+    
+==== c:/root/generated/src/project/file3.ts (0 errors) ====
+    export {x} from "../file2";

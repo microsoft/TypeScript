@@ -1,0 +1,67 @@
+--- old.jsFileMethodOverloads.errors.txt
++++ new.jsFileMethodOverloads.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++jsFileMethodOverloads.js(9,10): error TS2339: Property 'value' does not exist on type 'Example'.
++jsFileMethodOverloads.js(26,24): error TS2339: Property 'value' does not exist on type 'Example'.
++jsFileMethodOverloads.js(44,25): error TS2339: Property 'value' does not exist on type 'Example'.
++jsFileMethodOverloads.js(44,39): error TS2339: Property 'value' does not exist on type 'Example'.
++
++
++==== jsFileMethodOverloads.js (4 errors) ====
++    /**
++     * @template T
++     */
++     class Example {
++      /**
++       * @param {T} value 
++       */
++      constructor(value) {
++        this.value = value;
++             ~~~~~
++!!! error TS2339: Property 'value' does not exist on type 'Example'.
++      }
++    
++      /**
++       * @overload
++       * @param {Example<number>} this
++       * @returns {'number'}
++       */
++      /**
++       * @overload
++       * @param {Example<string>} this
++       * @returns {'string'}
++       */
++      /**
++       * @returns {string}
++       */
++      getTypeName() {
++        return typeof this.value;
++                           ~~~~~
++!!! error TS2339: Property 'value' does not exist on type 'Example'.
++      }
++    
++      /**
++       * @template U
++       * @overload
++       * @param {(y: T) => U} fn
++       * @returns {U}
++       */
++      /**
++       * @overload
++       * @returns {T}
++       */
++      /**
++       * @param {(y: T) => unknown} [fn]
++       * @returns {unknown}
++       */
++      transform(fn) {
++        return fn ? fn(this.value) : this.value;
++                            ~~~~~
++!!! error TS2339: Property 'value' does not exist on type 'Example'.
++                                          ~~~~~
++!!! error TS2339: Property 'value' does not exist on type 'Example'.
++      }
++    }
++    

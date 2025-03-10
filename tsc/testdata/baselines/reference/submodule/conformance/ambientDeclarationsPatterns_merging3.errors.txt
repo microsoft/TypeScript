@@ -1,0 +1,21 @@
+test.ts(1,16): error TS2664: Invalid module name in augmentation, module 'a.foo' cannot be found.
+test.ts(4,22): error TS2307: Cannot find module 'b.foo' or its corresponding type declarations.
+
+
+==== types.ts (0 errors) ====
+    declare module "*.foo" {
+      export interface OhNo { star: string }
+    }
+    
+==== test.ts (2 errors) ====
+    declare module "a.foo" {
+                   ~~~~~~~
+!!! error TS2664: Invalid module name in augmentation, module 'a.foo' cannot be found.
+      export interface OhNo { a: string }
+    }
+    import { OhNo } from "b.foo"
+                         ~~~~~~~
+!!! error TS2307: Cannot find module 'b.foo' or its corresponding type declarations.
+    declare let ohno: OhNo;
+    ohno.a // oh no
+    

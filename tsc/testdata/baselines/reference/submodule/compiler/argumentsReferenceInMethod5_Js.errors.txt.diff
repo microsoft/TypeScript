@@ -1,0 +1,35 @@
+--- old.argumentsReferenceInMethod5_Js.errors.txt
++++ new.argumentsReferenceInMethod5_Js.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/a.js(13,8): error TS2339: Property 'foo' does not exist on type 'A'.
++/a.js(18,8): error TS2339: Property 'bar' does not exist on type 'A'.
++
++
++==== /a.js (2 errors) ====
++    const bar = {
++    	arguments: {}
++    }
++    
++    class A {
++    	/**
++    	 * @param {object} [foo={}]
++    	 */
++    	m(foo = {}) {
++    		/**
++    		 * @type object
++    		 */
++    		this.foo = foo;
++    		     ~~~
++!!! error TS2339: Property 'foo' does not exist on type 'A'.
++    
++    		/**
++    		 * @type object
++    		 */
++    		this.bar = bar.arguments;
++    		     ~~~
++!!! error TS2339: Property 'bar' does not exist on type 'A'.
++    	}
++    }
++    

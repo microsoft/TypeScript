@@ -1,0 +1,20 @@
+--- old.requireTwoPropertyAccesses.errors.txt
++++ new.requireTwoPropertyAccesses.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++requireTwoPropertyAccesses.js(1,15): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
++==== requireTwoPropertyAccesses.js (1 errors) ====
++    const value = require("./mod").x.y
++                  ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    console.log(value)
++    
++==== mod.js (0 errors) ====
++    module.exports = {
++        x: {
++            y: "value"
++        }
++    }

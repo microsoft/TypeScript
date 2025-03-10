@@ -1,0 +1,68 @@
+--- old.instantiationExpressionErrors.errors.txt
++++ new.instantiationExpressionErrors.errors.txt
+@@= skipped -0, +0 lines =@@
+-instantiationExpressionErrors.ts(7,13): error TS1477: An instantiation expression cannot be followed by a property access.
+-instantiationExpressionErrors.ts(8,13): error TS1477: An instantiation expression cannot be followed by a property access.
++instantiationExpressionErrors.ts(7,14): error TS1477: An instantiation expression cannot be followed by a property access.
++instantiationExpressionErrors.ts(8,14): error TS1477: An instantiation expression cannot be followed by a property access.
+ instantiationExpressionErrors.ts(13,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string[]'.
+ instantiationExpressionErrors.ts(13,14): error TS2693: 'number' only refers to a type, but is being used as a value here.
+ instantiationExpressionErrors.ts(18,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+ instantiationExpressionErrors.ts(18,14): error TS2693: 'number' only refers to a type, but is being used as a value here.
+ instantiationExpressionErrors.ts(18,29): error TS1109: Expression expected.
+-instantiationExpressionErrors.ts(19,24): error TS2635: Type '{ (): number; g<U>(): U; }' has no signatures for which the type argument list is applicable.
++instantiationExpressionErrors.ts(19,24): error TS2635: Type '{ (): number; g: <U>() => U; }' has no signatures for which the type argument list is applicable.
+ instantiationExpressionErrors.ts(23,23): error TS1005: '(' expected.
+ instantiationExpressionErrors.ts(26,24): error TS2558: Expected 0 type arguments, but got 1.
+ instantiationExpressionErrors.ts(39,2): error TS2554: Expected 0 arguments, but got 1.
+-instantiationExpressionErrors.ts(43,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+-instantiationExpressionErrors.ts(44,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
++instantiationExpressionErrors.ts(43,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g: <U>() => U; }' and 'boolean'.
++instantiationExpressionErrors.ts(44,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g: <U>() => U; }' and 'boolean'.
+ instantiationExpressionErrors.ts(44,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+-instantiationExpressionErrors.ts(45,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
++instantiationExpressionErrors.ts(45,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g: <U>() => U; }' and 'boolean'.
+ instantiationExpressionErrors.ts(45,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+ 
+ 
+@@= skipped -23, +23 lines =@@
+     const a1 = f<number>;  // { (): number; g<U>(): U; }
+     const a2 = f.g<number>;  // () => number
+     const a3 = f<number>.g;  // <U>() => U
+-                ~~~~~~~~
++                 ~~~~~~
+ !!! error TS1477: An instantiation expression cannot be followed by a property access.
+     const a4 = f<number>.g<number>;  // () => number
+-                ~~~~~~~~
++                 ~~~~~~
+ !!! error TS1477: An instantiation expression cannot be followed by a property access.
+     const a5 = f['g']<number>;  // () => number
+     
+@@= skipped -27, +27 lines =@@
+ !!! error TS1109: Expression expected.
+     const a9 = (f<number>)<number>;  // Error, no applicable signatures
+                            ~~~~~~
+-!!! error TS2635: Type '{ (): number; g<U>(): U; }' has no signatures for which the type argument list is applicable.
++!!! error TS2635: Type '{ (): number; g: <U>() => U; }' has no signatures for which the type argument list is applicable.
+     
+     // Type arguments with `?.` token
+     
+@@= skipped -32, +32 lines =@@
+     
+     const r1 = f < true > true;
+                ~~~~~~~~
+-!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
++!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g: <U>() => U; }' and 'boolean'.
+     const r2 = f < true > +1;
+                ~~~~~~~~
+-!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
++!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g: <U>() => U; }' and 'boolean'.
+                ~~~~~~~~~~~~~
+ !!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+     const r3 = f < true > -1;
+                ~~~~~~~~
+-!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
++!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g: <U>() => U; }' and 'boolean'.
+                ~~~~~~~~~~~~~
+ !!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+     

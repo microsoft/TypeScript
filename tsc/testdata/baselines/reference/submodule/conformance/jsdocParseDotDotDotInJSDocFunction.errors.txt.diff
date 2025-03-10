@@ -1,0 +1,18 @@
+--- old.jsdocParseDotDotDotInJSDocFunction.errors.txt
++++ new.jsdocParseDotDotDotInJSDocFunction.errors.txt
+@@= skipped -0, +0 lines =@@
+-a.js(2,13): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
++a.js(3,12): error TS7006: Parameter 'callback' implicitly has an 'any' type.
+ 
+ 
+ ==== a.js (1 errors) ====
+     // from bcryptjs
+     /** @param {function(...[*])} callback */
+-                ~~~~~~~~~~~~~~~~
+-!!! error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+     function g(callback) {
++               ~~~~~~~~
++!!! error TS7006: Parameter 'callback' implicitly has an 'any' type.
+         callback([1], [2], [3])
+     }
+     

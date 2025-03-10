@@ -1,0 +1,71 @@
+--- old.jsObjectsMarkedAsOpenEnded.errors.txt
++++ new.jsObjectsMarkedAsOpenEnded.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++a.js(2,10): error TS2339: Property 'a' does not exist on type '{}'.
++a.js(7,14): error TS2339: Property 'member' does not exist on type 'C'.
++a.js(8,14): error TS2339: Property 'member' does not exist on type 'C'.
++a.js(16,14): error TS2339: Property 'a' does not exist on type '{}'.
++b.ts(1,10): error TS2339: Property 'a' does not exist on type '{}'.
++b.ts(2,11): error TS2339: Property 'member' does not exist on type 'C'.
++b.ts(3,29): error TS2339: Property 'a' does not exist on type '{}'.
++b.ts(4,14): error TS2339: Property 'a' does not exist on type '{}'.
++b.ts(5,8): error TS2339: Property 'a' does not exist on type '{}'.
++b.ts(6,10): error TS2339: Property 'a' does not exist on type '{}'.
++
++
++==== a.js (4 errors) ====
++    var variable = {};
++    variable.a = 0;
++             ~
++!!! error TS2339: Property 'a' does not exist on type '{}'.
++    
++    class C {
++        initializedMember = {};
++        constructor() {
++            this.member = {};
++                 ~~~~~~
++!!! error TS2339: Property 'member' does not exist on type 'C'.
++            this.member.a = 0;
++                 ~~~~~~
++!!! error TS2339: Property 'member' does not exist on type 'C'.
++        }
++    }
++    
++    var obj = {
++        property: {}
++    };
++    
++    obj.property.a = 0;
++                 ~
++!!! error TS2339: Property 'a' does not exist on type '{}'.
++    
++    var arr = [{}];
++    
++    function getObj() {
++        return {};
++    }
++    
++    
++==== b.ts (6 errors) ====
++    variable.a = 1;
++             ~
++!!! error TS2339: Property 'a' does not exist on type '{}'.
++    (new C()).member.a = 1;
++              ~~~~~~
++!!! error TS2339: Property 'member' does not exist on type 'C'.
++    (new C()).initializedMember.a = 1;
++                                ~
++!!! error TS2339: Property 'a' does not exist on type '{}'.
++    obj.property.a = 1;
++                 ~
++!!! error TS2339: Property 'a' does not exist on type '{}'.
++    arr[0].a = 1;
++           ~
++!!! error TS2339: Property 'a' does not exist on type '{}'.
++    getObj().a = 1;
++             ~
++!!! error TS2339: Property 'a' does not exist on type '{}'.
++    
++    

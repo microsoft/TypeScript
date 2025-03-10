@@ -1,0 +1,71 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'Promise'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+noImplicitReturnsInAsync2.ts(2,16): error TS7030: Not all code paths return a value.
+noImplicitReturnsInAsync2.ts(9,16): error TS7030: Not all code paths return a value.
+noImplicitReturnsInAsync2.ts(16,48): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+noImplicitReturnsInAsync2.ts(24,48): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+noImplicitReturnsInAsync2.ts(31,16): error TS2697: An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'Promise'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== noImplicitReturnsInAsync2.ts (5 errors) ====
+    // Should be an error, Promise<number>, currently retorted correctly 
+    async function test3(isError: boolean = true) {
+                   ~~~~~
+!!! error TS7030: Not all code paths return a value.
+        if (isError === true) {
+            return 6;
+        }
+    }
+    
+    // Should not be an error, Promise<any>, currently **not** working
+    async function test4(isError: boolean = true) {  
+                   ~~~~~
+!!! error TS7030: Not all code paths return a value.
+        if (isError === true) {
+            return undefined;
+        }
+    }
+    
+    // should not be error, Promise<any> currently working correctly 
+    async function test5(isError: boolean = true): Promise<any> { //should not be error
+                                                   ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+        if (isError === true) {
+            return undefined;
+        }
+    }
+    
+    
+    // should be error, currently reported correctly 
+    async function test6(isError: boolean = true): Promise<number> { 
+                                                   ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+        if (isError === true) {
+            return undefined;
+        }
+    }
+    
+    // infered to be Promise<void>, should not be an error, currently reported correctly 
+    async function test7(isError: boolean = true) { 
+                   ~~~~~
+!!! error TS2697: An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+        if (isError === true) {
+            return;
+        }
+    }

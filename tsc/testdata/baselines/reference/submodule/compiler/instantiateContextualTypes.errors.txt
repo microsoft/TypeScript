@@ -1,0 +1,250 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'CallableFunction'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'NewableFunction'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+instantiateContextualTypes.ts(11,23): error TS2304: Cannot find name 'alert'.
+instantiateContextualTypes.ts(114,35): error TS2345: Argument of type '[(foo: any) => string]' is not assignable to parameter of type '(foo: number) => string'.
+  Type '[(foo: any) => string]' provides no match for the signature '(foo: number): string'.
+instantiateContextualTypes.ts(114,36): error TS7006: Parameter 'foo' implicitly has an 'any' type.
+instantiateContextualTypes.ts(116,36): error TS2345: Argument of type '{}' is not assignable to parameter of type '(foo: number) => string'.
+  Type '{}' provides no match for the signature '(foo: number): string'.
+instantiateContextualTypes.ts(116,38): error TS7006: Parameter 'foo' implicitly has an 'any' type.
+instantiateContextualTypes.ts(146,25): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+instantiateContextualTypes.ts(147,10): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+instantiateContextualTypes.ts(154,23): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+instantiateContextualTypes.ts(155,10): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+instantiateContextualTypes.ts(159,46): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+instantiateContextualTypes.ts(160,10): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+instantiateContextualTypes.ts(177,55): error TS2304: Cannot find name 'Partial'.
+instantiateContextualTypes.ts(183,26): error TS7019: Rest parameter 'args' implicitly has an 'any[]' type.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'CallableFunction'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'NewableFunction'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== instantiateContextualTypes.ts (13 errors) ====
+    // #6611
+    
+    export interface A<a> {
+        value: a;
+    }
+    
+    function fn<a>(values: A<a>, value: a) : void {
+    }
+    
+    declare let handlers: A<(value: number) => void>;
+    fn(handlers, value => alert(value));
+                          ~~~~~
+!!! error TS2304: Cannot find name 'alert'.
+    
+    // #21382
+    
+    interface BaseProps<T> {
+      initialValues: T;
+      nextValues: (cur: T) => T;
+    }
+    declare class Component<P> { constructor(props: P); props: P; }
+    declare class GenericComponent<Props = {}, Values = object>
+        extends Component<Props & BaseProps<Values>> {
+      iv: Values;
+    }
+    
+    new GenericComponent({ initialValues: 12, nextValues: val => 12 });
+    
+    // #22149
+    
+    declare function useStringOrNumber<T extends string | number>(t: T, useIt: T extends string ? ((s: string) => void) : ((n: number) => void)): void;
+    useStringOrNumber("", foo => {});
+    
+    // #25299
+    
+    type ActionType<P> = string & { attachPayloadTypeHack?: P & never }
+    
+    type Handler<S, P> = P extends void
+        ? (state: S) => S
+        : (state: S, payload: P) => S
+    
+    interface ActionHandler<S, P> {
+        actionType: ActionType<P>
+        handler: Handler<S, P>
+    }
+    
+    declare function handler<S, P>(actionType: ActionType<P>, handler: Handler<S, P>): ActionHandler<S, P>
+    
+    declare function createReducer<S>(
+            defaultState: S,
+            ...actionHandlers: ActionHandler<S, any>[]
+        ): any
+    
+    interface AppState {
+        dummy: string
+    }
+    
+    const defaultState: AppState = {
+        dummy: ''
+    }
+    
+    const NON_VOID_ACTION: ActionType<number> = 'NON_VOID_ACTION'
+        , VOID_ACTION: ActionType<void> = 'VOID_ACTION'
+    
+    createReducer(
+        defaultState,
+        handler(NON_VOID_ACTION, (state, _payload) => state),
+        handler(VOID_ACTION, state => state)
+    )
+    
+    // #25814
+    
+    type R = {
+      a: (x: number) => void;
+      b: (x: string) => void;
+    };
+    
+    type O = {
+      on<P extends keyof R>(x: P, callback: R[P]): void;
+    };
+    
+    declare var x: O;
+    x.on('a', a => {});
+    
+    // #29775
+    
+    namespace N1 {
+    
+    declare class Component<P> { 
+      constructor(props: P);
+    }
+        
+    interface ComponentClass<P = {}> {
+      new (props: P): Component<P>;
+    }
+    
+    type CreateElementChildren<P> =
+      P extends { children?: infer C }
+      ? C extends any[]
+        ? C
+        : C[]
+      : unknown;
+    
+    declare function createElement<P extends {}>(
+      type: ComponentClass<P>,
+      ...children: CreateElementChildren<P>
+    ): any;
+    
+    declare function createElement2<P extends {}>(
+      type: ComponentClass<P>,
+      child: CreateElementChildren<P>
+    ): any;
+    
+    class InferFunctionTypes extends Component<{children: (foo: number) => string}> {}
+    
+    createElement(InferFunctionTypes, (foo) => "" + foo);
+                                      ~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '[(foo: any) => string]' is not assignable to parameter of type '(foo: number) => string'.
+!!! error TS2345:   Type '[(foo: any) => string]' provides no match for the signature '(foo: number): string'.
+                                       ~~~
+!!! error TS7006: Parameter 'foo' implicitly has an 'any' type.
+    
+    createElement2(InferFunctionTypes, [(foo) => "" + foo]);
+                                       ~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type '(foo: number) => string'.
+!!! error TS2345:   Type '{}' provides no match for the signature '(foo: number): string'.
+                                         ~~~
+!!! error TS7006: Parameter 'foo' implicitly has an 'any' type.
+    
+    }
+    
+    // #30341
+    
+    type InnerBox<T> = {
+      value: T;
+    }
+    
+    type OuterBox<T> = {
+      inner: InnerBox<T>
+    };
+    
+    type BoxConsumerFromOuterBox<T> =
+      T extends OuterBox<infer U> ?
+          (box: InnerBox<U>) => void :
+          never;
+    
+    declare function passContentsToFunc<T>(outerBox: T, consumer: BoxConsumerFromOuterBox<T>): void;
+    
+    declare const outerBoxOfString: OuterBox<string>;
+    
+    passContentsToFunc(outerBoxOfString, box => box.value);
+    
+    // Repro from #32349
+    
+    type DooDad = 'SOMETHING' | 'ELSE' ;
+    
+    class Interesting {
+    	public compiles = () : Promise<DooDad> => {
+    	                       ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    		return Promise.resolve().then(() => {
+    		       ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    			if (1 < 2) {
+    				return 'SOMETHING';
+    			}
+    			return 'ELSE';
+    		});
+    	};
+    	public doesnt = () : Promise<DooDad> => {
+    	                     ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    		return Promise.resolve().then(() => {
+    		       ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    			return 'ELSE';
+    		});
+    	};
+    	public slightlyDifferentErrorMessage = () : Promise<DooDad> => {
+    	                                            ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    		return Promise.resolve().then(() => {
+    		       ~~~~~~~
+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    			if (1 < 2) {
+    				return 'SOMETHING';
+    			}
+    			return 'SOMETHING';
+    		});
+    	};
+    }
+    
+    // Repro from #32349
+    
+    declare function invoke<T>(f: () => T): T;
+    
+    let xx: 0 | 1 | 2 = invoke(() => 1);
+    
+    // Repro from #32416
+    
+    declare function assignPartial<T>(target: T, partial: Partial<T>): T;
+                                                          ~~~~~~~
+!!! error TS2304: Cannot find name 'Partial'.
+    
+    let obj = {
+      foo(bar: string) {}
+    }
+    
+    assignPartial(obj, { foo(...args) {} });  // args has type [string]
+                             ~~~~~~~
+!!! error TS7019: Rest parameter 'args' implicitly has an 'any[]' type.
+    

@@ -1,0 +1,14 @@
+--- old.internalAliasClassInsideLocalModuleWithoutExportAccessError.errors.txt
++++ new.internalAliasClassInsideLocalModuleWithoutExportAccessError.errors.txt
+@@= skipped -0, +0 lines =@@
+-internalAliasClassInsideLocalModuleWithoutExportAccessError.ts(17,26): error TS2339: Property 'c' does not exist on type 'typeof m3'.
++internalAliasClassInsideLocalModuleWithoutExportAccessError.ts(17,26): error TS2339: Property 'c' does not exist on type '{ cProp: c; }'.
+ 
+ 
+ ==== internalAliasClassInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
+@@= skipped -19, +19 lines =@@
+     
+     export var d = new m2.m3.c();
+                              ~
+-!!! error TS2339: Property 'c' does not exist on type 'typeof m3'.
++!!! error TS2339: Property 'c' does not exist on type '{ cProp: c; }'.

@@ -1,0 +1,51 @@
+switchCasesExpressionTypeMismatch.ts(4,10): error TS2678: Type '{ new(): Foo; prototype: Foo; }' is not comparable to type '0'.
+switchCasesExpressionTypeMismatch.ts(5,10): error TS2678: Type '"sss"' is not comparable to type '0'.
+switchCasesExpressionTypeMismatch.ts(6,10): error TS2678: Type '123' is not comparable to type '0'.
+switchCasesExpressionTypeMismatch.ts(7,10): error TS2678: Type 'true' is not comparable to type '0'.
+switchCasesExpressionTypeMismatch.ts(16,10): error TS2678: Type 'true' is not comparable to type 'number | "hello"'.
+switchCasesExpressionTypeMismatch.ts(18,10): error TS2678: Type '"world"' is not comparable to type 'number | "hello"'.
+
+
+==== switchCasesExpressionTypeMismatch.ts (6 errors) ====
+    class Foo { }
+    
+    switch (0) {
+        case Foo: break;    // Error
+             ~~~
+!!! error TS2678: Type '{ new(): Foo; prototype: Foo; }' is not comparable to type '0'.
+        case "sss": break;  // Error
+             ~~~~~
+!!! error TS2678: Type '"sss"' is not comparable to type '0'.
+        case 123: break;    // Error
+             ~~~
+!!! error TS2678: Type '123' is not comparable to type '0'.
+        case true: break;   // Error
+             ~~~~
+!!! error TS2678: Type 'true' is not comparable to type '0'.
+    }
+    
+    declare var q: string
+    declare var r: number | "hello"
+    
+    switch (r) {
+        case q: break
+        case 42: break
+        case true: break // Error
+             ~~~~
+!!! error TS2678: Type 'true' is not comparable to type 'number | "hello"'.
+        case "hello": break
+        case "world": break // Error
+             ~~~~~~~
+!!! error TS2678: Type '"world"' is not comparable to type 'number | "hello"'.
+    }
+    
+    var s: any = 0;
+    
+    // No error for all
+    switch (s) {
+        case Foo: break;
+        case "sss": break;
+        case 123: break;
+        case true: break;
+    }
+    

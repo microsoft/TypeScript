@@ -1,0 +1,49 @@
+/packages/main/index.ts(1,19): error TS2307: Cannot find module 'shared' or its corresponding type declarations.
+
+
+==== /packages/main/tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "noEmit": true,
+            "checkJs": true,
+            "strict": true,
+            "module": "esnext",
+            "moduleResolution": "bundler",
+            "traceResolution": true,
+        }
+    }
+    
+    
+==== /packages/main/index.ts (1 errors) ====
+    import { x } from "shared";
+                      ~~~~~~~~
+!!! error TS2307: Cannot find module 'shared' or its corresponding type declarations.
+    
+==== /node_modules/pkg/index.d.ts (0 errors) ====
+    export declare function pkg(): "pkg";
+    
+==== /packages/shared/package.json (0 errors) ====
+    {
+        "name": "shared",
+        "version": "1.0.0",
+        "type": "module",
+        "exports": "./index.js"
+    }
+    
+==== /packages/shared/utils.js (0 errors) ====
+    export { pkg } from "pkg";
+    
+==== /packages/shared/index.js (0 errors) ====
+    import { pkg } from "./utils.js";
+    export const x = pkg();
+    
+==== /packages/main/package.json (0 errors) ====
+    {
+        "name": "main",
+        "version": "1.0.0",
+        "type": "module",
+        "dependencies": {
+            "shared": "workspace:*"
+        }
+    }
+    

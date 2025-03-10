@@ -1,0 +1,19 @@
+--- old.moduleDetectionIsolatedModulesCjsFileScope.errors.txt
++++ new.moduleDetectionIsolatedModulesCjsFileScope.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++filename.cts(1,7): error TS2451: Cannot redeclare block-scoped variable 'a'.
++filename.mts(1,7): error TS2451: Cannot redeclare block-scoped variable 'a'.
++
++
++==== filename.cts (1 errors) ====
++    const a = 2;
++          ~
++!!! error TS2451: Cannot redeclare block-scoped variable 'a'.
++!!! related TS6203 filename.mts:1:7: 'a' was also declared here.
++==== filename.mts (1 errors) ====
++    const a = 2;
++          ~
++!!! error TS2451: Cannot redeclare block-scoped variable 'a'.
++!!! related TS6203 filename.cts:1:7: 'a' was also declared here.

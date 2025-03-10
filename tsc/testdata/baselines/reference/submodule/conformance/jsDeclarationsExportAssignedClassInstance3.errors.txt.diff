@@ -1,0 +1,22 @@
+--- old.jsDeclarationsExportAssignedClassInstance3.errors.txt
++++ new.jsDeclarationsExportAssignedClassInstance3.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++index.js(6,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(8,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
++==== index.js (2 errors) ====
++    class Foo {
++        static stat = 10;
++        member = 10;
++    }
++    
++    module.exports = new Foo();
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++    module.exports.additional = 20;
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.

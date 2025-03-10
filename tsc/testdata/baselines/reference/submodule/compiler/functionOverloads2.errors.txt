@@ -1,0 +1,15 @@
+functionOverloads2.ts(4,13): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'boolean' is not assignable to parameter of type 'number'.
+
+
+==== functionOverloads2.ts (1 errors) ====
+    function foo(bar: string): string;
+    function foo(bar: number): number;
+    function foo(bar: any): any { return bar };
+    var x = foo(true);
+                ~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'number'.
+!!! related TS2771 functionOverloads2.ts:2:10: The last overload is declared here.

@@ -1,0 +1,15 @@
+logicalOrExpressionIsContextuallyTyped.ts(6,24): error TS2872: This kind of expression is always truthy.
+logicalOrExpressionIsContextuallyTyped.ts(6,33): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type '{ a: string; }'.
+
+
+==== logicalOrExpressionIsContextuallyTyped.ts (2 errors) ====
+    // The || operator permits the operands to be of any type.
+    // If the || expression is contextually typed, the operands are contextually typed by the
+    // same type and the result is of the best common type of the contextual type and the two
+    // operand types.
+    
+    var r: { a: string } = { a: '', b: 123 } || { a: '', b: true };
+                           ~~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+                                    ~
+!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type '{ a: string; }'.

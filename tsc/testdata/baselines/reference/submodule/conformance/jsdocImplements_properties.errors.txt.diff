@@ -1,0 +1,31 @@
+--- old.jsdocImplements_properties.errors.txt
++++ new.jsdocImplements_properties.errors.txt
+@@= skipped -0, +0 lines =@@
+-/a.js(3,7): error TS2720: Class 'B' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
+-  Property 'x' is missing in type 'B' but required in type 'A'.
++/a.js(1,32): error TS2339: Property 'x' does not exist on type 'A'.
++/a.js(12,26): error TS2339: Property 'x' does not exist on type 'B3'.
+ 
+ 
+-==== /a.js (1 errors) ====
++==== /a.js (2 errors) ====
+     class A { constructor() { this.x = 0; } }
++                                   ~
++!!! error TS2339: Property 'x' does not exist on type 'A'.
+     /** @implements A*/
+     class B {}
+-          ~
+-!!! error TS2720: Class 'B' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
+-!!! error TS2720:   Property 'x' is missing in type 'B' but required in type 'A'.
+-!!! related TS2728 /a.js:1:27: 'x' is declared here.
+     
+     /** @implements A*/
+     class B2 {
+@@= skipped -18, +16 lines =@@
+     /** @implements {A}*/
+     class B3 {
+         constructor() { this.x = 10 }
++                             ~
++!!! error TS2339: Property 'x' does not exist on type 'B3'.
+     }
+     

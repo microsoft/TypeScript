@@ -1,0 +1,13 @@
+--- old.incompleteDottedExpressionAtEOF.errors.txt
++++ new.incompleteDottedExpressionAtEOF.errors.txt
+@@= skipped -0, +0 lines =@@
+-incompleteDottedExpressionAtEOF.ts(2,17): error TS1003: Identifier expected.
++incompleteDottedExpressionAtEOF.ts(2,18): error TS1003: Identifier expected.
+ 
+ 
+ ==== incompleteDottedExpressionAtEOF.ts (1 errors) ====
+     // used to leak __missing into error message
+     var p2 = window. 
+-                    
++                     
+ !!! error TS1003: Identifier expected.

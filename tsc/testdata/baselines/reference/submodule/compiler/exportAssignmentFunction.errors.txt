@@ -1,0 +1,14 @@
+exportAssignmentFunction_B.ts(1,26): error TS2307: Cannot find module 'exportAssignmentFunction_A' or its corresponding type declarations.
+
+
+==== exportAssignmentFunction_B.ts (1 errors) ====
+    import fooFunc = require("exportAssignmentFunction_A");
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'exportAssignmentFunction_A' or its corresponding type declarations.
+    
+    var n: number = fooFunc();
+==== exportAssignmentFunction_A.ts (0 errors) ====
+    function foo() { return 0; }
+    
+    export = foo;
+    

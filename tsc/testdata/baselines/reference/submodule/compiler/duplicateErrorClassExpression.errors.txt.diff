@@ -1,0 +1,17 @@
+--- old.duplicateErrorClassExpression.errors.txt
++++ new.duplicateErrorClassExpression.errors.txt
+@@= skipped -1, +1 lines =@@
+   Type 'ComplicatedTypeDerived' is not assignable to type 'ComplicatedTypeBase'.
+     'string' index signatures are incompatible.
+       Property 'a' is missing in type 'ADerived' but required in type 'ABase'.
+-duplicateErrorClassExpression.ts(20,5): error TS2538: Type 'typeof Derived' cannot be used as an index type.
++duplicateErrorClassExpression.ts(20,5): error TS2538: Type '{ new(): Derived; prototype: Derived; }' cannot be used as an index type.
+ 
+ 
+ ==== duplicateErrorClassExpression.ts (2 errors) ====
+@@= skipped -31, +31 lines =@@
+     let obj: { 3: string } = { 3: "three" };
+     obj[x];
+         ~
+-!!! error TS2538: Type 'typeof Derived' cannot be used as an index type.
++!!! error TS2538: Type '{ new(): Derived; prototype: Derived; }' cannot be used as an index type.

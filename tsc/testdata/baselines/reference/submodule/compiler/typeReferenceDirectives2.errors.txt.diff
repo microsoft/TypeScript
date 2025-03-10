@@ -1,0 +1,17 @@
+--- old.typeReferenceDirectives2.errors.txt
++++ new.typeReferenceDirectives2.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/app.ts(2,8): error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.
++
++
++==== /app.ts (1 errors) ====
++    interface A {
++        x: $
++           ~
++!!! error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.
++    }
++==== /types/lib/index.d.ts (0 errors) ====
++    interface $ { x }
++    

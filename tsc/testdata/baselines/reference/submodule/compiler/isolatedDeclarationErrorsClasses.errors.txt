@@ -1,0 +1,90 @@
+isolatedDeclarationErrorsClasses.ts(8,18): error TS7006: Parameter 'p' implicitly has an 'any' type.
+isolatedDeclarationErrorsClasses.ts(12,9): error TS7032: Property 'setOnly' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
+isolatedDeclarationErrorsClasses.ts(12,17): error TS7006: Parameter 'value' implicitly has an 'any' type.
+isolatedDeclarationErrorsClasses.ts(36,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+isolatedDeclarationErrorsClasses.ts(36,6): error TS2304: Cannot find name 'missing'.
+isolatedDeclarationErrorsClasses.ts(44,35): error TS7006: Parameter 'v' implicitly has an 'any' type.
+isolatedDeclarationErrorsClasses.ts(48,9): error TS7032: Property '[noParamAnnotationStringName]' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
+isolatedDeclarationErrorsClasses.ts(48,39): error TS7006: Parameter 'value' implicitly has an 'any' type.
+isolatedDeclarationErrorsClasses.ts(50,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+isolatedDeclarationErrorsClasses.ts(55,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+
+
+==== isolatedDeclarationErrorsClasses.ts (10 errors) ====
+    export class Cls {
+    
+        field = 1 + 1;
+        method() {}
+    
+        methodOk(): void {}
+    
+        methodParams(p): void {}
+                     ~
+!!! error TS7006: Parameter 'p' implicitly has an 'any' type.
+        methodParams2(p = 1 + 1): void {}
+    
+        get getOnly() { return 1 + 1 }
+        set setOnly(value) { }
+            ~~~~~~~
+!!! error TS7032: Property 'setOnly' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
+                    ~~~~~
+!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
+    
+        get getSetBad() { return 0 }
+        set getSetBad(value) { }
+    
+        get getSetOk(): number { return 0 }
+        set getSetOk(value) { }
+    
+        get getSetOk2() { return 0 }
+        set getSetOk2(value: number) { }
+    
+        get getSetOk3(): number { return 0 }
+        set getSetOk3(value: number) { }
+    }
+    
+    let noAnnotationStringName: string = "noAnnotationStringName";
+    let noParamAnnotationStringName: string = "noParamAnnotationStringName";
+    
+    const noAnnotationLiteralName = "noAnnotationLiteralName";
+    const noParamAnnotationLiteralName = "noParamAnnotationLiteralName";
+    
+    export class C {
+    
+        // Should not be reported as an isolated declaration error
+        [missing] = 1;
+        ~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~~
+!!! error TS2304: Cannot find name 'missing'.
+        
+        [noAnnotationLiteralName](): void { }
+    
+        [noParamAnnotationLiteralName](v: string): void { }
+    
+        [noAnnotationStringName]() { }
+    
+        [noParamAnnotationStringName](v): void { }
+                                      ~
+!!! error TS7006: Parameter 'v' implicitly has an 'any' type.
+    
+        get [noAnnotationStringName]() { return 0;}
+    
+        set [noParamAnnotationStringName](value) { }
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7032: Property '[noParamAnnotationStringName]' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
+                                          ~~~~~
+!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
+    
+        [("A" + "B") as "AB"] =  1;
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+    
+    }
+    
+    export interface I {
+        [noAnnotationStringName]: 10;
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+        [noAnnotationLiteralName]();
+    }

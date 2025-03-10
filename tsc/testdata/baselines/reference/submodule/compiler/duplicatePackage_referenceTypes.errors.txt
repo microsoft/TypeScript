@@ -1,0 +1,30 @@
+/index.ts(4,5): error TS2719: Type 'Foo' is not assignable to type 'Foo'. Two different types with this name exist, but they are unrelated.
+  Types have separate declarations of a private property 'x'.
+
+
+==== /index.ts (1 errors) ====
+    import * as a from "a";
+    import { Foo } from "foo";
+    
+    let foo: Foo = a.foo;
+        ~~~
+!!! error TS2719: Type 'Foo' is not assignable to type 'Foo'. Two different types with this name exist, but they are unrelated.
+!!! error TS2719:   Types have separate declarations of a private property 'x'.
+    
+==== /node_modules/a/index.d.ts (0 errors) ====
+    /// <reference types="foo" />
+    import { Foo } from "foo";
+    export const foo: Foo;
+    
+==== /node_modules/a/node_modules/foo/index.d.ts (0 errors) ====
+    export class Foo { private x; }
+    
+==== /node_modules/a/node_modules/foo/package.json (0 errors) ====
+    { "name": "foo", "version": "1.2.3" }
+    
+==== /node_modules/@types/foo/index.d.ts (0 errors) ====
+    export class Foo { private x; }
+    
+==== /node_modules/@types/foo/package.json (0 errors) ====
+    { "name": "foo", "version": "1.2.3" }
+    

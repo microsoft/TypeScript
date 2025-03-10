@@ -1,0 +1,16 @@
+--- old.importTag10.errors.txt
++++ new.importTag10.errors.txt
+@@= skipped -0, +-1 lines =@@
+-/foo.js(2,11): error TS1109: Expression expected.
+-
+-
+-==== /foo.js (1 errors) ====
+-    /**
+-     * @import
+-              
+-     */
+-    
+-!!! error TS1109: Expression expected.
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

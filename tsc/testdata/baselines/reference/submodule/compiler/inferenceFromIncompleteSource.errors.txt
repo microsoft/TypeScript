@@ -1,0 +1,19 @@
+inferenceFromIncompleteSource.ts(11,11): error TS2741: Property 'prop' is missing in type '{ items: { name: string; }[]; itemKey: "name"; }' but required in type 'ListProps<{ name: string; }, "name">'.
+
+
+==== inferenceFromIncompleteSource.ts (1 errors) ====
+    // Repro from #42030
+    
+    interface ListProps<T, K extends keyof T> {
+      items: T[];
+      itemKey: K;
+      prop: number;
+    }
+    
+    declare const Component: <T, K extends keyof T>(x: ListProps<T, K>) => void;
+    
+    Component({items: [{name:' string'}], itemKey: 'name' });
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2741: Property 'prop' is missing in type '{ items: { name: string; }[]; itemKey: "name"; }' but required in type 'ListProps<{ name: string; }, "name">'.
+!!! related TS2728 inferenceFromIncompleteSource.ts:6:3: 'prop' is declared here.
+    

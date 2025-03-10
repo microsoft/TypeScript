@@ -1,0 +1,43 @@
+--- old.nodeModulesAtTypesPriority.errors.txt
++++ new.nodeModulesAtTypesPriority.errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS6504: File '/packages/a/node_modules/react/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+-  The file is in the program because:
+-    Root file specified for compilation
+-error TS6504: File '/packages/a/node_modules/redux/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+-  The file is in the program because:
+-    Root file specified for compilation
++/packages/a/node_modules/react/index.js(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++/packages/a/node_modules/redux/index.js(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ 
+ 
+-!!! error TS6504: File '/packages/a/node_modules/react/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+-!!! error TS6504:   The file is in the program because:
+-!!! error TS6504:     Root file specified for compilation
+-!!! error TS6504: File '/packages/a/node_modules/redux/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+-!!! error TS6504:   The file is in the program because:
+-!!! error TS6504:     Root file specified for compilation
+ ==== /node_modules/@types/react/index.d.ts (0 errors) ====
+     declare const React: any;
+     export = React;
+@@= skipped -18, +8 lines =@@
+ ==== /node_modules/@types/redux/index.d.ts (0 errors) ====
+     export declare function createStore(): void;
+     
+-==== /packages/a/node_modules/react/index.js (0 errors) ====
++==== /packages/a/node_modules/react/index.js (1 errors) ====
+     module.exports = {};
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+     
+ ==== /packages/a/node_modules/redux/index.d.ts (0 errors) ====
+     export declare function createStore(): void;
+     
+-==== /packages/a/node_modules/redux/index.js (0 errors) ====
++==== /packages/a/node_modules/redux/index.js (1 errors) ====
+     module.exports = {};
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+     
+ ==== /packages/a/index.ts (0 errors) ====
+     import React from "react";

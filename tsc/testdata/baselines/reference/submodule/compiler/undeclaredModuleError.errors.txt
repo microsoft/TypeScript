@@ -1,0 +1,29 @@
+undeclaredModuleError.ts(1,21): error TS2307: Cannot find module 'fs' or its corresponding type declarations.
+undeclaredModuleError.ts(8,29): error TS2345: Argument of type '() => void' is not assignable to parameter of type '(stat: Stats, name: string) => boolean'.
+  Type 'void' is not assignable to type 'boolean'.
+undeclaredModuleError.ts(11,41): error TS2304: Cannot find name 'IDoNotExist'.
+
+
+==== undeclaredModuleError.ts (3 errors) ====
+    import fs = require('fs');
+                        ~~~~
+!!! error TS2307: Cannot find module 'fs' or its corresponding type declarations.
+    function readdir(path: string, accept: (stat: fs.Stats, name: string) => boolean, callback: (error: Error, results: { name: string; stat: fs.Stats; }[]) => void ) {}
+    
+    function join(...paths: string[]) {}
+    
+    function instrumentFile(covFileDir: string, covFileName: string, originalFilePath: string) {
+        fs.readFile(originalFilePath, () => {       
+            readdir(covFileDir, () => {
+                                ~~~~~~~
+!!! error TS2345: Argument of type '() => void' is not assignable to parameter of type '(stat: Stats, name: string) => boolean'.
+!!! error TS2345:   Type 'void' is not assignable to type 'boolean'.
+            } , (error: Error, files: {}[]) => {
+                    files.forEach((file) => {
+                        var fullPath = join(IDoNotExist);
+                                            ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'IDoNotExist'.
+                    } );
+                } );
+        } );
+    }

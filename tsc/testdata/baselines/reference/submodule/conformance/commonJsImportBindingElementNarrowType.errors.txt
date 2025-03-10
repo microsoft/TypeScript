@@ -1,0 +1,13 @@
+/bar.js(1,15): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== /bar.js (1 errors) ====
+    const { a } = require("./foo");
+                  ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    if (a) {
+      var x = a + 1;
+    }
+==== /foo.d.ts (0 errors) ====
+    export const a: number | null;
+    

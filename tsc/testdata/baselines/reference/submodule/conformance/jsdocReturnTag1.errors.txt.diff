@@ -1,0 +1,32 @@
+--- old.jsdocReturnTag1.errors.txt
++++ new.jsdocReturnTag1.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++returns.js(19,12): error TS2872: This kind of expression is always truthy.
++
++
++==== returns.js (1 errors) ====
++    /**
++     * @returns {string} This comment is not currently exposed
++     */
++    function f() {
++        return 5;
++    }
++    
++    /**
++     * @returns {string=} This comment is not currently exposed
++     */
++    function f1() {
++        return 5;
++    }
++    
++    /**
++     * @returns {string|number} This comment is not currently exposed
++     */
++    function f2() {
++        return 5 || "hello";
++               ~
++!!! error TS2872: This kind of expression is always truthy.
++    }
++    

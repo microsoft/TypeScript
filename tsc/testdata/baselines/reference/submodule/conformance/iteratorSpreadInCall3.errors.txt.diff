@@ -1,0 +1,48 @@
+--- old.iteratorSpreadInCall3.errors.txt
++++ new.iteratorSpreadInCall3.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++iteratorSpreadInCall3.ts(5,20): error TS2304: Cannot find name 'Symbol'.
++iteratorSpreadInCall3.ts(10,6): error TS2304: Cannot find name 'Symbol'.
++iteratorSpreadInCall3.ts(15,8): error TS2488: Type 'SymbolIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== iteratorSpreadInCall3.ts (3 errors) ====
++    function foo(...s: symbol[]) { }
++    class SymbolIterator {
++        next() {
++            return {
++                value: Symbol(),
++                       ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
++                done: false
++            };
++        }
++    
++        [Symbol.iterator]() {
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
++            return this;
++        }
++    }
++    
++    foo(...new SymbolIterator);
++           ~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type 'SymbolIterator' must have a '[Symbol.iterator]()' method that returns an iterator.

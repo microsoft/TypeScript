@@ -1,0 +1,13 @@
+--- old.moduleResolutionWithExtensions_notSupported3.errors.txt
++++ new.moduleResolutionWithExtensions_notSupported3.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/a.ts(1,17): error TS2307: Cannot find module './jsx' or its corresponding type declarations.
++
++
++==== /a.ts (1 errors) ====
++    import jsx from "./jsx";
++                    ~~~~~~~
++!!! error TS2307: Cannot find module './jsx' or its corresponding type declarations.
++    

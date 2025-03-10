@@ -1,0 +1,39 @@
+--- old.commonJSImportClassTypeReference.errors.txt
++++ new.commonJSImportClassTypeReference.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++main.js(1,9): error TS2451: Cannot redeclare block-scoped variable 'K'.
++main.js(1,15): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++main.js(3,12): error TS7006: Parameter 'k' implicitly has an 'any' type.
++mod1.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'K'.
++mod1.js(6,1): error TS2304: Cannot find name 'exports'.
++
++
++==== main.js (3 errors) ====
++    const { K } = require("./mod1");
++            ~
++!!! error TS2451: Cannot redeclare block-scoped variable 'K'.
++!!! related TS6203 mod1.js:1:7: 'K' was also declared here.
++                  ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    /** @param {K} k */
++    function f(k) {
++               ~
++!!! error TS7006: Parameter 'k' implicitly has an 'any' type.
++        k.values()
++    }
++    
++==== mod1.js (2 errors) ====
++    class K {
++          ~
++!!! error TS2451: Cannot redeclare block-scoped variable 'K'.
++!!! related TS6203 main.js:1:9: 'K' was also declared here.
++        values() {
++            return new K()
++        }
++    }
++    exports.K = K;
++    ~~~~~~~
++!!! error TS2304: Cannot find name 'exports'.
++    

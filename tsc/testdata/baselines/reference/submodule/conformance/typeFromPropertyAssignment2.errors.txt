@@ -1,0 +1,21 @@
+a.js(6,14): error TS2339: Property 'x' does not exist on type 'I'.
+
+
+==== a.js (1 errors) ====
+    function Outer() {
+        this.y = 2
+    }
+    Outer.Inner = class I {
+        constructor() {
+            this.x = 1
+                 ~
+!!! error TS2339: Property 'x' does not exist on type 'I'.
+        }
+    }
+    /** @type {Outer} */
+    var ok
+    ok.y
+    /** @type {Outer.Inner} */
+    var oc
+    oc.x
+    

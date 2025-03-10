@@ -1,0 +1,12 @@
+parserModuleDeclaration5.ts(3,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+
+
+==== parserModuleDeclaration5.ts (1 errors) ====
+    module M1 {
+      declare module M2 {
+        declare module M3 {
+        ~~~~~~~
+!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+        }
+      }
+    }

@@ -1,0 +1,11 @@
+--- old.allowImportingTsExtensions(moduleresolution=node16).errors.txt
++++ new.allowImportingTsExtensions(moduleresolution=node16).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+ /c.ts(1,16): error TS2307: Cannot find module './thisfiledoesnotexist.ts' or its corresponding type declarations.
+ 
+ 
+-!!! error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+ ==== /ts.ts (0 errors) ====
+     export {};
+     

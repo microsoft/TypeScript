@@ -1,0 +1,17 @@
+internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts(11,10): error TS2694: Namespace '""internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts"".c' has no exported member 'b'.
+
+
+==== internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
+    export module a {
+        export interface I {
+        }
+    }
+    
+    export module c {
+        import b = a.I;
+        export var x: b;
+    }
+    
+    var x: c.b;
+             ~
+!!! error TS2694: Namespace '""internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts"".c' has no exported member 'b'.

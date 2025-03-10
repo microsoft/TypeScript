@@ -1,0 +1,18 @@
+--- old.computedEnumMemberSyntacticallyString2(isolatedmodules=false).errors.txt
++++ new.computedEnumMemberSyntacticallyString2(isolatedmodules=false).errors.txt
+@@= skipped -1, +1 lines =@@
+ foo.ts(12,8): error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
+ 
+ 
+-==== ./foo.ts (2 errors) ====
++==== foo.ts (2 errors) ====
+     import { BAR } from './bar';
+     const LOCAL = 'LOCAL';
+     
+@@= skipped -26, +26 lines =@@
+       J = H
+     }
+     
+-==== ./bar.ts (0 errors) ====
++==== bar.ts (0 errors) ====
+     export const BAR = 'bar';

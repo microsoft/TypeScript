@@ -1,0 +1,8 @@
+unicodeExtendedEscapesInStrings25.ts(1,28): error TS1002: Unterminated string literal.
+
+
+==== unicodeExtendedEscapesInStrings25.ts (1 errors) ====
+    var x = "\u{00000000000067}
+                               
+!!! error TS1002: Unterminated string literal.
+    

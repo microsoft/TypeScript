@@ -1,0 +1,9 @@
+privateIdentifierExpando.js(2,3): error TS2339: Property '#bar' does not exist on type '{}'.
+
+
+==== privateIdentifierExpando.js (1 errors) ====
+    const x = {};
+    x.#bar.baz = 20;
+      ~~~~
+!!! error TS2339: Property '#bar' does not exist on type '{}'.
+    

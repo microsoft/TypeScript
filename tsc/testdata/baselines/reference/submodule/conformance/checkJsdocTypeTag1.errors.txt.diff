@@ -1,0 +1,37 @@
+--- old.checkJsdocTypeTag1.errors.txt
++++ new.checkJsdocTypeTag1.errors.txt
+@@= skipped -0, +0 lines =@@
+-0.js(24,12): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
++0.js(10,1): error TS2322: Type 'string' is not assignable to type 'number'.
++0.js(14,1): error TS2322: Type 'string' is not assignable to type 'number'.
+ 
+ 
+-==== 0.js (1 errors) ====
++==== 0.js (2 errors) ====
+     // @ts-check
+     /** @type {String} */
+     var S = "hello world";
+@@= skipped -11, +12 lines =@@
+     /** @type {*} */
+     var anyT = 2;
+     anyT = "hello";
++    ~~~~
++!!! error TS2322: Type 'string' is not assignable to type 'number'.
+     
+     /** @type {?} */
+     var anyT1 = 2;
+     anyT1 = "hi";
++    ~~~~~
++!!! error TS2322: Type 'string' is not assignable to type 'number'.
+     
+     /** @type {Function} */
+     const x = (a) => a + 1;
+@@= skipped -14, +18 lines =@@
+     y(1);
+     
+     /** @type {function (number)} */
+-               ~~~~~~~~~~~~~~~~~
+-!!! error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+     const x1 = (a) => a + 1;
+     x1(0);
+     

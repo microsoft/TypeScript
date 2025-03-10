@@ -1,0 +1,68 @@
+--- old.importHelpersES6.errors.txt
++++ new.importHelpersES6.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++tslib.d.ts(1,38): error TS2304: Cannot find name 'Function'.
++tslib.d.ts(1,51): error TS2304: Cannot find name 'Function'.
++tslib.d.ts(2,48): error TS2304: Cannot find name 'Function'.
++tslib.d.ts(3,64): error TS2304: Cannot find name 'Function'.
++tslib.d.ts(3,75): error TS2304: Cannot find name 'Function'.
++tslib.d.ts(4,75): error TS2304: Cannot find name 'Function'.
++tslib.d.ts(5,69): error TS2304: Cannot find name 'Function'.
++tslib.d.ts(5,90): error TS2304: Cannot find name 'Function'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== a.ts (0 errors) ====
++    declare var dec: any;
++    @dec export class A {
++        #x: number = 1;
++        async f() { this.#x = await this.#x; }
++        g(u) { return #x in u; }
++    }
++    
++    const o = { a: 1 };
++    const y = { ...o };
++    
++==== tslib.d.ts (8 errors) ====
++    export declare function __extends(d: Function, b: Function): void;
++                                         ~~~~~~~~
++!!! error TS2304: Cannot find name 'Function'.
++                                                      ~~~~~~~~
++!!! error TS2304: Cannot find name 'Function'.
++    export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;
++                                                   ~~~~~~~~
++!!! error TS2304: Cannot find name 'Function'.
++    export declare function __param(paramIndex: number, decorator: Function): Function;
++                                                                   ~~~~~~~~
++!!! error TS2304: Cannot find name 'Function'.
++                                                                              ~~~~~~~~
++!!! error TS2304: Cannot find name 'Function'.
++    export declare function __metadata(metadataKey: any, metadataValue: any): Function;
++                                                                              ~~~~~~~~
++!!! error TS2304: Cannot find name 'Function'.
++    export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
++                                                                        ~~~~~~~~
++!!! error TS2304: Cannot find name 'Function'.
++                                                                                             ~~~~~~~~
++!!! error TS2304: Cannot find name 'Function'.
++    export declare function __classPrivateFieldGet(a: any, b: any, c: any, d: any): any;
++    export declare function __classPrivateFieldSet(a: any, b: any, c: any, d: any, e: any): any;
++    export declare function __classPrivateFieldIn(a: any, b: any): boolean;
++    

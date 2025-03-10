@@ -1,0 +1,25 @@
+--- old.enumWithNonLiteralStringInitializer.errors.txt
++++ new.enumWithNonLiteralStringInitializer.errors.txt
+@@= skipped -0, +0 lines =@@
+ bad.ts(3,8): error TS18055: 'A.a' has a string type, but must have syntactically recognizable string syntax when 'isolatedModules' is enabled.
+ 
+ 
+-==== ./helpers.ts (0 errors) ====
++==== helpers.ts (0 errors) ====
+     export const foo = 2;
+     export const bar = "bar";
+     
+-==== ./bad.ts (1 errors) ====
++==== bad.ts (1 errors) ====
+     import { bar } from "./helpers";
+     enum A {
+        a = bar,
+@@= skipped -12, +12 lines =@@
+ !!! error TS18055: 'A.a' has a string type, but must have syntactically recognizable string syntax when 'isolatedModules' is enabled.
+     }
+     
+-==== ./good.ts (0 errors) ====
++==== good.ts (0 errors) ====
+     import { foo } from "./helpers";
+     enum A {
+        a = `${foo}`,

@@ -1,0 +1,30 @@
+--- old.additionOperatorWithInvalidOperands.errors.txt
++++ new.additionOperatorWithInvalidOperands.errors.txt
+@@= skipped -12, +12 lines =@@
+ additionOperatorWithInvalidOperands.ts(34,11): error TS2365: Operator '+' cannot be applied to types 'number' and 'Number'.
+ additionOperatorWithInvalidOperands.ts(35,11): error TS2365: Operator '+' cannot be applied to types 'number' and '() => void'.
+ additionOperatorWithInvalidOperands.ts(36,11): error TS2365: Operator '+' cannot be applied to types 'number' and 'void'.
+-additionOperatorWithInvalidOperands.ts(37,11): error TS2365: Operator '+' cannot be applied to types 'number' and 'typeof C'.
++additionOperatorWithInvalidOperands.ts(37,11): error TS2365: Operator '+' cannot be applied to types 'number' and '{ new(): C; foo: () => void; prototype: C; }'.
+ additionOperatorWithInvalidOperands.ts(38,11): error TS2365: Operator '+' cannot be applied to types 'E' and 'C'.
+ additionOperatorWithInvalidOperands.ts(39,11): error TS2365: Operator '+' cannot be applied to types 'E' and 'void'.
+-additionOperatorWithInvalidOperands.ts(40,11): error TS2365: Operator '+' cannot be applied to types 'E' and 'typeof M'.
++additionOperatorWithInvalidOperands.ts(40,11): error TS2365: Operator '+' cannot be applied to types 'E' and '{ a: any; }'.
+ 
+ 
+ ==== additionOperatorWithInvalidOperands.ts (19 errors) ====
+@@= skipped -75, +75 lines =@@
+ !!! error TS2365: Operator '+' cannot be applied to types 'number' and 'void'.
+     var r17 = b + C;
+               ~~~~~
+-!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'typeof C'.
++!!! error TS2365: Operator '+' cannot be applied to types 'number' and '{ new(): C; foo: () => void; prototype: C; }'.
+     var r18 = E.a + new C();
+               ~~~~~~~~~~~~~
+ !!! error TS2365: Operator '+' cannot be applied to types 'E' and 'C'.
+@@= skipped -9, +9 lines =@@
+ !!! error TS2365: Operator '+' cannot be applied to types 'E' and 'void'.
+     var r20 = E.a + M;
+               ~~~~~~~
+-!!! error TS2365: Operator '+' cannot be applied to types 'E' and 'typeof M'.
++!!! error TS2365: Operator '+' cannot be applied to types 'E' and '{ a: any; }'.

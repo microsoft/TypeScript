@@ -1,0 +1,30 @@
+--- old.jsdocTypeFromChainedAssignment2.errors.txt
++++ new.jsdocTypeFromChainedAssignment2.errors.txt
+@@= skipped -0, +0 lines =@@
+-use.js(2,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+-use.js(3,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+-use.js(4,7): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+-use.js(5,7): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
++use.js(1,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ 
+ 
+-==== use.js (4 errors) ====
++==== use.js (1 errors) ====
+     var mod = require('./mod');
++              ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+     mod.f('no')
+-          ~~~~
+-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+     mod.g('also no')
+-          ~~~~~~~~~
+-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+     mod.h(0)
+-          ~
+-!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+     mod.i(1)
+-          ~
+-!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+     
+ ==== mod.js (0 errors) ====
+     /** @param {number} n */

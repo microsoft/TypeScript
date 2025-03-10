@@ -1,0 +1,23 @@
+--- old.fieldAndGetterWithSameName.errors.txt
++++ new.fieldAndGetterWithSameName.errors.txt
+@@= skipped -0, +0 lines =@@
+ fieldAndGetterWithSameName.ts(2,5): error TS2300: Duplicate identifier 'x'.
++fieldAndGetterWithSameName.ts(2,5): error TS2300: Duplicate identifier 'x'.
+ fieldAndGetterWithSameName.ts(3,7): error TS2300: Duplicate identifier 'x'.
++fieldAndGetterWithSameName.ts(3,7): error TS2300: Duplicate identifier 'x'.
+ 
+ 
+-==== fieldAndGetterWithSameName.ts (2 errors) ====
++==== fieldAndGetterWithSameName.ts (4 errors) ====
+     export class C {
+         x: number;
+         ~
+ !!! error TS2300: Duplicate identifier 'x'.
++        ~
++!!! error TS2300: Duplicate identifier 'x'.
+       get x(): number { return 1; }
+           ~
+ !!! error TS2300: Duplicate identifier 'x'.
++          ~
++!!! error TS2300: Duplicate identifier 'x'.
+     }

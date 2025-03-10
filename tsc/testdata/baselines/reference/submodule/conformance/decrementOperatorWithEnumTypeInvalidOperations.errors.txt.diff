@@ -1,0 +1,29 @@
+--- old.decrementOperatorWithEnumTypeInvalidOperations.errors.txt
++++ new.decrementOperatorWithEnumTypeInvalidOperations.errors.txt
+@@= skipped -2, +2 lines =@@
+ decrementOperatorWithEnumTypeInvalidOperations.ts(10,23): error TS2628: Cannot assign to 'ENUM' because it is an enum.
+ decrementOperatorWithEnumTypeInvalidOperations.ts(11,23): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
+ decrementOperatorWithEnumTypeInvalidOperations.ts(14,25): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+-decrementOperatorWithEnumTypeInvalidOperations.ts(14,43): error TS2339: Property 'B' does not exist on type 'typeof ENUM'.
++decrementOperatorWithEnumTypeInvalidOperations.ts(14,43): error TS2339: Property 'B' does not exist on type '{ readonly [x: number]: string; }'.
+ decrementOperatorWithEnumTypeInvalidOperations.ts(15,23): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+-decrementOperatorWithEnumTypeInvalidOperations.ts(15,29): error TS2339: Property 'A' does not exist on type 'typeof ENUM'.
++decrementOperatorWithEnumTypeInvalidOperations.ts(15,29): error TS2339: Property 'A' does not exist on type '{ readonly [x: number]: string; }'.
+ decrementOperatorWithEnumTypeInvalidOperations.ts(18,3): error TS2628: Cannot assign to 'ENUM' because it is an enum.
+ decrementOperatorWithEnumTypeInvalidOperations.ts(19,3): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
+ decrementOperatorWithEnumTypeInvalidOperations.ts(21,1): error TS2628: Cannot assign to 'ENUM' because it is an enum.
+@@= skipped -35, +35 lines =@@
+                             ~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+                                               ~
+-!!! error TS2339: Property 'B' does not exist on type 'typeof ENUM'.
++!!! error TS2339: Property 'B' does not exist on type '{ readonly [x: number]: string; }'.
+     var ResultIsNumber6 = (ENUM.A + ENUM["B"])--;
+                           ~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+                                 ~
+-!!! error TS2339: Property 'A' does not exist on type 'typeof ENUM'.
++!!! error TS2339: Property 'A' does not exist on type '{ readonly [x: number]: string; }'.
+     
+     // miss assignment operator
+     --ENUM;

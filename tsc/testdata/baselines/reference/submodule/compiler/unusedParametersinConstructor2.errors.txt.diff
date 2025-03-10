@@ -1,0 +1,11 @@
+--- old.unusedParametersinConstructor2.errors.txt
++++ new.unusedParametersinConstructor2.errors.txt
+@@= skipped -3, +3 lines =@@
+ ==== unusedParametersinConstructor2.ts (1 errors) ====
+     class greeter {
+         constructor(param1: string, param2: string) {
+-                    ~~~~~~
++                    ~~~~~~~~~~~~~~
+ !!! error TS6133: 'param1' is declared but its value is never read.
+             param2 = param2 + "dummy value";
+         }

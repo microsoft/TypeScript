@@ -1,0 +1,302 @@
+--- old.inKeywordTypeguard(strict=false).errors.txt
++++ new.inKeywordTypeguard(strict=false).errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'Record'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ inKeywordTypeguard.ts(6,11): error TS2339: Property 'b' does not exist on type 'A'.
+ inKeywordTypeguard.ts(8,11): error TS2339: Property 'a' does not exist on type 'B'.
+ inKeywordTypeguard.ts(14,11): error TS2339: Property 'b' does not exist on type 'A'.
+@@= skipped -4, +13 lines =@@
+ inKeywordTypeguard.ts(27,11): error TS2339: Property 'b' does not exist on type 'AWithOptionalProp | BWithOptionalProp'.
+   Property 'b' does not exist on type 'AWithOptionalProp'.
+ inKeywordTypeguard.ts(42,11): error TS2339: Property 'b' does not exist on type 'AWithMethod'.
+-inKeywordTypeguard.ts(49,11): error TS2339: Property 'a' does not exist on type '(AWithMethod | BWithMethod) & Record<"c", unknown>'.
+-  Property 'a' does not exist on type 'BWithMethod & Record<"c", unknown>'.
+-inKeywordTypeguard.ts(50,11): error TS2339: Property 'b' does not exist on type '(AWithMethod | BWithMethod) & Record<"c", unknown>'.
+-  Property 'b' does not exist on type 'AWithMethod & Record<"c", unknown>'.
++inKeywordTypeguard.ts(49,11): error TS2339: Property 'a' does not exist on type 'AWithMethod | BWithMethod'.
++  Property 'a' does not exist on type 'BWithMethod'.
++inKeywordTypeguard.ts(50,11): error TS2339: Property 'b' does not exist on type 'AWithMethod | BWithMethod'.
++  Property 'b' does not exist on type 'AWithMethod'.
+ inKeywordTypeguard.ts(52,11): error TS2339: Property 'a' does not exist on type 'AWithMethod | BWithMethod'.
+   Property 'a' does not exist on type 'BWithMethod'.
+ inKeywordTypeguard.ts(53,11): error TS2339: Property 'b' does not exist on type 'AWithMethod | BWithMethod'.
+@@= skipped -16, +16 lines =@@
+ inKeywordTypeguard.ts(82,39): error TS2339: Property 'b' does not exist on type 'A'.
+ inKeywordTypeguard.ts(84,39): error TS2339: Property 'a' does not exist on type 'B'.
+ inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' does not exist on type 'never'.
++inKeywordTypeguard.ts(108,22): error TS2304: Cannot find name 'Error'.
++inKeywordTypeguard.ts(147,27): error TS2304: Cannot find name 'window'.
++inKeywordTypeguard.ts(148,9): error TS2304: Cannot find name 'window'.
++inKeywordTypeguard.ts(150,9): error TS2304: Cannot find name 'window'.
+ inKeywordTypeguard.ts(155,16): error TS2322: Type 'unknown' is not assignable to type 'object'.
++inKeywordTypeguard.ts(156,11): error TS2339: Property 'a' does not exist on type 'unknown'.
+ inKeywordTypeguard.ts(158,21): error TS2322: Type 'unknown' is not assignable to type 'object'.
++inKeywordTypeguard.ts(159,11): error TS2339: Property 'a' does not exist on type 'unknown'.
++inKeywordTypeguard.ts(162,11): error TS2339: Property 'a' does not exist on type 'object'.
++inKeywordTypeguard.ts(165,11): error TS2339: Property 'a' does not exist on type 'object'.
++inKeywordTypeguard.ts(166,11): error TS2339: Property 'b' does not exist on type 'object'.
++inKeywordTypeguard.ts(167,11): error TS2339: Property 'c' does not exist on type 'object'.
++inKeywordTypeguard.ts(173,11): error TS2339: Property 'a' does not exist on type 'object'.
++inKeywordTypeguard.ts(176,11): error TS2339: Property 'a' does not exist on type 'object'.
++inKeywordTypeguard.ts(177,11): error TS2339: Property 'b' does not exist on type 'object'.
++inKeywordTypeguard.ts(178,11): error TS2339: Property 'c' does not exist on type 'object'.
+ inKeywordTypeguard.ts(183,16): error TS2322: Type 'T' is not assignable to type 'object'.
++inKeywordTypeguard.ts(184,11): error TS2339: Property 'a' does not exist on type 'T'.
+ inKeywordTypeguard.ts(186,21): error TS2322: Type 'T' is not assignable to type 'object'.
++inKeywordTypeguard.ts(187,11): error TS2339: Property 'a' does not exist on type 'T'.
++inKeywordTypeguard.ts(190,11): error TS2339: Property 'a' does not exist on type 'T & object'.
++inKeywordTypeguard.ts(193,11): error TS2339: Property 'a' does not exist on type 'T & object'.
++inKeywordTypeguard.ts(194,11): error TS2339: Property 'b' does not exist on type 'T & object'.
++inKeywordTypeguard.ts(195,11): error TS2339: Property 'c' does not exist on type 'T & object'.
++inKeywordTypeguard.ts(205,11): error TS2339: Property 'b' does not exist on type '{ a: string; }'.
++inKeywordTypeguard.ts(206,11): error TS2339: Property 'c' does not exist on type '{ a: string; }'.
++inKeywordTypeguard.ts(251,13): error TS2304: Cannot find name 'Symbol'.
++inKeywordTypeguard.ts(255,11): error TS2339: Property 'a' does not exist on type 'object'.
++inKeywordTypeguard.ts(265,11): error TS2339: Property 'a' does not exist on type 'object'.
++inKeywordTypeguard.ts(327,39): error TS2304: Cannot find name 'Window'.
++inKeywordTypeguard.ts(342,23): error TS2304: Cannot find name 'window'.
++inKeywordTypeguard.ts(342,55): error TS2304: Cannot find name 'window'.
++inKeywordTypeguard.ts(358,34): error TS2304: Cannot find name 'Record'.
++inKeywordTypeguard.ts(359,9): error TS2304: Cannot find name 'Array'.
++inKeywordTypeguard.ts(367,34): error TS2304: Cannot find name 'Record'.
++inKeywordTypeguard.ts(368,9): error TS2304: Cannot find name 'Array'.
++inKeywordTypeguard.ts(376,34): error TS2304: Cannot find name 'Record'.
+ 
+ 
+-==== inKeywordTypeguard.ts (21 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'Record'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== inKeywordTypeguard.ts (54 errors) ====
+     class A { a: string; }
+     class B { b: string; }
+     
+@@= skipped -70, +112 lines =@@
+         if ("c" in x) {
+             x.a();
+               ~
+-!!! error TS2339: Property 'a' does not exist on type '(AWithMethod | BWithMethod) & Record<"c", unknown>'.
+-!!! error TS2339:   Property 'a' does not exist on type 'BWithMethod & Record<"c", unknown>'.
++!!! error TS2339: Property 'a' does not exist on type 'AWithMethod | BWithMethod'.
++!!! error TS2339:   Property 'a' does not exist on type 'BWithMethod'.
+             x.b();
+               ~
+-!!! error TS2339: Property 'b' does not exist on type '(AWithMethod | BWithMethod) & Record<"c", unknown>'.
+-!!! error TS2339:   Property 'b' does not exist on type 'AWithMethod & Record<"c", unknown>'.
++!!! error TS2339: Property 'b' does not exist on type 'AWithMethod | BWithMethod'.
++!!! error TS2339:   Property 'b' does not exist on type 'AWithMethod'.
+         } else {
+             x.a();
+               ~
+@@= skipped -85, +85 lines =@@
+     
+     // Repro from #38608
+     declare const error: Error;
++                         ~~~~~
++!!! error TS2304: Cannot find name 'Error'.
+     if ('extra' in error) {
+         error // Still Error
+     } else {
+@@= skipped -39, +41 lines =@@
+     
+     function negativeIntersectionTest() {
+         if ("ontouchstart" in window) {
++                              ~~~~~~
++!!! error TS2304: Cannot find name 'window'.
+             window.ontouchstart
++            ~~~~~~
++!!! error TS2304: Cannot find name 'window'.
+         } else {
+             window.ontouchstart
++            ~~~~~~
++!!! error TS2304: Cannot find name 'window'.
+         }
+     }
+     
+@@= skipped -11, +17 lines =@@
+                    ~
+ !!! error TS2322: Type 'unknown' is not assignable to type 'object'.
+             x.a;
++              ~
++!!! error TS2339: Property 'a' does not exist on type 'unknown'.
+         }
+         if (x && "a" in x) {
+                         ~
+ !!! error TS2322: Type 'unknown' is not assignable to type 'object'.
+             x.a;
++              ~
++!!! error TS2339: Property 'a' does not exist on type 'unknown'.
+         }
+         if (x && typeof x === "object" && "a" in x) {
+             x.a;
++              ~
++!!! error TS2339: Property 'a' does not exist on type 'object'.
+         }
+         if (x && typeof x === "object" && "a" in x && "b" in x && "c" in x) {
+             x.a;
++              ~
++!!! error TS2339: Property 'a' does not exist on type 'object'.
+             x.b;
++              ~
++!!! error TS2339: Property 'b' does not exist on type 'object'.
+             x.c;
++              ~
++!!! error TS2339: Property 'c' does not exist on type 'object'.
+         }
+     }
+     
+     function f2(x: object) {
+         if ("a" in x) {
+             x.a;
++              ~
++!!! error TS2339: Property 'a' does not exist on type 'object'.
+         }
+         if ("a" in x && "b" in x && "c" in x) {
+             x.a;
++              ~
++!!! error TS2339: Property 'a' does not exist on type 'object'.
+             x.b;
++              ~
++!!! error TS2339: Property 'b' does not exist on type 'object'.
+             x.c;
++              ~
++!!! error TS2339: Property 'c' does not exist on type 'object'.
+         }
+     }
+     
+@@= skipped -33, +53 lines =@@
+ !!! error TS2322: Type 'T' is not assignable to type 'object'.
+ !!! related TS2208 inKeywordTypeguard.ts:182:13: This type parameter might need an `extends object` constraint.
+             x.a;
++              ~
++!!! error TS2339: Property 'a' does not exist on type 'T'.
+         }
+         if (x && "a" in x) {
+                         ~
+ !!! error TS2322: Type 'T' is not assignable to type 'object'.
+ !!! related TS2208 inKeywordTypeguard.ts:182:13: This type parameter might need an `extends object` constraint.
+             x.a;
++              ~
++!!! error TS2339: Property 'a' does not exist on type 'T'.
+         }
+         if (x && typeof x === "object" && "a" in x) {
+             x.a;
++              ~
++!!! error TS2339: Property 'a' does not exist on type 'T & object'.
+         }
+         if (x && typeof x === "object" && "a" in x && "b" in x && "c" in x) {
+             x.a;
++              ~
++!!! error TS2339: Property 'a' does not exist on type 'T & object'.
+             x.b;
++              ~
++!!! error TS2339: Property 'b' does not exist on type 'T & object'.
+             x.c;
++              ~
++!!! error TS2339: Property 'c' does not exist on type 'T & object'.
+         }
+     }
+     
+@@= skipped -24, +36 lines =@@
+         if ("a" in x && "b" in x && "c" in x) {
+             x.a;
+             x.b;
++              ~
++!!! error TS2339: Property 'b' does not exist on type '{ a: string; }'.
+             x.c;
++              ~
++!!! error TS2339: Property 'c' does not exist on type '{ a: string; }'.
+         }
+     }
+     
+@@= skipped -46, +50 lines =@@
+     }
+     
+     const sym = Symbol();
++                ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
+     
+     function f8(x: object) {
+         if ("a" in x && 1 in x && sym in x) {
+             x.a;
++              ~
++!!! error TS2339: Property 'a' does not exist on type 'object'.
+             x["a"];
+             x[1];
+             x["1"];
+@@= skipped -14, +18 lines =@@
+     function f9(x: object) {
+         if ("a" in x && "1" in x && sym in x) {
+             x.a;
++              ~
++!!! error TS2339: Property 'a' does not exist on type 'object'.
+             x["a"];
+             x[1];
+             x["1"];
+@@= skipped -62, +64 lines =@@
+     }
+     
+     function f16(x: typeof globalThis, y: Window & typeof globalThis) {
++                                          ~~~~~~
++!!! error TS2304: Cannot find name 'Window'.
+         x = y;
+     }
+     
+@@= skipped -15, +17 lines =@@
+     
+     const checkIsTouchDevice = () =>
+         "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
++                          ~~~~~~
++!!! error TS2304: Cannot find name 'window'.
++                                                          ~~~~~~
++!!! error TS2304: Cannot find name 'window'.
+     
+     // Repro from #51501
+     
+@@= skipped -16, +20 lines =@@
+     // Repro from #53773
+     
+     function test1<T extends any[] | Record<string, any>>(obj: T) {
++                                     ~~~~~~
++!!! error TS2304: Cannot find name 'Record'.
+         if (Array.isArray(obj) || 'length' in obj) {
++            ~~~~~
++!!! error TS2304: Cannot find name 'Array'.
+           obj;  // T
+         }
+         else {
+@@= skipped -9, +13 lines =@@
+     }
+     
+     function test2<T extends any[] | Record<string, any>>(obj: T) {
++                                     ~~~~~~
++!!! error TS2304: Cannot find name 'Record'.
+         if (Array.isArray(obj)) {
++            ~~~~~
++!!! error TS2304: Cannot find name 'Array'.
+           obj;  // T & any[]
+         }
+         else {
+@@= skipped -9, +13 lines =@@
+     }
+     
+     function test3<T extends any[] | Record<string, any>>(obj: T) {
++                                     ~~~~~~
++!!! error TS2304: Cannot find name 'Record'.
+         if ('length' in obj) {
+           obj;  // T
+         }

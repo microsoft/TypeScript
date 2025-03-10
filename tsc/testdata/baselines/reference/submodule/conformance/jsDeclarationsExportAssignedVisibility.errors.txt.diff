@@ -1,0 +1,32 @@
+--- old.jsDeclarationsExportAssignedVisibility.errors.txt
++++ new.jsDeclarationsExportAssignedVisibility.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++index.js(1,13): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(5,14): error TS2339: Property 'usage' does not exist on type 'Container'.
++index.js(9,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
++==== index.js (3 errors) ====
++    const Obj = require("./obj");
++                ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++    class Container {
++        constructor() {
++            this.usage = new Obj();
++                 ~~~~~
++!!! error TS2339: Property 'usage' does not exist on type 'Container'.
++        }
++    }
++    
++    module.exports = Container;
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++==== obj.js (0 errors) ====
++    module.exports = class Obj {
++        constructor() {
++            this.x = 12;
++        }
++    }

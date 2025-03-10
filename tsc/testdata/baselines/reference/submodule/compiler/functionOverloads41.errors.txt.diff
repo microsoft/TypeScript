@@ -1,0 +1,24 @@
+--- old.functionOverloads41.errors.txt
++++ new.functionOverloads41.errors.txt
+@@= skipped -0, +0 lines =@@
+ functionOverloads41.ts(4,14): error TS2769: No overload matches this call.
+-  Overload 1 of 2, '(bar: { a: number; }[]): string', gave the following error.
+-    Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
+-  Overload 2 of 2, '(bar: { a: boolean; }[]): number', gave the following error.
++  The last overload gave the following error.
+     Property 'a' is missing in type '{}' but required in type '{ a: boolean; }'.
+ 
+ 
+@@= skipped -11, +9 lines =@@
+     var x = foo([{}]);
+                  ~~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 2, '(bar: { a: number; }[]): string', gave the following error.
+-!!! error TS2769:     Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
+-!!! error TS2769:   Overload 2 of 2, '(bar: { a: boolean; }[]): number', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Property 'a' is missing in type '{}' but required in type '{ a: boolean; }'.
+-!!! related TS2728 functionOverloads41.ts:1:19: 'a' is declared here.
+ !!! related TS2728 functionOverloads41.ts:2:19: 'a' is declared here.
++!!! related TS2771 functionOverloads41.ts:2:10: The last overload is declared here.
+     

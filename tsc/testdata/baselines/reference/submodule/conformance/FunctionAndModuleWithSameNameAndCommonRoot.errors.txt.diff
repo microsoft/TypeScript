@@ -1,0 +1,29 @@
+--- old.FunctionAndModuleWithSameNameAndCommonRoot.errors.txt
++++ new.FunctionAndModuleWithSameNameAndCommonRoot.errors.txt
+@@= skipped -0, +0 lines =@@
+ module.ts(2,19): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+-simple.ts(13,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof Point'.
+-test.ts(2,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof Point'.
++simple.ts(13,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type '{ (): { x: number; y: number; }; Origin: { x: number; y: number; }; }'.
++test.ts(2,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type '{ (): { x: number; y: number; }; Origin: { x: number; y: number; }; }'.
+ 
+ 
+ ==== function.ts (0 errors) ====
+@@= skipped -22, +22 lines =@@
+     var fn: () => { x: number; y: number };
+     var fn = A.Point;
+         ~~
+-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof Point'.
++!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type '{ (): { x: number; y: number; }; Origin: { x: number; y: number; }; }'.
+ !!! related TS6203 test.ts:1:5: 'fn' was also declared here.
+     
+     var cl: { x: number; y: number; }
+@@= skipped -23, +23 lines =@@
+     var fn: () => { x: number; y: number };
+     var fn = B.Point;  // not expected to be an error. bug 840000: [corelang] Function of fundule not assignalbe as expected
+         ~~
+-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof Point'.
++!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type '{ (): { x: number; y: number; }; Origin: { x: number; y: number; }; }'.
+ !!! related TS6203 test.ts:1:5: 'fn' was also declared here.
+     
+     var cl: { x: number; y: number; }

@@ -1,0 +1,38 @@
+--- old.sideEffectImports4(nouncheckedsideeffectimports=true).errors.txt
++++ new.sideEffectImports4(nouncheckedsideeffectimports=true).errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++index.ts(1,8): error TS2307: Cannot find module 'server-only' or its corresponding type declarations.
++
++
++==== index.ts (1 errors) ====
++    import "server-only";
++           ~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'server-only' or its corresponding type declarations.
++    
++==== node_modules/server-only/package.json (0 errors) ====
++    {
++      "name": "server-only",
++      "version": "0.0.1",
++      "main": "index.js",
++      "exports": {
++        ".": {
++          "react-server": "./empty.js",
++          "default": "./index.js"
++        }
++      }
++    }
++    
++==== node_modules/server-only/index.js (0 errors) ====
++    throw new Error();
++    
++==== node_modules/server-only/empty.js (0 errors) ====
++    // Empty
++    
++==== package.json (0 errors) ====
++    {
++        "name": "root",
++        "type": "module"
++    }
++    

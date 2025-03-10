@@ -1,0 +1,28 @@
+m2.ts(1,20): error TS2307: Cannot find module 'm1' or its corresponding type declarations.
+
+
+==== m1.ts (0 errors) ====
+    export default class Decl {
+    }
+    
+    interface Decl {
+        p1: number;
+        p2: number;
+    }
+    
+    namespace Decl {
+        interface I {
+        }
+    }
+    
+==== m2.ts (1 errors) ====
+    import Entity from "m1"
+                       ~~~~
+!!! error TS2307: Cannot find module 'm1' or its corresponding type declarations.
+    
+    Entity();
+    
+    var x: Entity;
+    var y: Entity.I;
+    var z = new Entity();
+    var sum = z.p1 + z.p2

@@ -1,0 +1,25 @@
+--- old.classCannotExtendVar.errors.txt
++++ new.classCannotExtendVar.errors.txt
+@@= skipped -0, +0 lines =@@
+ classCannotExtendVar.ts(1,5): error TS2300: Duplicate identifier 'Markup'.
++classCannotExtendVar.ts(1,5): error TS2300: Duplicate identifier 'Markup'.
+ classCannotExtendVar.ts(3,7): error TS2300: Duplicate identifier 'Markup'.
++classCannotExtendVar.ts(3,7): error TS2300: Duplicate identifier 'Markup'.
+ 
+ 
+-==== classCannotExtendVar.ts (2 errors) ====
++==== classCannotExtendVar.ts (4 errors) ====
+     var Markup;
+         ~~~~~~
+ !!! error TS2300: Duplicate identifier 'Markup'.
++        ~~~~~~
++!!! error TS2300: Duplicate identifier 'Markup'.
+     
+     class Markup {
+           ~~~~~~
+ !!! error TS2300: Duplicate identifier 'Markup'.
++          ~~~~~~
++!!! error TS2300: Duplicate identifier 'Markup'.
+         constructor() {
+         }
+     }

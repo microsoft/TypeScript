@@ -1,0 +1,17 @@
+awaitUsingDeclarations.7.ts(2,5): error TS2853: 'await using' statements are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
+awaitUsingDeclarations.7.ts(3,17): error TS1492: 'await using' declarations may not have binding patterns.
+awaitUsingDeclarations.7.ts(3,18): error TS2339: Property 'b' does not exist on type 'null'.
+
+
+==== awaitUsingDeclarations.7.ts (3 errors) ====
+    {
+        await using a = null,
+        ~~~~~
+!!! error TS2853: 'await using' statements are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
+                    {b} = null,
+                    ~~~
+!!! error TS1492: 'await using' declarations may not have binding patterns.
+                     ~
+!!! error TS2339: Property 'b' does not exist on type 'null'.
+                    c = null;
+    }

@@ -1,0 +1,36 @@
+--- old.ClassAndModuleWithSameNameAndCommonRoot.errors.txt
++++ new.ClassAndModuleWithSameNameAndCommonRoot.errors.txt
+@@= skipped -0, +0 lines =@@
+-module.ts(2,19): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
++module.ts(3,33): error TS2351: This expression is not constructable.
++  Type '{ Origin: any; }' has no construct signatures.
++test.ts(2,16): error TS2339: Property 'Y' does not exist on type '{}'.
++test.ts(3,12): error TS2339: Property 'Y' does not exist on type '{}'.
+ 
+ 
+ ==== class.ts (0 errors) ====
+@@= skipped -15, +18 lines =@@
+ ==== module.ts (1 errors) ====
+     module X.Y {
+         export module Point {
+-                      ~~~~~
+-!!! error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+             export var Origin = new Point(0, 0);
++                                    ~~~~~
++!!! error TS2351: This expression is not constructable.
++!!! error TS2351:   Type '{ Origin: any; }' has no construct signatures.
+         }
+     }
+     
+-==== test.ts (0 errors) ====
++==== test.ts (2 errors) ====
+     //var cl: { x: number; y: number; }
+     var cl = new X.Y.Point(1,1);
++                   ~
++!!! error TS2339: Property 'Y' does not exist on type '{}'.
+     var cl = X.Y.Point.Origin; // error not expected here same as bug 83996 ?
++               ~
++!!! error TS2339: Property 'Y' does not exist on type '{}'.
+     
+     
+ ==== simple.ts (0 errors) ====

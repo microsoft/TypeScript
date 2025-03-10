@@ -1,0 +1,13 @@
+--- old.exportDefaultInJsFile01.errors.txt
++++ new.exportDefaultInJsFile01.errors.txt
+@@= skipped -0, +-1 lines =@@
+-error TS5055: Cannot write file 'myFile01.js' because it would overwrite input file.
+-  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+-
+-
+-!!! error TS5055: Cannot write file 'myFile01.js' because it would overwrite input file.
+-!!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+-==== myFile01.js (0 errors) ====
+-    export default "hello";
+@@= skipped --1, +1 lines =@@
++<no content>

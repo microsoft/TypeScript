@@ -1,0 +1,26 @@
+--- old.invalidInstantiatedModule.errors.txt
++++ new.invalidInstantiatedModule.errors.txt
+@@= skipped -0, +0 lines =@@
+ invalidInstantiatedModule.ts(2,18): error TS2300: Duplicate identifier 'Point'.
++invalidInstantiatedModule.ts(2,18): error TS2300: Duplicate identifier 'Point'.
+ invalidInstantiatedModule.ts(3,16): error TS2300: Duplicate identifier 'Point'.
++invalidInstantiatedModule.ts(3,16): error TS2300: Duplicate identifier 'Point'.
+ invalidInstantiatedModule.ts(12,8): error TS2833: Cannot find namespace 'm'. Did you mean 'M'?
+ 
+ 
+-==== invalidInstantiatedModule.ts (3 errors) ====
++==== invalidInstantiatedModule.ts (5 errors) ====
+     module M {
+         export class Point { x: number; y: number }
+                      ~~~~~
+ !!! error TS2300: Duplicate identifier 'Point'.
++                     ~~~~~
++!!! error TS2300: Duplicate identifier 'Point'.
+         export var Point = 1;  // Error
+                    ~~~~~
+ !!! error TS2300: Duplicate identifier 'Point'.
++                   ~~~~~
++!!! error TS2300: Duplicate identifier 'Point'.
+     }
+     
+     module M2 {

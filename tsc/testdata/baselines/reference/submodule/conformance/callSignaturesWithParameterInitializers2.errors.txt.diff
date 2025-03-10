@@ -1,0 +1,38 @@
+--- old.callSignaturesWithParameterInitializers2.errors.txt
++++ new.callSignaturesWithParameterInitializers2.errors.txt
+@@= skipped -0, +0 lines =@@
+ callSignaturesWithParameterInitializers2.ts(4,14): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+ callSignaturesWithParameterInitializers2.ts(11,9): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
++callSignaturesWithParameterInitializers2.ts(20,5): error TS2300: Duplicate identifier 'foo'.
++callSignaturesWithParameterInitializers2.ts(20,5): error TS2300: Duplicate identifier 'foo'.
+ callSignaturesWithParameterInitializers2.ts(20,9): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+ callSignaturesWithParameterInitializers2.ts(20,15): error TS1005: '{' expected.
++callSignaturesWithParameterInitializers2.ts(21,5): error TS2300: Duplicate identifier 'foo'.
++callSignaturesWithParameterInitializers2.ts(21,5): error TS2300: Duplicate identifier 'foo'.
+ 
+ 
+-==== callSignaturesWithParameterInitializers2.ts (4 errors) ====
++==== callSignaturesWithParameterInitializers2.ts (8 errors) ====
+     // Optional parameters allow initializers only in implementation signatures
+     // All the below declarations are errors
+     
+@@= skipped -28, +32 lines =@@
+     
+     var b = {
+         foo(x = 1), // error
++        ~~~
++!!! error TS2300: Duplicate identifier 'foo'.
++        ~~~
++!!! error TS2300: Duplicate identifier 'foo'.
+             ~~~~~
+ !!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+                   ~
+ !!! error TS1005: '{' expected.
+         foo(x = 1) { }, // error
++        ~~~
++!!! error TS2300: Duplicate identifier 'foo'.
++        ~~~
++!!! error TS2300: Duplicate identifier 'foo'.
+     }
+     
+     b.foo();

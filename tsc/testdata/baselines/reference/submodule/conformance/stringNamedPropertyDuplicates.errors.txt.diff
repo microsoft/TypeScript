@@ -1,0 +1,57 @@
+--- old.stringNamedPropertyDuplicates.errors.txt
++++ new.stringNamedPropertyDuplicates.errors.txt
+@@= skipped -0, +0 lines =@@
++stringNamedPropertyDuplicates.ts(2,5): error TS2300: Duplicate identifier '"a b"'.
+ stringNamedPropertyDuplicates.ts(3,5): error TS2300: Duplicate identifier '"a b"'.
++stringNamedPropertyDuplicates.ts(4,12): error TS2300: Duplicate identifier '"c d"'.
+ stringNamedPropertyDuplicates.ts(5,12): error TS2300: Duplicate identifier '"c d"'.
+-stringNamedPropertyDuplicates.ts(9,5): error TS2300: Duplicate identifier 'a b'.
+-stringNamedPropertyDuplicates.ts(10,5): error TS2300: Duplicate identifier 'a b'.
+-stringNamedPropertyDuplicates.ts(14,5): error TS2300: Duplicate identifier 'a b'.
+-stringNamedPropertyDuplicates.ts(15,5): error TS2300: Duplicate identifier 'a b'.
++stringNamedPropertyDuplicates.ts(9,5): error TS2300: Duplicate identifier '"a b"'.
++stringNamedPropertyDuplicates.ts(10,5): error TS2300: Duplicate identifier '"a b"'.
++stringNamedPropertyDuplicates.ts(14,5): error TS2300: Duplicate identifier '"a b"'.
++stringNamedPropertyDuplicates.ts(15,5): error TS2300: Duplicate identifier '"a b"'.
+ stringNamedPropertyDuplicates.ts(20,5): error TS1005: ',' expected.
+ 
+ 
+-==== stringNamedPropertyDuplicates.ts (7 errors) ====
++==== stringNamedPropertyDuplicates.ts (9 errors) ====
+     class C {
+         "a b": number;
++        ~~~~~
++!!! error TS2300: Duplicate identifier '"a b"'.
+         "a b": number;
+         ~~~~~
+ !!! error TS2300: Duplicate identifier '"a b"'.
+         static "c d": number;
++               ~~~~~
++!!! error TS2300: Duplicate identifier '"c d"'.
+         static "c d": number;
+                ~~~~~
+ !!! error TS2300: Duplicate identifier '"c d"'.
+@@= skipped -21, +27 lines =@@
+     interface I {
+         "a b": number;
+         ~~~~~
+-!!! error TS2300: Duplicate identifier 'a b'.
++!!! error TS2300: Duplicate identifier '"a b"'.
+         "a b": number;
+         ~~~~~
+-!!! error TS2300: Duplicate identifier 'a b'.
++!!! error TS2300: Duplicate identifier '"a b"'.
+     }
+     
+     var a: {
+         "a b": number;
+         ~~~~~
+-!!! error TS2300: Duplicate identifier 'a b'.
++!!! error TS2300: Duplicate identifier '"a b"'.
+         "a b": number;
+         ~~~~~
+-!!! error TS2300: Duplicate identifier 'a b'.
++!!! error TS2300: Duplicate identifier '"a b"'.
+     }
+     
+     var b = {

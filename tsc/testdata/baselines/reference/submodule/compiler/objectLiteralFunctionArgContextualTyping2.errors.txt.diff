@@ -1,0 +1,20 @@
+--- old.objectLiteralFunctionArgContextualTyping2.errors.txt
++++ new.objectLiteralFunctionArgContextualTyping2.errors.txt
+@@= skipped -0, +0 lines =@@
+ objectLiteralFunctionArgContextualTyping2.ts(8,6): error TS2353: Object literal may only specify known properties, and 'hello' does not exist in type 'I2'.
+-objectLiteralFunctionArgContextualTyping2.ts(9,4): error TS2345: Argument of type '{ value: string; }' is not assignable to parameter of type 'I2'.
+-  Property 'doStuff' is missing in type '{ value: string; }' but required in type 'I2'.
++objectLiteralFunctionArgContextualTyping2.ts(9,4): error TS2741: Property 'doStuff' is missing in type '{ value: string; }' but required in type 'I2'.
+ objectLiteralFunctionArgContextualTyping2.ts(10,17): error TS2353: Object literal may only specify known properties, and 'what' does not exist in type 'I2'.
+ objectLiteralFunctionArgContextualTyping2.ts(11,6): error TS2322: Type '(s: any) => any' is not assignable to type '() => string'.
+   Target signature provides too few arguments. Expected 1 or more, but got 0.
+@@= skipped -22, +21 lines =@@
+ !!! error TS2353: Object literal may only specify known properties, and 'hello' does not exist in type 'I2'.
+     f2({ value: '' })
+        ~~~~~~~~~~~~~
+-!!! error TS2345: Argument of type '{ value: string; }' is not assignable to parameter of type 'I2'.
+-!!! error TS2345:   Property 'doStuff' is missing in type '{ value: string; }' but required in type 'I2'.
++!!! error TS2741: Property 'doStuff' is missing in type '{ value: string; }' but required in type 'I2'.
+ !!! related TS2728 objectLiteralFunctionArgContextualTyping2.ts:3:5: 'doStuff' is declared here.
+     f2({ value: '', what: 1 }) 
+                     ~~~~

@@ -1,0 +1,29 @@
+isolatedDeclarationLazySymbols.ts(16,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+
+
+==== isolatedDeclarationLazySymbols.ts (1 errors) ====
+    export function foo() {
+    
+    }
+    
+    const o = {
+        ["prop.inner"]: "a",
+        prop: {
+            inner: "b",
+        }
+    } as const
+    
+    foo[o["prop.inner"]] ="A";
+    foo[o.prop.inner] = "B";
+    
+    export class Foo {
+        [o["prop.inner"]] ="A"
+        ~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        [o.prop.inner] = "B"
+    }
+    
+    export let oo = {
+        [o['prop.inner']]:"A",
+        [o.prop.inner]: "B",
+    }

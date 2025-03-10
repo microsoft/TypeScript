@@ -1,0 +1,26 @@
+assignmentToInstantiationExpression.ts(2,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentToInstantiationExpression.ts(6,1): error TS2454: Variable 'getValue' is used before being assigned.
+assignmentToInstantiationExpression.ts(6,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentToInstantiationExpression.ts(10,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+
+
+==== assignmentToInstantiationExpression.ts (4 errors) ====
+    let obj: { fn?: <T>() => T } = {};
+    obj.fn<number> = () => 1234;
+    ~~~~~~~~~~~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    
+    
+    let getValue: <T>() => T;
+    getValue<number> = () => 1234;
+    ~~~~~~~~
+!!! error TS2454: Variable 'getValue' is used before being assigned.
+    ~~~~~~~~~~~~~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    
+    
+    let getValue2!: <T>() => T;
+    getValue2<number> = () => 1234;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    

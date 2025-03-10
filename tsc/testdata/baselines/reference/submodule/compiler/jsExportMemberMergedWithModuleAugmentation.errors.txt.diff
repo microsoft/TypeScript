@@ -1,0 +1,42 @@
+--- old.jsExportMemberMergedWithModuleAugmentation.errors.txt
++++ new.jsExportMemberMergedWithModuleAugmentation.errors.txt
+@@= skipped -0, +0 lines =@@
+-/index.ts(11,7): error TS2741: Property 'x' is missing in type '{ b: string; }' but required in type 'Abcde'.
++/index.ts(1,23): error TS2306: File '/test.js' is not a module.
++/index.ts(3,16): error TS2306: File '/test.js' is not a module.
++/test.js(6,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ 
+ 
+-==== /test.js (0 errors) ====
++==== /test.js (1 errors) ====
+     class Abcde {
+       /** @type {string} */
+       x;
+     }
+     
+     module.exports = {
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+       Abcde
+     };
+     
+-==== /index.ts (1 errors) ====
++==== /index.ts (2 errors) ====
+     import { Abcde } from "./test";
++                          ~~~~~~~~
++!!! error TS2306: File '/test.js' is not a module.
+     
+     declare module "./test" {
++                   ~~~~~~~~
++!!! error TS2306: File '/test.js' is not a module.
+       interface Abcde { b: string }
+     }
+     
+@@= skipped -22, +30 lines =@@
+     // Bug: the type meaning from /test.js does not
+     // propagate through the object literal export.
+     const x: Abcde = { b: "" };
+-          ~
+-!!! error TS2741: Property 'x' is missing in type '{ b: string; }' but required in type 'Abcde'.
+-!!! related TS2728 /test.js:3:3: 'x' is declared here.
+     

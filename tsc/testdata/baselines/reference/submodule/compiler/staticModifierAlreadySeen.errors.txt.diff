@@ -1,0 +1,20 @@
+--- old.staticModifierAlreadySeen.errors.txt
++++ new.staticModifierAlreadySeen.errors.txt
+@@= skipped -0, +0 lines =@@
+ staticModifierAlreadySeen.ts(2,12): error TS1434: Unexpected keyword or identifier.
++staticModifierAlreadySeen.ts(2,12): error TS2300: Duplicate identifier 'static'.
+ staticModifierAlreadySeen.ts(3,19): error TS1434: Unexpected keyword or identifier.
+ staticModifierAlreadySeen.ts(3,19): error TS2300: Duplicate identifier 'static'.
+ 
+ 
+-==== staticModifierAlreadySeen.ts (3 errors) ====
++==== staticModifierAlreadySeen.ts (4 errors) ====
+     class C {
+         static static foo = 1;
+                ~~~~~~
+ !!! error TS1434: Unexpected keyword or identifier.
++               ~~~~~~
++!!! error TS2300: Duplicate identifier 'static'.
+         public static static bar() { }
+                       ~~~~~~
+ !!! error TS1434: Unexpected keyword or identifier.

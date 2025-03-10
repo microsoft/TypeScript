@@ -1,0 +1,20 @@
+--- old.circularMultipleAssignmentDeclaration.errors.txt
++++ new.circularMultipleAssignmentDeclaration.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++circularMultipleAssignmentDeclaration.js(1,1): error TS2304: Cannot find name 'ns'.
++circularMultipleAssignmentDeclaration.js(1,11): error TS2304: Cannot find name 'ns'.
++circularMultipleAssignmentDeclaration.js(2,1): error TS2304: Cannot find name 'ns'.
++
++
++==== circularMultipleAssignmentDeclaration.js (3 errors) ====
++    ns.next = ns.next || { shared: {} };
++    ~~
++!!! error TS2304: Cannot find name 'ns'.
++              ~~
++!!! error TS2304: Cannot find name 'ns'.
++    ns.next.shared.mymethod = {};
++    ~~
++!!! error TS2304: Cannot find name 'ns'.
++    

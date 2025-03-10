@@ -1,0 +1,16 @@
+parserErrorRecovery_ArgumentList7.ts(1,1): error TS2304: Cannot find name 'Foo'.
+parserErrorRecovery_ArgumentList7.ts(1,5): error TS2304: Cannot find name 'a'.
+parserErrorRecovery_ArgumentList7.ts(1,7): error TS1135: Argument expression expected.
+parserErrorRecovery_ArgumentList7.ts(1,8): error TS1005: ')' expected.
+
+
+==== parserErrorRecovery_ArgumentList7.ts (4 errors) ====
+    Foo(a,,
+    ~~~
+!!! error TS2304: Cannot find name 'Foo'.
+        ~
+!!! error TS2304: Cannot find name 'a'.
+          ~
+!!! error TS1135: Argument expression expected.
+           
+!!! error TS1005: ')' expected.

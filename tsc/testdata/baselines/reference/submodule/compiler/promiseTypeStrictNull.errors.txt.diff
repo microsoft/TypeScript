@@ -1,0 +1,398 @@
+--- old.promiseTypeStrictNull.errors.txt
++++ new.promiseTypeStrictNull.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'Promise'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++promiseTypeStrictNull.ts(1,16): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(39,15): error TS2304: Cannot find name 'Error'.
++promiseTypeStrictNull.ts(49,16): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(49,31): error TS2304: Cannot find name 'Error'.
++promiseTypeStrictNull.ts(69,15): error TS2304: Cannot find name 'Error'.
++promiseTypeStrictNull.ts(79,16): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(79,31): error TS2304: Cannot find name 'Error'.
++promiseTypeStrictNull.ts(96,27): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(97,27): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(107,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(108,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(118,37): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(119,37): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(129,32): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(130,32): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(140,37): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(141,37): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(151,35): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(152,35): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(162,43): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(163,43): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(173,38): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(174,38): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(184,36): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(185,36): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(195,43): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(196,43): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(198,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(199,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(200,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(201,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(202,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(203,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(204,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(205,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(206,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(206,54): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(207,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(207,54): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(209,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(210,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(211,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(212,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(213,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(214,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(215,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(216,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(217,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(217,53): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(218,26): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++promiseTypeStrictNull.ts(218,53): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'Promise'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== promiseTypeStrictNull.ts (51 errors) ====
++    declare var p: Promise<boolean>;
++                   ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    declare var x: any;
++    
++    async function A() {
++        const a = await p;
++        return a;
++    }
++    
++    async function B() {
++        const a = await p;
++        return 1;
++    }
++    
++    async function C() {
++        try {
++            const a = await p;
++            return 1;
++        }
++        catch (e) {
++            return 'error';
++        }
++    }
++    
++    async function D() {
++        try {
++            const a = await p;
++            return 1;
++        }
++        catch (e) {
++        }
++    }
++    
++    async function E() {
++        try {
++            const a = await p;
++            return 1;
++        }
++        catch (e) {
++            throw Error();
++                  ~~~~~
++!!! error TS2304: Cannot find name 'Error'.
++        }
++    }
++    
++    async function F() {
++        try {
++            const a = await p;
++            return 1;
++        }
++        catch (e) {
++            return Promise.reject(Error());
++                   ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++                                  ~~~~~
++!!! error TS2304: Cannot find name 'Error'.
++        }
++    }
++    
++    async function G() {
++        try {
++            const a = await p;
++            return a;
++        }
++        catch (e) {
++            return;
++        }
++    }
++    
++    async function H() {
++        try {
++            const a = await p;
++            return a;
++        }
++        catch (e) {
++            throw Error();
++                  ~~~~~
++!!! error TS2304: Cannot find name 'Error'.
++        }
++    }
++    
++    async function I() {
++        try {
++            const a = await p;
++            return a;
++        }
++        catch (e) {
++            return Promise.reject(Error());
++                   ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++                                  ~~~~~
++!!! error TS2304: Cannot find name 'Error'.
++        }
++    }
++    
++    // addresses github issue #4903:
++    
++    const p00 = p.catch();
++    const p01 = p.then();
++    
++    const p10 = p.catch(undefined);
++    const p11 = p.catch(null);
++    const p12 = p.catch(() => 1);
++    const p13 = p.catch(() => x);
++    const p14 = p.catch(() => undefined);
++    const p15 = p.catch(() => null);
++    const p16 = p.catch(() => {});
++    const p17 = p.catch(() => {throw 1});
++    const p18 = p.catch(() => Promise.reject(1));
++                              ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const p19 = p.catch(() => Promise.resolve(1));
++                              ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    
++    const p20 = p.then(undefined);
++    const p21 = p.then(null);
++    const p22 = p.then(() => 1);
++    const p23 = p.then(() => x);
++    const p24 = p.then(() => undefined);
++    const p25 = p.then(() => null);
++    const p26 = p.then(() => {});
++    const p27 = p.then(() => {throw 1});
++    const p28 = p.then(() => Promise.resolve(1));
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const p29 = p.then(() => Promise.reject(1));
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    
++    const p30 = p.then(undefined, undefined);
++    const p31 = p.then(undefined, null);
++    const p32 = p.then(undefined, () => 1);
++    const p33 = p.then(undefined, () => x);
++    const p34 = p.then(undefined, () => undefined);
++    const p35 = p.then(undefined, () => null);
++    const p36 = p.then(undefined, () => {});
++    const p37 = p.then(undefined, () => {throw 1});
++    const p38 = p.then(undefined, () => Promise.resolve(1));
++                                        ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const p39 = p.then(undefined, () => Promise.reject(1));
++                                        ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    
++    const p40 = p.then(null, undefined);
++    const p41 = p.then(null, null);
++    const p42 = p.then(null, () => 1);
++    const p43 = p.then(null, () => x);
++    const p44 = p.then(null, () => undefined);
++    const p45 = p.then(null, () => null);
++    const p46 = p.then(null, () => {});
++    const p47 = p.then(null, () => {throw 1});
++    const p48 = p.then(null, () => Promise.resolve(1));
++                                   ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const p49 = p.then(null, () => Promise.reject(1));
++                                   ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    
++    const p50 = p.then(() => "1", undefined);
++    const p51 = p.then(() => "1", null);
++    const p52 = p.then(() => "1", () => 1);
++    const p53 = p.then(() => "1", () => x);
++    const p54 = p.then(() => "1", () => undefined);
++    const p55 = p.then(() => "1", () => null);
++    const p56 = p.then(() => "1", () => {});
++    const p57 = p.then(() => "1", () => {throw 1});
++    const p58 = p.then(() => "1", () => Promise.resolve(1));
++                                        ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const p59 = p.then(() => "1", () => Promise.reject(1));
++                                        ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    
++    const p60 = p.then(() => x, undefined);
++    const p61 = p.then(() => x, null);
++    const p62 = p.then(() => x, () => 1);
++    const p63 = p.then(() => x, () => x);
++    const p64 = p.then(() => x, () => undefined);
++    const p65 = p.then(() => x, () => null);
++    const p66 = p.then(() => x, () => {});
++    const p67 = p.then(() => x, () => {throw 1});
++    const p68 = p.then(() => x, () => Promise.resolve(1));
++                                      ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const p69 = p.then(() => x, () => Promise.reject(1));
++                                      ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    
++    const p70 = p.then(() => undefined, undefined);
++    const p71 = p.then(() => undefined, null);
++    const p72 = p.then(() => undefined, () => 1);
++    const p73 = p.then(() => undefined, () => x);
++    const p74 = p.then(() => undefined, () => undefined);
++    const p75 = p.then(() => undefined, () => null);
++    const p76 = p.then(() => undefined, () => {});
++    const p77 = p.then(() => undefined, () => {throw 1});
++    const p78 = p.then(() => undefined, () => Promise.resolve(1));
++                                              ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const p79 = p.then(() => undefined, () => Promise.reject(1));
++                                              ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    
++    const p80 = p.then(() => null, undefined);
++    const p81 = p.then(() => null, null);
++    const p82 = p.then(() => null, () => 1);
++    const p83 = p.then(() => null, () => x);
++    const p84 = p.then(() => null, () => undefined);
++    const p85 = p.then(() => null, () => null);
++    const p86 = p.then(() => null, () => {});
++    const p87 = p.then(() => null, () => {throw 1});
++    const p88 = p.then(() => null, () => Promise.resolve(1));
++                                         ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const p89 = p.then(() => null, () => Promise.reject(1));
++                                         ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    
++    const p90 = p.then(() => {}, undefined);
++    const p91 = p.then(() => {}, null);
++    const p92 = p.then(() => {}, () => 1);
++    const p93 = p.then(() => {}, () => x);
++    const p94 = p.then(() => {}, () => undefined);
++    const p95 = p.then(() => {}, () => null);
++    const p96 = p.then(() => {}, () => {});
++    const p97 = p.then(() => {}, () => {throw 1});
++    const p98 = p.then(() => {}, () => Promise.resolve(1));
++                                       ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const p99 = p.then(() => {}, () => Promise.reject(1));
++                                       ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    
++    const pa0 = p.then(() => {throw 1}, undefined);
++    const pa1 = p.then(() => {throw 1}, null);
++    const pa2 = p.then(() => {throw 1}, () => 1);
++    const pa3 = p.then(() => {throw 1}, () => x);
++    const pa4 = p.then(() => {throw 1}, () => undefined);
++    const pa5 = p.then(() => {throw 1}, () => null);
++    const pa6 = p.then(() => {throw 1}, () => {});
++    const pa7 = p.then(() => {throw 1}, () => {throw 1});
++    const pa8 = p.then(() => {throw 1}, () => Promise.resolve(1));
++                                              ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pa9 = p.then(() => {throw 1}, () => Promise.reject(1));
++                                              ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    
++    const pb0 = p.then(() => Promise.resolve("1"), undefined);
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pb1 = p.then(() => Promise.resolve("1"), null);
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pb2 = p.then(() => Promise.resolve("1"), () => 1);
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pb3 = p.then(() => Promise.resolve("1"), () => x);
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pb4 = p.then(() => Promise.resolve("1"), () => undefined);
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pb5 = p.then(() => Promise.resolve("1"), () => null);
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pb6 = p.then(() => Promise.resolve("1"), () => {});
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pb7 = p.then(() => Promise.resolve("1"), () => {throw 1});
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pb8 = p.then(() => Promise.resolve("1"), () => Promise.resolve(1));
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++                                                         ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pb9 = p.then(() => Promise.resolve("1"), () => Promise.reject(1));
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++                                                         ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    
++    const pc0 = p.then(() => Promise.reject("1"), undefined);
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pc1 = p.then(() => Promise.reject("1"), null);
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pc2 = p.then(() => Promise.reject("1"), () => 1);
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pc3 = p.then(() => Promise.reject("1"), () => x);
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pc4 = p.then(() => Promise.reject("1"), () => undefined);
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pc5 = p.then(() => Promise.reject("1"), () => null);
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pc6 = p.then(() => Promise.reject("1"), () => {});
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pc7 = p.then(() => Promise.reject("1"), () => {throw 1});
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pc8 = p.then(() => Promise.reject("1"), () => Promise.resolve(1));
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++                                                        ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    const pc9 = p.then(() => Promise.reject("1"), () => Promise.reject(1));
++                             ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++                                                        ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    

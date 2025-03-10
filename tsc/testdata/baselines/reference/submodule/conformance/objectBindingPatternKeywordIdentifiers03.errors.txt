@@ -1,0 +1,7 @@
+objectBindingPatternKeywordIdentifiers03.ts(1,15): error TS1005: ':' expected.
+
+
+==== objectBindingPatternKeywordIdentifiers03.ts (1 errors) ====
+    var { "while" } = { while: 1 }
+                  ~
+!!! error TS1005: ':' expected.

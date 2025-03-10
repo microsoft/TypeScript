@@ -1,0 +1,47 @@
+--- old.inferringClassMembersFromAssignments7.errors.txt
++++ new.inferringClassMembersFromAssignments7.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++inferringClassMembersFromAssignments7.js(4,14): error TS2339: Property 'x' does not exist on type 'C'.
++inferringClassMembersFromAssignments7.js(5,14): error TS2339: Property 'm' does not exist on type 'C'.
++inferringClassMembersFromAssignments7.js(6,30): error TS2339: Property 'x' does not exist on type 'C'.
++inferringClassMembersFromAssignments7.js(11,14): error TS2339: Property 'y' does not exist on type 'C'.
++inferringClassMembersFromAssignments7.js(15,3): error TS2339: Property 'x' does not exist on type 'C'.
++inferringClassMembersFromAssignments7.js(16,3): error TS2339: Property 'y' does not exist on type 'C'.
++inferringClassMembersFromAssignments7.js(17,3): error TS2339: Property 'm' does not exist on type 'C'.
++
++
++==== inferringClassMembersFromAssignments7.js (7 errors) ====
++    class C {
++        constructor() {
++            var self = this
++            self.x = 1
++                 ~
++!!! error TS2339: Property 'x' does not exist on type 'C'.
++            self.m = function() {
++                 ~
++!!! error TS2339: Property 'm' does not exist on type 'C'.
++                console.log(self.x)
++                                 ~
++!!! error TS2339: Property 'x' does not exist on type 'C'.
++            }
++        }
++        mreal() {
++            var self = this
++            self.y = 2
++                 ~
++!!! error TS2339: Property 'y' does not exist on type 'C'.
++        }
++    }
++    const c = new C()
++    c.x
++      ~
++!!! error TS2339: Property 'x' does not exist on type 'C'.
++    c.y
++      ~
++!!! error TS2339: Property 'y' does not exist on type 'C'.
++    c.m()
++      ~
++!!! error TS2339: Property 'm' does not exist on type 'C'.
++    

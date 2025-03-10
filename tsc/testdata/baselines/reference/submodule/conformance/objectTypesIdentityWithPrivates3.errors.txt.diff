@@ -1,0 +1,17 @@
+--- old.objectTypesIdentityWithPrivates3.errors.txt
++++ new.objectTypesIdentityWithPrivates3.errors.txt
+@@= skipped -0, +0 lines =@@
+-objectTypesIdentityWithPrivates3.ts(25,1): error TS2352: Conversion of type 'C3<T2>' to type 'C4' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+-  Property 'y' is missing in type 'C3<T2>' but required in type 'C4'.
++objectTypesIdentityWithPrivates3.ts(25,1): error TS2741: Property 'y' is missing in type 'C3<T2>' but required in type 'C4'.
+ 
+ 
+ ==== objectTypesIdentityWithPrivates3.ts (1 errors) ====
+@@= skipped -28, +27 lines =@@
+     var c3: C3<T2>;
+     <C4>c3; // Should fail (private x originates in the same declaration, but different types)
+     ~~~~~~
+-!!! error TS2352: Conversion of type 'C3<T2>' to type 'C4' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+-!!! error TS2352:   Property 'y' is missing in type 'C3<T2>' but required in type 'C4'.
++!!! error TS2741: Property 'y' is missing in type 'C3<T2>' but required in type 'C4'.
+ !!! related TS2728 objectTypesIdentityWithPrivates3.ts:21:5: 'y' is declared here.

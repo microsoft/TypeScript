@@ -1,0 +1,56 @@
+file1.ts(1,15): error TS2300: Duplicate identifier 'C1'.
+file1.ts(1,15): error TS2300: Duplicate identifier 'C1'.
+file1.ts(3,15): error TS2300: Duplicate identifier 'C1'.
+file1.ts(3,15): error TS2300: Duplicate identifier 'C1'.
+file1.ts(5,15): error TS2300: Duplicate identifier 'C2'.
+file1.ts(5,15): error TS2300: Duplicate identifier 'C2'.
+file1.ts(7,11): error TS2300: Duplicate identifier 'C2'.
+file1.ts(7,11): error TS2300: Duplicate identifier 'C2'.
+file1.ts(9,15): error TS2300: Duplicate identifier 'C2'.
+file1.ts(9,15): error TS2300: Duplicate identifier 'C2'.
+file2.ts(1,15): error TS2300: Duplicate identifier 'C3'.
+file3.ts(1,15): error TS2300: Duplicate identifier 'C3'.
+
+
+==== file1.ts (10 errors) ====
+    declare class C1 {}
+                  ~~
+!!! error TS2300: Duplicate identifier 'C1'.
+                  ~~
+!!! error TS2300: Duplicate identifier 'C1'.
+    
+    declare class C1 {}
+                  ~~
+!!! error TS2300: Duplicate identifier 'C1'.
+                  ~~
+!!! error TS2300: Duplicate identifier 'C1'.
+    
+    declare class C2 {}
+                  ~~
+!!! error TS2300: Duplicate identifier 'C2'.
+                  ~~
+!!! error TS2300: Duplicate identifier 'C2'.
+    
+    interface C2 {}
+              ~~
+!!! error TS2300: Duplicate identifier 'C2'.
+              ~~
+!!! error TS2300: Duplicate identifier 'C2'.
+    
+    declare class C2 {}
+                  ~~
+!!! error TS2300: Duplicate identifier 'C2'.
+                  ~~
+!!! error TS2300: Duplicate identifier 'C2'.
+    
+==== file2.ts (1 errors) ====
+    declare class C3 { }
+                  ~~
+!!! error TS2300: Duplicate identifier 'C3'.
+!!! related TS6203 file3.ts:1:15: 'C3' was also declared here.
+    
+==== file3.ts (1 errors) ====
+    declare class C3 { }
+                  ~~
+!!! error TS2300: Duplicate identifier 'C3'.
+!!! related TS6203 file2.ts:1:15: 'C3' was also declared here.

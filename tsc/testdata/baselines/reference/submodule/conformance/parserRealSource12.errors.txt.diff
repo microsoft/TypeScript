@@ -1,0 +1,22 @@
+--- old.parserRealSource12.errors.txt
++++ new.parserRealSource12.errors.txt
+@@= skipped -0, +0 lines =@@
+-parserRealSource12.ts(4,21): error TS6053: File 'typescript.ts' not found.
+ parserRealSource12.ts(8,19): error TS2304: Cannot find name 'AST'.
+ parserRealSource12.ts(8,32): error TS2304: Cannot find name 'AST'.
+ parserRealSource12.ts(8,38): error TS2304: Cannot find name 'AST'.
+@@= skipped -208, +207 lines =@@
+ parserRealSource12.ts(524,30): error TS2304: Cannot find name 'ASTList'.
+ 
+ 
+-==== parserRealSource12.ts (209 errors) ====
++==== parserRealSource12.ts (208 errors) ====
+     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+     // See LICENSE.txt in the project root for complete license information.
+     
+     ///<reference path='typescript.ts' />
+-                        ~~~~~~~~~~~~~
+-!!! error TS6053: File 'typescript.ts' not found.
+     
+     module TypeScript {
+         export interface IAstWalker {

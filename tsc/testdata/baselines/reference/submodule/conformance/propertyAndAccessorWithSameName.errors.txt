@@ -1,0 +1,64 @@
+propertyAndAccessorWithSameName.ts(2,5): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(2,5): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(3,9): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(3,9): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(9,5): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(9,5): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(10,9): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(10,9): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(14,13): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(14,13): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(15,9): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(15,9): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(18,9): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(18,9): error TS2300: Duplicate identifier 'x'.
+
+
+==== propertyAndAccessorWithSameName.ts (14 errors) ====
+    class C {
+        x: number;
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x() { // error
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+            return 1;
+        }
+    }
+    
+    class D {
+        x: number;
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(v) { } // error
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    class E {
+        private x: number;
+                ~
+!!! error TS2300: Duplicate identifier 'x'.
+                ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x() { // error
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+            return 1;
+        }
+        set x(v) { }
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }

@@ -1,0 +1,31 @@
+--- old.callbackTag4.errors.txt
++++ new.callbackTag4.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++a.js(10,22): error TS7006: Parameter 'a' implicitly has an 'any' type.
++a.js(10,25): error TS7006: Parameter 'b' implicitly has an 'any' type.
++a.js(11,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++
++
++==== a.js (3 errors) ====
++    /**
++     * @callback C
++     * @this {{ a: string, b: number }}
++     * @param {string} a
++     * @param {number} b
++     * @returns {boolean}
++     */
++    
++    /** @type {C} */
++    const cb = function (a, b) {
++                         ~
++!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
++                            ~
++!!! error TS7006: Parameter 'b' implicitly has an 'any' type.
++        this
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++        return true
++    }
++    

@@ -1,0 +1,29 @@
+bar.ts(1,11): error TS2339: Property 'p' does not exist on type 'C'.
+foo.js(3,13): error TS2304: Cannot find name 'cond'.
+foo.js(4,18): error TS2339: Property 'p' does not exist on type 'C'.
+foo.js(7,18): error TS2339: Property 'p' does not exist on type 'C'.
+
+
+==== foo.js (3 errors) ====
+    class C {
+        constructor() {
+            if (cond) {
+                ~~~~
+!!! error TS2304: Cannot find name 'cond'.
+                this.p = null;
+                     ~
+!!! error TS2339: Property 'p' does not exist on type 'C'.
+            }
+            else {
+                this.p = 0;
+                     ~
+!!! error TS2339: Property 'p' does not exist on type 'C'.
+            }
+        }
+    }
+    
+==== bar.ts (1 errors) ====
+    (new C()).p = "string"; // Error
+              ~
+!!! error TS2339: Property 'p' does not exist on type 'C'.
+    

@@ -1,0 +1,16 @@
+exportedAliasedEnumTag.js(1,20): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+exportedAliasedEnumTag.js(4,14): error TS2339: Property 'Type' does not exist on type '{}'.
+
+
+==== exportedAliasedEnumTag.js (2 errors) ====
+    var middlewarify = module.exports = {};
+                       ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+    /** @enum */
+    middlewarify.Type = {
+                 ~~~~
+!!! error TS2339: Property 'Type' does not exist on type '{}'.
+      BEFORE: 'before'
+    };
+    

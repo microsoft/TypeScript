@@ -1,0 +1,17 @@
+--- old.importHelpersWithImportOrExportDefaultNoTslib.3(esmoduleinterop=true,module=amd).errors.txt
++++ new.importHelpersWithImportOrExportDefaultNoTslib.3(esmoduleinterop=true,module=amd).errors.txt
+@@= skipped -0, +-1 lines =@@
+-b.ts(1,10): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+-
+-
+-==== a.ts (0 errors) ====
+-    export default class { }
+-    
+-==== b.ts (1 errors) ====
+-    import { default as b } from "./a";
+-             ~~~~~~~~~~~~
+-!!! error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+-    void b;
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

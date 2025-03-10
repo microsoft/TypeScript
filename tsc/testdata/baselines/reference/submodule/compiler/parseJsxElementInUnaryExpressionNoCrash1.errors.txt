@@ -1,0 +1,8 @@
+a.js(2,1): error TS1005: '>' expected.
+
+
+==== a.js (1 errors) ====
+    ~< <
+    
+    
+!!! error TS1005: '>' expected.

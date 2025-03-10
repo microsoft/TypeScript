@@ -1,0 +1,16 @@
+--- old.unusedTypeParameterInMethod2.errors.txt
++++ new.unusedTypeParameterInMethod2.errors.txt
+@@= skipped -0, +0 lines =@@
+-unusedTypeParameterInMethod2.ts(2,18): error TS6133: 'Y' is declared but its value is never read.
++unusedTypeParameterInMethod2.ts(2,18): error TS6196: 'Y' is declared but never used.
+ 
+ 
+ ==== unusedTypeParameterInMethod2.ts (1 errors) ====
+     class A {
+         public f1<X, Y, Z>() {
+                      ~
+-!!! error TS6133: 'Y' is declared but its value is never read.
++!!! error TS6196: 'Y' is declared but never used.
+             var a: X;
+             var b: Z;
+             a;

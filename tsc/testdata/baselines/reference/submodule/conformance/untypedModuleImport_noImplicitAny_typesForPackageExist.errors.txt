@@ -1,0 +1,58 @@
+/a.ts(2,25): error TS2307: Cannot find module 'foo/sub' or its corresponding type declarations.
+/a.ts(3,25): error TS2307: Cannot find module 'bar/sub' or its corresponding type declarations.
+/a.ts(5,30): error TS2307: Cannot find module '@scope/foo/sub' or its corresponding type declarations.
+/a.ts(6,30): error TS2307: Cannot find module '@scope/bar/sub' or its corresponding type declarations.
+
+
+==== /a.ts (4 errors) ====
+    import * as foo from "foo";
+    import * as fooSub from "foo/sub";
+                            ~~~~~~~~~
+!!! error TS2307: Cannot find module 'foo/sub' or its corresponding type declarations.
+    import * as barSub from "bar/sub";
+                            ~~~~~~~~~
+!!! error TS2307: Cannot find module 'bar/sub' or its corresponding type declarations.
+    import * as scopeFoo from "@scope/foo";
+    import * as scopeFooSub from "@scope/foo/sub";
+                                 ~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module '@scope/foo/sub' or its corresponding type declarations.
+    import * as scopeBarSub from "@scope/bar/sub";
+                                 ~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module '@scope/bar/sub' or its corresponding type declarations.
+    
+==== /node_modules/@types/foo/index.d.ts (0 errors) ====
+    export const foo: number;
+    
+==== /node_modules/@types/foo/package.json (0 errors) ====
+    { "name": "@types/foo", "version": "1.2.3" }
+    
+==== /node_modules/foo/sub.js (0 errors) ====
+    const x = 0;
+    
+==== /node_modules/foo/package.json (0 errors) ====
+    { "name": "foo", "version": "1.2.3" }
+    
+==== /node_modules/bar/sub.js (0 errors) ====
+    const x = 0;
+    
+==== /node_modules/bar/package.json (0 errors) ====
+    { "name": "bar", "version": "1.2.3" }
+    
+==== /node_modules/@types/scope__foo/index.d.ts (0 errors) ====
+    export const foo: number;
+    
+==== /node_modules/@types/scope__foo/package.json (0 errors) ====
+    { "name": "@types/scope__foo", "version": "1.2.3" }
+    
+==== /node_modules/@scope/foo/sub.js (0 errors) ====
+    const x = 0;
+    
+==== /node_modules/@scope/foo/package.json (0 errors) ====
+    { "name": "@scope/foo", "version": "1.2.3" }
+    
+==== /node_modules/@scope/bar/sub.js (0 errors) ====
+    const x = 0;
+    
+==== /node_modules/@scope/bar/package.json (0 errors) ====
+    { "name": "@scope/bar", "version": "1.2.3" }
+    

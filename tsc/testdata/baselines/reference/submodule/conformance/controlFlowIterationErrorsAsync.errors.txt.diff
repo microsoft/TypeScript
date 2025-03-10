@@ -1,0 +1,52 @@
+--- old.controlFlowIterationErrorsAsync.errors.txt
++++ new.controlFlowIterationErrorsAsync.errors.txt
+@@= skipped -2, +2 lines =@@
+ controlFlowIterationErrorsAsync.ts(22,23): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+   Type 'number' is not assignable to type 'string'.
+ controlFlowIterationErrorsAsync.ts(34,23): error TS2769: No overload matches this call.
+-  Overload 1 of 2, '(x: string): Promise<number>', gave the following error.
+-    Argument of type 'string | number' is not assignable to parameter of type 'string'.
+-      Type 'number' is not assignable to type 'string'.
+-  Overload 2 of 2, '(x: number): Promise<string>', gave the following error.
++  The last overload gave the following error.
+     Argument of type 'string | number' is not assignable to parameter of type 'number'.
+       Type 'string' is not assignable to type 'number'.
+ controlFlowIterationErrorsAsync.ts(45,23): error TS2769: No overload matches this call.
+-  Overload 1 of 2, '(x: string): Promise<number>', gave the following error.
+-    Argument of type 'string | number' is not assignable to parameter of type 'string'.
+-      Type 'number' is not assignable to type 'string'.
+-  Overload 2 of 2, '(x: number): Promise<string>', gave the following error.
++  The last overload gave the following error.
+     Argument of type 'string | number' is not assignable to parameter of type 'number'.
+       Type 'string' is not assignable to type 'number'.
+ 
+@@= skipped -58, +52 lines =@@
+             x = await foo(x);
+                           ~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 2, '(x: string): Promise<number>', gave the following error.
+-!!! error TS2769:     Argument of type 'string | number' is not assignable to parameter of type 'string'.
+-!!! error TS2769:       Type 'number' is not assignable to type 'string'.
+-!!! error TS2769:   Overload 2 of 2, '(x: number): Promise<string>', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Argument of type 'string | number' is not assignable to parameter of type 'number'.
+ !!! error TS2769:       Type 'string' is not assignable to type 'number'.
++!!! related TS2771 controlFlowIterationErrorsAsync.ts:28:18: The last overload is declared here.
+             x;
+         }
+         x;
+@@= skipped -19, +17 lines =@@
+             x = await foo(x);
+                           ~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 2, '(x: string): Promise<number>', gave the following error.
+-!!! error TS2769:     Argument of type 'string | number' is not assignable to parameter of type 'string'.
+-!!! error TS2769:       Type 'number' is not assignable to type 'string'.
+-!!! error TS2769:   Overload 2 of 2, '(x: number): Promise<string>', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Argument of type 'string | number' is not assignable to parameter of type 'number'.
+ !!! error TS2769:       Type 'string' is not assignable to type 'number'.
++!!! related TS2771 controlFlowIterationErrorsAsync.ts:28:18: The last overload is declared here.
+         }
+         x;
+     }

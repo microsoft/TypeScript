@@ -1,0 +1,21 @@
+a.js(2,10): error TS7010: 'f1', which lacks return-type annotation, implicitly has an 'any' return type.
+a.js(8,10): error TS7010: 'f2', which lacks return-type annotation, implicitly has an 'any' return type.
+
+
+==== a.js (2 errors) ====
+    /** @type {() => undefined} */
+    function f1() {
+             ~~
+!!! error TS7010: 'f1', which lacks return-type annotation, implicitly has an 'any' return type.
+        return undefined;
+    }
+    const a = f1()
+    
+    /** @type {() => null} */
+    function f2() {
+             ~~
+!!! error TS7010: 'f2', which lacks return-type annotation, implicitly has an 'any' return type.
+        return null;
+    }
+    const b = f2()
+    

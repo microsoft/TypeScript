@@ -1,0 +1,44 @@
+c:/root/folder1/file1.ts(4,18): error TS2307: Cannot find module 'file4' or its corresponding type declarations.
+
+
+==== c:/root/tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "baseUrl": ".",
+            "paths": {
+                "*": [
+                    "*",
+                    "generated/*"
+                ],
+                    "components/*": [
+                        "shared/components/*"
+                    ]
+            }
+        }
+    }
+==== c:/root/folder1/file1.ts (1 errors) ====
+    import {x} from "folder2/file1"
+    import {y} from "folder3/file2"
+    import {z} from "components/file3"
+    import {z1} from "file4"
+                     ~~~~~~~
+!!! error TS2307: Cannot find module 'file4' or its corresponding type declarations.
+    
+    declare function use(a: any): void;
+    
+    use(x.toExponential());
+    use(y.toExponential());
+    use(z.toExponential());
+    use(z1.toExponential());
+    
+==== c:/root/folder2/file1.ts (0 errors) ====
+    export var x = 1;
+    
+==== c:/root/generated/folder3/file2.ts (0 errors) ====
+    export var y = 1;
+    
+==== c:/root/shared/components/file3.ts (0 errors) ====
+    export var z = 1;
+    
+==== c:/file4.ts (0 errors) ====
+    export var z1 = 1;

@@ -1,0 +1,46 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'CallableFunction'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'NewableFunction'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+lateBoundClassMemberAssignmentJS.js(1,14): error TS2304: Cannot find name 'Symbol'.
+lateBoundClassMemberAssignmentJS.js(4,9): error TS7053: Element implicitly has an 'any' type because expression of type 'error' can't be used to index type 'MyClass'.
+lateBoundClassMemberAssignmentJS.js(8,9): error TS7053: Element implicitly has an 'any' type because expression of type 'error' can't be used to index type 'MyClass'.
+lateBoundClassMemberAssignmentJS.js(9,19): error TS7053: Element implicitly has an 'any' type because expression of type 'error' can't be used to index type 'MyClass'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'CallableFunction'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'NewableFunction'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== lateBoundClassMemberAssignmentJS.js (4 errors) ====
+    const _sym = Symbol("_sym");
+                 ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+    export class MyClass {
+        constructor() {
+            this[_sym] = "ok";
+            ~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'error' can't be used to index type 'MyClass'.
+        }
+    
+        method() {
+            this[_sym] = "yep";
+            ~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'error' can't be used to index type 'MyClass'.
+            const x = this[_sym];
+                      ~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'error' can't be used to index type 'MyClass'.
+        }
+    }

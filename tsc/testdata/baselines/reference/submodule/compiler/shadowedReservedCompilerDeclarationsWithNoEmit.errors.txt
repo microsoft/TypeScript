@@ -1,0 +1,59 @@
+shadowedReservedCompilerDeclarationsWithNoEmit.ts(44,5): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+shadowedReservedCompilerDeclarationsWithNoEmit.ts(47,5): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+
+
+==== shadowedReservedCompilerDeclarationsWithNoEmit.ts (2 errors) ====
+    // Shadowed captured this and super
+    class Base { }
+    class C extends Base {
+        constructor() {
+            super();
+        }
+    
+        foo() {
+            let _this = this;
+    
+            () => {
+                _this;
+            };
+        }
+    
+        bar() {
+            let _super = this;
+        }
+    }
+    
+    
+    /// shadowed arguments
+    function f1(arguments, ...a) {
+    }
+    
+    class C2 extends Base {
+        constructor() {
+            super();
+            var _newTarget = "";
+            var t = new.target;
+            var y = _newTarget;
+        }
+    }
+    
+    
+    // Shadowed Promise
+    var Promise = null;
+    async function f4() {
+        return 0;
+    }
+    
+    
+    // shadowed require
+    var require = 0;
+        ~~~~~~~
+!!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+    
+    // shadowed exports
+    var exports = 0;
+        ~~~~~~~
+!!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+    
+    
+    export { };

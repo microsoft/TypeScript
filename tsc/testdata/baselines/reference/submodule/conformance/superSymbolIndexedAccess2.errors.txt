@@ -1,0 +1,39 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+superSymbolIndexedAccess2.ts(2,6): error TS2304: Cannot find name 'Symbol'.
+superSymbolIndexedAccess2.ts(8,6): error TS2304: Cannot find name 'Symbol'.
+superSymbolIndexedAccess2.ts(9,22): error TS2304: Cannot find name 'Symbol'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== superSymbolIndexedAccess2.ts (3 errors) ====
+    class Foo {
+        [Symbol.isConcatSpreadable]() {
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+            return 0;
+        }
+    }
+    
+    class Bar extends Foo {
+        [Symbol.isConcatSpreadable]() {
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+            return super[Symbol.isConcatSpreadable]();
+                         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        }
+    }

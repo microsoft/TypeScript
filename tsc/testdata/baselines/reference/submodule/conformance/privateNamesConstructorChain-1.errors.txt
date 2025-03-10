@@ -1,0 +1,36 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+privateNamesConstructorChain-1.ts(6,15): error TS2339: Property '#bar' does not exist on type '{ new(): Child; prototype: Child; }'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== privateNamesConstructorChain-1.ts (1 errors) ====
+    class Parent {
+        #foo = 3;
+        static #bar = 5;
+        accessChildProps() {
+            new Child().#foo; // OK (`#foo` was added when `Parent`'s constructor was called on `child`)
+            Child.#bar;       // Error: not found
+                  ~~~~
+!!! error TS2339: Property '#bar' does not exist on type '{ new(): Child; prototype: Child; }'.
+        }
+    }
+    
+    class Child extends Parent {
+        #foo = "foo";       // OK (Child's #foo does not conflict, as `Parent`'s `#foo` is not accessible)
+        #bar = "bar";       // OK
+    }
+    

@@ -1,0 +1,34 @@
+--- old.verbatimModuleSyntaxCompat3.errors.txt
++++ new.verbatimModuleSyntaxCompat3.errors.txt
+@@= skipped -0, +-1 lines =@@
+-/tsconfig.json(3,5): error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
+-  Use 'verbatimModuleSyntax' instead.
+-/tsconfig.json(3,5): error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+-  Use 'verbatimModuleSyntax' instead.
+-
+-
+-==== /tsconfig.json (2 errors) ====
+-    {
+-        "extends": "./tsconfig.base.json",
+-        "compilerOptions": {
+-        ~~~~~~~~~~~~~~~~~
+-!!! error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
+-!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
+-        ~~~~~~~~~~~~~~~~~
+-!!! error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+-!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
+-            "verbatimModuleSyntax": true
+-        }
+-    }
+-==== /index.ts (0 errors) ====
+-    
+-==== /tsconfig.base.json (0 errors) ====
+-    {
+-        "compilerOptions": {
+-            "isolatedModules": true,
+-            "preserveValueImports": true,
+-            "importsNotUsedAsValues": "error",
+-        }
+-    }
+@@= skipped --1, +1 lines =@@
++<no content>

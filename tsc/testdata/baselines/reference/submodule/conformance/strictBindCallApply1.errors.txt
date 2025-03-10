@@ -1,0 +1,218 @@
+strictBindCallApply1.ts(11,35): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+strictBindCallApply1.ts(17,15): error TS2554: Expected 3 arguments, but got 2.
+strictBindCallApply1.ts(18,35): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+strictBindCallApply1.ts(19,44): error TS2554: Expected 3 arguments, but got 4.
+strictBindCallApply1.ts(22,32): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
+  Source has 1 element(s) but target requires 2.
+strictBindCallApply1.ts(23,37): error TS2322: Type 'number' is not assignable to type 'string'.
+strictBindCallApply1.ts(24,32): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
+  Source has 3 element(s) but target allows only 2.
+strictBindCallApply1.ts(41,29): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+strictBindCallApply1.ts(42,22): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type 'C'.
+strictBindCallApply1.ts(48,17): error TS2554: Expected 3 arguments, but got 2.
+strictBindCallApply1.ts(49,29): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+strictBindCallApply1.ts(50,38): error TS2554: Expected 3 arguments, but got 4.
+strictBindCallApply1.ts(51,22): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
+strictBindCallApply1.ts(54,26): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
+  Source has 1 element(s) but target requires 2.
+strictBindCallApply1.ts(55,31): error TS2322: Type 'number' is not assignable to type 'string'.
+strictBindCallApply1.ts(56,26): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
+  Source has 3 element(s) but target allows only 2.
+strictBindCallApply1.ts(57,23): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
+strictBindCallApply1.ts(62,33): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+strictBindCallApply1.ts(65,3): error TS2554: Expected 3 arguments, but got 2.
+strictBindCallApply1.ts(66,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+strictBindCallApply1.ts(67,24): error TS2554: Expected 3 arguments, but got 4.
+strictBindCallApply1.ts(70,12): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
+  Source has 1 element(s) but target requires 2.
+strictBindCallApply1.ts(71,17): error TS2322: Type 'number' is not assignable to type 'string'.
+strictBindCallApply1.ts(72,12): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
+  Source has 3 element(s) but target allows only 2.
+strictBindCallApply1.ts(76,5): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    The 'this' context of type '(...args: T) => void' is not assignable to method's 'this' of type '(...args: unknown[]) => void'.
+      Types of parameters 'args' and 'args' are incompatible.
+        Type 'unknown[]' is not assignable to type 'T'.
+          'unknown[]' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'unknown[]'.
+strictBindCallApply1.ts(81,5): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    The 'this' context of type '(...args: ) => void' is not assignable to method's 'this' of type '(...args: [unknown]) => void'.
+      Types of parameters 'args' and 'args' are incompatible.
+        Type '[unknown]' is not assignable to type ''.
+
+
+==== strictBindCallApply1.ts (26 errors) ====
+    declare function foo(a: number, b: string): string;
+    
+    declare function overloaded(s: string): number;
+    declare function overloaded(n: number): string;
+    
+    declare function generic<T>(x: T): T;
+    
+    let f00 = foo.bind(undefined);
+    let f01 = foo.bind(undefined, 10);
+    let f02 = foo.bind(undefined, 10, "hello");
+    let f03 = foo.bind(undefined, 10, 20);  // Error
+                                      ~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    
+    let f04 = overloaded.bind(undefined);  // typeof overloaded
+    let f05 = generic.bind(undefined);  // typeof generic
+    
+    let c00 = foo.call(undefined, 10, "hello");
+    let c01 = foo.call(undefined, 10);  // Error
+                  ~~~~
+!!! error TS2554: Expected 3 arguments, but got 2.
+    let c02 = foo.call(undefined, 10, 20);  // Error
+                                      ~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    let c03 = foo.call(undefined, 10, "hello", 30);  // Error
+                                               ~~
+!!! error TS2554: Expected 3 arguments, but got 4.
+    
+    let a00 = foo.apply(undefined, [10, "hello"]);
+    let a01 = foo.apply(undefined, [10]);  // Error
+                                   ~~~~
+!!! error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
+!!! error TS2345:   Source has 1 element(s) but target requires 2.
+    let a02 = foo.apply(undefined, [10, 20]);  // Error
+                                        ~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    let a03 = foo.apply(undefined, [10, "hello", 30]);  // Error
+                                   ~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
+!!! error TS2345:   Source has 3 element(s) but target allows only 2.
+    
+    class C {
+        constructor(a: number, b: string) {}
+        foo(this: this, a: number, b: string): string { return "" }
+        overloaded(s: string): number;
+        overloaded(n: number): string;
+        overloaded(x: any): any { return <any>undefined }
+        generic<T>(x: T): T { return x }
+    }
+    
+    declare let c: C;
+    declare let obj: {};
+    
+    let f10 = c.foo.bind(c);
+    let f11 = c.foo.bind(c, 10);
+    let f12 = c.foo.bind(c, 10, "hello");
+    let f13 = c.foo.bind(c, 10, 20);  // Error
+                                ~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    let f14 = c.foo.bind(undefined);  // Error
+                         ~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type 'undefined' is not assignable to parameter of type 'C'.
+!!! related TS2771 lib.es5.d.ts:--:--: The last overload is declared here.
+    
+    let f15 = c.overloaded.bind(c);  // typeof C.prototype.overloaded
+    let f16 = c.generic.bind(c);  // typeof C.prototype.generic
+    
+    let c10 = c.foo.call(c, 10, "hello");
+    let c11 = c.foo.call(c, 10);  // Error
+                    ~~~~
+!!! error TS2554: Expected 3 arguments, but got 2.
+    let c12 = c.foo.call(c, 10, 20);  // Error
+                                ~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    let c13 = c.foo.call(c, 10, "hello", 30);  // Error
+                                         ~~
+!!! error TS2554: Expected 3 arguments, but got 4.
+    let c14 = c.foo.call(undefined, 10, "hello");  // Error
+                         ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
+    
+    let a10 = c.foo.apply(c, [10, "hello"]);
+    let a11 = c.foo.apply(c, [10]);  // Error
+                             ~~~~
+!!! error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
+!!! error TS2345:   Source has 1 element(s) but target requires 2.
+    let a12 = c.foo.apply(c, [10, 20]);  // Error
+                                  ~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    let a13 = c.foo.apply(c, [10, "hello", 30]);  // Error
+                             ~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
+!!! error TS2345:   Source has 3 element(s) but target allows only 2.
+    let a14 = c.foo.apply(undefined, [10, "hello"]);  // Error
+                          ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
+    
+    let f20 = C.bind(undefined);
+    let f21 = C.bind(undefined, 10);
+    let f22 = C.bind(undefined, 10, "hello");
+    let f23 = C.bind(undefined, 10, 20);  // Error
+                                    ~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    
+    C.call(c, 10, "hello");
+    C.call(c, 10);  // Error
+      ~~~~
+!!! error TS2554: Expected 3 arguments, but got 2.
+    C.call(c, 10, 20);  // Error
+                  ~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    C.call(c, 10, "hello", 30);  // Error
+                           ~~
+!!! error TS2554: Expected 3 arguments, but got 4.
+    
+    C.apply(c, [10, "hello"]);
+    C.apply(c, [10]);  // Error
+               ~~~~
+!!! error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
+!!! error TS2345:   Source has 1 element(s) but target requires 2.
+    C.apply(c, [10, 20]);  // Error
+                    ~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    C.apply(c, [10, "hello", 30]);  // Error
+               ~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
+!!! error TS2345:   Source has 3 element(s) but target allows only 2.
+    
+    function bar<T extends unknown[]>(callback: (this: 1, ...args: T) => void) {
+        callback.bind(1);
+        callback.bind(2); // Error
+        ~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     The 'this' context of type '(...args: T) => void' is not assignable to method's 'this' of type '(...args: unknown[]) => void'.
+!!! error TS2769:       Types of parameters 'args' and 'args' are incompatible.
+!!! error TS2769:         Type 'unknown[]' is not assignable to type 'T'.
+!!! error TS2769:           'unknown[]' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'unknown[]'.
+!!! related TS2771 lib.es5.d.ts:--:--: The last overload is declared here.
+    }
+    
+    function baz<T extends 1 | 2>(callback: (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void) {
+        callback.bind(1);
+        callback.bind(2); // Error
+        ~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     The 'this' context of type '(...args: ) => void' is not assignable to method's 'this' of type '(...args: [unknown]) => void'.
+!!! error TS2769:       Types of parameters 'args' and 'args' are incompatible.
+!!! error TS2769:         Type '[unknown]' is not assignable to type ''.
+!!! related TS2771 lib.es5.d.ts:--:--: The last overload is declared here.
+    }
+    
+    // Repro from #32964
+    class Foo<T extends unknown[]> {
+        constructor() {
+            this.fn.bind(this);
+        }
+    
+        fn(...args: T): void {}
+    }
+    
+    class Bar<T extends 1 | 2> {
+        constructor() {
+            this.fn.bind(this);
+        }
+    
+        fn(...args: T extends 1 ? [unknown] : [unknown, unknown]) {}
+    }
+    

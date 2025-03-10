@@ -1,0 +1,19 @@
+--- old.typeReferenceDirectives8.errors.txt
++++ new.typeReferenceDirectives8.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/mod1.ts(1,24): error TS2304: Cannot find name 'Lib'.
++
++
++==== /mod2.ts (0 errors) ====
++    import {foo} from "./mod1";
++    export const bar = foo();
++==== /types/lib/index.d.ts (0 errors) ====
++    interface Lib { x }
++    
++==== /mod1.ts (1 errors) ====
++    export function foo(): Lib { return {x: 1} }
++                           ~~~
++!!! error TS2304: Cannot find name 'Lib'.
++    

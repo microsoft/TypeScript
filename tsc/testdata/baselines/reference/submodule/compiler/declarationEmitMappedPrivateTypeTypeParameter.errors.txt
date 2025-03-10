@@ -1,0 +1,12 @@
+/FromFactor.ts(2,15): error TS2304: Cannot find name 'StringKeyOf'.
+
+
+==== /Helpers.ts (0 errors) ====
+    export type StringKeyOf<TObj> = Extract<string, keyof TObj>;
+    
+==== /FromFactor.ts (1 errors) ====
+    export type RowToColumns<TColumns> = {
+        [TName in StringKeyOf<TColumns>]: any;
+                  ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'StringKeyOf'.
+    }

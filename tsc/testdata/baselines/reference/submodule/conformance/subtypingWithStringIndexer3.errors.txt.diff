@@ -1,0 +1,22 @@
+--- old.subtypingWithStringIndexer3.errors.txt
++++ new.subtypingWithStringIndexer3.errors.txt
+@@= skipped -0, +0 lines =@@
+ subtypingWithStringIndexer3.ts(11,7): error TS2415: Class 'B' incorrectly extends base class 'A'.
+   'string' index signatures are incompatible.
+     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+-subtypingWithStringIndexer3.ts(24,23): error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
+-  Property 'bar' is missing in type 'Base' but required in type 'Derived'.
++subtypingWithStringIndexer3.ts(24,23): error TS2741: Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+ subtypingWithStringIndexer3.ts(32,11): error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
+   'string' index signatures are incompatible.
+     Type 'Base' is not assignable to type 'T'.
+@@= skipped -47, +46 lines =@@
+     
+         class B extends A<Base> {
+                           ~~~~
+-!!! error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
+-!!! error TS2344:   Property 'bar' is missing in type 'Base' but required in type 'Derived'.
++!!! error TS2741: Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+ !!! related TS2728 subtypingWithStringIndexer3.ts:4:34: 'bar' is declared here.
+             [x: string]: Derived; // error
+         }

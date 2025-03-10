@@ -1,0 +1,12 @@
+x.js(1,1): error TS2304: Cannot find name 'exports'.
+x.js(2,1): error TS2304: Cannot find name 'exports'.
+
+
+==== x.js (2 errors) ====
+    exports.fn1();
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    exports.fn2 = Math.min;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    

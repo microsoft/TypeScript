@@ -1,0 +1,31 @@
+--- old.typeParameterArgumentEquivalence5.errors.txt
++++ new.typeParameterArgumentEquivalence5.errors.txt
+@@= skipped -0, +0 lines =@@
+ typeParameterArgumentEquivalence5.ts(4,5): error TS2322: Type '() => (item: any) => T' is not assignable to type '() => (item: any) => U'.
+-  Call signature return types '(item: any) => T' and '(item: any) => U' are incompatible.
++  Type '(item: any) => T' is not assignable to type '(item: any) => U'.
+     Type 'T' is not assignable to type 'U'.
+       'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+ typeParameterArgumentEquivalence5.ts(5,5): error TS2322: Type '() => (item: any) => U' is not assignable to type '() => (item: any) => T'.
+-  Call signature return types '(item: any) => U' and '(item: any) => T' are incompatible.
++  Type '(item: any) => U' is not assignable to type '(item: any) => T'.
+     Type 'U' is not assignable to type 'T'.
+       'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+ 
+@@= skipped -14, +14 lines =@@
+         x = y;  // Should be an error
+         ~
+ !!! error TS2322: Type '() => (item: any) => T' is not assignable to type '() => (item: any) => U'.
+-!!! error TS2322:   Call signature return types '(item: any) => T' and '(item: any) => U' are incompatible.
++!!! error TS2322:   Type '(item: any) => T' is not assignable to type '(item: any) => U'.
+ !!! error TS2322:     Type 'T' is not assignable to type 'U'.
+ !!! error TS2322:       'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+ !!! related TS2208 typeParameterArgumentEquivalence5.ts:1:14: This type parameter might need an `extends U` constraint.
+         y = x;  // Shound be an error
+         ~
+ !!! error TS2322: Type '() => (item: any) => U' is not assignable to type '() => (item: any) => T'.
+-!!! error TS2322:   Call signature return types '(item: any) => U' and '(item: any) => T' are incompatible.
++!!! error TS2322:   Type '(item: any) => U' is not assignable to type '(item: any) => T'.
+ !!! error TS2322:     Type 'U' is not assignable to type 'T'.
+ !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+ !!! related TS2208 typeParameterArgumentEquivalence5.ts:1:16: This type parameter might need an `extends T` constraint.

@@ -1,0 +1,17 @@
+--- old.arrayLiteralAndArrayConstructorEquivalence1.errors.txt
++++ new.arrayLiteralAndArrayConstructorEquivalence1.errors.txt
+@@= skipped -0, +0 lines =@@
+-arrayLiteralAndArrayConstructorEquivalence1.ts(3,14): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
++arrayLiteralAndArrayConstructorEquivalence1.ts(3,14): error TS2314: Generic type 'T[]' requires 1 type argument(s).
+ 
+ 
+ ==== arrayLiteralAndArrayConstructorEquivalence1.ts (1 errors) ====
+@@= skipped -5, +5 lines =@@
+     var myCars3 = new Array({});
+     var myCars4: Array; // error
+                  ~~~~~
+-!!! error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
++!!! error TS2314: Generic type 'T[]' requires 1 type argument(s).
+     var myCars5: Array<any>[];
+      
+     myCars = myCars3;

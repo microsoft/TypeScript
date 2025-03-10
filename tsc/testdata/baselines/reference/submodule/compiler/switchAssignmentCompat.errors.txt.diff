@@ -1,0 +1,16 @@
+--- old.switchAssignmentCompat.errors.txt
++++ new.switchAssignmentCompat.errors.txt
+@@= skipped -0, +0 lines =@@
+-switchAssignmentCompat.ts(4,10): error TS2678: Type 'typeof Foo' is not comparable to type '0'.
++switchAssignmentCompat.ts(4,10): error TS2678: Type '{ new(): Foo; prototype: Foo; }' is not comparable to type '0'.
+ 
+ 
+ ==== switchAssignmentCompat.ts (1 errors) ====
+@@= skipped -6, +6 lines =@@
+     switch (0) {
+         case Foo: break; // Error expected
+              ~~~
+-!!! error TS2678: Type 'typeof Foo' is not comparable to type '0'.
++!!! error TS2678: Type '{ new(): Foo; prototype: Foo; }' is not comparable to type '0'.
+     }
+     

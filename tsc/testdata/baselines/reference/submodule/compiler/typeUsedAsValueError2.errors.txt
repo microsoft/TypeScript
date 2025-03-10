@@ -1,0 +1,28 @@
+world.ts(1,33): error TS2307: Cannot find module 'helloInterface' or its corresponding type declarations.
+world.ts(2,33): error TS2307: Cannot find module 'helloNamespace' or its corresponding type declarations.
+
+
+==== world.ts (2 errors) ====
+    import HelloInterface = require("helloInterface");
+                                    ~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'helloInterface' or its corresponding type declarations.
+    import HelloNamespace = require("helloNamespace");
+                                    ~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'helloNamespace' or its corresponding type declarations.
+    
+    HelloInterface.world;
+    HelloNamespace.world;
+==== helloInterface.ts (0 errors) ====
+    interface HelloInterface {
+        world: any;
+    }
+    
+    export = HelloInterface;
+    
+==== helloNamespace.ts (0 errors) ====
+    namespace HelloNamespace {
+        export type world = any;
+    }
+    
+    export = HelloNamespace;
+    

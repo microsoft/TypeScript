@@ -1,0 +1,38 @@
+--- old.checkJsdocTypeTagOnObjectProperty1.errors.txt
++++ new.checkJsdocTypeTagOnObjectProperty1.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++0.js(19,1): error TS2322: Type '"string"' is not assignable to type 'undefined'.
++0.js(21,1): error TS2322: Type 'undefined' is not assignable to type 'string'.
++
++
++==== 0.js (2 errors) ====
++    // @ts-check
++    var lol = "hello Lol"
++    const obj = {
++      /** @type {string|undefined} */
++      foo: undefined,
++      /** @type {string|undefined} */
++      bar: "42",
++      /** @type {function(number): number} */
++      method1(n1) {
++          return n1 + 42;
++      },
++      /** @type {string} */
++      lol,
++      /** @type {number} */
++      ['b' + 'ar1']: 42,
++      /** @type {function(number): number} */
++      arrowFunc: (num) => num + 42
++    }
++    obj.foo = 'string'
++    ~~~~~~~
++!!! error TS2322: Type '"string"' is not assignable to type 'undefined'.
++    obj.lol
++    obj.bar = undefined;
++    ~~~~~~~
++!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
++    var k = obj.method1(0);
++    obj.bar1 = "42";
++    obj.arrowFunc(0);

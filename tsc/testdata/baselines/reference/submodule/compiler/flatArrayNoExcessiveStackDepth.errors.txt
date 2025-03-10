@@ -1,0 +1,34 @@
+flatArrayNoExcessiveStackDepth.ts(20,5): error TS2322: Type 'FlatArray<Arr, any>' is not assignable to type 'FlatArray<Arr, D>'.
+  Type 'Arr' is not assignable to type 'FlatArray<Arr, D>'.
+    Type 'Arr' is not assignable to type 'Arr & ()'.
+      Type 'Arr' is not assignable to type ''.
+
+
+==== flatArrayNoExcessiveStackDepth.ts (1 errors) ====
+    // Repro from #43493
+    
+    declare const foo: unknown[];
+    const bar = foo.flatMap(bar => bar as Foo);
+    
+    interface Foo extends Array<string> {}
+    
+    // Repros from comments in #43249
+    
+    const repro_43249 = (value: unknown) => {
+        if (typeof value !== "string") {
+            throw new Error("No");
+        }
+        const match = value.match(/anything/) || [];
+        const [, extracted] = match;
+    };
+    
+    function f<Arr, D extends number>(x: FlatArray<Arr, any>, y: FlatArray<Arr, D>) {
+        x = y;
+        y = x;  // Error
+        ~
+!!! error TS2322: Type 'FlatArray<Arr, any>' is not assignable to type 'FlatArray<Arr, D>'.
+!!! error TS2322:   Type 'Arr' is not assignable to type 'FlatArray<Arr, D>'.
+!!! error TS2322:     Type 'Arr' is not assignable to type 'Arr & ()'.
+!!! error TS2322:       Type 'Arr' is not assignable to type ''.
+    }
+    

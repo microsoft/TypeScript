@@ -1,0 +1,48 @@
+shadowedFunctionScopedVariablesByBlockScopedOnes.ts(4,27): error TS2481: Cannot initialize outer scoped variable 'v' in the same scope as block scoped declaration 'v'.
+shadowedFunctionScopedVariablesByBlockScopedOnes.ts(7,29): error TS2481: Cannot initialize outer scoped variable 'v' in the same scope as block scoped declaration 'v'.
+shadowedFunctionScopedVariablesByBlockScopedOnes.ts(10,29): error TS2481: Cannot initialize outer scoped variable 'v' in the same scope as block scoped declaration 'v'.
+shadowedFunctionScopedVariablesByBlockScopedOnes.ts(16,17): error TS2481: Cannot initialize outer scoped variable 'x' in the same scope as block scoped declaration 'x'.
+shadowedFunctionScopedVariablesByBlockScopedOnes.ts(23,17): error TS2481: Cannot initialize outer scoped variable 'x' in the same scope as block scoped declaration 'x'.
+
+
+==== shadowedFunctionScopedVariablesByBlockScopedOnes.ts (5 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/2185
+    
+    function test1() {
+        for (let v; ; ) { var v; }
+                              ~
+!!! error TS2481: Cannot initialize outer scoped variable 'v' in the same scope as block scoped declaration 'v'.
+    }
+    function test2() {
+        for (let v in []) { var v; }
+                                ~
+!!! error TS2481: Cannot initialize outer scoped variable 'v' in the same scope as block scoped declaration 'v'.
+    }
+    function test3() {
+        for (let v of []) { var v; }
+                                ~
+!!! error TS2481: Cannot initialize outer scoped variable 'v' in the same scope as block scoped declaration 'v'.
+    }
+    function test4() {
+        {
+            let x;
+            {
+                var x;
+                    ~
+!!! error TS2481: Cannot initialize outer scoped variable 'x' in the same scope as block scoped declaration 'x'.
+            }
+        }
+    }
+    function test5() {
+        {
+            {
+                var x;
+                    ~
+!!! error TS2481: Cannot initialize outer scoped variable 'x' in the same scope as block scoped declaration 'x'.
+            }
+            let x;
+        }
+    }
+    
+    
+    

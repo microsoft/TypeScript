@@ -1,0 +1,23 @@
+logicalAssignment7.ts(10,5): error TS2532: Object is possibly 'undefined'.
+logicalAssignment7.ts(10,35): error TS2339: Property 'push' does not exist on type 'never[] | undefined'.
+  Property 'push' does not exist on type 'undefined'.
+
+
+==== logicalAssignment7.ts (2 errors) ====
+    function foo1(results: number[] | undefined, results1: number[] | undefined) {
+        (results ||= results1 ||= []).push(100);
+    }
+    
+    function foo2(results: number[] | undefined, results1: number[] | undefined) {
+        (results ??= results1 ??= []).push(100);
+    }
+    
+    function foo3(results: number[] | undefined, results1: number[] | undefined) {
+        (results &&= results1 &&= []).push(100);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+                                      ~~~~
+!!! error TS2339: Property 'push' does not exist on type 'never[] | undefined'.
+!!! error TS2339:   Property 'push' does not exist on type 'undefined'.
+    }
+    

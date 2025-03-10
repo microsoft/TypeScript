@@ -1,0 +1,82 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'CallableFunction'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'NewableFunction'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'CallableFunction'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'NewableFunction'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== privateNamesIncompatibleModifiersJs.js (0 errors) ====
+    class A {
+        /**
+         * @public
+         */
+        #a = 1;
+    
+        /**
+         * @private
+         */
+        #b = 1;
+    
+        /**
+         * @protected
+         */
+        #c = 1;
+    
+        /**
+         * @public
+         */
+        #aMethod() { return 1; }
+    
+        /**
+         * @private
+         */
+        #bMethod() { return 1; }
+    
+        /**
+         * @protected
+         */
+        #cMethod() { return 1; }
+    
+        /**
+         * @public
+         */
+        get #aProp() { return 1; }
+        /**
+         * @public
+         */
+        set #aProp(value) { }
+    
+        /**
+         * @private
+         */
+        get #bProp() { return 1; }
+        /**
+         * @private
+         */
+        set #bProp(value) { }
+    
+        /**
+        * @protected
+        */
+        get #cProp() { return 1; }
+        /**
+         * @protected
+         */
+        set #cProp(value) { }
+    }
+    

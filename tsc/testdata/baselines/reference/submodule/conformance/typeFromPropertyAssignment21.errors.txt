@@ -1,0 +1,11 @@
+chrome-devtools-DOMExtension.js(2,17): error TS2339: Property 'removeChildren' does not exist on type 'Event'.
+
+
+==== chrome-devtools-DOMExtension.js (1 errors) ====
+    // Extend that DOM! (doesn't work, but shouldn't crash)
+    Event.prototype.removeChildren = function () {
+                    ~~~~~~~~~~~~~~
+!!! error TS2339: Property 'removeChildren' does not exist on type 'Event'.
+        this.textContent = 'nope, not going to happen'
+    }
+    

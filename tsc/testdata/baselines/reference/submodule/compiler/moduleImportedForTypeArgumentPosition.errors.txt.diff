@@ -1,0 +1,20 @@
+--- old.moduleImportedForTypeArgumentPosition.errors.txt
++++ new.moduleImportedForTypeArgumentPosition.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++moduleImportedForTypeArgumentPosition_1.ts(2,21): error TS2307: Cannot find module 'moduleImportedForTypeArgumentPosition_0' or its corresponding type declarations.
++
++
++==== moduleImportedForTypeArgumentPosition_1.ts (1 errors) ====
++    /**This is on import declaration*/
++    import M2 = require("moduleImportedForTypeArgumentPosition_0");
++                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'moduleImportedForTypeArgumentPosition_0' or its corresponding type declarations.
++    class C1<T>{ }
++    class Test1 extends C1<M2.M2C> {
++    }
++    
++==== moduleImportedForTypeArgumentPosition_0.ts (0 errors) ====
++    export interface M2C { }
++    

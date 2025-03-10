@@ -1,0 +1,37 @@
+--- old.autoAccessorExperimentalDecorators(target=es2015).errors.txt
++++ new.autoAccessorExperimentalDecorators(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2318: Cannot find global type 'TypedPropertyDescriptor'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++autoAccessorExperimentalDecorators.ts(1,37): error TS2304: Cannot find name 'PropertyKey'.
++autoAccessorExperimentalDecorators.ts(1,56): error TS2304: Cannot find name 'PropertyDescriptor'.
+ autoAccessorExperimentalDecorators.ts(12,5): error TS1206: Decorators are not valid here.
+ autoAccessorExperimentalDecorators.ts(15,5): error TS1206: Decorators are not valid here.
+ 
+ 
+-==== autoAccessorExperimentalDecorators.ts (2 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2318: Cannot find global type 'TypedPropertyDescriptor'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== autoAccessorExperimentalDecorators.ts (4 errors) ====
+     declare var dec: (target: any, key: PropertyKey, desc: PropertyDescriptor) => void;
++                                        ~~~~~~~~~~~
++!!! error TS2304: Cannot find name 'PropertyKey'.
++                                                           ~~~~~~~~~~~~~~~~~~
++!!! error TS2304: Cannot find name 'PropertyDescriptor'.
+     
+     class C1 {
+         @dec

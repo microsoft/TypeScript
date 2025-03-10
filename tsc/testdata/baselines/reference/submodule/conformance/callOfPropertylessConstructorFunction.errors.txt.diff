@@ -1,0 +1,19 @@
+--- old.callOfPropertylessConstructorFunction.errors.txt
++++ new.callOfPropertylessConstructorFunction.errors.txt
+@@= skipped -0, +-1 lines =@@
+-callOfPropertylessConstructorFunction.js(7,1): error TS2348: Value of type 'typeof Dependency' is not callable. Did you mean to include 'new'?
+-
+-
+-==== callOfPropertylessConstructorFunction.js (1 errors) ====
+-    /**
+-     * @constructor
+-     */
+-    function Dependency(j) {
+-      return j
+-    }
+-    Dependency({})
+-    ~~~~~~~~~~~~~~
+-!!! error TS2348: Value of type 'typeof Dependency' is not callable. Did you mean to include 'new'?
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

@@ -1,0 +1,45 @@
+--- old.for-of17.errors.txt
++++ new.for-of17.errors.txt
+@@= skipped -0, +0 lines =@@
+-for-of17.ts(14,6): error TS2322: Type 'number' is not assignable to type 'string'.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++for-of17.ts(8,6): error TS2304: Cannot find name 'Symbol'.
++for-of17.ts(14,11): error TS2488: Type 'NumberIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
+ 
+ 
+-==== for-of17.ts (1 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== for-of17.ts (2 errors) ====
+     class NumberIterator {
+         next() {
+             return {
+@@= skipped -9, +26 lines =@@
+             };
+         }
+         [Symbol.iterator]() {
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
+             return this;
+         }
+     }
+     
+     var v: string;
+     for (v of new NumberIterator) { } // Should succeed
+-         ~
+-!!! error TS2322: Type 'number' is not assignable to type 'string'.
++              ~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type 'NumberIterator' must have a '[Symbol.iterator]()' method that returns an iterator.

@@ -1,0 +1,60 @@
+--- old.bundlerNodeModules1(module=esnext).errors.txt
++++ new.bundlerNodeModules1(module=esnext).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS6504: File '/node_modules/dual/index.cjs' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+-  The file is in the program because:
+-    Root file specified for compilation
+-error TS6504: File '/node_modules/dual/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+-  The file is in the program because:
+-    Root file specified for compilation
+-/main.cts(1,10): error TS2305: Module '"dual"' has no exported member 'esm'.
+-/main.mts(1,15): error TS2305: Module '"dual"' has no exported member 'cjs'.
+-/main.ts(1,15): error TS2305: Module '"dual"' has no exported member 'cjs'.
++/main.cts(1,10): error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
++/main.mts(1,10): error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
++/main.ts(1,10): error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
++/node_modules/dual/index.cjs(1,1): error TS2304: Cannot find name 'exports'.
+ 
+ 
+-!!! error TS6504: File '/node_modules/dual/index.cjs' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+-!!! error TS6504:   The file is in the program because:
+-!!! error TS6504:     Root file specified for compilation
+-!!! error TS6504: File '/node_modules/dual/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+-!!! error TS6504:   The file is in the program because:
+-!!! error TS6504:     Root file specified for compilation
+ ==== /node_modules/dual/package.json (0 errors) ====
+     {
+       "name": "dual",
+@@= skipped -35, +24 lines =@@
+ ==== /node_modules/dual/index.d.ts (0 errors) ====
+     export const esm: number;
+     
+-==== /node_modules/dual/index.cjs (0 errors) ====
++==== /node_modules/dual/index.cjs (1 errors) ====
+     exports.cjs = 0;
++    ~~~~~~~
++!!! error TS2304: Cannot find name 'exports'.
+     
+ ==== /node_modules/dual/index.d.cts (0 errors) ====
+     export const cjs: number;
+     
+ ==== /main.ts (1 errors) ====
+     import { esm, cjs } from "dual";
+-                  ~~~
+-!!! error TS2305: Module '"dual"' has no exported member 'cjs'.
++             ~~~
++!!! error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
+     
+ ==== /main.mts (1 errors) ====
+     import { esm, cjs } from "dual";
+-                  ~~~
+-!!! error TS2305: Module '"dual"' has no exported member 'cjs'.
++             ~~~
++!!! error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
+     
+ ==== /main.cts (1 errors) ====
+     import { esm, cjs } from "dual";
+              ~~~
+-!!! error TS2305: Module '"dual"' has no exported member 'esm'.
++!!! error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
+     

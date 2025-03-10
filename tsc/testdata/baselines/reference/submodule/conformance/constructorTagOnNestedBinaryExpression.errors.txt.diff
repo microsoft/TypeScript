@@ -1,0 +1,20 @@
+--- old.constructorTagOnNestedBinaryExpression.errors.txt
++++ new.constructorTagOnNestedBinaryExpression.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++constructorTagOnNestedBinaryExpression.js(3,1): error TS2304: Cannot find name 'a'.
++constructorTagOnNestedBinaryExpression.js(3,5): error TS2304: Cannot find name 'b'.
++
++
++==== constructorTagOnNestedBinaryExpression.js (2 errors) ====
++    // Fixes #35021
++    /** @constructor */
++    a = b = function c () {
++    ~
++!!! error TS2304: Cannot find name 'a'.
++        ~
++!!! error TS2304: Cannot find name 'b'.
++        console.log(this)
++    };
++    

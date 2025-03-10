@@ -1,0 +1,25 @@
+usage.ts(3,26): error TS2694: Namespace 'My' has no exported member 'Internal'.
+
+
+==== usage.ts (1 errors) ====
+    /// <reference path="./internal.ts" preserve="true" />
+    namespace SomeOther.Thing {
+        import Internal = My.Internal;
+                             ~~~~~~~~
+!!! error TS2694: Namespace 'My' has no exported member 'Internal'.
+        export class Foo {
+            private _which: Internal.WhichThing;
+            constructor() {
+                Internal.getThing();
+                Internal.WhichThing.A ? "foo" : "bar";
+            }
+        }
+    }
+==== internal.ts (0 errors) ====
+    namespace My.Internal {
+        export function getThing(): void {}
+        export const enum WhichThing {
+            A, B, C
+        }
+    }
+    

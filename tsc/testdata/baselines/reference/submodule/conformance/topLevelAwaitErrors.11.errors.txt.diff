@@ -1,0 +1,19 @@
+--- old.topLevelAwaitErrors.11.errors.txt
++++ new.topLevelAwaitErrors.11.errors.txt
+@@= skipped -0, +0 lines =@@
+ index.ts(3,8): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
++index.ts(3,8): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+ 
+ 
+-==== index.ts (1 errors) ====
++==== index.ts (2 errors) ====
+     // await disallowed in import=
+     declare var require: any;
+     import await = require("./other");
+            ~~~~~
+ !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
++           ~~~~~
++!!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+     
+ ==== other.ts (0 errors) ====
+     declare const _await: any;

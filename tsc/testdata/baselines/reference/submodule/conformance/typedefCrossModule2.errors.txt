@@ -1,0 +1,40 @@
+use.js(1,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== use.js (1 errors) ====
+    var mod = require('./mod1.js');
+              ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    /** @type {import("./mod1.js").Baz} */
+    var b;
+    /** @type {mod.Baz} */
+    var bb;
+    var bbb = new mod.Baz();
+    
+==== mod1.js (0 errors) ====
+    // error
+    
+    /** @typedef {number} Foo */
+    class Foo { } // should error
+    
+    /** @typedef {number} Bar */
+    exports.Bar = class { }
+    
+    /** @typedef {number} Baz */
+    module.exports = {
+        Baz: class { }
+    }
+    
+    // ok
+    
+    /** @typedef {number} Qux */
+    var Qux = 2;
+    
+    /** @typedef {number} Quid */
+    exports.Quid = 2;
+    
+    /** @typedef {number} Quack */
+    module.exports = {
+        Quack: 2
+    }
+    

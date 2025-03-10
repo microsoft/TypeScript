@@ -1,0 +1,49 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+f1.d.ts(11,9): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+f1.d.ts(11,10): error TS2339: Property '0' does not exist on type '{}'.
+f1.d.ts(11,13): error TS2339: Property '1' does not exist on type '{}'.
+main.ts(1,1): error TS2304: Cannot find name 'Symbol'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== f1.d.ts (3 errors) ====
+    export {};
+    
+    declare module M.M1 {
+        export let x: number;
+    }
+    declare global {
+        interface SymbolConstructor {
+            observable: symbol;
+        }
+        class Cls {x}
+        let [a, b]: number[];
+            ~~~~~~
+!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+             ~
+!!! error TS2339: Property '0' does not exist on type '{}'.
+                ~
+!!! error TS2339: Property '1' does not exist on type '{}'.
+        export import X = M.M1.x;
+    }
+    
+==== main.ts (1 errors) ====
+    Symbol.observable;
+    ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+    new Cls().x
+    let c = a + b + X;

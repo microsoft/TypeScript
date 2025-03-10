@@ -1,0 +1,22 @@
+--- old.logicalAssignment8(target=esnext).errors.txt
++++ new.logicalAssignment8(target=esnext).errors.txt
+@@= skipped -0, +0 lines =@@
+ logicalAssignment8.ts(12,5): error TS2532: Object is possibly 'undefined'.
++logicalAssignment8.ts(12,36): error TS2339: Property 'push' does not exist on type 'number[] | undefined'.
++  Property 'push' does not exist on type 'undefined'.
+ 
+ 
+-==== logicalAssignment8.ts (1 errors) ====
++==== logicalAssignment8.ts (2 errors) ====
+     declare const bar: { value?: number[] } | undefined
+     
+     function foo1(results: number[] | undefined) {
+@@= skipped -15, +17 lines =@@
+         (results &&= bar?.value ?? []).push(100);
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2532: Object is possibly 'undefined'.
++                                       ~~~~
++!!! error TS2339: Property 'push' does not exist on type 'number[] | undefined'.
++!!! error TS2339:   Property 'push' does not exist on type 'undefined'.
+     }
+     

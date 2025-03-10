@@ -1,0 +1,18 @@
+--- old.importTag13.errors.txt
++++ new.importTag13.errors.txt
+@@= skipped -0, +-1 lines =@@
+-/foo.js(1,15): error TS1005: 'from' expected.
+-
+-
+-==== /foo.js (1 errors) ====
+-    /** @import x = require("types") */
+-                  ~
+-!!! error TS1005: 'from' expected.
+-    
+-==== /types.ts (0 errors) ====
+-    export interface Foo {
+-        a: number;
+-    }
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

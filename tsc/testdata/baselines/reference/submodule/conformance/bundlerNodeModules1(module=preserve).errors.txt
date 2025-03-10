@@ -1,0 +1,50 @@
+/main.cts(1,10): error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
+/main.mts(1,10): error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
+/main.ts(1,10): error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
+/node_modules/dual/index.cjs(1,1): error TS2304: Cannot find name 'exports'.
+
+
+==== /node_modules/dual/package.json (0 errors) ====
+    {
+      "name": "dual",
+      "version": "1.0.0",
+      "type": "module",
+      "main": "index.cjs",
+      "types": "index.d.cts",
+      "exports": {
+        ".": {
+          "import": "./index.js",
+          "require": "./index.cjs"
+        }
+      }
+    }
+    
+==== /node_modules/dual/index.js (0 errors) ====
+    export const esm = 0;
+    
+==== /node_modules/dual/index.d.ts (0 errors) ====
+    export const esm: number;
+    
+==== /node_modules/dual/index.cjs (1 errors) ====
+    exports.cjs = 0;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    
+==== /node_modules/dual/index.d.cts (0 errors) ====
+    export const cjs: number;
+    
+==== /main.ts (1 errors) ====
+    import { esm, cjs } from "dual";
+             ~~~
+!!! error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
+    
+==== /main.mts (1 errors) ====
+    import { esm, cjs } from "dual";
+             ~~~
+!!! error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
+    
+==== /main.cts (1 errors) ====
+    import { esm, cjs } from "dual";
+             ~~~
+!!! error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
+    

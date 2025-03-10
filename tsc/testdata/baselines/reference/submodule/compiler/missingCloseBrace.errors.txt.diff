@@ -1,0 +1,8 @@
+--- old.missingCloseBrace.errors.txt
++++ new.missingCloseBrace.errors.txt
+@@= skipped -12, +12 lines =@@
+     
+     
+ !!! error TS1005: '}' expected.
+-!!! related TS1007 missingCloseBrace.ts:1:22: The parser expected to find a '}' to match the '{' token here.
++!!! related TS1007: The parser expected to find a '}' to match the '{' token here.

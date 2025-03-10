@@ -1,0 +1,52 @@
+--- old.orderMattersForSignatureGroupIdentity.errors.txt
++++ new.orderMattersForSignatureGroupIdentity.errors.txt
+@@= skipped -0, +0 lines =@@
+-orderMattersForSignatureGroupIdentity.ts(19,1): error TS2769: No overload matches this call.
+-  Overload 1 of 2, '(x: { s: string; }): string', gave the following error.
+-    Object literal may only specify known properties, and 'n' does not exist in type '{ s: string; }'.
+-  Overload 2 of 2, '(x: { n: number; }): number', gave the following error.
++orderMattersForSignatureGroupIdentity.ts(19,5): error TS2769: No overload matches this call.
++  The last overload gave the following error.
+     Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
+ orderMattersForSignatureGroupIdentity.ts(19,20): error TS2339: Property 'toLowerCase' does not exist on type 'never'.
+ orderMattersForSignatureGroupIdentity.ts(22,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'w' must be of type 'A', but here has type 'C'.
+-orderMattersForSignatureGroupIdentity.ts(24,1): error TS2769: No overload matches this call.
+-  Overload 1 of 2, '(x: { s: string; }): string', gave the following error.
+-    Object literal may only specify known properties, and 'n' does not exist in type '{ s: string; }'.
+-  Overload 2 of 2, '(x: { n: number; }): number', gave the following error.
++orderMattersForSignatureGroupIdentity.ts(24,5): error TS2769: No overload matches this call.
++  The last overload gave the following error.
+     Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
+ orderMattersForSignatureGroupIdentity.ts(24,20): error TS2339: Property 'toLowerCase' does not exist on type 'never'.
+ 
+@@= skipped -32, +28 lines =@@
+     var v: B;
+     
+     v({ s: "", n: 0 }).toLowerCase();
+-    ~
++        ~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 2, '(x: { s: string; }): string', gave the following error.
+-!!! error TS2769:     Object literal may only specify known properties, and 'n' does not exist in type '{ s: string; }'.
+-!!! error TS2769:   Overload 2 of 2, '(x: { n: number; }): number', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
++!!! related TS2771 orderMattersForSignatureGroupIdentity.ts:3:5: The last overload is declared here.
+                        ~~~~~~~~~~~
+ !!! error TS2339: Property 'toLowerCase' does not exist on type 'never'.
+     
+@@= skipped -16, +15 lines =@@
+ !!! related TS6203 orderMattersForSignatureGroupIdentity.ts:21:5: 'w' was also declared here.
+     
+     w({ s: "", n: 0 }).toLowerCase();
+-    ~
++        ~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 2, '(x: { s: string; }): string', gave the following error.
+-!!! error TS2769:     Object literal may only specify known properties, and 'n' does not exist in type '{ s: string; }'.
+-!!! error TS2769:   Overload 2 of 2, '(x: { n: number; }): number', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
++!!! related TS2771 orderMattersForSignatureGroupIdentity.ts:3:5: The last overload is declared here.
+                        ~~~~~~~~~~~
+ !!! error TS2339: Property 'toLowerCase' does not exist on type 'never'.

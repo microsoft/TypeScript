@@ -1,0 +1,16 @@
+index.ts(1,8): error TS2307: Cannot find module 'source-map-support/register' or its corresponding type declarations.
+
+
+==== tsconfig.json (0 errors) ====
+    {
+        "include": ["index.ts"],
+    }
+    
+==== index.ts (1 errors) ====
+    import "source-map-support/register";
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'source-map-support/register' or its corresponding type declarations.
+    
+==== node_modules/source-map-support/register.js (0 errors) ====
+    module.exports = {};
+    

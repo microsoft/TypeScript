@@ -1,0 +1,68 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2318: Cannot find global type 'TemplateStringsArray'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+index.ts(7,16): error TS2304: Cannot find name 'Object'.
+node_modules/styled-components/index.d.ts(14,14): error TS2304: Cannot find name 'TemplateStringsArray'.
+node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts(5,38): error TS2304: Cannot find name 'Exclude'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2318: Cannot find global type 'TemplateStringsArray'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts (1 errors) ====
+    interface Statics {
+        "$$whatever": string;
+    }
+    declare namespace hoistNonReactStatics {
+        type NonReactStatics<T> = {[X in Exclude<keyof T, keyof Statics>]: T[X]}
+                                         ~~~~~~~
+!!! error TS2304: Cannot find name 'Exclude'.
+    }
+    export = hoistNonReactStatics;
+==== node_modules/styled-components/index.d.ts (1 errors) ====
+    import * as hoistNonReactStatics from "hoist-non-react-statics";
+    export interface DefaultTheme {}
+    export type StyledComponent<TTag extends string, TTheme = DefaultTheme, TStyle = {}, TWhatever = never> =
+        string
+        & StyledComponentBase<TTag, TTheme, TStyle, TWhatever>
+        & hoistNonReactStatics.NonReactStatics<TTag>;
+    export interface StyledComponentBase<TTag extends string, TTheme = DefaultTheme, TStyle = {}, TWhatever = never> {
+        tag: TTag;
+        theme: TTheme;
+        style: TStyle;
+        whatever: TWhatever;
+    }
+    export interface StyledInterface {
+        div: (a: TemplateStringsArray) => StyledComponent<"div">;
+                 ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
+    }
+    
+    declare const styled: StyledInterface;
+    export default styled;
+==== index.ts (1 errors) ====
+    import styled from "styled-components";
+    
+    const A = styled.div``;
+    const B = styled.div``;
+    export const C = styled.div``;
+    
+    export default Object.assign(A, {
+                   ~~~~~~
+!!! error TS2304: Cannot find name 'Object'.
+        B,
+        C
+    });
+    

@@ -1,0 +1,47 @@
+--- old.classStaticBlock6.errors.txt
++++ new.classStaticBlock6.errors.txt
+@@= skipped -0, +0 lines =@@
+ classStaticBlock6.ts(8,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
++classStaticBlock6.ts(8,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+ classStaticBlock6.ts(9,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
++classStaticBlock6.ts(9,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+ classStaticBlock6.ts(13,9): error TS18037: 'await' expression cannot be used inside a class static block.
+ classStaticBlock6.ts(13,14): error TS1109: Expression expected.
+ classStaticBlock6.ts(17,9): error TS2662: Cannot find name 'arguments'. Did you mean the static member 'C.arguments'?
+@@= skipped -9, +11 lines =@@
+ classStaticBlock6.ts(41,13): error TS2815: 'arguments' cannot be referenced in property initializers.
+ classStaticBlock6.ts(42,13): error TS18037: 'await' expression cannot be used inside a class static block.
+ classStaticBlock6.ts(42,18): error TS1109: Expression expected.
+-classStaticBlock6.ts(45,17): error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES5. Consider using a standard function or method.
+ classStaticBlock6.ts(46,22): error TS1109: Expression expected.
+ classStaticBlock6.ts(55,13): error TS2815: 'arguments' cannot be referenced in property initializers.
+ 
+ 
+-==== classStaticBlock6.ts (15 errors) ====
++==== classStaticBlock6.ts (16 errors) ====
+     class B {
+         static a = 1;
+     }
+@@= skipped -16, +15 lines =@@
+             let arguments = 1;
+                 ~~~~~~~~~
+ !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
++                ~~~~~~~~~
++!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+             let eval = 1;
+                 ~~~~
+ !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
++                ~~~~
++!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+         }
+     
+         static {
+@@= skipped -59, +63 lines =@@
+     
+                 async function ff () {
+                     arguments;
+-                    ~~~~~~~~~
+-!!! error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES5. Consider using a standard function or method.
+                     await;
+                          ~
+ !!! error TS1109: Expression expected.

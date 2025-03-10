@@ -1,0 +1,13 @@
+--- old.optionsOutAndNoModuleGen.errors.txt
++++ new.optionsOutAndNoModuleGen.errors.txt
+@@= skipped -0, +-1 lines =@@
+-optionsOutAndNoModuleGen.ts(1,1): error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
+-
+-
+-==== optionsOutAndNoModuleGen.ts (1 errors) ====
+-    export var x = 10;
+-    ~~~~~~~~~~~~~~~~~~
+-!!! error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

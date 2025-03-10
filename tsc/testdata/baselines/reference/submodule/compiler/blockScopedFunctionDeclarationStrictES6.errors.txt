@@ -1,0 +1,28 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+blockScopedFunctionDeclarationStrictES6.ts(6,1): error TS2304: Cannot find name 'foo'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== blockScopedFunctionDeclarationStrictES6.ts (1 errors) ====
+    "use strict";
+    if (true) {
+        function foo() { } // Allowed to declare block scope function
+        foo(); // This call should be ok
+    }
+    foo(); // Cannot find name since foo is block scoped
+    ~~~
+!!! error TS2304: Cannot find name 'foo'.

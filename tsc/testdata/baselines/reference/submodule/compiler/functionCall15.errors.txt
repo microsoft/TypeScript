@@ -1,0 +1,16 @@
+functionCall15.ts(1,25): error TS2300: Duplicate identifier 'b'.
+functionCall15.ts(1,25): error TS2300: Duplicate identifier 'b'.
+functionCall15.ts(1,39): error TS2300: Duplicate identifier 'b'.
+functionCall15.ts(1,39): error TS2300: Duplicate identifier 'b'.
+
+
+==== functionCall15.ts (4 errors) ====
+    function foo(a?:string, b?:number, ...b:number[]){}
+                            ~
+!!! error TS2300: Duplicate identifier 'b'.
+                            ~
+!!! error TS2300: Duplicate identifier 'b'.
+                                          ~
+!!! error TS2300: Duplicate identifier 'b'.
+                                          ~
+!!! error TS2300: Duplicate identifier 'b'.

@@ -1,0 +1,21 @@
+--- old.systemModule10.errors.txt
++++ new.systemModule10.errors.txt
+@@= skipped -0, +0 lines =@@
+-systemModule10.ts(1,20): error TS2792: Cannot find module 'file1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+-systemModule10.ts(2,21): error TS2792: Cannot find module 'file2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++systemModule10.ts(1,20): error TS2307: Cannot find module 'file1' or its corresponding type declarations.
++systemModule10.ts(2,21): error TS2307: Cannot find module 'file2' or its corresponding type declarations.
+ 
+ 
+ ==== systemModule10.ts (2 errors) ====
+     import n, {x} from 'file1'
+                        ~~~~~~~
+-!!! error TS2792: Cannot find module 'file1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'file1' or its corresponding type declarations.
+     import n2 = require('file2');
+                         ~~~~~~~
+-!!! error TS2792: Cannot find module 'file2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'file2' or its corresponding type declarations.
+     export {x}
+     export {x as y}
+     export {n}

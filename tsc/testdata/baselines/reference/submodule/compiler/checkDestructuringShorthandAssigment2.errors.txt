@@ -1,0 +1,11 @@
+checkDestructuringShorthandAssigment2.ts(4,27): error TS2353: Object literal may only specify known properties, and '[k]' does not exist in type '{ x: any; }'.
+
+
+==== checkDestructuringShorthandAssigment2.ts (1 errors) ====
+    // GH #38175 -- should not crash while checking
+    
+    let o: any, k: any;
+    let { x } = { x: 1, ...o, [k]: 1 };
+                              ~~~
+!!! error TS2353: Object literal may only specify known properties, and '[k]' does not exist in type '{ x: any; }'.
+    

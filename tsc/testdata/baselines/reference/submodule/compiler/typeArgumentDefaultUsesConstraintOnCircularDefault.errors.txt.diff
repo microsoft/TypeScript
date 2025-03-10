@@ -1,0 +1,18 @@
+--- old.typeArgumentDefaultUsesConstraintOnCircularDefault.errors.txt
++++ new.typeArgumentDefaultUsesConstraintOnCircularDefault.errors.txt
+@@= skipped -0, +0 lines =@@
+ typeArgumentDefaultUsesConstraintOnCircularDefault.ts(1,30): error TS2744: Type parameter defaults can only reference previously declared type parameters.
+-typeArgumentDefaultUsesConstraintOnCircularDefault.ts(3,18): error TS2353: Object literal may only specify known properties, and 'foo' does not exist in type 'Test<any>'.
++typeArgumentDefaultUsesConstraintOnCircularDefault.ts(3,18): error TS2353: Object literal may only specify known properties, and 'foo' does not exist in type 'Test<error>'.
+ 
+ 
+ ==== typeArgumentDefaultUsesConstraintOnCircularDefault.ts (2 errors) ====
+@@= skipped -8, +8 lines =@@
+     
+     let zz: Test = { foo: "abc" };  // should error on comparison with Test<string>
+                      ~~~
+-!!! error TS2353: Object literal may only specify known properties, and 'foo' does not exist in type 'Test<any>'.
++!!! error TS2353: Object literal may only specify known properties, and 'foo' does not exist in type 'Test<error>'.
+     
+     let zzy: Test = { value: {} };
+     

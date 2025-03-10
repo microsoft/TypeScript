@@ -1,0 +1,52 @@
+module.ts(3,33): error TS2351: This expression is not constructable.
+  Type '{ Origin: any; }' has no construct signatures.
+test.ts(2,16): error TS2339: Property 'Y' does not exist on type '{}'.
+test.ts(3,12): error TS2339: Property 'Y' does not exist on type '{}'.
+
+
+==== class.ts (0 errors) ====
+    module X.Y {
+        export class Point {
+            constructor(x: number, y: number) {
+                this.x = x;
+                this.y = y;
+            }
+            x: number;
+            y: number;
+        }
+    }
+    
+==== module.ts (1 errors) ====
+    module X.Y {
+        export module Point {
+            export var Origin = new Point(0, 0);
+                                    ~~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type '{ Origin: any; }' has no construct signatures.
+        }
+    }
+    
+==== test.ts (2 errors) ====
+    //var cl: { x: number; y: number; }
+    var cl = new X.Y.Point(1,1);
+                   ~
+!!! error TS2339: Property 'Y' does not exist on type '{}'.
+    var cl = X.Y.Point.Origin; // error not expected here same as bug 83996 ?
+               ~
+!!! error TS2339: Property 'Y' does not exist on type '{}'.
+    
+    
+==== simple.ts (0 errors) ====
+    class A {
+        id: string;
+    }
+    
+    module A {
+        export var Instance = new A();
+    }
+    
+    // ensure merging works as expected
+    var a = A.Instance;
+    var a = new A();
+    var a: { id: string };
+    

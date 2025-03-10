@@ -1,0 +1,27 @@
+--- old.jsdocTypeTagParameterType.errors.txt
++++ new.jsdocTypeTagParameterType.errors.txt
+@@= skipped -0, +0 lines =@@
+-a.js(3,5): error TS2322: Type 'number' is not assignable to type 'string'.
+-a.js(7,5): error TS2322: Type 'number' is not assignable to type 'string'.
++a.js(2,12): error TS7006: Parameter 'value' implicitly has an 'any' type.
++a.js(6,12): error TS7006: Parameter 's' implicitly has an 'any' type.
+ 
+ 
+ ==== a.js (2 errors) ====
+     /** @type {function(string): void} */
+     const f = (value) => {
++               ~~~~~
++!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
+         value = 1 // should error
+-        ~~~~~
+-!!! error TS2322: Type 'number' is not assignable to type 'string'.
+     };
+     /** @type {(s: string) => void} */
+     function g(s) {
++               ~
++!!! error TS7006: Parameter 's' implicitly has an 'any' type.
+         s = 1 // Should error
+-        ~
+-!!! error TS2322: Type 'number' is not assignable to type 'string'.
+     }
+     

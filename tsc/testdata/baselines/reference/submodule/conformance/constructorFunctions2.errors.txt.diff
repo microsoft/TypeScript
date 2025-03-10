@@ -1,0 +1,32 @@
+--- old.constructorFunctions2.errors.txt
++++ new.constructorFunctions2.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++index.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'A'.
++other.js(1,10): error TS2451: Cannot redeclare block-scoped variable 'A'.
++
++
++==== node.d.ts (0 errors) ====
++    declare function require(id: string): any;
++    declare var module: any, exports: any;
++    
++==== index.js (1 errors) ====
++    const A = require("./other");
++          ~
++!!! error TS2451: Cannot redeclare block-scoped variable 'A'.
++!!! related TS6203 other.js:1:10: 'A' was also declared here.
++    const a = new A().id;
++    
++    const B = function() { this.id = 1; }
++    B.prototype.m = function() { this.x = 2; }
++    const b = new B();
++    b.id;
++    b.x;
++    
++==== other.js (1 errors) ====
++    function A() { this.id = 1; }
++             ~
++!!! error TS2451: Cannot redeclare block-scoped variable 'A'.
++!!! related TS6203 index.js:1:7: 'A' was also declared here.
++    module.exports = A;

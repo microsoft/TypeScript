@@ -1,0 +1,10 @@
+prototypes.ts(2,14): error TS2339: Property 'prototype' does not exist on type 'Object'.
+
+
+==== prototypes.ts (1 errors) ====
+    Object.prototype; // ok
+    new Object().prototype; // error
+                 ~~~~~~~~~
+!!! error TS2339: Property 'prototype' does not exist on type 'Object'.
+    function f() {}
+    f.prototype;

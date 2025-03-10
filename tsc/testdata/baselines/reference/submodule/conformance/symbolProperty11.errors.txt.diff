@@ -1,0 +1,43 @@
+--- old.symbolProperty11.errors.txt
++++ new.symbolProperty11.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++symbolProperty11.ts(3,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
++symbolProperty11.ts(3,6): error TS2304: Cannot find name 'Symbol'.
++symbolProperty11.ts(7,1): error TS2322: Type 'C' is not assignable to type 'I'.
++  Index signature for type 'number' is missing in type 'C'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== symbolProperty11.ts (3 errors) ====
++    class C { }
++    interface I {
++        [Symbol.iterator]?: { x };
++        ~~~~~~~~~~~~~~~~~
++!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
++    }
++    
++    var i: I;
++    i = new C;
++    ~
++!!! error TS2322: Type 'C' is not assignable to type 'I'.
++!!! error TS2322:   Index signature for type 'number' is missing in type 'C'.
++    var c: C = i;

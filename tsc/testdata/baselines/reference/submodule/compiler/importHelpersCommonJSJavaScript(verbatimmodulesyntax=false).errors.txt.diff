@@ -1,0 +1,53 @@
+--- old.importHelpersCommonJSJavaScript(verbatimmodulesyntax=false).errors.txt
++++ new.importHelpersCommonJSJavaScript(verbatimmodulesyntax=false).errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/index.js(5,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
++==== /node_modules/tslib/package.json (0 errors) ====
++    {
++      "name": "tslib",
++      "main": "tslib.js",
++      "module": "tslib.es6.js",
++      "jsnext:main": "tslib.es6.js",
++      "typings": "tslib.d.ts",
++      "exports": {
++          ".": {
++              "module": {
++                  "types": "./modules/index.d.ts",
++                  "default": "./tslib.es6.mjs"
++              },
++              "import": {
++                  "node": "./modules/index.js",
++                  "default": {
++                      "types": "./modules/index.d.ts",
++                      "default": "./tslib.es6.mjs"
++                  }
++              },
++              "default": "./tslib.js"
++          },
++          "./*": "./*",
++          "./": "./"
++      }
++    }
++    
++==== /node_modules/tslib/tslib.d.ts (0 errors) ====
++    export declare var __extends: any;
++    
++==== /node_modules/tslib/modules/package.json (0 errors) ====
++    { "type": "module" }
++    
++==== /node_modules/tslib/modules/index.d.ts (0 errors) ====
++    export {};
++    
++==== /index.js (1 errors) ====
++    class Foo {}
++    
++    class Bar extends Foo {}
++    
++    module.exports = Bar;
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    

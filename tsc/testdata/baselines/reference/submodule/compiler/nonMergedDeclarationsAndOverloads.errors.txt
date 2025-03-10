@@ -1,0 +1,35 @@
+nonMergedDeclarationsAndOverloads.ts(2,5): error TS2300: Duplicate identifier 'm1'.
+nonMergedDeclarationsAndOverloads.ts(2,5): error TS2300: Duplicate identifier 'm1'.
+nonMergedDeclarationsAndOverloads.ts(4,5): error TS2300: Duplicate identifier 'm1'.
+nonMergedDeclarationsAndOverloads.ts(4,5): error TS2300: Duplicate identifier 'm1'.
+nonMergedDeclarationsAndOverloads.ts(5,5): error TS2300: Duplicate identifier 'm1'.
+nonMergedDeclarationsAndOverloads.ts(5,5): error TS2300: Duplicate identifier 'm1'.
+nonMergedDeclarationsAndOverloads.ts(6,5): error TS2300: Duplicate identifier 'm1'.
+nonMergedDeclarationsAndOverloads.ts(6,5): error TS2300: Duplicate identifier 'm1'.
+
+
+==== nonMergedDeclarationsAndOverloads.ts (8 errors) ====
+    class A {
+        m1: string;
+        ~~
+!!! error TS2300: Duplicate identifier 'm1'.
+        ~~
+!!! error TS2300: Duplicate identifier 'm1'.
+        f() {}
+        m1 (a: string): void;
+        ~~
+!!! error TS2300: Duplicate identifier 'm1'.
+        ~~
+!!! error TS2300: Duplicate identifier 'm1'.
+        m1 (a: number): void;
+        ~~
+!!! error TS2300: Duplicate identifier 'm1'.
+        ~~
+!!! error TS2300: Duplicate identifier 'm1'.
+        m1 (a: any): void {
+        ~~
+!!! error TS2300: Duplicate identifier 'm1'.
+        ~~
+!!! error TS2300: Duplicate identifier 'm1'.
+        }
+    }

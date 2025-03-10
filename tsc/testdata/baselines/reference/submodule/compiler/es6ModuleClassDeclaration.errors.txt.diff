@@ -1,0 +1,136 @@
+--- old.es6ModuleClassDeclaration.errors.txt
++++ new.es6ModuleClassDeclaration.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== es6ModuleClassDeclaration.ts (0 errors) ====
++    export class c {
++        constructor() {
++        }
++        private x = 10;
++        public y = 30;
++        static k = 20;
++        private static l = 30;
++        private method1() {
++        }
++        public method2() {
++        }
++        static method3() {
++        }
++        private static method4() {
++        }
++    }
++    class c2 {
++        constructor() {
++        }
++        private x = 10;
++        public y = 30;
++        static k = 20;
++        private static l = 30;
++        private method1() {
++        }
++        public method2() {
++        }
++        static method3() {
++        }
++        private static method4() {
++        }
++    }
++    new c();
++    new c2();
++    
++    export module m1 {
++        export class c3 {
++            constructor() {
++            }
++            private x = 10;
++            public y = 30;
++            static k = 20;
++            private static l = 30;
++            private method1() {
++            }
++            public method2() {
++            }
++            static method3() {
++            }
++            private static method4() {
++            }
++        }
++        class c4 {
++            constructor() {
++            }
++            private x = 10;
++            public y = 30;
++            static k = 20;
++            private static l = 30;
++            private method1() {
++            }
++            public method2() {
++            }
++            static method3() {
++            }
++            private static method4() {
++            }
++        }
++        new c();
++        new c2();
++        new c3();
++        new c4();
++    }
++    module m2 {
++        export class c3 {
++            constructor() {
++            }
++            private x = 10;
++            public y = 30;
++            static k = 20;
++            private static l = 30;
++            private method1() {
++            }
++            public method2() {
++            }
++            static method3() {
++            }
++            private static method4() {
++            }
++        }
++        class c4 {
++            constructor() {
++            }
++            private x = 10;
++            public y = 30;
++            static k = 20;
++            private static l = 30;
++            private method1() {
++            }
++            public method2() {
++            }
++            static method3() {
++            }
++            private static method4() {
++            }
++        }
++        new c();
++        new c2();
++        new c3();
++        new c4();
++        new m1.c3();
++    }

@@ -1,0 +1,22 @@
+--- old.discriminateWithOptionalProperty4(exactoptionalpropertytypes=false).errors.txt
++++ new.discriminateWithOptionalProperty4(exactoptionalpropertytypes=false).errors.txt
+@@= skipped -0, +0 lines =@@
+ discriminateWithOptionalProperty4.ts(16,14): error TS18048: 'z.a' is possibly 'undefined'.
++discriminateWithOptionalProperty4.ts(16,18): error TS2339: Property 'toString' does not exist on type 'string[] | undefined'.
++  Property 'toString' does not exist on type 'undefined'.
+ 
+ 
+-==== discriminateWithOptionalProperty4.ts (1 errors) ====
++==== discriminateWithOptionalProperty4.ts (2 errors) ====
+     // https://github.com/microsoft/TypeScript/issues/55566
+     
+     export function main(a: string[] | undefined) {
+@@= skipped -19, +21 lines =@@
+       "a" in z ? z.a.toString() : z.b.toString();
+                  ~~~
+ !!! error TS18048: 'z.a' is possibly 'undefined'.
++                     ~~~~~~~~
++!!! error TS2339: Property 'toString' does not exist on type 'string[] | undefined'.
++!!! error TS2339:   Property 'toString' does not exist on type 'undefined'.
+     }
+     

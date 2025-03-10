@@ -1,0 +1,10 @@
+FunctionDeclaration8_es6.ts(1,12): error TS2304: Cannot find name 'yield'.
+FunctionDeclaration8_es6.ts(1,20): error TS2304: Cannot find name 'foo'.
+
+
+==== FunctionDeclaration8_es6.ts (2 errors) ====
+    var v = { [yield]: foo }
+               ~~~~~
+!!! error TS2304: Cannot find name 'yield'.
+                       ~~~
+!!! error TS2304: Cannot find name 'foo'.

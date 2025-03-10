@@ -1,0 +1,81 @@
+destructureCatchClause.ts(2,17): error TS2339: Property 'x' does not exist on type '{}'.
+destructureCatchClause.ts(3,15): error TS2461: Type 'unknown' is not an array type.
+destructureCatchClause.ts(5,17): error TS2339: Property 'a' does not exist on type '{}'.
+destructureCatchClause.ts(6,17): error TS2339: Property 'a' does not exist on type '{}'.
+destructureCatchClause.ts(8,15): error TS2461: Type 'unknown' is not an array type.
+destructureCatchClause.ts(9,15): error TS2461: Type 'unknown' is not an array type.
+destructureCatchClause.ts(11,17): error TS2339: Property 'a' does not exist on type '{}'.
+destructureCatchClause.ts(26,17): error TS2339: Property 'x' does not exist on type '{}'.
+destructureCatchClause.ts(27,15): error TS2461: Type 'unknown' is not an array type.
+destructureCatchClause.ts(29,17): error TS2339: Property 'a' does not exist on type '{}'.
+destructureCatchClause.ts(30,17): error TS2339: Property 'a' does not exist on type '{}'.
+destructureCatchClause.ts(32,15): error TS2461: Type 'unknown' is not an array type.
+destructureCatchClause.ts(33,15): error TS2461: Type 'unknown' is not an array type.
+destructureCatchClause.ts(35,17): error TS2339: Property 'a' does not exist on type '{}'.
+
+
+==== destructureCatchClause.ts (14 errors) ====
+    // These are okay with useUnknownInCatchVariables=false, but not okay with useUnknownInCatchVariables=true.
+    try {} catch ({ x }) { x }
+                    ~
+!!! error TS2339: Property 'x' does not exist on type '{}'.
+    try {} catch ([ x ]) { x }
+                  ~~~~~
+!!! error TS2461: Type 'unknown' is not an array type.
+    
+    try {} catch ({ a: { x } }) { x }
+                    ~
+!!! error TS2339: Property 'a' does not exist on type '{}'.
+    try {} catch ({ a: [ x ] }) { x }
+                    ~
+!!! error TS2339: Property 'a' does not exist on type '{}'.
+    
+    try {} catch ([{ x }]) { x }
+                  ~~~~~~~
+!!! error TS2461: Type 'unknown' is not an array type.
+    try {} catch ([[ x ]]) { x }
+                  ~~~~~~~
+!!! error TS2461: Type 'unknown' is not an array type.
+    
+    try {} catch ({ a: { b: { c: { x }} }}) { x }
+                    ~
+!!! error TS2339: Property 'a' does not exist on type '{}'.
+    
+    
+    try {} catch ({ x }: any) { x }
+    try {} catch ([ x ]: any) { x }
+    
+    try {} catch ({ a: { x } }: any) { x }
+    try {} catch ({ a: [ x ] }: any) { x }
+    
+    try {} catch ([{ x }]: any) { x }
+    try {} catch ([[ x ]]: any) { x }
+    
+    try {} catch ({ a: { b: { c: { x }} }}: any) { x }
+    
+    
+    try {} catch ({ x }: unknown) { x }
+                    ~
+!!! error TS2339: Property 'x' does not exist on type '{}'.
+    try {} catch ([ x ]: unknown) { x }
+                  ~~~~~
+!!! error TS2461: Type 'unknown' is not an array type.
+    
+    try {} catch ({ a: { x } }: unknown) { x }
+                    ~
+!!! error TS2339: Property 'a' does not exist on type '{}'.
+    try {} catch ({ a: [ x ] }: unknown) { x }
+                    ~
+!!! error TS2339: Property 'a' does not exist on type '{}'.
+    
+    try {} catch ([{ x }]: unknown) { x }
+                  ~~~~~~~
+!!! error TS2461: Type 'unknown' is not an array type.
+    try {} catch ([[ x ]]: unknown) { x }
+                  ~~~~~~~
+!!! error TS2461: Type 'unknown' is not an array type.
+    
+    try {} catch ({ a: { b: { c: { x }} }}: unknown) { x }
+                    ~
+!!! error TS2339: Property 'a' does not exist on type '{}'.
+    

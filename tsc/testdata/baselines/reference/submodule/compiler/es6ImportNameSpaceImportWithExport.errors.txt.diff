@@ -1,0 +1,26 @@
+--- old.es6ImportNameSpaceImportWithExport.errors.txt
++++ new.es6ImportNameSpaceImportWithExport.errors.txt
+@@= skipped -0, +0 lines =@@
+ client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
++client.ts(1,42): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+ client.ts(3,1): error TS1191: An import declaration cannot have modifiers.
++client.ts(3,43): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+ 
+ 
+ ==== server.ts (0 errors) ====
+     export var a = 10;
+     
+-==== client.ts (2 errors) ====
++==== client.ts (4 errors) ====
+     export import * as nameSpaceBinding from "server";
+     ~~~~~~
+ !!! error TS1191: An import declaration cannot have modifiers.
++                                             ~~~~~~~~
++!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
+     export var x = nameSpaceBinding.a;
+     export import * as nameSpaceBinding2 from "server"; // Not referenced imports
+     ~~~~~~
+ !!! error TS1191: An import declaration cannot have modifiers.
++                                              ~~~~~~~~
++!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
+     

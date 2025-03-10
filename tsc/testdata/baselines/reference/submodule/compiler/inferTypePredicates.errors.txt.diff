@@ -1,0 +1,47 @@
+--- old.inferTypePredicates.errors.txt
++++ new.inferTypePredicates.errors.txt
+@@= skipped -7, +7 lines =@@
+   Type 'number | null' is not assignable to type 'number'.
+     Type 'null' is not assignable to type 'number'.
+ inferTypePredicates.ts(52,17): error TS18048: 'arr' is possibly 'undefined'.
+-inferTypePredicates.ts(54,28): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+-  Type 'undefined' is not assignable to type 'string'.
++inferTypePredicates.ts(53,6): error TS2339: Property 'filter' does not exist on type 'MyObj[] | undefined'.
++  Property 'filter' does not exist on type 'undefined'.
+ inferTypePredicates.ts(65,28): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+   Type 'undefined' is not assignable to type 'string'.
+ inferTypePredicates.ts(90,8): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+@@= skipped -9, +9 lines =@@
+   Type 'number' is not assignable to type 'string'.
+ inferTypePredicates.ts(115,7): error TS2322: Type 'string | number' is not assignable to type 'number'.
+   Type 'string' is not assignable to type 'number'.
+-inferTypePredicates.ts(133,7): error TS2740: Type '{}' is missing the following properties from type 'Date': toDateString, toTimeString, toLocaleDateString, toLocaleTimeString, and 37 more.
++inferTypePredicates.ts(133,7): error TS2322: Type 'object' is not assignable to type 'Date'.
++  Type '{}' is missing the following properties from type 'Date': toDateString, toTimeString, toLocaleDateString, toLocaleTimeString, and 37 more.
+ inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1' but required in type 'C2'.
+ 
+ 
+@@= skipped -72, +73 lines =@@
+                     ~~~
+ !!! error TS18048: 'arr' is possibly 'undefined'.
+         .filter((obj) => obj && obj.data)
++         ~~~~~~
++!!! error TS2339: Property 'filter' does not exist on type 'MyObj[] | undefined'.
++!!! error TS2339:   Property 'filter' does not exist on type 'undefined'.
+         .map(obj => JSON.parse(obj.data))  // should error
+-                               ~~~~~~~~
+-!!! error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+-!!! error TS2345:   Type 'undefined' is not assignable to type 'string'.
+       );
+     
+     const result2 = myArray
+@@= skipped -95, +95 lines =@@
+     if (flakyIsDate(maybeDate)) {
+       let t: Date = maybeDate;  // should error
+           ~
+-!!! error TS2740: Type '{}' is missing the following properties from type 'Date': toDateString, toTimeString, toLocaleDateString, toLocaleTimeString, and 37 more.
++!!! error TS2322: Type 'object' is not assignable to type 'Date'.
++!!! error TS2322:   Type '{}' is missing the following properties from type 'Date': toDateString, toTimeString, toLocaleDateString, toLocaleTimeString, and 37 more.
+     } else {
+       let t: object = maybeDate;  // should ok
+     }

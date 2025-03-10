@@ -1,0 +1,59 @@
+--- old.symbolDeclarationEmit12.errors.txt
++++ new.symbolDeclarationEmit12.errors.txt
+@@= skipped -0, +0 lines =@@
+-symbolDeclarationEmit12.ts(9,13): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
+-symbolDeclarationEmit12.ts(10,13): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++symbolDeclarationEmit12.ts(4,9): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
++symbolDeclarationEmit12.ts(4,10): error TS2304: Cannot find name 'Symbol'.
++symbolDeclarationEmit12.ts(5,10): error TS2304: Cannot find name 'Symbol'.
++symbolDeclarationEmit12.ts(6,10): error TS2304: Cannot find name 'Symbol'.
++symbolDeclarationEmit12.ts(9,14): error TS2304: Cannot find name 'Symbol'.
++symbolDeclarationEmit12.ts(10,14): error TS2304: Cannot find name 'Symbol'.
+ 
+ 
+-==== symbolDeclarationEmit12.ts (2 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== symbolDeclarationEmit12.ts (6 errors) ====
+     module M {
+         interface I { }
+         export class C {
+             [Symbol.iterator]: I;
++            ~~~~~~~~~~~~~~~~~
++!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
++             ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
+             [Symbol.toPrimitive](x: I) { }
++             ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
+             [Symbol.isConcatSpreadable](): I {
++             ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
+                 return undefined
+             }
+             get [Symbol.toPrimitive]() { return undefined; }
+-                ~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
++                 ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
+             set [Symbol.toPrimitive](x: I) { }
+-                ~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
++                 ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
+         }
+     }

@@ -1,0 +1,32 @@
+/a.ts(2,1): error TS1361: 'ns' cannot be used as a value because it was imported using 'import type'.
+/a.ts(3,1): error TS1361: 'ns' cannot be used as a value because it was imported using 'import type'.
+
+
+==== /ns.ts (0 errors) ====
+    namespace ns {
+      export type Type = string;
+      export class Class {}
+      export const Value = "";
+      export namespace nested {
+        export class NestedClass {
+          a!: string;
+        }
+      }
+    }
+    
+    export default ns;
+    
+==== /a.ts (2 errors) ====
+    import type ns from './ns';
+    ns.Class; // Error
+    ~~
+!!! error TS1361: 'ns' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /a.ts:1:8: 'ns' was imported here.
+    ns.Value; // Error
+    ~~
+!!! error TS1361: 'ns' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /a.ts:1:8: 'ns' was imported here.
+    let c: ns.Class;
+    let t: ns.Type = "";
+    let n: ns.nested.NestedClass = { a: '' };
+    

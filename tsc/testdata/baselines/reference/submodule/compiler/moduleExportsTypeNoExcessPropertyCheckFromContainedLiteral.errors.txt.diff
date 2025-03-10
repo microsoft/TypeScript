@@ -1,0 +1,53 @@
+--- old.moduleExportsTypeNoExcessPropertyCheckFromContainedLiteral.errors.txt
++++ new.moduleExportsTypeNoExcessPropertyCheckFromContainedLiteral.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++eslint.config.js(1,21): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++eslint.config.js(2,18): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
++==== eslint.config.js (2 errors) ====
++    const eslintReact = require('./eslint-plugin-react.js');
++                        ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    const tseslint = require('./typescript-eslint.js');
++                     ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++    tseslint.config(eslintReact)
++    
++==== eslint-plugin-react.js (0 errors) ====
++    const deprecatedRules = {
++      "jsx-sort-default-props": true
++    }
++    
++    const allRules = {
++      'no-unsafe': true
++    }
++    
++    module.exports = {
++      plugins: {
++        react: {
++          deprecatedRules,
++          rules: allRules,
++        },
++      },
++    };
++    
++==== typescript-eslint.js (0 errors) ====
++    /**
++     * @typedef {{ rules: Record<string, boolean> }} Plugin
++     */
++    
++    /**
++     * @typedef {{ plugins: Record<string, Plugin> }} Config
++     */
++    
++    /**
++     * @type {(...configs: Config[]) => void}
++     */
++    function config(...configs) { }
++    
++    module.exports = { config };
++    

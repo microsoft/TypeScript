@@ -1,0 +1,56 @@
+--- old.logicalAssignment7(target=es2015).errors.txt
++++ new.logicalAssignment7(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'CallableFunction'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'NewableFunction'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++logicalAssignment7.ts(2,35): error TS2339: Property 'push' does not exist on type '{}'.
++logicalAssignment7.ts(6,35): error TS2339: Property 'push' does not exist on type '{}'.
+ logicalAssignment7.ts(10,5): error TS2532: Object is possibly 'undefined'.
+-logicalAssignment7.ts(10,40): error TS2345: Argument of type '100' is not assignable to parameter of type 'never'.
++logicalAssignment7.ts(10,35): error TS2339: Property 'push' does not exist on type '{} | undefined'.
++  Property 'push' does not exist on type 'undefined'.
+ 
+ 
+-==== logicalAssignment7.ts (2 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'CallableFunction'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'NewableFunction'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== logicalAssignment7.ts (4 errors) ====
+     function foo1(results: number[] | undefined, results1: number[] | undefined) {
+         (results ||= results1 ||= []).push(100);
++                                      ~~~~
++!!! error TS2339: Property 'push' does not exist on type '{}'.
+     }
+     
+     function foo2(results: number[] | undefined, results1: number[] | undefined) {
+         (results ??= results1 ??= []).push(100);
++                                      ~~~~
++!!! error TS2339: Property 'push' does not exist on type '{}'.
+     }
+     
+     function foo3(results: number[] | undefined, results1: number[] | undefined) {
+         (results &&= results1 &&= []).push(100);
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2532: Object is possibly 'undefined'.
+-                                           ~~~
+-!!! error TS2345: Argument of type '100' is not assignable to parameter of type 'never'.
++                                      ~~~~
++!!! error TS2339: Property 'push' does not exist on type '{} | undefined'.
++!!! error TS2339:   Property 'push' does not exist on type 'undefined'.
+     }
+     

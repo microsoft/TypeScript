@@ -1,0 +1,22 @@
+--- old.declarationEmitHasTypesRefOnNamespaceUse.errors.txt
++++ new.declarationEmitHasTypesRefOnNamespaceUse.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/src/index.ts(1,22): error TS2503: Cannot find namespace 'NS'.
++
++
++==== /src/index.ts (1 errors) ====
++    class Src implements NS.Dep { }
++                         ~~
++!!! error TS2503: Cannot find namespace 'NS'.
++    
++==== /deps/dep/dep.d.ts (0 errors) ====
++    declare namespace NS {
++        interface Dep {
++        }
++    }
++==== /deps/dep/package.json (0 errors) ====
++    {
++        "typings": "dep.d.ts"
++    }

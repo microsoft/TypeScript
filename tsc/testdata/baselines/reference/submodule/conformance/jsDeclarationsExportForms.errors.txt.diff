@@ -1,0 +1,112 @@
+--- old.jsDeclarationsExportForms.errors.txt
++++ new.jsDeclarationsExportForms.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++cjs.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'ns'.
++cjs.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'ns'.
++cjs.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'ns'.
++cjs.js(1,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++cjs.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++cjs2.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'ns'.
++cjs2.js(1,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++cjs2.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++cjs3.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'ns'.
++cjs3.js(1,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++cjs3.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++cjs4.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'ns'.
++cjs4.js(1,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++cjs4.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
++==== cls.js (0 errors) ====
++    export class Foo {}
++    
++==== func.js (0 errors) ====
++    export function func() {}
++    
++==== bar.js (0 errors) ====
++    export * from "./cls";
++    
++==== bar2.js (0 errors) ====
++    export * from "./func";
++    export * from "./cls";
++    
++==== baz.js (0 errors) ====
++    import {Foo} from "./cls";
++    export {Foo};
++    
++==== bat.js (0 errors) ====
++    import * as ns from "./cls";
++    export default ns;
++    
++==== ban.js (0 errors) ====
++    import * as ns from "./cls";
++    export {ns};
++    
++==== bol.js (0 errors) ====
++    import * as ns from "./cls";
++    export { ns as classContainer };
++    
++==== cjs.js (5 errors) ====
++    const ns = require("./cls");
++          ~~
++!!! error TS2451: Cannot redeclare block-scoped variable 'ns'.
++!!! related TS6203 cjs2.js:1:7: 'ns' was also declared here.
++          ~~
++!!! error TS2451: Cannot redeclare block-scoped variable 'ns'.
++!!! related TS6203 cjs3.js:1:7: 'ns' was also declared here.
++          ~~
++!!! error TS2451: Cannot redeclare block-scoped variable 'ns'.
++!!! related TS6203 cjs4.js:1:7: 'ns' was also declared here.
++               ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    module.exports = { ns };
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++==== cjs2.js (3 errors) ====
++    const ns = require("./cls");
++          ~~
++!!! error TS2451: Cannot redeclare block-scoped variable 'ns'.
++!!! related TS6203 cjs.js:1:7: 'ns' was also declared here.
++               ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    module.exports = ns;
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++==== cjs3.js (3 errors) ====
++    const ns = require("./cls");
++          ~~
++!!! error TS2451: Cannot redeclare block-scoped variable 'ns'.
++!!! related TS6203 cjs.js:1:7: 'ns' was also declared here.
++               ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    module.exports.ns = ns;
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++==== cjs4.js (3 errors) ====
++    const ns = require("./cls");
++          ~~
++!!! error TS2451: Cannot redeclare block-scoped variable 'ns'.
++!!! related TS6203 cjs.js:1:7: 'ns' was also declared here.
++               ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    module.exports.names = ns;
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++    
++==== includeAll.js (0 errors) ====
++    import "./cjs4";
++    import "./cjs3";
++    import "./cjs2";
++    import "./cjs";
++    import "./bol";
++    import "./ban";
++    import "./bat";
++    import "./baz";
++    import "./bar";
++    import "./bar2";
++    

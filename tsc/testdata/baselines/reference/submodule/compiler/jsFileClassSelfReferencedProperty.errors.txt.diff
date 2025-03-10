@@ -1,0 +1,20 @@
+--- old.jsFileClassSelfReferencedProperty.errors.txt
++++ new.jsFileClassSelfReferencedProperty.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++foo.js(3,10): error TS2339: Property 'testStackOverflow' does not exist on type 'StackOverflowTest'.
++foo.js(3,35): error TS2339: Property 'testStackOverflow' does not exist on type 'StackOverflowTest'.
++
++
++==== foo.js (2 errors) ====
++    export class StackOverflowTest {
++      constructor () {
++        this.testStackOverflow = this.testStackOverflow.bind(this)
++             ~~~~~~~~~~~~~~~~~
++!!! error TS2339: Property 'testStackOverflow' does not exist on type 'StackOverflowTest'.
++                                      ~~~~~~~~~~~~~~~~~
++!!! error TS2339: Property 'testStackOverflow' does not exist on type 'StackOverflowTest'.
++      }
++    }
++    

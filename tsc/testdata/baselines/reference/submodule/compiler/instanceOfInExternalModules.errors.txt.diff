@@ -1,0 +1,20 @@
+--- old.instanceOfInExternalModules.errors.txt
++++ new.instanceOfInExternalModules.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++instanceOfInExternalModules_1.ts(2,22): error TS2307: Cannot find module 'instanceOfInExternalModules_require' or its corresponding type declarations.
++
++
++==== instanceOfInExternalModules_1.ts (1 errors) ====
++    ///<reference path='instanceOfInExternalModules_require.ts'/>
++    import Bar = require("instanceOfInExternalModules_require");
++                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'instanceOfInExternalModules_require' or its corresponding type declarations.
++    function IsFoo(value: any): boolean {
++        return value instanceof Bar.Foo;
++    }
++    
++==== instanceOfInExternalModules_require.ts (0 errors) ====
++    export class Foo { foo: string; }
++    

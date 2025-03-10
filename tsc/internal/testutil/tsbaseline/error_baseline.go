@@ -175,6 +175,10 @@ func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inpu
 		lines := lineDelimiter.Split(inputFile.Content, -1)
 
 		for lineIndex, line := range lines {
+			if len(line) > 0 && line[len(line)-1] == '\r' {
+				line = line[:len(line)-1]
+			}
+
 			thisLineStart := int(lineStarts[lineIndex])
 			var nextLineStart int
 			// On the last line of the file, fake the next line start number so that we handle errors on the last character of the file correctly
@@ -189,19 +193,21 @@ func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inpu
 			outputLines.WriteString(line)
 			for _, errDiagnostic := range fileErrors {
 				// Does any error start or continue on to this line? Emit squiggles
+				errStart := errDiagnostic.Loc().Pos()
 				end := errDiagnostic.Loc().End()
-				if end >= thisLineStart && (errDiagnostic.Loc().Pos() < nextLineStart || lineIndex == len(lines)-1) {
+				if end >= thisLineStart && (errStart < nextLineStart || lineIndex == len(lines)-1) {
 					// How many characters from the start of this line the error starts at (could be positive or negative)
-					relativeOffset := errDiagnostic.Loc().Pos() - thisLineStart
+					relativeOffset := errStart - thisLineStart
 					// How many characters of the error are on this line (might be longer than this line in reality)
-					length := (end - errDiagnostic.Loc().Pos()) - max(0, -relativeOffset)
+					length := (end - errStart) - max(0, thisLineStart-errStart)
 					// Calculate the start of the squiggle
 					squiggleStart := max(0, relativeOffset)
 					// TODO/REVIEW: this doesn't work quite right in the browser if a multi file test has files whose names are just the right length relative to one another
 					outputLines.WriteString(newLine())
 					outputLines.WriteString("    ")
 					outputLines.WriteString(nonWhitespace.ReplaceAllString(line[:squiggleStart], " "))
-					outputLines.WriteString(strings.Repeat("~", min(length, len(line)-squiggleStart)))
+					// This was `new Array(count).join("~")`; which maps 0 to "", 1 to "", 2 to "~", 3 to "~~", etc.
+					outputLines.WriteString(strings.Repeat("~", max(0, min(length, len(line)-squiggleStart))))
 
 					// If the error ended here, or we're at the end of the file, emit its message
 					if lineIndex == len(lines)-1 || nextLineStart > end {

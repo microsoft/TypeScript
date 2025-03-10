@@ -1,0 +1,258 @@
+mappedTypeErrors.ts(19,20): error TS2313: Type parameter 'P' has a circular constraint.
+mappedTypeErrors.ts(21,20): error TS2322: Type 'Date' is not assignable to type 'string | number | symbol'.
+mappedTypeErrors.ts(22,19): error TS2344: Type 'Date' does not satisfy the constraint 'string | number | symbol'.
+mappedTypeErrors.ts(25,24): error TS2344: Type '"foo"' does not satisfy the constraint 'keyof Shape'.
+mappedTypeErrors.ts(26,24): error TS2344: Type '"foo" | "name"' does not satisfy the constraint 'keyof Shape'.
+  Type '"foo"' is not assignable to type 'keyof Shape'.
+mappedTypeErrors.ts(28,24): error TS2344: Type 'keyof Point' does not satisfy the constraint 'keyof Shape'.
+  Type '"x"' is not assignable to type 'keyof Shape'.
+mappedTypeErrors.ts(30,24): error TS2344: Type 'undefined' does not satisfy the constraint 'keyof Shape'.
+mappedTypeErrors.ts(33,24): error TS2344: Type 'T' does not satisfy the constraint 'keyof Shape'.
+mappedTypeErrors.ts(37,24): error TS2344: Type 'T' does not satisfy the constraint 'keyof Shape'.
+  Type 'string | number' is not assignable to type 'keyof Shape'.
+    Type 'string' is not assignable to type 'keyof Shape'.
+mappedTypeErrors.ts(59,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P] }', but here has type '{ [P in keyof T]?: T[P] | undefined }'.
+mappedTypeErrors.ts(60,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P] }', but here has type '{ readonly [P in keyof T]: T[P] }'.
+mappedTypeErrors.ts(61,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P] }', but here has type '{ readonly [P in keyof T]?: T[P] | undefined }'.
+mappedTypeErrors.ts(66,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P] }', but here has type '{ [P in keyof T]: T[P][] }'.
+mappedTypeErrors.ts(75,45): error TS2741: Property 'y' is missing in type '{ x: number; }' but required in type 'Readonly<{ x: number; y: number; }>'.
+mappedTypeErrors.ts(77,59): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type 'Readonly<{ x: number; y: number; }>'.
+mappedTypeErrors.ts(83,58): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type 'Partial<{ x: number; y: number; }>'.
+mappedTypeErrors.ts(105,17): error TS2322: Type 'undefined' is not assignable to type 'string'.
+mappedTypeErrors.ts(106,17): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
+mappedTypeErrors.ts(123,14): error TS2322: Type 'undefined' is not assignable to type 'string'.
+mappedTypeErrors.ts(124,14): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
+mappedTypeErrors.ts(128,16): error TS2322: Type 'string' is not assignable to type 'number'.
+mappedTypeErrors.ts(129,25): error TS2322: Type 'string' is not assignable to type 'number'.
+mappedTypeErrors.ts(130,39): error TS2322: Type 'string' is not assignable to type 'number'.
+mappedTypeErrors.ts(136,16): error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
+mappedTypeErrors.ts(136,21): error TS2536: Type 'P' cannot be used to index type 'T'.
+mappedTypeErrors.ts(148,17): error TS2339: Property 'foo' does not exist on type 'Pick<T, K>'.
+mappedTypeErrors.ts(152,17): error TS2339: Property 'foo' does not exist on type 'Record<K, number>'.
+
+
+==== mappedTypeErrors.ts (27 errors) ====
+    interface Shape {
+        name: string;
+        width: number;
+        height: number;
+        visible: boolean;
+    }
+    
+    interface Named {
+        name: string;
+    }
+    
+    interface Point {
+        x: number;
+        y: number;
+    }
+    
+    // Constraint checking
+    
+    type T00 = { [P in P]: string };  // Error
+                       ~
+!!! error TS2313: Type parameter 'P' has a circular constraint.
+    type T01 = { [P in number]: string };  // Error
+    type T02 = { [P in Date]: number };  // Error
+                       ~~~~
+!!! error TS2322: Type 'Date' is not assignable to type 'string | number | symbol'.
+    type T03 = Record<Date, number>;  // Error
+                      ~~~~
+!!! error TS2344: Type 'Date' does not satisfy the constraint 'string | number | symbol'.
+    
+    type T10 = Pick<Shape, "name">;
+    type T11 = Pick<Shape, "foo">;  // Error
+                           ~~~~~
+!!! error TS2344: Type '"foo"' does not satisfy the constraint 'keyof Shape'.
+    type T12 = Pick<Shape, "name" | "foo">;  // Error
+                           ~~~~~~~~~~~~~~
+!!! error TS2344: Type '"foo" | "name"' does not satisfy the constraint 'keyof Shape'.
+!!! error TS2344:   Type '"foo"' is not assignable to type 'keyof Shape'.
+    type T13 = Pick<Shape, keyof Named>;
+    type T14 = Pick<Shape, keyof Point>;  // Error
+                           ~~~~~~~~~~~
+!!! error TS2344: Type 'keyof Point' does not satisfy the constraint 'keyof Shape'.
+!!! error TS2344:   Type '"x"' is not assignable to type 'keyof Shape'.
+    type T15 = Pick<Shape, never>;
+    type T16 = Pick<Shape, undefined>;  // Error
+                           ~~~~~~~~~
+!!! error TS2344: Type 'undefined' does not satisfy the constraint 'keyof Shape'.
+    
+    function f1<T>(x: T) {
+        let y: Pick<Shape, T>;  // Error
+                           ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'keyof Shape'.
+!!! related TS2208 mappedTypeErrors.ts:32:13: This type parameter might need an `extends keyof Shape` constraint.
+    }
+    
+    function f2<T extends string | number>(x: T) {
+        let y: Pick<Shape, T>;  // Error
+                           ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'keyof Shape'.
+!!! error TS2344:   Type 'string | number' is not assignable to type 'keyof Shape'.
+!!! error TS2344:     Type 'string' is not assignable to type 'keyof Shape'.
+    }
+    
+    function f3<T extends keyof Shape>(x: T) {
+        let y: Pick<Shape, T>;
+    }
+    
+    function f4<T extends keyof Named>(x: T) {
+        let y: Pick<Shape, T>;
+    }
+    
+    // Type identity checking
+    
+    function f10<T>() {
+        type K = keyof T;
+        var x: { [P in keyof T]: T[P] };
+        var x: { [Q in keyof T]: T[Q] };
+        var x: { [R in K]: T[R] };
+    }
+    
+    function f11<T>() {
+        var x: { [P in keyof T]: T[P] };
+        var x: { [P in keyof T]?: T[P] };  // Error
+            ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P] }', but here has type '{ [P in keyof T]?: T[P] | undefined }'.
+!!! related TS6203 mappedTypeErrors.ts:58:9: 'x' was also declared here.
+        var x: { readonly [P in keyof T]: T[P] };  // Error
+            ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P] }', but here has type '{ readonly [P in keyof T]: T[P] }'.
+!!! related TS6203 mappedTypeErrors.ts:58:9: 'x' was also declared here.
+        var x: { readonly [P in keyof T]?: T[P] };  // Error
+            ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P] }', but here has type '{ readonly [P in keyof T]?: T[P] | undefined }'.
+!!! related TS6203 mappedTypeErrors.ts:58:9: 'x' was also declared here.
+    }
+    
+    function f12<T>() {
+        var x: { [P in keyof T]: T[P] };
+        var x: { [P in keyof T]: T[P][] };  // Error
+            ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P] }', but here has type '{ [P in keyof T]: T[P][] }'.
+!!! related TS6203 mappedTypeErrors.ts:65:9: 'x' was also declared here.
+    }
+    
+    // Check that inferences to mapped types are secondary
+    
+    declare function objAndReadonly<T>(primary: T, secondary: Readonly<T>): T;
+    declare function objAndPartial<T>(primary: T, secondary: Partial<T>): T;
+    
+    function f20() {
+        let x1 = objAndReadonly({ x: 0, y: 0 }, { x: 1 });  // Error
+                                                ~~~~~~~~
+!!! error TS2741: Property 'y' is missing in type '{ x: number; }' but required in type 'Readonly<{ x: number; y: number; }>'.
+!!! related TS2728 mappedTypeErrors.ts:75:37: 'y' is declared here.
+        let x2 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 });
+        let x3 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
+                                                              ~
+!!! error TS2353: Object literal may only specify known properties, and 'z' does not exist in type 'Readonly<{ x: number; y: number; }>'.
+    }
+    
+    function f21() {
+        let x1 = objAndPartial({ x: 0, y: 0 }, { x: 1 });
+        let x2 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1 });
+        let x3 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
+                                                             ~
+!!! error TS2353: Object literal may only specify known properties, and 'z' does not exist in type 'Partial<{ x: number; y: number; }>'.
+    }
+    
+    // Verify use of Pick<T, K> for setState functions (#12793)
+    
+    interface Foo {
+        a: string;
+        b?: number;
+    }
+    
+    function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>) {
+        for (let k in props) {
+            obj[k] = props[k];
+        }
+    }
+    
+    let foo: Foo = { a: "hello", b: 42 };
+    setState(foo, { a: "test", b: 43 })
+    setState(foo, { a: "hi" });
+    setState(foo, { b: undefined });
+    setState(foo, { });
+    setState(foo, foo);
+    setState(foo, { a: undefined });  // Error
+                    ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+!!! related TS6500 mappedTypeErrors.ts:89:5: The expected type comes from property 'a' which is declared here on type 'Pick<Foo, "a">'
+    setState(foo, { c: true });  // Error
+                    ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
+    
+    class C<T> {
+        state: T;
+        setState<K extends keyof T>(props: Pick<T, K>) {
+            for (let k in props) {
+                this.state[k] = props[k];
+            }
+        }
+    }
+    
+    let c = new C<Foo>();
+    c.setState({ a: "test", b: 43 });
+    c.setState({ a: "hi" });
+    c.setState({ b: undefined });
+    c.setState({ });
+    c.setState(foo);
+    c.setState({ a: undefined });  // Error
+                 ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+!!! related TS6500 mappedTypeErrors.ts:89:5: The expected type comes from property 'a' which is declared here on type 'Pick<Foo, "a">'
+    c.setState({ c: true });  // Error
+                 ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
+    
+    type T2 = { a?: number, [key: string]: any };
+    
+    let x1: T2 = { a: 'no' };  // Error
+                   ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 mappedTypeErrors.ts:126:13: The expected type comes from property 'a' which is declared here on type 'T2'
+    let x2: Partial<T2> = { a: 'no' }; // Error
+                            ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 mappedTypeErrors.ts:126:13: The expected type comes from property 'a' which is declared here on type 'Partial<T2>'
+    let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
+                                          ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 mappedTypeErrors.ts:126:13: The expected type comes from property 'a' which is declared here on type '{ [x: string]: any; a?: number | undefined; }'
+    
+    // Repro from #13044
+    
+    type Foo2<T, F extends keyof T> = {
+        pf: {[P in F]?: T[P]},
+        pt: {[P in T]?: T[P]}, // note: should be in keyof T
+                   ~
+!!! error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
+!!! related TS2208 mappedTypeErrors.ts:134:11: This type parameter might need an `extends string | number | symbol` constraint.
+                        ~~~~
+!!! error TS2536: Type 'P' cannot be used to index type 'T'.
+    };
+    type O = {x: number, y: boolean};
+    let o: O = {x: 5, y: false};
+    let f: Foo2<O, 'x'> = {
+        pf: {x: 7},
+        pt: {x: 7, y: false},
+    };
+    
+    // Repro from #28170
+    
+    function test1<T, K extends keyof T>(obj: Pick<T, K>) {
+        let x = obj.foo;  // Error
+                    ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'Pick<T, K>'.
+    }
+    
+    function test2<T, K extends keyof T>(obj: Record<K, number>) {
+        let x = obj.foo;  // Error
+                    ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'Record<K, number>'.
+    }
+    

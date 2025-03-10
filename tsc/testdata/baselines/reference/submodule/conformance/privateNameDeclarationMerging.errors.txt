@@ -1,0 +1,37 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+privateNameDeclarationMerging.ts(9,11): error TS2339: Property '#x' does not exist on type 'D'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== privateNameDeclarationMerging.ts (1 errors) ====
+    class D {};
+    
+    class C {
+        #x;
+        foo () {
+            const c = new C();
+            c.#x;     // OK
+            const d: D = new C();
+            d.#x;    // Error
+              ~~
+!!! error TS2339: Property '#x' does not exist on type 'D'.
+        }
+    }
+    interface C {
+        new (): D;
+    }
+    

@@ -1,0 +1,59 @@
+--- old.privateNameStaticFieldAssignment.errors.txt
++++ new.privateNameStaticFieldAssignment.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== privateNameStaticFieldAssignment.ts (0 errors) ====
++    class A {
++        static #field = 0;
++        constructor() {
++            A.#field = 1;
++            A.#field += 2;
++            A.#field -= 3;
++            A.#field /= 4;
++            A.#field *= 5;
++            A.#field **= 6;
++            A.#field %= 7;
++            A.#field <<= 8;
++            A.#field >>= 9;
++            A.#field >>>= 10;
++            A.#field &= 11;
++            A.#field |= 12;
++            A.#field ^= 13;
++            A.getClass().#field = 1;
++            A.getClass().#field += 2;
++            A.getClass().#field -= 3;
++            A.getClass().#field /= 4;
++            A.getClass().#field *= 5;
++            A.getClass().#field **= 6;
++            A.getClass().#field %= 7;
++            A.getClass().#field <<= 8;
++            A.getClass().#field >>= 9;
++            A.getClass().#field >>>= 10;
++            A.getClass().#field &= 11;
++            A.getClass().#field |= 12;
++            A.getClass().#field ^= 13;
++        }
++        static getClass() {
++            return A;
++        }
++    }
++    

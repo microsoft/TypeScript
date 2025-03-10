@@ -1,0 +1,112 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+constDeclarations-access2.ts(4,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(5,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(6,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(7,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(8,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(9,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(10,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(11,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(12,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(13,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(14,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(15,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(17,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(18,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(19,3): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(20,3): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(22,5): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(38,3): error TS2339: Property 'toString' does not exist on type 'number'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== constDeclarations-access2.ts (18 errors) ====
+    const x = 0
+    
+    // Errors
+    x = 1;
+    ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
+    x += 2;
+    ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
+    x -= 3;
+    ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
+    x *= 4;
+    ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
+    x /= 5;
+    ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
+    x %= 6;
+    ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
+    x <<= 7;
+    ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
+    x >>= 8;
+    ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
+    x >>>= 9;
+    ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
+    x &= 10;
+    ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
+    x |= 11;
+    ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
+    x ^= 12;
+    ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
+    
+    x++;
+    ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
+    x--;
+    ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
+    ++x;
+      ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
+    --x;
+      ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
+    
+    ++((x));
+        ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
+    
+    // OK
+    var a = x + 1;
+    
+    function f(v: number) { }
+    f(x);
+    
+    if (x) { }
+    
+    x;
+    (x);
+    
+    -x;
+    +x;
+    
+    x.toString();
+      ~~~~~~~~
+!!! error TS2339: Property 'toString' does not exist on type 'number'.
+    

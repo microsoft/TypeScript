@@ -1,0 +1,48 @@
+--- old.prototypePropertyAssignmentMergeAcrossFiles2.errors.txt
++++ new.prototypePropertyAssignmentMergeAcrossFiles2.errors.txt
+@@= skipped -0, +0 lines =@@
+-other.js(5,5): error TS2339: Property 'wat' does not exist on type 'One'.
+-other.js(10,5): error TS2339: Property 'wat' does not exist on type 'Two'.
++prototypePropertyAssignmentMergeAcrossFiles2.js(2,4): error TS2339: Property 'One' does not exist on type '{}'.
++prototypePropertyAssignmentMergeAcrossFiles2.js(3,4): error TS2339: Property 'Two' does not exist on type '{}'.
++prototypePropertyAssignmentMergeAcrossFiles2.js(5,4): error TS2339: Property 'One' does not exist on type '{}'.
++prototypePropertyAssignmentMergeAcrossFiles2.js(8,4): error TS2339: Property 'Two' does not exist on type '{}'.
+ 
+ 
+-==== prototypePropertyAssignmentMergeAcrossFiles2.js (0 errors) ====
++==== prototypePropertyAssignmentMergeAcrossFiles2.js (4 errors) ====
+     var Ns = {}
+     Ns.One = function() {};
++       ~~~
++!!! error TS2339: Property 'One' does not exist on type '{}'.
+     Ns.Two = function() {};
++       ~~~
++!!! error TS2339: Property 'Two' does not exist on type '{}'.
+     
+     Ns.One.prototype = {
++       ~~~
++!!! error TS2339: Property 'One' does not exist on type '{}'.
+       ok() {},
+     };
+     Ns.Two.prototype = {
++       ~~~
++!!! error TS2339: Property 'Two' does not exist on type '{}'.
+     }
+     
+-==== other.js (2 errors) ====
++==== other.js (0 errors) ====
+     /**
+      * @type {Ns.One}
+      */
+     var one;
+     one.wat;
+-        ~~~
+-!!! error TS2339: Property 'wat' does not exist on type 'One'.
+     /**
+      * @type {Ns.Two}
+      */
+     var two;
+     two.wat;
+-        ~~~
+-!!! error TS2339: Property 'wat' does not exist on type 'Two'.
+     

@@ -1,0 +1,127 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'ImportAttributes'.
+error TS2318: Cannot find global type 'ImportCallOptions'.
+error TS2318: Cannot find global type 'Promise'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+1.ts(1,14): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+1.ts(2,28): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+1.ts(3,28): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+2.ts(1,28): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+2.ts(2,38): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+3.ts(1,11): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+3.ts(2,11): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+3.ts(2,25): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.
+3.ts(3,11): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+3.ts(3,25): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.
+3.ts(4,11): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+3.ts(4,25): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.
+3.ts(5,12): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+3.ts(5,26): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.
+3.ts(7,11): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+3.ts(7,25): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.
+3.ts(8,11): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+3.ts(8,11): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+3.ts(9,11): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+3.ts(9,25): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.
+3.ts(10,11): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+3.ts(10,25): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.
+3.ts(10,52): error TS1009: Trailing comma not allowed.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'ImportAttributes'.
+!!! error TS2318: Cannot find global type 'ImportCallOptions'.
+!!! error TS2318: Cannot find global type 'Promise'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== 0.ts (0 errors) ====
+    export const a = 1;
+    export const b = 2;
+    
+==== 1.ts (3 errors) ====
+    import './0' assert { type: "json" }
+                 ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+    import { a, b } from './0' assert { "type": "json" }
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+    import * as foo from './0' assert { type: "json" }
+                               ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+    a;
+    b;
+    foo.a;
+    foo.b;
+    
+==== 2.ts (2 errors) ====
+    import { a, b } from './0' assert {}
+                               ~~~~~~~~~
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+    import { a as c, b as d } from './0' assert { a: "a", b: "b", c: "c" }
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+    a;
+    b;
+    c;
+    d;
+    
+==== 3.ts (18 errors) ====
+    const a = import('./0')
+              ~~~~~~~~~~~~~
+!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+    const b = import('./0', { assert: { type: "json" } })
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.
+    const c = import('./0', { assert: { type: "json", ttype: "typo" } })
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.
+    const d = import('./0', { assert: {} })
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+                            ~~~~~~~~~~~~~~
+!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.
+    const dd = import('./0', {})
+               ~~~~~~~~~~~~~~~~~
+!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+                             ~~
+!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.
+    declare function foo(): any;
+    const e = import('./0', foo())
+              ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+                            ~~~~~
+!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.
+    const f = import()
+              ~~~~~~~~
+!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+              ~~~~~~~~
+!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+    const g = import('./0', {}, {})
+              ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+                            ~~
+!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.
+    const h = import('./0', { assert: { type: "json" }},)
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.
+                                                       ~
+!!! error TS1009: Trailing comma not allowed.
+    
+    

@@ -1,0 +1,21 @@
+functionAndPropertyNameConflict.ts(2,12): error TS2300: Duplicate identifier 'aaaaa'.
+functionAndPropertyNameConflict.ts(2,12): error TS2300: Duplicate identifier 'aaaaa'.
+functionAndPropertyNameConflict.ts(3,16): error TS2300: Duplicate identifier 'aaaaa'.
+functionAndPropertyNameConflict.ts(3,16): error TS2300: Duplicate identifier 'aaaaa'.
+
+
+==== functionAndPropertyNameConflict.ts (4 errors) ====
+    class C65 {
+        public aaaaa() { }
+               ~~~~~
+!!! error TS2300: Duplicate identifier 'aaaaa'.
+               ~~~~~
+!!! error TS2300: Duplicate identifier 'aaaaa'.
+        public get aaaaa() {
+                   ~~~~~
+!!! error TS2300: Duplicate identifier 'aaaaa'.
+                   ~~~~~
+!!! error TS2300: Duplicate identifier 'aaaaa'.
+            return 1;
+        }
+    }

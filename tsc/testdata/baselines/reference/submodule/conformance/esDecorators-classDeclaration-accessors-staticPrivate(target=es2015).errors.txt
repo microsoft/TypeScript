@@ -1,0 +1,36 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== esDecorators-classDeclaration-accessors-staticPrivate.ts (0 errors) ====
+    declare let dec: any;
+    
+    class C {
+        @dec(1) static get #method1() { return 0; }
+        @dec(2) static set #method1(value) {}
+    }
+    
+    @dec
+    class D {
+        static get #method1() { return 0; }
+        static set #method1(value) {}
+        static {
+            this.#method1;
+            this.#method1 = 1;
+        }
+    }
+    

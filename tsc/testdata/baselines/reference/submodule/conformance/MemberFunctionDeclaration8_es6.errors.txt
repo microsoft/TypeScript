@@ -1,0 +1,41 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+MemberFunctionDeclaration8_es6.ts(4,9): error TS2304: Cannot find name 'a'.
+MemberFunctionDeclaration8_es6.ts(4,12): error TS1127: Invalid character.
+MemberFunctionDeclaration8_es6.ts(4,14): error TS1109: Expression expected.
+MemberFunctionDeclaration8_es6.ts(4,16): error TS2304: Cannot find name 'bar'.
+MemberFunctionDeclaration8_es6.ts(5,12): error TS2304: Cannot find name 'bar'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== MemberFunctionDeclaration8_es6.ts (5 errors) ====
+    class C {
+      foo() {
+        // Make sure we don't think of *bar as the start of a generator method.
+        if (a) ¬ * bar;
+            ~
+!!! error TS2304: Cannot find name 'a'.
+               ~~
+!!! error TS1127: Invalid character.
+                 ~
+!!! error TS1109: Expression expected.
+                   ~~~
+!!! error TS2304: Cannot find name 'bar'.
+        return bar;
+               ~~~
+!!! error TS2304: Cannot find name 'bar'.
+      }
+    }

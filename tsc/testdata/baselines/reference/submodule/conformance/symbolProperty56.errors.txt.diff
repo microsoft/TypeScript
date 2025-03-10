@@ -1,0 +1,37 @@
+--- old.symbolProperty56.errors.txt
++++ new.symbolProperty56.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++symbolProperty56.ts(2,6): error TS2304: Cannot find name 'Symbol'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== symbolProperty56.ts (1 errors) ====
++    var obj = {
++        [Symbol.iterator]: 0
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
++    };
++    
++    module M {
++        var Symbol: {};
++        // The following should be of type 'any'. This is because even though obj has a property keyed by Symbol.iterator,
++        // the key passed in here is the *wrong* Symbol.iterator. It is not the iterator property of the global Symbol.
++        obj[Symbol["iterator"]];
++    }

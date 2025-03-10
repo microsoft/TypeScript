@@ -1,0 +1,16 @@
+--- old.moduleResolution_explicitNodeModulesImport_implicitAny.errors.txt
++++ new.moduleResolution_explicitNodeModulesImport_implicitAny.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/src/index.ts(1,19): error TS2307: Cannot find module '../node_modules/foo' or its corresponding type declarations.
++
++
++==== /src/index.ts (1 errors) ====
++    import { y } from "../node_modules/foo";
++                      ~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module '../node_modules/foo' or its corresponding type declarations.
++    
++==== /node_modules/foo/index.js (0 errors) ====
++    exports.x = 0;
++    

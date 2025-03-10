@@ -1,0 +1,9 @@
+/a.js(2,1): error TS2304: Cannot find name 'exports'.
+
+
+==== /a.js (1 errors) ====
+    const x = 0;
+    exports.y = 1;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    

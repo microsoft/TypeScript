@@ -1,0 +1,31 @@
+unusedPrivateMethodInClass3.ts(2,13): error TS6133: 'function1' is declared but its value is never read.
+unusedPrivateMethodInClass3.ts(3,9): error TS6133: 'y' is declared but its value is never read.
+unusedPrivateMethodInClass3.ts(6,13): error TS6133: 'function2' is declared but its value is never read.
+unusedPrivateMethodInClass3.ts(7,9): error TS6133: 'y' is declared but its value is never read.
+unusedPrivateMethodInClass3.ts(11,9): error TS6133: 'y' is declared but its value is never read.
+
+
+==== unusedPrivateMethodInClass3.ts (5 errors) ====
+    class greeter {
+        private function1() {
+                ~~~~~~~~~
+!!! error TS6133: 'function1' is declared but its value is never read.
+            var y = 10;
+            ~~~~~~~~~~
+!!! error TS6133: 'y' is declared but its value is never read.
+        }
+    
+        private function2() {
+                ~~~~~~~~~
+!!! error TS6133: 'function2' is declared but its value is never read.
+            var y = 10;
+            ~~~~~~~~~~
+!!! error TS6133: 'y' is declared but its value is never read.
+        }
+    
+        public function3() {
+            var y = 10;
+            ~~~~~~~~~~
+!!! error TS6133: 'y' is declared but its value is never read.
+        }
+    }

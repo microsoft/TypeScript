@@ -1,0 +1,28 @@
+getAndSetNotIdenticalType3.ts(9,9): error TS2322: Type 'A<string>' is not assignable to type 'A<number>'.
+  Type 'string' is not assignable to type 'number'.
+getAndSetNotIdenticalType3.ts(15,1): error TS2322: Type 'A<number>' is not assignable to type 'A<string>'.
+  Type 'number' is not assignable to type 'string'.
+
+
+==== getAndSetNotIdenticalType3.ts (2 errors) ====
+    class A<T> { foo: T; }
+    
+    class C<T> {
+        data: A<number>;
+        get x(): A<number> {
+            return this.data;
+        }
+        set x(v: A<string>) {
+            this.data = v;
+            ~~~~~~~~~
+!!! error TS2322: Type 'A<string>' is not assignable to type 'A<number>'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+        }
+    }
+    
+    var x = new C();
+    var r = x.x;
+    x.x = r;
+    ~~~
+!!! error TS2322: Type 'A<number>' is not assignable to type 'A<string>'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.

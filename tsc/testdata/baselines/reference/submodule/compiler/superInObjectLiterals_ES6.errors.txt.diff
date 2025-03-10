@@ -1,0 +1,29 @@
+--- old.superInObjectLiterals_ES6.errors.txt
++++ new.superInObjectLiterals_ES6.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ superInObjectLiterals_ES6.ts(17,9): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+ superInObjectLiterals_ES6.ts(20,9): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+ superInObjectLiterals_ES6.ts(23,9): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+@@= skipped -4, +12 lines =@@
+ superInObjectLiterals_ES6.ts(52,17): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== superInObjectLiterals_ES6.ts (5 errors) ====
+     var obj = {
+         __proto__: {

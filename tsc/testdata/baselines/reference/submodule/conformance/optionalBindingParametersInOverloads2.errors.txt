@@ -1,0 +1,19 @@
+optionalBindingParametersInOverloads2.ts(8,7): error TS2322: Type 'boolean' is not assignable to type 'string'.
+optionalBindingParametersInOverloads2.ts(8,23): error TS2322: Type 'string' is not assignable to type 'boolean'.
+
+
+==== optionalBindingParametersInOverloads2.ts (2 errors) ====
+    function foo({ x, y, z }?: { x: string; y: number; z: boolean });
+    function foo(...rest: any[]) {
+    
+    }
+    
+    foo({ x: "", y: 0, z: false });
+    
+    foo({ x: false, y: 0, z: "" });
+          ~
+!!! error TS2322: Type 'boolean' is not assignable to type 'string'.
+!!! related TS6500 optionalBindingParametersInOverloads2.ts:1:30: The expected type comes from property 'x' which is declared here on type '{ x: string; y: number; z: boolean; }'
+                          ~
+!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+!!! related TS6500 optionalBindingParametersInOverloads2.ts:1:52: The expected type comes from property 'z' which is declared here on type '{ x: string; y: number; z: boolean; }'

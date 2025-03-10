@@ -1,0 +1,10 @@
+a.js(2,3): error TS2391: Function implementation is missing or not immediately following the declaration.
+
+
+==== a.js (1 errors) ====
+    class A {
+      foo();
+      ~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }
+    

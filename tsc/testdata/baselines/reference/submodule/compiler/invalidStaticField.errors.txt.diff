@@ -1,0 +1,13 @@
+--- old.invalidStaticField.errors.txt
++++ new.invalidStaticField.errors.txt
+@@= skipped -0, +0 lines =@@
+-invalidStaticField.ts(1,28): error TS2339: Property 'NULL' does not exist on type 'typeof B'.
++invalidStaticField.ts(1,28): error TS2339: Property 'NULL' does not exist on type '{ new(): B; NOT_NULL: B; prototype: B; }'.
+ 
+ 
+ ==== invalidStaticField.ts (1 errors) ====
+     class A { foo() { return B.NULL; } }
+                                ~~~~
+-!!! error TS2339: Property 'NULL' does not exist on type 'typeof B'.
++!!! error TS2339: Property 'NULL' does not exist on type '{ new(): B; NOT_NULL: B; prototype: B; }'.
+     class B { static NOT_NULL = new B(); }

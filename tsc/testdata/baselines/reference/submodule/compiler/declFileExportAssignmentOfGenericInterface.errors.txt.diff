@@ -1,0 +1,20 @@
+--- old.declFileExportAssignmentOfGenericInterface.errors.txt
++++ new.declFileExportAssignmentOfGenericInterface.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++declFileExportAssignmentOfGenericInterface_1.ts(1,20): error TS2307: Cannot find module 'declFileExportAssignmentOfGenericInterface_0' or its corresponding type declarations.
++
++
++==== declFileExportAssignmentOfGenericInterface_1.ts (1 errors) ====
++    import a = require('declFileExportAssignmentOfGenericInterface_0');
++                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'declFileExportAssignmentOfGenericInterface_0' or its corresponding type declarations.
++    export var x: a<a<string>>;
++    x.a;
++==== declFileExportAssignmentOfGenericInterface_0.ts (0 errors) ====
++    interface Foo<T> {
++        a: string;
++    }
++    export = Foo;
++    

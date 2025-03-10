@@ -1,0 +1,20 @@
+file1.ts(1,21): error TS2307: Cannot find module './b.json' or its corresponding type declarations.
+file1.ts(3,21): error TS2307: Cannot find module './b.json' or its corresponding type declarations.
+
+
+==== file1.ts (2 errors) ====
+    import b1 = require('./b.json');
+                        ~~~~~~~~~~
+!!! error TS2307: Cannot find module './b.json' or its corresponding type declarations.
+    let x = b1;
+    import b2 = require('./b.json');
+                        ~~~~~~~~~~
+!!! error TS2307: Cannot find module './b.json' or its corresponding type declarations.
+    if (x) {
+        x = b2;
+    }
+    
+==== b.json (0 errors) ====
+    {
+        [a]: 10
+    }

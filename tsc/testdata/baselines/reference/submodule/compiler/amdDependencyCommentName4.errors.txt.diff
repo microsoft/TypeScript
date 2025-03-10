@@ -1,0 +1,41 @@
+--- old.amdDependencyCommentName4.errors.txt
++++ new.amdDependencyCommentName4.errors.txt
+@@= skipped -0, +0 lines =@@
+-amdDependencyCommentName4.ts(8,21): error TS2792: Cannot find module 'aliasedModule1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+-amdDependencyCommentName4.ts(11,26): error TS2792: Cannot find module 'aliasedModule2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+-amdDependencyCommentName4.ts(14,15): error TS2792: Cannot find module 'aliasedModule3'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+-amdDependencyCommentName4.ts(17,21): error TS2792: Cannot find module 'aliasedModule4'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++amdDependencyCommentName4.ts(8,21): error TS2307: Cannot find module 'aliasedModule1' or its corresponding type declarations.
++amdDependencyCommentName4.ts(11,26): error TS2307: Cannot find module 'aliasedModule2' or its corresponding type declarations.
++amdDependencyCommentName4.ts(14,15): error TS2307: Cannot find module 'aliasedModule3' or its corresponding type declarations.
++amdDependencyCommentName4.ts(17,21): error TS2307: Cannot find module 'aliasedModule4' or its corresponding type declarations.
+ 
+ 
+ ==== amdDependencyCommentName4.ts (4 errors) ====
+@@= skipped -13, +13 lines =@@
+     
+     import r1 = require("aliasedModule1");
+                         ~~~~~~~~~~~~~~~~
+-!!! error TS2792: Cannot find module 'aliasedModule1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'aliasedModule1' or its corresponding type declarations.
+     r1;
+     
+     import {p1, p2, p3} from "aliasedModule2";
+                              ~~~~~~~~~~~~~~~~
+-!!! error TS2792: Cannot find module 'aliasedModule2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'aliasedModule2' or its corresponding type declarations.
+     p1;
+     
+     import d from "aliasedModule3";
+                   ~~~~~~~~~~~~~~~~
+-!!! error TS2792: Cannot find module 'aliasedModule3'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'aliasedModule3' or its corresponding type declarations.
+     d;
+     
+     import * as ns from "aliasedModule4";
+                         ~~~~~~~~~~~~~~~~
+-!!! error TS2792: Cannot find module 'aliasedModule4'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'aliasedModule4' or its corresponding type declarations.
+     ns;
+     
+     import "unaliasedModule2";

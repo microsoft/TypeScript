@@ -1,0 +1,23 @@
+requireEmitSemicolon_1.ts(2,20): error TS2307: Cannot find module 'requireEmitSemicolon_0' or its corresponding type declarations.
+
+
+==== requireEmitSemicolon_1.ts (1 errors) ====
+    ///<reference path='requireEmitSemicolon_0.ts'/>
+    import P = require("requireEmitSemicolon_0"); // bug was we were not emitting a ; here and causing runtime failures in node
+                       ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'requireEmitSemicolon_0' or its corresponding type declarations.
+    
+    export module Database {
+    	export class DB {
+    	    public findPerson(id: number): P.Models.Person {
+    	        return new P.Models.Person("Rock");
+    	    }
+    	}
+    } 
+==== requireEmitSemicolon_0.ts (0 errors) ====
+    export module Models {
+    	export class Person {
+            constructor(name: string) { }
+    	}
+    }
+    

@@ -1,0 +1,10 @@
+unresolvedTypeAssertionSymbol.ts(2,10): error TS2304: Cannot find name 'asdf'.
+
+
+==== unresolvedTypeAssertionSymbol.ts (1 errors) ====
+    var x = 1;
+    var y = <asdf>x;
+             ~~~~
+!!! error TS2304: Cannot find name 'asdf'.
+     
+    

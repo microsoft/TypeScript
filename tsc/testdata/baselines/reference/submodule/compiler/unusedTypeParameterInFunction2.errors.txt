@@ -1,0 +1,10 @@
+unusedTypeParameterInFunction2.ts(1,16): error TS6196: 'Y' is declared but never used.
+
+
+==== unusedTypeParameterInFunction2.ts (1 errors) ====
+    function f1<X, Y>() {
+                   ~
+!!! error TS6196: 'Y' is declared but never used.
+        var a: X;
+        a;
+    }

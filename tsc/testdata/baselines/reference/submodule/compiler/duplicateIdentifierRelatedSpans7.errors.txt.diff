@@ -1,0 +1,61 @@
+--- old.duplicateIdentifierRelatedSpans7.errors.txt
++++ new.duplicateIdentifierRelatedSpans7.errors.txt
+@@= skipped -0, +0 lines =@@
+-[96mfile1.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS6200: [0mDefinitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8, duplicate9
++[96mfile2.ts[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS2664: [0mInvalid module name in augmentation, module 'someMod' cannot be found.
+ 
+-[7m1[0m declare module "someMod" {
+-[7m [0m [91m~~~~~~~[0m
++[7m 3[0m declare module "someMod" {
++[7m  [0m [91m               ~~~~~~~~~[0m
+ 
+-  [96mfile2.ts[0m:[93m3[0m:[93m1[0m
+-    [7m3[0m declare module "someMod" {
+-    [7m [0m [96m~~~~~~~[0m
+-    Conflicts are in this file.
+-[96mfile2.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS6200: [0mDefinitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8, duplicate9
+ 
+-[7m3[0m declare module "someMod" {
+-[7m [0m [91m~~~~~~~[0m
+-
+-  [96mfile1.ts[0m:[93m1[0m:[93m1[0m
+-    [7m1[0m declare module "someMod" {
+-    [7m [0m [96m~~~~~~~[0m
+-    Conflicts are in this file.
+-
+-
+ ==== file2.ts (1 errors) ====
+     /// <reference path="./file1" />
+     
+     declare module "someMod" {
+-    ~~~~~~~
+-!!! error TS6200: Definitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8, duplicate9
+-!!! related TS6201 file1.ts:1:1: Conflicts are in this file.
++                   ~~~~~~~~~
++!!! error TS2664: Invalid module name in augmentation, module 'someMod' cannot be found.
+         export interface TopLevel {
+             duplicate1(): number;
+             duplicate2(): number;
+@@= skipped -38, +23 lines =@@
+     }
+     export {};
+     
+-==== file1.ts (1 errors) ====
++==== file1.ts (0 errors) ====
+     declare module "someMod" {
+-    ~~~~~~~
+-!!! error TS6200: Definitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8, duplicate9
+-!!! related TS6201 file2.ts:3:1: Conflicts are in this file.
+         export interface TopLevel {
+             duplicate1: () => string;
+             duplicate2: () => string;
+@@= skipped -17, +14 lines =@@
+             duplicate9: () => string;
+         }
+     }
+-Found 2 errors in 2 files.
++Found 1 error in file2.ts[90m:3[0m
+ 
+-Errors  Files
+-     1  file1.ts[90m:1[0m
+-     1  file2.ts[90m:3[0m

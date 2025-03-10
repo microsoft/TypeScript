@@ -1,0 +1,29 @@
+--- old.constDeclarations-invalidContexts.errors.txt
++++ new.constDeclarations-invalidContexts.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ constDeclarations-invalidContexts.ts(3,5): error TS1156: 'const' declarations can only be declared inside a block.
+ constDeclarations-invalidContexts.ts(5,5): error TS1156: 'const' declarations can only be declared inside a block.
+ constDeclarations-invalidContexts.ts(8,5): error TS1156: 'const' declarations can only be declared inside a block.
+@@= skipped -8, +16 lines =@@
+ constDeclarations-invalidContexts.ts(28,29): error TS1156: 'const' declarations can only be declared inside a block.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== constDeclarations-invalidContexts.ts (9 errors) ====
+     // Errors, const must be defined inside a block
+     if (true) 

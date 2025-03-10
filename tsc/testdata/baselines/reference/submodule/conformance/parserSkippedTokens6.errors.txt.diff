@@ -1,0 +1,9 @@
+--- old.parserSkippedTokens6.errors.txt
++++ new.parserSkippedTokens6.errors.txt
+@@= skipped -2, +2 lines =@@
+ 
+ ==== parserSkippedTokens6.ts (1 errors) ====
+     /*foo*/ \
+-            
++            ~
+ !!! error TS1127: Invalid character.

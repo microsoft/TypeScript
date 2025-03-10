@@ -1,0 +1,29 @@
+--- old.parseJsxElementInUnaryExpressionNoCrash3.errors.txt
++++ new.parseJsxElementInUnaryExpressionNoCrash3.errors.txt
+@@= skipped -0, +0 lines =@@
+-a.js(1,3): error TS17008: JSX element '' has no corresponding closing tag.
+-a.js(1,4): error TS1003: Identifier expected.
+-a.js(1,5): error TS1005: '...' expected.
+-a.js(3,1): error TS1005: '</' expected.
++a.js(1,5): error TS1131: Property or signature expected.
++a.js(1,6): error TS1131: Property or signature expected.
++a.js(3,1): error TS1109: Expression expected.
+ 
+ 
+-==== a.js (4 errors) ====
++==== a.js (3 errors) ====
+     !< {:>
+-      
+-!!! error TS17008: JSX element '' has no corresponding closing tag.
+-       ~
+-!!! error TS1003: Identifier expected.
+         ~
+-!!! error TS1005: '...' expected.
++!!! error TS1131: Property or signature expected.
++         ~
++!!! error TS1131: Property or signature expected.
+     
+     
+     
+-!!! error TS1005: '</' expected.
++!!! error TS1109: Expression expected.

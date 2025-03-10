@@ -1,0 +1,17 @@
+--- old.topLevelAwaitErrors.5(module=esnext).errors.txt
++++ new.topLevelAwaitErrors.5(module=esnext).errors.txt
+@@= skipped -0, +0 lines =@@
+ topLevelAwaitErrors.5.ts(2,14): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
++topLevelAwaitErrors.5.ts(2,14): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+ 
+ 
+-==== topLevelAwaitErrors.5.ts (1 errors) ====
++==== topLevelAwaitErrors.5.ts (2 errors) ====
+     // await in exported class name should fail
+     export class await {
+                  ~~~~~
+ !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
++                 ~~~~~
++!!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+     }
+     

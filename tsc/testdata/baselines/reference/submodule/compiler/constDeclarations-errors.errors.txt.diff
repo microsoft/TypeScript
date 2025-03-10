@@ -1,0 +1,29 @@
+--- old.constDeclarations-errors.errors.txt
++++ new.constDeclarations-errors.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ constDeclarations-errors.ts(2,7): error TS1155: 'const' declarations must be initialized.
+ constDeclarations-errors.ts(3,7): error TS1155: 'const' declarations must be initialized.
+ constDeclarations-errors.ts(4,7): error TS1155: 'const' declarations must be initialized.
+@@= skipped -8, +16 lines =@@
+ constDeclarations-errors.ts(15,20): error TS1155: 'const' declarations must be initialized.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== constDeclarations-errors.ts (9 errors) ====
+     // error, missing intialicer
+     const c1;

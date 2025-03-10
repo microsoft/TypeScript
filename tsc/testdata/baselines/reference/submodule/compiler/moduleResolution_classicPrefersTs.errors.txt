@@ -1,0 +1,14 @@
+/dir1/dir2/dir3/index.ts(1,15): error TS2307: Cannot find module 'a' or its corresponding type declarations.
+
+
+==== /dir1/dir2/dir3/a.js (0 errors) ====
+    export default "dir1/dir2/dir3/a.js";
+    
+==== /dir1/dir2/a.ts (0 errors) ====
+    export default "dir1/dir2/a.ts";
+    
+==== /dir1/dir2/dir3/index.ts (1 errors) ====
+    import a from "a";
+                  ~~~
+!!! error TS2307: Cannot find module 'a' or its corresponding type declarations.
+    

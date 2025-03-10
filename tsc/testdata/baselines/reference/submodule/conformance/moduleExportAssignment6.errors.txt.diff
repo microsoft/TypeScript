@@ -1,0 +1,47 @@
+--- old.moduleExportAssignment6.errors.txt
++++ new.moduleExportAssignment6.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++webpackLibNormalModule.js(4,14): error TS2339: Property 'x' does not exist on type 'C'.
++webpackLibNormalModule.js(5,14): error TS2339: Property 'exports' does not exist on type 'C'.
++webpackLibNormalModule.js(9,21): error TS2339: Property 'x' does not exist on type 'C'.
++webpackLibNormalModule.js(14,19): error TS2339: Property 'exports' does not exist on type 'C'.
++webpackLibNormalModule.js(21,23): error TS2339: Property 'exports' does not exist on type 'C'.
++
++
++==== webpackLibNormalModule.js (5 errors) ====
++    class C {
++        /** @param {number} x */
++        constructor(x) {
++            this.x = x
++                 ~
++!!! error TS2339: Property 'x' does not exist on type 'C'.
++            this.exports = [x]
++                 ~~~~~~~
++!!! error TS2339: Property 'exports' does not exist on type 'C'.
++        }
++        /** @param {number} y */
++        m(y) {
++            return this.x + y
++                        ~
++!!! error TS2339: Property 'x' does not exist on type 'C'.
++        }
++    }
++    function exec() {
++        const module = new C(12);
++        return module.exports; // should be fine because `module` is defined locally
++                      ~~~~~~~
++!!! error TS2339: Property 'exports' does not exist on type 'C'.
++    }
++    
++    function tricky() {
++        // (a trickier variant of what webpack does)
++        const module = new C(12);
++        return () => {
++            return module.exports;
++                          ~~~~~~~
++!!! error TS2339: Property 'exports' does not exist on type 'C'.
++        }
++    }
++    

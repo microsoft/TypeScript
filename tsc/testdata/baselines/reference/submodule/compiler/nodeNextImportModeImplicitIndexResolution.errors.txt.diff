@@ -1,0 +1,36 @@
+--- old.nodeNextImportModeImplicitIndexResolution.errors.txt
++++ new.nodeNextImportModeImplicitIndexResolution.errors.txt
+@@= skipped -0, +-1 lines =@@
+-index.ts(2,31): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+-index.ts(3,31): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+-
+-
+-==== node_modules/pkg/package.json (0 errors) ====
+-    {
+-        "name": "pkg",
+-        "version": "0.0.1"
+-    }
+-==== node_modules/pkg/index.d.ts (0 errors) ====
+-    export const item = 4;
+-==== pkg/package.json (0 errors) ====
+-    {
+-        "private": true
+-    }
+-==== pkg/index.d.ts (0 errors) ====
+-    export const item = 4;
+-==== package.json (0 errors) ====
+-    {
+-        "type": "module",
+-        "private": true
+-    }
+-==== index.ts (2 errors) ====
+-    import { item } from "pkg"; // should work (`index.js` is assumed to be the entrypoint for packages found via nonrelative import)
+-    import { item as item2 } from "./pkg";  // shouldn't work (`index.js` is _not_ assumed to be the entrypoint for packages found via relative import)
+-                                  ~~~~~~~
+-!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+-    import { item as item3 } from "./node_modules/pkg" // _even if they're in a node_modules folder_
+-                                  ~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

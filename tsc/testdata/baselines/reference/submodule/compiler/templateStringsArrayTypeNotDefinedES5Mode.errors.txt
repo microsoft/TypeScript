@@ -1,0 +1,12 @@
+templateStringsArrayTypeNotDefinedES5Mode.ts(4,3): error TS2740: Type '{}' is missing the following properties from type 'TemplateStringsArray': raw, length, concat, join, and 10 more.
+
+
+==== templateStringsArrayTypeNotDefinedES5Mode.ts (1 errors) ====
+    function f(x: TemplateStringsArray, y: number, z: number) {
+    }
+    
+    f({}, 10, 10);
+      ~~
+!!! error TS2740: Type '{}' is missing the following properties from type 'TemplateStringsArray': raw, length, concat, join, and 10 more.
+    
+    f `abcdef${ 1234 }${ 5678 }ghijkl`;

@@ -1,0 +1,29 @@
+--- old.unusedParametersWithUnderscore.errors.txt
++++ new.unusedParametersWithUnderscore.errors.txt
+@@= skipped -2, +2 lines =@@
+ unusedParametersWithUnderscore.ts(1,27): error TS6133: 'd' is declared but its value is never read.
+ unusedParametersWithUnderscore.ts(1,29): error TS6133: 'e___' is declared but its value is never read.
+ unusedParametersWithUnderscore.ts(5,13): error TS6198: All destructured elements are unused.
+-unusedParametersWithUnderscore.ts(11,16): error TS6133: 'arg' is declared but its value is never read.
++unusedParametersWithUnderscore.ts(11,13): error TS6133: 'arg' is declared but its value is never read.
+ unusedParametersWithUnderscore.ts(17,13): error TS6133: 'arg' is declared but its value is never read.
+ 
+ 
+@@= skipped -26, +26 lines =@@
+     }
+     
+     function f4(...arg) {
+-                   ~~~
++                ~~~~~~
+ !!! error TS6133: 'arg' is declared but its value is never read.
+     }
+     
+@@= skipped -8, +8 lines =@@
+     }
+     
+     function f6(arg?, _arg?) {
+-                ~~~
++                ~~~~
+ !!! error TS6133: 'arg' is declared but its value is never read.
+     }
+     

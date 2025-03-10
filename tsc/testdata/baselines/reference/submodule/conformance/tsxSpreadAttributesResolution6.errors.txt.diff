@@ -1,0 +1,42 @@
+--- old.tsxSpreadAttributesResolution6.errors.txt
++++ new.tsxSpreadAttributesResolution6.errors.txt
+@@= skipped -0, +0 lines =@@
+-file.tsx(13,10): error TS2322: Type '{ editable: true; }' is not assignable to type 'IntrinsicAttributes & (IntrinsicClassAttributes<TextComponent> & (TextProps & { children?: ReactNode; }))'.
+-  Property 'onEdit' is missing in type '{ editable: true; }' but required in type '{ editable: true; onEdit: (newText: string) => void; }'.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== file.tsx (1 errors) ====
+     import React = require('react');
++                           ~~~~~~~
++!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
+     
+     type TextProps = { editable: false }
+                    | { editable: true, onEdit: (newText: string) => void };
+@@= skipped -15, +32 lines =@@
+     
+     // Error
+     let x = <TextComponent editable={true} />
+-             ~~~~~~~~~~~~~
+-!!! error TS2322: Type '{ editable: true; }' is not assignable to type 'IntrinsicAttributes & (IntrinsicClassAttributes<TextComponent> & (TextProps & { children?: ReactNode; }))'.
+-!!! error TS2322:   Property 'onEdit' is missing in type '{ editable: true; }' but required in type '{ editable: true; onEdit: (newText: string) => void; }'.
+-!!! related TS2728 file.tsx:4:36: 'onEdit' is declared here.
+     
+     const textProps: TextProps = {
+         editable: false

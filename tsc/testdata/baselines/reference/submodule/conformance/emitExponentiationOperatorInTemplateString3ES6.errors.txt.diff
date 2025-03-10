@@ -1,0 +1,51 @@
+--- old.emitExponentiationOperatorInTemplateString3ES6.errors.txt
++++ new.emitExponentiationOperatorInTemplateString3ES6.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== emitExponentiationOperatorInTemplateString3ES6.ts (0 errors) ====
++    var t1 = 10;
++    var t2 = 10;
++    var s;
++    
++    // With TemplateTail
++    `${t1 ** t2} world`;
++    `${t1 ** t2 ** t1} world`;
++    `${t1 + t2 ** t1} world`;
++    `${t1 ** t2 + t1} world`;
++    `${t1 + t2 ** t2 + t1 } world`;
++    `${typeof (t1 ** t2 ** t1) } world`;
++    `${1 + typeof (t1 ** t2 ** t1) } world`;
++    
++    `${t1 ** t2}${t1 ** t2} world`;
++    `${t1 ** t2 ** t1}${t1 ** t2 ** t1} world`;
++    `${t1 + t2 ** t1}${t1 + t2 ** t1} world`;
++    `${t1 ** t2 + t1}${t1 ** t2 + t1} world`;
++    `${t1 + t2 ** t2 + t1}${t1 + t2 ** t2 + t1} world`;
++    `${typeof (t1 ** t2 ** t1) }${typeof (t1 ** t2 ** t1) } world`;
++    
++    `${t1 ** t2} hello world ${t1 ** t2} !!`;
++    `${t1 ** t2 ** t1} hello world ${t1 ** t2 ** t1} !!`;
++    `${t1 + t2 ** t1} hello world ${t1 + t2 ** t1} !!`;
++    `${t1 ** t2 + t1} hello world ${t1 ** t2 + t1} !!`;
++    `${t1 + t2 ** t2 + t1} hello world ${t1 + t2 ** t2 + t1} !!`;
++    `${typeof (t1 ** t2 ** t1) } hello world ${typeof (t1 ** t2 ** t1)} !!`;
++    

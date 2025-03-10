@@ -1,0 +1,18 @@
+a.js(2,5): error TS2331: 'this' cannot be referenced in a module or namespace body.
+b.js(2,5): error TS2331: 'this' cannot be referenced in a module or namespace body.
+
+
+==== a.js (1 errors) ====
+    module foo {
+        this.bar = 4;
+        ~~~~
+!!! error TS2331: 'this' cannot be referenced in a module or namespace body.
+    }
+    
+==== b.js (1 errors) ====
+    namespace blah {
+        this.prop = 42;
+        ~~~~
+!!! error TS2331: 'this' cannot be referenced in a module or namespace body.
+    }
+    

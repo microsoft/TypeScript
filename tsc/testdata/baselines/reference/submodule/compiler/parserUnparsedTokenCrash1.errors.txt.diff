@@ -1,0 +1,16 @@
+--- old.parserUnparsedTokenCrash1.errors.txt
++++ new.parserUnparsedTokenCrash1.errors.txt
+@@= skipped -0, +0 lines =@@
++a.js(1,3): error TS2304: Cannot find name 'y'.
+ a.js(1,9): error TS1005: ')' expected.
+ a.js(1,13): error TS1005: ';' expected.
+ 
+ 
+-==== a.js (2 errors) ====
++==== a.js (3 errors) ====
+     ( y = 1 ; 2 )
++      ~
++!!! error TS2304: Cannot find name 'y'.
+             ~
+ !!! error TS1005: ')' expected.
+                 ~

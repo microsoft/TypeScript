@@ -1,0 +1,29 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'IterableIterator'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+FunctionDeclaration5_es6.ts(1,14): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+FunctionDeclaration5_es6.ts(1,14): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'IterableIterator'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== FunctionDeclaration5_es6.ts (2 errors) ====
+    function*foo(yield) {
+                 ~~~~~
+!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+                 ~~~~~
+!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+    }

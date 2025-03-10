@@ -1,0 +1,40 @@
+namedTupleMembersErrors.ts(14,60): error TS1005: ',' expected.
+namedTupleMembersErrors.ts(14,61): error TS1110: Type expected.
+namedTupleMembersErrors.ts(18,44): error TS2574: A rest element type must be an array type.
+namedTupleMembersErrors.ts(20,13): error TS2456: Type alias 'RecusiveRestUnlabeled' circularly references itself.
+namedTupleMembersErrors.ts(21,13): error TS2456: Type alias 'RecusiveRest' circularly references itself.
+
+
+==== namedTupleMembersErrors.ts (5 errors) ====
+    export type Segment1 = [length: number, number];
+    export type Segment2 = [number, size: number];
+    
+    export type List = [item: any, ...any]; 
+    export type List2 = [any, ...remainder: any]; 
+    
+    export type Pair = [item: any, any?]; 
+    export type Pair2 = [any, last?: any]; 
+    
+    export type Opt = [element: string?]; // question mark on element disallowed
+    
+    export type Trailing = [first: string, rest: ...string[]]; // dots on element disallowed
+    
+    export type OptTrailing = [first: string, rest: ...string[]?]; // dots+question on element disallowed
+                                                               ~
+!!! error TS1005: ',' expected.
+                                                                ~
+!!! error TS1110: Type expected.
+    
+    export type OptRest = [first: string, ...rest?: string[]]; // rest+optional disallowed
+    
+    export type NonArrayRest = [first: string, ...rest: number]; // non-arraylike rest, disallowed
+                                               ~~~~~~~~~~~~~~~
+!!! error TS2574: A rest element type must be an array type.
+    
+    export type RecusiveRestUnlabeled = [string, ...RecusiveRestUnlabeled];
+                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2456: Type alias 'RecusiveRestUnlabeled' circularly references itself.
+    export type RecusiveRest = [first: string, ...rest: RecusiveRest]; // marked as incorrect, same as above
+                ~~~~~~~~~~~~
+!!! error TS2456: Type alias 'RecusiveRest' circularly references itself.
+    

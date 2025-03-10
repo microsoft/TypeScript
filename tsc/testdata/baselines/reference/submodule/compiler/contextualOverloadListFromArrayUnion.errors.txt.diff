@@ -1,0 +1,165 @@
+--- old.contextualOverloadListFromArrayUnion.errors.txt
++++ new.contextualOverloadListFromArrayUnion.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'CallableFunction'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'NewableFunction'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++one.ts(2,24): error TS2339: Property 'map' does not exist on type '{}'.
++one.ts(2,28): error TS7006: Parameter 'item' implicitly has an 'any' type.
++three.ts(3,15): error TS2304: Cannot find name 'ResizeObserverEntry'.
++three.ts(3,48): error TS2304: Cannot find name 'ResizeObserver'.
++three.ts(6,15): error TS2304: Cannot find name 'ResizeObserverEntry'.
++three.ts(6,48): error TS2304: Cannot find name 'ResizeObserver'.
++three.ts(9,28): error TS2304: Cannot find name 'ResizeObserver'.
++three.ts(9,44): error TS2488: Type '[any]' must have a '[Symbol.iterator]()' method that returns an iterator.
++three.ts(9,45): error TS7031: Binding element 'entry' implicitly has an 'any' type.
++three.ts(15,13): error TS2304: Cannot find name 'Error'.
++three.ts(27,20): error TS7053: Element implicitly has an 'any' type because expression of type 'number' can't be used to index type '{}'.
++  No index signature with a parameter of type 'number' was found on type '{}'.
++three.ts(31,19): error TS7006: Parameter 'error' implicitly has an 'any' type.
++three.ts(31,26): error TS7006: Parameter 'result' implicitly has an 'any' type.
++three.ts(37,29): error TS2339: Property 'push' does not exist on type '{}'.
++three.ts(47,5): error TS7006: Parameter 'cb' implicitly has an 'any' type.
++three.ts(47,11): error TS2304: Cannot find name 'setTimeout'.
++three.ts(48,5): error TS7006: Parameter 'cb' implicitly has an 'any' type.
++three.ts(48,11): error TS2304: Cannot find name 'setTimeout'.
++three.ts(49,5): error TS7006: Parameter 'cb' implicitly has an 'any' type.
++three.ts(49,11): error TS2304: Cannot find name 'setTimeout'.
++three.ts(52,9): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
++three.ts(54,9): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
++two.ts(2,24): error TS2339: Property 'map' does not exist on type '{}'.
++two.ts(2,28): error TS7006: Parameter 'item' implicitly has an 'any' type.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'CallableFunction'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'NewableFunction'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== one.ts (2 errors) ====
++    declare const y: never[] | string[];
++    export const yThen = y.map(item => item.length);
++                           ~~~
++!!! error TS2339: Property 'map' does not exist on type '{}'.
++                               ~~~~
++!!! error TS7006: Parameter 'item' implicitly has an 'any' type.
++==== two.ts (2 errors) ====
++    declare const y: number[][] | string[];
++    export const yThen = y.map(item => item.length);
++                           ~~~
++!!! error TS2339: Property 'map' does not exist on type '{}'.
++                               ~~~~
++!!! error TS7006: Parameter 'item' implicitly has an 'any' type.
++==== three.ts (20 errors) ====
++    // #42504
++    interface ResizeObserverCallback {
++        (entries: ResizeObserverEntry[], observer: ResizeObserver): void;
++                  ~~~~~~~~~~~~~~~~~~~
++!!! error TS2304: Cannot find name 'ResizeObserverEntry'.
++                                                   ~~~~~~~~~~~~~~
++!!! error TS2304: Cannot find name 'ResizeObserver'.
++    }
++    interface ResizeObserverCallback { // duplicate for effect
++        (entries: ResizeObserverEntry[], observer: ResizeObserver): void;
++                  ~~~~~~~~~~~~~~~~~~~
++!!! error TS2304: Cannot find name 'ResizeObserverEntry'.
++                                                   ~~~~~~~~~~~~~~
++!!! error TS2304: Cannot find name 'ResizeObserver'.
++    }
++    
++    const resizeObserver = new ResizeObserver(([entry]) => {
++                               ~~~~~~~~~~~~~~
++!!! error TS2304: Cannot find name 'ResizeObserver'.
++                                               ~~~~~~~
++!!! error TS2488: Type '[any]' must have a '[Symbol.iterator]()' method that returns an iterator.
++                                                ~~~~~
++!!! error TS7031: Binding element 'entry' implicitly has an 'any' type.
++        entry
++    });
++    // comment in #35501
++    interface Callback<T> {
++        (error: null, result: T): unknown
++        (error: Error, result: null): unknown
++                ~~~~~
++!!! error TS2304: Cannot find name 'Error'.
++    }
++    
++    interface Task<T> {
++        (callback: Callback<T>): unknown
++    }
++    
++    export function series<T>(tasks: Task<T>[], callback: Callback<T[]>): void {
++        let index = 0
++        let results: T[] = []
++    
++        function next() {
++            let task = tasks[index]
++                       ~~~~~~~~~~~~
++!!! error TS7053: Element implicitly has an 'any' type because expression of type 'number' can't be used to index type '{}'.
++!!! error TS7053:   No index signature with a parameter of type 'number' was found on type '{}'.
++            if (!task) {
++                callback(null, results)
++            } else {
++                task((error, result) => {
++                      ~~~~~
++!!! error TS7006: Parameter 'error' implicitly has an 'any' type.
++                             ~~~~~~
++!!! error TS7006: Parameter 'result' implicitly has an 'any' type.
++                    if (error) {
++                        callback(error, null)
++                    } else {
++                        // must use postfix-!, since `error` and `result` don't have a
++                        // causal relationship when the overloads are combined
++                        results.push(result!)
++                                ~~~~
++!!! error TS2339: Property 'push' does not exist on type '{}'.
++                        next()
++                    }
++                })
++            }
++        }
++        next()
++    }
++    
++    series([
++        cb => setTimeout(() => cb(null, 1), 300),
++        ~~
++!!! error TS7006: Parameter 'cb' implicitly has an 'any' type.
++              ~~~~~~~~~~
++!!! error TS2304: Cannot find name 'setTimeout'.
++        cb => setTimeout(() => cb(null, 2), 200),
++        ~~
++!!! error TS7006: Parameter 'cb' implicitly has an 'any' type.
++              ~~~~~~~~~~
++!!! error TS2304: Cannot find name 'setTimeout'.
++        cb => setTimeout(() => cb(null, 3), 100),
++        ~~
++!!! error TS7006: Parameter 'cb' implicitly has an 'any' type.
++              ~~~~~~~~~~
++!!! error TS2304: Cannot find name 'setTimeout'.
++    ], (error, results) => {
++        if (error) {
++            console.error(error)
++            ~~~~~~~
++!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
++        } else {
++            console.log(results)
++            ~~~~~~~
++!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
++        }
++    })
++    

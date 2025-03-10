@@ -1,0 +1,16 @@
+--- old.classExtendingQualifiedName.errors.txt
++++ new.classExtendingQualifiedName.errors.txt
+@@= skipped -0, +0 lines =@@
+-classExtendingQualifiedName.ts(5,23): error TS2339: Property 'C' does not exist on type 'typeof M'.
++classExtendingQualifiedName.ts(5,23): error TS2339: Property 'C' does not exist on type '{}'.
+ 
+ 
+ ==== classExtendingQualifiedName.ts (1 errors) ====
+@@= skipped -7, +7 lines =@@
+     
+         class D extends M.C {
+                           ~
+-!!! error TS2339: Property 'C' does not exist on type 'typeof M'.
++!!! error TS2339: Property 'C' does not exist on type '{}'.
+         }
+     }

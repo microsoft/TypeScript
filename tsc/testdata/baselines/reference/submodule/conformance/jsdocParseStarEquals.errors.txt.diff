@@ -1,0 +1,28 @@
+--- old.jsdocParseStarEquals.errors.txt
++++ new.jsdocParseStarEquals.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++a.js(3,12): error TS7019: Rest parameter 'args' implicitly has an 'any[]' type.
++a.js(12,14): error TS7006: Parameter 'f' implicitly has an 'any' type.
++
++
++==== a.js (2 errors) ====
++    /** @param {...*=} args
++        @return {*=} */
++    function f(...args) {
++               ~~~~~~~
++!!! error TS7019: Rest parameter 'args' implicitly has an 'any[]' type.
++        return null
++    }
++    
++    /** @type *= */
++    var x;
++    
++    
++    /** @param {function():*=} f */
++    function cbf(f) {
++                 ~
++!!! error TS7006: Parameter 'f' implicitly has an 'any' type.
++    }
++    

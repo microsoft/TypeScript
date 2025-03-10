@@ -1,0 +1,19 @@
+file1.js(2,3): error TS2339: Property 'commands' does not exist on type '{}'.
+file2.js(1,3): error TS2339: Property 'commands' does not exist on type '{}'.
+file2.js(2,3): error TS2339: Property 'commands' does not exist on type '{}'.
+
+
+==== file1.js (1 errors) ====
+    var N = {};
+    N.commands = {};
+      ~~~~~~~~
+!!! error TS2339: Property 'commands' does not exist on type '{}'.
+    
+==== file2.js (2 errors) ====
+    N.commands.a = 111;
+      ~~~~~~~~
+!!! error TS2339: Property 'commands' does not exist on type '{}'.
+    N.commands.b = function () { };
+      ~~~~~~~~
+!!! error TS2339: Property 'commands' does not exist on type '{}'.
+    

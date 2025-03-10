@@ -1,0 +1,10 @@
+a.js(2,3): error TS2390: Constructor implementation is missing.
+
+
+==== a.js (1 errors) ====
+    class A {
+      constructor();
+      ~~~~~~~~~~~
+!!! error TS2390: Constructor implementation is missing.
+    }
+    

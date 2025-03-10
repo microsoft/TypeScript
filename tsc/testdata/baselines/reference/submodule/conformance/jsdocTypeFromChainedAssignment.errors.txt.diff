@@ -1,0 +1,54 @@
+--- old.jsdocTypeFromChainedAssignment.errors.txt
++++ new.jsdocTypeFromChainedAssignment.errors.txt
+@@= skipped -0, +0 lines =@@
+-a.js(12,21): error TS2339: Property 'x' does not exist on type 'typeof A'.
+-a.js(15,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+-a.js(16,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+-a.js(17,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+-a.js(18,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+-a.js(19,1): error TS2322: Type '10' is not assignable to type '1'.
++a.js(7,44): error TS7006: Parameter 'n' implicitly has an 'any' type.
++a.js(11,24): error TS7006: Parameter 'm' implicitly has an 'any' type.
++a.js(14,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+ 
+ 
+-==== a.js (6 errors) ====
++==== a.js (3 errors) ====
+     function A () {
+         this.x = 1
+         /** @type {1} */
+@@= skipped -13, +10 lines =@@
+     }
+     /** @param {number} n */
+     A.prototype.y = A.prototype.z = function f(n) {
++                                               ~
++!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
+         return n + this.x
+     }
+     /** @param {number} m */
+     A.s = A.t = function g(m) {
++                           ~
++!!! error TS7006: Parameter 'm' implicitly has an 'any' type.
+         return m + this.x
+-                        ~
+-!!! error TS2339: Property 'x' does not exist on type 'typeof A'.
+     }
+     var a = new A()
++            ~~~~~~~
++!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+     a.y('no') // error
+-        ~~~~
+-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+     a.z('not really') // error
+-        ~~~~~~~~~~~~
+-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+     A.s('still no') // error
+-        ~~~~~~~~~~
+-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+     A.t('not here either') // error
+-        ~~~~~~~~~~~~~~~~~
+-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+     a.first = 10 // error: '10' isn't assignable to '1'
+-    ~~~~~~~
+-!!! error TS2322: Type '10' is not assignable to type '1'.
+     

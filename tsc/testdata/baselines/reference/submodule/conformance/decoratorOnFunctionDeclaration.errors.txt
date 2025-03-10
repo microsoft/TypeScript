@@ -1,0 +1,11 @@
+decoratorOnFunctionDeclaration.ts(3,1): error TS1206: Decorators are not valid here.
+
+
+==== decoratorOnFunctionDeclaration.ts (1 errors) ====
+    declare function dec<T>(target: T): T;
+    
+    @dec
+    ~
+!!! error TS1206: Decorators are not valid here.
+    function F() {
+    }

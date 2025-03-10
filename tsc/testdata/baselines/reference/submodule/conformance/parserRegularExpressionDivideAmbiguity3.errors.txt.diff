@@ -1,0 +1,14 @@
+--- old.parserRegularExpressionDivideAmbiguity3.errors.txt
++++ new.parserRegularExpressionDivideAmbiguity3.errors.txt
+@@= skipped -0, +0 lines =@@
+-parserRegularExpressionDivideAmbiguity3.ts(1,16): error TS1499: Unknown regular expression flag.
+ parserRegularExpressionDivideAmbiguity3.ts(1,18): error TS2339: Property 'foo' does not exist on type 'RegExp'.
+ 
+ 
+-==== parserRegularExpressionDivideAmbiguity3.ts (2 errors) ====
++==== parserRegularExpressionDivideAmbiguity3.ts (1 errors) ====
+     if (1) /regexp/a.foo();
+-                   ~
+-!!! error TS1499: Unknown regular expression flag.
+                      ~~~
+ !!! error TS2339: Property 'foo' does not exist on type 'RegExp'.

@@ -1,0 +1,15 @@
+index.js(3,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== /some-mod.d.ts (0 errors) ====
+    interface Item {
+        x: string;
+    }
+    declare const items: Item[];
+    export = items;
+==== index.js (1 errors) ====
+    /** @type {typeof import("/some-mod")} */
+    const items = [];
+    module.exports = items;
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.

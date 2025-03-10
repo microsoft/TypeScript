@@ -1,0 +1,48 @@
+--- old.objectRestForOf.errors.txt
++++ new.objectRestForOf.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++objectRestForOf.ts(2,30): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
++objectRestForOf.ts(7,18): error TS2741: Property 'y' is missing in type '{}' but required in type '{ y: string; }'.
++objectRestForOf.ts(10,28): error TS2339: Property 'map' does not exist on type '{}'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== objectRestForOf.ts (3 errors) ====
++    let array: { x: number, y: string }[];
++    for (let { x, ...restOf } of array) {
++                                 ~~~~~
++!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
++        [x, restOf];
++    }
++    let xx: number;
++    let rrestOff: { y: string };
++    for ({ x: xx, ...rrestOff } of array ) {
++                     ~~~~~~~~
++!!! error TS2741: Property 'y' is missing in type '{}' but required in type '{ y: string; }'.
++!!! related TS2728 objectRestForOf.ts:6:17: 'y' is declared here.
++        [xx, rrestOff];
++    }
++    for (const norest of array.map(a => ({ ...a, x: 'a string' }))) {
++                               ~~~
++!!! error TS2339: Property 'map' does not exist on type '{}'.
++        [norest.x, norest.y];
++        // x is now a string. who knows why.
++    }
++    

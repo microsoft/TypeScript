@@ -1,0 +1,23 @@
+differentTypesWithSameName.ts(16,15): error TS2741: Property 's' is missing in type 'variable' but required in type 'variable'.
+
+
+==== differentTypesWithSameName.ts (1 errors) ====
+    module m {
+      export class variable{
+        s: string;
+      }
+      export function doSomething(v: m.variable) {
+        
+      }
+    }
+    
+    class variable {
+     t: number;
+    }
+    
+    
+    var v: variable = new variable();
+    m.doSomething(v);
+                  ~
+!!! error TS2741: Property 's' is missing in type 'variable' but required in type 'variable'.
+!!! related TS2728 differentTypesWithSameName.ts:3:5: 's' is declared here.

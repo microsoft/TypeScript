@@ -1,0 +1,9 @@
+classWithPredefinedTypesAsNames2.ts(3,7): error TS1005: '{' expected.
+
+
+==== classWithPredefinedTypesAsNames2.ts (1 errors) ====
+    // classes cannot use predefined types as names
+    
+    class void {}
+          ~~~~
+!!! error TS1005: '{' expected.

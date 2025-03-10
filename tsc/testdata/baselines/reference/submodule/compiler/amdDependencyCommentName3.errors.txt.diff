@@ -1,0 +1,15 @@
+--- old.amdDependencyCommentName3.errors.txt
++++ new.amdDependencyCommentName3.errors.txt
+@@= skipped -0, +0 lines =@@
+-amdDependencyCommentName3.ts(5,21): error TS2792: Cannot find module 'm2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++amdDependencyCommentName3.ts(5,21): error TS2307: Cannot find module 'm2' or its corresponding type declarations.
+ 
+ 
+ ==== amdDependencyCommentName3.ts (1 errors) ====
+@@= skipped -7, +7 lines =@@
+     
+     import m1 = require("m2")
+                         ~~~~
+-!!! error TS2792: Cannot find module 'm2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'm2' or its corresponding type declarations.
+     m1.f();

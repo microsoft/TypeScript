@@ -1,0 +1,7 @@
+logicalNotExpression1.ts(1,2): error TS2304: Cannot find name 'foo'.
+
+
+==== logicalNotExpression1.ts (1 errors) ====
+    !foo;
+     ~~~
+!!! error TS2304: Cannot find name 'foo'.

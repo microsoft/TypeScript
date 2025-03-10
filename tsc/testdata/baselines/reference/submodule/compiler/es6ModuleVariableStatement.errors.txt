@@ -1,0 +1,35 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== es6ModuleVariableStatement.ts (0 errors) ====
+    export var a = "hello";
+    export var x: string = a, y = x;
+    var b = y;
+    var c: string = b, d = c;
+    export module m1 {
+        export var k = a;
+        export var l: string = b, m = k;
+        var n = m1.k;
+        var o: string = n, p = k;
+    }
+    module m2 {
+        export var k = a;
+        export var l: string = b, m = k;
+        var n = m1.k;
+        var o: string = n, p = k;
+    }

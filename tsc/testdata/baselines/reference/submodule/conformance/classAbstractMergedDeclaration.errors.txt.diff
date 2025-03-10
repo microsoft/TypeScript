@@ -1,0 +1,81 @@
+--- old.classAbstractMergedDeclaration.errors.txt
++++ new.classAbstractMergedDeclaration.errors.txt
+@@= skipped -0, +0 lines =@@
+ classAbstractMergedDeclaration.ts(13,16): error TS2300: Duplicate identifier 'CC1'.
++classAbstractMergedDeclaration.ts(13,16): error TS2300: Duplicate identifier 'CC1'.
+ classAbstractMergedDeclaration.ts(14,7): error TS2300: Duplicate identifier 'CC1'.
++classAbstractMergedDeclaration.ts(14,7): error TS2300: Duplicate identifier 'CC1'.
+ classAbstractMergedDeclaration.ts(16,7): error TS2300: Duplicate identifier 'CC2'.
++classAbstractMergedDeclaration.ts(16,7): error TS2300: Duplicate identifier 'CC2'.
+ classAbstractMergedDeclaration.ts(17,16): error TS2300: Duplicate identifier 'CC2'.
++classAbstractMergedDeclaration.ts(17,16): error TS2300: Duplicate identifier 'CC2'.
+ classAbstractMergedDeclaration.ts(25,24): error TS2300: Duplicate identifier 'DCC1'.
++classAbstractMergedDeclaration.ts(25,24): error TS2300: Duplicate identifier 'DCC1'.
+ classAbstractMergedDeclaration.ts(26,15): error TS2300: Duplicate identifier 'DCC1'.
++classAbstractMergedDeclaration.ts(26,15): error TS2300: Duplicate identifier 'DCC1'.
+ classAbstractMergedDeclaration.ts(28,15): error TS2300: Duplicate identifier 'DCC2'.
++classAbstractMergedDeclaration.ts(28,15): error TS2300: Duplicate identifier 'DCC2'.
+ classAbstractMergedDeclaration.ts(29,24): error TS2300: Duplicate identifier 'DCC2'.
++classAbstractMergedDeclaration.ts(29,24): error TS2300: Duplicate identifier 'DCC2'.
+ classAbstractMergedDeclaration.ts(31,1): error TS2511: Cannot create an instance of an abstract class.
+ classAbstractMergedDeclaration.ts(32,1): error TS2511: Cannot create an instance of an abstract class.
+ classAbstractMergedDeclaration.ts(33,1): error TS2511: Cannot create an instance of an abstract class.
+@@= skipped -15, +23 lines =@@
+ classAbstractMergedDeclaration.ts(39,1): error TS2511: Cannot create an instance of an abstract class.
+ 
+ 
+-==== classAbstractMergedDeclaration.ts (16 errors) ====
++==== classAbstractMergedDeclaration.ts (24 errors) ====
+     abstract class CM {}
+     module CM {}
+     
+@@= skipped -16, +16 lines =@@
+     abstract class CC1 {}
+                    ~~~
+ !!! error TS2300: Duplicate identifier 'CC1'.
++                   ~~~
++!!! error TS2300: Duplicate identifier 'CC1'.
+     class CC1 {}
+           ~~~
+ !!! error TS2300: Duplicate identifier 'CC1'.
++          ~~~
++!!! error TS2300: Duplicate identifier 'CC1'.
+     
+     class CC2 {}
+           ~~~
+ !!! error TS2300: Duplicate identifier 'CC2'.
++          ~~~
++!!! error TS2300: Duplicate identifier 'CC2'.
+     abstract class CC2 {}
+                    ~~~
+ !!! error TS2300: Duplicate identifier 'CC2'.
++                   ~~~
++!!! error TS2300: Duplicate identifier 'CC2'.
+     
+     declare abstract class DCI {}
+     interface DCI {}
+@@= skipped -20, +28 lines =@@
+     declare abstract class DCC1 {}
+                            ~~~~
+ !!! error TS2300: Duplicate identifier 'DCC1'.
++                           ~~~~
++!!! error TS2300: Duplicate identifier 'DCC1'.
+     declare class DCC1 {}
+                   ~~~~
+ !!! error TS2300: Duplicate identifier 'DCC1'.
++                  ~~~~
++!!! error TS2300: Duplicate identifier 'DCC1'.
+     
+     declare class DCC2 {}
+                   ~~~~
+ !!! error TS2300: Duplicate identifier 'DCC2'.
++                  ~~~~
++!!! error TS2300: Duplicate identifier 'DCC2'.
+     declare abstract class DCC2 {}
+                            ~~~~
+ !!! error TS2300: Duplicate identifier 'DCC2'.
++                           ~~~~
++!!! error TS2300: Duplicate identifier 'DCC2'.
+     
+     new CM;
+     ~~~~~~

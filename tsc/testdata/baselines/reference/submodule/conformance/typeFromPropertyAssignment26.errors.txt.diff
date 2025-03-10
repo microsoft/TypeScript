@@ -1,0 +1,46 @@
+--- old.typeFromPropertyAssignment26.errors.txt
++++ new.typeFromPropertyAssignment26.errors.txt
+@@= skipped -0, +0 lines =@@
++bug24730.js(2,4): error TS2339: Property 'TreeElement' does not exist on type '{}'.
++bug24730.js(4,14): error TS2339: Property 'treeOutline' does not exist on type 'TreeElement'.
++bug24730.js(7,4): error TS2339: Property 'context' does not exist on type '{}'.
++bug24730.js(7,21): error TS2339: Property 'TreeElement' does not exist on type '{}'.
++bug24730.js(9,20): error TS2339: Property 'TreeElement' does not exist on type '{}'.
+ bug24730.js(11,14): error TS2339: Property 'doesNotExist' does not exist on type 'C'.
+-bug24730.js(12,26): error TS2339: Property 'doesntExistEither' does not exist on type 'number'.
++bug24730.js(12,14): error TS2339: Property 'treeOutline' does not exist on type 'C'.
+ 
+ 
+-==== bug24730.js (2 errors) ====
++==== bug24730.js (7 errors) ====
+     var UI = {}
+     UI.TreeElement = class {
++       ~~~~~~~~~~~
++!!! error TS2339: Property 'TreeElement' does not exist on type '{}'.
+         constructor() {
+             this.treeOutline = 12
++                 ~~~~~~~~~~~
++!!! error TS2339: Property 'treeOutline' does not exist on type 'TreeElement'.
+         }
+     };
+     UI.context = new UI.TreeElement()
++       ~~~~~~~
++!!! error TS2339: Property 'context' does not exist on type '{}'.
++                        ~~~~~~~~~~~
++!!! error TS2339: Property 'TreeElement' does not exist on type '{}'.
+     
+     class C extends UI.TreeElement {
++                       ~~~~~~~~~~~
++!!! error TS2339: Property 'TreeElement' does not exist on type '{}'.
+         onpopulate() {
+             this.doesNotExist
+                  ~~~~~~~~~~~~
+ !!! error TS2339: Property 'doesNotExist' does not exist on type 'C'.
+             this.treeOutline.doesntExistEither()
+-                             ~~~~~~~~~~~~~~~~~
+-!!! error TS2339: Property 'doesntExistEither' does not exist on type 'number'.
++                 ~~~~~~~~~~~
++!!! error TS2339: Property 'treeOutline' does not exist on type 'C'.
+         }
+     };
+     

@@ -1,0 +1,7 @@
+parserSkippedTokens1.ts(1,1): error TS1127: Invalid character.
+
+
+==== parserSkippedTokens1.ts (1 errors) ====
+    \
+    ~
+!!! error TS1127: Invalid character.

@@ -1,0 +1,16 @@
+--- old.selfReferencingFile2.errors.txt
++++ new.selfReferencingFile2.errors.txt
+@@= skipped -0, +-1 lines =@@
+-selfReferencingFile2.ts(1,21): error TS6053: File '../selfReferencingFile2.ts' not found.
+-
+-
+-==== selfReferencingFile2.ts (1 errors) ====
+-    ///<reference path='../selfReferencingFile2.ts'/>
+-                        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS6053: File '../selfReferencingFile2.ts' not found.
+-    
+-    class selfReferencingFile2 {
+-    
+-    }
+@@= skipped --1, +1 lines =@@
++<no content>

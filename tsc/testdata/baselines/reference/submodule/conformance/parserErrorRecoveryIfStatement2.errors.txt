@@ -1,0 +1,19 @@
+parserErrorRecoveryIfStatement2.ts(3,9): error TS2304: Cannot find name 'a'.
+parserErrorRecoveryIfStatement2.ts(4,3): error TS1005: ')' expected.
+
+
+==== parserErrorRecoveryIfStatement2.ts (2 errors) ====
+    class Foo {
+      f1() {
+        if (a
+            ~
+!!! error TS2304: Cannot find name 'a'.
+      }
+      ~
+!!! error TS1005: ')' expected.
+!!! related TS1007: The parser expected to find a ')' to match the '(' token here.
+      f2() {
+      }
+      f3() {
+      }
+    }

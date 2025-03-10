@@ -1,0 +1,25 @@
+--- old.parserindenter.errors.txt
++++ new.parserindenter.errors.txt
+@@= skipped -0, +0 lines =@@
+-parserindenter.ts(16,21): error TS6053: File 'formatting.ts' not found.
+ parserindenter.ts(20,38): error TS2304: Cannot find name 'ILineIndenationResolver'.
+ parserindenter.ts(22,33): error TS2304: Cannot find name 'IndentationBag'.
+ parserindenter.ts(24,42): error TS2304: Cannot find name 'Dictionary_int_int'.
+@@= skipped -127, +126 lines =@@
+ parserindenter.ts(736,38): error TS2304: Cannot find name 'TypeScript'.
+ 
+ 
+-==== parserindenter.ts (128 errors) ====
++==== parserindenter.ts (127 errors) ====
+     //﻿
+     // Copyright (c) Microsoft Corporation.  All rights reserved.
+     // 
+@@= skipped -17, +17 lines =@@
+     //
+     
+     ///<reference path='formatting.ts' />
+-                        ~~~~~~~~~~~~~
+-!!! error TS6053: File 'formatting.ts' not found.
+     
+     
+     module Formatting {

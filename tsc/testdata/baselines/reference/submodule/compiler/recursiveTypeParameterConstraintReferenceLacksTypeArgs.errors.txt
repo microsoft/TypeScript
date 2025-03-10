@@ -1,0 +1,7 @@
+recursiveTypeParameterConstraintReferenceLacksTypeArgs.ts(1,19): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+
+
+==== recursiveTypeParameterConstraintReferenceLacksTypeArgs.ts (1 errors) ====
+    class A<T extends A> { }
+                      ~
+!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).

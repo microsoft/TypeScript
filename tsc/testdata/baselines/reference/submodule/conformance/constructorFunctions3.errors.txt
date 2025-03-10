@@ -1,0 +1,52 @@
+a.js(4,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+a.js(12,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+a.js(23,28): error TS7006: Parameter 'n' implicitly has an 'any' type.
+a.js(27,18): error TS7006: Parameter 'm' implicitly has an 'any' type.
+a.js(30,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+
+
+==== a.js (5 errors) ====
+    function Instance() {
+        this.i = 'simple'
+    }
+    var i = new Instance();
+            ~~~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    Instance;
+    i;
+    
+    function StaticToo() {
+        this.i = 'more complex'
+    }
+    StaticToo.property = 'yep'
+    var s = new StaticToo();
+            ~~~~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    s;
+    StaticToo;
+    
+    // Both!
+    function A () {
+        this.x = 1
+        /** @type {1} */
+        this.second = 1
+    }
+    /** @param {number} n */
+    A.prototype.z = function f(n) {
+                               ~
+!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
+        return n + this.x
+    }
+    /** @param {number} m */
+    A.t = function g(m) {
+                     ~
+!!! error TS7006: Parameter 'm' implicitly has an 'any' type.
+        return m + 1
+    }
+    var a = new A()
+            ~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    a.z(3)
+    A.t(2)
+    a.second = 1
+    

@@ -1,0 +1,16 @@
+assignmentCompatability45.ts(7,7): error TS2322: Type '{ new(x: number): B; prototype: B; }' is not assignable to type '{ new(): A; prototype: A; }'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+
+
+==== assignmentCompatability45.ts (1 errors) ====
+    abstract class A {}
+    class B extends A {
+        constructor(x: number) {
+            super();
+        }
+    }
+    const b: typeof A = B;
+          ~
+!!! error TS2322: Type '{ new(x: number): B; prototype: B; }' is not assignable to type '{ new(): A; prototype: A; }'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 1 or more, but got 0.
+    

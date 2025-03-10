@@ -1,0 +1,47 @@
+--- old.taggedTemplatesWithIncompleteTemplateExpressions4.errors.txt
++++ new.taggedTemplatesWithIncompleteTemplateExpressions4.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2318: Cannot find global type 'TemplateStringsArray'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++taggedTemplatesWithIncompleteTemplateExpressions4.ts(1,15): error TS2304: Cannot find name 'TemplateStringsArray'.
+ taggedTemplatesWithIncompleteTemplateExpressions4.ts(5,24): error TS1109: Expression expected.
+-taggedTemplatesWithIncompleteTemplateExpressions4.ts(5,27): error TS1109: Expression expected.
+-taggedTemplatesWithIncompleteTemplateExpressions4.ts(5,28): error TS1005: '}' expected.
+ taggedTemplatesWithIncompleteTemplateExpressions4.ts(5,28): error TS2554: Expected 3 arguments, but got 4.
++taggedTemplatesWithIncompleteTemplateExpressions4.ts(5,28): error TS1109: Expression expected.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2318: Cannot find global type 'TemplateStringsArray'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== taggedTemplatesWithIncompleteTemplateExpressions4.ts (4 errors) ====
+     function f(x: TemplateStringsArray, y: string, z: string) {
++                  ~~~~~~~~~~~~~~~~~~~~
++!!! error TS2304: Cannot find name 'TemplateStringsArray'.
+     }
+     
+     // Incomplete call, but too many parameters.
+     f `123qdawdrqw${ 1 }${ }${ 
+                            ~
+ !!! error TS1109: Expression expected.
+-                              
+-!!! error TS1109: Expression expected.
+                                
+-!!! error TS1005: '}' expected.
+-                               
+ !!! error TS2554: Expected 3 arguments, but got 4.
++                               
++!!! error TS1109: Expression expected.

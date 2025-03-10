@@ -1,0 +1,29 @@
+--- old.jsFileFunctionParametersAsOptional.errors.txt
++++ new.jsFileFunctionParametersAsOptional.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++bar.ts(1,1): error TS2554: Expected 3 arguments, but got 0.
++bar.ts(2,1): error TS2554: Expected 3 arguments, but got 1.
++bar.ts(3,1): error TS2554: Expected 3 arguments, but got 2.
++
++
++==== foo.js (0 errors) ====
++    function f(a, b, c) { }
++    
++    
++==== bar.ts (3 errors) ====
++    f();
++    ~
++!!! error TS2554: Expected 3 arguments, but got 0.
++!!! related TS6210 foo.js:1:12: An argument for 'a' was not provided.
++    f(1);
++    ~
++!!! error TS2554: Expected 3 arguments, but got 1.
++!!! related TS6210 foo.js:1:15: An argument for 'b' was not provided.
++    f(1, 2);
++    ~
++!!! error TS2554: Expected 3 arguments, but got 2.
++!!! related TS6210 foo.js:1:18: An argument for 'c' was not provided.
++    f(1, 2, 3);
++    

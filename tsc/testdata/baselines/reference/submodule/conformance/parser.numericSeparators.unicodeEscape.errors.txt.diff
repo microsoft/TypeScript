@@ -1,0 +1,175 @@
+--- old.parser.numericSeparators.unicodeEscape.errors.txt
++++ new.parser.numericSeparators.unicodeEscape.errors.txt
+@@= skipped -0, +0 lines =@@
+ 1.ts(1,7): error TS1199: Unterminated Unicode escape sequence.
+ 10.ts(1,5): error TS1125: Hexadecimal digit expected.
+ 11.ts(1,5): error TS1125: Hexadecimal digit expected.
+-12.ts(1,5): error TS1125: Hexadecimal digit expected.
+ 13.ts(1,5): error TS1125: Hexadecimal digit expected.
+ 14.ts(1,5): error TS1125: Hexadecimal digit expected.
+ 15.ts(1,5): error TS1125: Hexadecimal digit expected.
+-16.ts(1,5): error TS1125: Hexadecimal digit expected.
+-16.ts(1,12): error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
+ 17.ts(1,4): error TS1125: Hexadecimal digit expected.
+ 18.ts(1,4): error TS1125: Hexadecimal digit expected.
+ 19.ts(1,4): error TS1125: Hexadecimal digit expected.
+ 2.ts(1,7): error TS1199: Unterminated Unicode escape sequence.
+-20.ts(1,4): error TS1125: Hexadecimal digit expected.
+ 21.ts(1,4): error TS1125: Hexadecimal digit expected.
+ 22.ts(1,4): error TS1125: Hexadecimal digit expected.
+ 23.ts(1,4): error TS1125: Hexadecimal digit expected.
+-24.ts(1,4): error TS1125: Hexadecimal digit expected.
+ 25.ts(1,11): error TS1199: Unterminated Unicode escape sequence.
+ 26.ts(1,11): error TS1199: Unterminated Unicode escape sequence.
+ 27.ts(1,11): error TS1199: Unterminated Unicode escape sequence.
+-28.ts(1,11): error TS1199: Unterminated Unicode escape sequence.
+-28.ts(1,12): error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
+ 3.ts(1,7): error TS1199: Unterminated Unicode escape sequence.
+ 37.ts(1,7): error TS1199: Unterminated Unicode escape sequence.
+ 38.ts(1,7): error TS1199: Unterminated Unicode escape sequence.
+ 39.ts(1,7): error TS1199: Unterminated Unicode escape sequence.
+-4.ts(1,7): error TS1199: Unterminated Unicode escape sequence.
+-4.ts(1,12): error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
+-40.ts(1,7): error TS1199: Unterminated Unicode escape sequence.
+-40.ts(1,13): error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
+ 41.ts(1,6): error TS1125: Hexadecimal digit expected.
+ 42.ts(1,6): error TS1125: Hexadecimal digit expected.
+ 43.ts(1,6): error TS1125: Hexadecimal digit expected.
+-44.ts(1,6): error TS1125: Hexadecimal digit expected.
+ 45.ts(1,5): error TS1125: Hexadecimal digit expected.
+ 46.ts(1,5): error TS1125: Hexadecimal digit expected.
+ 47.ts(1,5): error TS1125: Hexadecimal digit expected.
+-48.ts(1,5): error TS1125: Hexadecimal digit expected.
+ 5.ts(1,6): error TS1125: Hexadecimal digit expected.
+ 6.ts(1,6): error TS1125: Hexadecimal digit expected.
+ 7.ts(1,6): error TS1125: Hexadecimal digit expected.
+-8.ts(1,6): error TS1125: Hexadecimal digit expected.
+ 9.ts(1,5): error TS1125: Hexadecimal digit expected.
+ 
+ 
+@@= skipped -58, +44 lines =@@
+           
+ !!! error TS1199: Unterminated Unicode escape sequence.
+     
+-==== 4.ts (2 errors) ====
++==== 4.ts (0 errors) ====
+     /\u{10_ffff}/u
+-          
+-!!! error TS1199: Unterminated Unicode escape sequence.
+-               ~
+-!!! error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
+     
+ ==== 5.ts (1 errors) ====
+     "\uff_ff"
+@@= skipped -22, +18 lines =@@
+          
+ !!! error TS1125: Hexadecimal digit expected.
+     
+-==== 8.ts (1 errors) ====
++==== 8.ts (0 errors) ====
+     /\uff_ff/u
+-         
+-!!! error TS1125: Hexadecimal digit expected.
+     
+ ==== 9.ts (1 errors) ====
+     "\xf_f"
+@@= skipped -20, +18 lines =@@
+         
+ !!! error TS1125: Hexadecimal digit expected.
+     
+-==== 12.ts (1 errors) ====
++==== 12.ts (0 errors) ====
+     /\xf_f/u
+-        
+-!!! error TS1125: Hexadecimal digit expected.
+     
+ ==== 13.ts (1 errors) ====
+     "\u{_10ffff}"
+@@= skipped -20, +18 lines =@@
+         
+ !!! error TS1125: Hexadecimal digit expected.
+     
+-==== 16.ts (2 errors) ====
++==== 16.ts (0 errors) ====
+     /\u{_10ffff}/u
+-        
+-!!! error TS1125: Hexadecimal digit expected.
+-               ~
+-!!! error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
+     
+ ==== 17.ts (1 errors) ====
+     "\u_ffff"
+@@= skipped -22, +18 lines =@@
+        
+ !!! error TS1125: Hexadecimal digit expected.
+     
+-==== 20.ts (1 errors) ====
++==== 20.ts (0 errors) ====
+     /\u_ffff/u
+-       
+-!!! error TS1125: Hexadecimal digit expected.
+     
+ ==== 21.ts (1 errors) ====
+     "\x_ff"
+@@= skipped -20, +18 lines =@@
+        
+ !!! error TS1125: Hexadecimal digit expected.
+     
+-==== 24.ts (1 errors) ====
++==== 24.ts (0 errors) ====
+     /\x_ff/u
+-       
+-!!! error TS1125: Hexadecimal digit expected.
+     
+ ==== 25.ts (1 errors) ====
+     "\u{10ffff_}"
+@@= skipped -20, +18 lines =@@
+               
+ !!! error TS1199: Unterminated Unicode escape sequence.
+     
+-==== 28.ts (2 errors) ====
++==== 28.ts (0 errors) ====
+     /\u{10ffff_}/u
+-              
+-!!! error TS1199: Unterminated Unicode escape sequence.
+-               ~
+-!!! error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
+     
+ ==== 29.ts (0 errors) ====
+     "\uffff_"
+@@= skipped -46, +42 lines =@@
+           
+ !!! error TS1199: Unterminated Unicode escape sequence.
+     
+-==== 40.ts (2 errors) ====
++==== 40.ts (0 errors) ====
+     /\u{10__ffff}/u
+-          
+-!!! error TS1199: Unterminated Unicode escape sequence.
+-                ~
+-!!! error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
+     
+ ==== 41.ts (1 errors) ====
+     "\uff__ff"
+@@= skipped -22, +18 lines =@@
+          
+ !!! error TS1125: Hexadecimal digit expected.
+     
+-==== 44.ts (1 errors) ====
++==== 44.ts (0 errors) ====
+     /\uff__ff/u
+-         
+-!!! error TS1125: Hexadecimal digit expected.
+     
+ ==== 45.ts (1 errors) ====
+     "\xf__f"
+@@= skipped -20, +18 lines =@@
+         
+ !!! error TS1125: Hexadecimal digit expected.
+     
+-==== 48.ts (1 errors) ====
++==== 48.ts (0 errors) ====
+     /\xf__f/u
+-        
+-!!! error TS1125: Hexadecimal digit expected.
+     

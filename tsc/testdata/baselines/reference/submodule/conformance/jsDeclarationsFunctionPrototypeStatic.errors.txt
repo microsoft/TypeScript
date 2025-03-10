@@ -1,0 +1,19 @@
+source.js(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== source.js (1 errors) ====
+    module.exports = MyClass;
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+    function MyClass() {}
+    MyClass.staticMethod = function() {}
+    MyClass.prototype.method = function() {}
+    MyClass.staticProperty = 123;
+    
+    /**
+     * Callback to be invoked when test execution is complete.
+     *
+     * @callback DoneCB
+     * @param {number} failures - Number of failures that occurred.
+     */

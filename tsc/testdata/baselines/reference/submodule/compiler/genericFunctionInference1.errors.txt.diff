@@ -1,0 +1,113 @@
+--- old.genericFunctionInference1.errors.txt
++++ new.genericFunctionInference1.errors.txt
+@@= skipped -0, +0 lines =@@
+-genericFunctionInference1.ts(135,14): error TS2345: Argument of type '<a>(value: { key: a; }) => a' is not assignable to parameter of type '(value: Data) => string'.
+-  Type 'number' is not assignable to type 'string'.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'CallableFunction'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'NewableFunction'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++genericFunctionInference1.ts(18,31): error TS2339: Property 'length' does not exist on type '{}'.
++genericFunctionInference1.ts(31,52): error TS2339: Property 'length' does not exist on type '{}'.
++genericFunctionInference1.ts(87,38): error TS2488: Type 'A' must have a '[Symbol.iterator]()' method that returns an iterator.
++genericFunctionInference1.ts(128,12): error TS2304: Cannot find name 'Date'.
++genericFunctionInference1.ts(135,14): error TS2345: Argument of type '<a>(value: { key: a; }) => a' is not assignable to parameter of type '(value: unknown) => string'.
++  Types of parameters 'value' and 'value' are incompatible.
++    Type 'unknown' is not assignable to type '{ key: string; }'.
++genericFunctionInference1.ts(152,23): error TS2339: Property 'map' does not exist on type '{}'.
++genericFunctionInference1.ts(195,17): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++genericFunctionInference1.ts(198,14): error TS18046: 'x' is of type 'unknown'.
+ 
+ 
+-==== genericFunctionInference1.ts (1 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'CallableFunction'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'NewableFunction'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== genericFunctionInference1.ts (8 errors) ====
+     declare function pipe<A extends any[], B>(ab: (...args: A) => B): (...args: A) => B;
+     declare function pipe<A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C;
+     declare function pipe<A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D;
+@@= skipped -20, +48 lines =@@
+     const f07 = pipe(x => list(x), pipe(box));
+     const f08 = pipe(x => list(x), pipe(x => box(x)));
+     const f09 = pipe(list, x => x.length);
++                                  ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
+     const f10 = pipe(foo);
+     const f11 = pipe(foo, foo);
+     
+@@= skipped -13, +15 lines =@@
+     const g07: <T>(x: T) => { value: T[] } = pipe(x => list(x), pipe(box));
+     const g08: <T>(x: T) => { value: T[] } = pipe(x => list(x), pipe(x => box(x)));
+     const g09: <T>(x: T) => number = pipe(list, x => x.length);
++                                                       ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
+     const g10: <T extends { value: T }>(x: T) => T = pipe(foo);
+     const g12: <T extends { value: T }>(x: T) => T = pipe(foo, foo);
+     
+@@= skipped -56, +58 lines =@@
+     
+     function asFunction<A extends any[], B>(cf: new (...args: A) => B) {
+         return (...args: A) => new cf(...args);
++                                         ~~~~
++!!! error TS2488: Type 'A' must have a '[Symbol.iterator]()' method that returns an iterator.
+     }
+     
+     const newPoint = asFunction(Point);
+@@= skipped -41, +43 lines =@@
+     export interface Data {
+         key: number;
+         value: Date;
++               ~~~~
++!!! error TS2304: Cannot find name 'Date'.
+     }
+     
+     var data: Data[] = [];
+@@= skipped -8, +10 lines =@@
+     
+     toKeys(data, keyOf);  // Error
+                  ~~~~~
+-!!! error TS2345: Argument of type '<a>(value: { key: a; }) => a' is not assignable to parameter of type '(value: Data) => string'.
+-!!! error TS2345:   Type 'number' is not assignable to type 'string'.
++!!! error TS2345: Argument of type '<a>(value: { key: a; }) => a' is not assignable to parameter of type '(value: unknown) => string'.
++!!! error TS2345:   Types of parameters 'value' and 'value' are incompatible.
++!!! error TS2345:     Type 'unknown' is not assignable to type '{ key: string; }'.
+     
+     // #9366
+     
+@@= skipped -19, +20 lines =@@
+     
+     const map = <T, U>(transform: (t: T) => U) =>
+         (arr: T[]) => arr.map(transform)
++                          ~~~
++!!! error TS2339: Property 'map' does not exist on type '{}'.
+     
+     const identityStr = (t: string) => t;
+     
+@@= skipped -43, +45 lines =@@
+     );
+     
+     const promise = Promise.resolve(1);
++                    ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+     promise.then(
+         pipe(
+             x => x + 1,
++                 ~
++!!! error TS18046: 'x' is of type 'unknown'.
+             x => x * 2,
+         ),
+     );

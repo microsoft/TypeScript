@@ -1,0 +1,35 @@
+--- old.augmentExportEquals1_1.errors.txt
++++ new.augmentExportEquals1_1.errors.txt
+@@= skipped -0, +0 lines =@@
+-file2.ts(6,16): error TS2671: Cannot augment module 'file1' because it resolves to a non-module entity.
+-file3.ts(3,8): error TS2503: Cannot find namespace 'x'.
++file3.ts(1,20): error TS2307: Cannot find module 'file1' or its corresponding type declarations.
+ 
+ 
+ ==== file3.ts (1 errors) ====
+     import x = require("file1");
++                       ~~~~~~~
++!!! error TS2307: Cannot find module 'file1' or its corresponding type declarations.
+     import "file2";
+     let a: x.A; // should not work
+-           ~
+-!!! error TS2503: Cannot find namespace 'x'.
+ ==== file1.d.ts (0 errors) ====
+     declare module "file1" {
+         var x: number;
+         export = x;
+     }
+     
+-==== file2.ts (1 errors) ====
++==== file2.ts (0 errors) ====
+     /// <reference path="file1.d.ts"/>
+     import x = require("file1"); 
+     
+     // augmentation for 'file1'
+     // should error since 'file1' does not have namespace meaning
+     declare module "file1" {
+-                   ~~~~~~~
+-!!! error TS2671: Cannot augment module 'file1' because it resolves to a non-module entity.
+         interface A { a }
+     }
+     

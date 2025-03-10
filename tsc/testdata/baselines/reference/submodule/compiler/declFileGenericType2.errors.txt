@@ -1,0 +1,50 @@
+declFileGenericType2.ts(25,141): error TS2304: Cannot find name 'IElementController'.
+declFileGenericType2.ts(33,134): error TS2339: Property 'dom' does not exist on type '{ mvc: { AbstractController: { new<ModelType>(): AbstractController<ModelType>; prototype: AbstractController<any>; }; }; }'.
+
+
+==== declFileGenericType2.ts (2 errors) ====
+    declare module templa.mvc {
+        interface IModel {
+        }
+    }
+    declare module templa.mvc {
+        interface IController<ModelType extends templa.mvc.IModel> {
+        }
+    }
+    declare module templa.mvc {
+        class AbstractController<ModelType extends templa.mvc.IModel> implements mvc.IController<ModelType> {
+        }
+    }
+    declare module templa.mvc.composite {
+        interface ICompositeControllerModel extends mvc.IModel {
+            getControllers(): mvc.IController<mvc.IModel>[];
+        }
+    }
+    module templa.dom.mvc {
+        export interface IElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.IController<ModelType> {
+        }
+    }
+    // Module
+    module templa.dom.mvc {
+    
+        export class AbstractElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.AbstractController<ModelType> implements IElementController<ModelType> {
+                                                                                                                                                ~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'IElementController'.
+            constructor() {
+                super();
+            }
+        }
+    }
+    // Module
+    module templa.dom.mvc.composite {
+        export class AbstractCompositeElementController<ModelType extends templa.mvc.composite.ICompositeControllerModel> extends templa.dom.mvc.AbstractElementController<ModelType> {
+                                                                                                                                         ~~~
+!!! error TS2339: Property 'dom' does not exist on type '{ mvc: { AbstractController: { new<ModelType>(): AbstractController<ModelType>; prototype: AbstractController<any>; }; }; }'.
+            public _controllers: templa.mvc.IController<templa.mvc.IModel>[];
+            constructor() {
+                super();
+                this._controllers = [];
+            }
+        }
+    }
+    

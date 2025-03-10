@@ -1,0 +1,9 @@
+--- old.slashBeforeVariableDeclaration1.errors.txt
++++ new.slashBeforeVariableDeclaration1.errors.txt
+@@= skipped -2, +2 lines =@@
+ 
+ ==== slashBeforeVariableDeclaration1.ts (1 errors) ====
+     \ declare var v;
+-    
++    ~
+ !!! error TS1127: Invalid character.

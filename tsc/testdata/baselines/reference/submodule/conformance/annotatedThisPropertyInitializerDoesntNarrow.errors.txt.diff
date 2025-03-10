@@ -1,0 +1,28 @@
+--- old.annotatedThisPropertyInitializerDoesntNarrow.errors.txt
++++ new.annotatedThisPropertyInitializerDoesntNarrow.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++Compilation.js(8,14): error TS2339: Property 'assets' does not exist on type 'C'.
++Compilation.js(11,20): error TS2339: Property 'assets' does not exist on type 'C'.
++
++
++==== Compilation.js (2 errors) ====
++    // from webpack/lib/Compilation.js and filed at #26427
++    /** @param {{ [s: string]: number }} map */
++    function mappy(map) {}
++    
++    export class C {
++        constructor() {
++            /** @type {{ [assetName: string]: number}} */
++            this.assets = {};
++                 ~~~~~~
++!!! error TS2339: Property 'assets' does not exist on type 'C'.
++        }
++        m() {
++            mappy(this.assets)
++                       ~~~~~~
++!!! error TS2339: Property 'assets' does not exist on type 'C'.
++        }
++    }
++    

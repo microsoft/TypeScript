@@ -1,0 +1,16 @@
+--- old.es6ImportDefaultBindingFollowedWithNamespaceBindingDts.errors.txt
++++ new.es6ImportDefaultBindingFollowedWithNamespaceBindingDts.errors.txt
+@@= skipped -0, +-1 lines =@@
+-client.ts(1,8): error TS1192: Module '"server"' has no default export.
+-
+-
+-==== server.ts (0 errors) ====
+-    export class a { }
+-    
+-==== client.ts (1 errors) ====
+-    import defaultBinding, * as nameSpaceBinding  from "./server";
+-           ~~~~~~~~~~~~~~
+-!!! error TS1192: Module '"server"' has no default export.
+-    export var x = new nameSpaceBinding.a();
+@@= skipped --1, +1 lines =@@
++<no content>

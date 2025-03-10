@@ -1,0 +1,40 @@
+decoratorMetadata-jsdoc.ts(5,15): error TS1442: Expected '=' for property initializer.
+decoratorMetadata-jsdoc.ts(7,15): error TS1442: Expected '=' for property initializer.
+decoratorMetadata-jsdoc.ts(7,16): error TS1109: Expression expected.
+decoratorMetadata-jsdoc.ts(8,17): error TS1146: Declaration expected.
+decoratorMetadata-jsdoc.ts(9,5): error TS2304: Cannot find name 'c'.
+decoratorMetadata-jsdoc.ts(9,7): error TS1109: Expression expected.
+decoratorMetadata-jsdoc.ts(9,9): error TS1109: Expression expected.
+decoratorMetadata-jsdoc.ts(9,10): error TS1109: Expression expected.
+decoratorMetadata-jsdoc.ts(10,1): error TS1128: Declaration or statement expected.
+
+
+==== decoratorMetadata-jsdoc.ts (9 errors) ====
+    declare var decorator: any;
+    
+    class X {
+        @decorator()
+        a?: string?;
+                  ~
+!!! error TS1442: Expected '=' for property initializer.
+        @decorator()
+        b?: string!;
+                  ~
+!!! error TS1442: Expected '=' for property initializer.
+                   ~
+!!! error TS1109: Expression expected.
+        @decorator()
+                    
+!!! error TS1146: Declaration expected.
+        c?: *;
+        ~
+!!! error TS2304: Cannot find name 'c'.
+          ~
+!!! error TS1109: Expression expected.
+            ~
+!!! error TS1109: Expression expected.
+             ~
+!!! error TS1109: Expression expected.
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.

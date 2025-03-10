@@ -1,0 +1,23 @@
+a.js(5,12): error TS7006: Parameter 'args' implicitly has an 'any' type.
+a.js(5,18): error TS7006: Parameter 'bwarg' implicitly has an 'any' type.
+
+
+==== a.js (2 errors) ====
+    /**
+     * @param {string=} `args`
+     * @param `bwarg` {?number?}
+     */
+    function f(args, bwarg) {
+               ~~~~
+!!! error TS7006: Parameter 'args' implicitly has an 'any' type.
+                     ~~~~~
+!!! error TS7006: Parameter 'bwarg' implicitly has an 'any' type.
+    }
+    
+==== ts.ts (0 errors) ====
+    /**
+     * @param `arg` - this is fine
+     */
+    function g(arg: string) {
+    }
+    

@@ -1,0 +1,15 @@
+--- old.allowImportingTsExtensions(moduleresolution=classic).errors.txt
++++ new.allowImportingTsExtensions(moduleresolution=classic).errors.txt
+@@= skipped -0, +0 lines =@@
+-/c.ts(1,16): error TS2792: Cannot find module './thisfiledoesnotexist.ts'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++/c.ts(1,16): error TS2307: Cannot find module './thisfiledoesnotexist.ts' or its corresponding type declarations.
+ 
+ 
+ ==== /ts.ts (0 errors) ====
+@@= skipped -27, +27 lines =@@
+ ==== /c.ts (1 errors) ====
+     import {} from "./thisfiledoesnotexist.ts";
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2792: Cannot find module './thisfiledoesnotexist.ts'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module './thisfiledoesnotexist.ts' or its corresponding type declarations.
+     

@@ -1,0 +1,51 @@
+--- old.multipleDefaultExports01.errors.txt
++++ new.multipleDefaultExports01.errors.txt
+@@= skipped -0, +0 lines =@@
+ m1.ts(1,22): error TS2323: Cannot redeclare exported variable 'default'.
+ m1.ts(1,22): error TS2528: A module cannot have multiple default exports.
++m1.ts(1,22): error TS2528: A module cannot have multiple default exports.
+ m1.ts(1,22): error TS2813: Class declaration cannot implement overload list for 'default'.
+ m1.ts(5,25): error TS2323: Cannot redeclare exported variable 'default'.
+ m1.ts(5,25): error TS2528: A module cannot have multiple default exports.
++m1.ts(5,25): error TS2528: A module cannot have multiple default exports.
+ m1.ts(5,25): error TS2814: Function with bodies can only merge with classes that are ambient.
+ m1.ts(10,16): error TS2528: A module cannot have multiple default exports.
++m1.ts(10,16): error TS2528: A module cannot have multiple default exports.
+ 
+ 
+-==== m1.ts (7 errors) ====
++==== m1.ts (10 errors) ====
+     export default class foo {
+                          ~~~
+ !!! error TS2323: Cannot redeclare exported variable 'default'.
+@@= skipped -14, +17 lines =@@
+ !!! error TS2528: A module cannot have multiple default exports.
+ !!! related TS6204 m1.ts:10:16: and here.
+                          ~~~
++!!! error TS2528: A module cannot have multiple default exports.
++!!! related TS6204 m1.ts:10:16: and here.
++                         ~~~
+ !!! error TS2813: Class declaration cannot implement overload list for 'default'.
+ !!! related TS6506 m1.ts:1:22: Consider adding a 'declare' modifier to this class.
+     
+@@= skipped -12, +15 lines =@@
+ !!! error TS2528: A module cannot have multiple default exports.
+ !!! related TS2753 m1.ts:10:16: Another export default is here.
+                             ~~~
++!!! error TS2528: A module cannot have multiple default exports.
++!!! related TS2753 m1.ts:10:16: Another export default is here.
++                            ~~~
+ !!! error TS2814: Function with bodies can only merge with classes that are ambient.
+ !!! related TS6506 m1.ts:1:22: Consider adding a 'declare' modifier to this class.
+     
+@@= skipped -11, +14 lines =@@
+ !!! error TS2528: A module cannot have multiple default exports.
+ !!! related TS2752 m1.ts:5:25: The first export default is here.
+ !!! related TS2752 m1.ts:1:22: The first export default is here.
++                   ~
++!!! error TS2528: A module cannot have multiple default exports.
++!!! related TS2752 m1.ts:5:25: The first export default is here.
++!!! related TS2752 m1.ts:1:22: The first export default is here.
+     
+ ==== m2.ts (0 errors) ====
+     import Entity from "./m1"

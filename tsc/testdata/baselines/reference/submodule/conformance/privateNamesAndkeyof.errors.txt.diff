@@ -1,0 +1,33 @@
+--- old.privateNamesAndkeyof.errors.txt
++++ new.privateNamesAndkeyof.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'CallableFunction'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'NewableFunction'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ privateNamesAndkeyof.ts(14,1): error TS2322: Type '"#fooField"' is not assignable to type 'keyof A'.
+ privateNamesAndkeyof.ts(15,1): error TS2322: Type '"#fooMethod"' is not assignable to type 'keyof A'.
+ privateNamesAndkeyof.ts(16,1): error TS2322: Type '"#fooProp"' is not assignable to type 'keyof A'.
+@@= skipped -5, +15 lines =@@
+ privateNamesAndkeyof.ts(20,1): error TS2322: Type '"fooProp"' is not assignable to type 'keyof A'.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'CallableFunction'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'NewableFunction'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== privateNamesAndkeyof.ts (6 errors) ====
+     class A {
+         #fooField = 3;

@@ -1,0 +1,30 @@
+--- old.defaultPropertyAssignedClassWithPrototype.errors.txt
++++ new.defaultPropertyAssignedClassWithPrototype.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++bug39167.js(2,6): error TS2339: Property 'K' does not exist on type '{}'.
++bug39167.js(2,15): error TS2339: Property 'K' does not exist on type '{}'.
++bug39167.js(5,6): error TS2339: Property 'K' does not exist on type '{}'.
++bug39167.js(9,10): error TS2339: Property 'K' does not exist on type '{}'.
++
++
++==== bug39167.js (4 errors) ====
++    var test = {};
++    test.K = test.K ||
++         ~
++!!! error TS2339: Property 'K' does not exist on type '{}'.
++                  ~
++!!! error TS2339: Property 'K' does not exist on type '{}'.
++        function () {}
++    
++    test.K.prototype = {
++         ~
++!!! error TS2339: Property 'K' does not exist on type '{}'.
++        add() {}
++    };
++    
++    new test.K().add;
++             ~
++!!! error TS2339: Property 'K' does not exist on type '{}'.
++    

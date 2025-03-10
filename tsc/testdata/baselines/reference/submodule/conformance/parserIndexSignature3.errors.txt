@@ -1,0 +1,9 @@
+parserIndexSignature3.ts(2,5): error TS1019: An index signature parameter cannot have a question mark.
+
+
+==== parserIndexSignature3.ts (1 errors) ====
+    interface I {
+      [a?]
+        ~
+!!! error TS1019: An index signature parameter cannot have a question mark.
+    }

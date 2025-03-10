@@ -1,0 +1,15 @@
+--- old.commentOnImportStatement1.errors.txt
++++ new.commentOnImportStatement1.errors.txt
+@@= skipped -0, +0 lines =@@
+-commentOnImportStatement1.ts(3,22): error TS2792: Cannot find module './foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++commentOnImportStatement1.ts(3,22): error TS2307: Cannot find module './foo' or its corresponding type declarations.
+ 
+ 
+ ==== commentOnImportStatement1.ts (1 errors) ====
+@@= skipped -5, +5 lines =@@
+     
+     import foo = require('./foo');
+                          ~~~~~~~
+-!!! error TS2792: Cannot find module './foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module './foo' or its corresponding type declarations.
+     

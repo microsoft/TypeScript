@@ -1,0 +1,31 @@
+typeParameterDiamond2.ts(8,13): error TS2322: Type 'T | U' is not assignable to type 'Top'.
+  'Top' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
+    Type 'U' is not assignable to type 'Top'.
+      'Top' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+typeParameterDiamond2.ts(10,13): error TS2322: Type 'Bottom' is not assignable to type 'Top'.
+  'Top' could be instantiated with an arbitrary type which could be unrelated to 'Bottom'.
+
+
+==== typeParameterDiamond2.ts (2 errors) ====
+    function diamondTop<Top>() {
+        function diamondMiddle<T extends Top, U>() {
+            function diamondBottom<Bottom extends T | U>() {
+                var top: Top;
+                var middle: T | U;
+                var bottom: Bottom;
+    
+                top = middle;
+                ~~~
+!!! error TS2322: Type 'T | U' is not assignable to type 'Top'.
+!!! error TS2322:   'Top' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
+!!! error TS2322:     Type 'U' is not assignable to type 'Top'.
+!!! error TS2322:       'Top' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+!!! related TS2208 typeParameterDiamond2.ts:2:43: This type parameter might need an `extends Top` constraint.
+                middle = bottom;
+                top = bottom;
+                ~~~
+!!! error TS2322: Type 'Bottom' is not assignable to type 'Top'.
+!!! error TS2322:   'Top' could be instantiated with an arbitrary type which could be unrelated to 'Bottom'.
+            }
+        }
+    }

@@ -1,0 +1,67 @@
+--- old.typeFromPropertyAssignment9.errors.txt
++++ new.typeFromPropertyAssignment9.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++a.js(30,11): error TS2304: Cannot find name 'window'.
++a.js(32,18): error TS2304: Cannot find name 'self'.
++a.js(33,16): error TS2304: Cannot find name 'global'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== a.js (3 errors) ====
++    var my = my || {};
++    /** @param {number} n */
++    my.method = function(n) {
++        return n + 1;
++    }
++    my.number = 1;
++    my.object = {};
++    my.predicate = my.predicate || {};
++    my.predicate.query = function () {
++        var me = this;
++        me.property = false;
++    };
++    var q = new my.predicate.query();
++    my.predicate.query.another = function () {
++        return 1;
++    }
++    my.predicate.query.result = 'none'
++    /** @param {number} first
++     *  @param {number} second
++     */
++    my.predicate.sort = my.predicate.sort || function (first, second) {
++        return first > second ? first : second;
++    }
++    my.predicate.type = class {
++        m() { return 101; }
++    }
++    
++    
++    // global-ish prefixes
++    var min = window.min || {};
++              ~~~~~~
++!!! error TS2304: Cannot find name 'window'.
++    min.nest = this.min.nest || function () { };
++    min.nest.other = self.min.nest.other || class { };
++                     ~~~~
++!!! error TS2304: Cannot find name 'self'.
++    min.property = global.min.property || {};
++                   ~~~~~~
++!!! error TS2304: Cannot find name 'global'.
++    

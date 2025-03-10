@@ -1,0 +1,48 @@
+--- old.bluebirdStaticThis.errors.txt
++++ new.bluebirdStaticThis.errors.txt
+@@= skipped -0, +0 lines =@@
+ bluebirdStaticThis.ts(5,22): error TS2420: Class 'Promise<R>' incorrectly implements interface 'Thenable<R>'.
+   Property 'then' is missing in type 'Promise<R>' but required in type 'Thenable<R>'.
+-bluebirdStaticThis.ts(22,51): error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Resolver'.
+-bluebirdStaticThis.ts(57,109): error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Inspection'.
+-bluebirdStaticThis.ts(58,91): error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Inspection'.
+-bluebirdStaticThis.ts(59,91): error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Inspection'.
+-bluebirdStaticThis.ts(60,73): error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Inspection'.
++bluebirdStaticThis.ts(22,51): error TS2694: Namespace '""bluebirdStaticThis.ts"".Promise' has no exported member 'Resolver'.
++bluebirdStaticThis.ts(57,109): error TS2694: Namespace '""bluebirdStaticThis.ts"".Promise' has no exported member 'Inspection'.
++bluebirdStaticThis.ts(58,91): error TS2694: Namespace '""bluebirdStaticThis.ts"".Promise' has no exported member 'Inspection'.
++bluebirdStaticThis.ts(59,91): error TS2694: Namespace '""bluebirdStaticThis.ts"".Promise' has no exported member 'Inspection'.
++bluebirdStaticThis.ts(60,73): error TS2694: Namespace '""bluebirdStaticThis.ts"".Promise' has no exported member 'Inspection'.
+ 
+ 
+ ==== bluebirdStaticThis.ts (6 errors) ====
+@@= skipped -34, +34 lines =@@
+     
+         static defer<R>(dit: typeof Promise): Promise.Resolver<R>;
+                                                       ~~~~~~~~
+-!!! error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Resolver'.
++!!! error TS2694: Namespace '""bluebirdStaticThis.ts"".Promise' has no exported member 'Resolver'.
+     
+         static cast<R>(dit: typeof Promise, value: Promise.Thenable<R>): Promise<R>;
+         static cast<R>(dit: typeof Promise, value: R): Promise<R>;
+@@= skipped -37, +37 lines =@@
+     
+         static settle<R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<Promise.Inspection<R>[]>;
+                                                                                                                 ~~~~~~~~~~
+-!!! error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Inspection'.
++!!! error TS2694: Namespace '""bluebirdStaticThis.ts"".Promise' has no exported member 'Inspection'.
+         static settle<R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<Promise.Inspection<R>[]>;
+                                                                                               ~~~~~~~~~~
+-!!! error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Inspection'.
++!!! error TS2694: Namespace '""bluebirdStaticThis.ts"".Promise' has no exported member 'Inspection'.
+         static settle<R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<Promise.Inspection<R>[]>;
+                                                                                               ~~~~~~~~~~
+-!!! error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Inspection'.
++!!! error TS2694: Namespace '""bluebirdStaticThis.ts"".Promise' has no exported member 'Inspection'.
+         static settle<R>(dit: typeof Promise, values: R[]): Promise<Promise.Inspection<R>[]>;
+                                                                             ~~~~~~~~~~
+-!!! error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Inspection'.
++!!! error TS2694: Namespace '""bluebirdStaticThis.ts"".Promise' has no exported member 'Inspection'.
+     
+         static any<R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R>;
+         static any<R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R>;

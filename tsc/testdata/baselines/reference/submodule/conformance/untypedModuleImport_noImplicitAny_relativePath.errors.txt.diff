@@ -1,0 +1,15 @@
+--- old.untypedModuleImport_noImplicitAny_relativePath.errors.txt
++++ new.untypedModuleImport_noImplicitAny_relativePath.errors.txt
+@@= skipped -0, +0 lines =@@
+-/a.ts(1,22): error TS7016: Could not find a declaration file for module './node_modules/foo'. '/node_modules/foo/index.js' implicitly has an 'any' type.
++/a.ts(1,22): error TS2307: Cannot find module './node_modules/foo' or its corresponding type declarations.
+ 
+ 
+ ==== /a.ts (1 errors) ====
+     import * as foo from "./node_modules/foo";
+                          ~~~~~~~~~~~~~~~~~~~~
+-!!! error TS7016: Could not find a declaration file for module './node_modules/foo'. '/node_modules/foo/index.js' implicitly has an 'any' type.
++!!! error TS2307: Cannot find module './node_modules/foo' or its corresponding type declarations.
+     
+ ==== /node_modules/foo/package.json (0 errors) ====
+     { "name": "foo", "version": "1.2.3" }

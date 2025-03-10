@@ -1,0 +1,44 @@
+--- old.moduleResolutionWithSymlinks_notInNodeModules.errors.txt
++++ new.moduleResolutionWithSymlinks_notInNodeModules.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/src/app.ts(1,19): error TS2307: Cannot find module './shared/abc' or its corresponding type declarations.
++/src/app.ts(2,25): error TS2307: Cannot find module './shared2/abc' or its corresponding type declarations.
++
++
++==== /src/tsconfig.json (0 errors) ====
++    {
++        "compilerOptions": {
++            "outDir": "bin"
++        }
++    }
++    
++    /*
++    # To reproduce in a real project:
++    
++    mkdir shared
++    echo 'export const x = 0;' > shared/abc.ts
++    
++    mkdir src; cd src
++    echo 'import { x } from "./shared/abc"; import { x as x2 } from "./shared2/abc"; x + x2;' > app.ts
++    
++    ln -s ../shared ./shared; ln -s ../shared ./shared2 # Linux
++    # Windows: Open command prompt as administrator and run: `mklink /D shared ..\shared; mklink /D shared2 ..\shared`
++    
++    echo '{ "compilerOptions": { "outDir": "bin" } }' > tsconfig.json
++    tsc # Should create `bin/app.js`, `bin/shared/abc.js`, and `bin/shared2/abc.js`
++    */
++    
++==== /src/app.ts (2 errors) ====
++    import { x } from "./shared/abc";
++                      ~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module './shared/abc' or its corresponding type declarations.
++    import { x as x2 } from "./shared2/abc";
++                            ~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module './shared2/abc' or its corresponding type declarations.
++    x + x2;
++    
++==== /shared/abc.ts (0 errors) ====
++    export const x = 0;
++    

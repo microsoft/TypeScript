@@ -1,0 +1,23 @@
+c.js(1,25): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+m.js(1,8): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+
+
+==== c.js (1 errors) ====
+    export default function require(a) { }
+                            ~~~~~~~
+!!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+    export function has(a) { return true }
+    
+==== m.js (1 errors) ====
+    import require, { has } from "./c"
+           ~~~~~~~
+!!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+    export function hello() { }
+    if (has('ember-debug')) {
+        require('ember-debug');
+    }
+    
+==== m2.ts (0 errors) ====
+    import { hello } from "./m";
+    hello();
+    

@@ -1,0 +1,130 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+destructuringArrayBindingPatternAndAssignment1ES6.ts(30,5): error TS2488: Type '[number, number, number]' must have a '[Symbol.iterator]()' method that returns an iterator.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(31,5): error TS2488: Type '[number, number, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(37,5): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(37,6): error TS2339: Property '0' does not exist on type '{}'.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(37,10): error TS2339: Property '1' does not exist on type '{}'.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(42,6): error TS2339: Property '0' does not exist on type '{}'.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(42,10): error TS2339: Property '1' does not exist on type '{}'.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(43,5): error TS2488: Type '[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(43,6): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(44,5): error TS2488: Type '[[[]], [[[[]]]]]' must have a '[Symbol.iterator]()' method that returns an iterator.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(44,6): error TS2488: Type '[[]]' must have a '[Symbol.iterator]()' method that returns an iterator.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(44,8): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(44,14): error TS2488: Type '[[[[]]]]' must have a '[Symbol.iterator]()' method that returns an iterator.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(44,15): error TS2488: Type '[[[]]]' must have a '[Symbol.iterator]()' method that returns an iterator.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(44,18): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(45,5): error TS2488: Type '[[string | number], boolean]' must have a '[Symbol.iterator]()' method that returns an iterator.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(45,6): error TS2488: Type '[string | number]' must have a '[Symbol.iterator]()' method that returns an iterator.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(47,5): error TS2488: Type '[number, number, number, number]' must have a '[Symbol.iterator]()' method that returns an iterator.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(49,5): error TS2488: Type '[number, number, number, number, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
+destructuringArrayBindingPatternAndAssignment1ES6.ts(50,5): error TS2488: Type '[number, number, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== destructuringArrayBindingPatternAndAssignment1ES6.ts (20 errors) ====
+    /* AssignmentPattern:
+     *      ObjectAssignmentPattern
+     *      ArrayAssignmentPattern
+     * ArrayAssignmentPattern:
+     *      [Elision<opt>   AssignmentRestElementopt   ]
+     *      [AssignmentElementList]
+     *      [AssignmentElementList, Elision<opt>   AssignmentRestElementopt   ]
+     * AssignmentElementList:
+     *      Elision<opt>   AssignmentElement
+     *      AssignmentElementList, Elisionopt   AssignmentElement
+     * AssignmentElement:
+     *      LeftHandSideExpression   Initialiseropt
+     *      AssignmentPattern   Initialiseropt
+     * AssignmentRestElement:
+     *      ...   LeftHandSideExpression
+     */
+    
+    // In a destructuring assignment expression, the type of the expression on the right must be assignable to the assignment target on the left.
+    // An expression of type S is considered assignable to an assignment target V if one of the following is true
+    
+    // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
+    //      S is the type Any, or
+    
+    var [a0, a1]: any = undefined;
+    var [a2 = false, a3 = 1]: any = undefined;
+    
+    // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
+    //      S is a tuple- like type (section 3.3.3) with a property named N of a type that is assignable to the target given in E,
+    //        where N is the numeric index of E in the array assignment pattern, or
+    var [b0, b1, b2] = [2, 3, 4];
+        ~~~~~~~~~~~~
+!!! error TS2488: Type '[number, number, number]' must have a '[Symbol.iterator]()' method that returns an iterator.
+    var [b3, b4, b5]: [number, number, string] = [1, 2, "string"];
+        ~~~~~~~~~~~~
+!!! error TS2488: Type '[number, number, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
+    
+    function foo() {
+        return [1, 2, 3];
+    }
+    
+    var [b6, b7] = foo();
+        ~~~~~~~~
+!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+         ~~
+!!! error TS2339: Property '0' does not exist on type '{}'.
+             ~~
+!!! error TS2339: Property '1' does not exist on type '{}'.
+    var [...b8] = foo();
+    
+    //      S is not a tuple- like type and the numeric index signature type of S is assignable to the target given in E.
+    var temp = [1,2,3]
+    var [c0, c1] = [...temp];
+         ~~
+!!! error TS2339: Property '0' does not exist on type '{}'.
+             ~~
+!!! error TS2339: Property '1' does not exist on type '{}'.
+    var [c2] = [];
+        ~~~~
+!!! error TS2488: Type '[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+         ~~
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+    var [[[c3]], [[[[c4]]]]] = [[[]], [[[[]]]]]
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type '[[[]], [[[[]]]]]' must have a '[Symbol.iterator]()' method that returns an iterator.
+         ~~~~~~
+!!! error TS2488: Type '[[]]' must have a '[Symbol.iterator]()' method that returns an iterator.
+           ~~
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+                 ~~~~~~~~~~
+!!! error TS2488: Type '[[[[]]]]' must have a '[Symbol.iterator]()' method that returns an iterator.
+                  ~~~~~~~~
+!!! error TS2488: Type '[[[]]]' must have a '[Symbol.iterator]()' method that returns an iterator.
+                     ~~
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+    var [[c5], c6]: [[string|number], boolean] = [[1], true];
+        ~~~~~~~~~~
+!!! error TS2488: Type '[[string | number], boolean]' must have a '[Symbol.iterator]()' method that returns an iterator.
+         ~~~~
+!!! error TS2488: Type '[string | number]' must have a '[Symbol.iterator]()' method that returns an iterator.
+    var [, c7] = [1, 2, 3];
+    var [,,, c8] = [1, 2, 3, 4];
+        ~~~~~~~~
+!!! error TS2488: Type '[number, number, number, number]' must have a '[Symbol.iterator]()' method that returns an iterator.
+    var [,,, c9] = [1, 2, 3, 4];
+    var [,,,...c10] = [1, 2, 3, 4, "hello"];
+        ~~~~~~~~~~~
+!!! error TS2488: Type '[number, number, number, number, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
+    var [c11, c12, ...c13] = [1, 2, "string"];
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type '[number, number, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
+    var [c14, c15, c16] = [1, 2, "string"];

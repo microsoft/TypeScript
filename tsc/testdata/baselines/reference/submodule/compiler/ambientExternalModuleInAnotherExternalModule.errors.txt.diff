@@ -1,0 +1,16 @@
+--- old.ambientExternalModuleInAnotherExternalModule.errors.txt
++++ new.ambientExternalModuleInAnotherExternalModule.errors.txt
+@@= skipped -0, +0 lines =@@
+ ambientExternalModuleInAnotherExternalModule.ts(4,16): error TS2664: Invalid module name in augmentation, module 'ext' cannot be found.
+-ambientExternalModuleInAnotherExternalModule.ts(9,22): error TS2792: Cannot find module 'ext'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++ambientExternalModuleInAnotherExternalModule.ts(9,22): error TS2307: Cannot find module 'ext' or its corresponding type declarations.
+ 
+ 
+ ==== ambientExternalModuleInAnotherExternalModule.ts (2 errors) ====
+@@= skipped -14, +14 lines =@@
+     // Cannot resolve this ext module reference
+     import ext = require("ext");
+                          ~~~~~
+-!!! error TS2792: Cannot find module 'ext'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'ext' or its corresponding type declarations.
+     var x = ext;

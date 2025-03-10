@@ -1,0 +1,52 @@
+--- old.jsExtendsImplicitAny.errors.txt
++++ new.jsExtendsImplicitAny.errors.txt
+@@= skipped -0, +0 lines =@@
+-/b.js(1,17): error TS8026: Expected A<T> type arguments; provide these with an '@extends' tag.
+-/b.js(4,15): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+-/b.js(8,15): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
++/b.js(1,17): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
++/b.js(2,5): error TS2351: This expression is not constructable.
++  Type '{ prototype: B; }' has no construct signatures.
++/b.js(5,17): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
++/b.js(6,5): error TS2351: This expression is not constructable.
++  Type '{ prototype: C; }' has no construct signatures.
++/b.js(9,17): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
++/b.js(10,5): error TS2351: This expression is not constructable.
++  Type '{ prototype: D; }' has no construct signatures.
+ 
+ 
+ ==== /a.d.ts (0 errors) ====
+     declare class A<T> { x: T; }
+     
+-==== /b.js (3 errors) ====
++==== /b.js (6 errors) ====
+     class B extends A {}
+                     ~
+-!!! error TS8026: Expected A<T> type arguments; provide these with an '@extends' tag.
++!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+     new B().x;
++        ~
++!!! error TS2351: This expression is not constructable.
++!!! error TS2351:   Type '{ prototype: B; }' has no construct signatures.
+     
+     /** @augments A */
+-                  ~
+-!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+     class C extends A { }
++                    ~
++!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+     new C().x;
++        ~
++!!! error TS2351: This expression is not constructable.
++!!! error TS2351:   Type '{ prototype: C; }' has no construct signatures.
+     
+     /** @augments A<number, number, number> */
+-                  ~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+     class D extends A {}
++                    ~
++!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+     new D().x;
++        ~
++!!! error TS2351: This expression is not constructable.
++!!! error TS2351:   Type '{ prototype: D; }' has no construct signatures.

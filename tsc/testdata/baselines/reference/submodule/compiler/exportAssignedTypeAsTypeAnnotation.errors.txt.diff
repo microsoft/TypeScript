@@ -1,0 +1,22 @@
+--- old.exportAssignedTypeAsTypeAnnotation.errors.txt
++++ new.exportAssignedTypeAsTypeAnnotation.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++exportAssignedTypeAsTypeAnnotation_1.ts(2,23): error TS2307: Cannot find module 'exportAssignedTypeAsTypeAnnotation_0' or its corresponding type declarations.
++
++
++==== exportAssignedTypeAsTypeAnnotation_1.ts (1 errors) ====
++    ///<reference path='exportAssignedTypeAsTypeAnnotation_0.ts'/>
++    import test = require('exportAssignedTypeAsTypeAnnotation_0');
++                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'exportAssignedTypeAsTypeAnnotation_0' or its corresponding type declarations.
++    var t2: test; // should not raise a 'container type' error
++    
++==== exportAssignedTypeAsTypeAnnotation_0.ts (0 errors) ====
++    interface x {
++        (): Date;
++        foo: string;
++    }
++    export = x;
++     

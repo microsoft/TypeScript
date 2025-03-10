@@ -1,0 +1,107 @@
+--- old.templateLiteralTypesPatterns.errors.txt
++++ new.templateLiteralTypesPatterns.errors.txt
+@@= skipped -0, +0 lines =@@
+ templateLiteralTypesPatterns.ts(7,7): error TS2322: Type '"no slash"' is not assignable to type '`/${string}`'.
+-templateLiteralTypesPatterns.ts(14,10): error TS2345: Argument of type '"example.com/noprotocol"' is not assignable to parameter of type '`http://${string}` | `https://${string}` | `ftp://${string}`'.
+-templateLiteralTypesPatterns.ts(16,10): error TS2345: Argument of type '"gopher://example.com/protocol"' is not assignable to parameter of type '`http://${string}` | `https://${string}` | `ftp://${string}`'.
++templateLiteralTypesPatterns.ts(14,10): error TS2345: Argument of type '"example.com/noprotocol"' is not assignable to parameter of type '`ftp://${string}` | `http://${string}` | `https://${string}`'.
++templateLiteralTypesPatterns.ts(16,10): error TS2345: Argument of type '"gopher://example.com/protocol"' is not assignable to parameter of type '`ftp://${string}` | `http://${string}` | `https://${string}`'.
+ templateLiteralTypesPatterns.ts(26,7): error TS2345: Argument of type '"other"' is not assignable to parameter of type '"false" | "true"'.
+-templateLiteralTypesPatterns.ts(35,11): error TS2345: Argument of type '"0"' is not assignable to parameter of type '"undefined" | "null"'.
+-templateLiteralTypesPatterns.ts(36,11): error TS2345: Argument of type '"false"' is not assignable to parameter of type '"undefined" | "null"'.
+-templateLiteralTypesPatterns.ts(37,11): error TS2345: Argument of type '"NaN"' is not assignable to parameter of type '"undefined" | "null"'.
+-templateLiteralTypesPatterns.ts(38,11): error TS2345: Argument of type '""' is not assignable to parameter of type '"undefined" | "null"'.
+-templateLiteralTypesPatterns.ts(39,11): error TS2345: Argument of type '"other"' is not assignable to parameter of type '"undefined" | "null"'.
++templateLiteralTypesPatterns.ts(35,11): error TS2345: Argument of type '"0"' is not assignable to parameter of type '"null" | "undefined"'.
++templateLiteralTypesPatterns.ts(36,11): error TS2345: Argument of type '"false"' is not assignable to parameter of type '"null" | "undefined"'.
++templateLiteralTypesPatterns.ts(37,11): error TS2345: Argument of type '"NaN"' is not assignable to parameter of type '"null" | "undefined"'.
++templateLiteralTypesPatterns.ts(38,11): error TS2345: Argument of type '""' is not assignable to parameter of type '"null" | "undefined"'.
++templateLiteralTypesPatterns.ts(39,11): error TS2345: Argument of type '"other"' is not assignable to parameter of type '"null" | "undefined"'.
+ templateLiteralTypesPatterns.ts(60,9): error TS2345: Argument of type '"?"' is not assignable to parameter of type '`${number}`'.
+ templateLiteralTypesPatterns.ts(61,9): error TS2345: Argument of type '"NaN"' is not assignable to parameter of type '`${number}`'.
+ templateLiteralTypesPatterns.ts(62,9): error TS2345: Argument of type '"Infinity"' is not assignable to parameter of type '`${number}`'.
+@@= skipped -16, +16 lines =@@
+ templateLiteralTypesPatterns.ts(69,9): error TS2345: Argument of type '"10a"' is not assignable to parameter of type '`${number}`'.
+ templateLiteralTypesPatterns.ts(72,9): error TS2345: Argument of type '"- 1"' is not assignable to parameter of type '`${number}`'.
+ templateLiteralTypesPatterns.ts(73,9): error TS2345: Argument of type '"-/**/1"' is not assignable to parameter of type '`${number}`'.
++templateLiteralTypesPatterns.ts(77,9): error TS2345: Argument of type '"1"' is not assignable to parameter of type '`${bigint}`'.
++templateLiteralTypesPatterns.ts(78,9): error TS2345: Argument of type '"-1"' is not assignable to parameter of type '`${bigint}`'.
++templateLiteralTypesPatterns.ts(79,9): error TS2345: Argument of type '"0"' is not assignable to parameter of type '`${bigint}`'.
++templateLiteralTypesPatterns.ts(80,9): error TS2345: Argument of type '"0b1"' is not assignable to parameter of type '`${bigint}`'.
++templateLiteralTypesPatterns.ts(81,9): error TS2345: Argument of type '"0x1"' is not assignable to parameter of type '`${bigint}`'.
++templateLiteralTypesPatterns.ts(82,9): error TS2345: Argument of type '"0o1"' is not assignable to parameter of type '`${bigint}`'.
+ templateLiteralTypesPatterns.ts(85,9): error TS2345: Argument of type '"1e21"' is not assignable to parameter of type '`${bigint}`'.
+ templateLiteralTypesPatterns.ts(86,9): error TS2345: Argument of type '"1E21"' is not assignable to parameter of type '`${bigint}`'.
+ templateLiteralTypesPatterns.ts(87,9): error TS2345: Argument of type '"1e-21"' is not assignable to parameter of type '`${bigint}`'.
+@@= skipped -41, +47 lines =@@
+ templateLiteralTypesPatterns.ts(215,5): error TS2345: Argument of type '"abcTest"' is not assignable to parameter of type '`${`a${string}` & `${string}a`}Test`'.
+ 
+ 
+-==== templateLiteralTypesPatterns.ts (58 errors) ====
++==== templateLiteralTypesPatterns.ts (64 errors) ====
+     type RequiresLeadingSlash = `/${string}`;
+     
+     // ok
+@@= skipped -18, +18 lines =@@
+     // issues error - no protocol
+     download("example.com/noprotocol");
+              ~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2345: Argument of type '"example.com/noprotocol"' is not assignable to parameter of type '`http://${string}` | `https://${string}` | `ftp://${string}`'.
++!!! error TS2345: Argument of type '"example.com/noprotocol"' is not assignable to parameter of type '`ftp://${string}` | `http://${string}` | `https://${string}`'.
+     // issues error, incorrect protocol
+     download("gopher://example.com/protocol");
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2345: Argument of type '"gopher://example.com/protocol"' is not assignable to parameter of type '`http://${string}` | `https://${string}` | `ftp://${string}`'.
++!!! error TS2345: Argument of type '"gopher://example.com/protocol"' is not assignable to parameter of type '`ftp://${string}` | `http://${string}` | `https://${string}`'.
+     
+     const q: RequiresLeadingSlash extends string ? true : false = true;
+     
+@@= skipped -27, +27 lines =@@
+     // not ok
+     nullishes("0");
+               ~~~
+-!!! error TS2345: Argument of type '"0"' is not assignable to parameter of type '"undefined" | "null"'.
++!!! error TS2345: Argument of type '"0"' is not assignable to parameter of type '"null" | "undefined"'.
+     nullishes("false");
+               ~~~~~~~
+-!!! error TS2345: Argument of type '"false"' is not assignable to parameter of type '"undefined" | "null"'.
++!!! error TS2345: Argument of type '"false"' is not assignable to parameter of type '"null" | "undefined"'.
+     nullishes("NaN");
+               ~~~~~
+-!!! error TS2345: Argument of type '"NaN"' is not assignable to parameter of type '"undefined" | "null"'.
++!!! error TS2345: Argument of type '"NaN"' is not assignable to parameter of type '"null" | "undefined"'.
+     nullishes("");
+               ~~
+-!!! error TS2345: Argument of type '""' is not assignable to parameter of type '"undefined" | "null"'.
++!!! error TS2345: Argument of type '""' is not assignable to parameter of type '"null" | "undefined"'.
+     nullishes("other");
+               ~~~~~~~
+-!!! error TS2345: Argument of type '"other"' is not assignable to parameter of type '"undefined" | "null"'.
++!!! error TS2345: Argument of type '"other"' is not assignable to parameter of type '"null" | "undefined"'.
+     
+     declare function numbers(x: `${number}`): void;
+     // the following should work
+@@= skipped -71, +71 lines =@@
+     declare function bigints(x: `${bigint}`): void;
+     // the following should work
+     bigints("1");
++            ~~~
++!!! error TS2345: Argument of type '"1"' is not assignable to parameter of type '`${bigint}`'.
+     bigints("-1");
++            ~~~~
++!!! error TS2345: Argument of type '"-1"' is not assignable to parameter of type '`${bigint}`'.
+     bigints("0");
++            ~~~
++!!! error TS2345: Argument of type '"0"' is not assignable to parameter of type '`${bigint}`'.
+     bigints("0b1");
++            ~~~~~
++!!! error TS2345: Argument of type '"0b1"' is not assignable to parameter of type '`${bigint}`'.
+     bigints("0x1");
++            ~~~~~
++!!! error TS2345: Argument of type '"0x1"' is not assignable to parameter of type '`${bigint}`'.
+     bigints("0o1");
++            ~~~~~
++!!! error TS2345: Argument of type '"0o1"' is not assignable to parameter of type '`${bigint}`'.
+     
+     // bigints do not allow scientific notation in their parsing/scanning, so these are all errors
+     bigints("1e21");

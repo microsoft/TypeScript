@@ -1,0 +1,35 @@
+--- old.typeOnlyESMImportFromCJS.errors.txt
++++ new.typeOnlyESMImportFromCJS.errors.txt
+@@= skipped -0, +0 lines =@@
+-common.cts(1,21): error TS1541: Type-only import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.
+-common.cts(4,25): error TS1542: Type import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.
++common.cts(2,36): error TS1454: `resolution-mode` can only be set for type-only imports.
++common.cts(2,36): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
++common.cts(3,36): error TS1454: `resolution-mode` can only be set for type-only imports.
++common.cts(3,36): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
+ 
+ 
+ ==== module.mts (0 errors) ====
+     export {};
+     
+-==== common.cts (2 errors) ====
++==== common.cts (4 errors) ====
+     import type {} from "./module.mts";
+-                        ~~~~~~~~~~~~~~
+-!!! error TS1541: Type-only import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.
+     import type {} from "./module.mts" with { "resolution-mode": "import" };
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1454: `resolution-mode` can only be set for type-only imports.
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
+     import type {} from "./module.mts" with { "resolution-mode": "require" };
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1454: `resolution-mode` can only be set for type-only imports.
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
+     type _1 = typeof import("./module.mts");
+-                            ~~~~~~~~~~~~~~
+-!!! error TS1542: Type import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.
+     type _2 = typeof import("./module.mts", { with: { "resolution-mode": "import" } });
+     type _3 = typeof import("./module.mts", { with: { "resolution-mode": "require" } });
+     

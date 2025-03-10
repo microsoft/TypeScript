@@ -1,0 +1,20 @@
+--- old.checkJsdocTypedefOnlySourceFile.errors.txt
++++ new.checkJsdocTypedefOnlySourceFile.errors.txt
+@@= skipped -0, +0 lines =@@
+-0.js(10,20): error TS2694: Namespace 'exports' has no exported member 'SomeName'.
++0.js(8,9): error TS2339: Property 'SomeName' does not exist on type '{}'.
+ 
+ 
+ ==== 0.js (1 errors) ====
+@@= skipped -9, +9 lines =@@
+      * @typedef {string}
+      */
+     exports.SomeName;
++            ~~~~~~~~
++!!! error TS2339: Property 'SomeName' does not exist on type '{}'.
+     
+     /** @type {exports.SomeName} */
+-                       ~~~~~~~~
+-!!! error TS2694: Namespace 'exports' has no exported member 'SomeName'.
+     const myString = 'str';
+     

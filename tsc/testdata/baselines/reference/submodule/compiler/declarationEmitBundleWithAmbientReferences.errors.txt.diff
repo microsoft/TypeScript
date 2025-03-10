@@ -1,0 +1,29 @@
+--- old.declarationEmitBundleWithAmbientReferences.errors.txt
++++ new.declarationEmitBundleWithAmbientReferences.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++src/conditional_directive_field.ts(1,34): error TS2307: Cannot find module 'src/datastore_result' or its corresponding type declarations.
++
++
++==== lib/lib.d.ts (0 errors) ====
++    declare module "lib/result" {
++        export type Result<E extends Error, T> = (E & Failure<E>) | (T & Success<T>);
++        export interface Failure<E extends Error> { }
++        export interface Success<T> { }
++    }
++    
++==== src/datastore_result.ts (0 errors) ====
++    import { Result } from "lib/result";
++    
++    export type T<T> = Result<Error, T>;
++    
++==== src/conditional_directive_field.ts (1 errors) ====
++    import * as DatastoreResult from "src/datastore_result";
++                                     ~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2307: Cannot find module 'src/datastore_result' or its corresponding type declarations.
++    
++    export const build = (): DatastoreResult.T<string> => {
++    	return null;
++    };
++    

@@ -1,0 +1,34 @@
+--- old.decoratorOnClassMethod6.errors.txt
++++ new.decoratorOnClassMethod6.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++decoratorOnClassMethod6.ts(1,75): error TS2304: Cannot find name 'TypedPropertyDescriptor'.
++decoratorOnClassMethod6.ts(1,106): error TS2304: Cannot find name 'TypedPropertyDescriptor'.
+ decoratorOnClassMethod6.ts(4,5): error TS1329: 'dec' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@dec()'?
+ 
+ 
+-==== decoratorOnClassMethod6.ts (1 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== decoratorOnClassMethod6.ts (3 errors) ====
+     declare function dec(): <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>;
++                                                                              ~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2304: Cannot find name 'TypedPropertyDescriptor'.
++                                                                                                             ~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2304: Cannot find name 'TypedPropertyDescriptor'.
+     
+     class C {
+         @dec ["method"]() {}

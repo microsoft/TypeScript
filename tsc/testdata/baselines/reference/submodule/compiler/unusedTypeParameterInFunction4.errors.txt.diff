@@ -1,0 +1,15 @@
+--- old.unusedTypeParameterInFunction4.errors.txt
++++ new.unusedTypeParameterInFunction4.errors.txt
+@@= skipped -0, +0 lines =@@
+-unusedTypeParameterInFunction4.ts(1,13): error TS6133: 'X' is declared but its value is never read.
++unusedTypeParameterInFunction4.ts(1,13): error TS6196: 'X' is declared but never used.
+ 
+ 
+ ==== unusedTypeParameterInFunction4.ts (1 errors) ====
+     function f1<X, Y, Z>() {
+                 ~
+-!!! error TS6133: 'X' is declared but its value is never read.
++!!! error TS6196: 'X' is declared but never used.
+         var a: Y;
+         var b: Z;
+         a;

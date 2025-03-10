@@ -1,0 +1,270 @@
+--- old.duplicateIdentifierRelatedSpans2.errors.txt
++++ new.duplicateIdentifierRelatedSpans2.errors.txt
+@@= skipped -0, +0 lines =@@
+-[96mfile1.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS6200: [0mDefinitions of the following identifiers conflict with those in another file: A, B, C, D, E, F, G, H, I
++[96mfile1.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'A'.
+ 
+ [7m1[0m class A { }
+-[7m [0m [91m~~~~~[0m
++[7m [0m [91m      ~[0m
+ 
+-  [96mfile2.ts[0m:[93m1[0m:[93m1[0m
+-    [7m1[0m class A { }
+-    [7m [0m [96m~~~~~[0m
+-    Conflicts are in this file.
+-[96mfile2.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS6200: [0mDefinitions of the following identifiers conflict with those in another file: A, B, C, D, E, F, G, H, I
++  [96mfile2.ts[0m:[93m1[0m:[93m7[0m - 'A' was also declared here.
++    [7m 1[0m class A { }
++    [7m  [0m [96m      ~[0m
+ 
+-[7m1[0m class A { }
+-[7m [0m [91m~~~~~[0m
++[96mfile1.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'B'.
+ 
+-  [96mfile1.ts[0m:[93m1[0m:[93m1[0m
++[7m2[0m class B { }
++[7m [0m [91m      ~[0m
++
++  [96mfile2.ts[0m:[93m2[0m:[93m7[0m - 'B' was also declared here.
++    [7m 2[0m class B { }
++    [7m  [0m [96m      ~[0m
++
++[96mfile1.ts[0m:[93m3[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'C'.
++
++[7m3[0m class C { }
++[7m [0m [91m      ~[0m
++
++  [96mfile2.ts[0m:[93m3[0m:[93m7[0m - 'C' was also declared here.
++    [7m 3[0m class C { }
++    [7m  [0m [96m      ~[0m
++
++[96mfile1.ts[0m:[93m4[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'D'.
++
++[7m4[0m class D { }
++[7m [0m [91m      ~[0m
++
++  [96mfile2.ts[0m:[93m4[0m:[93m7[0m - 'D' was also declared here.
++    [7m 4[0m class D { }
++    [7m  [0m [96m      ~[0m
++
++[96mfile1.ts[0m:[93m5[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'E'.
++
++[7m5[0m class E { }
++[7m [0m [91m      ~[0m
++
++  [96mfile2.ts[0m:[93m5[0m:[93m7[0m - 'E' was also declared here.
++    [7m 5[0m class E { }
++    [7m  [0m [96m      ~[0m
++
++[96mfile1.ts[0m:[93m6[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'F'.
++
++[7m6[0m class F { }
++[7m [0m [91m      ~[0m
++
++  [96mfile2.ts[0m:[93m6[0m:[93m7[0m - 'F' was also declared here.
++    [7m 6[0m class F { }
++    [7m  [0m [96m      ~[0m
++
++[96mfile1.ts[0m:[93m7[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'G'.
++
++[7m7[0m class G { }
++[7m [0m [91m      ~[0m
++
++  [96mfile2.ts[0m:[93m7[0m:[93m7[0m - 'G' was also declared here.
++    [7m 7[0m class G { }
++    [7m  [0m [96m      ~[0m
++
++[96mfile1.ts[0m:[93m8[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'H'.
++
++[7m8[0m class H { }
++[7m [0m [91m      ~[0m
++
++  [96mfile2.ts[0m:[93m8[0m:[93m7[0m - 'H' was also declared here.
++    [7m 8[0m class H { }
++    [7m  [0m [96m      ~[0m
++
++[96mfile1.ts[0m:[93m9[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'I'.
++
++[7m9[0m class I { }
++[7m [0m [91m      ~[0m
++
++  [96mfile2.ts[0m:[93m9[0m:[93m7[0m - 'I' was also declared here.
++    [7m 9[0m class I { }
++    [7m  [0m [96m      ~[0m
++
++[96mfile2.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'A'.
++
++[7m 1[0m class A { }
++[7m  [0m [91m      ~[0m
++
++  [96mfile1.ts[0m:[93m1[0m:[93m7[0m - 'A' was also declared here.
+     [7m1[0m class A { }
+-    [7m [0m [96m~~~~~[0m
+-    Conflicts are in this file.
++    [7m [0m [96m      ~[0m
+ 
++[96mfile2.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'B'.
+ 
+-==== file1.ts (1 errors) ====
++[7m 2[0m class B { }
++[7m  [0m [91m      ~[0m
++
++  [96mfile1.ts[0m:[93m2[0m:[93m7[0m - 'B' was also declared here.
++    [7m2[0m class B { }
++    [7m [0m [96m      ~[0m
++
++[96mfile2.ts[0m:[93m3[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'C'.
++
++[7m 3[0m class C { }
++[7m  [0m [91m      ~[0m
++
++  [96mfile1.ts[0m:[93m3[0m:[93m7[0m - 'C' was also declared here.
++    [7m3[0m class C { }
++    [7m [0m [96m      ~[0m
++
++[96mfile2.ts[0m:[93m4[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'D'.
++
++[7m 4[0m class D { }
++[7m  [0m [91m      ~[0m
++
++  [96mfile1.ts[0m:[93m4[0m:[93m7[0m - 'D' was also declared here.
++    [7m4[0m class D { }
++    [7m [0m [96m      ~[0m
++
++[96mfile2.ts[0m:[93m5[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'E'.
++
++[7m 5[0m class E { }
++[7m  [0m [91m      ~[0m
++
++  [96mfile1.ts[0m:[93m5[0m:[93m7[0m - 'E' was also declared here.
++    [7m5[0m class E { }
++    [7m [0m [96m      ~[0m
++
++[96mfile2.ts[0m:[93m6[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'F'.
++
++[7m 6[0m class F { }
++[7m  [0m [91m      ~[0m
++
++  [96mfile1.ts[0m:[93m6[0m:[93m7[0m - 'F' was also declared here.
++    [7m6[0m class F { }
++    [7m [0m [96m      ~[0m
++
++[96mfile2.ts[0m:[93m7[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'G'.
++
++[7m 7[0m class G { }
++[7m  [0m [91m      ~[0m
++
++  [96mfile1.ts[0m:[93m7[0m:[93m7[0m - 'G' was also declared here.
++    [7m7[0m class G { }
++    [7m [0m [96m      ~[0m
++
++[96mfile2.ts[0m:[93m8[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'H'.
++
++[7m 8[0m class H { }
++[7m  [0m [91m      ~[0m
++
++  [96mfile1.ts[0m:[93m8[0m:[93m7[0m - 'H' was also declared here.
++    [7m8[0m class H { }
++    [7m [0m [96m      ~[0m
++
++[96mfile2.ts[0m:[93m9[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'I'.
++
++[7m 9[0m class I { }
++[7m  [0m [91m      ~[0m
++
++  [96mfile1.ts[0m:[93m9[0m:[93m7[0m - 'I' was also declared here.
++    [7m9[0m class I { }
++    [7m [0m [96m      ~[0m
++
++
++==== file1.ts (9 errors) ====
+     class A { }
+-    ~~~~~
+-!!! error TS6200: Definitions of the following identifiers conflict with those in another file: A, B, C, D, E, F, G, H, I
+-!!! related TS6201 file2.ts:1:1: Conflicts are in this file.
++          ~
++!!! error TS2300: Duplicate identifier 'A'.
++!!! related TS6203 file2.ts:1:7: 'A' was also declared here.
+     class B { }
++          ~
++!!! error TS2300: Duplicate identifier 'B'.
++!!! related TS6203 file2.ts:2:7: 'B' was also declared here.
+     class C { }
++          ~
++!!! error TS2300: Duplicate identifier 'C'.
++!!! related TS6203 file2.ts:3:7: 'C' was also declared here.
+     class D { }
++          ~
++!!! error TS2300: Duplicate identifier 'D'.
++!!! related TS6203 file2.ts:4:7: 'D' was also declared here.
+     class E { }
++          ~
++!!! error TS2300: Duplicate identifier 'E'.
++!!! related TS6203 file2.ts:5:7: 'E' was also declared here.
+     class F { }
++          ~
++!!! error TS2300: Duplicate identifier 'F'.
++!!! related TS6203 file2.ts:6:7: 'F' was also declared here.
+     class G { }
++          ~
++!!! error TS2300: Duplicate identifier 'G'.
++!!! related TS6203 file2.ts:7:7: 'G' was also declared here.
+     class H { }
++          ~
++!!! error TS2300: Duplicate identifier 'H'.
++!!! related TS6203 file2.ts:8:7: 'H' was also declared here.
+     class I { }
+-==== file2.ts (1 errors) ====
++          ~
++!!! error TS2300: Duplicate identifier 'I'.
++!!! related TS6203 file2.ts:9:7: 'I' was also declared here.
++==== file2.ts (9 errors) ====
+     class A { }
+-    ~~~~~
+-!!! error TS6200: Definitions of the following identifiers conflict with those in another file: A, B, C, D, E, F, G, H, I
+-!!! related TS6201 file1.ts:1:1: Conflicts are in this file.
++          ~
++!!! error TS2300: Duplicate identifier 'A'.
++!!! related TS6203 file1.ts:1:7: 'A' was also declared here.
+     class B { }
++          ~
++!!! error TS2300: Duplicate identifier 'B'.
++!!! related TS6203 file1.ts:2:7: 'B' was also declared here.
+     class C { }
++          ~
++!!! error TS2300: Duplicate identifier 'C'.
++!!! related TS6203 file1.ts:3:7: 'C' was also declared here.
+     class D { }
++          ~
++!!! error TS2300: Duplicate identifier 'D'.
++!!! related TS6203 file1.ts:4:7: 'D' was also declared here.
+     class E { }
++          ~
++!!! error TS2300: Duplicate identifier 'E'.
++!!! related TS6203 file1.ts:5:7: 'E' was also declared here.
+     class F { }
++          ~
++!!! error TS2300: Duplicate identifier 'F'.
++!!! related TS6203 file1.ts:6:7: 'F' was also declared here.
+     class G { }
++          ~
++!!! error TS2300: Duplicate identifier 'G'.
++!!! related TS6203 file1.ts:7:7: 'G' was also declared here.
+     class H { }
++          ~
++!!! error TS2300: Duplicate identifier 'H'.
++!!! related TS6203 file1.ts:8:7: 'H' was also declared here.
+     class I { }
++          ~
++!!! error TS2300: Duplicate identifier 'I'.
++!!! related TS6203 file1.ts:9:7: 'I' was also declared here.
+     
+-Found 2 errors in 2 files.
++Found 18 errors in 2 files.
+ 
+ Errors  Files
+-     1  file1.ts[90m:1[0m
+-     1  file2.ts[90m:1[0m
++     9  file1.ts[90m:1[0m
++     9  file2.ts[90m:1[0m
++

@@ -1,0 +1,38 @@
+--- old.isolatedModulesShadowGlobalTypeNotValue(isolatedmodules=false,verbatimmodulesyntax=true).errors.txt
++++ new.isolatedModulesShadowGlobalTypeNotValue(isolatedmodules=false,verbatimmodulesyntax=true).errors.txt
+@@= skipped -4, +4 lines =@@
+ good.ts(2,10): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+ 
+ 
+-==== ./types.ts (0 errors) ====
++==== types.ts (0 errors) ====
+     export interface Date {
+         day: number;
+         month: number;
+@@= skipped -11, +11 lines =@@
+         export type T = any;
+     }
+     
+-==== ./node.d.ts (0 errors) ====
++==== node.d.ts (0 errors) ====
+     declare module 'node:console' {
+         global {
+             interface Console {
+@@= skipped -17, +17 lines =@@
+         export = globalThis.console;
+     }
+     
+-==== ./bad.ts (4 errors) ====
++==== bad.ts (4 errors) ====
+     import { Date, Event } from './types';
+              ~~~~
+ !!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+@@= skipped -18, +18 lines =@@
+         return new Event('bar') as Event.T;
+     }
+     
+-==== ./good.ts (1 errors) ====
++==== good.ts (1 errors) ====
+     import type { Date, Event } from './types';
+     import { Console } from 'node:console';
+              ~~~~~~~

@@ -1,0 +1,21 @@
+--- old.derivedClassWithPrivateStaticShadowingProtectedStatic.errors.txt
++++ new.derivedClassWithPrivateStaticShadowingProtectedStatic.errors.txt
+@@= skipped -0, +0 lines =@@
+-derivedClassWithPrivateStaticShadowingProtectedStatic.ts(12,7): error TS2417: Class static side 'typeof Derived' incorrectly extends base class static side 'typeof Base'.
+-  Property 'x' is private in type 'typeof Derived' but not in type 'typeof Base'.
++derivedClassWithPrivateStaticShadowingProtectedStatic.ts(12,7): error TS2417: Class static side '{ new(): Derived; x: string; fn: () => string; a: number; prototype: Derived; }' incorrectly extends base class static side '{ x: string; fn: () => string; a: number; prototype: Base; }'.
++  Property 'x' is private in type '{ new(): Derived; x: string; fn: () => string; a: number; prototype: Derived; }' but not in type '{ x: string; fn: () => string; a: number; prototype: Base; }'.
+ 
+ 
+ ==== derivedClassWithPrivateStaticShadowingProtectedStatic.ts (1 errors) ====
+@@= skipped -15, +15 lines =@@
+     // should be error
+     class Derived extends Base {
+           ~~~~~~~
+-!!! error TS2417: Class static side 'typeof Derived' incorrectly extends base class static side 'typeof Base'.
+-!!! error TS2417:   Property 'x' is private in type 'typeof Derived' but not in type 'typeof Base'.
++!!! error TS2417: Class static side '{ new(): Derived; x: string; fn: () => string; a: number; prototype: Derived; }' incorrectly extends base class static side '{ x: string; fn: () => string; a: number; prototype: Base; }'.
++!!! error TS2417:   Property 'x' is private in type '{ new(): Derived; x: string; fn: () => string; a: number; prototype: Derived; }' but not in type '{ x: string; fn: () => string; a: number; prototype: Base; }'.
+         private static x: string; 
+         private static fn(): string {
+             return '';

@@ -1,0 +1,35 @@
+/makeC.ts(1,10): error TS2305: Module '""/node_modules/pkg/index.d.cts""' has no exported member 'C'.
+
+
+==== /node_modules/pkg/package.json (0 errors) ====
+    {
+      "name": "pkg",
+      "type": "module",
+      "exports": {
+        ".": {
+          "import": "./index.js",
+          "require": "./index.cjs"
+        }
+      }
+    }
+    
+==== /node_modules/pkg/index.d.ts (0 errors) ====
+    export declare class C {
+      private p;
+    }
+    
+==== /node_modules/pkg/index.d.cts (0 errors) ====
+    export {};
+    
+==== /makeC.ts (1 errors) ====
+    import { C } from "pkg";
+             ~
+!!! error TS2305: Module '""/node_modules/pkg/index.d.cts""' has no exported member 'C'.
+    export function makeC() {
+      return new C();
+    }
+    
+==== /index.ts (0 errors) ====
+    import { makeC } from "./makeC";
+    export const c = makeC();
+    

@@ -1,0 +1,14 @@
+bar.js(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+bar.js(2,1): error TS2304: Cannot find name 'exports'.
+bar.js(2,16): error TS2304: Cannot find name 'exports'.
+
+
+==== bar.js (3 errors) ====
+    module.exports = function () {};
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    exports.blah = exports.someProp;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+                   ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.

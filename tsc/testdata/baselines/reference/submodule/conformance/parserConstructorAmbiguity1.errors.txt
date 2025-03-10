@@ -1,0 +1,7 @@
+parserConstructorAmbiguity1.ts(1,10): error TS2304: Cannot find name 'A'.
+
+
+==== parserConstructorAmbiguity1.ts (1 errors) ====
+    new Date<A;
+             ~
+!!! error TS2304: Cannot find name 'A'.

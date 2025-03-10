@@ -1,0 +1,14 @@
+duplicateIdentifierComputedName.ts(2,5): error TS2300: Duplicate identifier 'a'.
+duplicateIdentifierComputedName.ts(3,5): error TS2300: Duplicate identifier 'a'.
+
+
+==== duplicateIdentifierComputedName.ts (2 errors) ====
+    class C {
+        ["a"]: string;
+        ~~~~~
+!!! error TS2300: Duplicate identifier 'a'.
+        ["a"]: string;
+        ~~~~~
+!!! error TS2300: Duplicate identifier 'a'.
+    }
+    

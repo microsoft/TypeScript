@@ -1,0 +1,36 @@
+--- old.extension.errors.txt
++++ new.extension.errors.txt
+@@= skipped -0, +0 lines =@@
+ extension.ts(10,18): error TS2300: Duplicate identifier 'C'.
++extension.ts(10,18): error TS2300: Duplicate identifier 'C'.
+ extension.ts(16,5): error TS1128: Declaration or statement expected.
+ extension.ts(16,12): error TS1434: Unexpected keyword or identifier.
+ extension.ts(16,12): error TS2304: Cannot find name 'extension'.
+ extension.ts(16,28): error TS2300: Duplicate identifier 'C'.
++extension.ts(16,28): error TS2300: Duplicate identifier 'C'.
+ extension.ts(22,3): error TS2339: Property 'pe' does not exist on type 'C'.
+ 
+ 
+-==== extension.ts (6 errors) ====
++==== extension.ts (8 errors) ====
+     interface I {
+         x;
+     }
+@@= skipped -18, +20 lines =@@
+         export class C {
+                      ~
+ !!! error TS2300: Duplicate identifier 'C'.
++                     ~
++!!! error TS2300: Duplicate identifier 'C'.
+             public p:number;
+         }
+     }
+@@= skipped -14, +16 lines =@@
+ !!! error TS2304: Cannot find name 'extension'.
+                                ~
+ !!! error TS2300: Duplicate identifier 'C'.
++                               ~
++!!! error TS2300: Duplicate identifier 'C'.
+             public pe:string;
+         }
+     }

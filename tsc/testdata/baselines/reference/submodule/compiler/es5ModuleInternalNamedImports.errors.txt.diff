@@ -1,0 +1,18 @@
+--- old.es5ModuleInternalNamedImports.errors.txt
++++ new.es5ModuleInternalNamedImports.errors.txt
+@@= skipped -8, +8 lines =@@
+ es5ModuleInternalNamedImports.ts(30,25): error TS1147: Import declarations in a namespace cannot reference a module.
+ es5ModuleInternalNamedImports.ts(31,20): error TS1147: Import declarations in a namespace cannot reference a module.
+ es5ModuleInternalNamedImports.ts(32,32): error TS1147: Import declarations in a namespace cannot reference a module.
+-es5ModuleInternalNamedImports.ts(34,16): error TS2792: Cannot find module 'M3'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++es5ModuleInternalNamedImports.ts(34,16): error TS2307: Cannot find module 'M3' or its corresponding type declarations.
+ 
+ 
+ ==== es5ModuleInternalNamedImports.ts (12 errors) ====
+@@= skipped -61, +61 lines =@@
+     }
+     import M3 from "M3";
+                    ~~~~
+-!!! error TS2792: Cannot find module 'M3'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'M3' or its corresponding type declarations.
+     

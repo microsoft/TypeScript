@@ -1,0 +1,27 @@
+esDecorators-arguments.ts(1,2): error TS1238: Unable to resolve signature of class decorator when called as an expression.
+  The runtime will invoke the decorator with 2 arguments, but the decorator expects 0.
+esDecorators-arguments.ts(4,1): error TS1238: Unable to resolve signature of class decorator when called as an expression.
+  The runtime will invoke the decorator with 2 arguments, but the decorator expects 3.
+esDecorators-arguments.ts(5,1): error TS1238: Unable to resolve signature of class decorator when called as an expression.
+  The runtime will invoke the decorator with 2 arguments, but the decorator expects at least 3.
+
+
+==== esDecorators-arguments.ts (3 errors) ====
+    @(() => {})
+     ~~~~~~~~~~
+!!! error TS1238: Unable to resolve signature of class decorator when called as an expression.
+!!! error TS1238:   The runtime will invoke the decorator with 2 arguments, but the decorator expects 0.
+    @((a: any) => {})
+    @((a: any, b: any) => {})
+    @((a: any, b: any, c: any) => {})
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1238: Unable to resolve signature of class decorator when called as an expression.
+!!! error TS1238:   The runtime will invoke the decorator with 2 arguments, but the decorator expects 3.
+!!! related TS6210 esDecorators-arguments.ts:4:20: An argument for 'c' was not provided.
+    @((a: any, b: any, c: any, ...d: any[]) => {})
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1238: Unable to resolve signature of class decorator when called as an expression.
+!!! error TS1238:   The runtime will invoke the decorator with 2 arguments, but the decorator expects at least 3.
+!!! related TS6210 esDecorators-arguments.ts:5:20: An argument for 'c' was not provided.
+    class C1 {}
+    

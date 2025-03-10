@@ -1,0 +1,24 @@
+main.js(1,15): error TS2306: File 'mod1.js' is not a module.
+mod1.js(4,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== mod1.js (1 errors) ====
+    class Alias {
+        bar() { return 1 }
+    }
+    module.exports = Alias;
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    
+==== main.js (1 errors) ====
+    import A from './mod1'
+                  ~~~~~~~~
+!!! error TS2306: File 'mod1.js' is not a module.
+    A.prototype.foo = 0
+    A.prototype.func = function() { this._func = 0; }
+    Object.defineProperty(A.prototype, "def", { value: 0 });
+    new A().bar
+    new A().foo
+    new A().func()
+    new A().def
+    

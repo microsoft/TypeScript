@@ -1,0 +1,72 @@
+--- old.constructorFunctions.errors.txt
++++ new.constructorFunctions.errors.txt
+@@= skipped -0, +0 lines =@@
+-index.js(22,15): error TS2348: Value of type 'typeof C3' is not callable. Did you mean to include 'new'?
+-index.js(30,15): error TS2348: Value of type 'typeof C4' is not callable. Did you mean to include 'new'?
++index.js(2,39): error TS2350: Only a void function can be called with the 'new' keyword.
++index.js(7,15): error TS2350: Only a void function can be called with the 'new' keyword.
++index.js(10,39): error TS2350: Only a void function can be called with the 'new' keyword.
++index.js(15,15): error TS2350: Only a void function can be called with the 'new' keyword.
++index.js(19,39): error TS2350: Only a void function can be called with the 'new' keyword.
++index.js(23,15): error TS2350: Only a void function can be called with the 'new' keyword.
++index.js(27,39): error TS2350: Only a void function can be called with the 'new' keyword.
++index.js(31,15): error TS2350: Only a void function can be called with the 'new' keyword.
+ index.js(55,13): error TS2554: Expected 1 arguments, but got 0.
+ 
+ 
+-==== index.js (3 errors) ====
++==== index.js (9 errors) ====
+     function C1() {
+         if (!(this instanceof C1)) return new C1();
++                                          ~~~~~~~~
++!!! error TS2350: Only a void function can be called with the 'new' keyword.
+         this.x = 1;
+     }
+     
+     const c1_v1 = C1();
+     const c1_v2 = new C1();
++                  ~~~~~~~~
++!!! error TS2350: Only a void function can be called with the 'new' keyword.
+     
+     var C2 = function () {
+         if (!(this instanceof C2)) return new C2();
++                                          ~~~~~~~~
++!!! error TS2350: Only a void function can be called with the 'new' keyword.
+         this.x = 1;
+     };
+     
+     const c2_v1 = C2();
+     const c2_v2 = new C2();
++                  ~~~~~~~~
++!!! error TS2350: Only a void function can be called with the 'new' keyword.
+     
+     /** @class */
+     function C3() {
+         if (!(this instanceof C3)) return new C3();
++                                          ~~~~~~~~
++!!! error TS2350: Only a void function can be called with the 'new' keyword.
+     };
+     
+     const c3_v1 = C3(); // error: @class tag requires 'new'
+-                  ~~~~
+-!!! error TS2348: Value of type 'typeof C3' is not callable. Did you mean to include 'new'?
+     const c3_v2 = new C3();
++                  ~~~~~~~~
++!!! error TS2350: Only a void function can be called with the 'new' keyword.
+     
+     /** @class */
+     var C4 = function () {
+         if (!(this instanceof C4)) return new C4();
++                                          ~~~~~~~~
++!!! error TS2350: Only a void function can be called with the 'new' keyword.
+     };
+     
+     const c4_v1 = C4(); // error: @class tag requires 'new'
+-                  ~~~~
+-!!! error TS2348: Value of type 'typeof C4' is not callable. Did you mean to include 'new'?
+     const c4_v2 = new C4();
++                  ~~~~~~~~
++!!! error TS2350: Only a void function can be called with the 'new' keyword.
+     
+     var c5_v1;
+     c5_v1 = function f() { };

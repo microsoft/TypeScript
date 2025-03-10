@@ -1,0 +1,43 @@
+--- old.typeFromPrototypeAssignment3.errors.txt
++++ new.typeFromPrototypeAssignment3.errors.txt
+@@= skipped -0, +0 lines =@@
+-bug26885.js(11,16): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+-  No index signature with a parameter of type 'string' was found on type '{}'.
++bug26885.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++bug26885.js(10,5): error TS7023: 'get' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
++bug26885.js(10,9): error TS7006: Parameter 'key' implicitly has an 'any' type.
++bug26885.js(11,21): error TS2339: Property '_map' does not exist on type '{ get: (key: any) => error; }'.
++bug26885.js(16,13): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+ 
+ 
+-==== bug26885.js (1 errors) ====
++==== bug26885.js (5 errors) ====
+     function Multimap3() {
+         this._map = {};
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+     };
+     
+     Multimap3.prototype = {
+@@= skipped -12, +17 lines =@@
+          * @returns {number} the value ok
+          */
+         get(key) {
++        ~~~
++!!! error TS7023: 'get' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
++            ~~~
++!!! error TS7006: Parameter 'key' implicitly has an 'any' type.
+             return this._map[key + ''];
+-                   ~~~~~~~~~~~~~~~~~~~
+-!!! error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+-!!! error TS7053:   No index signature with a parameter of type 'string' was found on type '{}'.
++                        ~~~~
++!!! error TS2339: Property '_map' does not exist on type '{ get: (key: any) => error; }'.
+         }
+     }
+     
+     /** @type {Multimap3} */
+     const map = new Multimap3();
++                ~~~~~~~~~~~~~~~
++!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+     const n = map.get('hi')

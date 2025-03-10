@@ -1,0 +1,19 @@
+--- old.es6ImportDefaultBindingFollowedWithNamespaceBinding1WithExport.errors.txt
++++ new.es6ImportDefaultBindingFollowedWithNamespaceBinding1WithExport.errors.txt
+@@= skipped -0, +0 lines =@@
+ client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
++client.ts(1,59): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+ 
+ 
+ ==== server.ts (0 errors) ====
+     var a = 10;
+     export default a;
+     
+-==== client.ts (1 errors) ====
++==== client.ts (2 errors) ====
+     export import defaultBinding, * as nameSpaceBinding  from "server";
+     ~~~~~~
+ !!! error TS1191: An import declaration cannot have modifiers.
++                                                              ~~~~~~~~
++!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
+     export var x: number = defaultBinding;

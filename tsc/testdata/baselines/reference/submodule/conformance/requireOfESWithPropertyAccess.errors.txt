@@ -1,0 +1,16 @@
+main.js(1,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== main.js (1 errors) ====
+    const x = require('./ch').x
+              ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    x
+    x.grey
+    x.x.grey
+==== ch.js (0 errors) ====
+    const x = {
+      grey: {}
+    }
+    export { x }
+    

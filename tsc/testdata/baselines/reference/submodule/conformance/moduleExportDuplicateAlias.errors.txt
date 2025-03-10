@@ -1,0 +1,16 @@
+test.js(1,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+==== test.js (1 errors) ====
+    const { apply } = require('./moduleExportAliasDuplicateAlias')
+                      ~~~~~~~
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+    apply()
+    
+==== moduleExportAliasDuplicateAlias.js (0 errors) ====
+    exports.apply = undefined;
+    function a() { }
+    exports.apply()
+    exports.apply = a;
+    exports.apply()
+    

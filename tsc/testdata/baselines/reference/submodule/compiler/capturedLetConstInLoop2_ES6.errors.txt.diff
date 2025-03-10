@@ -1,0 +1,261 @@
+--- old.capturedLetConstInLoop2_ES6.errors.txt
++++ new.capturedLetConstInLoop2_ES6.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++capturedLetConstInLoop2_ES6.ts(3,19): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
++capturedLetConstInLoop2_ES6.ts(4,27): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(12,27): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(20,27): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(28,27): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(37,27): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(45,27): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(54,27): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(64,27): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(73,27): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(83,27): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(91,29): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(99,29): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(107,29): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(115,29): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(124,29): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(132,29): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(141,29): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(151,29): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(160,29): error TS2339: Property 'length' does not exist on type '{}'.
++capturedLetConstInLoop2_ES6.ts(170,29): error TS2339: Property 'length' does not exist on type '{}'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== capturedLetConstInLoop2_ES6.ts (21 errors) ====
++    // ========let
++    function foo0(x) {
++        for (let x of []) {
++                      ~~
++!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
++            let a = arguments.length;
++                              ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + a });
++            (() => x + a);
++        }
++    }
++    
++    function foo0_1(x) {
++        for (let x in []) {
++            let a = arguments.length;
++                              ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + a });
++            (() => x + a);
++        }
++    }
++    
++    function foo1(x) {
++        for (let x = 0; x < 1; ++x) {
++            let a = arguments.length;
++                              ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + a });
++            (() => x + a);
++        }
++    }
++    
++    function foo2(x) {
++        while (1 === 1) {
++            let a = arguments.length;
++                              ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + a });
++            (() => x + a);
++        }
++    }
++    
++    function foo3(x) {
++        do {
++            let x;
++            let a = arguments.length;
++                              ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + a });
++            (() => x + a);
++        } while (1 === 1)
++    }
++    
++    function foo4(x) {
++        for (let y = 0; y < 1; ++y) {
++            let a = arguments.length;
++                              ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            let x = 1;
++            (function() { return x + a });
++            (() => x + a);
++        }
++    }
++    
++    function foo5(x) {
++        for (let x = 0, y = 1; x < 1; ++x) {
++            let a = arguments.length;
++                              ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + y + a });
++            (() => x + y + a);
++        }
++    }
++    
++    
++    function foo6(x) {
++        while (1 === 1) {
++            let x, y;
++            let a = arguments.length;
++                              ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + y + a });
++            (() => x + y + a);
++        }
++    }
++    
++    function foo7(x) {
++        do {
++            let x, y;
++            let a = arguments.length;
++                              ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + y + a });
++            (() => x + y + a);
++        } while (1 === 1)
++    }
++    
++    
++    function foo8(x) {
++        for (let y = 0; y < 1; ++y) {
++            let x = 1;
++            let a = arguments.length;
++                              ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + y + a });
++            (() => x + y + a);
++        }
++    }
++    ///=======const
++    function foo0_c(x) {
++        for (const x of []) {
++            const a = arguments.length;
++                                ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + a });
++            (() => x + a);
++        }
++    }
++    
++    function foo0_1_c(x) {
++        for (const x in []) {
++            const a = arguments.length;
++                                ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + a });
++            (() => x + a);
++        }
++    }
++    
++    function foo1_c(x) {
++        for (const x = 0; x < 1;) {
++            const a = arguments.length;
++                                ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + a });
++            (() => x + a);
++        }
++    }
++    
++    function foo2_c(x) {
++        while (1 === 1) {
++            const a = arguments.length;
++                                ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + a });
++            (() => x + a);
++        }
++    }
++    
++    function foo3_c(x) {
++        do {
++            const x = 1;
++            const a = arguments.length;
++                                ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + a });
++            (() => x + a);
++        } while (1 === 1)
++    }
++    
++    function foo4_c(x) {
++        for (const y = 0; y < 1;) {
++            const a = arguments.length;
++                                ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            const x = 1;
++            (function() { return x + a });
++            (() => x + a);
++        }
++    }
++    
++    function foo5_c(x) {
++        for (const x = 0, y = 1; x < 1;) {
++            const a = arguments.length;
++                                ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + y + a });
++            (() => x + y + a);
++        }
++    }
++    
++    
++    function foo6_c(x) {
++        while (1 === 1) {
++            const x = 1, y =1 ;
++            const a = arguments.length;
++                                ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + y + a });
++            (() => x + y + a);
++        }
++    }
++    
++    function foo7_c(x) {
++        do {
++            const x = 1, y = 1;
++            const a = arguments.length;
++                                ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + y + a });
++            (() => x + y + a);
++        } while (1 === 1)
++    }
++    
++    
++    function foo8_c(x) {
++        for (const y = 0; y < 1;) {
++            const x = 1;
++            const a = arguments.length;
++                                ~~~~~~
++!!! error TS2339: Property 'length' does not exist on type '{}'.
++            (function() { return x + y + a });
++            (() => x + y + a);
++        }
++    }

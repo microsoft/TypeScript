@@ -1,0 +1,21 @@
+multipleExportAssignmentsInAmbientDeclaration.ts(4,14): error TS2300: Duplicate identifier 'export='.
+multipleExportAssignmentsInAmbientDeclaration.ts(4,14): error TS2300: Duplicate identifier 'export='.
+multipleExportAssignmentsInAmbientDeclaration.ts(5,14): error TS2300: Duplicate identifier 'export='.
+multipleExportAssignmentsInAmbientDeclaration.ts(5,14): error TS2300: Duplicate identifier 'export='.
+
+
+==== multipleExportAssignmentsInAmbientDeclaration.ts (4 errors) ====
+    declare module "m1" {
+        var a: number
+        var b: number;
+        export = a;
+                 ~
+!!! error TS2300: Duplicate identifier 'export='.
+                 ~
+!!! error TS2300: Duplicate identifier 'export='.
+        export = b;
+                 ~
+!!! error TS2300: Duplicate identifier 'export='.
+                 ~
+!!! error TS2300: Duplicate identifier 'export='.
+    }

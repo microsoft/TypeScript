@@ -1,0 +1,44 @@
+--- old.constructSignatureWithAccessibilityModifiersOnParameters2.errors.txt
++++ new.constructSignatureWithAccessibilityModifiersOnParameters2.errors.txt
+@@= skipped -0, +0 lines =@@
+ constructSignatureWithAccessibilityModifiersOnParameters2.ts(4,17): error TS2369: A parameter property is only allowed in a constructor implementation.
++constructSignatureWithAccessibilityModifiersOnParameters2.ts(4,24): error TS2300: Duplicate identifier 'x'.
+ constructSignatureWithAccessibilityModifiersOnParameters2.ts(4,27): error TS2369: A parameter property is only allowed in a constructor implementation.
++constructSignatureWithAccessibilityModifiersOnParameters2.ts(4,35): error TS2300: Duplicate identifier 'y'.
+ constructSignatureWithAccessibilityModifiersOnParameters2.ts(5,24): error TS2300: Duplicate identifier 'x'.
+ constructSignatureWithAccessibilityModifiersOnParameters2.ts(5,35): error TS2300: Duplicate identifier 'y'.
+ constructSignatureWithAccessibilityModifiersOnParameters2.ts(9,17): error TS2369: A parameter property is only allowed in a constructor implementation.
++constructSignatureWithAccessibilityModifiersOnParameters2.ts(9,25): error TS2300: Duplicate identifier 'x'.
+ constructSignatureWithAccessibilityModifiersOnParameters2.ts(9,25): error TS2687: All declarations of 'x' must have identical modifiers.
+ constructSignatureWithAccessibilityModifiersOnParameters2.ts(10,24): error TS2300: Duplicate identifier 'x'.
+ constructSignatureWithAccessibilityModifiersOnParameters2.ts(10,24): error TS2687: All declarations of 'x' must have identical modifiers.
+@@= skipped -16, +19 lines =@@
+ constructSignatureWithAccessibilityModifiersOnParameters2.ts(35,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+ 
+ 
+-==== constructSignatureWithAccessibilityModifiersOnParameters2.ts (17 errors) ====
++==== constructSignatureWithAccessibilityModifiersOnParameters2.ts (20 errors) ====
+     // Parameter properties are not valid in overloads of constructors
+     
+     class C {
+         constructor(public x, private y);
+                     ~~~~~~~~
+ !!! error TS2369: A parameter property is only allowed in a constructor implementation.
++                           ~
++!!! error TS2300: Duplicate identifier 'x'.
+                               ~~~~~~~~~
+ !!! error TS2369: A parameter property is only allowed in a constructor implementation.
++                                      ~
++!!! error TS2300: Duplicate identifier 'y'.
+         constructor(public x, private y) { }
+                            ~
+ !!! error TS2300: Duplicate identifier 'x'.
+@@= skipped -21, +25 lines =@@
+                     ~~~~~~~~~
+ !!! error TS2369: A parameter property is only allowed in a constructor implementation.
+                             ~
++!!! error TS2300: Duplicate identifier 'x'.
++                            ~
+ !!! error TS2687: All declarations of 'x' must have identical modifiers.
+         constructor(public x) { }
+                            ~

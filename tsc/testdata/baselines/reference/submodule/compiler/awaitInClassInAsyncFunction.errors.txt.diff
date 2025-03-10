@@ -1,0 +1,10 @@
+--- old.awaitInClassInAsyncFunction.errors.txt
++++ new.awaitInClassInAsyncFunction.errors.txt
+@@= skipped -12, +12 lines =@@
+             baz = await bar();
+                   ~~~~~
+ !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
++!!! related TS1356 awaitInClassInAsyncFunction.ts:7:16: Did you mean to mark this function as 'async'?
+         };
+     }
+     

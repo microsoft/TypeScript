@@ -1,0 +1,22 @@
+--- old.parseUnaryExpressionNoTypeAssertionInJsx1.errors.txt
++++ new.parseUnaryExpressionNoTypeAssertionInJsx1.errors.txt
+@@= skipped -0, +0 lines =@@
+-index.js(2,13): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+-index.js(2,14): error TS17008: JSX element 'number' has no corresponding closing tag.
+-index.js(3,1): error TS1005: '</' expected.
++index.js(2,13): error TS2352: Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+ 
+ 
+-==== index.js (3 errors) ====
++==== index.js (1 errors) ====
+     const x = "oops";
+     const y = + <number> x;
+-                ~~~~~~~~
+-!!! error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+-                 ~~~~~~
+-!!! error TS17008: JSX element 'number' has no corresponding closing tag.
++                ~~~~~~~~~~
++!!! error TS2352: Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+     
+-    
+-!!! error TS1005: '</' expected.

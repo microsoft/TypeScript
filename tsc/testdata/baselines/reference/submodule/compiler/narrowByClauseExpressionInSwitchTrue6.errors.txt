@@ -1,0 +1,89 @@
+narrowByClauseExpressionInSwitchTrue6.ts(70,15): error TS2339: Property 'bProps' does not exist on type 'A | B'.
+  Property 'bProps' does not exist on type 'A'.
+narrowByClauseExpressionInSwitchTrue6.ts(73,15): error TS2339: Property 'cProps' does not exist on type 'MyType'.
+  Property 'cProps' does not exist on type 'A'.
+
+
+==== narrowByClauseExpressionInSwitchTrue6.ts (2 errors) ====
+    interface A {
+        kind: "a";
+        aProps: string;
+    }
+    
+    interface B {
+        kind: "b";
+        bProps: string;
+    }
+    
+    interface C {
+        kind: "c";
+        cProps: string;
+    }
+    
+    
+    type MyType = A | B | C;
+    
+    function isA(x: MyType) {
+        switch (true) {
+            default:
+                const never: never = x;
+            case x.kind === "a":
+                x.aProps;
+                break;
+            case x.kind === "b":
+                x.bProps;
+                break;
+            case x.kind === "c":
+                x.cProps;
+                break;
+        }
+    
+        switch (true) {
+            default:
+                const never: never = x;
+            case x.kind === "a": {
+                x.aProps;
+                break;
+            }
+            case x.kind === "b": {
+                x.bProps;
+                break;
+            }
+            case x.kind === "c": {
+                x.cProps;
+                break;
+            }
+        }
+        
+        switch (true) {
+            default:
+                x.aProps;
+                break;
+            case x.kind === "b":
+                x.bProps;
+                break;
+            case x.kind === "c":
+                x.cProps;
+                break;
+        }
+    
+        switch (true) {
+            default:
+                const never: never = x;
+            case x.kind === "a":
+                x.aProps;
+                // fallthrough
+            case x.kind === "b":
+                x.bProps;
+                  ~~~~~~
+!!! error TS2339: Property 'bProps' does not exist on type 'A | B'.
+!!! error TS2339:   Property 'bProps' does not exist on type 'A'.
+                // fallthrough
+            case x.kind === "c":
+                x.cProps;
+                  ~~~~~~
+!!! error TS2339: Property 'cProps' does not exist on type 'MyType'.
+!!! error TS2339:   Property 'cProps' does not exist on type 'A'.
+        }
+    }
+    

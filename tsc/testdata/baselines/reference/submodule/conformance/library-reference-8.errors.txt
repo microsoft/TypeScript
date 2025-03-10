@@ -1,0 +1,22 @@
+/test/foo.ts(3,17): error TS2304: Cannot find name 'alpha'.
+/test/foo.ts(3,27): error TS2304: Cannot find name 'beta'.
+
+
+==== /test/foo.ts (2 errors) ====
+    /// <reference types="alpha" />
+    /// <reference types="beta" />
+    var x: string = alpha.a + beta.b;
+                    ~~~~~
+!!! error TS2304: Cannot find name 'alpha'.
+                              ~~~~
+!!! error TS2304: Cannot find name 'beta'.
+    
+    
+==== /test/types/alpha/index.d.ts (0 errors) ====
+    /// <reference types="beta" />
+    declare var alpha: { a: string };
+    
+==== /test/types/beta/index.d.ts (0 errors) ====
+    /// <reference types="alpha" />
+    declare var beta: { b: string };
+    

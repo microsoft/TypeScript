@@ -59,7 +59,7 @@ func getBaselineDiff(t *testing.T, actual string, fileName string) string {
 	}
 	var b strings.Builder
 	if err := diff.Text("old."+fileName, "new."+fileName, expected, actual, &b); err != nil {
-		t.Fatalf("failed to diff the actual and expected content: %v", err)
+		return fmt.Sprintf("failed to diff the actual and expected content: %v\n", err)
 	}
 
 	// Remove line numbers from unified diff headers; this avoids adding/deleting

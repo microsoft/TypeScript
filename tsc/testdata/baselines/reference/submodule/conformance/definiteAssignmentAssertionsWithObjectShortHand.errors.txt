@@ -1,0 +1,12 @@
+definiteAssignmentAssertionsWithObjectShortHand.ts(2,16): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+
+
+==== definiteAssignmentAssertionsWithObjectShortHand.ts (1 errors) ====
+    const a: string | undefined = 'ff';
+    const foo = { a! }
+                   ~
+!!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
+    
+    const bar = {
+        a ? () { }
+    }

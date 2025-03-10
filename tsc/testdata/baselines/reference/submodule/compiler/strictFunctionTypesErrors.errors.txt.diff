@@ -1,0 +1,26 @@
+--- old.strictFunctionTypesErrors.errors.txt
++++ new.strictFunctionTypesErrors.errors.txt
+@@= skipped -74, +74 lines =@@
+ strictFunctionTypesErrors.ts(127,1): error TS2322: Type 'Crate<Animal>' is not assignable to type 'Crate<Dog>'.
+   Types of property 'item' are incompatible.
+     Property 'dog' is missing in type 'Animal' but required in type 'Dog'.
+-strictFunctionTypesErrors.ts(133,1): error TS2328: Types of parameters 'f' and 'f' are incompatible.
+-  Property 'dog' is missing in type 'Animal' but required in type 'Dog'.
++strictFunctionTypesErrors.ts(133,1): error TS2322: Type '(f: (x: Dog) => Dog) => void' is not assignable to type '(f: (x: Animal) => Animal) => void'.
++  Types of parameters 'f' and 'f' are incompatible.
++    Property 'dog' is missing in type 'Animal' but required in type 'Dog'.
+ strictFunctionTypesErrors.ts(134,1): error TS2322: Type '(f: (x: Animal) => Animal) => void' is not assignable to type '(f: (x: Dog) => Dog) => void'.
+   Types of parameters 'f' and 'f' are incompatible.
+     Types of parameters 'x' and 'x' are incompatible.
+@@= skipped -262, +263 lines =@@
+     declare let fc2: (f: (x: Dog) => Dog) => void;
+     fc1 = fc2;  // Error
+     ~~~
+-!!! error TS2328: Types of parameters 'f' and 'f' are incompatible.
+-!!! error TS2328:   Property 'dog' is missing in type 'Animal' but required in type 'Dog'.
++!!! error TS2322: Type '(f: (x: Dog) => Dog) => void' is not assignable to type '(f: (x: Animal) => Animal) => void'.
++!!! error TS2322:   Types of parameters 'f' and 'f' are incompatible.
++!!! error TS2322:     Property 'dog' is missing in type 'Animal' but required in type 'Dog'.
+ !!! related TS2728 strictFunctionTypesErrors.ts:91:32: 'dog' is declared here.
+     fc2 = fc1;  // Error
+     ~~~

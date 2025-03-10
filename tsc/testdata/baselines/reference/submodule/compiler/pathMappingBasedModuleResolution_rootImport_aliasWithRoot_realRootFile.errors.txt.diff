@@ -1,0 +1,32 @@
+--- old.pathMappingBasedModuleResolution_rootImport_aliasWithRoot_realRootFile.errors.txt
++++ new.pathMappingBasedModuleResolution_rootImport_aliasWithRoot_realRootFile.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++/root/a.ts(2,21): error TS2307: Cannot find module '/bar' or its corresponding type declarations.
++
++
++==== /root/tsconfig.json (0 errors) ====
++    {
++        "compilerOptions": {
++            "baseUrl": ".",
++            "paths": {
++                "/*": ["./src/*"]
++            },
++            "allowJs": true,
++            "outDir": "bin"
++        }
++    }
++    
++==== /root/a.ts (1 errors) ====
++    import { foo } from "/foo";
++    import { bar } from "/bar";
++                        ~~~~~~
++!!! error TS2307: Cannot find module '/bar' or its corresponding type declarations.
++    
++==== /foo.ts (0 errors) ====
++    export function foo() {}
++    
++==== /bar.js (0 errors) ====
++    export function bar() {}
++    

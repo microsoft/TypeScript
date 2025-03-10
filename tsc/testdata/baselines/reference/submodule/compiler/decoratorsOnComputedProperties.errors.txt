@@ -1,0 +1,666 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2318: Cannot find global type 'TypedPropertyDescriptor'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+decoratorsOnComputedProperties.ts(1,26): error TS2304: Cannot find name 'PropertyKey'.
+decoratorsOnComputedProperties.ts(11,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(11,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(13,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(13,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(15,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(15,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(17,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(17,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(18,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(19,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(20,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(21,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(22,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(23,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(27,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(28,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(28,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(29,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(30,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(30,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(32,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(32,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(34,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(34,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(35,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(36,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(37,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(38,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(39,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(40,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(45,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(45,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(47,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(47,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(49,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(49,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(51,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(51,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(52,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(53,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(54,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(55,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(56,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(57,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(62,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(63,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(63,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(64,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(65,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(65,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(67,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(67,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(69,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(69,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(70,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(71,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(72,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(73,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(74,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(75,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(81,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(81,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(83,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(83,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(85,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(85,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(87,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(87,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(88,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(89,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(90,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(92,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(93,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(94,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(98,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(99,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(99,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(100,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(101,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(101,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(103,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(103,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(105,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(105,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(106,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(107,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(108,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(110,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(111,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(112,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(117,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(117,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(119,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(119,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(121,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(121,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(123,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(123,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(124,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(125,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(126,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(128,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(129,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(131,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(135,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(136,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(136,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(137,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(138,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(138,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(140,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(140,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(142,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(142,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(143,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(144,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(145,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(147,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(148,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(150,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(155,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(155,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(157,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(157,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(159,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(159,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(161,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(161,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(162,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(163,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(164,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(166,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(167,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(169,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(173,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(174,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(174,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(175,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(176,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(176,9): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(178,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(178,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(180,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(180,6): error TS2304: Cannot find name 'Symbol'.
+decoratorsOnComputedProperties.ts(181,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(182,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(183,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(184,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(185,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(186,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(188,5): error TS1206: Decorators are not valid here.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2318: Cannot find global type 'TypedPropertyDescriptor'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== decoratorsOnComputedProperties.ts (152 errors) ====
+    function x(o: object, k: PropertyKey) { }
+                             ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'PropertyKey'.
+    let i = 0;
+    function foo(): string { return ++i + ""; }
+    
+    const fieldNameA: string = "fieldName1";
+    const fieldNameB: string = "fieldName2";
+    const fieldNameC: string = "fieldName3";
+    
+    class A {
+        @x ["property"]: any;
+        @x [Symbol.toStringTag]: any;
+           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        @x ["property2"]: any = 2;
+        @x [Symbol.iterator]: any = null;
+           ~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property3"]: any;
+        [Symbol.isConcatSpreadable]: any;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property4"]: any = 2;
+        [Symbol.match]: any = null;
+        ~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        [foo()]: any;
+        ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [foo()]: any;
+           ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [foo()]: any = null;
+           ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        [fieldNameA]: any;
+        ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [fieldNameB]: any;
+           ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [fieldNameC]: any = null;
+           ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+    }
+    
+    void class B {
+        @x ["property"]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [Symbol.toStringTag]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        @x ["property2"]: any = 2;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [Symbol.iterator]: any = null;
+        ~
+!!! error TS1206: Decorators are not valid here.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property3"]: any;
+        [Symbol.isConcatSpreadable]: any;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property4"]: any = 2;
+        [Symbol.match]: any = null;
+        ~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        [foo()]: any;
+        ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [foo()]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [foo()]: any = null;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        [fieldNameA]: any;
+        ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [fieldNameB]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [fieldNameC]: any = null;
+        ~
+!!! error TS1206: Decorators are not valid here.
+    };
+    
+    class C {
+        @x ["property"]: any;
+        @x [Symbol.toStringTag]: any;
+           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        @x ["property2"]: any = 2;
+        @x [Symbol.iterator]: any = null;
+           ~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property3"]: any;
+        [Symbol.isConcatSpreadable]: any;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property4"]: any = 2;
+        [Symbol.match]: any = null;
+        ~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        [foo()]: any;
+        ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [foo()]: any;
+           ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [foo()]: any = null;
+           ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        [fieldNameA]: any;
+        ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [fieldNameB]: any;
+           ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [fieldNameC]: any = null;
+           ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        ["some" + "method"]() {}
+    }
+    
+    void class D {
+        @x ["property"]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [Symbol.toStringTag]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        @x ["property2"]: any = 2;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [Symbol.iterator]: any = null;
+        ~
+!!! error TS1206: Decorators are not valid here.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property3"]: any;
+        [Symbol.isConcatSpreadable]: any;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property4"]: any = 2;
+        [Symbol.match]: any = null;
+        ~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        [foo()]: any;
+        ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [foo()]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [foo()]: any = null;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        [fieldNameA]: any;
+        ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [fieldNameB]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [fieldNameC]: any = null;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        ["some" + "method"]() {}
+    };
+    
+    class E {
+        @x ["property"]: any;
+        @x [Symbol.toStringTag]: any;
+           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        @x ["property2"]: any = 2;
+        @x [Symbol.iterator]: any = null;
+           ~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property3"]: any;
+        [Symbol.isConcatSpreadable]: any;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property4"]: any = 2;
+        [Symbol.match]: any = null;
+        ~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        [foo()]: any;
+        ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [foo()]: any;
+           ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [foo()]: any = null;
+           ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        ["some" + "method"]() {}
+        [fieldNameA]: any;
+        ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [fieldNameB]: any;
+           ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [fieldNameC]: any = null;
+           ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+    }
+    
+    void class F {
+        @x ["property"]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [Symbol.toStringTag]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        @x ["property2"]: any = 2;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [Symbol.iterator]: any = null;
+        ~
+!!! error TS1206: Decorators are not valid here.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property3"]: any;
+        [Symbol.isConcatSpreadable]: any;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property4"]: any = 2;
+        [Symbol.match]: any = null;
+        ~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        [foo()]: any;
+        ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [foo()]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [foo()]: any = null;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        ["some" + "method"]() {}
+        [fieldNameA]: any;
+        ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [fieldNameB]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [fieldNameC]: any = null;
+        ~
+!!! error TS1206: Decorators are not valid here.
+    };
+    
+    class G {
+        @x ["property"]: any;
+        @x [Symbol.toStringTag]: any;
+           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        @x ["property2"]: any = 2;
+        @x [Symbol.iterator]: any = null;
+           ~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property3"]: any;
+        [Symbol.isConcatSpreadable]: any;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property4"]: any = 2;
+        [Symbol.match]: any = null;
+        ~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        [foo()]: any;
+        ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [foo()]: any;
+           ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [foo()]: any = null;
+           ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        ["some" + "method"]() {}
+        [fieldNameA]: any;
+        ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [fieldNameB]: any;
+           ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        ["some" + "method2"]() {}
+        @x [fieldNameC]: any = null;
+           ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+    }
+    
+    void class H {
+        @x ["property"]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [Symbol.toStringTag]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        @x ["property2"]: any = 2;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [Symbol.iterator]: any = null;
+        ~
+!!! error TS1206: Decorators are not valid here.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property3"]: any;
+        [Symbol.isConcatSpreadable]: any;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property4"]: any = 2;
+        [Symbol.match]: any = null;
+        ~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        [foo()]: any;
+        ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [foo()]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [foo()]: any = null;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        ["some" + "method"]() {}
+        [fieldNameA]: any;
+        ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [fieldNameB]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        ["some" + "method2"]() {}
+        @x [fieldNameC]: any = null;
+        ~
+!!! error TS1206: Decorators are not valid here.
+    };
+    
+    class I {
+        @x ["property"]: any;
+        @x [Symbol.toStringTag]: any;
+           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        @x ["property2"]: any = 2;
+        @x [Symbol.iterator]: any = null;
+           ~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property3"]: any;
+        [Symbol.isConcatSpreadable]: any;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property4"]: any = 2;
+        [Symbol.match]: any = null;
+        ~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        [foo()]: any;
+        ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [foo()]: any;
+           ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [foo()]: any = null;
+           ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x ["some" + "method"]() {}
+        [fieldNameA]: any;
+        ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [fieldNameB]: any;
+           ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        ["some" + "method2"]() {}
+        @x [fieldNameC]: any = null;
+           ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+    }
+    
+    void class J {
+        @x ["property"]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [Symbol.toStringTag]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        @x ["property2"]: any = 2;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [Symbol.iterator]: any = null;
+        ~
+!!! error TS1206: Decorators are not valid here.
+            ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property3"]: any;
+        [Symbol.isConcatSpreadable]: any;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        ["property4"]: any = 2;
+        [Symbol.match]: any = null;
+        ~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+        [foo()]: any;
+        ~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [foo()]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x [foo()]: any = null;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @x ["some" + "method"]() {}
+        ~
+!!! error TS1206: Decorators are not valid here.
+        [fieldNameA]: any;
+        ~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        @x [fieldNameB]: any;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        ["some" + "method2"]() {}
+        @x [fieldNameC]: any = null;
+        ~
+!!! error TS1206: Decorators are not valid here.
+    };

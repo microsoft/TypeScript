@@ -1,0 +1,18 @@
+--- old.strictModeReservedWordInImportEqualDeclaration.errors.txt
++++ new.strictModeReservedWordInImportEqualDeclaration.errors.txt
+@@= skipped -0, +0 lines =@@
+ strictModeReservedWordInImportEqualDeclaration.ts(2,8): error TS1214: Identifier expected. 'public' is a reserved word in strict mode. Modules are automatically in strict mode.
++strictModeReservedWordInImportEqualDeclaration.ts(2,8): error TS1214: Identifier expected. 'public' is a reserved word in strict mode. Modules are automatically in strict mode.
+ strictModeReservedWordInImportEqualDeclaration.ts(2,25): error TS2307: Cannot find module '1' or its corresponding type declarations.
+ 
+ 
+-==== strictModeReservedWordInImportEqualDeclaration.ts (2 errors) ====
++==== strictModeReservedWordInImportEqualDeclaration.ts (3 errors) ====
+     "use strict"
+     import public = require("1");
+            ~~~~~~
+ !!! error TS1214: Identifier expected. 'public' is a reserved word in strict mode. Modules are automatically in strict mode.
++           ~~~~~~
++!!! error TS1214: Identifier expected. 'public' is a reserved word in strict mode. Modules are automatically in strict mode.
+                             ~~~
+ !!! error TS2307: Cannot find module '1' or its corresponding type declarations.

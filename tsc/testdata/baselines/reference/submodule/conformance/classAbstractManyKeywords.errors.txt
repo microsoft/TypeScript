@@ -1,0 +1,13 @@
+classAbstractManyKeywords.ts(3,1): error TS1005: 'export' expected.
+classAbstractManyKeywords.ts(4,17): error TS1005: '=' expected.
+
+
+==== classAbstractManyKeywords.ts (2 errors) ====
+    export default abstract class A {}
+    export abstract class B {}
+    default abstract class C {}
+    ~~~~~~~
+!!! error TS1005: 'export' expected.
+    import abstract class D {}
+                    ~~~~~
+!!! error TS1005: '=' expected.

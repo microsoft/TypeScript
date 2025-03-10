@@ -1,0 +1,48 @@
+--- old.typeFromPropertyAssignment25.errors.txt
++++ new.typeFromPropertyAssignment25.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++bug24703.js(2,8): error TS2339: Property 'I' does not exist on type '{}'.
++bug24703.js(4,14): error TS2339: Property 'i' does not exist on type 'I'.
++bug24703.js(7,8): error TS2339: Property 'O' does not exist on type '{}'.
++bug24703.js(7,33): error TS2339: Property 'I' does not exist on type '{}'.
++bug24703.js(10,14): error TS2339: Property 'o' does not exist on type 'O'.
++bug24703.js(13,20): error TS2339: Property 'O' does not exist on type '{}'.
++bug24703.js(14,20): error TS2339: Property 'I' does not exist on type '{}'.
++
++
++==== bug24703.js (7 errors) ====
++    var Common = {};
++    Common.I = class {
++           ~
++!!! error TS2339: Property 'I' does not exist on type '{}'.
++        constructor() {
++            this.i = 1
++                 ~
++!!! error TS2339: Property 'i' does not exist on type 'I'.
++        }
++    }
++    Common.O = class extends Common.I {
++           ~
++!!! error TS2339: Property 'O' does not exist on type '{}'.
++                                    ~
++!!! error TS2339: Property 'I' does not exist on type '{}'.
++        constructor() {
++            super()
++            this.o = 2
++                 ~
++!!! error TS2339: Property 'o' does not exist on type 'O'.
++        }
++    }
++    var o = new Common.O()
++                       ~
++!!! error TS2339: Property 'O' does not exist on type '{}'.
++    var i = new Common.I()
++                       ~
++!!! error TS2339: Property 'I' does not exist on type '{}'.
++    o.i
++    o.o
++    i.i
++    
++    

@@ -1,0 +1,23 @@
+/index.js(5,10): error TS2304: Cannot find name 'JSDocType'.
+/index.js(6,10): error TS2304: Cannot find name 'JSDocType'.
+
+
+==== /node_modules/@types/node/index.d.ts (0 errors) ====
+    declare module "fs" {
+      export interface WriteFileOptions {}
+      export function writeFile(path: string, data: any, options: WriteFileOptions, callback: (err: Error) => void): void;
+    }
+    
+==== /index.js (2 errors) ====
+    import { writeFile, WriteFileOptions, WriteFileOptions as OtherName } from "fs";
+    
+    /** @typedef {{ x: any }} JSDocType */
+    
+    export { JSDocType };
+             ~~~~~~~~~
+!!! error TS2304: Cannot find name 'JSDocType'.
+    export { JSDocType as ThisIsFine };
+             ~~~~~~~~~
+!!! error TS2304: Cannot find name 'JSDocType'.
+    export { WriteFileOptions };
+    

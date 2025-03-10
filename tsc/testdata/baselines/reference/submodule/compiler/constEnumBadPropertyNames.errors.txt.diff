@@ -1,0 +1,13 @@
+--- old.constEnumBadPropertyNames.errors.txt
++++ new.constEnumBadPropertyNames.errors.txt
+@@= skipped -0, +0 lines =@@
+-constEnumBadPropertyNames.ts(2,11): error TS2339: Property 'B' does not exist on type 'typeof E'.
++constEnumBadPropertyNames.ts(2,11): error TS2339: Property 'B' does not exist on type '{ readonly [x: number]: string; readonly A: E.A; }'.
+ 
+ 
+ ==== constEnumBadPropertyNames.ts (1 errors) ====
+     const enum E { A }
+     var x = E["B"]
+               ~~~
+-!!! error TS2339: Property 'B' does not exist on type 'typeof E'.
++!!! error TS2339: Property 'B' does not exist on type '{ readonly [x: number]: string; readonly A: E.A; }'.

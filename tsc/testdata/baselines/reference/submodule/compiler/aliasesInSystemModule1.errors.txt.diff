@@ -1,0 +1,15 @@
+--- old.aliasesInSystemModule1.errors.txt
++++ new.aliasesInSystemModule1.errors.txt
+@@= skipped -0, +0 lines =@@
+-aliasesInSystemModule1.ts(1,24): error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++aliasesInSystemModule1.ts(1,24): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+ 
+ 
+ ==== aliasesInSystemModule1.ts (1 errors) ====
+     import alias = require('foo');
+                            ~~~~~
+-!!! error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+     import cls = alias.Class;
+     export import cls2 = alias.Class;
+     

@@ -1,0 +1,43 @@
+--- old.for-of30.errors.txt
++++ new.for-of30.errors.txt
+@@= skipped -0, +0 lines =@@
+-for-of30.ts(16,15): error TS2767: The 'return' property of an iterator must be a method.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++for-of30.ts(11,6): error TS2304: Cannot find name 'Symbol'.
++for-of30.ts(16,15): error TS2488: Type 'MyStringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
+ 
+ 
+-==== for-of30.ts (1 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== for-of30.ts (2 errors) ====
+     class MyStringIterator {
+         next() {
+             return {
+@@= skipped -12, +29 lines =@@
+         return = 0;
+     
+         [Symbol.iterator]() {
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
+             return this;
+         }
+     }
+     
+     for (var v of new MyStringIterator) { }
+                   ~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2767: The 'return' property of an iterator must be a method.
++!!! error TS2488: Type 'MyStringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.

@@ -1,0 +1,30 @@
+--- old.importEquals3.errors.txt
++++ new.importEquals3.errors.txt
+@@= skipped -11, +11 lines =@@
+     import A = a.A; // Error
+                ~~~
+ !!! error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
+-!!! related TS1376 b.ts:1:18: 'a' was imported here.
++!!! related TS1376 b.ts:1:18: '*' was imported here.
+     import aa = a;  // Error
+                 ~
+ !!! error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
+-!!! related TS1376 b.ts:1:18: 'a' was imported here.
++!!! related TS1376 b.ts:1:18: '*' was imported here.
+     
+     const x = 0;
+     export { a, A, x };
+@@= skipped -14, +14 lines =@@
+     import A = b.a.A; // Error
+                ~~~~~
+ !!! error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
+-!!! related TS1376 b.ts:1:18: 'a' was imported here.
++!!! related TS1376 b.ts:1:18: '*' was imported here.
+     import AA = b.A; // Error
+                 ~~~
+ !!! error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
+-!!! related TS1376 b.ts:1:18: 'a' was imported here.
++!!! related TS1376 b.ts:1:18: '*' was imported here.
+     
+     import x = b.x;
+     console.log(x);

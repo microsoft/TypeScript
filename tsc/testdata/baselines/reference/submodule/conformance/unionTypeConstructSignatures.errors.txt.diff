@@ -1,0 +1,45 @@
+--- old.unionTypeConstructSignatures.errors.txt
++++ new.unionTypeConstructSignatures.errors.txt
+@@= skipped -1, +1 lines =@@
+   Type 'number' is not assignable to type 'string | boolean'.
+ unionTypeConstructSignatures.ts(9,47): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+ unionTypeConstructSignatures.ts(10,33): error TS2769: No overload matches this call.
+-  Overload 1 of 2, '(a: number): number | Date', gave the following error.
+-    Argument of type 'boolean' is not assignable to parameter of type 'number'.
+-  Overload 2 of 2, '(a: string): string | boolean', gave the following error.
++  The last overload gave the following error.
+     Argument of type 'boolean' is not assignable to parameter of type 'string'.
+ unionTypeConstructSignatures.ts(15,33): error TS2769: No overload matches this call.
+-  Overload 1 of 2, '(a: number): number | Date', gave the following error.
+-    Argument of type 'boolean' is not assignable to parameter of type 'number'.
+-  Overload 2 of 2, '(a: string): string | boolean', gave the following error.
++  The last overload gave the following error.
+     Argument of type 'boolean' is not assignable to parameter of type 'string'.
+ unionTypeConstructSignatures.ts(16,1): error TS2554: Expected 1 arguments, but got 0.
+ unionTypeConstructSignatures.ts(19,36): error TS2345: Argument of type '10' is not assignable to parameter of type 'never'.
+@@= skipped -53, +49 lines =@@
+     new unionOfDifferentReturnType1(true); // error in type of parameter
+                                     ~~~~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 2, '(a: number): number | Date', gave the following error.
+-!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'number'.
+-!!! error TS2769:   Overload 2 of 2, '(a: string): string | boolean', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'string'.
++!!! related TS2771 unionTypeConstructSignatures.ts:12:61: The last overload is declared here.
+     
+     var unionOfDifferentReturnType1: { new (a: number): number; new (a: string): string; } | { new (a: number): Date; new (a: string): boolean; };
+     numOrDate = new unionOfDifferentReturnType1(10);
+@@= skipped -11, +10 lines =@@
+     new unionOfDifferentReturnType1(true); // error in type of parameter
+                                     ~~~~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 2, '(a: number): number | Date', gave the following error.
+-!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'number'.
+-!!! error TS2769:   Overload 2 of 2, '(a: string): string | boolean', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'string'.
++!!! related TS2771 unionTypeConstructSignatures.ts:12:61: The last overload is declared here.
+     new unionOfDifferentReturnType1(); // error missing parameter
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2554: Expected 1 arguments, but got 0.

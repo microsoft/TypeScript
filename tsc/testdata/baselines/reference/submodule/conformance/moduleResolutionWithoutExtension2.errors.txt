@@ -1,0 +1,8 @@
+/src/buzz.mts(2,22): error TS2307: Cannot find module './foo' or its corresponding type declarations.
+
+
+==== /src/buzz.mts (1 errors) ====
+    // Extensionless relative path cjs import in an ES module
+    import foo = require("./foo"); // should error, should not ask for extension
+                         ~~~~~~~
+!!! error TS2307: Cannot find module './foo' or its corresponding type declarations.

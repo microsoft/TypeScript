@@ -1,0 +1,45 @@
+--- old.parameterInitializersForwardReferencing.2(target=es2015).errors.txt
++++ new.parameterInitializersForwardReferencing.2(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-parameterInitializersForwardReferencing.2.ts(5,18): error TS2373: Parameter 'b' cannot reference identifier 'a' declared after it.
+-parameterInitializersForwardReferencing.2.ts(5,32): error TS2373: Parameter '{ b = a(), ...x }' cannot reference identifier 'a' declared after it.
+-parameterInitializersForwardReferencing.2.ts(11,35): error TS2373: Parameter 'd' cannot reference identifier 'x' declared after it.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ 
+ 
+-==== parameterInitializersForwardReferencing.2.ts (3 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== parameterInitializersForwardReferencing.2.ts (0 errors) ====
+     // https://github.com/microsoft/TypeScript/issues/36295
+     
+     function a(): any {}
+     
+     function b({ b = a(), ...x } = a()) {
+-                     ~
+-!!! error TS2373: Parameter 'b' cannot reference identifier 'a' declared after it.
+-                                   ~
+-!!! error TS2373: Parameter '{ b = a(), ...x }' cannot reference identifier 'a' declared after it.
+         var a;
+     }
+     
+     const x = "";
+     
+     function c({ b, ...c } = a(), d = x) {
+-                                      ~
+-!!! error TS2373: Parameter 'd' cannot reference identifier 'x' declared after it.
+         var x;
+     }

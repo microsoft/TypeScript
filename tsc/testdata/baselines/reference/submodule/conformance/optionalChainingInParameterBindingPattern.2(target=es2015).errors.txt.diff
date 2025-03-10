@@ -1,0 +1,40 @@
+--- old.optionalChainingInParameterBindingPattern.2(target=es2015).errors.txt
++++ new.optionalChainingInParameterBindingPattern.2(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-optionalChainingInParameterBindingPattern.2.ts(3,6): error TS2373: Parameter '{ [a()?.d]: c = "" }' cannot reference identifier 'a' declared after it.
+-optionalChainingInParameterBindingPattern.2.ts(6,24): error TS2373: Parameter 'd' cannot reference identifier 'x' declared after it.
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++optionalChainingInParameterBindingPattern.2.ts(3,6): error TS2537: Type '{}' has no matching index signature for type 'string'.
++optionalChainingInParameterBindingPattern.2.ts(6,6): error TS2537: Type '{}' has no matching index signature for type 'string'.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== optionalChainingInParameterBindingPattern.2.ts (2 errors) ====
+     // https://github.com/microsoft/TypeScript/issues/36295
+     const a = (): { d: string } | undefined => undefined;
+     (({ [a()?.d]: c = "" }) => { var a; })();
+-         ~
+-!!! error TS2373: Parameter '{ [a()?.d]: c = "" }' cannot reference identifier 'a' declared after it.
++         ~~~~~~
++!!! error TS2537: Type '{}' has no matching index signature for type 'string'.
+     
+     const x = "";
+     (({ [a()?.d]: c }, d = x) => { var x; })();
+-                           ~
+-!!! error TS2373: Parameter 'd' cannot reference identifier 'x' declared after it.
++         ~~~~~~
++!!! error TS2537: Type '{}' has no matching index signature for type 'string'.

@@ -1,0 +1,99 @@
+b-ext.js(3,14): error TS2339: Property 'x' does not exist on type 'B'.
+e-ext.js(3,14): error TS2339: Property 'x' does not exist on type 'E'.
+h.js(3,14): error TS2339: Property 'x' does not exist on type 'H'.
+
+
+==== node.d.ts (0 errors) ====
+    declare function require(id: string): any;
+    declare var module: any, exports: any;
+    
+==== a-ext.js (0 errors) ====
+    exports.A = function () {
+        this.x = 1;
+    };
+    
+==== a.js (0 errors) ====
+    const { A } = require("./a-ext");
+    
+    /** @param {A} p */
+    function a(p) { p.x; }
+    
+==== b-ext.js (1 errors) ====
+    exports.B = class {
+        constructor() {
+            this.x = 1;
+                 ~
+!!! error TS2339: Property 'x' does not exist on type 'B'.
+        }
+    };
+    
+==== b.js (0 errors) ====
+    const { B } = require("./b-ext");
+    
+    /** @param {B} p */
+    function b(p) { p.x; }
+    
+==== c-ext.js (0 errors) ====
+    export function C() {
+        this.x = 1;
+    }
+    
+==== c.js (0 errors) ====
+    const { C } = require("./c-ext");
+    
+    /** @param {C} p */
+    function c(p) { p.x; }
+    
+==== d-ext.js (0 errors) ====
+    export var D = function() {
+        this.x = 1;
+    };
+    
+==== d.js (0 errors) ====
+    const { D } = require("./d-ext");
+    
+    /** @param {D} p */
+    function d(p) { p.x; }
+    
+==== e-ext.js (1 errors) ====
+    export class E {
+        constructor() {
+            this.x = 1;
+                 ~
+!!! error TS2339: Property 'x' does not exist on type 'E'.
+        }
+    }
+    
+==== e.js (0 errors) ====
+    const { E } = require("./e-ext");
+    
+    /** @param {E} p */
+    function e(p) { p.x; }
+    
+==== f.js (0 errors) ====
+    var F = function () {
+        this.x = 1;
+    };
+    
+    /** @param {F} p */
+    function f(p) { p.x; }
+    
+==== g.js (0 errors) ====
+    function G() {
+        this.x = 1;
+    }
+    
+    /** @param {G} p */
+    function g(p) { p.x; }
+    
+==== h.js (1 errors) ====
+    class H {
+        constructor() {
+            this.x = 1;
+                 ~
+!!! error TS2339: Property 'x' does not exist on type 'H'.
+        }
+    }
+    
+    /** @param {H} p */
+    function h(p) { p.x; }

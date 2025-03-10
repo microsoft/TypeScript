@@ -1,0 +1,9 @@
+moduleAugmentationGlobal6.ts(1,9): error TS2669: Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.
+
+
+==== moduleAugmentationGlobal6.ts (1 errors) ====
+    declare global {
+            ~~~~~~
+!!! error TS2669: Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.
+        interface Array<T> { x }
+    }

@@ -1,0 +1,15 @@
+--- old.evalAfter0.errors.txt
++++ new.evalAfter0.errors.txt
+@@= skipped -0, +-1 lines =@@
+-evalAfter0.ts(4,2): error TS2695: Left side of comma operator is unused and has no side effects.
+-
+-
+-==== evalAfter0.ts (1 errors) ====
+-    (0,eval)("10"); // fine: special case for eval
+-    
+-    declare var eva;
+-    (0,eva)("10"); // error: no side effect left of comma (suspect of missing method name or something)
+-     ~
+-!!! error TS2695: Left side of comma operator is unused and has no side effects.
+@@= skipped --1, +1 lines =@@
++<no content>

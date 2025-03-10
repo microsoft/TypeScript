@@ -1,0 +1,17 @@
+staticClassProps.ts(4,9): error TS1128: Declaration or statement expected.
+staticClassProps.ts(6,1): error TS1128: Declaration or statement expected.
+
+
+==== staticClassProps.ts (2 errors) ====
+    class C
+    {
+        public foo() {
+            static z = 1;
+            ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+        }
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    
+    

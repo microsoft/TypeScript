@@ -1,0 +1,165 @@
+--- old.inferFromGenericFunctionReturnTypes3.errors.txt
++++ new.inferFromGenericFunctionReturnTypes3.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'CallableFunction'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'NewableFunction'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++inferFromGenericFunctionReturnTypes3.ts(3,25): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++inferFromGenericFunctionReturnTypes3.ts(4,12): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+ inferFromGenericFunctionReturnTypes3.ts(28,30): error TS2345: Argument of type 'string' is not assignable to parameter of type '"bar"'.
+-inferFromGenericFunctionReturnTypes3.ts(180,26): error TS2322: Type '{ state: State.A; }[] | { state: State.B; }[]' is not assignable to type '{ state: State.A; }[]'.
+-  Type '{ state: State.B; }[]' is not assignable to type '{ state: State.A; }[]'.
+-    Type '{ state: State.B; }' is not assignable to type '{ state: State.A; }'.
+-      Types of property 'state' are incompatible.
+-        Type 'State.B' is not assignable to type 'State.A'.
++inferFromGenericFunctionReturnTypes3.ts(44,21): error TS2339: Property 'map' does not exist on type '{}'.
++inferFromGenericFunctionReturnTypes3.ts(44,25): error TS7006: Parameter 'v' implicitly has an 'any' type.
++inferFromGenericFunctionReturnTypes3.ts(48,10): error TS2304: Cannot find name 'Array'.
++inferFromGenericFunctionReturnTypes3.ts(50,16): error TS2304: Cannot find name 'Array'.
++inferFromGenericFunctionReturnTypes3.ts(50,51): error TS2488: Type '[any, any]' must have a '[Symbol.iterator]()' method that returns an iterator.
++inferFromGenericFunctionReturnTypes3.ts(50,52): error TS7031: Binding element 'x' implicitly has an 'any' type.
++inferFromGenericFunctionReturnTypes3.ts(50,55): error TS7031: Binding element 'y' implicitly has an 'any' type.
++inferFromGenericFunctionReturnTypes3.ts(74,16): error TS2339: Property 'map' does not exist on type '{}'.
++inferFromGenericFunctionReturnTypes3.ts(74,21): error TS7006: Parameter 'value' implicitly has an 'any' type.
++inferFromGenericFunctionReturnTypes3.ts(85,13): error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++inferFromGenericFunctionReturnTypes3.ts(85,17): error TS2304: Cannot find name 'Object'.
++inferFromGenericFunctionReturnTypes3.ts(85,38): error TS7006: Parameter 'key' implicitly has an 'any' type.
++inferFromGenericFunctionReturnTypes3.ts(98,23): error TS2339: Property 'map' does not exist on type '{}'.
++inferFromGenericFunctionReturnTypes3.ts(141,28): error TS2339: Property 'map' does not exist on type '{}'.
++inferFromGenericFunctionReturnTypes3.ts(141,32): error TS7006: Parameter 'name' implicitly has an 'any' type.
++inferFromGenericFunctionReturnTypes3.ts(156,16): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++inferFromGenericFunctionReturnTypes3.ts(156,24): error TS2304: Cannot find name 'Array'.
++inferFromGenericFunctionReturnTypes3.ts(159,12): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+ 
+ 
+-==== inferFromGenericFunctionReturnTypes3.ts (2 errors) ====
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'CallableFunction'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'NewableFunction'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== inferFromGenericFunctionReturnTypes3.ts (21 errors) ====
+     // Repros from #5487
+     
+     function truePromise(): Promise<true> {
++                            ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+         return Promise.resolve(true);
++               ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+     }
+     
+     interface Wrap<T> {
+@@= skipped -52, +91 lines =@@
+     
+     let a: FolderContentItem[] = [];
+     a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' }));
++                        ~~~
++!!! error TS2339: Property 'map' does not exist on type '{}'.
++                            ~
++!!! error TS7006: Parameter 'v' implicitly has an 'any' type.
+     
+     // Repro from #11312
+     
+     let arr: Array<[number, number]> = [[1, 2]]
++             ~~~~~
++!!! error TS2304: Cannot find name 'Array'.
+     
+     let mappedArr: Array<[number, number]> = arr.map(([x, y]) => {
++                   ~~~~~
++!!! error TS2304: Cannot find name 'Array'.
++                                                      ~~~~~~
++!!! error TS2488: Type '[any, any]' must have a '[Symbol.iterator]()' method that returns an iterator.
++                                                       ~
++!!! error TS7031: Binding element 'x' implicitly has an 'any' type.
++                                                          ~
++!!! error TS7031: Binding element 'y' implicitly has an 'any' type.
+         return [x, y];
+     })
+     
+@@= skipped -30, +44 lines =@@
+     function bug(): Diagnostic[] {
+     	let values: any[] = [];
+     	return values.map((value) => {
++    	              ~~~
++!!! error TS2339: Property 'map' does not exist on type '{}'.
++    	                   ~~~~~
++!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
+     		return {
+     			severity: DiagnosticSeverity.Error,
+     			message: 'message'
+@@= skipped -11, +15 lines =@@
+     
+     function objectToMap(obj: any) {
+     	return new Map(Object.keys(obj).map(key => [key, obj[key]]));
++    	           ~~~
++!!! error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++    	               ~~~~~~
++!!! error TS2304: Cannot find name 'Object'.
++    	                                    ~~~
++!!! error TS7006: Parameter 'key' implicitly has an 'any' type.
+     };
+     
+     // Repro from #24352
+@@= skipped -13, +19 lines =@@
+     function createPerson(): Person {
+       return {
+         phoneNumbers: [1].map(() => ({
++                          ~~~
++!!! error TS2339: Property 'map' does not exist on type '{}'.
+           __typename: 'PhoneNumber'
+         }))
+       };
+@@= skipped -43, +45 lines =@@
+     }
+     
+     const a3: I[] = ['a', 'b'].map(name => {
++                               ~~~
++!!! error TS2339: Property 'map' does not exist on type '{}'.
++                                   ~~~~
++!!! error TS7006: Parameter 'name' implicitly has an 'any' type.
+         return {
+             code: 'mapped',
+             name,
+@@= skipped -15, +19 lines =@@
+     };
+      
+     type F = () => Promise<Array<Player>>;
++                   ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
++                           ~~~~~
++!!! error TS2304: Cannot find name 'Array'.
+      
+     const f1: F = () => {
+         return Promise.all([
++               ~~~~~~~
++!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+             {
+                 name: "David Gomes",
+                 age: 23,
+@@= skipped -24, +30 lines =@@
+     type Foo = { state: State }
+     declare function bar<T>(f: () => T[]): T[];
+     let x: Foo[] = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]);  // Error
+-                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2322: Type '{ state: State.A; }[] | { state: State.B; }[]' is not assignable to type '{ state: State.A; }[]'.
+-!!! error TS2322:   Type '{ state: State.B; }[]' is not assignable to type '{ state: State.A; }[]'.
+-!!! error TS2322:     Type '{ state: State.B; }' is not assignable to type '{ state: State.A; }'.
+-!!! error TS2322:       Types of property 'state' are incompatible.
+-!!! error TS2322:         Type 'State.B' is not assignable to type 'State.A'.
+-!!! related TS6502 inferFromGenericFunctionReturnTypes3.ts:179:28: The expected type comes from the return type of this signature.
+     
+     // Repros from #31443
+     

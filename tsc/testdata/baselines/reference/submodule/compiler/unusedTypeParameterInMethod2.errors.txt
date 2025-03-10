@@ -1,0 +1,14 @@
+unusedTypeParameterInMethod2.ts(2,18): error TS6196: 'Y' is declared but never used.
+
+
+==== unusedTypeParameterInMethod2.ts (1 errors) ====
+    class A {
+        public f1<X, Y, Z>() {
+                     ~
+!!! error TS6196: 'Y' is declared but never used.
+            var a: X;
+            var b: Z;
+            a;
+            b;
+        }
+    }

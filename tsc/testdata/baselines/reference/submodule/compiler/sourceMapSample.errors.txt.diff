@@ -1,0 +1,19 @@
+--- old.sourceMapSample.errors.txt
++++ new.sourceMapSample.errors.txt
+@@= skipped -0, +0 lines =@@
+-sourceMapSample.ts(14,45): error TS2694: Namespace 'Foo.Bar' has no exported member 'Greeter'.
++sourceMapSample.ts(14,41): error TS2694: Namespace 'Foo' has no exported member 'Bar'.
+ 
+ 
+ ==== sourceMapSample.ts (1 errors) ====
+@@= skipped -15, +15 lines =@@
+     
+     
+         function foo(greeting: string): Foo.Bar.Greeter {
+-                                                ~~~~~~~
+-!!! error TS2694: Namespace 'Foo.Bar' has no exported member 'Greeter'.
++                                            ~~~
++!!! error TS2694: Namespace 'Foo' has no exported member 'Bar'.
+             return new Greeter(greeting);
+         }
+     

@@ -1,0 +1,16 @@
+--- old.allowSyntheticDefaultImports8.errors.txt
++++ new.allowSyntheticDefaultImports8.errors.txt
+@@= skipped -0, +0 lines =@@
+-a.ts(1,10): error TS2305: Module '"./b"' has no exported member 'default'.
++a.ts(1,10): error TS2305: Module '""b.d.ts""' has no exported member 'default'.
+ 
+ 
+ ==== b.d.ts (0 errors) ====
+@@= skipped -8, +8 lines =@@
+ ==== a.ts (1 errors) ====
+     import { default as Foo } from "./b";
+              ~~~~~~~
+-!!! error TS2305: Module '"./b"' has no exported member 'default'.
++!!! error TS2305: Module '""b.d.ts""' has no exported member 'default'.
+     Foo.bar();
+     Foo.foo();

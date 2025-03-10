@@ -1,0 +1,255 @@
+ifDoWhileStatements.ts(44,5): error TS2873: This kind of expression is always falsy.
+ifDoWhileStatements.ts(45,8): error TS2873: This kind of expression is always falsy.
+ifDoWhileStatements.ts(46,13): error TS2873: This kind of expression is always falsy.
+ifDoWhileStatements.ts(48,5): error TS2873: This kind of expression is always falsy.
+ifDoWhileStatements.ts(49,8): error TS2873: This kind of expression is always falsy.
+ifDoWhileStatements.ts(50,13): error TS2873: This kind of expression is always falsy.
+ifDoWhileStatements.ts(56,5): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(57,8): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(58,13): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(60,5): error TS2873: This kind of expression is always falsy.
+ifDoWhileStatements.ts(61,8): error TS2873: This kind of expression is always falsy.
+ifDoWhileStatements.ts(62,13): error TS2873: This kind of expression is always falsy.
+ifDoWhileStatements.ts(64,5): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(65,8): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(66,13): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(68,5): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(69,8): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(70,13): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(72,5): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(73,8): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(74,13): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(76,5): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(77,8): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(78,13): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(80,5): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(81,8): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(82,13): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(84,5): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(85,8): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(86,13): error TS2872: This kind of expression is always truthy.
+
+
+==== ifDoWhileStatements.ts (30 errors) ====
+    interface I {
+        id: number;
+    }
+    
+    class C implements I {
+        id: number;
+        name: string;
+    }
+    
+    class C2 extends C {
+        valid: boolean;
+    }
+    
+    class D<T>{
+        source: T;
+        recurse: D<T>;
+        wrapped: D<D<T>>
+    }
+    
+    function F(x: string): number { return 42; }
+    function F2(x: number): boolean { return x < 42; }
+    
+    module M {
+        export class A {
+            name: string;
+        }
+    
+        export function F2(x: number): string { return x.toString(); }
+    }
+    
+    module N {
+        export class A {
+            id: number;
+        }
+    
+        export function F2(x: number): string { return x.toString(); }
+    }
+    
+    // literals
+    if (true) { }
+    while (true) { }
+    do { }while(true)
+    
+    if (null) { }
+        ~~~~
+!!! error TS2873: This kind of expression is always falsy.
+    while (null) { }
+           ~~~~
+!!! error TS2873: This kind of expression is always falsy.
+    do { }while(null)
+                ~~~~
+!!! error TS2873: This kind of expression is always falsy.
+    
+    if (undefined) { }
+        ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
+    while (undefined) { }
+           ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
+    do { }while(undefined)
+                ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
+    
+    if (0.0) { }
+    while (0.0) { }
+    do { }while(0.0)
+    
+    if ('a string') { }
+        ~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    while ('a string') { }
+           ~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    do { }while('a string')
+                ~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    
+    if ('') { }
+        ~~
+!!! error TS2873: This kind of expression is always falsy.
+    while ('') { }
+           ~~
+!!! error TS2873: This kind of expression is always falsy.
+    do { }while('')
+                ~~
+!!! error TS2873: This kind of expression is always falsy.
+    
+    if (/[a-z]/) { }
+        ~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    while (/[a-z]/) { }
+           ~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    do { }while(/[a-z]/)
+                ~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    
+    if ([]) { }
+        ~~
+!!! error TS2872: This kind of expression is always truthy.
+    while ([]) { }
+           ~~
+!!! error TS2872: This kind of expression is always truthy.
+    do { }while([])
+                ~~
+!!! error TS2872: This kind of expression is always truthy.
+    
+    if ([1, 2]) { }
+        ~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    while ([1, 2]) { }
+           ~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    do { }while([1, 2])
+                ~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    
+    if ({}) { }
+        ~~
+!!! error TS2872: This kind of expression is always truthy.
+    while ({}) { }
+           ~~
+!!! error TS2872: This kind of expression is always truthy.
+    do { }while({})
+                ~~
+!!! error TS2872: This kind of expression is always truthy.
+    
+    if ({ x: 1, y: 'a' }) { }
+        ~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    while ({ x: 1, y: 'a' }) { }
+           ~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    do { }while({ x: 1, y: 'a' })
+                ~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    
+    if (() => 43) { }
+        ~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    while (() => 43) { }
+           ~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    do { }while(() => 43)
+                ~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    
+    if (new C()) { }
+    while (new C()) { }
+    do { }while(new C())
+    
+    if (new D<C>()) { }
+    while (new D<C>()) { }
+    do { }while(new D<C>())
+    
+    // references
+    var a = true;
+    if (a) { }
+    while (a) { }
+    do { }while(a)
+    
+    var b = null;
+    if (b) { }
+    while (b) { }
+    do { }while(b)
+    
+    var c = undefined;
+    if (c) { }
+    while (c) { }
+    do { }while(c)
+    
+    var d = 0.0;
+    if (d) { }
+    while (d) { }
+    do { }while(d)
+    
+    var e = 'a string';
+    if (e) { }
+    while (e) { }
+    do { }while(e)
+    
+    var f = '';
+    if (f) { }
+    while (f) { }
+    do { }while(f)
+    
+    var g = /[a-z]/
+    if (g) { }
+    while (g) { }
+    do { }while(g)
+    
+    var h = [];
+    if (h) { }
+    while (h) { }
+    do { }while(h)
+    
+    var i = [1, 2];
+    if (i) { }
+    while (i) { }
+    do { }while(i)
+    
+    var j = {};
+    if (j) { }
+    while (j) { }
+    do { }while(j)
+    
+    var k = { x: 1, y: 'a' };
+    if (k) { }
+    while (k) { }
+    do { }while(k)
+    
+    function fn(x?: string): I { return null; }
+    if (fn()) { }
+    while (fn()) { }
+    do { }while(fn())
+    
+    if (fn) { }
+    while (fn) { }
+    do { }while(fn)
+    
+    
+    

@@ -1,0 +1,22 @@
+--- old.tripleSlashTypesReferenceWithMissingExports(module=node16).errors.txt
++++ new.tripleSlashTypesReferenceWithMissingExports(module=node16).errors.txt
+@@= skipped -0, +-1 lines =@@
+-usage.ts(1,23): error TS2688: Cannot find type definition file for 'pkg'.
+-
+-
+-==== node_modules/pkg/index.d.ts (0 errors) ====
+-    interface GlobalThing { a: number }
+-==== node_modules/pkg/package.json (0 errors) ====
+-    {
+-        "name": "pkg",
+-        "types": "index.d.ts",
+-        "exports": "some-other-thing.js"
+-    }
+-==== usage.ts (1 errors) ====
+-    /// <reference types="pkg" />
+-                          ~~~
+-!!! error TS2688: Cannot find type definition file for 'pkg'.
+-    
+-    const a: GlobalThing = { a: 0 };
+@@= skipped --1, +1 lines =@@
++<no content>

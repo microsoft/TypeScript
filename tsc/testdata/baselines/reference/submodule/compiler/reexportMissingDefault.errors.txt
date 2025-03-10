@@ -1,0 +1,11 @@
+a.ts(2,10): error TS2305: Module '""b.ts""' has no exported member 'default'.
+
+
+==== b.ts (0 errors) ====
+    export const b = null;
+    
+==== a.ts (1 errors) ====
+    export { b } from "./b";
+    export { default } from "./b";
+             ~~~~~~~
+!!! error TS2305: Module '""b.ts""' has no exported member 'default'.

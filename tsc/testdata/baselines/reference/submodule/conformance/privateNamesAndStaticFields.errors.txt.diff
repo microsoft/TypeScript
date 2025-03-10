@@ -1,0 +1,40 @@
+--- old.privateNamesAndStaticFields.errors.txt
++++ new.privateNamesAndStaticFields.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'CallableFunction'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'NewableFunction'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ privateNamesAndStaticFields.ts(6,11): error TS18013: Property '#foo' is not accessible outside class 'B' because it has a private identifier.
+-privateNamesAndStaticFields.ts(7,11): error TS2339: Property '#bar' does not exist on type 'typeof B'.
++privateNamesAndStaticFields.ts(7,11): error TS2339: Property '#bar' does not exist on type '{ new(): B; #foo: string; prototype: B; }'.
+ 
+ 
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'CallableFunction'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'NewableFunction'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+ ==== privateNamesAndStaticFields.ts (2 errors) ====
+     class A {
+         static #foo: number;
+@@= skipped -12, +32 lines =@@
+ !!! error TS18013: Property '#foo' is not accessible outside class 'B' because it has a private identifier.
+             B.#bar; // Error
+               ~~~~
+-!!! error TS2339: Property '#bar' does not exist on type 'typeof B'.
++!!! error TS2339: Property '#bar' does not exist on type '{ new(): B; #foo: string; prototype: B; }'.
+         }
+     }
+     

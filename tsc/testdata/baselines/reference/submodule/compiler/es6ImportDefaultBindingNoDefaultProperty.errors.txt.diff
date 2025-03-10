@@ -1,0 +1,16 @@
+--- old.es6ImportDefaultBindingNoDefaultProperty.errors.txt
++++ new.es6ImportDefaultBindingNoDefaultProperty.errors.txt
+@@= skipped -0, +-1 lines =@@
+-es6ImportDefaultBindingNoDefaultProperty_1.ts(1,8): error TS1192: Module '"es6ImportDefaultBindingNoDefaultProperty_0"' has no default export.
+-
+-
+-==== es6ImportDefaultBindingNoDefaultProperty_0.ts (0 errors) ====
+-    export var a = 10;
+-    
+-==== es6ImportDefaultBindingNoDefaultProperty_1.ts (1 errors) ====
+-    import defaultBinding from "./es6ImportDefaultBindingNoDefaultProperty_0";
+-           ~~~~~~~~~~~~~~
+-!!! error TS1192: Module '"es6ImportDefaultBindingNoDefaultProperty_0"' has no default export.
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

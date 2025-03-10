@@ -1,0 +1,44 @@
+--- old.symbolDeclarationEmit3.errors.txt
++++ new.symbolDeclarationEmit3.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++symbolDeclarationEmit3.ts(2,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
++symbolDeclarationEmit3.ts(2,6): error TS2304: Cannot find name 'Symbol'.
++symbolDeclarationEmit3.ts(3,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
++symbolDeclarationEmit3.ts(3,6): error TS2304: Cannot find name 'Symbol'.
++symbolDeclarationEmit3.ts(4,6): error TS2304: Cannot find name 'Symbol'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== symbolDeclarationEmit3.ts (5 errors) ====
++    class C {
++        [Symbol.toPrimitive](x: number);
++        ~~~~~~~~~~~~~~~~~~~~
++!!! error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
++        [Symbol.toPrimitive](x: string);
++        ~~~~~~~~~~~~~~~~~~~~
++!!! error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
++        [Symbol.toPrimitive](x: any) { }
++         ~~~~~~
++!!! error TS2304: Cannot find name 'Symbol'.
++    }

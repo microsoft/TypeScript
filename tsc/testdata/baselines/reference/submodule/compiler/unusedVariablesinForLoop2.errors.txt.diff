@@ -1,0 +1,15 @@
+--- old.unusedVariablesinForLoop2.errors.txt
++++ new.unusedVariablesinForLoop2.errors.txt
+@@= skipped -0, +0 lines =@@
+-unusedVariablesinForLoop2.ts(2,16): error TS6133: 'elem' is declared but its value is never read.
++unusedVariablesinForLoop2.ts(2,10): error TS6133: 'elem' is declared but its value is never read.
+ 
+ 
+ ==== unusedVariablesinForLoop2.ts (1 errors) ====
+     function f1 () {
+         for (const elem in ["a", "b", "c"]) {
+-                   ~~~~
++             ~~~~~~~~~~
+ !!! error TS6133: 'elem' is declared but its value is never read.
+     
+         }

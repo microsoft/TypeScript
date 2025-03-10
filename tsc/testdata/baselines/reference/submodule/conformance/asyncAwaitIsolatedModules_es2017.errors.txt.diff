@@ -1,0 +1,15 @@
+--- old.asyncAwaitIsolatedModules_es2017.errors.txt
++++ new.asyncAwaitIsolatedModules_es2017.errors.txt
+@@= skipped -0, +0 lines =@@
+-asyncAwaitIsolatedModules_es2017.ts(1,27): error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++asyncAwaitIsolatedModules_es2017.ts(1,27): error TS2307: Cannot find module 'missing' or its corresponding type declarations.
+ 
+ 
+ ==== asyncAwaitIsolatedModules_es2017.ts (1 errors) ====
+     import { MyPromise } from "missing";
+                               ~~~~~~~~~
+-!!! error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
++!!! error TS2307: Cannot find module 'missing' or its corresponding type declarations.
+     
+     declare var p: Promise<number>;
+     declare var mp: MyPromise<number>;

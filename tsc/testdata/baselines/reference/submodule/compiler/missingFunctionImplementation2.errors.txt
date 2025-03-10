@@ -1,0 +1,13 @@
+missingFunctionImplementation2_b.ts(1,17): error TS2391: Function implementation is missing or not immediately following the declaration.
+
+
+==== missingFunctionImplementation2_a.ts (0 errors) ====
+    export {};
+    declare module "./missingFunctionImplementation2_b" {
+      export function f(a, b): void;
+    }
+    
+==== missingFunctionImplementation2_b.ts (1 errors) ====
+    export function f(a?, b?);
+                    ~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.

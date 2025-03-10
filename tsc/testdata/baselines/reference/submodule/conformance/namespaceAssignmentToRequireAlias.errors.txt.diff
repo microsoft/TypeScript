@@ -1,0 +1,16 @@
+--- old.namespaceAssignmentToRequireAlias.errors.txt
++++ new.namespaceAssignmentToRequireAlias.errors.txt
+@@= skipped -0, +0 lines =@@
+-bug40140.js(1,19): error TS7016: Could not find a declaration file for module 'untyped'. 'node_modules/untyped/index.js' implicitly has an 'any' type.
++bug40140.js(1,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ 
+ 
+ ==== bug40140.js (1 errors) ====
+     const u = require('untyped');
+-                      ~~~~~~~~~
+-!!! error TS7016: Could not find a declaration file for module 'untyped'. 'node_modules/untyped/index.js' implicitly has an 'any' type.
++              ~~~~~~~
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+     u.assignment.nested = true
+     u.noError()
+     

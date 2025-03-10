@@ -1,0 +1,18 @@
+--- old.computedEnumMemberSyntacticallyString2(isolatedmodules=true).errors.txt
++++ new.computedEnumMemberSyntacticallyString2(isolatedmodules=true).errors.txt
+@@= skipped -3, +3 lines =@@
+ foo.ts(15,7): error TS18055: 'Foo.G' has a string type, but must have syntactically recognizable string syntax when 'isolatedModules' is enabled.
+ 
+ 
+-==== ./foo.ts (4 errors) ====
++==== foo.ts (4 errors) ====
+     import { BAR } from './bar';
+     const LOCAL = 'LOCAL';
+     
+@@= skipped -30, +30 lines =@@
+       J = H
+     }
+     
+-==== ./bar.ts (0 errors) ====
++==== bar.ts (0 errors) ====
+     export const BAR = 'bar';

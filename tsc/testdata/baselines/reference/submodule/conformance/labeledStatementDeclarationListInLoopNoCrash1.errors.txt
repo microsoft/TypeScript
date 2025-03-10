@@ -1,0 +1,12 @@
+labeledStatementDeclarationListInLoopNoCrash1.ts(3,11): error TS1123: Variable declaration list cannot be empty.
+
+
+==== labeledStatementDeclarationListInLoopNoCrash1.ts (1 errors) ====
+    for (let x of []) {
+      var v0 = x;
+      foo: var;
+              
+!!! error TS1123: Variable declaration list cannot be empty.
+      (function() { return x + v0});
+    }
+    

@@ -1,0 +1,16 @@
+--- old.outModuleConcatCommonjs.errors.txt
++++ new.outModuleConcatCommonjs.errors.txt
+@@= skipped -0, +-1 lines =@@
+-error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
+-
+-
+-!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
+-==== ref/a.ts (0 errors) ====
+-    export class A { }
+-    
+-==== b.ts (0 errors) ====
+-    import {A} from "./ref/a";
+-    export class B extends A { }
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

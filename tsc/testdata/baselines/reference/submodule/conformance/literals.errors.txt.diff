@@ -1,0 +1,31 @@
+--- old.literals.errors.txt
++++ new.literals.errors.txt
+@@= skipped -1, +1 lines =@@
+ literals.ts(8,17): error TS18050: The value 'null' cannot be used here.
+ literals.ts(9,9): error TS18050: The value 'undefined' cannot be used here.
+ literals.ts(9,21): error TS18050: The value 'undefined' cannot be used here.
+-literals.ts(19,9): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
+-literals.ts(24,9): error TS1121: Octal literals are not allowed. Use the syntax '-0o3'.
++literals.ts(19,9): error TS1121: Octal literals are not allowed. Use the syntax '01'.
++literals.ts(24,10): error TS1121: Octal literals are not allowed. Use the syntax '03'.
+ 
+ 
+ ==== literals.ts (6 errors) ====
+@@= skipped -33, +33 lines =@@
+     var n = 1e4;
+     var n = 001; // Error in ES5
+             ~~~
+-!!! error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
++!!! error TS1121: Octal literals are not allowed. Use the syntax '01'.
+     var n = 0x1;
+     var n = -1;
+     var n = -1.0;
+     var n = -1e-4;
+     var n = -003; // Error in ES5
+-            ~~~~
+-!!! error TS1121: Octal literals are not allowed. Use the syntax '-0o3'.
++             ~~~
++!!! error TS1121: Octal literals are not allowed. Use the syntax '03'.
+     var n = -0x1;
+     
+     var s: string;

@@ -1,0 +1,28 @@
+source.js(7,16): error TS2350: Only a void function can be called with the 'new' keyword.
+
+
+==== source.js (1 errors) ====
+    /**
+     * @param {number} x
+     * @param {number} y
+     */
+    export function Point(x, y) {
+        if (!(this instanceof Point)) {
+            return new Point(x, y);
+                   ~~~~~~~~~~~~~~~
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
+        }
+        this.x = x;
+        this.y = y;
+    }
+    
+==== referencer.js (0 errors) ====
+    import {Point} from "./source";
+    
+    /**
+     * @param {Point} p
+     */
+    export function magnitude(p) {
+        return Math.sqrt(p.x ** 2 + p.y ** 2);
+    }
+    

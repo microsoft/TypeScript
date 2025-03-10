@@ -1,0 +1,61 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+constDeclarations-errors.ts(2,7): error TS1155: 'const' declarations must be initialized.
+constDeclarations-errors.ts(3,7): error TS1155: 'const' declarations must be initialized.
+constDeclarations-errors.ts(4,7): error TS1155: 'const' declarations must be initialized.
+constDeclarations-errors.ts(4,11): error TS1155: 'const' declarations must be initialized.
+constDeclarations-errors.ts(4,15): error TS1155: 'const' declarations must be initialized.
+constDeclarations-errors.ts(4,27): error TS1155: 'const' declarations must be initialized.
+constDeclarations-errors.ts(9,27): error TS2588: Cannot assign to 'c8' because it is a constant.
+constDeclarations-errors.ts(12,11): error TS1155: 'const' declarations must be initialized.
+constDeclarations-errors.ts(15,20): error TS1155: 'const' declarations must be initialized.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== constDeclarations-errors.ts (9 errors) ====
+    // error, missing intialicer
+    const c1;
+          ~~
+!!! error TS1155: 'const' declarations must be initialized.
+    const c2: number;
+          ~~
+!!! error TS1155: 'const' declarations must be initialized.
+    const c3, c4, c5 :string, c6;  // error, missing initialicer
+          ~~
+!!! error TS1155: 'const' declarations must be initialized.
+              ~~
+!!! error TS1155: 'const' declarations must be initialized.
+                  ~~
+!!! error TS1155: 'const' declarations must be initialized.
+                              ~~
+!!! error TS1155: 'const' declarations must be initialized.
+    
+    for(const c in {}) { }
+    
+    // error, assigning to a const
+    for(const c8 = 0; c8 < 1; c8++) { }
+                              ~~
+!!! error TS2588: Cannot assign to 'c8' because it is a constant.
+    
+    // error, can not be unintalized
+    for(const c9; c9 < 1;) { }
+              ~~
+!!! error TS1155: 'const' declarations must be initialized.
+    
+    // error, can not be unintalized
+    for(const c10 = 0, c11; c10 < 1;) { }
+                       ~~~
+!!! error TS1155: 'const' declarations must be initialized.

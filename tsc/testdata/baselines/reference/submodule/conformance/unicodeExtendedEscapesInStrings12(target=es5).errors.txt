@@ -1,0 +1,8 @@
+unicodeExtendedEscapesInStrings12.ts(1,13): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+
+
+==== unicodeExtendedEscapesInStrings12.ts (1 errors) ====
+    var x = "\u{FFFFFFFF}";
+                ~~~~~~~~
+!!! error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+    

@@ -1,0 +1,23 @@
+--- old.noDefaultLib.errors.txt
++++ new.noDefaultLib.errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS2318: Cannot find global type 'Boolean'.
+-error TS2318: Cannot find global type 'IArguments'.
+-noDefaultLib.ts(4,11): error TS2317: Global type 'Array' must have 1 type parameter(s).
++noDefaultLib.ts(4,11): error TS2428: All declarations of 'Array' must have identical type parameters.
++lib.es5.d.ts(--,--): error TS2428: All declarations of 'Array' must have identical type parameters.
+ 
+ 
+-!!! error TS2318: Cannot find global type 'Boolean'.
+-!!! error TS2318: Cannot find global type 'IArguments'.
+ ==== noDefaultLib.ts (1 errors) ====
+     /// <reference no-default-lib="true"/>
+     var x;
+     
+     interface Array {}
+               ~~~~~
+-!!! error TS2317: Global type 'Array' must have 1 type parameter(s).
++!!! error TS2428: All declarations of 'Array' must have identical type parameters.
+     interface String {}
+     interface Number {}
+     interface Object {}

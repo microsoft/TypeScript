@@ -1,0 +1,37 @@
+--- old.jsDeclarationsExportAssignedClassExpressionAnonymousWithSub.errors.txt
++++ new.jsDeclarationsExportAssignedClassExpressionAnonymousWithSub.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++index.js(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(6,14): error TS2339: Property 't' does not exist on type 'exports'.
++index.js(9,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++index.js(11,14): error TS2339: Property 'instance' does not exist on type 'Sub'.
++index.js(11,29): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
++==== index.js (5 errors) ====
++    module.exports = class {
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++        /**
++         * @param {number} p
++         */
++        constructor(p) {
++            this.t = 12 + p;
++                 ~
++!!! error TS2339: Property 't' does not exist on type 'exports'.
++        }
++    }
++    module.exports.Sub = class {
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++        constructor() {
++            this.instance = new module.exports(10);
++                 ~~~~~~~~
++!!! error TS2339: Property 'instance' does not exist on type 'Sub'.
++                                ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++        }
++    }
++    

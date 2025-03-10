@@ -1,0 +1,42 @@
+--- old.assignmentCompatBug2.errors.txt
++++ new.assignmentCompatBug2.errors.txt
+@@= skipped -0, +0 lines =@@
+ assignmentCompatBug2.ts(1,27): error TS2353: Object literal may only specify known properties, and 'a' does not exist in type '{ b: number; }'.
+ assignmentCompatBug2.ts(3,8): error TS2353: Object literal may only specify known properties, and 'a' does not exist in type '{ b: number; }'.
+ assignmentCompatBug2.ts(5,13): error TS2353: Object literal may only specify known properties, and 'a' does not exist in type '{ b: number; }'.
+-assignmentCompatBug2.ts(15,1): error TS2741: Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; }' but required in type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
+-assignmentCompatBug2.ts(20,1): error TS2741: Property 'g' is missing in type '{ f: (n: number) => number; m: number; }' but required in type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
+-assignmentCompatBug2.ts(33,1): error TS2741: Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }' but required in type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
++assignmentCompatBug2.ts(15,1): error TS2741: Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; }' but required in type '{ f: (n: number) => number; g: (s: string) => number; m: number; n?: number; k?: (a: any) => any; }'.
++assignmentCompatBug2.ts(20,1): error TS2741: Property 'g' is missing in type '{ f: (n: number) => number; m: number; }' but required in type '{ f: (n: number) => number; g: (s: string) => number; m: number; n?: number; k?: (a: any) => any; }'.
++assignmentCompatBug2.ts(33,1): error TS2741: Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }' but required in type '{ f: (n: number) => number; g: (s: string) => number; m: number; n?: number; k?: (a: any) => any; }'.
+ 
+ 
+ ==== assignmentCompatBug2.ts (6 errors) ====
+@@= skipped -28, +28 lines =@@
+     
+     b3 = {
+     ~~
+-!!! error TS2741: Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; }' but required in type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
++!!! error TS2741: Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; }' but required in type '{ f: (n: number) => number; g: (s: string) => number; m: number; n?: number; k?: (a: any) => any; }'.
+ !!! related TS2728 assignmentCompatBug2.ts:7:55: 'm' is declared here.
+         f: (n) => { return 0; },
+         g: (s) => { return 0; },
+@@= skipped -8, +8 lines =@@
+     
+     b3 = {
+     ~~
+-!!! error TS2741: Property 'g' is missing in type '{ f: (n: number) => number; m: number; }' but required in type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
++!!! error TS2741: Property 'g' is missing in type '{ f: (n: number) => number; m: number; }' but required in type '{ f: (n: number) => number; g: (s: string) => number; m: number; n?: number; k?: (a: any) => any; }'.
+ !!! related TS2728 assignmentCompatBug2.ts:7:33: 'g' is declared here.
+         f: (n) => { return 0; },
+         m: 0,
+@@= skipped -16, +16 lines =@@
+     
+     b3 = {
+     ~~
+-!!! error TS2741: Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }' but required in type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
++!!! error TS2741: Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }' but required in type '{ f: (n: number) => number; g: (s: string) => number; m: number; n?: number; k?: (a: any) => any; }'.
+ !!! related TS2728 assignmentCompatBug2.ts:7:55: 'm' is declared here.
+         f: (n) => { return 0; },
+         g: (s) => { return 0; },

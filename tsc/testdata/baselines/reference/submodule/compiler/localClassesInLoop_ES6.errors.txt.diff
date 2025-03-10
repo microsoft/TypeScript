@@ -1,0 +1,37 @@
+--- old.localClassesInLoop_ES6.errors.txt
++++ new.localClassesInLoop_ES6.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Function'.
++error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'RegExp'.
++error TS2318: Cannot find global type 'String'.
++error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++localClassesInLoop_ES6.ts(7,10): error TS2339: Property 'push' does not exist on type '{}'.
++
++
++!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Function'.
++!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'RegExp'.
++!!! error TS2318: Cannot find global type 'String'.
++!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
++!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
++!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++==== localClassesInLoop_ES6.ts (1 errors) ====
++    declare function use(a: any);
++    
++    "use strict"
++    var data = [];
++    for (let x = 0; x < 2; ++x) {
++        class C { }
++        data.push(() => C);
++             ~~~~
++!!! error TS2339: Property 'push' does not exist on type '{}'.
++    }
++    
++    use(data[0]() === data[1]());

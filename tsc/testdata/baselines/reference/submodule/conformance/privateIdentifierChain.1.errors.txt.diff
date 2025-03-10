@@ -1,0 +1,24 @@
+--- old.privateIdentifierChain.1.errors.txt
++++ new.privateIdentifierChain.1.errors.txt
+@@= skipped -0, +0 lines =@@
+ privateIdentifierChain.1.ts(8,15): error TS18030: An optional chain cannot contain private identifiers.
+ privateIdentifierChain.1.ts(9,9): error TS2532: Object is possibly 'undefined'.
++privateIdentifierChain.1.ts(9,17): error TS2339: Property '#b' does not exist on type 'A | undefined'.
+ privateIdentifierChain.1.ts(9,17): error TS18030: An optional chain cannot contain private identifiers.
+ privateIdentifierChain.1.ts(10,22): error TS18030: An optional chain cannot contain private identifiers.
+ 
+ 
+-==== privateIdentifierChain.1.ts (4 errors) ====
++==== privateIdentifierChain.1.ts (5 errors) ====
+     class A {
+         a?: A
+         #b?: A;
+@@= skipped -18, +19 lines =@@
+             ~~~~~~~
+ !!! error TS2532: Object is possibly 'undefined'.
+                     ~~
++!!! error TS2339: Property '#b' does not exist on type 'A | undefined'.
++                    ~~
+ !!! error TS18030: An optional chain cannot contain private identifiers.
+             this?.getA().#b;    // Error
+                          ~~

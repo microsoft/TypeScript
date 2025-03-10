@@ -1,0 +1,35 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+privateNamesInterfaceExtendingClass.ts(10,7): error TS18013: Property '#prop' is not accessible outside class 'C' because it has a private identifier.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+==== privateNamesInterfaceExtendingClass.ts (1 errors) ====
+    class C {
+        #prop;
+        func(x: I) {
+            x.#prop = 123;
+        }
+    }
+    interface I extends C {}
+    
+    function func(x: I) {
+        x.#prop = 123;
+          ~~~~~
+!!! error TS18013: Property '#prop' is not accessible outside class 'C' because it has a private identifier.
+    }
+    
+    
