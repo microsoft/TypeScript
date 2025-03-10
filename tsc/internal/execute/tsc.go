@@ -16,7 +16,7 @@ type cbType = func(p any) any
 func CommandLine(sys System, cb cbType, commandLineArgs []string) ExitStatus {
 	parsedCommandLine := tsoptions.ParseCommandLine(commandLineArgs, sys)
 	e, watcher := executeCommandLineWorker(sys, cb, parsedCommandLine)
-	if watcher != nil {
+	if watcher == nil {
 		return e
 	}
 	return start(watcher)
