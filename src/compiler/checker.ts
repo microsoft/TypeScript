@@ -22045,6 +22045,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return isArrayOrTupleType(target);
             }
+
             if (isReadonlyArrayType(source) && isMutableArrayOrTuple(target)) {
                 if (reportErrors) {
                     reportError(Diagnostics.The_type_0_is_readonly_and_cannot_be_assigned_to_the_mutable_type_1, typeToString(source), typeToString(target));
@@ -22083,6 +22084,40 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     reportErrorResults(originalSource, originalTarget, originalSource, originalTarget, headMessage);
                 }
                 return Ternary.False;
+            }
+
+            // Before normalization: Intersections applied to unions create an explosion of types when normalized -
+            // handling those inner intersections can be very costly, so it can be beneficial to factor them out early.
+            // If both the source and target are intersections, we can remove the common types from them before formal normalization,
+            // and run a simplified comparison without those common members.
+            if (originalSource.flags & originalTarget.flags & TypeFlags.Intersection) {
+                // Set 1 for elements occuring in the source, then 2 for elements occuring in both source and target
+                const combinedTypeSet = new Map<number, number>();
+                forEach((originalSource as IntersectionType).types, t => combinedTypeSet.set(getTypeId(t), 1));
+                let hasOverlap = false;
+                forEach((originalTarget as IntersectionType).types, t => {
+                    const id = getTypeId(t);
+                    if (combinedTypeSet.has(id)) {
+                        combinedTypeSet.set(getTypeId(t), 2);
+                        hasOverlap = true;
+                    }
+                });
+                if (hasOverlap) {
+                    const filteredSource = filter((originalSource as IntersectionType).types, t => combinedTypeSet.get(getTypeId(t)) !== 2);
+                    const filteredTarget = filter((originalTarget as IntersectionType).types, t => combinedTypeSet.get(getTypeId(t)) !== 2);
+                    if (!length(filteredTarget)) {
+                        return Ternary.True; // Source has all parts of target
+                    }
+                    if (length(filteredSource)) {
+                        let result: Ternary;
+                        if (result = isRelatedTo(getIntersectionType(filteredSource), getIntersectionType(filteredTarget), recursionFlags, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
+                            return result;
+                        }
+                        // In the false case, we may still be assignable at the structural level, rather than the algebraic level
+                    }
+                    // Even if every member of the source is in the target but the target still has members left, the source may still be assignable
+                    // to the target, either if some member of the original source is assignable to the other members of the target, or if there is structural assignability
+                }
             }
 
             // Normalize the source and target types: Turn fresh literal types into regular literal types,
