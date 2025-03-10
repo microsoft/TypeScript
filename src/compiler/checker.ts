@@ -39843,18 +39843,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkNullishCoalesceOperands(node: BinaryExpression) {
-        const { left, operatorToken, right } = node;
-        if (operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
-            if (isBinaryExpression(left) && (left.operatorToken.kind === SyntaxKind.BarBarToken || left.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
-                grammarErrorOnNode(left, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(left.operatorToken.kind), tokenToString(operatorToken.kind));
-            }
-            if (isBinaryExpression(right) && (right.operatorToken.kind === SyntaxKind.BarBarToken || right.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
-                grammarErrorOnNode(right, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(right.operatorToken.kind), tokenToString(operatorToken.kind));
-            }
-
-            checkNullishCoalesceOperandLeft(node);
-            checkNullishCoalesceOperandRight(node);
+        if (node.operatorToken.kind !== SyntaxKind.QuestionQuestionToken) {
+            return;
         }
+        if (isBinaryExpression(node.parent)) {
+            const { left, operatorToken } = node.parent;
+            if (isBinaryExpression(left) && (operatorToken.kind === SyntaxKind.BarBarToken || operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
+                grammarErrorOnNode(left, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(SyntaxKind.QuestionQuestionToken), tokenToString(operatorToken.kind));
+            }
+        }
+        else if (isBinaryExpression(node.left) && node.left.operatorToken.kind === SyntaxKind.BarBarToken) {
+            grammarErrorOnNode(node.left, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(node.left.operatorToken.kind), tokenToString(SyntaxKind.QuestionQuestionToken));
+        }
+        else if (isBinaryExpression(node.right) && node.right.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
+            grammarErrorOnNode(node.right, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(SyntaxKind.QuestionQuestionToken), tokenToString(node.right.operatorToken.kind));
+        }
+        checkNullishCoalesceOperandLeft(node);
+        checkNullishCoalesceOperandRight(node);
     }
 
     function checkNullishCoalesceOperandLeft(node: BinaryExpression) {
