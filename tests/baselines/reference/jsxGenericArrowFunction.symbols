@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/jsxGenericArrowFunction.tsx] ////
+
+=== jsxGenericArrowFunction.tsx ===
+const a = <T>(b: T) => b
+>a : Symbol(a, Decl(jsxGenericArrowFunction.tsx, 0, 5))
+>T : Symbol(T, Decl(jsxGenericArrowFunction.tsx, 0, 11))
+>b : Symbol(b, Decl(jsxGenericArrowFunction.tsx, 0, 14))
+>T : Symbol(T, Decl(jsxGenericArrowFunction.tsx, 0, 11))
+>b : Symbol(b, Decl(jsxGenericArrowFunction.tsx, 0, 14))
+
