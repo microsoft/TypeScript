@@ -1,11 +1,3 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 constDeclarations-access4.ts(6,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
 constDeclarations-access4.ts(7,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
 constDeclarations-access4.ts(8,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
@@ -24,18 +16,9 @@ constDeclarations-access4.ts(21,5): error TS2540: Cannot assign to 'x' because i
 constDeclarations-access4.ts(22,5): error TS2540: Cannot assign to 'x' because it is a read-only property.
 constDeclarations-access4.ts(24,7): error TS2540: Cannot assign to 'x' because it is a read-only property.
 constDeclarations-access4.ts(26,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
-constDeclarations-access4.ts(42,5): error TS2339: Property 'toString' does not exist on type 'number'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== constDeclarations-access4.ts (19 errors) ====
+==== constDeclarations-access4.ts (18 errors) ====
     declare module M {
         const x: number;
     }
@@ -114,6 +97,4 @@ constDeclarations-access4.ts(42,5): error TS2339: Property 'toString' does not e
     +M.x;
     
     M.x.toString();
-        ~~~~~~~~
-!!! error TS2339: Property 'toString' does not exist on type 'number'.
     

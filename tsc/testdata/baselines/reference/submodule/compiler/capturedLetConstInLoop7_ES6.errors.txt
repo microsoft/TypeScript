@@ -1,12 +1,3 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-capturedLetConstInLoop7_ES6.ts(3,15): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
 capturedLetConstInLoop7_ES6.ts(230,9): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
 capturedLetConstInLoop7_ES6.ts(233,9): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
 capturedLetConstInLoop7_ES6.ts(236,9): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
@@ -17,20 +8,10 @@ capturedLetConstInLoop7_ES6.ts(311,9): error TS2367: This comparison appears to 
 capturedLetConstInLoop7_ES6.ts(314,9): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== capturedLetConstInLoop7_ES6.ts (9 errors) ====
+==== capturedLetConstInLoop7_ES6.ts (8 errors) ====
     //===let
     l0:
     for (let x of []) {
-                  ~~
-!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
         (function() { return x});
         (() => x);
         if (x == 1) {

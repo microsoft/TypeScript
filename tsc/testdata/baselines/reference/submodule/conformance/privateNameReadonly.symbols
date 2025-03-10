@@ -13,10 +13,16 @@ const C = class {
         this.#bar = console.log("should log this then throw");
 >this.#bar : Symbol(#bar, Decl(privateNameReadonly.ts, 0, 17))
 >this : Symbol(C, Decl(privateNameReadonly.ts, 0, 9))
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
     }
 }
 
 console.log(new C().foo());
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >new C().foo : Symbol(foo, Decl(privateNameReadonly.ts, 1, 13))
 >C : Symbol(C, Decl(privateNameReadonly.ts, 0, 5))
 >foo : Symbol(foo, Decl(privateNameReadonly.ts, 1, 13))

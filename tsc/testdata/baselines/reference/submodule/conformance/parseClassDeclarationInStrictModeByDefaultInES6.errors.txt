@@ -1,24 +1,9 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 parseClassDeclarationInStrictModeByDefaultInES6.ts(6,9): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 parseClassDeclarationInStrictModeByDefaultInES6.ts(6,9): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+parseClassDeclarationInStrictModeByDefaultInES6.ts(6,9): error TS2322: Type 'string' is not assignable to type 'IArguments'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== parseClassDeclarationInStrictModeByDefaultInES6.ts (2 errors) ====
+==== parseClassDeclarationInStrictModeByDefaultInES6.ts (3 errors) ====
     class C {
         interface = 10;
         public implements() { }
@@ -29,5 +14,7 @@ parseClassDeclarationInStrictModeByDefaultInES6.ts(6,9): error TS1210: Code cont
 !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
             ~~~~~~~~~
 !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+            ~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'IArguments'.
         }
     }

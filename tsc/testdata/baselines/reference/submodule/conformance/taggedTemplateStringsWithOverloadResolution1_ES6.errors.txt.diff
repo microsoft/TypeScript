@@ -5,43 +5,35 @@
 -  Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
 -taggedTemplateStringsWithOverloadResolution1_ES6.ts(10,13): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
 -  Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
--taggedTemplateStringsWithOverloadResolution1_ES6.ts(11,13): error TS2769: No overload matches this call.
++taggedTemplateStringsWithOverloadResolution1_ES6.ts(9,13): error TS2741: Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
++taggedTemplateStringsWithOverloadResolution1_ES6.ts(10,13): error TS2741: Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
+ taggedTemplateStringsWithOverloadResolution1_ES6.ts(11,13): error TS2769: No overload matches this call.
 -  Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
 -    Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
 -      Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
 -  Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
 -    Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
 -      Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
--taggedTemplateStringsWithOverloadResolution1_ES6.ts(12,13): error TS2769: No overload matches this call.
--  Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
--    Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
--      Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
--  Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
--    Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
--      Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
--taggedTemplateStringsWithOverloadResolution1_ES6.ts(13,13): error TS2769: No overload matches this call.
--  Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
--    Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
--      Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
--  Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
--    Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
--      Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2318: Cannot find global type 'TemplateStringsArray'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+taggedTemplateStringsWithOverloadResolution1_ES6.ts(1,20): error TS2304: Cannot find name 'TemplateStringsArray'.
-+taggedTemplateStringsWithOverloadResolution1_ES6.ts(2,20): error TS2304: Cannot find name 'TemplateStringsArray'.
-+taggedTemplateStringsWithOverloadResolution1_ES6.ts(3,20): error TS2304: Cannot find name 'TemplateStringsArray'.
-+taggedTemplateStringsWithOverloadResolution1_ES6.ts(4,20): error TS2304: Cannot find name 'TemplateStringsArray'.
-+taggedTemplateStringsWithOverloadResolution1_ES6.ts(12,20): error TS2769: No overload matches this call.
 +  The last overload gave the following error.
-+    Argument of type 'boolean' is not assignable to parameter of type 'string'.
++    Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
+ taggedTemplateStringsWithOverloadResolution1_ES6.ts(12,13): error TS2769: No overload matches this call.
+-  Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
+-    Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+-      Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
+-  Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
+-    Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+-      Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
++  The last overload gave the following error.
++    Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
+ taggedTemplateStringsWithOverloadResolution1_ES6.ts(13,13): error TS2769: No overload matches this call.
+-  Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
+-    Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+-      Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
+-  Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
+-    Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+-      Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
++  The last overload gave the following error.
++    Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
  taggedTemplateStringsWithOverloadResolution1_ES6.ts(14,23): error TS2554: Expected 1-3 arguments, but got 4.
  taggedTemplateStringsWithOverloadResolution1_ES6.ts(19,20): error TS2769: No overload matches this call.
 -  Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
@@ -51,60 +43,24 @@
      Argument of type 'boolean' is not assignable to parameter of type 'string'.
  taggedTemplateStringsWithOverloadResolution1_ES6.ts(21,24): error TS2554: Expected 1-3 arguments, but got 4.
  
- 
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2318: Cannot find global type 'TemplateStringsArray'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- ==== taggedTemplateStringsWithOverloadResolution1_ES6.ts (8 errors) ====
-     function foo(strs: TemplateStringsArray): number;
-+                       ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
-     function foo(strs: TemplateStringsArray, x: number): string;
-+                       ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
-     function foo(strs: TemplateStringsArray, x: number, y: number): boolean;
-+                       ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
-     function foo(strs: TemplateStringsArray, x: number, y: string): {};
-+                       ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
-     function foo(...stuff: any[]): any {
-         return undefined;
-     }
+@@= skipped -42, +26 lines =@@
      
      var a = foo([]);             // number
--                ~~
+                 ~~
 -!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
 -!!! error TS2345:   Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
--!!! related TS2728 lib.es5.d.ts:--:--: 'raw' is declared here.
++!!! error TS2741: Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
+ !!! related TS2728 lib.es5.d.ts:--:--: 'raw' is declared here.
 -!!! related TS2793 taggedTemplateStringsWithOverloadResolution1_ES6.ts:5:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
      var b = foo([], 1);          // string
--                ~~
+                 ~~
 -!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
 -!!! error TS2345:   Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
--!!! related TS2728 lib.es5.d.ts:--:--: 'raw' is declared here.
++!!! error TS2741: Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
+ !!! related TS2728 lib.es5.d.ts:--:--: 'raw' is declared here.
 -!!! related TS2793 taggedTemplateStringsWithOverloadResolution1_ES6.ts:5:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
      var c = foo([], 1, 2);       // boolean
--                ~~
--!!! error TS2769: No overload matches this call.
--!!! error TS2769:   Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
--!!! error TS2769:     Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
--!!! error TS2769:       Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
--!!! error TS2769:   Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
--!!! error TS2769:     Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
--!!! error TS2769:       Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
--!!! related TS2728 lib.es5.d.ts:--:--: 'raw' is declared here.
--!!! related TS2728 lib.es5.d.ts:--:--: 'raw' is declared here.
--!!! related TS2793 taggedTemplateStringsWithOverloadResolution1_ES6.ts:5:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
-     var d = foo([], 1, true);    // boolean (with error)
--                ~~
-+                       ~~~~
+                 ~~
  !!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
 -!!! error TS2769:     Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
@@ -112,28 +68,46 @@
 -!!! error TS2769:   Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
 -!!! error TS2769:     Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
 -!!! error TS2769:       Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
--!!! related TS2728 lib.es5.d.ts:--:--: 'raw' is declared here.
++!!! error TS2769:   The last overload gave the following error.
++!!! error TS2769:     Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
+ !!! related TS2728 lib.es5.d.ts:--:--: 'raw' is declared here.
 -!!! related TS2728 lib.es5.d.ts:--:--: 'raw' is declared here.
 -!!! related TS2793 taggedTemplateStringsWithOverloadResolution1_ES6.ts:5:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
-+!!! error TS2769:   The last overload gave the following error.
-+!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'string'.
 +!!! related TS2771 taggedTemplateStringsWithOverloadResolution1_ES6.ts:4:10: The last overload is declared here.
-     var e = foo([], 1, "2");     // {}
--                ~~
--!!! error TS2769: No overload matches this call.
+     var d = foo([], 1, true);    // boolean (with error)
+                 ~~
+ !!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
 -!!! error TS2769:     Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
 -!!! error TS2769:       Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
 -!!! error TS2769:   Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
 -!!! error TS2769:     Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
 -!!! error TS2769:       Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
--!!! related TS2728 lib.es5.d.ts:--:--: 'raw' is declared here.
++!!! error TS2769:   The last overload gave the following error.
++!!! error TS2769:     Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
+ !!! related TS2728 lib.es5.d.ts:--:--: 'raw' is declared here.
 -!!! related TS2728 lib.es5.d.ts:--:--: 'raw' is declared here.
 -!!! related TS2793 taggedTemplateStringsWithOverloadResolution1_ES6.ts:5:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
++!!! related TS2771 taggedTemplateStringsWithOverloadResolution1_ES6.ts:4:10: The last overload is declared here.
+     var e = foo([], 1, "2");     // {}
+                 ~~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
+-!!! error TS2769:     Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+-!!! error TS2769:       Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
+-!!! error TS2769:   Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
+-!!! error TS2769:     Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+-!!! error TS2769:       Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
++!!! error TS2769:   The last overload gave the following error.
++!!! error TS2769:     Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
+ !!! related TS2728 lib.es5.d.ts:--:--: 'raw' is declared here.
+-!!! related TS2728 lib.es5.d.ts:--:--: 'raw' is declared here.
+-!!! related TS2793 taggedTemplateStringsWithOverloadResolution1_ES6.ts:5:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
++!!! related TS2771 taggedTemplateStringsWithOverloadResolution1_ES6.ts:4:10: The last overload is declared here.
      var f = foo([], 1, 2, 3);    // any (with error)
                            ~
  !!! error TS2554: Expected 1-3 arguments, but got 4.
-@@= skipped -98, +66 lines =@@
+@@= skipped -56, +37 lines =@@
      var x = foo `${1}${true}`;   // boolean (with error)
                         ~~~~
  !!! error TS2769: No overload matches this call.

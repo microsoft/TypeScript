@@ -16,11 +16,11 @@ export function strategy<T extends StrategicState>(stratName: string, gen: (a: T
 >gen : Symbol(gen, Decl(generatorTypeCheck62.ts, 4, 69))
 >a : Symbol(a, Decl(generatorTypeCheck62.ts, 4, 76))
 >T : Symbol(T, Decl(generatorTypeCheck62.ts, 4, 25))
->IterableIterator : Symbol(IterableIterator)
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(generatorTypeCheck62.ts, 4, 25))
 >a : Symbol(a, Decl(generatorTypeCheck62.ts, 4, 126))
 >T : Symbol(T, Decl(generatorTypeCheck62.ts, 4, 25))
->IterableIterator : Symbol(IterableIterator)
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(generatorTypeCheck62.ts, 4, 25))
 
     return function*(state) {
@@ -35,7 +35,9 @@ export function strategy<T extends StrategicState>(stratName: string, gen: (a: T
 >next : Symbol(next, Decl(generatorTypeCheck62.ts, 6, 18))
 
                 next.lastStrategyApplied = stratName;
+>next.lastStrategyApplied : Symbol(lastStrategyApplied, Decl(generatorTypeCheck62.ts, 0, 33))
 >next : Symbol(next, Decl(generatorTypeCheck62.ts, 6, 18))
+>lastStrategyApplied : Symbol(lastStrategyApplied, Decl(generatorTypeCheck62.ts, 0, 33))
 >stratName : Symbol(stratName, Decl(generatorTypeCheck62.ts, 4, 51))
             }
             yield next;
@@ -51,7 +53,7 @@ export interface Strategy<T> {
     (a: T): IterableIterator<T | undefined, void>;
 >a : Symbol(a, Decl(generatorTypeCheck62.ts, 16, 5))
 >T : Symbol(T, Decl(generatorTypeCheck62.ts, 15, 26))
->IterableIterator : Symbol(IterableIterator)
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(generatorTypeCheck62.ts, 15, 26))
 }
 

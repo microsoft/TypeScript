@@ -1,31 +1,24 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-symbolType9.ts(1,9): error TS2304: Cannot find name 'Symbol'.
+symbolType9.ts(3,1): error TS2367: This comparison appears to be unintentional because the types 'symbol' and 'boolean' have no overlap.
+symbolType9.ts(5,1): error TS2367: This comparison appears to be unintentional because the types 'number' and 'symbol' have no overlap.
+symbolType9.ts(7,1): error TS2367: This comparison appears to be unintentional because the types 'symbol' and 'number' have no overlap.
+symbolType9.ts(9,1): error TS2367: This comparison appears to be unintentional because the types 'boolean' and 'symbol' have no overlap.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== symbolType9.ts (1 errors) ====
+==== symbolType9.ts (4 errors) ====
     var s = Symbol.for("equal");
-            ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
     s == s;
     s == true;
+    ~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'symbol' and 'boolean' have no overlap.
     s != s;
     0 != s;
+    ~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'symbol' have no overlap.
     s === s;
     s === 1;
+    ~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'symbol' and 'number' have no overlap.
     s !== s;
     false !== s;
+    ~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'boolean' and 'symbol' have no overlap.

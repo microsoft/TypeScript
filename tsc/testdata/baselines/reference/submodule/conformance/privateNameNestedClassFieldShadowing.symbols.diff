@@ -23,8 +23,10 @@
  
                  console.log(x.#x);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >x : Symbol(x, Decl(privateNameNestedClassFieldShadowing.ts, 5, 21))
              }
              testDerived(x: Derived) {
@@ -35,9 +37,11 @@
  
                  console.log(x.#x);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 ->x.#x : Symbol(Derived.#x, Decl(privateNameNestedClassFieldShadowing.ts, 3, 23))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 +>x.#x : Symbol(#x, Decl(privateNameNestedClassFieldShadowing.ts, 3, 23))
  >x : Symbol(x, Decl(privateNameNestedClassFieldShadowing.ts, 8, 24))
              }

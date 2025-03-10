@@ -6,6 +6,9 @@ class C {
 
     [Symbol.iterator]: { x; y };
 >[Symbol.iterator] : Symbol([Symbol.iterator], Decl(symbolProperty13.ts, 0, 9))
+>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >x : Symbol(x, Decl(symbolProperty13.ts, 1, 24))
 >y : Symbol(y, Decl(symbolProperty13.ts, 1, 27))
 }
@@ -14,6 +17,9 @@ interface I {
 
     [Symbol.iterator]: { x };
 >[Symbol.iterator] : Symbol([Symbol.iterator], Decl(symbolProperty13.ts, 3, 13))
+>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >x : Symbol(x, Decl(symbolProperty13.ts, 4, 24))
 }
 

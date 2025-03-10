@@ -1,6 +1,6 @@
 --- old.regularExpressionScanning(target=es2015).errors.txt
 +++ new.regularExpressionScanning(target=es2015).errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -regularExpressionScanning.ts(3,7): error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
 -regularExpressionScanning.ts(3,9): error TS1501: This regular expression flag is only available when targeting 'es2018' or later.
 -regularExpressionScanning.ts(3,10): error TS1502: The Unicode (u) flag and the Unicode Sets (v) flag cannot be set simultaneously.
@@ -220,32 +220,12 @@
 -regularExpressionScanning.ts(47,5): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -regularExpressionScanning.ts(47,89): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -regularExpressionScanning.ts(47,101): error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+regularExpressionScanning.ts(1,16): error TS2304: Cannot find name 'RegExp'.
- 
- 
+-
+-
 -==== regularExpressionScanning.ts (219 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+==== regularExpressionScanning.ts (1 errors) ====
-     const regexes: RegExp[] = [
-+                   ~~~~~~
-+!!! error TS2304: Cannot find name 'RegExp'.
-     	// Flags
-     	/foo/visualstudiocode,
+-    const regexes: RegExp[] = [
+-    	// Flags
+-    	/foo/visualstudiocode,
 -    	     ~
 -!!! error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
 -    	       ~
@@ -276,8 +256,8 @@
 -!!! error TS1500: Duplicate regular expression flag.
 -    	                    ~
 -!!! error TS1499: Unknown regular expression flag.
-     	// Pattern modifiers
-     	/(?med-ium:bar)/,
+-    	// Pattern modifiers
+-    	/(?med-ium:bar)/,
 -    	    ~
 -!!! error TS1499: Unknown regular expression flag.
 -    	     ~
@@ -286,17 +266,17 @@
 -!!! error TS1509: This regular expression flag cannot be toggled within a subpattern.
 -    	         ~
 -!!! error TS1500: Duplicate regular expression flag.
-     	// Capturing groups
-     	/\0/,
-     	/\1/,
+-    	// Capturing groups
+-    	/\0/,
+-    	/\1/,
 -    	  ~
 -!!! error TS1534: This backreference refers to a group that does not exist. There are no capturing groups in this regular expression.
-     	/\2/,
+-    	/\2/,
 -    	  ~
 -!!! error TS1534: This backreference refers to a group that does not exist. There are no capturing groups in this regular expression.
-     	/(hi)\1/,
-     	/(hi) (hello) \2/,
-     	/\2()(\12)(foo)\1\0[\0\1\01\123\08\8](\3\03)\5\005\9\009/,
+-    	/(hi)\1/,
+-    	/(hi) (hello) \2/,
+-    	/\2()(\12)(foo)\1\0[\0\1\01\123\08\8](\3\03)\5\005\9\009/,
 -    	       ~~
 -!!! error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
 -    	                      ~~
@@ -319,7 +299,7 @@
 -!!! error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
 -    	                                                    ~~~
 -!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-     	/\2()(\12)(foo)\1\0[\0\1\01\123\08\8](\3\03)\5\005\9\009/u,
+-    	/\2()(\12)(foo)\1\0[\0\1\01\123\08\8](\3\03)\5\005\9\009/u,
 -    	       ~~
 -!!! error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
 -    	                      ~~
@@ -342,7 +322,7 @@
 -!!! error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
 -    	                                                    ~~~
 -!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-     	/(?<foo>)((?<bar>bar)bar)(?<baz>baz)|(foo(?<foo>foo))(?<baz>)/,
+-    	/(?<foo>)((?<bar>bar)bar)(?<baz>baz)|(foo(?<foo>foo))(?<baz>)/,
 -    	   ~~~~~
 -!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
 -    	            ~~~~~
@@ -353,7 +333,7 @@
 -!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
 -    	                                                       ~~~~~
 -!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
-     	/(\k<bar>)\k<absent>(?<foo>foo)|(?<bar>)((?<foo>)|(bar(?<bar>bar)))/,
+-    	/(\k<bar>)\k<absent>(?<foo>foo)|(?<bar>)((?<foo>)|(bar(?<bar>bar)))/,
 -    	             ~~~~~~
 -!!! error TS1532: There is no capturing group named 'absent' in this regular expression.
 -    	                      ~~~~~
@@ -366,23 +346,23 @@
 -!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
 -    	                                                         ~~~
 -!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
-     	// Quantifiers
-     	/{}{1,2}_{3}.{4,}?(foo){008}${32,16}\b{064,128}.+&*?\???\n{,256}{\\{,/,
+-    	// Quantifiers
+-    	/{}{1,2}_{3}.{4,}?(foo){008}${32,16}\b{064,128}.+&*?\???\n{,256}{\\{,/,
 -    	                             ~~~~~~~
 -!!! error TS1507: There is nothing available for repetition.
 -    	                              ~~~~~
 -!!! error TS1506: Numbers out of order in quantifier.
 -    	                                      ~~~~~~~~~
 -!!! error TS1507: There is nothing available for repetition.
-     	// Character classes
-     	/[-A-Za-z-z-aZ-A\d_-\d-.-.\r-\n\w-\W]/,
+-    	// Character classes
+-    	/[-A-Za-z-z-aZ-A\d_-\d-.-.\r-\n\w-\W]/,
 -    	          ~~~
 -!!! error TS1517: Range out of order in character class.
 -    	             ~~~
 -!!! error TS1517: Range out of order in character class.
 -    	                          ~~~~~
 -!!! error TS1517: Range out of order in character class.
-     	/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/,
+-    	/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/,
 -    	 ~~~~~
 -!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
 -    	      ~~~~~~~~
@@ -403,19 +383,19 @@
 -!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
 -    	                                                            ~~~~~~~
 -!!! error TS1529: Unknown Unicode property name or value.
-     	/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/u,
+-    	/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/u,
 -    	                          ~~~~~~~
 -!!! error TS1529: Unknown Unicode property name or value.
 -    	                                                            ~~~~~~~
 -!!! error TS1529: Unknown Unicode property name or value.
-     	/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/v,
+-    	/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/v,
 -    	                          ~~~~~~~
 -!!! error TS1529: Unknown Unicode property name or value.
 -    	                                                            ~~~~~~~
 -!!! error TS1529: Unknown Unicode property name or value.
 -    	                                                                      ~
 -!!! error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
-     	/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/,
+-    	/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/,
 -    	 ~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
 -    	    ~~~~~~~~~~~~~~~
@@ -446,7 +426,7 @@
 -!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
 -    	                                                                
 -!!! error TS1527: Expected a Unicode property name or value.
-     	/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/u,
+-    	/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/u,
 -    	    ~~~~~~~~~~~~~~~
 -!!! error TS1524: Unknown Unicode property name.
 -    	                             
@@ -467,7 +447,7 @@
 -!!! error TS1527: Expected a Unicode property name or value.
 -    	                                                                
 -!!! error TS1527: Expected a Unicode property name or value.
-     	/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/v,
+-    	/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/v,
 -    	    ~~~~~~~~~~~~~~~
 -!!! error TS1524: Unknown Unicode property name.
 -    	                             
@@ -490,7 +470,7 @@
 -!!! error TS1527: Expected a Unicode property name or value.
 -    	                                                                 ~
 -!!! error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
-     	/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/,
+-    	/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/,
 -    	 ~~~~~~~~~~~~~
 -!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
 -    	    ~~~~~~~~~
@@ -507,7 +487,7 @@
 -!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
 -    	                                             ~~~~~~~~~
 -!!! error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
-     	/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/u,
+-    	/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/u,
 -    	    ~~~~~~~~~
 -!!! error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
 -    	                 ~~~~~~~~~
@@ -516,7 +496,7 @@
 -!!! error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
 -    	                                             ~~~~~~~~~
 -!!! error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
-     	/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/v,
+-    	/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/v,
 -    	                 ~~~~~~~~~
 -!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -    	                             ~~~~~~~~~~~~~
@@ -525,9 +505,9 @@
 -!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -    	                                                         ~
 -!!! error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
-     	// Character escapes
-     	/\c[\c0\ca\cQ\c\C]\c1\C/,
-     	/\c[\c0\ca\cQ\c\C]\c1\C/u,
+-    	// Character escapes
+-    	/\c[\c0\ca\cQ\c\C]\c1\C/,
+-    	/\c[\c0\ca\cQ\c\C]\c1\C/u,
 -    	 ~~
 -!!! error TS1512: '\c' must be followed by an ASCII letter.
 -    	    ~~
@@ -540,8 +520,8 @@
 -!!! error TS1512: '\c' must be followed by an ASCII letter.
 -    	                     ~~
 -!!! error TS1535: This character cannot be escaped in a regular expression.
-     	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/,
-     	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/u,
+-    	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/,
+-    	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/u,
 -    	 ~~
 -!!! error TS1535: This character cannot be escaped in a regular expression.
 -    	     ~~
@@ -566,7 +546,7 @@
 -!!! error TS1535: This character cannot be escaped in a regular expression.
 -    	                                           ~
 -!!! error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
-     	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/v,
+-    	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/v,
 -    	 ~~
 -!!! error TS1511: '\q' is only available inside character class.
 -    	     ~~
@@ -595,8 +575,8 @@
 -!!! error TS1005: '}' expected.
 -    	                                             ~
 -!!! error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
-     	// Unicode sets notation
-     	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/,
+-    	// Unicode sets notation
+-    	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/,
 -    	  ~~~
 -!!! error TS1517: Range out of order in character class.
 -    	      ~~~
@@ -607,7 +587,7 @@
 -!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
 -    	                                                             ~~~
 -!!! error TS1517: Range out of order in character class.
-     	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/u,
+-    	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/u,
 -    	  ~~~
 -!!! error TS1517: Range out of order in character class.
 -    	      ~~~
@@ -628,7 +608,7 @@
 -!!! error TS1517: Range out of order in character class.
 -    	                                                                          ~~
 -!!! error TS1535: This character cannot be escaped in a regular expression.
-     	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/v,
+-    	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/v,
 -    	      
 -!!! error TS1005: '--' expected.
 -    	       
@@ -669,24 +649,24 @@
 -!!! error TS1520: Expected a class set operand.
 -    	                                                                                     ~
 -!!! error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
-     	/[[^\P{Decimal_Number}&&[0-9]]&&\p{L}&&\p{ID_Continue}--\p{ASCII}\p{CWCF}]/v,
+-    	/[[^\P{Decimal_Number}&&[0-9]]&&\p{L}&&\p{ID_Continue}--\p{ASCII}\p{CWCF}]/v,
 -    	                                                      ~~
 -!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
 -    	                                                                 
 -!!! error TS1005: '&&' expected.
 -    	                                                                           ~
 -!!! error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
-     	/[^\p{Emoji}\p{RGI_Emoji}][^\p{Emoji}--\p{RGI_Emoji}][^\p{Emoji}&&\p{RGI_Emoji}]/v,
+-    	/[^\p{Emoji}\p{RGI_Emoji}][^\p{Emoji}--\p{RGI_Emoji}][^\p{Emoji}&&\p{RGI_Emoji}]/v,
 -    	                                                                                 ~
 -!!! error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
-     	/[^\p{RGI_Emoji}\p{Emoji}][^\p{RGI_Emoji}--\p{Emoji}][^\p{RGI_Emoji}&&\p{Emoji}]/v,
+-    	/[^\p{RGI_Emoji}\p{Emoji}][^\p{RGI_Emoji}--\p{Emoji}][^\p{RGI_Emoji}&&\p{Emoji}]/v,
 -    	   ~~~~~~~~~~~~~
 -!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -    	                            ~~~~~~~~~~~~~
 -!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -    	                                                                                 ~
 -!!! error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
-     	/[^\p{RGI_Emoji}\q{foo}][^\p{RGI_Emoji}--\q{foo}][^\p{RGI_Emoji}&&\q{foo}]/v,
+-    	/[^\p{RGI_Emoji}\q{foo}][^\p{RGI_Emoji}--\q{foo}][^\p{RGI_Emoji}&&\q{foo}]/v,
 -    	   ~~~~~~~~~~~~~
 -!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -    	                          ~~~~~~~~~~~~~
@@ -695,17 +675,17 @@
 -!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -    	                                                                           ~
 -!!! error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
-     	/[^\p{Emoji}[[\p{RGI_Emoji}]]][^\p{Emoji}--[[\p{RGI_Emoji}]]][^\p{Emoji}&&[[\p{RGI_Emoji}]]]/v,
+-    	/[^\p{Emoji}[[\p{RGI_Emoji}]]][^\p{Emoji}--[[\p{RGI_Emoji}]]][^\p{Emoji}&&[[\p{RGI_Emoji}]]]/v,
 -    	                                                                                             ~
 -!!! error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
-     	/[^[[\p{RGI_Emoji}]]\p{Emoji}][^[[\p{RGI_Emoji}]]--\p{Emoji}][^[[\p{RGI_Emoji}]]&&\p{Emoji}]/v,
+-    	/[^[[\p{RGI_Emoji}]]\p{Emoji}][^[[\p{RGI_Emoji}]]--\p{Emoji}][^[[\p{RGI_Emoji}]]&&\p{Emoji}]/v,
 -    	   ~~~~~~~~~~~~~~~~~
 -!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -    	                                ~~~~~~~~~~~~~~~~~
 -!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -    	                                                                                             ~
 -!!! error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
-     	/[^[[\p{RGI_Emoji}]]\q{foo}][^[[\p{RGI_Emoji}]]--\q{foo}][^[[\p{RGI_Emoji}]]&&\q{foo}]/v,
+-    	/[^[[\p{RGI_Emoji}]]\q{foo}][^[[\p{RGI_Emoji}]]--\q{foo}][^[[\p{RGI_Emoji}]]&&\q{foo}]/v,
 -    	   ~~~~~~~~~~~~~~~~~
 -!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -    	                              ~~~~~~~~~~~~~~~~~
@@ -714,19 +694,21 @@
 -!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -    	                                                                                       ~
 -!!! error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
-     	/[^\q{foo|bar|baz}--\q{foo}--\q{bar}--\q{baz}][^\p{L}--\q{foo}--[\q{bar}]--[^[\q{baz}]]]/v,
+-    	/[^\q{foo|bar|baz}--\q{foo}--\q{bar}--\q{baz}][^\p{L}--\q{foo}--[\q{bar}]--[^[\q{baz}]]]/v,
 -    	   ~~~~~~~~~~~~~~~
 -!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -    	                                                                             ~~~~~~~~~
 -!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -    	                                                                                         ~
 -!!! error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
-     	/[^[[\q{foo|bar|baz}]]--\q{foo}--\q{bar}--\q{baz}][^[^[^\p{L}]]--\q{foo}--[\q{bar}]--[^[\q{baz}]]]/v,
+-    	/[^[[\q{foo|bar|baz}]]--\q{foo}--\q{bar}--\q{baz}][^[^[^\p{L}]]--\q{foo}--[\q{bar}]--[^[\q{baz}]]]/v,
 -    	   ~~~~~~~~~~~~~~~~~~~
 -!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -    	                                                                                       ~~~~~~~~~
 -!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -    	                                                                                                   ~
 -!!! error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
-     ];
-     
+-    ];
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

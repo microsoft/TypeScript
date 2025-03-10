@@ -3,61 +3,17 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+controlFlowInstanceof.ts(3,16): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+controlFlowInstanceof.ts(3,30): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+controlFlowInstanceof.ts(4,13): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+controlFlowInstanceof.ts(6,22): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+controlFlowInstanceof.ts(13,16): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+controlFlowInstanceof.ts(13,30): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+controlFlowInstanceof.ts(14,13): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+controlFlowInstanceof.ts(16,22): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+controlFlowInstanceof.ts(23,16): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+controlFlowInstanceof.ts(23,30): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+controlFlowInstanceof.ts(25,22): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+controlFlowInstanceof.ts(33,16): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+controlFlowInstanceof.ts(33,30): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+controlFlowInstanceof.ts(34,13): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+controlFlowInstanceof.ts(36,22): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+controlFlowInstanceof.ts(102,21): error TS2304: Cannot find name 'Function'.
-+controlFlowInstanceof.ts(105,5): error TS2349: This expression is not callable.
-+  Not all constituents of type '() => void | null' are callable.
-+    Type 'null' has no call signatures.
-+controlFlowInstanceof.ts(105,5): error TS2721: Cannot invoke an object which is possibly 'null'.
 +uglify.js(5,5): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
 +uglify.js(6,7): error TS2339: Property 'val' does not exist on type 'number'.
 +
 +
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+==== controlFlowInstanceof.ts (18 errors) ====
++==== controlFlowInstanceof.ts (0 errors) ====
 +    // Repros from #10167
 +    
 +    function f1(s: Set<string> | Set<number>) {
-+                   ~~~
-+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+                                 ~~~
-+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 +        s = new Set<number>();
-+                ~~~
-+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 +        s;  // Set<number>
 +        if (s instanceof Set) {
-+                         ~~~
-+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 +            s;  // Set<number>
 +        }
 +        s;  // Set<number>
@@ -65,17 +21,9 @@
 +    }
 +    
 +    function f2(s: Set<string> | Set<number>) {
-+                   ~~~
-+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+                                 ~~~
-+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 +        s = new Set<number>();
-+                ~~~
-+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 +        s;  // Set<number>
 +        if (s instanceof Promise) {
-+                         ~~~~~~~
-+!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 +            s;  // Set<number> & Promise<any>
 +        }
 +        s;  // Set<number>
@@ -83,14 +31,8 @@
 +    }
 +    
 +    function f3(s: Set<string> | Set<number>) {
-+                   ~~~
-+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+                                 ~~~
-+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 +        s;  // Set<string> | Set<number>
 +        if (s instanceof Set) {
-+                         ~~~
-+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 +            s;  // Set<string> | Set<number>
 +        }
 +        else {
@@ -99,17 +41,9 @@
 +    }
 +    
 +    function f4(s: Set<string> | Set<number>) {
-+                   ~~~
-+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-+                                 ~~~
-+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 +        s = new Set<number>();
-+                ~~~
-+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 +        s;  // Set<number>
 +        if (s instanceof Set) {
-+                         ~~~
-+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 +            s;  // Set<number>
 +        }
 +        else {
@@ -176,17 +110,9 @@
 +    
 +    declare const x: (() => void)|null;
 +    declare const ctor: Function;
-+                        ~~~~~~~~
-+!!! error TS2304: Cannot find name 'Function'.
 +    
 +    if (x instanceof ctor) {
 +        x();
-+        ~
-+!!! error TS2349: This expression is not callable.
-+!!! error TS2349:   Not all constituents of type '() => void | null' are callable.
-+!!! error TS2349:     Type 'null' has no call signatures.
-+        ~
-+!!! error TS2721: Cannot invoke an object which is possibly 'null'.
 +    }
 +    
 +    // Repro from #27550 (based on uglify code)

@@ -1,29 +1,18 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'IterableIterator'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-generatorTypeCheck8.ts(1,32): error TS2583: Cannot find name 'Iterator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-generatorTypeCheck8.ts(1,50): error TS2304: Cannot find name 'Iterable'.
+generatorTypeCheck8.ts(2,17): error TS2322: Type 'Generator<string, any, any>' is not assignable to type 'BadGenerator'.
+  The types returned by 'next(...)' are incompatible between these types.
+    Type 'IteratorResult<string, any>' is not assignable to type 'IteratorResult<number, any>'.
+      Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<number, any>'.
+        Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<number>'.
+          Type 'string' is not assignable to type 'number'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'IterableIterator'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== generatorTypeCheck8.ts (2 errors) ====
+==== generatorTypeCheck8.ts (1 errors) ====
     interface BadGenerator extends Iterator<number>, Iterable<string> { }
-                                   ~~~~~~~~
-!!! error TS2583: Cannot find name 'Iterator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-                                                     ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
     function* g3(): BadGenerator { }
+                    ~~~~~~~~~~~~
+!!! error TS2322: Type 'Generator<string, any, any>' is not assignable to type 'BadGenerator'.
+!!! error TS2322:   The types returned by 'next(...)' are incompatible between these types.
+!!! error TS2322:     Type 'IteratorResult<string, any>' is not assignable to type 'IteratorResult<number, any>'.
+!!! error TS2322:       Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<number, any>'.
+!!! error TS2322:         Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<number>'.
+!!! error TS2322:           Type 'string' is not assignable to type 'number'.

@@ -1,15 +1,12 @@
 --- old.indirectGlobalSymbolPartOfObjectType.symbols
 +++ new.indirectGlobalSymbolPartOfObjectType.symbols
-@@= skipped -3, +3 lines =@@
- export { }
- const Symbol = globalThis.Symbol;
- >Symbol : Symbol(Symbol, Decl(indirectGlobalSymbolPartOfObjectType.ts, 1, 5))
-->globalThis.Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
- >globalThis : Symbol(globalThis)
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+@@= skipped -8, +8 lines =@@
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
  [][Symbol.iterator];
 ->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
  >Symbol : Symbol(Symbol, Decl(indirectGlobalSymbolPartOfObjectType.ts, 1, 5))
 ->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
  

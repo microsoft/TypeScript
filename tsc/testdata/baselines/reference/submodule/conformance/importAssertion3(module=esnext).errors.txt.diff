@@ -1,49 +1,31 @@
 --- old.importAssertion3(module=esnext).errors.txt
 +++ new.importAssertion3(module=esnext).errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -1.ts(1,27): error TS2822: Import assertions cannot be used with type-only imports or exports.
 -1.ts(2,30): error TS2822: Import assertions cannot be used with type-only imports or exports.
 -2.ts(1,31): error TS2822: Import assertions cannot be used with type-only imports or exports.
 -2.ts(2,33): error TS2822: Import assertions cannot be used with type-only imports or exports.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'ImportAttributes'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- 
- 
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'ImportAttributes'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- ==== 0.ts (0 errors) ====
-     export interface I { }
-     
+-
+-
+-==== 0.ts (0 errors) ====
+-    export interface I { }
+-    
 -==== 1.ts (2 errors) ====
-+==== 1.ts (0 errors) ====
-     export type {} from './0' assert { type: "json" }
+-    export type {} from './0' assert { type: "json" }
 -                              ~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2822: Import assertions cannot be used with type-only imports or exports.
-     export type { I } from './0' assert { type: "json" }
+-    export type { I } from './0' assert { type: "json" }
 -                                 ~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2822: Import assertions cannot be used with type-only imports or exports.
-     
+-    
 -==== 2.ts (2 errors) ====
-+==== 2.ts (0 errors) ====
-     import type { I } from './0'  assert { type: "json" }
+-    import type { I } from './0'  assert { type: "json" }
 -                                  ~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2822: Import assertions cannot be used with type-only imports or exports.
-     import type * as foo from './0' assert { type: "json" }
+-    import type * as foo from './0' assert { type: "json" }
 -                                    ~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2822: Import assertions cannot be used with type-only imports or exports.
-     
-     
+-    
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

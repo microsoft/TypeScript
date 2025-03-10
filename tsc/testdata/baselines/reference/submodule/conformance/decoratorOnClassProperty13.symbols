@@ -6,7 +6,7 @@ declare function dec(target: any, propertyKey: string, desc: PropertyDescriptor)
 >target : Symbol(target, Decl(decoratorOnClassProperty13.ts, 0, 21))
 >propertyKey : Symbol(propertyKey, Decl(decoratorOnClassProperty13.ts, 0, 33))
 >desc : Symbol(desc, Decl(decoratorOnClassProperty13.ts, 0, 54))
->PropertyDescriptor : Symbol(PropertyDescriptor)
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.es5.d.ts, --, --))
 
 class C {
 >C : Symbol(C, Decl(decoratorOnClassProperty13.ts, 0, 87))

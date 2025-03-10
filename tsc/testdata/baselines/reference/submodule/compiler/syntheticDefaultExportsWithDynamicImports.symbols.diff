@@ -7,6 +7,8 @@
 ->import("package").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 ->"package" : Symbol("node_modules/package/index", Decl(index.d.ts, 0, 0))
 ->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
++>import("package").then : Symbol(then, Decl(lib.es5.d.ts, --, --))
++>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
  >default : Symbol(default)
  >foo : Symbol(foo, Decl(index.ts, 0, 25))
  >foo : Symbol(foo, Decl(index.ts, 0, 25))

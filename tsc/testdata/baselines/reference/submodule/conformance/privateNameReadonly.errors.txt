@@ -1,37 +1,18 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
+privateNameReadonly.ts(4,9): error TS2322: Type 'void' is not assignable to type '() => void'.
 privateNameReadonly.ts(4,14): error TS2803: Cannot assign to private method '#bar'. Private methods are not writable.
-privateNameReadonly.ts(4,21): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
-privateNameReadonly.ts(8,1): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== privateNameReadonly.ts (3 errors) ====
+==== privateNameReadonly.ts (2 errors) ====
     const C = class {
         #bar() {}
         foo() {
             this.#bar = console.log("should log this then throw");
+            ~~~~~~~~~
+!!! error TS2322: Type 'void' is not assignable to type '() => void'.
                  ~~~~
 !!! error TS2803: Cannot assign to private method '#bar'. Private methods are not writable.
-                        ~~~~~~~
-!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
         }
     }
     
     console.log(new C().foo());
-    ~~~~~~~
-!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
     

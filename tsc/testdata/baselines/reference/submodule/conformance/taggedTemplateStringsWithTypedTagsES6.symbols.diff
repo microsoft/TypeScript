@@ -1,12 +1,6 @@
 --- old.taggedTemplateStringsWithTypedTagsES6.symbols
 +++ new.taggedTemplateStringsWithTypedTagsES6.symbols
-@@= skipped -5, +5 lines =@@
- 
-     (stringParts: TemplateStringsArray, ...rest: number[]): I;
- >stringParts : Symbol(stringParts, Decl(taggedTemplateStringsWithTypedTagsES6.ts, 1, 5))
-->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
-+>TemplateStringsArray : Symbol(TemplateStringsArray)
- >rest : Symbol(rest, Decl(taggedTemplateStringsWithTypedTagsES6.ts, 1, 39))
+@@= skipped -10, +10 lines =@@
  >I : Symbol(I, Decl(taggedTemplateStringsWithTypedTagsES6.ts, 0, 0))
  
      g: I;
@@ -30,7 +24,7 @@
  >x : Symbol(x, Decl(taggedTemplateStringsWithTypedTagsES6.ts, 5, 18))
  
      [x: number]: I;
-@@= skipped -36, +36 lines =@@
+@@= skipped -31, +31 lines =@@
  >f : Symbol(f, Decl(taggedTemplateStringsWithTypedTagsES6.ts, 9, 3))
  
  f `abc`.member

@@ -3,51 +3,14 @@
 @@= skipped -0, +0 lines =@@
 -iterableArrayPattern18.ts(17,5): error TS2345: Argument of type 'FooIterator' is not assignable to parameter of type 'Bar[]'.
 -  Type 'FooIterator' is missing the following properties from type 'Bar[]': length, pop, push, concat, and 24 more.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+iterableArrayPattern18.ts(11,6): error TS2304: Cannot find name 'Symbol'.
-+iterableArrayPattern18.ts(16,14): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
-+iterableArrayPattern18.ts(16,15): error TS2339: Property '0' does not exist on type '{}'.
-+iterableArrayPattern18.ts(16,18): error TS2339: Property '1' does not exist on type '{}'.
++iterableArrayPattern18.ts(17,5): error TS2740: Type 'FooIterator' is missing the following properties from type 'Bar[]': length, pop, push, concat, and 24 more.
  
  
--==== iterableArrayPattern18.ts (1 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+==== iterableArrayPattern18.ts (4 errors) ====
-     class Bar { x }
-     class Foo extends Bar { y }
-     class FooIterator {
-@@= skipped -13, +31 lines =@@
-         }
-     
-         [Symbol.iterator]() {
-+         ~~~~~~
-+!!! error TS2304: Cannot find name 'Symbol'.
-             return this;
-         }
-     }
-     
+ ==== iterableArrayPattern18.ts (1 errors) ====
+@@= skipped -20, +19 lines =@@
      function fun([a, b]: Bar[]) { }
-+                 ~~~~~~
-+!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
-+                  ~
-+!!! error TS2339: Property '0' does not exist on type '{}'.
-+                     ~
-+!!! error TS2339: Property '1' does not exist on type '{}'.
      fun(new FooIterator);
--        ~~~~~~~~~~~~~~~
+         ~~~~~~~~~~~~~~~
 -!!! error TS2345: Argument of type 'FooIterator' is not assignable to parameter of type 'Bar[]'.
 -!!! error TS2345:   Type 'FooIterator' is missing the following properties from type 'Bar[]': length, pop, push, concat, and 24 more.
++!!! error TS2740: Type 'FooIterator' is missing the following properties from type 'Bar[]': length, pop, push, concat, and 24 more.

@@ -6,8 +6,14 @@ class C {
 
     get [Symbol.toPrimitive]() { return ""; }
 >[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(symbolDeclarationEmit13.ts, 0, 9))
+>Symbol.toPrimitive : Symbol(toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toPrimitive : Symbol(toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     set [Symbol.toStringTag](x) { }
 >[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(symbolDeclarationEmit13.ts, 1, 45))
+>Symbol.toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >x : Symbol(x, Decl(symbolDeclarationEmit13.ts, 2, 29))
 }

@@ -1,14 +1,6 @@
 --- old.jsFileCompilationBindStrictModeErrors.errors.txt
 +++ new.jsFileCompilationBindStrictModeErrors.errors.txt
 @@= skipped -0, +0 lines =@@
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
  a.js(5,5): error TS1117: An object literal cannot have multiple properties with the same name.
  a.js(7,5): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
 +a.js(7,5): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
@@ -31,19 +23,11 @@
  
  
 -==== a.js (8 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 +==== a.js (13 errors) ====
      "use strict";
      var a = {
          a: "hello", // error
-@@= skipped -24, +43 lines =@@
+@@= skipped -24, +27 lines =@@
      var let = 10; // error
          ~~~
  !!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode.

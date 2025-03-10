@@ -14,6 +14,9 @@ class A2 {
 
     constructor() {
         console.log(A2.#prop);
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >A2.#prop : Symbol(#prop, Decl(privateNameStaticAccessorsAccess.ts, 1, 10), Decl(privateNameStaticAccessorsAccess.ts, 2, 37))
 >A2 : Symbol(A2, Decl(privateNameStaticAccessorsAccess.ts, 0, 9))
 

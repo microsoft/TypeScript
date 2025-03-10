@@ -1,14 +1,6 @@
 --- old.exportNonInitializedVariablesES6.errors.txt
 +++ new.exportNonInitializedVariablesES6.errors.txt
 @@= skipped -0, +0 lines =@@
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
  exportNonInitializedVariablesES6.ts(1,4): error TS1123: Variable declaration list cannot be empty.
 -exportNonInitializedVariablesES6.ts(2,1): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
  exportNonInitializedVariablesES6.ts(2,1): error TS2304: Cannot find name 'let'.
@@ -16,14 +8,6 @@
  
  
 -==== exportNonInitializedVariablesES6.ts (4 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 +==== exportNonInitializedVariablesES6.ts (3 errors) ====
      var;
         

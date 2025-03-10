@@ -6,7 +6,9 @@ function A() { }
 >A : Symbol(A, Decl(privateNameJsBadAssignment.js, 0, 18))
 
 A.prototype.#no = 2;         // Error (outside class body)
+>A.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 >A : Symbol(A, Decl(privateNameJsBadAssignment.js, 0, 18))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 
 class B {}
 >B : Symbol(B, Decl(privateNameJsBadAssignment.js, 2, 20))

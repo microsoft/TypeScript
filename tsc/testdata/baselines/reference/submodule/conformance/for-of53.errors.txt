@@ -1,27 +1,8 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-for-of53.ts(1,15): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
 for-of53.ts(2,9): error TS2481: Cannot initialize outer scoped variable 'v' in the same scope as block scoped declaration 'v'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== for-of53.ts (2 errors) ====
+==== for-of53.ts (1 errors) ====
     for (let v of []) {
-                  ~~
-!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
         var v;
             ~
 !!! error TS2481: Cannot initialize outer scoped variable 'v' in the same scope as block scoped declaration 'v'.

@@ -1,32 +1,16 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-symbolProperty52.ts(2,6): error TS2304: Cannot find name 'Symbol'.
-symbolProperty52.ts(7,5): error TS2304: Cannot find name 'Symbol'.
+symbolProperty52.ts(2,13): error TS2339: Property 'nonsense' does not exist on type 'SymbolConstructor'.
+symbolProperty52.ts(7,12): error TS2339: Property 'nonsense' does not exist on type 'SymbolConstructor'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 ==== symbolProperty52.ts (2 errors) ====
     var obj = {
         [Symbol.nonsense]: 0
-         ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
+                ~~~~~~~~
+!!! error TS2339: Property 'nonsense' does not exist on type 'SymbolConstructor'.
     };
     
     obj = {};
     
     obj[Symbol.nonsense];
-        ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
+               ~~~~~~~~
+!!! error TS2339: Property 'nonsense' does not exist on type 'SymbolConstructor'.

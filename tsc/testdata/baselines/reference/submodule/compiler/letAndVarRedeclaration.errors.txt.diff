@@ -1,14 +1,6 @@
 --- old.letAndVarRedeclaration.errors.txt
 +++ new.letAndVarRedeclaration.errors.txt
 @@= skipped -0, +0 lines =@@
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
  letAndVarRedeclaration.ts(1,5): error TS2300: Duplicate identifier 'e0'.
 +letAndVarRedeclaration.ts(1,5): error TS2300: Duplicate identifier 'e0'.
  letAndVarRedeclaration.ts(2,5): error TS2300: Duplicate identifier 'e0'.
@@ -54,14 +46,6 @@
  
  
 -==== letAndVarRedeclaration.ts (21 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 +==== letAndVarRedeclaration.ts (42 errors) ====
      let e0
          ~~
@@ -119,7 +103,7 @@
          }
      }
      
-@@= skipped -63, +118 lines =@@
+@@= skipped -63, +102 lines =@@
          let x2;
              ~~
  !!! error TS2300: Duplicate identifier 'x2'.

@@ -14,7 +14,7 @@ declare namespace hoistNonReactStatics {
 >NonReactStatics : Symbol(NonReactStatics, Decl(index.d.ts, 3, 40))
 >T : Symbol(T, Decl(index.d.ts, 4, 25))
 >X : Symbol(X, Decl(index.d.ts, 4, 32))
->Exclude : Symbol(Exclude)
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(index.d.ts, 4, 25))
 >Statics : Symbol(Statics, Decl(index.d.ts, 0, 0))
 >T : Symbol(T, Decl(index.d.ts, 4, 25))
@@ -81,7 +81,7 @@ export interface StyledInterface {
     div: (a: TemplateStringsArray) => StyledComponent<"div">;
 >div : Symbol(div, Decl(index.d.ts, 12, 34))
 >a : Symbol(a, Decl(index.d.ts, 13, 10))
->TemplateStringsArray : Symbol(TemplateStringsArray)
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
 >StyledComponent : Symbol(StyledComponent, Decl(index.d.ts, 1, 32))
 }
 
@@ -115,6 +115,9 @@ export const C = styled.div``;
 >div : Symbol(div, Decl(index.d.ts, 12, 34))
 
 export default Object.assign(A, {
+>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >A : Symbol(A, Decl(index.ts, 2, 5))
 
     B,

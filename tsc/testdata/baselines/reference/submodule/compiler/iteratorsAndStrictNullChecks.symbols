@@ -6,7 +6,9 @@ for (const x of ["a", "b"]) {
 >x : Symbol(x, Decl(iteratorsAndStrictNullChecks.ts, 1, 10))
 
     x.substring;
+>x.substring : Symbol(substring, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(iteratorsAndStrictNullChecks.ts, 1, 10))
+>substring : Symbol(substring, Decl(lib.es5.d.ts, --, --))
 }
 
 // Spread
@@ -17,6 +19,8 @@ const ys = [4, 5];
 >ys : Symbol(ys, Decl(iteratorsAndStrictNullChecks.ts, 7, 5))
 
 xs.push(...ys);
+>xs.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
 >xs : Symbol(xs, Decl(iteratorsAndStrictNullChecks.ts, 6, 5))
+>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
 >ys : Symbol(ys, Decl(iteratorsAndStrictNullChecks.ts, 7, 5))
 

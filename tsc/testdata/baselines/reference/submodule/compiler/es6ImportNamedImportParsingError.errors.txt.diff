@@ -1,16 +1,6 @@
 --- old.es6ImportNamedImportParsingError.errors.txt
 +++ new.es6ImportNamedImportParsingError.errors.txt
-@@= skipped -0, +0 lines =@@
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- es6ImportNamedImportParsingError_1.ts(1,10): error TS1003: Identifier expected.
- es6ImportNamedImportParsingError_1.ts(1,10): error TS1141: String literal expected.
+@@= skipped -2, +2 lines =@@
  es6ImportNamedImportParsingError_1.ts(1,12): error TS1109: Expression expected.
  es6ImportNamedImportParsingError_1.ts(1,14): error TS1434: Unexpected keyword or identifier.
  es6ImportNamedImportParsingError_1.ts(1,14): error TS2304: Cannot find name 'from'.
@@ -20,22 +10,7 @@
  es6ImportNamedImportParsingError_1.ts(3,1): error TS1128: Declaration or statement expected.
  es6ImportNamedImportParsingError_1.ts(3,8): error TS1128: Declaration or statement expected.
  es6ImportNamedImportParsingError_1.ts(3,16): error TS1434: Unexpected keyword or identifier.
-@@= skipped -13, +21 lines =@@
- es6ImportNamedImportParsingError_1.ts(4,20): error TS1005: ';' expected.
- 
- 
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- ==== es6ImportNamedImportParsingError_0.ts (0 errors) ====
-     export var a = 10;
-     export var x = a;
-@@= skipped -18, +26 lines =@@
+@@= skipped -29, +29 lines =@@
                   ~~~~
  !!! error TS2304: Cannot find name 'from'.
      import defaultBinding, from "es6ImportNamedImportParsingError_0";

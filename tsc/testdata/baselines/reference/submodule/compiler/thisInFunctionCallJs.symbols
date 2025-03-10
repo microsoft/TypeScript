@@ -31,6 +31,9 @@ class Test {
 >d : Symbol(d, Decl(a.js, 13, 36))
 
             console.log(d === this.data.length)
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >d : Symbol(d, Decl(a.js, 13, 36))
 
         })
@@ -47,6 +50,9 @@ class Test {
 >d : Symbol(d, Decl(a.js, 21, 18))
 
             console.log(d === this.data.length)
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >d : Symbol(d, Decl(a.js, 21, 18))
 
         }, this)

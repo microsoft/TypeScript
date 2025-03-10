@@ -3,35 +3,16 @@
 @@= skipped -0, +0 lines =@@
 -templateStringsArrayTypeRedefinedInES6Mode.ts(7,3): error TS2345: Argument of type '{}' is not assignable to parameter of type 'TemplateStringsArray'.
 -  Type '{}' is missing the following properties from type 'TemplateStringsArray': raw, length, concat, join, and 17 more.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
++templateStringsArrayTypeRedefinedInES6Mode.ts(7,3): error TS2740: Type '{}' is missing the following properties from type 'TemplateStringsArray': raw, length, concat, join, and 17 more.
  
  
--==== templateStringsArrayTypeRedefinedInES6Mode.ts (1 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+==== templateStringsArrayTypeRedefinedInES6Mode.ts (0 errors) ====
-     class TemplateStringsArray {
-     }
-     
-@@= skipped -9, +23 lines =@@
-     }
+ ==== templateStringsArrayTypeRedefinedInES6Mode.ts (1 errors) ====
+@@= skipped -10, +9 lines =@@
      
      f({}, 10, 10);
--      ~~
+       ~~
 -!!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'TemplateStringsArray'.
 -!!! error TS2345:   Type '{}' is missing the following properties from type 'TemplateStringsArray': raw, length, concat, join, and 17 more.
++!!! error TS2740: Type '{}' is missing the following properties from type 'TemplateStringsArray': raw, length, concat, join, and 17 more.
      
      f `abcdef${ 1234 }${ 5678 }ghijkl`;

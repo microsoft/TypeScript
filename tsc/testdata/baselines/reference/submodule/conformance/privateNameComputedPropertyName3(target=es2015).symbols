@@ -50,6 +50,9 @@ class Foo {
 }
 
 console.log(new Foo("NAME").getValue(100));
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >new Foo("NAME").getValue : Symbol(getValue, Decl(privateNameComputedPropertyName3.ts, 5, 5))
 >Foo : Symbol(Foo, Decl(privateNameComputedPropertyName3.ts, 0, 0))
 >getValue : Symbol(getValue, Decl(privateNameComputedPropertyName3.ts, 5, 5))

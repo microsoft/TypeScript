@@ -6,6 +6,9 @@ class MyStringIterator {
 
     [Symbol.iterator]: any;
 >[Symbol.iterator] : Symbol([Symbol.iterator], Decl(for-of27.ts, 0, 24))
+>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 }
 
 for (var v of new MyStringIterator) { }

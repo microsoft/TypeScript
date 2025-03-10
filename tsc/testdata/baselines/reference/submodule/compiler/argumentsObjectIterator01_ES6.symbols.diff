@@ -5,8 +5,10 @@
  
          result.push(arg + arg);
 ->result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>result.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  >result : Symbol(result, Decl(argumentsObjectIterator01_ES6.ts, 1, 7))
 ->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  >arg : Symbol(arg, Decl(argumentsObjectIterator01_ES6.ts, 2, 12))
  >arg : Symbol(arg, Decl(argumentsObjectIterator01_ES6.ts, 2, 12))
      }

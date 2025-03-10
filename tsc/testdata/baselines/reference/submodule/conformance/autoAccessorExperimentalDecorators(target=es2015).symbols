@@ -5,9 +5,9 @@ declare var dec: (target: any, key: PropertyKey, desc: PropertyDescriptor) => vo
 >dec : Symbol(dec, Decl(autoAccessorExperimentalDecorators.ts, 0, 11))
 >target : Symbol(target, Decl(autoAccessorExperimentalDecorators.ts, 0, 18))
 >key : Symbol(key, Decl(autoAccessorExperimentalDecorators.ts, 0, 30))
->PropertyKey : Symbol(PropertyKey)
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
 >desc : Symbol(desc, Decl(autoAccessorExperimentalDecorators.ts, 0, 48))
->PropertyDescriptor : Symbol(PropertyDescriptor)
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.es5.d.ts, --, --))
 
 class C1 {
 >C1 : Symbol(C1, Decl(autoAccessorExperimentalDecorators.ts, 0, 83))

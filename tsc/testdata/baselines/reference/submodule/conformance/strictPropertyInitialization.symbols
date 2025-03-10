@@ -318,6 +318,7 @@ const a = 'a';
 
 const b = Symbol();
 >b : Symbol(b, Decl(strictPropertyInitialization.ts, 135, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 class C12 {
 >C12 : Symbol(C12, Decl(strictPropertyInitialization.ts, 135, 19))

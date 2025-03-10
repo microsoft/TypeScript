@@ -41,11 +41,6 @@
  
          const data: Record<string, string> = { a: 'a', b: 'b', c: 'c', d: 'd', e: 'e' };
  >data : Symbol(data, Decl(privateNameComputedPropertyName1.ts, 15, 13))
-->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
-+>Record : Symbol(Record)
- >a : Symbol(a, Decl(privateNameComputedPropertyName1.ts, 15, 46))
- >b : Symbol(b, Decl(privateNameComputedPropertyName1.ts, 15, 54))
- >c : Symbol(c, Decl(privateNameComputedPropertyName1.ts, 15, 62))
 @@= skipped -38, +38 lines =@@
  
          const {
@@ -84,12 +79,14 @@
  
          console.log(a, b, c, d, e);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >a : Symbol(a, Decl(privateNameComputedPropertyName1.ts, 16, 15))
  >b : Symbol(b, Decl(privateNameComputedPropertyName1.ts, 17, 25))
  >c : Symbol(c, Decl(privateNameComputedPropertyName1.ts, 18, 25))
-@@= skipped -12, +9 lines =@@
+@@= skipped -12, +12 lines =@@
          const a1 = data[this.#a];
  >a1 : Symbol(a1, Decl(privateNameComputedPropertyName1.ts, 25, 13))
  >data : Symbol(data, Decl(privateNameComputedPropertyName1.ts, 15, 13))
@@ -127,12 +124,14 @@
  
          console.log(a1, b1, c1, d1);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >a1 : Symbol(a1, Decl(privateNameComputedPropertyName1.ts, 25, 13))
  >b1 : Symbol(b1, Decl(privateNameComputedPropertyName1.ts, 26, 13))
  >c1 : Symbol(c1, Decl(privateNameComputedPropertyName1.ts, 27, 13))
-@@= skipped -39, +36 lines =@@
+@@= skipped -39, +39 lines =@@
  }
  
  new A().test();

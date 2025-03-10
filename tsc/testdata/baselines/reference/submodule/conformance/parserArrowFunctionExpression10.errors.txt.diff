@@ -1,33 +1,17 @@
 --- old.parserArrowFunctionExpression10.errors.txt
 +++ new.parserArrowFunctionExpression10.errors.txt
 @@= skipped -0, +0 lines =@@
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
  fileJs.js(1,1): error TS2304: Cannot find name 'a'.
  fileJs.js(1,11): error TS2304: Cannot find name 'c'.
 -fileJs.js(1,11): error TS8010: Type annotations can only be used in TypeScript files.
  fileJs.js(1,17): error TS2304: Cannot find name 'd'.
  fileJs.js(1,27): error TS2304: Cannot find name 'f'.
  fileTs.ts(1,1): error TS2304: Cannot find name 'a'.
-@@= skipped -8, +15 lines =@@
+@@= skipped -8, +7 lines =@@
  fileTs.ts(1,27): error TS2304: Cannot find name 'f'.
  
  
 -==== fileJs.js (5 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 +==== fileJs.js (4 errors) ====
      a ? (b) : c => (d) : e => f // Not legal JS; "Unexpected token ':'" at last colon
      ~

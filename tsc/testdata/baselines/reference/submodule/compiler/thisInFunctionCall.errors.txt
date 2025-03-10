@@ -1,32 +1,10 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-thisInFunctionCall.ts(9,15): error TS2339: Property 'find' does not exist on type '{}'.
 thisInFunctionCall.ts(10,20): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-thisInFunctionCall.ts(15,15): error TS2339: Property 'forEach' does not exist on type '{}'.
-thisInFunctionCall.ts(16,7): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
 thisInFunctionCall.ts(16,25): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-thisInFunctionCall.ts(21,15): error TS2339: Property 'forEach' does not exist on type '{}'.
-thisInFunctionCall.ts(24,7): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
 thisInFunctionCall.ts(24,25): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-thisInFunctionCall.ts(29,15): error TS2339: Property 'find' does not exist on type '{}'.
 thisInFunctionCall.ts(32,20): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== thisInFunctionCall.ts (10 errors) ====
+==== thisInFunctionCall.ts (4 errors) ====
     class Test {
       data: number[]
     
@@ -36,8 +14,6 @@ thisInFunctionCall.ts(32,20): error TS2683: 'this' implicitly has type 'any' bec
     
       finderRaw() {
         this.data.find(function (d) {
-                  ~~~~
-!!! error TS2339: Property 'find' does not exist on type '{}'.
           return d === this.data.length
                        ~~~~
 !!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
@@ -47,11 +23,7 @@ thisInFunctionCall.ts(32,20): error TS2683: 'this' implicitly has type 'any' bec
     
       forEacherRaw() {
         this.data.forEach(function (d) {
-                  ~~~~~~~
-!!! error TS2339: Property 'forEach' does not exist on type '{}'.
           console.log(d === this.data.length)
-          ~~~~~~~
-!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
                             ~~~~
 !!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 !!! related TS2738 thisInFunctionCall.ts:15:23: An outer value of 'this' is shadowed by this container.
@@ -60,13 +32,9 @@ thisInFunctionCall.ts(32,20): error TS2683: 'this' implicitly has type 'any' bec
     
       forEacher() {
         this.data.forEach(
-                  ~~~~~~~
-!!! error TS2339: Property 'forEach' does not exist on type '{}'.
         /** @this {Test} */
         function (d) {
           console.log(d === this.data.length)
-          ~~~~~~~
-!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
                             ~~~~
 !!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 !!! related TS2738 thisInFunctionCall.ts:23:5: An outer value of 'this' is shadowed by this container.
@@ -75,8 +43,6 @@ thisInFunctionCall.ts(32,20): error TS2683: 'this' implicitly has type 'any' bec
     
       finder() {
         this.data.find(
-                  ~~~~
-!!! error TS2339: Property 'find' does not exist on type '{}'.
         /** @this {Test} */
         function (d) {
           return d === this.data.length

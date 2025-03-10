@@ -5,8 +5,10 @@
      f &&= (f.toString(), (a => a))
  >f : Symbol(f, Decl(logicalAssignment5.ts, 25, 15))
 ->f.toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
++>f.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >f : Symbol(f, Decl(logicalAssignment5.ts, 25, 15))
 ->toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >a : Symbol(a, Decl(logicalAssignment5.ts, 26, 26))
  >a : Symbol(a, Decl(logicalAssignment5.ts, 26, 26))
  

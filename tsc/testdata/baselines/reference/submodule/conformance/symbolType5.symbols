@@ -3,6 +3,9 @@
 === symbolType5.ts ===
 var s = Symbol.for("multiply");
 >s : Symbol(s, Decl(symbolType5.ts, 0, 3))
+>Symbol.for : Symbol(for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(for, Decl(lib.es2015.symbol.d.ts, --, --))
 
 s * s;
 >s : Symbol(s, Decl(symbolType5.ts, 0, 3))

@@ -1,11 +1,11 @@
 --- old.templateStringWithPropertyAccessES6.symbols
 +++ new.templateStringWithPropertyAccessES6.symbols
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/es6/templates/templateStringWithPropertyAccessES6.ts] ////
+@@= skipped -1, +1 lines =@@
  
  === templateStringWithPropertyAccessES6.ts ===
--`abc${0}abc`.indexOf(`abc`);
+ `abc${0}abc`.indexOf(`abc`);
 ->`abc${0}abc`.indexOf : Symbol(String.indexOf, Decl(lib.es5.d.ts, --, --))
 ->indexOf : Symbol(String.indexOf, Decl(lib.es5.d.ts, --, --))
++>`abc${0}abc`.indexOf : Symbol(indexOf, Decl(lib.es5.d.ts, --, --))
++>indexOf : Symbol(indexOf, Decl(lib.es5.d.ts, --, --))
  
-+`abc${0}abc`.indexOf(`abc`);

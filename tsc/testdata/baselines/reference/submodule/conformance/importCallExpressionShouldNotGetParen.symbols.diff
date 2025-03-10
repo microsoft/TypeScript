@@ -5,18 +5,22 @@
  
  import(`./locales/${localeName}.js`).then(bar => {
 ->import(`./locales/${localeName}.js`).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
++>import(`./locales/${localeName}.js`).then : Symbol(then, Decl(lib.es5.d.ts, --, --))
  >localeName : Symbol(localeName, Decl(importCallExpressionShouldNotGetParen.ts, 0, 5))
 ->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
++>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
  >bar : Symbol(bar, Decl(importCallExpressionShouldNotGetParen.ts, 1, 42))
  
      let x = bar;
-@@= skipped -12, +10 lines =@@
+@@= skipped -12, +12 lines =@@
  });
  
  import("./locales/" + localeName + ".js").then(bar => {
 ->import("./locales/" + localeName + ".js").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
++>import("./locales/" + localeName + ".js").then : Symbol(then, Decl(lib.es5.d.ts, --, --))
  >localeName : Symbol(localeName, Decl(importCallExpressionShouldNotGetParen.ts, 0, 5))
 ->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
++>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
  >bar : Symbol(bar, Decl(importCallExpressionShouldNotGetParen.ts, 5, 47))
  
      let x = bar;

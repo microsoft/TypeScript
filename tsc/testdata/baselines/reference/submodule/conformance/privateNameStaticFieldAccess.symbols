@@ -9,10 +9,16 @@ class A {
 
     constructor() {
         console.log(A.#myField); //Ok
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >A.#myField : Symbol(#myField, Decl(privateNameStaticFieldAccess.ts, 0, 9))
 >A : Symbol(A, Decl(privateNameStaticFieldAccess.ts, 0, 0))
 
         console.log(this.#myField); //Error
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >this : Symbol(A, Decl(privateNameStaticFieldAccess.ts, 0, 0))
     }
 }

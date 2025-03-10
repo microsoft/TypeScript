@@ -31,17 +31,21 @@
  
          console.log(this.#prop);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 ->this.#prop : Symbol(A1.#prop, Decl(privateNameAccessors.ts, 0, 10), Decl(privateNameAccessors.ts, 1, 30))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 +>this.#prop : Symbol(#prop, Decl(privateNameAccessors.ts, 0, 10), Decl(privateNameAccessors.ts, 1, 30))
  >this : Symbol(A1, Decl(privateNameAccessors.ts, 0, 0))
  
          console.log(this.#roProp);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 ->this.#roProp : Symbol(A1.#roProp, Decl(privateNameAccessors.ts, 2, 32))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 +>this.#roProp : Symbol(#roProp, Decl(privateNameAccessors.ts, 2, 32))
  >this : Symbol(A1, Decl(privateNameAccessors.ts, 0, 0))
      }

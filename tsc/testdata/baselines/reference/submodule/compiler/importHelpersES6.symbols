@@ -37,14 +37,14 @@ const y = { ...o };
 export declare function __extends(d: Function, b: Function): void;
 >__extends : Symbol(__extends, Decl(tslib.d.ts, 0, 0))
 >d : Symbol(d, Decl(tslib.d.ts, 0, 34))
->Function : Symbol(Function)
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >b : Symbol(b, Decl(tslib.d.ts, 0, 46))
->Function : Symbol(Function)
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;
 >__decorate : Symbol(__decorate, Decl(tslib.d.ts, 0, 66))
 >decorators : Symbol(decorators, Decl(tslib.d.ts, 1, 35))
->Function : Symbol(Function)
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >target : Symbol(target, Decl(tslib.d.ts, 1, 58))
 >key : Symbol(key, Decl(tslib.d.ts, 1, 71))
 >desc : Symbol(desc, Decl(tslib.d.ts, 1, 94))
@@ -53,23 +53,23 @@ export declare function __param(paramIndex: number, decorator: Function): Functi
 >__param : Symbol(__param, Decl(tslib.d.ts, 1, 112))
 >paramIndex : Symbol(paramIndex, Decl(tslib.d.ts, 2, 32))
 >decorator : Symbol(decorator, Decl(tslib.d.ts, 2, 51))
->Function : Symbol(Function)
->Function : Symbol(Function)
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 export declare function __metadata(metadataKey: any, metadataValue: any): Function;
 >__metadata : Symbol(__metadata, Decl(tslib.d.ts, 2, 83))
 >metadataKey : Symbol(metadataKey, Decl(tslib.d.ts, 3, 35))
 >metadataValue : Symbol(metadataValue, Decl(tslib.d.ts, 3, 52))
->Function : Symbol(Function)
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
 >__awaiter : Symbol(__awaiter, Decl(tslib.d.ts, 3, 83))
 >thisArg : Symbol(thisArg, Decl(tslib.d.ts, 4, 34))
 >_arguments : Symbol(_arguments, Decl(tslib.d.ts, 4, 47))
 >P : Symbol(P, Decl(tslib.d.ts, 4, 64))
->Function : Symbol(Function)
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >generator : Symbol(generator, Decl(tslib.d.ts, 4, 77))
->Function : Symbol(Function)
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 export declare function __classPrivateFieldGet(a: any, b: any, c: any, d: any): any;
 >__classPrivateFieldGet : Symbol(__classPrivateFieldGet, Decl(tslib.d.ts, 4, 104))

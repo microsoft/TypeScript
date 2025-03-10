@@ -19,7 +19,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >NAME : Symbol(NAME, Decl(conditionalTypeDoesntSpinForever.ts, 8, 32))
 >RECORD : Symbol(RECORD, Decl(conditionalTypeDoesntSpinForever.ts, 8, 52))
 >IDENTIFIER : Symbol(IDENTIFIER, Decl(conditionalTypeDoesntSpinForever.ts, 8, 60))
->Partial : Symbol(Partial)
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >RECORD : Symbol(RECORD, Decl(conditionalTypeDoesntSpinForever.ts, 8, 52))
 
     name: NAME;
@@ -79,6 +79,9 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
         buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}>
 >buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
+>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 21, 45))
 >name : Symbol(name, Decl(conditionalTypeDoesntSpinForever.ts, 24, 56))
 >instance : Symbol(instance, Decl(conditionalTypeDoesntSpinForever.ts, 23, 19))
@@ -132,6 +135,9 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
         buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) as
 >buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
+>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 34, 44))
 >storedAs : Symbol(storedAs, Decl(conditionalTypeDoesntSpinForever.ts, 37, 56))
 >PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString : Symbol(jsonEncodedRedisString, Decl(conditionalTypeDoesntSpinForever.ts, 4, 28))
@@ -150,6 +156,9 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
         buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) as
 >buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
+>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 34, 44))
 >storedAs : Symbol(storedAs, Decl(conditionalTypeDoesntSpinForever.ts, 40, 56))
 >PubSubRecordIsStoredInRedisAsA.redisHash : Symbol(redisHash, Decl(conditionalTypeDoesntSpinForever.ts, 3, 44))
@@ -180,7 +189,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
       identifier: <TYPE extends Partial<SO_FAR["record"]>>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>
 >identifier : Symbol(identifier, Decl(conditionalTypeDoesntSpinForever.ts, 47, 36))
 >TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 48, 19))
->Partial : Symbol(Partial)
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 45, 34))
 >t : Symbol(t, Decl(conditionalTypeDoesntSpinForever.ts, 48, 59))
 >TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 48, 19))
@@ -210,6 +219,9 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
         buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) as BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>
 >buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
+>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 51, 51))
 >identifier : Symbol(identifier, Decl(conditionalTypeDoesntSpinForever.ts, 54, 56))
 >instance : Symbol(instance, Decl(conditionalTypeDoesntSpinForever.ts, 53, 25))
@@ -261,6 +273,9 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
         buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) as BuildPubSubRecordType<SO_FAR & {record: TYPE}>
 >buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
+>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 63, 47))
 >record : Symbol(record, Decl(conditionalTypeDoesntSpinForever.ts, 66, 56))
 >instance : Symbol(instance, Decl(conditionalTypeDoesntSpinForever.ts, 65, 21))
@@ -314,6 +329,9 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
         buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}>,
 >buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
+>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 76, 68))
 >maxMsToWaitBeforePublishing : Symbol(maxMsToWaitBeforePublishing, Decl(conditionalTypeDoesntSpinForever.ts, 79, 56))
 >instance : Symbol(instance, Decl(conditionalTypeDoesntSpinForever.ts, 78, 36))
@@ -326,6 +344,9 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
         buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}>,
 >buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
+>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 76, 68))
 >maxMsToWaitBeforePublishing : Symbol(maxMsToWaitBeforePublishing, Decl(conditionalTypeDoesntSpinForever.ts, 81, 56))
 >BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
@@ -354,7 +375,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
       fields: Set<keyof SO_FAR>,
 >fields : Symbol(fields, Decl(conditionalTypeDoesntSpinForever.ts, 87, 19))
->Set : Symbol(Set)
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 85, 23))
 
       hasField: (fieldName: string | number | symbol) => fieldName is keyof SO_FAR
@@ -383,6 +404,10 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
       fields: () => new Set(Object.keys(soFar) as (keyof SO_FAR)[]),
 >fields : Symbol(fields, Decl(conditionalTypeDoesntSpinForever.ts, 94, 18))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Object.keys : Symbol(keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 92, 29))
 >SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 92, 21))
 
@@ -427,6 +452,9 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 108, 33))
 >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 108, 41))
 >SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 108, 33))
+>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
     {},
     buildNameFieldConstructor(soFar),

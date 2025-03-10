@@ -21,9 +21,11 @@
  
  console.log(new C().m());
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 ->new C().m : Symbol(C.m, Decl(privateNameSetterNoGetter.ts, 1, 16))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 +>new C().m : Symbol(m, Decl(privateNameSetterNoGetter.ts, 1, 16))
  >C : Symbol(C, Decl(privateNameSetterNoGetter.ts, 0, 5))
 ->m : Symbol(C.m, Decl(privateNameSetterNoGetter.ts, 1, 16))

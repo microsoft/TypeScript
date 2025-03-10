@@ -96,62 +96,7 @@
  >R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 27))
  >O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 29))
  >E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 32))
-@@= skipped -17, +17 lines =@@
- 
-         collection: Iterable<Kind<F, R, O, E, A>>
- >collection : Symbol(collection, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 62, 34))
-->Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
-+>Iterable : Symbol(Iterable)
- >Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
- >F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 29))
- >R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 27))
-@@= skipped -15, +15 lines =@@
- >O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 29))
- >E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 32))
- >A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 35))
-->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>Array : Symbol(Array)
- >A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 35))
- }
- export interface SemiApplicative<F extends TypeLambda> extends SemiProduct<F>, Covariant<F> { }
-@@= skipped -30, +30 lines =@@
-     <DataLast extends (...args: Array<any>) => any, DataFirst extends (...args: Array<any>) => any>(
- >DataLast : Symbol(DataLast, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 5))
- >args : Symbol(args, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 23))
-->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>Array : Symbol(Array)
- >DataFirst : Symbol(DataFirst, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 51))
- >args : Symbol(args, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 71))
-->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>Array : Symbol(Array)
- 
-         arity: Parameters<DataFirst>["length"],
- >arity : Symbol(arity, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 100))
-->Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
-+>Parameters : Symbol(Parameters)
- >DataFirst : Symbol(DataFirst, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 51))
- 
-         body: DataFirst
-@@= skipped -21, +21 lines =@@
-     <DataLast extends (...args: Array<any>) => any, DataFirst extends (...args: Array<any>) => any>(
- >DataLast : Symbol(DataLast, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 5))
- >args : Symbol(args, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 23))
-->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>Array : Symbol(Array)
- >DataFirst : Symbol(DataFirst, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 51))
- >args : Symbol(args, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 71))
-->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>Array : Symbol(Array)
- 
-         isDataFirst: (args: IArguments) => boolean,
- >isDataFirst : Symbol(isDataFirst, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 100))
- >args : Symbol(args, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 77, 22))
-->IArguments : Symbol(IArguments, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
-+>IArguments : Symbol(IArguments)
- 
-         body: DataFirst
- >body : Symbol(body, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 77, 51))
-@@= skipped -174, +174 lines =@@
+@@= skipped -257, +257 lines =@@
  >E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 16))
  >E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 31))
  >C : Symbol(C, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 38))

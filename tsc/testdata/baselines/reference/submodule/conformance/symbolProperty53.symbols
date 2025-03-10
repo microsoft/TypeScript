@@ -6,9 +6,15 @@ var obj = {
 
     [Symbol.for]: 0
 >[Symbol.for] : Symbol([Symbol.for], Decl(symbolProperty53.ts, 0, 11))
+>Symbol.for : Symbol(for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(for, Decl(lib.es2015.symbol.d.ts, --, --))
 
 };
 
 obj[Symbol.for];
 >obj : Symbol(obj, Decl(symbolProperty53.ts, 0, 3))
+>Symbol.for : Symbol(for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(for, Decl(lib.es2015.symbol.d.ts, --, --))
 

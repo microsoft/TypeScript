@@ -65,15 +65,19 @@
  
      return text[0].toLowerCase() + text.substring(1);
 ->text[0].toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
++>text[0].toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
  >text : Symbol(text, Decl(Element.ts, 26, 21))
 ->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 ->text.substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
++>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
++>text.substring : Symbol(substring, Decl(lib.es5.d.ts, --, --))
  >text : Symbol(text, Decl(Element.ts, 26, 21))
 ->substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
++>substring : Symbol(substring, Decl(lib.es5.d.ts, --, --))
  }
  
  === test.tsx ===
-@@= skipped -23, +19 lines =@@
+@@= skipped -23, +23 lines =@@
  
  let createElement = Element.createElement;
  >createElement : Symbol(createElement, Decl(test.tsx, 1, 3))

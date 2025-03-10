@@ -36,7 +36,7 @@ abstract class SomeAbstractClass<C, M, R> extends SomeBaseClass {
 >baz : Symbol(baz, Decl(inferenceErasedSignatures.ts, 8, 28))
 >c : Symbol(c, Decl(inferenceErasedSignatures.ts, 9, 17))
 >C : Symbol(C, Decl(inferenceErasedSignatures.ts, 6, 33))
->Promise : Symbol(Promise)
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >M : Symbol(M, Decl(inferenceErasedSignatures.ts, 6, 35))
 }
 
@@ -47,7 +47,7 @@ class SomeClass extends SomeAbstractClass<number, string, boolean> {
     async baz(context: number): Promise<string> {
 >baz : Symbol(baz, Decl(inferenceErasedSignatures.ts, 12, 68))
 >context : Symbol(context, Decl(inferenceErasedSignatures.ts, 13, 14))
->Promise : Symbol(Promise)
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         return `${context}`;
 >context : Symbol(context, Decl(inferenceErasedSignatures.ts, 13, 14))

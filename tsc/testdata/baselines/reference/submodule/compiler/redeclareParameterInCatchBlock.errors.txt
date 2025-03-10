@@ -1,14 +1,5 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 redeclareParameterInCatchBlock.ts(4,11): error TS2492: Cannot redeclare identifier 'e' in catch clause.
 redeclareParameterInCatchBlock.ts(10,9): error TS2492: Cannot redeclare identifier 'e' in catch clause.
-redeclareParameterInCatchBlock.ts(16,11): error TS2488: Type '[number, number]' must have a '[Symbol.iterator]()' method that returns an iterator.
 redeclareParameterInCatchBlock.ts(16,15): error TS2492: Cannot redeclare identifier 'b' in catch clause.
 redeclareParameterInCatchBlock.ts(21,15): error TS2451: Cannot redeclare block-scoped variable 'x'.
 redeclareParameterInCatchBlock.ts(21,15): error TS2451: Cannot redeclare block-scoped variable 'x'.
@@ -16,15 +7,7 @@ redeclareParameterInCatchBlock.ts(21,21): error TS2451: Cannot redeclare block-s
 redeclareParameterInCatchBlock.ts(21,21): error TS2451: Cannot redeclare block-scoped variable 'x'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== redeclareParameterInCatchBlock.ts (8 errors) ====
+==== redeclareParameterInCatchBlock.ts (7 errors) ====
     try {
     
     } catch(e) {
@@ -45,8 +28,6 @@ redeclareParameterInCatchBlock.ts(21,21): error TS2451: Cannot redeclare block-s
     
     } catch ([a, b]) {
         const [c, b] = [0, 1];
-              ~~~~~~
-!!! error TS2488: Type '[number, number]' must have a '[Symbol.iterator]()' method that returns an iterator.
                   ~
 !!! error TS2492: Cannot redeclare identifier 'b' in catch clause.
     }

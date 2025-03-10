@@ -10,7 +10,7 @@ function getProperty2<T, K extends keyof T>(obj: T, key: Extract<K, string>): T[
 >obj : Symbol(obj, Decl(extractInferenceImprovement.ts, 1, 44))
 >T : Symbol(T, Decl(extractInferenceImprovement.ts, 1, 22))
 >key : Symbol(key, Decl(extractInferenceImprovement.ts, 1, 51))
->Extract : Symbol(Extract)
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
 >K : Symbol(K, Decl(extractInferenceImprovement.ts, 1, 24))
 >T : Symbol(T, Decl(extractInferenceImprovement.ts, 1, 22))
 >K : Symbol(K, Decl(extractInferenceImprovement.ts, 1, 24))
@@ -24,7 +24,7 @@ function getProperty3<T, K extends Extract<keyof T, string>>(obj: T, key: K): T[
 >getProperty3 : Symbol(getProperty3, Decl(extractInferenceImprovement.ts, 3, 1))
 >T : Symbol(T, Decl(extractInferenceImprovement.ts, 5, 22))
 >K : Symbol(K, Decl(extractInferenceImprovement.ts, 5, 24))
->Extract : Symbol(Extract)
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(extractInferenceImprovement.ts, 5, 22))
 >obj : Symbol(obj, Decl(extractInferenceImprovement.ts, 5, 61))
 >T : Symbol(T, Decl(extractInferenceImprovement.ts, 5, 22))
@@ -40,6 +40,7 @@ function getProperty3<T, K extends Extract<keyof T, string>>(obj: T, key: K): T[
 
 const s = Symbol();
 >s : Symbol(s, Decl(extractInferenceImprovement.ts, 9, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 interface StrNum {
 >StrNum : Symbol(StrNum, Decl(extractInferenceImprovement.ts, 9, 19))

@@ -7,6 +7,8 @@ function f1() {
     (async () => {
         await 10
         throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
     })();
 
     var x = 1;

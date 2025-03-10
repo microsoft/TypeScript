@@ -14,6 +14,7 @@ class SymbolIterator {
         return {
             value: Symbol(),
 >value : Symbol(value, Decl(iteratorSpreadInCall.ts, 3, 16))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
             done: false
 >done : Symbol(done, Decl(iteratorSpreadInCall.ts, 4, 28))
@@ -23,6 +24,9 @@ class SymbolIterator {
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : Symbol([Symbol.iterator], Decl(iteratorSpreadInCall.ts, 7, 5))
+>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
         return this;
 >this : Symbol(SymbolIterator, Decl(iteratorSpreadInCall.ts, 0, 27))

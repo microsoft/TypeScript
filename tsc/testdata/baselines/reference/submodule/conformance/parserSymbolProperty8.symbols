@@ -6,4 +6,7 @@ var x: {
 
     [Symbol.toPrimitive](): string
 >[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(parserSymbolProperty8.ts, 0, 8))
+>Symbol.toPrimitive : Symbol(toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toPrimitive : Symbol(toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }

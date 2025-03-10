@@ -1,18 +1,6 @@
 --- old.decoratorOnClassMethod5.symbols
 +++ new.decoratorOnClassMethod5.symbols
-@@= skipped -6, +6 lines =@@
- >target : Symbol(target, Decl(decoratorOnClassMethod5.ts, 0, 28))
- >propertyKey : Symbol(propertyKey, Decl(decoratorOnClassMethod5.ts, 0, 40))
- >descriptor : Symbol(descriptor, Decl(decoratorOnClassMethod5.ts, 0, 61))
-->TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
-+>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor)
- >T : Symbol(T, Decl(decoratorOnClassMethod5.ts, 0, 25))
-->TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
-+>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor)
- >T : Symbol(T, Decl(decoratorOnClassMethod5.ts, 0, 25))
- 
- class C {
-@@= skipped -10, +10 lines =@@
+@@= skipped -16, +16 lines =@@
  
      @dec() ["method"]() {}
  >dec : Symbol(dec, Decl(decoratorOnClassMethod5.ts, 0, 0))

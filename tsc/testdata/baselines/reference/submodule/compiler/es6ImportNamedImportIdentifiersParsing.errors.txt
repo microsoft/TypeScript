@@ -1,11 +1,3 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 es6ImportNamedImportIdentifiersParsing.ts(1,10): error TS2300: Duplicate identifier 'yield'.
 es6ImportNamedImportIdentifiersParsing.ts(1,10): error TS2300: Duplicate identifier 'yield'.
 es6ImportNamedImportIdentifiersParsing.ts(1,23): error TS2307: Cannot find module 'somemodule' or its corresponding type declarations.
@@ -26,14 +18,6 @@ es6ImportNamedImportIdentifiersParsing.ts(5,21): error TS2300: Duplicate identif
 es6ImportNamedImportIdentifiersParsing.ts(5,36): error TS2307: Cannot find module 'somemodule' or its corresponding type declarations.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 ==== es6ImportNamedImportIdentifiersParsing.ts (18 errors) ====
     import { yield } from "somemodule"; // Allowed
              ~~~~~

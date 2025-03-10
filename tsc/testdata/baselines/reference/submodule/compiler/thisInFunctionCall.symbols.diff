@@ -23,15 +23,17 @@
      this.data.find(function (d) {
 ->this.data.find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 ->this.data : Symbol(Test.data, Decl(thisInFunctionCall.ts, 0, 12))
++>this.data.find : Symbol(find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 +>this.data : Symbol(data, Decl(thisInFunctionCall.ts, 0, 12))
  >this : Symbol(Test, Decl(thisInFunctionCall.ts, 0, 0))
 ->data : Symbol(Test.data, Decl(thisInFunctionCall.ts, 0, 12))
 ->find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 +>data : Symbol(data, Decl(thisInFunctionCall.ts, 0, 12))
++>find : Symbol(find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
  >d : Symbol(d, Decl(thisInFunctionCall.ts, 8, 29))
  
        return d === this.data.length
-@@= skipped -27, +25 lines =@@
+@@= skipped -27, +27 lines =@@
    }
  
    forEacherRaw() {
@@ -41,17 +43,21 @@
      this.data.forEach(function (d) {
 ->this.data.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 ->this.data : Symbol(Test.data, Decl(thisInFunctionCall.ts, 0, 12))
++>this.data.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
 +>this.data : Symbol(data, Decl(thisInFunctionCall.ts, 0, 12))
  >this : Symbol(Test, Decl(thisInFunctionCall.ts, 0, 0))
 ->data : Symbol(Test.data, Decl(thisInFunctionCall.ts, 0, 12))
 ->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 +>data : Symbol(data, Decl(thisInFunctionCall.ts, 0, 12))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
  >d : Symbol(d, Decl(thisInFunctionCall.ts, 14, 32))
  
        console.log(d === this.data.length)
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >d : Symbol(d, Decl(thisInFunctionCall.ts, 14, 32))
  
      })
@@ -64,11 +70,13 @@
      this.data.forEach(
 ->this.data.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 ->this.data : Symbol(Test.data, Decl(thisInFunctionCall.ts, 0, 12))
++>this.data.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
 +>this.data : Symbol(data, Decl(thisInFunctionCall.ts, 0, 12))
  >this : Symbol(Test, Decl(thisInFunctionCall.ts, 0, 0))
 ->data : Symbol(Test.data, Decl(thisInFunctionCall.ts, 0, 12))
 ->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 +>data : Symbol(data, Decl(thisInFunctionCall.ts, 0, 12))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
  
      /** @this {Test} */
      function (d) {
@@ -76,12 +84,14 @@
  
        console.log(d === this.data.length)
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >d : Symbol(d, Decl(thisInFunctionCall.ts, 22, 14))
  
      }, this)
-@@= skipped -44, +34 lines =@@
+@@= skipped -44, +44 lines =@@
    }
  
    finder() {
@@ -91,11 +101,13 @@
      this.data.find(
 ->this.data.find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 ->this.data : Symbol(Test.data, Decl(thisInFunctionCall.ts, 0, 12))
++>this.data.find : Symbol(find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 +>this.data : Symbol(data, Decl(thisInFunctionCall.ts, 0, 12))
  >this : Symbol(Test, Decl(thisInFunctionCall.ts, 0, 0))
 ->data : Symbol(Test.data, Decl(thisInFunctionCall.ts, 0, 12))
 ->find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 +>data : Symbol(data, Decl(thisInFunctionCall.ts, 0, 12))
++>find : Symbol(find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
  
      /** @this {Test} */
      function (d) {

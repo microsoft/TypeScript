@@ -12,6 +12,9 @@ export class A {
 
     constructor () {
         console.log(this.#used);
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >this.#used : Symbol(#used, Decl(privateNameUnused.ts, 0, 16))
 >this : Symbol(A, Decl(privateNameUnused.ts, 0, 0))
     }
@@ -28,6 +31,9 @@ export class A2 {
 
     constructor () {
         console.log(this.#used());
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >this.#used : Symbol(#used, Decl(privateNameUnused.ts, 8, 17))
 >this : Symbol(A2, Decl(privateNameUnused.ts, 6, 1))
     }
@@ -52,6 +58,9 @@ export class A3 {
 
     constructor () {
         console.log(this.#used);
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >this.#used : Symbol(#used, Decl(privateNameUnused.ts, 16, 17), Decl(privateNameUnused.ts, 17, 29))
 >this : Symbol(A3, Decl(privateNameUnused.ts, 14, 1))
     }

@@ -1,11 +1,3 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 constDeclarations-access2.ts(4,1): error TS2588: Cannot assign to 'x' because it is a constant.
 constDeclarations-access2.ts(5,1): error TS2588: Cannot assign to 'x' because it is a constant.
 constDeclarations-access2.ts(6,1): error TS2588: Cannot assign to 'x' because it is a constant.
@@ -23,18 +15,9 @@ constDeclarations-access2.ts(18,1): error TS2588: Cannot assign to 'x' because i
 constDeclarations-access2.ts(19,3): error TS2588: Cannot assign to 'x' because it is a constant.
 constDeclarations-access2.ts(20,3): error TS2588: Cannot assign to 'x' because it is a constant.
 constDeclarations-access2.ts(22,5): error TS2588: Cannot assign to 'x' because it is a constant.
-constDeclarations-access2.ts(38,3): error TS2339: Property 'toString' does not exist on type 'number'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== constDeclarations-access2.ts (18 errors) ====
+==== constDeclarations-access2.ts (17 errors) ====
     const x = 0
     
     // Errors
@@ -107,6 +90,4 @@ constDeclarations-access2.ts(38,3): error TS2339: Property 'toString' does not e
     +x;
     
     x.toString();
-      ~~~~~~~~
-!!! error TS2339: Property 'toString' does not exist on type 'number'.
     

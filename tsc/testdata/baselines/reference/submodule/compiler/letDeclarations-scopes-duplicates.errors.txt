@@ -1,11 +1,3 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 letDeclarations-scopes-duplicates.ts(2,5): error TS2451: Cannot redeclare block-scoped variable 'var1'.
 letDeclarations-scopes-duplicates.ts(2,5): error TS2451: Cannot redeclare block-scoped variable 'var1'.
 letDeclarations-scopes-duplicates.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'var1'.
@@ -56,14 +48,6 @@ letDeclarations-scopes-duplicates.ts(46,9): error TS2451: Cannot redeclare block
 letDeclarations-scopes-duplicates.ts(46,9): error TS2451: Cannot redeclare block-scoped variable 'var12'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 ==== letDeclarations-scopes-duplicates.ts (48 errors) ====
     // Errors: redeclaration
     let var1 = 0;

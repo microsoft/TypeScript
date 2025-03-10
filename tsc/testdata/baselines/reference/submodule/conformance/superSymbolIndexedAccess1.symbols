@@ -3,6 +3,9 @@
 === superSymbolIndexedAccess1.ts ===
 var symbol = Symbol.for('myThing');
 >symbol : Symbol(symbol, Decl(superSymbolIndexedAccess1.ts, 0, 3))
+>Symbol.for : Symbol(for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(for, Decl(lib.es2015.symbol.d.ts, --, --))
 
 class Foo {
 >Foo : Symbol(Foo, Decl(superSymbolIndexedAccess1.ts, 0, 35))

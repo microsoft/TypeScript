@@ -1,16 +1,6 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'Promise'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 a.ts(1,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
 a.ts(1,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
 a.ts(1,30): error TS2307: Cannot find module 'asyncawait' or its corresponding type declarations.
-a.ts(2,34): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 asyncawait.ts(2,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
 asyncawait.ts(2,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
 c.ts(1,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
@@ -24,15 +14,6 @@ e.ts(1,17): error TS1262: Identifier expected. 'await' is a reserved word at the
 e.ts(1,30): error TS2307: Cannot find module 'asyncawait' or its corresponding type declarations.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'Promise'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 ==== asyncawait.ts (2 errors) ====
     export function async<T>(...args: any[]): any { }
     export function await(...args: any[]): any { }
@@ -41,7 +22,7 @@ e.ts(1,30): error TS2307: Cannot find module 'asyncawait' or its corresponding t
                     ~~~~~
 !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
     
-==== a.ts (4 errors) ====
+==== a.ts (3 errors) ====
     import { async, await } from 'asyncawait';
                     ~~~~~
 !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
@@ -50,8 +31,6 @@ e.ts(1,30): error TS2307: Cannot find module 'asyncawait' or its corresponding t
                                  ~~~~~~~~~~~~
 !!! error TS2307: Cannot find module 'asyncawait' or its corresponding type declarations.
     export default async(() => await(Promise.resolve(1)));
-                                     ~~~~~~~
-!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
     
 ==== b.ts (0 errors) ====
     export default async () => { return 0; };

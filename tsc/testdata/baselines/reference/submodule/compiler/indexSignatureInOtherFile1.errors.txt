@@ -1,27 +1,8 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-other.ts(14,3): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-other.ts(14,4): error TS2304: Cannot find name 'Symbol'.
-other.ts(14,24): error TS2304: Cannot find name 'IterableIterator'.
-other.ts(23,3): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-other.ts(23,4): error TS2304: Cannot find name 'Symbol'.
+index.ts(2,3): error TS2411: Property '[Symbol.iterator]' of type '() => IterableIterator<any, any, any>' is not assignable to 'symbol' index type 'string'.
+index.ts(2,3): error TS2411: Property '[Symbol.unscopables]' of type '() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }' is not assignable to 'symbol' index type 'string'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== other.ts (5 errors) ====
+==== other.ts (0 errors) ====
     interface Array1<T> {
       length: number;
       [n: number]: T;
@@ -36,12 +17,6 @@ other.ts(23,4): error TS2304: Cannot find name 'Symbol'.
     // iterable.d.ts
     interface Array1<T> {
       [Symbol.iterator](): IterableIterator<T>;
-      ~~~~~~~~~~~~~~~~~
-!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-       ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
-                           ~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'IterableIterator'.
     }
     
     // symbol.wellknown.d.ts
@@ -51,10 +26,6 @@ other.ts(23,4): error TS2304: Cannot find name 'Symbol'.
        * when they will be absent when used in a 'with' statement.
        */
       [Symbol.unscopables](): {
-      ~~~~~~~~~~~~~~~~~~~~
-!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-       ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
           copyWithin: boolean;
           entries: boolean;
           fill: boolean;
@@ -65,7 +36,13 @@ other.ts(23,4): error TS2304: Cannot find name 'Symbol'.
       };
     }
     
-==== index.ts (0 errors) ====
+==== index.ts (2 errors) ====
     class Test extends Array1 {
       [key: symbol]: string
+      ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2411: Property '[Symbol.iterator]' of type '() => IterableIterator<any, any, any>' is not assignable to 'symbol' index type 'string'.
+!!! related TS2728 other.ts:14:3: '[Symbol.iterator]' is declared here.
+      ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2411: Property '[Symbol.unscopables]' of type '() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }' is not assignable to 'symbol' index type 'string'.
+!!! related TS2728 other.ts:23:3: '[Symbol.unscopables]' is declared here.
     }

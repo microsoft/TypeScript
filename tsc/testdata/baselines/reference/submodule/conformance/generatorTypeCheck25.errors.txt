@@ -1,37 +1,31 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'IterableIterator'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-generatorTypeCheck25.ts(4,15): error TS2304: Cannot find name 'Iterable'.
-generatorTypeCheck25.ts(8,12): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+generatorTypeCheck25.ts(4,5): error TS2322: Type '() => Generator<Bar | Baz, void, unknown>' is not assignable to type '() => Iterable<Foo, any, any>'.
+  Type 'Generator<Bar | Baz, void, unknown>' is not assignable to type 'Iterable<Foo, any, any>'.
+    The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+      Type 'IteratorResult<Bar | Baz, void>' is not assignable to type 'IteratorResult<Foo, any>'.
+        Type 'IteratorYieldResult<Bar | Baz>' is not assignable to type 'IteratorResult<Foo, any>'.
+          Type 'IteratorYieldResult<Bar | Baz>' is not assignable to type 'IteratorYieldResult<Foo>'.
+            Type 'Bar | Baz' is not assignable to type 'Foo'.
+              Property 'x' is missing in type 'Baz' but required in type 'Foo'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'IterableIterator'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== generatorTypeCheck25.ts (2 errors) ====
+==== generatorTypeCheck25.ts (1 errors) ====
     class Foo { x: number }
     class Bar extends Foo { y: string }
     class Baz { z: number }
     var g3: () => Iterable<Foo> = function* () {
-                  ~~~~~~~~
-!!! error TS2304: Cannot find name 'Iterable'.
+        ~~
+!!! error TS2322: Type '() => Generator<Bar | Baz, void, unknown>' is not assignable to type '() => Iterable<Foo, any, any>'.
+!!! error TS2322:   Type 'Generator<Bar | Baz, void, unknown>' is not assignable to type 'Iterable<Foo, any, any>'.
+!!! error TS2322:     The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+!!! error TS2322:       Type 'IteratorResult<Bar | Baz, void>' is not assignable to type 'IteratorResult<Foo, any>'.
+!!! error TS2322:         Type 'IteratorYieldResult<Bar | Baz>' is not assignable to type 'IteratorResult<Foo, any>'.
+!!! error TS2322:           Type 'IteratorYieldResult<Bar | Baz>' is not assignable to type 'IteratorYieldResult<Foo>'.
+!!! error TS2322:             Type 'Bar | Baz' is not assignable to type 'Foo'.
+!!! error TS2322:               Property 'x' is missing in type 'Baz' but required in type 'Foo'.
+!!! related TS2728 generatorTypeCheck25.ts:1:13: 'x' is declared here.
         yield;
         yield new Bar;
         yield new Baz;
         yield *[new Bar];
-               ~~~~~~~~~
-!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
         yield *[new Baz];
     }

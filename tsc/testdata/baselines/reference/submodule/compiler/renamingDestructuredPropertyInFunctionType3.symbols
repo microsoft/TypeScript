@@ -3,10 +3,11 @@
 === renamingDestructuredPropertyInFunctionType3.ts ===
 const sym = Symbol();
 >sym : Symbol(sym, Decl(renamingDestructuredPropertyInFunctionType3.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 type O = Record<symbol, unknown>
 >O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType3.ts, 0, 21))
->Record : Symbol(Record)
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 
 type F14 = ({ [sym]: string }: O) => void; // Error
 >F14 : Symbol(F14, Decl(renamingDestructuredPropertyInFunctionType3.ts, 1, 32))

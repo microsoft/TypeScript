@@ -1,8 +1,0 @@
---- old.iterableArrayPattern29.symbols
-+++ new.iterableArrayPattern29.symbols
-@@= skipped -9, +9 lines =@@
- 
- takeFirstTwoEntries(...new Map([["", true], ["hello", true]]));
- >takeFirstTwoEntries : Symbol(takeFirstTwoEntries, Decl(iterableArrayPattern29.ts, 0, 0))
-->Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
- 

@@ -9,6 +9,10 @@ class B {
 
         constructor() {
             console.log("hello");
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+
             new B.#foo2();
 >B.#foo2 : Symbol(#foo2, Decl(privateNameStaticFieldClassExpression.ts, 8, 6))
 >B : Symbol(B, Decl(privateNameStaticFieldClassExpression.ts, 0, 0))
@@ -33,6 +37,9 @@ class B {
 >m : Symbol(m, Decl(privateNameStaticFieldClassExpression.ts, 11, 6))
 
         console.log(B.#foo.test)
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >B.#foo.test : Symbol(test, Decl(privateNameStaticFieldClassExpression.ts, 5, 9))
 >B.#foo : Symbol(#foo, Decl(privateNameStaticFieldClassExpression.ts, 0, 9))
 >B : Symbol(B, Decl(privateNameStaticFieldClassExpression.ts, 0, 0))

@@ -9,40 +9,19 @@
  }
  
  export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>): (a: T) => IterableIterator<T | undefined, void> {
-@@= skipped -11, +11 lines =@@
- >gen : Symbol(gen, Decl(generatorTypeCheck63.ts, 4, 69))
- >a : Symbol(a, Decl(generatorTypeCheck63.ts, 4, 76))
- >T : Symbol(T, Decl(generatorTypeCheck63.ts, 4, 25))
-->IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
-+>IterableIterator : Symbol(IterableIterator)
- >T : Symbol(T, Decl(generatorTypeCheck63.ts, 4, 25))
- >a : Symbol(a, Decl(generatorTypeCheck63.ts, 4, 126))
- >T : Symbol(T, Decl(generatorTypeCheck63.ts, 4, 25))
-->IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
-+>IterableIterator : Symbol(IterableIterator)
- >T : Symbol(T, Decl(generatorTypeCheck63.ts, 4, 25))
- 
-     return function*(state) {
-@@= skipped -19, +19 lines =@@
+@@= skipped -30, +30 lines =@@
  >next : Symbol(next, Decl(generatorTypeCheck63.ts, 6, 18))
  
                  next.lastStrategyApplied = stratName;
 ->next.lastStrategyApplied : Symbol(StrategicState.lastStrategyApplied, Decl(generatorTypeCheck63.ts, 0, 33))
++>next.lastStrategyApplied : Symbol(lastStrategyApplied, Decl(generatorTypeCheck63.ts, 0, 33))
  >next : Symbol(next, Decl(generatorTypeCheck63.ts, 6, 18))
 ->lastStrategyApplied : Symbol(StrategicState.lastStrategyApplied, Decl(generatorTypeCheck63.ts, 0, 33))
++>lastStrategyApplied : Symbol(lastStrategyApplied, Decl(generatorTypeCheck63.ts, 0, 33))
  >stratName : Symbol(stratName, Decl(generatorTypeCheck63.ts, 4, 51))
              }
              yield next;
-@@= skipped -18, +16 lines =@@
-     (a: T): IterableIterator<T | undefined, void>;
- >a : Symbol(a, Decl(generatorTypeCheck63.ts, 16, 5))
- >T : Symbol(T, Decl(generatorTypeCheck63.ts, 15, 26))
-->IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
-+>IterableIterator : Symbol(IterableIterator)
- >T : Symbol(T, Decl(generatorTypeCheck63.ts, 15, 26))
- }
- 
-@@= skipped -9, +9 lines =@@
+@@= skipped -27, +27 lines =@@
  >StrategicState : Symbol(StrategicState, Decl(generatorTypeCheck63.ts, 0, 0))
  
      foo: number;

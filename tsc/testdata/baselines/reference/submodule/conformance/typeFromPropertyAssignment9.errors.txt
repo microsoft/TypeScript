@@ -1,25 +1,7 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-a.js(30,11): error TS2304: Cannot find name 'window'.
-a.js(32,18): error TS2304: Cannot find name 'self'.
 a.js(33,16): error TS2304: Cannot find name 'global'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== a.js (3 errors) ====
+==== a.js (1 errors) ====
     var my = my || {};
     /** @param {number} n */
     my.method = function(n) {
@@ -50,12 +32,8 @@ a.js(33,16): error TS2304: Cannot find name 'global'.
     
     // global-ish prefixes
     var min = window.min || {};
-              ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
     min.nest = this.min.nest || function () { };
     min.nest.other = self.min.nest.other || class { };
-                     ~~~~
-!!! error TS2304: Cannot find name 'self'.
     min.property = global.min.property || {};
                    ~~~~~~
 !!! error TS2304: Cannot find name 'global'.

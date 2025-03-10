@@ -1,20 +1,21 @@
 --- old.symbolDeclarationEmit10.symbols
 +++ new.symbolDeclarationEmit10.symbols
-@@= skipped -4, +4 lines =@@
- >obj : Symbol(obj, Decl(symbolDeclarationEmit10.ts, 0, 3))
+@@= skipped -5, +5 lines =@@
  
      get [Symbol.isConcatSpreadable]() { return '' },
-->[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(symbolDeclarationEmit10.ts, 0, 11), Decl(symbolDeclarationEmit10.ts, 1, 52))
+ >[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(symbolDeclarationEmit10.ts, 0, 11), Decl(symbolDeclarationEmit10.ts, 1, 52))
 ->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Symbol.isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(symbolDeclarationEmit10.ts, 0, 11))
++>isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      set [Symbol.isConcatSpreadable](x) { }
-->[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(symbolDeclarationEmit10.ts, 0, 11), Decl(symbolDeclarationEmit10.ts, 1, 52))
+ >[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(symbolDeclarationEmit10.ts, 0, 11), Decl(symbolDeclarationEmit10.ts, 1, 52))
 ->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Symbol.isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(symbolDeclarationEmit10.ts, 1, 52))
++>isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  >x : Symbol(x, Decl(symbolDeclarationEmit10.ts, 2, 36))
  }

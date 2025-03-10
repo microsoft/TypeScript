@@ -1,37 +1,19 @@
 --- old.thisInFunctionCallJs.errors.txt
 +++ new.thisInFunctionCallJs.errors.txt
 @@= skipped -0, +0 lines =@@
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 +/a.js(4,14): error TS2339: Property 'data' does not exist on type 'Test'.
 +/a.js(8,14): error TS2339: Property 'data' does not exist on type 'Test'.
  /a.js(9,26): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +/a.js(14,14): error TS2339: Property 'data' does not exist on type 'Test'.
-+/a.js(15,13): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
  /a.js(15,31): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +/a.js(20,14): error TS2339: Property 'data' does not exist on type 'Test'.
-+/a.js(23,13): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
 +/a.js(23,31): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +/a.js(28,14): error TS2339: Property 'data' does not exist on type 'Test'.
 +/a.js(31,26): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
  
  
 -==== /a.js (2 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+==== /a.js (11 errors) ====
++==== /a.js (9 errors) ====
      class Test {
          constructor() {
              /** @type {number[]} */
@@ -47,19 +29,16 @@
                  return d === this.data.length
                               ~~~~
  !!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-@@= skipped -19, +48 lines =@@
+@@= skipped -19, +30 lines =@@
      
          forEacherRaw() {
              this.data.forEach(function (d) {
 +                 ~~~~
 +!!! error TS2339: Property 'data' does not exist on type 'Test'.
                  console.log(d === this.data.length)
-+                ~~~~~~~
-+!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
                                    ~~~~
  !!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
- !!! related TS2738 /a.js:14:27: An outer value of 'this' is shadowed by this container.
-@@= skipped -9, +13 lines =@@
+@@= skipped -9, +11 lines =@@
      
          forEacher() {
              this.data.forEach(
@@ -68,8 +47,6 @@
              /** @this {Test} */
              function (d) {
                  console.log(d === this.data.length)
-+                ~~~~~~~
-+!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
 +                                  ~~~~
 +!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +!!! related TS2738 /a.js:22:9: An outer value of 'this' is shadowed by this container.

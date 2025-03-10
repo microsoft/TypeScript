@@ -23,6 +23,9 @@ const C = class {
 }
 
 console.log(C.getInstance().getField());
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >C.getInstance().getField : Symbol(getField, Decl(privateNameMethodClassExpression.ts, 3, 44))
 >C.getInstance : Symbol(getInstance, Decl(privateNameMethodClassExpression.ts, 2, 28))
 >C : Symbol(C, Decl(privateNameMethodClassExpression.ts, 0, 5))

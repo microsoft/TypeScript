@@ -22,6 +22,9 @@ class A {
 }
 
 console.log(getX(new A));
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >getX : Symbol(getX, Decl(privateNameComputedPropertyName2.ts, 0, 3))
 >A : Symbol(A, Decl(privateNameComputedPropertyName2.ts, 0, 27))
 

@@ -157,14 +157,20 @@ new (b.f)(1, 2, ...a, "string");
 
 // Element access expression
 new d[1].f(1, 2, "string");
+>d[1].f : Symbol(f, Decl(newWithSpreadES6.ts, 6, 13))
 >d : Symbol(d, Decl(newWithSpreadES6.ts, 27, 3))
+>f : Symbol(f, Decl(newWithSpreadES6.ts, 6, 13))
 
 new d[1].f(1, 2, ...a);
+>d[1].f : Symbol(f, Decl(newWithSpreadES6.ts, 6, 13))
 >d : Symbol(d, Decl(newWithSpreadES6.ts, 27, 3))
+>f : Symbol(f, Decl(newWithSpreadES6.ts, 6, 13))
 >a : Symbol(a, Decl(newWithSpreadES6.ts, 24, 3))
 
 new d[1].f(1, 2, ...a, "string");
+>d[1].f : Symbol(f, Decl(newWithSpreadES6.ts, 6, 13))
 >d : Symbol(d, Decl(newWithSpreadES6.ts, 27, 3))
+>f : Symbol(f, Decl(newWithSpreadES6.ts, 6, 13))
 >a : Symbol(a, Decl(newWithSpreadES6.ts, 24, 3))
 
 // Element access expression with a punctuated key
@@ -230,13 +236,16 @@ new (c["a-b"])(1, 2, ...a, "string");
 // Element access expression
 new g[1]["a-b"](1, 2, "string");
 >g : Symbol(g, Decl(newWithSpreadES6.ts, 29, 3))
+>"a-b" : Symbol("a-b", Decl(newWithSpreadES6.ts, 16, 13))
 
 new g[1]["a-b"](1, 2, ...a);
 >g : Symbol(g, Decl(newWithSpreadES6.ts, 29, 3))
+>"a-b" : Symbol("a-b", Decl(newWithSpreadES6.ts, 16, 13))
 >a : Symbol(a, Decl(newWithSpreadES6.ts, 24, 3))
 
 new g[1]["a-b"](1, 2, ...a, "string");
 >g : Symbol(g, Decl(newWithSpreadES6.ts, 29, 3))
+>"a-b" : Symbol("a-b", Decl(newWithSpreadES6.ts, 16, 13))
 >a : Symbol(a, Decl(newWithSpreadES6.ts, 24, 3))
 
 // Element access expression with a punctuated key

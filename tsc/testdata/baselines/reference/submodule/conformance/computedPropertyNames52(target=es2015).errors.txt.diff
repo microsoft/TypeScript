@@ -3,34 +3,15 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+computedPropertyNames52.js(3,11): error TS2339: Property 'push' does not exist on type '{}'.
 +computedPropertyNames52.js(4,9): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 +computedPropertyNames52.js(4,9): error TS2411: Property '[i]' of type '() => { new(): C; [x: number]: number; prototype: C; }' is not assignable to 'number' index type 'number'.
 +computedPropertyNames52.js(5,16): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 +
 +
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+==== computedPropertyNames52.js (4 errors) ====
++==== computedPropertyNames52.js (3 errors) ====
 +    const array = [];
 +    for (let i = 0; i < 10; ++i) {
 +        array.push(class C {
-+              ~~~~
-+!!! error TS2339: Property 'push' does not exist on type '{}'.
 +            [i] = () => C;
 +            ~~~
 +!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.

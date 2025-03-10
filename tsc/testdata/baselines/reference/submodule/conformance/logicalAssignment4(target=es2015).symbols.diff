@@ -5,38 +5,46 @@
  
      (results ||= []).push(100);
 ->(results ||= []).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>(results ||= []).push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  >results : Symbol(results, Decl(logicalAssignment4.ts, 0, 14))
 ->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  }
  
  function foo2(results: number[] | undefined) {
-@@= skipped -10, +8 lines =@@
+@@= skipped -10, +10 lines =@@
  >results : Symbol(results, Decl(logicalAssignment4.ts, 4, 14))
  
      (results ??= []).push(100);
 ->(results ??= []).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>(results ??= []).push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  >results : Symbol(results, Decl(logicalAssignment4.ts, 4, 14))
 ->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  }
  
  function foo3(results: number[] | undefined) {
-@@= skipped -13, +11 lines =@@
+@@= skipped -13, +13 lines =@@
  >results : Symbol(results, Decl(logicalAssignment4.ts, 8, 14))
  
      results.push(100);
 ->results.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>results.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  >results : Symbol(results, Decl(logicalAssignment4.ts, 8, 14))
 ->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  }
  
  function foo4(results: number[] | undefined) {
-@@= skipped -13, +11 lines =@@
+@@= skipped -13, +13 lines =@@
  >results : Symbol(results, Decl(logicalAssignment4.ts, 13, 14))
  
      results.push(100);
 ->results.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>results.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  >results : Symbol(results, Decl(logicalAssignment4.ts, 13, 14))
 ->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  }
  
  interface ThingWithOriginal {
@@ -52,7 +60,7 @@
  >ThingWithOriginal : Symbol(ThingWithOriginal, Decl(logicalAssignment4.ts, 16, 1))
  }
  declare const v: number
-@@= skipped -30, +28 lines =@@
+@@= skipped -30, +30 lines =@@
  
          if (thing &&= thing.original) {
  >thing : Symbol(thing, Decl(logicalAssignment4.ts, 23, 30))

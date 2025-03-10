@@ -61,16 +61,7 @@
  >A : Symbol(A, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 20, 8))
  >right : Symbol(right, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 20, 11))
  >Supervisor : Symbol(Supervisor, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 7, 1))
-@@= skipped -34, +34 lines =@@
- >Assign : Symbol(Assign, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 23, 1))
- >T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 26, 12))
- >U : Symbol(U, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 26, 14))
-->Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
-+>Omit : Symbol(Omit)
- >T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 26, 12))
- >U : Symbol(U, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 26, 14))
- >U : Symbol(U, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 26, 14))
-@@= skipped -10, +10 lines =@@
+@@= skipped -44, +44 lines =@@
  >T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 28, 11))
  
      constructor(public t: T) { }
@@ -93,9 +84,11 @@
  >T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 32, 17))
  >x : Symbol(x, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 34, 28))
 ->Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
-->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 ->this.t : Symbol(Base.t, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 29, 16))
++>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 +>this.t : Symbol(t, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 29, 16))
  >this : Symbol(Foo, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 30, 1))
 ->t : Symbol(Base.t, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 29, 16))

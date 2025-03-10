@@ -1,55 +1,41 @@
 --- old.jsxSpreadTag(target=es2015).errors.txt
 +++ new.jsxSpreadTag(target=es2015).errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -/a.tsx(5,13): error TS2304: Cannot find name 'Comp'.
 -/a.tsx(9,13): error TS2304: Cannot find name 'Comp'.
 -/a.tsx(13,13): error TS2304: Cannot find name 'Comp'.
 -/a.tsx(17,13): error TS2304: Cannot find name 'Comp'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- 
- 
+-
+-
 -==== /a.tsx (4 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+==== /a.tsx (0 errors) ====
-     declare const React: any;
-     
-     const t1 = <div {...<span />} />;
-     const t2 = <div {...<span className="foo" />} />;
-     const t3 = <Comp
+-    declare const React: any;
+-    
+-    const t1 = <div {...<span />} />;
+-    const t2 = <div {...<span className="foo" />} />;
+-    const t3 = <Comp
 -                ~~~~
 -!!! error TS2304: Cannot find name 'Comp'.
-         right={<div>x</div>}
-         {...{ wrong: <div>x</div>}}
-     />;
-     const t4 = <Comp
+-        right={<div>x</div>}
+-        {...{ wrong: <div>x</div>}}
+-    />;
+-    const t4 = <Comp
 -                ~~~~
 -!!! error TS2304: Cannot find name 'Comp'.
-         right={<div>x</div>}
-         {...{ wrong() { return <div>x</div>; }}}
-     />;
-     const t5 = <Comp
+-        right={<div>x</div>}
+-        {...{ wrong() { return <div>x</div>; }}}
+-    />;
+-    const t5 = <Comp
 -                ~~~~
 -!!! error TS2304: Cannot find name 'Comp'.
-         right={<div>x</div>}
-         {...{ get wrong() { return <div>x</div>; }}}
-     />;
-     const t6 = <Comp
+-        right={<div>x</div>}
+-        {...{ get wrong() { return <div>x</div>; }}}
+-    />;
+-    const t6 = <Comp
 -                ~~~~
 -!!! error TS2304: Cannot find name 'Comp'.
-         right={<div>x</div>}
-         {...{ set wrong(s) { let a = <div>x</div>; }}}
-     />;
+-        right={<div>x</div>}
+-        {...{ set wrong(s) { let a = <div>x</div>; }}}
+-    />;
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

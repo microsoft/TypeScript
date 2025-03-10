@@ -3,109 +3,70 @@
 @@= skipped -0, +0 lines =@@
 -generatorTypeCheck63.ts(24,61): error TS2345: Argument of type '(state: State) => Generator<number, State, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void>'.
 -  Call signature return types 'Generator<number, State, any>' and 'IterableIterator<State, void>' are incompatible.
--    The types returned by 'next(...)' are incompatible between these types.
--      Type 'IteratorResult<number, State>' is not assignable to type 'IteratorResult<State, void>'.
++generatorTypeCheck63.ts(24,61): error TS2345: Argument of type '(state: State) => Generator<number, State, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void, any>'.
++  Type 'Generator<number, State, any>' is not assignable to type 'IterableIterator<State, void, any>'.
+     The types returned by 'next(...)' are incompatible between these types.
+       Type 'IteratorResult<number, State>' is not assignable to type 'IteratorResult<State, void>'.
 -        Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<State, void>'.
 -          Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<State>'.
 -            Type 'number' is not assignable to type 'State'.
 -generatorTypeCheck63.ts(32,62): error TS2345: Argument of type '(state: State) => Generator<never, number, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void>'.
 -  Call signature return types 'Generator<never, number, any>' and 'IterableIterator<State, void>' are incompatible.
--    The types returned by 'next(...)' are incompatible between these types.
--      Type 'IteratorResult<never, number>' is not assignable to type 'IteratorResult<State, void>'.
--        Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorResult<State, void>'.
--          Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorReturnResult<void>'.
--            Type 'number' is not assignable to type 'void'.
++        Type 'IteratorReturnResult<State>' is not assignable to type 'IteratorResult<State, void>'.
++          Type 'IteratorReturnResult<State>' is not assignable to type 'IteratorReturnResult<void>'.
++            Type 'State' is not assignable to type 'void'.
++generatorTypeCheck63.ts(32,62): error TS2345: Argument of type '(state: State) => Generator<never, number, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void, any>'.
++  Type 'Generator<never, number, any>' is not assignable to type 'IterableIterator<State, void, any>'.
+     The types returned by 'next(...)' are incompatible between these types.
+       Type 'IteratorResult<never, number>' is not assignable to type 'IteratorResult<State, void>'.
+         Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorResult<State, void>'.
+           Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorReturnResult<void>'.
+             Type 'number' is not assignable to type 'void'.
 -generatorTypeCheck63.ts(36,62): error TS2345: Argument of type '(state: State) => Generator<State, number, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void>'.
 -  Call signature return types 'Generator<State, number, any>' and 'IterableIterator<State, void>' are incompatible.
--    The types returned by 'next(...)' are incompatible between these types.
--      Type 'IteratorResult<State, number>' is not assignable to type 'IteratorResult<State, void>'.
--        Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorResult<State, void>'.
--          Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorReturnResult<void>'.
--            Type 'number' is not assignable to type 'void'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'IterableIterator'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+generatorTypeCheck63.ts(5,86): error TS2304: Cannot find name 'IterableIterator'.
-+generatorTypeCheck63.ts(5,136): error TS2304: Cannot find name 'IterableIterator'.
-+generatorTypeCheck63.ts(17,13): error TS2304: Cannot find name 'IterableIterator'.
- 
- 
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'IterableIterator'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- ==== generatorTypeCheck63.ts (3 errors) ====
-     export interface StrategicState {
-         lastStrategyApplied?: string;
-     }
-     
-     export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>): (a: T) => IterableIterator<T | undefined, void> {
-+                                                                                         ~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'IterableIterator'.
-+                                                                                                                                           ~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'IterableIterator'.
-         return function*(state) {
-             for (const next of gen(state)) {
-                 if (next) {
-@@= skipped -38, +42 lines =@@
-     
-     export interface Strategy<T> {
-         (a: T): IterableIterator<T | undefined, void>;
-+                ~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'IterableIterator'.
-     }
-     
-     export interface State extends StrategicState {
-@@= skipped -7, +9 lines =@@
-     }
++generatorTypeCheck63.ts(36,62): error TS2345: Argument of type '(state: State) => Generator<State, number, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void, any>'.
++  Type 'Generator<State, number, any>' is not assignable to type 'IterableIterator<State, void, any>'.
+     The types returned by 'next(...)' are incompatible between these types.
+       Type 'IteratorResult<State, number>' is not assignable to type 'IteratorResult<State, void>'.
+         Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorResult<State, void>'.
+@@= skipped -46, +46 lines =@@
      
      export const Nothing: Strategy<State> = strategy("Nothing", function* (state: State) {
--                                                                ~~~~~~~~
+                                                                 ~~~~~~~~
 -!!! error TS2345: Argument of type '(state: State) => Generator<number, State, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void>'.
 -!!! error TS2345:   Call signature return types 'Generator<number, State, any>' and 'IterableIterator<State, void>' are incompatible.
--!!! error TS2345:     The types returned by 'next(...)' are incompatible between these types.
--!!! error TS2345:       Type 'IteratorResult<number, State>' is not assignable to type 'IteratorResult<State, void>'.
++!!! error TS2345: Argument of type '(state: State) => Generator<number, State, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void, any>'.
++!!! error TS2345:   Type 'Generator<number, State, any>' is not assignable to type 'IterableIterator<State, void, any>'.
+ !!! error TS2345:     The types returned by 'next(...)' are incompatible between these types.
+ !!! error TS2345:       Type 'IteratorResult<number, State>' is not assignable to type 'IteratorResult<State, void>'.
 -!!! error TS2345:         Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<State, void>'.
 -!!! error TS2345:           Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<State>'.
 -!!! error TS2345:             Type 'number' is not assignable to type 'State'.
++!!! error TS2345:         Type 'IteratorReturnResult<State>' is not assignable to type 'IteratorResult<State, void>'.
++!!! error TS2345:           Type 'IteratorReturnResult<State>' is not assignable to type 'IteratorReturnResult<void>'.
++!!! error TS2345:             Type 'State' is not assignable to type 'void'.
          yield 1; // number isn't a `State`, so this should error.
          return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
      });
-@@= skipped -16, +8 lines =@@
-     });
+@@= skipped -16, +16 lines =@@
      
      export const Nothing2: Strategy<State> = strategy("Nothing", function* (state: State) {
--                                                                 ~~~~~~~~
+                                                                  ~~~~~~~~
 -!!! error TS2345: Argument of type '(state: State) => Generator<never, number, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void>'.
 -!!! error TS2345:   Call signature return types 'Generator<never, number, any>' and 'IterableIterator<State, void>' are incompatible.
--!!! error TS2345:     The types returned by 'next(...)' are incompatible between these types.
--!!! error TS2345:       Type 'IteratorResult<never, number>' is not assignable to type 'IteratorResult<State, void>'.
--!!! error TS2345:         Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorResult<State, void>'.
--!!! error TS2345:           Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorReturnResult<void>'.
--!!! error TS2345:             Type 'number' is not assignable to type 'void'.
-         return 1; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
-     });
++!!! error TS2345: Argument of type '(state: State) => Generator<never, number, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void, any>'.
++!!! error TS2345:   Type 'Generator<never, number, any>' is not assignable to type 'IterableIterator<State, void, any>'.
+ !!! error TS2345:     The types returned by 'next(...)' are incompatible between these types.
+ !!! error TS2345:       Type 'IteratorResult<never, number>' is not assignable to type 'IteratorResult<State, void>'.
+ !!! error TS2345:         Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorResult<State, void>'.
+@@= skipped -12, +12 lines =@@
      
      export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: State) {
--                                                                 ~~~~~~~~
+                                                                  ~~~~~~~~
 -!!! error TS2345: Argument of type '(state: State) => Generator<State, number, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void>'.
 -!!! error TS2345:   Call signature return types 'Generator<State, number, any>' and 'IterableIterator<State, void>' are incompatible.
--!!! error TS2345:     The types returned by 'next(...)' are incompatible between these types.
--!!! error TS2345:       Type 'IteratorResult<State, number>' is not assignable to type 'IteratorResult<State, void>'.
--!!! error TS2345:         Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorResult<State, void>'.
--!!! error TS2345:           Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorReturnResult<void>'.
--!!! error TS2345:             Type 'number' is not assignable to type 'void'.
-         yield state;
-         return 1; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
-     });
++!!! error TS2345: Argument of type '(state: State) => Generator<State, number, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void, any>'.
++!!! error TS2345:   Type 'Generator<State, number, any>' is not assignable to type 'IterableIterator<State, void, any>'.
+ !!! error TS2345:     The types returned by 'next(...)' are incompatible between these types.
+ !!! error TS2345:       Type 'IteratorResult<State, number>' is not assignable to type 'IteratorResult<State, void>'.
+ !!! error TS2345:         Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorResult<State, void>'.

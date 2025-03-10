@@ -1,42 +1,27 @@
 --- old.esDecorators-classDeclaration-fields-nonStaticAmbient(target=es2015).errors.txt
 +++ new.esDecorators-classDeclaration-fields-nonStaticAmbient(target=es2015).errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -esDecorators-classDeclaration-fields-nonStaticAmbient.ts(6,5): error TS1206: Decorators are not valid here.
 -esDecorators-classDeclaration-fields-nonStaticAmbient.ts(7,5): error TS1206: Decorators are not valid here.
 -esDecorators-classDeclaration-fields-nonStaticAmbient.ts(8,5): error TS1206: Decorators are not valid here.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- 
- 
+-
+-
 -==== esDecorators-classDeclaration-fields-nonStaticAmbient.ts (3 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+==== esDecorators-classDeclaration-fields-nonStaticAmbient.ts (0 errors) ====
-     declare let dec: any;
-     
-     const field3 = "field3";
-     
-     class C {
-         @dec(1) declare field1: number;
+-    declare let dec: any;
+-    
+-    const field3 = "field3";
+-    
+-    class C {
+-        @dec(1) declare field1: number;
 -        ~
 -!!! error TS1206: Decorators are not valid here.
-         @dec(2) declare ["field2"]: number;
+-        @dec(2) declare ["field2"]: number;
 -        ~
 -!!! error TS1206: Decorators are not valid here.
-         @dec(3) declare [field3]: number;
+-        @dec(3) declare [field3]: number;
 -        ~
 -!!! error TS1206: Decorators are not valid here.
-     }
-     
+-    }
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

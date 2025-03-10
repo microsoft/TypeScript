@@ -1,17 +1,7 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'CallableFunction'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'NewableFunction'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 covariantCallbacks.ts(12,5): error TS2322: Type 'P<A>' is not assignable to type 'P<B>'.
   Property 'b' is missing in type 'A' but required in type 'B'.
-covariantCallbacks.ts(15,16): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-covariantCallbacks.ts(15,31): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+covariantCallbacks.ts(17,5): error TS2322: Type 'Promise<A>' is not assignable to type 'Promise<B>'.
+  Property 'b' is missing in type 'A' but required in type 'B'.
 covariantCallbacks.ts(30,5): error TS2322: Type 'AList1' is not assignable to type 'BList1'.
   Types of property 'forEach' are incompatible.
     Type '(cb: (item: A) => void) => void' is not assignable to type '(cb: (item: B) => void) => void'.
@@ -45,17 +35,7 @@ covariantCallbacks.ts(106,1): error TS2322: Type 'SetLike2<(x: string) => void>'
         Type 'unknown' is not assignable to type 'string'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'CallableFunction'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'NewableFunction'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== covariantCallbacks.ts (9 errors) ====
+==== covariantCallbacks.ts (8 errors) ====
     // Test that callback parameters are related covariantly
     
     interface P<T> {
@@ -75,12 +55,12 @@ covariantCallbacks.ts(106,1): error TS2322: Type 'SetLike2<(x: string) => void>'
     }
     
     function f2(a: Promise<A>, b: Promise<B>) {
-                   ~~~~~~~
-!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-                                  ~~~~~~~
-!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
         a = b;
         b = a;  // Error
+        ~
+!!! error TS2322: Type 'Promise<A>' is not assignable to type 'Promise<B>'.
+!!! error TS2322:   Property 'b' is missing in type 'A' but required in type 'B'.
+!!! related TS2728 covariantCallbacks.ts:8:25: 'b' is declared here.
     }
     
     interface AList1 {

@@ -1,14 +1,6 @@
 --- old.asyncQualifiedReturnType_es6.symbols
 +++ new.asyncQualifiedReturnType_es6.symbols
-@@= skipped -6, +6 lines =@@
-     export class MyPromise<T> extends Promise<T> {
- >MyPromise : Symbol(MyPromise, Decl(asyncQualifiedReturnType_es6.ts, 0, 13))
- >T : Symbol(T, Decl(asyncQualifiedReturnType_es6.ts, 1, 27))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
- >T : Symbol(T, Decl(asyncQualifiedReturnType_es6.ts, 1, 27))
-     }
- }
-@@= skipped -8, +7 lines =@@
+@@= skipped -14, +14 lines =@@
  async function f(): X.MyPromise<void> {
  >f : Symbol(f, Decl(asyncQualifiedReturnType_es6.ts, 3, 1))
  >X : Symbol(X, Decl(asyncQualifiedReturnType_es6.ts, 0, 0))

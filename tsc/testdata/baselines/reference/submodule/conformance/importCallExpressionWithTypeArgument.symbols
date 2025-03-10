@@ -8,7 +8,7 @@ export function foo() { return "foo"; }
 "use strict"
 var p1 = import<Promise<any>>("./0");  // error
 >p1 : Symbol(p1, Decl(1.ts, 1, 3))
->Promise : Symbol(Promise)
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 var p2 = import<>("./0");  // error
 >p2 : Symbol(p2, Decl(1.ts, 2, 3))

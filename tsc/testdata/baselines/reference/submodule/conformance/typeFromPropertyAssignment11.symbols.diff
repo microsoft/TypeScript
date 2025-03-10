@@ -11,11 +11,13 @@
 ->Inner.prototype : Symbol(Inner.prototype, Decl(module.js, 0, 25))
 ->Inner : Symbol(Inner, Decl(module.js, 0, 3), Decl(module.js, 0, 25))
 ->prototype : Symbol(Inner.prototype, Decl(module.js, 0, 25))
++>Inner.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 +>Inner : Symbol(Inner, Decl(module.js, 0, 3))
++>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
  
      m() { },
  >m : Symbol(m, Decl(module.js, 1, 19))
-@@= skipped -15, +13 lines =@@
+@@= skipped -15, +15 lines =@@
  }
  // incremental assignments still work
  Inner.prototype.j = 2
@@ -23,14 +25,18 @@
 ->Inner : Symbol(Inner, Decl(module.js, 0, 3), Decl(module.js, 0, 25))
 ->prototype : Symbol(Inner.prototype, Decl(module.js, 0, 25))
 ->j : Symbol(Inner.j, Decl(module.js, 4, 1))
++>Inner.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 +>Inner : Symbol(Inner, Decl(module.js, 0, 3))
++>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
  
  /** @type {string} */
  Inner.prototype.k;
 ->Inner.prototype : Symbol(Inner.prototype, Decl(module.js, 0, 25))
 ->Inner : Symbol(Inner, Decl(module.js, 0, 3), Decl(module.js, 0, 25))
 ->prototype : Symbol(Inner.prototype, Decl(module.js, 0, 25))
++>Inner.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 +>Inner : Symbol(Inner, Decl(module.js, 0, 3))
++>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
  
  var inner = new Inner()
  >inner : Symbol(inner, Decl(module.js, 9, 3))

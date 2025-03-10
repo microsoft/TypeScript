@@ -19,26 +19,10 @@
 -constDeclarations_access_2.ts(20,5): error TS2540: Cannot assign to 'x' because it is a read-only property.
 -constDeclarations_access_2.ts(22,7): error TS2540: Cannot assign to 'x' because it is a read-only property.
 -constDeclarations_access_2.ts(24,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 +constDeclarations_access_2.ts(2,20): error TS2307: Cannot find module 'constDeclarations_access_1' or its corresponding type declarations.
  
  
 -==== constDeclarations_access_2.ts (18 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 +==== constDeclarations_access_2.ts (1 errors) ====
      ///<reference path='constDeclarations_access_1.ts'/>
      import m = require('constDeclarations_access_1');

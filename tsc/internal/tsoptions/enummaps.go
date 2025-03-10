@@ -191,7 +191,7 @@ var targetToLibMap = map[core.ScriptTarget]string{
 	core.ScriptTargetES2018: "lib.es2018.full.d.ts",
 	core.ScriptTargetES2017: "lib.es2017.full.d.ts",
 	core.ScriptTargetES2016: "lib.es2016.full.d.ts",
-	core.ScriptTargetES2015: "lib.es6.full.d.ts", // We don't use lib.es2015.full.d.ts due to breaking change.
+	core.ScriptTargetES2015: "lib.es6.d.ts", // We don't use lib.es2015.full.d.ts due to breaking change.
 }
 
 func GetDefaultLibFileName(options *core.CompilerOptions) string {

@@ -1,52 +1,16 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-symbolProperty35.ts(2,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-symbolProperty35.ts(2,6): error TS2304: Cannot find name 'Symbol'.
-symbolProperty35.ts(5,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-symbolProperty35.ts(5,6): error TS2304: Cannot find name 'Symbol'.
-symbolProperty35.ts(8,11): error TS2430: Interface 'I3' incorrectly extends interface 'I2'.
-  'number' index signatures are incompatible.
-    Type '() => { x: string; }' is not assignable to type '() => { x: number; }'.
-      Type '{ x: string; }' is not assignable to type '{ x: number; }'.
-        Types of property 'x' are incompatible.
-          Type 'string' is not assignable to type 'number'.
+symbolProperty35.ts(8,11): error TS2320: Interface 'I3' cannot simultaneously extend types 'I1' and 'I2'.
+  Named property '[Symbol.toStringTag]' of types 'I1' and 'I2' are not identical.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== symbolProperty35.ts (5 errors) ====
+==== symbolProperty35.ts (1 errors) ====
     interface I1 {
         [Symbol.toStringTag](): { x: string }
-        ~~~~~~~~~~~~~~~~~~~~
-!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-         ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
     }
     interface I2 {
         [Symbol.toStringTag](): { x: number }
-        ~~~~~~~~~~~~~~~~~~~~
-!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-         ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
     }
     
     interface I3 extends I1, I2 { }
               ~~
-!!! error TS2430: Interface 'I3' incorrectly extends interface 'I2'.
-!!! error TS2430:   'number' index signatures are incompatible.
-!!! error TS2430:     Type '() => { x: string; }' is not assignable to type '() => { x: number; }'.
-!!! error TS2430:       Type '{ x: string; }' is not assignable to type '{ x: number; }'.
-!!! error TS2430:         Types of property 'x' are incompatible.
-!!! error TS2430:           Type 'string' is not assignable to type 'number'.
+!!! error TS2320: Interface 'I3' cannot simultaneously extend types 'I1' and 'I2'.
+!!! error TS2320:   Named property '[Symbol.toStringTag]' of types 'I1' and 'I2' are not identical.

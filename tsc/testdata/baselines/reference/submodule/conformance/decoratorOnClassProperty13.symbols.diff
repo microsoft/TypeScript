@@ -1,14 +1,6 @@
 --- old.decoratorOnClassProperty13.symbols
 +++ new.decoratorOnClassProperty13.symbols
-@@= skipped -5, +5 lines =@@
- >target : Symbol(target, Decl(decoratorOnClassProperty13.ts, 0, 21))
- >propertyKey : Symbol(propertyKey, Decl(decoratorOnClassProperty13.ts, 0, 33))
- >desc : Symbol(desc, Decl(decoratorOnClassProperty13.ts, 0, 54))
-->PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.es5.d.ts, --, --))
-+>PropertyDescriptor : Symbol(PropertyDescriptor)
- 
- class C {
- >C : Symbol(C, Decl(decoratorOnClassProperty13.ts, 0, 87))
+@@= skipped -12, +12 lines =@@
  
      @dec accessor prop;
  >dec : Symbol(dec, Decl(decoratorOnClassProperty13.ts, 0, 0))

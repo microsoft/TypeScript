@@ -5,7 +5,9 @@ var Inner = function() {}
 >Inner : Symbol(Inner, Decl(module.js, 0, 3))
 
 Inner.prototype = {
+>Inner.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 >Inner : Symbol(Inner, Decl(module.js, 0, 3))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 
     m() { },
 >m : Symbol(m, Decl(module.js, 1, 19))
@@ -15,11 +17,15 @@ Inner.prototype = {
 }
 // incremental assignments still work
 Inner.prototype.j = 2
+>Inner.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 >Inner : Symbol(Inner, Decl(module.js, 0, 3))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 
 /** @type {string} */
 Inner.prototype.k;
+>Inner.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 >Inner : Symbol(Inner, Decl(module.js, 0, 3))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 
 var inner = new Inner()
 >inner : Symbol(inner, Decl(module.js, 9, 3))

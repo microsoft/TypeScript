@@ -9,30 +9,10 @@
 -  Property 'my-fake-sym' does not exist on type 'F'.
 -usage.js(4,11): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'F'.
 -  Property '[_sym]' does not exist on type 'F'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'CallableFunction'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'NewableFunction'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 +usage.js(1,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
  
  
 -==== usage.js (2 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'CallableFunction'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'NewableFunction'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 +==== usage.js (1 errors) ====
      const x = require("./lateBoundAssignmentDeclarationSupport5.js");
 +              ~~~~~~~
@@ -52,7 +32,7 @@
      // currently unsupported
      const _sym = Symbol();
      const _str = "my-fake-sym";
-@@= skipped -32, +41 lines =@@
+@@= skipped -32, +21 lines =@@
      }
      const inst =  new F();
      const _y = inst[_str];

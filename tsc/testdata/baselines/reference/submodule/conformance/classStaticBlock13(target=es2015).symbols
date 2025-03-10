@@ -9,6 +9,9 @@ class C {
 
   static {
     console.log(C.#x)
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >C.#x : Symbol(#x, Decl(classStaticBlock13.ts, 0, 9))
 >C : Symbol(C, Decl(classStaticBlock13.ts, 0, 0))
   }

@@ -9,7 +9,7 @@ declare function dec(a: any): any;
 function fn(value: Promise<number>): any {
 >fn : Symbol(fn, Decl(decoratorOnClassMethodParameter3.ts, 1, 34))
 >value : Symbol(value, Decl(decoratorOnClassMethodParameter3.ts, 2, 12))
->Promise : Symbol(Promise)
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
   class Class {
 >Class : Symbol(Class, Decl(decoratorOnClassMethodParameter3.ts, 2, 42))

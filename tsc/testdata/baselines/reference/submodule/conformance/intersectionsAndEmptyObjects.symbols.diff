@@ -5,19 +5,14 @@
  >F1 : Symbol(F1, Decl(intersectionsAndEmptyObjects.ts, 30, 31))
  >F2 : Symbol(F2, Decl(intersectionsAndEmptyObjects.ts, 30, 53))
 ->Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
-->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
  >d1 : Symbol(d1, Decl(intersectionsAndEmptyObjects.ts, 30, 77))
  >d2 : Symbol(d2, Decl(intersectionsAndEmptyObjects.ts, 31, 9))
  
-@@= skipped -150, +147 lines =@@
- >mock : Symbol(mock, Decl(intersectionsAndEmptyObjects.ts, 80, 52))
- >M : Symbol(M, Decl(intersectionsAndEmptyObjects.ts, 84, 22))
- >_ : Symbol(_, Decl(intersectionsAndEmptyObjects.ts, 84, 25))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>Promise : Symbol(Promise)
- >M : Symbol(M, Decl(intersectionsAndEmptyObjects.ts, 84, 22))
- >M : Symbol(M, Decl(intersectionsAndEmptyObjects.ts, 84, 22))
+@@= skipped -156, +156 lines =@@
  
  mock(import('./ex'))
  >mock : Symbol(mock, Decl(intersectionsAndEmptyObjects.ts, 80, 52))

@@ -1,32 +1,10 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-renamingDestructuredPropertyInFunctionType3.ts(1,13): error TS2304: Cannot find name 'Symbol'.
-renamingDestructuredPropertyInFunctionType3.ts(2,10): error TS2304: Cannot find name 'Record'.
 renamingDestructuredPropertyInFunctionType3.ts(3,22): error TS2842: 'string' is an unused renaming of '[sym]'. Did you intend to use it as a type annotation?
 renamingDestructuredPropertyInFunctionType3.ts(4,26): error TS2842: 'string' is an unused renaming of '[sym]'. Did you intend to use it as a type annotation?
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== renamingDestructuredPropertyInFunctionType3.ts (4 errors) ====
+==== renamingDestructuredPropertyInFunctionType3.ts (2 errors) ====
     const sym = Symbol();
-                ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
     type O = Record<symbol, unknown>
-             ~~~~~~
-!!! error TS2304: Cannot find name 'Record'.
     type F14 = ({ [sym]: string }: O) => void; // Error
                          ~~~~~~
 !!! error TS2842: 'string' is an unused renaming of '[sym]'. Did you intend to use it as a type annotation?

@@ -1,36 +1,19 @@
 --- old.iteratorSpreadInArray10.errors.txt
 +++ new.iteratorSpreadInArray10.errors.txt
 @@= skipped -0, +0 lines =@@
--iteratorSpreadInArray10.ts(7,17): error TS2488: Type 'SymbolIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+iteratorSpreadInArray10.ts(2,6): error TS2304: Cannot find name 'Symbol'.
+ iteratorSpreadInArray10.ts(7,17): error TS2488: Type 'SymbolIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
++iteratorSpreadInArray10.ts(7,17): error TS2489: An iterator must have a 'next()' method.
  
  
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- ==== iteratorSpreadInArray10.ts (1 errors) ====
+-==== iteratorSpreadInArray10.ts (1 errors) ====
++==== iteratorSpreadInArray10.ts (2 errors) ====
      class SymbolIterator {
          [Symbol.iterator]() {
-+         ~~~~~~
-+!!! error TS2304: Cannot find name 'Symbol'.
              return this;
-         }
-     }
-     
+@@= skipped -10, +11 lines =@@
      var array = [...new SymbolIterator];
--                    ~~~~~~~~~~~~~~~~~~
--!!! error TS2488: Type 'SymbolIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
+                     ~~~~~~~~~~~~~~~~~~
+ !!! error TS2488: Type 'SymbolIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
 -!!! related TS2489 iteratorSpreadInArray10.ts:7:17: An iterator must have a 'next()' method.
++                    ~~~~~~~~~~~~~~~~~~
++!!! error TS2489: An iterator must have a 'next()' method.

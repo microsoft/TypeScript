@@ -16,16 +16,20 @@
 +>this.#bar : Symbol(#bar, Decl(privateNameReadonly.ts, 0, 17))
  >this : Symbol(C, Decl(privateNameReadonly.ts, 0, 9))
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
      }
  }
  
  console.log(new C().foo());
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 ->new C().foo : Symbol(C.foo, Decl(privateNameReadonly.ts, 1, 13))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 +>new C().foo : Symbol(foo, Decl(privateNameReadonly.ts, 1, 13))
  >C : Symbol(C, Decl(privateNameReadonly.ts, 0, 5))
 ->foo : Symbol(C.foo, Decl(privateNameReadonly.ts, 1, 13))

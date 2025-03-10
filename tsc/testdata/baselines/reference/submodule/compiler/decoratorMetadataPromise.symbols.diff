@@ -1,15 +1,6 @@
 --- old.decoratorMetadataPromise.symbols
 +++ new.decoratorMetadataPromise.symbols
-@@= skipped -2, +2 lines =@@
- === decoratorMetadataPromise.ts ===
- declare const decorator: MethodDecorator;
- >decorator : Symbol(decorator, Decl(decoratorMetadataPromise.ts, 0, 13))
-->MethodDecorator : Symbol(MethodDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
-+>MethodDecorator : Symbol(MethodDecorator)
- 
- class A {
- >A : Symbol(A, Decl(decoratorMetadataPromise.ts, 0, 41))
-@@= skipped -9, +9 lines =@@
+@@= skipped -11, +11 lines =@@
  >decorator : Symbol(decorator, Decl(decoratorMetadataPromise.ts, 0, 13))
  
      async foo() {}
@@ -21,9 +12,8 @@
  
      async bar(): Promise<number> { return 0; }
 ->bar : Symbol(A.bar, Decl(decoratorMetadataPromise.ts, 4, 18))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>bar : Symbol(bar, Decl(decoratorMetadataPromise.ts, 4, 18))
-+>Promise : Symbol(Promise)
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      @decorator
  >decorator : Symbol(decorator, Decl(decoratorMetadataPromise.ts, 0, 13))
@@ -32,10 +22,5 @@
 ->baz : Symbol(A.baz, Decl(decoratorMetadataPromise.ts, 6, 46))
 +>baz : Symbol(baz, Decl(decoratorMetadataPromise.ts, 6, 46))
  >n : Symbol(n, Decl(decoratorMetadataPromise.ts, 8, 8))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>Promise : Symbol(Promise)
-+>Promise : Symbol(Promise)
- >n : Symbol(n, Decl(decoratorMetadataPromise.ts, 8, 8))
- }
- 
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

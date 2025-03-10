@@ -3,7 +3,7 @@
 === contextualTypeOnYield1.ts ===
 type FuncOrGeneratorFunc = () => (number | Generator<(arg: number) => void, any, void>)
 >FuncOrGeneratorFunc : Symbol(FuncOrGeneratorFunc, Decl(contextualTypeOnYield1.ts, 0, 0))
->Generator : Symbol(Generator)
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
 >arg : Symbol(arg, Decl(contextualTypeOnYield1.ts, 0, 54))
 
 const f: FuncOrGeneratorFunc = function*() {
@@ -12,5 +12,8 @@ const f: FuncOrGeneratorFunc = function*() {
 
   yield (num) => console.log(num); // `num` should be inferred to have type `number`.
 >num : Symbol(num, Decl(contextualTypeOnYield1.ts, 3, 9))
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >num : Symbol(num, Decl(contextualTypeOnYield1.ts, 3, 9))
 }

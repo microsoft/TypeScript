@@ -1,25 +1,11 @@
 --- old.noImplicitUseStrict_es6.errors.txt
 +++ new.noImplicitUseStrict_es6.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -error TS5102: Option 'noImplicitUseStrict' has been removed. Please remove it from your configuration.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- 
- 
+-
+-
 -!!! error TS5102: Option 'noImplicitUseStrict' has been removed. Please remove it from your configuration.
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- ==== noImplicitUseStrict_es6.ts (0 errors) ====
-     export var x = 0;
+-==== noImplicitUseStrict_es6.ts (0 errors) ====
+-    export var x = 0;
+@@= skipped --1, +1 lines =@@
++<no content>

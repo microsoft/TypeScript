@@ -1,34 +1,13 @@
 --- old.taggedTemplatesWithIncompleteNoSubstitutionTemplate1.errors.txt
 +++ new.taggedTemplatesWithIncompleteNoSubstitutionTemplate1.errors.txt
 @@= skipped -0, +0 lines =@@
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2318: Cannot find global type 'TemplateStringsArray'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts(1,15): error TS2304: Cannot find name 'TemplateStringsArray'.
 +taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts(5,1): error TS2554: Expected 3 arguments, but got 1.
  taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts(5,15): error TS1160: Unterminated template literal.
  
  
 -==== taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts (1 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2318: Cannot find global type 'TemplateStringsArray'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+==== taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts (3 errors) ====
++==== taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts (2 errors) ====
      function f(x: TemplateStringsArray, y: string, z: string) {
-+                  ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
      }
      
      // Incomplete call, not enough parameters.

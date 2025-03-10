@@ -6,25 +6,29 @@
      [Symbol.toStringTag]: string;
 ->[Symbol.toStringTag] : Symbol(I1[Symbol.toStringTag], Decl(symbolProperty60.ts, 1, 14))
 ->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(symbolProperty60.ts, 1, 14))
++>Symbol.toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      [key: string]: number;
  >key : Symbol(key, Decl(symbolProperty60.ts, 3, 5))
-@@= skipped -13, +10 lines =@@
+@@= skipped -13, +13 lines =@@
  >I2 : Symbol(I2, Decl(symbolProperty60.ts, 4, 1))
  
      [Symbol.toStringTag]: string;
 ->[Symbol.toStringTag] : Symbol(I2[Symbol.toStringTag], Decl(symbolProperty60.ts, 6, 14))
 ->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(symbolProperty60.ts, 6, 14))
++>Symbol.toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      [key: number]: boolean;
  >key : Symbol(key, Decl(symbolProperty60.ts, 8, 5))
-@@= skipped -16, +13 lines =@@
+@@= skipped -16, +16 lines =@@
  >I3 : Symbol(I3, Decl(symbolProperty60.ts, 11, 38))
  
      [mySymbol]: string;

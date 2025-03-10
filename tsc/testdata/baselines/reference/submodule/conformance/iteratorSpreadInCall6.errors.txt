@@ -1,41 +1,17 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-iteratorSpreadInCall6.ts(5,20): error TS2304: Cannot find name 'Symbol'.
-iteratorSpreadInCall6.ts(10,6): error TS2304: Cannot find name 'Symbol'.
-iteratorSpreadInCall6.ts(23,6): error TS2304: Cannot find name 'Symbol'.
-iteratorSpreadInCall6.ts(28,8): error TS2488: Type 'SymbolIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
-iteratorSpreadInCall6.ts(28,31): error TS2488: Type '_StringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
+iteratorSpreadInCall6.ts(28,28): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number | symbol'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== iteratorSpreadInCall6.ts (5 errors) ====
+==== iteratorSpreadInCall6.ts (1 errors) ====
     function foo(...s: (symbol | number)[]) { }
     class SymbolIterator {
         next() {
             return {
                 value: Symbol(),
-                       ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
                 done: false
             };
         }
     
         [Symbol.iterator]() {
-         ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
             return this;
         }
     }
@@ -49,14 +25,10 @@ iteratorSpreadInCall6.ts(28,31): error TS2488: Type '_StringIterator' must have 
         }
     
         [Symbol.iterator]() {
-         ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
             return this;
         }
     }
     
     foo(...new SymbolIterator, ...new _StringIterator);
-           ~~~~~~~~~~~~~~~~~~
-!!! error TS2488: Type 'SymbolIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
-                                  ~~~~~~~~~~~~~~~~~~~
-!!! error TS2488: Type '_StringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
+                               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number | symbol'.

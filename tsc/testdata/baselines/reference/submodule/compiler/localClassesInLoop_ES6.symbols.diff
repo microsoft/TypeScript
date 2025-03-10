@@ -5,8 +5,10 @@
  
      data.push(() => C);
 ->data.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>data.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  >data : Symbol(data, Decl(localClassesInLoop_ES6.ts, 3, 3))
 ->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  >C : Symbol(C, Decl(localClassesInLoop_ES6.ts, 4, 29))
  }
  

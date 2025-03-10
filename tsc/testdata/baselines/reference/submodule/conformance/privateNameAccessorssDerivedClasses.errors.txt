@@ -1,38 +1,16 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-privateNameAccessorssDerivedClasses.ts(4,9): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
-privateNameAccessorssDerivedClasses.ts(9,9): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
 privateNameAccessorssDerivedClasses.ts(9,23): error TS18013: Property '#prop' is not accessible outside class 'Base' because it has a private identifier.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== privateNameAccessorssDerivedClasses.ts (3 errors) ====
+==== privateNameAccessorssDerivedClasses.ts (1 errors) ====
     class Base {
         get #prop(): number { return  123; }
         static method(x: Derived) {
             console.log(x.#prop);
-            ~~~~~~~
-!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
         }
     }
     class Derived extends Base {
         static method(x: Derived) {
             console.log(x.#prop);
-            ~~~~~~~
-!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
                           ~~~~~
 !!! error TS18013: Property '#prop' is not accessible outside class 'Base' because it has a private identifier.
         }

@@ -9,6 +9,9 @@ class B {
 
         constructor() {
             console.log("hello");
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
         }
         static test = 123;
 >test : Symbol(test, Decl(privateNameFieldClassExpression.ts, 4, 9))

@@ -6,9 +6,13 @@
  >includes : Symbol(includes, Decl(stringIncludes.ts, 0, 3))
 ->"abcde".includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
 ->includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
++>"abcde".includes : Symbol(includes, Decl(lib.es2015.core.d.ts, --, --))
++>includes : Symbol(includes, Decl(lib.es2015.core.d.ts, --, --))
  
  includes = "abcde".includes("cd", 2);
  >includes : Symbol(includes, Decl(stringIncludes.ts, 0, 3))
 ->"abcde".includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
 ->includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
++>"abcde".includes : Symbol(includes, Decl(lib.es2015.core.d.ts, --, --))
++>includes : Symbol(includes, Decl(lib.es2015.core.d.ts, --, --))
  

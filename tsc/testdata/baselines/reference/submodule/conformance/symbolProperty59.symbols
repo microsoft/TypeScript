@@ -6,4 +6,7 @@ interface I {
 
     [Symbol.keyFor]: string;
 >[Symbol.keyFor] : Symbol([Symbol.keyFor], Decl(symbolProperty59.ts, 0, 13))
+>Symbol.keyFor : Symbol(keyFor, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>keyFor : Symbol(keyFor, Decl(lib.es2015.symbol.d.ts, --, --))
 }

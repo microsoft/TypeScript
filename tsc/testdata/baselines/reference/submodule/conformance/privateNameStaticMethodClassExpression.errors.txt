@@ -1,25 +1,8 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-privateNameStaticMethodClassExpression.ts(8,1): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
 privateNameStaticMethodClassExpression.ts(9,14): error TS18013: Property '#method' is not accessible outside class 'D' because it has a private identifier.
 privateNameStaticMethodClassExpression.ts(10,14): error TS18013: Property '#field' is not accessible outside class 'D' because it has a private identifier.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== privateNameStaticMethodClassExpression.ts (3 errors) ====
+==== privateNameStaticMethodClassExpression.ts (2 errors) ====
     const C = class D {
         static #field = D.#method();
         static #method() { return 42; }
@@ -28,8 +11,6 @@ privateNameStaticMethodClassExpression.ts(10,14): error TS18013: Property '#fiel
     }
     
     console.log(C.getClass().getField());
-    ~~~~~~~
-!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
     C.getClass().#method; // Error
                  ~~~~~~~
 !!! error TS18013: Property '#method' is not accessible outside class 'D' because it has a private identifier.

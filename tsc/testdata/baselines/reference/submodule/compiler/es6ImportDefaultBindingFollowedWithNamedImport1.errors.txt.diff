@@ -7,14 +7,6 @@
 -es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(7,30): error TS2614: Module '"es6ImportDefaultBindingFollowedWithNamedImport1_0"' has no exported member 'a'. Did you mean to use 'import a from "es6ImportDefaultBindingFollowedWithNamedImport1_0"' instead?
 -es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(9,27): error TS2614: Module '"es6ImportDefaultBindingFollowedWithNamedImport1_0"' has no exported member 'x'. Did you mean to use 'import x from "es6ImportDefaultBindingFollowedWithNamedImport1_0"' instead?
 -es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(11,27): error TS2614: Module '"es6ImportDefaultBindingFollowedWithNamedImport1_0"' has no exported member 'm'. Did you mean to use 'import m from "es6ImportDefaultBindingFollowedWithNamedImport1_0"' instead?
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 +es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(1,34): error TS2307: Cannot find module 'es6ImportDefaultBindingFollowedWithNamedImport1_0' or its corresponding type declarations.
 +es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(3,36): error TS2307: Cannot find module 'es6ImportDefaultBindingFollowedWithNamedImport1_0' or its corresponding type declarations.
 +es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(5,41): error TS2307: Cannot find module 'es6ImportDefaultBindingFollowedWithNamedImport1_0' or its corresponding type declarations.
@@ -23,17 +15,8 @@
 +es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(11,38): error TS2307: Cannot find module 'es6ImportDefaultBindingFollowedWithNamedImport1_0' or its corresponding type declarations.
  
  
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
  ==== es6ImportDefaultBindingFollowedWithNamedImport1_0.ts (0 errors) ====
-     var a = 10;
-     export default a;
+@@= skipped -11, +11 lines =@@
      
  ==== es6ImportDefaultBindingFollowedWithNamedImport1_1.ts (6 errors) ====
      import defaultBinding1, { } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";

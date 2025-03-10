@@ -5,9 +5,10 @@
  
      if (Math.random()) {
 ->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
-->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
--
++>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+ 
          let arguments = 100;
  >arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments14_ES6.ts, 2, 11))
- 

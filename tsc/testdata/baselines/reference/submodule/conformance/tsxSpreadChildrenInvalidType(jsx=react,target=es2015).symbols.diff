@@ -26,10 +26,12 @@
      return <div>{prop.key.toString() + prop.todo}</div>;
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(tsxSpreadChildrenInvalidType.tsx, 2, 30))
 ->prop.key.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>prop.key.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >prop.key : Symbol(key, Decl(tsxSpreadChildrenInvalidType.tsx, 15, 21))
  >prop : Symbol(prop, Decl(tsxSpreadChildrenInvalidType.tsx, 15, 14))
  >key : Symbol(key, Decl(tsxSpreadChildrenInvalidType.tsx, 15, 21))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >prop.todo : Symbol(todo, Decl(tsxSpreadChildrenInvalidType.tsx, 15, 34))
  >prop : Symbol(prop, Decl(tsxSpreadChildrenInvalidType.tsx, 15, 14))
  >todo : Symbol(todo, Decl(tsxSpreadChildrenInvalidType.tsx, 15, 34))
@@ -37,7 +39,7 @@
  }
  function TodoList({ todos }: TodoListProps) {
  >TodoList : Symbol(TodoList, Decl(tsxSpreadChildrenInvalidType.tsx, 17, 1))
-@@= skipped -17, +13 lines =@@
+@@= skipped -17, +15 lines =@@
  >TodoListProps : Symbol(TodoListProps, Decl(tsxSpreadChildrenInvalidType.tsx, 11, 1))
  
      return <div>
@@ -47,19 +49,23 @@
  >Todo : Symbol(Todo, Decl(tsxSpreadChildrenInvalidType.tsx, 14, 1))
  >key : Symbol(key, Decl(tsxSpreadChildrenInvalidType.tsx, 20, 17))
 ->todos[0].id : Symbol(TodoProp.id, Decl(tsxSpreadChildrenInvalidType.tsx, 8, 20))
++>todos[0].id : Symbol(id, Decl(tsxSpreadChildrenInvalidType.tsx, 8, 20))
  >todos : Symbol(todos, Decl(tsxSpreadChildrenInvalidType.tsx, 18, 19))
 ->id : Symbol(TodoProp.id, Decl(tsxSpreadChildrenInvalidType.tsx, 8, 20))
++>id : Symbol(id, Decl(tsxSpreadChildrenInvalidType.tsx, 8, 20))
  >todo : Symbol(todo, Decl(tsxSpreadChildrenInvalidType.tsx, 20, 35))
 ->todos[0].todo : Symbol(TodoProp.todo, Decl(tsxSpreadChildrenInvalidType.tsx, 9, 15))
++>todos[0].todo : Symbol(todo, Decl(tsxSpreadChildrenInvalidType.tsx, 9, 15))
  >todos : Symbol(todos, Decl(tsxSpreadChildrenInvalidType.tsx, 18, 19))
 ->todo : Symbol(TodoProp.todo, Decl(tsxSpreadChildrenInvalidType.tsx, 9, 15))
++>todo : Symbol(todo, Decl(tsxSpreadChildrenInvalidType.tsx, 9, 15))
  
      </div>;
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(tsxSpreadChildrenInvalidType.tsx, 2, 30))
  }
  function TodoListNoError({ todos }: TodoListProps) {
  >TodoListNoError : Symbol(TodoListNoError, Decl(tsxSpreadChildrenInvalidType.tsx, 22, 1))
-@@= skipped -23, +16 lines =@@
+@@= skipped -23, +20 lines =@@
  
      // any is not checked
      return <div>
@@ -69,12 +75,16 @@
  >Todo : Symbol(Todo, Decl(tsxSpreadChildrenInvalidType.tsx, 14, 1))
  >key : Symbol(key, Decl(tsxSpreadChildrenInvalidType.tsx, 26, 18))
 ->todos[0].id : Symbol(TodoProp.id, Decl(tsxSpreadChildrenInvalidType.tsx, 8, 20))
++>todos[0].id : Symbol(id, Decl(tsxSpreadChildrenInvalidType.tsx, 8, 20))
  >todos : Symbol(todos, Decl(tsxSpreadChildrenInvalidType.tsx, 23, 26))
 ->id : Symbol(TodoProp.id, Decl(tsxSpreadChildrenInvalidType.tsx, 8, 20))
++>id : Symbol(id, Decl(tsxSpreadChildrenInvalidType.tsx, 8, 20))
  >todo : Symbol(todo, Decl(tsxSpreadChildrenInvalidType.tsx, 26, 36))
 ->todos[0].todo : Symbol(TodoProp.todo, Decl(tsxSpreadChildrenInvalidType.tsx, 9, 15))
++>todos[0].todo : Symbol(todo, Decl(tsxSpreadChildrenInvalidType.tsx, 9, 15))
  >todos : Symbol(todos, Decl(tsxSpreadChildrenInvalidType.tsx, 23, 26))
 ->todo : Symbol(TodoProp.todo, Decl(tsxSpreadChildrenInvalidType.tsx, 9, 15))
++>todo : Symbol(todo, Decl(tsxSpreadChildrenInvalidType.tsx, 9, 15))
  
      </div>;
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(tsxSpreadChildrenInvalidType.tsx, 2, 30))

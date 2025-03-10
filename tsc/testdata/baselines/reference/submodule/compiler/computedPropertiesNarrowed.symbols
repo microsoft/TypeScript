@@ -3,6 +3,9 @@
 === computedPropertiesNarrowed.ts ===
 const x: 0 | 1 = Math.random()? 0: 1;
 >x : Symbol(x, Decl(computedPropertiesNarrowed.ts, 0, 5))
+>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
 
 declare function assert(n: number): asserts n is 1;
 >assert : Symbol(assert, Decl(computedPropertiesNarrowed.ts, 0, 37))
@@ -49,6 +52,7 @@ export let o32 = { [1-1]: 1 } // error number
 
 let u = Symbol();
 >u : Symbol(u, Decl(computedPropertiesNarrowed.ts, 19, 3))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 export let o4 = {
 >o4 : Symbol(o4, Decl(computedPropertiesNarrowed.ts, 20, 10))
@@ -63,10 +67,12 @@ export let o5  ={
 
     [Symbol()]: 1 // Should error
 >[Symbol()] : Symbol([Symbol()], Decl(computedPropertiesNarrowed.ts, 24, 17))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 const uu: unique symbol = Symbol();
 >uu : Symbol(uu, Decl(computedPropertiesNarrowed.ts, 28, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 export let o6  = {
 >o6 : Symbol(o6, Decl(computedPropertiesNarrowed.ts, 29, 10))

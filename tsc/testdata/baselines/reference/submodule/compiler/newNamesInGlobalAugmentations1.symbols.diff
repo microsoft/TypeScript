@@ -1,11 +1,7 @@
 --- old.newNamesInGlobalAugmentations1.symbols
 +++ new.newNamesInGlobalAugmentations1.symbols
-@@= skipped -13, +13 lines =@@
- >global : Symbol(global, Decl(f1.d.ts, 4, 1))
- 
-     interface SymbolConstructor {
-->SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(f1.d.ts, 5, 16))
-+>SymbolConstructor : Symbol(SymbolConstructor, Decl(f1.d.ts, 5, 16))
+@@= skipped -16, +16 lines =@@
+ >SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(f1.d.ts, 5, 16))
  
          observable: symbol;
 ->observable : Symbol(SymbolConstructor.observable, Decl(f1.d.ts, 6, 33))
@@ -18,7 +14,7 @@
  
      let [a, b]: number[];
  >a : Symbol(a, Decl(f1.d.ts, 10, 9))
-@@= skipped -16, +16 lines =@@
+@@= skipped -13, +13 lines =@@
      export import X = M.M1.x;
  >X : Symbol(X, Decl(f1.d.ts, 10, 25))
  >M : Symbol(M, Decl(f1.d.ts, 0, 10))
@@ -31,9 +27,11 @@
  === main.ts ===
  Symbol.observable;
 ->Symbol.observable : Symbol(SymbolConstructor.observable, Decl(f1.d.ts, 6, 33))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Symbol.observable : Symbol(observable, Decl(f1.d.ts, 6, 33))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->observable : Symbol(SymbolConstructor.observable, Decl(f1.d.ts, 6, 33))
--
++>observable : Symbol(observable, Decl(f1.d.ts, 6, 33))
+ 
  new Cls().x
 ->new Cls().x : Symbol(Cls.x, Decl(f1.d.ts, 9, 15))
 +>new Cls().x : Symbol(x, Decl(f1.d.ts, 9, 15))

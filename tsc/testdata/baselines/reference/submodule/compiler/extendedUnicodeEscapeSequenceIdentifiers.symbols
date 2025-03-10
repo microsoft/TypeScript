@@ -8,6 +8,9 @@ const a\u{0061} = 12;
 >a\u{0061} : Symbol(aa, Decl(extendedUnicodeEscapeSequenceIdentifiers.ts, 1, 5))
 
 console.log(a + aa);
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >a : Symbol(a, Decl(extendedUnicodeEscapeSequenceIdentifiers.ts, 0, 5))
 >aa : Symbol(aa, Decl(extendedUnicodeEscapeSequenceIdentifiers.ts, 1, 5))
 

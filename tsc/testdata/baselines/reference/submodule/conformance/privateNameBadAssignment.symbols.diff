@@ -5,12 +5,14 @@
  
  A.prototype.#no = 2;         // Error (outside class body)
 ->A.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
++>A.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
  >A : Symbol(A, Decl(privateNameBadAssignment.ts, 0, 18))
 ->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
++>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
  
  class B {}
  >B : Symbol(B, Decl(privateNameBadAssignment.ts, 2, 20))
-@@= skipped -14, +12 lines =@@
+@@= skipped -14, +14 lines =@@
  >C : Symbol(C, Decl(privateNameBadAssignment.ts, 5, 11))
  
      #bar = 6;

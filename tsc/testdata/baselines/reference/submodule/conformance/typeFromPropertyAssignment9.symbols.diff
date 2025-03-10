@@ -131,7 +131,9 @@
  var min = window.min || {};
 ->min : Symbol(min, Decl(a.js, 29, 3), Decl(a.js, 29, 27), Decl(a.js, 30, 44), Decl(a.js, 31, 50))
 ->window.min : Symbol(min, Decl(a.js, 29, 3), Decl(a.js, 29, 27), Decl(a.js, 30, 44), Decl(a.js, 31, 50))
-->window : Symbol(window, Decl(lib.dom.d.ts, --, --))
++>min : Symbol(min, Decl(a.js, 29, 3))
++>window.min : Symbol(min, Decl(a.js, 29, 3))
+ >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
 ->min : Symbol(min, Decl(a.js, 29, 3), Decl(a.js, 29, 27), Decl(a.js, 30, 44), Decl(a.js, 31, 50))
 +>min : Symbol(min, Decl(a.js, 29, 3))
  
@@ -157,7 +159,9 @@
 ->self.min.nest.other : Symbol(min.nest.other, Decl(a.js, 30, 44))
 ->self.min.nest : Symbol(min.nest, Decl(a.js, 29, 27), Decl(a.js, 31, 4))
 ->self.min : Symbol(min, Decl(a.js, 29, 3), Decl(a.js, 29, 27), Decl(a.js, 30, 44), Decl(a.js, 31, 50))
-->self : Symbol(self, Decl(lib.dom.d.ts, --, --))
++>min : Symbol(min, Decl(a.js, 29, 3))
++>self.min : Symbol(min, Decl(a.js, 29, 3))
+ >self : Symbol(self, Decl(lib.dom.d.ts, --, --))
 ->min : Symbol(min, Decl(a.js, 29, 3), Decl(a.js, 29, 27), Decl(a.js, 30, 44), Decl(a.js, 31, 50))
 ->nest : Symbol(min.nest, Decl(a.js, 29, 27), Decl(a.js, 31, 4))
 ->other : Symbol(min.nest.other, Decl(a.js, 30, 44))

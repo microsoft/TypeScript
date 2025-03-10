@@ -1,51 +1,22 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'Promise'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-importCallExpressionSpecifierNotStringTypeError.ts(5,1): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
 importCallExpressionSpecifierNotStringTypeError.ts(5,8): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'boolean'.
-importCallExpressionSpecifierNotStringTypeError.ts(6,10): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
 importCallExpressionSpecifierNotStringTypeError.ts(6,17): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'boolean'.
-importCallExpressionSpecifierNotStringTypeError.ts(7,12): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
 importCallExpressionSpecifierNotStringTypeError.ts(7,19): error TS7036: Dynamic import's specifier must be of type 'string', but here has type '"defaulPath" | boolean'.
-importCallExpressionSpecifierNotStringTypeError.ts(12,10): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
-importCallExpressionSpecifierNotStringTypeError.ts(12,17): error TS7036: Dynamic import's specifier must be of type 'string', but here has type '{}'.
-importCallExpressionSpecifierNotStringTypeError.ts(13,10): error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
+importCallExpressionSpecifierNotStringTypeError.ts(12,17): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'string[]'.
 importCallExpressionSpecifierNotStringTypeError.ts(13,17): error TS7036: Dynamic import's specifier must be of type 'string', but here has type '() => string'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'Promise'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== importCallExpressionSpecifierNotStringTypeError.ts (10 errors) ====
+==== importCallExpressionSpecifierNotStringTypeError.ts (5 errors) ====
     declare function getSpecifier(): boolean;
     declare var whatToLoad: boolean;
     
     // Error specifier is not assignable to string
     import(getSpecifier());
-    ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
            ~~~~~~~~~~~~~~
 !!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'boolean'.
     var p1 = import(getSpecifier());
-             ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
                     ~~~~~~~~~~~~~~
 !!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'boolean'.
     const p2 = import(whatToLoad ? getSpecifier() : "defaulPath")
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type '"defaulPath" | boolean'.
     p1.then(zero => {
@@ -53,12 +24,8 @@ importCallExpressionSpecifierNotStringTypeError.ts(13,17): error TS7036: Dynamic
     });
     
     var p3 = import(["path1", "path2"]);
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
                     ~~~~~~~~~~~~~~~~~~
-!!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type '{}'.
+!!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'string[]'.
     var p4 = import(()=>"PathToModule");
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2711: A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
                     ~~~~~~~~~~~~~~~~~~
 !!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type '() => string'.

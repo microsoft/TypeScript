@@ -1,31 +1,16 @@
 --- old.emitArrowFunctionWhenUsingArguments12_ES6.errors.txt
 +++ new.emitArrowFunctionWhenUsingArguments12_ES6.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -emitArrowFunctionWhenUsingArguments12_ES6.ts(2,7): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- 
- 
+-
+-
 -==== emitArrowFunctionWhenUsingArguments12_ES6.ts (1 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+==== emitArrowFunctionWhenUsingArguments12_ES6.ts (0 errors) ====
-     class C {
-         f(arguments) {
+-    class C {
+-        f(arguments) {
 -          ~~~~~~~~~
 -!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-             var a = () => arguments;
-         }
-     }
+-            var a = () => arguments;
+-        }
+-    }
+@@= skipped --1, +1 lines =@@
++<no content>

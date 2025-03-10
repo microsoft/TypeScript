@@ -34,7 +34,7 @@ class A {
 
         const data: Record<string, string> = { a: 'a', b: 'b', c: 'c', d: 'd', e: 'e' };
 >data : Symbol(data, Decl(privateNameComputedPropertyName1.ts, 15, 13))
->Record : Symbol(Record)
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(privateNameComputedPropertyName1.ts, 15, 46))
 >b : Symbol(b, Decl(privateNameComputedPropertyName1.ts, 15, 54))
 >c : Symbol(c, Decl(privateNameComputedPropertyName1.ts, 15, 62))
@@ -71,6 +71,9 @@ class A {
 >data : Symbol(data, Decl(privateNameComputedPropertyName1.ts, 15, 13))
 
         console.log(a, b, c, d, e);
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >a : Symbol(a, Decl(privateNameComputedPropertyName1.ts, 16, 15))
 >b : Symbol(b, Decl(privateNameComputedPropertyName1.ts, 17, 25))
 >c : Symbol(c, Decl(privateNameComputedPropertyName1.ts, 18, 25))
@@ -108,6 +111,9 @@ class A {
 >this : Symbol(A, Decl(privateNameComputedPropertyName1.ts, 0, 0))
 
         console.log(a1, b1, c1, d1);
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >a1 : Symbol(a1, Decl(privateNameComputedPropertyName1.ts, 25, 13))
 >b1 : Symbol(b1, Decl(privateNameComputedPropertyName1.ts, 26, 13))
 >c1 : Symbol(c1, Decl(privateNameComputedPropertyName1.ts, 27, 13))

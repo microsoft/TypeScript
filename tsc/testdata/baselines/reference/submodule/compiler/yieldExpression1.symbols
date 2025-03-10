@@ -10,7 +10,7 @@ function* a() {
 
 function* b(): IterableIterator<number> {
 >b : Symbol(b, Decl(yieldExpression1.ts, 3, 1))
->IterableIterator : Symbol(IterableIterator)
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     yield;
     yield 0;

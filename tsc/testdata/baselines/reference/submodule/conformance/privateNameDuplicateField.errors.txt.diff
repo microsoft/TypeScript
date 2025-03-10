@@ -1,16 +1,6 @@
 --- old.privateNameDuplicateField.errors.txt
 +++ new.privateNameDuplicateField.errors.txt
 @@= skipped -0, +0 lines =@@
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'CallableFunction'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'NewableFunction'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 +privateNameDuplicateField.ts(5,9): error TS2300: Duplicate identifier '#foo'.
  privateNameDuplicateField.ts(6,9): error TS2300: Duplicate identifier '#foo'.
  privateNameDuplicateField.ts(11,9): error TS2300: Duplicate identifier '#foo'.
@@ -184,16 +174,6 @@
  
  
 -==== privateNameDuplicateField.ts (83 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'CallableFunction'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'NewableFunction'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 +==== privateNameDuplicateField.ts (168 errors) ====
      function Field() {
      
@@ -205,7 +185,7 @@
              #foo = "foo";
              ~~~~
  !!! error TS2300: Duplicate identifier '#foo'.
-@@= skipped -98, +205 lines =@@
+@@= skipped -98, +185 lines =@@
              #foo = "foo";
              ~~~~
  !!! error TS2300: Duplicate identifier '#foo'.

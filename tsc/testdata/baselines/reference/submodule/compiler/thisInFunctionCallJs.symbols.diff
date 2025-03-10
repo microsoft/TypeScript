@@ -39,8 +39,10 @@
  
              console.log(d === this.data.length)
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >d : Symbol(d, Decl(a.js, 13, 36))
  
          })
@@ -63,8 +65,10 @@
  
              console.log(d === this.data.length)
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >d : Symbol(d, Decl(a.js, 21, 18))
 ->this.data.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 ->this.data : Symbol(Test.data, Decl(a.js, 1, 19))
@@ -89,7 +93,7 @@
  
          /** @this {Test} */
          function (d) {
-@@= skipped -64, +41 lines =@@
+@@= skipped -64, +47 lines =@@
  
              return d === this.data.length
  >d : Symbol(d, Decl(a.js, 29, 18))

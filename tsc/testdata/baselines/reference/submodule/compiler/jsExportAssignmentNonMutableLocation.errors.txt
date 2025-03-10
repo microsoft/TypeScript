@@ -1,29 +1,9 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-file.js(1,22): error TS2304: Cannot find name 'Symbol'.
 file.js(4,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 file.js(8,1): error TS2304: Cannot find name 'exports'.
-file.js(8,25): error TS2304: Cannot find name 'Symbol'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== file.js (4 errors) ====
+==== file.js (2 errors) ====
     const customSymbol = Symbol("custom");
-                         ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
     
     // This is a common pattern in Node’s built-in modules:
     module.exports = {
@@ -35,5 +15,3 @@ file.js(8,25): error TS2304: Cannot find name 'Symbol'.
     exports.customSymbol2 = Symbol("custom");
     ~~~~~~~
 !!! error TS2304: Cannot find name 'exports'.
-                            ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.

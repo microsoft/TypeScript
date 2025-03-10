@@ -1,29 +1,7 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'CallableFunction'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'NewableFunction'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 privateNameStaticAccessors.ts(9,12): error TS2540: Cannot assign to '#roProp' because it is a read-only property.
-privateNameStaticAccessors.ts(10,9): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
-privateNameStaticAccessors.ts(11,9): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'CallableFunction'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'NewableFunction'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== privateNameStaticAccessors.ts (3 errors) ====
+==== privateNameStaticAccessors.ts (1 errors) ====
     class A1 {
         static get #prop() { return ""; }
         static set #prop(param: string) { }
@@ -36,11 +14,7 @@ privateNameStaticAccessors.ts(11,9): error TS2584: Cannot find name 'console'. D
                ~~~~~~~
 !!! error TS2540: Cannot assign to '#roProp' because it is a read-only property.
             console.log(A1.#prop);
-            ~~~~~~~
-!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
             console.log(A1.#roProp);
-            ~~~~~~~
-!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
         }
     }
     

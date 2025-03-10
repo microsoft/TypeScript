@@ -35,9 +35,11 @@
  
      console.log(this.#value); // error
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 ->this.#value : Symbol(Test.#value, Decl(privateWriteOnlyAccessorRead.ts, 0, 12))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 +>this.#value : Symbol(#value, Decl(privateWriteOnlyAccessorRead.ts, 0, 12))
  >this : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
  
@@ -83,7 +85,7 @@
  >this : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
  >foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 1, 17))
  >foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 16, 33))
-@@= skipped -72, +69 lines =@@
+@@= skipped -72, +72 lines =@@
        foo: { ...this.#value.foo },
  >foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 17, 6))
  >this.#value.foo : Symbol(foo, Decl(privateWriteOnlyAccessorRead.ts, 1, 17))

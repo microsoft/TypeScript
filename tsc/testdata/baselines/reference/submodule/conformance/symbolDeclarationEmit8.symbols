@@ -6,4 +6,7 @@ var obj = {
 
     [Symbol.isConcatSpreadable]: 0
 >[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(symbolDeclarationEmit8.ts, 0, 11))
+>Symbol.isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }

@@ -3,19 +3,25 @@
 === generatorTypeCheck26.ts ===
 function* g(): IterableIterator<(x: string) => number, (x: string) => number> {
 >g : Symbol(g, Decl(generatorTypeCheck26.ts, 0, 0))
->IterableIterator : Symbol(IterableIterator)
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >x : Symbol(x, Decl(generatorTypeCheck26.ts, 0, 33))
 >x : Symbol(x, Decl(generatorTypeCheck26.ts, 0, 56))
 
     yield x => x.length;
 >x : Symbol(x, Decl(generatorTypeCheck26.ts, 1, 9))
+>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(generatorTypeCheck26.ts, 1, 9))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
     yield *[x => x.length];
 >x : Symbol(x, Decl(generatorTypeCheck26.ts, 2, 12))
+>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(generatorTypeCheck26.ts, 2, 12))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
     return x => x.length;
 >x : Symbol(x, Decl(generatorTypeCheck26.ts, 3, 10))
+>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(generatorTypeCheck26.ts, 3, 10))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 }

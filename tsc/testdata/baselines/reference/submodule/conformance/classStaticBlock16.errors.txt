@@ -1,24 +1,8 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 classStaticBlock16.ts(11,5): error TS2448: Block-scoped variable 'getY' used before its declaration.
 classStaticBlock16.ts(11,28): error TS18013: Property '#y' is not accessible outside class 'D' because it has a private identifier.
 classStaticBlock16.ts(21,28): error TS18013: Property '#x' is not accessible outside class 'C' because it has a private identifier.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 ==== classStaticBlock16.ts (3 errors) ====
     let getX: (c: C) => number;
     class C {

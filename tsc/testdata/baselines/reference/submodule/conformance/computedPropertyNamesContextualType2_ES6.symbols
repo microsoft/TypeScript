@@ -20,10 +20,14 @@ var o: I = {
     [+"foo"](y) { return y.length; },
 >[+"foo"] : Symbol([+"foo"], Decl(computedPropertyNamesContextualType2_ES6.ts, 5, 12))
 >y : Symbol(y, Decl(computedPropertyNamesContextualType2_ES6.ts, 6, 13))
+>y.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(computedPropertyNamesContextualType2_ES6.ts, 6, 13))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
     [+"bar"]: y => y.length
 >[+"bar"] : Symbol([+"bar"], Decl(computedPropertyNamesContextualType2_ES6.ts, 6, 37))
 >y : Symbol(y, Decl(computedPropertyNamesContextualType2_ES6.ts, 7, 13))
+>y.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(computedPropertyNamesContextualType2_ES6.ts, 7, 13))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 }

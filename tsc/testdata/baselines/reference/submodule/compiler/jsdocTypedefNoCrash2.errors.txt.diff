@@ -1,38 +1,23 @@
 --- old.jsdocTypedefNoCrash2.errors.txt
 +++ new.jsdocTypedefNoCrash2.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -export.js(1,13): error TS2451: Cannot redeclare block-scoped variable 'foo'.
 -export.js(1,13): error TS8008: Type aliases can only be used in TypeScript files.
 -export.js(6,14): error TS2451: Cannot redeclare block-scoped variable 'foo'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- 
- 
+-
+-
 -==== export.js (3 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+==== export.js (0 errors) ====
-     export type foo = 5;
+-    export type foo = 5;
 -                ~~~
 -!!! error TS2451: Cannot redeclare block-scoped variable 'foo'.
 -                ~~~
 -!!! error TS8008: Type aliases can only be used in TypeScript files.
-     /**
-      * @typedef {{
-      * }}
-      */
-     export const foo = 5;
+-    /**
+-     * @typedef {{
+-     * }}
+-     */
+-    export const foo = 5;
 -                 ~~~
 -!!! error TS2451: Cannot redeclare block-scoped variable 'foo'.
+@@= skipped --1, +1 lines =@@
++<no content>

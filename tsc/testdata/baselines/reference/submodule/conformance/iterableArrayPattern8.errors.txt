@@ -1,27 +1,7 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-iterableArrayPattern8.ts(11,6): error TS2304: Cannot find name 'Symbol'.
-iterableArrayPattern8.ts(17,1): error TS2488: Type 'FooIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
-iterableArrayPattern8.ts(17,2): error TS2322: Type '() => FooIterator' is not assignable to type 'Bar'.
-iterableArrayPattern8.ts(17,8): error TS2322: Type '{}' is not assignable to type 'string'.
-  'string' is a primitive, but '{}' is a wrapper object. Prefer using 'string' when possible.
+iterableArrayPattern8.ts(17,8): error TS2322: Type 'Foo[]' is not assignable to type 'string'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== iterableArrayPattern8.ts (4 errors) ====
+==== iterableArrayPattern8.ts (1 errors) ====
     class Bar { x }
     class Foo extends Bar { y }
     class FooIterator {
@@ -33,18 +13,11 @@ iterableArrayPattern8.ts(17,8): error TS2322: Type '{}' is not assignable to typ
         }
     
         [Symbol.iterator]() {
-         ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
             return this;
         }
     }
     
     var a: Bar, b: string;
     [a, ...b] = new FooIterator;
-    ~~~~~~~~~
-!!! error TS2488: Type 'FooIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
-     ~
-!!! error TS2322: Type '() => FooIterator' is not assignable to type 'Bar'.
            ~
-!!! error TS2322: Type '{}' is not assignable to type 'string'.
-!!! error TS2322:   'string' is a primitive, but '{}' is a wrapper object. Prefer using 'string' when possible.
+!!! error TS2322: Type 'Foo[]' is not assignable to type 'string'.

@@ -55,10 +55,11 @@ export enum AppStyle {
 
 const appTypeStylesWithError: Map<AppType, Array<AppStyle>> = new Map([
 >appTypeStylesWithError : Symbol(appTypeStylesWithError, Decl(arrayLiteralInference.ts, 22, 5))
->Map : Symbol(Map)
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >AppType : Symbol(AppType, Decl(arrayLiteralInference.ts, 0, 0))
->Array : Symbol(Array)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >AppStyle : Symbol(AppStyle, Decl(arrayLiteralInference.ts, 12, 1))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     [AppType.Standard, [AppStyle.Standard, AppStyle.MiniApp]],
 >AppType.Standard : Symbol(Standard, Decl(arrayLiteralInference.ts, 5, 34))

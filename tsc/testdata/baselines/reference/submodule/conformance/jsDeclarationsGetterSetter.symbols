@@ -41,6 +41,9 @@ export class D {}
 >D : Symbol(D, Decl(index.js, 20, 1))
 
 Object.defineProperty(D.prototype, "x", {
+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 >D.prototype : Symbol(prototype)
 >D : Symbol(D, Decl(index.js, 20, 1))
 >prototype : Symbol(prototype)
@@ -56,6 +59,9 @@ export class E {}
 >E : Symbol(E, Decl(index.js, 27, 3))
 
 Object.defineProperty(E.prototype, "x", {
+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 >E.prototype : Symbol(prototype)
 >E : Symbol(E, Decl(index.js, 27, 3))
 >prototype : Symbol(prototype)
@@ -73,6 +79,9 @@ export class F {}
 >F : Symbol(F, Decl(index.js, 35, 3))
 
 Object.defineProperty(F.prototype, "x", {
+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 >F.prototype : Symbol(prototype)
 >F : Symbol(F, Decl(index.js, 35, 3))
 >prototype : Symbol(prototype)
@@ -95,6 +104,9 @@ export class G {}
 >G : Symbol(G, Decl(index.js, 46, 3))
 
 Object.defineProperty(G.prototype, "x", {
+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 >G.prototype : Symbol(prototype)
 >G : Symbol(G, Decl(index.js, 46, 3))
 >prototype : Symbol(prototype)
@@ -112,6 +124,9 @@ export class H {}
 >H : Symbol(H, Decl(index.js, 54, 3))
 
 Object.defineProperty(H.prototype, "x", {
+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 >H.prototype : Symbol(prototype)
 >H : Symbol(H, Decl(index.js, 54, 3))
 >prototype : Symbol(prototype)
@@ -126,6 +141,9 @@ export class I {}
 >I : Symbol(I, Decl(index.js, 59, 3))
 
 Object.defineProperty(I.prototype, "x", {
+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 >I.prototype : Symbol(prototype)
 >I : Symbol(I, Decl(index.js, 59, 3))
 >prototype : Symbol(prototype)
@@ -150,6 +168,9 @@ export class J {}
 >J : Symbol(J, Decl(index.js, 73, 25))
 
 Object.defineProperty(J.prototype, "x", {
+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 >J.prototype : Symbol(prototype)
 >J : Symbol(J, Decl(index.js, 73, 25))
 >prototype : Symbol(prototype)
@@ -178,12 +199,18 @@ export class K {}
 >K : Symbol(K, Decl(index.js, 86, 26))
 
 Object.defineProperty(K.prototype, "x", {
+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 >K.prototype : Symbol(prototype)
 >K : Symbol(K, Decl(index.js, 86, 26))
 >prototype : Symbol(prototype)
 
     set: Math.random() ? kSetter1 : kSetter2
 >set : Symbol(set, Decl(index.js, 88, 41))
+>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
 >kSetter1 : Symbol(kSetter1, Decl(index.js, 82, 5))
 >kSetter2 : Symbol(kSetter2, Decl(index.js, 86, 5))
 
@@ -207,12 +234,18 @@ export class L {}
 >L : Symbol(L, Decl(index.js, 99, 26))
 
 Object.defineProperty(L.prototype, "x", {
+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 >L.prototype : Symbol(prototype)
 >L : Symbol(L, Decl(index.js, 99, 26))
 >prototype : Symbol(prototype)
 
     set: Math.random() ? lSetter1 : lSetter2
 >set : Symbol(set, Decl(index.js, 101, 41))
+>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
 >lSetter1 : Symbol(lSetter1, Decl(index.js, 95, 5))
 >lSetter2 : Symbol(lSetter2, Decl(index.js, 99, 5))
 
@@ -236,12 +269,18 @@ export class M {}
 >M : Symbol(M, Decl(index.js, 112, 26))
 
 Object.defineProperty(M.prototype, "x", {
+>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
 >M.prototype : Symbol(prototype)
 >M : Symbol(M, Decl(index.js, 112, 26))
 >prototype : Symbol(prototype)
 
     set: Math.random() ? mSetter1 : mSetter2
 >set : Symbol(set, Decl(index.js, 114, 41))
+>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
 >mSetter1 : Symbol(mSetter1, Decl(index.js, 108, 5))
 >mSetter2 : Symbol(mSetter2, Decl(index.js, 112, 5))
 

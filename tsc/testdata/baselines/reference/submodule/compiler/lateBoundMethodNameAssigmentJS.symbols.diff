@@ -1,14 +1,14 @@
 --- old.lateBoundMethodNameAssigmentJS.symbols
 +++ new.lateBoundMethodNameAssigmentJS.symbols
-@@= skipped -2, +2 lines =@@
- === lateBoundMethodNameAssigmentJS.js ===
- const _symbol = Symbol("_sym");
+@@= skipped -11, +11 lines =@@
+         this[_symbol] = this[_symbol].bind(this);
+ >this : Symbol(MyClass, Decl(lateBoundMethodNameAssigmentJS.js, 0, 31))
  >_symbol : Symbol(_symbol, Decl(lateBoundMethodNameAssigmentJS.js, 0, 5))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
- 
- export class MyClass {
- >MyClass : Symbol(MyClass, Decl(lateBoundMethodNameAssigmentJS.js, 0, 31))
-@@= skipped -15, +14 lines =@@
++>this[_symbol].bind : Symbol(bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >this : Symbol(MyClass, Decl(lateBoundMethodNameAssigmentJS.js, 0, 31))
+ >_symbol : Symbol(_symbol, Decl(lateBoundMethodNameAssigmentJS.js, 0, 5))
++>bind : Symbol(bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >this : Symbol(MyClass, Decl(lateBoundMethodNameAssigmentJS.js, 0, 31))
      }
  
      async [_symbol]() { }

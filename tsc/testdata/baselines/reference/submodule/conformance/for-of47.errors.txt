@@ -1,29 +1,13 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-for-of47.ts(4,25): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+for-of47.ts(4,13): error TS2322: Type 'boolean' is not assignable to type 'number'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 ==== for-of47.ts (1 errors) ====
     var x: string, y: number;
     var array = [{ x: "", y: true }]
     enum E { x }
     for ({x, y: y = E.x} of array) {
-                            ~~~~~
-!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+                ~
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
         x;
         y;
     }

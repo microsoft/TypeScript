@@ -13,16 +13,20 @@
        var fn = async () => await other.apply(this, arguments);
  >fn : Symbol(fn, Decl(asyncArrowFunctionCapturesArguments_es6.ts, 3, 9))
 ->other.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
++>other.apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
  >other : Symbol(other, Decl(asyncArrowFunctionCapturesArguments_es6.ts, 1, 13))
 ->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
++>apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
  >this : Symbol(C, Decl(asyncArrowFunctionCapturesArguments_es6.ts, 0, 0))
  >arguments : Symbol(arguments)
     }
-@@= skipped -19, +17 lines =@@
+@@= skipped -19, +19 lines =@@
  >f : Symbol(f, Decl(asyncArrowFunctionCapturesArguments_es6.ts, 5, 1))
  
     return async () => async () => arguments.length;
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
++>arguments.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  }

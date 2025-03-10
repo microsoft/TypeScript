@@ -1,41 +1,17 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'Promise'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-reachabilityChecks7.ts(5,5): error TS2697: An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
-reachabilityChecks7.ts(9,22): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 reachabilityChecks7.ts(13,16): error TS7030: Not all code paths return a value.
-reachabilityChecks7.ts(17,22): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+reachabilityChecks7.ts(17,22): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'Promise'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== reachabilityChecks7.ts (4 errors) ====
+==== reachabilityChecks7.ts (2 errors) ====
     // async function without return type annotation - error
     async function f1() {    
     }
     
     let x = async function() {
-        ~
-!!! error TS2697: An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.
     }
     
     // async function with which promised type is void - return can be omitted
     async function f2(): Promise<void> {
-                         ~~~~~~~
-!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
         
     }
     
@@ -46,8 +22,8 @@ reachabilityChecks7.ts(17,22): error TS2583: Cannot find name 'Promise'. Do you 
     }
     
     async function f4(): Promise<number> {
-                         ~~~~~~~
-!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+                         ~~~~~~~~~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
         
     }
     

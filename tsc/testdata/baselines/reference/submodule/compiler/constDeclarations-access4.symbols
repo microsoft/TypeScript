@@ -141,7 +141,9 @@ M.x;
 >x : Symbol(x, Decl(constDeclarations-access4.ts, 1, 9))
 
 M.x.toString();
+>M.x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
 >M.x : Symbol(x, Decl(constDeclarations-access4.ts, 1, 9))
 >M : Symbol(M, Decl(constDeclarations-access4.ts, 0, 0))
 >x : Symbol(x, Decl(constDeclarations-access4.ts, 1, 9))
+>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
 

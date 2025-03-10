@@ -1,34 +1,14 @@
 --- old.taggedTemplateStringsWithOverloadResolution3_ES6.errors.txt
 +++ new.taggedTemplateStringsWithOverloadResolution3_ES6.errors.txt
 @@= skipped -0, +0 lines =@@
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2318: Cannot find global type 'TemplateStringsArray'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+taggedTemplateStringsWithOverloadResolution3_ES6.ts(2,20): error TS2304: Cannot find name 'TemplateStringsArray'.
-+taggedTemplateStringsWithOverloadResolution3_ES6.ts(3,20): error TS2304: Cannot find name 'TemplateStringsArray'.
  taggedTemplateStringsWithOverloadResolution3_ES6.ts(9,9): error TS2769: No overload matches this call.
 -  Overload 1 of 2, '(strs: TemplateStringsArray, s: string): string', gave the following error.
 -    Argument of type '{}' is not assignable to parameter of type 'string'.
 -  Overload 2 of 2, '(strs: TemplateStringsArray, n: number): number', gave the following error.
 +  The last overload gave the following error.
      Argument of type '{}' is not assignable to parameter of type 'number'.
--taggedTemplateStringsWithOverloadResolution3_ES6.ts(18,4): error TS2339: Property 'foo' does not exist on type 'Date'.
-+taggedTemplateStringsWithOverloadResolution3_ES6.ts(11,20): error TS2304: Cannot find name 'TemplateStringsArray'.
-+taggedTemplateStringsWithOverloadResolution3_ES6.ts(12,23): error TS2304: Cannot find name 'TemplateStringsArray'.
-+taggedTemplateStringsWithOverloadResolution3_ES6.ts(15,9): error TS2304: Cannot find name 'Date'.
-+taggedTemplateStringsWithOverloadResolution3_ES6.ts(28,23): error TS2304: Cannot find name 'TemplateStringsArray'.
-+taggedTemplateStringsWithOverloadResolution3_ES6.ts(29,26): error TS2304: Cannot find name 'TemplateStringsArray'.
-+taggedTemplateStringsWithOverloadResolution3_ES6.ts(30,29): error TS2304: Cannot find name 'TemplateStringsArray'.
+ taggedTemplateStringsWithOverloadResolution3_ES6.ts(18,4): error TS2339: Property 'foo' does not exist on type 'Date'.
  taggedTemplateStringsWithOverloadResolution3_ES6.ts(44,1): error TS2554: Expected 2-4 arguments, but got 1.
-+taggedTemplateStringsWithOverloadResolution3_ES6.ts(47,56): error TS2304: Cannot find name 'TemplateStringsArray'.
-+taggedTemplateStringsWithOverloadResolution3_ES6.ts(48,56): error TS2304: Cannot find name 'TemplateStringsArray'.
-+taggedTemplateStringsWithOverloadResolution3_ES6.ts(49,20): error TS2304: Cannot find name 'TemplateStringsArray'.
  taggedTemplateStringsWithOverloadResolution3_ES6.ts(62,9): error TS2769: No overload matches this call.
 -  Overload 1 of 3, '(strs: TemplateStringsArray, n: string, m: any): any', gave the following error.
 -    Argument of type 'boolean' is not assignable to parameter of type 'string'.
@@ -41,35 +21,9 @@
 -  Overload 2 of 3, '(strs: TemplateStringsArray, n: any, m: string): any', gave the following error.
 +  The last overload gave the following error.
      Argument of type 'boolean' is not assignable to parameter of type 'string'.
--taggedTemplateStringsWithOverloadResolution3_ES6.ts(69,18): error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
-+taggedTemplateStringsWithOverloadResolution3_ES6.ts(66,20): error TS2304: Cannot find name 'TemplateStringsArray'.
-+taggedTemplateStringsWithOverloadResolution3_ES6.ts(67,20): error TS2304: Cannot find name 'TemplateStringsArray'.
-+taggedTemplateStringsWithOverloadResolution3_ES6.ts(69,18): error TS2339: Property 'toFixed' does not exist on type 'string'.
-+taggedTemplateStringsWithOverloadResolution3_ES6.ts(70,18): error TS2339: Property 'substr' does not exist on type 'string'.
+ taggedTemplateStringsWithOverloadResolution3_ES6.ts(69,18): error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
  
- 
--==== taggedTemplateStringsWithOverloadResolution3_ES6.ts (6 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2318: Cannot find global type 'TemplateStringsArray'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+==== taggedTemplateStringsWithOverloadResolution3_ES6.ts (19 errors) ====
-     // Ambiguous call picks the first overload in declaration order
-     function fn1(strs: TemplateStringsArray, s: string): string;
-+                       ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
-     function fn1(strs: TemplateStringsArray, n: number): number;
-+                       ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
-     function fn1() { return null; }
-     
-     var s: string = fn1 `${ undefined }`;
-@@= skipped -29, +58 lines =@@
+@@= skipped -29, +23 lines =@@
      fn1 `${ {} }`; // Error
              ~~
  !!! error TS2769: No overload matches this call.
@@ -81,55 +35,8 @@
 +!!! related TS2771 taggedTemplateStringsWithOverloadResolution3_ES6.ts:3:10: The last overload is declared here.
      
      function fn2(strs: TemplateStringsArray, s: string, n: number): number;
-+                       ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
      function fn2<T>(strs: TemplateStringsArray, n: number, t: T): T;
-+                          ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
-     function fn2() { return undefined; }
-     
-     var d1: Date = fn2 `${ 0 }${ undefined }`; // contextually typed
-+            ~~~~
-+!!! error TS2304: Cannot find name 'Date'.
-     var d2 = fn2 `${ 0 }${ undefined }`; // any
-     
-     d1.foo(); // error
--       ~~~
--!!! error TS2339: Property 'foo' does not exist on type 'Date'.
-     d2();     // no error (typed as any)
-     
-     // Generic and non-generic overload where generic overload is the only candidate
-@@= skipped -25, +28 lines =@@
-     
-     // Generic overloads with differing arity
-     function fn3<T>(strs: TemplateStringsArray, n: T): string;
-+                          ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
-     function fn3<T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U;
-+                             ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
-     function fn3<T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number;
-+                                ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
-     function fn3() { return null; }
-     
-     var s = fn3 `${ 3 }`;
-@@= skipped -22, +28 lines =@@
-     
-     // Generic overloads with constraints
-     function fn4<T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U);
-+                                                           ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
-     function fn4<T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U);
-+                                                           ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
-     function fn4(strs: TemplateStringsArray)
-+                       ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
-     function fn4() { }
-     
-     // Generic overloads with constraints tagged with types that satisfy the constraints
-@@= skipped -17, +23 lines =@@
+@@= skipped -64, +63 lines =@@
      fn4 `${ true }${ null }`;
              ~~~~
  !!! error TS2769: No overload matches this call.
@@ -151,19 +58,3 @@
      
      // Non - generic overloads where contextual typing of function arguments has errors
      function fn5(strs: TemplateStringsArray, f: (n: string) => void): string;
-+                       ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
-     function fn5(strs: TemplateStringsArray, f: (n: number) => void): number;
-+                       ~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2304: Cannot find name 'TemplateStringsArray'.
-     function fn5() { return undefined; }
-     fn5 `${ (n) => n.toFixed() }`; // will error; 'n' should have type 'string'.
-                      ~~~~~~~
--!!! error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
--!!! related TS2728 lib.es2015.core.d.ts:--:--: 'fixed' is declared here.
-+!!! error TS2339: Property 'toFixed' does not exist on type 'string'.
-     fn5 `${ (n) => n.substr(0) }`;
-+                     ~~~~~~
-+!!! error TS2339: Property 'substr' does not exist on type 'string'.
-     
-     

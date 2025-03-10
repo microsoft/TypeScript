@@ -6,4 +6,6 @@
  >v : Symbol(v, Decl(for-of13.ts, 0, 3))
 ->[""].values : Symbol(Array.values, Decl(lib.es2015.iterable.d.ts, --, --))
 ->values : Symbol(Array.values, Decl(lib.es2015.iterable.d.ts, --, --))
++>[""].values : Symbol(values, Decl(lib.es2015.iterable.d.ts, --, --))
++>values : Symbol(values, Decl(lib.es2015.iterable.d.ts, --, --))
  

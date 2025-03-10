@@ -40,6 +40,9 @@ class FooIterator {
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : Symbol([Symbol.iterator], Decl(iterableArrayPattern16.ts, 10, 5))
+>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
         return this;
 >this : Symbol(FooIterator, Decl(iterableArrayPattern16.ts, 3, 27))
@@ -65,6 +68,9 @@ class FooIteratorIterator {
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : Symbol([Symbol.iterator], Decl(iterableArrayPattern16.ts, 23, 5))
+>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
         return this;
 >this : Symbol(FooIteratorIterator, Decl(iterableArrayPattern16.ts, 15, 1))

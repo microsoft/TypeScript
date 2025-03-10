@@ -1,26 +1,10 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'Promise'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 deepElaborationsIntoArrowExpressions.ts(4,14): error TS2322: Type '"b"' is not assignable to type '"a"'.
 deepElaborationsIntoArrowExpressions.ts(12,20): error TS2322: Type 'string' is not assignable to type 'number'.
+deepElaborationsIntoArrowExpressions.ts(16,14): error TS2322: Type 'string' is not assignable to type 'number'.
+deepElaborationsIntoArrowExpressions.ts(18,18): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'Promise'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== deepElaborationsIntoArrowExpressions.ts (2 errors) ====
+==== deepElaborationsIntoArrowExpressions.ts (4 errors) ====
     const a: {
         y(): "a"
     } = {
@@ -43,5 +27,11 @@ deepElaborationsIntoArrowExpressions.ts(12,20): error TS2322: Type 'string' is n
     
     function foo3(): Foo[] {
         return [{a: ''}];
+                 ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 deepElaborationsIntoArrowExpressions.ts:8:5: The expected type comes from property 'a' which is declared here on type 'Foo'
     }
     var y: Foo[] = [{a: ''}]
+                     ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 deepElaborationsIntoArrowExpressions.ts:8:5: The expected type comes from property 'a' which is declared here on type 'Foo'

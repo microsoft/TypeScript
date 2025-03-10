@@ -1,6 +1,6 @@
 --- old.privateNamesIncompatibleModifiersJs.errors.txt
 +++ new.privateNamesIncompatibleModifiersJs.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -privateNamesIncompatibleModifiersJs.js(3,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
 -privateNamesIncompatibleModifiersJs.js(8,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
 -privateNamesIncompatibleModifiersJs.js(13,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
@@ -13,122 +13,103 @@
 -privateNamesIncompatibleModifiersJs.js(46,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
 -privateNamesIncompatibleModifiersJs.js(51,7): error TS18010: An accessibility modifier cannot be used with a private identifier.
 -privateNamesIncompatibleModifiersJs.js(55,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'CallableFunction'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'NewableFunction'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- 
- 
+-
+-
 -==== privateNamesIncompatibleModifiersJs.js (12 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'CallableFunction'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'NewableFunction'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+==== privateNamesIncompatibleModifiersJs.js (0 errors) ====
-     class A {
-         /**
-          * @public
+-    class A {
+-        /**
+-         * @public
 -           ~~~~~~~
-          */
+-         */
 -    ~~~~~
 -!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
-         #a = 1;
-     
-         /**
-          * @private
+-        #a = 1;
+-    
+-        /**
+-         * @private
 -           ~~~~~~~~
-          */
+-         */
 -    ~~~~~
 -!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
-         #b = 1;
-     
-         /**
-          * @protected
+-        #b = 1;
+-    
+-        /**
+-         * @protected
 -           ~~~~~~~~~~
-          */
+-         */
 -    ~~~~~
 -!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
-         #c = 1;
-     
-         /**
-          * @public
+-        #c = 1;
+-    
+-        /**
+-         * @public
 -           ~~~~~~~
-          */
+-         */
 -    ~~~~~
 -!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
-         #aMethod() { return 1; }
-     
-         /**
-          * @private
+-        #aMethod() { return 1; }
+-    
+-        /**
+-         * @private
 -           ~~~~~~~~
-          */
+-         */
 -    ~~~~~
 -!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
-         #bMethod() { return 1; }
-     
-         /**
-          * @protected
+-        #bMethod() { return 1; }
+-    
+-        /**
+-         * @protected
 -           ~~~~~~~~~~
-          */
+-         */
 -    ~~~~~
 -!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
-         #cMethod() { return 1; }
-     
-         /**
-          * @public
+-        #cMethod() { return 1; }
+-    
+-        /**
+-         * @public
 -           ~~~~~~~
-          */
+-         */
 -    ~~~~~
 -!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
-         get #aProp() { return 1; }
-         /**
-          * @public
+-        get #aProp() { return 1; }
+-        /**
+-         * @public
 -           ~~~~~~~
-          */
+-         */
 -    ~~~~~
 -!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
-         set #aProp(value) { }
-     
-         /**
-          * @private
+-        set #aProp(value) { }
+-    
+-        /**
+-         * @private
 -           ~~~~~~~~
-          */
+-         */
 -    ~~~~~
 -!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
-         get #bProp() { return 1; }
-         /**
-          * @private
+-        get #bProp() { return 1; }
+-        /**
+-         * @private
 -           ~~~~~~~~
-          */
+-         */
 -    ~~~~~
 -!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
-         set #bProp(value) { }
-     
-         /**
-         * @protected
+-        set #bProp(value) { }
+-    
+-        /**
+-        * @protected
 -          ~~~~~~~~~~
-         */
+-        */
 -    ~~~~
 -!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
-         get #cProp() { return 1; }
-         /**
-          * @protected
+-        get #cProp() { return 1; }
+-        /**
+-         * @protected
 -           ~~~~~~~~~~
-          */
+-         */
 -    ~~~~~
 -!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
-         set #cProp(value) { }
-     }
-     
+-        set #cProp(value) { }
+-    }
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

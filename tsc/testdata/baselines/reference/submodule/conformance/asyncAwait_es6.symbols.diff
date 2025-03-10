@@ -1,70 +1,6 @@
 --- old.asyncAwait_es6.symbols
 +++ new.asyncAwait_es6.symbols
-@@= skipped -3, +3 lines =@@
- type MyPromise<T> = Promise<T>;
- >MyPromise : Symbol(MyPromise, Decl(asyncAwait_es6.ts, 0, 0), Decl(asyncAwait_es6.ts, 1, 11))
- >T : Symbol(T, Decl(asyncAwait_es6.ts, 0, 15))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>Promise : Symbol(Promise)
- >T : Symbol(T, Decl(asyncAwait_es6.ts, 0, 15))
- 
- declare var MyPromise: typeof Promise;
- >MyPromise : Symbol(MyPromise, Decl(asyncAwait_es6.ts, 0, 0), Decl(asyncAwait_es6.ts, 1, 11))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
- 
- declare var p: Promise<number>;
- >p : Symbol(p, Decl(asyncAwait_es6.ts, 2, 11))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>Promise : Symbol(Promise)
- 
- declare var mp: MyPromise<number>;
- >mp : Symbol(mp, Decl(asyncAwait_es6.ts, 3, 11))
-@@= skipped -20, +19 lines =@@
- 
- async function f1(): Promise<void> { }
- >f1 : Symbol(f1, Decl(asyncAwait_es6.ts, 5, 23))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>Promise : Symbol(Promise)
- 
- async function f3(): MyPromise<void> { }
- >f3 : Symbol(f3, Decl(asyncAwait_es6.ts, 6, 38))
-@@= skipped -11, +11 lines =@@
- 
- let f5 = async function(): Promise<void> { }
- >f5 : Symbol(f5, Decl(asyncAwait_es6.ts, 10, 3))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>Promise : Symbol(Promise)
- 
- let f6 = async function(): MyPromise<void> { }
- >f6 : Symbol(f6, Decl(asyncAwait_es6.ts, 11, 3))
-@@= skipped -11, +11 lines =@@
- 
- let f8 = async (): Promise<void> => { };
- >f8 : Symbol(f8, Decl(asyncAwait_es6.ts, 14, 3))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>Promise : Symbol(Promise)
- 
- let f9 = async (): MyPromise<void> => { };
- >f9 : Symbol(f9, Decl(asyncAwait_es6.ts, 15, 3))
-@@= skipped -16, +16 lines =@@
- 
- let f12 = async (): Promise<number> => mp;
- >f12 : Symbol(f12, Decl(asyncAwait_es6.ts, 18, 3))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>Promise : Symbol(Promise)
- >mp : Symbol(mp, Decl(asyncAwait_es6.ts, 3, 11))
- 
- let f13 = async (): MyPromise<number> => p;
-@@= skipped -16, +16 lines =@@
- 
- 	async m2(): Promise<void> { },
- >m2 : Symbol(m2, Decl(asyncAwait_es6.ts, 22, 16))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>Promise : Symbol(Promise)
- 
- 	async m3(): MyPromise<void> { }
- >m3 : Symbol(m3, Decl(asyncAwait_es6.ts, 23, 31))
-@@= skipped -12, +12 lines =@@
+@@= skipped -89, +89 lines =@@
  >C : Symbol(C, Decl(asyncAwait_es6.ts, 25, 2))
  
  	async m1() { }
@@ -73,9 +9,8 @@
  
  	async m2(): Promise<void> { }
 ->m2 : Symbol(C.m2, Decl(asyncAwait_es6.ts, 28, 15))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>m2 : Symbol(m2, Decl(asyncAwait_es6.ts, 28, 15))
-+>Promise : Symbol(Promise)
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
  	async m3(): MyPromise<void> { }
 ->m3 : Symbol(C.m3, Decl(asyncAwait_es6.ts, 29, 30))
@@ -88,9 +23,8 @@
  
  	static async m5(): Promise<void> { }
 ->m5 : Symbol(C.m5, Decl(asyncAwait_es6.ts, 31, 22))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>m5 : Symbol(m5, Decl(asyncAwait_es6.ts, 31, 22))
-+>Promise : Symbol(Promise)
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
  	static async m6(): MyPromise<void> { }
 ->m6 : Symbol(C.m6, Decl(asyncAwait_es6.ts, 32, 37))

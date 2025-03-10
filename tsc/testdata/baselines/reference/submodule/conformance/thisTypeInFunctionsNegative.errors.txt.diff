@@ -1,18 +1,6 @@
 --- old.thisTypeInFunctionsNegative.errors.txt
 +++ new.thisTypeInFunctionsNegative.errors.txt
-@@= skipped -0, +0 lines =@@
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Promise'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- thisTypeInFunctionsNegative.ts(16,15): error TS2339: Property 'n' does not exist on type 'void'.
- thisTypeInFunctionsNegative.ts(39,21): error TS2339: Property 'a' does not exist on type 'void'.
- thisTypeInFunctionsNegative.ts(49,1): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type '{ a: number; }'.
+@@= skipped -3, +3 lines =@@
  thisTypeInFunctionsNegative.ts(51,1): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'I'.
  thisTypeInFunctionsNegative.ts(56,21): error TS2339: Property 'notFound' does not exist on type '{ y: number; }'.
  thisTypeInFunctionsNegative.ts(59,21): error TS2339: Property 'notSpecified' does not exist on type 'void'.
@@ -35,7 +23,7 @@
  thisTypeInFunctionsNegative.ts(72,3): error TS2554: Expected 1 arguments, but got 0.
  thisTypeInFunctionsNegative.ts(73,13): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
  thisTypeInFunctionsNegative.ts(74,17): error TS2554: Expected 1 arguments, but got 2.
-@@= skipped -26, +34 lines =@@
+@@= skipped -23, +22 lines =@@
  thisTypeInFunctionsNegative.ts(81,3): error TS2554: Expected 1 arguments, but got 0.
  thisTypeInFunctionsNegative.ts(82,20): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
  thisTypeInFunctionsNegative.ts(83,24): error TS2554: Expected 1 arguments, but got 2.
@@ -98,23 +86,7 @@
    The 'this' types of each signature are incompatible.
      Property 'y' is missing in type 'Base1' but required in type 'Base2'.
  thisTypeInFunctionsNegative.ts(154,16): error TS2679: A function that is called with the 'new' keyword cannot have a 'this' type that is 'void'.
-@@= skipped -67, +67 lines =@@
- thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot have a 'this' parameter.
- 
- 
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Promise'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- ==== thisTypeInFunctionsNegative.ts (63 errors) ====
-     class C {
-         n: number;
-@@= skipped -75, +84 lines =@@
+@@= skipped -142, +142 lines =@@
      }
      let ok: {y: number, f: (this: { y: number }, x: number) => number} = { y: 12, explicitStructural };
                                                                                    ~~~~~~~~~~~~~~~~~~

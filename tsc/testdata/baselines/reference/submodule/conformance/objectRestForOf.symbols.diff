@@ -5,19 +5,10 @@
  for (const norest of array.map(a => ({ ...a, x: 'a string' }))) {
  >norest : Symbol(norest, Decl(objectRestForOf.ts, 9, 10))
 ->array.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>array.map : Symbol(map, Decl(lib.es5.d.ts, --, --))
  >array : Symbol(array, Decl(objectRestForOf.ts, 0, 3))
 ->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
  >a : Symbol(a, Decl(objectRestForOf.ts, 9, 31))
  >a : Symbol(a, Decl(objectRestForOf.ts, 9, 31))
  >x : Symbol(x, Decl(objectRestForOf.ts, 9, 44))
- 
-     [norest.x, norest.y];
-->norest.x : Symbol(x, Decl(objectRestForOf.ts, 9, 44))
- >norest : Symbol(norest, Decl(objectRestForOf.ts, 9, 10))
-->x : Symbol(x, Decl(objectRestForOf.ts, 9, 44))
-->norest.y : Symbol(y, Decl(objectRestForOf.ts, 0, 23))
- >norest : Symbol(norest, Decl(objectRestForOf.ts, 9, 10))
-->y : Symbol(y, Decl(objectRestForOf.ts, 0, 23))
- 
-     // x is now a string. who knows why.
- }

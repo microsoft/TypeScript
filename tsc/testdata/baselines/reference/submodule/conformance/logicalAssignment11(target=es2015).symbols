@@ -13,7 +13,9 @@ d ?? (d = x ?? "x")
 >x : Symbol(x, Decl(logicalAssignment11.ts, 0, 3))
 
 d.length;
+>d.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >d : Symbol(d, Decl(logicalAssignment11.ts, 2, 3))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
 let e: string | undefined;
 >e : Symbol(e, Decl(logicalAssignment11.ts, 6, 3))
@@ -23,5 +25,7 @@ e ??= x ?? "x"
 >x : Symbol(x, Decl(logicalAssignment11.ts, 0, 3))
 
 e.length
+>e.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >e : Symbol(e, Decl(logicalAssignment11.ts, 6, 3))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 

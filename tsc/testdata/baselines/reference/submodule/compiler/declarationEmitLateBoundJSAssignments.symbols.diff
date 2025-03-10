@@ -17,7 +17,7 @@
  
  const _private = Symbol();
  >_private : Symbol(_private, Decl(file.js, 2, 5))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
  foo[_private] = "ok";
 ->foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 24), Decl(file.js, 2, 26), Decl(file.js, 4, 28), Decl(file.js, 6, 36) ... and 1 more)

@@ -51,12 +51,8 @@
  >_2 : Symbol(_2, Decl(destructuringUnspreadableIntoRest.ts, 17, 15))
  >rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 17, 31))
  >this : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
- >A : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
- 
-         rest1.publicProp;
-->rest1.publicProp : Symbol(publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
- >rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 14, 15))
-->publicProp : Symbol(publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+@@= skipped -18, +18 lines =@@
+ >publicProp : Symbol(publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
  
          rest2.publicProp;
 ->rest2.publicProp : Symbol(A.publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
@@ -67,7 +63,7 @@
  
          rest3.publicProp;
  >rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 16, 31))
-@@= skipped -107, +105 lines =@@
+@@= skipped -89, +89 lines =@@
  >A : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
  
      const { publicProp: _1, ...rest3 } = x;
@@ -83,12 +79,8 @@
  >_2 : Symbol(_2, Decl(destructuringUnspreadableIntoRest.ts, 55, 11))
  >rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 55, 27))
  >x : Symbol(x, Decl(destructuringUnspreadableIntoRest.ts, 51, 34))
- >A : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
- 
-     rest1.publicProp;
-->rest1.publicProp : Symbol(publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
- >rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 52, 11))
-->publicProp : Symbol(publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+@@= skipped -18, +18 lines =@@
+ >publicProp : Symbol(publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
  
      rest2.publicProp;
 ->rest2.publicProp : Symbol(A.publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))

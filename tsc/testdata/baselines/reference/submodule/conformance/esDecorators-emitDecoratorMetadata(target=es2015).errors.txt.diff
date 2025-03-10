@@ -1,26 +1,56 @@
 --- old.esDecorators-emitDecoratorMetadata(target=es2015).errors.txt
 +++ new.esDecorators-emitDecoratorMetadata(target=es2015).errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -error TS5052: Option 'emitDecoratorMetadata' cannot be specified without specifying option 'experimentalDecorators'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- 
- 
+-
+-
 -!!! error TS5052: Option 'emitDecoratorMetadata' cannot be specified without specifying option 'experimentalDecorators'.
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- ==== esDecorators-emitDecoratorMetadata.ts (0 errors) ====
-     declare let dec: any;
-     
+-==== esDecorators-emitDecoratorMetadata.ts (0 errors) ====
+-    declare let dec: any;
+-    
+-    @dec
+-    class C {
+-        constructor(x: number) {}
+-    
+-        @dec
+-        method(x: number) {}
+-    
+-        @dec
+-        set x(x: number) {}
+-    
+-        @dec
+-        y: number;
+-    
+-        @dec
+-        static method(x: number) {}
+-    
+-        @dec
+-        static set x(x: number) {}
+-    
+-        @dec
+-        static y: number;
+-    }
+-    
+-    (@dec class C {
+-        constructor(x: number) {}
+-    
+-        @dec
+-        method(x: number) {}
+-    
+-        @dec
+-        set x(x: number) {}
+-    
+-        @dec
+-        y: number;
+-    
+-        @dec
+-        static method(x: number) {}
+-    
+-        @dec
+-        static set x(x: number) {}
+-    
+-        @dec
+-        static y: number;
+-    });
+@@= skipped --1, +1 lines =@@
++<no content>

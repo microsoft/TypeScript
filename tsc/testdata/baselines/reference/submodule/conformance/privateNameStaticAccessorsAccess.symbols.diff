@@ -15,14 +15,16 @@
      constructor() {
          console.log(A2.#prop);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
++>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+ >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 ->A2.#prop : Symbol(A2.#prop, Decl(privateNameStaticAccessorsAccess.ts, 1, 10), Decl(privateNameStaticAccessorsAccess.ts, 2, 37))
++>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 +>A2.#prop : Symbol(#prop, Decl(privateNameStaticAccessorsAccess.ts, 1, 10), Decl(privateNameStaticAccessorsAccess.ts, 2, 37))
  >A2 : Symbol(A2, Decl(privateNameStaticAccessorsAccess.ts, 0, 9))
  
          let a: typeof A2 = A2;
-@@= skipped -20, +17 lines =@@
+@@= skipped -20, +20 lines =@@
  >A2 : Symbol(A2, Decl(privateNameStaticAccessorsAccess.ts, 0, 9))
  
          a.#prop;

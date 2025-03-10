@@ -6,15 +6,27 @@ class C {
 
     [Symbol.iterator] = 0;
 >[Symbol.iterator] : Symbol([Symbol.iterator], Decl(symbolProperty6.ts, 0, 9))
+>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     [Symbol.unscopables]: number;
 >[Symbol.unscopables] : Symbol([Symbol.unscopables], Decl(symbolProperty6.ts, 1, 26))
+>Symbol.unscopables : Symbol(unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>unscopables : Symbol(unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     [Symbol.toPrimitive]() { }
 >[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(symbolProperty6.ts, 2, 33))
+>Symbol.toPrimitive : Symbol(toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toPrimitive : Symbol(toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     get [Symbol.toStringTag]() {
 >[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(symbolProperty6.ts, 3, 30))
+>Symbol.toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         return 0;
     }

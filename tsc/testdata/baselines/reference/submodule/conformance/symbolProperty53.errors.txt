@@ -1,30 +1,14 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-symbolProperty53.ts(2,6): error TS2304: Cannot find name 'Symbol'.
-symbolProperty53.ts(5,5): error TS2304: Cannot find name 'Symbol'.
+symbolProperty53.ts(2,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+symbolProperty53.ts(5,5): error TS2538: Type '(key: string) => symbol' cannot be used as an index type.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 ==== symbolProperty53.ts (2 errors) ====
     var obj = {
         [Symbol.for]: 0
-         ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
+        ~~~~~~~~~~~~
+!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
     };
     
     obj[Symbol.for];
-        ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
+        ~~~~~~~~~~
+!!! error TS2538: Type '(key: string) => symbol' cannot be used as an index type.

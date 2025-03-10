@@ -1,13 +1,3 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'CallableFunction'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'NewableFunction'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 privateNameAndAny.ts(9,15): error TS2339: Property '#bar' does not exist on type 'any'.
 privateNameAndAny.ts(13,9): error TS18046: 'thing' is of type 'unknown'.
 privateNameAndAny.ts(14,9): error TS18046: 'thing' is of type 'unknown'.
@@ -22,16 +12,6 @@ privateNameAndAny.ts(23,15): error TS2339: Property '#bar' does not exist on typ
 privateNameAndAny.ts(24,15): error TS2339: Property '#foo' does not exist on type 'never'.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'CallableFunction'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'NewableFunction'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 ==== privateNameAndAny.ts (12 errors) ====
     class A {
         #foo = true;

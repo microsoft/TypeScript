@@ -25,10 +25,16 @@ class A {
 >log : Symbol(log, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 7, 3))
 
     console.log(this.#privateField);
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >this.#privateField : Symbol(#privateField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 2, 9))
 >this : Symbol(A, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 0, 0))
 
     console.log(this.exposedField);
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >this.exposedField : Symbol(exposedField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 5, 35))
 >this : Symbol(A, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 0, 0))
 >exposedField : Symbol(exposedField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 5, 35))
@@ -58,10 +64,16 @@ class B {
 >log : Symbol(log, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 21, 3))
 
     console.log(this.#privateField);
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >this.#privateField : Symbol(#privateField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 15, 9))
 >this : Symbol(B, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 13, 1))
 
     console.log(this.exposedField);
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >this.exposedField : Symbol(exposedField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 18, 35))
 >this : Symbol(B, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 13, 1))
 >exposedField : Symbol(exposedField, Decl(constructorWithParameterPropertiesAndPrivateFields.es2015.ts, 18, 35))

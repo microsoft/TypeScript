@@ -1,29 +1,10 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-decoratorOnClassMethodParameter3.ts(3,20): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 decoratorOnClassMethodParameter3.ts(5,23): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== decoratorOnClassMethodParameter3.ts (2 errors) ====
+==== decoratorOnClassMethodParameter3.ts (1 errors) ====
     // https://github.com/microsoft/TypeScript/issues/48509
     declare function dec(a: any): any;
     function fn(value: Promise<number>): any {
-                       ~~~~~~~
-!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
       class Class {
         async method(@dec(await value) arg: number) {}
                           ~~~~~

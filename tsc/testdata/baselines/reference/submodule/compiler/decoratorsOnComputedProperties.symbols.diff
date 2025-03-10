@@ -1,15 +1,6 @@
 --- old.decoratorsOnComputedProperties.symbols
 +++ new.decoratorsOnComputedProperties.symbols
-@@= skipped -4, +4 lines =@@
- >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
- >o : Symbol(o, Decl(decoratorsOnComputedProperties.ts, 0, 11))
- >k : Symbol(k, Decl(decoratorsOnComputedProperties.ts, 0, 21))
-->PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
-+>PropertyKey : Symbol(PropertyKey)
- 
- let i = 0;
- >i : Symbol(i, Decl(decoratorsOnComputedProperties.ts, 1, 3))
-@@= skipped -23, +23 lines =@@
+@@= skipped -27, +27 lines =@@
  
      @x ["property"]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -22,9 +13,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.toStringTag] : Symbol(A[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 9, 25))
 ->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 9, 25))
++>Symbol.toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      @x ["property2"]: any = 2;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -37,9 +30,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.iterator] : Symbol(A[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 11, 30))
 ->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 11, 30))
++>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
  
      ["property3"]: any;
 ->["property3"] : Symbol(A["property3"], Decl(decoratorsOnComputedProperties.ts, 12, 37))
@@ -50,9 +45,11 @@
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(A[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 13, 23))
 ->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 13, 23))
++>Symbol.isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      ["property4"]: any = 2;
 ->["property4"] : Symbol(A["property4"], Decl(decoratorsOnComputedProperties.ts, 14, 37))
@@ -63,9 +60,11 @@
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(A[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 15, 27))
 ->Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 15, 27))
++>Symbol.match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      [foo()]: any;
 ->[foo()] : Symbol(A[foo()], Decl(decoratorsOnComputedProperties.ts, 16, 31))
@@ -102,7 +101,7 @@
  >fieldNameC : Symbol(fieldNameC, Decl(decoratorsOnComputedProperties.ts, 6, 5))
  }
  
-@@= skipped -76, +64 lines =@@
+@@= skipped -76, +76 lines =@@
  
      @x ["property"]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -115,9 +114,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.toStringTag] : Symbol(B[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 26, 25))
 ->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 26, 25))
++>Symbol.toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      @x ["property2"]: any = 2;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -130,9 +131,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.iterator] : Symbol(B[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 28, 30))
 ->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 28, 30))
++>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
  
      ["property3"]: any;
 ->["property3"] : Symbol(B["property3"], Decl(decoratorsOnComputedProperties.ts, 29, 37))
@@ -143,9 +146,11 @@
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(B[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 30, 23))
 ->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 30, 23))
++>Symbol.isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      ["property4"]: any = 2;
 ->["property4"] : Symbol(B["property4"], Decl(decoratorsOnComputedProperties.ts, 31, 37))
@@ -156,9 +161,11 @@
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(B[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 32, 27))
 ->Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 32, 27))
++>Symbol.match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      [foo()]: any;
 ->[foo()] : Symbol(B[foo()], Decl(decoratorsOnComputedProperties.ts, 33, 31))
@@ -195,7 +202,7 @@
  >fieldNameC : Symbol(fieldNameC, Decl(decoratorsOnComputedProperties.ts, 6, 5))
  
  };
-@@= skipped -77, +65 lines =@@
+@@= skipped -77, +77 lines =@@
  
      @x ["property"]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -208,9 +215,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.toStringTag] : Symbol(C[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 43, 25))
 ->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 43, 25))
++>Symbol.toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      @x ["property2"]: any = 2;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -223,9 +232,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 45, 30))
 ->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 45, 30))
++>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
  
      ["property3"]: any;
 ->["property3"] : Symbol(C["property3"], Decl(decoratorsOnComputedProperties.ts, 46, 37))
@@ -236,9 +247,11 @@
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(C[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 47, 23))
 ->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 47, 23))
++>Symbol.isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      ["property4"]: any = 2;
 ->["property4"] : Symbol(C["property4"], Decl(decoratorsOnComputedProperties.ts, 48, 37))
@@ -249,9 +262,11 @@
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(C[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 49, 27))
 ->Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 49, 27))
++>Symbol.match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      [foo()]: any;
 ->[foo()] : Symbol(C[foo()], Decl(decoratorsOnComputedProperties.ts, 50, 31))
@@ -293,7 +308,7 @@
  }
  
  void class D {
-@@= skipped -79, +67 lines =@@
+@@= skipped -79, +79 lines =@@
  
      @x ["property"]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -306,9 +321,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.toStringTag] : Symbol(D[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 61, 25))
 ->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 61, 25))
++>Symbol.toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      @x ["property2"]: any = 2;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -321,9 +338,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.iterator] : Symbol(D[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 63, 30))
 ->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 63, 30))
++>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
  
      ["property3"]: any;
 ->["property3"] : Symbol(D["property3"], Decl(decoratorsOnComputedProperties.ts, 64, 37))
@@ -334,9 +353,11 @@
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(D[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 65, 23))
 ->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 65, 23))
++>Symbol.isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      ["property4"]: any = 2;
 ->["property4"] : Symbol(D["property4"], Decl(decoratorsOnComputedProperties.ts, 66, 37))
@@ -347,9 +368,11 @@
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(D[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 67, 27))
 ->Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 67, 27))
++>Symbol.match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      [foo()]: any;
 ->[foo()] : Symbol(D[foo()], Decl(decoratorsOnComputedProperties.ts, 68, 31))
@@ -391,7 +414,7 @@
  
  };
  
-@@= skipped -80, +68 lines =@@
+@@= skipped -80, +80 lines =@@
  
      @x ["property"]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -404,9 +427,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.toStringTag] : Symbol(E[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 79, 25))
 ->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 79, 25))
++>Symbol.toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      @x ["property2"]: any = 2;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -419,9 +444,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.iterator] : Symbol(E[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 81, 30))
 ->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 81, 30))
++>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
  
      ["property3"]: any;
 ->["property3"] : Symbol(E["property3"], Decl(decoratorsOnComputedProperties.ts, 82, 37))
@@ -432,9 +459,11 @@
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(E[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 83, 23))
 ->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 83, 23))
++>Symbol.isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      ["property4"]: any = 2;
 ->["property4"] : Symbol(E["property4"], Decl(decoratorsOnComputedProperties.ts, 84, 37))
@@ -445,9 +474,11 @@
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(E[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 85, 27))
 ->Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 85, 27))
++>Symbol.match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      [foo()]: any;
 ->[foo()] : Symbol(E[foo()], Decl(decoratorsOnComputedProperties.ts, 86, 31))
@@ -488,7 +519,7 @@
  >fieldNameC : Symbol(fieldNameC, Decl(decoratorsOnComputedProperties.ts, 6, 5))
  }
  
-@@= skipped -79, +67 lines =@@
+@@= skipped -79, +79 lines =@@
  
      @x ["property"]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -501,9 +532,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.toStringTag] : Symbol(F[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 97, 25))
 ->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 97, 25))
++>Symbol.toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      @x ["property2"]: any = 2;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -516,9 +549,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.iterator] : Symbol(F[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 99, 30))
 ->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 99, 30))
++>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
  
      ["property3"]: any;
 ->["property3"] : Symbol(F["property3"], Decl(decoratorsOnComputedProperties.ts, 100, 37))
@@ -529,9 +564,11 @@
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(F[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 101, 23))
 ->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 101, 23))
++>Symbol.isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      ["property4"]: any = 2;
 ->["property4"] : Symbol(F["property4"], Decl(decoratorsOnComputedProperties.ts, 102, 37))
@@ -542,9 +579,11 @@
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(F[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 103, 27))
 ->Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 103, 27))
++>Symbol.match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      [foo()]: any;
 ->[foo()] : Symbol(F[foo()], Decl(decoratorsOnComputedProperties.ts, 104, 31))
@@ -585,7 +624,7 @@
  >fieldNameC : Symbol(fieldNameC, Decl(decoratorsOnComputedProperties.ts, 6, 5))
  
  };
-@@= skipped -80, +68 lines =@@
+@@= skipped -80, +80 lines =@@
  
      @x ["property"]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -598,9 +637,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.toStringTag] : Symbol(G[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 115, 25))
 ->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 115, 25))
++>Symbol.toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      @x ["property2"]: any = 2;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -613,9 +654,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.iterator] : Symbol(G[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 117, 30))
 ->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 117, 30))
++>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
  
      ["property3"]: any;
 ->["property3"] : Symbol(G["property3"], Decl(decoratorsOnComputedProperties.ts, 118, 37))
@@ -626,9 +669,11 @@
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(G[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 119, 23))
 ->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 119, 23))
++>Symbol.isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      ["property4"]: any = 2;
 ->["property4"] : Symbol(G["property4"], Decl(decoratorsOnComputedProperties.ts, 120, 37))
@@ -639,9 +684,11 @@
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(G[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 121, 27))
 ->Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 121, 27))
++>Symbol.match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      [foo()]: any;
 ->[foo()] : Symbol(G[foo()], Decl(decoratorsOnComputedProperties.ts, 122, 31))
@@ -686,7 +733,7 @@
  >fieldNameC : Symbol(fieldNameC, Decl(decoratorsOnComputedProperties.ts, 6, 5))
  }
  
-@@= skipped -82, +70 lines =@@
+@@= skipped -82, +82 lines =@@
  
      @x ["property"]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -699,9 +746,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.toStringTag] : Symbol(H[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 134, 25))
 ->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 134, 25))
++>Symbol.toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      @x ["property2"]: any = 2;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -714,9 +763,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.iterator] : Symbol(H[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 136, 30))
 ->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 136, 30))
++>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
  
      ["property3"]: any;
 ->["property3"] : Symbol(H["property3"], Decl(decoratorsOnComputedProperties.ts, 137, 37))
@@ -727,9 +778,11 @@
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(H[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 138, 23))
 ->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 138, 23))
++>Symbol.isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      ["property4"]: any = 2;
 ->["property4"] : Symbol(H["property4"], Decl(decoratorsOnComputedProperties.ts, 139, 37))
@@ -740,9 +793,11 @@
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(H[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 140, 27))
 ->Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 140, 27))
++>Symbol.match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      [foo()]: any;
 ->[foo()] : Symbol(H[foo()], Decl(decoratorsOnComputedProperties.ts, 141, 31))
@@ -787,7 +842,7 @@
  >fieldNameC : Symbol(fieldNameC, Decl(decoratorsOnComputedProperties.ts, 6, 5))
  
  };
-@@= skipped -83, +71 lines =@@
+@@= skipped -83, +83 lines =@@
  
      @x ["property"]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -800,9 +855,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.toStringTag] : Symbol(I[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 153, 25))
 ->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 153, 25))
++>Symbol.toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      @x ["property2"]: any = 2;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -815,9 +872,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.iterator] : Symbol(I[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 155, 30))
 ->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 155, 30))
++>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
  
      ["property3"]: any;
 ->["property3"] : Symbol(I["property3"], Decl(decoratorsOnComputedProperties.ts, 156, 37))
@@ -828,9 +887,11 @@
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(I[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 157, 23))
 ->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 157, 23))
++>Symbol.isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      ["property4"]: any = 2;
 ->["property4"] : Symbol(I["property4"], Decl(decoratorsOnComputedProperties.ts, 158, 37))
@@ -841,9 +902,11 @@
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(I[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 159, 27))
 ->Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 159, 27))
++>Symbol.match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      [foo()]: any;
 ->[foo()] : Symbol(I[foo()], Decl(decoratorsOnComputedProperties.ts, 160, 31))
@@ -889,7 +952,7 @@
  >fieldNameC : Symbol(fieldNameC, Decl(decoratorsOnComputedProperties.ts, 6, 5))
  }
  
-@@= skipped -83, +71 lines =@@
+@@= skipped -83, +83 lines =@@
  
      @x ["property"]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -902,9 +965,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.toStringTag] : Symbol(J[Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 172, 25))
 ->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(decoratorsOnComputedProperties.ts, 172, 25))
++>Symbol.toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      @x ["property2"]: any = 2;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -917,9 +982,11 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->[Symbol.iterator] : Symbol(J[Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 174, 30))
 ->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(decoratorsOnComputedProperties.ts, 174, 30))
++>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
++>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
  
      ["property3"]: any;
 ->["property3"] : Symbol(J["property3"], Decl(decoratorsOnComputedProperties.ts, 175, 37))
@@ -930,9 +997,11 @@
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(J[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 176, 23))
 ->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 176, 23))
++>Symbol.isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      ["property4"]: any = 2;
 ->["property4"] : Symbol(J["property4"], Decl(decoratorsOnComputedProperties.ts, 177, 37))
@@ -943,9 +1012,11 @@
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(J[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 178, 27))
 ->Symbol.match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 178, 27))
++>Symbol.match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+->match : Symbol(SymbolConstructor.match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>match : Symbol(match, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
      [foo()]: any;
 ->[foo()] : Symbol(J[foo()], Decl(decoratorsOnComputedProperties.ts, 179, 31))

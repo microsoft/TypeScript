@@ -126,9 +126,9 @@
 +>this._x : Symbol(_x, Decl(getterSetterSubtypeAssignment.ts, 27, 22))
  >this : Symbol(NumberOrString, Decl(getterSetterSubtypeAssignment.ts, 25, 25))
 ->_x : Symbol(NumberOrString._x, Decl(getterSetterSubtypeAssignment.ts, 27, 22))
-->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-->this._x : Symbol(NumberOrString._x, Decl(getterSetterSubtypeAssignment.ts, 27, 22))
 +>_x : Symbol(_x, Decl(getterSetterSubtypeAssignment.ts, 27, 22))
+ >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->this._x : Symbol(NumberOrString._x, Decl(getterSetterSubtypeAssignment.ts, 27, 22))
 +>this._x : Symbol(_x, Decl(getterSetterSubtypeAssignment.ts, 27, 22))
  >this : Symbol(NumberOrString, Decl(getterSetterSubtypeAssignment.ts, 25, 25))
 ->_x : Symbol(NumberOrString._x, Decl(getterSetterSubtypeAssignment.ts, 27, 22))
@@ -205,7 +205,7 @@
      }
  }
  const numberOrString = new NumberOrString();
-@@= skipped -95, +94 lines =@@
+@@= skipped -95, +95 lines =@@
  >NumberOrString : Symbol(NumberOrString, Decl(getterSetterSubtypeAssignment.ts, 25, 25))
  
  numberOrString.x += 1;

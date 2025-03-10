@@ -3,7 +3,7 @@
 === decoratorMetadataPromise.ts ===
 declare const decorator: MethodDecorator;
 >decorator : Symbol(decorator, Decl(decoratorMetadataPromise.ts, 0, 13))
->MethodDecorator : Symbol(MethodDecorator)
+>MethodDecorator : Symbol(MethodDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
 
 class A {
 >A : Symbol(A, Decl(decoratorMetadataPromise.ts, 0, 41))
@@ -19,7 +19,7 @@ class A {
 
     async bar(): Promise<number> { return 0; }
 >bar : Symbol(bar, Decl(decoratorMetadataPromise.ts, 4, 18))
->Promise : Symbol(Promise)
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     @decorator
 >decorator : Symbol(decorator, Decl(decoratorMetadataPromise.ts, 0, 13))
@@ -27,8 +27,8 @@ class A {
     baz(n: Promise<number>): Promise<number> { return n; }
 >baz : Symbol(baz, Decl(decoratorMetadataPromise.ts, 6, 46))
 >n : Symbol(n, Decl(decoratorMetadataPromise.ts, 8, 8))
->Promise : Symbol(Promise)
->Promise : Symbol(Promise)
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >n : Symbol(n, Decl(decoratorMetadataPromise.ts, 8, 8))
 }
 

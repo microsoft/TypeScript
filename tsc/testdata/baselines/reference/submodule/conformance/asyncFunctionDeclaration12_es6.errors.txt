@@ -1,29 +1,10 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 asyncFunctionDeclaration12_es6.ts(1,24): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
 asyncFunctionDeclaration12_es6.ts(1,24): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
-asyncFunctionDeclaration12_es6.ts(1,33): error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== asyncFunctionDeclaration12_es6.ts (3 errors) ====
+==== asyncFunctionDeclaration12_es6.ts (2 errors) ====
     var v = async function await(): Promise<void> { }
                            ~~~~~
 !!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
                            ~~~~~
 !!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
-                                    ~~~~~~~
-!!! error TS2583: Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.

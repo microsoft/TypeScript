@@ -60,31 +60,38 @@
  
  xa[1].foo(1, 2, "abc");
 ->xa[1].foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>xa[1].foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
  >xa : Symbol(xa, Decl(callWithSpreadES6.ts, 10, 3))
 ->foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
  
  xa[1].foo(1, 2, ...a);
 ->xa[1].foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>xa[1].foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
  >xa : Symbol(xa, Decl(callWithSpreadES6.ts, 10, 3))
 ->foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
  >a : Symbol(a, Decl(callWithSpreadES6.ts, 7, 3))
  
  xa[1].foo(1, 2, ...a, "abc");
 ->xa[1].foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>xa[1].foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
  >xa : Symbol(xa, Decl(callWithSpreadES6.ts, 10, 3))
 ->foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
  >a : Symbol(a, Decl(callWithSpreadES6.ts, 7, 3))
  
  (<Function>xa[1].foo)(...[1, 2, "abc"]);
-->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->xa[1].foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
-+>Function : Symbol(Function)
++>xa[1].foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
  >xa : Symbol(xa, Decl(callWithSpreadES6.ts, 10, 3))
 ->foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
++>foo : Symbol(foo, Decl(callWithSpreadES6.ts, 0, 13))
  
  class C {
  >C : Symbol(C, Decl(callWithSpreadES6.ts, 28, 40))
-@@= skipped -65, +57 lines =@@
+@@= skipped -65, +65 lines =@@
  >z : Symbol(z, Decl(callWithSpreadES6.ts, 31, 37))
  
          this.foo(x, y);

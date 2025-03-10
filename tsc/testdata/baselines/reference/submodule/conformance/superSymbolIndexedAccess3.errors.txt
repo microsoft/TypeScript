@@ -1,27 +1,8 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-superSymbolIndexedAccess3.ts(1,14): error TS2304: Cannot find name 'Symbol'.
 superSymbolIndexedAccess3.ts(11,22): error TS2538: Type '{ new(): Bar; prototype: Bar; }' cannot be used as an index type.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-==== superSymbolIndexedAccess3.ts (2 errors) ====
+==== superSymbolIndexedAccess3.ts (1 errors) ====
     var symbol = Symbol.for('myThing');
-                 ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
     
     class Foo {
         [symbol]() {

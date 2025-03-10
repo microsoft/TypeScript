@@ -6,4 +6,7 @@ class C {
 
     [Symbol.toStringTag]: string = "";
 >[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(parserSymbolProperty6.ts, 0, 9))
+>Symbol.toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }

@@ -1,18 +1,6 @@
 --- old.autoAccessorExperimentalDecorators(target=es2015).symbols
 +++ new.autoAccessorExperimentalDecorators(target=es2015).symbols
-@@= skipped -4, +4 lines =@@
- >dec : Symbol(dec, Decl(autoAccessorExperimentalDecorators.ts, 0, 11))
- >target : Symbol(target, Decl(autoAccessorExperimentalDecorators.ts, 0, 18))
- >key : Symbol(key, Decl(autoAccessorExperimentalDecorators.ts, 0, 30))
-->PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
-+>PropertyKey : Symbol(PropertyKey)
- >desc : Symbol(desc, Decl(autoAccessorExperimentalDecorators.ts, 0, 48))
-->PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.es5.d.ts, --, --))
-+>PropertyDescriptor : Symbol(PropertyDescriptor)
- 
- class C1 {
- >C1 : Symbol(C1, Decl(autoAccessorExperimentalDecorators.ts, 0, 83))
-@@= skipped -11, +11 lines =@@
+@@= skipped -15, +15 lines =@@
  >dec : Symbol(dec, Decl(autoAccessorExperimentalDecorators.ts, 0, 11))
  
      accessor a: any;

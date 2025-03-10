@@ -24,6 +24,9 @@ const C = class D {
 }
 
 console.log(C.getClass().getField());
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >C.getClass().getField : Symbol(getField, Decl(privateNameStaticMethodClassExpression.ts, 3, 35))
 >C.getClass : Symbol(getClass, Decl(privateNameStaticMethodClassExpression.ts, 2, 35))
 >C : Symbol(C, Decl(privateNameStaticMethodClassExpression.ts, 0, 5))

@@ -31,6 +31,7 @@ fn(handlers, value => alert(value));
 >fn : Symbol(fn, Decl(instantiateContextualTypes.ts, 4, 1))
 >handlers : Symbol(handlers, Decl(instantiateContextualTypes.ts, 9, 11))
 >value : Symbol(value, Decl(instantiateContextualTypes.ts, 10, 12))
+>alert : Symbol(alert, Decl(lib.dom.d.ts, --, --))
 >value : Symbol(value, Decl(instantiateContextualTypes.ts, 10, 12))
 
 // #21382
@@ -418,10 +419,16 @@ class Interesting {
 
 	public compiles = () : Promise<DooDad> => {
 >compiles : Symbol(compiles, Decl(instantiateContextualTypes.ts, 144, 19))
->Promise : Symbol(Promise)
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >DooDad : Symbol(DooDad, Decl(instantiateContextualTypes.ts, 138, 55))
 
 		return Promise.resolve().then(() => {
+>Promise.resolve().then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+
 			if (1 < 2) {
 				return 'SOMETHING';
 			}
@@ -430,19 +437,31 @@ class Interesting {
 	};
 	public doesnt = () : Promise<DooDad> => {
 >doesnt : Symbol(doesnt, Decl(instantiateContextualTypes.ts, 152, 3))
->Promise : Symbol(Promise)
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >DooDad : Symbol(DooDad, Decl(instantiateContextualTypes.ts, 138, 55))
 
 		return Promise.resolve().then(() => {
+>Promise.resolve().then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+
 			return 'ELSE';
 		});
 	};
 	public slightlyDifferentErrorMessage = () : Promise<DooDad> => {
 >slightlyDifferentErrorMessage : Symbol(slightlyDifferentErrorMessage, Decl(instantiateContextualTypes.ts, 157, 3))
->Promise : Symbol(Promise)
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >DooDad : Symbol(DooDad, Decl(instantiateContextualTypes.ts, 138, 55))
 
 		return Promise.resolve().then(() => {
+>Promise.resolve().then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+
 			if (1 < 2) {
 				return 'SOMETHING';
 			}
@@ -472,7 +491,7 @@ declare function assignPartial<T>(target: T, partial: Partial<T>): T;
 >target : Symbol(target, Decl(instantiateContextualTypes.ts, 176, 34))
 >T : Symbol(T, Decl(instantiateContextualTypes.ts, 176, 31))
 >partial : Symbol(partial, Decl(instantiateContextualTypes.ts, 176, 44))
->Partial : Symbol(Partial)
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(instantiateContextualTypes.ts, 176, 31))
 >T : Symbol(T, Decl(instantiateContextualTypes.ts, 176, 31))
 

@@ -1,21 +1,14 @@
 --- old.generatorTypeCheck45.symbols
 +++ new.generatorTypeCheck45.symbols
-@@= skipped -7, +7 lines =@@
- >x : Symbol(x, Decl(generatorTypeCheck45.ts, 0, 27))
- >T : Symbol(T, Decl(generatorTypeCheck45.ts, 0, 21))
- >fun : Symbol(fun, Decl(generatorTypeCheck45.ts, 0, 32))
-->Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
-+>Iterator : Symbol(Iterator)
- >x : Symbol(x, Decl(generatorTypeCheck45.ts, 0, 54))
- >T : Symbol(T, Decl(generatorTypeCheck45.ts, 0, 21))
- >U : Symbol(U, Decl(generatorTypeCheck45.ts, 0, 23))
-@@= skipped -13, +13 lines =@@
+@@= skipped -20, +20 lines =@@
  foo("", function* () { yield x => x.length }, p => undefined); // T is fixed, should be string
  >foo : Symbol(foo, Decl(generatorTypeCheck45.ts, 0, 0))
  >x : Symbol(x, Decl(generatorTypeCheck45.ts, 2, 28))
 ->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  >x : Symbol(x, Decl(generatorTypeCheck45.ts, 2, 28))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  >p : Symbol(p, Decl(generatorTypeCheck45.ts, 2, 45))
  >undefined : Symbol(undefined)
  

@@ -1,19 +1,14 @@
 --- old.symbolObserverMismatchingPolyfillsWorkTogether.symbols
 +++ new.symbolObserverMismatchingPolyfillsWorkTogether.symbols
-@@= skipped -1, +1 lines =@@
- 
- === symbolObserverMismatchingPolyfillsWorkTogether.ts ===
- interface SymbolConstructor {
-->SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 0, 0), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 2, 1))
-+>SymbolConstructor : Symbol(SymbolConstructor, Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 0, 0), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 2, 1))
+@@= skipped -4, +4 lines =@@
+ >SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 0, 0), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 2, 1))
  
      readonly observer: symbol;
 ->observer : Symbol(SymbolConstructor.observer, Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 0, 29), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 3, 29))
 +>observer : Symbol(observer, Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 0, 29), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 3, 29))
  }
  interface SymbolConstructor {
-->SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 0, 0), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 2, 1))
-+>SymbolConstructor : Symbol(SymbolConstructor, Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 0, 0), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 2, 1))
+ >SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 0, 0), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 2, 1))
  
      readonly observer: unique symbol;
 ->observer : Symbol(SymbolConstructor.observer, Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 0, 29), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 3, 29))
@@ -21,12 +16,14 @@
  }
  
  const obj = {
-@@= skipped -17, +17 lines =@@
+@@= skipped -14, +14 lines =@@
  
      [Symbol.observer]: 0
  >[Symbol.observer] : Symbol([Symbol.observer], Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 7, 13))
 ->Symbol.observer : Symbol(SymbolConstructor.observer, Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 0, 29), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 3, 29))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
++>Symbol.observer : Symbol(observer, Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 0, 29), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 3, 29))
+ >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->observer : Symbol(SymbolConstructor.observer, Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 0, 29), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 3, 29))
++>observer : Symbol(observer, Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 0, 29), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 3, 29))
  
  };

@@ -3,6 +3,9 @@
 === symbolType4.ts ===
 var s = Symbol.for("postfix");
 >s : Symbol(s, Decl(symbolType4.ts, 0, 3))
+>Symbol.for : Symbol(for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>for : Symbol(for, Decl(lib.es2015.symbol.d.ts, --, --))
 
 s++;
 >s : Symbol(s, Decl(symbolType4.ts, 0, 3))

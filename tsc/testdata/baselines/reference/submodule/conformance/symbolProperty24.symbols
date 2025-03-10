@@ -6,6 +6,9 @@ interface I {
 
     [Symbol.toPrimitive]: () => boolean;
 >[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(symbolProperty24.ts, 0, 13))
+>Symbol.toPrimitive : Symbol(toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toPrimitive : Symbol(toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 class C implements I {
@@ -14,6 +17,9 @@ class C implements I {
 
     [Symbol.toPrimitive]() {
 >[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(symbolProperty24.ts, 4, 22))
+>Symbol.toPrimitive : Symbol(toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toPrimitive : Symbol(toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         return "";
     }

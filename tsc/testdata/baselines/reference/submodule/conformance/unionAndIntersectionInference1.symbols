@@ -51,6 +51,9 @@ function destructure<a, r>(
 
 var value = Math.random() > 0.5 ? 'hey!' : <Y>undefined;
 >value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 12, 3))
+>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
 >Y : Symbol(Y, Decl(unionAndIntersectionInference1.ts, 0, 0))
 >undefined : Symbol(undefined)
 
@@ -146,8 +149,10 @@ let foo: Maybe<string>;
 >Maybe : Symbol(Maybe, Decl(unionAndIntersectionInference1.ts, 40, 1))
 
 get(foo).toUpperCase(); // Ok
+>get(foo).toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
 >get : Symbol(get, Decl(unionAndIntersectionInference1.ts, 44, 25))
 >foo : Symbol(foo, Decl(unionAndIntersectionInference1.ts, 50, 3))
+>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
 
 // Repro from #5456
 
@@ -209,8 +214,13 @@ interface ITest {
 
 const createTestAsync = (): Promise<ITest> => Promise.resolve().then(() => ({ name: 'test' }))
 >createTestAsync : Symbol(createTestAsync, Decl(unionAndIntersectionInference1.ts, 79, 5))
->Promise : Symbol(Promise)
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >ITest : Symbol(ITest, Decl(unionAndIntersectionInference1.ts, 71, 18))
+>Promise.resolve().then : Symbol(then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
 >name : Symbol(name, Decl(unionAndIntersectionInference1.ts, 79, 77))
 
 const createTest = (): ITest => {
@@ -264,6 +274,9 @@ const assign = <T, U>(a: T, b: U) => Object.assign(a, b);
 >T : Symbol(T, Decl(unionAndIntersectionInference1.ts, 94, 16))
 >b : Symbol(b, Decl(unionAndIntersectionInference1.ts, 94, 27))
 >U : Symbol(U, Decl(unionAndIntersectionInference1.ts, 94, 18))
+>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 94, 22))
 >b : Symbol(b, Decl(unionAndIntersectionInference1.ts, 94, 27))
 

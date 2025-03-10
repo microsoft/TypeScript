@@ -1,15 +1,6 @@
 --- old.noAsConstNameLookup.symbols
 +++ new.noAsConstNameLookup.symbols
-@@= skipped -13, +13 lines =@@
- >runner : Symbol(runner, Decl(noAsConstNameLookup.ts, 3, 40))
- >FeatureRunner : Symbol(FeatureRunner, Decl(noAsConstNameLookup.ts, 3, 81))
- >W : Symbol(W, Decl(noAsConstNameLookup.ts, 3, 23))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>Promise : Symbol(Promise)
- 
- export class FeatureRunner<W extends Store> {
- >FeatureRunner : Symbol(FeatureRunner, Decl(noAsConstNameLookup.ts, 3, 81))
-@@= skipped -8, +8 lines =@@
+@@= skipped -21, +21 lines =@@
  >Store : Symbol(Store, Decl(noAsConstNameLookup.ts, 0, 0))
  
      private readonly cleaners: Cleaner[] = []
@@ -19,20 +10,17 @@
  
      async runFeature(): Promise<any> {
 ->runFeature : Symbol(FeatureRunner.runFeature, Decl(noAsConstNameLookup.ts, 6, 45))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>runFeature : Symbol(runFeature, Decl(noAsConstNameLookup.ts, 6, 45))
-+>Promise : Symbol(Promise)
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
          const objectWhichShouldBeConst = {
- >objectWhichShouldBeConst : Symbol(objectWhichShouldBeConst, Decl(noAsConstNameLookup.ts, 9, 13))
 @@= skipped -24, +24 lines =@@
      }
  
      async run(): Promise<any> {
 ->run : Symbol(FeatureRunner.run, Decl(noAsConstNameLookup.ts, 14, 5))
-->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>run : Symbol(run, Decl(noAsConstNameLookup.ts, 14, 5))
-+>Promise : Symbol(Promise)
+ >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  
          const result = {}
  >result : Symbol(result, Decl(noAsConstNameLookup.ts, 17, 13))
@@ -40,15 +28,17 @@
          this.cleaners.forEach(c => c(this))
 ->this.cleaners.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 ->this.cleaners : Symbol(FeatureRunner.cleaners, Decl(noAsConstNameLookup.ts, 5, 45))
++>this.cleaners.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
 +>this.cleaners : Symbol(cleaners, Decl(noAsConstNameLookup.ts, 5, 45))
  >this : Symbol(FeatureRunner, Decl(noAsConstNameLookup.ts, 3, 81))
 ->cleaners : Symbol(FeatureRunner.cleaners, Decl(noAsConstNameLookup.ts, 5, 45))
 ->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 +>cleaners : Symbol(cleaners, Decl(noAsConstNameLookup.ts, 5, 45))
++>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
  >c : Symbol(c, Decl(noAsConstNameLookup.ts, 18, 30))
  >c : Symbol(c, Decl(noAsConstNameLookup.ts, 18, 30))
  >this : Symbol(FeatureRunner, Decl(noAsConstNameLookup.ts, 3, 81))
-@@= skipped -26, +24 lines =@@
+@@= skipped -26, +26 lines =@@
  >T : Symbol(T, Decl(noAsConstNameLookup.ts, 23, 15))
  
      f(): void {

@@ -13,12 +13,7 @@
    }
    
    export interface PubSubRecord<NAME extends string, RECORD, IDENTIFIER extends Partial<RECORD>> {
-@@= skipped -11, +11 lines =@@
- >NAME : Symbol(NAME, Decl(conditionalTypeDoesntSpinForever.ts, 8, 32))
- >RECORD : Symbol(RECORD, Decl(conditionalTypeDoesntSpinForever.ts, 8, 52))
- >IDENTIFIER : Symbol(IDENTIFIER, Decl(conditionalTypeDoesntSpinForever.ts, 8, 60))
-->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
-+>Partial : Symbol(Partial)
+@@= skipped -15, +15 lines =@@
  >RECORD : Symbol(RECORD, Decl(conditionalTypeDoesntSpinForever.ts, 8, 52))
  
      name: NAME;
@@ -47,17 +42,19 @@
    }
    
    type NameFieldConstructor<SO_FAR> =
-@@= skipped -60, +60 lines =@@
+@@= skipped -56, +56 lines =@@
  
          buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}>
  >buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
 ->Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
-->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
  >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 21, 45))
  >name : Symbol(name, Decl(conditionalTypeDoesntSpinForever.ts, 24, 56))
  >instance : Symbol(instance, Decl(conditionalTypeDoesntSpinForever.ts, 23, 19))
-@@= skipped -31, +28 lines =@@
+@@= skipped -31, +31 lines =@@
  >SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 28, 27))
  >storedAs : Symbol(storedAs, Decl(conditionalTypeDoesntSpinForever.ts, 30, 76))
  >PubSubRecordIsStoredInRedisAsA : Symbol(PubSubRecordIsStoredInRedisAsA, Decl(conditionalTypeDoesntSpinForever.ts, 0, 0))
@@ -80,8 +77,10 @@
          buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) as
  >buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
 ->Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
-->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
  >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 34, 44))
  >storedAs : Symbol(storedAs, Decl(conditionalTypeDoesntSpinForever.ts, 37, 56))
 ->PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString : Symbol(PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString, Decl(conditionalTypeDoesntSpinForever.ts, 4, 28))
@@ -104,8 +103,10 @@
          buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) as
  >buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
 ->Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
-->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
  >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 34, 44))
  >storedAs : Symbol(storedAs, Decl(conditionalTypeDoesntSpinForever.ts, 40, 56))
 ->PubSubRecordIsStoredInRedisAsA.redisHash : Symbol(PubSubRecordIsStoredInRedisAsA.redisHash, Decl(conditionalTypeDoesntSpinForever.ts, 3, 44))
@@ -124,82 +125,75 @@
      }
    );
    
-@@= skipped -54, +48 lines =@@
-       identifier: <TYPE extends Partial<SO_FAR["record"]>>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>
- >identifier : Symbol(identifier, Decl(conditionalTypeDoesntSpinForever.ts, 47, 36))
- >TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 48, 19))
-->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
-+>Partial : Symbol(Partial)
- >SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 45, 34))
- >t : Symbol(t, Decl(conditionalTypeDoesntSpinForever.ts, 48, 59))
- >TYPE : Symbol(TYPE, Decl(conditionalTypeDoesntSpinForever.ts, 48, 19))
-@@= skipped -30, +30 lines =@@
+@@= skipped -84, +84 lines =@@
  
          buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) as BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>
  >buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
 ->Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
-->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
  >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 51, 51))
  >identifier : Symbol(identifier, Decl(conditionalTypeDoesntSpinForever.ts, 54, 56))
  >instance : Symbol(instance, Decl(conditionalTypeDoesntSpinForever.ts, 53, 25))
-@@= skipped -54, +51 lines =@@
+@@= skipped -54, +54 lines =@@
  
          buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) as BuildPubSubRecordType<SO_FAR & {record: TYPE}>
  >buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
 ->Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
-->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
  >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 63, 47))
  >record : Symbol(record, Decl(conditionalTypeDoesntSpinForever.ts, 66, 56))
  >instance : Symbol(instance, Decl(conditionalTypeDoesntSpinForever.ts, 65, 21))
-@@= skipped -56, +53 lines =@@
+@@= skipped -56, +56 lines =@@
  
          buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}>,
  >buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
 ->Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
-->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
  >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 76, 68))
  >maxMsToWaitBeforePublishing : Symbol(maxMsToWaitBeforePublishing, Decl(conditionalTypeDoesntSpinForever.ts, 79, 56))
  >instance : Symbol(instance, Decl(conditionalTypeDoesntSpinForever.ts, 78, 36))
-@@= skipped -15, +12 lines =@@
+@@= skipped -15, +15 lines =@@
  
          buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}>,
  >buildPubSubRecordType : Symbol(buildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 108, 7))
 ->Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
-->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
  >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 76, 68))
  >maxMsToWaitBeforePublishing : Symbol(maxMsToWaitBeforePublishing, Decl(conditionalTypeDoesntSpinForever.ts, 81, 56))
  >BuildPubSubRecordType : Symbol(BuildPubSubRecordType, Decl(conditionalTypeDoesntSpinForever.ts, 98, 4))
-@@= skipped -31, +28 lines =@@
- 
-       fields: Set<keyof SO_FAR>,
- >fields : Symbol(fields, Decl(conditionalTypeDoesntSpinForever.ts, 87, 19))
-->Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>Set : Symbol(Set)
- >SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 85, 23))
- 
-       hasField: (fieldName: string | number | symbol) => fieldName is keyof SO_FAR
-@@= skipped -29, +29 lines =@@
- 
+@@= skipped -61, +61 lines =@@
        fields: () => new Set(Object.keys(soFar) as (keyof SO_FAR)[]),
  >fields : Symbol(fields, Decl(conditionalTypeDoesntSpinForever.ts, 94, 18))
-->Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
-->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.keys : Symbol(keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>keys : Symbol(keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
  >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 92, 29))
  >SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 92, 21))
  
-@@= skipped -48, +44 lines =@@
+@@= skipped -47, +47 lines =@@
  >SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 108, 33))
  >soFar : Symbol(soFar, Decl(conditionalTypeDoesntSpinForever.ts, 108, 41))
  >SO_FAR : Symbol(SO_FAR, Decl(conditionalTypeDoesntSpinForever.ts, 108, 33))
 ->Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
-->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>Object.assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+ >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
++>assign : Symbol(assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
  
      {},
      buildNameFieldConstructor(soFar),

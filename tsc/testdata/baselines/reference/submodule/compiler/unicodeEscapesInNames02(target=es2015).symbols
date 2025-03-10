@@ -9,6 +9,10 @@ var \u{102A7}: string;
 >\u{102A7} : Symbol(𐊧, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 3), Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 3))
 
 if (Math.random()) {
+>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
+
     𐊧 = "hello";
 >𐊧 : Symbol(𐊧, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 3), Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 3))
 }

@@ -6,9 +6,13 @@ declare const y: never[] | string[];
 
 export const yThen = y.map(item => item.length);
 >yThen : Symbol(yThen, Decl(one.ts, 1, 12))
+>y.map : Symbol(map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(one.ts, 0, 13))
+>map : Symbol(map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >item : Symbol(item, Decl(one.ts, 1, 27))
+>item.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >item : Symbol(item, Decl(one.ts, 1, 27))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
 === two.ts ===
 declare const y: number[][] | string[];
@@ -16,9 +20,13 @@ declare const y: number[][] | string[];
 
 export const yThen = y.map(item => item.length);
 >yThen : Symbol(yThen, Decl(two.ts, 1, 12))
+>y.map : Symbol(map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(two.ts, 0, 13))
+>map : Symbol(map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >item : Symbol(item, Decl(two.ts, 1, 27))
+>item.length : Symbol(length, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >item : Symbol(item, Decl(two.ts, 1, 27))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 === three.ts ===
 // #42504
@@ -27,22 +35,23 @@ interface ResizeObserverCallback {
 
     (entries: ResizeObserverEntry[], observer: ResizeObserver): void;
 >entries : Symbol(entries, Decl(three.ts, 2, 5))
->ResizeObserverEntry : Symbol(ResizeObserverEntry)
+>ResizeObserverEntry : Symbol(ResizeObserverEntry, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >observer : Symbol(observer, Decl(three.ts, 2, 36))
->ResizeObserver : Symbol(ResizeObserver)
+>ResizeObserver : Symbol(ResizeObserver, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 }
 interface ResizeObserverCallback { // duplicate for effect
 >ResizeObserverCallback : Symbol(ResizeObserverCallback, Decl(three.ts, 0, 0), Decl(three.ts, 3, 1))
 
     (entries: ResizeObserverEntry[], observer: ResizeObserver): void;
 >entries : Symbol(entries, Decl(three.ts, 5, 5))
->ResizeObserverEntry : Symbol(ResizeObserverEntry)
+>ResizeObserverEntry : Symbol(ResizeObserverEntry, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >observer : Symbol(observer, Decl(three.ts, 5, 36))
->ResizeObserver : Symbol(ResizeObserver)
+>ResizeObserver : Symbol(ResizeObserver, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 }
 
 const resizeObserver = new ResizeObserver(([entry]) => {
 >resizeObserver : Symbol(resizeObserver, Decl(three.ts, 8, 5))
+>ResizeObserver : Symbol(ResizeObserver, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >entry : Symbol(entry, Decl(three.ts, 8, 44))
 
     entry
@@ -61,7 +70,7 @@ interface Callback<T> {
 
     (error: Error, result: null): unknown
 >error : Symbol(error, Decl(three.ts, 14, 5))
->Error : Symbol(Error)
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >result : Symbol(result, Decl(three.ts, 14, 18))
 }
 
@@ -124,7 +133,9 @@ export function series<T>(tasks: Task<T>[], callback: Callback<T[]>): void {
                     // must use postfix-!, since `error` and `result` don't have a
                     // causal relationship when the overloads are combined
                     results.push(result!)
+>results.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
 >results : Symbol(results, Decl(three.ts, 23, 7))
+>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
 >result : Symbol(result, Decl(three.ts, 30, 24))
 
                     next()
@@ -142,14 +153,17 @@ series([
 
     cb => setTimeout(() => cb(null, 1), 300),
 >cb : Symbol(cb, Decl(three.ts, 45, 8))
+>setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --))
 >cb : Symbol(cb, Decl(three.ts, 45, 8))
 
     cb => setTimeout(() => cb(null, 2), 200),
 >cb : Symbol(cb, Decl(three.ts, 46, 45))
+>setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --))
 >cb : Symbol(cb, Decl(three.ts, 46, 45))
 
     cb => setTimeout(() => cb(null, 3), 100),
 >cb : Symbol(cb, Decl(three.ts, 47, 45))
+>setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --))
 >cb : Symbol(cb, Decl(three.ts, 47, 45))
 
 ], (error, results) => {
@@ -160,10 +174,16 @@ series([
 >error : Symbol(error, Decl(three.ts, 49, 4))
 
         console.error(error)
+>console.error : Symbol(error, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>error : Symbol(error, Decl(lib.dom.d.ts, --, --))
 >error : Symbol(error, Decl(three.ts, 49, 4))
 
     } else {
         console.log(results)
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >results : Symbol(results, Decl(three.ts, 49, 10))
     }
 })

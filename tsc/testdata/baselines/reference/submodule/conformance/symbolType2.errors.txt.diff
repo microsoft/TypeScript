@@ -2,33 +2,12 @@
 +++ new.symbolType2.errors.txt
 @@= skipped -0, +0 lines =@@
 -symbolType2.ts(2,7): error TS2322: Type 'typeof Symbol.toPrimitive' is not assignable to type 'object'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+symbolType2.ts(1,1): error TS2304: Cannot find name 'Symbol'.
-+symbolType2.ts(2,7): error TS2304: Cannot find name 'Symbol'.
++symbolType2.ts(2,7): error TS2322: Type 'unique symbol' is not assignable to type 'object'.
  
  
--==== symbolType2.ts (1 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+==== symbolType2.ts (2 errors) ====
+ ==== symbolType2.ts (1 errors) ====
      Symbol.isConcatSpreadable in {};
-+    ~~~~~~
-+!!! error TS2304: Cannot find name 'Symbol'.
      "" in Symbol.toPrimitive;
--          ~~~~~~~~~~~~~~~~~~
+           ~~~~~~~~~~~~~~~~~~
 -!!! error TS2322: Type 'typeof Symbol.toPrimitive' is not assignable to type 'object'.
-+          ~~~~~~
-+!!! error TS2304: Cannot find name 'Symbol'.
++!!! error TS2322: Type 'unique symbol' is not assignable to type 'object'.

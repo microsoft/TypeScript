@@ -5,42 +5,14 @@
 -astralAsSurrogatePair.ts(1,18): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uD800'.
 -astralAsSurrogatePair.ts(1,23): error TS1127: Invalid character.
 -astralAsSurrogatePair.ts(1,24): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uDEA7'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 +astralAsSurrogatePair.ts(1,16): error TS1127: Invalid character.
 +astralAsSurrogatePair.ts(1,17): error TS2305: Module '""extendedEscapesForAstralsInVarsAndClasses.ts""' has no exported member 'uD800'.
 +astralAsSurrogatePair.ts(1,22): error TS1127: Invalid character.
 +astralAsSurrogatePair.ts(1,23): error TS2305: Module '""extendedEscapesForAstralsInVarsAndClasses.ts""' has no exported member 'uDEA7'.
-+extendedEscapesForAstralsInVarsAndClasses.ts(5,5): error TS2304: Cannot find name 'Math'.
  
  
--==== extendedEscapesForAstralsInVarsAndClasses.ts (0 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
-+==== extendedEscapesForAstralsInVarsAndClasses.ts (1 errors) ====
-     // U+102A7 CARIAN LETTER A2
-     var 𐊧: string;
-     var \u{102A7}: string;
-     
-     if (Math.random()) {
-+        ~~~~
-+!!! error TS2304: Cannot find name 'Math'.
-         𐊧 = "hello";
-     }
-     else {
-@@= skipped -31, +50 lines =@@
+ ==== extendedEscapesForAstralsInVarsAndClasses.ts (0 errors) ====
+@@= skipped -31, +31 lines =@@
      
  ==== astralAsSurrogatePair.ts (4 errors) ====
      import { _𐊧 as \uD800\uDEA7 } from "./extendedEscapesForAstralsInVarsAndClasses.js";

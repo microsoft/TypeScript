@@ -41,7 +41,10 @@ interface Array1<T> {
 
   [Symbol.iterator](): IterableIterator<T>;
 >[Symbol.iterator] : Symbol([Symbol.iterator], Decl(other.ts, 12, 21))
->IterableIterator : Symbol(IterableIterator)
+>Symbol.iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(other.ts, 0, 17), Decl(other.ts, 12, 17), Decl(other.ts, 17, 17))
 }
 
@@ -56,6 +59,9 @@ interface Array1<T> {
    */
   [Symbol.unscopables](): {
 >[Symbol.unscopables] : Symbol([Symbol.unscopables], Decl(other.ts, 17, 21))
+>Symbol.unscopables : Symbol(unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>unscopables : Symbol(unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
       copyWithin: boolean;
 >copyWithin : Symbol(copyWithin, Decl(other.ts, 22, 27))

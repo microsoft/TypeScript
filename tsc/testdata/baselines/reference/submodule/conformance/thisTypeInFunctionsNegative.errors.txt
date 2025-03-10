@@ -1,12 +1,3 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'Promise'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 thisTypeInFunctionsNegative.ts(16,15): error TS2339: Property 'n' does not exist on type 'void'.
 thisTypeInFunctionsNegative.ts(39,21): error TS2339: Property 'a' does not exist on type 'void'.
 thisTypeInFunctionsNegative.ts(49,1): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type '{ a: number; }'.
@@ -102,15 +93,6 @@ thisTypeInFunctionsNegative.ts(177,19): error TS2730: An arrow function cannot h
 thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot have a 'this' parameter.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'Promise'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 ==== thisTypeInFunctionsNegative.ts (63 errors) ====
     class C {
         n: number;

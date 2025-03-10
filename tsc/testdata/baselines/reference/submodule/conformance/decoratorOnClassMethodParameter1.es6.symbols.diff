@@ -1,13 +1,6 @@
 --- old.decoratorOnClassMethodParameter1.es6.symbols
 +++ new.decoratorOnClassMethodParameter1.es6.symbols
-@@= skipped -3, +3 lines =@@
- declare function dec(target: Object, propertyKey: string | symbol, parameterIndex: number): void;
- >dec : Symbol(dec, Decl(decoratorOnClassMethodParameter1.es6.ts, 0, 0))
- >target : Symbol(target, Decl(decoratorOnClassMethodParameter1.es6.ts, 0, 21))
-->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-+>Object : Symbol(Object)
- >propertyKey : Symbol(propertyKey, Decl(decoratorOnClassMethodParameter1.es6.ts, 0, 36))
- >parameterIndex : Symbol(parameterIndex, Decl(decoratorOnClassMethodParameter1.es6.ts, 0, 66))
+@@= skipped -9, +9 lines =@@
  
  export default class {
      method(@dec p: number) {}

@@ -359,13 +359,7 @@
  >this : Symbol(C11, Decl(strictPropertyInitialization.ts, 123, 34))
  >someValue : Symbol(someValue, Decl(strictPropertyInitialization.ts, 119, 1))
      }
-@@= skipped -24, +24 lines =@@
- 
- const b = Symbol();
- >b : Symbol(b, Decl(strictPropertyInitialization.ts, 135, 5))
-->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
- 
- class C12 {
+@@= skipped -30, +30 lines =@@
  >C12 : Symbol(C12, Decl(strictPropertyInitialization.ts, 135, 19))
  
      [a]: number;
@@ -386,7 +380,7 @@
  
      constructor() {
          this[a] = 1;
-@@= skipped -28, +27 lines =@@
+@@= skipped -22, +22 lines =@@
  
          this['c'] = 1;
  >this : Symbol(C12, Decl(strictPropertyInitialization.ts, 135, 19))

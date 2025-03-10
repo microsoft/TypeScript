@@ -26,10 +26,16 @@ class A1 {
 >A1 : Symbol(A1, Decl(privateNameStaticAccessors.ts, 0, 0))
 
         console.log(A1.#prop);
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >A1.#prop : Symbol(#prop, Decl(privateNameStaticAccessors.ts, 0, 10), Decl(privateNameStaticAccessors.ts, 1, 37))
 >A1 : Symbol(A1, Decl(privateNameStaticAccessors.ts, 0, 0))
 
         console.log(A1.#roProp);
+>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >A1.#roProp : Symbol(#roProp, Decl(privateNameStaticAccessors.ts, 2, 39))
 >A1 : Symbol(A1, Decl(privateNameStaticAccessors.ts, 0, 0))
     }

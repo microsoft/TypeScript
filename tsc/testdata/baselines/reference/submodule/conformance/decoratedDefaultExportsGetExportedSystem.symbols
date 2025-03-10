@@ -3,7 +3,7 @@
 === a.ts ===
 var decorator: ClassDecorator;
 >decorator : Symbol(decorator, Decl(a.ts, 0, 3))
->ClassDecorator : Symbol(ClassDecorator)
+>ClassDecorator : Symbol(ClassDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
 
 @decorator
 >decorator : Symbol(decorator, Decl(a.ts, 0, 3))
@@ -14,7 +14,7 @@ export default class Foo {}
 === b.ts ===
 var decorator: ClassDecorator;
 >decorator : Symbol(decorator, Decl(b.ts, 0, 3))
->ClassDecorator : Symbol(ClassDecorator)
+>ClassDecorator : Symbol(ClassDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
 
 @decorator
 >decorator : Symbol(decorator, Decl(b.ts, 0, 3))
