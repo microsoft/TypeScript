@@ -22914,6 +22914,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
 
+            if (source.flags & TypeFlags.TemplateLiteral) {
+                if (target.flags & TypeFlags.StringLike) {
+                    const resolvedPrimitiveTypes = (source as TemplateLiteralType).types.flatMap(type => {
+                        if (type.flags & TypeFlags.Intersection && (type as IntersectionType).types.every(type => type.flags & TypeFlags.Primitive || type.flags & TypeFlags.Object)) {
+                            return (type as IntersectionType).types.filter(t => t.flags & TypeFlags.Primitive);
+                        }
+                        else {
+                            return [type];
+                        }
+                    });
+
+                    (source as TemplateLiteralType).types = resolvedPrimitiveTypes;
+                }
+            }
+
             // We limit alias variance probing to only object and conditional types since their alias behavior
             // is more predictable than other, interned types, which may or may not have an alias depending on
             // the order in which things were checked.
