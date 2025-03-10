@@ -6138,8 +6138,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             },
             serializeReturnTypeForSignature(syntacticContext, signatureDeclaration) {
                 const context = syntacticContext as NodeBuilderContext;
-                const signature = getSignatureFromDeclaration(signatureDeclaration);
-                const returnType = context.enclosingSymbolTypes.get(getSymbolId(getSymbolOfDeclaration(signatureDeclaration))) ?? instantiateType(getReturnTypeOfSignature(signature), context.mapper);
+                let signature = context.enclosingSymbolSignatures.get(getSymbolId(getSymbolOfDeclaration(signatureDeclaration)));
+                let returnType;
+                if (signature === undefined) {
+                    signature = getSignatureFromDeclaration(signatureDeclaration);
+                    returnType = instantiateType(getReturnTypeOfSignature(signature), context.mapper);
+                }
+                else {
+                    returnType = getReturnTypeOfSignature(signature);
+                }
                 return serializeInferredReturnTypeForSignature(context, signature, returnType);
             },
             serializeTypeOfExpression(syntacticContext, expr) {
@@ -6246,8 +6253,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (symbol.flags & SymbolFlags.Accessor) {
                         type = node.kind === SyntaxKind.SetAccessor ? getWriteTypeOfSymbol(symbol) : getTypeOfAccessors(symbol);
                     }
-                    else if (isValueSignatureDeclaration(node)) {
-                        type = getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+                    else if (isFunctionLike(node)) {
+                        type = getReturnTypeOfSignature(context.enclosingSymbolSignatures?.get(getSymbolId(symbol)) ?? getSignatureFromDeclaration(node));
                     }
                     else {
                         type = getTypeOfSymbol(symbol);
@@ -6372,6 +6379,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 typeParameterNamesByText: undefined,
                 typeParameterNamesByTextNextNameCount: undefined,
                 enclosingSymbolTypes: new Map(),
+                enclosingSymbolSignatures: new Map(),
                 mapper: undefined,
             };
             context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
@@ -6381,7 +6389,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return context.encounteredError ? undefined : resultingNode;
         }
-
+        function addSymbolSignatureToContext(context: NodeBuilderContext, symbol: Symbol, signature: Signature) {
+            const id = getSymbolId(symbol);
+            const oldSignature = context.enclosingSymbolTypes.get(id);
+            context.enclosingSymbolSignatures.set(id, signature);
+            return restore;
+            function restore() {
+                if (oldSignature) {
+                    context.enclosingSymbolTypes.set(id, oldSignature);
+                }
+                else {
+                    context.enclosingSymbolTypes.delete(id);
+                }
+            }
+        }
         function addSymbolTypeToContext(context: NodeBuilderContext, symbol: Symbol, type: Type) {
             const id = getSymbolId(symbol);
             const oldType = context.enclosingSymbolTypes.get(id);
@@ -8716,7 +8737,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!(suppressAny && isTypeAny(returnType))) {
                 if (signature.declaration && !nodeIsSynthesized(signature.declaration)) {
                     const declarationSymbol = getSymbolOfDeclaration(signature.declaration);
-                    const restore = addSymbolTypeToContext(context, declarationSymbol, returnType);
+                    const restore = addSymbolSignatureToContext(context, declarationSymbol, signature);
                     returnTypeNode = syntacticNodeBuilder.serializeReturnTypeForSignature(signature.declaration, declarationSymbol, context);
                     restore();
                 }
@@ -52927,6 +52948,7 @@ interface NodeBuilderContext extends SyntacticTypeNodeBuilderContext {
     remappedSymbolNames: Map<SymbolId, string> | undefined;
     remappedSymbolReferences: Map<SymbolId, Symbol> | undefined;
     enclosingSymbolTypes: Map<SymbolId, Type>;
+    enclosingSymbolSignatures: Map<SymbolId, Signature>;
     reverseMappedStack: ReverseMappedSymbol[] | undefined;
     bundled: boolean;
     mapper: TypeMapper | undefined;
