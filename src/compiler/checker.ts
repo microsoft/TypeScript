@@ -15028,6 +15028,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isLiteralType(type) || isPatternLiteralType(type)) {
                 checkFlags |= CheckFlags.HasLiteralType;
             }
+            if (type.flags & TypeFlags.Primitive) {
+                checkFlags |= CheckFlags.HasPrimitiveType;
+            }
             if (type.flags & TypeFlags.Never && type !== uniqueLiteralType) {
                 checkFlags |= CheckFlags.HasNeverType;
             }
@@ -27220,16 +27223,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function isDiscriminantProperty(type: Type | undefined, name: __String) {
+    // The flag `considerNonUniformPrimitivePropDiscriminant`, when enabled, introduces a new criterion for a property to be considered discriminant:
+    // 1 The property must be non-uniform
+    // 2 The property must include at least one primitive type as a possible type
+    function isDiscriminantProperty(type: Type | undefined, name: __String, considerNonUniformPrimitivePropDiscriminant: boolean = false) {
         if (type && type.flags & TypeFlags.Union) {
             const prop = getUnionOrIntersectionProperty(type as UnionType, name);
             if (prop && getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
+                const propType = getTypeOfSymbol(prop);
                 // NOTE: cast to TransientSymbol should be safe because only TransientSymbols can have CheckFlags.SyntheticProperty
-                if ((prop as TransientSymbol).links.isDiscriminantProperty === undefined) {
-                    (prop as TransientSymbol).links.isDiscriminantProperty = ((prop as TransientSymbol).links.checkFlags & CheckFlags.Discriminant) === CheckFlags.Discriminant &&
-                        !isGenericType(getTypeOfSymbol(prop));
+                const transientSymbol = prop as TransientSymbol;
+                transientSymbol.links.isDiscriminantProperty ??= new Map();
+
+                let isDiscriminant = transientSymbol.links.isDiscriminantProperty.get(considerNonUniformPrimitivePropDiscriminant);
+
+                if (isDiscriminant === undefined) {
+                    isDiscriminant = (((transientSymbol.links.checkFlags & CheckFlags.Discriminant) === CheckFlags.Discriminant)
+                        || !!(considerNonUniformPrimitivePropDiscriminant && (transientSymbol.links.checkFlags & (CheckFlags.HasNonUniformType | CheckFlags.HasPrimitiveType))))
+                        && !isGenericType(propType);
+
+                    transientSymbol.links.isDiscriminantProperty.set(considerNonUniformPrimitivePropDiscriminant, isDiscriminant);
                 }
-                return !!(prop as TransientSymbol).links.isDiscriminantProperty;
+
+                return isDiscriminant;
             }
         }
         return false;
@@ -28780,7 +28796,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const name = getAccessedPropertyName(access);
                     if (name) {
                         const type = declaredType.flags & TypeFlags.Union && isTypeSubsetOf(computedType, declaredType) ? declaredType : computedType;
-                        if (isDiscriminantProperty(type, name)) {
+                        if (isDiscriminantProperty(type, name, /*considerNonUniformPrimitivePropDiscriminant*/ true)) {
                             return access;
                         }
                     }
