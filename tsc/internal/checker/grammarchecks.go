@@ -32,15 +32,6 @@ func (c *Checker) grammarErrorAtPos(nodeForSourceFile *ast.Node, start int, leng
 	return false
 }
 
-func (c *Checker) grammarErrorOnNodeSkippedOn(key string, node *ast.Node, message *diagnostics.Message, args ...any) bool {
-	sourceFile := ast.GetSourceFileOfNode(node)
-	if !c.hasParseDiagnostics(sourceFile) {
-		c.errorSkippedOn(key, node, message, args...)
-		return true
-	}
-	return false
-}
-
 func (c *Checker) grammarErrorOnNode(node *ast.Node, message *diagnostics.Message, args ...any) bool {
 	sourceFile := ast.GetSourceFileOfNode(node)
 	if !c.hasParseDiagnostics(sourceFile) {
@@ -1249,7 +1240,6 @@ func (c *Checker) checkGrammarForInOrForOfStatement(forInOrOfStatement *ast.ForI
 					diagnostic := createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.X_for_await_loops_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules)
 					containingFunc := getContainingFunction(forInOrOfStatement.AsNode())
 					if containingFunc != nil && containingFunc.Kind != ast.KindConstructor {
-						// !!!
 						// Debug.assert((getFunctionFlags(containingFunc)&FunctionFlagsAsync) == 0, "Enclosing function should never be an async function.")
 						if hasAsyncModifier(containingFunc) {
 							panic("Enclosing function should never be an async function.")
@@ -1642,7 +1632,7 @@ func (c *Checker) checkGrammarVariableDeclaration(node *ast.VariableDeclaration)
 func (c *Checker) checkGrammarForEsModuleMarkerInBindingName(name *ast.Node) bool {
 	if ast.IsIdentifier(name) {
 		if name.Text() == "__esModule" {
-			return c.grammarErrorOnNodeSkippedOn("noEmit", name, diagnostics.Identifier_expected_esModule_is_reserved_as_an_exported_marker_when_transforming_ECMAScript_modules)
+			return c.grammarErrorOnNode(name, diagnostics.Identifier_expected_esModule_is_reserved_as_an_exported_marker_when_transforming_ECMAScript_modules)
 		}
 	} else {
 		for _, element := range name.AsBindingPattern().Elements.Nodes {
@@ -1889,8 +1879,6 @@ func (c *Checker) checkGrammarConstructorTypeParameters(node *ast.ConstructorDec
 }
 
 func (c *Checker) checkGrammarConstructorTypeAnnotation(node *ast.ConstructorDeclaration) bool {
-	// !!!
-	// t := node.ReturnType || getEffectiveReturnTypeNode(node)
 	t := node.Type
 	if t != nil {
 		return c.grammarErrorOnNode(t, diagnostics.Type_annotation_cannot_appear_on_a_constructor_declaration)

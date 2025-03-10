@@ -18,11 +18,3 @@
  
          let _super = this;
  >_super : Symbol(_super, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 16, 11))
-@@= skipped -29, +29 lines =@@
- 
-         var t = new.target;
- >t : Symbol(t, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 29, 11))
-->new.target : Symbol(C2, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 23, 1))
- >target : Symbol(C2, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 23, 1))
- 
-         var y = _newTarget;

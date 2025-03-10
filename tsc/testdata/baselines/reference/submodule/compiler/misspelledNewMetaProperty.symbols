@@ -3,4 +3,5 @@
 === misspelledNewMetaProperty.ts ===
 function foo(){new.targ}
 >foo : Symbol(foo, Decl(misspelledNewMetaProperty.ts, 0, 0))
+>new.targ : Symbol(foo, Decl(misspelledNewMetaProperty.ts, 0, 0))
 

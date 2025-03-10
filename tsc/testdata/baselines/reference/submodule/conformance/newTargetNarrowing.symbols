@@ -9,11 +9,17 @@ function f() {
 >f : Symbol(f, Decl(newTargetNarrowing.ts, 0, 25))
 
   if (new.target.marked === true) {
+>new.target.marked : Symbol(marked, Decl(newTargetNarrowing.ts, 6, 1))
+>new.target : Symbol(f, Decl(newTargetNarrowing.ts, 0, 25))
 >target : Symbol(f, Decl(newTargetNarrowing.ts, 0, 25))
+>marked : Symbol(marked, Decl(newTargetNarrowing.ts, 6, 1))
 
     foo(new.target.marked);
 >foo : Symbol(foo, Decl(newTargetNarrowing.ts, 0, 0))
+>new.target.marked : Symbol(marked, Decl(newTargetNarrowing.ts, 6, 1))
+>new.target : Symbol(f, Decl(newTargetNarrowing.ts, 0, 25))
 >target : Symbol(f, Decl(newTargetNarrowing.ts, 0, 25))
+>marked : Symbol(marked, Decl(newTargetNarrowing.ts, 6, 1))
   }
 }
 

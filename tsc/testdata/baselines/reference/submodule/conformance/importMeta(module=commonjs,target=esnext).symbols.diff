@@ -8,11 +8,13 @@
 +>new URL("../hamsters.jpg", import.meta.url).toString : Symbol(toString, Decl(lib.dom.d.ts, --, --))
  >URL : Symbol(URL, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 ->import.meta.url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
-->import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
++>import.meta.url : Symbol(url, Decl(lib.dom.d.ts, --, --))
+ >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 ->meta : Symbol(ImportMetaExpression.meta)
 ->url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
 ->toString : Symbol(URL.toString, Decl(lib.dom.d.ts, --, --))
 +>meta : Symbol(meta)
++>url : Symbol(url, Decl(lib.dom.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.dom.d.ts, --, --))
  
    const blob = await response.blob();
@@ -25,7 +27,7 @@
  
    const size = import.meta.scriptElement.dataset.size || 300;
  >size : Symbol(size, Decl(example.ts, 5, 7))
-->import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
+ >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 ->meta : Symbol(ImportMetaExpression.meta)
 +>meta : Symbol(meta)
  
@@ -70,42 +72,39 @@
  >image : Symbol(image, Decl(example.ts, 7, 7))
  
  })();
-@@= skipped -54, +50 lines =@@
- === moduleLookingFile01.ts ===
+@@= skipped -55, +55 lines =@@
  export let x = import.meta;
  >x : Symbol(x, Decl(moduleLookingFile01.ts, 0, 10))
-->import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
+ >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 ->meta : Symbol(ImportMetaExpression.meta)
 +>meta : Symbol(meta)
  
  export let y = import.metal;
  >y : Symbol(y, Decl(moduleLookingFile01.ts, 1, 10))
-@@= skipped -12, +11 lines =@@
- === scriptLookingFile01.ts ===
+@@= skipped -12, +12 lines =@@
  let globalA = import.meta;
  >globalA : Symbol(globalA, Decl(scriptLookingFile01.ts, 0, 3))
-->import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
+ >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 ->meta : Symbol(ImportMetaExpression.meta)
 +>meta : Symbol(meta)
  
  let globalB = import.metal;
  >globalB : Symbol(globalB, Decl(scriptLookingFile01.ts, 1, 3))
-@@= skipped -13, +12 lines =@@
- export const foo: ImportMeta = import.meta.blah = import.meta.blue = import.meta;
+@@= skipped -13, +13 lines =@@
  >foo : Symbol(foo, Decl(assignmentTargets.ts, 0, 12))
  >ImportMeta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
-->import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
-->meta : Symbol(ImportMetaExpression.meta)
-->import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
-->meta : Symbol(ImportMetaExpression.meta)
-->import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
+ >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 ->meta : Symbol(ImportMetaExpression.meta)
 +>meta : Symbol(meta)
+ >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
+->meta : Symbol(ImportMetaExpression.meta)
 +>meta : Symbol(meta)
+ >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
+->meta : Symbol(ImportMetaExpression.meta)
 +>meta : Symbol(meta)
  
  import.meta = foo;
-->import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
+ >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 ->meta : Symbol(ImportMetaExpression.meta)
 +>meta : Symbol(meta)
  >foo : Symbol(foo, Decl(assignmentTargets.ts, 0, 12))
@@ -124,13 +123,15 @@
  >a : Symbol(a, Decl(assignmentTargets.ts, 6, 24))
  >b : Symbol(b, Decl(assignmentTargets.ts, 6, 35))
  >c : Symbol(c, Decl(assignmentTargets.ts, 6, 46))
-@@= skipped -31, +27 lines =@@
+@@= skipped -30, +30 lines =@@
  >a : Symbol(a, Decl(assignmentTargets.ts, 10, 7))
  >b : Symbol(b, Decl(assignmentTargets.ts, 10, 10))
  >c : Symbol(c, Decl(assignmentTargets.ts, 10, 13))
 ->import.meta.wellKnownProperty : Symbol(ImportMeta.wellKnownProperty, Decl(assignmentTargets.ts, 5, 24))
-->import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
++>import.meta.wellKnownProperty : Symbol(wellKnownProperty, Decl(assignmentTargets.ts, 5, 24))
+ >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 ->meta : Symbol(ImportMetaExpression.meta)
 ->wellKnownProperty : Symbol(ImportMeta.wellKnownProperty, Decl(assignmentTargets.ts, 5, 24))
 +>meta : Symbol(meta)
++>wellKnownProperty : Symbol(wellKnownProperty, Decl(assignmentTargets.ts, 5, 24))
  

@@ -30,6 +30,8 @@ var f: I;
 
 var x = new new new f `abc${ 0 }def`.member("hello")(42) === true;
 >x : Symbol(x, Decl(taggedTemplateStringsWithManyCallAndMemberExpressionsES6.ts, 12, 3))
+>f `abc${ 0 }def`.member : Symbol(member, Decl(taggedTemplateStringsWithManyCallAndMemberExpressionsES6.ts, 1, 55))
 >f : Symbol(f, Decl(taggedTemplateStringsWithManyCallAndMemberExpressionsES6.ts, 10, 3))
+>member : Symbol(member, Decl(taggedTemplateStringsWithManyCallAndMemberExpressionsES6.ts, 1, 55))
 
 

@@ -8,7 +8,10 @@
 >fetch : Symbol(fetch, Decl(lib.dom.d.ts, --, --))
 >new URL("../hamsters.jpg", import.meta.url).toString : Symbol(toString, Decl(lib.dom.d.ts, --, --))
 >URL : Symbol(URL, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>import.meta.url : Symbol(url, Decl(lib.dom.d.ts, --, --))
+>import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 >meta : Symbol(meta)
+>url : Symbol(url, Decl(lib.dom.d.ts, --, --))
 >toString : Symbol(toString, Decl(lib.dom.d.ts, --, --))
 
   const blob = await response.blob();
@@ -19,6 +22,7 @@
 
   const size = import.meta.scriptElement.dataset.size || 300;
 >size : Symbol(size, Decl(example.ts, 5, 7))
+>import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 >meta : Symbol(meta)
 
   const image = new Image();
@@ -56,6 +60,7 @@
 === moduleLookingFile01.ts ===
 export let x = import.meta;
 >x : Symbol(x, Decl(moduleLookingFile01.ts, 0, 10))
+>import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 >meta : Symbol(meta)
 
 export let y = import.metal;
@@ -67,6 +72,7 @@ export let z = import.import.import.malkovich;
 === scriptLookingFile01.ts ===
 let globalA = import.meta;
 >globalA : Symbol(globalA, Decl(scriptLookingFile01.ts, 0, 3))
+>import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 >meta : Symbol(meta)
 
 let globalB = import.metal;
@@ -79,11 +85,15 @@ let globalC = import.import.import.malkovich;
 export const foo: ImportMeta = import.meta.blah = import.meta.blue = import.meta;
 >foo : Symbol(foo, Decl(assignmentTargets.ts, 0, 12))
 >ImportMeta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
+>import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 >meta : Symbol(meta)
+>import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 >meta : Symbol(meta)
+>import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 >meta : Symbol(meta)
 
 import.meta = foo;
+>import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 >meta : Symbol(meta)
 >foo : Symbol(foo, Decl(assignmentTargets.ts, 0, 12))
 
@@ -106,5 +116,8 @@ const { a, b, c } = import.meta.wellKnownProperty;
 >a : Symbol(a, Decl(assignmentTargets.ts, 10, 7))
 >b : Symbol(b, Decl(assignmentTargets.ts, 10, 10))
 >c : Symbol(c, Decl(assignmentTargets.ts, 10, 13))
+>import.meta.wellKnownProperty : Symbol(wellKnownProperty, Decl(assignmentTargets.ts, 5, 24))
+>import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 >meta : Symbol(meta)
+>wellKnownProperty : Symbol(wellKnownProperty, Decl(assignmentTargets.ts, 5, 24))
 

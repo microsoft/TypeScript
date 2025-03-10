@@ -82,48 +82,60 @@
  
  c.returnedObjProp.x;
 ->c.returnedObjProp.x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
-->c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
++>c.returnedObjProp.x : Symbol(x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+ >c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
  >c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
-->returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+ >returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
 ->x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
++>x : Symbol(x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
  
  c.returnedObjProp.y;
 ->c.returnedObjProp.y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
-->c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
++>c.returnedObjProp.y : Symbol(y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+ >c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
  >c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
-->returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+ >returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
 ->y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
++>y : Symbol(y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
  
  c.returnedObjProp.z;
 ->c.returnedObjProp.z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
-->c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
++>c.returnedObjProp.z : Symbol(z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+ >c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
  >c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
-->returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+ >returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
 ->z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
++>z : Symbol(z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
  
  c = obj.prop<Stuff> `${(input) => ({ ...input })}`
  >c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
-@@= skipped -30, +18 lines =@@
+@@= skipped -30, +30 lines =@@
  >input : Symbol(input, Decl(taggedTemplatesWithTypeArguments1.ts, 41, 24))
  
  c.returnedObjProp.x;
 ->c.returnedObjProp.x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
-->c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
++>c.returnedObjProp.x : Symbol(x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+ >c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
  >c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
-->returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+ >returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
 ->x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
++>x : Symbol(x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
  
  c.returnedObjProp.y;
 ->c.returnedObjProp.y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
-->c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
++>c.returnedObjProp.y : Symbol(y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+ >c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
  >c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
-->returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+ >returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
 ->y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
++>y : Symbol(y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
  
  c.returnedObjProp.z;
 ->c.returnedObjProp.z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
-->c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
++>c.returnedObjProp.z : Symbol(z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+ >c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
  >c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
-->returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+ >returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
 ->z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
++>z : Symbol(z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
  

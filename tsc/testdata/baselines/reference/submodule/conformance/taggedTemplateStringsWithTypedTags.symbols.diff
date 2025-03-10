@@ -29,32 +29,43 @@
  
  f `abc`.member
 ->f `abc`.member : Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
++>f `abc`.member : Symbol(member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
  >f : Symbol(f, Decl(taggedTemplateStringsWithTypedTags.ts, 9, 3))
 ->member : Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
++>member : Symbol(member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
  
  f `abc${1}def${2}ghi`.member;
 ->f `abc${1}def${2}ghi`.member : Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
++>f `abc${1}def${2}ghi`.member : Symbol(member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
  >f : Symbol(f, Decl(taggedTemplateStringsWithTypedTags.ts, 9, 3))
 ->member : Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
++>member : Symbol(member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
  
  f `abc`["member"];
  >f : Symbol(f, Decl(taggedTemplateStringsWithTypedTags.ts, 9, 3))
 ->"member" : Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
++>"member" : Symbol(member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
  
  f `abc${1}def${2}ghi`["member"];
  >f : Symbol(f, Decl(taggedTemplateStringsWithTypedTags.ts, 9, 3))
 ->"member" : Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
++>"member" : Symbol(member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
  
  f `abc`[0].member `abc${1}def${2}ghi`;
 ->f `abc`[0].member : Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
++>f `abc`[0].member : Symbol(member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
  >f : Symbol(f, Decl(taggedTemplateStringsWithTypedTags.ts, 9, 3))
 ->member : Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
++>member : Symbol(member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
  
  f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi`;
 ->f `abc${1}def${2}ghi`["member"].member : Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
++>f `abc${1}def${2}ghi`["member"].member : Symbol(member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
  >f : Symbol(f, Decl(taggedTemplateStringsWithTypedTags.ts, 9, 3))
 ->"member" : Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
 ->member : Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
++>"member" : Symbol(member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
++>member : Symbol(member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
  
  f.thisIsNotATag(`abc`);
 ->f.thisIsNotATag : Symbol(I.thisIsNotATag, Decl(taggedTemplateStringsWithTypedTags.ts, 4, 14))

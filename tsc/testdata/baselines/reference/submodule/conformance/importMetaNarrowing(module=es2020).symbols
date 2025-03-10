@@ -7,9 +7,11 @@ declare global { interface ImportMeta {foo?: () => void} };
 >foo : Symbol(foo, Decl(importMetaNarrowing.ts, 0, 39))
 
 if (import.meta.foo) {
+>import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >meta : Symbol(meta)
 
   import.meta.foo();
+>import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >meta : Symbol(meta)
 }
 

@@ -145,7 +145,7 @@ func (p *Printer) printTypeNoAlias(t *Type) {
 	switch {
 	case t.flags&TypeFlagsIntrinsic != 0:
 		p.print(t.AsIntrinsicType().intrinsicName)
-	case t.flags&TypeFlagsLiteral != 0:
+	case t.flags&(TypeFlagsLiteral|TypeFlagsEnum) != 0:
 		p.printLiteralType(t)
 	case t.flags&TypeFlagsUniqueESSymbol != 0:
 		p.printUniqueESSymbolType(t)
@@ -182,7 +182,7 @@ func (p *Printer) printRecursive(t *Type, f func(*Printer, *Type)) {
 }
 
 func (p *Printer) printLiteralType(t *Type) {
-	if t.flags&TypeFlagsEnumLiteral != 0 {
+	if t.flags&(TypeFlagsEnumLiteral|TypeFlagsEnum) != 0 {
 		p.printEnumLiteral(t)
 	} else {
 		p.printValue(t.AsLiteralType().value)

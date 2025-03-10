@@ -1957,9 +1957,9 @@ func forEachYieldExpression(body *ast.Node, visitor func(expr *ast.Node)) {
 }
 
 func skipTypeChecking(sourceFile *ast.SourceFile, options *core.CompilerOptions) bool {
-	return options.NoCheck == core.TSTrue ||
-		options.SkipLibCheck == core.TSTrue && tspath.IsDeclarationFileName(sourceFile.FileName()) ||
-		options.SkipDefaultLibCheck == core.TSTrue && sourceFile.HasNoDefaultLib ||
+	return options.NoCheck.IsTrue() ||
+		options.SkipLibCheck.IsTrue() && tspath.IsDeclarationFileName(sourceFile.FileName()) ||
+		options.SkipDefaultLibCheck.IsTrue() && sourceFile.HasNoDefaultLib ||
 		!canIncludeBindAndCheckDiagnostics(sourceFile, options)
 }
 
@@ -2240,4 +2240,49 @@ func tryGetPropertyAccessOrIdentifierToString(expr *ast.Node) string {
 		return entityNameToString(expr)
 	}
 	return ""
+}
+
+func getInvokedExpression(node *ast.Node) *ast.Node {
+	switch node.Kind {
+	case ast.KindTaggedTemplateExpression:
+		return node.AsTaggedTemplateExpression().Tag
+	case ast.KindJsxOpeningElement, ast.KindJsxSelfClosingElement:
+		return node.TagName()
+	case ast.KindBinaryExpression:
+		return node.AsBinaryExpression().Right
+	default:
+		return node.Expression()
+	}
+}
+
+func getFirstJSDocTag(node *ast.Node, f func(*ast.Node) bool) *ast.Node {
+	for _, jsdoc := range node.JSDoc(nil) {
+		tags := jsdoc.AsJSDoc().Tags
+		if tags != nil {
+			for _, tag := range tags.Nodes {
+				if f(tag) {
+					return tag
+				}
+			}
+		}
+	}
+	return nil
+}
+
+func getJSDocDeprecatedTag(node *ast.Node) *ast.Node {
+	return getFirstJSDocTag(node, ast.IsJSDocDeprecatedTag)
+}
+
+func allDeclarationsInSameSourceFile(symbol *ast.Symbol) bool {
+	if len(symbol.Declarations) > 1 {
+		var sourceFile *ast.SourceFile
+		for i, d := range symbol.Declarations {
+			if i == 0 {
+				sourceFile = ast.GetSourceFileOfNode(d)
+			} else if ast.GetSourceFileOfNode(d) != sourceFile {
+				return false
+			}
+		}
+	}
+	return true
 }

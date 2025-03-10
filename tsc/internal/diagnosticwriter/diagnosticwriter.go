@@ -83,6 +83,9 @@ func FormatDiagnosticsWithColorAndContext(output io.Writer, diags []*ast.Diagnos
 func writeCodeSnippet(writer io.Writer, sourceFile *ast.SourceFile, start int, length int, squiggleColor string, indent string, formatOpts *FormattingOptions) {
 	firstLine, firstLineChar := scanner.GetLineAndCharacterOfPosition(sourceFile, start)
 	lastLine, lastLineChar := scanner.GetLineAndCharacterOfPosition(sourceFile, start+length)
+	if length == 0 {
+		lastLineChar++ // When length is zero, squiggle the character right after the start position.
+	}
 
 	lastLineOfFile, _ := scanner.GetLineAndCharacterOfPosition(sourceFile, len(sourceFile.Text))
 
