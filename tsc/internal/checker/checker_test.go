@@ -86,9 +86,8 @@ func BenchmarkNewChecker(b *testing.B) {
 	p := compiler.NewProgram(opts)
 
 	b.ReportAllocs()
-	b.ResetTimer()
 
-	for range b.N {
+	for b.Loop() {
 		checker.NewChecker(p)
 	}
 }
