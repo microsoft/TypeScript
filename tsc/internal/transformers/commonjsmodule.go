@@ -1664,7 +1664,7 @@ func (tx *CommonJSModuleTransformer) visitCallExpression(node *ast.CallExpressio
 		updated := tx.factory.UpdateCallExpression(
 			node,
 			expression,
-			nil, /*questionDotToken*/
+			node.QuestionDotToken,
 			nil, /*typeArguments*/
 			tx.visitor.VisitNodes(node.Arguments),
 		)

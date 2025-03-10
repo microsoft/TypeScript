@@ -884,6 +884,14 @@ const tslib_1 = require("tslib");
 Promise.resolve(` + "`" + `${tslib_1.__rewriteRelativeImportExtension(x)}` + "`" + `).then(s => require(s));`,
 			options: core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue, ImportHelpers: core.TSTrue},
 		},
+		{
+			title: "CallExpression#7",
+			input: `export {};
+a?.()`,
+			output: `"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+a?.();`,
+		},
 
 		// TaggedTemplateExpression
 		{
