@@ -47138,17 +47138,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (isConstantVariable(symbol)) {
             const declaration = symbol.valueDeclaration;
-            if (declaration && isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && (!location || declaration !== location && isBlockScopedNameDeclaredBeforeUse(declaration, location))) {
-                const result = evaluate(declaration.initializer, declaration);
-                if (location && getSourceFileOfNode(location) !== getSourceFileOfNode(declaration)) {
-                    return evaluatorResult(
-                        result.value,
-                        /*isSyntacticallyString*/ false,
-                        /*resolvedOtherFiles*/ true,
-                        /*hasExternalReferences*/ true,
-                    );
+            if (declaration && isVariableDeclaration(declaration)) {
+                if (!declaration.type && declaration.initializer && (!location || declaration !== location && isBlockScopedNameDeclaredBeforeUse(declaration, location))) {
+                    const result = evaluate(declaration.initializer, declaration);
+                    return location && getSourceFileOfNode(location) !== getSourceFileOfNode(declaration) ?
+                        evaluatorResult(result.value, /*isSyntacticallyString*/ false, /*resolvedOtherFiles*/ true, /*hasExternalReferences*/ true) :
+                        evaluatorResult(result.value, result.isSyntacticallyString, result.resolvedOtherFiles, /*hasExternalReferences*/ true);
                 }
-                return evaluatorResult(result.value, result.isSyntacticallyString, result.resolvedOtherFiles, /*hasExternalReferences*/ true);
+                if (declaration.type && declaration.type.kind === SyntaxKind.LiteralType) {
+                    const type = getTypeOfSymbol(symbol);
+                    if (type.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
+                        return evaluatorResult((type as LiteralType).value as string | number);
+                    }
+                }
             }
         }
         return evaluatorResult(/*value*/ undefined);
