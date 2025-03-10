@@ -201,6 +201,9 @@ function getValueAsString(value: IntersectionFail): string {
 // Repro from #12535
 
 namespace enums {
+>enums : typeof enums
+>      : ^^^^^^^^^^^^
+
     export const enum A {
 >A : A
 >  : ^
