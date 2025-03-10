@@ -347,7 +347,7 @@ func (tx *CommonJSModuleTransformer) transformCommonJSModule(node *ast.SourceFil
 	// initialize exports for function declarations, e.g.:
 	//  exports.f = f;
 	//  function f() {}
-	for f := range tx.currentModuleInfo.exportedFunctions.Keys() {
+	for f := range tx.currentModuleInfo.exportedFunctions.Values() {
 		statements = tx.appendExportsOfClassOrFunctionDeclaration(statements, f.AsNode())
 	}
 

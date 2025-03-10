@@ -5,6 +5,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/binder"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/stringutil"
@@ -15,7 +16,7 @@ type externalModuleInfo struct {
 	exportSpecifiers             core.MultiMap[string, *ast.ExportSpecifier]            // Maps local names to their associated export specifiers (excludes reexports)
 	exportedBindings             core.MultiMap[*ast.Declaration, *ast.ModuleExportName] // Maps local declarations to their associated export aliases
 	exportedNames                []*ast.ModuleExportName                                // all exported names in the module, both local and re-exported, excluding the names of locally exported function declarations
-	exportedFunctions            core.Set[*ast.FunctionDeclarationNode]                 // all of the top-level exported function declarations
+	exportedFunctions            collections.OrderedSet[*ast.FunctionDeclarationNode]   // all of the top-level exported function declarations
 	exportEquals                 *ast.ExportAssignment                                  // an export= declaration if one was present
 	hasExportStarsToExportValues bool                                                   // whether this module contains export*
 }
