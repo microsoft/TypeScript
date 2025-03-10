@@ -364,27 +364,20 @@ func (p *Printer) printAnonymousType(t *Type) {
 		}
 	}
 	p.print("{")
-	var tail bool
+	hasMembers := false
 	for _, sig := range callSignatures {
-		if tail {
-			p.print(",")
-		}
 		p.print(" ")
 		p.printSignature(sig, ": ")
-		tail = true
+		p.print(";")
+		hasMembers = true
 	}
 	for _, sig := range constructSignatures {
-		if tail {
-			p.print(",")
-		}
 		p.print(" new")
 		p.printSignature(sig, ": ")
-		tail = true
+		p.print(";")
+		hasMembers = true
 	}
 	for _, info := range p.c.getIndexInfosOfType(t) {
-		if tail {
-			p.print(",")
-		}
 		if info.isReadonly {
 			p.print(" readonly")
 		}
@@ -394,12 +387,10 @@ func (p *Printer) printAnonymousType(t *Type) {
 		p.printType(info.keyType)
 		p.print("]: ")
 		p.printType(info.valueType)
-		tail = true
+		p.print(";")
+		hasMembers = true
 	}
 	for _, prop := range props {
-		if tail {
-			p.print(",")
-		}
 		if p.c.isReadonlySymbol(prop) {
 			p.print(" readonly")
 		}
@@ -410,9 +401,10 @@ func (p *Printer) printAnonymousType(t *Type) {
 		}
 		p.print(": ")
 		p.printType(p.c.getTypeOfSymbol(prop))
-		tail = true
+		p.print(";")
+		hasMembers = true
 	}
-	if tail {
+	if hasMembers {
 		p.print(" ")
 	}
 	p.print("}")
