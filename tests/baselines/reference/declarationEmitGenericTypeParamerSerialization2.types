@@ -1,0 +1,146 @@
+//// [tests/cases/compiler/declarationEmitGenericTypeParamerSerialization2.ts] ////
+
+=== declarationEmitGenericTypeParamerSerialization2.ts ===
+type ExpandRecursively<T> = {} & {
+>ExpandRecursively : { [P in keyof T]: T[P]; }
+>                  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
+
+  [P in keyof T]: T[P]
+}
+
+type G<T = string> = {
+>G : G<T>
+>  : ^^^^
+
+  get readonlyProperty(): T;
+>readonlyProperty : T
+>                 : ^
+
+  field: T;
+>field : T
+>      : ^
+
+  method(p: T): T;
+>method : (p: T) => T
+>       : ^ ^^ ^^^^^ 
+>p : T
+>  : ^
+
+  fnField: (p: T) => T;
+>fnField : (p: T) => T
+>        : ^ ^^ ^^^^^ 
+>p : T
+>  : ^
+
+  set writeOnlyProperty(p: T);
+>writeOnlyProperty : T
+>                  : ^
+>p : T
+>  : ^
+
+  get property(): T;
+>property : T
+>         : ^
+
+  set property(p: T);
+>property : T
+>         : ^
+>p : T
+>  : ^
+
+  get divergentProperty(): string | T;
+>divergentProperty : string | T
+>                  : ^^^^^^^^^^
+
+  set divergentProperty(p: number | T);
+>divergentProperty : string | T
+>                  : ^^^^^^^^^^
+>p : number | T
+>  : ^^^^^^^^^^
+
+};
+
+export const x = (() => null! as ExpandRecursively<G>)();
+>x : { readonly readonlyProperty: string; field: string; method: (p: string) => string; fnField: (p: string) => string; writeOnlyProperty: string; property: string; divergentProperty: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(() => null! as ExpandRecursively<G>)() : { readonly readonlyProperty: string; field: string; method: (p: string) => string; fnField: (p: string) => string; writeOnlyProperty: string; property: string; divergentProperty: string; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(() => null! as ExpandRecursively<G>) : () => ExpandRecursively<G>
+>                                      : ^^^^^^                    
+>() => null! as ExpandRecursively<G> : () => ExpandRecursively<G>
+>                                    : ^^^^^^                    
+>null! as ExpandRecursively<G> : { readonly readonlyProperty: string; field: string; method: (p: string) => string; fnField: (p: string) => string; writeOnlyProperty: string; property: string; divergentProperty: string; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>null! : null
+>      : ^^^^
+
+
+function makeV() {
+>makeV : () => { readonly readonlyProperty: number; field: number; method(p: number): number; fnField: (p: number) => number; writeOnlyProperty: number; property: number; get divergentProperty(): string | number; set divergentProperty(p: number); }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^
+
+  type X<T> = {
+>X : { readonly readonlyProperty: T; field: T; method(p: T): T; fnField: (p: T) => T; writeOnlyProperty: T; property: T; get divergentProperty(): string | T; set divergentProperty(p: number | T); }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^^^^^ ^^ ^^^ ^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^ ^^          ^^^^
+
+    get readonlyProperty(): T;
+>readonlyProperty : T
+>                 : ^
+
+    field: T;
+>field : T
+>      : ^
+
+    method(p: T): T;
+>method : (p: T) => T
+>       : ^ ^^ ^^^^^ 
+>p : T
+>  : ^
+
+    fnField: (p: T) => T;
+>fnField : (p: T) => T
+>        : ^ ^^ ^^^^^ 
+>p : T
+>  : ^
+
+    set writeOnlyProperty(p: T);
+>writeOnlyProperty : T
+>                  : ^
+>p : T
+>  : ^
+
+    get property(): T;
+>property : T
+>         : ^
+
+    set property(p: T);
+>property : T
+>         : ^
+>p : T
+>  : ^
+
+    get divergentProperty(): string | T;
+>divergentProperty : string | T
+>                  : ^^^^^^^^^^
+
+    set divergentProperty(p: number | T);
+>divergentProperty : string | T
+>                  : ^^^^^^^^^^
+>p : number | T
+>  : ^^^^^^^^^^
+   }
+  return null! as X<number>
+>null! as X<number> : { readonly readonlyProperty: number; field: number; method(p: number): number; fnField: (p: number) => number; writeOnlyProperty: number; property: number; get divergentProperty(): string | number; set divergentProperty(p: number); }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^
+>null! : null
+>      : ^^^^
+}
+
+export const v = makeV();
+>v : { readonly readonlyProperty: number; field: number; method(p: number): number; fnField: (p: number) => number; writeOnlyProperty: number; property: number; get divergentProperty(): string | number; set divergentProperty(p: number); }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^
+>makeV() : { readonly readonlyProperty: number; field: number; method(p: number): number; fnField: (p: number) => number; writeOnlyProperty: number; property: number; get divergentProperty(): string | number; set divergentProperty(p: number); }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^
+>makeV : () => { readonly readonlyProperty: number; field: number; method(p: number): number; fnField: (p: number) => number; writeOnlyProperty: number; property: number; get divergentProperty(): string | number; set divergentProperty(p: number); }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^
+
