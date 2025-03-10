@@ -307,6 +307,7 @@ import {
     PrefixUnaryOperator,
     PrimaryExpression,
     PrivateIdentifier,
+    PrivateNameTypeNode,
     PropertyAccessEntityNameExpression,
     PropertyAccessExpression,
     PropertyAssignment,
@@ -717,6 +718,9 @@ const forEachChildTable: ForEachChildTable = {
     },
     [SyntaxKind.LiteralType]: function forEachChildInLiteralType<T>(node: LiteralTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.literal);
+    },
+    [SyntaxKind.PrivateNameType]: function forEachChildInPrivateNameType<T>(node: PrivateNameTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.name);
     },
     [SyntaxKind.NamedTupleMember]: function forEachChildInNamedTupleMember<T>(node: NamedTupleMember, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.dotDotDotToken) ||
@@ -4692,6 +4696,7 @@ namespace Parser {
             case SyntaxKind.AssertsKeyword:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.TemplateHead:
+            case SyntaxKind.PrivateIdentifier:
                 return true;
             case SyntaxKind.FunctionKeyword:
                 return !inStartOfParameter;
@@ -4938,6 +4943,11 @@ namespace Parser {
     function parseType(): TypeNode {
         if (contextFlags & NodeFlags.TypeExcludesFlags) {
             return doOutsideOfContext(NodeFlags.TypeExcludesFlags, parseType);
+        }
+        if (token() === SyntaxKind.PrivateIdentifier) {
+            const pos = getNodePos();
+            const name = parsePrivateIdentifier();
+            return finishNode(factory.createPrivateNameTypeNode(name), pos);
         }
         if (isStartOfFunctionTypeOrConstructorType()) {
             return parseFunctionOrConstructorType();
