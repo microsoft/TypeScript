@@ -6207,7 +6207,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const context = syntacticContext as NodeBuilderContext;
                 if (context.bundled || context.enclosingFile !== getSourceFileOfNode(lit)) {
                     let name = lit.text;
-                    const originalName = name;
                     const nodeSymbol = getNodeLinks(parent).resolvedSymbol;
                     const meaning = parent.isTypeOf ? SymbolFlags.Value : SymbolFlags.Type;
                     const parentSymbol = nodeSymbol
@@ -6228,9 +6227,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             context.tracker.reportLikelyUnsafeImportRequiredError(name);
                         }
                     }
-                    if (name !== originalName) {
-                        return name;
-                    }
+                    return name;
                 }
             },
             canReuseTypeNode(context, typeNode) {
@@ -8834,7 +8831,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return setTextRange(context, setEmitFlags(name, EmitFlags.NoAsciiEscaping), node);
                 }
                 const updated = visitEachChildWorker(node, c => attachSymbolToLeftmostIdentifier(c), /*context*/ undefined);
-                return setTextRange(context, updated, node);
+                if (updated !== node) {
+                    setTextRange(context, updated, node);
+                }
+                return updated;
             }
         }
 
@@ -21964,6 +21964,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         needsOriginalSource ? sourceType : generalizedSourceType,
                         targetType,
                         typeToString(constraint),
+                    );
+                }
+                else if ((source.flags & TypeFlags.TypeParameter) && (isTypeAssignableTo(target, getBaseConstraintOrType(generalizedSource)) || (needsOriginalSource = isTypeAssignableTo(target, getBaseConstraintOrType(source))))) {
+                    reportError(
+                        Diagnostics._1_is_constrained_to_be_a_subtype_of_0,
+                        needsOriginalSource ? sourceType : generalizedSourceType,
+                        targetType,
                     );
                 }
                 else {
@@ -37311,11 +37318,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const file = getSourceFileOfNode(node);
             if (file && fileExtensionIsOneOf(file.fileName, [Extension.Cts, Extension.Mts])) {
                 grammarErrorOnNode(node, Diagnostics.This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Use_an_as_expression_instead);
-            }
-            if (compilerOptions.erasableSyntaxOnly) {
-                const start = node.type.pos - "<".length;
-                const end = skipTrivia(file.text, node.type.end) + ">".length;
-                diagnostics.add(createFileDiagnostic(file, start, end - start, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled));
             }
         }
         return checkAssertionWorker(node, checkMode);
