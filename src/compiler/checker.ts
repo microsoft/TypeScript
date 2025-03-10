@@ -17409,7 +17409,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
+    function addTypeToUnion(typeSet: Type[] | undefined, includes: TypeFlags, type: Type) {
         const flags = type.flags;
         // We ignore 'never' types in unions
         if (!(flags & TypeFlags.Never)) {
@@ -17421,7 +17421,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!strictNullChecks && flags & TypeFlags.Nullable) {
                 if (!(getObjectFlags(type) & ObjectFlags.ContainsWideningType)) includes |= TypeFlags.IncludesNonWideningType;
             }
-            else {
+            else if (typeSet) {
                 const len = typeSet.length;
                 const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
                 if (index < 0) {
@@ -17434,7 +17434,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // Add the given types to the given type set. Order is preserved, duplicates are removed,
     // and nested types of the given kind are flattened into the set.
-    function addTypesToUnion(typeSet: Type[], includes: TypeFlags, types: readonly Type[]): TypeFlags {
+    function addTypesToUnion(typeSet: Type[] | undefined, includes: TypeFlags, types: readonly Type[]): TypeFlags {
         let lastType: Type | undefined;
         for (const type of types) {
             // We skip the type if it is the same as the last type we processed. This simple test particularly
@@ -19642,6 +19642,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isFreshLiteralType(type: Type) {
         return !!(type.flags & TypeFlags.Freshable) && (type as LiteralType).freshType === type;
+    }
+
+    function isRegularLiteralType(type: Type) {
+        return !!(type.flags & TypeFlags.Freshable) && (type as LiteralType).regularType === type;
     }
 
     function getStringLiteralType(value: string): StringLiteralType {
@@ -25034,10 +25038,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function removeDefinitelyFalsyTypes(type: Type): Type {
         return filterType(type, t => hasTypeFacts(t, TypeFacts.Truthy));
-    }
-
-    function extractDefinitelyFalsyTypes(type: Type): Type {
-        return mapType(type, getDefinitelyFalsyPartOfType);
     }
 
     function getDefinitelyFalsyPartOfType(type: Type): Type {
@@ -40160,7 +40160,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.AmpersandAmpersandToken:
             case SyntaxKind.AmpersandAmpersandEqualsToken: {
                 const resultType = hasTypeFacts(leftType, TypeFacts.Truthy) ?
-                    getUnionType([extractDefinitelyFalsyTypes(strictNullChecks ? leftType : getBaseTypeOfLiteralType(rightType)), rightType]) :
+                    getUnionOfLeftAndRightTypes(strictNullChecks ? leftType : getBaseTypeOfLiteralType(rightType), rightType, getDefinitelyFalsyPartOfType) :
                     leftType;
                 if (operator === SyntaxKind.AmpersandAmpersandEqualsToken) {
                     checkAssignmentOperator(rightType);
@@ -40170,7 +40170,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.BarBarToken:
             case SyntaxKind.BarBarEqualsToken: {
                 const resultType = hasTypeFacts(leftType, TypeFacts.Falsy) ?
-                    getUnionType([getNonNullableType(removeDefinitelyFalsyTypes(leftType)), rightType], UnionReduction.Subtype) :
+                    getUnionOfLeftAndRightTypes(leftType, rightType, t => hasTypeFacts(t, TypeFacts.Truthy) ? getNonNullableType(t) : neverType, UnionReduction.Subtype) :
                     leftType;
                 if (operator === SyntaxKind.BarBarEqualsToken) {
                     checkAssignmentOperator(rightType);
@@ -40180,7 +40180,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.QuestionQuestionToken:
             case SyntaxKind.QuestionQuestionEqualsToken: {
                 const resultType = hasTypeFacts(leftType, TypeFacts.EQUndefinedOrNull) ?
-                    getUnionType([getNonNullableType(leftType), rightType], UnionReduction.Subtype) :
+                    getUnionOfLeftAndRightTypes(leftType, rightType, getNonNullableType, UnionReduction.Subtype) :
                     leftType;
                 if (operator === SyntaxKind.QuestionQuestionEqualsToken) {
                     checkAssignmentOperator(rightType);
@@ -40414,6 +40414,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !!globalNaNSymbol && globalNaNSymbol === getResolvedSymbol(expr);
             }
             return false;
+        }
+
+        function getUnionOfLeftAndRightTypes(leftType: Type, rightType: Type, adjustLeft: (type: Type) => Type, unionReduction?: UnionReduction) {
+            const rightTypes = rightType.flags & TypeFlags.Union ? (rightType as UnionType).types : [rightType];
+            const includes = addTypesToUnion(/*typeSet*/ undefined, 0 as TypeFlags, rightTypes) & (TypeFlags.BaseOfLiteral | TypeFlags.Nullable);
+            return getUnionType([
+                mapType(
+                    leftType,
+                    // when something could be removed from the left type and when it's in the right type it means it would be re-added right away
+                    // in such a case it's preserved in the mapped left type to help with origin/alias preservation
+                    t => includes & t.flags || isRegularLiteralType(t) && containsType(rightTypes, (t as LiteralType).freshType) ? t : adjustLeft(t),
+                ),
+                rightType,
+            ], unionReduction);
         }
     }
 
