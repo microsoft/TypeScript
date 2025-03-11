@@ -1,14 +1,13 @@
-# typescript-go
+# TypeScript 7
 
-```console
-$ go run github.com/microsoft/typescript-go/cmd/tsgo@latest
-```
+[Not sure what this is? Read the announcement post!](https://devblogs.microsoft.com/typescript/typescript-native-port/)
 
-For a list of intentional changes with respect to Typescript 5.7, see CHANGES.md.
+This repo is very much under active development; as such there are no published artifacts at this time.
+Interested developers can clone and run locally to try out things as they become available.
 
-## Local development
+## How to Build and Run
 
-This repo uses Go and TypeScript. For a full development experience, you'll need to have both installed.
+This repo uses [Go 1.24 or higher](https://go.dev/dl/), [Node.js with npm](https://nodejs.org/), and [`hereby`](https://www.npmjs.com/package/hereby).
 
 For tests and code generation, this repo contains a git submodule to the main TypeScript repo pointing to the commit being ported.
 When cloning, you'll want to clone with submodules:
@@ -38,6 +37,62 @@ Additional tasks are a work in progress.
 
 `hereby` is not required to work on the repo; the regular `go` tooling (e.g., `go build`, `go test ./...`) will work as expected.
 `hereby` tasks are provided as a convenience for those familiar with the TypeScript repo.
+
+### Running `tsgo`
+
+After running `hereby build`, you can run `built/local/tsgo`, which behaves mostly the same as `tsc` (respects tsconfig, but also prints out perf stats).
+This is mainly a testing entry point; for higher fidelity with regular `tsc`, run `tsgo tsc [flags]`, which behaves more similarly to `tsc`.
+
+### Running LSP Prototype
+
+To try the prototype LSP experience:
+
+* Run VS Code in the repo workspace (`code .`)
+* Copy `.vscode/launch.template.json` to `.vscode/launch.json`
+* <kbd>F5</kbd> (or `Debug: Start Debugging` from the command palette)
+
+This will launch a new VS Code instance which uses the Corsa LS as the backend. If correctly set up, you should see "typescript-go" as an option in the Output pane:
+
+![LSP Prototype Screenshot](ls-screenshot.png)
+
+
+## What Works So Far?
+
+This is still a work in progress and is not yet at full feature parity with TypeScript. Bugs may exist. Please check this list carefully before logging a new issue or assuming an intentional change.
+
+Status overview:
+
+ * Program creation (read `lib`, `target`, `reference`, `import`, `files`, `include`, and `exclude`): **done**. You should see the *same files*, with modules resolved to the *same locations*, as in a TypeScript 5.8 (TS5.8) invocation
+   * Not all resolution modes are supported yet
+ * Parsing/scanning (read source text and determine syntax shape): **done**. You should see the exact same *syntax errors* as in a TS5.8 invocation
+ * Commandline and `tsconfig.json` parsing: **mostly done**. Note that the entry point is slightly different (for now)
+ * Type resolution (resolve computed types to a concrete internal representation): **done**. You should see the same types as in TS5.8
+ * Type checking (check for problems in functions, classes, and statements): **done**. You should see the same errors, in the same locations, with the same messages, as TS 5.8
+    * Types printback in errors may display slightly differently; this is in progress
+ * JavaScript-specific inference and JS Doc: **not ready**
+ * JSX: **not ready**
+ * Declaration emit: **not ready**. Coming soon!
+ * Emit (JS output): **in progress**. `target: esnext` (minimal downleveling) is well-supported but other targets may have gaps
+ * Watch mode: **prototype** (watches the correct files and rebuilds, but doesn't do incremental rechecking)
+ * Build mode / project references: **not ready**
+ * Incremental build: **not ready**
+ * Language service (LSP): **prototype** only, expect minimal functionality (errors, hover, go to def). More features soon!
+   * ASCII files only for now
+ * API: **not ready**
+
+Definitions:
+
+ * **done** aka "believed done": We're not currently aware of any deficits or major left work to do. OK to log bugs
+ * **in progress**: currently being worked on; some features may work and some might not. OK to log panics, but nothing else please
+ * **prototype**: proof-of-concept only; do not log bugs
+ * **not ready**: either haven't even started yet, or far enough from ready that you shouldn't bother messing with it yet
+
+## Other Notes
+
+Long-term, we expect this repo is that its contents will be merged into `microsoft/TypeScript`.
+As a result, the repo and issue tracker for typescript-go will eventually be closed, so treat discussions/issues accordingly.
+
+For a list of intentional changes with respect to Typescript 5.7, see CHANGES.md.
 
 ## Contributing
 
