@@ -1,0 +1,39 @@
+//// [tests/cases/conformance/controlFlow/controlFlowComputedPropertyNames2.ts] ////
+
+=== controlFlowComputedPropertyNames2.ts ===
+// https://github.com/microsoft/TypeScript/issues/61389
+
+const arr: number[] = [1, 2, 3];
+>arr : Symbol(arr, Decl(controlFlowComputedPropertyNames2.ts, 2, 5))
+
+const idx: number = 2;
+>idx : Symbol(idx, Decl(controlFlowComputedPropertyNames2.ts, 3, 5))
+
+if (idx in arr) {
+>idx : Symbol(idx, Decl(controlFlowComputedPropertyNames2.ts, 3, 5))
+>arr : Symbol(arr, Decl(controlFlowComputedPropertyNames2.ts, 2, 5))
+
+  const x: number = arr[idx]; // ok
+>x : Symbol(x, Decl(controlFlowComputedPropertyNames2.ts, 5, 7))
+>arr : Symbol(arr, Decl(controlFlowComputedPropertyNames2.ts, 2, 5))
+>idx : Symbol(idx, Decl(controlFlowComputedPropertyNames2.ts, 3, 5))
+}
+
+const map: Record<string, number> = { a: 1 };
+>map : Symbol(map, Decl(controlFlowComputedPropertyNames2.ts, 8, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(controlFlowComputedPropertyNames2.ts, 8, 37))
+
+const key: string = "a";
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames2.ts, 9, 5))
+
+if (key in map) {
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames2.ts, 9, 5))
+>map : Symbol(map, Decl(controlFlowComputedPropertyNames2.ts, 8, 5))
+
+  const x: number = map[key]; // ok
+>x : Symbol(x, Decl(controlFlowComputedPropertyNames2.ts, 11, 7))
+>map : Symbol(map, Decl(controlFlowComputedPropertyNames2.ts, 8, 5))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames2.ts, 9, 5))
+}
+
