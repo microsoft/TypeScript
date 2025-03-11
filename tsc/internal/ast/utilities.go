@@ -13,8 +13,8 @@ import (
 // Atomic ids
 
 var (
-	nextNodeId   atomic.Uint32
-	nextSymbolId atomic.Uint32
+	nextNodeId   atomic.Uint64
+	nextSymbolId atomic.Uint64
 )
 
 func GetNodeId(node *Node) NodeId {

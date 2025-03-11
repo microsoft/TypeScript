@@ -1,6 +1,6 @@
 package ast
 
 type (
-	NodeId   uint32
-	SymbolId uint32
+	NodeId   uint64
+	SymbolId uint64
 )

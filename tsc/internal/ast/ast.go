@@ -175,7 +175,7 @@ type Node struct {
 	Kind   Kind
 	Flags  NodeFlags
 	Loc    core.TextRange
-	id     atomic.Uint32
+	id     atomic.Uint64
 	Parent *Node
 	data   nodeData
 }

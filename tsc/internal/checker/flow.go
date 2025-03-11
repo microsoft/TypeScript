@@ -1622,7 +1622,7 @@ func (c *Checker) writeFlowCacheKey(b *KeyBuilder, node *ast.Node, declaredType 
 		}
 		if flowContainer != nil {
 			b.WriteByte('@')
-			b.WriteInt(int(ast.GetNodeId(flowContainer)))
+			b.WriteNode(flowContainer)
 		}
 		return true
 	case ast.KindNonNullExpression, ast.KindParenthesizedExpression:
@@ -1656,7 +1656,7 @@ func (c *Checker) writeFlowCacheKey(b *KeyBuilder, node *ast.Node, declaredType 
 		}
 	case ast.KindObjectBindingPattern, ast.KindArrayBindingPattern, ast.KindFunctionDeclaration,
 		ast.KindFunctionExpression, ast.KindArrowFunction, ast.KindMethodDeclaration:
-		b.WriteInt(int(ast.GetNodeId(node)))
+		b.WriteNode(node)
 		b.WriteByte('#')
 		b.WriteType(declaredType)
 		return true
