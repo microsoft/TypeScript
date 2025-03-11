@@ -92,7 +92,7 @@ Definitions:
 Long-term, we expect this repo is that its contents will be merged into `microsoft/TypeScript`.
 As a result, the repo and issue tracker for typescript-go will eventually be closed, so treat discussions/issues accordingly.
 
-For a list of intentional changes with respect to Typescript 5.7, see CHANGES.md.
+For a list of intentional changes with respect to TypeScript 5.7, see CHANGES.md.
 
 ## Contributing
 
