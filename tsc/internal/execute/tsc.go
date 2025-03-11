@@ -49,7 +49,7 @@ func executeCommandLineWorker(sys System, cb cbType, commandLine *tsoptions.Pars
 		}
 
 		fileOrDirectory := tspath.NormalizePath(commandLine.CompilerOptions().Project)
-		if fileOrDirectory != "" || sys.FS().DirectoryExists(fileOrDirectory) {
+		if sys.FS().DirectoryExists(fileOrDirectory) {
 			configFileName = tspath.CombinePaths(fileOrDirectory, "tsconfig.json")
 			if !sys.FS().FileExists(configFileName) {
 				reportDiagnostic(ast.NewCompilerDiagnostic(diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, configFileName))

@@ -66,6 +66,38 @@ func TestTsc(t *testing.T) {
 			commandLineArgs: []string{"--lib", "es6 ", "first.ts"},
 		},
 		{
+			subScenario: "Project is empty string",
+			sys: newTestSys(FileMap{
+				"/home/src/workspaces/project/first.ts":      `export const a = 1`,
+				"/home/src/workspaces/project/tsconfig.json": `{ "compilerOptions": { "strict": true, "noEmit": true  } }`,
+			}, ""),
+			commandLineArgs: []string{},
+		},
+		{
+			subScenario: "Parse -p",
+			sys: newTestSys(FileMap{
+				"/home/src/workspaces/project/first.ts":      `export const a = 1`,
+				"/home/src/workspaces/project/tsconfig.json": `{ "compilerOptions": { "strict": true, "noEmit": true  } }`,
+			}, ""),
+			commandLineArgs: []string{"-p", "."},
+		},
+		{
+			subScenario: "Parse -p with path to tsconfig file",
+			sys: newTestSys(FileMap{
+				"/home/src/workspaces/project/first.ts":      `export const a = 1`,
+				"/home/src/workspaces/project/tsconfig.json": `{ "compilerOptions": { "strict": true, "noEmit": true } }`,
+			}, ""),
+			commandLineArgs: []string{"-p", "/home/src/workspaces/project/tsconfig.json"},
+		},
+		{
+			subScenario: "Parse -p with path to tsconfig folder",
+			sys: newTestSys(FileMap{
+				"/home/src/workspaces/project/first.ts":      `export const a = 1`,
+				"/home/src/workspaces/project/tsconfig.json": `{ "compilerOptions": { "strict": true, "noEmit": true  } }`,
+			}, ""),
+			commandLineArgs: []string{"-p", "/home/src/workspaces/project"},
+		},
+		{
 			subScenario:     "Parse enum type options",
 			sys:             newTestSys(nil, ""),
 			commandLineArgs: []string{"--moduleResolution", "nodenext ", "first.ts", "--module", "nodenext", "--target", "esnext", "--moduleDetection", "auto", "--jsx", "react", "--newLine", "crlf"},
