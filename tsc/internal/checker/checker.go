@@ -12199,7 +12199,7 @@ func (c *Checker) hasEmptyObjectIntersection(t *Type) bool {
 }
 
 func (c *Checker) isExactOptionalPropertyMismatch(source *Type, target *Type) bool {
-	return source != nil && target != nil && c.maybeTypeOfKind(source, TypeFlagsUndefined) && !!c.containsMissingType(target)
+	return source != nil && target != nil && c.maybeTypeOfKind(source, TypeFlagsUndefined) && c.containsMissingType(target)
 }
 
 func (c *Checker) checkReferenceExpression(expr *ast.Node, invalidReferenceMessage *diagnostics.Message, invalidOptionalChainMessage *diagnostics.Message) bool {
