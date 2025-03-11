@@ -947,6 +947,17 @@ var E;
 })(E || (exports.E = E = {}));
 E.A;`,
 		},
+		{
+			title: "Identifier#4 (preserve location)",
+			input: `import { a } from "other";
+x ||
+  a`,
+			output: `"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const other_1 = require("other");
+x ||
+    other_1.a;`,
+		},
 
 		{
 			title: "Other",

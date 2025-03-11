@@ -1910,6 +1910,7 @@ func (tx *CommonJSModuleTransformer) visitExpressionIdentifier(node *ast.Identif
 				ast.NodeFlagsNone,
 			)
 			tx.emitContext.AssignCommentAndSourceMapRanges(reference, node)
+			reference.Loc = node.Loc
 			return reference
 		}
 
@@ -1923,6 +1924,7 @@ func (tx *CommonJSModuleTransformer) visitExpressionIdentifier(node *ast.Identif
 					ast.NodeFlagsNone,
 				)
 				tx.emitContext.AssignCommentAndSourceMapRanges(reference, node)
+				reference.Loc = node.Loc
 				return reference
 			}
 			if ast.IsImportSpecifier(importDeclaration) {
@@ -1946,6 +1948,7 @@ func (tx *CommonJSModuleTransformer) visitExpressionIdentifier(node *ast.Identif
 					)
 				}
 				tx.emitContext.AssignCommentAndSourceMapRanges(reference, node)
+				reference.Loc = node.Loc
 				return reference
 			}
 		}
