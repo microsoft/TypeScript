@@ -1294,7 +1294,7 @@ func (p *Printer) emitTypeParameters(parentNode *ast.Node, nodes *ast.TypeParame
 		return
 	}
 
-	p.emitList((*Printer).emitTypeParameterNode, parentNode, nodes, LFTypeParameters|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone))
+	p.emitList((*Printer).emitTypeParameterNode, parentNode, nodes, LFTypeParameters|core.IfElse(ast.IsArrowFunction(parentNode) /*p.shouldAllowTrailingComma(parentNode, nodes)*/, LFAllowTrailingComma, LFNone)) // TODO: preserve trailing comma after Strada migration
 }
 
 func (p *Printer) emitTypeAnnotation(node *ast.TypeNode) {
@@ -1320,7 +1320,7 @@ func (p *Printer) emitInitializer(node *ast.Expression, equalTokenPos int, conte
 
 func (p *Printer) emitParameters(parentNode *ast.Node, parameters *ast.ParameterList) {
 	p.generateAllNames(parameters)
-	p.emitList((*Printer).emitParameterNode, parentNode, parameters, LFParameters|core.IfElse(p.shouldAllowTrailingComma(parentNode, parameters), LFAllowTrailingComma, LFNone))
+	p.emitList((*Printer).emitParameterNode, parentNode, parameters, LFParameters /*|core.IfElse(p.shouldAllowTrailingComma(parentNode, parameters), LFAllowTrailingComma, LFNone)*/) // TODO: preserve trailing comma after Strada migration
 }
 
 func canEmitSimpleArrowHead(parentNode *ast.Node, parameters *ast.ParameterList) bool {
@@ -1656,7 +1656,7 @@ func (p *Printer) emitTypeArguments(parentNode *ast.Node, nodes *ast.TypeArgumen
 	if nodes == nil {
 		return
 	}
-	p.emitList((*Printer).emitTypeArgument, parentNode, nodes, LFTypeArguments|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone) /*, typeArgumentParenthesizerRuleSelector */)
+	p.emitList((*Printer).emitTypeArgument, parentNode, nodes, LFTypeArguments /*|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone)*/) // TODO: preserve trailing comma after Strada migration
 }
 
 func (p *Printer) emitTypeReference(node *ast.TypeReferenceNode) {
