@@ -53,7 +53,7 @@ To try the prototype LSP experience:
 
 This will launch a new VS Code instance which uses the Corsa LS as the backend. If correctly set up, you should see "typescript-go" as an option in the Output pane:
 
-![LSP Prototype Screenshot](ls-screenshot.png)
+![LSP Prototype Screenshot](.github/ls-screenshot.png)
 
 
 ## What Works So Far?
