@@ -2381,3 +2381,45 @@ func TestNameGeneration(t *testing.T) {
 	parsetestutil.MarkSyntheticRecursive(file)
 	emittestutil.CheckEmit(t, ec, file.AsSourceFile(), "var _a;\nfunction f() {\n    var _a;\n}")
 }
+
+func TestNoTrailingCommaAfterTransform(t *testing.T) {
+	t.Parallel()
+
+	file := parsetestutil.ParseTypeScript("[a!]", false /*jsx*/)
+	emitContext := printer.NewEmitContext()
+
+	var visitor *ast.NodeVisitor
+	visitor = emitContext.NewNodeVisitor(func(node *ast.Node) *ast.Node {
+		switch node.Kind {
+		case ast.KindNonNullExpression:
+			node = node.AsNonNullExpression().Expression
+		default:
+			node = node.VisitEachChild(visitor)
+		}
+		return node
+	})
+	file = visitor.VisitSourceFile(file)
+
+	emittestutil.CheckEmit(t, emitContext, file.AsSourceFile(), "[a];")
+}
+
+func TestTrailingCommaAfterTransform(t *testing.T) {
+	t.Parallel()
+
+	file := parsetestutil.ParseTypeScript("[a!,]", false /*jsx*/)
+	emitContext := printer.NewEmitContext()
+
+	var visitor *ast.NodeVisitor
+	visitor = emitContext.NewNodeVisitor(func(node *ast.Node) *ast.Node {
+		switch node.Kind {
+		case ast.KindNonNullExpression:
+			node = node.AsNonNullExpression().Expression
+		default:
+			node = node.VisitEachChild(visitor)
+		}
+		return node
+	})
+	file = visitor.VisitSourceFile(file)
+
+	emittestutil.CheckEmit(t, emitContext, file.AsSourceFile(), "[a,];")
+}

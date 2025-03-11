@@ -197,12 +197,11 @@ func (n *Node) DeclarationData() *DeclarationBase         { return n.data.Declar
 func (n *Node) ExportableData() *ExportableBase           { return n.data.ExportableData() }
 func (n *Node) LocalsContainerData() *LocalsContainerBase { return n.data.LocalsContainerData() }
 func (n *Node) FunctionLikeData() *FunctionLikeBase       { return n.data.FunctionLikeData() }
-func (n *Node) Parameters() []*ParameterDeclarationNode {
-	return n.data.FunctionLikeData().Parameters.Nodes
-}
-func (n *Node) ClassLikeData() *ClassLikeBase     { return n.data.ClassLikeData() }
-func (n *Node) BodyData() *BodyBase               { return n.data.BodyData() }
-func (n *Node) LiteralLikeData() *LiteralLikeBase { return n.data.LiteralLikeData() }
+func (n *Node) ParameterList() *ParameterList             { return n.data.FunctionLikeData().Parameters }
+func (n *Node) Parameters() []*ParameterDeclarationNode   { return n.ParameterList().Nodes }
+func (n *Node) ClassLikeData() *ClassLikeBase             { return n.data.ClassLikeData() }
+func (n *Node) BodyData() *BodyBase                       { return n.data.BodyData() }
+func (n *Node) LiteralLikeData() *LiteralLikeBase         { return n.data.LiteralLikeData() }
 func (n *Node) TemplateLiteralLikeData() *TemplateLiteralLikeBase {
 	return n.data.TemplateLiteralLikeData()
 }

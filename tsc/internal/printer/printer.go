@@ -4216,7 +4216,7 @@ func (p *Printer) emitListRange(emit func(p *Printer, node *ast.Node), parentNod
 			end = length
 		}
 
-		p.emitListItems(emit, parentNode, children.Nodes[start:end], format, children.HasTrailingComma(), children.Loc)
+		p.emitListItems(emit, parentNode, children.Nodes[start:end], format, p.hasTrailingComma(parentNode, children), children.Loc)
 	}
 
 	if p.OnAfterEmitNodeList != nil {
@@ -4229,6 +4229,82 @@ func (p *Printer) emitListRange(emit func(p *Printer, node *ast.Node), parentNod
 		}
 		p.writePunctuation(getClosingBracket(format))
 	}
+}
+
+func (p *Printer) hasTrailingComma(parentNode *ast.Node, children *ast.NodeList) bool {
+	// NodeList.HasTrailingComma() is unreliable on transformed nodes as some nodes may have been removed. In the event
+	// we believe we may need to emit a trailing comma, we must first look to the respective node list on the original
+	// node first.
+	if !children.HasTrailingComma() {
+		return false
+	}
+
+	originalParent := p.emitContext.MostOriginal(parentNode)
+	if originalParent == parentNode {
+		// if this node is the original node, we can trust the result
+		return true
+	}
+
+	if originalParent.Kind != parentNode.Kind {
+		// if the original node is some other kind of node, we cannot correlate the list
+		return false
+	}
+
+	// find the respective node list on the original parent
+	originalList := children
+	switch originalParent.Kind {
+	case ast.KindObjectLiteralExpression:
+		originalList = originalParent.AsObjectLiteralExpression().Properties
+	case ast.KindArrayLiteralExpression:
+		originalList = originalParent.AsArrayLiteralExpression().Elements
+	case ast.KindCallExpression, ast.KindNewExpression:
+		switch children {
+		case parentNode.TypeArgumentList():
+			originalList = originalParent.TypeArgumentList()
+		case parentNode.ArgumentList():
+			originalList = originalParent.ArgumentList()
+		}
+	case ast.KindConstructor,
+		ast.KindMethodDeclaration,
+		ast.KindGetAccessor,
+		ast.KindSetAccessor,
+		ast.KindFunctionDeclaration,
+		ast.KindFunctionExpression,
+		ast.KindArrowFunction,
+		ast.KindFunctionType,
+		ast.KindConstructorType,
+		ast.KindCallSignature,
+		ast.KindConstructSignature:
+		switch children {
+		case parentNode.TypeParameterList():
+			originalList = originalParent.TypeParameterList()
+		case parentNode.ParameterList():
+			originalList = originalParent.ParameterList()
+		}
+	case ast.KindClassDeclaration, ast.KindClassExpression, ast.KindInterfaceDeclaration, ast.KindTypeAliasDeclaration:
+		switch children {
+		case parentNode.TypeParameterList():
+			originalList = originalParent.TypeParameterList()
+		}
+	case ast.KindObjectBindingPattern, ast.KindArrayBindingPattern:
+		switch children {
+		case parentNode.AsBindingPattern().Elements:
+			originalList = originalParent.AsBindingPattern().Elements
+		}
+	case ast.KindNamedImports:
+		originalList = originalParent.AsNamedImports().Elements
+	case ast.KindNamedExports:
+		originalList = originalParent.AsNamedImports().Elements
+	case ast.KindImportAttributes:
+		originalList = originalParent.AsImportAttributes().Attributes
+	}
+
+	// if we have the original list, we can use it's result.
+	if originalList != nil {
+		return originalList.HasTrailingComma()
+	}
+
+	return false
 }
 
 func (p *Printer) writeDelimiter(format ListFormat) {
