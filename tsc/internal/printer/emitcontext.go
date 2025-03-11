@@ -389,7 +389,7 @@ func (c *EmitContext) newGeneratedIdentifier(kind GeneratedIdentifierFlags, text
 		case ast.IsMemberName(node):
 			text = node.Text()
 		default:
-			text = fmt.Sprintf("(generated@%v)", ast.GetNodeId(node))
+			text = fmt.Sprintf("(generated@%v)", ast.GetNodeId(c.getNodeForGeneratedNameWorker(node, id)))
 		}
 		text = FormatGeneratedName(false /*privateName*/, options.Prefix, text, options.Suffix)
 	}
@@ -445,7 +445,7 @@ func (c *EmitContext) newGeneratedPrivateIdentifier(kind GeneratedIdentifierFlag
 		case ast.IsMemberName(node):
 			text = node.Text()
 		default:
-			text = fmt.Sprintf("(generated@%v)", ast.GetNodeId(node))
+			text = fmt.Sprintf("(generated@%v)", ast.GetNodeId(c.getNodeForGeneratedNameWorker(node, id)))
 		}
 		text = FormatGeneratedName(true /*privateName*/, options.Prefix, text, options.Suffix)
 	} else if !strings.HasPrefix(text, "#") {
@@ -500,24 +500,28 @@ func (c *EmitContext) GetAutoGenerateInfo(name *ast.MemberName) *AutoGenerateInf
 
 // Walks the associated AutoGenerateInfo entries of a name to find the root Nopde from which the name should be generated.
 func (c *EmitContext) GetNodeForGeneratedName(name *ast.MemberName) *ast.Node {
-	node := name
 	if autoGenerate := c.autoGenerate[name]; autoGenerate != nil && autoGenerate.Flags.IsNode() {
-		autoGenerateId := autoGenerate.Id
-		source := autoGenerate.Node
-		for source != nil {
-			node = source
-			if !ast.IsMemberName(node) {
-				break
-			}
+		return c.getNodeForGeneratedNameWorker(autoGenerate.Node, autoGenerate.Id)
+	}
+	return name
+}
 
+func (c *EmitContext) getNodeForGeneratedNameWorker(node *ast.Node, autoGenerateId AutoGenerateId) *ast.Node {
+	original := c.Original(node)
+	for original != nil {
+		node = original
+		if ast.IsMemberName(node) {
 			// if "node" is a different generated name (having a different "autoGenerateId"), use it and stop traversing.
 			autoGenerate := c.autoGenerate[node]
-			if autoGenerate == nil || !autoGenerate.Flags.IsNode() || autoGenerate.Id != autoGenerateId {
+			if autoGenerate == nil || autoGenerate.Flags.IsNode() && autoGenerate.Id != autoGenerateId {
 				break
 			}
-
-			source = autoGenerate.Node
+			if autoGenerate.Flags.IsNode() {
+				original = autoGenerate.Node
+				continue
+			}
 		}
+		original = c.Original(node)
 	}
 	return node
 }
