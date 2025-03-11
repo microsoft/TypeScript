@@ -4294,7 +4294,7 @@ func (p *Printer) hasTrailingComma(parentNode *ast.Node, children *ast.NodeList)
 	case ast.KindNamedImports:
 		originalList = originalParent.AsNamedImports().Elements
 	case ast.KindNamedExports:
-		originalList = originalParent.AsNamedImports().Elements
+		originalList = originalParent.AsNamedExports().Elements
 	case ast.KindImportAttributes:
 		originalList = originalParent.AsImportAttributes().Attributes
 	}
