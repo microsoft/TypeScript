@@ -226,6 +226,7 @@ func main() {
 	totalTime := time.Since(startTime)
 
 	var memStats runtime.MemStats
+	// GC must be called twice to allow things to settle.
 	runtime.GC()
 	runtime.GC()
 	runtime.ReadMemStats(&memStats)
