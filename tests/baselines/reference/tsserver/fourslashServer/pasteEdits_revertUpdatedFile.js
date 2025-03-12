@@ -386,6 +386,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "11"
           },
           {
+            "name": "Add",
+            "kind": "type",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "any",
             "kind": "keyword",
             "kindModifiers": "",
@@ -608,6 +614,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "Divide",
+            "kind": "type",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "Error",
             "kind": "var",
             "kindModifiers": "declare",
@@ -764,6 +776,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "Integer",
+            "kind": "type",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "Intl",
             "kind": "module",
             "kindModifiers": "declare",
@@ -795,6 +813,12 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "MethodDecorator",
+            "kind": "type",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Multiply",
             "kind": "type",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -1042,6 +1066,12 @@ Info seq  [hh:mm:ss:mss] response:
           {
             "name": "StringConstructor",
             "kind": "interface",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Subtract",
+            "kind": "type",
             "kindModifiers": "declare",
             "sortText": "15"
           },
