@@ -3,17 +3,17 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+a.js(2,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new(effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
-+a.js(5,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new(effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
++a.js(2,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
++a.js(5,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
 +
 +
 +==== a.js (2 errors) ====
 +    /** @typedef {{ endTime: number, screenshots: number}} A.<b>*/
 +    Animation.AnimationModel.ScreenshotCapture.Request;
 +              ~~~~~~~~~~~~~~
-+!!! error TS2339: Property 'AnimationModel' does not exist on type '{ new(effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
++!!! error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
 +    
 +    /** @typedef {{ endTime: number, screenshots: !B.<string>}} */
 +    Animation.AnimationModel.ScreenshotCapture.Request;
 +              ~~~~~~~~~~~~~~
-+!!! error TS2339: Property 'AnimationModel' does not exist on type '{ new(effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
++!!! error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.

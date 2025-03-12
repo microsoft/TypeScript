@@ -3,7 +3,7 @@
 @@= skipped -0, +0 lines =@@
  typeofClass.ts(8,4): error TS2576: Property 'bar' does not exist on type 'K'. Did you mean to access the static member 'K.bar' instead?
 -typeofClass.ts(10,4): error TS2339: Property 'foo' does not exist on type 'typeof K'.
-+typeofClass.ts(10,4): error TS2339: Property 'foo' does not exist on type '{ new(): K; bar: string; prototype: K; }'.
++typeofClass.ts(10,4): error TS2339: Property 'foo' does not exist on type '{ new (): K; bar: string; prototype: K; }'.
  
  
  ==== typeofClass.ts (2 errors) ====
@@ -12,5 +12,5 @@
      k2.foo;
         ~~~
 -!!! error TS2339: Property 'foo' does not exist on type 'typeof K'.
-+!!! error TS2339: Property 'foo' does not exist on type '{ new(): K; bar: string; prototype: K; }'.
++!!! error TS2339: Property 'foo' does not exist on type '{ new (): K; bar: string; prototype: K; }'.
      k2.bar;

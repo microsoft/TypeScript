@@ -1,8 +1,8 @@
-grammarAmbiguities1.ts(8,3): error TS2365: Operator '<' cannot be applied to types '<T, U>(x: any) => any' and '{ new(): A; prototype: A; }'.
-grammarAmbiguities1.ts(8,10): error TS2365: Operator '>' cannot be applied to types '{ new(): B; prototype: B; }' and 'number'.
+grammarAmbiguities1.ts(8,3): error TS2365: Operator '<' cannot be applied to types '<T, U>(x: any) => any' and '{ new (): A; prototype: A; }'.
+grammarAmbiguities1.ts(8,10): error TS2365: Operator '>' cannot be applied to types '{ new (): B; prototype: B; }' and 'number'.
 grammarAmbiguities1.ts(8,10): error TS2554: Expected 1 arguments, but got 2.
-grammarAmbiguities1.ts(9,3): error TS2365: Operator '<' cannot be applied to types '<T, U>(x: any) => any' and '{ new(): A; prototype: A; }'.
-grammarAmbiguities1.ts(9,10): error TS2365: Operator '>' cannot be applied to types '{ new(): B; prototype: B; }' and 'number'.
+grammarAmbiguities1.ts(9,3): error TS2365: Operator '<' cannot be applied to types '<T, U>(x: any) => any' and '{ new (): A; prototype: A; }'.
+grammarAmbiguities1.ts(9,10): error TS2365: Operator '>' cannot be applied to types '{ new (): B; prototype: B; }' and 'number'.
 grammarAmbiguities1.ts(9,10): error TS2554: Expected 1 arguments, but got 2.
 
 
@@ -16,16 +16,16 @@ grammarAmbiguities1.ts(9,10): error TS2554: Expected 1 arguments, but got 2.
     f(g<A, B>(7));
     f(g < A, B > 7);
       ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types '<T, U>(x: any) => any' and '{ new(): A; prototype: A; }'.
+!!! error TS2365: Operator '<' cannot be applied to types '<T, U>(x: any) => any' and '{ new (): A; prototype: A; }'.
              ~~~~~
-!!! error TS2365: Operator '>' cannot be applied to types '{ new(): B; prototype: B; }' and 'number'.
+!!! error TS2365: Operator '>' cannot be applied to types '{ new (): B; prototype: B; }' and 'number'.
              ~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     f(g < A, B > +(7));
       ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types '<T, U>(x: any) => any' and '{ new(): A; prototype: A; }'.
+!!! error TS2365: Operator '<' cannot be applied to types '<T, U>(x: any) => any' and '{ new (): A; prototype: A; }'.
              ~~~~~~~~
-!!! error TS2365: Operator '>' cannot be applied to types '{ new(): B; prototype: B; }' and 'number'.
+!!! error TS2365: Operator '>' cannot be applied to types '{ new (): B; prototype: B; }' and 'number'.
              ~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     

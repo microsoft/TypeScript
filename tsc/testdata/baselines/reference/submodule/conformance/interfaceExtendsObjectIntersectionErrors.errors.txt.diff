@@ -14,7 +14,7 @@
  interfaceExtendsObjectIntersectionErrors.ts(20,38): error TS2416: Property 'c' in type 'C5' is not assignable to the same property in base type 'T5'.
    Type 'number' is not assignable to type 'string'.
 -interfaceExtendsObjectIntersectionErrors.ts(30,11): error TS2430: Interface 'I10' incorrectly extends interface 'typeof CX'.
-+interfaceExtendsObjectIntersectionErrors.ts(30,11): error TS2430: Interface 'I10' incorrectly extends interface '{ new(): CX; a: string; prototype: CX; }'.
++interfaceExtendsObjectIntersectionErrors.ts(30,11): error TS2430: Interface 'I10' incorrectly extends interface '{ new (): CX; a: string; prototype: CX; }'.
    Types of property 'a' are incompatible.
      Type 'number' is not assignable to type 'string'.
 -interfaceExtendsObjectIntersectionErrors.ts(31,11): error TS2430: Interface 'I11' incorrectly extends interface 'typeof EX'.
@@ -40,7 +40,7 @@
      interface I10 extends TCX { a: number }
                ~~~
 -!!! error TS2430: Interface 'I10' incorrectly extends interface 'typeof CX'.
-+!!! error TS2430: Interface 'I10' incorrectly extends interface '{ new(): CX; a: string; prototype: CX; }'.
++!!! error TS2430: Interface 'I10' incorrectly extends interface '{ new (): CX; a: string; prototype: CX; }'.
  !!! error TS2430:   Types of property 'a' are incompatible.
  !!! error TS2430:     Type 'number' is not assignable to type 'string'.
      interface I11 extends TEX { C: string }

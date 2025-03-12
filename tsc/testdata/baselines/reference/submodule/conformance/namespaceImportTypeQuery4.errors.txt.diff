@@ -3,7 +3,7 @@
 @@= skipped -0, +0 lines =@@
  /a.ts(1,24): error TS2307: Cannot find module './z' or its corresponding type declarations.
 -/b.ts(3,3): error TS2353: Object literal may only specify known properties, and 'A' does not exist in type 'typeof import("/a")'.
-+/b.ts(3,3): error TS2353: Object literal may only specify known properties, and 'A' does not exist in type '{ B: { new(): B; prototype: B; }; }'.
++/b.ts(3,3): error TS2353: Object literal may only specify known properties, and 'A' does not exist in type '{ B: { new (): B; prototype: B; }; }'.
  
  
  ==== /a.ts (1 errors) ====
@@ -12,7 +12,7 @@
        A: undefined as any, // error
        ~
 -!!! error TS2353: Object literal may only specify known properties, and 'A' does not exist in type 'typeof import("/a")'.
-+!!! error TS2353: Object literal may only specify known properties, and 'A' does not exist in type '{ B: { new(): B; prototype: B; }; }'.
++!!! error TS2353: Object literal may only specify known properties, and 'A' does not exist in type '{ B: { new (): B; prototype: B; }; }'.
        B: undefined as any,
      }
      

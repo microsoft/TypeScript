@@ -2,7 +2,7 @@
 +++ new.staticInstanceResolution4.errors.txt
 @@= skipped -0, +0 lines =@@
 -staticInstanceResolution4.ts(5,3): error TS2339: Property 'foo' does not exist on type 'typeof A'.
-+staticInstanceResolution4.ts(5,3): error TS2339: Property 'foo' does not exist on type '{ new(): A; prototype: A; }'.
++staticInstanceResolution4.ts(5,3): error TS2339: Property 'foo' does not exist on type '{ new (): A; prototype: A; }'.
  
  
  ==== staticInstanceResolution4.ts (1 errors) ====
@@ -11,4 +11,4 @@
      A.foo();
        ~~~
 -!!! error TS2339: Property 'foo' does not exist on type 'typeof A'.
-+!!! error TS2339: Property 'foo' does not exist on type '{ new(): A; prototype: A; }'.
++!!! error TS2339: Property 'foo' does not exist on type '{ new (): A; prototype: A; }'.

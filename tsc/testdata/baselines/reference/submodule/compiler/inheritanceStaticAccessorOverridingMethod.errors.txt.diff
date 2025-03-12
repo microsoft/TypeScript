@@ -2,7 +2,7 @@
 +++ new.inheritanceStaticAccessorOverridingMethod.errors.txt
 @@= skipped -0, +0 lines =@@
 -inheritanceStaticAccessorOverridingMethod.ts(7,7): error TS2417: Class static side 'typeof b' incorrectly extends base class static side 'typeof a'.
-+inheritanceStaticAccessorOverridingMethod.ts(7,7): error TS2417: Class static side '{ new(): b; x: string; prototype: b; }' incorrectly extends base class static side '{ x: () => string; prototype: a; }'.
++inheritanceStaticAccessorOverridingMethod.ts(7,7): error TS2417: Class static side '{ new (): b; x: string; prototype: b; }' incorrectly extends base class static side '{ x: () => string; prototype: a; }'.
    Types of property 'x' are incompatible.
      Type 'string' is not assignable to type '() => string'.
  
@@ -11,7 +11,7 @@
      class b extends a {
            ~
 -!!! error TS2417: Class static side 'typeof b' incorrectly extends base class static side 'typeof a'.
-+!!! error TS2417: Class static side '{ new(): b; x: string; prototype: b; }' incorrectly extends base class static side '{ x: () => string; prototype: a; }'.
++!!! error TS2417: Class static side '{ new (): b; x: string; prototype: b; }' incorrectly extends base class static side '{ x: () => string; prototype: a; }'.
  !!! error TS2417:   Types of property 'x' are incompatible.
  !!! error TS2417:     Type 'string' is not assignable to type '() => string'.
          static get x() {

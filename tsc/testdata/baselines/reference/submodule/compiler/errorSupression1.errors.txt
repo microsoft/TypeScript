@@ -1,4 +1,4 @@
-errorSupression1.ts(3,15): error TS2339: Property 'b' does not exist on type '{ new(): Foo; bar: () => string; prototype: Foo; }'.
+errorSupression1.ts(3,15): error TS2339: Property 'b' does not exist on type '{ new (): Foo; bar: () => string; prototype: Foo; }'.
 
 
 ==== errorSupression1.ts (1 errors) ====
@@ -6,7 +6,7 @@ errorSupression1.ts(3,15): error TS2339: Property 'b' does not exist on type '{ 
     
     var baz = Foo.b;
                   ~
-!!! error TS2339: Property 'b' does not exist on type '{ new(): Foo; bar: () => string; prototype: Foo; }'.
+!!! error TS2339: Property 'b' does not exist on type '{ new (): Foo; bar: () => string; prototype: Foo; }'.
       // Foo.b won't bind. 
     baz.concat("y");
     

@@ -3,10 +3,10 @@
 @@= skipped -0, +0 lines =@@
  objectCreationOfElementAccessExpression.ts(53,25): error TS2538: Type 'Cookie' cannot be used as an index type.
 -objectCreationOfElementAccessExpression.ts(53,63): error TS2348: Value of type 'typeof Cookie' is not callable. Did you mean to include 'new'?
-+objectCreationOfElementAccessExpression.ts(53,63): error TS2348: Value of type '{ new(flavor: string, isGlutenFree: boolean): Cookie; prototype: Cookie; }' is not callable. Did you mean to include 'new'?
++objectCreationOfElementAccessExpression.ts(53,63): error TS2348: Value of type '{ new (flavor: string, isGlutenFree: boolean): Cookie; prototype: Cookie; }' is not callable. Did you mean to include 'new'?
  objectCreationOfElementAccessExpression.ts(54,41): error TS2538: Type 'Cookie' cannot be used as an index type.
 -objectCreationOfElementAccessExpression.ts(54,79): error TS2348: Value of type 'typeof Cookie' is not callable. Did you mean to include 'new'?
-+objectCreationOfElementAccessExpression.ts(54,79): error TS2348: Value of type '{ new(flavor: string, isGlutenFree: boolean): Cookie; prototype: Cookie; }' is not callable. Did you mean to include 'new'?
++objectCreationOfElementAccessExpression.ts(54,79): error TS2348: Value of type '{ new (flavor: string, isGlutenFree: boolean): Cookie; prototype: Cookie; }' is not callable. Did you mean to include 'new'?
  
  
  ==== objectCreationOfElementAccessExpression.ts (4 errors) ====
@@ -15,11 +15,11 @@
  !!! error TS2538: Type 'Cookie' cannot be used as an index type.
                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2348: Value of type 'typeof Cookie' is not callable. Did you mean to include 'new'?
-+!!! error TS2348: Value of type '{ new(flavor: string, isGlutenFree: boolean): Cookie; prototype: Cookie; }' is not callable. Did you mean to include 'new'?
++!!! error TS2348: Value of type '{ new (flavor: string, isGlutenFree: boolean): Cookie; prototype: Cookie; }' is not callable. Did you mean to include 'new'?
      var foods2: MonsterFood[] = new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)];
                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  !!! error TS2538: Type 'Cookie' cannot be used as an index type.
                                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2348: Value of type 'typeof Cookie' is not callable. Did you mean to include 'new'?
-+!!! error TS2348: Value of type '{ new(flavor: string, isGlutenFree: boolean): Cookie; prototype: Cookie; }' is not callable. Did you mean to include 'new'?
++!!! error TS2348: Value of type '{ new (flavor: string, isGlutenFree: boolean): Cookie; prototype: Cookie; }' is not callable. Did you mean to include 'new'?
      

@@ -14,14 +14,14 @@
 -main.ts(34,8): error TS1259: Module '"function-module"' can only be default-imported using the 'esModuleInterop' flag
 -main.ts(35,8): error TS1259: Module '"class"' can only be default-imported using the 'esModuleInterop' flag
 -main.ts(36,8): error TS1259: Module '"class-module"' can only be default-imported using the 'esModuleInterop' flag
-+main.ts(23,4): error TS2339: Property 'a' does not exist on type '{ new(): Foo; prototype: Foo; }'.
++main.ts(23,4): error TS2339: Property 'a' does not exist on type '{ new (): Foo; prototype: Foo; }'.
  main.ts(39,21): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
  main.ts(45,21): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
  main.ts(47,21): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
  main.ts(50,1): error TS2693: 'y1' only refers to a type, but is being used as a value here.
  main.ts(56,4): error TS2339: Property 'a' does not exist on type '() => any'.
 -main.ts(58,4): error TS2339: Property 'a' does not exist on type 'typeof Foo'.
-+main.ts(58,4): error TS2339: Property 'a' does not exist on type '{ new(): Foo; prototype: Foo; }'.
++main.ts(58,4): error TS2339: Property 'a' does not exist on type '{ new (): Foo; prototype: Foo; }'.
  main.ts(62,10): error TS2305: Module '"interface"' has no exported member 'a'.
  main.ts(62,25): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
  main.ts(68,10): error TS2305: Module '"function"' has no exported member 'a'.
@@ -39,7 +39,7 @@
      z9.a;
         ~
 -!!! error TS2339: Property 'a' does not exist on type 'typeof Foo'.
-+!!! error TS2339: Property 'a' does not exist on type '{ new(): Foo; prototype: Foo; }'.
++!!! error TS2339: Property 'a' does not exist on type '{ new (): Foo; prototype: Foo; }'.
      z0.a;
      
      // default import
@@ -91,7 +91,7 @@
      y9.a;
         ~
 -!!! error TS2339: Property 'a' does not exist on type 'typeof Foo'.
-+!!! error TS2339: Property 'a' does not exist on type '{ new(): Foo; prototype: Foo; }'.
++!!! error TS2339: Property 'a' does not exist on type '{ new (): Foo; prototype: Foo; }'.
      y0.a;
      
      // named import

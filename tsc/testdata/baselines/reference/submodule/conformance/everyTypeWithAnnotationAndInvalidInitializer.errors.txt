@@ -16,7 +16,7 @@ everyTypeWithAnnotationAndInvalidInitializer.ts(47,5): error TS2322: Type '(x: n
   Types of parameters 'x' and 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
 everyTypeWithAnnotationAndInvalidInitializer.ts(48,32): error TS2322: Type 'string' is not assignable to type 'number'.
-everyTypeWithAnnotationAndInvalidInitializer.ts(50,5): error TS2719: Type '{ A: { new(): A; prototype: A; }; F2: (x: number) => string; }' is not assignable to type '{ A: { new(): A; prototype: A; }; F2: (x: number) => string; }'. Two different types with this name exist, but they are unrelated.
+everyTypeWithAnnotationAndInvalidInitializer.ts(50,5): error TS2719: Type '{ A: { new (): A; prototype: A; }; F2: (x: number) => string; }' is not assignable to type '{ A: { new (): A; prototype: A; }; F2: (x: number) => string; }'. Two different types with this name exist, but they are unrelated.
   The types returned by 'new A()' are incompatible between these types.
     Property 'name' is missing in type 'A' but required in type 'A'.
 everyTypeWithAnnotationAndInvalidInitializer.ts(51,5): error TS2741: Property 'name' is missing in type 'A' but required in type 'A'.
@@ -110,7 +110,7 @@ everyTypeWithAnnotationAndInvalidInitializer.ts(52,5): error TS2322: Type '(x: n
     
     var aModule: typeof M = N;
         ~~~~~~~
-!!! error TS2719: Type '{ A: { new(): A; prototype: A; }; F2: (x: number) => string; }' is not assignable to type '{ A: { new(): A; prototype: A; }; F2: (x: number) => string; }'. Two different types with this name exist, but they are unrelated.
+!!! error TS2719: Type '{ A: { new (): A; prototype: A; }; F2: (x: number) => string; }' is not assignable to type '{ A: { new (): A; prototype: A; }; F2: (x: number) => string; }'. Two different types with this name exist, but they are unrelated.
 !!! error TS2719:   The types returned by 'new A()' are incompatible between these types.
 !!! error TS2719:     Property 'name' is missing in type 'A' but required in type 'A'.
 !!! related TS2728 everyTypeWithAnnotationAndInvalidInitializer.ts:20:9: 'name' is declared here.

@@ -4,7 +4,7 @@
 -<no content>
 @@= skipped --1, +1 lines =@@
 +foo.js(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-+foo.js(4,10): error TS2339: Property 'b' does not exist on type '{ new(): A; prototype: A; }'.
++foo.js(4,10): error TS2339: Property 'b' does not exist on type '{ new (): A; prototype: A; }'.
 +
 +
 +==== foo.js (2 errors) ====
@@ -15,7 +15,7 @@
 +      return {
 +        c: A.b = 1,
 +             ~
-+!!! error TS2339: Property 'b' does not exist on type '{ new(): A; prototype: A; }'.
++!!! error TS2339: Property 'b' does not exist on type '{ new (): A; prototype: A; }'.
 +      }
 +    };
 +    

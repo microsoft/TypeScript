@@ -1,5 +1,5 @@
 scopeCheckInsideStaticMethod1.ts(6,7): error TS2304: Cannot find name 'v'.
-scopeCheckInsideStaticMethod1.ts(8,12): error TS2339: Property 'p' does not exist on type '{ new(): C; s: any; b: () => void; prototype: C; }'.
+scopeCheckInsideStaticMethod1.ts(8,12): error TS2339: Property 'p' does not exist on type '{ new (): C; s: any; b: () => void; prototype: C; }'.
 
 
 ==== scopeCheckInsideStaticMethod1.ts (2 errors) ====
@@ -14,6 +14,6 @@ scopeCheckInsideStaticMethod1.ts(8,12): error TS2339: Property 'p' does not exis
           C.s = 1;
           this.p = 1; // ERR
                ~
-!!! error TS2339: Property 'p' does not exist on type '{ new(): C; s: any; b: () => void; prototype: C; }'.
+!!! error TS2339: Property 'p' does not exist on type '{ new (): C; s: any; b: () => void; prototype: C; }'.
        }
     }

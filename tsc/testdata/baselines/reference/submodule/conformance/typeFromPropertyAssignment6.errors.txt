@@ -1,6 +1,6 @@
-a.js(1,7): error TS2339: Property 'Inner' does not exist on type '{ new(): Outer; prototype: Outer; }'.
-a.js(5,7): error TS2339: Property 'i' does not exist on type '{ new(): Outer; prototype: Outer; }'.
-b.js(1,18): error TS2339: Property 'i' does not exist on type '{ new(): Outer; prototype: Outer; }'.
+a.js(1,7): error TS2339: Property 'Inner' does not exist on type '{ new (): Outer; prototype: Outer; }'.
+a.js(5,7): error TS2339: Property 'i' does not exist on type '{ new (): Outer; prototype: Outer; }'.
+b.js(1,18): error TS2339: Property 'i' does not exist on type '{ new (): Outer; prototype: Outer; }'.
 
 
 ==== def.js (0 errors) ====
@@ -9,18 +9,18 @@ b.js(1,18): error TS2339: Property 'i' does not exist on type '{ new(): Outer; p
 ==== a.js (2 errors) ====
     Outer.Inner = class I {
           ~~~~~
-!!! error TS2339: Property 'Inner' does not exist on type '{ new(): Outer; prototype: Outer; }'.
+!!! error TS2339: Property 'Inner' does not exist on type '{ new (): Outer; prototype: Outer; }'.
         messages() { return [] }
     }
     /** @type {!Outer.Inner} */
     Outer.i
           ~
-!!! error TS2339: Property 'i' does not exist on type '{ new(): Outer; prototype: Outer; }'.
+!!! error TS2339: Property 'i' does not exist on type '{ new (): Outer; prototype: Outer; }'.
     
 ==== b.js (1 errors) ====
     var msgs = Outer.i.messages()
                      ~
-!!! error TS2339: Property 'i' does not exist on type '{ new(): Outer; prototype: Outer; }'.
+!!! error TS2339: Property 'i' does not exist on type '{ new (): Outer; prototype: Outer; }'.
     
     /** @param {Outer.Inner} inner */
     function x(inner) {

@@ -2,7 +2,7 @@ invalidAssignmentsToVoid.ts(2,1): error TS2322: Type 'number' is not assignable 
 invalidAssignmentsToVoid.ts(3,1): error TS2322: Type 'boolean' is not assignable to type 'void'.
 invalidAssignmentsToVoid.ts(4,1): error TS2322: Type 'string' is not assignable to type 'void'.
 invalidAssignmentsToVoid.ts(5,1): error TS2322: Type '{}' is not assignable to type 'void'.
-invalidAssignmentsToVoid.ts(9,1): error TS2322: Type '{ new(): C; prototype: C; }' is not assignable to type 'void'.
+invalidAssignmentsToVoid.ts(9,1): error TS2322: Type '{ new (): C; prototype: C; }' is not assignable to type 'void'.
 invalidAssignmentsToVoid.ts(10,1): error TS2322: Type 'C' is not assignable to type 'void'.
 invalidAssignmentsToVoid.ts(14,1): error TS2322: Type 'I' is not assignable to type 'void'.
 invalidAssignmentsToVoid.ts(17,1): error TS2322: Type '{ x: number; }' is not assignable to type 'void'.
@@ -29,7 +29,7 @@ invalidAssignmentsToVoid.ts(22,5): error TS2322: Type '<T>(a: T) => void' is not
     var c: C;
     x = C;
     ~
-!!! error TS2322: Type '{ new(): C; prototype: C; }' is not assignable to type 'void'.
+!!! error TS2322: Type '{ new (): C; prototype: C; }' is not assignable to type 'void'.
     x = c;
     ~
 !!! error TS2322: Type 'C' is not assignable to type 'void'.

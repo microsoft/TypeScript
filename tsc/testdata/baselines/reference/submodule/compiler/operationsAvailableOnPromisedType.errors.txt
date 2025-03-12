@@ -18,7 +18,7 @@ operationsAvailableOnPromisedType.ts(25,5): error TS2349: This expression is not
   Not all constituents of type 'Promise<() => void> | () => void' are callable.
     Type 'Promise<() => void>' has no call signatures.
 operationsAvailableOnPromisedType.ts(26,9): error TS2351: This expression is not constructable.
-  Type 'Promise<new() => any>' has no construct signatures.
+  Type 'Promise<new () => any>' has no construct signatures.
 operationsAvailableOnPromisedType.ts(27,5): error TS2349: This expression is not callable.
   Type 'Promise<number>' has no call signatures.
 
@@ -98,7 +98,7 @@ operationsAvailableOnPromisedType.ts(27,5): error TS2349: This expression is not
         new g();
             ~
 !!! error TS2351: This expression is not constructable.
-!!! error TS2351:   Type 'Promise<new() => any>' has no construct signatures.
+!!! error TS2351:   Type 'Promise<new () => any>' has no construct signatures.
 !!! related TS2773 operationsAvailableOnPromisedType.ts:26:9: Did you forget to use 'await'?
         b();
         ~

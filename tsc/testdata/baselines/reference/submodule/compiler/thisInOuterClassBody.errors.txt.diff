@@ -3,7 +3,7 @@
 @@= skipped -0, +0 lines =@@
  thisInOuterClassBody.ts(12,22): error TS2576: Property 'y' does not exist on type 'Foo'. Did you mean to access the static member 'Foo.y' instead?
 -thisInOuterClassBody.ts(18,22): error TS2339: Property 'x' does not exist on type 'typeof Foo'.
-+thisInOuterClassBody.ts(18,22): error TS2339: Property 'x' does not exist on type '{ new(): Foo; y: ???; bar2: () => void; prototype: Foo; }'.
++thisInOuterClassBody.ts(18,22): error TS2339: Property 'x' does not exist on type '{ new (): Foo; y: ???; bar2: () => void; prototype: Foo; }'.
  
  
  ==== thisInOuterClassBody.ts (2 errors) ====
@@ -12,6 +12,6 @@
              var b = this.x;
                           ~
 -!!! error TS2339: Property 'x' does not exist on type 'typeof Foo'.
-+!!! error TS2339: Property 'x' does not exist on type '{ new(): Foo; y: ???; bar2: () => void; prototype: Foo; }'.
++!!! error TS2339: Property 'x' does not exist on type '{ new (): Foo; y: ???; bar2: () => void; prototype: Foo; }'.
          }
      }

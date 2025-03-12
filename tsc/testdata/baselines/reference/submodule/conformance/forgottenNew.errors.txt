@@ -1,4 +1,4 @@
-forgottenNew.ts(5,14): error TS2348: Value of type '{ new(): NullLogger; prototype: NullLogger; }' is not callable. Did you mean to include 'new'?
+forgottenNew.ts(5,14): error TS2348: Value of type '{ new (): NullLogger; prototype: NullLogger; }' is not callable. Did you mean to include 'new'?
 
 
 ==== forgottenNew.ts (1 errors) ====
@@ -8,4 +8,4 @@ forgottenNew.ts(5,14): error TS2348: Value of type '{ new(): NullLogger; prototy
     
     var logger = Tools.NullLogger();
                  ~~~~~~~~~~~~~~~~~~
-!!! error TS2348: Value of type '{ new(): NullLogger; prototype: NullLogger; }' is not callable. Did you mean to include 'new'?
+!!! error TS2348: Value of type '{ new (): NullLogger; prototype: NullLogger; }' is not callable. Did you mean to include 'new'?

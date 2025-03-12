@@ -3,7 +3,7 @@
 @@= skipped -0, +0 lines =@@
  exportStarFromEmptyModule_module3.ts(1,15): error TS2306: File 'exportStarFromEmptyModule_module2.ts' is not a module.
 -exportStarFromEmptyModule_module4.ts(4,5): error TS2339: Property 'r' does not exist on type 'typeof A'.
-+exportStarFromEmptyModule_module4.ts(4,5): error TS2339: Property 'r' does not exist on type '{ new(): A; q: any; prototype: A; }'.
++exportStarFromEmptyModule_module4.ts(4,5): error TS2339: Property 'r' does not exist on type '{ new (): A; q: any; prototype: A; }'.
  
  
  ==== exportStarFromEmptyModule_module1.ts (0 errors) ====
@@ -12,4 +12,4 @@
      X.A.r; // Error
          ~
 -!!! error TS2339: Property 'r' does not exist on type 'typeof A'.
-+!!! error TS2339: Property 'r' does not exist on type '{ new(): A; q: any; prototype: A; }'.
++!!! error TS2339: Property 'r' does not exist on type '{ new (): A; q: any; prototype: A; }'.

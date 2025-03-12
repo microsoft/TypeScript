@@ -12,13 +12,13 @@ import { ControllerClass } from './application';
 >ControllerClass : error
 
 import { BindingKey } from '@loopback/context';
->BindingKey : { new<T>(): BindingKey<T>; create: <T>(ctor: T) => BindingKey<T>; prototype: BindingKey<any>; }
+>BindingKey : { new <T>(): BindingKey<T>; create: <T>(ctor: T) => BindingKey<T>; prototype: BindingKey<any>; }
 
 export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(null as any); // line in question
 >CONTROLLER_CLASS : BindingKey<ControllerClass>
 >BindingKey.create<ControllerClass>(null as any) : BindingKey<ControllerClass>
 >BindingKey.create : <T>(ctor: T) => BindingKey<T>
->BindingKey : { new<T>(): BindingKey<T>; create: <T>(ctor: T) => BindingKey<T>; prototype: BindingKey<any>; }
+>BindingKey : { new <T>(): BindingKey<T>; create: <T>(ctor: T) => BindingKey<T>; prototype: BindingKey<any>; }
 >create : <T>(ctor: T) => BindingKey<T>
 >null as any : any
 

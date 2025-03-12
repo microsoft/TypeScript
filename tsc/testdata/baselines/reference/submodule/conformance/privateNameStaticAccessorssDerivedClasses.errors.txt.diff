@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -privateNameStaticAccessorssDerivedClasses.ts(4,23): error TS2339: Property '#prop' does not exist on type 'typeof Derived'.
 -privateNameStaticAccessorssDerivedClasses.ts(9,23): error TS2339: Property '#prop' does not exist on type 'typeof Derived'.
-+privateNameStaticAccessorssDerivedClasses.ts(4,23): error TS2339: Property '#prop' does not exist on type '{ new(): Derived; method: (x: ???) => void; prototype: Derived; }'.
-+privateNameStaticAccessorssDerivedClasses.ts(9,23): error TS2339: Property '#prop' does not exist on type '{ new(): Derived; method: (x: ???) => void; prototype: Derived; }'.
++privateNameStaticAccessorssDerivedClasses.ts(4,23): error TS2339: Property '#prop' does not exist on type '{ new (): Derived; method: (x: ???) => void; prototype: Derived; }'.
++privateNameStaticAccessorssDerivedClasses.ts(9,23): error TS2339: Property '#prop' does not exist on type '{ new (): Derived; method: (x: ???) => void; prototype: Derived; }'.
  
  
  ==== privateNameStaticAccessorssDerivedClasses.ts (2 errors) ====
@@ -13,7 +13,7 @@
              console.log(x.#prop);
                            ~~~~~
 -!!! error TS2339: Property '#prop' does not exist on type 'typeof Derived'.
-+!!! error TS2339: Property '#prop' does not exist on type '{ new(): Derived; method: (x: ???) => void; prototype: Derived; }'.
++!!! error TS2339: Property '#prop' does not exist on type '{ new (): Derived; method: (x: ???) => void; prototype: Derived; }'.
          }
      }
      class Derived extends Base {
@@ -21,7 +21,7 @@
              console.log(x.#prop);
                            ~~~~~
 -!!! error TS2339: Property '#prop' does not exist on type 'typeof Derived'.
-+!!! error TS2339: Property '#prop' does not exist on type '{ new(): Derived; method: (x: ???) => void; prototype: Derived; }'.
++!!! error TS2339: Property '#prop' does not exist on type '{ new (): Derived; method: (x: ???) => void; prototype: Derived; }'.
          }
      }
      

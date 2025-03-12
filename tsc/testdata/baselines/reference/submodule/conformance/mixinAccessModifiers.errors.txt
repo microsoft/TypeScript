@@ -12,9 +12,9 @@ mixinAccessModifiers.ts(66,18): error TS2509: Base constructor return type 'neve
 mixinAccessModifiers.ts(67,18): error TS2509: Base constructor return type 'never' is not an object type or intersection of object types with statically known members.
   The intersection 'Private & Public' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
 mixinAccessModifiers.ts(84,6): error TS2445: Property 'p' is protected and only accessible within class 'C4' and its subclasses.
-mixinAccessModifiers.ts(89,6): error TS2445: Property 's' is protected and only accessible within class '{ new(...args: any[]): C4; s: string; g: () => void; prototype: C4; }' and its subclasses.
+mixinAccessModifiers.ts(89,6): error TS2445: Property 's' is protected and only accessible within class '{ new (...args: any[]): C4; s: string; g: () => void; prototype: C4; }' and its subclasses.
 mixinAccessModifiers.ts(97,6): error TS2445: Property 'p' is protected and only accessible within class 'C4' and its subclasses.
-mixinAccessModifiers.ts(102,6): error TS2445: Property 's' is protected and only accessible within class '{ new(...args: any[]): C4; s: string; g: () => void; prototype: C4; }' and its subclasses.
+mixinAccessModifiers.ts(102,6): error TS2445: Property 's' is protected and only accessible within class '{ new (...args: any[]): C4; s: string; g: () => void; prototype: C4; }' and its subclasses.
 mixinAccessModifiers.ts(119,4): error TS2341: Property 'privateMethod' is private and only accessible within class 'ProtectedGeneric<T>'.
 mixinAccessModifiers.ts(120,4): error TS2445: Property 'protectedMethod' is protected and only accessible within class 'ProtectedGeneric<T>' and its subclasses.
 mixinAccessModifiers.ts(124,4): error TS2339: Property 'privateMethod' does not exist on type 'ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>'.
@@ -138,7 +138,7 @@ mixinAccessModifiers.ts(130,4): error TS2445: Property 'protectedMethod' is prot
     	static g() {
     		C4.s;  // Error, not in class deriving from Protected2
     		   ~
-!!! error TS2445: Property 's' is protected and only accessible within class '{ new(...args: any[]): C4; s: string; g: () => void; prototype: C4; }' and its subclasses.
+!!! error TS2445: Property 's' is protected and only accessible within class '{ new (...args: any[]): C4; s: string; g: () => void; prototype: C4; }' and its subclasses.
     		C5.s;
     		C6.s
     	}
@@ -155,7 +155,7 @@ mixinAccessModifiers.ts(130,4): error TS2445: Property 'protectedMethod' is prot
     	static g() {
     		C4.s;  // Error, not in class deriving from Protected2
     		   ~
-!!! error TS2445: Property 's' is protected and only accessible within class '{ new(...args: any[]): C4; s: string; g: () => void; prototype: C4; }' and its subclasses.
+!!! error TS2445: Property 's' is protected and only accessible within class '{ new (...args: any[]): C4; s: string; g: () => void; prototype: C4; }' and its subclasses.
     		C5.s;
     		C6.s
     	}

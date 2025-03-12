@@ -7,10 +7,10 @@
 -staticIndexSignature4.ts(20,5): error TS2542: Index signature in type 'typeof B' only permits reading.
 -staticIndexSignature4.ts(25,5): error TS2542: Index signature in type 'typeof B' only permits reading.
 -staticIndexSignature4.ts(26,5): error TS2542: Index signature in type 'typeof B' only permits reading.
-+staticIndexSignature4.ts(19,5): error TS2542: Index signature in type '{ new(): B; readonly [s: string]: number; readonly [s: number]: 42 | 233; prototype: B; }' only permits reading.
-+staticIndexSignature4.ts(20,5): error TS2542: Index signature in type '{ new(): B; readonly [s: string]: number; readonly [s: number]: 42 | 233; prototype: B; }' only permits reading.
-+staticIndexSignature4.ts(25,5): error TS2542: Index signature in type '{ new(): B; readonly [s: string]: number; readonly [s: number]: 42 | 233; prototype: B; }' only permits reading.
-+staticIndexSignature4.ts(26,5): error TS2542: Index signature in type '{ new(): B; readonly [s: string]: number; readonly [s: number]: 42 | 233; prototype: B; }' only permits reading.
++staticIndexSignature4.ts(19,5): error TS2542: Index signature in type '{ new (): B; readonly [s: string]: number; readonly [s: number]: 42 | 233; prototype: B; }' only permits reading.
++staticIndexSignature4.ts(20,5): error TS2542: Index signature in type '{ new (): B; readonly [s: string]: number; readonly [s: number]: 42 | 233; prototype: B; }' only permits reading.
++staticIndexSignature4.ts(25,5): error TS2542: Index signature in type '{ new (): B; readonly [s: string]: number; readonly [s: number]: 42 | 233; prototype: B; }' only permits reading.
++staticIndexSignature4.ts(26,5): error TS2542: Index signature in type '{ new (): B; readonly [s: string]: number; readonly [s: number]: 42 | 233; prototype: B; }' only permits reading.
  
  
  ==== staticIndexSignature4.ts (6 errors) ====
@@ -19,11 +19,11 @@
          B.a = D.a
          ~~~
 -!!! error TS2542: Index signature in type 'typeof B' only permits reading.
-+!!! error TS2542: Index signature in type '{ new(): B; readonly [s: string]: number; readonly [s: number]: 42 | 233; prototype: B; }' only permits reading.
++!!! error TS2542: Index signature in type '{ new (): B; readonly [s: string]: number; readonly [s: number]: 42 | 233; prototype: B; }' only permits reading.
          B[2] = D[2]
          ~~~~
 -!!! error TS2542: Index signature in type 'typeof B' only permits reading.
-+!!! error TS2542: Index signature in type '{ new(): B; readonly [s: string]: number; readonly [s: number]: 42 | 233; prototype: B; }' only permits reading.
++!!! error TS2542: Index signature in type '{ new (): B; readonly [s: string]: number; readonly [s: number]: 42 | 233; prototype: B; }' only permits reading.
      } else if (v === 1) {
          D.a = B.a
          D[2] = B[2]
@@ -31,11 +31,11 @@
          B.a = i.a
          ~~~
 -!!! error TS2542: Index signature in type 'typeof B' only permits reading.
-+!!! error TS2542: Index signature in type '{ new(): B; readonly [s: string]: number; readonly [s: number]: 42 | 233; prototype: B; }' only permits reading.
++!!! error TS2542: Index signature in type '{ new (): B; readonly [s: string]: number; readonly [s: number]: 42 | 233; prototype: B; }' only permits reading.
          B[2] = i[2]
          ~~~~
 -!!! error TS2542: Index signature in type 'typeof B' only permits reading.
-+!!! error TS2542: Index signature in type '{ new(): B; readonly [s: string]: number; readonly [s: number]: 42 | 233; prototype: B; }' only permits reading.
++!!! error TS2542: Index signature in type '{ new (): B; readonly [s: string]: number; readonly [s: number]: 42 | 233; prototype: B; }' only permits reading.
          D.a = i.a
          D[2] = i [2]
      } else if (v === 3) {

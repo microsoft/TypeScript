@@ -4,7 +4,7 @@
 -b.js(1,7): error TS2739: Type '{}' is missing the following properties from type 'typeof A': prototype, d
 +a.d.ts(1,15): error TS2451: Cannot redeclare block-scoped variable 'A'.
 +b.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'A'.
-+b.js(2,3): error TS2339: Property 'd' does not exist on type '{ new(): A; prototype: A; }'.
++b.js(2,3): error TS2339: Property 'd' does not exist on type '{ new (): A; prototype: A; }'.
  
  
 -==== a.d.ts (0 errors) ====
@@ -22,5 +22,5 @@
 +!!! related TS6203 a.d.ts:1:15: 'A' was also declared here.
      A.d = { };
 +      ~
-+!!! error TS2339: Property 'd' does not exist on type '{ new(): A; prototype: A; }'.
++!!! error TS2339: Property 'd' does not exist on type '{ new (): A; prototype: A; }'.
      

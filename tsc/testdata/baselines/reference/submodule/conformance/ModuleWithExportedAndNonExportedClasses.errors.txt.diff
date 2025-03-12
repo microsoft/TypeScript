@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -ModuleWithExportedAndNonExportedClasses.ts(30,16): error TS2339: Property 'A2' does not exist on type 'typeof A'.
 -ModuleWithExportedAndNonExportedClasses.ts(31,17): error TS2339: Property 'A2' does not exist on type 'typeof A'.
-+ModuleWithExportedAndNonExportedClasses.ts(30,16): error TS2339: Property 'A2' does not exist on type '{ A: { new(): A; prototype: A; }; AG: { new<T, U>(): AG<T, U>; prototype: AG<any, any>; }; }'.
-+ModuleWithExportedAndNonExportedClasses.ts(31,17): error TS2339: Property 'A2' does not exist on type '{ A: { new(): A; prototype: A; }; AG: { new<T, U>(): AG<T, U>; prototype: AG<any, any>; }; }'.
++ModuleWithExportedAndNonExportedClasses.ts(30,16): error TS2339: Property 'A2' does not exist on type '{ A: { new (): A; prototype: A; }; AG: { new <T, U>(): AG<T, U>; prototype: AG<any, any>; }; }'.
++ModuleWithExportedAndNonExportedClasses.ts(31,17): error TS2339: Property 'A2' does not exist on type '{ A: { new (): A; prototype: A; }; AG: { new <T, U>(): AG<T, U>; prototype: AG<any, any>; }; }'.
  
  
  ==== ModuleWithExportedAndNonExportedClasses.ts (2 errors) ====
@@ -13,10 +13,10 @@
      var a2 = new A.A2();
                     ~~
 -!!! error TS2339: Property 'A2' does not exist on type 'typeof A'.
-+!!! error TS2339: Property 'A2' does not exist on type '{ A: { new(): A; prototype: A; }; AG: { new<T, U>(): AG<T, U>; prototype: AG<any, any>; }; }'.
++!!! error TS2339: Property 'A2' does not exist on type '{ A: { new (): A; prototype: A; }; AG: { new <T, U>(): AG<T, U>; prototype: AG<any, any>; }; }'.
      var ag2 = new A.A2<string, number>();
                      ~~
 -!!! error TS2339: Property 'A2' does not exist on type 'typeof A'.
-+!!! error TS2339: Property 'A2' does not exist on type '{ A: { new(): A; prototype: A; }; AG: { new<T, U>(): AG<T, U>; prototype: AG<any, any>; }; }'.
++!!! error TS2339: Property 'A2' does not exist on type '{ A: { new (): A; prototype: A; }; AG: { new <T, U>(): AG<T, U>; prototype: AG<any, any>; }; }'.
      
      

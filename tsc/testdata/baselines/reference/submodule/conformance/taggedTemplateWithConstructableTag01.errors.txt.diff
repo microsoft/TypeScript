@@ -3,7 +3,7 @@
 @@= skipped -0, +0 lines =@@
  taggedTemplateWithConstructableTag01.ts(3,1): error TS2349: This expression is not callable.
 -  Type 'typeof CtorTag' has no call signatures.
-+  Type '{ new(): CtorTag; prototype: CtorTag; }' has no call signatures.
++  Type '{ new (): CtorTag; prototype: CtorTag; }' has no call signatures.
  
  
  ==== taggedTemplateWithConstructableTag01.ts (1 errors) ====
@@ -12,4 +12,4 @@
      ~~~~~~~
  !!! error TS2349: This expression is not callable.
 -!!! error TS2349:   Type 'typeof CtorTag' has no call signatures.
-+!!! error TS2349:   Type '{ new(): CtorTag; prototype: CtorTag; }' has no call signatures.
++!!! error TS2349:   Type '{ new (): CtorTag; prototype: CtorTag; }' has no call signatures.

@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -baseConstraintOfDecorator.ts(2,5): error TS2322: Type 'typeof decoratorFunc' is not assignable to type 'TFunction'.
 -  'TFunction' could be instantiated with an arbitrary type which could be unrelated to 'typeof decoratorFunc'.
-+baseConstraintOfDecorator.ts(2,5): error TS2322: Type '{ new(...args: any[]): decoratorFunc<TFunction>; prototype: decoratorFunc<any>; }' is not assignable to type 'TFunction'.
-+  'TFunction' could be instantiated with an arbitrary type which could be unrelated to '{ new(...args: any[]): decoratorFunc<TFunction>; prototype: decoratorFunc<any>; }'.
++baseConstraintOfDecorator.ts(2,5): error TS2322: Type '{ new (...args: any[]): decoratorFunc<TFunction>; prototype: decoratorFunc<any>; }' is not assignable to type 'TFunction'.
++  'TFunction' could be instantiated with an arbitrary type which could be unrelated to '{ new (...args: any[]): decoratorFunc<TFunction>; prototype: decoratorFunc<any>; }'.
  baseConstraintOfDecorator.ts(2,40): error TS2507: Type 'TFunction' is not a constructor function type.
  baseConstraintOfDecorator.ts(12,18): error TS2545: A mixin class must have a constructor with a single rest parameter of type 'any[]'.
  
@@ -14,8 +14,8 @@
          ~~~~~~
 -!!! error TS2322: Type 'typeof decoratorFunc' is not assignable to type 'TFunction'.
 -!!! error TS2322:   'TFunction' could be instantiated with an arbitrary type which could be unrelated to 'typeof decoratorFunc'.
-+!!! error TS2322: Type '{ new(...args: any[]): decoratorFunc<TFunction>; prototype: decoratorFunc<any>; }' is not assignable to type 'TFunction'.
-+!!! error TS2322:   'TFunction' could be instantiated with an arbitrary type which could be unrelated to '{ new(...args: any[]): decoratorFunc<TFunction>; prototype: decoratorFunc<any>; }'.
++!!! error TS2322: Type '{ new (...args: any[]): decoratorFunc<TFunction>; prototype: decoratorFunc<any>; }' is not assignable to type 'TFunction'.
++!!! error TS2322:   'TFunction' could be instantiated with an arbitrary type which could be unrelated to '{ new (...args: any[]): decoratorFunc<TFunction>; prototype: decoratorFunc<any>; }'.
                                             ~~~~~~~~~~
  !!! error TS2507: Type 'TFunction' is not a constructor function type.
  !!! related TS2735 baseConstraintOfDecorator.ts:1:31: Did you mean for 'TFunction' to be constrained to type 'new (...args: any[]) => unknown'?

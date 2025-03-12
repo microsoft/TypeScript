@@ -1,37 +1,37 @@
 constructSignatureAssignabilityInInheritance6.ts(24,11): error TS2430: Interface 'I<T>' incorrectly extends interface 'A'.
   Types of property 'a' are incompatible.
-    Type 'new(x: T) => T[]' is not assignable to type 'new<T>(x: T) => T[]'.
+    Type 'new (x: T) => T[]' is not assignable to type 'new <T>(x: T) => T[]'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 constructSignatureAssignabilityInInheritance6.ts(28,11): error TS2430: Interface 'I2<T>' incorrectly extends interface 'A'.
   Types of property 'a2' are incompatible.
-    Type 'new(x: T) => string[]' is not assignable to type 'new<T>(x: T) => string[]'.
+    Type 'new (x: T) => string[]' is not assignable to type 'new <T>(x: T) => string[]'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 constructSignatureAssignabilityInInheritance6.ts(32,11): error TS2430: Interface 'I3<T>' incorrectly extends interface 'A'.
   Types of property 'a3' are incompatible.
-    Type 'new(x: T) => T' is not assignable to type 'new<T>(x: T) => void'.
+    Type 'new (x: T) => T' is not assignable to type 'new <T>(x: T) => void'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 constructSignatureAssignabilityInInheritance6.ts(36,11): error TS2430: Interface 'I4<T>' incorrectly extends interface 'A'.
   Types of property 'a4' are incompatible.
-    Type 'new<U>(x: T, y: U) => string' is not assignable to type 'new<T, U>(x: T, y: U) => string'.
+    Type 'new <U>(x: T, y: U) => string' is not assignable to type 'new <T, U>(x: T, y: U) => string'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 constructSignatureAssignabilityInInheritance6.ts(40,11): error TS2430: Interface 'I5<T>' incorrectly extends interface 'A'.
   Types of property 'a5' are incompatible.
-    Type 'new<U>(x: (arg: T) => U) => T' is not assignable to type 'new<T, U>(x: (arg: T) => U) => T'.
+    Type 'new <U>(x: (arg: T) => U) => T' is not assignable to type 'new <T, U>(x: (arg: T) => U) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Types of parameters 'arg' and 'arg' are incompatible.
           Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
             'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 constructSignatureAssignabilityInInheritance6.ts(44,11): error TS2430: Interface 'I7<T>' incorrectly extends interface 'A'.
   Types of property 'a11' are incompatible.
-    Type 'new<U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base' is not assignable to type 'new<T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base'.
+    Type 'new <U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base' is not assignable to type 'new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base'.
       Types of parameters 'x' and 'x' are incompatible.
         Type '{ foo: T; }' is not assignable to type '{ foo: T; }'. Two different types with this name exist, but they are unrelated.
           Types of property 'foo' are incompatible.
@@ -39,7 +39,7 @@ constructSignatureAssignabilityInInheritance6.ts(44,11): error TS2430: Interface
               'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 constructSignatureAssignabilityInInheritance6.ts(48,11): error TS2430: Interface 'I9<T>' incorrectly extends interface 'A'.
   Types of property 'a16' are incompatible.
-    Type 'new(x: { a: T; b: T; }) => T[]' is not assignable to type 'new<T>(x: { a: T; b: T; }) => T[]'.
+    Type 'new (x: { a: T; b: T; }) => T[]' is not assignable to type 'new <T>(x: { a: T; b: T; }) => T[]'.
       Types of parameters 'x' and 'x' are incompatible.
         Type '{ a: T; b: T; }' is not assignable to type '{ a: T; b: T; }'. Two different types with this name exist, but they are unrelated.
           Types of property 'a' are incompatible.
@@ -75,7 +75,7 @@ constructSignatureAssignabilityInInheritance6.ts(48,11): error TS2430: Interface
               ~
 !!! error TS2430: Interface 'I<T>' incorrectly extends interface 'A'.
 !!! error TS2430:   Types of property 'a' are incompatible.
-!!! error TS2430:     Type 'new(x: T) => T[]' is not assignable to type 'new<T>(x: T) => T[]'.
+!!! error TS2430:     Type 'new (x: T) => T[]' is not assignable to type 'new <T>(x: T) => T[]'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
@@ -87,7 +87,7 @@ constructSignatureAssignabilityInInheritance6.ts(48,11): error TS2430: Interface
               ~~
 !!! error TS2430: Interface 'I2<T>' incorrectly extends interface 'A'.
 !!! error TS2430:   Types of property 'a2' are incompatible.
-!!! error TS2430:     Type 'new(x: T) => string[]' is not assignable to type 'new<T>(x: T) => string[]'.
+!!! error TS2430:     Type 'new (x: T) => string[]' is not assignable to type 'new <T>(x: T) => string[]'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
@@ -99,7 +99,7 @@ constructSignatureAssignabilityInInheritance6.ts(48,11): error TS2430: Interface
               ~~
 !!! error TS2430: Interface 'I3<T>' incorrectly extends interface 'A'.
 !!! error TS2430:   Types of property 'a3' are incompatible.
-!!! error TS2430:     Type 'new(x: T) => T' is not assignable to type 'new<T>(x: T) => void'.
+!!! error TS2430:     Type 'new (x: T) => T' is not assignable to type 'new <T>(x: T) => void'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
@@ -111,7 +111,7 @@ constructSignatureAssignabilityInInheritance6.ts(48,11): error TS2430: Interface
               ~~
 !!! error TS2430: Interface 'I4<T>' incorrectly extends interface 'A'.
 !!! error TS2430:   Types of property 'a4' are incompatible.
-!!! error TS2430:     Type 'new<U>(x: T, y: U) => string' is not assignable to type 'new<T, U>(x: T, y: U) => string'.
+!!! error TS2430:     Type 'new <U>(x: T, y: U) => string' is not assignable to type 'new <T, U>(x: T, y: U) => string'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
@@ -123,7 +123,7 @@ constructSignatureAssignabilityInInheritance6.ts(48,11): error TS2430: Interface
               ~~
 !!! error TS2430: Interface 'I5<T>' incorrectly extends interface 'A'.
 !!! error TS2430:   Types of property 'a5' are incompatible.
-!!! error TS2430:     Type 'new<U>(x: (arg: T) => U) => T' is not assignable to type 'new<T, U>(x: (arg: T) => U) => T'.
+!!! error TS2430:     Type 'new <U>(x: (arg: T) => U) => T' is not assignable to type 'new <T, U>(x: (arg: T) => U) => T'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Types of parameters 'arg' and 'arg' are incompatible.
 !!! error TS2430:           Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
@@ -136,7 +136,7 @@ constructSignatureAssignabilityInInheritance6.ts(48,11): error TS2430: Interface
               ~~
 !!! error TS2430: Interface 'I7<T>' incorrectly extends interface 'A'.
 !!! error TS2430:   Types of property 'a11' are incompatible.
-!!! error TS2430:     Type 'new<U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base' is not assignable to type 'new<T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base'.
+!!! error TS2430:     Type 'new <U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base' is not assignable to type 'new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type '{ foo: T; }' is not assignable to type '{ foo: T; }'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           Types of property 'foo' are incompatible.
@@ -150,7 +150,7 @@ constructSignatureAssignabilityInInheritance6.ts(48,11): error TS2430: Interface
               ~~
 !!! error TS2430: Interface 'I9<T>' incorrectly extends interface 'A'.
 !!! error TS2430:   Types of property 'a16' are incompatible.
-!!! error TS2430:     Type 'new(x: { a: T; b: T; }) => T[]' is not assignable to type 'new<T>(x: { a: T; b: T; }) => T[]'.
+!!! error TS2430:     Type 'new (x: { a: T; b: T; }) => T[]' is not assignable to type 'new <T>(x: { a: T; b: T; }) => T[]'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type '{ a: T; b: T; }' is not assignable to type '{ a: T; b: T; }'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           Types of property 'a' are incompatible.

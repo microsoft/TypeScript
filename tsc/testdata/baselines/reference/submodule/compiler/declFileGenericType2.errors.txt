@@ -1,5 +1,5 @@
 declFileGenericType2.ts(25,141): error TS2304: Cannot find name 'IElementController'.
-declFileGenericType2.ts(33,134): error TS2339: Property 'dom' does not exist on type '{ mvc: { AbstractController: { new<ModelType>(): AbstractController<ModelType>; prototype: AbstractController<any>; }; }; }'.
+declFileGenericType2.ts(33,134): error TS2339: Property 'dom' does not exist on type '{ mvc: { AbstractController: { new <ModelType>(): AbstractController<ModelType>; prototype: AbstractController<any>; }; }; }'.
 
 
 ==== declFileGenericType2.ts (2 errors) ====
@@ -39,7 +39,7 @@ declFileGenericType2.ts(33,134): error TS2339: Property 'dom' does not exist on 
     module templa.dom.mvc.composite {
         export class AbstractCompositeElementController<ModelType extends templa.mvc.composite.ICompositeControllerModel> extends templa.dom.mvc.AbstractElementController<ModelType> {
                                                                                                                                          ~~~
-!!! error TS2339: Property 'dom' does not exist on type '{ mvc: { AbstractController: { new<ModelType>(): AbstractController<ModelType>; prototype: AbstractController<any>; }; }; }'.
+!!! error TS2339: Property 'dom' does not exist on type '{ mvc: { AbstractController: { new <ModelType>(): AbstractController<ModelType>; prototype: AbstractController<any>; }; }; }'.
             public _controllers: templa.mvc.IController<templa.mvc.IModel>[];
             constructor() {
                 super();

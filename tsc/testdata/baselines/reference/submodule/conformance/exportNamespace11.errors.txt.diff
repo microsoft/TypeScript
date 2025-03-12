@@ -2,7 +2,7 @@
 +++ new.exportNamespace11.errors.txt
 @@= skipped -0, +0 lines =@@
 -main.ts(2,52): error TS2339: Property 'Ghost' does not exist on type 'typeof import("intermediate")'.
-+main.ts(2,52): error TS2339: Property 'Ghost' does not exist on type '{ Ghost: { new(): Ghost; prototype: Ghost; }; }'.
++main.ts(2,52): error TS2339: Property 'Ghost' does not exist on type '{ Ghost: { new (): Ghost; prototype: Ghost; }; }'.
  
  
  ==== main.ts (1 errors) ====
@@ -10,7 +10,7 @@
      const ghost: intermediate.Ghost = new intermediate.Ghost()
                                                         ~~~~~
 -!!! error TS2339: Property 'Ghost' does not exist on type 'typeof import("intermediate")'.
-+!!! error TS2339: Property 'Ghost' does not exist on type '{ Ghost: { new(): Ghost; prototype: Ghost; }; }'.
++!!! error TS2339: Property 'Ghost' does not exist on type '{ Ghost: { new (): Ghost; prototype: Ghost; }; }'.
      
  ==== intermediate.ts (0 errors) ====
      export type * from './ghost'

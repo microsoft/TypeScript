@@ -2,7 +2,7 @@
 +++ new.privateNamesConstructorChain-2.errors.txt
 @@= skipped -0, +0 lines =@@
 -privateNamesConstructorChain-2.ts(6,15): error TS2339: Property '#bar' does not exist on type 'typeof Child'.
-+privateNamesConstructorChain-2.ts(6,15): error TS2339: Property '#bar' does not exist on type '{ new<T>(): Child<T>; prototype: Child<any>; }'.
++privateNamesConstructorChain-2.ts(6,15): error TS2339: Property '#bar' does not exist on type '{ new <T>(): Child<T>; prototype: Child<any>; }'.
  
  
  ==== privateNamesConstructorChain-2.ts (1 errors) ====
@@ -11,7 +11,7 @@
              Child.#bar;       // Error: not found
                    ~~~~
 -!!! error TS2339: Property '#bar' does not exist on type 'typeof Child'.
-+!!! error TS2339: Property '#bar' does not exist on type '{ new<T>(): Child<T>; prototype: Child<any>; }'.
++!!! error TS2339: Property '#bar' does not exist on type '{ new <T>(): Child<T>; prototype: Child<any>; }'.
          }
      }
      

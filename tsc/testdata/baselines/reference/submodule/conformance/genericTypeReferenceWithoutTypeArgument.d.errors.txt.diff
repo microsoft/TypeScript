@@ -5,7 +5,7 @@
  genericTypeReferenceWithoutTypeArgument.d.ts(14,27): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
  genericTypeReferenceWithoutTypeArgument.d.ts(16,25): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 -genericTypeReferenceWithoutTypeArgument.d.ts(22,28): error TS2339: Property 'C' does not exist on type 'typeof M'.
-+genericTypeReferenceWithoutTypeArgument.d.ts(22,28): error TS2339: Property 'C' does not exist on type '{ E: { new<T>(): E<T>; prototype: E<any>; }; }'.
++genericTypeReferenceWithoutTypeArgument.d.ts(22,28): error TS2339: Property 'C' does not exist on type '{ E: { new <T>(): E<T>; prototype: E<any>; }; }'.
  genericTypeReferenceWithoutTypeArgument.d.ts(23,28): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
  genericTypeReferenceWithoutTypeArgument.d.ts(25,30): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
  genericTypeReferenceWithoutTypeArgument.d.ts(26,30): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
@@ -14,7 +14,7 @@
      declare class D2 extends M.C { }
                                 ~
 -!!! error TS2339: Property 'C' does not exist on type 'typeof M'.
-+!!! error TS2339: Property 'C' does not exist on type '{ E: { new<T>(): E<T>; prototype: E<any>; }; }'.
++!!! error TS2339: Property 'C' does not exist on type '{ E: { new <T>(): E<T>; prototype: E<any>; }; }'.
      declare class D3<T extends M.E> { }
                                 ~~~
  !!! error TS2314: Generic type 'E<T>' requires 1 type argument(s).

@@ -1,4 +1,4 @@
-staticInstanceResolution4.ts(5,3): error TS2339: Property 'foo' does not exist on type '{ new(): A; prototype: A; }'.
+staticInstanceResolution4.ts(5,3): error TS2339: Property 'foo' does not exist on type '{ new (): A; prototype: A; }'.
 
 
 ==== staticInstanceResolution4.ts (1 errors) ====
@@ -8,4 +8,4 @@ staticInstanceResolution4.ts(5,3): error TS2339: Property 'foo' does not exist o
     
     A.foo();
       ~~~
-!!! error TS2339: Property 'foo' does not exist on type '{ new(): A; prototype: A; }'.
+!!! error TS2339: Property 'foo' does not exist on type '{ new (): A; prototype: A; }'.

@@ -1,5 +1,5 @@
-derivedClassWithPrivateStaticShadowingProtectedStatic.ts(12,7): error TS2417: Class static side '{ new(): Derived; x: string; fn: () => string; a: number; prototype: Derived; }' incorrectly extends base class static side '{ x: string; fn: () => string; a: number; prototype: Base; }'.
-  Property 'x' is private in type '{ new(): Derived; x: string; fn: () => string; a: number; prototype: Derived; }' but not in type '{ x: string; fn: () => string; a: number; prototype: Base; }'.
+derivedClassWithPrivateStaticShadowingProtectedStatic.ts(12,7): error TS2417: Class static side '{ new (): Derived; x: string; fn: () => string; a: number; prototype: Derived; }' incorrectly extends base class static side '{ x: string; fn: () => string; a: number; prototype: Base; }'.
+  Property 'x' is private in type '{ new (): Derived; x: string; fn: () => string; a: number; prototype: Derived; }' but not in type '{ x: string; fn: () => string; a: number; prototype: Base; }'.
 
 
 ==== derivedClassWithPrivateStaticShadowingProtectedStatic.ts (1 errors) ====
@@ -16,8 +16,8 @@ derivedClassWithPrivateStaticShadowingProtectedStatic.ts(12,7): error TS2417: Cl
     // should be error
     class Derived extends Base {
           ~~~~~~~
-!!! error TS2417: Class static side '{ new(): Derived; x: string; fn: () => string; a: number; prototype: Derived; }' incorrectly extends base class static side '{ x: string; fn: () => string; a: number; prototype: Base; }'.
-!!! error TS2417:   Property 'x' is private in type '{ new(): Derived; x: string; fn: () => string; a: number; prototype: Derived; }' but not in type '{ x: string; fn: () => string; a: number; prototype: Base; }'.
+!!! error TS2417: Class static side '{ new (): Derived; x: string; fn: () => string; a: number; prototype: Derived; }' incorrectly extends base class static side '{ x: string; fn: () => string; a: number; prototype: Base; }'.
+!!! error TS2417:   Property 'x' is private in type '{ new (): Derived; x: string; fn: () => string; a: number; prototype: Derived; }' but not in type '{ x: string; fn: () => string; a: number; prototype: Base; }'.
         private static x: string; 
         private static fn(): string {
             return '';

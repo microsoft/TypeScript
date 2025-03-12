@@ -1,9 +1,9 @@
 inferTypes1.ts(36,23): error TS2344: Type 'string' does not satisfy the constraint '(...args: any) => any'.
 inferTypes1.ts(37,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
   Type 'Function' provides no match for the signature '(...args: any): any'.
-inferTypes1.ts(43,25): error TS2344: Type 'string' does not satisfy the constraint 'new(...args: any) => any'.
-inferTypes1.ts(44,25): error TS2344: Type 'Function' does not satisfy the constraint 'new(...args: any) => any'.
-  Type 'Function' provides no match for the signature 'new(...args: any): any'.
+inferTypes1.ts(43,25): error TS2344: Type 'string' does not satisfy the constraint 'new (...args: any) => any'.
+inferTypes1.ts(44,25): error TS2344: Type 'Function' does not satisfy the constraint 'new (...args: any) => any'.
+  Type 'Function' provides no match for the signature 'new (...args: any): any'.
 inferTypes1.ts(55,25): error TS2344: Type '(x: string, y: string) => number' does not satisfy the constraint '(x: any) => any'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
 inferTypes1.ts(56,25): error TS2344: Type 'Function' does not satisfy the constraint '(x: any) => any'.
@@ -69,11 +69,11 @@ inferTypes1.ts(153,40): error TS2322: Type 'T' is not assignable to type 'string
     type U12 = InstanceType<never>;  // never
     type U13 = InstanceType<string>;  // Error
                             ~~~~~~
-!!! error TS2344: Type 'string' does not satisfy the constraint 'new(...args: any) => any'.
+!!! error TS2344: Type 'string' does not satisfy the constraint 'new (...args: any) => any'.
     type U14 = InstanceType<Function>;  // Error
                             ~~~~~~~~
-!!! error TS2344: Type 'Function' does not satisfy the constraint 'new(...args: any) => any'.
-!!! error TS2344:   Type 'Function' provides no match for the signature 'new(...args: any): any'.
+!!! error TS2344: Type 'Function' does not satisfy the constraint 'new (...args: any) => any'.
+!!! error TS2344:   Type 'Function' provides no match for the signature 'new (...args: any): any'.
     type U15 = InstanceType<typeof Abstract>;  // Abstract
     type U16<T extends any[]> = InstanceType<new (x: string, ...args: T) => T[]>;  // T[]
     type U17<T extends any[]> = InstanceType<abstract new (x: string, ...args: T) => T[]>;  // T[]

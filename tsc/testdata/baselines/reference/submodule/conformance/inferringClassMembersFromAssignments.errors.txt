@@ -17,16 +17,16 @@ a.js(44,18): error TS2339: Property 'inSetter' does not exist on type 'C'.
 a.js(47,18): error TS2339: Property 'inSetter' does not exist on type 'C'.
 a.js(52,18): error TS2339: Property 'inPropertyDeclaration' does not exist on type 'C'.
 a.js(55,18): error TS2339: Property 'inPropertyDeclaration' does not exist on type 'C'.
-a.js(60,18): error TS2339: Property 'inStaticMethod' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
-a.js(63,18): error TS2339: Property 'inStaticMethod' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
-a.js(68,22): error TS2339: Property 'inStaticNestedArrowFunction' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
-a.js(71,22): error TS2339: Property 'inStaticNestedArrowFunction' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
-a.js(77,18): error TS2339: Property 'inStaticGetter' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
-a.js(80,18): error TS2339: Property 'inStaticGetter' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
-a.js(85,18): error TS2339: Property 'inStaticSetter' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
-a.js(88,18): error TS2339: Property 'inStaticSetter' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
-a.js(93,18): error TS2339: Property 'inStaticPropertyDeclaration' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
-a.js(96,18): error TS2339: Property 'inStaticPropertyDeclaration' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+a.js(60,18): error TS2339: Property 'inStaticMethod' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+a.js(63,18): error TS2339: Property 'inStaticMethod' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+a.js(68,22): error TS2339: Property 'inStaticNestedArrowFunction' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+a.js(71,22): error TS2339: Property 'inStaticNestedArrowFunction' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+a.js(77,18): error TS2339: Property 'inStaticGetter' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+a.js(80,18): error TS2339: Property 'inStaticGetter' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+a.js(85,18): error TS2339: Property 'inStaticSetter' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+a.js(88,18): error TS2339: Property 'inStaticSetter' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+a.js(93,18): error TS2339: Property 'inStaticPropertyDeclaration' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+a.js(96,18): error TS2339: Property 'inStaticPropertyDeclaration' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
 b.ts(4,24): error TS2339: Property 'inConstructor' does not exist on type 'C'.
 b.ts(8,35): error TS2551: Property 'inMethod' does not exist on type 'C'. Did you mean 'method'?
 b.ts(9,35): error TS2339: Property 'inGetter' does not exist on type 'C'.
@@ -36,11 +36,11 @@ b.ts(12,35): error TS2339: Property 'inNestedArrowFunction' does not exist on ty
 b.ts(17,16): error TS2339: Property 'inMultiple' does not exist on type 'C'.
 b.ts(19,36): error TS2339: Property 'inMultipleMethods' does not exist on type 'C'.
 b.ts(21,13): error TS2339: Property 'inMethodNullable' does not exist on type 'C'.
-b.ts(24,35): error TS2339: Property 'inStaticMethod' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
-b.ts(25,35): error TS2339: Property 'inStaticGetter' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
-b.ts(26,35): error TS2339: Property 'inStaticSetter' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
-b.ts(27,35): error TS2339: Property 'inStaticPropertyDeclaration' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
-b.ts(28,35): error TS2339: Property 'inStaticNestedArrowFunction' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+b.ts(24,35): error TS2339: Property 'inStaticMethod' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+b.ts(25,35): error TS2339: Property 'inStaticGetter' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+b.ts(26,35): error TS2339: Property 'inStaticSetter' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+b.ts(27,35): error TS2339: Property 'inStaticPropertyDeclaration' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+b.ts(28,35): error TS2339: Property 'inStaticNestedArrowFunction' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
 
 
 ==== a.js (29 errors) ====
@@ -145,24 +145,24 @@ b.ts(28,35): error TS2339: Property 'inStaticNestedArrowFunction' does not exist
             if (Math.random()) {
                 this.inStaticMethod = 0;
                      ~~~~~~~~~~~~~~
-!!! error TS2339: Property 'inStaticMethod' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+!!! error TS2339: Property 'inStaticMethod' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
             }
             else {
                 this.inStaticMethod = "string"
                      ~~~~~~~~~~~~~~
-!!! error TS2339: Property 'inStaticMethod' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+!!! error TS2339: Property 'inStaticMethod' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
             }
     
             var action = () => {
                 if (Math.random()) {
                     this.inStaticNestedArrowFunction = 0;
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'inStaticNestedArrowFunction' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+!!! error TS2339: Property 'inStaticNestedArrowFunction' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
                 }
                 else {
                     this.inStaticNestedArrowFunction = "string"
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'inStaticNestedArrowFunction' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+!!! error TS2339: Property 'inStaticNestedArrowFunction' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
                 }
             };
         }
@@ -170,36 +170,36 @@ b.ts(28,35): error TS2339: Property 'inStaticNestedArrowFunction' does not exist
             if (Math.random()) {
                 this.inStaticGetter = 0;
                      ~~~~~~~~~~~~~~
-!!! error TS2339: Property 'inStaticGetter' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+!!! error TS2339: Property 'inStaticGetter' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
             }
             else {
                 this.inStaticGetter = "string"
                      ~~~~~~~~~~~~~~
-!!! error TS2339: Property 'inStaticGetter' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+!!! error TS2339: Property 'inStaticGetter' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
             }
         }
         static set() {
             if (Math.random()) {
                 this.inStaticSetter = 0;
                      ~~~~~~~~~~~~~~
-!!! error TS2339: Property 'inStaticSetter' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+!!! error TS2339: Property 'inStaticSetter' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
             }
             else {
                 this.inStaticSetter = "string"
                      ~~~~~~~~~~~~~~
-!!! error TS2339: Property 'inStaticSetter' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+!!! error TS2339: Property 'inStaticSetter' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
             }
         }
         static prop = () => {
             if (Math.random()) {
                 this.inStaticPropertyDeclaration = 0;
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'inStaticPropertyDeclaration' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+!!! error TS2339: Property 'inStaticPropertyDeclaration' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
             }
             else {
                 this.inStaticPropertyDeclaration = "string"
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'inStaticPropertyDeclaration' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+!!! error TS2339: Property 'inStaticPropertyDeclaration' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
             }
         }
     }
@@ -249,17 +249,17 @@ b.ts(28,35): error TS2339: Property 'inStaticNestedArrowFunction' does not exist
     
     var stringOrNumberOrUndefined = C.inStaticMethod;
                                       ~~~~~~~~~~~~~~
-!!! error TS2339: Property 'inStaticMethod' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+!!! error TS2339: Property 'inStaticMethod' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
     var stringOrNumberOrUndefined = C.inStaticGetter;
                                       ~~~~~~~~~~~~~~
-!!! error TS2339: Property 'inStaticGetter' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+!!! error TS2339: Property 'inStaticGetter' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
     var stringOrNumberOrUndefined = C.inStaticSetter;
                                       ~~~~~~~~~~~~~~
-!!! error TS2339: Property 'inStaticSetter' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+!!! error TS2339: Property 'inStaticSetter' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
     var stringOrNumberOrUndefined = C.inStaticPropertyDeclaration;
                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'inStaticPropertyDeclaration' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+!!! error TS2339: Property 'inStaticPropertyDeclaration' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
     var stringOrNumberOrUndefined = C.inStaticNestedArrowFunction;
                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'inStaticNestedArrowFunction' does not exist on type '{ new(): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
+!!! error TS2339: Property 'inStaticNestedArrowFunction' does not exist on type '{ new (): C; method: () => void; get: () => void; set: () => void; prop: () => void; prototype: C; }'.
     

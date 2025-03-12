@@ -2,8 +2,8 @@
 +++ new.classFieldSuperAccessibleJs1.errors.txt
 @@= skipped -0, +0 lines =@@
 -index.js(9,23): error TS2565: Property 'blah2' is used before being assigned.
-+index.js(4,3): error TS2551: Property 'blah2' does not exist on type '{ new(): C; blah1: number; prototype: C; }'. Did you mean 'blah1'?
-+index.js(9,23): error TS2551: Property 'blah2' does not exist on type '{ new(): C; blah1: number; prototype: C; }'. Did you mean 'blah1'?
++index.js(4,3): error TS2551: Property 'blah2' does not exist on type '{ new (): C; blah1: number; prototype: C; }'. Did you mean 'blah1'?
++index.js(9,23): error TS2551: Property 'blah2' does not exist on type '{ new (): C; blah1: number; prototype: C; }'. Did you mean 'blah1'?
  
  
 -==== index.js (1 errors) ====
@@ -13,7 +13,7 @@
      }
      C.blah2 = 456;
 +      ~~~~~
-+!!! error TS2551: Property 'blah2' does not exist on type '{ new(): C; blah1: number; prototype: C; }'. Did you mean 'blah1'?
++!!! error TS2551: Property 'blah2' does not exist on type '{ new (): C; blah1: number; prototype: C; }'. Did you mean 'blah1'?
 +!!! related TS2728 index.js:2:10: 'blah1' is declared here.
      
      class D extends C {
@@ -22,7 +22,7 @@
          console.log(super.blah2);
                            ~~~~~
 -!!! error TS2565: Property 'blah2' is used before being assigned.
-+!!! error TS2551: Property 'blah2' does not exist on type '{ new(): C; blah1: number; prototype: C; }'. Did you mean 'blah1'?
++!!! error TS2551: Property 'blah2' does not exist on type '{ new (): C; blah1: number; prototype: C; }'. Did you mean 'blah1'?
 +!!! related TS2728 index.js:2:10: 'blah1' is declared here.
        }
      }

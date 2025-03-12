@@ -4,10 +4,10 @@
  typeofInternalModules.ts(15,16): error TS2708: Cannot use namespace 'importUninst' as a value.
  typeofInternalModules.ts(17,9): error TS2709: Cannot use namespace 'Outer' as a type.
 -typeofInternalModules.ts(19,1): error TS2741: Property 'C' is missing in type 'typeof Outer' but required in type 'typeof instantiated'.
-+typeofInternalModules.ts(19,1): error TS2741: Property 'C' is missing in type '{ instantiated: { C: { new(): C; prototype: C; }; }; }' but required in type '{ C: { new(): C; prototype: C; }; }'.
++typeofInternalModules.ts(19,1): error TS2741: Property 'C' is missing in type '{ instantiated: { C: { new (): C; prototype: C; }; }; }' but required in type '{ C: { new (): C; prototype: C; }; }'.
  typeofInternalModules.ts(21,16): error TS2708: Cannot use namespace 'importUninst' as a value.
 -typeofInternalModules.ts(23,1): error TS2741: Property 'instantiated' is missing in type 'typeof instantiated' but required in type 'typeof Outer'.
-+typeofInternalModules.ts(23,1): error TS2741: Property 'instantiated' is missing in type '{ C: { new(): C; prototype: C; }; }' but required in type '{ instantiated: { C: { new(): C; prototype: C; }; }; }'.
++typeofInternalModules.ts(23,1): error TS2741: Property 'instantiated' is missing in type '{ C: { new (): C; prototype: C; }; }' but required in type '{ instantiated: { C: { new (): C; prototype: C; }; }; }'.
  
  
  ==== typeofInternalModules.ts (5 errors) ====
@@ -16,7 +16,7 @@
      x5 = Outer;
      ~~
 -!!! error TS2741: Property 'C' is missing in type 'typeof Outer' but required in type 'typeof instantiated'.
-+!!! error TS2741: Property 'C' is missing in type '{ instantiated: { C: { new(): C; prototype: C; }; }; }' but required in type '{ C: { new(): C; prototype: C; }; }'.
++!!! error TS2741: Property 'C' is missing in type '{ instantiated: { C: { new (): C; prototype: C; }; }; }' but required in type '{ C: { new (): C; prototype: C; }; }'.
  !!! related TS2728 typeofInternalModules.ts:3:22: 'C' is declared here.
      x5 = Outer.instantiated;
      var x6: typeof importUninst;
@@ -25,6 +25,6 @@
      x7 = importInst;
      ~~
 -!!! error TS2741: Property 'instantiated' is missing in type 'typeof instantiated' but required in type 'typeof Outer'.
-+!!! error TS2741: Property 'instantiated' is missing in type '{ C: { new(): C; prototype: C; }; }' but required in type '{ instantiated: { C: { new(): C; prototype: C; }; }; }'.
++!!! error TS2741: Property 'instantiated' is missing in type '{ C: { new (): C; prototype: C; }; }' but required in type '{ instantiated: { C: { new (): C; prototype: C; }; }; }'.
  !!! related TS2728 typeofInternalModules.ts:2:19: 'instantiated' is declared here.
      

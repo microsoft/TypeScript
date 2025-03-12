@@ -8,7 +8,7 @@ subtypesOfUnion.ts(23,5): error TS2411: Property 'foo11' of type 'A2<number>' is
 subtypesOfUnion.ts(24,5): error TS2411: Property 'foo12' of type '(x: any) => number' is not assignable to 'string' index type 'string | number'.
 subtypesOfUnion.ts(25,5): error TS2411: Property 'foo13' of type '<T>(x: T) => T' is not assignable to 'string' index type 'string | number'.
 subtypesOfUnion.ts(26,5): error TS2411: Property 'foo14' of type '{ (): void; bar: number; }' is not assignable to 'string' index type 'string | number'.
-subtypesOfUnion.ts(27,5): error TS2411: Property 'foo15' of type '{ new(): c; bar: number; prototype: c; }' is not assignable to 'string' index type 'string | number'.
+subtypesOfUnion.ts(27,5): error TS2411: Property 'foo15' of type '{ new (): c; bar: number; prototype: c; }' is not assignable to 'string' index type 'string | number'.
 subtypesOfUnion.ts(28,5): error TS2411: Property 'foo16' of type 'T' is not assignable to 'string' index type 'string | number'.
 subtypesOfUnion.ts(29,5): error TS2411: Property 'foo17' of type 'Object' is not assignable to 'string' index type 'string | number'.
 subtypesOfUnion.ts(30,5): error TS2411: Property 'foo18' of type '{}' is not assignable to 'string' index type 'string | number'.
@@ -23,7 +23,7 @@ subtypesOfUnion.ts(44,5): error TS2411: Property 'foo11' of type 'A2<number>' is
 subtypesOfUnion.ts(45,5): error TS2411: Property 'foo12' of type '(x: any) => number' is not assignable to 'string' index type 'number'.
 subtypesOfUnion.ts(46,5): error TS2411: Property 'foo13' of type '<T>(x: T) => T' is not assignable to 'string' index type 'number'.
 subtypesOfUnion.ts(47,5): error TS2411: Property 'foo14' of type '{ (): void; bar: number; }' is not assignable to 'string' index type 'number'.
-subtypesOfUnion.ts(48,5): error TS2411: Property 'foo15' of type '{ new(): c; bar: number; prototype: c; }' is not assignable to 'string' index type 'number'.
+subtypesOfUnion.ts(48,5): error TS2411: Property 'foo15' of type '{ new (): c; bar: number; prototype: c; }' is not assignable to 'string' index type 'number'.
 subtypesOfUnion.ts(49,5): error TS2411: Property 'foo16' of type 'T' is not assignable to 'string' index type 'number'.
 subtypesOfUnion.ts(50,5): error TS2411: Property 'foo17' of type 'Object' is not assignable to 'string' index type 'number'.
 subtypesOfUnion.ts(51,5): error TS2411: Property 'foo18' of type '{}' is not assignable to 'string' index type 'number'.
@@ -78,7 +78,7 @@ subtypesOfUnion.ts(51,5): error TS2411: Property 'foo18' of type '{}' is not ass
 !!! error TS2411: Property 'foo14' of type '{ (): void; bar: number; }' is not assignable to 'string' index type 'string | number'.
         foo15: typeof c; // error
         ~~~~~
-!!! error TS2411: Property 'foo15' of type '{ new(): c; bar: number; prototype: c; }' is not assignable to 'string' index type 'string | number'.
+!!! error TS2411: Property 'foo15' of type '{ new (): c; bar: number; prototype: c; }' is not assignable to 'string' index type 'string | number'.
         foo16: T; // error
         ~~~~~
 !!! error TS2411: Property 'foo16' of type 'T' is not assignable to 'string' index type 'string | number'.
@@ -129,7 +129,7 @@ subtypesOfUnion.ts(51,5): error TS2411: Property 'foo18' of type '{}' is not ass
 !!! error TS2411: Property 'foo14' of type '{ (): void; bar: number; }' is not assignable to 'string' index type 'number'.
         foo15: typeof c; // error
         ~~~~~
-!!! error TS2411: Property 'foo15' of type '{ new(): c; bar: number; prototype: c; }' is not assignable to 'string' index type 'number'.
+!!! error TS2411: Property 'foo15' of type '{ new (): c; bar: number; prototype: c; }' is not assignable to 'string' index type 'number'.
         foo16: T; // error
         ~~~~~
 !!! error TS2411: Property 'foo16' of type 'T' is not assignable to 'string' index type 'number'.

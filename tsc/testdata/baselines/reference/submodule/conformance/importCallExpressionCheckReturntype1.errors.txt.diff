@@ -5,10 +5,10 @@
 -  Property 'D' is missing in type 'typeof import("defaultPath")' but required in type 'typeof import("anotherModule")'.
 -1.ts(5,10): error TS2352: Conversion of type 'Promise<typeof import("defaultPath")>' to type 'Promise<typeof import("anotherModule")>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 -  Property 'D' is missing in type 'typeof import("defaultPath")' but required in type 'typeof import("anotherModule")'.
-+1.ts(4,5): error TS2322: Type 'Promise<{ C: { new(): C; prototype: C; }; }>' is not assignable to type 'Promise<{ D: { new(): D; prototype: D; }; }>'.
-+  Property 'D' is missing in type '{ C: { new(): C; prototype: C; }; }' but required in type '{ D: { new(): D; prototype: D; }; }'.
-+1.ts(5,10): error TS2352: Conversion of type 'Promise<{ C: { new(): C; prototype: C; }; }>' to type 'Promise<{ D: { new(): D; prototype: D; }; }>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-+  Property 'D' is missing in type '{ C: { new(): C; prototype: C; }; }' but required in type '{ D: { new(): D; prototype: D; }; }'.
++1.ts(4,5): error TS2322: Type 'Promise<{ C: { new (): C; prototype: C; }; }>' is not assignable to type 'Promise<{ D: { new (): D; prototype: D; }; }>'.
++  Property 'D' is missing in type '{ C: { new (): C; prototype: C; }; }' but required in type '{ D: { new (): D; prototype: D; }; }'.
++1.ts(5,10): error TS2352: Conversion of type 'Promise<{ C: { new (): C; prototype: C; }; }>' to type 'Promise<{ D: { new (): D; prototype: D; }; }>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
++  Property 'D' is missing in type '{ C: { new (): C; prototype: C; }; }' but required in type '{ D: { new (): D; prototype: D; }; }'.
  
  
  ==== anotherModule.ts (0 errors) ====
@@ -18,15 +18,15 @@
          ~~
 -!!! error TS2322: Type 'Promise<typeof import("defaultPath")>' is not assignable to type 'Promise<typeof import("anotherModule")>'.
 -!!! error TS2322:   Property 'D' is missing in type 'typeof import("defaultPath")' but required in type 'typeof import("anotherModule")'.
-+!!! error TS2322: Type 'Promise<{ C: { new(): C; prototype: C; }; }>' is not assignable to type 'Promise<{ D: { new(): D; prototype: D; }; }>'.
-+!!! error TS2322:   Property 'D' is missing in type '{ C: { new(): C; prototype: C; }; }' but required in type '{ D: { new(): D; prototype: D; }; }'.
++!!! error TS2322: Type 'Promise<{ C: { new (): C; prototype: C; }; }>' is not assignable to type 'Promise<{ D: { new (): D; prototype: D; }; }>'.
++!!! error TS2322:   Property 'D' is missing in type '{ C: { new (): C; prototype: C; }; }' but required in type '{ D: { new (): D; prototype: D; }; }'.
  !!! related TS2728 anotherModule.ts:1:14: 'D' is declared here.
      let p2 = import("./defaultPath") as Promise<typeof anotherModule>;
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2352: Conversion of type 'Promise<typeof import("defaultPath")>' to type 'Promise<typeof import("anotherModule")>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 -!!! error TS2352:   Property 'D' is missing in type 'typeof import("defaultPath")' but required in type 'typeof import("anotherModule")'.
-+!!! error TS2352: Conversion of type 'Promise<{ C: { new(): C; prototype: C; }; }>' to type 'Promise<{ D: { new(): D; prototype: D; }; }>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-+!!! error TS2352:   Property 'D' is missing in type '{ C: { new(): C; prototype: C; }; }' but required in type '{ D: { new(): D; prototype: D; }; }'.
++!!! error TS2352: Conversion of type 'Promise<{ C: { new (): C; prototype: C; }; }>' to type 'Promise<{ D: { new (): D; prototype: D; }; }>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
++!!! error TS2352:   Property 'D' is missing in type '{ C: { new (): C; prototype: C; }; }' but required in type '{ D: { new (): D; prototype: D; }; }'.
  !!! related TS2728 anotherModule.ts:1:14: 'D' is declared here.
      let p3: Promise<any> = import("./defaultPath");
      

@@ -3,7 +3,7 @@
 @@= skipped -0, +0 lines =@@
  scopeCheckExtendedClassInsideStaticMethod1.ts(4,7): error TS2304: Cannot find name 'v'.
 -scopeCheckExtendedClassInsideStaticMethod1.ts(5,12): error TS2339: Property 'p' does not exist on type 'typeof D'.
-+scopeCheckExtendedClassInsideStaticMethod1.ts(5,12): error TS2339: Property 'p' does not exist on type '{ new(): D; s: any; c: () => void; prototype: D; }'.
++scopeCheckExtendedClassInsideStaticMethod1.ts(5,12): error TS2339: Property 'p' does not exist on type '{ new (): D; s: any; c: () => void; prototype: D; }'.
  scopeCheckExtendedClassInsideStaticMethod1.ts(6,7): error TS2662: Cannot find name 's'. Did you mean the static member 'D.s'?
  
  
@@ -12,7 +12,7 @@
            this.p = 1;
                 ~
 -!!! error TS2339: Property 'p' does not exist on type 'typeof D'.
-+!!! error TS2339: Property 'p' does not exist on type '{ new(): D; s: any; c: () => void; prototype: D; }'.
++!!! error TS2339: Property 'p' does not exist on type '{ new (): D; s: any; c: () => void; prototype: D; }'.
            s = 1;
            ~
  !!! error TS2662: Cannot find name 's'. Did you mean the static member 'D.s'?

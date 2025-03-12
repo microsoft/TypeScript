@@ -1,5 +1,5 @@
 classAbstractInstantiations2.ts(10,1): error TS2511: Cannot create an instance of an abstract class.
-classAbstractInstantiations2.ts(13,5): error TS2322: Type '{ new(): B; prototype: B; }' is not assignable to type '{ new(): A; prototype: A; }'.
+classAbstractInstantiations2.ts(13,5): error TS2322: Type '{ new (): B; prototype: B; }' is not assignable to type '{ new (): A; prototype: A; }'.
   Cannot assign an abstract constructor type to a non-abstract constructor type.
 classAbstractInstantiations2.ts(17,5): error TS2511: Cannot create an instance of an abstract class.
 classAbstractInstantiations2.ts(21,1): error TS2511: Cannot create an instance of an abstract class.
@@ -27,7 +27,7 @@ classAbstractInstantiations2.ts(50,5): error TS1244: Abstract methods can only a
     var BB: typeof B = B;
     var AA: typeof A = BB; // error, AA is not of abstract type.
         ~~
-!!! error TS2322: Type '{ new(): B; prototype: B; }' is not assignable to type '{ new(): A; prototype: A; }'.
+!!! error TS2322: Type '{ new (): B; prototype: B; }' is not assignable to type '{ new (): A; prototype: A; }'.
 !!! error TS2322:   Cannot assign an abstract constructor type to a non-abstract constructor type.
     new AA;
     

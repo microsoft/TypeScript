@@ -2,7 +2,7 @@ classStaticPropertyAccess.ts(10,1): error TS2576: Property '"' does not exist on
 classStaticPropertyAccess.ts(11,1): error TS2576: Property 'y' does not exist on type 'A'. Did you mean to access the static member 'A['y']' instead?
 classStaticPropertyAccess.ts(12,3): error TS2576: Property 'y' does not exist on type 'A'. Did you mean to access the static member 'A.y' instead?
 classStaticPropertyAccess.ts(13,3): error TS2341: Property '_b' is private and only accessible within class 'A'.
-classStaticPropertyAccess.ts(14,3): error TS2339: Property 'a' does not exist on type '{ new(): A; "\"": () => void; x: number; y: number; _b: number; prototype: A; }'.
+classStaticPropertyAccess.ts(14,3): error TS2339: Property 'a' does not exist on type '{ new (): A; "\"": () => void; x: number; y: number; _b: number; prototype: A; }'.
 
 
 ==== classStaticPropertyAccess.ts (5 errors) ====
@@ -29,5 +29,5 @@ classStaticPropertyAccess.ts(14,3): error TS2339: Property 'a' does not exist on
 !!! error TS2341: Property '_b' is private and only accessible within class 'A'.
     A.a
       ~
-!!! error TS2339: Property 'a' does not exist on type '{ new(): A; "\"": () => void; x: number; y: number; _b: number; prototype: A; }'.
+!!! error TS2339: Property 'a' does not exist on type '{ new (): A; "\"": () => void; x: number; y: number; _b: number; prototype: A; }'.
     

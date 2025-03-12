@@ -1,9 +1,9 @@
 moduleVisibilityTest2.ts(55,17): error TS2304: Cannot find name 'x'.
-moduleVisibilityTest2.ts(56,21): error TS2339: Property 'E' does not exist on type '{ exported_var: any; C: { new(): C; prototype: C; }; c: error; meb: any; }'.
+moduleVisibilityTest2.ts(56,21): error TS2339: Property 'E' does not exist on type '{ exported_var: any; C: { new (): C; prototype: C; }; c: error; meb: any; }'.
 moduleVisibilityTest2.ts(59,16): error TS2694: Namespace 'M' has no exported member 'I'.
 moduleVisibilityTest2.ts(59,23): error TS2694: Namespace 'M' has no exported member 'I'.
-moduleVisibilityTest2.ts(62,11): error TS2339: Property 'x' does not exist on type '{ exported_var: any; C: { new(): C; prototype: C; }; c: error; meb: any; }'.
-moduleVisibilityTest2.ts(63,15): error TS2339: Property 'E' does not exist on type '{ exported_var: any; C: { new(): C; prototype: C; }; c: error; meb: any; }'.
+moduleVisibilityTest2.ts(62,11): error TS2339: Property 'x' does not exist on type '{ exported_var: any; C: { new (): C; prototype: C; }; c: error; meb: any; }'.
+moduleVisibilityTest2.ts(63,15): error TS2339: Property 'E' does not exist on type '{ exported_var: any; C: { new (): C; prototype: C; }; c: error; meb: any; }'.
 
 
 ==== moduleVisibilityTest2.ts (6 errors) ====
@@ -66,7 +66,7 @@ moduleVisibilityTest2.ts(63,15): error TS2339: Property 'E' does not exist on ty
 !!! error TS2304: Cannot find name 'x'.
     	export var meb = M.E.B;
     	                   ~
-!!! error TS2339: Property 'E' does not exist on type '{ exported_var: any; C: { new(): C; prototype: C; }; c: error; meb: any; }'.
+!!! error TS2339: Property 'E' does not exist on type '{ exported_var: any; C: { new (): C; prototype: C; }; c: error; meb: any; }'.
     }
     
     var cprime : M.I = <M.I>null;
@@ -78,10 +78,10 @@ moduleVisibilityTest2.ts(63,15): error TS2339: Property 'E' does not exist on ty
     var c = new M.C();
     var z = M.x;
               ~
-!!! error TS2339: Property 'x' does not exist on type '{ exported_var: any; C: { new(): C; prototype: C; }; c: error; meb: any; }'.
+!!! error TS2339: Property 'x' does not exist on type '{ exported_var: any; C: { new (): C; prototype: C; }; c: error; meb: any; }'.
     var alpha = M.E.A;
                   ~
-!!! error TS2339: Property 'E' does not exist on type '{ exported_var: any; C: { new(): C; prototype: C; }; c: error; meb: any; }'.
+!!! error TS2339: Property 'E' does not exist on type '{ exported_var: any; C: { new (): C; prototype: C; }; c: error; meb: any; }'.
     var omega = M.exported_var;
     c.someMethodThatCallsAnOuterMethod();
     

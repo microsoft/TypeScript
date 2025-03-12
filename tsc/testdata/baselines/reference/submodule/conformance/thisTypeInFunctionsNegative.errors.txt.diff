@@ -73,7 +73,7 @@
      Type 'void' is not assignable to type 'D'.
 -thisTypeInFunctionsNegative.ts(125,69): error TS2339: Property 'x' does not exist on type 'typeof Base1'.
 -thisTypeInFunctionsNegative.ts(145,1): error TS2322: Type '(this: Base2) => number' is not assignable to type '(this: Base1) => number'.
-+thisTypeInFunctionsNegative.ts(125,69): error TS2339: Property 'x' does not exist on type '{ new(): Base1; explicitStatic: () => number; prototype: Base1; }'.
++thisTypeInFunctionsNegative.ts(125,69): error TS2339: Property 'x' does not exist on type '{ new (): Base1; explicitStatic: () => number; prototype: Base1; }'.
 +thisTypeInFunctionsNegative.ts(145,1): error TS2719: Type '() => number' is not assignable to type '() => number'. Two different types with this name exist, but they are unrelated.
    The 'this' types of each signature are incompatible.
      Property 'y' is missing in type 'Base1' but required in type 'Base2'.
@@ -224,7 +224,7 @@
          static explicitStatic(this: typeof Base1): number { return this.x; }
                                                                          ~
 -!!! error TS2339: Property 'x' does not exist on type 'typeof Base1'.
-+!!! error TS2339: Property 'x' does not exist on type '{ new(): Base1; explicitStatic: () => number; prototype: Base1; }'.
++!!! error TS2339: Property 'x' does not exist on type '{ new (): Base1; explicitStatic: () => number; prototype: Base1; }'.
      }
      class Derived1 extends Base1 {
          y: number

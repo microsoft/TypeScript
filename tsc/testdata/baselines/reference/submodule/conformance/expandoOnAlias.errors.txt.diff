@@ -2,7 +2,7 @@
 +++ new.expandoOnAlias.errors.txt
 @@= skipped -0, +0 lines =@@
 -test.js(4,5): error TS2339: Property 'config' does not exist on type 'typeof Vue'.
-+test.js(4,5): error TS2339: Property 'config' does not exist on type '{ new(): Vue; prototype: Vue; }'.
++test.js(4,5): error TS2339: Property 'config' does not exist on type '{ new (): Vue; prototype: Vue; }'.
 +test.js(12,8): error TS2339: Property 'y' does not exist on type '{ x: number; }'.
 +test.js(14,8): error TS2339: Property 'y' does not exist on type '{ x: number; }'.
  
@@ -19,7 +19,7 @@
      Vue.config = {};
          ~~~~~~
 -!!! error TS2339: Property 'config' does not exist on type 'typeof Vue'.
-+!!! error TS2339: Property 'config' does not exist on type '{ new(): Vue; prototype: Vue; }'.
++!!! error TS2339: Property 'config' does not exist on type '{ new (): Vue; prototype: Vue; }'.
      new Vue();
      
      // This is not an expando declaration; it's just a plain property assignment.

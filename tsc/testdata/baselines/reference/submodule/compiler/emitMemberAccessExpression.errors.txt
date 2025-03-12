@@ -1,4 +1,4 @@
-emitMemberAccessExpression_file2.ts(6,29): error TS2339: Property 'KnockoutExtentions' does not exist on type '{ _Person: { new(): _Person; prototype: _Person; }; }'.
+emitMemberAccessExpression_file2.ts(6,29): error TS2339: Property 'KnockoutExtentions' does not exist on type '{ _Person: { new (): _Person; prototype: _Person; }; }'.
 
 
 ==== emitMemberAccessExpression_file3.ts (0 errors) ====
@@ -21,7 +21,7 @@ emitMemberAccessExpression_file2.ts(6,29): error TS2339: Property 'KnockoutExten
             public populate(raw: any) {
                 var res = Model.KnockoutExtentions;
                                 ~~~~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'KnockoutExtentions' does not exist on type '{ _Person: { new(): _Person; prototype: _Person; }; }'.
+!!! error TS2339: Property 'KnockoutExtentions' does not exist on type '{ _Person: { new (): _Person; prototype: _Person; }; }'.
             }
         }
     }

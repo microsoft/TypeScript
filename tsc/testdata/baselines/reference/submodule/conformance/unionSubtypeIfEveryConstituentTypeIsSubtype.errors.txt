@@ -24,8 +24,8 @@ unionSubtypeIfEveryConstituentTypeIsSubtype.ts(92,5): error TS2411: Property 'fo
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(99,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type 'E2.A'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(110,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type '{ (): void; bar: number; }'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(111,5): error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type '{ (): void; bar: number; }'.
-unionSubtypeIfEveryConstituentTypeIsSubtype.ts(121,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type '{ new(): c; bar: number; prototype: c; }'.
-unionSubtypeIfEveryConstituentTypeIsSubtype.ts(122,5): error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type '{ new(): c; bar: number; prototype: c; }'.
+unionSubtypeIfEveryConstituentTypeIsSubtype.ts(121,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type '{ new (): c; bar: number; prototype: c; }'.
+unionSubtypeIfEveryConstituentTypeIsSubtype.ts(122,5): error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type '{ new (): c; bar: number; prototype: c; }'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(128,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type 'T'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(129,5): error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type 'T'.
 
@@ -205,10 +205,10 @@ unionSubtypeIfEveryConstituentTypeIsSubtype.ts(129,5): error TS2411: Property 'f
         [x: string]: typeof c;
         foo: string | number;
         ~~~
-!!! error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type '{ new(): c; bar: number; prototype: c; }'.
+!!! error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type '{ new (): c; bar: number; prototype: c; }'.
         foo2: e | number;
         ~~~~
-!!! error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type '{ new(): c; bar: number; prototype: c; }'.
+!!! error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type '{ new (): c; bar: number; prototype: c; }'.
     }
     
     

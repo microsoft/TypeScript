@@ -1,8 +1,8 @@
-staticIndexSignature2.ts(6,1): error TS2542: Index signature in type '{ new(): C; readonly [s: string]: number; readonly [s: number]: 42; prototype: C; }' only permits reading.
-staticIndexSignature2.ts(7,1): error TS2542: Index signature in type '{ new(): C; readonly [s: string]: number; readonly [s: number]: 42; prototype: C; }' only permits reading.
-staticIndexSignature2.ts(9,1): error TS2542: Index signature in type '{ new(): C; readonly [s: string]: number; readonly [s: number]: 42; prototype: C; }' only permits reading.
+staticIndexSignature2.ts(6,1): error TS2542: Index signature in type '{ new (): C; readonly [s: string]: number; readonly [s: number]: 42; prototype: C; }' only permits reading.
+staticIndexSignature2.ts(7,1): error TS2542: Index signature in type '{ new (): C; readonly [s: string]: number; readonly [s: number]: 42; prototype: C; }' only permits reading.
+staticIndexSignature2.ts(9,1): error TS2542: Index signature in type '{ new (): C; readonly [s: string]: number; readonly [s: number]: 42; prototype: C; }' only permits reading.
 staticIndexSignature2.ts(10,1): error TS2322: Type '2' is not assignable to type '42'.
-staticIndexSignature2.ts(10,1): error TS2542: Index signature in type '{ new(): C; readonly [s: string]: number; readonly [s: number]: 42; prototype: C; }' only permits reading.
+staticIndexSignature2.ts(10,1): error TS2542: Index signature in type '{ new (): C; readonly [s: string]: number; readonly [s: number]: 42; prototype: C; }' only permits reading.
 
 
 ==== staticIndexSignature2.ts (5 errors) ====
@@ -13,17 +13,17 @@ staticIndexSignature2.ts(10,1): error TS2542: Index signature in type '{ new(): 
     
     C["foo"] = 1
     ~~~~~~~~
-!!! error TS2542: Index signature in type '{ new(): C; readonly [s: string]: number; readonly [s: number]: 42; prototype: C; }' only permits reading.
+!!! error TS2542: Index signature in type '{ new (): C; readonly [s: string]: number; readonly [s: number]: 42; prototype: C; }' only permits reading.
     C.bar = 2;
     ~~~~~
-!!! error TS2542: Index signature in type '{ new(): C; readonly [s: string]: number; readonly [s: number]: 42; prototype: C; }' only permits reading.
+!!! error TS2542: Index signature in type '{ new (): C; readonly [s: string]: number; readonly [s: number]: 42; prototype: C; }' only permits reading.
     const foo = C["foo"]
     C[42] = 42
     ~~~~~
-!!! error TS2542: Index signature in type '{ new(): C; readonly [s: string]: number; readonly [s: number]: 42; prototype: C; }' only permits reading.
+!!! error TS2542: Index signature in type '{ new (): C; readonly [s: string]: number; readonly [s: number]: 42; prototype: C; }' only permits reading.
     C[2] = 2;
     ~~~~
 !!! error TS2322: Type '2' is not assignable to type '42'.
     ~~~~
-!!! error TS2542: Index signature in type '{ new(): C; readonly [s: string]: number; readonly [s: number]: 42; prototype: C; }' only permits reading.
+!!! error TS2542: Index signature in type '{ new (): C; readonly [s: string]: number; readonly [s: number]: 42; prototype: C; }' only permits reading.
     const bar = C[42] 

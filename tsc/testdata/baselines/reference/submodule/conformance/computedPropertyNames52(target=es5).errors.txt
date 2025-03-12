@@ -1,5 +1,5 @@
 computedPropertyNames52.js(4,9): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-computedPropertyNames52.js(4,9): error TS2411: Property '[i]' of type '() => { new(): C; [x: number]: number; prototype: C; }' is not assignable to 'number' index type 'number'.
+computedPropertyNames52.js(4,9): error TS2411: Property '[i]' of type '() => { new (): C; [x: number]: number; prototype: C; }' is not assignable to 'number' index type 'number'.
 computedPropertyNames52.js(5,16): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 
 
@@ -11,7 +11,7 @@ computedPropertyNames52.js(5,16): error TS1166: A computed property name in a cl
             ~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
             ~~~
-!!! error TS2411: Property '[i]' of type '() => { new(): C; [x: number]: number; prototype: C; }' is not assignable to 'number' index type 'number'.
+!!! error TS2411: Property '[i]' of type '() => { new (): C; [x: number]: number; prototype: C; }' is not assignable to 'number' index type 'number'.
             static [i] = 100;
                    ~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.

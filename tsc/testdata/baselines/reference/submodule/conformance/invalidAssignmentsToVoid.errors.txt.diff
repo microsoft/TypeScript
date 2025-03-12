@@ -5,7 +5,7 @@
  invalidAssignmentsToVoid.ts(4,1): error TS2322: Type 'string' is not assignable to type 'void'.
  invalidAssignmentsToVoid.ts(5,1): error TS2322: Type '{}' is not assignable to type 'void'.
 -invalidAssignmentsToVoid.ts(9,1): error TS2322: Type 'typeof C' is not assignable to type 'void'.
-+invalidAssignmentsToVoid.ts(9,1): error TS2322: Type '{ new(): C; prototype: C; }' is not assignable to type 'void'.
++invalidAssignmentsToVoid.ts(9,1): error TS2322: Type '{ new (): C; prototype: C; }' is not assignable to type 'void'.
  invalidAssignmentsToVoid.ts(10,1): error TS2322: Type 'C' is not assignable to type 'void'.
  invalidAssignmentsToVoid.ts(14,1): error TS2322: Type 'I' is not assignable to type 'void'.
 -invalidAssignmentsToVoid.ts(17,1): error TS2322: Type 'typeof M' is not assignable to type 'void'.
@@ -18,7 +18,7 @@
      x = C;
      ~
 -!!! error TS2322: Type 'typeof C' is not assignable to type 'void'.
-+!!! error TS2322: Type '{ new(): C; prototype: C; }' is not assignable to type 'void'.
++!!! error TS2322: Type '{ new (): C; prototype: C; }' is not assignable to type 'void'.
      x = c;
      ~
  !!! error TS2322: Type 'C' is not assignable to type 'void'.

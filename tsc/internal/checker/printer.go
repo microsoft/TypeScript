@@ -79,7 +79,7 @@ func (c *Checker) SourceFileWithTypes(sourceFile *ast.SourceFile) string {
 func (c *Checker) signatureToString(s *Signature) string {
 	p := c.newPrinter(TypeFormatFlagsNone)
 	if s.flags&SignatureFlagsConstruct != 0 {
-		p.print("new")
+		p.print("new ")
 	}
 	p.printSignature(s, ": ")
 	return p.string()
@@ -358,7 +358,7 @@ func (p *Printer) printAnonymousType(t *Type) {
 			return
 		}
 		if len(callSignatures) == 0 && len(constructSignatures) == 1 {
-			p.print("new")
+			p.print("new ")
 			p.printSignature(constructSignatures[0], " => ")
 			return
 		}
@@ -372,7 +372,7 @@ func (p *Printer) printAnonymousType(t *Type) {
 		hasMembers = true
 	}
 	for _, sig := range constructSignatures {
-		p.print(" new")
+		p.print(" new ")
 		p.printSignature(sig, ": ")
 		p.print(";")
 		hasMembers = true
