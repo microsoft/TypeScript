@@ -12282,23 +12282,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypeOfSymbol(symbol: Symbol): Type {
+        // Retrieve the check flags for the given symbol
         const checkFlags = getCheckFlags(symbol);
 
-        const typeResolvers: { flag: number; resolver: (sym: Symbol) => Type; }[] = [
-            { flag: CheckFlags.DeferredType, resolver: getTypeOfSymbolWithDeferredType },
-            { flag: CheckFlags.Instantiated, resolver: getTypeOfInstantiatedSymbol },
-            { flag: CheckFlags.Mapped, resolver: sym => getTypeOfMappedSymbol(sym as MappedSymbol) },
-            { flag: CheckFlags.ReverseMapped, resolver: sym => getTypeOfReverseMappedSymbol(sym as ReverseMappedSymbol) },
-            { flag: SymbolFlags.Variable | SymbolFlags.Property, resolver: getTypeOfVariableOrParameterOrProperty },
-            { flag: SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule, resolver: getTypeOfFuncClassEnumModule },
-            { flag: SymbolFlags.EnumMember, resolver: getTypeOfEnumMember },
-            { flag: SymbolFlags.Accessor, resolver: getTypeOfAccessors },
-            { flag: SymbolFlags.Alias, resolver: getTypeOfAlias },
+        // Define a mapping of flag checks to their respective type resolver functions
+        const typeResolvers: [number, (sym: Symbol) => Type][] = [
+            // Check for deferred type symbols
+            [CheckFlags.DeferredType, getTypeOfSymbolWithDeferredType], // Check for instantiated symbols
+            [CheckFlags.Instantiated, getTypeOfInstantiatedSymbol], // Check for mapped symbols (cast to MappedSymbol)
+            [CheckFlags.Mapped, sym => getTypeOfMappedSymbol(sym as MappedSymbol)], // Check for reverse-mapped symbols (cast to ReverseMappedSymbol)
+            [CheckFlags.ReverseMapped, sym => getTypeOfReverseMappedSymbol(sym as ReverseMappedSymbol)], // Check for variables and properties
+            [SymbolFlags.Variable | SymbolFlags.Property, getTypeOfVariableOrParameterOrProperty], // Check for functions, methods, classes, enums, and value modules
+            [SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule, getTypeOfFuncClassEnumModule], // Check for enum members
+            [SymbolFlags.EnumMember, getTypeOfEnumMember], // Check for accessor symbols
+            [SymbolFlags.Accessor, getTypeOfAccessors], // Check for alias symbols
+            [SymbolFlags.Alias, getTypeOfAlias],
         ];
 
-        const matchedResolver = typeResolvers.find(({ flag }) => (checkFlags & flag) !== 0);
+        // Iterate through the mapping and return the corresponding type if a flag matches
+        for (const [flag, resolver] of typeResolvers) {
+            if ((checkFlags & flag)) {
+                return resolver(symbol);
+            }
+        }
 
-        return matchedResolver ? matchedResolver.resolver(symbol) : errorType;
+        // Return the error type if no conditions match
+        return errorType;
     }
 
     function getNonMissingTypeOfSymbol(symbol: Symbol) {
