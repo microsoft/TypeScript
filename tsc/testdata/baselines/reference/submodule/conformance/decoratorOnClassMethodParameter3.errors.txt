@@ -9,7 +9,6 @@ decoratorOnClassMethodParameter3.ts(5,23): error TS1308: 'await' expressions are
         async method(@dec(await value) arg: number) {}
                           ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-!!! related TS1356 decoratorOnClassMethodParameter3.ts:5:11: Did you mean to mark this function as 'async'?
       }
       return Class
     }

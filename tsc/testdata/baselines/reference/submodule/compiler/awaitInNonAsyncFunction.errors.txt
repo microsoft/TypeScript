@@ -27,6 +27,7 @@ awaitInNonAsyncFunction.ts(40,1): error TS1378: Top-level 'await' expressions ar
       return await p;
              ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 awaitInNonAsyncFunction.ts:3:10: Did you mean to mark this function as 'async'?
     }
     
     export function exportedFunc(p: Promise<number>) {
@@ -37,6 +38,7 @@ awaitInNonAsyncFunction.ts(40,1): error TS1378: Top-level 'await' expressions ar
       return await p;
              ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 awaitInNonAsyncFunction.ts:8:17: Did you mean to mark this function as 'async'?
     }
     
     const functionExpression = function(p: Promise<number>) {
@@ -47,6 +49,7 @@ awaitInNonAsyncFunction.ts(40,1): error TS1378: Top-level 'await' expressions ar
       await p;
       ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 awaitInNonAsyncFunction.ts:13:7: Did you mean to mark this function as 'async'?
     }
     
     const arrowFunc = (p: Promise<number>) => {
@@ -57,6 +60,7 @@ awaitInNonAsyncFunction.ts(40,1): error TS1378: Top-level 'await' expressions ar
       return await p;
              ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 awaitInNonAsyncFunction.ts:18:19: Did you mean to mark this function as 'async'?
     };
     
     function* generatorFunc(p: Promise<number>) {
@@ -67,6 +71,7 @@ awaitInNonAsyncFunction.ts(40,1): error TS1378: Top-level 'await' expressions ar
       yield await p;
             ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 awaitInNonAsyncFunction.ts:23:11: Did you mean to mark this function as 'async'?
     }
     
     class clazz {
@@ -86,6 +91,7 @@ awaitInNonAsyncFunction.ts(40,1): error TS1378: Top-level 'await' expressions ar
         await p;
         ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 awaitInNonAsyncFunction.ts:33:3: Did you mean to mark this function as 'async'?
       }
     }
     

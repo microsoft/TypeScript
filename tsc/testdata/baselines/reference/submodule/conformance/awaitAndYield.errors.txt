@@ -8,7 +8,6 @@ awaitAndYield.ts(4,15): error TS1163: A 'yield' expression is only allowed in a 
             foo = await x,
                   ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-!!! related TS1356 awaitAndYield.ts:1:17: Did you mean to mark this function as 'async'?
             baz = yield 1,
                   ~~~~~
 !!! error TS1163: A 'yield' expression is only allowed in a generator body.

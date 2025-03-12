@@ -1,8 +1,0 @@
---- old.awaitUsingDeclarations.13.errors.txt
-+++ new.awaitUsingDeclarations.13.errors.txt
-@@= skipped -10, +10 lines =@@
-         await using x = null;
-         ~~~~~
- !!! error TS2852: 'await using' statements are only allowed within async functions and at the top levels of modules.
--!!! related TS1356 awaitUsingDeclarations.13.ts:3:10: Did you mean to mark this function as 'async'?
-     }

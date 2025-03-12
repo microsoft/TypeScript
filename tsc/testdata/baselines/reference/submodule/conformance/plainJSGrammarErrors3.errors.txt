@@ -6,5 +6,6 @@
         await new Promise(undefined);
         ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 /a.js:1:10: Did you mean to mark this function as 'async'?
     }
     
