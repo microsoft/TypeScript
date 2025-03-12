@@ -477,6 +477,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "Ceil",
+            "kind": "type",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "ClassAccessorDecoratorContext",
             "kind": "interface",
             "kindModifiers": "declare",
@@ -1024,6 +1030,12 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "ReturnType",
+            "kind": "type",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Round",
             "kind": "type",
             "kindModifiers": "declare",
             "sortText": "15"
