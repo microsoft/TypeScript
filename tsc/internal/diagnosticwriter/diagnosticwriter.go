@@ -90,7 +90,7 @@ func writeCodeSnippet(writer io.Writer, sourceFile *ast.SourceFile, start int, l
 	lastLineOfFile, _ := scanner.GetLineAndCharacterOfPosition(sourceFile, len(sourceFile.Text))
 
 	hasMoreThanFiveLines := lastLine-firstLine >= 4
-	gutterWidth := len(strconv.Itoa(lastLineOfFile + 1 + len("")))
+	gutterWidth := len(strconv.Itoa(lastLine + 1))
 	if hasMoreThanFiveLines {
 		gutterWidth = max(len(ellipsis), gutterWidth)
 	}

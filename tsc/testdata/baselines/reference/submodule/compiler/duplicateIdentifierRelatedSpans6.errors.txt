@@ -1,7 +1,7 @@
 [96mfile2.ts[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS2664: [0mInvalid module name in augmentation, module 'someMod' cannot be found.
 
-[7m 3[0m declare module "someMod" {
-[7m  [0m [91m               ~~~~~~~~~[0m
+[7m3[0m declare module "someMod" {
+[7m [0m [91m               ~~~~~~~~~[0m
 
 
 ==== file2.ts (1 errors) ====

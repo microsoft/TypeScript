@@ -6,8 +6,8 @@
  
 -[7m3[0m         duplicate1: () => string;
 -[7m [0m [91m        ~~~~~~~~~~[0m
-+[7m 3[0m declare module "someMod" {
-+[7m  [0m [91m               ~~~~~~~~~[0m
++[7m3[0m declare module "someMod" {
++[7m [0m [91m               ~~~~~~~~~[0m
  
 -  [96mfile2.ts[0m:[93m5[0m:[93m9[0m
 -    [7m5[0m         duplicate1(): number;
