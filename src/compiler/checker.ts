@@ -1403,7 +1403,7 @@ const enum IntrinsicTypeKind {
     Sub,
     Mul,
     Div,
-    Integer,
+    Floor,
 }
 
 const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Object.entries({
@@ -1416,7 +1416,7 @@ const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Objec
     Subtract: IntrinsicTypeKind.Sub,
     Multiply: IntrinsicTypeKind.Mul,
     Divide: IntrinsicTypeKind.Div,
-    Integer: IntrinsicTypeKind.Integer,
+    Floor: IntrinsicTypeKind.Floor,
 }));
 
 const SymbolLinks = class implements SymbolLinks {
@@ -18392,8 +18392,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Mapping<Mapping<T>> === Mapping<T>
             type.flags & TypeFlags.StringMapping && symbol === type.symbol ? type :
 			type.flags & TypeFlags.Calculation ? getCalculationTypeForGenericType(symbol, [type]) :
-			// Ensure Integer<T> === T when T is any, number, or bigint
-			intrinsicTypeKinds.get(symbol.escapedName as string) === IntrinsicTypeKind.Integer && (type.flags & (TypeFlags.Any | TypeFlags.Number | TypeFlags.BigInt)) ? type :
+			// Ensure Floor<T> === T when T is any, number, or bigint
+			intrinsicTypeKinds.get(symbol.escapedName as string) === IntrinsicTypeKind.Floor && (type.flags & (TypeFlags.Any | TypeFlags.Number | TypeFlags.BigInt)) ? type :
             type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.StringMapping) || isGenericIndexType(type) ? getStringMappingTypeForGenericType(symbol, type) :
             // This handles Mapping<`${number}`> and Mapping<`${bigint}`>
             isPatternLiteralPlaceholderType(type) ? getStringMappingTypeForGenericType(symbol, getTemplateLiteralType(["", ""], [type])) :
@@ -18415,7 +18415,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function applyNumberMapping(symbol: Symbol, n: NumberLiteralType): Type {
         switch (intrinsicTypeKinds.get(symbol.escapedName as string)) {
-            case IntrinsicTypeKind.Integer:
+            case IntrinsicTypeKind.Floor:
                 return getNumberLiteralType(Math.floor(n.value));
         }
         return n;
