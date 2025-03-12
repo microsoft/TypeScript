@@ -14070,7 +14070,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ) {
                 // A reverse mapping of `{[K in keyof T[K_1]]: T[K_1]}` is the same as that of `{[K in keyof T]: T}`, since all we care about is
                 // inferring to the "type parameter" (or indexed access) shared by the constraint and template. So, to reduce the number of
-                // type identities produced, we simplify such indexed access occurences
+                // type identities produced, we simplify such indexed access occurrences
                 const newTypeParam = (type.constraintType.type as IndexedAccessType).objectType;
                 const newMappedType = replaceIndexedAccess(type.mappedType, type.constraintType.type as ReplaceableIndexedAccessType, newTypeParam);
                 inferredProp.links.mappedType = newMappedType as MappedType;
@@ -15706,7 +15706,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             // If this is a function or method declaration, get the signature from the @type tag for the sake of optional parameters.
-            // Exclude contextually-typed kinds because we already apply the @type tag to the context, plus applying it here to the initializer would supress checks that the two are compatible.
+            // Exclude contextually-typed kinds because we already apply the @type tag to the context, plus applying it here to the initializer would suppress checks that the two are compatible.
             result.push(
                 (!isFunctionExpressionOrArrowFunction(decl) &&
                     !isObjectLiteralMethod(decl) &&
@@ -20362,7 +20362,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (instantiationDepth === 100 || instantiationCount >= 5000000) {
             // We have reached 100 recursive type instantiations, or 5M type instantiations caused by the same statement
-            // or expression. There is a very high likelyhood we're dealing with a combination of infinite generic types
+            // or expression. There is a very high likelihood we're dealing with a combination of infinite generic types
             // that perpetually generate new type identities, so we stop the recursion here by yielding the error type.
             tracing?.instant(tracing.Phase.CheckTypes, "instantiateType_DepthLimit", { typeId: type.id, instantiationDepth, instantiationCount });
             error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
@@ -23330,7 +23330,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // type references (which are intended by be compared structurally). Obtain the variance
                     // information for the type parameters and relate the type arguments accordingly.
                     const variances = getVariances((source as TypeReference).target);
-                    // We return Ternary.Maybe for a recursive invocation of getVariances (signalled by emptyArray). This
+                    // We return Ternary.Maybe for a recursive invocation of getVariances (signaled by emptyArray). This
                     // effectively means we measure variance only from type parameter occurrences that aren't nested in
                     // recursive instantiations of the generic type.
                     if (variances === emptyArray) {
@@ -36565,7 +36565,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         );
                     }
                     if (hasSignatures) {
-                        // Bail early if we already found a siganture, no chance of "No constituent of type is callable"
+                        // Bail early if we already found a signature, no chance of "No constituent of type is callable"
                         break;
                     }
                 }
@@ -49846,7 +49846,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const container = getSourceFileOfNode(symbol.valueDeclaration);
         const fileSymbol = container && getSymbolOfDeclaration(container);
         // Ensures cjs export assignment is setup, since this symbol may point at, and merge with, the file itself.
-        // If we don't, the merge may not have yet occured, and the flags check below will be missing flags that
+        // If we don't, the merge may not have yet occurred, and the flags check below will be missing flags that
         // are added as a result of the merge.
         void resolveExternalModuleSymbol(fileSymbol);
         const target = getExportSymbolOfValueSymbolIfExported(resolveAlias(symbol));

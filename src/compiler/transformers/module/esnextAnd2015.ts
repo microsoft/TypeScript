@@ -334,7 +334,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             (compilerOptions.module !== undefined && compilerOptions.module > ModuleKind.ES2015)
             || !node.exportClause || !isNamespaceExport(node.exportClause) || !node.moduleSpecifier
         ) {
-            // Either ill-formed or don't need to be tranformed.
+            // Either ill-formed or don't need to be transformed.
             return (!node.moduleSpecifier || updatedModuleSpecifier === node.moduleSpecifier) ? node :
                 factory.updateExportDeclaration(
                     node,
