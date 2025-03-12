@@ -21,8 +21,10 @@ func TestEmit(t *testing.T) {
 	}{
 		{title: "StringLiteral#1", input: `;"test"`, output: ";\n\"test\";"},
 		{title: "StringLiteral#2", input: `;'test'`, output: ";\n'test';"},
-		{title: "NumericLiteral", input: `0`, output: `0;`},
-		{title: "BigIntLiteral", input: `0n`, output: `0n;`},
+		{title: "NumericLiteral#1", input: `0`, output: `0;`},
+		{title: "NumericLiteral#2", input: `10_000`, output: `10_000;`},
+		{title: "BigIntLiteral#1", input: `0n`, output: `0n;`},
+		{title: "BigIntLiteral#2", input: `10_000n`, output: `10000n;`}, // TODO: Preserve numeric literal separators after Strada migration
 		{title: "BooleanLiteral#1", input: `true`, output: `true;`},
 		{title: "BooleanLiteral#2", input: `false`, output: `false;`},
 		{title: "NoSubstitutionTemplateLiteral", input: "``", output: "``;"},
