@@ -18392,6 +18392,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Mapping<Mapping<T>> === Mapping<T>
             type.flags & TypeFlags.StringMapping && symbol === type.symbol ? type :
 			type.flags & TypeFlags.Calculation ? getCalculationTypeForGenericType(symbol, [type]) :
+			// Ensure Integer<T> === T when T is any, number, or bigint
+			intrinsicTypeKinds.get(symbol.escapedName as string) === IntrinsicTypeKind.Integer && (type.flags & (TypeFlags.Any | TypeFlags.Number | TypeFlags.BigInt)) ? type :
             type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.StringMapping) || isGenericIndexType(type) ? getStringMappingTypeForGenericType(symbol, type) :
             // This handles Mapping<`${number}`> and Mapping<`${bigint}`>
             isPatternLiteralPlaceholderType(type) ? getStringMappingTypeForGenericType(symbol, getTemplateLiteralType(["", ""], [type])) :
@@ -18804,8 +18806,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isGenericStringLikeType(type: Type) {
-        // @todo TypeFlags.Calculation not exactly stringlike right?
-        return !!(type.flags & (TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Calculation)) && !isPatternLiteralType(type);
+        return !!(type.flags & (TypeFlags.TemplateLiteral | TypeFlags.StringMapping)) && !isPatternLiteralType(type);
     }
 
     function isGenericType(type: Type): boolean {
