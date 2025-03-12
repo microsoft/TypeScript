@@ -56,12 +56,12 @@ function foo4<U extends string>(x: Uppercase<U>) {
     return foo3(x);
 }
 
-type TI1 = Integer<3.5>;  // 3
-type TI2 = Integer<2.5 | 3.4>;  // 2 | 3
-type TI3 = Integer<number>;  // number
-type TI4 = Integer<any>;  // any
-type TI5 = Integer<never>;  // never
-type TI6 = Integer<'42'>;  // Error
+type TI1 = Floor<3.5>;  // 3
+type TI2 = Floor<2.5 | 3.4>;  // 2 | 3
+type TI3 = Floor<number>;  // number
+type TI4 = Floor<any>;  // any
+type TI5 = Floor<never>;  // never
+type TI6 = Floor<'42'>;  // Error
 
 type TA1 = Add<4, 2>;  // 6
 type TA2L = Add<4 | 5, 2>;  // 6 | 7
@@ -132,7 +132,7 @@ type TD6R = Divide<4, '2'>;  // Error
 type TD6LR = Divide<'4', '2'>;  // Error
 type TD7 = Divide<1, 0>; // never
 
-type TIX1<S extends number> = Integer<S>;
+type TIX1<S extends number> = Floor<S>;
 type TIX2 = TIX1<4.2>;  // 4
 type TAX1<M extends number, N extends number> = Add<M, N>;
 type TAX2 = TAX1<4, 2>;  // 6
@@ -157,9 +157,9 @@ function foo6<T extends 0 | 1>(x: Add<T, 3>) {
     let s: 3 | 4 = x;
 }
 
-declare function foo7<T extends number>(x: Integer<T>): T;
+declare function foo7<T extends number>(x: Floor<T>): T;
 
-function foo8<U extends number>(x: Integer<U>) {
+function foo8<U extends number>(x: Floor<U>) {
     return foo7(x);
 }
 
@@ -231,12 +231,12 @@ declare function foo1<T extends string, U extends T>(s: string, x: Uppercase<T>,
 declare function foo2<T extends 'foo' | 'bar'>(x: Uppercase<T>): void;
 declare function foo3<T extends string>(x: Uppercase<T>): T;
 declare function foo4<U extends string>(x: Uppercase<U>): U;
-type TI1 = Integer<3.5>;
-type TI2 = Integer<2.5 | 3.4>;
-type TI3 = Integer<number>;
-type TI4 = Integer<any>;
-type TI5 = Integer<never>;
-type TI6 = Integer<'42'>;
+type TI1 = Floor<3.5>;
+type TI2 = Floor<2.5 | 3.4>;
+type TI3 = Floor<number>;
+type TI4 = Floor<any>;
+type TI5 = Floor<never>;
+type TI6 = Floor<'42'>;
 type TA1 = Add<4, 2>;
 type TA2L = Add<4 | 5, 2>;
 type TA2R = Add<4, 2 | 3>;
@@ -302,7 +302,7 @@ type TD6L = Divide<'4', 2>;
 type TD6R = Divide<4, '2'>;
 type TD6LR = Divide<'4', '2'>;
 type TD7 = Divide<1, 0>;
-type TIX1<S extends number> = Integer<S>;
+type TIX1<S extends number> = Floor<S>;
 type TIX2 = TIX1<4.2>;
 type TAX1<M extends number, N extends number> = Add<M, N>;
 type TAX2 = TAX1<4, 2>;
@@ -315,5 +315,5 @@ type TDX2 = TDX1<4, 2>;
 type TAMX = Add<2, Multiply<5, 8>>;
 declare function foo5<T extends number, U extends T>(s: number, x: Add<T, U>, y: Multiply<T, U>): void;
 declare function foo6<T extends 0 | 1>(x: Add<T, 3>): void;
-declare function foo7<T extends number>(x: Integer<T>): T;
-declare function foo8<U extends number>(x: Integer<U>): U;
+declare function foo7<T extends number>(x: Floor<T>): T;
+declare function foo8<U extends number>(x: Floor<U>): U;

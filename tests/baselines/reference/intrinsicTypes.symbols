@@ -196,32 +196,32 @@ function foo4<U extends string>(x: Uppercase<U>) {
 >x : Symbol(x, Decl(intrinsicTypes.ts, 51, 32))
 }
 
-type TI1 = Integer<3.5>;  // 3
+type TI1 = Floor<3.5>;  // 3
 >TI1 : Symbol(TI1, Decl(intrinsicTypes.ts, 53, 1))
->Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+>Floor : Symbol(Floor, Decl(lib.es5.d.ts, --, --))
 
-type TI2 = Integer<2.5 | 3.4>;  // 2 | 3
->TI2 : Symbol(TI2, Decl(intrinsicTypes.ts, 55, 24))
->Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+type TI2 = Floor<2.5 | 3.4>;  // 2 | 3
+>TI2 : Symbol(TI2, Decl(intrinsicTypes.ts, 55, 22))
+>Floor : Symbol(Floor, Decl(lib.es5.d.ts, --, --))
 
-type TI3 = Integer<number>;  // number
->TI3 : Symbol(TI3, Decl(intrinsicTypes.ts, 56, 30))
->Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+type TI3 = Floor<number>;  // number
+>TI3 : Symbol(TI3, Decl(intrinsicTypes.ts, 56, 28))
+>Floor : Symbol(Floor, Decl(lib.es5.d.ts, --, --))
 
-type TI4 = Integer<any>;  // any
->TI4 : Symbol(TI4, Decl(intrinsicTypes.ts, 57, 27))
->Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+type TI4 = Floor<any>;  // any
+>TI4 : Symbol(TI4, Decl(intrinsicTypes.ts, 57, 25))
+>Floor : Symbol(Floor, Decl(lib.es5.d.ts, --, --))
 
-type TI5 = Integer<never>;  // never
->TI5 : Symbol(TI5, Decl(intrinsicTypes.ts, 58, 24))
->Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+type TI5 = Floor<never>;  // never
+>TI5 : Symbol(TI5, Decl(intrinsicTypes.ts, 58, 22))
+>Floor : Symbol(Floor, Decl(lib.es5.d.ts, --, --))
 
-type TI6 = Integer<'42'>;  // Error
->TI6 : Symbol(TI6, Decl(intrinsicTypes.ts, 59, 26))
->Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+type TI6 = Floor<'42'>;  // Error
+>TI6 : Symbol(TI6, Decl(intrinsicTypes.ts, 59, 24))
+>Floor : Symbol(Floor, Decl(lib.es5.d.ts, --, --))
 
 type TA1 = Add<4, 2>;  // 6
->TA1 : Symbol(TA1, Decl(intrinsicTypes.ts, 60, 25))
+>TA1 : Symbol(TA1, Decl(intrinsicTypes.ts, 60, 23))
 >Add : Symbol(Add, Decl(lib.es5.d.ts, --, --))
 
 type TA2L = Add<4 | 5, 2>;  // 6 | 7
@@ -480,14 +480,14 @@ type TD7 = Divide<1, 0>; // never
 >TD7 : Symbol(TD7, Decl(intrinsicTypes.ts, 128, 30))
 >Divide : Symbol(Divide, Decl(lib.es5.d.ts, --, --))
 
-type TIX1<S extends number> = Integer<S>;
+type TIX1<S extends number> = Floor<S>;
 >TIX1 : Symbol(TIX1, Decl(intrinsicTypes.ts, 129, 24))
 >S : Symbol(S, Decl(intrinsicTypes.ts, 131, 10))
->Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+>Floor : Symbol(Floor, Decl(lib.es5.d.ts, --, --))
 >S : Symbol(S, Decl(intrinsicTypes.ts, 131, 10))
 
 type TIX2 = TIX1<4.2>;  // 4
->TIX2 : Symbol(TIX2, Decl(intrinsicTypes.ts, 131, 41))
+>TIX2 : Symbol(TIX2, Decl(intrinsicTypes.ts, 131, 39))
 >TIX1 : Symbol(TIX1, Decl(intrinsicTypes.ts, 129, 24))
 
 type TAX1<M extends number, N extends number> = Add<M, N>;
@@ -595,19 +595,19 @@ function foo6<T extends 0 | 1>(x: Add<T, 3>) {
 >x : Symbol(x, Decl(intrinsicTypes.ts, 152, 31))
 }
 
-declare function foo7<T extends number>(x: Integer<T>): T;
+declare function foo7<T extends number>(x: Floor<T>): T;
 >foo7 : Symbol(foo7, Decl(intrinsicTypes.ts, 154, 1))
 >T : Symbol(T, Decl(intrinsicTypes.ts, 156, 22))
 >x : Symbol(x, Decl(intrinsicTypes.ts, 156, 40))
->Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+>Floor : Symbol(Floor, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(intrinsicTypes.ts, 156, 22))
 >T : Symbol(T, Decl(intrinsicTypes.ts, 156, 22))
 
-function foo8<U extends number>(x: Integer<U>) {
->foo8 : Symbol(foo8, Decl(intrinsicTypes.ts, 156, 58))
+function foo8<U extends number>(x: Floor<U>) {
+>foo8 : Symbol(foo8, Decl(intrinsicTypes.ts, 156, 56))
 >U : Symbol(U, Decl(intrinsicTypes.ts, 158, 14))
 >x : Symbol(x, Decl(intrinsicTypes.ts, 158, 32))
->Integer : Symbol(Integer, Decl(lib.es5.d.ts, --, --))
+>Floor : Symbol(Floor, Decl(lib.es5.d.ts, --, --))
 >U : Symbol(U, Decl(intrinsicTypes.ts, 158, 14))
 
     return foo7(x);

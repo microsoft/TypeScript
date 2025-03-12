@@ -214,27 +214,27 @@ function foo4<U extends string>(x: Uppercase<U>) {
 >  : ^^^^^^^^^^^^
 }
 
-type TI1 = Integer<3.5>;  // 3
+type TI1 = Floor<3.5>;  // 3
 >TI1 : 3
 >    : ^
 
-type TI2 = Integer<2.5 | 3.4>;  // 2 | 3
+type TI2 = Floor<2.5 | 3.4>;  // 2 | 3
 >TI2 : 3 | 2
 >    : ^^^^^
 
-type TI3 = Integer<number>;  // number
+type TI3 = Floor<number>;  // number
 >TI3 : number
 >    : ^^^^^^
 
-type TI4 = Integer<any>;  // any
+type TI4 = Floor<any>;  // any
 >TI4 : any
 >    : ^^^
 
-type TI5 = Integer<never>;  // never
+type TI5 = Floor<never>;  // never
 >TI5 : never
 >    : ^^^^^
 
-type TI6 = Integer<'42'>;  // Error
+type TI6 = Floor<'42'>;  // Error
 >TI6 : "42"
 >    : ^^^^
 
@@ -498,9 +498,9 @@ type TD7 = Divide<1, 0>; // never
 >TD7 : never
 >    : ^^^^^
 
-type TIX1<S extends number> = Integer<S>;
->TIX1 : Integer<S>
->     : ^^^^^^^^^^
+type TIX1<S extends number> = Floor<S>;
+>TIX1 : Floor<S>
+>     : ^^^^^^^^
 
 type TIX2 = TIX1<4.2>;  // 4
 >TIX2 : 4
@@ -614,24 +614,24 @@ function foo6<T extends 0 | 1>(x: Add<T, 3>) {
 >  : ^^^^^
 }
 
-declare function foo7<T extends number>(x: Integer<T>): T;
->foo7 : <T extends number>(x: Integer<T>) => T
->     : ^ ^^^^^^^^^      ^^ ^^          ^^^^^ 
->x : Integer<T>
->  : ^^^^^^^^^^
+declare function foo7<T extends number>(x: Floor<T>): T;
+>foo7 : <T extends number>(x: Floor<T>) => T
+>     : ^ ^^^^^^^^^      ^^ ^^        ^^^^^ 
+>x : Floor<T>
+>  : ^^^^^^^^
 
-function foo8<U extends number>(x: Integer<U>) {
->foo8 : <U extends number>(x: Integer<U>) => U
->     : ^ ^^^^^^^^^      ^^ ^^          ^^^^^^
->x : Integer<U>
->  : ^^^^^^^^^^
+function foo8<U extends number>(x: Floor<U>) {
+>foo8 : <U extends number>(x: Floor<U>) => U
+>     : ^ ^^^^^^^^^      ^^ ^^        ^^^^^^
+>x : Floor<U>
+>  : ^^^^^^^^
 
     return foo7(x);
 >foo7(x) : U
 >        : ^
->foo7 : <T extends number>(x: Integer<T>) => T
->     : ^ ^^^^^^^^^      ^^ ^^          ^^^^^ 
->x : Integer<U>
->  : ^^^^^^^^^^
+>foo7 : <T extends number>(x: Floor<T>) => T
+>     : ^ ^^^^^^^^^      ^^ ^^        ^^^^^ 
+>x : Floor<U>
+>  : ^^^^^^^^
 }
 

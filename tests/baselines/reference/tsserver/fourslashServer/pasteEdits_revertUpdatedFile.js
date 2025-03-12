@@ -686,6 +686,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "Floor",
+            "kind": "type",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "Function",
             "kind": "var",
             "kindModifiers": "declare",
@@ -772,12 +778,6 @@ Info seq  [hh:mm:ss:mss] response:
           {
             "name": "Int32ArrayConstructor",
             "kind": "interface",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Integer",
-            "kind": "type",
             "kindModifiers": "declare",
             "sortText": "15"
           },

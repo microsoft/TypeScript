@@ -8,7 +8,7 @@ intrinsicTypes.ts(42,5): error TS2322: Type 'string' is not assignable to type '
 intrinsicTypes.ts(43,5): error TS2322: Type 'Uppercase<T>' is not assignable to type 'Uppercase<U>'.
   Type 'T' is not assignable to type 'U'.
     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'string'.
-intrinsicTypes.ts(61,20): error TS2344: Type 'string' does not satisfy the constraint 'number'.
+intrinsicTypes.ts(61,18): error TS2344: Type 'string' does not satisfy the constraint 'number'.
 intrinsicTypes.ts(76,17): error TS2344: Type 'string' does not satisfy the constraint 'number'.
 intrinsicTypes.ts(77,20): error TS2344: Type 'string' does not satisfy the constraint 'number'.
 intrinsicTypes.ts(78,18): error TS2344: Type 'string' does not satisfy the constraint 'number'.
@@ -103,13 +103,13 @@ intrinsicTypes.ts(150,5): error TS2322: Type 'Add<T, U>' is not assignable to ty
         return foo3(x);
     }
     
-    type TI1 = Integer<3.5>;  // 3
-    type TI2 = Integer<2.5 | 3.4>;  // 2 | 3
-    type TI3 = Integer<number>;  // number
-    type TI4 = Integer<any>;  // any
-    type TI5 = Integer<never>;  // never
-    type TI6 = Integer<'42'>;  // Error
-                       ~~~~
+    type TI1 = Floor<3.5>;  // 3
+    type TI2 = Floor<2.5 | 3.4>;  // 2 | 3
+    type TI3 = Floor<number>;  // number
+    type TI4 = Floor<any>;  // any
+    type TI5 = Floor<never>;  // never
+    type TI6 = Floor<'42'>;  // Error
+                     ~~~~
 !!! error TS2344: Type 'string' does not satisfy the constraint 'number'.
     
     type TA1 = Add<4, 2>;  // 6
@@ -205,7 +205,7 @@ intrinsicTypes.ts(150,5): error TS2322: Type 'Add<T, U>' is not assignable to ty
 !!! error TS2344: Type 'string' does not satisfy the constraint 'number'.
     type TD7 = Divide<1, 0>; // never
     
-    type TIX1<S extends number> = Integer<S>;
+    type TIX1<S extends number> = Floor<S>;
     type TIX2 = TIX1<4.2>;  // 4
     type TAX1<M extends number, N extends number> = Add<M, N>;
     type TAX2 = TAX1<4, 2>;  // 6
@@ -240,9 +240,9 @@ intrinsicTypes.ts(150,5): error TS2322: Type 'Add<T, U>' is not assignable to ty
         let s: 3 | 4 = x;
     }
     
-    declare function foo7<T extends number>(x: Integer<T>): T;
+    declare function foo7<T extends number>(x: Floor<T>): T;
     
-    function foo8<U extends number>(x: Integer<U>) {
+    function foo8<U extends number>(x: Floor<U>) {
         return foo7(x);
     }
     
