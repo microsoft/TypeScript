@@ -12282,31 +12282,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypeOfSymbol(symbol: Symbol): Type {
-        // Retrieve the check flags for the given symbol
         const checkFlags = getCheckFlags(symbol);
 
-        // Define a mapping of flag checks to their respective type resolver functions
-        const typeResolvers: [number, (sym: Symbol) => Type][] = [
-            // Check for deferred type symbols
-            [CheckFlags.DeferredType, getTypeOfSymbolWithDeferredType], // Check for instantiated symbols
-            [CheckFlags.Instantiated, getTypeOfInstantiatedSymbol], // Check for mapped symbols (cast to MappedSymbol)
-            [CheckFlags.Mapped, sym => getTypeOfMappedSymbol(sym as MappedSymbol)], // Check for reverse-mapped symbols (cast to ReverseMappedSymbol)
-            [CheckFlags.ReverseMapped, sym => getTypeOfReverseMappedSymbol(sym as ReverseMappedSymbol)], // Check for variables and properties
-            [SymbolFlags.Variable | SymbolFlags.Property, getTypeOfVariableOrParameterOrProperty], // Check for functions, methods, classes, enums, and value modules
-            [SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule, getTypeOfFuncClassEnumModule], // Check for enum members
-            [SymbolFlags.EnumMember, getTypeOfEnumMember], // Check for accessor symbols
-            [SymbolFlags.Accessor, getTypeOfAccessors], // Check for alias symbols
-            [SymbolFlags.Alias, getTypeOfAlias],
-        ];
+        const checkFlagMap = new Map([
+            [CheckFlags.DeferredType, getTypeOfSymbolWithDeferredType],
+            [CheckFlags.Instantiated, getTypeOfInstantiatedSymbol],
+            [CheckFlags.Mapped, (s: Symbol) => getTypeOfMappedSymbol(s as MappedSymbol)],
+            [CheckFlags.ReverseMapped, (s: Symbol) => getTypeOfReverseMappedSymbol(s as ReverseMappedSymbol)],
+        ]);
 
-        // Iterate through the mapping and return the corresponding type if a flag matches
-        for (const [flag, resolver] of typeResolvers) {
-            if ((checkFlags & flag)) {
-                return resolver(symbol);
-            }
+        for (const [flag, fn] of checkFlagMap) {
+            if (checkFlags & flag) return fn(symbol);
         }
 
-        // Return the error type if no conditions match
+        const symbolFlagMap = new Map([
+            [SymbolFlags.Variable | SymbolFlags.Property, getTypeOfVariableOrParameterOrProperty],
+            [SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule, getTypeOfFuncClassEnumModule],
+            [SymbolFlags.EnumMember, getTypeOfEnumMember],
+            [SymbolFlags.Accessor, getTypeOfAccessors],
+            [SymbolFlags.Alias, getTypeOfAlias],
+        ]);
+
+        for (const [flag, fn] of symbolFlagMap) {
+            if (symbol.flags & flag) return fn(symbol);
+        }
+
         return errorType;
     }
 
