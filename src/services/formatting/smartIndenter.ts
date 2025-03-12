@@ -438,6 +438,7 @@ export namespace SmartIndenter {
     // branch beginning on the line that the whenTrue branch ends.
     export function childIsUnindentedBranchOfConditionalExpression(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
         if (isConditionalExpression(parent) && (child === parent.whenTrue || child === parent.whenFalse)) {
+
             const conditionEndLine = getLineAndCharacterOfPosition(sourceFile, parent.condition.end).line;
             if (child === parent.whenTrue) {
                 return childStartLine === conditionEndLine;
@@ -450,8 +451,20 @@ export namespace SmartIndenter {
                 //   ? 1 : (          L1: whenTrue indented because it's on a new line
                 //     0              L2: indented two stops, one because whenTrue was indented
                 //   );                   and one because of the parentheses spanning multiple lines
+
+                // However, when condition and whenTrue are on the same line, whenFalse should not be indented:
+                // 
+                // const z =
+                //     0 ? 1 :        L1: whenTrue indented because it's on a new line
+                //     2 ? 3 :        L2: not indented 
+                //     4;             L3: not indented
                 const trueStartLine = getStartLineAndCharacterForNode(parent.whenTrue, sourceFile).line;
                 const trueEndLine = getLineAndCharacterOfPosition(sourceFile, parent.whenTrue.end).line;
+
+                if (conditionEndLine === trueStartLine && trueStartLine === trueEndLine && trueEndLine !== childStartLine) {
+                    return true;
+                }
+
                 return conditionEndLine === trueStartLine && trueEndLine === childStartLine;
             }
         }
@@ -654,7 +667,6 @@ export namespace SmartIndenter {
             case SyntaxKind.VariableStatement:
             case SyntaxKind.ExportAssignment:
             case SyntaxKind.ReturnStatement:
-            case SyntaxKind.ConditionalExpression:
             case SyntaxKind.ArrayBindingPattern:
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.JsxOpeningElement:
@@ -695,6 +707,14 @@ export namespace SmartIndenter {
                     return true;
                 }
                 break;
+            case SyntaxKind.ConditionalExpression:
+                if (child && sourceFile) {
+                    const childStartCharacter = sourceFile.getLineAndCharacterOfPosition(skipTrivia(sourceFile.text, child.pos)).character;
+                    if (!rangeIsOnOneLine(sourceFile, parent) && childStartCharacter !== SyntaxKind.QuestionToken) {
+                        return false;
+                    }
+                }
+                return true;
             case SyntaxKind.DoStatement:
             case SyntaxKind.WhileStatement:
             case SyntaxKind.ForInStatement:
