@@ -12284,29 +12284,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getTypeOfSymbol(symbol: Symbol): Type {
         const checkFlags = getCheckFlags(symbol);
 
-        const checkFlagMap = new Map([
+        // Prioritize check flags
+        const checkFlagChecks: [CheckFlags, (s: Symbol) => Type][] = [
             [CheckFlags.DeferredType, getTypeOfSymbolWithDeferredType],
             [CheckFlags.Instantiated, getTypeOfInstantiatedSymbol],
-            [CheckFlags.Mapped, (s: Symbol) => getTypeOfMappedSymbol(s as MappedSymbol)],
-            [CheckFlags.ReverseMapped, (s: Symbol) => getTypeOfReverseMappedSymbol(s as ReverseMappedSymbol)],
-        ]);
+            [CheckFlags.Mapped, s => getTypeOfMappedSymbol(s as MappedSymbol)],
+            [CheckFlags.ReverseMapped, s => getTypeOfReverseMappedSymbol(s as ReverseMappedSymbol)],
+        ];
 
-        for (const [flag, fn] of checkFlagMap) {
+        for (const [flag, fn] of checkFlagChecks) {
             if (checkFlags & flag) return fn(symbol);
         }
 
-        const symbolFlagMap = new Map([
+        // Handle symbol flags
+        const symbolChecks: [SymbolFlags, (s: Symbol) => Type][] = [
             [SymbolFlags.Variable | SymbolFlags.Property, getTypeOfVariableOrParameterOrProperty],
             [SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule, getTypeOfFuncClassEnumModule],
             [SymbolFlags.EnumMember, getTypeOfEnumMember],
             [SymbolFlags.Accessor, getTypeOfAccessors],
             [SymbolFlags.Alias, getTypeOfAlias],
-        ]);
+        ];
 
-        for (const [flag, fn] of symbolFlagMap) {
-            if (symbol.flags & flag) return fn(symbol);
+        for (const [flag, fn] of symbolChecks) {
+            if ((symbol.flags & flag) !== 0) return fn(symbol);
         }
-
         return errorType;
     }
 
