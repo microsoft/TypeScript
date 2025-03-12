@@ -18387,7 +18387,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getIntrinsicMappingType(symbol: Symbol, type: Type): Type {
         return type.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type, t => getIntrinsicMappingType(symbol, t)) :
             type.flags & TypeFlags.StringLiteral ? getStringLiteralType(applyStringMapping(symbol, (type as StringLiteralType).value)) :
-            type.flags & TypeFlags.NumberLiteral ? applyNumberMapping(symbol, type as NumberLiteralType) :
+            type.flags & TypeFlags.NumberLiteral ? getNumberLiteralType(applyNumberMapping(symbol, (type as NumberLiteralType).value)):
             type.flags & TypeFlags.TemplateLiteral ? getTemplateLiteralType(...applyTemplateStringMapping(symbol, (type as TemplateLiteralType).texts, (type as TemplateLiteralType).types)) :
             // Mapping<Mapping<T>> === Mapping<T>
             type.flags & TypeFlags.StringMapping && symbol === type.symbol ? type :
@@ -18408,29 +18408,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // handle division by zero
             intrinsicTypeKinds.get(symbol.escapedName as string) === IntrinsicTypeKind.Div && type2.flags & TypeFlags.NumberLiteral && (type2 as NumberLiteralType).value === 0 ? neverType :
             type1.flags & TypeFlags.NumberLiteral ?
-            type2.flags & TypeFlags.NumberLiteral ? applyNumberMapping2(symbol, type1 as NumberLiteralType, type2 as NumberLiteralType) :
+            type2.flags & TypeFlags.NumberLiteral ? getNumberLiteralType(applyNumberMapping2(symbol, (type1 as NumberLiteralType).value, (type2 as NumberLiteralType).value)):
                 type2 :
             type1;
     }
 
-    function applyNumberMapping(symbol: Symbol, n: NumberLiteralType): Type {
+    function applyNumberMapping(symbol: Symbol, value: number): number {
         switch (intrinsicTypeKinds.get(symbol.escapedName as string)) {
             case IntrinsicTypeKind.Floor:
-                return getNumberLiteralType(Math.floor(n.value));
+                return Math.floor(value);
         }
-        return n;
+        return value;
     }
 
-    function applyNumberMapping2(symbol: Symbol, a: NumberLiteralType, b: NumberLiteralType): Type {
+    function applyNumberMapping2(symbol: Symbol, a: number, b: number): number {
         switch (intrinsicTypeKinds.get(symbol.escapedName as string)) {
             case IntrinsicTypeKind.Add:
-                return getNumberLiteralType(a.value + b.value);
+                return (a + b);
             case IntrinsicTypeKind.Sub:
-                return getNumberLiteralType(a.value - b.value);
+                return (a - b);
             case IntrinsicTypeKind.Mul:
-                return getNumberLiteralType(a.value * b.value);
+                return (a * b);
             case IntrinsicTypeKind.Div:
-                return getNumberLiteralType(a.value / b.value);
+                return (a / b);
         }
         return a;
     }
