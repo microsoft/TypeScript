@@ -37492,8 +37492,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getInstantiatedSignatures(signatures: readonly Signature[]) {
-            const applicableSignatures = filter(signatures, sig => !!sig.typeParameters && hasCorrectTypeArgumentArity(sig, typeArguments));
-            return sameMap(applicableSignatures, sig => {
+            const sameTypeAritySignatures = filter(signatures, sig => !!sig.typeParameters && hasCorrectTypeArgumentArity(sig, typeArguments));
+            if (!sameTypeAritySignatures.length) {
+                return sameTypeAritySignatures;
+            }
+            const applicableSignatures = mapDefined(sameTypeAritySignatures, sig => {
+                const typeArgumentTypes = checkTypeArguments(sig, typeArguments!, /*reportErrors*/ false);
+                return typeArgumentTypes && getSignatureInstantiation(sig, typeArgumentTypes, isInJSFile(sig.declaration));
+            });
+            if (applicableSignatures.length) {
+                return applicableSignatures;
+            }
+            return sameMap(sameTypeAritySignatures, sig => {
                 const typeArgumentTypes = checkTypeArguments(sig, typeArguments!, /*reportErrors*/ true);
                 return typeArgumentTypes ? getSignatureInstantiation(sig, typeArgumentTypes, isInJSFile(sig.declaration)) : sig;
             });
