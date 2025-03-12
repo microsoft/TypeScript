@@ -790,6 +790,8 @@ func IsOuterExpression(node *Expression, kinds OuterExpressionKinds) bool {
 		return kinds&OEKExpressionsWithTypeArguments != 0
 	case KindNonNullExpression:
 		return kinds&OEKNonNullAssertions != 0
+	case KindPartiallyEmittedExpression:
+		return kinds&OEKPartiallyEmittedExpressions != 0
 	}
 	return false
 }

@@ -4,9 +4,11 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/testutil/emittestutil"
 	"github.com/microsoft/typescript-go/internal/testutil/parsetestutil"
+	"github.com/microsoft/typescript-go/internal/transformers"
 )
 
 func TestEmit(t *testing.T) {
@@ -2422,4 +2424,22 @@ func TestTrailingCommaAfterTransform(t *testing.T) {
 	file = visitor.VisitSourceFile(file)
 
 	emittestutil.CheckEmit(t, emitContext, file.AsSourceFile(), "[a,];")
+}
+
+func TestPartiallyEmittedExpression(t *testing.T) {
+	t.Parallel()
+
+	compilerOptions := &core.CompilerOptions{}
+
+	file := parsetestutil.ParseTypeScript(`return ((container.parent
+    .left as PropertyAccessExpression)
+    .expression as PropertyAccessExpression)
+    .expression;`, false /*jsx*/)
+
+	emitContext := printer.NewEmitContext()
+	file = transformers.NewTypeEraserTransformer(emitContext, compilerOptions).TransformSourceFile(file)
+	emittestutil.CheckEmit(t, emitContext, file.AsSourceFile(), `return container.parent
+    .left
+    .expression
+    .expression;`)
 }

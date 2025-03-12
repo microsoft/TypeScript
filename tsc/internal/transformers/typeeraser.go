@@ -207,28 +207,20 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 		n := node.AsTaggedTemplateExpression()
 		return tx.factory.UpdateTaggedTemplateExpression(n, tx.visitor.VisitNode(n.Tag), n.QuestionDotToken, nil, tx.visitor.VisitNode(n.Template))
 
-	case ast.KindNonNullExpression:
-		// !!! Use PartiallyEmittedExpression to preserve comments
-		return tx.visitor.VisitNode(node.AsNonNullExpression().Expression)
-
-	case ast.KindTypeAssertionExpression:
-		// !!! Use PartiallyEmittedExpression to preserve comments
-		return tx.visitor.VisitNode(node.AsTypeAssertion().Expression)
-
-	case ast.KindAsExpression:
-		// !!! Use PartiallyEmittedExpression to preserve comments
-		return tx.visitor.VisitNode(node.AsAsExpression().Expression)
-
-	case ast.KindSatisfiesExpression:
-		// !!! Use PartiallyEmittedExpression to preserve comments
-		return tx.visitor.VisitNode(node.AsSatisfiesExpression().Expression)
+	case ast.KindNonNullExpression, ast.KindTypeAssertionExpression, ast.KindAsExpression, ast.KindSatisfiesExpression:
+		partial := tx.factory.NewPartiallyEmittedExpression(tx.visitor.VisitNode(node.Expression()))
+		tx.emitContext.SetOriginal(partial, node)
+		partial.Loc = node.Loc
+		return partial
 
 	case ast.KindParenthesizedExpression:
 		n := node.AsParenthesizedExpression()
 		expression := ast.SkipOuterExpressions(n.Expression, ^(ast.OEKTypeAssertions | ast.OEKExpressionsWithTypeArguments))
 		if ast.IsAssertionExpression(expression) || ast.IsSatisfiesExpression(expression) {
-			// !!! Use PartiallyEmittedExpression to preserve comments
-			return tx.visitor.VisitNode(n.Expression)
+			partial := tx.factory.NewPartiallyEmittedExpression(tx.visitor.VisitNode(n.Expression))
+			tx.emitContext.SetOriginal(partial, node)
+			partial.Loc = node.Loc
+			return partial
 		}
 		return tx.visitor.VisitEachChild(node)
 

@@ -302,6 +302,8 @@ func (n *Node) Expression() *Node {
 		return n.AsAwaitExpression().Expression
 	case KindYieldExpression:
 		return n.AsYieldExpression().Expression
+	case KindPartiallyEmittedExpression:
+		return n.AsPartiallyEmittedExpression().Expression
 	case KindIfStatement:
 		return n.AsIfStatement().Expression
 	case KindDoStatement:
@@ -1190,6 +1192,10 @@ func (n *Node) AsTemplateExpression() *TemplateExpression {
 
 func (n *Node) AsYieldExpression() *YieldExpression {
 	return n.data.(*YieldExpression)
+}
+
+func (n *Node) AsPartiallyEmittedExpression() *PartiallyEmittedExpression {
+	return n.data.(*PartiallyEmittedExpression)
 }
 
 func (n *Node) AsSpreadElement() *SpreadElement {
@@ -6953,6 +6959,42 @@ func (node *SyntheticExpression) Clone(f *NodeFactory) *Node {
 
 func IsSyntheticExpression(node *Node) bool {
 	return node.Kind == KindSyntheticExpression
+}
+
+// PartiallyEmittedExpression
+
+type PartiallyEmittedExpression struct {
+	ExpressionBase
+	Expression *Expression // Expression
+}
+
+func (f *NodeFactory) NewPartiallyEmittedExpression(expression *Expression) *Node {
+	data := &PartiallyEmittedExpression{}
+	data.Expression = expression
+	return newNode(KindPartiallyEmittedExpression, data, f.hooks)
+}
+
+func (f *NodeFactory) UpdatePartiallyEmittedExpression(node *PartiallyEmittedExpression, expression *Expression) *Node {
+	if expression != node.Expression {
+		return updateNode(f.NewPartiallyEmittedExpression(expression), node.AsNode(), f.hooks)
+	}
+	return node.AsNode()
+}
+
+func (node *PartiallyEmittedExpression) ForEachChild(v Visitor) bool {
+	return visit(v, node.Expression)
+}
+
+func (node *PartiallyEmittedExpression) VisitEachChild(v *NodeVisitor) *Node {
+	return v.Factory.UpdatePartiallyEmittedExpression(node, v.visitNode(node.Expression))
+}
+
+func (node *PartiallyEmittedExpression) Clone(f *NodeFactory) *Node {
+	return cloneNode(f.NewPartiallyEmittedExpression(node.Expression), node.AsNode(), f.hooks)
+}
+
+func IsPartiallyEmittedExpression(node *Node) bool {
+	return node.Kind == KindPartiallyEmittedExpression
 }
 
 /// A JSX expression of the form <TagName attrs>...</TagName>
