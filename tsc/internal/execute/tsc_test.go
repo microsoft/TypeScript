@@ -24,7 +24,7 @@ func TestTsc(t *testing.T) {
 			commandLineArgs: nil,
 		},
 		{
-			subScenario:     "show help with ExitStatus.DiagnosticsPresent_OutputsSkipped when host can't provide terminal width",
+			subScenario:     "show help with ExitStatus.DiagnosticsPresent_OutputsSkipped when host cannot provide terminal width",
 			sys:             newTestSys(nil, ""),
 			commandLineArgs: nil,
 		},
