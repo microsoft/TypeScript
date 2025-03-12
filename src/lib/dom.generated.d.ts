@@ -14549,7 +14549,7 @@ declare var IDBFactory: {
  */
 interface IDBIndex {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBIndex/keyPath) */
-    readonly keyPath: string | string[];
+    readonly keyPath: string | string[] | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBIndex/multiEntry) */
     readonly multiEntry: boolean;
     /**
@@ -14719,7 +14719,7 @@ interface IDBObjectStore {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/keyPath)
      */
-    readonly keyPath: string | string[];
+    readonly keyPath: string | string[] | null;
     /**
      * Returns the name of the store.
      *
