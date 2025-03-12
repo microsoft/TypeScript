@@ -213,7 +213,7 @@ func TestEmit(t *testing.T) {
 		{title: "CaseClause#2", input: `switch (a) {case b:;}`, output: "switch (a) {\n    case b: ;\n}"},
 		{title: "DefaultClause#1", input: `switch (a) {default:}`, output: "switch (a) {\n    default:\n}"},
 		{title: "DefaultClause#2", input: `switch (a) {default:;}`, output: "switch (a) {\n    default: ;\n}"},
-		{title: "LabeledStatement", input: `a:;`, output: "a:\n    ;"},
+		{title: "LabeledStatement", input: `a:;`, output: "a: ;"},
 		{title: "ThrowStatement", input: `throw a`, output: "throw a;"},
 		{title: "TryStatement#1", input: `try {} catch {}`, output: "try { }\ncatch { }"},
 		{title: "TryStatement#2", input: `try {} finally {}`, output: "try { }\nfinally { }"},

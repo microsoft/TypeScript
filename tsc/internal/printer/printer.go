@@ -3157,7 +3157,15 @@ func (p *Printer) emitLabeledStatement(node *ast.LabeledStatement) {
 	p.enterNode(node.AsNode())
 	p.emitLabelIdentifier(node.Label.AsIdentifier())
 	p.emitTokenWithComment(ast.KindColonToken, node.Label.End(), WriteKindPunctuation, node.AsNode())
-	p.emitEmbeddedStatement(node.AsNode(), node.Statement)
+
+	// TODO: use emitEmbeddedStatement rather than writeSpace/emitStatement here after Strada migration as it is
+	//       more consistent with similar emit elsewhere. writeSpace/emitStatement is used here to reduce spurious
+	//       diffs when testing the Strada migration.
+	////p.emitEmbeddedStatement(node.AsNode(), node.Statement)
+
+	p.writeSpace()
+	p.emitStatement(node.Statement)
+
 	p.exitNode(node.AsNode())
 }
 
