@@ -64,7 +64,7 @@ func (e *emitter) getScriptTransformers(emitContext *printer.EmitContext, source
 	var tx []*transformers.Transformer
 	options := e.host.Options()
 
-	// JS files don't use reference calculations as they don't do import ellision, no need to calculate it
+	// JS files don't use reference calculations as they don't do import elision, no need to calculate it
 	importElisionEnabled := !options.VerbatimModuleSyntax.IsTrue() && !ast.IsInJSFile(sourceFile.AsNode())
 
 	var emitResolver printer.EmitResolver
@@ -80,7 +80,7 @@ func (e *emitter) getScriptTransformers(emitContext *printer.EmitContext, source
 	// erase types
 	tx = append(tx, transformers.NewTypeEraserTransformer(emitContext, options))
 
-	// elide impors
+	// elide imports
 	if importElisionEnabled {
 		tx = append(tx, transformers.NewImportElisionTransformer(emitContext, options, emitResolver))
 	}
