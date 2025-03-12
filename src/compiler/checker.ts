@@ -12296,7 +12296,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             { flag: SymbolFlags.Alias, resolver: getTypeOfAlias },
         ];
 
-        const matchedResolver = typeResolvers.find(({ flag }) => (checkFlags & flag) !== 0 || (symbol.flags & flag) !== 0);
+        const matchedResolver = typeResolvers.find(({ flag }) => (checkFlags & flag) !== 0);
 
         return matchedResolver ? matchedResolver.resolver(symbol) : errorType;
     }
