@@ -1880,6 +1880,7 @@ func (tx *CommonJSModuleTransformer) visitShorthandPropertyAssignment(node *ast.
 			)
 		}
 		assignment := tx.factory.NewPropertyAssignment(nil /*modifiers*/, name, nil /*postfixToken*/, expression)
+		assignment.Loc = node.Loc
 		tx.emitContext.AssignCommentAndSourceMapRanges(assignment, node.AsNode())
 		return assignment
 	}

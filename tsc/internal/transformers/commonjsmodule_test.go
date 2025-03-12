@@ -810,6 +810,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const other_1 = require("other");
 ({ a: other_1.a });`,
 		},
+		{
+			title: "ShorthandPropertyAssignment#2",
+			input: `import { a } from "other"
+({
+    a,
+})`,
+			output: `"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const other_1 = require("other");
+({
+    a: other_1.a,
+});`,
+		},
 
 		// CallExpression
 		{
