@@ -1495,6 +1495,50 @@ func GetContainingClass(node *Node) *Node {
 	return FindAncestor(node.Parent, IsClassLike)
 }
 
+func GetExtendsHeritageClauseElement(node *Node) *ExpressionWithTypeArgumentsNode {
+	return core.FirstOrNil(GetExtendsHeritageClauseElements(node))
+}
+
+func GetExtendsHeritageClauseElements(node *Node) []*ExpressionWithTypeArgumentsNode {
+	return getHeritageElements(node, KindExtendsKeyword)
+}
+
+func GetImplementsHeritageClauseElements(node *Node) []*ExpressionWithTypeArgumentsNode {
+	return getHeritageElements(node, KindImplementsKeyword)
+}
+
+func getHeritageElements(node *Node, kind Kind) []*Node {
+	clause := getHeritageClause(node, kind)
+	if clause != nil {
+		return clause.AsHeritageClause().Types.Nodes
+	}
+	return nil
+}
+
+func getHeritageClause(node *Node, kind Kind) *Node {
+	clauses := getHeritageClauses(node)
+	if clauses != nil {
+		for _, clause := range clauses.Nodes {
+			if clause.AsHeritageClause().Token == kind {
+				return clause
+			}
+		}
+	}
+	return nil
+}
+
+func getHeritageClauses(node *Node) *NodeList {
+	switch node.Kind {
+	case KindClassDeclaration:
+		return node.AsClassDeclaration().HeritageClauses
+	case KindClassExpression:
+		return node.AsClassExpression().HeritageClauses
+	case KindInterfaceDeclaration:
+		return node.AsInterfaceDeclaration().HeritageClauses
+	}
+	return nil
+}
+
 func IsPartOfTypeQuery(node *Node) bool {
 	for node.Kind == KindQualifiedName || node.Kind == KindIdentifier {
 		node = node.Parent
@@ -1842,6 +1886,10 @@ func isJSXTagName(node *Node) bool {
 		return parent.AsJsxClosingElement().TagName == node
 	}
 	return false
+}
+
+func IsSuperCall(node *Node) bool {
+	return IsCallExpression(node) && node.AsCallExpression().Expression.Kind == KindSuperKeyword
 }
 
 func IsImportCall(node *Node) bool {

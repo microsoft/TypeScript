@@ -1273,50 +1273,6 @@ func parameterIsThisKeyword(parameter *ast.Node) bool {
 	return ast.IsThisParameter(parameter)
 }
 
-func getExtendsTypeNode(node *ast.Node) *ast.Node {
-	return core.FirstOrNil(getExtendsTypeNodes(node))
-}
-
-func getExtendsTypeNodes(node *ast.Node) []*ast.Node {
-	return getHeritageTypeNodes(node, ast.KindExtendsKeyword)
-}
-
-func getImplementsTypeNodes(node *ast.Node) []*ast.Node {
-	return getHeritageTypeNodes(node, ast.KindImplementsKeyword)
-}
-
-func getHeritageTypeNodes(node *ast.Node, kind ast.Kind) []*ast.Node {
-	clause := getHeritageClause(node, kind)
-	if clause != nil {
-		return clause.AsHeritageClause().Types.Nodes
-	}
-	return nil
-}
-
-func getHeritageClause(node *ast.Node, kind ast.Kind) *ast.Node {
-	clauses := getHeritageClauses(node)
-	if clauses != nil {
-		for _, clause := range clauses.Nodes {
-			if clause.AsHeritageClause().Token == kind {
-				return clause
-			}
-		}
-	}
-	return nil
-}
-
-func getHeritageClauses(node *ast.Node) *ast.NodeList {
-	switch node.Kind {
-	case ast.KindClassDeclaration:
-		return node.AsClassDeclaration().HeritageClauses
-	case ast.KindClassExpression:
-		return node.AsClassExpression().HeritageClauses
-	case ast.KindInterfaceDeclaration:
-		return node.AsInterfaceDeclaration().HeritageClauses
-	}
-	return nil
-}
-
 func isObjectOrArrayLiteralType(t *Type) bool {
 	return t.objectFlags&(ObjectFlagsObjectLiteral|ObjectFlagsArrayLiteral) != 0
 }

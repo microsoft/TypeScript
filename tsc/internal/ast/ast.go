@@ -2496,6 +2496,10 @@ func (node *TryStatement) Clone(f *NodeFactory) *Node {
 	return cloneNode(f.NewTryStatement(node.TryBlock, node.CatchClause, node.FinallyBlock), node.AsNode(), f.hooks)
 }
 
+func IsTryStatement(node *Node) bool {
+	return node.Kind == KindTryStatement
+}
+
 // CatchClause
 
 type CatchClause struct {
