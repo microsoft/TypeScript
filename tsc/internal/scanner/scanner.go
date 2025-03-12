@@ -570,11 +570,12 @@ func (s *Scanner) Scan() ast.Kind {
 						s.pos += size
 					}
 				}
-				s.processCommentDirective(s.tokenStart, s.pos)
+				s.processCommentDirective(s.tokenStart, s.pos, false)
 				continue
 			}
 			if s.charAt(1) == '*' {
 				s.pos += 2
+				lastline := s.tokenStart
 				isJSDoc := s.char() == '*' && s.charAt(1) != '/'
 				for {
 					ch = s.char()
@@ -587,21 +588,25 @@ func (s *Scanner) Scan() ast.Kind {
 							s.pos += 2
 							break
 						}
+						s.pos++
 						if ch == '\r' || ch == '\n' {
+							lastline = s.pos
 							s.tokenFlags |= ast.TokenFlagsPrecedingLineBreak
 						}
-						s.pos++
 					} else {
 						commentCh, size := s.charAndSize()
+						s.pos += size
 						if stringutil.IsLineBreak(commentCh) {
+							lastline = s.pos
 							s.tokenFlags |= ast.TokenFlagsPrecedingLineBreak
 						}
-						s.pos += size
 					}
 				}
 				if isJSDoc && s.shouldParseJSDoc() {
 					s.tokenFlags |= ast.TokenFlagsPrecedingJSDocComment
 				}
+
+				s.processCommentDirective(lastline, s.pos, true)
 				continue
 			}
 			if s.charAt(1) == '=' {
@@ -858,9 +863,17 @@ func (s *Scanner) Scan() ast.Kind {
 	}
 }
 
-func (s *Scanner) processCommentDirective(start int, end int) {
+func (s *Scanner) processCommentDirective(start int, end int, multiline bool) {
 	// Skip starting slashes and whitespace
-	pos := start + 2
+	pos := start
+	if multiline {
+		for pos < len(s.text) && (s.text[pos] == '*' || s.text[pos] == '/') {
+			pos++
+		}
+	} else {
+		// Skip "//" for single line comments
+		pos += 2
+	}
 	for pos < len(s.text) && (s.text[pos] == ' ' || s.text[pos] == '\t') {
 		pos++
 	}

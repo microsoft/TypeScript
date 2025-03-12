@@ -1,12 +1,12 @@
-ts-expect-error.ts(6,5): error TS2322: Type 'string' is not assignable to type 'number'.
 ts-expect-error.ts(8,1): error TS2578: Unused '@ts-expect-error' directive.
-ts-expect-error.ts(19,5): error TS2322: Type 'string' is not assignable to type 'number'.
+ts-expect-error.ts(11,1): error TS2578: Unused '@ts-expect-error' directive.
 ts-expect-error.ts(21,1): error TS2578: Unused '@ts-expect-error' directive.
+ts-expect-error.ts(24,1): error TS2578: Unused '@ts-expect-error' directive.
+ts-expect-error.ts(28,1): error TS2578: Unused '@ts-expect-error' directive.
 ts-expect-error.ts(31,5): error TS2322: Type 'string' is not assignable to type 'number'.
 ts-expect-error.ts(37,2): error TS2367: This comparison appears to be unintentional because the types 'true' and 'false' have no overlap.
 ts-expect-error.ts(39,2): error TS2367: This comparison appears to be unintentional because the types 'true' and 'false' have no overlap.
 ts-expect-error.ts(40,2): error TS2367: This comparison appears to be unintentional because the types 'true' and 'false' have no overlap.
-ts-expect-error.ts(47,5): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== ts-expect-error.ts (9 errors) ====
@@ -16,8 +16,6 @@ ts-expect-error.ts(47,5): error TS2322: Type 'string' is not assignable to type 
     /*
      @ts-expect-error additional commenting */
     var invalidCommentedFancyMulti: number = 'nope';
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     // @ts-expect-error additional commenting
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -25,6 +23,8 @@ ts-expect-error.ts(47,5): error TS2322: Type 'string' is not assignable to type 
     var validCommentedFancySingle: string = 'nope';
     
     /* @ts-expect-error additional commenting */
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2578: Unused '@ts-expect-error' directive.
     var validCommentedFancyMulti: string = 'nope';
     
     // @ts-expect-error
@@ -33,8 +33,6 @@ ts-expect-error.ts(47,5): error TS2322: Type 'string' is not assignable to type 
     /*
      @ts-expect-error */
     var invalidCommentedPlainMulti: number = 'nope';
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     // @ts-expect-error
     ~~~~~~~~~~~~~~~~~~~
@@ -42,10 +40,14 @@ ts-expect-error.ts(47,5): error TS2322: Type 'string' is not assignable to type 
     var validCommentedPlainSingle: string = 'nope';
     
     /* @ts-expect-error */
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2578: Unused '@ts-expect-error' directive.
     var validCommentedPlainMulti1: string = 'nope';
     
     /*
     @ts-expect-error */
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2578: Unused '@ts-expect-error' directive.
     var validCommentedPlainMulti2: string = 'nope';
     
     var invalidPlain: number = 'nope';
@@ -73,6 +75,4 @@ ts-expect-error.ts(47,5): error TS2322: Type 'string' is not assignable to type 
     /*
      @ts-expect-error: additional commenting with no whitespace */
     var invalidCommentedFancyMulti: number = 'nope';
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'number'.
     

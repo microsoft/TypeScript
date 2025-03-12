@@ -1,48 +1,40 @@
 --- old.multiline.errors.txt
 +++ new.multiline.errors.txt
 @@= skipped -0, +0 lines =@@
--a.ts(12,1): error TS2578: Unused '@ts-expect-error' directive.
--b.tsx(32,1): error TS2578: Unused '@ts-expect-error' directive.
-+a.ts(5,12): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-+a.ts(9,12): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+ a.ts(12,1): error TS2578: Unused '@ts-expect-error' directive.
 +b.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
++b.tsx(17,1): error TS2578: Unused '@ts-expect-error' directive.
++b.tsx(28,6): error TS2578: Unused '@ts-expect-error' directive.
+ b.tsx(32,1): error TS2578: Unused '@ts-expect-error' directive.
  
  
--==== a.ts (1 errors) ====
-+==== a.ts (2 errors) ====
-     export const texts: string[] = [];
-     
-     /**
-      @ts-ignore */
-     texts.push(100);
-+               ~~~
-+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-     
-     /**
-      @ts-expect-error */
-     texts.push(100);
-+               ~~~
-+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-     
-     /**
-      @ts-expect-error */
--    ~~~~~~~~~~~~~~~~~~~~
--!!! error TS2578: Unused '@ts-expect-error' directive.
+@@= skipped -18, +21 lines =@@
+ !!! error TS2578: Unused '@ts-expect-error' directive.
      texts.push("100");
      
- ==== b.tsx (1 errors) ====
+-==== b.tsx (1 errors) ====
++==== b.tsx (4 errors) ====
      import * as React from "react";
 +                           ~~~~~~~
 +!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
      
      export function MyComponent(props: { foo: string }) {
        return <div />;
-@@= skipped -51, +56 lines =@@
+@@= skipped -18, +20 lines =@@
      
          {/*
         @ts-expect-error */}
--    ~~~~~~~~~~~~~~~~~~~~~~
--!!! error TS2578: Unused '@ts-expect-error' directive.
-         <MyComponent foo={"hooray"} />
-       </div>
-     );
++    ~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2578: Unused '@ts-expect-error' directive.
+         <MyComponent foo={100} />
+     
+         {/*
+@@= skipped -11, +13 lines =@@
+         <MyComponent foo={100} />
+     
+         {/*@ts-expect-error*/}
++         ~~~~~~~~~~~~~~~~~~~~
++!!! error TS2578: Unused '@ts-expect-error' directive.
+         <MyComponent foo={100} />
+     
+         {/*
