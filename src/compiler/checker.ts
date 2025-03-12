@@ -1413,9 +1413,9 @@ const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Objec
     Uncapitalize: IntrinsicTypeKind.Uncapitalize,
     NoInfer: IntrinsicTypeKind.NoInfer,
     Add: IntrinsicTypeKind.Add,
-    Sub: IntrinsicTypeKind.Sub,
-    Mul: IntrinsicTypeKind.Mul,
-    Div: IntrinsicTypeKind.Div,
+    Subtract: IntrinsicTypeKind.Sub,
+    Multiply: IntrinsicTypeKind.Mul,
+    Divide: IntrinsicTypeKind.Div,
     Integer: IntrinsicTypeKind.Integer,
 }));
 
@@ -18391,8 +18391,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type.flags & TypeFlags.TemplateLiteral ? getTemplateLiteralType(...applyTemplateStringMapping(symbol, (type as TemplateLiteralType).texts, (type as TemplateLiteralType).types)) :
             // Mapping<Mapping<T>> === Mapping<T>
             type.flags & TypeFlags.StringMapping && symbol === type.symbol ? type :
-            type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.StringMapping) || isGenericIndexType(type) ? (getBaseConstraintOfType(type)?.flags ?? 0) & TypeFlags.StringLike ? getStringMappingTypeForGenericType(symbol, type) :
-                getCalculationTypeForGenericType(symbol, [type]) :
+			type.flags & TypeFlags.Calculation ? getCalculationTypeForGenericType(symbol, [type]) :
+            type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.StringMapping) || isGenericIndexType(type) ? getStringMappingTypeForGenericType(symbol, type) :
             // This handles Mapping<`${number}`> and Mapping<`${bigint}`>
             isPatternLiteralPlaceholderType(type) ? getStringMappingTypeForGenericType(symbol, getTemplateLiteralType(["", ""], [type])) :
             type;

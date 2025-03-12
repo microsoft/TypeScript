@@ -511,6 +511,7 @@ type NTuple<N extends number, Tup extends unknown[] = []> =
 
 type AddTuples<A extends number, B extends number> =
 >AddTuples : AddTuples<A, B>
+>          : ^^^^^^^^^^^^^^^
 
     [...NTuple<A>, ...NTuple<B>]['length'];
 

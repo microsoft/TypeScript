@@ -27,10 +27,10 @@ type LengthDown<
 >It : Symbol(It, Decl(recursiveConditionalCrash4.ts, 4, 33))
 >$Rest : Symbol($Rest, Decl(recursiveConditionalCrash4.ts, 7, 43))
 
-    ? LengthDown<$Rest, Add<Length, StrIter.Value<It>>, It>
+    ? LengthDown<$Rest, AddTuple<Length, StrIter.Value<It>>, It>
 >LengthDown : Symbol(LengthDown, Decl(recursiveConditionalCrash4.ts, 0, 0))
 >$Rest : Symbol($Rest, Decl(recursiveConditionalCrash4.ts, 7, 43))
->Add : Symbol(Add)
+>AddTuple : Symbol(AddTuple)
 >Length : Symbol(Length, Decl(recursiveConditionalCrash4.ts, 3, 21))
 >StrIter : Symbol(StrIter)
 >Value : Symbol(StrIter.Value)
