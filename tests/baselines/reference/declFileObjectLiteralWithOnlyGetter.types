@@ -3,7 +3,7 @@
 === declFileObjectLiteralWithOnlyGetter.ts ===
 function /*1*/makePoint(x: number) { 
 >makePoint : (x: number) => { readonly x: number; }
->          : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -25,7 +25,7 @@ var /*4*/point = makePoint(2);
 >makePoint(2) : { readonly x: number; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >makePoint : (x: number) => { readonly x: number; }
->          : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
 >2 : 2
 >  : ^
 

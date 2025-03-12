@@ -1,0 +1,108 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsArrays.ts] ////
+
+=== ok.ts ===
+export let a1 = [1, "2"] as const
+>a1 : Symbol(a1, Decl(ok.ts, 0, 10))
+>const : Symbol(const)
+
+const x = 0;
+>x : Symbol(x, Decl(ok.ts, 1, 5))
+
+export let a2 = [x as 0, "2"] as const
+>a2 : Symbol(a2, Decl(ok.ts, 2, 10))
+>x : Symbol(x, Decl(ok.ts, 1, 5))
+>const : Symbol(const)
+
+type N = 1;
+>N : Symbol(N, Decl(ok.ts, 2, 38))
+
+export let a3 = [x as N, "2" as string] as const
+>a3 : Symbol(a3, Decl(ok.ts, 4, 10))
+>x : Symbol(x, Decl(ok.ts, 1, 5))
+>N : Symbol(N, Decl(ok.ts, 2, 38))
+>const : Symbol(const)
+
+export let a4 = [Math.random() as N, "2" as string] as const
+>a4 : Symbol(a4, Decl(ok.ts, 5, 10))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>N : Symbol(N, Decl(ok.ts, 2, 38))
+>const : Symbol(const)
+
+export const a5 = [(s: N):void => {}, "2"] as const
+>a5 : Symbol(a5, Decl(ok.ts, 6, 12))
+>s : Symbol(s, Decl(ok.ts, 6, 20))
+>N : Symbol(N, Decl(ok.ts, 2, 38))
+>const : Symbol(const)
+
+export const o = {
+>o : Symbol(o, Decl(ok.ts, 8, 12))
+
+    arr: [x as N,2,3]
+>arr : Symbol(arr, Decl(ok.ts, 8, 18))
+>x : Symbol(x, Decl(ok.ts, 1, 5))
+>N : Symbol(N, Decl(ok.ts, 2, 38))
+
+} as const
+>const : Symbol(const)
+
+export const o2 = {
+>o2 : Symbol(o2, Decl(ok.ts, 12, 12))
+
+    arr: () => [x as N,2,3] as const
+>arr : Symbol(arr, Decl(ok.ts, 12, 19))
+>x : Symbol(x, Decl(ok.ts, 1, 5))
+>N : Symbol(N, Decl(ok.ts, 2, 38))
+>const : Symbol(const)
+
+};
+
+
+=== bad.ts ===
+export let aBad1 = [1, "2"];
+>aBad1 : Symbol(aBad1, Decl(bad.ts, 0, 10))
+
+export const aBad2 = [1, "2"];
+>aBad2 : Symbol(aBad2, Decl(bad.ts, 1, 12))
+
+const y = 0;
+>y : Symbol(y, Decl(bad.ts, 2, 5))
+
+type S = "2";
+>S : Symbol(S, Decl(bad.ts, 2, 12))
+
+export let aBad3 = [y, "2"] as const
+>aBad3 : Symbol(aBad3, Decl(bad.ts, 5, 10))
+>y : Symbol(y, Decl(bad.ts, 2, 5))
+>const : Symbol(const)
+
+export let a = [1,2,3] as const;
+>a : Symbol(a, Decl(bad.ts, 6, 10))
+>const : Symbol(const)
+
+export let aBad4 = [...a] as const
+>aBad4 : Symbol(aBad4, Decl(bad.ts, 7, 10))
+>a : Symbol(a, Decl(bad.ts, 6, 10))
+>const : Symbol(const)
+
+export const oBad1 = {
+>oBad1 : Symbol(oBad1, Decl(bad.ts, 9, 12))
+
+    arr: [y,2,3]
+>arr : Symbol(arr, Decl(bad.ts, 9, 22))
+>y : Symbol(y, Decl(bad.ts, 2, 5))
+
+} as const
+>const : Symbol(const)
+
+export const oBad2 = {
+>oBad2 : Symbol(oBad2, Decl(bad.ts, 13, 12))
+
+    arr: () => [y,2,3]
+>arr : Symbol(arr, Decl(bad.ts, 13, 22))
+>y : Symbol(y, Decl(bad.ts, 2, 5))
+
+} as const
+>const : Symbol(const)
+

@@ -10555,7 +10555,7 @@ export interface SyntacticTypeNodeBuilderResolver {
     serializeExistingTypeNode(context: SyntacticTypeNodeBuilderContext, node: TypeNode, addUndefined?: boolean): TypeNode | undefined;
     serializeReturnTypeForSignature(context: SyntacticTypeNodeBuilderContext, signatureDeclaration: SignatureDeclaration | JSDocSignature): TypeNode | undefined;
     serializeTypeOfExpression(context: SyntacticTypeNodeBuilderContext, expr: Expression): TypeNode;
-    serializeTypeOfDeclaration(context: SyntacticTypeNodeBuilderContext, node: HasInferredType | GetAccessorDeclaration | SetAccessorDeclaration, symbol: Symbol | undefined): TypeNode | undefined;
+    serializeTypeOfDeclaration(context: SyntacticTypeNodeBuilderContext, node: HasInferredType | GetAccessorDeclaration | SetAccessorDeclaration, symbol: Symbol | undefined, widen?: boolean): TypeNode | undefined;
     serializeNameOfParameter(context: SyntacticTypeNodeBuilderContext, parameter: ParameterDeclaration): BindingName | string;
     serializeTypeName(context: SyntacticTypeNodeBuilderContext, node: EntityName, isTypeOf?: boolean, typeArguments?: readonly TypeNode[]): TypeNode | undefined;
     serializeEntityName(context: SyntacticTypeNodeBuilderContext, node: EntityNameExpression): Expression | undefined;

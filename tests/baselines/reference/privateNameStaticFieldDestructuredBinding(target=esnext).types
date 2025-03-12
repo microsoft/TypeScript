@@ -19,7 +19,7 @@ class A {
 
     testObject() {
 >testObject : () => { x: number; y: number; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^
 
         return { x: 10, y: 6 };
 >{ x: 10, y: 6 } : { x: number; y: number; }
@@ -68,11 +68,11 @@ class A {
 >this.testObject() : { x: number; y: number; }
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.testObject : () => { x: number; y: number; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >testObject : () => { x: number; y: number; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^
 
         ([A.#field, y] = this.testArray());
 >([A.#field, y] = this.testArray()) : number[]

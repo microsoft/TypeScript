@@ -43,7 +43,7 @@ type T06 = Unpacked<never>;  // never
 
 function f1(s: string) {
 >f1 : (s: string) => { a: number; b: string; }
->   : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
@@ -116,7 +116,7 @@ type T14 = ReturnType<typeof f1>;  // { a: number, b: string }
 >T14 : { a: number; b: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f1 : (s: string) => { a: number; b: string; }
->   : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^
 
 type T15 = ReturnType<any>;  // any
 >T15 : any

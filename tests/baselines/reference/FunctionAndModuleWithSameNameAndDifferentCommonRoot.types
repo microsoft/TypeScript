@@ -7,7 +7,7 @@ module A {
 
     export function Point() {
 >Point : () => { x: number; y: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^
 
         return { x: 0, y: 0 };
 >{ x: 0, y: 0 } : { x: number; y: number; }
@@ -61,11 +61,11 @@ var fn = A.Point;
 >fn : () => { x: number; y: number; }
 >   : ^^^^^^                         
 >A.Point : () => { x: number; y: number; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 >Point : () => { x: number; y: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^
 
 var cl: { x: number; y: number; }
 >cl : { x: number; y: number; }

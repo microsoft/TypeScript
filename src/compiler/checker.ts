@@ -6147,15 +6147,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const type = instantiateType(getWidenedType(getRegularTypeOfExpression(expr)), context.mapper);
                 return typeToTypeNodeHelper(type, context);
             },
-            serializeTypeOfDeclaration(syntacticContext, declaration, symbol) {
+            serializeTypeOfDeclaration(syntacticContext, declaration, symbol, widen) {
                 // Get type of the symbol if this is the valid symbol otherwise get type at location
                 const context = syntacticContext as NodeBuilderContext;
                 symbol ??= getSymbolOfDeclaration(declaration);
                 let type = context.enclosingSymbolTypes?.get(getSymbolId(symbol));
                 if (type === undefined) {
-                    type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
-                        ? instantiateType(getWidenedLiteralType(getTypeOfSymbol(symbol)), context.mapper)
-                        : errorType;
+                    const symbolType = getTypeOfSymbol(symbol);
+                    if (widen) {
+                        type = instantiateType(getWidenedType(symbolType), context.mapper);
+                    }
+                    else {
+                        type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
+                            ? instantiateType(getWidenedLiteralType(symbolType), context.mapper)
+                            : errorType;
+                    }
                 }
                 const addUndefinedForParameter = declaration && (isParameter(declaration) || isJSDocParameterTag(declaration)) && requiresAddingImplicitUndefined(declaration, context.enclosingDeclaration);
                 if (addUndefinedForParameter) {

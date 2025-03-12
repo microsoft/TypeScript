@@ -95,7 +95,7 @@ interface F1 {
 
 function b1(z = null, o = { x: 0, y: undefined }) { }
 >b1 : (z?: any, o?: { x: number; y: any; }) => void
->   : ^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^ ^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >z : any
 >  : ^^^
 >o : { x: number; y: any; }
@@ -159,7 +159,7 @@ b1("string", { x: "string", y: true });  // Error
 >b1("string", { x: "string", y: true }) : void
 >                                       : ^^^^
 >b1 : (z?: any, o?: { x: number; y: any; }) => void
->   : ^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^ ^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 >{ x: "string", y: true } : { x: string; y: boolean; }

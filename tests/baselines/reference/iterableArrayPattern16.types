@@ -41,7 +41,7 @@ class FooIterator {
 
     next() {
 >next : () => { value: Foo; done: boolean; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^     ^^^^^^^    ^^^^^^^^^^^^
 
         return {
 >{            value: new Foo,            done: false        } : { value: Foo; done: boolean; }
@@ -86,7 +86,7 @@ class FooIteratorIterator {
 
     next() {
 >next : () => { value: FooIterator; done: boolean; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^
 
         return {
 >{            value: new FooIterator,            done: false        } : { value: FooIterator; done: boolean; }

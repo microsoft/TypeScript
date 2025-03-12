@@ -3,9 +3,9 @@
 === /a.js ===
 const a = () => {
 >a : () => { arguments: any[]; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^         ^^^^^^^^^^
 >() => {    return {        arguments: [],    };} : () => { arguments: any[]; }
->                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                 : ^^^^^^^^         ^^^^^^^^^^
 
     return {
 >{        arguments: [],    } : { arguments: undefined[]; }

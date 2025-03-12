@@ -11,7 +11,7 @@ declare function connectionFromArray(objects: number, args: any): {};
 
 function rootConnection(name: string) {
 >rootConnection : (name: string) => { resolve: (context: any, args: any) => Promise<{}>; }
->               : ^    ^^      ^^^^^^^^^^^^^^^^^       ^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^    ^^      ^^^^^^^       ^^^         ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 
@@ -60,7 +60,7 @@ rootConnection('test');
 >rootConnection('test') : { resolve: (context: any, args: any) => Promise<{}>; }
 >                       : ^^^^^^^^^^^^       ^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^
 >rootConnection : (name: string) => { resolve: (context: any, args: any) => Promise<{}>; }
->               : ^    ^^      ^^^^^^^^^^^^^^^^^       ^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^    ^^      ^^^^^^^       ^^^         ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >'test' : "test"
 >       : ^^^^^^
 

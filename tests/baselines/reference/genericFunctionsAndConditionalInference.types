@@ -127,9 +127,9 @@ const right: Ops<"right"> = {} as any
 
 const ok = <F extends Target>(at: Ops<F>) => ({lr: at.lr(at.str, at.num)})
 >ok : <F extends Target>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }
->   : ^ ^^^^^^^^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^      ^^  ^^      ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><F extends Target>(at: Ops<F>) => ({lr: at.lr(at.str, at.num)}) : <F extends Target>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }
->                                                                : ^ ^^^^^^^^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                : ^ ^^^^^^^^^      ^^  ^^      ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >at : Ops<F>
 >   : ^^^^^^
 >({lr: at.lr(at.str, at.num)}) : { lr: Result<F, LR<F, string, number>>; }
@@ -177,7 +177,7 @@ const orphaned = <F extends Target>(at: Ops<F>) => at.dict(ok(at))
 >ok(at) : { lr: Result<F, LR<F, string, number>>; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ok : <F_1 extends Target>(at: Ops<F_1>) => { lr: Result<F_1, LR<F_1, string, number>>; }
->   : ^^^^^^^^^^^^^      ^^  ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^      ^^  ^^        ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >at : Ops<F>
 >   : ^^^^^^
 
@@ -187,7 +187,7 @@ const leftOk = ok(left)
 >ok(left) : { lr: string; }
 >         : ^^^^^^^^^^^^^^^
 >ok : <F extends Target>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }
->   : ^ ^^^^^^^^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^      ^^  ^^      ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >left : Ops<"left">
 >     : ^^^^^^^^^^^
 
@@ -207,7 +207,7 @@ const rightOk = ok(right)
 >ok(right) : { lr: number; }
 >          : ^^^^^^^^^^^^^^^
 >ok : <F extends Target>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }
->   : ^ ^^^^^^^^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^      ^^  ^^      ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >right : Ops<"right">
 >      : ^^^^^^^^^^^^
 

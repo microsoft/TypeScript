@@ -3,15 +3,15 @@
 === foo.js ===
 module.exports = function () {
 >module.exports = function () {  class A { }  return {    c: A.b = 1,  }} : () => { c: number; }
->                                                                         : ^^^^^^^^^^^^^^^^^^^^
+>                                                                         : ^^^^^^^^ ^^^^^^^^^^^
 >module.exports : () => { c: number; }
->               : ^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^ ^^^^^^^^^^^
 >module : { exports: () => { c: number; }; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
 >exports : () => { c: number; }
->        : ^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^ ^^^^^^^^^^^
 >function () {  class A { }  return {    c: A.b = 1,  }} : () => { c: number; }
->                                                        : ^^^^^^^^^^^^^^^^^^^^
+>                                                        : ^^^^^^^^ ^^^^^^^^^^^
 
   class A { }
 >A : A

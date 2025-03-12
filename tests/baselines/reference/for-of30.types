@@ -7,7 +7,7 @@ class MyStringIterator {
 
     next() {
 >next : () => { done: boolean; value: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^    ^^^^^^^^^^^     ^^^^^^^^^^^
 
         return {
 >{            done: false,            value: ""        } : { done: boolean; value: string; }
