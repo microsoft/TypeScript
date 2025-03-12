@@ -165,7 +165,7 @@ var r7 = foo7(1);
 // object types
 function foo8(x: number) {
 >foo8 : (x: number) => { x: number; }
->     : ^ ^^      ^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^ ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -183,7 +183,7 @@ var r8 = foo8(1);
 >foo8(1) : { x: number; }
 >        : ^^^^^^^^^^^^^^
 >foo8 : (x: number) => { x: number; }
->     : ^ ^^      ^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^ ^^^^^^^^^^^
 >1 : 1
 >  : ^
 

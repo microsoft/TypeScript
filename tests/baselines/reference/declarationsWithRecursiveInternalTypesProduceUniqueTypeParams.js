@@ -155,7 +155,10 @@ export declare const testRecFun: <T extends Object>(parent: T) => {
                                         result: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7 & U_8;
                                         deeper: <U_9 extends Object>(child: U_9) => {
                                             result: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7 & U_8 & U_9;
-                                            deeper: <U_10 extends Object>(child: U_10) => /*elided*/ any;
+                                            deeper: <U_10 extends Object>(child: U_10) => {
+                                                result: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7 & U_8 & U_9 & U_10;
+                                                deeper: <U_11 extends Object>(child: U_11) => /*elided*/ any;
+                                            };
                                         };
                                     };
                                 };

@@ -126,7 +126,7 @@ function b1(z = [undefined, null]) { };
 
 function b2(z = null, o = { x: 0, y: undefined }) { }
 >b2 : (z?: any, o?: { x: number; y: any; }) => void
->   : ^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^ ^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >z : any
 >  : ^^^
 >o : { x: number; y: any; }
@@ -258,7 +258,7 @@ b2("string", { x: 200, y: "string" });
 >b2("string", { x: 200, y: "string" }) : void
 >                                      : ^^^^
 >b2 : (z?: any, o?: { x: number; y: any; }) => void
->   : ^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^ ^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 >{ x: 200, y: "string" } : { x: number; y: string; }
@@ -276,7 +276,7 @@ b2("string", { x: 200, y: true });
 >b2("string", { x: 200, y: true }) : void
 >                                  : ^^^^
 >b2 : (z?: any, o?: { x: number; y: any; }) => void
->   : ^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^ ^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 >{ x: 200, y: true } : { x: number; y: boolean; }

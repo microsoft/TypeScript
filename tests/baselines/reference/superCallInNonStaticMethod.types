@@ -57,7 +57,7 @@ class Other extends Doing {
     // in an object literal inside a instance method
     public objectLiteralInsideAnInstanceMethod() {
 >objectLiteralInsideAnInstanceMethod : () => { a: () => void; b: void; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^
 
         return {
 >{            a: () => {                super.instanceMethod();            },            b: super.instanceMethod()        } : { a: () => void; b: void; }

@@ -21,7 +21,7 @@ export function bar(func = () => foo) {
 // error
 export function baz1(func = { f() { return foo } }) {
 >baz1 : (func?: { f(): string; }) => void
->     : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^    ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >func : { f(): string; }
 >     : ^^^^^^^^^^^^^^^^
 >{ f() { return foo } } : { f(): string; }

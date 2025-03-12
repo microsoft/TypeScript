@@ -234,7 +234,7 @@ export const o8 = {
 
 function ns() { return { v: 0 } as const }
 >ns : () => { readonly v: 0; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^ ^^ ^^^
 >{ v: 0 } as const : { readonly v: 0; }
 >                  : ^^^^^^^^^^^^^^^^^^
 >{ v: 0 } : { readonly v: 0; }
@@ -258,7 +258,7 @@ export const o9 = {
 >ns() : { readonly v: 0; }
 >     : ^^^^^^^^^^^^^^^^^^
 >ns : () => { readonly v: 0; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^ ^^ ^^^
 >v : 0
 >  : ^
 >1 : 1

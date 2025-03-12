@@ -7,7 +7,7 @@ class B {}
 
 function foo() {
 >foo : () => { B: typeof B; }
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^ ^^^^^^^^^^^^^
 
     return {B: B};
 >{B: B} : { B: typeof B; }
@@ -27,7 +27,7 @@ class C extends (foo()).B {}
 >foo() : { B: typeof B; }
 >      : ^^^^^^^^^^^^^^^^
 >foo : () => { B: typeof B; }
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^ ^^^^^^^^^^^^^
 >B : typeof B
 >  : ^^^^^^^^
 

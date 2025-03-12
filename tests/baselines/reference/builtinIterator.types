@@ -224,7 +224,7 @@ class GoodIterator extends Iterator<number> {
 
   next() {
 >next : () => { readonly done: false; readonly value: 0; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^     ^^ ^^^
 
     return { done: false, value: 0 } as const;
 >{ done: false, value: 0 } as const : { readonly done: false; readonly value: 0; }
@@ -320,7 +320,7 @@ class BadIterator2 extends Iterator<number> {
 
   next() {
 >next : () => { done: boolean; value: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^    ^^^^^^^^^^^     ^^^^^^^^^^^
 
     return { done: false, value: 0 };
 >{ done: false, value: 0 } : { done: boolean; value: number; }

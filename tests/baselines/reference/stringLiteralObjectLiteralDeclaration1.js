@@ -16,6 +16,6 @@ var m1;
 //// [stringLiteralObjectLiteralDeclaration1.d.ts]
 declare namespace m1 {
     var n: {
-        'foo bar': number;
+        "foo bar": number;
     };
 }

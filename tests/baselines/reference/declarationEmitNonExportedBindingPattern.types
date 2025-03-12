@@ -3,7 +3,7 @@
 === test.ts ===
 function getFoo() {
 >getFoo : () => { foo: { test: number; }; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^   ^^^^    ^^^^^^^^^^^^^^
 
   return { foo: { test: 42 } }
 >{ foo: { test: 42 } } : { foo: { test: number; }; }
@@ -24,7 +24,7 @@ const { foo } = getFoo()
 >getFoo() : { foo: { test: number; }; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getFoo : () => { foo: { test: number; }; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^   ^^^^    ^^^^^^^^^^^^^^
 
 export type AliasType = typeof foo
 >AliasType : { test: number; }
@@ -40,7 +40,7 @@ const { foo: renamed } = getFoo()
 >getFoo() : { foo: { test: number; }; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getFoo : () => { foo: { test: number; }; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^   ^^^^    ^^^^^^^^^^^^^^
 
 export type AliasType2 = typeof renamed
 >AliasType2 : { test: number; }
@@ -50,7 +50,7 @@ export type AliasType2 = typeof renamed
 
 function getNested() {
 >getNested : () => { a: { b: { c: string; }; }; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^ ^^^^ ^^^^ ^^^^^^^^^^^^^^^^^
 
   return { a: { b: { c: 'd' } } }
 >{ a: { b: { c: 'd' } } } : { a: { b: { c: string; }; }; }
@@ -79,7 +79,7 @@ const { a: { b: { c } } } = getNested()
 >getNested() : { a: { b: { c: string; }; }; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getNested : () => { a: { b: { c: string; }; }; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^ ^^^^ ^^^^ ^^^^^^^^^^^^^^^^^
 
 export type AliasType3 = typeof c
 >AliasType3 : string

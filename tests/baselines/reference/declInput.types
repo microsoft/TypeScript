@@ -17,7 +17,7 @@ class bar {
 
   public g() { return {a: <bar>null, b: undefined, c: void 4 }; }
 >g : () => { a: bar; b: any; c: any; }
->  : ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^   ^^ ^^^^^^^ ^^^^^^^^
 >{a: <bar>null, b: undefined, c: void 4 } : { a: bar; b: undefined; c: undefined; }
 >                                         : ^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : bar

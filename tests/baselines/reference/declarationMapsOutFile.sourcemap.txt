@@ -64,20 +64,27 @@ sourceFile:a.ts
 1 >Emitted(5, 10) Source(2, 27) + SourceIndex(0)
 ---
 >>>            b: number;
+1->^^^^^^^^^^^^
+2 >            ^
+1->) {
+  >        return {
+2 >            b
+1->Emitted(6, 13) Source(3, 17) + SourceIndex(0)
+2 >Emitted(6, 14) Source(3, 18) + SourceIndex(0)
+---
 >>>        };
 >>>        static make(): Foo;
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^
 3 >              ^
 4 >               ^^^^
-1->) {
-  >        return {b: x.a};
+1 >: x.a};
   >    }
   >    
 2 >        static
 3 >               
 4 >               make
-1->Emitted(8, 9) Source(5, 5) + SourceIndex(0)
+1 >Emitted(8, 9) Source(5, 5) + SourceIndex(0)
 2 >Emitted(8, 15) Source(5, 11) + SourceIndex(0)
 3 >Emitted(8, 16) Source(5, 12) + SourceIndex(0)
 4 >Emitted(8, 20) Source(5, 16) + SourceIndex(0)
