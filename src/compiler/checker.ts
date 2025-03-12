@@ -1403,8 +1403,17 @@ const enum IntrinsicTypeKind {
     Sub,
     Mul,
     Div,
-    Integer,
+    Floor,
+    Ceil,
+    Round,
 }
+
+// Set.has is faster than Array.includes
+const intrinsicUnaryKinds = new Set([
+    IntrinsicTypeKind.Floor,
+    IntrinsicTypeKind.Ceil,
+    IntrinsicTypeKind.Round,
+]);
 
 const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Object.entries({
     Uppercase: IntrinsicTypeKind.Uppercase,
@@ -1413,10 +1422,12 @@ const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Objec
     Uncapitalize: IntrinsicTypeKind.Uncapitalize,
     NoInfer: IntrinsicTypeKind.NoInfer,
     Add: IntrinsicTypeKind.Add,
-    Sub: IntrinsicTypeKind.Sub,
-    Mul: IntrinsicTypeKind.Mul,
-    Div: IntrinsicTypeKind.Div,
-    Integer: IntrinsicTypeKind.Integer,
+    Subtract: IntrinsicTypeKind.Sub,
+    Multiply: IntrinsicTypeKind.Mul,
+    Divide: IntrinsicTypeKind.Div,
+    Floor: IntrinsicTypeKind.Floor,
+    Ceil: IntrinsicTypeKind.Ceil,
+    Round: IntrinsicTypeKind.Round,
 }));
 
 const SymbolLinks = class implements SymbolLinks {
@@ -18387,12 +18398,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getIntrinsicMappingType(symbol: Symbol, type: Type): Type {
         return type.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type, t => getIntrinsicMappingType(symbol, t)) :
             type.flags & TypeFlags.StringLiteral ? getStringLiteralType(applyStringMapping(symbol, (type as StringLiteralType).value)) :
-            type.flags & TypeFlags.NumberLiteral ? applyNumberMapping(symbol, type as NumberLiteralType) :
+            type.flags & TypeFlags.NumberLiteral ? getNumberLiteralType(applyNumericUnary(symbol, (type as NumberLiteralType).value)) :
             type.flags & TypeFlags.TemplateLiteral ? getTemplateLiteralType(...applyTemplateStringMapping(symbol, (type as TemplateLiteralType).texts, (type as TemplateLiteralType).types)) :
             // Mapping<Mapping<T>> === Mapping<T>
             type.flags & TypeFlags.StringMapping && symbol === type.symbol ? type :
-            type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.StringMapping) || isGenericIndexType(type) ? (getBaseConstraintOfType(type)?.flags ?? 0) & TypeFlags.StringLike ? getStringMappingTypeForGenericType(symbol, type) :
-                getCalculationTypeForGenericType(symbol, [type]) :
+            type.flags & TypeFlags.Calculation ? getCalculationTypeForGenericType(symbol, [type]) :
+            // Floor<T>/Ceil<T>/Round<T> === T when T is any, number, or bigint
+            (intrinsicUnaryKinds.has(intrinsicTypeKinds.get(symbol.escapedName as string)!) && (type.flags & (TypeFlags.Any | TypeFlags.Number | TypeFlags.BigInt))) ? type :
+            type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.StringMapping) || isGenericIndexType(type) ? getStringMappingTypeForGenericType(symbol, type) :
             // This handles Mapping<`${number}`> and Mapping<`${bigint}`>
             isPatternLiteralPlaceholderType(type) ? getStringMappingTypeForGenericType(symbol, getTemplateLiteralType(["", ""], [type])) :
             type;
@@ -18406,29 +18419,33 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // handle division by zero
             intrinsicTypeKinds.get(symbol.escapedName as string) === IntrinsicTypeKind.Div && type2.flags & TypeFlags.NumberLiteral && (type2 as NumberLiteralType).value === 0 ? neverType :
             type1.flags & TypeFlags.NumberLiteral ?
-            type2.flags & TypeFlags.NumberLiteral ? applyNumberMapping2(symbol, type1 as NumberLiteralType, type2 as NumberLiteralType) :
+            type2.flags & TypeFlags.NumberLiteral ? getNumberLiteralType(applyNumericBinary(symbol, (type1 as NumberLiteralType).value, (type2 as NumberLiteralType).value)) :
                 type2 :
             type1;
     }
 
-    function applyNumberMapping(symbol: Symbol, n: NumberLiteralType): Type {
+    function applyNumericUnary(symbol: Symbol, value: number): number {
         switch (intrinsicTypeKinds.get(symbol.escapedName as string)) {
-            case IntrinsicTypeKind.Integer:
-                return getNumberLiteralType(Math.floor(n.value));
+            case IntrinsicTypeKind.Floor:
+                return Math.floor(value);
+            case IntrinsicTypeKind.Ceil:
+                return Math.ceil(value);
+            case IntrinsicTypeKind.Round:
+                return Math.round(value);
         }
-        return n;
+        return value;
     }
 
-    function applyNumberMapping2(symbol: Symbol, a: NumberLiteralType, b: NumberLiteralType): Type {
+    function applyNumericBinary(symbol: Symbol, a: number, b: number): number {
         switch (intrinsicTypeKinds.get(symbol.escapedName as string)) {
             case IntrinsicTypeKind.Add:
-                return getNumberLiteralType(a.value + b.value);
+                return (a + b);
             case IntrinsicTypeKind.Sub:
-                return getNumberLiteralType(a.value - b.value);
+                return (a - b);
             case IntrinsicTypeKind.Mul:
-                return getNumberLiteralType(a.value * b.value);
+                return (a * b);
             case IntrinsicTypeKind.Div:
-                return getNumberLiteralType(a.value / b.value);
+                return (a / b);
         }
         return a;
     }
@@ -18804,8 +18821,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isGenericStringLikeType(type: Type) {
-        // @todo TypeFlags.Calculation not exactly stringlike right?
-        return !!(type.flags & (TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Calculation)) && !isPatternLiteralType(type);
+        return !!(type.flags & (TypeFlags.TemplateLiteral | TypeFlags.StringMapping)) && !isPatternLiteralType(type);
     }
 
     function isGenericType(type: Type): boolean {

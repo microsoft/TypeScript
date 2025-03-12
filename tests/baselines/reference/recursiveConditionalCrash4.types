@@ -18,7 +18,7 @@ type LengthDown<
 >StrIter : any
 >        : ^^^
 
-    ? LengthDown<$Rest, Add<Length, StrIter.Value<It>>, It>
+    ? LengthDown<$Rest, AddTuple<Length, StrIter.Value<It>>, It>
 >StrIter : any
 >        : ^^^
 

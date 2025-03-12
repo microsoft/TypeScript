@@ -9,7 +9,7 @@ type LengthDown<
   It
 > = It extends StrIter.Iterator
   ? StrIter.CutAt<Str, It> extends `${infer $Rest}`
-    ? LengthDown<$Rest, Add<Length, StrIter.Value<It>>, It>
+    ? LengthDown<$Rest, AddTuple<Length, StrIter.Value<It>>, It>
     : LengthDown<Str, Length, StrIter.Prev<It>>
   : Length;
 

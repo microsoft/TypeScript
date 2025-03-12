@@ -1650,9 +1650,19 @@ type Capitalize<S extends string> = intrinsic;
 type Uncapitalize<S extends string> = intrinsic;
 
 /**
- * Convert number literal type to integer
+ * Convert a number literal type to an integer by flooring it
  */
-type Integer<N extends number> = intrinsic;
+type Floor<N extends number> = intrinsic;
+
+/**
+ * Convert a number literal type to an integer by ceiling it
+ */
+type Ceil<N extends number> = intrinsic;
+
+/**
+ * Convert a number literal type to integer by rounding it
+ */
+type Round<N extends number> = intrinsic;
 
 /**
  * Add two literal numbers
