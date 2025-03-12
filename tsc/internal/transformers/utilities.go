@@ -157,7 +157,8 @@ func isIdentifierReference(name *ast.IdentifierNode, parent *ast.Node) bool {
 		ast.KindThrowStatement,
 		ast.KindExpressionStatement,
 		ast.KindExportAssignment,
-		ast.KindPropertyAccessExpression:
+		ast.KindPropertyAccessExpression,
+		ast.KindTemplateSpan:
 		// only an `Expression()` child that can be `Identifier` would be an instance of `IdentifierReference`
 		return parent.Expression() == name
 	case ast.KindVariableDeclaration,

@@ -383,6 +383,15 @@ func TestNamespaceTransformer(t *testing.T) {
 (function (N) {
     ({ x: N.x } = { x: 1 });
 })(N || (N = {}));`},
+
+		{title: "identifier reference in template", input: `namespace N {
+    export var x = 1;
+    ` + "`" + `${x}` + "`" + `
+}`, output: `var N;
+(function (N) {
+    N.x = 1;
+    ` + "`" + `${N.x}` + "`" + `;
+})(N || (N = {}));`},
 	}
 
 	for _, rec := range data {

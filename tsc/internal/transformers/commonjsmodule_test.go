@@ -970,6 +970,17 @@ const isNotOverloadAndNotAccessor = (0, ts_js_1.and)(isNotOverload, isNotAccesso
 		},
 
 		{
+			title: "Identifier#6 (in template literal)",
+			input: `export var x = 1;
+` + "`" + `${x}` + "`" + `;`,
+			output: `"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 1;
+` + "`" + `${exports.x}` + "`" + `;`,
+		},
+
+		{
 			title: "Other",
 			input: `export const a = class {
     p = 10;
