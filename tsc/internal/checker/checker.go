@@ -552,7 +552,7 @@ type Checker struct {
 	noImplicitThis                            bool
 	useUnknownInCatchVariables                bool
 	exactOptionalPropertyTypes                bool
-	canCollectSymbolAliasAccessabilityData    bool
+	canCollectSymbolAliasAccessibilityData    bool
 	arrayVariances                            []VarianceFlags
 	globals                                   ast.SymbolTable
 	globalSymbols                             []*ast.Symbol
@@ -828,7 +828,7 @@ func NewChecker(program Program) *Checker {
 	c.noImplicitThis = c.getStrictOptionValue(c.compilerOptions.NoImplicitThis)
 	c.useUnknownInCatchVariables = c.getStrictOptionValue(c.compilerOptions.UseUnknownInCatchVariables)
 	c.exactOptionalPropertyTypes = c.compilerOptions.ExactOptionalPropertyTypes == core.TSTrue
-	c.canCollectSymbolAliasAccessabilityData = c.compilerOptions.VerbatimModuleSyntax.IsFalseOrUnknown()
+	c.canCollectSymbolAliasAccessibilityData = c.compilerOptions.VerbatimModuleSyntax.IsFalseOrUnknown()
 	c.arrayVariances = []VarianceFlags{VarianceFlagsCovariant}
 	c.globals = make(ast.SymbolTable, countGlobalSymbols(c.files))
 	c.evaluate = createEvaluator(c.evaluateEntity)
@@ -9319,7 +9319,7 @@ func (c *Checker) invocationErrorDetails(errorTarget *ast.Node, apparentType *Ty
 					diagnostic = NewDiagnosticChainForNode(diagnostic, target, core.IfElse(isCall, diagnostics.Not_all_constituents_of_type_0_are_callable, diagnostics.Not_all_constituents_of_type_0_are_constructable), c.TypeToString(apparentType))
 				}
 				if hasSignatures {
-					// Bail early if we already found a siganture, no chance of "No constituent of type is callable"
+					// Bail early if we already found a signature, no chance of "No constituent of type is callable"
 					break
 				}
 			}
@@ -14064,7 +14064,7 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 	if ambientModule != nil {
 		return ambientModule
 	}
-	// !!! The following only implements simple module resoltion
+	// !!! The following only implements simple module resolution
 	sourceFile := c.program.GetResolvedModule(ast.GetSourceFileOfNode(location), moduleReference)
 	if sourceFile != nil {
 		if sourceFile.Symbol != nil {
@@ -22315,7 +22315,7 @@ func (c *Checker) getConditionalType(root *ConditionalRoot, mapper *TypeMapper, 
 				// types rules (i.e. proper contravariance) for inferences.
 				c.inferTypes(context.inferences, checkType, extendsType, InferencePriorityNoConstraints|InferencePriorityAlwaysStrict, false)
 			}
-			// It's possible for 'infer T' type paramteters to be given uninstantiated constraints when the
+			// It's possible for 'infer T' type parameters to be given uninstantiated constraints when the
 			// those type parameters are used in type references (see getInferredTypeParameterConstraint). For
 			// that reason we need context.mapper to be first in the combined mapper. See #42636 for examples.
 			if mapper != nil {
@@ -24857,7 +24857,7 @@ func (c *Checker) getIndexedAccessTypeOrUndefined(objectType *Type, indexType *T
 			if propType != nil {
 				propTypes = append(propTypes, propType)
 			} else if accessNode == nil {
-				// If there's no error node, we can immeditely stop, since error reporting is off
+				// If there's no error node, we can immediately stop, since error reporting is off
 				return nil
 			} else {
 				// Otherwise we set a flag and return at the end of the loop so we still mark all errors
@@ -25138,7 +25138,7 @@ func (c *Checker) isSelfTypeAccess(name *ast.Node, parent *ast.Symbol) bool {
 
 func (c *Checker) isAssignmentToReadonlyEntity(expr *ast.Node, symbol *ast.Symbol, assignmentKind AssignmentKind) bool {
 	if assignmentKind == AssignmentKindNone {
-		// no assigment means it doesn't matter whether the entity is readonly
+		// no assignment means it doesn't matter whether the entity is readonly
 		return false
 	}
 	if c.isReadonlySymbol(symbol) {
@@ -25925,7 +25925,7 @@ func (c *Checker) transformTypeOfMembers(t *Type, f func(propertyType *Type) *Ty
 }
 
 func (c *Checker) markLinkedReferences(location *ast.Node, hint ReferenceHint, propSymbol *ast.Symbol, parentType *Type) {
-	if !c.canCollectSymbolAliasAccessabilityData {
+	if !c.canCollectSymbolAliasAccessibilityData {
 		return
 	}
 	if location.Flags&ast.NodeFlagsAmbient != 0 && !ast.IsPropertySignatureDeclaration(location) && !ast.IsPropertyDeclaration(location) {
@@ -26133,7 +26133,7 @@ func (c *Checker) markPropertyAliasReferenced(location *ast.Node /*PropertyAcces
 	}
 }
 
-func (c *Checker) markExportAssignmentAliasReferenced(location *ast.Node /*ExportAssigment*/) {
+func (c *Checker) markExportAssignmentAliasReferenced(location *ast.Node /*ExportAssignment*/) {
 	id := location.Expression()
 	if ast.IsIdentifier(id) {
 		sym := c.getExportSymbolOfValueSymbolIfExported(c.resolveEntityName(id, ast.SymbolFlagsAll, true /*ignoreErrors*/, true /*dontResolveAlias*/, location))
@@ -26183,7 +26183,7 @@ func (c *Checker) markDecoratorAliasReferenced(node *ast.Node /*HasDecorators*/)
 }
 
 func (c *Checker) markAliasReferenced(symbol *ast.Symbol, location *ast.Node) {
-	if !c.canCollectSymbolAliasAccessabilityData {
+	if !c.canCollectSymbolAliasAccessibilityData {
 		return
 	}
 	if ast.IsNonLocalAlias(symbol, ast.SymbolFlagsValue /*excludes*/) && !isInTypeQuery(location) {
@@ -26247,7 +26247,7 @@ func (c *Checker) markEntityNameOrEntityExpressionAsReference(typeName *ast.Node
 	rootSymbol := c.resolveName(rootName, rootName.Text(), meaning, nil /*nameNotFoundMessage*/, true /*isUse*/, false /*excludeGlobals*/)
 
 	if rootSymbol != nil && rootSymbol.Flags&ast.SymbolFlagsAlias != 0 {
-		if c.canCollectSymbolAliasAccessabilityData &&
+		if c.canCollectSymbolAliasAccessibilityData &&
 			c.symbolIsValue(rootSymbol) &&
 			!isConstEnumOrConstEnumOnlyModule(c.resolveAlias(rootSymbol)) &&
 			c.getTypeOnlyAliasDeclaration(rootSymbol) == nil {

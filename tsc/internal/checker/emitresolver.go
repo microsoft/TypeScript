@@ -24,7 +24,7 @@ func isConstEnumOrConstEnumOnlyModule(s *ast.Symbol) bool {
 
 func (r *emitResolver) IsReferencedAliasDeclaration(node *ast.Node) bool {
 	c := r.checker
-	if !c.canCollectSymbolAliasAccessabilityData || !ast.IsParseTreeNode(node) {
+	if !c.canCollectSymbolAliasAccessibilityData || !ast.IsParseTreeNode(node) {
 		return true
 	}
 
@@ -50,7 +50,7 @@ func (r *emitResolver) IsReferencedAliasDeclaration(node *ast.Node) bool {
 
 func (r *emitResolver) IsValueAliasDeclaration(node *ast.Node) bool {
 	c := r.checker
-	if !c.canCollectSymbolAliasAccessabilityData || !ast.IsParseTreeNode(node) {
+	if !c.canCollectSymbolAliasAccessibilityData || !ast.IsParseTreeNode(node) {
 		return true
 	}
 
@@ -115,7 +115,7 @@ func (r *emitResolver) isAliasResolvedToValue(symbol *ast.Symbol, excludeTypeOnl
 
 func (r *emitResolver) IsTopLevelValueImportEqualsWithEntityName(node *ast.Node) bool {
 	c := r.checker
-	if !c.canCollectSymbolAliasAccessabilityData {
+	if !c.canCollectSymbolAliasAccessibilityData {
 		return true
 	}
 	if !ast.IsParseTreeNode(node) || node.Kind != ast.KindImportEqualsDeclaration || node.Parent.Kind != ast.KindSourceFile {

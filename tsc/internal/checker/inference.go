@@ -1039,7 +1039,7 @@ func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
 		if constraintTarget.flags&TypeFlagsIndexedAccess != 0 && constraintTarget.AsIndexedAccessType().objectType.flags&TypeFlagsTypeParameter != 0 && constraintTarget.AsIndexedAccessType().indexType.flags&TypeFlagsTypeParameter != 0 {
 			// A reverse mapping of `{[K in keyof T[K_1]]: T[K_1]}` is the same as that of `{[K in keyof T]: T}`, since all we care about is
 			// inferring to the "type parameter" (or indexed access) shared by the constraint and template. So, to reduce the number of
-			// type identities produced, we simplify such indexed access occurences
+			// type identities produced, we simplify such indexed access occurrences
 			newTypeParam := constraintTarget.AsIndexedAccessType().objectType
 			newMappedType := c.replaceIndexedAccess(r.mappedType, constraintTarget, newTypeParam)
 			links.mappedType = newMappedType
