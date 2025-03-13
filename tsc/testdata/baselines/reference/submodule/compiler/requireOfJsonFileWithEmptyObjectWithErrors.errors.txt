@@ -1,18 +1,21 @@
-file1.ts(1,21): error TS2307: Cannot find module './b.json' or its corresponding type declarations.
-file1.ts(3,21): error TS2307: Cannot find module './b.json' or its corresponding type declarations.
+file1.ts(2,12): error TS2339: Property 'a' does not exist on type '{}'.
+file1.ts(5,16): error TS2339: Property 'b' does not exist on type '{}'.
+file1.ts(6,13): error TS2339: Property 'b' does not exist on type '{}'.
 
 
-==== file1.ts (2 errors) ====
+==== file1.ts (3 errors) ====
     import b1 = require('./b.json');
-                        ~~~~~~~~~~
-!!! error TS2307: Cannot find module './b.json' or its corresponding type declarations.
     let x = b1.a;
+               ~
+!!! error TS2339: Property 'a' does not exist on type '{}'.
     import b2 = require('./b.json');
-                        ~~~~~~~~~~
-!!! error TS2307: Cannot find module './b.json' or its corresponding type declarations.
     if (x) {
         let b = b2.b;
+                   ~
+!!! error TS2339: Property 'b' does not exist on type '{}'.
         x = (b1.b === b);
+                ~
+!!! error TS2339: Property 'b' does not exist on type '{}'.
     }
     
 ==== b.json (0 errors) ====

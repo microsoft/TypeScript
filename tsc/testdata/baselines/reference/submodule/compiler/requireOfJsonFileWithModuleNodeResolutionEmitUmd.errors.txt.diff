@@ -1,16 +1,17 @@
 --- old.requireOfJsonFileWithModuleNodeResolutionEmitUmd.errors.txt
 +++ new.requireOfJsonFileWithModuleNodeResolutionEmitUmd.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -error TS5071: Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
-+file1.ts(1,20): error TS2307: Cannot find module './b.json' or its corresponding type declarations.
- 
- 
+-
+-
 -!!! error TS5071: Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
 -==== file1.ts (0 errors) ====
-+==== file1.ts (1 errors) ====
-     import * as b from './b.json';
-+                       ~~~~~~~~~~
-+!!! error TS2307: Cannot find module './b.json' or its corresponding type declarations.
-     
- ==== b.json (0 errors) ====
-     {
+-    import * as b from './b.json';
+-    
+-==== b.json (0 errors) ====
+-    {
+-        "a": true,
+-        "b": "hello"
+-    }
+@@= skipped --1, +1 lines =@@
++<no content>

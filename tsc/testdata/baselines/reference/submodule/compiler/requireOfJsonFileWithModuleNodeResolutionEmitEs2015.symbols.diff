@@ -1,14 +1,13 @@
 --- old.requireOfJsonFileWithModuleNodeResolutionEmitEs2015.symbols
 +++ new.requireOfJsonFileWithModuleNodeResolutionEmitEs2015.symbols
-@@= skipped -3, +3 lines =@@
- import * as b from './b.json';
- >b : Symbol(b, Decl(file1.ts, 0, 6))
- 
--=== b.json ===
--{
--    "a": true,
+@@= skipped -6, +6 lines =@@
+ === b.json ===
+ {
+     "a": true,
 ->"a" : Symbol("a", Decl(b.json, 0, 1))
--
--    "b": "hello"
++>"a" : Symbol(a, Decl(b.json, 0, 1))
+ 
+     "b": "hello"
 ->"b" : Symbol("b", Decl(b.json, 1, 14))
--}
++>"b" : Symbol(b, Decl(b.json, 1, 14))
+ }

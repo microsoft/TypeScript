@@ -10,11 +10,14 @@
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 ->foo.ios : Symbol("ios", Decl(foo.ios.json, 0, 1))
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
++>foo.ios : Symbol(ios, Decl(foo.ios.json, 0, 1))
  >foo : Symbol(foo, Decl(index.ts, 0, 6))
 ->ios : Symbol("ios", Decl(foo.ios.json, 0, 1))
++>ios : Symbol(ios, Decl(foo.ios.json, 0, 1))
  
--=== /foo.ios.json ===
--{
--	"ios": "platform ios"
+ === /foo.ios.json ===
+ {
+ 	"ios": "platform ios"
 ->"ios" : Symbol("ios", Decl(foo.ios.json, 0, 1))
--}
++>"ios" : Symbol(ios, Decl(foo.ios.json, 0, 1))
+ }

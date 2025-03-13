@@ -24,3 +24,5 @@ if (x) {
 >b : Symbol(b, Decl(file1.ts, 4, 7))
 }
 
+=== b.json ===
+

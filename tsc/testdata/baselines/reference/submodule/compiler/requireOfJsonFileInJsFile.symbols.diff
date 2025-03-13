@@ -40,10 +40,11 @@
  >js1 : Symbol(js1, Decl(user.js, 11, 5))
 ->b : Symbol(b, Decl(user.js, 10, 12))
  
--=== /json.json ===
--{ "a": 0 }
+ === /json.json ===
+ { "a": 0 }
 ->"a" : Symbol("a", Decl(json.json, 0, 1))
--
++>"a" : Symbol(a, Decl(json.json, 0, 1))
+ 
 -=== /js.js ===
 -module.exports = { a: 0 };
 ->module.exports : Symbol(module.exports, Decl(js.js, 0, 0))

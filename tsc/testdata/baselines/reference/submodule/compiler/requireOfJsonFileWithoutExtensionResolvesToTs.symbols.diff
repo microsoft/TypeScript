@@ -5,24 +5,23 @@
      let b = c2.b;
  >b : Symbol(b, Decl(file1.ts, 4, 7))
 ->c2.b : Symbol("b", Decl(c.json, 1, 14))
++>c2.b : Symbol(b, Decl(c.json, 1, 14))
  >c2 : Symbol(c2, Decl(file1.ts, 1, 14))
 ->b : Symbol("b", Decl(c.json, 1, 14))
++>b : Symbol(b, Decl(c.json, 1, 14))
  
      let x = (c1.b === b);
  >x : Symbol(x, Decl(file1.ts, 5, 7))
-@@= skipped -12, +10 lines =@@
- >b : Symbol(b, Decl(file1.ts, 4, 7))
+@@= skipped -15, +15 lines =@@
+ === c.json ===
+ {
+     "a": true,
+->"a" : Symbol("a", Decl(c.json, 0, 1))
++>"a" : Symbol(a, Decl(c.json, 0, 1))
+ 
+     "b": "hello"
+->"b" : Symbol("b", Decl(c.json, 1, 14))
++>"b" : Symbol(b, Decl(c.json, 1, 14))
  }
  
--=== c.json ===
--{
--    "a": true,
-->"a" : Symbol("a", Decl(c.json, 0, 1))
--
--    "b": "hello"
-->"b" : Symbol("b", Decl(c.json, 1, 14))
--}
--
  === c.ts ===
- export = { a: true, b: "hello" };
- >a : Symbol(a, Decl(c.ts, 0, 10))

@@ -33,6 +33,7 @@ var (
 	SupportedJSExtensionsFlat                = []string{ExtensionJs, ExtensionJsx, ExtensionMjs, ExtensionCjs}
 	AllSupportedExtensionsWithJson           = slices.Concat(AllSupportedExtensions, [][]string{{ExtensionJson}})
 	SupportedTSExtensionsWithJson            = slices.Concat(SupportedTSExtensions, [][]string{{ExtensionJson}})
+	SupportedTSExtensionsWithJsonFlat        = slices.Concat(SupportedTSExtensionsFlat, []string{ExtensionJson})
 )
 
 func ExtensionIsTs(ext string) bool {

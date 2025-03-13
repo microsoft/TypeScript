@@ -1,94 +1,54 @@
 --- old.nodeModulesJson.errors.txt
 +++ new.nodeModulesJson.errors.txt
 @@= skipped -0, +0 lines =@@
-+/loosey.cts(1,20): error TS2307: Cannot find module './config.json' or its corresponding type declarations.
  /loosey.cts(1,36): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
--/loosey.cts(6,9): error TS2339: Property 'default' does not exist on type '{ version: number; }'.
+ /loosey.cts(6,9): error TS2339: Property 'default' does not exist on type '{ version: number; }'.
 -/main.mts(2,22): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'NodeNext'.
 -/main.mts(3,19): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'NodeNext'.
 -/main.mts(7,21): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'NodeNext'.
 -/main.mts(8,10): error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'NodeNext'.
 -/main.mts(10,9): error TS2339: Property 'version' does not exist on type '{ default: { version: number; }; }'.
-+/loosey.cts(2,21): error TS2307: Cannot find module './config.json' or its corresponding type declarations.
-+/loosey.cts(3,25): error TS2307: Cannot find module './config.json' or its corresponding type declarations.
-+/loosey.cts(4,26): error TS2307: Cannot find module './config.json' or its corresponding type declarations.
-+/main.mts(2,22): error TS2307: Cannot find module 'actually-json' or its corresponding type declarations.
-+/main.mts(5,20): error TS2307: Cannot find module './config.json' or its corresponding type declarations.
 +/main.mts(5,36): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
-+/main.mts(6,36): error TS2307: Cannot find module './config.json' or its corresponding type declarations.
 +/main.mts(6,52): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
-+/main.mts(7,21): error TS2307: Cannot find module './config.json' or its corresponding type declarations.
-+/main.mts(8,25): error TS2307: Cannot find module './config.json' or its corresponding type declarations.
 +/main.mts(8,41): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
-+/main.mts(9,26): error TS2307: Cannot find module './config.json' or its corresponding type declarations.
 +/main.mts(9,42): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
++/main.mts(11,9): error TS2339: Property 'default' does not exist on type '{ version: number; }'.
  
  
  ==== /node_modules/not.json/package.json (0 errors) ====
-@@= skipped -40, +48 lines =@@
-       "version": 1
-     }
-     
--==== /main.mts (5 errors) ====
-+==== /main.mts (10 errors) ====
+@@= skipped -43, +43 lines =@@
+ ==== /main.mts (5 errors) ====
      import { oops } from "not.json"; // Ok
      import moreOops from "actually-json"; // Error
-                          ~~~~~~~~~~~~~~~
+-                         ~~~~~~~~~~~~~~~
 -!!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'NodeNext'.
-+!!! error TS2307: Cannot find module 'actually-json' or its corresponding type declarations.
      import typed from "actually-json/typed"; // Error
 -                      ~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'NodeNext'.
      
      import config from "./config.json" with { type: "json" }; // Ok
-+                       ~~~~~~~~~~~~~~~
-+!!! error TS2307: Cannot find module './config.json' or its corresponding type declarations.
 +                                       ~~~~~~~~~~~~~~~~~~~~~
 +!!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
      import { default as config1 } from "./config.json" with { type: "json" }; // Ok
-+                                       ~~~~~~~~~~~~~~~
-+!!! error TS2307: Cannot find module './config.json' or its corresponding type declarations.
 +                                                       ~~~~~~~~~~~~~~~~~~~~~
 +!!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
      import config2 from "./config.json"; // Error, no attribute
-                         ~~~~~~~~~~~~~~~
+-                        ~~~~~~~~~~~~~~~
 -!!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'NodeNext'.
-+!!! error TS2307: Cannot find module './config.json' or its corresponding type declarations.
      import { version } from "./config.json" with { type: "json" }; // Error, named import
 -             ~~~~~~~
 -!!! error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'NodeNext'.
-+                            ~~~~~~~~~~~~~~~
-+!!! error TS2307: Cannot find module './config.json' or its corresponding type declarations.
 +                                            ~~~~~~~~~~~~~~~~~~~~~
 +!!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
      import * as config3 from "./config.json" with { type: "json" };
-+                             ~~~~~~~~~~~~~~~
-+!!! error TS2307: Cannot find module './config.json' or its corresponding type declarations.
 +                                             ~~~~~~~~~~~~~~~~~~~~~
 +!!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
      config3.version; // Error
 -            ~~~~~~~
 -!!! error TS2339: Property 'version' does not exist on type '{ default: { version: number; }; }'.
      config3.default; // Ok
++            ~~~~~~~
++!!! error TS2339: Property 'default' does not exist on type '{ version: number; }'.
      
--==== /loosey.cts (2 errors) ====
-+==== /loosey.cts (5 errors) ====
+ ==== /loosey.cts (2 errors) ====
      import config from "./config.json" with { type: "json" }; // Error
-+                       ~~~~~~~~~~~~~~~
-+!!! error TS2307: Cannot find module './config.json' or its corresponding type declarations.
-                                        ~~~~~~~~~~~~~~~~~~~~~
- !!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
-     import config2 from "./config.json"; // Ok
-+                        ~~~~~~~~~~~~~~~
-+!!! error TS2307: Cannot find module './config.json' or its corresponding type declarations.
-     import { version } from "./config.json"; // Ok
-+                            ~~~~~~~~~~~~~~~
-+!!! error TS2307: Cannot find module './config.json' or its corresponding type declarations.
-     import * as config3 from "./config.json";
-+                             ~~~~~~~~~~~~~~~
-+!!! error TS2307: Cannot find module './config.json' or its corresponding type declarations.
-     config3.version; // Ok
-     config3.default; // Error
--            ~~~~~~~
--!!! error TS2339: Property 'default' does not exist on type '{ version: number; }'.
-     

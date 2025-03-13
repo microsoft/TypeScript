@@ -19,3 +19,6 @@ if (x) {
 >b2 : Symbol(b2, Decl(file1.ts, 1, 11))
 }
 
+=== b.json ===
+{
+}

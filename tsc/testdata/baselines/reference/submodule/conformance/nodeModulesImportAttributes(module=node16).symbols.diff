@@ -8,15 +8,18 @@
  >with : Symbol(with, Decl(otherc.cts, 1, 40))
  >type : Symbol(type, Decl(otherc.cts, 1, 48))
  
--=== package.json ===
--{
--    "name": "pkg",
+ === package.json ===
+ {
+     "name": "pkg",
 ->"name" : Symbol("name", Decl(package.json, 0, 1))
--
--    "private": true,
++>"name" : Symbol(name, Decl(package.json, 0, 1))
+ 
+     "private": true,
 ->"private" : Symbol("private", Decl(package.json, 1, 18))
--
--    "type": "module"
++>"private" : Symbol(private, Decl(package.json, 1, 18))
+ 
+     "type": "module"
 ->"type" : Symbol("type", Decl(package.json, 2, 20))
--}
--
++>"type" : Symbol(type, Decl(package.json, 2, 20))
+ }
+ 
