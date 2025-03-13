@@ -154,11 +154,8 @@ jobs:
         with:
           cache-name: tidy
 
-      - run: go mod tidy
-      - run: go -C ./_tools mod tidy
-
-      - run: git add .
-      - run: git diff --staged --exit-code --stat
+      - run: go mod tidy -diff
+      - run: go -C ./_tools mod tidy -diff
 
   smoke:
     runs-on: ubuntu-latest
